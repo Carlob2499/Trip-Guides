@@ -1,0 +1,180 @@
+---
+import Block from "../components/Block.astro";
+import { bucket } from "../lib/buckets";
+import { accentFor, darken } from "../lib/themes";
+import "../styles/guide.css";
+
+const { guide } = Astro.props;
+const { order, byG } = bucket(guide.sections);
+const accent = accentFor(guide.country);
+const accent2 = darken(accent, 0.14);
+const storeKey = (guide.title || "guide").replace(/\W+/g, "").toLowerCase();
+const navLabel = (s: any, g: string) => s.title || s.name || g;
+---
+<!doctype html>
+<html lang="en" style={`--accent:${accent};--accent2:${accent2}`}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{guide.title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  </head>
+  <body data-storekey={storeKey}>
+    <header class="masthead" id="top">
+      {guide.kicker && <p class="eyebrow">{guide.kicker}</p>}
+      <h1>{guide.title}</h1>
+      {guide.dek && <p class="dek">{guide.dek}</p>}
+      <div class="prog">
+        <button id="btnExport" type="button">⤓ Save progress</button>
+        <button id="btnImport" type="button">⤒ Restore</button>
+        <button id="btnClear" type="button">Reset</button>
+        <span class="saved" id="savedNote"></span>
+      </div>
+    </header>
+
+    <div class="shell">
+      <nav class="sidenav" id="sidenav" aria-label="Sections">
+        {order.map((g, ci) => {
+          const solo = byG[g].length === 1;
+          return (
+            <>
+              <a class="navcat" data-cat={ci} href={`#grp-${ci}`}>{g}</a>
+              {!solo && (
+                <div class="navsub">
+                  {byG[g].map((o) => (
+                    <a class="navlink" href={`#sec-${o.i}`}>{navLabel(o.s, g)}</a>
+                  ))}
+                </div>
+              )}
+            </>
+          );
+        })}
+      </nav>
+
+      <main class="content" id="content">
+        <noscript>
+          <p class="note" style="padding:1.5rem 0">This guide reads fine without JavaScript; enabling it adds nav highlighting and saved checklists.</p>
+        </noscript>
+        {order.map((g, ci) => {
+          const solo = byG[g].length === 1;
+          return (
+            <div class="catblock" id={`grp-${ci}`}>
+              <h2 class="cat-title">{g}</h2>
+              {byG[g].map((o) => (
+                <Block sec={o.s} sid={`sec-${o.i}`} ci={ci} solo={solo} />
+              ))}
+            </div>
+          );
+        })}
+      </main>
+    </div>
+
+    <footer>{guide.footer}</footer>
+
+    <!-- mobile-only: bottom bar + slide-up section sheet (hidden on desktop via CSS) -->
+    <div class="botbar">
+      <button class="botSections" id="sheetOpen" type="button" aria-haspopup="dialog" aria-expanded="false">
+        <span class="bs-label">Sections</span><span class="bs-cur" id="curCat"></span><span class="bs-chev">▾</span>
+      </button>
+      <a class="botTop" href="#top" aria-label="Back to top">↑</a>
+    </div>
+    <div class="sheet-backdrop"></div>
+    <div class="sheet" role="dialog" aria-label="Sections" aria-modal="true">
+      <div class="sheet-grip"></div>
+      <div class="sheet-head">Jump to a section</div>
+      <div class="sheet-list">
+        {order.map((g, ci) => (
+          <>
+            <a class="sheet-cat" data-cat={ci} href={`#grp-${ci}`}>{g}</a>
+            {byG[g].length > 1 && byG[g].map((o) => (
+              <a class="sheet-link" href={`#sec-${o.i}`}>{navLabel(o.s, g)}</a>
+            ))}
+          </>
+        ))}
+      </div>
+    </div>
+
+    <script define:vars={{ order, storeKey }}>
+      (function () {
+        try {
+          var STORE_KEY = "tripguide-" + (storeKey || "guide");
+
+          // ----- mobile sheet (open/close, Escape, focus handling) -----
+          var sheet = document.querySelector(".sheet");
+          var backdrop = document.querySelector(".sheet-backdrop");
+          var sheetBtn = document.getElementById("sheetOpen");
+          function openSheet() {
+            sheet.classList.add("open"); backdrop.classList.add("open");
+            document.body.classList.add("sheet-lock"); sheetBtn.setAttribute("aria-expanded", "true");
+            var f = sheet.querySelector("a"); if (f) f.focus();
+          }
+          function closeSheet() {
+            sheet.classList.remove("open"); backdrop.classList.remove("open");
+            document.body.classList.remove("sheet-lock"); sheetBtn.setAttribute("aria-expanded", "false"); sheetBtn.focus();
+          }
+          if (sheet && sheetBtn && backdrop) {
+            sheetBtn.addEventListener("click", openSheet);
+            backdrop.addEventListener("click", closeSheet);
+            sheet.querySelectorAll("a").forEach(function (a) { a.addEventListener("click", closeSheet); });
+            document.addEventListener("keydown", function (e) {
+              if (e.key === "Escape" && sheet.classList.contains("open")) { closeSheet(); return; }
+              if (e.key === "Tab" && sheet.classList.contains("open")) {
+                var fs = sheet.querySelectorAll("a"); if (!fs.length) return;
+                var first = fs[0], last = fs[fs.length - 1];
+                if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+                else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+              }
+            });
+          }
+
+          // ----- scroll-spy (scroll-driven, resolves the last section + the very bottom) -----
+          var navlinks = document.querySelectorAll(".navlink");
+          var navcats = document.querySelectorAll(".navcat");
+          function setActive(secId, cat) {
+            navlinks.forEach(function (a) { var on = a.getAttribute("href") === "#" + secId; a.classList.toggle("active", on); if (on) { a.setAttribute("aria-current", "true"); } else { a.removeAttribute("aria-current"); } });
+            navcats.forEach(function (a) { a.classList.toggle("active", a.dataset.cat === String(cat)); });
+            var cur = document.getElementById("curCat"); if (cur) cur.textContent = order[cat] || "";
+            document.querySelectorAll(".sheet-link").forEach(function (a) { var on = a.getAttribute("href") === "#" + secId; a.classList.toggle("active", on); if (on) { a.setAttribute("aria-current", "true"); } else { a.removeAttribute("aria-current"); } });
+            document.querySelectorAll(".sheet-cat").forEach(function (a) { a.classList.toggle("active", a.dataset.cat === String(cat)); });
+          }
+          var blocks = Array.prototype.slice.call(document.querySelectorAll(".block"));
+          function spy() {
+            if (!blocks.length) return;
+            var line = 120, idx = 0;
+            if (window.innerHeight + window.pageYOffset >= document.body.scrollHeight - 4) {
+              idx = blocks.length - 1;
+            } else {
+              for (var i = 0; i < blocks.length; i++) { if (blocks[i].getBoundingClientRect().top <= line) { idx = i; } else { break; } }
+            }
+            var b = blocks[idx]; setActive(b.id, b.dataset.cat);
+          }
+          var ticking = false;
+          function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(function () { spy(); ticking = false; }); } }
+          window.addEventListener("scroll", onScroll, { passive: true });
+          window.addEventListener("resize", onScroll);
+          spy();
+
+          // ----- checklists that remember themselves (keyed by their text, so edits don't shift ticks) -----
+          function hashKey(s) { var h = 5381; s = String(s); for (var i = 0; i < s.length; i++) { h = ((h << 5) + h + s.charCodeAt(i)) | 0; } return "k" + (h >>> 0).toString(36); }
+          var boxes = Array.prototype.slice.call(document.querySelectorAll('input[type=checkbox]'));
+          var seenK = {};
+          boxes.forEach(function (b) {
+            var lab = b.closest(".check"); var t = (lab ? lab.textContent : "").replace(/\s+/g, " ").trim();
+            var k = hashKey(t); if (seenK[k] != null) { seenK[k]++; k = k + "_" + seenK[k]; } else { seenK[k] = 0; } b.dataset.pkey = k;
+          });
+          function load() { try { return JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); } catch (e) { return {}; } }
+          function flash(t) { var n = document.getElementById("savedNote"); if (!n) return; n.textContent = t; if (t) { clearTimeout(n._t); n._t = setTimeout(function () { n.textContent = ""; }, 1200); } }
+          function save(s) { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); flash("✓ saved"); } catch (e) { flash("use Save progress"); } }
+          function current() { var s = {}; boxes.forEach(function (b) { if (b.checked) s[b.dataset.pkey] = 1; }); return s; }
+          var st = load(); boxes.forEach(function (b) { if (st[b.dataset.pkey]) b.checked = true; });
+          boxes.forEach(function (b) { b.addEventListener("change", function () { save(current()); }); });
+          var E = document.getElementById("btnExport"), I = document.getElementById("btnImport"), C = document.getElementById("btnClear");
+          if (E) E.addEventListener("click", function () { window.prompt("Copy this progress code (paste into Restore on any device):", btoa(JSON.stringify(current()))); });
+          if (I) I.addEventListener("click", function () { var c = window.prompt("Paste your progress code:"); if (!c) return; try { var s = JSON.parse(atob(c.trim())); boxes.forEach(function (b) { b.checked = !!s[b.dataset.pkey]; }); save(s); } catch (e) { alert("That code could not be read — check you copied all of it."); } });
+          if (C) C.addEventListener("click", function () { if (!confirm("Uncheck everything and clear saved progress?")) return; boxes.forEach(function (b) { b.checked = false; }); save({}); });
+        } catch (err) { console.error("guide enhancement error:", err); }
+      })();
+    </script>
+  </body>
+</html>

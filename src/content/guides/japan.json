@@ -1,0 +1,320 @@
+{
+  "kicker": "Autumn 2026",
+  "title": "Japan — Tokyo & Kyoto",
+  "dek": "An eight-day autumn run down the classic route — Tokyo, a Mt Fuji day, the Shinkansen to Kyoto, and a Nara hop — timed for the turning leaves. Everything below is checked; tick items off as you go and your progress saves.",
+  "footer": "Location photos via Wikimedia Commons — tap any credit for its source, author and license.",
+  "country": "Japan",
+  "intro": "Tokyo first, then the Shinkansen to Kyoto, with day trips to Hakone (Mt Fuji) and Nara. Built for an October–November visit.",
+  "sections": [
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Money & currency",
+      "body": "<p>Japan uses the <b>yen (¥)</b>, and the yen is very weak right now — great for your budget. Rough rates (approximate, check before you go), at about ¥160 to the dollar: <b>¥100 ≈ $0.63</b> and <b>¥1,000 ≈ $6.25</b>.</p><p>Japan is still surprisingly cash-friendly — carry some, especially for small shrines, markets and older shops — but cards and IC-card tap-to-pay now work in most places. Tipping isn't done and can confuse staff.</p>"
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "When you land",
+      "body": "<p>At the airport, in order:</p>",
+      "checklist": [
+        "Clear immigration — your <b>Visit Japan Web</b> QR codes (done before the flight) speed up immigration and customs",
+        "Get an <b>IC card</b>: a physical <b>Welcome Suica</b> at the counter, or add <b>Suica to Apple Wallet</b> if you have an iPhone",
+        "From <b>Narita</b>: Keisei Skyliner (~41 min to Ueno) or the N'EX; from <b>Haneda</b>: Keikyu/monorail (~30–45 min)",
+        "Text <b>TRAVEL to 4004</b> for Verizon TravelPass, or use a local eSIM/SIM",
+        "Install <b>Google Maps</b> (works well in Japan) plus a translation app"
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Local essentials",
+      "body": "<p>Emergencies: <b>110</b> (police), <b>119</b> (fire & ambulance). Tap water is safe. No tipping. Trains are punctual and quiet — keep calls and speakerphone off. Carry a small bag for your own rubbish; public bins are rare. Convenience stores (7-Eleven, Lawson, FamilyMart) are lifesavers for cash (7-Bank ATMs take foreign cards), food and umbrellas.</p>"
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Entry & documents",
+      "body": "<p>⚠️ The entry rules below assume a <b>US passport</b>. On another passport, check your own requirements — they differ.</p>",
+      "checklist": [
+        "No visa for tourism up to 90 days",
+        "<b>JESTA</b> (Japan's new travel authorisation) is <b>not required yet</b> — it isn't expected until ~2028, so it doesn't affect a 2026 trip",
+        "Register on <b>Visit Japan Web</b> before you fly for the fast-track immigration & customs QR codes",
+        "Passport valid for the length of your stay",
+        "Type A/B plugs, 100V — most US chargers work; bring a small power strip",
+        "Autumn is peak season — book hotels early, especially Kyoto"
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Should you buy a JR Pass?",
+      "body": "<p><b>For this Tokyo–Kyoto route, almost certainly not.</b> Since the 2023 price hike a 7-day national JR Pass is ¥50,000, while a Tokyo–Kyoto round trip in individual Shinkansen tickets is only about ¥27,000 — so the pass <i>loses</i> you roughly ¥20,000 unless you're also running far afield (Hiroshima, the far north). The better plan here: buy <b>point-to-point Shinkansen tickets</b> (ticket machines, or the smartEX app) and tap your <b>IC card</b> for everything local. Note the overseas pass price rises again on Oct 1, 2026.</p>"
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Phone & data",
+      "body": "<p><b>Verizon TravelPass</b> is $12/line/day and works in Japan; a local <b>eSIM</b> is cheaper if you can use one. Unlike Korea, <b>Google Maps works well in Japan</b> for trains and walking. Handy apps: a translation app (Google Translate or DeepL), <b>smartEX</b> for Shinkansen tickets, and your airline's app. Pocket Wi-Fi rental is an option for a group sharing one device.</p>"
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Weather, foliage & comfort",
+      "body": "<p><b>October</b> is mild but the tail of typhoon season, so watch forecasts; <b>November</b> is cool, crisp and gorgeous (roughly 7–17°C in the cities). For <b>autumn colour</b>: the mountains turn first — <b>Nikko, Hakone and the Alps in late Oct–early Nov</b> — while <b>Tokyo and Kyoto peak late Nov into early December</b>, and warm years run later still, so check the Japan Meteorological Corporation forecast near your dates. Pack layers and a compact umbrella. For heavier feet and heel pain, use a firm, structured insole with a deep heel cup and a weight rating (Powerstep Pinnacle Maxx, Tread Labs Pace, Superfeet, or VALSOLE / Walkomfy) — temple days are long and stone-paved.</p>"
+    },
+    {
+      "type": "routes",
+      "group": "Getting around",
+      "title": "Key transit routes",
+      "steps": [
+        "<b>Airport → Tokyo:</b> from Narita, the Keisei <b>Skyliner</b> (~41 min to Ueno) or the JR <b>N'EX</b>; from Haneda, the Keikyu line or monorail (~30–45 min). Sort an IC card first.",
+        "<b>Around Tokyo:</b> the JR Yamanote loop plus the metro cover almost everything — just tap your <b>IC card</b> in and out.",
+        "<b>Tokyo → Kyoto:</b> the <b>Tokaido Shinkansen</b>, ~2 hr 15 min on a Nozomi (about ¥14,000). Buy point-to-point (machines or smartEX); reserve a seat in autumn.",
+        "<b>Day trip to Hakone:</b> the Odakyu line from Shinjuku; the <b>Hakone Free Pass</b> covers the scenic loop (mountain railway, ropeway, pirate ship, bus) and Fuji views on clear days.",
+        "<b>Kyoto → Nara:</b> ~45 min by JR or Kintetsu — an easy half-day.",
+        "<b>Flying home:</b> from Kyoto, the <b>Haruka</b> express reaches Kansai (KIX) in ~80 min; or Shinkansen back to Tokyo if you fly from Narita/Haneda."
+      ]
+    },
+    {
+      "type": "map",
+      "group": "Getting around",
+      "title": "Orientation map — Tokyo",
+      "center": {
+        "lat": 35.6762,
+        "lng": 139.7503
+      },
+      "span": 0.1
+    },
+    {
+      "type": "days",
+      "group": "Itinerary",
+      "title": "Day by day",
+      "items": [
+        {
+          "date": "Day 1",
+          "title": "Arrival in Tokyo",
+          "pace": "Arrival day · airport → city ~45–60 min · easy evening",
+          "note": "After a long flight, keep it light — a neighbourhood izakaya and an early night.",
+          "body": "Clear immigration (Visit Japan Web ready), train into the city, check in, and find dinner nearby. Don't fight the jet lag.",
+          "fit": "Comfortable, layered clothes for cool autumn evenings.",
+          "checklist": [
+            "Visit Japan Web QR codes saved offline",
+            "IC card set up (Welcome Suica or Apple Wallet)",
+            "TravelPass / eSIM on"
+          ]
+        },
+        {
+          "date": "Day 2",
+          "title": "Old Tokyo — Asakusa & Ueno",
+          "pace": "Full day · Senso-ji ~1.5 hr · Ueno ~2 hr · Akihabara evening · lots of walking",
+          "note": "Temple grounds are stone-paved and long — pace it and sit when you can.",
+          "body": "Start at Senso-ji in Asakusa and the Nakamise shopping street, wander Ueno's park and museums, then Akihabara after dark for the electric, anime-and-games sensory overload.",
+          "fit": "Walking shoes; a light layer for the evening.",
+          "checklist": [
+            "Coins for the temple",
+            "Try a conveyor-belt sushi lunch"
+          ]
+        },
+        {
+          "date": "Day 3",
+          "title": "Modern Tokyo — Shibuya & Harajuku",
+          "pace": "~6 hr out · Meiji Shrine ~1 hr · Harajuku ~2 hr · Shibuya evening",
+          "note": "Crowd-heavy and on your feet — build in a café break.",
+          "body": "Quiet morning at Meiji Shrine, the youth fashion of Harajuku's Takeshita Street, then the Shibuya Scramble and a skyline view from Shibuya Sky at dusk.",
+          "fit": "Stylish-but-comfortable; you'll be photographed a lot here.",
+          "checklist": [
+            "Book Shibuya Sky ahead",
+            "See the Hachiko statue"
+          ]
+        },
+        {
+          "date": "Day 4",
+          "title": "Day trip — Hakone & Mt Fuji",
+          "pace": "Long day out · ~1.5 hr each way · scenic loop ~5–6 hr",
+          "note": "Fuji is shy — clear mornings give the best odds, and autumn colour is good here now.",
+          "body": "Take the Odakyu line to Hakone and ride the loop — mountain railway, ropeway over the sulphur vents at Owakudani, and the lake with Fuji behind on a clear day. Soak in an onsen before heading back.",
+          "fit": "Warm layers for the ropeway; bring a small towel for the onsen.",
+          "checklist": [
+            "Hakone Free Pass",
+            "Check the Fuji forecast",
+            "Onsen etiquette: wash first, no swimsuits"
+          ]
+        },
+        {
+          "date": "Day 5",
+          "title": "Shinkansen to Kyoto",
+          "pace": "Travel + sights · bullet train ~2 hr 15 · afternoon in Higashiyama",
+          "note": "Reserve your Shinkansen seat in autumn; trains fill up.",
+          "body": "Glide to Kyoto by Shinkansen (Fuji on the right early on), drop bags, and spend the afternoon climbing to Kiyomizu-dera through the Higashiyama lanes — best in late-afternoon light.",
+          "fit": "Comfortable shoes for hills and steps.",
+          "checklist": [
+            "Seat reserved (smartEX / machine)",
+            "Hotel near a subway/JR line"
+          ]
+        },
+        {
+          "date": "Day 6",
+          "title": "Kyoto — Fushimi Inari & Arashiyama",
+          "pace": "Full day · Fushimi Inari early ~2 hr · Arashiyama ~3 hr · Gion evening",
+          "note": "Beat the crowds: Fushimi Inari at sunrise, Arashiyama bamboo before mid-morning.",
+          "body": "Go early to the thousands of vermilion torii at Fushimi Inari, then west to the Arashiyama bamboo grove and Tenryu-ji's autumn garden. End in Gion at dusk, the lantern-lit geisha quarter.",
+          "fit": "Layers; a lot of walking and some climbing at Fushimi Inari.",
+          "checklist": [
+            "Sunrise start for the torii",
+            "Be respectful in Gion — no chasing geiko for photos"
+          ]
+        },
+        {
+          "date": "Day 7",
+          "title": "Day trip — Nara (or Kinkaku-ji)",
+          "pace": "Half to full day · Nara ~45 min each way · ~4–5 hr there",
+          "note": "The deer are wild — buy crackers, but they'll headbutt for them.",
+          "body": "Hop to Nara for the bowing deer in the park and the colossal bronze Buddha at Todai-ji. Back in Kyoto, fit in the Golden Pavilion (Kinkaku-ji) if you have the legs for it.",
+          "fit": "Comfortable shoes; the park is large.",
+          "checklist": [
+            "Deer crackers (shika senbei)",
+            "Todai-ji's Great Buddha Hall"
+          ]
+        },
+        {
+          "date": "Day 8",
+          "title": "Fly home",
+          "pace": "Departure · Kyoto → KIX ~80 min (Haruka) · be there ~3 hr before",
+          "note": "Allow a generous buffer — and use the luggage-forwarding (takkyubin) if your bags are heavy.",
+          "body": "The Haruka express to Kansai Airport (or Shinkansen back to Tokyo if you fly from there). Last konbini snacks for the road.",
+          "fit": "Travel-comfortable.",
+          "checklist": [
+            "Haruka / Shinkansen booked",
+            "Tax-free paperwork if you shopped",
+            "Passport + boarding pass"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "sights",
+      "group": "Sights",
+      "title": "Top sights",
+      "items": [
+        {
+          "name": "Senso-ji (Asakusa)",
+          "kicker": "Tokyo's oldest temple",
+          "body": "Tokyo's oldest temple, approached through the giant red Kaminarimon lantern and the Nakamise souvenir street. Lively day and night; come early to photograph it without the crowds.",
+          "img": {
+            "file": "Senso-ji, Asakusa, Tokyo.jpg",
+            "alt": "Senso-ji temple in Asakusa"
+          },
+          "map": {
+            "lat": 35.7148,
+            "lng": 139.7967
+          }
+        },
+        {
+          "name": "Shibuya Crossing",
+          "kicker": "The famous scramble",
+          "body": "The world's busiest pedestrian scramble — a wave of people on every light change. Watch from the Starbucks window or the Shibuya Sky deck above for the full effect.",
+          "img": {
+            "file": "Shibuya crossing.jpg",
+            "alt": "Shibuya scramble crossing"
+          },
+          "map": {
+            "lat": 35.6595,
+            "lng": 139.7006
+          }
+        },
+        {
+          "name": "Fushimi Inari Taisha",
+          "kicker": "The torii tunnels",
+          "body": "Thousands of vermilion torii gates winding up the mountain behind the shrine. The lower paths mob by mid-morning, so start at dawn and climb a little for near-empty tunnels.",
+          "img": {
+            "file": "Summit of Mount Inariyama @ Fushimi Inari Shrine @ Kyoto (13406530194).jpg",
+            "alt": "Torii at Fushimi Inari"
+          },
+          "map": {
+            "lat": 34.9671,
+            "lng": 135.7727
+          }
+        },
+        {
+          "name": "Arashiyama Bamboo Grove",
+          "kicker": "Towering bamboo",
+          "body": "A short, ethereal walk through towering bamboo on Kyoto's western edge, next to Tenryu-ji temple and its autumn garden. Go before mid-morning for the quiet and the light.",
+          "img": {
+            "file": "2021 Sagano Bamboo forest in Arashiyama, Kyoto, Japan.jpg",
+            "alt": "Arashiyama bamboo grove"
+          },
+          "map": {
+            "lat": 35.0168,
+            "lng": 135.6716
+          }
+        },
+        {
+          "name": "Kinkaku-ji",
+          "kicker": "The Golden Pavilion",
+          "body": "A gold-leaf Zen pavilion mirrored in its pond — small but unforgettable, and stunning framed by autumn colour. A quick, flat visit you can pair with a Kyoto afternoon.",
+          "img": {
+            "file": "Kinkaku Ji Golden Pavilion (111096827).jpeg",
+            "alt": "Kinkaku-ji golden pavilion"
+          },
+          "map": {
+            "lat": 35.0394,
+            "lng": 135.7292
+          }
+        },
+        {
+          "name": "Kiyomizu-dera & Higashiyama",
+          "kicker": "The hillside lanes",
+          "body": "A wooden temple on stilts above Kyoto, reached through preserved lanes of shops and tea houses (Sannenzaka, Ninenzaka). Magic in late-afternoon light and autumn leaves.",
+          "map": {
+            "lat": 34.9949,
+            "lng": 135.785
+          }
+        }
+      ]
+    },
+    {
+      "type": "prose",
+      "group": "Sights",
+      "title": "Visiting tips",
+      "body": "<p>Japan's blockbuster sights reward <b>early starts</b> — Fushimi Inari, Arashiyama and Kiyomizu are transformed before 9am and exhausting after. Treat Kyoto temples as a morning game and save the afternoon for gardens and food. And don't over-stack the days: the country's joy is often the small stuff — a perfect konbini egg sandwich, a quiet shrine, a department-store food hall (depachika) at closing time.</p>"
+    },
+    {
+      "type": "prose",
+      "group": "Gaming & anime",
+      "title": "Akihabara & beyond",
+      "body": "<p><b>Akihabara</b> is the anime-and-electronics heart of Tokyo — multi-floor arcades, retro-game shops, figure stores, and themed cafés. <b>Nakano Broadway</b> is the collectors' maze for vintage goods, <b>Pokemon Centers</b> and the giant flagship stores dot the city, and in Kyoto/Osaka <b>Den Den Town</b> (Nipponbashi) plays Akihabara's role. Arcades (Taito, Round1) are everywhere for crane games and rhythm titles.</p>"
+    },
+    {
+      "type": "prose",
+      "group": "Food & shopping",
+      "title": "What to eat",
+      "body": "<p>Eat widely and cheaply: <b>ramen</b>, <b>sushi</b> (conveyor-belt or counter), <b>tempura</b>, <b>okonomiyaki</b>, <b>tonkatsu</b>, and standing soba. The <b>depachika</b> food halls in the basements of department stores are a feast at any budget, and <b>convenience stores</b> punch absurdly above their weight (the egg sandwich is famous for a reason). In Osaka-adjacent Kyoto, hunt down takoyaki and okonomiyaki.</p>"
+    },
+    {
+      "type": "prose",
+      "group": "Food & shopping",
+      "title": "Shopping & tax-free",
+      "body": "<p>Foreign visitors get <b>tax-free</b> shopping (the 10% consumption tax) at participating shops on purchases over ¥5,000 — bring your passport. Good hunting: <b>Don Quijote</b> (everything, late hours), <b>Uniqlo / GU</b>, drugstores for skincare, <b>kitchenware in Kappabashi</b> (Tokyo) and knives, and <b>depachika</b> sweets to bring home. Many shops do instant in-store tax-free; some refund at the airport.</p>"
+    },
+    {
+      "type": "list",
+      "group": "Food & shopping",
+      "title": "Souvenirs — Japan",
+      "items": [
+        "KitKats in regional flavours (matcha, sake, Tokyo banana)",
+        "A folding fan, furoshiki cloth, or tenugui towel",
+        "Matcha and a good Japanese knife (Kappabashi)",
+        "Anime / game figures or goods from Akihabara",
+        "Stationery and pens (Itoya, Loft)",
+        "Sake or Japanese whisky"
+      ]
+    },
+    {
+      "type": "prose",
+      "group": "Food & shopping",
+      "title": "Collectibles & chain merch",
+      "body": "<p>For collectors: a Starbucks <b>'Been There' Tokyo / Kyoto</b> mug, the <b>Pokemon Center</b> and <b>Nintendo</b> flagship stores for exclusives, and the <b>Studio Ghibli</b>-adjacent goods at Donguri Republic shops. Tokyo also has a <b>Hard Rock Cafe</b> (and Universal/Disney merch if those parks are on your list).</p>"
+    }
+  ]
+}

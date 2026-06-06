@@ -1,0 +1,365 @@
+{
+  "kicker": "Summer 2026",
+  "title": "Seoul & Korea",
+  "dek": "Eight days based in Seoul — palaces, markets, gaming districts and street food — with a weekend in Daejeon for MSI 2026. Everything below is checked; tick items off as you go and your progress saves.",
+  "footer": "Location photos via Wikimedia Commons — tap any credit for its source, author and license.",
+  "country": "South Korea",
+  "intro": "Seoul base, with an overnight trip to Daejeon for the MSI 2026 weekend (Jul 11–12).",
+  "sections": [
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Money & currency",
+      "body": "<p>Korea uses the <b>won (₩)</b>. The won is weak right now, which helps your spending power — roughly (approximate, check before you go): <b>₩1,000 ≈ $0.67</b> and <b>₩10,000 ≈ $6.70</b>, at about ₩1,500 to the dollar.</p><p>Cards and contactless work almost everywhere, but keep some cash for market stalls and small eateries. A <b>T-money</b> card covers subway and buses. Tipping isn't expected.</p>"
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "When you land",
+      "body": "<p>At the airport, in order:</p>",
+      "checklist": [
+        "Clear immigration (your <b>e-Arrival Card</b> is already done — see below)",
+        "Buy and load a <b>T-money</b> card at a convenience store or machine",
+        "Take the <b>AREX</b> train into Seoul (~43–58 min) or an airport <b>limousine bus</b> to your area",
+        "Text <b>TRAVEL to 4004</b> to switch on Verizon TravelPass",
+        "Install <b>KakaoMap</b> / <b>Naver Map</b> — Google Maps navigation is limited in Korea"
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Local essentials",
+      "body": "<p>Emergencies: <b>112</b> (police), <b>119</b> (fire & ambulance). Tap water is officially drinkable, though many locals prefer filtered or bottled. Tipping isn't expected. For maps use <b>KakaoMap</b> or <b>Naver Map</b>; for taxis, <b>Kakao T</b>; for translation, <b>Papago</b>. A little Korean goes far: <i>annyeonghaseyo</i> (hello), <i>gamsahamnida</i> (thank you).</p>"
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Entry & documents",
+      "body": "<p>⚠️ The entry rules below assume a <b>US passport</b>. On another passport, check your own requirements — they differ.</p>",
+      "checklist": [
+        "No visa for tourism up to 90 days",
+        "<b>K-ETA is waived for US citizens through Dec 31, 2026</b> — you don't need it",
+        "Without a K-ETA you <b>must</b> complete the free <b>e-Arrival Card</b> within 3 days before arrival at the official site (e-arrivalcard.go.kr) — ignore lookalike sites that charge a fee",
+        "Optional: you may still apply for a K-ETA (₩10,000, ~$8, valid 3 years) to skip the arrival card",
+        "Passport valid for the length of your stay",
+        "Carry your <b>MSI</b> ticket confirmations and a power adapter (Korea uses Type C/F, 220V)"
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Booking checklist",
+      "body": "<p>Roughly in this order — the first group is what sells out or pins your dates.</p>",
+      "checklist": [
+        "Flights, round-trip (book early)",
+        "Seoul hotel for the week (book early)",
+        "Daejeon hotel near DCC II for Sat Jul 11 night (book early)",
+        "MSI tickets + mobile entry, via Interpark (book early)",
+        "KTX Seoul–Daejeon both ways — especially the Sunday-evening return (Korail app)",
+        "Changdeokgung Secret Garden timed tour (reserve ahead)",
+        "e-Arrival Card — within 72 hours of your flight",
+        "Confirm Verizon TravelPass; download KakaoMap, Naver Map, Papago, Kakao T, Korail",
+        "Break in your shoes / insoles (week before)"
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Phone & data",
+      "body": "<p><b>Verizon TravelPass</b> is $12/line/day and works in Korea — text <b>TRAVEL to 4004</b> to enable it; a local eSIM/SIM is a cheaper alternative if you can use one. The apps that actually matter here: <b>KakaoMap</b> or <b>Naver Map</b> for directions (Google Maps routing is limited), <b>Kakao T</b> for taxis, <b>Papago</b> for translation, and <b>Korail</b> for KTX tickets.</p>"
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Weather & comfort",
+      "body": "<p>Early-to-mid July is Korea's <b>monsoon season (jangma)</b> — hot, very humid, with heavy rain spells. Pack a compact umbrella and quick-dry clothes, hydrate hard, and build in air-conditioned breaks (malls, cafés, museums). For heavier feet and heel pain, use a <b>firm, structured</b> insole with a <b>deep heel cup</b> and a weight rating (Powerstep Pinnacle Maxx, Tread Labs Pace, Superfeet, or VALSOLE / Walkomfy), plus moisture-wicking socks. Break them in before the trip.</p>"
+    },
+    {
+      "type": "routes",
+      "group": "Getting around",
+      "title": "Key transit routes",
+      "steps": [
+        "<b>Incheon → Seoul:</b> the <b>AREX</b> express to Seoul Station (~43 min) or all-stop (~58 min); or an airport <b>limousine bus</b> straight to your district. Grab a T-money card first.",
+        "<b>Around Seoul:</b> the subway is fast and signed in English — tap your <b>T-money</b> in and out; use <b>Kakao T</b> for taxis.",
+        "<b>Seoul → Daejeon (Jul 11):</b> <b>KTX</b> from Seoul Station, ~50 min — book on the <b>Korail</b> app (or take the SRT from Suseo). Frequent departures.",
+        "<b>Daejeon Station → arena:</b> the <b>Daejeon Convention Center II</b> sits in the Expo area of Yuseong-gu, ~20–30 min by taxi or bus from Daejeon Station — staying near the venue lets you walk in.",
+        "<b>Back to Seoul (Jul 12):</b> KTX again, ~50 min — <b>book the Sunday-evening return in advance</b>, it fills up after the final.",
+        "<b>Seoul → Incheon (Jul 15):</b> AREX or limousine bus; allow ~3 hours before an international flight."
+      ]
+    },
+    {
+      "type": "map",
+      "group": "Getting around",
+      "title": "Orientation map",
+      "center": {
+        "lat": 37.5665,
+        "lng": 126.978
+      },
+      "span": 0.08
+    },
+    {
+      "type": "days",
+      "group": "Itinerary",
+      "title": "Day by day",
+      "items": [
+        {
+          "date": "Wed Jul 8",
+          "title": "Arrival in Seoul",
+          "pace": "Arrival day · ICN → Seoul ~60–90 min (AREX + subway/taxi) · easy evening",
+          "note": "After a long flight, keep it light — a neighbourhood dinner and an early night.",
+          "body": "Land, clear immigration (e-Arrival Card already done), ride the AREX into Seoul and check in. Korean fried chicken nearby, then rest.",
+          "fit": "Light, breathable clothes — July is hot and humid.",
+          "checklist": [
+            "e-Arrival Card confirmed before the flight",
+            "T-money card bought + loaded",
+            "TravelPass switched on"
+          ]
+        },
+        {
+          "date": "Thu Jul 9",
+          "title": "Palaces & old Seoul",
+          "pace": "Full day · Gyeongbokgung ~2 hr · Bukchon ~1.5 hr · Insadong ~1.5 hr · lots of walking",
+          "note": "Heat and humidity are the real workload — water, shade breaks, an iced-coffee stop.",
+          "body": "Gyeongbokgung in the morning (time it for the changing of the guard), then Bukchon Hanok Village — it's a real neighbourhood, so keep voices down — and tea and crafts in Insadong.",
+          "fit": "Breathable layers; an umbrella doubles for sun and sudden rain.",
+          "checklist": [
+            "Gyeongbokgung is open today (closed Tue)",
+            "Free entry if you rent a hanbok",
+            "Respect Bukchon's quiet hours"
+          ]
+        },
+        {
+          "date": "Fri Jul 10",
+          "title": "Namsan + Myeongdong → Hongdae",
+          "pace": "~6 hr out · Namsan / tower ~2 hr · Myeongdong ~1.5 hr · Hongdae in the evening",
+          "note": "Take the cable car or bus up Namsan rather than the stairs in this heat.",
+          "body": "Up Namsan to N Seoul Tower for the city view, street food and cosmetics in Myeongdong, then Hongdae after dark for buskers, arcades and anime shops.",
+          "fit": "Comfortable shoes for hills and a lot of standing.",
+          "checklist": [
+            "Cable car or bus up Namsan",
+            "Olive Young run in Myeongdong",
+            "PC bang or arcade in Hongdae"
+          ]
+        },
+        {
+          "date": "Sat Jul 11",
+          "title": "MSI in Daejeon — Lower Bracket Final",
+          "pace": "Travel + match day · KTX ~50 min · arena ~20–30 min from Daejeon Station",
+          "note": "Leave Seoul with a buffer and reach the arena early for security and merch lines.",
+          "body": "KTX to Daejeon, then taxi or transit to Daejeon Convention Center II for the Lower Bracket Final. Stay near the venue tonight — and try Sungsimdang, Daejeon's legendary bakery.",
+          "fit": "Team colours, plus a layer for fierce arena air-conditioning.",
+          "checklist": [
+            "KTX booked (Korail app)",
+            "MSI tickets / mobile entry ready",
+            "Hotel near DCC II booked"
+          ]
+        },
+        {
+          "date": "Sun Jul 12",
+          "title": "MSI Grand Final → back to Seoul",
+          "pace": "Match day · Grand Final · KTX back ~50 min in the evening",
+          "note": "Book the return KTX ahead — Sunday-evening trains fill up after the final.",
+          "body": "The MSI 2026 Grand Final at DCC II, then KTX back to Seoul. Celebrate with chimaek — fried chicken and beer.",
+          "fit": "Same as yesterday; easy for travelling.",
+          "checklist": [
+            "Return KTX booked",
+            "Checked out of the Daejeon hotel",
+            "Phones and battery packs charged"
+          ]
+        },
+        {
+          "date": "Mon Jul 13",
+          "title": "Markets, design & Gangnam",
+          "pace": "Full day, flexible · Gwangjang ~1.5 hr · DDP ~1 hr · Gangnam / COEX ~3 hr",
+          "note": "Stack the indoor, air-conditioned stops (DDP, COEX) through the midday heat.",
+          "body": "Graze Gwangjang Market (bindaetteok, mayak gimbap), see the swooping Dongdaemun Design Plaza, then Gangnam — COEX's Starfield Library, the aquarium and SMTOWN.",
+          "fit": "Light clothes; you'll be in and out of AC all day.",
+          "checklist": [
+            "Cash for market stalls",
+            "Changdeokgung is closed today — saved for tomorrow"
+          ]
+        },
+        {
+          "date": "Tue Jul 14",
+          "title": "Changdeokgung + last laps",
+          "pace": "~5 hr · Changdeokgung + Secret Garden ~2 hr · shopping / electronics afternoon",
+          "note": "The Secret Garden is a timed guided walk — book ahead and wear real shoes.",
+          "body": "Changdeokgung and its Secret Garden in the morning (Gyeongbokgung is closed Tuesdays), then last shopping — Myeongdong cosmetics, Yongsan electronics, or anime goods.",
+          "fit": "Walking shoes for the garden paths.",
+          "checklist": [
+            "Secret Garden tour pre-booked",
+            "Last-minute souvenirs",
+            "Pack and weigh your bags"
+          ]
+        },
+        {
+          "date": "Wed Jul 15",
+          "title": "Fly home",
+          "pace": "Departure · Seoul → ICN ~60–90 min · be there ~3 hr before an international flight",
+          "note": "Give Incheon plenty of buffer — it's big and busy.",
+          "body": "AREX or limousine bus back to Incheon for the flight home.",
+          "fit": "Travel-comfortable.",
+          "checklist": [
+            "AREX / limousine to ICN",
+            "Tax-refund kiosk if you shopped",
+            "Passport + boarding pass"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "sights",
+      "group": "Sights",
+      "title": "Top sights in Seoul",
+      "items": [
+        {
+          "name": "Gyeongbokgung",
+          "kicker": "The grand palace",
+          "body": "The largest of the Joseon palaces, with the changing-of-the-guard ceremony and the banquet hall over a lotus pond. Summer hours run to about 18:30 (last entry 17:30); closed Tuesdays, and free if you're wearing a hanbok.",
+          "img": {
+            "file": "Gyeonghoeru (Royal Banquet Hall) at Gyeongbokgung Palace, Seoul.jpg",
+            "alt": "Gyeonghoeru hall at Gyeongbokgung"
+          },
+          "map": {
+            "lat": 37.5796,
+            "lng": 126.977
+          }
+        },
+        {
+          "name": "Bukchon Hanok Village",
+          "kicker": "Traditional houses",
+          "body": "Lanes of restored hanok houses on the hillside between the palaces, framed against the modern skyline. It's a living neighbourhood — keep noise down and don't peer into homes.",
+          "img": {
+            "file": "Bukchon-ro 11-gil street with hanok houses and blue sky in Bukchon Hanok Village Seoul.jpg",
+            "alt": "Bukchon Hanok Village street"
+          },
+          "map": {
+            "lat": 37.5826,
+            "lng": 126.983
+          }
+        },
+        {
+          "name": "N Seoul Tower (Namsan)",
+          "kicker": "The city view",
+          "body": "On the wooded peak of Namsan, with the best wraparound view of the city. Ride the cable car or a bus up rather than hiking in the heat; the observation deck is worth timing for sunset.",
+          "img": {
+            "file": "Namsan Tower.jpg",
+            "alt": "N Seoul Tower on Namsan"
+          },
+          "map": {
+            "lat": 37.5512,
+            "lng": 126.9882
+          }
+        },
+        {
+          "name": "Dongdaemun Design Plaza",
+          "kicker": "Modern architecture",
+          "body": "Zaha Hadid's vast silver, curving 'spaceship', best after dark when it's lit and the LED-rose field is on. Design shops, exhibitions and the surrounding night markets make it an easy evening.",
+          "img": {
+            "file": "Dongdaemun Design Plaza at night, Seoul, Korea.jpg",
+            "alt": "Dongdaemun Design Plaza at night"
+          },
+          "map": {
+            "lat": 37.5669,
+            "lng": 127.0094
+          }
+        },
+        {
+          "name": "Cheonggyecheon",
+          "kicker": "The downtown stream",
+          "body": "A restored stream cutting through the centre with walkways below street level — a cool, easy stroll and a good flat break between sights.",
+          "map": {
+            "lat": 37.5696,
+            "lng": 126.9784
+          }
+        },
+        {
+          "name": "Insadong",
+          "kicker": "Crafts & tea",
+          "body": "A walkable lane of galleries, traditional craft shops and tea houses, a short hop from the palaces — a natural pairing with a Gyeongbokgung morning.",
+          "map": {
+            "lat": 37.574,
+            "lng": 126.985
+          }
+        }
+      ]
+    },
+    {
+      "type": "prose",
+      "group": "Sights",
+      "title": "Visiting tips",
+      "body": "<p>Time the palaces around their closed days — <b>Gyeongbokgung is shut Tuesdays, Changdeokgung Mondays</b> — and pre-book the Changdeokgung <b>Secret Garden</b>, which only enters on timed guided walks. Bukchon is residential, so it's best early and quiet. And don't fight the July heat: treat the air-conditioned stops (DDP, COEX, museums) as the spine of the hottest afternoons.</p>"
+    },
+    {
+      "type": "prose",
+      "group": "Daejeon & MSI",
+      "title": "Your MSI weekend",
+      "body": "<p>The Mid-Season Invitational runs at the <b>Daejeon Convention Center II</b> (Hall 2), the first international League event ever held in Daejeon. Your tickets cover the <b>Lower Bracket Final on Sat Jul 11</b> and the <b>Grand Final on Sun Jul 12</b> — the climax of the tournament. The hall holds roughly 8,000, so arrive early for security and the merch line, and have your passport handy since it's tied to ticketing.</p>"
+    },
+    {
+      "type": "prose",
+      "group": "Daejeon & MSI",
+      "title": "Getting to the arena",
+      "body": "<p>From Seoul Station, the <b>KTX reaches Daejeon in about 50 minutes</b>, with frequent departures (book on the Korail app; the SRT from Suseo is an alternative). The arena sits in the <b>Expo area of Yuseong-gu</b>, about 20–30 minutes by taxi or bus from Daejeon Station — so staying near the venue lets you walk in and skip the post-match scramble. While you're there, <b>Sungsimdang</b> is a Daejeon institution worth the queue (try the fried soboro and chive breads), with EXPO Science Park and Hanbat Arboretum nearby for daytime air.</p>"
+    },
+    {
+      "type": "map",
+      "group": "Daejeon & MSI",
+      "title": "Arena map — Daejeon",
+      "center": {
+        "lat": 36.3746,
+        "lng": 127.388
+      },
+      "span": 0.05
+    },
+    {
+      "type": "prose",
+      "group": "Gaming & anime",
+      "title": "Hongdae after dark",
+      "body": "<p>The university district around Hongik is the city's youth-and-nightlife core — street buskers, arcades and claw-machine halls, board-game and themed cafés, late-night eats, and anime goods (look for <b>Animate</b>). It's the natural evening base for the group when you're not at the arena.</p>"
+    },
+    {
+      "type": "prose",
+      "group": "Gaming & anime",
+      "title": "PC bangs, arcades & LoL Park",
+      "body": "<p>Korea's <b>PC bangs</b> — high-spec gaming cafés charging by the hour, often with food service — are everywhere and cheap; they're a rite of passage. Arcades lean into rhythm and crane games. League fans should check the <b>LCK schedule</b>: <b>LoL Park</b> in Jongno is the league's home studio/arena, and the Summer split resumes after MSI, so a live LCK match in Seoul may be on while you're there.</p>"
+    },
+    {
+      "type": "prose",
+      "group": "Gaming & anime",
+      "title": "Anime & game shopping",
+      "body": "<p>For merch: <b>Yongsan</b> (the I'Park Mall electronics floors), <b>Animate</b> in Hongdae for anime goods, and the <b>Kakao Friends</b> and <b>Line Friends</b> flagship stores for character collectibles. <b>COEX</b> in Gangnam bundles a huge mall, the aquarium, the Starfield Library and SMTOWN for K-pop.</p>"
+    },
+    {
+      "type": "prose",
+      "group": "Food & shopping",
+      "title": "What to eat",
+      "body": "<p>Hit the obvious greats: <b>Korean BBQ</b>, <b>chimaek</b> (fried chicken and beer), <b>tteokbokki</b>, and market street food at <b>Gwangjang</b> — bindaetteok (mung-bean pancake), mayak gimbap, and live octopus if you're brave. Myeongdong is the easy street-snack strip, and café culture is everywhere when you need an air-conditioned sit-down.</p>"
+    },
+    {
+      "type": "prose",
+      "group": "Food & shopping",
+      "title": "Shopping in Seoul",
+      "body": "<p>By district: <b>Myeongdong</b> for cosmetics (the big <b>Olive Young</b> is the K-beauty one-stop) and street food; <b>Hongdae</b> for youth fashion; <b>Gangnam / COEX</b> for malls; <b>Dongdaemun</b> for late-night shopping; <b>Insadong</b> for traditional crafts. Tax-free shops offer a <b>VAT refund</b> on purchases over ₩15,000 — instant in-store or at the airport kiosk on the way out.</p>"
+    },
+    {
+      "type": "list",
+      "group": "Food & shopping",
+      "title": "Souvenirs — Korea",
+      "items": [
+        "K-beauty from Olive Young (sheet masks, skincare)",
+        "K-pop albums and photocards",
+        "Korean snacks (honey-butter chips, Pepero, Market O)",
+        "Soju or makgeolli",
+        "Kakao Friends / Line Friends character goods",
+        "A celadon or craft piece from Insadong"
+      ]
+    },
+    {
+      "type": "prose",
+      "group": "Food & shopping",
+      "title": "Collectibles & chain merch",
+      "body": "<p>For collectors: a Starbucks <b>'Been There' Seoul</b> mug, and the <b>Kakao Friends</b> and <b>Line Friends</b> flagship stores (Hongdae and Gangnam) for character-brand exclusives you won't find at home.</p>"
+    }
+  ]
+}

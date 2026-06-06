@@ -1,0 +1,124 @@
+# Trip Guides
+
+This is your travel-guide blog. You write each destination as one simple
+**content file**, and the project turns it into a polished web page. The look
+and feel are exactly the same as the guides you already had — this just makes
+them easier to add to, publish, and grow.
+
+You do **not** need to read or write code to run this. The two things you'll
+ever touch are explained below.
+
+---
+
+## The idea in one picture
+
+```
+src/content/guides/denmark.json     ← YOU edit these (the "recipe cards")
+src/content/guides/korea.json
+src/content/guides/japan.json
+        │
+        ▼
+   the project's components          ← the "appliances" — leave these alone
+        │
+        ▼
+   finished web pages                ← built automatically when you publish
+```
+
+Everything you care about lives in **`src/content/guides/`**. Each `.json`
+file there is one destination. Everything else is the machinery that turns
+those files into pages — you can ignore it.
+
+---
+
+## How to publish it on the web (about 15 minutes, one time)
+
+> **A full, click-by-click walkthrough with fixes for every step is in
+> [`PUBLISHING.md`](./PUBLISHING.md).** The short version is below.
+
+The site is "static," meaning the pages are pre-built and then just served —
+fast, cheap (free), and reliable. Your sight photos are automatically converted
+to fast, modern WebP images during the build on the host (no work for you); if a
+photo ever can't be reached, the guide shows the plain version instead, so the
+site never breaks. The normal flow:
+
+1. **Put the project on GitHub.** Make a free account at github.com, create a
+   new repository, and upload this folder's contents (GitHub lets you drag files
+   in through the website — you don't need the command line).
+2. **Connect a host.** Sign up for **Cloudflare Pages** (free) — or Netlify or
+   Vercel, they all work the same way. Choose "connect to Git" and pick your
+   repository.
+3. **Accept the defaults.** The host recognises this as an Astro project and
+   fills in the build settings for you (build command `npm run build`, output
+   folder `dist`). Click deploy.
+4. You get a free web address like `your-guides.pages.dev`. Done. A custom
+   domain can be added later in the host's settings.
+
+After that, **every time you change a guide and save it on GitHub, the site
+rebuilds and updates itself automatically** — usually within a minute.
+
+> Official, step-by-step host instructions: https://docs.astro.build/en/guides/deploy/
+
+---
+
+## How to add a new destination
+
+1. Copy an existing guide file — `src/content/guides/denmark.json` is the best
+   example — and rename it, e.g. `portugal.json`. The file name becomes the web
+   address (`/guides/portugal/`).
+2. Edit the fields: `title`, `country`, `dek` (the one-line description), and
+   the `sections`. Keep the same shapes you see in the example.
+3. Save. The home page picks it up and adds a card automatically — you never
+   edit a list of destinations by hand.
+
+**Two helpful guardrails are built in:**
+
+- If a guide file is missing something it needs, or a section is malformed, the
+  build **stops and tells you exactly which file and field** — so a broken guide
+  can never quietly go live. (This is your accuracy-first rule, enforced by the
+  tool instead of by memory.)
+- Country colours live in **one** place — `src/lib/themes.ts`. Add a line there
+  for a new country's accent colour and every page uses it.
+
+### The section types you can use
+
+Each section has a `type` and a `group` (the category it appears under in the
+navigation). The available types: `panel` (a reference card with an optional
+checklist), `prose` (a plain note), `list` (a checklist), `routes` (numbered
+directions), `map` (an interactive map), `days` (the day-by-day itinerary), and
+`sights` (photo cards). The example files show each one in use.
+
+---
+
+## How Claude works on this with you
+
+Because the project is just text files, Claude can read it, write new guides,
+adjust components, and run the build to catch problems before you publish. The
+smoothest setup for ongoing work is **Claude Code** (Anthropic's command-line
+tool) pointed at this folder: Claude edits, runs the build, fixes anything that
+breaks, and you review the changes. You can also just ask in chat and get edited
+files back.
+
+---
+
+## For the curious: the folder map
+
+```
+src/
+  content/guides/*.json   the guides themselves — what you edit
+  content.config.ts       the "checker": rules every guide must satisfy
+  lib/themes.ts           country -> accent colour (single source)
+  lib/buckets.ts          groups sections into categories
+  components/Block.astro  draws one section (panel, days, sights, ...)
+  layouts/GuideLayout.astro  the page frame + nav + the small interactive bits
+  pages/index.astro       the home page (lists all guides)
+  pages/guides/[slug].astro  makes one page per guide file
+  styles/                 the look (lifted unchanged from your originals)
+astro.config.mjs          one-time settings (set your web address here)
+package.json              the project's dependency list
+```
+
+## Running it on your own computer (optional)
+
+If you ever want to preview locally: install Node.js, then in this folder run
+`npm install` once, and `npm run dev` to open a live preview, or `npm run build`
+to produce the final pages in a `dist/` folder.

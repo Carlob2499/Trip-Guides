@@ -1,0 +1,14 @@
+---
+import { getCollection } from "astro:content";
+import GuideLayout from "../../layouts/GuideLayout.astro";
+
+// Astro calls this at build time: it finds every guide content file and makes
+// a page for each. Add denmark.json -> you get /guides/denmark/ automatically.
+export async function getStaticPaths() {
+  const guides = await getCollection("guides");
+  return guides.map((g) => ({ params: { slug: g.id }, props: { guide: g.data } }));
+}
+
+const { guide } = Astro.props;
+---
+<GuideLayout guide={guide} />
