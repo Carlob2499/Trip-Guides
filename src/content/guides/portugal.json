@@ -1,0 +1,368 @@
+{
+  "kicker": "Field guide",
+  "title": "Lisbon & Portugal",
+  "dek": "Sun-soaked tiles, Atlantic seafood, and hilltop castles — a practical guide to Portugal's capital and a day trip to fairy-tale Sintra.",
+  "footer": "Location photos via Wikimedia Commons — tap any credit for its source, author and licence.",
+  "country": "Portugal",
+  "verified": "✓ Verified June 2026 — reconfirm prices, hours & transport fares before you go",
+  "intro": "Lisbon is one of Europe's most walkable and affordable capitals: easy to navigate by tram and metro, generous with free viewpoints, and endlessly rewarding on foot through the Alfama's tiled alleys.",
+  "sections": [
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "When you land",
+      "body": "<p>Humberto Delgado Airport (LIS) is inside the city — the Metro is the easiest way in:</p>",
+      "checklist": [
+        "Buy a <b>Viva Viagem card</b> at any Metro ticket machine (€0.50 for the reusable card)",
+        "Load credit or a <b>24-hour pass (€7.25)</b> and take the <b>Red Line</b> toward São Sebastião (~20–25 min to Baixa-Chiado area; change at Alameda if needed)",
+        "Alternatively, <b>Uber or taxi</b> to the centre runs ≈€15–20 and takes ~20–25 min",
+        "Text or call your accommodation — many Lisbon streets are narrow and one-way"
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Local essentials",
+      "body": "<p><b>Plug:</b> Type F (two round pins), 230 V / 50 Hz — US devices need an adapter and a voltage check. <b>Time zone:</b> WET/WEST (UTC+0 in winter, UTC+1 in summer — same as London, <i>not</i> the same as Spain). <b>Tap water:</b> safe and good everywhere in Lisbon — carry a reusable bottle. <b>Pharmacies</b> show a green cross; a rotation system means there is always at least one open 24/7 nearby — check <em>farmaciasdeservico.net</em> for the current duty pharmacy in your area.</p>"
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Entry & documents",
+      "body": "<p>⚠️ The rules below assume a <b>US passport</b>. Other nationalities should check their own requirements.</p>",
+      "checklist": [
+        "Visa-free for US citizens — up to <b>90 days in any 180-day period</b> in the Schengen area",
+        "Passport must be <b>valid for at least 3 months beyond your departure date</b>",
+        "<b>ETIAS not yet required</b> as of June 2026, but is expected to launch later in 2026 — check before you book (≈€20 fee when live)",
+        "EU <b>Type F plug adapter</b> — one strip can charge everything",
+        "Travel insurance covering medical care abroad — strongly recommended"
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Booking checklist",
+      "body": "<p>Roughly in this order — accommodation fills fast in summer (July–August prices jump 40–60%):</p>",
+      "checklist": [
+        "Flights, round-trip — ≈$500–1,000 from the US East Coast (book early)",
+        "Accommodation — book 2–3 months ahead for summer; budget hotel ≈€80–150/night",
+        "Jerónimos Monastery timed entry (book online to skip the queue) — €10",
+        "Pena Palace, Sintra — book online; queues without a reservation are long — ≈€14",
+        "Travel insurance (a few weeks out)",
+        "Viva Viagem Metro card (buy on arrival at the airport)",
+        "Offline maps for Lisbon + Sintra (week before)"
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Phone & data",
+      "body": "<p>Portugal is in the EU, so EU-roaming SIMs (or plans that include EU data) work at no extra charge. US travellers have several options: <b>eSIM</b> from providers like Airalo or Holafly (≈$5–15 for 5–10 GB) is the easiest; <b>a local SIM</b> from NOS, MEO or Vodafone PT at the airport or city shops; or your carrier's international day-pass if you have one. Coverage in Lisbon and Sintra is excellent; rural Alentejo can be patchy.</p>"
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Holidays & your dates",
+      "body": "<p>Portugal's main summer public holidays: <b>June 10 (Portugal / Camões Day)</b> — expect some closures and parades; <b>August 15 (Assumption)</b> — many smaller shops closed. Lisbon's own holiday is <b>June 13 (Santo António)</b>, the city's biggest street party — Alfama is mobbed with grilled sardines, street bands and dancing; great fun, but book restaurants well in advance. No public holidays in July or September. Peak season is July–August: crowded, expensive, and very hot (often 35 °C+); June and September are better value and still warm.</p>"
+    },
+    {
+      "type": "panel",
+      "group": "Money & budget",
+      "title": "Money & currency",
+      "body": "<p>Portugal uses the <b>euro (€)</b>. Mid-2026 rate: <b>€1 ≈ $1.16</b> (approximate — check before you go). Cards are accepted almost everywhere in Lisbon; carry some cash for small local tascas, market stalls and tipping. <b>Tipping:</b> not compulsory, but appreciated — round up at cafés, or leave 5–10% at sit-down restaurants, in cash if possible (card tip prompts are rare). ATMs are plentiful; use your bank's network to avoid high fees.</p>"
+    },
+    {
+      "type": "budget",
+      "group": "Money & budget",
+      "title": "Budget & daily costs",
+      "currency": "€",
+      "days": 7,
+      "intro": "Rough <b>per-person, mid-range</b> estimates in euros for a 7-day Lisbon trip. Lisbon is one of Western Europe's best-value capitals — you can eat and drink very well without spending much. Tap a field to log your real spend; the total saves on this device.",
+      "items": [
+        {
+          "label": "Accommodation, per night",
+          "basis": "day",
+          "est": 100,
+          "note": "Budget hotel ≈€80–150; hostels from ≈€25. Prices spike in July–August."
+        },
+        {
+          "label": "Food & drink, per day",
+          "basis": "day",
+          "est": 35,
+          "note": "Cheap set lunch (prato do dia) ≈€8–12; dinner ≈€15–25 pp; coffee €0.80–1.20."
+        },
+        {
+          "label": "Local transport, per day",
+          "basis": "day",
+          "est": 7,
+          "note": "24-hour Viva Viagem pass (metro + tram + bus) = €7.25."
+        },
+        {
+          "label": "Sights & activities, per day",
+          "basis": "day",
+          "est": 12,
+          "note": "Many viewpoints are free. Major paid sights: Belém Tower €6, São Jorge €10, Jerónimos €10. First Sunday of the month: state museums free."
+        },
+        {
+          "label": "Flights — round trip",
+          "basis": "trip",
+          "est": 650,
+          "note": "≈$500–1,000 USD from the US East Coast — book early."
+        },
+        {
+          "label": "Sintra day trip (train + Pena Palace)",
+          "basis": "trip",
+          "est": 20,
+          "note": "Train from Rossio ≈€2.30 each way + Pena Palace entry ≈€14. Book the palace online."
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Health & safety",
+      "title": "Health & pharmacy",
+      "body": "<p><b>Emergencies:</b> dial <b>112</b> (free) for ambulance, fire or police — English-speaking operators available. For a non-emergency medical question, call <b>808 24 24 24</b> (24/7 health line). Non-emergency police is also reachable via 112.</p><p><b>Pharmacies (farmácias)</b> show a green cross. Portugal uses a duty-rotation system — there is always one open 24 hours nearby, but the location rotates. Check <em>farmaciasdeservico.net</em> or ask your hotel. As a US visitor you have no Portuguese health card; private emergency treatment is available but not free — <b>travel insurance covering medical care is strongly recommended</b>. Tap water is safe to drink throughout Lisbon.</p>",
+      "checklist": [
+        "Save <b>112</b> (all emergencies) and <b>808 24 24 24</b> (non-emergency health line)",
+        "Confirm your travel insurance covers medical treatment abroad",
+        "Pack medicines in original packaging, plus copies of any prescriptions",
+        "Sunscreen — Lisbon sun is intense June–September; UV index regularly hits 8–10",
+        "Find your nearest duty pharmacy at <em>farmaciasdeservico.net</em>"
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Etiquette & language",
+      "title": "Etiquette & language",
+      "body": "<p><b>English is widely spoken</b> in Lisbon, especially in hospitality, tourism and among younger locals — you will rarely struggle. A few words of Portuguese are warmly received: <i>olá</i> (hello), <i>obrigado / obrigada</i> (thank you, male / female speaker), <i>por favor</i> (please), <i>com licença</i> (excuse me, passing through), <i>onde fica…?</i> (where is…?).</p><p><b>Tipping:</b> not expected but appreciated — round up at cafés, leave 5–10% at sit-down restaurants in cash. <b>Trams:</b> let people off before boarding, and move to the back — tram 28 is very cramped. <b>Mealtimes:</b> lunch runs 12:30–15:00; dinner rarely starts before 20:00 — arriving at 19:00 marks you as a tourist. <b>Sundays:</b> some smaller shops close or keep short hours. <b>Haggling:</b> not a norm.</p>"
+    },
+    {
+      "type": "routes",
+      "group": "Getting around",
+      "title": "Key transit routes",
+      "steps": [
+        "<b>Airport → centre:</b> Red Metro line from Aeroporto toward Oriente, change at <b>Alameda</b> for the Green line to <b>Baixa-Chiado</b> (~25 min total) — or Uber/taxi ≈€15–20.",
+        "<b>Around the city:</b> The <b>Metro</b> (4 lines, €1.90/ride or €7.25/day) covers most neighbourhoods quickly. <b>Tram 28</b> (historic yellow tram) runs through Alfama and Estrela — iconic but slow and packed; validate your pass before boarding.",
+        "<b>Belém (museums + tower):</b> Tram <b>15E</b> or bus 727 from Praça do Comércio to Belém (~20 min). Alternatively a short Uber.",
+        "<b>To Sintra (day trip):</b> <b>CP train</b> from <b>Rossio Station</b> (or Oriente) to Sintra (~40 min, ≈€2.30 each way) — validate your ticket at the platform scanner. Trains run roughly every 20 min. Book Pena Palace online in advance.",
+        "<b>Across the Tagus (Cacilhas):</b> <b>Ferry</b> from Cais do Sodré every ~15 min (≈€1.55 each way, ~10 min crossing) for views of the river and the 25 de Abril Bridge.",
+        "<b>Getting a taxi/Uber:</b> Uber works well in Lisbon and is usually cheaper than metered taxis; confirm your pickup point clearly as many streets are pedestrianised."
+      ]
+    },
+    {
+      "type": "map",
+      "group": "Getting around",
+      "title": "Orientation map — Lisbon",
+      "center": {
+        "lat": 38.7169,
+        "lng": -9.1399
+      },
+      "span": 0.07
+    },
+    {
+      "type": "days",
+      "group": "Itinerary",
+      "title": "Day by day — 7 days",
+      "items": [
+        {
+          "date": "Day 1",
+          "title": "Arrival + Baixa & Chiado",
+          "pace": "Easy half-day",
+          "body": "Arrive, collect your Viva Viagem card, and check in. Spend the afternoon wandering Baixa (the grid-plan lower town) and Chiado (the literary café district). Evening drink at a miradouro — Portas do Sol or Santa Catarina — with views over the Tagus.",
+          "checklist": [
+            "Viva Viagem card loaded",
+            "Offline maps downloaded"
+          ]
+        },
+        {
+          "date": "Day 2",
+          "title": "Alfama & São Jorge Castle",
+          "pace": "Full day, some steep walking",
+          "body": "Morning at Castelo de São Jorge for panoramic views, then wander down through Alfama's tiled alleys. Look for a tasca serving prato do dia for lunch. Afternoon at the National Tile Museum (Museu do Azulejo) — one of Portugal's best; ≈€5 entry.",
+          "checklist": [
+            "São Jorge Castle entry ≈€10 (book online to skip queue)",
+            "Wear comfortable shoes — Alfama is steep and cobbled"
+          ]
+        },
+        {
+          "date": "Day 3",
+          "title": "Belém — towers, monastery, pastéis",
+          "pace": "Full day, mostly flat",
+          "body": "Take tram 15E to Belém. See the UNESCO Jerónimos Monastery (book timed entry online — €10), then the Torre de Belém on the riverfront (€6). Lunch at Pastéis de Belém for the original custard tart — queue moves fast. Walk the riverside promenade in the afternoon.",
+          "checklist": [
+            "Jerónimos timed entry booked online",
+            "Arrive at Pastéis de Belém by 11:30 or after 15:00 to avoid peak queues"
+          ]
+        },
+        {
+          "date": "Day 4",
+          "title": "Sintra day trip",
+          "pace": "Full day — hilly; wear good shoes",
+          "body": "CP train from Rossio to Sintra (~40 min). Bus 434 from Sintra station loops to Pena Palace (colourful Romantic hilltop palace — ≈€14, book online), Moorish Castle and back. Afternoon in Sintra town: Quinta da Regaleira gardens, local pastries (travesseiros). Return train to Lisbon by early evening.",
+          "checklist": [
+            "Pena Palace entry booked online",
+            "Validate train ticket at platform scanner",
+            "Bus 434 runs on a loop — check last timings back to Sintra station"
+          ]
+        },
+        {
+          "date": "Day 5",
+          "title": "LX Factory + Príncipe Real",
+          "pace": "Relaxed day",
+          "body": "Morning at LX Factory (best on Sundays for the big market — other days more atmospheric and quieter). Afternoon in Príncipe Real: independent boutiques, the covered market, and the Jardim do Príncipe Real. Evening: Time Out Market for dinner — every major Lisbon chef has a counter here.",
+          "note": "LX Factory Sunday market runs 10:00–19:00 — the week's best version.",
+          "checklist": [
+            "LX Factory is free to enter; budget €10–20 for food and browsing"
+          ]
+        },
+        {
+          "date": "Day 6",
+          "title": "Free day — coast or culture",
+          "pace": "Your choice",
+          "body": "Two good options: the <b>Estoril/Cascais train line</b> from Cais do Sodré for a morning at the beach (≈30 min, ≈€2.30 each way), or a slower museum day — Museu Calouste Gulbenkian (world-class art collection, ≈€10) in Lisbon. Evening: fado dinner in Alfama (book ahead for a restaurant with live fado).",
+          "checklist": [
+            "Fado dinner — book at least a day ahead in peak season"
+          ]
+        },
+        {
+          "date": "Day 7",
+          "title": "Departure day",
+          "pace": "Easy morning",
+          "body": "Last pastel de nata with a coffee. Red Metro line from central Lisbon to Aeroporto (~20–25 min) — allow 2 hours before your flight for international departures. No VAT refund scheme for most travellers (Portugal is EU); if flying to a non-EU destination, check at the airport.",
+          "checklist": [
+            "Metro Red line to Aeroporto — validate your ticket",
+            "Allow 2 hr before flight for check-in + security"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "sights",
+      "group": "Sights",
+      "title": "Top sights in Lisbon",
+      "items": [
+        {
+          "name": "Torre de Belém",
+          "kicker": "The postcard icon",
+          "body": "A 16th-century Manueline tower on the Tagus riverfront — ornate stonework, watchtowers and river views. UNESCO World Heritage. Entry ≈€6; book online to avoid queues. Open Tue–Sun 10:00–17:30 (18:30 in summer); closed Mon.",
+          "img": {
+            "file": "Belem Tower, Lisbon (8038548360).jpg",
+            "alt": "Torre de Belém on the Tagus, Lisbon"
+          },
+          "map": {
+            "lat": 38.6916,
+            "lng": -9.216
+          }
+        },
+        {
+          "name": "Mosteiro dos Jerónimos",
+          "kicker": "Late Gothic masterpiece",
+          "body": "An enormous, intricately carved monastery built to celebrate Vasco da Gama's voyage to India — one of Portugal's greatest buildings. UNESCO World Heritage. Entry ≈€10; book a timed slot online. Open Tue–Sun 09:00–18:00 (17:00 Oct–Apr); closed Mon.",
+          "img": {
+            "file": "Jeronimos Monastery, Lisbon, Portugal.JPG",
+            "alt": "Jerónimos Monastery cloister, Lisbon"
+          },
+          "map": {
+            "lat": 38.6979,
+            "lng": -9.2067
+          }
+        },
+        {
+          "name": "Castelo de São Jorge",
+          "kicker": "Hilltop fortress with panoramic views",
+          "body": "A Moorish castle rebuilt by medieval Portuguese kings, perched over the Alfama with 360° views of the city and river. Entry ≈€10. Open daily 09:00–21:00 (18:00 Nov–Feb). Book online to avoid the queue.",
+          "img": {
+            "file": "Castelo Sao Jorge Lisboa 1.JPG",
+            "alt": "Castelo de São Jorge, Lisbon"
+          },
+          "map": {
+            "lat": 38.7139,
+            "lng": -9.1337
+          }
+        },
+        {
+          "name": "LX Factory",
+          "kicker": "Creative hub in a former textile mill",
+          "body": "A cluster of independent restaurants, bars, bookshops and studios in a 19th-century riverside factory. Free to enter. Best visited on Sunday (10:00–19:00) for the market; lively any evening. Home to the beloved bookshop Ler Devagar.",
+          "img": {
+            "file": "LX Factory (22342591986).jpg",
+            "alt": "LX Factory, Lisbon"
+          },
+          "map": {
+            "lat": 38.7026,
+            "lng": -9.1786
+          }
+        },
+        {
+          "name": "Alfama",
+          "kicker": "The old Moorish quarter",
+          "body": "Lisbon's oldest neighbourhood — a labyrinth of tiled alleys, laundry lines, and neighbourhood tascas spilling down from the castle. No single entrance; just walk in from Portas do Sol. Home to fado's roots.",
+          "map": {
+            "lat": 38.7122,
+            "lng": -9.1302
+          }
+        },
+        {
+          "name": "Pastéis de Belém",
+          "kicker": "The original custard tart",
+          "body": "The birthplace of the pastel de nata, made to a secret recipe since 1837. Eat them warm with cinnamon at the counter — €1.20–1.50 each. Queue moves fast; come before 11:30 or after 15:00. Rua de Belém 84–92.",
+          "map": {
+            "lat": 38.6973,
+            "lng": -9.2033
+          }
+        }
+      ]
+    },
+    {
+      "type": "prose",
+      "group": "Sights",
+      "title": "Free viewpoints (miradouros)",
+      "body": "<p>Lisbon's best views cost nothing. <b>Portas do Sol</b> and <b>Santa Luzia</b> overlook the Alfama's rooftops and the Tagus — both are on the tram 28 route. <b>Graça</b> (miradouro da Graça) is a local favourite with fewer tourists. <b>Santa Catarina</b> (Miradouro de Santa Catarina) faces the river and the 25 de Abril Bridge — a classic sunset spot. None charge admission.</p>"
+    },
+    {
+      "type": "sights",
+      "group": "Day trips",
+      "title": "Sintra — fairy-tale palaces",
+      "items": [
+        {
+          "name": "Palácio Nacional da Pena, Sintra",
+          "kicker": "40 minutes from Lisbon by train",
+          "body": "A wildly colourful Romantic palace perched above the clouds on a forested hill — the main reason to come to Sintra. Entry ≈€14 (palace + gardens); book online. Bus 434 from Sintra station runs on a loop to the palace and back. Also worth seeing: Quinta da Regaleira and the ruins of the Moorish Castle.",
+          "img": {
+            "file": "Pena National Palace.JPG",
+            "alt": "Pena National Palace, Sintra"
+          },
+          "map": {
+            "lat": 38.7877,
+            "lng": -9.3905
+          }
+        }
+      ]
+    },
+    {
+      "type": "prose",
+      "group": "Food & shopping",
+      "title": "What to eat",
+      "body": "<p>Portugal punches well above its weight for food. Don't miss: <b>pastel de nata</b> (custard tart — warm, with cinnamon); <b>bifana</b> (spiced pork sandwich, ≈€3); <b>prego</b> (steak sandwich); <b>bacalhau</b> (salt cod — claimed 365 recipes); <b>grilled sardines</b> (especially around the June Santo António festival); and <b>polvo à lagareiro</b> (octopus with olive oil and garlic). Wash it down with a <b>Super Bock</b> or a glass of <b>vinho verde</b>. Coffee: a <b>bica</b> is an espresso; a <b>galão</b> is the milky equivalent of a latte — and at €0.80–1.20, a bargain.</p><p>For dinner with everything under one roof, <b>Time Out Market</b> (Mercado da Ribeira, Cais do Sodré) has counters from the city's top chefs — no reservation needed, open daily. For a more local experience, look for a <b>tasca</b> serving <i>prato do dia</i> (dish of the day with bread, salad and a drink for ≈€8–12).</p>"
+    },
+    {
+      "type": "prose",
+      "group": "Food & shopping",
+      "title": "Shopping",
+      "body": "<p><b>Rua Augusta</b> and the Baixa grid are the main shopping streets — international chains plus some local ceramics shops. Better hunting: <b>Príncipe Real</b> for independent boutiques, vintage and design; <b>LX Factory</b> for books, concept stores and local brands; <b>Feira da Ladra</b> flea market (Campo de Santa Clara, Tue & Sat mornings) for antiques, tiles and vintage prints. For quality ceramics and <i>azulejos</i> (tiles), look for reputable shops rather than tourist stalls — prices vary hugely. Portugal does <b>no VAT refund for EU-bound travellers</b>; if flying to a non-EU country, ask at shops and claim at the airport.</p>"
+    },
+    {
+      "type": "list",
+      "group": "Food & shopping",
+      "title": "Souvenirs worth bringing home",
+      "items": [
+        "Hand-painted azulejo (tile) — buy from a reputable ceramics shop, not a stall",
+        "Pastéis de nata — eat them there; they don't travel well",
+        "A bottle of ginjinha (cherry liqueur) or port wine",
+        "Vinho verde (green wine) — light, slightly sparkling, cheap",
+        "Portuguese cork products (wallets, bags) — Portugal produces half the world's cork",
+        "Sardine tins — they sell them like artworks, in beautifully designed packaging"
+      ]
+    }
+  ]
+}
