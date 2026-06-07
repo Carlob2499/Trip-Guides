@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import PwaHead from "../components/PwaHead.astro";
 import { accentFor } from "../lib/themes";
 import "../styles/hub.css";
 
@@ -16,6 +17,7 @@ const guides = (await getCollection("guides")).sort((a, b) =>
     <title>Trip Guides</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <PwaHead />
   </head>
   <body>
     <header class="hub-masthead">

@@ -1,5 +1,6 @@
 ---
 import Block from "../components/Block.astro";
+import PwaHead from "../components/PwaHead.astro";
 import { bucket } from "../lib/buckets";
 import { accentFor, darken } from "../lib/themes";
 import "../styles/guide.css";
@@ -19,12 +20,14 @@ const navLabel = (s: any, g: string) => s.title || s.name || g;
     <title>{guide.title}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <PwaHead />
   </head>
   <body data-storekey={storeKey}>
     <header class="masthead" id="top">
       {guide.kicker && <p class="eyebrow">{guide.kicker}</p>}
       <h1>{guide.title}</h1>
       {guide.dek && <p class="dek">{guide.dek}</p>}
+      {guide.verified && <p class="verified">{guide.verified}</p>}
       <div class="prog">
         <button id="btnExport" type="button">⤓ Save progress</button>
         <button id="btnImport" type="button">⤒ Restore</button>
@@ -70,7 +73,7 @@ const navLabel = (s: any, g: string) => s.title || s.name || g;
       </main>
     </div>
 
-    <footer>{guide.footer}</footer>
+    <footer>{guide.footer}<br /><span class="offline-note">Add this to your home screen and it works offline once opened — only the embedded maps need a connection.</span></footer>
 
     <!-- mobile-only: bottom bar + slide-up section sheet (hidden on desktop via CSS) -->
     <div class="botbar">

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Trip Guides">
+  <rect width="512" height="512" fill="#f3ecdf"/>
+  <circle cx="256" cy="256" r="196" fill="none" stroke="#211e1a" stroke-width="7" opacity="0.9"/>
+  <polygon points="256,86 290,222 426,256 290,290 256,426 222,290 86,256 222,222" fill="#9c4421"/>
+  <circle cx="256" cy="256" r="16" fill="#f3ecdf" stroke="#211e1a" stroke-width="5"/>
+</svg>

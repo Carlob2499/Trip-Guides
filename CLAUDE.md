@@ -77,3 +77,32 @@ country. Use `guide-template.jsonc` at the repo root as the fill-in model.
 Do NOT auto-generate these sections or their contents — scaffold them, then
 research and verify. A stubbed section is fine to ship empty; an unverified one
 is not.
+
+## Freshness
+Every guide carries a `verified` stamp (string under the dek). Keep it honest:
+when you re-check a guide, update its date; if a guide hasn't been checked to the
+current standard, say so plainly (Japan currently reads "⚠ Draft …"). Before any
+real trip, re-verify the perishable facts (sailings, reservations, opening hours,
+forecast). The Denmark guide models this with a "Final checks — before you fly"
+panel.
+
+## Offline / installable (PWA)
+The site installs to a phone home screen and works offline once opened:
+- `public/manifest.webmanifest` + `public/icons/*` (regenerate icons from
+  `public/icons/favicon.svg`).
+- `public/sw.js` — the service worker. Pages are network-first; assets/images/
+  fonts are cache-first. Bump `CACHE` ("tripguides-v1" → v2) when you ship a big
+  update so visitors refresh cleanly.
+- `src/components/PwaHead.astro` — the shared <head> tags + worker registration;
+  it's already in both layouts, so new pages get offline support for free.
+- Limitation: embedded maps load in a cross-origin OpenStreetMap frame the worker
+  can't cache, so maps need a connection. The text "Key transit routes" cover it.
+
+## Roadmap / parked ideas
+- DESKTOP-CLASS DOC HUB (Wanderlog-style): a per-trip resource hub to drop in
+  reservation emails, hotel/excursion confirmations, train tickets, etc. and read
+  them inside the guide. Parked for a dedicated session — it needs a storage +
+  privacy design (these are sensitive personal docs) and likely an upload/paste
+  flow, not a quick add. Don't bolt it on hastily.
+- Bring Japan up to the universal-backbone + budget standard (needs its own
+  verified research).

@@ -9,6 +9,20 @@
     {
       "type": "panel",
       "group": "Plan",
+      "title": "Final checks — before you fly",
+      "body": "<p>You're only days out, so give the perishable details one last look — these are the things most likely to have shifted since this guide was checked.</p>",
+      "checklist": [
+        "DFDS Copenhagen→Oslo sailing time & terminal — re-check on the DFDS app",
+        "Vækst dinner, Sat Jun 13 17:30 — confirm the reservation still stands",
+        "Opening hours for any sight you're timing a specific day around",
+        "Copenhagen forecast for Jun 8–16 — pack layers + a rain shell",
+        "GO Fest session time (Jun 12–14) matches your ticket",
+        "Passport on you, cards set for abroad, Verizon TravelPass active"
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
       "title": "When you land",
       "body": "<p>At the airport, in order:</p>",
       "checklist": [
@@ -489,5 +503,6 @@
         "Freia chocolate"
       ]
     }
-  ]
+  ],
+  "verified": "✓ Verified June 2026 — reconfirm prices, hours & ferry times before you go"
 }

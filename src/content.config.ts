@@ -44,6 +44,7 @@ const guides = defineCollection({
     dek: z.string().optional(),
     footer: z.string().optional(),
     country: z.string(),          // sets the accent colour (see src/lib/themes.ts)
+    verified: z.string().optional(),  // freshness stamp shown under the dek, e.g. "✓ Verified June 2026 — …"
     intro: z.string().optional(),
     sections: z.array(section),
   }),
