@@ -1,0 +1,382 @@
+{
+  "kicker": "Field guide",
+  "title": "Berlin & Germany",
+  "dek": "Cold-war scars turned creative capital — street food, world-class museums, and day trips to Prussian palaces.",
+  "footer": "Location photos via Wikimedia Commons — tap any credit for its source, author and licence.",
+  "country": "Germany",
+  "verified": "✓ Verified June 2026 — reconfirm prices, hours & transport fares before you go",
+  "intro": "Berlin rewards walkers and cyclists: most of the major sights are close enough to string together on foot, the transit system is comprehensive, and the food scene runs from €2 currywurst to Michelin-starred tasting menus.",
+  "sections": [
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "When you land",
+      "body": "<p>Berlin Brandenburg Airport (BER) has two options for getting in:</p>",
+      "checklist": [
+        "<b>FEX Airport Express</b> — fastest option; runs every 15 min (04:00–01:00), reaches Hauptbahnhof in ~23 min and Potsdamer Platz in ~19 min. Uses a standard ABC single ticket (€5.00) — buy at the airport machines before boarding",
+        "<b>S-Bahn S9 or S45</b> — slower (~45–55 min to central stations) but more frequent; same ABC ticket (€5.00)",
+        "<b>Taxi or Uber</b> to the centre runs ≈€45–70 and takes 30–50 min (longer in traffic). Uber, Bolt and FreeNow are usually 10–20% cheaper than metered taxis",
+        "Validate your ticket at the yellow (BVG) or red (S-Bahn) machines <b>before</b> your first trip — inspectors board regularly and fines are steep"
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Local essentials",
+      "body": "<p><b>Plug:</b> Type F (Schuko, two round pins), 230 V / 50 Hz — US devices need an adapter and a voltage check. <b>Time zone:</b> CET/CEST (UTC+1 in winter, UTC+2 in summer — one hour ahead of the UK). <b>Tap water:</b> safe and excellent throughout Germany — carry a reusable bottle. <b>Sundays:</b> most shops are closed; do your grocery shopping on Saturday. <b>Pfand (bottle deposit):</b> cans and bottles carry a €0.25 deposit — return them at any supermarket machine to get it back. <b>Pharmacies</b> show a red 'A'; a duty rotation (Notdienstapotheke) keeps one open 24/7 nearby — check aponet.de or the notice in any pharmacy window.</p>"
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Entry & documents",
+      "body": "<p>⚠️ The rules below assume a <b>US passport</b>. Other nationalities should check their own requirements.</p>",
+      "checklist": [
+        "Visa-free for US citizens — up to <b>90 days in any 180-day period</b> across the Schengen area",
+        "Passport must be <b>valid for at least 3 months beyond your departure date</b> and issued within the last 10 years",
+        "<b>ETIAS not yet required</b> as of June 2026, but is expected to launch in late 2026 — check before you travel (≈€20 fee when live)",
+        "EU <b>Type F plug adapter</b> — one power strip handles everything",
+        "Travel insurance covering medical care abroad — strongly recommended"
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Booking checklist",
+      "body": "<p>Roughly in this order — the Reichstag dome is free but books out weeks ahead:</p>",
+      "checklist": [
+        "<b>Reichstag dome</b> — free, but register on bundestag.de <b>several weeks in advance</b>; fills fast in summer",
+        "Flights, round-trip — ≈$600–1,200 from the US East Coast (book early)",
+        "Accommodation — book 4–6 weeks ahead in summer; budget hotel ≈€90–130/night",
+        "Museum Island / Pergamon area — check current closures (Pergamon Altar hall closed until ≈2027); consider the <b>Museum Pass Berlin</b> (3 days, 30+ museums) ≈€32",
+        "Sanssouci Palace, Potsdam (day trip) — timed entry recommended, especially on weekends",
+        "Travel insurance (a few weeks out)",
+        "Offline maps + BVG app for transit (week before)"
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Phone & data",
+      "body": "<p>Germany is in the EU, so any EU-roaming SIM works at no extra charge. US travellers: <b>eSIM</b> from Airalo, Holafly or similar (≈$5–15 for 5–10 GB) is the easiest option; alternatively, local SIMs from Telekom, Vodafone DE or O2 are available at the airport and in city shops. Coverage in Berlin and Potsdam is excellent; rural areas can be patchy. The BVG app (transit) and Google Maps work reliably across the city.</p>"
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Holidays & your dates",
+      "body": "<p><b>No national public holidays fall in Berlin during June, July or August 2026</b> — museums, shops and transit run on normal schedules all summer. The next national holiday is <b>German Unity Day on October 3</b>. Note that some holidays (Assumption, Corpus Christi) exist only in certain states — they don't apply in Berlin. <b>Sunday closing laws are the main thing to plan around:</b> almost all shops are closed on Sundays, so stock up on food and supplies on Saturday. Berlin is permitted up to 8 exception Sundays per year where some shops may open — check locally if you're there on a Sunday.</p>"
+    },
+    {
+      "type": "panel",
+      "group": "Money & budget",
+      "title": "Money & currency",
+      "body": "<p>Germany uses the <b>euro (€)</b>. Mid-2026 rate: <b>€1 ≈ $1.16</b> (approximate — check before you go). <b>Germany is more cash-dependent than most of Western Europe</b> — many small restaurants, street-food stalls, independent shops and markets are cash-only. Always carry €20–40 in cash. Cards (especially Mastercard/Visa) are accepted at hotels, chains and larger restaurants, but don't assume. <b>Tipping:</b> not compulsory, but 10% or rounding up is standard at sit-down restaurants — hand the cash or card to the server and state the total you want to pay (e.g. 'Machen Sie 48, bitte' on a €44 bill); do not leave money on the table.</p>"
+    },
+    {
+      "type": "budget",
+      "group": "Money & budget",
+      "title": "Budget & daily costs",
+      "currency": "€",
+      "days": 7,
+      "intro": "Rough <b>per-person, mid-range</b> estimates in euros for a 7-day Berlin trip. Berlin is one of Europe's better-value capitals — street food is cheap, many sights are free or low-cost, and the Museum Pass covers a lot. Tap a field to log your real spend; the total saves on this device.",
+      "items": [
+        {
+          "label": "Accommodation, per night",
+          "basis": "day",
+          "est": 110,
+          "note": "Budget hotel ≈€90–130; hostel dorm from ≈€30–45. Book ahead for summer."
+        },
+        {
+          "label": "Food & drink, per day",
+          "basis": "day",
+          "est": 35,
+          "note": "Döner or currywurst ≈€5–8; sit-down lunch ≈€10–14; dinner ≈€15–25. Supermarkets (Aldi, Netto, Lidl) save money on breakfast and snacks."
+        },
+        {
+          "label": "Local transport, per day",
+          "basis": "day",
+          "est": 12,
+          "note": "24-hour AB day pass = €11.20; ABC (covers BER airport + Potsdam) = €12.90."
+        },
+        {
+          "label": "Sights & activities, per day",
+          "basis": "day",
+          "est": 10,
+          "note": "Reichstag dome free (book ahead). Individual museums ≈€6–14. Museum Pass Berlin (3 days, 30+ sites) ≈€32 — good value if you're doing Museum Island."
+        },
+        {
+          "label": "Flights — round trip",
+          "basis": "trip",
+          "est": 850,
+          "note": "≈$600–1,200 USD from the US East Coast — varies widely by date and carrier."
+        },
+        {
+          "label": "Potsdam day trip (Sanssouci)",
+          "basis": "trip",
+          "est": 26,
+          "note": "ABC day pass ≈€12.90 covers all transit + Sanssouci Palace entry ≈€14 (≈check current price). Book timed entry in advance."
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Health & safety",
+      "title": "Health & pharmacy",
+      "body": "<p><b>Emergencies:</b> dial <b>112</b> (free) for ambulance or fire; <b>110</b> for police. For non-emergency medical help outside office hours, call <b>116 117</b> — Germany's 24/7 medical on-call line, English operators available.</p><p><b>Pharmacies (Apotheken)</b> show a red 'A'. A duty rotation (Notdienstapotheke) keeps at least one open 24/7 in each district — check <em>aponet.de</em> or the notice posted in any pharmacy window for the current duty pharmacy. An after-hours surcharge of ≈€2.50 is set by law. Tap water is safe to drink throughout Germany — but never use <b>hot</b> tap water for drinking or cooking (Legionella risk, especially in older buildings). Travel insurance covering medical care is strongly recommended for US visitors.</p>",
+      "checklist": [
+        "Save <b>112</b> (ambulance/fire) and <b>110</b> (police)",
+        "Save <b>116 117</b> for non-emergency medical advice (24/7)",
+        "Confirm travel insurance covers medical treatment abroad",
+        "Pack medicines in original packaging, plus copies of prescriptions",
+        "Find duty pharmacy at <em>aponet.de</em> if you need one after hours"
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Etiquette & language",
+      "title": "Etiquette & language",
+      "body": "<p>English is widely spoken in Berlin — tourist areas, hotels, restaurants and museums present no language barrier. Outside Berlin, fluency drops; a few phrases go a long way: <i>Hallo</i> (hello), <i>Guten Tag</i> (good day), <i>Danke schön</i> (thank you), <i>Bitte</i> (please / you're welcome), <i>Entschuldigung</i> (excuse me), <i>Wo ist…?</i> (where is…?), <i>Die Rechnung, bitte</i> (the bill, please), <i>Sprechen Sie Englisch?</i> (do you speak English?).</p><p>A few practical habits: <b>carry cash</b> — many places don't take cards. <b>Tip by stating your total</b> to the server, not by leaving money on the table. <b>Don't jaywalk</b> conspicuously — locals wait for the green pedestrian light and will let you know if you don't. <b>Sunday is quiet</b> — shops are closed; plan accordingly. <b>Return your bottles</b> at supermarket Pfand machines. Recycling is taken seriously — bins are colour-coded and segregated.</p>"
+    },
+    {
+      "type": "routes",
+      "group": "Getting around",
+      "title": "Key transit routes",
+      "steps": [
+        "<b>Airport → centre:</b> <b>FEX</b> Airport Express every 15 min — Potsdamer Platz in ~19 min, Hauptbahnhof in ~23 min. Standard ABC single ticket €5.00. Validate before boarding. (S9/S45 is slower — ~45–55 min — but same ticket.)",
+        "<b>Around Berlin:</b> The <b>U-Bahn</b> (underground, yellow signage) and <b>S-Bahn</b> (surface/elevated, green signage) share the same ticket. AB day pass €11.20 covers all buses, trams, U-Bahn and S-Bahn within the city ring. Validate once — it's valid for 2 hours on a single, or until 3 a.m. the next day on a day pass.",
+        "<b>Brandenburg Gate / Mitte sights:</b> U-Bahn <b>U55</b> to Brandenburger Tor, or S-Bahn <b>S1/S2/S25</b> to Unter den Linden / Brandenburger Tor. The whole central historic mile is walkable.",
+        "<b>Museum Island:</b> S-Bahn <b>S3/S5/S7/S9</b> to Hackescher Markt, then a short walk; or tram M4/M5/M6 to Lustgarten.",
+        "<b>East Side Gallery:</b> S-Bahn <b>S3/S5/S7/S9</b> to Ostbahnhof, then a 5-min walk along the river.",
+        "<b>To Potsdam (day trip):</b> <b>RE1</b> Regional Express from Berlin Hbf or Ostbahnhof — 25 min to Potsdam Hbf. ABC day pass (€12.90) covers the whole journey. Sanssouci Park is a 30-min walk or short bus from the station.",
+        "<b>Cycling:</b> Berlin has 620+ km of dedicated lanes. Daily rental ≈€10–20 from Dott, Nextbike or local shops — a good option for Tiergarten and the central sights."
+      ]
+    },
+    {
+      "type": "map",
+      "group": "Getting around",
+      "title": "Orientation map — Berlin",
+      "center": {
+        "lat": 52.5166,
+        "lng": 13.3833
+      },
+      "span": 0.08
+    },
+    {
+      "type": "days",
+      "group": "Itinerary",
+      "title": "Day by day — 7 days",
+      "items": [
+        {
+          "date": "Day 1",
+          "title": "Arrival + Mitte first look",
+          "pace": "Easy half-day",
+          "body": "FEX from the airport to Potsdamer Platz or Hauptbahnhof. Check in, then walk the central mile: Brandenburg Gate, the Holocaust Memorial, Pariser Platz. Evening on Unter den Linden.",
+          "checklist": [
+            "ABC ticket validated before leaving airport",
+            "Carry €20–40 cash from the start"
+          ]
+        },
+        {
+          "date": "Day 2",
+          "title": "Reichstag + Tiergarten + Holocaust Memorial",
+          "pace": "Full day, mostly flat",
+          "body": "Morning at the Reichstag dome (free — you need a booking from bundestag.de). Walk through Tiergarten to the Victory Column. Afternoon at the Memorial to the Murdered Jews of Europe — moving and worth taking time over. Evening meal in the government quarter area.",
+          "checklist": [
+            "Reichstag booking confirmed (bring ID — passport or driver's licence)",
+            "Memorial has no entry fee; underground exhibition ≈€5"
+          ]
+        },
+        {
+          "date": "Day 3",
+          "title": "Museum Island",
+          "pace": "Full day — indoor, some walking",
+          "body": "The five UNESCO museums on a river island. Highlights: the Neues Museum (Egyptian collection, Nefertiti bust), the Altes Museum (Greek and Roman antiquities), and the Berliner Dom (cathedral) exterior and roof. ⚠️ The Pergamon Altar hall is closed until approximately 2027 — check current openings before you go. Museum Pass Berlin (≈€32) covers all five for 3 days.",
+          "note": "Pergamon Altar hall closed for renovation — confirm what's open at smb.museum.",
+          "checklist": [
+            "Museum Pass Berlin worth buying if you plan 3+ museums",
+            "Berliner Dom entry ≈€9; roof access included"
+          ]
+        },
+        {
+          "date": "Day 4",
+          "title": "East Side Gallery + Kreuzberg",
+          "pace": "Full day, lots of walking",
+          "body": "Morning at the East Side Gallery — 1.3 km of original Berlin Wall painted by international artists; free, outdoors. Lunch in Kreuzberg (best Döner in the city is contested but Kreuzberg is the place to try). Afternoon: Tempelhof Field (the former airport turned public park) if you want open space.",
+          "checklist": [
+            "East Side Gallery is free and always open",
+            "Bring cash for street food in Kreuzberg"
+          ]
+        },
+        {
+          "date": "Day 5",
+          "title": "Potsdam day trip — Sanssouci",
+          "pace": "Full day — hilly park; wear good shoes",
+          "body": "RE1 from Berlin Hbf to Potsdam Hbf (25 min). Bus or 30-min walk to Sanssouci Palace, Frederick the Great's rococo summer palace set in 500-hectare terraced gardens. Book a timed palace entry online — ≈€14. Also worth: the adjacent Orangery and Charlottenhof. Return to Berlin in the evening.",
+          "note": "Sanssouci is the most visited sight in Germany outside Berlin — book online, especially on weekends.",
+          "checklist": [
+            "Sanssouci timed entry booked",
+            "ABC day pass covers all transit there and back",
+            "The park itself is free; palace entry is ticketed"
+          ]
+        },
+        {
+          "date": "Day 6",
+          "title": "Charlottenburg + neighbourhood day",
+          "pace": "Relaxed",
+          "body": "Morning at Charlottenburg Palace (Berlin's largest palace, ≈€12 — or just the free gardens). Afternoon in one of Berlin's neighbourhood markets: Mauerpark flea market (Sunday mornings, free entry) or Boxhagener Platz market. Evening: KaDeWe department store food hall — the largest in continental Europe — for a splurge.",
+          "checklist": [
+            "Mauerpark market is Sunday only — adjust itinerary if this is a weekday",
+            "KaDeWe food hall is open Mon–Sat"
+          ]
+        },
+        {
+          "date": "Day 7",
+          "title": "Departure day",
+          "pace": "Easy morning",
+          "body": "Last currywurst or Frühstück (German bakery breakfast). FEX from any central station to BER — about 19–23 min. Allow 2.5 hours before your flight for international departures; security at BER can have queues.",
+          "checklist": [
+            "ABC ticket for the FEX (€5.00) — validate before boarding",
+            "Allow 2.5 hr before international departure"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "sights",
+      "group": "Sights",
+      "title": "Top sights in Berlin",
+      "items": [
+        {
+          "name": "Brandenburger Tor",
+          "kicker": "The symbol of Berlin",
+          "body": "The 18th-century neoclassical gate that divided East and West for 28 years — now the city's centrepiece. Free to view at any hour; spectacular at dusk. Pariser Platz around it is pedestrianised.",
+          "img": {
+            "file": "Berlin Brandenburg Gate.JPG",
+            "alt": "Brandenburg Gate, Berlin"
+          },
+          "map": {
+            "lat": 52.5163,
+            "lng": 13.3778
+          }
+        },
+        {
+          "name": "Reichstag & glass dome",
+          "kicker": "Free — but book weeks ahead",
+          "body": "The German parliament building, topped by Norman Foster's glass dome with a 360° rooftop walkway and views over the government quarter. Entry is free but requires advance registration on bundestag.de — book several weeks ahead in summer. Bring your passport.",
+          "img": {
+            "file": "The Reichstag building, Berlin, Germany 1.JPG",
+            "alt": "Reichstag building, Berlin"
+          },
+          "map": {
+            "lat": 52.5186,
+            "lng": 13.3767
+          }
+        },
+        {
+          "name": "East Side Gallery",
+          "kicker": "1.3 km of original Wall art",
+          "body": "The longest remaining section of the Berlin Wall, covered in murals painted by international artists in 1990. Free, open-air, always accessible. Dmitri Vrubel's 'Fraternal Kiss' (Brezhnev and Honecker) is the most photographed image.",
+          "img": {
+            "file": "East Side Gallery.JPG",
+            "alt": "East Side Gallery murals, Berlin Wall"
+          },
+          "map": {
+            "lat": 52.505,
+            "lng": 13.4396
+          }
+        },
+        {
+          "name": "Museum Island (Museumsinsel)",
+          "kicker": "Five UNESCO museums on a river island",
+          "body": "The Neues Museum (Nefertiti bust), Altes Museum (Greek and Roman antiquities), Bode Museum and Alte Nationalgalerie. ⚠️ The Pergamon Altar hall is closed for renovation until approximately 2027 — check smb.museum before you go. Museum Pass Berlin (≈€32) covers all five for 3 days.",
+          "img": {
+            "file": "Berliner Dom - Berlin Cathedral (2012).JPG",
+            "alt": "Berliner Dom (Berlin Cathedral) on Museum Island"
+          },
+          "map": {
+            "lat": 52.5166,
+            "lng": 13.4023
+          }
+        },
+        {
+          "name": "Memorial to the Murdered Jews of Europe",
+          "kicker": "2,711 concrete stelae — moving and disorienting",
+          "body": "Peter Eisenman's field of 2,711 grey concrete slabs of varying heights, metres from the Brandenburg Gate. Free to walk through at any time. The underground exhibition (≈€5) provides historical context — worth the time.",
+          "map": {
+            "lat": 52.5138,
+            "lng": 13.3786
+          }
+        },
+        {
+          "name": "Checkpoint Charlie",
+          "kicker": "The Cold War's most famous crossing",
+          "body": "The former US Army crossing point between East and West Berlin. The replica guardhouse and signage are free to see; the Checkpoint Charlie Museum next door charges entry (≈€15 — check current price). Busy and tourist-heavy, but historically resonant.",
+          "img": {
+            "file": "Checkpoint Charlie - Berlin (2007).JPG",
+            "alt": "Checkpoint Charlie, Berlin"
+          },
+          "map": {
+            "lat": 52.5074,
+            "lng": 13.3903
+          }
+        }
+      ]
+    },
+    {
+      "type": "prose",
+      "group": "Sights",
+      "title": "Free Berlin",
+      "body": "<p>A lot of Berlin's best things cost nothing. The <b>Brandenburg Gate</b>, <b>East Side Gallery</b>, <b>Holocaust Memorial</b> (exterior), <b>Tiergarten</b>, <b>Tempelhofer Feld</b> (vast former airport turned park — one of the most unusual spaces in any city) and <b>Mauerpark</b> are all free. The <b>Reichstag dome</b> is free with an advance booking. Many state museums have free entry on the first Sunday of the month — check smb.museum for the current offer.</p>"
+    },
+    {
+      "type": "sights",
+      "group": "Day trips",
+      "title": "Potsdam — Prussian palaces",
+      "items": [
+        {
+          "name": "Schloss Sanssouci, Potsdam",
+          "kicker": "25 minutes from Berlin by train",
+          "body": "Frederick the Great's intimate rococo summer palace set in 500 hectares of terraced gardens, fountains and smaller palaces. UNESCO World Heritage. Palace entry ≈€14 — book timed tickets online, especially at weekends. RE1 train from Berlin Hbf (25 min); ABC day pass (€12.90) covers the journey.",
+          "img": {
+            "file": "Potsdam - Schloss Sanssouci mit Weinberg 2008.JPG",
+            "alt": "Sanssouci Palace with vineyard terraces, Potsdam"
+          },
+          "map": {
+            "lat": 52.4036,
+            "lng": 13.0387
+          }
+        }
+      ]
+    },
+    {
+      "type": "prose",
+      "group": "Day trips",
+      "title": "Sachsenhausen Memorial",
+      "body": "<p>Sachsenhausen concentration camp memorial is 35 km north of Berlin — about 50 minutes by S-Bahn S1 to Oranienburg, then a 20-minute walk. Open daily (closed Mondays November–March); entry is free, with a suggested donation of ≈€3 for maintenance. Guided tours from Berlin are also available. A sobering but important half-day; pair it with a lighter afternoon in Berlin, not back-to-back with other heavy history.</p>"
+    },
+    {
+      "type": "prose",
+      "group": "Food & shopping",
+      "title": "What to eat",
+      "body": "<p>Berlin's street food is its best and cheapest. <b>Currywurst</b> (sliced pork sausage with curried ketchup) is the city's signature snack — ≈€3–5 from any Imbiss stand; Curry 36 in Kreuzberg is the most famous. <b>Döner kebab</b> was essentially invented in Berlin's Turkish community — the city's best is a genuine debate, but Kreuzberg and Neukölln are the neighbourhoods to try. <b>Pretzel (Brezel)</b> with butter from a bakery makes a cheap breakfast alongside strong coffee (≈€3–4 total).</p><p>For a proper sit-down meal, <b>Schnitzel</b> (breaded cutlet), <b>Sauerbraten</b> (slow-braised beef) and <b>Flammkuchen</b> (Alsatian flatbread) are reliable and filling. Beer is taken seriously — ask for a <i>Helles</i> (lager), <i>Weizen</i> (wheat beer) or a local craft option. Water at restaurants: ask for <i>Leitungswasser</i> (tap water) — it's free and perfectly safe; still water is <i>stilles Wasser</i>, sparkling is <i>Sprudelwasser</i>.</p>"
+    },
+    {
+      "type": "prose",
+      "group": "Food & shopping",
+      "title": "Shopping",
+      "body": "<p><b>Kurfürstendamm (Ku'damm)</b> is Berlin's main shopping boulevard — international brands and the iconic <b>KaDeWe</b> department store (food hall on the top floor is worth visiting even without buying). <b>Hackescher Markt</b> and the surrounding Mitte courtyards (Höfe) have independent boutiques and design shops. <b>Mauerpark flea market</b> (Sunday mornings, Prenzlauer Berg) is one of Berlin's best markets — vintage clothes, records and second-hand finds. Sunday closing applies everywhere: plan shopping for weekdays or Saturday.</p>"
+    },
+    {
+      "type": "list",
+      "group": "Food & shopping",
+      "title": "Souvenirs worth bringing home",
+      "items": [
+        "A piece of original Berlin Wall with certificate — sold at legitimate museum shops",
+        "Ampelmännchen merchandise (the beloved East German crossing-light figure)",
+        "German chocolate or marzipan (Niederegger for serious marzipan)",
+        "A bottle of Riesling or Spätburgunder (Pinot Noir) from a wine shop",
+        "A Pfand bottle as a souvenir — return it for €0.25, or keep it",
+        "Vinyl records — Berlin's record shops (especially in Kreuzberg and Mitte) are exceptional"
+      ]
+    }
+  ]
+}
