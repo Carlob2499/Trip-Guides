@@ -9,12 +9,6 @@
     {
       "type": "panel",
       "group": "Plan",
-      "title": "Money & currency",
-      "body": "<p>Denmark uses the <b>krone (DKK)</b>, not the euro. Rough mid-2026 rates (approximate — check before you go): <b>100 DKK ≈ $15.50</b>. Your day trips use other currencies: <b>100 SEK ≈ $10–11</b> (Sweden) and <b>100 NOK ≈ $9–10</b> (Norway).</p><p>Cards and contactless work essentially everywhere, so you may never touch cash. Tipping isn't expected — rounding up is plenty.</p>"
-    },
-    {
-      "type": "panel",
-      "group": "Plan",
       "title": "When you land",
       "body": "<p>At the airport, in order:</p>",
       "checklist": [
@@ -51,18 +45,129 @@
       "title": "Booking checklist",
       "body": "<p>Roughly in this order — the first group is the stuff that sells out or sets your dates.</p>",
       "checklist": [
-        "Flights, round-trip (book early)",
-        "DFDS Copenhagen–Oslo ferry <b>+ cabin</b> (book early)",
-        "Hotel — CABINN by Nørreport (book early)",
-        "GO Fest tickets + <b>Premier Access</b>, matching your session (book early)",
+        "Flights, round-trip (book early) — ≈ $400–1,200",
+        "DFDS Copenhagen–Oslo ferry <b>+ cabin</b> (book early) — ≈ $220 return",
+        "Hotel — CABINN by Nørreport (book early) — ≈ $110/night",
+        "GO Fest tickets + <b>Premier Access</b>, matching your session (book early) — Premier Access ≈ $95",
         "Vækst dinner, Sat Jun 13 17:30 (reserve early)",
         "Passport valid ≥3 months beyond Jun 16 (check ~1 month out)",
         "Travel insurance (a few weeks out)",
         "Confirm Verizon TravelPass or a SIM (a few weeks out)",
         "Rejseplanen + offline maps for CPH, Malmö, Oslo (week before)",
-        "Plan the Copenhagen City Pass — buy on arrival (week before)",
+        "Plan the Copenhagen City Pass — buy on arrival (week before) — 24h ≈ $13",
         "Break in your shoes / insoles (week before)"
       ]
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Phone & data",
+      "body": "<p><b>Verizon TravelPass</b> is $12/line/day — 5 GB high-speed then slower, with unlimited talk and text, and it works across Denmark, Sweden and Norway. Text <b>TRAVEL to 4004</b> to enable it. On Unlimited Ultimate, international is already included. One catch: the ferry's mid-sea stretch won't have usable signal, so download anything you need before you sail.</p>"
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Footwear & comfort",
+      "body": "<p>You'll be on your feet all day, so for heavier weight and heel pain, choose a <b>firm, structured</b> insole with a <b>deep heel cup</b> and a stated weight rating — not a soft gel pad. Solid options include Powerstep Pinnacle Maxx, Tread Labs Pace, Superfeet, or heavy-duty brands like VALSOLE / Walkomfy (rated 220+ lb). Break them in for a few days before the trip.</p>"
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "GoPro kit",
+      "body": "<p>Quick cheat-sheet: 4K/30 or 2.7K/60 for general b-roll, 1080/120 for slow-mo, HyperSmooth on. Pack two spare batteries and a fast 128 GB+ card — the cold harbour wind drains batteries faster than you'd expect.</p>"
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Holidays & your dates",
+      "body": "<p>Good news for timing: <b>no Danish public holidays fall during 8–16 June 2026.</b> The spring holidays (Ascension, Whit Monday, and Constitution Day on 5 June) all land just before you arrive, and Midsummer Eve (Sankt Hans, 23 June) is just after — so shops, museums, and transit run on normal schedules.</p><p>Two things to plan around: you're travelling in <b>peak summer</b>, which means very long daylight (about 17–18 hours), the biggest crowds, and the highest prices of the year; and <b>Pokémon GO Fest fills Fælledparken 12–14 June</b>, which packs central hotels, restaurants, and transit on those days. Most central Copenhagen shops open daily, Sundays included in summer, though smaller shops may keep shorter Sunday hours.</p>"
+    },
+    {
+      "type": "panel",
+      "group": "Money & budget",
+      "title": "Money & currency",
+      "body": "<p>Denmark uses the <b>krone (DKK)</b>, not the euro. Rough mid-2026 rates (approximate — check before you go): <b>100 DKK ≈ $15.50</b>. Your day trips use other currencies: <b>100 SEK ≈ $10–11</b> (Sweden) and <b>100 NOK ≈ $9–10</b> (Norway).</p><p>Cards and contactless work essentially everywhere, so you may never touch cash. Tipping isn't expected — rounding up is plenty.</p>"
+    },
+    {
+      "type": "budget",
+      "group": "Money & budget",
+      "title": "Budget & daily costs",
+      "currency": "$",
+      "days": 8,
+      "intro": "Rough <b>per-person</b> estimates in USD to set expectations — Denmark is one of Europe's priciest destinations. Tap a field to log what you actually spend; the running total updates live and saves on this device. Treat the estimates as starting points and confirm prices as you book.",
+      "items": [
+        {
+          "label": "Lodging — CABINN, per night (per room)",
+          "basis": "day",
+          "est": 110,
+          "note": "Split across the room if you share."
+        },
+        {
+          "label": "Food & coffee, per day",
+          "basis": "day",
+          "est": 50,
+          "note": "Restaurant mains run $25–48; bakeries and street food are cheaper."
+        },
+        {
+          "label": "Local transport, per day",
+          "basis": "day",
+          "est": 12,
+          "note": "A 24-hour DOT pass is about 90 DKK (~$13)."
+        },
+        {
+          "label": "Sights & entries, per day",
+          "basis": "day",
+          "est": 25
+        },
+        {
+          "label": "Flights — round trip (your fare)",
+          "basis": "trip",
+          "est": 650,
+          "note": "NYC↔CPH runs roughly $400–1,200 by date."
+        },
+        {
+          "label": "DFDS Oslo overnight ferry — return cabin",
+          "basis": "trip",
+          "est": 220,
+          "note": "Foot-passenger inside cabin; varies a lot — book early."
+        },
+        {
+          "label": "Malmö day trip — Øresundståg return",
+          "basis": "trip",
+          "est": 30,
+          "note": "≈111 DKK each way; bring your passport."
+        },
+        {
+          "label": "GO Fest Premier Access (optional)",
+          "basis": "trip",
+          "est": 95,
+          "note": "≈640 DKK; leave at 0 if you skip it."
+        },
+        {
+          "label": "Copenhagen Card 72h (alternative)",
+          "basis": "trip",
+          "est": 0,
+          "note": "599 DKK (~$82): transit + 80+ sights. Use INSTEAD of the per-day transport + sights lines, not on top."
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Health & safety",
+      "title": "Health & pharmacy",
+      "body": "<p><b>Emergencies:</b> dial <b>112</b> (free) for anything life-threatening — ambulance, fire, police. For an injury or sudden illness that isn't life-threatening, or before going to any emergency room, call <b>1813</b> first — the Capital Region's 24/7 medical line, staffed by nurses and doctors (from a foreign mobile, dial +45 1813). Non-emergency police is <b>114</b>.</p><p><b>Pharmacies (apotek)</b> show a green 'A'. The one open around the clock is <b>Steno Apotek, Vesterbrogade 6C</b>, by Central Station; staff speak English. As a US visitor you have no Danish health card, but you can still call 1813 and be seen, and private English-speaking doctor / hotel-visit services exist for a fee. <b>Tap water is clean and safe</b> to drink everywhere.</p>",
+      "checklist": [
+        "Save <b>112</b> (emergency) and <b>1813</b> (medical line — +45 1813 from a foreign phone)",
+        "Pack medicines in their original packaging, plus a copy of any prescriptions",
+        "Confirm your travel insurance covers medical care abroad",
+        "Note the 24-hour pharmacy: Steno Apotek, Vesterbrogade 6C"
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Etiquette & language",
+      "title": "Etiquette & language",
+      "body": "<p>Danish is the official language, but <b>English is spoken almost everywhere</b> — you'll have no trouble. A few local habits worth knowing:</p><p><b>Stay out of the bike lanes.</b> Copenhagen runs on cycling, and the lane between the pavement and the road belongs to bikes — stepping into it, or stopping there for a photo, is the quickest way to startle a cyclist. Look both ways before crossing one.</p><p><b>Tipping isn't expected</b> — service is included in the bill; round up for great service if you like. It's a <b>card-first country</b>, so contactless works nearly everywhere and you can carry very little cash. Danes are friendly but reserved, and quiet on public transport. '<b>Tak</b>' means thank you.</p>"
     },
     {
       "type": "routes",
@@ -86,24 +191,6 @@
         "lng": 12.5683
       },
       "span": 0.06
-    },
-    {
-      "type": "panel",
-      "group": "Plan",
-      "title": "Phone & data",
-      "body": "<p><b>Verizon TravelPass</b> is $12/line/day — 5 GB high-speed then slower, with unlimited talk and text, and it works across Denmark, Sweden and Norway. Text <b>TRAVEL to 4004</b> to enable it. On Unlimited Ultimate, international is already included. One catch: the ferry's mid-sea stretch won't have usable signal, so download anything you need before you sail.</p>"
-    },
-    {
-      "type": "panel",
-      "group": "Plan",
-      "title": "Footwear & comfort",
-      "body": "<p>You'll be on your feet all day, so for heavier weight and heel pain, choose a <b>firm, structured</b> insole with a <b>deep heel cup</b> and a stated weight rating — not a soft gel pad. Solid options include Powerstep Pinnacle Maxx, Tread Labs Pace, Superfeet, or heavy-duty brands like VALSOLE / Walkomfy (rated 220+ lb). Break them in for a few days before the trip.</p>"
-    },
-    {
-      "type": "panel",
-      "group": "Plan",
-      "title": "GoPro kit",
-      "body": "<p>Quick cheat-sheet: 4K/30 or 2.7K/60 for general b-roll, 1080/120 for slow-mo, HyperSmooth on. Pack two spare batteries and a fast 128 GB+ card — the cold harbour wind drains batteries faster than you'd expect.</p>"
     },
     {
       "type": "days",

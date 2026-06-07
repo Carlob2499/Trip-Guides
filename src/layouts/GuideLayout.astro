@@ -173,6 +173,33 @@ const navLabel = (s: any, g: string) => s.title || s.name || g;
           if (E) E.addEventListener("click", function () { window.prompt("Copy this progress code (paste into Restore on any device):", btoa(JSON.stringify(current()))); });
           if (I) I.addEventListener("click", function () { var c = window.prompt("Paste your progress code:"); if (!c) return; try { var s = JSON.parse(atob(c.trim())); boxes.forEach(function (b) { b.checked = !!s[b.dataset.pkey]; }); save(s); } catch (e) { alert("That code could not be read — check you copied all of it."); } });
           if (C) C.addEventListener("click", function () { if (!confirm("Uncheck everything and clear saved progress?")) return; boxes.forEach(function (b) { b.checked = false; }); save({}); });
+
+          // ----- budget calculators: live running total of what you actually spend, saved per device -----
+          document.querySelectorAll(".budget").forEach(function (bud) {
+            var BKEY = STORE_KEY + "-budget";
+            var bstore = {};
+            try { bstore = JSON.parse(localStorage.getItem(BKEY) || "{}"); } catch (e) { bstore = {}; }
+            var cur = bud.getAttribute("data-cur") || "$";
+            var inputs = Array.prototype.slice.call(bud.querySelectorAll(".bactual"));
+            inputs.forEach(function (inp) {
+              var row = inp.closest(".brow");
+              var k = hashKey((row && row.getAttribute("data-key")) || "");
+              inp.dataset.pkey = k;
+              if (bstore[k] != null) inp.value = bstore[k];
+            });
+            function fmt(n) { return cur + (Math.round(n * 100) / 100).toLocaleString("en-US"); }
+            function recalc() {
+              var sum = 0;
+              inputs.forEach(function (inp) { var v = parseFloat(inp.value); if (!isNaN(v)) sum += v; });
+              var t = bud.querySelector(".bact-total"); if (t) t.textContent = fmt(sum);
+            }
+            function persistBudget() {
+              var o = {}; inputs.forEach(function (inp) { if (inp.value !== "") o[inp.dataset.pkey] = inp.value; });
+              try { localStorage.setItem(BKEY, JSON.stringify(o)); flash("✓ saved"); } catch (e) { flash("use Save progress"); }
+            }
+            inputs.forEach(function (inp) { inp.addEventListener("input", function () { recalc(); persistBudget(); }); });
+            recalc();
+          });
         } catch (err) { console.error("guide enhancement error:", err); }
       })();
     </script>

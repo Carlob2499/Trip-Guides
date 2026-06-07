@@ -9,12 +9,6 @@
     {
       "type": "panel",
       "group": "Plan",
-      "title": "Money & currency",
-      "body": "<p>Korea uses the <b>won (₩)</b>. The won is weak right now, which helps your spending power — roughly (approximate, check before you go): <b>₩1,000 ≈ $0.67</b> and <b>₩10,000 ≈ $6.70</b>, at about ₩1,500 to the dollar.</p><p>Cards and contactless work almost everywhere, but keep some cash for market stalls and small eateries. A <b>T-money</b> card covers subway and buses. Tipping isn't expected.</p>"
-    },
-    {
-      "type": "panel",
-      "group": "Plan",
       "title": "When you land",
       "body": "<p>At the airport, in order:</p>",
       "checklist": [
@@ -51,11 +45,11 @@
       "title": "Booking checklist",
       "body": "<p>Roughly in this order — the first group is what sells out or pins your dates.</p>",
       "checklist": [
-        "Flights, round-trip (book early)",
-        "Seoul hotel for the week (book early)",
-        "Daejeon hotel near DCC II for Sat Jul 11 night (book early)",
+        "Flights, round-trip (book early) — ≈ $1,000–1,400",
+        "Seoul hotel for the week (book early) — ≈ $90/night",
+        "Daejeon hotel near DCC II for Sat Jul 11 night (book early) — ≈ $80",
         "MSI tickets + mobile entry, via Interpark (book early)",
-        "KTX Seoul–Daejeon both ways — especially the Sunday-evening return (Korail app)",
+        "KTX Seoul–Daejeon both ways — especially the Sunday-evening return (Korail app) — ≈ $32 return",
         "Changdeokgung Secret Garden timed tour (reserve ahead)",
         "e-Arrival Card — within 72 hours of your flight",
         "Confirm Verizon TravelPass; download KakaoMap, Naver Map, Papago, Kakao T, Korail",
@@ -73,6 +67,94 @@
       "group": "Plan",
       "title": "Weather & comfort",
       "body": "<p>Early-to-mid July is Korea's <b>monsoon season (jangma)</b> — hot, very humid, with heavy rain spells. Pack a compact umbrella and quick-dry clothes, hydrate hard, and build in air-conditioned breaks (malls, cafés, museums). For heavier feet and heel pain, use a <b>firm, structured</b> insole with a <b>deep heel cup</b> and a weight rating (Powerstep Pinnacle Maxx, Tread Labs Pace, Superfeet, or VALSOLE / Walkomfy), plus moisture-wicking socks. Break them in before the trip.</p>"
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Holidays & your dates",
+      "body": "<p>Timing is in your favour: <b>no public holidays fall during 8–15 July 2026.</b> Constitution Day (17 July) isn't a day off and lands just after you leave, and the next real holiday is Liberation Day on 15 August — so nothing shuts down while you're there.</p><p>What you do need to plan around is the weather. Mid-July is the peak of Korea's monsoon, '<b>jangma</b>' — the wettest, most humid stretch of the year, with roughly 300–400&nbsp;mm of rain across about 16 days, real heat, and humidity near 80%. The rain often arrives in heavy bursts that can briefly flood streets or slow transit, with a small typhoon chance later in the month. Pack a compact umbrella and quick-dry layers, keep indoor options in your back pocket, and check the forecast each morning. Your MSI weekend in Daejeon (11–12 July) is indoors, so rain won't touch it. (See <b>Weather &amp; comfort</b> for what to wear.)</p>"
+    },
+    {
+      "type": "panel",
+      "group": "Money & budget",
+      "title": "Money & currency",
+      "body": "<p>Korea uses the <b>won (₩)</b>. The won is weak right now, which helps your spending power — roughly (approximate, check before you go): <b>₩1,000 ≈ $0.67</b> and <b>₩10,000 ≈ $6.70</b>, at about ₩1,500 to the dollar.</p><p>Cards and contactless work almost everywhere, but keep some cash for market stalls and small eateries. A <b>T-money</b> card covers subway and buses. Tipping isn't expected.</p>"
+    },
+    {
+      "type": "budget",
+      "group": "Money & budget",
+      "title": "Budget & daily costs",
+      "currency": "$",
+      "days": 7,
+      "intro": "Rough <b>per-person</b> estimates in USD — Korea is good value, and the weak won (about ₩1,500 to the dollar) stretches your money further. Tap a field to log what you actually spend; the running total updates live and saves on this device. Treat the estimates as starting points and confirm as you book.",
+      "items": [
+        {
+          "label": "Lodging — Seoul hotel, per night (per room)",
+          "basis": "day",
+          "est": 90,
+          "note": "Split across the room — good value with three of you."
+        },
+        {
+          "label": "Food & coffee, per day",
+          "basis": "day",
+          "est": 40,
+          "note": "Street food and casual spots are cheap; chain coffee ~$1.50."
+        },
+        {
+          "label": "Local transport, per day",
+          "basis": "day",
+          "est": 10,
+          "note": "Subway rides are under ~$1.10 on a T-money card."
+        },
+        {
+          "label": "Sights & entries, per day",
+          "basis": "day",
+          "est": 15,
+          "note": "Palaces are a few dollars; lots is free."
+        },
+        {
+          "label": "Flights — round trip (your fare)",
+          "basis": "trip",
+          "est": 1200,
+          "note": "NYC↔ICN runs roughly $1,000–1,400 by date."
+        },
+        {
+          "label": "MSI weekend tickets (already booked)",
+          "basis": "trip",
+          "est": 0,
+          "note": "You've got the LBF + Grand Final — log what you paid."
+        },
+        {
+          "label": "KTX Seoul↔Daejeon — return",
+          "basis": "trip",
+          "est": 32,
+          "note": "₩18,000–32,000 each way, ~50 min; book on the Korail app."
+        },
+        {
+          "label": "Daejeon hotel — 1 night (Sat 11 Jul)",
+          "basis": "trip",
+          "est": 80,
+          "note": "Near DCC II for the MSI weekend."
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Health & safety",
+      "title": "Health & pharmacy",
+      "body": "<p><b>Emergencies:</b> dial <b>119</b> for an ambulance or fire — the ambulance is free — and <b>112</b> for police. On a 119 call, say '<b>English, please</b>' to be connected to an interpreter; your location is detected automatically. The number worth saving first is <b>1330</b>, the 24/7 Korea Travel Hotline: English-speaking operators who interpret, give directions, and can patch you through to 119 or 112. <b>1339</b> is a 24-hour medical line that finds the nearest emergency room.</p><p><b>Pharmacies (약국, <i>yakguk</i>)</b> show a '약' sign and are well stocked; many close on Sundays, but those by major stations stay open and some run 24 hours. For minor needs, convenience stores (CU, GS25, 7-Eleven) carry basics like paracetamol and antacids. Korea doesn't require insurance for visitors, so you'd <b>pay the full bill upfront — bring travel insurance.</b> Seoul tap water (Arisu) is treated and safe to drink, though locals often prefer bottled or filtered.</p>",
+      "checklist": [
+        "Save <b>119</b> (ambulance/fire), <b>112</b> (police), and <b>1330</b> (24/7 English travel hotline)",
+        "Buy travel insurance — without it you pay 100% upfront",
+        "Pack medicines in original packaging, plus a note of their generic names",
+        "Learn the sign: <b>약</b> = pharmacy; convenience stores cover the basics after hours"
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Etiquette & language",
+      "title": "Etiquette & language",
+      "body": "<p>Korean is the language, and while <b>English is less widespread than in Europe</b>, signs, the subway, and major sights are bilingual, and a translation app (Papago handles Korean better than Google) covers the rest. One practical heads-up: <b>Google Maps barely works for directions in Korea</b> — use <b>KakaoMap</b> or <b>Naver Map</b> instead.</p><p><b>Don't tip</b> — it isn't customary and can puzzle staff; the listed price is what you pay. A few courtesies go a long way: hand over and receive cash or cards with <b>two hands</b> (or one hand touching the other forearm), slip your <b>shoes off</b> wherever you see a raised floor or a row of shoes at the door, and keep your voice low on the subway. A small bow works as both hello and thanks. 'Thank you' is '<b>gamsahamnida</b>'.</p>"
     },
     {
       "type": "routes",

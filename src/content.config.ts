@@ -22,7 +22,18 @@ const section = z.discriminatedUnion("type", [
     img: z.object({ file: z.string(), alt: z.string().optional() }).optional(),
     map: coord.optional(),
   })) }),
+  z.object({ type: z.literal("budget"), group: z.string(), title: z.string().optional(),
+    intro: z.string().optional(), currency: z.string().optional(), days: z.number().optional(),
+    items: z.array(z.object({
+      label: z.string(),
+      basis: z.enum(["day", "trip"]),   // per-day cost (× days) or a one-off trip cost
+      est: z.number(),                  // estimate in the guide's currency
+      note: z.string().optional(),
+    })) }),
 ]);
+
+// NOTE: when changing the eight section types here, also update the comment in
+// src/components/Block.astro and the section list in CLAUDE.md.
 
 const guides = defineCollection({
   // Every .json file in src/content/guides/ becomes one guide page.

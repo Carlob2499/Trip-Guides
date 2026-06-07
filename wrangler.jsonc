@@ -1,0 +1,10 @@
+{
+  // This file is ONLY used if you deploy on Cloudflare (Workers). It tells
+  // Cloudflare your site is plain static files in the "dist" folder, which
+  // STOPS it from auto-adding a server adapter your site doesn't need (that was
+  // the cause of the "astro add cloudflare" / .assetsignore error).
+  // Netlify and Vercel ignore this file — it does no harm there.
+  "name": "trip-guides",
+  "compatibility_date": "2026-06-06",
+  "assets": { "directory": "./dist" }
+}
