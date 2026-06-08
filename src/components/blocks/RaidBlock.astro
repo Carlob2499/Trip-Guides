@@ -1,0 +1,74 @@
+---
+// Renders a `raids` section: collapsible per-boss counter tables with strategy notes.
+// Data lives in the JSON `bosses` array — no HTML hand-maintenance required.
+const { sec } = Astro.props;
+
+const TIER_LABELS: Record<string, string> = {
+  "3-star":     "3-Star Raid",
+  "5-star":     "5-Star Raid",
+  "primal":     "Primal Raid",
+  "shadow":     "Shadow 5-Star Raid · Bring Purified Gems",
+  "super-mega": "Super Mega Raid · Park session finale only",
+};
+const TIER_ORDER = ["3-star", "5-star", "primal", "shadow", "super-mega"] as const;
+
+const bosses: any[] = sec.bosses || [];
+
+const tierGroups = TIER_ORDER
+  .map(tier => ({ tier, label: TIER_LABELS[tier], bosses: bosses.filter(b => b.tier === tier) }))
+  .filter(g => g.bosses.length > 0);
+
+// Wrap summary text in a single <span> so it's one flex item after the ::before arrow.
+const summaryHTML = (boss: any) => {
+  const typing = boss.typing.join(" / ");
+  const shiny  = `✨ Shiny ${boss.shiny_odds}${boss.shiny_note ? ` — ${boss.shiny_note}` : ""}`;
+  const note   = boss.note ? ` · ⚠️ ${boss.note}` : "";
+  return `<span><strong>${boss.name}</strong> · ${typing} · ${shiny} · ${boss.trainers}${note}</span>`;
+};
+---
+<p class="raid-intro">
+  Tap any boss to expand counters and strategy. Ranked by estimated DPS.<br />
+  <strong>Shiny odds: 1/20</strong> for legendary&nbsp;·&nbsp;Shadow&nbsp;·&nbsp;Primal&nbsp;·&nbsp;Super Mega
+  &emsp;·&emsp;
+  <strong>≈1/64</strong> for 3-star (ticket holders only for Combat Breed).
+</p>
+
+{tierGroups.map(({ label, bosses: tierBosses }) => (
+  <>
+    <p class="raid-tier-label">— {label.toUpperCase()} —</p>
+    {tierBosses.map((boss: any) => (
+      <details>
+        <summary set:html={summaryHTML(boss)}></summary>
+        <table>
+          <thead>
+            <tr>
+              <th>Pokémon</th><th>Fast Move</th><th>Charged Move</th><th>Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            {boss.counters.map((c: any) => (
+              <tr>
+                <td>{c.pokemon}</td>
+                <td>{c.fast}</td>
+                <td>{c.charged}</td>
+                <td>{c.typing}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p>⚡ <Fragment set:html={boss.strategy} /></p>
+      </details>
+    ))}
+  </>
+))}
+
+<p class="raid-sources">
+  <small>
+    Counter data:
+    <a href="https://www.dittobase.com/pokemon-go" target="_blank" rel="noopener noreferrer">Dittobase.com</a> ·
+    <a href="https://pokemongohub.net" target="_blank" rel="noopener noreferrer">Pokémon GO Hub</a> ·
+    <a href="https://www.pokebattler.com" target="_blank" rel="noopener noreferrer">Pokébattler.com</a>
+    (June 2026). Shiny rates:
+    <a href="https://www.locachange.com/pokemon-go/go-fest-shiny-odds-and-list/" target="_blank" rel="noopener noreferrer">GO Fest shiny rates guide</a>.
+  </small>
+</p>

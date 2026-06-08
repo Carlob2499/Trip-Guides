@@ -27,8 +27,13 @@ not a programmer — explain changes in plain language and keep the workflow sim
   destination = one page at `/guides/<filename>/`.
 - `src/content.config.ts` — the schema: the authoritative list of what a guide and
   each section type may contain. If a build fails with a content error, this is why.
-- `src/components/Block.astro` — renders one section (panel, prose, list, routes,
-  map, days, sights). Change here = changes every guide.
+- `src/components/Block.astro` — thin router: routes each section type to its
+  sub-component in `src/components/blocks/`. Change the router only to add a new
+  type; change a sub-component to affect only that type.
+- `src/components/blocks/` — one file per section type (PanelBlock, ProseBlock,
+  ListBlock, RoutesBlock, MapBlock, BudgetBlock, DaysBlock, SightsBlock,
+  RaidBlock). Adding a new type: create the sub-component here first, then wire
+  it up in Block.astro and content.config.ts.
 - `src/layouts/GuideLayout.astro` — page frame, sidebar/mobile nav, the small
   client script (scroll-spy, mobile sheet, checklist memory).
 - `src/styles/guide.css`, `src/styles/hub.css` — all visual styling.
@@ -55,9 +60,17 @@ separate. There is no "edit once, change all guides' content," by design.
 (checklist), `routes` (numbered steps), `map` (lat/lng → live map), `days`
 (itinerary), `sights` (photo cards), `budget` (interactive cost calculator:
 per-day and one-off estimates, a server-computed trip total, and editable
-"your spend" fields that total live and save on the reader's device). A `group`
-puts a section under a nav category; a category with a single section hides that
-section's own title.
+"your spend" fields that total live and save on the reader's device), `raids`
+(collapsible counter tables for each raid boss — structured data, not HTML).
+A `group` puts a section under a nav category; a category with a single section
+hides that section's own title.
+
+**`prose` body fields** may contain inline HTML: `<p>`, `<b>`, `<i>`, `<a>`,
+`<ul>/<li>`, `<ol>`. Do **not** put `<details>`, `<table>`, or any other complex
+block elements in a `prose` body. If you need collapsible sections, tables, or
+structured repeating content, add a proper section type to `content.config.ts`
+instead (as `raids` was added). Hand-authored HTML in a `body` field is
+technical debt — it's unvalidated, hard to update, and bypasses the schema.
 
 ## Universal backbone — every country guide should cover these
 Build to this checklist and VERIFY each item (rule 1) before committing a new
@@ -128,6 +141,9 @@ Generic titles like "Kastellet + Reffen" or "City day + LEGO" describe contents 
 
 ### Day theme summaries are a distinct, addable layer
 A one-line italic summary at the opening of each day's body field (e.g. "A gentle landing — find your bearings, then let the harbour do the heavy lifting.") adds emotional context that pacing notes and checklists can't provide. **Rule: every `days` item should open with a 1–2 sentence theme line before the logistical detail.**
+
+### Complex content belongs in a section type, not an HTML string in a `prose` body
+The raid counter charts were first implemented as a ~4,000-character HTML string in a `prose` body field — `<details>`, `<table>`, nested `<tr>` rows, all hand-written and unvalidated. This worked once but was fragile: one wrong bracket broke the display, updating a counter required editing raw HTML, and the schema gave zero help. The fix was to add a `raids` section type to `content.config.ts`, create `RaidBlock.astro` to render it, and migrate the data into a typed JSON structure. **Rule: if a `prose` body field grows beyond simple `<b>/<i>/<a>/<p>/<ul>` inline markup, stop and add a section type instead. The extra 20 minutes of schema work saves hours of maintenance.**
 
 ### Inline links go in the most actionable places; References handles citation
 Link the first mention of each key resource in the most relevant section of the guide (e.g., "DOT Tickets app" in the transit panel, "tivoli.dk" in the Tivoli entry). Don't link every mention of every resource everywhere — that clutters the text. The References section is the comprehensive citation list; inline links are navigation shortcuts. **Rule: max one inline link per resource, in the place where it's most likely to be acted on.**

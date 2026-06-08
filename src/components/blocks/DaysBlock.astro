@@ -1,0 +1,23 @@
+---
+const { sec } = Astro.props;
+---
+{(sec.items || []).map((d: any) => (
+  <div class="day">
+    <div class="d">{d.date}</div>
+    <div class="b">
+      <strong>{d.title}</strong>
+      {d.pace && <div class="pace">⏱ {d.pace}</div>}
+      {d.body && <div><Fragment set:html={d.body} /></div>}
+      {d.note && <span class="lsnote">🌿 <Fragment set:html={d.note} /></span>}
+      {d.fit  && <div class="fit">Fit: <Fragment set:html={d.fit} /></div>}
+      {d.checklist && d.checklist.length > 0 && (
+        <div class="daykit">
+          <span class="kit-label">Day kit</span>
+          {d.checklist.map((i: string) => (
+            <label class="check"><input type="checkbox" /> <Fragment set:html={i} /></label>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+))}

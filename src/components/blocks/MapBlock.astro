@@ -1,0 +1,11 @@
+---
+const { sec } = Astro.props;
+const bbox = (c: any, span?: number) => {
+  const s = span || 0.05;
+  return [c.lng - s, c.lat - s * 0.6, c.lng + s, c.lat + s * 0.6].join("%2C");
+};
+---
+<iframe class="osmmap" loading="lazy" title="map"
+  src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox(sec.center, sec.span)}&layer=mapnik&marker=${sec.center.lat}%2C${sec.center.lng}`}>
+</iframe>
+<p class="note">Interactive map — pan &amp; zoom when you open this guide in a browser.</p>

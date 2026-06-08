@@ -1,0 +1,4 @@
+---
+const { sec } = Astro.props;
+---
+{sec.body && <Fragment set:html={sec.body} />}

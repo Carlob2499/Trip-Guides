@@ -1,4 +1,4 @@
-{
+﻿{
   "kicker": "Summer 2026",
   "title": "Copenhagen & Denmark",
   "dek": "Nine days around one of Europe's most liveable cities — canal cruises and rooftop ski slopes, a bridge to Sweden, an overnight ferry to Norway, and three days at Pokémon GO Fest. Tick items off as you go; your progress saves automatically.",
@@ -500,6 +500,233 @@
       "body": "<p><b>Premier Access — use the lounge as your operations base:</b></p><ul><li>The Copenhagen Premier Lounge is the first-ever European location — a quiet charging hub with lockers and upgraded facilities. Use it at the midpoint of each park session for a recharge, not just at the end.</li><li>100 Super Incubators means you can incubate aggressively all three days. Load all nine incubator slots before entering the Cultivation Zone at the start of each session.</li><li>Silver Pinap Berries: use exclusively on Zeraora, every Mewtwo catch, and every Comfey catch. They boost catch rate AND give extra candy. Don't spend them on common spawns.</li><li>Activate a Lucky Egg + Star Piece right before a burst of back-to-back raids. With Raid Lover's +5,000 XP per raid, a Lucky Egg doubles this. 18 raids at 10,000 XP each = 180,000 XP from one Lucky Egg activation.</li></ul><p><b>Raid Lover — 18 passes is a massive operational advantage:</b></p><ul><li>Priority order: <b>Mewtwo → Mega Mewtwo X/Y (park finale) → Shadow Kyogre/Groudon → Shadow Moltres/Entei → Primal Kyogre/Groudon → Paldean Tauros (Combat Breed)</b></li><li>The Recruitment Zone is where raid groups form fastest. Arrive there in the first 30 min of the session to find full lobbies and reduce solo-raid waste.</li><li>Candy XL from 5-star catches (3 per catch with the add-on): with Mewtwo requiring 200 Candy to Mega-evolve, every raid catch matters. Stack raid bursts in the early morning when energy is highest.</li><li>Spin the first Gym inside the park to collect all 18 passes — don't start burning passes outside before you enter.</li></ul><p><b>Egg-thusiast — make every step count:</b></p><ul><li>At ¼ hatch distance, a 10 km Egg hatches at 2.5 km. In a 4-hour park session at GO Fest walking pace, you can realistically hatch 5–8 Super Incubated Eggs. Load up before entering and walk continuously.</li><li>Walk during raid lobbies and catch sequences — the game counts distance via Adventure Sync even while you're in menus. Keep Bluetooth on at all times.</li><li>3× Hatch Candy and Stardust mean every good hatch is tripled in value. If 10 km event Eggs carry strong GO Fest species (check Leek Duck on Jun 12), fill all nine incubator slots exclusively with those.</li><li>Don't waste Super Incubators on 2 km or 5 km Eggs if 10 km event Eggs are available in the Cultivation Zone.</li></ul>"
     },
     {
+      "type": "raids",
+      "group": "Sights",
+      "title": "Raid counter charts — all 12 GO Fest Copenhagen bosses",
+      "bosses": [
+        {
+          "name": "Paldean Tauros — Combat Breed",
+          "tier": "3-star",
+          "typing": ["Fighting"],
+          "shiny_odds": "≈1/64",
+          "shiny_note": "ticket holders only",
+          "trainers": "Solo-able",
+          "strategy": "<b>Weak to:</b> Flying · Psychic · Fairy. Easily solo-able. Don't waste Raid Passes — one attempt per session is enough. <b>Use Silver Pinap on every catch</b>: Combat Breed is the Copenhagen-exclusive regional shiny, ticket holders only, and you won't get another chance outside this city. Throw Excellents.",
+          "counters": [
+            { "pokemon": "Mega Mewtwo Y",   "fast": "Confusion",   "charged": "Psystrike",     "typing": "Psychic" },
+            { "pokemon": "Mega Rayquaza",   "fast": "Air Slash",   "charged": "Dragon Ascent", "typing": "Flying" },
+            { "pokemon": "Mega Mewtwo X",   "fast": "Confusion",   "charged": "Psystrike",     "typing": "Psychic" },
+            { "pokemon": "Shadow Mewtwo",   "fast": "Confusion",   "charged": "Psystrike",     "typing": "Psychic" },
+            { "pokemon": "Mega Alakazam",   "fast": "Confusion",   "charged": "Psychic",       "typing": "Psychic" },
+            { "pokemon": "Rayquaza",        "fast": "Air Slash",   "charged": "Dragon Ascent", "typing": "Flying" },
+            { "pokemon": "Shadow Moltres",  "fast": "Wing Attack", "charged": "Fly",           "typing": "Flying" },
+            { "pokemon": "Shadow Alakazam", "fast": "Confusion",   "charged": "Psychic",       "typing": "Psychic" }
+          ]
+        },
+        {
+          "name": "Mewtwo",
+          "tier": "5-star",
+          "typing": ["Psychic"],
+          "shiny_odds": "1/20",
+          "trainers": "2–3 trainers",
+          "note": "GO Fest moveset: Counter + Psystrike",
+          "strategy": "<b>Weak to:</b> Bug · Ghost · Dark. <b>GO Fest moveset note (Counter + Psystrike):</b> Counter is Fighting-type — Ghost attackers are nearly immune to it (best survivability). Dark types resist Psystrike but take heavy Counter damage. <b>Avoid Rock-type attackers</b> entirely — weak to Fighting. Every Mewtwo caught here gets Counter + Psystrike locked in, the GO Fest 2026 Location Background, and Mega Level 1 free. <b>Run Mewtwo raids first, every session</b>.",
+          "counters": [
+            { "pokemon": "Necrozma — Dawn Wings", "fast": "Shadow Claw", "charged": "Moongeist Beam", "typing": "Ghost" },
+            { "pokemon": "Mega Mewtwo Y",         "fast": "Psycho Cut",  "charged": "Shadow Ball",    "typing": "Psychic" },
+            { "pokemon": "Mega Gengar",           "fast": "Lick",        "charged": "Shadow Ball",    "typing": "Ghost" },
+            { "pokemon": "Mega Mewtwo X",         "fast": "Psycho Cut",  "charged": "Shadow Ball",    "typing": "Psychic" },
+            { "pokemon": "Mega Tyranitar",        "fast": "Bite",        "charged": "Brutal Swing",   "typing": "Dark" },
+            { "pokemon": "Shadow Chandelure",     "fast": "Hex",         "charged": "Shadow Ball",    "typing": "Ghost" },
+            { "pokemon": "Shadow Darkrai",        "fast": "Snarl",       "charged": "Shadow Ball",    "typing": "Dark" },
+            { "pokemon": "Shadow Hydreigon",      "fast": "Bite",        "charged": "Brutal Swing",   "typing": "Dark" }
+          ]
+        },
+        {
+          "name": "Moltres",
+          "tier": "5-star",
+          "typing": ["Fire", "Flying"],
+          "shiny_odds": "1/20",
+          "trainers": "2–3 trainers",
+          "strategy": "<b>Weak to:</b> Rock (2× double weakness) · Water · Electric. All Rock, all the time — the double weakness makes even budget options like Rampardos and Rhyperior hit hard.",
+          "counters": [
+            { "pokemon": "Mega Diancie",     "fast": "Rock Throw", "charged": "Rock Slide",   "typing": "Rock" },
+            { "pokemon": "Shadow Rhyperior", "fast": "Smack Down", "charged": "Rock Wrecker", "typing": "Rock" },
+            { "pokemon": "Shadow Rampardos", "fast": "Smack Down", "charged": "Rock Slide",   "typing": "Rock" },
+            { "pokemon": "Shadow Tyrantrum", "fast": "Rock Throw", "charged": "Meteor Beam",  "typing": "Rock" },
+            { "pokemon": "Mega Tyranitar",   "fast": "Smack Down", "charged": "Stone Edge",   "typing": "Rock" },
+            { "pokemon": "Mega Aerodactyl",  "fast": "Rock Throw", "charged": "Rock Slide",   "typing": "Rock" },
+            { "pokemon": "Shadow Tyranitar", "fast": "Smack Down", "charged": "Stone Edge",   "typing": "Rock" },
+            { "pokemon": "Rampardos",        "fast": "Smack Down", "charged": "Rock Slide",   "typing": "Rock" }
+          ]
+        },
+        {
+          "name": "Entei",
+          "tier": "5-star",
+          "typing": ["Fire"],
+          "shiny_odds": "1/20",
+          "trainers": "2–3 trainers",
+          "strategy": "<b>Weak to:</b> Water · Rock · Ground. Primal Kyogre leads by a huge margin and boosts your team's Water moves by 10% from the 6th slot even without entering. Budget: Swampert (Hydro Cannon) and Rhyperior (Rock Wrecker) are strong accessible options.",
+          "counters": [
+            { "pokemon": "Primal Kyogre",    "fast": "Waterfall",  "charged": "Origin Pulse",     "typing": "Water" },
+            { "pokemon": "Primal Groudon",   "fast": "Mud Shot",   "charged": "Precipice Blades", "typing": "Ground" },
+            { "pokemon": "Mega Garchomp",    "fast": "Mud Shot",   "charged": "Earth Power",      "typing": "Dragon / Ground" },
+            { "pokemon": "Shadow Kyogre",    "fast": "Waterfall",  "charged": "Origin Pulse",     "typing": "Water" },
+            { "pokemon": "Mega Swampert",    "fast": "Water Gun",  "charged": "Hydro Cannon",     "typing": "Water / Ground" },
+            { "pokemon": "Shadow Rhyperior", "fast": "Mud Slap",   "charged": "Rock Wrecker",     "typing": "Rock / Ground" },
+            { "pokemon": "Shadow Garchomp",  "fast": "Mud Shot",   "charged": "Earth Power",      "typing": "Dragon / Ground" },
+            { "pokemon": "Mega Diancie",     "fast": "Rock Throw", "charged": "Rock Slide",       "typing": "Rock" }
+          ]
+        },
+        {
+          "name": "Primal Kyogre",
+          "tier": "primal",
+          "typing": ["Water"],
+          "shiny_odds": "1/20",
+          "trainers": "5+ trainers",
+          "strategy": "<b>Weak to:</b> Electric · Grass. Grass types (Mega Venusaur, Kartana) resist Water moves and survive longer; Electric types deal more raw damage. Keep Primal Kyogre in the 6th anchor slot during Entei and Primal Groudon raids — it boosts all your Water attackers by 10% without even entering.",
+          "counters": [
+            { "pokemon": "Mega Mewtwo Y",  "fast": "Psycho Cut",    "charged": "Thunderbolt",  "typing": "Psychic" },
+            { "pokemon": "Mega Mewtwo X",  "fast": "Psycho Cut",    "charged": "Thunderbolt",  "typing": "Psychic" },
+            { "pokemon": "Zeraora",        "fast": "Volt Switch",   "charged": "Plasma Fists", "typing": "Electric" },
+            { "pokemon": "Kartana",        "fast": "Razor Leaf",    "charged": "Leaf Blade",   "typing": "Grass / Steel" },
+            { "pokemon": "Shadow Raikou",  "fast": "Thunder Shock", "charged": "Wild Charge",  "typing": "Electric" },
+            { "pokemon": "Mega Venusaur",  "fast": "Vine Whip",     "charged": "Frenzy Plant", "typing": "Grass / Poison" },
+            { "pokemon": "Xurkitree",      "fast": "Thunder Shock", "charged": "Discharge",    "typing": "Electric" },
+            { "pokemon": "Mega Manectric", "fast": "Thunder Fang",  "charged": "Wild Charge",  "typing": "Electric" }
+          ]
+        },
+        {
+          "name": "Primal Groudon",
+          "tier": "primal",
+          "typing": ["Ground", "Fire"],
+          "shiny_odds": "1/20",
+          "trainers": "4+ trainers",
+          "strategy": "<b>Weak to:</b> Water (double weakness — both Ground and Fire are weak to Water). Bring your whole Water bench. Primal Kyogre dominates; even regular Gyarados contributes. Budget: Mega Blastoise or a team of Gyarados clears this with 4–5 trainers.",
+          "counters": [
+            { "pokemon": "Primal Kyogre",   "fast": "Waterfall", "charged": "Surf",         "typing": "Water" },
+            { "pokemon": "Shadow Kyogre",   "fast": "Waterfall", "charged": "Surf",         "typing": "Water" },
+            { "pokemon": "Mega Swampert",   "fast": "Water Gun", "charged": "Hydro Cannon", "typing": "Water / Ground" },
+            { "pokemon": "Mega Gyarados",   "fast": "Waterfall", "charged": "Aqua Tail",    "typing": "Water / Flying" },
+            { "pokemon": "Shadow Gyarados", "fast": "Waterfall", "charged": "Aqua Tail",    "typing": "Water / Flying" },
+            { "pokemon": "Mega Blastoise",  "fast": "Water Gun", "charged": "Hydro Cannon", "typing": "Water" },
+            { "pokemon": "Kyogre",          "fast": "Waterfall", "charged": "Surf",         "typing": "Water" },
+            { "pokemon": "Gyarados",        "fast": "Waterfall", "charged": "Aqua Tail",    "typing": "Water / Flying" }
+          ]
+        },
+        {
+          "name": "Shadow Moltres",
+          "tier": "shadow",
+          "typing": ["Fire", "Flying"],
+          "shiny_odds": "1/20",
+          "trainers": "4–5 trainers + Purified Gems",
+          "strategy": "<b>Weak to:</b> Rock (2×) · Water · Electric. Same counters as regular Moltres but Shadow raids deal and take 20% more. Use Purified Gems at the start. Shiny Shadow Moltres has massive collector value — worth several Raid Passes.",
+          "counters": [
+            { "pokemon": "Mega Diancie",     "fast": "Rock Throw", "charged": "Rock Slide",   "typing": "Rock" },
+            { "pokemon": "Shadow Rampardos", "fast": "Smack Down", "charged": "Rock Slide",   "typing": "Rock" },
+            { "pokemon": "Shadow Rhyperior", "fast": "Smack Down", "charged": "Rock Wrecker", "typing": "Rock" },
+            { "pokemon": "Shadow Tyrantrum", "fast": "Rock Throw", "charged": "Meteor Beam",  "typing": "Rock" },
+            { "pokemon": "Mega Tyranitar",   "fast": "Smack Down", "charged": "Stone Edge",   "typing": "Rock" },
+            { "pokemon": "Shadow Gigalith",  "fast": "Lock On",    "charged": "Meteor Beam",  "typing": "Rock" },
+            { "pokemon": "Mega Aerodactyl",  "fast": "Rock Throw", "charged": "Rock Slide",   "typing": "Rock" },
+            { "pokemon": "Shadow Tyranitar", "fast": "Smack Down", "charged": "Stone Edge",   "typing": "Rock" }
+          ]
+        },
+        {
+          "name": "Shadow Entei",
+          "tier": "shadow",
+          "typing": ["Fire"],
+          "shiny_odds": "1/20",
+          "trainers": "3–4 trainers + Purified Gems",
+          "strategy": "<b>Weak to:</b> Water · Ground · Rock. The most accessible Shadow legendary — 3 trainers with strong counters can manage it. Use Purified Gems at the start.",
+          "counters": [
+            { "pokemon": "Primal Kyogre",    "fast": "Waterfall",      "charged": "Origin Pulse",     "typing": "Water" },
+            { "pokemon": "Primal Groudon",   "fast": "Mud Shot",       "charged": "Precipice Blades", "typing": "Ground" },
+            { "pokemon": "Mega Garchomp",    "fast": "Mud Shot",       "charged": "Earth Power",      "typing": "Dragon / Ground" },
+            { "pokemon": "Shadow Kyogre",    "fast": "Waterfall",      "charged": "Origin Pulse",     "typing": "Water" },
+            { "pokemon": "Mega Swampert",    "fast": "Water Gun",      "charged": "Hydro Cannon",     "typing": "Water / Ground" },
+            { "pokemon": "Shadow Rhyperior", "fast": "Mud Slap",       "charged": "Rock Wrecker",     "typing": "Rock / Ground" },
+            { "pokemon": "Shadow Greninja",  "fast": "Water Shuriken", "charged": "Hydro Cannon",     "typing": "Water / Dark" },
+            { "pokemon": "Mega Rayquaza",    "fast": "Dragon Tail",    "charged": "Dragon Ascent",    "typing": "Dragon / Flying" }
+          ]
+        },
+        {
+          "name": "Shadow Kyogre",
+          "tier": "shadow",
+          "typing": ["Water"],
+          "shiny_odds": "1/20",
+          "trainers": "4+ trainers + Purified Gems",
+          "strategy": "<b>Weak to:</b> Electric · Grass. Mega Sceptile resists Water moves while hitting super-effectively — best survivability pick. Shadow Kyogre's Origin Pulse hits extremely hard; expect frequent faints. Save Purified Gems for this raid and Shadow Groudon.",
+          "counters": [
+            { "pokemon": "Mega Mewtwo Y",  "fast": "Psycho Cut",    "charged": "Thunderbolt",  "typing": "Psychic" },
+            { "pokemon": "Mega Mewtwo X",  "fast": "Psycho Cut",    "charged": "Thunderbolt",  "typing": "Psychic" },
+            { "pokemon": "Zeraora",        "fast": "Volt Switch",   "charged": "Plasma Fists", "typing": "Electric" },
+            { "pokemon": "Kartana",        "fast": "Razor Leaf",    "charged": "Leaf Blade",   "typing": "Grass / Steel" },
+            { "pokemon": "Shadow Raikou",  "fast": "Thunder Shock", "charged": "Wild Charge",  "typing": "Electric" },
+            { "pokemon": "Xurkitree",      "fast": "Thunder Shock", "charged": "Discharge",    "typing": "Electric" },
+            { "pokemon": "Mega Sceptile",  "fast": "Fury Cutter",   "charged": "Frenzy Plant", "typing": "Grass" },
+            { "pokemon": "Mega Manectric", "fast": "Thunder Fang",  "charged": "Wild Charge",  "typing": "Electric" }
+          ]
+        },
+        {
+          "name": "Shadow Groudon",
+          "tier": "shadow",
+          "typing": ["Ground"],
+          "shiny_odds": "1/20",
+          "trainers": "4–5 trainers + Purified Gems",
+          "strategy": "<b>Weak to:</b> Water · Grass · Ice (pure Ground — unlike Primal Groudon which is Ground/Fire). Kyurem White tops the chart but is rare; Primal Kyogre and Mega Sceptile carry most groups. Toughest Shadow raid — use Purified Gems and bring your best.",
+          "counters": [
+            { "pokemon": "Kyurem — White", "fast": "Ice Fang",    "charged": "Ice Burn",      "typing": "Dragon / Ice" },
+            { "pokemon": "Primal Kyogre",  "fast": "Waterfall",   "charged": "Origin Pulse",  "typing": "Water" },
+            { "pokemon": "Mega Sceptile",  "fast": "Fury Cutter", "charged": "Frenzy Plant",  "typing": "Grass" },
+            { "pokemon": "Mega Rayquaza",  "fast": "Dragon Tail", "charged": "Dragon Ascent", "typing": "Dragon / Flying" },
+            { "pokemon": "Mega Mewtwo Y",  "fast": "Psycho Cut",  "charged": "Ice Beam",      "typing": "Psychic" },
+            { "pokemon": "Mega Mewtwo X",  "fast": "Psycho Cut",  "charged": "Ice Beam",      "typing": "Psychic" },
+            { "pokemon": "Shadow Kyogre",  "fast": "Waterfall",   "charged": "Surf",          "typing": "Water" },
+            { "pokemon": "Mega Venusaur",  "fast": "Vine Whip",   "charged": "Frenzy Plant",  "typing": "Grass / Poison" }
+          ]
+        },
+        {
+          "name": "Mega Mewtwo Y",
+          "tier": "super-mega",
+          "typing": ["Psychic"],
+          "shiny_odds": "1/20",
+          "trainers": "5+ trainers",
+          "note": "Park session finale only",
+          "strategy": "<b>Weak to:</b> Bug · Ghost · Dark. The hardest raid of the event. Spawns at session end — gather your group at the Recruitment Zone before your session closes. Stack a Lucky Egg before it spawns: Raid Lover's +5,000 XP becomes 10,000 XP each under Lucky Egg.",
+          "counters": [
+            { "pokemon": "Necrozma — Dawn Wings", "fast": "Shadow Claw", "charged": "Moongeist Beam", "typing": "Ghost" },
+            { "pokemon": "Mega Mewtwo Y",         "fast": "Psycho Cut",  "charged": "Shadow Ball",    "typing": "Psychic" },
+            { "pokemon": "Mega Mewtwo X",         "fast": "Psycho Cut",  "charged": "Shadow Ball",    "typing": "Psychic" },
+            { "pokemon": "Mega Tyranitar",        "fast": "Bite",        "charged": "Brutal Swing",   "typing": "Dark" },
+            { "pokemon": "Mega Gengar",           "fast": "Lick",        "charged": "Shadow Ball",    "typing": "Ghost" },
+            { "pokemon": "Shadow Tyranitar",      "fast": "Bite",        "charged": "Brutal Swing",   "typing": "Dark" },
+            { "pokemon": "Lunala",                "fast": "Shadow Claw", "charged": "Shadow Ball",    "typing": "Ghost" },
+            { "pokemon": "Shadow Hydreigon",      "fast": "Bite",        "charged": "Brutal Swing",   "typing": "Dark" }
+          ]
+        },
+        {
+          "name": "Mega Mewtwo X",
+          "tier": "super-mega",
+          "typing": ["Psychic", "Fighting"],
+          "shiny_odds": "1/20",
+          "trainers": "5+ trainers",
+          "note": "Park session finale only",
+          "strategy": "<b>Weak to:</b> Flying · Ghost · Fairy (the Fighting subtype adds Flying as an extra weakness). Mega Rayquaza leads on Flying super-effectiveness. Pick whichever Mega Mewtwo form you still need for your Mega dex — both are available in raids.",
+          "counters": [
+            { "pokemon": "Mega Rayquaza",         "fast": "Air Slash",   "charged": "Dragon Ascent",  "typing": "Dragon / Flying" },
+            { "pokemon": "Necrozma — Dawn Wings", "fast": "Psycho Cut",  "charged": "Moongeist Beam", "typing": "Ghost" },
+            { "pokemon": "Mega Mewtwo Y",         "fast": "Psycho Cut",  "charged": "Shadow Ball",    "typing": "Psychic" },
+            { "pokemon": "Mega Mewtwo X",         "fast": "Psycho Cut",  "charged": "Shadow Ball",    "typing": "Psychic" },
+            { "pokemon": "Mega Gardevoir",        "fast": "Charm",       "charged": "Dazzling Gleam", "typing": "Fairy / Psychic" },
+            { "pokemon": "Mega Gengar",           "fast": "Lick",        "charged": "Shadow Ball",    "typing": "Ghost" },
+            { "pokemon": "Shadow Moltres",        "fast": "Wing Attack", "charged": "Fly",            "typing": "Flying" },
+            { "pokemon": "Rayquaza",              "fast": "Air Slash",   "charged": "Dragon Ascent",  "typing": "Dragon / Flying" }
+          ]
+        }
+      ]
+    },
+    {
       "type": "prose",
       "group": "Food & shopping",
       "title": "What to eat in Copenhagen — a first-timer's guide",
@@ -545,10 +772,6 @@
           "name": "Lilla Torg & Gamla Staden (Old Town)",
           "kicker": "Best photo spot in the city — arrive before 10:00",
           "body": "Malmö's old town is a tight cluster of half-timbered buildings in red, yellow, and ochre framing a cobblestone square. Lilla Torg (Little Square) is the best postcard shot in the city — arrive before 10:00 for morning light before cafe chairs fill every frame. Walk <b>Jakob Nilsgatan</b> for a narrow 17th-century lane of pastel houses with almost no crowds. The <b>Form/Design Center</b> on the square stocks ceramics, carved wood, and suede bags — genuinely Swedish and portable. Free to browse.",
-          "img": {
-            "file": "The Turning Torso, Malmo.JPG",
-            "alt": "Turning Torso at Västra Hamnen, Malmö"
-          },
           "map": {
             "lat": 55.6049,
             "lng": 13.0038
@@ -567,6 +790,10 @@
           "name": "Turning Torso & Västra Hamnen waterfront",
           "kicker": "54-story twisted skyscraper — photograph from the harbor dock",
           "body": "Sweden's tallest building twists 90 degrees from base to top. Photograph it from the harbor dock with boats in the foreground — the distance gives context that close-up shots miss. The building is a private residence; no public access except rare bookable summer tours (check <a href='https://www.hsb.se/malmo/om-hsb-malmo/turning-torso/' target='_blank' rel='noopener noreferrer'>hsb.se</a> in advance). Walk the Västra Hamnen promenade back toward Malmö C — about 25 min on foot from Gamla Staden.",
+          "img": {
+            "file": "The Turning Torso, Malmo.JPG",
+            "alt": "Turning Torso at Västra Hamnen, Malmö"
+          },
           "map": {
             "lat": 55.6213,
             "lng": 12.9751

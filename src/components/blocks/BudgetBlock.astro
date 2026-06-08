@@ -1,0 +1,49 @@
+---
+const { sec } = Astro.props;
+const cur   = sec.currency || "$";
+const days  = sec.days || 1;
+const items = sec.items || [];
+const estTotal = items.reduce(
+  (t: number, it: any) => t + (it.basis === "day" ? it.est * days : it.est),
+  0
+);
+---
+<div class="budget" data-cur={cur}>
+  {sec.intro && <p class="budget-intro"><Fragment set:html={sec.intro} /></p>}
+  <div class="budget-grid">
+    <div class="brow bhead">
+      <span>Item</span>
+      <span class="bcol">Estimate</span>
+      <span class="bcol">Your spend</span>
+    </div>
+    {items.map((it: any) => {
+      const line = it.basis === "day" ? it.est * days : it.est;
+      return (
+        <div class="brow" data-key={it.label}>
+          <span class="blabel">
+            {it.label}
+            {it.note && <em class="bnote"><Fragment set:html={it.note} /></em>}
+          </span>
+          <span class="bcol best">
+            {cur}{line.toLocaleString("en-US")}
+            {it.basis === "day" && <small>{cur}{it.est.toLocaleString("en-US")}/day</small>}
+          </span>
+          <span class="bcol">
+            <input class="bactual" type="number" inputmode="decimal"
+              min="0" step="1" placeholder="0"
+              aria-label={"Your spend on " + it.label} />
+          </span>
+        </div>
+      );
+    })}
+    <div class="brow btotal">
+      <span>Trip total</span>
+      <span class="bcol best-total">{cur}{estTotal.toLocaleString("en-US")}</span>
+      <span class="bcol bact-total">{cur}0</span>
+    </div>
+  </div>
+  <p class="budget-foot">
+    Estimated over {days} days · figures are approximate — confirm prices as you book,
+    then log what you actually spend. Saved on this device.
+  </p>
+</div>

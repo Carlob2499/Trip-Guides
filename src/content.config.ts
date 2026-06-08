@@ -4,8 +4,18 @@ import { glob } from "astro/loaders";
 // A point on the map.
 const coord = z.object({ lat: z.number(), lng: z.number() });
 
-// The seven kinds of section a guide can contain. Each one lists the fields it
+// The nine kinds of section a guide can contain. Each one lists the fields it
 // needs; if a content file gets one wrong, the build fails with a clear message.
+// NOTE: when adding a new type here, also add it to Block.astro and CLAUDE.md.
+
+// Shared counter shape used by the `raids` type.
+const counter = z.object({
+  pokemon: z.string(),
+  fast:    z.string(),
+  charged: z.string(),
+  typing:  z.string(),
+});
+
 const section = z.discriminatedUnion("type", [
   z.object({ type: z.literal("panel"),  group: z.string(), title: z.string().optional(), body: z.string().optional(), checklist: z.array(z.string()).optional() }),
   z.object({ type: z.literal("prose"),  group: z.string(), title: z.string().optional(), body: z.string().optional() }),
@@ -30,10 +40,22 @@ const section = z.discriminatedUnion("type", [
       est: z.number(),                  // estimate in the guide's currency
       note: z.string().optional(),
     })) }),
+  // raids — structured raid boss counter tables; replaces hand-written HTML in prose bodies.
+  // Each boss renders as a collapsible <details> card with a typed counter table.
+  // `strategy` may contain simple inline HTML (<b>, <a>); no block elements.
+  z.object({ type: z.literal("raids"),  group: z.string(), title: z.string().optional(),
+    bosses: z.array(z.object({
+      name:        z.string(),
+      tier:        z.enum(["3-star", "5-star", "primal", "shadow", "super-mega"]),
+      typing:      z.array(z.string()).min(1),
+      shiny_odds:  z.string(),
+      shiny_note:  z.string().optional(),
+      trainers:    z.string(),
+      note:        z.string().optional(),   // e.g. "GO Fest moveset: Counter + Psystrike"
+      strategy:    z.string(),              // inline HTML allowed (<b>, <a>)
+      counters:    z.array(counter).min(1).max(10),
+    })) }),
 ]);
-
-// NOTE: when changing the eight section types here, also update the comment in
-// src/components/Block.astro and the section list in CLAUDE.md.
 
 const guides = defineCollection({
   // Every .json file in src/content/guides/ becomes one guide page.

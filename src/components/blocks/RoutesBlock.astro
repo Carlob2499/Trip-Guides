@@ -1,0 +1,8 @@
+---
+const { sec } = Astro.props;
+---
+<ol class="steps">
+  {(sec.steps || []).map((s: string) => (
+    <li><Fragment set:html={s} /></li>
+  ))}
+</ol>

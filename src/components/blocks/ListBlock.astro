@@ -1,0 +1,6 @@
+---
+const { sec } = Astro.props;
+---
+{(sec.items || []).map((i: string) => (
+  <label class="check"><input type="checkbox" /> <Fragment set:html={i} /></label>
+))}
