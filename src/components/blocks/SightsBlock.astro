@@ -1,60 +1,38 @@
 ---
-import { getImage } from "astro:assets";
-
 const { sec } = Astro.props;
 
-const commonsSrc  = (f: string) =>
-  `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(f)}?width=1200`;
+// Wikimedia's Special:FilePath already supports ?width= thumbnailing —
+// use that directly instead of pulling the image through Astro's optimizer.
+// This avoids build-time HTTP fetches (and Wikimedia 429 rate-limits) while
+// still giving the browser a proper responsive srcset.
+const commonsSrc  = (f: string, w = 800) =>
+  `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(f)}?width=${w}`;
 const commonsPage = (f: string) =>
   `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(f)}`;
 const gmaps = (m: any) =>
   `https://www.google.com/maps/search/?api=1&query=${m.lat},${m.lng}`;
-
-// Pre-optimise each sight photo into responsive WebP. Falls back to the plain
-// URL if the build server can't reach Wikimedia (e.g. preview sandbox).
-const opt: Record<string, any> = {};
-for (const it of (sec.items || [])) {
-  if (it.img?.file && !(it.img.file in opt)) {
-    try {
-      opt[it.img.file] = await getImage({
-        src: commonsSrc(it.img.file),
-        widths: [480, 800, 1200],
-        format: "webp",
-        inferSize: true,
-      });
-    } catch {
-      opt[it.img.file] = null;
-    }
-  }
-}
 ---
-{(sec.items || []).map((it: any) => {
-  const o = it.img ? opt[it.img.file] : null;
-  return (
-    <div class="card sight">
-      {it.img && (o ? (
-        <img class="cardimg" loading="lazy" alt={it.img.alt || ""}
-          src={o.src} srcset={o.srcSet.attribute}
-          sizes="(max-width:899px) 100vw, 760px"
-          width={o.attributes.width} height={o.attributes.height}
-          onerror="this.classList.add('imgfail')" />
-      ) : (
-        <img class="cardimg" loading="lazy" alt={it.img.alt || ""}
-          onerror="this.classList.add('imgfail')" src={commonsSrc(it.img.file)} />
-      ))}
-      {it.img && (
-        <span class="imgcredit">
-          <a href={commonsPage(it.img.file)} target="_blank" rel="noopener">
-            Photo: Wikimedia Commons ↗
-          </a>
-        </span>
-      )}
-      {it.kicker && <span class="tag">{it.kicker}</span>}
-      <h4 class="sight-name">{it.name}</h4>
-      <p>
-        <Fragment set:html={it.body || ""} />
-        {it.map && <> <a class="maplink" target="_blank" rel="noopener" href={gmaps(it.map)}>Open in Maps ↗</a></>}
-      </p>
-    </div>
-  );
-})}
+{(sec.items || []).map((it: any) => (
+  <div class="card sight">
+    {it.img && (
+      <img class="cardimg" loading="lazy" alt={it.img.alt || ""}
+        src={commonsSrc(it.img.file, 800)}
+        srcset={`${commonsSrc(it.img.file, 480)} 480w, ${commonsSrc(it.img.file, 800)} 800w, ${commonsSrc(it.img.file, 1200)} 1200w`}
+        sizes="(max-width:899px) 100vw, 760px"
+        onerror="this.classList.add('imgfail')" />
+    )}
+    {it.img && (
+      <span class="imgcredit">
+        <a href={commonsPage(it.img.file)} target="_blank" rel="noopener">
+          Photo: Wikimedia Commons ↗
+        </a>
+      </span>
+    )}
+    {it.kicker && <span class="tag">{it.kicker}</span>}
+    <h4 class="sight-name">{it.name}</h4>
+    <p>
+      <Fragment set:html={it.body || ""} />
+      {it.map && <> <a class="maplink" target="_blank" rel="noopener" href={gmaps(it.map)}>Open in Maps ↗</a></>}
+    </p>
+  </div>
+))}
