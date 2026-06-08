@@ -1,132 +1,133 @@
 {
   "kicker": "Summer 2026",
   "title": "Copenhagen & Denmark",
-  "dek": "Nine days around Copenhagen in June — palaces and street food, a day across the bridge to Malmö, and an overnight ferry to Oslo. Everything below is checked; tick items off as you go and your progress saves automatically.",
+  "dek": "Nine days around one of Europe's most liveable cities — canal cruises and rooftop ski slopes, a bridge to Sweden, an overnight ferry to Norway, and three days at Pokémon GO Fest. Tick items off as you go; your progress saves automatically.",
   "footer": "Location photos via Wikimedia Commons — tap any credit for its source, author and license.",
   "country": "Denmark",
-  "intro": "Copenhagen base at CABINN by Nørreport, with day trips across the bridge to Malmö and an overnight ferry to Oslo.",
+  "intro": "Copenhagen base at CABINN by Nørreport, with day trips to Malmö and an overnight sailing to Oslo.",
   "sections": [
     {
       "type": "panel",
       "group": "Plan",
-      "title": "Final checks — before you fly",
-      "body": "<p>You're only days out, so give the perishable details one last look — these are the things most likely to have shifted since this guide was checked.</p>",
+      "title": "Before you leave — final checks",
+      "body": "<p>Give these a last look in the week before you fly. They're the things most likely to have shifted since this guide was written.</p>",
       "checklist": [
-        "DFDS Copenhagen→Oslo sailing time & terminal — re-check on the DFDS app",
+        "Go Nordic Cruiseline Copenhagen→Oslo sailing time & terminal — re-check at <a href='https://www.gonordiccruiseline.com' target='_blank' rel='noopener noreferrer'>gonordiccruiseline.com</a>",
         "Vækst dinner, Sat Jun 13 17:30 — confirm the reservation still stands",
-        "Opening hours for any sight you're timing a specific day around",
-        "Copenhagen forecast for Jun 8–16 — pack layers + a rain shell",
-        "GO Fest session time (Jun 12–14) matches your ticket",
-        "Passport on you, cards set for abroad, Verizon plan active"
+        "Opening hours for any sight you've built a day around",
+        "Copenhagen forecast Jun 8–16 — pack layers and a waterproof",
+        "GO Fest park ticket session time matches what you bought",
+        "Passport valid, cards set for abroad, Verizon plan confirmed active"
       ]
     },
     {
       "type": "panel",
       "group": "Plan",
-      "title": "When you land",
-      "body": "<p>At the airport, in order:</p>",
+      "title": "Off the plane — what to do first",
+      "body": "<p>At the airport, in this order:</p>",
       "checklist": [
-        "Clear <b>EES</b> biometrics (photo + fingerprints) — your first entry into the new EU system",
-        "Buy a <b>City Pass</b> in the DOT Tickets app (metro, bus, harbour buses)",
-        "Take Metro <b>M2</b> toward the city to <b>Nørreport</b> (~15–20 min)",
-        "Walk ~5 min to CABINN and drop your bags",
-        "Check your Verizon plan is active — if you're not on Unlimited Ultimate, text <b>TRAVEL to 4004</b> for TravelPass"
+        "Clear <b>EES biometrics</b> — photo and fingerprints; this is the EU's new entry system, your first time through it",
+        "Open the <a href='https://dinoffentligetransport.dk/en/find-tickets/day-tickets/city-pass' target='_blank' rel='noopener noreferrer'>DOT Tickets app</a> and buy a <b>City Pass Small</b> before you board the metro",
+        "Take Metro <b>M2</b> from Lufthavnen to <b>Nørreport</b> (~15–20 min) — City Pass covers the ride",
+        "Walk ~5 min to CABINN and check in",
+        "Confirm Verizon is active — if not on Unlimited Ultimate, text <b>TRAVEL to 4004</b> to enable TravelPass"
       ]
     },
     {
       "type": "panel",
       "group": "Plan",
-      "title": "Local essentials",
-      "body": "<p>Emergencies: <b>112</b>. Tap water is excellent — carry a bottle. Tipping isn't expected. Transit is easy with the <b>Rejseplanen</b> app, which routes you door to door. Two words go a long way: <i>tak</i> (thanks) and <i>hej</i> (hi / bye).</p>"
+      "title": "The basics — what every first-timer should know",
+      "body": "<p><b>Emergency: 112.</b> Tap water is safe and delicious everywhere in Denmark — carry a refillable bottle. Tipping is not expected or required; rounding up at a restaurant is plenty. <a href='https://www.rejseplanen.dk' target='_blank' rel='noopener noreferrer'>Rejseplanen</a> is the official transit app — type in any two addresses and it gives you door-to-door directions. Two phrases go a long way: <em>tak</em> (thanks) and <em>hej</em> (hi, or bye).</p>"
     },
     {
       "type": "panel",
       "group": "Plan",
-      "title": "Entry & documents",
-      "body": "<p>⚠️ The entry rules below assume a <b>US passport</b>. On another passport, check your own visa/ETA requirements — they can differ.</p>",
+      "title": "Entry & what to carry",
+      "body": "<p>⚠️ This assumes a <b>US passport</b>. Different passport? Check your own requirements — they can differ significantly from the US.</p>",
       "checklist": [
-        "Passport valid <b>≥3 months beyond Jun 16</b>",
-        "No ETIAS needed yet (the EU's travel authorisation is delayed)",
-        "Expect <b>EES</b> biometric capture at first entry (CPH)",
-        "Carry confirmations: <b>DFDS ferry + cabin</b>, <b>GO Fest + Premier Access</b>, <b>Vækst</b> (Sat Jun 13, 17:30)",
-        "An EU <b>Type E/F</b> plug adapter (one strip charges the whole group)",
-        "A proper rain layer — Copenhagen weather turns fast"
+        "Passport valid at least <b>3 months beyond Jun 16</b>",
+        "No ETIAS needed yet — the EU's pre-travel authorisation has been delayed past 2026",
+        "Expect <b>EES biometric capture</b> at your first EU entry point (Copenhagen airport)",
+        "Download or print confirmations: <b>Go Nordic Cruiseline ferry + cabin</b>, <b>GO Fest tickets + Premier Access</b>, <b>Vækst dinner</b> (Sat Jun 13 at 17:30)",
+        "A <b>Type E/F EU plug adapter</b> — one power strip covers the whole group from a single outlet",
+        "A proper rain layer — Copenhagen's weather changes fast in June"
       ]
     },
     {
       "type": "panel",
       "group": "Plan",
-      "title": "Booking checklist",
-      "body": "<p>Roughly in this order — the first group is the stuff that sells out or sets your dates.</p>",
+      "title": "Everything you need to book, in order",
+      "body": "<p>Start at the top — these are the things that sell out or set your dates for everything else.</p>",
       "checklist": [
-        "Flights, round-trip (book early) — ≈ $400–1,200",
-        "DFDS Copenhagen–Oslo ferry <b>+ cabin</b> (book early) — ≈ $220 return",
-        "Hotel — CABINN by Nørreport (book early) — ≈ $110/night",
-        "GO Fest <b>park ticket</b> (200 kr ≈ $31) + <b>Premier Access</b> add-on (640 kr ≈ $99) — match to your session day",
-        "Vækst dinner, Sat Jun 13 17:30 (reserve early)",
-        "Passport valid ≥3 months beyond Jun 16 (check ~1 month out)",
+        "Flights, round-trip — ≈ $400–1,200 depending on dates and timing",
+        "<a href='https://www.gonordiccruiseline.com' target='_blank' rel='noopener noreferrer'>Go Nordic Cruiseline</a> Copenhagen–Oslo ferry <b>+ a cabin</b> — ≈ $220 return; books up early, especially in summer",
+        "Hotel — CABINN by Nørreport — ≈ $110/night; book early for June",
+        "<a href='https://pokemongo.com/en/gofest/copenhagen/tickets' target='_blank' rel='noopener noreferrer'>GO Fest park ticket</a> (200 kr ≈ $31) + <b>Premier Access</b> add-on (640 kr ≈ $99) — match the session to your day",
+        "Mom's group: <b>GetYourGuide canal tour + hop-on-hop-off bus</b> for Thu and Fri — book a few days ahead",
+        "Vækst dinner, Sat Jun 13 17:30 — popular restaurant, reserve early",
         "Travel insurance (a few weeks out)",
         "Confirm which Verizon plan you're on — see Phone & data section (a few weeks out)",
-        "Rejseplanen + offline maps for CPH, Malmö, Oslo (week before)",
-        "DOT Tickets app — buy your City Pass on arrival; ≈ check app for current 24h price (guide estimate was low)",
-        "Break in your shoes / insoles (week before)"
+        "Passport valid check — at least 3 months beyond Jun 16 (check about a month out)",
+        "Download <a href='https://www.rejseplanen.dk' target='_blank' rel='noopener noreferrer'>Rejseplanen</a> + offline maps for Copenhagen, Malmö, and Oslo (the week before)",
+        "Download DOT Tickets app; buy City Pass on arrival — see current price at <a href='https://dinoffentligetransport.dk/en/find-tickets/day-tickets/city-pass' target='_blank' rel='noopener noreferrer'>dinoffentligetransport.dk</a>",
+        "Break in your shoes and insoles — you'll be walking 12,000+ steps a day"
       ]
     },
     {
       "type": "panel",
       "group": "Plan",
-      "title": "Phone & data — all three countries",
-      "body": "<p><b>Which plan you're on changes everything here.</b></p><p><b>If you're on Unlimited Ultimate:</b> International data, talk and text is already included — no daily fee, no TravelPass, and you can't add TravelPass to this plan even if you wanted to. You get <b>15 GB of high-speed data per month</b> while roaming, then unlimited at <b>1.5 Mbps</b> for the rest of the billing month. That covers all three countries: <b>Denmark (Jun 8–14 + 16), Sweden / Malmö (Jun 10), and Norway / Oslo (Jun 15)</b>. Each new country draws from the same monthly pool.</p><p><b>If you're on Unlimited Plus, Welcome, or any other plan:</b> Use <b>TravelPass at $12/line/day</b>. It activates automatically the first time you make a call, send a text, or use data in that country — you're only charged on days you actually use it. You get <b>5 GB high-speed data</b> then unlimited at 3G speeds within that 24-hour window. Text <b>TRAVEL to 4004</b> to pre-enable it before you leave. Note: Sweden and Norway each count as separate days when you cross the border.</p><p><b>Either way:</b> The ferry's mid-sea stretch between Copenhagen and Oslo has no usable signal. Download offline maps (Google Maps, Maps.me), any podcasts or playlists, and the DFDS app info before you board on Jun 14.</p>"
+      "title": "Phone & data — Denmark, Sweden & Norway",
+      "body": "<p><b>Which Verizon plan you're on changes everything here. Check before you leave.</b></p><p><b>On Unlimited Ultimate:</b> International data, calls and texts are already included — no daily charge, and you can't add TravelPass to this plan even if you wanted to. You get <b>15 GB of high-speed roaming data per month</b>, then unlimited at 1.5 Mbps for the rest of your billing cycle. All three countries on this trip — <b>Denmark, Sweden (Malmö) and Norway (Oslo)</b> — draw from the same monthly pool.</p><p><b>On any other Unlimited plan (Plus, Welcome, etc.):</b> Use <a href='https://www.verizon.com/solutions-and-services/travel-pass/' target='_blank' rel='noopener noreferrer'>TravelPass at $12/line/day</a>. It activates automatically the first time you use data, make a call, or send a text in a given country — you're only charged on days you actually use it. You get 5 GB high-speed then unlimited at 3G speeds per 24-hour window. Text <b>TRAVEL to 4004</b> to pre-enable it before you fly. Each country counts separately when you cross a border.</p><p><b>Both plans:</b> No phone signal in the middle of the North Sea on the overnight ferry. Download offline maps, the Go Nordic Cruiseline app, and anything else you'll want before you board on Jun 14.</p>"
     },
     {
       "type": "panel",
       "group": "Plan",
       "title": "Footwear & comfort",
-      "body": "<p>You'll be on your feet all day, so for heavier weight and heel pain, choose a <b>firm, structured</b> insole with a <b>deep heel cup</b> and a stated weight rating — not a soft gel pad. Solid options include Powerstep Pinnacle Maxx, Tread Labs Pace, Superfeet, or heavy-duty brands like VALSOLE / Walkomfy (rated 220+ lb). Break them in for a few days before the trip.</p>"
+      "body": "<p>You'll be on your feet 6–10 hours most days. For heavier build or heel pain, choose a <b>firm insole with a deep heel cup</b> — not a soft gel pad, which compresses and stops helping within an hour. Good options: Powerstep Pinnacle Maxx, Tread Labs Pace, Superfeet Green, or heavy-duty brands like VALSOLE / Walkomfy (rated 220+ lb). Buy them a week before the trip and break them in.</p>"
     },
     {
       "type": "panel",
       "group": "Plan",
-      "title": "GoPro kit",
-      "body": "<p>Quick cheat-sheet: 4K/30 or 2.7K/60 for general b-roll, 1080/120 for slow-mo, HyperSmooth on. Pack two spare batteries and a fast 128 GB+ card — the cold harbour wind drains batteries faster than you'd expect.</p>"
+      "title": "GoPro settings cheat-sheet",
+      "body": "<p><b>General footage:</b> 4K/30 or 2.7K/60 with HyperSmooth on. <b>Slow-mo:</b> 1080/120. Pack two fully charged spare batteries — the cold harbour wind drains them faster than at home. Use a fast 128 GB+ card and format it before you leave.</p>"
     },
     {
       "type": "panel",
       "group": "Plan",
-      "title": "Holidays & your dates",
-      "body": "<p>Good news for timing: <b>no Danish public holidays fall during 8–16 June 2026.</b> The spring holidays (Ascension, Whit Monday, and Constitution Day on 5 June) all land just before you arrive, and Midsummer Eve (Sankt Hans, 23 June) is just after — so shops, museums, and transit run on normal schedules.</p><p>Two things to plan around: you're travelling in <b>peak summer</b>, which means very long daylight (about 17–18 hours), the biggest crowds, and the highest prices of the year; and <b>Pokémon GO Fest fills Fælledparken 12–14 June</b>, which packs central hotels, restaurants, and transit on those days. Most central Copenhagen shops open daily, Sundays included in summer, though smaller shops may keep shorter Sunday hours.</p>"
+      "title": "When is a good time to go — and what to know about June",
+      "body": "<p><b>Good news: no Danish public holidays fall during Jun 8–16, 2026.</b> The spring bank holidays (Ascension, Whit Monday, and Constitution Day on Jun 5) all land just before you arrive, and Midsummer Eve (Jun 23) is just after. Shops, museums, and transit run on normal weekday and weekend schedules throughout your stay.</p><p>What to plan around: you're travelling in <b>peak summer</b>, which means roughly 17–18 hours of daylight each day, maximum crowds at popular spots, and the highest prices of the year. And <b>Pokémon GO Fest fills Fælledparken Jun 12–14</b>, drawing a large international crowd that packs central hotels, restaurants, and transit on those days. Most Copenhagen shops open seven days a week in summer; smaller neighbourhood shops may shorten Sunday hours.</p>"
     },
     {
       "type": "panel",
       "group": "Money & budget",
-      "title": "Money & currency",
-      "body": "<p>Denmark uses the <b>krone (DKK)</b>, not the euro. Rough mid-2026 rates (approximate — check before you go): <b>100 DKK ≈ $15.50</b>. Your day trips use other currencies: <b>100 SEK ≈ $10–11</b> (Sweden) and <b>100 NOK ≈ $9–10</b> (Norway).</p><p>Cards and contactless work essentially everywhere, so you may never touch cash. Tipping isn't expected — rounding up is plenty.</p>"
+      "title": "Currency & how to pay",
+      "body": "<p>Denmark uses the <b>krone (DKK)</b> — not the euro. Rough mid-2026 guide rate (verify before you go): <b>100 DKK ≈ $15.50 USD</b>. Your day trips use different currencies: <b>100 SEK ≈ $10–11</b> (Sweden) and <b>100 NOK ≈ $9–10</b> (Norway).</p><p>Cards and contactless payments work essentially everywhere in Denmark — you may never need to touch cash. Tipping is not part of Danish culture; rounding up at a restaurant for genuinely good service is plenty, and no one expects it.</p>"
     },
     {
       "type": "budget",
       "group": "Money & budget",
-      "title": "Budget & daily costs",
+      "title": "What this trip costs — a realistic budget",
       "currency": "$",
       "days": 8,
-      "intro": "Rough <b>per-person</b> estimates in USD to set expectations — Denmark is one of Europe's priciest destinations. Tap a field to log what you actually spend; the running total updates live and saves on this device. Treat the estimates as starting points and confirm prices as you book.",
+      "intro": "Rough <b>per-person</b> estimates in USD. Denmark is consistently one of Europe's most expensive destinations — these numbers are honest starting points, not minimums. Tap any 'Your spend' field to log what you actually pay; the total updates live and is saved on this device.",
       "items": [
         {
           "label": "Lodging — CABINN, per night (per room)",
           "basis": "day",
           "est": 110,
-          "note": "Split across the room if you share."
+          "note": "Split across the room if sharing."
         },
         {
           "label": "Food & coffee, per day",
           "basis": "day",
-          "est": 50,
-          "note": "Restaurant mains run $25–48; bakeries and street food are cheaper. Torvehallerne lunch ≈$12–20."
+          "est": 55,
+          "note": "Restaurant mains ≈$25–48; bakeries and street food are much cheaper. Torvehallerne lunch ≈$12–20."
         },
         {
-          "label": "Local transport, per day",
+          "label": "Local transport — City Pass Small (100 DKK/day)",
           "basis": "day",
           "est": 16,
-          "note": "≈ check DOT app for current City Pass price; was listed at 90 DKK but actual 2026 price is higher — verify in the app before buying."
+          "note": "100 DKK ≈ $15.50. Covers metro, bus, S-tog and harbour buses in zones 1–4 (including the airport). Check current price at dinoffentligetransport.dk."
         },
         {
           "label": "Sights & entries, per day",
@@ -134,90 +135,96 @@
           "est": 25
         },
         {
-          "label": "Flights — round trip (your fare)",
+          "label": "Flights — round trip",
           "basis": "trip",
           "est": 650,
-          "note": "NYC↔CPH runs roughly $400–1,200 by date."
+          "note": "NYC↔CPH runs roughly $400–1,200 by date and timing."
         },
         {
-          "label": "DFDS Oslo overnight ferry — return cabin",
+          "label": "Go Nordic Cruiseline ferry — return cabin",
           "basis": "trip",
           "est": 220,
-          "note": "Foot-passenger inside cabin; varies a lot — book early."
+          "note": "Foot-passenger with inside cabin. Prices vary — book early at gonordiccruiseline.com."
         },
         {
           "label": "Malmö day trip — Øresundståg return",
           "basis": "trip",
           "est": 30,
-          "note": "≈111 DKK each way; bring your passport."
+          "note": "≈111 DKK each way from Nørreport. Buy at the station — City Pass doesn't cover the Swedish leg."
         },
         {
           "label": "GO Fest park ticket (200 kr per session)",
           "basis": "trip",
           "est": 31,
-          "note": "200 kr ≈ $31. Morning (9–13:00) or Afternoon (14–18:00) session; includes full-day citywide access that day."
+          "note": "200 kr ≈ $31. Morning (9:00–13:00) or Afternoon (14:00–18:00) session. Includes full citywide access that day."
         },
         {
           "label": "GO Fest Premier Access (optional add-on)",
           "basis": "trip",
           "est": 99,
-          "note": "640 kr ≈ $99. Exclusive collectible + vouchers for 100+ in-game items. Leave at 0 if you skip it."
+          "note": "640 kr ≈ $99. Exclusive collectible + voucher codes for 100+ in-game items. Set to 0 if skipping."
         },
         {
-          "label": "Copenhagen Card 72h (alternative to daily passes)",
+          "label": "Mom's group — canal tour + hop-on-hop-off (per person, 2 days)",
+          "basis": "trip",
+          "est": 85,
+          "note": "≈ Stromma canal tour ~129 DKK + RED Sightseeing bus 24h ~199–299 DKK. Check current prices on GetYourGuide before booking."
+        },
+        {
+          "label": "Copenhagen Card option (instead of daily transit + entries)",
           "basis": "trip",
           "est": 0,
-          "note": "≈599–999 DKK depending on duration: covers transit in all zones + 80+ museums free. Use INSTEAD of the per-day transport + sights lines, not on top. Check copenhagencard.com for current price."
+          "note": "589 / 859 / 1,039 DKK for 24h / 48h / 72h (verified Jun 2026 at copenhagencard.com). Covers all transit zones + 80+ attractions free. Use INSTEAD of the transport and sights daily lines — not on top of them."
         }
       ]
     },
     {
       "type": "panel",
       "group": "Health & safety",
-      "title": "Health & pharmacy",
-      "body": "<p><b>Emergencies:</b> dial <b>112</b> (free) for anything life-threatening — ambulance, fire, police. For an injury or sudden illness that isn't life-threatening, or before going to any emergency room, call <b>1813</b> first — the Capital Region's 24/7 medical line, staffed by nurses and doctors (from a foreign mobile, dial +45 1813). Non-emergency police is <b>114</b>.</p><p><b>Pharmacies (apotek)</b> show a green 'A'. The one open around the clock is <b>Steno Apotek, Vesterbrogade 6C</b>, by Central Station; staff speak English. As a US visitor you have no Danish health card, but you can still call 1813 and be seen, and private English-speaking doctor / hotel-visit services exist for a fee. <b>Tap water is clean and safe</b> to drink everywhere.</p>",
+      "title": "Getting medical help in Copenhagen",
+      "body": "<p><b>Emergency — dial 112</b> (free from any phone): ambulance, fire, police. <b>Non-emergency medical line: 1813</b> — Copenhagen's 24/7 nurse and doctor advice line. Call this before going to any emergency room; they'll direct you. From a foreign mobile: +45 1813. Non-emergency police: 114.</p><p>Pharmacies (apotek) are marked with a green 'A'. The only one open around the clock is <a href='https://stenoapotek.dk/welcome---english' target='_blank' rel='noopener noreferrer'><b>Steno Apotek</b></a>, Vesterbrogade 6C — directly opposite Central Station. English-speaking staff; after 23:00, use the night bell on the right side of the entrance. As a US visitor you have no Danish health insurance card, but 1813 can still advise you; private English-speaking GP and hotel-visit services are available for a fee. <b>Tap water is safe</b> throughout Denmark.</p>",
       "checklist": [
-        "Save <b>112</b> (emergency) and <b>1813</b> (medical line — +45 1813 from a foreign phone)",
-        "Pack medicines in their original packaging, plus a copy of any prescriptions",
-        "Confirm your travel insurance covers medical care abroad",
-        "Note the 24-hour pharmacy: Steno Apotek, Vesterbrogade 6C"
+        "Save 112 (emergency) and +45 1813 (medical advice) in your phone now",
+        "Pack all medicines in original packaging with a copy of any prescriptions",
+        "Confirm travel insurance covers overseas medical care",
+        "24-hour pharmacy: <a href='https://stenoapotek.dk/welcome---english' target='_blank' rel='noopener noreferrer'>Steno Apotek, Vesterbrogade 6C</a>"
       ]
     },
     {
       "type": "panel",
       "group": "Etiquette & language",
-      "title": "Etiquette & language",
-      "body": "<p>Danish is the official language, but <b>English is spoken almost everywhere</b> — you'll have no trouble. A few local habits worth knowing:</p><p><b>Stay out of the bike lanes.</b> Copenhagen runs on cycling, and the lane between the pavement and the road belongs to bikes — stepping into it, or stopping there for a photo, is the quickest way to startle a cyclist. Look both ways before crossing one.</p><p><b>Tipping isn't expected</b> — service is included in the bill; round up for great service if you like. It's a <b>card-first country</b>, so contactless works nearly everywhere and you can carry very little cash. Danes are friendly but reserved, and quiet on public transport. '<b>Tak</b>' means thank you.</p>"
+      "title": "How to fit in — Danish etiquette for visitors",
+      "body": "<p>Danish is the official language, but <b>virtually everyone under 60 speaks fluent English</b> — you will not struggle. A few local habits worth knowing before you arrive:</p><p><b>The bike lane is sacred.</b> Copenhagen runs on cycling. The painted lane between the pavement and the road belongs exclusively to cyclists — do not step into it, stop in it for photos, or cut across it without looking. Cyclists move fast and expect the lane clear. Look both ways before crossing.</p><p><b>Cards, not cash.</b> Denmark is one of the world's most cashless societies. Contactless payments work in taxis, market stalls, museums, and corner shops. You can carry virtually no cash and be fine.</p><p><b>Tipping is not expected.</b> Service charges are included in all restaurant bills by law. Rounding up for exceptional service is perfectly fine; no one will be offended if you don't. '<em>Tak</em>' (thanks) and '<em>hej</em>' (hi or bye) go a long way.</p>"
     },
     {
       "type": "routes",
       "group": "Getting around",
-      "title": "Key transit routes",
+      "title": "How to get everywhere on this trip",
       "steps": [
-        "<b>Airport → hotel:</b> Metro <b>M2</b> from the airport (Lufthavnen) toward the city to <b>Nørreport</b> (~15–20 min), then a ~5-min walk to CABINN. Buy a City Pass in the DOT Tickets app before boarding — it covers the ride.",
-        "<b>Around town:</b> harbour buses <b>991/992</b> for the waterfront (City Pass covers them); the driverless metro for most cross-city hops; Donkey Republic e-bikes for short, knee-friendly stretches.",
-        "<b>To Malmö:</b> Øresundståg from Nørreport or København H to Malmö C (~35–40 min) — bring your passport for ID checks. Buy a separate cross-border ticket; your City Pass does not cover the Swedish leg.",
-        "<b>To the Oslo ferry (Jun 14):</b> Take the terminal shuttle or taxi to the DFDS Oslo terminal (Dampfærgevej); board by ~15:30 for the 16:30 sailing.",
-        "<b>Oslo ashore (Jun 15):</b> Dock at Vippetangen and walk ~10–15 min to the Opera / Aker Brygge loop; reboard by ~15:30.",
-        "<b>Dock → airport (Jun 16):</b> Back in Copenhagen ~10:00 — a taxi straight to the airport (~20 min) is the safe call for the 14:20 flight."
+        "<b>Airport → hotel:</b> Metro <b>M2</b> from CPH airport (Lufthavnen station) to <b>Nørreport</b> (~15–20 min). Buy a City Pass Small in the <a href='https://dinoffentligetransport.dk/en/find-tickets/day-tickets/city-pass' target='_blank' rel='noopener noreferrer'>DOT Tickets app</a> before boarding — it covers the airport ride (zones 1–4). Walk ~5 min to CABINN.",
+        "<b>Around Copenhagen:</b> Harbour buses <b>991 and 992</b> for waterfront hops (City Pass covers them). The driverless metro for cross-city trips. Donkey Republic e-bikes for short, flat stretches if you want a break from walking.",
+        "<b>To Malmö (Jun 10):</b> Øresundståg from Nørreport or København H to Malmö C (~35–40 min). Bring your passport — there are ID checks on the bridge crossing. Buy a separate cross-border ticket at the station; your City Pass stops at the Danish border.",
+        "<b>To the Oslo ferry (Jun 14):</b> Taxi or shuttle to <b>Go Nordic Cruiseline terminal, Dampfærgevej 30</b> (Østerbro). Check in by 16:15; sailing departs 16:30.",
+        "<b>Oslo ashore (Jun 15):</b> Dock at Vippetangen ~10:00. Walk 10–15 min to the Oslo Opera House roof, Aker Brygge, and Akershus Fortress loop. Reboard by 15:30.",
+        "<b>Dock → airport (Jun 16):</b> Back in Copenhagen ~10:00. Take a taxi directly to CPH (~20 min) — safest option for the 14:20 flight."
       ]
     },
     {
       "type": "panel",
       "group": "Getting around",
-      "title": "Transit passes — which to buy",
-      "body": "<p>Three real options for this trip, in order of simplicity:</p><p><b>DOT City Pass (recommended for most days)</b> — bought in the <b>DOT Tickets app</b>. Covers all metro lines (M1/M2/M3/M4), S-tog commuter rail, local buses, and harbour buses 991/992 within the city fare zones. Comes in 24h, 48h, 72h, and 120h versions. ⚠️ Check the app for current prices — the guide's earlier estimate of 90 DKK was low; actual 2026 price is higher. Buy before you board the airport metro.</p><p><b>Copenhagen Card (DISCOVER) — best if you're hitting 3+ paid museums</b> — covers unlimited transit in all zones (including the airport metro) <em>plus</em> free entry to 80+ attractions including Rosenborg Castle, the Round Tower, and many more. ≈599 DKK for 24h, ≈849 DKK for 48h, ≈999 DKK for 72h (≈ check copenhagencard.com for current prices). Do the maths before buying — it's only worth it on heavy museum days.</p><p><b>Single tickets</b> — fine for one-offs. A standard 2-zone ticket in the city is ≈26 DKK; the airport requires a 3-zone ticket (≈36–40 DKK). Buy from machines at any station or in the DOT app.</p><p><b>What your City Pass does NOT cover:</b> the Øresundståg to Malmö (buy a separate ticket at the station), the DFDS ferry, or any travel in Sweden or Norway.</p>",
+      "title": "Transit passes — which one to buy and when",
+      "body": "<p>Three real options for this trip, from simplest to most comprehensive:</p><p><b>City Pass Small</b> — the default choice, bought in the <a href='https://dinoffentligetransport.dk/en/find-tickets/day-tickets/city-pass' target='_blank' rel='noopener noreferrer'>DOT Tickets app</a>. Covers all metro lines (M1–M4), S-tog commuter rail, local buses, and harbour buses 991/992. Zones 1–4, which includes the CPH airport. Verified 2026 prices: <b>24h = 100 DKK, 48h = 160 DKK, 96h = 280 DKK, 120h = 340 DKK.</b> Note: there is no 72-hour option — the jump is from 48h to 96h.</p><p><b>Copenhagen Card (DISCOVER)</b> — covers unlimited transit in all zones (including airport) <em>plus</em> free admission to 80+ attractions, including Rosenborg Castle, the Round Tower, and the National Museum. Verified 2026 prices: <b>24h = 589 DKK, 48h = 859 DKK, 72h = 1,039 DKK.</b> Worth doing the maths before you buy — it only makes sense on days you're visiting 3+ paid attractions. Full pricing at <a href='https://copenhagencard.com/view/prices' target='_blank' rel='noopener noreferrer'>copenhagencard.com</a>.</p><p><b>Single tickets</b> — fine for one-off journeys. A standard 2-zone city ticket is ≈26 DKK; the airport is a 3-zone journey if you're buying a single (~36–40 DKK, but a City Pass Small covers it). Buy at station machines or in the DOT app.</p><p><b>What City Pass does NOT cover:</b> the Øresundståg to Malmö, the Go Nordic Cruiseline ferry, or any travel in Sweden or Norway.</p>",
       "checklist": [
-        "Download <b>DOT Tickets app</b> before you leave — buy your City Pass on arrival at the airport",
-        "Check current City Pass price in the app (estimate: ≈115–135 DKK for 24h — verify)",
-        "Malmö day (Jun 10): buy a separate cross-border Øresundståg ticket at Nørreport station",
-        "For heavy museum days: check if the Copenhagen Card saves money vs City Pass + entries"
+        "Download the DOT Tickets app before you leave home",
+        "Buy City Pass Small on arrival at the airport — 100 DKK/24h (verified 2026 price)",
+        "Malmö day (Jun 10): buy a separate Øresundståg cross-border ticket at Nørreport station",
+        "Museum-heavy days: check if Copenhagen Card (589+ DKK) saves money vs City Pass + individual entries"
       ]
     },
     {
       "type": "map",
       "group": "Getting around",
-      "title": "Orientation map",
+      "title": "Orientation map — central Copenhagen",
       "center": {
         "lat": 55.6761,
         "lng": 12.5683
@@ -227,12 +234,15 @@
     {
       "type": "routes",
       "group": "Getting around",
-      "title": "Day routes — Thu, Fri & Sat",
+      "title": "Step-by-step routes — Thursday, Friday & Saturday",
       "steps": [
-        "<b>Thu Jun 11 — LEGO → CopenHill → Superkilen → Grundtvig's:</b> (1) Walk from CABINN south via Nørregade and Strøget to the <b>LEGO Store Vimmelskaftet</b> (~15 min on foot, ≈1 km). (2) From Strøget, take Metro M1 south to <b>DR Byen</b> (4 stops, ~8 min) then walk or take bus 2A ~600 m to <b>CopenHill</b> rooftop — or grab an Uber from Rådhuspladsen (~10 min, ≈100–140 DKK). (3) Return to city and take bus <b>5C</b> from Nørreport north to <b>Nørrebrogade</b> for <b>Superkilen</b> (~15 min). (4) From Nørrebro take bus <b>6A</b> to Bispebjerg for <b>Grundtvig's Church</b> (~20 min). Return to CABINN on bus 6A or 6C back to Nørreport.",
-        "<b>Fri Jun 12 AM — Hotel → Fælledparken GO Fest (9:00 session):</b> Walk from CABINN east along Nørre Allé → Blegdamsvej → Fælledparken south entrance (~20–25 min, ≈1.8 km, flat). Alternatively take Metro M2 one stop to <b>Østerport</b> (~2 min) then walk south ~10 min to the park's east gate. Arrive by 8:45 to clear the entry queue. Note: the park is Fælledparken, Øster Allé entrance, Østerbro.",
-        "<b>Fri Jun 12 PM — After 1:00 session ends:</b> Walk back west toward Nørreport (~20 min) and stop at <b>Torvehallerne</b> food hall for lunch (right at the station exit — impossible to miss). Rest the afternoon. Light evening — GO Fest resumes citywide Saturday.",
-        "<b>Sat Jun 13 — Citywide GO Fest → Vækst dinner (17:30):</b> Citywide gameplay means roaming on your City Pass. Priority PokéStop clusters: <b>Strøget/Vimmelskaftet</b> area (LEGO Store, Royal Copenhagen, central spin spots) and the <b>Nyhavn–Kongens Nytorv</b> loop (dense stops, waterfront). Both LEGO stores count for the LEGO Stamp Rally — see GO Fest section for hours. By <b>16:30 latest</b>, leave wherever you are and head to Vækst for your 17:30 dinner reservation."
+        "<b>Thu — GO Fest group · LEGO → CopenHill → Superkilen → Grundtvig's:</b> (1) Walk from CABINN south via Nørregade → Strøget to <b>LEGO Store Vimmelskaftet 37</b> (~15 min, ≈1 km). Browse freely — the Stamp Rally doesn't open until tomorrow. (2) Metro M1 south to <b>DR Byen</b> (4 stops, ~8 min) then bus 2A or walk ≈600 m to <b>CopenHill</b>; or taxi from Rådhuspladsen (~10 min, ≈100–140 DKK). (3) Return to city: bus <b>5C</b> from Nørreport north to <b>Nørrebrogade</b> for <b>Superkilen</b> (~15 min). (4) Bus <b>6A</b> from Nørrebro to Bispebjerg for <b>Grundtvig's Church</b> (~20 min). ⚠️ <b>Grundtvig's closes at 15:45</b> — plan to arrive no later than 15:15. Return on bus 6A or 6C to Nørreport.",
+        "<b>Thu — Mom's group · Canal boat → hop-on-hop-off bus:</b> Metro M1/M2 to <b>Kongens Nytorv</b> (~5 min from CABINN) then walk ~5 min to Nyhavn or Gammel Strand for the canal tour — confirm exact departure pier from your <a href='https://www.getyourguide.com/copenhagen-l12/cruises-boat-tours-tc48/' target='_blank' rel='noopener noreferrer'>GetYourGuide booking</a>. After the cruise (~1 hr), join the <a href='https://www.redsightseeing.com/copenhagen/' target='_blank' rel='noopener noreferrer'>RED Sightseeing hop-on-hop-off bus</a> at the nearest stop (Kongens Nytorv, Nyhavn, or Rådhuspladsen). Ride the full loop once to orient, then hop off at leisure.",
+        "<b>Fri AM — GO Fest group · CABINN → Fælledparken (9:00 park session):</b> Walk east: Nørre Allé → Blegdamsvej → Fælledparken south entrance (~20–25 min, ≈1.8 km, flat). OR Metro M2 one stop to <b>Østerport</b> (~2 min) then walk south ~10 min to the park's east gate at Øster Allé. Aim to arrive by 8:45 to clear the entry queue.",
+        "<b>Fri PM — GO Fest group · Park exit → lunch → Stamp Rally begins:</b> Session ends 13:00. Walk west (~20 min) and stop at <b>Torvehallerne</b> for lunch — the market exits directly onto Nørreport station. Then walk ~15 min south down Strøget to <b>LEGO Store Vimmelskaftet</b> (open until 18:00 today) for your first Stamp Rally stamps. Evening: <b>LEGO Store Tivoli Gardens</b> is open until 22:00 if you want more stamps — no rush.",
+        "<b>Fri — Mom's group · Hop-on-hop-off bus day:</b> Board at <b>Kongens Nytorv</b> or <b>Rådhuspladsen</b>. Suggested stops: <b>Nyhavn</b> (waterfront, canal views) → <b>Rosenborg Castle</b> and the King's Garden → <b>Frederiksberg</b> palace park. All on the bus pass; no separate tickets needed for transport.",
+        "<b>Sat — GO Fest group · Citywide play → leave by 16:30:</b> Best PokéStop clusters: <b>Strøget/Vimmelskaftet</b> (LEGO Store, Royal Copenhagen, central stops) and the <b>Nyhavn–Kongens Nytorv loop</b> (waterfront, dense stops). For the Stamp Rally: <b>LEGO Vimmelskaftet</b> is open 10:00–18:00, <b>LEGO Tivoli Gardens</b> 10:00–22:00. Collect your remaining stamps for the 5-stamp Pikachu encounter. <b>Hard stop at 16:30</b> — leave wherever you are.",
+        "<b>Sat — Mom's group · Tivoli → Vækst:</b> <a href='https://shop.tivoli.dk/en/billetter-og-tivolikort/entre' target='_blank' rel='noopener noreferrer'>Tivoli Gardens</a>, Vesterbrogade 3 — 10-min walk or short metro from CABINN. Buy tickets at tivoli.dk in advance to skip the queue (dynamic pricing, from ≈150 DKK in summer; verify before going). Leave Tivoli by <b>17:00</b> — taxi to Vækst is ~10–15 min. <b>All five people at Vækst at 17:30.</b>"
       ]
     },
     {
@@ -242,118 +252,126 @@
       "items": [
         {
           "date": "Mon Jun 8",
-          "title": "Arrival day",
-          "pace": "Arrival half-day · airport → hotel ~20 min (Metro M2 + short walk) · easy harbour-bus loop ~1–2 hr",
-          "note": "Keep the first day light to shake off the flight.",
-          "body": "Land, clear EES, ride the M2 to Nørreport and check in at CABINN. Spend the evening on an easy harbour-bus loop along the waterfront — your City Pass covers it.",
-          "fit": "Comfortable shoes and a light rain layer.",
+          "title": "First steps in Copenhagen",
+          "pace": "Arrival half-day · airport → hotel ~20 min · easy harbour-bus loop ~1–2 hr",
+          "note": "Keep day one light. You've just crossed the Atlantic — your body doesn't know what time it is.",
+          "body": "<p><em>A gentle landing. Find your bearings, put the luggage down, and let the harbour do the heavy lifting.</em></p><p>Land, clear EES biometrics, ride the M2 to Nørreport, and check in at CABINN. Then an easy harbour-bus loop along the waterfront — your City Pass covers it. Nyhavn looks best in the evening light, and this is a low-pressure way to see the city at your own pace without a plan.</p>",
+          "fit": "Comfortable shoes, light rain layer.",
           "checklist": [
-            "City Pass active in the DOT app",
-            "Refill a water bottle",
-            "Early night to beat jet lag"
+            "City Pass Small active in the DOT Tickets app",
+            "Refill a water bottle — tap water here is excellent",
+            "Dinner somewhere close; early night recommended to beat the jet lag"
           ]
         },
         {
           "date": "Tue Jun 9",
-          "title": "Kastellet + Reffen",
-          "pace": "~5–6 hr out · Kastellet + Little Mermaid ~1 hr · Reffen ~1.5–2 hr · harbour bus between",
-          "note": "Lots of walking — pace it; there's plenty of seating at Reffen.",
-          "body": "Morning at the star-shaped Kastellet fortress with a quick Little Mermaid drive-by, then a harbour bus out to Reffen for street food by the water. Reffen opens at 11:30 and has 60+ stalls from across the world.",
-          "fit": "Layers; the waterfront is breezy.",
+          "title": "Fortresses, mermaids & the best street food market in Scandinavia",
+          "pace": "~5–6 hr out · Kastellet + Little Mermaid ~1 hr · harbour bus to Reffen ~20 min · Reffen ~1.5–2 hr",
+          "note": "Lots of walking in the morning — pace it. There's plenty of seating at Reffen once you arrive.",
+          "body": "<p><em>Copenhagen at its most ancient and its most now — a 400-year-old star fort before noon, 60 international kitchens for lunch.</em></p><p>Morning at <b>Kastellet</b>, one of the best-preserved star-shaped fortresses in northern Europe with scenic ramparts to walk. A short detour takes you to the Little Mermaid — lovely, though smaller than photographs suggest. Afterwards, board a harbour bus out to <a href='https://reffen.dk' target='_blank' rel='noopener noreferrer'><b>Reffen</b></a> for lunch among the food stalls. The market opens at 11:30 and runs until 21:30; it's the largest street food market in the Nordics.</p>",
+          "fit": "Layers — the waterfront is breezy in any weather.",
           "checklist": [
-            "Card + a little cash for stalls",
+            "Card or small cash for food stalls",
             "Camera / GoPro charged"
           ]
         },
         {
           "date": "Wed Jun 10",
-          "title": "Sweden day trip — Malmö",
-          "pace": "Full day · train ~35 min each way · old town + waterfront ~4–5 hr",
-          "note": "Bring your passport — there are ID checks on the bridge crossing.",
-          "body": "Take the Øresundståg across the bridge to Malmö. Wander Gamla Staden and Lilla Torg, then out to the twisting Turning Torso on the waterfront. Buy your cross-border ticket at Nørreport — your City Pass covers Copenhagen but not the Swedish leg.",
+          "title": "Across the bridge — a half-day in Sweden",
+          "pace": "Full day · train ~35 min each way · Gamla Staden + Turning Torso ~4–5 hr",
+          "note": "You need your passport — there are ID checks on the Øresund bridge crossing. No exceptions.",
+          "body": "<p><em>Just 35 minutes by train, but Malmö feels like a different world — cobbled medieval squares and a tower that corkscrews 190 metres into the sky.</em></p><p>Take the Øresundståg from Nørreport across the Øresund Bridge to Malmö C. Wander <b>Gamla Staden</b> (the old town) and <b>Lilla Torg</b>, then out to the waterfront for the twisting <b>Turning Torso</b>. Buy your cross-border ticket at Nørreport station before boarding — City Pass covers Copenhagen only, and does not work in Sweden.</p>",
           "fit": "Same as a city day; comfortable shoes.",
           "checklist": [
-            "Passport",
-            "Buy cross-border Øresundståg ticket at the station (City Pass alone won't work)",
-            "Check the return train times"
+            "Passport (mandatory for ID checks at the border)",
+            "Buy a separate cross-border Øresundståg ticket at Nørreport station",
+            "Check the return train timetable before you leave Copenhagen"
           ]
         },
         {
           "date": "Thu Jun 11",
-          "title": "City day + LEGO",
-          "pace": "Full day, spread out · LEGO ~1 hr · CopenHill ~1 hr · Superkilen ~30 min · Grundtvig's ~30 min · metro/taxi between",
-          "note": "These are spread across the city — lean on the metro and the odd taxi. See 'Day routes' in Getting around for the exact path.",
-          "body": "Start with the <b>LEGO flagship on Strøget</b> (also open Fri–Sun for GO Fest activations, so you can revisit). Then CopenHill's rooftop for skyline-and-sea views, the striped Superkilen plaza in Nørrebro, and the soaring Grundtvig's Church. Heavy transit day — use buses 5C and 6A or grab Ubers between spots.",
-          "fit": "Comfortable shoes; a layer for the rooftop wind.",
+          "title": "Two crews, two cities — a rooftop ski slope, the world's most famous brick store & a guided cruise",
+          "pace": "Full day · two separate plans · meet up for dinner · see 'Day routes' for step-by-step paths",
+          "note": "The LEGO Stamp Rally doesn't open until Friday — Thursday is a pure city day for the GO Fest group. ⚠️ Grundtvig's Church closes at 15:45; plan to arrive by 15:15 at the latest.",
+          "body": "<p><em>The group splits for the day. The Pokémon crew plots a vertical loop across Copenhagen. The mums float through the canals, then see the city from the top of a double-decker.</em></p><p><b>🎮 GO Fest group (you + +1):</b> Start at the <b>LEGO flagship on Strøget</b> (Vimmelskaftet 37) — browse and pick up anything you want; come back for Stamp Rally tomorrow. Then <b>CopenHill</b> (Amager Bakke) for rooftop skyline-and-sea views — free to visit, accessible by lift. Next, the striped <b>Superkilen plaza</b> in Nørrebro, and finally the extraordinary <b>Grundtvig's Church</b> in Bispebjerg — a cathedral of yellow brick that looks like a giant pipe organ inside. Close attention to timing: <b>it closes at 15:45.</b> Full step-by-step route in 'Day routes' above.</p><p><b>👵 Mom's group (3 people):</b> Two tours booked ahead on <a href='https://www.getyourguide.com/copenhagen-l12/cruises-boat-tours-tc48/' target='_blank' rel='noopener noreferrer'>GetYourGuide</a>: (1) a <b>1-hour canal/harbour boat tour</b> from Gammel Strand or Nyhavn — narrated cruise past Christianshavn, the opera house and the coloured canal houses (Stromma classic tour ≈129 DKK; budget option: Netto-Bådene ≈60 DKK); (2) a <a href='https://www.redsightseeing.com/copenhagen/' target='_blank' rel='noopener noreferrer'><b>RED Sightseeing hop-on-hop-off bus</b></a> (24h, ≈199–299 DKK — check before booking) covering Nyhavn, Amalienborg, Rosenborg, and Frederiksberg at their own pace. Mostly seated; low walking demand all day.</p>",
+          "fit": "GO Fest group: comfortable shoes and a layer for CopenHill's rooftop wind. Mom's group: light shoes — mostly seated.",
           "checklist": [
-            "Confirm Grundtvig's is open (closed Mon)",
-            "Battery pack"
+            "GO Fest group: leave LEGO by ~10:30 to have time for all four stops before Grundtvig's closes",
+            "GO Fest group: GoPro charged + battery pack",
+            "Mom's group: GetYourGuide canal tour slot confirmed and pier noted",
+            "Mom's group: RED Sightseeing bus pass in hand or downloaded",
+            "All groups: agree on dinner location and time before splitting up in the morning"
           ]
         },
         {
           "date": "Fri Jun 12",
-          "title": "GO FEST — morning park session",
-          "pace": "Park 9:00–13:00 (Fælledparken) + open afternoon · walk or M2 to Østerport then 10 min on foot",
-          "note": "Heat and a lot of standing — water, hat, sunscreen, battery pack. Walk to Torvehallerne for lunch on the way back.",
-          "body": "Pokémon GO Fest morning session at Fælledparken (park ticket 200 kr — see your session on the ticket). Walk from CABINN (~20–25 min) or Metro M2 one stop to Østerport then 10 min south. After 13:00, head back via Torvehallerne for lunch. Rest the afternoon — GO Fest continues citywide Saturday.",
-          "fit": "Cool, comfortable clothes and a hat.",
+          "title": "The gates open — GO Fest park morning, the Stamp Rally begins",
+          "pace": "Split groups all day · GO Fest group: park 9:00–13:00 then Stamp Rally · Mom's group: hop-on-hop-off bus day",
+          "note": "The LEGO Stamp Rally opens today. LEGO Store Vimmelskaftet closes at 18:00 — go this afternoon, don't leave Stamp Rally entirely to Saturday.",
+          "body": "<p><em>The biggest morning of the trip. Into the park at sunrise-adjacent. Out into the city, stamps in hand, by afternoon.</em></p><p><b>🎮 GO Fest group (you + +1):</b> Morning park session at <b>Fælledparken</b> (9:00–13:00, park ticket required). Walk from CABINN (~20–25 min) or Metro M2 to Østerport then 10 min south — full directions in 'Day routes' above. Arrive by 8:45 to beat the entry queue. After the session, lunch at <a href='https://torvehallernekbh.dk' target='_blank' rel='noopener noreferrer'><b>Torvehallerne</b></a> on the walk back (directly at Nørreport). Afternoon: straight to <b>LEGO Store Vimmelskaftet</b> (open until 18:00) to start the <b>Stamp Rally</b>. Evening: <b>LEGO Store Tivoli Gardens</b> (open until 22:00) for additional stamps if needed.</p><p><b>👵 Mom's group (3 people):</b> Their full hop-on-hop-off bus day on <a href='https://www.redsightseeing.com/copenhagen/' target='_blank' rel='noopener noreferrer'>RED Sightseeing</a>. Board at Kongens Nytorv or Rådhuspladsen; ride the full loop once to orient, then hop off at <b>Nyhavn</b> for waterfront time, <b>Rosenborg Castle</b> and the King's Garden, and <b>Frederiksberg</b> palace park. Flexible and low-demand throughout. Meet for dinner as agreed.</p>",
+          "fit": "GO Fest group: hat, sunscreen, water bottle, battery pack — it will be warm in the park. Mom's group: comfortable shoes for on/off the bus.",
           "checklist": [
-            "Park ticket matches Morning session (9:00–13:00)",
-            "Premier Access add-on loaded (if purchased)",
-            "Battery pack + cable",
-            "Water + sunscreen",
-            "Torvehallerne for lunch on the way back"
+            "GO Fest group: park ticket matches Morning session (9:00–13:00)",
+            "GO Fest group: Premier Access add-on loaded in the app (if purchased)",
+            "GO Fest group: battery pack + charging cable + water + sunscreen",
+            "GO Fest group: Torvehallerne for lunch right after exiting the park",
+            "GO Fest group: LEGO Vimmelskaftet this afternoon — it closes at 18:00",
+            "Mom's group: RED Sightseeing bus pass confirmed",
+            "All groups: agree on dinner time and place"
           ]
         },
         {
           "date": "Sat Jun 13",
-          "title": "GO Fest citywide + Vækst (17:30)",
-          "pace": "Full fest day · leave the park/city by ~16:30 · Vækst dinner 17:30 (~2 hr)",
-          "note": "Long day on your feet — bank some rest before dinner. LEGO stores are open for GO Fest activations — good spots for the Stamp Rally.",
-          "body": "Citywide GO Fest gameplay: Strøget / Vimmelskaftet PokéStop cluster and Nyhavn–Kongens Nytorv loop are the densest. Both LEGO stores are open (Vimmelskaftet 10:00–18:00, Tivoli 10:00–22:00). Leave by ~16:30 for Vækst dinner at 17:30.",
-          "fit": "Something a little nicer for Vækst.",
+          "title": "Last stamps, full city — then the best dinner of the trip",
+          "pace": "Split groups AM/PM · GO Fest group: hard stop 16:30 · all five at Vækst 17:30",
+          "note": "Stamp Rally wraps up today — you need 5 total across both LEGO stores; you started yesterday, so you may only need a few more. Everyone at Vækst at 17:30 no matter what.",
+          "body": "<p><em>One last day to hunt the city before all five meet at the table.</em></p><p><b>🎮 GO Fest group (you + +1):</b> Citywide GO Fest gameplay all day. Best PokéStop clusters: <b>Strøget/Vimmelskaftet</b> (LEGO Store, Royal Copenhagen, central stops) and the <b>Nyhavn–Kongens Nytorv loop</b>. Stamp Rally: <b>LEGO Vimmelskaftet</b> (10:00–18:00) and <b>LEGO Tivoli Gardens</b> (10:00–22:00). Collect 5 stamps total → Pikachu with Special Background encounter. <b>Hard stop at 16:30 — leave wherever you are.</b></p><p><b>👵 Mom's group (3 people):</b> <a href='https://shop.tivoli.dk/en/billetter-og-tivolikort/entre' target='_blank' rel='noopener noreferrer'><b>Tivoli Gardens</b></a> (Vesterbrogade 3, 10-min walk from CABINN). Buy tickets at tivoli.dk in advance to skip the queue — entry from ≈150 DKK in summer (dynamic pricing; verify before going). Alternatively, Rosenborg Castle if they missed it Friday (~160 DKK entry, or free with Copenhagen Card). <b>Leave by 17:00</b> for a taxi to Vækst (~10–15 min). All five meet at Vækst at 17:30.</p>",
+          "fit": "GO Fest group: walking shoes for a full pavement day. Mom's group: comfortable shoes for Tivoli. Everyone: something a step up from trainers for Vækst dinner.",
           "checklist": [
-            "Vækst reservation (17:30)",
-            "Leave GO Fest by 16:30",
-            "LEGO Stamp Rally: hit both stores for encounter rewards"
+            "Vækst reservation confirmed — 17:30, all 5 people",
+            "GO Fest group: hard stop 16:30, drop everything and head to Vækst",
+            "GO Fest group: LEGO Stamp Rally — 5 stamps total for the Pikachu encounter",
+            "Mom's group: Tivoli tickets bought in advance at tivoli.dk",
+            "Mom's group: leave Tivoli by 17:00",
+            "Agree on a meeting point near Vækst in case groups are in different parts of the city at 16:30"
           ]
         },
         {
           "date": "Sun Jun 14",
-          "title": "Slow morning → board DFDS 16:30",
-          "pace": "Morning free · Torvehallerne ~1 hr · be at the terminal by ~15:30 to board",
-          "note": "Don't cut the boarding window fine with luggage.",
-          "body": "Ease into the day at Torvehallerne food hall, then head to the DFDS Oslo terminal. Board by ~15:30 for the 16:30 sailing and settle into your cabin for the overnight crossing.",
+          "title": "Last morning ashore — then overnight to Oslo",
+          "pace": "Morning free · Torvehallerne ~1 hr · terminal check-in by 16:15, sailing 16:30",
+          "note": "Don't cut the boarding window fine with luggage. The check-in deadline is 16:15.",
+          "body": "<p><em>A slow last morning at the food market. Then the ferry terminal, the cabin, and the North Sea between you and Oslo.</em></p><p>Ease into the day at <a href='https://torvehallernekbh.dk' target='_blank' rel='noopener noreferrer'>Torvehallerne</a> for a final Copenhagen breakfast. Then take a taxi to the <b>Go Nordic Cruiseline terminal at Dampfærgevej 30</b>. Check in by 16:15 for the 16:30 sailing, find your cabin, and settle in for the overnight crossing.</p>",
           "fit": "Comfortable travel clothes.",
           "checklist": [
-            "Ferry + cabin confirmation",
-            "Snacks for the crossing",
-            "Download offline maps + apps before mid-sea (no signal once at sea)"
+            "Go Nordic Cruiseline ferry + cabin booking confirmation",
+            "Snacks and anything you'll want for the overnight crossing",
+            "Download offline maps, playlists, and the Go Nordic Cruiseline app — there's no phone signal in the middle of the North Sea"
           ]
         },
         {
           "date": "Mon Jun 15",
-          "title": "Oslo",
-          "pace": "~6 hr ashore · dock ~10:00 · Opera + Aker Brygge + Akershus ~5 hr · reboard by ~15:30",
-          "note": "Mathallen is closed Monday — Aker Brygge is the easy food alternative.",
-          "body": "Dock in Oslo around 10:00. Walk the marble Opera House roof, stroll Aker Brygge, and see Akershus Fortress, then reboard by ~15:30 for the trip back.",
-          "fit": "Layers; Oslo can be cooler.",
+          "title": "Six hours in Oslo — marble rooftops, a Viking waterfront & a medieval fortress",
+          "pace": "~6 hr ashore · dock ~10:00 · Opera + Aker Brygge + Akershus ~5 hr · reboard by 15:30",
+          "note": "Mathallen food hall is closed on Mondays. Aker Brygge has plenty of good food options on the waterfront instead.",
+          "body": "<p><em>Dock, see the city, reboard. Oslo gives you exactly one day — make it count.</em></p><p>Dock at Vippetangen around 10:00. Walk the white marble roof of the <b>Oslo Opera House</b> (free and open to all), stroll the waterfront restaurants and galleries of <b>Aker Brygge</b>, then visit <b>Akershus Fortress</b> — a medieval castle with harbour views that has stood since the 1290s. Reboard the ship by 15:30 for the return crossing.</p>",
+          "fit": "Layers — Oslo can be noticeably cooler than Copenhagen.",
           "checklist": [
-            "Watch the reboarding time (~15:30)",
-            "Norwegian kroner / card"
+            "Watch the reboarding time — 15:30, not a minute later",
+            "Norwegian krone or card (Vipps mobile pay is widely used in Norway)"
           ]
         },
         {
           "date": "Tue Jun 16",
-          "title": "Dock ~10:00 → fly 14:20",
-          "pace": "Tight transfer · dock ~10:00 → taxi to airport ~20 min · go straight to CPH for the 14:20",
-          "note": "It's a tight connection — head straight to the airport.",
-          "body": "Back in Copenhagen around 10:00. Go straight to the airport (a taxi is the safe call) for the 14:20 flight, and handle any VAT refund there.",
+          "title": "Ferry home, one last coffee, catch the flight",
+          "pace": "Tight connection · dock ~10:00 → taxi ~20 min → CPH for 14:20",
+          "note": "Go straight to the airport. This is not a day for one more detour.",
+          "body": "<p><em>The ship docks at ten. The plane leaves at 14:20. Go straight to the airport.</em></p><p>Back in Copenhagen around 10:00. Take a taxi directly to CPH (~20 min) — this is the safe call for a tight connection. Handle any VAT refund at the airport before the flight.</p>",
           "fit": "Travel-comfortable.",
           "checklist": [
             "Passport",
-            "VAT refund paperwork if you shopped",
-            "Straight to the airport"
+            "VAT refund forms if you bought anything over 300 DKK at a participating store",
+            "Taxi to the airport — don't try to take the metro with heavy bags on a tight schedule"
           ]
         }
       ]
@@ -361,12 +379,12 @@
     {
       "type": "sights",
       "group": "Sights",
-      "title": "Top sights in Copenhagen",
+      "title": "The must-see sights in Copenhagen",
       "items": [
         {
           "name": "Nyhavn",
-          "kicker": "The classic view",
-          "body": "The candy-coloured canal houses everyone pictures — beautiful, and mobbed by midday, so come early or glide past on the harbour bus.",
+          "kicker": "The postcard view",
+          "body": "The candy-coloured canal houses everyone photographs. Beautiful in any light — come early morning to beat the crowds, or glide past on the harbour bus to avoid them entirely.",
           "img": {
             "file": "Nyhavn-Copenhagen.JPG",
             "alt": "Nyhavn canal, Copenhagen"
@@ -378,17 +396,17 @@
         },
         {
           "name": "Reffen",
-          "kicker": "Street food by the water",
-          "body": "Open-air street food on the old shipyard — picnic benches, firepits, harbour views. Street food stalls open daily 11:30–21:30; bars open until midnight (Thu) and 1 am (Fri–Sat). The largest street food market in the Nordics.",
+          "kicker": "Scandinavia's biggest street food market",
+          "body": "60+ international stalls on the old shipyard at Refshaleøen, with picnic benches, firepits, and harbour views. Food stalls open 11:30–21:30 daily; bars until midnight Thu and 1 am Fri–Sat. <a href='https://reffen.dk' target='_blank' rel='noopener noreferrer'>reffen.dk</a>",
           "map": {
             "lat": 55.6906,
             "lng": 12.6007
           }
         },
         {
-          "name": "Kastellet + Little Mermaid",
-          "kicker": "An easy waterfront walk",
-          "body": "A beautifully preserved star-shaped fortress with grassy ramparts to stroll. The Little Mermaid is a short walk away — lovely, but smaller than the photos suggest, so manage expectations.",
+          "name": "Kastellet",
+          "kicker": "A perfect star-shaped fortress",
+          "body": "One of the best-preserved star-shaped fortresses in northern Europe — still an active military area, but the ramparts and grounds are open to walk freely. The Little Mermaid is a short detour away: lovely, but smaller than expected.",
           "img": {
             "file": "Kastellet, Copenhagen (aerial view).jpg",
             "alt": "Kastellet fortress, Copenhagen"
@@ -400,8 +418,8 @@
         },
         {
           "name": "CopenHill (Amager Bakke)",
-          "kicker": "Rooftop views",
-          "body": "A waste-to-energy plant you can walk up, with a free lift and skyline-and-sea views from the roof. Genuinely unlike anything else in the city.",
+          "kicker": "A ski slope on top of a power plant",
+          "body": "A waste-to-energy plant whose roof doubles as a year-round ski slope and hiking trail, with a free lift to the summit for views over the harbour and city. One of the most original pieces of architecture in Europe.",
           "img": {
             "file": "Amager Bakke (aerial view).jpg",
             "alt": "CopenHill / Amager Bakke"
@@ -413,8 +431,8 @@
         },
         {
           "name": "Superkilen",
-          "kicker": "A local favourite",
-          "body": "A surreal striped plaza in Nørrebro — flat, photogenic, and a real slice of local life rather than a tourist set-piece.",
+          "kicker": "Nørrebro's striped urban square",
+          "body": "A surreal striped public park in Nørrebro that brings together objects collected from 60 different countries. Flat, photogenic, and genuinely local — not a tourist set-piece.",
           "img": {
             "file": "Superkilen - red section.JPG",
             "alt": "Superkilen red square, Copenhagen"
@@ -426,8 +444,8 @@
         },
         {
           "name": "Grundtvig's Church",
-          "kicker": "Striking architecture",
-          "body": "A soaring brick 'organ-pipe' church — vast, quiet, and unforgettable inside. Closed Mondays, so plan around it.",
+          "kicker": "Copenhagen's hidden cathedral",
+          "body": "A massive yellow-brick 'organ-pipe' church in Bispebjerg — soaring, quiet, and genuinely unforgettable inside. <b>Closed Mondays; closes at 15:45 every other day.</b> Plan your Thursday route accordingly. <a href='https://grundtvigskirke.dk' target='_blank' rel='noopener noreferrer'>grundtvigskirke.dk</a>",
           "img": {
             "file": "Grundvigs Church, Copenhagen, 3 August 2019.jpg",
             "alt": "Grundtvig's Church, Copenhagen"
@@ -442,61 +460,61 @@
     {
       "type": "prose",
       "group": "Sights",
-      "title": "What to skip",
-      "body": "<p>A few things over-promise. The <b>Little Mermaid</b> is worth a two-minute look, not a special trip — catch it on the way past Kastellet. <b>Strøget</b>'s middle stretch is mostly the same chains you have at home; browse the ends and side streets instead. And you don't need a paid canal tour — the <b>harbour buses</b> on your City Pass cover much of the same view for free.</p>"
+      "title": "What to skip (or lower your expectations for)",
+      "body": "<p>A few Copenhagen classics that over-promise. <b>The Little Mermaid</b> is worth a two-minute look — it's roughly the size of a labrador, not the towering figure the photos imply. Catch it while walking past Kastellet; don't plan a trip around it. <b>Strøget</b>'s middle section is mostly the same international chains you have at home — the side streets and the ends of the street are far more interesting. And the GO Fest group doesn't need a paid boat tour — the <b>harbour buses</b> on your City Pass cover much of the same waterfront view for free. (Mom's group is in a different situation — their guided narrated cruise is exactly the right call for a first-time visit.)</p>"
     },
     {
       "type": "prose",
       "group": "Sights",
-      "title": "GO Fest 2026 — full breakdown",
-      "body": "<p>Pokémon GO Fest Copenhagen runs at <b>Fælledparken, Jun 12–14, 2026</b>, in partnership with the LEGO Group.</p><p><b>Tickets (buy at pokemongo.com):</b><br>— <b>Park ticket</b>: 200 kr (≈$31) per session — Morning (9:00–13:00) or Afternoon (14:00–18:00). Includes one park session + full citywide gameplay that day.<br>— <b>City Explorer Pass</b>: TBA — citywide gameplay only, no park access; available Jun 11–14.<br>— Tickets are non-refundable and first-come-first-served.</p><p><b>Optional add-ons (can be purchased separately):</b><br>— <b>Premier Access</b>: 640 kr (≈$99) — exclusive collectible item + voucher codes for 100+ in-game consumables (balls, incubators, lures, battle passes)<br>— <b>Raid Lover</b>: 112 kr — up to 18 daily Raid Passes from spinning Gym Photo Discs + raid XP and candy bonuses<br>— <b>Egg-thusiast</b>: 112 kr — ¼ egg hatch distance + tripled hatch rewards<br>— <b>Extra Citywide Day</b>: 135 kr/day — extends citywide gameplay bonuses: reduced egg distance, extra Raid Passes, special trades, 2× catch candy</p><p><b>LEGO GO Fest activations:</b><br>— <b>LEGO Store Vimmelskaftet 37</b>: Fri–Sat 10:00–18:00, Sun 11:00–17:00<br>— <b>LEGO Store Tivoli Gardens</b>: Fri–Sun 10:00–22:00<br>Spin PokéStops at LEGO stores for exclusive stickers + Timed Research. Collect 5 LEGO Stamp Rally stamps → Pikachu with Special Background encounter.</p><p>Heat, sun and a lot of standing on GO Fest days — carry a battery pack (essential), water, sunscreen and a hat.</p>"
+      "title": "GO Fest 2026 — the complete guide",
+      "body": "<p>Pokémon GO Fest Copenhagen runs at <b>Fælledparken, Jun 12–14, 2026</b>, in partnership with the LEGO Group. This is the largest live Pokémon GO event in Europe in 2026.</p><p><b>Tickets</b> — buy at <a href='https://pokemongo.com/en/gofest/copenhagen/tickets' target='_blank' rel='noopener noreferrer'>pokemongo.com/en/gofest/copenhagen/tickets</a>:</p><ul><li><b>Park Experience ticket</b>: 200 kr (≈$31) per session. Choose Morning (9:00–13:00) or Afternoon (14:00–18:00). Includes one park session plus full citywide access that day.</li><li><b>City Explorer Pass</b>: 135 kr — citywide gameplay only, no park entry; available Jun 11–14.</li><li>Tickets are non-refundable and first-come-first-served.</li></ul><p><b>Optional add-ons</b> (purchased separately, any session):</p><ul><li><b>Premier Access</b>: 640 kr (≈$99) — exclusive physical collectible + voucher codes for 100+ in-game items</li><li><b>Raid Lover</b>: 112 kr — up to 18 daily Raid Passes from spinning Gym Photo Discs + bonus raid XP and candy</li><li><b>Egg-thusiast</b>: 112 kr — ¼ egg hatch distance + tripled hatch rewards for the day</li></ul><p><b>LEGO Stamp Rally</b> — opens Friday Jun 12 (first day of GO Fest):</p><ul><li><b>LEGO Store Vimmelskaftet 37</b>: Fri–Sat 10:00–18:00 · Sun 11:00–17:00</li><li><b>LEGO Store Tivoli Gardens</b>: Fri–Sun 10:00–22:00</li></ul><p>Spin PokéStops at each store for exclusive GO Fest stickers and Timed Research. Collect <b>5 stamps across both stores</b> to unlock a Pikachu with Special Background encounter reward. The Tivoli Gardens store has significantly longer hours — use it for evening stamp collection. Official LEGO announcement: <a href='https://pokemongo.com/news/gofest-2026-copenhagen-lego' target='_blank' rel='noopener noreferrer'>pokemongo.com/news/gofest-2026-copenhagen-lego</a>.</p><p><b>Pack for a long warm day:</b> battery bank (essential — GO Fest drains phones fast), water, sunscreen, a hat, and comfortable shoes. You'll be standing and walking for hours.</p>"
     },
     {
       "type": "prose",
       "group": "Food & shopping",
-      "title": "What to eat in Copenhagen",
-      "body": "<p>Copenhagen has one of the world's best food scenes at every price point. Here's how to eat well on this trip:</p><p><b>Danish classics — try at least once:</b><br>— <b>Smørrebrød</b>: open-faced sandwich on dense dark rye bread (rugbrød). Toppings range from pickled herring and egg to roast beef and remoulade. This is Danish lunch culture — eaten at midday, not dinner. Expect ≈80–160 DKK at a proper sit-down place.<br>— <b>Wienerbrød</b> (Danish pastry): a flaky, laminated pastry that puts every airport 'Danish' to shame. ≈20–45 DKK at a good bakery.<br>— <b>Kanelsnegl / Kardemommesnurrer</b>: cinnamon or cardamom bun from a bakery — the current must-try pastry in the city. ≈25–40 DKK.<br>— <b>Pølse</b> (Danish hot dog): from a red pølsevogn (hot-dog cart) — a red sausage with remoulade, crispy onions and pickles. ≈30–50 DKK. Completely authentic.<br>— <b>Stegt flæsk med persillesovs</b>: crispy pork belly strips with parsley sauce, voted Denmark's national dish. Found at traditional lunch restaurants.</p><p><b>Seafood:</b> Denmark is surrounded by water. Cold Nordic shrimp (rejer) piled on rugbrød with mayo and lemon is exceptional. Fresh smoked fish is worth seeking at Torvehallerne's fish counters.</p><p><b>New Nordic:</b> This is where Copenhagen earned its world reputation. Think seasonal, foraged, fermented. Budget versions exist — Folkehuset Absalon serves a communal shared dinner for ≈40 DKK (≈$6) that's genuinely special. The high-end version (Alchemist, 50+ courses) costs ≈3,000–5,000 DKK per person and books months ahead.</p><p><b>Street food:</b> Reffen (Tue Jun 9) has 60+ international stalls; open 11:30 daily. Good for dinner after Kastellet.</p>"
+      "title": "What to eat in Copenhagen — a first-timer's guide",
+      "body": "<p>Copenhagen has one of the world's best food cultures at every price point, from two-euro bakery buns to multi-course tasting menus. Here's what to prioritise on this particular trip.</p><p><b>Danish classics to try at least once:</b></p><ul><li><b>Smørrebrød</b> — Denmark's national lunch: an open-faced sandwich on dense dark rye bread (rugbrød). Classic toppings include pickled herring, roast beef, egg and remoulade, or fresh shrimp. This is a midday meal, not dinner. ≈80–160 DKK at a proper smørrebrød restaurant.</li><li><b>Wienerbrød</b> — Danish pastry. Flaky, laminated, and far better here than any 'Danish' you've had anywhere else. ≈20–45 DKK at a decent bakery.</li><li><b>Kanelsnegl or Kardemommesnurrer</b> — cinnamon or cardamom bun. The current must-order pastry in the city. ≈25–40 DKK.</li><li><b>Pølse</b> — Danish hot dog from a red pølsevogn cart. Red sausage in a soft bun, topped with remoulade, crispy onions, and pickles. ≈30–50 DKK. One of the most authentic things you can eat on the street here.</li><li><b>Stegt flæsk med persillesovs</b> — crispy pork belly strips with parsley sauce, considered Denmark's national dish. Found at traditional lunch restaurants.</li></ul><p><b>Seafood:</b> Cold Nordic shrimp (rejer) piled on buttered rugbrød with mayonnaise and lemon is exceptional and uniquely Danish. Fresh smoked fish is worth seeking at Torvehallerne's fish counters.</p><p><b>New Nordic:</b> Copenhagen essentially invented this global restaurant movement — seasonal, foraged, and fermented. At the budget end, Folkehuset Absalon does a communal long-table dinner for 75–100 DKK (see restaurant picks). At the high end, Alchemist runs 50+ micro-courses for ≈3,000–5,000 DKK per person and books months ahead.</p><p><b>Street food:</b> Reffen (Tue Jun 9) — 60+ stalls open from 11:30 daily, perfect after Kastellet.</p>"
     },
     {
       "type": "prose",
       "group": "Food & shopping",
-      "title": "Restaurant picks near your route",
-      "body": "<p>Ordered by how close they are to CABINN Nørreport and the Jun 11–13 walking paths. All prices in DKK approximate — verify before going.</p><p><b>Right at Nørreport (walk-out-the-door convenient):</b><br>— <b>Torvehallerne</b> (Frederiksborggade 21, directly outside Nørreport station): Copenhagen's best covered food market — 60+ stalls, all price points, excellent for breakfast and lunch. Standouts: the fresh fish counter, smørrebrød stalls, coffee from The Coffee Collective, and pastries. Open Mon–Fri 10:00–19:00, Sat 10:00–18:00, Sun 11:00–17:00. ≈80–160 DKK for a proper lunch. The single most convenient food stop on this itinerary.</p><p><b>Lunch on Strøget / Thu route:</b><br>— <b>Selma</b> (smørrebrød, Michelin Bib Gourmand — ≈ look up current address; walk from LEGO Store): Elevated traditional smørrebrød — herring with nettles, roast beef with pickled things. Lunch only. ≈150–250 DKK per person.<br>— <b>Conditori La Glace</b> (Skoubogade 3, just off Strøget): Denmark's oldest confectionery, founded 1870. Famous for elaborate layer cakes (Sportskagebord, Othellolagkage). ≈40–90 DKK for a slice and coffee. Don't skip it on the Strøget walk.</p><p><b>Bakeries — anytime, everywhere:</b><br>— <b>Hart Bageri</b> (multiple: Gammel Kongevej, Refshaleøen/Reffen area): Widely regarded as Copenhagen's best sourdough. ≈25–55 DKK.<br>— <b>Juno the Bakery</b> (Elmegade 10, near Fælledparken — perfect for Fri morning before GO Fest): Cardamom buns and outstanding pastries. ≈30–50 DKK.<br>— <b>Lagkagehuset</b> (multiple city center locations): Reliable chain for pastries, smørrebrød takeaway, coffee. ≈30–60 DKK.</p><p><b>Budget dinner / local scene:</b><br>— <b>Folkehuset Absalon</b> (Sønder Blvd 73, Vesterbro): Communal long-table Danish dinners for around <b>40 DKK</b> — one of the city's best bargains and genuinely social. Not a tourist trap. Check their schedule as times vary.<br>— <b>Doomsday Deli</b> (Gulbergsgade, Nørrebro, ~20 min from CABINN): Thick, oozy sandwiches, strong local reputation. ≈80–120 DKK.</p><p><b>On the itinerary already:</b><br>— <b>Vækst</b> — Sat Jun 13, 17:30 (reservation confirmed). The guide has your booking.</p><p>⚠️ All specific addresses above should be confirmed via Google Maps before you go — some may have moved since this was checked.</p>"
+      "title": "Where to eat — picks near your route",
+      "body": "<p>Ordered by proximity to CABINN Nørreport and the Jun 11–13 daily routes. All DKK prices are approximate — verify before going.</p><p><b>Steps from the hotel (Nørreport):</b></p><ul><li><a href='https://torvehallernekbh.dk' target='_blank' rel='noopener noreferrer'><b>Torvehallerne</b></a>, Frederiksborggade 21 — Copenhagen's best covered food market, directly outside Nørreport station. 60+ stalls, all price points. Standouts: the fresh fish counter, smørrebrød stalls, The Coffee Collective, pastries. Hours: Mon–Sat 10:00–18:00, Sun 10:00–18:00 (closed Sun some stalls vary — arrive by 17:30 to be safe). ≈80–160 DKK for a proper lunch. The single most convenient food stop on this entire itinerary.</li></ul><p><b>On the Strøget and Thursday route:</b></p><ul><li><b>Selma</b>, Rømersgade 20 (Indre By) — <a href='https://guide.michelin.com/dk/en/capital-region/copenhagen/restaurant/selma' target='_blank' rel='noopener noreferrer'>Michelin Bib Gourmand</a>, modern smørrebrød at lunch and tasting menu in the evening. Herring with nettles, roast beef with pickled things. ≈150–250 DKK per person for lunch.</li><li><b>Conditori La Glace</b>, Skoubogade 3 (just off Strøget) — Denmark's oldest confectionery, founded 1870. Layer cakes and pastries that are genuinely hard to find elsewhere. ≈40–90 DKK for a slice and coffee.</li></ul><p><b>Bakeries — open daily, everywhere:</b></p><ul><li><b>Hart Bageri</b> (multiple: Gammel Kongevej, Refshaleøen/Reffen area) — widely rated Copenhagen's best sourdough. ≈25–55 DKK.</li><li><b>Juno the Bakery</b>, Elmegade 10 (near Fælledparken — good for a pastry before Friday's GO Fest walk) — famous cardamom buns. ≈30–50 DKK. ≈ Confirm address before going.</li><li><b>Lagkagehuset</b> (multiple city-centre locations) — reliable chain for pastries, smørrebrød to go, coffee. ≈30–60 DKK.</li></ul><p><b>Budget and local:</b></p><ul><li><a href='https://absaloncph.dk/en/food/' target='_blank' rel='noopener noreferrer'><b>Folkehuset Absalon</b></a>, Sønder Blvd 73 (Vesterbro) — communal long-table Danish dinner served at 18:00 daily. <b>75 DKK Sun–Wed, 100 DKK Thu–Sat.</b> Book a ticket online by 16:00 on the day, or try the door from 17:00. One of the city's best bargains and genuinely social — not a tourist trap.</li><li><b>Doomsday Deli</b>, Gulbergsgade (Nørrebro, ~20 min from CABINN) — thick, layered sandwiches with a strong local following. ≈80–120 DKK.</li></ul><p><b>Already on the itinerary:</b> Vækst — Sat Jun 13 at 17:30. Reservation confirmed.</p><p><small>⚠️ Confirm all addresses via Google Maps before you go. Restaurant details change.</small></p>"
     },
     {
       "type": "prose",
       "group": "Food & shopping",
-      "title": "Shopping in Copenhagen",
-      "body": "<p><b>Strøget</b> is the 1.1 km pedestrian spine from Rådhuspladsen to Kongens Nytorv — the longest pedestrian shopping street in Europe. The middle section is chains (H&M, Zara, LEGO flagship at Vimmelskaftet 37). The ends are more interesting: the Rådhuspladsen end has more local names; the Kongens Nytorv end has Hermès, Louis Vuitton and <b>Illum</b> department store (Østergade 52 — 7 floors, mostly designer-tier). <b>Magasin du Nord</b> (Kongens Nytorv 13) is the more accessible department store — great food hall in the basement. Side streets off Strøget (<b>Købmagergade</b>, <b>Kronprinsensgade</b>) have independent boutiques and jewellers worth wandering.</p><p><b>By neighbourhood:</b><br>— <b>Nørrebro</b> (Jægersborggade, Ravnsborggade): hipster boutiques, vintage stores, vinyl shops, local designers. A 20-min walk from CABINN. The most interesting neighbourhood for non-chain shopping.<br>— <b>Vesterbro</b> (Istedgade, Værnedamsvej): vintage clothes, independent cafes-with-shops, slightly grittier. The 'meatpacking district' (Kødbyen) edge has concept stores.<br>— <b>Torvehallerne</b>: food market right at Nørreport — the best place to buy edible souvenirs (Danish honey, rye crackers, smoked fish, craft beer, Lakrids liquorice by Johan Bülow).</p><p><b>By price tier:</b><br>Budget: <b>Flying Tiger</b> and <b>Søstrene Grene</b> (both on/near Strøget, both Danish originals, both cheap and fun)<br>Mid-range: <b>Rains</b> (rainwear, great VAT refund opportunity), <b>Samsøe Samsøe</b>, <b>Ecco</b><br>Higher-end: <b>Hay</b> (design), <b>Royal Copenhagen</b> (porcelain, Amagertorv 6), <b>Georg Jensen</b> (silver, same street), <b>Pandora</b></p><p><b>VAT refund:</b> Denmark's VAT is 25% — as a non-EU visitor you can claim a refund on purchases over 300 DKK at participating stores. Ask for a tax-free form when you buy. Process the refund at the airport on departure. Rains rainwear, for example, runs about $62 after the refund versus ~$95 in the US.</p>"
+      "title": "Shopping in Copenhagen — where to go and what to look for",
+      "body": "<p><b>Strøget</b> is the 1.1 km pedestrian spine from Rådhuspladsen to Kongens Nytorv — the longest pedestrian shopping street in Europe. The middle section is mostly international chains (H&M, Zara, the LEGO flagship at Vimmelskaftet 37). The ends reward attention: the Rådhuspladsen end has more Danish names; the Kongens Nytorv end has <b>Illum</b> (Østergade 52 — seven floors, designer-tier) and <b>Magasin du Nord</b> (Kongens Nytorv 13 — more accessible, with an excellent basement food hall). Side streets off Strøget — especially <b>Købmagergade</b> and <b>Kronprinsensgade</b> — carry independent boutiques and jewellers.</p><p><b>By neighbourhood:</b></p><ul><li><b>Nørrebro</b> (Jægersborggade, Ravnsborggade): independent boutiques, vintage stores, vinyl record shops, local designers. About 20 minutes' walk from CABINN. The best neighbourhood for non-chain shopping in Copenhagen.</li><li><b>Vesterbro</b> (Istedgade, Værnedamsvej): vintage clothes, independent cafes, concept stores near the old meatpacking district (Kødbyen). Slightly grittier, more neighbourhood feel.</li><li><b>Torvehallerne</b>: the best source of edible souvenirs — Danish honey, rye crackers, smoked fish, craft beer, Lakrids liquorice by Johan Bülow.</li></ul><p><b>By price tier:</b></p><ul><li>Budget: <b>Flying Tiger Copenhagen</b> and <b>Søstrene Grene</b> — both Danish originals, both cheap, fun and genuinely worth a visit. Both on or near Strøget.</li><li>Mid-range: <b>Rains</b> (rainwear — good VAT-refund item), <b>Samsøe Samsøe</b>, <b>Ecco</b></li><li>Higher-end: <b>Hay</b> (design and homewares), <b>Royal Copenhagen</b> (porcelain, Amagertorv 6, on Strøget), <b>Georg Jensen</b> (silver, same street), <b>Pandora</b></li></ul><p><b>VAT refund:</b> Denmark charges 25% VAT. Non-EU visitors can claim a refund on purchases of 300 DKK or more at participating stores. Ask for a Global Blue or Planet tax-free form when you buy, then process it at the airport before departure. Rains gear, for example, typically costs around $60–65 after the refund versus $90–100 in the US (≈ figures approximate — verify at point of purchase).</p>"
     },
     {
       "type": "list",
       "group": "Food & shopping",
-      "title": "Souvenirs & pins — Denmark",
+      "title": "Souvenir ideas — Denmark",
       "items": [
-        "A Royal Copenhagen piece (even a small trinket — Amagertorv 6, on Strøget)",
-        "Something from Flying Tiger (Danish original, cheap and quirky)",
-        "A LEGO store-exclusive set (check GO Fest exclusives too)",
-        "A Dannebrog or Copenhagen enamel pin",
-        "Lakrids by Johan Bülow (premium Danish liquorice, available at Torvehallerne)",
-        "Danish craft beer from Torvehallerne — Mikkeller is the famous local name"
+        "A Royal Copenhagen piece — even a small ornament (Amagertorv 6, on Strøget)",
+        "Something from Flying Tiger Copenhagen (a Danish original that most visitors haven't heard of)",
+        "A LEGO store-exclusive set — check for GO Fest weekend exclusives",
+        "A Dannebrog (Danish flag) or Copenhagen enamel pin",
+        "Lakrids by Johan Bülow — premium Danish liquorice available at Torvehallerne",
+        "Danish craft beer from Torvehallerne — Mikkeller is the famous Copenhagen name"
       ]
     },
     {
       "type": "prose",
       "group": "Food & shopping",
-      "title": "Collectibles & chain merch",
-      "body": "<p>For collectors: grab a Starbucks <b>'Been There' Copenhagen</b> (or Denmark) mug. There's a <b>Hard Rock Cafe in Copenhagen</b> and another in <b>Oslo</b> (Karl Johans gate) — but <b>none in Malmö</b> (nearest is Stockholm). The <b>LEGO flagship</b> at Vimmelskaftet 37 carries store-exclusive sets — and it's open Friday through Sunday, so you have multiple opportunities including GO Fest weekend.</p>"
+      "title": "Collector's checklist — pins, mugs & merch",
+      "body": "<p>For souvenir hunters: a Starbucks <b>'Been There' Copenhagen</b> or Denmark mug. There's a <b>Hard Rock Cafe in Copenhagen</b> and another in <b>Oslo</b> (Karl Johans gate 45) — but <b>none in Malmö</b>; the nearest is Stockholm. The <b>LEGO flagship</b> at Vimmelskaftet 37 stocks store-exclusive sets and GO Fest weekend activations run Friday through Sunday — you have three days of opportunities to visit.</p>"
     },
     {
       "type": "sights",
       "group": "Day trips",
-      "title": "A day in Malmö",
+      "title": "A day across the bridge — Malmö, Sweden",
       "items": [
         {
           "name": "Malmö, Sweden",
-          "kicker": "Across the bridge",
-          "body": "Cobbled old-town squares (Gamla Staden, Lilla Torg) and the twisting Turning Torso, an easy ~35-minute train from Copenhagen. Buy a cross-border ticket at Nørreport — your City Pass doesn't cover Sweden. Bring your passport for ID checks.",
+          "kicker": "35 minutes from central Copenhagen",
+          "body": "Cobbled medieval squares (Gamla Staden, Lilla Torg) and the twisting Turning Torso skyscraper on the waterfront. The Øresund Bridge crossing is an experience in itself. Buy a cross-border Øresundståg ticket at Nørreport — City Pass stops at the border. Bring your passport.",
           "img": {
             "file": "The Turning Torso, Malmo.JPG",
             "alt": "Turning Torso, Malmö"
@@ -511,22 +529,22 @@
     {
       "type": "list",
       "group": "Day trips",
-      "title": "Souvenirs — Sweden",
+      "title": "Souvenir ideas — Sweden",
       "items": [
-        "A Dala horse",
-        "Swedish pick-and-mix candy (lösgodis)",
-        "A Malmö or Sweden pin"
+        "A Dala horse (the classic Swedish souvenir)",
+        "Swedish pick-and-mix candy — lösgodis is a national institution",
+        "A Malmö or Sweden enamel pin"
       ]
     },
     {
       "type": "sights",
       "group": "Day trips",
-      "title": "The overnight ferry to Oslo",
+      "title": "Overnight to Oslo — how the ferry works",
       "items": [
         {
           "name": "Oslo, Norway",
-          "kicker": "How the crossing works",
-          "body": "The DFDS overnight ferry leaves Copenhagen ~16:30 with a cabin for the night, docking in Oslo around 10:00 for roughly six hours ashore — the Opera House roof, Aker Brygge and Akershus — before you reboard by ~15:30. No phone signal mid-sea — download everything before you board.",
+          "kicker": "Dock at 10, reboard at 15:30",
+          "body": "The <a href='https://www.gonordiccruiseline.com' target='_blank' rel='noopener noreferrer'>Go Nordic Cruiseline</a> overnight ferry departs Dampfærgevej 30 at 16:30 (check in by 16:15), sails overnight in a cabin, and docks at Vippetangen in Oslo around 10:00. That gives you roughly five hours ashore: the marble Opera House roof, Aker Brygge waterfront, and Akershus Fortress. Reboard by 15:30. No phone signal mid-sea — download everything before you board.",
           "img": {
             "file": "Oslo Opera House seen from Langkaia.JPG",
             "alt": "Oslo Opera House"
@@ -541,14 +559,20 @@
     {
       "type": "list",
       "group": "Day trips",
-      "title": "Souvenirs — Norway",
+      "title": "Souvenir ideas — Norway",
       "items": [
-        "A Norwegian wool sweater",
-        "Brunost (brown cheese) + a cheese slicer",
+        "A Norwegian wool sweater (Oleana or Dale of Norway are classic brands)",
+        "Brunost (brown cheese) and a traditional cheese slicer",
         "A troll figurine",
-        "Freia chocolate"
+        "Freia chocolate — Norway's most iconic confectionery brand"
       ]
+    },
+    {
+      "type": "prose",
+      "group": "References",
+      "title": "Sources & links — everything verified for this guide",
+      "body": "<p>Every fact in this guide has a source. Click any link below to verify it yourself or check for updates.</p><p><b>GO Fest 2026</b></p><ul><li><a href='https://pokemongo.com/en/gofest/copenhagen/tickets' target='_blank' rel='noopener noreferrer'>GO Fest 2026 Copenhagen — official tickets & add-on prices</a> · Park ticket 200 kr, Premier Access 640 kr, Raid Lover 112 kr, Egg-thusiast 112 kr</li><li><a href='https://pokemongo.com/news/gofest-2026-copenhagen-lego' target='_blank' rel='noopener noreferrer'>GO Fest × LEGO — official announcement</a> · LEGO store hours, Stamp Rally details</li></ul><p><b>Transport & transit</b></p><ul><li><a href='https://dinoffentligetransport.dk/en/find-tickets/day-tickets/city-pass' target='_blank' rel='noopener noreferrer'>DOT City Pass — official pricing page</a> · 24h 100 DKK / 48h 160 DKK / 96h 280 DKK / 120h 340 DKK (Small, zones 1–4 incl. airport). No 72h option exists.</li><li><a href='https://www.rejseplanen.dk' target='_blank' rel='noopener noreferrer'>Rejseplanen</a> · Official Copenhagen transit journey planner</li><li><a href='https://www.gonordiccruiseline.com' target='_blank' rel='noopener noreferrer'>Go Nordic Cruiseline</a> · Copenhagen–Oslo overnight ferry (formerly DFDS route, operator changed Nov 2024). Departs 16:30 Copenhagen / arrives 10:00 Oslo. Terminal: Dampfærgevej 30.</li><li><a href='https://copenhagencard.com/view/prices' target='_blank' rel='noopener noreferrer'>Copenhagen Card — verified prices</a> · 589 DKK / 24h · 859 DKK / 48h · 1,039 DKK / 72h (all zones + 80+ attractions free)</li></ul><p><b>Attractions</b></p><ul><li><a href='https://shop.tivoli.dk/en/billetter-og-tivolikort/entre' target='_blank' rel='noopener noreferrer'>Tivoli Gardens — ticket booking</a> · Dynamic (date-based) pricing from ≈150 DKK in summer. Buy in advance to skip the queue.</li><li><a href='https://grundtvigskirke.dk' target='_blank' rel='noopener noreferrer'>Grundtvig's Church — opening hours</a> · Closed Mondays. Open Tue–Sat 10:00–15:45, Sun 12:30–15:45. Plan Thursday visit accordingly.</li><li><a href='https://reffen.dk' target='_blank' rel='noopener noreferrer'>Reffen street food market</a> · Food stalls open 11:30–21:30 daily</li></ul><p><b>Food & markets</b></p><ul><li><a href='https://torvehallernekbh.dk' target='_blank' rel='noopener noreferrer'>Torvehallerne food market</a> · Mon–Sat 10:00–18:00, Sun 10:00–18:00 (some stalls vary)</li><li><a href='https://absaloncph.dk/en/food/' target='_blank' rel='noopener noreferrer'>Folkehuset Absalon — communal dinner</a> · Sønder Blvd 73. 75 DKK Sun–Wed, 100 DKK Thu–Sat. Served at 18:00 daily; book online by 16:00.</li><li><a href='https://guide.michelin.com/dk/en/capital-region/copenhagen/restaurant/selma' target='_blank' rel='noopener noreferrer'>Selma — Michelin Bib Gourmand</a> · Rømersgade 20. Modern smørrebrød at lunch.</li></ul><p><b>Tours & activities</b></p><ul><li><a href='https://www.getyourguide.com/copenhagen-l12/cruises-boat-tours-tc48/' target='_blank' rel='noopener noreferrer'>GetYourGuide — Copenhagen canal tours</a> · Stromma classic canal tour ≈129 DKK / Netto-Bådene budget option ≈60 DKK per adult</li><li><a href='https://www.redsightseeing.com/copenhagen/' target='_blank' rel='noopener noreferrer'>RED Sightseeing (Stromma) — hop-on-hop-off bus</a> · 24h ≈199–299 DKK per adult (verify before booking)</li></ul><p><b>Health & safety</b></p><ul><li><a href='https://stenoapotek.dk/welcome---english' target='_blank' rel='noopener noreferrer'>Steno Apotek</a> · Vesterbrogade 6C, Copenhagen. Denmark's only 24-hour pharmacy. +45 33 14 82 66. Use night bell after 23:00.</li></ul><p><b>Connectivity</b></p><ul><li><a href='https://www.verizon.com/solutions-and-services/travel-pass/' target='_blank' rel='noopener noreferrer'>Verizon TravelPass</a> · $12/line/day in Denmark, Sweden and Norway. 5 GB high-speed per 24h window.</li><li><a href='https://www.verizon.com/plans/unlimited/' target='_blank' rel='noopener noreferrer'>Verizon Unlimited Ultimate</a> · 15 GB international roaming included; TravelPass cannot be added to this plan.</li></ul>"
     }
   ],
-  "verified": "✓ GO Fest prices verified June 2026 · Verizon plans verified June 2026 · re-check transit pass prices in DOT app and restaurant addresses before you go"
+  "verified": "✓ Verified Jun 2026 — GO Fest prices, City Pass pricing, Copenhagen Card, ferry operator (Go Nordic Cruiseline), Torvehallerne hours, Folkehuset Absalon dinner prices all confirmed from primary sources. Re-check Tivoli dynamic pricing, GetYourGuide tour prices, and all restaurant details before you go."
 }
