@@ -16,10 +16,12 @@
   When you publish a big update, bump CACHE below (v1 -> v2) so visitors get the
   new version cleanly.
 */
-const CACHE = "tripguides-v1";
+const CACHE = "tripguides-v2";
 const CORE = [
   "/",
   "/guides/denmark/",
+  "/guides/germany/",
+  "/guides/portugal/",
   "/guides/korea/",
   "/guides/japan/",
   "/manifest.webmanifest",

@@ -69,6 +69,12 @@ const destTz = DEST_TZ[guide.country] ?? null;
       </a>
       <div class="topbar-right">
         <!--
+          Save as PDF — triggers the browser's print dialog; user chooses
+          "Save as PDF" from the destination selector. Print CSS hides all
+          navigation and interactive widgets and renders a clean document.
+        -->
+        <button id="btnPrint" class="topbar-btn" aria-label="Save as PDF" title="Save as PDF / Print">⬇ PDF</button>
+        <!--
           Dark-mode toggle — icon and aria-label are updated by JS.
           ◑ = currently light → click to go dark
           ☀ = currently dark  → click to go light
@@ -256,6 +262,12 @@ const destTz = DEST_TZ[guide.country] ?? null;
       (function () {
         try {
           var STORE_KEY = "tripguide-" + (storeKey || "guide");
+
+          /* ── 0. SAVE AS PDF ──────────────────────────────────────────── */
+          var printBtn = document.getElementById("btnPrint");
+          if (printBtn) {
+            printBtn.addEventListener("click", function () { window.print(); });
+          }
 
           /* ── 1. DARK MODE TOGGLE ──────────────────────────────────────── */
           var darkBtn = document.getElementById("btnDark");
