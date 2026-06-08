@@ -154,14 +154,14 @@
       "type": "panel",
       "group": "Etiquette & language",
       "title": "Etiquette & language",
-      "body": "<p>Korean is the language, and while <b>English is less widespread than in Europe</b>, signs, the subway, and major sights are bilingual, and a translation app (Papago handles Korean better than Google) covers the rest. One practical heads-up: <b>Google Maps barely works for directions in Korea</b> — use <b>KakaoMap</b> or <b>Naver Map</b> instead.</p><p><b>Don't tip</b> — it isn't customary and can puzzle staff; the listed price is what you pay. A few courtesies go a long way: hand over and receive cash or cards with <b>two hands</b> (or one hand touching the other forearm), slip your <b>shoes off</b> wherever you see a raised floor or a row of shoes at the door, and keep your voice low on the subway. A small bow works as both hello and thanks. 'Thank you' is '<b>gamsahamnida</b>'.</p>"
+      "body": "<p>Korean is the language; signs, the subway, and major sights are bilingual. For translation, use <b>Papago</b> — it's far more accurate than Google Translate for menus and signs. <b>Google Maps barely works for directions in Korea</b> — use <b>KakaoMap</b> or <b>Naver Map</b>.</p><ul><li><b>Bowing:</b> a slight nod works as hello, thank you, or goodbye — don't overthink it.</li><li><b>Two-handed exchange:</b> give and receive cards, cash, or items with both hands (or right hand with the left touching your forearm) — it signals respect.</li><li><b>No tipping, anywhere.</b> Genuinely none — attempting it can create awkwardness. The price on the menu is what you pay.</li><li><b>Chopstick etiquette:</b> don't stand them upright in rice (funeral association); rest them on the holder when you're not using them.</li><li><b>Pouring drinks:</b> pour for others at the table; let them pour for you. Don't self-pour at a shared meal.</li><li><b>Shoes off:</b> watch for a raised floor at traditional floor-seating restaurants — it's obvious when you see it.</li><li><b>Volume:</b> keep it quiet indoors, especially on transit.</li></ul><p><b>Key phrases</b> (Hangul + romanisation):</p><ul><li>안녕하세요 — <i>annyeonghaseyo</i> — hello</li><li>감사합니다 — <i>gamsahamnida</i> — thank you (formal)</li><li>얼마예요? — <i>eolmayeyo?</i> — how much?</li><li>이거 주세요 — <i>igeo juseyo</i> — this one, please</li><li>화장실 어디예요? — <i>hwajangsil eodiyeyo?</i> — where is the bathroom?</li><li>괜찮아요 — <i>gwaenchanayo</i> — it's okay / no problem</li></ul>"
     },
     {
       "type": "routes",
       "group": "Getting around",
       "title": "Key transit routes",
       "steps": [
-        "<b>Incheon → Seoul:</b> the <b>AREX</b> express to Seoul Station (~43 min) or all-stop (~58 min); or an airport <b>limousine bus</b> straight to your district. Grab a T-money card first.",
+        "<b>Incheon → Seoul:</b> the <b>AREX</b> express to Seoul Station (~43 min) or all-stop (~58 min); or an airport <b>limousine bus</b> straight to your district. Grab a T-money card first. <b>Asiana Airlines uses Terminal 2</b> (moved January 2026) — AREX T2 stop is one stop before Terminal 1.",
         "<b>Around Seoul:</b> the subway is fast and signed in English — tap your <b>T-money</b> in and out; use <b>Kakao T</b> for taxis.",
         "<b>Seoul → Daejeon (Jul 11):</b> <b>KTX</b> from Seoul Station, ~50 min — book on the <b>Korail</b> app (or take the SRT from Suseo). Frequent departures.",
         "<b>Daejeon Station → arena:</b> the <b>Daejeon Convention Center II</b> sits in the Expo area of Yuseong-gu, ~20–30 min by taxi or bus from Daejeon Station — staying near the venue lets you walk in.",
@@ -410,19 +410,25 @@
       "type": "prose",
       "group": "Gaming & anime",
       "title": "Anime & game shopping",
-      "body": "<p>For merch: <b>Yongsan</b> (the I'Park Mall electronics floors), <b>Animate</b> in Hongdae for anime goods, and the <b>Kakao Friends</b> and <b>Line Friends</b> flagship stores for character collectibles. <b>COEX</b> in Gangnam bundles a huge mall, the aquarium, the Starfield Library and SMTOWN for K-pop.</p>"
+      "body": "<p><b>Animate Seoul</b> (5F, AK&amp; Mall, 188 Yanghwa-ro, Mapo-gu — Hongdae Station Exit 9; open ~11:00–22:00) is the largest anime specialist in the Hongdae area: figures, manga, Blu-ray, merchandise, and rotating pop-ups for seasonal titles. <b>Yongsan i'Park Mall</b> electronics floors carry games, trading cards, and figures — verify the current tenant mix at the mall, as renovations have shifted some vendors. <b>SMTOWN COEX Artium</b> (Gangnam; open 10:30–22:00) is the K-pop one-stop: SM artists' albums, photocards, limited merch, and a café. <b>Myeongdong K-pop street</b> around Myeongdong Station has comprehensive stock across all agencies; go early or skip if the weekend crowds are too much.</p><p><b>HYBE Insight</b> (42 Hangang-daero, Yongsan-gu; BTS/HYBE fan museum) requires timed-entry tickets booked weeks in advance via the <a href='https://hybeinsight.com'>official app or site</a> — book the moment you confirm your trip dates. No walk-in entry; no late arrivals. <b>LoL Park</b> (3F Gran Seoul Building, 33 Jong-ro, Jongno-gu; open 11:00–20:00; Jonggak Station Exit 1) is the LCK's home venue with a free-to-browse exhibition floor, Riot merch store, and PC café. LCK Summer split resumes after MSI — check the schedule for a live match while you're there.</p>"
     },
     {
       "type": "prose",
       "group": "Food & shopping",
       "title": "What to eat",
-      "body": "<p>Hit the obvious greats: <b>Korean BBQ</b>, <b>chimaek</b> (fried chicken and beer), <b>tteokbokki</b>, and market street food at <b>Gwangjang</b> — bindaetteok (mung-bean pancake), mayak gimbap, and live octopus if you're brave. Myeongdong is the easy street-snack strip, and café culture is everywhere when you need an air-conditioned sit-down.</p>"
+      "body": "<p>Hit the obvious greats: <b>Korean BBQ</b>, <b>chimaek</b> (fried chicken and beer), <b>tteokbokki</b>, and market street food at <b>Gwangjang</b> — bindaetteok (mung-bean pancake), mayak gimbap, and live octopus if you're brave. In July heat, <b>naengmyeon</b> (cold buckwheat noodles) and <b>bingsu</b> (shaved-ice dessert) are exactly what you want. Myeongdong is the easy street-snack strip, and café culture is everywhere when you need an air-conditioned sit-down.</p>"
+    },
+    {
+      "type": "prose",
+      "group": "Food & shopping",
+      "title": "Where to eat — picks near your route",
+      "body": "<p><i>⚠ Transit times are from Hongdae station — update legs once your Airbnb address is confirmed. All prices are approximate (≈); verify before you go.</i></p><p><b>AYCE Korean BBQ — budget pork belly</b><br/><b>Ungteori Meats</b> (엉터리생고기) — 118 Eoulmadang-ro, Mapo-gu. Walk 8 min from Hongdae Station Exit 3; all-stop to Sangsu Station also works. Open 11:00–23:00 daily. ≈₩14,800 pp; confirm on <a href='https://creatrip.com/en/blog/4457'>Creatrip</a>. Famous for fresh (not frozen) samgyeopsal; specialises in pork belly. Walk-in; may queue on weekend evenings. Best on the Jul 9 or 10 dinner after a light afternoon.</p><p><b>AYCE Korean BBQ — mid-range / beef option</b><br/><b>MUSSO Hongdae</b> (무쏘 홍대점) — 10 Jandari-ro, Mapo-gu. Walk 10 min from Hongdae Station Exit 3. Open 24 hours. ≈₩20,800–23,800 pp (beef, shrimp, yukhoe option at higher tier); confirm price at venue. Good for late nights — the 24 h hours make it the post-MSI return chimaek alternative if you want BBQ instead. Walk-in.</p><p><b>Gwangjang Market</b> (광장시장) — 88 Changgyeonggung-ro, Jongno-gu. From Hongdae: Line 2 to Euljiro 4-ga → Line 1 to Jongno 5-ga, Exit 7–8; ≈25 min total. Food vendors open from 09:00; closed Sundays. Cash only at most stalls. Bindaetteok (mung-bean pancakes), mayak gimbap, eomuk (fish cake). Best on Mon Jul 13 morning before the DDP — weekday is less crowded. Walk-in; no booking possible.</p><p><b>Chimaek (fried chicken + beer)</b><br/><b>Chicken Baengi</b> (치킨뱅이 홍대점) — 127 Eoulmadang-ro, Mapo-gu. Walk 7 min from Hongdae Station Exit 3. Mon–Thu 16:00–01:00; Fri–Sun 14:00–01:00. ≈₩10,000–20,000 pp; confirm at venue. Hof-style, grungy charm; garlic chicken is the standout. Walk-in; can get busy Fri/Sat after 20:00 — arrive early or expect a short wait. Best on the Jul 12 return evening as the post-MSI celebration.</p><p><b>Cold noodles (July heat special)</b><br/><b>Yookssam Naengmyeon</b> (육쌈냉면 홍대점) — 76 Eoulmadang-ro, Mapo-gu. Walk 8 min from Hongdae Station Exit 9. Hours ⚠ not confirmed for 2026 — call ahead or check <a href='https://yookssam.com'>yookssam.com</a>. ≈₩15,000–18,000 pp (naengmyeon set with charcoal-grilled bulgogi). The definitive Hongdae answer to July heat. Walk-in for lunch; dinner can queue.</p><p><b>Tteokbokki street stall</b><br/>The Hongdae entrance plaza (Eoulmadang-ro exits) and Sinchon road (a 10 min walk southeast of Hongdae Station) both have permanent pojangmacha (street stall) rows open from late afternoon to 02:00+. Tteokbokki + twigim sets run ≈₩5,000–7,000. No booking, cash preferred. Best before or after a PC bang night — Fri Jul 10 or any evening.</p><p><b>Bingsu</b><br/><b>Sulbing Hongdae</b> (설빙 홍대점) — 15 Hongik-ro 6-gil, Mapo-gu. 2 min walk from Hongdae Station along the main walkable street. Open 12:00–00:00. Injeolmi bingsu ≈₩8,900; mango/melon ≈₩14,900–15,900; confirm on <a href='https://www.sulbing.com'>sulbing.com</a>. Korea's most consistent bingsu chain — huge portions, reliable quality, no booking needed. Good mid-afternoon on any hot day.</p><p><b>Daejeon — near DCC II</b><br/><b>Sungsimdang Expo Branch</b> — 107 Expo-ro, Yuseong-gu (1F Daejeon Convention Center building). Open ~08:00–21:00 ⚠ verify hours on site. Legendary Daejeon bakery with a branch inside the convention complex itself. Fried soboro and chive breads; queue is part of the experience. Walk-in; grab breakfast or a snack before entering the arena.<br/><b>Ossi Kalguksu Doryong</b> — 0.2 mi from DCC II (exact address on Kakao Map: search 'Ossi Kalguksu Doryong'). Highly rated kalguksu (knife-cut noodle soup); popular with locals. Open lunch/dinner ⚠ hours unconfirmed — check before going. ≈₩9,000–12,000 pp. Walk-in. Best for a pre-match dinner on Sat Jul 11.</p><p><b>Convenience store — the underrated late-night move</b><br/>GS25 and CU are everywhere, open 24 hours, and fully stocked for a real meal: triangle gimbap (~₩1,500), instant ramen (hot water station, ~₩1,500), egg salad sandwiches (~₩2,500), tteokbokki cups. After 9 hours at a GO Fest / MSI day, this is often the right call. No booking, obviously.</p>"
     },
     {
       "type": "prose",
       "group": "Food & shopping",
       "title": "Shopping in Seoul",
-      "body": "<p>By district: <b>Myeongdong</b> for cosmetics (the big <b>Olive Young</b> is the K-beauty one-stop) and street food; <b>Hongdae</b> for youth fashion; <b>Gangnam / COEX</b> for malls; <b>Dongdaemun</b> for late-night shopping; <b>Insadong</b> for traditional crafts. Tax-free shops offer a <b>VAT refund</b> on purchases over ₩15,000 — instant in-store or at the airport kiosk on the way out.</p>"
+      "body": "<p>By district: <b>Myeongdong</b> for cosmetics (<b>Olive Young</b> is the K-beauty one-stop) and street food; <b>Hongdae</b> for youth fashion and streetwear; <b>Gangnam / COEX</b> for malls; <b>Dongdaemun</b> for late-night shopping; <b>Insadong</b> for traditional crafts. Tax-free shops offer a <b>VAT refund</b> on purchases over ₩15,000 — instant in-store or at the airport kiosk on departure.</p><p><b>Streetwear near Hongdae:</b> <b>Musinsa Standard</b> flagship (144 Yanghwa-ro, Mapo-gu; open 11:00–21:00; Exit 9) is Korean casualwear at a wide price range — the most accessible entry point. The alley cluster around <b>Wausan-ro</b> (Mahagrid, SOUR, and indie labels) rewards a slow browse. <b>Gentle Monster</b> Hongdae flagship (54 Dokmak-ro 7-gil, Mapo-gu; open 12:00–22:00) is an art-installation eyewear store — free to walk through even if you don't buy. <b>Ader Error</b>'s main space has moved to Seongsu (Seongdong-gu); worth the trip if design-forward Korean fashion is your thing.</p>"
     },
     {
       "type": "list",
@@ -442,6 +448,185 @@
       "group": "Food & shopping",
       "title": "Collectibles & chain merch",
       "body": "<p>For collectors: a Starbucks <b>'Been There' Seoul</b> mug, and the <b>Kakao Friends</b> and <b>Line Friends</b> flagship stores (Hongdae and Gangnam) for character-brand exclusives you won't find at home.</p>"
+    },
+    {
+      "type": "prose",
+      "group": "GO Fest Global",
+      "title": "GO Fest Global 2026 — what to know",
+      "body": "<p>Pokémon GO Fest 2026: Global runs <b>Saturday Jul 11 and Sunday Jul 12, 10:00 a.m.–7:00 p.m. local time</b> — which is exactly your MSI weekend in Daejeon, so you'll be raiding between matches. This year's event is <b>completely free for all trainers</b> (no ticket purchase needed); everyone gets the same bonuses including Special Research leading to a <b>Zeraora</b> debut encounter.</p><ul><li><b>Free for everyone:</b> up to 9 free Raid Passes per day (spin Gym discs), increased shiny rates, 6 Special Trades per day, 1/2 Stardust trade cost, open 50 Gifts daily, Special Research (Zeraora encounter, non-expiring), Branching Timed Research (choose Mega Mewtwo X or Y)</li><li><b>Raid pass note:</b> 9 free passes per day = you can hit 18 raids across the weekend without spending PokéCoins. Save remote passes for the Seoul days before/after (Jul 9–10, 13–14) when you're not at the arena.</li><li><b>Raid rotation:</b> 5-star and Mega bosses rotate hourly by habitat on both days — see the counter charts below for Saturday's and Sunday's lineups.</li><li><b>Mega Mewtwo debut:</b> Mega Mewtwo X appears Saturday, Mega Mewtwo Y on Sunday — first appearances in Pokémon GO. Both are Super Mega tier; plan your best teams in advance.</li></ul>"
+    },
+    {
+      "type": "panel",
+      "group": "GO Fest Global",
+      "title": "Pre-GO Fest checklist",
+      "checklist": [
+        "Pokémon storage to 400+ (transfer/release beforehand)",
+        "Item bag cleared: stock up on Max Revives, Ultra Balls, Golden Razz Berries",
+        "Lucky Eggs ready (use before evolving / before mass Stardust bonuses)",
+        "Star Pieces ready (use during raids and catches to maximise Stardust)",
+        "Silver Pinap Berries stocked (use on Legendaries you need Candy XL for)",
+        "Charged TMs ready — re-roll shadow Pokémon and new Mega moves on day 1",
+        "Purified Gems ready for Shadow Raids if any appear",
+        "9 free Raid Passes per day — remember to spin Gym discs, not just battle",
+        "Pokémon GO Plus / Gotcha charged and connected for auto-catches during downtime",
+        "Battery pack fully charged; portable charger in bag for the 9-hour event window",
+        "Branching Research choice made: Mega Mewtwo X (Psychic/Fighting) or Y (pure Psychic)",
+        "Teams pre-built for Mega Mewtwo X (Flying/Fairy/Ghost) and Y (Ghost/Dark/Bug)"
+      ]
+    },
+    {
+      "type": "prose",
+      "group": "GO Fest Global",
+      "title": "Priority targets — which raids to spend passes on",
+      "body": "<p>With 9 free passes per day, be selective. Ranked by shiny rarity + meta/Candy XL value:</p><ul><li><b>Tier 1 — must-do:</b> <b>Mega Mewtwo X</b> (Saturday Super Mega) and <b>Mega Mewtwo Y</b> (Sunday Super Mega) — global debut, shiny available, best-in-class meta picks. Use your best passes here; 3–5 encounters each to chase shiny + Candy XL.</li><li><b>Tier 2 — high value:</b> Rayquaza (5-star, Sat 4–7 PM), Kyogre (5-star, Sat 4–7 PM), Giratina Origin (5-star, Sat 1–4 PM), Darkrai (5-star, Sun 4–7 PM), Zacian (5-star, Sun 4–7 PM) — high Candy XL utility or strong PvP/PvE meta. Shiny at 1/20.</li><li><b>Tier 3 — targeted:</b> Any legendary you're missing shiny; ultra beasts (Nihilego, Xurkitree for PvP); Regieleki/Regidrago if you need the Regigigas power-up candy.</li><li><b>Skip or deprioritise:</b> Bosses you already have shiny and maxed; save passes for the ones that matter to your Pokédex.</li><li><b>Shiny odds:</b> All legendary 5-star and Super Mega raid encounters are <b>1/20</b> — the best in the game. Every encounter counts.</li></ul>"
+    },
+    {
+      "type": "raids",
+      "group": "GO Fest Global",
+      "title": "Raid counter charts — GO Fest Global 2026",
+      "bosses": [
+        {
+          "name": "Mega Mewtwo X",
+          "tier": "super-mega",
+          "typing": ["Psychic", "Fighting"],
+          "shiny_odds": "1/20",
+          "shiny_note": "Global debut — first appearance in Pokémon GO",
+          "trainers": "10–20 trainers (Super Mega tier — harder than standard Mega)",
+          "note": "Saturday Jul 11 only. Branching Research lets you choose X or Y encounter.",
+          "strategy": "<b>Weak to:</b> Flying (2×), Ghost, Fairy. Flying hits both types simultaneously — the most efficient damage type. Shadow Moltres with Wing Attack + Sky Attack is the top budget shadow lead. Mega Rayquaza (if already unlocked from before the event) and Dawn Wings Necrozma are the premium picks.",
+          "counters": [
+            { "pokemon": "Mega Rayquaza", "fast": "Air Slash", "charged": "Dragon Ascent", "typing": "Dragon/Flying" },
+            { "pokemon": "Dawn Wings Necrozma", "fast": "Shadow Claw", "charged": "Moongeist Beam", "typing": "Ghost/Psychic" },
+            { "pokemon": "Shadow Moltres", "fast": "Wing Attack", "charged": "Sky Attack", "typing": "Fire/Flying" },
+            { "pokemon": "Mega Gardevoir", "fast": "Charm", "charged": "Dazzling Gleam", "typing": "Psychic/Fairy" },
+            { "pokemon": "Mega Gengar", "fast": "Lick", "charged": "Shadow Ball", "typing": "Ghost/Poison" },
+            { "pokemon": "Lunala", "fast": "Psycho Cut", "charged": "Shadow Ball", "typing": "Ghost/Psychic" },
+            { "pokemon": "Zacian", "fast": "Snarl", "charged": "Play Rough", "typing": "Fairy" },
+            { "pokemon": "Rayquaza", "fast": "Air Slash", "charged": "Dragon Ascent", "typing": "Dragon/Flying" }
+          ]
+        },
+        {
+          "name": "Mega Mewtwo Y",
+          "tier": "super-mega",
+          "typing": ["Psychic"],
+          "shiny_odds": "1/20",
+          "shiny_note": "Global debut — first appearance in Pokémon GO",
+          "trainers": "10–20 trainers (Super Mega tier)",
+          "note": "Sunday Jul 12 only. Pure Psychic — more counters available than Mega X.",
+          "strategy": "<b>Weak to:</b> Bug, Ghost, Dark. Ghost and Dark are the strongest damage types here. Dawn Wings Necrozma is the single best counter in the game; Mega Tyranitar and Mega Gengar round out the premium trio. Shadow Tyranitar or Shadow Hydreigon are excellent budget shadow leads.",
+          "counters": [
+            { "pokemon": "Dawn Wings Necrozma", "fast": "Shadow Claw", "charged": "Moongeist Beam", "typing": "Ghost/Psychic" },
+            { "pokemon": "Mega Tyranitar", "fast": "Bite", "charged": "Brutal Swing", "typing": "Rock/Dark" },
+            { "pokemon": "Mega Gengar", "fast": "Lick", "charged": "Shadow Ball", "typing": "Ghost/Poison" },
+            { "pokemon": "Shadow Tyranitar", "fast": "Bite", "charged": "Brutal Swing", "typing": "Rock/Dark" },
+            { "pokemon": "Lunala", "fast": "Shadow Claw", "charged": "Shadow Ball", "typing": "Ghost/Psychic" },
+            { "pokemon": "Shadow Hydreigon", "fast": "Bite", "charged": "Brutal Swing", "typing": "Dark/Dragon" },
+            { "pokemon": "Mega Mewtwo Y", "fast": "Psycho Cut", "charged": "Shadow Ball", "typing": "Psychic" },
+            { "pokemon": "Mega Absol", "fast": "Snarl", "charged": "Dark Pulse", "typing": "Dark" }
+          ]
+        },
+        {
+          "name": "Rayquaza",
+          "tier": "5-star",
+          "typing": ["Dragon", "Flying"],
+          "shiny_odds": "1/20",
+          "trainers": "2–4 trainers",
+          "note": "Saturday Dragonflight Summit habitat (4–7 PM). High-priority shiny hunt; Candy XL for Master League. Mega Rayquaza is not a GO Fest raid boss — use Mega Salamence or Mega Garchomp as your Mega boost instead.",
+          "strategy": "<b>Weak to:</b> Ice (2×), Dragon, Fairy, Rock. Ice hits for double super-effective — always lead Ice. Standard 5-star difficulty; 2–3 high-level trainers handle it comfortably.",
+          "counters": [
+            { "pokemon": "Galarian Darmanitan", "fast": "Ice Fang", "charged": "Avalanche", "typing": "Ice" },
+            { "pokemon": "Shadow Mamoswine", "fast": "Powder Snow", "charged": "Avalanche", "typing": "Ice/Ground" },
+            { "pokemon": "Mamoswine", "fast": "Powder Snow", "charged": "Avalanche", "typing": "Ice/Ground" },
+            { "pokemon": "Weavile", "fast": "Ice Shard", "charged": "Avalanche", "typing": "Dark/Ice" },
+            { "pokemon": "Glaceon", "fast": "Ice Shard", "charged": "Avalanche", "typing": "Ice" },
+            { "pokemon": "Cetitan", "fast": "Powder Snow", "charged": "Avalanche", "typing": "Ice" },
+            { "pokemon": "Mega Abomasnow", "fast": "Powder Snow", "charged": "Weather Ball (Ice)", "typing": "Grass/Ice" },
+            { "pokemon": "Kyurem", "fast": "Steel Wing", "charged": "Blizzard", "typing": "Dragon/Ice" }
+          ]
+        },
+        {
+          "name": "Kyogre",
+          "tier": "5-star",
+          "typing": ["Water"],
+          "shiny_odds": "1/20",
+          "trainers": "2–3 trainers",
+          "note": "Saturday Dragonflight Summit (4–7 PM). High Candy XL value for Master League.",
+          "strategy": "<b>Weak to:</b> Grass, Electric. Zekrom and Shadow Raikou are the top Electric picks; Roserade or Kartana for Grass. Zekrom's Fusion Bolt is the hardest-hitting charged move here.",
+          "counters": [
+            { "pokemon": "Shadow Raikou", "fast": "Thunder Shock", "charged": "Wild Charge", "typing": "Electric" },
+            { "pokemon": "Zekrom", "fast": "Charge Beam", "charged": "Fusion Bolt", "typing": "Dragon/Electric" },
+            { "pokemon": "Mega Manectric", "fast": "Charge Beam", "charged": "Wild Charge", "typing": "Electric" },
+            { "pokemon": "Kartana", "fast": "Razor Leaf", "charged": "Leaf Blade", "typing": "Grass/Steel" },
+            { "pokemon": "Xurkitree", "fast": "Thunder Shock", "charged": "Discharge", "typing": "Electric" },
+            { "pokemon": "Thundurus (Therian)", "fast": "Volt Switch", "charged": "Thunderbolt", "typing": "Electric/Flying" },
+            { "pokemon": "Electivire", "fast": "Thunder Shock", "charged": "Wild Charge", "typing": "Electric" },
+            { "pokemon": "Roserade", "fast": "Razor Leaf", "charged": "Grass Knot", "typing": "Grass/Poison" }
+          ]
+        },
+        {
+          "name": "Giratina (Origin Forme)",
+          "tier": "5-star",
+          "typing": ["Ghost", "Dragon"],
+          "shiny_odds": "1/20",
+          "trainers": "2–4 trainers",
+          "note": "Saturday Astral Tides habitat (1–4 PM). Top PvP pick for Master League; worth stacking Candy XL.",
+          "strategy": "<b>Weak to:</b> Ghost, Ice, Dragon, Dark, Fairy. Ghost and Dragon hit hardest. Shadow Gengar with Lick + Shadow Ball is the accessible shadow lead. Dawn Wings Necrozma is premier.",
+          "counters": [
+            { "pokemon": "Dawn Wings Necrozma", "fast": "Shadow Claw", "charged": "Moongeist Beam", "typing": "Ghost/Psychic" },
+            { "pokemon": "Shadow Gengar", "fast": "Lick", "charged": "Shadow Ball", "typing": "Ghost/Poison" },
+            { "pokemon": "Mega Gengar", "fast": "Lick", "charged": "Shadow Ball", "typing": "Ghost/Poison" },
+            { "pokemon": "Lunala", "fast": "Shadow Claw", "charged": "Shadow Ball", "typing": "Ghost/Psychic" },
+            { "pokemon": "Chandelure", "fast": "Hex", "charged": "Shadow Ball", "typing": "Ghost/Fire" },
+            { "pokemon": "Dragapult", "fast": "Dragon Breath", "charged": "Shadow Ball", "typing": "Dragon/Ghost" },
+            { "pokemon": "Hydreigon", "fast": "Bite", "charged": "Brutal Swing", "typing": "Dark/Dragon" },
+            { "pokemon": "Galarian Weezing", "fast": "Fairy Wind", "charged": "Play Rough", "typing": "Poison/Fairy" }
+          ]
+        },
+        {
+          "name": "Darkrai",
+          "tier": "5-star",
+          "typing": ["Dark"],
+          "shiny_odds": "1/20",
+          "trainers": "2–3 trainers",
+          "note": "Sunday Twilight Battlefield (4–7 PM). Strong PvE attacker; worth multiple shiny hunts.",
+          "strategy": "<b>Weak to:</b> Fighting, Bug, Fairy. Fighting-type attackers hit hardest. Mega Lopunny is the best Mega boost here; Lucario and Conkeldurr are accessible shadow leads.",
+          "counters": [
+            { "pokemon": "Mega Lopunny", "fast": "Low Kick", "charged": "Focus Blast", "typing": "Normal/Fighting" },
+            { "pokemon": "Shadow Machamp", "fast": "Counter", "charged": "Dynamic Punch", "typing": "Fighting" },
+            { "pokemon": "Lucario", "fast": "Counter", "charged": "Aura Sphere", "typing": "Fighting/Steel" },
+            { "pokemon": "Conkeldurr", "fast": "Counter", "charged": "Dynamic Punch", "typing": "Fighting" },
+            { "pokemon": "Terrakion", "fast": "Double Kick", "charged": "Sacred Sword", "typing": "Rock/Fighting" },
+            { "pokemon": "Mega Gardevoir", "fast": "Charm", "charged": "Dazzling Gleam", "typing": "Psychic/Fairy" },
+            { "pokemon": "Buzzwole", "fast": "Counter", "charged": "Superpower", "typing": "Bug/Fighting" },
+            { "pokemon": "Breloom", "fast": "Counter", "charged": "Grass Knot", "typing": "Grass/Fighting" }
+          ]
+        },
+        {
+          "name": "Zacian (Hero of Many Battles)",
+          "tier": "5-star",
+          "typing": ["Fairy"],
+          "shiny_odds": "1/20",
+          "trainers": "2–3 trainers",
+          "note": "Sunday Twilight Battlefield (4–7 PM). Top Master League meta pick; high priority.",
+          "strategy": "<b>Weak to:</b> Poison, Steel. Mega Beedrill and Nihilego are premier Poison picks; Metagross and Dialga cover Steel. Poison hits hardest — build your best Poison team.",
+          "counters": [
+            { "pokemon": "Mega Beedrill", "fast": "Poison Jab", "charged": "Sludge Bomb", "typing": "Bug/Poison" },
+            { "pokemon": "Nihilego", "fast": "Poison Jab", "charged": "Sludge Wave", "typing": "Rock/Poison" },
+            { "pokemon": "Roserade", "fast": "Poison Jab", "charged": "Sludge Bomb", "typing": "Grass/Poison" },
+            { "pokemon": "Dialga (Origin)", "fast": "Metal Claw", "charged": "Iron Head", "typing": "Steel/Dragon" },
+            { "pokemon": "Metagross", "fast": "Bullet Punch", "charged": "Meteor Mash", "typing": "Steel/Psychic" },
+            { "pokemon": "Gengar", "fast": "Lick", "charged": "Sludge Bomb", "typing": "Ghost/Poison" },
+            { "pokemon": "Excadrill", "fast": "Metal Claw", "charged": "Iron Head", "typing": "Ground/Steel" },
+            { "pokemon": "Victreebel", "fast": "Acid", "charged": "Sludge Bomb", "typing": "Grass/Poison" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "prose",
+      "group": "References",
+      "title": "Sources & links — verified for this guide",
+      "body": "<p><b>Entry &amp; documents</b><br/><a href='https://www.krentry.go.kr'>Korea e-Arrival Card — official site (krentry.go.kr)</a> — complete within 72 h of arrival; ignore third-party fee sites.<br/><a href='https://flyasiana.com/C/KR/EN/customer/notice/detail?id=CM202509300002526502'>Asiana Airlines Terminal 2 move (Jan 14 2026) — official notice</a><br/><a href='https://www.korail.com'>Korail — KTX tickets (korail.com)</a></p><p><b>Events</b><br/><a href='https://pokemongo.com/en/gofest/global'>Pokémon GO Fest 2026: Global — official page</a><br/><a href='https://leekduck.com/events/pokemon-go-fest-2026-global/'>Leek Duck — GO Fest Global 2026 raid schedule &amp; boss lists</a><br/><a href='https://www.pokebattler.com'>Pokébattler — raid counter rankings</a><br/><a href='https://lolesports.com'>LoL Esports — MSI 2026 schedule &amp; results</a></p><p><b>Transit &amp; maps</b><br/><a href='https://www.letskorail.com'>Korail booking (English)</a><br/>KakaoMap and Naver Map apps — use in preference to Google Maps for in-Korea navigation.</p><p><b>Food &amp; venues</b><br/><a href='https://creatrip.com/en/blog/4457'>Creatrip — AYCE KBBQ in Hongdae (prices &amp; coupons)</a><br/><a href='https://www.sulbing.com'>Sulbing official site — bingsu menu &amp; prices</a><br/><a href='https://yookssam.com'>Yookssam Naengmyeon — official site (verify hours)</a><br/><a href='https://english.visitseoul.net/shopping/gwangjang-market_/287'>Gwangjang Market — Visit Seoul official page</a></p><p><b>Shopping &amp; attractions</b><br/><a href='https://locations.musinsa.com/en/stndhd'>Musinsa Standard Hongdae — official location page</a><br/><a href='https://www.gentlemonster.com/kr/en/stores'>Gentle Monster — store locator</a><br/><a href='https://hybeinsight.com'>HYBE Insight — official booking site</a><br/><a href='https://english.visitseoul.net/entertainment/LoL%20Park_/50659'>LoL Park — Visit Seoul official page</a><br/><a href='https://www.animate.co.jp/en/shop/hongdae/'>Animate Korea Hongdae — official store page</a></p><p><b>General Korea travel</b><br/><a href='https://english.visitkorea.or.kr'>VisitKorea — official tourism portal</a><br/><a href='https://english.visitseoul.net'>Visit Seoul — official Seoul travel guide</a></p>"
     }
   ],
   "verified": "✓ Verified June 2026 — reconfirm prices & hours before you go"
