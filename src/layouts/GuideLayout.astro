@@ -7,10 +7,21 @@ import "../styles/guide.css";
 
 const { guide } = Astro.props;
 const { order, byG } = bucket(guide.sections);
-const accent = accentFor(guide.country);
+const accent  = accentFor(guide.country);
 const accent2 = darken(accent, 0.14);
 const storeKey = (guide.title || "guide").replace(/\W+/g, "").toLowerCase();
 const navLabel = (s: any, g: string) => s.title || s.name || g;
+
+// Destination UTC offset (summer / DST) for the jet-lag calculator.
+// null → calculator is hidden for this guide.
+const DEST_TZ: Record<string, number> = {
+  Denmark: 2, Germany: 2, Sweden: 2, Norway: 2, Finland: 3,
+  Portugal: 1, Spain: 2, France: 2, Italy: 2, Greece: 3,
+  Japan: 9, "South Korea": 9, Korea: 9, Thailand: 7, Iceland: 0,
+  "United Kingdom": 1, "United States": -4, Mexico: -6, China: 8,
+  Netherlands: 2,
+};
+const destTz = DEST_TZ[guide.country] ?? null;
 ---
 <!doctype html>
 <html lang="en" style={`--accent:${accent};--accent2:${accent2}`}>
@@ -21,21 +32,138 @@ const navLabel = (s: any, g: string) => s.title || s.name || g;
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
     <PwaHead />
+    <!--
+      Inline dark-mode init: runs synchronously before first paint so there's
+      no flash of the wrong theme. Reads localStorage then falls back to the
+      OS prefers-color-scheme preference.
+    -->
+    <script is:inline>
+      (function () {
+        var s = localStorage.getItem("tg-theme");
+        var preferDark = window.matchMedia && window.matchMedia("(prefers-color-scheme:dark)").matches;
+        if (s === "dark" || (s === null && preferDark)) {
+          document.documentElement.setAttribute("data-theme", "dark");
+        } else if (s === "light") {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      })();
+    </script>
   </head>
+
   <body data-storekey={storeKey}>
-    <header class="masthead" id="top">
-      {guide.kicker && <p class="eyebrow">{guide.kicker}</p>}
-      <h1>{guide.title}</h1>
-      {guide.dek && <p class="dek">{guide.dek}</p>}
-      {guide.verified && <p class="verified">{guide.verified}</p>}
-      <div class="prog">
-        <button id="btnExport" type="button">⤓ Save progress</button>
-        <button id="btnImport" type="button">⤒ Restore</button>
-        <button id="btnClear" type="button">Reset</button>
-        <span class="saved" id="savedNote"></span>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         TOP NAVIGATION BAR
+         Always-visible bar: "← All guides" on the left, dark-mode toggle on
+         the right. Appears on every guide page; keeps navigation frictionless
+         without requiring the user to scroll back to a header.
+         ═══════════════════════════════════════════════════════════════════ -->
+    <nav class="topbar" aria-label="Site navigation">
+      <a href="/" class="topbar-home" aria-label="All guides">
+        <!-- Left-pointing arrow -->
+        <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
+          <path d="M1 5h12M1 5l4-4M1 5l4 4" stroke="currentColor" stroke-width="1.6"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        All&nbsp;guides
+      </a>
+      <div class="topbar-right">
+        <!--
+          Dark-mode toggle — icon and aria-label are updated by JS.
+          ◑ = currently light → click to go dark
+          ☀ = currently dark  → click to go light
+        -->
+        <button id="btnDark" class="topbar-btn" aria-label="Switch to dark mode" title="Switch to dark mode">◑</button>
       </div>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         MASTHEAD
+         ═══════════════════════════════════════════════════════════════════ -->
+    <header class="masthead" id="top">
+      {guide.kicker  && <p class="eyebrow">{guide.kicker}</p>}
+      <h1>{guide.title}</h1>
+      {guide.dek     && <p class="dek">{guide.dek}</p>}
+      {guide.verified && <p class="verified">{guide.verified}</p>}
+
+      <!--
+        PROGRESS CONTROLS
+        · "N/M checked" counter — shows at a glance how much is done.
+        · "Copy progress" — copies a portable base64 code to the clipboard
+          (no more window.prompt). Paste it into "Restore" on another device.
+        · "Restore" — reveals an inline textarea; no modal, no prompt dialog.
+        · "Clear all" — resets everything after a confirmation.
+      -->
+      <div class="prog">
+        <span class="prog-count" id="progCount" aria-live="polite"></span>
+        <button id="btnCopy"         type="button" title="Copy a code you can paste on another device to restore your progress">Copy&nbsp;progress</button>
+        <button id="btnImportToggle" type="button" title="Paste a progress code from another device">Restore</button>
+        <button id="btnClear"        type="button" title="Uncheck all items and clear saved progress">Clear&nbsp;all</button>
+        <span class="saved" id="savedNote" aria-live="polite"></span>
+      </div>
+
+      <!-- Inline restore panel — hidden until "Restore" is clicked -->
+      <div class="import-panel" id="importPanel" hidden>
+        <label class="import-label" for="importCode">Paste your progress code:</label>
+        <textarea id="importCode" spellcheck="false" placeholder="Paste the code here…"></textarea>
+        <div class="import-actions">
+          <button class="btn-apply" id="btnApplyImport"  type="button">Apply</button>
+          <button                   id="btnCancelImport" type="button">Cancel</button>
+        </div>
+      </div>
+
+      <!--
+        JET-LAG CALCULATOR
+        Collapsible — shown only when the guide's country has a known UTC offset.
+        User picks their origin timezone; output shows the time gap, recovery
+        estimate, and direction-specific tips.
+      -->
+      {destTz !== null && (
+        <div class="jl-wrap">
+          <button class="jl-toggle" id="jlToggle" type="button"
+                  aria-expanded="false" aria-controls="jlPanel">
+            <span class="jl-icon" aria-hidden="true">✈</span>
+            <span>Jet-lag calculator</span>
+            <span class="jl-chev" aria-hidden="true">▾</span>
+          </button>
+          <div id="jlPanel" hidden data-dest={String(destTz)}>
+            <div class="jl-inner">
+              <div class="jl-row">
+                <label class="jl-label" for="jlOrigin">Flying&nbsp;from</label>
+                <select class="jl-select" id="jlOrigin">
+                  <option value="">— pick your departure city —</option>
+                  <optgroup label="United States">
+                    <option value="-7">Los Angeles / Pacific (PDT, UTC−7)</option>
+                    <option value="-6">Denver / Mountain (MDT, UTC−6)</option>
+                    <option value="-5">Chicago / Central (CDT, UTC−5)</option>
+                    <option value="-4">New York / Eastern (EDT, UTC−4)</option>
+                  </optgroup>
+                  <optgroup label="Other cities">
+                    <option value="0">London (BST, UTC+0)</option>
+                    <option value="1">Lisbon (WEST, UTC+1)</option>
+                    <option value="2">Paris / Berlin / Madrid (CEST, UTC+2)</option>
+                    <option value="3">Helsinki / Athens / Nairobi (UTC+3)</option>
+                    <option value="4">Dubai (UTC+4)</option>
+                    <option value="5.5">Mumbai / Delhi (IST, UTC+5:30)</option>
+                    <option value="7">Bangkok (ICT, UTC+7)</option>
+                    <option value="8">Singapore / Hong Kong / Beijing (UTC+8)</option>
+                    <option value="9">Tokyo / Seoul (JST/KST, UTC+9)</option>
+                    <option value="10">Sydney (AEST, UTC+10)</option>
+                    <option value="12">Auckland (NZST, UTC+12)</option>
+                  </optgroup>
+                </select>
+              </div>
+              <!-- Output injected by JS -->
+              <div class="jl-output" id="jlOutput" hidden></div>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
 
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         MAIN LAYOUT — sticky sidenav (desktop) + scrollable content
+         ═══════════════════════════════════════════════════════════════════ -->
     <div class="shell">
       <nav class="sidenav" id="sidenav" aria-label="Sections">
         {order.map((g, ci) => {
@@ -57,7 +185,7 @@ const navLabel = (s: any, g: string) => s.title || s.name || g;
 
       <main class="content" id="content">
         <noscript>
-          <p class="note" style="padding:1.5rem 0">This guide reads fine without JavaScript; enabling it adds nav highlighting and saved checklists.</p>
+          <p class="note" style="padding:1.5rem 0">This guide reads fine without JavaScript; enabling it adds nav highlighting, saved checklists, and the jet-lag calculator.</p>
         </noscript>
         {order.map((g, ci) => {
           const solo = byG[g].length === 1;
@@ -73,18 +201,34 @@ const navLabel = (s: any, g: string) => s.title || s.name || g;
       </main>
     </div>
 
-    <footer>{guide.footer}<br /><span class="offline-note">Add this to your home screen and it works offline once opened — only the embedded maps need a connection.</span></footer>
+    <footer>
+      {guide.footer}
+      <br />
+      <span class="offline-note">Add this to your home screen and it works offline once opened — only the embedded maps need a connection.</span>
+    </footer>
 
-    <!-- mobile-only: bottom bar + slide-up section sheet (hidden on desktop via CSS) -->
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         MOBILE BOTTOM BAR (hidden on desktop)
+         Three touch targets: Home | Sections (flex-1) | ↑ Top
+         · Home     — one tap back to the guide list, always reachable
+         · Sections — opens the slide-up section sheet
+         · ↑        — scroll to top
+         ═══════════════════════════════════════════════════════════════════ -->
     <div class="botbar">
-      <button class="botSections" id="sheetOpen" type="button" aria-haspopup="dialog" aria-expanded="false">
-        <span class="bs-label">Sections</span><span class="bs-cur" id="curCat"></span><span class="bs-chev">▾</span>
+      <a class="botHome" href="/" aria-label="All guides" title="All guides">⌂</a>
+      <button class="botSections" id="sheetOpen" type="button"
+              aria-haspopup="dialog" aria-expanded="false">
+        <span class="bs-label">Sections</span>
+        <span class="bs-cur" id="curCat"></span>
+        <span class="bs-chev" aria-hidden="true">▾</span>
       </button>
       <a class="botTop" href="#top" aria-label="Back to top">↑</a>
     </div>
+
+    <!-- Slide-up section sheet (mobile) -->
     <div class="sheet-backdrop"></div>
     <div class="sheet" role="dialog" aria-label="Sections" aria-modal="true">
-      <div class="sheet-grip"></div>
+      <div class="sheet-grip" aria-hidden="true"></div>
       <div class="sheet-head">Jump to a section</div>
       <div class="sheet-list">
         {order.map((g, ci) => (
@@ -98,23 +242,55 @@ const navLabel = (s: any, g: string) => s.title || s.name || g;
       </div>
     </div>
 
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         CLIENT SCRIPT
+         All interactive enhancements in one bundle:
+           1. Dark-mode toggle
+           2. Mobile sheet (open/close, Escape, focus-trap)
+           3. Scroll-spy (highlights current section in nav)
+           4. Checklists (save to localStorage, export/import/clear)
+           5. Budget calculators (live total, persisted per-device)
+           6. Jet-lag calculator
+         ═══════════════════════════════════════════════════════════════════ -->
     <script define:vars={{ order, storeKey }}>
       (function () {
         try {
           var STORE_KEY = "tripguide-" + (storeKey || "guide");
 
-          // ----- mobile sheet (open/close, Escape, focus handling) -----
-          var sheet = document.querySelector(".sheet");
+          /* ── 1. DARK MODE TOGGLE ──────────────────────────────────────── */
+          var darkBtn = document.getElementById("btnDark");
+          function syncDarkUI() {
+            var dark = document.documentElement.getAttribute("data-theme") === "dark";
+            if (!darkBtn) return;
+            darkBtn.textContent = dark ? "☀" : "◑";
+            darkBtn.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+            darkBtn.title = dark ? "Switch to light mode" : "Switch to dark mode";
+          }
+          syncDarkUI();
+          if (darkBtn) {
+            darkBtn.addEventListener("click", function () {
+              var dark = document.documentElement.getAttribute("data-theme") === "dark";
+              var next = dark ? "light" : "dark";
+              document.documentElement.setAttribute("data-theme", next);
+              try { localStorage.setItem("tg-theme", next); } catch (e) {}
+              syncDarkUI();
+            });
+          }
+
+          /* ── 2. MOBILE SHEET ─────────────────────────────────────────── */
+          var sheet    = document.querySelector(".sheet");
           var backdrop = document.querySelector(".sheet-backdrop");
           var sheetBtn = document.getElementById("sheetOpen");
           function openSheet() {
             sheet.classList.add("open"); backdrop.classList.add("open");
-            document.body.classList.add("sheet-lock"); sheetBtn.setAttribute("aria-expanded", "true");
+            document.body.classList.add("sheet-lock");
+            sheetBtn.setAttribute("aria-expanded", "true");
             var f = sheet.querySelector("a"); if (f) f.focus();
           }
           function closeSheet() {
             sheet.classList.remove("open"); backdrop.classList.remove("open");
-            document.body.classList.remove("sheet-lock"); sheetBtn.setAttribute("aria-expanded", "false"); sheetBtn.focus();
+            document.body.classList.remove("sheet-lock");
+            sheetBtn.setAttribute("aria-expanded", "false"); sheetBtn.focus();
           }
           if (sheet && sheetBtn && backdrop) {
             sheetBtn.addEventListener("click", openSheet);
@@ -125,21 +301,31 @@ const navLabel = (s: any, g: string) => s.title || s.name || g;
               if (e.key === "Tab" && sheet.classList.contains("open")) {
                 var fs = sheet.querySelectorAll("a"); if (!fs.length) return;
                 var first = fs[0], last = fs[fs.length - 1];
-                if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+                if (e.shiftKey && document.activeElement === first)      { e.preventDefault(); last.focus(); }
                 else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
               }
             });
           }
 
-          // ----- scroll-spy (scroll-driven, resolves the last section + the very bottom) -----
+          /* ── 3. SCROLL-SPY ───────────────────────────────────────────── */
           var navlinks = document.querySelectorAll(".navlink");
-          var navcats = document.querySelectorAll(".navcat");
+          var navcats  = document.querySelectorAll(".navcat");
           function setActive(secId, cat) {
-            navlinks.forEach(function (a) { var on = a.getAttribute("href") === "#" + secId; a.classList.toggle("active", on); if (on) { a.setAttribute("aria-current", "true"); } else { a.removeAttribute("aria-current"); } });
+            navlinks.forEach(function (a) {
+              var on = a.getAttribute("href") === "#" + secId;
+              a.classList.toggle("active", on);
+              on ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current");
+            });
             navcats.forEach(function (a) { a.classList.toggle("active", a.dataset.cat === String(cat)); });
             var cur = document.getElementById("curCat"); if (cur) cur.textContent = order[cat] || "";
-            document.querySelectorAll(".sheet-link").forEach(function (a) { var on = a.getAttribute("href") === "#" + secId; a.classList.toggle("active", on); if (on) { a.setAttribute("aria-current", "true"); } else { a.removeAttribute("aria-current"); } });
-            document.querySelectorAll(".sheet-cat").forEach(function (a) { a.classList.toggle("active", a.dataset.cat === String(cat)); });
+            document.querySelectorAll(".sheet-link").forEach(function (a) {
+              var on = a.getAttribute("href") === "#" + secId;
+              a.classList.toggle("active", on);
+              on ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current");
+            });
+            document.querySelectorAll(".sheet-cat").forEach(function (a) {
+              a.classList.toggle("active", a.dataset.cat === String(cat));
+            });
           }
           var blocks = Array.prototype.slice.call(document.querySelectorAll(".block"));
           function spy() {
@@ -148,7 +334,9 @@ const navLabel = (s: any, g: string) => s.title || s.name || g;
             if (window.innerHeight + window.pageYOffset >= document.body.scrollHeight - 4) {
               idx = blocks.length - 1;
             } else {
-              for (var i = 0; i < blocks.length; i++) { if (blocks[i].getBoundingClientRect().top <= line) { idx = i; } else { break; } }
+              for (var i = 0; i < blocks.length; i++) {
+                if (blocks[i].getBoundingClientRect().top <= line) { idx = i; } else { break; }
+              }
             }
             var b = blocks[idx]; setActive(b.id, b.dataset.cat);
           }
@@ -158,53 +346,228 @@ const navLabel = (s: any, g: string) => s.title || s.name || g;
           window.addEventListener("resize", onScroll);
           spy();
 
-          // ----- checklists that remember themselves (keyed by their text, so edits don't shift ticks) -----
-          function hashKey(s) { var h = 5381; s = String(s); for (var i = 0; i < s.length; i++) { h = ((h << 5) + h + s.charCodeAt(i)) | 0; } return "k" + (h >>> 0).toString(36); }
-          var boxes = Array.prototype.slice.call(document.querySelectorAll('input[type=checkbox]'));
-          var seenK = {};
+          /* ── 4. CHECKLISTS ───────────────────────────────────────────── */
+          function hashKey(s) {
+            var h = 5381; s = String(s);
+            for (var i = 0; i < s.length; i++) { h = ((h << 5) + h + s.charCodeAt(i)) | 0; }
+            return "k" + (h >>> 0).toString(36);
+          }
+          var boxes  = Array.prototype.slice.call(document.querySelectorAll("input[type=checkbox]"));
+          var seenK  = {};
           boxes.forEach(function (b) {
-            var lab = b.closest(".check"); var t = (lab ? lab.textContent : "").replace(/\s+/g, " ").trim();
-            var k = hashKey(t); if (seenK[k] != null) { seenK[k]++; k = k + "_" + seenK[k]; } else { seenK[k] = 0; } b.dataset.pkey = k;
+            var lab = b.closest(".check");
+            var t   = (lab ? lab.textContent : "").replace(/\s+/g, " ").trim();
+            var k   = hashKey(t);
+            if (seenK[k] != null) { seenK[k]++; k = k + "_" + seenK[k]; } else { seenK[k] = 0; }
+            b.dataset.pkey = k;
           });
-          function load() { try { return JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); } catch (e) { return {}; } }
-          function flash(t) { var n = document.getElementById("savedNote"); if (!n) return; n.textContent = t; if (t) { clearTimeout(n._t); n._t = setTimeout(function () { n.textContent = ""; }, 1200); } }
-          function save(s) { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); flash("✓ saved"); } catch (e) { flash("use Save progress"); } }
-          function current() { var s = {}; boxes.forEach(function (b) { if (b.checked) s[b.dataset.pkey] = 1; }); return s; }
-          var st = load(); boxes.forEach(function (b) { if (st[b.dataset.pkey]) b.checked = true; });
-          boxes.forEach(function (b) { b.addEventListener("change", function () { save(current()); }); });
-          var E = document.getElementById("btnExport"), I = document.getElementById("btnImport"), C = document.getElementById("btnClear");
-          if (E) E.addEventListener("click", function () { window.prompt("Copy this progress code (paste into Restore on any device):", btoa(JSON.stringify(current()))); });
-          if (I) I.addEventListener("click", function () { var c = window.prompt("Paste your progress code:"); if (!c) return; try { var s = JSON.parse(atob(c.trim())); boxes.forEach(function (b) { b.checked = !!s[b.dataset.pkey]; }); save(s); } catch (e) { alert("That code could not be read — check you copied all of it."); } });
-          if (C) C.addEventListener("click", function () { if (!confirm("Uncheck everything and clear saved progress?")) return; boxes.forEach(function (b) { b.checked = false; }); save({}); });
 
-          // ----- budget calculators: live running total of what you actually spend, saved per device -----
+          function loadState()  { try { return JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); } catch (e) { return {}; } }
+          function saveState(s) { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); flash("✓ saved"); } catch (e) { flash("Storage full — use Copy progress"); } }
+          function currentState() { var s = {}; boxes.forEach(function (b) { if (b.checked) s[b.dataset.pkey] = 1; }); return s; }
+
+          function flash(t) {
+            var n = document.getElementById("savedNote"); if (!n) return;
+            n.textContent = t;
+            if (t) { clearTimeout(n._t); n._t = setTimeout(function () { n.textContent = ""; }, 2200); }
+          }
+
+          // Progress counter — "N/M checked"
+          function updateCount() {
+            var c = document.getElementById("progCount"); if (!c || !boxes.length) return;
+            var checked = boxes.filter(function (b) { return b.checked; }).length;
+            c.textContent = checked + "/" + boxes.length + " checked";
+          }
+
+          // Load saved state on page open
+          var saved = loadState();
+          boxes.forEach(function (b) { if (saved[b.dataset.pkey]) b.checked = true; });
+          updateCount();
+          boxes.forEach(function (b) {
+            b.addEventListener("change", function () { saveState(currentState()); updateCount(); });
+          });
+
+          // Copy progress — clipboard with fallback
+          function fallbackCopy(text) {
+            var ta = document.createElement("textarea");
+            ta.value = text; ta.style.cssText = "position:fixed;opacity:0;top:0;left:0";
+            document.body.appendChild(ta); ta.focus(); ta.select();
+            try { document.execCommand("copy"); flash("✓ Copied to clipboard"); }
+            catch (e) { flash("Auto-copy failed — paste manually via Restore"); }
+            document.body.removeChild(ta);
+          }
+          var copyBtn = document.getElementById("btnCopy");
+          if (copyBtn) {
+            copyBtn.addEventListener("click", function () {
+              var code = btoa(JSON.stringify(currentState()));
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(code)
+                  .then(function ()  { flash("✓ Copied — paste into Restore on any device"); })
+                  .catch(function () { fallbackCopy(code); });
+              } else { fallbackCopy(code); }
+            });
+          }
+
+          // Restore panel — inline textarea, no window.prompt
+          var importToggle = document.getElementById("btnImportToggle");
+          var importPanel  = document.getElementById("importPanel");
+          var importCodeEl = document.getElementById("importCode");
+          var btnApply     = document.getElementById("btnApplyImport");
+          var btnCancel    = document.getElementById("btnCancelImport");
+          if (importToggle && importPanel) {
+            importToggle.addEventListener("click", function () {
+              if (importPanel.hasAttribute("hidden")) {
+                importPanel.removeAttribute("hidden");
+                if (importCodeEl) importCodeEl.focus();
+              } else {
+                importPanel.setAttribute("hidden", "");
+              }
+            });
+          }
+          if (btnCancel) {
+            btnCancel.addEventListener("click", function () {
+              importPanel.setAttribute("hidden", "");
+              if (importCodeEl) importCodeEl.value = "";
+            });
+          }
+          if (btnApply) {
+            btnApply.addEventListener("click", function () {
+              var c = importCodeEl ? importCodeEl.value.trim() : "";
+              if (!c) return;
+              try {
+                var s = JSON.parse(atob(c));
+                boxes.forEach(function (b) { b.checked = !!s[b.dataset.pkey]; });
+                saveState(s); updateCount();
+                importPanel.setAttribute("hidden", "");
+                if (importCodeEl) importCodeEl.value = "";
+              } catch (e) { flash("Code couldn't be read — check you copied it completely"); }
+            });
+          }
+
+          // Clear all
+          var clearBtn = document.getElementById("btnClear");
+          if (clearBtn) {
+            clearBtn.addEventListener("click", function () {
+              if (!confirm("Uncheck everything and clear saved progress?")) return;
+              boxes.forEach(function (b) { b.checked = false; });
+              saveState({}); updateCount();
+            });
+          }
+
+          /* ── 5. BUDGET CALCULATORS ───────────────────────────────────── */
           document.querySelectorAll(".budget").forEach(function (bud) {
-            var BKEY = STORE_KEY + "-budget";
+            var BKEY   = STORE_KEY + "-budget";
             var bstore = {};
             try { bstore = JSON.parse(localStorage.getItem(BKEY) || "{}"); } catch (e) { bstore = {}; }
-            var cur = bud.getAttribute("data-cur") || "$";
+            var cur    = bud.getAttribute("data-cur") || "$";
             var inputs = Array.prototype.slice.call(bud.querySelectorAll(".bactual"));
             inputs.forEach(function (inp) {
               var row = inp.closest(".brow");
-              var k = hashKey((row && row.getAttribute("data-key")) || "");
+              var k   = hashKey((row && row.getAttribute("data-key")) || "");
               inp.dataset.pkey = k;
               if (bstore[k] != null) inp.value = bstore[k];
             });
-            function fmt(n) { return cur + (Math.round(n * 100) / 100).toLocaleString("en-US"); }
-            function recalc() {
-              var sum = 0;
-              inputs.forEach(function (inp) { var v = parseFloat(inp.value); if (!isNaN(v)) sum += v; });
+            function fmt(n)    { return cur + (Math.round(n * 100) / 100).toLocaleString("en-US"); }
+            function recalcB() {
+              var sum = 0; inputs.forEach(function (inp) { var v = parseFloat(inp.value); if (!isNaN(v)) sum += v; });
               var t = bud.querySelector(".bact-total"); if (t) t.textContent = fmt(sum);
             }
-            function persistBudget() {
+            function persistB() {
               var o = {}; inputs.forEach(function (inp) { if (inp.value !== "") o[inp.dataset.pkey] = inp.value; });
-              try { localStorage.setItem(BKEY, JSON.stringify(o)); flash("✓ saved"); } catch (e) { flash("use Save progress"); }
+              try { localStorage.setItem(BKEY, JSON.stringify(o)); flash("✓ saved"); } catch (e) { flash("Storage full"); }
             }
-            inputs.forEach(function (inp) { inp.addEventListener("input", function () { recalc(); persistBudget(); }); });
-            recalc();
+            inputs.forEach(function (inp) { inp.addEventListener("input", function () { recalcB(); persistB(); }); });
+            recalcB();
           });
+
+          /* ── 6. JET-LAG CALCULATOR ───────────────────────────────────── */
+          (function () {
+            var jlBtn   = document.getElementById("jlToggle");
+            var jlPanel = document.getElementById("jlPanel");
+            if (!jlBtn || !jlPanel) return;
+
+            var destOffset = parseFloat(jlPanel.getAttribute("data-dest") || "");
+            if (isNaN(destOffset)) return;
+
+            // Toggle open / close
+            jlBtn.addEventListener("click", function () {
+              var wasHidden = jlPanel.hasAttribute("hidden");
+              if (wasHidden) {
+                jlPanel.removeAttribute("hidden");
+                jlBtn.setAttribute("aria-expanded", "true");
+              } else {
+                jlPanel.setAttribute("hidden", "");
+                jlBtn.setAttribute("aria-expanded", "false");
+              }
+            });
+
+            // Recalculate when origin changes
+            function recalcJL() {
+              var sel = document.getElementById("jlOrigin");
+              var out = document.getElementById("jlOutput");
+              if (!sel || !out) return;
+              if (!sel.value) { out.setAttribute("hidden", ""); return; }
+
+              var origOffset = parseFloat(sel.value);
+              if (isNaN(origOffset)) { out.setAttribute("hidden", ""); return; }
+
+              var diff    = destOffset - origOffset;  // positive = flew east
+              var absDiff = Math.round(Math.abs(diff) * 10) / 10;
+              var dir     = diff > 0.4 ? "east" : diff < -0.4 ? "west" : null;
+
+              if (!dir || absDiff < 1) {
+                out.innerHTML = "<p class='jl-none'>Under 1 hour of difference — no meaningful jet lag expected.</p>";
+                out.removeAttribute("hidden");
+                return;
+              }
+
+              // Eastward ≈1 hr/day to adapt; westward ≈1.5 hr/day (easier direction)
+              var days   = dir === "east" ? Math.ceil(absDiff) : Math.ceil(absDiff / 1.5);
+              var harder = dir === "east" ? " — eastward crossings are tougher" : " — westward tends to be easier";
+
+              // What your body clock reads at 11 pm local on arrival night
+              var bodyAt11 = 23 - diff;
+              while (bodyAt11 < 0)  bodyAt11 += 24;
+              while (bodyAt11 >= 24) bodyAt11 -= 24;
+              var bh    = Math.round(bodyAt11);
+              var h12   = bh % 12 || 12;
+              var ampm  = bh >= 12 ? "pm" : "am";
+              var bodyTimeStr = h12 + ampm;
+
+              var html = "";
+              html += "<p class='jl-result'>";
+              html += "<strong>" + absDiff + "-hour gap, flying " + dir + harder + ".</strong> ";
+              html += "Expect roughly <strong>" + days + " day" + (days === 1 ? "" : "s") + "</strong> to fully adapt.";
+              html += "</p>";
+              html += "<p style='font-size:.84rem;color:var(--muted);margin-bottom:.5rem;line-height:1.45'>";
+              html += "At 11 pm local on your first night, your body will still feel like it's <strong>" + bodyTimeStr + "</strong> back home.";
+              html += "</p>";
+              html += "<ul class='jl-tips'>";
+              html += "<li>Get <strong>morning sunlight on arrival day</strong> — the single most effective clock reset</li>";
+              if (dir === "east") {
+                html += "<li>Stay awake until <strong>local 10–11 pm</strong> no matter how tired — sleeping too early makes it worse</li>";
+                html += "<li>If you wake in the night, stay in dim light; avoid phones and bright screens until 7 am</li>";
+              } else {
+                html += "<li>Westward is easier — avoid napping more than 20 minutes on your first afternoon</li>";
+                html += "<li>Get outside in the morning; resisting the urge to sleep in accelerates adjustment</li>";
+              }
+              html += "<li>Drink water on the flight; skip alcohol and heavy meals 4 hours before landing</li>";
+              if (absDiff >= 7) {
+                html += "<li>Large gap: melatonin 0.5–1 mg at local bedtime can help on nights 1–3 — check with your doctor first</li>";
+              }
+              html += "</ul>";
+
+              out.innerHTML = html;
+              out.removeAttribute("hidden");
+            }
+
+            var originSel = document.getElementById("jlOrigin");
+            if (originSel) originSel.addEventListener("change", recalcJL);
+          })();
+
         } catch (err) { console.error("guide enhancement error:", err); }
       })();
     </script>
+
   </body>
 </html>

@@ -145,7 +145,7 @@ if (sec.type === "sights") {
             <h4 class="sight-name">{it.name}</h4>
             <p>
               <Fragment set:html={it.body || ""} />
-              {it.map && <> <a class="maplink" target="_blank" rel="noopener" href={gmaps(it.map)}>Map ↗</a></>}
+              {it.map && <> <a class="maplink" target="_blank" rel="noopener" href={gmaps(it.map)}>Open in Maps ↗</a></>}
             </p>
           </div>
         );

@@ -4,7 +4,6 @@ import PwaHead from "../components/PwaHead.astro";
 import { accentFor } from "../lib/themes";
 import "../styles/hub.css";
 
-// The home page builds itself from whatever guides exist — no hand-kept list.
 const guides = (await getCollection("guides")).sort((a, b) =>
   a.data.title.localeCompare(b.data.title)
 );
@@ -18,9 +17,25 @@ const guides = (await getCollection("guides")).sort((a, b) =>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
     <PwaHead />
+    <!-- Dark-mode init — runs before paint to avoid flash -->
+    <script is:inline>
+      (function () {
+        var s = localStorage.getItem("tg-theme");
+        var preferDark = window.matchMedia && window.matchMedia("(prefers-color-scheme:dark)").matches;
+        if (s === "dark" || (s === null && preferDark)) {
+          document.documentElement.setAttribute("data-theme", "dark");
+        } else if (s === "light") {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      })();
+    </script>
   </head>
   <body>
     <header class="hub-masthead">
+      <!-- Dark-mode toggle — top-right of the home page header -->
+      <div class="hub-topbar">
+        <button id="btnDark" class="topbar-btn" aria-label="Switch to dark mode" title="Switch to dark mode">◑</button>
+      </div>
       <p class="eyebrow">Field Guides</p>
       <h1>Trip Guides</h1>
       <p class="dek">Curated, fact-checked travel guides — built to be calm to read and easy to follow on the move.</p>
@@ -43,5 +58,28 @@ const guides = (await getCollection("guides")).sort((a, b) =>
     </main>
 
     <footer class="hub-foot">Built from the reusable trip-guide template.</footer>
+
+    <script is:inline>
+      (function () {
+        var darkBtn = document.getElementById("btnDark");
+        function syncDark() {
+          var dark = document.documentElement.getAttribute("data-theme") === "dark";
+          if (!darkBtn) return;
+          darkBtn.textContent = dark ? "☀" : "◑";
+          darkBtn.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+          darkBtn.title = dark ? "Switch to light mode" : "Switch to dark mode";
+        }
+        syncDark();
+        if (darkBtn) {
+          darkBtn.addEventListener("click", function () {
+            var dark = document.documentElement.getAttribute("data-theme") === "dark";
+            var next = dark ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", next);
+            try { localStorage.setItem("tg-theme", next); } catch (e) {}
+            syncDark();
+          });
+        }
+      })();
+    </script>
   </body>
 </html>
