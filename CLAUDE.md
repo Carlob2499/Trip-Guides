@@ -20,7 +20,11 @@ not a programmer — explain changes in plain language and keep the workflow sim
    whole guide from memory.
 4. **Be honest.** If a request is a bad idea or won't work, say so plainly.
 5. **Always build before committing:** run `npm run build`. It must finish with all
-   pages built and no schema errors. Only commit if the build is clean.
+   pages built and no schema errors. Only commit if the build is clean. If `npm`
+   is not available in the current shell, tell the user explicitly: "Please run
+   `npm run build` in your terminal and confirm it passes before I commit."
+   **Never use Netlify as a build validator — a failed production deploy is worse
+   than a delayed commit.**
 
 ## Where things live
 - `src/content/guides/*.json` — the guides themselves (the facts). One file = one
@@ -85,8 +89,16 @@ country. Use `guide-template.jsonc` at the repo root as the fill-in model.
   visitor, 24-hour pharmacy, tap-water safety, what to bring.
 - Etiquette & language: how widely English is spoken, tipping norms, local
   do's/don'ts, key phrases.
-- Getting around, Itinerary, Sights, Food & shopping, plus any day trips and a
-  country-special block (e.g. esports, onsen, ferries) where it fits.
+- Getting around, Itinerary, Sights, plus any day trips and a country-special
+  block (e.g. esports, onsen, ferries) where it fits.
+- Food & shopping: two prose sections minimum — "What to eat" (local dishes and
+  markets) and "Where to eat — picks near your route" (specific restaurants,
+  ordered by proximity to the lodging). Every restaurant entry must answer four
+  questions: **Where?** (address) **How do I get there from the hotel?**
+  (transit route + time) **When in the trip does it fit?** (best day, fits
+  around what) **Do I need to book?** (walk-in / reserve online / call ahead).
+  Flag all prices as ≈ with a verify link; note any hours that couldn't be
+  confirmed online.
 Do NOT auto-generate these sections or their contents — scaffold them, then
 research and verify. A stubbed section is fine to ship empty; an unverified one
 is not.
@@ -147,6 +159,15 @@ The raid counter charts were first implemented as a ~4,000-character HTML string
 
 ### Inline links go in the most actionable places; References handles citation
 Link the first mention of each key resource in the most relevant section of the guide (e.g., "DOT Tickets app" in the transit panel, "tivoli.dk" in the Tivoli entry). Don't link every mention of every resource everywhere — that clutters the text. The References section is the comprehensive citation list; inline links are navigation shortcuts. **Rule: max one inline link per resource, in the place where it's most likely to be acted on.**
+
+### Always write JSON files as UTF-8 without BOM
+PowerShell's `[System.IO.File]::WriteAllText(path, text, [System.Text.Encoding]::UTF8)` silently prepends a **BOM** (bytes `0xEF 0xBB 0xBF`). Astro's JSON content loader — and `JSON.parse` — reject BOM-prefixed files with `Unexpected token ''`, causing an immediate build failure. This happened in the Jun 2026 session and produced a failed Netlify production deploy. **Rule: when writing or rewriting a `.json` file via PowerShell, use `New-Object System.Text.UTF8Encoding $false` as the encoding, or write raw bytes after stripping any leading BOM. Always verify the first byte is `0x7B` (`{`) after writing.**
+
+### Netlify is not a build validator — build locally first
+In the Jun 2026 session, `denmark.json` was committed and pushed without running `npm run build`. The BOM encoding bug above would have been caught immediately by a local build in under 15 seconds; instead it caused a failed production deploy visible to any visitor until the fix landed. **Rule: if `npm` is unavailable in the current shell, explicitly tell the user to run `npm run build` themselves and confirm it passes before pushing. Do not treat a green Netlify deploy as proof the build was clean — it means the build happened to pass, not that it was validated before commit.**
+
+### Restaurant entries need four-question logistics, not just addresses
+The Copenhagen food section was improved by adding AYCE Korean BBQ (KOBA, Seoul Nordhavn) and Filipino restaurants (Jabby's, Manila at Reffen) with explicit transit directions from the hotel, best-day-of-trip fit, and reservation requirements. Entries without this context are much less useful to a reader in the field. **Rule: every specific restaurant pick must answer — (1) exact address, (2) transit from lodging with time, (3) which day(s) of the itinerary it fits and why, (4) reservation requirement and how to make one. Flag unconfirmed hours with ⚠ and unconfirmed prices with ≈.**
 
 ## Roadmap / parked ideas
 - DESKTOP-CLASS DOC HUB (Wanderlog-style): a per-trip resource hub to drop in
