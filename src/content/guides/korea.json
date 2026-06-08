@@ -189,7 +189,7 @@
           "title": "Arrival in Seoul",
           "pace": "Arrival day · ICN → Seoul ~60–90 min (AREX + subway/taxi) · easy evening",
           "note": "After a long flight, keep it light — a neighbourhood dinner and an early night.",
-          "body": "Land, clear immigration (e-Arrival Card already done), ride the AREX into Seoul and check in. Korean fried chicken nearby, then rest.",
+          "body": "<p><em>The first impression of Seoul: humid air, neon signs, and the subway working exactly as promised.</em></p><p>Land, clear immigration (e-Arrival Card already done), ride the AREX to Seoul Station and Line 4 one stop to Myeongdong. Check in, then dinner: <b>Goobne Chicken</b> has a branch near Myeongdong (original or garlic, ≈₩22,000–28,000 for a whole chicken — verify current price) — eat, then rest. The first night is for recovering, not covering ground.</p>",
           "fit": "Light, breathable clothes — July is hot and humid.",
           "checklist": [
             "e-Arrival Card confirmed before the flight",
@@ -202,7 +202,7 @@
           "title": "Palaces & old Seoul",
           "pace": "Full day · Gyeongbokgung ~2 hr · Bukchon ~1.5 hr · Insadong ~1.5 hr · lots of walking",
           "note": "Heat and humidity are the real workload — water, shade breaks, an iced-coffee stop.",
-          "body": "Gyeongbokgung in the morning (time it for the changing of the guard), then Bukchon Hanok Village — it's a real neighbourhood, so keep voices down — and tea and crafts in Insadong.",
+          "body": "<p><em>Fifteen minutes on the subway and you're six hundred years back — grand palaces, stone lanes, and a neighbourhood that still feels lived-in.</em></p><p>Gyeongbokgung in the morning (time it for the changing of the guard — typically 10:00 and 14:00, but <b>⚠ verify the current schedule</b> as specific ceremonies are sometimes suspended); free entry if you rent a hanbok at the gate. Then uphill into Bukchon Hanok Village — quiet voices, real residents — and wind down with tea and crafts in Insadong.</p>",
           "fit": "Breathable layers; an umbrella doubles for sun and sudden rain.",
           "checklist": [
             "Gyeongbokgung is open today (closed Tue)",
@@ -228,7 +228,7 @@
           "title": "MSI in Daejeon — Lower Bracket Final",
           "pace": "Travel + match day · KTX ~50 min · arena ~20–30 min from Daejeon Station",
           "note": "Leave Seoul with a buffer and reach the arena early for security and merch lines.",
-          "body": "KTX to Daejeon, then taxi or transit to Daejeon Convention Center II for the Lower Bracket Final. Stay near the venue tonight — and try Sungsimdang, Daejeon's legendary bakery.",
+          "body": "<p>KTX to Daejeon, then taxi or transit to Daejeon Convention Center II for the Lower Bracket Final. Stay near the venue tonight — and try Sungsimdang, Daejeon's legendary bakery (fried soboro bread, queue moves fast).</p><p><b>🎮 GO Fest Global starts today (Jul 11–12, worldwide).</b> Raids are live everywhere — raid before you catch the KTX in the morning, then the <b>EXPO Science Park area around DCC II</b> has open plazas and PokéStops you can spin during any pre-match window. Priority bosses are in the raids section.</p>",
           "fit": "Team colours, plus a layer for fierce arena air-conditioning.",
           "checklist": [
             "KTX booked (Korail app)",
@@ -241,7 +241,7 @@
           "title": "MSI Grand Final → back to Seoul",
           "pace": "Match day · Grand Final · KTX back ~50 min in the evening",
           "note": "Book the return KTX ahead — Sunday-evening trains fill up after the final.",
-          "body": "The MSI 2026 Grand Final at DCC II, then KTX back to Seoul. Celebrate with chimaek — fried chicken and beer.",
+          "body": "<p><em>The biggest match of the season — and GO Fest day 2 running alongside it.</em></p><p>The MSI 2026 Grand Final at DCC II. After the final, KTX back to Seoul — book the Sunday evening return in advance, it fills up fast. Celebrate with chimaek.</p><p><b>🎮 GO Fest day 2.</b> GO Fest Global ends at <b>7:00 p.m. local time</b> — raid before and between matches, not after. The EXPO Science Park is walkable from DCC II and should have active PokéStops during the day. If the final runs late into the evening, GO Fest will already be over.</p>",
           "fit": "Same as yesterday; easy for travelling.",
           "checklist": [
             "Return KTX booked",
@@ -263,10 +263,10 @@
         },
         {
           "date": "Tue Jul 14",
-          "title": "Changdeokgung + last laps",
-          "pace": "~5 hr · Changdeokgung + Secret Garden ~2 hr · shopping / electronics afternoon",
-          "note": "The Secret Garden is a timed guided walk — book ahead and wear real shoes.",
-          "body": "Changdeokgung and its Secret Garden in the morning (Gyeongbokgung is closed Tuesdays), then last shopping — Myeongdong cosmetics, Yongsan electronics, or anime goods.",
+          "title": "The Secret Garden — then one last sweep of the city",
+          "pace": "~5 hr · Changdeokgung + Secret Garden ~2 hr · free afternoon for shopping",
+          "note": "The Secret Garden is a timed guided walk — book ahead and wear real shoes for uneven paths.",
+          "body": "<p><em>The palace garden you saved for last, then a slow final wander through streets that are starting to feel familiar.</em></p><p>Changdeokgung and its Secret Garden in the morning — it was closed Monday, so today is the slot. (Gyeongbokgung would be the alternative but it's shut on Tuesdays too, so this is the only palace day left anyway.) The guided walk through the rear garden is genuinely one of the best things in Seoul. Afternoon is yours: Myeongdong cosmetics, Yongsan electronics, anime at Animate, or simply walk.</p>",
           "fit": "Walking shoes for the garden paths.",
           "checklist": [
             "Secret Garden tour pre-booked",

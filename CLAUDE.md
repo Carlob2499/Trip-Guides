@@ -2,6 +2,18 @@
 
 This file is read automatically. Follow it on every change to this project.
 
+## ⛔ AGENT PRE-COMMIT CHECKLIST — read this before every `git commit`
+
+These are the rules most commonly violated by background agents. Check each one before committing, without exception:
+
+1. **Build must pass first.** Run `npm run build`. If `npm` is unavailable in the shell, stop and tell the user: *"Please run `npm run build` and confirm it passes before I commit."* Never commit without a clean build.
+2. **Every price, URL, and travel fact must be verified** with a web search before it goes in. Flag anything unconfirmed as approximate ("≈", "⚠ check before you go"). Never invent links.
+3. **No emojis unless the user explicitly asked for them.** Do not add emoji to any file without a direct request.
+4. **Anchor all logistics to the confirmed lodging**, not a placeholder. If the Airbnb address or neighbourhood is unconfirmed, say so — don't assume a district.
+5. **Read the current file before editing.** Make targeted edits; never regenerate a whole guide from memory. The owner edits content between sessions.
+6. **Write JSON files as UTF-8 without BOM.** After any PowerShell file write, verify the first byte is `0x7B`. A BOM causes an immediate build failure.
+7. **Never use Netlify as a build validator.** A failed production deploy is worse than a delayed commit.
+
 ## What this project is
 A static **Astro** website of curated travel guides, hosted on **Netlify**, which
 rebuilds automatically whenever a commit lands on `main` in GitHub. The owner is
@@ -75,6 +87,40 @@ block elements in a `prose` body. If you need collapsible sections, tables, or
 structured repeating content, add a proper section type to `content.config.ts`
 instead (as `raids` was added). Hand-authored HTML in a `body` field is
 technical debt — it's unvalidated, hard to update, and bypasses the schema.
+
+## Accuracy & anti-hallucination standards — apply before every fact goes in
+
+These rules apply to every piece of content, not just the sections listed in the backbone below. Follow them in order: source first, then write.
+
+### 1. Source hierarchy — always reach the primary source
+Official source (venue website, operator booking page, government portal) outranks major publisher (Lonely Planet, newspaper travel desk) outranks aggregator (TripAdvisor, Google Maps, travel blog). Aggregators are useful for leads; never cite them as the source of a fact. For any perishable fact (price, hours, operator name, entry requirement), link the specific page checked — not just the homepage.
+
+### 2. Training data is a starting point, not a source
+Treat all prices, hours, operator names, entry requirements, and event details as unverified until confirmed by a current web search. This applies even when the answer feels certain. Popular, well-documented destinations have the most text about them in training data — which makes the outdated information feel most authoritative. Counter-intuitively, the more confident the answer feels, the more important it is to check.
+
+### 3. The "plausible but wrong" trap
+The most dangerous errors are facts that sound authoritative, are internally consistent, and match expectations — but are wrong. Every confirmed error in this project was this type (DFDS → Go Nordic Cruiseline; "GO Fest ends at midnight"; "72-hour City Pass"). **Especially verify the things that obviously seem right.** High confidence from training data is a warning sign, not a green light.
+
+### 4. Compound claims — check each component independently
+A claim like "take Line 2 to Hongik Univ (8 min), then 5-min walk to the restaurant" contains at least three independently verifiable facts. Verifying the destination does not validate the route or the time. Check each component separately.
+
+### 5. Omission errors — ask what hasn't been said
+What the guide doesn't say can be as harmful as what it gets wrong. For every attraction and restaurant, ask: what important constraint have I not mentioned? Reservation requirements, cash-only policies, early closing times, age restrictions, and "closed on the specific days of this trip" are the most commonly omitted facts. Note both closed days AND closing times — "closed Mondays" is incomplete if the closing time on open days is 15:45.
+
+### 6. Seasonal and edition variation
+Hours and prices often vary by season; note which season they apply to if they differ. Event data (raid bosses, tournament schedules, event hours) is edition-specific — last year's GO Fest data is not this year's GO Fest data. Re-verify every event section from scratch, every time.
+
+### 7. Internal consistency
+If a fact appears in multiple sections of the guide, every instance must be identical. Before committing, search the guide for every key proper noun (restaurant names, event names, prices, operator names) and confirm there are no contradictions. Contradictions within a guide are a hallucination signal.
+
+### 8. The ≈ flag means "checked, approximately" — not "haven't checked"
+≈ means: I found the official source and the actual figure is approximately this — verify before paying. It does not mean "I haven't checked." If you haven't checked, write "unverified" or omit the figure entirely. A missing price is honest; a guessed price with a ≈ fig-leaf is not.
+
+### 9. Confirm businesses still exist before citing them
+Before naming a specific restaurant, hotel, or venue: search for it with the current year in the query to confirm it is still operating. Training-data businesses close, move, and change hands. A closed restaurant cited as a "pick" is worse than no recommendation.
+
+### 10. Confirmation bias in searching
+Finding a result that confirms your existing belief is not verification. Always trace back to the official primary source. Stopping at the first result that matches your training-data memory adds false confidence without adding accuracy.
 
 ## Universal backbone — every country guide should cover these
 Build to this checklist and VERIFY each item (rule 1) before committing a new

@@ -236,6 +236,16 @@
       ]
     },
     {
+      "type": "map",
+      "group": "Getting around",
+      "title": "Orientation map — Copenhagen",
+      "center": {
+        "lat": 55.676,
+        "lng": 12.568
+      },
+      "span": 0.08
+    },
+    {
       "type": "days",
       "group": "Itinerary",
       "title": "Day by day",
