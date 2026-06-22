@@ -10,13 +10,14 @@
       "type": "panel",
       "group": "Plan",
       "title": "When you land",
-      "body": "<p>At the airport, in order:</p>",
+      "body": "<p>You land at <b>Terminal 1, Incheon Airport (~05:30–06:30 KST on Thursday Jul 9)</b>. Air Premia YP132 arrives at T1 — the AREX station is inside the terminal, no shuttle needed. Budget 30–60 min through immigration at this hour. In order:</p>",
       "checklist": [
-        "Clear immigration (your <b>e-Arrival Card</b> is already done — see below)",
-        "Buy and load a <b>T-money</b> card at a convenience store or machine",
-        "Take the <b>AREX</b> train to Seoul Station (~43–58 min), then <b>Line 4 one stop</b> to Myeongdong (or a limousine bus direct to the area)",
+        "Scan your <b>e-Arrival Card QR</b> at the automated immigration gate (saved offline on your phone — done Jul 7)",
+        "Pick up a <b>T-money</b> card at any convenience store or ticket machine in arrivals; load ≈₩20,000",
+        "Take the <b>AREX All-Stop</b> from T1 to Seoul Station (≈59 min, ≈₩5,350 — trains every 5–15 min from 05:14 onward; Express saves 15 min but costs ≈₩13,000 and needs a reservation — not worth it at 06:00)",
+        "At Seoul Station, take <b>Line 4</b> toward the city centre — Myeongdong Station is <b>2 stops</b> (≈5 min, ≈₩1,350)",
         "Text <b>TRAVEL to 4004</b> to switch on Verizon TravelPass",
-        "Install <b>KakaoMap</b> / <b>Naver Map</b> — Google Maps navigation is limited in Korea"
+        "Open <b>KakaoMap</b> or <b>Naver Map</b> — Google Maps navigation is very limited in Korea"
       ]
     },
     {
@@ -54,6 +55,37 @@
         "e-Arrival Card — within 72 hours of your flight",
         "Confirm Verizon TravelPass; download KakaoMap, Naver Map, Papago, Kakao T, Korail",
         "Break in your shoes / insoles (week before)"
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Pre-flight countdown — specific actions by date",
+      "body": "<p>Time-sensitive. Do these in order — the e-Arrival Card window opens exactly 72 h before landing; do not complete it earlier or it expires.</p><p><b>Now — before Jul 7</b><br/>Book the <b>KTX Seoul→Daejeon</b> (Jul 11, morning departure ≈08:00–10:00) and <b>Daejeon→Seoul return</b> (Jul 12, evening ≈19:00–21:00) at <a href='https://www.korail.com/global/eng'>korail.com</a> or the KorailTalk app — Finals weekend trains fill fast. Book a <b>Daejeon hotel near DCC II</b> (Expo/Yuseong-gu): LOTTE City Hotel Daejeon (33 Expo-ro 123beon-gil, ≈3 min walk to Expo Park) or Hotel Onoma Daejeon Marriott (92 Oncheon-ro) are the closest options. Book the <b>Changdeokgung Secret Garden</b> timed tour for Tue Jul 14 at <a href='https://ticket.changdeokgung.go.kr'>ticket.changdeokgung.go.kr</a>. Install the <b>NOL World app</b> and confirm MSI tickets open (mobile-only — no screenshots, no prints).</p><p><b>Jul 5 (Sun) — 3 days before</b><br/>Start the jet lag clock: go to bed <b>1 hour earlier</b> than normal tonight, wake 1 hour earlier. Get 15–20 min of bright outdoor light within 30 min of waking. Dim screens after 20:00. Take 0.5–1 mg melatonin ~5 h before your new (earlier) bedtime. Stock Pokémon GO: Max Revives, Ultra Balls, Golden Razz, Silver Pinaps, Charged TMs. Build and save raid teams for Mega Mewtwo X (Flying/Fairy) and Y (Ghost/Dark).</p><p><b>Jul 6 (Mon) — 2 days before</b><br/>Jet lag: go to bed <b>2 hours earlier</b>. Same morning light + evening dim + melatonin protocol. Clear Pokémon storage to 400+ (transfer/release before the trip).</p><p><b>Jul 7 (Tue) — 1 day before</b><br/>Complete the <b>e-Arrival Card</b> at <a href='https://www.e-arrivalcard.go.kr'>e-arrivalcard.go.kr</a> (free, 5 min; this window opens ≈17:30 EDT Jul 6 / ≈06:30 KST Jul 7 — i.e., 72 h before your ~05:30 KST Jul 9 landing). Save the QR code to your camera roll offline. Jet lag: bedtime <b>3 hours earlier</b> if possible. No caffeine after 12:00. Charge all battery packs and GO Plus/Gotcha. Pack: flip-flops (for jimjilbang), compact umbrella, quick-dry layers, insoles.</p><p><b>Jul 8 (Wed) — departure night</b><br/>Depart <b>Newark Liberty Airport (EWR) — not JFK</b>. Air Premia flight YP132. K-ETA is waived for US citizens through Dec 31 2026 (no action needed). Check your booking confirmation for the EWR terminal. Check-in opens ~6 h before departure (≈19:30 Jul 7 EDT). Arrive at EWR by 23:00 at the latest for a smooth international process.</p>",
+      "checklist": [
+        "KTX Jul 11 Seoul → Daejeon booked — korail.com or KorailTalk",
+        "KTX Jul 12 Daejeon → Seoul (evening return) booked",
+        "Daejeon hotel near DCC II (Expo/Yuseong-gu) booked",
+        "Changdeokgung Secret Garden tour Jul 14 reserved",
+        "e-Arrival Card completed at e-arrivalcard.go.kr — QR saved offline",
+        "MSI tickets loaded and tested in NOL World app (no screenshots)",
+        "GO Fest teams pre-built; Pokémon storage cleared to 400+",
+        "Departure airport confirmed: Newark Liberty EWR — not JFK"
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Jet lag protocol — EWR to Seoul (13-hour eastward shift)",
+      "body": "<p>A 13-hour eastward shift is near worst-case for jet lag. Natural adaptation: ~1 hour per day = 13 days to fully adjust. With this protocol: 4–5 days. Three tools: timed light exposure, melatonin, and sleep scheduling. Sources: Frontiers in Physiology (2019), PMC1249488/PMC1262683, CDC Yellow Book Travel Health, Huberman Lab.</p><p><b>Pre-flight (Jul 5–7):</b> Shift bedtime 1 hour earlier each night (see Pre-flight countdown above). Each morning get bright outdoor light within 15–30 min of waking — this is the strongest phase-advance signal available. Dim screens after 20:00 each evening (blocks the delay signals fighting your advance). Take <b>0.5–1 mg melatonin approximately 5 hours before your shifted bedtime</b> — timing is critical; at this point melatonin produces maximum clock advance. Taking it too late works against you.</p><p><b>On the flight (01:30+ EDT Jul 8):</b> Sleep is the goal. Eye mask and earplugs on immediately. Keep window shade closed — the polar route crosses near-continuous daylight at altitude. No alcohol: it suppresses REM and fragments sleep. No caffeine from boarding onward. Drink ~250 ml water per hour (cabin humidity is under 20%). Take 0.5–1 mg melatonin shortly after takeoff (~02:00 EDT / 15:00 KST) — this is early evening Seoul time and the correct phase-advance window. When breakfast service begins near landing, eat it: meal timing anchors your metabolic clock to Seoul rhythms.</p><p><b>Day 1 in Seoul (Jul 9 landing):</b> Your internal clock says ~17:00 EDT (early evening New York). <b>Do not nap on arrival</b> — a full sleep cycle now locks you to NY time for days. Get outside within 1 hour of reaching your room: even 15–20 min of outdoor morning light (07:00–10:00 KST) is your strongest circadian anchor. Caffeine: use it in the morning and early afternoon only — <b>hard cutoff at 14:00 KST</b>. Stay active; don't sit still. <b>Avoid bright outdoor light 17:00–19:00 KST</b> for the first 2 days — on your NY body clock this is just-after-sunrise, and light here delays rather than advances your clock. Jimjilbang visit 17:00–21:00 (see Day 1 itinerary): the heat-then-cooling cycle triggers the temperature drop that signals sleep onset — one of the best jet-lag recovery tools available. Target bedtime: <b>22:00–22:30 KST</b>. Take 0.5–1 mg melatonin at 21:00 KST. Repeat nightly for 4–5 nights.</p>",
+      "checklist": [
+        "Jul 5: Bedtime 1h earlier, morning outdoor light within 30 min of waking, dim evenings, melatonin 5h before new bedtime",
+        "Jul 6: Bedtime 2h earlier — same protocol",
+        "Jul 7: Bedtime 3h earlier; no caffeine after 12:00",
+        "On flight: eye mask on, no alcohol, water every hour, melatonin at ~02:00 EDT, eat Seoul-time breakfast near landing",
+        "Jul 9 AM: Outside for light by 09:00 KST — no nap over 30 min, caffeine cut off at 14:00 KST",
+        "Jul 9 PM: Jimjilbang 17:00–21:00 KST, melatonin 0.5–1 mg at 21:00, bed by 22:30",
+        "Jul 10–13: Morning outdoor light daily; avoid light 17:00–19:00 KST first 2 days; melatonin 21:00 nightly"
       ]
     },
     {
@@ -161,12 +193,12 @@
       "group": "Getting around",
       "title": "Key transit routes",
       "steps": [
-        "<b>Incheon → Seoul:</b> the <b>AREX</b> express to Seoul Station (~43 min) or all-stop (~58 min); or an airport <b>limousine bus</b> straight to your district. Grab a <b>T-money card</b> at the airport. <b>Asiana Airlines uses Terminal 2</b> (moved January 2026) — the AREX T2 stop is one stop before Terminal 1.",
-        "<b>Around Seoul from Myeongdong (Line 4):</b> subway signed in English — tap T-money in and out; use <b>Kakao T</b> for taxis. Line 4 reaches most of the city without a transfer. Key hops: <b>Gwangjang Market</b> → change to Line 1 at Dongdaemun H&amp;C Park (~10 min), <b>Yongsan / HYBE / LoL Park</b> (~5–10 min south on Line 4), <b>Hongdae</b> → Seoul Station then Line 2 (~20 min).",
-        "<b>Seoul → Daejeon (Jul 11):</b> <b>KTX</b> from Seoul Station, ~50 min — book on the <b>Korail</b> app (or take the SRT from Suseo). Frequent departures.",
-        "<b>Daejeon Station → arena:</b> the <b>Daejeon Convention Center II</b> sits in the Expo area of Yuseong-gu, ~20–30 min by taxi or bus from Daejeon Station — staying near the venue lets you walk in.",
-        "<b>Back to Seoul (Jul 12):</b> KTX again, ~50 min — <b>book the Sunday-evening return in advance</b>, it fills up after the final.",
-        "<b>Seoul → Incheon (Jul 15):</b> AREX or limousine bus; allow ~3 hours before an international flight."
+        "<b>Incheon → Seoul:</b> Air Premia arrives at <b>Terminal 1</b> — the AREX station is inside T1. Take the <b>AREX All-Stop</b> to Seoul Station (≈59 min, ≈₩5,350) — practical choice at 06:00 KST; the Express (≈43 min, ≈₩13,000) requires a reservation and isn't worth the premium at that hour. At Seoul Station, board <b>Line 4</b> — Myeongdong is <b>2 stops</b> (≈5 min). Total airport → door: ~70 min.",
+        "<b>Around Seoul from Myeongdong (Line 4):</b> subway signed in English — tap T-money in and out; use <b>Kakao T</b> for taxis. Line 4 reaches most of the city without a transfer. Key hops: <b>Gwangjang Market</b> → change to Line 1 at Dongdaemun H&amp;C Park (~10 min), <b>Yongsan / HYBE / LoL Park</b> (~5–10 min south on Line 4), <b>Hongdae</b> → Seoul Station then Line 2 (~20 min). <b>SPAREX Dongdaemun jimjilbang</b> → 2 stops to Dongdaemun H&amp;C Park Station, Exit 14 (~8 min).",
+        "<b>Seoul → Daejeon (Jul 11):</b> <b>KTX</b> from <b>Seoul Station</b> (not Suseo/SRT), ~50 min — book on the <b>Korail</b> app or korail.com. Take a train in the 15:00–15:30 KST window on Jul 11 to reach Daejeon by ≈16:10 before the 17:00 LBF.",
+        "<b>Daejeon Station → DCC II:</b> From Daejeon Station, take <b>Metro Line 1</b> toward Banseok to <b>Government Complex Station (정부청사역)</b>, then <b>bus 705 or 707</b> to the Daejeon Convention Center stop. Total: ≈40 min. Taxi from Daejeon Station is ≈20–30 min and ≈₩15,000–20,000 KRW — faster if budget allows. DCC II address: 87 Expo-ro, Yuseong-gu, Daejeon.",
+        "<b>Back to Seoul (Jul 12):</b> KTX from Daejeon Station, ~50 min — <b>book the evening return in advance</b> (≈19:00–21:00 departure to handle a long Grand Final). Fills up after the match.",
+        "<b>Seoul → Incheon (Jul 15):</b> AREX All-Stop from Myeongdong (2 stops to Seoul Station then AREX T1); allow ~3 hours before an international flight."
       ]
     },
     {
@@ -186,79 +218,93 @@
       "items": [
         {
           "date": "Wed Jul 8",
-          "title": "Arrival in Seoul",
-          "pace": "Arrival day · ICN → Seoul ~60–90 min (AREX + subway/taxi) · easy evening",
-          "note": "After a long flight, keep it light — a neighbourhood dinner and an early night.",
-          "body": "<p><em>The first impression of Seoul: humid air, neon signs, and the subway working exactly as promised.</em></p><p>Land, clear immigration (e-Arrival Card already done), ride the AREX to Seoul Station and Line 4 one stop to Myeongdong. Check in, then dinner: <b>Goobne Chicken</b> has a branch near Myeongdong (original or garlic, ≈₩22,000–28,000 for a whole chicken — verify current price) — eat, then rest. The first night is for recovering, not covering ground.</p>",
-          "fit": "Light, breathable clothes — July is hot and humid.",
+          "title": "Flight — depart Newark (EWR) at 01:30 EDT",
+          "pace": "Travel day · depart EWR 01:30 EDT · ~15 hrs in the air · land ICN Terminal 1 ~05:30–06:30 KST Jul 9",
+          "note": "The jet lag protocol in the Plan section covers exactly what to do on this flight. Follow it.",
+          "body": "<p><em>A night flight across the Pacific — the trip starts in the dark and ends with a Korean sunrise.</em></p><p>Air Premia flight YP132 departs <b>Newark Liberty (EWR)</b> at 01:30 EDT. The flight is approximately 14–15 hours; you land at ICN Terminal 1 at approximately 05:30–06:30 KST on Thursday Jul 9.</p><p><b>On the plane:</b> Eye mask and earplugs as soon as you're settled. No alcohol. Drink water every hour (~250 ml). Take 0.5–1 mg melatonin at approximately 02:00 EDT (~15:00 KST) — this is early afternoon Seoul time and the right phase-advance window. Sleep as much as possible; keep window shades closed (the polar route has near-continuous daylight). When breakfast service comes near landing (Seoul morning KST), eat it.</p><p><b>Airport logistics:</b> Your e-Arrival Card QR is saved offline (done Jul 7). On landing: follow signs to immigration, scan QR at the automated gate, pick up a T-money card in arrivals, and take the AREX All-Stop to Seoul Station (~59 min) then Line 4 two stops to Myeongdong (~5 min). Full steps in the 'When you land' checklist.</p>",
+          "fit": "Compression socks; something easy to sleep in on the plane.",
           "checklist": [
-            "e-Arrival Card confirmed before the flight",
-            "T-money card bought + loaded",
-            "TravelPass switched on"
+            "e-Arrival Card QR saved offline (done Jul 7)",
+            "Melatonin packed in carry-on (0.5–1 mg for ~02:00 EDT)",
+            "Battery pack and all devices fully charged",
+            "Eye mask and earplugs in carry-on",
+            "Depart EWR — not JFK"
           ]
         },
         {
           "date": "Thu Jul 9",
-          "title": "Palaces & old Seoul",
-          "pace": "Full day · Gyeongbokgung ~2 hr · Bukchon ~1.5 hr · Insadong ~1.5 hr · lots of walking",
-          "note": "Heat and humidity are the real workload — water, shade breaks, an iced-coffee stop.",
-          "body": "<p><em>Fifteen minutes on the subway and you're six hundred years back — grand palaces, stone lanes, and a neighbourhood that still feels lived-in.</em></p><p>Gyeongbokgung in the morning (time it for the changing of the guard — typically 10:00 and 14:00, but <b>⚠ verify the current schedule</b> as specific ceremonies are sometimes suspended); free entry if you rent a hanbok at the gate. Then uphill into Bukchon Hanok Village — quiet voices, real residents — and wind down with tea and crafts in Insadong.</p>",
-          "fit": "Breathable layers; an umbrella doubles for sun and sudden rain.",
+          "title": "Arrive Seoul — light, bathhouse, early night",
+          "pace": "Arrival day · ICN T1 → Myeongdong ≈70 min · outdoor light by 09:00 · jimjilbang 17:00–21:00 · bed by 22:30",
+          "note": "The most important day of the trip for jet lag. Follow the protocol exactly — especially the bedtime.",
+          "body": "<p><em>After 15 hours in the air, Seoul delivers exactly what exhausted travellers need: a city that works perfectly at 6 a.m.</em></p><p>Land at ICN Terminal 1 (~05:30–06:30 KST). Scan e-Arrival Card QR at immigration. Pick up T-money card. AREX All-Stop to Seoul Station (≈59 min), then Line 4 two stops to Myeongdong (≈5 min). Check in — early check-in is arranged. Shower, change, and <b>do not sleep.</b></p><p><b>Jet lag: get outside within 1 hour of arrival.</b> Walk through Myeongdong's morning market stalls (they start early), grab a coffee, anything that gets you into daylight before 10:00 KST. This 15–20 min of outdoor morning light is the single strongest signal to anchor your clock to Seoul time. Stay active through the day — don't sit still.</p><p><b>Afternoon (17:00–21:00): SPAREX Dongdaemun jimjilbang.</b> From Myeongdong Station, take Line 4 two stops east to <b>Dongdaemun History &amp; Culture Park Station (Exit 14)</b> — B3F of Goodmorning City building. 24-hour facility; entry ≈₩12,000–15,000 pp (verify at desk). The process: pay, receive wristband + uniform (shorts/T-shirt for the co-ed communal floor); men's bath section is separate and fully nude — shower before any pool. Rotate through heated rooms (황토방 clay room, 소금방 salt room) with cooling breaks; rest on mats in the communal area. Exit by 21:00. The heat-then-cooling cycle triggers the temperature drop that is one of the most effective signals for sleep onset — ideal jet lag timing.</p><p><b>⚠ Tattoo policy:</b> Call SPAREX Dongdaemun ahead if relevant (+82-2 area, check Klook/KKday listing for the direct number). Bring flip-flops; towels provided.</p><p>Dinner: <b>Goobne Chicken</b> near Myeongdong (whole chicken, ≈₩22,000–28,000 — verify current price). Melatonin 0.5–1 mg at 21:00 KST. <b>In bed by 22:30 KST.</b> This is the most important sleep of the entire trip.</p><p><b>⚠ Road of Legends</b> (Pokémon GO pre-event, Jul 6–10): the event is live when you land. Skip raiding today — save the energy for tomorrow and GO Fest weekend.</p>",
+          "fit": "Light, breathable clothes. Flip-flops in your bag for the jimjilbang.",
           "checklist": [
-            "Gyeongbokgung is open today (closed Tue)",
-            "Free entry if you rent a hanbok",
-            "Respect Bukchon's quiet hours"
+            "T-money card bought + loaded at ICN arrivals",
+            "TravelPass switched on (text TRAVEL to 4004)",
+            "Do NOT nap over 30 min — jet lag protocol",
+            "Outdoor light before 10:00 KST",
+            "SPAREX Dongdaemun: arrive ≈17:00, exit by 21:00 (Dongdaemun H&C Park Station, Exit 14)",
+            "Melatonin 0.5–1 mg at 21:00 KST",
+            "In bed by 22:30 KST"
           ]
         },
         {
           "date": "Fri Jul 10",
-          "title": "Namsan Tower → Myeongdong street food → Hongdae after dark",
-          "pace": "~6 hr out · Namsan / tower ~2 hr · Myeongdong street food (base) · Hongdae evening",
-          "note": "Take the cable car or bus up Namsan rather than the stairs in this heat. Myeongdong is your home base — the street stalls here are genuinely good value even if the area is busy.",
-          "body": "Walk or bus up to Namsan cable-car base from Myeongdong (15 min), ride up to N Seoul Tower for the city view. Back down to grab street food and do an Olive Young run in Myeongdong (you're sleeping here, so there's no rush). Then Hongdae after dark: Line 4 to Seoul Station, change Line 2 to Hongik Univ. (~20 min) — buskers, arcades, anime shops and late-night eats.",
-          "fit": "Comfortable shoes for hills and a lot of standing.",
+          "title": "Palaces & old Seoul",
+          "pace": "Full day · Gyeongbokgung ~2 hr · Bukchon ~1.5 hr · Insadong ~1.5 hr · lots of walking",
+          "note": "Heat and humidity are the real workload — water, shade breaks, an iced-coffee stop. Your body clock is 1–2 days adjusted at this point.",
+          "body": "<p><em>Fifteen minutes on the subway and you're six hundred years back — grand palaces, stone lanes, and a neighbourhood that still feels lived-in.</em></p><p>Gyeongbokgung in the morning (time it for the changing of the guard — typically 10:00 and 14:00, but <b>⚠ verify the current schedule</b> as specific ceremonies are sometimes suspended); free entry if you rent a hanbok at the gate. Then uphill into Bukchon Hanok Village — quiet voices, real residents — and wind down with tea and crafts in Insadong.</p><p><b>🎮 Road of Legends ends tonight (Jul 10, ~20:00 KST).</b> Spin Gyeongbokgung and Bukchon PokéStops during your visit for any bonus items. If you want to grab a quick raid before the event ends, the Gyeongbokgung area has active gyms.</p>",
+          "fit": "Breathable layers; umbrella doubles for sun and sudden rain.",
           "checklist": [
-            "Cable car or bus up Namsan — don't hike in July heat",
-            "Olive Young run in Myeongdong",
-            "PC bang or arcade in Hongdae"
+            "Gyeongbokgung open today (closed Tue)",
+            "Free entry if you rent a hanbok",
+            "Respect Bukchon's quiet hours — it's a residential neighbourhood",
+            "Road of Legends ends tonight — spin stops during the visit"
           ]
         },
         {
           "date": "Sat Jul 11",
-          "title": "MSI in Daejeon — Lower Bracket Final",
-          "pace": "Travel + match day · KTX ~50 min · arena ~20–30 min from Daejeon Station",
-          "note": "Leave Seoul with a buffer and reach the arena early for security and merch lines.",
-          "body": "<p>KTX to Daejeon, then taxi or transit to Daejeon Convention Center II for the Lower Bracket Final. Stay near the venue tonight — and try Sungsimdang, Daejeon's legendary bakery (fried soboro bread, queue moves fast).</p><p><b>🎮 GO Fest Global starts today (Jul 11–12, worldwide).</b> Raids are live everywhere — raid before you catch the KTX in the morning, then the <b>EXPO Science Park area around DCC II</b> has open plazas and PokéStops you can spin during any pre-match window. Priority bosses are in the raids section.</p>",
+          "title": "GO Fest Day 1 in Seoul → KTX → MSI Lower Bracket Final",
+          "pace": "GO Fest 10:00–15:00 Seoul · KTX ≈15:30 · DCC II via metro+bus ~40 min · LBF 17:00 KST",
+          "note": "Leave Seoul by 15:00 to reach DCC II before the 17:00 start. That gives 5 hours of GO Fest raiding in Seoul.",
+          "body": "<p><em>The biggest weekend begins — GO Fest raids from the morning, then KTX south to the world stage.</em></p><p><b>🎮 GO Fest Global Day 1 — Seoul window (10:00–15:00 KST):</b><br/>Raids go live at 10:00 KST. You have ~5 hours before you must leave for Seoul Station.</p><p><b>Saturday habitat rotation (5-star + Mega raids rotate hourly):</b><br/><b>Stormfire Peaks 10:00–13:00:</b> Lugia, Ho-Oh, Raikou, Entei, Suicune, Articuno, Zapdos, Moltres in 5-star rotation. Mega Blaziken, Mega Ampharos, Mega Abomasnow as Mega bosses.<br/><b>Astral Tides 13:00–16:00 (you'll leave mid-window):</b> Giratina (Origin), Dialga, Palkia, Xerneas, Yveltal, Uxie/Mesprit/Azelf in 5-star rotation. Mega Alakazam, Mega Gengar, Mega Swampert.<br/><b>Dragonflight Summit 16:00–19:00:</b> You'll be on the KTX.</p><p><b>Top priority all day: Mega Mewtwo X</b> (Super Mega tier, Saturday-only, global Pokémon GO debut). 9 free Raid Passes are available — spin Gym discs. Use 3–5 passes on Mega Mewtwo X raids; use remaining passes on Stormfire (Lugia/Ho-Oh for Candy XL) and Astral Tides (Giratina Origin, Dialga — top Master League picks).</p><p><b>📍 15:00 KST: leave for Seoul Station.</b> Line 4 south, 2 stops (~5 min). Take a KTX departing 15:00–15:30 toward Daejeon (≈50 min → Daejeon Station ≈16:10–16:20).</p><p><b>Daejeon Station → DCC II:</b> Take <b>Metro Line 1</b> (direction Banseok) to <b>Government Complex Station (정부청사역)</b>, then bus <b>705 or 707</b> to the Daejeon Convention Center stop. Total: ≈40 min. Taxi is ≈20–30 min, ≈₩15,000–20,000 KRW — faster if you have time pressure. Leave by 16:10 to arrive at DCC with buffer for security.</p><p><b>🏟 MSI Lower Bracket Final, 17:00 KST.</b> Arrive early for security and the merch queue. Passport on you — MSI tickets are <b>mobile-only via the NOL World app</b> (no screenshots, no prints, no transfers). Match is best-of-5; budget 3–5 hours.</p><p><b>EXPO Science Park</b> (near DCC II) has active PokéStops and gyms — if you arrive with time before the match, you can spin and raid in the plaza.</p><p>After the match: <b>Sungsimdang Expo branch</b> (107 Expo-ro, ≈08:00–21:00) for fried soboro bread if it's not too late, or <b>Ossi Kalguksu Doryong</b> (knife-cut noodles, ≈0.2 mi from DCC II) for a post-match dinner. Hotel check-in tonight.</p>",
           "fit": "Team colours, plus a layer for fierce arena air-conditioning.",
           "checklist": [
-            "KTX booked (Korail app)",
-            "MSI tickets / mobile entry ready",
-            "Hotel near DCC II booked"
+            "KTX booked — Seoul Station depart 15:00–15:30 KST",
+            "MSI NOL World app ticket loaded on your phone",
+            "Passport on you (tied to NOL World ticketing)",
+            "9 free Raid Passes today — spin Gym discs",
+            "GO Fest priority: Mega Mewtwo X first (Saturday Super Mega only)",
+            "Battery packs fully charged before leaving the hotel"
           ]
         },
         {
           "date": "Sun Jul 12",
-          "title": "MSI Grand Final → back to Seoul",
-          "pace": "Match day · Grand Final · KTX back ~50 min in the evening",
-          "note": "Book the return KTX ahead — Sunday-evening trains fill up after the final.",
-          "body": "<p><em>The biggest match of the season — and GO Fest day 2 running alongside it.</em></p><p>The MSI 2026 Grand Final at DCC II. After the final, KTX back to Seoul — book the Sunday evening return in advance, it fills up fast. Celebrate with chimaek.</p><p><b>🎮 GO Fest day 2.</b> GO Fest Global ends at <b>7:00 p.m. local time</b> — raid before and between matches, not after. The EXPO Science Park is walkable from DCC II and should have active PokéStops during the day. If the final runs late into the evening, GO Fest will already be over.</p>",
-          "fit": "Same as yesterday; easy for travelling.",
+          "title": "GO Fest Day 2 in Daejeon → MSI Grand Final → back to Seoul",
+          "pace": "GO Fest 10:00–14:30 Daejeon · Grand Final 15:00 KST · KTX back ≈20:00",
+          "note": "Book the evening return KTX ahead — trains fill fast after the Grand Final.",
+          "body": "<p><em>The day the season ends — and GO Fest's final hours run alongside it.</em></p><p><b>🎮 GO Fest Global Day 2 — Daejeon window (10:00–14:30 KST):</b><br/>You're already in the Expo/Yuseong district. The EXPO Science Park plazas and streets around DCC II have PokéStops and gyms — raid from your hotel area and while walking to breakfast.</p><p><b>Sunday habitat rotation:</b><br/><b>Earthforged Domain 10:00–13:00:</b> Regieleki, Regidrago, Forces of Nature (Tornadus/Thundurus/Landorus in both Incarnate and Therian formes), Enamorus, Origin Dialga, Origin Palkia, Regigigas, Heatran in 5-star rotation. Mega Metagross, Mega Garchomp, Mega Audino as Mega bosses.<br/><b>Verdant Anomaly 13:00–16:00 (you'll leave at ≈14:30):</b> Deoxys (all 4 formes), Genesect (all 5 drives), Ultra Beasts, Nihilego, and Tapu quartet. <b>In Korea (Asia-Pacific): Xurkitree appears as the regional Ultra Beast</b> — strong Electric attacker. Mega Beedrill, Mega Pinsir, Mega Sceptile.<br/><b>Twilight Battlefield 16:00–19:00:</b> Darkrai and Zacian are the headline 5-stars, but you'll be watching the Grand Final.</p><p><b>Top priority all day: Mega Mewtwo Y</b> (Super Mega tier, Sunday-only, global debut). Pure Psychic — more counters available than X. Use your first morning passes here; chase shiny early before the match.<br/>Secondary targets: Deoxys (Attack forme, Verdant Anomaly 13:00+) for PvP Glass Cannon; Xurkitree (Korea-exclusive Ultra Beast) for Electric attacker; Nihilego for Great/Ultra League PvP.</p><p><b>⚠ Conflict note:</b> Grand Final starts at <b>15:00 KST</b> (best-of-5, likely ends 18:00–20:30). GO Fest ends at <b>19:00 KST</b>. Darkrai and Zacian (Twilight Battlefield, 16:00–19:00) may still be available during match breaks — you'll have mobile signal inside the arena. If the Grand Final runs to game 5, GO Fest will end during the match. Shadow Palkia runs in Shadow Raids through Aug 4 — not locked to GO Fest weekend.</p><p><b>🏟 MSI Grand Final, 15:00 KST.</b> Head to DCC II by 14:15. NOL World mobile ticket required.</p><p><b>Return to Seoul:</b> After the match, taxi or metro back to Daejeon Station. Take the evening KTX you booked in advance (≈19:00–21:00 departure, ~50 min → Seoul Station). Celebrate with chimaek — Chicken Baengi in Hongdae, or wherever the night takes you.</p>",
+          "fit": "Same as yesterday; comfortable for travelling back.",
           "checklist": [
-            "Return KTX booked",
-            "Checked out of the Daejeon hotel",
-            "Phones and battery packs charged"
+            "Return KTX booked (Daejeon → Seoul, ≈19:00–21:00 departure)",
+            "Check out of the Daejeon hotel by 12:00 (leave bags at concierge)",
+            "Phones and battery packs charged the night before",
+            "GO Fest priority: Mega Mewtwo Y first (Sunday Super Mega only), then Xurkitree",
+            "Darkrai and Zacian in Twilight Battlefield 16:00–19:00 — raid if match allows"
           ]
         },
         {
           "date": "Mon Jul 13",
-          "title": "Markets, design & Gangnam",
-          "pace": "Full day, flexible · Gwangjang ~1.5 hr · DDP ~1 hr · Gangnam / COEX ~3 hr",
-          "note": "Stack the indoor, air-conditioned stops (DDP, COEX) through the midday heat.",
-          "body": "Graze Gwangjang Market (bindaetteok, mayak gimbap), see the swooping Dongdaemun Design Plaza, then Gangnam — COEX's Starfield Library, the aquarium and SMTOWN.",
-          "fit": "Light clothes; you'll be in and out of AC all day.",
+          "title": "Namsan view, Gwangjang market & Dongdaemun",
+          "pace": "Full day · Gwangjang ~1.5 hr · Namsan/N Seoul Tower ~2 hr · DDP evening",
+          "note": "Stack Namsan in the mid-morning before the heat peaks. Stack air-conditioned stops (DDP) for the hottest part of the afternoon.",
+          "body": "<p><em>A market breakfast, a city view, and the city's best light-up architecture after dark.</em></p><p><b>Morning:</b> Gwangjang Market (광장시장) for bindaetteok, mayak gimbap, and market atmosphere — it's quieter on a Monday than weekends. From Myeongdong: Line 4 → Dongdaemun H&amp;C Park → Line 1 one stop to Jongno-5-ga (Exit 7–8), ≈10 min. Vendors open from 09:00; cash only at most stalls.</p><p><b>Midday:</b> Namsan and <b>N Seoul Tower</b>. From Myeongdong, walk or bus 15 min to the Namsan cable-car base, ride up for the city view. Do this before 13:00 — by midday the haze builds and the July heat is fierce on the exposed observation deck. Cable car up and down, view, then back down to Myeongdong for lunch.</p><p><b>Afternoon–evening:</b> <b>Dongdaemun Design Plaza (DDP)</b> for Zaha Hadid's curvature after dark — it's best at night when the LED rose field and building lights are on. Design shops and exhibitions during the day. The surrounding Dongdaemun shopping streets stay open until midnight for any last-minute purchases.</p>",
+          "fit": "Light clothes; layers for AC-heavy interiors.",
           "checklist": [
-            "Cash for market stalls",
-            "Changdeokgung is closed today — saved for tomorrow"
+            "Cash for Gwangjang market stalls",
+            "Cable car or bus up Namsan — don't hike in July heat",
+            "DDP after dark for the full light effect",
+            "Changdeokgung is closed today (Monday) — tomorrow's slot"
           ]
         },
         {
@@ -382,7 +428,7 @@
       "type": "prose",
       "group": "Daejeon & MSI",
       "title": "Getting to the arena",
-      "body": "<p>From Seoul Station, the <b>KTX reaches Daejeon in about 50 minutes</b>, with frequent departures (book on the Korail app; the SRT from Suseo is an alternative). The arena sits in the <b>Expo area of Yuseong-gu</b>, about 20–30 minutes by taxi or bus from Daejeon Station — so staying near the venue lets you walk in and skip the post-match scramble. While you're there, <b>Sungsimdang</b> is a Daejeon institution worth the queue (try the fried soboro and chive breads), with EXPO Science Park and Hanbat Arboretum nearby for daytime air.</p>"
+      "body": "<p>From Seoul Station, the <b>KTX reaches Daejeon in about 50 minutes</b> (book on the Korail app or korail.com; use <b>Seoul Station</b>, not Suseo/SRT). The arena — <b>Daejeon Convention Center II (DCC II), 87 Expo-ro, Yuseong-gu</b> — is about <b>40 minutes from Daejeon Station</b> via Metro Line 1 to Government Complex Station (정부청사역) then bus 705 or 707 to the DCC stop. Taxi is ≈20–30 min if budget allows. Staying near the venue (Expo/Yuseong district) means you can walk in and skip the post-match scramble. While you're there, <b>Sungsimdang Expo branch</b> (107 Expo-ro) is Daejeon's legendary bakery — fried soboro and chive breads; queue moves fast. EXPO Science Park is adjacent to DCC II with open plazas, PokéStops, and gyms — useful for GO Fest raiding windows between matches.</p>"
     },
     {
       "type": "map",
@@ -453,7 +499,7 @@
       "type": "prose",
       "group": "GO Fest Global",
       "title": "GO Fest Global 2026 — what to know",
-      "body": "<p>Pokémon GO Fest 2026: Global runs <b>Saturday Jul 11 and Sunday Jul 12, 10:00 a.m.–7:00 p.m. local time</b> — which is exactly your MSI weekend in Daejeon, so you'll be raiding between matches. This year's event is <b>completely free for all trainers</b> (no ticket purchase needed); everyone gets the same bonuses including Special Research leading to a <b>Zeraora</b> debut encounter.</p><ul><li><b>Free for everyone:</b> up to 9 free Raid Passes per day (spin Gym discs), increased shiny rates, 6 Special Trades per day, 1/2 Stardust trade cost, open 50 Gifts daily, Special Research (Zeraora encounter, non-expiring), Branching Timed Research (choose Mega Mewtwo X or Y)</li><li><b>Raid pass note:</b> 9 free passes per day = you can hit 18 raids across the weekend without spending PokéCoins. Save remote passes for the Seoul days before/after (Jul 9–10, 13–14) when you're not at the arena.</li><li><b>Raid rotation:</b> 5-star and Mega bosses rotate hourly by habitat on both days — see the counter charts below for Saturday's and Sunday's lineups.</li><li><b>Mega Mewtwo debut:</b> Mega Mewtwo X appears Saturday, Mega Mewtwo Y on Sunday — first appearances in Pokémon GO. Both are Super Mega tier; plan your best teams in advance.</li></ul>"
+      "body": "<p>Pokémon GO Fest 2026: Global runs <b>Saturday Jul 11 and Sunday Jul 12, 10:00 a.m.–7:00 p.m. local time</b> worldwide — not location-gated. This year's event is <b>completely free for all trainers</b> (no ticket purchase or payment needed). Everyone gets: Special Research leading to <b>Zeraora</b> (Mythical, Electric-type — first appearance in Pokémon GO; research does not expire), Branching Timed Research (choose Mega Mewtwo X or Y path), and all event bonuses below.</p><p><b>Bonuses active 10:00–19:00 KST both days:</b> up to 9 free Raid Passes per day from Gym discs, boosted Shiny encounter rates (historically ~1/20 for all legendaries and Super Mega bosses), lure modules last 1 hour, Incense-exclusive spawns (Unown, Tropius, Bouffalant), Party Play active, type-themed Field Research refreshes hourly with each habitat.</p><p><b>Bonuses active all day both days (00:00–23:59):</b> up to 6 Special Trades per day (normally 1), 50% reduced Stardust cost on all trades, open 50 Gifts per day.</p><p><b>Raid rotation — habitats cycle every 3 hours:</b><br/><b>Saturday:</b> Stormfire Peaks (10:00–13:00) → Astral Tides (13:00–16:00) → Dragonflight Summit (16:00–19:00)<br/><b>Sunday:</b> Earthforged Domain (10:00–13:00) → Verdant Anomaly (13:00–16:00) → Twilight Battlefield (16:00–19:00)<br/>See counter charts below for the full boss list per habitat.</p><p><b>Mega Mewtwo debut (Super Mega tier):</b> Mega Mewtwo X on Saturday, Mega Mewtwo Y on Sunday — first appearances in Pokémon GO. Both have shiny available. Mewtwo caught from Mega X raids knows <b>Counter</b> (fast); Mewtwo from Mega Y raids knows <b>Psystrike</b> (charged). Build teams in advance — see counter charts.</p><p><b>Shadow Palkia</b> is in Shadow Raids every weekend Jul 1–Aug 4 (including GO Fest weekend). Shiny available.</p><p><b>Road of Legends pre-event (Jul 6–10):</b> You land Jul 9 and catch the last 2 days of this pre-event. Features Pokémon Background collectibles from raids and GO Pass rewards (Lucky Trinkets, Gold Bottle Caps, bonus XP/candy). Spin stops on Jul 9 arrival day and Jul 10 palaces day to collect.</p><p><b>Ultra Unlock (from Jul 13):</b> Niantic confirmed post-GO Fest Ultra Unlock content starting Jul 13, details to be announced after the global challenge is complete during the event weekend. Check pokemongo.com after Jul 12.</p><ul><li><b>Raid pass strategy:</b> 9 free passes per day = 18 raids across the weekend without spending PokéCoins. Saturday: use in Seoul (10:00–15:00 KST) and at EXPO Science Park near DCC II. Sunday: use in Daejeon (10:00–14:30 KST) before the Grand Final.</li><li><b>Remote passes:</b> Save for Jul 9–10 and Jul 13–14 Seoul days when you're not at the arena.</li></ul>"
     },
     {
       "type": "panel",
@@ -478,7 +524,7 @@
       "type": "prose",
       "group": "GO Fest Global",
       "title": "Priority targets — which raids to spend passes on",
-      "body": "<p>With 9 free passes per day, be selective. Ranked by shiny rarity + meta/Candy XL value:</p><ul><li><b>Tier 1 — must-do:</b> <b>Mega Mewtwo X</b> (Saturday Super Mega) and <b>Mega Mewtwo Y</b> (Sunday Super Mega) — global debut, shiny available, best-in-class meta picks. Use your best passes here; 3–5 encounters each to chase shiny + Candy XL.</li><li><b>Tier 2 — high value:</b> Rayquaza (5-star, Sat 4–7 PM), Kyogre (5-star, Sat 4–7 PM), Giratina Origin (5-star, Sat 1–4 PM), Darkrai (5-star, Sun 4–7 PM), Zacian (5-star, Sun 4–7 PM) — high Candy XL utility or strong PvP/PvE meta. Shiny at 1/20.</li><li><b>Tier 3 — targeted:</b> Any legendary you're missing shiny; ultra beasts (Nihilego, Xurkitree for PvP); Regieleki/Regidrago if you need the Regigigas power-up candy.</li><li><b>Skip or deprioritise:</b> Bosses you already have shiny and maxed; save passes for the ones that matter to your Pokédex.</li><li><b>Shiny odds:</b> All legendary 5-star and Super Mega raid encounters are <b>1/20</b> — the best in the game. Every encounter counts.</li></ul>"
+      "body": "<p>With 9 free passes per day and a strict MSI schedule, be selective. All legendary 5-star and Super Mega encounters have <b>1/20 shiny odds</b> — the best in the game. Every encounter counts.</p><ul><li><b>Tier 1 — must-do first:</b> <b>Mega Mewtwo X</b> (Sat Super Mega, all day) and <b>Mega Mewtwo Y</b> (Sun Super Mega, all day) — global debut, shiny available, best-in-class meta picks, exclusive moves. 3–5 encounters each to chase shiny + Candy XL before spending passes elsewhere.</li><li><b>Tier 2 — high value by habitat window:</b><br/>Saturday Stormfire 10–13: <b>Lugia, Ho-Oh</b> (top Master League, Candy XL priority). <b>Raikou, Entei, Suicune</b> if missing shiny.<br/>Saturday Astral Tides 13–16: <b>Giratina Origin</b> (top ML pick), <b>Dialga</b> (top ML pick — shiny not yet available, still worth Candy XL).<br/>Saturday Dragonflight 16–19: <b>Rayquaza</b> (high Candy XL), <b>Kyogre</b> (top Water attacker) — but you'll be on the KTX by 15:30, so this window is missed. Use remote passes on these if available.<br/>Sunday Earthforged 10–13: <b>Regieleki, Regidrago</b> (unique typing, Candy XL); Forces of Nature Therian formes for Candy XL.<br/>Sunday Verdant Anomaly 13–16: <b>Deoxys Attack</b> (top Glass Cannon PvE), <b>Xurkitree</b> (Korea regional Ultra Beast, strong Electric), <b>Nihilego</b> (top GL/UL PvP).<br/>Sunday Twilight Battlefield 16–19: <b>Darkrai</b> (strong PvE + PvP), <b>Zacian</b> (top ML) — you'll be in the Grand Final arena; raid on breaks.</li><li><b>Tier 3 — targeted if passes remain:</b> Any legendary you're missing shiny; Tapu quartet (Verdant Anomaly, strong PvP Fairy); Shadow Palkia (Shadow Raids all weekend, separate from GO Fest rotation).</li><li><b>Skip or deprioritise:</b> Bosses you already have shiny and maxed. Save passes for debuting or missing meta picks.</li></ul>"
     },
     {
       "type": "raids",
@@ -626,7 +672,7 @@
       "type": "prose",
       "group": "References",
       "title": "Sources & links — verified for this guide",
-      "body": "<p><b>Entry &amp; documents</b><br/><a href='https://www.krentry.go.kr'>Korea e-Arrival Card — official site (krentry.go.kr)</a> — complete within 72 h of arrival; ignore third-party fee sites.<br/><a href='https://flyasiana.com/C/KR/EN/customer/notice/detail?id=CM202509300002526502'>Asiana Airlines Terminal 2 move (Jan 14 2026) — official notice</a><br/><a href='https://www.korail.com'>Korail — KTX tickets (korail.com)</a></p><p><b>Events</b><br/><a href='https://pokemongo.com/en/gofest/global'>Pokémon GO Fest 2026: Global — official page</a><br/><a href='https://leekduck.com/events/pokemon-go-fest-2026-global/'>Leek Duck — GO Fest Global 2026 raid schedule &amp; boss lists</a><br/><a href='https://www.pokebattler.com'>Pokébattler — raid counter rankings</a><br/><a href='https://lolesports.com'>LoL Esports — MSI 2026 schedule &amp; results</a></p><p><b>Transit &amp; maps</b><br/><a href='https://www.letskorail.com'>Korail booking (English)</a><br/>KakaoMap and Naver Map apps — use in preference to Google Maps for in-Korea navigation.</p><p><b>Food &amp; venues</b><br/><a href='https://creatrip.com/en/blog/4457'>Creatrip — AYCE KBBQ in Hongdae (prices &amp; coupons)</a><br/><a href='https://www.sulbing.com'>Sulbing official site — bingsu menu &amp; prices</a><br/><a href='https://yookssam.com'>Yookssam Naengmyeon — official site (verify hours)</a><br/><a href='https://english.visitseoul.net/shopping/gwangjang-market_/287'>Gwangjang Market — Visit Seoul official page</a></p><p><b>Shopping &amp; attractions</b><br/><a href='https://locations.musinsa.com/en/stndhd'>Musinsa Standard Hongdae — official location page</a><br/><a href='https://www.gentlemonster.com/kr/en/stores'>Gentle Monster — store locator</a><br/><a href='https://hybeinsight.com'>HYBE Insight — official booking site</a><br/><a href='https://english.visitseoul.net/entertainment/LoL%20Park_/50659'>LoL Park — Visit Seoul official page</a><br/><a href='https://www.animate.co.jp/en/shop/hongdae/'>Animate Korea Hongdae — official store page</a></p><p><b>General Korea travel</b><br/><a href='https://english.visitkorea.or.kr'>VisitKorea — official tourism portal</a><br/><a href='https://english.visitseoul.net'>Visit Seoul — official Seoul travel guide</a></p>"
+      "body": "<p><b>Entry &amp; documents</b><br/><a href='https://www.e-arrivalcard.go.kr'>Korea e-Arrival Card — official site (e-arrivalcard.go.kr)</a> — complete within 72 h of arrival; free; ignore third-party fee sites.<br/>K-ETA waiver for US citizens through Dec 31 2026 — source: <a href='https://www.korvia.com/korea-e-arrival-card-guide-how-to-complete-it-before-your-flight'>Korvia e-Arrival Card guide</a><br/><a href='https://www.korail.com/global/eng'>Korail English booking — KTX tickets</a></p><p><b>Flight &amp; transit</b><br/><a href='https://info.flightmapper.net/flight/Air_Premia_YP_132'>Air Premia YP132 schedule (FlightMapper)</a> — EWR→ICN, Terminal 1 at ICN<br/><a href='https://www.chadorri.com/en/travel-en/korea/arex-train-timetable/'>AREX timetable including first train (05:14 T1 All-Stop)</a><br/><a href='https://www.theseoulguide.com/airport-railroad-arex-all-stop-train/'>AREX All-Stop guide — The Seoul Guide</a></p><p><b>Events</b><br/><a href='https://pokemongo.com/en/gofest/global'>Pokémon GO Fest 2026: Global — official page</a><br/><a href='https://leekduck.com/events/pokemon-go-fest-2026-global/'>Leek Duck — GO Fest Global 2026 raid schedule &amp; boss lists</a><br/><a href='https://pokemongo.com/news/road-of-legends-2026'>Road of Legends 2026 — official Niantic page</a><br/><a href='https://www.pokebattler.com'>Pokébattler — raid counter rankings</a><br/><a href='https://liquipedia.net/leagueoflegends/Mid-Season_Invitational/2026'>MSI 2026 — Liquipedia schedule</a><br/><a href='https://world.nol.com/en/ticket/places/26000383/products/26005887'>MSI Grand Final tickets — NOL World</a><br/><a href='https://world.nol.com/en/ticket/places/26000383/products/26005886'>MSI Lower Bracket Final tickets — NOL World</a><br/><a href='https://www.dcckorea.or.kr/eng/index.do'>Daejeon Convention Center II — official site</a></p><p><b>Jimjilbang</b><br/><a href='https://www.klook.com/en-US/activity/133675-seoul-dongdaemun-sparex-jjimjilbang-sauna-admission-ticket/'>SPAREX Dongdaemun — Klook ticket (B3F Goodmorning City, Dongdaemun H&amp;C Park Exit 14)</a> — 24 h, ≈₩12,000–15,000 pp</p><p><b>Jet lag sources</b><br/><a href='https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2019.00927/full'>Frontiers in Physiology (2019) — interventions for eastward jet lag</a><br/><a href='https://pmc.ncbi.nlm.nih.gov/articles/PMC1249488/'>PMC1249488 — advancing circadian rhythms before eastward flight</a><br/><a href='https://pmc.ncbi.nlm.nih.gov/articles/PMC1262683/'>PMC1262683 — 3 days of advancing sleep before eastward travel</a><br/><a href='https://wwwnc.cdc.gov/travel/yellowbook/2024/air-land-sea/jet-lag'>CDC Yellow Book — jet lag disorder</a><br/><a href='https://www.hubermanlab.com/newsletter/defeat-jet-lag'>Huberman Lab — defeat jet lag protocol</a></p><p><b>Food &amp; venues</b><br/><a href='https://creatrip.com/en/blog/4457'>Creatrip — AYCE KBBQ in Hongdae (prices &amp; coupons)</a><br/><a href='https://www.sulbing.com'>Sulbing official site — bingsu menu &amp; prices</a><br/><a href='https://yookssam.com'>Yookssam Naengmyeon — official site (verify hours)</a><br/><a href='https://english.visitseoul.net/shopping/gwangjang-market_/287'>Gwangjang Market — Visit Seoul official page</a></p><p><b>Shopping &amp; attractions</b><br/><a href='https://locations.musinsa.com/en/stndhd'>Musinsa Standard Hongdae — official location page</a><br/><a href='https://www.gentlemonster.com/kr/en/stores'>Gentle Monster — store locator</a><br/><a href='https://hybeinsight.com'>HYBE Insight — official booking site</a><br/><a href='https://english.visitseoul.net/entertainment/LoL%20Park_/50659'>LoL Park — Visit Seoul official page</a><br/><a href='https://www.animate.co.jp/en/shop/hongdae/'>Animate Korea Hongdae — official store page</a></p><p><b>General Korea travel</b><br/><a href='https://english.visitkorea.or.kr'>VisitKorea — official tourism portal</a><br/><a href='https://english.visitseoul.net'>Visit Seoul — official Seoul travel guide</a></p>"
     }
   ],
   "verified": "✓ Verified June 2026 — reconfirm prices & hours before you go"
