@@ -74,6 +74,7 @@ const destTz = DEST_TZ[guide.country] ?? null;
           navigation and interactive widgets and renders a clean document.
         -->
         <button id="btnPrint" class="topbar-btn" aria-label="Save as PDF" title="Save as PDF / Print">⬇ PDF</button>
+        <button id="btnShare" class="topbar-btn" aria-label="Share this guide" title="Share this guide">↗ Share</button>
         <!--
           Dark-mode toggle — icon and aria-label are updated by JS.
           ◑ = currently light → click to go dark
@@ -82,6 +83,30 @@ const destTz = DEST_TZ[guide.country] ?? null;
         <button id="btnDark" class="topbar-btn" aria-label="Switch to dark mode" title="Switch to dark mode">◑</button>
       </div>
     </nav>
+
+    <!-- Share modal — hidden until btnShare is clicked; skipped by Web Share API on mobile -->
+    <div class="share-backdrop" id="shareBackdrop" aria-hidden="true"></div>
+    <div class="share-modal" id="shareModal" role="dialog" aria-modal="true" aria-label="Share this guide" hidden>
+      <p class="share-head">
+        Share this guide
+        <button class="share-close" id="shareClose" type="button" aria-label="Close">✕</button>
+      </p>
+      <div class="share-qr-wrap"><div id="shareQr"></div></div>
+      <div class="share-url-row">
+        <span class="share-url-txt" id="shareUrlTxt" title="Guide URL"></span>
+        <button class="share-copy-btn" id="shareCopyBtn" type="button">Copy link</button>
+      </div>
+      <div class="share-socials">
+        <a class="share-soc" id="shareWA" href="#" target="_blank" rel="noopener noreferrer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96s-.47-.15-.66.15-.76.96-.93 1.16-.34.22-.64.07a8.06 8.06 0 0 1-2.37-1.46 8.9 8.9 0 0 1-1.64-2.04c-.17-.3 0-.46.13-.6s.3-.35.44-.52a2 2 0 0 0 .3-.5.55.55 0 0 0-.03-.52c-.07-.15-.66-1.6-.91-2.19-.24-.57-.48-.49-.66-.5h-.57a1.1 1.1 0 0 0-.8.37 3.36 3.36 0 0 0-1.05 2.5 5.84 5.84 0 0 0 1.22 3.1c.15.2 2.1 3.2 5.08 4.49a17.1 17.1 0 0 0 1.7.63 4.1 4.1 0 0 0 1.87.12 3.08 3.08 0 0 0 2.02-1.43 2.5 2.5 0 0 0 .17-1.43c-.07-.13-.26-.2-.56-.35M12 2a10 10 0 0 0-8.67 14.97L2 22l5.18-1.36A10 10 0 1 0 12 2"/></svg>
+          WhatsApp
+        </a>
+        <a class="share-soc" id="shareEmail" href="#">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          Email
+        </a>
+      </div>
+    </div>
 
     <!-- ═══════════════════════════════════════════════════════════════════════
          MASTHEAD
@@ -579,6 +604,155 @@ const destTz = DEST_TZ[guide.country] ?? null;
 
         } catch (err) { console.error("guide enhancement error:", err); }
       })();
+
+      /* ── SHARE PANEL ──────────────────────────────────────────────────── */
+      (function () {
+        var shareBtn      = document.getElementById("btnShare");
+        var shareModal    = document.getElementById("shareModal");
+        var shareBackdrop = document.getElementById("shareBackdrop");
+        var shareUrlTxt   = document.getElementById("shareUrlTxt");
+        var shareCopyBtn  = document.getElementById("shareCopyBtn");
+        var shareWALink   = document.getElementById("shareWA");
+        var shareEmailLink = document.getElementById("shareEmail");
+        var shareCloseBtn = document.getElementById("shareClose");
+        var shareQrEl     = document.getElementById("shareQr");
+        if (!shareBtn || !shareModal) return;
+
+        var pageUrl      = window.location.href;
+        var pageTitle    = document.title;
+        var qrGenerated  = false;
+        var qrLibLoaded  = false;
+
+        function loadQRLib(cb) {
+          if (qrLibLoaded || window.QRCode) { qrLibLoaded = true; cb(); return; }
+          var s = document.createElement("script");
+          s.src = "https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js";
+          s.onload = function () { qrLibLoaded = true; cb(); };
+          s.onerror = function () { cb(); };
+          document.head.appendChild(s);
+        }
+
+        function openShare() {
+          if (navigator.share) {
+            navigator.share({ title: pageTitle, url: pageUrl }).catch(function () {});
+            return;
+          }
+          shareModal.removeAttribute("hidden");
+          shareBackdrop.classList.add("open");
+          document.body.classList.add("sheet-lock");
+          if (shareUrlTxt) shareUrlTxt.textContent = pageUrl;
+          if (shareWALink)   shareWALink.href   = "https://wa.me/?text=" + encodeURIComponent(pageUrl);
+          if (shareEmailLink) shareEmailLink.href = "mailto:?subject=" + encodeURIComponent(pageTitle) + "&body=" + encodeURIComponent(pageUrl);
+          if (shareQrEl && !qrGenerated) {
+            loadQRLib(function () {
+              if (!window.QRCode) return;
+              var dark = document.documentElement.getAttribute("data-theme") === "dark";
+              try {
+                new window.QRCode(shareQrEl, {
+                  text: pageUrl, width: 148, height: 148,
+                  colorDark:  dark ? "#ede5d4" : "#211e1a",
+                  colorLight: dark ? "#27211a" : "#ffffff",
+                  correctLevel: window.QRCode.CorrectLevel.M
+                });
+                qrGenerated = true;
+              } catch (e) { /* QR lib unavailable */ }
+            });
+          }
+          shareBtn && shareBtn.setAttribute("aria-expanded", "true");
+        }
+
+        function closeShare() {
+          shareModal.setAttribute("hidden", "");
+          shareBackdrop.classList.remove("open");
+          document.body.classList.remove("sheet-lock");
+          shareBtn && shareBtn.setAttribute("aria-expanded", "false");
+          shareBtn && shareBtn.focus();
+        }
+
+        shareBtn.addEventListener("click", openShare);
+        if (shareCloseBtn)  shareCloseBtn.addEventListener("click", closeShare);
+        if (shareBackdrop)  shareBackdrop.addEventListener("click", closeShare);
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && !shareModal.hasAttribute("hidden")) closeShare();
+        });
+
+        if (shareCopyBtn) {
+          shareCopyBtn.addEventListener("click", function () {
+            var btn = shareCopyBtn;
+            function flash() { btn.textContent = "Copied!"; setTimeout(function () { btn.textContent = "Copy link"; }, 2200); }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(pageUrl).then(flash).catch(function () { fallbackCopy(); });
+            } else { fallbackCopy(); }
+            function fallbackCopy() {
+              var ta = document.createElement("textarea");
+              ta.value = pageUrl;
+              ta.style.cssText = "position:fixed;opacity:0;top:0;left:0;width:1px;height:1px";
+              document.body.appendChild(ta);
+              ta.focus(); ta.select();
+              try { document.execCommand("copy"); flash(); } catch (e) {}
+              document.body.removeChild(ta);
+            }
+          });
+        }
+      })();
+
+      /* ── BUDGET PER-PERSON TOGGLE ─────────────────────────────────────── */
+      document.querySelectorAll(".budget-toggle").forEach(function (tog) {
+        var bud = tog.closest(".budget");
+        if (!bud) return;
+        var btns  = tog.querySelectorAll(".btog-btn");
+        var party = parseInt(bud.getAttribute("data-party") || "1", 10);
+        var cur   = bud.getAttribute("data-cur") || "$";
+
+        function fmt(n) { return cur + Math.round(n).toLocaleString("en-US"); }
+
+        function applyMode(mode) {
+          btns.forEach(function (b) {
+            b.classList.toggle("btog-active", b.getAttribute("data-mode") === mode);
+          });
+
+          bud.querySelectorAll(".brow[data-key]").forEach(function (row) {
+            var valEl = row.querySelector(".best-val");
+            var ranEl = row.querySelector(".brange");
+            if (!valEl) return;
+            var tv = parseFloat(row.getAttribute("data-trip")    || "0");
+            var pv = parseFloat(row.getAttribute("data-person")  || "0");
+            var tl = row.getAttribute("data-trip-lo");
+            var th = row.getAttribute("data-trip-hi");
+            var pl = row.getAttribute("data-pp-lo");
+            var ph = row.getAttribute("data-pp-hi");
+            valEl.textContent = fmt(mode === "person" ? pv : tv);
+            if (ranEl) {
+              var lo = mode === "person" ? pl : tl;
+              var hi = mode === "person" ? ph : th;
+              if (lo !== "" && hi !== "" && lo !== null && hi !== null) {
+                ranEl.textContent = cur + Math.round(parseFloat(lo)).toLocaleString("en-US") +
+                  "–" + cur + Math.round(parseFloat(hi)).toLocaleString("en-US");
+              }
+            }
+          });
+
+          bud.querySelectorAll(".bsubtotal").forEach(function (row) {
+            var el = row.querySelector(".bsub-est");
+            if (!el) return;
+            var t = parseFloat(row.getAttribute("data-sub-trip")   || "0");
+            var p = parseFloat(row.getAttribute("data-sub-person") || "0");
+            el.textContent = fmt(mode === "person" ? p : t);
+          });
+
+          var totEl = bud.querySelector(".best-total");
+          if (totEl) {
+            var t = parseFloat(totEl.getAttribute("data-trip-total") || "0");
+            var p = parseFloat(totEl.getAttribute("data-pp-total")   || "0");
+            totEl.textContent = fmt(mode === "person" ? p : t);
+          }
+        }
+
+        btns.forEach(function (b) {
+          b.addEventListener("click", function () { applyMode(b.getAttribute("data-mode") || "total"); });
+        });
+      });
+
     </script>
 
   </body>

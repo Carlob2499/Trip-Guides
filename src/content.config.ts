@@ -34,10 +34,15 @@ const section = z.discriminatedUnion("type", [
   })) }),
   z.object({ type: z.literal("budget"), group: z.string(), title: z.string().optional(),
     intro: z.string().optional(), currency: z.string().optional(), days: z.number().optional(),
+    party: z.number().optional(),       // number of people sharing group costs (default 1)
     items: z.array(z.object({
       label: z.string(),
       basis: z.enum(["day", "trip"]),   // per-day cost (× days) or a one-off trip cost
-      est: z.number(),                  // estimate in the guide's currency
+      est: z.number(),                  // midpoint estimate in the guide's currency
+      low:  z.number().optional(),      // low-end estimate (same basis as est)
+      high: z.number().optional(),      // high-end estimate (same basis as est)
+      category: z.string().optional(),  // groups items under a labelled category header
+      per: z.enum(["person", "group"]).optional(), // "group" ÷ party in per-person view
       note: z.string().optional(),
     })) }),
   // raids — structured raid boss counter tables; replaces hand-written HTML in prose bodies.

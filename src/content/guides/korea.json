@@ -98,7 +98,7 @@
       "type": "panel",
       "group": "Plan",
       "title": "Weather & comfort",
-      "body": "<p>Early-to-mid July is Korea's <b>monsoon season (jangma)</b> — hot, very humid, with heavy rain spells. Pack a compact umbrella and quick-dry clothes, hydrate hard, and build in air-conditioned breaks (malls, cafés, museums). For heavier feet and heel pain, use a <b>firm, structured</b> insole with a <b>deep heel cup</b> and a weight rating (Powerstep Pinnacle Maxx, Tread Labs Pace, Superfeet, or VALSOLE / Walkomfy), plus moisture-wicking socks. Break them in before the trip.</p>"
+      "body": "<p>Early-to-mid July is Korea's <b>monsoon season (jangma)</b> — hot (30–35 °C / 86–95 °F), very humid, and rainy. Gear up accordingly:</p><ul><li><b>Pack a compact umbrella</b> — heavy rain can hit without warning and briefly flood low streets or cause metro delays. Check the morning forecast.</li><li><b>Moisture-wicking, quick-dry clothes</b> — linen or synthetic shirts, not cotton. Cotton stays wet all day in high humidity. One change of shirt per day minimum.</li><li><b>Hydrate constantly</b> — convenience stores have cold water and sports drinks every 200m; use them. Heat exhaustion is a real risk by day 3 if you're walking all day.</li><li><b>Build in AC breaks</b> every 2 hours: a café, a mall (Lotte Young Plaza, Shinsegae, Coex), or a museum. These are free and essential, not optional.</li><li><b>Weather app:</b> use <b>WeatherKorea</b> or the KMA official app (kma.go.kr) — Korean meteorological forecasts are more accurate than international apps for localised monsoon patterns.</li></ul>"
     },
     {
       "type": "panel",
@@ -110,7 +110,7 @@
       "type": "panel",
       "group": "Money & budget",
       "title": "Money & currency",
-      "body": "<p>Korea uses the <b>won (₩)</b>. The won is weak right now, which helps your spending power — roughly (approximate, check before you go): <b>₩1,000 ≈ $0.67</b> and <b>₩10,000 ≈ $6.70</b>, at about ₩1,500 to the dollar.</p><p>Cards and contactless work almost everywhere, but keep some cash for market stalls and small eateries. A <b>T-money</b> card covers subway and buses. Tipping isn't expected.</p>"
+      "body": "<p>Korea uses the <b>won (₩)</b>. The won is weak right now, which helps your spending power — roughly (approximate, <a href=\"https://www.google.com/search?q=KRW+USD+exchange+rate\" target=\"_blank\" rel=\"noopener noreferrer\">check before you go</a>): <b>₩1,000 ≈ $0.67</b> and <b>₩10,000 ≈ $6.70</b>, at about ₩1,500 to the dollar.</p><p>Cards and contactless work almost everywhere. For cash, the most reliable option is an <b>ATM inside a GS25 or CU convenience store</b> — both accept most foreign cards and charge modest fees. <b>Global ATM Alliance banks</b> (KEB Hana is the Korean partner) have lower or zero foreign withdrawal fees if your home bank is in the network — check before you leave. Avoid airport exchange booths; the rates are poor. Keep ≈₩30,000–50,000 cash for markets and small eateries. A <b>T-money</b> card covers all subway and buses. Tipping isn't expected anywhere.</p>"
     },
     {
       "type": "budget",
@@ -118,55 +118,181 @@
       "title": "Budget & daily costs",
       "currency": "$",
       "days": 7,
-      "intro": "Rough <b>per-person</b> estimates in USD — Korea is good value, and the weak won (about ₩1,500 to the dollar) stretches your money further. Tap a field to log what you actually spend; the running total updates live and saves on this device. Treat the estimates as starting points and confirm as you book.",
+      "party": 3,
+      "intro": "Estimates in <b>USD per person</b> — toggle to see trip-total or per-person view. Items marked <b>group</b> are split three ways. Log what you actually spend; your running total saves on this device. Treat all figures as ≈ and confirm as you book. Rate check: ₩1,500 ≈ $1.",
       "items": [
         {
-          "label": "Lodging — Myeongdong Airbnb, per night (per room)",
-          "basis": "day",
-          "est": 90,
-          "note": "Split across the room — good value with three of you. Myeongdong is central and Line 4 connects everything. You keep it through the 2 Daejeon nights too (so those nights overlap with the Daejeon hotel cost) — the upside is you leave most of your luggage in Seoul and travel light to MSI."
+          "label": "Seoul Airbnb — Myeongdong, 7 nights",
+          "basis": "trip",
+          "est": 630,
+          "low": 480,
+          "high": 750,
+          "category": "Accommodation",
+          "per": "group",
+          "note": "Kept all 7 nights — luggage stays in Seoul while you're in Daejeon. ≈$90/night per room. Split three ways = ≈$210/person."
         },
         {
-          "label": "Food & coffee, per day",
-          "basis": "day",
-          "est": 40,
-          "note": "Street food and casual spots are cheap; chain coffee ~$1.50."
+          "label": "Daejeon I-Hotel — 2 nights (Jul 11–12)",
+          "basis": "trip",
+          "est": 160,
+          "low": 140,
+          "high": 200,
+          "category": "Accommodation",
+          "per": "group",
+          "note": "Booked. 27-5 Expo-ro 123beon-gil, 2-min walk from DCC II. Log your actual cost — split three ways = ≈$53/person."
         },
         {
-          "label": "Local transport, per day",
+          "label": "Meals per day",
+          "basis": "day",
+          "est": 32,
+          "low": 12,
+          "high": 55,
+          "category": "Food & drinks",
+          "note": "Low = convenience-store day (triangle gimbap + cup noodles ≈₩7,000). High = sit-down AYCE BBQ with drinks. Most days land ₩25,000–40,000 ($17–27) for 3 meals."
+        },
+        {
+          "label": "Drinks & alcohol per day",
           "basis": "day",
           "est": 10,
-          "note": "Subway rides are under ~$1.10 on a T-money card."
+          "low": 0,
+          "high": 25,
+          "category": "Food & drinks",
+          "note": "Soju ≈₩1,500 at a convenience store; ≈₩4,000–6,000 at a restaurant. BBQ nights will push this higher. Skip if you're not drinking: $0."
         },
         {
-          "label": "Sights & entries, per day",
+          "label": "Seoul subway (T-money) per day",
           "basis": "day",
-          "est": 15,
-          "note": "Palaces are a few dollars; lots is free."
+          "est": 5,
+          "low": 3,
+          "high": 10,
+          "category": "Transport",
+          "note": "≈₩1,350/ride on T-money. A sightseeing day is 4–6 rides (~₩7,000). Late Hongdae nights add 2 more."
+        },
+        {
+          "label": "Taxis (whole trip total)",
+          "basis": "trip",
+          "est": 12,
+          "low": 3,
+          "high": 35,
+          "category": "Transport",
+          "note": "Base fare ₩4,800. Key rides: Daejeon Station → I-Hotel (≈₩10,000 total, ≈₩3,300/person split 3). Budget 3–5 rides total — late-night Hongdae is the most likely use."
+        },
+        {
+          "label": "AREX inbound + outbound",
+          "basis": "trip",
+          "est": 11,
+          "low": 11,
+          "high": 26,
+          "category": "Transport",
+          "note": "All-Stop: ≈₩5,350 each way per person (59 min). The Express (≈₩13,000, 43 min) is not worth it — skip it."
+        },
+        {
+          "label": "KTX Seoul ↔ Daejeon — return",
+          "basis": "trip",
+          "est": 30,
+          "low": 24,
+          "high": 46,
+          "category": "Transport",
+          "note": "≈₩18,000–23,000 each way. Book early on the Korail app — Finals-weekend trains fill up. ≈50 min each way."
+        },
+        {
+          "label": "Gyeongbokgung palace",
+          "basis": "trip",
+          "est": 2,
+          "low": 0,
+          "high": 3,
+          "category": "Activities & entries",
+          "note": "₩3,000 adult (≈$2). Free if you arrive wearing a hanbok — hanbok rental ≈₩15,000–25,000/hour near the north gate."
+        },
+        {
+          "label": "Changdeokgung + Huwon (Secret Garden)",
+          "basis": "trip",
+          "est": 6,
+          "low": 6,
+          "high": 6,
+          "category": "Activities & entries",
+          "note": "₩3,000 palace + ₩5,000 Huwon tour = ₩8,000/person (≈$5.40). English Huwon tours at 10:15 — book online in advance (50 slots)."
+        },
+        {
+          "label": "N Seoul Tower observatory",
+          "basis": "trip",
+          "est": 13,
+          "low": 12,
+          "high": 20,
+          "category": "Activities & entries",
+          "note": "Buy online: ≈₩18,400 (≈$12) vs ₩29,000 at the gate (≈$19). Namsan cable car ≈₩9,000 round-trip if you don't walk up (very hot in July)."
+        },
+        {
+          "label": "Namsan cable car (round-trip)",
+          "basis": "trip",
+          "est": 6,
+          "low": 1,
+          "high": 7,
+          "category": "Activities & entries",
+          "note": "≈₩9,000 RT per person (≈$6). Low = Bus 03 from Chungmuro Station (₩1,350) if you want to save. In July heat, the cable car is worth it for the descent."
+        },
+        {
+          "label": "SPAREX Dongdaemun jimjilbang",
+          "basis": "trip",
+          "est": 11,
+          "low": 9,
+          "high": 14,
+          "category": "Activities & entries",
+          "note": "≈₩12,000–15,000/person. Entry includes locker + shorts + robe. Plan for Day 1 (Jul 9) jet-lag recovery: check in ~17:00, leave ~21:00."
         },
         {
           "label": "Flights — round trip (your fare)",
           "basis": "trip",
           "est": 1200,
-          "note": "NYC↔ICN runs roughly $1,000–1,400 by date."
+          "low": 1000,
+          "high": 1400,
+          "category": "Flights & events",
+          "note": "Air Premia EWR↔ICN. Enter the actual price you paid."
         },
         {
-          "label": "MSI weekend tickets (already booked)",
+          "label": "MSI tickets (LBF + Grand Final) — already bought",
           "basis": "trip",
           "est": 0,
-          "note": "You've got the LBF + Grand Final — log what you paid."
+          "low": 0,
+          "high": 0,
+          "category": "Flights & events",
+          "note": "Log what you actually paid for both days. Tickets are tied to your name — bring photo ID."
         },
         {
-          "label": "KTX Seoul↔Daejeon — return",
+          "label": "PC bang sessions (whole trip)",
           "basis": "trip",
-          "est": 32,
-          "note": "₩18,000–32,000 each way, ~50 min; book on the Korail app."
+          "est": 5,
+          "low": 2,
+          "high": 15,
+          "category": "Experiences",
+          "note": "≈₩1,000–2,000/hour. Budget 3–6 hours total across the trip. Hongdae has good options open 24 hours."
         },
         {
-          "label": "Daejeon I-Hotel — 2 nights (Jul 11 & 12)",
+          "label": "Norebang — 1 session",
           "basis": "trip",
-          "est": 160,
-          "note": "Booked — 27-5 Expo-ro 123beon-gil, a 2-min walk from DCC II. Log what you actually paid; the second night means no Sunday-evening dash back to Seoul."
+          "est": 8,
+          "low": 5,
+          "high": 14,
+          "category": "Experiences",
+          "note": "≈₩15,000–25,000/hour for a group room, split 3 ways = ≈₩5,000–8,300/person (≈$3.30–5.50). Best on Tuesday Jul 14 evening in Hongdae."
+        },
+        {
+          "label": "Pokémon GO in-app items",
+          "basis": "trip",
+          "est": 10,
+          "low": 0,
+          "high": 35,
+          "category": "Experiences",
+          "note": "9 free Raid Passes/day during GO Fest covers most raiding. Optional: Charged TMs (≈₩1,100), Star Pieces, Remote Raid Passes. Can easily be $0."
+        },
+        {
+          "label": "Souvenirs, K-beauty & shopping",
+          "basis": "trip",
+          "est": 60,
+          "low": 20,
+          "high": 300,
+          "category": "Shopping",
+          "note": "Highly variable. Olive Young (K-beauty), Hongdae streetwear, Yongsan electronics, Insadong crafts. Claim VAT refund (10%) on purchases over ₩15,000 at the airport before check-in."
         }
       ]
     },
@@ -186,7 +312,7 @@
       "type": "panel",
       "group": "Etiquette & language",
       "title": "Etiquette & language",
-      "body": "<p>Korean is the language; signs, the subway, and major sights are bilingual. For translation, use <b>Papago</b> — it's far more accurate than Google Translate for menus and signs. <b>Google Maps barely works for directions in Korea</b> — use <b>KakaoMap</b> or <b>Naver Map</b>.</p><ul><li><b>Bowing:</b> a slight nod works as hello, thank you, or goodbye — don't overthink it.</li><li><b>Two-handed exchange:</b> give and receive cards, cash, or items with both hands (or right hand with the left touching your forearm) — it signals respect.</li><li><b>No tipping, anywhere.</b> Genuinely none — attempting it can create awkwardness. The price on the menu is what you pay.</li><li><b>Chopstick etiquette:</b> don't stand them upright in rice (funeral association); rest them on the holder when you're not using them.</li><li><b>Pouring drinks:</b> pour for others at the table; let them pour for you. Don't self-pour at a shared meal.</li><li><b>Shoes off:</b> watch for a raised floor at traditional floor-seating restaurants — it's obvious when you see it.</li><li><b>Volume:</b> keep it quiet indoors, especially on transit.</li></ul><p><b>Key phrases</b> (Hangul + romanisation):</p><ul><li>안녕하세요 — <i>annyeonghaseyo</i> — hello</li><li>감사합니다 — <i>gamsahamnida</i> — thank you (formal)</li><li>얼마예요? — <i>eolmayeyo?</i> — how much?</li><li>이거 주세요 — <i>igeo juseyo</i> — this one, please</li><li>화장실 어디예요? — <i>hwajangsil eodiyeyo?</i> — where is the bathroom?</li><li>괜찮아요 — <i>gwaenchanayo</i> — it's okay / no problem</li></ul>"
+      "body": "<p>Korean is the language; signs, the subway, and major sights are bilingual. For translation, use <b>Papago</b> — it's far more accurate than Google Translate for menus and signs. <b>Google Maps barely works for directions in Korea</b> — use <b>KakaoMap</b> or <b>Naver Map</b>.</p><ul><li><b>Bowing:</b> a slight nod works as hello, thank you, or goodbye — don't overthink it.</li><li><b>Two-handed exchange:</b> give and receive cards, cash, or items with both hands (or right hand with the left touching your forearm) — it signals respect.</li><li><b>No tipping, anywhere.</b> Genuinely none — attempting it can create awkwardness. The price on the menu is what you pay.</li><li><b>Chopstick etiquette:</b> don't stand them upright in rice (funeral association); rest them on the holder when you're not using them.</li><li><b>Pouring drinks:</b> pour for others at the table; let them pour for you. Don't self-pour at a shared meal.</li><li><b>Shoes off:</b> watch for a raised floor at traditional floor-seating restaurants — it's obvious when you see it.</li><li><b>Volume:</b> keep it quiet indoors, especially on transit.</li><li><b>Subway rules:</b> no eating or drinking on the metro — even water bottles, technically. <b>Pink seats at the end of every car are priority seats</b> for elderly, disabled, and pregnant passengers — don't sit in them even if the car is empty. You'll notice even young Koreans avoid them. Phones on silent; keep conversations brief and quiet.</li><li><b>Papago offline:</b> before you leave home, open Papago → Languages → Korean → download the offline pack. Camera translation still needs a data signal, but text input works offline — useful in rural Daejeon areas.</li></ul><p><b>Key phrases</b> (Hangul + romanisation):</p><ul><li>안녕하세요 — <i>annyeonghaseyo</i> — hello</li><li>감사합니다 — <i>gamsahamnida</i> — thank you (formal)</li><li>얼마예요? — <i>eolmayeyo?</i> — how much?</li><li>이거 주세요 — <i>igeo juseyo</i> — this one, please</li><li>화장실 어디예요? — <i>hwajangsil eodiyeyo?</i> — where is the bathroom?</li><li>괜찮아요 — <i>gwaenchanayo</i> — it's okay / no problem</li></ul>"
     },
     {
       "type": "prose",

@@ -1,49 +1,152 @@
 ---
 const { sec } = Astro.props;
-const cur   = sec.currency || "$";
-const days  = sec.days || 1;
-const items = sec.items || [];
-const estTotal = items.reduce(
-  (t: number, it: any) => t + (it.basis === "day" ? it.est * days : it.est),
-  0
-);
+const cur   = (sec.currency ?? "$") as string;
+const days  = (sec.days    ?? 1)   as number;
+const party = (sec.party   ?? 1)   as number;
+const items = (sec.items   ?? [])  as Array<{
+  label:     string;
+  basis:     "day" | "trip";
+  est:       number;
+  low?:      number;
+  high?:     number;
+  category?: string;
+  per?:      "person" | "group";
+  note?:     string;
+}>;
+
+// Build ordered category list preserving insertion order
+const catMap = new Map<string, typeof items>();
+for (const it of items) {
+  const c = it.category ?? "";
+  if (!catMap.has(c)) catMap.set(c, []);
+  catMap.get(c)!.push(it);
+}
+
+function tripLine(it: (typeof items)[0]) {
+  return it.basis === "day" ? it.est * days : it.est;
+}
+function tripLow(it: (typeof items)[0]) {
+  return it.low  != null ? (it.basis === "day" ? it.low  * days : it.low)  : null;
+}
+function tripHigh(it: (typeof items)[0]) {
+  return it.high != null ? (it.basis === "day" ? it.high * days : it.high) : null;
+}
+
+const estTotal  = items.reduce((t, it) => t + tripLine(it), 0);
+const lowTotal  = items.reduce((t, it) => { const l = tripLow(it);  return t + (l != null ? l : tripLine(it)); }, 0);
+const highTotal = items.reduce((t, it) => { const h = tripHigh(it); return t + (h != null ? h : tripLine(it)); }, 0);
+const hasRange  = Math.round(lowTotal) !== Math.round(estTotal) || Math.round(highTotal) !== Math.round(estTotal);
 ---
-<div class="budget" data-cur={cur}>
+
+<div class="budget" data-cur={cur} data-party={party}>
   {sec.intro && <p class="budget-intro"><Fragment set:html={sec.intro} /></p>}
+
+  {party > 1 && (
+    <div class="budget-toggle" role="group" aria-label="Cost view">
+      <button class="btog-btn btog-active" data-mode="total" type="button">Trip total</button>
+      <button class="btog-btn" data-mode="person" type="button">
+        Per person <span class="btog-party">(÷&thinsp;{party})</span>
+      </button>
+    </div>
+  )}
+
   <div class="budget-grid">
-    <div class="brow bhead">
+    <div class="brow bhead" aria-hidden="true">
       <span>Item</span>
       <span class="bcol">Estimate</span>
       <span class="bcol">Your spend</span>
     </div>
-    {items.map((it: any) => {
-      const line = it.basis === "day" ? it.est * days : it.est;
+
+    {Array.from(catMap.entries()).map(([cat, catItems]) => {
+      const catEst  = catItems.reduce((t, it) => t + tripLine(it), 0);
+      const catEstPP = Math.round(catEst / party);
       return (
-        <div class="brow" data-key={it.label}>
-          <span class="blabel">
-            {it.label}
-            {it.note && <em class="bnote"><Fragment set:html={it.note} /></em>}
-          </span>
-          <span class="bcol best">
-            {cur}{line.toLocaleString("en-US")}
-            {it.basis === "day" && <small>{cur}{it.est.toLocaleString("en-US")}/day</small>}
-          </span>
-          <span class="bcol">
-            <input class="bactual" type="number" inputmode="decimal"
-              min="0" step="1" placeholder="0"
-              aria-label={"Your spend on " + it.label} />
-          </span>
-        </div>
+        <>
+          {cat && (
+            <div class="brow bcat-head">
+              <span class="bcat-label">{cat}</span>
+            </div>
+          )}
+
+          {catItems.map(it => {
+            const line    = tripLine(it);
+            const linePP  = it.per === "group" ? Math.round(line / party) : line;
+            const lo      = tripLow(it);
+            const hi      = tripHigh(it);
+            const loPP    = lo  != null ? (it.per === "group" ? Math.round(lo  / party) : lo)  : null;
+            const hiPP    = hi  != null ? (it.per === "group" ? Math.round(hi  / party) : hi)  : null;
+            return (
+              <div class="brow"
+                   data-key={it.label}
+                   data-trip={line}
+                   data-person={linePP}
+                   data-trip-lo={lo  ?? ""}
+                   data-trip-hi={hi  ?? ""}
+                   data-pp-lo={loPP  ?? ""}
+                   data-pp-hi={hiPP  ?? ""}>
+                <span class="blabel">
+                  {it.label}
+                  {it.per === "group" && <span class="bpill">group</span>}
+                  {it.note && <em class="bnote"><Fragment set:html={it.note} /></em>}
+                </span>
+                <span class="bcol best">
+                  <span class="best-val">{cur}{line.toLocaleString("en-US")}</span>
+                  {it.basis === "day" && (
+                    <small class="bday-rate">{cur}{it.est.toLocaleString("en-US")}/day</small>
+                  )}
+                  {(lo != null || hi != null) && (
+                    <small class="brange">
+                      {cur}{(lo ?? 0).toLocaleString("en-US")}–{cur}{(hi ?? line).toLocaleString("en-US")}
+                    </small>
+                  )}
+                </span>
+                <span class="bcol">
+                  <input class="bactual" type="number" inputmode="decimal"
+                    min="0" step="1" placeholder="—"
+                    aria-label={"Your spend — " + it.label} />
+                </span>
+              </div>
+            );
+          })}
+
+          {cat && catMap.size > 1 && (
+            <div class="brow bsubtotal"
+                 data-sub-trip={catEst}
+                 data-sub-person={catEstPP}>
+              <span class="blabel bsub-lbl">{cat} subtotal</span>
+              <span class="bcol bsub-est">{cur}{catEst.toLocaleString("en-US")}</span>
+              <span class="bcol bsub-act">&mdash;</span>
+            </div>
+          )}
+        </>
       );
     })}
+
     <div class="brow btotal">
-      <span>Trip total</span>
-      <span class="bcol best-total">{cur}{estTotal.toLocaleString("en-US")}</span>
-      <span class="bcol bact-total">{cur}0</span>
+      <span class="blabel">
+        Trip total
+        {hasRange && (
+          <small class="btot-range">
+            {cur}{Math.round(lowTotal).toLocaleString("en-US")}–{cur}{Math.round(highTotal).toLocaleString("en-US")} range
+          </small>
+        )}
+      </span>
+      <span class="bcol best-total"
+            data-trip-total={estTotal}
+            data-pp-total={Math.round(estTotal / party)}>
+        {cur}{estTotal.toLocaleString("en-US")}
+      </span>
+      <span class="bcol bact-total">&mdash;</span>
     </div>
   </div>
+
   <p class="budget-foot">
-    Estimated over {days} days · figures are approximate — confirm prices as you book,
-    then log what you actually spend. Saved on this device.
+    {party > 1
+      ? <>Figures per person · party of {party} · use toggle for per-person view · </>
+      : <>Figures per person · </>}
+    all estimates ≈ — confirm as you book
+    {cur === "$" && (
+      <> · ₩1,500 ≈ $1 — <a class="brate-link" href="https://www.google.com/search?q=KRW+USD+exchange+rate" target="_blank" rel="noopener noreferrer">check live rate</a></>
+    )}
   </p>
 </div>
