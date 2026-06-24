@@ -15,7 +15,7 @@ const guides = (await getCollection("guides")).sort((a, b) =>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Trip Guides</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300..700&family=Space+Grotesk:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
     <PwaHead />
     <!-- Dark-mode init — runs before paint to avoid flash -->
     <script is:inline>
@@ -32,32 +32,35 @@ const guides = (await getCollection("guides")).sort((a, b) =>
   </head>
   <body>
     <header class="hub-masthead">
-      <!-- Dark-mode toggle — top-right of the home page header -->
       <div class="hub-topbar">
         <button id="btnDark" class="topbar-btn" aria-label="Switch to dark mode" title="Switch to dark mode">◑</button>
       </div>
-      <p class="eyebrow">Field Guides</p>
-      <h1>Trip Guides</h1>
-      <p class="dek">Curated, fact-checked travel guides — built to be calm to read and easy to follow on the move.</p>
+      <div class="hub-rule" aria-hidden="true"></div>
+      <p class="eyebrow">Travel Guides</p>
+      <h1>Waypoint</h1>
+      <p class="dek">Curated, fact-checked guides — built to be calm to read and easy to follow on the move.</p>
+      <p class="hub-count">{guides.length} destinations</p>
     </header>
 
     <main class="hub">
       <div class="hub-grid">
         {guides.map((g) => (
           <a class="hubcard" href={`/guides/${g.id}/`} style={`--accent:${accentFor(g.data.country)}`}>
-            <span class="hubcard-top">
-              <span class="hubcard-dot"></span>
-              <span class="hubcard-country">{g.data.country}</span>
+            <span class="hubcard-bar" aria-hidden="true"></span>
+            <span class="hubcard-body">
+              <span class="hubcard-top">
+                <span class="hubcard-country">{g.data.country}</span>
+              </span>
+              <span class="hubcard-title">{g.data.title}</span>
+              {g.data.dek && <span class="hubcard-dek">{g.data.dek}</span>}
+              <span class="hubcard-go">Open guide →</span>
             </span>
-            <span class="hubcard-title">{g.data.title}</span>
-            {g.data.dek && <span class="hubcard-dek">{g.data.dek}</span>}
-            <span class="hubcard-go">Open guide →</span>
           </a>
         ))}
       </div>
     </main>
 
-    <footer class="hub-foot">Built from the reusable trip-guide template.</footer>
+    <footer class="hub-foot">Waypoint — every fact checked, every route tested.</footer>
 
     <script is:inline>
       (function () {

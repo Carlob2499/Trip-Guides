@@ -22,6 +22,14 @@ const DEST_TZ: Record<string, number> = {
   Netherlands: 2,
 };
 const destTz = DEST_TZ[guide.country] ?? null;
+
+// Compute at-a-glance stats for the masthead stat bar
+function flatSections(secs: any[]): any[] {
+  return secs.flatMap((s: any) => s.sections ? flatSections(s.sections) : [s]);
+}
+const _flat = flatSections(guide.sections || []);
+const dayCount   = _flat.filter((s: any) => s.type === "days"  ).reduce((n: number, s: any) => n + (s.items?.length || 0), 0);
+const sightCount = _flat.filter((s: any) => s.type === "sights").reduce((n: number, s: any) => n + (s.items?.length || 0), 0);
 ---
 <!doctype html>
 <html lang="en" style={`--accent:${accent};--accent2:${accent2}`}>
@@ -34,12 +42,14 @@ const destTz = DEST_TZ[guide.country] ?? null;
     <meta property="og:title"       content={`${guide.title} — Trip Guide`} />
     <meta property="og:description" content={guide.dek || guide.title} />
     <meta property="og:url"         content={Astro.url.href} />
-    <meta name="twitter:card"       content="summary" />
+    <meta property="og:image"       content={`${Astro.url.origin}/og/${Astro.url.pathname.replace(/^\/guides\//,"").replace(/\/$/,"")}.svg`} />
+    <meta name="twitter:card"       content="summary_large_image" />
     <meta name="twitter:title"      content={`${guide.title} — Trip Guide`} />
     <meta name="twitter:description" content={guide.dek || guide.title} />
+    <meta name="twitter:image"      content={`${Astro.url.origin}/og/${Astro.url.pathname.replace(/^\/guides\//,"").replace(/\/$/,"")}.svg`} />
     <link rel="canonical"           href={Astro.url.href} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300..700&family=Space+Grotesk:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
     <PwaHead />
     <!--
       Inline dark-mode init: runs synchronously before first paint so there's
@@ -69,12 +79,11 @@ const destTz = DEST_TZ[guide.country] ?? null;
          ═══════════════════════════════════════════════════════════════════ -->
     <nav class="topbar" aria-label="Site navigation">
       <a href="/" class="topbar-home" aria-label="All guides">
-        <!-- Left-pointing arrow -->
         <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
           <path d="M1 5h12M1 5l4-4M1 5l4 4" stroke="currentColor" stroke-width="1.6"
                 stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        All&nbsp;guides
+        <span class="topbar-wordmark">Waypoint</span>
       </a>
       <div class="topbar-right">
         <!--
@@ -121,10 +130,15 @@ const destTz = DEST_TZ[guide.country] ?? null;
          MASTHEAD
          ═══════════════════════════════════════════════════════════════════ -->
     <header class="masthead" id="top">
-      {guide.kicker  && <p class="eyebrow">{guide.kicker}</p>}
+      <div class="masthead-rule" aria-hidden="true"></div>
+      <p class="eyebrow">{guide.kicker || guide.country}</p>
       <h1>{guide.title}</h1>
-      {guide.dek     && <p class="dek">{guide.dek}</p>}
-      {guide.verified && <p class="verified">{guide.verified}</p>}
+      {guide.dek && <p class="dek">{guide.dek}</p>}
+      <div class="guide-stats">
+        {dayCount   > 0 && <span class="gstat">{dayCount} days</span>}
+        {sightCount > 0 && <span class="gstat">{sightCount} sights</span>}
+        {guide.verified && <span class="gstat gstat-verified">{guide.verified}</span>}
+      </div>
 
       <!--
         PROGRESS CONTROLS

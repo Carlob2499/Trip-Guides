@@ -14,26 +14,37 @@ html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{background:var(--bg);color:var(--ink);font-family:'DM Sans',-apple-system,system-ui,sans-serif;font-size:1.04rem;line-height:1.7;-webkit-font-smoothing:antialiased}
 body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .topbar,header,.shell,footer{position:relative;z-index:1}
-h1,h2,h3,h4{font-family:'Space Grotesk',-apple-system,system-ui,sans-serif;font-weight:400;line-height:1.15;text-wrap:balance}
-a{color:var(--accent);text-underline-offset:2px}
+/* Display h1 uses Fraunces (editorial italic variable font).
+   All other headings stay with Space Grotesk. */
+h1{font-family:'Fraunces',Georgia,'Times New Roman',serif;font-weight:400;font-style:italic;line-height:1.1;text-wrap:balance}
+h2,h3,h4{font-family:'Space Grotesk',-apple-system,system-ui,sans-serif;font-weight:400;line-height:1.15;text-wrap:balance}
+a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 
 /* === TOP NAVIGATION BAR ===================================================== */
-/* Persists across all guide pages — Home link on the left, dark-mode toggle on the right */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:.42rem 1.1rem;border-bottom:1px solid var(--rule);background:var(--bg)}
-.topbar-home{display:inline-flex;align-items:center;gap:.45rem;color:var(--muted);text-decoration:none;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:.2rem 0;transition:color .15s}
+.topbar-home{display:inline-flex;align-items:center;gap:.5rem;color:var(--muted);text-decoration:none;padding:.2rem 0;transition:color .15s}
 .topbar-home:hover{color:var(--ink)}
 .topbar-home svg{flex:none;transition:transform .15s}
-.topbar-home:hover svg{transform:translateX(-2px)}
+.topbar-home:hover svg{transform:translateX(-3px)}
+/* Wordmark — Fraunces italic for brand identity */
+.topbar-wordmark{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:400;font-size:1.08rem;letter-spacing:-.01em;line-height:1}
 .topbar-right{display:flex;align-items:center;gap:.4rem}
 /* Dark-mode toggle — labelled via aria-label + title; icon swaps in JS */
 .topbar-btn{background:none;border:1px solid var(--rule2);border-radius:4px;padding:.28rem .55rem;cursor:pointer;color:var(--muted);font-size:.95rem;line-height:1;transition:color .15s,border-color .15s;font-family:inherit}
 .topbar-btn:hover{color:var(--ink);border-color:var(--ink)}
 
 /* === MASTHEAD ================================================================ */
-.masthead{padding:2rem 1.1rem 1.4rem;border-bottom:1px solid var(--ink);text-align:center}
-.eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent)}
-.masthead h1{font-size:clamp(2rem,6vw,3rem);margin:.35rem 0 0}
-.dek{color:var(--muted);max-width:62ch;margin:.7rem auto 0}
+.masthead{padding:3.2rem 1.1rem 2rem;border-bottom:1px solid var(--ink);text-align:center}
+/* Thin accent rule above the eyebrow — the editorial "this page starts here" signal */
+.masthead-rule{width:2.8rem;height:2px;background:var(--accent);margin:0 auto 1.3rem}
+.eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--accent)}
+/* Fraunces italic: the single biggest visual upgrade — from dashboard to publication */
+.masthead h1{font-size:clamp(2.8rem,8vw,4.8rem);margin:.4rem 0 0;letter-spacing:-.02em;font-optical-sizing:auto}
+.dek{color:var(--muted);max-width:58ch;margin:.8rem auto 0;font-size:1.05rem;line-height:1.65}
+/* Stats bar: days · sights · verified stamp — at-a-glance guide summary */
+.guide-stats{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin:1.1rem auto 0}
+.gstat{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border:1px solid var(--rule2);border-radius:99px;padding:.22rem .75rem;line-height:1.5;white-space:nowrap}
+.gstat-verified{color:var(--green);border-color:var(--green)}
 
 /* === PROGRESS BAR ============================================================ */
 /* Buttons: Copy progress / Restore / Clear all — clearly labelled, no cryptic symbols */
@@ -96,16 +107,29 @@ a{color:var(--accent);text-underline-offset:2px}
 /* === CONTENT ================================================================= */
 .content{min-width:0;padding:1.2rem 0 3rem}
 .catblock{scroll-margin-top:1.2rem}
-.cat-title{font-family:'Space Grotesk',-apple-system,system-ui,sans-serif;font-size:clamp(1.5rem,4vw,2rem);margin:2rem 0 1rem;padding-bottom:.4rem;border-bottom:2px solid var(--ink);display:flex;align-items:baseline;gap:.6rem}
+.cat-title{font-family:'Space Grotesk',-apple-system,system-ui,sans-serif;font-size:clamp(1.5rem,4vw,2rem);margin:2.4rem 0 1rem;padding-bottom:.45rem;border-bottom:2px solid var(--ink);display:flex;align-items:baseline;gap:.6rem}
 .catblock:first-child .cat-title{margin-top:.3rem}
 .cat-title::before{content:"";flex:none;width:.5rem;height:.5rem;background:var(--accent)}
 .block{scroll-margin-top:1.2rem;margin-bottom:1rem}
 .block-title{font-family:'Space Grotesk',-apple-system,system-ui,sans-serif;font-size:1.32rem;margin:.1rem 0 .5rem}
 @media(max-width:899px){.catblock,.block{scroll-margin-top:16px}}
+/* Prose reading improvements — paragraph rhythm and list breathing room */
+.card p{line-height:1.75}
+.card p+p{margin-top:.85rem}
+.card ul,.card ol{padding-left:1.3rem;margin:.45rem 0}
+.card li{margin-bottom:.3rem;line-height:1.65}
+.card li+li{margin-top:.1rem}
+.card b,.card strong{font-weight:600}
 
 /* === CARDS =================================================================== */
-.card{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:1.25rem 1.4rem;margin-bottom:1rem;box-shadow:0 1px 2px rgba(33,30,26,.045)}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:1.25rem 1.4rem;margin-bottom:1rem;box-shadow:0 1px 3px rgba(33,30,26,.06);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+.card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(33,30,26,.1);border-color:var(--rule2)}
 .card .block-title{margin-top:0}
+/* Type-specific card accents — subtle visual differentiation by content role */
+.card:has(.budget){border-left:3px solid var(--green)}
+.card:has(.brow){border-left:3px solid var(--green)}
+.card:has(.steps){border-left:3px solid var(--accent)}
+.card:has(.check:first-child){background:color-mix(in srgb,var(--accent) 2%,var(--card))}
 .tag{display:inline-block;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.3rem}
 .note{font-size:.9rem;color:var(--muted)}
 .cardimg{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:5px;margin:.1rem 0 .2rem;background:var(--bg2)}
@@ -345,10 +369,18 @@ details table{margin:.3rem 0 .4rem}
   a.topbar-home::after, a.botHome::after, a.navcat::after, a.navlink::after, a.sheet-link::after, a.sheet-cat::after { content: none !important; }
 
   /* Masthead */
-  .masthead { padding: 0 0 .6rem; border-bottom: 1.5pt solid #111; text-align: left; }
-  .masthead h1 { font-size: 20pt; }
+  .masthead { padding: 0 0 .7rem; border-bottom: 1.5pt solid #111; text-align: left; }
+  .masthead-rule { display: none; }
+  .masthead h1 { font-size: 22pt; font-style: italic; }
   .dek { max-width: 100%; }
-  .verified { border: 1px solid #ccc; }
+  .guide-stats { justify-content: flex-start; gap: .4rem; }
+  .gstat { font-size: 8pt; padding: .1rem .5rem; }
+  /* Suppress card hover transitions and decoration for print */
+  .card { transform: none !important; transition: none !important; }
+  .card:has(.budget) { border-left: 1px solid #ccc !important; }
+  .card:has(.steps) { border-left: 1px solid #ccc !important; }
+  /* Days: keep each day with its content, add break between days */
+  .days > .day { break-inside: avoid; }
 
   /* Page setup */
   @page { margin: 1.5cm 1.8cm; }
