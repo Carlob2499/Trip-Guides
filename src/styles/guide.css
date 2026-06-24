@@ -126,10 +126,10 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 .card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(33,30,26,.1);border-color:var(--rule2)}
 .card .block-title{margin-top:0}
 /* Type-specific card accents — subtle visual differentiation by content role */
-.card:has(.budget){border-left:3px solid var(--green)}
 .card:has(.brow){border-left:3px solid var(--green)}
 .card:has(.steps){border-left:3px solid var(--accent)}
-.card:has(.check:first-child){background:color-mix(in srgb,var(--accent) 2%,var(--card))}
+/* .check:first-child never fires (block-title-row is always first) — target any card with checkboxes */
+.card:has(.check){background:color-mix(in srgb,var(--accent) 2%,var(--card))}
 .tag{display:inline-block;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.3rem}
 .note{font-size:.9rem;color:var(--muted)}
 .cardimg{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:5px;margin:.1rem 0 .2rem;background:var(--bg2)}
@@ -379,8 +379,8 @@ details table{margin:.3rem 0 .4rem}
   .card { transform: none !important; transition: none !important; }
   .card:has(.budget) { border-left: 1px solid #ccc !important; }
   .card:has(.steps) { border-left: 1px solid #ccc !important; }
-  /* Days: keep each day with its content, add break between days */
-  .days > .day { break-inside: avoid; }
+  /* Keep each day with its content — .days is not a real class; target .day directly */
+  .day { break-inside: avoid; }
 
   /* Page setup */
   @page { margin: 1.5cm 1.8cm; }

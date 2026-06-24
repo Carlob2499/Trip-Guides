@@ -42,11 +42,11 @@ const sightCount = _flat.filter((s: any) => s.type === "sights").reduce((n: numb
     <meta property="og:title"       content={`${guide.title} — Trip Guide`} />
     <meta property="og:description" content={guide.dek || guide.title} />
     <meta property="og:url"         content={Astro.url.href} />
-    <meta property="og:image"       content={`${Astro.url.origin}/og/${Astro.url.pathname.replace(/^\/guides\//,"").replace(/\/$/,"")}.svg`} />
+    <meta property="og:image"       content={`${Astro.url.origin}/og/${Astro.url.pathname.replace(/^\/guides\//,"").replace(/\/$/,"")}.png`} />
     <meta name="twitter:card"       content="summary_large_image" />
     <meta name="twitter:title"      content={`${guide.title} — Trip Guide`} />
     <meta name="twitter:description" content={guide.dek || guide.title} />
-    <meta name="twitter:image"      content={`${Astro.url.origin}/og/${Astro.url.pathname.replace(/^\/guides\//,"").replace(/\/$/,"")}.svg`} />
+    <meta name="twitter:image"      content={`${Astro.url.origin}/og/${Astro.url.pathname.replace(/^\/guides\//,"").replace(/\/$/,"")}.png`} />
     <link rel="canonical"           href={Astro.url.href} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300..700&family=Space+Grotesk:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
@@ -134,11 +134,13 @@ const sightCount = _flat.filter((s: any) => s.type === "sights").reduce((n: numb
       <p class="eyebrow">{guide.kicker || guide.country}</p>
       <h1>{guide.title}</h1>
       {guide.dek && <p class="dek">{guide.dek}</p>}
-      <div class="guide-stats">
-        {dayCount   > 0 && <span class="gstat">{dayCount} days</span>}
-        {sightCount > 0 && <span class="gstat">{sightCount} sights</span>}
-        {guide.verified && <span class="gstat gstat-verified">{guide.verified}</span>}
-      </div>
+      {(dayCount > 0 || sightCount > 0 || guide.verified) && (
+        <div class="guide-stats">
+          {dayCount   > 0 && <span class="gstat">{dayCount} days</span>}
+          {sightCount > 0 && <span class="gstat">{sightCount} sights</span>}
+          {guide.verified && <span class="gstat gstat-verified">{guide.verified}</span>}
+        </div>
+      )}
 
       <!--
         PROGRESS CONTROLS
