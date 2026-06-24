@@ -1,90 +1,255 @@
 {
   "kicker": "Autumn 2026",
   "title": "Japan",
-  "dek": "An eight-day autumn run down the classic route — Tokyo, a Mt Fuji day, the Shinkansen to Kyoto, and a Nara hop — timed for the turning leaves. Everything below is checked; tick items off as you go and your progress saves.",
+  "dek": "Two weeks through southern Japan — Fukuoka's ramen alleys and yatai stalls, Beppu's volcanic onsen, Yufuin's ryokans in mountain mist, Nagasaki's layered history, and Hiroshima's Miyajima island. The side of Japan first-timers never plan — and always wish they had.",
   "footer": "Location photos via Wikimedia Commons — tap any credit for its source, author and license.",
   "country": "Japan",
-  "intro": "Tokyo first, then the Shinkansen to Kyoto, with day trips to Hakone (Mt Fuji) and Nara. Built for an October–November visit.",
+  "verified": "⚠ Structural draft — prices, restaurants, and transport passes need pre-trip verification",
   "sections": [
     {
       "type": "panel",
       "group": "Plan",
-      "title": "Money & currency",
-      "body": "<p>Japan uses the <b>yen (¥)</b>, and the yen is very weak right now — great for your budget. Rough rates (approximate, check before you go), at about ¥160 to the dollar: <b>¥100 ≈ $0.63</b> and <b>¥1,000 ≈ $6.25</b>.</p><p>Japan is still surprisingly cash-friendly — carry some, especially for small shrines, markets and older shops — but cards and IC-card tap-to-pay now work in most places. Tipping isn't done and can confuse staff.</p>"
-    },
-    {
-      "type": "panel",
-      "group": "Plan",
-      "title": "When you land",
-      "body": "<p>At the airport, in order:</p>",
+      "title": "The trip at a glance",
+      "body": "<p>This is a 14-night loop through <b>southern Japan</b>, using Fukuoka as the home base. It covers every experience that makes the classic Tokyo–Kyoto route famous — shrines, ryokans, onsen, street food, solemn history, and an iconic water view — without going near those cities. Late October into early November is the best two-week window in Japan: typhoon season is effectively over, humidity is gone, and the first highland autumn colour is beginning.</p><p>The route: <b>Fukuoka</b> (food, yatai, Hakata ramen) → <b>Dazaifu</b> day trip (ancient shrine city, the Kyoto substitute) → <b>Yanagawa</b> day trip (canal punting, eel rice) → <b>Beppu</b> (volcanic hells, deep onsen) → <b>Yufuin</b> (one ryokan night in the mountains) → <b>Nagasaki</b> (WWII history, Dutch trading post, champon noodles) → <b>Hiroshima</b> (Peace Museum, okonomiyaki) → <b>Miyajima</b> (the floating torii gate, overnight on the island) → <b>back to Fukuoka</b> to fly home.</p>",
       "checklist": [
-        "Clear immigration — your <b>Visit Japan Web</b> QR codes (done before the flight) speed up immigration and customs",
-        "Get an <b>IC card</b>: a physical <b>Welcome Suica</b> at the counter, or add <b>Suica to Apple Wallet</b> if you have an iPhone",
-        "From <b>Narita</b>: Keisei Skyliner (~41 min to Ueno) or the N'EX; from <b>Haneda</b>: Keikyu/monorail (~30–45 min)",
-        "Text <b>TRAVEL to 4004</b> for Verizon TravelPass, or use a local eSIM/SIM",
-        "Install <b>Google Maps</b> (works well in Japan) plus a translation app"
+        "Fukuoka — 5 nights (base city, food focus)",
+        "Beppu — 1 night (onsen, hells tour)",
+        "Yufuin — 1 night (ryokan, mountain village)",
+        "Nagasaki — 2 nights (history, Dejima, champon)",
+        "Hiroshima — 1 night (Peace Museum, okonomiyaki)",
+        "Miyajima — 1 night (floating torii, overnight on the island)",
+        "Fukuoka return — 2 nights (wind down, last ramen, depart)"
       ]
     },
     {
       "type": "panel",
       "group": "Plan",
-      "title": "Local essentials",
-      "body": "<p>Emergencies: <b>110</b> (police), <b>119</b> (fire & ambulance). Tap water is safe. No tipping. Trains are punctual and quiet — keep calls and speakerphone off. Carry a small bag for your own rubbish; public bins are rare. Convenience stores (7-Eleven, Lawson, FamilyMart) are lifesavers for cash (7-Bank ATMs take foreign cards), food and umbrellas.</p>"
+      "title": "Best & worst case scenarios",
+      "body": "<p><b>Weather — Best:</b> clear skies, 18–24°C, low humidity, first highland koyo (autumn colour) starting in Yufuin and the Aso highlands in late October. Kyushu's driest, most comfortable month. <b>Worst:</b> a late straggler typhoon hits the first week (rare past Oct 20 but possible); or a persistent November rain front arrives early. Check JMA 10-day forecasts before you fly.</p><p><b>Flights &amp; points — Best:</b> ANA business class booked 11 months out using United MileagePlus miles (~70–80k per person EWR→NRT one-way), or JAL with American AAdvantage; direct EWR→NRT, then domestic connection to FUK. <b>Worst:</b> award space long gone, last-minute economy from $1,300+, routing through two hubs with a redeye connection.</p><p><b>Ryokan availability — Best:</b> Yufuin and Miyajima inns booked 4–5 months out (May–June booking window), with private onsen rooms at both. <b>Worst:</b> October is domestic Japanese foliage season — popular Yufuin properties sell out by July; fallback is a good business hotel in Yufuin town, less atmospheric but still fine.</p><p><b>Jet lag — Best:</b> depart EWR Thursday evening ~Oct 22, arrive Fukuoka Saturday Oct 24 afternoon (your birthday in Japan); outdoor afternoon light, eat at Japanese time, asleep by 23:00 JST. Adapted by Day 3. <b>Worst:</b> red-eye routing via multiple hubs with a 5–6am Fukuoka arrival; disoriented for 4–5 days.</p>"
     },
     {
       "type": "panel",
       "group": "Plan",
       "title": "Entry & documents",
-      "body": "<p>⚠️ The entry rules below assume a <b>US passport</b>. On another passport, check your own requirements — they differ.</p>",
+      "body": "<p>US citizens: <b>no visa needed</b> for stays up to 90 days. No eTA or pre-approval form required for US passport holders (verify closer to October 2026 — Japan has discussed a future eTA system but had not launched one as of mid-2026). Register on <b>Visit Japan Web</b> before departure to get QR codes that speed up immigration and customs declaration.</p>",
       "checklist": [
-        "No visa for tourism up to 90 days",
-        "<b>JESTA</b> (Japan's new travel authorisation) is <b>not required yet</b> — it isn't expected until ~2028, so it doesn't affect a 2026 trip",
-        "Register on <b>Visit Japan Web</b> before you fly for the fast-track immigration & customs QR codes",
-        "Passport valid for the length of your stay",
-        "Type A/B plugs, 100V — most US chargers work; bring a small power strip",
-        "Autumn is peak season — book hotels early, especially Kyoto"
+        "Passport valid for the duration of the trip",
+        "Register on Visit Japan Web (vjw-lp.digital.go.jp) before flying — free, speeds up customs",
+        "Download QR codes offline before the flight in case of poor airport Wi-Fi",
+        "No visa, no eTA required for US citizens — ⚠ re-verify closer to Oct 2026",
+        "US plug (Type A) works directly in Japan — no adapter needed; 100V is safe for all modern chargers",
+        "International driving permit only if renting a car (not needed for this city-to-city route)"
       ]
     },
     {
       "type": "panel",
       "group": "Plan",
-      "title": "Should you buy a JR Pass?",
-      "body": "<p><b>For this Tokyo–Kyoto route, almost certainly not.</b> Since the 2023 price hike a 7-day national JR Pass is ¥50,000, while a Tokyo–Kyoto round trip in individual Shinkansen tickets is only about ¥27,000 — so the pass <i>loses</i> you roughly ¥20,000 unless you're also running far afield (Hiroshima, the far north). The better plan here: buy <b>point-to-point Shinkansen tickets</b> (ticket machines, or the smartEX app) and tap your <b>IC card</b> for everything local. Note the overseas pass price rises again on Oct 1, 2026.</p>"
+      "title": "Booking checklist — time-sensitive items",
+      "body": "<p>Japan rewards early planners. The two windows that matter most: <b>4–6 months out</b> for ryokans in Yufuin and Miyajima (October is peak domestic foliage season — good properties go by July); <b>1–3 months out</b> for the Yufuin no Mori scenic train (limited reserved seating, popular year-round). Everything else can wait until 4–6 weeks before departure.</p>",
+      "checklist": [
+        "✈ Flights: check ANA/JAL award availability on United MileagePlus and AA AAdvantage as early as possible",
+        "🏯 Yufuin ryokan: book 4–6 months out — October foliage season books fast",
+        "🏝 Miyajima overnight inn: book 3–4 months out — island accommodation is limited",
+        "🚂 Yufuin no Mori scenic train (Fukuoka ↔ Yufuin): reserve at JR Kyushu website 1–3 months out",
+        "🏥 Travel insurance: include trip interruption coverage (typhoon season tail; medical coverage)",
+        "📋 JR Kyushu Rail Pass or national JR Pass: must be purchased before arriving in Japan",
+        "⚠ Pre-confirm ryokan tattoo policy — most ban tattoos in shared baths; request a private onsen room (kashikiri-buro)"
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Jet lag — EWR to Japan",
+      "body": "<p>Japan is <b>13 hours ahead of EDT</b> (14 ahead of EST after clocks fall back Nov 1). The body adapts to a 13-hour east jump more easily when treated as an <b>11-hour westward delay</b> — delaying your internal clock is biologically easier than advancing it for most people.</p><p><b>Protocol:</b> push your bedtime 1–2 hours later than usual the night before departure. On the overnight flight, aim to sleep 6–8 hours of the middle portion. Land in Japan in the mid-afternoon JST if your routing allows, get outside in natural light immediately, eat a real dinner at ~19:00 JST, and push through until 22:00–23:00. Most travelers are on Japanese time by Day 3. <b>The trap to avoid:</b> a 5–6am Fukuoka arrival. You'll have the whole day but you'll be wrecked — take a 2-hour nap maximum, then stay active until 22:00.</p>"
     },
     {
       "type": "panel",
       "group": "Plan",
       "title": "Phone & data",
-      "body": "<p><b>Verizon TravelPass</b> is $12/line/day and works in Japan; a local <b>eSIM</b> is cheaper if you can use one. Unlike Korea, <b>Google Maps works well in Japan</b> for trains and walking. Handy apps: a translation app (Google Translate or DeepL), <b>smartEX</b> for Shinkansen tickets, and your airline's app. Pocket Wi-Fi rental is an option for a group sharing one device.</p>"
+      "body": "<p>Japan has excellent LTE and 5G coverage. Best option: <b>eSIM</b> from IIJmio, Ubigi, or Airalo — buy and activate before departure; ~$20–30 for 15GB over 15 days, far cheaper than carrier day passes for a group. Or use Verizon/AT&T international day pass (~$12/day per line). <b>Pocket Wi-Fi rental</b> at the airport is a solid group option — one device, everyone connects. Local SIMs at Fukuoka Airport work but require unlocked phones.</p><p><b>Install before flying:</b> Google Maps (works well in Japan), Google Translate (camera mode reads menus), Navitime or Hyperdia for train planning, <b>JR Kyushu Rail app</b> for Yufuin no Mori tickets, and your airline's app. Download offline maps for Fukuoka, Nagasaki, and Hiroshima before you board.</p>"
     },
     {
       "type": "panel",
       "group": "Plan",
-      "title": "Weather, foliage & comfort",
-      "body": "<p><b>October</b> is mild but the tail of typhoon season, so watch forecasts; <b>November</b> is cool, crisp and gorgeous (roughly 7–17°C in the cities). For <b>autumn colour</b>: the mountains turn first — <b>Nikko, Hakone and the Alps in late Oct–early Nov</b> — while <b>Tokyo and Kyoto peak late Nov into early December</b>, and warm years run later still, so check the Japan Meteorological Corporation forecast near your dates. Pack layers and a compact umbrella. For heavier feet and heel pain, use a firm, structured insole with a deep heel cup and a weight rating (Powerstep Pinnacle Maxx, Tread Labs Pace, Superfeet, or VALSOLE / Walkomfy) — temple days are long and stone-paved.</p>"
+      "title": "Weather — late October & early November",
+      "body": "<p>Kyushu in late October is one of the best travel windows in Japan: <b>18–24°C</b> during the day, <b>12–16°C</b> at night, low humidity, minimal rain. Typhoon season is ~95% done by October 20; a late straggler is possible but rare. Hiroshima (western Honshu) is nearly identical. Pack layers — evenings in Yufuin (~500m altitude) can be 10–12°C, and early morning on Miyajima will be crisp. Compact umbrella always. <b>Autumn colour (koyo):</b> highland Yufuin and the Aso caldera typically peak mid-to-late November; in late October you'll catch early colour on the highlands. Coastal Fukuoka, Nagasaki, and Hiroshima stay green into November.</p>"
+    },
+    {
+      "type": "panel",
+      "group": "Money & budget",
+      "title": "Money & currency",
+      "body": "<p>Japan uses the <b>yen (¥ / JPY)</b>. The yen has been historically weak since 2022 — outstanding value for USD travelers. Rough reference at ≈¥150/$: <b>¥1,000 ≈ $6.70</b>. Check the current rate before you go.</p><p>Japan is more <b>cash-heavy</b> than Korea or Western Europe. Most ryokans, small restaurants, shrines, and local shops are cash-only or strongly prefer it. Bring enough to cover ryokan nights in full. <b>7-Eleven ATMs</b> (Japan) reliably accept foreign Visa/Mastercard/Amex with English interfaces — the most reliable cash source in any city. IC cards are accepted on all transit and at konbini (convenience stores); cards work at city hotels, department stores, and most urban restaurants.</p>",
+      "checklist": [
+        "Withdraw ¥50,000–100,000 in cash at a 7-Eleven ATM on arrival — covers ryokan nights and small restaurants",
+        "IC card (Suica or Nimoca): set up at Fukuoka Hakata station or add Suica to Apple Wallet before flying",
+        "No tipping — anywhere, for anything. It causes genuine confusion",
+        "Tax-free shopping (8–10% off) at participating shops for foreign tourists on ¥5,000+ purchases — bring your passport"
+      ]
+    },
+    {
+      "type": "budget",
+      "group": "Money & budget",
+      "title": "Budget & daily costs",
+      "currency": "USD",
+      "days": 14,
+      "intro": "Estimates in USD at ≈¥150/$. All figures are per-person approximations — verify all prices before booking.",
+      "items": [
+        {
+          "label": "Flights (round trip, economy)",
+          "basis": "trip",
+          "est": 1100,
+          "low": 750,
+          "high": 1650,
+          "category": "Getting there",
+          "per": "person",
+          "note": "≈ — book early; or ~35–45k miles/person economy with United MileagePlus (ANA) or AA AAdvantage (JAL)"
+        },
+        {
+          "label": "City hotel (~10 nights, sharing room)",
+          "basis": "trip",
+          "est": 750,
+          "low": 450,
+          "high": 1100,
+          "category": "Stay",
+          "per": "person",
+          "note": "≈ — business hotels ≈¥7,000–12,000/night/room; per person sharing double"
+        },
+        {
+          "label": "Ryokan (Beppu + Yufuin + Miyajima, dinner & breakfast included)",
+          "basis": "trip",
+          "est": 600,
+          "low": 350,
+          "high": 950,
+          "category": "Stay",
+          "per": "person",
+          "note": "≈ — includes kaiseki dinner and Japanese breakfast; private onsen rooms cost more"
+        },
+        {
+          "label": "JR Kyushu 5-day Pass + Hiroshima Shinkansen return",
+          "basis": "trip",
+          "est": 250,
+          "low": 170,
+          "high": 370,
+          "category": "Getting around",
+          "per": "person",
+          "note": "≈ — Northern Kyushu 5-day pass ≈¥14,000; Fukuoka↔Hiroshima Shinkansen ≈¥8,100 each way — ⚠ verify at jrkyushu.co.jp"
+        },
+        {
+          "label": "Meals per day (non-ryokan days)",
+          "basis": "day",
+          "est": 28,
+          "low": 12,
+          "high": 60,
+          "category": "Food",
+          "per": "person",
+          "note": "Ramen ≈¥900–1,200; set lunch ≈¥1,000–1,500; yatai dinner ≈¥2,500–3,500. Japan is cheap for good food."
+        },
+        {
+          "label": "Local transit per day (IC card)",
+          "basis": "day",
+          "est": 8,
+          "low": 3,
+          "high": 18,
+          "category": "Getting around",
+          "per": "person",
+          "note": "Fukuoka subway ≈¥260/ride; Miyajima ferry ≈¥180. Low on walking days, higher on travel days."
+        },
+        {
+          "label": "Activities & entry fees per day",
+          "basis": "day",
+          "est": 12,
+          "low": 4,
+          "high": 28,
+          "category": "Activities",
+          "per": "person",
+          "note": "Beppu hells ≈¥2,200 all-8; Hiroshima Peace Museum ≈¥200; Miyajima ropeway ≈¥1,800 return — ⚠ verify all"
+        },
+        {
+          "label": "Snacks, drinks & konbini per day",
+          "basis": "day",
+          "est": 8,
+          "low": 3,
+          "high": 20,
+          "category": "Food",
+          "per": "person",
+          "note": "Japanese convenience stores punch well above their weight. Budget a few runs a day."
+        },
+        {
+          "label": "Shopping & souvenirs",
+          "basis": "trip",
+          "est": 200,
+          "low": 60,
+          "high": 700,
+          "category": "Other",
+          "per": "person",
+          "note": "Tax-free rebate at participating shops on ¥5,000+ purchases — bring passport"
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Health & safety",
+      "title": "Health & safety",
+      "body": "<p><b>Emergency numbers:</b> <b>110</b> (police), <b>119</b> (fire &amp; ambulance). Japan Visitor Hotline (English, 24/7): <b>050-3816-2787</b>. Tap water is safe throughout Japan. Medical standards are very high; Fukuoka, Nagasaki, and Hiroshima all have hospitals with international patient services.</p><p><b>Pharmacy:</b> Matsumoto Kiyoshi, Tsuruha, and Welcia drugstores are on every high street. English-speaking staff is inconsistent outside tourist zones; photos and Google Translate camera mode bridge most gaps. Note: some US cold medicines containing <b>pseudoephedrine</b> are restricted in Japan — check your medications before packing.</p>",
+      "checklist": [
+        "Travel insurance with medical coverage — Japan healthcare is excellent but expensive without it",
+        "Check that your cold/allergy medicines are permitted in Japan (pseudoephedrine is restricted)",
+        "Blister pads — non-negotiable for 2 weeks of temple and city walking",
+        "Structured walking insoles (Powerstep, Superfeet) if you're prone to foot pain on long days",
+        "Prescription medicines: carry in original packaging; controlled substances need a doctor's note"
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Etiquette & language",
+      "title": "Etiquette & language",
+      "body": "<p>Japan's social expectations are more formal than Korea's — but very forgiving of obvious foreigners. The baseline rule: <b>be quiet, be clean, be patient</b>.</p><ul><li><b>No tipping.</b> Anywhere. Good service is standard, not a bonus. Attempting to tip causes confusion.</li><li><b>Shoes off</b> at ryokans, traditional restaurants with tatami, and some shrines. You'll see a step up to floor level — it's obvious when you're there.</li><li><b>Bowing:</b> a slight nod is fine for tourists. Don't overthink depth.</li><li><b>Two-handed exchange:</b> give and receive items (cash at a register, business cards, gifts) with both hands — signals respect.</li><li><b>Trains:</b> silent mode on your phone, no calls, no speakerphone. Quiet voice. Eating on local trains is frowned upon (Shinkansen is the exception — ekiben lunch boxes are a tradition).</li><li><b>Trash bins are rare</b> outside train stations and konbini. Carry a small plastic bag for rubbish.</li><li><b>Chopsticks:</b> don't stab them upright in rice (funeral association); don't pass food chopstick-to-chopstick (also funeral). Rest on the holder provided.</li><li><b>Onsen:</b> shower and rinse completely before entering any communal bath. No swimwear. Hair tied back. No towels in the water.</li><li><b>Queuing:</b> Japan queues with extraordinary discipline. Follow the marked lines.</li></ul>",
+      "checklist": [
+        "arigatou gozaimasu — thank you (formal)",
+        "sumimasen — excuse me / sorry / getting a server's attention",
+        "kore o kudasai — this one, please",
+        "okaikei o onegaishimasu — bill, please",
+        "Google Translate camera mode reads Japanese menus in real time"
+      ]
+    },
+    {
+      "type": "prose",
+      "group": "Etiquette & language",
+      "title": "First-timer's Japan",
+      "body": "<p>A few things that surprise first-timers: Japan is <b>quieter than expected</b> in shared spaces — the famous Shinjuku energy is real, but inside trains, restaurants, and ryokans, people speak softly and mind their space. Matching the room is the most useful social adaptation. Japan is also <b>easier to navigate than it looks</b> — station signs are romanised throughout Kyushu, Google Maps handles transit routing accurately, and most hotel and tourist-zone staff have enough English for practical needs.</p><p><b>Harder than expected:</b> very few trash bins (carry a small bag); cash dependence at traditional places; the sheer density of choices at any ramen shop or izakaya. A picture menu and a pointed finger closes most gaps. <b>The biggest first-timer mistake</b> is over-scheduling. Japan's real pleasure is the unplanned hour — a quiet back street, a vending-machine coffee by a canal, a konbini egg sandwich at midnight. Leave space for it.</p>"
     },
     {
       "type": "routes",
       "group": "Getting around",
       "title": "Key transit routes",
       "steps": [
-        "<b>Airport → Tokyo:</b> from Narita, the Keisei <b>Skyliner</b> (~41 min to Ueno) or the JR <b>N'EX</b>; from Haneda, the Keikyu line or monorail (~30–45 min). Sort an IC card first.",
-        "<b>Around Tokyo:</b> the JR Yamanote loop plus the metro cover almost everything — just tap your <b>IC card</b> in and out.",
-        "<b>Tokyo → Kyoto:</b> the <b>Tokaido Shinkansen</b>, ~2 hr 15 min on a Nozomi (about ¥14,000). Buy point-to-point (machines or smartEX); reserve a seat in autumn.",
-        "<b>Day trip to Hakone:</b> the Odakyu line from Shinjuku; the <b>Hakone Free Pass</b> covers the scenic loop (mountain railway, ropeway, pirate ship, bus) and Fuji views on clear days.",
-        "<b>Kyoto → Nara:</b> ~45 min by JR or Kintetsu — an easy half-day.",
-        "<b>Flying home:</b> from Kyoto, the <b>Haruka</b> express reaches Kansai (KIX) in ~80 min; or Shinkansen back to Tokyo if you fly from Narita/Haneda."
+        "<b>Airport → Fukuoka city:</b> Fukuoka Airport has a subway station in the international terminal — 5 minutes to Hakata station, ≈¥260. Tap your IC card. One of the world's best airport connections. If arriving via Tokyo (NRT/HND), take a domestic flight to FUK (~1.5 hrs) or the Shinkansen from Tokyo to Hakata (~5 hrs, ≈¥23,000).",
+        "<b>Around Fukuoka:</b> the Fukuoka City Subway (Kūkō/Airport line, Hakozaki line, Nanakuma line) covers the main zones. IC card tap in and out. One-day pass (≈¥640) worth it on busy days.",
+        "<b>Fukuoka → Dazaifu:</b> Nishitetsu Omuta line from Nishitetsu-Fukuoka (Tenjin) to Nishitetsu-Futsukaichi, transfer to Dazaifu line → Dazaifu station. ~30 min total, ≈¥400. ⚠ Verify current fare.",
+        "<b>Fukuoka → Beppu:</b> JR Sonic express from Hakata — ~2 hrs 15 min, ≈¥5,240. Covered by JR Kyushu Rail Pass.",
+        "<b>Beppu → Yufuin:</b> 45-min bus (Kyushu Odan Bus, ≈¥1,600) or taxi (~¥6,000). Or the Yufuin no Mori scenic train (see below).",
+        "<b>Fukuoka → Yufuin (Yufuin no Mori):</b> scenic limited express from JR Hakata, ~2.5 hrs, ≈¥4,450. Seats are reserved and must be booked in advance — popular year-round, especially in autumn. ⚠ Book at JR Kyushu website.",
+        "<b>Fukuoka → Nagasaki:</b> JR Kamome (Nishi-Kyushu Shinkansen relay service) from Hakata, ~1 hr 40 min, ≈¥5,400. Covered by JR Kyushu Rail Pass.",
+        "<b>Nagasaki → Hiroshima:</b> Nagasaki → Hakata by express (~1 hr 40 min), then Hakata → Hiroshima on the Sanyo Shinkansen (~50 min). Total ~3 hrs, ≈¥13,500. The Sanyo Shinkansen leg requires a national JR Pass or an individual ticket — not covered by the Kyushu pass.",
+        "<b>Hiroshima → Miyajima:</b> JR San'yo line to Miyajimaguchi (~27 min), then JR ferry to the island (~10 min). Total ~40 min from Hiroshima station. Ferry included with JR Pass, or ≈¥180 with IC card.",
+        "<b>Miyajima → Fukuoka:</b> ferry back to Miyajimaguchi → train to Hiroshima → Sanyo Shinkansen to Hakata. Total ~1.5 hrs, ≈¥8,100 for the Shinkansen leg."
       ]
     },
     {
       "type": "map",
       "group": "Getting around",
-      "title": "Orientation map — Tokyo",
+      "title": "Orientation map — Fukuoka (Hakata)",
       "center": {
-        "lat": 35.6762,
-        "lng": 139.7503
+        "lat": 33.5902,
+        "lng": 130.4017
       },
-      "span": 0.1
+      "span": 0.06
+    },
+    {
+      "type": "prose",
+      "group": "Getting around",
+      "title": "JR Pass vs JR Kyushu Rail Pass",
+      "body": "<p>For this itinerary, the best value is probably the <b>JR Kyushu 5-day Northern Kyushu Pass</b> for Kyushu legs, plus individual tickets for the Sanyo Shinkansen to Hiroshima.</p><ul><li><b>JR Kyushu Northern Kyushu 5-day Pass:</b> covers Fukuoka ↔ Nagasaki (Kamome), Fukuoka ↔ Beppu (Sonic), Yufuin no Mori scenic train, and most JR Kyushu local trains. ≈¥14,000 (~$93). Then buy Fukuoka ↔ Hiroshima Shinkansen individually (≈¥16,200 return). Total: ≈¥30,200 — cheaper than the national pass for most users on this itinerary. ⚠ Verify at english.jrkyushu.co.jp.</li><li><b>National 14-day JR Pass:</b> covers everything including Sanyo Shinkansen (Fukuoka ↔ Hiroshima ↔ Osaka ↔ Tokyo). ≈¥70,000 (~$467). ⚠ Japan raised the price significantly in October 2023 — verify current price before purchasing. Worth it mainly if adding Tokyo or other long Shinkansen legs.</li></ul><p>Both passes must be <b>purchased before arriving in Japan</b> — online at the JR website or through a travel agent abroad.</p>"
     },
     {
       "type": "days",
@@ -92,102 +257,214 @@
       "title": "Day by day",
       "items": [
         {
-          "date": "Day 1",
-          "title": "Arrival in Tokyo",
-          "pace": "Arrival day · airport → city ~45–60 min · easy evening",
-          "note": "After a long flight, keep it light — a neighbourhood izakaya and an early night.",
-          "body": "Clear immigration (Visit Japan Web ready), train into the city, check in, and find dinner nearby. Don't fight the jet lag.",
-          "fit": "Comfortable, layered clothes for cool autumn evenings.",
+          "date": "Day 0 — ~Thu Oct 22",
+          "title": "Depart Newark",
+          "pace": "Departure · overnight westbound flight",
+          "note": "Aim for a routing that puts you in Fukuoka Saturday afternoon Oct 24 — your birthday in Japan. Departing Thursday evening and connecting through Seoul (ICN) or Tokyo gets you there in time.",
+          "body": "The long flight west. Eat a real meal before boarding, watch one film, then sleep 7–8 hours of the middle section. That in-flight sleep is the most important jet lag move of the trip. The plane crosses the International Date Line heading west — you arrive in Japan 2 calendar days after departure.",
+          "fit": "Comfortable travel clothes. Compression socks if you have them.",
           "checklist": [
-            "Visit Japan Web QR codes saved offline",
-            "IC card set up (Welcome Suica or Apple Wallet)",
-            "TravelPass / eSIM on"
+            "Visit Japan Web QR codes downloaded offline before boarding",
+            "Suica added to Apple Wallet, or plan to buy Nimoca at Hakata station",
+            "eSIM activated or TravelPass texted in",
+            "Plan for first 7-Eleven ATM cash withdrawal in Fukuoka"
           ]
         },
         {
-          "date": "Day 2",
-          "title": "Old Tokyo — Asakusa & Ueno",
-          "pace": "Full day · Senso-ji ~1.5 hr · Ueno ~2 hr · Akihabara evening · lots of walking",
-          "note": "Temple grounds are stone-paved and long — pace it and sit when you can.",
-          "body": "Start at Senso-ji in Asakusa and the Nakamise shopping street, wander Ueno's park and museums, then Akihabara after dark for the electric, anime-and-games sensory overload.",
-          "fit": "Walking shoes; a light layer for the evening.",
+          "date": "Day 1 — ~Sat Oct 24 (birthday!)",
+          "title": "Arrive Fukuoka — first yatai night",
+          "pace": "Arrival · 5-min subway to Hakata · easy evening",
+          "note": "If you departed Thursday night via Seoul, you land in Fukuoka Saturday afternoon. Check in, recover, and do one thing: find a yatai stall.",
+          "body": "The Fukuoka Airport subway to Hakata station is 5 minutes — one of the world's best airport connections. Check into the hotel. Resist sleep until 22:00 JST. The evening has one job: a bowl of tonkotsu ramen and a cold Sapporo at a yatai counter on the Nakasu waterfront. You've earned it.",
+          "fit": "Comfortable clothes. You're not sightseeing today.",
           "checklist": [
-            "Coins for the temple",
-            "Try a conveyor-belt sushi lunch"
+            "IC card (Nimoca) set up at Hakata station, or Apple Wallet Suica",
+            "Cash withdrawn at 7-Eleven ATM in Hakata station",
+            "Hotel check-in confirmed",
+            "First tonkotsu ramen — mandatory"
           ]
         },
         {
-          "date": "Day 3",
-          "title": "Modern Tokyo — Shibuya & Harajuku",
-          "pace": "~6 hr out · Meiji Shrine ~1 hr · Harajuku ~2 hr · Shibuya evening",
-          "note": "Crowd-heavy and on your feet — build in a café break.",
-          "body": "Quiet morning at Meiji Shrine, the youth fashion of Harajuku's Takeshita Street, then the Shibuya Scramble and a skyline view from Shibuya Sky at dusk.",
-          "fit": "Stylish-but-comfortable; you'll be photographed a lot here.",
+          "date": "Day 2 — Sun Oct 25",
+          "title": "Hakata & Tenjin — getting your bearings",
+          "pace": "Moderate day · flat city walking · find the rhythm",
+          "note": "Jet lag forgiveness day. Start late, walk at a pace you can sustain for two weeks.",
+          "body": "Hakata station area in the morning — the Hakata Riverain complex and the old merchant district behind the station. Canal City for the free midday fountain show. Walk to Tenjin in the afternoon — Tenjin Chikagai underground mall, the Imaizumi café and bar district. Evening back on the yatai strip, this time picking a different stall and ordering something you can't identify.",
+          "fit": "Flat, walkable terrain. Comfortable shoes.",
           "checklist": [
-            "Book Shibuya Sky ahead",
-            "See the Hachiko statue"
+            "Canal City fountain show — check schedule on the day",
+            "Try yakitori at a standing izakaya counter",
+            "Pick up a reusable chopstick holder for the trip"
           ]
         },
         {
-          "date": "Day 4",
-          "title": "Day trip — Hakone & Mt Fuji",
-          "pace": "Long day out · ~1.5 hr each way · scenic loop ~5–6 hr",
-          "note": "Fuji is shy — clear mornings give the best odds, and autumn colour is good here now.",
-          "body": "Take the Odakyu line to Hakone and ride the loop — mountain railway, ropeway over the sulphur vents at Owakudani, and the lake with Fuji behind on a clear day. Soak in an onsen before heading back.",
-          "fit": "Warm layers for the ropeway; bring a small towel for the onsen.",
+          "date": "Day 3 — Mon Oct 26",
+          "title": "Dazaifu + Yanagawa — shrines and canals",
+          "pace": "Full day · 2 excursions · moderate walking",
+          "note": "Dazaifu first (30 min from Tenjin by Nishitetsu rail), Yanagawa in the afternoon. The best all-day excursion from Fukuoka.",
+          "body": "Dazaifu Tenmangu is one of Japan's most important Shinto shrines — ancient cryptomeria trees, the arched moon-reflection bridge, an approach lined with umegae mochi plum cakes. The Kyushu National Museum sits directly behind the shrine (excellent permanent collection). Walk back along the approach and stop at the Kengo Kuma-designed Starbucks — a woven-bamboo lattice building worth seeing even if you don't drink coffee. Then south by train to Yanagawa for an hour on the canals in a flat-bottomed punt boat. Unaju (grilled eel on rice) for dinner — Yanagawa's signature dish.",
+          "fit": "Comfortable walking shoes, light layer for the evening.",
           "checklist": [
-            "Hakone Free Pass",
-            "Check the Fuji forecast",
-            "Onsen etiquette: wash first, no swimsuits"
+            "Nishitetsu rail day ticket if doing both towns",
+            "Yanagawa punt: walk-in or book ahead on weekends",
+            "Unaju dinner in Yanagawa (eel is expensive but worth it here)",
+            "Dazaifu: Kyushu National Museum entry fee — ⚠ verify current amount"
           ]
         },
         {
-          "date": "Day 5",
-          "title": "Shinkansen to Kyoto",
-          "pace": "Travel + sights · bullet train ~2 hr 15 · afternoon in Higashiyama",
-          "note": "Reserve your Shinkansen seat in autumn; trains fill up.",
-          "body": "Glide to Kyoto by Shinkansen (Fuji on the right early on), drop bags, and spend the afternoon climbing to Kiyomizu-dera through the Higashiyama lanes — best in late-afternoon light.",
-          "fit": "Comfortable shoes for hills and steps.",
+          "date": "Day 4 — Tue Oct 27",
+          "title": "Ohori Park + Fukuoka Tower — rest day",
+          "pace": "Gentle day · parks and seafront · rest before the onsen push",
+          "note": "A lighter day before the Beppu–Yufuin run. Don't skip it — pacing through easy days is what makes the heavy ones land properly.",
+          "body": "Ohori Park in the morning — a large lakeside park with a reconstructed Japanese garden at one end and Fukuoka Castle ruins on an adjacent hill (free, short climb, good city views). Afternoon at Fukuoka Tower and Momochi seafront — the viewing deck gives the best panoramic read of the city. Final Fukuoka yatai crawl in the evening: three stalls, three dishes.",
+          "fit": "Flat terrain. Comfortable shoes.",
           "checklist": [
-            "Seat reserved (smartEX / machine)",
-            "Hotel near a subway/JR line"
+            "Ohori Park Japanese Garden (small entry fee — ⚠ verify)",
+            "Fukuoka Tower viewing deck",
+            "Three-stall yatai crawl: one ramen, one yakitori, one wild card"
           ]
         },
         {
-          "date": "Day 6",
-          "title": "Kyoto — Fushimi Inari & Arashiyama",
-          "pace": "Full day · Fushimi Inari early ~2 hr · Arashiyama ~3 hr · Gion evening",
-          "note": "Beat the crowds: Fushimi Inari at sunrise, Arashiyama bamboo before mid-morning.",
-          "body": "Go early to the thousands of vermilion torii at Fushimi Inari, then west to the Arashiyama bamboo grove and Tenryu-ji's autumn garden. End in Gion at dusk, the lantern-lit geisha quarter.",
-          "fit": "Layers; a lot of walking and some climbing at Fushimi Inari.",
+          "date": "Day 5 — Wed Oct 28",
+          "title": "Beppu — the volcanic hells",
+          "pace": "JR Sonic 2.5 hrs · hells tour ~3 hrs · onsen evening",
+          "note": "Beppu's jigoku (hells) are theatrical and genuinely strange. Budget 3 hours for all 8.",
+          "body": "JR Sonic express from Hakata to Beppu (~2.5 hrs). The Eight Hells (Jigoku Meguri) are a circuit of dramatically coloured volcanic pools — cobalt blue, blood red, milky white, boiling grey mud — plus a crocodile pit and a tropical greenhouse heated by the springs. Combined ticket covers all eight; allow 2–3 hours. Afternoon: Takegawara Onsen, one of Japan's oldest facilities, offering a sand bath where staff bury you to the neck in sand heated by underground springs. Walk the Beppu port at dusk. Check into an onsen hotel for the evening.",
+          "fit": "Layers; warm near the geothermal pools. Bring a small towel for the onsen.",
           "checklist": [
-            "Sunrise start for the torii",
-            "Be respectful in Gion — no chasing geiko for photos"
+            "JR Sonic reserved seat from Hakata",
+            "Jigoku Meguri combined ticket ≈¥2,200 — ⚠ verify current price",
+            "Takegawara sand bath — ⚠ verify hours and walk-in availability",
+            "Yukata provided at onsen hotels — ask at check-in"
           ]
         },
         {
-          "date": "Day 7",
-          "title": "Day trip — Nara (or Kinkaku-ji)",
-          "pace": "Half to full day · Nara ~45 min each way · ~4–5 hr there",
-          "note": "The deer are wild — buy crackers, but they'll headbutt for them.",
-          "body": "Hop to Nara for the bowing deer in the park and the colossal bronze Buddha at Todai-ji. Back in Kyoto, fit in the Golden Pavilion (Kinkaku-ji) if you have the legs for it.",
-          "fit": "Comfortable shoes; the park is large.",
+          "date": "Day 6 — Thu Oct 29",
+          "title": "Yufuin — ryokan day in the mountains",
+          "pace": "Bus 45 min · slow village morning · ryokan from 15:00",
+          "note": "The pacing purpose of the whole trip. The ryokan does the work — your job is just to show up and slow down.",
+          "body": "Morning bus from Beppu to Yufuin (~45 min). Walk Yunotsubo Kaido from the station to Lake Kinrinko — 1km of craft ceramics, local sake, mountain cafés with records on a turntable. Check into the ryokan at 15:00. Kaiseki dinner is served at a fixed time in your room or a private dining space — multi-course, unhurried, sake-paired. Then the private onsen in your room. Sleep whenever you want.",
+          "fit": "Yukata provided. Pack light — this stop is about the ryokan, not the sights.",
           "checklist": [
-            "Deer crackers (shika senbei)",
-            "Todai-ji's Great Buddha Hall"
+            "Ryokan check-in 15:00 — leave Beppu after a late breakfast",
+            "Dinner included, at a fixed time — confirm when booking (usually 18:00 or 19:00)",
+            "Breakfast included (typically 07:30–09:00)",
+            "Private onsen room (kashikiri-buro) — book this room type at reservation",
+            "Bring cash — most Yufuin ryokans are cash-only"
           ]
         },
         {
-          "date": "Day 8",
-          "title": "Fly home",
-          "pace": "Departure · Kyoto → KIX ~80 min (Haruka) · be there ~3 hr before",
-          "note": "Allow a generous buffer — and use the luggage-forwarding (takkyubin) if your bags are heavy.",
-          "body": "The Haruka express to Kansai Airport (or Shinkansen back to Tokyo if you fly from there). Last konbini snacks for the road.",
-          "fit": "Travel-comfortable.",
+          "date": "Day 7 — Fri Oct 30",
+          "title": "Yufuin dawn + Yufuin no Mori back to Fukuoka",
+          "pace": "Early morning · slow check-out · scenic train afternoon",
+          "note": "Set an alarm for 06:30. The lake mist in October is not optional.",
+          "body": "Walk to Lake Kinrinko before 07:00 — in late October the lake steams gently in the cool morning air while the surrounding hills begin to turn. Ryokan breakfast at 08:00, then a final walk down Yunotsubo Kaido. Check out by 10:00–11:00. The Yufuin no Mori scenic train departs early-to-mid afternoon — a 2.5-hour rolling forest-and-valley journey back to Hakata in a retro wooden-panelled carriage. Dinner back in Fukuoka.",
+          "fit": "Warm layer for early morning by the lake.",
           "checklist": [
-            "Haruka / Shinkansen booked",
-            "Tax-free paperwork if you shopped",
-            "Passport + boarding pass"
+            "06:30 alarm for Lake Kinrinko mist",
+            "Yufuin no Mori reserved seat — booked months in advance",
+            "Ryokan checkout by 10:00–11:00",
+            "One Yufuin souvenir: ceramics, sake, or craft textile"
+          ]
+        },
+        {
+          "date": "Day 8 — Sat Oct 31",
+          "title": "Nagasaki — Glover Garden & Chinatown",
+          "pace": "Express train 1.5 hrs · afternoon sights · champon dinner",
+          "note": "Nagasaki has a character unlike anywhere else in Japan — Portuguese, Dutch, and Chinese layers over a Japanese foundation. It takes at least two days to feel.",
+          "body": "Express train from Hakata to Nagasaki (~1.5 hrs on the Nishi-Kyushu Shinkansen relay). Check in, then head to Glover Garden on the hillside — Victorian-era Western merchants' houses with panoramic harbour views. Walk down through the Minami Yamate district. Chinatown (Shinchi) for dinner: champon, Nagasaki's signature thick noodles in a rich pork-and-seafood broth. Walk the harbour front at night.",
+          "fit": "Glover Garden involves substantial hill walking — good shoes.",
+          "checklist": [
+            "JR Kamome reserved seat from Hakata",
+            "Glover Garden — ⚠ verify current opening hours and entry fee",
+            "Champon dinner in Chinatown — ⚠ verify your chosen restaurant is still operating in 2026"
+          ]
+        },
+        {
+          "date": "Day 9 — Sun Nov 1",
+          "title": "Nagasaki — Peace Museum & Dejima",
+          "pace": "Deep day · museums and memorial parks · emotionally heavy",
+          "note": "Give the museum and hypocenter site the time they deserve. Don't stack other major sights on this day.",
+          "body": "Nagasaki Atomic Bomb Museum and the Peace Memorial Park in the morning — allow 3+ hours. The museum is smaller and less internationally famous than Hiroshima's; many visitors find Nagasaki's context — a cosmopolitan city with deep Catholic roots, struck three days after Hiroshima — makes the weight of August 9 even more acute. Walk from the museum to the hypocenter marker. Afternoon: Dejima, the reconstructed Dutch trading post where all Western contact with Japan filtered through for over 200 years of isolation. Oura Cathedral (Japan's oldest surviving Western-style church) is a short walk uphill. Sara udon dinner.",
+          "fit": "Comfortable shoes. A contemplative walking day.",
+          "checklist": [
+            "Nagasaki Atomic Bomb Museum — ⚠ verify entry fee (≈¥200) and hours",
+            "Hypocenter marker and Peace Park — free",
+            "Dejima — ⚠ verify hours and entry",
+            "Oura Cathedral — ⚠ verify visiting hours",
+            "Buy Fukusaya castella — Nagasaki's most iconic souvenir"
+          ]
+        },
+        {
+          "date": "Day 10 — Mon Nov 2",
+          "title": "Hiroshima — Peace Memorial & okonomiyaki",
+          "pace": "Transit + full day · ~3 hrs to Hiroshima · deep museum day",
+          "note": "The Hiroshima Peace Memorial Museum is widely considered one of the best museums in Japan. Give it 3–4 hours.",
+          "body": "Morning train back through Hakata, then the Sanyo Shinkansen to Hiroshima (~3 hrs total). Straight to the Peace Memorial Museum and the Atomic Bomb Dome — the preserved industrial promotion hall skeleton directly under the hypocenter. Walk the Peace Memorial Park. Allow more time than you think you'll need. Dinner: Hiroshima-style okonomiyaki — layered (noodles, cabbage, pork, egg) and cooked flat, quite different from Osaka's mixed style. Okonomimura is a multi-storey building of stalls.",
+          "fit": "Comfortable clothes. Reflective and walking-heavy day.",
+          "checklist": [
+            "Hiroshima Peace Memorial Museum — ⚠ verify current entry (≈¥200) and hours",
+            "Allow 3–4 hours minimum — do not rush",
+            "Atomic Bomb Dome — adjacent, free",
+            "Hiroshima okonomiyaki dinner — Okonomimura building (⚠ verify still operating 2026)"
+          ]
+        },
+        {
+          "date": "Day 11 — Tue Nov 3",
+          "title": "Miyajima — the floating torii & island overnight",
+          "pace": "Ferry day · full island · stay overnight",
+          "note": "Staying overnight is the whole point. All day-trippers leave on the last ferry. You'll have the torii to yourself at dawn.",
+          "body": "Morning train and JR ferry to Miyajima island (~40 min total). Free-roaming deer will meet you at the dock — they are bold and will investigate your bag. Itsukushima Shrine and the vermilion torii gate: check the tide tables before going. At high tide the gate appears to float in Hiroshima Bay; at low tide you can walk out to its base. Mount Misen ropeway for panoramic views. Momiji tempura — the island's autumn specialty. Check into your ryokan by 15:00. Sunset on the gate is yours alone after the ferries stop.",
+          "fit": "Walking shoes for the ropeway trail or hike.",
+          "checklist": [
+            "JR ferry from Miyajimaguchi (IC card or JR Pass)",
+            "Check tide tables before you go",
+            "Itsukushima Shrine entry ≈¥300 — ⚠ verify",
+            "Miyajima ropeway — ⚠ verify hours and ≈¥1,800 return",
+            "Overnight ryokan booked months in advance",
+            "Alarm for sunrise — 06:00 or earlier"
+          ]
+        },
+        {
+          "date": "Day 12 — Wed Nov 4",
+          "title": "Miyajima dawn → Hiroshima → back to Fukuoka",
+          "pace": "Early start · ferry return · Shinkansen home",
+          "note": "The 06:00 torii in morning mist is the single best image of the trip. Get up for it.",
+          "body": "Wake before 06:00. Walk to the torii in early light — the island fog, the stillness, the gate. Ryokan breakfast, check out by 10:00. Ferry back to the mainland, Hondori covered shopping arcade in Hiroshima if time allows, then Sanyo Shinkansen to Hakata (~50 min). Fukuoka evening: the dinner you didn't get to earlier.",
+          "fit": "Warm layer for the early morning on the water.",
+          "checklist": [
+            "06:00 alarm for the torii at sunrise",
+            "Hiroshima Hondori for last-minute shopping",
+            "Reserved Shinkansen seat back to Hakata",
+            "Final Fukuoka dinner confirmed or walk-in spot researched"
+          ]
+        },
+        {
+          "date": "Day 13 — Thu Nov 5",
+          "title": "Fukuoka — rest day & Yanagibashi Market",
+          "pace": "Easy day · open agenda · departure prep",
+          "note": "A buffer day for anything missed and the ritual last bowl. Don't over-plan it.",
+          "body": "Sleep in. Yanagibashi Rengo Market in the morning — Fukuoka's old wholesale market ('Fukuoka's kitchen'): fresh fish, pickles, ceramics, local sake. ⚠ Closes around 13:00. Afternoon open: Canal City, Imaizumi cafés, Fukuoka Tower one last time. Pack carefully — Japanese packaging is beautiful and heavier than it looks. The evening bowl of ramen at a counter, late, with a beer. Ritual.",
+          "fit": "Comfortable clothes. You've earned a slow day.",
+          "checklist": [
+            "Yanagibashi Market — morning only, closes ≈13:00 (⚠ verify hours)",
+            "Hakata Hankyu department store food hall for packaged goods to bring home",
+            "Pack and weigh bags — Japanese shopping adds up",
+            "Last ramen, last Sapporo, last yatai counter"
+          ]
+        },
+        {
+          "date": "Day 14 — Fri Nov 6",
+          "title": "Depart Fukuoka",
+          "pace": "Departure · 5-min subway · fly home",
+          "note": "Fukuoka Airport is 5 minutes from the city centre. The most painless airport exit in Japan.",
+          "body": "International check-in opens 3 hours before departure. From Hakata station it's 5 minutes and ≈¥260 to the international terminal. Complete tax-free shopping paperwork if needed. One last konbini onigiri for the road. The flight east crosses the date line — you land in the US the same calendar day you left Japan.",
+          "fit": "Travel comfortable.",
+          "checklist": [
+            "Tax-free shopping paperwork completed before security",
+            "IC card: keep as souvenir or clear the balance at a machine",
+            "Passport, boarding pass, Visit Japan Web documents",
+            "Airport 3 hours before international departure"
           ]
         }
       ]
@@ -195,80 +472,103 @@
     {
       "type": "sights",
       "group": "Sights",
-      "title": "Top sights",
+      "title": "Fukuoka highlights",
       "items": [
         {
-          "name": "Senso-ji (Asakusa)",
-          "kicker": "Tokyo's oldest temple",
-          "body": "Tokyo's oldest temple, approached through the giant red Kaminarimon lantern and the Nakamise souvenir street. Lively day and night; come early to photograph it without the crowds.",
-          "img": {
-            "file": "Senso-ji, Asakusa, Tokyo.jpg",
-            "alt": "Senso-ji temple in Asakusa"
-          },
+          "name": "Yatai stalls — Nakasu & Tenjin",
+          "kicker": "Open-air food culture, uniquely Fukuoka",
+          "body": "Yatai are small open-air food stalls — a protected cultural institution found nowhere else in Japan at this scale. The Nakasu cluster runs along the river between Hakata and Tenjin; the smaller Tenjin cluster sits on Showa-dori. Each stall seats 6–10 at the counter; you sit and order through the cook. Open ~18:00 until the small hours. Walk the strip and pick whichever stall has a friendly opening.",
           "map": {
-            "lat": 35.7148,
-            "lng": 139.7967
+            "lat": 33.5944,
+            "lng": 130.4075
           }
         },
         {
-          "name": "Shibuya Crossing",
-          "kicker": "The famous scramble",
-          "body": "The world's busiest pedestrian scramble — a wave of people on every light change. Watch from the Starbucks window or the Shibuya Sky deck above for the full effect.",
-          "img": {
-            "file": "Shibuya crossing.jpg",
-            "alt": "Shibuya scramble crossing"
-          },
+          "name": "Dazaifu Tenmangu",
+          "kicker": "Ancient shrine city, 30 minutes from Tenjin",
+          "body": "One of Japan's most important Shinto shrines, dedicated to the scholar-deity Sugawara no Michizane. The approach passes plum trees, gift stalls, and the Kengo Kuma-designed woven-bamboo Starbucks. The moon-reflection bridge leads to the main hall. The Kyushu National Museum is directly behind the shrine in a striking modern building. A complete half-day trip with almost no tourist pressure.",
           "map": {
-            "lat": 35.6595,
-            "lng": 139.7006
+            "lat": 33.5122,
+            "lng": 130.5339
           }
         },
         {
-          "name": "Fushimi Inari Taisha",
-          "kicker": "The torii tunnels",
-          "body": "Thousands of vermilion torii gates winding up the mountain behind the shrine. The lower paths mob by mid-morning, so start at dawn and climb a little for near-empty tunnels.",
-          "img": {
-            "file": "Summit of Mount Inariyama @ Fushimi Inari Shrine @ Kyoto (13406530194).jpg",
-            "alt": "Torii at Fushimi Inari"
-          },
+          "name": "Yanagawa canal town",
+          "kicker": "Flat-bottomed punting, eel rice",
+          "body": "A historic castle town crisscrossed by canals, best experienced on a flat-bottomed donko-bune punt boat with a pole-wielding guide. The ride is unhurried and genuinely calming. Yanagawa's other claim: Unaju — grilled eel on rice in a lacquer box. One hour south of Fukuoka by Nishitetsu rail.",
           "map": {
-            "lat": 34.9671,
-            "lng": 135.7727
+            "lat": 33.1638,
+            "lng": 130.4055
           }
         },
         {
-          "name": "Arashiyama Bamboo Grove",
-          "kicker": "Towering bamboo",
-          "body": "A short, ethereal walk through towering bamboo on Kyoto's western edge, next to Tenryu-ji temple and its autumn garden. Go before mid-morning for the quiet and the light.",
-          "img": {
-            "file": "2021 Sagano Bamboo forest in Arashiyama, Kyoto, Japan.jpg",
-            "alt": "Arashiyama bamboo grove"
-          },
+          "name": "Canal City Hakata",
+          "kicker": "Free fountain shows, practical shopping",
+          "body": "A large curved retail and entertainment complex built along an indoor canal. Free laser and water shows at the central fountain every hour. Good for a rainy afternoon, a film, or anything you forgot to pack.",
           "map": {
-            "lat": 35.0168,
-            "lng": 135.6716
+            "lat": 33.5894,
+            "lng": 130.4108
+          }
+        }
+      ]
+    },
+    {
+      "type": "sights",
+      "group": "Sights",
+      "title": "Kyushu & western Honshu",
+      "items": [
+        {
+          "name": "Beppu Jigoku Meguri — 8 Hells",
+          "kicker": "Volcanic pools in every colour",
+          "body": "Eight dramatically different volcanic pools in a compact circuit: the cobalt-blue Sea Hell, the blood-red Blood Pond Hell, the boiling grey Tornado mud pool, and more. Combined entry covers all eight; allow 2–3 hours. Takegawara Onsen nearby offers the famous sand bath — buried to the neck, heated from below by the springs.",
+          "map": {
+            "lat": 33.3017,
+            "lng": 131.4995
           }
         },
         {
-          "name": "Kinkaku-ji",
-          "kicker": "The Golden Pavilion",
-          "body": "A gold-leaf Zen pavilion mirrored in its pond — small but unforgettable, and stunning framed by autumn colour. A quick, flat visit you can pair with a Kyoto afternoon.",
-          "img": {
-            "file": "Kinkaku Ji Golden Pavilion (111096827).jpeg",
-            "alt": "Kinkaku-ji golden pavilion"
-          },
+          "name": "Yufuin — Lake Kinrinko & Yunotsubo Kaido",
+          "kicker": "Mountain ryokan village",
+          "body": "A small artisan town at ~500m altitude surrounded by mountains, with a steam-covered lake at its centre. The 1km Yunotsubo Kaido pedestrian street from the station to the lake is the best expression of artisan Japan outside Kyoto: craft ceramics, small-batch sake, pour-over cafés. Best in early morning, when the lake steams.",
           "map": {
-            "lat": 35.0394,
-            "lng": 135.7292
+            "lat": 33.2660,
+            "lng": 131.0638
           }
         },
         {
-          "name": "Kiyomizu-dera & Higashiyama",
-          "kicker": "The hillside lanes",
-          "body": "A wooden temple on stilts above Kyoto, reached through preserved lanes of shops and tea houses (Sannenzaka, Ninenzaka). Magic in late-afternoon light and autumn leaves.",
+          "name": "Nagasaki Atomic Bomb Museum & Peace Park",
+          "kicker": "The second city — August 9, 1945",
+          "body": "Nagasaki was the second city struck, three days after Hiroshima. The museum is smaller and less internationally known — shorter queues, a slightly more intimate experience. The hypocenter marker, Peace Park, and the nearby Urakami Cathedral (rebuilt after the bombing) form a walking circuit. Allow a full morning.",
           "map": {
-            "lat": 34.9949,
-            "lng": 135.785
+            "lat": 32.7737,
+            "lng": 129.8643
+          }
+        },
+        {
+          "name": "Dejima — the Dutch trading post",
+          "kicker": "Japan's window on the world, 1641–1853",
+          "body": "A small artificial island in Nagasaki harbour where the Dutch East India Company operated as Japan's sole Western trading partner during the Sakoku isolation period. Reconstructed to its early 19th-century state; exhibits explain how Western science, medicine, and trade goods entered Japan through this single channel.",
+          "map": {
+            "lat": 32.7437,
+            "lng": 129.8716
+          }
+        },
+        {
+          "name": "Hiroshima Peace Memorial Park & Museum",
+          "kicker": "One of the best museums in Japan",
+          "body": "The Genbaku Dome — the skeletal ruin of a prefectural promotion hall preserved exactly as it stood after August 6, 1945 — is a UNESCO World Heritage Site. The Peace Memorial Museum is consistently ranked among Japan's finest (entry ≈¥200). Allow 3–4 hours minimum; the park provides space to process what you've seen.",
+          "map": {
+            "lat": 34.3951,
+            "lng": 132.4534
+          }
+        },
+        {
+          "name": "Itsukushima Shrine & floating torii — Miyajima",
+          "kicker": "Japan's most iconic image",
+          "body": "The vermilion O-torii gate standing in Hiroshima Bay is one of Japan's three officially designated scenic views. At high tide the gate appears to float; at low tide you can walk to its base. Free-roaming deer inhabit the island. Staying overnight — after the last day-tripper ferry — separates the experience from the photograph.",
+          "map": {
+            "lat": 34.2960,
+            "lng": 132.3195
           }
         }
       ]
@@ -277,45 +577,56 @@
       "type": "prose",
       "group": "Sights",
       "title": "Visiting tips",
-      "body": "<p>Japan's blockbuster sights reward <b>early starts</b> — Fushimi Inari, Arashiyama and Kiyomizu are transformed before 9am and exhausting after. Treat Kyoto temples as a morning game and save the afternoon for gardens and food. And don't over-stack the days: the country's joy is often the small stuff — a perfect konbini egg sandwich, a quiet shrine, a department-store food hall (depachika) at closing time.</p>"
+      "body": "<p>The shape of this itinerary is <b>cities first, reverential experiences later</b>. Beppu is theatrical and sensory; Yufuin is slow and contemplative; Nagasaki and Hiroshima are weighty and need emotional stamina. Don't put both Peace Museums on consecutive days — build a lighter day between them. And remember: <b>early mornings transform Japan</b>. The Miyajima torii at 06:15 in mist with no one else present is a completely different sight from the same gate at 11:00 with a tour group queuing behind you. Set the alarms.</p>"
     },
     {
       "type": "prose",
-      "group": "Gaming & anime",
-      "title": "Akihabara & beyond",
-      "body": "<p><b>Akihabara</b> is the anime-and-electronics heart of Tokyo — multi-floor arcades, retro-game shops, figure stores, and themed cafés. <b>Nakano Broadway</b> is the collectors' maze for vintage goods, <b>Pokemon Centers</b> and the giant flagship stores dot the city, and in Kyoto/Osaka <b>Den Den Town</b> (Nipponbashi) plays Akihabara's role. Arcades (Taito, Round1) are everywhere for crane games and rhythm titles.</p>"
+      "group": "Onsen & ryokan",
+      "title": "Understanding ryokan",
+      "body": "<p>A <b>ryokan</b> is a traditional Japanese inn, and staying in one is as much an experience as any sight on this trip. What makes it different from a hotel: <b>futon bedding</b> on tatami mats (rolled out by staff while you're at dinner); <b>yukata</b> (cotton robe) provided and worn throughout the property, including to dinner; <b>kaiseki dinner</b> included — a multi-course seasonal meal served at a fixed time in your room or a private dining space; and a <b>Japanese breakfast</b> equally elaborate the next morning. Both meals are included in the room price and not optional.</p><p>The protocol: shoes off at the genkan (entrance), follow the staff's lead. At dinner, sake or beer is extra and ordered from the menu. Checkout is typically 10:00–11:00. The stay has a fixed shape. The experience is about <b>time that isn't optimised</b>. Don't schedule anything before noon on ryokan check-out mornings.</p><p>For this trip: Yufuin and Miyajima are the two ryokan nights. Yufuin has the better range of properties; Miyajima has the better location. Both must be booked 3–6 months in advance for October.</p>"
     },
     {
       "type": "prose",
-      "group": "Food & shopping",
-      "title": "What to eat",
-      "body": "<p>Eat widely and cheaply: <b>ramen</b>, <b>sushi</b> (conveyor-belt or counter), <b>tempura</b>, <b>okonomiyaki</b>, <b>tonkatsu</b>, and standing soba. The <b>depachika</b> food halls in the basements of department stores are a feast at any budget, and <b>convenience stores</b> punch absurdly above their weight (the egg sandwich is famous for a reason). In Osaka-adjacent Kyoto, hunt down takoyaki and okonomiyaki.</p>"
+      "group": "Onsen & ryokan",
+      "title": "Onsen etiquette",
+      "body": "<p>Hot-spring bathing is a cornerstone of the trip — Beppu, Yufuin, and both ryokans all have it. The rules are consistent: <b>shower and rinse completely before entering any communal bath</b>. Wash everything, rinse thoroughly, then slide in. Move slowly. Keep your voice down — onsen are meditative, not social. Towels stay outside the water or folded on your head. Hair must be tied back or kept dry. Most onsen have separate-sex communal baths. Many ryokans offer private onsen rooms (kashikiri-buro) bookable by the hour — ideal for groups or for anyone with tattoo concerns.</p>"
     },
     {
-      "type": "prose",
-      "group": "Food & shopping",
-      "title": "Shopping & tax-free",
-      "body": "<p>Foreign visitors get <b>tax-free</b> shopping (the 10% consumption tax) at participating shops on purchases over ¥5,000 — bring your passport. Good hunting: <b>Don Quijote</b> (everything, late hours), <b>Uniqlo / GU</b>, drugstores for skincare, <b>kitchenware in Kappabashi</b> (Tokyo) and knives, and <b>depachika</b> sweets to bring home. Many shops do instant in-store tax-free; some refund at the airport.</p>"
-    },
-    {
-      "type": "list",
-      "group": "Food & shopping",
-      "title": "Souvenirs — Japan",
-      "items": [
-        "KitKats in regional flavours (matcha, sake, Tokyo banana)",
-        "A folding fan, furoshiki cloth, or tenugui towel",
-        "Matcha and a good Japanese knife (Kappabashi)",
-        "Anime / game figures or goods from Akihabara",
-        "Stationery and pens (Itoya, Loft)",
-        "Sake or Japanese whisky"
+      "type": "panel",
+      "group": "Onsen & ryokan",
+      "title": "Tattoos & onsen",
+      "body": "<p>The majority of traditional onsen facilities in Japan prohibit visible tattoos in communal baths — a firm policy at most places, not a suggestion. The root is historical association with organised crime, and it is unlikely to change soon.</p>",
+      "checklist": [
+        "Book ryokan rooms with a private onsen (kashikiri-buro) — no tattoo restrictions apply to private baths",
+        "State the requirement when booking — most ryokans respond honestly and can confirm private bath availability",
+        "Beppu's Takegawara sand bath has typically been more lenient — ⚠ confirm before arriving",
+        "Small tattoos covered by a waterproof bandage may be tolerated at some facilities — ask first, never assume",
+        "Both Yufuin and Miyajima ryokans: request a private onsen room at the time of booking"
       ]
     },
     {
       "type": "prose",
-      "group": "Food & shopping",
-      "title": "Collectibles & chain merch",
-      "body": "<p>For collectors: a Starbucks <b>'Been There' Tokyo / Kyoto</b> mug, the <b>Pokemon Center</b> and <b>Nintendo</b> flagship stores for exclusives, and the <b>Studio Ghibli</b>-adjacent goods at Donguri Republic shops. Tokyo also has a <b>Hard Rock Cafe</b> (and Universal/Disney merch if those parks are on your list).</p>"
+      "group": "Food & Fukuoka",
+      "title": "What to eat — by city",
+      "body": "<p><b>Fukuoka:</b> Japan's food capital by most serious rankings. <b>Hakata ramen</b> (tonkotsu) is the original — rich pork-bone broth, creamy and fatty, thin noodles, chashu pork, served at a narrow counter with the cook in front of you. <b>Yatai stall food:</b> yakitori (grilled skewers), ramen again, motsunabe (offal hot pot), mentaiko onigiri. <b>Mentaiko</b> (spicy cod roe) is Fukuoka's souvenir food. <b>Mizutaki</b> (Fukuoka chicken hot pot) for colder evenings.</p><p><b>Yanagawa:</b> <b>Unaju</b> (grilled eel on rice in a lacquer box) — properly expensive, worth the expense for one meal.</p><p><b>Nagasaki:</b> <b>Champon</b> — thick noodles in rich pork-seafood broth, Chinese-Japanese fusion; the city's defining dish. <b>Sara udon</b> — crispy noodles with a sauce-covered stir-fry. <b>Castella</b> — Portuguese-origin sponge cake; Fukusaya brand is definitive. <b>Kakuni manju</b> — braised pork belly in a steamed bun.</p><p><b>Hiroshima:</b> <b>Hiroshima okonomiyaki</b> — layered savoury flat-cooked pancake (noodles, cabbage, pork, egg), distinct from Osaka's mixed style. <b>Oysters</b> — Hiroshima is Japan's top oyster prefecture; grilled, raw, or panko-fried.</p><p><b>Miyajima:</b> <b>Momiji manju</b> — maple-leaf-shaped cakes (red bean, custard, or chocolate); the island snack. <b>Grilled oysters</b> on the street from waterfront vendors.</p>"
+    },
+    {
+      "type": "prose",
+      "group": "Food & Fukuoka",
+      "title": "How to order in Japan",
+      "body": "<p>Many ramen and tonkatsu shops use <b>vending machine ticket systems (shokken)</b>: buy a meal ticket at the machine by the door before sitting, hand it to the cook at the counter. Most machines have photos. When in doubt, press the top-left button — it's almost always the most popular item.</p><p>At regular restaurants: point at the menu and say <b>kore o kudasai</b> (this one, please). Photo menus are common; plastic food models at the entrance show exactly what the dish looks like. Water comes automatically and is free. <b>Okaikei o onegaishimasu</b> = bill, please. Pay at the register by the door on the way out — don't leave cash on the table.</p><p>At a yatai: sit at any open counter stool, the cook takes your order. 6–10 items usually on a board above. Point and nod. A cold namashibori beer or whisky highball is the natural companion.</p>"
+    },
+    {
+      "type": "prose",
+      "group": "Food & Fukuoka",
+      "title": "Where to eat — specific picks (⚠ needs pre-trip research)",
+      "body": "<p>This section is intentionally a <b>framework</b> — specific names and prices change quickly, and this guide was written more than 6 months before the trip. Fill in the following slots closer to departure:</p><ul><li><b>Fukuoka ramen counter:</b> search Tabelog or Google Maps for '博多ラーメン Fukuoka' filtered to 3.5+ stars; pick a counter-style shop with a ticket machine. Verify walk-in policy and hours. ⚠ Don't rely on training-data name recommendations — verify the restaurant is still open in 2026.</li><li><b>Fukuoka yatai stall:</b> no reservations possible. Walk the Nakasu strip after 18:30 and take any open seat. Ask the cook what they made that day.</li><li><b>Yanagawa Unaju:</b> several well-regarded options near the canal boarding area; book ahead for Saturdays. ⚠ Verify current prices — eel is expensive (expect ¥2,500–4,000).</li><li><b>Nagasaki champon:</b> Shikairō (四海楼) is credited with inventing the dish. ⚠ Verify it's still operating in 2026 and worth the likely queue. Alternatives in Chinatown exist one block back from the main strip.</li><li><b>Hiroshima okonomiyaki:</b> the Okonomimura multi-storey building is reliable for first-timers; pick any stall with the cook actively working and a counter seat open.</li><li><b>Miyajima oysters:</b> grilled oyster vendors operate along the main approach road from the ferry dock; walk-in, order at the counter, eat standing.</li></ul>"
+    },
+    {
+      "type": "prose",
+      "group": "References",
+      "title": "Sources & links",
+      "body": "<p>⚠ This guide is a structural draft. Every link should be re-checked closer to travel — prices, hours, and operators change. Links will be expanded as sections are verified pre-trip:</p><ul><li><b>Visit Japan Web</b> (immigration &amp; customs): vjw-lp.digital.go.jp</li><li><b>JR Kyushu Rail Pass</b> (current prices &amp; booking): english.jrkyushu.co.jp — ⚠ verify all pass prices here before buying</li><li><b>National JR Pass:</b> japanrailpass.net — ⚠ price raised Oct 2023; verify current amount</li><li><b>Fukuoka City Subway:</b> subway.city.fukuoka.lg.jp/english</li><li><b>Beppu Jigoku Meguri</b> (hells tour): beppu-jigoku.com — ⚠ verify combined entry price</li><li><b>Hiroshima Peace Memorial Museum:</b> hiro-tsuitokinenkan.jp/en — ⚠ verify entry and hours</li><li><b>Nagasaki Atomic Bomb Museum:</b> nabmuseum.jp/english — ⚠ verify entry and hours</li><li><b>Japan Meteorological Agency</b> (weather &amp; typhoon forecasts): jma.go.jp/jma/indexe.html</li><li><b>Japan Visitor Hotline</b> (English, 24/7): 050-3816-2787</li><li><b>Tabelog</b> (restaurant ratings, some English): tabelog.com/en — for pre-trip restaurant research</li></ul>"
     }
-  ],
-  "verified": "⚠ Draft — not yet fact-checked to the current standard; verify before relying on it"
+  ]
 }
