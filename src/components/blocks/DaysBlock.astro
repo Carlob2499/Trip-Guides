@@ -1,7 +1,7 @@
 ---
-const { sec } = Astro.props;
+const { sec, keyPrefix = "dy" } = Astro.props;
 ---
-{(sec.items || []).map((d: any) => (
+{(sec.items || []).map((d: any, di: number) => (
   <div class="day">
     <div class="d">{d.date}</div>
     <div class="b">
@@ -13,8 +13,8 @@ const { sec } = Astro.props;
       {d.checklist && d.checklist.length > 0 && (
         <div class="daykit">
           <span class="kit-label">Day kit</span>
-          {d.checklist.map((i: string) => (
-            <label class="check"><input type="checkbox" /> <Fragment set:html={i} /></label>
+          {d.checklist.map((i: string, j: number) => (
+            <label class="check"><input type="checkbox" data-pkey={`${keyPrefix}-d${di}-${j}`} /> <Fragment set:html={i} /></label>
           ))}
         </div>
       )}

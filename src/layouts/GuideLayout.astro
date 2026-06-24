@@ -28,7 +28,16 @@ const destTz = DEST_TZ[guide.country] ?? null;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{guide.title}</title>
+    <title>{guide.title} — Trip Guide</title>
+    <meta name="description" content={guide.dek || guide.title} />
+    <meta property="og:type"        content="article" />
+    <meta property="og:title"       content={`${guide.title} — Trip Guide`} />
+    <meta property="og:description" content={guide.dek || guide.title} />
+    <meta property="og:url"         content={Astro.url.href} />
+    <meta name="twitter:card"       content="summary" />
+    <meta name="twitter:title"      content={`${guide.title} — Trip Guide`} />
+    <meta name="twitter:description" content={guide.dek || guide.title} />
+    <link rel="canonical"           href={Astro.url.href} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
     <PwaHead />
@@ -284,9 +293,28 @@ const destTz = DEST_TZ[guide.country] ?? null;
            6. Jet-lag calculator
          ═══════════════════════════════════════════════════════════════════ -->
     <script define:vars={{ order, storeKey }}>
+      /* ── SHARED: SCROLL LOCK (used by both sheet and share modal) ─────── */
+      var _lockCount = 0;
+      function _lockScroll()   { if (++_lockCount === 1) document.body.classList.add("sheet-lock"); }
+      function _unlockScroll() { if (--_lockCount <= 0) { _lockCount = 0; document.body.classList.remove("sheet-lock"); } }
+
       (function () {
         try {
           var STORE_KEY = "tripguide-" + (storeKey || "guide");
+
+          /* ── SCROLL POSITION MEMORY ──────────────────────────────────── */
+          // Restore the scroll position saved during the previous visit
+          // (uses sessionStorage so it resets on a fresh tab, not across days).
+          var SCROLL_KEY = "scroll-" + STORE_KEY;
+          var _savedY = sessionStorage.getItem(SCROLL_KEY);
+          if (_savedY) { requestAnimationFrame(function () { window.scrollTo(0, parseInt(_savedY, 10) || 0); }); }
+          var _scrollTimer;
+          window.addEventListener("scroll", function () {
+            clearTimeout(_scrollTimer);
+            _scrollTimer = setTimeout(function () {
+              try { sessionStorage.setItem(SCROLL_KEY, String(window.pageYOffset)); } catch (e) {}
+            }, 250);
+          }, { passive: true });
 
           /* ── 0. SAVE AS PDF ──────────────────────────────────────────── */
           var printBtn = document.getElementById("btnPrint");
@@ -320,13 +348,13 @@ const destTz = DEST_TZ[guide.country] ?? null;
           var sheetBtn = document.getElementById("sheetOpen");
           function openSheet() {
             sheet.classList.add("open"); backdrop.classList.add("open");
-            document.body.classList.add("sheet-lock");
+            _lockScroll();
             sheetBtn.setAttribute("aria-expanded", "true");
             var f = sheet.querySelector("a"); if (f) f.focus();
           }
           function closeSheet() {
             sheet.classList.remove("open"); backdrop.classList.remove("open");
-            document.body.classList.remove("sheet-lock");
+            _unlockScroll();
             sheetBtn.setAttribute("aria-expanded", "false"); sheetBtn.focus();
           }
           if (sheet && sheetBtn && backdrop) {
@@ -342,6 +370,12 @@ const destTz = DEST_TZ[guide.country] ?? null;
                 else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
               }
             });
+            // Swipe down to close on mobile
+            var _swipeY = 0;
+            sheet.addEventListener("touchstart", function (e) { _swipeY = e.touches[0].clientY; }, { passive: true });
+            sheet.addEventListener("touchend", function (e) {
+              if (e.changedTouches[0].clientY - _swipeY > 60) closeSheet();
+            }, { passive: true });
           }
 
           /* ── 3. SCROLL-SPY ───────────────────────────────────────────── */
@@ -383,21 +417,33 @@ const destTz = DEST_TZ[guide.country] ?? null;
           window.addEventListener("resize", onScroll);
           spy();
 
+          /* ── 3b. SECTION DEEP LINKS ──────────────────────────────────── */
+          document.querySelectorAll(".anchor-btn").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+              var sid = btn.getAttribute("data-sid");
+              var url = window.location.href.split("#")[0] + "#" + sid;
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(function () {
+                  btn.textContent = "✓";
+                  setTimeout(function () { btn.textContent = "#"; }, 1800);
+                }).catch(function () {
+                  btn.textContent = "✓";
+                  setTimeout(function () { btn.textContent = "#"; }, 1800);
+                });
+              }
+            });
+          });
+
           /* ── 4. CHECKLISTS ───────────────────────────────────────────── */
+          // hashKey is still used by the budget calculator below.
           function hashKey(s) {
             var h = 5381; s = String(s);
             for (var i = 0; i < s.length; i++) { h = ((h << 5) + h + s.charCodeAt(i)) | 0; }
             return "k" + (h >>> 0).toString(36);
           }
-          var boxes  = Array.prototype.slice.call(document.querySelectorAll("input[type=checkbox]"));
-          var seenK  = {};
-          boxes.forEach(function (b) {
-            var lab = b.closest(".check");
-            var t   = (lab ? lab.textContent : "").replace(/\s+/g, " ").trim();
-            var k   = hashKey(t);
-            if (seenK[k] != null) { seenK[k]++; k = k + "_" + seenK[k]; } else { seenK[k] = 0; }
-            b.dataset.pkey = k;
-          });
+          // data-pkey is stamped at build time by PanelBlock/ListBlock/DaysBlock —
+          // no client-side hash or dedup needed.
+          var boxes = Array.prototype.slice.call(document.querySelectorAll("input[type=checkbox]"));
 
           function loadState()  { try { return JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); } catch (e) { return {}; } }
           function saveState(s) { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); flash("✓ saved"); } catch (e) { flash("Storage full — use Copy progress"); } }
@@ -481,13 +527,26 @@ const destTz = DEST_TZ[guide.country] ?? null;
             });
           }
 
-          // Clear all
+          // Clear all — two-step in-page confirmation (no blocking dialog)
           var clearBtn = document.getElementById("btnClear");
+          var _clearPending = false, _clearTimer;
           if (clearBtn) {
             clearBtn.addEventListener("click", function () {
-              if (!confirm("Uncheck everything and clear saved progress?")) return;
-              boxes.forEach(function (b) { b.checked = false; });
-              saveState({}); updateCount();
+              if (_clearPending) {
+                // Second click — confirmed
+                _clearPending = false; clearTimeout(_clearTimer);
+                clearBtn.textContent = "Clear all"; clearBtn.classList.remove("prog-confirm");
+                boxes.forEach(function (b) { b.checked = false; });
+                saveState({}); updateCount();
+              } else {
+                // First click — arm
+                _clearPending = true;
+                clearBtn.textContent = "Sure?"; clearBtn.classList.add("prog-confirm");
+                _clearTimer = setTimeout(function () {
+                  _clearPending = false;
+                  clearBtn.textContent = "Clear all"; clearBtn.classList.remove("prog-confirm");
+                }, 3000);
+              }
             });
           }
 
@@ -506,8 +565,24 @@ const destTz = DEST_TZ[guide.country] ?? null;
             });
             function fmt(n)    { return cur + (Math.round(n * 100) / 100).toLocaleString("en-US"); }
             function recalcB() {
-              var sum = 0; inputs.forEach(function (inp) { var v = parseFloat(inp.value); if (!isNaN(v)) sum += v; });
+              var sum = 0;
+              var catSums = {};
+              inputs.forEach(function (inp) {
+                var v = parseFloat(inp.value);
+                if (!isNaN(v)) {
+                  sum += v;
+                  var row = inp.closest(".brow");
+                  var cat = row ? (row.getAttribute("data-bcat") || "") : "";
+                  catSums[cat] = (catSums[cat] || 0) + v;
+                }
+              });
               var t = bud.querySelector(".bact-total"); if (t) t.textContent = fmt(sum);
+              // Update per-category "Your spend" subtotal cells
+              bud.querySelectorAll(".bsubtotal").forEach(function (row) {
+                var cat = row.getAttribute("data-sub-cat") || "";
+                var el  = row.querySelector(".bsub-act");
+                if (el) el.textContent = catSums[cat] != null ? fmt(catSums[cat]) : "—";
+              });
             }
             function persistB() {
               var o = {}; inputs.forEach(function (inp) { if (inp.value !== "") o[inp.dataset.pkey] = inp.value; });
@@ -628,7 +703,14 @@ const destTz = DEST_TZ[guide.country] ?? null;
           var s = document.createElement("script");
           s.src = "https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js";
           s.onload = function () { qrLibLoaded = true; cb(); };
-          s.onerror = function () { cb(); };
+          s.onerror = function () {
+            // Offline or CDN failure — show a helpful message instead of an empty box
+            if (shareQrEl) {
+              shareQrEl.style.cssText = "display:flex;align-items:center;justify-content:center;height:80px;font-size:12px;color:var(--muted);text-align:center;padding:0 8px";
+              shareQrEl.textContent = "QR unavailable offline — use Copy link";
+            }
+            cb();
+          };
           document.head.appendChild(s);
         }
 
@@ -639,7 +721,7 @@ const destTz = DEST_TZ[guide.country] ?? null;
           }
           shareModal.removeAttribute("hidden");
           shareBackdrop.classList.add("open");
-          document.body.classList.add("sheet-lock");
+          _lockScroll();
           if (shareUrlTxt) shareUrlTxt.textContent = pageUrl;
           if (shareWALink)   shareWALink.href   = "https://wa.me/?text=" + encodeURIComponent(pageUrl);
           if (shareEmailLink) shareEmailLink.href = "mailto:?subject=" + encodeURIComponent(pageTitle) + "&body=" + encodeURIComponent(pageUrl);
@@ -664,7 +746,7 @@ const destTz = DEST_TZ[guide.country] ?? null;
         function closeShare() {
           shareModal.setAttribute("hidden", "");
           shareBackdrop.classList.remove("open");
-          document.body.classList.remove("sheet-lock");
+          _unlockScroll();
           shareBtn && shareBtn.setAttribute("aria-expanded", "false");
           shareBtn && shareBtn.focus();
         }

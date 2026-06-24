@@ -17,6 +17,11 @@ import RaidBlock   from "./blocks/RaidBlock.astro";
 
 const { sec, sid, ci, solo } = Astro.props;
 
+// Stable key prefix for checklist items — based on section index, not content.
+// Changing item text does not change its saved state; adding/removing items at
+// the end is safe. Adding in the middle shifts later keys (acceptable tradeoff).
+const keyPrefix = sid.replace(/^sec-/, "s");
+
 const titleText = solo ? "" : (sec.title || "");
 
 // Types that render their content inside a shared .card wrapper.
@@ -26,10 +31,16 @@ const carded = ["panel", "prose", "list", "routes", "map", "budget", "raids"].in
 <section class="block" id={sid} data-cat={ci}>
   {carded ? (
     <div class="card">
-      {titleText && <h3 class="block-title">{titleText}</h3>}
-      {sec.type === "panel"  && <PanelBlock  sec={sec} />}
+      {titleText && (
+        <div class="block-title-row">
+          <h3 class="block-title">{titleText}</h3>
+          <button class="anchor-btn" data-sid={sid} type="button"
+                  title="Copy link to this section" aria-label="Copy link to this section">#</button>
+        </div>
+      )}
+      {sec.type === "panel"  && <PanelBlock  sec={sec} keyPrefix={keyPrefix} />}
       {sec.type === "prose"  && <ProseBlock  sec={sec} />}
-      {sec.type === "list"   && <ListBlock   sec={sec} />}
+      {sec.type === "list"   && <ListBlock   sec={sec} keyPrefix={keyPrefix} />}
       {sec.type === "routes" && <RoutesBlock sec={sec} />}
       {sec.type === "map"    && <MapBlock    sec={sec} />}
       {sec.type === "budget" && <BudgetBlock sec={sec} />}
@@ -37,8 +48,14 @@ const carded = ["panel", "prose", "list", "routes", "map", "budget", "raids"].in
     </div>
   ) : (
     <>
-      {titleText && <h3 class="block-title">{titleText}</h3>}
-      {sec.type === "days"   && <DaysBlock   sec={sec} />}
+      {titleText && (
+        <div class="block-title-row">
+          <h3 class="block-title">{titleText}</h3>
+          <button class="anchor-btn" data-sid={sid} type="button"
+                  title="Copy link to this section" aria-label="Copy link to this section">#</button>
+        </div>
+      )}
+      {sec.type === "days"   && <DaysBlock   sec={sec} keyPrefix={keyPrefix} />}
       {sec.type === "sights" && <SightsBlock sec={sec} />}
     </>
   )}

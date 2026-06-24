@@ -78,6 +78,7 @@ const hasRange  = Math.round(lowTotal) !== Math.round(estTotal) || Math.round(hi
             return (
               <div class="brow"
                    data-key={it.label}
+                   data-bcat={it.category ?? ""}
                    data-trip={line}
                    data-person={linePP}
                    data-trip-lo={lo  ?? ""}
@@ -112,7 +113,8 @@ const hasRange  = Math.round(lowTotal) !== Math.round(estTotal) || Math.round(hi
           {cat && catMap.size > 1 && (
             <div class="brow bsubtotal"
                  data-sub-trip={catEst}
-                 data-sub-person={catEstPP}>
+                 data-sub-person={catEstPP}
+                 data-sub-cat={cat}>
               <span class="blabel bsub-lbl">{cat} subtotal</span>
               <span class="bcol bsub-est">{cur}{catEst.toLocaleString("en-US")}</span>
               <span class="bcol bsub-act">&mdash;</span>

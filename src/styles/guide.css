@@ -42,6 +42,7 @@ a{color:var(--accent);text-underline-offset:2px}
 .prog button{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;background:none;border:1px solid var(--rule2);border-radius:3px;padding:.42rem .8rem;cursor:pointer;color:var(--muted);transition:background .15s,color .15s,border-color .15s}
 .prog button:hover{color:var(--ink);border-color:var(--ink)}
 .prog .saved{border:none;color:var(--green);padding:.42rem .3rem;font-family:'Space Mono',monospace;font-size:10px}
+.prog-confirm{color:var(--accent) !important;border-color:var(--accent) !important}
 
 /* Inline restore panel — no window.prompt; appears below the prog bar */
 .import-panel{margin:.55rem auto 0;width:100%;max-width:26rem;background:var(--bg2);border:1px solid var(--rule);border-radius:6px;padding:.65rem .85rem;text-align:left}
@@ -252,7 +253,18 @@ body{overflow-x:clip}
 .share-socials{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
 .share-soc{display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.45rem .4rem;border:1px solid var(--rule2);border-radius:5px;text-decoration:none;font-size:.85rem;color:var(--muted);transition:color .14s,border-color .14s}
 .share-soc:hover{color:var(--ink);border-color:var(--ink)}
-@media(prefers-color-scheme:dark){.share-qr-wrap canvas,.share-qr-wrap img{filter:invert(1)}}
+/* QR colors are set explicitly in JS based on data-theme — no CSS inversion needed */
+
+/* === SECTION DEEP LINK ======================================================= */
+/* A small # button that appears on hover next to each section title.
+   Always faintly visible on touch devices (no hover state). */
+.block-title-row{display:flex;align-items:baseline;gap:.45rem}
+.block-title-row .block-title{flex:1;min-width:0}
+.anchor-btn{flex:none;background:none;border:none;padding:.1rem .3rem;cursor:pointer;font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted);opacity:0;border-radius:3px;transition:opacity .15s,color .15s,background .15s;line-height:1;align-self:center}
+.anchor-btn:focus{opacity:1;outline:2px solid var(--accent)}
+.card:hover .anchor-btn,.block:hover .anchor-btn{opacity:.45}
+.card:hover .anchor-btn:hover,.block:hover .anchor-btn:hover{opacity:1;color:var(--accent)}
+@media(hover:none){.anchor-btn{opacity:.3}}
 
 /* === FRESHNESS STAMP + OFFLINE NOTE ========================================== */
 .verified{display:inline-block;margin:.6rem 0 0;padding:.32rem .7rem;border:1px solid var(--rule);border-radius:999px;background:var(--card);font-family:'Space Mono',monospace;font-size:.72rem;letter-spacing:.02em;color:var(--muted);line-height:1.3}
