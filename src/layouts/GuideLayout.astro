@@ -49,6 +49,7 @@ const sightCount = _flat.filter((s: any) => s.type === "sights").reduce((n: numb
     <meta name="twitter:image"      content={`${Astro.url.origin}/og/${Astro.url.pathname.replace(/^\/guides\//,"").replace(/\/$/,"")}.png`} />
     <link rel="canonical"           href={Astro.url.href} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300..700&family=Space+Grotesk:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
     <PwaHead />
     <!--
