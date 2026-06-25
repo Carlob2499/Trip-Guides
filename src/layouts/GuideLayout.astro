@@ -434,6 +434,29 @@ const sightCount = _flat.filter((s: any) => s.type === "sights").reduce((n: numb
           window.addEventListener("resize", onScroll);
           spy();
 
+          /* ── 3a. JUMP TO TODAY ──────────────────────────────────────── */
+          (function () {
+            var now = new Date();
+            var mo  = now.getMonth() + 1;
+            var d   = now.getDate();
+            // Match day cards whose .d label contains today's month-day (e.g. "Jul 9", "Jul 14")
+            var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+            var label  = MONTHS[mo - 1] + " " + d; // "Jul 9" — uses &nbsp; as Space Mono renders it
+            var plain  = MONTHS[mo - 1] + " " + d;
+            document.querySelectorAll(".day").forEach(function (card) {
+              var dEl = card.querySelector(".d");
+              if (!dEl) return;
+              var txt = dEl.textContent || "";
+              if (txt.indexOf(plain) !== -1 || txt.indexOf(label) !== -1 ||
+                  txt.replace(/ /g, " ").indexOf(plain) !== -1) {
+                card.classList.add("day-today");
+                setTimeout(function () {
+                  card.scrollIntoView({ behavior: "smooth", block: "center" });
+                }, 120);
+              }
+            });
+          })();
+
           /* ── 3b. SECTION DEEP LINKS ──────────────────────────────────── */
           document.querySelectorAll(".anchor-btn").forEach(function (btn) {
             btn.addEventListener("click", function () {

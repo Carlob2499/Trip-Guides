@@ -144,6 +144,7 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 /* === DAY-BY-DAY ============================================================== */
 .day{display:grid;grid-template-columns:92px 1fr;gap:1rem;padding:1.1rem;border-radius:6px;background:var(--bg2);margin-bottom:.5rem;border:1px solid var(--rule)}
 .day:last-child{margin-bottom:0}
+.day-today{border-color:var(--accent)!important;box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 18%,transparent)}
 .day .d{font-family:'Space Mono',monospace;font-size:.74rem;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);padding-top:.35rem}
 .day .b strong{display:block;font-family:'Space Grotesk',-apple-system,system-ui,sans-serif;font-size:1.22rem;line-height:1.2;margin-bottom:.25rem}
 .pace{font-size:.78rem;color:var(--muted);font-family:'Space Mono',monospace;margin:.25rem 0 .6rem;line-height:1.55;padding-left:.7rem;border-left:2px solid var(--rule2)}
