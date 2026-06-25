@@ -114,6 +114,26 @@
     },
     {
       "type": "panel",
+      "group": "Plan",
+      "title": "Final checks — before you fly",
+      "body": "<p>Two items are still open; the rest are one-time verifications before packing.</p>",
+      "checklist": [
+        "<b>⚠ Book KTX: Seoul → Daejeon (Jul 11 morning, ≈08:30) and Daejeon → Seoul (Jul 13 morning).</b> Finals weekend fills fast — book now at korail.com or in the Korail Talk app. Standard class ~₩23,600 each way. Main Seoul Station, not Suseo/SRT.",
+        "<b>⚠ Book Changdeokgung Secret Garden (Huwon) tour.</b> English 10:15 slot on Jul 14. Book at cdg.go.kr — sells out weeks ahead. Palace ticket (₩3,000) + Huwon tour (₩5,000) = ₩8,000/person total.",
+        "T-money card topped up to ≈₩50,000 per person before leaving NJ, OR load at ICN T1 arrivals (GS25 / convenience store, no fee).",
+        "Kakao T app installed on all three phones — use for Daejeon taxis on Jul 11 and Jul 13.",
+        "Pokémon GO: bag cleared to ≥500 free slots, Remote Raid Passes stocked, Lucky Eggs and Star Pieces packed, charged TMs in bag for GO Fest.",
+        "NOL World app installed on both Daejeon-trip phones; MSI tickets confirmed showing in the app (name-tied — no screenshots, prints, or transfers).",
+        "e-Arrival Card (electronic): complete at krentry.go.kr within 72 hours of landing — easiest to fill out on the plane.",
+        "Re-verify GO Fest Global boss list the week of Jul 8. Niantic adjusts lineups up to 48 hours before an event; the counters in this guide are for the announced roster.",
+        "Cash: ≈₩200,000–300,000 per person (convenience stores + street food are often cash-only). Alternatively, load Wise or Revolut before departure for fee-free ATM withdrawals.",
+        "Power adapter: Korea uses 220V Type C/F round-pin plugs (same as continental Europe). One adapter per person — USB-C PDs are fine.",
+        "Heat prep packed: hat (arena AC won't help you outdoors), sunscreen SPF 50+, electrolyte tablets. Seoul in July averages 28–31°C with high humidity.",
+        "Leave home contact a copy of your itinerary: Seoul Jul 8–10 & Jul 13–15, Daejeon Jul 11–12 (Daejeon I-Hotel, 27-5 Expo-ro 123beon-gil, Yuseong-gu)."
+      ]
+    },
+    {
+      "type": "panel",
       "group": "Money & budget",
       "title": "Money & currency",
       "body": "<p>Korea uses the <b>won (₩)</b>. The won is weak right now, which helps your spending power — roughly (approximate, <a href=\"https://www.google.com/search?q=KRW+USD+exchange+rate\" target=\"_blank\" rel=\"noopener noreferrer\">check before you go</a>): <b>₩1,000 ≈ $0.67</b> and <b>₩10,000 ≈ $6.70</b>, at about ₩1,500 to the dollar.</p><p>Cards and contactless work almost everywhere. For cash, the most reliable option is an <b>ATM inside a GS25 or CU convenience store</b> — both accept most foreign cards and charge modest fees. <b>Global ATM Alliance banks</b> (KEB Hana is the Korean partner) have lower or zero foreign withdrawal fees if your home bank is in the network — check before you leave. Avoid airport exchange booths; the rates are poor. Keep ≈₩30,000–50,000 cash for markets and small eateries. A <b>T-money</b> card covers all subway and buses. Tipping isn't expected anywhere.</p>"
@@ -181,16 +201,16 @@
           "low": 3,
           "high": 35,
           "category": "Transport",
-          "note": "Base fare ₩4,800. Key rides: Daejeon Station → I-Hotel (≈₩10,000 total, ≈₩3,300/person split 3). Budget 3–5 rides total — late-night Hongdae is the most likely use."
+          "note": "Base fare ₩4,800. Key rides: Daejeon Station → I-Hotel (≈₩10,000 total, ≈₩5,500 each split 2). Budget 3–5 rides total — late-night Hongdae is the most likely use."
         },
         {
           "label": "AREX inbound + outbound",
           "basis": "trip",
-          "est": 11,
-          "low": 11,
-          "high": 26,
+          "est": 6,
+          "low": 6,
+          "high": 17,
           "category": "Transport",
-          "note": "All-Stop: ≈₩4,050 each way per person (~49 min). The Express (≈₩13,000, 43 min) is not worth it — skip it."
+          "note": "All-Stop: ≈₩4,050 each way per person (~49 min) → ≈₩8,100 round trip ≈ $6. The Express (≈₩13,000, 43 min) is not worth it — skip it."
         },
         {
           "label": "KTX Seoul ↔ Daejeon — return",
