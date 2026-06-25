@@ -19,6 +19,13 @@ A static **Astro** website of curated travel guides, hosted on **Netlify**, whic
 rebuilds automatically whenever a commit lands on `main` in GitHub. The owner is
 not a programmer — explain changes in plain language and keep the workflow simple.
 
+## Audits and comparisons — fix, don't report
+
+When asked to compare a guide against the standard (Denmark/Korea) or audit it for gaps:
+- **Immediately fix every gap found.** The comparison is a work order, not a report.
+- The only exception: a gap that requires external research (price verification, web search) that can't be completed in the session — flag those explicitly as "needs research" and fix everything else.
+- Do not present a list of gaps and wait for the user to say "so fix them." That is the same failure as not finding them at all, with an extra step.
+
 ## Golden rules (do not compromise these)
 1. **Accuracy first.** Every price, opening time, URL, and travel fact must be
    verified with a web search before it goes in a guide. Flag anything you cannot
