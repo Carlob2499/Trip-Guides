@@ -107,6 +107,12 @@
       "body": "<p>Timing is in your favour: <b>no public holidays fall during 8–15 July 2026.</b> Constitution Day (17 July) isn't a day off and lands just after you leave, and the next real holiday is Liberation Day on 15 August — so nothing shuts down while you're there.</p><p>What you do need to plan around is the weather. Mid-July is the peak of Korea's monsoon, '<b>jangma</b>' — the wettest, most humid stretch of the year, with roughly 300–400&nbsp;mm of rain across about 16 days, real heat, and humidity near 80%. The rain often arrives in heavy bursts that can briefly flood streets or slow transit, with a small typhoon chance later in the month. Pack a compact umbrella and quick-dry layers, keep indoor options in your back pocket, and check the forecast each morning. Your MSI weekend in Daejeon (11–12 July) is indoors, so rain won't touch it. (See <b>Weather &amp; comfort</b> for what to wear.)</p>"
     },
     {
+      "type": "prose",
+      "group": "Plan",
+      "title": "Rainy day fallback — when the monsoon hits",
+      "body": "<p>Expect at least 1–2 full-rain days in July. The rain can be heavy but rarely lasts the whole day. Have a plan ready:</p><ul><li><b>Stay underground:</b> Seoul's subway-connected underground malls are enormous. The Hongdae Shopping Street (under Hongik University Station) and Gangnam's COEX Underground Mall are both walkable and free to enter — good for an entire afternoon.</li><li><b>COEX Aquarium</b> (Samseong Station, Line 2): 45,000+ sea creatures, 2–3 hours easy. ≈₩33,000–35,000 pp — <b>⚠ verify price and book online</b> to skip the queue. Open daily.</li><li><b>Seoul Museum of Art (SeMA)</b> (City Hall, Line 1/2): free admission for main exhibitions, strong contemporary Korean art, fully dry. Takes 1.5–2 hours.</li><li><b>PC Bang:</b> Full-spec gaming PCs, ≈₩1,500–2,500/hr, unlimited snacks at the counter. There's one within 5 minutes of any Hongdae station exit. Unironically one of the best rainy-day options for this group.</li><li><b>Cinema:</b> CGV or Megabox near Hapjeong Station (one stop from Hongdae). Korean cinemas are excellent — huge screens, reclining seats, ≈₩12,000–15,000 pp. Both apps have English filter for subtitled showings.</li><li><b>Rainy day = great raiding:</b> Fewer players competing for gyms. Head to COEX, Times Square (Yeongdeungpo, Line 1/5), or Lotte World Tower (Jamsil, Line 2/8) — all have indoor gyms and PokéStops. Light rain also boosts Water-type Incense spawns.</li></ul>"
+    },
+    {
       "type": "panel",
       "group": "Money & budget",
       "title": "Money & currency",
@@ -435,13 +441,15 @@
           "title": "Palaces & old Seoul",
           "pace": "Full day · Gyeongbokgung ~2 hr · Bukchon ~1.5 hr · Insadong ~1.5 hr · lots of walking",
           "note": "Heat and humidity are the real workload — water, shade breaks, an iced-coffee stop. Your body clock is 1–2 days adjusted at this point.",
-          "body": "<p><em>Fifteen minutes on the subway and you're six hundred years back — grand palaces, stone lanes, and a neighbourhood that still feels lived-in.</em></p><p>Gyeongbokgung in the morning (time it for the changing of the guard — typically 10:00 and 14:00, but <b>⚠ verify the current schedule</b> as specific ceremonies are sometimes suspended); free entry if you rent a hanbok at the gate. Then uphill into Bukchon Hanok Village — quiet voices, real residents — and wind down with tea and crafts in Insadong.</p><p><b>🎮 Road of Legends ends tonight (Jul 10, ~20:00 KST).</b> Spin Gyeongbokgung and Bukchon PokéStops during your visit for any bonus items. If you want to grab a quick raid before the event ends, the Gyeongbokgung area has active gyms.</p>",
+          "body": "<p><em>Fifteen minutes on the subway and you're six hundred years back — grand palaces, stone lanes, and a neighbourhood that still feels lived-in.</em></p><p>Gyeongbokgung in the morning (time it for the changing of the guard — typically 10:00 and 14:00, but <b>⚠ verify the current schedule</b> as specific ceremonies are sometimes suspended); free entry if you rent a hanbok at the gate. Then uphill into Bukchon Hanok Village — quiet voices, real residents — and wind down with tea and crafts in Insadong.</p><p><b>🎮 Tonight is one of the best raiding evenings of the trip — Road of Legends finale.</b> Spin Gyeongbokgung and Bukchon PokéStops during your visit. Then plan your evening around the Raid Hours:</p><ul><li><b>~17:00 — head toward Hongdae or any area with dense gyms.</b> Hongdae pedestrian zone is ideal. Stop for bingsu or iced coffee — you've earned it after a full day of walking.</li><li><b>18:00–19:00 — Raid Hour: Origin Forme Dialga &amp; Origin Forme Palkia.</b> Best Master League forms of both species (Roar of Time / Spacial Rend), both shiny-eligible (1/20), both 2–4 trainers. Use 4–5 passes here, split between the two. Counter charts in the Road of Legends section.</li><li><b>19:00–20:00 — Primal Raid Hour: Primal Kyogre &amp; Primal Groudon.</b> Primal Groudon (Ground/Fire) is quadruple weak to Water — your Kyogre team farms it easily. Primal tier needs 5+ trainers — coordinate ahead of time. Groudon gives you Master League XL Candy and is your best Xurkitree counter on Sunday. Use your last 3–4 passes here.</li></ul><p>Road of Legends ends at <b>23:59 KST</b> (the Primal Raid Hour wraps at 20:00; regular 5-star bosses stay available until midnight). Head to dinner after 20:00 — the Hongdae pedestrian zone has dozens of options, no reservations needed.</p>",
           "fit": "Breathable layers; umbrella doubles for sun and sudden rain.",
           "checklist": [
             "Gyeongbokgung open today (closed Tue)",
             "Free entry if you rent a hanbok",
             "Respect Bukchon's quiet hours — it's a residential neighbourhood",
-            "Road of Legends ends tonight — spin stops during the visit"
+            "18:00–19:00 Raid Hour — Origin Forme Dialga + Palkia (best Master League forms; 4–5 passes)",
+            "19:00–20:00 Primal Raid Hour — Primal Kyogre + Primal Groudon (5+ trainers needed; priority Groudon for XL Candy)",
+            "Coordinate Primal group beforehand — find raid partners via Pokémon GO chat or Campfire"
           ]
         },
         {
@@ -708,6 +716,141 @@
       "group": "Food & shopping",
       "title": "Collectibles & chain merch",
       "body": "<p>For collectors: a Starbucks <b>'Been There' Seoul</b> mug, and the <b>Kakao Friends</b> and <b>Line Friends</b> flagship stores (Hongdae and Gangnam) for character-brand exclusives you won't find at home.</p>"
+    },
+    {
+      "type": "prose",
+      "group": "Food & shopping",
+      "title": "Quick reference — when you're unsure what to do",
+      "body": "<p>Open this when no one can agree on a plan.</p><ul><li><b>Hungry, near Hongdae, any time:</b> Yookssam Naengmyeon or Chicken Baengi (both walkable, no reservation). Cold noodles in July heat are excellent.</li><li><b>Want KBBQ tonight:</b> Walk the side streets off Wausan-ro after 17:00 — a dozen AYCE spots, no reservations needed mid-week. Budget ≈₩15,000–25,000 pp.</li><li><b>Fastest possible meal:</b> GS25 or CU — triangle gimbap (≈₩1,500), corn dog, instant ramen at the counter. Genuinely good and a Seoul experience.</li><li><b>Hot and need AC:</b> any café, COEX Mall (Samseong Station, Line 2), or the underground Hongdae Shopping Street below Hongik University Station. Free to enter, browse for as long as you want.</li><li><b>Nothing to do in the afternoon:</b> Han River — Line 5 to Yeouido Station, buy fried chicken from the strip at Exit 3–4, sit on the grass by the water. Free, always worth it.</li><li><b>Want to raid but don't want to sightsee:</b> Hongdae and Sinchon are gym-dense — you can rack up 30+ raids without going underground. Drop a Lure at a café table and grind.</li><li><b>Evening with no plan:</b> Hongdae pedestrian zone at 20:00 — buskers, street food, energy builds toward midnight. Walk 30 minutes and see what pulls you in.</li><li><b>After midnight:</b> MUSSO (24-hr Korean BBQ, several Hongdae locations) or any GS25 with ramen. Mike's Cabin if someone wants a bar, no cover charge.</li><li><b>Daejeon: gap between events:</b> Hanbat Arboretum (free, walkable from EXPO, great PokéStop density) or the EXPO Science Park grounds. Both have shade.</li></ul>"
+    },
+    {
+      "type": "prose",
+      "group": "Road of Legends",
+      "title": "Road of Legends 2026 — your Jul 9–10 window",
+      "body": "<p>Road of Legends runs <b>Mon Jul 6 – Fri Jul 10 (ends 23:59 KST)</b>. You land Thursday Jul 9 and catch the final two days. Up to 9 free Raid Passes per day from gym discs. Pokémon caught from any raid Jul 6–12 may earn a <b>Special Pokémon Background</b> collectible.</p><p><b>Thursday Jul 9 (arrival day) — take it easy:</b> 5-star bosses all day: <b>Crowned Sword Zacian</b> (Fairy/Steel) and <b>Crowned Shield Zamazenta</b> (Fighting/Steel). Both shiny-eligible (1/20), both 2–4 trainers. Raid Hour 18:00–19:00 KST. Mega Gengar Mega Raid Hour 19:00–20:00. You just flew 14 hours — use 2–3 passes if you're feeling fresh, save most for tomorrow. Both Crowned forms are weak only to <b>Fire and Ground — same team handles both</b>. See counter charts below.</p><p><b>Friday Jul 10 (palaces day) — the real evening:</b> One of the best raiding evenings of the trip. Full plan in the day-by-day entry.</p><ul><li><b>Raid Hour 18:00–19:00 KST</b> — Origin Forme Dialga and Origin Forme Palkia. Both are the best Master League forms of their species (Roar of Time / Spacial Rend). Save 4–5 passes here.</li><li><b>Primal Raid Hour 19:00–20:00 KST</b> — Primal Kyogre and Primal Groudon. Groudon (Ground/Fire) has a quadruple Water weakness; your Kyogre counters make it trivial. Coordinate 5+ trainers for Primal tier. Groudon is your best Xurkitree counter on Sunday — a priority XL-candy target. Save 3–4 passes here.</li></ul>"
+    },
+    {
+      "type": "raids",
+      "group": "Road of Legends",
+      "title": "Raid counter charts — Road of Legends Jul 9 & 10",
+      "bosses": [
+        {
+          "name": "Crowned Sword Zacian",
+          "tier": "5-star",
+          "typing": ["Fairy", "Steel"],
+          "shiny_odds": "1/20",
+          "trainers": "2–4 trainers",
+          "note": "Thursday Jul 9 all day + Raid Hour 18:00–19:00 KST. Steel typing neutralises all the usual Fairy counters (Ghost/Dark/Bug do nothing useful here). Bring the same Fire/Ground team for Zamazenta right after.",
+          "strategy": "<b>Weak to: Fire and Ground only.</b> Steel cancels out every type Fairy is normally weak to — no Ghost, Dark, or Bug. Fire hits harder overall (Reshiram, Mega Blaziken). Primal Groudon covers both weaknesses in one slot. <b>This same team works identically for Crowned Shield Zamazenta.</b>",
+          "counters": [
+            { "pokemon": "Primal Groudon", "fast": "Mud Shot", "charged": "Earthquake", "typing": "Ground/Fire" },
+            { "pokemon": "Mega Blaziken", "fast": "Fire Spin", "charged": "Blast Burn", "typing": "Fire/Fighting" },
+            { "pokemon": "Reshiram", "fast": "Fire Fang", "charged": "Fusion Flare", "typing": "Dragon/Fire" },
+            { "pokemon": "Mega Garchomp", "fast": "Mud Shot", "charged": "Earth Power", "typing": "Dragon/Ground" },
+            { "pokemon": "Landorus (Therian)", "fast": "Mud Shot", "charged": "Sandsear Storm", "typing": "Ground/Flying" },
+            { "pokemon": "Shadow Entei", "fast": "Fire Spin", "charged": "Flamethrower", "typing": "Fire" },
+            { "pokemon": "Chandelure", "fast": "Fire Spin", "charged": "Overheat", "typing": "Ghost/Fire" },
+            { "pokemon": "Excadrill", "fast": "Mud-Slap", "charged": "Drill Run", "typing": "Ground/Steel" }
+          ]
+        },
+        {
+          "name": "Crowned Shield Zamazenta",
+          "tier": "5-star",
+          "typing": ["Fighting", "Steel"],
+          "shiny_odds": "1/20",
+          "trainers": "2–4 trainers",
+          "note": "Thursday Jul 9 all day + Raid Hour 18:00–19:00 KST. Fighting/Steel is an unusual type combination — Psychic and Fairy (usually great vs Fighting) are fully neutralised by the Steel typing. Identical weakness profile to Crowned Sword Zacian: Fire and Ground only.",
+          "strategy": "<b>Weak to: Fire and Ground only.</b> Steel neutralises the Fighting weakness to Psychic, Flying, and Fairy. Reuse the exact same team you built for Crowned Zacian — there's no need to swap anything.",
+          "counters": [
+            { "pokemon": "Primal Groudon", "fast": "Mud Shot", "charged": "Earthquake", "typing": "Ground/Fire" },
+            { "pokemon": "Mega Blaziken", "fast": "Fire Spin", "charged": "Blast Burn", "typing": "Fire/Fighting" },
+            { "pokemon": "Reshiram", "fast": "Fire Fang", "charged": "Fusion Flare", "typing": "Dragon/Fire" },
+            { "pokemon": "Mega Garchomp", "fast": "Mud Shot", "charged": "Earth Power", "typing": "Dragon/Ground" },
+            { "pokemon": "Landorus (Therian)", "fast": "Mud Shot", "charged": "Sandsear Storm", "typing": "Ground/Flying" },
+            { "pokemon": "Shadow Entei", "fast": "Fire Spin", "charged": "Flamethrower", "typing": "Fire" },
+            { "pokemon": "Chandelure", "fast": "Fire Spin", "charged": "Overheat", "typing": "Ghost/Fire" },
+            { "pokemon": "Excadrill", "fast": "Mud-Slap", "charged": "Drill Run", "typing": "Ground/Steel" }
+          ]
+        },
+        {
+          "name": "Origin Forme Dialga",
+          "tier": "5-star",
+          "typing": ["Steel", "Dragon"],
+          "shiny_odds": "1/20",
+          "trainers": "2–4 trainers",
+          "note": "Friday Jul 10 all day + Raid Hour 18:00–19:00 KST. The best Dialga form for Master League — knows Roar of Time. High priority for XL Candy. Both Fighting and Ground work; Ground slightly favoured due to Primal Groudon coverage.",
+          "strategy": "<b>Weak to: Fighting and Ground.</b> Steel's Dragon resistance means Dragon-type attackers do nothing here. Primal Groudon (from earlier in the same Raid Hour) is the best single counter if you have it; Mega Garchomp is the accessible Mega lead. Terrakion and Keldeo lead the Fighting options.",
+          "counters": [
+            { "pokemon": "Primal Groudon", "fast": "Mud Shot", "charged": "Earthquake", "typing": "Ground/Fire" },
+            { "pokemon": "Mega Garchomp", "fast": "Mud Shot", "charged": "Earth Power", "typing": "Dragon/Ground" },
+            { "pokemon": "Terrakion", "fast": "Double Kick", "charged": "Sacred Sword", "typing": "Rock/Fighting" },
+            { "pokemon": "Keldeo", "fast": "Low Kick", "charged": "Sacred Sword", "typing": "Water/Fighting" },
+            { "pokemon": "Lucario", "fast": "Counter", "charged": "Aura Sphere", "typing": "Fighting/Steel" },
+            { "pokemon": "Shadow Machamp", "fast": "Counter", "charged": "Dynamic Punch", "typing": "Fighting" },
+            { "pokemon": "Landorus (Therian)", "fast": "Mud Shot", "charged": "Sandsear Storm", "typing": "Ground/Flying" },
+            { "pokemon": "Excadrill", "fast": "Mud-Slap", "charged": "Drill Run", "typing": "Ground/Steel" }
+          ]
+        },
+        {
+          "name": "Origin Forme Palkia",
+          "tier": "5-star",
+          "typing": ["Water", "Dragon"],
+          "shiny_odds": "1/20",
+          "trainers": "2–4 trainers",
+          "note": "Friday Jul 10 all day + Raid Hour 18:00–19:00 KST. The best Palkia form for Master League — knows Spacial Rend. Dragon and Fairy both hit super-effectively. If you raided Rayquaza at GO Fest Day 1, bring it.",
+          "strategy": "<b>Weak to: Dragon and Fairy.</b> Water neutralises Dragon's usual Rock and Ice weaknesses. Dragon-type moves hit harder overall; Mega Salamence is the top Mega lead. Fairy picks (Xerneas, Mega Gardevoir) are great if Dragon is short on trainers — Fairy moves are unresisted here.",
+          "counters": [
+            { "pokemon": "Mega Salamence", "fast": "Dragon Tail", "charged": "Outrage", "typing": "Dragon/Flying" },
+            { "pokemon": "Rayquaza", "fast": "Dragon Tail", "charged": "Dragon Ascent", "typing": "Dragon/Flying" },
+            { "pokemon": "Mega Gardevoir", "fast": "Charm", "charged": "Dazzling Gleam", "typing": "Psychic/Fairy" },
+            { "pokemon": "Palkia", "fast": "Dragon Tail", "charged": "Spacial Rend", "typing": "Water/Dragon" },
+            { "pokemon": "Xerneas", "fast": "Geomancy", "charged": "Moonblast", "typing": "Fairy" },
+            { "pokemon": "Dragonite", "fast": "Dragon Tail", "charged": "Outrage", "typing": "Dragon/Flying" },
+            { "pokemon": "Togekiss", "fast": "Charm", "charged": "Dazzling Gleam", "typing": "Fairy/Flying" },
+            { "pokemon": "Zacian", "fast": "Quick Attack", "charged": "Play Rough", "typing": "Fairy" }
+          ]
+        },
+        {
+          "name": "Primal Kyogre",
+          "tier": "primal",
+          "typing": ["Water"],
+          "shiny_odds": "1/20",
+          "shiny_note": "Same shiny model as regular Kyogre (black/dark highlights)",
+          "trainers": "5–10 trainers (Primal tier has significantly more HP than 5-star)",
+          "note": "Friday Jul 10 Primal Raid Hour 19:00–20:00 KST. Pure Water — Electric hits hardest. Kyogre is also the top counter for Primal Groudon in the same raid hour; stack Raid Passes between both Primals.",
+          "strategy": "<b>Weak to: Grass and Electric.</b> Electric moves deal slightly more damage overall. Zekrom (Fusion Bolt) is the single best counter; Shadow Raikou and Xurkitree are close behind. Primal tier — 5+ trainers recommended, more if under Level 35. Coordinate before the hour starts.",
+          "counters": [
+            { "pokemon": "Zekrom", "fast": "Charge Beam", "charged": "Fusion Bolt", "typing": "Dragon/Electric" },
+            { "pokemon": "Shadow Raikou", "fast": "Thunder Shock", "charged": "Wild Charge", "typing": "Electric" },
+            { "pokemon": "Mega Manectric", "fast": "Charge Beam", "charged": "Wild Charge", "typing": "Electric" },
+            { "pokemon": "Kartana", "fast": "Razor Leaf", "charged": "Leaf Blade", "typing": "Grass/Steel" },
+            { "pokemon": "Xurkitree", "fast": "Thunder Shock", "charged": "Discharge", "typing": "Electric" },
+            { "pokemon": "Thundurus (Therian)", "fast": "Volt Switch", "charged": "Thunderbolt", "typing": "Electric/Flying" },
+            { "pokemon": "Roserade", "fast": "Razor Leaf", "charged": "Grass Knot", "typing": "Grass/Poison" },
+            { "pokemon": "Electivire", "fast": "Thunder Shock", "charged": "Wild Charge", "typing": "Electric" }
+          ]
+        },
+        {
+          "name": "Primal Groudon",
+          "tier": "primal",
+          "typing": ["Ground", "Fire"],
+          "shiny_odds": "1/20",
+          "shiny_note": "Same shiny model as regular Groudon (gold/yellow highlights)",
+          "trainers": "5–10 trainers (Primal tier)",
+          "note": "Friday Jul 10 Primal Raid Hour 19:00–20:00 KST. Ground/Fire = quadruple Water weakness (the only type that hits both super-effectively). Your Kyogre literally counters this boss. Priority target: Primal Groudon is your best counter for Xurkitree on Sunday, and top-tier Ground attacker for Master League XL.",
+          "strategy": "<b>Weak to: Water only</b> — but it is a <i>quadruple</i> weakness (both Ground and Fire take 2.56× from Water in GO). Ice, Grass, and other types that usually hit Ground well are resisted by Fire. Bring nothing but Water. Kyogre (available in the same Raid Hour) is the single best attacker; Mega Swampert and Mega Gyarados are the top Mega options.",
+          "counters": [
+            { "pokemon": "Kyogre", "fast": "Waterfall", "charged": "Origin Pulse", "typing": "Water" },
+            { "pokemon": "Mega Swampert", "fast": "Water Gun", "charged": "Hydro Cannon", "typing": "Water/Ground" },
+            { "pokemon": "Mega Gyarados", "fast": "Waterfall", "charged": "Hydro Pump", "typing": "Water/Dark" },
+            { "pokemon": "Shadow Swampert", "fast": "Water Gun", "charged": "Hydro Cannon", "typing": "Water/Ground" },
+            { "pokemon": "Samurott", "fast": "Waterfall", "charged": "Hydro Cannon", "typing": "Water" },
+            { "pokemon": "Shadow Feraligatr", "fast": "Water Gun", "charged": "Hydro Cannon", "typing": "Water" },
+            { "pokemon": "Blastoise", "fast": "Water Gun", "charged": "Hydro Cannon", "typing": "Water" },
+            { "pokemon": "Kingler", "fast": "Bubble", "charged": "Crabhammer", "typing": "Water" }
+          ]
+        }
+      ]
     },
     {
       "type": "prose",
