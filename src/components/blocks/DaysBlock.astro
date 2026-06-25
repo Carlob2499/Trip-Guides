@@ -7,8 +7,8 @@ const { sec, keyPrefix = "dy" } = Astro.props;
     <div class="b">
       <strong>{d.title}</strong>
       {d.pace && <div class="pace">⏱ {d.pace}</div>}
-      {d.body && <div><Fragment set:html={d.body} /></div>}
       {d.note && <span class="lsnote">🌿 <Fragment set:html={d.note} /></span>}
+      {d.body && <div><Fragment set:html={d.body} /></div>}
       {d.fit  && <div class="fit">Fit: <Fragment set:html={d.fit} /></div>}
       {d.checklist && d.checklist.length > 0 && (
         <div class="daykit">
