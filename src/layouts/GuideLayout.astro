@@ -497,9 +497,27 @@ const sightCount = _flat.filter((s: any) => s.type === "sights").reduce((n: numb
 
           // Progress counter — "N/M checked"
           function updateCount() {
+            updateDayCounts();
             var c = document.getElementById("progCount"); if (!c || !boxes.length) return;
             var checked = boxes.filter(function (b) { return b.checked; }).length;
             c.textContent = checked + "/" + boxes.length + " checked";
+          }
+
+          // Per-day "Day kit N/M" badge — counts only the checkboxes inside each
+          // day card's .daykit. Hidden until populated; turns green when complete.
+          function updateDayCounts() {
+            document.querySelectorAll(".day").forEach(function (card) {
+              var badge = card.querySelector(".day-kitcount");
+              var kit   = card.querySelector(".daykit");
+              if (!badge || !kit) return;
+              var cbs = kit.querySelectorAll("input[type=checkbox]");
+              if (!cbs.length) return;
+              var done = 0;
+              cbs.forEach(function (c) { if (c.checked) done++; });
+              badge.textContent = "Day kit " + done + "/" + cbs.length;
+              badge.hidden = false;
+              badge.classList.toggle("done", done === cbs.length);
+            });
           }
 
           // Load saved state on page open

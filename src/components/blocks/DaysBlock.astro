@@ -6,6 +6,9 @@ const { sec, keyPrefix = "dy" } = Astro.props;
     <div class="d">{d.date}</div>
     <div class="b">
       <strong>{d.title}</strong>
+      {d.checklist && d.checklist.length > 0 && (
+        <span class="day-kitcount" hidden aria-live="polite"></span>
+      )}
       {d.pace && <div class="pace">⏱ {d.pace}</div>}
       {d.note && <span class="lsnote">🌿 <Fragment set:html={d.note} /></span>}
       {d.body && <div><Fragment set:html={d.body} /></div>}
