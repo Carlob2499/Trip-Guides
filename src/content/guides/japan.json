@@ -4,8 +4,27 @@
   "dek": "Two weeks through southern Japan — Fukuoka's ramen alleys and yatai stalls, Beppu's volcanic onsen, Yufuin's ryokans in mountain mist, Nagasaki's layered history, and Hiroshima's Miyajima island. The side of Japan first-timers never plan — and always wish they had.",
   "footer": "Location photos via Wikimedia Commons — tap any credit for its source, author and license.",
   "country": "Japan",
-  "verified": "⚠ Structural draft — restaurant names, prices, and transport passes need pre-trip verification",
+  "verified": "⚠ Simulated draft — hotels and flights below are realistic proposals, not confirmed reservations. Verify and book each independently.",
   "sections": [
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Before you fly — final checks",
+      "body": "<p>Run this list 48 hours before departure. The ryokan and rail reservations are the most time-sensitive items to reconfirm.</p>",
+      "checklist": [
+        "ANA NH110 EWR→NRT: recheck flight status and seat assignment at ana.co.jp",
+        "ANA NH249 NRT→FUK: confirm departure time and gate at NRT T3",
+        "Ryokan Tamanoyu (Oct 29): call or email to reconfirm; verify kashikiri-buro is on the booking",
+        "Iwaso ryokan Miyajima (Nov 3): call or email to reconfirm; verify kashikiri-buro is on the booking",
+        "Yufuin no Mori reserved seat (Oct 30): recheck seat booking reference at JR Kyushu website",
+        "Hiroshima Peace Memorial Museum: check current opening hours at hiro-tsuitokinenkan.jp/en",
+        "Miyajima tide tables for Nov 3 at visit-miyajima.or.jp — plan shrine visit around high tide window",
+        "JR Kyushu Rail Pass: download pass PDF or confirm QR presentation method before travel",
+        "JMA weather forecast (jma.go.jp) for Fukuoka, Beppu, and Hiroshima for the week of Oct 24",
+        "Visit Japan Web: complete registration and download QR codes offline before the flight",
+        "Carry-on essentials: passport (valid 6+ months), insurance card, ¥50,000 cash per person, all chargers"
+      ]
+    },
     {
       "type": "panel",
       "group": "Plan",
@@ -44,16 +63,54 @@
     {
       "type": "panel",
       "group": "Plan",
-      "title": "Booking checklist — time-sensitive items",
-      "body": "<p>Japan rewards early planners. The two windows that matter most: <b>4–6 months out</b> for ryokans in Yufuin and Miyajima (October is peak domestic foliage season — good properties go by July); <b>1–3 months out</b> for the Yufuin no Mori scenic train (limited reserved seating, popular year-round). Everything else can wait until 4–6 weeks before departure.</p>",
+      "title": "When you land — Fukuoka",
+      "body": "<p>FUK International Terminal to the hotel is under 30 minutes. Do these steps in order on arrival day.</p>",
       "checklist": [
-        "Flights: check ANA/JAL award availability on United MileagePlus and AA AAdvantage as early as possible",
-        "Yufuin ryokan: book 4–6 months out — October foliage season books fast; request private onsen room at time of booking",
-        "Miyajima overnight inn: book 3–4 months out — island accommodation is limited; request private onsen room at time of booking",
-        "Yufuin no Mori scenic train (Fukuoka to Yufuin): reserve at JR Kyushu website 1–3 months out",
-        "Travel insurance: include trip interruption coverage (typhoon season tail; medical coverage)",
-        "JR Kyushu Rail Pass or national JR Pass: must be purchased before arriving in Japan — verify current prices at english.jrkyushu.co.jp",
-        "Pre-confirm ryokan tattoo policy by email before paying any deposit — request a private onsen room (kashikiri-buro)"
+        "Clear customs with Visit Japan Web QR — follow 訪日外国人 (foreign visitor) signs",
+        "Subway: 地下鉄 signs inside the terminal → Kuko line direction Hakata, 5 stops, 5 min, ¥260 on IC card",
+        "7-Eleven ATM at Hakata Station south passage — ¥50,000 per person in cash",
+        "IC card: load Suica (Apple Wallet) or buy Nimoca at the Hakata Station IC card machine near the gates",
+        "JR midori-no-madoguchi (green ticket window, main concourse): reserve Sonic to Beppu (Oct 28), Kamome to Nagasaki (Oct 31), Yufuin no Mori (Oct 30) — do this on arrival day or first thing Oct 25",
+        "Walk ~8 min south from Hakata Station to Dormy Inn PREMIUM Hakata Chuou (Naka Ward)",
+        "Rooftop hot spring open from 15:00 — no tattoo restriction on this facility",
+        "Resist sleep until 22:00 JST — this is the most important jet lag action of the trip"
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Booking checklist — time-sensitive items",
+      "body": "<p>Japan rewards early planners. For this Oct 22–Nov 6 trip, the two critical windows: <b>by Apr 15, 2026</b> for ryokans in Yufuin (Ryokan Tamanoyu) and Miyajima (Iwaso) — October is peak domestic foliage season and good properties sell by July; <b>1–3 months out</b> for the Yufuin no Mori scenic train reserved seat. Everything else can wait until 4–6 weeks before departure.</p>",
+      "checklist": [
+        "Flights (simulated): ANA NH110 EWR→NRT at 23:05 EDT Oct 22 + NH249 NRT→FUK at 09:00 JST Oct 24 — check ANA award availability via United MileagePlus or AA AAdvantage",
+        "Fukuoka (7 nights, Oct 24–30 + Nov 4–6): Dormy Inn PREMIUM Hakata Chuou — dormyinn.com ⚠ verify availability and book",
+        "Beppu (1 night, Oct 28): Onyado Nono Beppu Natural Hot Spring (Dormy Inn group) — dormyinn.com ⚠ verify and book; ask about kashikiri-buro",
+        "Yufuin ryokan (1 night, Oct 29): Ryokan Tamanoyu — book by Apr 15, 2026 (October foliage sells out by July); confirm kashikiri-buro; email tattoo query before deposit",
+        "Nagasaki (2 nights, Oct 31–Nov 1): JR Kyushu Hotel Nagasaki (exits directly from Nagasaki Station) — jrk-hotels.co.jp ⚠ verify and book",
+        "Hiroshima (1 night, Nov 2): Dormy Inn Hiroshima — dormyinn.com ⚠ verify and book",
+        "Miyajima ryokan (1 night, Nov 3): Iwaso (operating since 1854, near the shrine) — book by Apr 15, 2026; confirm kashikiri-buro; email tattoo query before deposit",
+        "Yufuin no Mori scenic train (Oct 30, Yufuin→Hakata): reserve at JR Kyushu website 1–3 months out — limited reserved seats",
+        "JR Kyushu Rail Pass (Northern Kyushu 5-day): purchase before arriving in Japan — english.jrkyushu.co.jp ⚠ verify current price",
+        "Travel insurance: trip interruption + medical coverage",
+        "Pre-confirm tattoo policy at both ryokans by email before any deposit — request kashikiri-buro"
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Pre-trip countdown — actions by date",
+      "body": "<p>Time-sensitive. Set calendar reminders now. The ryokan windows are the most unforgiving — October Yufuin sells out by July.</p>",
+      "checklist": [
+        "Now: check ANA NH110 EWR→NRT (Oct 22) + NH249 NRT→FUK (Oct 24) award availability — United MileagePlus for ANA, or AA AAdvantage for JAL",
+        "By Apr 15, 2026: book Ryokan Tamanoyu (Yufuin, Oct 29) — confirm kashikiri-buro; email tattoo query before any deposit",
+        "By Apr 15, 2026: book Iwaso ryokan (Miyajima, Nov 3) — same process",
+        "By Apr 15, 2026: reserve Yufuin no Mori scenic train (Oct 30, Yufuin→Hakata) — limited reserved seats",
+        "By Jul 1, 2026: buy JR Kyushu Northern Kyushu Rail Pass (must purchase before arriving in Japan); book Fukuoka, Beppu, Nagasaki, Hiroshima hotels",
+        "By Sep 15, 2026: buy travel insurance; activate eSIM or confirm carrier plan; add Suica to Apple Wallet",
+        "Oct 15 (1 week out): download offline maps (Fukuoka, Nagasaki, Hiroshima, Miyajima); download Google Translate Japanese offline pack",
+        "Oct 19 (3 days before): start jet lag clock — shift bedtime 1 hour earlier; complete Visit Japan Web; download QR codes offline",
+        "Oct 21 (night before): final pack; weigh bags; all devices charged; ¥ cash in carry-on",
+        "Oct 22: depart EWR — ANA NH110 at 23:05 EDT"
       ]
     },
     {
@@ -90,6 +147,12 @@
       "group": "Plan",
       "title": "Weather — late October & early November",
       "body": "<p>Kyushu in late October is one of the best travel windows in Japan: <b>18–24°C</b> during the day, <b>12–16°C</b> at night, low humidity, minimal rain. Typhoon season is ~95% done by October 20; a late straggler is possible but rare. Hiroshima (western Honshu) is nearly identical. Pack layers — evenings in Yufuin (~500m altitude) can be 10–12°C, and early morning on Miyajima will be crisp. Compact umbrella always. <b>Autumn colour (koyo):</b> highland Yufuin and the Aso caldera typically peak mid-to-late November; in late October you'll catch early colour on the highlands. Coastal Fukuoka, Nagasaki, and Hiroshima stay green into November.</p>"
+    },
+    {
+      "type": "prose",
+      "group": "Money & budget",
+      "title": "What to wear — late October & early November",
+      "body": "<p>Kyushu in late October runs <b>18–24°C</b> during the day, <b>10–12°C</b> at night in the highlands. Pack in layers — you'll be in urban heat at noon and mountain-cool at 07:00 on Miyajima.</p><ul><li><b>Base layer:</b> 2–3 lightweight long-sleeve tops for evenings and cold mornings</li><li><b>Mid-layer:</b> a light fleece or merino sweater — Yufuin at altitude, early Miyajima dawn (the coldest moment of the trip)</li><li><b>Outer layer:</b> a packable rain shell, doubles as wind block — not a heavy jacket</li><li><b>Bottoms:</b> 2–3 lightweight travel trousers or slim-fit jeans; nothing you'd regret kneeling on at a shrine</li><li><b>Shoes:</b> one broken-in walking shoe (15,000–20,000 steps/day on stone), one slip-on for ryokan common areas and onsen corridors — mandatory; yukata is provided, no need to pack a dinner outfit</li><li><b>Miyajima Nov 4 dawn</b> is the coldest moment of the trip — bring that mid-layer for the torii walk</li><li><b>Compact folding umbrella:</b> pack one, or buy from any 7-Eleven on arrival for ≈¥1,000</li></ul>"
     },
     {
       "type": "panel",
@@ -306,41 +369,50 @@
       "body": "<p>For this itinerary, the best value is probably the <b>JR Kyushu 5-day Northern Kyushu Pass</b> for Kyushu legs, plus individual tickets for the Sanyo Shinkansen to Hiroshima.</p><ul><li><b>JR Kyushu Northern Kyushu 5-day Pass:</b> covers Fukuoka ↔ Nagasaki (Kamome), Fukuoka ↔ Beppu (Sonic), Yufuin no Mori scenic train, and most JR Kyushu local trains. ≈¥14,000 (~$93). Then buy Fukuoka ↔ Hiroshima Shinkansen individually (≈¥16,200 return). Total: ≈¥30,200 — cheaper than the national pass for most users on this itinerary. ⚠ Verify at english.jrkyushu.co.jp.</li><li><b>National 14-day JR Pass:</b> covers everything including Sanyo Shinkansen (Fukuoka ↔ Hiroshima ↔ Osaka ↔ Tokyo). ≈¥70,000 (~$467). ⚠ Japan raised the price significantly in October 2023 — verify current price before purchasing. Worth it mainly if adding Tokyo or other long Shinkansen legs.</li></ul><p>Both passes must be <b>purchased before arriving in Japan</b> — online at the JR website or through a travel agent abroad. When you arrive at Hakata station on Day 1, go to the JR ticket window (midori-no-madoguchi) and reserve your specific seats for all Kyushu trains in one session: Sonic to Beppu, Kamome to Nagasaki, Yufuin no Mori. Do it on Day 2 at the latest.</p>"
     },
     {
+      "type": "prose",
+      "group": "Getting around",
+      "title": "Tips & tricks — navigating Japan",
+      "body": "<p>Practical details that save friction in the field.</p><ul><li><b>Google Maps offline:</b> download the Fukuoka, Nagasaki, Hiroshima, and Miyajima areas before you board — works without data, routes transit accurately</li><li><b>IC card protocol:</b> tap in at the gate, tap out when you exit — every journey; if you exit without tapping, the gates lock and you owe the maximum fare</li><li><b>Paying at the register:</b> in Japan you pay at the front register, not the table. At ramen counters there's often a ticket vending machine at the entrance — buy before sitting</li><li><b>Summoning servers:</b> say 「すみません」(sumimasen) — never wave, snap, or stare. Servers respond; they just won't interrupt until called</li><li><b>Coin lockers:</b> at every major station, ¥400–800/day — transformative for day trips out of Fukuoka when you don't want to haul bags</li><li><b>7-Eleven ATMs:</b> the single most reliable foreign-card cash source in Japan. Lawson and Japan Post are second. Most other Japanese bank ATMs reject foreign cards</li><li><b>No eating while walking</b> on ordinary streets — a real norm outside tourist promenades. Miyajima's Omotesando and Yufuin's Yunotsubo Kaido are the explicit exceptions</li><li><b>Queuing:</b> Japan queues at floor markings with extraordinary discipline. Join the back, stay in line, don't cut</li><li><b>Google Translate camera mode:</b> download Japanese offline before departure — points your camera at any menu or sign and overlays translation in real time</li><li><b>Power:</b> Japan uses 100V Type A outlets — same plug as the US, no adapter needed; all modern chargers handle 100–240V</li></ul>"
+    },
+    {
       "type": "days",
       "group": "Itinerary",
       "title": "Day by day",
       "items": [
         {
-          "date": "Day 0 — ~Thu Oct 22",
+          "date": "Thu Oct 22",
           "title": "Depart Newark",
-          "pace": "Departure · overnight westbound flight",
-          "note": "Aim for a routing that puts you in Fukuoka Saturday afternoon Oct 24 — your birthday in Japan. Departing Thursday evening and connecting through Seoul (ICN) or Tokyo gets you there in time.",
-          "body": "The long flight west. Eat a real meal before boarding, watch one film, then sleep 7–8 hours of the middle section. That in-flight sleep is the most important jet lag move of the trip. The plane crosses the International Date Line heading west — you arrive in Japan 2 calendar days after departure.",
+          "pace": "Departure · ANA NH110 EWR→NRT at 23:05 EDT",
+          "note": "ANA NH110 departs Newark Liberty at 23:05 EDT. Connect at Narita (~5.5 hrs) for NH249 NRT→FUK at 09:00 JST — arriving Fukuoka 10:55 JST on Oct 24, your birthday in Japan.",
+          "body": "Eat a real meal before boarding. Compression socks on. Watch one film, then sleep 7–8 hours of the middle section of the flight — that in-flight sleep is the most important jet lag move of the trip. The Narita connection is 5.5 hours — long enough for a ramen bowl in Terminal 3 and to find your domestic gate without rushing. ANA NH249 is a short 1 hr 55 min hop. You board Thursday evening and land in Japan Saturday morning.",
           "fit": "Comfortable travel clothes. Compression socks if you have them.",
           "checklist": [
+            "ANA NH110 EWR→NRT departs 23:05 EDT — arrive airport by 20:30",
             "Visit Japan Web QR codes downloaded offline before boarding",
-            "Suica added to Apple Wallet, or plan to buy Nimoca at Hakata station",
-            "eSIM activated or TravelPass texted in",
-            "Plan for first 7-Eleven ATM cash withdrawal in Fukuoka"
+            "Suica added to Apple Wallet, or plan to buy Nimoca at Hakata Station on arrival",
+            "eSIM activated or carrier roaming confirmed",
+            "Battery packs, all devices, GoPro fully charged"
           ]
         },
         {
-          "date": "Day 1 — ~Sat Oct 24 (birthday)",
+          "date": "Sat Oct 24 — birthday",
           "title": "Arrive Fukuoka — first yatai night",
-          "pace": "Arrival · 5-min subway to Hakata · easy evening",
-          "note": "If you departed Thursday night via Seoul, you land in Fukuoka Saturday afternoon. Check in, recover, and do one thing: find a yatai stall.",
-          "body": "The Fukuoka Airport subway to Hakata station is 5 minutes — one of the world's best airport connections. Check into the hotel. First stop: 7-Eleven ATM in Hakata station, withdraw ¥50,000. Set up your IC card. Resist sleep until 22:00 JST. The evening has one job: a bowl of tonkotsu ramen and a cold Sapporo at a yatai counter on the Nakasu waterfront.",
+          "pace": "NH249 lands 10:55 JST · 5-min subway to Hakata · easy afternoon",
+          "note": "One of the world's best airport-to-city connections: subway inside the terminal, 5 stops, 5 minutes, ¥260.",
+          "body": "<p>ANA NH249 lands at FUK International Terminal at 10:55 JST. The subway station is a 5-minute walk inside the terminal — follow signs to 地下鉄. Board the Kuko line direction Hakata: 5 stops, 5 minutes, ¥260 on your IC card.</p><p>At Hakata Station: go to the south passage 7-Eleven ATM and withdraw ¥50,000 per person. Then find the JR midori-no-madoguchi (green ticket window, main concourse) and in one session reserve seats for: Sonic to Beppu (Oct 28), Kamome to Nagasaki (Oct 31), and Yufuin no Mori scenic train (Oct 30, Yufuin→Hakata). Do this today or first thing Sunday — October reserved-seat windows go fast.</p><p>Walk south ~8 min from the station to Dormy Inn PREMIUM Hakata Chuou (Naka Ward). Check in. The hotel has a rooftop natural hot spring open from 15:00 — no tattoo restriction here; go up before dinner if you want to decompress. <b>Resist sleep until 22:00 JST.</b></p><p>The evening has one job: the Nakasu yatai strip. Walk from the hotel (~15 min) to the Naka River bend. Pick any open-counter stall with the cook actively working — avoid stalls with touts at the entrance. Order yakitori first, then whatever you can't identify. Cold Sapporo or namashibori highball. It's your birthday in Japan.</p>",
           "fit": "Comfortable clothes. You are not sightseeing today.",
           "checklist": [
-            "IC card (Nimoca) set up at Hakata station, or Apple Wallet Suica loaded",
-            "Cash withdrawn at 7-Eleven ATM in Hakata station — ¥50,000 per person",
-            "Hotel check-in confirmed",
-            "Visit Japan Web QR scanned through customs",
-            "First tonkotsu ramen at a Nakasu yatai stall — mandatory"
+            "NH249 lands 10:55 JST — Kuko line to Hakata Station, ¥260",
+            "7-Eleven ATM at Hakata Station south passage — ¥50,000 per person",
+            "JR midori-no-madoguchi: reserve Sonic (Oct 28), Kamome (Oct 31), Yufuin no Mori (Oct 30)",
+            "Check into Dormy Inn PREMIUM Hakata Chuou (8 min south of Hakata Station)",
+            "Rooftop hot spring open from 15:00 — no tattoo restriction on this facility",
+            "Resist sleep until 22:00 JST",
+            "Birthday dinner: Nakasu yatai strip, ~15 min walk from hotel"
           ]
         },
         {
-          "date": "Day 2 — Sun Oct 25",
+          "date": "Sun Oct 25",
           "title": "Hakata & Tenjin — city orientation",
           "pace": "Moderate day · flat city walking",
           "note": "Jet lag forgiveness day. Start late, walk at a pace you can sustain for two weeks.",
@@ -348,12 +420,12 @@
           "fit": "Flat, walkable terrain. Comfortable shoes.",
           "checklist": [
             "Canal City fountain show — check schedule on the day",
-            "Reserve all Kyushu train seats at JR ticket window (Hakata station, midori-no-madoguchi): Sonic to Beppu, Kamome to Nagasaki, Yufuin no Mori",
+            "JR midori-no-madoguchi: reserve Sonic (Oct 28), Kamome (Oct 31), Yufuin no Mori (Oct 30) if not done Oct 24",
             "Try yakitori at a standing izakaya counter"
           ]
         },
         {
-          "date": "Day 3 — Mon Oct 26",
+          "date": "Mon Oct 26",
           "title": "Dazaifu + Yanagawa — shrines and canals",
           "pace": "Full day · 2 excursions · moderate walking",
           "note": "Dazaifu first (30 min from Tenjin by Nishitetsu rail), Yanagawa in the afternoon. The best all-day excursion from Fukuoka.",
@@ -367,7 +439,7 @@
           ]
         },
         {
-          "date": "Day 4 — Tue Oct 27",
+          "date": "Tue Oct 27",
           "title": "Ohori Park + Fukuoka Tower — rest day",
           "pace": "Gentle day · parks and seafront · rest before the onsen push",
           "note": "A lighter day before the Beppu–Yufuin run. Don't skip it — pacing through easy days is what makes the heavy ones land properly.",
@@ -380,122 +452,128 @@
           ]
         },
         {
-          "date": "Day 5 — Wed Oct 28",
+          "date": "Wed Oct 28",
           "title": "Beppu — the volcanic hells",
           "pace": "JR Sonic 2.5 hrs · hells tour ~3 hrs · onsen evening",
           "note": "Beppu's jigoku (hells) are theatrical and genuinely strange. Budget 3 hours for all 8.",
-          "body": "JR Sonic express from Hakata to Beppu (~2.5 hrs). The Eight Hells (Jigoku Meguri) are a circuit of dramatically coloured volcanic pools — cobalt blue (Umi Jigoku), blood red (Chinoike Jigoku), boiling grey mud, a crocodile enclosure, a greenhouse heated by springs. Combined ticket covers all eight; allow 2–3 hours. Afternoon: Takegawara Onsen for the sand bath — staff bury you to the neck in geothermally heated sand. Walk the Beppu port at dusk. Check into your hotel; confirm private bath availability at check-in.",
+          "body": "JR Sonic express from Hakata to Beppu (~2.5 hrs, reserved seat confirmed from Hakata Station). The Eight Hells (Jigoku Meguri) are a circuit of dramatically coloured volcanic pools — cobalt blue (Umi Jigoku), blood red (Chinoike Jigoku), boiling grey mud, a crocodile enclosure, a greenhouse heated by springs. Combined ticket covers all eight; allow 2–3 hours. Afternoon: Takegawara Onsen for the sand bath — staff bury you to the neck in geothermally heated sand. Walk the Beppu port at dusk. Check into Onyado Nono Beppu Natural Hot Spring (Dormy Inn group, central Beppu, near the station). On check-in, ask about the kashikiri-buro: 「貸切風呂はありますか？」 — and confirm the communal bath tattoo policy at booking.",
           "fit": "Layers — warm near the pools. Bring a small towel for the footbath.",
           "checklist": [
-            "JR Sonic reserved seat from Hakata — confirm reservation is booked",
+            "JR Sonic reserved seat from Hakata — confirmed at JR window",
             "Jigoku Meguri combined ticket ≈¥2,200 — ⚠ verify current price at beppu-jigoku.com",
-            "Takegawara sand bath — ⚠ call ahead re: tattoo policy and walk-in availability",
-            "Yukata provided at onsen hotels — ask at check-in"
+            "Takegawara sand bath — ⚠ confirm tattoo policy before going; show 「タトゥーがあっても入浴できますか？」if needed",
+            "Check into Onyado Nono Beppu Natural Hot Spring — ask about kashikiri-buro on arrival",
+            "Yukata provided at hotel — ask at check-in"
           ]
         },
         {
-          "date": "Day 6 — Thu Oct 29",
-          "title": "Yufuin — ryokan day in the mountains",
+          "date": "Thu Oct 29",
+          "title": "Yufuin — Ryokan Tamanoyu",
           "pace": "Bus 45 min · slow village morning · ryokan from 15:00",
-          "note": "The pacing purpose of the whole trip. The ryokan does the work — your job is to show up and slow down.",
-          "body": "Morning bus from Beppu to Yufuin (~45 min). Walk Yunotsubo Kaido from the station to Lake Kinrinko — 1km of craft ceramics, local sake shops, and mountain cafés. Buy ceramics here if that's on the shopping list. Check into the ryokan at 15:00. Yukata on. Kaiseki dinner served at a fixed time in your room or a private dining space — multi-course, seasonal, sake available extra. Then the private onsen in your room. Sleep whenever.",
-          "fit": "Yukata provided by the ryokan. Pack light — this stop is about the ryokan, not the sights.",
+          "note": "The pacing purpose of the whole trip. Ryokan Tamanoyu does the work — your job is to show up and slow down.",
+          "body": "Morning bus from Beppu to Yufuin (~45 min). Walk Yunotsubo Kaido from the station to Lake Kinrinko — 1km of craft ceramics, local sake shops, and mountain cafés. Buy ceramics here if that's on the shopping list. Check into Ryokan Tamanoyu at 15:00 — private outdoor onsen room (kashikiri-buro) confirmed from booking. Yukata on. Kaiseki dinner served at a fixed time in a private dining space — multi-course, seasonal, sake available extra. Then the private onsen. Sleep whenever.",
+          "fit": "Yukata provided by Ryokan Tamanoyu. Pack light — this stop is about the ryokan, not the sights.",
           "checklist": [
-            "Ryokan check-in 15:00 — leave Beppu after a late breakfast",
+            "Ryokan Tamanoyu check-in 15:00 — leave Beppu after a late breakfast",
             "Dinner included at a fixed time — confirm when booking (usually 18:00 or 19:00)",
             "Breakfast included (typically 07:30–09:00)",
-            "Private onsen room (kashikiri-buro) — must be the room type booked at reservation",
-            "Bring cash — most Yufuin ryokans are cash-only"
+            "Private onsen room (kashikiri-buro) — confirmed from booking",
+            "Bring cash — Ryokan Tamanoyu is likely cash-only"
           ]
         },
         {
-          "date": "Day 7 — Fri Oct 30",
+          "date": "Fri Oct 30",
           "title": "Yufuin dawn + Yufuin no Mori back to Fukuoka",
           "pace": "Early morning · slow check-out · scenic train afternoon",
           "note": "Set an alarm for 06:30. The lake mist in October is not optional.",
-          "body": "Walk to Lake Kinrinko before 07:00 — in late October the lake steams gently in the cool morning air while surrounding hills begin to turn. Ryokan breakfast at 08:00. Final walk down Yunotsubo Kaido. Check out by 10:00–11:00. The Yufuin no Mori scenic train departs mid-morning or early afternoon — a 2.5-hour rolling forest-and-valley journey back to Hakata in a retro wooden-panelled carriage. Dinner in Fukuoka.",
+          "body": "Walk to Lake Kinrinko before 07:00 — in late October the lake steams gently in the cool morning air while surrounding hills begin to turn. Ryokan breakfast at 08:00. Final walk down Yunotsubo Kaido. Check out by 10:00–11:00. The Yufuin no Mori scenic train departs mid-morning (reserved seat, booked at Hakata Station on Oct 24 or 25) — a 2.5-hour rolling forest-and-valley journey back to Hakata in a retro wooden-panelled carriage. Return to Dormy Inn PREMIUM Hakata Chuou for two nights before the Nagasaki leg.",
           "fit": "Warm layer for early morning by the lake.",
           "checklist": [
             "06:30 alarm for Lake Kinrinko mist",
-            "Yufuin no Mori reserved seat — booked months in advance",
-            "Ryokan checkout by 10:00–11:00",
+            "Yufuin no Mori reserved seat — confirmed at JR Hakata window",
+            "Ryokan Tamanoyu checkout by 10:00–11:00",
             "One Yufuin souvenir: ceramics, sake, or craft textile from Yunotsubo Kaido"
           ]
         },
         {
-          "date": "Day 8 — Sat Oct 31",
+          "date": "Sat Oct 31",
           "title": "Nagasaki — Glover Garden & Chinatown",
           "pace": "Express train 1.5 hrs · afternoon sights · champon dinner",
           "note": "Nagasaki has a character unlike anywhere else in Japan — Portuguese, Dutch, and Chinese layers over a Japanese foundation. It takes at least two days to feel.",
-          "body": "Express train from Hakata to Nagasaki (~1.5 hrs on the Nishi-Kyushu Shinkansen relay). Check in, then head to Glover Garden on the hillside — Victorian-era Western merchants' houses with panoramic harbour views. Walk down through Minami Yamate district. Dinner in Chinatown (Shinchi): champon, Nagasaki's signature thick noodles in rich pork-and-seafood broth. If Shikairō (四海楼) has too long a queue, any restaurant one block back from the main Chinatown strip is equivalent. Walk the harbour front at night.",
+          "body": "Express train from Hakata to Nagasaki (~1.5 hrs on the Nishi-Kyushu Shinkansen relay, reserved seat). Check into JR Kyushu Hotel Nagasaki — the hotel opens directly from Nagasaki Station concourse on the 2nd floor; drop bags in 10 minutes. City tram to Glover Garden: take Line 1 from the JR Nagasaki Station tram stop (outside east exit) toward Akasako, to Tsukimachi (3 stops, ~10 min, ≈¥140), then change to Line 5 toward Ishikawa to Oura Tenshudo-shita (2 stops). Glover Garden is a 3-min uphill walk from the tram stop — Victorian-era Western merchants' houses with panoramic harbour views. Walk down through Minami Yamate district. Dinner in Chinatown (Shinchi): champon at Shikairō (四海楼), credited with inventing the dish in 1899. If the queue is over 45 min, any restaurant one block back is equivalent. Walk the harbour front at night.",
           "fit": "Glover Garden involves substantial hill walking — good shoes.",
           "checklist": [
-            "JR Kamome reserved seat from Hakata — confirm reservation",
+            "JR Kamome reserved seat from Hakata — confirmed at JR window",
+            "Check into JR Kyushu Hotel Nagasaki (exits from Nagasaki Station concourse)",
+            "City tram Line 1 → Tsukimachi → Line 5 → Oura Tenshudo-shita for Glover Garden (≈¥140)",
             "Glover Garden — ⚠ verify current opening hours and entry fee",
-            "Champon dinner in Chinatown — ⚠ verify Shikairō still operating in 2026 at shikairo.co.jp"
+            "Champon dinner: Shikairō — ⚠ verify still operating at shikairo.co.jp"
           ]
         },
         {
-          "date": "Day 9 — Sun Nov 1",
+          "date": "Sun Nov 1",
           "title": "Nagasaki — Peace Museum & Dejima",
           "pace": "Deep day · museums and memorial park · emotionally heavy",
           "note": "Give the museum and hypocenter site the time they deserve. Don't stack other major sights on this day.",
-          "body": "Nagasaki Atomic Bomb Museum and Peace Memorial Park in the morning — allow 3+ hours. The museum is smaller and less internationally known than Hiroshima's; many visitors find the weight of August 9 more acute here because of Nagasaki's specific history — deep Catholic roots, the most cosmopolitan city in Japan, the second bomb three days after Hiroshima. Walk from the museum to the hypocenter marker. Afternoon: Dejima, the reconstructed Dutch trading post where all Western contact with Japan filtered through for over 200 years. Oura Cathedral (Japan's oldest surviving Western-style church) is a short walk uphill. Buy Fukusaya castella today — it's the definitive Nagasaki souvenir. Sara udon dinner.",
+          "body": "Nagasaki Atomic Bomb Museum and Peace Memorial Park in the morning — allow 3+ hours. The museum is smaller and less internationally known than Hiroshima's; many visitors find the weight of August 9 more acute here because of Nagasaki's specific history — deep Catholic roots, the most cosmopolitan city in Japan, the second bomb three days after Hiroshima. Walk from the museum to the hypocenter marker. Afternoon: Dejima, the reconstructed Dutch trading post where all Western contact with Japan filtered through for over 200 years. Oura Cathedral (Japan's oldest surviving Western-style church) is a short walk uphill. Fukusaya castella: the Hamanomachi Arcade branch is ~15 min north from JR Kyushu Hotel Nagasaki along the main street — ⚠ verify branch locations at fukusaya.jp before going. Sara udon dinner.",
           "fit": "Comfortable shoes. A contemplative walking day.",
           "checklist": [
             "Nagasaki Atomic Bomb Museum — ⚠ verify entry fee (≈¥200) and hours at nabmuseum.jp/english",
             "Hypocenter marker and Peace Park — free",
             "Dejima — ⚠ verify hours and entry",
             "Oura Cathedral — ⚠ verify visiting hours",
-            "Buy Fukusaya castella — ⚠ verify current locations at fukusaya.jp"
+            "Fukusaya castella: Hamanomachi Arcade branch (~15 min from JR Kyushu Hotel Nagasaki) — ⚠ verify at fukusaya.jp"
           ]
         },
         {
-          "date": "Day 10 — Mon Nov 2",
+          "date": "Mon Nov 2",
           "title": "Hiroshima — Peace Memorial & okonomiyaki",
           "pace": "Transit + full day · ~3 hrs to Hiroshima · deep museum day",
           "note": "The Hiroshima Peace Memorial Museum is widely considered one of the best museums in Japan. Give it 3–4 hours.",
-          "body": "Morning train back through Hakata, then the Sanyo Shinkansen to Hiroshima (~3 hrs total). Straight to the Peace Memorial Museum and Atomic Bomb Dome — the preserved industrial promotion hall skeleton directly under the hypocenter, UNESCO World Heritage. Walk the Peace Memorial Park. Allow more time than you think you need. Dinner: Hiroshima-style okonomiyaki at Okonomimura — a multi-storey building of family-run stalls. Find a stall with the cook working and a counter seat open. Watch it get built in layers in front of you.",
+          "body": "Morning train back through Hakata, then the Sanyo Shinkansen to Hiroshima (~3 hrs total). Check into Dormy Inn Hiroshima (~10-min walk from Hiroshima Station toward the Hondori arcade). From the hotel: city tram (Hiroshima Electric Railway Line 2 or 6 from Hiroshima Station, ≈¥190) to Genbaku Dome-mae (2 stops), or 20-min walk across the Peace Park footbridge. Atomic Bomb Dome — the preserved skeletal ruin at the hypocenter, UNESCO World Heritage. Peace Memorial Museum. Walk the park. Allow more time than you think you need. Dinner: Hiroshima-style okonomiyaki at Okonomimura in Shintenchi, ~10 min walk from the museum.",
           "fit": "Comfortable clothes. Reflective and walking-heavy day.",
           "checklist": [
             "Hiroshima Peace Memorial Museum — ⚠ verify current entry (≈¥200) and hours at hiro-tsuitokinenkan.jp/en",
             "Allow 3–4 hours minimum",
             "Atomic Bomb Dome — adjacent, free",
+            "Check into Dormy Inn Hiroshima (~10 min from station toward Hondori)",
+            "City tram Line 2 or 6 from Hiroshima Station to Genbaku Dome-mae (≈¥190)",
             "Okonomimura okonomiyaki dinner — ⚠ verify still operating 2026 at okonomimura.jp"
           ]
         },
         {
-          "date": "Day 11 — Tue Nov 3",
-          "title": "Miyajima — the floating torii & island overnight",
+          "date": "Tue Nov 3",
+          "title": "Miyajima — the floating torii & overnight at Iwaso",
           "pace": "Ferry day · full island · stay overnight",
           "note": "Staying overnight is the whole point. All day-trippers leave on the last ferry. You have the torii to yourself at dawn.",
-          "body": "Morning train and JR ferry to Miyajima island (~40 min total). Free-roaming deer will meet you at the dock — they are bold and will investigate your bag. Keep food secured. Grilled oysters from the vendors along Omotesando approach — eat standing while they're hot. Itsukushima Shrine and the torii gate: check tide tables before going (high tide = floating gate, low tide = walk to its base). Mount Misen ropeway for panoramic views. Check into the ryokan by 15:00. Sunset on the gate after the last ferry — yours alone.",
+          "body": "Morning train and JR ferry to Miyajima island (~40 min total). Free-roaming deer will meet you at the dock — they are bold and will investigate your bag. Keep food secured. Grilled oysters from the vendors along Omotesando approach — eat standing while they're hot. Itsukushima Shrine and the torii gate: check tide tables before going (high tide = floating gate, low tide = walk to its base). Mount Misen ropeway for panoramic views. Check into Iwaso ryokan at 15:00 — Miyajima's most historic inn, operating since 1854, set among maple trees near the shrine. Private onsen room (kashikiri-buro) confirmed from booking. Yukata provided; wear it to the kaiseki dinner. Sunset on the gate after the last ferry — yours alone.",
           "fit": "Walking shoes for the ropeway trail or hike.",
           "checklist": [
             "JR ferry from Miyajimaguchi (IC card or JR Pass)",
-            "Check tide tables for your visit day — ⚠ see visit-miyajima.or.jp",
+            "Check tide tables for Nov 3 — ⚠ see visit-miyajima.or.jp",
             "Itsukushima Shrine entry ≈¥300 — ⚠ verify current amount",
             "Miyajima ropeway — ⚠ verify hours and ≈¥1,800 return fare",
-            "Overnight ryokan booked with private onsen room",
+            "Check into Iwaso ryokan at 15:00 — private onsen room confirmed from booking",
             "Alarm set for 06:00"
           ]
         },
         {
-          "date": "Day 12 — Wed Nov 4",
+          "date": "Wed Nov 4",
           "title": "Miyajima dawn → Hiroshima → back to Fukuoka",
           "pace": "Early start · ferry return · Shinkansen home",
           "note": "The 06:00 torii in morning mist is the single best image of the trip. Get up for it.",
-          "body": "Wake before 06:00. Walk to the torii in early light — the island fog, the stillness, the gate with no one else present. Ryokan breakfast, check out by 10:00. Ferry back to the mainland, Hondori covered shopping arcade in Hiroshima if time allows (local sake, souvenirs), then Sanyo Shinkansen to Hakata (~50 min). Fukuoka evening: the dinner you didn't get to earlier.",
+          "body": "Wake before 06:00. Walk to the torii in early light — the island fog, the stillness, the gate with no one else present. Ryokan breakfast at Iwaso (usually 08:00), checkout by 10:00. Ferry back to the mainland, Hondori covered shopping arcade in Hiroshima if time allows (local sake, souvenirs), then Sanyo Shinkansen to Hakata (~50 min). Return to Dormy Inn PREMIUM Hakata Chuou for the final two nights.",
           "fit": "Warm layer for the early morning on the water.",
           "checklist": [
             "06:00 alarm for the torii at sunrise",
+            "Checkout Iwaso by 10:00",
             "Hiroshima Hondori for Hiroshima sake and last-minute items",
             "Reserved Shinkansen seat back to Hakata",
-            "Final Fukuoka dinner confirmed or walk-in spot researched"
+            "Return to Dormy Inn PREMIUM Hakata Chuou — two final nights"
           ]
         },
         {
-          "date": "Day 13 — Thu Nov 5",
+          "date": "Thu Nov 5",
           "title": "Fukuoka — rest day & souvenir run",
           "pace": "Easy day · open agenda · departure prep",
           "note": "A buffer day for anything missed and the ritual last bowl. Don't over-plan it.",
@@ -510,17 +588,18 @@
           ]
         },
         {
-          "date": "Day 14 — Fri Nov 6",
+          "date": "Fri Nov 6",
           "title": "Depart Fukuoka",
-          "pace": "Departure · 5-min subway · fly home",
+          "pace": "ANA NH254 FUK→NRT 10:00 JST · NH109 NRT→EWR 14:05 JST · land EWR 09:25 EST",
           "note": "Fukuoka Airport is 5 minutes from the city centre. The most painless airport exit in Japan.",
-          "body": "International check-in opens 3 hours before departure. From Hakata station it's 5 minutes and ≈¥260 to the international terminal. Complete tax-free shopping paperwork before security if applicable — the airport counter is the fallback but in-store is faster. One last onigiri from the airport 7-Eleven. The flight east crosses the date line — you land in the US the same calendar day you left Japan.",
+          "body": "ANA NH254 FUK→NRT departs 10:00 JST — arrive at FUK International Terminal by 07:30 (3 hours before). From Hakata Station: Kuko line to FUK International Terminal, 5 stops, 5 minutes, ¥260. Complete any in-store tax-free paperwork before heading to the airport. One last onigiri from the 7-Eleven in the terminal. At NRT: ANA NH109 NRT→EWR departs 14:05 JST, lands Newark Liberty at 09:25 EST on Nov 6 — same calendar day due to the date line crossing. Connection at Narita is ~2 hours.",
           "fit": "Travel comfortable.",
           "checklist": [
+            "ANA NH254 FUK→NRT departs 10:00 JST — arrive FUK by 07:30",
+            "Kuko line from Hakata Station, ¥260",
             "Tax-free shopping paperwork completed before security",
-            "IC card: keep as souvenir or clear the balance at a station machine",
-            "Passport, boarding pass, Visit Japan Web documents",
-            "Airport 3 hours before international departure"
+            "IC card: keep as souvenir or clear balance at a station machine",
+            "ANA NH109 NRT→EWR departs 14:05 JST, lands EWR 09:25 EST (same day Nov 6)"
           ]
         }
       ]
