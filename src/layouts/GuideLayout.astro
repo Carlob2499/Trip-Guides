@@ -28,6 +28,14 @@ function flatSections(secs: any[]): any[] {
 const _flat = flatSections(guide.sections || []);
 const dayCount   = _flat.filter((s: any) => s.type === "days"  ).reduce((n: number, s: any) => n + (s.items?.length || 0), 0);
 const sightCount = _flat.filter((s: any) => s.type === "sights").reduce((n: number, s: any) => n + (s.items?.length || 0), 0);
+
+// For weather widget — pull lat/lng from first map section
+const mapSec    = _flat.find((s: any) => s.type === "map" && s.center?.lat);
+const mapCenter = mapSec ? { lat: mapSec.center.lat as number, lng: mapSec.center.lng as number } : null;
+
+// For trip countdown — pull first date string from first days section (e.g. "Wed Jul 8")
+const daysSec      = _flat.find((s: any) => s.type === "days" && s.items?.length);
+const firstDayDate = (daysSec?.items?.[0]?.date as string) ?? null;
 ---
 <!doctype html>
 <html lang="en" style={`--accent:${accent};--accent2:${accent2}`}>
@@ -69,6 +77,9 @@ const sightCount = _flat.filter((s: any) => s.type === "sights").reduce((n: numb
   </head>
 
   <body data-storekey={storeKey}>
+
+    <!-- Reading progress bar — fixed 3px line at top, fills as user scrolls -->
+    <div id="readProg" class="read-prog" aria-hidden="true"></div>
 
     <!-- Sticky chrome: topbar + guide tab bar stick together as a unit -->
     <div class="sticky-chrome">
@@ -147,13 +158,14 @@ const sightCount = _flat.filter((s: any) => s.type === "sights").reduce((n: numb
       <p class="eyebrow">{guide.kicker || guide.country}</p>
       <h1>{guide.title}</h1>
       {guide.dek && <p class="dek">{guide.dek}</p>}
-      {(dayCount > 0 || sightCount > 0 || guide.verified) && (
-        <div class="guide-stats">
-          {dayCount   > 0 && <span class="gstat">{dayCount} days</span>}
-          {sightCount > 0 && <span class="gstat">{sightCount} sights</span>}
-          {guide.verified && <span class="gstat gstat-verified">{guide.verified}</span>}
-        </div>
-      )}
+      <!-- Stats bar — always rendered so JS can inject dynamic pills -->
+      <div class="guide-stats" id="guideStats">
+        {dayCount   > 0 && <span class="gstat">{dayCount} days</span>}
+        {sightCount > 0 && <span class="gstat">{sightCount} sights</span>}
+        {guide.verified && <span class="gstat gstat-verified">{guide.verified}</span>}
+        <!-- Live currency rate injected by JS when fetch succeeds -->
+        <span class="gstat gstat-rate" id="liveRatePill" hidden></span>
+      </div>
 
       <!--
         PROGRESS CONTROLS
@@ -187,6 +199,9 @@ const sightCount = _flat.filter((s: any) => s.type === "sights").reduce((n: numb
         User picks their origin timezone; output shows the time gap, recovery
         estimate, and direction-specific tips.
       -->
+      <!-- Weather strip — populated by JS via Open-Meteo if guide has a map section -->
+      <div id="wxWrap" class="wx-wrap" hidden></div>
+
       {destTz !== null && (
         <div class="jl-wrap">
           <button class="jl-toggle" id="jlToggle" type="button"
@@ -309,7 +324,7 @@ const sightCount = _flat.filter((s: any) => s.type === "sights").reduce((n: numb
            5. Budget calculators (live total, persisted per-device)
            6. Jet-lag calculator
          ═══════════════════════════════════════════════════════════════════ -->
-    <script define:vars={{ order, storeKey }}>
+    <script define:vars={{ order, storeKey, mapCenter, firstDayDate, destTzOffset: destTz, curCode: localCur?.code ?? null, guideTitle: guide.title }}>
       /* ── SHARED: SCROLL LOCK (used by both sheet and share modal) ─────── */
       var _lockCount = 0;
       function _lockScroll()   { if (++_lockCount === 1) document.body.classList.add("sheet-lock"); }
@@ -836,6 +851,162 @@ const sightCount = _flat.filter((s: any) => s.type === "sights").reduce((n: numb
 
             var originSel = document.getElementById("jlOrigin");
             if (originSel) originSel.addEventListener("change", recalcJL);
+          })();
+
+          /* ── 7. READING PROGRESS BAR ────────────────────────────────── */
+          (function () {
+            var bar = document.getElementById("readProg");
+            if (!bar) return;
+            function updateBar() {
+              var max = document.body.scrollHeight - window.innerHeight;
+              bar.style.width = (max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0) + "%";
+            }
+            window.addEventListener("scroll", updateBar, { passive: true });
+            window.addEventListener("resize", updateBar);
+            updateBar();
+          })();
+
+          /* ── 8. TRIP COUNTDOWN ──────────────────────────────────────── */
+          (function () {
+            var statsEl = document.getElementById("guideStats");
+            if (!statsEl || !firstDayDate) return;
+            var MONTHS = { Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11 };
+            var parts  = String(firstDayDate).split(/\s+/);
+            var mStr   = parts[1]; var day = parseInt(parts[2], 10);
+            if (!mStr || isNaN(day) || MONTHS[mStr] == null) return;
+            var now  = new Date();
+            var trip = new Date(now.getFullYear(), MONTHS[mStr], day);
+            if (trip < now && (now - trip) > 180 * 86400000) trip.setFullYear(now.getFullYear() + 1);
+            var diff = Math.round((trip.getTime() - now.getTime()) / 86400000);
+            var pill = document.createElement("span");
+            if (diff > 1)       { pill.className = "gstat gstat-countdown"; pill.textContent = diff + " days to go"; }
+            else if (diff === 1){ pill.className = "gstat gstat-countdown"; pill.textContent = "Tomorrow!"; }
+            else if (diff === 0){ pill.className = "gstat gstat-active";    pill.textContent = "Trip starts today!"; }
+            else if (diff >= -7){ pill.className = "gstat gstat-active";    pill.textContent = "Happening now!"; }
+            else                { pill.className = "gstat gstat-past";      pill.textContent = Math.abs(diff) + " days ago"; }
+            statsEl.insertBefore(pill, statsEl.firstChild);
+          })();
+
+          /* ── 9. LOCAL TIME AT DESTINATION ───────────────────────────── */
+          (function () {
+            if (destTzOffset == null) return;
+            var statsEl = document.getElementById("guideStats");
+            if (!statsEl) return;
+            var pill = document.createElement("span");
+            pill.className = "gstat gstat-time";
+            pill.id = "localTimePill";
+            function tick() {
+              var now   = new Date();
+              var destMs = now.getTime() + now.getTimezoneOffset() * 60000 + destTzOffset * 3600000;
+              var d = new Date(destMs);
+              var hh = d.getHours().toString().padStart(2, "0");
+              var mm = d.getMinutes().toString().padStart(2, "0");
+              pill.textContent = "Local " + hh + ":" + mm;
+            }
+            tick();
+            statsEl.appendChild(pill);
+            setInterval(tick, 60000);
+          })();
+
+          /* ── 10. OFFLINE-READY BADGE ────────────────────────────────── */
+          (function () {
+            if (!("caches" in window)) return;
+            caches.has("tripguides-v3").then(function (has) {
+              if (!has) return;
+              var statsEl = document.getElementById("guideStats");
+              if (!statsEl) return;
+              var pill = document.createElement("span");
+              pill.className = "gstat gstat-offline";
+              pill.title = "This guide is cached and readable without a connection";
+              pill.textContent = "✓ Works offline";
+              statsEl.appendChild(pill);
+            }).catch(function () {});
+          })();
+
+          /* ── 11. LIVE CURRENCY RATE (Frankfurter) ───────────────────── */
+          (function () {
+            if (!curCode || !window.fetch) return;
+            fetch("https://api.frankfurter.dev/v2/latest?base=USD&symbols=" + curCode)
+              .then(function (r) { return r.ok ? r.json() : null; })
+              .then(function (data) {
+                if (!data || !data.rates || !data.rates[curCode]) return;
+                var rate = data.rates[curCode];
+                var el = document.getElementById("liveRatePill");
+                if (!el) return;
+                el.textContent = "$1 = " + Math.round(rate).toLocaleString() + " " + curCode;
+                el.title = "Live rate from European Central Bank via Frankfurter.dev";
+                el.removeAttribute("hidden");
+              }).catch(function () {});
+          })();
+
+          /* ── 12. WEATHER STRIP (Open-Meteo, no key) ─────────────────── */
+          (function () {
+            if (!mapCenter || !window.fetch) return;
+            var wxWrap = document.getElementById("wxWrap");
+            if (!wxWrap) return;
+            function wxIcon(code) {
+              if (code === 0)           return "☀";   // ☀
+              if (code <= 3)            return "⛅";   // ⛅
+              if (code <= 48)           return "🌫"; // 🌫
+              if (code <= 55)           return "🌦"; // 🌦 drizzle
+              if (code <= 67)           return "🌧"; // 🌧 rain
+              if (code <= 77)           return "❄";   // ❄
+              if (code <= 82)           return "🌦"; // 🌦 showers
+              if (code <= 86)           return "🌨"; // 🌨 snow showers
+              if (code >= 95)           return "⛈";   // ⛈
+              return "⛅";
+            }
+            var url = "https://api.open-meteo.com/v1/forecast" +
+              "?latitude=" + mapCenter.lat + "&longitude=" + mapCenter.lng +
+              "&daily=temperature_2m_max,temperature_2m_min,weathercode" +
+              "&forecast_days=7&timezone=auto&temperature_unit=celsius";
+            fetch(url)
+              .then(function (r) { return r.ok ? r.json() : null; })
+              .then(function (data) {
+                if (!data || !data.daily) return;
+                var d = data.daily;
+                var DAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+                var html = '<div class="wx-strip" aria-label="7-day weather forecast">';
+                for (var i = 0; i < d.time.length; i++) {
+                  var dt  = new Date(d.time[i] + "T12:00:00");
+                  var hi  = Math.round(d.temperature_2m_max[i]);
+                  var lo  = Math.round(d.temperature_2m_min[i]);
+                  var now = new Date();
+                  var isToday = dt.getDate() === now.getDate() && dt.getMonth() === now.getMonth();
+                  html += '<div class="wx-day' + (isToday ? " wx-today" : "") + '">' +
+                    '<span class="wx-name">' + (isToday ? "Today" : DAYS[dt.getDay()]) + '</span>' +
+                    '<span class="wx-icon">' + wxIcon(d.weathercode[i]) + '</span>' +
+                    '<span class="wx-hi">' + hi + '°</span>' +
+                    '<span class="wx-lo">' + lo + '°</span>' +
+                    '</div>';
+                }
+                html += '</div>';
+                html += '<p class="wx-credit">7-day forecast · <a href="https://open-meteo.com" target="_blank" rel="noopener" class="wx-src">Open-Meteo</a></p>';
+                wxWrap.innerHTML = html;
+                wxWrap.removeAttribute("hidden");
+              }).catch(function () {});
+          })();
+
+          /* ── 13. MAP FULLSCREEN BUTTON ──────────────────────────────── */
+          (function () {
+            document.querySelectorAll(".osmmap").forEach(function (frame) {
+              var wrap = frame.parentElement;
+              if (!wrap || !document.fullscreenEnabled) return;
+              wrap.style.position = "relative";
+              var btn = document.createElement("button");
+              btn.className = "map-fs-btn";
+              btn.setAttribute("aria-label", "View map fullscreen");
+              btn.title = "Fullscreen";
+              btn.textContent = "⤢";
+              wrap.appendChild(btn);
+              btn.addEventListener("click", function () {
+                if (wrap.requestFullscreen) wrap.requestFullscreen();
+                else if (wrap.webkitRequestFullscreen) wrap.webkitRequestFullscreen();
+              });
+              document.addEventListener("fullscreenchange", function () {
+                btn.textContent = document.fullscreenElement ? "✕" : "⤢";
+              });
+            });
           })();
 
         } catch (err) { console.error("guide enhancement error:", err); }

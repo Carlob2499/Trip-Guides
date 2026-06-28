@@ -40,4 +40,11 @@ h1{font-family:'Fraunces',Georgia,'Times New Roman',serif;font-style:italic;font
 .hubcard-go{margin-top:.65rem;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);transition:letter-spacing .15s}
 .hubcard:hover .hubcard-go{letter-spacing:.12em}
 
+/* Trip countdown badge — sits next to country label */
+.hubcard-badge{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);border-radius:99px;padding:.1rem .5rem;line-height:1.5;white-space:nowrap;margin-left:auto}
+
+/* Meta row — section/day count */
+.hubcard-meta{display:flex;gap:.4rem;margin-top:.1rem}
+.hubcard-days{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+
 .hub-foot{border-top:1px solid var(--ink);text-align:center;padding:1.6rem 1.2rem;color:var(--muted);font-size:.82rem;max-width:1120px;margin:0 auto;width:100%;font-family:'Space Mono',monospace;letter-spacing:.04em}

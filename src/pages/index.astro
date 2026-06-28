@@ -8,9 +8,47 @@ const guides = (await getCollection("guides")).sort((a, b) =>
   a.data.title.localeCompare(b.data.title)
 );
 
-// Base path for the deploy (e.g. "/Trip-Guides" on GitHub Pages). Astro does
-// not auto-prepend the base to template-literal hrefs, so we do it explicitly.
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+// For each guide, extract trip dates from days sections (build-time, no JS needed)
+function flatSecs(secs: any[]): any[] {
+  return secs.flatMap((s: any) => s.sections ? flatSecs(s.sections) : [s]);
+}
+
+const MONTH_MAP: Record<string, number> = {
+  Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11
+};
+
+function parseTripDate(dateStr: string | undefined): Date | null {
+  if (!dateStr) return null;
+  const parts = dateStr.split(/\s+/);
+  const mon = parts[1]; const d = parseInt(parts[2], 10);
+  if (!mon || isNaN(d) || MONTH_MAP[mon] == null) return null;
+  const now = new Date();
+  const dt  = new Date(now.getFullYear(), MONTH_MAP[mon], d);
+  if (dt < now && (now.getTime() - dt.getTime()) > 180 * 86400000) dt.setFullYear(now.getFullYear() + 1);
+  return dt;
+}
+
+const now = new Date();
+const guideExtras = guides.map(g => {
+  const flat = flatSecs(g.data.sections as any[] || []);
+  const allDays = flat.filter((s: any) => s.type === "days");
+  const allItems = allDays.flatMap((s: any) => s.items || []);
+  const firstDate = parseTripDate(allItems[0]?.date);
+  const lastDate  = parseTripDate(allItems[allItems.length - 1]?.date);
+  const dayCount  = allItems.length;
+  let badge = "";
+  if (firstDate) {
+    const diff = Math.round((firstDate.getTime() - now.getTime()) / 86400000);
+    if (diff > 1)       badge = diff + " days away";
+    else if (diff === 1) badge = "Tomorrow!";
+    else if (diff === 0) badge = "Today!";
+    else if (diff >= -7) badge = "Now!";
+    else if (lastDate && lastDate > now) badge = "In progress";
+  }
+  return { dayCount, badge };
+});
 ---
 <!doctype html>
 <html lang="en">
@@ -48,19 +86,26 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
     <main class="hub">
       <div class="hub-grid">
-        {guides.map((g) => (
+        {guides.map((g, i) => {
+          const ex = guideExtras[i];
+          return (
           <a class="hubcard" href={`${base}/guides/${g.id}/`} style={`--accent:${accentFor(g.data.country)}`}>
             <span class="hubcard-bar" aria-hidden="true"></span>
             <span class="hubcard-body">
               <span class="hubcard-top">
                 <span class="hubcard-country">{g.data.country}</span>
+                {ex.badge && <span class="hubcard-badge">{ex.badge}</span>}
               </span>
               <span class="hubcard-title">{g.data.title}</span>
               {g.data.dek && <span class="hubcard-dek">{g.data.dek}</span>}
+              <span class="hubcard-meta">
+                {ex.dayCount > 0 && <span class="hubcard-days">{ex.dayCount} days</span>}
+              </span>
               <span class="hubcard-go">Open guide →</span>
             </span>
           </a>
-        ))}
+          );
+        })}
       </div>
     </main>
 
