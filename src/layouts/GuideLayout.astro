@@ -17,6 +17,10 @@ const localCur = currencyFor(guide.country);
 // Destination UTC offset — sourced from themes.ts so adding a country only needs one file.
 const destTz = DEST_TZ[guide.country] ?? null;
 
+// Base path for the deploy (e.g. "/Trip-Guides" on GitHub Pages). Astro does not
+// auto-prepend the base to string/template hrefs, so home links build it explicitly.
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+
 // Compute at-a-glance stats for the masthead stat bar
 function flatSections(secs: any[]): any[] {
   return secs.flatMap((s: any) => s.sections ? flatSections(s.sections) : [s]);
@@ -73,7 +77,7 @@ const sightCount = _flat.filter((s: any) => s.type === "sights").reduce((n: numb
          TOP NAVIGATION BAR
          ═══════════════════════════════════════════════════════════════════ -->
     <nav class="topbar" aria-label="Site navigation">
-      <a href="/" class="topbar-home" aria-label="All guides">
+      <a href={`${base}/`} class="topbar-home" aria-label="All guides">
         <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
           <path d="M1 5h12M1 5l4-4M1 5l4 4" stroke="currentColor" stroke-width="1.6"
                 stroke-linecap="round" stroke-linejoin="round"/>
@@ -267,7 +271,7 @@ const sightCount = _flat.filter((s: any) => s.type === "sights").reduce((n: numb
          · ↑        — scroll to top
          ═══════════════════════════════════════════════════════════════════ -->
     <div class="botbar">
-      <a class="botHome" href="/" aria-label="All guides" title="All guides">⌂</a>
+      <a class="botHome" href={`${base}/`} aria-label="All guides" title="All guides">⌂</a>
       <button class="botSections" id="sheetOpen" type="button"
               aria-haspopup="dialog" aria-expanded="false">
         <span class="bs-label">Sections</span>
