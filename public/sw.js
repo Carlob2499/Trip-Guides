@@ -16,17 +16,18 @@
   When you publish a big update, bump CACHE below (v1 -> v2) so visitors get the
   new version cleanly.
 */
-const CACHE = "tripguides-v2";
+const CACHE = "tripguides-v3";
+const BASE = "/Trip-Guides";
 const CORE = [
-  "/",
-  "/guides/denmark/",
-  "/guides/germany/",
-  "/guides/portugal/",
-  "/guides/korea/",
-  "/guides/japan/",
-  "/manifest.webmanifest",
-  "/icons/icon-192.png",
-  "/icons/favicon.svg",
+  BASE + "/",
+  BASE + "/guides/denmark/",
+  BASE + "/guides/germany/",
+  BASE + "/guides/portugal/",
+  BASE + "/guides/korea/",
+  BASE + "/guides/japan/",
+  BASE + "/manifest.webmanifest",
+  BASE + "/icons/icon-192.png",
+  BASE + "/icons/favicon.svg",
 ];
 
 self.addEventListener("install", (event) => {

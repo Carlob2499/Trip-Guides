@@ -8,8 +8,18 @@ export const CURRENCIES: Record<string, Currency> = {
   "Germany":       { code: "EUR", symbol: "€",  name: "Euro",           approxRate: 0.93 },
   "Portugal":      { code: "EUR", symbol: "€",  name: "Euro",           approxRate: 0.93 },
   "Japan":         { code: "JPY", symbol: "¥",  name: "Japanese Yen",   approxRate: 150  },
-  "South Korea":   { code: "KRW", symbol: "₩",  name: "Korean Won",     approxRate: 1380 },
-  "Korea":         { code: "KRW", symbol: "₩",  name: "Korean Won",     approxRate: 1380 },
+  "South Korea":   { code: "KRW", symbol: "₩",  name: "Korean Won",     approxRate: 1535 },
+  "Korea":         { code: "KRW", symbol: "₩",  name: "Korean Won",     approxRate: 1535 },
+};
+
+// Destination UTC offset (summer/DST) for the jet-lag calculator.
+// Kept here so adding a new country only requires one file.
+export const DEST_TZ: Record<string, number> = {
+  Denmark: 2, Germany: 2, Sweden: 2, Norway: 2, Finland: 3,
+  Portugal: 1, Spain: 2, France: 2, Italy: 2, Greece: 3,
+  Japan: 9, "South Korea": 9, Korea: 9, Thailand: 7, Iceland: 0,
+  "United Kingdom": 1, "United States": -4, Mexico: -6, China: 8,
+  Netherlands: 2,
 };
 
 export function currencyFor(country: string): Currency | null {

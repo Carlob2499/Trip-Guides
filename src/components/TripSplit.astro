@@ -239,7 +239,7 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
         "<select class='split-in se-payer' data-ei='" + ei + "'>" + memberOptions(exp.paidBy) + "</select>" +
         "<input class='split-in se-desc' type='text' placeholder='What for?'" +
           " value='" + esc(exp.desc || "") + "' data-ei='" + ei + "' data-field='desc' />" +
-        "<div class='se-amt-wrap'><span class='se-cur'>$</span>" +
+        "<div class='se-amt-wrap'><span class='se-cur'>" + (state.useLocal ? C_SYM : "$") + "</span>" +
         "<input class='split-in se-amt' type='number' min='0' step='0.01' placeholder='0.00'" +
           " value='" + (exp.amount != null ? String(exp.amount) : "") + "'" +
           " data-ei='" + ei + "' data-field='amount' /></div>" +
@@ -261,7 +261,7 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
         var fld = this.dataset.field;
         var val = fld === "amount" ? (parseFloat(this.value) || null) : this.value;
         state.expenses[ei][fld] = val;
-        if (fld === "amount") {
+        if (fld === "amount" && !state.customSplit) {
           var n    = state.members.length;
           var even = (parseFloat(this.value) || 0) / (n || 1);
           state.expenses[ei].customAmts = state.members.map(function () {

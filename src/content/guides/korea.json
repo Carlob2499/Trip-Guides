@@ -145,7 +145,7 @@
       "currency": "$",
       "days": 7,
       "party": 3,
-      "intro": "Estimates in <b>USD per person</b> — toggle to see trip-total or per-person view. Items marked <b>group</b> are shared costs (Melody House ÷3; Daejeon I-Hotel ÷2 — only two of you are going). Log what you actually spend; your running total saves on this device. Treat all figures as ≈ and confirm as you book. Rate check: ₩1,500 ≈ $1.",
+      "intro": "Estimates in <b>USD per person</b> — toggle to see trip-total or per-person view. Items marked <b>group</b> are shared costs (Melody House ÷3; Daejeon I-Hotel ÷2 — only two of you are going). Log what you actually spend; your running total saves on this device. Treat all figures as ≈ and confirm as you book. Rate check: <a href='https://www.google.com/search?q=KRW+USD+exchange+rate' target='_blank' rel='noopener noreferrer'>verify before you go</a> — as of Jun 2026 ≈₩1,535 to the dollar.",
       "items": [
         {
           "label": "Melody House — Mapo-gu (Hongdae), 7 nights",
@@ -461,7 +461,7 @@
           "title": "Palaces & old Seoul",
           "pace": "Full day · Gyeongbokgung ~2 hr · Bukchon ~1.5 hr · Insadong ~1.5 hr · lots of walking",
           "note": "Heat and humidity are the real workload — water, shade breaks, an iced-coffee stop. Your body clock is 1–2 days adjusted at this point.",
-          "body": "<p><em>Fifteen minutes on the subway and you're six hundred years back — grand palaces, stone lanes, and a neighbourhood that still feels lived-in.</em></p><ul><li><b>Getting there:</b> Line 2 east to <b>Euljiro 3-ga</b> (~14 min, 7 stops) → <b>Line 3 north 2 stops to Gyeongbokgung Station</b> (~22 min total, ≈₩1,650). Taxi: ~25 min, ≈₩13,000–16,000.</li><li><b>Morning — Gyeongbokgung.</b> Guard ceremony ≈10:00 and 14:00 (<b>⚠ verify current schedule</b>). Free entry with hanbok rental at gate. Last entry 17:30.</li><li><b>Midday — Bukchon Hanok Village.</b> Uphill from the palace — real residents, keep voices low. Spin PokéStops as you wander.</li><li><b>Early afternoon — Insadong.</b> Tea houses and craft galleries, ~5 min walk from Bukchon. Iced coffee stop before the evening.</li><li><b>~17:00 — head toward Hongdae or any gym-dense area.</b> Tonight is the Road of Legends finale — one of the best raiding evenings of the trip.</li><li><b>18:00–19:00 — Raid Hour: Origin Forme Dialga &amp; Palkia.</b> Best Master League forms (Roar of Time / Spacial Rend), shiny-eligible (1/20), 2–4 trainers. 4–5 passes. See Road of Legends counter charts.</li><li><b>19:00–20:00 — Primal Raid Hour: Primal Kyogre &amp; Groudon.</b> Groudon = quadruple Water weakness, Master League XL Candy, best Xurkitree counter Sunday. 5+ trainers needed — coordinate ahead. 3–4 passes.</li></ul><p>Road of Legends ends 23:59 KST. Dinner in Hongdae after 20:00 — dozens of walk-in options right there.</p>",
+          "body": "<p><em>Fifteen minutes on the subway and you're six hundred years back — grand palaces, stone lanes, the birthplace of the LCK, and the esports cafe right outside your door.</em></p><ul><li><b>Getting there:</b> Line 2 east to <b>Euljiro 3-ga</b> (~14 min, 7 stops) → <b>Line 3 north 2 stops to Gyeongbokgung Station</b> (~22 min total, ≈₩1,650). Taxi: ~25 min, ≈₩13,000–16,000.</li><li><b>Morning — Gyeongbokgung.</b> Guard ceremony ≈10:00 and 14:00 (<b>⚠ verify current schedule</b>). Free entry with hanbok rental at gate. Last entry 17:30.</li><li><b>Midday — Bukchon Hanok Village.</b> Uphill from the palace — real residents, keep voices low. Spin PokéStops as you wander.</li><li><b>Early afternoon — Insadong.</b> Tea houses and craft galleries, ~5 min walk from Bukchon. Iced coffee stop before the next stop.</li><li><b>~15:30 — LoL Park (롤파크).</b> Walk or take Line 3 south one stop to <b>Jonggak Station Exit 1</b> (~10 min from Insadong) — LoL Park is in the <b>Gran Seoul Building, 33 Jong-ro</b>. Open 10:00–19:00. Exhibits trace LCK history from Season 1; Riot store kiosk and LCK shop carry MSI tie-in merch you'll want before Daejeon. Cafe Bilgewater for a drink. Budget 45–60 min. Free entry to exhibits.</li><li><b>~17:00 — head toward Hongdae or any gym-dense area.</b> Tonight is the Road of Legends finale — one of the best raiding evenings of the trip.</li><li><b>18:00–19:00 — Raid Hour: Origin Forme Dialga &amp; Palkia.</b> Best Master League forms (Roar of Time / Spacial Rend), shiny-eligible (1/20), 2–4 trainers. 4–5 passes. See Road of Legends counter charts.</li><li><b>19:00–20:00 — Primal Raid Hour: Primal Kyogre &amp; Groudon.</b> Groudon = quadruple Water weakness, Master League XL Candy, best Xurkitree counter Sunday. 5+ trainers needed — coordinate ahead. 3–4 passes.</li></ul><p>Road of Legends ends 23:59 KST. Dinner in Hongdae after 20:00 — dozens of walk-in options right there. Then walk the same block home: <b>T1 Basecamp (마포구 양화로 147, B1)</b> is a 10-minute walk from Melody House. Half gaming museum, half esports cafe — sit at pro-level setups, order a themed drink, browse the merch shop (open until 22:00). Perfect cap to the night before you head to Daejeon tomorrow.</p>",
           "fit": "Breathable layers; umbrella doubles for sun and sudden rain.",
           "checklist": [
             "Gyeongbokgung open today (closed Tue)",
@@ -511,7 +511,7 @@
           "title": "KTX back to Seoul → Namsan, Gwangjang & Dongdaemun",
           "pace": "Half travel day · morning KTX Daejeon→Seoul ~50 min · Gwangjang lunch · N Seoul Tower at dusk · DDP evening",
           "note": "A deliberately lighter day to recover from the GO Fest/MSI weekend — ride back relaxed, then take the Seoul afternoon at your own pace.",
-          "body": "<p><em>The Daejeon crew rides back — the hard-charging weekend is behind everyone. Today is deliberately light.</em></p><ul><li><b>Morning — KTX to Seoul.</b> Relaxed checkout → booked morning KTX (~50 min) → Seoul Station → Gyeongui-Jungang Line 3 stops to Hongik University Station (~8 min) → walk or taxi to Melody House. Third person is already there. A short rest is completely fine.</li><li><b>Lunch — Gwangjang Market</b> (광장시장). Line 2 east to Dongdaemun H&amp;C Park (~20 min) → Line 1 one stop west to Jongno-5-ga (Exit 7–8) (~25 min total). Bindaetteok and mayak gimbap. Cash only at most stalls.</li><li><b>Late afternoon — N Seoul Tower.</b> Cable car or Bus 03 from Chungmuro Station up Namsan — best timed for dusk. Don't hike in July heat.</li><li><b>Evening — Dongdaemun Design Plaza (DDP).</b> Best after dark when the LED-lit building and rose field are on. Surrounding streets shop until 04:00. Dinner near DDP or Line 2 back for Hongdae street food.</li></ul><p>(Changdeokgung is closed Mondays — it's tomorrow's plan.)</p>",
+          "body": "<p><em>The Daejeon crew rides back — the hard-charging weekend is behind everyone. One meaningful stop on the way, then an easy evening.</em></p><ul><li><b>Morning — KTX to Seoul.</b> Relaxed checkout → booked morning KTX (~50 min) → Seoul Station. Drop bags at Melody House or Seoul Station B1 left-luggage, then head straight to Yongsan.</li><li><b>Afternoon — HYBE Insight.</b> From Seoul Station: Line 4 two stops to <b>Samgakji → Line 6 one stop to Hangangjin Station, Exit 2</b> (~15 min, ≈₩1,650) → 5-min walk to <b>42 Hangang-daero, Yongsan</b>. <b>Timed-entry tickets must be booked in advance via the Weverse app</b> (≈₩22,000 standard / ≈₩25,000 with photo ticket) — sells out weeks ahead during peak season. Open 11:00–21:00, last admission 19:00. Allow 1.5–2 hrs. The BTS and HYBE artist retrospective is genuinely well-produced even for non-ARMY visitors — the sound design alone is worth it.</li><li><b>Late afternoon — Namsan &amp; N Seoul Tower.</b> Hangangjin is Namsan-adjacent — short taxi (≈₩7,000) or 25-min walk uphill to the cable car or Bus 03. Best timed for dusk. Don't hike in July heat.</li><li><b>Lunch option — Gwangjang Market</b> (광장시장). If you want it before HYBE: Line 2 east from Hongik to Dongdaemun H&amp;C Park (~20 min) → Line 1 one stop west to Jongno-5-ga (Exit 7–8). Bindaetteok and mayak gimbap. Cash only at most stalls.</li><li><b>Evening.</b> Dinner near Namsan or Itaewon (one Line 6 stop from Hangangjin), or Line 2 back to Hongdae street food. DDP is always an option after dark.</li></ul><p>(Changdeokgung is closed Mondays — it's tomorrow's plan.)</p>",
           "fit": "Light clothes; layers for AC-heavy interiors.",
           "checklist": [
             "Morning KTX Daejeon → Seoul (booked)",
@@ -526,7 +526,7 @@
           "title": "The Secret Garden, last shopping & a Hongdae send-off",
           "pace": "Full day · Huwon (Secret Garden) 10:30 English tour ~90 min · afternoon shopping · Hongdae night",
           "note": "Book the 10:30 English Huwon tour ahead (50 online slots per session — it sells out). This is your last proper night, and the flight home isn't until 21:30 tomorrow, so give Hongdae the send-off.",
-          "body": "<p><em>The palace garden you saved for last, a final shopping sweep, then the city's best night out — right outside the front door.</em></p><ul><li><b>Morning — Changdeokgung &amp; Secret Garden.</b> From Melody House: Line 2 east to <b>Euljiro 3-ga</b> (~14 min) → <b>Line 3 north 2 stops to Anguk Station</b> (~22 min total). Arrive 30 min early for the pre-booked <b>10:30 English Huwon tour</b> (70–90 min guided walk, gentle terrain). Note: the palace itself requires a separate ₩3,000 admission ticket at the gate; the Huwon tour (₩5,000) is on top of that.</li><li><b>Afternoon — last shopping.</b> Insadong is a 5-min walk from Anguk. Myeongdong (Olive Young flagship) ~30 min via Line 3 south. Yongsan i'Park Mall (figures, cards, electronics) ~30 min via Line 1. Keep all receipts for the VAT refund.</li><li><b>Evening — Hongdae send-off.</b> AYCE KBBQ at MUSSO (~12 min walk from Melody House, open ≈12:00–01:00 — not 24 hr; see Where to eat), then the Hongdae youth core: Animate for anime goods, PC bangs, arcades, claw machines, buskers, and late-night chimaek. Stay out late — the flight home is tomorrow evening, no early alarm.</li></ul>",
+          "body": "<p><em>The palace garden you saved for last, a streetwear run through Gangnam, K-beauty, and the city's best block to end the night on.</em></p><ul><li><b>Morning — Changdeokgung &amp; Secret Garden.</b> From Melody House: Line 2 east to <b>Euljiro 3-ga</b> (~14 min) → <b>Line 3 north 2 stops to Anguk Station</b> (~22 min total). Arrive 30 min early for the pre-booked <b>10:30 English Huwon tour</b> (70–90 min guided walk, gentle terrain). Note: the palace itself requires a separate ₩3,000 admission ticket at the gate; the Huwon tour (₩5,000) is on top of that.</li><li><b>Afternoon — Apgujeong streetwear strip.</b> From Anguk Station: <b>Line 3 south 7 stops to Apgujeong Station, Exit 2</b> (~15 min, ≈₩1,650). Seoul's best block for Korean and international streetwear:<ul><li><b>Stüssý Seoul</b> — 78 Apgujeong-ro 46-gil, Gangnam-gu. Open 11:00–20:00. Seoul-exclusive colourways; pick up something you can't get at home.</li><li><b>Gentle Monster</b> flagship — eyewear and surreal store design; free to browse, worth seeing as an installation.</li><li><b>Ader Error</b> — Korea's most distinctive label; architectural fits, higher price point.</li></ul></li><li><b>Late afternoon — Olive Young K-beauty run.</b> From Apgujeong: Line 3 or taxi to <b>Myeongdong (Exit 6) for the flagship</b> (~20 min) — 4 floors, English-speaking staff, dedicated tax-refund counter. Or <b>Olive Young N Seongsu</b> (Line 2, Seongsu Station) is the new 5-floor flagship with the widest selection in Korea and far less tourist pressure — better for a browse. Keep all receipts for VAT refund.</li><li><b>Evening — Hongdae send-off.</b> AYCE KBBQ at MUSSO (~12 min walk from Melody House, open ≈12:00–01:00 — not 24 hr; see Where to eat), then: <b>T1 Basecamp (B1, 147 Yanghwa-ro — 10-min walk from Melody House).</b> Merch shop open until 22:00; PC cafe is 24 hr. Last merch grab and a photo at the pro setups. Then out to the Hongdae youth core: Animate for anime goods, arcades, claw machines, buskers, late-night chimaek. Stay out late — the flight home is tomorrow evening, no early alarm.</li></ul>",
           "fit": "Walking shoes for the garden paths; comfortable for a long night in Hongdae.",
           "checklist": [
             "Secret Garden 10:30 English tour booked (50 online slots — sells out)",
@@ -541,7 +541,7 @@
           "title": "A full last day — then the evening flight home",
           "pace": "Departure day · flight YP131 departs ICN 21:30 · near-full day in Seoul first · leave Melody House ~17:00",
           "note": "Your flight is an evening departure (21:30), so you have almost the whole day — check out, store your bags, and make the most of it.",
-          "body": "<p><em>An evening flight is a gift: one more full Seoul day before wheels-up.</em></p><ul><li><b>Morning — check out.</b> Stash luggage with Melody House host, or Seoul Station B1 left-luggage counter (~06:00 onward). Day is yours once bags are sorted.</li><li><b>Day — choose your finale.</b> Gangnam/COEX (Starfield Library, SMTOWN, Aquarium); Myeongdong + Cheonggyecheon (final Olive Young run); or Yongsan i'Park Mall (figures, cards, electronics). Do any in-store VAT refund on the way.</li><li><b>~17:00 — leave for the airport.</b> Walk or taxi to Hongik University Station → <b>AREX All-Stop to ICN Terminal 1</b> (≈49 min, ≈₩4,050 — no transfer) → arrive ≈18:30. Air Premia YP131 departs Terminal 1 at 21:30.</li></ul>",
+          "body": "<p><em>Check-out morning — bags packed, shopping done. The only job today is a smooth airport run.</em></p><ul><li><b>Morning — check out.</b> Bags should be packed the night before. Melody House checkout, then a final walk around Hongdae if time allows — coffee from a corner cafe, one last convenience store run.</li><li><b>~13:00–14:00 — head to the airport.</b> Walk or taxi to Hongik University Station → <b>AREX All-Stop to ICN Terminal 1</b> (≈49 min, ≈₩4,050 — no transfer) → arrive ≈14:30–15:00. Air Premia check-in and bag drop, then airside food and duty-free browsing. Air Premia YP131 departs Terminal 1 at <b>21:30</b> — plenty of buffer to eat, sit, and decompress.</li><li><b>Duty-free last buy.</b> ICN T1 departures level has Olive Young and Korean skincare duty-free counters — pick up anything you forgot, often cheaper than street price on cosmetics. Tax refund kiosk also in departures if you have receipts.</li></ul>",
           "fit": "Travel-comfortable; a layer for the flight.",
           "checklist": [
             "Check out of Melody House; stash luggage with host or Seoul Station left-luggage B1",
@@ -662,7 +662,7 @@
       "type": "prose",
       "group": "Daejeon & MSI",
       "title": "Getting to the arena",
-      "body": "<p>From Seoul Station, the <b>KTX reaches Daejeon in about 50 minutes</b> (book on the Korail app or korail.com; use <b>Seoul Station</b>, not Suseo/SRT). From Daejeon Station, a <b>taxi to the arena is ~20 min, ≈₩11,000</b> (split two ways between the two of you = ≈₩5,500 each); the cheaper metro-plus-taxi combo runs ~25 min via Government Complex Daejeon (정부청사역). The arena is <b>Daejeon Convention Center II (DCC II), 87 Expo-ro, Yuseong-gu</b> — and your <b>Daejeon I-Hotel</b> (27-5 Expo-ro 123beon-gil) is ~130 m from it, a 2-minute walk, so you stroll to both matches and skip the post-match scramble entirely. While you're there, <b>Sungsimdang</b> (107 Expo-ro, near DCC II ⚠ verify hours) is Daejeon's legendary bakery — fried soboro and chive breads; queue moves fast. EXPO Science Park is adjacent to DCC II with open plazas, PokéStops, and gyms — useful for GO Fest raiding windows between matches. It's the former 1993 World's Fair site: a large open-air campus with wide walkways, gardens, and permanent science pavilions spread across roughly 1 km. Free to walk through; no entry fee for the public outdoor areas. Expect sun with little shade cover — hat and water matter here.</p>"
+      "body": "<p>From Seoul Station, the <b>KTX reaches Daejeon in about 50 minutes</b> (book on the Korail app or korail.com; use <b>Seoul Station</b>, not Suseo/SRT). From Daejeon Station, a <b>taxi to the arena is ~20 min, ≈₩11,000</b> (split two ways between the two of you = ≈₩5,500 each); the cheaper metro-plus-taxi combo runs ~25 min via Government Complex Daejeon (정부청사역). The arena is <b>Daejeon Convention Center II (DCC II), 87 Expo-ro, Yuseong-gu</b> — and your <b>Daejeon I-Hotel</b> (27-5 Expo-ro 123beon-gil) is ~130 m from it, a 2-minute walk, so you stroll to both matches and skip the post-match scramble entirely.</p><p><b>Return to Seoul — Monday Jul 13:</b> You are staying both Saturday and Sunday nights at the I-Hotel, so there is no rush after the Grand Final. Monday morning KTX back to Seoul takes ~50 min; trains run from ≈06:00. A 09:00–10:00 departure puts you back in Seoul by 11:00 with the afternoon free. Book the return leg at <a href=\"https://www.letskorail.com\" target=\"_blank\" rel=\"noopener noreferrer\">letskorail.com</a>.</p><p>While you're there, <b>Sungsimdang</b> (107 Expo-ro, near DCC II ⚠ verify hours) is Daejeon's legendary bakery — fried soboro and chive breads; queue moves fast. EXPO Science Park is adjacent to DCC II with open plazas, PokéStops, and gyms — useful for GO Fest raiding windows between matches. It's the former 1993 World's Fair site: a large open-air campus with wide walkways, gardens, and permanent science pavilions spread across roughly 1 km. Free to walk through; no entry fee for the public outdoor areas. Expect sun with little shade cover — hat and water matter here.</p>"
     },
     {
       "type": "map",
@@ -773,117 +773,374 @@
         {
           "name": "Crowned Sword Zacian",
           "tier": "5-star",
-          "typing": ["Fairy", "Steel"],
+          "typing": [
+            "Fairy",
+            "Steel"
+          ],
           "shiny_odds": "1/20",
           "trainers": "2–4 trainers",
           "note": "Thursday Jul 9 all day + Raid Hour 18:00–19:00 KST. Steel typing neutralises all the usual Fairy counters (Ghost/Dark/Bug do nothing useful here). Bring the same Fire/Ground team for Zamazenta right after.",
           "strategy": "<b>Weak to: Fire and Ground only.</b> Steel cancels out every type Fairy is normally weak to — no Ghost, Dark, or Bug. Fire hits harder overall (Reshiram, Mega Blaziken). Primal Groudon covers both weaknesses in one slot. <b>This same team works identically for Crowned Shield Zamazenta.</b>",
           "counters": [
-            { "pokemon": "Primal Groudon", "fast": "Mud Shot", "charged": "Earthquake", "typing": "Ground/Fire" },
-            { "pokemon": "Mega Blaziken", "fast": "Fire Spin", "charged": "Blast Burn", "typing": "Fire/Fighting" },
-            { "pokemon": "Reshiram", "fast": "Fire Fang", "charged": "Fusion Flare", "typing": "Dragon/Fire" },
-            { "pokemon": "Mega Garchomp", "fast": "Mud Shot", "charged": "Earth Power", "typing": "Dragon/Ground" },
-            { "pokemon": "Landorus (Therian)", "fast": "Mud Shot", "charged": "Sandsear Storm", "typing": "Ground/Flying" },
-            { "pokemon": "Shadow Entei", "fast": "Fire Spin", "charged": "Flamethrower", "typing": "Fire" },
-            { "pokemon": "Chandelure", "fast": "Fire Spin", "charged": "Overheat", "typing": "Ghost/Fire" },
-            { "pokemon": "Excadrill", "fast": "Mud-Slap", "charged": "Drill Run", "typing": "Ground/Steel" }
+            {
+              "pokemon": "Primal Groudon",
+              "fast": "Mud Shot",
+              "charged": "Earthquake",
+              "typing": "Ground/Fire"
+            },
+            {
+              "pokemon": "Mega Blaziken",
+              "fast": "Fire Spin",
+              "charged": "Blast Burn",
+              "typing": "Fire/Fighting"
+            },
+            {
+              "pokemon": "Reshiram",
+              "fast": "Fire Fang",
+              "charged": "Fusion Flare",
+              "typing": "Dragon/Fire"
+            },
+            {
+              "pokemon": "Mega Garchomp",
+              "fast": "Mud Shot",
+              "charged": "Earth Power",
+              "typing": "Dragon/Ground"
+            },
+            {
+              "pokemon": "Landorus (Therian)",
+              "fast": "Mud Shot",
+              "charged": "Sandsear Storm",
+              "typing": "Ground/Flying"
+            },
+            {
+              "pokemon": "Shadow Entei",
+              "fast": "Fire Spin",
+              "charged": "Flamethrower",
+              "typing": "Fire"
+            },
+            {
+              "pokemon": "Chandelure",
+              "fast": "Fire Spin",
+              "charged": "Overheat",
+              "typing": "Ghost/Fire"
+            },
+            {
+              "pokemon": "Excadrill",
+              "fast": "Mud-Slap",
+              "charged": "Drill Run",
+              "typing": "Ground/Steel"
+            }
           ]
         },
         {
           "name": "Crowned Shield Zamazenta",
           "tier": "5-star",
-          "typing": ["Fighting", "Steel"],
+          "typing": [
+            "Fighting",
+            "Steel"
+          ],
           "shiny_odds": "1/20",
           "trainers": "2–4 trainers",
           "note": "Thursday Jul 9 all day + Raid Hour 18:00–19:00 KST. Fighting/Steel is an unusual type combination — Psychic and Fairy (usually great vs Fighting) are fully neutralised by the Steel typing. Identical weakness profile to Crowned Sword Zacian: Fire and Ground only.",
           "strategy": "<b>Weak to: Fire and Ground only.</b> Steel neutralises the Fighting weakness to Psychic, Flying, and Fairy. Reuse the exact same team you built for Crowned Zacian — there's no need to swap anything.",
           "counters": [
-            { "pokemon": "Primal Groudon", "fast": "Mud Shot", "charged": "Earthquake", "typing": "Ground/Fire" },
-            { "pokemon": "Mega Blaziken", "fast": "Fire Spin", "charged": "Blast Burn", "typing": "Fire/Fighting" },
-            { "pokemon": "Reshiram", "fast": "Fire Fang", "charged": "Fusion Flare", "typing": "Dragon/Fire" },
-            { "pokemon": "Mega Garchomp", "fast": "Mud Shot", "charged": "Earth Power", "typing": "Dragon/Ground" },
-            { "pokemon": "Landorus (Therian)", "fast": "Mud Shot", "charged": "Sandsear Storm", "typing": "Ground/Flying" },
-            { "pokemon": "Shadow Entei", "fast": "Fire Spin", "charged": "Flamethrower", "typing": "Fire" },
-            { "pokemon": "Chandelure", "fast": "Fire Spin", "charged": "Overheat", "typing": "Ghost/Fire" },
-            { "pokemon": "Excadrill", "fast": "Mud-Slap", "charged": "Drill Run", "typing": "Ground/Steel" }
+            {
+              "pokemon": "Primal Groudon",
+              "fast": "Mud Shot",
+              "charged": "Earthquake",
+              "typing": "Ground/Fire"
+            },
+            {
+              "pokemon": "Mega Blaziken",
+              "fast": "Fire Spin",
+              "charged": "Blast Burn",
+              "typing": "Fire/Fighting"
+            },
+            {
+              "pokemon": "Reshiram",
+              "fast": "Fire Fang",
+              "charged": "Fusion Flare",
+              "typing": "Dragon/Fire"
+            },
+            {
+              "pokemon": "Mega Garchomp",
+              "fast": "Mud Shot",
+              "charged": "Earth Power",
+              "typing": "Dragon/Ground"
+            },
+            {
+              "pokemon": "Landorus (Therian)",
+              "fast": "Mud Shot",
+              "charged": "Sandsear Storm",
+              "typing": "Ground/Flying"
+            },
+            {
+              "pokemon": "Shadow Entei",
+              "fast": "Fire Spin",
+              "charged": "Flamethrower",
+              "typing": "Fire"
+            },
+            {
+              "pokemon": "Chandelure",
+              "fast": "Fire Spin",
+              "charged": "Overheat",
+              "typing": "Ghost/Fire"
+            },
+            {
+              "pokemon": "Excadrill",
+              "fast": "Mud-Slap",
+              "charged": "Drill Run",
+              "typing": "Ground/Steel"
+            }
           ]
         },
         {
           "name": "Origin Forme Dialga",
           "tier": "5-star",
-          "typing": ["Steel", "Dragon"],
+          "typing": [
+            "Steel",
+            "Dragon"
+          ],
           "shiny_odds": "1/20",
           "trainers": "2–4 trainers",
           "note": "Friday Jul 10 all day + Raid Hour 18:00–19:00 KST. The best Dialga form for Master League — knows Roar of Time. High priority for XL Candy. Both Fighting and Ground work; Ground slightly favoured due to Primal Groudon coverage.",
           "strategy": "<b>Weak to: Fighting and Ground.</b> Steel's Dragon resistance means Dragon-type attackers do nothing here. Primal Groudon (from earlier in the same Raid Hour) is the best single counter if you have it; Mega Garchomp is the accessible Mega lead. Terrakion and Keldeo lead the Fighting options.",
           "counters": [
-            { "pokemon": "Primal Groudon", "fast": "Mud Shot", "charged": "Earthquake", "typing": "Ground/Fire" },
-            { "pokemon": "Mega Garchomp", "fast": "Mud Shot", "charged": "Earth Power", "typing": "Dragon/Ground" },
-            { "pokemon": "Terrakion", "fast": "Double Kick", "charged": "Sacred Sword", "typing": "Rock/Fighting" },
-            { "pokemon": "Keldeo", "fast": "Low Kick", "charged": "Sacred Sword", "typing": "Water/Fighting" },
-            { "pokemon": "Lucario", "fast": "Counter", "charged": "Aura Sphere", "typing": "Fighting/Steel" },
-            { "pokemon": "Shadow Machamp", "fast": "Counter", "charged": "Dynamic Punch", "typing": "Fighting" },
-            { "pokemon": "Landorus (Therian)", "fast": "Mud Shot", "charged": "Sandsear Storm", "typing": "Ground/Flying" },
-            { "pokemon": "Excadrill", "fast": "Mud-Slap", "charged": "Drill Run", "typing": "Ground/Steel" }
+            {
+              "pokemon": "Primal Groudon",
+              "fast": "Mud Shot",
+              "charged": "Earthquake",
+              "typing": "Ground/Fire"
+            },
+            {
+              "pokemon": "Mega Garchomp",
+              "fast": "Mud Shot",
+              "charged": "Earth Power",
+              "typing": "Dragon/Ground"
+            },
+            {
+              "pokemon": "Terrakion",
+              "fast": "Double Kick",
+              "charged": "Sacred Sword",
+              "typing": "Rock/Fighting"
+            },
+            {
+              "pokemon": "Keldeo",
+              "fast": "Low Kick",
+              "charged": "Sacred Sword",
+              "typing": "Water/Fighting"
+            },
+            {
+              "pokemon": "Lucario",
+              "fast": "Counter",
+              "charged": "Aura Sphere",
+              "typing": "Fighting/Steel"
+            },
+            {
+              "pokemon": "Shadow Machamp",
+              "fast": "Counter",
+              "charged": "Dynamic Punch",
+              "typing": "Fighting"
+            },
+            {
+              "pokemon": "Landorus (Therian)",
+              "fast": "Mud Shot",
+              "charged": "Sandsear Storm",
+              "typing": "Ground/Flying"
+            },
+            {
+              "pokemon": "Excadrill",
+              "fast": "Mud-Slap",
+              "charged": "Drill Run",
+              "typing": "Ground/Steel"
+            }
           ]
         },
         {
           "name": "Origin Forme Palkia",
           "tier": "5-star",
-          "typing": ["Water", "Dragon"],
+          "typing": [
+            "Water",
+            "Dragon"
+          ],
           "shiny_odds": "1/20",
           "trainers": "2–4 trainers",
           "note": "Friday Jul 10 all day + Raid Hour 18:00–19:00 KST. The best Palkia form for Master League — knows Spacial Rend. Dragon and Fairy both hit super-effectively. If you raided Rayquaza at GO Fest Day 1, bring it.",
           "strategy": "<b>Weak to: Dragon and Fairy.</b> Water neutralises Dragon's usual Rock and Ice weaknesses. Dragon-type moves hit harder overall; Mega Salamence is the top Mega lead. Fairy picks (Xerneas, Mega Gardevoir) are great if Dragon is short on trainers — Fairy moves are unresisted here.",
           "counters": [
-            { "pokemon": "Mega Salamence", "fast": "Dragon Tail", "charged": "Outrage", "typing": "Dragon/Flying" },
-            { "pokemon": "Rayquaza", "fast": "Dragon Tail", "charged": "Dragon Ascent", "typing": "Dragon/Flying" },
-            { "pokemon": "Mega Gardevoir", "fast": "Charm", "charged": "Dazzling Gleam", "typing": "Psychic/Fairy" },
-            { "pokemon": "Palkia", "fast": "Dragon Tail", "charged": "Spacial Rend", "typing": "Water/Dragon" },
-            { "pokemon": "Xerneas", "fast": "Geomancy", "charged": "Moonblast", "typing": "Fairy" },
-            { "pokemon": "Dragonite", "fast": "Dragon Tail", "charged": "Outrage", "typing": "Dragon/Flying" },
-            { "pokemon": "Togekiss", "fast": "Charm", "charged": "Dazzling Gleam", "typing": "Fairy/Flying" },
-            { "pokemon": "Zacian", "fast": "Quick Attack", "charged": "Play Rough", "typing": "Fairy" }
+            {
+              "pokemon": "Mega Salamence",
+              "fast": "Dragon Tail",
+              "charged": "Outrage",
+              "typing": "Dragon/Flying"
+            },
+            {
+              "pokemon": "Rayquaza",
+              "fast": "Dragon Tail",
+              "charged": "Dragon Ascent",
+              "typing": "Dragon/Flying"
+            },
+            {
+              "pokemon": "Mega Gardevoir",
+              "fast": "Charm",
+              "charged": "Dazzling Gleam",
+              "typing": "Psychic/Fairy"
+            },
+            {
+              "pokemon": "Palkia",
+              "fast": "Dragon Tail",
+              "charged": "Spacial Rend",
+              "typing": "Water/Dragon"
+            },
+            {
+              "pokemon": "Xerneas",
+              "fast": "Geomancy",
+              "charged": "Moonblast",
+              "typing": "Fairy"
+            },
+            {
+              "pokemon": "Dragonite",
+              "fast": "Dragon Tail",
+              "charged": "Outrage",
+              "typing": "Dragon/Flying"
+            },
+            {
+              "pokemon": "Togekiss",
+              "fast": "Charm",
+              "charged": "Dazzling Gleam",
+              "typing": "Fairy/Flying"
+            },
+            {
+              "pokemon": "Zacian",
+              "fast": "Quick Attack",
+              "charged": "Play Rough",
+              "typing": "Fairy"
+            }
           ]
         },
         {
           "name": "Primal Kyogre",
           "tier": "primal",
-          "typing": ["Water"],
+          "typing": [
+            "Water"
+          ],
           "shiny_odds": "1/20",
           "shiny_note": "Same shiny model as regular Kyogre (black/dark highlights)",
           "trainers": "5–10 trainers (Primal tier has significantly more HP than 5-star)",
           "note": "Friday Jul 10 Primal Raid Hour 19:00–20:00 KST. Pure Water — Electric hits hardest. Kyogre is also the top counter for Primal Groudon in the same raid hour; stack Raid Passes between both Primals.",
           "strategy": "<b>Weak to: Grass and Electric.</b> Electric moves deal slightly more damage overall. Zekrom (Fusion Bolt) is the single best counter; Shadow Raikou and Xurkitree are close behind. Primal tier — 5+ trainers recommended, more if under Level 35. Coordinate before the hour starts.",
           "counters": [
-            { "pokemon": "Zekrom", "fast": "Charge Beam", "charged": "Fusion Bolt", "typing": "Dragon/Electric" },
-            { "pokemon": "Shadow Raikou", "fast": "Thunder Shock", "charged": "Wild Charge", "typing": "Electric" },
-            { "pokemon": "Mega Manectric", "fast": "Charge Beam", "charged": "Wild Charge", "typing": "Electric" },
-            { "pokemon": "Kartana", "fast": "Razor Leaf", "charged": "Leaf Blade", "typing": "Grass/Steel" },
-            { "pokemon": "Xurkitree", "fast": "Thunder Shock", "charged": "Discharge", "typing": "Electric" },
-            { "pokemon": "Thundurus (Therian)", "fast": "Volt Switch", "charged": "Thunderbolt", "typing": "Electric/Flying" },
-            { "pokemon": "Roserade", "fast": "Razor Leaf", "charged": "Grass Knot", "typing": "Grass/Poison" },
-            { "pokemon": "Electivire", "fast": "Thunder Shock", "charged": "Wild Charge", "typing": "Electric" }
+            {
+              "pokemon": "Zekrom",
+              "fast": "Charge Beam",
+              "charged": "Fusion Bolt",
+              "typing": "Dragon/Electric"
+            },
+            {
+              "pokemon": "Shadow Raikou",
+              "fast": "Thunder Shock",
+              "charged": "Wild Charge",
+              "typing": "Electric"
+            },
+            {
+              "pokemon": "Mega Manectric",
+              "fast": "Charge Beam",
+              "charged": "Wild Charge",
+              "typing": "Electric"
+            },
+            {
+              "pokemon": "Kartana",
+              "fast": "Razor Leaf",
+              "charged": "Leaf Blade",
+              "typing": "Grass/Steel"
+            },
+            {
+              "pokemon": "Xurkitree",
+              "fast": "Thunder Shock",
+              "charged": "Discharge",
+              "typing": "Electric"
+            },
+            {
+              "pokemon": "Thundurus (Therian)",
+              "fast": "Volt Switch",
+              "charged": "Thunderbolt",
+              "typing": "Electric/Flying"
+            },
+            {
+              "pokemon": "Roserade",
+              "fast": "Razor Leaf",
+              "charged": "Grass Knot",
+              "typing": "Grass/Poison"
+            },
+            {
+              "pokemon": "Electivire",
+              "fast": "Thunder Shock",
+              "charged": "Wild Charge",
+              "typing": "Electric"
+            }
           ]
         },
         {
           "name": "Primal Groudon",
           "tier": "primal",
-          "typing": ["Ground", "Fire"],
+          "typing": [
+            "Ground",
+            "Fire"
+          ],
           "shiny_odds": "1/20",
           "shiny_note": "Same shiny model as regular Groudon (gold/yellow highlights)",
           "trainers": "5–10 trainers (Primal tier)",
           "note": "Friday Jul 10 Primal Raid Hour 19:00–20:00 KST. Ground/Fire = quadruple Water weakness (the only type that hits both super-effectively). Your Kyogre literally counters this boss. Priority target: Primal Groudon is your best counter for Xurkitree on Sunday, and top-tier Ground attacker for Master League XL.",
           "strategy": "<b>Weak to: Water only</b> — but it is a <i>quadruple</i> weakness (both Ground and Fire take 2.56× from Water in GO). Ice, Grass, and other types that usually hit Ground well are resisted by Fire. Bring nothing but Water. Kyogre (available in the same Raid Hour) is the single best attacker; Mega Swampert and Mega Gyarados are the top Mega options.",
           "counters": [
-            { "pokemon": "Kyogre", "fast": "Waterfall", "charged": "Origin Pulse", "typing": "Water" },
-            { "pokemon": "Mega Swampert", "fast": "Water Gun", "charged": "Hydro Cannon", "typing": "Water/Ground" },
-            { "pokemon": "Mega Gyarados", "fast": "Waterfall", "charged": "Hydro Pump", "typing": "Water/Dark" },
-            { "pokemon": "Shadow Swampert", "fast": "Water Gun", "charged": "Hydro Cannon", "typing": "Water/Ground" },
-            { "pokemon": "Samurott", "fast": "Waterfall", "charged": "Hydro Cannon", "typing": "Water" },
-            { "pokemon": "Shadow Feraligatr", "fast": "Water Gun", "charged": "Hydro Cannon", "typing": "Water" },
-            { "pokemon": "Blastoise", "fast": "Water Gun", "charged": "Hydro Cannon", "typing": "Water" },
-            { "pokemon": "Kingler", "fast": "Bubble", "charged": "Crabhammer", "typing": "Water" }
+            {
+              "pokemon": "Kyogre",
+              "fast": "Waterfall",
+              "charged": "Origin Pulse",
+              "typing": "Water"
+            },
+            {
+              "pokemon": "Mega Swampert",
+              "fast": "Water Gun",
+              "charged": "Hydro Cannon",
+              "typing": "Water/Ground"
+            },
+            {
+              "pokemon": "Mega Gyarados",
+              "fast": "Waterfall",
+              "charged": "Hydro Pump",
+              "typing": "Water/Dark"
+            },
+            {
+              "pokemon": "Shadow Swampert",
+              "fast": "Water Gun",
+              "charged": "Hydro Cannon",
+              "typing": "Water/Ground"
+            },
+            {
+              "pokemon": "Samurott",
+              "fast": "Waterfall",
+              "charged": "Hydro Cannon",
+              "typing": "Water"
+            },
+            {
+              "pokemon": "Shadow Feraligatr",
+              "fast": "Water Gun",
+              "charged": "Hydro Cannon",
+              "typing": "Water"
+            },
+            {
+              "pokemon": "Blastoise",
+              "fast": "Water Gun",
+              "charged": "Hydro Cannon",
+              "typing": "Water"
+            },
+            {
+              "pokemon": "Kingler",
+              "fast": "Bubble",
+              "charged": "Crabhammer",
+              "typing": "Water"
+            }
           ]
         }
       ]
@@ -939,194 +1196,617 @@
         {
           "name": "Mega Mewtwo X",
           "tier": "super-mega",
-          "typing": ["Psychic", "Fighting"],
+          "typing": [
+            "Psychic",
+            "Fighting"
+          ],
           "shiny_odds": "1/20",
           "shiny_note": "Global debut — first appearance in Pokémon GO",
           "trainers": "10–20 trainers (Super Mega tier — harder than standard Mega)",
           "note": "Saturday Jul 11 only — appears in every habitat, so you can raid it in Seoul in the morning and again near the arena in Daejeon. Branching Research lets you choose the X or Y encounter.",
           "strategy": "<b>Weak to: Flying, Fairy, and Ghost.</b> The Fighting secondary type does not remove Ghost weakness — Ghost still hits Psychic for 2×. Flying is the highest-DPS type: Mega Rayquaza (Dragon Ascent) is best if you have it; otherwise lead <b>Mega Pidgeot</b> (Saturday's rotation) or Mega Gardevoir for Fairy. Dawn Wings Necrozma is the top Ghost pick and fits both Mewtwo forms.",
           "counters": [
-            { "pokemon": "Mega Rayquaza", "fast": "Air Slash", "charged": "Dragon Ascent", "typing": "Dragon/Flying" },
-            { "pokemon": "Shadow Moltres", "fast": "Wing Attack", "charged": "Sky Attack", "typing": "Fire/Flying" },
-            { "pokemon": "Mega Pidgeot", "fast": "Gust", "charged": "Brave Bird", "typing": "Normal/Flying" },
-            { "pokemon": "Rayquaza", "fast": "Air Slash", "charged": "Dragon Ascent", "typing": "Dragon/Flying" },
-            { "pokemon": "Mega Gardevoir", "fast": "Charm", "charged": "Dazzling Gleam", "typing": "Psychic/Fairy" },
-            { "pokemon": "Xerneas", "fast": "Geomancy", "charged": "Moonblast", "typing": "Fairy" },
-            { "pokemon": "Zacian", "fast": "Quick Attack", "charged": "Play Rough", "typing": "Fairy" },
-            { "pokemon": "Dawn Wings Necrozma", "fast": "Shadow Claw", "charged": "Moongeist Beam", "typing": "Ghost/Psychic" }
+            {
+              "pokemon": "Mega Rayquaza",
+              "fast": "Air Slash",
+              "charged": "Dragon Ascent",
+              "typing": "Dragon/Flying"
+            },
+            {
+              "pokemon": "Shadow Moltres",
+              "fast": "Wing Attack",
+              "charged": "Sky Attack",
+              "typing": "Fire/Flying"
+            },
+            {
+              "pokemon": "Mega Pidgeot",
+              "fast": "Gust",
+              "charged": "Brave Bird",
+              "typing": "Normal/Flying"
+            },
+            {
+              "pokemon": "Rayquaza",
+              "fast": "Air Slash",
+              "charged": "Dragon Ascent",
+              "typing": "Dragon/Flying"
+            },
+            {
+              "pokemon": "Mega Gardevoir",
+              "fast": "Charm",
+              "charged": "Dazzling Gleam",
+              "typing": "Psychic/Fairy"
+            },
+            {
+              "pokemon": "Xerneas",
+              "fast": "Geomancy",
+              "charged": "Moonblast",
+              "typing": "Fairy"
+            },
+            {
+              "pokemon": "Zacian",
+              "fast": "Quick Attack",
+              "charged": "Play Rough",
+              "typing": "Fairy"
+            },
+            {
+              "pokemon": "Dawn Wings Necrozma",
+              "fast": "Shadow Claw",
+              "charged": "Moongeist Beam",
+              "typing": "Ghost/Psychic"
+            }
           ]
         },
         {
           "name": "Mega Mewtwo Y",
           "tier": "super-mega",
-          "typing": ["Psychic"],
+          "typing": [
+            "Psychic"
+          ],
           "shiny_odds": "1/20",
           "shiny_note": "Global debut — first appearance in Pokémon GO",
           "trainers": "10–20 trainers (Super Mega tier)",
           "note": "Sunday Jul 12 only — appears in every habitat, so raid it morning and afternoon around the Grand Final. Pure Psychic — more counters available than Mega X.",
           "strategy": "<b>Weak to:</b> Bug, Ghost, Dark. Ghost and Dark are the strongest damage types here. Dawn Wings Necrozma is the single best counter in the game; Mega Tyranitar and Mega Gengar round out the premium trio. Shadow Tyranitar or Shadow Hydreigon are excellent budget shadow leads.",
           "counters": [
-            { "pokemon": "Dawn Wings Necrozma", "fast": "Shadow Claw", "charged": "Moongeist Beam", "typing": "Ghost/Psychic" },
-            { "pokemon": "Mega Tyranitar", "fast": "Bite", "charged": "Brutal Swing", "typing": "Rock/Dark" },
-            { "pokemon": "Mega Gengar", "fast": "Lick", "charged": "Shadow Ball", "typing": "Ghost/Poison" },
-            { "pokemon": "Shadow Tyranitar", "fast": "Bite", "charged": "Brutal Swing", "typing": "Rock/Dark" },
-            { "pokemon": "Chandelure", "fast": "Hex", "charged": "Shadow Ball", "typing": "Ghost/Fire" },
-            { "pokemon": "Shadow Hydreigon", "fast": "Bite", "charged": "Brutal Swing", "typing": "Dark/Dragon" },
-            { "pokemon": "Mega Pinsir", "fast": "Bug Bite", "charged": "X-Scissor", "typing": "Bug/Flying" },
-            { "pokemon": "Mega Absol", "fast": "Snarl", "charged": "Dark Pulse", "typing": "Dark" }
+            {
+              "pokemon": "Dawn Wings Necrozma",
+              "fast": "Shadow Claw",
+              "charged": "Moongeist Beam",
+              "typing": "Ghost/Psychic"
+            },
+            {
+              "pokemon": "Mega Tyranitar",
+              "fast": "Bite",
+              "charged": "Brutal Swing",
+              "typing": "Rock/Dark"
+            },
+            {
+              "pokemon": "Mega Gengar",
+              "fast": "Lick",
+              "charged": "Shadow Ball",
+              "typing": "Ghost/Poison"
+            },
+            {
+              "pokemon": "Shadow Tyranitar",
+              "fast": "Bite",
+              "charged": "Brutal Swing",
+              "typing": "Rock/Dark"
+            },
+            {
+              "pokemon": "Chandelure",
+              "fast": "Hex",
+              "charged": "Shadow Ball",
+              "typing": "Ghost/Fire"
+            },
+            {
+              "pokemon": "Shadow Hydreigon",
+              "fast": "Bite",
+              "charged": "Brutal Swing",
+              "typing": "Dark/Dragon"
+            },
+            {
+              "pokemon": "Mega Pinsir",
+              "fast": "Bug Bite",
+              "charged": "X-Scissor",
+              "typing": "Bug/Flying"
+            },
+            {
+              "pokemon": "Mega Absol",
+              "fast": "Snarl",
+              "charged": "Dark Pulse",
+              "typing": "Dark"
+            }
           ]
         },
         {
           "name": "Rayquaza",
           "tier": "5-star",
-          "typing": ["Dragon", "Flying"],
+          "typing": [
+            "Dragon",
+            "Flying"
+          ],
           "shiny_odds": "1/20",
           "trainers": "2–4 trainers",
           "note": "Saturday Dragonflight Summit (4–7 PM) — live in Daejeon around the LBF; raid near DCC II / EXPO Science Park. Top F2P Dragon attacker and Candy XL for Master League. (Mega Rayquaza is not a raid boss this event — use Mega Salamence as your Dragon Mega lead.)",
           "strategy": "<b>Weak to:</b> Ice (2×), Dragon, Fairy, Rock. Ice hits for double super-effective — always lead Ice. Standard 5-star difficulty; 2–3 high-level trainers handle it comfortably.",
           "counters": [
-            { "pokemon": "Galarian Darmanitan", "fast": "Ice Fang", "charged": "Avalanche", "typing": "Ice" },
-            { "pokemon": "Shadow Mamoswine", "fast": "Powder Snow", "charged": "Avalanche", "typing": "Ice/Ground" },
-            { "pokemon": "Mamoswine", "fast": "Powder Snow", "charged": "Avalanche", "typing": "Ice/Ground" },
-            { "pokemon": "Weavile", "fast": "Ice Shard", "charged": "Avalanche", "typing": "Dark/Ice" },
-            { "pokemon": "Glaceon", "fast": "Ice Shard", "charged": "Avalanche", "typing": "Ice" },
-            { "pokemon": "Cetitan", "fast": "Powder Snow", "charged": "Avalanche", "typing": "Ice" },
-            { "pokemon": "Mega Abomasnow", "fast": "Powder Snow", "charged": "Weather Ball (Ice)", "typing": "Grass/Ice" },
-            { "pokemon": "Kyurem", "fast": "Steel Wing", "charged": "Blizzard", "typing": "Dragon/Ice" }
+            {
+              "pokemon": "Galarian Darmanitan",
+              "fast": "Ice Fang",
+              "charged": "Avalanche",
+              "typing": "Ice"
+            },
+            {
+              "pokemon": "Shadow Mamoswine",
+              "fast": "Powder Snow",
+              "charged": "Avalanche",
+              "typing": "Ice/Ground"
+            },
+            {
+              "pokemon": "Mamoswine",
+              "fast": "Powder Snow",
+              "charged": "Avalanche",
+              "typing": "Ice/Ground"
+            },
+            {
+              "pokemon": "Weavile",
+              "fast": "Ice Shard",
+              "charged": "Avalanche",
+              "typing": "Dark/Ice"
+            },
+            {
+              "pokemon": "Glaceon",
+              "fast": "Ice Shard",
+              "charged": "Avalanche",
+              "typing": "Ice"
+            },
+            {
+              "pokemon": "Cetitan",
+              "fast": "Powder Snow",
+              "charged": "Avalanche",
+              "typing": "Ice"
+            },
+            {
+              "pokemon": "Mega Abomasnow",
+              "fast": "Powder Snow",
+              "charged": "Weather Ball (Ice)",
+              "typing": "Grass/Ice"
+            },
+            {
+              "pokemon": "Kyurem",
+              "fast": "Steel Wing",
+              "charged": "Blizzard",
+              "typing": "Dragon/Ice"
+            }
           ]
         },
         {
           "name": "Kyogre",
           "tier": "5-star",
-          "typing": ["Water"],
+          "typing": [
+            "Water"
+          ],
           "shiny_odds": "1/20",
           "trainers": "2–3 trainers",
           "note": "Saturday Dragonflight Summit (4–7 PM) — live in Daejeon around the LBF. Top Water attacker and Candy XL; doubles as a Groudon and Xurkitree counter.",
           "strategy": "<b>Weak to:</b> Grass, Electric. Zekrom and Shadow Raikou are the top Electric picks; Roserade or Kartana for Grass. Zekrom's Fusion Bolt is the hardest-hitting charged move here.",
           "counters": [
-            { "pokemon": "Shadow Raikou", "fast": "Thunder Shock", "charged": "Wild Charge", "typing": "Electric" },
-            { "pokemon": "Zekrom", "fast": "Charge Beam", "charged": "Fusion Bolt", "typing": "Dragon/Electric" },
-            { "pokemon": "Mega Manectric", "fast": "Charge Beam", "charged": "Wild Charge", "typing": "Electric" },
-            { "pokemon": "Kartana", "fast": "Razor Leaf", "charged": "Leaf Blade", "typing": "Grass/Steel" },
-            { "pokemon": "Xurkitree", "fast": "Thunder Shock", "charged": "Discharge", "typing": "Electric" },
-            { "pokemon": "Thundurus (Therian)", "fast": "Volt Switch", "charged": "Thunderbolt", "typing": "Electric/Flying" },
-            { "pokemon": "Electivire", "fast": "Thunder Shock", "charged": "Wild Charge", "typing": "Electric" },
-            { "pokemon": "Roserade", "fast": "Razor Leaf", "charged": "Grass Knot", "typing": "Grass/Poison" }
+            {
+              "pokemon": "Shadow Raikou",
+              "fast": "Thunder Shock",
+              "charged": "Wild Charge",
+              "typing": "Electric"
+            },
+            {
+              "pokemon": "Zekrom",
+              "fast": "Charge Beam",
+              "charged": "Fusion Bolt",
+              "typing": "Dragon/Electric"
+            },
+            {
+              "pokemon": "Mega Manectric",
+              "fast": "Charge Beam",
+              "charged": "Wild Charge",
+              "typing": "Electric"
+            },
+            {
+              "pokemon": "Kartana",
+              "fast": "Razor Leaf",
+              "charged": "Leaf Blade",
+              "typing": "Grass/Steel"
+            },
+            {
+              "pokemon": "Xurkitree",
+              "fast": "Thunder Shock",
+              "charged": "Discharge",
+              "typing": "Electric"
+            },
+            {
+              "pokemon": "Thundurus (Therian)",
+              "fast": "Volt Switch",
+              "charged": "Thunderbolt",
+              "typing": "Electric/Flying"
+            },
+            {
+              "pokemon": "Electivire",
+              "fast": "Thunder Shock",
+              "charged": "Wild Charge",
+              "typing": "Electric"
+            },
+            {
+              "pokemon": "Roserade",
+              "fast": "Razor Leaf",
+              "charged": "Grass Knot",
+              "typing": "Grass/Poison"
+            }
           ]
         },
         {
           "name": "Groudon",
           "tier": "5-star",
-          "typing": ["Ground"],
+          "typing": [
+            "Ground"
+          ],
           "shiny_odds": "1/20",
           "trainers": "2–4 trainers",
           "note": "Saturday Dragonflight Summit (4–7 PM) — live in Daejeon around the LBF. Top Ground attacker, Candy XL for Master League, and your best Xurkitree counter on Sunday.",
           "strategy": "<b>Weak to:</b> Water, Grass, Ice. Water hits hardest — Kyogre (in the same habitat) and Mega Swampert / Mega Gyarados lead. Kartana and Mega Sceptile bring Grass; Mamoswine and Galarian Darmanitan bring Ice.",
           "counters": [
-            { "pokemon": "Kyogre", "fast": "Waterfall", "charged": "Origin Pulse", "typing": "Water" },
-            { "pokemon": "Mega Swampert", "fast": "Water Gun", "charged": "Hydro Cannon", "typing": "Water/Ground" },
-            { "pokemon": "Mega Gyarados", "fast": "Waterfall", "charged": "Hydro Pump", "typing": "Water/Dark" },
-            { "pokemon": "Kartana", "fast": "Razor Leaf", "charged": "Leaf Blade", "typing": "Grass/Steel" },
-            { "pokemon": "Mega Sceptile", "fast": "Bullet Seed", "charged": "Frenzy Plant", "typing": "Grass" },
-            { "pokemon": "Roserade", "fast": "Razor Leaf", "charged": "Grass Knot", "typing": "Grass/Poison" },
-            { "pokemon": "Mamoswine", "fast": "Powder Snow", "charged": "Avalanche", "typing": "Ice/Ground" },
-            { "pokemon": "Galarian Darmanitan", "fast": "Ice Fang", "charged": "Avalanche", "typing": "Ice" }
+            {
+              "pokemon": "Kyogre",
+              "fast": "Waterfall",
+              "charged": "Origin Pulse",
+              "typing": "Water"
+            },
+            {
+              "pokemon": "Mega Swampert",
+              "fast": "Water Gun",
+              "charged": "Hydro Cannon",
+              "typing": "Water/Ground"
+            },
+            {
+              "pokemon": "Mega Gyarados",
+              "fast": "Waterfall",
+              "charged": "Hydro Pump",
+              "typing": "Water/Dark"
+            },
+            {
+              "pokemon": "Kartana",
+              "fast": "Razor Leaf",
+              "charged": "Leaf Blade",
+              "typing": "Grass/Steel"
+            },
+            {
+              "pokemon": "Mega Sceptile",
+              "fast": "Bullet Seed",
+              "charged": "Frenzy Plant",
+              "typing": "Grass"
+            },
+            {
+              "pokemon": "Roserade",
+              "fast": "Razor Leaf",
+              "charged": "Grass Knot",
+              "typing": "Grass/Poison"
+            },
+            {
+              "pokemon": "Mamoswine",
+              "fast": "Powder Snow",
+              "charged": "Avalanche",
+              "typing": "Ice/Ground"
+            },
+            {
+              "pokemon": "Galarian Darmanitan",
+              "fast": "Ice Fang",
+              "charged": "Avalanche",
+              "typing": "Ice"
+            }
           ]
         },
         {
           "name": "Giratina (Origin Forme)",
           "tier": "5-star",
-          "typing": ["Ghost", "Dragon"],
+          "typing": [
+            "Ghost",
+            "Dragon"
+          ],
           "shiny_odds": "1/20",
           "trainers": "2–4 trainers",
           "note": "Saturday Astral Tides habitat (1–4 PM). Top PvP pick for Master League; worth stacking Candy XL.",
           "strategy": "<b>Weak to:</b> Ghost, Ice, Dragon, Dark, Fairy. Ghost and Dragon hit hardest. Shadow Gengar with Lick + Shadow Ball is the accessible shadow lead. Dawn Wings Necrozma is premier.",
           "counters": [
-            { "pokemon": "Dawn Wings Necrozma", "fast": "Shadow Claw", "charged": "Moongeist Beam", "typing": "Ghost/Psychic" },
-            { "pokemon": "Shadow Gengar", "fast": "Lick", "charged": "Shadow Ball", "typing": "Ghost/Poison" },
-            { "pokemon": "Mega Gengar", "fast": "Lick", "charged": "Shadow Ball", "typing": "Ghost/Poison" },
-            { "pokemon": "Lunala", "fast": "Shadow Claw", "charged": "Shadow Ball", "typing": "Ghost/Psychic" },
-            { "pokemon": "Chandelure", "fast": "Hex", "charged": "Shadow Ball", "typing": "Ghost/Fire" },
-            { "pokemon": "Dragapult", "fast": "Dragon Breath", "charged": "Shadow Ball", "typing": "Dragon/Ghost" },
-            { "pokemon": "Hydreigon", "fast": "Bite", "charged": "Brutal Swing", "typing": "Dark/Dragon" },
-            { "pokemon": "Galarian Weezing", "fast": "Fairy Wind", "charged": "Play Rough", "typing": "Poison/Fairy" }
+            {
+              "pokemon": "Dawn Wings Necrozma",
+              "fast": "Shadow Claw",
+              "charged": "Moongeist Beam",
+              "typing": "Ghost/Psychic"
+            },
+            {
+              "pokemon": "Shadow Gengar",
+              "fast": "Lick",
+              "charged": "Shadow Ball",
+              "typing": "Ghost/Poison"
+            },
+            {
+              "pokemon": "Mega Gengar",
+              "fast": "Lick",
+              "charged": "Shadow Ball",
+              "typing": "Ghost/Poison"
+            },
+            {
+              "pokemon": "Lunala",
+              "fast": "Shadow Claw",
+              "charged": "Shadow Ball",
+              "typing": "Ghost/Psychic"
+            },
+            {
+              "pokemon": "Chandelure",
+              "fast": "Hex",
+              "charged": "Shadow Ball",
+              "typing": "Ghost/Fire"
+            },
+            {
+              "pokemon": "Dragapult",
+              "fast": "Dragon Breath",
+              "charged": "Shadow Ball",
+              "typing": "Dragon/Ghost"
+            },
+            {
+              "pokemon": "Hydreigon",
+              "fast": "Bite",
+              "charged": "Brutal Swing",
+              "typing": "Dark/Dragon"
+            },
+            {
+              "pokemon": "Galarian Weezing",
+              "fast": "Fairy Wind",
+              "charged": "Play Rough",
+              "typing": "Poison/Fairy"
+            }
           ]
         },
         {
           "name": "Xurkitree",
           "tier": "5-star",
-          "typing": ["Electric"],
+          "typing": [
+            "Electric"
+          ],
           "shiny_odds": "1/20",
           "shiny_note": "Korea is in the Asia-Pacific region where Xurkitree appears — region-locked Ultra Beast, you can't get it at home",
           "trainers": "2–4 trainers",
           "note": "Sunday Verdant Anomaly (1–4 PM), Daejeon — the Asia-Pacific regional Ultra Beast and a top non-shadow Electric attacker. Raid it before the 3 PM Grand Final; it's the single most location-exclusive thing on the weekend.",
           "strategy": "<b>Weak to:</b> Ground only (pure Electric) — and Ground is immune to its Electric attacks, so a full Ground team takes almost no damage. Lead Mega Garchomp or Excadrill; Groudon (from Saturday) and Therian Landorus are premium.",
           "counters": [
-            { "pokemon": "Mega Garchomp", "fast": "Mud Shot", "charged": "Earth Power", "typing": "Dragon/Ground" },
-            { "pokemon": "Primal Groudon", "fast": "Mud Shot", "charged": "Precipice Blades", "typing": "Ground/Fire" },
-            { "pokemon": "Landorus (Therian)", "fast": "Mud Shot", "charged": "Sandsear Storm", "typing": "Ground/Flying" },
-            { "pokemon": "Shadow Excadrill", "fast": "Mud-Slap", "charged": "Earthquake", "typing": "Ground/Steel" },
-            { "pokemon": "Excadrill", "fast": "Mud-Slap", "charged": "Drill Run", "typing": "Ground/Steel" },
-            { "pokemon": "Groudon", "fast": "Mud Shot", "charged": "Earthquake", "typing": "Ground" },
-            { "pokemon": "Shadow Garchomp", "fast": "Mud Shot", "charged": "Earth Power", "typing": "Dragon/Ground" },
-            { "pokemon": "Rhyperior", "fast": "Mud-Slap", "charged": "Earthquake", "typing": "Ground/Rock" }
+            {
+              "pokemon": "Mega Garchomp",
+              "fast": "Mud Shot",
+              "charged": "Earth Power",
+              "typing": "Dragon/Ground"
+            },
+            {
+              "pokemon": "Primal Groudon",
+              "fast": "Mud Shot",
+              "charged": "Precipice Blades",
+              "typing": "Ground/Fire"
+            },
+            {
+              "pokemon": "Landorus (Therian)",
+              "fast": "Mud Shot",
+              "charged": "Sandsear Storm",
+              "typing": "Ground/Flying"
+            },
+            {
+              "pokemon": "Shadow Excadrill",
+              "fast": "Mud-Slap",
+              "charged": "Earthquake",
+              "typing": "Ground/Steel"
+            },
+            {
+              "pokemon": "Excadrill",
+              "fast": "Mud-Slap",
+              "charged": "Drill Run",
+              "typing": "Ground/Steel"
+            },
+            {
+              "pokemon": "Groudon",
+              "fast": "Mud Shot",
+              "charged": "Earthquake",
+              "typing": "Ground"
+            },
+            {
+              "pokemon": "Shadow Garchomp",
+              "fast": "Mud Shot",
+              "charged": "Earth Power",
+              "typing": "Dragon/Ground"
+            },
+            {
+              "pokemon": "Rhyperior",
+              "fast": "Mud-Slap",
+              "charged": "Earthquake",
+              "typing": "Ground/Rock"
+            }
           ]
         },
         {
           "name": "Necrozma",
           "tier": "5-star",
-          "typing": ["Psychic"],
+          "typing": [
+            "Psychic"
+          ],
           "shiny_odds": "1/20",
           "trainers": "2–4 trainers",
           "note": "Sunday Verdant Anomaly (1–4 PM). Base Necrozma — fuse with Solgaleo for Dusk Mane or Lunala for Dawn Wings (the game's best Ghost attacker). Worth a couple of raids as fusion fodder.",
           "strategy": "<b>Weak to:</b> Bug, Ghost, Dark (pure Psychic — same profile as Mega Mewtwo Y, so reuse that team). Mega Gengar, Dawn Wings Necrozma and Mega Tyranitar are premier; Chandelure and Shadow Tyranitar are accessible.",
           "counters": [
-            { "pokemon": "Mega Gengar", "fast": "Lick", "charged": "Shadow Ball", "typing": "Ghost/Poison" },
-            { "pokemon": "Dawn Wings Necrozma", "fast": "Shadow Claw", "charged": "Moongeist Beam", "typing": "Ghost/Psychic" },
-            { "pokemon": "Mega Tyranitar", "fast": "Bite", "charged": "Brutal Swing", "typing": "Rock/Dark" },
-            { "pokemon": "Chandelure", "fast": "Hex", "charged": "Shadow Ball", "typing": "Ghost/Fire" },
-            { "pokemon": "Shadow Tyranitar", "fast": "Bite", "charged": "Brutal Swing", "typing": "Rock/Dark" },
-            { "pokemon": "Mega Pinsir", "fast": "Bug Bite", "charged": "X-Scissor", "typing": "Bug/Flying" },
-            { "pokemon": "Shadow Hydreigon", "fast": "Bite", "charged": "Brutal Swing", "typing": "Dark/Dragon" },
-            { "pokemon": "Mega Absol", "fast": "Snarl", "charged": "Dark Pulse", "typing": "Dark" }
+            {
+              "pokemon": "Mega Gengar",
+              "fast": "Lick",
+              "charged": "Shadow Ball",
+              "typing": "Ghost/Poison"
+            },
+            {
+              "pokemon": "Dawn Wings Necrozma",
+              "fast": "Shadow Claw",
+              "charged": "Moongeist Beam",
+              "typing": "Ghost/Psychic"
+            },
+            {
+              "pokemon": "Mega Tyranitar",
+              "fast": "Bite",
+              "charged": "Brutal Swing",
+              "typing": "Rock/Dark"
+            },
+            {
+              "pokemon": "Chandelure",
+              "fast": "Hex",
+              "charged": "Shadow Ball",
+              "typing": "Ghost/Fire"
+            },
+            {
+              "pokemon": "Shadow Tyranitar",
+              "fast": "Bite",
+              "charged": "Brutal Swing",
+              "typing": "Rock/Dark"
+            },
+            {
+              "pokemon": "Mega Pinsir",
+              "fast": "Bug Bite",
+              "charged": "X-Scissor",
+              "typing": "Bug/Flying"
+            },
+            {
+              "pokemon": "Shadow Hydreigon",
+              "fast": "Bite",
+              "charged": "Brutal Swing",
+              "typing": "Dark/Dragon"
+            },
+            {
+              "pokemon": "Mega Absol",
+              "fast": "Snarl",
+              "charged": "Dark Pulse",
+              "typing": "Dark"
+            }
           ]
         },
         {
           "name": "Darkrai",
           "tier": "5-star",
-          "typing": ["Dark"],
+          "typing": [
+            "Dark"
+          ],
           "shiny_odds": "1/20",
           "trainers": "2–3 trainers",
           "note": "Sunday Twilight Battlefield (4–7 PM). Strong PvE attacker; worth multiple shiny hunts.",
           "strategy": "<b>Weak to:</b> Fighting, Bug, Fairy. Fighting-type attackers hit hardest. Mega Lopunny is the best Mega boost here; Lucario and Conkeldurr are accessible shadow leads.",
           "counters": [
-            { "pokemon": "Mega Lopunny", "fast": "Low Kick", "charged": "Focus Blast", "typing": "Normal/Fighting" },
-            { "pokemon": "Shadow Machamp", "fast": "Counter", "charged": "Dynamic Punch", "typing": "Fighting" },
-            { "pokemon": "Lucario", "fast": "Counter", "charged": "Aura Sphere", "typing": "Fighting/Steel" },
-            { "pokemon": "Conkeldurr", "fast": "Counter", "charged": "Dynamic Punch", "typing": "Fighting" },
-            { "pokemon": "Terrakion", "fast": "Double Kick", "charged": "Sacred Sword", "typing": "Rock/Fighting" },
-            { "pokemon": "Mega Gardevoir", "fast": "Charm", "charged": "Dazzling Gleam", "typing": "Psychic/Fairy" },
-            { "pokemon": "Buzzwole", "fast": "Counter", "charged": "Superpower", "typing": "Bug/Fighting" },
-            { "pokemon": "Breloom", "fast": "Counter", "charged": "Grass Knot", "typing": "Grass/Fighting" }
+            {
+              "pokemon": "Mega Lopunny",
+              "fast": "Low Kick",
+              "charged": "Focus Blast",
+              "typing": "Normal/Fighting"
+            },
+            {
+              "pokemon": "Shadow Machamp",
+              "fast": "Counter",
+              "charged": "Dynamic Punch",
+              "typing": "Fighting"
+            },
+            {
+              "pokemon": "Lucario",
+              "fast": "Counter",
+              "charged": "Aura Sphere",
+              "typing": "Fighting/Steel"
+            },
+            {
+              "pokemon": "Conkeldurr",
+              "fast": "Counter",
+              "charged": "Dynamic Punch",
+              "typing": "Fighting"
+            },
+            {
+              "pokemon": "Terrakion",
+              "fast": "Double Kick",
+              "charged": "Sacred Sword",
+              "typing": "Rock/Fighting"
+            },
+            {
+              "pokemon": "Mega Gardevoir",
+              "fast": "Charm",
+              "charged": "Dazzling Gleam",
+              "typing": "Psychic/Fairy"
+            },
+            {
+              "pokemon": "Buzzwole",
+              "fast": "Counter",
+              "charged": "Superpower",
+              "typing": "Bug/Fighting"
+            },
+            {
+              "pokemon": "Breloom",
+              "fast": "Counter",
+              "charged": "Grass Knot",
+              "typing": "Grass/Fighting"
+            }
           ]
         },
         {
           "name": "Zacian (Hero of Many Battles)",
           "tier": "5-star",
-          "typing": ["Fairy"],
+          "typing": [
+            "Fairy"
+          ],
           "shiny_odds": "1/20",
           "trainers": "2–3 trainers",
           "note": "Sunday Twilight Battlefield (4–7 PM). Top Master League meta pick; high priority.",
           "strategy": "<b>Weak to:</b> Poison, Steel. Mega Beedrill and Nihilego are premier Poison picks; Metagross and Dialga cover Steel. Poison hits hardest — build your best Poison team.",
           "counters": [
-            { "pokemon": "Mega Beedrill", "fast": "Poison Jab", "charged": "Sludge Bomb", "typing": "Bug/Poison" },
-            { "pokemon": "Nihilego", "fast": "Poison Jab", "charged": "Sludge Wave", "typing": "Rock/Poison" },
-            { "pokemon": "Roserade", "fast": "Poison Jab", "charged": "Sludge Bomb", "typing": "Grass/Poison" },
-            { "pokemon": "Dialga (Origin)", "fast": "Metal Claw", "charged": "Iron Head", "typing": "Steel/Dragon" },
-            { "pokemon": "Metagross", "fast": "Bullet Punch", "charged": "Meteor Mash", "typing": "Steel/Psychic" },
-            { "pokemon": "Gengar", "fast": "Lick", "charged": "Sludge Bomb", "typing": "Ghost/Poison" },
-            { "pokemon": "Excadrill", "fast": "Metal Claw", "charged": "Iron Head", "typing": "Ground/Steel" },
-            { "pokemon": "Victreebel", "fast": "Acid", "charged": "Sludge Bomb", "typing": "Grass/Poison" }
+            {
+              "pokemon": "Mega Beedrill",
+              "fast": "Poison Jab",
+              "charged": "Sludge Bomb",
+              "typing": "Bug/Poison"
+            },
+            {
+              "pokemon": "Nihilego",
+              "fast": "Poison Jab",
+              "charged": "Sludge Wave",
+              "typing": "Rock/Poison"
+            },
+            {
+              "pokemon": "Roserade",
+              "fast": "Poison Jab",
+              "charged": "Sludge Bomb",
+              "typing": "Grass/Poison"
+            },
+            {
+              "pokemon": "Dialga (Origin)",
+              "fast": "Metal Claw",
+              "charged": "Iron Head",
+              "typing": "Steel/Dragon"
+            },
+            {
+              "pokemon": "Metagross",
+              "fast": "Bullet Punch",
+              "charged": "Meteor Mash",
+              "typing": "Steel/Psychic"
+            },
+            {
+              "pokemon": "Gengar",
+              "fast": "Lick",
+              "charged": "Sludge Bomb",
+              "typing": "Ghost/Poison"
+            },
+            {
+              "pokemon": "Excadrill",
+              "fast": "Metal Claw",
+              "charged": "Iron Head",
+              "typing": "Ground/Steel"
+            },
+            {
+              "pokemon": "Victreebel",
+              "fast": "Acid",
+              "charged": "Sludge Bomb",
+              "typing": "Grass/Poison"
+            }
           ]
         }
       ]
