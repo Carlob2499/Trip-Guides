@@ -152,13 +152,45 @@ Added rules 8–15 to the pre-commit checklist:
 - On base path changes, audit ALL internal hrefs before first push
 - Prose body beyond simple inline tags = signal to add a section type
 
+### Phase 7 — UI/UX feature pass (Jun 2026)
+Researched leading travel apps (Wanderlog, TripIt, Google Travel, Polarsteps) and added 7 features:
+- **Reading progress bar:** 3px accent line fixed at top, fills on scroll (Medium/Substack pattern)
+- **Trip countdown pill:** stats bar shows "N days to go / Today! / Happening now! / N days ago" (parsed from first days-section date)
+- **Local time at destination:** live clock pill in stats bar, updates every 60s, uses `DEST_TZ`
+- **Offline-ready badge:** green pill shown when the guide is in the SW cache
+- **Live currency rate:** Frankfurter API (no key, ECB data) → "$1 = N KRW" pill in stats bar
+- **Weather strip:** Open-Meteo (no key) forecast using the guide's map lat/lng
+- **Map fullscreen button:** ⤢ overlay on every embedded OSM iframe
+- **Home page hub cards:** trip countdown badge + itinerary day count, computed at build time
+
+### Phase 8 — Self-audit & fixes (Jun 2026)
+Comprehensive review of the Phase 5–7 work; fixed in the same session:
+- **Weather window bug (accuracy):** was `forecast_days=7` (next 7 days from *today*), which for the Korea trip showed Jun 28–Jul 4 — dates that don't overlap the trip. Now fetches the 16-day max and slices to the **trip dates** when in range; labels honestly ("Trip-dates forecast" vs "Next N days") and warns when the trip is still beyond the 16-day horizon.
+- **Color emoji in weather (rule + design):** replaced 🌧⛈ etc. with monochrome text-presentation symbols (`☀︎ ⛅︎ ☁︎ ☂︎ ❄︎ ☈`) to honor the no-emoji rule and the editorial monochrome design.
+- **Currency rounding bug:** `Math.round(rate)` turned EUR 0.93 into a useless "1" and lost DKK precision. Now magnitude-aware: KRW/JPY whole, DKK 2dp, EUR 3dp. Fixes Germany/Portugal/Denmark.
+- **Offline badge cache coupling:** hardcoded `caches.has("tripguides-v3")` would silently break on the next SW version bump. Now matches any `tripguides-*` key via `caches.keys()`.
+- **Map fullscreen mismatch:** JS called `wrap.requestFullscreen()` but the CSS targeted `.osmmap:fullscreen`, so the iframe stayed 300px. Now requests fullscreen on the iframe itself + added `allowfullscreen` to the iframe.
+- **Stale git worktree lock removed:** the recurring `Permission denied: .git/worktrees/agent-...` error on every git command is gone (pruned + directory deleted).
+- **CLAUDE.md:** updated "hosted on Netlify" → GitHub Pages; documented the base-path constraint and the client-side API integration contract (no keys, always `.catch`, format per currency, monochrome UI icons).
+
 ---
 
 ## 4. Current Known Bugs / Issues
 
-### Minor / cosmetic
-- **`Permission denied: .git/worktrees/agent-a5e7a1ba4e629ceca`** appears on every git command. This is a leftover stale worktree lock from a background agent run. Harmless — commits and pushes complete normally. Can be cleaned up by: close Claude Code, then delete the `.git/worktrees/` directory manually in File Explorer.
-- **CLAUDE.md still says "hosted on Netlify"** in the "What this project is" section (line 26–28) — this is now outdated. The site migrated to GitHub Pages. That section needs updating.
+### Resolved in the Phase 8 self-audit (Jun 2026)
+- ~~Stale git worktree lock erroring on every git command~~ — **fixed** (pruned + deleted).
+- ~~CLAUDE.md said "hosted on Netlify"~~ — **fixed** (now GitHub Pages).
+- ~~Weather strip showed next-7-days-from-today, not trip dates~~ — **fixed** (16-day fetch, sliced to trip).
+- ~~Color emoji in weather strip~~ — **fixed** (monochrome text symbols).
+- ~~Currency rate `Math.round` broke EUR/DKK~~ — **fixed** (magnitude-aware).
+- ~~Offline badge hardcoded the SW cache version~~ — **fixed** (prefix match).
+- ~~Map fullscreen left iframe at 300px~~ — **fixed** (fullscreen the iframe).
+
+### Open — latent, lower priority
+- **DST-incorrect timezones:** `DEST_TZ` and the live-time/jet-lag features use FIXED UTC offsets (e.g. Denmark: 2 = summer time). Correct for the summer trips in scope, but European guides would be 1 hour off in winter. Proper fix: map country → IANA zone (e.g. "Asia/Seoul") and use `Intl.DateTimeFormat`, which handles DST automatically. Affects the local-time pill and jet-lag calc.
+- **Live FX rate vs hardcoded budget rate:** the live pill (Frankfurter) and the hardcoded `approxRate` in `themes.ts` / budget prose can drift apart, showing two different KRW rates on one page. Consider feeding the live rate into the budget calculator, or labeling the hardcoded one "approx" more prominently.
+- **Pre-existing color emoji in Korea content JSON** (🌿🎮🏠🏟🔼): present in the guide content from earlier work, not the weather code. Left in place because they may be intentional section icons — confirm with owner before removing (the no-emoji rule targets new additions).
+- **Date-parse duplication:** the "Wed Jul 8" → Date logic exists in both `index.astro` (build) and `GuideLayout.astro` (client countdown/weather). Minor DRY; could move to a shared helper.
 
 ### Content gaps (not bugs, but tracked)
 - **Japan guide:** marked `⚠ Draft` — 45 sections but they are simulated/unverified proposals. Needs the same accuracy treatment as Denmark/Korea before any real trip.
@@ -290,20 +322,20 @@ Every `img.file` value in a `sights` section must be an exact Wikimedia Commons 
 
 ---
 
-## 9. API Integrations — Researched, Not Yet Built
-
-The following APIs have been researched and are ready to integrate when prioritised:
+## 9. API Integrations — Status
 
 | Category | API | Free Tier | Client-Side Safe | Status |
 |---|---|---|---|---|
-| Currency (live) | Frankfurter (api.frankfurter.dev) | No quota, no key needed | Yes | Ready to build |
-| Weather | Open-Meteo (api.open-meteo.com) | 10,000/day, no key | Yes | Ready to build |
-| Jet lag calc | Build in-house (Intl.DateTimeFormat) | N/A | Yes | Ready to build |
+| Currency (live) | Frankfurter (api.frankfurter.dev) | No quota, no key needed | Yes | **BUILT** — live FX pill in stats bar |
+| Weather | Open-Meteo (api.open-meteo.com) | 10,000/day, no key | Yes | **BUILT** — 7-day strip sliced to trip dates |
+| Jet lag calc | In-house (fixed UTC offsets) | N/A | Yes | **BUILT** — collapsible panel in masthead (see DST caveat in §4) |
 | Visa requirements | Travel Buddy via RapidAPI | 120 calls/month | Yes (expose key only) | Research done |
 | Events | Ticketmaster Discovery | 5,000 calls/day | Yes (expose key only) | Research done; weak Asia coverage |
 | Flights | Amadeus Self-Service | 2,000 calls/month | No — needs server/edge fn | Research done; needs backend |
 | Hotels | Amadeus Hotel Search | 1,000 calls/month | No — needs server/edge fn | Research done; needs backend |
 | Transit | Google Maps Routes API | 10,000/month | Yes (restrict key by referrer) | Research done; no Japan transit |
+
+**Built-integration contract** (follow when adding more): no API keys in client code; always `.catch()` + feature-detect so a dead API never breaks the page; format output for the actual currency/locale; keep UI icons monochrome.
 
 **Not accessible to hobbyists:** Google Flights, Skyscanner, Expedia, Booking.com — all require commercial partnership approval or have no public API.
 

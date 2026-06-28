@@ -5,7 +5,7 @@ const bbox = (c: any, span?: number) => {
   return [c.lng - s, c.lat - s * 0.6, c.lng + s, c.lat + s * 0.6].join("%2C");
 };
 ---
-<iframe class="osmmap" loading="lazy" title="map"
+<iframe class="osmmap" loading="lazy" title="map" allowfullscreen
   src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox(sec.center, sec.span)}&layer=mapnik&marker=${sec.center.lat}%2C${sec.center.lng}`}>
 </iframe>
 <p class="note">⚠ Maps need an internet connection — the transit steps in this section work offline.</p>

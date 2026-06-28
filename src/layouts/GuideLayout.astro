@@ -911,8 +911,10 @@ const firstDayDate = (daysSec?.items?.[0]?.date as string) ?? null;
           /* ── 10. OFFLINE-READY BADGE ────────────────────────────────── */
           (function () {
             if (!("caches" in window)) return;
-            caches.has("tripguides-v3").then(function (has) {
-              if (!has) return;
+            // Match any "tripguides-*" cache so a version bump in sw.js (v3→v4)
+            // never silently breaks this badge.
+            caches.keys().then(function (keys) {
+              if (!keys.some(function (k) { return k.indexOf("tripguides-") === 0; })) return;
               var statsEl = document.getElementById("guideStats");
               if (!statsEl) return;
               var pill = document.createElement("span");
@@ -933,7 +935,10 @@ const firstDayDate = (daysSec?.items?.[0]?.date as string) ?? null;
                 var rate = data.rates[curCode];
                 var el = document.getElementById("liveRatePill");
                 if (!el) return;
-                el.textContent = "$1 = " + Math.round(rate).toLocaleString() + " " + curCode;
+                // Magnitude-aware: KRW/JPY whole thousands, DKK 2dp, EUR (<1) 3dp.
+                // Math.round alone would turn EUR 0.93 into a useless "1".
+                var shown = rate >= 100 ? Math.round(rate).toLocaleString() : rate >= 1 ? rate.toFixed(2) : rate.toFixed(3);
+                el.textContent = "$1 = " + shown + " " + curCode;
                 el.title = "Live rate from European Central Bank via Frankfurter.dev";
                 el.removeAttribute("hidden");
               }).catch(function () {});
@@ -944,44 +949,75 @@ const firstDayDate = (daysSec?.items?.[0]?.date as string) ?? null;
             if (!mapCenter || !window.fetch) return;
             var wxWrap = document.getElementById("wxWrap");
             if (!wxWrap) return;
+            // Monochrome text-symbol icons (\uFE0E forces non-emoji rendering) to
+            // match the editorial design and honor the no-emoji content rule.
             function wxIcon(code) {
-              if (code === 0)           return "☀";   // ☀
-              if (code <= 3)            return "⛅";   // ⛅
-              if (code <= 48)           return "🌫"; // 🌫
-              if (code <= 55)           return "🌦"; // 🌦 drizzle
-              if (code <= 67)           return "🌧"; // 🌧 rain
-              if (code <= 77)           return "❄";   // ❄
-              if (code <= 82)           return "🌦"; // 🌦 showers
-              if (code <= 86)           return "🌨"; // 🌨 snow showers
-              if (code >= 95)           return "⛈";   // ⛈
-              return "⛅";
+              if (code === 0)  return "☀︎"; // clear  (sun)
+              if (code <= 3)   return "⛅︎"; // partly cloudy
+              if (code <= 48)  return "☁︎"; // cloud / fog
+              if (code <= 67)  return "☂︎"; // drizzle + rain (umbrella)
+              if (code <= 77)  return "❄︎"; // snow
+              if (code <= 82)  return "☂︎"; // showers (umbrella)
+              if (code <= 86)  return "❄︎"; // snow showers
+              if (code >= 95)  return "☈";      // thunderstorm (inherently monochrome)
+              return "⛅︎";
             }
+            // Fetch the max free window (16 days) so we can show the TRIP dates
+            // when they fall within range — not just the next 7 days from today.
             var url = "https://api.open-meteo.com/v1/forecast" +
               "?latitude=" + mapCenter.lat + "&longitude=" + mapCenter.lng +
               "&daily=temperature_2m_max,temperature_2m_min,weathercode" +
-              "&forecast_days=7&timezone=auto&temperature_unit=celsius";
+              "&forecast_days=16&timezone=auto&temperature_unit=celsius";
+
+            // Build "-MM-DD" target from the guide's first day date (e.g. "Wed Jul 8").
+            var TRIP_MD = null;
+            if (firstDayDate) {
+              var MM = { Jan:1,Feb:2,Mar:3,Apr:4,May:5,Jun:6,Jul:7,Aug:8,Sep:9,Oct:10,Nov:11,Dec:12 };
+              var pp = String(firstDayDate).split(/\s+/);
+              if (MM[pp[1]] != null && !isNaN(parseInt(pp[2], 10))) {
+                TRIP_MD = "-" + String(MM[pp[1]]).padStart(2, "0") + "-" + String(parseInt(pp[2], 10)).padStart(2, "0");
+              }
+            }
+
             fetch(url)
               .then(function (r) { return r.ok ? r.json() : null; })
               .then(function (data) {
-                if (!data || !data.daily) return;
+                if (!data || !data.daily || !data.daily.time) return;
                 var d = data.daily;
                 var DAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-                var html = '<div class="wx-strip" aria-label="7-day weather forecast">';
-                for (var i = 0; i < d.time.length; i++) {
+                var now = new Date();
+
+                // Decide the 7-day window: start at the trip date if it's in range.
+                var startI = 0, onTrip = false;
+                if (TRIP_MD) {
+                  for (var j = 0; j < d.time.length; j++) {
+                    if (d.time[j].indexOf(TRIP_MD) !== -1) { startI = j; onTrip = true; break; }
+                  }
+                }
+                var endI = Math.min(d.time.length, startI + 7);
+
+                var html = '<div class="wx-strip" aria-label="Weather forecast">';
+                for (var i = startI; i < endI; i++) {
                   var dt  = new Date(d.time[i] + "T12:00:00");
                   var hi  = Math.round(d.temperature_2m_max[i]);
                   var lo  = Math.round(d.temperature_2m_min[i]);
-                  var now = new Date();
                   var isToday = dt.getDate() === now.getDate() && dt.getMonth() === now.getMonth();
+                  var mo = dt.getMonth() + 1, da = dt.getDate();
                   html += '<div class="wx-day' + (isToday ? " wx-today" : "") + '">' +
                     '<span class="wx-name">' + (isToday ? "Today" : DAYS[dt.getDay()]) + '</span>' +
+                    '<span class="wx-date">' + mo + "/" + da + '</span>' +
                     '<span class="wx-icon">' + wxIcon(d.weathercode[i]) + '</span>' +
                     '<span class="wx-hi">' + hi + '°</span>' +
                     '<span class="wx-lo">' + lo + '°</span>' +
                     '</div>';
                 }
                 html += '</div>';
-                html += '<p class="wx-credit">7-day forecast · <a href="https://open-meteo.com" target="_blank" rel="noopener" class="wx-src">Open-Meteo</a></p>';
+                // Honest label: trip-date forecast vs. fallback next-days, with a
+                // note when the trip is still beyond the 16-day forecast horizon.
+                var label = onTrip ? "Trip-dates forecast" : "Next " + (endI - startI) + " days";
+                var far = (TRIP_MD && !onTrip) ? " \u00b7 trip is beyond the 16-day forecast \u2014 check again closer to departure" : "";
+                html += '<p class="wx-credit">' + label + far +
+                  ' \u00b7 <a href="https://open-meteo.com" target="_blank" rel="noopener" class="wx-src">Open-Meteo</a></p>';
                 wxWrap.innerHTML = html;
                 wxWrap.removeAttribute("hidden");
               }).catch(function () {});
@@ -1000,8 +1036,10 @@ const firstDayDate = (daysSec?.items?.[0]?.date as string) ?? null;
               btn.textContent = "⤢";
               wrap.appendChild(btn);
               btn.addEventListener("click", function () {
-                if (wrap.requestFullscreen) wrap.requestFullscreen();
-                else if (wrap.webkitRequestFullscreen) wrap.webkitRequestFullscreen();
+                // Fullscreen the iframe itself so the .osmmap:fullscreen CSS applies
+                // and the map fills the screen (wrap.requestFullscreen left it 300px).
+                if (frame.requestFullscreen) frame.requestFullscreen();
+                else if (frame.webkitRequestFullscreen) frame.webkitRequestFullscreen();
               });
               document.addEventListener("fullscreenchange", function () {
                 btn.textContent = document.fullscreenElement ? "✕" : "⤢";

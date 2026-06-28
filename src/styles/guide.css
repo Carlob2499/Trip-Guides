@@ -294,6 +294,7 @@ body{overflow-x:clip}
 .wx-day:hover{background:color-mix(in srgb,var(--accent) 5%,var(--bg2))}
 .wx-today{background:color-mix(in srgb,var(--accent) 8%,var(--bg2))}
 .wx-name{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);line-height:1}
+.wx-date{font-family:'Space Mono',monospace;font-size:.54rem;color:var(--muted);opacity:.7;line-height:1}
 .wx-icon{font-size:1.2rem;line-height:1;margin:.1rem 0}
 .wx-hi{font-weight:600;font-size:.8rem;color:var(--ink);line-height:1}
 .wx-lo{font-size:.7rem;color:var(--muted);line-height:1}

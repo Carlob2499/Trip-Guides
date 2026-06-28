@@ -23,9 +23,36 @@ These are the rules most commonly violated by background agents. Check each one 
 15. **A `prose` body growing beyond `<p>/<b>/<i>/<a>/<ul>/<li>/<ol>` is a signal to add a section type.** Before committing any prose body with `<details>`, `<table>`, `<figure>`, or more than ~5 nested elements: stop, add a typed section to `content.config.ts` and a matching block component, then migrate the data. Hand-authored HTML in body fields is unvalidated, hard to update, and bypasses the schema.
 
 ## What this project is
-A static **Astro** website of curated travel guides, hosted on **Netlify**, which
-rebuilds automatically whenever a commit lands on `main` in GitHub. The owner is
-not a programmer — explain changes in plain language and keep the workflow simple.
+A static **Astro** website of curated travel guides, hosted on **GitHub Pages**
+at `carlob2499.github.io/Trip-Guides/`. A GitHub Actions workflow
+(`.github/workflows/deploy.yml`, Node 22) rebuilds and deploys automatically
+whenever a commit lands on `main`. The owner is not a programmer — explain
+changes in plain language and keep the workflow simple.
+
+**Base path:** the site is served from the `/Trip-Guides` subpath, so
+`astro.config.mjs` sets `base: '/Trip-Guides'`. Astro does NOT auto-prepend the
+base to string/template hrefs — every internal link must derive from
+`import.meta.env.BASE_URL` (see rule 14). To move to a custom domain or root
+deploy, change `base` in `astro.config.mjs` only; all links follow.
+
+## Client-side API integrations (no backend)
+The guide pages call a few free, no-key, CORS-safe APIs directly from the
+browser and degrade silently if the fetch fails (the feature just doesn't
+appear). When adding more, keep this contract:
+- **No API keys in client code.** Anything needing a secret (Amadeus flights/
+  hotels) requires a serverless function — do not expose a secret in the bundle.
+- **Always wrap in `.catch()` and feature-detect** (`window.fetch`, the data
+  field you need). A dead API must never break the page.
+- **Format for the actual currency/locale**, not just the trip's. A rate
+  formatter that assumes KRW-sized numbers prints garbage for EUR (0.93→"1").
+- Current integrations: **Frankfurter** (live FX rate pill, ECB data),
+  **Open-Meteo** (weather strip — fetch the 16-day max and slice to the TRIP
+  dates, not just "next 7 days from today"). Jet-lag is computed in-browser, no
+  API.
+- **UI iconography stays monochrome.** The design is editorial monochrome (line
+  glyphs like ✈ ↗ ⌂). Do not introduce colour emoji in UI widgets; use
+  text-presentation symbols (`︎`) or inline SVG. (The no-emoji content rule
+  applies to guide JSON; this is its UI corollary.)
 
 ## Audits and comparisons — fix, don't report
 
@@ -84,7 +111,8 @@ separate. There is no "edit once, change all guides' content," by design.
    schema defines. Research and verify every fact (rule 1) and every photo (rule 2).
 3. If the country is new, add its accent colour in `src/lib/themes.ts`.
 4. `npm run build`, confirm the new page appears and its section count looks right.
-5. Commit with a clear message; push to `main`. Netlify deploys automatically.
+5. Commit with a clear message; push to `main`. GitHub Actions deploys
+   automatically — confirm a green run in the repo's Actions tab (rule 13).
 
 ## Section types (see content.config.ts for the exact fields)
 `panel` (reference card + optional checklist), `prose` (plain card), `list`
