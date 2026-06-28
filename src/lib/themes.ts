@@ -1,5 +1,21 @@
 // The ONE place country colours live now. Add or change a colour here and every
 // guide + the home page picks it up — no more copying the same list into each file.
+
+export interface Currency { code: string; symbol: string; name: string; approxRate: number; }
+
+export const CURRENCIES: Record<string, Currency> = {
+  "Denmark":       { code: "DKK", symbol: "kr", name: "Danish Krone",   approxRate: 6.9  },
+  "Germany":       { code: "EUR", symbol: "€",  name: "Euro",           approxRate: 0.93 },
+  "Portugal":      { code: "EUR", symbol: "€",  name: "Euro",           approxRate: 0.93 },
+  "Japan":         { code: "JPY", symbol: "¥",  name: "Japanese Yen",   approxRate: 150  },
+  "South Korea":   { code: "KRW", symbol: "₩",  name: "Korean Won",     approxRate: 1380 },
+  "Korea":         { code: "KRW", symbol: "₩",  name: "Korean Won",     approxRate: 1380 },
+};
+
+export function currencyFor(country: string): Currency | null {
+  return CURRENCIES[country] || null;
+}
+
 export const THEMES: Record<string, string> = {
   Denmark: "#a4332a", Sweden: "#8a6a1f", Norway: "#34507a", Finland: "#2b5d86", Iceland: "#3a6ea5",
   "South Korea": "#2b5d86", Korea: "#2b5d86", Japan: "#b23a48", China: "#9c2f2a", Thailand: "#2e4a86",

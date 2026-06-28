@@ -1,0 +1,471 @@
+---
+interface Props {
+  storeKey: string;
+  curCode?: string;
+  curSymbol?: string;
+  curName?: string;
+  curRate?: number;
+}
+const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", curRate = 1380 } = Astro.props;
+---
+
+<div class="split-wrap" id="tripSplit" hidden
+     data-sk={storeKey}
+     data-cur-code={curCode}
+     data-cur-sym={curSymbol}
+     data-cur-name={curName}
+     data-cur-rate={String(curRate)}>
+
+  <div class="split-toolbar">
+    <h2 class="split-title">Trip Split</h2>
+    <p class="split-desc">Track who paid what and see exactly who owes who — minimum transfers, no maths.</p>
+  </div>
+
+  <!-- People -->
+  <div class="split-card">
+    <div class="sc-head">
+      <span class="sc-label">People on this trip</span>
+      <button class="sc-add-btn" id="sAddPerson" type="button">+ Add person</button>
+    </div>
+    <div class="sc-body" id="sMemberList">
+      <p class="split-empty">Add the people splitting costs.</p>
+    </div>
+  </div>
+
+  <!-- Currency -->
+  <div class="split-card split-card--row">
+    <span class="sc-label">Currency</span>
+    <div class="scur-group">
+      <button class="scur-btn scur-active" data-cur="usd" id="sCurUSD" type="button">$ USD</button>
+      <button class="scur-btn" data-cur="local" id="sCurLocal" type="button">{curSymbol} {curCode}</button>
+    </div>
+    <div class="split-rate-row" id="sRateRow" hidden>
+      <label class="split-rate-label" for="sRate">1 USD&nbsp;=</label>
+      <input class="split-rate-input" type="number" id="sRate" min="0.001" step="any" value={String(curRate)} />
+      <span class="split-rate-unit">{curCode}</span>
+      <span class="split-rate-note">⚠ verify before settling</span>
+    </div>
+  </div>
+
+  <!-- Expenses -->
+  <div class="split-card">
+    <div class="sc-head">
+      <span class="sc-label">Expenses</span>
+      <div class="sc-mode-toggle">
+        <button class="scm-btn scm-active" id="sModeEven" type="button">÷ Even</button>
+        <button class="scm-btn" id="sModeCustom" type="button">Custom amounts</button>
+      </div>
+    </div>
+    <div class="se-header">
+      <span class="se-h-payer">Paid by</span>
+      <span class="se-h-desc">What for</span>
+      <span class="se-h-amt">Amount</span>
+    </div>
+    <div class="sc-body" id="sExpenseList">
+      <p class="split-empty">Add people first, then record who paid what.</p>
+    </div>
+    <button class="sc-add-expense-btn" id="sAddExpense" type="button">+ Add expense</button>
+  </div>
+
+  <!-- Results -->
+  <div class="split-card split-results-card" id="sResults" hidden>
+    <div class="sc-head"><span class="sc-label">Balances</span></div>
+    <div id="sBalances"></div>
+    <div class="split-settle-head">
+      <span class="sc-label">Who pays who</span>
+      <span class="split-settle-count" id="sSettleCount"></span>
+    </div>
+    <div id="sSettlements"></div>
+  </div>
+
+  <!-- Summary bar -->
+  <div class="split-summary" id="sSummary" hidden>
+    <span class="split-summary-lbl">Total trip spend</span>
+    <span class="split-summary-val" id="sTotalUSD">$0.00</span>
+    <span class="split-summary-local" id="sTotalLocal" hidden></span>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  var wrap = document.getElementById("tripSplit");
+  if (!wrap) return;
+
+  var SK       = "tg-split-" + (wrap.dataset.sk || "guide");
+  var C_CODE   = wrap.dataset.curCode  || "KRW";
+  var C_SYM    = wrap.dataset.curSym   || "₩";
+  var DEF_RATE = parseFloat(wrap.dataset.curRate || "1380") || 1380;
+
+  var state = {
+    members:     [],
+    expenses:    [],
+    useLocal:    false,
+    localRate:   DEF_RATE,
+    customSplit: false
+  };
+
+  /* ── persistence ─────────────────────────── */
+  function load() {
+    try {
+      var s = JSON.parse(localStorage.getItem(SK) || "null");
+      if (s && typeof s === "object") {
+        if (Array.isArray(s.members))       state.members     = s.members;
+        if (Array.isArray(s.expenses))      state.expenses    = s.expenses;
+        if (typeof s.useLocal    === "boolean") state.useLocal    = s.useLocal;
+        if (typeof s.localRate   === "number")  state.localRate   = s.localRate;
+        if (typeof s.customSplit === "boolean") state.customSplit = s.customSplit;
+      }
+    } catch (_) {}
+  }
+  function save() {
+    try { localStorage.setItem(SK, JSON.stringify(state)); } catch (_) {}
+  }
+
+  /* ── utilities ───────────────────────────── */
+  function esc(s) {
+    return String(s || "")
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+  function fmtUSD(v) {
+    return "$" + (Math.round(Math.abs(v) * 100) / 100).toFixed(2);
+  }
+  function fmtLocal(v) {
+    return C_SYM + Math.round(Math.abs(v) * state.localRate).toLocaleString("en-US");
+  }
+  function fmt(v) {
+    return state.useLocal ? fmtLocal(v) : fmtUSD(v);
+  }
+  function memberName(i) {
+    var m = state.members[i];
+    return m ? (m.name || ("Person " + (i + 1))) : "?";
+  }
+
+  /* ── member rendering ────────────────────── */
+  function renderMembers() {
+    var list = document.getElementById("sMemberList");
+    if (!list) return;
+    if (!state.members.length) {
+      list.innerHTML = "<p class='split-empty'>Add the people splitting costs.</p>";
+      return;
+    }
+    list.innerHTML = state.members.map(function (m, i) {
+      return "<div class='sm-row'>" +
+        "<span class='sm-idx'>" + (i + 1) + "</span>" +
+        "<input class='split-in sm-name' type='text' placeholder='Name'" +
+          " value='" + esc(m.name) + "' data-mi='" + i + "' data-field='name' />" +
+        "<input class='split-in sm-pay' type='text'" +
+          " placeholder='Venmo / Zelle / Kakao Pay…'" +
+          " value='" + esc(m.payment || "") + "' data-mi='" + i + "' data-field='payment' />" +
+        "<button class='split-del' type='button' data-del-m='" + i + "'" +
+          " aria-label='Remove " + esc(m.name || "person") + "'>×</button>" +
+        "</div>";
+    }).join("");
+
+    list.querySelectorAll("[data-field]").forEach(function (inp) {
+      inp.addEventListener("input", function () {
+        var i   = parseInt(this.dataset.mi, 10);
+        var fld = this.dataset.field;
+        state.members[i][fld] = this.value;
+        save();
+        renderExpenses();
+        renderResults();
+      });
+    });
+    list.querySelectorAll("[data-del-m]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var i = parseInt(this.dataset.delM, 10);
+        state.members.splice(i, 1);
+        state.expenses.forEach(function (e) {
+          if ((e.paidBy || 0) >= state.members.length) e.paidBy = 0;
+          if (e.customAmts) e.customAmts.splice(i, 1);
+        });
+        save();
+        render();
+      });
+    });
+  }
+
+  /* ── expense rendering ───────────────────── */
+  function memberOptions(sel) {
+    return state.members.map(function (m, i) {
+      return "<option value='" + i + "'" + (i === (sel || 0) ? " selected" : "") + ">" +
+        esc(m.name || ("Person " + (i + 1))) + "</option>";
+    }).join("");
+  }
+
+  function renderExpenses() {
+    var list = document.getElementById("sExpenseList");
+    if (!list) return;
+    if (!state.members.length) {
+      list.innerHTML = "<p class='split-empty'>Add people first, then record who paid what.</p>";
+      return;
+    }
+    if (!state.expenses.length) {
+      list.innerHTML = "<p class='split-empty'>No expenses yet — tap + Add expense.</p>";
+      return;
+    }
+
+    list.innerHTML = state.expenses.map(function (exp, ei) {
+      var customBlock = "";
+      if (state.customSplit) {
+        var n     = state.members.length;
+        var total = parseFloat(exp.amount) || 0;
+        if (!exp.customAmts || exp.customAmts.length !== n) {
+          var even = total / (n || 1);
+          exp.customAmts = state.members.map(function () {
+            return parseFloat(even.toFixed(2));
+          });
+        }
+        var sumCA = exp.customAmts.reduce(function (a, b) { return a + b; }, 0);
+        var diff  = Math.abs(sumCA - total);
+        customBlock =
+          "<div class='se-custom" + (diff > 0.015 ? " se-custom--warn" : "") + "'>" +
+          state.members.map(function (m, mi) {
+            return "<label class='se-cl'><span class='se-cl-name'>" + esc(m.name || ("P" + (mi+1))) + "</span>" +
+              "<input class='split-in se-ca' type='number' min='0' step='0.01'" +
+              " value='" + (exp.customAmts[mi] || 0).toFixed(2) + "'" +
+              " data-ei='" + ei + "' data-mi='" + mi + "' /></label>";
+          }).join("") +
+          (diff > 0.015
+            ? "<span class='se-warn'>Shares sum " + fmtUSD(sumCA) + " — total is " + fmtUSD(total) + "</span>"
+            : "") +
+          "</div>";
+      }
+
+      return "<div class='se-row' data-ei='" + ei + "'>" +
+        "<div class='se-main'>" +
+        "<select class='split-in se-payer' data-ei='" + ei + "'>" + memberOptions(exp.paidBy) + "</select>" +
+        "<input class='split-in se-desc' type='text' placeholder='What for?'" +
+          " value='" + esc(exp.desc || "") + "' data-ei='" + ei + "' data-field='desc' />" +
+        "<div class='se-amt-wrap'><span class='se-cur'>$</span>" +
+        "<input class='split-in se-amt' type='number' min='0' step='0.01' placeholder='0.00'" +
+          " value='" + (exp.amount != null ? String(exp.amount) : "") + "'" +
+          " data-ei='" + ei + "' data-field='amount' /></div>" +
+        "<button class='split-del' type='button' data-del-e='" + ei + "' aria-label='Remove expense'>×</button>" +
+        "</div>" +
+        customBlock +
+        "</div>";
+    }).join("");
+
+    list.querySelectorAll(".se-payer").forEach(function (sel) {
+      sel.addEventListener("change", function () {
+        state.expenses[parseInt(this.dataset.ei, 10)].paidBy = parseInt(this.value, 10);
+        save(); renderResults();
+      });
+    });
+    list.querySelectorAll("[data-field]").forEach(function (inp) {
+      inp.addEventListener("input", function () {
+        var ei  = parseInt(this.dataset.ei, 10);
+        var fld = this.dataset.field;
+        var val = fld === "amount" ? (parseFloat(this.value) || null) : this.value;
+        state.expenses[ei][fld] = val;
+        if (fld === "amount") {
+          var n    = state.members.length;
+          var even = (parseFloat(this.value) || 0) / (n || 1);
+          state.expenses[ei].customAmts = state.members.map(function () {
+            return parseFloat(even.toFixed(2));
+          });
+        }
+        save();
+        if (fld === "amount") renderExpenses();
+        renderResults();
+      });
+    });
+    list.querySelectorAll(".se-ca").forEach(function (inp) {
+      inp.addEventListener("input", function () {
+        var ei = parseInt(this.dataset.ei, 10);
+        var mi = parseInt(this.dataset.mi, 10);
+        if (!state.expenses[ei].customAmts) state.expenses[ei].customAmts = [];
+        state.expenses[ei].customAmts[mi] = parseFloat(this.value) || 0;
+        save();
+        renderExpenses();
+        renderResults();
+      });
+    });
+    list.querySelectorAll("[data-del-e]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        state.expenses.splice(parseInt(this.dataset.delE, 10), 1);
+        save(); renderExpenses(); renderResults();
+      });
+    });
+  }
+
+  /* ── settlement algorithm ────────────────── */
+  function calculate() {
+    var n = state.members.length;
+    if (!n) return { balances: [], txns: [] };
+
+    var balances = new Array(n).fill(0);
+    state.expenses.forEach(function (exp) {
+      var total = parseFloat(exp.amount) || 0;
+      if (!total) return;
+      var payer = parseInt(exp.paidBy, 10) || 0;
+      if (payer >= n) payer = 0;
+      balances[payer] += total;
+
+      if (state.customSplit && exp.customAmts && exp.customAmts.length >= n) {
+        var sumCA = exp.customAmts.slice(0, n).reduce(function (a, b) { return a + b; }, 0);
+        for (var i = 0; i < n; i++) {
+          balances[i] -= sumCA > 0 ? total * (exp.customAmts[i] / sumCA) : total / n;
+        }
+      } else {
+        var share = total / n;
+        for (var i = 0; i < n; i++) balances[i] -= share;
+      }
+    });
+
+    var creds = [], debts = [];
+    for (var i = 0; i < n; i++) {
+      if (balances[i] >  0.005) creds.push({ idx: i, amt: balances[i] });
+      else if (balances[i] < -0.005) debts.push({ idx: i, amt: -balances[i] });
+    }
+    creds.sort(function (a, b) { return b.amt - a.amt; });
+    debts.sort(function (a, b) { return b.amt - a.amt; });
+
+    var txns = [], ci = 0, di = 0;
+    while (ci < creds.length && di < debts.length) {
+      var pay = Math.min(creds[ci].amt, debts[di].amt);
+      if (pay > 0.005) txns.push({ from: debts[di].idx, to: creds[ci].idx, amt: pay });
+      creds[ci].amt -= pay; debts[di].amt -= pay;
+      if (creds[ci].amt < 0.005) ci++;
+      if (debts[di].amt < 0.005) di++;
+    }
+    return { balances: balances, txns: txns };
+  }
+
+  /* ── results rendering ───────────────────── */
+  function renderResults() {
+    var card     = document.getElementById("sResults");
+    var summary  = document.getElementById("sSummary");
+    var bDiv     = document.getElementById("sBalances");
+    var sDiv     = document.getElementById("sSettlements");
+    var sCount   = document.getElementById("sSettleCount");
+    var totUSD   = document.getElementById("sTotalUSD");
+    var totLocal = document.getElementById("sTotalLocal");
+
+    if (!state.members.length || !state.expenses.length) {
+      if (card)    card.hidden    = true;
+      if (summary) summary.hidden = true;
+      return;
+    }
+    if (card)    card.hidden    = false;
+    if (summary) summary.hidden = false;
+
+    var total = state.expenses.reduce(function (s, e) {
+      return s + (parseFloat(e.amount) || 0);
+    }, 0);
+    if (totUSD)   totUSD.textContent   = "$" + total.toFixed(2);
+    if (totLocal) {
+      totLocal.textContent = "/ " + C_SYM + Math.round(total * state.localRate).toLocaleString("en-US");
+      totLocal.hidden = !state.useLocal;
+    }
+
+    var calc = calculate();
+
+    if (bDiv) {
+      bDiv.innerHTML = calc.balances.map(function (bal, i) {
+        var abs  = Math.abs(bal);
+        var cls  = bal >  0.005 ? "sb-owed" : bal < -0.005 ? "sb-owes" : "sb-even";
+        var verb = bal >  0.005 ? "is owed" : bal < -0.005 ? "owes"    : "settled ✓";
+        return "<div class='sb-row " + cls + "'>" +
+          "<span class='sb-name'>" + esc(memberName(i)) + "</span>" +
+          "<span class='sb-verb'>" + verb + "</span>" +
+          "<span class='sb-amt'>" + (abs > 0.005 ? fmt(abs) : "—") + "</span>" +
+          (state.useLocal && abs > 0.005
+            ? "<span class='sb-usd'>(" + fmtUSD(abs) + ")</span>" : "") +
+          "</div>";
+      }).join("");
+    }
+
+    if (sDiv) {
+      if (!calc.txns.length) {
+        sDiv.innerHTML = "<p class='split-settle-ok'>All square — no transfers needed.</p>";
+        if (sCount) sCount.textContent = "";
+      } else {
+        if (sCount) sCount.textContent = calc.txns.length + " payment" + (calc.txns.length > 1 ? "s" : "");
+        sDiv.innerHTML = calc.txns.map(function (t) {
+          var payMethod = (state.members[t.to] || {}).payment || "";
+          return "<div class='st-row'>" +
+            "<div class='st-parties'>" +
+              "<span class='st-from'>" + esc(memberName(t.from)) + "</span>" +
+              "<span class='st-arrow'>→</span>" +
+              "<span class='st-to'>" + esc(memberName(t.to)) + "</span>" +
+            "</div>" +
+            "<div class='st-amt-row'>" +
+              "<span class='st-usd'>" + fmtUSD(t.amt) + "</span>" +
+              (state.useLocal ? "<span class='st-local'>" + fmtLocal(t.amt) + "</span>" : "") +
+            "</div>" +
+            (payMethod ? "<div class='st-via'>via " + esc(payMethod) + "</div>" : "") +
+            "</div>";
+        }).join("");
+      }
+    }
+  }
+
+  function render() {
+    renderMembers();
+    renderExpenses();
+    renderResults();
+  }
+
+  /* ── button wiring ───────────────────────── */
+  var addPerson = document.getElementById("sAddPerson");
+  if (addPerson) {
+    addPerson.addEventListener("click", function () {
+      state.members.push({ name: "", payment: "" });
+      save(); renderMembers(); renderExpenses();
+    });
+  }
+
+  var addExpense = document.getElementById("sAddExpense");
+  if (addExpense) {
+    addExpense.addEventListener("click", function () {
+      if (!state.members.length) return;
+      var n    = state.members.length;
+      var even = parseFloat("0");
+      state.expenses.push({
+        paidBy: 0, desc: "", amount: null,
+        customAmts: state.members.map(function () { return even; })
+      });
+      save(); renderExpenses();
+    });
+  }
+
+  /* currency */
+  var curUSD   = document.getElementById("sCurUSD");
+  var curLocal = document.getElementById("sCurLocal");
+  var rateRow  = document.getElementById("sRateRow");
+  var rateInp  = document.getElementById("sRate");
+
+  function syncCurUI() {
+    if (curUSD)   curUSD.classList.toggle("scur-active",  !state.useLocal);
+    if (curLocal) curLocal.classList.toggle("scur-active", state.useLocal);
+    if (rateRow)  rateRow.hidden = !state.useLocal;
+  }
+  syncCurUI();
+  if (rateInp) rateInp.value = String(state.localRate);
+
+  if (curUSD)   curUSD.addEventListener("click",   function () { state.useLocal = false; save(); syncCurUI(); renderResults(); });
+  if (curLocal) curLocal.addEventListener("click",  function () { state.useLocal = true;  save(); syncCurUI(); renderResults(); });
+  if (rateInp)  rateInp.addEventListener("input",  function () {
+    state.localRate = parseFloat(this.value) || DEF_RATE; save(); renderResults();
+  });
+
+  /* split mode */
+  var modeEven   = document.getElementById("sModeEven");
+  var modeCustom = document.getElementById("sModeCustom");
+  function syncModeUI() {
+    if (modeEven)   modeEven.classList.toggle("scm-active",   !state.customSplit);
+    if (modeCustom) modeCustom.classList.toggle("scm-active", state.customSplit);
+  }
+  syncModeUI();
+  if (modeEven)   modeEven.addEventListener("click",   function () { state.customSplit = false; save(); syncModeUI(); renderExpenses(); renderResults(); });
+  if (modeCustom) modeCustom.addEventListener("click", function () { state.customSplit = true;  save(); syncModeUI(); renderExpenses(); renderResults(); });
+
+  /* ── init ─────────────────────────────────── */
+  load();
+  render();
+})();
+</script>
