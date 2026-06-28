@@ -230,6 +230,9 @@ In the Jun 2026 session, `denmark.json` was committed and pushed without running
 ### Restaurant entries need four-question logistics, not just addresses
 The Copenhagen food section was improved by adding AYCE Korean BBQ (KOBA, Seoul Nordhavn) and Filipino restaurants (Jabby's, Manila at Reffen) with explicit transit directions from the hotel, best-day-of-trip fit, and reservation requirements. Entries without this context are much less useful to a reader in the field. **Rule: every specific restaurant pick must answer — (1) exact address, (2) transit from lodging with time, (3) which day(s) of the itinerary it fits and why, (4) reservation requirement and how to make one. Flag unconfirmed hours with ⚠ and unconfirmed prices with ≈.**
 
+## Session handoff
+At the end of every session that makes meaningful changes, update `Project_State.md` in the repo root. This file is the single source of truth for Claude chat (non-desktop) sessions. Keep it current so the user can upload it to Claude.ai and resume without loss of context. Update sections 3 (changes), 4 (bugs), and 6 (next steps) at minimum.
+
 ## Roadmap / parked ideas
 - DESKTOP-CLASS DOC HUB (Wanderlog-style): a per-trip resource hub to drop in
   reservation emails, hotel/excursion confirmations, train tickets, etc. and read
