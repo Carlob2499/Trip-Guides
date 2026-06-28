@@ -13,6 +13,8 @@ These are the rules most commonly violated by background agents. Check each one 
 5. **Read the current file before editing.** Make targeted edits; never regenerate a whole guide from memory. The owner edits content between sessions.
 6. **Write JSON files as UTF-8 without BOM.** After any PowerShell file write, verify the first byte is `0x7B`. A BOM causes an immediate build failure.
 7. **Never use Netlify as a build validator.** A failed production deploy is worse than a delayed commit.
+8. **Verify the built output, not just the source.** After `npm run build`, grep `dist/` to confirm that every changed link, path, or asset actually appears correctly in the compiled HTML. Source-level grep is not sufficient — Astro transforms can drop or misplace things silently.
+9. **Efficient, correct on first pass.** Before every `git push`, re-read the original prompt and verify that the commit satisfies it completely — content accuracy, adherence to the stated requirements, and working end-to-end. Do not push with the intention of fixing it in a follow-up commit. One clean push beats two sloppy ones.
 
 ## What this project is
 A static **Astro** website of curated travel guides, hosted on **Netlify**, which
