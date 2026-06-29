@@ -252,7 +252,7 @@ Service worker (`public/sw.js`) is network-first for HTML (fresh content when on
 - [ ] **Japan guide:** full verification pass and upgrade to backbone standard (needs dedicated research session with web search for every hotel, attraction, transit price, and event)
 - [ ] **Document hub (Wanderlog-style):** per-trip resource hub to upload reservation emails, train tickets, hotel confirmations — accessible inside the guide on mobile. Needs privacy/storage design first. Do not bolt on hastily
 - [ ] **Visa API integration:** Travel Buddy on RapidAPI (120 free calls/month, client-side safe) — could power a dynamic visa requirements widget keyed to passport country
-- [ ] **Amadeus flight search:** requires a serverless edge function to hold the OAuth secret. Doable with Netlify Functions / Vercel edge routes, but needs a backend hosting decision first
+- [ ] ~~**Amadeus flight search**~~ — removed; Amadeus self-service portal decommissions 17 Jul 2026 (see §9). If flight search is still wanted, evaluate an alternative provider (e.g. Duffel, Kiwi/Tequila) — all require a serverless function to hold the secret
 - [ ] **Ticketmaster events widget:** free API, 5,000 calls/day, good Europe coverage — could show events happening during the trip dates automatically. Weak Japan/Korea coverage
 
 ---
@@ -331,9 +331,9 @@ Every `img.file` value in a `sights` section must be an exact Wikimedia Commons 
 | Jet lag calc | In-house (fixed UTC offsets) | N/A | Yes | **BUILT** — collapsible panel in masthead (see DST caveat in §4) |
 | Visa requirements | Travel Buddy via RapidAPI | 120 calls/month | Yes (expose key only) | Research done |
 | Events | Ticketmaster Discovery | 5,000 calls/day | Yes (expose key only) | Research done; weak Asia coverage |
-| Flights | Amadeus Self-Service | 2,000 calls/month | No — needs server/edge fn | Research done; needs backend |
-| Hotels | Amadeus Hotel Search | 1,000 calls/month | No — needs server/edge fn | Research done; needs backend |
 | Transit | Google Maps Routes API | 10,000/month | Yes (restrict key by referrer) | Research done; no Japan transit |
+
+> **Amadeus self-service API removed (Phase 0, Jun 2026):** Amadeus announced (Feb 2026) it is decommissioning its self-service developer portal on **17 Jul 2026** — API keys deactivate and the portal closes; only the enterprise AQC API survives. Verified via [PhocusWire](https://www.phocuswire.com/amadeus-shut-down-self-service-apis-portal-developers). The former Flights/Hotels rows were dropped. (Note: as of this writing the date is still ~weeks away, not yet past — but the closure is confirmed and the free tier is going away, so it's off the table.)
 
 **Built-integration contract** (follow when adding more): no API keys in client code; always `.catch()` + feature-detect so a dead API never breaks the page; format output for the actual currency/locale; keep UI icons monochrome.
 

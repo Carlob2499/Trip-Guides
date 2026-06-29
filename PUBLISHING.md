@@ -4,13 +4,12 @@ Goal: get a live web address you can share — like a Squarespace site, except f
 and yours. You'll do this once. After that, any change you save updates the live
 site automatically within a minute or two.
 
-The path: **GitHub** stores your files → a **host** builds them into a website and
-serves it. Both have free plans, and you never touch a command line.
+The path: **GitHub** both stores your files **and** builds + serves the website,
+using **GitHub Pages**. It's free, and you never touch a command line.
 
-> Steps verified against the current dashboards (mid-2026). **Use Netlify (Part B).**
-> Cloudflare now funnels static sites through its "Workers" flow, which tries to add
-> a server piece this site doesn't need and fails — see Part B-ALT if you must use
-> Cloudflare.
+> This site is published with **GitHub Pages** (Part B). The repository already
+> includes the build recipe (`.github/workflows/deploy.yml`), so once you switch
+> Pages on, every change you commit rebuilds and redeploys automatically.
 
 ---
 
@@ -29,9 +28,15 @@ correct).
 sign-in, set it up with an authenticator app.)
 
 **A2.** Click the **+** at top-right → **New repository** (or go to github.com/new).
-Name it `trip-guides`, leave it **Public**, and **tick "Add a README file"** so the
-upload button is visible on the next page. Leave .gitignore/license as "None". Click
-**Create repository**.
+Name it **`Trip-Guides`**, leave it **Public**, and **tick "Add a README file"** so
+the upload button is visible on the next page. Leave .gitignore/license as "None".
+Click **Create repository**.
+
+> **Important — the name must match one setting.** GitHub Pages serves the site at
+> `your-username.github.io/REPO-NAME/`, and that path has to match the `base` line
+> in `astro.config.mjs` (currently `base: '/Trip-Guides'`). If you name the repo
+> something other than `Trip-Guides`, open `astro.config.mjs` and change `base` to
+> `'/your-repo-name'` to match, or the links and images will 404.
 
 **A3.** On the repo page, click **Add file → Upload files**. Open your unzipped
 folder, select **everything inside it**, and drag it onto the upload area (the folder
@@ -46,58 +51,49 @@ replaces the placeholder — that's expected.
 
 ---
 
-## Part B — Publish with Netlify  ✅ recommended
+## Part B — Publish with GitHub Pages  ✅
 
-**B1.** Create a free account at netlify.com.
+No second account needed — GitHub itself builds and hosts the site. The build
+recipe is already in the repo (`.github/workflows/deploy.yml`); you just switch
+Pages on once.
 
-**B2.** In your Netlify dashboard, click **Add new project → Import an existing
-project**.
+**B1.** On your repository page, click the **Settings** tab (top of the repo, far
+right).
 
-**B3.** Choose **GitHub** and follow the prompts to authorize Netlify. When asked,
-grant access to your `trip-guides` repository.
+**B2.** In the left sidebar, click **Pages** (under "Code and automation").
 
-**B4.** Pick `trip-guides`. Netlify auto-detects Astro and pre-fills the settings:
-- **Build command:** `npm run build`
-- **Publish directory:** `dist`
-Leave them as detected (these are correct). No adapter or extra setup is needed —
-this is a static site.
+**B3.** Under **Build and deployment → Source**, change the dropdown from "Deploy
+from a branch" to **GitHub Actions**. That's the only setting to change — there's
+nothing to save separately; the choice takes effect immediately.
 
-**B5.** Click **Deploy** (or **Publish**). The first build takes ~1–3 minutes (it
-also converts your photos to fast WebP images). You'll get a live link like
-`https://yourname.netlify.app`. Open it — that's your site.
+**B4.** Click the **Actions** tab (top of the repo). You'll see a workflow named
+**"Deploy to GitHub Pages"** running (it starts on every push to `main`, and
+switching Pages on triggers one). The first run takes ~1–3 minutes (it also
+converts your photos to fast WebP images). Wait for the green check.
 
-After this, every change you commit on GitHub rebuilds the site automatically.
+**B5.** Back in **Settings → Pages**, your live link appears at the top:
+`https://your-username.github.io/Trip-Guides/`. Open it — that's your site.
 
-### If a Netlify build fails (open the deploy log)
+After this, every change you commit on `main` rebuilds and redeploys automatically.
 
-- **Node version error:** in the site's **Site configuration → Build & deploy →
-  Environment**, add an environment variable **`NODE_VERSION`** = `22`, then
-  **Trigger deploy → Deploy site**.
-- **The log names a content file** (e.g. `korea.json`): the built-in checker caught a
-  typo or missing field — fix that file on GitHub and commit.
+### If a build fails (open the Actions tab → click the red run)
+
+- **Node version error** (`Astro requires Node >= …`): the workflow already pins
+  Node 22 in `.github/workflows/deploy.yml`. If you see this, confirm that file is
+  present and unedited.
+- **The log names a content file** (e.g. `korea.json`): the built-in checker caught
+  a typo or missing field — fix that file on GitHub and commit; the rebuild is
+  automatic.
+- **Pages shows a 404 after a successful build:** the `base` in `astro.config.mjs`
+  must match your repo name (`/Trip-Guides`). See the note under A2.
 - **A photo didn't load but the site deployed:** the safety net worked — that one
   photo fell back to the plain version; everything else is fine.
 
 ### Custom domain (optional)
 
-In Netlify: **Domain management → Add a domain**. Until DNS settles, use the
-`netlify.app` link — it works immediately.
-
----
-
-## Part B-ALT — Publish with Cloudflare (only if you specifically want it)
-
-Cloudflare's dashboard now pushes the **Workers** path, which auto-runs
-`astro add cloudflare` and breaks static sites. The included **`wrangler.jsonc`**
-file prevents that — make sure it's in your GitHub repo (it's in the zip; if you
-uploaded before this version, add it via **Add file → Create new file**, name it
-`wrangler.jsonc`, paste the contents, commit).
-
-Then: dashboard → **Workers & Pages → Create application → Pages tab → Connect to
-Git** → pick `trip-guides` → set **Framework preset: Astro**, **Build command:**
-`npm run build`, **Build output directory:** `dist` → **Save and Deploy**. If a
-previous broken Workers project exists for this repo, delete it first
-(**its Settings → Delete project**).
+In **Settings → Pages → Custom domain**, add your domain and follow the DNS
+prompts. Until DNS settles, the `github.io` link works immediately. (With a custom
+domain at the root, you'd also set `base: '/'` in `astro.config.mjs`.)
 
 ---
 

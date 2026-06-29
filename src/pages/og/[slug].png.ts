@@ -32,7 +32,7 @@ export async function GET({ props }: { props: { data: any } }) {
   const tfs  = title.length > 20 ? (title.length > 28 ? 48 : 62) : 80;
   const dekY = 310 + Math.ceil(tfs * 1.25) + 20;
 
-  // Font hints ordered for Netlify's Ubuntu image (librsvg) then browsers:
+  // Font hints ordered for the CI Ubuntu build image (librsvg) then browsers:
   // Liberation* are the Linux equivalents of the Windows/Mac metric-compatible fonts.
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <rect width="1200" height="630" fill="#f3ecdf"/>

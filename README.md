@@ -42,21 +42,24 @@ photo ever can't be reached, the guide shows the plain version instead, so the
 site never breaks. The normal flow:
 
 1. **Put the project on GitHub.** Make a free account at github.com, create a
-   new repository, and upload this folder's contents (GitHub lets you drag files
-   in through the website — you don't need the command line).
-2. **Connect a host.** Sign up for **Cloudflare Pages** (free) — or Netlify or
-   Vercel, they all work the same way. Choose "connect to Git" and pick your
-   repository.
-3. **Accept the defaults.** The host recognises this as an Astro project and
-   fills in the build settings for you (build command `npm run build`, output
-   folder `dist`). Click deploy.
-4. You get a free web address like `your-guides.pages.dev`. Done. A custom
-   domain can be added later in the host's settings.
+   new repository named `Trip-Guides`, and upload this folder's contents (GitHub
+   lets you drag files in through the website — you don't need the command line).
+2. **Turn on GitHub Pages.** In the repo, go to **Settings → Pages → Source** and
+   choose **GitHub Actions**. No second account or host to connect — GitHub builds
+   and serves the site itself, using the recipe already in the repo
+   (`.github/workflows/deploy.yml`).
+3. **Wait for the green check.** The **Actions** tab shows the "Deploy to GitHub
+   Pages" build running (~1–3 minutes). It installs, runs `npm run build`, and
+   publishes the `dist` folder for you.
+4. Your address appears at **Settings → Pages**:
+   `https://your-username.github.io/Trip-Guides/`. Done. A custom domain can be
+   added there later.
 
 After that, **every time you change a guide and save it on GitHub, the site
-rebuilds and updates itself automatically** — usually within a minute.
+rebuilds and updates itself automatically** — usually within a minute or two.
 
-> Official, step-by-step host instructions: https://docs.astro.build/en/guides/deploy/
+> The repo name must match the `base` in `astro.config.mjs` (`/Trip-Guides`).
+> Official step-by-step: https://docs.astro.build/en/guides/deploy/github/
 
 ---
 
