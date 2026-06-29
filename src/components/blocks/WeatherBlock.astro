@@ -1,0 +1,16 @@
+---
+// Weather strip section. Renders only a hidden mount shell; the canonical weather
+// service in GuideLayout.astro finds #wxWrap, fetches Open-Meteo (coords from the
+// guide's first map section), and injects the strip into #wxMount.
+//
+// The whole block starts hidden and the title lives INSIDE it, so if the fetch
+// fails the service leaves it hidden and nothing renders — no orphaned heading.
+// The service reuses this same #wxWrap/#wxMount shape for the masthead fallback.
+const { sec, title } = Astro.props;
+const heading = title || sec.title || "";
+---
+<div class="wx-wrap wx-block" id="wxWrap" hidden>
+  {heading && <h3 class="wx-title">{heading}</h3>}
+  <div id="wxMount"></div>
+  {sec.note && <p class="wx-note" set:html={sec.note} />}
+</div>

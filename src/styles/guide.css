@@ -300,6 +300,13 @@ body{overflow-x:clip}
 .wx-lo{font-size:.7rem;color:var(--muted);line-height:1}
 .wx-credit{font-family:'Space Mono',monospace;font-size:.58rem;color:var(--muted);text-align:right;margin-top:.28rem;opacity:.7}
 .wx-src{color:var(--muted);text-decoration:underline;text-underline-offset:2px}
+/* In-flow weather SECTION (vs the centred masthead strip): full content width. */
+.wx-block{max-width:100%;margin:0}
+.wx-title{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.05rem;margin:0 0 .5rem}
+.wx-note{font-size:.82rem;color:var(--muted);margin:.5rem 0 0}
+/* When the fetch fails the wrapper stays [hidden]; collapse the empty .block so
+   no 1rem gap is left where the strip would have been (clean reflow). */
+.block:has(> .wx-block[hidden]){margin-bottom:0}
 
 /* === MAP FULLSCREEN BUTTON ================================================== */
 .map-fs-btn{position:absolute;top:.42rem;right:.42rem;z-index:2;background:var(--card);border:1px solid var(--rule2);border-radius:4px;padding:.25rem .4rem;cursor:pointer;font-size:.88rem;color:var(--muted);line-height:1;transition:color .13s,border-color .13s;font-family:inherit}

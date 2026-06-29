@@ -40,6 +40,12 @@ const sightCount = _flat.filter((s: any) => s.type === "sights").reduce((n: numb
 const mapSec    = _flat.find((s: any) => s.type === "map" && s.center?.lat);
 const mapCenter = mapSec ? { lat: mapSec.center.lat as number, lng: mapSec.center.lng as number } : null;
 
+// When a guide has its own `weather` section, that section provides the #wxWrap
+// mount in-flow, so the masthead strip is suppressed (no double render). The flag
+// is also passed to the client so the service can log a breadcrumb if a weather
+// section exists but there's no map section to source coordinates from.
+const hasWeatherSection = _flat.some((s: any) => s.type === "weather");
+
 // For trip countdown — pull first date string from first days section (e.g. "Wed Jul 8")
 const daysSec      = _flat.find((s: any) => s.type === "days" && s.items?.length);
 const firstDayDate = (daysSec?.items?.[0]?.date as string) ?? null;
@@ -206,8 +212,12 @@ const firstDayDate = (daysSec?.items?.[0]?.date as string) ?? null;
         User picks their origin timezone; output shows the time gap, recovery
         estimate, and direction-specific tips.
       -->
-      <!-- Weather strip — populated by JS via Open-Meteo if guide has a map section -->
-      <div id="wxWrap" class="wx-wrap" hidden></div>
+      <!-- Weather strip — populated by JS via Open-Meteo if guide has a map section.
+           Suppressed when the guide has its own `weather` section (which mounts
+           #wxWrap in-flow instead), so weather never renders twice. -->
+      {!hasWeatherSection && (
+        <div id="wxWrap" class="wx-wrap" hidden><div id="wxMount"></div></div>
+      )}
 
       {destTz !== null && (
         <div class="jl-wrap">
@@ -331,7 +341,7 @@ const firstDayDate = (daysSec?.items?.[0]?.date as string) ?? null;
            5. Budget calculators (live total, persisted per-device)
            6. Jet-lag calculator
          ═══════════════════════════════════════════════════════════════════ -->
-    <script define:vars={{ order, storeKey, mapCenter, firstDayDate, destTzOffset: destTz, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, guideTitle: guide.title }}>
+    <script define:vars={{ order, storeKey, mapCenter, firstDayDate, hasWeatherSection, destTzOffset: destTz, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, guideTitle: guide.title }}>
       /* ── SHARED: SCROLL LOCK (used by both sheet and share modal) ─────── */
       var _lockCount = 0;
       function _lockScroll()   { if (++_lockCount === 1) document.body.classList.add("sheet-lock"); }
@@ -1015,11 +1025,23 @@ const firstDayDate = (daysSec?.items?.[0]?.date as string) ?? null;
               .catch(function (err) { applyFallback(String(err)); });
           })();
 
-          /* ── 12. WEATHER STRIP (Open-Meteo, no key) ─────────────────── */
+          /* ── 12. WEATHER STRIP (Open-Meteo, canonical cached service) ───
+             Same pattern as the rate service: fetch-once, sessionStorage cache,
+             graceful failure (block hides, never errors), source + timestamp shown.
+             Mount: #wxWrap (masthead OR in-flow weather section) → injects #wxMount. */
           (function () {
-            if (!mapCenter || !window.fetch) return;
             var wxWrap = document.getElementById("wxWrap");
-            if (!wxWrap) return;
+            if (!wxWrap) return; // no mount on this page (masthead suppressed, no section)
+
+            // Breadcrumb for the forkable-template future: a weather section with no
+            // map section to source coordinates from will silently hide otherwise.
+            if (!mapCenter) {
+              if (hasWeatherSection) {
+                console.warn("weather section present but no map section found — no coordinates");
+              }
+              return;
+            }
+            if (!window.fetch) return;
             // Monochrome text-symbol icons (\uFE0E forces non-emoji rendering) to
             // match the editorial design and honor the no-emoji content rule.
             function wxIcon(code) {
@@ -1050,11 +1072,29 @@ const firstDayDate = (daysSec?.items?.[0]?.date as string) ?? null;
               }
             }
 
-            fetch(url)
-              .then(function (r) { return r.ok ? r.json() : null; })
-              .then(function (data) {
-                if (!data || !data.daily || !data.daily.time) return;
-                var d = data.daily;
+            // Validate response shape + a coarse temperature sanity band (−90..60 °C
+            // catches unit errors / garbage). Returns the `daily` object or null.
+            function wxValidate(data) {
+              if (!data || !data.daily) return null;
+              var d = data.daily;
+              if (!Array.isArray(d.time) || !d.time.length) return null;
+              var n = d.time.length;
+              if (!Array.isArray(d.temperature_2m_max) || d.temperature_2m_max.length !== n) return null;
+              if (!Array.isArray(d.temperature_2m_min) || d.temperature_2m_min.length !== n) return null;
+              if (!Array.isArray(d.weathercode)        || d.weathercode.length        !== n) return null;
+              for (var k = 0; k < n; k++) {
+                var H = d.temperature_2m_max[k], L = d.temperature_2m_min[k];
+                if (typeof H !== "number" || H < -90 || H > 60) return null;
+                if (typeof L !== "number" || L < -90 || L > 60) return null;
+              }
+              return d;
+            }
+
+            // Render takes the validated `daily` object + the retrieval date, and
+            // recomputes the trip-window slice each call so a stale cached "today"
+            // never freezes the window. WX_FETCH_DATE is the retrieval day (the honest
+            // timestamp — Open-Meteo's daily call returns no forecast "issued at").
+            function wxRender(d, WX_FETCH_DATE) {
                 var DAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
                 var now = new Date();
 
@@ -1087,11 +1127,38 @@ const firstDayDate = (daysSec?.items?.[0]?.date as string) ?? null;
                 // note when the trip is still beyond the 16-day forecast horizon.
                 var label = onTrip ? "Trip-dates forecast" : "Next " + (endI - startI) + " days";
                 var far = (TRIP_MD && !onTrip) ? " \u00b7 trip is beyond the 16-day forecast \u2014 check again closer to departure" : "";
-                html += '<p class="wx-credit">' + label + far +
+                html += '<p class="wx-credit">Forecast \u00b7 ' + label + far +
+                  ' \u00b7 retrieved ' + WX_FETCH_DATE +
                   ' \u00b7 <a href="https://open-meteo.com" target="_blank" rel="noopener" class="wx-src">Open-Meteo</a></p>';
-                wxWrap.innerHTML = html;
+                var mount = document.getElementById("wxMount") || wxWrap;
+                mount.innerHTML = html;
                 wxWrap.removeAttribute("hidden");
-              }).catch(function () {});
+            }
+
+            // Cache keyed by coordinates; "today" measured in UTC (matches the rate
+            // service, avoiding a device-local off-by-one near midnight).
+            var WX_CACHE = "tg-wx-" + mapCenter.lat + "," + mapCenter.lng;
+            var wxToday  = new Date().toISOString().slice(0, 10);
+            try {
+              var wxCached = JSON.parse(sessionStorage.getItem(WX_CACHE) || "null");
+              if (wxCached && wxCached.daily && wxCached.fetchedAt === wxToday) {
+                wxRender(wxCached.daily, wxCached.fetchDate || wxToday);
+                return; // served from cache — no network call
+              }
+            } catch (_) {}
+
+            fetch(url)
+              .then(function (r) { return r.ok ? r.json() : Promise.reject("non-200 " + r.status); })
+              .then(function (data) {
+                var d = wxValidate(data);
+                if (!d) throw new Error("malformed or out-of-band weather data");
+                try { sessionStorage.setItem(WX_CACHE, JSON.stringify({ daily: d, fetchDate: wxToday, fetchedAt: wxToday })); } catch (_) {}
+                wxRender(d, wxToday);
+              })
+              .catch(function (err) {
+                // Graceful failure: leave #wxWrap hidden (block renders nothing).
+                console.warn("[tg-weather] " + String(err) + " — weather strip hidden");
+              });
           })();
 
           /* ── 13. MAP FULLSCREEN BUTTON ──────────────────────────────── */

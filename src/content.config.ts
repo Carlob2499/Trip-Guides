@@ -4,7 +4,7 @@ import { glob } from "astro/loaders";
 // A point on the map.
 const coord = z.object({ lat: z.number(), lng: z.number() });
 
-// The nine kinds of section a guide can contain. Each one lists the fields it
+// The ten kinds of section a guide can contain. Each one lists the fields it
 // needs; if a content file gets one wrong, the build fails with a clear message.
 // NOTE: when adding a new type here, also add it to Block.astro and CLAUDE.md.
 
@@ -22,6 +22,10 @@ const section = z.discriminatedUnion("type", [
   z.object({ type: z.literal("list"),   group: z.string(), title: z.string().optional(), items: z.array(z.string()) }),
   z.object({ type: z.literal("routes"), group: z.string(), title: z.string().optional(), steps: z.array(z.string()) }),
   z.object({ type: z.literal("map"),    group: z.string(), title: z.string().optional(), center: coord, span: z.number().optional() }),
+  // weather — live 7-day Open-Meteo strip. No coords here: reads lat/lng from the
+  // guide's first `map` section at runtime (so it needs no per-guide config). If the
+  // guide has no map section the block stays hidden. `note` is an optional caption.
+  z.object({ type: z.literal("weather"), group: z.string(), title: z.string().optional(), note: z.string().optional() }),
   z.object({ type: z.literal("days"),   group: z.string(), title: z.string().optional(), items: z.array(z.object({
     date: z.string(), title: z.string(),
     pace: z.string().optional(), note: z.string().optional(), body: z.string().optional(), fit: z.string().optional(),

@@ -133,6 +133,12 @@
       ]
     },
     {
+      "type": "weather",
+      "group": "Plan",
+      "title": "Seoul forecast",
+      "note": "Live 7-day outlook (Open-Meteo). Within ~16 days of departure it auto-snaps to your trip dates; before then it shows the coming week. Seoul in July is hot and humid with monsoon rain — pack light layers and an umbrella."
+    },
+    {
       "type": "panel",
       "group": "Money & budget",
       "title": "Money & currency",

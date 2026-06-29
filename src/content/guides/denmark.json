@@ -246,6 +246,12 @@
       "span": 0.08
     },
     {
+      "type": "weather",
+      "group": "Getting around",
+      "title": "Copenhagen forecast",
+      "note": "Live 7-day outlook (Open-Meteo). Snaps to your trip dates when they fall within the ~16-day forecast window; otherwise it shows the coming week."
+    },
+    {
       "type": "days",
       "group": "Itinerary",
       "title": "Day by day",
