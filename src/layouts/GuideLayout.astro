@@ -331,7 +331,7 @@ const firstDayDate = (daysSec?.items?.[0]?.date as string) ?? null;
            5. Budget calculators (live total, persisted per-device)
            6. Jet-lag calculator
          ═══════════════════════════════════════════════════════════════════ -->
-    <script define:vars={{ order, storeKey, mapCenter, firstDayDate, destTzOffset: destTz, curCode: localCur?.code ?? null, guideTitle: guide.title }}>
+    <script define:vars={{ order, storeKey, mapCenter, firstDayDate, destTzOffset: destTz, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, guideTitle: guide.title }}>
       /* ── SHARED: SCROLL LOCK (used by both sheet and share modal) ─────── */
       var _lockCount = 0;
       function _lockScroll()   { if (++_lockCount === 1) document.body.classList.add("sheet-lock"); }
@@ -932,23 +932,87 @@ const firstDayDate = (daysSec?.items?.[0]?.date as string) ?? null;
             }).catch(function () {});
           })();
 
-          /* ── 11. LIVE CURRENCY RATE (Frankfurter) ───────────────────── */
+          /* ── 11. LIVE CURRENCY RATE (Frankfurter, canonical rate service) ─
+             Pattern for all API integrations: fetch-once, sessionStorage cache,
+             dispatch tg:rate event, graceful failure with fallback.           */
           (function () {
-            if (!curCode || !window.fetch) return;
+            if (!curCode || !curFallbackRate || !window.fetch) return;
+
+            // Sanity band per currency — rates outside this are treated as bad data.
+            var SANITY = { KRW: [500, 3000], JPY: [80, 250], DKK: [4, 12], EUR: [0.5, 1.5] };
+            function inBand(r) {
+              var b = SANITY[curCode];
+              return !b || (r >= b[0] && r <= b[1]);
+            }
+
+            // Magnitude-aware display: KRW/JPY whole number, DKK/EUR decimal.
+            // Math.round alone would turn EUR 0.93 into a useless "1".
+            function fmtRate(r) {
+              return r >= 100 ? Math.round(r).toLocaleString() : r >= 1 ? r.toFixed(2) : r.toFixed(3);
+            }
+
+            function applyLive(rate, date) {
+              // Update stats-bar pill
+              var pill = document.getElementById("liveRatePill");
+              if (pill) {
+                pill.textContent = "$1 = " + fmtRate(rate) + " " + curCode;
+                pill.title = "Live rate · ECB via Frankfurter.dev · " + date;
+                pill.removeAttribute("hidden");
+              }
+
+              // Update budget foot span
+              var foot = document.getElementById("liveRateFoot");
+              if (foot) {
+                foot.textContent = fmtRate(rate) + " " + curCode + " = $1 · Live · ECB · " + date;
+              }
+
+              // Update TripSplit rate input only if the user hasn't manually changed it
+              // (guard: current value still matches the build-time fallback ±1).
+              var rateInp = document.getElementById("sRate");
+              if (rateInp && Math.abs(parseFloat(rateInp.value) - curFallbackRate) <= 1) {
+                rateInp.value = String(rate >= 1 ? Math.round(rate) : parseFloat(rate.toFixed(4)));
+                rateInp.dispatchEvent(new Event("input"));
+              }
+
+              // Broadcast for any future listeners (Session 2/3 pattern).
+              document.dispatchEvent(new CustomEvent("tg:rate", { detail: { rate: rate, date: date, code: curCode } }));
+            }
+
+            function applyFallback(reason) {
+              console.warn("[tg-rate] " + reason + " — using fallback " + curFallbackRate + " " + curCode);
+              var foot = document.getElementById("liveRateFoot");
+              if (foot) {
+                foot.textContent = "≈₩" + curFallbackRate.toLocaleString() + " = $1 · Jun 2026 · live rate unavailable";
+              }
+            }
+
+            // Cache keyed by currency code so guides don't share stale rates.
+            // "Today" is UTC (same reference Frankfurter uses for its daily timestamp;
+            // device-local date can differ, e.g. user in UTC+9 at 00:30 UTC).
+            var CACHE_KEY = "tg-rate-" + curCode;
+            var todayUTC  = new Date().toISOString().slice(0, 10);
+
+            try {
+              var cached = JSON.parse(sessionStorage.getItem(CACHE_KEY) || "null");
+              if (cached && cached.rate && cached.date && cached.fetchedAt === todayUTC) {
+                applyLive(cached.rate, cached.date);
+                return; // served from cache — no network call
+              }
+            } catch (_) {}
+
             fetch("https://api.frankfurter.dev/v2/latest?base=USD&symbols=" + curCode)
-              .then(function (r) { return r.ok ? r.json() : null; })
+              .then(function (r) { return r.ok ? r.json() : Promise.reject("non-200 " + r.status); })
               .then(function (data) {
-                if (!data || !data.rates || !data.rates[curCode]) return;
-                var rate = data.rates[curCode];
-                var el = document.getElementById("liveRatePill");
-                if (!el) return;
-                // Magnitude-aware: KRW/JPY whole thousands, DKK 2dp, EUR (<1) 3dp.
-                // Math.round alone would turn EUR 0.93 into a useless "1".
-                var shown = rate >= 100 ? Math.round(rate).toLocaleString() : rate >= 1 ? rate.toFixed(2) : rate.toFixed(3);
-                el.textContent = "$1 = " + shown + " " + curCode;
-                el.title = "Live rate from European Central Bank via Frankfurter.dev";
-                el.removeAttribute("hidden");
-              }).catch(function () {});
+                var rate = data && data.rates && data.rates[curCode];
+                if (!rate || !isFinite(rate)) throw new Error("missing or non-finite rate");
+                if (!inBand(rate)) throw new Error("rate " + rate + " outside sanity band for " + curCode);
+                var date = data.date || todayUTC;
+                try {
+                  sessionStorage.setItem(CACHE_KEY, JSON.stringify({ rate: rate, date: date, fetchedAt: todayUTC }));
+                } catch (_) {}
+                applyLive(rate, date);
+              })
+              .catch(function (err) { applyFallback(String(err)); });
           })();
 
           /* ── 12. WEATHER STRIP (Open-Meteo, no key) ─────────────────── */

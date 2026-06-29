@@ -8,6 +8,8 @@ export const CURRENCIES: Record<string, Currency> = {
   "Germany":       { code: "EUR", symbol: "€",  name: "Euro",           approxRate: 0.93 },
   "Portugal":      { code: "EUR", symbol: "€",  name: "Euro",           approxRate: 0.93 },
   "Japan":         { code: "JPY", symbol: "¥",  name: "Japanese Yen",   approxRate: 150  },
+  // Fallback only — USD/KRW is volatile (ranged 1426–1559 over the past year).
+  // Re-verify before each trip; last set Jun 2026.
   "South Korea":   { code: "KRW", symbol: "₩",  name: "Korean Won",     approxRate: 1535 },
   "Korea":         { code: "KRW", symbol: "₩",  name: "Korean Won",     approxRate: 1535 },
 };

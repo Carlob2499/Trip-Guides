@@ -78,14 +78,14 @@ bump SW cache."
 ## Phase 1 — Live Data APIs
 
 ### Session 1 — Live currency (Frankfurter) **[PLAN FIRST]**
-*Status: ☐ Not started · Sets the API integration template — do this carefully*
+*Status: ✅ Complete (29 Jun 2026)*
 
-- [ ] Plan approved
-- [ ] Hardcoded ₩1,535 replaced with live rate (all instances, code + prose)
-- [ ] Fetch-once-per-session caching in place
-- [ ] Graceful failure: fallback rate + "live unavailable" note
-- [ ] Source + timestamp shown on the displayed rate
-- [ ] Build passes, dist/ confirmed, committed
+- [x] Plan approved
+- [x] Hardcoded ₩1,535 replaced with live rate (all instances, code + prose)
+- [x] Fetch-once-per-session caching in place
+- [x] Graceful failure: fallback rate + "live unavailable" note
+- [x] Source + timestamp shown on the displayed rate
+- [x] Build passes, dist/ confirmed, committed
 
 <details><summary>Prompt A — planning</summary>
 
@@ -295,4 +295,5 @@ Claude Code.*
 
 | Date | Session | Outcome | Notes / follow-ups |
 |------|---------|---------|--------------------|
+| 29 Jun 2026 | Session 1 — Live currency (Frankfurter) | ✅ Canonical rate service shipped; build clean, dist/ verified | Promoted existing Phase-7 fetch into full service: sessionStorage cache (UTC daily TTL, keyed `tg-rate-KRW`), sanity band `[500,3000]`, `applyLive`/`applyFallback`, `tg:rate` event broadcast. TripSplit + budget foot + stats pill all update live. Prose inconsistency fixed (`₩1,500` → `₩1,535` in 2 places). Pattern reusable for DKK/JPY/EUR — keys off `curCode`. |
 | 29 Jun 2026 | Phase 0 — Housekeeping | ✅ All 4 fixes shipped; build clean, dist/ verified | Amadeus shutdown **verified** (PhocusWire; decommissions 17 Jul 2026 — imminent, not yet past). Netlify text was bigger than expected: PUBLISHING.md + README.md were full Netlify/Cloudflare walkthroughs, both rewritten to GitHub Pages. **Follow-up:** `wrangler.jsonc` (Cloudflare config) is now dead — decide delete vs keep. OG image URL was not just double-slashed but pointing at a non-existent path → social previews were broken; now fixed + target png confirmed to exist. |

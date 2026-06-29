@@ -148,7 +148,7 @@ const hasRange  = Math.round(lowTotal) !== Math.round(estTotal) || Math.round(hi
       : <>Figures per person · </>}
     all estimates ≈ — confirm as you book
     {cur === "$" && (
-      <> · ₩1,500 ≈ $1 — <a class="brate-link" href="https://www.google.com/search?q=KRW+USD+exchange+rate" target="_blank" rel="noopener noreferrer">check live rate</a></>
+      <> · <span id="liveRateFoot">≈₩1,535 = $1 · Jun 2026</span> — <a class="brate-link" href="https://www.google.com/search?q=KRW+USD+exchange+rate" target="_blank" rel="noopener noreferrer">check live rate</a></>
     )}
   </p>
 </div>
