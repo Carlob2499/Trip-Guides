@@ -164,13 +164,13 @@ and a new component — confirm you'll wire all three.
 ---
 
 ### Session 3 — Public holidays (Nager.Date) **[PLAN FIRST]**
-*Status: ☐ Not started · Tests the build-time escape hatch for non-CORS APIs*
+*Status: ✅ Complete (30 Jun 2026)*
 
-- [ ] CORS tested; path chosen (browser vs. build-time) and explained
-- [ ] Country code sourced from themes.ts (added if missing)
-- [ ] Holidays overlapping trip dates highlighted + closures flagged
-- [ ] Graceful failure handled
-- [ ] Build passes, dist/ confirmed, committed
+- [x] CORS tested; path chosen (browser vs. build-time) and explained
+- [x] Country code sourced from themes.ts (added if missing)
+- [x] Holidays overlapping trip dates highlighted + closures flagged
+- [x] Graceful failure handled
+- [x] Build passes, dist/ confirmed, committed
 
 <details><summary>Prompt</summary>
 
@@ -295,6 +295,7 @@ Claude Code.*
 
 | Date | Session | Outcome | Notes / follow-ups |
 |------|---------|---------|--------------------|
+| 30 Jun 2026 | Session 3 — Public holidays (Nager.Date) | ✅ Build-time holiday integration shipped; build clean, dist/ verified | Chose build-time (not browser fetch) — holidays are fixed for the year, so committed JSON + CI refresh beats a per-load fetch; works offline, no client JS, no runtime failure mode. `COUNTRY_CODES` in themes.ts; `src/lib/holidays.ts` for slicing; `scripts/fetch-holidays.mjs` for CI/local fetch. Three block states: holiday during trip (alert + closure flag), clear ("✓ normal hours"), adjacent (±3-day shoulder). Korea: clear + Constitution Day 2 days after; Denmark: clear + Grundlovsdag 3 days before. Block hides only on genuine data-unavailability. `tg:holidays` event deferred — no consumer yet. |
 | 30 Jun 2026 | Session 2 — Weather strip (Open-Meteo) | ✅ WeatherBlock + canonical service shipped; build clean, dist/ verified | `WeatherBlock.astro` new component (hidden wrapper, title inside so failed fetch leaves no orphaned heading). Content.config.ts → 10th Zod union member. `hasWeatherSection` flag suppresses masthead `#wxWrap` when guide has its own weather section (no double-render). Service: sessionStorage cache (`tg-wx-{lat},{lng}`, UTC daily TTL), shape + temp sanity (−90..60 °C), trip-window date slice, "retrieved {date} · Open-Meteo" credit. Missing-map console.warn breadcrumb. Korea + Denmark both got in-flow `weather` sections. `tg:weather` CustomEvent deferred — no consumer yet. |
 | 29 Jun 2026 | Session 1 — Live currency (Frankfurter) | ✅ Canonical rate service shipped; build clean, dist/ verified | Promoted existing Phase-7 fetch into full service: sessionStorage cache (UTC daily TTL, keyed `tg-rate-KRW`), sanity band `[500,3000]`, `applyLive`/`applyFallback`, `tg:rate` event broadcast. TripSplit + budget foot + stats pill all update live. Prose inconsistency fixed (`₩1,500` → `₩1,535` in 2 places). Pattern reusable for DKK/JPY/EUR — keys off `curCode`. |
 | 29 Jun 2026 | Phase 0 — Housekeeping | ✅ All 4 fixes shipped; build clean, dist/ verified | Amadeus shutdown **verified** (PhocusWire; decommissions 17 Jul 2026 — imminent, not yet past). Netlify text was bigger than expected: PUBLISHING.md + README.md were full Netlify/Cloudflare walkthroughs, both rewritten to GitHub Pages. **Follow-up:** `wrangler.jsonc` (Cloudflare config) is now dead — decide delete vs keep. OG image URL was not just double-slashed but pointing at a non-existent path → social previews were broken; now fixed + target png confirmed to exist. |
