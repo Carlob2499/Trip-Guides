@@ -4,7 +4,7 @@ import { glob } from "astro/loaders";
 // A point on the map.
 const coord = z.object({ lat: z.number(), lng: z.number() });
 
-// The ten kinds of section a guide can contain. Each one lists the fields it
+// The eleven kinds of section a guide can contain. Each one lists the fields it
 // needs; if a content file gets one wrong, the build fails with a clear message.
 // NOTE: when adding a new type here, also add it to Block.astro and CLAUDE.md.
 
@@ -26,6 +26,13 @@ const section = z.discriminatedUnion("type", [
   // guide's first `map` section at runtime (so it needs no per-guide config). If the
   // guide has no map section the block stays hidden. `note` is an optional caption.
   z.object({ type: z.literal("weather"), group: z.string(), title: z.string().optional(), note: z.string().optional() }),
+  // holidays — public holidays for the trip, fetched at BUILD time from Nager.Date
+  // into src/data/holidays/{CC}-{year}.json (offline-safe, no client JS). The country
+  // comes from themes.ts COUNTRY_CODES; the dates come from the guide's `days` section.
+  // `year` is optional (defaults to the derived trip year). The block highlights any
+  // holiday during the trip, notes ones just before/after, and hides if no data file
+  // exists for the country/year.
+  z.object({ type: z.literal("holidays"), group: z.string(), title: z.string().optional(), note: z.string().optional(), year: z.number().int().optional() }),
   z.object({ type: z.literal("days"),   group: z.string(), title: z.string().optional(), items: z.array(z.object({
     date: z.string(), title: z.string(),
     pace: z.string().optional(), note: z.string().optional(), body: z.string().optional(), fit: z.string().optional(),

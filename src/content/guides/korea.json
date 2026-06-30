@@ -139,6 +139,13 @@
       "note": "Live 7-day outlook (Open-Meteo). Within ~16 days of departure it auto-snaps to your trip dates; before then it shows the coming week. Seoul in July is hot and humid with monsoon rain — pack light layers and an umbrella."
     },
     {
+      "type": "holidays",
+      "group": "Plan",
+      "title": "Public holidays",
+      "year": 2026,
+      "note": "Checked automatically against your travel dates (source: Nager.Date, refreshed each deploy). On a Korean national holiday, expect many shops, banks and government offices to close or run reduced hours, and major sights and transit to be busier than usual."
+    },
+    {
       "type": "panel",
       "group": "Money & budget",
       "title": "Money & currency",

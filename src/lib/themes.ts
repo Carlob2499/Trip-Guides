@@ -28,6 +28,14 @@ export function currencyFor(country: string): Currency | null {
   return CURRENCIES[country] || null;
 }
 
+// Country → ISO 3166-1 alpha-2 code, used by the public-holiday integration
+// (Nager.Date). Kept here so adding a country only touches one file. Must stay in
+// sync with the same map in scripts/fetch-holidays.mjs (which can't import TS).
+export const COUNTRY_CODES: Record<string, string> = {
+  Denmark: "DK", Germany: "DE", Portugal: "PT",
+  Japan: "JP", "South Korea": "KR", Korea: "KR",
+};
+
 export const THEMES: Record<string, string> = {
   Denmark: "#a4332a", Sweden: "#8a6a1f", Norway: "#34507a", Finland: "#2b5d86", Iceland: "#3a6ea5",
   "South Korea": "#2b5d86", Korea: "#2b5d86", Japan: "#b23a48", China: "#9c2f2a", Thailand: "#2e4a86",

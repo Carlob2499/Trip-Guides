@@ -1,0 +1,63 @@
+---
+// Public-holiday section. Pure server-rendered from build-time Nager.Date data,
+// which GuideLayout reads, slices around the trip dates, and passes in as `info`.
+//
+// Like WeatherBlock, the title lives INSIDE the wrapper and the whole block is
+// hidden when there's no data for the country/year — so an unavailable holiday set
+// leaves no orphaned heading and the empty .block collapses (see guide.css).
+//
+// When data IS present but no holiday falls in the trip window, the block still
+// renders the reassuring "no public holidays during your dates" state — that's
+// useful information, not a failure.
+import type { HolidayInfo } from "../../lib/holidays";
+const { sec, title, info } = Astro.props as { sec: any; title?: string; info: HolidayInfo | null };
+const heading = title || sec.title || "";
+const show = !!info;
+const during = info?.during ?? [];
+const near = show ? [...(info!.nearBefore ?? []), ...(info!.nearAfter ?? [])] : [];
+---
+<div class="hol-wrap" hidden={!show}>
+  {show && heading && <h3 class="hol-title">{heading}</h3>}
+
+  {show && (during.length > 0 ? (
+    <div class="hol-alert">
+      <p class="hol-alert-head"><strong>⚠ Public holiday during your trip ({info!.tripLabel})</strong></p>
+      <table class="hol-table">
+        <tbody>
+          {during.map((h) => (
+            <tr>
+              <td class="hol-date">{h.label}</td>
+              <td class="hol-name">
+                {h.name}{h.localName && h.localName !== h.name && <span class="hol-local"> · {h.localName}</span>}
+              </td>
+              <td class="hol-flag">{h.national
+                ? "National holiday — many shops, banks & offices closed or on reduced hours"
+                : "Regional holiday — closures vary by area"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  ) : (
+    <p class="hol-clear">✓ No public holidays fall during your dates ({info!.tripLabel}) — expect normal opening hours.</p>
+  ))}
+
+  {show && near.length > 0 && (
+    <div class="hol-near">
+      <span class="hol-near-label">Around your trip</span>
+      <ul>
+        {near.map((h) => (
+          <li>
+            <span class="hol-date">{h.label}</span> · {h.name}{h.localName && h.localName !== h.name && <span class="hol-local"> ({h.localName})</span>}
+            {h.rel && <span class="hol-rel"> — {h.rel}</span>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+
+  {show && sec.note && <p class="hol-note" set:html={sec.note} />}
+  {show && info && (
+    <p class="hol-credit">Public holidays {info.year} · source <a class="hol-src" href="https://date.nager.at" target="_blank" rel="noopener">Nager.Date</a></p>
+  )}
+</div>

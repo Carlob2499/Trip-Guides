@@ -15,8 +15,11 @@ import DaysBlock   from "./blocks/DaysBlock.astro";
 import SightsBlock from "./blocks/SightsBlock.astro";
 import RaidBlock   from "./blocks/RaidBlock.astro";
 import WeatherBlock from "./blocks/WeatherBlock.astro";
+import HolidaysBlock from "./blocks/HolidaysBlock.astro";
 
-const { sec, sid, ci, solo } = Astro.props;
+// `holidays` is the server-computed holiday info (or null), threaded down from
+// GuideLayout; only the `holidays` section type uses it.
+const { sec, sid, ci, solo, holidays } = Astro.props;
 
 // Stable key prefix for checklist items — based on section index, not content.
 // Changing item text does not change its saved state; adding/removing items at
@@ -51,6 +54,10 @@ const carded = ["panel", "prose", "list", "routes", "map", "budget", "raids"].in
     // Weather renders its own title INSIDE the hidden wrapper, so a failed fetch
     // (wrapper stays hidden) leaves no orphaned heading — hence no block-title-row here.
     <WeatherBlock sec={sec} title={titleText} />
+  ) : sec.type === "holidays" ? (
+    // Holidays likewise keeps its title inside the wrapper, which is hidden when
+    // there's no data for the country/year — so no orphaned heading on empty data.
+    <HolidaysBlock sec={sec} title={titleText} info={holidays} />
   ) : (
     <>
       {titleText && (
