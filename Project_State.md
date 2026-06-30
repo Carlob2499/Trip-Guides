@@ -56,9 +56,13 @@ src/
   lib/
     themes.ts            — country → accent colour AND DEST_TZ (timezone offset) AND CURRENCIES. Single source for all three. Add new countries here.
     buckets.ts           — groups sections into nav categories
+    exports.ts           — build-time export helpers (pure): collectWaypoints, collectDayEvents, buildGpx, buildIcs, buildSummary. Used by the export endpoints + GuideLayout's Share modal.
   pages/
     index.astro          — home page, auto-lists all guides
     guides/[slug].astro  — dynamic route, one page per guide JSON
+    guides/[slug].gpx.ts — build-time GPX export endpoint (map + sights coords) → dist/guides/<slug>.gpx
+    guides/[slug].ics.ts — build-time iCal export endpoint (all-day day cards) → dist/guides/<slug>.ics
+    og/[slug].png.ts     — build-time OG image endpoint (existing; the pattern the export endpoints follow)
   styles/
     guide.css            — all guide page styling
     hub.css              — home page styling
@@ -187,6 +191,7 @@ Comprehensive review of the Phase 5–7 work; fixed in the same session:
 - ~~Map fullscreen left iframe at 300px~~ — **fixed** (fullscreen the iframe).
 
 ### Open — latent, lower priority
+- **Denmark map coordinate (likely error):** in `denmark.json`, `Kastellet` (55.6909, 12.5945) and `CopenHill / Amager Bakke` (55.6916, 12.5970) sit only ~175 m apart, but they are not adjacent landmarks in reality — at least one coordinate is probably wrong. Surfaced by the GPX export (Session 4), which stacks the two pins. Verify against a primary source before correcting; not changed here (no invented coordinate).
 - **DST-incorrect timezones:** `DEST_TZ` and the live-time/jet-lag features use FIXED UTC offsets (e.g. Denmark: 2 = summer time). Correct for the summer trips in scope, but European guides would be 1 hour off in winter. Proper fix: map country → IANA zone (e.g. "Asia/Seoul") and use `Intl.DateTimeFormat`, which handles DST automatically. Affects the local-time pill and jet-lag calc.
 - **Live FX rate vs hardcoded budget rate:** the live pill (Frankfurter) and the hardcoded `approxRate` in `themes.ts` / budget prose can drift apart, showing two different KRW rates on one page. Consider feeding the live rate into the budget calculator, or labeling the hardcoded one "approx" more prominently.
 - **Pre-existing color emoji in Korea content JSON** (🌿🎮🏠🏟🔼): present in the guide content from earlier work, not the weather code. Left in place because they may be intentional section icons — confirm with owner before removing (the no-emoji rule targets new additions).
@@ -214,6 +219,23 @@ The initial Pokémon raid counter tables were a ~4,000-character HTML string in 
 
 ### Why `DEST_TZ` and `CURRENCIES` live in `themes.ts`
 Originally defined inline in `GuideLayout.astro`. Consolidated to `themes.ts` so adding a new country requires editing exactly one file. `themes.ts` is now the single source for: accent colour, destination timezone offset, and currency information.
+
+### Why exports (GPX/iCal) are build-time endpoints, not a pre-build script
+The holiday data uses a pre-build script (`fetch-holidays.mjs`) only because it
+fetches from an external API. GPX/iCal derive purely from committed guide JSON, so
+they are Astro static endpoints (`pages/guides/[slug].gpx.ts` / `.ics.ts`, mirroring
+`og/[slug].png.ts`) — no script, no `deploy.yml` change. `getStaticPaths` is filtered
+so a guide without map/day data emits no file (and the Share modal hides that link).
+iCal events are all-day because the `days` schema stores a date string, not times —
+honest, not invented. Guides with relative "Day N" labels (germany, portugal) get no
+`.ics` by design.
+
+### PDF / print
+There is no build-time PDF renderer. "Save as PDF" was the browser's own
+`window.print()` dialog; the visible **PDF button was removed** (owner request,
+Session 4). The print stylesheet remains, so Ctrl+P / the mobile share-sheet print
+still produces the clean print layout. A true build-time PDF would need a headless
+renderer (e.g. Playwright driving the print CSS) added to CI — not built.
 
 ### Why base-path hrefs must be explicit
 Astro auto-rewrites `<img src="...">` and asset references when `base` is set, but does NOT rewrite `href` attributes written as string literals or template literals in `.astro` files. Every navigational href that starts with `/` must be prefixed with `import.meta.env.BASE_URL` (or a `base` variable derived from it). This was learned the hard way when all country links 404'd after the GitHub Pages migration.
