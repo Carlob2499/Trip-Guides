@@ -6,7 +6,9 @@ interface Props {
   curName?: string;
   curRate?: number;
 }
-const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", curRate = 1380 } = Astro.props;
+// curRate is always passed by GuideLayout from themes.ts CURRENCIES[country].approxRate;
+// this default only covers an unmapped/undefined country and should track that value.
+const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", curRate = 1535 } = Astro.props;
 ---
 
 <div class="split-wrap" id="tripSplit" hidden
@@ -95,7 +97,7 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
   var SK       = "tg-split-" + (wrap.dataset.sk || "guide");
   var C_CODE   = wrap.dataset.curCode  || "KRW";
   var C_SYM    = wrap.dataset.curSym   || "₩";
-  var DEF_RATE = parseFloat(wrap.dataset.curRate || "1380") || 1380;
+  var DEF_RATE = parseFloat(wrap.dataset.curRate || "1535") || 1535;
 
   var state = {
     members:     [],

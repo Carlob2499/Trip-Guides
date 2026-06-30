@@ -381,6 +381,12 @@ const tripSummary = buildSummary(guide);
         try {
           var STORE_KEY = "tripguide-" + (storeKey || "guide");
 
+          // Single source of month names, shared by every section below that parses
+          // a guide date string like "Wed Jul 8" (jump-to-today, trip countdown,
+          // weather window). 0-indexed (MONTHS[0] === "Jan"), matching Date's own
+          // month numbering — sections needing a 1-indexed month use "+ 1".
+          var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
           /* ── TAB BAR ─────────────────────────────────────────────────── */
           var guideTabs  = document.getElementById("guideTabs");
           var catblocks  = Array.prototype.slice.call(document.querySelectorAll(".catblock"));
@@ -578,7 +584,6 @@ const tripSummary = buildSummary(guide);
             var mo  = now.getMonth() + 1;
             var d   = now.getDate();
             // Match day cards whose .d label contains today's month-day (e.g. "Jul 9", "Jul 14")
-            var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
             var plain  = MONTHS[mo - 1] + " " + d;
             document.querySelectorAll(".day").forEach(function (card) {
               var dEl = card.querySelector(".d");
@@ -645,21 +650,13 @@ const tripSummary = buildSummary(guide);
           var boxes = Array.prototype.slice.call(document.querySelectorAll("input[type=checkbox]"));
 
           function loadState()  { try { return JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); } catch (e) { return {}; } }
-          function saveState(s) { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); flash("✓ saved"); } catch (e) { flash("Storage full — use Copy progress"); } }
+          function saveState(s) { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); flash("✓ saved"); } catch (e) { flash("Storage full"); } }
           function currentState() { var s = {}; boxes.forEach(function (b) { if (b.checked) s[b.dataset.pkey] = 1; }); return s; }
 
           function flash(t) {
             var n = document.getElementById("savedNote"); if (!n) return;
             n.textContent = t;
             if (t) { clearTimeout(n._t); n._t = setTimeout(function () { n.textContent = ""; }, 2200); }
-          }
-
-          // Progress counter — "N/M checked"
-          function updateCount() {
-            updateDayCounts();
-            var c = document.getElementById("progCount"); if (!c || !boxes.length) return;
-            var checked = boxes.filter(function (b) { return b.checked; }).length;
-            c.textContent = checked + "/" + boxes.length + " checked";
           }
 
           // Per-day "Day kit N/M" badge — counts only the checkboxes inside each
@@ -682,9 +679,9 @@ const tripSummary = buildSummary(guide);
           // Load saved state on page open
           var saved = loadState();
           boxes.forEach(function (b) { if (saved[b.dataset.pkey]) b.checked = true; });
-          updateCount();
+          updateDayCounts();
           boxes.forEach(function (b) {
-            b.addEventListener("change", function () { saveState(currentState()); updateCount(); });
+            b.addEventListener("change", function () { saveState(currentState()); updateDayCounts(); });
           });
 
           /* ── 5. BUDGET CALCULATORS ───────────────────────────────────── */
@@ -831,12 +828,12 @@ const tripSummary = buildSummary(guide);
           (function () {
             var statsEl = document.getElementById("guideStats");
             if (!statsEl || !firstDayDate) return;
-            var MONTHS = { Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11 };
             var parts  = String(firstDayDate).split(/\s+/);
             var mStr   = parts[1]; var day = parseInt(parts[2], 10);
-            if (!mStr || isNaN(day) || MONTHS[mStr] == null) return;
+            var moIdx  = mStr ? MONTHS.indexOf(mStr) : -1;
+            if (moIdx === -1 || isNaN(day)) return;
             var now  = new Date();
-            var trip = new Date(now.getFullYear(), MONTHS[mStr], day);
+            var trip = new Date(now.getFullYear(), moIdx, day);
             if (trip < now && (now - trip) > 180 * 86400000) trip.setFullYear(now.getFullYear() + 1);
             var diff = Math.round((trip.getTime() - now.getTime()) / 86400000);
             var pill = document.createElement("span");
@@ -1009,10 +1006,10 @@ const tripSummary = buildSummary(guide);
             // Build "-MM-DD" target from the guide's first day date (e.g. "Wed Jul 8").
             var TRIP_MD = null;
             if (firstDayDate) {
-              var MM = { Jan:1,Feb:2,Mar:3,Apr:4,May:5,Jun:6,Jul:7,Aug:8,Sep:9,Oct:10,Nov:11,Dec:12 };
               var pp = String(firstDayDate).split(/\s+/);
-              if (MM[pp[1]] != null && !isNaN(parseInt(pp[2], 10))) {
-                TRIP_MD = "-" + String(MM[pp[1]]).padStart(2, "0") + "-" + String(parseInt(pp[2], 10)).padStart(2, "0");
+              var ppMoIdx = MONTHS.indexOf(pp[1]);
+              if (ppMoIdx !== -1 && !isNaN(parseInt(pp[2], 10))) {
+                TRIP_MD = "-" + String(ppMoIdx + 1).padStart(2, "0") + "-" + String(parseInt(pp[2], 10)).padStart(2, "0");
               }
             }
 

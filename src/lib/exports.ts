@@ -26,7 +26,8 @@ export function flattenSections(sections: any[] | undefined | null, out: any[] =
 // HTML entities decoded. Used for calendar DESCRIPTION so an event never reads
 // "Dinner at <b>X</b>" or the escaped "&lt;b&gt;". Entities are decoded BEFORE
 // tag removal so an already-escaped "&lt;b&gt;" is also stripped, not revived.
-export function htmlToText(s: string | undefined | null): string {
+// Not exported — only used internally by collectDayEvents/buildSummary below.
+function htmlToText(s: string | undefined | null): string {
   if (!s) return "";
   return String(s)
     .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">")

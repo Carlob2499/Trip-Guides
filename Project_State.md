@@ -67,7 +67,7 @@ src/
     guide.css            — all guide page styling
     hub.css              — home page styling
 public/
-  sw.js                  — service worker (CACHE = "tripguides-v3", BASE = "/Trip-Guides")
+  sw.js                  — service worker (CACHE = "tripguides-v4", BASE = "/Trip-Guides")
   manifest.webmanifest   — PWA manifest (start_url and scope both include /Trip-Guides/)
   icons/                 — PWA icons (source: favicon.svg)
 .github/
@@ -247,7 +247,7 @@ The Edit tool matches `old_string` against the raw file bytes. Em dashes (U+2014
 Migrated to GitHub Pages Jun 2026. Astro config requires `base: '/Trip-Guides'` and `site: 'https://carlob2499.github.io'`. The GitHub Actions workflow (`deploy.yml`) handles build + deploy. To change the base path in future (e.g. custom domain), update `astro.config.mjs` only — all hrefs derive from `import.meta.env.BASE_URL`.
 
 ### PWA / offline
-Service worker (`public/sw.js`) is network-first for HTML (fresh content when online, cached when offline) and cache-first for assets. Maps are NOT cached — they load inside a cross-origin OpenStreetMap frame the service worker cannot reach. Text "Key transit routes" sections cover the offline case. Cache key is `tripguides-v3`; bump to v4 on the next major release.
+Service worker (`public/sw.js`) is network-first for HTML (fresh content when online, cached when offline) and cache-first for assets. Maps are NOT cached — they load inside a cross-origin OpenStreetMap frame the service worker cannot reach. Text "Key transit routes" sections cover the offline case. Cache key is `tripguides-v4` (current); bump on the next breaking change to cached assets.
 
 ---
 
