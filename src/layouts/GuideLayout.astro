@@ -58,6 +58,10 @@ const daysSec      = _flat.find((s: any) => s.type === "days" && s.items?.length
 const firstDayDate = (daysSec?.items?.[0]?.date as string) ?? null;
 const lastDayDate  = (daysSec?.items?.[daysSec.items.length - 1]?.date as string) ?? firstDayDate;
 
+// `verified` is source metadata (freshness tracking for the maker/AI), not shown to
+// travelers — EXCEPT genuine ⚠ warnings (e.g. an unconfirmed draft), which stay visible.
+const verifiedWarning = guide.verified?.trimStart().startsWith("⚠") ? guide.verified : null;
+
 // Public holidays — if the guide has a `holidays` section, look up the build-time
 // data for this country + trip year and slice it around the trip dates. All
 // server-side; the block hides when there's no country mapping or no data file.
@@ -195,7 +199,7 @@ if (holSec) {
       <div class="guide-stats" id="guideStats">
         {dayCount   > 0 && <span class="gstat">{dayCount} days</span>}
         {sightCount > 0 && <span class="gstat">{sightCount} sights</span>}
-        {guide.verified && <span class="gstat gstat-verified">{guide.verified}</span>}
+        {verifiedWarning && <span class="gstat gstat-warning">{verifiedWarning}</span>}
         <!-- Live currency rate injected by JS when fetch succeeds -->
         <span class="gstat gstat-rate" id="liveRatePill" hidden></span>
       </div>

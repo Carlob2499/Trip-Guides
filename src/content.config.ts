@@ -82,7 +82,7 @@ const guides = defineCollection({
     dek: z.string().optional(),
     footer: z.string().optional(),
     country: z.string(),          // sets the accent colour (see src/lib/themes.ts)
-    verified: z.string().optional(),  // freshness stamp shown under the dek, e.g. "✓ Verified June 2026 — …"
+    verified: z.string().optional(),  // freshness metadata for the maker/AI — NOT shown to travelers, EXCEPT a ⚠-prefixed value (e.g. an unconfirmed draft), which renders as a warning pill in the masthead
     intro: z.string().optional(),
     sections: z.array(section),
   }),
