@@ -1,0 +1,10 @@
+# Static response headers, honored by Cloudflare Pages and Netlify (both read a
+# `_headers` file at the site root). GitHub Pages — the current deploy target in
+# .github/workflows/deploy.yml — does not support custom headers and ignores this
+# file, so it's a no-op there; kept here so the site is hardened by default if it's
+# ever pointed at Cloudflare Pages/Netlify instead (same reasoning as wrangler.jsonc).
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), camera=(), microphone=()

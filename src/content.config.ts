@@ -44,8 +44,10 @@ const section = z.discriminatedUnion("type", [
     map: coord.optional(),
   })) }),
   z.object({ type: z.literal("budget"), group: z.string(), title: z.string().optional(),
-    intro: z.string().optional(), currency: z.string().optional(), days: z.number().optional(),
-    party: z.number().optional(),       // number of people sharing group costs (default 1)
+    intro: z.string().optional(), currency: z.string().optional(), days: z.number().positive().optional(),
+    // party must be a positive integer: BudgetBlock.astro divides trip totals by it
+    // for the per-person view, so 0 or a negative value would render $Infinity/$NaN.
+    party: z.number().int().positive().optional(),
     items: z.array(z.object({
       label: z.string(),
       basis: z.enum(["day", "trip"]),   // per-day cost (× days) or a one-off trip cost

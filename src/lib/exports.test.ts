@@ -1,0 +1,286 @@
+import { describe, it, expect } from "vitest";
+import {
+  flattenSections,
+  collectWaypoints,
+  collectDayEvents,
+  buildSummary,
+  buildGpx,
+  buildIcs,
+} from "./exports";
+
+// RFC 5545 unfold: a CRLF followed by a single leading space/tab is a folded
+// continuation, not a real line break. Used below to verify buildIcs() output
+// round-trips to the original (unescaped) content after folding.
+function unfoldIcs(ics: string): string[] {
+  const physical = ics.split("\r\n").filter((_, i, arr) => !(i === arr.length - 1 && arr[i] === ""));
+  const logical: string[] = [];
+  for (const line of physical) {
+    if (/^[ \t]/.test(line) && logical.length) logical[logical.length - 1] += line.slice(1);
+    else logical.push(line);
+  }
+  return logical;
+}
+
+function icsUnescape(s: string): string {
+  return s.replace(/\\n/g, "\n").replace(/\\,/g, ",").replace(/\\;/g, ";").replace(/\\\\/g, "\\");
+}
+
+describe("flattenSections", () => {
+  it("passes through an already-flat list unchanged", () => {
+    const secs = [{ type: "prose" }, { type: "list" }];
+    expect(flattenSections(secs)).toEqual(secs);
+  });
+
+  it("recursively flattens nested `sections`", () => {
+    const secs = [
+      { type: "prose" },
+      { sections: [{ type: "list" }, { sections: [{ type: "map" }] }] },
+    ];
+    expect(flattenSections(secs).map((s) => s.type)).toEqual(["prose", "list", "map"]);
+  });
+
+  it("handles null/undefined input gracefully", () => {
+    expect(flattenSections(undefined)).toEqual([]);
+    expect(flattenSections(null)).toEqual([]);
+  });
+
+  it("skips falsy entries in the sections array", () => {
+    expect(flattenSections([null, { type: "prose" }, undefined])).toEqual([{ type: "prose" }]);
+  });
+});
+
+describe("collectWaypoints", () => {
+  it("collects a map section's center with its title", () => {
+    const guide = { country: "Japan", sections: [{ type: "map", center: { lat: 35.6, lng: 139.7 }, title: "Tokyo" }] };
+    expect(collectWaypoints(guide)).toEqual([{ lat: 35.6, lng: 139.7, name: "Tokyo" }]);
+  });
+
+  it("falls back to '<Country> map point' when a map section has no title", () => {
+    const guide = { country: "Japan", sections: [{ type: "map", center: { lat: 35.6, lng: 139.7 } }] };
+    expect(collectWaypoints(guide)[0].name).toBe("Japan map point");
+  });
+
+  it("collects sights items that carry a `map` coord, falling back to '<Country> sight'", () => {
+    const guide = {
+      country: "Japan",
+      sections: [{ type: "sights", items: [{ name: "Shrine", map: { lat: 1, lng: 2 } }, { map: { lat: 3, lng: 4 } }, { name: "No coord" }] }],
+    };
+    const pts = collectWaypoints(guide);
+    expect(pts).toEqual([
+      { lat: 1, lng: 2, name: "Shrine" },
+      { lat: 3, lng: 4, name: "Japan sight" },
+    ]);
+  });
+
+  it("de-dupes on the exact lat,lng,name triplet", () => {
+    const guide = {
+      country: "Japan",
+      sections: [
+        { type: "map", center: { lat: 1, lng: 2 }, title: "A" },
+        { type: "sights", items: [{ name: "A", map: { lat: 1, lng: 2 } }] },
+      ],
+    };
+    expect(collectWaypoints(guide)).toHaveLength(1);
+  });
+
+  it("keeps two points that share coordinates but have different names", () => {
+    const guide = {
+      country: "Japan",
+      sections: [{ type: "sights", items: [{ name: "A", map: { lat: 1, lng: 2 } }, { name: "B", map: { lat: 1, lng: 2 } }] }],
+    };
+    expect(collectWaypoints(guide)).toHaveLength(2);
+  });
+
+  it("rejects non-finite or non-numeric coordinates", () => {
+    const guide = {
+      country: "Japan",
+      sections: [{
+        type: "sights",
+        items: [
+          { name: "NaN", map: { lat: NaN, lng: 2 } },
+          { name: "Infinity", map: { lat: Infinity, lng: 2 } },
+          { name: "String", map: { lat: "1", lng: 2 } },
+        ],
+      }],
+    };
+    expect(collectWaypoints(guide)).toEqual([]);
+  });
+
+  it("returns an empty array for a guide with no sections", () => {
+    expect(collectWaypoints({})).toEqual([]);
+    expect(collectWaypoints(null)).toEqual([]);
+  });
+});
+
+describe("collectDayEvents", () => {
+  it("emits one event per day-card item with a parseable date", () => {
+    const guide = { sections: [{ type: "days", items: [{ date: "Wed Jul 8", title: "Arrive" }] }] };
+    const events = collectDayEvents(guide);
+    expect(events).toHaveLength(1);
+    expect(events[0].title).toBe("Arrive");
+    expect(events[0].date.toISOString().slice(0, 10)).toBe("2026-07-08");
+  });
+
+  it("skips items whose date string doesn't parse, without throwing", () => {
+    const guide = { sections: [{ type: "days", items: [{ date: "garbage", title: "Bad" }, { date: "Jul 9", title: "Good" }] }] };
+    const events = collectDayEvents(guide);
+    expect(events.map((e) => e.title)).toEqual(["Good"]);
+  });
+
+  it("defaults the title to 'Trip day' when missing", () => {
+    const guide = { sections: [{ type: "days", items: [{ date: "Jul 9" }] }] };
+    expect(collectDayEvents(guide)[0].title).toBe("Trip day");
+  });
+
+  it("uses `note` for desc, falling back to `fit`, and converts HTML to plain text", () => {
+    const guide = {
+      sections: [{
+        type: "days",
+        items: [
+          { date: "Jul 9", title: "A", note: "Dinner at <b>Nobu</b> &amp; drinks" },
+          { date: "Jul 10", title: "B", fit: "Easy pace" },
+        ],
+      }],
+    };
+    const events = collectDayEvents(guide);
+    expect(events[0].desc).toBe("Dinner at Nobu & drinks");
+    expect(events[1].desc).toBe("Easy pace");
+  });
+
+  it("omits `desc` entirely when neither note nor fit is present", () => {
+    const guide = { sections: [{ type: "days", items: [{ date: "Jul 9", title: "A" }] }] };
+    expect(collectDayEvents(guide)[0]).not.toHaveProperty("desc");
+  });
+
+  it("ignores non-`days` sections", () => {
+    const guide = { sections: [{ type: "prose", body: "hi" }] };
+    expect(collectDayEvents(guide)).toEqual([]);
+  });
+});
+
+describe("buildSummary", () => {
+  it("uses the title alone when there's no dek, no days, no waypoints", () => {
+    expect(buildSummary({ title: "Japan Trip" })).toBe("Japan Trip");
+  });
+
+  it("defaults the title to 'Trip Guide' when missing", () => {
+    expect(buildSummary({})).toBe("Trip Guide");
+  });
+
+  it("appends the dek (converted from HTML) after an em dash", () => {
+    const summary = buildSummary({ title: "Japan Trip", dek: "A <b>week</b> in Tokyo" });
+    expect(summary).toBe("Japan Trip — A week in Tokyo");
+  });
+
+  it("lists planned days with their date prefix when present", () => {
+    const guide = { title: "T", sections: [{ type: "days", items: [{ date: "Jul 8", title: "Arrive" }, { title: "No date" }] }] };
+    const summary = buildSummary(guide);
+    expect(summary).toContain("Planned:");
+    expect(summary).toContain("• Jul 8 — Arrive");
+    expect(summary).toContain("• No date");
+  });
+
+  it("lists up to 8 key spots and adds a '+N more' suffix beyond that", () => {
+    const items = Array.from({ length: 10 }, (_, i) => ({ name: `Spot ${i}`, map: { lat: i, lng: i } }));
+    const guide = { title: "T", sections: [{ type: "sights", items }] };
+    const summary = buildSummary(guide);
+    expect(summary).toContain("Key spots: Spot 0, Spot 1, Spot 2, Spot 3, Spot 4, Spot 5, Spot 6, Spot 7, +2 more");
+  });
+
+  it("omits the 'Key spots' line entirely when there are no waypoints", () => {
+    expect(buildSummary({ title: "T" })).not.toContain("Key spots");
+  });
+});
+
+describe("buildGpx", () => {
+  it("produces a valid GPX 1.1 document with one <wpt> per waypoint", () => {
+    const guide = { title: "Japan Trip", country: "Japan", sections: [{ type: "map", center: { lat: 35.6, lng: 139.7 }, title: "Tokyo" }] };
+    const gpx = buildGpx(guide);
+    expect(gpx).toContain('<gpx version="1.1"');
+    expect(gpx).toContain('<wpt lat="35.6" lon="139.7">');
+    expect(gpx).toContain("<name>Tokyo</name>");
+    expect(gpx).toContain("<name>Japan Trip</name>");
+  });
+
+  it("XML-escapes special characters in names/titles", () => {
+    const guide = { title: `A & B <"quote">`, country: "X", sections: [] };
+    const gpx = buildGpx(guide);
+    expect(gpx).toContain("A &amp; B &lt;&quot;quote&quot;&gt;");
+    expect(gpx).not.toContain("<\"quote\">");
+  });
+
+  it("still emits a well-formed document with zero waypoints", () => {
+    const gpx = buildGpx({ title: "Empty", country: "X", sections: [] });
+    expect(gpx).toContain("<gpx");
+    expect(gpx).toContain("</gpx>");
+  });
+});
+
+describe("buildIcs", () => {
+  it("produces a VCALENDAR with one VEVENT per day event", () => {
+    const guide = { title: "Trip", sections: [{ type: "days", items: [{ date: "Jul 8", title: "Arrive" }] }] };
+    const ics = buildIcs(guide, "my-trip");
+    expect(ics).toContain("BEGIN:VCALENDAR");
+    expect(ics).toContain("BEGIN:VEVENT");
+    expect(ics).toContain("UID:my-trip-20260708@waypoint");
+    expect(ics).toContain("DTSTART;VALUE=DATE:20260708");
+    expect(ics).toContain("DTEND;VALUE=DATE:20260709"); // all-day end is exclusive: next day
+    expect(ics).toContain("END:VEVENT");
+    expect(ics).toContain("END:VCALENDAR");
+  });
+
+  it("uses CRLF line endings throughout", () => {
+    const guide = { title: "Trip", sections: [] };
+    const ics = buildIcs(guide, "slug");
+    expect(ics.includes("\r\n")).toBe(true);
+    expect(ics.replace(/\r\n/g, "").includes("\n")).toBe(false);
+  });
+
+  it("omits DESCRIPTION when the day has no note/fit", () => {
+    const guide = { title: "Trip", sections: [{ type: "days", items: [{ date: "Jul 8", title: "Arrive" }] }] };
+    const ics = buildIcs(guide, "slug");
+    expect(ics).not.toContain("DESCRIPTION");
+  });
+
+  it("escapes commas, semicolons, and newlines in ICS text fields", () => {
+    const guide = { title: "Trip, Inc; Co", sections: [] };
+    const ics = buildIcs(guide, "slug");
+    const calname = unfoldIcs(ics).find((l) => l.startsWith("X-WR-CALNAME:"))!;
+    expect(calname).toBe("X-WR-CALNAME:Trip\\, Inc\\; Co");
+  });
+
+  it("folds long SUMMARY lines to <=75 octets per physical line and round-trips the original text", () => {
+    const longTitle = "A".repeat(160);
+    const guide = { title: "Trip", sections: [{ type: "days", items: [{ date: "Jul 8", title: longTitle }] }] };
+    const ics = buildIcs(guide, "slug");
+
+    for (const physical of ics.split("\r\n")) {
+      expect(Buffer.byteLength(physical, "utf8")).toBeLessThanOrEqual(75);
+    }
+
+    const summaryLine = unfoldIcs(ics).find((l) => l.startsWith("SUMMARY:"))!;
+    expect(icsUnescape(summaryLine.slice("SUMMARY:".length))).toBe(longTitle);
+  });
+
+  it("folds multibyte (emoji) content without splitting a code point across lines", () => {
+    const emojiTitle = "🎉".repeat(40); // 4 bytes/char in UTF-8, forces multiple fold points
+    const guide = { title: "Trip", sections: [{ type: "days", items: [{ date: "Jul 8", title: emojiTitle }] }] };
+    const ics = buildIcs(guide, "slug");
+
+    for (const physical of ics.split("\r\n")) {
+      expect(Buffer.byteLength(physical, "utf8")).toBeLessThanOrEqual(75);
+      // A valid re-encode implies no surrogate pair / code point was split.
+      expect(Buffer.from(physical, "utf8").toString("utf8")).toBe(physical);
+    }
+
+    const summaryLine = unfoldIcs(ics).find((l) => l.startsWith("SUMMARY:"))!;
+    expect(summaryLine.slice("SUMMARY:".length)).toBe(emojiTitle);
+  });
+
+  it("returns a well-formed calendar with zero day events", () => {
+    const ics = buildIcs({ title: "Empty", sections: [] }, "slug");
+    expect(ics).toContain("BEGIN:VCALENDAR");
+    expect(ics).toContain("END:VCALENDAR");
+    expect(ics).not.toContain("BEGIN:VEVENT");
+  });
+});
