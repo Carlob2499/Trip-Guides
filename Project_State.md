@@ -254,7 +254,10 @@ Any country can be scaffolded from the home-page **"Make a new guide"** button. 
 opens a pre-filled GitHub Issue Form; the `new-guide` workflow parses it
 (`scripts/issue-to-scaffold.mjs` → `scripts/scaffold-guide.mjs`, no third-party
 actions), commits a **draft** guide (`draft: true`) + a filled `guides-intake/<slug>.md`,
-and opens a PR (never auto-merged — the owner's review is the moderation gate). Drafts
+and opens a PR (never auto-merged — the owner's review is the moderation gate). The
+`new-guide` label the flow triggers on is created automatically by
+`.github/workflows/ensure-labels.yml` (GitHub issue templates apply labels but can't
+create them), so there's no manual setup. Drafts
 list in a secondary **"Guides-to-be"** grid on the home page. The scaffold ships the
 API-driven sections (map + weather + holidays) pre-wired so live data shows immediately;
 content sections are empty until a Claude Code research pass fills them per CLAUDE.md.

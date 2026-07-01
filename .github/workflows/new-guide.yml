@@ -2,7 +2,8 @@ name: New guide scaffold
 
 # Fires when the "new-guide" label lands on an issue. The New-guide issue form
 # (.github/ISSUE_TEMPLATE/new-guide.yml) auto-applies that label, so submitting the
-# form is enough. Requires a repo label named "new-guide" to exist.
+# form is enough. The "new-guide" label is created automatically by
+# .github/workflows/ensure-labels.yml — no manual setup needed.
 on:
   issues:
     types: [labeled]

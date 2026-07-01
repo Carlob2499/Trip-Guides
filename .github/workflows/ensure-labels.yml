@@ -1,0 +1,34 @@
+name: Ensure repo labels
+
+# Guarantees the labels the automation depends on actually exist. GitHub issue
+# templates can only APPLY labels that already exist — they never create them — so
+# without this the New-guide form would silently fail to trigger its workflow.
+#
+# Runs on setup (the first push that adds this file matches the path filter) and can
+# be re-run any time from the Actions tab. Idempotent via `gh label create --force`.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/ensure-labels.yml
+      - .github/ISSUE_TEMPLATE/new-guide.yml
+
+# Label management lives under the issues API — that's all this needs.
+permissions:
+  issues: write
+
+jobs:
+  ensure-labels:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create or update the new-guide label
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        # --force creates the label if missing, updates colour/description if present.
+        run: |
+          gh label create new-guide \
+            --color 0E8A16 \
+            --description "Triggers the new-guide scaffold workflow" \
+            --force

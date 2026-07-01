@@ -71,8 +71,9 @@ Submitting it runs an automation that commits a **draft scaffold** — the stand
 structure with live weather, public-holiday, and currency data already wired in for that
 country — and opens it as a pull request. The draft appears under **"Guides-to-be"** on
 the home page; a later research pass fills the facts (per CLAUDE.md) and, once verified,
-it graduates to the main grid. Works for **any** country. *(Setup note: the repo needs a
-label named `new-guide` — the issue form applies it automatically.)*
+it graduates to the main grid. Works for **any** country. *(No setup needed — the
+`new-guide` label the automation relies on is created automatically by the
+`ensure-labels` workflow.)*
 
 ## How to add a new destination by hand
 
