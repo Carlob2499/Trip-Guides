@@ -1,9 +1,13 @@
 import { describe, it, expect } from "vitest";
-import { currencyFor, accentFor, darken, CURRENCIES, DEST_TZ, COUNTRY_CODES } from "./themes";
+import { currencyFor, accentFor, tzFor, darken, COUNTRY_CODES } from "./themes";
 
 describe("currencyFor", () => {
   it("returns the currency entry for a known country", () => {
-    expect(currencyFor("Japan")).toEqual(CURRENCIES.Japan);
+    const jpy = currencyFor("Japan");
+    expect(jpy).not.toBeNull();
+    expect(jpy?.code).toBe("JPY");
+    expect(jpy?.symbol).toBeTruthy();
+    expect(jpy?.name).toBeTruthy();
   });
 
   it("returns null for an unknown country", () => {
@@ -18,6 +22,16 @@ describe("accentFor", () => {
 
   it("falls back to the default accent for an unknown country", () => {
     expect(accentFor("Narnia")).toBe("#9c4421");
+  });
+});
+
+describe("tzFor", () => {
+  it("returns the IANA time zone for a known country", () => {
+    expect(tzFor("Japan")).toBe("Asia/Tokyo");
+  });
+
+  it("returns null for an unknown country", () => {
+    expect(tzFor("Narnia")).toBeNull();
   });
 });
 
@@ -37,9 +51,10 @@ describe("darken", () => {
 });
 
 describe("data tables stay in sync", () => {
-  it("every currency-mapped country also has a DEST_TZ entry (needed for the jet-lag calculator)", () => {
-    for (const country of Object.keys(CURRENCIES)) {
-      expect(DEST_TZ, `missing DEST_TZ for ${country}`).toHaveProperty(country);
+  it("every country with a holiday COUNTRY_CODE also has a currency and an IANA time zone (single-source countries.mjs)", () => {
+    for (const country of Object.keys(COUNTRY_CODES)) {
+      expect(currencyFor(country), `missing currency for ${country}`).not.toBeNull();
+      expect(tzFor(country), `missing time zone for ${country}`).not.toBeNull();
     }
   });
 

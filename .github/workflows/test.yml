@@ -1,0 +1,24 @@
+name: Tests
+
+# Runs the Vitest suite on every PR (and on pushes to main) so a broken or
+# stale test blocks the merge instead of only surfacing later in the Pages
+# deploy. Deploy.yml also runs `npm test`, but only after a push to main.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
