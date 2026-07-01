@@ -1,5 +1,5 @@
 # Project State — Waypoint Travel Guides
-**Last updated:** 28 Jun 2026  
+**Last updated:** 1 Jul 2026  
 **Repo:** github.com/Carlob2499/Trip-Guides  
 **Live site:** carlob2499.github.io/Trip-Guides/  
 **Primary working directory:** C:\Users\carlo\OneDrive\Documents\GitHub  
@@ -263,10 +263,10 @@ Service worker (`public/sw.js`) is network-first for HTML (fresh content when on
 - [ ] Korea: add specific PC bang recommendation near Hongdae with address
 
 ### Medium term
-- [ ] **Live currency rates:** integrate Frankfurter API (free, no key, CORS-safe) to replace hardcoded ₩1,535 rate in Budget section. ~10 lines of client-side JS
-- [ ] **Weather widget:** integrate Open-Meteo API (free, no key, CORS-safe) for 14-day forecast strip on trip dates. Uses lat/lng already in the guide JSON's `map` sections
-- [ ] **Jet lag calculator:** self-contained Astro component (no external API needed). Inputs: home timezone, destination timezone, flight duration. Output: day-by-day sleep shift recommendation
-- [ ] **Fix CLAUDE.md:** update "hosted on Netlify" to "hosted on GitHub Pages" in the "What this project is" section
+- [x] **Live currency rates:** ✅ shipped — Frankfurter canonical rate service (Session 1). See §9.
+- [x] **Weather widget:** ✅ shipped — Open-Meteo strip, sliced to trip dates (Session 2). See §9.
+- [x] **Jet lag calculator:** ✅ shipped — in-house masthead panel, fixed UTC offsets (see DST caveat in §4). See §9.
+- [x] **Fix CLAUDE.md hosting text:** ✅ done (Phase 0) — Netlify → GitHub Pages.
 - [ ] **Germany and Portugal backbone audit:** add Where-to-eat with 4-question logistics, References section, verified budget estimates for each
 - [ ] **Korea visual hierarchy in food section:** either add a dedicated restaurant section type, or add bold name anchors at minimum
 

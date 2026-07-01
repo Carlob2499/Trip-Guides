@@ -87,8 +87,13 @@ rebuilds and updates itself automatically** — usually within a minute or two.
 Each section has a `type` and a `group` (the category it appears under in the
 navigation). The available types: `panel` (a reference card with an optional
 checklist), `prose` (a plain note), `list` (a checklist), `routes` (numbered
-directions), `map` (an interactive map), `days` (the day-by-day itinerary), and
-`sights` (photo cards). The example files show each one in use.
+directions), `map` (an interactive map), `days` (the day-by-day itinerary),
+`sights` (photo cards), `budget` (the cost calculator), `weather` (a live
+forecast strip — needs a `map` section in the same guide for coordinates),
+`holidays` (public holidays during the trip), and `raids` (Pokémon GO raid
+counter tables). The example files show each one in use — `guide-template.jsonc`
+covers the common "universal backbone" set; see `src/content.config.ts` for the
+full, authoritative list of fields each type accepts.
 
 ---
 
