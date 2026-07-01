@@ -3,7 +3,7 @@ import Block from "../components/Block.astro";
 import PwaHead from "../components/PwaHead.astro";
 import TripSplit from "../components/TripSplit.astro";
 import { bucket } from "../lib/buckets";
-import { accentFor, darken, currencyFor, DEST_TZ, COUNTRY_CODES } from "../lib/themes";
+import { accentFor, darken, currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
 import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
 import { collectWaypoints, collectDayEvents, buildSummary } from "../lib/exports";
 import "../styles/guide.css";
@@ -22,8 +22,9 @@ const storeKey = (guide.title || "guide").replace(/\W+/g, "").toLowerCase();
 const navLabel = (s: any, g: string) => s.title || s.name || g;
 const localCur = currencyFor(guide.country);
 
-// Destination UTC offset — sourced from themes.ts so adding a country only needs one file.
-const destTz = DEST_TZ[guide.country] ?? null;
+// Destination IANA time zone (e.g. "Asia/Seoul") — sourced from the country table.
+// The client uses Intl with this, so the local-time pill + jet-lag calc are DST-correct.
+const destTzIana = tzFor(guide.country);
 
 // Base path for the deploy (e.g. "/Trip-Guides" on GitHub Pages). Astro does not
 // auto-prepend the base to string/template hrefs, so home links build it explicitly.
@@ -253,7 +254,7 @@ const tripSummary = buildSummary(guide);
         <div id="wxWrap" class="wx-wrap" hidden><div id="wxMount"></div></div>
       )}
 
-      {destTz !== null && (
+      {destTzIana !== null && (
         <div class="jl-wrap">
           <button class="jl-toggle" id="jlToggle" type="button"
                   aria-expanded="false" aria-controls="jlPanel">
@@ -261,7 +262,7 @@ const tripSummary = buildSummary(guide);
             <span>Jet-lag calculator</span>
             <span class="jl-chev" aria-hidden="true">▾</span>
           </button>
-          <div id="jlPanel" hidden data-dest={String(destTz)}>
+          <div id="jlPanel" hidden data-dest-tz={destTzIana}>
             <div class="jl-inner">
               <div class="jl-row">
                 <label class="jl-label" for="jlOrigin">Flying&nbsp;from</label>
@@ -375,7 +376,7 @@ const tripSummary = buildSummary(guide);
            5. Budget calculators (live total, persisted per-device)
            6. Jet-lag calculator
          ═══════════════════════════════════════════════════════════════════ -->
-    <script define:vars={{ order, storeKey, mapCenter, firstDayDate, hasWeatherSection, destTzOffset: destTz, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, guideTitle: guide.title }}>
+    <script define:vars={{ order, storeKey, mapCenter, firstDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, guideTitle: guide.title }}>
       /* ── SHARED: SCROLL LOCK (used by both sheet and share modal) ─────── */
       var _lockCount = 0;
       function _lockScroll()   { if (++_lockCount === 1) document.body.classList.add("sheet-lock"); }
@@ -390,6 +391,20 @@ const tripSummary = buildSummary(guide);
           // weather window). 0-indexed (MONTHS[0] === "Jan"), matching Date's own
           // month numbering — sections needing a 1-indexed month use "+ 1".
           var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+          // DST-aware UTC offset (in hours) of an IANA zone at a given instant, via Intl.
+          // Returns null if the zone is unknown. Used by the local-time pill + jet-lag calc.
+          function tzOffsetHours(tz, date) {
+            if (!tz) return null;
+            try {
+              var f = new Intl.DateTimeFormat("en-US", { timeZone: tz, hour12: false,
+                year: "numeric", month: "2-digit", day: "2-digit",
+                hour: "2-digit", minute: "2-digit", second: "2-digit" });
+              var p = {}; f.formatToParts(date).forEach(function (x) { p[x.type] = x.value; });
+              var asUTC = Date.UTC(+p.year, +p.month - 1, +p.day, (+p.hour) % 24, +p.minute, +p.second);
+              return (asUTC - date.getTime()) / 3600000;
+            } catch (e) { return null; }
+          }
 
           /* ── TAB BAR ─────────────────────────────────────────────────── */
           var guideTabs  = document.getElementById("guideTabs");
@@ -736,8 +751,9 @@ const tripSummary = buildSummary(guide);
             var jlPanel = document.getElementById("jlPanel");
             if (!jlBtn || !jlPanel) return;
 
-            var destOffset = parseFloat(jlPanel.getAttribute("data-dest") || "");
-            if (isNaN(destOffset)) return;
+            // Destination offset computed from its IANA zone (DST-aware), not a fixed number.
+            var destOffset = tzOffsetHours(jlPanel.getAttribute("data-dest-tz"), new Date());
+            if (destOffset == null) return;
 
             // Toggle open / close
             jlBtn.addEventListener("click", function () {
@@ -851,20 +867,21 @@ const tripSummary = buildSummary(guide);
 
           /* ── 9. LOCAL TIME AT DESTINATION ───────────────────────────── */
           (function () {
-            if (destTzOffset == null) return;
+            if (!destTzIana) return;
             var statsEl = document.getElementById("guideStats");
             if (!statsEl) return;
+            // Format directly in the destination's IANA zone — DST is handled by Intl,
+            // so this is correct year-round (the old fixed-offset math was an hour off
+            // for European destinations in winter).
+            var fmt;
+            try {
+              fmt = new Intl.DateTimeFormat("en-GB", { timeZone: destTzIana, hour: "2-digit", minute: "2-digit", hour12: false });
+              fmt.format(new Date()); // probe: throws on an invalid zone
+            } catch (e) { return; }
             var pill = document.createElement("span");
             pill.className = "gstat gstat-time";
             pill.id = "localTimePill";
-            function tick() {
-              var now   = new Date();
-              var destMs = now.getTime() + now.getTimezoneOffset() * 60000 + destTzOffset * 3600000;
-              var d = new Date(destMs);
-              var hh = d.getHours().toString().padStart(2, "0");
-              var mm = d.getMinutes().toString().padStart(2, "0");
-              pill.textContent = "Local " + hh + ":" + mm;
-            }
+            function tick() { pill.textContent = "Local " + fmt.format(new Date()); }
             tick();
             statsEl.appendChild(pill);
             setInterval(tick, 60000);

@@ -1,0 +1,42 @@
+name: New guide
+description: Scaffold a new travel guide (structure + live weather/holiday/currency; facts added later by a research pass).
+title: "New guide: "
+labels: ["new-guide"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This files a **draft scaffold** — the standard guide structure with live weather,
+        holidays, and currency wired in for your country. It opens as a pull request for
+        review; a Claude Code research pass then fills the facts. Nothing here is verified
+        until that happens. The **Country** field is the only required one.
+  - type: input
+    id: country
+    attributes:
+      label: Country
+      description: Used to theme the guide and pull its currency, time zone, holidays, and a default map location.
+      placeholder: e.g. Brazil
+    validations:
+      required: true
+  - type: input
+    id: cities
+    attributes:
+      label: City / cities
+      placeholder: e.g. Rio de Janeiro, São Paulo
+  - type: input
+    id: dates
+    attributes:
+      label: Trip dates
+      description: Optional. Format "YYYY-MM-DD to YYYY-MM-DD" — drives the day-by-day cards and the weather/holiday window.
+      placeholder: 2026-03-01 to 2026-03-08
+  - type: input
+    id: who
+    attributes:
+      label: Who's going
+      placeholder: solo / couple / friends / family / mixed group
+  - type: input
+    id: priorities
+    attributes:
+      label: Top priorities
+      description: Comma-separated, most important first (e.g. Food & dining, Nature / outdoors).
+      placeholder: Food & dining, Culture / history, Nature / outdoors

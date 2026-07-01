@@ -1,0 +1,67 @@
+# ⚠ INERT / STAGED — NOT ACTIVE. This file lives under docs/ on purpose: GitHub only
+# runs workflows located directly in .github/workflows/, so nothing here executes and
+# no Claude API call can happen. It's the ready-to-go template for the AI research pass,
+# kept handy for real implementation later (see docs/research-pass/README.md).
+#
+# TO ACTIVATE (a deliberate, cost-incurring step — do NOT do this casually):
+#   1. Verify the `anthropics/claude-code-action` step below against its CURRENT README
+#      — pin a released version/SHA and correct the input names (see the ⚠ VERIFY notes).
+#      Do not trust the field names here from memory.
+#   2. Add repo secret ANTHROPIC_API_KEY (Settings → Secrets and variables → Actions).
+#      (Alternative: a Claude Max OAuth token, per the action's auth docs.)
+#   3. Move this file to .github/workflows/research-guide.yml and commit.
+#   4. Test with a `/research` comment on a throwaway scaffold PR and watch the usage.
+
+name: Research a Guide-to-be
+
+on:
+  issue_comment:
+    types: [created]
+
+# Least privilege: commit to the PR branch + comment back.
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  research:
+    # Owner/collaborator only, and only on a PR comment that starts with "/research".
+    # This is the cost + abuse gate — public comments never trigger a paid run.
+    if: >
+      github.event.issue.pull_request &&
+      startsWith(github.event.comment.body, '/research') &&
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the PR branch
+        uses: actions/checkout@v4
+        with:
+          # Resolve the PR's head branch from the comment event.
+          ref: refs/pull/${{ github.event.issue.number }}/head
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+
+      # ⚠ VERIFY EVERYTHING IN THIS STEP against the current anthropics/claude-code-action
+      # README before activating — action version, input names (prompt vs direct_prompt),
+      # allowed_tools syntax, model id, and how the API key is passed are all
+      # placeholders here and MUST NOT be trusted from memory.
+      - name: Claude Code research pass
+        uses: anthropics/claude-code-action@v1   # ⚠ VERIFY / pin a real released version or SHA
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}   # ⚠ VERIFY input name
+          # Feed it the committed prompt; it targets the guide named by this PR's branch.
+          prompt_file: .github/prompts/research-guide.md         # ⚠ VERIFY input name (may be `prompt`/`direct_prompt`)
+          # Bound cost — one pass, capped turns; web tools for verification + build.
+          max_turns: "40"                                        # ⚠ VERIFY input name
+          allowed_tools: "Read,Edit,Write,Bash(npm run build),WebSearch,WebFetch"  # ⚠ VERIFY syntax
+        env:
+          # The research prompt derives the slug from the PR head branch (new-guide/<slug>).
+          PR_BRANCH: ${{ github.head_ref }}
+
+      # NOTE: intentionally NO merge and NO removal of `draft` — a human graduates the
+      # guide after review. The action commits to the PR branch; the owner reviews there.

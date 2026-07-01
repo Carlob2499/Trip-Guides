@@ -78,7 +78,7 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 .sticky-chrome{position:sticky;top:0;z-index:50;background:var(--bg)}
 
 /* === GUIDE TAB BAR ========================================================== */
-.guide-tabs{display:flex;overflow-x:auto;overscroll-behavior-x:contain;max-width:100%;scrollbar-width:none;background:var(--bg);border-bottom:1px solid var(--rule);padding:0 .6rem}
+.guide-tabs{display:flex;overflow-x:auto;overflow-y:hidden;touch-action:pan-x;overscroll-behavior-x:contain;max-width:100%;scrollbar-width:none;background:var(--bg);border-bottom:1px solid var(--rule);padding:0 .6rem}
 .guide-tabs::-webkit-scrollbar{display:none}
 .gtab{flex:none;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;padding:.48rem .82rem;font-family:'Space Grotesk',-apple-system,system-ui,sans-serif;font-size:.8rem;font-weight:500;color:var(--muted);cursor:pointer;white-space:nowrap;transition:color .14s,border-color .14s;line-height:1.25;user-select:none}
 .gtab:hover{color:var(--ink);border-bottom-color:var(--rule2)}
@@ -94,7 +94,6 @@ html{scroll-padding-top:94px}
 
 /* sidebar nav is gone — tabs replace it; .sidenav hidden everywhere */
 .sidenav{display:none!important}
-.navcat,.navlink,.navsub{display:none!important}
 
 /* === CONTENT ================================================================= */
 .content{min-width:0;padding:1.2rem 0 3rem}
@@ -204,7 +203,7 @@ footer{border-top:1px solid var(--ink);text-align:center;padding:1.7rem 1.1rem;c
 }
 
 /* === TYPOGRAPHY POLISH ======================================================= */
-h1,h2,h3,h4,.block-title,.cat-title,.sight-name,.item .name,.sheet-head,.req-card .rc-name{font-weight:600;letter-spacing:-0.012em}
+h1,h2,h3,h4,.block-title,.cat-title,.sight-name,.item .name,.sheet-head{font-weight:600;letter-spacing:-0.012em}
 img{max-width:100%}
 iframe{max-width:100%}
 .content,.block,.card,.catblock,.day,.day .b{min-width:0}
@@ -449,7 +448,7 @@ details table{margin:.3rem 0 .4rem}
 
   /* Print external link URLs inline */
   a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 8pt; color: #555; word-break: break-all; }
-  a.topbar-home::after, a.botHome::after, a.navcat::after, a.navlink::after, a.sheet-link::after, a.sheet-cat::after { content: none !important; }
+  a.topbar-home::after, a.botHome::after, a.sheet-link::after, a.sheet-cat::after { content: none !important; }
 
   /* Masthead */
   .masthead { padding: 0 0 .7rem; border-bottom: 1.5pt solid #111; text-align: left; }

@@ -63,7 +63,19 @@ rebuilds and updates itself automatically** — usually within a minute or two.
 
 ---
 
-## How to add a new destination
+## Start a new guide (the quick way)
+
+On the home page, click **"＋ Make a new guide."** Enter a country (and, optionally,
+cities, dates, who's going, and priorities) and it opens a pre-filled GitHub issue.
+Submitting it runs an automation that commits a **draft scaffold** — the standard guide
+structure with live weather, public-holiday, and currency data already wired in for that
+country — and opens it as a pull request. The draft appears under **"Guides-to-be"** on
+the home page; a later research pass fills the facts (per CLAUDE.md) and, once verified,
+it graduates to the main grid. Works for **any** country. *(No setup needed — the
+`new-guide` label the automation relies on is created automatically by the
+`ensure-labels` workflow.)*
+
+## How to add a new destination by hand
 
 1. Copy an existing guide file — `src/content/guides/denmark.json` is the best
    example — and rename it, e.g. `portugal.json`. The file name becomes the web
@@ -87,8 +99,13 @@ rebuilds and updates itself automatically** — usually within a minute or two.
 Each section has a `type` and a `group` (the category it appears under in the
 navigation). The available types: `panel` (a reference card with an optional
 checklist), `prose` (a plain note), `list` (a checklist), `routes` (numbered
-directions), `map` (an interactive map), `days` (the day-by-day itinerary), and
-`sights` (photo cards). The example files show each one in use.
+directions), `map` (an interactive map), `days` (the day-by-day itinerary),
+`sights` (photo cards), `budget` (the cost calculator), `weather` (a live
+forecast strip — needs a `map` section in the same guide for coordinates),
+`holidays` (public holidays during the trip), and `raids` (Pokémon GO raid
+counter tables). The example files show each one in use — `guide-template.jsonc`
+covers the common "universal backbone" set; see `src/content.config.ts` for the
+full, authoritative list of fields each type accepts.
 
 ---
 
