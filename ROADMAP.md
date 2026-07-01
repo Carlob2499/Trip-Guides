@@ -227,39 +227,29 @@ link appears in the UI and confirm the build produces the files in dist/.
 
 ---
 
-## Phase 3 — Group Features
+## Phase 3 — Authoring platform
 
-### Session 5 — Shared checklist via URL **[PLAN FIRST]**
-*Status: ☐ Not started · First real state-management complexity — own slot*
+### Session 5 — Shared checklist via URL — *SCRAPPED*
+*Replaced by Session 6. The owner scrapped the shared-checklist idea; the checklist
+progress bar it would have extended was itself removed in Session 4.*
 
-- [ ] Plan approved (encoding, restore flow, stale-URL handling)
-- [ ] Checklist state encodes into a shareable URL
-- [ ] Restore-on-open works; merges sanely with local state
-- [ ] UI text makes clear this is a snapshot, NOT live sync
-- [ ] Extends existing "copy progress" button rather than rebuilding
-- [ ] Build passes, committed
+### Session 6 — "Make a new Guide" + Guides-to-be tier
+*Status: ✅ Shipped · Template-first; AI research is a later Claude Code pass, not in-site*
 
-<details><summary>Prompt</summary>
+- [x] Mobile tab-bar scrolls horizontally only (fixed the both-axes drag)
+- [x] Single-source country table (`src/data/countries.mjs`) — accent/currency/IANA
+      tz/ISO code/capital for ~60 countries; DST bug fixed (fixed offsets → Intl)
+- [x] `draft` schema flag + "Guides-to-be" secondary tier on the home page
+- [x] Japan/Germany/Portugal stripped to the standard template + moved to drafts
+- [x] Deterministic scaffold generator (`scripts/scaffold-guide.mjs`) — backbone with
+      **API sections pre-wired** (map+weather+holidays) so live data shows immediately
+- [x] "Make a new guide" button + quick-start modal on the home page
+- [x] GitHub Issue Form → Action → PR (semi-automatic commit; owner merges, never auto)
+- [x] Build passes, browser-verified, committed
 
-```
-The checklist state is currently localStorage, per-device, so group
-members don't share progress. I want a no-backend shared-state feature:
-encode the current checklist state into a URL that can be shared (via the
-existing WhatsApp button), and when someone opens that URL, their guide
-restores to that state.
-
-This is more complex than the API work — plan thoroughly and wait. Address:
-- How state is encoded compactly into a URL hash (it could be large)
-- The restore-on-load flow and how it merges with any existing local state
-- What happens with an old/stale shared URL
-- That this is a share-snapshot, NOT live sync — be clear about that
-  limitation in any UI text
-- Whether the existing "copy progress" button already does part of this
-  and can be extended rather than rebuilt
-
-Do not over-engineer. No backend, no library unless you justify it.
-```
-</details>
+**Follow-up (next session):** wire the deferred **AI research pass** — have the Action
+(or a companion workflow) invoke Claude Code on the new-guide PR to research + fill the
+scaffold per CLAUDE.md, 2–3 passes to Korea/Denmark polish, then drop `draft`.
 
 ---
 
@@ -295,6 +285,7 @@ Claude Code.*
 
 | Date | Session | Outcome | Notes / follow-ups |
 |------|---------|---------|--------------------|
+| 1 Jul 2026 | Session 6 — "Make a new Guide" + Guides-to-be | ✅ Shipped; build clean, browser-verified both viewports | **Tab fix:** `.guide-tabs` had `overflow-x:auto` + default `overflow-y:visible` (computes to auto) + `.gtab` `margin-bottom:-1px` → a 1px vertical scroll region; added `overflow-y:hidden`+`touch-action:pan-x` → horizontal-only. **Country data:** new `src/data/countries.mjs` (plain ESM, imported by both TS and the Node scripts) is the single source for accent/currency/IANA-tz/ISO/capital across ~60 countries; removed the duplicate COUNTRY_CODES map in fetch-holidays.mjs; **fixed the DST bug** — local-time pill + jet-lag now use IANA tz + `Intl` (was fixed offsets, an hour off in European winter). Rates NOT tabled per country (perishable) — live Frankfurter remains the source; only the 4 pre-existing fallbacks kept. **Guides-to-be tier:** `draft?:boolean` schema flag; `index.astro` splits curated (Korea+Denmark) from a secondary drafts grid. **Stripped** Japan/Germany/Portugal to the standard 16-section template (identity + real coords only; old content recoverable via git) → first occupants of the tier. **Scaffold generator** `scripts/scaffold-guide.mjs` (pure Node) emits a backbone guide (empty cards/checklists + budget) with **map+weather+holidays pre-wired** (coords from creator or the country's capital) + a filled `guides-intake/<slug>.md`. **Button:** home-page "Make a new guide" modal → prefilled GitHub Issue-Form URL. **Action:** `.github/workflows/new-guide.yml` parses the issue (`scripts/issue-to-scaffold.mjs`, no third-party actions), scaffolds, opens a PR (never auto-merges), closes the issue. **Requires:** a repo label `new-guide` to exist (the issue form auto-applies it). **Follow-up:** the deferred AI research pass (Claude Code on the PR); the draft `verified` stamp renders in the green "verified" pill (minor visual mismatch, pre-existing pattern). Replaces scrapped Session 5. |
 | 30 Jun 2026 | Technical-debt pass (whole repo) | ✅ Dead code/config cleaned; build clean, dist/ verified, browser-tested both viewports | Three parallel audits (client JS, CSS, components/lib/scripts/config) then fixes, each independently re-verified before applying. **Real bugs fixed:** `public/sw.js`'s offline fallback `caches.match("/")` could never match anything (SW scope is `/Trip-Guides/`, never bare `/`) — now matches `BASE + "/"`, restoring the last-resort offline fallback. **Dead code removed:** `updateCount()` in GuideLayout.astro was an orphaned wrapper (its `#progCount` target no longer exists post-Session-4) — calls now go straight to `updateDayCounts()`; a stale `flash("...use Copy progress")` message referencing the removed button. **Consolidated:** 3 separate month-name lookup tables (array + two differently-indexed objects) into one shared `MONTHS` array; duplicate `.pace` CSS rule merged; `flatSecs()` in index.astro replaced with the existing `flattenSections()` from lib/exports.ts. **Stale values fixed:** TripSplit.astro's KRW fallback default (1380 → 1535, matching themes.ts; was unreachable in practice since the real rate is always passed, but misleading). **Dependency hygiene:** `sharp` (used directly by `og/[slug].png.ts`) was an undeclared phantom dependency, only present because npm hoists it from Astro's own deps — added as an explicit direct dependency so it can't silently disappear on a different package manager or Astro version. **API-surface accuracy:** dropped unnecessary `export` from 3 internal-only helpers (`THEMES`, `DEFAULT_ACCENT`, `htmlToText`) that nothing outside their own file imports. **Repo hygiene:** removed the tracked `trip-guides-site.zip` (85 KB, dated 5 Jun — predates the GitHub Pages migration and every content session since; unreferenced by any build/CI step); `PUBLISHING.md` updated so it no longer points at a now-deleted file; `.gitignore` now excludes `*.zip`. **Resolved an old open question:** `wrangler.jsonc` (flagged "decide delete vs keep" after Phase 0) — kept; its own comment explains it's a deliberate guard against an Astro-CLI auto-adapter bug, explicitly harmless on every host. **Docs fixed:** Project_State.md's SW cache-version note was stale (said v3, code is v4); also fixed a self-inflicted table-corruption bug from the prior session's edit, where the Session 4 log row had absorbed Session 3's row into one malformed cell — split back into two correct rows. **Found but explicitly NOT fixed (flagged, not actioned):** `npm audit` reports a high-severity Astro XSS/SSRF advisory with no fix available within the current `^6.4.4` range (only Astro 7 resolves it) — a major-version upgrade is a real decision, not a cleanup, left for the owner; `astro check` (run for the first time ever on this repo, transiently, not added as a dependency) surfaces ~66 pre-existing type-strictness gaps (missing `@types/node`, implicit `any` in older vanilla-JS blocks) across files untouched today — retrofitting strict typing repo-wide is a different, much larger initiative than bloat removal and was left alone to avoid regression risk for no user-facing benefit. |
 | 30 Jun 2026 | Session 4 — GPX + iCal exports (+ owner add-ons) | ✅ Exports shipped + share/UX cleanup; build clean, dist/ verified, browser-tested | Build-time static endpoints `src/pages/guides/[slug].gpx.ts` + `.ics.ts` (mirror the `og/[slug].png.ts` precedent), pure helpers in `src/lib/exports.ts` (reuses `parseGuideDate`/`deriveTripYear`). GPX = map centers + sights coords; iCal = all-day VEVENTs (days schema has no times), CRLF, 75-octet fold, stable UID. `getStaticPaths` filtered → guides without data get no file/link (germany/portugal use "Day N" labels → no .ics, by design). Real-import verified via node-ical + @tmcw/togeojson. **Owner add-ons same session:** Share-summary button (theme + planned + key spots; native share / clipboard); removed the **PDF button** (was `window.print()` only) and the **top checklist progress bar** (Copy/Restore/Clear) — `flash()` feedback relocated to a fixed toast; **mobile horizontal-scroll fixed** (`overflow-x:clip` on html+body, tab bar `overscroll-behavior-x:contain`+`max-width:100%`) — verified 0 page h-scroll across all 6 pages @390px. **Behavior change:** Share button now always opens the modal (was bypassing it via native share on mobile, which hid the downloads/summary). **Watch-item:** Share modal now carries link + QR + socials + summary + downloads — fine now; section it (Share vs Export) if it grows. **Follow-up:** denmark.json `Kastellet` (55.6909,12.5945) vs `CopenHill` (55.6916,12.5970) sit 175 m apart but aren't adjacent landmarks — likely a wrong coordinate; verify against a primary source (stacked GPX pins until fixed). |
 | 30 Jun 2026 | Session 3 — Public holidays (Nager.Date) | ✅ Build-time holiday integration shipped; build clean, dist/ verified | Chose build-time (not browser fetch) — holidays are fixed for the year, so committed JSON + CI refresh beats a per-load fetch; works offline, no client JS, no runtime failure mode. `COUNTRY_CODES` in themes.ts; `src/lib/holidays.ts` for slicing; `scripts/fetch-holidays.mjs` for CI/local fetch. Three block states: holiday during trip (alert + closure flag), clear ("✓ normal hours"), adjacent (±3-day shoulder). Korea: clear + Constitution Day 2 days after; Denmark: clear + Grundlovsdag 3 days before. Block hides only on genuine data-unavailability. `tg:holidays` event deferred — no consumer yet. |

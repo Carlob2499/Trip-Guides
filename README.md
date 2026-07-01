@@ -63,7 +63,18 @@ rebuilds and updates itself automatically** — usually within a minute or two.
 
 ---
 
-## How to add a new destination
+## Start a new guide (the quick way)
+
+On the home page, click **"＋ Make a new guide."** Enter a country (and, optionally,
+cities, dates, who's going, and priorities) and it opens a pre-filled GitHub issue.
+Submitting it runs an automation that commits a **draft scaffold** — the standard guide
+structure with live weather, public-holiday, and currency data already wired in for that
+country — and opens it as a pull request. The draft appears under **"Guides-to-be"** on
+the home page; a later research pass fills the facts (per CLAUDE.md) and, once verified,
+it graduates to the main grid. Works for **any** country. *(Setup note: the repo needs a
+label named `new-guide` — the issue form applies it automatically.)*
+
+## How to add a new destination by hand
 
 1. Copy an existing guide file — `src/content/guides/denmark.json` is the best
    example — and rename it, e.g. `portugal.json`. The file name becomes the web

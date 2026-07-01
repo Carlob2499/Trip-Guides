@@ -76,7 +76,7 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 .sticky-chrome{position:sticky;top:0;z-index:50;background:var(--bg)}
 
 /* === GUIDE TAB BAR ========================================================== */
-.guide-tabs{display:flex;overflow-x:auto;overscroll-behavior-x:contain;max-width:100%;scrollbar-width:none;background:var(--bg);border-bottom:1px solid var(--rule);padding:0 .6rem}
+.guide-tabs{display:flex;overflow-x:auto;overflow-y:hidden;touch-action:pan-x;overscroll-behavior-x:contain;max-width:100%;scrollbar-width:none;background:var(--bg);border-bottom:1px solid var(--rule);padding:0 .6rem}
 .guide-tabs::-webkit-scrollbar{display:none}
 .gtab{flex:none;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;padding:.48rem .82rem;font-family:'Space Grotesk',-apple-system,system-ui,sans-serif;font-size:.8rem;font-weight:500;color:var(--muted);cursor:pointer;white-space:nowrap;transition:color .14s,border-color .14s;line-height:1.25;user-select:none}
 .gtab:hover{color:var(--ink);border-bottom-color:var(--rule2)}

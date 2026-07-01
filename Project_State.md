@@ -53,12 +53,15 @@ src/
       RaidBlock.astro    — Pokémon GO raid boss counter tables (added Jun 2026)
   layouts/
     GuideLayout.astro    — page frame, sticky topbar, section tab bar, sidebar/mobile sheet nav, all client scripts
+  data/
+    countries.mjs        — SINGLE SOURCE of per-country data (accent, currency, IANA tz, ISO code, capital coords) for ~60 countries. Plain ESM so both the TS site AND the Node scripts import it. ADD NEW COUNTRIES HERE.
+    holidays/            — build-time public-holiday JSON (written by scripts/fetch-holidays.mjs)
   lib/
-    themes.ts            — country → accent colour AND DEST_TZ (timezone offset) AND CURRENCIES. Single source for all three. Add new countries here.
+    themes.ts            — thin typed accessors over data/countries.mjs (accentFor, currencyFor, tzFor, darken, COUNTRY_CODES). No data lives here anymore.
     buckets.ts           — groups sections into nav categories
     exports.ts           — build-time export helpers (pure): collectWaypoints, collectDayEvents, buildGpx, buildIcs, buildSummary. Used by the export endpoints + GuideLayout's Share modal.
   pages/
-    index.astro          — home page, auto-lists all guides
+    index.astro          — home page: curated grid + "Guides-to-be" draft tier + "Make a new guide" modal
     guides/[slug].astro  — dynamic route, one page per guide JSON
     guides/[slug].gpx.ts — build-time GPX export endpoint (map + sights coords) → dist/guides/<slug>.gpx
     guides/[slug].ics.ts — build-time iCal export endpoint (all-day day cards) → dist/guides/<slug>.ics
@@ -236,6 +239,28 @@ There is no build-time PDF renderer. "Save as PDF" was the browser's own
 Session 4). The print stylesheet remains, so Ctrl+P / the mobile share-sheet print
 still produces the clean print layout. A true build-time PDF would need a headless
 renderer (e.g. Playwright driving the print CSS) added to CI — not built.
+
+### Country data is single-source (Session 6)
+`src/data/countries.mjs` is the one place per-country facts live (accent, currency,
+IANA time zone, ISO code, capital coords) — imported by both `src/lib/themes.ts` and
+the plain-Node scripts (no more duplicated COUNTRY_CODES). Time is now IANA + `Intl`,
+so the local-time pill and jet-lag calc are DST-correct (the old fixed offsets were an
+hour wrong in European winter). Exchange **rates are deliberately not tabled** per
+country — they're perishable; the live Frankfurter service is the source, with only the
+four pre-existing rough fallbacks kept.
+
+### "Make a new Guide" + Guides-to-be tier (Session 6)
+Any country can be scaffolded from the home-page **"Make a new guide"** button. It
+opens a pre-filled GitHub Issue Form; the `new-guide` workflow parses it
+(`scripts/issue-to-scaffold.mjs` → `scripts/scaffold-guide.mjs`, no third-party
+actions), commits a **draft** guide (`draft: true`) + a filled `guides-intake/<slug>.md`,
+and opens a PR (never auto-merged — the owner's review is the moderation gate). Drafts
+list in a secondary **"Guides-to-be"** grid on the home page. The scaffold ships the
+API-driven sections (map + weather + holidays) pre-wired so live data shows immediately;
+content sections are empty until a Claude Code research pass fills them per CLAUDE.md.
+**Japan/Germany/Portugal were stripped to this template** (unverified content cleared —
+recoverable via git history) as the tier's first occupants. Deferred: the automatic
+Claude research pass on the PR.
 
 ### Why base-path hrefs must be explicit
 Astro auto-rewrites `<img src="...">` and asset references when `base` is set, but does NOT rewrite `href` attributes written as string literals or template literals in `.astro` files. Every navigational href that starts with `/` must be prefixed with `import.meta.env.BASE_URL` (or a `base` variable derived from it). This was learned the hard way when all country links 404'd after the GitHub Pages migration.

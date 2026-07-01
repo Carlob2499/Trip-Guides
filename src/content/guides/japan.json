@@ -1,378 +1,127 @@
 {
-  "kicker": "Autumn 2026",
+  "kicker": "Field guide",
   "title": "Japan",
-  "dek": "Two weeks through southern Japan — Fukuoka's ramen alleys and yatai stalls, Beppu's volcanic onsen, Yufuin's ryokans in mountain mist, Nagasaki's layered history, and Hiroshima's Miyajima island. The side of Japan first-timers never plan — and always wish they had.",
-  "footer": "Location photos via Wikimedia Commons — tap any credit for its source, author and license.",
+  "dek": "",
   "country": "Japan",
-  "verified": "⚠ Simulated draft — hotels and flights below are realistic proposals, not confirmed reservations. Verify and book each independently.",
+  "draft": true,
+  "verified": "⚠ Draft scaffold — nothing here is researched or verified yet. This is a starting skeleton; every price, hour, address and fact must be added and checked against a primary source before use (see the intake spec + CLAUDE.md).",
+  "footer": "",
   "sections": [
     {
       "type": "panel",
       "group": "Plan",
-      "title": "Before you fly — final checks",
-      "body": "<p>Run this list 48 hours before departure. The ryokan and rail reservations are the most time-sensitive items to reconfirm.</p>",
-      "checklist": [
-        "ANA NH110 EWR→NRT: recheck flight status and seat assignment at ana.co.jp",
-        "ANA NH249 NRT→FUK: confirm departure time and gate at NRT T3",
-        "Ryokan Tamanoyu (Oct 29): call or email to reconfirm; verify kashikiri-buro is on the booking",
-        "Iwaso ryokan Miyajima (Nov 3): call or email to reconfirm; verify kashikiri-buro is on the booking",
-        "Yufuin no Mori reserved seat (Oct 30): recheck seat booking reference at JR Kyushu website",
-        "Hiroshima Peace Memorial Museum: check current opening hours at hiro-tsuitokinenkan.jp/en",
-        "Miyajima tide tables for Nov 3 at visit-miyajima.or.jp — plan shrine visit around high tide window",
-        "JR Kyushu Rail Pass: download pass PDF or confirm QR presentation method before travel",
-        "JMA weather forecast (jma.go.jp) for Fukuoka, Beppu, and Hiroshima for the week of Oct 24",
-        "Visit Japan Web: complete registration and download QR codes offline before the flight",
-        "Carry-on essentials: passport (valid 6+ months), insurance card, ¥50,000 cash per person, all chargers"
-      ]
+      "title": "When you land",
+      "body": ""
     },
     {
       "type": "panel",
       "group": "Plan",
-      "title": "The trip at a glance",
-      "body": "<p>This is a 14-night loop through <b>southern Japan</b>, using Fukuoka as the home base. It covers every experience that makes the classic Tokyo–Kyoto route famous — shrines, ryokans, onsen, street food, solemn history, and an iconic water view — without going near those cities. Late October into early November is the best two-week window in Japan: typhoon season is effectively over, humidity is gone, and the first highland autumn colour is beginning.</p><p>The route: <b>Fukuoka</b> (food, yatai, Hakata ramen) → <b>Dazaifu</b> day trip (ancient shrine city) → <b>Yanagawa</b> day trip (canal punting, eel rice) → <b>Beppu</b> (volcanic hells, onsen) → <b>Yufuin</b> (one ryokan night in the mountains) → <b>Nagasaki</b> (WWII history, Dutch trading post, champon) → <b>Hiroshima</b> (Peace Museum, okonomiyaki) → <b>Miyajima</b> (the floating torii, overnight on the island) → <b>back to Fukuoka</b> to fly home.</p>",
-      "checklist": [
-        "Fukuoka — 5 nights (base city, food focus)",
-        "Beppu — 1 night (onsen, hells tour)",
-        "Yufuin — 1 night (ryokan, mountain village)",
-        "Nagasaki — 2 nights (history, Dejima, champon)",
-        "Hiroshima — 1 night (Peace Museum, okonomiyaki)",
-        "Miyajima — 1 night (floating torii, overnight on the island)",
-        "Fukuoka return — 2 nights (wind down, last ramen, depart)"
-      ]
-    },
-    {
-      "type": "panel",
-      "group": "Plan",
-      "title": "Best & worst case scenarios",
-      "body": "<p><b>Weather — Best:</b> clear skies, 18–24°C, low humidity, first highland koyo (autumn colour) starting in Yufuin and the Aso highlands in late October. Kyushu's driest, most comfortable month. <b>Worst:</b> a late straggler typhoon hits the first week (rare past Oct 20 but possible); or a persistent November rain front arrives early. Check JMA 10-day forecasts before you fly.</p><p><b>Flights &amp; points — Best:</b> ANA business class booked 11 months out using United MileagePlus miles (~70–80k per person EWR→NRT one-way), or JAL with American AAdvantage; direct EWR→NRT, then domestic connection to FUK. <b>Worst:</b> award space long gone, last-minute economy from $1,300+, routing through two hubs with a redeye connection.</p><p><b>Ryokan availability — Best:</b> Yufuin and Miyajima inns booked 4–5 months out (May–June booking window), with private onsen rooms at both. <b>Worst:</b> October is domestic Japanese foliage season — popular Yufuin properties sell out by July; fallback is a good business hotel in Yufuin town, less atmospheric but still fine.</p><p><b>Jet lag — Best:</b> depart EWR Thursday evening ~Oct 22, arrive Fukuoka Saturday Oct 24 afternoon (your birthday in Japan); outdoor afternoon light, eat at Japanese time, asleep by 23:00 JST. Adapted by Day 3. <b>Worst:</b> red-eye routing via multiple hubs with a 5–6am Fukuoka arrival; disoriented for 4–5 days.</p>"
+      "title": "Local essentials",
+      "body": ""
     },
     {
       "type": "panel",
       "group": "Plan",
       "title": "Entry & documents",
-      "body": "<p>US citizens: <b>no visa needed</b> for stays up to 90 days. No eTA or pre-approval form required for US passport holders (verify closer to October 2026 — Japan has discussed a future eTA system but had not launched one as of mid-2026). Register on <b>Visit Japan Web</b> before departure to get QR codes that speed up immigration and customs declaration.</p>",
-      "checklist": [
-        "Passport valid for the duration of the trip",
-        "Register on Visit Japan Web (vjw-lp.digital.go.jp) before flying — free, speeds up customs",
-        "Download QR codes offline before the flight in case of poor airport Wi-Fi",
-        "No visa, no eTA required for US citizens — ⚠ re-verify closer to Oct 2026",
-        "US plug (Type A) works directly in Japan — no adapter needed; 100V is safe for all modern chargers",
-        "International driving permit only if renting a car (not needed for this city-to-city route)"
-      ]
-    },
-    {
-      "type": "panel",
-      "group": "Plan",
-      "title": "When you land — Fukuoka",
-      "body": "<p>FUK International Terminal to the hotel is under 30 minutes. Do these steps in order on arrival day.</p>",
-      "checklist": [
-        "Clear customs with Visit Japan Web QR — follow 訪日外国人 (foreign visitor) signs",
-        "Subway: 地下鉄 signs inside the terminal → Kuko line direction Hakata, 5 stops, 5 min, ¥260 on IC card",
-        "7-Eleven ATM at Hakata Station south passage — ¥50,000 per person in cash",
-        "IC card: load Suica (Apple Wallet) or buy Nimoca at the Hakata Station IC card machine near the gates",
-        "JR midori-no-madoguchi (green ticket window, main concourse): reserve Sonic to Beppu (Oct 28), Kamome to Nagasaki (Oct 31), Yufuin no Mori (Oct 30) — do this on arrival day or first thing Oct 25",
-        "Walk ~8 min south from Hakata Station to Dormy Inn PREMIUM Hakata Chuou (Naka Ward)",
-        "Rooftop hot spring open from 15:00 — no tattoo restriction on this facility",
-        "Resist sleep until 22:00 JST — this is the most important jet lag action of the trip"
-      ]
-    },
-    {
-      "type": "panel",
-      "group": "Plan",
-      "title": "Booking checklist — time-sensitive items",
-      "body": "<p>Japan rewards early planners. For this Oct 22–Nov 6 trip, the two critical windows: <b>by Apr 15, 2026</b> for ryokans in Yufuin (Ryokan Tamanoyu) and Miyajima (Iwaso) — October is peak domestic foliage season and good properties sell by July; <b>1–3 months out</b> for the Yufuin no Mori scenic train reserved seat. Everything else can wait until 4–6 weeks before departure.</p>",
-      "checklist": [
-        "Flights (simulated): ANA NH110 EWR→NRT at 23:05 EDT Oct 22 + NH249 NRT→FUK at 09:00 JST Oct 24 — check ANA award availability via United MileagePlus or AA AAdvantage",
-        "Fukuoka (7 nights, Oct 24–30 + Nov 4–6): Dormy Inn PREMIUM Hakata Chuou — dormyinn.com ⚠ verify availability and book",
-        "Beppu (1 night, Oct 28): Onyado Nono Beppu Natural Hot Spring (Dormy Inn group) — dormyinn.com ⚠ verify and book; ask about kashikiri-buro",
-        "Yufuin ryokan (1 night, Oct 29): Ryokan Tamanoyu — book by Apr 15, 2026 (October foliage sells out by July); confirm kashikiri-buro; email tattoo query before deposit",
-        "Nagasaki (2 nights, Oct 31–Nov 1): JR Kyushu Hotel Nagasaki (exits directly from Nagasaki Station) — jrk-hotels.co.jp ⚠ verify and book",
-        "Hiroshima (1 night, Nov 2): Dormy Inn Hiroshima — dormyinn.com ⚠ verify and book",
-        "Miyajima ryokan (1 night, Nov 3): Iwaso (operating since 1854, near the shrine) — book by Apr 15, 2026; confirm kashikiri-buro; email tattoo query before deposit",
-        "Yufuin no Mori scenic train (Oct 30, Yufuin→Hakata): reserve at JR Kyushu website 1–3 months out — limited reserved seats",
-        "JR Kyushu Rail Pass (Northern Kyushu 5-day): purchase before arriving in Japan — english.jrkyushu.co.jp ⚠ verify current price",
-        "Travel insurance: trip interruption + medical coverage",
-        "Pre-confirm tattoo policy at both ryokans by email before any deposit — request kashikiri-buro"
-      ]
-    },
-    {
-      "type": "panel",
-      "group": "Plan",
-      "title": "Pre-trip countdown — actions by date",
-      "body": "<p>Time-sensitive. Set calendar reminders now. The ryokan windows are the most unforgiving — October Yufuin sells out by July.</p>",
-      "checklist": [
-        "Now: check ANA NH110 EWR→NRT (Oct 22) + NH249 NRT→FUK (Oct 24) award availability — United MileagePlus for ANA, or AA AAdvantage for JAL",
-        "By Apr 15, 2026: book Ryokan Tamanoyu (Yufuin, Oct 29) — confirm kashikiri-buro; email tattoo query before any deposit",
-        "By Apr 15, 2026: book Iwaso ryokan (Miyajima, Nov 3) — same process",
-        "By Apr 15, 2026: reserve Yufuin no Mori scenic train (Oct 30, Yufuin→Hakata) — limited reserved seats",
-        "By Jul 1, 2026: buy JR Kyushu Northern Kyushu Rail Pass (must purchase before arriving in Japan); book Fukuoka, Beppu, Nagasaki, Hiroshima hotels",
-        "By Sep 15, 2026: buy travel insurance; activate eSIM or confirm carrier plan; add Suica to Apple Wallet",
-        "Oct 15 (1 week out): download offline maps (Fukuoka, Nagasaki, Hiroshima, Miyajima); download Google Translate Japanese offline pack",
-        "Oct 19 (3 days before): start jet lag clock — shift bedtime 1 hour earlier; complete Visit Japan Web; download QR codes offline",
-        "Oct 21 (night before): final pack; weigh bags; all devices charged; ¥ cash in carry-on",
-        "Oct 22: depart EWR — ANA NH110 at 23:05 EDT"
-      ]
-    },
-    {
-      "type": "list",
-      "group": "Plan",
-      "title": "Packing checklist",
-      "items": [
-        "Walking shoes already broken in — not brand-new. Japan days run 15,000–20,000 steps on stone and uneven temple paths.",
-        "Structured insoles (Powerstep Pinnacle or Superfeet Carbon) — prevents the foot pain that ends day 10 early.",
-        "Slip-on sandals or flip-flops — for ryokan common areas, onsen corridors, and any beach access.",
-        "Layers for evenings — Yufuin (500m altitude) and early Miyajima mornings are 10–12°C in late October.",
-        "Compact folding umbrella — buy one at any 7-Eleven on arrival if you forget (≈¥1,000).",
-        "Portable charger, 10,000 mAh minimum — Google Maps, Translate camera, and your camera run all day. Available at airport convenience stores for ≈¥3,000–4,000 if needed.",
-        "Small crossbody bag or day pack — for konbini runs, souvenir overflow, and carrying a layer.",
-        "Ziploc bags — for packing mentaiko, castella, and any liquids in checked luggage on the way home.",
-        "Cash envelope or card holder — Japanese cash etiquette means presenting bills neatly. Don't pull crumpled notes from your pocket.",
-        "Printed or phone-saved card in Japanese for tattoo situations: 「タトゥーがあるため貸切風呂をお願いしたいのですが」— faster than typing in Translate when you're standing in a ryokan lobby."
-      ]
-    },
-    {
-      "type": "panel",
-      "group": "Plan",
-      "title": "Jet lag — EWR to Japan",
-      "body": "<p>Japan is <b>13 hours ahead of EDT</b> (14 ahead of EST after clocks fall back Nov 1). The body adapts to a 13-hour east jump more easily when treated as an <b>11-hour westward delay</b> — delaying your internal clock is biologically easier than advancing it for most people.</p><p><b>Protocol:</b> push your bedtime 1–2 hours later than usual the night before departure. On the overnight flight, aim to sleep 6–8 hours of the middle portion. Land in Japan in the mid-afternoon JST if your routing allows, get outside in natural light immediately, eat a real dinner at ~19:00 JST, and push through until 22:00–23:00. Most travelers are on Japanese time by Day 3. <b>The trap to avoid:</b> a 5–6am Fukuoka arrival. You'll have the whole day but you'll be wrecked — take a 2-hour nap maximum, then stay active until 22:00.</p>"
+      "body": ""
     },
     {
       "type": "panel",
       "group": "Plan",
       "title": "Phone & data",
-      "body": "<p>Japan has excellent LTE and 5G coverage. Best option: <b>eSIM</b> from IIJmio, Ubigi, or Airalo — buy and activate before departure; ~$20–30 for 15GB over 15 days, far cheaper than carrier day passes. Or use Verizon/AT&T international day pass (~$12/day per line). <b>Pocket Wi-Fi rental</b> at the airport works for groups — one device, everyone connects, but you're tied together all day.</p><p><b>Install before flying:</b> Google Maps (works well in Japan), Google Translate (download Japanese for offline camera mode — reads menus), Navitime or Hyperdia for train planning, <b>JR Kyushu Rail app</b> for Yufuin no Mori tickets, and your airline's app. Download offline maps for Fukuoka, Nagasaki, and Hiroshima before you board. Add Suica to Apple Wallet now — you can load it before you land.</p>"
+      "body": ""
     },
     {
       "type": "panel",
       "group": "Plan",
-      "title": "Weather — late October & early November",
-      "body": "<p>Kyushu in late October is one of the best travel windows in Japan: <b>18–24°C</b> during the day, <b>12–16°C</b> at night, low humidity, minimal rain. Typhoon season is ~95% done by October 20; a late straggler is possible but rare. Hiroshima (western Honshu) is nearly identical. Pack layers — evenings in Yufuin (~500m altitude) can be 10–12°C, and early morning on Miyajima will be crisp. Compact umbrella always. <b>Autumn colour (koyo):</b> highland Yufuin and the Aso caldera typically peak mid-to-late November; in late October you'll catch early colour on the highlands. Coastal Fukuoka, Nagasaki, and Hiroshima stay green into November.</p>"
+      "title": "Booking checklist",
+      "body": "",
+      "checklist": [
+        "Flights",
+        "Accommodation",
+        "Airport transfer",
+        "Travel insurance",
+        "Any timed tickets"
+      ]
     },
     {
-      "type": "prose",
-      "group": "Money & budget",
-      "title": "What to wear — late October & early November",
-      "body": "<p>Kyushu in late October runs <b>18–24°C</b> during the day, <b>10–12°C</b> at night in the highlands. Pack in layers — you'll be in urban heat at noon and mountain-cool at 07:00 on Miyajima.</p><ul><li><b>Base layer:</b> 2–3 lightweight long-sleeve tops for evenings and cold mornings</li><li><b>Mid-layer:</b> a light fleece or merino sweater — Yufuin at altitude, early Miyajima dawn (the coldest moment of the trip)</li><li><b>Outer layer:</b> a packable rain shell, doubles as wind block — not a heavy jacket</li><li><b>Bottoms:</b> 2–3 lightweight travel trousers or slim-fit jeans; nothing you'd regret kneeling on at a shrine</li><li><b>Shoes:</b> one broken-in walking shoe (15,000–20,000 steps/day on stone), one slip-on for ryokan common areas and onsen corridors — mandatory; yukata is provided, no need to pack a dinner outfit</li><li><b>Miyajima Nov 4 dawn</b> is the coldest moment of the trip — bring that mid-layer for the torii walk</li><li><b>Compact folding umbrella:</b> pack one, or buy from any 7-Eleven on arrival for ≈¥1,000</li></ul>"
+      "type": "weather",
+      "group": "Plan",
+      "title": "Weather for your dates"
+    },
+    {
+      "type": "holidays",
+      "group": "Plan",
+      "title": "Public holidays & closures"
     },
     {
       "type": "panel",
       "group": "Money & budget",
       "title": "Money & currency",
-      "body": "<p>Japan uses the <b>yen (¥ / JPY)</b>. The yen has been historically weak since 2022 — outstanding value for USD travelers. Rough reference at ≈¥150/$: <b>¥1,000 ≈ $6.70</b>. Check the current rate before you go.</p><p>Japan is more <b>cash-heavy</b> than Korea or Western Europe. Most ryokans, small restaurants, shrines, and local shops are cash-only or strongly prefer it. Bring enough to cover ryokan nights in full. <b>7-Eleven ATMs</b> reliably accept foreign Visa/Mastercard/Amex with English interfaces — the most reliable cash source in any city. IC cards cover all transit and konbini; cards work at city hotels, department stores, and most urban restaurants.</p>",
-      "checklist": [
-        "Withdraw ¥50,000–100,000 in cash at a 7-Eleven ATM on arrival — covers ryokan nights and small restaurants",
-        "IC card (Suica or Nimoca): add Suica to Apple Wallet before flying, or set up Nimoca at Fukuoka Hakata station",
-        "No tipping — anywhere, for anything. It causes genuine confusion",
-        "Tax-free shopping (8–10% off) at participating shops for foreign tourists on ¥5,000+ purchases — bring your passport"
-      ]
+      "body": ""
     },
     {
       "type": "budget",
       "group": "Money & budget",
       "title": "Budget & daily costs",
-      "currency": "USD",
-      "days": 14,
-      "intro": "Estimates in USD at ≈¥150/$. All figures are per-person approximations — verify all prices before booking.",
+      "intro": "Rough per-person estimates — replace the zeros with researched figures.",
+      "currency": "¥",
+      "days": 7,
       "items": [
         {
-          "label": "Flights (round trip, economy)",
-          "basis": "trip",
-          "est": 1100,
-          "low": 750,
-          "high": 1650,
-          "category": "Getting there",
-          "per": "person",
-          "note": "≈ — book early; or ~35–45k miles/person economy with United MileagePlus (ANA) or AA AAdvantage (JAL)"
-        },
-        {
-          "label": "City hotel (~10 nights, sharing room)",
-          "basis": "trip",
-          "est": 750,
-          "low": 450,
-          "high": 1100,
-          "category": "Stay",
-          "per": "person",
-          "note": "≈ — business hotels ≈¥7,000–12,000/night/room; per person sharing double"
-        },
-        {
-          "label": "Ryokan (Yufuin + Miyajima, dinner & breakfast included)",
-          "basis": "trip",
-          "est": 600,
-          "low": 350,
-          "high": 950,
-          "category": "Stay",
-          "per": "person",
-          "note": "≈ — includes kaiseki dinner and Japanese breakfast; private onsen rooms cost more — ⚠ verify at time of booking"
-        },
-        {
-          "label": "JR Kyushu 5-day Pass + Hiroshima Shinkansen return",
-          "basis": "trip",
-          "est": 250,
-          "low": 170,
-          "high": 370,
-          "category": "Getting around",
-          "per": "person",
-          "note": "≈ — Northern Kyushu 5-day pass ≈¥14,000; Fukuoka↔Hiroshima Shinkansen ≈¥8,100 each way — ⚠ verify at english.jrkyushu.co.jp"
-        },
-        {
-          "label": "Meals per day (non-ryokan days)",
+          "label": "Lodging, per night",
           "basis": "day",
-          "est": 28,
-          "low": 12,
-          "high": 60,
-          "category": "Food",
-          "per": "person",
-          "note": "Ramen ≈¥900–1,200; set lunch ≈¥1,000–1,500; yatai dinner ≈¥2,500–3,500. Japan is cheap for good food."
+          "est": 0
         },
         {
-          "label": "Local transit per day (IC card)",
+          "label": "Food & drink, per day",
           "basis": "day",
-          "est": 8,
-          "low": 3,
-          "high": 18,
-          "category": "Getting around",
-          "per": "person",
-          "note": "Fukuoka subway ≈¥260/ride; Miyajima ferry ≈¥180. Low on walking days, higher on travel days."
+          "est": 0
         },
         {
-          "label": "Activities & entry fees per day",
+          "label": "Local transport, per day",
           "basis": "day",
-          "est": 12,
-          "low": 4,
-          "high": 28,
-          "category": "Activities",
-          "per": "person",
-          "note": "Beppu hells ≈¥2,200 all-8; Hiroshima Peace Museum ≈¥200; Miyajima ropeway ≈¥1,800 return — ⚠ verify all"
+          "est": 0
         },
         {
-          "label": "Snacks, drinks & konbini per day",
+          "label": "Sights & activities, per day",
           "basis": "day",
-          "est": 8,
-          "low": 3,
-          "high": 20,
-          "category": "Food",
-          "per": "person",
-          "note": "Japanese convenience stores punch well above their weight. Budget a few runs a day."
+          "est": 0
         },
         {
-          "label": "Shopping & souvenirs",
+          "label": "Flights — round trip",
           "basis": "trip",
-          "est": 200,
-          "low": 60,
-          "high": 700,
-          "category": "Other",
-          "per": "person",
-          "note": "Tax-free rebate at participating shops on ¥5,000+ purchases — bring passport"
+          "est": 0
         }
       ]
     },
     {
       "type": "panel",
       "group": "Health & safety",
-      "title": "Health & safety",
-      "body": "<p><b>Emergency numbers:</b> <b>110</b> (police), <b>119</b> (fire &amp; ambulance). Japan Visitor Hotline (English, 24/7): <b>050-3816-2787</b>. Tap water is safe throughout Japan. Medical standards are very high; Fukuoka, Nagasaki, and Hiroshima all have hospitals with international patient services.</p><p><b>Pharmacy:</b> Matsumoto Kiyoshi, Tsuruha, and Welcia drugstores are on every high street. English-speaking staff is inconsistent outside tourist zones; photos and Google Translate camera mode bridge most gaps. Note: some US cold medicines containing <b>pseudoephedrine</b> are restricted in Japan — check your medications before packing.</p>",
-      "checklist": [
-        "Travel insurance with medical coverage — Japan healthcare is excellent but expensive without it",
-        "Check that your cold/allergy medicines are permitted in Japan (pseudoephedrine is restricted)",
-        "Blister pads — non-negotiable for 2 weeks of temple and city walking",
-        "Structured walking insoles (Powerstep, Superfeet) if prone to foot pain on long days",
-        "Prescription medicines: carry in original packaging; controlled substances need a doctor's note"
-      ]
+      "title": "Health & pharmacy",
+      "body": ""
     },
     {
       "type": "panel",
       "group": "Etiquette & language",
-      "title": "Etiquette — what to know",
-      "body": "<p>Japan's social expectations are more formal than Korea's — but very forgiving of obvious foreigners. The baseline: <b>be quiet, be clean, be patient</b>.</p><ul><li><b>No tipping.</b> Anywhere. Not at restaurants, ryokans, or in taxis. Attempting it causes genuine confusion.</li><li><b>Shoes off</b> at ryokans, traditional tatami restaurants, and some shrines. You'll see a raised step — it's always obvious.</li><li><b>Bowing:</b> a slight nod is sufficient for tourists. Don't overthink depth.</li><li><b>Two-handed exchange:</b> give and receive items — cash at a register, business cards, gifts — with both hands or right hand supported by the left. Signals respect.</li><li><b>Trains:</b> phone on silent, no calls, no speakerphone. Quiet voice throughout. On local trains, eating is frowned upon (Shinkansen is the exception — ekiben lunch boxes are a tradition).</li><li><b>Trash bins are rare</b> outside train stations and konbini. Carry a small plastic bag for rubbish.</li><li><b>Chopsticks:</b> don't stab them upright in rice (funeral association); don't pass food chopstick-to-chopstick (also funeral). Rest on the holder provided.</li><li><b>Onsen:</b> shower and rinse completely before entering any communal bath. No swimwear. Hair tied back or kept dry. No towels in the water.</li><li><b>Queuing:</b> Japan queues with extraordinary discipline. Follow the marked floor lines.</li></ul>",
-      "checklist": [
-        "arigatou gozaimasu (ありがとうございます) — thank you (formal)",
-        "sumimasen (すみません) — excuse me / sorry / getting a server's attention",
-        "kore o kudasai (これをください) — this one, please",
-        "okaikei o onegaishimasu (お会計をお願いします) — bill, please",
-        "Google Translate camera mode reads Japanese menus in real time — download Japanese offline before the flight"
-      ]
-    },
-    {
-      "type": "prose",
-      "group": "Etiquette & language",
-      "title": "First-timer's field notes",
-      "body": "<p><b>Japan is quieter than expected in shared spaces.</b> Trains, restaurants, and ryokans run at a lower volume than you're used to. Matching the room is the single most useful social adjustment. You don't need to suppress yourself — just read the context. A yatai stall at night is social and noisy; a ramen counter at noon is heads-down and focused; a ryokan evening is close to silence.</p><p><b>Japan is easier to navigate than it looks.</b> Station signs throughout Kyushu are romanised, Google Maps handles transit routing accurately, and most hotel and tourist-zone staff have enough English for practical needs. The real difficulty is visual density — hundreds of signs, all in characters you can't parse. Let it wash over you. Use the camera translate when it matters.</p><p><b>Very few trash bins.</b> Unlike every other major city, Japan has almost no public bins. Carry a small plastic bag and use the bin at the next konbini (convenience stores always have one, for items bought there). <b>Cash is more necessary</b> than in Korea or Europe — many small restaurants, all ryokans, most shrines, and the Yanagawa punt boats are cash-only or strongly prefer it. <b>The biggest scheduling mistake</b> is over-packing the days. Japan's best moments are the gaps — a back street you turned down for no reason, a vending machine coffee by a canal, a konbini run at midnight. Leave space.</p>"
-    },
-    {
-      "type": "list",
-      "group": "Etiquette & language",
-      "title": "Lingo cheat sheet",
-      "items": [
-        "Itadakimasu (いただきます) — say before eating, every time. Even at a konbini counter. It means: I humbly receive this.",
-        "Gochisosama deshita (ごちそうさまでした) — say when leaving any sit-down restaurant or ramen counter. Direct it toward the kitchen. Cooks notice.",
-        "Sumimasen (すみません) — excuse me / sorry / may I trouble you. Use before every question and every time you need a server's attention. Never wave, snap fingers, or call out.",
-        "Kore o kudasai (これをください) — this one, please. Point at the menu item and say this.",
-        "Okaikei o onegaishimasu (お会計をお願いします) — the bill, please. Say to the server or walk to the register.",
-        "Kae-dama hitotsu (替え玉ひとつ) — one extra noodle serving in my remaining ramen broth. Say this at any ramen counter when the noodles run out. Usually ≈¥100–150.",
-        "Ikura desu ka? (いくらですか?) — how much is this?",
-        "Otearai wa doko desu ka? (お手洗いはどこですか?) — where is the bathroom?",
-        "Irasshaimase (いらっしゃいませ) — welcome. Staff say this when you enter any shop or restaurant. You do not need to respond — a nod is fine.",
-        "Otsukare / Otsukaresama (お疲れ / お疲れ様) — acknowledgment of effort; roughly: you've worked hard. Heard constantly in ryokans and between staff. Respond with the same phrase."
-      ]
-    },
-    {
-      "type": "list",
-      "group": "Etiquette & language",
-      "title": "Dos and don'ts",
-      "items": [
-        "DO say gochisosama deshita when leaving any restaurant — directed toward the kitchen as you walk out.",
-        "DO use sumimasen to get a server's attention — not a wave, not a shout, not eye contact from across the room.",
-        "DO take your shoes off at any raised-floor threshold. The step up to tatami level at ryokans and traditional restaurants is always obvious.",
-        "DO give and receive cash, cards, and items with both hands — right hand supported by left at the wrist.",
-        "DO use coin lockers at major train stations on day trips (¥400–800/day). Transforms how much ground you can cover without dragging luggage.",
-        "DO eat set lunches wherever possible. Expensive restaurants serve the same quality at lunch for ¥1,000–1,800 vs. ¥4,000+ at dinner.",
-        "DO carry small plastic bag for rubbish — public bins are rare; konbini bins are for items bought there.",
-        "DON'T tip anywhere, for anything. Not restaurants, not ryokans, not taxis. It causes confusion and can be read as condescending.",
-        "DON'T stick chopsticks upright in rice — funeral association.",
-        "DON'T pass food chopstick-to-chopstick — also a funeral custom. Put items on someone's plate instead.",
-        "DON'T eat while walking, except on designated tourist promenades (Miyajima Omotesando, Yufuin Yunotsubo Kaido).",
-        "DON'T make phone calls on local trains or in onsen. Quiet voice in both. Yatai stalls (outdoor) are the exception.",
-        "DON'T try to hide tattoos in a shared onsen bath and hope no one notices. Getting caught is far worse than asking first."
-      ]
+      "title": "Etiquette & language",
+      "body": ""
     },
     {
       "type": "routes",
       "group": "Getting around",
       "title": "Key transit routes",
-      "steps": [
-        "<b>Airport → Fukuoka city:</b> Fukuoka Airport has a subway station in the international terminal — 5 minutes to Hakata station, ≈¥260. Tap your IC card. One of the world's best airport connections. If arriving via Tokyo (NRT/HND), take a domestic flight to FUK (~1.5 hrs) or the Shinkansen from Tokyo to Hakata (~5 hrs, ≈¥23,000).",
-        "<b>Around Fukuoka:</b> the Fukuoka City Subway (Kuko/Airport line, Hakozaki line, Nanakuma line) covers the main zones. IC card tap in and out. One-day pass (≈¥640) worth it on busy days.",
-        "<b>Fukuoka → Dazaifu:</b> Nishitetsu Omuta line from Nishitetsu-Fukuoka (Tenjin) to Nishitetsu-Futsukaichi, transfer to Dazaifu line → Dazaifu station. ~30 min total, ≈¥400. ⚠ Verify current fare.",
-        "<b>Fukuoka → Beppu:</b> JR Sonic express from Hakata — ~2 hrs 15 min, ≈¥5,240. Covered by JR Kyushu Rail Pass.",
-        "<b>Beppu → Yufuin:</b> 45-min bus (Kyushu Odan Bus, ≈¥1,600) or taxi (~¥6,000). Or the Yufuin no Mori scenic train from Fukuoka (see below).",
-        "<b>Fukuoka → Yufuin (Yufuin no Mori):</b> scenic limited express from JR Hakata, ~2.5 hrs, ≈¥4,450. Seats are reserved and must be booked in advance — popular year-round, especially in autumn. ⚠ Book at JR Kyushu website.",
-        "<b>Fukuoka → Nagasaki:</b> JR Kamome (Nishi-Kyushu Shinkansen relay service) from Hakata, ~1 hr 40 min, ≈¥5,400. Covered by JR Kyushu Rail Pass.",
-        "<b>Nagasaki → Hiroshima:</b> Nagasaki → Hakata by express (~1 hr 40 min), then Hakata → Hiroshima on the Sanyo Shinkansen (~50 min). Total ~3 hrs, ≈¥13,500. The Sanyo Shinkansen leg requires a national JR Pass or an individual ticket — not covered by the Kyushu pass.",
-        "<b>Hiroshima → Miyajima:</b> JR San'yo line to Miyajimaguchi (~27 min), then JR ferry to the island (~10 min). Total ~40 min from Hiroshima station. Ferry included with JR Pass, or ≈¥180 with IC card.",
-        "<b>Miyajima → Fukuoka:</b> ferry back to Miyajimaguchi → train to Hiroshima → Sanyo Shinkansen to Hakata. Total ~1.5 hrs, ≈¥8,100 for the Shinkansen leg."
-      ]
+      "steps": []
     },
     {
       "type": "map",
       "group": "Getting around",
-      "title": "Orientation map — Fukuoka (Hakata)",
+      "title": "Orientation map",
       "center": {
         "lat": 33.5902,
         "lng": 130.4017
       },
-      "span": 0.06
-    },
-    {
-      "type": "prose",
-      "group": "Getting around",
-      "title": "JR Pass vs JR Kyushu Rail Pass",
-      "body": "<p>For this itinerary, the best value is probably the <b>JR Kyushu 5-day Northern Kyushu Pass</b> for Kyushu legs, plus individual tickets for the Sanyo Shinkansen to Hiroshima.</p><ul><li><b>JR Kyushu Northern Kyushu 5-day Pass:</b> covers Fukuoka ↔ Nagasaki (Kamome), Fukuoka ↔ Beppu (Sonic), Yufuin no Mori scenic train, and most JR Kyushu local trains. ≈¥14,000 (~$93). Then buy Fukuoka ↔ Hiroshima Shinkansen individually (≈¥16,200 return). Total: ≈¥30,200 — cheaper than the national pass for most users on this itinerary. ⚠ Verify at english.jrkyushu.co.jp.</li><li><b>National 14-day JR Pass:</b> covers everything including Sanyo Shinkansen (Fukuoka ↔ Hiroshima ↔ Osaka ↔ Tokyo). ≈¥70,000 (~$467). ⚠ Japan raised the price significantly in October 2023 — verify current price before purchasing. Worth it mainly if adding Tokyo or other long Shinkansen legs.</li></ul><p>Both passes must be <b>purchased before arriving in Japan</b> — online at the JR website or through a travel agent abroad. When you arrive at Hakata station on Day 1, go to the JR ticket window (midori-no-madoguchi) and reserve your specific seats for all Kyushu trains in one session: Sonic to Beppu, Kamome to Nagasaki, Yufuin no Mori. Do it on Day 2 at the latest.</p>"
-    },
-    {
-      "type": "prose",
-      "group": "Getting around",
-      "title": "Tips & tricks — navigating Japan",
-      "body": "<p>Practical details that save friction in the field.</p><ul><li><b>Google Maps offline:</b> download the Fukuoka, Nagasaki, Hiroshima, and Miyajima areas before you board — works without data, routes transit accurately</li><li><b>IC card protocol:</b> tap in at the gate, tap out when you exit — every journey; if you exit without tapping, the gates lock and you owe the maximum fare</li><li><b>Paying at the register:</b> in Japan you pay at the front register, not the table. At ramen counters there's often a ticket vending machine at the entrance — buy before sitting</li><li><b>Summoning servers:</b> say 「すみません」(sumimasen) — never wave, snap, or stare. Servers respond; they just won't interrupt until called</li><li><b>Coin lockers:</b> at every major station, ¥400–800/day — transformative for day trips out of Fukuoka when you don't want to haul bags</li><li><b>7-Eleven ATMs:</b> the single most reliable foreign-card cash source in Japan. Lawson and Japan Post are second. Most other Japanese bank ATMs reject foreign cards</li><li><b>No eating while walking</b> on ordinary streets — a real norm outside tourist promenades. Miyajima's Omotesando and Yufuin's Yunotsubo Kaido are the explicit exceptions</li><li><b>Queuing:</b> Japan queues at floor markings with extraordinary discipline. Join the back, stay in line, don't cut</li><li><b>Google Translate camera mode:</b> download Japanese offline before departure — points your camera at any menu or sign and overlays translation in real time</li><li><b>Power:</b> Japan uses 100V Type A outlets — same plug as the US, no adapter needed; all modern chargers handle 100–240V</li></ul>"
+      "span": 0.08
     },
     {
       "type": "days",
@@ -380,470 +129,60 @@
       "title": "Day by day",
       "items": [
         {
-          "date": "Thu Oct 22",
-          "title": "Depart Newark",
-          "pace": "Departure · ANA NH110 EWR→NRT at 23:05 EDT",
-          "note": "ANA NH110 departs Newark Liberty at 23:05 EDT. Connect at Narita (~5.5 hrs) for NH249 NRT→FUK at 09:00 JST — arriving Fukuoka 10:55 JST on Oct 24, your birthday in Japan.",
-          "body": "Eat a real meal before boarding. Compression socks on. Watch one film, then sleep 7–8 hours of the middle section of the flight — that in-flight sleep is the most important jet lag move of the trip. The Narita connection is 5.5 hours — long enough for a ramen bowl in Terminal 3 and to find your domestic gate without rushing. ANA NH249 is a short 1 hr 55 min hop. You board Thursday evening and land in Japan Saturday morning.",
-          "fit": "Comfortable travel clothes. Compression socks if you have them.",
-          "checklist": [
-            "ANA NH110 EWR→NRT departs 23:05 EDT — arrive airport by 20:30",
-            "Visit Japan Web QR codes downloaded offline before boarding",
-            "Suica added to Apple Wallet, or plan to buy Nimoca at Hakata Station on arrival",
-            "eSIM activated or carrier roaming confirmed",
-            "Battery packs, all devices, GoPro fully charged"
-          ]
+          "date": "Day 1",
+          "title": "",
+          "pace": "",
+          "body": ""
         },
         {
-          "date": "Sat Oct 24 — birthday",
-          "title": "Arrive Fukuoka — first yatai night",
-          "pace": "NH249 lands 10:55 JST · 5-min subway to Hakata · easy afternoon",
-          "note": "One of the world's best airport-to-city connections: subway inside the terminal, 5 stops, 5 minutes, ¥260.",
-          "body": "<p>ANA NH249 lands at FUK International Terminal at 10:55 JST. The subway station is a 5-minute walk inside the terminal — follow signs to 地下鉄. Board the Kuko line direction Hakata: 5 stops, 5 minutes, ¥260 on your IC card.</p><p>At Hakata Station: go to the south passage 7-Eleven ATM and withdraw ¥50,000 per person. Then find the JR midori-no-madoguchi (green ticket window, main concourse) and in one session reserve seats for: Sonic to Beppu (Oct 28), Kamome to Nagasaki (Oct 31), and Yufuin no Mori scenic train (Oct 30, Yufuin→Hakata). Do this today or first thing Sunday — October reserved-seat windows go fast.</p><p>Walk south ~8 min from the station to Dormy Inn PREMIUM Hakata Chuou (Naka Ward). Check in. The hotel has a rooftop natural hot spring open from 15:00 — no tattoo restriction here; go up before dinner if you want to decompress. <b>Resist sleep until 22:00 JST.</b></p><p>The evening has one job: the Nakasu yatai strip. Walk from the hotel (~15 min) to the Naka River bend. Pick any open-counter stall with the cook actively working — avoid stalls with touts at the entrance. Order yakitori first, then whatever you can't identify. Cold Sapporo or namashibori highball. It's your birthday in Japan.</p>",
-          "fit": "Comfortable clothes. You are not sightseeing today.",
-          "checklist": [
-            "NH249 lands 10:55 JST — Kuko line to Hakata Station, ¥260",
-            "7-Eleven ATM at Hakata Station south passage — ¥50,000 per person",
-            "JR midori-no-madoguchi: reserve Sonic (Oct 28), Kamome (Oct 31), Yufuin no Mori (Oct 30)",
-            "Check into Dormy Inn PREMIUM Hakata Chuou (8 min south of Hakata Station)",
-            "Rooftop hot spring open from 15:00 — no tattoo restriction on this facility",
-            "Resist sleep until 22:00 JST",
-            "Birthday dinner: Nakasu yatai strip, ~15 min walk from hotel"
-          ]
+          "date": "Day 2",
+          "title": "",
+          "pace": "",
+          "body": ""
         },
         {
-          "date": "Sun Oct 25",
-          "title": "Hakata & Tenjin — city orientation",
-          "pace": "Moderate day · flat city walking",
-          "note": "Jet lag forgiveness day. Start late, walk at a pace you can sustain for two weeks.",
-          "body": "Hakata station area in the morning — the Hakata Riverain complex and old merchant district behind the station. Canal City for the midday fountain show (free, check times on the day). Walk to Tenjin in the afternoon — Tenjin Chikagai underground mall, the Imaizumi café and bar district. Evening: go to Shin-Shin ramen counter in the Tenjin area for your benchmark bowl (ticket machine at the door, top-left button). Then back to a different yatai stall than last night — order something you can't identify.",
-          "fit": "Flat, walkable terrain. Comfortable shoes.",
-          "checklist": [
-            "Canal City fountain show — check schedule on the day",
-            "JR midori-no-madoguchi: reserve Sonic (Oct 28), Kamome (Oct 31), Yufuin no Mori (Oct 30) if not done Oct 24",
-            "Try yakitori at a standing izakaya counter"
-          ]
+          "date": "Day 3",
+          "title": "",
+          "pace": "",
+          "body": ""
         },
         {
-          "date": "Mon Oct 26",
-          "title": "Dazaifu + Yanagawa — shrines and canals",
-          "pace": "Full day · 2 excursions · moderate walking",
-          "note": "Dazaifu first (30 min from Tenjin by Nishitetsu rail), Yanagawa in the afternoon. The best all-day excursion from Fukuoka.",
-          "body": "Dazaifu Tenmangu is one of Japan's most important Shinto shrines — ancient cryptomeria trees, the arched moon-reflection bridge, an approach lined with umegae mochi plum cakes. The Kyushu National Museum sits directly behind the shrine. Walk back along the approach and stop at the Kengo Kuma-designed Starbucks — a woven-bamboo lattice building worth 10 minutes even if you don't drink coffee. Then south by train to Yanagawa for a flat-bottomed punt boat along the historic canals. Unaju (grilled eel on rice in a lacquer box) for dinner in Yanagawa — the city's signature dish and worth the price.",
-          "fit": "Comfortable walking shoes, light layer for the evening.",
-          "checklist": [
-            "Nishitetsu rail day ticket if doing both towns",
-            "Yanagawa punt: walk-in or book ahead on weekends",
-            "Unaju dinner in Yanagawa (eel is expensive — expect ¥2,500–4,000 — ⚠ verify current price)",
-            "Dazaifu: Kyushu National Museum entry fee — ⚠ verify current amount"
-          ]
+          "date": "Day 4",
+          "title": "",
+          "pace": "",
+          "body": ""
         },
         {
-          "date": "Tue Oct 27",
-          "title": "Ohori Park + Fukuoka Tower — rest day",
-          "pace": "Gentle day · parks and seafront · rest before the onsen push",
-          "note": "A lighter day before the Beppu–Yufuin run. Don't skip it — pacing through easy days is what makes the heavy ones land properly.",
-          "body": "Ohori Park in the morning — a large lakeside park with a reconstructed Japanese garden at one end and Fukuoka Castle ruins on an adjacent hill (free short climb, good city views). Afternoon at Fukuoka Tower and Momochi seafront — the viewing deck gives the best panoramic read of the city. Final Fukuoka yatai crawl in the evening: three stalls, three dishes, try motsu nabe (offal hot pot) if a stall has it on the board.",
-          "fit": "Flat terrain. Comfortable shoes.",
-          "checklist": [
-            "Ohori Park Japanese Garden (small entry fee — ⚠ verify)",
-            "Fukuoka Tower viewing deck",
-            "Three-stall yatai crawl: one ramen, one yakitori, one wild card"
-          ]
+          "date": "Day 5",
+          "title": "",
+          "pace": "",
+          "body": ""
         },
         {
-          "date": "Wed Oct 28",
-          "title": "Beppu — the volcanic hells",
-          "pace": "JR Sonic 2.5 hrs · hells tour ~3 hrs · onsen evening",
-          "note": "Beppu's jigoku (hells) are theatrical and genuinely strange. Budget 3 hours for all 8.",
-          "body": "JR Sonic express from Hakata to Beppu (~2.5 hrs, reserved seat confirmed from Hakata Station). The Eight Hells (Jigoku Meguri) are a circuit of dramatically coloured volcanic pools — cobalt blue (Umi Jigoku), blood red (Chinoike Jigoku), boiling grey mud, a crocodile enclosure, a greenhouse heated by springs. Combined ticket covers all eight; allow 2–3 hours. Afternoon: Takegawara Onsen for the sand bath — staff bury you to the neck in geothermally heated sand. Walk the Beppu port at dusk. Check into Onyado Nono Beppu Natural Hot Spring (Dormy Inn group, central Beppu, near the station). On check-in, ask about the kashikiri-buro: 「貸切風呂はありますか？」 — and confirm the communal bath tattoo policy at booking.",
-          "fit": "Layers — warm near the pools. Bring a small towel for the footbath.",
-          "checklist": [
-            "JR Sonic reserved seat from Hakata — confirmed at JR window",
-            "Jigoku Meguri combined ticket ≈¥2,200 — ⚠ verify current price at beppu-jigoku.com",
-            "Takegawara sand bath — ⚠ confirm tattoo policy before going; show 「タトゥーがあっても入浴できますか？」if needed",
-            "Check into Onyado Nono Beppu Natural Hot Spring — ask about kashikiri-buro on arrival",
-            "Yukata provided at hotel — ask at check-in"
-          ]
+          "date": "Day 6",
+          "title": "",
+          "pace": "",
+          "body": ""
         },
         {
-          "date": "Thu Oct 29",
-          "title": "Yufuin — Ryokan Tamanoyu",
-          "pace": "Bus 45 min · slow village morning · ryokan from 15:00",
-          "note": "The pacing purpose of the whole trip. Ryokan Tamanoyu does the work — your job is to show up and slow down.",
-          "body": "Morning bus from Beppu to Yufuin (~45 min). Walk Yunotsubo Kaido from the station to Lake Kinrinko — 1km of craft ceramics, local sake shops, and mountain cafés. Buy ceramics here if that's on the shopping list. Check into Ryokan Tamanoyu at 15:00 — private outdoor onsen room (kashikiri-buro) confirmed from booking. Yukata on. Kaiseki dinner served at a fixed time in a private dining space — multi-course, seasonal, sake available extra. Then the private onsen. Sleep whenever.",
-          "fit": "Yukata provided by Ryokan Tamanoyu. Pack light — this stop is about the ryokan, not the sights.",
-          "checklist": [
-            "Ryokan Tamanoyu check-in 15:00 — leave Beppu after a late breakfast",
-            "Dinner included at a fixed time — confirm when booking (usually 18:00 or 19:00)",
-            "Breakfast included (typically 07:30–09:00)",
-            "Private onsen room (kashikiri-buro) — confirmed from booking",
-            "Bring cash — Ryokan Tamanoyu is likely cash-only"
-          ]
-        },
-        {
-          "date": "Fri Oct 30",
-          "title": "Yufuin dawn + Yufuin no Mori back to Fukuoka",
-          "pace": "Early morning · slow check-out · scenic train afternoon",
-          "note": "Set an alarm for 06:30. The lake mist in October is not optional.",
-          "body": "Walk to Lake Kinrinko before 07:00 — in late October the lake steams gently in the cool morning air while surrounding hills begin to turn. Ryokan breakfast at 08:00. Final walk down Yunotsubo Kaido. Check out by 10:00–11:00. The Yufuin no Mori scenic train departs mid-morning (reserved seat, booked at Hakata Station on Oct 24 or 25) — a 2.5-hour rolling forest-and-valley journey back to Hakata in a retro wooden-panelled carriage. Return to Dormy Inn PREMIUM Hakata Chuou for two nights before the Nagasaki leg.",
-          "fit": "Warm layer for early morning by the lake.",
-          "checklist": [
-            "06:30 alarm for Lake Kinrinko mist",
-            "Yufuin no Mori reserved seat — confirmed at JR Hakata window",
-            "Ryokan Tamanoyu checkout by 10:00–11:00",
-            "One Yufuin souvenir: ceramics, sake, or craft textile from Yunotsubo Kaido"
-          ]
-        },
-        {
-          "date": "Sat Oct 31",
-          "title": "Nagasaki — Glover Garden & Chinatown",
-          "pace": "Express train 1.5 hrs · afternoon sights · champon dinner",
-          "note": "Nagasaki has a character unlike anywhere else in Japan — Portuguese, Dutch, and Chinese layers over a Japanese foundation. It takes at least two days to feel.",
-          "body": "Express train from Hakata to Nagasaki (~1.5 hrs on the Nishi-Kyushu Shinkansen relay, reserved seat). Check into JR Kyushu Hotel Nagasaki — the hotel opens directly from Nagasaki Station concourse on the 2nd floor; drop bags in 10 minutes. City tram to Glover Garden: take Line 1 from the JR Nagasaki Station tram stop (outside east exit) toward Akasako, to Tsukimachi (3 stops, ~10 min, ≈¥140), then change to Line 5 toward Ishikawa to Oura Tenshudo-shita (2 stops). Glover Garden is a 3-min uphill walk from the tram stop — Victorian-era Western merchants' houses with panoramic harbour views. Walk down through Minami Yamate district. Dinner in Chinatown (Shinchi): champon at Shikairō (四海楼), credited with inventing the dish in 1899. If the queue is over 45 min, any restaurant one block back is equivalent. Walk the harbour front at night.",
-          "fit": "Glover Garden involves substantial hill walking — good shoes.",
-          "checklist": [
-            "JR Kamome reserved seat from Hakata — confirmed at JR window",
-            "Check into JR Kyushu Hotel Nagasaki (exits from Nagasaki Station concourse)",
-            "City tram Line 1 → Tsukimachi → Line 5 → Oura Tenshudo-shita for Glover Garden (≈¥140)",
-            "Glover Garden — ⚠ verify current opening hours and entry fee",
-            "Champon dinner: Shikairō — ⚠ verify still operating at shikairo.co.jp"
-          ]
-        },
-        {
-          "date": "Sun Nov 1",
-          "title": "Nagasaki — Peace Museum & Dejima",
-          "pace": "Deep day · museums and memorial park · emotionally heavy",
-          "note": "Give the museum and hypocenter site the time they deserve. Don't stack other major sights on this day.",
-          "body": "Nagasaki Atomic Bomb Museum and Peace Memorial Park in the morning — allow 3+ hours. The museum is smaller and less internationally known than Hiroshima's; many visitors find the weight of August 9 more acute here because of Nagasaki's specific history — deep Catholic roots, the most cosmopolitan city in Japan, the second bomb three days after Hiroshima. Walk from the museum to the hypocenter marker. Afternoon: Dejima, the reconstructed Dutch trading post where all Western contact with Japan filtered through for over 200 years. Oura Cathedral (Japan's oldest surviving Western-style church) is a short walk uphill. Fukusaya castella: the Hamanomachi Arcade branch is ~15 min north from JR Kyushu Hotel Nagasaki along the main street — ⚠ verify branch locations at fukusaya.jp before going. Sara udon dinner.",
-          "fit": "Comfortable shoes. A contemplative walking day.",
-          "checklist": [
-            "Nagasaki Atomic Bomb Museum — ⚠ verify entry fee (≈¥200) and hours at nabmuseum.jp/english",
-            "Hypocenter marker and Peace Park — free",
-            "Dejima — ⚠ verify hours and entry",
-            "Oura Cathedral — ⚠ verify visiting hours",
-            "Fukusaya castella: Hamanomachi Arcade branch (~15 min from JR Kyushu Hotel Nagasaki) — ⚠ verify at fukusaya.jp"
-          ]
-        },
-        {
-          "date": "Mon Nov 2",
-          "title": "Hiroshima — Peace Memorial & okonomiyaki",
-          "pace": "Transit + full day · ~3 hrs to Hiroshima · deep museum day",
-          "note": "The Hiroshima Peace Memorial Museum is widely considered one of the best museums in Japan. Give it 3–4 hours.",
-          "body": "Morning train back through Hakata, then the Sanyo Shinkansen to Hiroshima (~3 hrs total). Check into Dormy Inn Hiroshima (~10-min walk from Hiroshima Station toward the Hondori arcade). From the hotel: city tram (Hiroshima Electric Railway Line 2 or 6 from Hiroshima Station, ≈¥190) to Genbaku Dome-mae (2 stops), or 20-min walk across the Peace Park footbridge. Atomic Bomb Dome — the preserved skeletal ruin at the hypocenter, UNESCO World Heritage. Peace Memorial Museum. Walk the park. Allow more time than you think you need. Dinner: Hiroshima-style okonomiyaki at Okonomimura in Shintenchi, ~10 min walk from the museum.",
-          "fit": "Comfortable clothes. Reflective and walking-heavy day.",
-          "checklist": [
-            "Hiroshima Peace Memorial Museum — ⚠ verify current entry (≈¥200) and hours at hiro-tsuitokinenkan.jp/en",
-            "Allow 3–4 hours minimum",
-            "Atomic Bomb Dome — adjacent, free",
-            "Check into Dormy Inn Hiroshima (~10 min from station toward Hondori)",
-            "City tram Line 2 or 6 from Hiroshima Station to Genbaku Dome-mae (≈¥190)",
-            "Okonomimura okonomiyaki dinner — ⚠ verify still operating 2026 at okonomimura.jp"
-          ]
-        },
-        {
-          "date": "Tue Nov 3",
-          "title": "Miyajima — the floating torii & overnight at Iwaso",
-          "pace": "Ferry day · full island · stay overnight",
-          "note": "Staying overnight is the whole point. All day-trippers leave on the last ferry. You have the torii to yourself at dawn.",
-          "body": "Morning train and JR ferry to Miyajima island (~40 min total). Free-roaming deer will meet you at the dock — they are bold and will investigate your bag. Keep food secured. Grilled oysters from the vendors along Omotesando approach — eat standing while they're hot. Itsukushima Shrine and the torii gate: check tide tables before going (high tide = floating gate, low tide = walk to its base). Mount Misen ropeway for panoramic views. Check into Iwaso ryokan at 15:00 — Miyajima's most historic inn, operating since 1854, set among maple trees near the shrine. Private onsen room (kashikiri-buro) confirmed from booking. Yukata provided; wear it to the kaiseki dinner. Sunset on the gate after the last ferry — yours alone.",
-          "fit": "Walking shoes for the ropeway trail or hike.",
-          "checklist": [
-            "JR ferry from Miyajimaguchi (IC card or JR Pass)",
-            "Check tide tables for Nov 3 — ⚠ see visit-miyajima.or.jp",
-            "Itsukushima Shrine entry ≈¥300 — ⚠ verify current amount",
-            "Miyajima ropeway — ⚠ verify hours and ≈¥1,800 return fare",
-            "Check into Iwaso ryokan at 15:00 — private onsen room confirmed from booking",
-            "Alarm set for 06:00"
-          ]
-        },
-        {
-          "date": "Wed Nov 4",
-          "title": "Miyajima dawn → Hiroshima → back to Fukuoka",
-          "pace": "Early start · ferry return · Shinkansen home",
-          "note": "The 06:00 torii in morning mist is the single best image of the trip. Get up for it.",
-          "body": "Wake before 06:00. Walk to the torii in early light — the island fog, the stillness, the gate with no one else present. Ryokan breakfast at Iwaso (usually 08:00), checkout by 10:00. Ferry back to the mainland, Hondori covered shopping arcade in Hiroshima if time allows (local sake, souvenirs), then Sanyo Shinkansen to Hakata (~50 min). Return to Dormy Inn PREMIUM Hakata Chuou for the final two nights.",
-          "fit": "Warm layer for the early morning on the water.",
-          "checklist": [
-            "06:00 alarm for the torii at sunrise",
-            "Checkout Iwaso by 10:00",
-            "Hiroshima Hondori for Hiroshima sake and last-minute items",
-            "Reserved Shinkansen seat back to Hakata",
-            "Return to Dormy Inn PREMIUM Hakata Chuou — two final nights"
-          ]
-        },
-        {
-          "date": "Thu Nov 5",
-          "title": "Fukuoka — rest day & souvenir run",
-          "pace": "Easy day · open agenda · departure prep",
-          "note": "A buffer day for anything missed and the ritual last bowl. Don't over-plan it.",
-          "body": "Sleep in. Yanagibashi Rengo Market in the morning — Fukuoka's old wholesale market: fresh fish, pickles, ceramics, local sake. ⚠ Closes around 13:00. Hakata Hankyu B1 food hall in the afternoon — this is the primary souvenir run: vacuum-packed mentaiko (Yamaya brand), Hakata ramen kits, local packaged goods. Pack carefully — Japanese packaging is beautiful and heavier than it looks. The evening bowl of ramen at the counter you haven't tried yet. Ritual.",
-          "fit": "Comfortable clothes. You've earned a slow day.",
-          "checklist": [
-            "Yanagibashi Market — morning only, closes ≈13:00 (⚠ verify hours)",
-            "Hakata Hankyu B1 food hall — mentaiko gift boxes, ramen kits, packaged goods",
-            "Yodobashi Camera Hakata — last chance for gaming/anime shopping",
-            "Pack and weigh bags — Japanese shopping adds up",
-            "Last ramen, last cold beer, last yatai counter"
-          ]
-        },
-        {
-          "date": "Fri Nov 6",
-          "title": "Depart Fukuoka",
-          "pace": "ANA NH254 FUK→NRT 10:00 JST · NH109 NRT→EWR 14:05 JST · land EWR 09:25 EST",
-          "note": "Fukuoka Airport is 5 minutes from the city centre. The most painless airport exit in Japan.",
-          "body": "ANA NH254 FUK→NRT departs 10:00 JST — arrive at FUK International Terminal by 07:30 (3 hours before). From Hakata Station: Kuko line to FUK International Terminal, 5 stops, 5 minutes, ¥260. Complete any in-store tax-free paperwork before heading to the airport. One last onigiri from the 7-Eleven in the terminal. At NRT: ANA NH109 NRT→EWR departs 14:05 JST, lands Newark Liberty at 09:25 EST on Nov 6 — same calendar day due to the date line crossing. Connection at Narita is ~2 hours.",
-          "fit": "Travel comfortable.",
-          "checklist": [
-            "ANA NH254 FUK→NRT departs 10:00 JST — arrive FUK by 07:30",
-            "Kuko line from Hakata Station, ¥260",
-            "Tax-free shopping paperwork completed before security",
-            "IC card: keep as souvenir or clear balance at a station machine",
-            "ANA NH109 NRT→EWR departs 14:05 JST, lands EWR 09:25 EST (same day Nov 6)"
-          ]
+          "date": "Day 7",
+          "title": "",
+          "pace": "",
+          "body": ""
         }
       ]
     },
     {
       "type": "sights",
       "group": "Sights",
-      "title": "Fukuoka highlights",
-      "items": [
-        {
-          "name": "Yatai stalls — Nakasu & Tenjin",
-          "kicker": "Open-air food culture, uniquely Fukuoka",
-          "body": "Yatai are small open-air food stalls — a protected cultural institution found nowhere else in Japan at this scale. The Nakasu cluster runs along the river between Hakata and Tenjin; the smaller Tenjin cluster sits on Showa-dori. Each stall seats 6–10 at the counter; you sit and order through the cook. Open ~18:00 until the small hours. Walk the strip and pick whichever stall has an open seat with the cook actively working.",
-          "map": {
-            "lat": 33.5944,
-            "lng": 130.4075
-          }
-        },
-        {
-          "name": "Dazaifu Tenmangu",
-          "kicker": "Ancient shrine city, 30 minutes from Tenjin",
-          "body": "One of Japan's most important Shinto shrines, dedicated to the scholar-deity Sugawara no Michizane. The approach passes plum trees, gift stalls, and the Kengo Kuma-designed woven-bamboo Starbucks. The moon-reflection bridge leads to the main hall. The Kyushu National Museum is directly behind the shrine in a striking modern building. A complete half-day trip.",
-          "map": {
-            "lat": 33.5122,
-            "lng": 130.5339
-          }
-        },
-        {
-          "name": "Yanagawa canal town",
-          "kicker": "Flat-bottomed punting, eel rice",
-          "body": "A historic castle town crisscrossed by canals, best experienced on a flat-bottomed donko-bune punt boat with a pole-wielding guide. The ride is unhurried and calming. Yanagawa's other claim: Unaju — grilled eel on rice in a lacquer box. One hour south of Fukuoka by Nishitetsu rail.",
-          "map": {
-            "lat": 33.1638,
-            "lng": 130.4055
-          }
-        },
-        {
-          "name": "Canal City Hakata",
-          "kicker": "Free fountain shows, practical shopping",
-          "body": "A large curved retail and entertainment complex built along an indoor canal. Free laser and water shows at the central fountain every hour. Good for a rainy afternoon, a film, or anything you forgot to pack.",
-          "map": {
-            "lat": 33.5894,
-            "lng": 130.4108
-          }
-        }
-      ]
-    },
-    {
-      "type": "sights",
-      "group": "Sights",
-      "title": "Kyushu & western Honshu",
-      "items": [
-        {
-          "name": "Beppu Jigoku Meguri — 8 Hells",
-          "kicker": "Volcanic pools in every colour",
-          "body": "Eight dramatically different volcanic pools in a compact circuit: the cobalt-blue Sea Hell (Umi Jigoku), the blood-red Blood Pond Hell (Chinoike Jigoku), the boiling grey Tornado mud pool, and more. Combined entry covers all eight; allow 2–3 hours. Takegawara Onsen nearby offers the famous sand bath — buried to the neck, heated from below by the springs.",
-          "map": {
-            "lat": 33.3017,
-            "lng": 131.4995
-          }
-        },
-        {
-          "name": "Yufuin — Lake Kinrinko & Yunotsubo Kaido",
-          "kicker": "Mountain ryokan village",
-          "body": "A small artisan town at ~500m altitude surrounded by mountains, with a steam-covered lake at its centre. The 1km Yunotsubo Kaido pedestrian street from the station to the lake has craft ceramics, small-batch sake, and pour-over cafés. Best in early morning when the lake steams.",
-          "map": {
-            "lat": 33.2660,
-            "lng": 131.0638
-          }
-        },
-        {
-          "name": "Nagasaki Atomic Bomb Museum & Peace Park",
-          "kicker": "The second city — August 9, 1945",
-          "body": "Nagasaki was the second city struck, three days after Hiroshima. The museum is smaller and less internationally known — shorter queues, a slightly more intimate experience. The hypocenter marker, Peace Park, and nearby Urakami Cathedral (rebuilt after the bombing) form a walking circuit. Allow a full morning.",
-          "map": {
-            "lat": 32.7737,
-            "lng": 129.8643
-          }
-        },
-        {
-          "name": "Dejima — the Dutch trading post",
-          "kicker": "Japan's window on the world, 1641–1853",
-          "body": "A small artificial island in Nagasaki harbour where the Dutch East India Company operated as Japan's sole Western trading partner during the Sakoku isolation period. Reconstructed to its early 19th-century state; exhibits explain how Western science, medicine, and trade goods entered Japan through this single channel.",
-          "map": {
-            "lat": 32.7437,
-            "lng": 129.8716
-          }
-        },
-        {
-          "name": "Hiroshima Peace Memorial Park & Museum",
-          "kicker": "One of the best museums in Japan",
-          "body": "The Genbaku Dome — the skeletal ruin of a prefectural promotion hall preserved exactly as it stood after August 6, 1945 — is a UNESCO World Heritage Site. The Peace Memorial Museum is consistently ranked among Japan's finest (entry ≈¥200). Allow 3–4 hours minimum; the park provides space to process what you've seen.",
-          "map": {
-            "lat": 34.3951,
-            "lng": 132.4534
-          }
-        },
-        {
-          "name": "Itsukushima Shrine & floating torii — Miyajima",
-          "kicker": "Japan's most iconic image",
-          "body": "The vermilion O-torii gate standing in Hiroshima Bay is one of Japan's three officially designated scenic views. At high tide the gate appears to float; at low tide you can walk to its base. Free-roaming deer inhabit the island. Staying overnight — after the last day-tripper ferry — separates the experience from the photograph.",
-          "map": {
-            "lat": 34.2960,
-            "lng": 132.3195
-          }
-        }
-      ]
+      "title": "Top sights",
+      "items": []
     },
     {
       "type": "prose",
-      "group": "Sights",
-      "title": "Visiting tips",
-      "body": "<p>The shape of this itinerary is <b>cities first, reverential experiences later</b>. Beppu is theatrical and sensory; Yufuin is slow and contemplative; Nagasaki and Hiroshima are weighty and need emotional stamina. Don't put both Peace Museums on consecutive days — build a lighter day between them. And remember: <b>early mornings transform Japan</b>. The Miyajima torii at 06:15 in mist with no one else present is a completely different sight from the same gate at 11:00 with a tour group behind you. Set the alarms.</p>"
-    },
-    {
-      "type": "prose",
-      "group": "Onsen & ryokan",
-      "title": "Understanding ryokan",
-      "body": "<p>A <b>ryokan</b> is a traditional Japanese inn, and staying in one is as much an experience as any sight on this trip. What makes it different from a hotel: <b>futon bedding</b> on tatami mats (rolled out by staff while you're at dinner); <b>yukata</b> (cotton robe) provided and worn throughout the property, including to dinner; <b>kaiseki dinner</b> included — a multi-course seasonal meal served at a fixed time in your room or a private dining space; and a <b>Japanese breakfast</b> equally elaborate the next morning. Both meals are included in the room price and are not optional.</p><p>The protocol: shoes off at the genkan (entrance), follow the staff's lead. At dinner, sake or beer is extra and ordered from the menu. Checkout is typically 10:00–11:00. The stay has a fixed shape — the experience is about <b>time that isn't optimised</b>. Don't schedule anything before noon on ryokan check-out mornings.</p><p>For this trip: Yufuin and Miyajima are the two ryokan nights. Yufuin has the better range of properties; Miyajima has the better location. Both must be booked 3–6 months in advance for October.</p>"
-    },
-    {
-      "type": "prose",
-      "group": "Onsen & ryokan",
-      "title": "Onsen etiquette",
-      "body": "<p>Hot-spring bathing is a cornerstone of the trip — Beppu, Yufuin, and both ryokans all have it. The rules are consistent: <b>shower and rinse completely before entering any communal bath</b>. Wash everything, rinse thoroughly, then enter slowly. Move slowly. Keep your voice down — onsen are meditative, not social. Towels stay outside the water or folded on your head. Hair must be tied back or kept dry. Most onsen have separate-sex communal baths. Both ryokans on this trip have private onsen rooms (kashikiri-buro) bookable for the group — often the better experience and the right call with tattoos present.</p>"
-    },
-    {
-      "type": "panel",
-      "group": "Onsen & ryokan",
-      "title": "Tattoos & onsen — the exact protocol",
-      "body": "<p>Most traditional onsen ban visible tattoos in communal baths. This is enforced. The solution is straightforward: <b>book a private onsen room (kashikiri-buro, 貸切風呂)</b> at every facility on this trip. Private rooms are reserved by the hour for your group only — no communal bath, no restriction, and for a group of 3–5 they are often the better experience anyway.</p><p><b>At booking:</b> email the ryokan directly in English. Write: \"Some of our group have tattoos. We'd like to confirm availability of a private onsen room (kashikiri-buro).\" A good property responds clearly and either confirms or directs you to an alternative. Do this before paying any deposit.</p><p><b>At Beppu:</b> the Takegawara sand bath has been historically more lenient — the sand covers the body. ⚠ Call ahead to confirm, or show staff this phrase via Google Translate: 「タトゥーがあっても入浴できますか？」(Can I bathe if I have tattoos?)</p><p><b>Never try to hide tattoos</b> in a shared onsen and get caught. The resulting situation is uncomfortable for everyone involved — staff included. Ask before you enter, every time.</p>",
-      "checklist": [
-        "Email Yufuin ryokan before booking: confirm private onsen room (kashikiri-buro) availability",
-        "Email Miyajima ryokan before booking: same request — must be done before paying deposit",
-        "Beppu Takegawara sand bath: call ahead or show 「タトゥーがあっても入浴できますか？」to staff",
-        "Beppu hotel: ask front desk on check-in about private bath options",
-        "Save the kanji phrase 「貸切風呂」(private onsen room) in your phone — use it at any facility"
-      ]
-    },
-    {
-      "type": "prose",
-      "group": "Food & Fukuoka",
-      "title": "What to eat — by city",
-      "body": "<p><b>Fukuoka:</b> Japan's food capital by most serious rankings. <b>Hakata ramen</b> (tonkotsu) is the original — rich pork-bone broth, creamy and opaque, thin noodles, chashu pork belly, served at a narrow counter with the cook in front of you. Order kae-dama (extra noodles) when your noodles run out. <b>Yatai stall food:</b> yakitori (grilled skewers), motsu nabe (offal hot pot — Fukuoka's cold-weather staple), and mentaiko pasta. <b>Mentaiko</b> (spicy cod roe) is Fukuoka's most iconic ingredient — it appears on pasta, in onigiri, on toast at breakfast, and in every souvenir shop.</p><p><b>Yanagawa:</b> <b>Unaju</b> (grilled eel on rice in a lacquer box) — properly expensive (≈¥2,500–4,000), worth the price for one meal. Yanagawa's eel comes from local farms; it's sweet-savory tare-glazed and charcoal-grilled.</p><p><b>Nagasaki:</b> <b>Champon</b> — thick noodles in rich pork-seafood broth, Chinese-Japanese fusion. Not ramen; lighter and vegetable-loaded. <b>Sara udon</b> — crispy fried noodles topped with a sauced stir-fry. <b>Castella</b> — Portuguese-origin sponge cake; Fukusaya brand is the definitive version. <b>Kakuni manju</b> — braised pork belly in a steamed bun.</p><p><b>Hiroshima:</b> <b>Hiroshima okonomiyaki</b> — layered (noodles, cabbage, pork, egg), cooked flat. Distinct from Osaka's mixed style. <b>Oysters</b> — Hiroshima produces ~60% of Japan's oysters; grilled on the street in Miyajima is the best format.</p><p><b>Miyajima:</b> <b>Momiji manju</b> — maple-leaf cakes (red bean, custard, or chocolate); buy the freshly baked ones from any shop on the approach road. <b>Grilled oysters</b> on Omotesando from street vendors — eaten standing.</p>"
-    },
-    {
-      "type": "prose",
-      "group": "Food & Fukuoka",
-      "title": "How to order in Japan",
-      "body": "<p>Many ramen and tonkatsu shops use <b>vending machine ticket systems (shokken)</b>: buy a meal ticket at the machine by the door before sitting, hand it to the cook at the counter. Most machines have photos. When in doubt, press the <b>top-left button</b> — it's almost always the most popular item.</p><p>At regular restaurants: point at the menu and say <b>kore o kudasai</b> (this one, please). Photo menus are common; plastic food models at the entrance show exactly what dishes look like. Water comes automatically and is free. <b>Okaikei o onegaishimasu</b> = bill, please. Pay at the register by the door — don't leave cash on the table.</p><p>At a yatai: sit at any open counter stool, the cook makes eye contact and takes your order. 6–10 items on a board above. Point and nod. A cold namashibori beer or whisky highball is the natural companion. <b>Set lunch (ランチセット)</b>: most good restaurants serve a set lunch for ¥1,000–1,800 using the same ingredients as the ¥4,000+ dinner. Find the restaurants you want to try and go at lunch instead of dinner when possible.</p>"
-    },
-    {
-      "type": "prose",
-      "group": "Food & Fukuoka",
-      "title": "Konbini — Japan's fourth meal",
-      "body": "<p>Japanese convenience stores are not a compromise. <b>7-Eleven Japan</b> is the best; FamilyMart and Lawson are close seconds. You will stop here at least once a day. These are the items worth buying:</p><ul><li><b>Onigiri</b> (triangle rice balls, ¥130–180): tuna-mayo (ツナマヨ) for the familiar; mentaiko (明太子) while in Fukuoka. To open: pull the tab marked 1 on the back, then 2 and 3 to separate the wrapper halves and release the nori. Do not tear it — there is a correct way.</li><li><b>Egg salad sandwich</b> (たまごサラダサンドイッチ): crustless white bread, very sweet mayo. Genuinely one of the best sandwiches in Japan.</li><li><b>Nikuman</b> (肉まん): steamed pork bun from the hot case by the register, ≈¥160. Point at the steamer and say <i>nikuman hitotsu</i>.</li><li><b>Canned coffee</b> (hot): Georgia Original, the orange can, ¥130 from the in-store vending machine. Hold with both hands. It is what Japan tastes like at 08:00.</li><li><b>Yakitori skewers</b> from the hot case: acceptable late-night protein after a long walking day.</li></ul><p>The 7-Eleven ATM inside is the most reliable source of cash from any foreign card. Use it every time you need yen — not bank ATMs, not post offices unless confirmed to work.</p>"
-    },
-    {
-      "type": "prose",
-      "group": "Food & Fukuoka",
-      "title": "Where to eat — specific picks",
-      "body": "<p>⚠ All restaurant information needs pre-trip verification. Confirm each place is still operating, check current hours, and verify prices before your trip. Use Tabelog (tabelog.com/en) and a current Google search with the year.</p><p><b>Shin-Shin (博多らーめん ShinShin) — Hakata tonkotsu, Fukuoka</b></p><ul><li><b>Where:</b> Tenjin area, multiple Fukuoka locations — ⚠ verify exact address and nearest open branch at shinshin.co.jp before going</li><li><b>From Hakata hotel:</b> 15–20 min walk, or 5 min on the Kuko subway line to Tenjin station (≈¥260)</li><li><b>Best day:</b> Day 2 (establish your ramen baseline) or Day 13 (last-night ritual)</li><li><b>Reservation:</b> Walk-in only. Ticket machine at the door — top-left button is the standard bowl (≈¥900). Peak queue 19:00–21:00. Arrive at opening (~17:30) or after 21:00 to walk straight in. Say <i>kae-dama hitotsu</i> when the noodles run out for a second serving in the same broth (≈¥150).</li></ul><p><b>Nakasu yatai strip — evening food stalls, Fukuoka</b></p><ul><li><b>Where:</b> Along the Naka River in Nakasu district, between Nakasu-Kawabata and Tenjin stations</li><li><b>From Hakata hotel:</b> 15 min walk, or 2 stops on the Hakozaki line to Nakasu-Kawabata station</li><li><b>Best days:</b> Days 1, 2, 4, 13 — any Fukuoka evening. Do at least two visits on different nights.</li><li><b>Reservation:</b> No reservations possible. Walk the strip after 18:30, sit at any open stool. Budget ≈¥2,500–3,500 per stall. Do 2–3 stalls across the evening — don't settle in at one.</li></ul><p><b>Shikairō (四海楼) — champon original, Nagasaki</b></p><ul><li><b>Where:</b> On the hillside near Glover Garden, Nagasaki — ⚠ verify current address at shikairo.co.jp; credited with inventing champon in 1899</li><li><b>From Nagasaki hotel:</b> ~15 min walk uphill, roughly the same direction as Glover Garden</li><li><b>Best day:</b> Day 8 (dinner after Glover Garden) or Day 9 lunch (calmer than dinner service)</li><li><b>Reservation:</b> Walk-in; popular at dinner — expect a queue after 19:00. If the queue is over 40 min, alternatives in Chinatown are 1–2 blocks back and equivalent. ⚠ Verify hours before going.</li></ul><p><b>Okonomimura (お好み村) — Hiroshima okonomiyaki</b></p><ul><li><b>Where:</b> Multi-storey building in the Shintenchi area, Naka-ku, Hiroshima — ⚠ verify at okonomimura.jp</li><li><b>From Peace Memorial Museum:</b> 10 min walk</li><li><b>Best day:</b> Day 10 (dinner after the Peace Museum — earned food after a heavy afternoon)</li><li><b>Reservation:</b> Walk-in. Find a floor with the cook working and a counter seat open. Order <i>buta</i> (pork) as the base and watch it get built in layers. ≈¥1,000–1,300 ⚠ verify.</li></ul><p><b>Miyajima grilled oyster vendors (やきがき)</b></p><ul><li><b>Where:</b> Along Omotesando shopping street, the main approach road from the ferry pier — follow the smoke and grill smell</li><li><b>From the ferry dock:</b> 5 min walk toward the shrine</li><li><b>Best day:</b> Day 11 (mid-morning arrival snack, before ryokan check-in)</li><li><b>Reservation:</b> Walk-in, counter service. Point at the grill. ≈¥300–500 per oyster ⚠ verify. Eat standing.</li></ul>"
-    },
-    {
-      "type": "prose",
-      "group": "Shopping",
-      "title": "Anime, gaming & collectibles",
-      "body": "<p>Fukuoka is not Akihabara. Expect solid coverage of current releases, adequate figure selection, reasonable game prices — not the 12-storey megastore. The advantage: less overwhelming, easier to navigate, staff less rushed.</p><ul><li><b>Animate Hakata</b> — flagship anime goods chain. In or near Canal City Hakata — ⚠ verify exact current location at animate.co.jp before going. New manga, figures, character goods, merchandise for current series. Typical hours 11:00–21:00 ⚠ verify. Budget 45 min.</li><li><b>Yodobashi Camera Hakata</b> — adjacent to Hakata station Hakata City complex — ⚠ verify at yodobashi.com. Multiple floors: gaming floor has physical Japanese releases (Switch cartridges are region-free — buy any title here, it works on your home console); hobby floor has figures; electronics throughout. Budget 90 min.</li><li><b>Gacha machines (ガチャガチャ)</b> — coin capsule toy machines, ¥200–500 per turn. Available in Canal City basement, Yodobashi, and most large shopping buildings. Budget at least 5 turns each. The creep is intentional.</li></ul><p>For the serious collector: Mandarake, deep vintage markets, and Akihabara-level density are not present in Fukuoka. That trip requires Tokyo. Budget for it on a future leg.</p>"
-    },
-    {
-      "type": "prose",
-      "group": "Shopping",
-      "title": "Food & kitchen — what to bring home",
-      "body": "<p>Kyushu has strong food export culture. The best items to buy, city by city:</p><ul><li><b>Mentaiko gift boxes (Fukuoka)</b> — Fukuoka's spicy cod roe, the city's most iconic food souvenir. Buy vacuum-sealed gift boxes at <b>Yamaya</b> (やまや) — a Fukuoka-based mentaiko brand with shops near Hakata station and at Fukuoka Airport (⚠ verify current locations at yamaya.co.jp). Also available at the Hakata Hankyu B1 food hall inside Hakata station. ≈¥1,500–3,500 per gift box ⚠ verify. Buy on Day 13.</li><li><b>Hakata ramen kits (Fukuoka)</b> — packaged tonkotsu broth and noodle sets from local counters, sold at the Hakata Hankyu B1 food hall. ≈¥600–1,200 per kit ⚠ verify. Buy on Day 13 when you know how much luggage space you have.</li><li><b>Fukusaya castella (Nagasaki)</b> — yellow tin box, dense honey-egg sponge cake, the definitive Nagasaki souvenir since 1624. Individual vacuum-sealed slices travel well; the full tin is the premium gift option. Buy on Day 9 — ⚠ verify current shop locations and hours at fukusaya.jp.</li><li><b>Yufuin ceramics (Yufuin)</b> — locally made earthenware along Yunotsubo Kaido: plates, sake cups, tea bowls. ≈¥3,000–15,000 depending on piece. Buy on the Day 6 morning walk before ryokan check-in.</li><li><b>Miyajima shamoji (Miyajima)</b> — traditional hand-carved wooden rice paddles; Miyajima is the historical source of Japan's rice paddles. A full-size working paddle costs ≈¥500–3,000 on the Omotesando approach road. Specific to this place.</li><li><b>Tax-free shopping:</b> show your passport at participating stores on ¥5,000+ purchases for the 8–10% consumption tax refund. The in-store counter is faster than the airport fallback.</li></ul>"
-    },
-    {
-      "type": "panel",
-      "group": "Language guide",
-      "title": "Pronunciation & how to use this guide",
-      "body": "<p>All phrases in this section use <b>Hepburn romanisation</b> — the same system on train station signs throughout Kyushu. Japanese phonetics are consistent: once you know the five vowels and three rules, you can pronounce almost any word correctly.</p><p><b>The five vowels, always pure:</b> A = \"ah\" (father) · I = \"ee\" (feet) · U = soft near-silent \"oo\" · E = \"eh\" (bed) · O = \"oh\" (boat)</p><p><b>The R:</b> Not the English R. Flick your tongue tip against the ridge just behind your front teeth — it sounds like a quick, soft D. \"Ramen\" is closer to \"dah-men\" than \"ray-men.\"</p><p><b>Silent U:</b> The U at the end of <i>desu</i> and <i>masu</i> is nearly silent. Say \"des\" and \"mas,\" not \"deh-soo\" and \"mah-soo.\" This is the single most recognisable foreign-speaker error in Japanese.</p><p><b>Double consonants</b> (tt, kk, pp) have a short pause before them. <i>Kitte</i> (stamp) = kit-teh. <i>Issho</i> (together) = is-sho.</p><p>All phrases use <b>polite desu-masu form</b> — appropriate for every tourist interaction. Staff at every hotel, ryokan, and restaurant throughout Kyushu speak standard Japanese with visitors. You will hear Hakata dialect in social settings, not at service counters.</p>",
-      "checklist": [
-        "A/I/U/E/O vowels are always pure — no silent letters except the final U in desu and masu",
-        "R sounds like a flicked soft D — not English R, not Spanish R",
-        "Desu = \"des\" not \"deh-soo\"; masu = \"mas\" not \"mah-soo\"",
-        "Double vowels (ou, ii, uu) hold slightly longer — don't rush them",
-        "Double consonants (tt, kk, pp) pause before them: issho = is-sho, kitte = kit-teh",
-        "When in doubt, add onegaishimasu to any request — it makes anything appropriately polite"
-      ]
-    },
-    {
-      "type": "prose",
-      "group": "Language guide",
-      "title": "Essential phrases — what everyone needs",
-      "body": "<p>These 15 phrases cover ~90% of tourist interactions. Learn them as sounds before the trip. <b>Numbers:</b> ichi (1), ni (2), san (3), yon (4), go (5), roku (6), nana (7), hachi (8), kyuu (9), juu (10), hyaku (100), sen (1,000), ichi-man (10,000). Prices are always shown as Arabic numerals on screens and receipts — you mainly need numbers for ordering quantities.</p><ul><li><b>Sumimasen</b> <i>(su-mi-ma-sen)</i> — Excuse me / I'm sorry / May I. The most useful word in Japan. Use it before every question, every interruption, every time you need a server's attention. Never wave or call out — always sumimasen first.</li><li><b>Arigatou gozaimasu</b> <i>(a-ri-ga-toh go-zai-mas)</i> — Thank you (formal). Casual: <i>arigatou</i> alone. Both correct; the full version is never wrong in a service setting.</li><li><b>Onegaishimasu</b> <i>(oh-neh-gai-shi-mas)</i> — Please / I request this. Attach to any noun: \"Mizu onegaishimasu\" = water, please. More general than <i>kudasai</i>, which specifically means \"please give me.\"</li><li><b>Kore o kudasai</b> <i>(koh-reh oh ku-da-sai)</i> — This one, please. Point at a menu item or product and say this. Works everywhere.</li><li><b>Kore wa nan desu ka?</b> <i>(koh-reh wa nan des ka)</i> — What is this? Essential at markets, yatai, and anywhere you're pointing at food.</li><li><b>Ikura desu ka?</b> <i>(ee-ku-ra des ka)</i> — How much is this?</li><li><b>[Place] wa doko desu ka?</b> <i>([place] wa doh-koh des ka)</i> — Where is [place]? Substitute any place name: \"Hakata eki wa doko desu ka?\" = Where is Hakata station?</li><li><b>Hai / Iie</b> <i>(hai / ee-eh)</i> — Yes / No. <i>Hai</i> is also a general acknowledgment: \"I hear you / understood.\" Do not confuse with English \"Hi.\"</li><li><b>Wakarimashita / Wakarimasen</b> <i>(wa-ka-ri-mash-ta / wa-ka-ri-ma-sen)</i> — I understood / I don't understand. When lost: <i>wakarimasen</i> stated clearly signals the conversation needs to shift.</li><li><b>Mou ichido itte kudasai</b> <i>(moh ee-chi-doh it-teh ku-da-sai)</i> — Please say that again. Use this after almost catching something.</li><li><b>Yukkuri hanashite kudasai</b> <i>(yuk-ku-ri ha-na-shi-teh ku-da-sai)</i> — Please speak slowly. People comply immediately.</li><li><b>Nihongo ga amari jouzu ja nai desu</b> <i>(ni-hon-go ga a-ma-ri joh-zu ja nai des)</i> — My Japanese isn't very good. A modest opener that prompts staff to simplify, gesture, or find English assistance.</li><li><b>Eigo ga hanasemasu ka?</b> <i>(eh-go ga ha-na-seh-mas ka)</i> — Do you speak English? Always after <i>sumimasen</i> first.</li><li><b>Daijoubu desu</b> <i>(dai-joh-boo des)</i> — It's okay / No problem. Also used to decline politely: \"Need a bag?\" → \"Daijoubu desu\" = No, I'm fine.</li><li><b>Chotto...</b> <i>(chot-toh)</i> — Just a moment / Hmm / That's a bit... Trailing off with <i>chotto</i> is a complete, polite sentence in Japanese — it signals hesitation or mild refusal without being blunt. Do not say \"no\" directly when this works.</li></ul>"
-    },
-    {
-      "type": "prose",
-      "group": "Language guide",
-      "title": "At restaurants & food stalls — full conversations",
-      "body": "<p><b>Ramen counters with ticket machines (食券機, shokken-ki)</b></p><p>Most Hakata ramen counters use a ticket machine at the entrance. Buy your ticket first — top-left button is almost always the standard bowl — sit at the counter, and hand the ticket to the cook. The cook may then ask:</p><ul><li><b>\"Katasa wa?\"</b> <i>(ka-ta-sa wa)</i> — How firm do you want the noodles? Options: <b>yawarakame</b> (soft), <b>futsuu</b> (standard), <b>katame</b> (firm). Safe answer: <b>futsuu de onegaishimasu</b> <i>(fu-tsuu deh oh-neh-gai-shi-mas)</i>.</li><li><b>\"Abura wa?\"</b> <i>(a-bu-ra wa)</i> — How much pork fat? Options: <b>sukuname</b> (less), <b>futsuu</b> (standard), <b>oome</b> (extra). Same safe answer applies.</li><li><b>\"Toppings?\"</b> or pointing at add-ons — hold up fingers for quantity or say <b>hitotsu</b> (one), <b>futatsu</b> (two).</li></ul><p>When your noodles run out: say <b>kae-dama hitotsu onegaishimasu</b> <i>(ka-eh da-ma hi-to-tsu oh-neh-gai-shi-mas)</i> — one extra noodle serving in the remaining broth. Usually ≈¥100–150.</p><p><b>Ordering at any sit-down restaurant</b></p><ul><li>Get attention: <b>Sumimasen!</b> — then point and say <b>kore o hitotsu kudasai</b> <i>(koh-reh oh hi-to-tsu ku-da-sai)</i> — one of this, please. <i>Hitotsu</i> (1), <i>futatsu</i> (2), <i>mittsu</i> (3), <i>yottsu</i> (4), <i>itsutsu</i> (5).</li><li>What do you recommend?: <b>Osusume wa nan desu ka?</b> <i>(oh-su-su-meh wa nan des ka)</i></li><li>No meat: <b>Niku nashi de onegaishimasu</b> <i>(ni-ku na-shi deh oh-neh-gai-shi-mas)</i></li><li>Allergy: <b>[food] arerugii ga arimasu</b> <i>([food] a-reh-ru-gee ga a-ri-mas)</i> — I'm allergic to [food]. Key allergy words: <i>ebi</i> (shrimp), <i>kai</i> (shellfish), <i>komugi</i> (wheat/gluten), <i>rakkasei</i> (peanuts), <i>tamago</i> (egg), <i>nyu</i> (dairy).</li><li>English menu: <b>Eigo no menyu wa arimasu ka?</b> <i>(eh-go no men-yuu wa a-ri-mas ka)</i> — Do you have an English menu?</li></ul><p><b>At a yatai stall</b></p><ul><li>Walk up, sit at any open stool. The cook will look at you — nod. They'll ask: <b>\"Nani ni shimasu ka?\"</b> <i>(na-ni ni shi-mas ka)</i> — What would you like? Point at the board and say <b>kore o kudasai.</b></li><li>Draft beer: <b>Nama biiru hitotsu onegaishimasu</b> <i>(na-ma bee-ru hi-to-tsu)</i></li><li>The cook acknowledges with <b>Hai yo!</b> — coming right up. That is Hakata dialect; it means \"yes, got it.\" A good sign.</li><li>To ask what something is on the board: <b>Kore wa nan desu ka?</b> — point clearly. The cook usually mimes or names the ingredient.</li></ul><p><b>Paying</b></p><ul><li>Bill: <b>Okaikei onegaishimasu</b> <i>(oh-kai-keh oh-neh-gai-shi-mas)</i></li><li>Separate bills: <b>Betsubetsu de onegaishimasu</b> <i>(be-tsu-be-tsu deh)</i></li><li>Together: <b>Issho ni onegaishimasu</b> <i>(is-shoh ni)</i></li><li>At most counters, pay at the register on the way out. At yatai, pay directly to the cook before leaving your stool.</li></ul>"
-    },
-    {
-      "type": "prose",
-      "group": "Language guide",
-      "title": "At ryokans & onsen — full conversations",
-      "body": "<p><b>Checking in</b></p><ul><li>Confirm your reservation: <b>[Name] de yoyaku shite orimasu</b> <i>([name] deh yoh-ya-ku shi-teh oh-ri-mas)</i> — I have a reservation under [Name]. <i>Orimasu</i> (not <i>imasu</i>) is the humble/polite form — correct for speaking about your own actions to staff.</li><li>Expected staff response: <b>Kashikomarimashita</b> <i>(ka-shi-ko-ma-ri-mash-ta)</i> — Certainly, understood. Or: <b>Onamae wo kakunin sasete itadakemasu ka?</b> — May I confirm your name? Just say your name clearly.</li><li>If you need help with paperwork: <b>Koko ni nanika kaite mo ii desu ka?</b> — May I write something here? Point at the form.</li></ul><p><b>The tattoo / private onsen room conversation</b></p><ul><li>At the desk: <b>Tattoo ga arimasu ga, kashikiri-buro wo onegai dekimasu ka?</b> <i>(tat-too ga a-ri-mas ga, ka-shi-ki-ri boo-roh wo oh-neh-gai de-ki-mas ka)</i> — I have tattoos; may I request a private onsen room?</li><li>If available: <b>Kashikomarimashita</b> — Certainly. Or: <b>Mochiron desu</b> — Of course.</li><li>If they need to check: <b>Shoushou omachi kudasai</b> <i>(shoh-shoh oh-ma-chi ku-da-sai)</i> — Just a moment, please.</li><li>If unavailable: <b>Moushiwake gozaimasen, kashikiri-buro wa gozaimasen</b> — I'm terribly sorry, we don't have a private room. This is why the booking email confirmation matters before you pay a deposit.</li><li>To ask availability at any facility: <b>Kashikiri-buro wa arimasu ka?</b> — Do you have a private onsen room?</li></ul><p><b>Timing questions</b></p><ul><li>Dinner: <b>Yushoku wa nanji desu ka?</b> <i>(yuu-shoh-ku wa nan-ji des ka)</i> — What time is dinner?</li><li>Breakfast: <b>Asagohan wa nanji kara desu ka?</b> <i>(a-sa go-han wa nan-ji ka-ra des ka)</i> — What time does breakfast start?</li><li>Checkout: <b>Chekku-auto wa nanji made desu ka?</b> <i>(chek-ku a-u-to wa nan-ji ma-deh des ka)</i> — What time is checkout?</li><li>Private bath hours: <b>Kashikiri-buro wa nanji kara nanji made tsukaemasuka?</b> <i>(ka-shi-ki-ri boo-roh wa nan-ji ka-ra nan-ji ma-deh tsu-ka-eh-mas ka)</i> — What hours is the private bath available?</li></ul><p><b>Onsen</b></p><ul><li>Towel rules: <b>Taoru wa mizu ni irete wa ikemasen</b> — Don't put the towel in the water. (You won't need to say this, but you may hear it.)</li><li>Temperature too hot: <b>Chotto atsui desu ne</b> <i>(chot-toh a-tsui des neh)</i> — It's a bit hot, isn't it. Said softly to no one in particular — a polite acknowledgment, not a complaint.</li></ul>"
-    },
-    {
-      "type": "prose",
-      "group": "Language guide",
-      "title": "Getting around — directions & transit",
-      "body": "<p><b>Finding places</b></p><ul><li><b>[Place] wa doko desu ka?</b> — Where is [Place]? The all-purpose direction question. Works for any noun: station, toilet, exit, hotel, ferry dock.</li><li>Common responses to listen for: <b>Asoko desu</b> (over there) · <b>Koko desu</b> (here) · <b>Massugu</b> (straight ahead) · <b>Migi</b> (right) · <b>Hidari</b> (left) · <b>Mukou</b> (across, that way). Staff almost always gesture alongside — follow both the words and the hands.</li><li>Nearest train station: <b>Chikaku no eki wa doko desu ka?</b> <i>(chi-ka-ku no eh-ki wa doh-koh des ka)</i></li><li>Exit: <b>Deguchi wa doko desu ka?</b> <i>(deh-gu-chi wa doh-koh des ka)</i></li><li>Toilet: <b>Otearai wa doko desu ka?</b> or just <b>Toire wa doko desu ka?</b></li></ul><p><b>On trains and platforms</b></p><ul><li>Which platform for my train?: <b>[Beppu] yuki no densha wa nan-bansen desu ka?</b> <i>([Beppu] yoo-ki no den-sha wa nan-ban-sen des ka)</i> — Which platform for the train to Beppu?</li><li>Does this train stop there?: <b>Kono densha wa [Nagasaki] ni tomarimasu ka?</b> — Yes: <i>Hai, tomarimasu.</i> No: <i>Iie, tomarimasen</i> — the person will usually gesture or point toward the correct platform.</li><li>Transfer: you may hear <b>[Hakata] de norikaete kudasai</b> <i>(noh-ri-ka-eh-teh ku-da-sai)</i> — Please transfer at Hakata. This is also shown on train display boards.</li><li>Wrong train: <b>Sumimasen, kono densha wa [destination] ni ikimasu ka?</b> — Does this train go to [destination]?</li><li>Reserved seat car: look for <b>shiteiseki</b> (指定席) signs — your reserved car number is on your ticket.</li></ul><p><b>When you're lost</b></p><ul><li><b>Michi ni mayoimashita</b> <i>(mi-chi ni ma-yoh-i-mash-ta)</i> — I'm lost. Say this to any station staff or store employee — they will stop and help.</li><li><b>[Hotel name] ni ikitai no desu ga...</b> <i>([hotel] ni i-ki-tai no des ga)</i> — I want to go to [hotel]... The trailing <i>ga</i> (\"but...\") invites assistance; it's gentler and more culturally correct than a direct demand.</li><li><b>Koko wa doko desu ka?</b> — Where am I? Open your phone map to your location pin and show it — they will immediately point.</li><li>Ask someone to call a taxi: <b>Takushii wo yonde moraemasu ka?</b> <i>(ta-ku-shee oh yon-deh mo-ra-eh-mas ka)</i> — Could you call a taxi for me?</li></ul>"
-    },
-    {
-      "type": "prose",
-      "group": "Language guide",
-      "title": "Shopping & souvenirs",
-      "body": "<p><b>Browsing and buying</b></p><ul><li>May I look at this? (items in a case): <b>Kore wo misete moraemasu ka?</b> <i>(koh-reh oh mi-seh-teh mo-ra-eh-mas ka)</i></li><li>Just looking: <b>Mite iru dake desu</b> <i>(mi-teh i-ru da-keh des)</i> — Staff will stop hovering.</li><li>Price: <b>Ikura desu ka?</b> If you don't catch the number: <b>Kaite kudasai</b> <i>(kai-teh ku-da-sai)</i> — please write it. They will immediately write in Arabic numerals.</li><li>I'll take it: <b>Kore ni shimasu</b> <i>(koh-reh ni shi-mas)</i> — I'll have this one. More decisive than <i>kore o kudasai</i>; signals you're buying, not asking.</li><li>Bigger size: <b>Motto ookii saizu wa arimasu ka?</b> <i>(mot-toh oh-ki sai-zu wa a-ri-mas ka)</i> · Smaller: <b>Motto chiisai saizu wa arimasu ka?</b></li><li>Other colors: <b>Hoka no iro wa arimasu ka?</b> <i>(hoh-ka no i-ro wa a-ri-mas ka)</i></li><li>Gift wrapping: <b>Purezento you ni tsutsunde moraemasu ka?</b> <i>(pu-reh-zen-to yoh ni tsu-tsun-deh mo-ra-eh-mas ka)</i> — Could you wrap this as a gift?</li></ul><p><b>Tax-free shopping (免税, menzei)</b></p><ul><li>Is this item eligible?: <b>Kore wa menzei ni narimasu ka?</b> <i>(koh-reh wa men-zeh ni na-ri-mas ka)</i></li><li>Staff response: <b>Passport wo misete kudasai</b> — Please show your passport. Have it ready.</li><li>Staff may also ask: <b>Doko ni otomari desu ka?</b> — Where are you staying? Name your hotel.</li><li>Minimum is ¥5,000 in a single transaction. Purchased items are often sealed in a bag until you leave Japan — do not break the seal before departure or you owe the full tax.</li></ul><p><b>For the learner — building sentences in shops:</b> The pattern <b>[noun] wa arimasu ka?</b> (<i>[noun] wa a-ri-mas ka</i>) = \"Do you have [noun]?\" works universally. Add any noun: \"Eigo no menyu wa arimasu ka?\" (English menu?) · \"Suica no chajaa wa arimasu ka?\" (Suica charger?) · \"Chiisakattara arimasu ka?\" (Do you have a smaller one?). Master this one construction and you can ask about almost any product in any shop.</p>"
-    },
-    {
-      "type": "panel",
-      "group": "Language guide",
-      "title": "Hakata-ben — what you'll hear in Fukuoka",
-      "body": "<p><b>Hakata-ben</b> (博多弁) is the regional dialect of Fukuoka and surrounding Kyushu. You will hear it from locals at yatai stalls, in covered markets, and on the street — not from hotel, ryokan, or restaurant staff addressing tourists. You won't be expected to speak it, but recognising common expressions prevents confusion.</p><p>The most noticeable difference from standard Japanese: <b>sentence-ending particles</b>. Standard questions end with <i>-ka</i> (ですか); Hakata-ben often uses <i>-to</i>, <i>-yaken</i>, or shortened forms. Standard \"good/okay\" is <i>ii</i>; Hakata-ben is <i>yoka</i> (よか). The accent is generally flatter and more melodic than Tokyo Japanese — pitch accent is less pronounced.</p><p>Key point: every service staff member at every hotel, ryokan, and tourist venue on this itinerary will address you in standard Japanese. Hakata-ben is social, not transactional.</p>",
-      "checklist": [
-        "yoka (よか) — good / okay / fine. Standard equivalent: ii (いい). If a cook says 'yoka yoka,' they mean 'all good, no problem.'",
-        "bari (ばり) — very / super. Standard equivalent: sugoku (すごく). 'Bari oishii' = really delicious.",
-        "Hai yo! (はいよ！) — coming right up / got it. A cook's acknowledgment at a yatai or counter. A good sign.",
-        "~to sentence ending (〜と) — a softening particle on statements and questions. 'Ii to' = it's fine. Don't try to replicate it; just know it isn't an error.",
-        "nanbai? (なんばい？) — how much? Casual version of ikura desu ka. Heard between locals at markets.",
-        "~yaken (〜やけん) — because / so (Hakata equivalent of dakara/node). 'Oishii yaken' = it's delicious, so [you should try it]."
-      ]
-    },
-    {
-      "type": "prose",
-      "group": "Language guide",
-      "title": "When communication breaks down — recovery steps",
-      "body": "<p>Use these in order. Each step either resolves the problem or signals what kind of help you need. The goal is to keep the interaction moving without shutting it down.</p><ul><li><b>Step 1 — Slow it down:</b> <b>Yukkuri hanashite kudasai</b> <i>(yuk-ku-ri ha-na-shi-teh ku-da-sai)</i> — Please speak slowly. People comply immediately in Japan.</li><li><b>Step 2 — Repeat it:</b> <b>Mou ichido itte kudasai</b> <i>(moh ee-chi-doh it-teh ku-da-sai)</i> — Please say that again. Say this after almost catching something.</li><li><b>Step 3 — Write it:</b> <b>Kaite kudasai</b> <i>(kai-teh ku-da-sai)</i> — Please write it. Japanese people will immediately write prices, station names, or times in Arabic numerals. This closes most practical gaps with no further words required.</li><li><b>Step 4 — Use your phone:</b> Open Google Translate and point the phone toward the person. Say <b>Kore wo tsukatte mo ii desu ka?</b> <i>(koh-reh oh tsu-kat-teh mo ee des ka)</i> — Is it okay if I use this? Most people will type directly into it without further prompting.</li><li><b>Step 5 — Request English:</b> <b>Eigo ga hanaseru kata wa irasshaimasu ka?</b> <i>(eh-go ga ha-na-seh-ru ka-ta wa i-rash-shai-mas ka)</i> — Is there someone who speaks English? At any hotel, department store, or restaurant there will often be someone nearby. At stations, the green JR ticket window (midori-no-madoguchi) almost always has English-capable staff.</li><li><b>Signal genuine non-comprehension:</b> <b>Sumimasen, nihongo ga yoku wakarimasen</b> <i>(ni-hon-go ga yo-ku wa-ka-ri-ma-sen)</i> — I'm sorry, I don't understand Japanese well. This is not a failure — it prompts most people to simplify, gesture, draw, or find assistance. Never pretend to understand to avoid awkwardness; it always compounds the problem.</li></ul><p><b>For the learner — the core grammatical building block:</b> Japanese requests follow the pattern <b>[object] o [verb in te-form] kudasai</b> = \"please [do] [object].\" Once you know the te-form of common verbs, you can construct almost any instruction: <i>motte kite kudasai</i> (please bring it here) · <i>oshiete kudasai</i> (please explain / show me) · <i>kaite kudasai</i> (please write it) · <i>misete kudasai</i> (please show me). Add a noun before <i>o</i> and the construction is complete. This is the single most leveraged grammatical pattern for an intermediate learner navigating Japan independently.</p>"
-    },
-    {
-      "type": "prose",
-      "group": "References",
-      "title": "Sources & links",
-      "body": "<p>⚠ This guide is a structural draft. Every link should be re-checked closer to travel — prices, hours, and operators change.</p><ul><li><b>Visit Japan Web</b> (immigration &amp; customs): vjw-lp.digital.go.jp</li><li><b>JR Kyushu Rail Pass</b> (current prices &amp; booking): english.jrkyushu.co.jp — ⚠ verify all pass prices here before buying</li><li><b>National JR Pass:</b> japanrailpass.net — ⚠ price raised Oct 2023; verify current amount</li><li><b>Fukuoka City Subway:</b> subway.city.fukuoka.lg.jp/english</li><li><b>Beppu Jigoku Meguri</b> (hells tour combined ticket): beppu-jigoku.com — ⚠ verify combined entry price</li><li><b>Miyajima tide tables &amp; visitor info:</b> visit-miyajima.or.jp — check before Day 11</li><li><b>Hiroshima Peace Memorial Museum:</b> hiro-tsuitokinenkan.jp/en — ⚠ verify entry and hours</li><li><b>Nagasaki Atomic Bomb Museum:</b> nabmuseum.jp/english — ⚠ verify entry and hours</li><li><b>Shin-Shin ramen (Fukuoka):</b> shinshin.co.jp — ⚠ verify location and hours before going</li><li><b>Shikairō champon (Nagasaki):</b> shikairo.co.jp — ⚠ verify still operating and hours</li><li><b>Fukusaya castella (Nagasaki):</b> fukusaya.jp — ⚠ verify shop locations</li><li><b>Okonomimura (Hiroshima):</b> okonomimura.jp — ⚠ verify still operating 2026</li><li><b>Yamaya mentaiko (Fukuoka):</b> yamaya.co.jp — ⚠ verify shop locations</li><li><b>Tabelog</b> (restaurant ratings): tabelog.com/en — for pre-trip restaurant verification</li><li><b>Japan Meteorological Agency</b> (weather &amp; typhoon): jma.go.jp/jma/indexe.html</li><li><b>Japan Visitor Hotline</b> (English, 24/7): 050-3816-2787</li></ul>"
+      "group": "Food & shopping",
+      "title": "What to eat",
+      "body": ""
     }
   ]
 }

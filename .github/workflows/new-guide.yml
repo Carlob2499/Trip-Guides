@@ -1,0 +1,51 @@
+name: New guide scaffold
+
+# Fires when the "new-guide" label lands on an issue. The New-guide issue form
+# (.github/ISSUE_TEMPLATE/new-guide.yml) auto-applies that label, so submitting the
+# form is enough. Requires a repo label named "new-guide" to exist.
+on:
+  issues:
+    types: [labeled]
+
+# Least privilege: commit a branch, open a PR, comment/close the issue.
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  scaffold:
+    if: github.event.label.name == 'new-guide'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Parse issue and generate scaffold
+        id: gen
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: node scripts/issue-to-scaffold.mjs
+
+      - name: Commit scaffold, open PR, close issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SLUG: ${{ steps.gen.outputs.slug }}
+          COUNTRY: ${{ steps.gen.outputs.country }}
+          ISSUE_NUM: ${{ github.event.issue.number }}
+        run: |
+          set -euo pipefail
+          BRANCH="new-guide/${SLUG}"
+          git config user.name  "waypoint-scaffold[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add src/content/guides guides-intake
+          git commit -m "Scaffold new guide: ${COUNTRY} (from #${ISSUE_NUM})"
+          git push -u origin "$BRANCH"
+          PR_URL=$(gh pr create --base main --head "$BRANCH" \
+            --title "New guide: ${COUNTRY}" \
+            --body "Scaffolded from #${ISSUE_NUM} via the New-guide form. This is a **draft** (\`draft: true\`) — it lands in the *Guides-to-be* tier with live weather/holidays/currency wired, but every fact still needs a research pass per CLAUDE.md before it graduates. Intake spec: \`guides-intake/${SLUG}.md\`.")
+          gh issue comment "${ISSUE_NUM}" --body "Scaffolded ✅ — draft PR opened: ${PR_URL}. It'll appear under *Guides-to-be* once merged; a research pass polishes it from there."
+          gh issue close "${ISSUE_NUM}"

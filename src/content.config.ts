@@ -83,6 +83,7 @@ const guides = defineCollection({
     footer: z.string().optional(),
     country: z.string(),          // sets the accent colour (see src/lib/themes.ts)
     verified: z.string().optional(),  // freshness stamp shown under the dek, e.g. "✓ Verified June 2026 — …"
+    draft: z.boolean().optional(),    // true = a "Guide-to-be" scaffold; listed in the home page's draft tier, not the curated grid
     intro: z.string().optional(),
     sections: z.array(section),
   }),

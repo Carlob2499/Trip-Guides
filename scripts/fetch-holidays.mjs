@@ -14,17 +14,13 @@ import { readFile, readdir, writeFile, mkdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+// Country → ISO 3166-1 alpha-2, shared with the site (single source of truth).
+// countries.mjs is plain ESM precisely so this Node script can import it too.
+import { COUNTRY_CODES } from "../src/data/countries.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const GUIDES_DIR = path.join(ROOT, "src", "content", "guides");
 const OUT_DIR = path.join(ROOT, "src", "data", "holidays");
-
-// Country → ISO 3166-1 alpha-2. MUST stay in sync with src/lib/themes.ts
-// COUNTRY_CODES (this script runs in plain Node and can't import the TS module).
-const COUNTRY_CODES = {
-  Denmark: "DK", Germany: "DE", Portugal: "PT",
-  Japan: "JP", "South Korea": "KR", Korea: "KR",
-};
 const MONTHS = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
 
 function flatten(sections, out = []) {
