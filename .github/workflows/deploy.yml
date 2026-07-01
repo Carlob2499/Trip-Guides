@@ -24,6 +24,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npm test
       # Refresh public-holiday data (Nager.Date) before building. The script is
       # self-healing: on any fetch error it keeps the committed JSON, so the build
       # always proceeds with last-good data.
