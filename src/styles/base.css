@@ -1,0 +1,22 @@
+/* === SHARED BASE ============================================================
+   Design tokens, reset, and page-chrome shared by EVERY page (guide + hub).
+   Imported before the page-specific stylesheet so tokens + reset live in one
+   place; page sheets layer their own layout on top. Single source of truth. */
+
+/* --- DESIGN TOKENS --------------------------------------------------------- */
+/* --chrome-h = rendered height of the sticky top chrome; drives scroll-padding
+   and section scroll-margins so they never drift out of sync (see guide.css). */
+:root{--bg:#f3ecdf;--bg2:#eae1d0;--ink:#211e1a;--card:#fcf8f0;--rule:#ddd2bd;--rule2:#c8bca2;--muted:#615849;--accent:#9c4421;--accent2:#7a3b2e;--green:#3f6b4a;--warn:#9c5009;--chrome-h:94px}
+/* Dark-mode override — via data-theme="dark" on <html>, or auto via OS preference.
+   --accent / --accent2 are set inline per-guide and are intentionally NOT overridden here. */
+@media(prefers-color-scheme:dark){html:not([data-theme="light"]){
+  --bg:#1c1714;--bg2:#241f1a;--ink:#ede5d4;--card:#27211a;--rule:#3e3328;--rule2:#4e4235;--muted:#9d8d7d;--green:#6aab76;--warn:#d9923f}}
+[data-theme="dark"]{--bg:#1c1714;--bg2:#241f1a;--ink:#ede5d4;--card:#27211a;--rule:#3e3328;--rule2:#4e4235;--muted:#9d8d7d;--green:#6aab76;--warn:#d9923f}
+
+/* --- RESET & BASE ---------------------------------------------------------- */
+*{margin:0;padding:0;box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;overflow-x:clip;max-width:100%}
+body{background:var(--bg);color:var(--ink);font-family:'DM Sans',-apple-system,system-ui,sans-serif;font-size:1.04rem;line-height:1.7;-webkit-font-smoothing:antialiased}
+/* Fine paper-grain noise overlay — fixed, non-interactive, behind everything. */
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}

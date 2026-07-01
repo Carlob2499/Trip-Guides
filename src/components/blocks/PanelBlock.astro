@@ -3,5 +3,5 @@ const { sec, keyPrefix = "p" } = Astro.props;
 ---
 {sec.body && <Fragment set:html={sec.body} />}
 {(sec.checklist || []).map((i: string, j: number) => (
-  <label class="check"><input type="checkbox" data-pkey={`${keyPrefix}-${j}`} /> <Fragment set:html={i} /></label>
+  <label class="check"><input type="checkbox" data-pkey={`${keyPrefix}-${j}`} /><span class="check-txt"><Fragment set:html={i} /></span></label>
 ))}

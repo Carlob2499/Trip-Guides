@@ -17,7 +17,7 @@ const { sec, keyPrefix = "dy" } = Astro.props;
         <div class="daykit">
           <span class="kit-label">Day kit</span>
           {d.checklist.map((i: string, j: number) => (
-            <label class="check"><input type="checkbox" data-pkey={`${keyPrefix}-d${di}-${j}`} /> <Fragment set:html={i} /></label>
+            <label class="check"><input type="checkbox" data-pkey={`${keyPrefix}-d${di}-${j}`} /><span class="check-txt"><Fragment set:html={i} /></span></label>
           ))}
         </div>
       )}

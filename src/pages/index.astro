@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import PwaHead from "../components/PwaHead.astro";
 import { accentFor } from "../lib/themes";
 import { flattenSections } from "../lib/exports";
+import "../styles/base.css";
 import "../styles/hub.css";
 
 const guides = (await getCollection("guides")).sort((a, b) =>

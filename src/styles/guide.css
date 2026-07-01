@@ -1,18 +1,6 @@
-/* === DESIGN TOKENS =========================================================== */
-:root{--bg:#f3ecdf;--bg2:#eae1d0;--ink:#211e1a;--card:#fcf8f0;--rule:#ddd2bd;--rule2:#c8bca2;--muted:#615849;--accent:#9c4421;--accent2:#7a3b2e;--green:#3f6b4a;--warn:#9c5009}
-
-/* Dark-mode token override — via data-theme="dark" on <html> or auto via OS preference.
-   --accent and --accent2 are NOT overridden here; they're set inline per-guide. */
-@media(prefers-color-scheme:dark){html:not([data-theme="light"]){
-  --bg:#1c1714;--bg2:#241f1a;--ink:#ede5d4;--card:#27211a;--rule:#3e3328;--rule2:#4e4235;--muted:#9d8d7d;--green:#6aab76;--warn:#d9923f}}
-[data-theme="dark"]{--bg:#1c1714;--bg2:#241f1a;--ink:#ede5d4;--card:#27211a;--rule:#3e3328;--rule2:#4e4235;--muted:#9d8d7d;--green:#6aab76;--warn:#d9923f}
-
-/* === RESET & BASE ============================================================ */
-*{margin:0;padding:0;box-sizing:border-box}
-[hidden]{display:none!important}
-html{scroll-behavior:smooth;scroll-padding-top:94px;-webkit-text-size-adjust:100%;overflow-x:clip;max-width:100%}
-body{background:var(--bg);color:var(--ink);font-family:'DM Sans',-apple-system,system-ui,sans-serif;font-size:1.04rem;line-height:1.7;-webkit-font-smoothing:antialiased}
-body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+/* === GUIDE BASE (tokens, reset, noise texture live in base.css) ============= */
+/* scroll-padding keeps hash-linked sections clear of the sticky chrome. */
+html{scroll-behavior:smooth;scroll-padding-top:var(--chrome-h)}
 .topbar,header,.shell,footer{position:relative;z-index:1}
 /* Display h1 uses Fraunces (editorial italic variable font).
    All other headings stay with Space Grotesk. */
@@ -86,24 +74,38 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 .gtab-split{border-left:1px solid var(--rule);margin-left:.2rem;padding-left:1rem;font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.04em;color:var(--muted)}
 .gtab-split.gtab-active{color:var(--accent)}
 @media(max-width:899px){.gtab{padding:.44rem .7rem;font-size:.77rem}}
-/* scroll-padding accounts for sticky chrome height */
-html{scroll-padding-top:94px}
 
 /* === LAYOUT SHELL ============================================================ */
-.shell{max-width:1200px;margin:0 auto;padding:0 1.1rem}
-
-/* sidebar nav is gone — tabs replace it; .sidenav hidden everywhere */
-.sidenav{display:none!important}
+/* Widened so desktop uses the screen. Text sections sit in a centered reading
+   column (--read) for legibility; sights (image grid) and maps break out to fill
+   the shell — see READING COLUMN below. */
+:root{--read:42rem}
+.shell{max-width:1400px;margin:0 auto;padding:0 1.1rem}
 
 /* === CONTENT ================================================================= */
 .content{min-width:0;padding:1.2rem 0 3rem}
-.catblock{scroll-margin-top:94px}
-.cat-title{font-family:'Space Grotesk',-apple-system,system-ui,sans-serif;font-size:clamp(1.5rem,4vw,2rem);margin:2.4rem 0 1rem;padding-bottom:.45rem;border-bottom:2px solid var(--ink);display:flex;align-items:baseline;gap:.6rem}
+.catblock{scroll-margin-top:var(--chrome-h)}
+.cat-title{font-family:'Space Grotesk',-apple-system,system-ui,sans-serif;font-size:clamp(1.5rem,4vw,2.2rem);margin:2.4rem 0 1rem;padding-bottom:.45rem;border-bottom:2px solid var(--ink);display:flex;align-items:baseline;gap:.6rem}
 .catblock:first-child .cat-title{margin-top:.3rem}
 .cat-title::before{content:"";flex:none;width:.5rem;height:.5rem;background:var(--accent)}
-.block{scroll-margin-top:94px;margin-bottom:1rem}
+.block{scroll-margin-top:var(--chrome-h);margin-bottom:1rem}
 .block-title{font-family:'Space Grotesk',-apple-system,system-ui,sans-serif;font-size:1.32rem;margin:.1rem 0 .5rem}
-@media(max-width:899px){.catblock,.block{scroll-margin-top:82px}}
+/* Below 900px the sticky chrome is shorter — retune --chrome-h once; scroll-padding
+   and every scroll-margin above follow automatically. */
+@media(max-width:899px){html{--chrome-h:82px}}
+
+/* === READING COLUMN (wide desktop) ========================================= */
+/* Prose/panel/list/day/budget sections sit in a centered column at a comfortable
+   line length; sights become an image grid and maps stretch, both filling the
+   widened shell (the "edge-to-edge media" side of the widen). The reading cap only
+   bites once the shell is wider than --read, so tablet/mobile are untouched. */
+.catblock>.cat-title,.catblock>.block{max-width:var(--read);margin-inline:auto}
+/* Sights: responsive image grid across the full shell width. */
+.block:has(.sight){max-width:100%;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem 1.1rem;align-items:start}
+.block:has(.sight) .block-title-row{grid-column:1/-1;margin-bottom:0}
+.block:has(.sight) .card{margin-bottom:0}
+/* Embedded maps: let the section fill the shell so the map is generously sized. */
+.block:has(.osmmap){max-width:100%}
 /* Prose reading improvements — paragraph rhythm and list breathing room */
 .card p{line-height:1.75}
 .card p+p{margin-top:.85rem}
@@ -154,6 +156,10 @@ html{scroll-padding-top:94px}
 .check{display:flex;gap:.6rem;align-items:flex-start;font-size:.95rem;padding:.32rem 0;cursor:pointer;transition:color .12s}
 .check:hover{color:var(--accent2)}
 .check input{margin-top:.28rem;width:1.05rem;height:1.05rem;accent-color:var(--accent);flex:none;cursor:pointer}
+/* The label text (which may carry inline <b>/<a>) must be ONE flex item so it
+   flows and wraps as normal text; without this wrapper each inline tag becomes a
+   separate flex item laid out in a row, garbling and overflowing the line. */
+.check-txt{flex:1;min-width:0;overflow-wrap:anywhere}
 
 /* === NUMBERED ROUTE STEPS ==================================================== */
 ol.steps{margin:.4rem 0 .1rem;padding-left:0;list-style:none;counter-reset:step}
@@ -381,6 +387,10 @@ body{overflow-x:clip}
 .card tbody td{padding:.3rem .55rem;border-bottom:1px solid var(--rule)}
 .card tbody tr:last-child td{border-bottom:none}
 .card tbody tr:hover td{background:var(--bg2)}
+/* On phones/tablets a multi-column table (e.g. raid counter charts) can exceed the
+   viewport; make it scroll horizontally instead of being clipped by overflow-x:clip.
+   Desktop keeps the normal full-width table. */
+@media(max-width:720px){.card table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}}
 details{margin:.3rem 0;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
 details summary{cursor:pointer;padding:.55rem .8rem;font-weight:600;font-size:.92rem;list-style:none;display:flex;align-items:center;gap:.5rem;user-select:none;background:var(--bg2)}
 details summary::-webkit-details-marker{display:none}
@@ -403,7 +413,6 @@ details table{margin:.3rem 0 .4rem}
 @media print {
   /* Hide every interactive or navigation element */
   .topbar, nav.topbar, .sticky-chrome, .guide-tabs,
-  .sidenav,
   .botbar, .sheet, .sheet-backdrop,
   .split-wrap,
   .jl-wrap,
@@ -477,7 +486,7 @@ details table{margin:.3rem 0 .4rem}
 .split-card{background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:1.1rem 1.25rem;margin-bottom:.9rem;box-shadow:0 1px 3px rgba(33,30,26,.06)}
 .split-card--row{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem .9rem;padding:.75rem 1.25rem}
 .sc-head{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin-bottom:.75rem}
-.sc-label{font-family:'Space Grotesk',-apple-system,system-ui,sans-serif;font-size:.82rem;font-weight:600;letter-spacing:-.01em;color:var(--muted);text-transform:uppercase;font-size:.7rem;letter-spacing:.06em}
+.sc-label{font-family:'Space Grotesk',-apple-system,system-ui,sans-serif;font-size:.7rem;font-weight:600;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
 .sc-body{display:flex;flex-direction:column;gap:.5rem}
 /* buttons */
 .sc-add-btn,.sc-add-expense-btn{font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;background:none;border:1px solid var(--rule2);border-radius:4px;padding:.3rem .7rem;cursor:pointer;color:var(--muted);transition:color .14s,border-color .14s,background .14s;white-space:nowrap;flex:none}
@@ -525,7 +534,6 @@ details table{margin:.3rem 0 .4rem}
 .se-ca{text-align:right;font-size:.85rem}
 .se-warn{width:100%;font-family:'Space Mono',monospace;font-size:.65rem;color:var(--accent);letter-spacing:.02em}
 /* results */
-.split-results-card{}
 .split-settle-head{display:flex;align-items:center;justify-content:space-between;margin:.9rem 0 .5rem}
 .split-settle-count{font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.04em;color:var(--muted);background:var(--bg2);border:1px solid var(--rule2);border-radius:99px;padding:.12rem .55rem}
 /* balance rows */
