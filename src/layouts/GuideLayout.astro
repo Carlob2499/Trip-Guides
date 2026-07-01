@@ -5,6 +5,7 @@ import TripSplit from "../components/TripSplit.astro";
 import { bucket } from "../lib/buckets";
 import { accentFor, darken, currencyFor, DEST_TZ, COUNTRY_CODES } from "../lib/themes";
 import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
+import { collectWaypoints, collectDayEvents, buildSummary } from "../lib/exports";
 import "../styles/guide.css";
 
 // Build-time public-holiday data (Nager.Date), written by scripts/fetch-holidays.mjs
@@ -73,6 +74,18 @@ if (holSec) {
   const all = cc ? holidayData[`../data/holidays/${cc}-${holYear}.json`] : null;
   holidayInfo = buildHolidayInfo(all ?? null, firstDayDate, lastDayDate, holYear);
 }
+
+// Build-time export availability. A guide gets a .gpx only if it has at least one
+// map/sights coordinate, and a .ics only if it has at least one parseable day card —
+// the same filters the endpoints use. Each download link is shown only when its
+// file exists, so a guide missing that data simply doesn't offer it (Principle 5).
+const hasWaypoints = collectWaypoints(guide).length > 0;
+const hasDayEvents = collectDayEvents(guide).length > 0;
+
+// Plain-text trip digest for the "Share summary" button (theme + planned days +
+// key spots). Embedded in a hidden element; the client reads its textContent and
+// appends the page URL at share time.
+const tripSummary = buildSummary(guide);
 ---
 <!doctype html>
 <html lang="en" style={`--accent:${accent};--accent2:${accent2}`}>
@@ -118,6 +131,11 @@ if (holSec) {
     <!-- Reading progress bar — fixed 3px line at top, fills as user scrolls -->
     <div id="readProg" class="read-prog" aria-hidden="true"></div>
 
+    <!-- Transient toast — destination for flash() (save/copy confirmations).
+         Was previously inline in the checklist progress bar; relocated here as a
+         standalone toast so feedback survives that bar's removal. -->
+    <div id="savedNote" class="toast" role="status" aria-live="polite"></div>
+
     <!-- Sticky chrome: topbar + guide tab bar stick together as a unit -->
     <div class="sticky-chrome">
 
@@ -133,12 +151,6 @@ if (holSec) {
         <span class="topbar-wordmark">Waypoint</span>
       </a>
       <div class="topbar-right">
-        <!--
-          Save as PDF — triggers the browser's print dialog; user chooses
-          "Save as PDF" from the destination selector. Print CSS hides all
-          navigation and interactive widgets and renders a clean document.
-        -->
-        <button id="btnPrint" class="topbar-btn" aria-label="Save as PDF" title="Save as PDF / Print">⬇ PDF</button>
         <button id="btnShare" class="topbar-btn" aria-label="Share this guide" title="Share this guide">↗ Share</button>
         <!--
           Dark-mode toggle — icon and aria-label are updated by JS.
@@ -161,6 +173,11 @@ if (holSec) {
         <span class="share-url-txt" id="shareUrlTxt" title="Guide URL"></span>
         <button class="share-copy-btn" id="shareCopyBtn" type="button">Copy link</button>
       </div>
+      {(hasDayEvents || hasWaypoints) && (
+        <button class="share-summary-btn" id="btnShareSummary" type="button">↗ Share trip summary</button>
+      )}
+      <!-- Plain-text trip digest; read by the Share-summary handler via textContent -->
+      <div id="tripSummary" hidden>{tripSummary}</div>
       <div class="share-socials">
         <a class="share-soc" id="shareWA" href="#" target="_blank" rel="noopener noreferrer">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96s-.47-.15-.66.15-.76.96-.93 1.16-.34.22-.64.07a8.06 8.06 0 0 1-2.37-1.46 8.9 8.9 0 0 1-1.64-2.04c-.17-.3 0-.46.13-.6s.3-.35.44-.52a2 2 0 0 0 .3-.5.55.55 0 0 0-.03-.52c-.07-.15-.66-1.6-.91-2.19-.24-.57-.48-.49-.66-.5h-.57a1.1 1.1 0 0 0-.8.37 3.36 3.36 0 0 0-1.05 2.5 5.84 5.84 0 0 0 1.22 3.1c.15.2 2.1 3.2 5.08 4.49a17.1 17.1 0 0 0 1.7.63 4.1 4.1 0 0 0 1.87.12 3.08 3.08 0 0 0 2.02-1.43 2.5 2.5 0 0 0 .17-1.43c-.07-.13-.26-.2-.56-.35M12 2a10 10 0 0 0-8.67 14.97L2 22l5.18-1.36A10 10 0 1 0 12 2"/></svg>
@@ -171,6 +188,25 @@ if (holSec) {
           Email
         </a>
       </div>
+      {(hasWaypoints || hasDayEvents) && (
+        <div class="share-downloads">
+          <p class="share-dl-head">Take it with you</p>
+          <div class="share-dl-row">
+            {hasWaypoints && (
+              <a class="share-dl" href={`${base}/guides/${ogSlug}.gpx`} download={`${ogSlug}.gpx`}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                Map points <span class="share-dl-ext">.gpx</span>
+              </a>
+            )}
+            {hasDayEvents && (
+              <a class="share-dl" href={`${base}/guides/${ogSlug}.ics`} download={`${ogSlug}.ics`}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                Trip calendar <span class="share-dl-ext">.ics</span>
+              </a>
+            )}
+          </div>
+        </div>
+      )}
     </div>
 
     <!-- ═══════════════════════════════════════════════════════════════════════
@@ -202,32 +238,6 @@ if (holSec) {
         {verifiedWarning && <span class="gstat gstat-warning">{verifiedWarning}</span>}
         <!-- Live currency rate injected by JS when fetch succeeds -->
         <span class="gstat gstat-rate" id="liveRatePill" hidden></span>
-      </div>
-
-      <!--
-        PROGRESS CONTROLS
-        · "N/M checked" counter — shows at a glance how much is done.
-        · "Copy progress" — copies a portable base64 code to the clipboard
-          (no more window.prompt). Paste it into "Restore" on another device.
-        · "Restore" — reveals an inline textarea; no modal, no prompt dialog.
-        · "Clear all" — resets everything after a confirmation.
-      -->
-      <div class="prog">
-        <span class="prog-count" id="progCount" aria-live="polite"></span>
-        <button id="btnCopy"         type="button" title="Copy a code you can paste on another device to restore your progress">Copy&nbsp;progress</button>
-        <button id="btnImportToggle" type="button" title="Paste a progress code from another device">Restore</button>
-        <button id="btnClear"        type="button" title="Uncheck all items and clear saved progress">Clear&nbsp;all</button>
-        <span class="saved" id="savedNote" aria-live="polite"></span>
-      </div>
-
-      <!-- Inline restore panel — hidden until "Restore" is clicked -->
-      <div class="import-panel" id="importPanel" hidden>
-        <label class="import-label" for="importCode">Paste your progress code:</label>
-        <textarea id="importCode" spellcheck="false" placeholder="Paste the code here…"></textarea>
-        <div class="import-actions">
-          <button class="btn-apply" id="btnApplyImport"  type="button">Apply</button>
-          <button                   id="btnCancelImport" type="button">Cancel</button>
-        </div>
       </div>
 
       <!--
@@ -375,6 +385,12 @@ if (holSec) {
         try {
           var STORE_KEY = "tripguide-" + (storeKey || "guide");
 
+          // Single source of month names, shared by every section below that parses
+          // a guide date string like "Wed Jul 8" (jump-to-today, trip countdown,
+          // weather window). 0-indexed (MONTHS[0] === "Jan"), matching Date's own
+          // month numbering — sections needing a 1-indexed month use "+ 1".
+          var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
           /* ── TAB BAR ─────────────────────────────────────────────────── */
           var guideTabs  = document.getElementById("guideTabs");
           var catblocks  = Array.prototype.slice.call(document.querySelectorAll(".catblock"));
@@ -466,12 +482,6 @@ if (holSec) {
               try { sessionStorage.setItem(SCROLL_KEY, String(window.pageYOffset)); } catch (e) {}
             }, 250);
           }, { passive: true });
-
-          /* ── 0. SAVE AS PDF ──────────────────────────────────────────── */
-          var printBtn = document.getElementById("btnPrint");
-          if (printBtn) {
-            printBtn.addEventListener("click", function () { window.print(); });
-          }
 
           /* ── 1. DARK MODE TOGGLE ──────────────────────────────────────── */
           var darkBtn = document.getElementById("btnDark");
@@ -578,7 +588,6 @@ if (holSec) {
             var mo  = now.getMonth() + 1;
             var d   = now.getDate();
             // Match day cards whose .d label contains today's month-day (e.g. "Jul 9", "Jul 14")
-            var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
             var plain  = MONTHS[mo - 1] + " " + d;
             document.querySelectorAll(".day").forEach(function (card) {
               var dEl = card.querySelector(".d");
@@ -645,21 +654,13 @@ if (holSec) {
           var boxes = Array.prototype.slice.call(document.querySelectorAll("input[type=checkbox]"));
 
           function loadState()  { try { return JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); } catch (e) { return {}; } }
-          function saveState(s) { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); flash("✓ saved"); } catch (e) { flash("Storage full — use Copy progress"); } }
+          function saveState(s) { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); flash("✓ saved"); } catch (e) { flash("Storage full"); } }
           function currentState() { var s = {}; boxes.forEach(function (b) { if (b.checked) s[b.dataset.pkey] = 1; }); return s; }
 
           function flash(t) {
             var n = document.getElementById("savedNote"); if (!n) return;
             n.textContent = t;
             if (t) { clearTimeout(n._t); n._t = setTimeout(function () { n.textContent = ""; }, 2200); }
-          }
-
-          // Progress counter — "N/M checked"
-          function updateCount() {
-            updateDayCounts();
-            var c = document.getElementById("progCount"); if (!c || !boxes.length) return;
-            var checked = boxes.filter(function (b) { return b.checked; }).length;
-            c.textContent = checked + "/" + boxes.length + " checked";
           }
 
           // Per-day "Day kit N/M" badge — counts only the checkboxes inside each
@@ -682,90 +683,10 @@ if (holSec) {
           // Load saved state on page open
           var saved = loadState();
           boxes.forEach(function (b) { if (saved[b.dataset.pkey]) b.checked = true; });
-          updateCount();
+          updateDayCounts();
           boxes.forEach(function (b) {
-            b.addEventListener("change", function () { saveState(currentState()); updateCount(); });
+            b.addEventListener("change", function () { saveState(currentState()); updateDayCounts(); });
           });
-
-          // Copy progress — clipboard with fallback
-          function fallbackCopy(text) {
-            var ta = document.createElement("textarea");
-            ta.value = text; ta.style.cssText = "position:fixed;opacity:0;top:0;left:0";
-            document.body.appendChild(ta); ta.focus(); ta.select();
-            try { document.execCommand("copy"); flash("✓ Copied to clipboard"); }
-            catch (e) { flash("Auto-copy failed — paste manually via Restore"); }
-            document.body.removeChild(ta);
-          }
-          var copyBtn = document.getElementById("btnCopy");
-          if (copyBtn) {
-            copyBtn.addEventListener("click", function () {
-              var code = btoa(JSON.stringify(currentState()));
-              if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(code)
-                  .then(function ()  { flash("✓ Copied — paste into Restore on any device"); })
-                  .catch(function () { fallbackCopy(code); });
-              } else { fallbackCopy(code); }
-            });
-          }
-
-          // Restore panel — inline textarea, no window.prompt
-          var importToggle = document.getElementById("btnImportToggle");
-          var importPanel  = document.getElementById("importPanel");
-          var importCodeEl = document.getElementById("importCode");
-          var btnApply     = document.getElementById("btnApplyImport");
-          var btnCancel    = document.getElementById("btnCancelImport");
-          if (importToggle && importPanel) {
-            importToggle.addEventListener("click", function () {
-              if (importPanel.hasAttribute("hidden")) {
-                importPanel.removeAttribute("hidden");
-                if (importCodeEl) importCodeEl.focus();
-              } else {
-                importPanel.setAttribute("hidden", "");
-              }
-            });
-          }
-          if (btnCancel) {
-            btnCancel.addEventListener("click", function () {
-              importPanel.setAttribute("hidden", "");
-              if (importCodeEl) importCodeEl.value = "";
-            });
-          }
-          if (btnApply) {
-            btnApply.addEventListener("click", function () {
-              var c = importCodeEl ? importCodeEl.value.trim() : "";
-              if (!c) return;
-              try {
-                var s = JSON.parse(atob(c));
-                boxes.forEach(function (b) { b.checked = !!s[b.dataset.pkey]; });
-                saveState(s); updateCount();
-                importPanel.setAttribute("hidden", "");
-                if (importCodeEl) importCodeEl.value = "";
-              } catch (e) { flash("Code couldn't be read — check you copied it completely"); }
-            });
-          }
-
-          // Clear all — two-step in-page confirmation (no blocking dialog)
-          var clearBtn = document.getElementById("btnClear");
-          var _clearPending = false, _clearTimer;
-          if (clearBtn) {
-            clearBtn.addEventListener("click", function () {
-              if (_clearPending) {
-                // Second click — confirmed
-                _clearPending = false; clearTimeout(_clearTimer);
-                clearBtn.textContent = "Clear all"; clearBtn.classList.remove("prog-confirm");
-                boxes.forEach(function (b) { b.checked = false; });
-                saveState({}); updateCount();
-              } else {
-                // First click — arm
-                _clearPending = true;
-                clearBtn.textContent = "Sure?"; clearBtn.classList.add("prog-confirm");
-                _clearTimer = setTimeout(function () {
-                  _clearPending = false;
-                  clearBtn.textContent = "Clear all"; clearBtn.classList.remove("prog-confirm");
-                }, 3000);
-              }
-            });
-          }
 
           /* ── 5. BUDGET CALCULATORS ───────────────────────────────────── */
           document.querySelectorAll(".budget").forEach(function (bud) {
@@ -911,12 +832,12 @@ if (holSec) {
           (function () {
             var statsEl = document.getElementById("guideStats");
             if (!statsEl || !firstDayDate) return;
-            var MONTHS = { Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11 };
             var parts  = String(firstDayDate).split(/\s+/);
             var mStr   = parts[1]; var day = parseInt(parts[2], 10);
-            if (!mStr || isNaN(day) || MONTHS[mStr] == null) return;
+            var moIdx  = mStr ? MONTHS.indexOf(mStr) : -1;
+            if (moIdx === -1 || isNaN(day)) return;
             var now  = new Date();
-            var trip = new Date(now.getFullYear(), MONTHS[mStr], day);
+            var trip = new Date(now.getFullYear(), moIdx, day);
             if (trip < now && (now - trip) > 180 * 86400000) trip.setFullYear(now.getFullYear() + 1);
             var diff = Math.round((trip.getTime() - now.getTime()) / 86400000);
             var pill = document.createElement("span");
@@ -1089,10 +1010,10 @@ if (holSec) {
             // Build "-MM-DD" target from the guide's first day date (e.g. "Wed Jul 8").
             var TRIP_MD = null;
             if (firstDayDate) {
-              var MM = { Jan:1,Feb:2,Mar:3,Apr:4,May:5,Jun:6,Jul:7,Aug:8,Sep:9,Oct:10,Nov:11,Dec:12 };
               var pp = String(firstDayDate).split(/\s+/);
-              if (MM[pp[1]] != null && !isNaN(parseInt(pp[2], 10))) {
-                TRIP_MD = "-" + String(MM[pp[1]]).padStart(2, "0") + "-" + String(parseInt(pp[2], 10)).padStart(2, "0");
+              var ppMoIdx = MONTHS.indexOf(pp[1]);
+              if (ppMoIdx !== -1 && !isNaN(parseInt(pp[2], 10))) {
+                TRIP_MD = "-" + String(ppMoIdx + 1).padStart(2, "0") + "-" + String(parseInt(pp[2], 10)).padStart(2, "0");
               }
             }
 
@@ -1247,10 +1168,9 @@ if (holSec) {
         }
 
         function openShare() {
-          if (navigator.share) {
-            navigator.share({ title: pageTitle, url: pageUrl }).catch(function () {});
-            return;
-          }
+          // Always open the modal (on every device) so the QR, copy-link, social
+          // links, file downloads (.gpx/.ics), and Share-summary action are all
+          // reachable. Native OS share is offered by the Share-summary button.
           shareModal.removeAttribute("hidden");
           shareBackdrop.classList.add("open");
           _lockScroll();
@@ -1286,6 +1206,33 @@ if (holSec) {
         shareBtn.addEventListener("click", openShare);
         if (shareCloseBtn)  shareCloseBtn.addEventListener("click", closeShare);
         if (shareBackdrop)  shareBackdrop.addEventListener("click", closeShare);
+
+        // Share-summary — a brief theme + planned-days + key-spots digest. Native OS
+        // share on devices that support it; clipboard copy (with a toast) otherwise.
+        var summaryBtn = document.getElementById("btnShareSummary");
+        var summaryEl  = document.getElementById("tripSummary");
+        if (summaryBtn && summaryEl) {
+          function summaryToast(m) {
+            var n = document.getElementById("savedNote"); if (!n) return;
+            n.textContent = m; clearTimeout(n._t);
+            n._t = setTimeout(function () { n.textContent = ""; }, 2200);
+          }
+          summaryBtn.addEventListener("click", function () {
+            var text = (summaryEl.textContent || "").trim();
+            if (navigator.share) {
+              navigator.share({ title: pageTitle, text: text, url: pageUrl }).catch(function () {});
+              return;
+            }
+            var full = text + "\n\n" + pageUrl;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(full)
+                .then(function ()  { summaryToast("✓ Summary copied"); })
+                .catch(function () { summaryToast("Copy failed — select the text manually"); });
+            } else {
+              summaryToast("Copy not supported here");
+            }
+          });
+        }
         document.addEventListener("keydown", function (e) {
           if (e.key === "Escape" && !shareModal.hasAttribute("hidden")) closeShare();
         });

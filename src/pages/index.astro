@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import PwaHead from "../components/PwaHead.astro";
 import { accentFor } from "../lib/themes";
+import { flattenSections } from "../lib/exports";
 import "../styles/hub.css";
 
 const guides = (await getCollection("guides")).sort((a, b) =>
@@ -10,11 +11,9 @@ const guides = (await getCollection("guides")).sort((a, b) =>
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
-// For each guide, extract trip dates from days sections (build-time, no JS needed)
-function flatSecs(secs: any[]): any[] {
-  return secs.flatMap((s: any) => s.sections ? flatSecs(s.sections) : [s]);
-}
-
+// Trip-date math below intentionally uses LOCAL time (not the UTC parsing in
+// lib/holidays.ts) — this badge is "N days away" relative to the visitor's own
+// clock, same as the countdown pill in GuideLayout.astro.
 const MONTH_MAP: Record<string, number> = {
   Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11
 };
@@ -32,7 +31,7 @@ function parseTripDate(dateStr: string | undefined): Date | null {
 
 const now = new Date();
 const guideExtras = guides.map(g => {
-  const flat = flatSecs(g.data.sections as any[] || []);
+  const flat = flattenSections(g.data.sections as any[] || []);
   const allDays = flat.filter((s: any) => s.type === "days");
   const allItems = allDays.flatMap((s: any) => s.items || []);
   const firstDate = parseTripDate(allItems[0]?.date);

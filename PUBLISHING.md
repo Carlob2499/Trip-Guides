@@ -10,19 +10,21 @@ using **GitHub Pages**. It's free, and you never touch a command line.
 > This site is published with **GitHub Pages** (Part B). The repository already
 > includes the build recipe (`.github/workflows/deploy.yml`), so once you switch
 > Pages on, every change you commit rebuilds and redeploys automatically.
+>
+> **This has already been done for this repo** — Part A below is a one-time,
+> from-scratch bootstrap step, kept for reference (e.g. if you ever set up a
+> second copy of this site). If you're just editing the live site, skip to
+> Part C.
 
 ---
 
-## Before you start
+## Part A — Put the files on GitHub *(one-time, from scratch only)*
 
-Unzip `trip-guides-site.zip`. You'll see a folder with `src`, `package.json`,
-`astro.config.mjs`, `README.md`, and this file. That folder's **contents** are what
-you upload — not the zip, and not a `node_modules` folder (there isn't one, which is
-correct).
-
----
-
-## Part A — Put the files on GitHub
+Starting a brand-new copy from this project's source files (not this exact repo)?
+Download this repository as a ZIP from GitHub (**Code → Download ZIP**) and unzip
+it. You'll see a folder with `src`, `package.json`, `astro.config.mjs`,
+`README.md`, and this file. That folder's **contents** are what you upload — not
+the zip, and not a `node_modules` folder (there isn't one, which is correct).
 
 **A1.** Make a free account at github.com → Sign up. (If it asks for two-factor
 sign-in, set it up with an authenticator app.)

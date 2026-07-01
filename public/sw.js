@@ -64,7 +64,7 @@ self.addEventListener("fetch", (event) => {
           caches.open(CACHE).then((c) => c.put(req, copy));
           return res;
         })
-        .catch(() => caches.match(req).then((m) => m || caches.match("/")))
+        .catch(() => caches.match(req).then((m) => m || caches.match(BASE + "/")))
     );
     return;
   }
