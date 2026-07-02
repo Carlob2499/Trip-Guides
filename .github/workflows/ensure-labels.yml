@@ -13,6 +13,7 @@ on:
     paths:
       - .github/workflows/ensure-labels.yml
       - .github/ISSUE_TEMPLATE/new-guide.yml
+      - .github/workflows/content-audit.yml
 
 # Label management lives under the issues API — that's all this needs.
 permissions:
@@ -22,7 +23,7 @@ jobs:
   ensure-labels:
     runs-on: ubuntu-latest
     steps:
-      - name: Create or update the new-guide label
+      - name: Create or update labels
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
@@ -31,4 +32,8 @@ jobs:
           gh label create new-guide \
             --color 0E8A16 \
             --description "Triggers the new-guide scaffold workflow" \
+            --force
+          gh label create content-audit \
+            --color FBCA04 \
+            --description "Automated weekly content-audit tracking issue" \
             --force

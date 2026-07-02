@@ -1,0 +1,31 @@
+name: Content audit
+
+# Weekly, no-LLM accuracy sweep: dead links, missing Commons photos, third-party API
+# health, and stale `verified` stamps. Findings are posted to a single tracking issue
+# (updated in place, never duplicated) — this workflow only REPORTS; a human or a
+# separate research pass (.github/prompts/research-guide.md) does the actual fixing.
+# See scripts/audit/*.mjs for the checks themselves; run any of them locally with
+# `node scripts/audit/run-audit.mjs --dry-run` (no GH_TOKEN needed for a dry run).
+on:
+  schedule:
+    # 03:00 UTC every Monday — an off-the-hour minute on purpose, so this doesn't
+    # land on the same instant every other repo's ":00" cron jobs do.
+    - cron: "17 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run content audit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: node scripts/audit/run-audit.mjs

@@ -608,7 +608,7 @@ const curFallbackRate   = _cfg.curFallbackRate || null;
               }
             } catch (_) {}
 
-            fetch("https://api.frankfurter.dev/v2/latest?base=USD&symbols=" + curCode)
+            fetch("https://api.frankfurter.dev/v1/latest?base=USD&symbols=" + curCode)
               .then(function (r) { return r.ok ? r.json() : Promise.reject("non-200 " + r.status); })
               .then(function (data) {
                 var rate = data && data.rates && data.rates[curCode];

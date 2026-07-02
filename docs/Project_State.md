@@ -378,7 +378,7 @@ Every `img.file` value in a `sights` section must be an exact Wikimedia Commons 
 
 | Category | API | Free Tier | Client-Side Safe | Status |
 |---|---|---|---|---|
-| Currency (live) | Frankfurter (api.frankfurter.dev) | No quota, no key needed | Yes | **BUILT** — live FX pill in stats bar |
+| Currency (live) | Frankfurter (api.frankfurter.dev) | No quota, no key needed | Yes | **BUILT, currently broken** — see note below |
 | Weather | Open-Meteo (api.open-meteo.com) | 10,000/day, no key | Yes | **BUILT** — 7-day strip sliced to trip dates |
 | Jet lag calc | In-house (fixed UTC offsets) | N/A | Yes | **BUILT** — collapsible panel in masthead (see DST caveat in §4) |
 | Visa requirements | Travel Buddy via RapidAPI | 120 calls/month | Yes (expose key only) | Research done |
@@ -386,6 +386,20 @@ Every `img.file` value in a `sights` section must be an exact Wikimedia Commons 
 | Transit | Google Maps Routes API | 10,000/month | Yes (restrict key by referrer) | Research done; no Japan transit |
 
 > **Amadeus self-service API removed (Phase 0, Jun 2026):** Amadeus announced (Feb 2026) it is decommissioning its self-service developer portal on **17 Jul 2026** — API keys deactivate and the portal closes; only the enterprise AQC API survives. Verified via [PhocusWire](https://www.phocuswire.com/amadeus-shut-down-self-service-apis-portal-developers). The former Flights/Hotels rows were dropped. (Note: as of this writing the date is still ~weeks away, not yet past — but the closure is confirmed and the free tier is going away, so it's off the table.)
+
+> **Frankfurter `/v2/` is dead (found 2 Jul 2026 by the content-audit canary):** `src/scripts/guide-ui.js` calls `api.frankfurter.dev/v2/latest?...`, which now 404s — verified independently via `curl` against the bare endpoint with no params, also 404. `/v1/latest?...` returns 200 with the exact `{ rates: { KRW: ... } }` shape the code expects. Not yet fixed in the site code as of this writing — the graceful-failure design means it silently falls back to the hardcoded rate on every page, so nothing visibly breaks, but the "live" rate pill has been stale since whenever `/v2/` was retired. Fix: change the one URL in `src/scripts/guide-ui.js` from `v2` to `v1`.
+
+### Content audit (Session, 2 Jul 2026)
+`scripts/audit/*.mjs` + `.github/workflows/content-audit.yml` (weekly cron, Monday
+03:17 UTC, plus `workflow_dispatch`) — no-LLM accuracy sweep: dead links (bucketed by
+confidence — 403/blocked results are NOT treated as dead, since testing showed even a
+full browser User-Agent gets 403'd on some travel-booking sites; only 404/410 counts as
+high-confidence), missing Wikimedia Commons photos (via the MediaWiki API's `missing`
+flag, not a thumbnail HEAD request), a canary ping to each of the three live APIs
+(caught the Frankfurter `v2` breakage above), and a `verified`-field staleness flag
+(90-day default threshold, drafts skipped). Findings post to one tracking GitHub Issue
+(title-matched, updated in place — never duplicates). Reports only; does not fix
+anything itself. Local dry run: `node scripts/audit/run-audit.mjs --dry-run`.
 
 **Built-integration contract** (follow when adding more): no API keys in client code; always `.catch()` + feature-detect so a dead API never breaks the page; format output for the actual currency/locale; keep UI icons monochrome.
 
