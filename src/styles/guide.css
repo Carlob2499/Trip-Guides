@@ -280,11 +280,19 @@ body{overflow-x:clip}
 
 /* === WEATHER STRIP (Open-Meteo) ============================================= */
 .wx-wrap{margin:.9rem auto 0;max-width:38rem;width:100%}
-.wx-strip{display:flex;gap:0;background:var(--bg2);border:1px solid var(--rule);border-radius:7px;overflow:hidden}
+.wx-strip{display:flex;gap:0;background:var(--bg2);border:1px solid var(--rule);border-radius:7px;overflow-x:auto;-webkit-overflow-scrolling:touch}
 .wx-day{flex:1;display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.5rem .15rem;min-width:0;transition:background .13s}
 .wx-day:not(:last-child){border-right:1px solid var(--rule)}
 .wx-day:hover{background:color-mix(in srgb,var(--accent) 5%,var(--bg2))}
 .wx-today{background:color-mix(in srgb,var(--accent) 8%,var(--bg2))}
+/* 8+ day cards (longer trips): stop squashing evenly and scroll horizontally
+   instead. 5-7 day trips are unaffected — no :nth-child(8) exists, so .wx-day
+   keeps flex:1 above and renders exactly as before. 4.6rem (not 4.75rem) so
+   an exact 8-card trip (8 × card = 36.8rem) clears the 38rem wrap with room
+   to spare for the strip's own border — otherwise an 8-card trip lands right
+   on the edge and shows a phantom scrollbar for content that already fits. */
+.wx-strip:has(.wx-day:nth-child(8)){scroll-snap-type:x proximity}
+.wx-strip:has(.wx-day:nth-child(8)) .wx-day{flex:0 0 4.6rem;min-width:4.6rem;scroll-snap-align:start}
 .wx-name{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);line-height:1}
 .wx-date{font-family:'Space Mono',monospace;font-size:.54rem;color:var(--muted);opacity:.7;line-height:1}
 .wx-icon{font-size:1.2rem;line-height:1;margin:.1rem 0}

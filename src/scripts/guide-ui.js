@@ -8,6 +8,7 @@ const order             = _cfg.order || [];
 const storeKey          = _cfg.storeKey || "guide";
 const mapCenter         = _cfg.mapCenter || null;
 const firstDayDate      = _cfg.firstDayDate || null;
+const lastDayDate       = _cfg.lastDayDate || null;
 const hasWeatherSection = !!_cfg.hasWeatherSection;
 const destTzIana        = _cfg.destTzIana || null;
 const curCode           = _cfg.curCode || null;
@@ -27,6 +28,23 @@ const curFallbackRate   = _cfg.curFallbackRate || null;
           // weather window). 0-indexed (MONTHS[0] === "Jan"), matching Date's own
           // month numbering — sections needing a 1-indexed month use "+ 1".
           var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+          // Parse a dateless guide date string like "Wed Jul 8" into a real Date,
+          // resolving the missing year the same way everywhere it's needed: assume
+          // the current year unless that lands >180 days in the past, in which case
+          // assume next year. Returns null if the string doesn't match the expected
+          // shape (e.g. relative labels like "Day 1", which some guides use instead
+          // of calendar dates — those guides fall back to no-trip-date behavior).
+          function resolveTripDate(str, now) {
+            if (!str) return null;
+            var parts = String(str).split(/\s+/);
+            var moIdx = MONTHS.indexOf(parts[1]);
+            var day   = parseInt(parts[2], 10);
+            if (moIdx === -1 || isNaN(day)) return null;
+            var d = new Date(now.getFullYear(), moIdx, day);
+            if (d < now && (now - d) > 180 * 86400000) d.setFullYear(now.getFullYear() + 1);
+            return d;
+          }
 
           // DST-aware UTC offset (in hours) of an IANA zone at a given instant, via Intl.
           // Returns null if the zone is unknown. Used by the local-time pill + jet-lag calc.
@@ -484,13 +502,9 @@ const curFallbackRate   = _cfg.curFallbackRate || null;
           (function () {
             var statsEl = document.getElementById("guideStats");
             if (!statsEl || !firstDayDate) return;
-            var parts  = String(firstDayDate).split(/\s+/);
-            var mStr   = parts[1]; var day = parseInt(parts[2], 10);
-            var moIdx  = mStr ? MONTHS.indexOf(mStr) : -1;
-            if (moIdx === -1 || isNaN(day)) return;
             var now  = new Date();
-            var trip = new Date(now.getFullYear(), moIdx, day);
-            if (trip < now && (now - trip) > 180 * 86400000) trip.setFullYear(now.getFullYear() + 1);
+            var trip = resolveTripDate(firstDayDate, now);
+            if (!trip) return;
             var diff = Math.round((trip.getTime() - now.getTime()) / 86400000);
             var pill = document.createElement("span");
             if (diff > 1)       { pill.className = "gstat gstat-countdown"; pill.textContent = diff + " days to go"; }
@@ -653,6 +667,22 @@ const curFallbackRate   = _cfg.curFallbackRate || null;
               if (code >= 95)  return "☈";      // thunderstorm (inherently monochrome)
               return "⛅︎";
             }
+            // Resolve the trip's date range once (doesn't depend on "today" changing
+            // mid-session): powers the hide/show/window decisions in wxRender below.
+            var _now      = new Date();
+            var todayMid  = new Date(_now.getFullYear(), _now.getMonth(), _now.getDate());
+            var tripStart = firstDayDate ? resolveTripDate(firstDayDate, _now) : null;
+            var tripEnd   = tripStart ? (resolveTripDate(lastDayDate, _now) || tripStart) : null;
+            if (tripStart && tripEnd && tripEnd < tripStart) tripEnd = tripStart; // defensive, malformed data
+            var hasTripDates   = !!tripStart;
+            var tripLengthDays = hasTripDates ? Math.round((tripEnd - tripStart) / 86400000) + 1 : 0;
+            var isPastTrip     = hasTripDates && todayMid > tripEnd;
+
+            // A concluded trip has nothing useful to show — same "don't show
+            // misleading weather" reasoning as the beyond-horizon case in wxRender,
+            // just checked earlier so we skip the network call entirely.
+            if (isPastTrip) return;
+
             // Fetch the max free window (16 days) so we can show the TRIP dates
             // when they fall within range — not just the next 7 days from today.
             var url = "https://api.open-meteo.com/v1/forecast" +
@@ -660,18 +690,15 @@ const curFallbackRate   = _cfg.curFallbackRate || null;
               "&daily=temperature_2m_max,temperature_2m_min,weathercode" +
               "&forecast_days=16&timezone=auto&temperature_unit=celsius";
 
-            // Build "-MM-DD" target from the guide's first day date (e.g. "Wed Jul 8").
-            var TRIP_MD = null;
-            if (firstDayDate) {
-              var pp = String(firstDayDate).split(/\s+/);
-              var ppMoIdx = MONTHS.indexOf(pp[1]);
-              if (ppMoIdx !== -1 && !isNaN(parseInt(pp[2], 10))) {
-                TRIP_MD = "-" + String(ppMoIdx + 1).padStart(2, "0") + "-" + String(parseInt(pp[2], 10)).padStart(2, "0");
-              }
-            }
-
             // Validate response shape + a coarse temperature sanity band (−90..60 °C
-            // catches unit errors / garbage). Returns the `daily` object or null.
+            // catches unit errors / garbage). Returns the `daily` object (trimmed —
+            // see below) or null.
+            function wxDayOk(d, k) {
+              var H = d.temperature_2m_max[k], L = d.temperature_2m_min[k], W = d.weathercode[k];
+              return typeof H === "number" && H >= -90 && H <= 60 &&
+                     typeof L === "number" && L >= -90 && L <= 60 &&
+                     typeof W === "number";
+            }
             function wxValidate(data) {
               if (!data || !data.daily) return null;
               var d = data.daily;
@@ -680,12 +707,23 @@ const curFallbackRate   = _cfg.curFallbackRate || null;
               if (!Array.isArray(d.temperature_2m_max) || d.temperature_2m_max.length !== n) return null;
               if (!Array.isArray(d.temperature_2m_min) || d.temperature_2m_min.length !== n) return null;
               if (!Array.isArray(d.weathercode)        || d.weathercode.length        !== n) return null;
-              for (var k = 0; k < n; k++) {
-                var H = d.temperature_2m_max[k], L = d.temperature_2m_min[k];
-                if (typeof H !== "number" || H < -90 || H > 60) return null;
-                if (typeof L !== "number" || L < -90 || L > 60) return null;
+              // Open-Meteo can return incomplete (null) data for the last day or two
+              // of the 16-day window as its model refreshes near the edge. Trim those
+              // trailing incomplete days rather than rejecting the whole response —
+              // but a bad value anywhere else is still a hard failure (real anomaly).
+              var validLen = n;
+              while (validLen > 0 && !wxDayOk(d, validLen - 1)) validLen--;
+              if (!validLen) return null;
+              for (var k = 0; k < validLen; k++) {
+                if (!wxDayOk(d, k)) return null;
               }
-              return d;
+              if (validLen === n) return d;
+              return {
+                time: d.time.slice(0, validLen),
+                temperature_2m_max: d.temperature_2m_max.slice(0, validLen),
+                temperature_2m_min: d.temperature_2m_min.slice(0, validLen),
+                weathercode: d.weathercode.slice(0, validLen),
+              };
             }
 
             // Render takes the validated `daily` object + the retrieval date, and
@@ -696,14 +734,43 @@ const curFallbackRate   = _cfg.curFallbackRate || null;
                 var DAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
                 var now = new Date();
 
-                // Decide the 7-day window: start at the trip date if it's in range.
-                var startI = 0, onTrip = false;
-                if (TRIP_MD) {
-                  for (var j = 0; j < d.time.length; j++) {
-                    if (d.time[j].indexOf(TRIP_MD) !== -1) { startI = j; onTrip = true; break; }
+                // Decide the window: trip-length-aware if we have trip dates,
+                // else the generic "next 7 days from today" fallback.
+                var HORIZON = d.time.length;
+                var startI, count, onTrip;
+
+                if (hasTripDates) {
+                  onTrip = true;
+                  if (todayMid >= tripStart && todayMid <= tripEnd) {
+                    // Ongoing trip: show the remaining trip days starting today, not
+                    // the original full length and not a pre-trip "next 7 days".
+                    var daysElapsed = Math.round((todayMid - tripStart) / 86400000);
+                    startI = 0;
+                    count  = Math.min(HORIZON, tripLengthDays - daysElapsed);
+                  } else {
+                    // Upcoming trip (a past trip already returned before the fetch).
+                    var daysUntilStart = Math.round((tripStart - todayMid) / 86400000);
+                    if (daysUntilStart >= HORIZON) return; // beyond the 16-day forecast — stay hidden
+                    // Locate the trip's start date in d.time[] by month/day match,
+                    // falling back to index arithmetic defensively.
+                    var wantMD = "-" + String(tripStart.getMonth() + 1).padStart(2, "0") +
+                                 "-" + String(tripStart.getDate()).padStart(2, "0");
+                    startI = -1;
+                    for (var j = 0; j < d.time.length; j++) {
+                      if (d.time[j].indexOf(wantMD) !== -1) { startI = j; break; }
+                    }
+                    if (startI === -1) startI = daysUntilStart;
+                    count = Math.min(HORIZON - startI, tripLengthDays);
                   }
+                } else {
+                  // No usable trip date (no `days` section, or unparseable date
+                  // labels like "Day 1") — legitimate generic case: today's
+                  // weather, unrelated to any trip.
+                  startI = 0;
+                  count  = Math.min(HORIZON, 7);
+                  onTrip = false;
                 }
-                var endI = Math.min(d.time.length, startI + 7);
+                var endI = startI + count;
 
                 var html = '<div class="wx-strip" aria-label="Weather forecast">';
                 for (var i = startI; i < endI; i++) {
@@ -721,11 +788,11 @@ const curFallbackRate   = _cfg.curFallbackRate || null;
                     '</div>';
                 }
                 html += '</div>';
-                // Honest label: trip-date forecast vs. fallback next-days, with a
-                // note when the trip is still beyond the 16-day forecast horizon.
-                var label = onTrip ? "Trip-dates forecast" : "Next " + (endI - startI) + " days";
-                var far = (TRIP_MD && !onTrip) ? " \u00b7 trip is beyond the 16-day forecast \u2014 check again closer to departure" : "";
-                html += '<p class="wx-credit">Forecast \u00b7 ' + label + far +
+                // Honest label: trip-date forecast vs. fallback next-days. (Trips
+                // beyond the 16-day forecast horizon hide entirely \u2014 see above \u2014
+                // rather than showing an irrelevant "next N days" guess.)
+                var label = onTrip ? "Trip-dates forecast" : "Next " + count + " days";
+                html += '<p class="wx-credit">Forecast \u00b7 ' + label +
                   ' \u00b7 retrieved ' + WX_FETCH_DATE +
                   ' \u00b7 <a href="https://open-meteo.com" target="_blank" rel="noopener" class="wx-src">Open-Meteo</a></p>';
                 var mount = document.getElementById("wxMount") || wxWrap;
