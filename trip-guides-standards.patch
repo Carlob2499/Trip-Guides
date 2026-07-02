@@ -1,0 +1,68 @@
+diff --git a/.github/prompts/research-guide.md b/.github/prompts/research-guide.md
+index da7fd69..a766013 100644
+--- a/.github/prompts/research-guide.md
++++ b/.github/prompts/research-guide.md
+@@ -24,9 +24,16 @@ holidays / currency) are in place, but the content is empty. Your job is to fill
+ 
+ ## How to research
+ 
+-- Use **web search + web fetch** to reach primary sources (official sites, government
+-  portals, operator pages, official transit sites). Aggregators (review sites, wikis,
+-  blogs) are leads, not authorities — never cite them for a specific fact.
++- **Source-tier ladder** — rank every source before trusting it; cite up the ladder,
++  never down. Use **web search + web fetch** to climb it:
++  - **T0 · primary / first-party** — official site, government portal, operator page,
++    official transit site, direct documentation. **This is what you cite.** Reach it
++    for every specific fact.
++  - **T1 · authoritative secondary** — a reputable, edited reference reporting a
++    primary fact. Usable only when T0 is unreachable; prefer to trace back to the T0
++    it cites.
++  - **T2 · aggregators / UGC** — review sites, wikis, blogs, forums, AI answers.
++    **Leads only** — use them to *find* the T0 source; never cite them for a fact.
+ - Apply the project's **price/answer flags** exactly:
+   - `≈` — you found the official source and the figure is approximately this.
+   - `⚠` — hours/details could not be confirmed online; flag for a human to check.
+@@ -37,6 +44,21 @@ holidays / currency) are in place, but the content is empty. Your job is to fill
+   page** you have confirmed exists. If unsure, omit the image — do not guess a filename.
+ - **Prioritize** per the intake's ranked top 2–3 (depth there, light touch elsewhere). If
+   asked to target one section (e.g. "food"), do only that section this pass.
++- **Keep a verification ledger as you go** — one row per perishable fact, so the source
++  and checked-on date the standard requires are captured *while* researching, not
++  reconstructed afterward:
++
++  | Claim | Value | Source (tier + URL) | Checked | Flag |
++  |-------|-------|---------------------|---------|------|
++  | Museum X admission | ≈ €12 adult | T0 — official site /visit | 2026-07-01 | ≈ |
++  | Opening hours | Tue–Sun 10–18 | T0 — official site | 2026-07-01 | (exact) |
++
++  The ledger doubles as your source list and your `⚠` punch-list for the finish summary.
++- **Adversarial check before you trust a fact** — spend one search trying to *disprove*
++  what you just found ("X closed", "X moved", "X price 2026"), not only to confirm it. A
++  first result that matches your expectation is not verification; it may be a second copy
++  of the same error (the global confirmation-bias rule). Seek the primary source and
++  read it critically, rather than stopping the moment something says the expected thing.
+ 
+ ## Rules (do not break)
+ 
+@@ -56,3 +78,5 @@ holidays / currency) are in place, but the content is empty. Your job is to fill
+   remains `⚠` unconfirmed, and the specific items a human must still verify before this
+   guide should drop `draft` and graduate. Be candid about coverage — an honest "I couldn't
+   confirm X" beats a fabricated X.
++- Include the **verification ledger** (the table above) with the summary — it is the
++  source list and the re-check schedule for every perishable fact you added.
+diff --git a/CLAUDE.md b/CLAUDE.md
+index 840ecc0..13bd70a 100644
+--- a/CLAUDE.md
++++ b/CLAUDE.md
+@@ -49,8 +49,9 @@ A new guide is NEVER started by writing content. The sequence is fixed:
+ 2. **Spec from intake.** Derive which section types the guide needs from
+    the priority ranking. Nightlife ranked last → no nightlife section.
+ 3. **Research per the spec.** Verify every fact against a primary source
+-   (global rules 1–13). Depth on the top 2–3 priorities; light touch on
+-   the rest. Gather only what the priorities call for.
++   (all global accuracy rules — the numbered set in `~/.claude/CLAUDE.md`).
++   Depth on the top 2–3 priorities; light touch on the rest. Gather only
++   what the priorities call for.
+ 4. **Write with sources attached.** Every perishable fact carries its
+    source and verification date as written, not bolted on after.
+ 5. **Run the autogeneration test** on the finished draft. Anything

@@ -49,8 +49,9 @@ A new guide is NEVER started by writing content. The sequence is fixed:
 2. **Spec from intake.** Derive which section types the guide needs from
    the priority ranking. Nightlife ranked last → no nightlife section.
 3. **Research per the spec.** Verify every fact against a primary source
-   (global rules 1–13). Depth on the top 2–3 priorities; light touch on
-   the rest. Gather only what the priorities call for.
+   (all global accuracy rules — the numbered set in `~/.claude/CLAUDE.md`).
+   Depth on the top 2–3 priorities; light touch on the rest. Gather only
+   what the priorities call for.
 4. **Write with sources attached.** Every perishable fact carries its
    source and verification date as written, not bolted on after.
 5. **Run the autogeneration test** on the finished draft. Anything
