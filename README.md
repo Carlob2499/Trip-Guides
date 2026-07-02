@@ -33,7 +33,7 @@ those files into pages — you can ignore it.
 ## How to publish it on the web (about 15 minutes, one time)
 
 > **A full, click-by-click walkthrough with fixes for every step is in
-> [`PUBLISHING.md`](./PUBLISHING.md).** The short version is below.
+> [`docs/PUBLISHING.md`](./docs/PUBLISHING.md).** The short version is below.
 
 The site is "static," meaning the pages are pre-built and then just served —
 fast, cheap (free), and reliable. Your sight photos are automatically converted

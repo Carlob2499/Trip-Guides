@@ -1,6 +1,6 @@
 # Waypoint Travel Guides — Project Instructions
 
-Full architecture, file structure, and stack detail: see Project_State.md
+Full architecture, file structure, and stack detail: see docs/Project_State.md
 (Read on demand; not duplicated here to keep this file lean).
 
 Project-specific rules for this repo. These stack on top of the global
@@ -44,7 +44,7 @@ and either verify it or personalize it.
 
 A new guide is NEVER started by writing content. The sequence is fixed:
 
-1. **Intake first.** Complete NEW_GUIDE_INTAKE.md with the traveler. No
+1. **Intake first.** Complete docs/NEW_GUIDE_INTAKE.md with the traveler. No
    research begins until priorities are ranked and dates are set.
 2. **Spec from intake.** Derive which section types the guide needs from
    the priority ranking. Nightlife ranked last → no nightlife section.
@@ -132,3 +132,12 @@ signal to add a typed section instead.
 - **If `guide.css` grows past ~800 lines**, split by feature (e.g.
   `weather.css`, `split.css`) as `base.css` was split — do not let one
   file absorb everything. Not before the threshold.
+- **Don't re-Read CLAUDE.md files.** Both this file and `~/.claude/CLAUDE.md`
+  auto-load into context at session start — a Read tool call on either is
+  always wasted. This includes prompts/docs that instruct a fresh session
+  to "read CLAUDE.md first" (e.g. `.github/prompts/research-guide.md`,
+  `docs/ROADMAP.md`'s Session Opener) — phrase those as "already loaded,
+  don't re-Read" instead. When spawning multiple subagents in one pass,
+  don't have each independently re-derive this same context either — pass
+  only the specific relevant excerpt in the subagent's prompt if it needs
+  one at all.

@@ -8,25 +8,34 @@ holidays / currency) are in place, but the content is empty. Your job is to fill
 
 ## Read first (in this order)
 
-1. **`CLAUDE.md`** (repo root) — the accuracy standard. It is binding. In particular:
-   training data is a starting point, not a source; reach the **primary** source; `≈`
-   means *checked, roughly this*; when you can't verify, leave an honest blank, never a
-   confident guess; distinguish fact from recommendation.
-2. The **target guide**: `src/content/guides/<slug>.json` (the one on this branch — a
+`CLAUDE.md` (repo root) is already auto-loaded into your context — don't re-Read
+it. Its accuracy standard is binding. In particular: training data is a starting
+point, not a source; reach the **primary** source; `≈` means *checked, roughly
+this*; when you can't verify, leave an honest blank, never a confident guess;
+distinguish fact from recommendation.
+
+1. The **target guide**: `src/content/guides/<slug>.json` (the one on this branch — a
    `new-guide/<slug>` branch names the slug; otherwise you'll be told which).
-3. The **intake spec** `guides-intake/<slug>.md` **if it exists** — it holds the traveler,
+2. The **intake spec** `guides-intake/<slug>.md` **if it exists** — it holds the traveler,
    dates, and *ranked priorities* that decide which sections get depth. If it's absent
    (stripped drafts have none), infer a sensible general-purpose scope from the country and
    note that no intake was provided.
-4. **`NEW_GUIDE_INTAKE.md`** — the order-of-operations for how intake drives research.
-5. **`src/content.config.ts`** — the section schema. Every field you write must validate.
-6. **`src/content/guides/denmark.json`** — the gold standard for shape, depth, and voice.
+3. **`docs/NEW_GUIDE_INTAKE.md`** — the order-of-operations for how intake drives research.
+4. **`src/content.config.ts`** — the section schema. Every field you write must validate.
+5. **`src/content/guides/denmark.json`** — the gold standard for shape, depth, and voice.
 
 ## How to research
 
-- Use **web search + web fetch** to reach primary sources (official sites, government
-  portals, operator pages, official transit sites). Aggregators (review sites, wikis,
-  blogs) are leads, not authorities — never cite them for a specific fact.
+- **Source-tier ladder** — rank every source before trusting it; cite up the ladder,
+  never down. Use **web search + web fetch** to climb it:
+  - **T0 · primary / first-party** — official site, government portal, operator page,
+    official transit site, direct documentation. **This is what you cite.** Reach it
+    for every specific fact.
+  - **T1 · authoritative secondary** — a reputable, edited reference reporting a
+    primary fact. Usable only when T0 is unreachable; prefer to trace back to the T0
+    it cites.
+  - **T2 · aggregators / UGC** — review sites, wikis, blogs, forums, AI answers.
+    **Leads only** — use them to *find* the T0 source; never cite them for a fact.
 - Apply the project's **price/answer flags** exactly:
   - `≈` — you found the official source and the figure is approximately this.
   - `⚠` — hours/details could not be confirmed online; flag for a human to check.
@@ -37,6 +46,21 @@ holidays / currency) are in place, but the content is empty. Your job is to fill
   page** you have confirmed exists. If unsure, omit the image — do not guess a filename.
 - **Prioritize** per the intake's ranked top 2–3 (depth there, light touch elsewhere). If
   asked to target one section (e.g. "food"), do only that section this pass.
+- **Keep a verification ledger as you go** — one row per perishable fact, so the source
+  and checked-on date the standard requires are captured *while* researching, not
+  reconstructed afterward:
+
+  | Claim | Value | Source (tier + URL) | Checked | Flag |
+  |-------|-------|---------------------|---------|------|
+  | Museum X admission | ≈ €12 adult | T0 — official site /visit | 2026-07-01 | ≈ |
+  | Opening hours | Tue–Sun 10–18 | T0 — official site | 2026-07-01 | (exact) |
+
+  The ledger doubles as your source list and your `⚠` punch-list for the finish summary.
+- **Adversarial check before you trust a fact** — spend one search trying to *disprove*
+  what you just found ("X closed", "X moved", "X price 2026"), not only to confirm it. A
+  first result that matches your expectation is not verification; it may be a second copy
+  of the same error (the global confirmation-bias rule). Seek the primary source and
+  read it critically, rather than stopping the moment something says the expected thing.
 
 ## Rules (do not break)
 
@@ -56,3 +80,5 @@ holidays / currency) are in place, but the content is empty. Your job is to fill
   remains `⚠` unconfirmed, and the specific items a human must still verify before this
   guide should drop `draft` and graduate. Be candid about coverage — an honest "I couldn't
   confirm X" beats a fabricated X.
+- Include the **verification ledger** (the table above) with the summary — it is the
+  source list and the re-check schedule for every perishable fact you added.
