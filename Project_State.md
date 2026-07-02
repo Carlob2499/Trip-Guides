@@ -1,4 +1,6 @@
 # Project State — Waypoint Travel Guides
+**This is the chat-facing context file** — upload it to Claude.ai chat sessions that have no repo access; Claude Code does not auto-load it (see repo-root CLAUDE.md for the auto-loaded project rules).
+
 **Last updated:** 1 Jul 2026  
 **Repo:** github.com/Carlob2499/Trip-Guides  
 **Live site:** carlob2499.github.io/Trip-Guides/  
