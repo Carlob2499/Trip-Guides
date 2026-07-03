@@ -21,6 +21,7 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
   <div class="split-toolbar">
     <h2 class="split-title">Trip Split</h2>
     <p class="split-desc">Track who paid what and see exactly who owes who — minimum transfers, no maths.</p>
+    <button class="sc-add-btn" id="sSyncLink" type="button">🔗 Copy sync link</button>
   </div>
 
   <!-- People -->
@@ -122,6 +123,52 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
   }
   function save() {
     try { localStorage.setItem(SK, JSON.stringify(state)); } catch (_) {}
+  }
+
+  /* ── URL-hash state handoff (QR / link sync) ──────────────────
+     Uses the ?split= query param, NOT location.hash — guide-ui.js's tab
+     router does `document.querySelector(window.location.hash)`, so a
+     base64 blob in the hash would throw a DOMException there. The query
+     string is untouched by any other script, so it's collision-free. */
+  function toBase64Url(str) {
+    var b64 = btoa(unescape(encodeURIComponent(str)));
+    return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  }
+  function fromBase64Url(b64url) {
+    var b64 = b64url.replace(/-/g, "+").replace(/_/g, "/");
+    while (b64.length % 4) b64 += "=";
+    return decodeURIComponent(escape(atob(b64)));
+  }
+  function encodeSyncState() {
+    return toBase64Url(JSON.stringify({
+      members: state.members, expenses: state.expenses,
+      useLocal: state.useLocal, localRate: state.localRate, customSplit: state.customSplit,
+    }));
+  }
+  function syncLinkUrl() {
+    return window.location.origin + window.location.pathname + "?split=" + encodeSyncState();
+  }
+  // Hydrate from an incoming ?split= link (e.g. scanned via QR), then strip the
+  // param so a reload doesn't re-import a now-stale snapshot over local edits.
+  function hydrateFromUrl() {
+    var params = new URLSearchParams(window.location.search);
+    var raw = params.get("split");
+    if (!raw) return false;
+    try {
+      var s = JSON.parse(fromBase64Url(raw));
+      if (s && typeof s === "object") {
+        if (Array.isArray(s.members))           state.members     = s.members;
+        if (Array.isArray(s.expenses))          state.expenses    = s.expenses;
+        if (typeof s.useLocal    === "boolean") state.useLocal    = s.useLocal;
+        if (typeof s.localRate   === "number")  state.localRate   = s.localRate;
+        if (typeof s.customSplit === "boolean") state.customSplit = s.customSplit;
+        save();
+      }
+    } catch (_) { return false; }
+    params.delete("split");
+    var qs = params.toString();
+    history.replaceState(null, "", window.location.pathname + (qs ? "?" + qs : "") + window.location.hash);
+    return true;
   }
 
   /* ── utilities ───────────────────────────── */
@@ -466,8 +513,27 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
   if (modeEven)   modeEven.addEventListener("click",   function () { state.customSplit = false; save(); syncModeUI(); renderExpenses(); renderResults(); });
   if (modeCustom) modeCustom.addEventListener("click", function () { state.customSplit = true;  save(); syncModeUI(); renderExpenses(); renderResults(); });
 
+  /* sync-link button */
+  var syncBtn = document.getElementById("sSyncLink");
+  if (syncBtn) {
+    var syncBtnDefault = syncBtn.textContent;
+    syncBtn.addEventListener("click", function () {
+      var url = syncLinkUrl();
+      function flash(ok) {
+        syncBtn.textContent = ok ? "✓ Copied" : "Copy failed — select manually";
+        setTimeout(function () { syncBtn.textContent = syncBtnDefault; }, 1800);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(function () { flash(true); }, function () { flash(false); });
+      } else {
+        flash(false);
+      }
+    });
+  }
+
   /* ── init ─────────────────────────────────── */
   load();
+  hydrateFromUrl();
   render();
 })();
 </script>
