@@ -55,6 +55,20 @@ const { storeKey } = Astro.props;
         <button class="scm-btn" id="sModeCustom" type="button">Custom amounts</button>
       </div>
     </div>
+    <!-- Add-expense box — visually boxed off (background + border) so it can
+         never be mistaken for a blank/broken row in the list below it. -->
+    <div class="se-new-card" id="sNewCard">
+      <span class="sc-label">Add expense</span>
+      <div class="se-new-row">
+        <select class="split-in se-payer" id="sNewPayer"></select>
+        <input class="split-in se-desc" type="text" placeholder="What for?" id="sNewDesc" />
+        <div class="se-amt-wrap"><span class="se-cur">$</span>
+          <input class="split-in se-amt" type="number" min="0" step="0.01" placeholder="0.00" id="sNewAmt" />
+        </div>
+      </div>
+      <button class="sc-add-expense-btn" id="sAddExpense" type="button">+ Add expense</button>
+    </div>
+
     <div class="se-header">
       <span class="se-h-payer">Paid by</span>
       <span class="se-h-desc">What for</span>
@@ -63,7 +77,6 @@ const { storeKey } = Astro.props;
     <div class="sc-body" id="sExpenseList">
       <p class="split-empty">Add people first, then record who paid what.</p>
     </div>
-    <button class="sc-add-expense-btn" id="sAddExpense" type="button">+ Add expense</button>
   </div>
 
 </div>
@@ -179,6 +192,7 @@ const { storeKey } = Astro.props;
         var fld = this.dataset.field;
         state.members[i][fld] = this.value;
         save();
+        if (fld === "name") renderNewRowOptions();
         renderResults();
       });
     });
@@ -204,15 +218,30 @@ const { storeKey } = Astro.props;
     }).join("");
   }
 
+  // Keeps the static entry row's payer dropdown in sync with the People list
+  // (names added/renamed/removed) without touching the row's own text fields.
+  function renderNewRowOptions() {
+    var sel = document.getElementById("sNewPayer");
+    if (!sel) return;
+    var keep = parseInt(sel.value, 10);
+    if (isNaN(keep) || keep >= state.members.length) keep = 0;
+    sel.innerHTML = memberOptions(keep);
+  }
+
   function renderExpenses() {
-    var list = document.getElementById("sExpenseList");
+    var newCard = document.getElementById("sNewCard");
+    var list    = document.getElementById("sExpenseList");
     if (!list) return;
-    if (!state.members.length) {
+
+    var hasMembers = state.members.length > 0;
+    if (newCard) newCard.hidden = !hasMembers;
+
+    if (!hasMembers) {
       list.innerHTML = "<p class='split-empty'>Add people first, then record who paid what.</p>";
       return;
     }
     if (!state.expenses.length) {
-      list.innerHTML = "<p class='split-empty'>No expenses yet — tap + Add expense.</p>";
+      list.innerHTML = "<p class='split-empty'>No expenses yet — fill in the row above and tap + Add expense.</p>";
       return;
     }
 
@@ -245,6 +274,7 @@ const { storeKey } = Astro.props;
 
       return "<div class='se-row' data-ei='" + ei + "'>" +
         "<div class='se-main'>" +
+        "<span class='se-drag' draggable='true' aria-label='Drag to reorder' title='Drag to reorder'>⠿</span>" +
         "<select class='split-in se-payer' data-ei='" + ei + "'>" + memberOptions(exp.paidBy) + "</select>" +
         "<input class='split-in se-desc' type='text' placeholder='What for?'" +
           " value='" + esc(exp.desc || "") + "' data-ei='" + ei + "' data-field='desc' />" +
@@ -298,6 +328,38 @@ const { storeKey } = Astro.props;
     list.querySelectorAll("[data-del-e]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         state.expenses.splice(parseInt(this.dataset.delE, 10), 1);
+        save(); renderExpenses(); renderResults();
+      });
+    });
+
+    /* drag-to-reorder — grab the ⠿ handle, drop on any row to move it there.
+       Native HTML5 drag/drop; desktop pointer only (no touch equivalent). */
+    var dragSrcIdx = null;
+    list.querySelectorAll(".se-drag").forEach(function (handle) {
+      handle.addEventListener("dragstart", function (e) {
+        var row = handle.closest(".se-row");
+        dragSrcIdx = parseInt(row.dataset.ei, 10);
+        e.dataTransfer.effectAllowed = "move";
+        e.dataTransfer.setData("text/plain", String(dragSrcIdx)); // Firefox needs data set to allow the drag
+        row.classList.add("se-dragging");
+      });
+      handle.addEventListener("dragend", function () {
+        var row = handle.closest(".se-row");
+        if (row) row.classList.remove("se-dragging");
+        dragSrcIdx = null;
+      });
+    });
+    list.querySelectorAll(".se-row").forEach(function (row) {
+      row.addEventListener("dragover", function (e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+      });
+      row.addEventListener("drop", function (e) {
+        e.preventDefault();
+        var targetIdx = parseInt(row.dataset.ei, 10);
+        if (dragSrcIdx === null || targetIdx === dragSrcIdx) return;
+        var moved = state.expenses.splice(dragSrcIdx, 1)[0];
+        state.expenses.splice(targetIdx, 0, moved);
         save(); renderExpenses(); renderResults();
       });
     });
@@ -409,6 +471,7 @@ const { storeKey } = Astro.props;
 
   function render() {
     renderMembers();
+    renderNewRowOptions();
     renderExpenses();
     renderResults();
   }
@@ -418,20 +481,30 @@ const { storeKey } = Astro.props;
   if (addPerson) {
     addPerson.addEventListener("click", function () {
       state.members.push({ name: "", payment: "" });
-      save(); renderMembers(); renderExpenses();
+      save(); renderMembers(); renderNewRowOptions(); renderExpenses();
     });
   }
 
+  // Static top entry row: fill in payer/desc/amount, tap Add, it commits to
+  // the list below and the row resets — never scroll down to add another.
   var addExpense = document.getElementById("sAddExpense");
+  var newPayerEl = document.getElementById("sNewPayer");
+  var newDescEl  = document.getElementById("sNewDesc");
+  var newAmtEl   = document.getElementById("sNewAmt");
   if (addExpense) {
     addExpense.addEventListener("click", function () {
       if (!state.members.length) return;
-      var even = parseFloat("0");
+      var amt = parseFloat(newAmtEl.value);
+      if (!amt || amt <= 0) { newAmtEl.focus(); return; }
+      var payer = parseInt(newPayerEl.value, 10) || 0;
+      var even  = amt / state.members.length;
       state.expenses.push({
-        paidBy: 0, desc: "", amount: null,
-        customAmts: state.members.map(function () { return even; })
+        paidBy: payer, desc: newDescEl.value || "", amount: amt,
+        customAmts: state.members.map(function () { return parseFloat(even.toFixed(2)); })
       });
-      save(); renderExpenses();
+      save(); renderExpenses(); renderResults();
+      newDescEl.value = ""; newAmtEl.value = "";
+      newDescEl.focus();
     });
   }
 

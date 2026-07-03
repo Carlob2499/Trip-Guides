@@ -496,7 +496,7 @@ details table{margin:.3rem 0 .4rem}
 /* buttons */
 .sc-add-btn,.sc-add-expense-btn{font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;background:none;border:1px solid var(--rule2);border-radius:4px;padding:.3rem .7rem;cursor:pointer;color:var(--muted);transition:color .14s,border-color .14s,background .14s;white-space:nowrap;flex:none}
 .sc-add-btn:hover,.sc-add-expense-btn:hover{color:var(--ink);border-color:var(--ink)}
-.sc-add-expense-btn{margin-top:.6rem;align-self:flex-start}
+.sc-add-expense-btn{margin-bottom:.9rem;align-self:flex-start}
 /* member rows */
 .sm-row{display:grid;grid-template-columns:1.4rem 1fr 1.6fr 1.6rem;gap:.45rem;align-items:center}
 .sm-idx{font-family:'Space Mono',monospace;font-size:.72rem;color:var(--muted);text-align:center;line-height:1}
@@ -514,9 +514,16 @@ details table{margin:.3rem 0 .4rem}
 .se-header{display:grid;grid-template-columns:7rem 1fr 5.5rem;gap:.4rem;padding:.1rem 0 .4rem;border-bottom:1px solid var(--rule);margin-bottom:.3rem}
 .se-h-payer,.se-h-desc,.se-h-amt{font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .se-h-amt{text-align:right}
+/* add-expense box — boxed off so it never reads as a stray row in the list below */
+.se-new-card{background:var(--bg2);border:1px solid var(--rule);border-radius:6px;padding:.75rem .8rem;margin-bottom:.9rem}
+.se-new-card .sc-label{display:block;margin-bottom:.5rem}
+.se-new-row{display:grid;grid-template-columns:7rem 1fr 5.5rem;gap:.4rem;align-items:center;margin-bottom:.55rem}
 /* expense rows */
 .se-row{margin-bottom:.35rem}
-.se-main{display:grid;grid-template-columns:7rem 1fr 5.5rem 1.6rem;gap:.4rem;align-items:center}
+.se-main{display:grid;grid-template-columns:1.3rem 7rem 1fr 5.5rem 1.6rem;gap:.4rem;align-items:center}
+.se-drag{cursor:grab;color:var(--muted);font-size:.9rem;text-align:center;flex:none;user-select:none}
+.se-drag:active{cursor:grabbing}
+.se-dragging{opacity:.4}
 .se-amt-wrap{display:flex;align-items:center;gap:.2rem;min-width:0}
 .se-cur{font-family:'Space Mono',monospace;font-size:.78rem;color:var(--muted);flex:none}
 .se-amt{text-align:right}
@@ -560,5 +567,6 @@ details table{margin:.3rem 0 .4rem}
   .sm-row{grid-template-columns:1.4rem 1fr 1.6rem;grid-template-rows:auto auto}
   .sm-pay{grid-column:2}
   .se-header{grid-template-columns:5.5rem 1fr 4.5rem}
-  .se-main{grid-template-columns:5.5rem 1fr 4.5rem 1.6rem}
+  .se-new-row{grid-template-columns:5.5rem 1fr 4.5rem}
+  .se-main{grid-template-columns:1.3rem 5.5rem 1fr 4.5rem 1.6rem}
 }
