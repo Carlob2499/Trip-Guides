@@ -154,6 +154,35 @@ const curFallbackRate   = _cfg.curFallbackRate || null;
             });
           }
 
+          /* ── 1a. LOW-ENERGY TOGGLE ───────────────────────────────────────
+             Dims day cards explicitly tagged energy:"high" in the guide JSON
+             (DaysBlock stamps data-energy). Guides with no tagged days show no
+             visible change — this filters authored tags, it never infers
+             strenuousness from `pace`'s free-text schedule narrative. */
+          var ENERGY_KEY = "tg-energy-" + (storeKey || "guide");
+          var energyBtn = document.getElementById("btnEnergy");
+          function syncEnergyUI() {
+            var low = document.body.getAttribute("data-energy") === "low";
+            if (!energyBtn) return;
+            energyBtn.textContent = low ? "⚡ Low" : "⚡ High";
+            energyBtn.setAttribute("aria-label", low ? "Switch to normal-energy mode" : "Switch to low-energy mode");
+            energyBtn.title = energyBtn.getAttribute("aria-label");
+          }
+          try {
+            if (localStorage.getItem(ENERGY_KEY) === "low") document.body.setAttribute("data-energy", "low");
+          } catch (_) {}
+          syncEnergyUI();
+          if (energyBtn) {
+            energyBtn.addEventListener("click", function () {
+              var low = document.body.getAttribute("data-energy") === "low";
+              var next = low ? "high" : "low";
+              if (next === "low") document.body.setAttribute("data-energy", "low");
+              else document.body.removeAttribute("data-energy");
+              try { localStorage.setItem(ENERGY_KEY, next); } catch (e) {}
+              syncEnergyUI();
+            });
+          }
+
           /* ── 2. MOBILE SHEET ─────────────────────────────────────────── */
           var sheet    = document.querySelector(".sheet");
           var backdrop = document.querySelector(".sheet-backdrop");

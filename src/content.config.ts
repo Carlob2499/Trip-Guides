@@ -49,6 +49,11 @@ const section = z.discriminatedUnion("type", [
     pace: z.string().optional(), note: z.string().optional(), body: z.string().optional(), fit: z.string().optional(),
     checklist: z.array(z.string()).optional(),
     constraints: z.array(z.string()).optional(), // e.g. "Closed Mondays", "Advance booking required"
+    // Explicit exertion tag for the Low-Energy toggle. NOT derived from `pace` —
+    // `pace` is a free-text schedule narrative, not a strenuousness rating, so
+    // inferring one from it would be a guess. This field starts unset on every
+    // existing guide; the toggle only filters days an editor has tagged.
+    energy: z.enum(["high", "low"]).optional(),
   })) }),
   z.object({ type: z.literal("sights"), group: z.string(), title: z.string().optional(), items: z.array(z.object({
     name: z.string(), kicker: z.string().optional(), body: z.string().optional(),

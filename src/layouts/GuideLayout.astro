@@ -155,6 +155,12 @@ const tripSummary = buildSummary(guide);
       <div class="topbar-right">
         <button id="btnShare" class="topbar-btn" aria-label="Share this guide" title="Share this guide">↗ Share</button>
         <!--
+          Low-energy toggle — dims/hides day cards explicitly tagged `energy: "high"`
+          in the guide JSON. No-op on guides where no day is tagged (icon/label
+          still update; nothing filters). Icon/label updated by JS.
+        -->
+        <button id="btnEnergy" class="topbar-btn" aria-label="Switch to low-energy mode" title="Switch to low-energy mode">⚡ High</button>
+        <!--
           Dark-mode toggle — icon and aria-label are updated by JS.
           ◑ = currently light → click to go dark
           ☀ = currently dark  → click to go light
