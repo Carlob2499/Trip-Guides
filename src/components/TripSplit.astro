@@ -1,27 +1,21 @@
 ---
 interface Props {
   storeKey: string;
-  curCode?: string;
-  curSymbol?: string;
-  curName?: string;
-  curRate?: number;
 }
-// curRate is always passed by GuideLayout from themes.ts CURRENCIES[country].approxRate;
-// this default only covers an unmapped/undefined country and should track that value.
-const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", curRate = 1535 } = Astro.props;
+const { storeKey } = Astro.props;
 ---
 
-<div class="split-wrap" id="tripSplit" hidden
-     data-sk={storeKey}
-     data-cur-code={curCode}
-     data-cur-sym={curSymbol}
-     data-cur-name={curName}
-     data-cur-rate={String(curRate)}>
+<div class="split-wrap" id="tripSplit" hidden data-sk={storeKey}>
 
   <div class="split-toolbar">
-    <h2 class="split-title">Trip Split</h2>
+    <h2 class="split-title">Budget Calculator</h2>
     <p class="split-desc">Track who paid what and see exactly who owes who — minimum transfers, no maths.</p>
-    <button class="sc-add-btn" id="sSyncLink" type="button">🔗 Copy sync link</button>
+    <div class="split-save-actions">
+      <button class="sc-add-btn" id="sSyncLink" type="button">🔗 Copy sync link</button>
+      <button class="sc-add-btn" id="sExport" type="button">⬇ Export file</button>
+      <button class="sc-add-btn" id="sImportBtn" type="button">⬆ Import file</button>
+      <input type="file" id="sImportFile" accept="application/json" hidden />
+    </div>
   </div>
 
   <!-- People -->
@@ -35,19 +29,21 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
     </div>
   </div>
 
-  <!-- Currency -->
-  <div class="split-card split-card--row">
-    <span class="sc-label">Currency</span>
-    <div class="scur-group">
-      <button class="scur-btn scur-active" data-cur="usd" id="sCurUSD" type="button">$ USD</button>
-      <button class="scur-btn" data-cur="local" id="sCurLocal" type="button">{curSymbol} {curCode}</button>
+  <!-- Summary bar -->
+  <div class="split-summary" id="sSummary" hidden>
+    <span class="split-summary-lbl">Total trip spend</span>
+    <span class="split-summary-val" id="sTotalUSD">$0.00</span>
+  </div>
+
+  <!-- Results -->
+  <div class="split-card split-results-card" id="sResults" hidden>
+    <div class="sc-head"><span class="sc-label">Balances</span></div>
+    <div id="sBalances"></div>
+    <div class="split-settle-head">
+      <span class="sc-label">Who pays who</span>
+      <span class="split-settle-count" id="sSettleCount"></span>
     </div>
-    <div class="split-rate-row" id="sRateRow" hidden>
-      <label class="split-rate-label" for="sRate">1 USD&nbsp;=</label>
-      <input class="split-rate-input" type="number" id="sRate" min="0.001" step="any" value={String(curRate)} />
-      <span class="split-rate-unit">{curCode}</span>
-      <span class="split-rate-note">⚠ verify before settling</span>
-    </div>
+    <div id="sSettlements"></div>
   </div>
 
   <!-- Expenses -->
@@ -70,24 +66,6 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
     <button class="sc-add-expense-btn" id="sAddExpense" type="button">+ Add expense</button>
   </div>
 
-  <!-- Results -->
-  <div class="split-card split-results-card" id="sResults" hidden>
-    <div class="sc-head"><span class="sc-label">Balances</span></div>
-    <div id="sBalances"></div>
-    <div class="split-settle-head">
-      <span class="sc-label">Who pays who</span>
-      <span class="split-settle-count" id="sSettleCount"></span>
-    </div>
-    <div id="sSettlements"></div>
-  </div>
-
-  <!-- Summary bar -->
-  <div class="split-summary" id="sSummary" hidden>
-    <span class="split-summary-lbl">Total trip spend</span>
-    <span class="split-summary-val" id="sTotalUSD">$0.00</span>
-    <span class="split-summary-local" id="sTotalLocal" hidden></span>
-  </div>
-
 </div>
 
 <script>
@@ -95,16 +73,11 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
   var wrap = document.getElementById("tripSplit");
   if (!wrap) return;
 
-  var SK       = "tg-split-" + (wrap.dataset.sk || "guide");
-  var C_CODE   = wrap.dataset.curCode  || "KRW";
-  var C_SYM    = wrap.dataset.curSym   || "₩";
-  var DEF_RATE = parseFloat(wrap.dataset.curRate || "1535") || 1535;
+  var SK = "tg-split-" + (wrap.dataset.sk || "guide");
 
   var state = {
     members:     [],
     expenses:    [],
-    useLocal:    false,
-    localRate:   DEF_RATE,
     customSplit: false
   };
 
@@ -112,24 +85,28 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
   function load() {
     try {
       var s = JSON.parse(localStorage.getItem(SK) || "null");
-      if (s && typeof s === "object") {
-        if (Array.isArray(s.members))       state.members     = s.members;
-        if (Array.isArray(s.expenses))      state.expenses    = s.expenses;
-        if (typeof s.useLocal    === "boolean") state.useLocal    = s.useLocal;
-        if (typeof s.localRate   === "number")  state.localRate   = s.localRate;
-        if (typeof s.customSplit === "boolean") state.customSplit = s.customSplit;
-      }
+      applyState(s);
     } catch (_) {}
   }
   function save() {
     try { localStorage.setItem(SK, JSON.stringify(state)); } catch (_) {}
   }
+  // Shared shape guard used by localStorage load, URL-link hydration, and file import.
+  function applyState(s) {
+    if (!s || typeof s !== "object") return false;
+    if (Array.isArray(s.members))           state.members     = s.members;
+    if (Array.isArray(s.expenses))          state.expenses    = s.expenses;
+    if (typeof s.customSplit === "boolean") state.customSplit = s.customSplit;
+    return true;
+  }
 
-  /* ── URL-hash state handoff (QR / link sync) ──────────────────
+  /* ── URL-link + file state handoff (QR / cross-device sync) ───────
      Uses the ?split= query param, NOT location.hash — guide-ui.js's tab
      router does `document.querySelector(window.location.hash)`, so a
      base64 blob in the hash would throw a DOMException there. The query
-     string is untouched by any other script, so it's collision-free. */
+     string is untouched by any other script, so it's collision-free.
+     Export/Import is the same shape, saved to/read from a local file —
+     both are the "not just this browser's localStorage" save path. */
   function toBase64Url(str) {
     var b64 = btoa(unescape(encodeURIComponent(str)));
     return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
@@ -139,14 +116,11 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
     while (b64.length % 4) b64 += "=";
     return decodeURIComponent(escape(atob(b64)));
   }
-  function encodeSyncState() {
-    return toBase64Url(JSON.stringify({
-      members: state.members, expenses: state.expenses,
-      useLocal: state.useLocal, localRate: state.localRate, customSplit: state.customSplit,
-    }));
+  function exportableState() {
+    return { members: state.members, expenses: state.expenses, customSplit: state.customSplit };
   }
   function syncLinkUrl() {
-    return window.location.origin + window.location.pathname + "?split=" + encodeSyncState();
+    return window.location.origin + window.location.pathname + "?split=" + toBase64Url(JSON.stringify(exportableState()));
   }
   // Hydrate from an incoming ?split= link (e.g. scanned via QR), then strip the
   // param so a reload doesn't re-import a now-stale snapshot over local edits.
@@ -155,15 +129,8 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
     var raw = params.get("split");
     if (!raw) return false;
     try {
-      var s = JSON.parse(fromBase64Url(raw));
-      if (s && typeof s === "object") {
-        if (Array.isArray(s.members))           state.members     = s.members;
-        if (Array.isArray(s.expenses))          state.expenses    = s.expenses;
-        if (typeof s.useLocal    === "boolean") state.useLocal    = s.useLocal;
-        if (typeof s.localRate   === "number")  state.localRate   = s.localRate;
-        if (typeof s.customSplit === "boolean") state.customSplit = s.customSplit;
-        save();
-      }
+      if (!applyState(JSON.parse(fromBase64Url(raw)))) return false;
+      save();
     } catch (_) { return false; }
     params.delete("split");
     var qs = params.toString();
@@ -179,12 +146,6 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
   }
   function fmtUSD(v) {
     return "$" + (Math.round(Math.abs(v) * 100) / 100).toFixed(2);
-  }
-  function fmtLocal(v) {
-    return C_SYM + Math.round(Math.abs(v) * state.localRate).toLocaleString("en-US");
-  }
-  function fmt(v) {
-    return state.useLocal ? fmtLocal(v) : fmtUSD(v);
   }
   function memberName(i) {
     var m = state.members[i];
@@ -218,7 +179,6 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
         var fld = this.dataset.field;
         state.members[i][fld] = this.value;
         save();
-        renderExpenses();
         renderResults();
       });
     });
@@ -288,7 +248,7 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
         "<select class='split-in se-payer' data-ei='" + ei + "'>" + memberOptions(exp.paidBy) + "</select>" +
         "<input class='split-in se-desc' type='text' placeholder='What for?'" +
           " value='" + esc(exp.desc || "") + "' data-ei='" + ei + "' data-field='desc' />" +
-        "<div class='se-amt-wrap'><span class='se-cur'>" + (state.useLocal ? C_SYM : "$") + "</span>" +
+        "<div class='se-amt-wrap'><span class='se-cur'>$</span>" +
         "<input class='split-in se-amt' type='number' min='0' step='0.01' placeholder='0.00'" +
           " value='" + (exp.amount != null ? String(exp.amount) : "") + "'" +
           " data-ei='" + ei + "' data-field='amount' /></div>" +
@@ -318,7 +278,10 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
           });
         }
         save();
-        if (fld === "amount") renderExpenses();
+        // NOTE: do not call renderExpenses() here — it rebuilds this input's
+        // DOM node via innerHTML, which drops focus mid-keystroke. Nothing
+        // visible in this list depends on the amount while typing; renderResults()
+        // (balances/settlement) is the only thing that needs to react live.
         renderResults();
       });
     });
@@ -329,7 +292,6 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
         if (!state.expenses[ei].customAmts) state.expenses[ei].customAmts = [];
         state.expenses[ei].customAmts[mi] = parseFloat(this.value) || 0;
         save();
-        renderExpenses();
         renderResults();
       });
     });
@@ -386,13 +348,12 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
 
   /* ── results rendering ───────────────────── */
   function renderResults() {
-    var card     = document.getElementById("sResults");
-    var summary  = document.getElementById("sSummary");
-    var bDiv     = document.getElementById("sBalances");
-    var sDiv     = document.getElementById("sSettlements");
-    var sCount   = document.getElementById("sSettleCount");
-    var totUSD   = document.getElementById("sTotalUSD");
-    var totLocal = document.getElementById("sTotalLocal");
+    var card    = document.getElementById("sResults");
+    var summary = document.getElementById("sSummary");
+    var bDiv    = document.getElementById("sBalances");
+    var sDiv    = document.getElementById("sSettlements");
+    var sCount  = document.getElementById("sSettleCount");
+    var totUSD  = document.getElementById("sTotalUSD");
 
     if (!state.members.length || !state.expenses.length) {
       if (card)    card.hidden    = true;
@@ -405,11 +366,7 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
     var total = state.expenses.reduce(function (s, e) {
       return s + (parseFloat(e.amount) || 0);
     }, 0);
-    if (totUSD)   totUSD.textContent   = "$" + total.toFixed(2);
-    if (totLocal) {
-      totLocal.textContent = "/ " + C_SYM + Math.round(total * state.localRate).toLocaleString("en-US");
-      totLocal.hidden = !state.useLocal;
-    }
+    if (totUSD) totUSD.textContent = "$" + total.toFixed(2);
 
     var calc = calculate();
 
@@ -421,9 +378,7 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
         return "<div class='sb-row " + cls + "'>" +
           "<span class='sb-name'>" + esc(memberName(i)) + "</span>" +
           "<span class='sb-verb'>" + verb + "</span>" +
-          "<span class='sb-amt'>" + (abs > 0.005 ? fmt(abs) : "—") + "</span>" +
-          (state.useLocal && abs > 0.005
-            ? "<span class='sb-usd'>(" + fmtUSD(abs) + ")</span>" : "") +
+          "<span class='sb-amt'>" + (abs > 0.005 ? fmtUSD(abs) : "—") + "</span>" +
           "</div>";
       }).join("");
     }
@@ -444,7 +399,6 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
             "</div>" +
             "<div class='st-amt-row'>" +
               "<span class='st-usd'>" + fmtUSD(t.amt) + "</span>" +
-              (state.useLocal ? "<span class='st-local'>" + fmtLocal(t.amt) + "</span>" : "") +
             "</div>" +
             (payMethod ? "<div class='st-via'>via " + esc(payMethod) + "</div>" : "") +
             "</div>";
@@ -472,7 +426,6 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
   if (addExpense) {
     addExpense.addEventListener("click", function () {
       if (!state.members.length) return;
-      var n    = state.members.length;
       var even = parseFloat("0");
       state.expenses.push({
         paidBy: 0, desc: "", amount: null,
@@ -481,26 +434,6 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
       save(); renderExpenses();
     });
   }
-
-  /* currency */
-  var curUSD   = document.getElementById("sCurUSD");
-  var curLocal = document.getElementById("sCurLocal");
-  var rateRow  = document.getElementById("sRateRow");
-  var rateInp  = document.getElementById("sRate");
-
-  function syncCurUI() {
-    if (curUSD)   curUSD.classList.toggle("scur-active",  !state.useLocal);
-    if (curLocal) curLocal.classList.toggle("scur-active", state.useLocal);
-    if (rateRow)  rateRow.hidden = !state.useLocal;
-  }
-  syncCurUI();
-  if (rateInp) rateInp.value = String(state.localRate);
-
-  if (curUSD)   curUSD.addEventListener("click",   function () { state.useLocal = false; save(); syncCurUI(); renderResults(); });
-  if (curLocal) curLocal.addEventListener("click",  function () { state.useLocal = true;  save(); syncCurUI(); renderResults(); });
-  if (rateInp)  rateInp.addEventListener("input",  function () {
-    state.localRate = parseFloat(this.value) || DEF_RATE; save(); renderResults();
-  });
 
   /* split mode */
   var modeEven   = document.getElementById("sModeEven");
@@ -530,6 +463,53 @@ const { storeKey, curCode = "KRW", curSymbol = "₩", curName = "Korean Won", cu
       }
     });
   }
+
+  /* export / import file — a real save-file, independent of this browser's storage */
+  var exportBtn = document.getElementById("sExport");
+  if (exportBtn) {
+    exportBtn.addEventListener("click", function () {
+      var blob = new Blob([JSON.stringify(exportableState(), null, 2)], { type: "application/json" });
+      var url  = URL.createObjectURL(blob);
+      var a    = document.createElement("a");
+      a.href = url;
+      a.download = "budget-" + (wrap.dataset.sk || "guide") + ".json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  var importBtn  = document.getElementById("sImportBtn");
+  var importFile = document.getElementById("sImportFile");
+  if (importBtn && importFile) {
+    importBtn.addEventListener("click", function () { importFile.click(); });
+    importFile.addEventListener("change", function () {
+      var file = importFile.files && importFile.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function () {
+        try {
+          if (applyState(JSON.parse(String(reader.result)))) { save(); render(); }
+        } catch (_) {
+          // Malformed/foreign file — leave existing state untouched rather than guess.
+        }
+        importFile.value = "";
+      };
+      reader.readAsText(file);
+    });
+  }
+
+  /* Prevent the browser's default "scroll wheel changes a focused number
+     input's value" behaviour — users scrolling the page while their cursor
+     happens to sit over an amount field were silently getting their typed
+     value overwritten. Delegated on wrap since expense rows are re-rendered. */
+  wrap.addEventListener("wheel", function (e) {
+    var t = e.target;
+    if (t && t.tagName === "INPUT" && t.type === "number" && document.activeElement === t) {
+      e.preventDefault();
+    }
+  }, { passive: false });
 
   /* ── init ─────────────────────────────────── */
   load();

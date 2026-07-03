@@ -603,14 +603,6 @@ const curFallbackRate   = _cfg.curFallbackRate || null;
                 foot.textContent = fmtRate(rate) + " " + curCode + " = $1 · Live · ECB · " + date;
               }
 
-              // Update TripSplit rate input only if the user hasn't manually changed it
-              // (guard: current value still matches the build-time fallback ±1).
-              var rateInp = document.getElementById("sRate");
-              if (rateInp && Math.abs(parseFloat(rateInp.value) - curFallbackRate) <= 1) {
-                rateInp.value = String(rate >= 1 ? Math.round(rate) : parseFloat(rate.toFixed(4)));
-                rateInp.dispatchEvent(new Event("input"));
-              }
-
               // Broadcast for any future listeners (Session 2/3 pattern).
               document.dispatchEvent(new CustomEvent("tg:rate", { detail: { rate: rate, date: date, code: curCode } }));
             }

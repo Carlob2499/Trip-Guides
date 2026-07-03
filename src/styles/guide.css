@@ -482,14 +482,14 @@ details table{margin:.3rem 0 .4rem}
   @page { margin: 1.5cm 1.8cm; }
 }
 
-/* === TRIP SPLIT CALCULATOR =================================================== */
+/* === BUDGET CALCULATOR ======================================================= */
 .split-wrap{padding:1.4rem 0 3rem;max-width:680px}
 .split-toolbar{margin-bottom:1.2rem}
 .split-title{font-family:'Fraunces',Georgia,serif;font-weight:400;font-style:italic;font-size:clamp(1.8rem,5vw,2.4rem);line-height:1.1;margin-bottom:.3rem}
 .split-desc{color:var(--muted);font-size:.92rem;line-height:1.6}
+.split-save-actions{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.7rem}
 /* cards */
 .split-card{background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:1.1rem 1.25rem;margin-bottom:.9rem;box-shadow:0 1px 3px rgba(33,30,26,.06)}
-.split-card--row{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem .9rem;padding:.75rem 1.25rem}
 .sc-head{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin-bottom:.75rem}
 .sc-label{font-family:'Space Grotesk',-apple-system,system-ui,sans-serif;font-size:.7rem;font-weight:600;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
 .sc-body{display:flex;flex-direction:column;gap:.5rem}
@@ -506,17 +506,6 @@ details table{margin:.3rem 0 .4rem}
 /* delete button */
 .split-del{background:none;border:none;cursor:pointer;font-size:1rem;color:var(--muted);padding:.1rem .35rem;border-radius:3px;line-height:1;transition:color .14s,background .14s;flex:none}
 .split-del:hover{color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
-/* currency */
-.scur-group{display:flex;gap:.25rem}
-.scur-btn{font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.04em;background:none;border:1px solid var(--rule2);border-radius:4px;padding:.28rem .65rem;cursor:pointer;color:var(--muted);transition:background .13s,color .13s,border-color .13s}
-.scur-btn.scur-active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.split-rate-row{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
-.split-rate-label{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted);white-space:nowrap}
-.split-rate-input{font:inherit;font-size:.88rem;width:5.5rem;border:1px solid var(--rule2);border-radius:4px;padding:.28rem .4rem;background:var(--card);color:var(--ink);text-align:right;-moz-appearance:textfield}
-.split-rate-input::-webkit-outer-spin-button,.split-rate-input::-webkit-inner-spin-button{-webkit-appearance:none}
-.split-rate-input:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
-.split-rate-unit{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted)}
-.split-rate-note{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--accent);letter-spacing:.02em}
 /* split mode toggle */
 .sc-mode-toggle{display:flex;gap:.25rem}
 .scm-btn{font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.04em;background:none;border:1px solid var(--rule2);border-radius:4px;padding:.26rem .6rem;cursor:pointer;color:var(--muted);transition:background .13s,color .13s,border-color .13s;white-space:nowrap}
@@ -547,7 +536,6 @@ details table{margin:.3rem 0 .4rem}
 .sb-name{font-weight:600;font-size:.92rem}
 .sb-verb{font-size:.82rem;color:var(--muted)}
 .sb-amt{font-family:'Space Mono',monospace;font-size:.88rem;font-weight:600;text-align:right;white-space:nowrap}
-.sb-usd{font-family:'Space Mono',monospace;font-size:.72rem;color:var(--muted);text-align:right;white-space:nowrap}
 .sb-owed .sb-amt{color:var(--green)}
 .sb-owes .sb-amt{color:var(--accent)}
 .sb-even .sb-amt{color:var(--muted)}
@@ -559,14 +547,12 @@ details table{margin:.3rem 0 .4rem}
 .st-to{font-weight:600}
 .st-amt-row{display:flex;align-items:baseline;gap:.5rem}
 .st-usd{font-family:'Space Mono',monospace;font-size:1.05rem;font-weight:700}
-.st-local{font-family:'Space Mono',monospace;font-size:.8rem;color:var(--muted)}
 .st-via{margin-top:.25rem;font-size:.82rem;color:var(--muted);font-style:italic}
 .split-settle-ok{color:var(--green);font-size:.92rem;font-style:italic;padding:.3rem 0}
 /* summary bar */
 .split-summary{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;padding:.7rem 1rem;background:var(--bg2);border:1px solid var(--rule);border-radius:6px}
 .split-summary-lbl{font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);flex:1}
 .split-summary-val{font-family:'Space Mono',monospace;font-size:.92rem;font-weight:700}
-.split-summary-local{font-family:'Space Mono',monospace;font-size:.78rem;color:var(--muted)}
 /* empty state */
 .split-empty{color:var(--muted);font-size:.88rem;font-style:italic;padding:.25rem 0}
 /* mobile tweaks */

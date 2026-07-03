@@ -218,7 +218,7 @@ const tripSummary = buildSummary(guide);
     </div>
 
     <!-- ═══════════════════════════════════════════════════════════════════════
-         GUIDE TAB BAR — one tab per section group + Trip Split tool
+         GUIDE TAB BAR — one tab per section group + Budget Calculator tool
          ═══════════════════════════════════════════════════════════════════ -->
     <nav class="guide-tabs" id="guideTabs" role="tablist" aria-label="Guide sections">
       {order.map((g, i) => (
@@ -226,7 +226,7 @@ const tripSummary = buildSummary(guide);
                 aria-selected={i === 0 ? "true" : "false"}>{g}</button>
       ))}
       <button class="gtab gtab-split" role="tab" type="button" data-tab="split"
-              aria-selected="false">÷ Split</button>
+              aria-selected="false">$ Budget</button>
     </nav>
 
     </div>{/* end .sticky-chrome */}
@@ -323,11 +323,7 @@ const tripSummary = buildSummary(guide);
             </div>
           );
         })}
-        <TripSplit storeKey={storeKey}
-          curCode={localCur?.code}
-          curSymbol={localCur?.symbol}
-          curName={localCur?.name}
-          curRate={localCur?.approxRate} />
+        <TripSplit storeKey={storeKey} />
       </main>
     </div>
 
@@ -369,7 +365,7 @@ const tripSummary = buildSummary(guide);
             ))}
           </>
         ))}
-        <a class="sheet-cat sheet-split-link" data-tab="split" href="#">÷ Trip Split</a>
+        <a class="sheet-cat sheet-split-link" data-tab="split" href="#">$ Budget Calculator</a>
       </div>
     </div>
 
