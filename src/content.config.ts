@@ -1,5 +1,16 @@
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
+import { contrastRatio } from "./lib/contrast";
+
+// Light page background (base.css `--bg`). A guide `theme.primary` becomes the
+// site `--accent`, painted as link/tab/label text on this surface — so it must
+// stay legible against it. Keep in sync with base.css if that token changes.
+const LIGHT_BG = "#f3ecdf";
+// 3.0:1 is WCAG's minimum for large-text / UI-component contrast, and is the
+// empirically-calibrated floor of the project's own country accent palette
+// (the tightest, #b07a1f, sits at ~3.16:1). Below this, accent UI turns
+// illegible on the cream background — fail the build loudly rather than ship it.
+const MIN_ACCENT_CONTRAST = 3.0;
 
 // A point on the map.
 const coord = z.object({ lat: z.number(), lng: z.number() });
@@ -109,7 +120,18 @@ const guides = defineCollection({
       primary: z.string().regex(/^#[0-9a-fA-F]{6}$/),
       secondary: z.string().regex(/^#[0-9a-fA-F]{6}$/),
       accent: z.string().regex(/^#[0-9a-fA-F]{6}$/),
-    }).optional(),
+    }).refine(
+      // `primary` is the colour actually painted as accent UI on the page
+      // background (it becomes `--accent`), so it's the one that can break
+      // legibility. secondary/accent are exposed as CSS vars but not yet
+      // consumed as on-background text, so they aren't gated here — add a
+      // check against their own surface if/when something renders them.
+      (t) => contrastRatio(t.primary, LIGHT_BG) >= MIN_ACCENT_CONTRAST,
+      (t) => ({
+        message: `theme.primary ${t.primary} has only ${contrastRatio(t.primary, LIGHT_BG).toFixed(2)}:1 contrast against the light background ${LIGHT_BG} — needs ≥${MIN_ACCENT_CONTRAST}:1 to stay legible as accent text. Pick a deeper/more saturated colour.`,
+        path: ["primary"],
+      }),
+    ).optional(),
     verified: z.string().optional(),  // freshness metadata for the maker/AI — NOT shown to travelers, EXCEPT a ⚠-prefixed value (e.g. an unconfirmed draft), which renders as a warning pill in the masthead
     draft: z.boolean().optional(),    // true = a "Guide-to-be" scaffold; listed in the home page's draft tier, not the curated grid
     intro: z.string().optional(),

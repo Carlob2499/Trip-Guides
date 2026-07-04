@@ -18,8 +18,18 @@ const holidayData = import.meta.glob("../data/holidays/*.json", { eager: true, i
 
 const { guide } = Astro.props;
 const { order, byG } = bucket(guide.sections);
-const accent  = accentFor(guide.country);
+// A guide may override the country-derived palette with an explicit `theme`
+// (primary/secondary/accent, contrast-gated at build time). When absent — every
+// guide today — `accent` stays exactly the country colour, so no guide regresses.
+// `theme.primary` drives the existing `--accent` (all accent-coloured UI); the
+// three `--theme-*` vars are exposed for opt-in use (e.g. focus rings) and simply
+// equal the country accent when no theme is set, so `var(--theme-primary)` is
+// always safe.
+const accent  = guide.theme?.primary ?? accentFor(guide.country);
 const accent2 = darken(accent, 0.14);
+const themePrimary   = guide.theme?.primary   ?? accent;
+const themeSecondary = guide.theme?.secondary ?? accent;
+const themeAccent    = guide.theme?.accent    ?? accent;
 const storeKey = (guide.title || "guide").replace(/\W+/g, "").toLowerCase();
 const navLabel = (s: any, g: string) => s.title || s.name || g;
 const localCur = currencyFor(guide.country);
@@ -98,7 +108,7 @@ const hasDayEvents = collectDayEvents(guide).length > 0;
 const tripSummary = buildSummary(guide);
 ---
 <!doctype html>
-<html lang="en" style={`--accent:${accent};--accent2:${accent2}`}>
+<html lang="en" style={`--accent:${accent};--accent2:${accent2};--theme-primary:${themePrimary};--theme-secondary:${themeSecondary};--theme-accent:${themeAccent}`}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
