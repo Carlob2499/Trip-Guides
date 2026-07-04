@@ -45,7 +45,7 @@ const carded = ["panel", "prose", "list", "routes", "map", "budget", "raids"].in
       {sec.type === "panel"  && <PanelBlock  sec={sec} keyPrefix={keyPrefix} />}
       {sec.type === "prose"  && <ProseBlock  sec={sec} />}
       {sec.type === "list"   && <ListBlock   sec={sec} keyPrefix={keyPrefix} />}
-      {sec.type === "routes" && <RoutesBlock sec={sec} />}
+      {sec.type === "routes" && <RoutesBlock sec={sec} keyPrefix={keyPrefix} />}
       {sec.type === "map"    && <MapBlock    sec={sec} />}
       {sec.type === "budget" && <BudgetBlock sec={sec} />}
       {sec.type === "raids"  && <RaidBlock   sec={sec} />}

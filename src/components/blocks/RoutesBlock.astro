@@ -1,8 +1,13 @@
 ---
-const { sec } = Astro.props;
+const { sec, keyPrefix = "rt" } = Astro.props;
 ---
 <ol class="steps">
-  {(sec.steps || []).map((s: string) => (
-    <li><Fragment set:html={s} /></li>
+  {(sec.steps || []).map((s: string, j: number) => (
+    <li>
+      <label class="check">
+        <input type="checkbox" data-pkey={`${keyPrefix}-${j}`} />
+        <span class="check-txt"><Fragment set:html={s} /></span>
+      </label>
+    </li>
   ))}
 </ol>
