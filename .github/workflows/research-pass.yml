@@ -1,0 +1,76 @@
+name: Research pass
+
+# Assisted research pass: Claude Code agent researches one guide, commits its findings
+# to a branch, and opens a draft PR for human review. Never auto-merges; draft: true
+# is always preserved on the guide JSON. Trigger manually via workflow_dispatch.
+#
+# Prerequisites:
+#   - ANTHROPIC_API_KEY secret set in repo Settings → Secrets → Actions
+#   - The guide's scaffold exists at src/content/guides/<slug>.json
+#
+# Usage: Actions → Research pass → Run workflow → enter slug (and optionally section)
+on:
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "Guide slug (e.g. japan, sweden). Must match src/content/guides/<slug>.json"
+        required: true
+        type: string
+      section:
+        description: "Section key to focus on (e.g. food, sights). Leave blank for a full pass."
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure git identity
+        run: |
+          git config user.name  "waypoint-research[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Run research agent
+        uses: anthropic/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          allowed_tools: "Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch"
+          prompt: |
+            Guide slug: ${{ inputs.slug }}
+            Section focus: ${{ inputs.section || 'full pass — all sections' }}
+
+            Start by reading .github/prompts/research-guide.md — it contains all your research
+            instructions, source-tier rules, accuracy requirements, and finish steps. Follow them
+            exactly. The CLAUDE.md accuracy standard (auto-loaded) is also binding.
+
+            Target guide: src/content/guides/${{ inputs.slug }}.json
+            ${{ inputs.section != '' && format('Scope this pass to the "{0}" section only; leave all other sections as-is.', inputs.section) || '' }}
+
+            When you have finished researching and editing:
+
+            1. Run `npm run build` and fix any schema validation errors before continuing.
+            2. Create a branch named `research/${{ inputs.slug }}` if it does not already exist,
+               and commit your changes there with a clear message.
+            3. Push the branch and open a **draft PR** with:
+                 - Title: "Research pass: ${{ inputs.slug }}${{ inputs.section != '' && format(' ({0})', inputs.section) || '' }}"
+                 - Body: your finish summary (what you researched, what you filled, what remains
+                   ⚠ unconfirmed) followed by the verification ledger table
+            4. NEVER remove `draft: true` from the guide JSON — graduating a guide is a human decision.
+            5. Never touch any guide other than src/content/guides/${{ inputs.slug }}.json.

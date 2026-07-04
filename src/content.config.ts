@@ -4,6 +4,17 @@ import { glob } from "astro/loaders";
 // A point on the map.
 const coord = z.object({ lat: z.number(), lng: z.number() });
 
+// A named, individually-addressable map point (distinct from the section's own
+// `center`/`span`). place_id is verified-or-flagged, never guessed: an unverified
+// value is literally the string "__VERIFICATION_REQUIRED__" (CLAUDE.md accuracy rule 4).
+const mapPoint = z.object({
+  name: z.string(),
+  lat: z.number(),
+  lng: z.number(),
+  place_id: z.string().optional(),
+  local_script_name: z.string().optional(), // native-script name for taxi/local display
+});
+
 // The eleven kinds of section a guide can contain. Each one lists the fields it
 // needs; if a content file gets one wrong, the build fails with a clear message.
 // NOTE: when adding a new type here, also add it to Block.astro and CLAUDE.md.
@@ -21,7 +32,7 @@ const section = z.discriminatedUnion("type", [
   z.object({ type: z.literal("prose"),  group: z.string(), title: z.string().optional(), body: z.string().optional() }),
   z.object({ type: z.literal("list"),   group: z.string(), title: z.string().optional(), items: z.array(z.string()) }),
   z.object({ type: z.literal("routes"), group: z.string(), title: z.string().optional(), steps: z.array(z.string()) }),
-  z.object({ type: z.literal("map"),    group: z.string(), title: z.string().optional(), center: coord, span: z.number().optional() }),
+  z.object({ type: z.literal("map"),    group: z.string(), title: z.string().optional(), center: coord, span: z.number().optional(), points: z.array(mapPoint).optional() }),
   // weather — live 7-day Open-Meteo strip. No coords here: reads lat/lng from the
   // guide's first `map` section at runtime (so it needs no per-guide config). If the
   // guide has no map section the block stays hidden. `note` is an optional caption.
@@ -37,6 +48,12 @@ const section = z.discriminatedUnion("type", [
     date: z.string(), title: z.string(),
     pace: z.string().optional(), note: z.string().optional(), body: z.string().optional(), fit: z.string().optional(),
     checklist: z.array(z.string()).optional(),
+    constraints: z.array(z.string()).optional(), // e.g. "Closed Mondays", "Advance booking required"
+    // Explicit exertion tag for the Low-Energy toggle. NOT derived from `pace` —
+    // `pace` is a free-text schedule narrative, not a strenuousness rating, so
+    // inferring one from it would be a guess. This field starts unset on every
+    // existing guide; the toggle only filters days an editor has tagged.
+    energy: z.enum(["high", "low"]).optional(),
   })) }),
   z.object({ type: z.literal("sights"), group: z.string(), title: z.string().optional(), items: z.array(z.object({
     name: z.string(), kicker: z.string().optional(), body: z.string().optional(),
@@ -57,6 +74,8 @@ const section = z.discriminatedUnion("type", [
       category: z.string().optional(),  // groups items under a labelled category header
       per: z.enum(["person", "group"]).optional(), // "group" ÷ party in per-person view
       note: z.string().optional(),
+      split_type: z.enum(["equal", "individual", "group"]).optional(),   // TripSplit hydration filter
+      payment_preference: z.enum(["Cash Only", "Contactless", "Credit Card"]).optional(),
     })) }),
   // raids — structured raid boss counter tables; replaces hand-written HTML in prose bodies.
   // Each boss renders as a collapsible <details> card with a typed counter table.
@@ -83,7 +102,14 @@ const guides = defineCollection({
     title: z.string(),
     dek: z.string().optional(),
     footer: z.string().optional(),
-    country: z.string(),          // sets the accent colour (see src/lib/themes.ts)
+    country: z.string(),          // sets the default accent colour (see src/lib/themes.ts)
+    // Optional override of the country-derived palette. Hex only; when absent,
+    // src/lib/themes.ts's country lookup remains the sole colour source.
+    theme: z.object({
+      primary: z.string().regex(/^#[0-9a-fA-F]{6}$/),
+      secondary: z.string().regex(/^#[0-9a-fA-F]{6}$/),
+      accent: z.string().regex(/^#[0-9a-fA-F]{6}$/),
+    }).optional(),
     verified: z.string().optional(),  // freshness metadata for the maker/AI — NOT shown to travelers, EXCEPT a ⚠-prefixed value (e.g. an unconfirmed draft), which renders as a warning pill in the masthead
     draft: z.boolean().optional(),    // true = a "Guide-to-be" scaffold; listed in the home page's draft tier, not the curated grid
     intro: z.string().optional(),

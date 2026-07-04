@@ -2,7 +2,7 @@
 const { sec, keyPrefix = "dy" } = Astro.props;
 ---
 {(sec.items || []).map((d: any, di: number) => (
-  <div class="day">
+  <div class="day" data-energy={d.energy ?? undefined}>
     <div class="d">{d.date}</div>
     <div class="b">
       <strong>{d.title}</strong>

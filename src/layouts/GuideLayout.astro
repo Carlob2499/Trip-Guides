@@ -2,6 +2,7 @@
 import Block from "../components/Block.astro";
 import PwaHead from "../components/PwaHead.astro";
 import TripSplit from "../components/TripSplit.astro";
+import Voting from "../components/Voting.astro";
 import { bucket } from "../lib/buckets";
 import { accentFor, darken, currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
 import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
@@ -60,6 +61,13 @@ const hasWeatherSection = _flat.some((s: any) => s.type === "weather");
 const daysSec      = _flat.find((s: any) => s.type === "days" && s.items?.length);
 const firstDayDate = (daysSec?.items?.[0]?.date as string) ?? null;
 const lastDayDate  = (daysSec?.items?.[daysSec.items.length - 1]?.date as string) ?? firstDayDate;
+
+// What's-Next banner: compact per-day slice for the client to match against
+// today's device-local date. No coordinates/time-of-day in the schema — day
+// granularity only, same as the trip-countdown pill's own date parsing.
+const daysForBanner = (daysSec?.items ?? []).map((d: any) => ({
+  date: d.date as string, title: d.title as string, fit: (d.fit as string) ?? null,
+}));
 
 // `verified` is source metadata (freshness tracking for the maker/AI), not shown to
 // travelers — EXCEPT genuine ⚠ warnings (e.g. an unconfirmed draft), which stay visible.
@@ -155,6 +163,12 @@ const tripSummary = buildSummary(guide);
       <div class="topbar-right">
         <button id="btnShare" class="topbar-btn" aria-label="Share this guide" title="Share this guide">↗ Share</button>
         <!--
+          Low-energy toggle — dims/hides day cards explicitly tagged `energy: "high"`
+          in the guide JSON. No-op on guides where no day is tagged (icon/label
+          still update; nothing filters). Icon/label updated by JS.
+        -->
+        <button id="btnEnergy" class="topbar-btn" aria-label="Switch to low-energy mode" title="Switch to low-energy mode">⚡ High</button>
+        <!--
           Dark-mode toggle — icon and aria-label are updated by JS.
           ◑ = currently light → click to go dark
           ☀ = currently dark  → click to go light
@@ -212,7 +226,7 @@ const tripSummary = buildSummary(guide);
     </div>
 
     <!-- ═══════════════════════════════════════════════════════════════════════
-         GUIDE TAB BAR — one tab per section group + Trip Split tool
+         GUIDE TAB BAR — one tab per section group + Budget Calculator + Vote tools
          ═══════════════════════════════════════════════════════════════════ -->
     <nav class="guide-tabs" id="guideTabs" role="tablist" aria-label="Guide sections">
       {order.map((g, i) => (
@@ -220,7 +234,9 @@ const tripSummary = buildSummary(guide);
                 aria-selected={i === 0 ? "true" : "false"}>{g}</button>
       ))}
       <button class="gtab gtab-split" role="tab" type="button" data-tab="split"
-              aria-selected="false">÷ Split</button>
+              aria-selected="false">$ Budget</button>
+      <button class="gtab gtab-vote" role="tab" type="button" data-tab="vote"
+              aria-selected="false">🗳 Vote</button>
     </nav>
 
     </div>{/* end .sticky-chrome */}
@@ -249,6 +265,14 @@ const tripSummary = buildSummary(guide);
         {verifiedWarning && <span class="gstat gstat-warning">{verifiedWarning}</span>}
         <!-- Live currency rate injected by JS when fetch succeeds -->
         <span class="gstat gstat-rate" id="liveRatePill" hidden></span>
+      </div>
+
+      <!-- What's-Next banner — populated client-side against the device clock;
+           hidden by default since a static build can't know "today". Only shows
+           during the trip's own date range (see guide-ui.js "WHATS NEXT"). -->
+      <div class="whats-next" id="whatsNext" hidden>
+        <span class="wn-label" id="wnLabel">Today</span>
+        <span class="wn-text" id="wnText"></span>
       </div>
 
       <!--
@@ -319,11 +343,8 @@ const tripSummary = buildSummary(guide);
             </div>
           );
         })}
-        <TripSplit storeKey={storeKey}
-          curCode={localCur?.code}
-          curSymbol={localCur?.symbol}
-          curName={localCur?.name}
-          curRate={localCur?.approxRate} />
+        <TripSplit storeKey={storeKey} />
+        <Voting storeKey={storeKey} />
       </main>
     </div>
 
@@ -365,7 +386,8 @@ const tripSummary = buildSummary(guide);
             ))}
           </>
         ))}
-        <a class="sheet-cat sheet-split-link" data-tab="split" href="#">÷ Trip Split</a>
+        <a class="sheet-cat sheet-split-link" data-tab="split" href="#">$ Budget Calculator</a>
+        <a class="sheet-cat sheet-vote-link" data-tab="vote" href="#">🗳 Group Vote</a>
       </div>
     </div>
 
@@ -380,7 +402,7 @@ const tripSummary = buildSummary(guide);
            6. Jet-lag calculator
          ═══════════════════════════════════════════════════════════════════ -->
     <!-- Config for the extracted guide UI module (formerly Astro define:vars). -->
-    <script type="application/json" id="tgConfig" set:html={JSON.stringify({ order, storeKey, mapCenter, firstDayDate, lastDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null })}></script>
+    <script type="application/json" id="tgConfig" set:html={JSON.stringify({ order, storeKey, mapCenter, firstDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, daysForBanner })}></script>
     <!-- Interactive UI — bundled + hashed by Astro into one module shared across guides. -->
     <script>
       import "../scripts/guide-ui.js";

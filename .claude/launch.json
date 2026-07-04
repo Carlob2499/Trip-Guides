@@ -12,6 +12,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "preview", "--", "--port", "4322"],
       "port": 4322
+    },
+    {
+      "name": "wayfinder",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "C:/Users/carlo/dev/wayfinder", "run", "dev"],
+      "port": 3000
     }
   ]
 }
