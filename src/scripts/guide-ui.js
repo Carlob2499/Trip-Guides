@@ -615,19 +615,36 @@ const curFallbackRate   = _cfg.curFallbackRate || null;
               }
             }
 
+            // A stale-but-real cached rate beats the hardcoded build-time fallback —
+            // show it clearly labeled as locked rather than silently discarding it.
+            function applyLockedStale(c) {
+              var pill = document.getElementById("liveRatePill");
+              if (pill) {
+                pill.textContent = "$1 = " + fmtRate(c.rate) + " " + curCode;
+                pill.title = "Rate locked " + c.date + " (offline) · ECB via Frankfurter.dev";
+                pill.removeAttribute("hidden");
+              }
+              var foot = document.getElementById("liveRateFoot");
+              if (foot) {
+                foot.textContent = fmtRate(c.rate) + " " + curCode + " = $1 · Rate locked " + c.date + " · offline";
+              }
+              document.dispatchEvent(new CustomEvent("tg:rate", { detail: { rate: c.rate, date: c.date, code: curCode, locked: true } }));
+            }
+
+            // localStorage (not sessionStorage) so a previously-fetched rate survives
+            // across sessions/offline visits, not just the current tab's lifetime.
             // Cache keyed by currency code so guides don't share stale rates.
             // "Today" is UTC (same reference Frankfurter uses for its daily timestamp;
             // device-local date can differ, e.g. user in UTC+9 at 00:30 UTC).
             var CACHE_KEY = "tg-rate-" + curCode;
             var todayUTC  = new Date().toISOString().slice(0, 10);
+            var cached = null;
+            try { cached = JSON.parse(localStorage.getItem(CACHE_KEY) || "null"); } catch (_) {}
 
-            try {
-              var cached = JSON.parse(sessionStorage.getItem(CACHE_KEY) || "null");
-              if (cached && cached.rate && cached.date && cached.fetchedAt === todayUTC) {
-                applyLive(cached.rate, cached.date);
-                return; // served from cache — no network call
-              }
-            } catch (_) {}
+            if (cached && cached.rate && cached.date && cached.fetchedAt === todayUTC) {
+              applyLive(cached.rate, cached.date);
+              return; // served from today's cache — no network call
+            }
 
             fetch("https://api.frankfurter.dev/v1/latest?base=USD&symbols=" + curCode)
               .then(function (r) { return r.ok ? r.json() : Promise.reject("non-200 " + r.status); })
@@ -637,11 +654,14 @@ const curFallbackRate   = _cfg.curFallbackRate || null;
                 if (!inBand(rate)) throw new Error("rate " + rate + " outside sanity band for " + curCode);
                 var date = data.date || todayUTC;
                 try {
-                  sessionStorage.setItem(CACHE_KEY, JSON.stringify({ rate: rate, date: date, fetchedAt: todayUTC }));
+                  localStorage.setItem(CACHE_KEY, JSON.stringify({ rate: rate, date: date, fetchedAt: todayUTC }));
                 } catch (_) {}
                 applyLive(rate, date);
               })
-              .catch(function (err) { applyFallback(String(err)); });
+              .catch(function (err) {
+                if (cached && cached.rate && cached.date) applyLockedStale(cached);
+                else applyFallback(String(err));
+              });
           })();
 
           /* ── 12. WEATHER STRIP (Open-Meteo, canonical cached service) ───
