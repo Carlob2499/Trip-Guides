@@ -1,7 +1,7 @@
 // Bridges a "New guide" GitHub Issue Form to the scaffolder. Run by
 // .github/workflows/new-guide.yml. Reads the issue body from $ISSUE_BODY, extracts
 // the form fields (by their labels), writes the scaffold + intake via writeScaffold,
-// and emits the chosen slug to $GITHUB_OUTPUT for the workflow's commit/PR steps.
+// and emits the chosen slug to $GITHUB_OUTPUT for the workflow's commit steps.
 //
 // No third-party actions: the issue-form body is parsed here with a small regex.
 
@@ -20,19 +20,38 @@ function field(label) {
   return v;
 }
 
+// Dropdowns carry a null-ish first option chosen as the default (so the field always
+// renders a value). Treat those as "unset" so they don't leak into the scaffold.
+// "— none —" uses an em dash (U+2014), matching the Issue Form exactly.
+const NULLISH = new Set(["undecided", "— none —"]);
+function choice(label) {
+  const v = field(label);
+  return NULLISH.has(v) ? "" : v;
+}
+
 const country = field("Country");
 if (!country) { console.error("[issue-to-scaffold] no Country field — aborting"); process.exit(1); }
 
 const dates = field("Trip dates");
 const [start, end] = dates ? dates.split(/\s+to\s+/i).map((s) => s.trim()) : [];
-const prioRaw = field("Top priorities");
+
+// Three single-select rank fields → an ordered array (rank preserved), empties dropped.
+const priorities = [
+  choice("Priority #1 (most important)"),
+  choice("Priority #2"),
+  choice("Priority #3"),
+].filter(Boolean);
 
 const answers = {
   country,
   cities: field("City / cities"),
-  who: field("Who's going"),
   start, end,
-  priorities: prioRaw ? prioRaw.split(",").map((s) => s.trim()).filter(Boolean) : [],
+  travelers: field("Number of travelers"),
+  pace: choice("Pace"),
+  priorities,
+  niche: field("Niche interest"),
+  budget: choice("Budget"),
+  comments: field("Comments"),
   dayLabels: dayLabelsFromRange(start, end),
 };
 

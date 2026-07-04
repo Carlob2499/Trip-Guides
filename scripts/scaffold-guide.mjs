@@ -117,6 +117,18 @@ export function buildGuideObject(answers = {}) {
   sections.push({ type: "sights", group: "Sights", title: "Top sights", items: [] });
   sections.push({ type: "prose", group: "Food & shopping", title: "What to eat", body: "" });
 
+  // Traveler's specific niche interest (free-text) → one dedicated shell, if given.
+  // This is the only priority materialized as a scaffold section: it has no home in
+  // the universal backbone and is an explicit custom signal. The ranked dropdown
+  // priorities are recorded in the intake doc instead and drive research-TIME depth
+  // (CLAUDE.md order-of-operations), which keeps the backbone predictable and avoids
+  // seeding empty generic priority tabs on a viewable draft.
+  const niche = (answers.niche || "").trim();
+  if (niche) sections.push(P("Highlights", niche));
+
+  // References — canonical closing section; the research pass fills the sources.
+  sections.push({ type: "prose", group: "References", title: "Sources & further reading", body: "" });
+
   const cityLabel = (answers.cities || "").trim();
   return {
     kicker: "Field guide",
@@ -140,8 +152,8 @@ export function buildIntakeMd(answers = {}) {
 > Operations". Keep this file next to the guide so future updates know the priorities.
 
 ## 1. The Traveler(s)
-- Who is going: ${answers.who || ""}
-- Group size / ages / mobility:
+- Number of travelers: ${answers.travelers || ""}
+- Group makeup / ages / mobility / dietary (from Comments): ${answers.comments || ""}
 - First time or returning:
 - Languages spoken:
 - Home country (drives visa & entry research):
@@ -151,16 +163,17 @@ export function buildIntakeMd(answers = {}) {
 - Cities: ${answers.cities || ""}
 - Number of nights / cities:
 - Fixed anchors (the non-negotiables):
-- Pace preference: packed / balanced / slow
+- Pace preference: ${answers.pace || "packed / balanced / slow"}
 
 ## 3. Priorities — RANK them
 Top 3, in order:
 1. ${prio[0] || ""}
 2. ${prio[1] || ""}
 3. ${prio[2] || ""}
+- Niche interest: ${answers.niche || ""}
 
 ## 4. Budget Reality
-- Total budget OR per-day target OR "comfortable but not lavish":
+- Per-day target (from form): ${answers.budget || ""}
 - Accommodation style: hostel / mid-range / boutique / luxury
 - Splurge on: / Save on:
 
@@ -206,8 +219,9 @@ export async function writeScaffold(answers) {
 
 // ── CLI ──────────────────────────────────────────────────────────────────────
 // node scripts/scaffold-guide.mjs --country "Brazil" --cities "Rio de Janeiro" \
-//   --start 2026-03-01 --end 2026-03-08 --who "friends" --priorities "Food,Nature" \
-//   [--title "..."] [--lat -22.9 --lng -43.2] [--slug rio]
+//   --start 2026-03-01 --end 2026-03-08 --travelers 2 --pace balanced \
+//   --priorities "Food,Nature" --niche "live music" --budget "Mid-range ($75-150/day)" \
+//   --comments "one vegetarian" [--title "..."] [--lat -22.9 --lng -43.2] [--slug rio]
 function parseArgs(argv) {
   const a = {};
   for (let i = 0; i < argv.length; i++) {
@@ -219,12 +233,13 @@ function parseArgs(argv) {
 async function main() {
   const a = parseArgs(process.argv.slice(2));
   if (!a.country && !a.title) {
-    console.error("Usage: node scripts/scaffold-guide.mjs --country <name> [--cities ..] [--start YYYY-MM-DD --end YYYY-MM-DD] [--who ..] [--priorities a,b,c] [--lat ..] [--lng ..] [--slug ..]");
+    console.error("Usage: node scripts/scaffold-guide.mjs --country <name> [--cities ..] [--start YYYY-MM-DD --end YYYY-MM-DD] [--travelers N] [--pace ..] [--priorities a,b,c] [--niche ..] [--budget ..] [--comments ..] [--lat ..] [--lng ..] [--slug ..]");
     process.exit(1);
   }
   const answers = {
-    country: a.country, title: a.title, cities: a.cities, who: a.who,
+    country: a.country, title: a.title, cities: a.cities,
     slug: a.slug, start: a.start, end: a.end,
+    travelers: a.travelers, pace: a.pace, niche: a.niche, budget: a.budget, comments: a.comments,
     priorities: a.priorities ? a.priorities.split(",").map((s) => s.trim()) : [],
     dayLabels: dayLabelsFromRange(a.start, a.end),
     coords: (a.lat && a.lng) ? { lat: parseFloat(a.lat), lng: parseFloat(a.lng) } : null,
