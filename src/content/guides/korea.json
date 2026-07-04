@@ -4,7 +4,7 @@
   "dek": "Eight days based in Seoul — palaces, markets, gaming districts and street food — with a weekend in Daejeon for MSI 2026. Everything below is checked; tick items off as you go and your progress saves.",
   "footer": "Location photos via Wikimedia Commons — tap any credit for its source, author and license.",
   "country": "South Korea",
-  "intro": "Seoul base, with a two-night trip to Daejeon for the MSI 2026 weekend (Jul 11–12).",
+  "intro": "Seoul base, with a two-night trip to Daejeon for the MSI 2026 weekend (Jul 11–12). Seoul in July is hot and humid with monsoon rain — pack light layers and an umbrella.",
   "sections": [
     {
       "type": "panel",
@@ -131,12 +131,6 @@
         "Heat prep packed: hat (arena AC won't help you outdoors), sunscreen SPF 50+, electrolyte tablets. Seoul in July averages 28–31°C with high humidity.",
         "Leave home contact a copy of your itinerary: Seoul Jul 8–10 & Jul 13–15, Daejeon Jul 11–12 (Daejeon I-Hotel, 27-5 Expo-ro 123beon-gil, Yuseong-gu)."
       ]
-    },
-    {
-      "type": "weather",
-      "group": "Plan",
-      "title": "Seoul forecast",
-      "note": "Live 7-day outlook (Open-Meteo). Within ~16 days of departure it auto-snaps to your trip dates; before then it shows the coming week. Seoul in July is hot and humid with monsoon rain — pack light layers and an umbrella."
     },
     {
       "type": "holidays",

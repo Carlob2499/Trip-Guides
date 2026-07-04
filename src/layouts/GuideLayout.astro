@@ -249,6 +249,15 @@ const tripSummary = buildSummary(guide);
       <p class="eyebrow">{guide.kicker || guide.country}</p>
       <h1>{guide.title}</h1>
       {guide.dek && <p class="dek">{guide.dek}</p>}
+
+      <!-- Weather strip — populated by JS via Open-Meteo if guide has a map section.
+           Suppressed when the guide has its own `weather` section (which mounts
+           #wxWrap in-flow instead), so weather never renders twice. Sits right
+           under the trip description, above the stats/tags row. -->
+      {!hasWeatherSection && (
+        <div id="wxWrap" class="wx-wrap" hidden><div id="wxMount"></div></div>
+      )}
+
       <!-- Stats bar — always rendered so JS can inject dynamic pills -->
       <div class="guide-stats" id="guideStats">
         {dayCount   > 0 && <span class="gstat">{dayCount} days</span>}
@@ -272,13 +281,6 @@ const tripSummary = buildSummary(guide);
         User picks their origin timezone; output shows the time gap, recovery
         estimate, and direction-specific tips.
       -->
-      <!-- Weather strip — populated by JS via Open-Meteo if guide has a map section.
-           Suppressed when the guide has its own `weather` section (which mounts
-           #wxWrap in-flow instead), so weather never renders twice. -->
-      {!hasWeatherSection && (
-        <div id="wxWrap" class="wx-wrap" hidden><div id="wxMount"></div></div>
-      )}
-
       {destTzIana !== null && (
         <div class="jl-wrap">
           <button class="jl-toggle" id="jlToggle" type="button"
