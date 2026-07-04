@@ -63,7 +63,7 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 .jl-row{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:.55rem}
 .jl-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);flex:0 0 7.5rem;line-height:1.4}
 .jl-select{flex:1;min-width:0;border:1px solid var(--rule2);border-radius:4px;padding:.35rem .5rem;font:inherit;font-size:.88rem;background:var(--card);color:var(--ink)}
-.jl-select:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+.jl-select:focus{outline:2px solid var(--theme-primary,var(--accent));outline-offset:0;border-color:transparent}
 .jl-output{margin-top:.55rem;padding:.7rem .9rem;background:var(--bg2);border-radius:5px;border-left:3px solid var(--accent);font-size:.9rem}
 .jl-result{font-weight:600;margin-bottom:.4rem;line-height:1.4}
 .jl-tips{padding-left:1.1rem;color:var(--muted);font-size:.86rem;line-height:1.65;margin-top:.3rem}
@@ -82,6 +82,14 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 .gtab-split{border-left:1px solid var(--rule);margin-left:.2rem;padding-left:1rem;font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.04em;color:var(--muted)}
 .gtab-split.gtab-active{color:var(--accent)}
 @media(max-width:899px){.gtab{padding:.44rem .7rem;font-size:.77rem}}
+/* Tactile press feedback — guide action buttons dip 1px on :active for a
+   physical "pressed" feel. Snaps back on release (no transition needed); the
+   press cue is the point. Interactive controls only — not cards/inputs, and
+   suppressed for users who ask to reduce motion. */
+.gtab:active,.sc-add-btn:active,.sc-add-expense-btn:active,.scm-btn:active,.vo-btn:active,.split-del:active,.jl-toggle:active,.anchor-btn:active,.topbar-btn:active{transform:translateY(1px)}
+@media(prefers-reduced-motion:reduce){
+  .gtab:active,.sc-add-btn:active,.sc-add-expense-btn:active,.scm-btn:active,.vo-btn:active,.split-del:active,.jl-toggle:active,.anchor-btn:active,.topbar-btn:active{transform:none}
+}
 
 /* === LAYOUT SHELL ============================================================ */
 /* Widened so desktop uses the screen. Text sections sit in a centered reading
@@ -243,7 +251,7 @@ body{overflow-x:clip}
 .best small{display:block;font-size:.68rem;color:var(--muted)}
 .bactual{width:100%;border:1px solid var(--rule2);border-radius:4px;padding:.32rem .35rem;font:inherit;font-size:.85rem;text-align:right;background:var(--card);color:var(--ink);-moz-appearance:textfield}
 .bactual::-webkit-outer-spin-button,.bactual::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-.bactual:focus{outline:2px solid var(--accent);outline-offset:0;border-color:var(--accent)}
+.bactual:focus{outline:2px solid var(--theme-primary,var(--accent));outline-offset:0;border-color:var(--theme-primary,var(--accent))}
 .btotal{background:var(--bg2);font-weight:600}
 .best-total,.bact-total{font-variant-numeric:tabular-nums;white-space:nowrap}
 .budget-foot{margin-top:.55rem;font-size:.78rem;color:var(--muted);line-height:1.4}
@@ -390,7 +398,7 @@ body{overflow-x:clip}
 .block-title-row{display:flex;align-items:baseline;gap:.45rem}
 .block-title-row .block-title{flex:1;min-width:0}
 .anchor-btn{flex:none;background:none;border:none;padding:.1rem .3rem;cursor:pointer;font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted);opacity:0;border-radius:3px;transition:opacity .15s,color .15s,background .15s;line-height:1;align-self:center}
-.anchor-btn:focus{opacity:1;outline:2px solid var(--accent)}
+.anchor-btn:focus-visible{opacity:1;outline:2px solid var(--theme-primary,var(--accent));outline-offset:2px}
 .card:hover .anchor-btn,.block:hover .anchor-btn{opacity:.45}
 .card:hover .anchor-btn:hover,.block:hover .anchor-btn:hover{opacity:1;color:var(--accent)}
 @media(hover:none){.anchor-btn{opacity:.3}}
@@ -518,7 +526,7 @@ details table{margin:.3rem 0 .4rem}
 .sm-idx{font-family:'Space Mono',monospace;font-size:.72rem;color:var(--muted);text-align:center;line-height:1}
 /* shared input */
 .split-in{font:inherit;font-size:.9rem;border:1px solid var(--rule2);border-radius:4px;padding:.3rem .45rem;background:var(--card);color:var(--ink);width:100%;min-width:0;transition:border-color .14s}
-.split-in:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+.split-in:focus{outline:2px solid var(--theme-primary,var(--accent));outline-offset:0;border-color:transparent}
 /* delete button */
 .split-del{background:none;border:none;cursor:pointer;font-size:1rem;color:var(--muted);padding:.1rem .35rem;border-radius:3px;line-height:1;transition:color .14s,background .14s;flex:none}
 .split-del:hover{color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
