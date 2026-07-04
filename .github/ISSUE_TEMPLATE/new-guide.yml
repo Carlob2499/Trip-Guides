@@ -7,9 +7,10 @@ body:
     attributes:
       value: |
         This files a **draft scaffold** — the standard guide structure with live weather,
-        holidays, and currency wired in for your country. It opens as a pull request for
-        review; a Claude Code research pass then fills the facts. Nothing here is verified
-        until that happens. The **Country** field is the only required one.
+        holidays, and currency wired in for your country. It commits straight to the
+        Guides-to-be draft tier; a research pass then fills the facts. Nothing here is
+        verified until that happens. The **Country** field is the only required one —
+        fill in as much or as little else as you know now and add more later.
   - type: input
     id: country
     attributes:
@@ -23,20 +24,113 @@ body:
     attributes:
       label: City / cities
       placeholder: e.g. Rio de Janeiro, São Paulo
+    validations:
+      required: false
   - type: input
     id: dates
     attributes:
       label: Trip dates
       description: Optional. Format "YYYY-MM-DD to YYYY-MM-DD" — drives the day-by-day cards and the weather/holiday window.
       placeholder: 2026-03-01 to 2026-03-08
+    validations:
+      required: false
   - type: input
-    id: who
+    id: travelers
     attributes:
-      label: Who's going
-      placeholder: solo / couple / friends / family / mixed group
+      label: Number of travelers
+      description: Just the headcount. Anything more specific (solo/couple/family, ages, mobility needs) goes in Comments below.
+      placeholder: e.g. 3
+    validations:
+      required: false
+  - type: dropdown
+    id: pace
+    attributes:
+      label: Pace
+      description: How packed should the days be?
+      options:
+        - undecided
+        - packed
+        - balanced
+        - slow
+      default: 0
+    validations:
+      required: false
+  - type: dropdown
+    id: priority1
+    attributes:
+      label: "Priority #1 (most important)"
+      description: Three separate rank fields, not a multi-select — so the order you actually mean is preserved.
+      options:
+        - "— none —"
+        - Food & dining
+        - Culture / history
+        - Nature / outdoors
+        - Nightlife
+        - Shopping
+        - Wellness / relaxation
+        - Niche interest (specify below)
+      default: 0
+    validations:
+      required: false
+  - type: dropdown
+    id: priority2
+    attributes:
+      label: "Priority #2"
+      options:
+        - "— none —"
+        - Food & dining
+        - Culture / history
+        - Nature / outdoors
+        - Nightlife
+        - Shopping
+        - Wellness / relaxation
+        - Niche interest (specify below)
+      default: 0
+    validations:
+      required: false
+  - type: dropdown
+    id: priority3
+    attributes:
+      label: "Priority #3"
+      options:
+        - "— none —"
+        - Food & dining
+        - Culture / history
+        - Nature / outdoors
+        - Nightlife
+        - Shopping
+        - Wellness / relaxation
+        - Niche interest (specify below)
+      default: 0
+    validations:
+      required: false
   - type: input
-    id: priorities
+    id: niche
     attributes:
-      label: Top priorities
-      description: Comma-separated, most important first (e.g. Food & dining, Nature / outdoors).
-      placeholder: Food & dining, Culture / history, Nature / outdoors
+      label: Niche interest
+      description: Only fill in if you picked "Niche interest" above (e.g. anime, esports, diving, architecture, live music).
+      placeholder: e.g. live music
+    validations:
+      required: false
+  - type: dropdown
+    id: budget
+    attributes:
+      label: Budget
+      description: Per-day spending target, all-in (lodging + food + activities).
+      options:
+        - undecided
+        - "Shoestring (<$75/day)"
+        - "Mid-range ($75–150/day)"
+        - "Comfortable ($150–300/day)"
+        - "Luxury ($300+/day)"
+      default: 0
+    validations:
+      required: false
+  - type: textarea
+    id: comments
+    attributes:
+      label: Comments
+      description: Anything the fields above don't capture — group makeup, dietary needs, a fixed anchor event, dealbreakers, etc.
+      placeholder: e.g. traveling with my parents, one vegetarian, celebrating an anniversary
+    validations:
+      required: false

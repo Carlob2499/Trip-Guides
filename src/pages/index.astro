@@ -146,7 +146,7 @@ const drafts  = withExtras.filter(x =>  x.g.data.draft);
         Make a new guide
         <button class="ng-close" id="ngClose" type="button" aria-label="Close">✕</button>
       </p>
-      <p class="ng-intro">A few details scaffold a new guide — structure, checklists, and live weather/holiday/currency data wired in. It opens a GitHub issue that files the draft for review; a research pass then fills the facts.</p>
+      <p class="ng-intro">A few details scaffold a new guide — structure, checklists, and live weather/holiday/currency data wired in. It opens a GitHub issue; a research pass then fills the facts.</p>
       <form id="ngForm" class="ng-form">
         <label class="ng-field">
           <span>Country <em>(required)</em></span>
@@ -167,24 +167,51 @@ const drafts  = withExtras.filter(x =>  x.g.data.draft);
           </label>
         </div>
         <label class="ng-field">
-          <span>Who's going?</span>
-          <select id="ngWho">
-            <option value="">—</option>
-            <option value="solo">Solo</option>
-            <option value="couple">Couple</option>
-            <option value="friends">Friends</option>
-            <option value="family">Family</option>
-            <option value="mixed group">Mixed group</option>
+          <span>Number of travelers</span>
+          <input type="number" id="ngTravelers" min="1" placeholder="e.g. 3" />
+        </label>
+        <label class="ng-field">
+          <span>Pace</span>
+          <select id="ngPace">
+            <option value="">undecided</option>
+            <option value="packed">packed</option>
+            <option value="balanced">balanced</option>
+            <option value="slow">slow</option>
           </select>
         </label>
-        <fieldset class="ng-field ng-prio">
-          <span>Top priorities <em>(pick up to 3)</em></span>
-          <div class="ng-checks">
-            {["Food & dining","Culture / history","Nature / outdoors","Nightlife","Shopping","Relaxation / wellness"].map((p) => (
-              <label class="ng-check"><input type="checkbox" name="ngPrio" value={p} /> {p}</label>
-            ))}
-          </div>
-        </fieldset>
+        {[1, 2, 3].map((n) => (
+          <label class="ng-field">
+            <span>Priority #{n}{n === 1 && <em> (most important)</em>}</span>
+            <select id={`ngPriority${n}`}>
+              <option value="">— none —</option>
+              <option value="Food & dining">Food & dining</option>
+              <option value="Culture / history">Culture / history</option>
+              <option value="Nature / outdoors">Nature / outdoors</option>
+              <option value="Nightlife">Nightlife</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Wellness / relaxation">Wellness / relaxation</option>
+              <option value="Niche interest (specify below)">Niche interest (specify below)</option>
+            </select>
+          </label>
+        ))}
+        <label class="ng-field">
+          <span>Niche interest</span>
+          <input type="text" id="ngNiche" placeholder="only if a Priority above is Niche — e.g. live music" autocomplete="off" />
+        </label>
+        <label class="ng-field">
+          <span>Budget</span>
+          <select id="ngBudget">
+            <option value="">undecided</option>
+            <option value="Shoestring (<$75/day)">Shoestring (&lt;$75/day)</option>
+            <option value="Mid-range ($75–150/day)">Mid-range ($75–150/day)</option>
+            <option value="Comfortable ($150–300/day)">Comfortable ($150–300/day)</option>
+            <option value="Luxury ($300+/day)">Luxury ($300+/day)</option>
+          </select>
+        </label>
+        <label class="ng-field">
+          <span>Comments</span>
+          <textarea id="ngComments" rows="2" placeholder="group makeup, dietary needs, a fixed anchor event, dealbreakers, etc."></textarea>
+        </label>
         <p class="ng-err" id="ngErr" hidden></p>
         <button type="submit" class="ng-submit">Continue on GitHub →</button>
       </form>
@@ -250,9 +277,6 @@ const drafts  = withExtras.filter(x =>  x.g.data.draft);
               if (errEl) { errEl.textContent = "Country is required."; errEl.removeAttribute("hidden"); }
               return;
             }
-            var prio = Array.prototype.slice
-              .call(document.querySelectorAll('input[name="ngPrio"]:checked'))
-              .map(function (b) { return b.value; }).slice(0, 3);
             var dates = [val("ngStart"), val("ngEnd")].filter(Boolean).join(" to ");
             var params = new URLSearchParams();
             params.set("template", "new-guide.yml");
@@ -261,8 +285,14 @@ const drafts  = withExtras.filter(x =>  x.g.data.draft);
             params.set("country", country);
             params.set("cities", val("ngCities"));
             params.set("dates", dates);
-            params.set("who", val("ngWho"));
-            params.set("priorities", prio.join(", "));
+            params.set("travelers", val("ngTravelers"));
+            params.set("pace", val("ngPace"));
+            params.set("priority1", val("ngPriority1"));
+            params.set("priority2", val("ngPriority2"));
+            params.set("priority3", val("ngPriority3"));
+            params.set("niche", val("ngNiche"));
+            params.set("budget", val("ngBudget"));
+            params.set("comments", val("ngComments"));
             var url = "https://github.com/" + repo + "/issues/new?" + params.toString();
             window.open(url, "_blank", "noopener");
             closeModal();
