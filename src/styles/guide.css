@@ -36,6 +36,14 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 .gstat{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border:1px solid var(--rule2);border-radius:99px;padding:.22rem .75rem;line-height:1.5;white-space:nowrap}
 .gstat-warning{color:var(--warn);border-color:var(--warn)}
 
+/* === WHAT'S NEXT BANNER ======================================================= */
+/* Populated client-side against the device clock; only shown during the trip's
+   own date range (guide-ui.js "WHATS NEXT"). High-contrast — this is meant to
+   be glanceable, not just another muted stat pill. */
+.whats-next{display:flex;align-items:baseline;gap:.55rem;flex-wrap:wrap;justify-content:center;margin:.75rem auto 0;max-width:36rem;padding:.6rem 1rem;background:var(--accent);border-radius:6px}
+.wn-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--bg);opacity:.85;flex:none}
+.wn-text{font-size:.92rem;font-weight:600;color:var(--bg);overflow-wrap:anywhere}
+
 /* === TOAST ==================================================================== */
 /* Transient feedback (save/copy confirmations) — destination for flash().
    Fixed, centred at the bottom; never participates in layout or page width. */

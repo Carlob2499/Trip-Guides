@@ -61,6 +61,13 @@ const daysSec      = _flat.find((s: any) => s.type === "days" && s.items?.length
 const firstDayDate = (daysSec?.items?.[0]?.date as string) ?? null;
 const lastDayDate  = (daysSec?.items?.[daysSec.items.length - 1]?.date as string) ?? firstDayDate;
 
+// What's-Next banner: compact per-day slice for the client to match against
+// today's device-local date. No coordinates/time-of-day in the schema — day
+// granularity only, same as the trip-countdown pill's own date parsing.
+const daysForBanner = (daysSec?.items ?? []).map((d: any) => ({
+  date: d.date as string, title: d.title as string, fit: (d.fit as string) ?? null,
+}));
+
 // `verified` is source metadata (freshness tracking for the maker/AI), not shown to
 // travelers — EXCEPT genuine ⚠ warnings (e.g. an unconfirmed draft), which stay visible.
 const verifiedWarning = guide.verified?.trimStart().startsWith("⚠") ? guide.verified : null;
@@ -248,6 +255,14 @@ const tripSummary = buildSummary(guide);
         <span class="gstat gstat-rate" id="liveRatePill" hidden></span>
       </div>
 
+      <!-- What's-Next banner — populated client-side against the device clock;
+           hidden by default since a static build can't know "today". Only shows
+           during the trip's own date range (see guide-ui.js "WHATS NEXT"). -->
+      <div class="whats-next" id="whatsNext" hidden>
+        <span class="wn-label" id="wnLabel">Today</span>
+        <span class="wn-text" id="wnText"></span>
+      </div>
+
       <!--
         JET-LAG CALCULATOR
         Collapsible — shown only when the guide's country has a known UTC offset.
@@ -380,7 +395,7 @@ const tripSummary = buildSummary(guide);
            6. Jet-lag calculator
          ═══════════════════════════════════════════════════════════════════ -->
     <!-- Config for the extracted guide UI module (formerly Astro define:vars). -->
-    <script type="application/json" id="tgConfig" set:html={JSON.stringify({ order, storeKey, mapCenter, firstDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null })}></script>
+    <script type="application/json" id="tgConfig" set:html={JSON.stringify({ order, storeKey, mapCenter, firstDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, daysForBanner })}></script>
     <!-- Interactive UI — bundled + hashed by Astro into one module shared across guides. -->
     <script>
       import "../scripts/guide-ui.js";

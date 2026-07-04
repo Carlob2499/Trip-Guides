@@ -12,6 +12,7 @@ const hasWeatherSection = !!_cfg.hasWeatherSection;
 const destTzIana        = _cfg.destTzIana || null;
 const curCode           = _cfg.curCode || null;
 const curFallbackRate   = _cfg.curFallbackRate || null;
+const daysForBanner     = _cfg.daysForBanner || [];
 
       /* ── SHARED: SCROLL LOCK (used by both sheet and share modal) ─────── */
       var _lockCount = 0;
@@ -528,6 +529,58 @@ const curFallbackRate   = _cfg.curFallbackRate || null;
             else if (diff >= -7){ pill.className = "gstat gstat-active";    pill.textContent = "Happening now!"; }
             else                { pill.className = "gstat gstat-past";      pill.textContent = Math.abs(diff) + " days ago"; }
             statsEl.insertBefore(pill, statsEl.firstChild);
+          })();
+
+          /* ── 8a. WHAT'S NEXT BANNER ─────────────────────────────────────
+             Only appears during the trip's own date range (degrades to
+             nothing before/after — the countdown pill above already covers
+             those states). Shows the specific day's title (+ fit note if
+             present), not just an abstract day-count, so it adds real info
+             rather than duplicating the pill. No intraday time exists in the
+             schema — day-level granularity only, same convention as above. */
+          (function () {
+            var box   = document.getElementById("whatsNext");
+            var label = document.getElementById("wnLabel");
+            var text  = document.getElementById("wnText");
+            if (!box || !text || !daysForBanner.length) return;
+
+            var now = new Date();
+            var firstParts = String(daysForBanner[0].date).split(/\s+/);
+            var firstMoIdx = MONTHS.indexOf(firstParts[1]);
+            var firstDay   = parseInt(firstParts[2], 10);
+            if (firstMoIdx === -1 || isNaN(firstDay)) return;
+            var year  = now.getFullYear();
+            var probe = new Date(year, firstMoIdx, firstDay);
+            if (probe < now && (now - probe) > 180 * 86400000) year++;
+
+            // Sequential parse; roll the year forward again if a later entry's
+            // month precedes the previous one (a trip spanning New Year's).
+            var prevMoIdx = -1;
+            var days = [];
+            daysForBanner.forEach(function (d) {
+              var parts = String(d.date).split(/\s+/);
+              var moIdx = MONTHS.indexOf(parts[1]);
+              var day   = parseInt(parts[2], 10);
+              if (moIdx === -1 || isNaN(day)) return;
+              if (prevMoIdx !== -1 && moIdx < prevMoIdx) year++;
+              prevMoIdx = moIdx;
+              var dt = new Date(year, moIdx, day);
+              dt.setHours(0, 0, 0, 0);
+              days.push({ date: dt, title: d.title, fit: d.fit });
+            });
+            if (!days.length) return;
+
+            var today = new Date(); today.setHours(0, 0, 0, 0);
+            if (today < days[0].date || today > days[days.length - 1].date) return;
+
+            var match    = days.find(function (d) { return d.date.getTime() === today.getTime(); });
+            var upcoming = !match && days.find(function (d) { return d.date.getTime() > today.getTime(); });
+            var entry    = match || upcoming;
+            if (!entry) return;
+
+            label.textContent = match ? "Today" : "Next up";
+            text.textContent  = entry.title + (entry.fit ? " — " + entry.fit : "");
+            box.hidden = false;
           })();
 
           /* ── 9. LOCAL TIME AT DESTINATION ───────────────────────────── */
