@@ -16,6 +16,11 @@ import "../styles/guide.css";
 // no files exist yet — the holiday block then simply hides.
 const holidayData = import.meta.glob("../data/holidays/*.json", { eager: true, import: "default" }) as Record<string, any[]>;
 
+// Same repo identifier index.astro's New-guide modal already uses for its
+// prefilled-issue link — kept as a local constant there too (no shared
+// site-config module exists yet for a single string this small).
+const REPO = "Carlob2499/Trip-Guides";
+
 const { guide } = Astro.props;
 const { order, byG } = bucket(guide.sections);
 // A guide may override the country-derived palette with an explicit `theme`
@@ -283,6 +288,20 @@ const tripSummary = buildSummary(guide);
         <!-- Live currency rate injected by JS when fetch succeeds -->
         <span class="gstat gstat-rate" id="liveRatePill" hidden></span>
       </div>
+
+      {guide.draft && (
+        <!-- Anyone can nominate; nothing here actually publishes anything — the
+             linked issue only auto-applies "graduate-request". Only the owner
+             applying "graduate-approved" (requires write access) flips draft:false,
+             via .github/workflows/graduate-guide.yml. -->
+        <p class="draft-graduate">
+          <a
+            class="draft-graduate-link"
+            href={`https://github.com/${REPO}/issues/new?template=graduate-guide.yml&labels=graduate-request&slug=${encodeURIComponent(ogSlug)}&title=${encodeURIComponent(`Graduate: ${ogSlug}`)}`}
+            target="_blank" rel="noopener"
+          >✓ Think this is ready? Nominate it for graduation</a>
+        </p>
+      )}
 
       <!-- What's-Next banner — populated client-side against the device clock;
            hidden by default since a static build can't know "today". Only shows

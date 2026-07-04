@@ -1,0 +1,28 @@
+name: Graduate a draft guide
+description: Nominate a Guides-to-be draft as ready to leave draft status and join the curated grid.
+title: "Graduate: "
+labels: ["graduate-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Anyone can file this — filing it does **not** publish anything. It's a
+        nomination for the site owner to review. Nothing changes until the
+        owner applies the `graduate-approved` label (which requires write
+        access to this repo), at which point a workflow flips the guide's
+        `draft: true` to `false`.
+  - type: input
+    id: slug
+    attributes:
+      label: Guide slug
+      description: The guide's file name without ".json" (e.g. "korea" for src/content/guides/korea.json). The "Nominate for graduation" button on a draft page fills this in for you.
+      placeholder: e.g. korea
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why is this ready?
+      description: Optional — what makes you confident the facts are verified and it's ready for the curated grid?
+    validations:
+      required: false

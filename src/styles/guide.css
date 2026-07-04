@@ -36,6 +36,13 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 .gstat{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border:1px solid var(--rule2);border-radius:99px;padding:.22rem .75rem;line-height:1.5;white-space:nowrap}
 .gstat-warning{color:var(--warn);border-color:var(--warn)}
 
+/* Draft-guide "nominate for graduation" link — opens a prefilled GitHub issue.
+   Filing it doesn't publish anything; owner approval (a separate GitHub label,
+   requiring write access) is what actually flips draft:false. */
+.draft-graduate{text-align:center;margin:.6rem auto 0;font-size:.8rem}
+.draft-graduate-link{color:var(--green);text-decoration:underline;text-underline-offset:2px}
+.draft-graduate-link:hover{color:var(--accent)}
+
 /* === WHAT'S NEXT BANNER ======================================================= */
 /* Populated client-side against the device clock; only shown during the trip's
    own date range (guide-ui.js "WHATS NEXT"). High-contrast — this is meant to

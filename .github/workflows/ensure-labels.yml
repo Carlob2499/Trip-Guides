@@ -13,7 +13,9 @@ on:
     paths:
       - .github/workflows/ensure-labels.yml
       - .github/ISSUE_TEMPLATE/new-guide.yml
+      - .github/ISSUE_TEMPLATE/graduate-guide.yml
       - .github/workflows/content-audit.yml
+      - .github/workflows/graduate-guide.yml
 
 # Label management lives under the issues API — that's all this needs.
 permissions:
@@ -36,4 +38,12 @@ jobs:
           gh label create content-audit \
             --color FBCA04 \
             --description "Automated weekly content-audit tracking issue" \
+            --force
+          gh label create graduate-request \
+            --color 0E8A16 \
+            --description "Nominates a draft guide as ready to leave Guides-to-be — anyone can open one" \
+            --force
+          gh label create graduate-approved \
+            --color 5319E7 \
+            --description "Owner-only: applying this label actually flips draft:false. Requires write access." \
             --force

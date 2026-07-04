@@ -1,0 +1,50 @@
+name: Graduate guide
+
+# Anyone can file a "Graduate a draft guide" issue (auto-applies graduate-request —
+# see .github/ISSUE_TEMPLATE/graduate-guide.yml) — that alone does nothing. This
+# workflow only runs when graduate-approved is ALSO applied, which requires write
+# access to the repo (GitHub's own permission model, not a custom check here) — so
+# graduation stays the owner's decision even though anyone can nominate.
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  graduate:
+    if: >
+      github.event.label.name == 'graduate-approved' &&
+      contains(github.event.issue.labels.*.name, 'graduate-request')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Flip draft:false
+        id: grad
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: node scripts/graduate-guide.mjs
+
+      - name: Commit straight to main, comment/close the issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SLUG: ${{ steps.grad.outputs.slug }}
+          COUNTRY: ${{ steps.grad.outputs.country }}
+          ISSUE_NUM: ${{ github.event.issue.number }}
+        run: |
+          set -euo pipefail
+          git config user.name  "waypoint-scaffold[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "src/content/guides/${SLUG}.json"
+          git commit -m "Graduate guide: ${COUNTRY} (${SLUG}, from #${ISSUE_NUM})"
+          git pull --rebase origin main
+          git push origin HEAD:main
+          GUIDE_URL="https://carlob2499.github.io/Trip-Guides/guides/${SLUG}/"
+          gh issue comment "${ISSUE_NUM}" --body "Graduated ✅ — \`draft\` removed from \`src/content/guides/${SLUG}.json\`. It'll appear in the curated grid on the next deploy: ${GUIDE_URL}. Reminder: the \`verified\` freshness stamp on this guide wasn't touched — update it separately if it still reads as an unverified draft."
+          gh issue close "${ISSUE_NUM}"
