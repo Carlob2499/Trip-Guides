@@ -570,6 +570,17 @@ details table{margin:.3rem 0 .4rem}
 .split-summary-val{font-family:'Space Mono',monospace;font-size:.92rem;font-weight:700}
 /* empty state */
 .split-empty{color:var(--muted);font-size:.88rem;font-style:italic;padding:.25rem 0}
+
+/* === GROUP VOTE (reuses .split-*/.sc-*/.se-new-card box+button styles above) === */
+.vo-row{display:grid;grid-template-columns:1fr auto auto 1.6rem;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid var(--rule)}
+.vo-row:last-child{border-bottom:none}
+.vo-text{font-size:.92rem;overflow-wrap:anywhere}
+.vo-count{font-family:'Space Mono',monospace;font-size:.9rem;font-weight:700;color:var(--muted);min-width:1.4rem;text-align:right}
+.vo-btn{font-family:'Space Mono',monospace;font-size:.72rem;letter-spacing:.05em;background:none;border:1px solid var(--rule2);border-radius:4px;padding:.28rem .6rem;cursor:pointer;color:var(--muted);transition:color .13s,border-color .13s,background .13s;flex:none}
+.vo-btn:hover{color:var(--ink);border-color:var(--ink)}
+.vo-row--leader .vo-count{color:var(--accent)}
+.vo-row--leader .vo-text{font-weight:600}
+
 /* mobile tweaks */
 @media(max-width:599px){
   .sm-row{grid-template-columns:1.4rem 1fr 1.6rem;grid-template-rows:auto auto}

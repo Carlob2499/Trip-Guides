@@ -46,16 +46,24 @@ const daysForBanner     = _cfg.daysForBanner || [];
           /* ── TAB BAR ─────────────────────────────────────────────────── */
           var guideTabs  = document.getElementById("guideTabs");
           var catblocks  = Array.prototype.slice.call(document.querySelectorAll(".catblock"));
-          var splitPanel = document.getElementById("tripSplit");
-          var TAB_KEY    = "tg-tab-" + STORE_KEY;
+          // Non-numeric tabs (each a standalone panel, not a section group).
+          // Add a new one here + its DOM id — everything else generalizes.
+          var specialPanels = {
+            split: document.getElementById("tripSplit"),
+            vote:  document.getElementById("tripVote"),
+          };
+          var TAB_KEY = "tg-tab-" + STORE_KEY;
 
           function showTab(idx) {
-            var isSplit = idx === "split";
-            catblocks.forEach(function (b, i) { b.hidden = isSplit || i !== idx; });
-            if (splitPanel) splitPanel.hidden = !isSplit;
+            var isSpecial = typeof idx === "string" && specialPanels.hasOwnProperty(idx);
+            catblocks.forEach(function (b, i) { b.hidden = isSpecial || i !== idx; });
+            Object.keys(specialPanels).forEach(function (key) {
+              var panel = specialPanels[key];
+              if (panel) panel.hidden = !(isSpecial && idx === key);
+            });
             if (guideTabs) {
               guideTabs.querySelectorAll(".gtab").forEach(function (btn) {
-                var match = btn.dataset.tab === (isSplit ? "split" : String(idx));
+                var match = btn.dataset.tab === (isSpecial ? idx : String(idx));
                 btn.setAttribute("aria-selected", match ? "true" : "false");
                 btn.classList.toggle("gtab-active", match);
               });
@@ -63,7 +71,7 @@ const daysForBanner     = _cfg.daysForBanner || [];
               var active = guideTabs.querySelector(".gtab-active");
               if (active) active.scrollIntoView({ block: "nearest", inline: "nearest" });
             }
-            try { sessionStorage.setItem(TAB_KEY, isSplit ? "split" : String(idx)); } catch (_) {}
+            try { sessionStorage.setItem(TAB_KEY, isSpecial ? idx : String(idx)); } catch (_) {}
             syncTabIndex();
           }
 
@@ -78,7 +86,7 @@ const daysForBanner     = _cfg.daysForBanner || [];
             guideTabs.querySelectorAll(".gtab").forEach(function (btn) {
               btn.addEventListener("click", function () {
                 var t = this.dataset.tab;
-                showTab(t === "split" ? "split" : parseInt(t, 10));
+                showTab(specialPanels.hasOwnProperty(t) ? t : parseInt(t, 10));
                 window.scrollTo({ top: 0, behavior: "smooth" });
               });
             });
@@ -116,8 +124,8 @@ const daysForBanner     = _cfg.daysForBanner || [];
           var hashTabIdx = tabForHash();
           if (hashTabIdx >= 0) {
             showTab(hashTabIdx);
-          } else if (savedTab === "split") {
-            showTab("split");
+          } else if (specialPanels.hasOwnProperty(savedTab)) {
+            showTab(savedTab);
           } else {
             var si = parseInt(savedTab || "0", 10);
             showTab(isNaN(si) || si >= catblocks.length ? 0 : si);
@@ -205,8 +213,8 @@ const daysForBanner     = _cfg.daysForBanner || [];
             sheet.querySelectorAll("a").forEach(function (a) {
               a.addEventListener("click", function () {
                 var t = this.dataset.tab;
-                if (t === "split") {
-                  showTab("split");
+                if (specialPanels.hasOwnProperty(t)) {
+                  showTab(t);
                 } else if (t !== undefined && t !== "") {
                   showTab(parseInt(t, 10));
                 }

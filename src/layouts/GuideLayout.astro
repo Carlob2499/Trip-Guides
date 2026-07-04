@@ -2,6 +2,7 @@
 import Block from "../components/Block.astro";
 import PwaHead from "../components/PwaHead.astro";
 import TripSplit from "../components/TripSplit.astro";
+import Voting from "../components/Voting.astro";
 import { bucket } from "../lib/buckets";
 import { accentFor, darken, currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
 import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
@@ -225,7 +226,7 @@ const tripSummary = buildSummary(guide);
     </div>
 
     <!-- ═══════════════════════════════════════════════════════════════════════
-         GUIDE TAB BAR — one tab per section group + Budget Calculator tool
+         GUIDE TAB BAR — one tab per section group + Budget Calculator + Vote tools
          ═══════════════════════════════════════════════════════════════════ -->
     <nav class="guide-tabs" id="guideTabs" role="tablist" aria-label="Guide sections">
       {order.map((g, i) => (
@@ -234,6 +235,8 @@ const tripSummary = buildSummary(guide);
       ))}
       <button class="gtab gtab-split" role="tab" type="button" data-tab="split"
               aria-selected="false">$ Budget</button>
+      <button class="gtab gtab-vote" role="tab" type="button" data-tab="vote"
+              aria-selected="false">🗳 Vote</button>
     </nav>
 
     </div>{/* end .sticky-chrome */}
@@ -339,6 +342,7 @@ const tripSummary = buildSummary(guide);
           );
         })}
         <TripSplit storeKey={storeKey} />
+        <Voting storeKey={storeKey} />
       </main>
     </div>
 
@@ -381,6 +385,7 @@ const tripSummary = buildSummary(guide);
           </>
         ))}
         <a class="sheet-cat sheet-split-link" data-tab="split" href="#">$ Budget Calculator</a>
+        <a class="sheet-cat sheet-vote-link" data-tab="vote" href="#">🗳 Group Vote</a>
       </div>
     </div>
 
