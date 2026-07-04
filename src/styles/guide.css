@@ -165,10 +165,15 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 .kit-label{display:block;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.2rem}
 @media(max-width:520px){.day{grid-template-columns:1fr;gap:.3rem}.day .d{padding-top:0}}
 
-/* Low-energy toggle: dims (not hides — the day still exists) any day card an
-   editor tagged energy:"high". No-op wherever no day carries the tag. */
-body[data-energy="low"] .day[data-energy="high"]{opacity:.45;filter:grayscale(.3)}
-body[data-energy="low"] .day[data-energy="low"]{border-color:var(--accent)}
+/* Low-energy toggle: dims (not hides — the day still exists) any day card
+   tagged energy:"packed" on the packed/balanced/slow spectrum, and highlights
+   "slow" days as the restful alternative. Every day defaults to "balanced" (no
+   tag needed), so untagged guides see no change when the toggle is flipped.
+   Body attribute is data-energy-mode (the toggle's own on/off state) — kept
+   distinct from the per-day data-energy (its packed/balanced/slow value) so
+   the two don't collide in the selector. */
+body[data-energy-mode="low"] .day[data-energy="packed"]{opacity:.45;filter:grayscale(.3)}
+body[data-energy-mode="low"] .day[data-energy="slow"]{border-color:var(--accent)}
 
 /* === SIGHTS ================================================================== */
 .sight-name{font-size:1.25rem;margin:.05rem 0 .4rem}
