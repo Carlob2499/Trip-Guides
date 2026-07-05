@@ -11,8 +11,7 @@
     "create-guide": "tsx scripts/generate-guide.ts"
   },
   "dependencies": {
-    "@ai-sdk/google": "^4.0.8",
-    "ai": "^7.0.15",
+    "@google/genai": "^2.10.0",
     "astro": "^6.4.4",
     "dotenv": "^17.4.2",
     "sharp": "^0.34.0",

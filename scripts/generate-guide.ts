@@ -1,14 +1,17 @@
-// AI-driven guide generator. Calls Gemini via the Vercel AI SDK to produce a
-// destination "brief" (src/schemas/guideSchema.ts), maps it into the site's real
-// sections-array guide shape (scripts/brief-to-guide.mjs), and writes a draft guide to
-// src/content/guides/. Always lands as draft:true — a human runs the existing
-// research/verification pass and scripts/graduate-guide.mjs to publish it.
+// AI-driven guide generator. Calls Gemini via Google's own native SDK (@google/genai —
+// NOT the Vercel AI SDK: as of mid-2026 Google's new "AQ."-format auth keys are
+// rejected by @ai-sdk/google with an opaque OAuth error, while the native SDK accepts
+// them directly) to produce a destination "brief" (src/schemas/guideSchema.ts), maps
+// it into the site's real sections-array guide shape (scripts/brief-to-guide.mjs), and
+// writes a draft guide to src/content/guides/. Always lands as draft:true — a human
+// runs the existing research/verification pass and scripts/graduate-guide.mjs to
+// publish it.
 //
 // Usage: npm run create-guide -- --location "Kyoto, Japan" [--parameters "2 adults, foodie trip, mid-range budget"]
 
 import "dotenv/config";
-import { generateObject } from "ai";
-import { google } from "@ai-sdk/google";
+import { GoogleGenAI } from "@google/genai";
+import { toJSONSchema } from "zod";
 import path from "node:path";
 import { existsSync } from "node:fs";
 import { writeFile } from "node:fs/promises";
@@ -65,12 +68,25 @@ async function main() {
     (a.parameters ? ` Traveler context: ${a.parameters}.` : "") +
     " Produce a practical destination brief for a first-time group of travelers.";
 
-  const { object: brief } = await generateObject({
-    model: google("gemini-2.5-flash"),
-    schema: guideSchema,
-    system: SYSTEM_PROMPT,
-    prompt,
+  const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY });
+  const response = await ai.models.generateContent({
+    model: "gemini-2.5-flash",
+    contents: prompt,
+    config: {
+      systemInstruction: SYSTEM_PROMPT,
+      responseMimeType: "application/json",
+      // Standard JSON Schema (not Gemini's proprietary Type-enum schema dialect) —
+      // reuses guideSchema.ts directly via zod's native converter, so there's no
+      // hand-transcribed second schema that could silently drift from the real one.
+      responseJsonSchema: toJSONSchema(guideSchema),
+    },
   });
+
+  // responseSchema/responseJsonSchema is a strong prompting constraint on the model,
+  // not a client-side validator (unlike generateObject, which ran Zod's .parse()
+  // internally) — so we validate explicitly here to keep the exact same guarantee:
+  // buildGuideFromBrief only ever receives a confirmed-valid GuideBrief.
+  const brief = guideSchema.parse(JSON.parse(response.text ?? ""));
 
   const guide = buildGuideFromBrief(brief, country);
   const slug = await uniqueSlug(slugify(a.location));
