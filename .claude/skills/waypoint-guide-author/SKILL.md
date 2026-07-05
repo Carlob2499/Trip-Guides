@@ -14,13 +14,14 @@ description: >-
 
 # Waypoint Guide Author
 
-The research/authoring layer for Waypoint guides. **`CLAUDE.md` auto-loads and
-is binding** — the four properties (Verified/Personal/Actionable/Honest) + the
-autogeneration test, the mandatory continuity sweep on edits, the content
-standards (4-question venues, `≈`/`⚠` flags, verification stamps, photo rule,
-prose allowlist). This skill does **not** restate that; it adds the operational
-layer on top: how to source a fact, which scripts verify what, and the done
-gate. Don't re-Read `CLAUDE.md`.
+The research/authoring layer for Waypoint guides — and the **operational home**
+for the guide-content standards. `CLAUDE.md` auto-loads and is binding for the
+universal principles (the four properties Verified/Personal/Actionable/Honest,
+the autogeneration test, the continuity sweep on edits) plus the code-layer
+guardrails — don't re-Read it; it points *here* for guide-content detail. This
+skill and its references carry that detail: source-tiering a fact, the `≈`/`⚠`
+states, verification stamps, the 4-question venue rule, photo/section rules, the
+helper scripts, and the done gate.
 
 ## Read first
 1. **`references/verification-rules.md`** — the binding fact decision layer
