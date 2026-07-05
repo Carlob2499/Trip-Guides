@@ -7,13 +7,19 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "create-guide": "tsx scripts/generate-guide.ts"
   },
   "dependencies": {
+    "@ai-sdk/google": "^4.0.8",
+    "ai": "^7.0.15",
     "astro": "^6.4.4",
-    "sharp": "^0.34.0"
+    "dotenv": "^17.4.2",
+    "sharp": "^0.34.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
+    "tsx": "^4.23.0",
     "vitest": "^4.1.9"
   }
 }
