@@ -56,9 +56,11 @@ jobs:
             Guide slug: ${{ inputs.slug }}
             Section focus: ${{ inputs.section || 'full pass — all sections' }}
 
-            Start by reading .github/prompts/research-guide.md — it contains all your research
-            instructions, source-tier rules, accuracy requirements, and finish steps. Follow them
-            exactly. The CLAUDE.md accuracy standard (auto-loaded) is also binding.
+            Use the waypoint-guide-author skill: read .claude/skills/waypoint-guide-author/SKILL.md
+            and its references/ (verification-rules.md, block-types.md) and follow them exactly —
+            the source-tier ladder, the verification ledger, the ≈/⚠ fact states, the deterministic
+            lookup scripts, the done gate, and the completion report. The CLAUDE.md accuracy standard
+            (auto-loaded) is also binding.
 
             Target guide: src/content/guides/${{ inputs.slug }}.json
             ${{ inputs.section != '' && format('Scope this pass to the "{0}" section only; leave all other sections as-is.', inputs.section) || '' }}

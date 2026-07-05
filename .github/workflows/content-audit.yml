@@ -3,7 +3,7 @@ name: Content audit
 # Weekly, no-LLM accuracy sweep: dead links, missing Commons photos, third-party API
 # health, and stale `verified` stamps. Findings are posted to a single tracking issue
 # (updated in place, never duplicated) — this workflow only REPORTS; a human or a
-# separate research pass (.github/prompts/research-guide.md) does the actual fixing.
+# separate research pass (the waypoint-guide-author skill) does the actual fixing.
 # See scripts/audit/*.mjs for the checks themselves; run any of them locally with
 # `node scripts/audit/run-audit.mjs --dry-run` (no GH_TOKEN needed for a dry run).
 on:

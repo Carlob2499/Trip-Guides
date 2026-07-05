@@ -168,12 +168,12 @@ async function main() {
 }
 
 // A Groq draft is an UNVERIFIED grounded first draft — the intended next step is a Claude
-// research pass to source/verify it against primary sources (the repo's existing
-// research-guide.md discipline), toward denmark.json/korea.json quality. This prints a
-// ready-to-run local Claude Code command that kicks that off against the new draft.
+// research pass to source/verify it against primary sources (the waypoint-guide-author
+// skill), toward denmark.json/korea.json quality. This prints a ready-to-run local Claude
+// Code command that kicks that off against the new draft.
 function printResearchHandoff(slug: string, relPath: string) {
   const kickoff =
-    `Run a research pass on ${relPath} following .github/prompts/research-guide.md exactly. ` +
+    `Run a research pass on ${relPath} using the waypoint-guide-author skill. ` +
     `It's an unverified Groq/Wikivoyage draft — verify every perishable fact against primary (T0) sources, ` +
     `fill gaps, apply the ≈/⚠ flags, and keep draft:true.`;
   const bar = "─".repeat(70);
@@ -185,7 +185,7 @@ function printResearchHandoff(slug: string, relPath: string) {
     "",
     `  claude "${kickoff}"`,
     "",
-    `Or, in an existing Claude Code session: "research pass on ${slug} per .github/prompts/research-guide.md".`,
+    `Or, in an existing Claude Code session: "research pass on ${slug} with the waypoint-guide-author skill".`,
     bar,
   ].join("\n"));
 }

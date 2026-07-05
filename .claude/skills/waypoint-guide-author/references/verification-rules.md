@@ -12,20 +12,14 @@ Verify it, personalize it, or cut it.
 
 ---
 
-## 1. The four gates (all must pass before a guide is "done")
+## 1. The four gates (from CLAUDE.md — binding, not restated here)
 
-A guide is not done if any is missing:
-
-1. **Verified** — every *perishable* fact traced to a primary source, with a
-   verification date.
-2. **Personal** — structured around this traveler's ranked priorities, not a
-   generic "things to do in X."
-3. **Actionable** — every recommendation states how to get there, when it
-   fits, and whether to book.
-4. **Honest** — gaps are stated, not filled. An admitted blank is a feature.
-
-If you cannot satisfy a gate for a given fact, that fact is not ready — flag
-or omit it (§4). Never paper over a failed gate.
+A guide is not done unless it passes all four: **Verified · Personal ·
+Actionable · Honest** (full definitions in `CLAUDE.md`, which auto-loads). This
+file is the operational decision layer *underneath* those gates: for a given
+fact, whether it may ship at all and in what state. If you can't satisfy a gate
+for a fact, that fact isn't ready — flag or omit it (§4). Never paper over a
+failed gate.
 
 ---
 
@@ -51,20 +45,31 @@ checked*, it is perishable and the date rules apply.
 ## 3. What counts as a source (quality hierarchy)
 
 Use the highest tier available; drop a tier only when the one above doesn't
-exist for that fact.
+exist for that fact. Cite up the ladder, never down.
 
-1. **Primary / official** — the venue's own site, the official transit
+1. **T0 · primary / official** — the venue's own site, the official transit
    operator, the government entry-rules page, the event's official page.
-   Required for prices, hours, booking rules, entry rules.
-2. **Authoritative secondary** — an operator aggregator or a domain reference
-   the community treats as canonical (e.g. Leek Duck for GO event data). Fine
-   for facts that primary sources publish poorly, if named.
-3. **Cross-checked general** — two independent reputable sources agreeing.
-   Acceptable only for durable facts, never for a price or an hour on its own.
+   Required for prices, hours, booking rules, entry rules. **This is what you
+   cite — reach it for every specific fact.**
+2. **T1 · authoritative secondary** — an operator aggregator or a domain
+   reference the community treats as canonical (e.g. Leek Duck for GO event
+   data). Fine for facts that primary sources publish poorly, if named.
+   Prefer to trace back to the T0 it cites.
+3. **T2 · cross-checked general** — two independent reputable sources
+   agreeing. Acceptable only for durable facts, never for a price or an hour
+   on its own. Review sites, wikis, blogs, forums, and AI answers are **leads
+   only** — use them to *find* the T0 source; never cite them for a fact.
 
 Never source a perishable fact from: a single blog, a forum post, an
 undated page, or your own training memory. If that's all that exists, the
 fact is unverified — flag or omit it.
+
+**Adversarial check before you trust a fact:** spend one search trying to
+*disprove* what you just found ("X closed", "X moved", "X price 2026"), not
+only to confirm it. A first result that matches your expectation is not
+verification; it may be a second copy of the same error (the global
+confirmation-bias rule). Seek the primary source and read it critically,
+rather than stopping the moment something says the expected thing.
 
 **Conflicting sources:** do not average or pick silently. Record the range and
 flag it (see denmark.json's "Akershus interior price (≈150 NOK — conflicting
@@ -110,8 +115,8 @@ check; never publish an unconfirmed hour as fact.
 **Transit fares/times** — official operator. Times that vary get `≈` or a
 range. Name the specific service (line, bus number), not "a bus."
 
-**Events / rosters** — official event page (tier 1) or the canonical domain
-source (tier 2, named). These age fastest; carry a per-section date if the
+**Events / rosters** — official event page (T0) or the canonical domain
+source (T1, named). These age fastest; carry a per-section date if the
 guide-level stamp is older.
 
 **Entry / visa rules** — official government page only, and state the
@@ -133,6 +138,10 @@ for anything else means the content wants a typed section, not richer prose.
 and (b) an explicit **re-check** list of the most perishable items before
 travel. Match the pattern in korea.json / denmark.json — the stamp doubles as
 the reader's pre-trip re-verification checklist.
+
+**On drafts** the stamp stays `⚠`-prefixed (it renders as the masthead warning
+pill) with the date + re-check list riding along. Dropping the `⚠` / `draft`
+is the human graduation call, never yours.
 
 **Per-section stamps** — sections whose facts age fastest (restaurant hours,
 event rosters) should carry their own verified date where practical, since the
@@ -178,10 +187,3 @@ smooth, confident, unverified paragraph is a failing one.
    `dist/`, not just source.
 
 If any check fails, the guide is not done — fix or flag, then re-run.
-
----
-
-*Draft — grounded in this repo's CLAUDE.md, content.config.ts conventions
-(`__VERIFICATION_REQUIRED__`, the prose allowlist), and the verification
-patterns in korea.json and denmark.json. Edit freely; this is a starting
-point, not a finished standard.*

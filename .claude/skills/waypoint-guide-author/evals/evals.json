@@ -1,0 +1,33 @@
+{
+  "skill_name": "waypoint-guide-author",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Research and fill the 'Money & currency' section of the germany draft guide (src/content/guides/germany.json) with verified, current facts a traveler can act on — cash vs card reality, ATM advice, tipping. Keep the rest of the guide untouched.",
+      "expected_output": "germany.json's Money & currency panel filled with sourced facts; every perishable fact sourced-and-dated, ≈, ⚠, or omitted; draft:true intact; build passes; a verification ledger and completion report in the agent's summary.",
+      "files": [],
+      "assertions": [
+        "money-section-filled: the Money & currency panel body in the edited germany.json is non-empty and substantive (not a stub)",
+        "no-bare-perishable-facts: every perishable money fact (fees, tipping figures, limits) carries a legal state — a sourced/dated claim, an ≈ prefix, or a ⚠ flag; no bare unsourced figures",
+        "draft-flag-preserved: germany.json still has draft: true",
+        "scope-respected: only the Money & currency content (plus at most the verified stamp) differs from the original scaffold — no other sections rewritten",
+        "verification-ledger-present: the report includes a ledger table with source (tier + URL) and checked-on dates per fact",
+        "completion-report-present: the report ends with the flagged/omitted/conflicts completion summary",
+        "gold-standard-depth: coverage is comparable to denmark.json's money guidance (cash vs card reality, tipping norms, ATM/DCC specifics) rather than generic filler"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "The SPAREX Dongdaemun jimjilbang in the korea guide changed its daytime entry price to ₩14,000 (enter by 20:00). Update the guide (src/content/guides/korea.json).",
+      "expected_output": "Both touchpoints of the SPAREX price (budget note + Day 1 body) updated with the new figure and a fresh verification flag; no stale ₩12,000 SPAREX reference anywhere; continuity sweep evidenced; build passes; completion report present.",
+      "files": [],
+      "assertions": [
+        "both-touchpoints-updated: BOTH SPAREX price touchpoints (the budget-section note AND the Day 1 itinerary body) show ₩14,000",
+        "no-stale-price: no SPAREX-related ₩12,000 daytime figure remains anywhere in the edited korea.json",
+        "verification-carried: the changed figure carries its verification state as written (≈/⚠ flag or dated note), not a bare number",
+        "continuity-evidence: the report shows the whole guide was swept for touchpoints (not just one line edited)",
+        "completion-report-present: the report ends with the flagged/omitted/conflicts completion summary"
+      ]
+    }
+  ]
+}
