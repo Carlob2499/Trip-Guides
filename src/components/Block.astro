@@ -15,6 +15,8 @@ import DaysBlock   from "./blocks/DaysBlock.astro";
 import SightsBlock from "./blocks/SightsBlock.astro";
 import RaidBlock   from "./blocks/RaidBlock.astro";
 import HabitatsBlock from "./blocks/HabitatsBlock.astro";
+import InfoGridBlock from "./blocks/InfoGridBlock.astro";
+import TierListBlock from "./blocks/TierListBlock.astro";
 import WeatherBlock from "./blocks/WeatherBlock.astro";
 import HolidaysBlock from "./blocks/HolidaysBlock.astro";
 
@@ -31,27 +33,61 @@ const titleText = solo ? "" : (sec.title || "");
 
 // Types that render their content inside a shared .card wrapper.
 // days and sights render their own per-item .card elements instead.
-const carded = ["panel", "prose", "list", "routes", "map", "budget", "raids", "habitats"].includes(sec.type);
+const carded = ["panel", "prose", "list", "routes", "map", "budget", "raids", "habitats", "infogrid", "tierlist"].includes(sec.type);
+
+// Opt-in per-section collapse/expand (content.config.ts `collapse` fields). Renders
+// the whole card as a native <details>/<summary> instead of a plain div — tap the
+// title to fold it away. The anchor (#) button sits OUTSIDE <summary> (as a sibling,
+// positioned absolute) so tapping it copies the link instead of also toggling open/closed.
+const isCollapsible = carded && sec.collapsible === true;
+const CardTag = isCollapsible ? "details" : "div";
+const cardProps = isCollapsible ? { open: sec.defaultOpen !== false } : {};
+const TitleTag = isCollapsible ? "summary" : "div";
 ---
 <section class="block" id={sid} data-cat={ci}>
   {carded ? (
-    <div class="card">
+    <CardTag class={`card${isCollapsible ? " is-collapsible" : ""}`} {...cardProps}>
       {titleText && (
-        <div class="block-title-row">
+        <TitleTag class="block-title-row">
           <h3 class="block-title">{titleText}</h3>
+          {!isCollapsible && (
+            <button class="anchor-btn" data-sid={sid} type="button"
+                    title="Copy link to this section" aria-label="Copy link to this section">#</button>
+          )}
+        </TitleTag>
+      )}
+      {isCollapsible ? (
+        <>
           <button class="anchor-btn" data-sid={sid} type="button"
                   title="Copy link to this section" aria-label="Copy link to this section">#</button>
-        </div>
+          <div class="block-body">
+            {sec.type === "panel"  && <PanelBlock  sec={sec} keyPrefix={keyPrefix} />}
+            {sec.type === "prose"  && <ProseBlock  sec={sec} />}
+            {sec.type === "list"   && <ListBlock   sec={sec} keyPrefix={keyPrefix} />}
+            {sec.type === "routes" && <RoutesBlock sec={sec} keyPrefix={keyPrefix} />}
+            {sec.type === "map"    && <MapBlock    sec={sec} />}
+            {sec.type === "budget" && <BudgetBlock sec={sec} />}
+            {sec.type === "raids"  && <RaidBlock   sec={sec} />}
+            {sec.type === "habitats" && <HabitatsBlock sec={sec} />}
+            {sec.type === "infogrid" && <InfoGridBlock sec={sec} />}
+            {sec.type === "tierlist" && <TierListBlock sec={sec} />}
+          </div>
+        </>
+      ) : (
+        <>
+          {sec.type === "panel"  && <PanelBlock  sec={sec} keyPrefix={keyPrefix} />}
+          {sec.type === "prose"  && <ProseBlock  sec={sec} />}
+          {sec.type === "list"   && <ListBlock   sec={sec} keyPrefix={keyPrefix} />}
+          {sec.type === "routes" && <RoutesBlock sec={sec} keyPrefix={keyPrefix} />}
+          {sec.type === "map"    && <MapBlock    sec={sec} />}
+          {sec.type === "budget" && <BudgetBlock sec={sec} />}
+          {sec.type === "raids"  && <RaidBlock   sec={sec} />}
+          {sec.type === "habitats" && <HabitatsBlock sec={sec} />}
+          {sec.type === "infogrid" && <InfoGridBlock sec={sec} />}
+          {sec.type === "tierlist" && <TierListBlock sec={sec} />}
+        </>
       )}
-      {sec.type === "panel"  && <PanelBlock  sec={sec} keyPrefix={keyPrefix} />}
-      {sec.type === "prose"  && <ProseBlock  sec={sec} />}
-      {sec.type === "list"   && <ListBlock   sec={sec} keyPrefix={keyPrefix} />}
-      {sec.type === "routes" && <RoutesBlock sec={sec} keyPrefix={keyPrefix} />}
-      {sec.type === "map"    && <MapBlock    sec={sec} />}
-      {sec.type === "budget" && <BudgetBlock sec={sec} />}
-      {sec.type === "raids"  && <RaidBlock   sec={sec} />}
-      {sec.type === "habitats" && <HabitatsBlock sec={sec} />}
-    </div>
+    </CardTag>
   ) : sec.type === "weather" ? (
     // Weather renders its own title INSIDE the hidden wrapper, so a failed fetch
     // (wrapper stays hidden) leaves no orphaned heading — hence no block-title-row here.

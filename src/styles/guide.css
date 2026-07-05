@@ -418,6 +418,25 @@ body{overflow-x:clip}
 .copy-addr:hover{color:var(--accent);border-color:var(--accent)}
 .copy-addr.copied{color:var(--green);border-color:var(--green)}
 
+/* === COLLAPSIBLE SECTION CARD (opt-in via `collapsible:true`) ================ */
+/* A `.card` that is also a native <details> — tap the title to fold the whole
+   section away. Selectors here are deliberately more specific than the generic
+   `details`/`details summary` rules below (used for nested per-boss/per-window
+   details), so this section-level card keeps normal `.card` chrome instead of
+   picking up a second border/background from those generic rules. */
+details.card.is-collapsible{margin-bottom:1rem;border:1px solid var(--rule);padding:0;position:relative}
+details.card.is-collapsible>summary{background:none;padding:1.25rem 1.4rem;margin:0;border-bottom:1px solid transparent}
+details.card.is-collapsible>summary::before{content:"▶";font-size:.68rem}
+details.card.is-collapsible[open]>summary{border-bottom-color:var(--rule)}
+details.card.is-collapsible>summary .block-title{margin:0}
+details.card.is-collapsible>.anchor-btn{position:absolute;top:1.15rem;right:1.3rem}
+details.card.is-collapsible>.block-body{padding:1.1rem 1.4rem 1.25rem}
+@media(max-width:599px){
+  details.card.is-collapsible>summary{padding:1rem 1.1rem}
+  details.card.is-collapsible>.anchor-btn{top:.9rem;right:1rem}
+  details.card.is-collapsible>.block-body{padding:.9rem 1.1rem 1.05rem}
+}
+
 /* === OFFLINE NOTE ============================================================ */
 .offline-note{display:inline-block;margin-top:.4rem;font-size:.76rem;color:var(--muted);opacity:.85}
 
@@ -463,6 +482,39 @@ details table{margin:.3rem 0 .4rem}
 .hab-chip-hot{background:color-mix(in srgb,var(--accent) 14%,var(--card));border-color:color-mix(in srgb,var(--accent) 40%,var(--rule2));font-weight:600}
 .hab-mega{margin:.55rem 0 0;font-size:.78rem;color:var(--muted);line-height:1.4;border-top:1px dashed var(--rule2);padding-top:.4rem}
 @media(max-width:420px){.hab-row{grid-template-columns:1fr;gap:.15rem}.hab-label{padding-top:0}}
+
+/* Shiny-odds badge — a tiny, instantly-recognizable ✨ pill instead of reading
+   "Shiny 1/20" as plain text buried in a sentence. Used in raid-boss summaries
+   and anywhere else a shiny rate needs to jump out at a glance. */
+.shiny-pill{display:inline-flex;align-items:center;gap:.2em;font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;color:var(--accent2);background:color-mix(in srgb,var(--accent) 12%,var(--card));border:1px solid color-mix(in srgb,var(--accent) 35%,var(--rule2));border-radius:99px;padding:.08rem .5rem .08rem .4rem;white-space:nowrap}
+
+/* === INFOGRID (compact icon-labeled fact cards) ============================= */
+/* Replaces "here's everything you need to know" bullet-list prose with one short
+   fact per tile — reduces read time in a sunlit/rushed on-the-move setting. */
+.ig-note{font-size:.88rem;color:var(--muted);margin:.1rem 0 .8rem;line-height:1.5}
+.ig-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.7rem;margin:.2rem 0 .3rem}
+.ig-card{display:flex;gap:.6rem;align-items:flex-start;background:var(--bg2);border:1px solid var(--rule);border-radius:7px;padding:.7rem .8rem;min-width:0}
+.ig-icon{flex:none;font-size:1.3rem;line-height:1;margin-top:.05rem}
+.ig-text{min-width:0}
+.ig-label{font-weight:600;font-size:.88rem;line-height:1.3}
+.ig-body{font-size:.8rem;color:var(--muted);line-height:1.4;margin-top:.18rem}
+
+/* === TIERLIST (ranked chip groups — priority picks, skip-vs-fresh divergence) = */
+/* Replaces paragraph rankings ("S — do X, Y, Z...") with scannable chip rows: the
+   pick's name is readable in one glance instead of parsed out of a sentence. */
+.tl-note{font-size:.88rem;color:var(--muted);margin:.1rem 0 .8rem;line-height:1.5}
+.tl-list{display:flex;flex-direction:column;gap:.8rem}
+.tl-tier{border-left:3px solid var(--rule2);padding-left:.75rem}
+.tl-tier-head{display:flex;align-items:center;gap:.4rem;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.82rem;margin-bottom:.4rem}
+.tl-tier-label{color:var(--ink)}
+.tl-chips{display:flex;flex-wrap:wrap;gap:.32rem}
+.tl-chip{font-size:.8rem;line-height:1.4;background:var(--card);border:1px solid var(--rule);border-radius:5px;padding:.14rem .5rem}
+.tl-chip-hot{background:color-mix(in srgb,var(--accent) 14%,var(--card));border-color:color-mix(in srgb,var(--accent) 40%,var(--rule2));font-weight:600}
+.tl-chip-shiny{color:var(--accent2)}
+.tl-body{font-size:.8rem;color:var(--muted);line-height:1.45;margin-top:.45rem}
+/* First tier (typically "S — must do") gets the accent border to read as top priority
+   at a glance without needing to parse the label text first. */
+.tl-tier:first-child{border-left-color:var(--accent)}
 
 /* === PRINT / SAVE AS PDF ===================================================== */
 /*

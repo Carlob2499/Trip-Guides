@@ -1,0 +1,33 @@
+---
+// Renders a `tierlist` section: ranked chip groups (priority tiers, or "skip vs
+// fresh" divergence groups). Replaces paragraph-of-prose priority rankings with
+// scannable chip rows — the pick's name is readable at a glance instead of buried
+// in a sentence. A chip prefixed "✨" in the JSON gets the shiny-eligible treatment;
+// a chip listed in `hot` gets the must-do highlight (both can apply to one chip).
+const { sec } = Astro.props;
+const tiers: any[] = sec.tiers || [];
+---
+{sec.note && <p class="tl-note" set:html={sec.note} />}
+<div class="tl-list">
+  {tiers.map((t: any) => {
+    const hot = new Set(t.hot || []);
+    return (
+      <div class="tl-tier">
+        <div class="tl-tier-head">
+          {t.icon && <span aria-hidden="true">{t.icon}</span>}
+          <span class="tl-tier-label">{t.tier}</span>
+        </div>
+        <div class="tl-chips">
+          {t.chips.map((chip: string) => {
+            const isShiny = chip.trim().startsWith("✨");
+            const isHot = hot.has(chip);
+            return (
+              <span class={`tl-chip${isHot ? " tl-chip-hot" : ""}${isShiny ? " tl-chip-shiny" : ""}`}>{chip}</span>
+            );
+          })}
+        </div>
+        {t.body && <p class="tl-body" set:html={t.body} />}
+      </div>
+    );
+  })}
+</div>

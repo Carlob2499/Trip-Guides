@@ -1,0 +1,19 @@
+---
+// Renders an `infogrid` section: a grid of small icon-labeled fact cards. Replaces
+// dense bullet-list "here's everything you need to know" prose with scannable tiles —
+// one fact per card instead of a paragraph. Reflows to a single column on mobile.
+const { sec } = Astro.props;
+const cards: any[] = sec.cards || [];
+---
+{sec.note && <p class="ig-note" set:html={sec.note} />}
+<div class="ig-grid">
+  {cards.map((c: any) => (
+    <div class="ig-card">
+      {c.icon && <span class="ig-icon" aria-hidden="true">{c.icon}</span>}
+      <div class="ig-text">
+        <p class="ig-label">{c.label}</p>
+        {c.body && <p class="ig-body" set:html={c.body} />}
+      </div>
+    </div>
+  ))}
+</div>

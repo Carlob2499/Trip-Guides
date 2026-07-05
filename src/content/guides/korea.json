@@ -798,10 +798,69 @@
       ]
     },
     {
-      "type": "prose",
+      "type": "infogrid",
       "group": "Road of Legends",
-      "title": "Road of Legends 2026 — your Jul 9–10 window",
-      "body": "<p>Road of Legends runs <b>Mon Jul 6 – Fri Jul 10 (ends 23:59 KST)</b>. You land Thursday Jul 9 and catch the final two days. Up to 9 free Raid Passes per day from gym discs. Pokémon caught from any raid Jul 6–12 may earn a <b>Special Pokémon Background</b> collectible.</p><p><b>Thursday Jul 9 (arrival day) — take it easy:</b> 5-star bosses all day: <b>Crowned Sword Zacian</b> (Fairy/Steel) and <b>Crowned Shield Zamazenta</b> (Fighting/Steel). Both shiny-eligible (1/20), both 2–4 trainers. Raid Hour 18:00–19:00 KST. Mega Gengar Mega Raid Hour 19:00–20:00. You just flew 14 hours — use 2–3 passes if you're feeling fresh, save most for tomorrow. Both Crowned forms are weak only to <b>Fire and Ground — same team handles both</b>. See counter charts below.</p><p><b>Friday Jul 10 (palaces day) — the real evening:</b> One of the best raiding evenings of the trip. Full plan in the day-by-day entry.</p><ul><li><b>Raid Hour 18:00–19:00 KST</b> — Origin Forme Dialga and Origin Forme Palkia. Both are the best Master League forms of their species (Roar of Time / Spacial Rend). Save 4–5 passes here.</li><li><b>Primal Raid Hour 19:00–20:00 KST</b> — Primal Kyogre and Primal Groudon. Groudon (Ground/Fire) has a quadruple Water weakness; your Kyogre counters make it trivial. Coordinate 5+ trainers for Primal tier. Groudon is your best Xurkitree counter on Sunday — a priority XL-candy target. Save 3–4 passes here.</li></ul>"
+      "title": "Road of Legends 2026 — what to know",
+      "collapsible": true,
+      "defaultOpen": true,
+      "cards": [
+        {
+          "icon": "📅",
+          "label": "Event window",
+          "body": "<b>Mon Jul 6 – Fri Jul 10</b> (ends 23:59 KST). You land Thursday Jul 9 and catch the final two days."
+        },
+        {
+          "icon": "🎟️",
+          "label": "Raid passes",
+          "body": "Up to <b>9 free Raid Passes/day</b> from Gym photo discs."
+        },
+        {
+          "icon": "🎖️",
+          "label": "Collectible",
+          "body": "Pokémon caught from any raid <b>Jul 6–12</b> may earn a Special Pokémon Background collectible."
+        }
+      ]
+    },
+    {
+      "type": "habitats",
+      "group": "Road of Legends",
+      "title": "Raid Hour rotation — Thu & Fri",
+      "note": "Friday evening is one of the best raiding windows of the trip — full day plan in the day-by-day entry.",
+      "collapsible": true,
+      "defaultOpen": true,
+      "windows": [
+        {
+          "day": "Thu Jul 9",
+          "time": "All day · Raid Hour 18:00–19:00",
+          "name": "Crowned Forms",
+          "targets": [
+            "✨ Crowned Sword Zacian",
+            "✨ Crowned Shield Zamazenta"
+          ],
+          "tip": "Weak to <b>Fire and Ground only</b> — the same team handles both. You just flew 14 hours: use 2–3 passes if you're feeling fresh, save most for tomorrow.",
+          "mega": "Mega Gengar Mega Raid Hour 19:00–20:00."
+        },
+        {
+          "day": "Fri Jul 10",
+          "time": "Raid Hour 18:00–19:00",
+          "name": "Origin Duo",
+          "targets": [
+            "Origin Forme Dialga",
+            "Origin Forme Palkia"
+          ],
+          "tip": "Best Master League forms of their species (Roar of Time / Spacial Rend). Save 4–5 passes here."
+        },
+        {
+          "day": "Fri Jul 10",
+          "time": "Primal Raid Hour 19:00–20:00",
+          "name": "Primal Duo",
+          "targets": [
+            "Primal Kyogre",
+            "Primal Groudon"
+          ],
+          "tip": "Groudon (Ground/Fire) has a quadruple Water weakness — your Kyogre counters make it trivial. Coordinate 5+ trainers for Primal tier. Groudon is also your best Xurkitree counter Sunday — a priority XL Candy target."
+        }
+      ]
     },
     {
       "type": "raids",
@@ -1181,13 +1240,146 @@
             }
           ]
         }
+      ],
+      "collapsible": true,
+      "defaultOpen": false
+    },
+    {
+      "type": "infogrid",
+      "group": "GO Fest Global",
+      "title": "GO Fest Global 2026 — what to know",
+      "note": "⚠ Niantic finalises exact habitat boss lists, Super Mega mechanics, and shiny rates only days before the event — re-check <a href='https://leekduck.com/events/pokemon-go-fest-2026-global/'>LeekDuck</a> and in-game news the week of Jul 6. Remote passes: save for the Seoul days (Jul 9–10, Jul 14) when you're not at EXPO.",
+      "collapsible": true,
+      "defaultOpen": true,
+      "cards": [
+        {
+          "icon": "📅",
+          "label": "Dates & format",
+          "body": "<b>Sat Jul 11 – Sun Jul 12, 10:00–19:00 local</b> — worldwide, not location-gated. Completely <b>free</b>, no ticket needed."
+        },
+        {
+          "icon": "🔮",
+          "label": "Special Research",
+          "body": "Leads to <b>Zeraora</b> (Mythical Electric, GO debut) — doesn't expire. Branching path: choose Mega Mewtwo X or Y."
+        },
+        {
+          "icon": "🎟️",
+          "label": "Raid passes",
+          "body": "<b>9 free/day</b> from spinning Gym photo discs — doesn't auto-grant, you must spin."
+        },
+        {
+          "icon": "✨",
+          "label": "Shiny rates",
+          "body": "<span class='shiny-pill'>✨ 1/20</span> for every legendary and Super Mega boss — the best odds in the game."
+        },
+        {
+          "icon": "🕯️",
+          "label": "Incense",
+          "body": "1-hour Lures, plus all Unown forms, Tropius, and Bouffalant as incense-exclusive spawns both days."
+        },
+        {
+          "icon": "🔄",
+          "label": "Trades & gifts",
+          "body": "6 Special Trades/day (up from 1), 50% Stardust off trades, 50 Gifts/day openable — all day, both days."
+        },
+        {
+          "icon": "🦸",
+          "label": "Super Mega",
+          "body": "Mega Mewtwo X (Sat, knows Counter) / Y (Sun, knows Psystrike) — global debut, every habitat, all day."
+        },
+        {
+          "icon": "🕐",
+          "label": "Also running",
+          "body": "Shadow Palkia in Shadow Raids Jul 1–Aug 4 (not urgent). Ultra Unlock starts Jul 13 — check pokemongo.com after."
+        }
       ]
     },
     {
-      "type": "prose",
+      "type": "panel",
       "group": "GO Fest Global",
-      "title": "GO Fest Global 2026 — what to know",
-      "body": "<p>Pokémon GO Fest 2026: Global runs <b>Saturday Jul 11 and Sunday Jul 12, 10:00  a.m. – 7:00  p.m.  local time</b> worldwide — not location-gated. This year's event is <b>completely free for all trainers</b> (no ticket needed). Everyone gets: Special Research leading to <b>Zeraora</b> (Mythical, Electric-type — first appearance in Pokémon GO; research does not expire), Branching Timed Research (choose Mega Mewtwo X or Y path), and all event bonuses.</p><p><b>Bonuses active 10:00– 19:00 KST both days:</b></p><ul><li>9 free Raid Passes/day — spin Gym photo discs (does <i>not</i> auto-grant; must spin)</li><li>Boosted Shiny rates — all legendaries and Super Mega bosses ≈01/20</li><li>Lure Modules last 1 hour</li><li>Incense-exclusive spawns: all Unown forms, Tropius, Bouffalant</li><li>Party Play active · Field Research refreshes hourly with each habitat</li></ul><p><b>Bonuses all day both days (00:00–23:59):</b></p><ul><li>Up to 6 Special Trades/day (normally 1)</li><li>50% reduced Stardust cost on all trades</li><li>Open 50 Gifts/day</li></ul><p><b>Raid rotation:</b> habitats cycle every 3 hours; Mega + 5★ bosses rotate hourly within each window. <b>Super Mega all day both days</b> — Mega Mewtwo X (Sat, knows Counter) / Mega Mewtwo Y (Sun, knows Psystrike), global debut, in every habitat. Full per-window spawns and priority targets are in the <b>habitat rotation</b> cards just below.</p><p><b>⚠ Re-verify in the final week.</b> Niantic finalises exact habitat boss lists, Super Mega mechanics, and shiny rates only days before the event. Everything here reflects the official pre-announcement and LeekDuck's tracking as of June 2026. Re-check <a href='https://leekduck.com/events/pokemon-go-fest-2026-global/'>LeekDuck</a> and in-game news the week of Jul 6, and adjust priority targets if the lineup shifts.</p><p><b>Other active during GO Fest weekend:</b> Shadow Palkia in Shadow Raids every weekend Jul 1–Aug 4 (shiny available, not urgent — persists after). Ultra Unlock content starts Jul 13 — details announced after the global challenge completes; check pokemongo.com after Jul 12.</p><p><b>Pass strategy (all three of you in Daejeon):</b></p><ul><li><b>Sat:</b> 9 passes each across the three habitats at EXPO Science Park — no transit cutoff. 3–5 on Mega Mewtwo X, the rest on Stormfire (Lugia/Ho-Oh) and Dragonflight (Rayquaza, Groudon, Kyogre).</li><li><b>Sun:</b> 9 passes each. 3–5 on Mega Mewtwo Y, 2–3 on <b>Xurkitree</b> (Korea-only regional) in Verdant before the 15:00 Grand Final, the rest on Twilight around and after the match.</li><li><b>Remote passes:</b> save for the Seoul days (Jul 9–10 and Jul 14) when you're not at EXPO.</li></ul>"
+      "title": "Pre-GO Fest checklist",
+      "checklist": [
+        "Pokémon storage to 400+ (transfer/release beforehand)",
+        "Item bag cleared: stock up on Max Revives, Ultra Balls, Golden Razz Berries",
+        "Lucky Eggs ready (use before evolving / before mass Stardust bonuses)",
+        "Star Pieces ready (use during raids and catches to maximise Stardust)",
+        "Silver Pinap Berries stocked (use on Legendaries you need Candy XL for)",
+        "Charged TMs ready — re-roll shadow Pokémon and new Mega moves on day 1",
+        "Purified Gems ready for Shadow Raids if any appear",
+        "9 free Raid Passes per day — remember to spin Gym discs, not just battle",
+        "Pokémon GO Plus / Gotcha charged and connected for auto-catches during downtime",
+        "Battery pack fully charged; portable charger in bag for the 9-hour event window",
+        "Branching Research choice made: Mega Mewtwo X (Psychic/Fighting) or Y (pure Psychic)",
+        "Teams pre-built for Mega Mewtwo X (Flying/Fairy/Ghost counters) and Y (Ghost/Dark/Bug counters)"
+      ],
+      "collapsible": true,
+      "defaultOpen": true
+    },
+    {
+      "type": "tierlist",
+      "group": "GO Fest Global",
+      "title": "Already did Copenhagen? Your Global divergence",
+      "note": "You raided GO Fest Copenhagen in person (Fælledparken, Jun 12–14) — much of the Global headline content repeats. Net effect: skip Zeraora and the Mewtwos unless you want the shiny; make Xurkitree your Sunday must; hoover up the legendaries and incense regionals Copenhagen never offered.",
+      "collapsible": true,
+      "defaultOpen": true,
+      "tiers": [
+        {
+          "tier": "✅ Skip / deprioritize — already done at Copenhagen",
+          "chips": [
+            "Zeraora",
+            "Mega Mewtwo X",
+            "Mega Mewtwo Y",
+            "Entei",
+            "Moltres",
+            "Kyogre",
+            "Groudon",
+            "Shiny Wash Rotom"
+          ],
+          "body": "Copenhagen's in-person Mewtwo already knows <b>both</b> Counter + Psystrike (better than either single-move Global raid) and gave you Primal Kyogre/Groudon (outclass the Global 5★ forms). Only worth a raid now for a missing shiny or extra Mega Energy/XL Candy. Shiny Wash Rotom was Copenhagen-only — not in Global at all."
+        },
+        {
+          "tier": "🔼 Fresh at Global — your real priorities",
+          "chips": [
+            "✨ Xurkitree",
+            "Rayquaza",
+            "Reshiram",
+            "Zekrom",
+            "Kyurem",
+            "Giratina Origin",
+            "Dialga",
+            "Palkia",
+            "Lake trio",
+            "Xerneas",
+            "Yveltal",
+            "Solgaleo",
+            "Lunala",
+            "Therian Landorus",
+            "Therian Thundurus",
+            "Heatran",
+            "Regi trio",
+            "Latias",
+            "Latios",
+            "Cresselia",
+            "Darkrai",
+            "Cobalion",
+            "Terrakion",
+            "Virizion",
+            "Zacian",
+            "Zamazenta",
+            "Tropius",
+            "Bouffalant",
+            "Deoxys",
+            "Genesect",
+            "Necrozma",
+            "Tapu quartet",
+            "Nihilego"
+          ],
+          "hot": [
+            "✨ Xurkitree"
+          ],
+          "body": "<b>Xurkitree</b> (Sun Verdant 13–16, Daejeon) is the single most valuable target — an Asia-Pacific regional Ultra Beast Copenhagen never had. Everything else here is a legendary or collection mon Copenhagen's smaller 5★ pool (Moltres/Mewtwo/Entei only) simply didn't include."
+        }
+      ]
     },
     {
       "type": "habitats",
@@ -1195,12 +1387,329 @@
       "title": "Habitat rotation — Sat & Sun",
       "note": "Habitats cycle every 3 hours (10:00–19:00 KST); Mega + 5★ bosses rotate hourly within each window. ⚠ Niantic finalises exact boss lists days before — re-check <a href='https://leekduck.com/events/pokemon-go-fest-2026-global/'>LeekDuck</a> the week of Jul 6.",
       "windows": [
-        { "day": "Sat Jul 11", "time": "10:00–13:00", "name": "Stormfire Peaks", "types": ["Ice", "Electric", "Fire"], "targets": ["Lugia", "Ho-Oh"], "raids": ["Articuno", "Zapdos", "Moltres", "Raikou", "Entei", "Suicune", "Mega Blaziken", "Mega Ampharos", "Mega Abomasnow"], "mega": "Super Mega all day: Mega Mewtwo X (knows Counter) — every habitat." },
-        { "day": "Sat Jul 11", "time": "13:00–16:00", "name": "Astral Tides", "types": ["Psychic", "Ghost", "Water"], "raids": ["Dialga", "Palkia", "Giratina (Altered)", "Giratina (Origin)", "Xerneas", "Yveltal", "Lake trio", "Solgaleo", "Lunala", "Mega Alakazam", "Mega Gengar", "Mega Swampert"] },
-        { "day": "Sat Jul 11", "time": "16:00–19:00", "name": "Dragonflight Summit", "types": ["Flying", "Rock", "Dragon"], "targets": ["Rayquaza", "Groudon", "Kyogre"], "raids": ["Reshiram", "Zekrom", "Kyurem", "Mega Salamence", "Mega Pidgeot", "Mega Aerodactyl"] },
-        { "day": "Sun Jul 12", "time": "10:00–13:00", "name": "Earthforged Domain", "types": ["Ground", "Steel", "Normal"], "raids": ["Regirock", "Regice", "Registeel", "Regieleki", "Regidrago", "Regigigas", "Heatran", "Origin Dialga", "Origin Palkia", "Therian Forces of Nature", "Mega Metagross", "Mega Garchomp", "Mega Audino"], "mega": "Super Mega all day: Mega Mewtwo Y (knows Psystrike) — every habitat." },
-        { "day": "Sun Jul 12", "time": "13:00–16:00", "name": "Verdant Anomaly", "types": ["Poison", "Bug", "Grass"], "targets": ["Xurkitree (Korea-only)"], "raids": ["Deoxys (all formes)", "Genesect (all drives)", "Necrozma", "Stakataka", "Tapu quartet", "Ultra Beasts", "Mega Beedrill", "Mega Pinsir", "Mega Sceptile"] },
-        { "day": "Sun Jul 12", "time": "16:00–19:00", "name": "Twilight Battlefield", "types": ["Dark", "Fairy", "Fighting"], "targets": ["Darkrai", "Latios"], "raids": ["Latias", "Cresselia", "Cobalion", "Terrakion", "Virizion", "Zacian", "Zamazenta", "Mega Tyranitar", "Mega Gardevoir", "Mega Lucario"] }
+        {
+          "day": "Sat Jul 11",
+          "time": "10:00–13:00",
+          "name": "Stormfire Peaks",
+          "types": [
+            "Ice",
+            "Electric",
+            "Fire"
+          ],
+          "targets": [
+            "Lugia",
+            "Ho-Oh"
+          ],
+          "raids": [
+            "Articuno",
+            "Zapdos",
+            "Moltres",
+            "Raikou",
+            "Entei",
+            "Suicune",
+            "Mega Blaziken",
+            "Mega Ampharos",
+            "Mega Abomasnow"
+          ],
+          "mega": "Super Mega all day: Mega Mewtwo X (knows Counter) — every habitat."
+        },
+        {
+          "day": "Sat Jul 11",
+          "time": "13:00–16:00",
+          "name": "Astral Tides",
+          "types": [
+            "Psychic",
+            "Ghost",
+            "Water"
+          ],
+          "raids": [
+            "Dialga",
+            "Palkia",
+            "Giratina (Altered)",
+            "Giratina (Origin)",
+            "Xerneas",
+            "Yveltal",
+            "Lake trio",
+            "Solgaleo",
+            "Lunala",
+            "Mega Alakazam",
+            "Mega Gengar",
+            "Mega Swampert"
+          ]
+        },
+        {
+          "day": "Sat Jul 11",
+          "time": "16:00–19:00",
+          "name": "Dragonflight Summit",
+          "types": [
+            "Flying",
+            "Rock",
+            "Dragon"
+          ],
+          "targets": [
+            "Rayquaza",
+            "Groudon",
+            "Kyogre"
+          ],
+          "raids": [
+            "Reshiram",
+            "Zekrom",
+            "Kyurem",
+            "Mega Salamence",
+            "Mega Pidgeot",
+            "Mega Aerodactyl"
+          ]
+        },
+        {
+          "day": "Sun Jul 12",
+          "time": "10:00–13:00",
+          "name": "Earthforged Domain",
+          "types": [
+            "Ground",
+            "Steel",
+            "Normal"
+          ],
+          "raids": [
+            "Regirock",
+            "Regice",
+            "Registeel",
+            "Regieleki",
+            "Regidrago",
+            "Regigigas",
+            "Heatran",
+            "Origin Dialga",
+            "Origin Palkia",
+            "Therian Forces of Nature",
+            "Mega Metagross",
+            "Mega Garchomp",
+            "Mega Audino"
+          ],
+          "mega": "Super Mega all day: Mega Mewtwo Y (knows Psystrike) — every habitat."
+        },
+        {
+          "day": "Sun Jul 12",
+          "time": "13:00–16:00",
+          "name": "Verdant Anomaly",
+          "types": [
+            "Poison",
+            "Bug",
+            "Grass"
+          ],
+          "targets": [
+            "Xurkitree (Korea-only)"
+          ],
+          "raids": [
+            "Deoxys (all formes)",
+            "Genesect (all drives)",
+            "Necrozma",
+            "Stakataka",
+            "Tapu quartet",
+            "Ultra Beasts",
+            "Mega Beedrill",
+            "Mega Pinsir",
+            "Mega Sceptile"
+          ]
+        },
+        {
+          "day": "Sun Jul 12",
+          "time": "16:00–19:00",
+          "name": "Twilight Battlefield",
+          "types": [
+            "Dark",
+            "Fairy",
+            "Fighting"
+          ],
+          "targets": [
+            "Darkrai",
+            "Latios"
+          ],
+          "raids": [
+            "Latias",
+            "Cresselia",
+            "Cobalion",
+            "Terrakion",
+            "Virizion",
+            "Zacian",
+            "Zamazenta",
+            "Mega Tyranitar",
+            "Mega Gardevoir",
+            "Mega Lucario"
+          ]
+        }
+      ],
+      "collapsible": true,
+      "defaultOpen": true
+    },
+    {
+      "type": "tierlist",
+      "group": "GO Fest Global",
+      "title": "Priority targets — which raids to spend passes on",
+      "note": "Every GO Fest legendary 5★ and Super Mega is <span class='shiny-pill'>✨ 1/20</span> shiny — the best odds in the game. Tuned to your weekend: Saturday and Sunday are both Daejeon all day for all three of you (two of you in the arena for the LBF/Grand Final, the third raiding EXPO). Already did Copenhagen? See the divergence card above — it reorders these for you. <b>Pass math:</b> Sat — 3–5 on Mega Mewtwo X, rest on Dragonflight. Sun — 3–4 on Mega Mewtwo Y, 2–3 on Xurkitree, rest on Twilight around the Grand Final.",
+      "collapsible": true,
+      "defaultOpen": true,
+      "tiers": [
+        {
+          "tier": "S — do these no matter what",
+          "icon": "⭐",
+          "chips": [
+            "✨ Mega Mewtwo X",
+            "✨ Mega Mewtwo Y",
+            "✨ Xurkitree"
+          ],
+          "hot": [
+            "✨ Mega Mewtwo X",
+            "✨ Mega Mewtwo Y",
+            "✨ Xurkitree"
+          ],
+          "body": "<b>Mega Mewtwo X</b> (Sat, every habitat) — global debut, best Psychic attacker; weak to <b>Flying/Fairy</b>. <b>Mega Mewtwo Y</b> (Sun) — stronger Psychic; weak to <b>Ghost/Dark/Bug</b>. <b>Xurkitree</b> (Sun Verdant 13–16) — Korea-only regional, top non-shadow Electric attacker; raid before the 15:00 Grand Final. Weak to <b>Ground</b>."
+        },
+        {
+          "tier": "A — high value if passes/time allow",
+          "icon": "🅰️",
+          "chips": [
+            "Rayquaza",
+            "Groudon",
+            "Kyogre",
+            "Reshiram",
+            "Zekrom",
+            "Mega Salamence",
+            "Therian Landorus",
+            "Therian Thundurus",
+            "Heatran",
+            "Origin Dialga",
+            "Origin Palkia",
+            "Latios",
+            "Darkrai",
+            "Zacian",
+            "Zamazenta"
+          ],
+          "body": "<b>Sat Dragonflight</b> (around the LBF): Rayquaza (best F2P Dragon + Candy XL), Groudon (top Ground + your Xurkitree counter), Kyogre (top Water), Reshiram/Zekrom (top Fire/Electric). <b>Sun Earthforged</b> (morning): Therian Landorus/Thundurus, Heatran, Origin Dialga/Palkia. <b>Sun Twilight</b> (around the GF): Latios, Darkrai, Zacian, Zamazenta."
+        },
+        {
+          "tier": "B — fill / collection",
+          "icon": "🅱️",
+          "chips": [
+            "Giratina Origin",
+            "Deoxys Attack",
+            "Necrozma",
+            "Nihilego",
+            "Regi trio",
+            "Regigigas",
+            "Tapu quartet"
+          ],
+          "body": "Giratina Origin (Sat Astral, top ML Ghost) · Deoxys Attack (Sun Verdant, PvE) · Necrozma (Sun Verdant, fusion fodder) · Nihilego (Sun Verdant, PvP) · the Regi trio + Regigigas (Sun Earthforged) · Tapu quartet (Sun Verdant, PvP Fairy)."
+        },
+        {
+          "tier": "Low priority — persists after the event",
+          "icon": "🕐",
+          "chips": [
+            "Shadow Palkia"
+          ],
+          "body": "Runs in Shadow Raids all weekend, separate from the habitat rotation. Grab one if a gym is handy, but it's available through Aug 4 — not urgent."
+        }
+      ]
+    },
+    {
+      "type": "infogrid",
+      "group": "GO Fest Global",
+      "title": "Your 6-team for the debuts",
+      "note": "Lead a Mega to boost the lobby — exact moves are in the counter charts below. No Mega of your own? A full lobby of the listed Shadow/non-Mega counters still clears either Super Mega with 6+ trainers — aim for a group, not a duo.",
+      "collapsible": true,
+      "defaultOpen": false,
+      "cards": [
+        {
+          "icon": "🅧",
+          "label": "Mega Mewtwo X team",
+          "body": "weak to <b>Flying/Fairy/Ghost</b>: Mega Rayquaza (or Mega Pidgeot) · Shadow Moltres · Rayquaza · Dawn Wings Necrozma · Mega Gardevoir · Zacian."
+        },
+        {
+          "icon": "🅨",
+          "label": "Mega Mewtwo Y team",
+          "body": "weak to <b>Bug/Ghost/Dark</b>: Mega Tyranitar (or Mega Gengar) · Dawn Wings Necrozma · Shadow Tyranitar · Shadow Hydreigon · Chandelure · Mega Absol."
+        }
+      ]
+    },
+    {
+      "type": "list",
+      "group": "GO Fest Global",
+      "title": "Caught tracker — Saturday",
+      "collapsible": true,
+      "defaultOpen": true,
+      "items": [
+        "Mega Mewtwo X (Super Mega debut, shiny eligible)",
+        "Lugia (Stormfire 10–13)",
+        "Ho-Oh (Stormfire 10–13)",
+        "Giratina Origin (Astral 13–16)",
+        "Rayquaza (Dragonflight 16–19)",
+        "Groudon (Dragonflight 16–19 — Xurkitree counter, XL Candy priority)",
+        "Kyogre (Dragonflight 16–19)",
+        "Reshiram / Zekrom (Dragonflight — top Fire/Electric for ML)"
+      ]
+    },
+    {
+      "type": "list",
+      "group": "GO Fest Global",
+      "title": "Caught tracker — Sunday",
+      "collapsible": true,
+      "defaultOpen": true,
+      "items": [
+        "Mega Mewtwo Y (Super Mega debut, shiny eligible)",
+        "Xurkitree ★ MUST (Verdant 13–16, Korea-only, raid before 15:00)",
+        "Therian Landorus (Earthforged 10–13 — best Ground attacker)",
+        "Therian Thundurus (Earthforged 10–13)",
+        "Heatran (Earthforged 10–13)",
+        "Deoxys Attack (Verdant 13–16)",
+        "Necrozma (Verdant 13–16 — fusion fodder)",
+        "Darkrai (Twilight 16–19)",
+        "Latios (Twilight 16–19)",
+        "Zacian / Zamazenta (Twilight 16–19)"
+      ]
+    },
+    {
+      "type": "list",
+      "group": "GO Fest Global",
+      "title": "Caught tracker — trades, incense & research",
+      "collapsible": true,
+      "defaultOpen": true,
+      "items": [
+        "Tropius from Incense (region-locked normally — pop Incense each day)",
+        "Bouffalant from Incense",
+        "Xurkitree swaps with group (6 Special Trades/day, 50% Stardust off)",
+        "Zeraora encounter (if not completed at Copenhagen)"
+      ]
+    },
+    {
+      "type": "infogrid",
+      "group": "GO Fest Global",
+      "title": "Beyond raids — research, eggs & wild spawns (Global)",
+      "collapsible": true,
+      "defaultOpen": false,
+      "cards": [
+        {
+          "icon": "🔬",
+          "label": "Special Research → Zeraora",
+          "body": "Free for everyone who logs in — but it's the same line you completed at Copenhagen. Likely nothing new for you."
+        },
+        {
+          "icon": "🕯️",
+          "label": "Incense spawns (both days)",
+          "body": "All Unown forms, Tropius, Bouffalant — normally region-locked elsewhere. Lures last 1 hr during event hours; drop one near DCC II / EXPO Science Park Sunday."
+        },
+        {
+          "icon": "🌱",
+          "label": "Wild spawns",
+          "body": "Each habitat's wild pool follows its type theme. ⚠ Exact Global list unposted as of writing — check <a href='https://leekduck.com/events/pokemon-go-fest-2026-global/'>LeekDuck</a> the week of Jul 6."
+        },
+        {
+          "icon": "🥚",
+          "label": "Eggs — skip them",
+          "body": "Unlike Copenhagen (½ Hatch Distance + 1.5× Hatch Candy), Global has <b>no egg-distance discount</b>. Don't burn incubators — spend the time raiding instead."
+        },
+        {
+          "icon": "🔄",
+          "label": "Trades (all weekend)",
+          "body": "Up to <b>6 Special Trades/day</b>, 50% Stardust off every trade. Line up swaps with your group for Xurkitree, new legendaries, and dex gaps."
+        }
       ]
     },
     {
@@ -1220,73 +1729,9 @@
         "⚠ TO VERIFY (week of Jul 6): Hour-by-hour boss rotation within each 3-hour habitat window",
         "⚠ TO VERIFY (after event starts): Shiny rates — verify at thesilphroad.com once trainers are reporting",
         "⚠ TO VERIFY (after Jul 12): Ultra Unlock details — check pokemongo.com once the global challenge result is announced"
-      ]
-    },
-    {
-      "type": "prose",
-      "group": "GO Fest Global",
-      "title": "Already did Copenhagen? Your Global divergence",
-      "body": "<p>You raided <b>GO Fest 2026 Copenhagen</b> in person (Fælledparken, Jun 12–14), so much of the Global headline content is a <b>repeat for you</b>. Here's what changes when you raid the Global weekend in Korea.</p><p><b>✅ Already done at Copenhagen — deprioritise at Global:</b></p><ul><li><b>Zeraora</b> — you earned it from the Copenhagen Special Research. Global runs the <i>same</i> Zeraora line; if you completed it there you won't receive a second one. Nothing to chase.</li><li><b>Mega Mewtwo X &amp; Y</b> — both appeared in Copenhagen's 1,000-trainer Super Mega finale, and your in-person Mewtwo learned <b>both Counter and Psystrike</b> (better than the single-move Mewtwos from Global X or Y raids). At Global they're only worth a pass if you're <b>still missing the shiny</b> or want more Mega Energy / XL candy — they drop from must-do to an optional shiny re-hunt.</li><li><b>Entei, Moltres</b> (Stormfire, Sat) and <b>Kyogre, Groudon</b> (Dragonflight, Sat) — caught at Copenhagen, where you also got the <b>Primal</b> Kyogre/Groudon that outclass the Global 5-star forms. Re-raid only for a missing shiny or as raw counters (Groudon/Kyogre still counter Xurkitree).</li><li><b>Shiny Wash Rotom</b> — an in-person <b>Copenhagen exclusive</b>, <i>not</i> in the Global event. Nothing to do here.</li></ul><p><b>🔼 Fresh at Global — your real priorities now:</b></p><ul><li><b>S — Xurkitree</b> (Sun Verdant 13–16, Daejeon): the <b>Asia-Pacific regional Ultra Beast</b>, not in the Copenhagen pool and catchable only on this continent. The single most valuable target of your Global weekend.</li><li><b>The legendaries Copenhagen lacked</b> (its 5-star pool was only Moltres/Mewtwo/Entei): Rayquaza, Reshiram/Zekrom/Kyurem (Sat Dragonflight); Giratina Origin, Dialga/Palkia, lake trio, Xerneas/Yveltal, Solgaleo/Lunala (Sat Astral); Therian Landorus/Thundurus, Heatran, Origin Dialga/Palkia, the Regi trio (Sun Earthforged); Latias/Latios, Cresselia, Darkrai, Cobalion/Terrakion/Virizion, Zacian, Zamazenta (Sun Twilight). Spend the bulk of your ~18 weekend passes here.</li><li><b>Incense regionals — Tropius &amp; Bouffalant</b> (plus all-form Unown): normally region-locked to other continents; Global incense pulls them in anywhere, so pop an Incense for easy dex fills.</li><li><b>Verdant collection</b> (Sun 13–16): Deoxys (all 4 forms), Genesect (all 5 drives), Necrozma (fusion fodder), the Tapu quartet, Nihilego — none were at Copenhagen.</li></ul><p><b>Net effect:</b> skip Zeraora and the Mewtwos unless you want the shiny; make <b>Xurkitree</b> your Sunday must, and otherwise hoover up the legendaries and incense regionals Copenhagen never offered.</p>"
-    },
-    {
-      "type": "prose",
-      "group": "GO Fest Global",
-      "title": "Beyond raids — research, eggs & wild spawns (Global)",
-      "body": "<p>The Global weekend isn't only raids — here's the rest, and how much to care given your Copenhagen run.</p><ul><li><b>Special Research → Zeraora:</b> free for everyone who logs in, but it's the <i>same</i> line you completed in Copenhagen — likely nothing new for you (see the divergence note above).</li><li><b>Incense spawns (both days):</b> <b>all forms of Unown</b>, <b>Tropius</b>, and <b>Bouffalant</b>. Tropius/Bouffalant are region-locked elsewhere, so burn an Incense each day for the Pokédex entries; lures last 1 hour during event hours — drop one near DCC II / EXPO Science Park on Sunday.</li><li><b>Wild spawns:</b> each habitat's wild pool follows its type theme (Verdant = Poison/Bug/Grass, etc.). Niantic hadn't posted the exact Global wild list as of this writing — ⚠ check LeekDuck the week of Jul 6. Otherwise catch with an eye on the day's featured types for Stardust and XL.</li><li><b>Eggs:</b> the Global egg pool wasn't detailed, and unlike Copenhagen (½ Hatch Distance + 1.5× Hatch Candy) the Global bonuses include <b>no egg-distance discount</b> — so don't burn incubators here; spend the time raiding.</li><li><b>Trades (all weekend):</b> up to <b>6 Special Trades/day</b> and <b>50% Stardust</b> on every trade. With three of you, line up swaps for Xurkitree, the new legendaries, and any Copenhagen-vs-Korea dex gaps.</li></ul>"
-    },
-    {
-      "type": "panel",
-      "group": "GO Fest Global",
-      "title": "Pre-GO Fest checklist",
-      "checklist": [
-        "Pokémon storage to 400+ (transfer/release beforehand)",
-        "Item bag cleared: stock up on Max Revives, Ultra Balls, Golden Razz Berries",
-        "Lucky Eggs ready (use before evolving / before mass Stardust bonuses)",
-        "Star Pieces ready (use during raids and catches to maximise Stardust)",
-        "Silver Pinap Berries stocked (use on Legendaries you need Candy XL for)",
-        "Charged TMs ready — re-roll shadow Pokémon and new Mega moves on day 1",
-        "Purified Gems ready for Shadow Raids if any appear",
-        "9 free Raid Passes per day — remember to spin Gym discs, not just battle",
-        "Pokémon GO Plus / Gotcha charged and connected for auto-catches during downtime",
-        "Battery pack fully charged; portable charger in bag for the 9-hour event window",
-        "Branching Research choice made: Mega Mewtwo X (Psychic/Fighting) or Y (pure Psychic)",
-        "Teams pre-built for Mega Mewtwo X (Flying/Fairy/Ghost counters) and Y (Ghost/Dark/Bug counters)"
-      ]
-    },
-    {
-      "type": "list",
-      "group": "GO Fest Global",
-      "title": "Caught tracker — mark as you go",
-      "items": [
-        "SAT — Mega Mewtwo X (Super Mega debut, shiny eligible)",
-        "SAT — Lugia (Stormfire 10–13)",
-        "SAT — Ho-Oh (Stormfire 10–13)",
-        "SAT — Giratina Origin (Astral 13–16)",
-        "SAT — Rayquaza (Dragonflight 16–19)",
-        "SAT — Groudon (Dragonflight 16–19 — Xurkitree counter, XL Candy priority)",
-        "SAT — Kyogre (Dragonflight 16–19)",
-        "SAT — Reshiram / Zekrom (Dragonflight — top Fire/Electric for ML)",
-        "SUN — Mega Mewtwo Y (Super Mega debut, shiny eligible)",
-        "SUN — Xurkitree ★ MUST (Verdant 13–16, Korea-only, raid before 15:00)",
-        "SUN — Therian Landorus (Earthforged 10–13 — best Ground attacker)",
-        "SUN — Therian Thundurus (Earthforged 10–13)",
-        "SUN — Heatran (Earthforged 10–13)",
-        "SUN — Deoxys Attack (Verdant 13–16)",
-        "SUN — Necrozma (Verdant 13–16 — fusion fodder)",
-        "SUN — Darkrai (Twilight 16–19)",
-        "SUN — Latios (Twilight 16–19)",
-        "SUN — Zacian / Zamazenta (Twilight 16–19)",
-        "BOTH — Tropius from Incense (region-locked normally — pop Incense each day)",
-        "BOTH — Bouffalant from Incense",
-        "TRADES — Xurkitree swaps with group (6 Special Trades/day, 50% Stardust off)",
-        "RESEARCH — Zeraora encounter (if not completed at Copenhagen)"
-      ]
-    },
-    {
-      "type": "prose",
-      "group": "GO Fest Global",
-      "title": "Priority targets — which raids to spend passes on",
-      "body": "<p>⚠ <b>Did GO Fest Copenhagen?</b> See <b>Your Global divergence</b> above — it demotes Zeraora and the Mewtwos for you and promotes Xurkitree plus the legendaries Copenhagen lacked. The S/A/B tiers below are the general ranking.</p><p>9 free passes a day and a packed match schedule — spend them on debuts, the region-lock, and meta picks. <b>Every GO Fest legendary 5★ and Super Mega is 1/20 shiny</b> (the best odds in the game). Tiers below are tuned to <b>your</b> weekend: Saturday is Daejeon all day for all three of you (all 3 habitats; two of you in the arena for the LBF at 17:00, the third raiding EXPO); Sunday is Daejeon all day for all three (Grand Final 15:00, two of you inside).</p><ul><li><b>S — do these no matter what:</b><br/><b>Mega Mewtwo X</b> (Sat, every habitat incl. Daejeon) — global debut, best Psychic attacker; shiny. <i>Weak to Flying/Fairy.</i><br/><b>Mega Mewtwo Y</b> (Sun, every habitat) — global debut, even stronger Psychic; shiny. <i>Weak to Ghost/Dark/Bug.</i><br/><b>Xurkitree</b> (Sun Verdant 13–16, Daejeon) — <b>Korea-only regional UB</b>, top non-shadow Electric attacker; you can't get it at home. Raid it before the 15:00 GF. <i>Weak to Ground.</i></li><li><b>A — high value if passes/time allow:</b><br/><b>Sat Dragonflight (Daejeon, around the LBF):</b> Rayquaza (best F2P Dragon + Candy XL), Groudon (top Ground, and your Xurkitree counter), Kyogre (top Water), Reshiram/Zekrom (top Fire/Electric for ML), Mega Salamence.<br/><b>Sun Earthforged (morning):</b> Therian Landorus (best Ground attacker), Therian Thundurus (top Electric), Heatran (top Fire/Steel), Origin Dialga/Palkia.<br/><b>Sun Twilight (around the GF):</b> Latios (top Dragon), Darkrai (top Dark PvE), Zacian (top ML), Zamazenta (great GL/UL wall).</li><li><b>B — fill / collection:</b> Giratina Origin (Sat Astral, top ML Ghost), Deoxys Attack (Sun Verdant, glass-cannon PvE), Necrozma (Sun Verdant, fusion fodder for Dusk Mane/Dawn Wings), Nihilego (Sun Verdant, GL/UL PvP), the Regi trio + Regigigas (Sun Earthforged), Tapu quartet (Sun Verdant, PvP Fairy).</li><li><b>Shadow Palkia</b> runs in Shadow Raids all weekend (separate from the habitat rotation). Grab one if a gym is handy, but it persists through Aug 4 — not urgent.</li><li><b>Pass math:</b> Sat — 3–5 on Mega Mewtwo X, the rest on Dragonflight in Daejeon. Sun — 3–4 on Mega Mewtwo Y, 2–3 on Xurkitree, the rest on Twilight around the GF.</li></ul><p><b>Your 6-team for the debuts</b> (lead a Mega to boost the lobby; exact moves are in the counter charts below):<br/><b>Mega Mewtwo X</b> — weak to Flying / Fairy / Ghost: Mega Rayquaza (or Mega Pidgeot) · Shadow Moltres · Rayquaza · Dawn Wings Necrozma · Mega Gardevoir · Zacian.<br/><b>Mega Mewtwo Y</b> — weak to Bug / Ghost / Dark: Mega Tyranitar (or Mega Gengar) · Dawn Wings Necrozma · Shadow Tyranitar · Shadow Hydreigon · Chandelure · Mega Absol.<br/>No Mega of your own? A full lobby of the listed Shadow/non-Mega counters still clears either Super Mega with 6+ trainers — aim for a group, not a duo.</p>"
+      ],
+      "collapsible": true,
+      "defaultOpen": true
     },
     {
       "type": "raids",
@@ -1909,7 +2354,9 @@
             }
           ]
         }
-      ]
+      ],
+      "collapsible": true,
+      "defaultOpen": false
     },
     {
       "type": "prose",

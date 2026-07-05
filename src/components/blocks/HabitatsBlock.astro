@@ -1,8 +1,9 @@
 ---
-// Renders a `habitats` section: the GO Fest habitat rotation as a responsive card
-// grid. Each window is one card (day + time + type theme + spawn/raid chips + priority
-// targets). Data lives in the JSON `windows` array — no hand-maintained HTML. The grid
-// reflows from multi-column on desktop to a single column on mobile via CSS.
+// Renders a `habitats` section: a responsive card grid for any raid-window rotation
+// (GO Fest habitats, Road of Legends raid hours, etc). Each window is one card
+// (day + time + type theme + spawn/raid chips + priority targets + an optional short
+// tactical `tip`/`mega` footnote). Data lives in the JSON `windows` array — no
+// hand-maintained HTML. The grid reflows to a single column on mobile via CSS.
 const { sec } = Astro.props;
 const windows: any[] = sec.windows || [];
 ---
@@ -36,7 +37,8 @@ const windows: any[] = sec.windows || [];
           </div>
         </div>
       )}
-      {w.mega && <p class="hab-mega">{w.mega}</p>}
+      {w.tip && <p class="hab-mega" set:html={w.tip} />}
+      {w.mega && <p class="hab-mega" set:html={w.mega} />}
     </div>
   ))}
 </div>

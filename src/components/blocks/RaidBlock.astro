@@ -21,7 +21,7 @@ const tierGroups = TIER_ORDER
 // Wrap summary text in a single <span> so it's one flex item after the ::before arrow.
 const summaryHTML = (boss: any) => {
   const typing = boss.typing.join(" / ");
-  const shiny  = `✨ Shiny ${boss.shiny_odds}${boss.shiny_note ? ` — ${boss.shiny_note}` : ""}`;
+  const shiny  = `<span class="shiny-pill">✨ ${boss.shiny_odds}</span>${boss.shiny_note ? ` <small>${boss.shiny_note}</small>` : ""}`;
   const note   = boss.note ? ` · ⚠️ ${boss.note}` : "";
   return `<span><strong>${boss.name}</strong> · ${typing} · ${shiny} · ${boss.trainers}${note}</span>`;
 };

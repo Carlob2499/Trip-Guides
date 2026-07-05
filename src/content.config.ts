@@ -26,7 +26,7 @@ const mapPoint = z.object({
   local_script_name: z.string().optional(), // native-script name for taxi/local display
 });
 
-// The eleven kinds of section a guide can contain. Each one lists the fields it
+// The kinds of section a guide can contain. Each one lists the fields it
 // needs; if a content file gets one wrong, the build fails with a clear message.
 // NOTE: when adding a new type here, also add it to Block.astro and CLAUDE.md.
 
@@ -38,10 +38,20 @@ const counter = z.object({
   typing:  z.string(),
 });
 
+// Opt-in collapse/expand for a section's whole card. `collapsible` renders it as a
+// native <details>/<summary> (tap the title to fold); `defaultOpen` (default true)
+// controls its initial state. Native <details> state is unmanaged/session-only —
+// same convention the `raids`/`habitats` per-item <details> already use, so this
+// stays consistent rather than adding a bespoke persistence layer.
+const collapse = {
+  collapsible: z.boolean().optional(),
+  defaultOpen: z.boolean().optional(),
+};
+
 const section = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("panel"),  group: z.string(), title: z.string().optional(), body: z.string().optional(), checklist: z.array(z.string()).optional() }),
-  z.object({ type: z.literal("prose"),  group: z.string(), title: z.string().optional(), body: z.string().optional() }),
-  z.object({ type: z.literal("list"),   group: z.string(), title: z.string().optional(), items: z.array(z.string()) }),
+  z.object({ type: z.literal("panel"),  group: z.string(), title: z.string().optional(), body: z.string().optional(), checklist: z.array(z.string()).optional(), ...collapse }),
+  z.object({ type: z.literal("prose"),  group: z.string(), title: z.string().optional(), body: z.string().optional(), ...collapse }),
+  z.object({ type: z.literal("list"),   group: z.string(), title: z.string().optional(), items: z.array(z.string()), ...collapse }),
   z.object({ type: z.literal("routes"), group: z.string(), title: z.string().optional(), steps: z.array(z.string()) }),
   z.object({ type: z.literal("map"),    group: z.string(), title: z.string().optional(), center: coord, span: z.number().optional(), points: z.array(mapPoint).optional() }),
   // weather — live 7-day Open-Meteo strip. No coords here: reads lat/lng from the
@@ -104,11 +114,30 @@ const section = z.discriminatedUnion("type", [
       raids:   z.array(z.string()).optional(),    // 5★ / Mega bosses in the window (chips)
       targets: z.array(z.string()).optional(),    // priority pick chips (highlighted)
       mega:    z.string().optional(),             // all-window Super Mega note
-    })).min(1) }),
+      tip:     z.string().optional(),             // short tactical footnote (weakness/pass budget/etc.)
+    })).min(1), ...collapse }),
+  // infogrid — a grid of small icon-labeled fact cards; replaces dense bullet-list
+  // "here's everything you need to know" prose with scannable, low-text-density tiles.
+  z.object({ type: z.literal("infogrid"), group: z.string(), title: z.string().optional(), note: z.string().optional(),
+    cards: z.array(z.object({
+      icon:  z.string().optional(),   // single emoji/glyph, e.g. "🎟️"
+      label: z.string(),              // short heading, e.g. "9 free raid passes/day"
+      body:  z.string().optional(),   // one short clause of detail (inline HTML ok: <b>, <a>)
+    })).min(1), ...collapse }),
+  // tierlist — ranked chip groups (S/A/B priority tiers, or "skip vs fresh" divergence
+  // groups); replaces paragraph-of-prose priority rankings with scannable chip rows.
+  z.object({ type: z.literal("tierlist"), group: z.string(), title: z.string().optional(), note: z.string().optional(),
+    tiers: z.array(z.object({
+      tier:  z.string(),                       // group label, e.g. "S — do these no matter what"
+      icon:  z.string().optional(),            // single emoji/glyph shown before the label
+      chips: z.array(z.string()).min(1),       // short pick names; prefix "✨" inline for shiny-eligible
+      hot:   z.array(z.string()).optional(),   // chip text(s) to render highlighted/must-do
+      body:  z.string().optional(),            // optional 1–2 line elaboration (inline HTML ok)
+    })).min(1), ...collapse }),
   // raids — structured raid boss counter tables; replaces hand-written HTML in prose bodies.
   // Each boss renders as a collapsible <details> card with a typed counter table.
   // `strategy` may contain simple inline HTML (<b>, <a>); no block elements.
-  z.object({ type: z.literal("raids"),  group: z.string(), title: z.string().optional(),
+  z.object({ type: z.literal("raids"),  group: z.string(), title: z.string().optional(), ...collapse,
     bosses: z.array(z.object({
       name:        z.string(),
       tier:        z.enum(["3-star", "5-star", "primal", "shadow", "super-mega"]),
