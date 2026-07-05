@@ -163,6 +163,31 @@ async function main() {
   const guidePath = path.join(GUIDES_DIR, `${slug}.json`);
   await writeFile(guidePath, JSON.stringify(guide, null, 2) + "\n");
   console.log(`[generate-guide] wrote ${path.relative(ROOT, guidePath)} (slug: ${slug})`);
+
+  printResearchHandoff(slug, path.relative(ROOT, guidePath).replace(/\\/g, "/"));
+}
+
+// A Groq draft is an UNVERIFIED grounded first draft — the intended next step is a Claude
+// research pass to source/verify it against primary sources (the repo's existing
+// research-guide.md discipline), toward denmark.json/korea.json quality. This prints a
+// ready-to-run local Claude Code command that kicks that off against the new draft.
+function printResearchHandoff(slug: string, relPath: string) {
+  const kickoff =
+    `Run a research pass on ${relPath} following .github/prompts/research-guide.md exactly. ` +
+    `It's an unverified Groq/Wikivoyage draft — verify every perishable fact against primary (T0) sources, ` +
+    `fill gaps, apply the ≈/⚠ flags, and keep draft:true.`;
+  const bar = "─".repeat(70);
+  console.log([
+    "", bar,
+    "NEXT STEP — Claude research pass (local Claude Code)",
+    "This is an UNVERIFIED Groq draft. Run the research pass to source, verify,",
+    "and deepen it toward denmark.json / korea.json quality:",
+    "",
+    `  claude "${kickoff}"`,
+    "",
+    `Or, in an existing Claude Code session: "research pass on ${slug} per .github/prompts/research-guide.md".`,
+    bar,
+  ].join("\n"));
 }
 
 main().catch((err) => {
