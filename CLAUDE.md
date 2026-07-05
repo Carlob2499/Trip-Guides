@@ -42,22 +42,14 @@ and either verify it or personalize it.
 
 ## Building a New Guide — Order of Operations
 
-A new guide is NEVER started by writing content. The sequence is fixed:
-
-1. **Intake first.** Complete docs/NEW_GUIDE_INTAKE.md with the traveler. No
-   research begins until priorities are ranked and dates are set.
-2. **Spec from intake.** Derive which section types the guide needs from
-   the priority ranking. Nightlife ranked last → no nightlife section.
-3. **Research per the spec.** Verify every fact against a primary source
-   (all global accuracy rules — the numbered set in `~/.claude/CLAUDE.md`).
-   Depth on the top 2–3 priorities; light touch on the rest. Gather only
-   what the priorities call for.
-4. **Write with sources attached.** Every perishable fact carries its
-   source and verification date as written, not bolted on after.
-5. **Run the autogeneration test** on the finished draft. Anything
-   generic or unverified is cut or fixed.
-6. **Save the intake doc with the guide** so future updates know the
-   original priorities and who the guide was for.
+A new guide is NEVER started by writing content. Fixed sequence: **(1)** intake
+first (`docs/NEW_GUIDE_INTAKE.md` — priorities ranked, dates set), **(2)** spec
+the section types from the ranking, **(3)** research per spec (primary sources;
+depth on the top 2–3 priorities, light touch on the rest), **(4)** write with
+each perishable fact's source + verification date attached, **(5)** run the
+autogeneration test, **(6)** save the intake doc beside the guide. The
+`waypoint-guide-author` skill carries the operational detail (source tiers,
+verification ledger, helper scripts, done gate) and drives this flow.
 
 ---
 
@@ -101,33 +93,16 @@ There should be zero reason for the user to find a leftover from a prior pass.
 
 ## Content Standards (enforced on every guide)
 
-### Every restaurant/venue entry answers four questions
-1. **Where?** Exact address (local + romanized where relevant).
-2. **How do I get there from base?** Transit route + approximate time.
-3. **When in the trip does it fit?** Best day, and why.
-4. **Do I need to book?** Walk-in / reserve online / call ahead.
-
-### Price and confidence flags
-- `≈` — found the official source; figure is approximately this. Verify
-  before paying.
-- `⚠` — hours or details could not be confirmed online. Check before
-  going.
-- A missing price is honest. A guessed price wearing a `≈` is not.
-
-### Verification stamps
-Each guide carries a guide-level "Checked [date]" stamp. Individual
-sections with faster-aging facts (restaurant hours, event rosters) should
-carry their own per-section verified date where practical.
-
-### Photo validation
-Every `img.file` in a `sights` section must be an exact Wikimedia Commons
-`File:` page filename. Confirm the page exists before adding. If unsure,
-omit — never guess.
-
-### Prose body tag allowlist
-`<p> <b> <i> <a> <ul> <li> <ol>` — the complete set. Any other HTML in a
-prose body (`<details>`, `<table>`, `<figure>`, `<br/>` as layout) is a
-signal to add a typed section instead.
+The operational guide-content standards — the 4-question venue rule (where /
+how to get there / when it fits / book?), the `≈` (sourced-approximate) and `⚠`
+(unconfirmed — check before going) flags, the guide-level + per-section
+"Checked [date]" stamps, Wikimedia Commons `File:` photo validation, and the
+prose tag allowlist (`<p> <b> <i> <a> <ul> <li> <ol>`; anything richer means a
+typed section) — are defined and enforced by the **`waypoint-guide-author`
+skill** (`references/verification-rules.md` + `references/block-types.md`),
+which loads when you touch guide content. That skill is the single operational
+home for these rules, so this always-loaded file names the principle without
+repeating the detail on every inquiry.
 
 ---
 
@@ -173,7 +148,7 @@ signal to add a typed section instead.
 - **Don't re-Read CLAUDE.md files.** Both this file and `~/.claude/CLAUDE.md`
   auto-load into context at session start — a Read tool call on either is
   always wasted. This includes prompts/docs that instruct a fresh session
-  to "read CLAUDE.md first" (e.g. `.github/prompts/research-guide.md`,
+  to "read CLAUDE.md first" (e.g. the `waypoint-guide-author` skill,
   `docs/ROADMAP.md`'s Session Opener) — phrase those as "already loaded,
   don't re-Read" instead. When spawning multiple subagents in one pass,
   don't have each independently re-derive this same context either — pass
