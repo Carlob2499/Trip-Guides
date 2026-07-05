@@ -62,7 +62,10 @@ const { storeKey } = Astro.props;
     <!-- Add-expense box — visually boxed off (background + border) so it can
          never be mistaken for a blank/broken row in the list below it. -->
     <div class="se-new-card" id="sNewCard">
-      <span class="sc-label">Add expense</span>
+      <div class="se-new-head">
+        <span class="sc-label">Add expense</span>
+        <button class="sc-add-expense-btn" id="sAddExpense" type="button">+ Add expense</button>
+      </div>
       <div class="se-new-row">
         <select class="split-in se-payer" id="sNewPayer"></select>
         <input class="split-in se-desc" type="text" placeholder="What for?" id="sNewDesc" />
@@ -70,7 +73,6 @@ const { storeKey } = Astro.props;
           <input class="split-in se-amt" type="number" min="0" step="0.01" placeholder="0.00" id="sNewAmt" />
         </div>
       </div>
-      <button class="sc-add-expense-btn" id="sAddExpense" type="button">+ Add expense</button>
     </div>
 
     <div class="se-header">
@@ -509,6 +511,14 @@ const { storeKey } = Astro.props;
       save(); renderExpenses(); renderResults();
       newDescEl.value = ""; newAmtEl.value = "";
       newDescEl.focus();
+    });
+    // Enter anywhere in the entry row commits it — the button now sits at the top
+    // of the box, so keyboard users never need to reach for it.
+    [newPayerEl, newDescEl, newAmtEl].forEach(function (el) {
+      if (!el) return;
+      el.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") { e.preventDefault(); addExpense.click(); }
+      });
     });
   }
 

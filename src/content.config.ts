@@ -91,6 +91,20 @@ const section = z.discriminatedUnion("type", [
       split_type: z.enum(["equal", "individual", "group"]).optional(),   // TripSplit hydration filter
       payment_preference: z.enum(["Cash Only", "Contactless", "Credit Card"]).optional(),
     })) }),
+  // habitats — GO Fest habitat rotation as a responsive card grid; replaces the dense
+  // comma-lists that used to live in prose. Each window renders as one card (day + time +
+  // type theme + spawn/raid chips + priority targets), so the data segments cleanly and
+  // reflows from a multi-column grid on desktop to a single column on mobile.
+  z.object({ type: z.literal("habitats"), group: z.string(), title: z.string().optional(), note: z.string().optional(),
+    windows: z.array(z.object({
+      day:     z.string(),                        // "Sat Jul 11"
+      time:    z.string(),                        // "10:00–13:00"
+      name:    z.string(),                        // "Stormfire Peaks"
+      types:   z.array(z.string()).optional(),    // type theme chips, e.g. ["Ice","Electric","Fire"]
+      raids:   z.array(z.string()).optional(),    // 5★ / Mega bosses in the window (chips)
+      targets: z.array(z.string()).optional(),    // priority pick chips (highlighted)
+      mega:    z.string().optional(),             // all-window Super Mega note
+    })).min(1) }),
   // raids — structured raid boss counter tables; replaces hand-written HTML in prose bodies.
   // Each boss renders as a collapsible <details> card with a typed counter table.
   // `strategy` may contain simple inline HTML (<b>, <a>); no block elements.

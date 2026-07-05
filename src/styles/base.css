@@ -17,6 +17,11 @@
 *{margin:0;padding:0;box-sizing:border-box}
 [hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%;overflow-x:clip;max-width:100%}
+/* Kill the default gray/blue tap-flash on every touch device (the single biggest
+   "this is a website, not an app" tell) and use our own 1px :active press cue
+   instead. touch-action:manipulation removes the ~300ms tap delay some mobile
+   browsers still apply and stops accidental double-tap-zoom on controls. */
+a,button,[role="button"],input,select,summary{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 body{background:var(--bg);color:var(--ink);font-family:'DM Sans',-apple-system,system-ui,sans-serif;font-size:1.04rem;line-height:1.7;-webkit-font-smoothing:antialiased}
 /* Fine paper-grain noise overlay — fixed, non-interactive, behind everything. */
 body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}

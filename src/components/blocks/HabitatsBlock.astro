@@ -1,0 +1,42 @@
+---
+// Renders a `habitats` section: the GO Fest habitat rotation as a responsive card
+// grid. Each window is one card (day + time + type theme + spawn/raid chips + priority
+// targets). Data lives in the JSON `windows` array — no hand-maintained HTML. The grid
+// reflows from multi-column on desktop to a single column on mobile via CSS.
+const { sec } = Astro.props;
+const windows: any[] = sec.windows || [];
+---
+{sec.note && <p class="hab-note" set:html={sec.note} />}
+<div class="hab-grid">
+  {windows.map((w: any) => (
+    <div class="hab-card">
+      <div class="hab-head">
+        <span class="hab-day">{w.day}</span>
+        <span class="hab-time">{w.time}</span>
+      </div>
+      <h4 class="hab-name">{w.name}</h4>
+      {w.types && w.types.length > 0 && (
+        <div class="hab-types">
+          {w.types.map((t: string) => <span class="hab-type">{t}</span>)}
+        </div>
+      )}
+      {w.targets && w.targets.length > 0 && (
+        <div class="hab-row">
+          <span class="hab-label">Priority</span>
+          <div class="hab-chips">
+            {w.targets.map((t: string) => <span class="hab-chip hab-chip-hot">{t}</span>)}
+          </div>
+        </div>
+      )}
+      {w.raids && w.raids.length > 0 && (
+        <div class="hab-row">
+          <span class="hab-label">Raids</span>
+          <div class="hab-chips">
+            {w.raids.map((r: string) => <span class="hab-chip">{r}</span>)}
+          </div>
+        </div>
+      )}
+      {w.mega && <p class="hab-mega">{w.mega}</p>}
+    </div>
+  ))}
+</div>

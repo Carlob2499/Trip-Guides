@@ -14,6 +14,7 @@ import BudgetBlock from "./blocks/BudgetBlock.astro";
 import DaysBlock   from "./blocks/DaysBlock.astro";
 import SightsBlock from "./blocks/SightsBlock.astro";
 import RaidBlock   from "./blocks/RaidBlock.astro";
+import HabitatsBlock from "./blocks/HabitatsBlock.astro";
 import WeatherBlock from "./blocks/WeatherBlock.astro";
 import HolidaysBlock from "./blocks/HolidaysBlock.astro";
 
@@ -30,7 +31,7 @@ const titleText = solo ? "" : (sec.title || "");
 
 // Types that render their content inside a shared .card wrapper.
 // days and sights render their own per-item .card elements instead.
-const carded = ["panel", "prose", "list", "routes", "map", "budget", "raids"].includes(sec.type);
+const carded = ["panel", "prose", "list", "routes", "map", "budget", "raids", "habitats"].includes(sec.type);
 ---
 <section class="block" id={sid} data-cat={ci}>
   {carded ? (
@@ -49,6 +50,7 @@ const carded = ["panel", "prose", "list", "routes", "map", "budget", "raids"].in
       {sec.type === "map"    && <MapBlock    sec={sec} />}
       {sec.type === "budget" && <BudgetBlock sec={sec} />}
       {sec.type === "raids"  && <RaidBlock   sec={sec} />}
+      {sec.type === "habitats" && <HabitatsBlock sec={sec} />}
     </div>
   ) : sec.type === "weather" ? (
     // Weather renders its own title INSIDE the hidden wrapper, so a failed fetch

@@ -444,6 +444,26 @@ details table{margin:.3rem 0 .4rem}
 .raid-tier-label{font-family:'Space Grotesk',sans-serif;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:.9rem 0 .25rem;padding:.18rem 0 .18rem .1rem;border-bottom:1px solid var(--rule2)}
 .raid-sources{margin:.8rem 0 .1rem;font-size:.78rem;color:var(--muted)}
 
+/* === HABITATS (GO Fest rotation card grid) ================================== */
+/* Responsive grid: multi-column on desktop, single column on mobile. minmax()
+   floor keeps chips readable; auto-fill packs as many columns as fit the width. */
+.hab-note{font-size:.88rem;color:var(--muted);margin:.1rem 0 .8rem;line-height:1.5}
+.hab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.9rem;margin:.2rem 0 .3rem}
+.hab-card{background:var(--bg2);border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:7px;padding:.85rem .95rem;min-width:0}
+.hab-head{display:flex;align-items:baseline;justify-content:space-between;gap:.5rem}
+.hab-day{font-family:'Space Grotesk',sans-serif;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+.hab-time{font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.hab-name{margin:.2rem 0 .5rem;font-size:1.02rem;line-height:1.2}
+.hab-types{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.6rem}
+.hab-type{font-family:'Space Grotesk',sans-serif;font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);background:color-mix(in srgb,var(--accent) 8%,var(--card));border:1px solid var(--rule2);border-radius:4px;padding:.12rem .4rem}
+.hab-row{display:grid;grid-template-columns:4.2rem 1fr;gap:.4rem;align-items:start;margin-top:.4rem}
+.hab-label{font-family:'Space Grotesk',sans-serif;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding-top:.18rem}
+.hab-chips{display:flex;flex-wrap:wrap;gap:.28rem;min-width:0}
+.hab-chip{font-size:.75rem;line-height:1.35;background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:.1rem .38rem;color:var(--ink,inherit)}
+.hab-chip-hot{background:color-mix(in srgb,var(--accent) 14%,var(--card));border-color:color-mix(in srgb,var(--accent) 40%,var(--rule2));font-weight:600}
+.hab-mega{margin:.55rem 0 0;font-size:.78rem;color:var(--muted);line-height:1.4;border-top:1px dashed var(--rule2);padding-top:.4rem}
+@media(max-width:420px){.hab-row{grid-template-columns:1fr;gap:.15rem}.hab-label{padding-top:0}}
+
 /* === PRINT / SAVE AS PDF ===================================================== */
 /*
   Triggered by the browser's own print/Save-as-PDF (Ctrl+P / share-sheet print).
@@ -547,12 +567,22 @@ details table{margin:.3rem 0 .4rem}
 .scm-btn{font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.04em;background:none;border:1px solid var(--rule2);border-radius:4px;padding:.26rem .6rem;cursor:pointer;color:var(--muted);transition:background .13s,color .13s,border-color .13s;white-space:nowrap}
 .scm-btn.scm-active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 /* expense header row */
-.se-header{display:grid;grid-template-columns:7rem 1fr 5.5rem;gap:.4rem;padding:.1rem 0 .4rem;border-bottom:1px solid var(--rule);margin-bottom:.3rem}
+/* Header shares the committed-row grid (.se-main: drag | payer | desc | amount | del)
+   so the labels sit over their columns; the 3 labels are placed in cols 2–4. */
+.se-header{display:grid;grid-template-columns:1.3rem 7rem 1fr 5.5rem 1.6rem;gap:.4rem;padding:.1rem 0 .4rem;border-bottom:1px solid var(--rule);margin-bottom:.3rem}
 .se-h-payer,.se-h-desc,.se-h-amt{font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.se-h-amt{text-align:right}
+.se-h-payer{grid-column:2}
+.se-h-desc{grid-column:3}
+.se-h-amt{grid-column:4;text-align:right}
 /* add-expense box — boxed off so it never reads as a stray row in the list below */
 .se-new-card{background:var(--bg2);border:1px solid var(--rule);border-radius:6px;padding:.75rem .8rem;margin-bottom:.9rem}
 .se-new-card .sc-label{display:block;margin-bottom:.5rem}
+/* Add-expense button lives in a header row at the TOP of the entry box (mirrors the
+   People card's "+ Add person"), so it's the first, always-in-place control — not
+   hunted for below the inputs when tallying many expenses in a row. */
+.se-new-head{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.55rem}
+.se-new-head .sc-label{margin-bottom:0}
+.se-new-head .sc-add-expense-btn{margin-bottom:0}
 .se-new-row{display:grid;grid-template-columns:7rem 1fr 5.5rem;gap:.4rem;align-items:center;margin-bottom:.55rem}
 /* expense rows */
 .se-row{margin-bottom:.35rem}
@@ -563,6 +593,10 @@ details table{margin:.3rem 0 .4rem}
 .se-amt-wrap{display:flex;align-items:center;gap:.2rem;min-width:0}
 .se-cur{font-family:'Space Mono',monospace;font-size:.78rem;color:var(--muted);flex:none}
 .se-amt{text-align:right}
+/* Strip the native number-input spinners (Chrome/Safari show them, Firefox varies)
+   so amount fields read consistently across browsers — same treatment as .bactual. */
+.se-amt,.se-ca{appearance:textfield;-moz-appearance:textfield}
+.se-amt::-webkit-inner-spin-button,.se-amt::-webkit-outer-spin-button,.se-ca::-webkit-inner-spin-button,.se-ca::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 /* custom split */
 .se-custom{display:flex;flex-wrap:wrap;gap:.4rem .6rem;margin-top:.4rem;padding:.55rem .6rem;background:var(--bg2);border-radius:5px;border-left:3px solid var(--rule2)}
 .se-custom--warn{border-left-color:var(--accent)}
@@ -611,9 +645,28 @@ details table{margin:.3rem 0 .4rem}
 
 /* mobile tweaks */
 @media(max-width:599px){
+  /* Touch-target expander: several controls stay visually compact (delete ×,
+     mode pills, tabs) but their tap area was measured well under the ~44px
+     Apple HIG / Material minimum, causing mis-taps on real phones. An invisible
+     ::after halo grows the hit region without changing layout width/height —
+     so grids and row density are untouched. Tabs/pills get a vertical-only
+     halo (horizontal would overlap the next tab and cause the wrong one to fire). */
+  .split-del,.anchor-btn,.map-fs-btn,.copy-addr{position:relative}
+  .split-del::after,.anchor-btn::after,.map-fs-btn::after,.copy-addr::after{content:"";position:absolute;inset:-11px}
+  .gtab,.scm-btn,.vo-btn{position:relative}
+  .gtab::after,.scm-btn::after,.vo-btn::after{content:"";position:absolute;top:-9px;bottom:-9px;left:0;right:0}
+  .sc-add-btn,.sc-add-expense-btn{position:relative}
+  .sc-add-btn::after,.sc-add-expense-btn::after{content:"";position:absolute;top:-8px;bottom:-8px;left:-4px;right:-4px}
+
   .sm-row{grid-template-columns:1.4rem 1fr 1.6rem;grid-template-rows:auto auto}
   .sm-pay{grid-column:2}
-  .se-header{grid-template-columns:5.5rem 1fr 4.5rem}
+  /* Drag-to-reorder is desktop-pointer-only (HTML5 DnD, no touch equivalent), so on
+     mobile drop the handle and its column — reclaims width so rows never overflow. */
+  .se-drag{display:none}
+  .se-main{grid-template-columns:5.5rem 1fr 4.5rem 1.6rem}
+  .se-header{grid-template-columns:5.5rem 1fr 4.5rem 1.6rem}
+  .se-h-payer{grid-column:1}
+  .se-h-desc{grid-column:2}
+  .se-h-amt{grid-column:3}
   .se-new-row{grid-template-columns:5.5rem 1fr 4.5rem}
-  .se-main{grid-template-columns:1.3rem 5.5rem 1fr 4.5rem 1.6rem}
 }

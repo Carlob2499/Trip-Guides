@@ -61,6 +61,44 @@ A new guide is NEVER started by writing content. The sequence is fixed:
 
 ---
 
+## Editing an Existing Guide — Continuity Is Mandatory
+
+A guide is one interconnected system, not a list of independent lines. When
+you change ANY fact, that change almost always ripples into other lines the
+prompt did not name — and leaving those stale breaks the guide's internal
+consistency (global accuracy rule #7) and its **Honest** property. This is a
+hard requirement, not a nicety. The failure mode to prevent: the user having
+to catch a contradiction you left behind.
+
+**After every change, before you call it done, run the continuity sweep:**
+
+1. **Grep the whole guide for every touchpoint of the changed fact.** Not just
+   the section you edited. Examples of what ripples:
+   - **Party size / who-does-what** → ticket counts, cost splits (`÷2`/`÷3`,
+     "each"), "2 of you" / "third person" / "solo" framing, per-person budgets.
+   - **Transport mode** → the arrival day, the departure day, the transit-routes
+     section, the budget line, any "options compared" prose, and reusable
+     recommendations — all at once.
+   - **A day's plan / route** → pre-flight panels, booking checklists, budget
+     lines, and any prose that references that day's original shape.
+   - **Dates** → holiday/weather windows, "day N" labels, verification stamps.
+2. **Grep for the specific stale phrasings** the change creates (e.g. after a
+   2→3 party change: `split two`, `÷2`, `2 of you`, `2 tickets`, `third person
+   stays`). Read each hit — some are still correct (a genuinely 2-person fact),
+   most are not.
+3. **Fix everything clearly in scope** (the numbers, splits, framing that MUST
+   change to stay consistent). Do not report-and-wait on these.
+4. **When a change forks the plan** — i.e. it opens a real decision the user
+   hasn't made (which of two routings, whether to restructure a day) — **stop,
+   alert the user to exactly what it affects, and ask** before propagating.
+   Silently guessing and silently ignoring are both wrong.
+5. **Verify in built output** where relevant: `npm run build`, then grep
+   compiled `dist/` HTML to confirm no stale string survived.
+
+There should be zero reason for the user to find a leftover from a prior pass.
+
+---
+
 ## Content Standards (enforced on every guide)
 
 ### Every restaurant/venue entry answers four questions

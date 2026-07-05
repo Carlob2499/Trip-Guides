@@ -165,6 +165,14 @@ const daysForBanner     = _cfg.daysForBanner || [];
           var darkBtn = document.getElementById("btnDark");
           function syncDarkUI() {
             var dark = document.documentElement.getAttribute("data-theme") === "dark";
+            // Keep the PWA / browser-chrome tint (address bar, iOS status bar) in sync
+            // with the real theme. Reading computed --bg covers the manual toggle AND
+            // the OS-preference auto-dark path, so it can never drift from the page.
+            var tc = document.querySelector('meta[name="theme-color"]');
+            if (tc) {
+              var bg = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
+              if (bg) tc.setAttribute("content", bg);
+            }
             if (!darkBtn) return;
             darkBtn.textContent = dark ? "☀" : "◑";
             darkBtn.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");

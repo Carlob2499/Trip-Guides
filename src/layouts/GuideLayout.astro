@@ -438,7 +438,7 @@ const tripSummary = buildSummary(guide);
            6. Jet-lag calculator
          ═══════════════════════════════════════════════════════════════════ -->
     <!-- Config for the extracted guide UI module (formerly Astro define:vars). -->
-    <script type="application/json" id="tgConfig" set:html={JSON.stringify({ order, storeKey, mapCenter, firstDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, daysForBanner })}></script>
+    <script type="application/json" id="tgConfig" set:html={JSON.stringify({ order, storeKey, mapCenter, firstDayDate, lastDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, daysForBanner })}></script>
     <!-- Interactive UI — bundled + hashed by Astro into one module shared across guides. -->
     <script>
       import "../scripts/guide-ui.js";
