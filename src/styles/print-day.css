@@ -22,5 +22,8 @@
   body[data-print-day] .catblock.print-keep{display:block!important}
   body[data-print-day] .print-keep > *:not(.print-keep):not(.print-day){display:none!important}
   body[data-print-day] .day.print-day{display:block!important;border:none;page-break-inside:avoid}
+  /* Full day pack: one sheet per day. */
+  body[data-print-pack] .day.print-day{break-after:page}
+  body[data-print-pack] .day.print-day:last-child{break-after:auto}
   body[data-print-day] .day.print-day .d{font-size:1.1rem;font-weight:700}
 }

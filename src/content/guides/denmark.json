@@ -259,6 +259,7 @@
       "items": [
         {
           "date": "Mon Jun 8",
+          "tldr": "Land, check in at CABINN, easy harbour-bus loop to Nyhavn.",
           "title": "First steps in Copenhagen",
           "pace": "Arrival half-day · airport → hotel ~20 min · easy harbour-bus loop ~1–2 hr",
           "waypoints": [
@@ -278,6 +279,7 @@
         },
         {
           "date": "Tue Jun 9",
+          "tldr": "Kastellet ramparts and the Little Mermaid, lunch at Reffen.",
           "title": "Fortresses, mermaids & the best street food market in Scandinavia",
           "pace": "~5–6 hr out · Kastellet + Little Mermaid ~1 hr · harbour bus to Reffen ~20 min · Reffen ~1.5–2 hr",
           "waypoints": [
@@ -295,6 +297,7 @@
         },
         {
           "date": "Wed Jun 10",
+          "tldr": "Over the bridge — a Malmö half-day.",
           "title": "Across the bridge — a half-day in Sweden",
           "pace": "Full day · train ~35 min each way · Gamla Staden + Turning Torso ~4–5 hr",
           "note": "You need your passport — there are ID checks on the Øresund bridge crossing. No exceptions.",
@@ -308,6 +311,7 @@
         },
         {
           "date": "Thu Jun 11",
+          "tldr": "Two crews: CopenHill, the LEGO flagship, and a guided canal cruise.",
           "title": "Two crews, two cities — a rooftop ski slope, the world's most famous brick store & a guided cruise",
           "pace": "Full day · two separate plans · meet up for dinner · see 'Day routes' for step-by-step paths",
           "note": "The LEGO Stamp Rally doesn't open until Friday — Thursday is a pure city day for the GO Fest group. ⚠️ Grundtvig's Church closes at 15:45; plan to arrive by 15:15 at the latest.",
@@ -323,6 +327,7 @@
         },
         {
           "date": "Fri Jun 12",
+          "tldr": "GO Fest park day one — the Stamp Rally begins.",
           "title": "The gates open — GO Fest park morning, the Stamp Rally begins",
           "pace": "Split groups all day · GO Fest group: park 9:00–13:00 then Stamp Rally · Mom's group: hop-on-hop-off bus day",
           "note": "The LEGO Stamp Rally opens today. LEGO Store Vimmelskaftet closes at 18:00 — go this afternoon, don't leave Stamp Rally entirely to Saturday.",
@@ -340,6 +345,7 @@
         },
         {
           "date": "Sat Jun 13",
+          "tldr": "Last stamps across the city, then the best dinner of the trip.",
           "title": "Last stamps, full city — then the best dinner of the trip",
           "pace": "Split groups AM/PM · GO Fest group: hard stop 16:30 · all five at Vækst 17:30",
           "note": "Stamp Rally wraps up today — you need 5 total across both LEGO stores; you started yesterday, so you may only need a few more. Everyone at Vækst at 17:30 no matter what.",
@@ -356,6 +362,7 @@
         },
         {
           "date": "Sun Jun 14",
+          "tldr": "Last morning ashore — overnight ferry to Oslo.",
           "title": "Last morning ashore — then overnight to Oslo",
           "pace": "Morning free · Torvehallerne ~1 hr · terminal check-in by 16:15, sailing 16:30",
           "note": "Don't cut the boarding window fine with luggage. The check-in deadline is 16:15.",
@@ -369,6 +376,7 @@
         },
         {
           "date": "Mon Jun 15",
+          "tldr": "Oslo in a day — ski jump, Viking waterfront, sculpture park.",
           "title": "Oslo in a day — ski jumps, Viking waterfronts & 200 sculptures in a park",
           "pace": "~5.5 hr ashore · dock ~10:00 · bus tour 10:25–13:00 · free until ~15:20 · reboard by 15:30",
           "note": "Mathallen food hall is closed on Mondays. Aker Brygge waterfront has excellent food alternatives right by the ship. Hard Rock Cafe Oslo (Karl Johans gate 45) is open noon–22:00 on Mondays.",
@@ -383,6 +391,7 @@
         },
         {
           "date": "Tue Jun 16",
+          "tldr": "Ferry back, one last coffee, catch the flight.",
           "title": "Ferry home, one last coffee, catch the flight",
           "pace": "Tight connection · dock ~10:00 → taxi ~20 min → CPH for 14:20",
           "note": "Go straight to the airport. This is not a day for one more detour.",

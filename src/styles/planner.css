@@ -43,6 +43,9 @@
 }
 @keyframes stopIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
 
+/* ── Day TL;DR — the one-line glance summary ──────────────────────────────── */
+.day-tldr{margin:.2rem 0 .5rem;font-family:var(--font-display);font-weight:640;font-size:1.02rem;line-height:1.4;letter-spacing:-.01em;color:var(--accent)}
+
 /* ── Now-line: live stop states on today's card (now-line.js) ─────────────── */
 .stop-past{opacity:.5}
 .stop-past .stop-num{color:var(--muted)}

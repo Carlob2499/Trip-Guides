@@ -433,6 +433,7 @@
       "items": [
         {
           "date": "Wed Jul 8",
+          "tldr": "Overnight flight to Seoul — follow the jet-lag protocol on board.",
           "title": "Flight — depart Newark (EWR) at ≈01:00 EDT",
           "pace": "Travel day · depart EWR ≈01:00 EDT · ~15 hrs in the air · land ICN Terminal 1 ≈04:55 KST Jul 9",
           "waypoints": [
@@ -452,6 +453,7 @@
         },
         {
           "date": "Thu Jul 9",
+          "tldr": "Land, drop bags in Hongdae, stay awake in daylight, jimjilbang, bed by 22:30.",
           "title": "Arrive Seoul — light, bathhouse, early night",
           "pace": "Arrival day · ICN T1 → Hongik Univ. via Airport Limousine 6002 ~60–70 min · outdoor light by 09:00 · jimjilbang 17:00–21:00 · bed by 22:30",
           "waypoints": [
@@ -476,6 +478,7 @@
         },
         {
           "date": "Fri Jul 10",
+          "tldr": "Palaces and old Seoul by day; Road of Legends raid night in Hongdae.",
           "title": "Palaces & old Seoul",
           "pace": "Full day · Gyeongbokgung ~2 hr · Bukchon ~1.5 hr · Insadong ~1.5 hr · lots of walking",
           "waypoints": [
@@ -500,6 +503,7 @@
         },
         {
           "date": "Sat Jul 11",
+          "tldr": "Morning KTX to Daejeon — GO Fest all day, MSI Lower Bracket Final at 17:00.",
           "title": "GO Fest Day 1 in Daejeon (all day) → MSI Lower Bracket Final",
           "pace": "All 3 in Daejeon · morning KTX ≈08:30 → GO Fest 10:00–16:30 EXPO Science Park · LBF 17:00 KST (2 of you inside the arena)",
           "waypoints": [
@@ -526,6 +530,7 @@
         },
         {
           "date": "Sun Jul 12",
+          "tldr": "GO Fest Day 2, Grand Final at 15:00 — second Daejeon night, no train to catch.",
           "title": "GO Fest Day 2 in Daejeon → MSI Grand Final",
           "pace": "GO Fest 10:00–19:00 Daejeon · Grand Final 15:00 KST · 2nd night in Daejeon (no train to catch)",
           "waypoints": [
@@ -547,6 +552,7 @@
         },
         {
           "date": "Mon Jul 13",
+          "tldr": "Slow Daejeon morning, Busan afternoon — markets, beach, milmyeon — home ~22:00.",
           "title": "Post-MSI: Daejeon → Busan day trip → back to Seoul",
           "pace": "Relaxed Daejeon morning · KTX to Busan ≈1 hr 25 min · Jagalchi → Gwangalli → KTX back · home by ~22:00",
           "waypoints": [
@@ -577,6 +583,7 @@
         },
         {
           "date": "Tue Jul 14",
+          "tldr": "Secret Garden at 10:30, central shopping loop, send-off dinner in Insadong.",
           "title": "The Secret Garden, the big shopping day & a send-off dinner",
           "pace": "Full day · Huwon (Secret Garden) 10:30 English tour ~90 min · central-Seoul shopping (Insadong · Gwanghwamun · Myeongdong) · Insadong send-off dinner · Hongdae night",
           "waypoints": [
@@ -599,6 +606,7 @@
         },
         {
           "date": "Wed Jul 15",
+          "tldr": "Slow Hongdae morning, bus 6002 ≈14:30, YP131 home at 21:30.",
           "title": "Easy departure — slow Hongdae morning → limousine bus home",
           "pace": "Deliberately light final morning · bags sorted early · Airport Limousine 6002 from Hongik Univ. ≈14:30 · 3+ hr airport buffer · flight YP131 21:30",
           "waypoints": [

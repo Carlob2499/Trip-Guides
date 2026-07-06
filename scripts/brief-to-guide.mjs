@@ -47,9 +47,9 @@ export function buildGuideFromBrief(brief, country, opts = {}) {
     ? `<p><b>${esc(currencyName)} (${esc(currencyCode)}).</b> ${esc(brief.currency.exchange_advice)}</p>`
     : `<p><b>${esc(currencyName)} (${esc(currencyCode)}).</b> ${esc(brief.currency.exchange_advice)} ` +
       `<i>⚠ Currency code/name not cross-checked against site data — country not in the curated list.</i></p>`;
-  sections.push({ type: "prose", group: "Money & budget", title: "Money & currency", body: currencyNote });
+  sections.push({ type: "prose", group: "Essentials", title: "Money & currency", body: currencyNote });
   sections.push({
-    type: "budget", group: "Money & budget", title: "Budget & daily costs",
+    type: "budget", group: "Essentials", title: "Budget & daily costs",
     intro: `Rough per-person estimates for a ${esc(brief.cost)} trip — replace the zeros with researched figures.`,
     currency: currencySym,
     items: [
@@ -62,7 +62,7 @@ export function buildGuideFromBrief(brief, country, opts = {}) {
   });
 
   // Etiquette & language
-  sections.push(P("Etiquette & language", "Etiquette & culture tips", { checklist: brief.culture_tips }));
+  sections.push(P("Essentials", "Etiquette & culture tips", { checklist: brief.culture_tips }));
 
   // Sights — must-do activities. Because we now enrich with a VERIFIED Commons photo and
   // real OSM coords, these become a real `sights` section (photo + map link) instead of a
@@ -102,7 +102,7 @@ export function buildGuideFromBrief(brief, country, opts = {}) {
     const body = "<p>" + brief.emergency_contacts
       .map((c) => `<b>${esc(c.service)}:</b> <a href='tel:${esc(c.number)}'><b>${esc(c.number)}</b></a>`)
       .join(". ") + ".</p>";
-    sections.push(P("Health & safety", "Emergency contacts", { body }));
+    sections.push(P("Essentials", "Emergency contacts", { body }));
   }
 
   // Getting around — orientation map, only when real capital coords exist

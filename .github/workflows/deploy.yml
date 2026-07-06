@@ -37,6 +37,8 @@ jobs:
         env:
           PUBLIC_GMAPS_KEY: ${{ secrets.PUBLIC_GMAPS_KEY }}
           PUBLIC_GMAPS_MAP_ID: ${{ secrets.PUBLIC_GMAPS_MAP_ID }}
+      # Performance budget — fail the deploy if bundles bloat past budget.
+      - run: node scripts/check-perf-budget.mjs
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist/

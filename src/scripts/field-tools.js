@@ -42,6 +42,7 @@
       '<div class="addr-card-inner">' +
       '<p class="addr-card-hint">Show this to the driver 기사님께 보여주세요</p>' +
       '<p class="addr-card-big"></p>' +
+      '<p class="addr-card-en"></p>' +
       '<div class="addr-card-row">' +
       '<button class="addr-card-copy" type="button">⧉ Copy for Naver / Kakao</button>' +
       '<button class="addr-card-x" type="button">Close</button></div></div>';
@@ -72,6 +73,10 @@
       buildAddrCard();
       addrLastFocus = document.activeElement;
       addrCard.querySelector(".addr-card-big").textContent = el.getAttribute("data-addr-kr");
+      // The span's visible text is the English form — show both scripts.
+      var en = (el.textContent || "").trim();
+      var enEl = addrCard.querySelector(".addr-card-en");
+      enEl.textContent = en && en !== el.getAttribute("data-addr-kr") ? en : "";
       addrCard.hidden = false;
       addrCard.querySelector(".addr-card-copy").focus();
     }
@@ -182,9 +187,14 @@
         var head = document.createElement("div");
         head.className = "focus-head";
         head.innerHTML = '<p class="focus-date"></p><h2 class="focus-title"></h2>' +
+          '<p class="focus-tldr"></p>' +
           '<button class="focus-x" type="button" aria-label="Close today view">✕</button>';
         head.querySelector(".focus-date").textContent = dateTxt;
         head.querySelector(".focus-title").textContent = title;
+        var tldrSrc = todayCard.querySelector(".day-tldr");
+        var tldrEl = head.querySelector(".focus-tldr");
+        if (tldrSrc) tldrEl.textContent = tldrSrc.textContent;
+        else tldrEl.remove();
         focusEl.appendChild(head);
         var list = document.createElement("ol");
         list.className = "focus-stops";
@@ -252,7 +262,93 @@
     chipEl.textContent = "◉ Today · " + chipDate;
     document.body.appendChild(chipEl);
     chipEl.addEventListener("click", openFocus);
+    // Hook for trip-pulse.js (arrival autopilot / weather banner deep-links).
+    document.addEventListener("tg:focus-today", openFocus);
   }
+
+  /* ── 4a-ii. Data-freshness chip + budget burn tile in the masthead ─────── */
+  (function () {
+    var stats = document.getElementById("guideStats");
+    if (!stats) return;
+    var cfgEl2 = document.getElementById("tgConfig");
+    var cfg2 = cfgEl2 ? JSON.parse(cfgEl2.textContent || "{}") : {};
+    // Freshness: surface the guide's own verification date (already in data).
+    if (cfg2.verifiedDate) {
+      var vf = document.createElement("span");
+      vf.className = "gstat";
+      vf.textContent = "✓ data checked " + cfg2.verifiedDate;
+      stats.appendChild(vf);
+    }
+    // Burn tile: total logged in the Budget calculator, tap to open it.
+    function renderBurn() {
+      try {
+        var s = JSON.parse(localStorage.getItem("tg-split-" + storeKey) || "null");
+        var total = (s && s.expenses || []).reduce(function (sum, ex) {
+          return sum + (parseFloat(ex.amount) || 0);
+        }, 0);
+        var el = document.getElementById("burnPill");
+        if (!total) { if (el) el.remove(); return; }
+        if (!el) {
+          el = document.createElement("button");
+          el.id = "burnPill";
+          el.type = "button";
+          el.className = "gstat gstat-burn";
+          el.addEventListener("click", function () {
+            var t = document.querySelector('.gtab[data-tab="split"]');
+            if (t) t.click();
+          });
+          stats.appendChild(el);
+        }
+        el.textContent = "$" + total.toLocaleString(undefined, { maximumFractionDigits: 0 }) + " logged →";
+      } catch (e) {}
+    }
+    renderBurn();
+    document.addEventListener("visibilitychange", renderBurn);
+    var tabsForBurn = document.getElementById("guideTabs");
+    if (tabsForBurn) tabsForBurn.addEventListener("click", function () { setTimeout(renderBurn, 300); });
+  })();
+
+  /* ── 2b. Progress share: checked stops travel in a link ────────────────── */
+  (function () {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get("stops")) {
+      try {
+        var incoming = JSON.parse(decodeURIComponent(escape(atob(params.get("stops")))));
+        if (incoming && typeof incoming === "object") {
+          Object.keys(incoming).forEach(function (k) {
+            if (/^\d+-\d+$/.test(k)) stopState[k] = 1;
+          });
+          try { localStorage.setItem(STOPS_KEY, JSON.stringify(stopState)); } catch (e) {}
+          // Re-mark ticked stops now that state merged.
+          document.querySelectorAll(".planner-days .day[data-day]").forEach(function (day) {
+            var di = day.getAttribute("data-day");
+            day.querySelectorAll(".stop").forEach(function (stop, si) {
+              if (stopState[di + "-" + si]) stop.classList.add("stop-done");
+            });
+          });
+        }
+      } catch (e) {}
+      params.delete("stops");
+      var qs = params.toString();
+      history.replaceState(null, "", window.location.pathname + (qs ? "?" + qs : "") + window.location.hash);
+    }
+    var modal = document.getElementById("shareModal");
+    if (modal && Object.keys(stopState).length + document.querySelectorAll(".stop").length > 0) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "share-summary-btn";
+      b.textContent = "↗ Share trip progress (checked stops)";
+      b.addEventListener("click", function () {
+        var url = window.location.origin + window.location.pathname +
+          "?stops=" + btoa(unescape(encodeURIComponent(JSON.stringify(stopState))));
+        (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(
+          function () { say("Progress link copied"); },
+          function () { window.prompt("Copy this link:", url); }
+        );
+      });
+      modal.appendChild(b);
+    }
+  })();
 
   /* ── 4b. Section position in the mobile bottom bar ("3/13") ────────────── */
   var bsCur = document.getElementById("curCat");

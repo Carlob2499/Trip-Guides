@@ -155,6 +155,9 @@ const daysForBanner = (daysSec?.items ?? []).map((d: any) => ({
 // `verified` is source metadata (freshness tracking for the maker/AI), not shown to
 // travelers — EXCEPT genuine ⚠ warnings (e.g. an unconfirmed draft), which stay visible.
 const verifiedWarning = guide.verified?.trimStart().startsWith("⚠") ? guide.verified : null;
+// Freshness date for the masthead chip — the ISO date inside the verified
+// stamp when present (surfaced, never invented; no date → no chip).
+const verifiedDate = guide.verified?.match(/\d{4}-\d{2}-\d{2}/)?.[0] ?? null;
 
 // Public holidays — if the guide has a `holidays` section, look up the build-time
 // data for this country + trip year and slice it around the trip dates. All
@@ -548,7 +551,7 @@ const tripSummary = buildSummary(guide);
            6. Jet-lag calculator
          ═══════════════════════════════════════════════════════════════════ -->
     <!-- Config for the extracted guide UI module (formerly Astro define:vars). -->
-    <script type="application/json" id="tgConfig" set:html={JSON.stringify({ order, storeKey, mapCenter, firstDayDate, lastDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, daysForBanner, gmapsKey: import.meta.env.PUBLIC_GMAPS_KEY ?? null, gmapsMapId: import.meta.env.PUBLIC_GMAPS_MAP_ID ?? null, emergency: EMERGENCY[guide.country] ?? null })}></script>
+    <script type="application/json" id="tgConfig" set:html={JSON.stringify({ order, storeKey, mapCenter, firstDayDate, lastDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, daysForBanner, gmapsKey: import.meta.env.PUBLIC_GMAPS_KEY ?? null, gmapsMapId: import.meta.env.PUBLIC_GMAPS_MAP_ID ?? null, emergency: EMERGENCY[guide.country] ?? null, verifiedDate })}></script>
     <!-- Interactive UI — bundled + hashed by Astro into one module shared across guides. -->
     <script>
       import "../scripts/guide-ui.js";
@@ -564,6 +567,8 @@ const tripSummary = buildSummary(guide);
       import "../scripts/offline-pill.js";
       import "../scripts/field-tools.js";
       import "../scripts/sos.js";
+      import "../scripts/trip-pulse.js";
+      import "../scripts/journal.js";
       import "../scripts/lightbox.js";
       import "../scripts/spine.js";
       import "../scripts/hero-parallax.js";

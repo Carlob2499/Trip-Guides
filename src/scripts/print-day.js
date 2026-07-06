@@ -41,4 +41,40 @@
     });
     body.appendChild(btn);
   });
+
+  /* Print the FULL day pack — every day as its own sheet (paper backup for a
+     dead phone). Reuses the single-day print rules by marking all days. */
+  var modal = document.getElementById("shareModal");
+  if (modal) {
+    var packBtn = document.createElement("button");
+    packBtn.type = "button";
+    packBtn.className = "share-summary-btn";
+    packBtn.textContent = "⎙ Print the full day pack (paper backup)";
+    packBtn.addEventListener("click", function () {
+      cleanup();
+      var node = null;
+      days.forEach(function (day) {
+        day.classList.add("print-day");
+        node = day.parentElement;
+        while (node && node !== document.body) {
+          node.classList.add("print-keep");
+          if (node.classList.contains("catblock")) break;
+          node = node.parentElement;
+        }
+      });
+      document.body.setAttribute("data-print-day", "pack");
+      document.body.setAttribute("data-print-pack", "");
+      window.print();
+      setTimeout(function () {
+        window.addEventListener("focus", function packClean() {
+          document.body.removeAttribute("data-print-pack");
+          cleanup();
+        }, { once: true });
+      }, 0);
+    });
+    window.addEventListener("afterprint", function () {
+      document.body.removeAttribute("data-print-pack");
+    });
+    modal.appendChild(packBtn);
+  }
 })();

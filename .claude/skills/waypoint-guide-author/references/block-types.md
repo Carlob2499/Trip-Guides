@@ -24,6 +24,12 @@ New guides start from: Plan · Essentials · Getting around · Itinerary ·
 Sights · Food & shopping · References, adding at most 3 trip-specific
 groups.
 
+**Day `tldr` (required on researched guides).** Every day item carries a
+one-sentence `tldr` — the glanceable summary rendered huge in Focus Today
+and as the day card's lead line. Derive it from the day's own researched
+content (title/pace/body); it may never introduce a fact the day doesn't
+already contain.
+
 **The governing rule:** prose bodies allow only `<p> <b> <i> <a> <ul> <li> <ol>`.
 The moment content wants a table, a grid, cards, collapsibles, or any richer
 structure, that is the signal to reach for a **typed section** below — never richer

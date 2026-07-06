@@ -78,6 +78,10 @@ const section = z.discriminatedUnion("type", [
     // "balanced" before this field existed. The toggle only dims days explicitly
     // tagged "packed".
     energy: z.enum(["packed", "balanced", "slow"]).default("balanced"),
+    // ADDITIVE: one-sentence glanceable day summary, derived from the day's own
+    // researched content (never new facts). Rendered huge in Focus Today and as
+    // the day card's lead line. Researched guides should always set it.
+    tldr: z.string().optional(),
     // ADDITIVE (Plan view): ordered stops for the day. Powers the day-synced
     // planner map (pins + route line per day), the day stop-list, and GPX export.
     // All optional — guides adopt incrementally; coords must come from a verified

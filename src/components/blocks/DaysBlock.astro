@@ -38,6 +38,7 @@ const two = (n: number) => String(n + 1).padStart(2, "0");
         <div class="d"><span class="day-num">{two(di)}</span>{d.date}</div>
         <div class="b">
           <strong>{d.title}</strong>
+          {d.tldr && <p class="day-tldr">{d.tldr}</p>}
           {d.checklist && d.checklist.length > 0 && (
             <span class="day-kitcount" hidden aria-live="polite"></span>
           )}
