@@ -1,0 +1,26 @@
+/* === PRINT DAY-SHEETS =======================================================
+   "Print this day" scopes the print output to one day card: when body carries
+   data-print-day, everything else is suppressed and the chosen day prints as
+   a clean single sheet (stops ladder, checklist, notes). Normal Ctrl+P without
+   the attribute keeps the existing full-guide print behavior. */
+
+.day-print-btn{display:inline-flex;align-items:center;gap:.3rem;margin:.4rem 0 0;padding:.3rem .7rem;font-family:var(--font-data);font-size:.7rem;font-weight:600;color:var(--muted);background:transparent;border:1px solid var(--rule);border-radius:999px;cursor:pointer}
+.day-print-btn:hover{color:var(--ink);border-color:var(--ink)}
+
+@media print{
+  .day-print-btn{display:none}
+  body[data-print-day] .sticky-chrome,
+  body[data-print-day] .masthead,
+  body[data-print-day] .botbar,
+  body[data-print-day] footer,
+  body[data-print-day] .day-scrub,
+  body[data-print-day] .planner-side,
+  body[data-print-day] .read-prog{display:none!important}
+  /* Hide every group, then re-open only the marked ancestor chain down to the
+     chosen day (JS adds .print-keep to each ancestor, .print-day to the day). */
+  body[data-print-day] .catblock{display:none!important}
+  body[data-print-day] .catblock.print-keep{display:block!important}
+  body[data-print-day] .print-keep > *:not(.print-keep):not(.print-day){display:none!important}
+  body[data-print-day] .day.print-day{display:block!important;border:none;page-break-inside:avoid}
+  body[data-print-day] .day.print-day .d{font-size:1.1rem;font-weight:700}
+}
