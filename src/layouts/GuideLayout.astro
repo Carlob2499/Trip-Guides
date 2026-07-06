@@ -4,6 +4,7 @@ import PwaHead from "../components/PwaHead.astro";
 import TripSplit from "../components/TripSplit.astro";
 import Voting from "../components/Voting.astro";
 import { bucket } from "../lib/buckets";
+import { EMERGENCY } from "../data/countries.mjs";
 import { accentFor, darken, currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
 import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
 import { collectWaypoints, collectDayEvents, buildSummary } from "../lib/exports";
@@ -294,6 +295,7 @@ const tripSummary = buildSummary(guide);
           Email
         </a>
       </div>
+      <p class="share-install">📲 <b>Save this guide to your phone:</b> open your browser menu and choose <i>Add to Home Screen</i> — it then works offline for the whole trip (maps and photos still need a connection).</p>
       {(hasWaypoints || hasDayEvents) && (
         <div class="share-downloads">
           <p class="share-dl-head">Take it with you</p>
@@ -546,7 +548,7 @@ const tripSummary = buildSummary(guide);
            6. Jet-lag calculator
          ═══════════════════════════════════════════════════════════════════ -->
     <!-- Config for the extracted guide UI module (formerly Astro define:vars). -->
-    <script type="application/json" id="tgConfig" set:html={JSON.stringify({ order, storeKey, mapCenter, firstDayDate, lastDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, daysForBanner, gmapsKey: import.meta.env.PUBLIC_GMAPS_KEY ?? null, gmapsMapId: import.meta.env.PUBLIC_GMAPS_MAP_ID ?? null })}></script>
+    <script type="application/json" id="tgConfig" set:html={JSON.stringify({ order, storeKey, mapCenter, firstDayDate, lastDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, daysForBanner, gmapsKey: import.meta.env.PUBLIC_GMAPS_KEY ?? null, gmapsMapId: import.meta.env.PUBLIC_GMAPS_MAP_ID ?? null, emergency: EMERGENCY[guide.country] ?? null })}></script>
     <!-- Interactive UI — bundled + hashed by Astro into one module shared across guides. -->
     <script>
       import "../scripts/guide-ui.js";
@@ -561,6 +563,7 @@ const tripSummary = buildSummary(guide);
       import "../scripts/now-line.js";
       import "../scripts/offline-pill.js";
       import "../scripts/field-tools.js";
+      import "../scripts/sos.js";
       import "../scripts/lightbox.js";
       import "../scripts/spine.js";
       import "../scripts/hero-parallax.js";

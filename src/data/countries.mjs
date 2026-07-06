@@ -26,6 +26,29 @@ export const FALLBACK_RATES = {
   KRW: 1535, DKK: 6.9, EUR: 0.93, JPY: 150,
 };
 
+// Verified emergency numbers — SOS sheet data. ONLY countries whose numbers
+// have been verified get an entry (KR corroborated by the korea guide's own
+// researched Health & safety section; DK/EU-wide 112 is statutory). A country
+// without an entry simply gets no SOS button — never guessed numbers.
+export const EMERGENCY = {
+  "South Korea": {
+    lines: [
+      { label: "Police", num: "112" },
+      { label: "Fire / Ambulance (free, say 'English please')", num: "119" },
+      { label: "Korea Travel Hotline — 24/7 English, interprets & connects", num: "1330" },
+      { label: "Medical line — locates the nearest ER", num: "1339" },
+    ],
+    note: "Your location is auto-detected on 119 calls. Full detail in Health & safety.",
+  },
+  "Denmark": {
+    lines: [
+      { label: "All emergencies (EU-wide)", num: "112" },
+      { label: "Police (non-urgent)", num: "114" },
+    ],
+    note: "112 works in Denmark, Sweden and Norway alike. Full detail in Health & safety.",
+  },
+};
+
 // Canonical rows, keyed by the exact `country` string used in guide JSON.
 export const COUNTRIES = {
   // ── Existing curated set (values preserved exactly from the old themes.ts) ──

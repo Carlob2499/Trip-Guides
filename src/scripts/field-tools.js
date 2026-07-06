@@ -26,22 +26,58 @@
     toastT = setTimeout(function () { toast.classList.remove("ft-toast-on"); }, 1800);
   }
 
-  /* ── 1. Tap-to-copy native addresses ───────────────────────────────────── */
-  document.querySelectorAll("[data-addr-kr]").forEach(function (el) {
-    el.classList.add("addr-copy");
-    el.setAttribute("role", "button");
-    el.setAttribute("tabindex", "0");
-    el.setAttribute("title", "Tap to copy the Korean address");
-    function copy() {
-      var addr = el.getAttribute("data-addr-kr");
+  /* ── 1. Native addresses → the show-the-driver card ────────────────────────
+     Tap opens a full-screen card with the address HUGE in native script —
+     made to be held up to a taxi driver — plus a copy button for map apps. */
+  var addrCard = null, addrLastFocus = null;
+  function buildAddrCard() {
+    if (addrCard) return;
+    addrCard = document.createElement("div");
+    addrCard.className = "addr-card";
+    addrCard.setAttribute("role", "dialog");
+    addrCard.setAttribute("aria-modal", "true");
+    addrCard.setAttribute("aria-label", "Address card");
+    addrCard.hidden = true;
+    addrCard.innerHTML =
+      '<div class="addr-card-inner">' +
+      '<p class="addr-card-hint">Show this to the driver 기사님께 보여주세요</p>' +
+      '<p class="addr-card-big"></p>' +
+      '<div class="addr-card-row">' +
+      '<button class="addr-card-copy" type="button">⧉ Copy for Naver / Kakao</button>' +
+      '<button class="addr-card-x" type="button">Close</button></div></div>';
+    document.body.appendChild(addrCard);
+    function closeCard() {
+      addrCard.hidden = true;
+      if (addrLastFocus && addrLastFocus.focus) addrLastFocus.focus();
+    }
+    addrCard.addEventListener("click", function (e) { if (e.target === addrCard) closeCard(); });
+    addrCard.querySelector(".addr-card-x").addEventListener("click", closeCard);
+    addrCard.querySelector(".addr-card-copy").addEventListener("click", function () {
+      var addr = addrCard.querySelector(".addr-card-big").textContent;
       (navigator.clipboard ? navigator.clipboard.writeText(addr) : Promise.reject()).then(
         function () { say("주소 복사됨 — address copied"); buzz(10); },
         function () { window.prompt("Copy this address:", addr); }
       );
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !addrCard.hidden) closeCard();
+    });
+  }
+  document.querySelectorAll("[data-addr-kr]").forEach(function (el) {
+    el.classList.add("addr-copy");
+    el.setAttribute("role", "button");
+    el.setAttribute("tabindex", "0");
+    el.setAttribute("title", "Tap for a show-the-driver address card");
+    function show() {
+      buildAddrCard();
+      addrLastFocus = document.activeElement;
+      addrCard.querySelector(".addr-card-big").textContent = el.getAttribute("data-addr-kr");
+      addrCard.hidden = false;
+      addrCard.querySelector(".addr-card-copy").focus();
     }
-    el.addEventListener("click", copy);
+    el.addEventListener("click", show);
     el.addEventListener("keydown", function (e) {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); copy(); }
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); show(); }
     });
   });
 
@@ -125,29 +161,116 @@
     });
   }
 
-  /* ── 4. Jump-to-today chip (during the trip only) ──────────────────────── */
+  /* ── 4. Focus Today — the on-the-street view ───────────────────────────────
+     During the trip, the floating Today chip opens a stripped full-screen
+     view of TODAY only: huge type, the stop ladder with times, tap-to-check
+     (perfectly synced — checking here clicks the real stop's checkbox), and
+     a link into the full plan. Built from the day-today card the page
+     already rendered; no second source of truth. */
   var todayCard = document.querySelector(".day-today");
-  var TK = "tg-today-chip-" + storeKey;
-  var dismissed = false;
-  try { dismissed = !!sessionStorage.getItem(TK); } catch (e) {}
-  if (todayCard && !dismissed) {
+  if (todayCard) {
+    var focusEl = null;
+    function openFocus() {
+      if (!focusEl) {
+        focusEl = document.createElement("div");
+        focusEl.className = "focus-today";
+        focusEl.setAttribute("role", "dialog");
+        focusEl.setAttribute("aria-modal", "true");
+        focusEl.setAttribute("aria-label", "Today at a glance");
+        var dateTxt = ((todayCard.querySelector(".d") || {}).textContent || "Today").replace(/^\s*\d+\s*/, "").trim();
+        var title = (todayCard.querySelector(".b strong") || {}).textContent || "";
+        var head = document.createElement("div");
+        head.className = "focus-head";
+        head.innerHTML = '<p class="focus-date"></p><h2 class="focus-title"></h2>' +
+          '<button class="focus-x" type="button" aria-label="Close today view">✕</button>';
+        head.querySelector(".focus-date").textContent = dateTxt;
+        head.querySelector(".focus-title").textContent = title;
+        focusEl.appendChild(head);
+        var list = document.createElement("ol");
+        list.className = "focus-stops";
+        var srcStops = todayCard.querySelectorAll(".stop");
+        srcStops.forEach(function (src, i) {
+          var li = document.createElement("li");
+          li.className = "focus-stop" + (src.classList.contains("stop-done") ? " focus-done" : "");
+          li.setAttribute("role", "checkbox");
+          li.setAttribute("tabindex", "0");
+          li.setAttribute("aria-checked", src.classList.contains("stop-done") ? "true" : "false");
+          li.innerHTML = '<span class="focus-time"></span><span class="focus-name"></span><span class="focus-note"></span>';
+          li.querySelector(".focus-time").textContent = (src.querySelector(".stop-time") || {}).textContent || "·";
+          li.querySelector(".focus-name").textContent = (src.querySelector(".stop-name") || {}).textContent || "";
+          li.querySelector(".focus-note").textContent = (src.querySelector(".stop-note") || {}).textContent || "";
+          function tick() {
+            var num = src.querySelector(".stop-num");
+            if (num) num.click(); // single source of truth — real stop toggles + persists
+            var on = src.classList.contains("stop-done");
+            li.classList.toggle("focus-done", on);
+            li.setAttribute("aria-checked", on ? "true" : "false");
+          }
+          li.addEventListener("click", tick);
+          li.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tick(); }
+          });
+          list.appendChild(li);
+        });
+        focusEl.appendChild(list);
+        var foot = document.createElement("button");
+        foot.type = "button";
+        foot.className = "focus-full";
+        foot.textContent = "Open the full plan →";
+        foot.addEventListener("click", function () {
+          closeFocus();
+          var cat = todayCard.closest(".catblock");
+          if (cat) {
+            var tab = document.querySelector('.gtab[data-tab="' + cat.getAttribute("data-ci") + '"]');
+            if (tab) tab.click();
+          }
+          setTimeout(function () {
+            window.scrollTo(0, todayCard.getBoundingClientRect().top + window.scrollY - 120);
+          }, 120);
+        });
+        focusEl.appendChild(foot);
+        document.body.appendChild(focusEl);
+        head.querySelector(".focus-x").addEventListener("click", closeFocus);
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && focusEl.classList.contains("focus-on")) closeFocus();
+        });
+      }
+      focusEl.classList.add("focus-on");
+      document.body.classList.add("sheet-lock");
+      focusEl.querySelector(".focus-x").focus();
+    }
+    function closeFocus() {
+      if (focusEl) focusEl.classList.remove("focus-on");
+      document.body.classList.remove("sheet-lock");
+      if (chipEl && document.body.contains(chipEl)) chipEl.focus();
+    }
+
     var chipEl = document.createElement("button");
     chipEl.type = "button";
     chipEl.className = "today-chip";
-    var dateTxt = (todayCard.querySelector(".d") || {}).textContent || "Today";
-    chipEl.innerHTML = "→ Today · " + dateTxt.replace(/^\s*\d+\s*/, "").trim();
+    var chipDate = ((todayCard.querySelector(".d") || {}).textContent || "Today").replace(/^\s*\d+\s*/, "").trim();
+    chipEl.textContent = "◉ Today · " + chipDate;
     document.body.appendChild(chipEl);
-    chipEl.addEventListener("click", function () {
-      var cat = todayCard.closest(".catblock");
-      if (cat) {
-        var tab = document.querySelector('.gtab[data-tab="' + cat.getAttribute("data-ci") + '"]');
-        if (tab) tab.click();
-      }
-      setTimeout(function () {
-        window.scrollTo(0, todayCard.getBoundingClientRect().top + window.scrollY - 120);
-      }, 120);
-      chipEl.remove();
-      try { sessionStorage.setItem(TK, "1"); } catch (e) {}
-    });
+    chipEl.addEventListener("click", openFocus);
+  }
+
+  /* ── 4b. Section position in the mobile bottom bar ("3/13") ────────────── */
+  var bsCur = document.getElementById("curCat");
+  var tabsEl = document.getElementById("guideTabs");
+  if (bsCur && tabsEl) {
+    var numTabs = tabsEl.querySelectorAll('.gtab[data-tab]');
+    var totalSections = Array.prototype.filter.call(numTabs, function (t) {
+      return /^\d+$/.test(t.getAttribute("data-tab"));
+    }).length;
+    var posEl = document.createElement("span");
+    posEl.className = "bs-pos";
+    bsCur.insertAdjacentElement("afterend", posEl);
+    function syncPos() {
+      var a = tabsEl.querySelector(".gtab-active");
+      var v = a ? parseInt(a.getAttribute("data-tab"), 10) : NaN;
+      posEl.textContent = isNaN(v) ? "" : (v + 1) + "/" + totalSections;
+    }
+    tabsEl.addEventListener("click", function () { setTimeout(syncPos, 50); });
+    syncPos();
   }
 })();

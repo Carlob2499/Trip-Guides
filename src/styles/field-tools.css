@@ -67,5 +67,53 @@ html[data-swipe-hint="back"]::after{left:0;background:linear-gradient(to right,c
   .spine-tick:hover .spine-tip,.spine-tick:focus-visible .spine-tip{opacity:1;transform:translateY(-50%) translateX(0)}
   .spine-tick:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 }
+/* ── SOS button + sheet ───────────────────────────────────────────────────── */
+.sos-btn{position:fixed;left:1rem;bottom:5.2rem;z-index:75;width:48px;height:48px;border-radius:50%;background:#b3261e;color:#fff;border:2px solid rgba(255,255,255,.35);font-family:var(--font-data);font-size:.68rem;font-weight:800;letter-spacing:.05em;box-shadow:0 4px 16px rgba(179,38,30,.4);cursor:pointer}
+@media(min-width:900px){.sos-btn{bottom:1.6rem;left:5rem}}
+.sos-btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.sos-sheet{position:fixed;inset:0;z-index:320;display:flex;align-items:flex-end;justify-content:center;background:rgba(8,11,14,.6)}
+.sos-sheet[hidden]{display:none}
+.sos-inner{width:100%;max-width:30rem;background:var(--card);border-radius:16px 16px 0 0;padding:1rem 1.2rem calc(1.2rem + env(safe-area-inset-bottom))}
+@media(min-width:900px){.sos-sheet{align-items:center}.sos-inner{border-radius:var(--r-lg)}}
+.sos-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 .6rem;font-family:var(--font-display);font-weight:720;font-size:1.3rem}
+.sos-x{width:36px;height:36px;background:transparent;border:1px solid var(--rule);border-radius:999px;color:var(--muted);cursor:pointer}
+.sos-row{display:flex;align-items:center;gap:.9rem;padding:.7rem .2rem;border-top:1px solid var(--rule);text-decoration:none;color:var(--ink)}
+.sos-num{flex:none;min-width:4.2rem;font-family:var(--font-display);font-weight:800;font-size:1.7rem;letter-spacing:-.02em;color:#b3261e}
+.sos-label{font-size:.9rem;line-height:1.4;color:var(--ink)}
+.sos-note{margin:.7rem 0 0;font-size:.78rem;color:var(--muted)}
+
+/* ── Show-the-driver address card ─────────────────────────────────────────── */
+.addr-card{position:fixed;inset:0;z-index:320;display:flex;align-items:center;justify-content:center;background:rgba(8,11,14,.75);padding:1rem}
+.addr-card[hidden]{display:none}
+.addr-card-inner{width:100%;max-width:34rem;background:var(--card);border-radius:var(--r-lg);padding:1.4rem;text-align:center}
+.addr-card-hint{margin:0 0 .8rem;font-family:var(--font-data);font-size:.72rem;letter-spacing:.06em;color:var(--muted)}
+.addr-card-big{margin:0;font-family:var(--font-display);font-weight:720;font-size:clamp(1.7rem,7vw,2.6rem);line-height:1.35;color:var(--ink);word-break:keep-all}
+.addr-card-row{display:flex;gap:.6rem;justify-content:center;margin-top:1.2rem;flex-wrap:wrap}
+.addr-card-copy{padding:.65rem 1.2rem;background:var(--ink);color:var(--bg);border:none;border-radius:999px;font-family:var(--font-data);font-size:.82rem;font-weight:700;cursor:pointer}
+.addr-card-x{padding:.65rem 1.2rem;background:transparent;color:var(--muted);border:1px solid var(--rule);border-radius:999px;font-size:.82rem;cursor:pointer}
+
+/* ── Focus Today overlay ──────────────────────────────────────────────────── */
+.focus-today{position:fixed;inset:0;z-index:310;display:none;flex-direction:column;background:var(--bg);padding:1rem 1.1rem calc(1.2rem + env(safe-area-inset-bottom));overflow-y:auto}
+.focus-today.focus-on{display:flex}
+.focus-head{position:relative;padding:0 3rem .8rem 0;border-bottom:2px solid var(--accent)}
+.focus-date{margin:0;font-family:var(--font-data);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.focus-title{margin:.2rem 0 0;font-family:var(--font-display);font-weight:780;font-size:clamp(1.5rem,6vw,2.2rem);line-height:1.08;letter-spacing:-.025em}
+.focus-x{position:absolute;right:0;top:0;width:42px;height:42px;background:var(--card);border:1px solid var(--rule);border-radius:999px;color:var(--ink);cursor:pointer}
+.focus-stops{list-style:none;margin:1rem 0;padding:0;display:flex;flex-direction:column;gap:.55rem;flex:1}
+.focus-stop{display:grid;grid-template-columns:5.2rem 1fr;gap:.15rem .8rem;padding:.85rem .9rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md);cursor:pointer}
+.focus-time{grid-row:span 2;align-self:center;font-family:var(--font-data);font-size:.85rem;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
+.focus-name{font-family:var(--font-display);font-weight:680;font-size:1.15rem;line-height:1.25}
+.focus-note{font-size:.85rem;color:var(--muted);line-height:1.45}
+.focus-done{opacity:.45}
+.focus-done .focus-name{text-decoration:line-through}
+.focus-stop:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.focus-full{margin-top:.4rem;padding:.8rem 1.1rem;background:transparent;color:var(--ink);border:1px dashed var(--rule2);border-radius:var(--r-md);font-family:var(--font-display);font-weight:640;font-size:.95rem;cursor:pointer}
+
+/* ── Share-modal install note ─────────────────────────────────────────────── */
+.share-install{margin:.9rem 0 0;padding:.6rem .8rem;background:color-mix(in srgb,var(--accent) 8%,var(--card));border:1px solid var(--rule);border-radius:var(--r-sm);font-size:.82rem;line-height:1.55;color:var(--ink)}
+
+/* ── Bottom-bar section position ─────────────────────────────────────────── */
+.bs-pos{font-family:var(--font-data);font-size:.62rem;font-weight:700;color:var(--accent);margin-left:.35rem}
+
 @media(prefers-reduced-motion:reduce){.spine-fill,.spine-tip{transition:none}.day-kitcount.done{animation:none}.today-chip{animation:none}}
-@media print{.spine,.today-chip,.ft-toast,.cur-pop,.lb-backdrop{display:none!important}}
+@media print{.spine,.today-chip,.ft-toast,.cur-pop,.lb-backdrop,.sos-btn,.sos-sheet,.addr-card,.focus-today{display:none!important}}
