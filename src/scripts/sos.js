@@ -12,13 +12,22 @@
   var em = cfg.emergency;
   if (!em || !em.lines || !em.lines.length) return;
 
+  // Mount in the topbar chrome (top of screen, out of the thumb-rest zone —
+  // far less likely to be hit by accident than a floating bottom-corner FAB),
+  // falling back to a small floating button only if the topbar is absent.
   var btn = document.createElement("button");
   btn.type = "button";
-  btn.className = "sos-btn";
   btn.setAttribute("aria-label", "Emergency numbers");
   btn.setAttribute("aria-haspopup", "dialog");
   btn.textContent = "SOS";
-  document.body.appendChild(btn);
+  var topRight = document.querySelector(".topbar-right");
+  if (topRight) {
+    btn.className = "topbar-btn topbar-sos";
+    topRight.insertBefore(btn, topRight.firstChild);
+  } else {
+    btn.className = "sos-btn";
+    document.body.appendChild(btn);
+  }
 
   var sheet = document.createElement("div");
   sheet.className = "sos-sheet";

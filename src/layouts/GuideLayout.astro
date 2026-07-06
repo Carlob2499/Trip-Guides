@@ -266,13 +266,9 @@ const tripSummary = buildSummary(guide);
         <span class="topbar-wordmark">Waypoint</span>
       </a>
       <div class="topbar-right">
-        <button id="btnShare" class="topbar-btn" aria-label="Share this guide" title="Share this guide">↗ Share</button>
-        <!--
-          Low-energy toggle — dims/hides day cards explicitly tagged `energy: "high"`
-          in the guide JSON. No-op on guides where no day is tagged (icon/label
-          still update; nothing filters). Icon/label updated by JS.
-        -->
-        <button id="btnEnergy" class="topbar-btn" aria-label="Switch to low-energy mode" title="Switch to low-energy mode">⚡ High</button>
+        <!-- Search + SOS buttons are injected into this cluster by palette.js /
+             sos.js so they share the chrome-button styling. -->
+        <button id="btnShare" class="topbar-btn" aria-label="Share this guide" title="Share this guide"><span aria-hidden="true">↗</span> <span class="tb-label">Share</span></button>
         <!--
           Dark-mode toggle — icon and aria-label are updated by JS.
           ◑ = currently light → click to go dark

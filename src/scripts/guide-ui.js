@@ -191,38 +191,6 @@ const daysForBanner     = _cfg.daysForBanner || [];
             });
           }
 
-          /* ── 1a. LOW-ENERGY TOGGLE ───────────────────────────────────────
-             Dims day cards explicitly tagged energy:"packed" on the guide's
-             packed/balanced/slow spectrum (DaysBlock stamps data-energy; every
-             day defaults to "balanced"). Guides with no "packed"-tagged days
-             show no visible change — this filters authored tags, it never
-             infers strenuousness from `pace`'s free-text schedule narrative.
-             The toggle's own on/off state lives in body[data-energy-mode], kept
-             distinct from the per-day data-energy value so the two don't collide. */
-          var ENERGY_KEY = "tg-energy-" + (storeKey || "guide");
-          var energyBtn = document.getElementById("btnEnergy");
-          function syncEnergyUI() {
-            var low = document.body.getAttribute("data-energy-mode") === "low";
-            if (!energyBtn) return;
-            energyBtn.textContent = low ? "⚡ Low" : "⚡ High";
-            energyBtn.setAttribute("aria-label", low ? "Switch to normal-energy mode" : "Switch to low-energy mode");
-            energyBtn.title = energyBtn.getAttribute("aria-label");
-          }
-          try {
-            if (localStorage.getItem(ENERGY_KEY) === "low") document.body.setAttribute("data-energy-mode", "low");
-          } catch (_) {}
-          syncEnergyUI();
-          if (energyBtn) {
-            energyBtn.addEventListener("click", function () {
-              var low = document.body.getAttribute("data-energy-mode") === "low";
-              var next = low ? "high" : "low";
-              if (next === "low") document.body.setAttribute("data-energy-mode", "low");
-              else document.body.removeAttribute("data-energy-mode");
-              try { localStorage.setItem(ENERGY_KEY, next); } catch (e) {}
-              syncEnergyUI();
-            });
-          }
-
           /* ── 2. MOBILE SHEET ─────────────────────────────────────────── */
           var sheet    = document.querySelector(".sheet");
           var backdrop = document.querySelector(".sheet-backdrop");
@@ -984,10 +952,18 @@ const daysForBanner     = _cfg.daysForBanner || [];
         var shareQrEl     = document.getElementById("shareQr");
         if (!shareBtn || !shareModal) return;
 
-        var pageUrl      = window.location.href;
         var pageTitle    = document.title;
-        var qrGenerated  = false;
         var qrLibLoaded  = false;
+
+        // The QR/link must point at the SECTION the reader is on — tabs switch
+        // without changing the URL, so build it fresh each open from the active
+        // tab as #grp-N (tabForHash lands the visitor back on that section).
+        function currentPageUrl() {
+          var base = window.location.href.split("#")[0];
+          var active = document.querySelector(".gtab.gtab-active");
+          var t = active && active.getAttribute("data-tab");
+          return (t && /^\d+$/.test(t)) ? base + "#grp-" + t : base;
+        }
 
         function loadQRLib(cb) {
           if (qrLibLoaded || window.QRCode) { qrLibLoaded = true; cb(); return; }
@@ -1012,10 +988,13 @@ const daysForBanner     = _cfg.daysForBanner || [];
           shareModal.removeAttribute("hidden");
           shareBackdrop.classList.add("open");
           _lockScroll();
+          var pageUrl = currentPageUrl(); // fresh each open — carries the section
           if (shareUrlTxt) shareUrlTxt.textContent = pageUrl;
           if (shareWALink)   shareWALink.href   = "https://wa.me/?text=" + encodeURIComponent(pageUrl);
           if (shareEmailLink) shareEmailLink.href = "mailto:?subject=" + encodeURIComponent(pageTitle) + "&body=" + encodeURIComponent(pageUrl);
-          if (shareQrEl && !qrGenerated) {
+          if (shareCopyBtn)  shareCopyBtn.dataset.url = pageUrl;
+          if (shareQrEl) {
+            shareQrEl.innerHTML = ""; // regenerate — the section may have changed
             loadQRLib(function () {
               if (!window.QRCode) return;
               var dark = document.documentElement.getAttribute("data-theme") === "dark";
@@ -1026,7 +1005,6 @@ const daysForBanner     = _cfg.daysForBanner || [];
                   colorLight: dark ? "#27211a" : "#ffffff",
                   correctLevel: window.QRCode.CorrectLevel.M
                 });
-                qrGenerated = true;
               } catch (e) { /* QR lib unavailable */ }
             });
           }
@@ -1078,13 +1056,14 @@ const daysForBanner     = _cfg.daysForBanner || [];
         if (shareCopyBtn) {
           shareCopyBtn.addEventListener("click", function () {
             var btn = shareCopyBtn;
+            var url = btn.dataset.url || currentPageUrl(); // section-specific
             function flash() { btn.textContent = "Copied!"; setTimeout(function () { btn.textContent = "Copy link"; }, 2200); }
             if (navigator.clipboard && navigator.clipboard.writeText) {
-              navigator.clipboard.writeText(pageUrl).then(flash).catch(function () { fallbackCopy(); });
+              navigator.clipboard.writeText(url).then(flash).catch(function () { fallbackCopy(); });
             } else { fallbackCopy(); }
             function fallbackCopy() {
               var ta = document.createElement("textarea");
-              ta.value = pageUrl;
+              ta.value = url;
               ta.style.cssText = "position:fixed;opacity:0;top:0;left:0;width:1px;height:1px";
               document.body.appendChild(ta);
               ta.focus(); ta.select();

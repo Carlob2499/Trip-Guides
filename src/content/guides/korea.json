@@ -784,6 +784,61 @@
       "body": "<p><b>Animate Seoul</b> (5F, AK&amp; Mall, 188 Yanghwa-ro, Mapo-gu — Hongdae Station Exit 9; open ~11:00–22:00) is the largest anime specialist in the Hongdae area: figures, manga, Blu-ray, merchandise, and rotating pop-ups for seasonal titles. <b>Yongsan i'Park Mall</b> electronics floors carry games, trading cards, and figures — verify the current tenant mix at the mall, as renovations have shifted some vendors. <b>SMTOWN COEX Artium</b> (Gangnam; open 10:30–22:00) is the K-pop one-stop: SM artists' albums, photocards, limited merch, and a café. <b>Myeongdong K-pop street</b> around Myeongdong Station has comprehensive stock across all agencies; go early or skip if the weekend crowds are too much.</p><p><b>HYBE Insight</b> (42 Hangang-daero, Yongsan-gu; BTS/HYBE fan museum) requires timed-entry tickets booked weeks in advance via the <a href='https://hybeinsight.com'>official app or site</a> — book the moment you confirm your trip dates. No walk-in entry; no late arrivals. <b>LoL Park</b> (3F Gran Seoul Building, 33 Jong-ro, Jongno-gu; open 11:00–20:00; Jonggak Station Exit 1) is the LCK's home venue with a free-to-browse exhibition floor, Riot merch store, and PC café. LCK Summer split resumes after MSI — check the schedule for a live match while you're there.</p>"
     },
     {
+      "type": "sights",
+      "group": "Food & shopping",
+      "title": "What the dishes look like — and how to order",
+      "items": [
+        {
+          "name": "Samgyeopsal · 삼겹살",
+          "kicker": "Grill-your-own pork belly",
+          "body": "Thick pork-belly strips you grill at the table, wrapped in lettuce with garlic, ssamjang and kimchi. Order by the portion (인분, <i>in-bun</i>) — say \"삼겹살 2인분\" for two.",
+          "img": { "file": "Korean.cuisine-Samgyeopsal-01.jpg", "alt": "Pork belly grilling on a tabletop grill with onion" }
+        },
+        {
+          "name": "Bibimbap · 비빔밥",
+          "kicker": "Rice, vegetables, gochujang",
+          "body": "Rice topped with seasoned vegetables, egg and red chili paste — mix it all together before eating. Point and say \"비빔밥 하나\" (one bibimbap). Dolsot (돌솥) means the sizzling stone bowl.",
+          "img": { "file": "Bibimbap 7.jpg", "alt": "Bibimbap with arranged vegetables and gochujang over rice" }
+        },
+        {
+          "name": "Tteokbokki · 떡볶이",
+          "kicker": "Chewy rice cakes, sweet-spicy sauce",
+          "body": "Cylindrical rice cakes simmered in a sweet-spicy gochujang sauce — the classic street snack. Grab it from any pojangmacha (street stall) or a bunsik shop.",
+          "img": { "file": "Korean.snacks-Tteokbokki-08.jpg", "alt": "Tteokbokki rice cakes in red sauce with sesame seeds" }
+        },
+        {
+          "name": "Chimaek · 치맥",
+          "kicker": "Fried chicken + beer",
+          "body": "Korean fried chicken with beer — the national evening ritual. \"반반\" (<i>banban</i>) gets you half plain-crispy, half sweet-spicy yangnyeom, the safe first order.",
+          "img": { "file": "Korean fried chicken 3 banban.jpg", "alt": "Half crispy, half seasoned Korean fried chicken with pickled radish" }
+        },
+        {
+          "name": "Naengmyeon · 냉면",
+          "kicker": "Icy summer noodles",
+          "body": "Cold buckwheat noodles in an icy broth (mul, 물) or with spicy sauce (bibim, 비빔) — exactly what July heat calls for. Snip them with the table scissors before eating.",
+          "img": { "file": "KOCIS Mul-naengmyeon, Chilled Buckwheat Noodle Soup (4594756202).jpg", "alt": "Cold naengmyeon noodles in a metal bowl with ice, egg and beef" }
+        },
+        {
+          "name": "Gamjatang · 감자탕",
+          "kicker": "Pork-spine potato stew",
+          "body": "A rich, spicy pork-spine-and-potato stew that bubbles at the table — hearty late-night or hangover food. Ordered by pot size for the group (소/중/대 = small/medium/large).",
+          "img": { "file": "Korean.food-Gamjatang-01.jpg", "alt": "Gamjatang pork spine stew with potato in red broth" }
+        },
+        {
+          "name": "Hotteok · 호떡",
+          "kicker": "Griddled sweet pancake",
+          "body": "A chewy pancake stuffed with molten brown sugar, honey and cinnamon, pressed on a street griddle — winter-market perfect, sold year-round. Just point and hand over ₩1,000–2,000.",
+          "img": { "file": "Korean snack-Hotteok-01.jpg", "alt": "Hotteok sweet pancakes cooking on a street griddle" }
+        },
+        {
+          "name": "Bingsu · 빙수",
+          "kicker": "Mountain of shaved ice",
+          "body": "Fluffy shaved milk-ice piled with sweet red bean (pat, 팥), fruit and condensed milk — the café heat-beater. Patbingsu (팥빙수) is the classic; share one, they're big.",
+          "img": { "file": "Bingsu 2.jpg", "alt": "Bowls of Korean bingsu shaved ice with red bean and fruit" }
+        }
+      ]
+    },
+    {
       "type": "prose",
       "group": "Food & shopping",
       "title": "What to eat",

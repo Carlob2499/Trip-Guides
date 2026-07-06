@@ -18,8 +18,15 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 .topbar-wordmark{font-family:var(--font-display);font-weight:750;font-size:1.05rem;letter-spacing:-.02em;line-height:1}
 .topbar-right{display:flex;align-items:center;gap:.4rem}
 /* Dark-mode toggle — labelled via aria-label + title; icon swaps in JS */
-.topbar-btn{background:none;border:1px solid var(--rule2);border-radius:4px;padding:.28rem .55rem;cursor:pointer;color:var(--muted);font-size:.95rem;line-height:1;transition:color .15s,border-color .15s;font-family:inherit}
+/* Consistent chrome buttons: data face, uniform sizing so Share/Energy/dark
+   align as one control cluster (was mixed body-font + icon sizes). */
+.topbar-btn{display:inline-flex;align-items:center;gap:.3rem;background:none;border:1px solid var(--rule2);border-radius:999px;padding:.32rem .7rem;min-height:32px;cursor:pointer;color:var(--muted);font-family:var(--font-data);font-size:.72rem;font-weight:600;letter-spacing:.02em;line-height:1;transition:color .15s,border-color .15s}
 .topbar-btn:hover{color:var(--ink);border-color:var(--ink)}
+.topbar-sos{color:#b3261e;border-color:color-mix(in srgb,#b3261e 55%,var(--rule2));font-weight:700}
+.topbar-sos:hover{color:#fff;background:#b3261e;border-color:#b3261e}
+.topbar-search{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,var(--rule2))}
+/* Mobile: collapse chrome buttons to icons so the cluster never crowds. */
+@media(max-width:560px){.topbar-btn .tb-label{display:none}.topbar-btn{padding:.32rem .55rem}}
 
 /* === MASTHEAD ================================================================ */
 .masthead{padding:3.2rem 1.1rem 2rem;border-bottom:1px solid var(--ink);text-align:center}
@@ -219,16 +226,6 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 .daykit{margin-top:.6rem;padding:.6rem .8rem;background:var(--bg);border-radius:5px;border:1px solid var(--rule)}
 .kit-label{display:block;font-family:var(--font-data);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.2rem}
 @media(max-width:520px){.day{grid-template-columns:1fr;gap:.3rem}.day .d{padding-top:0}}
-
-/* Low-energy toggle: dims (not hides — the day still exists) any day card
-   tagged energy:"packed" on the packed/balanced/slow spectrum, and highlights
-   "slow" days as the restful alternative. Every day defaults to "balanced" (no
-   tag needed), so untagged guides see no change when the toggle is flipped.
-   Body attribute is data-energy-mode (the toggle's own on/off state) — kept
-   distinct from the per-day data-energy (its packed/balanced/slow value) so
-   the two don't collide in the selector. */
-body[data-energy-mode="low"] .day[data-energy="packed"]{opacity:.45;filter:grayscale(.3)}
-body[data-energy-mode="low"] .day[data-energy="slow"]{border-color:var(--accent)}
 
 /* === SIGHTS ================================================================== */
 .sight-name{font-size:1.25rem;margin:.05rem 0 .4rem}

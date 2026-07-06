@@ -17,7 +17,7 @@
     overlay.innerHTML =
       '<div class="pal" role="dialog" aria-modal="true" aria-label="Jump to a section">' +
       '<input class="pal-input" type="text" role="combobox" aria-expanded="true" ' +
-      'aria-controls="palList" aria-autocomplete="list" placeholder="Jump to a section, day, or sight…" />' +
+      'aria-controls="palList" aria-autocomplete="list" placeholder="Search this guide — sections, days, food, any keyword…" />' +
       '<ul class="pal-list" id="palList" role="listbox"></ul>' +
       '<p class="pal-hint">↑↓ navigate · Enter jump · Esc close</p></div>';
     document.body.appendChild(overlay);
@@ -47,11 +47,27 @@
     });
     document.querySelectorAll(".planner-days .day[data-day]").forEach(function (d) {
       var label = textOf(d.querySelector(".d")) + " — " + textOf(d.querySelector(".b strong"));
-      items.push({ label: label, kind: "Day", act: makeJump(d) });
+      items.push({ label: label, kind: "Day", hint: textOf(d.querySelector(".day-tldr")), search: textOf(d).toLowerCase(), act: makeJump(d) });
     });
     document.querySelectorAll(".sight").forEach(function (s) {
       var name = textOf(s.querySelector(".sight-name"));
-      if (name) items.push({ label: name, kind: "Sight", act: makeJump(s) });
+      if (name) items.push({ label: name, kind: "Sight", hint: textOf(s.querySelector(".sight-body, p")).slice(0, 90), act: makeJump(s) });
+    });
+    // Full-text: every content card, so a keyword ("tax", "jimjilbang",
+    // "KTX") jumps straight to the card that mentions it — the search the
+    // guide was missing. Label = the card's heading; hint = a text preview;
+    // both are matched against the query.
+    document.querySelectorAll(".catblock .card, .catblock .block").forEach(function (c) {
+      var full = textOf(c);
+      if (!full) return;
+      var title = textOf(c.querySelector(".block-title, .cat-title, strong, h3, h4"));
+      items.push({
+        label: title || full.slice(0, 60),
+        kind: "In text",
+        hint: full.slice(0, 130),
+        search: full.toLowerCase(), // match against the WHOLE card, not a preview
+        act: makeJump(c),
+      });
     });
   }
 
@@ -74,9 +90,18 @@
 
   function render() {
     var q = input.value.trim().toLowerCase();
-    results = items.filter(function (it) {
-      return !q || it.label.toLowerCase().indexOf(q) !== -1;
-    }).slice(0, 12);
+    // Rank: section/day/sight matches on the label rank above in-text matches;
+    // a keyword found only in body text still surfaces its card.
+    var scored = [];
+    items.forEach(function (it) {
+      if (!q) { if (it.kind !== "In text") scored.push({ it: it, r: 1 }); return; }
+      var inLabel = it.label.toLowerCase().indexOf(q) !== -1;
+      var inText = it.search && it.search.indexOf(q) !== -1;
+      if (inLabel) scored.push({ it: it, r: it.kind === "In text" ? 2 : 0 });
+      else if (inText) scored.push({ it: it, r: 3 });
+    });
+    scored.sort(function (a, b) { return a.r - b.r; });
+    results = scored.map(function (s) { return s.it; }).slice(0, 12);
     sel = 0;
     list.innerHTML = "";
     results.forEach(function (it, i) {
@@ -84,9 +109,10 @@
       li.className = "pal-item" + (i === sel ? " pal-sel" : "");
       li.setAttribute("role", "option");
       li.setAttribute("aria-selected", i === sel ? "true" : "false");
-      li.innerHTML = '<span class="pal-kind"></span><span class="pal-label"></span>';
+      li.innerHTML = '<span class="pal-kind"></span><span class="pal-body"><span class="pal-label"></span><span class="pal-hint"></span></span>';
       li.querySelector(".pal-kind").textContent = it.kind;
       li.querySelector(".pal-label").textContent = it.label;
+      if (it.hint && q && it.label.toLowerCase().indexOf(q) === -1) li.querySelector(".pal-hint").textContent = it.hint;
       li.addEventListener("click", function () { go(it); });
       li.addEventListener("mousemove", function () { setSel(i); });
       list.appendChild(li);
@@ -138,4 +164,19 @@
       open();
     }
   });
+
+  // Visible entry point: a Search button in the topbar chrome (many users
+  // never discover Ctrl+K). Kept out of the .gtab tab set so the tab router,
+  // keyboard nav and spine are untouched.
+  var topRight = document.querySelector(".topbar-right");
+  if (topRight) {
+    var sb = document.createElement("button");
+    sb.type = "button";
+    sb.className = "topbar-btn topbar-search";
+    sb.setAttribute("aria-label", "Search this guide");
+    sb.innerHTML = "<span aria-hidden='true'>⌕</span> <span class='tb-label'>Search</span>";
+    sb.addEventListener("click", open);
+    topRight.insertBefore(sb, topRight.firstChild);
+  }
+  document.addEventListener("tg:search", open);
 })();
