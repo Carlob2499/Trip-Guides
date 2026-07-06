@@ -1020,7 +1020,7 @@ const daysForBanner     = _cfg.daysForBanner || [];
               try {
                 new window.QRCode(shareQrEl, {
                   text: pageUrl, width: 148, height: 148,
-                  colorDark:  dark ? "#ede5d4" : "#211e1a",
+                  colorDark:  dark ? "#e5e9e0" : "#1a2028",
                   colorLight: dark ? "#27211a" : "#ffffff",
                   correctLevel: window.QRCode.CorrectLevel.M
                 });

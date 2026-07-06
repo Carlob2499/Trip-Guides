@@ -2,8 +2,8 @@
 /* scroll-padding keeps hash-linked sections clear of the sticky chrome. */
 html{scroll-behavior:smooth;scroll-padding-top:var(--chrome-h)}
 .topbar,header,.shell,footer{position:relative;z-index:1}
-/* Display h1 uses Fraunces (editorial italic variable font).
-   All other headings stay with Space Grotesk. */
+/* Display h1 uses Bricolage Grotesque (characterful display face).
+   All headings share the display face; body text is Literata. */
 h1{font-family:var(--font-display);font-weight:780;letter-spacing:-.035em;line-height:1.02;text-wrap:balance}
 h2,h3,h4{font-family:var(--font-display);font-weight:400;line-height:1.15;text-wrap:balance}
 a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
@@ -14,7 +14,7 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 .topbar-home:hover{color:var(--ink)}
 .topbar-home svg{flex:none;transition:transform .15s}
 .topbar-home:hover svg{transform:translateX(-3px)}
-/* Wordmark — Fraunces italic for brand identity */
+/* Wordmark — display face for brand identity */
 .topbar-wordmark{font-family:var(--font-display);font-weight:750;font-size:1.05rem;letter-spacing:-.02em;line-height:1}
 .topbar-right{display:flex;align-items:center;gap:.4rem}
 /* Dark-mode toggle — labelled via aria-label + title; icon swaps in JS */
@@ -26,7 +26,7 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 /* Thin accent rule above the eyebrow — the editorial "this page starts here" signal */
 .masthead-rule{width:2.8rem;height:2px;background:var(--accent);margin:0 auto 1.3rem}
 .eyebrow{font-family:var(--font-data);font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--accent)}
-/* Fraunces italic: the single biggest visual upgrade — from dashboard to publication */
+/* Display face at masthead scale — publication, not dashboard */
 .masthead h1{font-size:clamp(2.8rem,8vw,4.8rem);margin:.4rem 0 0;letter-spacing:-.02em;font-optical-sizing:auto}
 .dek{color:var(--muted);max-width:58ch;margin:.8rem auto 0;font-size:1.05rem;line-height:1.65}
 /* Stats bar: days · sights · live rate — at-a-glance guide summary. A guide may also
@@ -129,6 +129,13 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
    widened shell (the "edge-to-edge media" side of the widen). The reading cap only
    bites once the shell is wider than --read, so tablet/mobile are untouched. */
 .catblock>.cat-title,.catblock>.block{max-width:var(--read);margin-inline:auto}
+/* Section-switch transition: unhiding a panel re-triggers the animation (a
+   display:none element restarts CSS animations on reveal), so every tab
+   change gets a quiet fade-rise. Off under reduced motion. */
+@media(prefers-reduced-motion:no-preference){
+  .catblock{animation:panelIn .3s cubic-bezier(.2,.7,.2,1)}
+}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 /* Sights: responsive image grid across the full shell width. */
 .block:has(.sight){max-width:100%;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem 1.1rem;align-items:start}
 .block:has(.sight) .block-title-row{grid-column:1/-1;margin-bottom:0}
@@ -144,8 +151,8 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 .card b,.card strong{font-weight:600}
 
 /* === CARDS =================================================================== */
-.card{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-lg);padding:1.25rem 1.4rem;margin-bottom:1rem;box-shadow:0 1px 3px rgba(33,30,26,.06);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
-.card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(33,30,26,.1);border-color:var(--rule2)}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-lg);padding:1.25rem 1.4rem;margin-bottom:1rem;box-shadow:0 1px 3px rgba(16,20,24,.06);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+.card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(16,20,24,.1);border-color:var(--rule2)}
 .card .block-title{margin-top:0}
 /* Type-specific card accents — subtle visual differentiation by content role */
 .card:has(.brow){border-left:3px solid var(--green)}
@@ -218,8 +225,7 @@ footer{border-top:1px solid var(--ink);text-align:center;padding:1.7rem 1.1rem;c
 @media(max-width:899px){
   .content{padding-bottom:5.5rem}
   /* Three-button bottom bar: Home | Sections (flex-1) | Top */
-  .botbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:40;gap:.5rem;padding:.6rem .8rem;padding-bottom:calc(.6rem + env(safe-area-inset-bottom));background:rgba(243,236,223,.96);backdrop-filter:blur(10px);border-top:1px solid var(--rule2)}
-  [data-theme="dark"] .botbar{background:rgba(28,23,20,.96)}
+  .botbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:40;gap:.5rem;padding:.6rem .8rem;padding-bottom:calc(.6rem + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--rule2)}
   /* Home button — mirrors the ↑ button style */
   .botHome{flex:0 0 auto;min-width:48px;min-height:48px;display:flex;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--rule2);border-radius:8px;color:var(--muted);text-decoration:none;font-size:1.05rem;transition:color .15s,border-color .15s}
   .botHome:hover{color:var(--ink);border-color:var(--ink)}
@@ -231,10 +237,10 @@ footer{border-top:1px solid var(--ink);text-align:center;padding:1.7rem 1.1rem;c
   /* Back-to-top button */
   .botTop{flex:0 0 auto;min-width:48px;min-height:48px;display:flex;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--rule2);border-radius:8px;color:var(--ink);text-decoration:none;font-size:1.1rem}
   /* Slide-up sheet backdrop */
-  .sheet-backdrop{display:block;position:fixed;inset:0;z-index:45;background:rgba(33,30,26,0);pointer-events:none;transition:background .25s}
-  .sheet-backdrop.open{background:rgba(33,30,26,.45);pointer-events:auto}
+  .sheet-backdrop{display:block;position:fixed;inset:0;z-index:45;background:rgba(16,20,24,0);pointer-events:none;transition:background .25s}
+  .sheet-backdrop.open{background:rgba(16,20,24,.45);pointer-events:auto}
   /* Slide-up sheet */
-  .sheet{display:flex;flex-direction:column;position:fixed;left:0;right:0;bottom:0;z-index:46;max-height:80vh;background:var(--bg);border-radius:16px 16px 0 0;box-shadow:0 -10px 34px rgba(33,30,26,.28);transform:translateY(100%);transition:transform .28s cubic-bezier(.2,.8,.2,1);padding-bottom:env(safe-area-inset-bottom)}
+  .sheet{display:flex;flex-direction:column;position:fixed;left:0;right:0;bottom:0;z-index:46;max-height:80vh;background:var(--bg);border-radius:16px 16px 0 0;box-shadow:0 -10px 34px rgba(16,20,24,.28);transform:translateY(100%);transition:transform .28s cubic-bezier(.2,.8,.2,1);padding-bottom:env(safe-area-inset-bottom)}
   .sheet.open{transform:translateY(0)}
   .sheet-grip{flex:none;width:38px;height:4px;border-radius:4px;background:var(--rule2);margin:.7rem auto .25rem}
   .sheet-head{flex:none;font-family:var(--font-display);font-size:1.3rem;padding:.3rem 1.2rem .65rem;border-bottom:1px solid var(--rule)}
@@ -603,7 +609,7 @@ details table{margin:.3rem 0 .4rem}
 .split-desc{color:var(--muted);font-size:.92rem;line-height:1.6}
 .split-save-actions{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.7rem}
 /* cards */
-.split-card{background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:1.1rem 1.25rem;margin-bottom:.9rem;box-shadow:0 1px 3px rgba(33,30,26,.06)}
+.split-card{background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:1.1rem 1.25rem;margin-bottom:.9rem;box-shadow:0 1px 3px rgba(16,20,24,.06)}
 .sc-head{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin-bottom:.75rem}
 .sc-label{font-family:var(--font-display);font-size:.7rem;font-weight:600;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
 .sc-body{display:flex;flex-direction:column;gap:.5rem}

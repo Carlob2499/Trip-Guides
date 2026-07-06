@@ -80,6 +80,9 @@ const hero = upcoming[0] ?? null;
 const heroSrc = hero?.ex.heroImg
   ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(hero.ex.heroImg.file)}?width=1400`
   : null;
+// Card cover thumbnails — same Commons thumbnailing at grid width.
+const coverSrc = (img: { file: string } | null) =>
+  img ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(img.file)}?width=640` : null;
 
 // Filter chips: one per country that appears in the curated grid.
 const countries = [...new Set(curated.map(x => x.g.data.country))].sort();
@@ -164,6 +167,16 @@ const countries = [...new Set(curated.map(x => x.g.data.country))].sort();
             data-start={ex.startISO}
             data-search={`${g.data.country} ${g.data.title} ${g.data.dek || ""}`.toLowerCase()}
           >
+            {ex.heroImg ? (
+              <span class="hubcard-cover">
+                <img class="hubcard-img" src={coverSrc(ex.heroImg)} alt="" loading="lazy" decoding="async" />
+                <span class="hubcard-cover-grad" aria-hidden="true"></span>
+              </span>
+            ) : (
+              <span class="hubcard-cover hubcard-cover--typo" aria-hidden="true">
+                <span class="hubcard-cover-initial">{g.data.country.slice(0, 1)}</span>
+              </span>
+            )}
             <span class="hubcard-bar" aria-hidden="true"></span>
             <span class="hubcard-body">
               <span class="hubcard-top">
@@ -192,6 +205,9 @@ const countries = [...new Set(curated.map(x => x.g.data.country))].sort();
           <div class="hub-grid">
             {drafts.map(({ g }) => (
               <a class="hubcard hubcard--draft" href={`${base}/guides/${g.id}/`} style={`--accent:${accentFor(g.data.country)}`}>
+                <span class="hubcard-cover hubcard-cover--typo" aria-hidden="true">
+                  <span class="hubcard-cover-initial">{g.data.country.slice(0, 1)}</span>
+                </span>
                 <span class="hubcard-bar" aria-hidden="true"></span>
                 <span class="hubcard-body">
                   <span class="hubcard-top">

@@ -25,12 +25,23 @@
   .planner-map-note{margin-top:.4rem;font-size:.74rem}
 }
 
-/* ── Day number in the date gutter ────────────────────────────────────────── */
-.day-num{display:inline-block;font-family:var(--font-data);font-size:.6rem;font-weight:700;letter-spacing:.05em;color:var(--accent);margin-right:.4rem;vertical-align:top;padding-top:.15rem}
+/* ── Day number in the date gutter — editorial ghost numeral ──────────────── */
+.day-num{display:block;font-family:var(--font-display);font-weight:800;font-size:2rem;line-height:.95;letter-spacing:-.04em;color:color-mix(in srgb,var(--accent) 42%,var(--bg2));margin:0 0 .3rem}
+@media(max-width:520px){.day-num{display:inline-block;font-size:1.2rem;margin:0 .45rem 0 0;vertical-align:-2px}}
 
 /* ── Numbered stop list (waypoints) — the on-the-go itinerary ladder ──────── */
 .stops{list-style:none;margin:.55rem 0 .35rem;padding:0;border-left:2px solid color-mix(in srgb,var(--accent) 45%,var(--rule));display:flex;flex-direction:column}
 .stop{display:flex;align-items:baseline;gap:.55rem;padding:.34rem 0 .34rem .65rem;min-width:0}
+/* Stop ladder choreography: stops cascade in when the itinerary panel is
+   revealed (same display:none-restart mechanism as the section transition). */
+@media(prefers-reduced-motion:no-preference){
+  .stop{animation:stopIn .34s cubic-bezier(.2,.7,.2,1) both}
+  .stop:nth-child(1){animation-delay:.05s}.stop:nth-child(2){animation-delay:.1s}
+  .stop:nth-child(3){animation-delay:.15s}.stop:nth-child(4){animation-delay:.2s}
+  .stop:nth-child(5){animation-delay:.25s}.stop:nth-child(6){animation-delay:.3s}
+  .stop:nth-child(7){animation-delay:.35s}.stop:nth-child(n+8){animation-delay:.4s}
+}
+@keyframes stopIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
 .stop+.stop{border-top:1px dashed var(--rule)}
 .stop-num{flex:none;font-family:var(--font-data);font-size:.62rem;font-weight:700;color:var(--accent);letter-spacing:.04em}
 .stop-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:.05rem}

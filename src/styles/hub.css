@@ -21,8 +21,8 @@ h1{font-family:var(--font-display);font-weight:800;letter-spacing:-.04em;line-he
 .hub-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1.2rem}
 
 /* Hub cards: elevated with richer hierarchy — color accent bar at top, larger title */
-.hubcard{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-lg);padding:0;text-decoration:none;color:var(--ink);box-shadow:0 1px 3px rgba(33,30,26,.06);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;overflow:hidden}
-.hubcard:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(33,30,26,.12);border-color:var(--rule2)}
+.hubcard{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-lg);padding:0;text-decoration:none;color:var(--ink);box-shadow:0 1px 3px rgba(16,20,24,.06);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;overflow:hidden}
+.hubcard:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(16,20,24,.12);border-color:var(--rule2)}
 /* Accent color bar across the top of each card */
 .hubcard-bar{height:4px;background:var(--accent);width:100%;flex:none}
 .hubcard-body{padding:1.3rem 1.4rem 1.25rem;display:flex;flex-direction:column;gap:.35rem;flex:1}

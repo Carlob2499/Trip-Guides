@@ -30,4 +30,5 @@
 /* ── Glass on floating controls ONLY (sticky chrome + mobile bottom bar);
       cards stay paper ───────────────────────────────────────────────────── */
 .sticky-chrome{background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-.botbar{background:color-mix(in srgb,var(--card) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+/* .botbar glass lives with its layout rules in guide.css (media-scoped +
+   safe-area padding) — not duplicated here. */

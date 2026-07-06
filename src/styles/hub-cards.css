@@ -30,3 +30,24 @@
 @media(prefers-reduced-motion:reduce){.hub-chip{transition:none}}
 
 .hub-empty{color:var(--muted);font-style:italic;padding:1.2rem 0}
+
+/* ── Card covers — the hub grid speaks the same photo-forward language as the
+      guide mastheads and sight cards. Photo guides get their cover image with
+      a soft gradient; scaffolds get the accent field + giant display initial
+      (the typographic-hero language at card scale). ─────────────────────── */
+.hubcard{overflow:hidden}
+.hubcard-cover{position:relative;display:block;aspect-ratio:16/9;overflow:hidden;background:var(--bg2)}
+.hubcard-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.001);transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.hubcard:hover .hubcard-img{transform:scale(1.05)}
+.hubcard-cover-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,13,16,.28),rgba(10,13,16,0) 55%)}
+.hubcard-cover--typo{background:
+  radial-gradient(circle at 1px 1px,rgba(255,255,255,.14) 1.3px,transparent 1.5px) 0 0/20px 20px,
+  linear-gradient(120deg,color-mix(in srgb,var(--accent) 100%,#000 6%),color-mix(in srgb,var(--accent) 82%,#fff 12%));
+  display:flex;align-items:center;justify-content:center}
+.hubcard-cover-initial{font-family:var(--font-display);font-weight:800;font-size:4.6rem;line-height:1;color:rgba(255,255,255,.92);letter-spacing:-.04em;transform:translateY(2px);transition:transform .4s cubic-bezier(.2,.7,.2,1)}
+.hubcard:hover .hubcard-cover-initial{transform:translateY(-2px) scale(1.06)}
+@media(prefers-reduced-motion:reduce){
+  .hubcard-img,.hubcard-cover-initial{transition:none}
+  .hubcard:hover .hubcard-img{transform:none}
+  .hubcard:hover .hubcard-cover-initial{transform:none}
+}
