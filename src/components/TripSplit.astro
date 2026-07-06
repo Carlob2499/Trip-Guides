@@ -1,11 +1,21 @@
 ---
 interface Props {
   storeKey: string;
+  /* Local currency (from countries data): entering ₩38,000 converts to USD at
+     the live rate (fallback: approxRate). Absent → the toggle hides. */
+  curCode?: string | null;
+  curSymbol?: string | null;
+  curRate?: number | null;
+  /* Per-person planned total (USD) from the guide's own budget section, and
+     the trip length — powers the plan-vs-logged line. 0/absent → hidden. */
+  plannedPP?: number;
 }
-const { storeKey } = Astro.props;
+const { storeKey, curCode = null, curSymbol = null, curRate = null, plannedPP = 0 } = Astro.props;
 ---
 
-<div class="split-wrap" id="tripSplit" hidden data-sk={storeKey}>
+<div class="split-wrap" id="tripSplit" hidden data-sk={storeKey}
+     data-cur-code={curCode} data-cur-sym={curSymbol} data-cur-rate={curRate}
+     data-planned-pp={plannedPP}>
 
   <div class="split-toolbar">
     <h2 class="split-title">Budget Calculator</h2>
@@ -14,6 +24,7 @@ const { storeKey } = Astro.props;
       <button class="sc-add-btn" id="sSyncLink" type="button">🔗 Copy sync link</button>
       <button class="sc-add-btn" id="sQrBtn" type="button" aria-expanded="false">▦ Show QR</button>
       <button class="sc-add-btn" id="sExport" type="button">⬇ Export file</button>
+      <button class="sc-add-btn" id="sExportCsv" type="button">⬇ Export CSV</button>
       <button class="sc-add-btn" id="sImportBtn" type="button">⬆ Import file</button>
       <input type="file" id="sImportFile" accept="application/json" hidden />
     </div>
@@ -37,6 +48,13 @@ const { storeKey } = Astro.props;
   <div class="split-summary" id="sSummary" hidden>
     <span class="split-summary-lbl">Total trip spend</span>
     <span class="split-summary-val" id="sTotalUSD">$0.00</span>
+    <span class="split-plan" id="sPlanLine" hidden></span>
+  </div>
+
+  <!-- Category breakdown — stacked bar + legend, from expense categories -->
+  <div class="split-breakdown" id="sBreakdown" hidden>
+    <div class="split-bar" id="sBar" aria-hidden="true"></div>
+    <div class="split-legend" id="sLegend"></div>
   </div>
 
   <!-- Results -->
@@ -46,6 +64,7 @@ const { storeKey } = Astro.props;
     <div class="split-settle-head">
       <span class="sc-label">Who pays who</span>
       <span class="split-settle-count" id="sSettleCount"></span>
+      <button class="sc-add-btn" id="sCopySettle" type="button">⧉ Copy settle plan</button>
     </div>
     <div id="sSettlements"></div>
   </div>
@@ -69,10 +88,22 @@ const { storeKey } = Astro.props;
       <div class="se-new-row">
         <select class="split-in se-payer" id="sNewPayer"></select>
         <input class="split-in se-desc" type="text" placeholder="What for?" id="sNewDesc" />
-        <div class="se-amt-wrap"><span class="se-cur">$</span>
+        <select class="split-in se-cat-sel" id="sNewCat" aria-label="Category">
+          <option value="food">🍜 Food</option>
+          <option value="transit">🚇 Transit</option>
+          <option value="tickets">🎟 Tickets</option>
+          <option value="shopping">🛍 Shopping</option>
+          <option value="lodging">🏨 Lodging</option>
+          <option value="other" selected>· Other</option>
+        </select>
+        <div class="se-amt-wrap">
+          <button class="se-cur se-cur-toggle" id="sNewCur" type="button" hidden
+                  title="Switch entry currency" aria-label="Switch entry currency">$</button>
+          <span class="se-cur" id="sNewCurStatic">$</span>
           <input class="split-in se-amt" type="number" min="0" step="0.01" placeholder="0.00" id="sNewAmt" />
         </div>
       </div>
+      <p class="se-conv-note" id="sConvNote" hidden></p>
     </div>
 
     <div class="se-header">
@@ -99,6 +130,32 @@ const { storeKey } = Astro.props;
     expenses:    [],
     customSplit: false
   };
+
+  /* ── local currency + planned budget (from data attrs / live rate) ─── */
+  var CUR = {
+    code: wrap.dataset.curCode || null,
+    sym:  wrap.dataset.curSym  || null,
+    rate: parseFloat(wrap.dataset.curRate) || null, // 1 USD = rate local
+  };
+  document.addEventListener("tg:rate", function (e) {
+    if (e.detail && e.detail.rate) CUR.rate = e.detail.rate; // live beats fallback
+  });
+  var PLANNED_PP = parseFloat(wrap.dataset.plannedPp) || 0;
+
+  var CATS = {
+    food:     { label: "🍜 Food",     color: "color-mix(in srgb,var(--accent) 85%,#fff)" },
+    transit:  { label: "🚇 Transit",  color: "color-mix(in srgb,var(--accent) 55%,var(--ink))" },
+    tickets:  { label: "🎟 Tickets",  color: "color-mix(in srgb,var(--accent) 65%,#fff)" },
+    shopping: { label: "🛍 Shopping", color: "color-mix(in srgb,var(--accent) 35%,var(--ink))" },
+    lodging:  { label: "🏨 Lodging",  color: "var(--accent)" },
+    other:    { label: "· Other",     color: "var(--rule2)" },
+  };
+  function catOptions(sel) {
+    return Object.keys(CATS).map(function (k) {
+      return "<option value='" + k + "'" + (k === (sel || "other") ? " selected" : "") + ">" +
+        CATS[k].label + "</option>";
+    }).join("");
+  }
 
   /* ── persistence ─────────────────────────── */
   function load() {
@@ -278,21 +335,32 @@ const { storeKey } = Astro.props;
           "</div>";
       }
 
+      var localChip = (exp.localAmt && exp.localCur)
+        ? "<span class='se-local'>" + esc((CUR.sym || "") + Number(exp.localAmt).toLocaleString() + " " + exp.localCur) + "</span>"
+        : "";
       return "<div class='se-row' data-ei='" + ei + "'>" +
         "<div class='se-main'>" +
         "<span class='se-drag' draggable='true' aria-label='Drag to reorder' title='Drag to reorder'>⠿</span>" +
         "<select class='split-in se-payer' data-ei='" + ei + "'>" + memberOptions(exp.paidBy) + "</select>" +
         "<input class='split-in se-desc' type='text' placeholder='What for?'" +
           " value='" + esc(exp.desc || "") + "' data-ei='" + ei + "' data-field='desc' />" +
+        "<select class='split-in se-cat-sel' data-ei='" + ei + "' data-cat>" + catOptions(exp.cat) + "</select>" +
         "<div class='se-amt-wrap'><span class='se-cur'>$</span>" +
         "<input class='split-in se-amt' type='number' min='0' step='0.01' placeholder='0.00'" +
           " value='" + (exp.amount != null ? String(exp.amount) : "") + "'" +
-          " data-ei='" + ei + "' data-field='amount' /></div>" +
+          " data-ei='" + ei + "' data-field='amount' />" + localChip + "</div>" +
         "<button class='split-del' type='button' data-del-e='" + ei + "' aria-label='Remove expense'>×</button>" +
         "</div>" +
         customBlock +
         "</div>";
     }).join("");
+
+    list.querySelectorAll("[data-cat]").forEach(function (sel) {
+      sel.addEventListener("change", function () {
+        state.expenses[parseInt(this.dataset.ei, 10)].cat = this.value;
+        save(); renderResults();
+      });
+    });
 
     list.querySelectorAll(".se-payer").forEach(function (sel) {
       sel.addEventListener("change", function () {
@@ -306,6 +374,11 @@ const { storeKey } = Astro.props;
         var fld = this.dataset.field;
         var val = fld === "amount" ? (parseFloat(this.value) || null) : this.value;
         state.expenses[ei][fld] = val;
+        if (fld === "amount") {
+          // Hand-edited USD invalidates a stored local-currency origin.
+          delete state.expenses[ei].localAmt;
+          delete state.expenses[ei].localCur;
+        }
         if (fld === "amount" && !state.customSplit) {
           var n    = state.members.length;
           var even = (parseFloat(this.value) || 0) / (n || 1);
@@ -436,6 +509,46 @@ const { storeKey } = Astro.props;
     }, 0);
     if (totUSD) totUSD.textContent = "$" + total.toFixed(2);
 
+    /* Plan vs logged (per person, from the guide's own budget section). */
+    var planEl = document.getElementById("sPlanLine");
+    if (planEl) {
+      if (PLANNED_PP > 0 && state.members.length) {
+        var pp = total / state.members.length;
+        var pct = Math.round((pp / PLANNED_PP) * 100);
+        planEl.hidden = false;
+        planEl.textContent = "Plan ≈$" + Math.round(PLANNED_PP).toLocaleString() +
+          " pp · logged $" + pp.toFixed(0) + " pp (" + pct + "%)";
+        planEl.classList.toggle("split-plan--over", pct > 100);
+      } else planEl.hidden = true;
+    }
+
+    /* Category breakdown — stacked bar + legend. */
+    var bd = document.getElementById("sBreakdown");
+    var bar = document.getElementById("sBar");
+    var leg = document.getElementById("sLegend");
+    if (bd && bar && leg) {
+      var byCat = {};
+      state.expenses.forEach(function (e) {
+        var amt = parseFloat(e.amount) || 0;
+        if (!amt) return;
+        var k = CATS[e.cat] ? e.cat : "other";
+        byCat[k] = (byCat[k] || 0) + amt;
+      });
+      var keys = Object.keys(byCat);
+      if (total > 0 && keys.length) {
+        bd.hidden = false;
+        keys.sort(function (a, b) { return byCat[b] - byCat[a]; });
+        bar.innerHTML = keys.map(function (k) {
+          var w = (byCat[k] / total) * 100;
+          return "<span class='split-bar-seg' style='width:" + w.toFixed(1) + "%;background:" + CATS[k].color + "'></span>";
+        }).join("");
+        leg.innerHTML = keys.map(function (k) {
+          return "<span class='split-leg-item'><span class='split-leg-dot' style='background:" + CATS[k].color + "'></span>" +
+            CATS[k].label + " " + fmtUSD(byCat[k]) + " (" + Math.round((byCat[k] / total) * 100) + "%)</span>";
+        }).join("");
+      } else bd.hidden = true;
+    }
+
     var calc = calculate();
 
     if (bDiv) {
@@ -497,19 +610,58 @@ const { storeKey } = Astro.props;
   var newPayerEl = document.getElementById("sNewPayer");
   var newDescEl  = document.getElementById("sNewDesc");
   var newAmtEl   = document.getElementById("sNewAmt");
+  /* Entry currency toggle — type ₩38,000 at the register, it stores USD. */
+  var newCurBtn    = document.getElementById("sNewCur");
+  var newCurStatic = document.getElementById("sNewCurStatic");
+  var convNote     = document.getElementById("sConvNote");
+  var newCatEl     = document.getElementById("sNewCat");
+  var entryLocal   = false;
+  function curAvailable() { return !!(CUR.code && CUR.rate); }
+  function syncCurUI() {
+    if (!newCurBtn || !newCurStatic) return;
+    if (!curAvailable()) { newCurBtn.hidden = true; newCurStatic.hidden = false; return; }
+    newCurBtn.hidden = false; newCurStatic.hidden = true;
+    newCurBtn.textContent = entryLocal ? (CUR.sym || CUR.code) : "$";
+    syncConvNote();
+  }
+  function syncConvNote() {
+    if (!convNote) return;
+    var amt = parseFloat(newAmtEl && newAmtEl.value);
+    if (!entryLocal || !amt || !CUR.rate) { convNote.hidden = true; return; }
+    convNote.hidden = false;
+    convNote.textContent = (CUR.sym || "") + amt.toLocaleString() + " " + CUR.code +
+      " ≈ $" + (amt / CUR.rate).toFixed(2) + " at the current rate";
+  }
+  if (newCurBtn) {
+    newCurBtn.addEventListener("click", function () {
+      entryLocal = !entryLocal;
+      syncCurUI();
+      if (newAmtEl) newAmtEl.focus();
+    });
+  }
+  if (newAmtEl) newAmtEl.addEventListener("input", syncConvNote);
+  document.addEventListener("tg:rate", syncCurUI);
+  syncCurUI();
+
   if (addExpense) {
     addExpense.addEventListener("click", function () {
       if (!state.members.length) return;
-      var amt = parseFloat(newAmtEl.value);
-      if (!amt || amt <= 0) { newAmtEl.focus(); return; }
+      var raw = parseFloat(newAmtEl.value);
+      if (!raw || raw <= 0) { newAmtEl.focus(); return; }
+      var isLocal = entryLocal && curAvailable();
+      var amt = isLocal ? Math.round((raw / CUR.rate) * 100) / 100 : raw;
       var payer = parseInt(newPayerEl.value, 10) || 0;
       var even  = amt / state.members.length;
-      state.expenses.push({
+      var exp = {
         paidBy: payer, desc: newDescEl.value || "", amount: amt,
+        cat: (newCatEl && newCatEl.value) || "other",
         customAmts: state.members.map(function () { return parseFloat(even.toFixed(2)); })
-      });
+      };
+      if (isLocal) { exp.localAmt = raw; exp.localCur = CUR.code; }
+      state.expenses.push(exp);
       save(); renderExpenses(); renderResults();
       newDescEl.value = ""; newAmtEl.value = "";
+      syncConvNote();
       newDescEl.focus();
     });
     // Enter anywhere in the entry row commits it — the button now sits at the top
@@ -614,6 +766,51 @@ const { storeKey } = Astro.props;
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
+    });
+  }
+
+  /* CSV export — opens straight in Excel/Sheets for post-trip reconciling. */
+  var csvBtn = document.getElementById("sExportCsv");
+  if (csvBtn) {
+    csvBtn.addEventListener("click", function () {
+      var q = function (s) { return '"' + String(s == null ? "" : s).replace(/"/g, '""') + '"'; };
+      var rows = [["Paid by", "Description", "Category", "Amount (USD)", "Local amount", "Local currency"]];
+      state.expenses.forEach(function (e) {
+        rows.push([
+          memberName(parseInt(e.paidBy, 10) || 0), e.desc || "",
+          (CATS[e.cat] ? CATS[e.cat].label.replace(/^\S+\s*/, "") : "Other"),
+          (parseFloat(e.amount) || 0).toFixed(2),
+          e.localAmt != null ? e.localAmt : "", e.localCur || "",
+        ]);
+      });
+      var csv = rows.map(function (r) { return r.map(q).join(","); }).join("\r\n");
+      var blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "budget-" + (wrap.dataset.sk || "guide") + ".csv";
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+  }
+
+  /* Copy settle plan — the who-pays-who list as text for the group chat. */
+  var copySettleBtn = document.getElementById("sCopySettle");
+  if (copySettleBtn) {
+    var copySettleDefault = copySettleBtn.textContent;
+    copySettleBtn.addEventListener("click", function () {
+      var calc = calculate();
+      var lines = calc.txns.map(function (t) {
+        var via = (state.members[t.to] || {}).payment;
+        return memberName(t.from) + " → " + memberName(t.to) + ": " + fmtUSD(t.amt) + (via ? " (via " + via + ")" : "");
+      });
+      var text = lines.length ? "Settle-up:\n" + lines.join("\n") : "All square — no transfers needed.";
+      function flash(ok) {
+        copySettleBtn.textContent = ok ? "✓ Copied" : "Copy failed";
+        setTimeout(function () { copySettleBtn.textContent = copySettleDefault; }, 1800);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { flash(true); }, function () { flash(false); });
+      } else flash(false);
     });
   }
 

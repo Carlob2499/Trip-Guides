@@ -24,6 +24,12 @@ New guides start from: Plan · Essentials · Getting around · Itinerary ·
 Sights · Food & shopping · References, adding at most 3 trip-specific
 groups.
 
+**Budget `est` values power plan-vs-logged.** The Budget calculator compares
+its logged spend against the guide's own `budget` section (USD sections
+only; `est × dayCount` for `basis:"day"` items). Generated drafts emit
+`est: 0` (line hidden) — filling real researched estimates during
+graduation turns the comparison on automatically.
+
 **Day `tldr` (required on researched guides).** Every day item carries a
 one-sentence `tldr` — the glanceable summary rendered huge in Focus Today
 and as the day card's lead line. Derive it from the day's own researched

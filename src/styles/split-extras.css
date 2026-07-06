@@ -1,0 +1,30 @@
+/* === BUDGET CALCULATOR EXTRAS ================================================
+   Local-currency entry, category tags + breakdown bar, plan-vs-logged line,
+   settle-plan copy, CSV export (buttons reuse .sc-add-btn). */
+
+/* Entry currency toggle */
+.se-cur-toggle{cursor:pointer;background:var(--ink);color:var(--bg);border:none;border-radius:5px;padding:.1rem .45rem;font-family:var(--font-data);font-size:.8rem;font-weight:700;line-height:1.6}
+.se-cur-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.se-conv-note{margin:.35rem 0 0;font-family:var(--font-data);font-size:.72rem;color:var(--muted)}
+
+/* Category select — compact */
+.se-cat-sel{max-width:8.5rem;font-size:.8rem}
+
+/* Local-origin chip under a converted amount */
+.se-local{display:block;font-family:var(--font-data);font-size:.62rem;color:var(--muted);margin-top:.1rem;white-space:nowrap}
+
+/* Plan vs logged */
+.split-plan{display:block;margin-top:.25rem;font-family:var(--font-data);font-size:.74rem;color:var(--muted)}
+.split-plan--over{color:var(--warn,#b3261e);font-weight:700}
+
+/* Category breakdown */
+.split-breakdown{margin:.6rem 0 .9rem}
+.split-bar{display:flex;height:10px;border-radius:999px;overflow:hidden;background:var(--bg2);border:1px solid var(--rule)}
+.split-bar-seg{display:block;height:100%}
+.split-legend{display:flex;flex-wrap:wrap;gap:.35rem .9rem;margin-top:.45rem}
+.split-leg-item{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--font-data);font-size:.7rem;color:var(--muted)}
+.split-leg-dot{width:9px;height:9px;border-radius:50%;flex:none}
+
+/* Settle head: keep the copy button on the right */
+.split-settle-head{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+#sCopySettle{margin-left:auto}
