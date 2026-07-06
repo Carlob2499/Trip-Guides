@@ -105,7 +105,9 @@ const daysForBanner     = _cfg.daysForBanner || [];
               btn.addEventListener("click", function () {
                 var t = this.dataset.tab;
                 showTab(specialPanels.hasOwnProperty(t) ? t : parseInt(t, 10));
-                window.scrollTo({ top: 0, behavior: "smooth" });
+                // Post-switch scrolling is owned by scroll-memory.js (per-tab
+                // position restore) — a hard jump to page top re-showed the
+                // hero on every section change and lost the reader's place.
               });
             });
             guideTabs.addEventListener("keydown", function (e) {
