@@ -39,8 +39,11 @@
 .mast-hero .guide-stats,.mast-hero #wxWrap,.mast-hero .whats-next,.mast-hero .jl-wrap,.mast-hero .draft-graduate{max-width:1400px;margin-left:auto;margin-right:auto;padding-left:clamp(1.2rem,3.2vw,2.4rem);padding-right:clamp(1.2rem,3.2vw,2.4rem);justify-content:flex-start}
 
 /* ── Orchestrated page-load motion ──────────────────────────────────────── */
+/* Photo motion (Ken Burns drift-in + scroll parallax) is owned entirely by
+   hero-parallax.js — a finished CSS fill-forwards animation still overrides
+   inline transforms, which would freeze the parallax, so the image transform
+   is never animated in CSS. The text rises here (no transform conflict). */
 @media(prefers-reduced-motion:no-preference){
-  .mast-photo .mast-img{animation:mastDrift 18s ease-out both}
   .mast-eyebrow{animation:mastRise .7s cubic-bezier(.2,.7,.2,1) .05s both}
   .mast-title{animation:mastRise .8s cubic-bezier(.2,.7,.2,1) .14s both}
   .mast-dek{animation:mastRise .8s cubic-bezier(.2,.7,.2,1) .26s both}
@@ -48,7 +51,6 @@
 }
 @keyframes mastRise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
 @keyframes mastFade{from{opacity:0}to{opacity:1}}
-@keyframes mastDrift{from{transform:scale(1.09)}to{transform:scale(1)}}
 
 /* Print: flatten to a plain heading */
 @media print{

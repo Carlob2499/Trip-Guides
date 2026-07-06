@@ -1,0 +1,52 @@
+/* === SIGHT CARDS — editorial photo-forward treatment ========================
+   The venue photo is the card's hero: full-bleed to the rounded card edges,
+   3:2, with the kicker + name laid over a legibility gradient (matches the
+   masthead language) and a slow zoom on hover. Text-only venues keep a clean
+   typographic head. Award-site restraint: one bold move (the overlaid photo),
+   everything else quiet. */
+
+/* Photo cards: kill the card padding so the media bleeds to the rounded edge;
+   the body re-adds its own padding below. */
+.sight--photo{padding:0;overflow:hidden}
+
+.sight-media{position:relative;margin:0;aspect-ratio:3/2;overflow:hidden;background:
+  linear-gradient(100deg,var(--bg2) 30%,color-mix(in srgb,var(--bg2) 60%,var(--card)) 50%,var(--bg2) 70%);
+  background-size:200% 100%;animation:sightShimmer 1.4s linear infinite}
+@media(prefers-reduced-motion:reduce){.sight-media{animation:none}}
+@keyframes sightShimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+
+.sight-media .cardimg{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;object-fit:cover;border-radius:0;margin:0;
+  transform:scale(1.001);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.card.sight--photo:hover .cardimg{transform:scale(1.06)}
+@media(prefers-reduced-motion:reduce){.sight--photo:hover .cardimg{transform:none}}
+
+/* Failed image → static "loads online" plate (no infinite shimmer). */
+.sight-media.media-fail{animation:none;background:var(--bg2)}
+.sight-media.media-fail .cardimg{display:none}
+.sight-media.media-fail::after{content:"Photo loads online";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-data);font-size:.72rem;letter-spacing:.04em;color:var(--muted)}
+.sight-media.media-fail .sight-media-grad,.sight-media.media-fail .imgcredit{display:none}
+
+.sight-media-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,13,16,.82) 0%,rgba(10,13,16,.30) 42%,rgba(10,13,16,0) 68%)}
+
+.sight-media-cap{position:absolute;left:0;right:0;bottom:0;margin:0;padding:.9rem 1rem .85rem;color:#f4f6ef}
+.tag--onphoto{color:#e9ede2;opacity:.95;margin-bottom:.15rem;text-shadow:0 1px 6px rgba(0,0,0,.4)}
+.sight-name--onphoto{color:#fff;margin:0;font-size:1.32rem;line-height:1.12;text-shadow:0 1px 12px rgba(0,0,0,.4)}
+
+.imgcredit--onphoto{position:absolute;top:.55rem;right:.55rem;left:auto;margin:0;padding:.2rem .5rem;font-size:.6rem;color:rgba(244,246,239,.85);background:rgba(10,13,16,.42);border-radius:999px;text-align:right;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.imgcredit--onphoto a,.imgcredit--onphoto{border-bottom:0;text-decoration:none}
+.imgcredit--onphoto:hover{background:rgba(10,13,16,.62);color:#fff}
+
+/* Bodies */
+.sight--photo .sight-body{padding:1rem 1.3rem 1.15rem}
+.sight--text .sight-head{margin-bottom:.1rem}
+.sight-body p{margin:0}
+
+/* Print: show the photo, drop the overlay chrome, name as heading below. */
+@media print{
+  .sight--photo{padding:0}
+  .sight-media{aspect-ratio:auto;animation:none;background:none}
+  .sight-media .cardimg{position:static;max-height:180px}
+  .sight-media-grad,.imgcredit--onphoto{display:none}
+  .sight-media-cap{position:static;padding:.2rem 0;color:#111}
+  .sight-name--onphoto,.tag--onphoto{color:#111;text-shadow:none}
+}

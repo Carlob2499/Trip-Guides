@@ -14,26 +14,34 @@ const gmaps = (m: any) =>
   `https://www.google.com/maps/search/?api=1&query=${m.lat},${m.lng}`;
 ---
 {(sec.items || []).map((it: any) => (
-  <div class="card sight" id={it.map ? `sight-${pinSlug(it.name)}` : undefined}>
-    {it.img && (
-      <img class="cardimg" loading="lazy" alt={it.img.alt || ""}
-        src={commonsSrc(it.img.file, 800)}
-        srcset={`${commonsSrc(it.img.file, 480)} 480w, ${commonsSrc(it.img.file, 800)} 800w, ${commonsSrc(it.img.file, 1200)} 1200w`}
-        sizes="(max-width:899px) 100vw, 760px"
-        onerror="this.classList.add('imgfail')" />
+  <article class={`card sight ${it.img ? "sight--photo" : "sight--text"}`} id={it.map ? `sight-${pinSlug(it.name)}` : undefined}>
+    {it.img ? (
+      /* Photo-forward: the image is the card hero with an overlaid caption
+         (kicker + name), a legibility gradient, and a hover zoom. */
+      <figure class="sight-media">
+        <img class="cardimg" loading="lazy" decoding="async" alt={it.img.alt || it.name || ""}
+          src={commonsSrc(it.img.file, 800)}
+          srcset={`${commonsSrc(it.img.file, 480)} 480w, ${commonsSrc(it.img.file, 800)} 800w, ${commonsSrc(it.img.file, 1200)} 1200w`}
+          sizes="(max-width:899px) 100vw, 420px"
+          onerror="this.closest('.sight-media').classList.add('media-fail')" />
+        <span class="sight-media-grad" aria-hidden="true"></span>
+        <figcaption class="sight-media-cap">
+          {it.kicker && <span class="tag tag--onphoto">{it.kicker}</span>}
+          <h4 class="sight-name sight-name--onphoto">{it.name}</h4>
+        </figcaption>
+        <a class="imgcredit imgcredit--onphoto" href={commonsPage(it.img.file)} target="_blank" rel="noopener" aria-label="Photo source on Wikimedia Commons">Wikimedia Commons ↗</a>
+      </figure>
+    ) : (
+      <div class="sight-head">
+        {it.kicker && <span class="tag">{it.kicker}</span>}
+        <h4 class="sight-name">{it.name}</h4>
+      </div>
     )}
-    {it.img && (
-      <span class="imgcredit">
-        <a href={commonsPage(it.img.file)} target="_blank" rel="noopener">
-          Photo: Wikimedia Commons ↗
-        </a>
-      </span>
-    )}
-    {it.kicker && <span class="tag">{it.kicker}</span>}
-    <h4 class="sight-name">{it.name}</h4>
-    <p>
-      <Fragment set:html={it.body || ""} />
-      {it.map && <> <button class="pin-jump" type="button" data-pin-jump={pinSlug(it.name)}>◈ Show on map</button> <a class="maplink" target="_blank" rel="noopener" href={gmaps(it.map)}>Open in Maps ↗</a></>}
-    </p>
-  </div>
+    <div class="sight-body">
+      <p>
+        <Fragment set:html={it.body || ""} />
+        {it.map && <> <button class="pin-jump" type="button" data-pin-jump={pinSlug(it.name)}>◈ Show on map</button> <a class="maplink" target="_blank" rel="noopener" href={gmaps(it.map)}>Open in Maps ↗</a></>}
+      </p>
+    </div>
+  </article>
 ))}

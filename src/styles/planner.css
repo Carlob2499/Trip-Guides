@@ -10,8 +10,9 @@
 .dchip:hover{border-color:var(--accent);transform:translateY(-1px)}
 .dchip-num{font-family:var(--font-data);font-size:.62rem;font-weight:700;letter-spacing:.06em;color:var(--accent);line-height:1}
 .dchip-date{font-family:var(--font-display);font-size:.78rem;font-weight:640;letter-spacing:-.01em;white-space:nowrap;line-height:1.15}
-.dchip-active{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.dchip-active{background:var(--accent);border-color:var(--accent);color:var(--bg);transform:translateY(-2px);box-shadow:0 4px 14px color-mix(in srgb,var(--accent) 34%,transparent)}
 .dchip-active .dchip-num{color:color-mix(in srgb,var(--bg) 78%,transparent)}
+@media(prefers-reduced-motion:reduce){.dchip-active{transform:none;box-shadow:none}}
 @media(prefers-reduced-motion:reduce){.dchip{transition:none}.dchip:hover{transform:none}}
 
 /* ── Planner grid — days column + sticky map (wide desktop only) ──────────── */
