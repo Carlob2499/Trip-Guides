@@ -44,5 +44,11 @@
   }
 
   refresh();
-  setInterval(refresh, 60000);
+  // Battery-conscious: the minute tick only runs while the page is visible;
+  // returning to the tab refreshes immediately.
+  var timer = setInterval(refresh, 60000);
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) { clearInterval(timer); timer = null; }
+    else if (!timer) { refresh(); timer = setInterval(refresh, 60000); }
+  });
 })();

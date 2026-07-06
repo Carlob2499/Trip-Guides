@@ -1,0 +1,71 @@
+/* === FIELD TOOLS — on-the-street toolkit styles =============================
+   Address copy chips, stop check-off, currency converter popover, jump-to-
+   today chip, mini toast, lightbox, swipe edge glow, kit-complete pop, and
+   the desktop reading spine. */
+
+/* ── Tap-to-copy addresses ────────────────────────────────────────────────── */
+.addr-copy{cursor:pointer;border-bottom:1px dashed color-mix(in srgb,var(--accent) 55%,transparent);padding-bottom:1px}
+.addr-copy::after{content:" ⧉";font-size:.78em;color:var(--accent)}
+.addr-copy:hover,.addr-copy:focus-visible{background:color-mix(in srgb,var(--accent) 12%,transparent);outline:none}
+
+/* ── Mini toast ───────────────────────────────────────────────────────────── */
+.ft-toast{position:fixed;left:50%;bottom:5.4rem;transform:translate(-50%,8px);z-index:940;padding:.5rem .95rem;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:.74rem;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+.ft-toast-on{opacity:1;transform:translate(-50%,0)}
+@media(min-width:900px){.ft-toast{bottom:1.6rem}}
+
+/* ── Stop check-off ───────────────────────────────────────────────────────── */
+.stop-num{cursor:pointer;border-radius:999px;padding:.1rem .3rem;margin:-.1rem -.3rem}
+.stop-num:hover,.stop-num:focus-visible{background:color-mix(in srgb,var(--accent) 16%,transparent);outline:none}
+.stop-done .stop-name{text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--accent) 60%,transparent);opacity:.6}
+.stop-done .stop-note{opacity:.5}
+.stop-done .stop-num{color:var(--green,#2e7d4f)}
+.stop-done .stop-num::after{content:" ✓"}
+
+/* ── Currency converter popover ───────────────────────────────────────────── */
+.cur-pop{position:absolute;z-index:120;width:240px;padding:.75rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md);box-shadow:0 10px 32px rgba(10,14,18,.3)}
+.cur-in{width:100%;padding:.45rem .6rem;font:inherit;font-size:.95rem;color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:var(--r-sm)}
+.cur-out{margin-top:.5rem;font-family:var(--font-data);font-size:.8rem;line-height:1.7;color:var(--ink)}
+
+/* ── Jump-to-today chip ───────────────────────────────────────────────────── */
+.today-chip{position:fixed;left:50%;bottom:5.2rem;transform:translateX(-50%);z-index:70;padding:.6rem 1.1rem;background:var(--accent);color:var(--bg);border:none;border-radius:999px;font-family:var(--font-display);font-weight:640;font-size:.9rem;box-shadow:0 6px 22px color-mix(in srgb,var(--accent) 45%,transparent);cursor:pointer}
+@media(min-width:900px){.today-chip{bottom:1.7rem;left:auto;right:6rem;transform:none}}
+@media(prefers-reduced-motion:no-preference){.today-chip{animation:chipIn .5s cubic-bezier(.2,1.2,.3,1) .8s both}}
+@keyframes chipIn{from{opacity:0;transform:translateX(-50%) translateY(16px)}to{opacity:1}}
+@media(min-width:900px){@keyframes chipIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}}
+
+/* ── Lightbox ─────────────────────────────────────────────────────────────── */
+.sight--photo .cardimg{cursor:zoom-in}
+.lb-backdrop{position:fixed;inset:0;z-index:300;display:none;background:rgba(8,11,14,.92);align-items:center;justify-content:center;padding:1rem}
+.lb-backdrop.lb-on{display:flex}
+.lb-fig{position:relative;margin:0;max-width:min(1200px,96vw);max-height:92vh;display:flex;flex-direction:column}
+.lb-img{max-width:100%;max-height:82vh;object-fit:contain;border-radius:var(--r-md)}
+.lb-cap{margin-top:.6rem;color:#dfe4d8;font-size:.85rem;display:flex;gap:.8rem;align-items:baseline;flex-wrap:wrap}
+.lb-credit{color:#aeb8a6;font-family:var(--font-data);font-size:.7rem}
+.lb-x{position:absolute;top:-.4rem;right:-.4rem;z-index:2;width:40px;height:40px;background:var(--ink);color:var(--bg);border:1px solid rgba(244,246,239,.25);border-radius:50%;cursor:pointer;font-size:.9rem}
+.lb-x:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+/* ── Swipe edge glow ──────────────────────────────────────────────────────── */
+html[data-swipe-hint]::after{content:"";position:fixed;top:0;bottom:0;width:26px;z-index:80;pointer-events:none;opacity:.85}
+html[data-swipe-hint="fwd"]::after{right:0;background:linear-gradient(to left,color-mix(in srgb,var(--accent) 55%,transparent),transparent)}
+html[data-swipe-hint="back"]::after{left:0;background:linear-gradient(to right,color-mix(in srgb,var(--accent) 55%,transparent),transparent)}
+
+/* ── Day-kit completion pop ───────────────────────────────────────────────── */
+@media(prefers-reduced-motion:no-preference){
+  .day-kitcount.done{animation:kitPop .45s cubic-bezier(.2,1.4,.3,1)}
+}
+@keyframes kitPop{0%{transform:scale(1)}45%{transform:scale(1.18)}100%{transform:scale(1)}}
+
+/* ── Reading spine (desktop ≥1100px) ─────────────────────────────────────── */
+.spine{display:none}
+@media(min-width:1100px){
+  .spine{display:flex;flex-direction:column;gap:.45rem;position:fixed;left:.9rem;top:50%;transform:translateY(-50%);z-index:55}
+  .spine-tick{position:relative;width:5px;height:30px;padding:0;background:color-mix(in srgb,var(--rule) 70%,transparent);border:none;border-radius:4px;cursor:pointer;overflow:visible}
+  .spine-fill{position:absolute;left:0;right:0;top:0;height:0;background:var(--accent);border-radius:4px;transition:height .25s ease}
+  .spine-seen .spine-fill{background:color-mix(in srgb,var(--accent) 55%,var(--rule))}
+  .spine-active{width:7px}
+  .spine-tip{position:absolute;left:14px;top:50%;transform:translateY(-50%) translateX(-4px);white-space:nowrap;padding:.25rem .6rem;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:.68rem;border-radius:6px;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s}
+  .spine-tick:hover .spine-tip,.spine-tick:focus-visible .spine-tip{opacity:1;transform:translateY(-50%) translateX(0)}
+  .spine-tick:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+}
+@media(prefers-reduced-motion:reduce){.spine-fill,.spine-tip{transition:none}.day-kitcount.done{animation:none}.today-chip{animation:none}}
+@media print{.spine,.today-chip,.ft-toast,.cur-pop,.lb-backdrop{display:none!important}}

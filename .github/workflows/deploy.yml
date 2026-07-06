@@ -29,7 +29,14 @@ jobs:
       # self-healing: on any fetch error it keeps the committed JSON, so the build
       # always proceeds with last-good data.
       - run: node scripts/fetch-holidays.mjs
+      # Google Maps browser key (optional). When the repo secret exists, guides
+      # build with the Google Maps provider; when absent, Leaflet/OSM is used.
+      # The key is a PUBLIC browser key — restrict it by HTTP referrer + API
+      # in Google Cloud Console; the secret only keeps it out of the repo.
       - run: npm run build
+        env:
+          PUBLIC_GMAPS_KEY: ${{ secrets.PUBLIC_GMAPS_KEY }}
+          PUBLIC_GMAPS_MAP_ID: ${{ secrets.PUBLIC_GMAPS_MAP_ID }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist/

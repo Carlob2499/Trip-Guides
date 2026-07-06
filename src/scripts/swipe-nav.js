@@ -44,15 +44,30 @@
   }
 
   var sx = 0, sy = 0, st = 0, tracking = false;
+  function clearHint() { document.documentElement.removeAttribute("data-swipe-hint"); }
+
   content.addEventListener("touchstart", function (e) {
     tracking = e.touches.length === 1 && !overlayOpen() && !ownsGesture(e.target);
     if (!tracking) return;
     sx = e.touches[0].clientX; sy = e.touches[0].clientY; st = Date.now();
   }, { passive: true });
 
+  // Live edge glow while a horizontal swipe is forming — the page answers the
+  // gesture before it completes, so the traveler learns it's working.
+  content.addEventListener("touchmove", function (e) {
+    if (!tracking) return;
+    var t = e.touches[0];
+    var dx = t.clientX - sx, dy = t.clientY - sy;
+    if (Math.abs(dx) > 34 && Math.abs(dy) < 46) {
+      document.documentElement.setAttribute("data-swipe-hint", dx < 0 ? "fwd" : "back");
+    } else clearHint();
+  }, { passive: true });
+  content.addEventListener("touchcancel", clearHint, { passive: true });
+
   content.addEventListener("touchend", function (e) {
     if (!tracking) return;
     tracking = false;
+    clearHint();
     var t = e.changedTouches[0];
     var dx = t.clientX - sx, dy = t.clientY - sy, dt = Date.now() - st;
     if (Math.abs(dx) < 72 || Math.abs(dy) > 46 || dt > 650) return;
@@ -61,6 +76,7 @@
     var next = dx < 0 ? cur + 1 : cur - 1; // swipe left = fly forward
     if (next < 0 || next >= catCount) return;
     document.documentElement.setAttribute("data-flight", dx < 0 ? "fwd" : "back");
+    try { navigator.vibrate && navigator.vibrate(12); } catch (err) {}
     var btn = tabs.querySelector('.gtab[data-tab="' + next + '"]');
     if (btn) btn.click();
   }, { passive: true });

@@ -17,6 +17,17 @@
   var mounts = Array.prototype.slice.call(document.querySelectorAll("[data-itin-map]"));
   if (!mounts.length) return;
 
+  // Provider switch: when a Google Maps key was present at build (tgConfig),
+  // the Google renderer (gmaps-render.js) takes ALL mounts — same payloads,
+  // feature parity plus vector basemap/POI context. No key → this Leaflet/OSM
+  // path stays, zero-config. One provider owns the page at a time.
+  var _cfgEl = document.getElementById("tgConfig");
+  var _cfg = _cfgEl ? JSON.parse(_cfgEl.textContent || "{}") : {};
+  if (_cfg.gmapsKey) {
+    import("./gmaps-render.js").then(function (m) { m.boot(_cfg); });
+    return;
+  }
+
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var leafletPromise = null;
   function loadLeaflet() {

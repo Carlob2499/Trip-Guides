@@ -21,6 +21,7 @@ import "../styles/overview.css";
 import "../styles/flight.css";
 import "../styles/compass.css";
 import "../styles/mobile-nav.css";
+import "../styles/field-tools.css";
 import "../styles/palette.css";
 import "../styles/print-day.css";
 import "../styles/links-panel.css";
@@ -545,7 +546,7 @@ const tripSummary = buildSummary(guide);
            6. Jet-lag calculator
          ═══════════════════════════════════════════════════════════════════ -->
     <!-- Config for the extracted guide UI module (formerly Astro define:vars). -->
-    <script type="application/json" id="tgConfig" set:html={JSON.stringify({ order, storeKey, mapCenter, firstDayDate, lastDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, daysForBanner })}></script>
+    <script type="application/json" id="tgConfig" set:html={JSON.stringify({ order, storeKey, mapCenter, firstDayDate, lastDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, daysForBanner, gmapsKey: import.meta.env.PUBLIC_GMAPS_KEY ?? null, gmapsMapId: import.meta.env.PUBLIC_GMAPS_MAP_ID ?? null })}></script>
     <!-- Interactive UI — bundled + hashed by Astro into one module shared across guides. -->
     <script>
       import "../scripts/guide-ui.js";
@@ -559,6 +560,9 @@ const tripSummary = buildSummary(guide);
       import "../scripts/scroll-memory.js";
       import "../scripts/now-line.js";
       import "../scripts/offline-pill.js";
+      import "../scripts/field-tools.js";
+      import "../scripts/lightbox.js";
+      import "../scripts/spine.js";
       import "../scripts/hero-parallax.js";
       import "../scripts/palette.js";
       import "../scripts/print-day.js";
