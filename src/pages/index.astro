@@ -67,10 +67,10 @@ const guideExtras = guides.map(g => {
   };
 });
 
-// Split the curated (verified) grid from the "Guides-to-be" draft tier.
+// Only finished, verified guides appear on the hub. A generated draft lives at
+// its own URL until it graduates (draft:false) — the hub never shows scaffolds.
 const withExtras = guides.map((g, i) => ({ g, ex: guideExtras[i] }));
 const curated = withExtras.filter(x => !x.g.data.draft);
-const drafts  = withExtras.filter(x =>  x.g.data.draft);
 
 // Next-trip hero: the curated guide whose trip starts soonest in the future
 // (or is in progress right now). None upcoming → the hub keeps its masthead.
@@ -201,34 +201,6 @@ const countries = [...new Set(gridGuides.map(x => x.g.data.country))].sort();
         ))}
       </div>
       <p class="hub-empty" id="hubEmpty" hidden>No guides match — clear the search or pick another country.</p>
-
-      {drafts.length > 0 && (
-        <section class="hub-drafts" aria-labelledby="draftsHead">
-          <div class="hub-drafts-head">
-            <h2 id="draftsHead">Guides-to-be</h2>
-            <p class="hub-drafts-note">Scaffolds awaiting research — structure and live data are in place, but the facts aren't verified yet.</p>
-          </div>
-          <div class="hub-grid">
-            {drafts.map(({ g }) => (
-              <a class="hubcard hubcard--draft" href={`${base}/guides/${g.id}/`} style={`--accent:${accentFor(g.data.country)}`}>
-                <span class="hubcard-cover hubcard-cover--typo" aria-hidden="true">
-                  <span class="hubcard-cover-initial">{g.data.country.slice(0, 1)}</span>
-                </span>
-                <span class="hubcard-bar" aria-hidden="true"></span>
-                <span class="hubcard-body">
-                  <span class="hubcard-top">
-                    <span class="hubcard-country">{g.data.country}</span>
-                    <span class="hubcard-badge hubcard-badge--draft">Draft</span>
-                  </span>
-                  <span class="hubcard-title">{g.data.title}</span>
-                  <span class="hubcard-dek">Template ready · needs a research pass</span>
-                  <span class="hubcard-go">Open scaffold →</span>
-                </span>
-              </a>
-            ))}
-          </div>
-        </section>
-      )}
     </main>
 
     <!-- New-guide quick-start modal -->
