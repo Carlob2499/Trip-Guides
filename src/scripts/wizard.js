@@ -7,6 +7,8 @@
    every downstream step (Groq generation, verification, graduation) is
    untouched, so new guides inherit the whole feature set automatically. */
 
+import { reducedMotion } from "./util.js";
+
 (function () {
   var form = document.getElementById("ngForm");
   var modal = document.getElementById("ngModal");
@@ -174,7 +176,7 @@
     }
     var fromEl = stepEls[cur], toEl = stepEls[next];
     cur = next;
-    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var reduced = reducedMotion();
     if (reduced) { sync(); return; }
     animating = true;
     import("gsap").then(function (m) {

@@ -6,6 +6,8 @@
    active chip. The chips stay the accessible, keyboard-first navigator. Uses a
    rAF + scroll-listener (proven robust; no IntersectionObserver). */
 
+import { reducedMotion } from "./util.js";
+
 (function () {
   var scrub = document.getElementById("dayScrub");
   if (!scrub) return;
@@ -14,7 +16,7 @@
   var dayEls = Array.prototype.slice.call(document.querySelectorAll(".planner-days .day[data-day]"));
   if (!chips.length || !dayEls.length || !track) return;
 
-  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var reduced = reducedMotion();
   var chromeH = 110; // sticky chrome + scrubber allowance (vertical modes)
   var active = -1;
 

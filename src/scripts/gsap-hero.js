@@ -3,8 +3,10 @@
    locally (npm), lazy-imported, and skipped entirely under
    prefers-reduced-motion. hero-parallax.js owns the photo transform. */
 
+import { reducedMotion } from "./util.js";
+
 (function () {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (reducedMotion()) return;
   var mast = document.querySelector(".mast-hero");
   if (!mast) return;
 

@@ -9,6 +9,8 @@
      itself (tab bar, day scrubber, maps, tables) or an open overlay
    · never fights text selection (single touch only). */
 
+import { tapHaptic } from "./util.js";
+
 (function () {
   if (!window.matchMedia("(max-width: 899px)").matches &&
       !window.matchMedia("(pointer: coarse)").matches) return;
@@ -73,10 +75,9 @@
     if (Math.abs(dx) < 72 || Math.abs(dy) > 46 || dt > 650) return;
     var cur = currentIdx();
     if (cur < 0) return;
-    var next = dx < 0 ? cur + 1 : cur - 1; // swipe left = fly forward
+    var next = dx < 0 ? cur + 1 : cur - 1; // swipe left = next section
     if (next < 0 || next >= catCount) return;
-    document.documentElement.setAttribute("data-flight", dx < 0 ? "fwd" : "back");
-    try { navigator.vibrate && navigator.vibrate(12); } catch (err) {}
+    tapHaptic();
     var btn = tabs.querySelector('.gtab[data-tab="' + next + '"]');
     if (btn) btn.click();
   }, { passive: true });

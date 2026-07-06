@@ -4,8 +4,10 @@
    short-circuits at the top, and a timeout un-hides everything if the
    IntersectionObserver never delivers (wedged/backgrounded tabs). */
 
+import { reducedMotion } from "./util.js";
+
 (function () {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (reducedMotion()) return;
   if (!("IntersectionObserver" in window)) return;
 
   var targets = Array.prototype.slice.call(

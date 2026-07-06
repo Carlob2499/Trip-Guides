@@ -21,6 +21,7 @@
   --font-body:'Literata Variable',Georgia,'Times New Roman',serif;
   --font-data:'Spline Sans Mono Variable',ui-monospace,'Courier New',monospace;
   --r-sm:6px;--r-md:10px;--r-lg:16px; /* radius scale — rounded-container language */
+  --ease-spring:cubic-bezier(.34,1.56,.64,1); /* gentle overshoot — press-release + hover-lift */
 }
 /* Dark-mode override — via data-theme="dark" on <html>, or auto via OS preference. */
 @media(prefers-color-scheme:dark){html:not([data-theme="light"]){

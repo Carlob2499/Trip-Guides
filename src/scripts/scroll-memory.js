@@ -11,6 +11,8 @@
      this module's landing scroll by design — a specific target beats a
      remembered position. */
 
+import { reducedMotion } from "./util.js";
+
 (function () {
   var tabs = document.getElementById("guideTabs");
   var content = document.getElementById("content");
@@ -18,7 +20,7 @@
 
   var storeKey = document.body.getAttribute("data-storekey") || "guide";
   var KEY = "tg-scrollmem-" + storeKey;
-  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var reduced = reducedMotion();
 
   function load() {
     try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; }

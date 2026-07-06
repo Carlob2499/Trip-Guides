@@ -6,13 +6,14 @@
 /* ── Day scrubber — sticky numbered chips ─────────────────────────────────── */
 .day-scrub{position:sticky;top:var(--chrome-h);z-index:30;display:flex;gap:.45rem;overflow-x:auto;scrollbar-width:none;padding:.55rem .15rem;margin:0 0 .9rem;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:var(--r-md)}
 .day-scrub::-webkit-scrollbar{display:none}
-.dchip{flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:.15rem;min-width:4.6rem;min-height:44px;padding:.45rem .6rem .4rem;background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:var(--r-md);cursor:pointer;transition:background .15s,border-color .15s,transform .12s;text-align:left}
+.dchip{flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:.15rem;min-width:4.6rem;min-height:44px;padding:.45rem .6rem .4rem;background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:var(--r-md);cursor:pointer;transition:background .15s,border-color .15s,transform .2s var(--ease-spring);text-align:left}
 .dchip:hover{border-color:var(--accent);transform:translateY(-1px)}
+.dchip:active{transform:scale(.94)}
 .dchip-num{font-family:var(--font-data);font-size:.62rem;font-weight:700;letter-spacing:.06em;color:var(--accent);line-height:1}
 .dchip-date{font-family:var(--font-display);font-size:.78rem;font-weight:640;letter-spacing:-.01em;white-space:nowrap;line-height:1.15}
 .dchip-active{background:var(--accent);border-color:var(--accent);color:var(--bg)}
 .dchip-active .dchip-num{color:color-mix(in srgb,var(--bg) 78%,transparent)}
-@media(prefers-reduced-motion:reduce){.dchip{transition:none}.dchip:hover{transform:none}}
+@media(prefers-reduced-motion:reduce){.dchip{transition:none}.dchip:hover,.dchip:active{transform:none}}
 
 /* ── Itinerary — single column of day cards (the day scrubber sticks above). ─ */
 .planner{min-width:0}

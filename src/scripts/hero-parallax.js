@@ -3,8 +3,10 @@
    throttled, and fully disabled under prefers-reduced-motion. No-op on the
    typographic scaffold heroes (no photo to move). */
 
+import { reducedMotion } from "./util.js";
+
 (function () {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (reducedMotion()) return;
   var img = document.querySelector(".mast-photo .mast-img");
   var frame = document.querySelector(".mast-photo .mast-frame");
   if (!img || !frame) return;
