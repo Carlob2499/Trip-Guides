@@ -554,7 +554,10 @@ const daysForBanner     = _cfg.daysForBanner || [];
             var now  = new Date();
             var trip = resolveTripDate(firstDayDate, now);
             if (!trip) return;
-            var diff = Math.round((trip.getTime() - now.getTime()) / 86400000);
+            // Midnight-to-midnight, matching the hub's countdown — "days to go"
+            // must read the same on both surfaces regardless of time of day.
+            var todayMid = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            var diff = Math.round((trip.getTime() - todayMid.getTime()) / 86400000);
             var pill = document.createElement("span");
             if (diff > 1)       { pill.className = "gstat gstat-countdown"; pill.textContent = diff + " days to go"; }
             else if (diff === 1){ pill.className = "gstat gstat-countdown"; pill.textContent = "Tomorrow!"; }

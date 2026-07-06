@@ -1,0 +1,33 @@
+/* === MASTHEAD OVERVIEW — bento re-plating of the existing live data =========
+   No new data sources: the countdown / local-time / rate pills guide-ui.js
+   already injects into #guideStats, the weather strip, and the What's-Next
+   banner are re-plated as a bento tile row (units.-style rounded blocks).
+   Everything degrades to the original inline pills when JS is off. */
+
+/* Tile row */
+.guide-stats{display:flex;flex-wrap:wrap;gap:.55rem;margin:1.05rem 0 .2rem}
+.guide-stats .gstat{display:flex;flex-direction:column;justify-content:center;gap:.1rem;min-height:58px;padding:.55rem .95rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md);font-family:var(--font-data);font-size:.82rem;font-weight:600;letter-spacing:.02em;color:var(--ink)}
+.guide-stats .gstat-countdown,.guide-stats .gstat-active{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:700}
+.guide-stats .gstat-warning{border-color:var(--accent);color:var(--accent)}
+.guide-stats .gstat-past{color:var(--muted)}
+
+/* Weather strip as a tile */
+.wx-wrap{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md);padding:.5rem .8rem;margin:.9rem 0 0}
+
+/* What's-Next as the accent tile of the row */
+.whats-next{display:flex;align-items:baseline;gap:.6rem;background:color-mix(in srgb,var(--accent) 12%,var(--card));border:1px solid color-mix(in srgb,var(--accent) 45%,var(--rule));border-radius:var(--r-md);padding:.65rem .95rem;margin:.6rem 0 0}
+.whats-next .wn-label{font-family:var(--font-data);font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+
+/* ── Reveal-on-scroll (opacity/transform only; short-circuited under
+      reduced-motion; reveal.js guarantees content is never left hidden) ───── */
+.reveal-pending{opacity:0;transform:translateY(14px)}
+.reveal-in{opacity:1;transform:none;transition:opacity .5s ease,transform .5s ease}
+@media(prefers-reduced-motion:reduce){
+  .reveal-pending{opacity:1;transform:none}
+  .reveal-in{transition:none}
+}
+
+/* ── Glass on floating controls ONLY (sticky chrome + mobile bottom bar);
+      cards stay paper ───────────────────────────────────────────────────── */
+.sticky-chrome{background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.botbar{background:color-mix(in srgb,var(--card) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
