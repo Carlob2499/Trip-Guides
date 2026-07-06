@@ -21,6 +21,52 @@
   .planner-days{max-width:52rem;margin-inline:auto}
 }
 
+/* === ITINERARY CARD DECK (mobile / tablet) ==================================
+   Phone: a horizontal snap deck — swipe day-to-day, the next day peeks at the
+   edge, and the centered card pops forward (scroll-driven depth, progressive).
+   Tablet: vertical page-snap. Desktop (≥1100px, above) is the readable single
+   column, untouched. day-rail.js syncs the numbered scrubber to whichever mode
+   is live; the scrubber stays the accessible, keyboard-first navigator. */
+
+/* ── Phone: horizontal swipe deck (≤639px) ───────────────────────────────── */
+@media(max-width:639px){
+  .planner-days{
+    display:flex;gap:1rem;
+    overflow-x:auto;overflow-y:visible;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;
+    /* 7% side padding centers the 86%-wide cards and reveals the next one. */
+    padding:.3rem 7% 1rem;
+  }
+  .planner-days::-webkit-scrollbar{display:none}
+  .planner-days .day{
+    flex:0 0 86%;scroll-snap-align:center;
+    grid-template-columns:1fr;              /* single-column card */
+    max-height:calc(100svh - var(--chrome-h) - 8.5rem);
+    overflow-y:auto;-webkit-overflow-scrolling:touch;
+    margin:0;border-radius:var(--r-lg);
+  }
+  .planner-days .day::-webkit-scrollbar{width:0}
+  .planner-days .day .d{padding-top:0}
+  /* Depth: the centered card is crisp; neighbors recede. Progressive — with no
+     scroll-timeline support or under reduced-motion it's a flat snap deck. */
+  @supports (animation-timeline:view(inline)){
+    @media(prefers-reduced-motion:no-preference){
+      .planner-days .day{animation:deckDepth linear both;animation-timeline:view(inline);animation-range:cover 0% cover 100%}
+    }
+  }
+}
+@keyframes deckDepth{
+  0%,100%{opacity:.5;transform:scale(.9)}
+  42%,58%{opacity:1;transform:scale(1)}
+}
+
+/* ── Tablet: vertical page-snap (640–1099px) ─────────────────────────────── */
+@media(min-width:640px) and (max-width:1099px){
+  .planner-days{scroll-snap-type:y proximity}
+  .planner-days .day{scroll-snap-align:start;scroll-margin-top:calc(var(--chrome-h) + 3.4rem)}
+}
+
 /* ── Day number in the date gutter — editorial ghost numeral ──────────────── */
 .day-num{display:block;font-family:var(--font-display);font-weight:800;font-size:2rem;line-height:.95;letter-spacing:-.04em;color:color-mix(in srgb,var(--accent) 42%,var(--bg2));margin:0 0 .3rem}
 @media(max-width:520px){.day-num{display:inline-block;font-size:1.2rem;margin:0 .45rem 0 0;vertical-align:-2px}}
