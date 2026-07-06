@@ -185,6 +185,9 @@ export function boot(cfg) {
     var data;
     try { data = JSON.parse(dataEl.textContent); } catch (e) { return; }
     if (!data.center || typeof data.center.lat !== "number") return;
+    // Replace the default OSM iframe fallback before rendering Google.
+    var frame = mount.querySelector(".osmmap");
+    if (frame) frame.remove();
     loadApi().then(function (api) {
       if (mount.hasAttribute("data-planner")) initPlannerMap(api, mount, data);
       else initGuideMap(api, mount, data);
@@ -237,3 +240,12 @@ export function boot(cfg) {
     else { primary.queue.push(focusPin); initOnce(primary.mount); }
   });
 }
+
+/* Self-boot: the interactive Google map is opt-in. It runs only when a
+   PUBLIC_GMAPS_KEY was set at build (surfaced via tgConfig). With no key, the
+   OSM iframe embed in each map section is the map, and boot() never runs. */
+(function () {
+  var el = document.getElementById("tgConfig");
+  var cfg = el ? JSON.parse(el.textContent || "{}") : {};
+  if (cfg.gmapsKey) boot(cfg);
+})();

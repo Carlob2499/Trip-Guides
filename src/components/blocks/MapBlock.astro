@@ -1,9 +1,8 @@
 ---
-// Interactive itinerary map (Leaflet, progressive enhancement). Renders a mount
-// div + a JSON pin payload consumed by src/scripts/itinerary-map.js, which
-// lazy-imports Leaflet only when the map nears the viewport. With JS disabled,
-// the <noscript> OSM iframe keeps the old embed behavior. Pins are derived at
-// build time in src/lib/map-pins.ts and passed down from GuideLayout via Block.
+// Area map for a guide section. Default: a lightweight OpenStreetMap embed
+// (no map library, works with JS on or off). If a Google Maps key is set at
+// build (PUBLIC_GMAPS_KEY → tgConfig), gmaps-render.js upgrades this mount to
+// an interactive Google map with pins; without a key, the OSM embed stays.
 const { sec, pins } = Astro.props;
 const bbox = (c: any, span?: number) => {
   const s = span || 0.05;
@@ -17,10 +16,8 @@ const payload = JSON.stringify({
 ---
 <div class="itin-map" data-itin-map>
   <script type="application/json" data-map-data set:html={payload} />
-  <noscript>
-    <iframe class="osmmap" loading="lazy" title="map" allowfullscreen
-      src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox(sec.center, sec.span)}&layer=mapnik&marker=${sec.center.lat}%2C${sec.center.lng}`}>
-    </iframe>
-  </noscript>
+  <iframe class="osmmap" loading="lazy" title="Area map" allowfullscreen
+    src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox(sec.center, sec.span)}&layer=mapnik&marker=${sec.center.lat}%2C${sec.center.lng}`}>
+  </iframe>
 </div>
-<p class="note">⚠ Maps need an internet connection — the transit steps in this section work offline.</p>
+<p class="note">⚠ The map needs an internet connection — the written transit steps in this section work offline.</p>

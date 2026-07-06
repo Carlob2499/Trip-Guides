@@ -15,19 +15,11 @@
 @media(prefers-reduced-motion:reduce){.dchip-active{transform:none;box-shadow:none}}
 @media(prefers-reduced-motion:reduce){.dchip{transition:none}.dchip:hover{transform:none}}
 
-/* ── Planner grid — days column + sticky map (wide desktop only) ──────────── */
+/* ── Itinerary — single column of day cards (the day scrubber sticks above). ─ */
 .planner{min-width:0}
-.planner-side{display:none}
+/* Day cards read at a comfortable measure on wide desktop, centered. */
 @media(min-width:1100px){
-  /* Wider map column + taller sticky map that fills the viewport height, so
-     the right column is never a short map stranded in dead space. */
-  .planner.has-map{display:grid;grid-template-columns:minmax(0,1fr) minmax(420px,44%);gap:1.4rem;align-items:start}
-  .planner.has-map .planner-side{display:flex;flex-direction:column;position:sticky;top:calc(var(--chrome-h) + 1.2rem);height:calc(100vh - var(--chrome-h) - 2.4rem)}
-  .planner.has-map .planner-map{flex:1;height:auto;min-height:0;margin:0}
-  .planner-map-note{flex:none;margin-top:.5rem;font-size:.74rem}
-}
-@media(min-width:1500px){
-  .planner.has-map{grid-template-columns:minmax(0,1fr) minmax(520px,46%)}
+  .planner-days{max-width:52rem;margin-inline:auto}
 }
 
 /* ── Day number in the date gutter — editorial ghost numeral ──────────────── */

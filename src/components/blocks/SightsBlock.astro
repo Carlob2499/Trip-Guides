@@ -40,7 +40,7 @@ const gmaps = (m: any) =>
     <div class="sight-body">
       <p>
         <Fragment set:html={it.body || ""} />
-        {it.map && <> <button class="pin-jump" type="button" data-pin-jump={pinSlug(it.name)}>◈ Show on map</button> <a class="maplink" target="_blank" rel="noopener" href={gmaps(it.map)}>Open in Maps ↗</a></>}
+        {it.map && <> <a class="maplink" target="_blank" rel="noopener" href={gmaps(it.map)}>Open in Maps ↗</a></>}
       </p>
     </div>
   </article>

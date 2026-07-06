@@ -14,7 +14,6 @@
   body[data-print-day] .botbar,
   body[data-print-day] footer,
   body[data-print-day] .day-scrub,
-  body[data-print-day] .planner-side,
   body[data-print-day] .read-prog{display:none!important}
   /* Hide every group, then re-open only the marked ancestor chain down to the
      chosen day (JS adds .print-keep to each ancestor, .print-day to the day). */
