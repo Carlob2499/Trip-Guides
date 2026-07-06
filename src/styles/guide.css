@@ -18,7 +18,7 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 .topbar-wordmark{font-family:var(--font-display);font-weight:750;font-size:1.05rem;letter-spacing:-.02em;line-height:1}
 .topbar-right{display:flex;align-items:center;gap:.4rem}
 /* Dark-mode toggle — labelled via aria-label + title; icon swaps in JS */
-/* Consistent chrome buttons: data face, uniform sizing so Share/Energy/dark
+/* Consistent chrome buttons: data face, uniform sizing so SOS/Share/dark
    align as one control cluster (was mixed body-font + icon sizes). */
 .topbar-btn{display:inline-flex;align-items:center;gap:.3rem;background:none;border:1px solid var(--rule2);border-radius:999px;padding:.32rem .7rem;min-height:32px;cursor:pointer;color:var(--muted);font-family:var(--font-data);font-size:.72rem;font-weight:600;letter-spacing:.02em;line-height:1;transition:color .15s,border-color .15s}
 .topbar-btn:hover{color:var(--ink);border-color:var(--ink)}
