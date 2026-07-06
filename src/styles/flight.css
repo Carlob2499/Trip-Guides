@@ -1,0 +1,64 @@
+/* === WAYPOINT FLIGHT — section-switch motion system =========================
+   Switching sections is flying to the next waypoint on a route, not swapping
+   a box. Three coordinated layers, all CSS-restart driven (a display:none
+   panel restarts its animations on reveal — no JS animation code):
+     1. The panel banks in along the travel direction (fwd = from the right,
+        back = from the left; section-flight.js sets html[data-flight]).
+     2. The chapter opener: a giant ghost bearing-numeral sweeps in with the
+        section title rising out of a clipped baseline.
+     3. Content settles: the first blocks land in sequence behind the title.
+   Everything short-circuits under prefers-reduced-motion. */
+
+/* ── 1. Panel flight ──────────────────────────────────────────────────────── */
+@media(prefers-reduced-motion:no-preference){
+  .catblock{animation:flyFwd .48s cubic-bezier(.16,.84,.28,1)}
+  html[data-flight="back"] .catblock{animation:flyBack .48s cubic-bezier(.16,.84,.28,1)}
+
+  /* 3. Content settle — the opener leads, blocks follow in sequence. */
+  .catblock>.block{animation:blockSettle .5s cubic-bezier(.2,.7,.2,1) both}
+  .catblock>.block:nth-of-type(1){animation-delay:.08s}
+  .catblock>.block:nth-of-type(2){animation-delay:.15s}
+  .catblock>.block:nth-of-type(3){animation-delay:.21s}
+  .catblock>.block:nth-of-type(n+4){animation-delay:.26s}
+}
+@keyframes flyFwd{
+  from{opacity:0;transform:translateX(9vw) rotate(.5deg)}
+  60%{opacity:1}
+  to{opacity:1;transform:none}
+}
+@keyframes flyBack{
+  from{opacity:0;transform:translateX(-9vw) rotate(-.5deg)}
+  60%{opacity:1}
+  to{opacity:1;transform:none}
+}
+@keyframes blockSettle{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:none}
+}
+
+/* ── 2. Chapter opener — bearing numeral + kinetic title ─────────────────── */
+.cat-opener{position:relative;max-width:var(--read);margin:0 auto .4rem;padding:1.6rem 0 .2rem;overflow:hidden}
+.cat-num{position:absolute;right:-.05em;top:-.35rem;z-index:0;font-family:var(--font-display);font-weight:800;font-size:clamp(4.6rem,9vw,7.5rem);line-height:1;letter-spacing:-.05em;color:color-mix(in srgb,var(--accent) 14%,transparent);-webkit-text-stroke:1.5px color-mix(in srgb,var(--accent) 34%,transparent);user-select:none;pointer-events:none}
+.cat-opener .cat-title{position:relative;z-index:1;margin:0}
+.cat-sub{position:relative;z-index:1;margin:.3rem 0 0;font-family:var(--font-data);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+@media(prefers-reduced-motion:no-preference){
+  .cat-num{animation:numSweep .6s cubic-bezier(.16,.84,.28,1) both}
+  html[data-flight="back"] .cat-num{animation-name:numSweepBack}
+  .cat-opener .cat-title{animation:titleRise .55s cubic-bezier(.16,.84,.28,1) .06s both}
+  .cat-sub{animation:blockSettle .5s ease .2s both}
+}
+@keyframes numSweep{from{opacity:0;transform:translateX(60px);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes numSweepBack{from{opacity:0;transform:translateX(-60px);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes titleRise{from{transform:translateY(115%)}to{transform:none}}
+
+/* ── Next-section CTA — the guided reading chain ─────────────────────────── */
+.next-cta{display:flex;align-items:center;gap:1rem;width:100%;max-width:var(--read);margin:2.2rem auto .4rem;padding:1.15rem 1.4rem;background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:var(--r-lg);cursor:pointer;text-align:left;transition:background .22s,color .22s,border-color .22s,transform .18s}
+.next-cta-label{font-family:var(--font-data);font-size:.64rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transition:color .22s}
+.next-cta-title{flex:1;font-family:var(--font-display);font-weight:720;font-size:1.35rem;letter-spacing:-.02em;line-height:1.1}
+.next-cta-arrow{font-size:1.5rem;line-height:1;transition:transform .22s cubic-bezier(.2,.7,.2,1)}
+.next-cta:hover{background:var(--ink);color:var(--bg);border-color:var(--ink);transform:translateY(-2px)}
+.next-cta:hover .next-cta-label{color:color-mix(in srgb,var(--bg) 72%,transparent)}
+.next-cta:hover .next-cta-arrow{transform:translateX(8px)}
+.next-cta:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.next-cta,.next-cta-arrow{transition:none}.next-cta:hover{transform:none}}
+@media print{.next-cta{display:none}}

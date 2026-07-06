@@ -129,13 +129,8 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
    widened shell (the "edge-to-edge media" side of the widen). The reading cap only
    bites once the shell is wider than --read, so tablet/mobile are untouched. */
 .catblock>.cat-title,.catblock>.block{max-width:var(--read);margin-inline:auto}
-/* Section-switch transition: unhiding a panel re-triggers the animation (a
-   display:none element restarts CSS animations on reveal), so every tab
-   change gets a quiet fade-rise. Off under reduced motion. */
-@media(prefers-reduced-motion:no-preference){
-  .catblock{animation:panelIn .3s cubic-bezier(.2,.7,.2,1)}
-}
-@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+/* Section-switch motion lives in flight.css (directional "waypoint flight"
+   system — banking transitions, numeral sweeps, content settle). */
 /* Sights: responsive image grid across the full shell width. */
 .block:has(.sight){max-width:100%;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem 1.1rem;align-items:start}
 .block:has(.sight) .block-title-row{grid-column:1/-1;margin-bottom:0}
