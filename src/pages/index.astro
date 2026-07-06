@@ -9,6 +9,7 @@ import "@fontsource-variable/literata";
 import "@fontsource-variable/spline-sans-mono";
 import "../styles/base.css";
 import "../styles/hub.css";
+import "../styles/hub-cards.css";
 
 const guides = (await getCollection("guides")).sort((a, b) =>
   a.data.title.localeCompare(b.data.title)
@@ -53,13 +54,35 @@ const guideExtras = guides.map(g => {
     else if (diff >= -7) badge = "Now!";
     else if (lastDate && lastDate > now) badge = "In progress";
   }
-  return { dayCount, badge };
+  // Hero/filter extras — all derivable at build from data the guide already has.
+  const mapSec  = flat.find((s: any) => s.type === "map" && typeof s.center?.lat === "number");
+  const sight   = flat.filter((s: any) => s.type === "sights").flatMap((s: any) => s.items || []).find((it: any) => it?.img?.file);
+  const month   = allItems[0]?.date?.split(/\s+/)[1] || "";
+  return {
+    dayCount, badge, firstDate, lastDate, month,
+    startISO: firstDate ? firstDate.toISOString().slice(0, 10) : "",
+    mapCenter: mapSec ? { lat: mapSec.center.lat, lng: mapSec.center.lng } : null,
+    heroImg: sight ? { file: sight.img.file, alt: sight.img.alt || sight.name } : null,
+  };
 });
 
 // Split the curated (verified) grid from the "Guides-to-be" draft tier.
 const withExtras = guides.map((g, i) => ({ g, ex: guideExtras[i] }));
 const curated = withExtras.filter(x => !x.g.data.draft);
 const drafts  = withExtras.filter(x =>  x.g.data.draft);
+
+// Next-trip hero: the curated guide whose trip starts soonest in the future
+// (or is in progress right now). None upcoming → the hub keeps its masthead.
+const upcoming = curated
+  .filter(x => x.ex.firstDate && (x.ex.firstDate >= now || (x.ex.lastDate && x.ex.lastDate >= now)))
+  .sort((a, b) => a.ex.firstDate!.getTime() - b.ex.firstDate!.getTime());
+const hero = upcoming[0] ?? null;
+const heroSrc = hero?.ex.heroImg
+  ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(hero.ex.heroImg.file)}?width=1400`
+  : null;
+
+// Filter chips: one per country that appears in the curated grid.
+const countries = [...new Set(curated.map(x => x.g.data.country))].sort();
 ---
 <!doctype html>
 <html lang="en">
@@ -95,9 +118,52 @@ const drafts  = withExtras.filter(x =>  x.g.data.draft);
     </header>
 
     <main class="hub">
-      <div class="hub-grid">
+      {hero && (
+        <a
+          class="hub-hero"
+          href={`${base}/guides/${hero.g.id}/`}
+          style={`--accent:${accentFor(hero.g.data.country)}`}
+          data-hero-start={hero.ex.startISO}
+          data-hero-lat={hero.ex.mapCenter?.lat}
+          data-hero-lng={hero.ex.mapCenter?.lng}
+        >
+          {heroSrc && (
+            <img class="hub-hero-img" src={heroSrc} alt={hero.ex.heroImg!.alt} loading="eager" fetchpriority="high" />
+          )}
+          <span class="hub-hero-scrim" aria-hidden="true"></span>
+          <span class="hub-hero-body">
+            <span class="hub-hero-eyebrow">Next trip · {hero.g.data.country}</span>
+            <span class="hub-hero-title">{hero.g.data.title}</span>
+            <span class="hub-hero-meta">
+              <span class="hub-hero-count" data-hero-countdown>{hero.ex.badge}</span>
+              <span class="hub-hero-wx" data-hero-wx hidden></span>
+              {hero.ex.dayCount > 0 && <span class="hub-hero-days">{hero.ex.dayCount} days planned</span>}
+            </span>
+            <span class="hub-hero-cta">Open the guide →</span>
+          </span>
+        </a>
+      )}
+
+      <div class="hub-filter" role="search">
+        <input class="hub-search" id="hubSearch" type="search" placeholder="Search guides…" aria-label="Search guides" autocomplete="off" />
+        <div class="hub-chips" id="hubChips" role="group" aria-label="Filter by country">
+          <button class="hub-chip hub-chip-active" type="button" data-filter="">All</button>
+          {countries.map((c) => (
+            <button class="hub-chip" type="button" data-filter={c}>{c}</button>
+          ))}
+        </div>
+      </div>
+
+      <div class="hub-grid" id="hubGrid">
         {curated.map(({ g, ex }) => (
-          <a class="hubcard" href={`${base}/guides/${g.id}/`} style={`--accent:${accentFor(g.data.country)}`}>
+          <a
+            class="hubcard"
+            href={`${base}/guides/${g.id}/`}
+            style={`--accent:${accentFor(g.data.country)}`}
+            data-country={g.data.country}
+            data-start={ex.startISO}
+            data-search={`${g.data.country} ${g.data.title} ${g.data.dek || ""}`.toLowerCase()}
+          >
             <span class="hubcard-bar" aria-hidden="true"></span>
             <span class="hubcard-body">
               <span class="hubcard-top">
@@ -108,12 +174,14 @@ const drafts  = withExtras.filter(x =>  x.g.data.draft);
               {g.data.dek && <span class="hubcard-dek">{g.data.dek}</span>}
               <span class="hubcard-meta">
                 {ex.dayCount > 0 && <span class="hubcard-days">{ex.dayCount} days</span>}
+                {ex.month && <span class="hubcard-days">{ex.month}</span>}
               </span>
               <span class="hubcard-go">Open guide →</span>
             </span>
           </a>
         ))}
       </div>
+      <p class="hub-empty" id="hubEmpty" hidden>No guides match — clear the search or pick another country.</p>
 
       {drafts.length > 0 && (
         <section class="hub-drafts" aria-labelledby="draftsHead">
@@ -220,6 +288,10 @@ const drafts  = withExtras.filter(x =>  x.g.data.draft);
     </div>
 
     <footer class="hub-foot">Waypoint — every fact checked, every route tested.</footer>
+
+    <script>
+      import "../scripts/hub.js";
+    </script>
 
     <script is:inline>
       (function () {
