@@ -23,7 +23,6 @@ import "../styles/flight.css";
 import "../styles/compass.css";
 import "../styles/mobile-nav.css";
 import "../styles/field-tools.css";
-import "../styles/split-extras.css";
 import "../styles/palette.css";
 import "../styles/print-day.css";
 import "../styles/links-panel.css";
@@ -179,15 +178,6 @@ if (holSec) {
 const hasWaypoints = collectWaypoints(guide).length > 0;
 const hasDayEvents = collectDayEvents(guide).length > 0;
 
-// Per-person planned total from the guide's own budget section(s), USD only
-// (no cross-currency guessing) — powers the Budget calculator's plan-vs-logged
-// line. Zero (scaffolds, non-USD budgets) simply hides the line.
-let plannedPP = 0;
-for (const s of _flat.filter((x: any) => x.type === "budget" && x.currency === "$")) {
-  for (const it of s.items || []) {
-    plannedPP += (Number(it.est) || 0) * (it.basis === "day" ? dayCount : 1);
-  }
-}
 
 // Plain-text trip digest for the "Share summary" button (theme + planned days +
 // key spots). Embedded in a hidden element; the client reads its textContent and
@@ -499,7 +489,7 @@ const tripSummary = buildSummary(guide);
             </div>
           );
         })}
-        <TripSplit storeKey={storeKey} curCode={localCur?.code ?? null} curSymbol={localCur?.symbol ?? null} curRate={localCur?.approxRate ?? null} plannedPP={Math.round(plannedPP)} />
+        <TripSplit storeKey={storeKey} />
         <Voting storeKey={storeKey} />
       </main>
     </div>

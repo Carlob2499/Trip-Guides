@@ -701,7 +701,8 @@ details table{margin:.3rem 0 .4rem}
 .se-ca{text-align:right;font-size:.85rem}
 .se-warn{width:100%;font-family:var(--font-data);font-size:.65rem;color:var(--accent);letter-spacing:.02em}
 /* results */
-.split-settle-head{display:flex;align-items:center;justify-content:space-between;margin:.9rem 0 .5rem}
+.split-settle-head{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin:.9rem 0 .5rem}
+.split-settle-head #sCopySettle{margin-left:auto}
 .split-settle-count{font-family:var(--font-data);font-size:.68rem;letter-spacing:.04em;color:var(--muted);background:var(--bg2);border:1px solid var(--rule2);border-radius:99px;padding:.12rem .55rem}
 /* balance rows */
 .sb-row{display:grid;grid-template-columns:1fr auto auto auto;gap:.3rem .7rem;align-items:center;padding:.38rem 0;border-bottom:1px solid var(--rule)}

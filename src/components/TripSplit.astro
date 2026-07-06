@@ -1,36 +1,15 @@
 ---
 interface Props {
   storeKey: string;
-  /* Local currency (from countries data): entering ₩38,000 converts to USD at
-     the live rate (fallback: approxRate). Absent → the toggle hides. */
-  curCode?: string | null;
-  curSymbol?: string | null;
-  curRate?: number | null;
-  /* Per-person planned total (USD) from the guide's own budget section, and
-     the trip length — powers the plan-vs-logged line. 0/absent → hidden. */
-  plannedPP?: number;
 }
-const { storeKey, curCode = null, curSymbol = null, curRate = null, plannedPP = 0 } = Astro.props;
+const { storeKey } = Astro.props;
 ---
 
-<div class="split-wrap" id="tripSplit" hidden data-sk={storeKey}
-     data-cur-code={curCode} data-cur-sym={curSymbol} data-cur-rate={curRate}
-     data-planned-pp={plannedPP}>
+<div class="split-wrap" id="tripSplit" hidden data-sk={storeKey}>
 
   <div class="split-toolbar">
-    <h2 class="split-title">Budget Calculator</h2>
-    <p class="split-desc">Track who paid what and see exactly who owes who — minimum transfers, no maths.</p>
-    <div class="split-save-actions">
-      <button class="sc-add-btn" id="sSyncLink" type="button">🔗 Copy sync link</button>
-      <button class="sc-add-btn" id="sQrBtn" type="button" aria-expanded="false">▦ Show QR</button>
-      <button class="sc-add-btn" id="sExport" type="button">⬇ Export file</button>
-      <button class="sc-add-btn" id="sExportCsv" type="button">⬇ Export CSV</button>
-      <button class="sc-add-btn" id="sImportBtn" type="button">⬆ Import file</button>
-      <input type="file" id="sImportFile" accept="application/json" hidden />
-    </div>
-    <div class="share-qr-wrap" id="sQrBox" hidden>
-      <div id="sQrEl"></div>
-    </div>
+    <h2 class="split-title">Budget split</h2>
+    <p class="split-desc">Add who paid what. See who owes who, with the fewest transfers.</p>
   </div>
 
   <!-- People -->
@@ -46,15 +25,8 @@ const { storeKey, curCode = null, curSymbol = null, curRate = null, plannedPP = 
 
   <!-- Summary bar -->
   <div class="split-summary" id="sSummary" hidden>
-    <span class="split-summary-lbl">Total trip spend</span>
+    <span class="split-summary-lbl">Total spend</span>
     <span class="split-summary-val" id="sTotalUSD">$0.00</span>
-    <span class="split-plan" id="sPlanLine" hidden></span>
-  </div>
-
-  <!-- Category breakdown — stacked bar + legend, from expense categories -->
-  <div class="split-breakdown" id="sBreakdown" hidden>
-    <div class="split-bar" id="sBar" aria-hidden="true"></div>
-    <div class="split-legend" id="sLegend"></div>
   </div>
 
   <!-- Results -->
@@ -64,7 +36,7 @@ const { storeKey, curCode = null, curSymbol = null, curRate = null, plannedPP = 
     <div class="split-settle-head">
       <span class="sc-label">Who pays who</span>
       <span class="split-settle-count" id="sSettleCount"></span>
-      <button class="sc-add-btn" id="sCopySettle" type="button">⧉ Copy settle plan</button>
+      <button class="sc-add-btn" id="sCopySettle" type="button">⧉ Copy</button>
     </div>
     <div id="sSettlements"></div>
   </div>
@@ -78,8 +50,7 @@ const { storeKey, curCode = null, curSymbol = null, curRate = null, plannedPP = 
         <button class="scm-btn" id="sModeCustom" type="button">Custom amounts</button>
       </div>
     </div>
-    <!-- Add-expense box — visually boxed off (background + border) so it can
-         never be mistaken for a blank/broken row in the list below it. -->
+    <!-- Add-expense box — boxed off so it never reads as a blank/broken row. -->
     <div class="se-new-card" id="sNewCard">
       <div class="se-new-head">
         <span class="sc-label">Add expense</span>
@@ -88,22 +59,10 @@ const { storeKey, curCode = null, curSymbol = null, curRate = null, plannedPP = 
       <div class="se-new-row">
         <select class="split-in se-payer" id="sNewPayer"></select>
         <input class="split-in se-desc" type="text" placeholder="What for?" id="sNewDesc" />
-        <select class="split-in se-cat-sel" id="sNewCat" aria-label="Category">
-          <option value="food">🍜 Food</option>
-          <option value="transit">🚇 Transit</option>
-          <option value="tickets">🎟 Tickets</option>
-          <option value="shopping">🛍 Shopping</option>
-          <option value="lodging">🏨 Lodging</option>
-          <option value="other" selected>· Other</option>
-        </select>
-        <div class="se-amt-wrap">
-          <button class="se-cur se-cur-toggle" id="sNewCur" type="button" hidden
-                  title="Switch entry currency" aria-label="Switch entry currency">$</button>
-          <span class="se-cur" id="sNewCurStatic">$</span>
-          <input class="split-in se-amt" type="number" min="0" step="0.01" placeholder="0.00" id="sNewAmt" />
+        <div class="se-amt-wrap"><span class="se-cur">$</span>
+          <input class="split-in se-amt" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" id="sNewAmt" />
         </div>
       </div>
-      <p class="se-conv-note" id="sConvNote" hidden></p>
     </div>
 
     <div class="se-header">
@@ -125,49 +84,15 @@ const { storeKey, curCode = null, curSymbol = null, curRate = null, plannedPP = 
 
   var SK = "tg-split-" + (wrap.dataset.sk || "guide");
 
-  var state = {
-    members:     [],
-    expenses:    [],
-    customSplit: false
-  };
+  var state = { members: [], expenses: [], customSplit: false };
 
-  /* ── local currency + planned budget (from data attrs / live rate) ─── */
-  var CUR = {
-    code: wrap.dataset.curCode || null,
-    sym:  wrap.dataset.curSym  || null,
-    rate: parseFloat(wrap.dataset.curRate) || null, // 1 USD = rate local
-  };
-  document.addEventListener("tg:rate", function (e) {
-    if (e.detail && e.detail.rate) CUR.rate = e.detail.rate; // live beats fallback
-  });
-  var PLANNED_PP = parseFloat(wrap.dataset.plannedPp) || 0;
-
-  var CATS = {
-    food:     { label: "🍜 Food",     color: "color-mix(in srgb,var(--accent) 85%,#fff)" },
-    transit:  { label: "🚇 Transit",  color: "color-mix(in srgb,var(--accent) 55%,var(--ink))" },
-    tickets:  { label: "🎟 Tickets",  color: "color-mix(in srgb,var(--accent) 65%,#fff)" },
-    shopping: { label: "🛍 Shopping", color: "color-mix(in srgb,var(--accent) 35%,var(--ink))" },
-    lodging:  { label: "🏨 Lodging",  color: "var(--accent)" },
-    other:    { label: "· Other",     color: "var(--rule2)" },
-  };
-  function catOptions(sel) {
-    return Object.keys(CATS).map(function (k) {
-      return "<option value='" + k + "'" + (k === (sel || "other") ? " selected" : "") + ">" +
-        CATS[k].label + "</option>";
-    }).join("");
-  }
-
-  /* ── persistence ─────────────────────────── */
+  /* ── persistence (this device only — a calculator, not a synced account) ── */
   function load() {
-    try {
-      var s = JSON.parse(localStorage.getItem(SK) || "null");
-      applyState(s);
-    } catch (_) {}
+    try { applyState(JSON.parse(localStorage.getItem(SK) || "null")); } catch (_) {}
   }
   function save() {
     try { localStorage.setItem(SK, JSON.stringify(state)); } catch (_) {}
   }
-  // Shared shape guard used by localStorage load, URL-link hydration, and file import.
   function applyState(s) {
     if (!s || typeof s !== "object") return false;
     if (Array.isArray(s.members))           state.members     = s.members;
@@ -176,53 +101,11 @@ const { storeKey, curCode = null, curSymbol = null, curRate = null, plannedPP = 
     return true;
   }
 
-  /* ── URL-link + file state handoff (QR / cross-device sync) ───────
-     Uses the ?split= query param, NOT location.hash — guide-ui.js's tab
-     router does `document.querySelector(window.location.hash)`, so a
-     base64 blob in the hash would throw a DOMException there. The query
-     string is untouched by any other script, so it's collision-free.
-     Export/Import is the same shape, saved to/read from a local file —
-     both are the "not just this browser's localStorage" save path. */
-  function toBase64Url(str) {
-    var b64 = btoa(unescape(encodeURIComponent(str)));
-    return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-  }
-  function fromBase64Url(b64url) {
-    var b64 = b64url.replace(/-/g, "+").replace(/_/g, "/");
-    while (b64.length % 4) b64 += "=";
-    return decodeURIComponent(escape(atob(b64)));
-  }
-  function exportableState() {
-    return { members: state.members, expenses: state.expenses, customSplit: state.customSplit };
-  }
-  function syncLinkUrl() {
-    return window.location.origin + window.location.pathname + "?split=" + toBase64Url(JSON.stringify(exportableState()));
-  }
-  // Hydrate from an incoming ?split= link (e.g. scanned via QR), then strip the
-  // param so a reload doesn't re-import a now-stale snapshot over local edits.
-  function hydrateFromUrl() {
-    var params = new URLSearchParams(window.location.search);
-    var raw = params.get("split");
-    if (!raw) return false;
-    try {
-      if (!applyState(JSON.parse(fromBase64Url(raw)))) return false;
-      save();
-    } catch (_) { return false; }
-    params.delete("split");
-    var qs = params.toString();
-    history.replaceState(null, "", window.location.pathname + (qs ? "?" + qs : "") + window.location.hash);
-    return true;
-  }
-
   /* ── utilities ───────────────────────────── */
   function esc(s) {
-    return String(s || "")
-      .replace(/&/g,"&amp;").replace(/</g,"&lt;")
-      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    return String(s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
   }
-  function fmtUSD(v) {
-    return "$" + (Math.round(Math.abs(v) * 100) / 100).toFixed(2);
-  }
+  function fmtUSD(v) { return "$" + (Math.round(Math.abs(v) * 100) / 100).toFixed(2); }
   function memberName(i) {
     var m = state.members[i];
     return m ? (m.name || ("Person " + (i + 1))) : "?";
@@ -241,8 +124,7 @@ const { storeKey, curCode = null, curSymbol = null, curRate = null, plannedPP = 
         "<span class='sm-idx'>" + (i + 1) + "</span>" +
         "<input class='split-in sm-name' type='text' placeholder='Name'" +
           " value='" + esc(m.name) + "' data-mi='" + i + "' data-field='name' />" +
-        "<input class='split-in sm-pay' type='text'" +
-          " placeholder='Venmo / Zelle / Kakao Pay…'" +
+        "<input class='split-in sm-pay' type='text' placeholder='Venmo / Zelle / Kakao Pay…'" +
           " value='" + esc(m.payment || "") + "' data-mi='" + i + "' data-field='payment' />" +
         "<button class='split-del' type='button' data-del-m='" + i + "'" +
           " aria-label='Remove " + esc(m.name || "person") + "'>×</button>" +
@@ -251,11 +133,10 @@ const { storeKey, curCode = null, curSymbol = null, curRate = null, plannedPP = 
 
     list.querySelectorAll("[data-field]").forEach(function (inp) {
       inp.addEventListener("input", function () {
-        var i   = parseInt(this.dataset.mi, 10);
-        var fld = this.dataset.field;
-        state.members[i][fld] = this.value;
+        var i = parseInt(this.dataset.mi, 10);
+        state.members[i][this.dataset.field] = this.value;
         save();
-        if (fld === "name") renderNewRowOptions();
+        if (this.dataset.field === "name") renderNewRowOptions();
         renderResults();
       });
     });
@@ -267,8 +148,7 @@ const { storeKey, curCode = null, curSymbol = null, curRate = null, plannedPP = 
           if ((e.paidBy || 0) >= state.members.length) e.paidBy = 0;
           if (e.customAmts) e.customAmts.splice(i, 1);
         });
-        save();
-        render();
+        save(); render();
       });
     });
   }
@@ -280,9 +160,6 @@ const { storeKey, curCode = null, curSymbol = null, curRate = null, plannedPP = 
         esc(m.name || ("Person " + (i + 1))) + "</option>";
     }).join("");
   }
-
-  // Keeps the static entry row's payer dropdown in sync with the People list
-  // (names added/renamed/removed) without touching the row's own text fields.
   function renderNewRowOptions() {
     var sel = document.getElementById("sNewPayer");
     if (!sel) return;
@@ -311,13 +188,10 @@ const { storeKey, curCode = null, curSymbol = null, curRate = null, plannedPP = 
     list.innerHTML = state.expenses.map(function (exp, ei) {
       var customBlock = "";
       if (state.customSplit) {
-        var n     = state.members.length;
-        var total = parseFloat(exp.amount) || 0;
+        var n = state.members.length, total = parseFloat(exp.amount) || 0;
         if (!exp.customAmts || exp.customAmts.length !== n) {
           var even = total / (n || 1);
-          exp.customAmts = state.members.map(function () {
-            return parseFloat(even.toFixed(2));
-          });
+          exp.customAmts = state.members.map(function () { return parseFloat(even.toFixed(2)); });
         }
         var sumCA = exp.customAmts.reduce(function (a, b) { return a + b; }, 0);
         var diff  = Math.abs(sumCA - total);
@@ -325,42 +199,26 @@ const { storeKey, curCode = null, curSymbol = null, curRate = null, plannedPP = 
           "<div class='se-custom" + (diff > 0.015 ? " se-custom--warn" : "") + "'>" +
           state.members.map(function (m, mi) {
             return "<label class='se-cl'><span class='se-cl-name'>" + esc(m.name || ("P" + (mi+1))) + "</span>" +
-              "<input class='split-in se-ca' type='number' min='0' step='0.01'" +
+              "<input class='split-in se-ca' type='number' min='0' step='0.01' inputmode='decimal'" +
               " value='" + (exp.customAmts[mi] || 0).toFixed(2) + "'" +
               " data-ei='" + ei + "' data-mi='" + mi + "' /></label>";
           }).join("") +
-          (diff > 0.015
-            ? "<span class='se-warn'>Shares sum " + fmtUSD(sumCA) + " — total is " + fmtUSD(total) + "</span>"
-            : "") +
+          (diff > 0.015 ? "<span class='se-warn'>Shares sum " + fmtUSD(sumCA) + " — total is " + fmtUSD(total) + "</span>" : "") +
           "</div>";
       }
 
-      var localChip = (exp.localAmt && exp.localCur)
-        ? "<span class='se-local'>" + esc((CUR.sym || "") + Number(exp.localAmt).toLocaleString() + " " + exp.localCur) + "</span>"
-        : "";
       return "<div class='se-row' data-ei='" + ei + "'>" +
         "<div class='se-main'>" +
-        "<span class='se-drag' draggable='true' aria-label='Drag to reorder' title='Drag to reorder'>⠿</span>" +
         "<select class='split-in se-payer' data-ei='" + ei + "'>" + memberOptions(exp.paidBy) + "</select>" +
         "<input class='split-in se-desc' type='text' placeholder='What for?'" +
           " value='" + esc(exp.desc || "") + "' data-ei='" + ei + "' data-field='desc' />" +
-        "<select class='split-in se-cat-sel' data-ei='" + ei + "' data-cat>" + catOptions(exp.cat) + "</select>" +
         "<div class='se-amt-wrap'><span class='se-cur'>$</span>" +
-        "<input class='split-in se-amt' type='number' min='0' step='0.01' placeholder='0.00'" +
+        "<input class='split-in se-amt' type='number' min='0' step='0.01' inputmode='decimal' placeholder='0.00'" +
           " value='" + (exp.amount != null ? String(exp.amount) : "") + "'" +
-          " data-ei='" + ei + "' data-field='amount' />" + localChip + "</div>" +
+          " data-ei='" + ei + "' data-field='amount' /></div>" +
         "<button class='split-del' type='button' data-del-e='" + ei + "' aria-label='Remove expense'>×</button>" +
-        "</div>" +
-        customBlock +
-        "</div>";
+        "</div>" + customBlock + "</div>";
     }).join("");
-
-    list.querySelectorAll("[data-cat]").forEach(function (sel) {
-      sel.addEventListener("change", function () {
-        state.expenses[parseInt(this.dataset.ei, 10)].cat = this.value;
-        save(); renderResults();
-      });
-    });
 
     list.querySelectorAll(".se-payer").forEach(function (sel) {
       sel.addEventListener("change", function () {
@@ -372,36 +230,22 @@ const { storeKey, curCode = null, curSymbol = null, curRate = null, plannedPP = 
       inp.addEventListener("input", function () {
         var ei  = parseInt(this.dataset.ei, 10);
         var fld = this.dataset.field;
-        var val = fld === "amount" ? (parseFloat(this.value) || null) : this.value;
-        state.expenses[ei][fld] = val;
-        if (fld === "amount") {
-          // Hand-edited USD invalidates a stored local-currency origin.
-          delete state.expenses[ei].localAmt;
-          delete state.expenses[ei].localCur;
-        }
+        state.expenses[ei][fld] = fld === "amount" ? (parseFloat(this.value) || null) : this.value;
         if (fld === "amount" && !state.customSplit) {
-          var n    = state.members.length;
-          var even = (parseFloat(this.value) || 0) / (n || 1);
-          state.expenses[ei].customAmts = state.members.map(function () {
-            return parseFloat(even.toFixed(2));
-          });
+          var even = (parseFloat(this.value) || 0) / (state.members.length || 1);
+          state.expenses[ei].customAmts = state.members.map(function () { return parseFloat(even.toFixed(2)); });
         }
         save();
-        // NOTE: do not call renderExpenses() here — it rebuilds this input's
-        // DOM node via innerHTML, which drops focus mid-keystroke. Nothing
-        // visible in this list depends on the amount while typing; renderResults()
-        // (balances/settlement) is the only thing that needs to react live.
+        // Don't re-render the list here — it would drop focus mid-keystroke.
         renderResults();
       });
     });
     list.querySelectorAll(".se-ca").forEach(function (inp) {
       inp.addEventListener("input", function () {
-        var ei = parseInt(this.dataset.ei, 10);
-        var mi = parseInt(this.dataset.mi, 10);
+        var ei = parseInt(this.dataset.ei, 10), mi = parseInt(this.dataset.mi, 10);
         if (!state.expenses[ei].customAmts) state.expenses[ei].customAmts = [];
         state.expenses[ei].customAmts[mi] = parseFloat(this.value) || 0;
-        save();
-        renderResults();
+        save(); renderResults();
       });
     });
     list.querySelectorAll("[data-del-e]").forEach(function (btn) {
@@ -410,45 +254,12 @@ const { storeKey, curCode = null, curSymbol = null, curRate = null, plannedPP = 
         save(); renderExpenses(); renderResults();
       });
     });
-
-    /* drag-to-reorder — grab the ⠿ handle, drop on any row to move it there.
-       Native HTML5 drag/drop; desktop pointer only (no touch equivalent). */
-    var dragSrcIdx = null;
-    list.querySelectorAll(".se-drag").forEach(function (handle) {
-      handle.addEventListener("dragstart", function (e) {
-        var row = handle.closest(".se-row");
-        dragSrcIdx = parseInt(row.dataset.ei, 10);
-        e.dataTransfer.effectAllowed = "move";
-        e.dataTransfer.setData("text/plain", String(dragSrcIdx)); // Firefox needs data set to allow the drag
-        row.classList.add("se-dragging");
-      });
-      handle.addEventListener("dragend", function () {
-        var row = handle.closest(".se-row");
-        if (row) row.classList.remove("se-dragging");
-        dragSrcIdx = null;
-      });
-    });
-    list.querySelectorAll(".se-row").forEach(function (row) {
-      row.addEventListener("dragover", function (e) {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = "move";
-      });
-      row.addEventListener("drop", function (e) {
-        e.preventDefault();
-        var targetIdx = parseInt(row.dataset.ei, 10);
-        if (dragSrcIdx === null || targetIdx === dragSrcIdx) return;
-        var moved = state.expenses.splice(dragSrcIdx, 1)[0];
-        state.expenses.splice(targetIdx, 0, moved);
-        save(); renderExpenses(); renderResults();
-      });
-    });
   }
 
-  /* ── settlement algorithm ────────────────── */
+  /* ── settlement algorithm (minimum transfers) ── */
   function calculate() {
     var n = state.members.length;
     if (!n) return { balances: [], txns: [] };
-
     var balances = new Array(n).fill(0);
     state.expenses.forEach(function (exp) {
       var total = parseFloat(exp.amount) || 0;
@@ -456,26 +267,21 @@ const { storeKey, curCode = null, curSymbol = null, curRate = null, plannedPP = 
       var payer = parseInt(exp.paidBy, 10) || 0;
       if (payer >= n) payer = 0;
       balances[payer] += total;
-
       if (state.customSplit && exp.customAmts && exp.customAmts.length >= n) {
         var sumCA = exp.customAmts.slice(0, n).reduce(function (a, b) { return a + b; }, 0);
-        for (var i = 0; i < n; i++) {
-          balances[i] -= sumCA > 0 ? total * (exp.customAmts[i] / sumCA) : total / n;
-        }
+        for (var i = 0; i < n; i++) balances[i] -= sumCA > 0 ? total * (exp.customAmts[i] / sumCA) : total / n;
       } else {
         var share = total / n;
-        for (var i = 0; i < n; i++) balances[i] -= share;
+        for (var j = 0; j < n; j++) balances[j] -= share;
       }
     });
-
     var creds = [], debts = [];
-    for (var i = 0; i < n; i++) {
-      if (balances[i] >  0.005) creds.push({ idx: i, amt: balances[i] });
-      else if (balances[i] < -0.005) debts.push({ idx: i, amt: -balances[i] });
+    for (var k = 0; k < n; k++) {
+      if (balances[k] >  0.005) creds.push({ idx: k, amt: balances[k] });
+      else if (balances[k] < -0.005) debts.push({ idx: k, amt: -balances[k] });
     }
     creds.sort(function (a, b) { return b.amt - a.amt; });
     debts.sort(function (a, b) { return b.amt - a.amt; });
-
     var txns = [], ci = 0, di = 0;
     while (ci < creds.length && di < debts.length) {
       var pay = Math.min(creds[ci].amt, debts[di].amt);
@@ -489,81 +295,33 @@ const { storeKey, curCode = null, curSymbol = null, curRate = null, plannedPP = 
 
   /* ── results rendering ───────────────────── */
   function renderResults() {
-    var card    = document.getElementById("sResults");
-    var summary = document.getElementById("sSummary");
-    var bDiv    = document.getElementById("sBalances");
-    var sDiv    = document.getElementById("sSettlements");
-    var sCount  = document.getElementById("sSettleCount");
-    var totUSD  = document.getElementById("sTotalUSD");
+    var card = document.getElementById("sResults"), summary = document.getElementById("sSummary");
+    var bDiv = document.getElementById("sBalances"), sDiv = document.getElementById("sSettlements");
+    var sCount = document.getElementById("sSettleCount"), totUSD = document.getElementById("sTotalUSD");
 
     if (!state.members.length || !state.expenses.length) {
-      if (card)    card.hidden    = true;
+      if (card) card.hidden = true;
       if (summary) summary.hidden = true;
       return;
     }
-    if (card)    card.hidden    = false;
+    if (card) card.hidden = false;
     if (summary) summary.hidden = false;
 
-    var total = state.expenses.reduce(function (s, e) {
-      return s + (parseFloat(e.amount) || 0);
-    }, 0);
+    var total = state.expenses.reduce(function (s, e) { return s + (parseFloat(e.amount) || 0); }, 0);
     if (totUSD) totUSD.textContent = "$" + total.toFixed(2);
 
-    /* Plan vs logged (per person, from the guide's own budget section). */
-    var planEl = document.getElementById("sPlanLine");
-    if (planEl) {
-      if (PLANNED_PP > 0 && state.members.length) {
-        var pp = total / state.members.length;
-        var pct = Math.round((pp / PLANNED_PP) * 100);
-        planEl.hidden = false;
-        planEl.textContent = "Plan ≈$" + Math.round(PLANNED_PP).toLocaleString() +
-          " pp · logged $" + pp.toFixed(0) + " pp (" + pct + "%)";
-        planEl.classList.toggle("split-plan--over", pct > 100);
-      } else planEl.hidden = true;
-    }
-
-    /* Category breakdown — stacked bar + legend. */
-    var bd = document.getElementById("sBreakdown");
-    var bar = document.getElementById("sBar");
-    var leg = document.getElementById("sLegend");
-    if (bd && bar && leg) {
-      var byCat = {};
-      state.expenses.forEach(function (e) {
-        var amt = parseFloat(e.amount) || 0;
-        if (!amt) return;
-        var k = CATS[e.cat] ? e.cat : "other";
-        byCat[k] = (byCat[k] || 0) + amt;
-      });
-      var keys = Object.keys(byCat);
-      if (total > 0 && keys.length) {
-        bd.hidden = false;
-        keys.sort(function (a, b) { return byCat[b] - byCat[a]; });
-        bar.innerHTML = keys.map(function (k) {
-          var w = (byCat[k] / total) * 100;
-          return "<span class='split-bar-seg' style='width:" + w.toFixed(1) + "%;background:" + CATS[k].color + "'></span>";
-        }).join("");
-        leg.innerHTML = keys.map(function (k) {
-          return "<span class='split-leg-item'><span class='split-leg-dot' style='background:" + CATS[k].color + "'></span>" +
-            CATS[k].label + " " + fmtUSD(byCat[k]) + " (" + Math.round((byCat[k] / total) * 100) + "%)</span>";
-        }).join("");
-      } else bd.hidden = true;
-    }
-
     var calc = calculate();
-
     if (bDiv) {
       bDiv.innerHTML = calc.balances.map(function (bal, i) {
-        var abs  = Math.abs(bal);
-        var cls  = bal >  0.005 ? "sb-owed" : bal < -0.005 ? "sb-owes" : "sb-even";
-        var verb = bal >  0.005 ? "is owed" : bal < -0.005 ? "owes"    : "settled ✓";
+        var abs = Math.abs(bal);
+        var cls = bal > 0.005 ? "sb-owed" : bal < -0.005 ? "sb-owes" : "sb-even";
+        var verb = bal > 0.005 ? "is owed" : bal < -0.005 ? "owes" : "settled ✓";
         return "<div class='sb-row " + cls + "'>" +
           "<span class='sb-name'>" + esc(memberName(i)) + "</span>" +
           "<span class='sb-verb'>" + verb + "</span>" +
-          "<span class='sb-amt'>" + (abs > 0.005 ? fmtUSD(abs) : "—") + "</span>" +
-          "</div>";
+          "<span class='sb-amt'>" + (abs > 0.005 ? fmtUSD(abs) : "—") + "</span></div>";
       }).join("");
     }
-
     if (sDiv) {
       if (!calc.txns.length) {
         sDiv.innerHTML = "<p class='split-settle-ok'>All square — no transfers needed.</p>";
@@ -572,111 +330,54 @@ const { storeKey, curCode = null, curSymbol = null, curRate = null, plannedPP = 
         if (sCount) sCount.textContent = calc.txns.length + " payment" + (calc.txns.length > 1 ? "s" : "");
         sDiv.innerHTML = calc.txns.map(function (t) {
           var payMethod = (state.members[t.to] || {}).payment || "";
-          return "<div class='st-row'>" +
-            "<div class='st-parties'>" +
-              "<span class='st-from'>" + esc(memberName(t.from)) + "</span>" +
-              "<span class='st-arrow'>→</span>" +
-              "<span class='st-to'>" + esc(memberName(t.to)) + "</span>" +
-            "</div>" +
-            "<div class='st-amt-row'>" +
-              "<span class='st-usd'>" + fmtUSD(t.amt) + "</span>" +
-            "</div>" +
-            (payMethod ? "<div class='st-via'>via " + esc(payMethod) + "</div>" : "") +
-            "</div>";
+          return "<div class='st-row'><div class='st-parties'>" +
+            "<span class='st-from'>" + esc(memberName(t.from)) + "</span>" +
+            "<span class='st-arrow'>→</span>" +
+            "<span class='st-to'>" + esc(memberName(t.to)) + "</span></div>" +
+            "<div class='st-amt-row'><span class='st-usd'>" + fmtUSD(t.amt) + "</span></div>" +
+            (payMethod ? "<div class='st-via'>via " + esc(payMethod) + "</div>" : "") + "</div>";
         }).join("");
       }
     }
   }
 
-  function render() {
-    renderMembers();
-    renderNewRowOptions();
-    renderExpenses();
-    renderResults();
-  }
+  function render() { renderMembers(); renderNewRowOptions(); renderExpenses(); renderResults(); }
 
   /* ── button wiring ───────────────────────── */
   var addPerson = document.getElementById("sAddPerson");
-  if (addPerson) {
-    addPerson.addEventListener("click", function () {
-      state.members.push({ name: "", payment: "" });
-      save(); renderMembers(); renderNewRowOptions(); renderExpenses();
-    });
-  }
+  if (addPerson) addPerson.addEventListener("click", function () {
+    state.members.push({ name: "", payment: "" });
+    save(); renderMembers(); renderNewRowOptions(); renderExpenses();
+  });
 
-  // Static top entry row: fill in payer/desc/amount, tap Add, it commits to
-  // the list below and the row resets — never scroll down to add another.
   var addExpense = document.getElementById("sAddExpense");
   var newPayerEl = document.getElementById("sNewPayer");
   var newDescEl  = document.getElementById("sNewDesc");
   var newAmtEl   = document.getElementById("sNewAmt");
-  /* Entry currency toggle — type ₩38,000 at the register, it stores USD. */
-  var newCurBtn    = document.getElementById("sNewCur");
-  var newCurStatic = document.getElementById("sNewCurStatic");
-  var convNote     = document.getElementById("sConvNote");
-  var newCatEl     = document.getElementById("sNewCat");
-  var entryLocal   = false;
-  function curAvailable() { return !!(CUR.code && CUR.rate); }
-  function syncCurUI() {
-    if (!newCurBtn || !newCurStatic) return;
-    if (!curAvailable()) { newCurBtn.hidden = true; newCurStatic.hidden = false; return; }
-    newCurBtn.hidden = false; newCurStatic.hidden = true;
-    newCurBtn.textContent = entryLocal ? (CUR.sym || CUR.code) : "$";
-    syncConvNote();
-  }
-  function syncConvNote() {
-    if (!convNote) return;
-    var amt = parseFloat(newAmtEl && newAmtEl.value);
-    if (!entryLocal || !amt || !CUR.rate) { convNote.hidden = true; return; }
-    convNote.hidden = false;
-    convNote.textContent = (CUR.sym || "") + amt.toLocaleString() + " " + CUR.code +
-      " ≈ $" + (amt / CUR.rate).toFixed(2) + " at the current rate";
-  }
-  if (newCurBtn) {
-    newCurBtn.addEventListener("click", function () {
-      entryLocal = !entryLocal;
-      syncCurUI();
-      if (newAmtEl) newAmtEl.focus();
-    });
-  }
-  if (newAmtEl) newAmtEl.addEventListener("input", syncConvNote);
-  document.addEventListener("tg:rate", syncCurUI);
-  syncCurUI();
-
   if (addExpense) {
     addExpense.addEventListener("click", function () {
       if (!state.members.length) return;
-      var raw = parseFloat(newAmtEl.value);
-      if (!raw || raw <= 0) { newAmtEl.focus(); return; }
-      var isLocal = entryLocal && curAvailable();
-      var amt = isLocal ? Math.round((raw / CUR.rate) * 100) / 100 : raw;
+      var amt = parseFloat(newAmtEl.value);
+      if (!amt || amt <= 0) { newAmtEl.focus(); return; }
       var payer = parseInt(newPayerEl.value, 10) || 0;
-      var even  = amt / state.members.length;
-      var exp = {
+      var even = amt / state.members.length;
+      state.expenses.push({
         paidBy: payer, desc: newDescEl.value || "", amount: amt,
-        cat: (newCatEl && newCatEl.value) || "other",
-        customAmts: state.members.map(function () { return parseFloat(even.toFixed(2)); })
-      };
-      if (isLocal) { exp.localAmt = raw; exp.localCur = CUR.code; }
-      state.expenses.push(exp);
+        customAmts: state.members.map(function () { return parseFloat(even.toFixed(2)); }),
+      });
       save(); renderExpenses(); renderResults();
       newDescEl.value = ""; newAmtEl.value = "";
-      syncConvNote();
       newDescEl.focus();
     });
-    // Enter anywhere in the entry row commits it — the button now sits at the top
-    // of the box, so keyboard users never need to reach for it.
     [newPayerEl, newDescEl, newAmtEl].forEach(function (el) {
-      if (!el) return;
-      el.addEventListener("keydown", function (e) {
+      if (el) el.addEventListener("keydown", function (e) {
         if (e.key === "Enter") { e.preventDefault(); addExpense.click(); }
       });
     });
   }
 
   /* split mode */
-  var modeEven   = document.getElementById("sModeEven");
-  var modeCustom = document.getElementById("sModeCustom");
+  var modeEven = document.getElementById("sModeEven"), modeCustom = document.getElementById("sModeCustom");
   function syncModeUI() {
     if (modeEven)   modeEven.classList.toggle("scm-active",   !state.customSplit);
     if (modeCustom) modeCustom.classList.toggle("scm-active", state.customSplit);
@@ -685,118 +386,11 @@ const { storeKey, curCode = null, curSymbol = null, curRate = null, plannedPP = 
   if (modeEven)   modeEven.addEventListener("click",   function () { state.customSplit = false; save(); syncModeUI(); renderExpenses(); renderResults(); });
   if (modeCustom) modeCustom.addEventListener("click", function () { state.customSplit = true;  save(); syncModeUI(); renderExpenses(); renderResults(); });
 
-  /* sync-link button */
-  var syncBtn = document.getElementById("sSyncLink");
-  if (syncBtn) {
-    var syncBtnDefault = syncBtn.textContent;
-    syncBtn.addEventListener("click", function () {
-      var url = syncLinkUrl();
-      function flash(ok) {
-        syncBtn.textContent = ok ? "✓ Copied" : "Copy failed — select manually";
-        setTimeout(function () { syncBtn.textContent = syncBtnDefault; }, 1800);
-      }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(url).then(function () { flash(true); }, function () { flash(false); });
-      } else {
-        flash(false);
-      }
-    });
-  }
-
-  /* QR handoff — same lazy-CDN + offline-fallback pattern as the share modal's
-     QR (guide-ui.js), reimplemented here rather than reaching into that
-     script's private closure. Regenerates on every open since split state
-     (unlike the share modal's static page URL) changes between views. */
-  var qrBtn      = document.getElementById("sQrBtn");
-  var qrBox      = document.getElementById("sQrBox");
-  var qrEl       = document.getElementById("sQrEl");
-  var qrLibState = "unloaded"; // unloaded | loading | ready | failed
-  function loadQrLib(cb) {
-    if (qrLibState === "ready" || window.QRCode) { qrLibState = "ready"; cb(); return; }
-    if (qrLibState === "failed") { cb(); return; }
-    if (qrLibState === "loading") {
-      document.addEventListener("tg:qrlib-settled", function once() {
-        document.removeEventListener("tg:qrlib-settled", once); cb();
-      });
-      return;
-    }
-    qrLibState = "loading";
-    var s = document.createElement("script");
-    s.src = "https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js";
-    s.onload = function () { qrLibState = "ready"; document.dispatchEvent(new Event("tg:qrlib-settled")); cb(); };
-    s.onerror = function () { qrLibState = "failed"; document.dispatchEvent(new Event("tg:qrlib-settled")); cb(); };
-    document.head.appendChild(s);
-  }
-  if (qrBtn && qrBox && qrEl) {
-    qrBtn.addEventListener("click", function () {
-      var opening = qrBox.hidden;
-      qrBox.hidden = !opening;
-      qrBtn.setAttribute("aria-expanded", String(opening));
-      if (!opening) return;
-      loadQrLib(function () {
-        qrEl.innerHTML = "";
-        if (!window.QRCode) {
-          qrEl.textContent = "QR unavailable offline — use Copy sync link instead";
-          qrEl.style.cssText = "font-size:12px;color:var(--muted);text-align:center;padding:.5rem";
-          return;
-        }
-        var dark = document.documentElement.getAttribute("data-theme") === "dark";
-        try {
-          new window.QRCode(qrEl, {
-            text: syncLinkUrl(), width: 148, height: 148,
-            colorDark:  dark ? "#e5e9e0" : "#1a2028",
-            colorLight: dark ? "#27211a" : "#ffffff",
-            correctLevel: window.QRCode.CorrectLevel.M
-          });
-        } catch (e) { /* QR lib unavailable */ }
-      });
-    });
-  }
-
-  /* export / import file — a real save-file, independent of this browser's storage */
-  var exportBtn = document.getElementById("sExport");
-  if (exportBtn) {
-    exportBtn.addEventListener("click", function () {
-      var blob = new Blob([JSON.stringify(exportableState(), null, 2)], { type: "application/json" });
-      var url  = URL.createObjectURL(blob);
-      var a    = document.createElement("a");
-      a.href = url;
-      a.download = "budget-" + (wrap.dataset.sk || "guide") + ".json";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    });
-  }
-
-  /* CSV export — opens straight in Excel/Sheets for post-trip reconciling. */
-  var csvBtn = document.getElementById("sExportCsv");
-  if (csvBtn) {
-    csvBtn.addEventListener("click", function () {
-      var q = function (s) { return '"' + String(s == null ? "" : s).replace(/"/g, '""') + '"'; };
-      var rows = [["Paid by", "Description", "Category", "Amount (USD)", "Local amount", "Local currency"]];
-      state.expenses.forEach(function (e) {
-        rows.push([
-          memberName(parseInt(e.paidBy, 10) || 0), e.desc || "",
-          (CATS[e.cat] ? CATS[e.cat].label.replace(/^\S+\s*/, "") : "Other"),
-          (parseFloat(e.amount) || 0).toFixed(2),
-          e.localAmt != null ? e.localAmt : "", e.localCur || "",
-        ]);
-      });
-      var csv = rows.map(function (r) { return r.map(q).join(","); }).join("\r\n");
-      var blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" });
-      var a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = "budget-" + (wrap.dataset.sk || "guide") + ".csv";
-      a.click();
-      URL.revokeObjectURL(a.href);
-    });
-  }
-
-  /* Copy settle plan — the who-pays-who list as text for the group chat. */
+  /* Copy the who-pays-who result as text for the group chat — the one share
+     primitive that matters (replaces the old link/QR/file sync clutter). */
   var copySettleBtn = document.getElementById("sCopySettle");
   if (copySettleBtn) {
-    var copySettleDefault = copySettleBtn.textContent;
+    var copyDefault = copySettleBtn.textContent;
     copySettleBtn.addEventListener("click", function () {
       var calc = calculate();
       var lines = calc.txns.map(function (t) {
@@ -806,7 +400,7 @@ const { storeKey, curCode = null, curSymbol = null, curRate = null, plannedPP = 
       var text = lines.length ? "Settle-up:\n" + lines.join("\n") : "All square — no transfers needed.";
       function flash(ok) {
         copySettleBtn.textContent = ok ? "✓ Copied" : "Copy failed";
-        setTimeout(function () { copySettleBtn.textContent = copySettleDefault; }, 1800);
+        setTimeout(function () { copySettleBtn.textContent = copyDefault; }, 1800);
       }
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(function () { flash(true); }, function () { flash(false); });
@@ -814,40 +408,14 @@ const { storeKey, curCode = null, curSymbol = null, curRate = null, plannedPP = 
     });
   }
 
-  var importBtn  = document.getElementById("sImportBtn");
-  var importFile = document.getElementById("sImportFile");
-  if (importBtn && importFile) {
-    importBtn.addEventListener("click", function () { importFile.click(); });
-    importFile.addEventListener("change", function () {
-      var file = importFile.files && importFile.files[0];
-      if (!file) return;
-      var reader = new FileReader();
-      reader.onload = function () {
-        try {
-          if (applyState(JSON.parse(String(reader.result)))) { save(); render(); }
-        } catch (_) {
-          // Malformed/foreign file — leave existing state untouched rather than guess.
-        }
-        importFile.value = "";
-      };
-      reader.readAsText(file);
-    });
-  }
-
-  /* Prevent the browser's default "scroll wheel changes a focused number
-     input's value" behaviour — users scrolling the page while their cursor
-     happens to sit over an amount field were silently getting their typed
-     value overwritten. Delegated on wrap since expense rows are re-rendered. */
+  /* Guard the scroll-wheel-changes-focused-number-input footgun. */
   wrap.addEventListener("wheel", function (e) {
     var t = e.target;
-    if (t && t.tagName === "INPUT" && t.type === "number" && document.activeElement === t) {
-      e.preventDefault();
-    }
+    if (t && t.tagName === "INPUT" && t.type === "number" && document.activeElement === t) e.preventDefault();
   }, { passive: false });
 
   /* ── init ─────────────────────────────────── */
   load();
-  hydrateFromUrl();
   render();
 })();
 </script>
