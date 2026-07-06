@@ -33,10 +33,11 @@
 .mast-credit{position:absolute;right:.7rem;top:.7rem;z-index:1;font-family:var(--font-data);font-size:.6rem;letter-spacing:.02em;color:rgba(244,246,239,.82);background:rgba(12,15,18,.42);padding:.24rem .5rem;border-radius:999px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);text-decoration:none}
 .mast-credit:hover{color:#fff;background:rgba(12,15,18,.62)}
 
-/* Keep the thin accent rule as the "content starts here" signal, left-aligned
-   under the hero to match the new editorial axis. */
-.mast-hero .masthead-rule{margin:1.4rem 0 0;width:3.2rem}
-.mast-hero .guide-stats,.mast-hero #wxWrap,.mast-hero .whats-next,.mast-hero .jl-wrap,.mast-hero .draft-graduate{max-width:1400px;margin-left:auto;margin-right:auto;padding-left:clamp(1.2rem,3.2vw,2.4rem);padding-right:clamp(1.2rem,3.2vw,2.4rem);justify-content:flex-start}
+/* The accent rule centers over the meta band (which is centered below). */
+.mast-hero .masthead-rule{margin:1.4rem auto 0;width:3.2rem}
+/* Below-hero meta band is centered (see overview.css). Only the collapsible
+   jet-lag panel + draft-graduate note stay left within the contained width. */
+.mast-hero .jl-wrap,.mast-hero .draft-graduate{max-width:52rem;margin-left:auto;margin-right:auto;padding-left:clamp(1rem,3vw,1.5rem);padding-right:clamp(1rem,3vw,1.5rem)}
 
 /* ── Orchestrated page-load motion ──────────────────────────────────────── */
 /* Motion ownership: the photo transform belongs to hero-parallax.js; the text

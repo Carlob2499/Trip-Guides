@@ -137,19 +137,18 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 /* Section-switch motion lives in flight.css (directional "waypoint flight"
    system — banking transitions, numeral sweeps, content settle). */
 
-/* === DESKTOP DENSITY (≥1100px) ==============================================
-   The reading column alone left wide screens rendering a centered mobile
-   strip. On desktop each section becomes a two-column card grid: standard
-   cards sit two-up (each column is still a comfortable reading measure),
-   while data-heavy blocks — image grids, habitat/tier/raid tables, maps,
-   sights, the planner — span the full row. The itinerary opts out entirely
-   (its own planner grid needs the full shell). */
+/* === DESKTOP MASONRY (≥1100px) ==============================================
+   The reading column alone left wide screens as a centered mobile strip; a
+   2-col GRID then left ragged rows (paired cards of wildly different height =
+   dead space). CSS multi-column masonry packs cards with NO vertical gaps —
+   the Pinterest/Wanderlog pattern. Reading flows down column 1, then column 2.
+   Openers, CTAs and data-heavy blocks span all columns; the itinerary opts
+   out (its planner owns the full shell). */
 @media(min-width:1100px){
-  .catblock{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 1.4rem;align-items:start;max-width:min(76rem,100%);margin-inline:auto}
-  .catblock>.cat-opener,.catblock>.next-cta{grid-column:1/-1;max-width:100%}
-  .catblock>.cat-title{grid-column:1/-1}
-  .catblock>.block{max-width:100%;margin-inline:0;min-width:0}
-  /* Full-row blocks: anything whose content is a grid/table/map/planner. */
+  .catblock{display:block;columns:2;column-gap:1.5rem;max-width:min(78rem,100%);margin-inline:auto}
+  .catblock>.block{break-inside:avoid;max-width:100%;margin:0 0 1.4rem;min-width:0}
+  .catblock>.cat-opener,.catblock>.cat-title,.catblock>.next-cta{column-span:all;max-width:100%}
+  /* Full-width blocks: grids/tables/maps/sights break the column flow. */
   .catblock>.block:has(.ig-grid),
   .catblock>.block:has(.hab-grid),
   .catblock>.block:has(.tl-list),
@@ -157,12 +156,9 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
   .catblock>.block:has(.itin-map),
   .catblock>.block:has(.osmmap),
   .catblock>.block:has(.wx-strip),
-  .catblock>.block:has(.sight){grid-column:1/-1}
-  /* Itinerary: the planner owns the full shell width. */
-  .catblock:has(.planner){display:block;max-width:100%}
-  .catblock:has(.planner)>.block{max-width:100%}
-  /* Dense packing: later cards backfill gaps so rows stay even. */
-  .catblock{grid-auto-flow:row dense}
+  .catblock>.block:has(.sight){column-span:all}
+  /* Itinerary: single column; the planner grid owns the full shell width. */
+  .catblock:has(.planner){columns:1;max-width:100%}
 }
 
 /* Progressive disclosure — the density pass. The lead paragraph reads like a

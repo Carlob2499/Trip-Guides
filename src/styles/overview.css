@@ -4,18 +4,20 @@
    banner are re-plated as a bento tile row (units.-style rounded blocks).
    Everything degrades to the original inline pills when JS is off. */
 
-/* Tile row */
-.guide-stats{display:flex;flex-wrap:wrap;gap:.55rem;margin:1.05rem 0 .2rem}
+/* Tile row — centered under the hero (the meta band reads as an intentional
+   Explora-style stat row, not a left-hugging fragment). */
+.guide-stats{display:flex;flex-wrap:wrap;justify-content:center;gap:.55rem;margin:1.05rem auto .2rem}
 .guide-stats .gstat{display:flex;flex-direction:column;justify-content:center;gap:.1rem;min-height:58px;padding:.55rem .95rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md);font-family:var(--font-data);font-size:.82rem;font-weight:600;letter-spacing:.02em;color:var(--ink)}
 .guide-stats .gstat-countdown,.guide-stats .gstat-active{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:700}
 .guide-stats .gstat-warning{border-color:var(--accent);color:var(--accent)}
 .guide-stats .gstat-past{color:var(--muted)}
 
-/* Weather strip as a tile */
-.wx-wrap{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md);padding:.5rem .8rem;margin:.9rem 0 0}
+/* Weather strip as a tile — centered, capped (edge-to-edge made each day
+   cell huge and sparse; ~52rem reads as a proper forecast band). */
+.wx-wrap{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md);padding:.5rem .8rem;margin:.9rem auto 0;max-width:52rem}
 
-/* What's-Next as the accent tile of the row */
-.whats-next{display:flex;align-items:baseline;gap:.6rem;background:color-mix(in srgb,var(--accent) 12%,var(--card));border:1px solid color-mix(in srgb,var(--accent) 45%,var(--rule));border-radius:var(--r-md);padding:.65rem .95rem;margin:.6rem 0 0}
+/* What's-Next as the accent tile of the row — centered to match. */
+.whats-next{display:flex;align-items:baseline;justify-content:center;gap:.6rem;background:color-mix(in srgb,var(--accent) 12%,var(--card));border:1px solid color-mix(in srgb,var(--accent) 45%,var(--rule));border-radius:var(--r-md);padding:.65rem .95rem;margin:.6rem auto 0;max-width:52rem}
 .whats-next .wn-label{font-family:var(--font-data);font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
 
 /* ── Reveal-on-scroll (opacity/transform only; short-circuited under
