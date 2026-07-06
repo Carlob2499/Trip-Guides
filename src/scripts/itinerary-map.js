@@ -168,7 +168,64 @@
     if (bounds.length > 1) map.fitBounds(bounds, { padding: [30, 30], animate: false });
     else map.setView([data.center.lat, data.center.lng], zoomFromSpan(data.span), { animate: false });
     addFullscreen(mount, map);
+    addDropPins(L, map, mount);
     if (planner.pending != null) { focusDay(planner.pending); planner.pending = null; }
+  }
+
+  /* Droppable pins — the traveler's own marks on the planner map (a spot to
+     try, where the car is parked, a meeting point). A toggle button arms
+     "drop mode"; a map click adds a labelled pin; pins persist per guide in
+     localStorage and survive reloads/offline. Click a custom pin to remove. */
+  function addDropPins(L, map, mount) {
+    var KEY = "tg-mappins-" + (document.body.getAttribute("data-storekey") || "guide");
+    function load() { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; } }
+    function save(a) { try { localStorage.setItem(KEY, JSON.stringify(a)); } catch (e) {} }
+    var custom = load();
+
+    function renderPin(p, idx) {
+      var icon = L.divIcon({ className: "wpin wpin-custom", iconSize: [26, 26], iconAnchor: [13, 26],
+        html: "<span class='wpin-drop'>◎</span>" });
+      var m = L.marker([p.lat, p.lng], { icon: icon, title: p.name || "My pin" }).addTo(map);
+      m.bindPopup("<b>" + escapeHtml(p.name || "My pin") + "</b><br><button class='wpop-jump' data-rm-pin='" + idx + "'>Remove</button>");
+      m.on("popupopen", function (e) {
+        var b = e.popup.getElement() && e.popup.getElement().querySelector("[data-rm-pin]");
+        if (b) b.addEventListener("click", function () {
+          custom.splice(idx, 1); save(custom);
+          map.removeLayer(m);
+          // re-index remaining by redraw
+          drawn.forEach(function (mm) { map.removeLayer(mm); });
+          drawn = []; custom.forEach(renderInto);
+        });
+      });
+      return m;
+    }
+    var drawn = [];
+    function renderInto(p, i) { drawn.push(renderPin(p, i)); }
+    custom.forEach(renderInto);
+
+    var arm = document.createElement("button");
+    arm.type = "button";
+    arm.className = "map-drop-btn";
+    arm.title = "Add your own pin";
+    arm.setAttribute("aria-label", "Add your own pin — then tap the map");
+    arm.textContent = "◎ Pin";
+    mount.appendChild(arm);
+    var arming = false;
+    arm.addEventListener("click", function (e) {
+      e.stopPropagation();
+      arming = !arming;
+      arm.classList.toggle("map-drop-armed", arming);
+      mount.classList.toggle("map-dropping", arming);
+    });
+    map.on("click", function (ev) {
+      if (!arming) return;
+      var name = window.prompt("Name this pin (e.g. 'hotel', 'meet here'):", "");
+      if (name === null) return;
+      var p = { lat: +ev.latlng.lat.toFixed(6), lng: +ev.latlng.lng.toFixed(6), name: name || "My pin" };
+      custom.push(p); save(custom);
+      renderInto(p, custom.length - 1);
+      arming = false; arm.classList.remove("map-drop-armed"); mount.classList.remove("map-dropping");
+    });
   }
 
   // Day sync: dim other days' pins and fit the active day's route.

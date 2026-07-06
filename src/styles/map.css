@@ -44,3 +44,11 @@
 @media(prefers-reduced-motion:reduce){
   .pin-flash{transition:none}
 }
+
+/* Droppable pins — the traveler's own marks (itinerary-map.js addDropPins). */
+.map-drop-btn{position:absolute;top:.42rem;right:3rem;z-index:2;background:var(--card);border:1px solid var(--rule2);border-radius:999px;padding:.25rem .6rem;cursor:pointer;font-family:var(--font-data);font-size:.7rem;font-weight:700;color:var(--muted);line-height:1.4}
+.map-drop-btn:hover{color:var(--ink);border-color:var(--ink)}
+.map-drop-armed{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.map-dropping{cursor:crosshair}
+.map-dropping .leaflet-container{cursor:crosshair}
+.wpin-custom .wpin-drop{display:flex;align-items:center;justify-content:center;width:26px;height:26px;font-size:1.3rem;color:var(--accent);text-shadow:0 1px 3px rgba(0,0,0,.5)}
