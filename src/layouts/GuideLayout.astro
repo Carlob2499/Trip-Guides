@@ -13,6 +13,7 @@ import "@fontsource-variable/literata";
 import "@fontsource-variable/spline-sans-mono";
 import "../styles/base.css";
 import "../styles/guide.css";
+import "../styles/masthead.css";
 import "../styles/map.css";
 import "../styles/planner.css";
 import "../styles/overview.css";
@@ -72,6 +73,20 @@ function flatSections(secs: any[]): any[] {
 const _flat = flatSections(guide.sections || []);
 const dayCount   = _flat.filter((s: any) => s.type === "days"  ).reduce((n: number, s: any) => n + (s.items?.length || 0), 0);
 const sightCount = _flat.filter((s: any) => s.type === "sights").reduce((n: number, s: any) => n + (s.items?.length || 0), 0);
+
+// Masthead hero image — the first sights item that carries a Commons photo.
+// Present → full-bleed photo hero; absent (scaffolds) → bold typographic hero
+// on the accent field. Same Commons Special:FilePath thumbnailing as SightsBlock.
+const heroSight = _flat
+  .filter((s: any) => s.type === "sights")
+  .flatMap((s: any) => s.items || [])
+  .find((it: any) => it?.img?.file);
+const heroSrc = heroSight
+  ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(heroSight.img.file)}?width=1600`
+  : null;
+const heroCredit = heroSight
+  ? `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(heroSight.img.file)}`
+  : null;
 
 // For weather widget — pull lat/lng from first map section
 const mapSec    = _flat.find((s: any) => s.type === "map" && s.center?.lat);
@@ -287,11 +302,23 @@ const tripSummary = buildSummary(guide);
     <!-- ═══════════════════════════════════════════════════════════════════════
          MASTHEAD
          ═══════════════════════════════════════════════════════════════════ -->
-    <header class="masthead" id="top">
+    <header class={`masthead mast-hero ${heroSrc ? "mast-photo" : "mast-typo"}`} id="top" data-hero>
+      <div class="mast-frame">
+        {heroSrc && (
+          <img class="mast-img" src={heroSrc} alt={heroSight.img.alt || heroSight.name || ""}
+               loading="eager" fetchpriority="high" />
+        )}
+        <span class="mast-scrim" aria-hidden="true"></span>
+        <div class="mast-inner">
+          <p class="eyebrow mast-eyebrow">{guide.kicker || guide.country}</p>
+          <h1 class="mast-title">{guide.title}</h1>
+          {guide.dek && <p class="dek mast-dek">{guide.dek}</p>}
+        </div>
+        {heroCredit && (
+          <a class="mast-credit" href={heroCredit} target="_blank" rel="noopener" aria-label="Photo source on Wikimedia Commons">Photo: Wikimedia Commons ↗</a>
+        )}
+      </div>
       <div class="masthead-rule" aria-hidden="true"></div>
-      <p class="eyebrow">{guide.kicker || guide.country}</p>
-      <h1>{guide.title}</h1>
-      {guide.dek && <p class="dek">{guide.dek}</p>}
 
       <!-- Weather strip — populated by JS via Open-Meteo if guide has a map section.
            Suppressed when the guide has its own `weather` section (which mounts

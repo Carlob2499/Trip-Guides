@@ -83,9 +83,15 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 /* === GUIDE TAB BAR ========================================================== */
 .guide-tabs{display:flex;overflow-x:auto;overflow-y:hidden;touch-action:pan-x;overscroll-behavior-x:contain;max-width:100%;scrollbar-width:none;background:var(--bg);border-bottom:1px solid var(--rule);padding:0 .6rem}
 .guide-tabs::-webkit-scrollbar{display:none}
-.gtab{flex:none;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;padding:.48rem .82rem;font-family:var(--font-display);font-size:.8rem;font-weight:500;color:var(--muted);cursor:pointer;white-space:nowrap;transition:color .14s,border-color .14s;line-height:1.25;user-select:none}
-.gtab:hover{color:var(--ink);border-bottom-color:var(--rule2)}
-.gtab.gtab-active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+.gtab{position:relative;flex:none;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;padding:.48rem .82rem;font-family:var(--font-display);font-size:.8rem;font-weight:500;color:var(--muted);cursor:pointer;white-space:nowrap;transition:color .14s;line-height:1.25;user-select:none}
+/* Active indicator: a 2px accent underline that grows from the center when a
+   tab becomes active — the site's core navigation motion cue. */
+.gtab::after{content:"";position:absolute;left:.82rem;right:.82rem;bottom:0;height:2px;background:var(--accent);transform:scaleX(0);transform-origin:center;transition:transform .24s cubic-bezier(.2,.7,.2,1)}
+.gtab:hover{color:var(--ink)}
+.gtab:hover::after{transform:scaleX(.4);background:var(--rule2)}
+.gtab.gtab-active{color:var(--accent);font-weight:600}
+.gtab.gtab-active::after{transform:scaleX(1);background:var(--accent)}
+@media(prefers-reduced-motion:reduce){.gtab::after{transition:none}}
 .gtab-split{border-left:1px solid var(--rule);margin-left:.2rem;padding-left:1rem;font-family:var(--font-data);font-size:.7rem;letter-spacing:.04em;color:var(--muted)}
 .gtab-split.gtab-active{color:var(--accent)}
 @media(max-width:899px){.gtab{padding:.44rem .7rem;font-size:.77rem}}
