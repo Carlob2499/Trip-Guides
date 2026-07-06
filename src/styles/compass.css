@@ -12,6 +12,9 @@
   .dial-fab{position:relative;z-index:2;width:56px;height:56px;border-radius:50%;background:var(--ink);color:var(--bg);border:1px solid color-mix(in srgb,var(--bg) 20%,var(--ink));box-shadow:0 4px 18px rgba(10,14,18,.35);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .25s cubic-bezier(.2,1.2,.3,1),background .2s}
   .dial-fab:hover{transform:scale(1.08)}
   .dial-fab:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+  /* Reading-progress ring: a conic accent arc around the needle (compass-dial.js
+     sets --prog 0-100 on scroll) — the FAB doubles as "how far through". */
+  .dial-fab::before{content:"";position:absolute;inset:-5px;border-radius:50%;background:conic-gradient(var(--accent) calc(var(--prog,0)*1%),color-mix(in srgb,var(--rule) 55%,transparent) 0);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px));mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px));pointer-events:none}
   .dial-needle{font-size:1.35rem;line-height:1;display:block;transition:transform .45s cubic-bezier(.2,1.2,.3,1)}
   .dial-open .dial-needle{transform:rotate(135deg)}
 

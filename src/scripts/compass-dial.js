@@ -45,7 +45,9 @@
     var num = /^\d+$/.test(t.getAttribute("data-tab")) ? String(i + 1).padStart(2, "0") : "·";
     chip.innerHTML = '<span class="dial-chip-num"></span><span class="dial-chip-label"></span>';
     chip.querySelector(".dial-chip-num").textContent = num;
-    chip.querySelector(".dial-chip-label").textContent = t.textContent.trim();
+    // Full group name (data-full) — the tab strip may show a shortened label.
+    chip.querySelector(".dial-chip-label").textContent =
+      t.getAttribute("data-full") || t.textContent.trim();
     var n = gtabs.length;
     var a = (0.06 + 0.42 * (i / (n - 1))) * Math.PI; // 0.06π (near-up) → 0.48π (near-left)
     var R = (i % 2 === 0) ? 168 : 236;               // alternating radii = blade fan
@@ -84,6 +86,21 @@
     fab.focus();
   }
   fab.addEventListener("click", function () { open ? close() : openDial(); });
+
+  /* ── Reading-progress ring around the needle ───────────────────────────── */
+  var ticking = false;
+  function ring() {
+    ticking = false;
+    var max = document.body.scrollHeight - window.innerHeight;
+    var p = max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0;
+    fab.style.setProperty("--prog", p.toFixed(1));
+  }
+  window.addEventListener("scroll", function () {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(ring);
+  }, { passive: true });
+  ring();
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && open) { e.preventDefault(); close(); }
   });

@@ -51,6 +51,30 @@
 @keyframes numSweepBack{from{opacity:0;transform:translateX(-60px);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}
 @keyframes titleRise{from{transform:translateY(115%)}to{transform:none}}
 
+/* ── Opener photo fan — a group's own verified photos, fanned like a hand of
+      postcards beside the numeral. Only groups whose sections already carry
+      images render one (derived at build; no new sourcing). ───────────────── */
+.cat-fan{position:absolute;right:clamp(.5rem,4vw,3rem);top:.4rem;z-index:1;width:130px;height:88px;pointer-events:none}
+.cat-fan-img{position:absolute;width:86px;height:62px;object-fit:cover;border-radius:8px;border:2px solid var(--card);box-shadow:0 4px 14px rgba(10,14,18,.28)}
+.cat-fan-0{left:0;top:12px;transform:rotate(-7deg)}
+.cat-fan-1{left:26px;top:4px;transform:rotate(2deg)}
+.cat-fan-2{left:52px;top:14px;transform:rotate(9deg)}
+@media(prefers-reduced-motion:no-preference){
+  .cat-fan-img{animation:fanIn .55s cubic-bezier(.2,1.2,.3,1) both}
+  .cat-fan-1{animation-delay:.08s}
+  .cat-fan-2{animation-delay:.16s}
+}
+@keyframes fanIn{from{opacity:0;transform:translateY(18px) rotate(0deg) scale(.8)}}
+@media(max-width:640px){.cat-fan{width:96px;height:66px}.cat-fan-img{width:64px;height:46px}.cat-fan-1{left:18px}.cat-fan-2{left:36px}}
+
+/* ── First-visit navigation hint ─────────────────────────────────────────── */
+.nav-hint{display:flex;align-items:center;gap:.7rem;max-width:var(--read);margin:.7rem auto 0;padding:.55rem .9rem;background:color-mix(in srgb,var(--accent) 10%,var(--card));border:1px dashed color-mix(in srgb,var(--accent) 45%,var(--rule));border-radius:var(--r-md);font-size:.85rem;color:var(--ink);transition:opacity .35s,transform .35s}
+.nav-hint-txt{flex:1;line-height:1.5}
+.nav-hint-x{flex:none;width:30px;height:30px;background:transparent;border:1px solid var(--rule);border-radius:999px;color:var(--muted);cursor:pointer;font-size:.72rem}
+.nav-hint-x:hover{color:var(--ink);border-color:var(--ink)}
+.nav-hint-out{opacity:0;transform:translateY(-8px)}
+@media(max-width:899px){.nav-hint{margin-left:1rem;margin-right:1rem}}
+
 /* ── Next-section CTA — the guided reading chain ─────────────────────────── */
 .next-cta{display:flex;align-items:center;gap:1rem;width:100%;max-width:var(--read);margin:2.2rem auto .4rem;padding:1.15rem 1.4rem;background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:var(--r-lg);cursor:pointer;text-align:left;transition:background .22s,color .22s,border-color .22s,transform .18s}
 .next-cta-label{font-family:var(--font-data);font-size:.64rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transition:color .22s}

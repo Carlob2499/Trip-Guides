@@ -39,6 +39,29 @@ const REPO = "Carlob2499/Trip-Guides";
 
 const { guide } = Astro.props;
 const { order, byG } = bucket(guide.sections);
+
+// Tab-bar display shortening: long compound group names crowd the tab strip
+// (Korea has 13 tabs; names run to 20 chars). Display-only — the full name
+// stays in aria-label, the sheet, the dial, and the chapter opener. Data is
+// untouched. Rule: names over 13 chars split at " & " keep the head.
+const shortLabel = (g: string) =>
+  g.length > 13 && g.includes(" & ") ? g.split(" & ")[0] : g;
+
+// Chapter-opener photo fans: a group whose sections already carry verified
+// Commons images (sights) gets up to three of its OWN photos fanned beside
+// the opener numeral. Pure derivation — no new sourcing, no invented files.
+const groupImgs: Record<string, { file: string; alt: string }[]> = {};
+for (const g of order) {
+  const imgs = byG[g]
+    .filter((o: any) => o.s.type === "sights")
+    .flatMap((o: any) => o.s.items || [])
+    .filter((it: any) => it?.img?.file)
+    .slice(0, 3)
+    .map((it: any) => ({ file: it.img.file, alt: it.img.alt || it.name || "" }));
+  if (imgs.length) groupImgs[g] = imgs;
+}
+const thumbSrc = (f: string) =>
+  `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(f)}?width=320`;
 // A guide may override the country-derived palette with an explicit `theme`
 // (primary/secondary/accent, contrast-gated at build time). When absent — every
 // guide today — `accent` stays exactly the country colour, so no guide regresses.
@@ -200,6 +223,10 @@ const tripSummary = buildSummary(guide);
 
   <body data-storekey={storeKey}>
 
+    <!-- Skip link — first focusable element; jumps keyboard/AT users past the
+         chrome straight to the content. -->
+    <a class="skip-link" href="#content">Skip to content</a>
+
     <!-- Reading progress bar — fixed 3px line at top, fills as user scrolls -->
     <div id="readProg" class="read-prog" aria-hidden="true"></div>
 
@@ -292,8 +319,8 @@ const tripSummary = buildSummary(guide);
          ═══════════════════════════════════════════════════════════════════ -->
     <nav class="guide-tabs" id="guideTabs" role="tablist" aria-label="Guide sections">
       {order.map((g, i) => (
-        <button class="gtab" role="tab" type="button" data-tab={i}
-                aria-selected={i === 0 ? "true" : "false"}>{g}</button>
+        <button class="gtab" role="tab" type="button" data-tab={i} data-full={g}
+                aria-label={g} aria-selected={i === 0 ? "true" : "false"}>{shortLabel(g)}</button>
       ))}
       <button class="gtab gtab-split" role="tab" type="button" data-tab="split"
               aria-selected="false">$ Budget</button>
@@ -330,10 +357,18 @@ const tripSummary = buildSummary(guide);
       </div>
       <div class="masthead-rule" aria-hidden="true"></div>
 
+      <!-- What's-Next banner — populated client-side against the device clock;
+           FIRST in the masthead flow because it's the most actionable element
+           during the trip ("what am I doing today"). Hidden outside the trip's
+           own date range. -->
+      <div class="whats-next" id="whatsNext" hidden>
+        <span class="wn-label" id="wnLabel">Today</span>
+        <span class="wn-text" id="wnText"></span>
+      </div>
+
       <!-- Weather strip — populated by JS via Open-Meteo if guide has a map section.
            Suppressed when the guide has its own `weather` section (which mounts
-           #wxWrap in-flow instead), so weather never renders twice. Sits right
-           under the trip description, above the stats/tags row. -->
+           #wxWrap in-flow instead), so weather never renders twice. -->
       {!hasWeatherSection && (
         <div id="wxWrap" class="wx-wrap" hidden><div id="wxMount"></div></div>
       )}
@@ -360,14 +395,6 @@ const tripSummary = buildSummary(guide);
           >✓ Think this is ready? Nominate it for graduation</a>
         </p>
       )}
-
-      <!-- What's-Next banner — populated client-side against the device clock;
-           hidden by default since a static build can't know "today". Only shows
-           during the trip's own date range (see guide-ui.js "WHATS NEXT"). -->
-      <div class="whats-next" id="whatsNext" hidden>
-        <span class="wn-label" id="wnLabel">Today</span>
-        <span class="wn-text" id="wnText"></span>
-      </div>
 
       <!--
         JET-LAG CALCULATOR
@@ -436,6 +463,13 @@ const tripSummary = buildSummary(guide);
             <div class="catblock" id={`grp-${ci}`} data-ci={ci} hidden={ci > 0}>
               <header class="cat-opener">
                 <span class="cat-num" aria-hidden="true">{String(ci + 1).padStart(2, "0")}</span>
+                {groupImgs[g] && (
+                  <span class="cat-fan" aria-hidden="true">
+                    {groupImgs[g].map((im, fi) => (
+                      <img class={`cat-fan-img cat-fan-${fi}`} src={thumbSrc(im.file)} alt="" loading="lazy" decoding="async" />
+                    ))}
+                  </span>
+                )}
                 <h2 class="cat-title">{g}</h2>
                 {sub && <p class="cat-sub">{sub}</p>}
               </header>
@@ -521,6 +555,7 @@ const tripSummary = buildSummary(guide);
       import "../scripts/section-flight.js";
       import "../scripts/compass-dial.js";
       import "../scripts/swipe-nav.js";
+      import "../scripts/onboard.js";
       import "../scripts/hero-parallax.js";
       import "../scripts/palette.js";
       import "../scripts/print-day.js";
