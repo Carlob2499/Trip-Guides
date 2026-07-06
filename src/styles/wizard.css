@@ -1,0 +1,31 @@
+/* === NEW-GUIDE WIZARD ========================================================
+   Three numbered steps in the bearing language; GSAP slides between them.
+   Research chips + document drop restyle the intake as an experience, not a
+   form. All fields are the existing intake fields, re-parented. */
+
+.ngw-deck{position:relative;min-height:14rem}
+.ngw-step{display:none}
+.ngw-step.ngw-on{display:block}
+.ngw-head{display:flex;align-items:baseline;gap:.6rem;margin:.2rem 0 .9rem;font-family:var(--font-display);font-weight:720;font-size:1.15rem;letter-spacing:-.015em}
+.ngw-num{font-family:var(--font-data);font-size:.66rem;font-weight:700;letter-spacing:.08em;color:var(--accent)}
+
+.ngw-nav{display:flex;align-items:center;gap:.8rem;margin:1rem 0 .4rem}
+.ngw-back,.ngw-next{padding:.55rem 1.1rem;border-radius:999px;font-family:var(--font-display);font-weight:640;font-size:.88rem;cursor:pointer;border:1px solid var(--rule);background:var(--card);color:var(--ink);transition:background .18s,color .18s,border-color .18s}
+.ngw-next{background:var(--ink);border-color:var(--ink);color:var(--bg);margin-left:auto}
+.ngw-next:hover{background:var(--accent);border-color:var(--accent)}
+.ngw-back:hover{border-color:var(--ink)}
+.ngw-dots{display:flex;gap:.35rem;margin:0 auto}
+.ngw-back[hidden]+.ngw-dots{margin-left:0}
+.ngw-dot{width:8px;height:8px;border-radius:50%;background:var(--rule2)}
+.ngw-dot-on{background:var(--accent)}
+
+.ngw-chips-label{margin:.4rem 0 .4rem;font-family:var(--font-data);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.ngw-chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.9rem}
+.ngw-chip{padding:.42rem .8rem;min-height:36px;border-radius:999px;border:1px solid var(--rule);background:var(--card);color:var(--ink);font-family:var(--font-display);font-weight:600;font-size:.8rem;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.ngw-chip:hover{border-color:var(--accent)}
+.ngw-chip-on{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+
+.ngw-doc{margin-top:.9rem;padding-top:.8rem;border-top:1px dashed var(--rule)}
+.ngw-doc-btn{display:block;padding:.8rem 1rem;border:1.5px dashed var(--rule2);border-radius:var(--r-md);font-size:.86rem;color:var(--muted);cursor:pointer;text-align:center;transition:border-color .15s,color .15s}
+.ngw-doc-btn:hover{border-color:var(--accent);color:var(--ink)}
+.ngw-doc-out{margin:.5rem 0 0;font-family:var(--font-data);font-size:.72rem;color:var(--green,#2e7d4f)}

@@ -161,7 +161,20 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
   /* Itinerary: the planner owns the full shell width. */
   .catblock:has(.planner){display:block;max-width:100%}
   .catblock:has(.planner)>.block{max-width:100%}
+  /* Dense packing: later cards backfill gaps so rows stay even. */
+  .catblock{grid-auto-flow:row dense}
 }
+
+/* Progressive disclosure — the density pass. The lead paragraph reads like a
+   summary card; "More detail" opens the full researched depth in place. */
+.card-more{margin-top:.35rem;border-top:1px dashed var(--rule)}
+.card-more-sum{display:inline-flex;align-items:center;gap:.35rem;padding:.5rem 0 .3rem;font-family:var(--font-data);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);cursor:pointer;list-style:none;min-height:34px}
+.card-more-sum::-webkit-details-marker{display:none}
+.card-more-sum::after{content:"↓";transition:transform .2s}
+.card-more[open] .card-more-sum::after{transform:rotate(180deg)}
+.card-more[open]{padding-bottom:.2rem}
+@media(prefers-reduced-motion:reduce){.card-more-sum::after{transition:none}}
+@media print{.card-more{border:none}.card-more:not([open])>*:not(summary){display:block}.card-more-sum{display:none}}
 /* Sights: responsive image grid across the full shell width. */
 .block:has(.sight){max-width:100%;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem 1.1rem;align-items:start}
 .block:has(.sight) .block-title-row{grid-column:1/-1;margin-bottom:0}

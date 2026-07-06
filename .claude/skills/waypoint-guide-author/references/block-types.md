@@ -36,6 +36,12 @@ and as the day card's lead line. Derive it from the day's own researched
 content (title/pace/body); it may never introduce a fact the day doesn't
 already contain.
 
+**Write bodies lead-first.** Panel/prose cards render only the FIRST `<p>`
+by default; everything after folds behind a "More detail" toggle (density
+pass — content deferred, never dropped). So the first paragraph must stand
+alone as the card's summary: the one thing the traveler needs, in one or
+two sentences. Depth, caveats, and reference detail go in later paragraphs.
+
 **The governing rule:** prose bodies allow only `<p> <b> <i> <a> <ul> <li> <ol>`.
 The moment content wants a table, a grid, cards, collapsibles, or any richer
 structure, that is the signal to reach for a **typed section** below — never richer

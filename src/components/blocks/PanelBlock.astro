@@ -1,7 +1,19 @@
 ---
+// Density pass: the first paragraph is the card's lead; substantial remainders
+// fold behind a native "More detail" toggle (splitLead — content deferred,
+// never dropped). Sections that are already collapsible keep their body whole
+// (no nested <details>).
+import { splitLead } from "../../lib/lead-split";
 const { sec, keyPrefix = "p" } = Astro.props;
+const { lead, more } = sec.collapsible ? { lead: sec.body, more: null } : splitLead(sec.body);
 ---
-{sec.body && <Fragment set:html={sec.body} />}
+{lead && <Fragment set:html={lead} />}
+{more && (
+  <details class="card-more">
+    <summary class="card-more-sum">More detail</summary>
+    <Fragment set:html={more} />
+  </details>
+)}
 {(sec.checklist || []).map((i: string, j: number) => (
   <label class="check"><input type="checkbox" data-pkey={`${keyPrefix}-${j}`} /><span class="check-txt"><Fragment set:html={i} /></span></label>
 ))}

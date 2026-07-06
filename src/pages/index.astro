@@ -10,6 +10,7 @@ import "@fontsource-variable/spline-sans-mono";
 import "../styles/base.css";
 import "../styles/hub.css";
 import "../styles/hub-cards.css";
+import "../styles/wizard.css";
 
 const guides = (await getCollection("guides")).sort((a, b) =>
   a.data.title.localeCompare(b.data.title)
@@ -312,6 +313,7 @@ const countries = [...new Set(gridGuides.map(x => x.g.data.country))].sort();
 
     <script>
       import "../scripts/hub.js";
+      import "../scripts/wizard.js";
     </script>
 
     <script is:inline>

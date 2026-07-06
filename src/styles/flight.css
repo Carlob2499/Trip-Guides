@@ -41,15 +41,11 @@
 .cat-num{position:absolute;right:-.05em;top:-.35rem;z-index:0;font-family:var(--font-display);font-weight:800;font-size:clamp(4.6rem,9vw,7.5rem);line-height:1;letter-spacing:-.05em;color:color-mix(in srgb,var(--accent) 14%,transparent);-webkit-text-stroke:1.5px color-mix(in srgb,var(--accent) 34%,transparent);user-select:none;pointer-events:none}
 .cat-opener .cat-title{position:relative;z-index:1;margin:0}
 .cat-sub{position:relative;z-index:1;margin:.3rem 0 0;font-family:var(--font-data);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+/* Opener numeral/title motion is owned by gsap-hero.js (single owner); the
+   contents line still settles with the block cascade. */
 @media(prefers-reduced-motion:no-preference){
-  .cat-num{animation:numSweep .6s cubic-bezier(.16,.84,.28,1) both}
-  html[data-flight="back"] .cat-num{animation-name:numSweepBack}
-  .cat-opener .cat-title{animation:titleRise .55s cubic-bezier(.16,.84,.28,1) .06s both}
   .cat-sub{animation:blockSettle .5s ease .2s both}
 }
-@keyframes numSweep{from{opacity:0;transform:translateX(60px);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}
-@keyframes numSweepBack{from{opacity:0;transform:translateX(-60px);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}
-@keyframes titleRise{from{transform:translateY(115%)}to{transform:none}}
 
 /* ── Opener photo fan — a group's own verified photos, fanned like a hand of
       postcards beside the numeral. Only groups whose sections already carry

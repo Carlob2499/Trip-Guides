@@ -1,4 +1,13 @@
 ---
+// Density pass — same lead + "More detail" fold as PanelBlock (see lead-split.ts).
+import { splitLead } from "../../lib/lead-split";
 const { sec } = Astro.props;
+const { lead, more } = sec.collapsible ? { lead: sec.body, more: null } : splitLead(sec.body);
 ---
-{sec.body && <Fragment set:html={sec.body} />}
+{lead && <Fragment set:html={lead} />}
+{more && (
+  <details class="card-more">
+    <summary class="card-more-sum">More detail</summary>
+    <Fragment set:html={more} />
+  </details>
+)}
