@@ -134,6 +134,30 @@ repeating the detail on every inquiry.
 
 ---
 
+## Refinement Doctrine (how this site evolves)
+
+The site must feel **open, not crowded**, while carrying everything a
+traveler needs to survive a trip. Standing rules for every future pass:
+
+- **Tab budget: ≤10 groups per guide.** Merge before adding. The
+  "Essentials" pattern (Money + Health + Etiquette) is the canonical merge;
+  same-audience event groups merge too (e.g. two Pokémon events → one
+  group). Section titles keep their identity inside the merged group — the
+  group name is nav, the title is content.
+- **Surfacing beats sourcing.** If verified data exists but takes >2 taps
+  to reach in the moment it's needed (emergencies, addresses, "what now"),
+  build a surface for it (SOS sheet, driver card, Focus Today are the
+  precedents). Never invent data to fill a surface.
+- **Iterate freely at the layout/script level** — those changes reach
+  every guide, current and future, automatically. Content edits stay under
+  the waypoint-guide-author discipline (verify, flag, continuity-sweep).
+- **Every pass ends the same way:** build clean → tests green → preview
+  verification (mobile 375px + desktop, dark, reduced-motion) → dist grep →
+  commit → push → confirm live. Transient Pages failures: the workflow
+  auto-retries; only investigate after three consecutive failures.
+- **Clickability must be obvious.** Interactive elements look like buttons
+  (pills, chips, visible borders/fills) — no bare-text tap targets.
+
 ## Gotchas
 
 - This repo is OneDrive-synced: `astro dev`'s HMR can serve STALE CSS

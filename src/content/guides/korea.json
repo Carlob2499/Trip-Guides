@@ -141,13 +141,13 @@
     },
     {
       "type": "panel",
-      "group": "Money & budget",
+      "group": "Essentials",
       "title": "Money & currency",
       "body": "<p>Korea uses the <b>won (₩)</b>. The won is weak right now, which helps your spending power — roughly (approximate, <a href=\"https://www.google.com/search?q=KRW+USD+exchange+rate\" target=\"_blank\" rel=\"noopener noreferrer\">check before you go</a>): <b>₩1,000 ≈ $0.67</b> and <b>₩10,000 ≈ $6.70</b>, at about ₩1,535 to the dollar.</p><p>Cards and contactless work almost everywhere. For cash, the most reliable option is an <b>ATM inside a GS25 or CU convenience store</b> — both accept most foreign cards and charge modest fees. <b>Global ATM Alliance banks</b> (KEB Hana is the Korean partner) have lower or zero foreign withdrawal fees if your home bank is in the network — check before you leave. Avoid airport exchange booths; the rates are poor. Keep ≈₩30,000–50,000 cash for markets and small eateries. A <b>T-money</b> card covers all subway and buses. Tipping isn't expected anywhere.</p>"
     },
     {
       "type": "budget",
-      "group": "Money & budget",
+      "group": "Essentials",
       "title": "Budget & daily costs",
       "currency": "$",
       "days": 7,
@@ -331,7 +331,7 @@
     },
     {
       "type": "panel",
-      "group": "Health & safety",
+      "group": "Essentials",
       "title": "Health & pharmacy",
       "body": "<p><b>Emergencies:</b> dial <a href='tel:119'><b>119</b></a> for ambulance or fire (free) and <a href='tel:112'><b>112</b></a> for police. On a 119 call, say '<b>English, please</b>' to reach an interpreter — your location is auto-detected. Save <a href='tel:1330'><b>1330</b></a> first: the 24/7 Korea Travel Hotline, English-speaking, can interpret, give directions, and patch you through to 119 or 112. <a href='tel:1339'><b>1339</b></a> is a 24-hour medical line that locates the nearest ER.</p><p><b>US Embassy Seoul</b> — for lost passports, serious medical emergencies, or legal trouble: <b>188 Sejong-daero, Jongno-gu</b> (between Gyeongbokgung and City Hall). Emergency line: <a href='tel:+82-2-397-4114'><b>+82-2-397-4114</b></a> (24/7). Website: <a href='https://kr.usembassy.gov' target='_blank' rel='noopener noreferrer'>kr.usembassy.gov</a>. If you lose your passport in Daejeon, go to the Embassy in Seoul — there's no consulate in Daejeon.</p><p><b>Pharmacies (약국, <i>yakguk</i>)</b> show a '약' sign. Many close Sundays but major-station branches stay open; some run 24 hours. Convenience stores cover paracetamol and antacids after hours. Korea bills upfront — no insurance card means 100% out of pocket.</p>",
       "checklist": [
@@ -344,37 +344,37 @@
     },
     {
       "type": "panel",
-      "group": "Etiquette & language",
+      "group": "Essentials",
       "title": "Etiquette & language",
       "body": "<p>Korean is the language; signs, the subway, and major sights are bilingual. For translation, use <b>Papago</b> — it's far more accurate than Google Translate for menus and signs. <b>Google Maps barely works for directions in Korea</b> — use <b>KakaoMap</b> or <b>Naver Map</b>.</p><ul><li><b>Bowing:</b> a slight nod works as hello, thank you, or goodbye — don't overthink it.</li><li><b>Two-handed exchange:</b> give and receive cards, cash, or items with both hands (or right hand with the left touching your forearm) — it signals respect.</li><li><b>No tipping, anywhere.</b> Genuinely none — attempting it can create awkwardness. The price on the menu is what you pay.</li><li><b>Chopstick etiquette:</b> don't stand them upright in rice (funeral association); rest them on the holder when you're not using them.</li><li><b>Pouring drinks:</b> pour for others at the table; let them pour for you. Don't self-pour at a shared meal.</li><li><b>Shoes off:</b> watch for a raised floor at traditional floor-seating restaurants — it's obvious when you see it.</li><li><b>Volume:</b> keep it quiet indoors, especially on transit.</li><li><b>Subway rules:</b> no eating or drinking on the metro — even water bottles, technically. <b>Pink seats at the end of every car are priority seats</b> for elderly, disabled, and pregnant passengers — don't sit in them even if the car is empty. You'll notice even young Koreans avoid them. Phones on silent; keep conversations brief and quiet.</li><li><b>Papago offline:</b> before you leave home, open Papago → Languages → Korean → download the offline pack. Camera translation still needs a data signal, but text input works offline — useful in rural Daejeon areas.</li></ul><p><b>Key phrases</b> (Hangul + romanisation):</p><ul><li>안녕하세요 — <i>annyeonghaseyo</i> — hello</li><li>감사합니다 — <i>gamsahamnida</i> — thank you (formal)</li><li>얼마예요? — <i>eolmayeyo?</i> — how much?</li><li>이거 주세요 — <i>igeo juseyo</i> — this one, please</li><li>화장실 어디예요? — <i>hwajangsil eodiyeyo?</i> — where is the bathroom?</li><li>괜찮아요 — <i>gwaenchanayo</i> — it's okay / no problem</li></ul>"
     },
     {
       "type": "prose",
-      "group": "Etiquette & language",
+      "group": "Essentials",
       "title": "Navigating Seoul as first-time foreigners",
       "body": "<p>Seoul is safe and welcoming to international tourists — most of your interactions will be frictionless. A few things worth knowing:</p><ul><li><b>Language hesitation ≠ hostility.</b> If someone seems reluctant, it's almost always communication anxiety. Open Papago's camera mode, point it at the menu or sign — translation overlays live. Showing a typed phrase on screen resolves almost anything. Most staff near tourist areas have functional English.</li><li><b>Tattoos.</b> Some traditional jimjilbangs, public pools, and older gyms still ban visible tattoos. SPAREX Dongdaemun: check their current policy on the <a href='https://www.klook.com/en-US/activity/133675-seoul-dongdaemun-sparex-jjimjilbang-sauna-admission-ticket/' target='_blank' rel='noopener noreferrer'>Klook listing</a> before Day 1 if this applies to any of you. Restaurants and the other venues in this guide are unbothered.</li><li><b>Nightlife.</b> Hongdae and Sinchon clubs have diverse, ID-at-the-door entry. High-end Gangnam clubs have documented discriminatory door policies — not worth the uncertainty. Hongdae is your nightlife district and it's excellent. Noraebangs (private karaoke rooms) and PC bangs are universally welcoming.</li><li><b>Restaurants.</b> Almost no restaurant refuses foreign visitors. Even local spots manage — worst case, picture menu and point. See the Food section for ordering mechanics.</li><li><b>If you're turned away anywhere:</b> don't escalate. Seoul is dense enough that an equivalent alternative is within two minutes. Move on.</li></ul>"
     },
     {
       "type": "prose",
-      "group": "Etiquette & language",
+      "group": "Essentials",
       "title": "What to wear — July in Korea",
       "body": "<p>July is 30–35 °C and brutally humid. What you pack will make or break day 3 when the heat exhaustion hits.</p><ul><li><b>Shirts: linen or moisture-wicking synthetic only.</b> Cotton saturates and stays wet all day in 80% humidity — you'll feel it by noon. Pack one quick-dry shirt per day minimum; they rinse and dry overnight in the hotel.</li><li><b>Bottoms: lightweight shorts or thin chinos</b> — both are fine in Seoul. Shorts are totally normal in the city; Korean dress culture is casual outside of formal workplaces. Avoid jeans in July: they trap heat and dry slowly.</li><li><b>Shoes: comfortable walking shoes with broken-in soles.</b> You'll walk 10–15 km/day on mixed surfaces (stone palace courtyards, uneven sidewalks, tiled subway stations). Sandals are fine for Hongdae evenings but not a full sightseeing day. If any of you haven't broken in your shoes yet — do it this week.</li><li><b>Compact folding umbrella — non-negotiable.</b> Heavy rain hits without warning during jangma. A good compact umbrella folds to 25 cm and costs under $15 at home; convenience stores sell them but they're flimsy.</li><li><b>Indoor layer (thin jacket or cardigan).</b> Korean malls, restaurants, subway trains, and arenas run AC at 16–18 °C. The temperature swing between outside (34 °C) and inside (18 °C) is the most common reason people get sick mid-trip. Keep a light layer in your bag at all times — critical for DCC II during MSI.</li><li><b>MSI / arena:</b> team jerseys and esports gear are welcome; no dress code at DCC II beyond the no-huge-bag rule. Bring that AC layer.</li><li><b>Jimjilbang (Day 1, SPAREX):</b> the facility provides shorts and a T-shirt — you need nothing special except flip-flops for walking between the pools. Leave your shoes at the locker.</li><li><b>Daejeon day:</b> same as Seoul. You'll be outdoors at EXPO Science Park for 6+ hours before the match — quick-dry fabric matters most on Saturday.</li></ul>"
     },
     {
       "type": "prose",
-      "group": "Etiquette & language",
+      "group": "Essentials",
       "title": "Language guide — speaking Korean",
       "body": "<p>English is widely spoken in central Seoul and tourist areas; much less common in Daejeon outside DCC II. You don't need to be fluent — three tools handle almost everything: <b>Papago</b> (camera translation; download Korean offline pack before you leave), <b>picture menus</b> (point and hold up fingers), and a handful of phrases below. Koreans respond warmly to any attempt, however imperfect.</p><p><b>Pronunciation note:</b> stress is fairly even across syllables. Vowels are consistent: <i>a</i> = 'ah', <i>eo</i> = 'uh', <i>eu</i> = lips-back 'uh', <i>i</i> = 'ee', <i>u</i> = 'oo'.</p><p><b>Greetings &amp; basics</b></p><ul><li>안녕하세요 — <i>annyeonghaseyo</i> — hello (universal; a slight nod with this is perfect)</li><li>감사합니다 — <i>gamsahamnida</i> — thank you (formal)</li><li>괜찮아요 — <i>gwaenchanayo</i> — it's okay / I'm fine / no problem</li><li>네 — <i>ne</i> — yes &nbsp;·&nbsp; 아니요 — <i>aniyo</i> — no</li><li>죄송합니다 — <i>joesonghamnida</i> — I'm sorry / excuse me (bumping into someone)</li><li>잠깐만요 — <i>jamkkanmanyo</i> — just a moment / one second</li></ul><p><b>Restaurants &amp; cafes</b></p><ul><li>여기요! — <i>yeogi-yo!</i> — over here! (the universal way to call a server — normal and expected)</li><li>이거 주세요 — <i>igeo juseyo</i> — this one, please (point at the menu)</li><li>두 개 주세요 — <i>du gae juseyo</i> — two of these, please (hold up fingers to show number)</li><li>맵지 않게 해주세요 — <i>maepji ank-e haejuseyo</i> — not spicy, please (show this on Papago if unsure of pronunciation)</li><li>물 주세요 — <i>mul juseyo</i> — water, please</li><li>계산해 주세요 — <i>gyesan haejuseyo</i> — the bill, please (or just walk to the counter)</li><li>얼마예요? — <i>eolmayeyo?</i> — how much is this?</li><li>카드 돼요? — <i>kadeu dwaeyo?</i> — do you accept card?</li></ul><p><b>Shopping</b></p><ul><li>봐도 돼요? — <i>bwado dwaeyo?</i> — may I look / try this?</li><li>이거 사이즈 있어요? — <i>igeo saijeu isseoyo?</i> — do you have this in my size?</li><li>더 싸게 해주세요 — <i>deo ssage haejuseyo</i> — can you give a discount? (markets only)</li><li>영수증 주세요 — <i>yeongsujeung juseyo</i> — receipt, please (keep for VAT refund)</li></ul><p><b>Transit &amp; directions</b></p><ul><li>화장실 어디예요? — <i>hwajangsil eodiyeyo?</i> — where is the bathroom?</li><li>여기로 가 주세요 — <i>yeogiro ga juseyo</i> — please take me here (show address on phone to driver)</li><li>미터기로 가주세요 — <i>miteo-giro gajuseyo</i> — please use the meter (taxis)</li><li>세워 주세요 — <i>seweo juseyo</i> — please stop here</li><li>영어 하세요? — <i>yeong-eo haseyo?</i> — do you speak English?</li></ul><p><b>Emergencies</b></p><ul><li>도와주세요! — <i>dowajuseyo!</i> — help me!</li><li>경찰 불러주세요 — <i>gyeongchal bulleojuseyo</i> — please call the police (112)</li><li>구급차 불러주세요 — <i>gugeupcha bulleojuseyo</i> — please call an ambulance (119)</li><li>아파요 — <i>apayo</i> — I'm sick / it hurts</li><li>병원 어디예요? — <i>byeongwon eodiyeyo?</i> — where is the hospital?</li></ul>"
     },
     {
       "type": "prose",
-      "group": "Etiquette & language",
+      "group": "Essentials",
       "title": "What staff will say to you",
       "body": "<p>When you walk into a restaurant, shop, or hotel, you'll hear these immediately. Knowing them removes the guesswork.</p><p><b>In restaurants:</b></p><ul><li><b>어서 오세요!</b> — <i>eoseo oseyo!</i> — welcome! (said by every server; a nod is fine, no response needed)</li><li><b>몇 분이세요?</b> — <i>myeot buniseyo?</i> — how many people? (hold up fingers)</li><li><b>주문하시겠어요?</b> — <i>jumunhashigeseoyo?</i> — are you ready to order? (wave gently + say <i>jamkkanmanyo</i> if not)</li><li><b>기다려 주세요</b> — <i>gidaryeo juseyo</i> — please wait a moment</li><li><b>카드요, 현금이요?</b> — <i>kadeunyo, hyeongeumiyo?</i> — card or cash? (point to your card or pocket)</li><li><b>영수증 드릴까요?</b> — <i>yeongsujeung deurilkkayo?</i> — would you like a receipt? Say <i>ne</i> (yes) — keep it for VAT refund</li><li><b>맛있게 드세요!</b> — <i>masikke deuseyo!</i> — enjoy your meal! (nod is fine)</li></ul><p><b>In shops:</b></p><ul><li><b>어떤 거 찾으세요?</b> — <i>eotteon geo chaeuseyo?</i> — what are you looking for? (open Papago or point)</li><li><b>품절이에요</b> — <i>pumjeoliheyo</i> — out of stock / sold out</li><li><b>세금 환급 되세요?</b> — <i>segeum hwangeup doeseyo?</i> — would you like a tax refund? Say <i>ne</i> and show your passport to get the VAT refund in-store.</li></ul>"
     },
     {
       "type": "list",
-      "group": "Etiquette & language",
+      "group": "Essentials",
       "title": "Signs to recognize",
       "items": [
         "약 (yak) — pharmacy · green cross sign",
@@ -862,7 +862,7 @@
     },
     {
       "type": "infogrid",
-      "group": "Road of Legends",
+      "group": "Pokémon GO",
       "title": "Road of Legends 2026 — what to know",
       "collapsible": true,
       "defaultOpen": true,
@@ -886,7 +886,7 @@
     },
     {
       "type": "habitats",
-      "group": "Road of Legends",
+      "group": "Pokémon GO",
       "title": "Raid Hour rotation — Thu & Fri",
       "note": "Friday evening is one of the best raiding windows of the trip — full day plan in the day-by-day entry.",
       "collapsible": true,
@@ -927,7 +927,7 @@
     },
     {
       "type": "raids",
-      "group": "Road of Legends",
+      "group": "Pokémon GO",
       "title": "Raid counter charts — Road of Legends Jul 9 & 10",
       "bosses": [
         {
@@ -1309,7 +1309,7 @@
     },
     {
       "type": "infogrid",
-      "group": "GO Fest Global",
+      "group": "Pokémon GO",
       "title": "GO Fest Global 2026 — what to know",
       "note": "⚠ Niantic finalises exact habitat boss lists, Super Mega mechanics, and shiny rates only days before the event — re-check <a href='https://leekduck.com/events/pokemon-go-fest-2026-global/'>LeekDuck</a> and in-game news the week of Jul 6. Remote passes: save for the Seoul days (Jul 9–10, Jul 14) when you're not at EXPO.",
       "collapsible": true,
@@ -1359,7 +1359,7 @@
     },
     {
       "type": "panel",
-      "group": "GO Fest Global",
+      "group": "Pokémon GO",
       "title": "Pre-GO Fest checklist",
       "checklist": [
         "Pokémon storage to 400+ (transfer/release beforehand)",
@@ -1380,7 +1380,7 @@
     },
     {
       "type": "tierlist",
-      "group": "GO Fest Global",
+      "group": "Pokémon GO",
       "title": "Already did Copenhagen? Your Global divergence",
       "note": "You raided GO Fest Copenhagen in person (Fælledparken, Jun 12–14) — much of the Global headline content repeats. Net effect: skip Zeraora and the Mewtwos unless you want the shiny; make Xurkitree your Sunday must; hoover up the legendaries and incense regionals Copenhagen never offered.",
       "collapsible": true,
@@ -1446,7 +1446,7 @@
     },
     {
       "type": "habitats",
-      "group": "GO Fest Global",
+      "group": "Pokémon GO",
       "title": "Habitat rotation — Sat & Sun",
       "note": "Habitats cycle every 3 hours (10:00–19:00 KST); Mega + 5★ bosses rotate hourly within each window. ⚠ Niantic finalises exact boss lists days before — re-check <a href='https://leekduck.com/events/pokemon-go-fest-2026-global/'>LeekDuck</a> the week of Jul 6.",
       "windows": [
@@ -1605,7 +1605,7 @@
     },
     {
       "type": "tierlist",
-      "group": "GO Fest Global",
+      "group": "Pokémon GO",
       "title": "Priority targets — which raids to spend passes on",
       "note": "Every GO Fest legendary 5★ and Super Mega is <span class='shiny-pill'>✨ 1/20</span> shiny — the best odds in the game. Tuned to your weekend: Saturday and Sunday are both Daejeon all day for all three of you (two of you in the arena for the LBF/Grand Final, the third raiding EXPO). Already did Copenhagen? See the divergence card above — it reorders these for you. <b>Pass math:</b> Sat — 3–5 on Mega Mewtwo X, rest on Dragonflight. Sun — 3–4 on Mega Mewtwo Y, 2–3 on Xurkitree, rest on Twilight around the Grand Final.",
       "collapsible": true,
@@ -1674,7 +1674,7 @@
     },
     {
       "type": "infogrid",
-      "group": "GO Fest Global",
+      "group": "Pokémon GO",
       "title": "Your 6-team for the debuts",
       "note": "Lead a Mega to boost the lobby — exact moves are in the counter charts below. No Mega of your own? A full lobby of the listed Shadow/non-Mega counters still clears either Super Mega with 6+ trainers — aim for a group, not a duo.",
       "collapsible": true,
@@ -1694,7 +1694,7 @@
     },
     {
       "type": "list",
-      "group": "GO Fest Global",
+      "group": "Pokémon GO",
       "title": "Caught tracker — Saturday",
       "collapsible": true,
       "defaultOpen": true,
@@ -1711,7 +1711,7 @@
     },
     {
       "type": "list",
-      "group": "GO Fest Global",
+      "group": "Pokémon GO",
       "title": "Caught tracker — Sunday",
       "collapsible": true,
       "defaultOpen": true,
@@ -1730,7 +1730,7 @@
     },
     {
       "type": "list",
-      "group": "GO Fest Global",
+      "group": "Pokémon GO",
       "title": "Caught tracker — trades, incense & research",
       "collapsible": true,
       "defaultOpen": true,
@@ -1743,7 +1743,7 @@
     },
     {
       "type": "infogrid",
-      "group": "GO Fest Global",
+      "group": "Pokémon GO",
       "title": "Beyond raids — research, eggs & wild spawns (Global)",
       "collapsible": true,
       "defaultOpen": false,
@@ -1777,7 +1777,7 @@
     },
     {
       "type": "list",
-      "group": "GO Fest Global",
+      "group": "Pokémon GO",
       "title": "Info to confirm — update as announced",
       "items": [
         "CONFIRMED ✔ Dates: Jul 11–12, 10:00–19:00 local time everywhere",
@@ -1798,7 +1798,7 @@
     },
     {
       "type": "raids",
-      "group": "GO Fest Global",
+      "group": "Pokémon GO",
       "title": "Raid counter charts — GO Fest Global 2026",
       "bosses": [
         {

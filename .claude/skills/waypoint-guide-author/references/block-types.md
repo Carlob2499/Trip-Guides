@@ -16,6 +16,14 @@ and every section carries `type`, `group` (the nav-tab category label), and usua
 - Same principle everywhere: no surface may present the same datum twice
   side-by-side (see CLAUDE.md "Uniform application across surfaces").
 
+**Group (tab) budget — ≤10 groups per guide.** Merge before adding:
+`Essentials` holds money/health/etiquette-type sections; same-audience
+event content shares one group. A group name is a nav label (short, no
+" & " chains where avoidable); the section `title` carries the identity.
+New guides start from: Plan · Essentials · Getting around · Itinerary ·
+Sights · Food & shopping · References, adding at most 3 trip-specific
+groups.
+
 **The governing rule:** prose bodies allow only `<p> <b> <i> <a> <ul> <li> <ol>`.
 The moment content wants a table, a grid, cards, collapsibles, or any richer
 structure, that is the signal to reach for a **typed section** below — never richer

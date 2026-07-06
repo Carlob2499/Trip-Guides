@@ -56,13 +56,13 @@
     },
     {
       "type": "panel",
-      "group": "Money & budget",
+      "group": "Essentials",
       "title": "Money & currency",
       "body": ""
     },
     {
       "type": "budget",
-      "group": "Money & budget",
+      "group": "Essentials",
       "title": "Budget & daily costs",
       "intro": "Rough per-person estimates — replace the zeros with researched figures.",
       "currency": "¥",
@@ -97,13 +97,13 @@
     },
     {
       "type": "panel",
-      "group": "Health & safety",
+      "group": "Essentials",
       "title": "Health & pharmacy",
       "body": ""
     },
     {
       "type": "panel",
-      "group": "Etiquette & language",
+      "group": "Essentials",
       "title": "Etiquette & language",
       "body": ""
     },

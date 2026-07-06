@@ -1,4 +1,4 @@
-/*
+﻿/*
   Offline service worker for Trip Guides.
 
   What it does:
@@ -9,14 +9,14 @@
   - Everything else (CSS, JS, fonts, photos) is cache-first: fast, and available
     offline after it's been seen once.
 
-  Known limit: the little embedded maps load inside an OpenStreetMap frame from
-  another website, which a service worker isn't allowed to reach — so maps need
-  a connection. The written "Key transit routes" steps work offline regardless.
+  Known limit: map tiles (OpenStreetMap or Google) come from third-party
+  servers and are not precached, so interactive maps need a connection.
+  The written "Key transit routes" steps work offline regardless.
 
   When you publish a big update, bump CACHE below (v1 -> v2) so visitors get the
   new version cleanly.
 */
-const CACHE = "tripguides-v14";
+const CACHE = "tripguides-v15";
 const BASE = "/Trip-Guides";
 const CORE = [
   BASE + "/",
