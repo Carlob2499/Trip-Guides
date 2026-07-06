@@ -126,6 +126,12 @@ export function buildGuideFromBrief(brief, country, opts = {}) {
     `checked against a primary source before this guide graduates (see CLAUDE.md).`;
 
   return {
+    // Kicker invariant (see CLAUDE.md "Uniform application across surfaces" +
+    // the waypoint-guide-author block-types rules): the kicker must never
+    // repeat title/country — the layout suppresses a country eyebrow when
+    // title === country, so the kicker is the masthead's only context line.
+    // On graduation, replace with the route + dates pattern
+    // ("Seoul · Daejeon · Busan — Jul 8–15, 2026").
     kicker: "AI draft",
     title: brief.title,
     dek: "",

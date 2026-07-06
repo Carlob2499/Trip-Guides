@@ -311,7 +311,13 @@ const tripSummary = buildSummary(guide);
         )}
         <span class="mast-scrim" aria-hidden="true"></span>
         <div class="mast-inner">
-          <p class="eyebrow mast-eyebrow">{guide.kicker || guide.country}</p>
+          {/* Dedup guard: never render the eyebrow if it would repeat the
+              title verbatim (e.g. title "South Korea", country "South Korea").
+              A kicker always wins; otherwise the country shows only when it
+              adds information. */}
+          {(guide.kicker || guide.country !== guide.title) && (
+            <p class="eyebrow mast-eyebrow">{guide.kicker || guide.country}</p>
+          )}
           <h1 class="mast-title">{guide.title}</h1>
           {guide.dek && <p class="dek mast-dek">{guide.dek}</p>}
         </div>

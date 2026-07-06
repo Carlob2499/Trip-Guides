@@ -6,6 +6,16 @@ every field you write must validate against it; when in doubt, read it). A guide
 and every section carries `type`, `group` (the nav-tab category label), and usually
 `title`.
 
+**Top-of-guide label rules (dedup + information density):**
+- `kicker` must carry information the title does not — the established pattern
+  is the route + dates: `"Seoul · Daejeon · Busan — Jul 8–15, 2026"`. Never a
+  vague season label, and never text that repeats `title` or `country`.
+- When `title` equals `country` (the common case), the layout suppresses the
+  country eyebrow to avoid rendering the same word twice — so a missing kicker
+  means NO eyebrow at all. Always set a kicker on a researched guide.
+- Same principle everywhere: no surface may present the same datum twice
+  side-by-side (see CLAUDE.md "Uniform application across surfaces").
+
 **The governing rule:** prose bodies allow only `<p> <b> <i> <a> <ul> <li> <ol>`.
 The moment content wants a table, a grid, cards, collapsibles, or any richer
 structure, that is the signal to reach for a **typed section** below — never richer

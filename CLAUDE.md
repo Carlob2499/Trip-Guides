@@ -111,6 +111,17 @@ repeating the detail on every inquiry.
 - **Shared components affect every guide.** Styling, layout, and block
   components are global. A change to any component changes all guides at
   once. Only JSON data files are per-country.
+- **Uniform application across surfaces.** The same guide data renders on
+  multiple surfaces (hub hero, hub grid card, guide masthead, share modal,
+  OG image, print). Any change to how one surface presents a datum must be
+  checked against every other surface that presents it — apply the change
+  everywhere it belongs, in the same pass. Two failure modes to prevent:
+  (a) a redesign that reaches some surfaces but not others (stale palette,
+  old typography, missing photo treatment — grep for the old tokens after
+  any identity change), and (b) **the same datum rendered twice
+  side-by-side** (e.g. a next-trip hero AND a grid card for the same
+  guide; an eyebrow that repeats the title verbatim). Dedup derived
+  labels at the layout level, not by hand-editing content.
 - **Read before editing.** Always read the target JSON before changing
   it. Never regenerate a file from memory.
 - **Verify the build.** `npm run build` must pass with zero schema
