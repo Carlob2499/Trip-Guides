@@ -1,66 +1,28 @@
-/* === WAYPOINT FLIGHT — section-switch motion system =========================
-   Switching sections is flying to the next waypoint on a route, not swapping
-   a box. Three coordinated layers, all CSS-restart driven (a display:none
-   panel restarts its animations on reveal — no JS animation code):
-     1. The panel banks in along the travel direction (fwd = from the right,
-        back = from the left; section-flight.js sets html[data-flight]).
-     2. The chapter opener: a giant ghost bearing-numeral sweeps in with the
-        section title rising out of a clipped baseline.
-     3. Content settles: the first blocks land in sequence behind the title.
-   Everything short-circuits under prefers-reduced-motion. */
+/* === CHAPTER OPENERS + GUIDED CHAIN ==========================================
+   The one orchestrated motion moment lives in the masthead arrival
+   (gsap-hero.js). Everything else is calm: a section change is a quick opacity
+   fade, and the chapter opener (ghost numeral + title + contents line) and
+   next-section cards are static. */
 
-/* ── 1. Panel flight ──────────────────────────────────────────────────────── */
+/* Quiet fade on section reveal — opacity only, no banking/settle. */
 @media(prefers-reduced-motion:no-preference){
-  .catblock{animation:flyFwd .48s cubic-bezier(.16,.84,.28,1)}
-  html[data-flight="back"] .catblock{animation:flyBack .48s cubic-bezier(.16,.84,.28,1)}
+  .catblock{animation:sectionIn .28s ease}
+}
+@keyframes sectionIn{from{opacity:0}to{opacity:1}}
 
-  /* 3. Content settle — the opener leads, blocks follow in sequence. */
-  .catblock>.block{animation:blockSettle .5s cubic-bezier(.2,.7,.2,1) both}
-  .catblock>.block:nth-of-type(1){animation-delay:.08s}
-  .catblock>.block:nth-of-type(2){animation-delay:.15s}
-  .catblock>.block:nth-of-type(3){animation-delay:.21s}
-  .catblock>.block:nth-of-type(n+4){animation-delay:.26s}
-}
-@keyframes flyFwd{
-  from{opacity:0;transform:translateX(9vw) rotate(.5deg)}
-  60%{opacity:1}
-  to{opacity:1;transform:none}
-}
-@keyframes flyBack{
-  from{opacity:0;transform:translateX(-9vw) rotate(-.5deg)}
-  60%{opacity:1}
-  to{opacity:1;transform:none}
-}
-@keyframes blockSettle{
-  from{opacity:0;transform:translateY(16px)}
-  to{opacity:1;transform:none}
-}
-
-/* ── 2. Chapter opener — bearing numeral + kinetic title ─────────────────── */
+/* ── Chapter opener — ghost numeral, title, contents line (static) ────────── */
 .cat-opener{position:relative;max-width:var(--read);margin:0 auto .4rem;padding:1.6rem 0 .2rem;overflow:hidden}
 .cat-num{position:absolute;right:-.05em;top:-.35rem;z-index:0;font-family:var(--font-display);font-weight:800;font-size:clamp(4.6rem,9vw,7.5rem);line-height:1;letter-spacing:-.05em;color:color-mix(in srgb,var(--accent) 14%,transparent);-webkit-text-stroke:1.5px color-mix(in srgb,var(--accent) 34%,transparent);user-select:none;pointer-events:none}
 .cat-opener .cat-title{position:relative;z-index:1;margin:0}
 .cat-sub{position:relative;z-index:1;margin:.3rem 0 0;font-family:var(--font-data);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-/* Opener numeral/title motion is owned by gsap-hero.js (single owner); the
-   contents line still settles with the block cascade. */
-@media(prefers-reduced-motion:no-preference){
-  .cat-sub{animation:blockSettle .5s ease .2s both}
-}
 
 /* ── Opener photo fan — a group's own verified photos, fanned like a hand of
-      postcards beside the numeral. Only groups whose sections already carry
-      images render one (derived at build; no new sourcing). ───────────────── */
+      postcards beside the numeral (static). ────────────────────────────────── */
 .cat-fan{position:absolute;right:clamp(.5rem,4vw,3rem);top:.4rem;z-index:1;width:130px;height:88px;pointer-events:none}
 .cat-fan-img{position:absolute;width:86px;height:62px;object-fit:cover;border-radius:8px;border:2px solid var(--card);box-shadow:0 4px 14px rgba(10,14,18,.28)}
 .cat-fan-0{left:0;top:12px;transform:rotate(-7deg)}
 .cat-fan-1{left:26px;top:4px;transform:rotate(2deg)}
 .cat-fan-2{left:52px;top:14px;transform:rotate(9deg)}
-@media(prefers-reduced-motion:no-preference){
-  .cat-fan-img{animation:fanIn .55s cubic-bezier(.2,1.2,.3,1) both}
-  .cat-fan-1{animation-delay:.08s}
-  .cat-fan-2{animation-delay:.16s}
-}
-@keyframes fanIn{from{opacity:0;transform:translateY(18px) rotate(0deg) scale(.8)}}
 @media(max-width:640px){.cat-fan{width:96px;height:66px}.cat-fan-img{width:64px;height:46px}.cat-fan-1{left:18px}.cat-fan-2{left:36px}}
 
 /* ── First-visit navigation hint ─────────────────────────────────────────── */

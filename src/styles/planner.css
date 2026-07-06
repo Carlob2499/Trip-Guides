@@ -10,9 +10,8 @@
 .dchip:hover{border-color:var(--accent);transform:translateY(-1px)}
 .dchip-num{font-family:var(--font-data);font-size:.62rem;font-weight:700;letter-spacing:.06em;color:var(--accent);line-height:1}
 .dchip-date{font-family:var(--font-display);font-size:.78rem;font-weight:640;letter-spacing:-.01em;white-space:nowrap;line-height:1.15}
-.dchip-active{background:var(--accent);border-color:var(--accent);color:var(--bg);transform:translateY(-2px);box-shadow:0 4px 14px color-mix(in srgb,var(--accent) 34%,transparent)}
+.dchip-active{background:var(--accent);border-color:var(--accent);color:var(--bg)}
 .dchip-active .dchip-num{color:color-mix(in srgb,var(--bg) 78%,transparent)}
-@media(prefers-reduced-motion:reduce){.dchip-active{transform:none;box-shadow:none}}
 @media(prefers-reduced-motion:reduce){.dchip{transition:none}.dchip:hover{transform:none}}
 
 /* ── Itinerary — single column of day cards (the day scrubber sticks above). ─ */
@@ -29,17 +28,6 @@
 /* ── Numbered stop list (waypoints) — the on-the-go itinerary ladder ──────── */
 .stops{list-style:none;margin:.55rem 0 .35rem;padding:0;border-left:2px solid color-mix(in srgb,var(--accent) 45%,var(--rule));display:flex;flex-direction:column}
 .stop{display:flex;align-items:baseline;gap:.55rem;padding:.34rem 0 .34rem .65rem;min-width:0}
-/* Stop ladder choreography: stops cascade in when the itinerary panel is
-   revealed (same display:none-restart mechanism as the section transition). */
-@media(prefers-reduced-motion:no-preference){
-  .stop{animation:stopIn .34s cubic-bezier(.2,.7,.2,1) both}
-  .stop:nth-child(1){animation-delay:.05s}.stop:nth-child(2){animation-delay:.1s}
-  .stop:nth-child(3){animation-delay:.15s}.stop:nth-child(4){animation-delay:.2s}
-  .stop:nth-child(5){animation-delay:.25s}.stop:nth-child(6){animation-delay:.3s}
-  .stop:nth-child(7){animation-delay:.35s}.stop:nth-child(n+8){animation-delay:.4s}
-}
-@keyframes stopIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
-
 /* ── Day TL;DR — the one-line glance summary ──────────────────────────────── */
 .day-tldr{margin:.2rem 0 .5rem;font-family:var(--font-display);font-weight:640;font-size:1.02rem;line-height:1.4;letter-spacing:-.01em;color:var(--accent)}
 
