@@ -69,11 +69,11 @@ On the home page, click **"＋ Make a new guide."** Enter a country (and, option
 cities, dates, who's going, and priorities) and it opens a pre-filled GitHub issue.
 Submitting it runs an automation that commits a **draft scaffold** — the standard guide
 structure with live weather, public-holiday, and currency data already wired in for that
-country — and opens it as a pull request. The draft appears under **"Guides-to-be"** on
-the home page; a later research pass fills the facts (per CLAUDE.md) and, once verified,
-it graduates to the main grid. Works for **any** country. *(No setup needed — the
-`new-guide` label the automation relies on is created automatically by the
-`ensure-labels` workflow.)*
+country — and opens it as a pull request. The draft lives at its own URL (it is not shown
+on the home page until it graduates); a later research pass fills the facts (per CLAUDE.md)
+and, once verified (`draft: false`), it appears in the main grid. Works for **any**
+country. *(No setup needed — the `new-guide` label the automation relies on is created
+automatically by the `ensure-labels` workflow.)*
 
 ## How to add a new destination by hand
 
