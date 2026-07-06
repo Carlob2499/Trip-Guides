@@ -119,19 +119,6 @@ html[data-swipe-hint="back"]::after{left:0;background:linear-gradient(to right,c
 /* ── Focus Today TL;DR ────────────────────────────────────────────────────── */
 .focus-tldr{margin:.45rem 0 0;font-family:var(--font-display);font-weight:640;font-size:1.1rem;line-height:1.4;color:var(--accent)}
 
-/* ── Trip-pulse banners ───────────────────────────────────────────────────── */
-.pulse-banner{display:block;width:100%;max-width:36rem;margin:.7rem auto 0;padding:.7rem 1rem;border-radius:var(--r-md);border:1px solid;font-family:var(--font-body);font-size:.9rem;line-height:1.5;text-align:left;cursor:pointer}
-.pulse-wx{background:color-mix(in srgb,#3a6ea5 12%,var(--card));border-color:color-mix(in srgb,#3a6ea5 45%,var(--rule));color:var(--ink)}
-.pulse-gate{background:color-mix(in srgb,var(--accent) 12%,var(--card));border-color:color-mix(in srgb,var(--accent) 45%,var(--rule));color:var(--ink)}
-@media(prefers-reduced-motion:no-preference){.pulse-banner{animation:chipIn .5s cubic-bezier(.2,1.2,.3,1) both}}
-
-/* ── Journal ──────────────────────────────────────────────────────────────── */
-.journal{margin-top:.7rem;border-top:1px dashed var(--rule)}
-.journal-sum{padding:.45rem 0;font-family:var(--font-data);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);cursor:pointer;list-style:none}
-.journal-sum::-webkit-details-marker{display:none}
-.journal[open] .journal-sum{color:var(--accent)}
-.journal-ta{width:100%;padding:.55rem .7rem;font:inherit;font-size:.9rem;line-height:1.55;color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:var(--r-sm);resize:vertical}
-
 /* ── Budget burn pill ─────────────────────────────────────────────────────── */
 .gstat-burn{cursor:pointer;border-color:var(--accent);color:var(--accent)}
 .gstat-burn:hover{background:color-mix(in srgb,var(--accent) 12%,transparent)}

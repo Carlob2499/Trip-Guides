@@ -262,8 +262,6 @@
     chipEl.textContent = "◉ Today · " + chipDate;
     document.body.appendChild(chipEl);
     chipEl.addEventListener("click", openFocus);
-    // Hook for trip-pulse.js (arrival autopilot / weather banner deep-links).
-    document.addEventListener("tg:focus-today", openFocus);
   }
 
   /* ── 4a-ii. Data-freshness chip + budget burn tile in the masthead ─────── */
