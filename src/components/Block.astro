@@ -22,7 +22,7 @@ import HolidaysBlock from "./blocks/HolidaysBlock.astro";
 
 // `holidays` is the server-computed holiday info (or null), threaded down from
 // GuideLayout; only the `holidays` section type uses it.
-const { sec, sid, ci, solo, holidays } = Astro.props;
+const { sec, sid, ci, solo, holidays, mapPins } = Astro.props;
 
 // Stable key prefix for checklist items — based on section index, not content.
 // Changing item text does not change its saved state; adding/removing items at
@@ -65,7 +65,7 @@ const TitleTag = isCollapsible ? "summary" : "div";
             {sec.type === "prose"  && <ProseBlock  sec={sec} />}
             {sec.type === "list"   && <ListBlock   sec={sec} keyPrefix={keyPrefix} />}
             {sec.type === "routes" && <RoutesBlock sec={sec} keyPrefix={keyPrefix} />}
-            {sec.type === "map"    && <MapBlock    sec={sec} />}
+            {sec.type === "map"    && <MapBlock    sec={sec} pins={mapPins} />}
             {sec.type === "budget" && <BudgetBlock sec={sec} />}
             {sec.type === "raids"  && <RaidBlock   sec={sec} />}
             {sec.type === "habitats" && <HabitatsBlock sec={sec} />}
@@ -79,7 +79,7 @@ const TitleTag = isCollapsible ? "summary" : "div";
           {sec.type === "prose"  && <ProseBlock  sec={sec} />}
           {sec.type === "list"   && <ListBlock   sec={sec} keyPrefix={keyPrefix} />}
           {sec.type === "routes" && <RoutesBlock sec={sec} keyPrefix={keyPrefix} />}
-          {sec.type === "map"    && <MapBlock    sec={sec} />}
+          {sec.type === "map"    && <MapBlock    sec={sec} pins={mapPins} />}
           {sec.type === "budget" && <BudgetBlock sec={sec} />}
           {sec.type === "raids"  && <RaidBlock   sec={sec} />}
           {sec.type === "habitats" && <HabitatsBlock sec={sec} />}

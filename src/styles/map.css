@@ -1,0 +1,46 @@
+/* === INTERACTIVE ITINERARY MAPS (Leaflet) ====================================
+   Styles for the [data-itin-map] mounts + CSS-drawn markers. The markers are
+   divIcons (no image assets) so they inherit the guide's accent color and the
+   monochrome-icon convention. Tile pane gets a filter under dark mode so OSM's
+   light tiles sit comfortably on the chart-room palette. */
+
+.itin-map{position:relative;width:100%;height:340px;border:1px solid var(--rule2);border-radius:5px;background:var(--bg2);margin:.4rem 0 .3rem;z-index:0}
+.itin-map:fullscreen{width:100%;height:100%;border-radius:0}
+@media(max-width:599px){.itin-map{height:300px}}
+
+/* CSS-drawn pins: an accent ring dot; kinds get subtle differentiation.
+   The 26px icon box doubles as the touch target (+ halo below on mobile). */
+.wpin{background:none;border:none}
+.wpin-dot{display:block;width:14px;height:14px;margin:6px;border-radius:50%;background:var(--accent);border:2.5px solid var(--card);box-shadow:0 0 0 1.5px var(--accent),0 1px 4px rgba(0,0,0,.35)}
+.wpin-center .wpin-dot{background:var(--ink);box-shadow:0 0 0 1.5px var(--ink),0 1px 4px rgba(0,0,0,.35)}
+.wpin-sight .wpin-dot{border-radius:3px}  /* sights are squares — scannable at a glance */
+@media(max-width:599px){.wpin{position:relative}.wpin::after{content:"";position:absolute;inset:-9px}}
+
+/* Popup chrome matched to the card system + type roles. */
+.leaflet-popup-content-wrapper{background:var(--card);color:var(--ink);border:1px solid var(--rule2);border-radius:7px;box-shadow:0 4px 18px rgba(0,0,0,.22)}
+.leaflet-popup-tip{background:var(--card);border:1px solid var(--rule2)}
+.leaflet-popup-content{margin:.65rem .85rem;font-family:var(--font-body);font-size:.92rem;line-height:1.45}
+.leaflet-popup-content b{font-family:var(--font-display);font-weight:640;letter-spacing:-.01em}
+.wpop-local{display:block;font-family:var(--font-data);font-size:.8rem;color:var(--muted);margin-top:.15rem}
+.wpop-jump{display:inline-block;margin-top:.35rem;font-family:var(--font-data);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
+.leaflet-container a.leaflet-popup-close-button{color:var(--muted)}
+.leaflet-control-attribution{font-size:.62rem;background:color-mix(in srgb,var(--card) 82%,transparent);color:var(--muted)}
+.leaflet-control-attribution a{color:var(--muted)}
+.leaflet-bar a{background:var(--card);color:var(--ink);border-bottom-color:var(--rule2)}
+.leaflet-bar a:hover{background:var(--bg2)}
+
+/* Dark mode: dim + desaturate OSM's light tiles instead of a second tile source. */
+[data-theme="dark"] .itin-map .leaflet-tile-pane{filter:grayscale(.25) brightness(.72) contrast(1.06)}
+@media(prefers-color-scheme:dark){
+  html:not([data-theme="light"]) .itin-map .leaflet-tile-pane{filter:grayscale(.25) brightness(.72) contrast(1.06)}
+}
+
+/* Sight-card "show on map" chip — same visual family as .copy-addr. */
+.pin-jump{display:inline-flex;align-items:center;gap:.25em;font-family:var(--font-data);font-size:.62rem;letter-spacing:.04em;color:var(--muted);background:var(--bg);border:1px solid var(--rule);border-radius:4px;padding:.1rem .4rem;cursor:pointer;vertical-align:middle;margin-left:.35em;line-height:1.4;transition:color .15s,border-color .15s;white-space:nowrap}
+.pin-jump:hover{color:var(--accent);border-color:var(--accent)}
+
+/* Card flash when arriving from a map popup's "Details ↓". */
+.pin-flash{outline:2px solid var(--accent);outline-offset:3px;transition:outline-color .3s}
+@media(prefers-reduced-motion:reduce){
+  .pin-flash{transition:none}
+}

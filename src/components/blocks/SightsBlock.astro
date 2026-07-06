@@ -1,4 +1,5 @@
 ---
+import { pinSlug } from "../../lib/map-pins";
 const { sec } = Astro.props;
 
 // Wikimedia's Special:FilePath already supports ?width= thumbnailing —
@@ -13,7 +14,7 @@ const gmaps = (m: any) =>
   `https://www.google.com/maps/search/?api=1&query=${m.lat},${m.lng}`;
 ---
 {(sec.items || []).map((it: any) => (
-  <div class="card sight">
+  <div class="card sight" id={it.map ? `sight-${pinSlug(it.name)}` : undefined}>
     {it.img && (
       <img class="cardimg" loading="lazy" alt={it.img.alt || ""}
         src={commonsSrc(it.img.file, 800)}
@@ -32,7 +33,7 @@ const gmaps = (m: any) =>
     <h4 class="sight-name">{it.name}</h4>
     <p>
       <Fragment set:html={it.body || ""} />
-      {it.map && <> <a class="maplink" target="_blank" rel="noopener" href={gmaps(it.map)}>Open in Maps ↗</a></>}
+      {it.map && <> <button class="pin-jump" type="button" data-pin-jump={pinSlug(it.name)}>◈ Show on map</button> <a class="maplink" target="_blank" rel="noopener" href={gmaps(it.map)}>Open in Maps ↗</a></>}
     </p>
   </div>
 ))}

@@ -5,7 +5,7 @@ import { contrastRatio } from "./lib/contrast";
 // Light page background (base.css `--bg`). A guide `theme.primary` becomes the
 // site `--accent`, painted as link/tab/label text on this surface — so it must
 // stay legible against it. Keep in sync with base.css if that token changes.
-const LIGHT_BG = "#f3ecdf";
+const LIGHT_BG = "#e9ebe3";
 // 3.0:1 is WCAG's minimum for large-text / UI-component contrast, and is the
 // empirically-calibrated floor of the project's own country accent palette
 // (the tightest, #b07a1f, sits at ~3.16:1). Below this, accent UI turns
