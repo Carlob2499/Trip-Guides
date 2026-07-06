@@ -90,9 +90,9 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 /* === GUIDE TAB BAR ========================================================== */
 /* Pill segmented control — replaces the old text+underline strip (poor
    clickability affordance; hard to tell what's a button). Every tab is an
-   obvious pill with a generous hit area; the active pill fills with the
-   accent (the dial-chip language). Edge fades signal horizontal
-   scrollability; scroll-snap keeps pills landing cleanly. */
+   obvious pill with a generous hit area; the active pill fills solid with
+   the accent. Edge fades signal horizontal scrollability; scroll-snap keeps
+   pills landing cleanly. */
 .guide-tabs{display:flex;gap:.4rem;align-items:center;overflow-x:auto;overflow-y:hidden;touch-action:pan-x;overscroll-behavior-x:contain;max-width:100%;scrollbar-width:none;background:var(--bg);border-bottom:1px solid var(--rule);padding:.5rem .9rem;scroll-snap-type:x proximity;
   -webkit-mask-image:linear-gradient(to right,transparent 0,#000 16px,#000 calc(100% - 16px),transparent);
   mask-image:linear-gradient(to right,transparent 0,#000 16px,#000 calc(100% - 16px),transparent)}

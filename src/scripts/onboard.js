@@ -2,7 +2,7 @@
    teaching the three navigation gestures in one glance. Appears once per
    device (localStorage), never again after dismissal or first section change
    (using the nav proves the lesson landed). Content is device-appropriate:
-   swipe on touch, compass + Ctrl+K on desktop. */
+   swipe on touch, tabs + Ctrl+K search on desktop. */
 
 (function () {
   var KEY = "tg-nav-hint-done";
@@ -19,7 +19,7 @@
     '<span class="nav-hint-txt">' +
     (touch
       ? "Swipe ⇄ to move between sections · <b>Sections</b> below jumps anywhere"
-      : "Click the ✦ compass (bottom-right) to fan out every section · <b>Ctrl+K</b> jumps anywhere") +
+      : "Tabs up top jump between sections · <b>Ctrl+K</b> searches the whole guide") +
     '</span><button class="nav-hint-x" type="button" aria-label="Dismiss navigation hint">✕</button>';
   tabs.insertAdjacentElement("afterend", strip);
 
