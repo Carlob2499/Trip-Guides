@@ -1,0 +1,36 @@
+/* === MOBILE BEARING SHEET ====================================================
+   The mobile counterpart of the compass dial: the section sheet speaks the
+   same bearing-chip language — numbered sections in the display face, accent
+   numerals, and a staggered rise when the sheet opens (transition-delay
+   stagger; the sheet animates via .open transform, not display, so child
+   transitions re-run on every open). Swipe-nav.js adds the flight gesture. */
+
+@media(max-width:899px){
+  /* Bearing numbers via CSS counters — only real section groups count. */
+  .sheet-list{counter-reset:bearing}
+  .sheet-cat{display:flex;align-items:baseline;gap:.65rem;font-family:var(--font-display);font-size:1.18rem;font-weight:640;letter-spacing:-.015em;text-transform:none;color:var(--ink);padding:.6rem 1.2rem .35rem;min-height:46px}
+  .sheet-cat:not(.sheet-split-link):not(.sheet-vote-link)::before{counter-increment:bearing;content:counter(bearing,decimal-leading-zero);font-family:var(--font-data);font-size:.66rem;font-weight:700;letter-spacing:.08em;color:var(--accent)}
+  .sheet-split-link::before,.sheet-vote-link::before{content:"·";font-family:var(--font-data);color:var(--muted)}
+  .sheet-cat.active{color:var(--accent)}
+  .sheet-link{padding-left:3rem;color:var(--muted);font-size:.95rem}
+  .sheet-link.active{color:var(--accent)}
+
+  /* Staggered rise-in on open. */
+  .sheet .sheet-cat,.sheet .sheet-link{opacity:0;transform:translateY(14px);transition:opacity .28s ease,transform .34s cubic-bezier(.2,1.1,.3,1)}
+  .sheet.open .sheet-cat,.sheet.open .sheet-link{opacity:1;transform:none}
+  .sheet.open .sheet-list>:nth-child(1){transition-delay:.04s}
+  .sheet.open .sheet-list>:nth-child(2){transition-delay:.07s}
+  .sheet.open .sheet-list>:nth-child(3){transition-delay:.1s}
+  .sheet.open .sheet-list>:nth-child(4){transition-delay:.13s}
+  .sheet.open .sheet-list>:nth-child(5){transition-delay:.16s}
+  .sheet.open .sheet-list>:nth-child(6){transition-delay:.19s}
+  .sheet.open .sheet-list>:nth-child(7){transition-delay:.22s}
+  .sheet.open .sheet-list>:nth-child(8){transition-delay:.25s}
+  .sheet.open .sheet-list>:nth-child(9){transition-delay:.28s}
+  .sheet.open .sheet-list>:nth-child(10){transition-delay:.31s}
+  .sheet.open .sheet-list>:nth-child(n+11){transition-delay:.34s}
+
+  @media(prefers-reduced-motion:reduce){
+    .sheet .sheet-cat,.sheet .sheet-link{opacity:1;transform:none;transition:none}
+  }
+}
