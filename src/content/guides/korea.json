@@ -689,6 +689,10 @@
           "name": "Cheonggyecheon",
           "kicker": "The downtown stream",
           "body": "A restored stream cutting through the centre with walkways below street level — a cool, easy stroll and a good flat break between sights.",
+          "img": {
+            "file": "Cheonggyecheon evening 2.jpg",
+            "alt": "Cheonggyecheon stream and stepped weir at Cheonggye Plaza, Seoul"
+          },
           "map": {
             "lat": 37.5696,
             "lng": 126.9784
@@ -698,6 +702,10 @@
           "name": "Insadong",
           "kicker": "Crafts & tea",
           "body": "A walkable lane of galleries, traditional craft shops and tea houses, a short hop from the palaces — a natural pairing with a Gyeongbokgung morning.",
+          "img": {
+            "file": "Seoul-Insadong-Street-01.jpg",
+            "alt": "Traditional restaurant alley in Insadong, Seoul"
+          },
           "map": {
             "lat": 37.574,
             "lng": 126.985

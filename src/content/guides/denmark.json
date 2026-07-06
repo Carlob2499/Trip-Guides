@@ -418,6 +418,10 @@
           "name": "Reffen",
           "kicker": "Scandinavia's biggest street food market",
           "body": "60+ international stalls on the old shipyard at Refshaleøen, with picnic benches, firepits, and harbour views. Food stalls open 11:30–20:30 daily; bars until 22:00 Sun–Thu and 01:00 Fri–Sat. <a href='https://reffen.dk' target='_blank' rel='noopener noreferrer'>reffen.dk</a>",
+          "img": {
+            "file": "Reffen Copenhagen Street Food Market.jpg",
+            "alt": "Shipping-container food stalls at Reffen street food market, Copenhagen"
+          },
           "map": {
             "lat": 55.6906,
             "lng": 12.6007
@@ -806,6 +810,10 @@
           "name": "Lilla Torg & Gamla Staden (Old Town)",
           "kicker": "Best photo spot in the city — arrive before 10:00",
           "body": "Malmö's old town is a tight cluster of half-timbered buildings in red, yellow, and ochre framing a cobblestone square. Lilla Torg (Little Square) is the best postcard shot in the city — arrive before 10:00 for morning light before cafe chairs fill every frame. Walk <b>Jakob Nilsgatan</b> for a narrow 17th-century lane of pastel houses with almost no crowds. The <b>Form/Design Center</b> on the square stocks ceramics, carved wood, and suede bags — genuinely Swedish and portable. Free to browse.",
+          "img": {
+            "file": "Lilla Torg, Malmö, mars 2015-3.jpg",
+            "alt": "Cobblestone café square at Lilla Torg in Malmö's old town"
+          },
           "map": {
             "lat": 55.6049,
             "lng": 13.0038
@@ -815,6 +823,10 @@
           "name": "Malmöhus Castle",
           "kicker": "Oldest preserved Renaissance castle in the Nordic countries · open Wed 11:00–17:00",
           "body": "The castle with its green moat and swans is worth both the photo and the entry. Inside: royal chambers, natural history, and a small aquarium. Hours: Tue–Wed, Fri–Sun 11:00–17:00; Thu 11:00–19:00. <b>Closed Mondays</b>. Jun 10 is Wednesday — open 11:00–17:00. Entry ≈120 SEK adult (~$11 USD); free under 20. Verify current pricing at <a href='https://malmocity.se/en/museum/' target='_blank' rel='noopener noreferrer'>malmocity.se/en/museum/</a>. The moat walk is free and worth doing even if you skip entry.",
+          "img": {
+            "file": "Malmöhus slott 2022.jpg",
+            "alt": "Malmöhus Castle's red round tower reflected in its moat"
+          },
           "map": {
             "lat": 55.6076,
             "lng": 12.9968
