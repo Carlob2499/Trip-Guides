@@ -106,6 +106,22 @@ describe("collectWaypoints", () => {
     expect(collectWaypoints(guide)).toEqual([]);
   });
 
+  it("includes day-item waypoints with coords and skips coordless ones", () => {
+    const guide = {
+      country: "Korea",
+      sections: [{
+        type: "days",
+        items: [
+          { date: "Jul 8", title: "Arrive", waypoints: [
+            { name: "Incheon T1", lat: 37.45, lng: 126.44, time: "16:50" },
+            { name: "No coords yet" },
+          ] },
+        ],
+      }],
+    };
+    expect(collectWaypoints(guide)).toEqual([{ lat: 37.45, lng: 126.44, name: "Incheon T1" }]);
+  });
+
   it("returns an empty array for a guide with no sections", () => {
     expect(collectWaypoints({})).toEqual([]);
     expect(collectWaypoints(null)).toEqual([]);

@@ -1,26 +1,82 @@
 ---
-const { sec, keyPrefix = "dy" } = Astro.props;
+// Day-by-day itinerary — the heart of the Plan view. Renders:
+//   1. A numbered day-scrubber (color-block chips, units.-style wayfinding —
+//      numbering is real information here: days are a sequence). Sticky while
+//      the itinerary is in view; scroll-synced + click-to-jump via day-rail.js.
+//   2. The day cards (unchanged content model) inside a planner grid; on wide
+//      desktop a sticky day-synced Leaflet map sits beside them when any day
+//      has waypoint coords (falls back to guide-level pins otherwise).
+//   3. Per-day numbered stop lists from the additive `waypoints` field — the
+//      on-the-go itinerary ladder (time in data face, name, note).
+// `planner` (days+pins+mapCenter) is derived at build time in map-pins.ts and
+// threaded from GuideLayout via Block.
+const { sec, keyPrefix = "dy", planner } = Astro.props;
+const days: any[] = sec.items || [];
+const pins = planner?.pins || [];
+const showPlannerMap = !!planner?.mapCenter; // mount when the guide has a real map center
+const payload = showPlannerMap ? JSON.stringify({
+  planner: true,
+  center: planner.mapCenter, span: planner.span ?? null,
+  pins: pins,                      // day-indexed waypoint pins (may be empty)
+  fallbackPins: planner.fallbackPins || [], // guide-level pins when no waypoints yet
+}) : null;
+const two = (n: number) => String(n + 1).padStart(2, "0");
 ---
-{(sec.items || []).map((d: any, di: number) => (
-  <div class="day" data-energy={d.energy}>
-    <div class="d">{d.date}</div>
-    <div class="b">
-      <strong>{d.title}</strong>
-      {d.checklist && d.checklist.length > 0 && (
-        <span class="day-kitcount" hidden aria-live="polite"></span>
-      )}
-      {d.pace && <div class="pace">⏱ {d.pace}</div>}
-      {d.note && <span class="lsnote">🌿 <Fragment set:html={d.note} /></span>}
-      {d.body && <div><Fragment set:html={d.body} /></div>}
-      {d.fit  && <div class="fit">Fit: <Fragment set:html={d.fit} /></div>}
-      {d.checklist && d.checklist.length > 0 && (
-        <div class="daykit">
-          <span class="kit-label">Day kit</span>
-          {d.checklist.map((i: string, j: number) => (
-            <label class="check"><input type="checkbox" data-pkey={`${keyPrefix}-d${di}-${j}`} /><span class="check-txt"><Fragment set:html={i} /></span></label>
-          ))}
+<nav class="day-scrub" id="dayScrub" aria-label="Jump to a day">
+  {days.map((d: any, di: number) => (
+    <button class="dchip" type="button" data-day-jump={di} aria-label={`Jump to ${d.date}`}>
+      <span class="dchip-num">{two(di)}</span>
+      <span class="dchip-date">{d.date}</span>
+    </button>
+  ))}
+</nav>
+
+<div class={`planner${showPlannerMap ? " has-map" : ""}`}>
+  <div class="planner-days">
+    {days.map((d: any, di: number) => (
+      <div class="day" data-energy={d.energy} data-day={di} id={`day-${di}`}>
+        <div class="d"><span class="day-num">{two(di)}</span>{d.date}</div>
+        <div class="b">
+          <strong>{d.title}</strong>
+          {d.checklist && d.checklist.length > 0 && (
+            <span class="day-kitcount" hidden aria-live="polite"></span>
+          )}
+          {d.pace && <div class="pace">⏱ {d.pace}</div>}
+          {d.waypoints && d.waypoints.length > 0 && (
+            <ol class="stops" aria-label="Stops this day">
+              {d.waypoints.map((w: any, wi: number) => (
+                <li class="stop">
+                  <span class="stop-num">{String(wi + 1).padStart(2, "0")}</span>
+                  <span class="stop-main">
+                    <span class="stop-name">{w.name}</span>
+                    {w.note && <span class="stop-note">{w.note}</span>}
+                  </span>
+                  {w.time && <span class="stop-time">{w.time}</span>}
+                </li>
+              ))}
+            </ol>
+          )}
+          {d.note && <span class="lsnote">🌿 <Fragment set:html={d.note} /></span>}
+          {d.body && <div><Fragment set:html={d.body} /></div>}
+          {d.fit  && <div class="fit">Fit: <Fragment set:html={d.fit} /></div>}
+          {d.checklist && d.checklist.length > 0 && (
+            <div class="daykit">
+              <span class="kit-label">Day kit</span>
+              {d.checklist.map((i: string, j: number) => (
+                <label class="check"><input type="checkbox" data-pkey={`${keyPrefix}-d${di}-${j}`} /><span class="check-txt"><Fragment set:html={i} /></span></label>
+              ))}
+            </div>
+          )}
         </div>
-      )}
-    </div>
+      </div>
+    ))}
   </div>
-))}
+  {showPlannerMap && (
+    <div class="planner-side">
+      <div class="itin-map planner-map" data-itin-map data-planner>
+        <script type="application/json" data-map-data set:html={payload} />
+      </div>
+      <p class="note planner-map-note">Pins follow the day you're reading. ⚠ Maps need internet.</p>
+    </div>
+  )}
+</div>

@@ -78,6 +78,18 @@ const section = z.discriminatedUnion("type", [
     // "balanced" before this field existed. The toggle only dims days explicitly
     // tagged "packed".
     energy: z.enum(["packed", "balanced", "slow"]).default("balanced"),
+    // ADDITIVE (Plan view): ordered stops for the day. Powers the day-synced
+    // planner map (pins + route line per day), the day stop-list, and GPX export.
+    // All optional — guides adopt incrementally; coords must come from a verified
+    // source (scripts/lookup-place.mjs), never guessed. `time` is a display label
+    // ("08:00", "≈14:30"); day granularity stays honest when it's absent.
+    waypoints: z.array(z.object({
+      name: z.string(),
+      lat: z.number().optional(),
+      lng: z.number().optional(),
+      time: z.string().optional(),
+      note: z.string().optional(),
+    })).optional(),
   })) }),
   z.object({ type: z.literal("sights"), group: z.string(), title: z.string().optional(), items: z.array(z.object({
     name: z.string(), kicker: z.string().optional(), body: z.string().optional(),

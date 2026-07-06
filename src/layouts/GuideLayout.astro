@@ -14,7 +14,8 @@ import "@fontsource-variable/spline-sans-mono";
 import "../styles/base.css";
 import "../styles/guide.css";
 import "../styles/map.css";
-import { derivePins } from "../lib/map-pins";
+import "../styles/planner.css";
+import { derivePins, derivePlannerData } from "../lib/map-pins";
 
 // Build-time public-holiday data (Nager.Date), written by scripts/fetch-holidays.mjs
 // into src/data/holidays/{CC}-{year}.json and refreshed by CI before each build.
@@ -80,6 +81,16 @@ const hasWeatherSection = _flat.some((s: any) => s.type === "weather");
 
 // Interactive-map pins per map section (build-time; first map gets all sights).
 const pinMap = derivePins(guide.sections);
+// Plan-view data: per-day stops + day-indexed pins for the planner map. The
+// planner map falls back to the primary map’s pin set until waypoints exist.
+const plannerBase = derivePlannerData(guide.sections);
+const firstMapSec = _flat.find((s: any) => s.type === "map" && s.center?.lat);
+const planner = {
+  ...plannerBase,
+  mapCenter: mapCenter,
+  span: firstMapSec?.span ?? null,
+  fallbackPins: firstMapSec ? (pinMap.get(firstMapSec) ?? []) : [],
+};
 
 // For trip countdown — pull first date string from first days section (e.g. "Wed Jul 8")
 const daysSec      = _flat.find((s: any) => s.type === "days" && s.items?.length);
@@ -380,7 +391,7 @@ const tripSummary = buildSummary(guide);
             <div class="catblock" id={`grp-${ci}`} data-ci={ci} hidden={ci > 0}>
               <h2 class="cat-title">{g}</h2>
               {byG[g].map((o) => (
-                <Block sec={o.s} sid={`sec-${o.i}`} ci={ci} solo={solo} holidays={holidayInfo} mapPins={pinMap.get(o.s) ?? null} />
+                <Block sec={o.s} sid={`sec-${o.i}`} ci={ci} solo={solo} holidays={holidayInfo} mapPins={pinMap.get(o.s) ?? null} planner={planner} />
               ))}
             </div>
           );
@@ -449,6 +460,7 @@ const tripSummary = buildSummary(guide);
     <script>
       import "../scripts/guide-ui.js";
       import "../scripts/itinerary-map.js";
+      import "../scripts/day-rail.js";
     </script>
 
   </body>

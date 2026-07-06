@@ -22,7 +22,7 @@ import HolidaysBlock from "./blocks/HolidaysBlock.astro";
 
 // `holidays` is the server-computed holiday info (or null), threaded down from
 // GuideLayout; only the `holidays` section type uses it.
-const { sec, sid, ci, solo, holidays, mapPins } = Astro.props;
+const { sec, sid, ci, solo, holidays, mapPins, planner } = Astro.props;
 
 // Stable key prefix for checklist items — based on section index, not content.
 // Changing item text does not change its saved state; adding/removing items at
@@ -105,7 +105,7 @@ const TitleTag = isCollapsible ? "summary" : "div";
                   title="Copy link to this section" aria-label="Copy link to this section">#</button>
         </div>
       )}
-      {sec.type === "days"   && <DaysBlock   sec={sec} keyPrefix={keyPrefix} />}
+      {sec.type === "days"   && <DaysBlock   sec={sec} keyPrefix={keyPrefix} planner={planner} />}
       {sec.type === "sights" && <SightsBlock sec={sec} />}
     </>
   )}

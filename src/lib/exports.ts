@@ -39,9 +39,11 @@ function htmlToText(s: string | undefined | null): string {
     .trim();
 }
 
-// Every `map` section center plus every `sights` item that carries a `map`
-// coord. De-duped on the exact lat,lng,name triplet. Names: a map section's
-// `title`, or "<Country> map point" when untitled; a sight's `name`.
+// Every `map` section center, every `sights` item that carries a `map` coord,
+// and every day-item `waypoints` entry with coords (the Plan-view stops).
+// De-duped on the exact lat,lng,name triplet. Names: a map section's
+// `title`, or "<Country> map point" when untitled; a sight's `name`; a
+// waypoint's `name`.
 export function collectWaypoints(guide: any): Waypoint[] {
   const country = guide?.country || "";
   const seen = new Set<string>();
@@ -60,6 +62,12 @@ export function collectWaypoints(guide: any): Waypoint[] {
     } else if (s.type === "sights" && Array.isArray(s.items)) {
       for (const it of s.items) {
         if (it?.map) push(it.map.lat, it.map.lng, it.name || `${country} sight`);
+      }
+    } else if (s.type === "days" && Array.isArray(s.items)) {
+      for (const it of s.items) {
+        for (const w of it?.waypoints || []) {
+          push(w?.lat, w?.lng, w?.name || `${country} stop`);
+        }
       }
     }
   }

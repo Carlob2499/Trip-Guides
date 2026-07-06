@@ -261,6 +261,12 @@
           "date": "Mon Jun 8",
           "title": "First steps in Copenhagen",
           "pace": "Arrival half-day · airport → hotel ~20 min · easy harbour-bus loop ~1–2 hr",
+          "waypoints": [
+            { "name": "Copenhagen Airport — EES biometrics, M2 metro", "lat": 55.60913, "lng": 12.65098, "note": "M2 to Nørreport, ~20 min" },
+            { "name": "Nørreport Station", "lat": 55.68336, "lng": 12.57163 },
+            { "name": "CABINN City — check-in, drop bags", "lat": 55.67059, "lng": 12.5708 },
+            { "name": "Harbour-bus loop → Nyhavn", "lat": 55.67974, "lng": 12.59089, "time": "evening", "note": "City Pass covers the harbour bus · best light in the evening" }
+          ],
           "note": "Keep day one light. You've just crossed the Atlantic — your body doesn't know what time it is.",
           "body": "<p><em>A gentle landing. Find your bearings, put the luggage down, and let the harbour do the heavy lifting.</em></p><p>Land, clear EES biometrics, ride the M2 to Nørreport, and check in at CABINN. Then an easy harbour-bus loop along the waterfront — your City Pass covers it. Nyhavn looks best in the evening light, and this is a low-pressure way to see the city at your own pace without a plan.</p>",
           "fit": "Comfortable shoes, light rain layer.",
@@ -274,6 +280,11 @@
           "date": "Tue Jun 9",
           "title": "Fortresses, mermaids & the best street food market in Scandinavia",
           "pace": "~5–6 hr out · Kastellet + Little Mermaid ~1 hr · harbour bus to Reffen ~20 min · Reffen ~1.5–2 hr",
+          "waypoints": [
+            { "name": "Kastellet — star-fort ramparts walk", "lat": 55.69138, "lng": 12.59374, "time": "morning" },
+            { "name": "The Little Mermaid", "lat": 55.69287, "lng": 12.59929, "note": "Short detour from the ramparts" },
+            { "name": "Reffen street food market — lunch", "lat": 55.69317, "lng": 12.60978, "time": "from 11:30", "note": "Harbour bus ~20 min · open until 21:30" }
+          ],
           "note": "Lots of walking in the morning — pace it. There's plenty of seating at Reffen once you arrive.",
           "body": "<p><em>Copenhagen at its most ancient and its most now — a 400-year-old star fort before noon, 60 international kitchens for lunch.</em></p><p>Morning at <b>Kastellet</b>, one of the best-preserved star-shaped fortresses in northern Europe with scenic ramparts to walk. A short detour takes you to the Little Mermaid — lovely, though smaller than photographs suggest. Afterwards, board a harbour bus out to <a href='https://reffen.dk' target='_blank' rel='noopener noreferrer'><b>Reffen</b></a> for lunch among the food stalls. The market opens at 11:30 and runs until 21:30; it's the largest street food market in the Nordics.</p>",
           "fit": "Layers — the waterfront is breezy in any weather.",
