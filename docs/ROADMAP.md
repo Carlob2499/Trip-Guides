@@ -5,39 +5,10 @@ days or weeks apart. Claude Code: read this at the start of every session
 to know where we left off. Check items off as they ship. Update the
 "Session Log" at the bottom before ending each session.
 
-**How to use this file:**
-- Each session below is ONE unit of work — scoped, shippable, self-verifying.
-- Run them in order. Do not combine sessions.
-- Prompts marked **[PLAN FIRST]** must propose an approach and wait for
-  approval before writing code.
-- After each session: tick the boxes, append a Session Log entry.
-
----
-
-## Reusable Session Opener (run at the start of EVERY session)
-
-```
-~/.claude/CLAUDE.md and CLAUDE.md in this repo are already auto-loaded into
-your context — don't re-Read them. Read docs/Project_State.md and
-docs/ROADMAP.md in full before doing anything (these are NOT auto-loaded).
-Then tell me, in a few bullets: the last completed session per
-docs/ROADMAP.md, what's next, and confirm you understand the "verified not
-generic" principle from the already-loaded CLAUDE.md. Do not change any code
-yet — I'm confirming context before we start.
-```
-
----
-
-## Guiding Principles (the standard for every session)
-
-1. **One unit of work per session.** Ship it, verify it, commit it, stop.
-2. **Plan before code** on anything non-trivial. Approve the plan first.
-3. **Verification is part of the work.** `npm run build` passes, `dist/`
-   confirmed, the specific thing checked — before any commit.
-4. **Establish the pattern once, replicate after.** The first API
-   integration is the template; later ones reference it.
-5. **Graceful failure is mandatory** for anything calling an external API.
-   A dead API hides its widget; it never breaks the page.
+**How to use:** each roadmap item is one shippable unit. The working rules
+(the ship loop, plan-first, graceful external-API failure, verify-in-dist) now
+live in the auto-loaded `CLAUDE.md` — not duplicated here. Only open this file
+when you need the roadmap backlog itself; it is not required session reading.
 
 ---
 

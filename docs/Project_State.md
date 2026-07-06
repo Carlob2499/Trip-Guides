@@ -1,7 +1,12 @@
 # Project State — Waypoint Travel Guides
 **This is the chat-facing context file** — upload it to Claude.ai chat sessions that have no repo access; Claude Code does not auto-load it (see repo-root CLAUDE.md for the auto-loaded project rules).
 
-**Last updated:** 1 Jul 2026  
+**Last updated:** 6 Jul 2026 — the feature set has expanded substantially since the
+section-by-section detail below was written (interactive Leaflet/Google maps, Plan view
++ planner map with droppable pins, compass nav + GSAP motion, field tools —
+SOS/driver-card/Focus-Today/journal, full-guide search, New-Guide wizard with doc
+parsing, upgraded budget calculator). For the current shape prefer `git log` and the
+`src/scripts/` + `src/styles/` file lists over the detail below, which predates it.  
 **Repo:** github.com/Carlob2499/Trip-Guides  
 **Live site:** carlob2499.github.io/Trip-Guides/  
 **Primary working directory:** C:\Users\carlo\OneDrive\Documents\GitHub  
@@ -17,7 +22,9 @@ A static **Astro** website of curated, fact-checked personal travel guides. The 
 **Stack:**
 - **Framework:** Astro (static site generator)
 - **Content:** JSON files in `src/content/guides/` — one file per destination, one page at `/guides/<filename>/`
-- **Styling:** Custom CSS in `src/styles/guide.css` and `src/styles/hub.css`
+- **Styling:** Custom CSS split by feature across `src/styles/` (base, guide, hub,
+  masthead, sights, planner, map, flight, compass, field-tools, wizard, …). Client
+  behavior is per-feature modules in `src/scripts/`. The two-file era is long past.
 - **Hosting:** GitHub Pages at `carlob2499.github.io/Trip-Guides/` (migrated from Netlify in Jun 2026)
 - **CI/CD:** GitHub Actions — `.github/workflows/deploy.yml` builds on every push to `main`
 - **PWA:** Installable to phone home screen, works offline. Service worker at `public/sw.js`
