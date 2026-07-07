@@ -18,10 +18,10 @@
   "intro": "",
   "sections": [
     // ---- Plan ----
-    { "type": "panel", "group": "Plan", "title": "When you land", "body": "<airport → lodging: the cheapest/easiest route, time, cost>" },
+    { "type": "panel", "group": "Plan", "title": "When you land", "body": "<airport → lodging: the cheapest/easiest route, time, cost; for a redeye/early arrival, note where to shower/refresh at the airport>" },
     { "type": "panel", "group": "Plan", "title": "Local essentials", "body": "<plug type & voltage, time zone, what's open/closed which day>" },
     { "type": "panel", "group": "Plan", "title": "Entry & documents", "body": "<visa/visa-free, passport validity, any arrival form>" },
-    { "type": "panel", "group": "Plan", "title": "Booking checklist", "body": "<what to book, roughly in order>", "checklist": ["<item — ≈ $cost>", "<item>"] },
+    { "type": "panel", "group": "Plan", "title": "Booking checklist", "body": "<what to book, roughly in order>", "checklist": ["Flights — <carrier + flight nos, dep times>; ⚠ confirm times", "<b>Baggage</b> — the booked airline's carry-on + checked allowance (fare-dependent on hybrid/low-cost carriers); ⚠ confirm your fare and pre-pay any extra bags online", "<item — ≈ $cost>"] },
     { "type": "panel", "group": "Plan", "title": "Phone & data", "body": "<eSIM/SIM/roaming options that actually work here>" },
     { "type": "panel", "group": "Plan", "title": "Holidays & your dates", "body": "<any public holidays, closures, or big events overlapping the travel dates>" },
 

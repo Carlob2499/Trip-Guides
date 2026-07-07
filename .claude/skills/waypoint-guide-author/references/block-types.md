@@ -76,7 +76,12 @@ and `raids` accept optional `collapsible: true` (renders the card as a native
 ## Per-type notes (fields beyond the obvious)
 
 - **`panel`** — `{ group, title?, body?, checklist?[] }`. The workhorse for Plan-tab
-  reference cards ("When you land", "Booking checklist", "Local essentials").
+  reference cards ("When you land", "Booking checklist", "Local essentials"). **Standard
+  for any guide with a flight:** the Booking checklist (or a flight panel) must state the
+  **booked airline's baggage allowance** — carry-on + checked, per fare, since hybrid/
+  low-cost carriers (e.g. Air Premia) don't bundle bags the way legacy carriers do; flag
+  `⚠ confirm your fare` and link the carrier's current baggage + flight-specific notices.
+  For a redeye/early arrival, "When you land" should note where to shower/refresh airside.
 - **`prose`** — `{ group, title?, body? }`. If you're tempted to put `<table>`,
   `<details>`, or layout `<br/>` in a body, stop: pick a typed section instead.
 - **`list`** — `{ group, title?, items[] }`. Items may contain inline allowlist HTML.
