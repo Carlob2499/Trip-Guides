@@ -105,8 +105,10 @@ auto-retries transient Pages failures; only investigate after three consecutive.
 
 ## Operational Habits (save tokens)
 
-- **Large guides** (korea.json ~1900 lines, denmark ~900): Grep first, Read with
-  offset/limit — never full-file Read for a targeted edit.
+- **Large guides** (korea.json ~2500 lines, denmark ~900): check `<slug>.index.md`
+  beside the guide first (generated line-range map by section/day) and jump straight
+  to `offset:N limit:M` — never full-file Read for a targeted edit. Regenerate the
+  index after any line-count-changing edit: `npm run index-guide -- <slug>`.
 - **New client behavior → `src/scripts/`**, never inline back into `GuideLayout.astro`.
 - **`guide.css` past ~800 lines → split by feature** (as `base.css` was). Not before.
 - **Greppable questions** (dead selectors, dup props, fact diffs) → a local grep/script,
