@@ -63,8 +63,11 @@ import { reducedMotion } from "./util.js";
     var mem = load();
     var ct = contentTop();
     var target = (mem[t] != null && mem[t] > ct) ? mem[t] : ct;
-    // Reader still up in the hero → a switch shouldn't move them at all.
-    if (window.scrollY <= ct && target === ct) return;
+    // Always land on the switched-to section so the change is unmistakable —
+    // including from the hero. (The old "if you're up in the hero, don't move"
+    // behavior left the page on the same masthead for every tab, so testers
+    // couldn't tell the tab had switched at all.)
+    if (Math.abs(window.scrollY - target) < 4) return; // already there
     muteUntil = Date.now() + 900;
     window.scrollTo({ top: target, behavior: reduced ? "auto" : "smooth" });
   });

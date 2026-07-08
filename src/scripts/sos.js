@@ -19,7 +19,7 @@
   btn.type = "button";
   btn.setAttribute("aria-label", "Emergency numbers");
   btn.setAttribute("aria-haspopup", "dialog");
-  btn.textContent = "SOS";
+  btn.innerHTML = "<svg class='tb-ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><circle cx='12' cy='12' r='9'/><circle cx='12' cy='12' r='3.4'/><path d='m9.6 9.6-4-4M18.4 18.4l-4-4M14.4 9.6l4-4M9.6 14.4l-4 4'/></svg><span class='tb-label'>SOS</span>";
   var topRight = document.querySelector(".topbar-right");
   if (topRight) {
     btn.className = "topbar-btn topbar-sos";

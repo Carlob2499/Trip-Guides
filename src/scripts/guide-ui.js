@@ -176,7 +176,9 @@ const daysForBanner     = _cfg.daysForBanner || [];
               if (bg) tc.setAttribute("content", bg);
             }
             if (!darkBtn) return;
-            darkBtn.textContent = dark ? "☀" : "◑";
+            var moon = "<svg class='tb-ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z'/></svg>";
+            var sun = "<svg class='tb-ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><circle cx='12' cy='12' r='4'/><path d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4'/></svg>";
+            darkBtn.innerHTML = dark ? sun : moon;
             darkBtn.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
             darkBtn.title = dark ? "Switch to light mode" : "Switch to dark mode";
           }
@@ -951,6 +953,15 @@ const daysForBanner     = _cfg.daysForBanner || [];
         var shareCloseBtn = document.getElementById("shareClose");
         var shareQrEl     = document.getElementById("shareQr");
         if (!shareBtn || !shareModal) return;
+
+        // The modal + backdrop are authored inside .sticky-chrome, which carries a
+        // backdrop-filter — and a filtered ancestor becomes the containing block for
+        // position:fixed, so the modal anchored to the ~175px chrome instead of the
+        // viewport and flew off-screen once the page was scrolled. Reparent both to
+        // <body> (mirroring how the SOS sheet / command palette mount) so `fixed` is
+        // viewport-relative and the modal centers correctly at any scroll position.
+        if (shareModal.parentElement !== document.body) document.body.appendChild(shareModal);
+        if (shareBackdrop && shareBackdrop.parentElement !== document.body) document.body.appendChild(shareBackdrop);
 
         var pageTitle    = document.title;
         var qrLibLoaded  = false;

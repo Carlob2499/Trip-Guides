@@ -174,7 +174,7 @@
     sb.type = "button";
     sb.className = "topbar-btn topbar-search";
     sb.setAttribute("aria-label", "Search this guide");
-    sb.innerHTML = "<span aria-hidden='true'>⌕</span> <span class='tb-label'>Search</span>";
+    sb.innerHTML = "<svg class='tb-ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.1' stroke-linecap='round' aria-hidden='true'><circle cx='11' cy='11' r='7'/><path d='m20 20-3.6-3.6'/></svg><span class='tb-label'>Search</span>";
     sb.addEventListener("click", open);
     topRight.insertBefore(sb, topRight.firstChild);
   }
