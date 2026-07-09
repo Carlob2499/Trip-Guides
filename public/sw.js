@@ -16,7 +16,7 @@
   When you publish a big update, bump CACHE below (v1 -> v2) so visitors get the
   new version cleanly.
 */
-const CACHE = "tripguides-v23";
+const CACHE = "tripguides-v24";
 const BASE = "/Trip-Guides";
 const CORE = [
   BASE + "/",

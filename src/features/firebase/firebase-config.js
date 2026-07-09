@@ -11,11 +11,11 @@
    `firebaseConfig`. See README.md in this folder for the ~10-minute setup. */
 
 export const FIREBASE_CONFIG = {
-  apiKey: "",
-  authDomain: "",
-  databaseURL: "", // REQUIRED for Realtime Database, e.g. https://<project>-default-rtdb.<region>.firebasedatabase.app
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: "",
+  apiKey: "AIzaSyAc-kkU7g22DVyT3UIyPa3RQGHy3i1o6fw",
+  authDomain: "waypoint-v1-2e7ae.firebaseapp.com",
+  databaseURL: "https://waypoint-v1-2e7ae-default-rtdb.firebaseio.com",
+  projectId: "waypoint-v1-2e7ae",
+  storageBucket: "waypoint-v1-2e7ae.firebasestorage.app",
+  messagingSenderId: "499891211430",
+  appId: "1:499891211430:web:2db52d41c4bc6d3c2c7867",
 };
