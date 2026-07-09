@@ -1,0 +1,28 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "trips": {
+      "$code": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        ".validate": "$code.length >= 6 && $code.length <= 40",
+        "members": {
+          "$mid": {
+            "name": { ".validate": "newData.isString() && newData.val().length <= 60" },
+            "payment": { ".validate": "newData.isString() && newData.val().length <= 80" },
+            "$other": { ".validate": true }
+          }
+        },
+        "expenses": {
+          "$eid": {
+            "desc": { ".validate": "newData.isString() && newData.val().length <= 120" },
+            "amount": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000000" },
+            "$other": { ".validate": true }
+          }
+        },
+        "$other": { ".validate": true }
+      }
+    }
+  }
+}
