@@ -16,7 +16,7 @@
   When you publish a big update, bump CACHE below (v1 -> v2) so visitors get the
   new version cleanly.
 */
-const CACHE = "tripguides-v24";
+const CACHE = "tripguides-v25";
 const BASE = "/Trip-Guides";
 const CORE = [
   BASE + "/",
@@ -53,12 +53,16 @@ self.addEventListener("fetch", (event) => {
     (req.headers.get("accept") || "").includes("text/html");
 
   if (isHTML) {
-    // network-first, fall back to the cached page, then the home page
+    // network-first, fall back to the cached page, then the home page.
+    // Only cache a *successful* response — never a 404/redirect/opaque error,
+    // or a device that loaded mid-deploy would serve that broken page forever.
     event.respondWith(
       fetch(req)
         .then((res) => {
-          const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put(req, copy));
+          if (res.ok) {
+            const copy = res.clone();
+            caches.open(CACHE).then((c) => c.put(req, copy));
+          }
           return res;
         })
         .catch(() => caches.match(req).then((m) => m || caches.match(BASE + "/")))
@@ -66,13 +70,18 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // assets/images/fonts: cache-first, then network (and remember it for next time)
+  // assets/images/fonts: cache-first, then network (and remember it for next time).
+  // Same rule: only persist a 200 OK. Caching a transient 404 for a hashed JS
+  // chunk (e.g. during Pages/Fastly propagation) would poison that URL until the
+  // next CACHE bump — breaking the page's scripts on that device.
   event.respondWith(
     caches.match(req).then((cached) => {
       if (cached) return cached;
       return fetch(req).then((res) => {
-        const copy = res.clone();
-        caches.open(CACHE).then((c) => c.put(req, copy));
+        if (res.ok) {
+          const copy = res.clone();
+          caches.open(CACHE).then((c) => c.put(req, copy));
+        }
         return res;
       });
     })
