@@ -75,6 +75,14 @@ is their single home; this file names the principle without repeating detail.
 - **Read before editing; never regenerate from memory.**
 - **Base-path hrefs are explicit** — every internal `/`-href needs `import.meta.env.BASE_URL`.
 - **New facts get a verification date on write**, never bolted on later.
+- **New self-contained features get their own folder** — `src/features/<name>/` holding all
+  of the feature's code (and any third-party SDK usage siloed there), consumed via a single
+  `index.js` public API; existing flat `src/scripts` / `src/styles` stay put. `src/features/firebase/`
+  (live sync) is the reference. A small single-module client behavior still just goes in `src/scripts/`.
+- **Third-party SDKs stay behind a config gate + lazy import** — commit an empty/public config so the
+  build is inert until configured (Vite tree-shakes the whole path when the config is empty), and
+  `import()` the heavy SDK on first use so it's a lazy chunk, never in the main bundle (the Firebase
+  and Google-Maps features are the pattern).
 
 ---
 
