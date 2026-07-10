@@ -142,7 +142,10 @@ const daysForBanner     = _cfg.daysForBanner || [];
           var savedTab;
           try { savedTab = sessionStorage.getItem(TAB_KEY); } catch (_) {}
           var hashTabIdx = tabForHash();
-          if (hashTabIdx >= 0) {
+          // An explicit deep link (e.g. #grp-9) is a deliberate destination — it must
+          // win over the automatic "jump to today" below during the trip window.
+          var deepLinkedTab = hashTabIdx >= 0;
+          if (deepLinkedTab) {
             showTab(hashTabIdx);
           } else if (specialPanels.hasOwnProperty(savedTab)) {
             showTab(savedTab);
@@ -286,8 +289,12 @@ const daysForBanner     = _cfg.daysForBanner || [];
               if (txt.indexOf(plain) !== -1 || txt.indexOf(plain.replace(/ /g, " ")) !== -1 ||
                   txt.replace(/ /g, " ").indexOf(plain) !== -1) {
                 card.classList.add("day-today");
-                var _cb = card.closest(".catblock"); if (_cb) { var _ci = parseInt(_cb.dataset.ci, 10); if (!isNaN(_ci)) showTab(_ci); }
-                setTimeout(function () { card.scrollIntoView({ behavior: "smooth", block: "center" }); }, 160);
+                // Keep the today marker (the Focus Today chip depends on it), but don't
+                // hijack the tab/scroll if the visitor arrived via an explicit deep link.
+                if (!deepLinkedTab) {
+                  var _cb = card.closest(".catblock"); if (_cb) { var _ci = parseInt(_cb.dataset.ci, 10); if (!isNaN(_ci)) showTab(_ci); }
+                  setTimeout(function () { card.scrollIntoView({ behavior: "smooth", block: "center" }); }, 160);
+                }
               }
             });
           })();

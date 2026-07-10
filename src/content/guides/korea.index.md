@@ -2,7 +2,7 @@
      Regenerate after any line-count-changing edit: node scripts/audit/index-guide.mjs korea
      Line numbers are 1-indexed, matching Read-tool / editor line numbers. -->
 
-# korea.json — line index (2503 lines)
+# korea.json — line index (2578 lines)
 
 | Lines | Group | Type | Title |
 |---|---|---|---|
@@ -80,4 +80,10 @@
 | 1814–1847 | Pokémon GO | infogrid | Beyond raids — research, eggs & wild spawns (Global) |
 | 1848–1868 | Pokémon GO | list | Info to confirm — update as announced |
 | 1869–2493 | Pokémon GO | raids | Raid counter charts — GO Fest Global 2026 |
-| 2494–2499 | References | prose | Sources & links — verified for this guide |
+| 2494–2508 | Tokyo | panel | Tokyo weekend — the quick brief |
+| 2509–2522 | Tokyo | panel | Flights, getting in & getting around |
+| 2523–2528 | Tokyo | prose | Your 3 days, roughly |
+| 2529–2542 | Tokyo | list | Must-hit Tokyo |
+| 2543–2555 | Tokyo | list | Where to eat — fast, cheap, good |
+| 2556–2568 | Tokyo | list | Carry-on souvenirs & snacks to take home |
+| 2569–2574 | References | prose | Sources & links — verified for this guide |
