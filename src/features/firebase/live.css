@@ -1,45 +1,36 @@
-/* Live-sync UI for the Trip Split budget — the "Sync with group" bar and the "● Live"
-   indicator. Only rendered when Firebase is configured (the #sSync element stays hidden
-   otherwise), so with no config the budget calculator looks exactly as before. */
+/* Status line for the shared Trip Split budget. Everyone viewing a guide edits ONE live
+   budget (keyed by the guide) — so there is no setup UI and no code, just a small,
+   non-interactive indicator of the connection. Only shown when Firebase is configured;
+   with no config the budget calculator is a private, on-device tool exactly as before. */
 
-.split-sync {
+.split-live {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
   margin: 0 0 1rem;
-  padding: .6rem .75rem;
+  padding: .5rem .7rem;
   border: 1px solid var(--rule);
   border-radius: var(--r-md);
   background: color-mix(in srgb, var(--accent) 5%, transparent);
-}
-.split-sync-row {
-  display: flex;
-  align-items: center;
-  gap: .55rem;
-  flex-wrap: wrap;
-}
-.split-sync-text {
   font-family: var(--font-data);
   font-size: .78rem;
   color: var(--muted);
-  margin-right: auto; /* push the buttons to the right */
 }
-.split-sync-code {
-  font-weight: 700;
-  color: var(--ink);
-  letter-spacing: .06em;
-  background: var(--bg2);
-  padding: .08rem .38rem;
-  border-radius: var(--r-sm);
-}
-/* Live dot — pulses gently to signal a live connection (calm under reduced-motion). */
-.split-sync-dot {
+.split-live-dot {
   flex: none;
   width: 9px; height: 9px;
   border-radius: 50%;
+  background: var(--rule2);          /* default / offline: grey, no pulse */
+  box-shadow: none;
+}
+/* Connecting: amber. Live: green, gently pulsing. Offline keeps the grey default. */
+.split-live[data-state="connecting"] .split-live-dot { background: #d98a00; }
+.split-live[data-state="live"] .split-live-dot {
   background: var(--green);
   box-shadow: 0 0 0 0 color-mix(in srgb, var(--green) 55%, transparent);
 }
-.split-sync-dot--off { background: var(--rule2); box-shadow: none; }
 @media (prefers-reduced-motion: no-preference) {
-  .split-sync-on:not([hidden]) .split-sync-dot { animation: liveDot 2s ease-in-out infinite; }
+  .split-live[data-state="live"] .split-live-dot { animation: liveDot 2s ease-in-out infinite; }
 }
 @keyframes liveDot {
   0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--green) 55%, transparent); }

@@ -15,21 +15,12 @@ const { storeKey } = Astro.props;
     <p class="split-desc">Add who paid what. See who owes who, with the fewest transfers.</p>
   </div>
 
-  <!-- Group live-sync bar — shown only when Firebase is configured (src/features/firebase);
-       otherwise the calculator is local-only exactly as before. Wired by trip-split.js. -->
-  <div class="split-sync" id="sSync" hidden>
-    <div class="split-sync-row" id="sSyncOff">
-      <span class="split-sync-dot split-sync-dot--off" aria-hidden="true"></span>
-      <span class="split-sync-text">Solo — saved on this device</span>
-      <button class="scm-btn" id="sSyncCreate" type="button">Sync with group</button>
-      <button class="scm-btn" id="sSyncJoin" type="button">Join code</button>
-    </div>
-    <div class="split-sync-row" id="sSyncOn" hidden>
-      <span class="split-sync-dot" aria-hidden="true"></span>
-      <span class="split-sync-text">Live · <code class="split-sync-code" id="sSyncCode"></code></span>
-      <button class="scm-btn" id="sSyncCopy" type="button">Copy code</button>
-      <button class="scm-btn" id="sSyncLeave" type="button">Leave</button>
-    </div>
+  <!-- Shared live budget: everyone viewing this guide edits ONE budget automatically —
+       no code, no setup, no buttons. This is a passive status line only; trip-split.js
+       reveals it once it knows whether live sync is available (src/features/firebase). -->
+  <div class="split-live" id="sLive" data-state="connecting" hidden>
+    <span class="split-live-dot" aria-hidden="true"></span>
+    <span class="split-live-text" id="sLiveText">Connecting to your group’s live budget…</span>
   </div>
 
   <!-- People -->

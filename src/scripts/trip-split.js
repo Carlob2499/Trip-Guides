@@ -1,22 +1,23 @@
-/* Waypoint Trip Split — the group budget calculator, id-keyed, with optional Firebase
-   live sync. Two modes behind one UI:
-     · SOLO (default; also when Firebase isn't configured): state lives in localStorage,
-       exactly as before. The "Sync with group" bar never even appears without a config.
-     · SYNCED: after Create/Join a trip code, every mutation writes a single RECORD to the
-       trips/<code> room (so two people editing at once merge, never clobber), and remote
-       changes rebuild state + re-render — deferred while you're mid-keystroke so focus is
-       never yanked. Firebase itself lives in src/features/firebase (the silo); this file
-       only imports its public API. */
+/* Waypoint Trip Split — the group budget calculator, id-keyed, with automatic Firebase
+   live sync. Two modes, chosen automatically — no code, no buttons:
+     · SHARED LIVE (whenever Firebase is configured): every device viewing a guide joins
+       ONE room keyed by that guide (trips/<guide>), so the whole group edits a single
+       budget. Every mutation writes a RECORD (two people editing at once merge, never
+       clobber); remote changes rebuild state + re-render — deferred while you're mid-
+       keystroke so a teammate's edit never yanks your caret.
+     · ON-DEVICE (only if Firebase isn't configured): state lives in localStorage, a
+       private offline calculator exactly as before.
+   Firebase itself lives in src/features/firebase (the silo); this file only imports its
+   public API. */
 
 import { settle } from "../lib/settle";
-import { hasFirebase, joinTrip, generateTripCode, normalizeCode } from "../features/firebase/index.js";
+import { hasFirebase, joinTrip, normalizeCode } from "../features/firebase/index.js";
 
 (function () {
   var wrap = document.getElementById("tripSplit");
   if (!wrap) return;
 
   var SK = "tg-split-" + (wrap.dataset.sk || "guide");
-  var CODE_KEY = "tg-splitcode-" + (wrap.dataset.sk || "guide");
   var state = { members: [], expenses: [], customSplit: false };
   var room = null;      // Firebase room when synced, else null
   var offFns = [];      // room onChange unsubscribers
@@ -288,65 +289,33 @@ import { hasFirebase, joinTrip, generateTripCode, normalizeCode } from "../featu
       renderRemote();
     }));
     offFns.push(meta.onChange(function (v) { if (v && typeof v.customSplit === "boolean") { state.customSplit = v.customSplit; syncModeUI(); renderRemote(); } }));
-    setSyncUI(true, r.code);
-  }
-  function unbind() { offFns.forEach(function (off) { try { off(); } catch (_) {} }); offFns = []; room = null; }
-
-  async function createTrip() {
-    // Seed the new room with the current local budget so existing entries become the
-    // shared starting point (keyed by their existing ids).
-    var snap = { members: state.members.slice(), expenses: state.expenses.slice(), customSplit: state.customSplit };
-    var code = generateTripCode();
-    var r = await joinTrip(code);
-    bindRoom(r);
-    r.doc("meta").set({ customSplit: snap.customSplit });
-    snap.members.forEach(function (m, i) { r.collection("members").set(m.id, { name: m.name || "", payment: m.payment || "", order: i }); });
-    snap.expenses.forEach(function (e, i) { r.collection("expenses").set(e.id, { paidBy: e.paidBy, desc: e.desc || "", amount: e.amount != null ? e.amount : null, split: e.split || null, order: i }); });
-    try { localStorage.setItem(CODE_KEY, code); } catch (_) {}
-  }
-  async function joinExisting(code) {
-    var c = normalizeCode(code);
-    if (!c) return;
-    var r = await joinTrip(c);
-    bindRoom(r); // the room's onChange populates state (replacing local)
-    try { localStorage.setItem(CODE_KEY, c); } catch (_) {}
-  }
-  function leaveTrip() {
-    unbind();
-    try { localStorage.removeItem(CODE_KEY); } catch (_) {}
-    persist();       // keep the current budget locally
-    setSyncUI(false);
-    render();
+    setLive("live", "Live · shared with everyone on this guide.");
   }
 
-  function setSyncUI(on, code) {
-    var offRow = document.getElementById("sSyncOff"), onRow = document.getElementById("sSyncOn"), codeEl = document.getElementById("sSyncCode");
-    if (offRow) offRow.hidden = on;
-    if (onRow) onRow.hidden = !on;
-    if (on && codeEl) codeEl.textContent = code || "";
+  // Passive status line (no buttons). state = "connecting" | "live" | "offline".
+  function setLive(stateName, text) {
+    var el = document.getElementById("sLive");
+    if (!el) return;
+    el.hidden = false;
+    el.setAttribute("data-state", stateName);
+    var t = document.getElementById("sLiveText");
+    if (t && text) t.textContent = text;
   }
-  function flash(btn, msg) {
-    if (!btn) return; var d = btn.textContent; btn.textContent = msg; setTimeout(function () { btn.textContent = d; }, 1600);
-  }
-  function initSync() {
-    var syncEl = document.getElementById("sSync");
-    if (!hasFirebase() || !syncEl) return; // no config → sync UI never appears (fully inert)
-    syncEl.hidden = false;
-    var createBtn = document.getElementById("sSyncCreate"), joinBtn = document.getElementById("sSyncJoin");
-    var copyBtn = document.getElementById("sSyncCopy"), leaveBtn = document.getElementById("sSyncLeave");
-    if (createBtn) createBtn.addEventListener("click", function () { flash(createBtn, "Connecting…"); createTrip().catch(function () { flash(createBtn, "Failed — retry"); }); });
-    if (joinBtn) joinBtn.addEventListener("click", function () {
-      var c = window.prompt("Enter your group's trip code:");
-      if (c) joinExisting(c).catch(function () { window.alert("Couldn't join that code — check it and try again."); });
+
+  // Join the one shared room for this guide. No code, no UI — the guide's storeKey IS the
+  // room, so every device viewing the same guide edits the same budget automatically. The
+  // room is the single source of truth (no local seed), so devices never inject stale copies.
+  function autoConnect() {
+    var roomId = normalizeCode(wrap.dataset.sk || "guide");
+    if (!roomId) { load(); render(); return; }
+    setLive("connecting", "Connecting to your group’s live budget…");
+    joinTrip(roomId).then(function (r) {
+      bindRoom(r); // room.onChange populates state + renders; flips the indicator to Live
+    }).catch(function () {
+      // Couldn't reach Firebase — fall back to this device's local copy so the tool still works.
+      setLive("offline", "Offline — changes are saved on this device only.");
+      load(); render();
     });
-    if (copyBtn) copyBtn.addEventListener("click", function () {
-      var code = (document.getElementById("sSyncCode") || {}).textContent || "";
-      if (navigator.clipboard && code) navigator.clipboard.writeText(code).then(function () { flash(copyBtn, "✓ Copied"); }, function () {});
-    });
-    if (leaveBtn) leaveBtn.addEventListener("click", leaveTrip);
-    // Auto-rejoin a code this device joined before.
-    var saved; try { saved = localStorage.getItem(CODE_KEY); } catch (_) {}
-    if (saved) joinExisting(saved).catch(function () { try { localStorage.removeItem(CODE_KEY); } catch (_) {} });
   }
 
   /* ── button wiring ───────────────────────── */
@@ -401,7 +370,11 @@ import { hasFirebase, joinTrip, generateTripCode, normalizeCode } from "../featu
 
   /* ── init ─────────────────────────────────── */
   syncModeUI();
-  load();
-  render();
-  initSync();
+  if (hasFirebase()) {
+    render();       // paint the empty shell immediately, then connect to the shared room
+    autoConnect();
+  } else {
+    load();         // no config → private on-device calculator, exactly as before
+    render();
+  }
 })();
