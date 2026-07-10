@@ -1,7 +1,7 @@
 # Waypoint Travel Guides — Project Instructions
 
 Stacks on the global `~/.claude/CLAUDE.md` (universal accuracy rules — auto-loads
-separately). Architecture/stack detail: `docs/Project_State.md` (read on demand).
+separately). Architecture/stack detail: `docs/ARCHITECTURE.md` (read on demand).
 
 ---
 

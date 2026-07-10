@@ -32,8 +32,7 @@ those files into pages — you can ignore it.
 
 ## How to publish it on the web (about 15 minutes, one time)
 
-> **A full, click-by-click walkthrough with fixes for every step is in
-> [`docs/PUBLISHING.md`](./docs/PUBLISHING.md).** The short version is below.
+> The short version is below; if a build ever fails, see **Troubleshooting** at the end.
 
 The site is "static," meaning the pages are pre-built and then just served —
 fast, cheap (free), and reliable. Your sight photos are automatically converted
@@ -142,3 +141,18 @@ package.json              the project's dependency list
 If you ever want to preview locally: install Node.js, then in this folder run
 `npm install` once, and `npm run dev` to open a live preview, or `npm run build`
 to produce the final pages in a `dist/` folder.
+
+---
+
+## Troubleshooting (if a GitHub build fails)
+
+Open the **Actions** tab and click the red run:
+
+- **The log names a content file** (e.g. `korea.json`): the built-in checker caught a typo
+  or missing field — fix that file and commit; the rebuild is automatic.
+- **Pages shows a 404 after a successful build:** the `base` in `astro.config.mjs` must match
+  your repo name (`/Trip-Guides`).
+- **A photo didn't load but the site deployed:** the safety net worked — that one photo fell
+  back to the plain version; everything else is fine.
+- **Your live site never breaks on a bad edit:** it stays on the last working version until a
+  build succeeds.
