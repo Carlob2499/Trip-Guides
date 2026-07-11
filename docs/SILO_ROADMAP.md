@@ -27,20 +27,30 @@ src/features/<name>/
 
 ## Phase 3 — code silo migration order (frequency × stakes, one PR each)
 
-| # | Silo | Absorbs (from src/scripts + styles) |
-|---|------|--------------------------------------|
-| 1 | trip-split | trip-split.js (+ WayFinder money model: integer minor-units, EQUAL/EXACT/PERCENTAGE/SHARES) |
-| 2 | exports | src/lib/exports.ts (ICS/GPX builders) + endpoints' client bits |
-| 3 | sos | sos.js (+ EU-112 fallback, Phase 5) |
-| 4 | itinerary | day-rail.js, spine.js, now-line.js, swipe-nav.js, print-day.js (+ planner.css, print-day.css) |
-| 5 | hub | hub.js, wizard.js (+ hub.css, hub-cards.css, wizard.css) |
-| 6 | field-tools | field-tools.js (+ field-tools.css) |
-| 7 | palette | palette.js (+ palette.css) |
-| 8 | maps | gmaps-render.js (+ map.css) — already config-gated; formalize |
+| # | Silo | Absorbs | Status |
+|---|------|---------|--------|
+| 1 | trip-split | trip-split.js + settle.ts + WayFinder money model (minor-units, EQUAL/EXACT/PERCENTAGE/SHARES, 22 tests) | ✅ done |
+| 2 | exports | src/lib/exports.ts (ICS/GPX builders) | ✅ done |
+| 3 | sos | sos.js (+ EU-112 fallback) | ✅ done |
+| 4 | itinerary | day-rail.js, spine.js, now-line.js, swipe-nav.js, print-day.js | ⏸ DEFERRED — see below |
+| 5 | hub | hub.js + wizard.js (adjacent imports; internal order preserved) | ✅ done |
+| 6 | field-tools | field-tools.js | ✅ done |
+| 7 | palette | palette.js | ✅ done |
+| 8 | maps | gmaps-render.js (config-gated) | ✅ done |
+
+**Documented deviations (deliberate, not drift):**
+- **Itinerary deferred:** its five modules are *interleaved* with other IIFEs in the
+  GuideLayout bundle (day-rail@547 … print-day@563); merging them into one index import
+  would reorder listener attachment across 12 modules — an unprovable-cheaply behavior
+  change. Do it only WITH behavioral test coverage for tab/scroll interplay.
+- **CSS stays in `src/styles/`:** Astro bundles every imported sheet into the same
+  per-page CSS regardless of location, so co-locating buys zero fetch/token win while
+  risking cascade-order churn. The single ordered import list in GuideLayout IS the
+  cascade contract.
 
 Cross-cutting page chrome (guide-ui.js, scroll-memory, reveal, micro, lightbox,
-onboard, offline-pill, section-flight, gsap-hero, hero-parallax) stays flat in
-`src/scripts/` — it is the page, not a feature.
+onboard, offline-pill, section-flight, gsap-hero, hero-parallax, util.js) stays flat
+in `src/scripts/` — it is the page, not a feature.
 
 ## Phase 4 — content siloing (the hallmark)
 

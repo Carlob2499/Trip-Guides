@@ -7,7 +7,7 @@
    every downstream step (Groq generation, verification, graduation) is
    untouched, so new guides inherit the whole feature set automatically. */
 
-import { reducedMotion } from "./util.js";
+import { reducedMotion } from "../../../scripts/util.js";
 
 (function () {
   var form = document.getElementById("ngForm");

@@ -2,7 +2,7 @@
 // Mirrors src/pages/og/[slug].png.ts — getStaticPaths + GET returning a Response.
 // Output lands at dist/guides/<slug>.gpx and is linked from the guide's Share modal.
 import { getCollection } from "astro:content";
-import { buildGpx, collectWaypoints } from "../../lib/exports";
+import { buildGpx, collectWaypoints } from "../../features/exports/index";
 
 export async function getStaticPaths() {
   const guides = await getCollection("guides");

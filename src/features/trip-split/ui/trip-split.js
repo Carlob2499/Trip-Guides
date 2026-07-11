@@ -10,8 +10,8 @@
    Firebase itself lives in src/features/firebase (the silo); this file only imports its
    public API. */
 
-import { settle } from "../lib/settle";
-import { hasFirebase, joinTrip, normalizeCode } from "../features/firebase/index.js";
+import { settle } from "../model/settle";
+import { hasFirebase, joinTrip, normalizeCode } from "../../firebase/index.js";
 
 (function () {
   var wrap = document.getElementById("tripSplit");

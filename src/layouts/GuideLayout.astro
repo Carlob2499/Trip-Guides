@@ -7,7 +7,7 @@ import { bucket } from "../lib/buckets";
 import { emergencyFor } from "../data/countries.mjs";
 import { accentFor, darken, currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
 import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
-import { collectWaypoints, collectDayEvents, buildSummary } from "../lib/exports";
+import { collectWaypoints, collectDayEvents, buildSummary } from "../features/exports/index";
 // Self-hosted variable fonts (bundled, base-path-safe, offline-correct) — no CDN.
 import "@fontsource-variable/bricolage-grotesque";
 import "@fontsource-variable/literata";
@@ -543,7 +543,7 @@ const tripSummary = buildSummary(guide);
     <!-- Interactive UI — bundled + hashed by Astro into one module shared across guides. -->
     <script>
       import "../scripts/guide-ui.js";
-      import "../scripts/gmaps-render.js";
+      import "../features/maps/index.js";
       import "../scripts/day-rail.js";
       import "../scripts/reveal.js";
       import "../scripts/section-flight.js";
@@ -553,15 +553,15 @@ const tripSummary = buildSummary(guide);
       import "../scripts/scroll-memory.js";
       import "../scripts/now-line.js";
       import "../scripts/offline-pill.js";
-      import "../scripts/field-tools.js";
-      import "../scripts/sos.js";
+      import "../features/field-tools/index.js";
+      import "../features/sos/index.js";
       import "../scripts/lightbox.js";
       import "../scripts/spine.js";
       import "../scripts/hero-parallax.js";
       import "../scripts/gsap-hero.js";
-      import "../scripts/palette.js";
+      import "../features/palette/index.js";
       import "../scripts/print-day.js";
-      import "../scripts/trip-split.js";
+      import "../features/trip-split/index.ts";
       import "../scripts/staleness-ui.js";
     </script>
 

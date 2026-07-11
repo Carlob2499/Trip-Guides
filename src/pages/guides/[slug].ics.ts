@@ -3,7 +3,7 @@
 // an all-day VEVENT (the `days` schema has a date string but no structured
 // times, so all-day is honest, not invented). Output: dist/guides/<slug>.ics.
 import { getCollection } from "astro:content";
-import { buildIcs, collectDayEvents } from "../../lib/exports";
+import { buildIcs, collectDayEvents } from "../../features/exports/index";
 
 export async function getStaticPaths() {
   const guides = await getCollection("guides");

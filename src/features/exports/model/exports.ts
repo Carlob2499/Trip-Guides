@@ -6,7 +6,7 @@
 // Date parsing is reused from ./holidays.ts so the iCal calendar resolves the
 // same trip year the holidays block already uses.
 
-import { parseGuideDate, deriveTripYear } from "./holidays";
+import { parseGuideDate, deriveTripYear } from "../../../lib/holidays";
 
 export interface Waypoint { lat: number; lng: number; name: string; }
 export interface DayEvent { date: Date; title: string; desc?: string; }

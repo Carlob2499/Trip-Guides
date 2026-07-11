@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import PwaHead from "../components/PwaHead.astro";
 import { accentFor } from "../lib/themes";
-import { flattenSections } from "../lib/exports";
+import { flattenSections } from "../features/exports/index";
 // Self-hosted variable fonts (bundled, base-path-safe, offline-correct) — no CDN.
 import "@fontsource-variable/bricolage-grotesque";
 import "@fontsource-variable/literata";
@@ -284,8 +284,8 @@ const countries = [...new Set(gridGuides.map(x => x.g.data.country))].sort();
     <footer class="hub-foot">Waypoint — every fact checked, every route tested.</footer>
 
     <script>
-      import "../scripts/hub.js";
-      import "../scripts/wizard.js";
+      import "../features/hub/index.js";
+      
       import "../scripts/micro.js";
     </script>
 
