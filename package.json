@@ -8,6 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "test": "vitest run",
+    "test:visual": "playwright test",
     "create-guide": "tsx scripts/generate-guide.ts",
     "lookup-place": "node scripts/lookup-place.mjs",
     "search-commons": "node scripts/search-commons.mjs",
@@ -27,6 +28,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "tsx": "^4.23.0",
     "vitest": "^4.1.9"
   }

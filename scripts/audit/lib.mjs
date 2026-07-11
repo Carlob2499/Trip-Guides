@@ -48,14 +48,15 @@ export function flatten(sections, out = []) {
   return out;
 }
 
-// Extract every unique http(s) href from the RAW file text. Guide JSON stores HTML
-// with single-quoted attributes (href='https://...') so it doesn't need escaping
-// inside the double-quoted JSON string — a plain double-quote regex misses them.
+// Extract every unique http(s) citation from the RAW file text: inline <a href>
+// (guide JSON stores HTML with single-quoted attributes, so match both quote
+// styles) AND the structured `source_url` provenance field — both are live
+// citations the weekly link-rot sweep must cover.
 export function extractLinks(raw) {
   const found = new Set();
-  const re = /href=['"](https?:\/\/[^'"]+)['"]/g;
+  const re = /href=['"](https?:\/\/[^'"]+)['"]|"source_url"\s*:\s*"(https?:\/\/[^"]+)"/g;
   let m;
-  while ((m = re.exec(raw))) found.add(m[1]);
+  while ((m = re.exec(raw))) found.add(m[1] || m[2]);
   return [...found];
 }
 

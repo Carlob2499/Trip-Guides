@@ -63,6 +63,12 @@ helper scripts, and the done gate.
   `⚠` known-gap · omitted · `__VERIFICATION_REQUIRED__` (unverified map
   place_id). **Zero bare perishable facts.** Full rules: `verification-rules.md`
   §4. A guessed figure wearing `≈` is a fabrication.
+- **Structured provenance (additive):** sections and items accept optional
+  `source_url` + `verified_on` (YYYY-MM-DD). Set BOTH on new/edited perishable
+  facts where the block supports them — they feed the weekly recert audit
+  (link HEAD-checks + shelf-life flagging; fx ≈7d, hours/transit ≈90d, venues
+  ≈180d per `src/lib/staleness.ts`). Inline `<a href>` citations stay valid;
+  `verified_on` without `source_url` is lint-flagged.
 
 ## Never guess what a script can verify
 - **coords / place_id** → `node scripts/lookup-place.mjs "<place>" --cc XX`
@@ -81,6 +87,10 @@ helper scripts, and the done gate.
 5. **`verified` stamp** — `Checked [date] for [trip] · re-check before travel:
    [most perishable items]`; keep it `⚠`-prefixed on drafts and keep
    `draft: true` — graduating a guide is a human decision, never yours.
+6. **Recert pass** — any fact you touched that sits past its shelf life
+   (`src/lib/staleness.ts` categories) is re-sourced from a primary source and
+   re-dated, or visibly downgraded to `⚠` — never silently left presenting as
+   verified.
 
 ## Completion report
 End every pass with: `built ✓ (N sections, build + linter clean) · flagged ⚠

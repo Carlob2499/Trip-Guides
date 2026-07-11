@@ -7,3 +7,5 @@ CLAUDE.md
 .env
 .claude/skills/waypoint-guide-author-workspace/
 .claude/worktrees/
+test-results/
+playwright-report/

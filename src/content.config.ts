@@ -6,11 +6,25 @@ import { contrastRatio } from "./lib/contrast";
 // site `--accent`, painted as link/tab/label text on this surface — so it must
 // stay legible against it. Keep in sync with base.css if that token changes.
 const LIGHT_BG = "#e9ebe3";
+// Dark page background (base.css dark-mode `--bg`). The accent is NOT re-mapped in
+// dark mode, so a theme.primary must stay legible on BOTH grounds — a light-only
+// gate shipped a 2.33:1 dark-mode bug in WayPoint-V2; gate both, always.
+const DARK_BG = "#14181c";
 // 3.0:1 is WCAG's minimum for large-text / UI-component contrast, and is the
 // empirically-calibrated floor of the project's own country accent palette
 // (the tightest, #b07a1f, sits at ~3.16:1). Below this, accent UI turns
 // illegible on the cream background — fail the build loudly rather than ship it.
 const MIN_ACCENT_CONTRAST = 3.0;
+
+// ADDITIVE provenance for perishable facts (prices, hours, transit, availability).
+// Optional everywhere — every pre-existing guide builds unchanged. When present:
+// source_url = the primary source consulted; verified_on = the YYYY-MM-DD it was
+// checked. These power the weekly recert audit (link HEAD-checks + shelf-life
+// flagging) and the staleness UI; inline <a href> citations remain equally valid.
+const provenance = {
+  source_url: z.string().url().optional(),
+  verified_on: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+};
 
 // A point on the map.
 const coord = z.object({ lat: z.number(), lng: z.number() });
@@ -49,10 +63,10 @@ const collapse = {
 };
 
 const section = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("panel"),  group: z.string(), title: z.string().optional(), body: z.string().optional(), checklist: z.array(z.string()).optional(), ...collapse }),
-  z.object({ type: z.literal("prose"),  group: z.string(), title: z.string().optional(), body: z.string().optional(), ...collapse }),
-  z.object({ type: z.literal("list"),   group: z.string(), title: z.string().optional(), items: z.array(z.string()), ...collapse }),
-  z.object({ type: z.literal("routes"), group: z.string(), title: z.string().optional(), steps: z.array(z.string()) }),
+  z.object({ type: z.literal("panel"),  group: z.string(), title: z.string().optional(), body: z.string().optional(), checklist: z.array(z.string()).optional(), ...collapse, ...provenance }),
+  z.object({ type: z.literal("prose"),  group: z.string(), title: z.string().optional(), body: z.string().optional(), ...collapse, ...provenance }),
+  z.object({ type: z.literal("list"),   group: z.string(), title: z.string().optional(), items: z.array(z.string()), ...collapse, ...provenance }),
+  z.object({ type: z.literal("routes"), group: z.string(), title: z.string().optional(), steps: z.array(z.string()), ...provenance }),
   z.object({ type: z.literal("map"),    group: z.string(), title: z.string().optional(), center: coord, span: z.number().optional(), points: z.array(mapPoint).optional() }),
   // weather — live 7-day Open-Meteo strip. No coords here: reads lat/lng from the
   // guide's first `map` section at runtime (so it needs no per-guide config). If the
@@ -94,11 +108,13 @@ const section = z.discriminatedUnion("type", [
       time: z.string().optional(),
       note: z.string().optional(),
     })).optional(),
+    ...provenance,
   })) }),
   z.object({ type: z.literal("sights"), group: z.string(), title: z.string().optional(), items: z.array(z.object({
     name: z.string(), kicker: z.string().optional(), body: z.string().optional(),
     img: z.object({ file: z.string(), alt: z.string().optional() }).optional(),
     map: coord.optional(),
+    ...provenance,
   })) }),
   z.object({ type: z.literal("budget"), group: z.string(), title: z.string().optional(),
     intro: z.string().optional(), currency: z.string().optional(), days: z.number().positive().optional(),
@@ -116,6 +132,7 @@ const section = z.discriminatedUnion("type", [
       note: z.string().optional(),
       split_type: z.enum(["equal", "individual", "group"]).optional(),   // TripSplit hydration filter
       payment_preference: z.enum(["Cash Only", "Contactless", "Credit Card"]).optional(),
+      ...provenance,
     })) }),
   // habitats — GO Fest habitat rotation as a responsive card grid; replaces the dense
   // comma-lists that used to live in prose. Each window renders as one card (day + time +
@@ -191,6 +208,15 @@ const guides = defineCollection({
       (t) => contrastRatio(t.primary, LIGHT_BG) >= MIN_ACCENT_CONTRAST,
       (t) => ({
         message: `theme.primary ${t.primary} has only ${contrastRatio(t.primary, LIGHT_BG).toFixed(2)}:1 contrast against the light background ${LIGHT_BG} — needs ≥${MIN_ACCENT_CONTRAST}:1 to stay legible as accent text. Pick a deeper/more saturated colour.`,
+        path: ["primary"],
+      }),
+    ).refine(
+      // Same accent renders on the dark ground too (dark mode does not re-map
+      // --accent), so gate BOTH surfaces. Mid-value colours pass both; a very
+      // dark accent passes light-only and turns illegible in dark mode.
+      (t) => contrastRatio(t.primary, DARK_BG) >= MIN_ACCENT_CONTRAST,
+      (t) => ({
+        message: `theme.primary ${t.primary} has only ${contrastRatio(t.primary, DARK_BG).toFixed(2)}:1 contrast against the dark background ${DARK_BG} — needs ≥${MIN_ACCENT_CONTRAST}:1 on both grounds. Pick a mid-value colour (or supply a lighter tone).`,
         path: ["primary"],
       }),
     ).optional(),
