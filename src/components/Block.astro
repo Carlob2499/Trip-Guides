@@ -44,7 +44,12 @@ const CardTag = isCollapsible ? "details" : "div";
 const cardProps = isCollapsible ? { open: sec.defaultOpen !== false } : {};
 const TitleTag = isCollapsible ? "summary" : "div";
 ---
-<section class="block" id={sid} data-cat={ci}>
+{/* Structured provenance (content.config.ts `provenance`) rides as data attrs;
+    staleness-ui.js judges shelf life client-side (live clock — a static build
+    date would freeze "fresh" forever) and pins a warn pill on stale sections.
+    Sections without verified_on render exactly as before. */}
+<section class="block" id={sid} data-cat={ci}
+         data-verified-on={sec.verified_on} data-source-url={sec.source_url}>
   {carded ? (
     <CardTag class={`card${isCollapsible ? " is-collapsible" : ""}`} {...cardProps}>
       {titleText && (

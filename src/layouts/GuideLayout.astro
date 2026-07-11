@@ -4,7 +4,7 @@ import PwaHead from "../components/PwaHead.astro";
 import TripSplit from "../components/TripSplit.astro";
 import Voting from "../components/Voting.astro";
 import { bucket } from "../lib/buckets";
-import { EMERGENCY } from "../data/countries.mjs";
+import { emergencyFor } from "../data/countries.mjs";
 import { accentFor, darken, currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
 import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
 import { collectWaypoints, collectDayEvents, buildSummary } from "../lib/exports";
@@ -539,7 +539,7 @@ const tripSummary = buildSummary(guide);
            6. Jet-lag calculator
          ═══════════════════════════════════════════════════════════════════ -->
     <!-- Config for the extracted guide UI module (formerly Astro define:vars). -->
-    <script type="application/json" id="tgConfig" set:html={JSON.stringify({ order, storeKey, mapCenter, firstDayDate, lastDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, daysForBanner, gmapsKey: import.meta.env.PUBLIC_GMAPS_KEY ?? null, gmapsMapId: import.meta.env.PUBLIC_GMAPS_MAP_ID ?? null, emergency: EMERGENCY[guide.country] ?? null, verifiedDate })}></script>
+    <script type="application/json" id="tgConfig" set:html={JSON.stringify({ order, storeKey, mapCenter, firstDayDate, lastDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, daysForBanner, gmapsKey: import.meta.env.PUBLIC_GMAPS_KEY ?? null, gmapsMapId: import.meta.env.PUBLIC_GMAPS_MAP_ID ?? null, emergency: emergencyFor(guide.country), verifiedDate })}></script>
     <!-- Interactive UI — bundled + hashed by Astro into one module shared across guides. -->
     <script>
       import "../scripts/guide-ui.js";
@@ -562,6 +562,7 @@ const tripSummary = buildSummary(guide);
       import "../scripts/palette.js";
       import "../scripts/print-day.js";
       import "../scripts/trip-split.js";
+      import "../scripts/staleness-ui.js";
     </script>
 
   </body>

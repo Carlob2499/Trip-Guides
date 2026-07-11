@@ -132,6 +132,11 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 .cat-title::before{content:"";flex:none;width:.5rem;height:.5rem;background:var(--accent)}
 .block{scroll-margin-top:var(--chrome-h);margin-bottom:1rem}
 .block-title{font-family:var(--font-display);font-size:1.32rem;margin:.1rem 0 .5rem}
+/* Staleness downgrade pill (staleness-ui.js) — appears only on sections whose
+   structured verified_on has outlived its shelf life. Warn tone, never red
+   (red is reserved for emergencies); links to the recorded source when present. */
+.stale-pill{display:inline-block;margin-left:.55rem;padding:.1rem .5rem;border:1px solid var(--warn);border-radius:999px;font-family:var(--font-data);font-size:.68rem;letter-spacing:.03em;color:var(--warn);text-decoration:none;vertical-align:middle;white-space:nowrap}
+a.stale-pill:hover{background:color-mix(in srgb,var(--warn) 12%,transparent)}
 /* Below 900px the sticky chrome is shorter — retune --chrome-h once; scroll-padding
    and every scroll-margin above follow automatically. */
 @media(max-width:899px){html{--chrome-h:82px}}

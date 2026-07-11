@@ -18,6 +18,11 @@
 */
 const CACHE = "tripguides-v25";
 const BASE = "/Trip-Guides";
+/* CORE:BEGIN — the precache list. Rewritten in dist/ at build time by
+   scripts/gen-sw-precache.mjs from the guides that actually built (so a new
+   guide is precached automatically, and a removed one stops 404-ing the
+   install). The committed list below is only the fallback if the generator
+   didn't run. */
 const CORE = [
   BASE + "/",
   BASE + "/guides/denmark/",
@@ -26,6 +31,7 @@ const CORE = [
   BASE + "/icons/icon-192.png",
   BASE + "/icons/favicon.svg",
 ];
+/* CORE:END */
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

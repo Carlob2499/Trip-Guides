@@ -30,7 +30,9 @@
   }
 
   var sheet = document.createElement("div");
-  sheet.className = "sos-sheet";
+  // A fallback entry (EU-wide 112 only, no researched local numbers) renders
+  // warn-toned so it never masquerades as a fully-verified emergency sheet.
+  sheet.className = "sos-sheet" + (em.fallback ? " sos-sheet--fallback" : "");
   sheet.setAttribute("role", "dialog");
   sheet.setAttribute("aria-modal", "true");
   sheet.setAttribute("aria-label", "Emergency numbers");
