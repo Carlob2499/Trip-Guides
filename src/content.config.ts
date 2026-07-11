@@ -1,5 +1,4 @@
 import { defineCollection, z } from "astro:content";
-import { glob } from "astro/loaders";
 import { contrastRatio } from "./lib/contrast";
 
 // Light page background (base.css `--bg`). A guide `theme.primary` becomes the
@@ -184,9 +183,53 @@ const section = z.discriminatedUnion("type", [
     })) }),
 ]);
 
+// Guide loader — accepts BOTH content shapes (convergence Phase 4):
+//   · <slug>.json                — a single-file guide (legacy; scaffolds/drafts
+//                                  still author this way)
+//   · <slug>/ directory          — the siloed shape: _guide.json (all top-level
+//                                  fields except sections) + NN-<group>.json
+//                                  files, each an ARRAY of that tab group's
+//                                  sections; filename sort (the NN prefix)
+//                                  reproduces the original section order.
+// Split a monolith with `node scripts/split-guide.mjs <slug>`. The assembled
+// data validates against the exact same schema as a single-file guide, and the
+// built HTML is byte-identical either way (that is the migration gate).
+const guideLoader = {
+  name: "waypoint-guides",
+  load: async ({ store, parseData, generateDigest }: any) => {
+    const { readdir, readFile } = await import("node:fs/promises");
+    const path = await import("node:path");
+    const DIR = path.join(process.cwd(), "src", "content", "guides");
+    store.clear();
+    const entries = await readdir(DIR, { withFileTypes: true });
+    for (const e of entries) {
+      let id: string, raw: Record<string, unknown>;
+      if (e.isFile() && e.name.endsWith(".json")) {
+        id = e.name.replace(/\.json$/, "");
+        raw = JSON.parse(await readFile(path.join(DIR, e.name), "utf8"));
+      } else if (e.isDirectory()) {
+        const files = (await readdir(path.join(DIR, e.name))).filter((f) => f.endsWith(".json"));
+        if (!files.includes("_guide.json")) continue; // not a guide dir
+        id = e.name;
+        const meta = JSON.parse(await readFile(path.join(DIR, e.name, "_guide.json"), "utf8"));
+        const sections: unknown[] = [];
+        for (const f of files.filter((f) => f !== "_guide.json").sort()) {
+          const part = JSON.parse(await readFile(path.join(DIR, e.name, f), "utf8"));
+          if (!Array.isArray(part)) throw new Error(`${e.name}/${f} must be a JSON array of sections`);
+          sections.push(...part);
+        }
+        raw = { ...meta, sections };
+      } else continue;
+      const data = await parseData({ id, data: raw });
+      store.set({ id, data, digest: generateDigest(data) });
+    }
+  },
+};
+
 const guides = defineCollection({
-  // Every .json file in src/content/guides/ becomes one guide page.
-  loader: glob({ pattern: "**/*.json", base: "./src/content/guides" }),
+  // Every guide in src/content/guides/ becomes one page — single-file or
+  // directory shape alike (see guideLoader above).
+  loader: guideLoader,
   schema: z.object({
     kicker: z.string().optional(),
     title: z.string(),

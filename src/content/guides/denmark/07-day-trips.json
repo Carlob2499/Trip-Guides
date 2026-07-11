@@ -1,0 +1,116 @@
+[
+  {
+    "type": "sights",
+    "group": "Day trips",
+    "title": "A day across the bridge — Malmö, Sweden (Wed Jun 10)",
+    "items": [
+      {
+        "name": "Lilla Torg & Gamla Staden (Old Town)",
+        "kicker": "Best photo spot in the city — arrive before 10:00",
+        "body": "Malmö's old town is a tight cluster of half-timbered buildings in red, yellow, and ochre framing a cobblestone square. Lilla Torg (Little Square) is the best postcard shot in the city — arrive before 10:00 for morning light before cafe chairs fill every frame. Walk <b>Jakob Nilsgatan</b> for a narrow 17th-century lane of pastel houses with almost no crowds. The <b>Form/Design Center</b> on the square stocks ceramics, carved wood, and suede bags — genuinely Swedish and portable. Free to browse.",
+        "img": {
+          "file": "Lilla Torg, Malmö, mars 2015-3.jpg",
+          "alt": "Cobblestone café square at Lilla Torg in Malmö's old town"
+        },
+        "map": {
+          "lat": 55.6049,
+          "lng": 13.0038
+        }
+      },
+      {
+        "name": "Malmöhus Castle",
+        "kicker": "Oldest preserved Renaissance castle in the Nordic countries · open Wed 11:00–17:00",
+        "body": "The castle with its green moat and swans is worth both the photo and the entry. Inside: royal chambers, natural history, and a small aquarium. Hours: Tue–Wed, Fri–Sun 11:00–17:00; Thu 11:00–19:00. <b>Closed Mondays</b>. Jun 10 is Wednesday — open 11:00–17:00. Entry ≈120 SEK adult (~$11 USD); free under 20. Verify current pricing at <a href='https://malmocity.se/en/museum/' target='_blank' rel='noopener noreferrer'>malmocity.se/en/museum/</a>. The moat walk is free and worth doing even if you skip entry.",
+        "img": {
+          "file": "Malmöhus slott 2022.jpg",
+          "alt": "Malmöhus Castle's red round tower reflected in its moat"
+        },
+        "map": {
+          "lat": 55.6076,
+          "lng": 12.9968
+        }
+      },
+      {
+        "name": "Turning Torso & Västra Hamnen waterfront",
+        "kicker": "54-story twisted skyscraper — photograph from the harbor dock",
+        "body": "Sweden's tallest building twists 90 degrees from base to top. Photograph it from the harbor dock with boats in the foreground — the distance gives context that close-up shots miss. The building is a private residence; no public access except rare bookable summer tours (check <a href='https://www.hsb.se/malmo/om-hsb-malmo/turning-torso/' target='_blank' rel='noopener noreferrer'>hsb.se</a> in advance). Walk the Västra Hamnen promenade back toward Malmö C — about 25 min on foot from Gamla Staden.",
+        "img": {
+          "file": "The Turning Torso, Malmo.JPG",
+          "alt": "Turning Torso at Västra Hamnen, Malmö"
+        },
+        "map": {
+          "lat": 55.6213,
+          "lng": 12.9751
+        }
+      }
+    ]
+  },
+  {
+    "type": "prose",
+    "group": "Day trips",
+    "title": "Shopping, food & the full-day plan for Malmö",
+    "body": "<p><b>Shopping worth the trip — things you can't get in Copenhagen or the US:</b></p><ul><li><b>Form/Design Center</b> — Lilla Torg. Ceramics, carved wood, suede leather bags from Swedish artisans. Free to browse; good portable gift buys. Source: <a href='https://visitsweden.com/where-to-go/southern-sweden/malmo/slow-shopping-or-shop-till-you-drop-malmo/' target='_blank' rel='noopener noreferrer'>Visit Sweden shopping guide</a></li><li><b>Uma Bazaar</b> — Lilla Torg 9. Ethical fashion since 2005; wood-fibre basics, eco-cotton dresses from Swedish and European indie brands not found in US chains.</li><li><b>Aplace</b> — Davidshallstorg area (~10 min from old town). Curated Scandinavian fashion: Stine Goya, CDLP, By Malene Birger, Eytys.</li><li><b>Liebling</b> — Davidshallstorg 8. Slow-fashion boutique, own Swedish label plus curated European pieces.</li><li><b>Filippa K</b> — Södergatan (on the walk from Malmö C to old town). Major Swedish brand significantly cheaper in Sweden than in the US; worth a VAT-refund purchase if you spend 300+ SEK.</li></ul><p><b>Food stops:</b></p><ul><li><b>Malmö Saluhall</b> (food hall) — <a href='https://www.malmosaluhall.se/en/welcome/' target='_blank' rel='noopener noreferrer'>Gibraltargatan 6</a>. Open Wed 11:00–20:00. Fresh fish, ramen, Skåne ice cream, artisan bread, local cheese. About 25 min walk or short bus from Gamla Staden.</li><li><b>Falafel</b> — Malmö is Sweden's self-styled falafel capital. Grab one from a stand near Möllevångstorget for ≈30–40 SEK (~$3).</li><li><b>Kanelbullar</b> — Swedish-style cinnamon buns, more cardamom-forward and less sweet than the Danish version. Any bakery in the old town.</li></ul><p><b>Suggested day structure — Wednesday Jun 10:</b></p><ul><li>≈09:00 train from Copenhagen Central → ≈09:35 arrive Malmö C (buy cross-border ticket at station; bring passport)</li><li>09:45 — Lilla Torg + Jakob Nilsgatan photos (best morning light, low crowds)</li><li>10:00 — Form/Design Center + Uma Bazaar browse</li><li>11:00–12:30 — Malmöhus Castle (opens 11:00 on Wednesdays)</li><li>12:30–13:30 — Lunch in old town or walk toward Saluhall</li><li>13:30–14:30 — Davidshall shopping: Aplace + Liebling (~10 min walk from castle)</li><li>14:30–15:30 — Walk to Västra Hamnen / Turning Torso exterior photos + harbor walk</li><li>15:30–16:30 — Malmö Saluhall: fika, ice cream, browse</li><li>≈17:00 train back → ≈17:35 arrive Copenhagen Central</li></ul><p>⚠️ <b>Logistics:</b> Your Copenhagen City Pass stops at the Danish border. Buy a separate cross-border Øresundståg ticket at Nørreport or Copenhagen C. Bring your passport — ID checks occur on the bridge. The entire Malmö historic core and Västra Hamnen are walkable from Malmö C; no transit needed inside the city.</p>"
+  },
+  {
+    "type": "list",
+    "group": "Day trips",
+    "title": "Souvenir ideas — Sweden",
+    "items": [
+      "Something from Form/Design Center at Lilla Torg — ceramics or carved wood, genuinely Swedish and portable",
+      "Filippa K clothing — Swedish brand, notably cheaper in Sweden than in the US; good VAT-refund item",
+      "Swedish lösgodis (pick-and-mix candy) — a national institution; grab a bag at any supermarket",
+      "A Malmö or Sweden enamel city pin",
+      "A Dala horse — the classic Swedish folk art souvenir"
+    ]
+  },
+  {
+    "type": "sights",
+    "group": "Day trips",
+    "title": "Overnight to Oslo — Jun 14–16",
+    "items": [
+      {
+        "name": "The ferry crossing",
+        "kicker": "Depart Copenhagen 16:30 · check in by 16:15 · Dampfærgevej 30",
+        "body": "The <a href='https://www.gonordiccruiseline.com' target='_blank' rel='noopener noreferrer'>Go Nordic Cruiseline</a> overnight ferry departs Dampfærgevej 30 (Østerbro) at 16:30 on Jun 14. Check in by 16:15. The ship sails overnight in your cabin and docks at Vippetangen, Oslo around 10:00 on Jun 15 — giving you roughly 5.5 hours ashore. Sailing returns Jun 16, docking Copenhagen ~10:00. No phone signal mid-sea: download Pokémon GO cached maps, offline navigation, and anything else you need before departure. Oslo weather in June: highs ≈19°C / 66°F — bring a light layer and compact rain jacket. ⚠️ Verify your ticket's actual reboard time — the published departure is 16:30 but your ticket may state an earlier cutoff.",
+        "img": {
+          "file": "Oslo Opera House seen from Langkaia.JPG",
+          "alt": "Oslo Opera House roof seen from the harbor"
+        },
+        "map": {
+          "lat": 59.9075,
+          "lng": 10.7531
+        }
+      },
+      {
+        "name": "Oslo Panorama bus tour — 3 hours",
+        "kicker": "332 NOK (~$35) · departs 10:25 from dock · book in advance",
+        "body": "Go Nordic Cruiseline partners with HMK Sightseeing for a guided city bus tour departing from the dock at 10:25. The 3-hour Oslo Panorama (≈332 NOK adult after the 15% cruise discount) covers: <b>Holmenkollen ski jump</b> — ~30 min stop at the iconic hilltop overlook; <b>Vigeland Sculpture Park</b> — ~45 min walk among 200+ bronze and granite sculptures including the towering Monolith; and a city centre bus pass through the Royal Palace and Karl Johans gate. Drops you at Oslo City Hall at ~13:00, leaving ≈2.5 free hours before reboarding. <b>Book ahead at <a href='https://www.gonordiccruiseline.dk/ferie-i-norge/oslo/aktiviteter/sightseeing/' target='_blank' rel='noopener noreferrer'>gonordiccruiseline.dk/sightseeing</a></b> and check your booking confirmation — the tour may already be included. ⚠️ The 5.5-hour Discovery Tour ends at 15:30 with zero buffer before reboard. Stick to the 3-hour tour.",
+        "map": {
+          "lat": 59.9638,
+          "lng": 10.6562
+        }
+      },
+      {
+        "name": "Free afternoon after the tour — ~13:00 to 15:20",
+        "kicker": "Drop-off at Oslo City Hall · walk from there",
+        "body": "<b>Oslo Opera House</b> (5 min walk from City Hall) — the sloping white marble roof is a free public walkway open around the clock, right to the water's edge. One of the best architectural photo spots in Scandinavia. Interior foyer is also free. <b>Akershus Fortress</b> (10 min from Opera House) — grounds free, open daily 06:00–21:00; a medieval castle standing since the 1290s with sweeping harbour views. Interior entry ≈150 NOK (~$16 USD) — check <a href='https://www.visitoslo.com' target='_blank' rel='noopener noreferrer'>visitoslo.com</a> for current price. Grounds alone are worth the walk. <b>Aker Brygge waterfront</b> (5 min from Akershus) — old shipyard converted to an open-air promenade with restaurants, design shops, and harbor sculptures. Free to walk; great for a coffee or a quick lunch back toward the ship. <b>Hard Rock Cafe Oslo</b> — Karl Johans gate 45; open daily noon–22:00; ~15 min walk from City Hall. ≈ Verify still open before going.",
+        "map": {
+          "lat": 59.9098,
+          "lng": 10.7317
+        }
+      }
+    ]
+  },
+  {
+    "type": "list",
+    "group": "Day trips",
+    "title": "Souvenir ideas — Norway",
+    "items": [
+      "Freia chocolate — Norway's most iconic confectionery brand; grab the Kvikk Lunsj (Kit-Kat style bar) at any grocery near City Hall",
+      "A Norwegian wool sweater (Oleana or Dale of Norway are the classic brands — pricey but genuinely the real thing)",
+      "Brunost (brown cheese) with a traditional cheese slicer — a quintessentially Norwegian combination",
+      "A troll figurine from any souvenir shop near City Hall",
+      "Hard Rock Cafe Oslo pin or t-shirt — Karl Johans gate 45, open noon–22:00 (Mon Jun 15)"
+    ]
+  }
+]

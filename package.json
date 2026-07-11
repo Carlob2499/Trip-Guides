@@ -13,7 +13,7 @@
     "lookup-place": "node scripts/lookup-place.mjs",
     "search-commons": "node scripts/search-commons.mjs",
     "fetch-wikivoyage": "node scripts/fetch-wikivoyage.mjs",
-    "index-guide": "node scripts/audit/index-guide.mjs"
+    "split-guide": "node scripts/split-guide.mjs"
   },
   "dependencies": {
     "@fontsource-variable/bricolage-grotesque": "^5.2.10",

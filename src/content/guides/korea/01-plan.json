@@ -1,0 +1,137 @@
+[
+  {
+    "type": "panel",
+    "group": "Plan",
+    "title": "When you land",
+    "body": "<p>You land at <b>Terminal 1, Incheon Airport (~04:55 KST Thu Jul 9 — ⚠ confirm against your booking)</b> on Air Premia YP132 from EWR Terminal B. The plan: clear immigration, <b>shower at the airport to reset after the redeye</b>, then take the <b>Airport Limousine 6002</b> into Jongno. Budget 30–60 min through immigration at this hour. In order:</p>",
+    "checklist": [
+      "Have your <b>e-Arrival Card QR</b> ready on your phone — scan it at the automated immigration gate (download at e-arrivalcard.go.kr before you leave home; save it offline)",
+      "Pick up a <b>T-money</b> card at any convenience store or ticket machine in arrivals; load ≈₩20,000",
+      "<b>Shower to reset:</b> <b>Spa on Air</b> (rebranding to 'Spa at Home') on <b>B1 by arrivals Door 3</b> — ≈₩10,000 for a 2-hour shower pass with towel + toiletries, open 24 h (⚠ confirm name/price on arrival). Keep a change of clothes in your carry-on so you're not opening checked bags for it",
+      "Buy an <b>Airport Limousine 6002</b> ticket at the arrivals bus counter (card, ₩17,000 pp) and board at the T1 bus bay → get off at <b>Gwanghwamun</b> or <b>Jongno 3-ga</b> (~7-min walk to the base either side; ~75 min, first bus 05:35). Luggage rides under the bus — no stairs. <b>Faster alternative:</b> AREX All-Stop T1 → Seoul Station, then Line 1 one stop to <b>Jonggak</b> (~55 min total, ≈₩4,450) — Jonggak exits right by the base",
+      "From the bus stop, the Airbnb (<span data-addr-kr='서울 종로구 종로 19'>19 Jong-ro, Jongno-gu</span> — across from <b>Olive Young Jonggak</b>) is a ~7-min walk or one Line-1 stop. After the redeye with bags, a short Kakao T taxi (≈₩4,000) is worth it",
+      "Text <b>TRAVEL to 4004</b> to switch on Verizon TravelPass",
+      "Open <b>KakaoMap</b> or <b>Naver Map</b> — Google Maps navigation is very limited in Korea"
+    ]
+  },
+  {
+    "type": "panel",
+    "group": "Plan",
+    "title": "Local essentials",
+    "body": "<p>Emergencies: <a href='tel:112'><b>112</b></a> (police), <a href='tel:119'><b>119</b></a> (fire & ambulance). Tap water is officially drinkable, though many locals prefer filtered or bottled. Tipping isn't expected. For maps use <a href='https://map.kakao.com' target='_blank' rel='noopener noreferrer'><b>KakaoMap</b></a> or <a href='https://map.naver.com' target='_blank' rel='noopener noreferrer'><b>Naver Map</b></a>; for taxis, <a href='https://t.kakao.com' target='_blank' rel='noopener noreferrer'><b>Kakao T</b></a>; for translation, <a href='https://papago.naver.com' target='_blank' rel='noopener noreferrer'><b>Papago</b></a>. A little Korean goes far: <i>annyeonghaseyo</i> (hello), <i>gamsahamnida</i> (thank you).</p>"
+  },
+  {
+    "type": "panel",
+    "group": "Plan",
+    "title": "Entry & documents",
+    "body": "<p>⚠️ The entry rules below assume a <b>US passport</b>. On another passport, check your own requirements — they differ.</p>",
+    "checklist": [
+      "No visa for tourism up to 90 days",
+      "<b>K-ETA is waived for US citizens through Dec 31, 2026</b> — you don't need it",
+      "Without a K-ETA you <b>must</b> complete the free <b>e-Arrival Card</b> within 3 days before arrival at the official site (e-arrivalcard.go.kr) — ignore lookalike sites that charge a fee",
+      "Optional: you may still apply for a K-ETA (₩10,000, ~$8, valid 3 years) to skip the arrival card",
+      "Passport valid for the length of your stay",
+      "Carry your <b>MSI</b> ticket confirmations and a power adapter (Korea uses Type C/F, 220V)"
+    ]
+  },
+  {
+    "type": "panel",
+    "group": "Plan",
+    "title": "Booking checklist",
+    "body": "<p>Roughly in this order — the first group is what sells out or pins your dates.</p>",
+    "checklist": [
+      "Flights — Air Premia YP132 (EWR Terminal B → ICN T1, Jul 8, dep ≈01:00 EDT) and YP131 (ICN→EWR Jul 15, dep 21:30 KST) — booked ✓ · <b>⚠ confirm exact times against your booking</b> (Air Premia posted an EWR schedule change for 29 Mar–24 Oct 2026)",
+      "<b>Air Premia baggage (economy, EWR route):</b> free <b>2 × 23 kg checked + 1 carry-on ≤10 kg</b> (≤115 cm total) — but <b>Economy Lite is 15 kg only</b>, so <b>⚠ confirm which fare you booked</b> before you pack; check the current <a href='https://www.airpremia.com/a/en/customer/notice/609' target='_blank' rel='noopener noreferrer'>YP132 carry-on notice</a> and keep power banks in your carry-on (<a href='https://www.airpremia.com/a/en/customer/notice/686' target='_blank' rel='noopener noreferrer'>Air Premia rule</a>)",
+      "Seoul Airbnb — <b>19 Jong-ro, Jongno-gu</b> (across from Olive Young Jonggak) — booked ✓, $2,007.90 for 7 nights ÷ 3 = ≈$669/person (all three on the booking; the third is only away for the Tokyo nights of Jul 11–12)",
+      "Daejeon I-Hotel — 2 nights (Jul 11 & 12), a 2-min walk to DCC II — booked ✓",
+      "MSI tickets — loaded in the NOL World app (mobile-only; no screenshots, prints, or transfers) ✓",
+      "KTX for the two of you — <b>Seoul→Daejeon</b> (Jul 11 morning) plus the Monday Busan day-trip legs <b>Daejeon→Busan</b> (≈10:30) and <b>Busan→Seoul</b> (≈18:30 evening), <b>2 tickets each leg</b> — book early; Finals weekend + summer-weekend trains fill fast — <a href='https://www.letskorail.com' target='_blank' rel='noopener noreferrer'>letskorail.com</a> or Korail Talk app. (Your third flies Jeju Air to Tokyo Jul 11–13 — see the Tokyo tab.)",
+      "Changdeokgung Secret Garden — book the 10:30 English Huwon tour for Tue Jul 14 (50 online slots, sells out)",
+      "e-Arrival Card — within 72 hours of your flight",
+      "Confirm Verizon TravelPass; download <a href='https://map.kakao.com' target='_blank' rel='noopener noreferrer'>KakaoMap</a>, <a href='https://map.naver.com' target='_blank' rel='noopener noreferrer'>Naver Map</a>, <a href='https://papago.naver.com' target='_blank' rel='noopener noreferrer'>Papago</a>, <a href='https://t.kakao.com' target='_blank' rel='noopener noreferrer'>Kakao T</a>, <a href='https://www.letskorail.com' target='_blank' rel='noopener noreferrer'>Korail</a>",
+      "Break in your shoes / insoles (week before)"
+    ]
+  },
+  {
+    "type": "panel",
+    "group": "Plan",
+    "title": "Pre-flight countdown — specific actions by date",
+    "body": "<p>Time-sensitive. Do these in order — the e-Arrival Card window opens exactly 72 h before landing; do not complete it earlier or it expires.</p><p><b>Now — before Jul 7</b><br/>Book the <b>KTX Seoul→Daejeon</b> (Jul 11, <b>morning departure ≈08:30–09:00</b> — <b>2 tickets; the two of you going to Daejeon (the third flies to Tokyo — see the Tokyo tab)</b>) and the <b>Monday Jul 13 Busan day-trip legs</b> — <b>Daejeon→Busan</b> (≈10:30) and <b>Busan→Seoul</b> (≈18:30 evening; full plan in the Monday day entry) — at<a href='https://www.korail.com/global/eng'>korail.com</a> or the KorailTalk app — Finals weekend trains fill fast. Your <b>Daejeon I-Hotel</b> (27-5 Expo-ro 123beon-gil, Yuseong-gu) is booked for both nights (Jul 11 &amp; 12) — it sits ~130 m / a <b>2-minute walk from DCC II</b>, so you drop your bags and stroll to both matches. Book the <b>Changdeokgung Secret Garden (Huwon)</b> 10:30 English tour for Tue Jul 14 — official info via <a href='https://www.cdg.go.kr/eng'>cdg.go.kr</a> (50 online slots per session; sells out). Install the <b>NOL World app</b> and confirm MSI tickets open (mobile-only — no screenshots, no prints).</p><p><b>Jul 5 (Sun) — 3 days before</b><br/>Start the jet lag clock: go to bed <b>1 hour earlier</b> than normal tonight, wake 1 hour earlier. Get 15–20 min of bright outdoor light within 30 min of waking. Dim screens after 20:00. Take 0.5–1 mg melatonin ~5 h before your new (earlier) bedtime. Stock Pokémon GO: Max Revives, Ultra Balls, Golden Razz, Silver Pinaps, Charged TMs. Build and save raid teams for Mega Mewtwo X (Flying/Fairy) and Y (Ghost/Dark).</p><p><b>Jul 6 (Mon) — 2 days before</b><br/>Jet lag: go to bed <b>2 hours earlier</b>. Same morning light + evening dim + melatonin protocol. Clear Pokémon storage to 400+ (transfer/release before the trip).</p><p><b>Jul 6–7 — within 3 days of landing</b><br/>Complete the <b>e-Arrival Card</b> at <a href='https://www.e-arrivalcard.go.kr'>e-arrivalcard.go.kr</a> (free, 5 min). The site accepts submissions from <b>~3 days (72 h) before arrival</b> — for your ~04:55 KST Jul 9 landing that window opens around Jul 6; don't try earlier or it won't be accepted, and don't leave it to the airport. Save the QR code to your camera roll offline. Jet lag: bedtime <b>3 hours earlier</b> if possible. No caffeine after 12:00. Charge all battery packs and GO Plus/Gotcha. Pack: flip-flops (for jimjilbang), compact umbrella, quick-dry layers, insoles.</p><p><b>Jul 8 (Wed) — departure night</b><br/>Depart <b>Newark Liberty Airport (EWR) — not JFK</b> on <b>Air Premia YP132 from Terminal B</b> (dep ≈01:00 EDT — ⚠ confirm against your booking; Air Premia has changed this schedule before). K-ETA is waived for US citizens through Dec 31 2026 (no action needed). <b>Confirm your Air Premia bag allowance and pre-pay any extra/overweight bags online</b> — far cheaper than at the counter; power banks ride in your carry-on, never checked. Check-in opens ~6 h before departure (≈19:00 Jul 7 EDT). Arrive at EWR by 22:30 at the latest for a smooth international process.</p>",
+    "checklist": [
+      "KTX Jul 11 Seoul → Daejeon (morning, ≈08:30–09:00) booked — <b>2 tickets</b> (the third flies to Tokyo) — <a href='https://www.letskorail.com' target='_blank' rel='noopener noreferrer'>letskorail.com</a> or KorailTalk",
+      "KTX Jul 13 Busan day trip booked: Daejeon → Busan (≈10:30) and Busan → Seoul (≈18:30 evening)",
+      "Daejeon I-Hotel (27-5 Expo-ro 123beon-gil) — 2 nights (Jul 11 & 12) booked; 2-min walk to DCC II",
+      "Changdeokgung Secret Garden tour Jul 14 reserved",
+      "e-Arrival Card completed at e-arrivalcard.go.kr — QR saved offline",
+      "MSI tickets loaded and tested in NOL World app (no screenshots)",
+      "GO Fest teams pre-built; Pokémon storage cleared to 400+",
+      "Departure airport confirmed: Newark Liberty EWR — not JFK"
+    ]
+  },
+  {
+    "type": "panel",
+    "group": "Plan",
+    "title": "Jet lag protocol — EWR to Seoul (13-hour eastward shift)",
+    "body": "<p>A 13-hour eastward shift is near worst-case for jet lag. Natural adaptation: ~1 hour per day = 13 days to fully adjust. With this protocol: 4–5 days. Three tools: timed light exposure, melatonin, and sleep scheduling. Sources: Frontiers in Physiology (2019), PMC1249488/PMC1262683, CDC Yellow Book Travel Health, Huberman Lab.</p><p><b>Pre-flight (Jul 5–7):</b> Shift bedtime 1 hour earlier each night (see Pre-flight countdown above). Each morning get bright outdoor light within 15–30 min of waking — this is the strongest phase-advance signal available. Dim screens after 20:00 each evening (blocks the delay signals fighting your advance). Take <b>0.5–1 mg melatonin approximately 5 hours before your shifted bedtime</b> — timing is critical; at this point melatonin produces maximum clock advance. Taking it too late works against you.</p><p><b>On the flight (01:30+ EDT Jul 8):</b> Sleep is the goal. Eye mask and earplugs on immediately. Keep window shade closed — the polar route crosses near-continuous daylight at altitude. No alcohol: it suppresses REM and fragments sleep. No caffeine from boarding onward. Drink ~250 ml water per hour (cabin humidity is under 20%). Take 0.5–1 mg melatonin shortly after takeoff (~02:00 EDT / ~15:00 KST). Your body still reads this as ~2 a.m., so the priority on this leg is simply to sleep the overnight flight — melatonin helps you do that. (The real Seoul re-anchoring happens with morning light after you land.) When breakfast service begins near landing, eat it: meal timing helps shift your metabolic clock to Seoul rhythms.</p><p><b>Day 1 in Seoul (Jul 9 landing):</b> Your internal clock says ~17:00 EDT (early evening New York). <b>Do not nap on arrival</b> — a full sleep cycle now locks you to NY time for days. Get outside within 1 hour of reaching your room: even 15–20 min of outdoor morning light (07:00–10:00 KST) is your strongest circadian anchor. Caffeine: use it in the morning and early afternoon only — <b>hard cutoff at 14:00 KST</b>. Stay active; don't sit still. <b>Avoid bright outdoor light 17:00–19:00 KST</b> for the first 2 days — on your NY body clock this is just-after-sunrise, and light here delays rather than advances your clock. Jimjilbang visit 17:00–21:00 (see Day 1 itinerary): the heat-then-cooling cycle triggers the temperature drop that signals sleep onset — one of the best jet-lag recovery tools available. Target bedtime: <b>22:00–22:30 KST</b>. Take 0.5–1 mg melatonin at 21:00 KST. Repeat nightly for 4–5 nights.</p>",
+    "checklist": [
+      "Jul 5: Bedtime 1h earlier, morning outdoor light within 30 min of waking, dim evenings, melatonin 5h before new bedtime",
+      "Jul 6: Bedtime 2h earlier — same protocol",
+      "Jul 7: Bedtime 3h earlier; no caffeine after 12:00",
+      "On flight: eye mask on, no alcohol, water every hour, melatonin at ~02:00 EDT, eat Seoul-time breakfast near landing",
+      "Jul 9 AM: Outside for light by 09:00 KST — no nap over 30 min, caffeine cut off at 14:00 KST",
+      "Jul 9 PM: Jimjilbang 17:00–21:00 KST, melatonin 0.5–1 mg at 21:00, bed by 22:30",
+      "Jul 10–13: Morning outdoor light daily; avoid light 17:00–19:00 KST first 2 days; melatonin 21:00 nightly"
+    ]
+  },
+  {
+    "type": "panel",
+    "group": "Plan",
+    "title": "Phone & data",
+    "body": "<p><b>Verizon TravelPass</b> — text <b>TRAVEL to 4004</b> to activate ($12/line/day). Easy and reliable. A local eSIM is roughly half the price if your phone is unlocked:</p><ul><li><b>Korean eSIMs from KT, SKT, or LG U+</b> run about <b>₩26,000–35,000 (~$17–23) for 7–10 days</b> of unlimited LTE data. Speed throttles to 5 Mbps after 3 GB/day but stays usable for maps and translation. Buy in advance at <a href='https://roaming.kt.com/esim/eng/main.asp' target='_blank' rel='noopener noreferrer'>KT Roaming</a>, <a href='https://www.trazy.com' target='_blank' rel='noopener noreferrer'>Trazy</a>, or <a href='https://www.kkday.com/en-us/product/165904' target='_blank' rel='noopener noreferrer'>KKday</a> — or at a telecom counter in ICN T1 arrivals (open from ≈07:00 KST on arrival morning). Confirm your phone is carrier-unlocked before you leave home.</li><li>Resellers ByteSIM and TooSIM often have the same networks at slightly lower prices with English checkout.</li></ul><p>Apps that actually matter: <a href='https://map.kakao.com' target='_blank' rel='noopener noreferrer'><b>KakaoMap</b></a> or <a href='https://map.naver.com' target='_blank' rel='noopener noreferrer'><b>Naver Map</b></a> for directions (Google Maps routing is severely limited in Korea), <a href='https://t.kakao.com' target='_blank' rel='noopener noreferrer'><b>Kakao T</b></a> for taxis, <a href='https://papago.naver.com' target='_blank' rel='noopener noreferrer'><b>Papago</b></a> for translation — download the Korean offline language pack before you leave (Papago → Languages → Korean → Download), <a href='https://www.letskorail.com' target='_blank' rel='noopener noreferrer'><b>Korail / KorailTalk</b></a> for KTX tickets.</p>"
+  },
+  {
+    "type": "panel",
+    "group": "Plan",
+    "title": "Weather & comfort",
+    "body": "<p>Early-to-mid July is Korea's <b>monsoon season (jangma)</b> — hot (30–35 °C / 86–95 °F), very humid, and rainy. Gear up accordingly:</p><ul><li><b>Pack a compact umbrella</b> — heavy rain can hit without warning and briefly flood low streets or cause metro delays. Check the morning forecast.</li><li><b>Moisture-wicking, quick-dry clothes</b> — linen or synthetic shirts, not cotton. Cotton stays wet all day in high humidity. One change of shirt per day minimum.</li><li><b>Hydrate constantly</b> — convenience stores have cold water and sports drinks every 200m; use them. Heat exhaustion is a real risk by day 3 if you're walking all day.</li><li><b>Build in AC breaks</b> every 2 hours: a café, a mall (Lotte Young Plaza, Shinsegae, Coex), or a museum. These are free and essential, not optional.</li><li><b>Weather app:</b> use <b>WeatherKorea</b> or the KMA official app (kma.go.kr) — Korean meteorological forecasts are more accurate than international apps for localised monsoon patterns.</li></ul>"
+  },
+  {
+    "type": "panel",
+    "group": "Plan",
+    "title": "Holidays & your dates",
+    "body": "<p>Timing is in your favour: <b>no public holidays fall during 8–15 July 2026.</b> Constitution Day (17 July) isn't a day off and lands just after you leave, and the next real holiday is Liberation Day on 15 August — so nothing shuts down while you're there.</p><p>What you do need to plan around is the weather. Mid-July is the peak of Korea's monsoon, '<b>jangma</b>' — the wettest, most humid stretch of the year, with roughly 300–400&nbsp;mm of rain across about 16 days, real heat, and humidity near 80%. The rain often arrives in heavy bursts that can briefly flood streets or slow transit, with a small typhoon chance later in the month. Pack a compact umbrella and quick-dry layers, keep indoor options in your back pocket, and check the forecast each morning. Your MSI weekend in Daejeon (11–12 July) is indoors, so rain won't touch it. (See <b>Weather &amp; comfort</b> for what to wear.)</p>"
+  },
+  {
+    "type": "prose",
+    "group": "Plan",
+    "title": "Rainy day fallback — when the monsoon hits",
+    "body": "<p>Expect at least 1–2 full-rain days in July. The rain can be heavy but rarely lasts the whole day. Have a plan ready:</p><ul><li><b>Stay underground:</b> Seoul's subway-connected underground malls are enormous. The Hongdae Shopping Street (under Hongik University Station) and Gangnam's COEX Underground Mall are both walkable and free to enter — good for an entire afternoon.</li><li><b>COEX Aquarium</b> (Samseong Station, Line 2): 45,000+ sea creatures, 2–3 hours easy. ≈₩33,000–35,000 pp — <b>⚠ verify price and book online</b> to skip the queue. Open daily.</li><li><b>Seoul Museum of Art (SeMA)</b> (City Hall, Line 1/2): free admission for main exhibitions, strong contemporary Korean art, fully dry. Takes 1.5–2 hours.</li><li><b>PC Bang:</b> Full-spec gaming PCs, ≈₩1,500–2,500/hr, unlimited snacks at the counter. There's one within 5 minutes of any Hongdae station exit. Unironically one of the best rainy-day options for this group.</li><li><b>Cinema:</b> CGV or Megabox near Hapjeong Station (one stop from Hongdae). Korean cinemas are excellent — huge screens, reclining seats, ≈₩12,000–15,000 pp. Both apps have English filter for subtitled showings.</li><li><b>Rainy day = great raiding:</b> Fewer players competing for gyms. Head to COEX, Times Square (Yeongdeungpo, Line 1/5), or Lotte World Tower (Jamsil, Line 2/8) — all have indoor gyms and PokéStops. Light rain also boosts Water-type Incense spawns.</li></ul>"
+  },
+  {
+    "type": "panel",
+    "group": "Plan",
+    "title": "Final checks — before you fly",
+    "body": "<p>Two items are still open; the rest are one-time verifications before packing.</p>",
+    "checklist": [
+      "<b>⚠ Book KTX: Seoul → Daejeon (Jul 11 morning, ≈08:30), then the Jul 13 Busan day-trip legs — Daejeon → Busan (≈10:30) and Busan → Seoul (≈18:30 evening).</b> Finals + summer weekend fills fast — <a href='https://www.letskorail.com' target='_blank' rel='noopener noreferrer'><b>book now at letskorail.com</b></a> or in the Korail Talk app. Seoul–Daejeon standard ≈₩23,700; the Daejeon→Busan and Busan→Seoul fares run higher — ⚠ check current fares on Korail. Main Seoul Station, not Suseo/SRT.",
+      "<b>⚠ Book Changdeokgung Secret Garden (Huwon) tour.</b> English 10:30 slot on Jul 14. <a href='https://cdg.go.kr/tour/english/reserve.htm' target='_blank' rel='noopener noreferrer'><b>Book at cdg.go.kr</b></a> — sells out weeks ahead. Palace ticket (₩3,000) + Huwon tour (₩5,000) = ₩8,000/person total.",
+      "T-money card topped up to ≈₩50,000 per person before leaving NJ, OR load at ICN T1 arrivals (GS25 / convenience store, no fee).",
+      "<a href='https://t.kakao.com' target='_blank' rel='noopener noreferrer'>Kakao T</a> app on all three phones — the two of you use it for Daejeon (Jul 11) and Daejeon + Busan taxis (Jul 13); handy in Seoul for everyone.",
+      "Pokémon GO: bag cleared to ≥500 free slots, Remote Raid Passes stocked, Lucky Eggs and Star Pieces packed, charged TMs in bag for GO Fest.",
+      "NOL World app installed on both Daejeon-trip phones; MSI tickets confirmed showing in the app (name-tied — no screenshots, prints, or transfers).",
+      "e-Arrival Card (electronic): complete at e-arrivalcard.go.kr within 72 hours of landing — easiest to fill out on the plane.",
+      "Re-verify GO Fest Global boss list the week of Jul 8. Niantic adjusts lineups up to 48 hours before an event; the counters in this guide are for the announced roster.",
+      "Cash: ≈₩200,000–300,000 per person (convenience stores + street food are often cash-only). Alternatively, load Wise or Revolut before departure for fee-free ATM withdrawals.",
+      "Power adapter: Korea uses 220V Type C/F round-pin plugs (same as continental Europe). One adapter per person — USB-C PDs are fine.",
+      "Heat prep packed: hat (arena AC won't help you outdoors), sunscreen SPF 50+, electrolyte tablets. Seoul in July averages 28–31°C with high humidity.",
+      "Leave home contact a copy of your itinerary: Seoul Jul 8–10 & Jul 13–15 (Busan day trip Jul 13), Daejeon Jul 11–12 (Daejeon I-Hotel, 27-5 Expo-ro 123beon-gil, Yuseong-gu)."
+    ]
+  },
+  {
+    "type": "holidays",
+    "group": "Plan",
+    "title": "Public holidays",
+    "year": 2026,
+    "note": "Checked automatically against your travel dates (source: Nager.Date, refreshed each deploy). On a Korean national holiday, expect many shops, banks and government offices to close or run reduced hours, and major sights and transit to be busier than usual."
+  }
+]

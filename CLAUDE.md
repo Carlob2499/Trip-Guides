@@ -116,11 +116,14 @@ auto-retries transient Pages failures; only investigate after three consecutive.
 
 ## Operational Habits (save tokens)
 
-- **Large guides** (korea.json ~2500 lines, denmark ~900): check `<slug>.index.md`
-  beside the guide first (generated line-range map by section/day) and jump straight
-  to `offset:N limit:M` — never full-file Read for a targeted edit. Regenerate the
-  index after any line-count-changing edit: `npm run index-guide -- <slug>`.
-- **New client behavior → `src/scripts/`**, never inline back into `GuideLayout.astro`.
+- **Guides are directories** (`src/content/guides/<slug>/` — `_guide.json` meta +
+  `NN-<group>.json` per tab group): for a targeted edit, Read ONLY the group file it
+  lives in — never assemble the whole guide. `ls` the dir to find the group. Drafts may
+  still be single `<slug>.json` files (both shapes build); split one with
+  `npm run split-guide -- <slug>`.
+- **New client behavior → its feature silo** (`src/features/<name>/`, see
+  `docs/SILO_ROADMAP.md`) or `src/scripts/` for page chrome — never inline back into
+  `GuideLayout.astro`.
 - **`guide.css` past ~800 lines → split by feature** (as `base.css` was). Not before.
 - **Greppable questions** (dead selectors, dup props, fact diffs) → a local grep/script,
   not an Explore agent. Reserve agents for open-ended synthesis.

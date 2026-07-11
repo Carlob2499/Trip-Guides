@@ -22,17 +22,38 @@ export function isMain(moduleUrl) {
 export const MONTHS = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
 const MONTH_RE = new RegExp(`\\b(${Object.keys(MONTHS).join("|")})[a-z]*\\.?\\s+(\\d{4})\\b`);
 
-// Read every guide as { file, slug, raw (text), guide (parsed) }.
+// Read every guide as { file, slug, raw (text), guide (parsed) }. Understands
+// BOTH content shapes (mirrors the guideLoader in src/content.config.ts):
+//   · <slug>.json — single-file guide
+//   · <slug>/     — directory guide: _guide.json meta + NN-*.json section
+//                   arrays, assembled in filename-sort order. `raw` is the
+//                   concatenation of every file's text so href/source_url
+//                   regex extraction keeps seeing everything.
 export async function readGuides() {
-  const files = (await readdir(GUIDES_DIR)).filter((f) => f.endsWith(".json"));
+  const entries = await readdir(GUIDES_DIR, { withFileTypes: true });
   const out = [];
-  for (const file of files) {
-    const full = path.join(GUIDES_DIR, file);
-    const raw = await readFile(full, "utf8");
-    let guide;
-    try { guide = JSON.parse(raw); }
-    catch (err) { console.warn(`[audit] cannot parse ${file}: ${err.message} — skipped`); continue; }
-    out.push({ file, slug: file.replace(/\.json$/, ""), raw, guide });
+  for (const e of entries) {
+    try {
+      if (e.isFile() && e.name.endsWith(".json")) {
+        const raw = await readFile(path.join(GUIDES_DIR, e.name), "utf8");
+        out.push({ file: e.name, slug: e.name.replace(/\.json$/, ""), raw, guide: JSON.parse(raw) });
+      } else if (e.isDirectory()) {
+        const dir = path.join(GUIDES_DIR, e.name);
+        const files = (await readdir(dir)).filter((f) => f.endsWith(".json"));
+        if (!files.includes("_guide.json")) continue;
+        const metaRaw = await readFile(path.join(dir, "_guide.json"), "utf8");
+        const sections = [];
+        let raw = metaRaw;
+        for (const f of files.filter((f) => f !== "_guide.json").sort()) {
+          const txt = await readFile(path.join(dir, f), "utf8");
+          raw += "\n" + txt;
+          sections.push(...JSON.parse(txt));
+        }
+        out.push({ file: e.name + "/", slug: e.name, raw, guide: { ...JSON.parse(metaRaw), sections } });
+      }
+    } catch (err) {
+      console.warn(`[audit] cannot parse ${e.name}: ${err.message} — skipped`);
+    }
   }
   return out;
 }

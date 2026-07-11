@@ -26,7 +26,9 @@ self-boots to upgrade it only when `PUBLIC_GMAPS_KEY` is set.
 
 ## File map
 
-- `src/content/guides/*.json` — the guides (the only per-country files).
+- `src/content/guides/<slug>/` — the guides (the only per-country files): `_guide.json`
+  meta + `NN-<group>.json` per tab group, assembled by the loader; a draft may still be
+  a single `<slug>.json` (both shapes build). Split with `npm run split-guide -- <slug>`.
 - `src/content.config.ts` — the section schema (discriminated union of block types).
 - `src/layouts/GuideLayout.astro` — the guide shell; imports styles + client modules.
   `src/components/blocks/*.astro` — one renderer per section type, dispatched by `Block.astro`.

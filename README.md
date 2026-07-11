@@ -13,9 +13,10 @@ ever touch are explained below.
 ## The idea in one picture
 
 ```
-src/content/guides/denmark.json     ← YOU edit these (the "recipe cards")
-src/content/guides/korea.json
-src/content/guides/japan.json
+src/content/guides/korea/           ← YOU edit these (the "recipe cards")
+  _guide.json                         · the guide's title, dates, intro
+  01-plan.json … 10-tokyo.json        · one small file per tab of the guide
+src/content/guides/denmark/         ← same shape, one folder per destination
         │
         ▼
    the project's components          ← the "appliances" — leave these alone
@@ -24,9 +25,12 @@ src/content/guides/japan.json
    finished web pages                ← built automatically when you publish
 ```
 
-Everything you care about lives in **`src/content/guides/`**. Each `.json`
-file there is one destination. Everything else is the machinery that turns
-those files into pages — you can ignore it.
+Everything you care about lives in **`src/content/guides/`**. Each **folder**
+there is one destination — `_guide.json` holds the guide's identity, and each
+numbered file holds one tab's sections, so you only ever open the small file
+you're changing. (A brand-new draft can also be a single `<name>.json` file —
+both shapes work.) Everything else is the machinery that turns those files
+into pages — you can ignore it.
 
 ---
 
@@ -76,9 +80,10 @@ automatically by the `ensure-labels` workflow.)*
 
 ## How to add a new destination by hand
 
-1. Copy an existing guide file — `src/content/guides/denmark.json` is the best
-   example — and rename it, e.g. `portugal.json`. The file name becomes the web
-   address (`/guides/portugal/`).
+1. Copy an existing guide folder — `src/content/guides/denmark/` is the best
+   example — and rename it, e.g. `portugal/`. The folder name becomes the web
+   address (`/guides/portugal/`). (A single `portugal.json` file in the old
+   one-file shape works too.)
 2. Edit the fields: `title`, `country`, `dek` (the one-line description), and
    the `sections`. Keep the same shapes you see in the example.
 3. Save. The home page picks it up and adds a card automatically — you never
@@ -123,7 +128,7 @@ files back.
 
 ```
 src/
-  content/guides/*.json   the guides themselves — what you edit
+  content/guides/<name>/  the guides themselves — what you edit
   content.config.ts       the "checker": rules every guide must satisfy
   lib/themes.ts           country -> accent colour (single source)
   lib/buckets.ts          groups sections into categories
@@ -148,8 +153,8 @@ to produce the final pages in a `dist/` folder.
 
 Open the **Actions** tab and click the red run:
 
-- **The log names a content file** (e.g. `korea.json`): the built-in checker caught a typo
-  or missing field — fix that file and commit; the rebuild is automatic.
+- **The log names a content file** (e.g. `korea/08-food-and-shopping.json`): the built-in
+  checker caught a typo or missing field — fix that file and commit; the rebuild is automatic.
 - **Pages shows a 404 after a successful build:** the `base` in `astro.config.mjs` must match
   your repo name (`/Trip-Guides`).
 - **A photo didn't load but the site deployed:** the safety net worked — that one photo fell

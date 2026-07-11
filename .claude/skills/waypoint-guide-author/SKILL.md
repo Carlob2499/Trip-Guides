@@ -27,15 +27,16 @@ helper scripts, and the done gate.
 1. **`references/verification-rules.md`** — the binding fact decision layer
    (perishable-vs-durable, source tiers, ship/flag/omit, stopping conditions,
    the §8 self-check). Read before writing any fact.
-2. The **target guide** `src/content/guides/<slug>.json` (read before editing —
-   never regenerate from memory) and its **intake** `guides-intake/<slug>.md`
-   if it exists (ranked priorities decide which sections get depth); else infer
-   general scope and say so. `docs/NEW_GUIDE_INTAKE.md` explains intake → spec.
-   For a targeted edit on a large guide, check `<slug>.index.md` beside it first
-   (generated line-range map by section/day) instead of reading the whole file —
-   regenerate with `npm run index-guide -- <slug>` after any line-count change.
+2. The **target guide** — a directory `src/content/guides/<slug>/` (`_guide.json`
+   meta + `NN-<group>.json` per tab group; drafts may still be a single
+   `<slug>.json`). For a targeted edit, `ls` the dir and Read ONLY the group
+   file the fact lives in — never regenerate from memory, never read the whole
+   guide for a one-section change. Also read its **intake**
+   `guides-intake/<slug>.md` if it exists (ranked priorities decide which
+   sections get depth); else infer general scope and say so.
+   `docs/NEW_GUIDE_INTAKE.md` explains intake → spec.
 3. **`references/block-types.md`** — when choosing or creating a section type.
-4. **`denmark.json` / `korea.json`** — the gold standard to match or beat.
+4. **The `denmark/` and `korea/` guide dirs** — the gold standard to match or beat.
 
 ## Modes
 - **New guide** — intake first, then scaffold (`node scripts/scaffold-guide.mjs

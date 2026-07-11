@@ -1,0 +1,1563 @@
+[
+  {
+    "type": "infogrid",
+    "group": "Pokémon GO",
+    "title": "Road of Legends 2026 — what to know",
+    "collapsible": true,
+    "defaultOpen": true,
+    "cards": [
+      {
+        "icon": "📅",
+        "label": "Event window",
+        "body": "<b>Mon Jul 6 – Fri Jul 10</b> (ends 23:59 KST). You land Thursday Jul 9 and catch the final two days."
+      },
+      {
+        "icon": "🎟️",
+        "label": "Raid passes",
+        "body": "Up to <b>9 free Raid Passes/day</b> from Gym photo discs."
+      },
+      {
+        "icon": "🎖️",
+        "label": "Collectible",
+        "body": "Pokémon caught from any raid <b>Jul 6–12</b> may earn a Special Pokémon Background collectible."
+      }
+    ]
+  },
+  {
+    "type": "habitats",
+    "group": "Pokémon GO",
+    "title": "Raid Hour rotation — Thu & Fri",
+    "note": "Friday evening is one of the best raiding windows of the trip — full day plan in the day-by-day entry.",
+    "collapsible": true,
+    "defaultOpen": true,
+    "windows": [
+      {
+        "day": "Thu Jul 9",
+        "time": "All day · Raid Hour 18:00–19:00",
+        "name": "Crowned Forms",
+        "targets": [
+          "✨ Crowned Sword Zacian",
+          "✨ Crowned Shield Zamazenta"
+        ],
+        "tip": "Weak to <b>Fire and Ground only</b> — the same team handles both. You just flew 14 hours: use 2–3 passes if you're feeling fresh, save most for tomorrow.",
+        "mega": "Mega Gengar Mega Raid Hour 19:00–20:00."
+      },
+      {
+        "day": "Fri Jul 10",
+        "time": "Raid Hour 18:00–19:00",
+        "name": "Origin Duo",
+        "targets": [
+          "Origin Forme Dialga",
+          "Origin Forme Palkia"
+        ],
+        "tip": "Best Master League forms of their species (Roar of Time / Spacial Rend). Save 4–5 passes here."
+      },
+      {
+        "day": "Fri Jul 10",
+        "time": "Primal Raid Hour 19:00–20:00",
+        "name": "Primal Duo",
+        "targets": [
+          "Primal Kyogre",
+          "Primal Groudon"
+        ],
+        "tip": "Groudon (Ground/Fire) has a quadruple Water weakness — your Kyogre counters make it trivial. Coordinate 5+ trainers for Primal tier. Groudon is also your best Xurkitree counter Sunday — a priority XL Candy target."
+      }
+    ]
+  },
+  {
+    "type": "raids",
+    "group": "Pokémon GO",
+    "title": "Raid counter charts — Road of Legends Jul 9 & 10",
+    "bosses": [
+      {
+        "name": "Crowned Sword Zacian",
+        "tier": "5-star",
+        "typing": [
+          "Fairy",
+          "Steel"
+        ],
+        "shiny_odds": "1/20",
+        "trainers": "2–4 trainers",
+        "note": "Thursday Jul 9 all day + Raid Hour 18:00–19:00 KST. Steel typing neutralises all the usual Fairy counters (Ghost/Dark/Bug do nothing useful here). Bring the same Fire/Ground team for Zamazenta right after.",
+        "strategy": "<b>Weak to: Fire and Ground only.</b> Steel cancels out every type Fairy is normally weak to — no Ghost, Dark, or Bug. Fire hits harder overall (Reshiram, Mega Blaziken). Primal Groudon covers both weaknesses in one slot. <b>This same team works identically for Crowned Shield Zamazenta.</b>",
+        "counters": [
+          {
+            "pokemon": "Primal Groudon",
+            "fast": "Mud Shot",
+            "charged": "Earthquake",
+            "typing": "Ground/Fire"
+          },
+          {
+            "pokemon": "Mega Blaziken",
+            "fast": "Fire Spin",
+            "charged": "Blast Burn",
+            "typing": "Fire/Fighting"
+          },
+          {
+            "pokemon": "Reshiram",
+            "fast": "Fire Fang",
+            "charged": "Fusion Flare",
+            "typing": "Dragon/Fire"
+          },
+          {
+            "pokemon": "Mega Garchomp",
+            "fast": "Mud Shot",
+            "charged": "Earth Power",
+            "typing": "Dragon/Ground"
+          },
+          {
+            "pokemon": "Landorus (Therian)",
+            "fast": "Mud Shot",
+            "charged": "Sandsear Storm",
+            "typing": "Ground/Flying"
+          },
+          {
+            "pokemon": "Shadow Entei",
+            "fast": "Fire Spin",
+            "charged": "Flamethrower",
+            "typing": "Fire"
+          },
+          {
+            "pokemon": "Chandelure",
+            "fast": "Fire Spin",
+            "charged": "Overheat",
+            "typing": "Ghost/Fire"
+          },
+          {
+            "pokemon": "Excadrill",
+            "fast": "Mud-Slap",
+            "charged": "Drill Run",
+            "typing": "Ground/Steel"
+          }
+        ]
+      },
+      {
+        "name": "Crowned Shield Zamazenta",
+        "tier": "5-star",
+        "typing": [
+          "Fighting",
+          "Steel"
+        ],
+        "shiny_odds": "1/20",
+        "trainers": "2–4 trainers",
+        "note": "Thursday Jul 9 all day + Raid Hour 18:00–19:00 KST. Fighting/Steel is an unusual type combination — Psychic and Fairy (usually great vs Fighting) are fully neutralised by the Steel typing. Identical weakness profile to Crowned Sword Zacian: Fire and Ground only.",
+        "strategy": "<b>Weak to: Fire and Ground only.</b> Steel neutralises the Fighting weakness to Psychic, Flying, and Fairy. Reuse the exact same team you built for Crowned Zacian — there's no need to swap anything.",
+        "counters": [
+          {
+            "pokemon": "Primal Groudon",
+            "fast": "Mud Shot",
+            "charged": "Earthquake",
+            "typing": "Ground/Fire"
+          },
+          {
+            "pokemon": "Mega Blaziken",
+            "fast": "Fire Spin",
+            "charged": "Blast Burn",
+            "typing": "Fire/Fighting"
+          },
+          {
+            "pokemon": "Reshiram",
+            "fast": "Fire Fang",
+            "charged": "Fusion Flare",
+            "typing": "Dragon/Fire"
+          },
+          {
+            "pokemon": "Mega Garchomp",
+            "fast": "Mud Shot",
+            "charged": "Earth Power",
+            "typing": "Dragon/Ground"
+          },
+          {
+            "pokemon": "Landorus (Therian)",
+            "fast": "Mud Shot",
+            "charged": "Sandsear Storm",
+            "typing": "Ground/Flying"
+          },
+          {
+            "pokemon": "Shadow Entei",
+            "fast": "Fire Spin",
+            "charged": "Flamethrower",
+            "typing": "Fire"
+          },
+          {
+            "pokemon": "Chandelure",
+            "fast": "Fire Spin",
+            "charged": "Overheat",
+            "typing": "Ghost/Fire"
+          },
+          {
+            "pokemon": "Excadrill",
+            "fast": "Mud-Slap",
+            "charged": "Drill Run",
+            "typing": "Ground/Steel"
+          }
+        ]
+      },
+      {
+        "name": "Origin Forme Dialga",
+        "tier": "5-star",
+        "typing": [
+          "Steel",
+          "Dragon"
+        ],
+        "shiny_odds": "1/20",
+        "trainers": "2–4 trainers",
+        "note": "Friday Jul 10 all day + Raid Hour 18:00–19:00 KST. The best Dialga form for Master League — knows Roar of Time. High priority for XL Candy. Both Fighting and Ground work; Ground slightly favoured due to Primal Groudon coverage.",
+        "strategy": "<b>Weak to: Fighting and Ground.</b> Steel's Dragon resistance means Dragon-type attackers do nothing here. Primal Groudon (from earlier in the same Raid Hour) is the best single counter if you have it; Mega Garchomp is the accessible Mega lead. Terrakion and Keldeo lead the Fighting options.",
+        "counters": [
+          {
+            "pokemon": "Primal Groudon",
+            "fast": "Mud Shot",
+            "charged": "Earthquake",
+            "typing": "Ground/Fire"
+          },
+          {
+            "pokemon": "Mega Garchomp",
+            "fast": "Mud Shot",
+            "charged": "Earth Power",
+            "typing": "Dragon/Ground"
+          },
+          {
+            "pokemon": "Terrakion",
+            "fast": "Double Kick",
+            "charged": "Sacred Sword",
+            "typing": "Rock/Fighting"
+          },
+          {
+            "pokemon": "Keldeo",
+            "fast": "Low Kick",
+            "charged": "Sacred Sword",
+            "typing": "Water/Fighting"
+          },
+          {
+            "pokemon": "Lucario",
+            "fast": "Counter",
+            "charged": "Aura Sphere",
+            "typing": "Fighting/Steel"
+          },
+          {
+            "pokemon": "Shadow Machamp",
+            "fast": "Counter",
+            "charged": "Dynamic Punch",
+            "typing": "Fighting"
+          },
+          {
+            "pokemon": "Landorus (Therian)",
+            "fast": "Mud Shot",
+            "charged": "Sandsear Storm",
+            "typing": "Ground/Flying"
+          },
+          {
+            "pokemon": "Excadrill",
+            "fast": "Mud-Slap",
+            "charged": "Drill Run",
+            "typing": "Ground/Steel"
+          }
+        ]
+      },
+      {
+        "name": "Origin Forme Palkia",
+        "tier": "5-star",
+        "typing": [
+          "Water",
+          "Dragon"
+        ],
+        "shiny_odds": "1/20",
+        "trainers": "2–4 trainers",
+        "note": "Friday Jul 10 all day + Raid Hour 18:00–19:00 KST. The best Palkia form for Master League — knows Spacial Rend. Dragon and Fairy both hit super-effectively. If you raided Rayquaza at GO Fest Day 1, bring it.",
+        "strategy": "<b>Weak to: Dragon and Fairy.</b> Water neutralises Dragon's usual Rock and Ice weaknesses. Dragon-type moves hit harder overall; Mega Salamence is the top Mega lead. Fairy picks (Xerneas, Mega Gardevoir) are great if Dragon is short on trainers — Fairy moves are unresisted here.",
+        "counters": [
+          {
+            "pokemon": "Mega Salamence",
+            "fast": "Dragon Tail",
+            "charged": "Outrage",
+            "typing": "Dragon/Flying"
+          },
+          {
+            "pokemon": "Rayquaza",
+            "fast": "Dragon Tail",
+            "charged": "Dragon Ascent",
+            "typing": "Dragon/Flying"
+          },
+          {
+            "pokemon": "Mega Gardevoir",
+            "fast": "Charm",
+            "charged": "Dazzling Gleam",
+            "typing": "Psychic/Fairy"
+          },
+          {
+            "pokemon": "Palkia",
+            "fast": "Dragon Tail",
+            "charged": "Spacial Rend",
+            "typing": "Water/Dragon"
+          },
+          {
+            "pokemon": "Xerneas",
+            "fast": "Geomancy",
+            "charged": "Moonblast",
+            "typing": "Fairy"
+          },
+          {
+            "pokemon": "Dragonite",
+            "fast": "Dragon Tail",
+            "charged": "Outrage",
+            "typing": "Dragon/Flying"
+          },
+          {
+            "pokemon": "Togekiss",
+            "fast": "Charm",
+            "charged": "Dazzling Gleam",
+            "typing": "Fairy/Flying"
+          },
+          {
+            "pokemon": "Zacian",
+            "fast": "Quick Attack",
+            "charged": "Play Rough",
+            "typing": "Fairy"
+          }
+        ]
+      },
+      {
+        "name": "Primal Kyogre",
+        "tier": "primal",
+        "typing": [
+          "Water"
+        ],
+        "shiny_odds": "1/20",
+        "shiny_note": "Same shiny model as regular Kyogre (black/dark highlights)",
+        "trainers": "5–10 trainers (Primal tier has significantly more HP than 5-star)",
+        "note": "Friday Jul 10 Primal Raid Hour 19:00–20:00 KST. Pure Water — Electric hits hardest. Kyogre is also the top counter for Primal Groudon in the same raid hour; stack Raid Passes between both Primals.",
+        "strategy": "<b>Weak to: Grass and Electric.</b> Electric moves deal slightly more damage overall. Zekrom (Fusion Bolt) is the single best counter; Shadow Raikou and Xurkitree are close behind. Primal tier — 5+ trainers recommended, more if under Level 35. Coordinate before the hour starts.",
+        "counters": [
+          {
+            "pokemon": "Zekrom",
+            "fast": "Charge Beam",
+            "charged": "Fusion Bolt",
+            "typing": "Dragon/Electric"
+          },
+          {
+            "pokemon": "Shadow Raikou",
+            "fast": "Thunder Shock",
+            "charged": "Wild Charge",
+            "typing": "Electric"
+          },
+          {
+            "pokemon": "Mega Manectric",
+            "fast": "Charge Beam",
+            "charged": "Wild Charge",
+            "typing": "Electric"
+          },
+          {
+            "pokemon": "Kartana",
+            "fast": "Razor Leaf",
+            "charged": "Leaf Blade",
+            "typing": "Grass/Steel"
+          },
+          {
+            "pokemon": "Xurkitree",
+            "fast": "Thunder Shock",
+            "charged": "Discharge",
+            "typing": "Electric"
+          },
+          {
+            "pokemon": "Thundurus (Therian)",
+            "fast": "Volt Switch",
+            "charged": "Thunderbolt",
+            "typing": "Electric/Flying"
+          },
+          {
+            "pokemon": "Roserade",
+            "fast": "Razor Leaf",
+            "charged": "Grass Knot",
+            "typing": "Grass/Poison"
+          },
+          {
+            "pokemon": "Electivire",
+            "fast": "Thunder Shock",
+            "charged": "Wild Charge",
+            "typing": "Electric"
+          }
+        ]
+      },
+      {
+        "name": "Primal Groudon",
+        "tier": "primal",
+        "typing": [
+          "Ground",
+          "Fire"
+        ],
+        "shiny_odds": "1/20",
+        "shiny_note": "Same shiny model as regular Groudon (gold/yellow highlights)",
+        "trainers": "5–10 trainers (Primal tier)",
+        "note": "Friday Jul 10 Primal Raid Hour 19:00–20:00 KST. Ground/Fire = quadruple Water weakness (the only type that hits both super-effectively). Your Kyogre literally counters this boss. Priority target: Primal Groudon is your best counter for Xurkitree on Sunday, and top-tier Ground attacker for Master League XL.",
+        "strategy": "<b>Weak to: Water only</b> — but it is a <i>quadruple</i> weakness (both Ground and Fire take 2.56× from Water in GO). Ice, Grass, and other types that usually hit Ground well are resisted by Fire. Bring nothing but Water. Kyogre (available in the same Raid Hour) is the single best attacker; Mega Swampert and Mega Gyarados are the top Mega options.",
+        "counters": [
+          {
+            "pokemon": "Kyogre",
+            "fast": "Waterfall",
+            "charged": "Origin Pulse",
+            "typing": "Water"
+          },
+          {
+            "pokemon": "Mega Swampert",
+            "fast": "Water Gun",
+            "charged": "Hydro Cannon",
+            "typing": "Water/Ground"
+          },
+          {
+            "pokemon": "Mega Gyarados",
+            "fast": "Waterfall",
+            "charged": "Hydro Pump",
+            "typing": "Water/Dark"
+          },
+          {
+            "pokemon": "Shadow Swampert",
+            "fast": "Water Gun",
+            "charged": "Hydro Cannon",
+            "typing": "Water/Ground"
+          },
+          {
+            "pokemon": "Samurott",
+            "fast": "Waterfall",
+            "charged": "Hydro Cannon",
+            "typing": "Water"
+          },
+          {
+            "pokemon": "Shadow Feraligatr",
+            "fast": "Water Gun",
+            "charged": "Hydro Cannon",
+            "typing": "Water"
+          },
+          {
+            "pokemon": "Blastoise",
+            "fast": "Water Gun",
+            "charged": "Hydro Cannon",
+            "typing": "Water"
+          },
+          {
+            "pokemon": "Kingler",
+            "fast": "Bubble",
+            "charged": "Crabhammer",
+            "typing": "Water"
+          }
+        ]
+      }
+    ],
+    "collapsible": true,
+    "defaultOpen": false
+  },
+  {
+    "type": "infogrid",
+    "group": "Pokémon GO",
+    "title": "GO Fest Global 2026 — what to know",
+    "note": "⚠ Niantic finalises exact habitat boss lists, Super Mega mechanics, and shiny rates only days before the event — re-check <a href='https://leekduck.com/events/pokemon-go-fest-2026-global/'>LeekDuck</a> and in-game news the week of Jul 6. Remote passes: save for the Seoul days (Jul 9–10, Jul 14) when you're not at EXPO.",
+    "collapsible": true,
+    "defaultOpen": true,
+    "cards": [
+      {
+        "icon": "📅",
+        "label": "Dates & format",
+        "body": "<b>Sat Jul 11 – Sun Jul 12, 10:00–19:00 local</b> — worldwide, not location-gated. Completely <b>free</b>, no ticket needed."
+      },
+      {
+        "icon": "🔮",
+        "label": "Special Research",
+        "body": "Leads to <b>Zeraora</b> (Mythical Electric, GO debut) — doesn't expire. Branching path: choose Mega Mewtwo X or Y."
+      },
+      {
+        "icon": "🎟️",
+        "label": "Raid passes",
+        "body": "<b>9 free/day</b> from spinning Gym photo discs — doesn't auto-grant, you must spin."
+      },
+      {
+        "icon": "✨",
+        "label": "Shiny rates",
+        "body": "<span class='shiny-pill'>✨ 1/20</span> for every legendary and Super Mega boss — the best odds in the game."
+      },
+      {
+        "icon": "🕯️",
+        "label": "Incense",
+        "body": "1-hour Lures, plus all Unown forms, Tropius, and Bouffalant as incense-exclusive spawns both days."
+      },
+      {
+        "icon": "🔄",
+        "label": "Trades & gifts",
+        "body": "6 Special Trades/day (up from 1), 50% Stardust off trades, 50 Gifts/day openable — all day, both days."
+      },
+      {
+        "icon": "🦸",
+        "label": "Super Mega",
+        "body": "Mega Mewtwo X (Sat, knows Counter) / Y (Sun, knows Psystrike) — global debut, every habitat, all day."
+      },
+      {
+        "icon": "🕐",
+        "label": "Also running",
+        "body": "Shadow Palkia in Shadow Raids Jul 1–Aug 4 (not urgent). Ultra Unlock starts Jul 13 — check pokemongo.com after."
+      }
+    ]
+  },
+  {
+    "type": "panel",
+    "group": "Pokémon GO",
+    "title": "Pre-GO Fest checklist",
+    "checklist": [
+      "Pokémon storage to 400+ (transfer/release beforehand)",
+      "Item bag cleared: stock up on Max Revives, Ultra Balls, Golden Razz Berries",
+      "Lucky Eggs ready (use before evolving / before mass Stardust bonuses)",
+      "Star Pieces ready (use during raids and catches to maximise Stardust)",
+      "Silver Pinap Berries stocked (use on Legendaries you need Candy XL for)",
+      "Charged TMs ready — re-roll shadow Pokémon and new Mega moves on day 1",
+      "Purified Gems ready for Shadow Raids if any appear",
+      "9 free Raid Passes per day — remember to spin Gym discs, not just battle",
+      "Pokémon GO Plus / Gotcha charged and connected for auto-catches during downtime",
+      "Battery pack fully charged; portable charger in bag for the 9-hour event window",
+      "Branching Research choice made: Mega Mewtwo X (Psychic/Fighting) or Y (pure Psychic)",
+      "Teams pre-built for Mega Mewtwo X (Flying/Fairy/Ghost counters) and Y (Ghost/Dark/Bug counters)"
+    ],
+    "collapsible": true,
+    "defaultOpen": true
+  },
+  {
+    "type": "tierlist",
+    "group": "Pokémon GO",
+    "title": "Already did Copenhagen? Your Global divergence",
+    "note": "You raided GO Fest Copenhagen in person (Fælledparken, Jun 12–14) — much of the Global headline content repeats. Net effect: skip Zeraora and the Mewtwos unless you want the shiny; make Xurkitree your Sunday must; hoover up the legendaries and incense regionals Copenhagen never offered.",
+    "collapsible": true,
+    "defaultOpen": true,
+    "tiers": [
+      {
+        "tier": "✅ Skip / deprioritize — already done at Copenhagen",
+        "chips": [
+          "Zeraora",
+          "Mega Mewtwo X",
+          "Mega Mewtwo Y",
+          "Entei",
+          "Moltres",
+          "Kyogre",
+          "Groudon",
+          "Shiny Wash Rotom"
+        ],
+        "body": "Copenhagen's in-person Mewtwo already knows <b>both</b> Counter + Psystrike (better than either single-move Global raid) and gave you Primal Kyogre/Groudon (outclass the Global 5★ forms). Only worth a raid now for a missing shiny or extra Mega Energy/XL Candy. Shiny Wash Rotom was Copenhagen-only — not in Global at all."
+      },
+      {
+        "tier": "🔼 Fresh at Global — your real priorities",
+        "chips": [
+          "✨ Xurkitree",
+          "Rayquaza",
+          "Reshiram",
+          "Zekrom",
+          "Kyurem",
+          "Giratina Origin",
+          "Dialga",
+          "Palkia",
+          "Lake trio",
+          "Xerneas",
+          "Yveltal",
+          "Solgaleo",
+          "Lunala",
+          "Therian Landorus",
+          "Therian Thundurus",
+          "Heatran",
+          "Regi trio",
+          "Latias",
+          "Latios",
+          "Cresselia",
+          "Darkrai",
+          "Cobalion",
+          "Terrakion",
+          "Virizion",
+          "Zacian",
+          "Zamazenta",
+          "Tropius",
+          "Bouffalant",
+          "Deoxys",
+          "Genesect",
+          "Necrozma",
+          "Tapu quartet",
+          "Nihilego"
+        ],
+        "hot": [
+          "✨ Xurkitree"
+        ],
+        "body": "<b>Xurkitree</b> (Sun Verdant 13–16, Daejeon) is the single most valuable target — an Asia-Pacific regional Ultra Beast Copenhagen never had. Everything else here is a legendary or collection mon Copenhagen's smaller 5★ pool (Moltres/Mewtwo/Entei only) simply didn't include."
+      }
+    ]
+  },
+  {
+    "type": "habitats",
+    "group": "Pokémon GO",
+    "title": "Habitat rotation — Sat & Sun",
+    "note": "Habitats cycle every 3 hours (10:00–19:00 KST); Mega + 5★ bosses rotate hourly within each window. ⚠ Niantic finalises exact boss lists days before — re-check <a href='https://leekduck.com/events/pokemon-go-fest-2026-global/'>LeekDuck</a> the week of Jul 6.",
+    "windows": [
+      {
+        "day": "Sat Jul 11",
+        "time": "10:00–13:00",
+        "name": "Stormfire Peaks",
+        "types": [
+          "Ice",
+          "Electric",
+          "Fire"
+        ],
+        "targets": [
+          "Lugia",
+          "Ho-Oh"
+        ],
+        "raids": [
+          "Articuno",
+          "Zapdos",
+          "Moltres",
+          "Raikou",
+          "Entei",
+          "Suicune",
+          "Mega Blaziken",
+          "Mega Ampharos",
+          "Mega Abomasnow"
+        ],
+        "mega": "Super Mega all day: Mega Mewtwo X (knows Counter) — every habitat."
+      },
+      {
+        "day": "Sat Jul 11",
+        "time": "13:00–16:00",
+        "name": "Astral Tides",
+        "types": [
+          "Psychic",
+          "Ghost",
+          "Water"
+        ],
+        "raids": [
+          "Dialga",
+          "Palkia",
+          "Giratina (Altered)",
+          "Giratina (Origin)",
+          "Xerneas",
+          "Yveltal",
+          "Lake trio",
+          "Solgaleo",
+          "Lunala",
+          "Mega Alakazam",
+          "Mega Gengar",
+          "Mega Swampert"
+        ]
+      },
+      {
+        "day": "Sat Jul 11",
+        "time": "16:00–19:00",
+        "name": "Dragonflight Summit",
+        "types": [
+          "Flying",
+          "Rock",
+          "Dragon"
+        ],
+        "targets": [
+          "Rayquaza",
+          "Groudon",
+          "Kyogre"
+        ],
+        "raids": [
+          "Reshiram",
+          "Zekrom",
+          "Kyurem",
+          "Mega Salamence",
+          "Mega Pidgeot",
+          "Mega Aerodactyl"
+        ]
+      },
+      {
+        "day": "Sun Jul 12",
+        "time": "10:00–13:00",
+        "name": "Earthforged Domain",
+        "types": [
+          "Ground",
+          "Steel",
+          "Normal"
+        ],
+        "raids": [
+          "Regirock",
+          "Regice",
+          "Registeel",
+          "Regieleki",
+          "Regidrago",
+          "Regigigas",
+          "Heatran",
+          "Origin Dialga",
+          "Origin Palkia",
+          "Therian Forces of Nature",
+          "Mega Metagross",
+          "Mega Garchomp",
+          "Mega Audino"
+        ],
+        "mega": "Super Mega all day: Mega Mewtwo Y (knows Psystrike) — every habitat."
+      },
+      {
+        "day": "Sun Jul 12",
+        "time": "13:00–16:00",
+        "name": "Verdant Anomaly",
+        "types": [
+          "Poison",
+          "Bug",
+          "Grass"
+        ],
+        "targets": [
+          "Xurkitree (Korea-only)"
+        ],
+        "raids": [
+          "Deoxys (all formes)",
+          "Genesect (all drives)",
+          "Necrozma",
+          "Stakataka",
+          "Tapu quartet",
+          "Ultra Beasts",
+          "Mega Beedrill",
+          "Mega Pinsir",
+          "Mega Sceptile"
+        ]
+      },
+      {
+        "day": "Sun Jul 12",
+        "time": "16:00–19:00",
+        "name": "Twilight Battlefield",
+        "types": [
+          "Dark",
+          "Fairy",
+          "Fighting"
+        ],
+        "targets": [
+          "Darkrai",
+          "Latios"
+        ],
+        "raids": [
+          "Latias",
+          "Cresselia",
+          "Cobalion",
+          "Terrakion",
+          "Virizion",
+          "Zacian",
+          "Zamazenta",
+          "Mega Tyranitar",
+          "Mega Gardevoir",
+          "Mega Lucario"
+        ]
+      }
+    ],
+    "collapsible": true,
+    "defaultOpen": true
+  },
+  {
+    "type": "tierlist",
+    "group": "Pokémon GO",
+    "title": "Priority targets — which raids to spend passes on",
+    "note": "Every GO Fest legendary 5★ and Super Mega is <span class='shiny-pill'>✨ 1/20</span> shiny — the best odds in the game. Tuned to your weekend: Saturday and Sunday are both Daejeon all day for the two of you (both in the arena for the LBF/Grand Final) — your third friend is in Tokyo this weekend (see the Tokyo tab). Already did Copenhagen? See the divergence card above — it reorders these for you. <b>Pass math:</b> Sat — 3–5 on Mega Mewtwo X, rest on Dragonflight. Sun — 3–4 on Mega Mewtwo Y, 2–3 on Xurkitree, rest on Twilight around the Grand Final.",
+    "collapsible": true,
+    "defaultOpen": true,
+    "tiers": [
+      {
+        "tier": "S — do these no matter what",
+        "icon": "⭐",
+        "chips": [
+          "✨ Mega Mewtwo X",
+          "✨ Mega Mewtwo Y",
+          "✨ Xurkitree"
+        ],
+        "hot": [
+          "✨ Mega Mewtwo X",
+          "✨ Mega Mewtwo Y",
+          "✨ Xurkitree"
+        ],
+        "body": "<b>Mega Mewtwo X</b> (Sat, every habitat) — global debut, best Psychic attacker; weak to <b>Flying/Fairy</b>. <b>Mega Mewtwo Y</b> (Sun) — stronger Psychic; weak to <b>Ghost/Dark/Bug</b>. <b>Xurkitree</b> (Sun Verdant 13–16) — Korea-only regional, top non-shadow Electric attacker; raid before the 15:00 Grand Final. Weak to <b>Ground</b>."
+      },
+      {
+        "tier": "A — high value if passes/time allow",
+        "icon": "🅰️",
+        "chips": [
+          "Rayquaza",
+          "Groudon",
+          "Kyogre",
+          "Reshiram",
+          "Zekrom",
+          "Mega Salamence",
+          "Therian Landorus",
+          "Therian Thundurus",
+          "Heatran",
+          "Origin Dialga",
+          "Origin Palkia",
+          "Latios",
+          "Darkrai",
+          "Zacian",
+          "Zamazenta"
+        ],
+        "body": "<b>Sat Dragonflight</b> (around the LBF): Rayquaza (best F2P Dragon + Candy XL), Groudon (top Ground + your Xurkitree counter), Kyogre (top Water), Reshiram/Zekrom (top Fire/Electric). <b>Sun Earthforged</b> (morning): Therian Landorus/Thundurus, Heatran, Origin Dialga/Palkia. <b>Sun Twilight</b> (around the GF): Latios, Darkrai, Zacian, Zamazenta."
+      },
+      {
+        "tier": "B — fill / collection",
+        "icon": "🅱️",
+        "chips": [
+          "Giratina Origin",
+          "Deoxys Attack",
+          "Necrozma",
+          "Nihilego",
+          "Regi trio",
+          "Regigigas",
+          "Tapu quartet"
+        ],
+        "body": "Giratina Origin (Sat Astral, top ML Ghost) · Deoxys Attack (Sun Verdant, PvE) · Necrozma (Sun Verdant, fusion fodder) · Nihilego (Sun Verdant, PvP) · the Regi trio + Regigigas (Sun Earthforged) · Tapu quartet (Sun Verdant, PvP Fairy)."
+      },
+      {
+        "tier": "Low priority — persists after the event",
+        "icon": "🕐",
+        "chips": [
+          "Shadow Palkia"
+        ],
+        "body": "Runs in Shadow Raids all weekend, separate from the habitat rotation. Grab one if a gym is handy, but it's available through Aug 4 — not urgent."
+      }
+    ]
+  },
+  {
+    "type": "infogrid",
+    "group": "Pokémon GO",
+    "title": "Your 6-team for the debuts",
+    "note": "Lead a Mega to boost the lobby — exact moves are in the counter charts below. No Mega of your own? A full lobby of the listed Shadow/non-Mega counters still clears either Super Mega with 6+ trainers — aim for a group, not a duo.",
+    "collapsible": true,
+    "defaultOpen": false,
+    "cards": [
+      {
+        "icon": "🅧",
+        "label": "Mega Mewtwo X team",
+        "body": "weak to <b>Flying/Fairy/Ghost</b>: Mega Rayquaza (or Mega Pidgeot) · Shadow Moltres · Rayquaza · Dawn Wings Necrozma · Mega Gardevoir · Zacian."
+      },
+      {
+        "icon": "🅨",
+        "label": "Mega Mewtwo Y team",
+        "body": "weak to <b>Bug/Ghost/Dark</b>: Mega Tyranitar (or Mega Gengar) · Dawn Wings Necrozma · Shadow Tyranitar · Shadow Hydreigon · Chandelure · Mega Absol."
+      }
+    ]
+  },
+  {
+    "type": "list",
+    "group": "Pokémon GO",
+    "title": "Caught tracker — Saturday",
+    "collapsible": true,
+    "defaultOpen": true,
+    "items": [
+      "Mega Mewtwo X (Super Mega debut, shiny eligible)",
+      "Lugia (Stormfire 10–13)",
+      "Ho-Oh (Stormfire 10–13)",
+      "Giratina Origin (Astral 13–16)",
+      "Rayquaza (Dragonflight 16–19)",
+      "Groudon (Dragonflight 16–19 — Xurkitree counter, XL Candy priority)",
+      "Kyogre (Dragonflight 16–19)",
+      "Reshiram / Zekrom (Dragonflight — top Fire/Electric for ML)"
+    ]
+  },
+  {
+    "type": "list",
+    "group": "Pokémon GO",
+    "title": "Caught tracker — Sunday",
+    "collapsible": true,
+    "defaultOpen": true,
+    "items": [
+      "Mega Mewtwo Y (Super Mega debut, shiny eligible)",
+      "Xurkitree ★ MUST (Verdant 13–16, Korea-only, raid before 15:00)",
+      "Therian Landorus (Earthforged 10–13 — best Ground attacker)",
+      "Therian Thundurus (Earthforged 10–13)",
+      "Heatran (Earthforged 10–13)",
+      "Deoxys Attack (Verdant 13–16)",
+      "Necrozma (Verdant 13–16 — fusion fodder)",
+      "Darkrai (Twilight 16–19)",
+      "Latios (Twilight 16–19)",
+      "Zacian / Zamazenta (Twilight 16–19)"
+    ]
+  },
+  {
+    "type": "list",
+    "group": "Pokémon GO",
+    "title": "Caught tracker — trades, incense & research",
+    "collapsible": true,
+    "defaultOpen": true,
+    "items": [
+      "Tropius from Incense (region-locked normally — pop Incense each day)",
+      "Bouffalant from Incense",
+      "Xurkitree swaps with group (6 Special Trades/day, 50% Stardust off)",
+      "Zeraora encounter (if not completed at Copenhagen)"
+    ]
+  },
+  {
+    "type": "infogrid",
+    "group": "Pokémon GO",
+    "title": "Beyond raids — research, eggs & wild spawns (Global)",
+    "collapsible": true,
+    "defaultOpen": false,
+    "cards": [
+      {
+        "icon": "🔬",
+        "label": "Special Research → Zeraora",
+        "body": "Free for everyone who logs in — but it's the same line you completed at Copenhagen. Likely nothing new for you."
+      },
+      {
+        "icon": "🕯️",
+        "label": "Incense spawns (both days)",
+        "body": "All Unown forms, Tropius, Bouffalant — normally region-locked elsewhere. Lures last 1 hr during event hours; drop one near DCC II / EXPO Science Park Sunday."
+      },
+      {
+        "icon": "🌱",
+        "label": "Wild spawns",
+        "body": "Each habitat's wild pool follows its type theme. ⚠ Exact Global list unposted as of writing — check <a href='https://leekduck.com/events/pokemon-go-fest-2026-global/'>LeekDuck</a> the week of Jul 6."
+      },
+      {
+        "icon": "🥚",
+        "label": "Eggs — skip them",
+        "body": "Unlike Copenhagen (½ Hatch Distance + 1.5× Hatch Candy), Global has <b>no egg-distance discount</b>. Don't burn incubators — spend the time raiding instead."
+      },
+      {
+        "icon": "🔄",
+        "label": "Trades (all weekend)",
+        "body": "Up to <b>6 Special Trades/day</b>, 50% Stardust off every trade. Line up swaps with your group for Xurkitree, new legendaries, and dex gaps."
+      }
+    ]
+  },
+  {
+    "type": "list",
+    "group": "Pokémon GO",
+    "title": "Info to confirm — update as announced",
+    "items": [
+      "CONFIRMED ✔ Dates: Jul 11–12, 10:00–19:00 local time everywhere",
+      "CONFIRMED ✔ Free for all trainers — no ticket required",
+      "CONFIRMED ✔ Mega Mewtwo X (Sat) / Y (Sun) — Super Mega global debut, shiny available",
+      "CONFIRMED ✔ Xurkitree in Asia-Pacific (Korea) — Verdant Anomaly Sun 13:00–16:00",
+      "CONFIRMED ✔ Habitat schedule: Stormfire→Astral→Dragonflight (Sat), Earthforged→Verdant→Twilight (Sun)",
+      "CONFIRMED ✔ Stakataka in Verdant Anomaly (Eastern Hemisphere)",
+      "CONFIRMED ✔ 9 free Raid Passes/day from Gym disc spins",
+      "⚠ TO VERIFY (week of Jul 6): Wild spawn pool per habitat — check leekduck.com",
+      "⚠ TO VERIFY (week of Jul 6): Egg pool for the weekend — Niantic posts ~1 week before",
+      "⚠ TO VERIFY (week of Jul 6): Hour-by-hour boss rotation within each 3-hour habitat window",
+      "⚠ TO VERIFY (after event starts): Shiny rates — verify at thesilphroad.com once trainers are reporting",
+      "⚠ TO VERIFY (after Jul 12): Ultra Unlock details — check pokemongo.com once the global challenge result is announced"
+    ],
+    "collapsible": true,
+    "defaultOpen": true
+  },
+  {
+    "type": "raids",
+    "group": "Pokémon GO",
+    "title": "Raid counter charts — GO Fest Global 2026",
+    "bosses": [
+      {
+        "name": "Mega Mewtwo X",
+        "tier": "super-mega",
+        "typing": [
+          "Psychic",
+          "Fighting"
+        ],
+        "shiny_odds": "1/20",
+        "shiny_note": "Global debut — first appearance in Pokémon GO",
+        "trainers": "10–20 trainers (Super Mega tier — harder than standard Mega)",
+        "note": "Saturday Jul 11 only — appears in every habitat, so you can raid it in Seoul in the morning and again near the arena in Daejeon. Branching Research lets you choose the X or Y encounter.",
+        "strategy": "<b>Weak to: Flying, Fairy, and Ghost.</b> The Fighting secondary type does not remove Ghost weakness — Ghost still hits Psychic for 2×. Flying is the highest-DPS type: Mega Rayquaza (Dragon Ascent) is best if you have it; otherwise lead <b>Mega Pidgeot</b> (Saturday's rotation) or Mega Gardevoir for Fairy. Dawn Wings Necrozma is the top Ghost pick and fits both Mewtwo forms.",
+        "counters": [
+          {
+            "pokemon": "Mega Rayquaza",
+            "fast": "Air Slash",
+            "charged": "Dragon Ascent",
+            "typing": "Dragon/Flying"
+          },
+          {
+            "pokemon": "Shadow Moltres",
+            "fast": "Wing Attack",
+            "charged": "Sky Attack",
+            "typing": "Fire/Flying"
+          },
+          {
+            "pokemon": "Mega Pidgeot",
+            "fast": "Gust",
+            "charged": "Brave Bird",
+            "typing": "Normal/Flying"
+          },
+          {
+            "pokemon": "Rayquaza",
+            "fast": "Air Slash",
+            "charged": "Dragon Ascent",
+            "typing": "Dragon/Flying"
+          },
+          {
+            "pokemon": "Mega Gardevoir",
+            "fast": "Charm",
+            "charged": "Dazzling Gleam",
+            "typing": "Psychic/Fairy"
+          },
+          {
+            "pokemon": "Xerneas",
+            "fast": "Geomancy",
+            "charged": "Moonblast",
+            "typing": "Fairy"
+          },
+          {
+            "pokemon": "Zacian",
+            "fast": "Quick Attack",
+            "charged": "Play Rough",
+            "typing": "Fairy"
+          },
+          {
+            "pokemon": "Dawn Wings Necrozma",
+            "fast": "Shadow Claw",
+            "charged": "Moongeist Beam",
+            "typing": "Ghost/Psychic"
+          }
+        ]
+      },
+      {
+        "name": "Mega Mewtwo Y",
+        "tier": "super-mega",
+        "typing": [
+          "Psychic"
+        ],
+        "shiny_odds": "1/20",
+        "shiny_note": "Global debut — first appearance in Pokémon GO",
+        "trainers": "10–20 trainers (Super Mega tier)",
+        "note": "Sunday Jul 12 only — appears in every habitat, so raid it morning and afternoon around the Grand Final. Pure Psychic — more counters available than Mega X.",
+        "strategy": "<b>Weak to:</b> Bug, Ghost, Dark. Ghost and Dark are the strongest damage types here. Dawn Wings Necrozma is the single best counter in the game; Mega Tyranitar and Mega Gengar round out the premium trio. Shadow Tyranitar or Shadow Hydreigon are excellent budget shadow leads.",
+        "counters": [
+          {
+            "pokemon": "Dawn Wings Necrozma",
+            "fast": "Shadow Claw",
+            "charged": "Moongeist Beam",
+            "typing": "Ghost/Psychic"
+          },
+          {
+            "pokemon": "Mega Tyranitar",
+            "fast": "Bite",
+            "charged": "Brutal Swing",
+            "typing": "Rock/Dark"
+          },
+          {
+            "pokemon": "Mega Gengar",
+            "fast": "Lick",
+            "charged": "Shadow Ball",
+            "typing": "Ghost/Poison"
+          },
+          {
+            "pokemon": "Shadow Tyranitar",
+            "fast": "Bite",
+            "charged": "Brutal Swing",
+            "typing": "Rock/Dark"
+          },
+          {
+            "pokemon": "Chandelure",
+            "fast": "Hex",
+            "charged": "Shadow Ball",
+            "typing": "Ghost/Fire"
+          },
+          {
+            "pokemon": "Shadow Hydreigon",
+            "fast": "Bite",
+            "charged": "Brutal Swing",
+            "typing": "Dark/Dragon"
+          },
+          {
+            "pokemon": "Mega Pinsir",
+            "fast": "Bug Bite",
+            "charged": "X-Scissor",
+            "typing": "Bug/Flying"
+          },
+          {
+            "pokemon": "Mega Absol",
+            "fast": "Snarl",
+            "charged": "Dark Pulse",
+            "typing": "Dark"
+          }
+        ]
+      },
+      {
+        "name": "Rayquaza",
+        "tier": "5-star",
+        "typing": [
+          "Dragon",
+          "Flying"
+        ],
+        "shiny_odds": "1/20",
+        "trainers": "2–4 trainers",
+        "note": "Saturday Dragonflight Summit (4–7 PM) — live in Daejeon around the LBF; raid near DCC II / EXPO Science Park. Top F2P Dragon attacker and Candy XL for Master League. (Mega Rayquaza is not a raid boss this event — use Mega Salamence as your Dragon Mega lead.)",
+        "strategy": "<b>Weak to:</b> Ice (2×), Dragon, Fairy, Rock. Ice hits for double super-effective — always lead Ice. Standard 5-star difficulty; 2–3 high-level trainers handle it comfortably.",
+        "counters": [
+          {
+            "pokemon": "Galarian Darmanitan",
+            "fast": "Ice Fang",
+            "charged": "Avalanche",
+            "typing": "Ice"
+          },
+          {
+            "pokemon": "Shadow Mamoswine",
+            "fast": "Powder Snow",
+            "charged": "Avalanche",
+            "typing": "Ice/Ground"
+          },
+          {
+            "pokemon": "Mamoswine",
+            "fast": "Powder Snow",
+            "charged": "Avalanche",
+            "typing": "Ice/Ground"
+          },
+          {
+            "pokemon": "Weavile",
+            "fast": "Ice Shard",
+            "charged": "Avalanche",
+            "typing": "Dark/Ice"
+          },
+          {
+            "pokemon": "Glaceon",
+            "fast": "Ice Shard",
+            "charged": "Avalanche",
+            "typing": "Ice"
+          },
+          {
+            "pokemon": "Cetitan",
+            "fast": "Powder Snow",
+            "charged": "Avalanche",
+            "typing": "Ice"
+          },
+          {
+            "pokemon": "Mega Abomasnow",
+            "fast": "Powder Snow",
+            "charged": "Weather Ball (Ice)",
+            "typing": "Grass/Ice"
+          },
+          {
+            "pokemon": "Kyurem",
+            "fast": "Steel Wing",
+            "charged": "Blizzard",
+            "typing": "Dragon/Ice"
+          }
+        ]
+      },
+      {
+        "name": "Kyogre",
+        "tier": "5-star",
+        "typing": [
+          "Water"
+        ],
+        "shiny_odds": "1/20",
+        "trainers": "2–3 trainers",
+        "note": "Saturday Dragonflight Summit (4–7 PM) — live in Daejeon around the LBF. Top Water attacker and Candy XL; doubles as a Groudon and Xurkitree counter.",
+        "strategy": "<b>Weak to:</b> Grass, Electric. Zekrom and Shadow Raikou are the top Electric picks; Roserade or Kartana for Grass. Zekrom's Fusion Bolt is the hardest-hitting charged move here.",
+        "counters": [
+          {
+            "pokemon": "Shadow Raikou",
+            "fast": "Thunder Shock",
+            "charged": "Wild Charge",
+            "typing": "Electric"
+          },
+          {
+            "pokemon": "Zekrom",
+            "fast": "Charge Beam",
+            "charged": "Fusion Bolt",
+            "typing": "Dragon/Electric"
+          },
+          {
+            "pokemon": "Mega Manectric",
+            "fast": "Charge Beam",
+            "charged": "Wild Charge",
+            "typing": "Electric"
+          },
+          {
+            "pokemon": "Kartana",
+            "fast": "Razor Leaf",
+            "charged": "Leaf Blade",
+            "typing": "Grass/Steel"
+          },
+          {
+            "pokemon": "Xurkitree",
+            "fast": "Thunder Shock",
+            "charged": "Discharge",
+            "typing": "Electric"
+          },
+          {
+            "pokemon": "Thundurus (Therian)",
+            "fast": "Volt Switch",
+            "charged": "Thunderbolt",
+            "typing": "Electric/Flying"
+          },
+          {
+            "pokemon": "Electivire",
+            "fast": "Thunder Shock",
+            "charged": "Wild Charge",
+            "typing": "Electric"
+          },
+          {
+            "pokemon": "Roserade",
+            "fast": "Razor Leaf",
+            "charged": "Grass Knot",
+            "typing": "Grass/Poison"
+          }
+        ]
+      },
+      {
+        "name": "Groudon",
+        "tier": "5-star",
+        "typing": [
+          "Ground"
+        ],
+        "shiny_odds": "1/20",
+        "trainers": "2–4 trainers",
+        "note": "Saturday Dragonflight Summit (4–7 PM) — live in Daejeon around the LBF. Top Ground attacker, Candy XL for Master League, and your best Xurkitree counter on Sunday.",
+        "strategy": "<b>Weak to:</b> Water, Grass, Ice. Water hits hardest — Kyogre (in the same habitat) and Mega Swampert / Mega Gyarados lead. Kartana and Mega Sceptile bring Grass; Mamoswine and Galarian Darmanitan bring Ice.",
+        "counters": [
+          {
+            "pokemon": "Kyogre",
+            "fast": "Waterfall",
+            "charged": "Origin Pulse",
+            "typing": "Water"
+          },
+          {
+            "pokemon": "Mega Swampert",
+            "fast": "Water Gun",
+            "charged": "Hydro Cannon",
+            "typing": "Water/Ground"
+          },
+          {
+            "pokemon": "Mega Gyarados",
+            "fast": "Waterfall",
+            "charged": "Hydro Pump",
+            "typing": "Water/Dark"
+          },
+          {
+            "pokemon": "Kartana",
+            "fast": "Razor Leaf",
+            "charged": "Leaf Blade",
+            "typing": "Grass/Steel"
+          },
+          {
+            "pokemon": "Mega Sceptile",
+            "fast": "Bullet Seed",
+            "charged": "Frenzy Plant",
+            "typing": "Grass"
+          },
+          {
+            "pokemon": "Roserade",
+            "fast": "Razor Leaf",
+            "charged": "Grass Knot",
+            "typing": "Grass/Poison"
+          },
+          {
+            "pokemon": "Mamoswine",
+            "fast": "Powder Snow",
+            "charged": "Avalanche",
+            "typing": "Ice/Ground"
+          },
+          {
+            "pokemon": "Galarian Darmanitan",
+            "fast": "Ice Fang",
+            "charged": "Avalanche",
+            "typing": "Ice"
+          }
+        ]
+      },
+      {
+        "name": "Giratina (Origin Forme)",
+        "tier": "5-star",
+        "typing": [
+          "Ghost",
+          "Dragon"
+        ],
+        "shiny_odds": "1/20",
+        "trainers": "2–4 trainers",
+        "note": "Saturday Astral Tides habitat (1–4 PM). Top PvP pick for Master League; worth stacking Candy XL.",
+        "strategy": "<b>Weak to:</b> Ghost, Ice, Dragon, Dark, Fairy. Ghost and Dragon hit hardest. Shadow Gengar with Lick + Shadow Ball is the accessible shadow lead. Dawn Wings Necrozma is premier.",
+        "counters": [
+          {
+            "pokemon": "Dawn Wings Necrozma",
+            "fast": "Shadow Claw",
+            "charged": "Moongeist Beam",
+            "typing": "Ghost/Psychic"
+          },
+          {
+            "pokemon": "Shadow Gengar",
+            "fast": "Lick",
+            "charged": "Shadow Ball",
+            "typing": "Ghost/Poison"
+          },
+          {
+            "pokemon": "Mega Gengar",
+            "fast": "Lick",
+            "charged": "Shadow Ball",
+            "typing": "Ghost/Poison"
+          },
+          {
+            "pokemon": "Lunala",
+            "fast": "Shadow Claw",
+            "charged": "Shadow Ball",
+            "typing": "Ghost/Psychic"
+          },
+          {
+            "pokemon": "Chandelure",
+            "fast": "Hex",
+            "charged": "Shadow Ball",
+            "typing": "Ghost/Fire"
+          },
+          {
+            "pokemon": "Dragapult",
+            "fast": "Dragon Breath",
+            "charged": "Shadow Ball",
+            "typing": "Dragon/Ghost"
+          },
+          {
+            "pokemon": "Hydreigon",
+            "fast": "Bite",
+            "charged": "Brutal Swing",
+            "typing": "Dark/Dragon"
+          },
+          {
+            "pokemon": "Galarian Weezing",
+            "fast": "Fairy Wind",
+            "charged": "Play Rough",
+            "typing": "Poison/Fairy"
+          }
+        ]
+      },
+      {
+        "name": "Xurkitree",
+        "tier": "5-star",
+        "typing": [
+          "Electric"
+        ],
+        "shiny_odds": "1/20",
+        "shiny_note": "Korea is in the Asia-Pacific region where Xurkitree appears — region-locked Ultra Beast, you can't get it at home",
+        "trainers": "2–4 trainers",
+        "note": "Sunday Verdant Anomaly (1–4 PM), Daejeon — the Asia-Pacific regional Ultra Beast and a top non-shadow Electric attacker. Raid it before the 3 PM Grand Final; it's the single most location-exclusive thing on the weekend.",
+        "strategy": "<b>Weak to:</b> Ground only (pure Electric) — and Ground is immune to its Electric attacks, so a full Ground team takes almost no damage. Lead Mega Garchomp or Excadrill; Groudon (from Saturday) and Therian Landorus are premium.",
+        "counters": [
+          {
+            "pokemon": "Mega Garchomp",
+            "fast": "Mud Shot",
+            "charged": "Earth Power",
+            "typing": "Dragon/Ground"
+          },
+          {
+            "pokemon": "Primal Groudon",
+            "fast": "Mud Shot",
+            "charged": "Precipice Blades",
+            "typing": "Ground/Fire"
+          },
+          {
+            "pokemon": "Landorus (Therian)",
+            "fast": "Mud Shot",
+            "charged": "Sandsear Storm",
+            "typing": "Ground/Flying"
+          },
+          {
+            "pokemon": "Shadow Excadrill",
+            "fast": "Mud-Slap",
+            "charged": "Earthquake",
+            "typing": "Ground/Steel"
+          },
+          {
+            "pokemon": "Excadrill",
+            "fast": "Mud-Slap",
+            "charged": "Drill Run",
+            "typing": "Ground/Steel"
+          },
+          {
+            "pokemon": "Groudon",
+            "fast": "Mud Shot",
+            "charged": "Earthquake",
+            "typing": "Ground"
+          },
+          {
+            "pokemon": "Shadow Garchomp",
+            "fast": "Mud Shot",
+            "charged": "Earth Power",
+            "typing": "Dragon/Ground"
+          },
+          {
+            "pokemon": "Rhyperior",
+            "fast": "Mud-Slap",
+            "charged": "Earthquake",
+            "typing": "Ground/Rock"
+          }
+        ]
+      },
+      {
+        "name": "Necrozma",
+        "tier": "5-star",
+        "typing": [
+          "Psychic"
+        ],
+        "shiny_odds": "1/20",
+        "trainers": "2–4 trainers",
+        "note": "Sunday Verdant Anomaly (1–4 PM). Base Necrozma — fuse with Solgaleo for Dusk Mane or Lunala for Dawn Wings (the game's best Ghost attacker). Worth a couple of raids as fusion fodder.",
+        "strategy": "<b>Weak to:</b> Bug, Ghost, Dark (pure Psychic — same profile as Mega Mewtwo Y, so reuse that team). Mega Gengar, Dawn Wings Necrozma and Mega Tyranitar are premier; Chandelure and Shadow Tyranitar are accessible.",
+        "counters": [
+          {
+            "pokemon": "Mega Gengar",
+            "fast": "Lick",
+            "charged": "Shadow Ball",
+            "typing": "Ghost/Poison"
+          },
+          {
+            "pokemon": "Dawn Wings Necrozma",
+            "fast": "Shadow Claw",
+            "charged": "Moongeist Beam",
+            "typing": "Ghost/Psychic"
+          },
+          {
+            "pokemon": "Mega Tyranitar",
+            "fast": "Bite",
+            "charged": "Brutal Swing",
+            "typing": "Rock/Dark"
+          },
+          {
+            "pokemon": "Chandelure",
+            "fast": "Hex",
+            "charged": "Shadow Ball",
+            "typing": "Ghost/Fire"
+          },
+          {
+            "pokemon": "Shadow Tyranitar",
+            "fast": "Bite",
+            "charged": "Brutal Swing",
+            "typing": "Rock/Dark"
+          },
+          {
+            "pokemon": "Mega Pinsir",
+            "fast": "Bug Bite",
+            "charged": "X-Scissor",
+            "typing": "Bug/Flying"
+          },
+          {
+            "pokemon": "Shadow Hydreigon",
+            "fast": "Bite",
+            "charged": "Brutal Swing",
+            "typing": "Dark/Dragon"
+          },
+          {
+            "pokemon": "Mega Absol",
+            "fast": "Snarl",
+            "charged": "Dark Pulse",
+            "typing": "Dark"
+          }
+        ]
+      },
+      {
+        "name": "Darkrai",
+        "tier": "5-star",
+        "typing": [
+          "Dark"
+        ],
+        "shiny_odds": "1/20",
+        "trainers": "2–3 trainers",
+        "note": "Sunday Twilight Battlefield (4–7 PM). Strong PvE attacker; worth multiple shiny hunts.",
+        "strategy": "<b>Weak to:</b> Fighting, Bug, Fairy. Fighting-type attackers hit hardest. Mega Lopunny is the best Mega boost here; Lucario and Conkeldurr are accessible shadow leads.",
+        "counters": [
+          {
+            "pokemon": "Mega Lopunny",
+            "fast": "Low Kick",
+            "charged": "Focus Blast",
+            "typing": "Normal/Fighting"
+          },
+          {
+            "pokemon": "Shadow Machamp",
+            "fast": "Counter",
+            "charged": "Dynamic Punch",
+            "typing": "Fighting"
+          },
+          {
+            "pokemon": "Lucario",
+            "fast": "Counter",
+            "charged": "Aura Sphere",
+            "typing": "Fighting/Steel"
+          },
+          {
+            "pokemon": "Conkeldurr",
+            "fast": "Counter",
+            "charged": "Dynamic Punch",
+            "typing": "Fighting"
+          },
+          {
+            "pokemon": "Terrakion",
+            "fast": "Double Kick",
+            "charged": "Sacred Sword",
+            "typing": "Rock/Fighting"
+          },
+          {
+            "pokemon": "Mega Gardevoir",
+            "fast": "Charm",
+            "charged": "Dazzling Gleam",
+            "typing": "Psychic/Fairy"
+          },
+          {
+            "pokemon": "Buzzwole",
+            "fast": "Counter",
+            "charged": "Superpower",
+            "typing": "Bug/Fighting"
+          },
+          {
+            "pokemon": "Breloom",
+            "fast": "Counter",
+            "charged": "Grass Knot",
+            "typing": "Grass/Fighting"
+          }
+        ]
+      },
+      {
+        "name": "Zacian (Hero of Many Battles)",
+        "tier": "5-star",
+        "typing": [
+          "Fairy"
+        ],
+        "shiny_odds": "1/20",
+        "trainers": "2–3 trainers",
+        "note": "Sunday Twilight Battlefield (4–7 PM). Top Master League meta pick; high priority.",
+        "strategy": "<b>Weak to:</b> Poison, Steel. Mega Beedrill and Nihilego are premier Poison picks; Metagross and Dialga cover Steel. Poison hits hardest — build your best Poison team.",
+        "counters": [
+          {
+            "pokemon": "Mega Beedrill",
+            "fast": "Poison Jab",
+            "charged": "Sludge Bomb",
+            "typing": "Bug/Poison"
+          },
+          {
+            "pokemon": "Nihilego",
+            "fast": "Poison Jab",
+            "charged": "Sludge Wave",
+            "typing": "Rock/Poison"
+          },
+          {
+            "pokemon": "Roserade",
+            "fast": "Poison Jab",
+            "charged": "Sludge Bomb",
+            "typing": "Grass/Poison"
+          },
+          {
+            "pokemon": "Dialga (Origin)",
+            "fast": "Metal Claw",
+            "charged": "Iron Head",
+            "typing": "Steel/Dragon"
+          },
+          {
+            "pokemon": "Metagross",
+            "fast": "Bullet Punch",
+            "charged": "Meteor Mash",
+            "typing": "Steel/Psychic"
+          },
+          {
+            "pokemon": "Gengar",
+            "fast": "Lick",
+            "charged": "Sludge Bomb",
+            "typing": "Ghost/Poison"
+          },
+          {
+            "pokemon": "Excadrill",
+            "fast": "Metal Claw",
+            "charged": "Iron Head",
+            "typing": "Ground/Steel"
+          },
+          {
+            "pokemon": "Victreebel",
+            "fast": "Acid",
+            "charged": "Sludge Bomb",
+            "typing": "Grass/Poison"
+          }
+        ]
+      }
+    ],
+    "collapsible": true,
+    "defaultOpen": false
+  }
+]

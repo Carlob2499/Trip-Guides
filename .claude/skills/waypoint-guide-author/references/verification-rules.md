@@ -72,7 +72,7 @@ confirmation-bias rule). Seek the primary source and read it critically,
 rather than stopping the moment something says the expected thing.
 
 **Conflicting sources:** do not average or pick silently. Record the range and
-flag it (see denmark.json's "Akershus interior price (≈150 NOK — conflicting
+flag it (see the denmark guide's "Akershus interior price (≈150 NOK — conflicting
 sources)"). Surfacing the conflict *is* the honest answer.
 
 ---
@@ -136,7 +136,7 @@ for anything else means the content wants a typed section, not richer prose.
 **Guide-level `verified` field** — not just a date. Write it as:
 `Checked [date] for the [trip] · ` then (a) what was confirmed and from where,
 and (b) an explicit **re-check** list of the most perishable items before
-travel. Match the pattern in korea.json / denmark.json — the stamp doubles as
+travel. Match the pattern in the korea / denmark guides — the stamp doubles as
 the reader's pre-trip re-verification checklist.
 
 **On drafts** the stamp stays `⚠`-prefixed (it renders as the masthead warning

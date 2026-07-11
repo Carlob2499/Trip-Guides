@@ -1,0 +1,93 @@
+[
+  {
+    "type": "sights",
+    "group": "Sights",
+    "title": "Top sights in Seoul",
+    "items": [
+      {
+        "name": "Gyeongbokgung",
+        "kicker": "The grand palace",
+        "body": "The largest of the Joseon palaces, with the changing-of-the-guard ceremony and the banquet hall over a lotus pond. Summer hours run to about 18:30 (last entry 17:30); closed Tuesdays, and free if you're wearing a hanbok.",
+        "img": {
+          "file": "Gyeonghoeru (Royal Banquet Hall) at Gyeongbokgung Palace, Seoul.jpg",
+          "alt": "Gyeonghoeru hall at Gyeongbokgung"
+        },
+        "map": {
+          "lat": 37.5796,
+          "lng": 126.977
+        }
+      },
+      {
+        "name": "Bukchon Hanok Village",
+        "kicker": "Traditional houses",
+        "body": "Lanes of restored hanok houses on the hillside between the palaces, framed against the modern skyline. It's a living neighbourhood — keep noise down and don't peer into homes.",
+        "img": {
+          "file": "Bukchon-ro 11-gil street with hanok houses and blue sky in Bukchon Hanok Village Seoul.jpg",
+          "alt": "Bukchon Hanok Village street"
+        },
+        "map": {
+          "lat": 37.5826,
+          "lng": 126.983
+        }
+      },
+      {
+        "name": "N Seoul Tower (Namsan)",
+        "kicker": "The city view",
+        "body": "On the wooded peak of Namsan, with the best wraparound view of the city. Ride the cable car or a bus up rather than hiking in the heat; the observation deck is worth timing for sunset.",
+        "img": {
+          "file": "Namsan Tower.jpg",
+          "alt": "N Seoul Tower on Namsan"
+        },
+        "map": {
+          "lat": 37.5512,
+          "lng": 126.9882
+        }
+      },
+      {
+        "name": "Dongdaemun Design Plaza",
+        "kicker": "Modern architecture",
+        "body": "Zaha Hadid's vast silver, curving 'spaceship', best after dark when it's lit and the LED-rose field is on. Design shops, exhibitions and the surrounding night markets make it an easy evening.",
+        "img": {
+          "file": "Dongdaemun Design Plaza at night, Seoul, Korea.jpg",
+          "alt": "Dongdaemun Design Plaza at night"
+        },
+        "map": {
+          "lat": 37.5669,
+          "lng": 127.0094
+        }
+      },
+      {
+        "name": "Cheonggyecheon",
+        "kicker": "The downtown stream",
+        "body": "A restored stream cutting through the centre with walkways below street level — a cool, easy stroll and a good flat break between sights.",
+        "img": {
+          "file": "Cheonggyecheon evening 2.jpg",
+          "alt": "Cheonggyecheon stream and stepped weir at Cheonggye Plaza, Seoul"
+        },
+        "map": {
+          "lat": 37.5696,
+          "lng": 126.9784
+        }
+      },
+      {
+        "name": "Insadong",
+        "kicker": "Crafts & tea",
+        "body": "A walkable lane of galleries, traditional craft shops and tea houses, a short hop from the palaces — a natural pairing with a Gyeongbokgung morning.",
+        "img": {
+          "file": "Seoul-Insadong-Street-01.jpg",
+          "alt": "Traditional restaurant alley in Insadong, Seoul"
+        },
+        "map": {
+          "lat": 37.574,
+          "lng": 126.985
+        }
+      }
+    ]
+  },
+  {
+    "type": "prose",
+    "group": "Sights",
+    "title": "Visiting tips",
+    "body": "<p>Time the palaces around their closed days — <b>Gyeongbokgung is shut Tuesdays, Changdeokgung Mondays</b> — and pre-book the Changdeokgung <b>Secret Garden</b>, which only enters on timed guided walks. Bukchon is residential, so it's best early and quiet. And don't fight the July heat: treat the air-conditioned stops (DDP, COEX, museums) as the spine of the hottest afternoons.</p>"
+  }
+]
