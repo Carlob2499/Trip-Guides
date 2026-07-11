@@ -32,17 +32,26 @@ src/features/<name>/
 | 1 | trip-split | trip-split.js + settle.ts + WayFinder money model (minor-units, EQUAL/EXACT/PERCENTAGE/SHARES, 22 tests) | ✅ done |
 | 2 | exports | src/lib/exports.ts (ICS/GPX builders) | ✅ done |
 | 3 | sos | sos.js (+ EU-112 fallback) | ✅ done |
-| 4 | itinerary | day-rail.js, spine.js, now-line.js, swipe-nav.js, print-day.js | ⏸ DEFERRED — see below |
+| 4 | itinerary | day-rail.js, spine.js, now-line.js, swipe-nav.js, print-day.js | ✅ done (behavioral-gated) |
 | 5 | hub | hub.js + wizard.js (adjacent imports; internal order preserved) | ✅ done |
 | 6 | field-tools | field-tools.js | ✅ done |
 | 7 | palette | palette.js | ✅ done |
 | 8 | maps | gmaps-render.js (config-gated) | ✅ done |
 
+All 8 features are sealed; `src/scripts/` now holds only true page chrome (guide-ui,
+scroll-memory, reveal, section-flight, micro, onboard, offline-pill, lightbox,
+hero-parallax, gsap-hero, staleness-ui, util) — the page itself, not features.
+
+**How the itinerary silo was de-risked (the interleaving concern, resolved):**
+its five modules were *interleaved* with other IIFEs in the GuideLayout bundle, so
+merging them risked reordering listener attachment. Resolved empirically, not by
+argument: `tests/visual/itinerary.spec.ts` (6 behavioral tests — deep-link, tab
+switch, day-rail chip, spine tick, print buttons, mobile swipe) was written and made
+green on the PRE-move build, then required to stay green POST-move. The single barrel
+import sits at day-rail's original slot with submodules in original exec order, and
+guide-ui (the one load-bearing invariant) still runs first.
+
 **Documented deviations (deliberate, not drift):**
-- **Itinerary deferred:** its five modules are *interleaved* with other IIFEs in the
-  GuideLayout bundle (day-rail@547 … print-day@563); merging them into one index import
-  would reorder listener attachment across 12 modules — an unprovable-cheaply behavior
-  change. Do it only WITH behavioral test coverage for tab/scroll interplay.
 - **CSS stays in `src/styles/`:** Astro bundles every imported sheet into the same
   per-page CSS regardless of location, so co-locating buys zero fetch/token win while
   risking cascade-order churn. The single ordered import list in GuideLayout IS the

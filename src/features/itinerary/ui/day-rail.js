@@ -6,7 +6,7 @@
    active chip. The chips stay the accessible, keyboard-first navigator. Uses a
    rAF + scroll-listener (proven robust; no IntersectionObserver). */
 
-import { reducedMotion } from "./util.js";
+import { reducedMotion } from "../../../scripts/util.js";
 
 (function () {
   var scrub = document.getElementById("dayScrub");

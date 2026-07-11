@@ -9,7 +9,7 @@
      itself (tab bar, day scrubber, maps, tables) or an open overlay
    · never fights text selection (single touch only). */
 
-import { tapHaptic } from "./util.js";
+import { tapHaptic } from "../../../scripts/util.js";
 
 (function () {
   if (!window.matchMedia("(max-width: 899px)").matches &&

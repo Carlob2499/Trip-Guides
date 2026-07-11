@@ -544,23 +544,22 @@ const tripSummary = buildSummary(guide);
     <script>
       import "../scripts/guide-ui.js";
       import "../features/maps/index.js";
-      import "../scripts/day-rail.js";
+      // itinerary silo (day-rail, swipe-nav, now-line, spine, print-day) —
+      // imported at day-rail's original slot; its index preserves their exec
+      // order. guide-ui above stays first (the one load-bearing invariant).
+      import "../features/itinerary/index.js";
       import "../scripts/reveal.js";
       import "../scripts/section-flight.js";
-      import "../scripts/swipe-nav.js";
       import "../scripts/micro.js";
       import "../scripts/onboard.js";
       import "../scripts/scroll-memory.js";
-      import "../scripts/now-line.js";
       import "../scripts/offline-pill.js";
       import "../features/field-tools/index.js";
       import "../features/sos/index.js";
       import "../scripts/lightbox.js";
-      import "../scripts/spine.js";
       import "../scripts/hero-parallax.js";
       import "../scripts/gsap-hero.js";
       import "../features/palette/index.js";
-      import "../scripts/print-day.js";
       import "../features/trip-split/index.ts";
       import "../scripts/staleness-ui.js";
     </script>
