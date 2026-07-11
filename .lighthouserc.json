@@ -1,0 +1,13 @@
+{
+  "ci": {
+    "collect": {
+      "staticDistDir": "_lhroot",
+      "url": [
+        "http://localhost/Trip-Guides/index.html",
+        "http://localhost/Trip-Guides/guides/korea/index.html"
+      ],
+      "numberOfRuns": 1
+    },
+    "assert": {}
+  }
+}

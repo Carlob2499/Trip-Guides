@@ -9,3 +9,5 @@ CLAUDE.md
 .claude/worktrees/
 test-results/
 playwright-report/
+_lhroot/
+.lighthouseci/

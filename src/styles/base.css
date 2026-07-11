@@ -36,6 +36,17 @@
   --bg:#14181c;--bg2:#1b2026;--ink:#e5e9e0;--card:#1e242b;--rule:#333b44;--rule2:#48525c;--muted:#97a08f;--green:#6aab76;--warn:#d9923f}}
 [data-theme="dark"]{--bg:#14181c;--bg2:#1b2026;--ink:#e5e9e0;--card:#1e242b;--rule:#333b44;--rule2:#48525c;--muted:#97a08f;--green:#6aab76;--warn:#d9923f}
 
+/* --- CROSS-PAGE VIEW TRANSITIONS ------------------------------------------- */
+/* Native MPA View Transitions (hub ↔ guide): a brief crossfade instead of the
+   hard white flash. Pure progressive enhancement — browsers without the API
+   ignore all of this; reduced-motion never opts in (the @media wrapper IS the
+   documented opt-out pattern). Timings ride the motion tokens above. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root) { animation-duration: var(--dur-ui) }
+  ::view-transition-new(root) { animation-duration: var(--dur-reveal); animation-timing-function: var(--ease-out-expo) }
+}
+
 /* --- RESET & BASE ---------------------------------------------------------- */
 *{margin:0;padding:0;box-sizing:border-box}
 [hidden]{display:none!important}

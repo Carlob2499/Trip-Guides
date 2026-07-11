@@ -249,6 +249,10 @@ a.stale-pill:hover{background:color-mix(in srgb,var(--warn) 12%,transparent)}
 ol.steps{margin:.4rem 0 .1rem;padding-left:0;list-style:none;counter-reset:step}
 ol.steps li{position:relative;padding-left:2.1rem;margin-bottom:.7rem;counter-increment:step}
 ol.steps li::before{content:counter(step);position:absolute;left:0;top:.05rem;width:1.45rem;height:1.45rem;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:.72rem;display:flex;align-items:center;justify-content:center;border-radius:3px}
+/* Route ribbon — a dashed path connecting the step numerals, the same visual
+   vocabulary as a route drawn on a map (the site's cartographic identity).
+   Pure CSS; sits behind/between the numeral squares. */
+ol.steps li:not(:last-child)::after{content:"";position:absolute;left:calc(.725rem - 1px);top:1.65rem;bottom:-.75rem;width:2px;background:repeating-linear-gradient(to bottom,var(--accent) 0 4px,transparent 4px 8px);opacity:.45}
 
 /* === EMBEDDED MAP ============================================================ */
 .osmmap{width:100%;height:300px;border:1px solid var(--rule2);border-radius:5px;display:block;margin:.4rem 0 .3rem;background:var(--bg2)}
@@ -413,7 +417,7 @@ body{overflow-x:clip}
 .hol-near li{padding:.15rem 0;color:var(--ink)}
 .hol-rel{color:var(--muted)}
 .hol-note{font-size:.82rem;color:var(--muted);margin:.6rem 0 0}
-.hol-credit{font-family:var(--font-data);font-size:.58rem;color:var(--muted);text-align:right;margin-top:.4rem;opacity:.7}
+.hol-credit{font-family:var(--font-data);font-size:.58rem;color:var(--muted);text-align:right;margin-top:.4rem} /* no opacity knockdown — --muted alone holds ≥4.5:1; dimming tiny text broke the contrast gate */
 .hol-src{color:var(--muted);text-decoration:underline;text-underline-offset:2px}
 /* If holiday data is unavailable the wrapper stays [hidden]; collapse the empty
    .block so there's no gap where the section would have been. */
@@ -488,7 +492,7 @@ details.card.is-collapsible>.block-body{padding:1.1rem 1.4rem 1.25rem}
 }
 
 /* === OFFLINE NOTE ============================================================ */
-.offline-note{display:inline-block;margin-top:.4rem;font-size:.76rem;color:var(--muted);opacity:.85}
+.offline-note{display:inline-block;margin-top:.4rem;font-size:.76rem;color:var(--muted)} /* no opacity — see .hol-credit */
 
 /* === RAID COUNTER TABLES & COLLAPSIBLE DETAILS =============================== */
 /* Used in GO Fest prose sections — <details>/<summary> for collapsible boss charts */

@@ -1,8 +1,8 @@
-name: Visual regression
+name: Visual regression & quality
 
-# Screenshot-diff gate (convergence Phase 2): hub + Korea guide, light/dark ×
-# mobile/desktop, diffed against committed baselines. Pull requests only — this
-# workflow never runs on main and never touches the deploy pipeline.
+# Screenshot-diff + axe accessibility gates (convergence Phases 2/5), plus a
+# report-only Lighthouse job. Pull requests only — this workflow never runs on
+# main and never touches the deploy pipeline.
 #
 # Baseline bootstrap: baselines are per-platform. `--update-snapshots missing`
 # creates absent linux baselines on a first run (pass) instead of failing;
@@ -36,3 +36,27 @@ jobs:
             tests/visual/*-snapshots/
             test-results/
           retention-days: 14
+
+  # Report-only Lighthouse pass (perf/a11y/best-practices/SEO scores as a PR
+  # artifact). continue-on-error — informational, never blocks; the binding
+  # perf gate remains scripts/check-perf-budget.mjs in the deploy itself.
+  lighthouse:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      # dist/ expects to be served under /Trip-Guides (the Pages base path) —
+      # mirror that shape so asset URLs resolve.
+      - run: mkdir -p _lhroot/Trip-Guides && cp -r dist/. _lhroot/Trip-Guides/
+      - name: Lighthouse
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: .lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: false
