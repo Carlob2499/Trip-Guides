@@ -2,7 +2,7 @@
      Regenerate after any line-count-changing edit: node scripts/audit/index-guide.mjs korea
      Line numbers are 1-indexed, matching Read-tool / editor line numbers. -->
 
-# korea.json — line index (2578 lines)
+# korea.json — line index (2577 lines)
 
 | Lines | Group | Type | Title |
 |---|---|---|---|
@@ -31,59 +31,59 @@
 | 409–414 | Getting around | prose | Getting to/from Incheon Airport — options compared |
 | 415–424 | Getting around | map | Orientation map |
 | 425–430 | Getting around | prose | Tips & tricks — Seoul and Daejeon |
-| 431–632 | Itinerary | days | Day by day |
+| 431–631 | Itinerary | days | Day by day |
 |   436–455 | ↳ Wed Jul 8 | | Flight — depart Newark (EWR) at ≈01:00 EDT |
 |   456–480 | ↳ Thu Jul 9 | | Arrive Seoul — light, bathhouse, early night |
 |   481–505 | ↳ Fri Jul 10 | | Palaces & old Seoul |
-|   506–532 | ↳ Sat Jul 11 | | GO Fest Day 1 in Daejeon (all day) → MSI Lower Bracket Final |
-|   533–553 | ↳ Sun Jul 12 | | GO Fest Day 2 in Daejeon → MSI Grand Final |
-|   554–584 | ↳ Mon Jul 13 | | Post-MSI: Daejeon → Busan day trip → back to Seoul |
-|   585–606 | ↳ Tue Jul 14 | | The Secret Garden, the big shopping day & a send-off dinner |
-|   607–630 | ↳ Wed Jul 15 | | Easy departure — slow Jongno morning → limousine bus home |
-| 633–638 | Itinerary | prose | Solo in Seoul — a menu for whenever someone splits off |
-| 639–723 | Sights | sights | Top sights in Seoul |
-| 724–729 | Sights | prose | Visiting tips |
-| 730–735 | Daejeon & MSI | prose | Your MSI weekend |
-| 736–745 | Daejeon & MSI | map | Daejeon — Expo district orientation |
-| 746–751 | Daejeon & MSI | prose | Getting to the arena |
-| 752–761 | Daejeon & MSI | map | Arena map — Daejeon |
-| 762–767 | Gaming & anime | prose | Hongdae after dark |
-| 768–773 | Gaming & anime | prose | PC bangs, arcades & LoL Park |
-| 774–779 | Gaming & anime | prose | Norebang, Han River & the ones Americans miss |
-| 780–785 | Gaming & anime | prose | Anime & game shopping |
-| 786–840 | Food & shopping | sights | What the dishes look like — and how to order |
-| 841–846 | Food & shopping | prose | What to eat |
-| 847–852 | Food & shopping | prose | Where locals review restaurants — apps and platforms |
-| 853–858 | Food & shopping | prose | Ordering in Korean restaurants — the mechanics |
-| 859–864 | Food & shopping | prose | How to book restaurants in Korea |
-| 865–870 | Food & shopping | prose | Where to eat — picks near your route |
-| 871–876 | Food & shopping | prose | Breakfast near the base |
-| 877–882 | Food & shopping | prose | Late-night food after midnight |
-| 883–888 | Food & shopping | prose | Shopping game plan — low-hassle route |
-| 889–894 | Food & shopping | prose | Shopping in Seoul |
-| 895–907 | Food & shopping | list | Souvenirs — Korea |
-| 908–913 | Food & shopping | prose | Collectibles & chain merch |
-| 914–919 | Food & shopping | prose | Quick reference — when you're unsure what to do |
-| 920–931 | Food & shopping | panel | 2026 Tax Refund Optimization |
-| 932–955 | Pokémon GO | infogrid | Road of Legends 2026 — what to know |
-| 956–996 | Pokémon GO | habitats | Raid Hour rotation — Thu & Fri |
-| 997–1378 | Pokémon GO | raids | Raid counter charts — Road of Legends Jul 9 & 10 |
-| 1379–1428 | Pokémon GO | infogrid | GO Fest Global 2026 — what to know |
-| 1429–1449 | Pokémon GO | panel | Pre-GO Fest checklist |
-| 1450–1515 | Pokémon GO | tierlist | Already did Copenhagen? Your Global divergence |
-| 1516–1674 | Pokémon GO | habitats | Habitat rotation — Sat & Sun |
-| 1675–1743 | Pokémon GO | tierlist | Priority targets — which raids to spend passes on |
-| 1744–1763 | Pokémon GO | infogrid | Your 6-team for the debuts |
-| 1764–1780 | Pokémon GO | list | Caught tracker — Saturday |
-| 1781–1799 | Pokémon GO | list | Caught tracker — Sunday |
-| 1800–1812 | Pokémon GO | list | Caught tracker — trades, incense & research |
-| 1813–1846 | Pokémon GO | infogrid | Beyond raids — research, eggs & wild spawns (Global) |
-| 1847–1867 | Pokémon GO | list | Info to confirm — update as announced |
-| 1868–2492 | Pokémon GO | raids | Raid counter charts — GO Fest Global 2026 |
-| 2493–2507 | Tokyo | panel | Tokyo weekend — the quick brief |
-| 2508–2522 | Tokyo | panel | Flights, getting in & getting around |
-| 2523–2528 | Tokyo | prose | Your 3 days, roughly |
-| 2529–2542 | Tokyo | list | Must-hit Tokyo |
-| 2543–2555 | Tokyo | list | Where to eat — fast, cheap, good |
-| 2556–2568 | Tokyo | list | Carry-on souvenirs & snacks to take home |
-| 2569–2574 | References | prose | Sources & links — verified for this guide |
+|   506–533 | ↳ Sat Jul 11 | | GO Fest Day 1 in Daejeon (all day) → MSI Lower Bracket Final |
+|   534–554 | ↳ Sun Jul 12 | | GO Fest Day 2 in Daejeon → MSI Grand Final |
+|   555–581 | ↳ Mon Jul 13 | | Post-MSI: Daejeon → Busan day trip → back to Seoul |
+|   582–605 | ↳ Tue Jul 14 | | The Secret Garden, the big shopping day & a send-off dinner |
+|   606–629 | ↳ Wed Jul 15 | | Easy departure — slow Jongno morning → limousine bus home |
+| 632–637 | Itinerary | prose | Solo in Seoul — a menu for whenever someone splits off |
+| 638–722 | Sights | sights | Top sights in Seoul |
+| 723–728 | Sights | prose | Visiting tips |
+| 729–734 | Daejeon & MSI | prose | Your MSI weekend |
+| 735–744 | Daejeon & MSI | map | Daejeon — Expo district orientation |
+| 745–750 | Daejeon & MSI | prose | Getting to the arena |
+| 751–760 | Daejeon & MSI | map | Arena map — Daejeon |
+| 761–766 | Gaming & anime | prose | Hongdae after dark |
+| 767–772 | Gaming & anime | prose | PC bangs, arcades & LoL Park |
+| 773–778 | Gaming & anime | prose | Norebang, Han River & the ones Americans miss |
+| 779–784 | Gaming & anime | prose | Anime & game shopping |
+| 785–839 | Food & shopping | sights | What the dishes look like — and how to order |
+| 840–845 | Food & shopping | prose | What to eat |
+| 846–851 | Food & shopping | prose | Where locals review restaurants — apps and platforms |
+| 852–857 | Food & shopping | prose | Ordering in Korean restaurants — the mechanics |
+| 858–863 | Food & shopping | prose | How to book restaurants in Korea |
+| 864–869 | Food & shopping | prose | Where to eat — picks near your route |
+| 870–875 | Food & shopping | prose | Breakfast near the base |
+| 876–881 | Food & shopping | prose | Late-night food after midnight |
+| 882–887 | Food & shopping | prose | Shopping game plan — low-hassle route |
+| 888–893 | Food & shopping | prose | Shopping in Seoul |
+| 894–906 | Food & shopping | list | Souvenirs — Korea |
+| 907–912 | Food & shopping | prose | Collectibles & chain merch |
+| 913–918 | Food & shopping | prose | Quick reference — when you're unsure what to do |
+| 919–930 | Food & shopping | panel | 2026 Tax Refund Optimization |
+| 931–954 | Pokémon GO | infogrid | Road of Legends 2026 — what to know |
+| 955–995 | Pokémon GO | habitats | Raid Hour rotation — Thu & Fri |
+| 996–1377 | Pokémon GO | raids | Raid counter charts — Road of Legends Jul 9 & 10 |
+| 1378–1427 | Pokémon GO | infogrid | GO Fest Global 2026 — what to know |
+| 1428–1448 | Pokémon GO | panel | Pre-GO Fest checklist |
+| 1449–1514 | Pokémon GO | tierlist | Already did Copenhagen? Your Global divergence |
+| 1515–1673 | Pokémon GO | habitats | Habitat rotation — Sat & Sun |
+| 1674–1742 | Pokémon GO | tierlist | Priority targets — which raids to spend passes on |
+| 1743–1762 | Pokémon GO | infogrid | Your 6-team for the debuts |
+| 1763–1779 | Pokémon GO | list | Caught tracker — Saturday |
+| 1780–1798 | Pokémon GO | list | Caught tracker — Sunday |
+| 1799–1811 | Pokémon GO | list | Caught tracker — trades, incense & research |
+| 1812–1845 | Pokémon GO | infogrid | Beyond raids — research, eggs & wild spawns (Global) |
+| 1846–1866 | Pokémon GO | list | Info to confirm — update as announced |
+| 1867–2491 | Pokémon GO | raids | Raid counter charts — GO Fest Global 2026 |
+| 2492–2506 | Tokyo | panel | Tokyo weekend — the quick brief |
+| 2507–2521 | Tokyo | panel | Flights, getting in & getting around |
+| 2522–2527 | Tokyo | prose | Your 3 days, roughly |
+| 2528–2541 | Tokyo | list | Must-hit Tokyo |
+| 2542–2554 | Tokyo | list | Where to eat — fast, cheap, good |
+| 2555–2567 | Tokyo | list | Carry-on souvenirs & snacks to take home |
+| 2568–2573 | References | prose | Sources & links — verified for this guide |
