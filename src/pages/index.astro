@@ -73,11 +73,24 @@ const withExtras = guides.map((g, i) => ({ g, ex: guideExtras[i] }));
 const curated = withExtras.filter(x => !x.g.data.draft);
 
 // Next-trip hero: the curated guide whose trip starts soonest in the future
-// (or is in progress right now). None upcoming → the hub keeps its masthead.
+// (or is in progress right now).
 const upcoming = curated
   .filter(x => x.ex.firstDate && (x.ex.firstDate >= now || (x.ex.lastDate && x.ex.lastDate >= now)))
   .sort((a, b) => a.ex.firstDate!.getTime() - b.ex.firstDate!.getTime());
-const hero = upcoming[0] ?? null;
+// Retrospective fallback: between trips there IS no next trip, and the hub used to drop the
+// hero entirely — losing its whole first impression (and the site's best photo) exactly when
+// the guides are at their most proven. So feature the most recently FINISHED trip instead,
+// labelled honestly as past. Every guide is eventually past; the hero shouldn't expire.
+const finished = curated
+  .filter(x => x.ex.lastDate && x.ex.lastDate < now)
+  .sort((a, b) => b.ex.lastDate!.getTime() - a.ex.lastDate!.getTime());
+const hero = upcoming[0] ?? finished[0] ?? null;
+const heroIsPast = upcoming.length === 0 && finished.length > 0;
+// A finished trip gets a static month/year, never the live countdown — hub.js would render
+// any past start date as "In progress", which would be a lie about a trip that's over.
+const heroWhen = heroIsPast && hero?.ex.lastDate
+  ? hero.ex.lastDate.toLocaleDateString("en-US", { month: "short", year: "numeric" })
+  : "";
 // The hero IS that guide's entry on the hub — don't render it twice. The grid
 // lists everything else; the hero card carries search/filter exemption (it's
 // always visible, being the next trip).
@@ -132,23 +145,27 @@ const countries = [...new Set(gridGuides.map(x => x.g.data.country))].sort();
           class="hub-hero"
           href={`${base}/guides/${hero.g.id}/`}
           style={`--accent:${accentFor(hero.g.data.country)}`}
-          data-hero-start={hero.ex.startISO}
-          data-hero-lat={hero.ex.mapCenter?.lat}
-          data-hero-lng={hero.ex.mapCenter?.lng}
+          data-hero-start={heroIsPast ? undefined : hero.ex.startISO}
+          data-hero-lat={heroIsPast ? undefined : hero.ex.mapCenter?.lat}
+          data-hero-lng={heroIsPast ? undefined : hero.ex.mapCenter?.lng}
         >
           {heroSrc && (
             <img class="hub-hero-img" src={heroSrc} alt={hero.ex.heroImg!.alt} loading="eager" fetchpriority="high" />
           )}
           <span class="hub-hero-scrim" aria-hidden="true"></span>
           <span class="hub-hero-body">
-            <span class="hub-hero-eyebrow">Next trip{hero.g.data.country !== hero.g.data.title ? ` · ${hero.g.data.country}` : ""}</span>
+            <span class="hub-hero-eyebrow">{heroIsPast ? "Last trip" : "Next trip"}{hero.g.data.country !== hero.g.data.title ? ` · ${hero.g.data.country}` : ""}</span>
             <span class="hub-hero-title">{hero.g.data.title}</span>
             <span class="hub-hero-meta">
-              <span class="hub-hero-count" data-hero-countdown>{hero.ex.badge}</span>
-              <span class="hub-hero-wx" data-hero-wx hidden></span>
-              {hero.ex.dayCount > 0 && <span class="hub-hero-days">{hero.ex.dayCount} days planned</span>}
+              {heroIsPast
+                ? <span class="hub-hero-count hub-hero-past">{heroWhen}</span>
+                : <span class="hub-hero-count" data-hero-countdown>{hero.ex.badge}</span>}
+              {/* Today's weather at the destination is only useful for a trip you're about
+                  to take — a finished one gets no pill. */}
+              {!heroIsPast && <span class="hub-hero-wx" data-hero-wx hidden></span>}
+              {hero.ex.dayCount > 0 && <span class="hub-hero-days">{hero.ex.dayCount} days {heroIsPast ? "travelled" : "planned"}</span>}
             </span>
-            <span class="hub-hero-cta">Open the guide →</span>
+            <span class="hub-hero-cta">{heroIsPast ? "See how it went →" : "Open the guide →"}</span>
           </span>
         </a>
       )}
