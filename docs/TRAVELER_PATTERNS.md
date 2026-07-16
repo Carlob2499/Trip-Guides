@@ -51,13 +51,40 @@ Honest property.
   → *Design implication:* for a day-trip on a fixed train, plan **backwards from the return
   train**, keep stops in one geographic pocket, and assume ~4–5 hours of real exploration,
   not the full clock.
-- **Under time pressure in heat, this group buys predictability over speed, and hates
-  inter-stop commuting more than it hates a slow leg.** The in-Busan re-plot swapped a ~25-min
-  taxi for a ~55-min subway ride, moved lunch off Busan Station onto **Gunam-ro** so lunch +
-  T1 Base Camp + the beach all sat on **one walkable street**, and put the bags in a station
-  locker. **[observed]**
-  → *Design implication:* collapse a pressured day onto a single street/strip even if the
-  transit leg gets slower. Don't scatter a 4-hour window across a city.
+- **Heat doesn't just slow a day down — it can cancel the whole outdoor half of it, on
+  repeat.** Real feedback: both Pokémon GO Fest days at EXPO Science Park were abandoned for
+  remote play from the hotel room, "TOO HOT," same decision both days. **[reported]**
+  → *Design implication:* for any full-day outdoor commitment in July/August Korea, build the
+  indoor/remote fallback into the plan from the start — not as a contingency footnote, but as
+  an equally real branch, since this group took it on consecutive days without hesitation.
+- **Rain is a second, near-equal disruptor to heat, and the group is under-equipped for it.**
+  Real feedback, verbatim: *"Despite umbrellas we were always wet. Shoes were often wet. Need
+  better recommendations."* A rain day directly cancelled a planned Secret Garden visit and a
+  planned walk. **[reported]**
+  → *Design implication:* July/August Korea guides need explicit waterproof-shoe and real-
+  rain-gear advice (umbrellas alone are stated as insufficient), not just a "rainy day
+  fallback" panel.
+- **This group buys predictability and clustering over almost anything — EXCEPT when a taxi
+  is cheap, in which case taxi wins outright.** The unmerged Busan re-plot proposed swapping
+  a ~25-min taxi for a ~55-min subway ride to Haeundae; that idea was never actually
+  field-tested (the branch wasn't live during the trip). Real feedback says the group **took
+  a taxi anyway** — "VERY CHEAP and direct." **[observed]** the clustering-onto-one-street
+  choice (Gunam-ro: lunch + T1 + beach), **[reported]** that taxi beat subway for the
+  connecting leg.
+  → *Design implication:* don't reflexively recommend subway-for-cost-savings once a taxi
+  fare is small in absolute terms (a few dollars split 2–3 ways) — this group will pay it for
+  directness. Cluster the STOPS onto one street; be more careful before also prescribing
+  which transit mode connects the cluster to the station.
+- Related booking-tool + transit friction, all **[reported]**: Uber (used as a Kakao T
+  substitute) was a bad experience on a foreign number — get a Korean e-SIM before relying on
+  Kakao T. VIP/first-class KTX sells out **days** in advance; standing-room tickets exist but
+  are uncomfortable and not guaranteed — book early. Buses were difficult outside the direct
+  Limousine bus. Naver/Kakao Maps were rated distinctly worse than Google Maps or word-of-
+  mouth for navigation — don't lean on map-app links alone for wayfinding advice. CatchTable
+  under-lists real venues — treat it as one source, not the source, for bookability.
+  → *Design implication:* book KTX premium/VIP seats as early as the guide can identify them;
+  give written turn-by-turn navigation notes rather than relying on the traveler's own map
+  app; set expectations that Kakao T needs a Korean SIM to work well.
 - **The post-event dinner is the fragile part of the day.** The Monday reunion kept drifting
   later and toward venues with later kitchens (Jonggak ~21:15 → Jongno-3-ga ~21:30 + pocha
   tents past midnight). **[observed]**
@@ -74,11 +101,21 @@ Honest property.
 - Food is a first-class priority, not filler — the group asks for specific venues near the
   route rather than "where to eat in X". **[stated]**
 
-## Post-trip reported patterns
+## Money, payment & booking
 
-*(Empty. The Korea 2026 Trip Feedback collection has no submissions yet, so nothing here is
-**[reported]**. Do not invent entries — the honest blank is the feature. Fill this in from
-real critiques via the reflection pass; see `learnings/korea.md`.)*
+- Tax-free is easier than expected but inconsistent — some venues (Olive Young) do it
+  instantly at checkout, others don't. **[reported]**
+- Apple Pay T-money needs a **Korean** credit card; the physical T-money card needs **cash**
+  to top up. Don't assume a foreign Apple Pay wallet covers transit. **[reported]**
+  → *Design implication:* state the T-money/cash requirement plainly in the money panel
+  rather than assuming contactless-everywhere.
+
+## Accommodation
+
+- Airbnb **AC** in Korean summer is not a nice-to-have — its absence was called out as
+  genuinely disruptive ("annoying for the price... can be extremely contentious"). **[reported]**
+  → *Design implication:* for a summer Korea booking checklist, verify AC explicitly as a
+  hard filter, not an assumed amenity.
 
 ---
 
@@ -87,4 +124,4 @@ real critiques via the reflection pass; see `learnings/korea.md`.)*
 | Trip | Dates | Status |
 |---|---|---|
 | Denmark (Copenhagen) | — | live; no post-mortem written |
-| South Korea (Seoul · Daejeon · Busan) | Jul 8–15, 2026 | live; **post-mortem pending real critiques** |
+| South Korea (Seoul · Daejeon · Busan) | Jul 8–15, 2026 | live; **reflected** (1 submission, 2026-07-16) — see `learnings/korea.md` |

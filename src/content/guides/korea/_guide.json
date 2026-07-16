@@ -5,5 +5,125 @@
   "footer": "Location photos via Wikimedia Commons — tap any credit for its source, author and license.",
   "country": "South Korea",
   "intro": "Seoul base, with a two-night trip to Daejeon for the MSI 2026 weekend (Jul 11–12). Seoul in July is hot and humid with monsoon rain — pack light layers and an umbrella.",
-  "verified": "Checked 28 Jun 2026 for the 8–15 Jul trip; base, transit, Air Premia baggage, shopping & send-off dinner re-verified 7 Jul 2026; Airbnb address (19 Jong-ro), booking total ($2,007.90), and A Flower Blossom on the Rice reservation confirmed 8 Jul 2026 · Tokyo side-trip section (third traveler, Jul 11–13) added & checked 10 Jul 2026 · Mon Busan restructured (KTX 10:44/18:00; east cluster — T1 Base Camp Haeundae + Bonjeon gukbap) + HYBE HQ into Tue shopping + Daejeon post-MSI beef (Yakiniku Doryong / Gobang) + Jongno reunion KBBQ, checked 12 Jul 2026 · Mon Busan re-plotted to subway (Line 1↔2 via Seomyeon, Haeundae Exit 5) with Gunam-ro lunch (Choryang Milmyeon / Obok dwaeji gukbap) and Seoul evening moved to Jongno-3-ga beef KBBQ (Ikseon-dong Ranch / Jongsam Yuk / Mido Galbi / Gwangju House) + pojangmacha at Exits 3–8, checked 13 Jul 2026 · ⚠ re-verify same-day before going: T1 Base Camp hours, Choryang Milmyeon / Obok hours, the Jongno-3-ga beef spots' late kitchens (several close ~22:30–23:00), Gobang/Yakiniku Doryong hours & Sunday opening, HYBE Weverse pop-up (may be none), KTX seats, Shibuya Sky/teamLab tickets & GO Fest roster"
+  "verified": "Checked 28 Jun 2026 for the 8–15 Jul trip; base, transit, Air Premia baggage, shopping & send-off dinner re-verified 7 Jul 2026; Airbnb address (19 Jong-ro), booking total ($2,007.90), and A Flower Blossom on the Rice reservation confirmed 8 Jul 2026 · Tokyo side-trip section (third traveler, Jul 11–13) added & checked 10 Jul 2026 · Mon Busan restructured (KTX 10:44/18:00; east cluster — T1 Base Camp Haeundae + Bonjeon gukbap) + HYBE HQ into Tue shopping + Daejeon post-MSI beef (Yakiniku Doryong / Gobang) + Jongno reunion KBBQ, checked 12 Jul 2026 · Mon Busan re-plotted to subway (Line 1↔2 via Seomyeon, Haeundae Exit 5) with Gunam-ro lunch (Choryang Milmyeon / Obok dwaeji gukbap) and Seoul evening moved to Jongno-3-ga beef KBBQ (Ikseon-dong Ranch / Jongsam Yuk / Mido Galbi / Gwangju House) + pojangmacha at Exits 3–8, checked 13 Jul 2026 · ⚠ re-verify same-day before going: T1 Base Camp hours, Choryang Milmyeon / Obok hours, the Jongno-3-ga beef spots' late kitchens (several close ~22:30–23:00), Gobang/Yakiniku Doryong hours & Sunday opening, HYBE Weverse pop-up (may be none), KTX seats, Shibuya Sky/teamLab tickets & GO Fest roster",
+  "learnings": {
+    "verified_on": "2026-07-16",
+    "summary": "The plan held where it was clustered and broke where it was exposed. <b>Heat and rain — not fatigue — did the damage:</b> both GO Fest park days were abandoned for remote raids from the hotel, and a downpour took out the Secret Garden and the Cheonggyecheon walk. Whenever a stop was merely <i>far</i> rather than blocked, proximity won every single time. 21 of 37 planned stops were hit; pace was the weakest part of the guide.",
+    "keyLearnings": [
+      "A full-day outdoor commitment in July needs its indoor/remote fallback planned as a <b>real branch, not a footnote</b> — this group took the remote option on two consecutive days without hesitating once the heat hit.",
+      "Umbrellas were not enough. \"Despite umbrellas we were always wet. Shoes were often wet.\" A monsoon-season guide has to talk about <b>footwear</b>, not just rain cover.",
+      "Distance beat intent three separate times — Apgujeong lost to Myeongdong, HYBE HQ was dropped, and the Daejeon celebration grill lost to a closer strip. If it is not near the day's anchor, assume it will not happen.",
+      "A cheap, direct taxi beats a clever transit route. The Busan subway plan was skipped for a taxi: \"VERY CHEAP and direct.\"",
+      "Kakao T fights a foreign phone number — bring a Korean e-SIM. Uber was the fallback, and it was worse (registration, traffic, heat).",
+      "Premium KTX seats are cheap but sell out <b>days</b> ahead; standing-room tickets are uncomfortable and not guaranteed. Book the moment the times are fixed.",
+      "Naver and Kakao Maps underperformed Google Maps and word-of-mouth for navigation and translation, and CatchTable missed many real venues — do not lean on any one app to find or reach a place.",
+      "Summer accommodation without AC is a real problem, not a minor comfort trade — verify it explicitly before booking."
+    ],
+    "changed": [
+      "Recorded what actually happened on every day below, so the plan and the reality sit side by side rather than the guide pretending it went to script.",
+      "Promoted the durable lessons (heat fallbacks, rain gear, clustering, cheap-taxi-beats-transit, e-SIM for Kakao T, AC as a hard filter) into the traveler-patterns file the guide author consults, so the next guide starts from them instead of relearning them."
+    ],
+    "days": [
+      {
+        "date": "Thu Jul 9",
+        "actually": "Landed and went straight in on the 6002 Limousine bus — \"the simplest and fastest direct route.\" An intense downpour reshaped the evening: the Jongno walk became shelter and chimaek at a Korean fried-chicken place, then SPAREX earlier than planned.",
+        "skipped": [
+          {
+            "stop": "ICN T1 — shower, then bus 6002",
+            "reason": "Skipped the shower; took the 6002 Limousine bus straight in as the simplest, fastest direct route."
+          },
+          {
+            "stop": "Cheonggyecheon / Jongno light walk",
+            "reason": "Intense downpour and no rain-ready clothing or shoes — sheltered for chimaek instead, then went to SPAREX early."
+          },
+          {
+            "stop": "Dinner near the base — Jongno BBQ",
+            "reason": "Walked the Jonggak restaurant list: many touristy, many closed by 10. Ended up at a slightly overpriced izakaya — but it was good."
+          }
+        ]
+      },
+      {
+        "date": "Fri Jul 10",
+        "actually": "The palace day lost to weather and heat. Hongdae still happened, but for T1 Base Camp and KBBQ rather than raid hours.",
+        "skipped": [
+          {
+            "stop": "Gyeongbokgung",
+            "reason": "Weather."
+          },
+          {
+            "stop": "Bukchon Hanok Village",
+            "reason": "Too hot, too historical, and no time."
+          },
+          {
+            "stop": "Hongdae raid hours (Dialga/Palkia → Primals)",
+            "reason": "Went to Hongdae anyway — for T1 Base Camp and KBBQ instead of raids."
+          }
+        ]
+      },
+      {
+        "date": "Sat Jul 11",
+        "actually": "GO Fest Day 1 never happened outdoors. The heat made in-person raiding untenable, so it became remote raids and a direct run to DCC II for MSI at 3pm plus the pre-MSI events.",
+        "skipped": [
+          {
+            "stop": "Daejeon Station → Kakao T to I-Hotel",
+            "reason": "Used Uber instead — Kakao T registration fights a foreign number, and traffic plus heat made it unbearable. Get a Korean e-SIM; little translation available."
+          },
+          {
+            "stop": "EXPO Science Park — GO Fest Day 1",
+            "reason": "Went straight to DCC II for MSI at 3 and did remote raids instead — too hot, few raids in person, and the pre-MSI events were on."
+          }
+        ]
+      },
+      {
+        "date": "Sun Jul 12",
+        "actually": "The same call as Saturday, made again: stayed in the hotel for remote raids, ate at a burger chain before MSI. The celebration grill lost to distance and to how early Daejeon closes.",
+        "skipped": [
+          {
+            "stop": "EXPO Science Park — GO Fest Day 2",
+            "reason": "Stayed in the hotel for remote raids — unbearable heat. Burger chain before MSI."
+          },
+          {
+            "stop": "Gobang Sikdang Expo Branch — celebration grill",
+            "reason": "Too far. Went to a KBBQ strip near I-Hotel that barely had room, since most places close by 11."
+          }
+        ]
+      },
+      {
+        "date": "Mon Jul 13",
+        "actually": "Busan worked. The taxi, not the subway, is what made it work — \"VERY CHEAP and direct.\" Lunch got skipped for time rather than because the plan was wrong.",
+        "skipped": [
+          {
+            "stop": "Sungsimdang DCC (107 Expo-ro)",
+            "reason": "Went straight by taxi instead."
+          },
+          {
+            "stop": "Busan Station → subway to Haeundae",
+            "reason": "Took a taxi — very cheap and direct."
+          },
+          {
+            "stop": "Lunch on Gunam-ro, Haeundae",
+            "reason": "Not hungry, and little time to sit down."
+          }
+        ]
+      },
+      {
+        "date": "Tue Jul 14",
+        "actually": "The big shopping day collapsed toward whatever was closest. Rain plus a group vote sent the morning to shops, and Myeongdong absorbed the day on proximity alone.",
+        "skipped": [
+          {
+            "stop": "Changdeokgung — Huwon (Secret Garden) tour",
+            "reason": "Group vote went to shopping instead — rain as well."
+          },
+          {
+            "stop": "Apgujeong — Stüssy + Gentle Monster",
+            "reason": "Too far — did more shopping in Myeongdong for proximity and convenience, plus lunch."
+          },
+          {
+            "stop": "HYBE HQ (Yongsan) — photo + pop-up shop",
+            "reason": "Never made it — too far."
+          }
+        ]
+      }
+    ]
+  }
 }
