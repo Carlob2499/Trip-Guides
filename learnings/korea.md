@@ -33,6 +33,23 @@ These are drawn from the guide's git history — the plan demonstrably moved dur
    *Learning candidate:* assume a multi-person trip may fork; keep per-person maths and
    "the 3 of you" phrasing derivable rather than hardcoded.
 
+3. **Monday Busan was re-plotted a SECOND time — from inside Busan.** An unmerged branch
+   (`claude/busan-seoul-itinerary-update-svykyx`, commit `780d1fa`) was written 13:05 KST on
+   Mon Jul 13 — roughly 12 minutes after the 12:53 arrival. It never merged, so the live
+   guide never showed it; but what it *chose* is the signal:
+   - **taxi → subway** (Line 1 → Seomyeon → Line 2 → Haeundae Exit 5), explicitly trading
+     ~25 min of taxi for a ~55 min predictable ride;
+   - **lunch moved off Busan Station onto Gunam-ro** (Choryang Milmyeon / Obok gukbap), so
+     lunch + T1 Base Camp + Haeundae Beach all sit on **one street**;
+   - **bags into a Busan Station locker** rather than carried;
+   - **Seoul reunion moved Jonggak → Jongno-3-ga**, chasing a *late* kitchen (~21:30) plus
+     pojangmacha tents past midnight.
+   *Learning candidate — the strongest one here:* when this group is under time pressure in
+   heat, they don't optimise for speed, they optimise for **predictability and zero
+   inter-stop commute** — collapse a day onto a single walkable street even at the cost of
+   a slower transit leg. And the reunion venue kept drifting later, which says the
+   post-event dinner window was the fragile part of the whole day.
+
 3. **A factual near-miss worth remembering.** A celebration KBBQ venue was initially written
    as hanwoo *beef* when the venue is an aged-**pork** specialist; a Korean primary source
    caught it and the beef pick was replaced (Yakiniku Doryong). Nothing shipped wrong, but

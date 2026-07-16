@@ -4,7 +4,8 @@
    · aggregateVisited() rolls MANY submissions into the objective visited/skipped aggregate
      the Learnings tab (P2) renders live.
    `freeform` is carried through storage but is NEVER surfaced by the aggregate or any UI —
-   it is the private, candid channel (see docs/EXECUTION_ROADMAP.md, Stage 1/4). */
+   it is the private, candid channel, summarized into learnings/<slug>.md rather than shown
+   (see "The Learnings Loop" in CLAUDE.md). */
 
 export interface Ratings {
   overall?: number;

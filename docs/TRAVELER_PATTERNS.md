@@ -44,13 +44,25 @@ Honest property.
 - **Low-commute clustering is an explicit priority**, especially in heat. The Monday Busan
   day was rebuilt to "combine whatever is possible for highest efficiency and lower
   stress/commute times in this heat". **[stated]**
-- **The plan did not survive contact and was rebuilt mid-trip.** Monday's Busan day trip was
-  re-cut during the trip around new KTX times (Daejeon→Busan 10:44, Busan→Seoul 18:00) and
-  re-clustered into a single eastern pocket (gukbap near Busan Station → T1 Base Camp
-  Haeundae → Haeundae Beach) to fit ~4.5 usable hours. **[observed]**
+- **The plan did not survive contact — and was rebuilt TWICE.** Monday's Busan day trip was
+  re-cut before the day around new KTX times (Daejeon→Busan 10:44, Busan→Seoul 18:00) into a
+  single eastern pocket, then **re-plotted again at 13:05 KST from inside Busan** (an
+  unmerged branch, minutes after arrival). **[observed]**
   → *Design implication:* for a day-trip on a fixed train, plan **backwards from the return
-  train** and keep stops in one geographic pocket. Assume ~4–5 hours of real exploration,
+  train**, keep stops in one geographic pocket, and assume ~4–5 hours of real exploration,
   not the full clock.
+- **Under time pressure in heat, this group buys predictability over speed, and hates
+  inter-stop commuting more than it hates a slow leg.** The in-Busan re-plot swapped a ~25-min
+  taxi for a ~55-min subway ride, moved lunch off Busan Station onto **Gunam-ro** so lunch +
+  T1 Base Camp + the beach all sat on **one walkable street**, and put the bags in a station
+  locker. **[observed]**
+  → *Design implication:* collapse a pressured day onto a single street/strip even if the
+  transit leg gets slower. Don't scatter a 4-hour window across a city.
+- **The post-event dinner is the fragile part of the day.** The Monday reunion kept drifting
+  later and toward venues with later kitchens (Jonggak ~21:15 → Jongno-3-ga ~21:30 + pocha
+  tents past midnight). **[observed]**
+  → *Design implication:* for a late reunion, lead with venues whose kitchens survive past
+  23:00 and a no-reservation fallback (pojangmacha / Hongdae), not a place that closes 22:30.
 - July in Korea is hot enough that heat was a stated planning constraint, not an
   afterthought. **[stated]**
 
