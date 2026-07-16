@@ -53,14 +53,15 @@ Honest property.
   not the full clock.
 - **Heat doesn't just slow a day down — it can cancel the whole outdoor half of it, on
   repeat.** Real feedback: both Pokémon GO Fest days at EXPO Science Park were abandoned for
-  remote play from the hotel room, "TOO HOT," same decision both days. **[reported]**
+  remote play from the hotel room — the park was reported unbearably hot, with few raids
+  actually running in person — the same decision made independently both days. **[reported]**
   → *Design implication:* for any full-day outdoor commitment in July/August Korea, build the
   indoor/remote fallback into the plan from the start — not as a contingency footnote, but as
   an equally real branch, since this group took it on consecutive days without hesitation.
 - **Rain is a second, near-equal disruptor to heat, and the group is under-equipped for it.**
-  Real feedback, verbatim: *"Despite umbrellas we were always wet. Shoes were often wet. Need
-  better recommendations."* A rain day directly cancelled a planned Secret Garden visit and a
-  planned walk. **[reported]**
+  Real feedback, summarized: umbrellas didn't keep anyone dry — clothes and especially shoes
+  were soaked repeatedly — and the group explicitly asked for better rain recommendations. A
+  rain day directly cancelled a planned Secret Garden visit and a planned walk. **[reported]**
   → *Design implication:* July/August Korea guides need explicit waterproof-shoe and real-
   rain-gear advice (umbrellas alone are stated as insufficient), not just a "rainy day
   fallback" panel.
@@ -68,7 +69,7 @@ Honest property.
   is cheap, in which case taxi wins outright.** The unmerged Busan re-plot proposed swapping
   a ~25-min taxi for a ~55-min subway ride to Haeundae; that idea was never actually
   field-tested (the branch wasn't live during the trip). Real feedback says the group **took
-  a taxi anyway** — "VERY CHEAP and direct." **[observed]** the clustering-onto-one-street
+  a taxi anyway**, reporting it very cheap and direct. **[observed]** the clustering-onto-one-street
   choice (Gunam-ro: lunch + T1 + beach), **[reported]** that taxi beat subway for the
   connecting leg.
   → *Design implication:* don't reflexively recommend subway-for-cost-savings once a taxi
