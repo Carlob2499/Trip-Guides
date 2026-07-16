@@ -704,6 +704,14 @@ details table{margin:.3rem 0 .4rem}
 .se-amt,.se-ca{appearance:textfield;-moz-appearance:textfield}
 .se-amt::-webkit-inner-spin-button,.se-amt::-webkit-outer-spin-button,.se-ca::-webkit-inner-spin-button,.se-ca::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 /* custom split */
+/* Who shared an expense. Chips, not checkboxes — tap targets have to look tappable, and an
+   excluded person must read as clearly OFF rather than merely unstyled. */
+.se-parts{display:flex;flex-wrap:wrap;align-items:center;gap:.3rem .4rem;margin-top:.35rem;padding:.4rem .6rem;background:var(--bg2);border-radius:5px;border-left:3px solid var(--rule2)}
+.se-parts-lbl{font-family:var(--font-data);font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:.15rem}
+.se-part{padding:.22rem .55rem;border:1px solid var(--rule2);border-radius:999px;background:var(--bg);color:var(--muted);font-size:.78rem;font-weight:600;cursor:pointer;text-decoration:line-through;text-decoration-color:var(--rule2)}
+.se-part-on{background:var(--accent);border-color:var(--accent);color:#fff;text-decoration:none}
+.se-part:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+.se-parts-note{font-family:var(--font-data);font-size:.68rem;font-weight:700;color:var(--accent);margin-left:.1rem}
 .se-custom{display:flex;flex-wrap:wrap;gap:.4rem .6rem;margin-top:.4rem;padding:.55rem .6rem;background:var(--bg2);border-radius:5px;border-left:3px solid var(--rule2)}
 .se-custom--warn{border-left-color:var(--accent)}
 .se-cl{display:flex;flex-direction:column;gap:.18rem;min-width:5rem}

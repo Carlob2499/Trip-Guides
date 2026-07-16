@@ -58,7 +58,7 @@ import { hasFirebase, joinTrip, normalizeCode } from "../../firebase/index.js";
       } else if (e && e.split && typeof e.split === "object") { split = e.split; }
       var payIdx = e ? parseInt(e.paidBy, 10) : 0;
       var paidBy = ids[(isNaN(payIdx) || payIdx >= ids.length || payIdx < 0) ? 0 : payIdx] || (ids[0] || "");
-      return { id: (e && e.id) || newId(), paidBy: paidBy, desc: (e && e.desc) || "", amount: (e && e.amount != null) ? e.amount : null, split: split };
+      return { id: (e && e.id) || newId(), paidBy: paidBy, desc: (e && e.desc) || "", amount: (e && e.amount != null) ? e.amount : null, split: split, participants: (e && e.participants) || null };
     });
     return { members: members, expenses: expenses, customSplit: !!s.customSplit };
   }
@@ -70,10 +70,31 @@ import { hasFirebase, joinTrip, normalizeCode } from "../../firebase/index.js";
   function memberById(id) { var p = memberPos(id); return p === -1 ? null : state.members[p]; }
   function memberName(id) { var p = memberPos(id); return p === -1 ? "?" : (state.members[p].name || ("Person " + (p + 1))); }
   function expenseById(id) { for (var i = 0; i < state.expenses.length; i++) if (state.expenses[i].id === id) return state.expenses[i]; return null; }
-  function evenSplit(total) {
-    var n = state.members.length, even = total / (n || 1), map = {};
-    state.members.forEach(function (m) { map[m.id] = parseFloat(even.toFixed(2)); });
+  // Who shares an expense: its own participant list, or the whole group when it has none
+  // (which is every expense recorded before participants existed).
+  function sharersOf(exp) {
+    var named = (exp && exp.participants || []).filter(function (id) { return memberPos(id) !== -1; });
+    return named.length ? named : state.members.map(function (m) { return m.id; });
+  }
+  function isSharer(exp, id) { return sharersOf(exp).indexOf(id) !== -1; }
+  // Even split across the given ids (defaults to everyone). Keyed by id, so the map itself
+  // never charges a non-participant.
+  function evenSplit(total, ids) {
+    var list = (ids && ids.length) ? ids : state.members.map(function (m) { return m.id; });
+    var even = total / (list.length || 1), map = {};
+    list.forEach(function (id) { map[id] = parseFloat(even.toFixed(2)); });
     return map;
+  }
+  // Toggle one person in/out of an expense. Excluding the last sharer is refused — an
+  // expense nobody shares has no meaning and would divide by zero.
+  function opToggleSharer(eid, mid) {
+    var e = expenseById(eid); if (!e) return;
+    var cur = sharersOf(e);
+    var next = cur.indexOf(mid) !== -1 ? cur.filter(function (x) { return x !== mid; }) : cur.concat([mid]);
+    if (!next.length) return;
+    var patch = { participants: next };
+    if (!state.customSplit) patch.split = evenSplit(parseFloat(e.amount) || 0, next);
+    opExpenseField(eid, patch);
   }
 
   /* ── mutation ops — route to the room when synced, else mutate local state ─────
@@ -94,11 +115,22 @@ import { hasFirebase, joinTrip, normalizeCode } from "../../firebase/index.js";
       state.expenses.forEach(function (e) {
         if (e.paidBy === id) room.collection("expenses").update(e.id, { paidBy: fallback });
         if (e.split && (id in e.split)) { var s = Object.assign({}, e.split); delete s[id]; room.collection("expenses").update(e.id, { split: s }); }
+        // Drop the departed member from any expense that named them, so no ghost id is left
+        // in the shared room. If they were the ONLY named sharer, clear the list entirely —
+        // that reverts the expense to the whole group rather than leaving it shared by nobody.
+        if (e.participants && e.participants.indexOf(id) !== -1) {
+          var pruned = e.participants.filter(function (x) { return x !== id; });
+          room.collection("expenses").update(e.id, { participants: pruned.length ? pruned : null });
+        }
       });
     } else {
       var pos = memberPos(id); if (pos === -1) return;
       state.members.splice(pos, 1);
-      state.expenses.forEach(function (e) { if (e.paidBy === id) e.paidBy = state.members.length ? state.members[0].id : ""; if (e.split) delete e.split[id]; });
+      state.expenses.forEach(function (e) {
+        if (e.paidBy === id) e.paidBy = state.members.length ? state.members[0].id : "";
+        if (e.split) delete e.split[id];
+        if (e.participants) { var pr = e.participants.filter(function (x) { return x !== id; }); e.participants = pr.length ? pr : null; }
+      });
       persist(); render();
     }
   }
@@ -169,16 +201,34 @@ import { hasFirebase, joinTrip, normalizeCode } from "../../firebase/index.js";
     if (!state.expenses.length) { list.innerHTML = "<p class='split-empty'>No expenses yet — fill in the row above and tap + Add expense.</p>"; return; }
 
     list.innerHTML = state.expenses.map(function (exp) {
+      var shareIds = sharersOf(exp);
+      // Only offer the who-shared-this row when there's actually a subset to pick — with
+      // one person it's noise.
+      var partBlock = state.members.length > 1
+        ? "<div class='se-parts'><span class='se-parts-lbl'>Split between</span>" +
+            state.members.map(function (m, mi) {
+              var on = shareIds.indexOf(m.id) !== -1;
+              return "<button type='button' class='se-part" + (on ? " se-part-on" : "") + "' data-eid='" + exp.id +
+                "' data-pid='" + m.id + "' aria-pressed='" + (on ? "true" : "false") + "'>" +
+                esc(m.name || ("P" + (mi + 1))) + "</button>";
+            }).join("") +
+            (shareIds.length < state.members.length
+              ? "<span class='se-parts-note'>÷ " + shareIds.length + "</span>" : "") +
+          "</div>"
+        : "";
+
       var customBlock = "";
       if (state.customSplit) {
         var total = parseFloat(exp.amount) || 0;
-        if (!exp.split || Object.keys(exp.split).length !== state.members.length) exp.split = evenSplit(total);
-        var sumCA = state.members.reduce(function (a, m) { return a + (parseFloat(exp.split[m.id]) || 0); }, 0);
+        // Custom amounts are only offered for the people actually sharing the expense.
+        if (!exp.split || Object.keys(exp.split).length !== shareIds.length) exp.split = evenSplit(total, shareIds);
+        var sumCA = shareIds.reduce(function (a, id) { return a + (parseFloat(exp.split[id]) || 0); }, 0);
         var diff = Math.abs(sumCA - total);
         customBlock = "<div class='se-custom" + (diff > 0.015 ? " se-custom--warn" : "") + "'>" +
-          state.members.map(function (m, mi) {
+          shareIds.map(function (id) {
+            var mi = memberPos(id), m = state.members[mi];
             return "<label class='se-cl'><span class='se-cl-name'>" + esc(m.name || ("P" + (mi + 1))) + "</span>" +
-              "<input class='split-in se-ca' type='number' min='0' step='0.01' inputmode='decimal' value='" + (parseFloat(exp.split[m.id]) || 0).toFixed(2) + "' data-eid='" + exp.id + "' data-mid='" + m.id + "' /></label>";
+              "<input class='split-in se-ca' type='number' min='0' step='0.01' inputmode='decimal' value='" + (parseFloat(exp.split[id]) || 0).toFixed(2) + "' data-eid='" + exp.id + "' data-mid='" + id + "' /></label>";
           }).join("") +
           (diff > 0.015 ? "<span class='se-warn'>Shares sum " + fmtUSD(sumCA) + " — total is " + fmtUSD(total) + "</span>" : "") + "</div>";
       }
@@ -188,7 +238,7 @@ import { hasFirebase, joinTrip, normalizeCode } from "../../firebase/index.js";
         "<div class='se-amt-wrap'><span class='se-cur'>$</span>" +
         "<input class='split-in se-amt' type='number' min='0' step='0.01' inputmode='decimal' placeholder='0.00' value='" + (exp.amount != null ? String(exp.amount) : "") + "' data-eid='" + exp.id + "' data-field='amount' /></div>" +
         "<button class='split-del' type='button' data-del-e='" + exp.id + "' aria-label='Remove expense'>×</button>" +
-        "</div>" + customBlock + "</div>";
+        "</div>" + partBlock + customBlock + "</div>";
     }).join("");
 
     list.querySelectorAll(".se-payer").forEach(function (sel) {
@@ -199,9 +249,13 @@ import { hasFirebase, joinTrip, normalizeCode } from "../../firebase/index.js";
         var fld = this.dataset.field;
         var patch = {};
         patch[fld] = fld === "amount" ? (parseFloat(this.value) || null) : this.value;
-        if (fld === "amount" && !state.customSplit) patch.split = evenSplit(parseFloat(this.value) || 0);
+        // Re-even only across whoever actually shares this expense, not the whole group.
+        if (fld === "amount" && !state.customSplit) patch.split = evenSplit(parseFloat(this.value) || 0, sharersOf(expenseById(this.dataset.eid) || {}));
         opExpenseField(this.dataset.eid, patch);
       });
+    });
+    list.querySelectorAll(".se-part").forEach(function (btn) {
+      btn.addEventListener("click", function () { opToggleSharer(this.dataset.eid, this.dataset.pid); });
     });
     list.querySelectorAll(".se-ca").forEach(function (inp) {
       inp.addEventListener("input", function () { opExpenseSplit(this.dataset.eid, this.dataset.mid, this.value); });
@@ -214,7 +268,7 @@ import { hasFirebase, joinTrip, normalizeCode } from "../../firebase/index.js";
   /* ── results (uses the tested pure settle()) ── */
   function computeSettle() {
     var ids = state.members.map(function (m) { return m.id; });
-    return settle(ids, state.expenses.map(function (e) { return { paidBy: e.paidBy, amount: e.amount, split: e.split }; }), state.customSplit);
+    return settle(ids, state.expenses.map(function (e) { return { paidBy: e.paidBy, amount: e.amount, split: e.split, participants: e.participants }; }), state.customSplit);
   }
   function renderResults() {
     var card = document.getElementById("sResults"), summary = document.getElementById("sSummary");

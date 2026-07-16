@@ -12,6 +12,12 @@ export interface SettleExpense {
   amount: number | null;
   // Custom split: member id -> that person's share (normalized to the total). null/absent = even.
   split?: Record<string, number> | null;
+  // Who this expense is actually shared between. Absent/empty = the whole group (the old
+  // behaviour, so every saved expense keeps settling identically). Set it when only some of
+  // the group was involved — e.g. two of three were in Daejeon — and an even split divides
+  // by THOSE people only, instead of silently charging everyone and forcing the payer to
+  // hand-calculate in custom mode.
+  participants?: string[] | null;
 }
 
 export interface SettleTxn { from: string; to: string; amt: number }
@@ -37,15 +43,21 @@ export function settle(
     const payer = memberIds.indexOf(exp.paidBy) !== -1 ? exp.paidBy : memberIds[0];
     balances[payer] += total;
 
+    // Who actually shares this expense. Unknown ids are dropped (a member can be deleted
+    // after the expense was recorded); an empty/absent list means the whole group.
+    const named = (exp.participants || []).filter((id) => memberIds.indexOf(id) !== -1);
+    const sharers = named.length ? named : memberIds;
+
     if (customSplit && exp.split) {
+      // Custom amounts are the source of truth; a non-sharer simply has no entry (→ 0).
       const shares = memberIds.map((id) => Number(exp.split![id]) || 0);
       const sum = shares.reduce((a, b) => a + b, 0);
       memberIds.forEach((id, i) => {
         balances[id] -= sum > 0 ? total * (shares[i] / sum) : total / n;
       });
     } else {
-      const share = total / n;
-      for (const id of memberIds) balances[id] -= share;
+      const share = total / sharers.length;
+      for (const id of sharers) balances[id] -= share;
     }
   }
 
