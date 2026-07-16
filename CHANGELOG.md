@@ -9,6 +9,25 @@ Pages under `/Trip-Guides`. A guide is only done when it's **Verified · Persona
 
 ---
 
+## 2026-07-16 — The loop closes: real feedback → shipped fixes
+*The first trip critique came back, and it changed the product, not just the guide.*
+
+Korea's post-mortem went live (heat cancelled both GO Fest days; rain took the Secret Garden;
+distance beat intent three times) — but two items in that feedback were about **the site**, and
+both are now global features:
+
+- **Trip Split: subset expenses.** "Phil and Carlo were in Daejeon, so all expenses didn't need
+  Gaby, yet I had to manually calculate." The bug was in the math: `settle()` only honoured the
+  split map in Custom mode, so Even mode always divided by everyone. Expenses now carry
+  `participants`, and each row has a "Split between" chip row. Absent = the whole group, so
+  every expense ever recorded settles identically.
+- **Reminders / Notable Items.** A shared scratchpad tab on every guide for what a guide can't
+  know in advance — door codes, agreed meetup times, links. Live-synced like the budget, kind
+  inferred from what you type, pinned items on top.
+
+That's the loop working as designed: a traveller's complaint became tested code, and the
+durable lessons became patterns the guide author reads before writing the next guide.
+
 ## 2026-07-16 — The hub's hero stopped expiring
 *A guide is at its most proven the day after the trip, not the day before.*
 
