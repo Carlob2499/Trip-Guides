@@ -16,7 +16,7 @@
   When you publish a big update, bump CACHE below (v1 -> v2) so visitors get the
   new version cleanly.
 */
-const CACHE = "tripguides-v34";
+const CACHE = "tripguides-v35";
 const BASE = "/Trip-Guides";
 /* CORE:BEGIN — the precache list. Rewritten in dist/ at build time by
    scripts/gen-sw-precache.mjs from the guides that actually built (so a new

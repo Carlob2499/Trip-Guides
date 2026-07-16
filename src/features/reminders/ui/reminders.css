@@ -1,0 +1,119 @@
+/* Reminders / Notable Items — the group's shared scratchpad. Uses the guide design tokens
+   so light/dark/mobile come free. */
+
+.rm-wrap { max-width: 760px; margin: 0 auto; }
+.rm-head { margin-bottom: 14px; }
+.rm-eyebrow {
+  margin: 0 0 2px;
+  color: var(--accent);
+  font-size: 0.72rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.rm-title { margin: 0 0 4px; font-size: 1.5rem; line-height: 1.15; }
+.rm-desc { margin: 0; color: var(--muted); font-size: 0.95rem; }
+
+/* Honest about what "shared" means — this is the same open room as the budget, so a door
+   code here is visible to anyone holding the guide link. Say so where it's typed, not in a doc. */
+.rm-privacy {
+  margin: 10px 0 0;
+  padding: 8px 11px;
+  border-left: 3px solid var(--warn);
+  background: var(--bg2);
+  border-radius: 0 6px 6px 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.rm-new {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+  padding: 12px;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: var(--card);
+}
+.rm-in {
+  padding: 9px 11px;
+  border: 1px solid var(--rule2);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.92rem;
+}
+.rm-in-label { flex: 1 1 8rem; min-width: 0; }
+.rm-in-text { flex: 3 1 14rem; min-width: 0; }
+.rm-in:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.rm-add {
+  flex: 0 0 auto;
+  padding: 9px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+.rm-add:hover { filter: brightness(1.06); }
+.rm-add:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+
+.rm-empty { margin: 0; padding: 18px 0; color: var(--muted); }
+
+.rm-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 11px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--card);
+  margin-bottom: 8px;
+}
+/* A pinned item is the one you're about to need at a station entrance — give it the accent
+   edge so it's findable at a glance, one-handed, in the rain. */
+.rm-item-pinned { border-left: 3px solid var(--accent); }
+.rm-ico { flex: none; font-size: 1rem; line-height: 1.5; }
+.rm-body { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.rm-label {
+  font-family: var(--font-data);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.rm-text { word-break: break-word; }
+/* A door code / PIN is read aloud and typed under pressure — give it the data face and let
+   it be selectable at a size you can actually read. */
+.rm-code {
+  font-family: var(--font-data);
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  user-select: all;
+}
+.rm-link { color: var(--accent); text-decoration: underline; }
+.rm-pin, .rm-del {
+  flex: none;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px 4px;
+}
+.rm-pin { font-size: 1.05rem; }
+.rm-del { font-size: 1.25rem; }
+.rm-pin[aria-pressed="true"] { color: var(--accent); }
+.rm-pin:hover, .rm-del:hover { color: var(--ink); }
+.rm-pin:focus-visible, .rm-del:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+
+/* Live indicator — mirrors the budget's passive status line. */
+.rm-live { display: inline-flex; align-items: center; gap: 7px; margin-top: 12px; font-size: 0.82rem; color: var(--muted); }
+.rm-live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--rule2); }
+.rm-live[data-state="live"] .rm-live-dot { background: var(--green); }
+.rm-live[data-state="offline"] .rm-live-dot { background: var(--warn); }

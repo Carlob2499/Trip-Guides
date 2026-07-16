@@ -4,6 +4,7 @@ import PwaHead from "../components/PwaHead.astro";
 import TripSplit from "../components/TripSplit.astro";
 import Voting from "../components/Voting.astro";
 import Learnings from "../components/Learnings.astro";
+import Reminders from "../components/Reminders.astro";
 import { bucket } from "../lib/buckets";
 import { emergencyFor } from "../data/countries.mjs";
 import { accentFor, darken, currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
@@ -321,6 +322,8 @@ const tripSummary = buildSummary(guide);
               aria-selected="false">$ Budget</button>
       <button class="gtab gtab-vote" role="tab" type="button" data-tab="vote"
               aria-selected="false">🗳 Vote</button>
+      <button class="gtab gtab-remind" role="tab" type="button" data-tab="remind"
+              aria-selected="false">📌 Reminders</button>
       <button class="gtab gtab-learn" role="tab" type="button" data-tab="learn"
               aria-selected="false" hidden>📓 Learnings</button>
     </nav>
@@ -494,6 +497,7 @@ const tripSummary = buildSummary(guide);
         <TripSplit storeKey={storeKey} />
         <Voting storeKey={storeKey} />
         <Learnings storeKey={storeKey} learnings={guide.learnings ?? null} />
+        <Reminders storeKey={storeKey} />
       </main>
     </div>
 
@@ -537,6 +541,7 @@ const tripSummary = buildSummary(guide);
         ))}
         <a class="sheet-cat sheet-split-link" data-tab="split" href="#">$ Budget Calculator</a>
         <a class="sheet-cat sheet-vote-link" data-tab="vote" href="#">🗳 Group Vote</a>
+        <a class="sheet-cat sheet-remind-link" data-tab="remind" href="#">📌 Reminders</a>
         <a class="sheet-cat sheet-learn-link" data-tab="learn" href="#" hidden>📓 Trip Learnings</a>
       </div>
     </div>

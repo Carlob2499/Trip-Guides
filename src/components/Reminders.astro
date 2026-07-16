@@ -1,0 +1,39 @@
+---
+/* Reminders / Notable Items — the group's shared scratchpad, a special panel like #tripSplit.
+   Markup only; behaviour lives in src/features/reminders (which reaches Firebase through its
+   silo). Present on every guide: the things it holds — a door code, an agreed meetup time, a
+   link — are exactly what a guide can't know in advance. */
+import "../features/reminders/ui/reminders.css";
+interface Props { storeKey: string }
+const { storeKey } = Astro.props;
+---
+<div class="rm-wrap" id="tripRemind" data-sk={storeKey} hidden>
+  <div class="rm-head">
+    <p class="rm-eyebrow">Reminders</p>
+    <h2 class="rm-title">Notable items</h2>
+    <p class="rm-desc">The things this guide can’t know in advance — the door code, the time you all agreed on, a link. Everyone on this guide sees the same list.</p>
+    <p class="rm-privacy">Shared with anyone who has this guide’s link — the same open room as the budget. Fine for a meetup time; think twice about anything you’d mind a stranger reading.</p>
+  </div>
+
+  <div class="rm-new">
+    <input class="rm-in rm-in-label" id="rmLabel" type="text" placeholder="Label (optional) — e.g. Airbnb door" autocomplete="off" />
+    <input class="rm-in rm-in-text" id="rmText" type="text" placeholder="Code, time, link or note…" autocomplete="off" />
+    <button class="rm-add" id="rmAdd" type="button">+ Add</button>
+  </div>
+
+  <div id="rmList"></div>
+
+  <div class="rm-live" id="rmLive" data-state="connecting" hidden>
+    <span class="rm-live-dot" aria-hidden="true"></span>
+    <span id="rmLiveText">Connecting to your group’s shared list…</span>
+  </div>
+</div>
+
+<script>
+  import { initReminders } from "../features/reminders/index.js";
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => initReminders(), { once: true });
+  } else {
+    initReminders();
+  }
+</script>

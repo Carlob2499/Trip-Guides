@@ -69,9 +69,10 @@ const daysForBanner     = _cfg.daysForBanner || [];
           // Non-numeric tabs (each a standalone panel, not a section group).
           // Add a new one here + its DOM id — everything else generalizes.
           var specialPanels = {
-            split: document.getElementById("tripSplit"),
-            vote:  document.getElementById("tripVote"),
-            learn: document.getElementById("tripLearn"),
+            split:  document.getElementById("tripSplit"),
+            vote:   document.getElementById("tripVote"),
+            learn:  document.getElementById("tripLearn"),
+            remind: document.getElementById("tripRemind"),
           };
           var TAB_KEY = "tg-tab-" + STORE_KEY;
 
