@@ -33,10 +33,12 @@ These are drawn from the guide's git history — the plan demonstrably moved dur
    *Learning candidate:* assume a multi-person trip may fork; keep per-person maths and
    "the 3 of you" phrasing derivable rather than hardcoded.
 
-3. **Monday Busan was re-plotted a SECOND time — from inside Busan.** An unmerged branch
-   (`claude/busan-seoul-itinerary-update-svykyx`, commit `780d1fa`) was written 13:05 KST on
-   Mon Jul 13 — roughly 12 minutes after the 12:53 arrival. It never merged, so the live
-   guide never showed it; but what it *chose* is the signal:
+3. **Monday Busan was re-plotted a SECOND time — from inside Busan.** Commit `780d1fa` (on the
+   never-merged branch `claude/busan-seoul-itinerary-update-svykyx`) was written 13:05 KST on
+   Mon Jul 13 — roughly 12 minutes after the 12:53 arrival. It was **not live during the trip**,
+   so the group didn't have it in hand on the day; its research has since been carried into the
+   guide's split files (2026-07-16), so Monday now documents the better route. What it *chose*
+   is the signal:
    - **taxi → subway** (Line 1 → Seomyeon → Line 2 → Haeundae Exit 5), explicitly trading
      ~25 min of taxi for a ~55 min predictable ride;
    - **lunch moved off Busan Station onto Gunam-ro** (Choryang Milmyeon / Obok gukbap), so

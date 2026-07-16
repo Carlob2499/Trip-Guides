@@ -249,9 +249,9 @@
       },
       {
         "date": "Mon Jul 13",
-        "tldr": "Sungsimdang, KTX 10:44 to Busan → gukbap, T1 Base Camp, Haeundae Beach → KTX 18:00, Seoul reunion KBBQ.",
+        "tldr": "Sungsimdang, KTX 10:44 to Busan → subway to Haeundae for a Gunam-ro lunch, T1 Base Camp, Haeundae Beach → KTX 18:00, Jongno-3-ga reunion KBBQ + pochas.",
         "title": "Post-MSI: Daejeon → Busan day trip → back to Seoul",
-        "pace": "Sungsimdang + KTX 10:44→12:53 · Busan east cluster: gukbap · T1 Base Camp · Haeundae Beach · KTX 18:00→20:52 · Jongno reunion KBBQ ~21:15",
+        "pace": "Sungsimdang + KTX 10:44→12:53 · subway Line 1→2 to Haeundae (Exit 5) · Gunam-ro lunch 14:15 · T1 Base Camp · Haeundae Beach · subway back · KTX 18:00→20:52 · Jongno-3-ga reunion KBBQ ~21:30 + pochas",
         "waypoints": [
           {
             "name": "Sungsimdang DCC (107 Expo-ro)",
@@ -268,46 +268,54 @@
             "note": "Daejeon Station only — not Daejeon West · arrive Busan 12:53"
           },
           {
-            "name": "Bonjeon Dwaeji Gukbap (by Busan Station)",
+            "name": "Busan Station → subway to Haeundae",
             "lat": 35.11555,
             "lng": 129.04259,
-            "time": "≈13:00",
-            "note": "Busan's signature dwaeji gukbap · 5-min walk from Busan Station · ≈₩11,000 · ⚠ confirm hours"
+            "time": "12:53",
+            "note": "Line 1 to Seomyeon, transfer to Line 2 (toward Jangsan) → Haeundae Station Exit 5 · 13:15–14:10 · leave bags in a station locker (they ride to Seoul tonight)"
           },
           {
-            "name": "T1 Base Camp Busan (Haeundae)",
+            "name": "Lunch on Gunam-ro, Haeundae",
+            "lat": 35.16375,
+            "lng": 129.15875,
+            "time": "14:15–15:30",
+            "note": "Choryang Milmyeon (구남로 20 · cold wheat noodles + mandu) or Obok Dwaeji Gukbap (구남로 15 · pork soup, 24h) · ≈₩7,000–11,000 · ⚠ confirm hours (Naver/CatchTable)"
+          },
+          {
+            "name": "T1 Base Camp Busan (37 Gunam-ro)",
             "lat": 35.16178,
             "lng": 129.16053,
-            "time": "≈14:15",
+            "time": "15:30",
             "note": "Merch shop 11:00–22:00 + photos · ⚠ confirm hours (Naver/@t1basecamp)"
           },
           {
             "name": "Haeundae Beach",
             "lat": 35.15778,
             "lng": 129.15813,
-            "time": "≈15:15",
-            "note": "Quick pictures + sea breeze · 2-min walk from T1"
+            "time": "≈16:15",
+            "note": "Walk down Gunam-ro from T1 (~2 min) · pictures + sea breeze until ~17:00"
           },
           {
             "name": "Busan Station — KTX 18:00 to Seoul",
             "lat": 35.11555,
             "lng": 129.04259,
             "time": "18:00",
-            "note": "Busan Station only — not Gupo/Singyeongju · arrive Seoul 20:52"
+            "note": "Subway back: Line 2 → Seomyeon → Line 1 (17:00–17:50) · Busan Station only — not Gupo/Singyeongju · arrive Seoul 20:52"
           }
         ],
         "energy": "balanced",
-        "note": "The hard-charging weekend is done. One clean run east to Busan — Busan's own bowl at the station, the T1 pilgrimage in Haeundae, and the sea — then the 18:00 train home for the three-way reunion dinner in Seoul. Tight but low-stress if you keep the cluster east and don't chase the central markets. If anyone is wiped after two GO Fest days + MSI, see the contingency to ride straight to Seoul instead.",
-        "body": "<p><em>Daejeon delivered. One clean run east to Busan — Busan's own bowl, the T1 pilgrimage, and the sea — then home to Seoul for the three-way reunion.</em></p><p><b>08:15–09:15 — Sungsimdang DCC + check out.</b> Walk from I-Hotel (~2 min) to <a href='https://sungsimdang.co.kr' target='_blank' rel='noopener noreferrer'><b>Sungsimdang DCC Branch</b></a> (<span data-addr-kr='유성구 엑스포로 107'>107 Expo-ro, Yuseong-gu</span>). Grab <b>fried soboro</b> (튀김소보로) + <b>chive bread</b> (부추빵) for the train. Check out; a short EXPO plaza stroll if you have a minute.</p><p><b>~10:15 — Kakao T to Daejeon Station.</b> ≈20 min, ≈₩11,000 (split 2 ≈₩5,500 each). <b>Daejeon Station only — not Daejeon West.</b> <b>KTX 10:44 → Busan 12:53</b> (booked). You're carrying bags to Seoul tonight, so travel light or grab a Busan Station locker on arrival.</p><p><b>🍲 ~13:00 — Lunch: Bonjeon Dwaeji Gukbap (본전돼지국밥).</b> <span data-addr-kr='동구 중앙대로214번길 3-8'>3-8 Jungang-daero 214beon-gil, Dong-gu</span> — a <b>5-min walk from Busan Station</b>, zero commute off the train. This is <b>Busan's signature dish</b>: <b>dwaeji gukbap</b>, a deep, clean pork-and-rice soup that is Busan's own. Michelin-listed; ≈₩11,000; short fast-moving line; they cut the meat tableside. ⚠ Confirm hours / Monday-open on Naver. <a href='https://map.naver.com/p/search/%EB%B3%B8%EC%A0%84%EB%8F%BC%EC%A7%80%EA%B5%AD%EB%B0%A5'>Naver Map</a>. <i>(Prefer seafood? Jagalchi Market is central too — but it pulls you west, away from today's east cluster.)</i></p><p><b>🎮 ~14:15 — T1 Base Camp Busan (Haeundae).</b> Taxi Busan Station → Haeundae (~25 min, ≈₩18,000–22,000; metro Line 1→2 is ~40 min). <b>T1 Base Camp</b> (2F, <span data-addr-kr='해운대구 구남로 37'>37 Gunam-ro, Haeundae-gu</span>) — the Worlds champions' second home base, opened Dec 2025: <b>official merch shop (11:00–22:00)</b>, the T1 PUB, and a 24-hour PC café. You're here for the <b>shop + photos</b> (~30–40 min) — you're literally at MSI, so this is the pilgrimage. ⚠ Confirm hours on the day (Naver / <a href='https://x.com/t1basecamp'>@t1basecamp</a>). <i>(Distinct from the Seoul T1 Base Camp in Hongdae.)</i></p><p><b>🌊 ~15:15 — Haeundae Beach.</b> <b>2-min walk</b> from Gunam-ro. Quick pictures, toes in the water, sea breeze — the reward after two arena days. In this heat, keep it to the shaded promenade + a beach-vendor iced coffee. <i>(Optional if ahead: Gwangalli Beach + Gwangan Bridge sits between Haeundae and Busan Station — a stronger skyline photo on the way back, ~15 min by taxi.)</i></p><p><b>~17:00 — back to Busan Station.</b> Taxi Haeundae → Busan Station (~25–30 min, ≈₩18,000–22,000); be at the station by <b>17:40</b>. <b>KTX 18:00 → Seoul 20:52</b> (booked). <b>Busan Station only — not Gupo/Singyeongju.</b></p><p><b>🍖 ~21:15 — Seoul reunion KBBQ (Jongno).</b> Seoul Station 20:52 → <b>Line 1 to Jonggak</b> (2 stops, ~5 min, ≈₩1,400) → the base. Your third friend is back from Tokyo (~20:30), so all three regroup here. Realistically you're seated ~21:15, and most Jongno hanwoo houses close ~21:30–22:00 — so the move is the <b>Jongno 3-ga grilled-meat &amp; pojangmacha strip</b> (Nakwon-dong, ~8-min walk): eat beef galbi at <b>Solbat Galbi</b> (솔밭갈비 — charcoal beef short ribs ≈₩40,000, open till ~22:00, so hustle in), then slide to the <b>tented pochas</b> that run past midnight for the soju-and-grill tail. Come as you are; walk home. ⚠ Confirm same-day hours; if you want a guaranteed late kitchen instead, Hongdae (Line 2) stays open latest.</p><p><b>⚠ Contingencies</b></p><ul><li><b>Wiped after MSI?</b> Skip Busan — morning KTX direct Daejeon → Seoul (~50 min), then rest at the base or an easy Gwangjang Market / DDP afternoon. Busan's still there another trip.</li><li><b>Running behind in Busan?</b> Drop Haeundae Beach; keep T1 + the gukbap. A beach photo isn't worth risking the 18:00 train.</li><li><b>Rain or too hot?</b> <a href='https://www.shinsegae.com/spaland/busan' target='_blank' rel='noopener noreferrer'><b>Shinsegae Spa Land</b></a> at <b>Centum City</b> (Haeundae-gu) sits between Busan Station and Haeundae — Korea's largest department spa, ≈₩22,000, 22 sauna rooms + rooftop pool; Metro Line 2 to Centum City. A cool indoor reset right on the route. Open 06:00–24:00.</li></ul>",
-        "fit": "Light bags (they ride to Seoul tonight). Sea-friendly shoes + sunscreen for Haeundae; a layer for the KTX AC.",
+        "note": "The hard-charging weekend is done. One clean run east to Busan — the KTX in, the subway straight out to Haeundae for a Gunam-ro lunch, the T1 pilgrimage, and the sea — then the 18:00 train home for the three-way reunion in Seoul's Jongno-3-ga. Tight but low-stress if you keep everything on the Gunam-ro strip and don't chase the central markets. If anyone is wiped after two GO Fest days + MSI, see the contingency to ride straight to Seoul instead.",
+        "body": "<p><em>Daejeon delivered. One clean run east to Busan — the subway straight out to Haeundae, a Gunam-ro lunch, the T1 pilgrimage, and the sea — then home to Seoul's Jongno-3-ga for the three-way reunion.</em></p><p><b>08:15–09:15 — Sungsimdang DCC + check out.</b> Walk from I-Hotel (~2 min) to <a href='https://sungsimdang.co.kr' target='_blank' rel='noopener noreferrer'><b>Sungsimdang DCC Branch</b></a> (<span data-addr-kr='유성구 엑스포로 107'>107 Expo-ro, Yuseong-gu</span>). Grab <b>fried soboro</b> (튀김소보로) + <b>chive bread</b> (부추빵) for the train. Check out; a short EXPO plaza stroll if you have a minute.</p><p><b>~10:15 — Kakao T to Daejeon Station.</b> ≈20 min, ≈₩11,000 (split 2 ≈₩5,500 each). <b>Daejeon Station only — not Daejeon West.</b> <b>KTX 10:44 → Busan 12:53</b> (booked). You're carrying bags to Seoul tonight, so travel light or grab a Busan Station locker on arrival.</p><p><b>🚇 13:15–14:10 — Busan Station → Haeundae by subway.</b> Drop your bags in a Busan Station locker first. Then take <b>subway Line 1 toward Seomyeon</b>, <b>transfer at Seomyeon to Line 2 (toward Jangsan)</b>, and get off at <b>Haeundae Station, Exit 5</b> (~55 min on your T-money card). Exits 3 and 5 put you straight onto Gunam-ro — the lunch spots, T1 and the beach all line this one street.</p><p><b>🍜 14:15–15:30 — Lunch on Gunam-ro.</b> Two Haeundae classics, both a 1-min walk from Haeundae Station:</p><ul><li><b>Haeundae Choryang Milmyeon</b> (해운대 초량밀면, <span data-addr-kr='해운대구 구남로 20'>20 Gunam-ro</span>) — Busan's summer dish: <b>milmyeon</b>, chewy cold wheat noodles (≈₩6,000–7,000), with their well-known <b>mandu</b> (dumplings, ≈₩6,000). +82 51-731-2885.</li><li><b>Haeundae Obok</b> (해운대 오복돼지국밥, <span data-addr-kr='해운대구 구남로 15'>15 Gunam-ro</span>, 1F) — traditional <b>dwaeji gukbap</b>, Busan's own pork-and-rice soup (from ≈₩10,000); <b>open 24h</b>, mild broth that's easy for first-timers. Often a short wait — a CatchTable queue tablet sits at the door.</li></ul><p>⚠ Confirm same-day hours on Naver / CatchTable.</p><p><b>🎮 15:30–17:00 — T1 Base Camp Busan, then Haeundae Beach.</b> <b>T1 Base Camp</b> (2F, <span data-addr-kr='해운대구 구남로 37'>37 Gunam-ro, Haeundae-gu</span>) — the Worlds champions' second home base, opened Dec 2025: <b>official merch shop (11:00–22:00)</b>, the T1 PUB, and a 24-hour PC café. You're here for the <b>shop + photos</b> (~30–40 min) — you're literally at MSI, so this is the pilgrimage. ⚠ Confirm hours on the day (Naver / <a href='https://x.com/t1basecamp'>@t1basecamp</a>). Then <b>walk down Gunam-ro to Haeundae Beach</b> (~2 min): quick pictures, toes in the water, sea breeze — the reward after two arena days. In this heat, keep to the shaded promenade + a beach-vendor iced coffee. <i>(Distinct from the Seoul T1 Base Camp in Hongdae.)</i></p><p><b>🚇 17:00–17:50 — back to Busan Station.</b> Reverse the subway: <b>Line 2 to Seomyeon</b>, then <b>transfer to Line 1 toward Busan Station</b>. Be on the platform by <b>17:50</b>. <b>KTX 18:00 → Seoul 20:52</b> (booked). <b>Busan Station only — not Gupo/Singyeongju.</b></p><p><b>🍖 Seoul evening — Jongno-3-ga reunion (from ~21:00).</b> <b>Arrive Seoul Station 20:52</b> (≈9:00 PM). From Seoul Station take <b>Line 1 to Jongno 3-ga</b> (or a taxi, ≈₩6,000) — ~15 min into the Jongno-3-ga area, right by the base and LoL Park. Your third friend is back from Tokyo (~20:30), so all three regroup here.</p><p><b>~21:30–23:30 — late dinner, beef-centric KBBQ.</b> Aim for a beef house on the Jongno-3-ga meat lanes; because it's late, <b>call ahead or check the kitchen is still open</b>. Options to try:</p><ul><li><b>Ikseon-dong Ranch</b> (익선동목장 / Iksundong Farm) — Korean beef + Iberico pork, steps from Jongno 3-ga in the Ikseon-dong hanok lanes.</li><li><b>Jongsam Yuk</b> (종삼육, <span data-addr-kr='종로구 돈화문로11길 8-1'>8-1 Donhwamun-ro 11-gil</span>) — charcoal-grilled aged meat right in front of <b>Exit 6</b>; a big 1F–3F house (leans pork belly, does beef too).</li><li><b>Mido Galbi</b> (미도갈비, <span data-addr-kr='종로구 삼일대로15길 25'>25 Samil-daero 15-gil</span>) — Wagyu / beef galbi and ribs, ≈₩22,000–120,000. ⚠ Closes ~22:30, so this one only works if you're seated early.</li><li><b>Gwangju House</b> (광주집, <span data-addr-kr='종로구 돈화문로11나길 3'>3 Donhwamun-ro 11na-gil</span>) — old-school Jongno galbi.</li></ul><p>⚠ Confirm late hours the same day — several Jongno hanwoo houses close ~22:30–23:00. No booking? Just walk the strip and take an open table.</p><p><b>🍶 23:30 onward — pojangmacha (pocha) tents.</b> For late drinks and street food, head straight <b>outside Jongno-3-ga Station — Exits 3, 4, 5, 6, 7 and 8</b>, where the tented <b>pojangmacha</b> stalls run past midnight. No reservations: find open seats at a stall, order soju + grilled snacks, and walk home.</p><p><b>⚠ Contingencies</b></p><ul><li><b>Wiped after MSI?</b> Skip Busan — morning KTX direct Daejeon → Seoul (~50 min), then rest at the base or an easy Gwangjang Market / DDP afternoon. Busan's still there another trip.</li><li><b>Running behind in Busan?</b> Drop Haeundae Beach; keep T1 + lunch. The subway back needs ~50 min, so leave Gunam-ro by 17:00 — a beach photo isn't worth risking the 18:00 train.</li><li><b>Prefer a faster hop?</b> A taxi Busan Station ⇄ Haeundae is ~25 min (≈₩18,000–22,000) vs ~55 min on the subway — worth it if either leg runs tight.</li><li><b>Rain or too hot?</b> <a href='https://www.shinsegae.com/spaland/busan' target='_blank' rel='noopener noreferrer'><b>Shinsegae Spa Land</b></a> at <b>Centum City</b> (Haeundae-gu) sits on the Line 2 route between Seomyeon and Haeundae — Korea's largest department spa, ≈₩22,000, 22 sauna rooms + rooftop pool; hop off at Centum City. A cool indoor reset right on the way. Open 06:00–24:00.</li></ul>",
+        "fit": "Light bags (they ride to Seoul tonight — use a Busan Station locker for the afternoon). Sea-friendly shoes + sunscreen for Haeundae; a layer for the KTX AC; T-money topped up for the Busan subway.",
         "checklist": [
           "Sungsimdang DCC by ~08:30 — soboro (튀김소보로) + chive bread (부추빵) for the train; check out of I-Hotel",
           "Kakao T to Daejeon Station by ~10:20 — KTX 10:44 → Busan 12:53 (booked); Daejeon Station not Daejeon West",
-          "Lunch: Bonjeon Dwaeji Gukbap, 5-min walk from Busan Station — Busan's signature gukbap ≈₩11,000 (⚠ confirm hours on Naver)",
-          "T1 Base Camp Busan (37 Gunam-ro, Haeundae) — merch shop 11:00–22:00 + photos (⚠ confirm hours)",
-          "Haeundae Beach quick photos (2-min walk from T1); drop it if you're behind schedule",
-          "Back at Busan Station by 17:40 — KTX 18:00 → Seoul 20:52 (booked); Busan Station not Gupo/Singyeongju",
-          "Seoul Station → Jonggak (Line 1, 2 stops); reunion KBBQ ~21:15 on the Jongno 3-ga meat/pocha strip — beef galbi (Solbat Galbi) + pochas (⚠ confirm hours)"
+          "Busan Station → Haeundae by subway (13:15–14:10): Line 1 to Seomyeon → Line 2 toward Jangsan → Haeundae Exit 5; leave bags in a Busan Station locker",
+          "Lunch 14:15–15:30 on Gunam-ro — Choryang Milmyeon (구남로 20, cold noodles + mandu) or Obok dwaeji gukbap (구남로 15, 24h) (⚠ confirm hours)",
+          "T1 Base Camp (37 Gunam-ro) shop + photos 15:30, then walk to Haeundae Beach ~16:15 (drop the beach if you're behind)",
+          "Back to Busan Station by ~17:50 (subway Line 2 → Seomyeon → Line 1); KTX 18:00 → Seoul 20:52 (booked); Busan Station not Gupo/Singyeongju",
+          "Seoul Station 20:52 → Line 1 to Jongno 3-ga (or taxi); three-way reunion — beef KBBQ ~21:30 (Ikseon-dong Ranch / Jongsam Yuk / Mido Galbi / Gwangju House; ⚠ call ahead for a late kitchen)",
+          "Pojangmacha tents from ~23:30 outside Jongno-3-ga Station Exits 3–8 — walk up, no reservations"
         ]
       },
       {
