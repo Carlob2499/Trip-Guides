@@ -1,0 +1,101 @@
+[
+  {
+    "type": "panel",
+    "group": "Essentials",
+    "title": "Currency & how to pay",
+    "body": "<p>Denmark uses the <b>krone (DKK)</b> — not the euro. Rough mid-2026 guide rate (verify before you go): <b>100 DKK ≈ $15.50 USD</b>. Your day trips use different currencies: <b>100 SEK ≈ $10–11</b> (Sweden) and <b>100 NOK ≈ $9–10</b> (Norway).</p><p>Cards and contactless payments work essentially everywhere in Denmark — you may never need to touch cash. Tipping is not part of Danish culture; rounding up at a restaurant for genuinely good service is plenty, and no one expects it.</p>"
+  },
+  {
+    "type": "budget",
+    "group": "Essentials",
+    "title": "What this trip costs — a realistic budget",
+    "currency": "$",
+    "days": 8,
+    "intro": "Rough <b>per-person</b> estimates in USD. Denmark is consistently one of Europe's most expensive destinations — these numbers are honest starting points, not minimums. Tap any 'Your spend' field to log what you actually pay; the total updates live and is saved on this device.",
+    "items": [
+      {
+        "label": "Lodging — CABINN, per night (per room)",
+        "basis": "day",
+        "est": 110,
+        "note": "Split across the room if sharing."
+      },
+      {
+        "label": "Food & coffee, per day",
+        "basis": "day",
+        "est": 55,
+        "note": "Restaurant mains ≈$25–48; bakeries and street food are much cheaper. Torvehallerne lunch ≈$12–20."
+      },
+      {
+        "label": "Local transport — City Pass Small (100 DKK/day)",
+        "basis": "day",
+        "est": 16,
+        "note": "100 DKK ≈ $15.50. Covers metro, bus, S-tog and harbour buses in zones 1–4 (including the airport). Check current price at dinoffentligetransport.dk."
+      },
+      {
+        "label": "Sights & entries, per day",
+        "basis": "day",
+        "est": 25
+      },
+      {
+        "label": "Flights — round trip",
+        "basis": "trip",
+        "est": 650,
+        "note": "NYC↔CPH runs roughly $400–1,200 by date and timing."
+      },
+      {
+        "label": "Go Nordic Cruiseline ferry — return cabin",
+        "basis": "trip",
+        "est": 220,
+        "note": "Foot-passenger with inside cabin. Prices vary — book early at gonordiccruiseline.com."
+      },
+      {
+        "label": "Malmö day trip — Øresundståg return",
+        "basis": "trip",
+        "est": 30,
+        "note": "≈111 DKK each way from Nørreport. Buy at the station — City Pass doesn't cover the Swedish leg."
+      },
+      {
+        "label": "GO Fest park ticket (200 kr per session)",
+        "basis": "trip",
+        "est": 31,
+        "note": "200 kr ≈ $31. Morning (9:00–13:00) or Afternoon (14:00–18:00) session. Includes full citywide access that day."
+      },
+      {
+        "label": "GO Fest Premier Access (optional add-on)",
+        "basis": "trip",
+        "est": 99,
+        "note": "640 kr ≈ $99. Exclusive collectible + voucher codes for 100+ in-game items. Set to 0 if skipping."
+      },
+      {
+        "label": "Mom's group — canal tour + hop-on-hop-off (per person, 2 days)",
+        "basis": "trip",
+        "est": 85,
+        "note": "≈ Stromma canal tour ~129 DKK + RED Sightseeing bus 24h ~199–299 DKK. Check current prices on GetYourGuide before booking."
+      },
+      {
+        "label": "Copenhagen Card option (instead of daily transit + entries)",
+        "basis": "trip",
+        "est": 0,
+        "note": "589 / 859 / 1,039 DKK for 24h / 48h / 72h (verified Jun 2026 at copenhagencard.com). Covers all transit zones + 80+ attractions free. Use INSTEAD of the transport and sights daily lines — not on top of them."
+      }
+    ]
+  },
+  {
+    "type": "panel",
+    "group": "Essentials",
+    "title": "Getting medical help in Copenhagen",
+    "body": "<p><b>Emergency — dial 112</b> (free from any phone): ambulance, fire, police. <b>Non-emergency medical line: 1813</b> — Copenhagen's 24/7 nurse and doctor advice line. Call this before going to any emergency room; they'll direct you. From a foreign mobile: +45 1813. Non-emergency police: 114.</p><p>Pharmacies (apotek) are marked with a green 'A'. The only one open around the clock is <a href='https://stenoapotek.dk/welcome---english' target='_blank' rel='noopener noreferrer'><b>Steno Apotek</b></a>, Vesterbrogade 6C — directly opposite Central Station. English-speaking staff; after 23:00, use the night bell on the right side of the entrance. As a US visitor you have no Danish health insurance card, but 1813 can still advise you; private English-speaking GP and hotel-visit services are available for a fee. <b>Tap water is safe</b> throughout Denmark.</p>",
+    "checklist": [
+      "Save 112 (emergency) and +45 1813 (medical advice) in your phone now",
+      "Pack all medicines in original packaging with a copy of any prescriptions",
+      "Confirm travel insurance covers overseas medical care",
+      "24-hour pharmacy: <a href='https://stenoapotek.dk/welcome---english' target='_blank' rel='noopener noreferrer'>Steno Apotek, Vesterbrogade 6C</a>"
+    ]
+  },
+  {
+    "type": "panel",
+    "group": "Essentials",
+    "title": "How to fit in — Danish etiquette for visitors",
+    "body": "<p>Danish is the official language, but <b>virtually everyone under 60 speaks fluent English</b> — you will not struggle. A few local habits worth knowing before you arrive:</p><p><b>The bike lane is sacred.</b> Copenhagen runs on cycling. The painted lane between the pavement and the road belongs exclusively to cyclists — do not step into it, stop in it for photos, or cut across it without looking. Cyclists move fast and expect the lane clear. Look both ways before crossing.</p><p><b>Cards, not cash.</b> Denmark is one of the world's most cashless societies. Contactless payments work in taxis, market stalls, museums, and corner shops. You can carry virtually no cash and be fine.</p><p><b>Tipping is not expected.</b> Service charges are included in all restaurant bills by law. Rounding up for exceptional service is perfectly fine; no one will be offended if you don't. '<em>Tak</em>' (thanks) and '<em>hej</em>' (hi or bye) go a long way.</p>"
+  }
+]

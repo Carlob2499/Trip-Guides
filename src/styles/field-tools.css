@@ -81,6 +81,11 @@ html[data-swipe-hint="back"]::after{left:0;background:linear-gradient(to right,c
 .sos-num{flex:none;min-width:4.2rem;font-family:var(--font-display);font-weight:800;font-size:1.7rem;letter-spacing:-.02em;color:#b3261e}
 .sos-label{font-size:.9rem;line-height:1.4;color:var(--ink)}
 .sos-note{margin:.7rem 0 0;font-size:.78rem;color:var(--muted)}
+/* Fallback sheet (EU-wide 112 only, no researched local numbers): warn-toned so
+   it reads as "the universal number, not the researched sheet" at a glance. */
+.sos-sheet--fallback .sos-inner{border-top:3px solid var(--warn)}
+.sos-sheet--fallback .sos-note{color:var(--warn)}
+.sos-sheet--fallback .sos-note::before{content:"⚠ "}
 
 /* ── Show-the-driver address card ─────────────────────────────────────────── */
 .addr-card{position:fixed;inset:0;z-index:320;display:flex;align-items:center;justify-content:center;background:rgba(8,11,14,.75);padding:1rem}

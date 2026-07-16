@@ -5,7 +5,7 @@
 // every sights coordinate guide-wide; later map sections show only their own
 // center + named points. Nothing is invented — pins exist only where the
 // content already carries verified coordinates.
-import { flattenSections } from "./exports";
+import { flattenSections } from "../features/exports/index";
 
 export type Pin = {
   id: string;

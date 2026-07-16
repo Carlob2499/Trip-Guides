@@ -5,9 +5,9 @@ interface Props {
 const { storeKey } = Astro.props;
 ---
 
-<!-- Behavior lives in src/scripts/trip-split.js (imported in the GuideLayout bundle) —
-     the id-keyed calculator + settlement, plus (when Firebase is configured) live group
-     sync. This file is markup only. -->
+<!-- Behavior lives in the src/features/trip-split silo (imported in the GuideLayout
+     bundle via its index.ts) — the id-keyed calculator + settlement + minor-unit split
+     engine, plus (when Firebase is configured) the shared live room. Markup only. -->
 <div class="split-wrap" id="tripSplit" hidden data-sk={storeKey}>
 
   <div class="split-toolbar">

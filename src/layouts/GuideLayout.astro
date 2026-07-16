@@ -5,10 +5,10 @@ import TripSplit from "../components/TripSplit.astro";
 import Voting from "../components/Voting.astro";
 import Learnings from "../components/Learnings.astro";
 import { bucket } from "../lib/buckets";
-import { EMERGENCY } from "../data/countries.mjs";
+import { emergencyFor } from "../data/countries.mjs";
 import { accentFor, darken, currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
 import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
-import { collectWaypoints, collectDayEvents, buildSummary } from "../lib/exports";
+import { collectWaypoints, collectDayEvents, buildSummary } from "../features/exports/index";
 // Self-hosted variable fonts (bundled, base-path-safe, offline-correct) — no CDN.
 import "@fontsource-variable/bricolage-grotesque";
 import "@fontsource-variable/literata";
@@ -549,29 +549,29 @@ const tripSummary = buildSummary(guide);
            6. Jet-lag calculator
          ═══════════════════════════════════════════════════════════════════ -->
     <!-- Config for the extracted guide UI module (formerly Astro define:vars). -->
-    <script type="application/json" id="tgConfig" set:html={JSON.stringify({ order, storeKey, mapCenter, firstDayDate, lastDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, daysForBanner, gmapsKey: import.meta.env.PUBLIC_GMAPS_KEY ?? null, gmapsMapId: import.meta.env.PUBLIC_GMAPS_MAP_ID ?? null, emergency: EMERGENCY[guide.country] ?? null, verifiedDate })}></script>
+    <script type="application/json" id="tgConfig" set:html={JSON.stringify({ order, storeKey, mapCenter, firstDayDate, lastDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, daysForBanner, gmapsKey: import.meta.env.PUBLIC_GMAPS_KEY ?? null, gmapsMapId: import.meta.env.PUBLIC_GMAPS_MAP_ID ?? null, emergency: emergencyFor(guide.country), verifiedDate })}></script>
     <!-- Interactive UI — bundled + hashed by Astro into one module shared across guides. -->
     <script>
       import "../scripts/guide-ui.js";
-      import "../scripts/gmaps-render.js";
-      import "../scripts/day-rail.js";
+      import "../features/maps/index.js";
+      // itinerary silo (day-rail, swipe-nav, now-line, spine, print-day) —
+      // imported at day-rail's original slot; its index preserves their exec
+      // order. guide-ui above stays first (the one load-bearing invariant).
+      import "../features/itinerary/index.js";
       import "../scripts/reveal.js";
       import "../scripts/section-flight.js";
-      import "../scripts/swipe-nav.js";
       import "../scripts/micro.js";
       import "../scripts/onboard.js";
       import "../scripts/scroll-memory.js";
-      import "../scripts/now-line.js";
       import "../scripts/offline-pill.js";
-      import "../scripts/field-tools.js";
-      import "../scripts/sos.js";
+      import "../features/field-tools/index.js";
+      import "../features/sos/index.js";
       import "../scripts/lightbox.js";
-      import "../scripts/spine.js";
       import "../scripts/hero-parallax.js";
       import "../scripts/gsap-hero.js";
-      import "../scripts/palette.js";
-      import "../scripts/print-day.js";
-      import "../scripts/trip-split.js";
+      import "../features/palette/index.js";
+      import "../features/trip-split/index.ts";
+      import "../scripts/staleness-ui.js";
     </script>
 
   </body>

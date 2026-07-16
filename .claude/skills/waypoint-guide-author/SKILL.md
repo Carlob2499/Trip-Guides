@@ -27,15 +27,16 @@ helper scripts, and the done gate.
 1. **`references/verification-rules.md`** — the binding fact decision layer
    (perishable-vs-durable, source tiers, ship/flag/omit, stopping conditions,
    the §8 self-check). Read before writing any fact.
-2. The **target guide** `src/content/guides/<slug>.json` (read before editing —
-   never regenerate from memory) and its **intake** `guides-intake/<slug>.md`
-   if it exists (ranked priorities decide which sections get depth); else infer
-   general scope and say so. `docs/NEW_GUIDE_INTAKE.md` explains intake → spec.
-   For a targeted edit on a large guide, check `<slug>.index.md` beside it first
-   (generated line-range map by section/day) instead of reading the whole file —
-   regenerate with `npm run index-guide -- <slug>` after any line-count change.
+2. The **target guide** — a directory `src/content/guides/<slug>/` (`_guide.json`
+   meta + `NN-<group>.json` per tab group; drafts may still be a single
+   `<slug>.json`). For a targeted edit, `ls` the dir and Read ONLY the group
+   file the fact lives in — never regenerate from memory, never read the whole
+   guide for a one-section change. Also read its **intake**
+   `guides-intake/<slug>.md` if it exists (ranked priorities decide which
+   sections get depth); else infer general scope and say so.
+   `docs/NEW_GUIDE_INTAKE.md` explains intake → spec.
 3. **`references/block-types.md`** — when choosing or creating a section type.
-4. **`denmark.json` / `korea.json`** — the gold standard to match or beat.
+4. **The `denmark/` and `korea/` guide dirs** — the gold standard to match or beat.
 
 ## Modes
 - **New guide** — intake first, then scaffold (`node scripts/scaffold-guide.mjs
@@ -63,6 +64,12 @@ helper scripts, and the done gate.
   `⚠` known-gap · omitted · `__VERIFICATION_REQUIRED__` (unverified map
   place_id). **Zero bare perishable facts.** Full rules: `verification-rules.md`
   §4. A guessed figure wearing `≈` is a fabrication.
+- **Structured provenance (additive):** sections and items accept optional
+  `source_url` + `verified_on` (YYYY-MM-DD). Set BOTH on new/edited perishable
+  facts where the block supports them — they feed the weekly recert audit
+  (link HEAD-checks + shelf-life flagging; fx ≈7d, hours/transit ≈90d, venues
+  ≈180d per `src/lib/staleness.ts`). Inline `<a href>` citations stay valid;
+  `verified_on` without `source_url` is lint-flagged.
 
 ## Never guess what a script can verify
 - **coords / place_id** → `node scripts/lookup-place.mjs "<place>" --cc XX`
@@ -81,6 +88,10 @@ helper scripts, and the done gate.
 5. **`verified` stamp** — `Checked [date] for [trip] · re-check before travel:
    [most perishable items]`; keep it `⚠`-prefixed on drafts and keep
    `draft: true` — graduating a guide is a human decision, never yours.
+6. **Recert pass** — any fact you touched that sits past its shelf life
+   (`src/lib/staleness.ts` categories) is re-sourced from a primary source and
+   re-dated, or visibly downgraded to `⚠` — never silently left presenting as
+   verified.
 
 ## Completion report
 End every pass with: `built ✓ (N sections, build + linter clean) · flagged ⚠

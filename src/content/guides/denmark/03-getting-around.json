@@ -1,0 +1,58 @@
+[
+  {
+    "type": "routes",
+    "group": "Getting around",
+    "title": "How to get everywhere on this trip",
+    "steps": [
+      "<b>Airport → hotel:</b> Metro <b>M2</b> from CPH airport (Lufthavnen station) to <b>Nørreport</b> (~15–20 min). Buy a City Pass Small in the <a href='https://dinoffentligetransport.dk/en/find-tickets/day-tickets/city-pass' target='_blank' rel='noopener noreferrer'>DOT Tickets app</a> before boarding — it covers the airport ride (zones 1–4). Walk ~5 min to CABINN.",
+      "<b>Around Copenhagen:</b> Harbour buses <b>991 and 992</b> for waterfront hops (City Pass covers them). The driverless metro for cross-city trips. Donkey Republic e-bikes for short, flat stretches if you want a break from walking.",
+      "<b>To Malmö (Jun 10):</b> Øresundståg from Nørreport or København H to Malmö C (~35–40 min). Bring your passport — there are ID checks on the bridge crossing. Buy a separate cross-border ticket at the station; your City Pass stops at the Danish border.",
+      "<b>To the Oslo ferry (Jun 14):</b> Taxi or shuttle to <b>Go Nordic Cruiseline terminal, Dampfærgevej 30</b> (Østerbro). Check in by 16:15; sailing departs 16:30.",
+      "<b>Oslo ashore (Jun 15):</b> Dock at Vippetangen ~10:00. Walk 10–15 min to the Oslo Opera House roof, Aker Brygge, and Akershus Fortress loop. Reboard by 15:30.",
+      "<b>Dock → airport (Jun 16):</b> Back in Copenhagen ~10:00. Take a taxi directly to CPH (~20 min) — safest option for the 14:20 flight."
+    ]
+  },
+  {
+    "type": "panel",
+    "group": "Getting around",
+    "title": "Transit passes — which one to buy and when",
+    "body": "<p>Three real options for this trip, from simplest to most comprehensive:</p><p><b>City Pass Small</b> — the default choice, bought in the <a href='https://dinoffentligetransport.dk/en/find-tickets/day-tickets/city-pass' target='_blank' rel='noopener noreferrer'>DOT Tickets app</a>. Covers all metro lines (M1–M4), S-tog commuter rail, local buses, and harbour buses 991/992. Zones 1–4, which includes the CPH airport. Verified 2026 prices: <b>24h = 100 DKK, 48h = 160 DKK, 96h = 280 DKK, 120h = 340 DKK.</b> Note: there is no 72-hour option — the jump is from 48h to 96h.</p><p><b>Copenhagen Card (DISCOVER)</b> — covers unlimited transit in all zones (including airport) <em>plus</em> free admission to 80+ attractions, including Rosenborg Castle, the Round Tower, and the National Museum. Verified 2026 prices: <b>24h = 589 DKK, 48h = 859 DKK, 72h = 1,039 DKK.</b> Worth doing the maths before you buy — it only makes sense on days you're visiting 3+ paid attractions. Full pricing at <a href='https://copenhagencard.com/view/prices' target='_blank' rel='noopener noreferrer'>copenhagencard.com</a>.</p><p><b>Single tickets</b> — fine for one-off journeys. A standard 2-zone city ticket is ≈26 DKK; the airport is a 3-zone journey if you're buying a single (~36–40 DKK, but a City Pass Small covers it). Buy at station machines or in the DOT app.</p><p><b>What City Pass does NOT cover:</b> the Øresundståg to Malmö, the Go Nordic Cruiseline ferry, or any travel in Sweden or Norway.</p>",
+    "checklist": [
+      "Download the DOT Tickets app before you leave home",
+      "Buy City Pass Small on arrival at the airport — 100 DKK/24h (verified 2026 price)",
+      "Malmö day (Jun 10): buy a separate Øresundståg cross-border ticket at Nørreport station",
+      "Museum-heavy days: check if Copenhagen Card (589+ DKK) saves money vs City Pass + individual entries"
+    ]
+  },
+  {
+    "type": "routes",
+    "group": "Getting around",
+    "title": "Step-by-step routes — Thursday, Friday & Saturday",
+    "steps": [
+      "<b>Thu — GO Fest group · LEGO → CopenHill → Superkilen → Grundtvig's:</b> (1) Walk from CABINN south via Nørregade → Strøget to <b>LEGO Store Vimmelskaftet 37</b> (~15 min, ≈1 km). Browse freely — the Stamp Rally doesn't open until tomorrow. (2) Metro M1 south to <b>DR Byen</b> (4 stops, ~8 min) then bus 2A or walk ≈600 m to <b>CopenHill</b>; or taxi from Rådhuspladsen (~10 min, ≈100–140 DKK). (3) Return to city: bus <b>5C</b> from Nørreport north to <b>Nørrebrogade</b> for <b>Superkilen</b> (~15 min). (4) Bus <b>6A</b> from Nørrebro to Bispebjerg for <b>Grundtvig's Church</b> (~20 min). ⚠️ <b>Grundtvig's closes at 15:45</b> — plan to arrive no later than 15:15. Return on bus 6A or 6C to Nørreport.",
+      "<b>Thu — Mom's group · Canal boat → hop-on-hop-off bus:</b> Metro M1/M2 to <b>Kongens Nytorv</b> (~5 min from CABINN) then walk ~5 min to Nyhavn or Gammel Strand for the canal tour — confirm exact departure pier from your <a href='https://www.getyourguide.com/copenhagen-l12/cruises-boat-tours-tc48/' target='_blank' rel='noopener noreferrer'>GetYourGuide booking</a>. After the cruise (~1 hr), join the <a href='https://www.redsightseeing.com/copenhagen/' target='_blank' rel='noopener noreferrer'>RED Sightseeing hop-on-hop-off bus</a> at the nearest stop (Kongens Nytorv, Nyhavn, or Rådhuspladsen). Ride the full loop once to orient, then hop off at leisure.",
+      "<b>Fri AM — GO Fest group · CABINN → Fælledparken (9:00 park session):</b> Walk east: Nørre Allé → Blegdamsvej → Fælledparken south entrance (~20–25 min, ≈1.8 km, flat). OR Metro M2 one stop to <b>Østerport</b> (~2 min) then walk south ~10 min to the park's east gate at Øster Allé. Aim to arrive by 8:45 to clear the entry queue.",
+      "<b>Fri PM — GO Fest group · Park exit → lunch → Stamp Rally begins:</b> Session ends 13:00. Walk west (~20 min) and stop at <b>Torvehallerne</b> for lunch — the market exits directly onto Nørreport station. Then walk ~15 min south down Strøget to <b>LEGO Store Vimmelskaftet</b> (open until 18:00 today) for your first Stamp Rally stamps. Evening: <b>LEGO Store Tivoli Gardens</b> is open until 22:00 if you want more stamps — no rush.",
+      "<b>Fri — Mom's group · Hop-on-hop-off bus day:</b> Board at <b>Kongens Nytorv</b> or <b>Rådhuspladsen</b>. Suggested stops: <b>Nyhavn</b> (waterfront, canal views) → <b>Rosenborg Castle</b> and the King's Garden → <b>Frederiksberg</b> palace park. All on the bus pass; no separate tickets needed for transport.",
+      "<b>Sat — GO Fest group · Citywide play → leave by 16:30:</b> Best PokéStop clusters: <b>Strøget/Vimmelskaftet</b> (LEGO Store, Royal Copenhagen, central stops) and the <b>Nyhavn–Kongens Nytorv loop</b> (waterfront, dense stops). For the Stamp Rally: <b>LEGO Vimmelskaftet</b> is open 10:00–18:00, <b>LEGO Tivoli Gardens</b> 10:00–22:00. Collect your remaining stamps for the 5-stamp Pikachu encounter. <b>Hard stop at 16:30</b> — leave wherever you are.",
+      "<b>Sat — Mom's group · Tivoli → Vækst:</b> <a href='https://shop.tivoli.dk/en/billetter-og-tivolikort/entre' target='_blank' rel='noopener noreferrer'>Tivoli Gardens</a>, Vesterbrogade 3 — 10-min walk or short metro from CABINN. Buy tickets at tivoli.dk in advance to skip the queue (dynamic pricing, from ≈150 DKK in summer; verify before going). Leave Tivoli by <b>17:00</b> — taxi to Vækst is ~10–15 min. <b>All five people at Vækst at 17:30.</b>"
+    ]
+  },
+  {
+    "type": "map",
+    "group": "Getting around",
+    "title": "Orientation map — Copenhagen",
+    "center": {
+      "lat": 55.676,
+      "lng": 12.568
+    },
+    "span": 0.08
+  },
+  {
+    "type": "holidays",
+    "group": "Getting around",
+    "title": "Public holidays",
+    "year": 2026,
+    "note": "Checked automatically against your travel dates (source: Nager.Date, refreshed each deploy). On a Danish national holiday, many shops, banks and offices close or close early — and Grundlovsdag (Constitution Day) shortens hours at a lot of places."
+  }
+]

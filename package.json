@@ -5,14 +5,15 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/gen-sw-precache.mjs",
     "preview": "astro preview",
     "test": "vitest run",
+    "test:visual": "playwright test",
     "create-guide": "tsx scripts/generate-guide.ts",
     "lookup-place": "node scripts/lookup-place.mjs",
     "search-commons": "node scripts/search-commons.mjs",
     "fetch-wikivoyage": "node scripts/fetch-wikivoyage.mjs",
-    "index-guide": "node scripts/audit/index-guide.mjs"
+    "split-guide": "node scripts/split-guide.mjs"
   },
   "dependencies": {
     "@fontsource-variable/bricolage-grotesque": "^5.2.10",
@@ -27,6 +28,8 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
+    "@playwright/test": "^1.61.1",
     "tsx": "^4.23.0",
     "vitest": "^4.1.9"
   }

@@ -4,7 +4,11 @@
    are live data re-plated from the guides' own modules. */
 
 /* ── Next-trip hero ───────────────────────────────────────────────────────── */
-.hub-hero{position:relative;display:block;overflow:hidden;border-radius:var(--r-lg);margin:0 0 1.6rem;min-height:340px;background:var(--card);border:1px solid var(--rule);color:#f4f6ef;text-decoration:none;isolation:isolate}
+/* Fallback background is FIXED dark ink (not var(--card)): the hero text is
+   light-on-photo, so before/without the photo (slow network, offline — the SW
+   precaches pages, not Commons photos) it must sit on a dark ground in BOTH
+   themes. The loaded photo covers this entirely. Found by the axe gate. */
+.hub-hero{position:relative;display:block;overflow:hidden;border-radius:var(--r-lg);margin:0 0 1.6rem;min-height:340px;background:#1a2028;border:1px solid var(--rule);color:#f4f6ef;text-decoration:none;isolation:isolate}
 .hub-hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
 .hub-hero-scrim{position:absolute;inset:0;z-index:-1;background:linear-gradient(to top,rgba(12,16,20,.82) 0%,rgba(12,16,20,.35) 55%,rgba(12,16,20,.12) 100%)}
 .hub-hero-body{display:flex;flex-direction:column;gap:.5rem;justify-content:flex-end;min-height:340px;padding:1.6rem 1.5rem 1.4rem}

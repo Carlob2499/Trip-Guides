@@ -1,0 +1,62 @@
+name: Visual regression & quality
+
+# Screenshot-diff + axe accessibility gates (convergence Phases 2/5), plus a
+# report-only Lighthouse job. Pull requests only — this workflow never runs on
+# main and never touches the deploy pipeline.
+#
+# Baseline bootstrap: baselines are per-platform. `--update-snapshots missing`
+# creates absent linux baselines on a first run (pass) instead of failing;
+# commit the uploaded artifact's snapshots to the branch to arm real diffing.
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  visual:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test --update-snapshots missing
+      - name: Upload snapshots + diffs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-snapshots
+          path: |
+            tests/visual/*-snapshots/
+            test-results/
+          retention-days: 14
+
+  # Report-only Lighthouse pass (perf/a11y/best-practices/SEO scores as a PR
+  # artifact). continue-on-error — informational, never blocks; the binding
+  # perf gate remains scripts/check-perf-budget.mjs in the deploy itself.
+  lighthouse:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      # dist/ expects to be served under /Trip-Guides (the Pages base path) —
+      # mirror that shape so asset URLs resolve.
+      - run: mkdir -p _lhroot/Trip-Guides && cp -r dist/. _lhroot/Trip-Guides/
+      - name: Lighthouse
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: .lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: false

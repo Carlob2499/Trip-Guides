@@ -1,7 +1,7 @@
 # Waypoint Travel Guides — Project Instructions
 
 Stacks on the global `~/.claude/CLAUDE.md` (universal accuracy rules — auto-loads
-separately). Architecture/stack detail: `docs/Project_State.md` (read on demand).
+separately). Architecture/stack detail: `docs/ARCHITECTURE.md` (read on demand).
 
 ---
 
@@ -75,10 +75,13 @@ is their single home; this file names the principle without repeating detail.
 - **Read before editing; never regenerate from memory.**
 - **Base-path hrefs are explicit** — every internal `/`-href needs `import.meta.env.BASE_URL`.
 - **New facts get a verification date on write**, never bolted on later.
-- **New self-contained features get their own folder** — `src/features/<name>/` holding all
-  of the feature's code (and any third-party SDK usage siloed there), consumed via a single
-  `index.js` public API; existing flat `src/scripts` / `src/styles` stay put. `src/features/firebase/`
-  (live sync) is the reference. A small single-module client behavior still just goes in `src/scripts/`.
+- **New self-contained features get their own SEALED silo** — `src/features/<name>/` with
+  `index.ts` (the only public surface — never deep-import across features), `model/` (zod +
+  pure tested logic), `ui/`, `mocks/` (real-shaped seeds; tests run zero-network), and
+  `__tests__/`. Data access sits behind an injectable gateway in `index.ts` (backend-ready:
+  a source swap never touches `ui/`). `src/features/firebase/` is the reference; full
+  contract + migration order: `docs/SILO_ROADMAP.md`. A small single-module client behavior
+  still just goes in `src/scripts/`; no speculative silos.
 - **Third-party SDKs stay behind a config gate + lazy import** — commit an empty/public config so the
   build is inert until configured (Vite tree-shakes the whole path when the config is empty), and
   `import()` the heavy SDK on first use so it's a lazy chunk, never in the main bundle (the Firebase
@@ -113,11 +116,14 @@ auto-retries transient Pages failures; only investigate after three consecutive.
 
 ## Operational Habits (save tokens)
 
-- **Large guides** (korea.json ~2500 lines, denmark ~900): check `<slug>.index.md`
-  beside the guide first (generated line-range map by section/day) and jump straight
-  to `offset:N limit:M` — never full-file Read for a targeted edit. Regenerate the
-  index after any line-count-changing edit: `npm run index-guide -- <slug>`.
-- **New client behavior → `src/scripts/`**, never inline back into `GuideLayout.astro`.
+- **Guides are directories** (`src/content/guides/<slug>/` — `_guide.json` meta +
+  `NN-<group>.json` per tab group): for a targeted edit, Read ONLY the group file it
+  lives in — never assemble the whole guide. `ls` the dir to find the group. Drafts may
+  still be single `<slug>.json` files (both shapes build); split one with
+  `npm run split-guide -- <slug>`.
+- **New client behavior → its feature silo** (`src/features/<name>/`, see
+  `docs/SILO_ROADMAP.md`) or `src/scripts/` for page chrome — never inline back into
+  `GuideLayout.astro`.
 - **`guide.css` past ~800 lines → split by feature** (as `base.css` was). Not before.
 - **Greppable questions** (dead selectors, dup props, fact diffs) → a local grep/script,
   not an Explore agent. Reserve agents for open-ended synthesis.

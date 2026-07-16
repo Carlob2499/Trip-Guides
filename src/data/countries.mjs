@@ -49,6 +49,35 @@ export const EMERGENCY = {
   },
 };
 
+// Countries where 112 is the statutory universal emergency number: EU law makes
+// it the single European emergency number in every member state, and it is
+// equally live in the EEA states, the UK and Switzerland. A durable legal fact,
+// not a perishable one. Keys must match COUNTRIES rows exactly. Used ONLY as a
+// labeled fallback below — a traveler in Norway must never get silence, but the
+// fallback never pretends to be a fully-researched emergency sheet.
+export const EU112_COUNTRIES = new Set([
+  "Austria", "Belgium", "Croatia", "Czechia", "Denmark", "Finland", "France",
+  "Germany", "Greece", "Hungary", "Iceland", "Ireland", "Italy", "Netherlands",
+  "Norway", "Poland", "Portugal", "Spain", "Sweden", "Switzerland",
+  "United Kingdom",
+]);
+
+// SOS data selector: a verified entry wins; an EU/EEA country without one gets
+// the honest 112-only fallback (flagged `fallback: true` — the SOS sheet renders
+// it warn-toned); anywhere else gets null and no SOS button — never guessed.
+export function emergencyFor(country) {
+  if (EMERGENCY[country]) return EMERGENCY[country];
+  if (EU112_COUNTRIES.has(country)) {
+    return {
+      fallback: true,
+      lines: [{ label: "All emergencies — universal EU number", num: "112" }],
+      note: "112 is the statutory EU/EEA-wide emergency number and works in " + country +
+            ". Local extras (non-urgent police, medical hotlines) are not verified for this guide yet — check Health & safety before relying on them.",
+    };
+  }
+  return null;
+}
+
 // Canonical rows, keyed by the exact `country` string used in guide JSON.
 export const COUNTRIES = {
   // ── Existing curated set (values preserved exactly from the old themes.ts) ──

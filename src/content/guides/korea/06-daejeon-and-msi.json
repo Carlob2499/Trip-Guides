@@ -1,0 +1,34 @@
+[
+  {
+    "type": "prose",
+    "group": "Daejeon & MSI",
+    "title": "Your MSI weekend",
+    "body": "<p>The Mid-Season Invitational runs at the <b>Daejeon Convention Center II</b> (Hall 2), the first international League event ever held in Daejeon. Your tickets cover the <b>Lower Bracket Final on Sat Jul 11</b> and the <b>Grand Final on Sun Jul 12</b>. Your <b>Daejeon I-Hotel</b> is ~130 m from the hall — a 2-minute walk — both days you stroll over.</p><p><b>What to bring:</b></p><ul><li><b>Photo ID (passport)</b> — tickets are name-tied and scanned at entry via the NOL World app</li><li><b>Bag no larger than 45.7 cm × 57 cm × 19 cm</b> (~18\" × 22\" × 7.5\"), must fit under your seat. <b>DCC II has no bag check</b> — oversized bags are turned away at the door with nowhere to leave them. The I-Hotel is 2 min away, so drop anything large before you walk over.</li><li><b>Outside food is allowed</b> if sealed or in an appropriate container — saves money vs. arena concessions</li><li>Portable battery pack — phone needs to last all day for the NOL World ticket scan, live coverage, and GO Fest raids before/after</li></ul><p><b>Prohibited</b> (per the <a href='https://lolesports.com/en-US/news/msi-2026-venue-event-policies' target='_blank' rel='noopener noreferrer'>official Riot event policy</a>): glass containers, cans, laser pens, air horns, banners or flags on poles, drones, selfie-sticks, laptops and tablets. Non-compliant items may be confiscated without return.</p><p>The merch queue is longest before the first match on Day 1 — arrive 60–90 min early if you want MSI merchandise. Day 2 line is shorter.</p>"
+  },
+  {
+    "type": "map",
+    "group": "Daejeon & MSI",
+    "title": "Daejeon — Expo district orientation",
+    "center": {
+      "lat": 36.3745,
+      "lng": 127.39
+    },
+    "span": 0.04
+  },
+  {
+    "type": "prose",
+    "group": "Daejeon & MSI",
+    "title": "Getting to the arena",
+    "body": "<p>From Seoul Station, the <b>KTX reaches Daejeon in about 50 minutes</b> (book on the Korail app or korail.com; use <b>Seoul Station</b>, not Suseo/SRT). From Daejeon Station, a <b>taxi to the arena is ~20 min, ≈₩11,000</b> (split two = ≈₩5,500 each); the cheaper metro-plus-taxi combo runs ~25 min via Government Complex Daejeon (정부청사역). The arena is <b>Daejeon Convention Center II (DCC II), 87 Expo-ro, Yuseong-gu</b> — and your <b>Daejeon I-Hotel</b> (27-5 Expo-ro 123beon-gil) is ~130 m from it, a 2-minute walk, so you stroll to both matches and skip the post-match scramble entirely.</p><p><b>Monday Jul 13 — you don't ride straight back:</b> You are staying both Saturday and Sunday nights at the I-Hotel, so there is no rush after the Grand Final. Monday is the <b>Busan day trip</b> — a slow Daejeon morning, then KTX south to Busan for the afternoon, and a Busan → Seoul train in the evening (full plan in the Monday day entry). Book the <b>Daejeon → Busan</b> (≈10:30) and <b>Busan → Seoul</b> (≈18:30) legs at <a href=\"https://www.letskorail.com\" target=\"_blank\" rel=\"noopener noreferrer\">letskorail.com</a>. Too wiped after MSI? Skip Busan and take a morning KTX Daejeon → Seoul instead.</p><p>While you're there, <b>Sungsimdang</b> (107 Expo-ro, near DCC II ⚠ verify hours) is Daejeon's legendary bakery — fried soboro and chive breads; queue moves fast. EXPO Science Park is adjacent to DCC II with open plazas, PokéStops, and gyms — useful for GO Fest raiding windows between matches. It's the former 1993 World's Fair site: a large open-air campus with wide walkways, gardens, and permanent science pavilions spread across roughly 1 km. Free to walk through; no entry fee for the public outdoor areas. Expect sun with little shade cover — hat and water matter here.</p>"
+  },
+  {
+    "type": "map",
+    "group": "Daejeon & MSI",
+    "title": "Arena map — Daejeon",
+    "center": {
+      "lat": 36.3746,
+      "lng": 127.388
+    },
+    "span": 0.05
+  }
+]

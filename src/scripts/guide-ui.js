@@ -2,6 +2,8 @@
 // single hashed module cached across every guide page (was ~950 lines inline per
 // page). Config that used to come from Astro define:vars is now read from the
 // #tgConfig JSON script tag emitted by the layout.
+import { todayInTz } from "./util.js";
+
 const _cfgEl = document.getElementById("tgConfig");
 const _cfg = _cfgEl ? JSON.parse(_cfgEl.textContent || "{}") : {};
 const order             = _cfg.order || [];
@@ -277,9 +279,13 @@ const daysForBanner     = _cfg.daysForBanner || [];
 
           /* ── 3a. JUMP TO TODAY ──────────────────────────────────────── */
           (function () {
+            // "Today" means the traveler's day AT THE DESTINATION — a viewer
+            // checking from another timezone must see the in-country day, not
+            // their device's (falls back to the device date without a tz).
+            var destToday = todayInTz(destTzIana);
             var now = new Date();
-            var mo  = now.getMonth() + 1;
-            var d   = now.getDate();
+            var mo  = destToday ? destToday.m : now.getMonth() + 1;
+            var d   = destToday ? destToday.d : now.getDate();
             // Match day cards whose .d label contains today's month-day (e.g. "Jul 9", "Jul 14")
             var plain  = MONTHS[mo - 1] + " " + d;
             document.querySelectorAll(".day").forEach(function (card) {
@@ -559,7 +565,9 @@ const daysForBanner     = _cfg.daysForBanner || [];
             var text  = document.getElementById("wnText");
             if (!box || !text || !daysForBanner.length) return;
 
-            var now = new Date();
+            // Destination-calendar "today" (see 3a) — device date only as fallback.
+            var _dt = todayInTz(destTzIana);
+            var now = _dt ? new Date(_dt.y, _dt.m - 1, _dt.d) : new Date();
             var firstParts = String(daysForBanner[0].date).split(/\s+/);
             var firstMoIdx = MONTHS.indexOf(firstParts[1]);
             var firstDay   = parseInt(firstParts[2], 10);
@@ -585,7 +593,7 @@ const daysForBanner     = _cfg.daysForBanner || [];
             });
             if (!days.length) return;
 
-            var today = new Date(); today.setHours(0, 0, 0, 0);
+            var today = new Date(now); today.setHours(0, 0, 0, 0); // dest-calendar day (from `now` above)
             if (today < days[0].date || today > days[days.length - 1].date) return;
 
             var match    = days.find(function (d) { return d.date.getTime() === today.getTime(); });

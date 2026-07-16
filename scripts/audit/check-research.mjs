@@ -70,6 +70,40 @@ export function checkResearchGuide(guide, slug) {
     }
   }
 
+  // 6. Story consistency — itinerary days must be contiguous calendar dates.
+  //    A gap or repeat means a day was dropped/duplicated in editing (a class of
+  //    error a schema can't see: each day validates fine alone).
+  const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  for (const s of sections) {
+    if (s.type !== "days" || !Array.isArray(s.items)) continue;
+    let prev = null;
+    for (const d of s.items) {
+      const m = /([A-Z][a-z]{2})\s+(\d{1,2})/.exec(String(d.date || ""));
+      if (!m || !MONTHS.includes(m[1])) { add("info", `day "${d.date}" has no parseable "Mon D" date`); prev = null; continue; }
+      // Year-free ordinal (month index × 31 + day) — sufficient for contiguity within one trip.
+      const ord = MONTHS.indexOf(m[1]) * 31 + Number(m[2]);
+      if (prev != null && ord !== prev + 1 && ord !== prev) {
+        add("warn", `itinerary jump: "${d.date}" does not follow the previous day (gap or reorder)`);
+      }
+      if (prev != null && ord === prev) add("warn", `duplicate itinerary date "${d.date}"`);
+      prev = ord;
+    }
+  }
+
+  // 7. Provenance hygiene (the ADDITIVE source_url/verified_on fields).
+  //    verified_on without source_url = a date with nothing to re-check against;
+  //    a future-dated verified_on is always an entry error.
+  const today = new Date().toISOString().slice(0, 10);
+  const walkProv = (node, label) => {
+    if (!node || typeof node !== "object") return;
+    if (node.verified_on && !node.source_url) add("warn", `${label} has verified_on ${node.verified_on} but no source_url to recertify against`);
+    if (node.verified_on && node.verified_on > today) add("warn", `${label} has a future verified_on: ${node.verified_on}`);
+  };
+  for (const s of sections) {
+    walkProv(s, `${s.type} "${s.title || s.group}"`);
+    for (const it of s.items || []) walkProv(it, `${s.type} item "${it.name || it.label || it.date || "?"}"`);
+  }
+
   return { slug, findings };
 }
 

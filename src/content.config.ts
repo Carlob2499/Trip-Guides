@@ -1,16 +1,29 @@
 import { defineCollection, z } from "astro:content";
-import { glob } from "astro/loaders";
 import { contrastRatio } from "./lib/contrast";
 
 // Light page background (base.css `--bg`). A guide `theme.primary` becomes the
 // site `--accent`, painted as link/tab/label text on this surface — so it must
 // stay legible against it. Keep in sync with base.css if that token changes.
 const LIGHT_BG = "#e9ebe3";
+// Dark page background (base.css dark-mode `--bg`). The accent is NOT re-mapped in
+// dark mode, so a theme.primary must stay legible on BOTH grounds — a light-only
+// gate shipped a 2.33:1 dark-mode bug in WayPoint-V2; gate both, always.
+const DARK_BG = "#14181c";
 // 3.0:1 is WCAG's minimum for large-text / UI-component contrast, and is the
 // empirically-calibrated floor of the project's own country accent palette
 // (the tightest, #b07a1f, sits at ~3.16:1). Below this, accent UI turns
 // illegible on the cream background — fail the build loudly rather than ship it.
 const MIN_ACCENT_CONTRAST = 3.0;
+
+// ADDITIVE provenance for perishable facts (prices, hours, transit, availability).
+// Optional everywhere — every pre-existing guide builds unchanged. When present:
+// source_url = the primary source consulted; verified_on = the YYYY-MM-DD it was
+// checked. These power the weekly recert audit (link HEAD-checks + shelf-life
+// flagging) and the staleness UI; inline <a href> citations remain equally valid.
+const provenance = {
+  source_url: z.string().url().optional(),
+  verified_on: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+};
 
 // A point on the map.
 const coord = z.object({ lat: z.number(), lng: z.number() });
@@ -49,10 +62,10 @@ const collapse = {
 };
 
 const section = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("panel"),  group: z.string(), title: z.string().optional(), body: z.string().optional(), checklist: z.array(z.string()).optional(), ...collapse }),
-  z.object({ type: z.literal("prose"),  group: z.string(), title: z.string().optional(), body: z.string().optional(), ...collapse }),
-  z.object({ type: z.literal("list"),   group: z.string(), title: z.string().optional(), items: z.array(z.string()), ...collapse }),
-  z.object({ type: z.literal("routes"), group: z.string(), title: z.string().optional(), steps: z.array(z.string()) }),
+  z.object({ type: z.literal("panel"),  group: z.string(), title: z.string().optional(), body: z.string().optional(), checklist: z.array(z.string()).optional(), ...collapse, ...provenance }),
+  z.object({ type: z.literal("prose"),  group: z.string(), title: z.string().optional(), body: z.string().optional(), ...collapse, ...provenance }),
+  z.object({ type: z.literal("list"),   group: z.string(), title: z.string().optional(), items: z.array(z.string()), ...collapse, ...provenance }),
+  z.object({ type: z.literal("routes"), group: z.string(), title: z.string().optional(), steps: z.array(z.string()), ...provenance }),
   z.object({ type: z.literal("map"),    group: z.string(), title: z.string().optional(), center: coord, span: z.number().optional(), points: z.array(mapPoint).optional() }),
   // weather — live 7-day Open-Meteo strip. No coords here: reads lat/lng from the
   // guide's first `map` section at runtime (so it needs no per-guide config). If the
@@ -94,11 +107,13 @@ const section = z.discriminatedUnion("type", [
       time: z.string().optional(),
       note: z.string().optional(),
     })).optional(),
+    ...provenance,
   })) }),
   z.object({ type: z.literal("sights"), group: z.string(), title: z.string().optional(), items: z.array(z.object({
     name: z.string(), kicker: z.string().optional(), body: z.string().optional(),
     img: z.object({ file: z.string(), alt: z.string().optional() }).optional(),
     map: coord.optional(),
+    ...provenance,
   })) }),
   z.object({ type: z.literal("budget"), group: z.string(), title: z.string().optional(),
     intro: z.string().optional(), currency: z.string().optional(), days: z.number().positive().optional(),
@@ -116,6 +131,7 @@ const section = z.discriminatedUnion("type", [
       note: z.string().optional(),
       split_type: z.enum(["equal", "individual", "group"]).optional(),   // TripSplit hydration filter
       payment_preference: z.enum(["Cash Only", "Contactless", "Credit Card"]).optional(),
+      ...provenance,
     })) }),
   // habitats — GO Fest habitat rotation as a responsive card grid; replaces the dense
   // comma-lists that used to live in prose. Each window renders as one card (day + time +
@@ -167,9 +183,53 @@ const section = z.discriminatedUnion("type", [
     })) }),
 ]);
 
+// Guide loader — accepts BOTH content shapes (convergence Phase 4):
+//   · <slug>.json                — a single-file guide (legacy; scaffolds/drafts
+//                                  still author this way)
+//   · <slug>/ directory          — the siloed shape: _guide.json (all top-level
+//                                  fields except sections) + NN-<group>.json
+//                                  files, each an ARRAY of that tab group's
+//                                  sections; filename sort (the NN prefix)
+//                                  reproduces the original section order.
+// Split a monolith with `node scripts/split-guide.mjs <slug>`. The assembled
+// data validates against the exact same schema as a single-file guide, and the
+// built HTML is byte-identical either way (that is the migration gate).
+const guideLoader = {
+  name: "waypoint-guides",
+  load: async ({ store, parseData, generateDigest }: any) => {
+    const { readdir, readFile } = await import("node:fs/promises");
+    const path = await import("node:path");
+    const DIR = path.join(process.cwd(), "src", "content", "guides");
+    store.clear();
+    const entries = await readdir(DIR, { withFileTypes: true });
+    for (const e of entries) {
+      let id: string, raw: Record<string, unknown>;
+      if (e.isFile() && e.name.endsWith(".json")) {
+        id = e.name.replace(/\.json$/, "");
+        raw = JSON.parse(await readFile(path.join(DIR, e.name), "utf8"));
+      } else if (e.isDirectory()) {
+        const files = (await readdir(path.join(DIR, e.name))).filter((f) => f.endsWith(".json"));
+        if (!files.includes("_guide.json")) continue; // not a guide dir
+        id = e.name;
+        const meta = JSON.parse(await readFile(path.join(DIR, e.name, "_guide.json"), "utf8"));
+        const sections: unknown[] = [];
+        for (const f of files.filter((f) => f !== "_guide.json").sort()) {
+          const part = JSON.parse(await readFile(path.join(DIR, e.name, f), "utf8"));
+          if (!Array.isArray(part)) throw new Error(`${e.name}/${f} must be a JSON array of sections`);
+          sections.push(...part);
+        }
+        raw = { ...meta, sections };
+      } else continue;
+      const data = await parseData({ id, data: raw });
+      store.set({ id, data, digest: generateDigest(data) });
+    }
+  },
+};
+
 const guides = defineCollection({
-  // Every .json file in src/content/guides/ becomes one guide page.
-  loader: glob({ pattern: "**/*.json", base: "./src/content/guides" }),
+  // Every guide in src/content/guides/ becomes one page — single-file or
+  // directory shape alike (see guideLoader above).
+  loader: guideLoader,
   schema: z.object({
     kicker: z.string().optional(),
     title: z.string(),
@@ -191,6 +251,15 @@ const guides = defineCollection({
       (t) => contrastRatio(t.primary, LIGHT_BG) >= MIN_ACCENT_CONTRAST,
       (t) => ({
         message: `theme.primary ${t.primary} has only ${contrastRatio(t.primary, LIGHT_BG).toFixed(2)}:1 contrast against the light background ${LIGHT_BG} — needs ≥${MIN_ACCENT_CONTRAST}:1 to stay legible as accent text. Pick a deeper/more saturated colour.`,
+        path: ["primary"],
+      }),
+    ).refine(
+      // Same accent renders on the dark ground too (dark mode does not re-map
+      // --accent), so gate BOTH surfaces. Mid-value colours pass both; a very
+      // dark accent passes light-only and turns illegible in dark mode.
+      (t) => contrastRatio(t.primary, DARK_BG) >= MIN_ACCENT_CONTRAST,
+      (t) => ({
+        message: `theme.primary ${t.primary} has only ${contrastRatio(t.primary, DARK_BG).toFixed(2)}:1 contrast against the dark background ${DARK_BG} — needs ≥${MIN_ACCENT_CONTRAST}:1 on both grounds. Pick a mid-value colour (or supply a lighter tone).`,
         path: ["primary"],
       }),
     ).optional(),
