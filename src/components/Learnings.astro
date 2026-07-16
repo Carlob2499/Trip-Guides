@@ -1,8 +1,10 @@
 ---
-/* Trip Learnings — P1 capture surface. Renders ONLY the hidden survey-modal shell; the
-   visible "Trip Feedback" trigger lives at the foot of the itinerary (GuideLayout). The
-   modal stays inert until Firebase is configured (survey.js gates on hasFirebase()).
-   The Learnings tab + per-day Plan⇄Actual toggle are P2/P3 and live behind feedback. */
+/* Trip Learnings — capture (P1) + reality layer (P2/P3). Renders:
+   · the hidden survey-modal shell (the "Trip Feedback" trigger lives at the foot of the
+     itinerary in GuideLayout),
+   · the #tripLearn special-panel (the Learnings tab) — a sibling of #tripSplit / #tripVote,
+     hidden until Firebase has ≥1 feedback record for this guide (tab.js reveals its gtab).
+   Everything stays inert until Firebase is configured (the silo gates on hasFirebase()). */
 import "../features/learnings/ui/learnings.css";
 interface Props { storeKey: string; }
 const { storeKey } = Astro.props;
@@ -17,13 +19,31 @@ const { storeKey } = Astro.props;
     <div class="lnw-nav" id="lnwNav"></div>
   </div>
 </div>
+
+<section class="learn-wrap" id="tripLearn" data-sk={storeKey} hidden>
+  <div class="learn-head">
+    <div>
+      <p class="learn-eyebrow">Trip learnings</p>
+      <h2 class="learn-title">How the plan actually went</h2>
+    </div>
+    <button class="learn-x" type="button" data-learn-dismiss aria-label="Hide learnings for now">×</button>
+  </div>
+  <div class="learn-agg" id="learnAgg"></div>
+  <div class="learn-curated" id="learnCurated"></div>
+  <div class="learn-foot">
+    <button class="lnw-open lnw-open-inline" type="button" data-lnw-open>
+      <span class="lnw-open-ico" aria-hidden="true">✎</span>Add trip feedback
+    </button>
+  </div>
+</section>
+
 <script>
-  import { initFeedback } from "../features/learnings/index.js";
+  import { initLearnings } from "../features/learnings/index.js";
   // Module scripts run deferred, but guard anyway so the itinerary DOM (the stop list
   // the survey reads) is present before we wire up.
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => initFeedback(), { once: true });
+    document.addEventListener("DOMContentLoaded", () => initLearnings(), { once: true });
   } else {
-    initFeedback();
+    initLearnings();
   }
 </script>

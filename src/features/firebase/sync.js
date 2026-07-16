@@ -39,10 +39,21 @@ export async function joinTrip(code) {
       // onChange(cb) → cb(mapOf {id: value}); returns an unsubscribe fn.
       onChange(cb) { return onValue(ref(db, path), (snap) => cb(snap.val() || {})); },
       // add(value) → new id (optimistic: RTDB fires onChange locally before the round-trip).
+      // Fire-and-forget by design: the budget re-renders instantly from the local write and
+      // RTDB flushes the queue on reconnect. Use addAsync when the caller must KNOW it landed.
       add(value) {
         const r = push(ref(db, path));
         set(r, Object.assign({ createdBy: uid, createdAt: serverTimestamp() }, value));
         return r.key;
+      },
+      // addAsync(value) → Promise<id> that settles only when the SERVER acknowledges the write.
+      // While the SDK is disconnected RTDB queues the write and this promise stays PENDING (it
+      // neither resolves nor rejects) — so callers that report success to a human must race it
+      // against a timeout rather than await it forever, and say "queued", not "saved".
+      addAsync(value) {
+        const r = push(ref(db, path));
+        return set(r, Object.assign({ createdBy: uid, createdAt: serverTimestamp() }, value))
+          .then(function () { return r.key; });
       },
       set(id, value) { return set(ref(db, path + "/" + id), value); },
       update(id, patch) { return update(ref(db, path + "/" + id), patch); },

@@ -61,7 +61,7 @@ files auto-load — never Read them again.
 | # | Stage | Branch | Status |
 |---|-------|--------|--------|
 | 1 | Learnings **P1 — capture** (feedback button + survey → Firebase) | `main` | [x] |
-| 2 | Merge `convergence/phase-1-docs` → `main` | reconcile branch → `main` | [ ] |
+| 2 | Merge `convergence/phase-1-docs` → `main` | reconcile branch → `main` | [x] |
 | 3 | Learnings **P2 — tab**, **P3 — reality reflection**, on merged codebase | `main` | [ ] |
 | 4 | Learnings **P4 — loop** + the **first real Korea reflection** | `main` | [ ] |
 | 5 | CI bootstrap PR (Linux visual baselines + Lighthouse) | PR branch | [ ] |

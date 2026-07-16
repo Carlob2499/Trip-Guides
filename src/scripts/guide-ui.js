@@ -71,6 +71,7 @@ const daysForBanner     = _cfg.daysForBanner || [];
           var specialPanels = {
             split: document.getElementById("tripSplit"),
             vote:  document.getElementById("tripVote"),
+            learn: document.getElementById("tripLearn"),
           };
           var TAB_KEY = "tg-tab-" + STORE_KEY;
 

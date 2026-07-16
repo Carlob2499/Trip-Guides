@@ -197,9 +197,16 @@ export function initFeedback() {
     var subBtn = navEl.querySelector(".lnw-submit");
     if (subBtn) { subBtn.disabled = true; subBtn.textContent = "Logging…"; }
 
+    // Wait for the SERVER to acknowledge before telling anyone it landed. RTDB queues writes
+    // while offline and that promise never settles, so race a timeout and say "queued" instead
+    // of claiming success we can't prove.
     joinTrip(normalizeCode(storeKey))
-      .then(function (room) { return room.collection("feedback").add(rec); })
-      .then(function () { success(); })
+      .then(function (room) {
+        var ack = room.collection("feedback").addAsync(rec);
+        var timeout = new Promise(function (resolve) { setTimeout(function () { resolve("queued"); }, 8000); });
+        return Promise.race([ack.then(function () { return "saved"; }), timeout]);
+      })
+      .then(function (outcome) { success(outcome === "queued"); })
       .catch(function () {
         if (subBtn) { subBtn.disabled = false; subBtn.textContent = "Retry — couldn't reach the group"; }
       });
@@ -210,10 +217,12 @@ export function initFeedback() {
     if (lede) { lede.classList.add("lnw-warn"); lede.textContent = "Add at least one rating, stop, or note before logging."; }
   }
 
-  function success() {
-    if (titleEl) titleEl.textContent = "Thanks — logged for the post-mortem.";
+  function success(queued) {
+    if (titleEl) titleEl.textContent = queued ? "Saved — still syncing." : "Thanks — logged for the post-mortem.";
     if (eyebrowEl) eyebrowEl.textContent = "Trip feedback";
-    bodyEl.innerHTML = '<p class="lnw-lede">Your notes feed the guide\'s learnings. Add more anytime.</p>';
+    bodyEl.innerHTML = '<p class="lnw-lede">' + (queued
+      ? "You're offline or the connection is slow — this is saved on your device and uploads on its own once you're back."
+      : "Your notes feed the guide's learnings. Add more anytime.") + "</p>";
     navEl.innerHTML = '<button type="button" class="lnw-btn lnw-primary lnw-done">Done</button>';
     var done = navEl.querySelector(".lnw-done");
     if (done) { done.addEventListener("click", close); done.focus(); }

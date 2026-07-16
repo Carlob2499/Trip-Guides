@@ -193,3 +193,116 @@
 .lnw-btn:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
 .lnw-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
 .lnw-primary:disabled { opacity: 0.7; cursor: default; }
+
+/* ── Learnings tab (#tripLearn, P2/P3) ────────────────────────────────────── */
+.learn-wrap { max-width: 760px; margin: 0 auto; }
+.learn-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.learn-eyebrow {
+  margin: 0 0 2px;
+  color: var(--accent);
+  font-size: 0.72rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.learn-title { margin: 0; font-size: 1.5rem; line-height: 1.15; }
+.learn-x {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--rule2);
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--muted);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.learn-x:hover { color: var(--ink); }
+.learn-agg {
+  padding: 16px 18px;
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  background: var(--card);
+}
+.learn-empty { margin: 0; color: var(--muted); }
+.learn-stat { margin: 0 0 6px; font-size: 1.05rem; }
+.learn-pct {
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--green);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.learn-sub {
+  margin: 14px 0 6px;
+  color: var(--accent2);
+  font-size: 0.76rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.learn-skips { margin: 0; padding: 0; list-style: none; }
+.learn-skips li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  padding: 7px 0;
+  border-top: 1px solid var(--rule);
+}
+.learn-skip-stop { font-weight: 600; }
+.learn-skip-why { color: var(--muted); }
+
+/* Curated post-mortem (P3) — hidden until the guide data carries `learnings`. */
+.learn-curated:empty { display: none; }
+.learn-curated { margin-top: 18px; }
+.learn-day {
+  padding: 14px 16px;
+  margin-top: 12px;
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  background: var(--card);
+}
+.learn-day-date {
+  margin: 0 0 4px;
+  color: var(--accent2);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.learn-actually { margin: 0 0 8px; }
+.learn-changed, .learn-key { margin: 14px 0 0; padding-left: 18px; }
+.learn-changed li, .learn-key li { margin: 3px 0; }
+.learn-foot { margin-top: 20px; }
+.lnw-open-inline { background: var(--bg); color: var(--accent); border: 1px solid var(--accent); }
+.lnw-open-inline:hover { background: var(--card); filter: none; }
+
+/* ── Per-day Plan ⇄ Actual toggle (P3) ────────────────────────────────────── */
+.day-flip {
+  display: inline-flex;
+  margin: 6px 0 2px;
+  border: 1px solid var(--rule2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.day-flip-btn {
+  padding: 4px 12px;
+  border: 0;
+  background: var(--bg);
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.day-flip-btn.on { background: var(--accent); color: #fff; }
+.day-actual { margin-top: 8px; }
+.day-actual .learn-skip-stop { display: inline-block; }
