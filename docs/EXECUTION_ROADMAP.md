@@ -298,13 +298,23 @@ Ship P2 and P3 as **separate commits/deploys**, each with the full ship loop.
    public post-mortem text for approval — it summarizes their friends' critiques and
    is outward-facing. If Firebase has zero real feedback records, ask the user for
    verbal critiques instead and seed from those.
-5. **CLEANUP CARRIED FROM STAGE 1 (do this before the real reflection):** one synthetic
-   test record was written to the live DB during P1 round-trip verification and could not
-   be removed in auto mode (the classifier declined the out-of-band REST delete). It is at
-   `trips/southkorea/feedback`, id `-Oxdc5rSwf0y0cHMViDr`, createdBy uid
-   `RPWrRAGIJYQI3IrJD6L9Dw7JSmo1`, freeform "Pace heavy midweek; Busan was the highlight."
-   **Filter it OUT** of the real reflection (skip that id/uid), or delete it deliberately
-   from the Firebase console / outside auto mode. Do NOT treat it as real trip feedback.
+5. **CLEANUP — BLOCKS STAGE 3's P2 DEPLOY (do this first).** Verifying the capture +
+   tab wrote **3 synthetic records** to the live `trips/southkorea/feedback`. They are
+   identifiable by their `freeform` marker — delete exactly these and nothing else:
+   - `__P2_VERIFY_TEST__`
+   - `__PERSIST_TEST__`
+   - `__REJECT_PROBE__`
+   (An earlier 4th, "Pace heavy midweek; Busan was the highlight.", may also still be
+   present.) Also check for a leftover diagnostic node at `trips/zzztestpersist` (not a
+   guide storeKey — safe to delete wholesale).
+
+   The auto-mode classifier **declines** these deletes (it cannot verify the rows aren't
+   real traveler feedback) — correctly. Delete them from the **Firebase console**
+   (Realtime Database → `trips/southkorea/feedback`), or run the cleanup outside auto mode.
+   **Why this blocks P2:** the Learnings tab reveals as soon as ANY feedback record exists,
+   so shipping P2 with these present would show real users fabricated stop data — a direct
+   violation of the guide's Honest property. Once the collection is empty, merge
+   `learnings/p2-tab` → main and the tab correctly stays hidden until real feedback lands.
 
 ---
 
