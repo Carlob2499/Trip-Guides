@@ -1,0 +1,33 @@
+[
+  {
+    "ratings": { "overall": 4, "pacing": 2, "food": 5 },
+    "visited": { "1-0": true, "1-1": true, "1-2": false, "5-0": true, "5-1": true, "5-2": false },
+    "skips": [
+      { "stop": "Haeundae Beach", "reason": "too hot by afternoon, everyone was fried" }
+    ],
+    "freeform": "Busan day was worth it but the KTX back felt rushed. Loved the gukbap.",
+    "day": "2026-07-13",
+    "createdBy": "mock-anon-a",
+    "createdAt": 1752460800000
+  },
+  {
+    "ratings": { "overall": 5, "pacing": 3 },
+    "visited": { "1-2": true, "2-0": true, "2-1": false, "5-2": true },
+    "skips": [
+      { "stop": "Bukchon Hanok Village", "reason": "skipped, chose to nap through the heat" }
+    ],
+    "freeform": "Pace was aggressive on palace day. Would cut one palace next time.",
+    "day": "2026-07-10",
+    "createdBy": "mock-anon-b",
+    "createdAt": 1752489600000
+  },
+  {
+    "ratings": { "overall": 4, "pacing": 4, "food": 4 },
+    "visited": { "3-0": true, "3-1": true, "6-0": true },
+    "skips": [],
+    "freeform": "MSI nights ran long — the late-night KBBQ recs were clutch.",
+    "day": "2026-07-12",
+    "createdBy": "mock-anon-c",
+    "createdAt": 1752576000000
+  }
+]

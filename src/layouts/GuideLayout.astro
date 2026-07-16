@@ -3,6 +3,7 @@ import Block from "../components/Block.astro";
 import PwaHead from "../components/PwaHead.astro";
 import TripSplit from "../components/TripSplit.astro";
 import Voting from "../components/Voting.astro";
+import Learnings from "../components/Learnings.astro";
 import { bucket } from "../lib/buckets";
 import { EMERGENCY } from "../data/countries.mjs";
 import { accentFor, darken, currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
@@ -470,6 +471,14 @@ const tripSummary = buildSummary(guide);
               {byG[g].map((o) => (
                 <Block sec={o.s} sid={`sec-${o.i}`} ci={ci} solo={solo} holidays={holidayInfo} mapPins={pinMap.get(o.s) ?? null} />
               ))}
+              {byG[g].some((o: any) => o.s.type === "days") && (
+                <div class="lnw-cta">
+                  <button class="lnw-open" type="button" data-lnw-open hidden>
+                    <span class="lnw-open-ico" aria-hidden="true">✎</span>Trip Feedback
+                  </button>
+                  <span class="lnw-cta-note">Traveled this? Log what worked and what you’d change.</span>
+                </div>
+              )}
               {ci < order.length - 1 && (
                 <button class="next-cta" type="button" data-next-tab={ci + 1}>
                   <span class="next-cta-label">Next section</span>
@@ -482,6 +491,7 @@ const tripSummary = buildSummary(guide);
         })}
         <TripSplit storeKey={storeKey} />
         <Voting storeKey={storeKey} />
+        <Learnings storeKey={storeKey} />
       </main>
     </div>
 

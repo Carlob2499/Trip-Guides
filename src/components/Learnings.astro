@@ -1,0 +1,29 @@
+---
+/* Trip Learnings — P1 capture surface. Renders ONLY the hidden survey-modal shell; the
+   visible "Trip Feedback" trigger lives at the foot of the itinerary (GuideLayout). The
+   modal stays inert until Firebase is configured (survey.js gates on hasFirebase()).
+   The Learnings tab + per-day Plan⇄Actual toggle are P2/P3 and live behind feedback. */
+import "../features/learnings/ui/learnings.css";
+interface Props { storeKey: string; }
+const { storeKey } = Astro.props;
+---
+<div class="lnw-modal" id="lnwModal" data-sk={storeKey} hidden aria-hidden="true">
+  <div class="lnw-backdrop" data-lnw-close aria-hidden="true"></div>
+  <div class="lnw-dialog" role="dialog" aria-modal="true" aria-labelledby="lnwTitle" tabindex="-1">
+    <button class="lnw-x" type="button" data-lnw-close aria-label="Close feedback">×</button>
+    <p class="lnw-eyebrow">Trip feedback</p>
+    <h2 class="lnw-title" id="lnwTitle">How did the plan hold up?</h2>
+    <div class="lnw-body" id="lnwBody"></div>
+    <div class="lnw-nav" id="lnwNav"></div>
+  </div>
+</div>
+<script>
+  import { initFeedback } from "../features/learnings/index.js";
+  // Module scripts run deferred, but guard anyway so the itinerary DOM (the stop list
+  // the survey reads) is present before we wire up.
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => initFeedback(), { once: true });
+  } else {
+    initFeedback();
+  }
+</script>

@@ -1,0 +1,195 @@
+/* Trip Learnings — feedback trigger + survey modal. Uses the guide's design tokens
+   (--accent / --card / --ink / --rule / --muted from base.css) so it inherits light,
+   dark, and high-contrast automatically. Motion is JS-gated (reducedMotion) and this
+   file adds no transitions that would fight prefers-reduced-motion. */
+
+/* ── Trigger (foot of the itinerary) ──────────────────────────────────────── */
+.lnw-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin: 28px 0 8px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+}
+.lnw-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font: 600 0.95rem/1 var(--font-body, inherit);
+  cursor: pointer;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12);
+}
+.lnw-open:hover { filter: brightness(1.06); }
+.lnw-open:focus-visible { outline: 2px solid var(--accent2); outline-offset: 3px; }
+.lnw-open-ico { font-size: 1rem; }
+.lnw-cta-note { color: var(--muted); font-size: 0.9rem; }
+
+/* ── Modal overlay ────────────────────────────────────────────────────────── */
+.lnw-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: grid;
+  place-items: end center;
+}
+@media (min-width: 620px) { .lnw-modal { place-items: center; } }
+.lnw-modal[hidden] { display: none; }
+.lnw-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 14, 18, 0.55);
+  backdrop-filter: blur(2px);
+}
+.lnw-dialog {
+  position: relative;
+  width: min(560px, 100%);
+  max-height: 92vh;
+  overflow-y: auto;
+  background: var(--card);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 18px 18px 0 0;
+  padding: 22px 20px 20px;
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.3);
+}
+@media (min-width: 620px) { .lnw-dialog { border-radius: 18px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); } }
+.lnw-dialog:focus { outline: none; }
+.lnw-x {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.lnw-x:hover { background: var(--bg2); color: var(--ink); }
+.lnw-eyebrow {
+  margin: 0 0 4px;
+  color: var(--accent);
+  font-size: 0.72rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.lnw-title { margin: 0 0 14px; font-size: 1.32rem; line-height: 1.2; }
+.lnw-lede { margin: 0 0 14px; color: var(--muted); font-size: 0.95rem; }
+.lnw-lede.lnw-warn { color: var(--warn); font-weight: 600; }
+
+/* ── Ratings step ─────────────────────────────────────────────────────────── */
+.lnw-rate {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.lnw-rate-lbl { font-weight: 600; }
+.lnw-pills { display: inline-flex; gap: 6px; }
+.lnw-pill {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--rule2);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--ink);
+  font-weight: 600;
+  cursor: pointer;
+}
+.lnw-pill-on { background: var(--accent); color: #fff; border-color: var(--accent); }
+.lnw-pill:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+
+/* ── Stops step ───────────────────────────────────────────────────────────── */
+.lnw-day {
+  margin: 16px 0 6px;
+  color: var(--accent2);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.lnw-stop {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 8px 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.lnw-stop-name { font-size: 0.96rem; }
+.lnw-toggle { display: inline-flex; border: 1px solid var(--rule2); border-radius: 999px; overflow: hidden; }
+.lnw-tg {
+  padding: 6px 13px;
+  border: 0;
+  background: var(--bg);
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.lnw-tg-on { background: var(--green); color: #fff; }
+.lnw-tg-off { background: var(--accent); color: #fff; }
+.lnw-reason {
+  grid-column: 1 / -1;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--rule2);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+/* ── Freeform step ────────────────────────────────────────────────────────── */
+.lnw-ta {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--rule2);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.95rem;
+  resize: vertical;
+}
+.lnw-ta:focus-visible, .lnw-reason:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* ── Nav ──────────────────────────────────────────────────────────────────── */
+.lnw-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+}
+.lnw-dots { display: inline-flex; gap: 7px; }
+.lnw-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--rule2); }
+.lnw-dot-on { background: var(--accent); }
+.lnw-btn {
+  padding: 10px 16px;
+  border: 1px solid var(--rule2);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--ink);
+  font-weight: 600;
+  cursor: pointer;
+}
+.lnw-btn:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+.lnw-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.lnw-primary:disabled { opacity: 0.7; cursor: default; }
