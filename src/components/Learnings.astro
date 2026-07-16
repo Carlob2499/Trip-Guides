@@ -6,8 +6,8 @@
      hidden until Firebase has ≥1 feedback record for this guide (tab.js reveals its gtab).
    Everything stays inert until Firebase is configured (the silo gates on hasFirebase()). */
 import "../features/learnings/ui/learnings.css";
-interface Props { storeKey: string; }
-const { storeKey } = Astro.props;
+interface Props { storeKey: string; learnings?: any }
+const { storeKey, learnings = null } = Astro.props;
 ---
 <div class="lnw-modal" id="lnwModal" data-sk={storeKey} hidden aria-hidden="true">
   <div class="lnw-backdrop" data-lnw-close aria-hidden="true"></div>
@@ -29,7 +29,41 @@ const { storeKey } = Astro.props;
     <button class="learn-x" type="button" data-learn-dismiss aria-label="Hide learnings for now">×</button>
   </div>
   <div class="learn-agg" id="learnAgg"></div>
-  <div class="learn-curated" id="learnCurated"></div>
+  {/* Curated post-mortem — server-rendered guide data (never travelers' verbatim
+      critiques). Empty unless the guide carries `learnings`; tab.js treats a
+      non-empty #learnCurated as its own unlock. */}
+  <div class="learn-curated" id="learnCurated">
+    {learnings?.summary && <p class="learn-actually"><Fragment set:html={learnings.summary} /></p>}
+    {(learnings?.days ?? []).map((d: any) => (
+      <div class="learn-day">
+        <p class="learn-day-date">{d.date}</p>
+        {d.actually && <p class="learn-actually"><Fragment set:html={d.actually} /></p>}
+        {(d.skipped ?? []).length > 0 && (
+          <ul class="learn-skips">
+            {d.skipped.map((s: any) => (
+              <li>
+                <span class="learn-skip-stop">✗ {s.stop}</span>
+                {s.reason && <span class="learn-skip-why">{s.reason}</span>}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    ))}
+    {(learnings?.keyLearnings ?? []).length > 0 && (
+      <>
+        <p class="learn-sub">What we learned</p>
+        <ul class="learn-key">{learnings.keyLearnings.map((t: string) => <li><Fragment set:html={t} /></li>)}</ul>
+      </>
+    )}
+    {(learnings?.changed ?? []).length > 0 && (
+      <>
+        <p class="learn-sub">What I changed in this guide</p>
+        <ul class="learn-changed">{learnings.changed.map((t: string) => <li><Fragment set:html={t} /></li>)}</ul>
+      </>
+    )}
+    {learnings?.verified_on && <p class="learn-day-date">Post-mortem written {learnings.verified_on}</p>}
+  </div>
   <div class="learn-foot">
     <button class="lnw-open lnw-open-inline" type="button" data-lnw-open>
       <span class="lnw-open-ico" aria-hidden="true">✎</span>Add trip feedback

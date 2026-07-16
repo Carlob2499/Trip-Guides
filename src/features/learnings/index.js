@@ -6,13 +6,14 @@
    wires both. buildFeedbackRecord()/aggregateVisited() are exported for the tab + tests. */
 
 import { initFeedback } from "./ui/survey.js";
-import { initLearningsTab } from "./ui/tab.js";
+import { initLearningsTab, initDayFlip } from "./ui/tab.js";
 
 export function initLearnings() {
   initFeedback();
   initLearningsTab();
+  initDayFlip();
 }
 
 export { initFeedback } from "./ui/survey.js";
-export { initLearningsTab } from "./ui/tab.js";
+export { initLearningsTab, initDayFlip } from "./ui/tab.js";
 export { buildFeedbackRecord, aggregateVisited } from "./model/feedback";

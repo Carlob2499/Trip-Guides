@@ -471,7 +471,7 @@ const tripSummary = buildSummary(guide);
                 {sub && <p class="cat-sub">{sub}</p>}
               </header>
               {byG[g].map((o) => (
-                <Block sec={o.s} sid={`sec-${o.i}`} ci={ci} solo={solo} holidays={holidayInfo} mapPins={pinMap.get(o.s) ?? null} />
+                <Block sec={o.s} sid={`sec-${o.i}`} ci={ci} solo={solo} holidays={holidayInfo} learnings={guide.learnings ?? null} mapPins={pinMap.get(o.s) ?? null} />
               ))}
               {byG[g].some((o: any) => o.s.type === "days") && (
                 <div class="lnw-cta">
@@ -493,7 +493,7 @@ const tripSummary = buildSummary(guide);
         })}
         <TripSplit storeKey={storeKey} />
         <Voting storeKey={storeKey} />
-        <Learnings storeKey={storeKey} />
+        <Learnings storeKey={storeKey} learnings={guide.learnings ?? null} />
       </main>
     </div>
 

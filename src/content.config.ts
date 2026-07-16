@@ -266,6 +266,26 @@ const guides = defineCollection({
     verified: z.string().optional(),  // freshness metadata for the maker/AI — NOT shown to travelers, EXCEPT a ⚠-prefixed value (e.g. an unconfirmed draft), which renders as a warning pill in the masthead
     draft: z.boolean().optional(),    // true = a "Guide-to-be" scaffold; listed in the home page's draft tier, not the curated grid
     intro: z.string().optional(),
+    // ADDITIVE + OPTIONAL — the curated post-mortem: what REALLY happened vs the plan.
+    // Hand-authored by the maker from the raw trip feedback (never auto-generated, never
+    // a dump of travelers' verbatim critiques — those stay private). Absent on every guide
+    // until a trip has been reflected on, so existing guides validate byte-identically.
+    // Its presence is what surfaces the reality layer: the Learnings tab renders it, and
+    // each `days[].date` that matches an itinerary day grows a Plan ⇄ Actual toggle.
+    learnings: z.object({
+      verified_on: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), // when this post-mortem was written
+      summary: z.string().optional(),          // lead paragraph for the Learnings tab
+      keyLearnings: z.array(z.string()).optional(), // what we learned about how we travel
+      changed: z.array(z.string()).optional(),     // what I changed in the guide as a result
+      days: z.array(z.object({
+        date: z.string(),                      // must match a days[].date, e.g. "Mon Jul 13"
+        actually: z.string().optional(),       // what really happened that day
+        skipped: z.array(z.object({
+          stop: z.string(),
+          reason: z.string().optional(),
+        })).optional(),
+      })).optional(),
+    }).optional(),
     sections: z.array(section),
   }),
 });

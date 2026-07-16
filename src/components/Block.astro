@@ -21,8 +21,10 @@ import WeatherBlock from "./blocks/WeatherBlock.astro";
 import HolidaysBlock from "./blocks/HolidaysBlock.astro";
 
 // `holidays` is the server-computed holiday info (or null), threaded down from
-// GuideLayout; only the `holidays` section type uses it.
-const { sec, sid, ci, solo, holidays, mapPins } = Astro.props;
+// GuideLayout; only the `holidays` section type uses it. `learnings` is the guide's
+// optional curated post-mortem (or null), threaded the same way; only `days` uses it,
+// to grow a per-day Plan ⇄ Actual toggle on the days it has an entry for.
+const { sec, sid, ci, solo, holidays, learnings, mapPins } = Astro.props;
 
 // Stable key prefix for checklist items — based on section index, not content.
 // Changing item text does not change its saved state; adding/removing items at
@@ -110,7 +112,7 @@ const TitleTag = isCollapsible ? "summary" : "div";
                   title="Copy link to this section" aria-label="Copy link to this section">#</button>
         </div>
       )}
-      {sec.type === "days"   && <DaysBlock   sec={sec} keyPrefix={keyPrefix} />}
+      {sec.type === "days"   && <DaysBlock   sec={sec} keyPrefix={keyPrefix} learnings={learnings} />}
       {sec.type === "sights" && <SightsBlock sec={sec} />}
     </>
   )}

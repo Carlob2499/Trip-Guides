@@ -5,9 +5,13 @@
 //   2. The day cards, full width (single column).
 //   3. Per-day numbered stop lists from the additive `waypoints` field — the
 //      on-the-go itinerary ladder (time in data face, name, note).
-const { sec, keyPrefix = "dy" } = Astro.props;
+const { sec, keyPrefix = "dy", learnings = null } = Astro.props;
 const days: any[] = sec.items || [];
 const two = (n: number) => String(n + 1).padStart(2, "0");
+// Curated post-mortem for THIS day, matched by date. Only days the maker actually
+// reflected on get a Plan ⇄ Actual toggle — the rest render exactly as before.
+const actualFor = (date: string) =>
+  (learnings?.days ?? []).find((d: any) => d.date === date) ?? null;
 ---
 <nav class="day-scrub" id="dayScrub" aria-label="Jump to a day">
   {days.map((d: any, di: number) => (
@@ -25,6 +29,30 @@ const two = (n: number) => String(n + 1).padStart(2, "0");
         <div class="d"><span class="day-num">{two(di)}</span>{d.date}</div>
         <div class="b">
           <strong>{d.title}</strong>
+          {actualFor(d.date) && (
+            <div class="day-flip" role="group" aria-label="Plan or what actually happened">
+              <button class="day-flip-btn on" type="button" data-flip="plan" aria-pressed="true">Plan</button>
+              <button class="day-flip-btn" type="button" data-flip="actual" aria-pressed="false">Actually</button>
+            </div>
+          )}
+          {actualFor(d.date) && (
+            <div class="day-actual" hidden>
+              {actualFor(d.date).actually && <p class="learn-actually"><Fragment set:html={actualFor(d.date).actually} /></p>}
+              {(actualFor(d.date).skipped ?? []).length > 0 && (
+                <>
+                  <p class="learn-sub">Skipped</p>
+                  <ul class="learn-skips">
+                    {actualFor(d.date).skipped.map((s: any) => (
+                      <li>
+                        <span class="learn-skip-stop">✗ {s.stop}</span>
+                        {s.reason && <span class="learn-skip-why">{s.reason}</span>}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+            </div>
+          )}
           {d.tldr && <p class="day-tldr">{d.tldr}</p>}
           {d.checklist && d.checklist.length > 0 && (
             <span class="day-kitcount" hidden aria-live="polite"></span>
