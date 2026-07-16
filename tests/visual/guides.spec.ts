@@ -1,10 +1,21 @@
 /* Visual smoke — hub + Korea guide, light + dark, mobile + desktop (8 baselines).
-   Deterministic by construction:
+   Deterministic for everything the BROWSER decides:
    · fixed clock (post-trip date) — countdowns, "jump to today", now-line and
      weather-day logic render the same forever;
    · external requests aborted — Commons photos / weather / FX / Firebase never
      vary a pixel (and never hit the network in CI);
    · animations disabled at the screenshot layer (config).
+
+   ⚠ KNOWN LIMIT — page.clock only fixes CLIENT-side time. The hub's "next trip" hero is
+   chosen at BUILD time (`new Date()` in src/pages/index.astro) and baked into static HTML,
+   so no browser clock can stabilize it: the hub baselines legitimately change when a trip
+   crosses from upcoming → past, or when an upcoming guide is added. A hub diff after such a
+   change is expected staleness, NOT a regression — confirm against the guide baselines
+   (which are build-date independent) before hunting a bug, then re-record with
+   `npx playwright test --update-snapshots`. Fixing this properly means making the build date
+   injectable (e.g. SOURCE_DATE_EPOCH) so index.astro resolves "next trip" against a pinned
+   date; until then, treat hub baselines as date-sensitive.
+
    Baselines are per-platform (Playwright suffixes them); CI bootstraps missing
    linux baselines on its first run (see .github/workflows/visual.yml). */
 import { test, expect, type Page } from "@playwright/test";
