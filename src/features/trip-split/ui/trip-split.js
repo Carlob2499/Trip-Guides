@@ -12,6 +12,7 @@
 
 import { settle } from "../model/settle";
 import { hasFirebase, joinTrip, normalizeCode } from "../../firebase/index.js";
+import { esc } from "../../../scripts/util.js";
 
 (function () {
   var wrap = document.getElementById("tripSplit");
@@ -58,13 +59,12 @@ import { hasFirebase, joinTrip, normalizeCode } from "../../firebase/index.js";
       } else if (e && e.split && typeof e.split === "object") { split = e.split; }
       var payIdx = e ? parseInt(e.paidBy, 10) : 0;
       var paidBy = ids[(isNaN(payIdx) || payIdx >= ids.length || payIdx < 0) ? 0 : payIdx] || (ids[0] || "");
-      return { id: (e && e.id) || newId(), paidBy: paidBy, desc: (e && e.desc) || "", amount: (e && e.amount != null) ? e.amount : null, split: split, participants: (e && e.participants) || null };
+      return normalizeExpense({ id: (e && e.id) || newId(), paidBy: paidBy, desc: (e && e.desc) || "", amount: e && e.amount, split: split, participants: e && e.participants });
     });
     return { members: members, expenses: expenses, customSplit: !!s.customSplit };
   }
 
   /* ── utilities ───────────────────────────── */
-  function esc(s) { return String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
   function fmtUSD(v) { return "$" + (Math.round(Math.abs(v) * 100) / 100).toFixed(2); }
   function memberPos(id) { for (var i = 0; i < state.members.length; i++) if (state.members[i].id === id) return i; return -1; }
   function memberById(id) { var p = memberPos(id); return p === -1 ? null : state.members[p]; }
@@ -76,7 +76,15 @@ import { hasFirebase, joinTrip, normalizeCode } from "../../firebase/index.js";
     var named = (exp && exp.participants || []).filter(function (id) { return memberPos(id) !== -1; });
     return named.length ? named : state.members.map(function (m) { return m.id; });
   }
-  function isSharer(exp, id) { return sharersOf(exp).indexOf(id) !== -1; }
+  // ONE normalizer for the expense record shape, so a field added to the model exists on
+  // every path (the sync mapper silently dropping `participants` is the bug this ends).
+  function normalizeExpense(e) {
+    return {
+      id: e.id, paidBy: e.paidBy || "", desc: e.desc || "",
+      amount: e.amount != null ? e.amount : null,
+      split: e.split || null, participants: e.participants || null, order: e.order,
+    };
+  }
   // Even split across the given ids (defaults to everyone). Keyed by id, so the map itself
   // never charges a non-participant.
   function evenSplit(total, ids) {
@@ -93,7 +101,17 @@ import { hasFirebase, joinTrip, normalizeCode } from "../../firebase/index.js";
     var next = cur.indexOf(mid) !== -1 ? cur.filter(function (x) { return x !== mid; }) : cur.concat([mid]);
     if (!next.length) return;
     var patch = { participants: next };
-    if (!state.customSplit) patch.split = evenSplit(parseFloat(e.amount) || 0, next);
+    if (state.customSplit) {
+      // Reconcile the persisted custom amounts with the new sharer set: keep what's typed
+      // for everyone still sharing, start a newly added sharer at 0 (the sum-mismatch
+      // warning asks for their amount), and DROP entries for anyone excluded — a stale
+      // amount must never keep charging someone who wasn't part of the expense.
+      var split = {};
+      next.forEach(function (id) { split[id] = (e.split && parseFloat(e.split[id])) || 0; });
+      patch.split = split;
+    } else {
+      patch.split = evenSplit(parseFloat(e.amount) || 0, next);
+    }
     opExpenseField(eid, patch);
   }
 
@@ -221,14 +239,17 @@ import { hasFirebase, joinTrip, normalizeCode } from "../../firebase/index.js";
       if (state.customSplit) {
         var total = parseFloat(exp.amount) || 0;
         // Custom amounts are only offered for the people actually sharing the expense.
-        if (!exp.split || Object.keys(exp.split).length !== shareIds.length) exp.split = evenSplit(total, shareIds);
-        var sumCA = shareIds.reduce(function (a, id) { return a + (parseFloat(exp.split[id]) || 0); }, 0);
+        // Render is read-only: no split exists yet → SHOW the even fallback (which is
+        // exactly what settle() computes for a missing/zero-sum split) without mutating
+        // or persisting state. Ops own reconciliation; render never edits the record.
+        var caMap = exp.split || evenSplit(total, shareIds);
+        var sumCA = shareIds.reduce(function (a, id) { return a + (parseFloat(caMap[id]) || 0); }, 0);
         var diff = Math.abs(sumCA - total);
         customBlock = "<div class='se-custom" + (diff > 0.015 ? " se-custom--warn" : "") + "'>" +
           shareIds.map(function (id) {
             var mi = memberPos(id), m = state.members[mi];
             return "<label class='se-cl'><span class='se-cl-name'>" + esc(m.name || ("P" + (mi + 1))) + "</span>" +
-              "<input class='split-in se-ca' type='number' min='0' step='0.01' inputmode='decimal' value='" + (parseFloat(exp.split[id]) || 0).toFixed(2) + "' data-eid='" + exp.id + "' data-mid='" + id + "' /></label>";
+              "<input class='split-in se-ca' type='number' min='0' step='0.01' inputmode='decimal' value='" + (parseFloat(caMap[id]) || 0).toFixed(2) + "' data-eid='" + exp.id + "' data-mid='" + id + "' /></label>";
           }).join("") +
           (diff > 0.015 ? "<span class='se-warn'>Shares sum " + fmtUSD(sumCA) + " — total is " + fmtUSD(total) + "</span>" : "") + "</div>";
       }
@@ -339,7 +360,7 @@ import { hasFirebase, joinTrip, normalizeCode } from "../../firebase/index.js";
       renderRemote();
     }));
     offFns.push(expenses.onChange(function (map) {
-      state.expenses = orderedFrom(map).map(function (e) { return { id: e.id, paidBy: e.paidBy || "", desc: e.desc || "", amount: e.amount != null ? e.amount : null, split: e.split || null, order: e.order }; });
+      state.expenses = orderedFrom(map).map(normalizeExpense);
       renderRemote();
     }));
     offFns.push(meta.onChange(function (v) { if (v && typeof v.customSplit === "boolean") { state.customSplit = v.customSplit; syncModeUI(); renderRemote(); } }));

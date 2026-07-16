@@ -7,7 +7,7 @@
    members/expenses under the same room — the budget is never touched. `freeform` is written
    but never rendered anywhere in the app (the private, candid channel). */
 
-import { reducedMotion } from "../../../scripts/util.js";
+import { esc, reducedMotion } from "../../../scripts/util.js";
 import { hasFirebase, joinTrip, normalizeCode } from "../../firebase/index.js";
 import { buildFeedbackRecord } from "../model/feedback";
 
@@ -68,11 +68,6 @@ export function initFeedback() {
       });
     });
     return out;
-  }
-
-  function esc(s) {
-    return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
 
   /* ── step renderers ─────────────────────────────────────────────────────── */

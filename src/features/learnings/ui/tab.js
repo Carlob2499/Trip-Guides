@@ -4,6 +4,7 @@
    touches `freeform` — that stays the private channel. Dismissable per session (× hides the
    tab). The curated post-mortem (P3) renders into #learnCurated when the guide data carries it. */
 
+import { esc } from "../../../scripts/util.js";
 import { hasFirebase, joinTrip, normalizeCode } from "../../firebase/index.js";
 import { aggregateVisited } from "../model/feedback";
 
@@ -55,10 +56,6 @@ export function initLearningsTab() {
   // Live records are the OTHER unlock, handled by the subscription below.
   var hasCurated = !!(curatedEl && curatedEl.children.length);
 
-  function esc(s) {
-    return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-  }
 
   function reveal(show) {
     if (gtab) gtab.hidden = !show;

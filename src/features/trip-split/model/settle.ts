@@ -49,11 +49,17 @@ export function settle(
     const sharers = named.length ? named : memberIds;
 
     if (customSplit && exp.split) {
-      // Custom amounts are the source of truth; a non-sharer simply has no entry (→ 0).
-      const shares = memberIds.map((id) => Number(exp.split![id]) || 0);
+      // Custom amounts are the source of truth — but only for the people actually sharing
+      // the expense. A stale split entry for someone excluded after amounts were typed
+      // (or for a deleted member) must never charge them.
+      const shares = memberIds.map((id) =>
+        sharers.indexOf(id) !== -1 ? Number(exp.split![id]) || 0 : 0,
+      );
       const sum = shares.reduce((a, b) => a + b, 0);
       memberIds.forEach((id, i) => {
-        balances[id] -= sum > 0 ? total * (shares[i] / sum) : total / n;
+        // Zero-sum split (amounts not typed yet) → fall back to even, across sharers only.
+        balances[id] -= sum > 0 ? total * (shares[i] / sum)
+          : sharers.indexOf(id) !== -1 ? total / sharers.length : 0;
       });
     } else {
       const share = total / sharers.length;

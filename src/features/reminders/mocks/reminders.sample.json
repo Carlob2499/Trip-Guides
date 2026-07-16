@@ -1,0 +1,34 @@
+{
+  "r1a2b3c4": {
+    "label": "Airbnb door",
+    "text": "4821",
+    "kind": "code",
+    "pinned": true,
+    "createdAt": 1752624000000,
+    "createdBy": "mock-uid-carlo"
+  },
+  "r5d6e7f8": {
+    "label": "Meet at the station",
+    "text": "8:30 at Exit 5",
+    "kind": "time",
+    "pinned": false,
+    "createdAt": 1752627600000,
+    "createdBy": "mock-uid-phil"
+  },
+  "r9g0h1i2": {
+    "label": "KTX booking",
+    "text": "https://www.letskorail.com/ebizbf/EbizBfTicketSearch.do",
+    "kind": "link",
+    "pinned": false,
+    "createdAt": 1752631200000,
+    "createdBy": "mock-uid-gaby"
+  },
+  "r3j4k5l6": {
+    "label": "",
+    "text": "Bring passports for tax-free at Olive Young",
+    "kind": "note",
+    "pinned": false,
+    "createdAt": 1752634800000,
+    "createdBy": "mock-uid-carlo"
+  }
+}

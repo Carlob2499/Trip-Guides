@@ -2,6 +2,16 @@
    it (guide bundle + hub bundle), so this is the single home for the tiny
    cross-module checks that were previously copy-pasted per file. */
 
+/* Escape a string for interpolation into HTML. Escapes BOTH quote styles — callers
+   build markup with single- AND double-quoted attributes, and the per-module copies
+   this replaces had drifted (none escaped single quotes, which let user-typed text in
+   the shared rooms break out of single-quoted attributes). */
+export function esc(s) {
+  return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
 /* True when the visitor has asked the OS to minimize motion. Callers gate
    every non-essential animation / smooth-scroll behind this. */
 export function reducedMotion() {

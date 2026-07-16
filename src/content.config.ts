@@ -287,6 +287,26 @@ const guides = defineCollection({
       })).optional(),
     }).optional(),
     sections: z.array(section),
+  }).superRefine((g: any, ctx: any) => {
+    // The Plan ⇄ Actual join key is the day's date STRING, so a reworded label would
+    // silently drop that day's whole reality layer. Fail the build instead: every
+    // learnings day must name a date that exists in some itinerary days block.
+    const learnDays: { date: string }[] = g.learnings?.days ?? [];
+    if (!learnDays.length) return;
+    const itinDates = new Set(
+      g.sections
+        .filter((s: any) => s.type === "days")
+        .flatMap((s: any) => s.items.map((d: any) => d.date)),
+    );
+    for (const d of learnDays) {
+      if (!itinDates.has(d.date)) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["learnings", "days"],
+          message: `learnings day "${d.date}" matches no itinerary days[].date — its Plan ⇄ Actual toggle would silently not render. Itinerary dates: ${[...itinDates].join(", ") || "(none)"}`,
+        });
+      }
+    }
   }),
 });
 

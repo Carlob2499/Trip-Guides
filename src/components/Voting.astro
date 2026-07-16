@@ -42,6 +42,7 @@ const { storeKey } = Astro.props;
 </div>
 
 <script>
+import { esc } from "../scripts/util.js";
 (function () {
   var wrap = document.getElementById("tripVote");
   if (!wrap) return;
@@ -92,11 +93,6 @@ const { storeKey } = Astro.props;
     return true;
   }
 
-  function esc(s) {
-    return String(s || "")
-      .replace(/&/g, "&amp;").replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-  }
 
   function render() {
     var list = document.getElementById("voList");

@@ -63,6 +63,30 @@ describe("settle — participants (a subset of the group shares an expense)", ()
     expect(r.balances.c).toBeCloseTo(-20);  // -10 -10
   });
 
+  it("ignores a stale custom amount for someone excluded from the expense", () => {
+    // b was excluded AFTER amounts were typed — the leftover split entry must not charge b.
+    const r = settle(
+      ["a", "b", "c"],
+      [{ paidBy: "a", amount: 100, participants: ["a", "c"], split: { a: 25, b: 75 } }],
+      true,
+    );
+    expect(r.balances.b).toBeCloseTo(0);      // excluded — untouched despite the stale entry
+    expect(r.balances.a).toBeCloseTo(0);      // only sharer with an amount → owes all 100, paid 100
+    expect(r.balances.c).toBeCloseTo(0);      // sharer with no typed amount yet → 0 of a sum>0 split
+  });
+
+  it("zero-sum custom split falls back to even across the PARTICIPANTS, not the group", () => {
+    // Amounts cleared to 0 while deciding — the fallback must not resurrect excluded members.
+    const r = settle(
+      ["a", "b", "c"],
+      [{ paidBy: "a", amount: 90, participants: ["a", "b"], split: { a: 0, b: 0 } }],
+      true,
+    );
+    expect(r.balances.a).toBeCloseTo(45);
+    expect(r.balances.b).toBeCloseTo(-45);
+    expect(r.balances.c).toBeCloseTo(0);
+  });
+
   it("custom amounts still win over participants (the split map is the source of truth)", () => {
     const r = settle(
       ["a", "b", "c"],

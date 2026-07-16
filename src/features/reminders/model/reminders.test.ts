@@ -93,3 +93,34 @@ describe("sortReminders", () => {
     expect(sortReminders([])).toEqual([]);
   });
 });
+
+/* The mocks are the contract for what a room record looks like. If the stored shape or the
+   kind inference drifts from these seeds, this fails before any device ever syncs bad data. */
+import seeds from "../mocks/reminders.sample.json";
+
+describe("mocks/reminders.sample.json — real-shaped room records", () => {
+  const records = Object.values(seeds as Record<string, any>);
+
+  it("every seed carries the full stored shape (model fields + sync-added fields)", () => {
+    expect(records.length).toBeGreaterThan(0);
+    for (const r of records) {
+      expect(typeof r.label).toBe("string");
+      expect(typeof r.text).toBe("string");
+      expect(["note", "code", "time", "link"]).toContain(r.kind);
+      expect(typeof r.pinned).toBe("boolean");
+      expect(typeof r.createdAt).toBe("number"); // set by the sync layer
+      expect(typeof r.createdBy).toBe("string"); // set by the sync layer
+    }
+  });
+
+  it("each seed's stored kind matches what inferKind derives from its text", () => {
+    for (const r of records) expect(r.kind).toBe(inferKind(r.text));
+  });
+
+  it("buildReminder round-trips each seed's authorable fields unchanged", () => {
+    for (const r of records) {
+      const built = buildReminder({ text: r.text, label: r.label, pinned: r.pinned });
+      expect(built).toEqual({ label: r.label, text: r.text, kind: r.kind, pinned: r.pinned });
+    }
+  });
+});
