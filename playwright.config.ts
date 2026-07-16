@@ -23,9 +23,16 @@ export default defineConfig({
   },
   use: { baseURL: "http://localhost:4322" },
   webServer: {
-    command: "npm run preview",
+    // The port MUST be passed: `astro preview` defaults to 4321, so a bare `npm run preview`
+    // serves 4321 while Playwright waits on 4322 and times out. The bug hid because
+    // reuseExistingServer:true silently reused whatever preview a dev already had open on
+    // 4322 — green locally, dead in CI, which is exactly backwards.
+    command: "npm run preview -- --port 4322",
     port: 4322,
-    reuseExistingServer: true,
-    timeout: 30_000,
+    // Locally: reuse a dev's running :4322 preview. In CI: always start a clean one, so a run
+    // can never pass because of a foreign server (or fail because of a stale one).
+    reuseExistingServer: !process.env.CI,
+    // A cold CI box has to boot astro preview from scratch; 30s was tight enough to flake.
+    timeout: 120_000,
   },
 });
