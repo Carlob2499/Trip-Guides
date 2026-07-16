@@ -1,0 +1,55 @@
+# Korea 2026 — learnings (maker's private synthesis)
+
+**Trip:** Seoul · Daejeon · Busan, Jul 8–15, 2026 · 3 travelers.
+**Status: PRE-REFLECTION.** No post-trip critiques have been submitted yet, so this file
+records only what is *evidenced* — planning-time constraints and the divergences visible in
+the guide's own history. **Nothing below is a claim about how the group felt or what they
+skipped; there is no data for that yet.**
+
+## What this file is (and isn't)
+
+- A **synthesis**, not a dump. Raw traveler critiques from the Trip Feedback survey
+  (`freeform`) are **never pasted here verbatim** and never rendered in the app — they get
+  summarized and anonymized into patterns.
+- The **public** counterpart is the guide's `learnings` block (the curated post-mortem the
+  Learnings tab renders). This file is the working notes behind it.
+- Cross-trip patterns graduate to `docs/TRAVELER_PATTERNS.md`, which the
+  `waypoint-guide-author` skill consults when building the next guide.
+
+## Evidenced divergences (plan vs. what the plan became)
+
+These are drawn from the guide's git history — the plan demonstrably moved during the trip:
+
+1. **Monday Busan was rebuilt mid-trip.** The original Monday day trip was re-cut around new
+   KTX times (Daejeon→Busan 10:44→12:53; Busan→Seoul 18:00→20:52) and re-clustered into one
+   eastern pocket — Bonjeon Dwaeji Gukbap near Busan Station → T1 Base Camp Busan (Haeundae)
+   → Haeundae Beach — to fit roughly 4.5 hours of real exploration in July heat.
+   *Learning candidate:* a fixed-train day trip should be planned backwards from the return
+   train, in a single pocket, budgeting ~4–5 usable hours rather than the full window.
+
+2. **The group forked.** A solo Tokyo weekend (Jeju Air, Sat Jul 11 → Mon Jul 13) was added
+   for the third traveler after the guide was already live, forcing a carve-out of the
+   shared Sat–Mon itinerary *and* the budget.
+   *Learning candidate:* assume a multi-person trip may fork; keep per-person maths and
+   "the 3 of you" phrasing derivable rather than hardcoded.
+
+3. **A factual near-miss worth remembering.** A celebration KBBQ venue was initially written
+   as hanwoo *beef* when the venue is an aged-**pork** specialist; a Korean primary source
+   caught it and the beef pick was replaced (Yakiniku Doryong). Nothing shipped wrong, but
+   it is the clearest example of why perishable venue facts get a primary source.
+
+## Open questions — answer these from real critiques
+
+- Which planned stops were actually **skipped**, and why? (heat? fatigue? event overrun?)
+- Was the pace right? The itinerary carried 36 planned stops across 8 days.
+- Did the MSI-night 8:00–9:30pm dinner window actually work, or did games overrun it?
+- Was the Busan day worth the round trip, or should it have been cut?
+- Did the Tokyo fork feel good for the group, or did it fracture the trip?
+
+## Next step
+
+Run the reflection pass once critiques exist:
+1. Read the feedback (`trips/southkorea/feedback`) + whatever the traveler says directly.
+2. Update this file, then promote durable patterns to `docs/TRAVELER_PATTERNS.md`.
+3. Author the guide's public `learnings` block (curated post-mortem) — get it approved
+   before publishing, since it summarizes other people's critiques outward.

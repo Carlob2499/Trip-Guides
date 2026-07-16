@@ -49,6 +49,22 @@ ignoring are both wrong.
 
 ---
 
+## The Learnings Loop
+
+Guides are the *ideal*; real trips diverge. Each guide carries a **Trip Feedback** button →
+survey → Firebase (`trips/<storeKey>/feedback`, the `src/features/learnings/` silo). Those
+critiques become: the guide's optional `learnings` block (the **curated, public** post-mortem
+the Learnings tab + per-day Plan⇄Actual toggle render), `learnings/<slug>.md` (the maker's
+private synthesis), and `docs/TRAVELER_PATTERNS.md` (cross-trip patterns the
+`waypoint-guide-author` skill consults so the *next* guide starts personalized).
+
+Two rules: raw `freeform` critiques are **never rendered and never pasted verbatim** — they
+are summarized into patterns. And the reality layer only appears when there IS reality to
+show — no feedback and no post-mortem means nothing renders. Never invent a learning to fill
+the surface; an honest blank is the feature.
+
+---
+
 ## Content Standards
 
 The operational standards — the 4-question venue rule, `≈` (sourced-approximate) and `⚠`

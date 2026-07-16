@@ -37,6 +37,15 @@ helper scripts, and the done gate.
    `docs/NEW_GUIDE_INTAKE.md` explains intake → spec.
 3. **`references/block-types.md`** — when choosing or creating a section type.
 4. **The `denmark/` and `korea/` guide dirs** — the gold standard to match or beat.
+5. **`docs/TRAVELER_PATTERNS.md`** — how this group *actually* travels, learned from
+   past trips (pace, heat, commute clustering, fixed-event anchors, food preferences,
+   whether the group forks). Plus `learnings/<slug>.md` for any prior trip with the
+   same travelers. **Consult these during intake and research** so a new guide starts
+   personalized instead of generic — they are the answer to "could a generic AI have
+   written this without knowing this traveler?".
+   Respect the provenance tags: plan around **[stated]** / **[observed]** /
+   **[reported]** patterns; treat **[hypothesis]** as a question to test, never a fact.
+   An empty section there means no evidence exists — do not invent one.
 
 ## Modes
 - **New guide** — intake first, then scaffold (`node scripts/scaffold-guide.mjs
