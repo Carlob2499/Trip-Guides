@@ -84,10 +84,13 @@ is their single home; this file names the principle without repeating detail.
   guide-author discipline.
 - **Uniform application across surfaces.** The same datum renders on many surfaces (hub
   hero, grid card, masthead, share modal, OG, print). Apply any presentation change to
-  every surface in the same pass, and never render the same datum twice side-by-side
-  (a hero + a grid card for the same guide; an eyebrow repeating the title). Dedup
-  derived labels at the layout level, not by hand-editing content. After an identity
-  change, grep for the old tokens.
+  every surface in the same pass, and never render the same datum twice **as if it were two
+  different things** (an eyebrow repeating the title). Dedup derived labels at the layout
+  level, not by hand-editing content. After an identity change, grep for the old tokens.
+  **Dedup never means an index lies.** A featured item still belongs in its list — a hub hero
+  does NOT get cut from the guide grid, or "All trips" quietly means "all but one" and a
+  filtered view looks like a guide vanished. Repeat it, and *mark* it ("Featured above") so
+  it reads as the same thing, not a second one. Completeness beats tidiness in any list.
 - **Read before editing; never regenerate from memory.**
 - **Base-path hrefs are explicit** — every internal `/`-href needs `import.meta.env.BASE_URL`.
 - **New facts get a verification date on write**, never bolted on later.

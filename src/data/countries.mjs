@@ -166,6 +166,52 @@ export function isoCodeFor(country) {
   return countryData(country)?.iso2 ?? null;
 }
 
+/* ── Continents ────────────────────────────────────────────────────────────────
+   The axis the hub filters on: as the library grows, "which continent" is how you
+   actually browse trips — country chips just restate the list.
+
+   Kept as explicit data rather than derived from each row's IANA `tz`, because the
+   tz prefix lies in exactly the cases that matter: Iceland is Atlantic/Reykjavik
+   (Europe), and every American zone is `America/` with no North/South split.
+   Every key here must exist in COUNTRIES — countries.test.ts enforces that, so a
+   new country can't be added with a missing or stale continent. */
+export const CONTINENTS = {
+  // Europe (Turkey sits on both sides; its zone and its travel centre are European)
+  "Denmark": "Europe", "Germany": "Europe", "Portugal": "Europe", "Iceland": "Europe",
+  "Norway": "Europe", "Sweden": "Europe", "Finland": "Europe", "United Kingdom": "Europe",
+  "Ireland": "Europe", "France": "Europe", "Spain": "Europe", "Italy": "Europe",
+  "Netherlands": "Europe", "Belgium": "Europe", "Switzerland": "Europe", "Austria": "Europe",
+  "Greece": "Europe", "Poland": "Europe", "Czechia": "Europe", "Hungary": "Europe",
+  "Croatia": "Europe", "Turkey": "Europe",
+  // Asia
+  "South Korea": "Asia", "Japan": "Asia", "China": "Asia", "Hong Kong": "Asia",
+  "Taiwan": "Asia", "Thailand": "Asia", "Vietnam": "Asia", "Singapore": "Asia",
+  "Malaysia": "Asia", "Indonesia": "Asia", "Philippines": "Asia", "India": "Asia",
+  "United Arab Emirates": "Asia", "Israel": "Asia",
+  // North America (Costa Rica is Central America — conventionally grouped north)
+  "United States": "North America", "Canada": "North America", "Mexico": "North America",
+  "Costa Rica": "North America",
+  // South America
+  "Brazil": "South America", "Argentina": "South America", "Peru": "South America",
+  "Chile": "South America", "Colombia": "South America",
+  // Oceania
+  "Australia": "Oceania", "New Zealand": "Oceania",
+  // Africa
+  "Egypt": "Africa", "Morocco": "Africa", "South Africa": "Africa", "Kenya": "Africa",
+};
+
+// Display order for continent filters — roughly by where this traveler actually goes,
+// so the chips don't reshuffle alphabetically as the library grows.
+export const CONTINENT_ORDER = ["Asia", "Europe", "North America", "South America", "Oceania", "Africa"];
+
+// Continent for a guide `country` string (following the same aliases), or null when
+// unknown — callers must handle null rather than guess a continent.
+export function continentFor(country) {
+  if (!country) return null;
+  const key = ALIASES[country] || country;
+  return CONTINENTS[key] ?? null;
+}
+
 // Back-compat shape: { [country]: "XX" } for callers that want the flat map.
 export const COUNTRY_CODES = Object.fromEntries(
   [...Object.entries(COUNTRIES).map(([k, v]) => [k, v.iso2]),

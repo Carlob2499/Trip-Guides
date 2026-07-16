@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import PwaHead from "../components/PwaHead.astro";
 import { accentFor } from "../lib/themes";
+import { continentFor, CONTINENT_ORDER } from "../data/countries.mjs";
 import { flattenSections } from "../features/exports/index";
 // Self-hosted variable fonts (bundled, base-path-safe, offline-correct) — no CDN.
 import "@fontsource-variable/bricolage-grotesque";
@@ -92,9 +93,13 @@ const heroWhen = heroIsPast && hero?.ex.lastDate
   ? hero.ex.lastDate.toLocaleDateString("en-US", { month: "short", year: "numeric" })
   : "";
 // The hero IS that guide's entry on the hub — don't render it twice. The grid
-// lists everything else; the hero card carries search/filter exemption (it's
-// always visible, being the next trip).
-const gridGuides = hero ? curated.filter(x => x.g.id !== hero.g.id) : curated;
+// The grid is the COMPLETE index — every curated guide, including the one featured in
+// the hero. Excluding the hero used to make "All" quietly mean "all but one", and left a
+// filtered view looking like a guide had vanished. The hero is an editorial band ABOVE the
+// filter; the grid below it is the list. The hero's own card is marked (not hidden) so it
+// reads as the same trip, not a second one.
+const gridGuides = curated;
+const heroId = hero?.g.id ?? null;
 const heroSrc = hero?.ex.heroImg
   ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(hero.ex.heroImg.file)}?width=1400`
   : null;
@@ -102,9 +107,14 @@ const heroSrc = hero?.ex.heroImg
 const coverSrc = (img: { file: string } | null) =>
   img ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(img.file)}?width=640` : null;
 
-// Filter chips: one per country that appears in the grid (the hero guide is
-// always visible above the grid, so it doesn't need a chip).
-const countries = [...new Set(gridGuides.map(x => x.g.data.country))].sort();
+// Filter chips: by CONTINENT, not country. With a handful of guides a country chip just
+// restates the card beneath it; continent is the axis you actually browse by as the library
+// grows. Only continents that have a guide get a chip, in CONTINENT_ORDER (stable — chips
+// don't reshuffle alphabetically when a new trip lands).
+const gridContinents = new Set(
+  gridGuides.map(x => continentFor(x.g.data.country)).filter(Boolean) as string[]
+);
+const continents = CONTINENT_ORDER.filter(c => gridContinents.has(c));
 ---
 <!doctype html>
 <html lang="en">
@@ -172,9 +182,9 @@ const countries = [...new Set(gridGuides.map(x => x.g.data.country))].sort();
 
       <div class="hub-filter" role="search">
         <input class="hub-search" id="hubSearch" type="search" placeholder="Search guides…" aria-label="Search guides" autocomplete="off" />
-        <div class="hub-chips" id="hubChips" role="group" aria-label="Filter by country">
-          <button class="hub-chip hub-chip-active" type="button" data-filter="">All</button>
-          {countries.map((c) => (
+        <div class="hub-chips" id="hubChips" role="group" aria-label="Filter by continent">
+          <button class="hub-chip hub-chip-active" type="button" data-filter="">All trips</button>
+          {continents.map((c) => (
             <button class="hub-chip" type="button" data-filter={c}>{c}</button>
           ))}
         </div>
@@ -183,13 +193,15 @@ const countries = [...new Set(gridGuides.map(x => x.g.data.country))].sort();
       <div class="hub-grid" id="hubGrid">
         {gridGuides.map(({ g, ex }) => (
           <a
-            class="hubcard"
+            class:list={["hubcard", { "hubcard-featured": g.id === heroId }]}
             href={`${base}/guides/${g.id}/`}
             style={`--accent:${accentFor(g.data.country)}`}
             data-country={g.data.country}
+            data-continent={continentFor(g.data.country)}
             data-start={ex.startISO}
-            data-search={`${g.data.country} ${g.data.title} ${g.data.dek || ""}`.toLowerCase()}
+            data-search={`${g.data.country} ${g.data.title} ${g.data.dek || ""} ${continentFor(g.data.country) || ""}`.toLowerCase()}
           >
+            {g.id === heroId && <span class="hubcard-featured-tag">Featured above</span>}
             {ex.heroImg ? (
               <span class="hubcard-cover">
                 <img class="hubcard-img" src={coverSrc(ex.heroImg)} alt="" loading="lazy" decoding="async" />

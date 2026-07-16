@@ -67,17 +67,20 @@
       .sort(function (a, b) { return keyOf(a) < keyOf(b) ? -1 : 1; })
       .forEach(function (c) { grid.appendChild(c); });
 
-    /* ── Search + country chips ─────────────────────────────────────────── */
+    /* ── Search + continent chips ───────────────────────────────────────────
+       Chips filter by CONTINENT (data-continent). Search still matches the card's
+       data-search blob, which includes the country name — so typing "korea" finds it
+       even though there's no country chip. */
     var search = document.getElementById("hubSearch");
     var chips = Array.prototype.slice.call(document.querySelectorAll(".hub-chip"));
     var empty = document.getElementById("hubEmpty");
-    var activeCountry = "";
+    var activeContinent = "";
     function apply() {
       var q = (search && search.value || "").trim().toLowerCase();
       var shown = 0;
       cards.forEach(function (c) {
         var ok =
-          (!activeCountry || c.getAttribute("data-country") === activeCountry) &&
+          (!activeContinent || c.getAttribute("data-continent") === activeContinent) &&
           (!q || (c.getAttribute("data-search") || "").indexOf(q) !== -1);
         c.toggleAttribute("hidden", !ok);
         if (ok) shown++;
@@ -86,7 +89,7 @@
     }
     chips.forEach(function (chip) {
       chip.addEventListener("click", function () {
-        activeCountry = chip.getAttribute("data-filter") || "";
+        activeContinent = chip.getAttribute("data-filter") || "";
         chips.forEach(function (c) { c.classList.toggle("hub-chip-active", c === chip); });
         apply();
       });
