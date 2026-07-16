@@ -9,6 +9,15 @@ Pages under `/Trip-Guides`. A guide is only done when it's **Verified · Persona
 
 ---
 
+## 2026-07-16 — The hub's hero stopped expiring
+*A guide is at its most proven the day after the trip, not the day before.*
+
+The landing page only ever featured an **upcoming** trip, so once every trip was in the past
+the hero resolved to nothing and the hub silently dropped its whole first impression. Between
+trips it now features the most recently **finished** one — "Last trip", a quiet date instead of
+a countdown, "8 days travelled", and a CTA into what actually happened. The upcoming-trip path
+(live countdown + weather peek) is unchanged.
+
 ## 2026-07-16 — The Learnings loop
 *Guides were the ideal plan. Now they can admit what really happened.*
 
