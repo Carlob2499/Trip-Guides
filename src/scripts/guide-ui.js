@@ -20,6 +20,12 @@ const destTzIana        = _cfg.destTzIana || null;
 const curCode           = _cfg.curCode || null;
 const curFallbackRate   = _cfg.curFallbackRate || null;
 const daysForBanner     = _cfg.daysForBanner || [];
+      // Fault isolation: the coupled core (tab bar → budget, all bound by shared
+      // closures like showTab/hashKey) runs in one try; each independent leaf feature
+      // after it gets its own, so a throw in one leaf can no longer kill the rest and
+      // the console names the culprit instead of a single generic message.
+      function fail(name, e) { console.error("[guide-ui] " + name + " failed:", e); }
+
 
       /* ── SHARED: SCROLL LOCK (used by both sheet and share modal) ─────── */
       var _lockCount = 0;
@@ -418,12 +424,16 @@ const daysForBanner     = _cfg.daysForBanner || [];
             recalcB();
           });
 
+        } catch (e) { fail("core", e); }
+        try {
           /* ── 6. JET-LAG CALCULATOR ────────────────────────────────────
              Moved to src/scripts/jetlag-ui.js — the direction/day/body-clock math
              (and its boundary conditions) now lives in src/lib/jetlag.ts, tested,
              instead of inline with zero tests. */
           initJetLag();
 
+        } catch (e) { fail("jet-lag", e); }
+        try {
           /* ── 7. READING PROGRESS BAR ────────────────────────────────── */
           (function () {
             var bar = document.getElementById("readProg");
@@ -437,6 +447,8 @@ const daysForBanner     = _cfg.daysForBanner || [];
             updateBar();
           })();
 
+        } catch (e) { fail("progress bar", e); }
+        try {
           /* ── 8. TRIP COUNTDOWN ──────────────────────────────────────── */
           (function () {
             var statsEl = document.getElementById("guideStats");
@@ -511,6 +523,8 @@ const daysForBanner     = _cfg.daysForBanner || [];
             box.hidden = false;
           })();
 
+        } catch (e) { fail("countdown", e); }
+        try {
           /* ── 9. LOCAL TIME AT DESTINATION ───────────────────────────── */
           (function () {
             if (!destTzIana) return;
@@ -533,6 +547,8 @@ const daysForBanner     = _cfg.daysForBanner || [];
             setInterval(tick, 60000);
           })();
 
+        } catch (e) { fail("local time", e); }
+        try {
           /* ── 10. OFFLINE-READY BADGE ────────────────────────────────── */
           (function () {
             if (!("caches" in window)) return;
@@ -550,6 +566,8 @@ const daysForBanner     = _cfg.daysForBanner || [];
             }).catch(function () {});
           })();
 
+        } catch (e) { fail("offline badge", e); }
+        try {
           /* ── 11+12. LIVE DATA (exchange rate + weather strip) ───────────
              Both moved to src/features/live-data/ — ~285 lines of fetch/validate/
              cache/render whose sanity checks (the bands that stop a 10x-wrong rate
@@ -567,7 +585,7 @@ const daysForBanner     = _cfg.daysForBanner || [];
           // ── 13. MAP FULLSCREEN BUTTON — moved to src/features/maps/ui/fullscreen.js
           // (imported by the maps silo, right beside the Google upgrade that can make
           // its button stale — the two now live together instead of racing blind).
-        } catch (err) { console.error("guide enhancement error:", err); }
+        } catch (e) { fail("live-data", e); }
       })();
 
       /* ── SHARE PANEL — moved to src/features/share/ ───────────────────────
@@ -579,7 +597,7 @@ const daysForBanner     = _cfg.daysForBanner || [];
          computes its own fresh copy, matching the pattern the copy-link button already
          used. lockScroll/unlockScroll are still shared with the mobile sheet below —
          passed in rather than duplicated, so the two keep coordinating one counter. */
-      initSharePanel(_lockScroll, _unlockScroll);
+      try { initSharePanel(_lockScroll, _unlockScroll); } catch (e) { fail("share panel", e); }
 
       /* ── BUDGET PER-PERSON TOGGLE ─────────────────────────────────────── */
       document.querySelectorAll(".budget-toggle").forEach(function (tog) {
