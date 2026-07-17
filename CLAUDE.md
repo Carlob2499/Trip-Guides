@@ -111,8 +111,13 @@ is their single home; this file names the principle without repeating detail.
 ## Design Doctrine
 
 - **Open, not crowded** — the site must feel spacious while carrying everything a
-  traveler needs. Merge before adding; the tab budget and its merge rules are the
-  `waypoint-guide-author` skill's (Content Standards, above).
+  traveler needs. Merge before adding. The tab budget is now **enforced, per-guide**:
+  `_guide.json`'s `tabBudget` (default 10) caps distinct content groups and the build
+  fails past it. It is per-guide because guides legitimately differ — Korea's two anchor
+  events earn it 11; Denmark declares 8. The four tool tabs are layout chrome and don't
+  count, but each still spends reader attention, so adding one is a doctrine decision, not
+  a feature decision. Merge rules stay the `waypoint-guide-author` skill's
+  (Content Standards, above).
 - **Surfacing beats sourcing** — if verified data takes >2 taps to reach when it's needed
   (emergencies, addresses, "what now"), build a surface for it (SOS sheet, driver card,
   Focus Today are precedents). Never invent data to fill a surface.

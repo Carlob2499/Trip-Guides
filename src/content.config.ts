@@ -278,6 +278,17 @@ const guides = defineCollection({
     // that any section CLAIMING a check carries the date of that check; see the
     // superRefine below. New guides should be born strict.
     provenance: z.enum(["strict"]).optional(),
+    // How many distinct content `group`s (= nav tabs) this guide may carry. Default 10.
+    // Per-guide because guides legitimately differ: Korea's anchor events earn it groups
+    // Denmark has no use for. This replaces a prose rule in the design doctrine that
+    // nothing enforced — Korea quietly reached 11 content groups (15 tabs on screen) and
+    // no gate noticed. Declare a number here and the build holds you to it; the cost of
+    // a new tab becomes a deliberate, reviewable edit instead of a silent drift.
+    // NOT counted: the four tool tabs (Budget/Vote/Reminders/Learnings). They're layout
+    // chrome shipped by GuideLayout to every guide, not this guide's content — but note
+    // each one still spends a slot of the reader's attention, which is why they're capped
+    // separately in the layout rather than being free.
+    tabBudget: z.number().int().positive().optional(),
     intro: z.string().optional(),
     // ADDITIVE + OPTIONAL — the curated post-mortem: what REALLY happened vs the plan.
     // Hand-authored by the maker from the raw trip feedback (never auto-generated, never
@@ -296,6 +307,14 @@ const guides = defineCollection({
         skipped: z.array(z.object({
           stop: z.string(),
           reason: z.string().optional(),
+          // Which content `group` this stop belonged to — MAKER-DECLARED, never inferred.
+          // It's what lets the Learnings tab total up which parts of a guide didn't
+          // survive contact. Deliberately not derived by matching stop names against
+          // section text: that's fuzzy matching, and a confident wrong answer here would
+          // quietly mis-teach the next guide. Omit it when the stop doesn't clearly
+          // belong to one group — an absent group just sits the stop out of the tally,
+          // which is the honest outcome. Validated below against the guide's real groups.
+          group: z.string().optional(),
         })).optional(),
       })).optional(),
     }).optional(),
@@ -325,7 +344,41 @@ const guides = defineCollection({
       }
     }
 
-    // 2. Provenance gate — only for guides that opted in with `provenance: "strict"`.
+    // 1b. A skipped stop's declared `group` must name a real group. Same failure mode as
+    // the date check above: a typo or a renamed group wouldn't error, it would just drop
+    // that stop out of the "what didn't survive contact" tally — under-reporting the
+    // damage, silently, which is the one thing the reality layer must never do.
+    if (learnDays.length) {
+      const realGroups = new Set(g.sections.map((s: any) => s.group));
+      for (const d of learnDays as any[]) {
+        for (const sk of d.skipped ?? []) {
+          if (sk.group && !realGroups.has(sk.group)) {
+            ctx.addIssue({
+              code: "custom",
+              path: ["learnings", "days"],
+              message: `learnings skipped stop "${sk.stop}" declares group "${sk.group}", which no section uses — it would vanish from the skipped-by-group tally instead of erroring. Real groups: ${[...realGroups].join(" · ")}`,
+            });
+          }
+        }
+      }
+    }
+
+    // 2. Tab budget — distinct content groups become nav tabs, so this is the density
+    // gate. Applies to every guide (default 10), because the failure it catches is drift
+    // nobody notices: a group is added one section at a time and the tab bar grows on its
+    // own. Excludes the four tool tabs — they're layout chrome, identical on every guide.
+    const DEFAULT_TAB_BUDGET = 10;
+    const budget = g.tabBudget ?? DEFAULT_TAB_BUDGET;
+    const groups = [...new Set(g.sections.map((s: any) => s.group))];
+    if (groups.length > budget) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["tabBudget"],
+        message: `${groups.length} content groups exceeds this guide's tab budget of ${budget} — the nav bar also carries 4 tool tabs on top, so the reader would face ${groups.length + 4}. Merge two groups, or raise tabBudget deliberately if this guide has earned them. Groups: ${groups.join(" · ")}`,
+      });
+    }
+
+    // 3. Provenance gate — only for guides that opted in with `provenance: "strict"`.
     // The rule encodes the ≈/⚠ distinction from the guide-author skill's
     // verification-rules §4: `≈` means *sourced-and-approximate* — it is a positive
     // claim to have CHECKED a figure, so it owes the date of that check. `⚠` means

@@ -64,6 +64,18 @@ helper scripts, and the done gate.
   CLAUDE.md's **"Editing a Guide — Continuity Is Mandatory"**: grep the whole
   guide for every touchpoint the change ripples into, fix what's in scope,
   stop-and-ask when it forks the plan.
+- **Reflect on a trip** — when writing a `learnings` block, tag each `skipped[]` stop with
+  the content `group` it belonged to where that's unambiguous, and **leave `group` off when
+  it isn't**. It powers the Learnings tab's "what didn't survive contact" tally and the
+  section-ranking table in `TRAVELER_PATTERNS.md`. An ungrouped stop sits the tally out;
+  a guessed group teaches the next guide something false.
+
+## Tab budget — enforced, not advisory
+`_guide.json`'s `tabBudget` (default 10) caps distinct content `group`s; the build fails
+past it and lists the groups. Don't raise it to make a build pass — that inverts the point.
+Raise it only when the guide has genuinely earned the tab (Korea's 11 exist because two
+anchor events and a solo fork demand them), and prefer merging two thin groups first. Note
+the reader also sees 4 tool tabs on top of whatever you declare.
 
 ## Research workflow
 - Climb the source ladder with web search/fetch — reach a **T0 primary source**

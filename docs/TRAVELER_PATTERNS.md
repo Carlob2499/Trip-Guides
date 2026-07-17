@@ -208,6 +208,34 @@ real; treat any specific as soft. See `learnings/denmark.md`.*
 - **Trips are built around fixed anchor events**, and the anchors hold even when everything
   else bends. Korea: GO Fest + MSI. Denmark: GO Fest + the Oslo cruise. **[stated]**
 
+## Which sections actually get used — rank guide #3's tabs from this
+
+Korea's post-mortem tags each skipped stop with the group it belonged to (the Learnings
+tab renders the tally). What died on contact, Party A, Korea 2026: **[reported]**
+
+| Group | Planned stops that didn't happen |
+|---|---|
+| Food & shopping | 5 |
+| Sights | 4 |
+| Getting around | 3 |
+| Pokémon GO | 3 |
+
+Counts, not ratios — the block records what was skipped, never what was attempted, so
+there is no honest denominator. Read it as *where the plan over-committed*, not as a
+success rate.
+
+→ *Design implication for guide #3:* **Sights is the most over-planned section type for
+this group** — four separate stops written up and none reached (Gyeongbokgung, Bukchon,
+Changdeokgung/Huwon, the Cheonggyecheon walk), all lost to heat, rain or a group vote.
+Write fewer, and make them fallback-aware. **Food & shopping's 5 is a different story** and
+must not be read the same way: those weren't skipped from disinterest, they were traded for
+something closer (Myeongdong over Apgujeong, a nearer grill over Gobang) — food stayed a
+first-class priority, only the *specific venue* lost to distance. Cluster food; cut Sights.
+
+⚠ **This is a Party A signal only, and it rests on one trip.** Denmark's post-mortem
+carries no group tags, so there is no Party B equivalent and nothing to compare against.
+Do not generalise the table to a family trip.
+
 ---
 
 ## Trips covered

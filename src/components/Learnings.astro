@@ -6,8 +6,12 @@
      hidden until Firebase has ≥1 feedback record for this guide (tab.js reveals its gtab).
    Everything stays inert until Firebase is configured (the silo gates on hasFirebase()). */
 import "../features/learnings/ui/learnings.css";
+import { tallySkipsByGroup } from "../features/learnings/index.js";
 interface Props { storeKey: string; learnings?: any }
 const { storeKey, learnings = null } = Astro.props;
+// Which parts of the guide didn't survive contact, by declared group. Empty unless the
+// post-mortem tagged its skipped stops — no data, no heading (the honest-blank rule).
+const skipTally = tallySkipsByGroup(learnings?.days);
 ---
 <div class="lnw-modal" id="lnwModal" data-sk={storeKey} hidden aria-hidden="true">
   <div class="lnw-backdrop" data-lnw-close aria-hidden="true"></div>
@@ -50,6 +54,20 @@ const { storeKey, learnings = null } = Astro.props;
         )}
       </div>
     ))}
+    {skipTally.length > 0 && (
+      <>
+        <p class="learn-sub">What didn't survive contact</p>
+        <p class="learn-tally-note">Planned stops that didn't happen, by section. Counts only — the plan records what was skipped, not what was attempted.</p>
+        <ul class="learn-tally">
+          {skipTally.map((t) => (
+            <li class="learn-tally-row">
+              <span class="learn-tally-group">{t.group}</span>
+              <span class="learn-tally-count">{t.count}</span>
+            </li>
+          ))}
+        </ul>
+      </>
+    )}
     {(learnings?.keyLearnings ?? []).length > 0 && (
       <>
         <p class="learn-sub">What we learned</p>

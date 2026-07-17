@@ -101,3 +101,38 @@ export function aggregateVisited(records: Array<Partial<FeedbackRecord> | null |
   const skipped = Object.keys(skipMap).map((stop) => ({ stop, reason: skipMap[stop] }));
   return { done, total: keys.length, skipped };
 }
+
+export interface GroupSkipTally {
+  group: string;
+  count: number;
+}
+
+/**
+ * Roll a curated post-mortem's skipped stops up by their DECLARED `group` — "what didn't
+ * survive contact with the trip", per tab group, highest first.
+ *
+ * Counts only. The `learnings` block records what was skipped, never what was planned, so
+ * there is no honest denominator here: "Sights — 4 stops didn't happen" is supportable,
+ * "4 of 6" is not. Stops with no declared group are excluded rather than bucketed into an
+ * "other" pile, because an absent group means the maker judged it ambiguous — inventing a
+ * home for it is exactly the guess the field exists to avoid.
+ *
+ * Takes `learnings.days`; returns [] for absent/empty/ungrouped input so the caller renders
+ * nothing rather than an empty heading (the loop's honest-blank rule).
+ */
+export function tallySkipsByGroup(
+  days: Array<{ skipped?: Array<{ stop?: string; group?: string } | null | undefined> } | null | undefined> | null | undefined,
+): GroupSkipTally[] {
+  const counts: Record<string, number> = {};
+  for (const d of days || []) {
+    for (const s of d?.skipped || []) {
+      if (!s || !s.group) continue;
+      counts[s.group] = (counts[s.group] || 0) + 1;
+    }
+  }
+  return Object.keys(counts)
+    .map((group) => ({ group, count: counts[group] }))
+    // Ties broken by group name so the render is deterministic — an unstable order would
+    // make the visual-regression baselines flap for no reason.
+    .sort((a, b) => b.count - a.count || a.group.localeCompare(b.group));
+}

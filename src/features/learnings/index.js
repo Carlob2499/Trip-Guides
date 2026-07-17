@@ -16,4 +16,4 @@ export function initLearnings() {
 
 export { initFeedback } from "./ui/survey.js";
 export { initLearningsTab, initDayFlip } from "./ui/tab.js";
-export { buildFeedbackRecord, aggregateVisited } from "./model/feedback";
+export { buildFeedbackRecord, aggregateVisited, tallySkipsByGroup } from "./model/feedback";

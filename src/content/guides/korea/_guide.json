@@ -30,15 +30,18 @@
         "skipped": [
           {
             "stop": "ICN T1 — shower, then bus 6002",
-            "reason": "Skipped the shower; took the 6002 Limousine bus straight in as the simplest, fastest direct route."
+            "reason": "Skipped the shower; took the 6002 Limousine bus straight in as the simplest, fastest direct route.",
+            "group": "Getting around"
           },
           {
             "stop": "Cheonggyecheon / Jongno light walk",
-            "reason": "Intense downpour and no rain-ready clothing or shoes — sheltered for chimaek instead, then went to SPAREX early."
+            "reason": "Intense downpour and no rain-ready clothing or shoes — sheltered for chimaek instead, then went to SPAREX early.",
+            "group": "Sights"
           },
           {
             "stop": "Dinner near the base — Jongno BBQ",
-            "reason": "Walked the Jonggak restaurant list: many touristy, many closed by 10. Ended up at a slightly overpriced izakaya — but it was good."
+            "reason": "Walked the Jonggak restaurant list: many touristy, many closed by 10. Ended up at a slightly overpriced izakaya — but it was good.",
+            "group": "Food & shopping"
           }
         ]
       },
@@ -48,15 +51,18 @@
         "skipped": [
           {
             "stop": "Gyeongbokgung",
-            "reason": "Weather."
+            "reason": "Weather.",
+            "group": "Sights"
           },
           {
             "stop": "Bukchon Hanok Village",
-            "reason": "Too hot, too historical, and no time."
+            "reason": "Too hot, too historical, and no time.",
+            "group": "Sights"
           },
           {
             "stop": "Hongdae raid hours (Dialga/Palkia → Primals)",
-            "reason": "Went to Hongdae anyway — for T1 Base Camp and KBBQ instead of raids."
+            "reason": "Went to Hongdae anyway — for T1 Base Camp and KBBQ instead of raids.",
+            "group": "Pokémon GO"
           }
         ]
       },
@@ -66,11 +72,13 @@
         "skipped": [
           {
             "stop": "Daejeon Station → Kakao T to I-Hotel",
-            "reason": "Used Uber instead — Kakao T registration fights a foreign number, and traffic plus heat made it unbearable. Get a Korean e-SIM; little translation available."
+            "reason": "Used Uber instead — Kakao T registration fights a foreign number, and traffic plus heat made it unbearable. Get a Korean e-SIM; little translation available.",
+            "group": "Getting around"
           },
           {
             "stop": "EXPO Science Park — GO Fest Day 1",
-            "reason": "Went straight to DCC II for MSI at 3 and did remote raids instead — too hot, few raids in person, and the pre-MSI events were on."
+            "reason": "Went straight to DCC II for MSI at 3 and did remote raids instead — too hot, few raids in person, and the pre-MSI events were on.",
+            "group": "Pokémon GO"
           }
         ]
       },
@@ -80,11 +88,13 @@
         "skipped": [
           {
             "stop": "EXPO Science Park — GO Fest Day 2",
-            "reason": "Stayed in the hotel for remote raids — unbearable heat. Burger chain before MSI."
+            "reason": "Stayed in the hotel for remote raids — unbearable heat. Burger chain before MSI.",
+            "group": "Pokémon GO"
           },
           {
             "stop": "Gobang Sikdang Expo Branch — celebration grill",
-            "reason": "Too far. Went to a KBBQ strip near I-Hotel that barely had room, since most places close by 11."
+            "reason": "Too far. Went to a KBBQ strip near I-Hotel that barely had room, since most places close by 11.",
+            "group": "Food & shopping"
           }
         ]
       },
@@ -94,15 +104,18 @@
         "skipped": [
           {
             "stop": "Sungsimdang DCC (107 Expo-ro)",
-            "reason": "Went straight by taxi instead."
+            "reason": "Went straight by taxi instead.",
+            "group": "Food & shopping"
           },
           {
             "stop": "Busan Station → subway to Haeundae",
-            "reason": "Took a taxi — very cheap and direct."
+            "reason": "Took a taxi — very cheap and direct.",
+            "group": "Getting around"
           },
           {
             "stop": "Lunch on Gunam-ro, Haeundae",
-            "reason": "Not hungry, and little time to sit down."
+            "reason": "Not hungry, and little time to sit down.",
+            "group": "Food & shopping"
           }
         ]
       },
@@ -112,11 +125,13 @@
         "skipped": [
           {
             "stop": "Changdeokgung — Huwon (Secret Garden) tour",
-            "reason": "Group vote went to shopping instead — rain as well."
+            "reason": "Group vote went to shopping instead — rain as well.",
+            "group": "Sights"
           },
           {
             "stop": "Apgujeong — Stüssy + Gentle Monster",
-            "reason": "Too far — did more shopping in Myeongdong for proximity and convenience, plus lunch."
+            "reason": "Too far — did more shopping in Myeongdong for proximity and convenience, plus lunch.",
+            "group": "Food & shopping"
           },
           {
             "stop": "HYBE HQ (Yongsan) — photo + pop-up shop",
@@ -125,5 +140,6 @@
         ]
       }
     ]
-  }
+  },
+  "tabBudget": 11
 }

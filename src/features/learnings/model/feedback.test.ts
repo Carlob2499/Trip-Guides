@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { buildFeedbackRecord, aggregateVisited } from "./feedback";
+import { buildFeedbackRecord, aggregateVisited, tallySkipsByGroup } from "./feedback";
 
 describe("buildFeedbackRecord", () => {
   it("clamps ratings to integer 1..5 and omits missing/invalid", () => {
@@ -63,5 +63,46 @@ describe("aggregateVisited", () => {
   it("handles empty / nullish input", () => {
     expect(aggregateVisited([])).toEqual({ done: 0, total: 0, skipped: [] });
     expect(aggregateVisited([null, undefined])).toEqual({ done: 0, total: 0, skipped: [] });
+  });
+});
+
+describe("tallySkipsByGroup", () => {
+  const DAYS = [
+    { skipped: [{ stop: "A", group: "Sights" }, { stop: "B", group: "Food & shopping" }] },
+    { skipped: [{ stop: "C", group: "Sights" }, { stop: "D" }] }, // D has no group
+    { skipped: [{ stop: "E", group: "Food & shopping" }, { stop: "F", group: "Food & shopping" }] },
+  ];
+
+  it("counts by declared group, highest first", () => {
+    expect(tallySkipsByGroup(DAYS)).toEqual([
+      { group: "Food & shopping", count: 3 },
+      { group: "Sights", count: 2 },
+    ]);
+  });
+
+  it("EXCLUDES ungrouped stops rather than bucketing them", () => {
+    // "D" is deliberately ungrouped — the maker judged it ambiguous. It must not appear
+    // under an invented "other" heading, and must not inflate any real group's count.
+    const total = tallySkipsByGroup(DAYS).reduce((n, t) => n + t.count, 0);
+    expect(total).toBe(5); // 6 skipped stops, 1 ungrouped
+    expect(tallySkipsByGroup(DAYS).map((t) => t.group)).not.toContain("other");
+  });
+
+  it("breaks count ties by group name so the render is deterministic", () => {
+    // An unstable sort here would flap the visual-regression baselines on every build.
+    const tied = [{ skipped: [{ stop: "x", group: "Zebra" }, { stop: "y", group: "Alpha" }] }];
+    expect(tallySkipsByGroup(tied)).toEqual([
+      { group: "Alpha", count: 1 },
+      { group: "Zebra", count: 1 },
+    ]);
+  });
+
+  it("returns [] for absent/empty/ungrouped input — caller renders nothing, not an empty heading", () => {
+    expect(tallySkipsByGroup(null)).toEqual([]);
+    expect(tallySkipsByGroup(undefined)).toEqual([]);
+    expect(tallySkipsByGroup([])).toEqual([]);
+    expect(tallySkipsByGroup([{ skipped: [] }])).toEqual([]);
+    expect(tallySkipsByGroup([{ skipped: [{ stop: "only", group: undefined }] }])).toEqual([]);
+    expect(tallySkipsByGroup([null, undefined, {}])).toEqual([]);
   });
 });
