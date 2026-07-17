@@ -1,7 +1,7 @@
 # Firebase live-sync feature
 
 Real-time shared state over Firebase Realtime Database. First consumer: the Trip Split
-budget calculator (`src/scripts/trip-split.js`) — group-mates who join the same trip code
+budget calculator (`src/features/trip-split/`) — group-mates who join the same trip code
 see the same budget live. The core is feature-agnostic so future features (shared
 checklists, live voting, presence) can reuse it.
 
