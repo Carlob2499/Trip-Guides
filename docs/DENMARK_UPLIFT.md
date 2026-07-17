@@ -3,6 +3,16 @@
 **Status: DRAFT PLAN. Not scheduled.** Denmark stays an archive for now (maker's call,
 2026-07-17). This is what the work would be if that changes.
 
+> **This document was wrong three times before it was right, and every correction came from
+> running something rather than reasoning about it.** (1) "Denmark is half a guide" — the
+> line count says so; the field-by-field count says its days are *fully* populated and it has
+> more of them. (2) "Add a weather section, ~15 min" — I added one, rebuilt, loaded the page:
+> it renders nothing, because the service refuses to forecast a concluded trip. (3) "Add
+> weather to the scaffold so it can't be forgotten" — it's been there all along, with a
+> capital-city coord fallback, verified by scaffolding a throwaway guide. Each wrong version
+> was plausible, internally consistent, and would have aimed real work at nothing. If you
+> extend this plan, extend it the same way: **check the claim before you cost it.**
+
 **Why this exists.** Denmark's post-mortem rated the itinerary *"marginally useful"* and
 said it should have been at Korea's standard, naming two missing features. This plan is
 the measured answer to that — and the measurement matters, because the headline number is
@@ -49,17 +59,40 @@ The feature shipped between the two trips. Denmark was travelled on the pre-June
 Korea got the post-June-25 site. Nothing is missing — the traveller simply never saw it.
 **Do not "fix" this.** If it matters, the fix is telling the traveller it's there now.
 
-**2. "A daily weather forecast" — a real gap, and a one-section fix.**
+**2. "A daily weather forecast" — CANNOT be delivered to Denmark. The window has closed.**
 
-The `weather` section type is **fully built and used by zero guides** — not Denmark's
-failing, the platform's. Schema type ✓ · `WeatherBlock.astro` ✓ · 12 refs of forecast code
-in `guide-ui.js` ✓ · live Open-Meteo fetch ✓ · **0 guides use it.** Same
-built-but-unadopted pattern as the staleness pill (fixed 2026-07-17) and the shelf-life
-categories (fixed same day).
+My first draft of this document said the fix was "add one `weather` section, ~15 min."
+**That was wrong, and testing it is the only reason I know.** I added a real weather section
+to Denmark, rebuilt, and loaded the page: the strip stayed hidden, nothing fetched, nothing
+cached. Not a bug — `guide-ui.js:784`:
 
-Denmark already has the one prerequisite: a `map` section at Copenhagen
-(55.676, 12.568) — the block reads coords from the guide's first map. Adding one
-`weather` section is the entire fix, and it delivers the thing that was asked for.
+```js
+var isPastTrip = hasTripDates && todayMid > tripEnd;
+// A concluded trip has nothing useful to show …
+if (isPastTrip) return;   // skips the network call entirely
+```
+
+The weather service is **correct and deliberately refuses to forecast a trip that already
+ended** — the same "don't show misleading weather" reasoning as its beyond-horizon guard,
+just checked before the network call. Denmark ended Jun 16; Korea ended Jul 15. Both past.
+**A weather section added to either today renders nothing, forever.** The feature was never
+broken and was never really "unadopted" either — it simply needed to exist *during* the
+trip, and on Denmark it didn't.
+
+So the honest statement of this gap: **the forecast was askable-for and deliverable in June,
+and the guide didn't have the section.** There is no retrofit. The only thing left is the
+lesson, and it belongs to guide #3:
+
+→ **Guide #3 is already protected — no action needed.** I was about to recommend adding
+`weather` to the scaffold's defaults; checking first showed `scaffold-guide.mjs:78` has done
+it all along, and `coords` falls back to the country capital, so *every* scaffolded guide
+gets a weather section whether or not `--lat/--lng` is passed. Verified by scaffolding a
+throwaway guide with no coords: `weather: 1, map: 1`. **Denmark's missing forecast is a
+legacy artifact** — it predates that backbone. There is nothing to fix and nothing to
+harden.
+
+(Denmark does have the prerequisite — a `map` section at Copenhagen 55.676, 12.568 — so the
+section would have worked in June. That's what makes this a miss rather than a limitation.)
 
 ### The gap nobody asked for, which is worse
 
@@ -87,12 +120,9 @@ demonstrably `slow`; the Fælledparken ticketed day is `packed`). Turns on the L
 toggle for the party that needed it most. No research required — it's a judgment over
 content that already exists.
 
-**B. Add one `weather` section — ~15 min, delivers a named request.**
-`{ type: "weather", group: "Plan", title: "…", note?: "…" }`. Coords already resolve.
-Verify it renders (the block self-hides on fetch failure, so confirm the strip actually
-appears rather than trusting the build).
-→ *Also worth doing for Korea in the same pass* — it has 3 map sections and no weather
-either. This is a platform gap wearing a Denmark costume.
+**B. Weather — NOT DOABLE. Removed from this plan.** See above: the service skips concluded
+trips by design, so a section added now renders nothing on Denmark or Korea. The action
+moved to guide #3 (scaffold default), where it can still work.
 
 **C. Provenance backfill + `provenance: "strict"` — ~2h.**
 Denmark carries `≈`/`⚠` flags across 8 files with **zero** `verified_on`. Same treatment
@@ -113,12 +143,29 @@ A + B + C are what make it *honest and current*, which is the part that matters.
 
 ## Recommendation
 
-Do **A + B** (≈45 min combined) and treat that as the uplift. They're small, they answer
-the actual complaints, and B fixes a platform gap that also affects Korea and every future
-guide. Do **C** partially, honestly, without strict. **Skip D** — and if Denmark's depth
-ever matters again, that's a signal the trip is being re-run, which changes the question.
+**Do A (~30 min). That is the entire honest uplift.** Tagging `energy` is the only item here
+that both works on a past trip and answers something real — and it's pointed straight at the
+party whose whole trip was shaped by not being able to walk far.
 
-The larger lesson for the loop, already recorded in `learnings/denmark.md`: **a guide isn't
-finished when it ships, it's finished when it's at the current standard.** Denmark's real
-failing was never depth — it was that two features shipped three weeks too late for its
-traveller, and one of them (weather) hasn't shipped to *anyone* yet.
+Do **C** partially and without `strict`. **Skip D.** **B is impossible** — see above.
+
+Which means the answer to "whip Denmark into Korea's shape" is: **there is far less to do
+than the line count implies, and most of what's left can't be done at all.** Two of the three
+things Denmark was missing were features that shipped after its trip; the third had a hard
+expiry that passed. That is not a content debt to repay — it's a timing fact to record.
+
+**The real lesson is the one with teeth, and it's for guide #3, not Denmark:**
+
+1. **A guide isn't finished when it ships — it's finished when it's at the current
+   standard.** Denmark's traveller got the June site. Nobody went back.
+2. **Some features have a hard expiry, and the platform already knows it.** The weather
+   forecast could only ever be delivered *during* the trip window — `guide-ui.js` skips
+   concluded trips on purpose, and the scaffold has pre-wired a weather section all along.
+   Denmark simply predates that backbone. Nothing to build; the guard rail exists.
+3. **`energy` tagging matters most for the party least able to absorb a bad day** — and got
+   0/9 on exactly that party. Tag it at authoring time, from the intake's mobility answers,
+   not retroactively from a post-mortem.
+
+Denmark stays an archive. Its value now is as evidence, and it has already paid for itself:
+the party split in `TRAVELER_PATTERNS.md`, the structure-vs-roaming finding, and the three
+lessons above all came out of a trip nobody will take again.
