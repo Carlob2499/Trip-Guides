@@ -7,6 +7,7 @@
    rAF + scroll-listener (proven robust; no IntersectionObserver). */
 
 import { reducedMotion } from "../../../scripts/util.js";
+import { lastAboveFold, nearestToCenter } from "../model/scroll-spy";
 
 (function () {
   var scrub = document.getElementById("dayScrub");
@@ -65,21 +66,15 @@ import { reducedMotion } from "../../../scripts/util.js";
   function spyHorizontal() {
     var trackRect = track.getBoundingClientRect();
     var center = trackRect.left + track.clientWidth / 2;
-    var best = 0, bestDist = Infinity;
-    for (var i = 0; i < dayEls.length; i++) {
-      var r = dayEls[i].getBoundingClientRect();
-      var d = Math.abs(r.left + r.width / 2 - center);
-      if (d < bestDist) { bestDist = d; best = i; }
-    }
-    setActive(best);
+    var centers = dayEls.map(function (el) {
+      var r = el.getBoundingClientRect();
+      return r.left + r.width / 2;
+    });
+    setActive(nearestToCenter(centers, center));
   }
   function spyVertical() {
-    var idx = 0;
-    for (var i = 0; i < dayEls.length; i++) {
-      if (dayEls[i].getBoundingClientRect().top - chromeH - 40 <= 0) idx = i;
-      else break;
-    }
-    setActive(idx);
+    var tops = dayEls.map(function (el) { return el.getBoundingClientRect().top; });
+    setActive(lastAboveFold(tops, chromeH + 40));
   }
 
   var ticking = false;

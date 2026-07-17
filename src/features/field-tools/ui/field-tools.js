@@ -12,6 +12,7 @@
 // Cross-feature, but through the silo's public surface (never a deep import) — the
 // converter needs the rate live-data already applied, since this module loads after it.
 import { getLastRate } from "../../live-data/index.js";
+import { burnTotal, convertRate, decodeStops, encodeStops } from "../model/field-math";
 
 (function () {
   var storeKey = document.body.getAttribute("data-storekey") || "guide";
@@ -143,11 +144,13 @@ import { getLastRate } from "../../live-data/index.js";
     var out = pop.querySelector(".cur-out");
     function render() {
       var v = parseFloat(inp.value);
-      if (!rate || isNaN(v)) { out.textContent = rate ? "Type an amount" : "Live rate not loaded"; return; }
+      var res = convertRate(v, rate); // math + branching in the tested model
+      if (res.state === "no-rate") { out.textContent = "Live rate not loaded"; return; }
+      if (res.state === "empty") { out.textContent = "Type an amount"; return; }
       // tg:rate is USD → local (1 USD = rate local), matching the pill.
       out.innerHTML =
-        "<b>$" + v.toLocaleString() + "</b> ≈ " + (v * rate).toLocaleString(undefined, { maximumFractionDigits: 0 }) + " " + code +
-        "<br><b>" + v.toLocaleString() + " " + code + "</b> ≈ $" + (v / rate).toLocaleString(undefined, { maximumFractionDigits: 2 });
+        "<b>$" + v.toLocaleString() + "</b> ≈ " + res.usdToLocal.toLocaleString(undefined, { maximumFractionDigits: 0 }) + " " + code +
+        "<br><b>" + v.toLocaleString() + " " + code + "</b> ≈ $" + res.localToUsd.toLocaleString(undefined, { maximumFractionDigits: 2 });
     }
     inp.addEventListener("input", render);
     // Registered here, not above, for two reasons: `render` is block-scoped to this `if`
@@ -298,9 +301,7 @@ import { getLastRate } from "../../live-data/index.js";
     function renderBurn() {
       try {
         var s = JSON.parse(localStorage.getItem("tg-split-" + storeKey) || "null");
-        var total = (s && s.expenses || []).reduce(function (sum, ex) {
-          return sum + (parseFloat(ex.amount) || 0);
-        }, 0);
+        var total = burnTotal(s);
         var el = document.getElementById("burnPill");
         if (!total) { if (el) el.remove(); return; }
         if (!el) {
@@ -327,22 +328,20 @@ import { getLastRate } from "../../live-data/index.js";
   (function () {
     var params = new URLSearchParams(window.location.search);
     if (params.get("stops")) {
-      try {
-        var incoming = JSON.parse(decodeURIComponent(escape(atob(params.get("stops")))));
-        if (incoming && typeof incoming === "object") {
-          Object.keys(incoming).forEach(function (k) {
-            if (/^\d+-\d+$/.test(k)) stopState[k] = 1;
+      // decodeStops validates + filters to <day>-<idx> keys (tamper-safe).
+      var incoming = decodeStops(params.get("stops"));
+      var incomingKeys = Object.keys(incoming);
+      if (incomingKeys.length) {
+        incomingKeys.forEach(function (k) { stopState[k] = 1; });
+        try { localStorage.setItem(STOPS_KEY, JSON.stringify(stopState)); } catch (e) {}
+        // Re-mark ticked stops now that state merged.
+        document.querySelectorAll(".planner-days .day[data-day]").forEach(function (day) {
+          var di = day.getAttribute("data-day");
+          day.querySelectorAll(".stop").forEach(function (stop, si) {
+            if (stopState[di + "-" + si]) stop.classList.add("stop-done");
           });
-          try { localStorage.setItem(STOPS_KEY, JSON.stringify(stopState)); } catch (e) {}
-          // Re-mark ticked stops now that state merged.
-          document.querySelectorAll(".planner-days .day[data-day]").forEach(function (day) {
-            var di = day.getAttribute("data-day");
-            day.querySelectorAll(".stop").forEach(function (stop, si) {
-              if (stopState[di + "-" + si]) stop.classList.add("stop-done");
-            });
-          });
-        }
-      } catch (e) {}
+        });
+      }
       params.delete("stops");
       var qs = params.toString();
       history.replaceState(null, "", window.location.pathname + (qs ? "?" + qs : "") + window.location.hash);
@@ -355,7 +354,7 @@ import { getLastRate } from "../../live-data/index.js";
       b.textContent = "↗ Share trip progress (checked stops)";
       b.addEventListener("click", function () {
         var url = window.location.origin + window.location.pathname +
-          "?stops=" + btoa(unescape(encodeURIComponent(JSON.stringify(stopState))));
+          "?stops=" + encodeStops(stopState);
         (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(
           function () { say("Progress link copied"); },
           function () { window.prompt("Copy this link:", url); }

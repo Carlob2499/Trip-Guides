@@ -10,6 +10,7 @@
    · never fights text selection (single touch only). */
 
 import { tapHaptic } from "../../../scripts/util.js";
+import { resolveSwipe, swipeHint } from "../model/gesture";
 
 (function () {
   if (!window.matchMedia("(max-width: 899px)").matches &&
@@ -60,9 +61,9 @@ import { tapHaptic } from "../../../scripts/util.js";
     if (!tracking) return;
     var t = e.touches[0];
     var dx = t.clientX - sx, dy = t.clientY - sy;
-    if (Math.abs(dx) > 34 && Math.abs(dy) < 46) {
-      document.documentElement.setAttribute("data-swipe-hint", dx < 0 ? "fwd" : "back");
-    } else clearHint();
+    var hint = swipeHint(dx, dy);
+    if (hint) document.documentElement.setAttribute("data-swipe-hint", hint);
+    else clearHint();
   }, { passive: true });
   content.addEventListener("touchcancel", clearHint, { passive: true });
 
@@ -72,11 +73,8 @@ import { tapHaptic } from "../../../scripts/util.js";
     clearHint();
     var t = e.changedTouches[0];
     var dx = t.clientX - sx, dy = t.clientY - sy, dt = Date.now() - st;
-    if (Math.abs(dx) < 72 || Math.abs(dy) > 46 || dt > 650) return;
-    var cur = currentIdx();
-    if (cur < 0) return;
-    var next = dx < 0 ? cur + 1 : cur - 1; // swipe left = next section
-    if (next < 0 || next >= catCount) return;
+    var next = resolveSwipe(dx, dy, dt, currentIdx(), catCount);
+    if (next === null) return;
     tapHaptic();
     var btn = tabs.querySelector('.gtab[data-tab="' + next + '"]');
     if (btn) btn.click();
