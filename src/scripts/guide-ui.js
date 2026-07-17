@@ -5,6 +5,8 @@
 import { todayInTz } from "./util.js";
 import { resolveTripDate } from "../lib/trip-dates";
 import { initRate, initWeather } from "../features/live-data/index.js";
+import { initJetLag } from "./jetlag-ui.js";
+import { initSharePanel } from "../features/share/index.js";
 
 const _cfgEl = document.getElementById("tgConfig");
 const _cfg = _cfgEl ? JSON.parse(_cfgEl.textContent || "{}") : {};
@@ -39,19 +41,10 @@ const daysForBanner     = _cfg.daysForBanner || [];
           // it encodes is the kind that fails silently and only in December. It has
           // tests there; it had none here.
 
-          // DST-aware UTC offset (in hours) of an IANA zone at a given instant, via Intl.
-          // Returns null if the zone is unknown. Used by the local-time pill + jet-lag calc.
-          function tzOffsetHours(tz, date) {
-            if (!tz) return null;
-            try {
-              var f = new Intl.DateTimeFormat("en-US", { timeZone: tz, hour12: false,
-                year: "numeric", month: "2-digit", day: "2-digit",
-                hour: "2-digit", minute: "2-digit", second: "2-digit" });
-              var p = {}; f.formatToParts(date).forEach(function (x) { p[x.type] = x.value; });
-              var asUTC = Date.UTC(+p.year, +p.month - 1, +p.day, (+p.hour) % 24, +p.minute, +p.second);
-              return (asUTC - date.getTime()) / 3600000;
-            } catch (e) { return null; }
-          }
+          // tzOffsetHours moved to ../lib/tz-offset — its only caller was the jet-lag
+          // calculator, which now imports it directly inside jetlag-ui.js (imported
+          // above). (The "local time" pill below uses Intl.DateTimeFormat directly and
+          // never called this — that stale claim in the old comment here is gone too.)
 
           /* ── TAB BAR ─────────────────────────────────────────────────── */
           var guideTabs  = document.getElementById("guideTabs");
@@ -425,91 +418,11 @@ const daysForBanner     = _cfg.daysForBanner || [];
             recalcB();
           });
 
-          /* ── 6. JET-LAG CALCULATOR ───────────────────────────────────── */
-          (function () {
-            var jlBtn   = document.getElementById("jlToggle");
-            var jlPanel = document.getElementById("jlPanel");
-            if (!jlBtn || !jlPanel) return;
-
-            // Destination offset computed from its IANA zone (DST-aware), not a fixed number.
-            var destOffset = tzOffsetHours(jlPanel.getAttribute("data-dest-tz"), new Date());
-            if (destOffset == null) return;
-
-            // Toggle open / close
-            jlBtn.addEventListener("click", function () {
-              var wasHidden = jlPanel.hasAttribute("hidden");
-              if (wasHidden) {
-                jlPanel.removeAttribute("hidden");
-                jlBtn.setAttribute("aria-expanded", "true");
-              } else {
-                jlPanel.setAttribute("hidden", "");
-                jlBtn.setAttribute("aria-expanded", "false");
-              }
-            });
-
-            // Recalculate when origin changes
-            function recalcJL() {
-              var sel = document.getElementById("jlOrigin");
-              var out = document.getElementById("jlOutput");
-              if (!sel || !out) return;
-              if (!sel.value) { out.setAttribute("hidden", ""); return; }
-
-              var origOffset = parseFloat(sel.value);
-              if (isNaN(origOffset)) { out.setAttribute("hidden", ""); return; }
-
-              var diff    = destOffset - origOffset;  // positive = flew east
-              var absDiff = Math.round(Math.abs(diff) * 10) / 10;
-              var dir     = diff > 0.4 ? "east" : diff < -0.4 ? "west" : null;
-
-              if (!dir || absDiff < 1) {
-                out.innerHTML = "<p class='jl-none'>Under 1 hour of difference — no meaningful jet lag expected.</p>";
-                out.removeAttribute("hidden");
-                return;
-              }
-
-              // Eastward ≈1 hr/day to adapt; westward ≈1.5 hr/day (easier direction)
-              var days   = dir === "east" ? Math.ceil(absDiff) : Math.ceil(absDiff / 1.5);
-              var harder = dir === "east" ? " — eastward crossings are tougher" : " — westward tends to be easier";
-
-              // What your body clock reads at 11 pm local on arrival night
-              var bodyAt11 = 23 - diff;
-              while (bodyAt11 < 0)  bodyAt11 += 24;
-              while (bodyAt11 >= 24) bodyAt11 -= 24;
-              var bh    = Math.round(bodyAt11);
-              var h12   = bh % 12 || 12;
-              var ampm  = bh >= 12 ? "pm" : "am";
-              var bodyTimeStr = h12 + ampm;
-
-              var html = "";
-              html += "<p class='jl-result'>";
-              html += "<strong>" + absDiff + "-hour gap, flying " + dir + harder + ".</strong> ";
-              html += "Expect roughly <strong>" + days + " day" + (days === 1 ? "" : "s") + "</strong> to fully adapt.";
-              html += "</p>";
-              html += "<p style='font-size:.84rem;color:var(--muted);margin-bottom:.5rem;line-height:1.45'>";
-              html += "At 11 pm local on your first night, your body will still feel like it's <strong>" + bodyTimeStr + "</strong> back home.";
-              html += "</p>";
-              html += "<ul class='jl-tips'>";
-              html += "<li>Get <strong>morning sunlight on arrival day</strong> — the single most effective clock reset</li>";
-              if (dir === "east") {
-                html += "<li>Stay awake until <strong>local 10–11 pm</strong> no matter how tired — sleeping too early makes it worse</li>";
-                html += "<li>If you wake in the night, stay in dim light; avoid phones and bright screens until 7 am</li>";
-              } else {
-                html += "<li>Westward is easier — avoid napping more than 20 minutes on your first afternoon</li>";
-                html += "<li>Get outside in the morning; resisting the urge to sleep in accelerates adjustment</li>";
-              }
-              html += "<li>Drink water on the flight; skip alcohol and heavy meals 4 hours before landing</li>";
-              if (absDiff >= 7) {
-                html += "<li>Large gap: melatonin 0.5–1 mg at local bedtime can help on nights 1–3 — check with your doctor first</li>";
-              }
-              html += "</ul>";
-
-              out.innerHTML = html;
-              out.removeAttribute("hidden");
-            }
-
-            var originSel = document.getElementById("jlOrigin");
-            if (originSel) originSel.addEventListener("change", recalcJL);
-          })();
+          /* ── 6. JET-LAG CALCULATOR ────────────────────────────────────
+             Moved to src/scripts/jetlag-ui.js — the direction/day/body-clock math
+             (and its boundary conditions) now lives in src/lib/jetlag.ts, tested,
+             instead of inline with zero tests. */
+          initJetLag();
 
           /* ── 7. READING PROGRESS BAR ────────────────────────────────── */
           (function () {
@@ -651,176 +564,22 @@ const daysForBanner     = _cfg.daysForBanner || [];
             firstDayDate: firstDayDate,
             lastDayDate: lastDayDate,
           });
-          /* ── 13. MAP FULLSCREEN BUTTON ──────────────────────────────── */
-          (function () {
-            document.querySelectorAll(".osmmap").forEach(function (frame) {
-              var wrap = frame.parentElement;
-              if (!wrap || !document.fullscreenEnabled) return;
-              wrap.style.position = "relative";
-              var btn = document.createElement("button");
-              btn.className = "map-fs-btn";
-              btn.setAttribute("aria-label", "View map fullscreen");
-              btn.title = "Fullscreen";
-              btn.textContent = "⤢";
-              wrap.appendChild(btn);
-              btn.addEventListener("click", function () {
-                // Fullscreen the iframe itself so the .osmmap:fullscreen CSS applies
-                // and the map fills the screen (wrap.requestFullscreen left it 300px).
-                if (frame.requestFullscreen) frame.requestFullscreen();
-                else if (frame.webkitRequestFullscreen) frame.webkitRequestFullscreen();
-              });
-              document.addEventListener("fullscreenchange", function () {
-                btn.textContent = document.fullscreenElement ? "✕" : "⤢";
-              });
-            });
-          })();
-
+          // ── 13. MAP FULLSCREEN BUTTON — moved to src/features/maps/ui/fullscreen.js
+          // (imported by the maps silo, right beside the Google upgrade that can make
+          // its button stale — the two now live together instead of racing blind).
         } catch (err) { console.error("guide enhancement error:", err); }
       })();
 
-      /* ── SHARE PANEL ──────────────────────────────────────────────────── */
-      (function () {
-        var shareBtn      = document.getElementById("btnShare");
-        var shareModal    = document.getElementById("shareModal");
-        var shareBackdrop = document.getElementById("shareBackdrop");
-        var shareUrlTxt   = document.getElementById("shareUrlTxt");
-        var shareCopyBtn  = document.getElementById("shareCopyBtn");
-        var shareWALink   = document.getElementById("shareWA");
-        var shareEmailLink = document.getElementById("shareEmail");
-        var shareCloseBtn = document.getElementById("shareClose");
-        var shareQrEl     = document.getElementById("shareQr");
-        if (!shareBtn || !shareModal) return;
-
-        // The modal + backdrop are authored inside .sticky-chrome, which carries a
-        // backdrop-filter — and a filtered ancestor becomes the containing block for
-        // position:fixed, so the modal anchored to the ~175px chrome instead of the
-        // viewport and flew off-screen once the page was scrolled. Reparent both to
-        // <body> (mirroring how the SOS sheet / command palette mount) so `fixed` is
-        // viewport-relative and the modal centers correctly at any scroll position.
-        if (shareModal.parentElement !== document.body) document.body.appendChild(shareModal);
-        if (shareBackdrop && shareBackdrop.parentElement !== document.body) document.body.appendChild(shareBackdrop);
-
-        var pageTitle    = document.title;
-        var qrLibLoaded  = false;
-
-        // The QR/link must point at the SECTION the reader is on — tabs switch
-        // without changing the URL, so build it fresh each open from the active
-        // tab as #grp-N (tabForHash lands the visitor back on that section).
-        function currentPageUrl() {
-          var base = window.location.href.split("#")[0];
-          var active = document.querySelector(".gtab.gtab-active");
-          var t = active && active.getAttribute("data-tab");
-          return (t && /^\d+$/.test(t)) ? base + "#grp-" + t : base;
-        }
-
-        function loadQRLib(cb) {
-          if (qrLibLoaded || window.QRCode) { qrLibLoaded = true; cb(); return; }
-          var s = document.createElement("script");
-          s.src = "https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js";
-          s.onload = function () { qrLibLoaded = true; cb(); };
-          s.onerror = function () {
-            // Offline or CDN failure — show a helpful message instead of an empty box
-            if (shareQrEl) {
-              shareQrEl.style.cssText = "display:flex;align-items:center;justify-content:center;height:80px;font-size:12px;color:var(--muted);text-align:center;padding:0 8px";
-              shareQrEl.textContent = "QR unavailable offline — use Copy link";
-            }
-            cb();
-          };
-          document.head.appendChild(s);
-        }
-
-        function openShare() {
-          // Always open the modal (on every device) so the QR, copy-link, social
-          // links, file downloads (.gpx/.ics), and Share-summary action are all
-          // reachable. Native OS share is offered by the Share-summary button.
-          shareModal.removeAttribute("hidden");
-          shareBackdrop.classList.add("open");
-          _lockScroll();
-          var pageUrl = currentPageUrl(); // fresh each open — carries the section
-          if (shareUrlTxt) shareUrlTxt.textContent = pageUrl;
-          if (shareWALink)   shareWALink.href   = "https://wa.me/?text=" + encodeURIComponent(pageUrl);
-          if (shareEmailLink) shareEmailLink.href = "mailto:?subject=" + encodeURIComponent(pageTitle) + "&body=" + encodeURIComponent(pageUrl);
-          if (shareCopyBtn)  shareCopyBtn.dataset.url = pageUrl;
-          if (shareQrEl) {
-            shareQrEl.innerHTML = ""; // regenerate — the section may have changed
-            loadQRLib(function () {
-              if (!window.QRCode) return;
-              var dark = document.documentElement.getAttribute("data-theme") === "dark";
-              try {
-                new window.QRCode(shareQrEl, {
-                  text: pageUrl, width: 148, height: 148,
-                  colorDark:  dark ? "#e5e9e0" : "#1a2028",
-                  colorLight: dark ? "#27211a" : "#ffffff",
-                  correctLevel: window.QRCode.CorrectLevel.M
-                });
-              } catch (e) { /* QR lib unavailable */ }
-            });
-          }
-          shareBtn && shareBtn.setAttribute("aria-expanded", "true");
-        }
-
-        function closeShare() {
-          shareModal.setAttribute("hidden", "");
-          shareBackdrop.classList.remove("open");
-          _unlockScroll();
-          shareBtn && shareBtn.setAttribute("aria-expanded", "false");
-          shareBtn && shareBtn.focus();
-        }
-
-        shareBtn.addEventListener("click", openShare);
-        if (shareCloseBtn)  shareCloseBtn.addEventListener("click", closeShare);
-        if (shareBackdrop)  shareBackdrop.addEventListener("click", closeShare);
-
-        // Share-summary — a brief theme + planned-days + key-spots digest. Native OS
-        // share on devices that support it; clipboard copy (with a toast) otherwise.
-        var summaryBtn = document.getElementById("btnShareSummary");
-        var summaryEl  = document.getElementById("tripSummary");
-        if (summaryBtn && summaryEl) {
-          function summaryToast(m) {
-            var n = document.getElementById("savedNote"); if (!n) return;
-            n.textContent = m; clearTimeout(n._t);
-            n._t = setTimeout(function () { n.textContent = ""; }, 2200);
-          }
-          summaryBtn.addEventListener("click", function () {
-            var text = (summaryEl.textContent || "").trim();
-            if (navigator.share) {
-              navigator.share({ title: pageTitle, text: text, url: pageUrl }).catch(function () {});
-              return;
-            }
-            var full = text + "\n\n" + pageUrl;
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-              navigator.clipboard.writeText(full)
-                .then(function ()  { summaryToast("✓ Summary copied"); })
-                .catch(function () { summaryToast("Copy failed — select the text manually"); });
-            } else {
-              summaryToast("Copy not supported here");
-            }
-          });
-        }
-        document.addEventListener("keydown", function (e) {
-          if (e.key === "Escape" && !shareModal.hasAttribute("hidden")) closeShare();
-        });
-
-        if (shareCopyBtn) {
-          shareCopyBtn.addEventListener("click", function () {
-            var btn = shareCopyBtn;
-            var url = btn.dataset.url || currentPageUrl(); // section-specific
-            function flash() { btn.textContent = "Copied!"; setTimeout(function () { btn.textContent = "Copy link"; }, 2200); }
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-              navigator.clipboard.writeText(url).then(flash).catch(function () { fallbackCopy(); });
-            } else { fallbackCopy(); }
-            function fallbackCopy() {
-              var ta = document.createElement("textarea");
-              ta.value = url;
-              ta.style.cssText = "position:fixed;opacity:0;top:0;left:0;width:1px;height:1px";
-              document.body.appendChild(ta);
-              ta.focus(); ta.select();
-              try { document.execCommand("copy"); flash(); } catch (e) {}
-              document.body.removeChild(ta);
-            }
-          });
-        }
-      })();
+      /* ── SHARE PANEL — moved to src/features/share/ ───────────────────────
+         URL/text building lives in model/share-links.ts, tested. The DOM wiring
+         moved carries a real fix: the "Share trip summary" button used to reference
+         a variable declared inside a SIBLING function (openShare) — undefined unless
+         the share modal had already been opened first. Reproduced live: a cold click
+         threw "pageUrl is not defined" and did nothing. Every share-URL consumer now
+         computes its own fresh copy, matching the pattern the copy-link button already
+         used. lockScroll/unlockScroll are still shared with the mobile sheet below —
+         passed in rather than duplicated, so the two keep coordinating one counter. */
+      initSharePanel(_lockScroll, _unlockScroll);
 
       /* ── BUDGET PER-PERSON TOGGLE ─────────────────────────────────────── */
       document.querySelectorAll(".budget-toggle").forEach(function (tog) {

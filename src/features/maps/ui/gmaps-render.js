@@ -112,7 +112,21 @@ export function boot(cfg) {
     if (!data.center || typeof data.center.lat !== "number") return;
     // Replace the default OSM iframe fallback before rendering Google.
     var frame = mount.querySelector(".osmmap");
-    if (frame) frame.remove();
+    if (frame) {
+      // fullscreen.js already wired a ⤢ button onto this iframe's wrapper at page
+      // load (it runs eagerly; this upgrade is lazy and can fire minutes later, well
+      // after that button exists). Capture the wrap BEFORE removing the frame —
+      // frame.parentElement goes null the instant it's detached — and strip the now-
+      // dangling button along with it. Google's own map ships fullscreenControl: true,
+      // so nothing is lost; without this, the OSM button sits there pointing at a
+      // removed element and silently does nothing on click.
+      var wrap = frame.parentElement;
+      frame.remove();
+      if (wrap) {
+        var staleBtn = wrap.querySelector(".map-fs-btn");
+        if (staleBtn) staleBtn.remove();
+      }
+    }
     loadApi().then(function (api) { initMap(api, mount, data); })
       .catch(function (err) { console.warn("[gmaps] failed to load:", err && err.message); });
   }
