@@ -11,6 +11,7 @@
    public API. */
 
 import { settle } from "../model/settle";
+import { normalizeExpense, normalizeMember } from "../model/records";
 import { hasFirebase, joinTrip, normalizeCode } from "../../firebase/index.js";
 import { esc } from "../../../scripts/util.js";
 
@@ -50,7 +51,7 @@ import { esc } from "../../../scripts/util.js";
     var needs = s.members.some(function (m) { return m && !m.id; });
     if (!needs) return s;
     var ids = s.members.map(function (m) { return (m && m.id) || newId(); });
-    var members = s.members.map(function (m, i) { return { id: ids[i], name: (m && m.name) || "", payment: (m && m.payment) || "" }; });
+    var members = s.members.map(function (m, i) { return normalizeMember(Object.assign({}, m, { id: ids[i] })); });
     var expenses = (Array.isArray(s.expenses) ? s.expenses : []).map(function (e) {
       var split = null;
       if (e && Array.isArray(e.customAmts)) {
@@ -76,15 +77,8 @@ import { esc } from "../../../scripts/util.js";
     var named = (exp && exp.participants || []).filter(function (id) { return memberPos(id) !== -1; });
     return named.length ? named : state.members.map(function (m) { return m.id; });
   }
-  // ONE normalizer for the expense record shape, so a field added to the model exists on
-  // every path (the sync mapper silently dropping `participants` is the bug this ends).
-  function normalizeExpense(e) {
-    return {
-      id: e.id, paidBy: e.paidBy || "", desc: e.desc || "",
-      amount: e.amount != null ? e.amount : null,
-      split: e.split || null, participants: e.participants || null, order: e.order,
-    };
-  }
+  // normalizeExpense/normalizeMember now live in ../model/records.ts — the shape is the
+  // model's business, not the view's, and it needed tests more than anything else here.
   // Even split across the given ids (defaults to everyone). Keyed by id, so the map itself
   // never charges a non-participant.
   function evenSplit(total, ids) {
@@ -120,7 +114,7 @@ import { esc } from "../../../scripts/util.js";
      locally by Realtime Database, so it feels instant) rebuilds state and re-renders. */
   function opAddMember() {
     if (room) { room.collection("members").add({ name: "", payment: "", order: nextOrder() }); }
-    else { state.members.push({ id: newId(), name: "", payment: "" }); persist(); renderMembers(); renderNewRowOptions(); renderExpenses(); }
+    else { state.members.push(normalizeMember({ id: newId() })); persist(); renderMembers(); renderNewRowOptions(); renderExpenses(); }
   }
   function opMemberField(id, field, value) {
     if (room) { var p = {}; p[field] = value; room.collection("members").update(id, p); }
@@ -356,7 +350,10 @@ import { esc } from "../../../scripts/util.js";
     room = r;
     var members = r.collection("members"), expenses = r.collection("expenses"), meta = r.doc("meta");
     offFns.push(members.onChange(function (map) {
-      state.members = orderedFrom(map).map(function (m) { return { id: m.id, name: m.name || "", payment: m.payment || "", order: m.order }; });
+      // Was a hand-copied field list — the same shape of code that dropped `participants`
+      // from expenses, sitting unexercised on the members side waiting for the first field
+      // anyone added. Both echoes now go through the one normalizer.
+      state.members = orderedFrom(map).map(normalizeMember);
       renderRemote();
     }));
     offFns.push(expenses.onChange(function (map) {

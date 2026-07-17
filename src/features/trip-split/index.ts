@@ -13,6 +13,8 @@
     #tripSplit, exactly as the old src/scripts module did). */
 export { settle } from "./model/settle";
 export type { SettleExpense, SettleResult, SettleTxn } from "./model/settle";
+export { normalizeMember, normalizeExpense } from "./model/records";
+export type { SplitMember, SplitExpense } from "./model/records";
 export { computeSplits, formatMinor, CURRENCY_EXPONENT, SplitError } from "./model/money";
 export type { SplitMethod, SplitParticipant, SplitResult } from "./model/money";
 import "./ui/trip-split.js";
