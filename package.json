@@ -32,5 +32,8 @@
     "@playwright/test": "^1.61.1",
     "tsx": "^4.23.0",
     "vitest": "^4.1.9"
+  },
+  "overrides": {
+    "esbuild": "0.28.1"
   }
 }
