@@ -12,7 +12,10 @@
       "From the bus stop, the Airbnb (<span data-addr-kr='서울 종로구 종로 19'>19 Jong-ro, Jongno-gu</span> — across from <b>Olive Young Jonggak</b>) is a ~7-min walk or one Line-1 stop. After the redeye with bags, a short Kakao T taxi (≈₩4,000) is worth it",
       "Text <b>TRAVEL to 4004</b> to switch on Verizon TravelPass",
       "Open <b>KakaoMap</b> or <b>Naver Map</b> — Google Maps navigation is very limited in Korea"
-    ]
+    ],
+    "verified_on": "2026-07-07",
+    "shelf_life": "transit",
+    "source_url": "https://www.airport.kr/ap/en/index.do"
   },
   {
     "type": "panel",
@@ -50,7 +53,10 @@
       "e-Arrival Card — within 72 hours of your flight",
       "Confirm Verizon TravelPass; download <a href='https://map.kakao.com' target='_blank' rel='noopener noreferrer'>KakaoMap</a>, <a href='https://map.naver.com' target='_blank' rel='noopener noreferrer'>Naver Map</a>, <a href='https://papago.naver.com' target='_blank' rel='noopener noreferrer'>Papago</a>, <a href='https://www.kakaocorp.com/page/service/service/KakaoT?lang=en' target='_blank' rel='noopener noreferrer'>Kakao T</a>, <a href='https://www.letskorail.com' target='_blank' rel='noopener noreferrer'>Korail</a>",
       "Break in your shoes / insoles (week before)"
-    ]
+    ],
+    "verified_on": "2026-07-07",
+    "shelf_life": "hours",
+    "source_url": "https://www.airpremia.com/a/en/customer/notice/686"
   },
   {
     "type": "panel",

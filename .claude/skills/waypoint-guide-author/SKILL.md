@@ -80,12 +80,23 @@ helper scripts, and the done gate.
   `⚠` known-gap · omitted · `__VERIFICATION_REQUIRED__` (unverified map
   place_id). **Zero bare perishable facts.** Full rules — including what each
   state does and doesn't license: `verification-rules.md` §4.
-- **Structured provenance (additive):** sections and items accept optional
-  `source_url` + `verified_on` (YYYY-MM-DD). Set BOTH on new/edited perishable
-  facts where the block supports them — they feed the weekly recert audit
-  (link HEAD-checks + shelf-life flagging; fx ≈7d, hours/transit ≈90d, venues
-  ≈180d per `src/lib/staleness.ts`). Inline `<a href>` citations stay valid;
+- **Structured provenance — MANDATORY on anything you write or edit.** Sections and
+  items accept `source_url` + `verified_on` (YYYY-MM-DD) + `shelf_life`
+  (`fx` 7d · `transit` 90d · `hours` 90d · `venue` 180d · `default` 90d, from
+  `src/lib/staleness.ts`). Set **all three** on every new/edited perishable fact whose
+  block supports them. They are not decoration: `verified_on` + `shelf_life` drive the
+  ⚠ re-check pill travelers actually see (client clock, so it can't freeze "fresh"),
+  and `source_url` is what the pill links to and the weekly recert re-checks. Pick the
+  `shelf_life` that matches the fact, not the section's title — a currency figure is
+  `fx` even inside a general "Money" panel. Inline `<a href>` citations stay valid;
   `verified_on` without `source_url` is lint-flagged.
+- **New guides are born `provenance: "strict"`** (guide-level field). Under strict the
+  build REJECTS any `panel`/`prose`/`list`/`routes` section that uses `≈` without a
+  `verified_on` — because `≈` asserts *sourced-and-approximate*, and a claim to have
+  checked something owes the date it was checked. If you can't produce a date, the
+  figure was never confirmed: downgrade it to `⚠` or omit it. Do not add `strict` to an
+  existing guide without doing the backfill first — a half-dated guide flipped to strict
+  just fails the build.
 
 ## Never guess what a script can verify
 - **coords / place_id** → `node scripts/lookup-place.mjs "<place>" --cc XX`

@@ -51,7 +51,8 @@ const TitleTag = isCollapsible ? "summary" : "div";
     date would freeze "fresh" forever) and pins a warn pill on stale sections.
     Sections without verified_on render exactly as before. */}
 <section class="block" id={sid} data-cat={ci}
-         data-verified-on={sec.verified_on} data-source-url={sec.source_url}>
+         data-verified-on={sec.verified_on} data-source-url={sec.source_url}
+         data-shelf-life={sec.shelf_life}>
   {carded ? (
     <CardTag class={`card${isCollapsible ? " is-collapsible" : ""}`} {...cardProps}>
       {titleText && (

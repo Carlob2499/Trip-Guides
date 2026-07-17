@@ -23,6 +23,13 @@ const MIN_ACCENT_CONTRAST = 3.0;
 const provenance = {
   source_url: z.string().url().optional(),
   verified_on: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  // Which shelf life judges this fact — the categories in src/lib/staleness.ts
+  // (fx 7d · transit 90d · hours 90d · venue 180d · default 90d). Omit for `default`.
+  // Without this, every dated fact was judged at a blanket 90 days, which is wrong in
+  // both directions: an exchange rate is stale in a week, and a venue's existence is
+  // still good at four months. The categories existed in staleness.ts from the start
+  // and nothing ever passed one — this is the field that makes them real.
+  shelf_life: z.enum(["fx", "transit", "hours", "venue", "default"]).optional(),
 };
 
 // A point on the map.
@@ -265,6 +272,12 @@ const guides = defineCollection({
     ).optional(),
     verified: z.string().optional(),  // freshness metadata for the maker/AI — NOT shown to travelers, EXCEPT a ⚠-prefixed value (e.g. an unconfirmed draft), which renders as a warning pill in the masthead
     draft: z.boolean().optional(),    // true = a "Guide-to-be" scaffold; listed in the home page's draft tier, not the curated grid
+    // OPT-IN provenance enforcement. Absent = loose (every guide written before this
+    // gate existed keeps building untouched, and a partial backfill stays honest rather
+    // than being forced to fake dates it doesn't have). "strict" = this guide promises
+    // that any section CLAIMING a check carries the date of that check; see the
+    // superRefine below. New guides should be born strict.
+    provenance: z.enum(["strict"]).optional(),
     intro: z.string().optional(),
     // ADDITIVE + OPTIONAL — the curated post-mortem: what REALLY happened vs the plan.
     // Hand-authored by the maker from the raw trip feedback (never auto-generated, never
@@ -288,24 +301,52 @@ const guides = defineCollection({
     }).optional(),
     sections: z.array(section),
   }).superRefine((g: any, ctx: any) => {
-    // The Plan ⇄ Actual join key is the day's date STRING, so a reworded label would
+    // NOTE: each check below is its own block and must not `return` — an early return
+    // here exits the whole superRefine and silently skips every later check.
+
+    // 1. The Plan ⇄ Actual join key is the day's date STRING, so a reworded label would
     // silently drop that day's whole reality layer. Fail the build instead: every
     // learnings day must name a date that exists in some itinerary days block.
     const learnDays: { date: string }[] = g.learnings?.days ?? [];
-    if (!learnDays.length) return;
-    const itinDates = new Set(
-      g.sections
-        .filter((s: any) => s.type === "days")
-        .flatMap((s: any) => s.items.map((d: any) => d.date)),
-    );
-    for (const d of learnDays) {
-      if (!itinDates.has(d.date)) {
+    if (learnDays.length) {
+      const itinDates = new Set(
+        g.sections
+          .filter((s: any) => s.type === "days")
+          .flatMap((s: any) => s.items.map((d: any) => d.date)),
+      );
+      for (const d of learnDays) {
+        if (!itinDates.has(d.date)) {
+          ctx.addIssue({
+            code: "custom",
+            path: ["learnings", "days"],
+            message: `learnings day "${d.date}" matches no itinerary days[].date — its Plan ⇄ Actual toggle would silently not render. Itinerary dates: ${[...itinDates].join(", ") || "(none)"}`,
+          });
+        }
+      }
+    }
+
+    // 2. Provenance gate — only for guides that opted in with `provenance: "strict"`.
+    // The rule encodes the ≈/⚠ distinction from the guide-author skill's
+    // verification-rules §4: `≈` means *sourced-and-approximate* — it is a positive
+    // claim to have CHECKED a figure, so it owes the date of that check. `⚠` means
+    // *known gap, unconfirmed by design* and is exempt: it already tells the reader the
+    // fact is unverified. A section carrying `≈` with no `verified_on` is claiming a
+    // check it can't evidence, which is the "guessed figure wearing a ≈" the rules call
+    // a fabrication — so it fails the build rather than shipping.
+    if (g.provenance === "strict") {
+      // Only these four accept section-level verified_on (see `section` above); the
+      // others carry provenance per-item or not at all, so gating them here would
+      // demand a field their schema rejects.
+      const DATED_TYPES = new Set(["panel", "prose", "list", "routes"]);
+      g.sections.forEach((s: any, i: number) => {
+        if (!DATED_TYPES.has(s.type) || s.verified_on) return; // returns from the forEach cb only
+        if (!JSON.stringify(s).includes("≈")) return;
         ctx.addIssue({
           code: "custom",
-          path: ["learnings", "days"],
-          message: `learnings day "${d.date}" matches no itinerary days[].date — its Plan ⇄ Actual toggle would silently not render. Itinerary dates: ${[...itinDates].join(", ") || "(none)"}`,
+          path: ["sections", i, "verified_on"],
+          message: `section ${i} ("${s.title ?? s.group}", type "${s.type}") uses ≈ but has no verified_on. Under provenance:"strict", ≈ asserts a fact was checked and found approximate — so it owes the date it was checked. Either add verified_on (+ source_url), or downgrade the figure to ⚠ if it was never actually confirmed.`,
         });
-      }
+      });
     }
   }),
 });

@@ -137,6 +137,12 @@ export function buildGuideObject(answers = {}) {
     country,
     draft: true,
     verified: DRAFT_STAMP,
+    // Born strict: every guide from here on must date the facts it claims to have
+    // checked. A fresh scaffold has no facts, so this passes trivially — it starts
+    // biting the moment research writes the first ≈ figure, which is exactly when the
+    // date is knowable and exactly what "new facts get a verification date on write,
+    // never bolted on later" means. Korea/Denmark predate the gate and stay loose.
+    provenance: "strict",
     footer: "",
     sections,
   };

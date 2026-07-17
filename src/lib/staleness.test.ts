@@ -37,6 +37,33 @@ describe("staleness", () => {
     expect(SHELF_LIFE_DAYS.fx).toBe(7);
   });
 
+  // The categories only started being USED once `shelf_life` reached the schema and
+  // staleness-ui.js stopped hardcoding "default". These lock in the behaviour that
+  // makes them worth having: the same date is stale or fresh depending on the category.
+  it("the SAME date is judged differently per category — the whole point of having them", () => {
+    const on = "2026-06-28"; // 12 days before NOW (2026-07-10)
+    expect(staleness(on, "fx", NOW)!.stale).toBe(true);       // 7d  → stale
+    expect(staleness(on, "transit", NOW)!.stale).toBe(false); // 90d → fresh
+    expect(staleness(on, "hours", NOW)!.stale).toBe(false);   // 90d → fresh
+    expect(staleness(on, "venue", NOW)!.stale).toBe(false);   // 180d → fresh
+    expect(staleness(on, "default", NOW)!.stale).toBe(false); // 90d → fresh
+  });
+
+  // staleness-ui.js reads the category off a DOM attribute, and the DOM is not the
+  // schema — a hand-edited page, an old cached build, or a future schema value can put
+  // anything there. It guards with hasOwnProperty and falls back to "default"; this
+  // pins the contract that an unknown key must not silently resolve to undefined days
+  // (which would make `ageDays > undefined` false and mark every fact permanently fresh).
+  it("SHELF_LIFE_DAYS has no inherited-key collisions (the UI's hasOwnProperty guard)", () => {
+    expect(Object.prototype.hasOwnProperty.call(SHELF_LIFE_DAYS, "toString")).toBe(false);
+    expect(Object.prototype.hasOwnProperty.call(SHELF_LIFE_DAYS, "constructor")).toBe(false);
+    expect(Object.prototype.hasOwnProperty.call(SHELF_LIFE_DAYS, "default")).toBe(true);
+    // every category the schema's shelf_life enum allows must exist here
+    for (const k of ["fx", "transit", "hours", "venue", "default"]) {
+      expect(Object.prototype.hasOwnProperty.call(SHELF_LIFE_DAYS, k)).toBe(true);
+    }
+  });
+
   it("null/undefined/malformed dates return null (caller decides rendering)", () => {
     expect(staleness(null, 90, NOW)).toBeNull();
     expect(staleness(undefined, 90, NOW)).toBeNull();
