@@ -1,21 +1,41 @@
 name: Visual regression & quality
 
 # Screenshot-diff + axe accessibility gates (convergence Phases 2/5), plus a
-# report-only Lighthouse job. Pull requests only — this workflow never runs on
-# main and never touches the deploy pipeline.
+# report-only Lighthouse job.
 #
-# Baseline bootstrap: baselines are per-platform. `--update-snapshots missing`
-# creates absent linux baselines on a first run (pass) instead of failing;
-# commit the uploaded artifact's snapshots to the branch to arm real diffing.
+# Baselines are PER-PLATFORM: Playwright names them `<test>-<platform>.png`, so a
+# `-win32.png` recorded on a dev machine is invisible to these ubuntu runners.
+# The committed `-linux.png` files are therefore the only baselines that gate
+# anything; the `-win32.png` ones exist for local `npm run test:visual` runs.
+#
+# The `visual` job is STRICT on purpose: a missing baseline FAILS. It used to run
+# `--update-snapshots missing`, which silently created whatever was absent and
+# passed — so with only win32 baselines committed, every CI run manufactured a
+# fresh linux baseline, compared it against itself, and went green. The gate had
+# never diffed a single pixel. Strict means "no baseline" reports as the problem
+# it is instead of masquerading as a pass.
+#
+# To arm or re-arm the baselines (first setup, or after an INTENTIONAL design
+# change): Actions → this workflow → "Run workflow" → tick `refresh_baselines`.
+# That job regenerates them on Linux and commits them back to main.
 on:
   pull_request:
+  push:
+    branches: [main]
   workflow_dispatch:
+    inputs:
+      refresh_baselines:
+        description: "Regenerate Linux screenshot baselines and commit them to main"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
 
 jobs:
   visual:
+    # Every trigger except an explicit baseline refresh.
+    if: ${{ !inputs.refresh_baselines }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,7 +46,8 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npx playwright install --with-deps chromium
-      - run: npx playwright test --update-snapshots missing
+      # No --update-snapshots: a missing or drifted baseline must fail.
+      - run: npx playwright test
       - name: Upload snapshots + diffs
         if: always()
         uses: actions/upload-artifact@v4
@@ -37,10 +58,45 @@ jobs:
             test-results/
           retention-days: 14
 
+  # Manual-only: regenerate the Linux baselines and commit them. Run this once to
+  # arm the gate, and again whenever a deliberate design change should become the
+  # new reference. Never runs on push/PR, so it can't launder a regression into a
+  # baseline behind your back.
+  refresh-baselines:
+    if: ${{ inputs.refresh_baselines }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      # Screenshot failures are expected here — this run RECORDS the truth rather
+      # than checking against it, so don't let a diff abort before the commit.
+      - run: npx playwright test --update-snapshots
+        continue-on-error: true
+      - name: Commit refreshed baselines
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tests/visual/*-snapshots/
+          if git diff --staged --quiet; then
+            echo "Baselines unchanged — nothing to commit."
+            exit 0
+          fi
+          git commit -m "CI: refresh Linux visual baselines [skip ci]"
+          git push
+
   # Report-only Lighthouse pass (perf/a11y/best-practices/SEO scores as a PR
   # artifact). continue-on-error — informational, never blocks; the binding
   # perf gate remains scripts/check-perf-budget.mjs in the deploy itself.
   lighthouse:
+    if: ${{ !inputs.refresh_baselines }}
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:

@@ -16,9 +16,14 @@ async function prep(page: Page, path: string) {
   await page.waitForTimeout(400);
 }
 
+// Every page shape the site builds: the hub, and BOTH guides. Korea and Denmark
+// differ in ways axe can see — Denmark has no learnings block (so no reality
+// layer), Korea carries four extra content groups and a habitats/raids grid — so
+// covering one guide leaves the other's markup ungated.
 for (const [name, path] of [
   ["hub", "/Trip-Guides/"],
   ["korea guide", "/Trip-Guides/guides/korea/"],
+  ["denmark guide", "/Trip-Guides/guides/denmark/"],
 ] as const) {
   test(`a11y — ${name}`, async ({ page }) => {
     await prep(page, path);
