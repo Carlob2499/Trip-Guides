@@ -90,10 +90,19 @@ conventions, render behavior, and the verification rules attached to a field.
 - **`routes`** — steps are HTML strings; use single-quoted `href='…'` attributes
   (repo JSON convention), name the specific service (`<b>M2</b>`, bus `<b>707</b>`),
   give `≈` times/fares.
-- **`map`** — `place_id` is verified-or-flagged, never guessed: an unverified value is
-  the literal string `__VERIFICATION_REQUIRED__`. `local_script_name` carries the
-  native-script name for taxi/local display. Coords come from
-  `scripts/lookup-place.mjs`, not memory.
+- **`map`** — `points[]` now RENDER (not dormant schema): with a Google Maps key each
+  point is a pin whose info window shows its name, its `local_script_name` in native
+  script (the "show a taxi driver" line), and a Directions deep-link. So populate
+  `points` during research on any guide where a language barrier matters — it's the
+  answer to a traveler who can't read the local script. `local_script_name` must be an
+  AUTHORITATIVELY verified native name (Nominatim `namedetails` name:ko/name:xx, or the
+  place's official site) — never transliterated from memory; omit it rather than guess,
+  the pin still ships with its coords + Directions. `place_id` is verified-or-flagged,
+  never guessed: an unverified value is the literal `__VERIFICATION_REQUIRED__`; a real
+  one is the OSM id `scripts/lookup-place.mjs` returns (it's provenance for the coords —
+  the Directions link is built from lat/lng, so it works with or without a place_id).
+  Coords come from `lookup-place.mjs`, not memory. Korea's Seoul orientation map is the
+  worked example.
 - **`weather`** — needs a `map` section somewhere in the guide to source coords;
   otherwise it stays hidden. Don't invent coords for it.
 - **`holidays`** — country comes from the guide's `country` via the ISO map; dates

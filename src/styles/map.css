@@ -14,4 +14,5 @@
 
 /* Google info-window content (rendered only when the Google renderer is active). */
 .wpop-local{display:block;font-family:var(--font-data);font-size:.8rem;color:var(--muted);margin-top:.15rem}
-.wpop-jump{display:inline-block;margin-top:.35rem;font-family:var(--font-data);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
+.wpop-dir,.wpop-jump{display:inline-block;margin-top:.35rem;font-family:var(--font-data);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
+.wpop-dir{margin-right:.7rem}

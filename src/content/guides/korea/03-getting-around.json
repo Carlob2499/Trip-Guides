@@ -32,7 +32,44 @@
       "lat": 37.5707,
       "lng": 126.98
     },
-    "span": 0.07
+    "span": 0.07,
+    "points": [
+      {
+        "name": "Gyeongbokgung",
+        "lat": 37.579754,
+        "lng": 126.9766818,
+        "place_id": "R5501517",
+        "local_script_name": "경복궁"
+      },
+      {
+        "name": "Gwangjang Market",
+        "lat": 37.570189,
+        "lng": 126.9994995,
+        "place_id": "W607083156",
+        "local_script_name": "광장시장"
+      },
+      {
+        "name": "Myeongdong",
+        "lat": 37.5608977,
+        "lng": 126.9863762,
+        "place_id": "N6036160341",
+        "local_script_name": "명동"
+      },
+      {
+        "name": "Dongdaemun Design Plaza",
+        "lat": 37.5670686,
+        "lng": 127.009899,
+        "place_id": "R10647068",
+        "local_script_name": "동대문디자인플라자"
+      },
+      {
+        "name": "Hongdae (Hongik Univ.)",
+        "lat": 37.55305,
+        "lng": 126.92461,
+        "place_id": "N357934105",
+        "local_script_name": "홍익대학교"
+      }
+    ]
   },
   {
     "type": "prose",

@@ -79,8 +79,17 @@ export function boot(cfg) {
       map: map, position: { lat: pin.lat, lng: pin.lng },
       content: pinEl.element, title: pin.name,
     });
+    // Directions deep-link uses the pin's VERIFIED lat/lng, not a place_id: the guide's
+    // place_id is an OSM/Nominatim id (the geocode's source record), which Google Maps
+    // can't resolve — a coordinate destination is unambiguous and can't point at the
+    // wrong business. `.local` (native-script name) rides above it for the show-the-driver
+    // case; the two together are the "little translation available" answer.
+    var dirUrl = "https://www.google.com/maps/dir/?api=1&destination=" + pin.lat + "," + pin.lng;
     var html = "<b>" + escapeHtml(pin.name) + "</b>" +
       (pin.local ? "<div class='wpop-local'>" + escapeHtml(pin.local) + "</div>" : "") +
+      (pin.kind !== "center"
+        ? "<a class='wpop-dir' href='" + dirUrl + "' target='_blank' rel='noopener'>Directions ↗</a>"
+        : "") +
       (pin.kind === "sight" ? "<a class='wpop-jump' href='#sight-" + pin.id + "'>Details ↓</a>" : "");
     m.addListener("click", function () {
       sharedInfo.setContent(html);
