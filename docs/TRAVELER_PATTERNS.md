@@ -163,11 +163,23 @@ real; treat any specific as soft. See `learnings/denmark.md`.*
   → *Design implication:* plan a port day **backwards from the reboarding time**, and treat
   the guided tour as consuming the day rather than seeding it. (Compare Party A's Busan
   day-trip lesson — same shape, different cause: plan backwards from the fixed departure.)
-- **A single-park event day worked, and absorbed most of the trip.** Concentrating GO Fest
-  into one green space removed all inter-cluster commuting. **[reported]**
-  → ⚠ *Unreconciled:* the account names **King's Garden (Kongens Have)**; the plan and the
-  official venue were **Fælledparken**, and Kongens Have appears nowhere in the guide. Do
-  not harden the park name into a pattern until it's confirmed.
+- **Structure holds; unstructured time collapses inward.** The two GO Fest days went
+  opposite ways, and the difference wasn't difficulty — it was whether the day had a fixed
+  shape. The **ticketed Fælledparken session** (paid, timed, one place to be) ran exactly as
+  written. The **citywide day** — a plan that asked them to roam between the
+  Strøget/Vimmelskaftet and Nyhavn–Kongens Nytorv spawn clusters — didn't roam at all: the
+  group settled into King's Garden, a park the guide never mentions, and played there.
+  Tellingly, the **LEGO stamp rally still worked citywide** on that same day, because it had
+  specific places to be. **[reported]**
+  → *Design implication:* for Party B, a "roam these clusters" day is not a plan, it's a
+  suggestion, and it will be replaced by whatever green space is nearest and most
+  comfortable. Either give the day a fixed anchor (a ticket, a time, a named place) or
+  design it as errands with specific stops — the stamp rally is the working model. Don't
+  write a day whose only structure is a suggested route between areas.
+  → *Cross-check against Party A:* Korea's GO Fest days collapsed too, but for a different
+  reason — heat drove them to remote play indoors. Same outcome (the outdoor roaming plan
+  died), two unrelated causes. Don't merge these into one "GO Fest days fail" rule; the
+  Party A fix is a heat fallback, the Party B fix is structure.
 - Prices ran high across the board and the guide under-prepared them for it. **[reported]**
   → *Design implication:* Nordic budget figures need to be sharp and honest, not indicative.
 - Convenience stores were far from the base, so **IKEA and the nearby mall became the

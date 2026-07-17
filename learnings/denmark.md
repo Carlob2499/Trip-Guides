@@ -11,12 +11,21 @@ Recall at a month's distance compresses and reorders; treat the *patterns* as re
 *specific* as soft. Raw narration is never pasted here verbatim — it is summarized, per
 CLAUDE.md's Learnings Loop. If a line below reads like a quote, rewrite it.
 
-**One unreconciled conflict.** The account says GO Fest was played in a single park it
-names **King's Garden (Kongens Have)**. The guide — and the official venue, verified from
-pokemongo.com — was **Fælledparken**. Kongens Have appears nowhere in the guide. Either the
-group played somewhere other than the official venue, or the park was misremembered a month
-on. Not resolved, not guessed: recorded in both the public block and here as reported.
-Worth a direct question before any of it hardens into a pattern.
+**The park conflict, resolved (2026-07-17).** The first pass flagged an apparent conflict —
+the account named **King's Garden (Kongens Have)**; the guide and the official venue said
+**Fælledparken**. Asking rather than guessing dissolved it: *both are true, for different
+days.* Fælledparken was the **ticketed in-person park event** and ran as planned. King's
+Garden is where the **citywide gameplay day** actually concentrated, against a plan that
+mapped the Strøget/Vimmelskaftet and Nyhavn–Kongens Nytorv clusters instead. The LEGO stamp
+rally did happen around the city.
+
+**The lesson is about the synthesis, not the trip.** My first pass compressed two different
+days into one "GO Fest was great in one park" claim and then flagged the leftover as a
+conflict. Nothing was invented, but the *shape* was wrong — a month-old recollection
+naturally drops the distinction between "the ticketed thing" and "the roaming thing", and I
+took the compression at face value. The real finding was only visible once the days were
+separated: **the fixed commitment held and the unstructured day collapsed.** When a
+recollection sounds like one event, check whether it was two.
 
 ---
 
@@ -42,8 +51,10 @@ on a map. That's a research failure, not bad luck.
   area was nice. It was also, in practice, hard to get out of on foot. Proximity on a map
   meant nothing.
 - **The hotel had no AC.** Windows open every night. **Second trip running.**
-- **GO Fest concentrated in one park worked** — and absorbed most of the days. No commuting
-  between spawn clusters. (Park name unresolved — see above.)
+- **The ticketed event held; the roaming day didn't roam.** Fælledparken (paid, fixed time)
+  ran as written. The citywide day settled into King's Garden instead of the mapped Strøget
+  and Nyhavn clusters — concentration over coverage, no commuting between spawn clusters.
+  The LEGO stamp rally still worked citywide, because it had specific places to be.
 - **Malmö underdelivered.** Little to do once there, and the distances on foot were past what they could manage; the
   half-day ended early.
 - **Oslo had almost no slack.** After the guided tour: a pier walk, a Starbucks mug, a
@@ -53,20 +64,37 @@ on a map. That's a research failure, not bad luck.
 
 ## What the guide got wrong (product, not content)
 
-Two features were asked for **by name**, and both already exist — in Korea:
+Two features were asked for **by name**. Measuring them (2026-07-17) corrected my first
+read of both — full workings in `docs/DENMARK_UPLIFT.md`:
 
-1. **A daily weather forecast.** The weather was sporadic and hard to plan around. There is
-   a `weather` section type; Denmark doesn't use it, or doesn't use it per-day.
-2. **Korea's scrolling day-by-day itinerary.** Named explicitly as what would have made the
-   days runnable.
+1. **Korea's scrolling day-by-day itinerary — already on Denmark, and always was fine.**
+   It renders identically on both guides today. This was never a Denmark gap; it's a
+   **timing** gap. The concise day cards shipped **Jun 25** and the itinerary silo **Jul
+   11** — Denmark was travelled Jun 8–16, Korea Jul 8–15. The feature landed between the
+   two trips. Denmark got the old site; Korea got the new one. Nothing to fix; the
+   traveller just never saw it.
+2. **A daily weather forecast — a real gap, and not Denmark's fault.** The `weather` section
+   type is fully built (schema, `WeatherBlock.astro`, 12 refs of forecast code in
+   guide-ui.js, live Open-Meteo fetch) and used by **zero guides, including Korea**. Denmark
+   already has the Copenhagen `map` section the block reads coords from. One section is the
+   whole fix. This is the same built-but-unadopted pattern as the staleness pill and the
+   shelf-life categories — a platform gap wearing a Denmark costume.
 
-And the flat verdict: the itinerary was **marginally useful**, and would have been better
-"at the same standard Korea was at". Denmark predates Korea and never got the same depth.
-That gap is now measurable — Denmark's itinerary file is 190 lines against Korea's 428.
+**And the one nobody asked for, which is worse:** Denmark has **0 of 9 days tagged with
+`energy`**; Korea has 2 of 8. That field drives the **Low-Energy toggle**. The party whose
+binding constraint was *mobility* got zero low-energy tagging; the party that walks
+everywhere got some. Exactly backwards.
 
-**This is the loop working as designed and indicting the loop.** Denmark shipped, Korea got
-the good treatment, and Denmark was never brought up to it. The feature disparity is the
-finding.
+**I was wrong about the depth story, and the correction matters.** I first wrote that
+Denmark's 190-line itinerary against Korea's 428 measured the gap. It doesn't. Denmark has
+**more** days (9 v 8) and every one carries a full `tldr`/`pace`/`fit`/`checklist`/`body` —
+the structure is complete. The real difference is prose depth per day (~21 v ~53 lines) and
+reference breadth (39 v 73 sections). Reaching for the easy metric and inferring "thin"
+from it would have sent a research pass at the wrong target.
+
+**This is the loop working as designed and indicting the loop** — but for a sharper reason
+than "Denmark never got the good treatment": two features shipped three weeks too late for
+its traveller, and one of them still hasn't shipped to anyone.
 
 ## What I changed
 
@@ -83,7 +111,6 @@ finding.
 
 ## Open questions for the next trip
 
-- Which park was GO Fest actually played in? (see above)
 - Is the mobility constraint permanent for this party, or was it specific to who came?
   It determines whether "step-free" is a hard filter or a preference on the next family trip.
 - Does the Denmark guide get retro-fitted to Korea's standard, or is it left as an archive
