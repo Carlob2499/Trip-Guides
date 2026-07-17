@@ -313,7 +313,8 @@ const tripSummary = buildSummary(guide);
     <!-- ═══════════════════════════════════════════════════════════════════════
          GUIDE TAB BAR — one tab per section group + Budget Calculator + Vote tools
          ═══════════════════════════════════════════════════════════════════ -->
-    <nav class="guide-tabs" id="guideTabs" role="tablist" aria-label="Guide sections">
+    <nav class="guide-tabs-nav" aria-label="Guide sections">
+    <div class="guide-tabs" id="guideTabs" role="tablist">
       {order.map((g, i) => (
         <button class="gtab" role="tab" type="button" data-tab={i} data-full={g}
                 aria-label={g} aria-selected={i === 0 ? "true" : "false"}>{shortLabel(g)}</button>
@@ -326,6 +327,7 @@ const tripSummary = buildSummary(guide);
               aria-selected="false">📌 Reminders</button>
       <button class="gtab gtab-learn" role="tab" type="button" data-tab="learn"
               aria-selected="false" hidden>📓 Learnings</button>
+    </div>
     </nav>
 
     </div>{/* end .sticky-chrome */}
@@ -449,7 +451,7 @@ const tripSummary = buildSummary(guide);
          MAIN LAYOUT — tab-switched content panels (nav is the sticky tab bar above)
          ═══════════════════════════════════════════════════════════════════ -->
     <div class="shell">
-      <main class="content" id="content" role="tabpanel">
+      <main class="content" id="content">
         <noscript>
           <p class="note" style="padding:1.5rem 0">This guide reads fine without JavaScript; enabling it adds section tabs, saved checklists, and the jet-lag calculator.</p>
         </noscript>
