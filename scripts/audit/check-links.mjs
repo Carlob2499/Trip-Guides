@@ -10,6 +10,12 @@
 // only that this checker got blocked. Results are bucketed by confidence so the
 // report doesn't cry wolf on sites that work fine for an actual visitor:
 //   dead    — 404/410, high confidence the page is genuinely gone
+//
+// Second calibration note (2026-07-17): a 404 is only trusted after checkUrl()
+// re-probes with GET. A HEAD-only 404 means nothing on some servers —
+// english.visitseoul.net answers HEAD 404 / GET 200 on every URL, which had this
+// report calling three live citations dead. Distinct from the 403 case above:
+// that's the site blocking us, this is HEAD being answered wrong. See lib.mjs.
 //   blocked — 401/403/429, likely bot-detection; needs a human to check in a browser
 //   error   — network/DNS/timeout failure, retried once before counting
 //   other   — any other non-2xx/3xx (5xx etc.)

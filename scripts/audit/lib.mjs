@@ -111,9 +111,18 @@ export function daysSince(date, now = new Date()) {
   return Math.round((now.getTime() - date.getTime()) / 86400000);
 }
 
-// Small fetch wrapper: HEAD first (cheap), fall back to GET if the server doesn't
-// support/allows HEAD (405, or some sites just don't reply sensibly to it). Never
-// throws — callers get a uniform { ok, status, error } shape.
+// Small fetch wrapper: HEAD first (cheap), fall back to GET when HEAD's answer
+// isn't trustworthy. Never throws — callers get a uniform { ok, status, error }.
+//
+// Why 404 triggers a GET retry: some servers answer HEAD with 404 on pages that
+// are perfectly alive over GET. english.visitseoul.net does exactly this — every
+// one of its URLs returned HEAD 404 / GET 200, with or without a browser
+// User-Agent, so it isn't bot-detection (the check-links.mjs note blaming TLS/IP
+// blocking doesn't apply to this failure mode). Before this retry, three live
+// citations were reported as "dead — high confidence", which is the worst kind of
+// wrong here: the whole point of the dead bucket is that it's actionable, and
+// acting on it would have deleted good sources. A 404 is now only believed once
+// GET agrees; the extra request costs one round-trip on genuinely dead links only.
 export async function checkUrl(url, { timeoutMs = 10000 } = {}) {
   const attempt = async (method) => {
     const ctrl = new AbortController();
@@ -130,9 +139,13 @@ export async function checkUrl(url, { timeoutMs = 10000 } = {}) {
       clearTimeout(t);
     }
   };
+  const headIsUnreliable = (s) => s === 405 || s === 501 || s === 404 || s === 410;
   try {
     const head = await attempt("HEAD");
-    if (head.status === 405 || head.status === 501) return await attempt("GET");
+    if (headIsUnreliable(head.status)) {
+      try { return await attempt("GET"); }
+      catch { return head; } // GET failed outright — report what HEAD saw
+    }
     return head;
   } catch (err) {
     try { return await attempt("GET"); }
