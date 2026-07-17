@@ -3,6 +3,8 @@
 // page). Config that used to come from Astro define:vars is now read from the
 // #tgConfig JSON script tag emitted by the layout.
 import { todayInTz } from "./util.js";
+import { resolveTripDate } from "../lib/trip-dates";
+import { initRate, initWeather } from "../features/live-data/index.js";
 
 const _cfgEl = document.getElementById("tgConfig");
 const _cfg = _cfgEl ? JSON.parse(_cfgEl.textContent || "{}") : {};
@@ -32,22 +34,10 @@ const daysForBanner     = _cfg.daysForBanner || [];
           // month numbering — sections needing a 1-indexed month use "+ 1".
           var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
-          // Parse a dateless guide date string like "Wed Jul 8" into a real Date,
-          // resolving the missing year the same way everywhere it's needed: assume
-          // the current year unless that lands >180 days in the past, in which case
-          // assume next year. Returns null if the string doesn't match the expected
-          // shape (e.g. relative labels like "Day 1", which some guides use instead
-          // of calendar dates — those guides fall back to no-trip-date behavior).
-          function resolveTripDate(str, now) {
-            if (!str) return null;
-            var parts = String(str).split(/\s+/);
-            var moIdx = MONTHS.indexOf(parts[1]);
-            var day   = parseInt(parts[2], 10);
-            if (moIdx === -1 || isNaN(day)) return null;
-            var d = new Date(now.getFullYear(), moIdx, day);
-            if (d < now && (now - d) > 180 * 86400000) d.setFullYear(now.getFullYear() + 1);
-            return d;
-          }
+          // resolveTripDate now comes from ../lib/trip-dates (imported above) — it's
+          // shared with the live-data silo's weather window, and the year-rollover rule
+          // it encodes is the kind that fails silently and only in December. It has
+          // tests there; it had none here.
 
           // DST-aware UTC offset (in hours) of an IANA zone at a given instant, via Intl.
           // Returns null if the zone is unknown. Used by the local-time pill + jet-lag calc.
@@ -647,290 +637,20 @@ const daysForBanner     = _cfg.daysForBanner || [];
             }).catch(function () {});
           })();
 
-          /* ── 11. LIVE CURRENCY RATE (Frankfurter, canonical rate service) ─
-             Pattern for all API integrations: fetch-once, sessionStorage cache,
-             dispatch tg:rate event, graceful failure with fallback.           */
-          (function () {
-            if (!curCode || !curFallbackRate || !window.fetch) return;
-
-            // Sanity band per currency — rates outside this are treated as bad data.
-            var SANITY = { KRW: [500, 3000], JPY: [80, 250], DKK: [4, 12], EUR: [0.5, 1.5] };
-            function inBand(r) {
-              var b = SANITY[curCode];
-              return !b || (r >= b[0] && r <= b[1]);
-            }
-
-            // Magnitude-aware display: KRW/JPY whole number, DKK/EUR decimal.
-            // Math.round alone would turn EUR 0.93 into a useless "1".
-            function fmtRate(r) {
-              return r >= 100 ? Math.round(r).toLocaleString() : r >= 1 ? r.toFixed(2) : r.toFixed(3);
-            }
-
-            function applyLive(rate, date) {
-              // Update stats-bar pill
-              var pill = document.getElementById("liveRatePill");
-              if (pill) {
-                pill.textContent = "$1 = " + fmtRate(rate) + " " + curCode;
-                pill.title = "Live rate · ECB via Frankfurter.dev · " + date;
-                pill.removeAttribute("hidden");
-              }
-
-              // Update budget foot span
-              var foot = document.getElementById("liveRateFoot");
-              if (foot) {
-                foot.textContent = fmtRate(rate) + " " + curCode + " = $1 · Live · ECB · " + date;
-              }
-
-              // Broadcast for any future listeners (Session 2/3 pattern).
-              document.dispatchEvent(new CustomEvent("tg:rate", { detail: { rate: rate, date: date, code: curCode } }));
-            }
-
-            function applyFallback(reason) {
-              console.warn("[tg-rate] " + reason + " — using fallback " + curFallbackRate + " " + curCode);
-              var foot = document.getElementById("liveRateFoot");
-              if (foot) {
-                foot.textContent = "≈₩" + curFallbackRate.toLocaleString() + " = $1 · Jun 2026 · live rate unavailable";
-              }
-            }
-
-            // A stale-but-real cached rate beats the hardcoded build-time fallback —
-            // show it clearly labeled as locked rather than silently discarding it.
-            function applyLockedStale(c) {
-              var pill = document.getElementById("liveRatePill");
-              if (pill) {
-                pill.textContent = "$1 = " + fmtRate(c.rate) + " " + curCode;
-                pill.title = "Rate locked " + c.date + " (offline) · ECB via Frankfurter.dev";
-                pill.removeAttribute("hidden");
-              }
-              var foot = document.getElementById("liveRateFoot");
-              if (foot) {
-                foot.textContent = fmtRate(c.rate) + " " + curCode + " = $1 · Rate locked " + c.date + " · offline";
-              }
-              document.dispatchEvent(new CustomEvent("tg:rate", { detail: { rate: c.rate, date: c.date, code: curCode, locked: true } }));
-            }
-
-            // localStorage (not sessionStorage) so a previously-fetched rate survives
-            // across sessions/offline visits, not just the current tab's lifetime.
-            // Cache keyed by currency code so guides don't share stale rates.
-            // "Today" is UTC (same reference Frankfurter uses for its daily timestamp;
-            // device-local date can differ, e.g. user in UTC+9 at 00:30 UTC).
-            var CACHE_KEY = "tg-rate-" + curCode;
-            var todayUTC  = new Date().toISOString().slice(0, 10);
-            var cached = null;
-            try { cached = JSON.parse(localStorage.getItem(CACHE_KEY) || "null"); } catch (_) {}
-
-            if (cached && cached.rate && cached.date && cached.fetchedAt === todayUTC) {
-              applyLive(cached.rate, cached.date);
-              return; // served from today's cache — no network call
-            }
-
-            fetch("https://api.frankfurter.dev/v1/latest?base=USD&symbols=" + curCode)
-              .then(function (r) { return r.ok ? r.json() : Promise.reject("non-200 " + r.status); })
-              .then(function (data) {
-                var rate = data && data.rates && data.rates[curCode];
-                if (!rate || !isFinite(rate)) throw new Error("missing or non-finite rate");
-                if (!inBand(rate)) throw new Error("rate " + rate + " outside sanity band for " + curCode);
-                var date = data.date || todayUTC;
-                try {
-                  localStorage.setItem(CACHE_KEY, JSON.stringify({ rate: rate, date: date, fetchedAt: todayUTC }));
-                } catch (_) {}
-                applyLive(rate, date);
-              })
-              .catch(function (err) {
-                if (cached && cached.rate && cached.date) applyLockedStale(cached);
-                else applyFallback(String(err));
-              });
-          })();
-
-          /* ── 12. WEATHER STRIP (Open-Meteo, canonical cached service) ───
-             Same pattern as the rate service: fetch-once, sessionStorage cache,
-             graceful failure (block hides, never errors), source + timestamp shown.
-             Mount: #wxWrap (masthead OR in-flow weather section) → injects #wxMount. */
-          (function () {
-            var wxWrap = document.getElementById("wxWrap");
-            if (!wxWrap) return; // no mount on this page (masthead suppressed, no section)
-
-            // Breadcrumb for the forkable-template future: a weather section with no
-            // map section to source coordinates from will silently hide otherwise.
-            if (!mapCenter) {
-              if (hasWeatherSection) {
-                console.warn("weather section present but no map section found — no coordinates");
-              }
-              return;
-            }
-            if (!window.fetch) return;
-            // Monochrome text-symbol icons (\uFE0E forces non-emoji rendering) to
-            // match the editorial design and honor the no-emoji content rule.
-            function wxIcon(code) {
-              if (code === 0)  return "☀︎"; // clear  (sun)
-              if (code <= 3)   return "⛅︎"; // partly cloudy
-              if (code <= 48)  return "☁︎"; // cloud / fog
-              if (code <= 67)  return "☂︎"; // drizzle + rain (umbrella)
-              if (code <= 77)  return "❄︎"; // snow
-              if (code <= 82)  return "☂︎"; // showers (umbrella)
-              if (code <= 86)  return "❄︎"; // snow showers
-              if (code >= 95)  return "☈";      // thunderstorm (inherently monochrome)
-              return "⛅︎";
-            }
-            // Resolve the trip's date range once (doesn't depend on "today" changing
-            // mid-session): powers the hide/show/window decisions in wxRender below.
-            var _now      = new Date();
-            var todayMid  = new Date(_now.getFullYear(), _now.getMonth(), _now.getDate());
-            var tripStart = firstDayDate ? resolveTripDate(firstDayDate, _now) : null;
-            var tripEnd   = tripStart ? (resolveTripDate(lastDayDate, _now) || tripStart) : null;
-            if (tripStart && tripEnd && tripEnd < tripStart) tripEnd = tripStart; // defensive, malformed data
-            var hasTripDates   = !!tripStart;
-            var tripLengthDays = hasTripDates ? Math.round((tripEnd - tripStart) / 86400000) + 1 : 0;
-            var isPastTrip     = hasTripDates && todayMid > tripEnd;
-
-            // A concluded trip has nothing useful to show — same "don't show
-            // misleading weather" reasoning as the beyond-horizon case in wxRender,
-            // just checked earlier so we skip the network call entirely.
-            if (isPastTrip) return;
-
-            // Fetch the max free window (16 days) so we can show the TRIP dates
-            // when they fall within range — not just the next 7 days from today.
-            var url = "https://api.open-meteo.com/v1/forecast" +
-              "?latitude=" + mapCenter.lat + "&longitude=" + mapCenter.lng +
-              "&daily=temperature_2m_max,temperature_2m_min,weathercode" +
-              "&forecast_days=16&timezone=auto&temperature_unit=celsius";
-
-            // Validate response shape + a coarse temperature sanity band (−90..60 °C
-            // catches unit errors / garbage). Returns the `daily` object (trimmed —
-            // see below) or null.
-            function wxDayOk(d, k) {
-              var H = d.temperature_2m_max[k], L = d.temperature_2m_min[k], W = d.weathercode[k];
-              return typeof H === "number" && H >= -90 && H <= 60 &&
-                     typeof L === "number" && L >= -90 && L <= 60 &&
-                     typeof W === "number";
-            }
-            function wxValidate(data) {
-              if (!data || !data.daily) return null;
-              var d = data.daily;
-              if (!Array.isArray(d.time) || !d.time.length) return null;
-              var n = d.time.length;
-              if (!Array.isArray(d.temperature_2m_max) || d.temperature_2m_max.length !== n) return null;
-              if (!Array.isArray(d.temperature_2m_min) || d.temperature_2m_min.length !== n) return null;
-              if (!Array.isArray(d.weathercode)        || d.weathercode.length        !== n) return null;
-              // Open-Meteo can return incomplete (null) data for the last day or two
-              // of the 16-day window as its model refreshes near the edge. Trim those
-              // trailing incomplete days rather than rejecting the whole response —
-              // but a bad value anywhere else is still a hard failure (real anomaly).
-              var validLen = n;
-              while (validLen > 0 && !wxDayOk(d, validLen - 1)) validLen--;
-              if (!validLen) return null;
-              for (var k = 0; k < validLen; k++) {
-                if (!wxDayOk(d, k)) return null;
-              }
-              if (validLen === n) return d;
-              return {
-                time: d.time.slice(0, validLen),
-                temperature_2m_max: d.temperature_2m_max.slice(0, validLen),
-                temperature_2m_min: d.temperature_2m_min.slice(0, validLen),
-                weathercode: d.weathercode.slice(0, validLen),
-              };
-            }
-
-            // Render takes the validated `daily` object + the retrieval date, and
-            // recomputes the trip-window slice each call so a stale cached "today"
-            // never freezes the window. WX_FETCH_DATE is the retrieval day (the honest
-            // timestamp — Open-Meteo's daily call returns no forecast "issued at").
-            function wxRender(d, WX_FETCH_DATE) {
-                var DAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-                var now = new Date();
-
-                // Decide the window: trip-length-aware if we have trip dates,
-                // else the generic "next 7 days from today" fallback.
-                var HORIZON = d.time.length;
-                var startI, count, onTrip;
-
-                if (hasTripDates) {
-                  onTrip = true;
-                  if (todayMid >= tripStart && todayMid <= tripEnd) {
-                    // Ongoing trip: show the remaining trip days starting today, not
-                    // the original full length and not a pre-trip "next 7 days".
-                    var daysElapsed = Math.round((todayMid - tripStart) / 86400000);
-                    startI = 0;
-                    count  = Math.min(HORIZON, tripLengthDays - daysElapsed);
-                  } else {
-                    // Upcoming trip (a past trip already returned before the fetch).
-                    var daysUntilStart = Math.round((tripStart - todayMid) / 86400000);
-                    if (daysUntilStart >= HORIZON) return; // beyond the 16-day forecast — stay hidden
-                    // Locate the trip's start date in d.time[] by month/day match,
-                    // falling back to index arithmetic defensively.
-                    var wantMD = "-" + String(tripStart.getMonth() + 1).padStart(2, "0") +
-                                 "-" + String(tripStart.getDate()).padStart(2, "0");
-                    startI = -1;
-                    for (var j = 0; j < d.time.length; j++) {
-                      if (d.time[j].indexOf(wantMD) !== -1) { startI = j; break; }
-                    }
-                    if (startI === -1) startI = daysUntilStart;
-                    count = Math.min(HORIZON - startI, tripLengthDays);
-                  }
-                } else {
-                  // No usable trip date (no `days` section, or unparseable date
-                  // labels like "Day 1") — legitimate generic case: today's
-                  // weather, unrelated to any trip.
-                  startI = 0;
-                  count  = Math.min(HORIZON, 7);
-                  onTrip = false;
-                }
-                var endI = startI + count;
-
-                var html = '<div class="wx-strip" aria-label="Weather forecast">';
-                for (var i = startI; i < endI; i++) {
-                  var dt  = new Date(d.time[i] + "T12:00:00");
-                  var hi  = Math.round(d.temperature_2m_max[i]);
-                  var lo  = Math.round(d.temperature_2m_min[i]);
-                  var isToday = dt.getDate() === now.getDate() && dt.getMonth() === now.getMonth();
-                  var mo = dt.getMonth() + 1, da = dt.getDate();
-                  html += '<div class="wx-day' + (isToday ? " wx-today" : "") + '">' +
-                    '<span class="wx-name">' + (isToday ? "Today" : DAYS[dt.getDay()]) + '</span>' +
-                    '<span class="wx-date">' + mo + "/" + da + '</span>' +
-                    '<span class="wx-icon">' + wxIcon(d.weathercode[i]) + '</span>' +
-                    '<span class="wx-hi">' + hi + '°</span>' +
-                    '<span class="wx-lo">' + lo + '°</span>' +
-                    '</div>';
-                }
-                html += '</div>';
-                // Honest label: trip-date forecast vs. fallback next-days. (Trips
-                // beyond the 16-day forecast horizon hide entirely \u2014 see above \u2014
-                // rather than showing an irrelevant "next N days" guess.)
-                var label = onTrip ? "Trip-dates forecast" : "Next " + count + " days";
-                html += '<p class="wx-credit">Forecast \u00b7 ' + label +
-                  ' \u00b7 retrieved ' + WX_FETCH_DATE +
-                  ' \u00b7 <a href="https://open-meteo.com" target="_blank" rel="noopener" class="wx-src">Open-Meteo</a></p>';
-                var mount = document.getElementById("wxMount") || wxWrap;
-                mount.innerHTML = html;
-                wxWrap.removeAttribute("hidden");
-            }
-
-            // Cache keyed by coordinates; "today" measured in UTC (matches the rate
-            // service, avoiding a device-local off-by-one near midnight).
-            var WX_CACHE = "tg-wx-" + mapCenter.lat + "," + mapCenter.lng;
-            var wxToday  = new Date().toISOString().slice(0, 10);
-            try {
-              var wxCached = JSON.parse(sessionStorage.getItem(WX_CACHE) || "null");
-              if (wxCached && wxCached.daily && wxCached.fetchedAt === wxToday) {
-                wxRender(wxCached.daily, wxCached.fetchDate || wxToday);
-                return; // served from cache — no network call
-              }
-            } catch (_) {}
-
-            fetch(url)
-              .then(function (r) { return r.ok ? r.json() : Promise.reject("non-200 " + r.status); })
-              .then(function (data) {
-                var d = wxValidate(data);
-                if (!d) throw new Error("malformed or out-of-band weather data");
-                try { sessionStorage.setItem(WX_CACHE, JSON.stringify({ daily: d, fetchDate: wxToday, fetchedAt: wxToday })); } catch (_) {}
-                wxRender(d, wxToday);
-              })
-              .catch(function (err) {
-                // Graceful failure: leave #wxWrap hidden (block renders nothing).
-                console.warn("[tg-weather] " + String(err) + " — weather strip hidden");
-              });
-          })();
-
+          /* ── 11+12. LIVE DATA (exchange rate + weather strip) ───────────
+             Both moved to src/features/live-data/ — ~285 lines of fetch/validate/
+             cache/render whose sanity checks (the bands that stop a 10x-wrong rate
+             or a 200°C day reaching a traveler) had no tests while they lived here.
+             The silo owns its own DOM mounts (#liveRatePill/#liveRateFoot, #wxWrap)
+             and is inert without config, so a guide with no currency or no map
+             section simply never lights them up. */
+          initRate({ curCode: curCode, curFallbackRate: curFallbackRate });
+          initWeather({
+            mapCenter: mapCenter,
+            hasWeatherSection: hasWeatherSection,
+            firstDayDate: firstDayDate,
+            lastDayDate: lastDayDate,
+          });
           /* ── 13. MAP FULLSCREEN BUTTON ──────────────────────────────── */
           (function () {
             document.querySelectorAll(".osmmap").forEach(function (frame) {
