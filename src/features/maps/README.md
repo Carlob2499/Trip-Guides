@@ -29,16 +29,38 @@ project with billing enabled:
 The key ships to the browser in every built page. Restriction, not secrecy, is what stops
 someone else spending your quota. On the key's settings:
 
-- **Application restriction → HTTP referrers**, and add:
-  - `carlob2499.github.io/*` — the live site
-  - `localhost:4322/*` — local `astro preview`
-- **API restriction → restrict to the Maps JavaScript API.**
+- **Application restrictions → Websites**, and add:
+  - `https://carlob2499.github.io/*` — the live site
+  - `http://localhost:4322/*` — local `astro preview` (note `http`, not `https`)
+- **API restrictions → Restrict key → Maps JavaScript API.**
+
+The **protocol is mandatory**. Google's guidance: *"Always provide the whole referrer
+string, including the protocol scheme, hostname and optional port (e.g.
+`https://google.com`)."* A bare `carlob2499.github.io/*` is not a valid referrer and the
+key will reject requests.
+
+Don't be tempted to narrow it to the real path (`https://carlob2499.github.io/Trip-Guides/*`).
+Browsers strip the path from cross-origin requests for privacy, so the referrer Google
+actually receives is just the origin — a path-scoped rule would never match and every map
+would fail. Origin + `/*` is the correct scope, and Google's own docs warn about exactly
+this.
 
 ### 3. Create a Map ID — required, not optional
 
 `gmaps-render.js` renders `AdvancedMarkerElement` pins, and Google's docs are explicit:
 *"Advanced markers requires a map ID. If the map ID is missing, advanced markers cannot
-load."* Create one under **Map Management** and pick the **JavaScript** map type.
+load."*
+
+On the **Map Management** page → **Create map ID** → set **Map type: JavaScript**, which
+then makes you choose **Raster (the default) or Vector**. Either works — advanced markers
+are supported on both, and this code uses only basic `PinElement` styling, which raster
+handles fine. Vector adds smoother zoom plus tilt/rotation.
+
+If you later want the other rendering type, Google's docs don't document changing it on an
+existing map ID — but they do note a `renderingType` map option that "overrides any
+rendering type settings made by configuring a map ID", so it's changeable in code
+(`gmaps-render.js:60`, beside the existing `mapId`) without touching the console. Either
+choice here is recoverable; don't overthink it.
 
 The code falls back to `mapId: "DEMO_MAP_ID"` when none is set. That is Google's documented
 **testing** shortcut — it renders, so a missing Map ID fails quietly rather than loudly, but
