@@ -1,4 +1,4 @@
-// Build-time pin derivation for the interactive itinerary maps (Leaflet).
+// Build-time pin derivation for the interactive itinerary maps.
 // Pure + tested: given a guide's sections, returns the pins each `map` section
 // should render. Convention (mirrors "weather binds to the first map section"):
 // the FIRST map section is the guide's primary map and additionally receives

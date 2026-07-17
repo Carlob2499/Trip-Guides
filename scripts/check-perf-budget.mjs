@@ -7,7 +7,7 @@ import { join } from "node:path";
 
 const DIST = "dist/_astro";
 const BUDGET = {
-  js:  900 * 1024,  // all JS combined (Leaflet chunk included)
+  js:  900 * 1024,  // all JS combined (the lazy Firebase chunks dominate this)
   css: 300 * 1024,  // all CSS combined
   maxFile: 500 * 1024, // no single bundle larger than this
 };

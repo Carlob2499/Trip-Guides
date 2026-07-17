@@ -111,8 +111,8 @@ is their single home; this file names the principle without repeating detail.
 ## Design Doctrine
 
 - **Open, not crowded** — the site must feel spacious while carrying everything a
-  traveler needs. Merge before adding (the "Essentials" = Money+Health+Etiquette merge
-  is canonical; ≤10 groups per guide).
+  traveler needs. Merge before adding; the tab budget and its merge rules are the
+  `waypoint-guide-author` skill's (Content Standards, above).
 - **Surfacing beats sourcing** — if verified data takes >2 taps to reach when it's needed
   (emergencies, addresses, "what now"), build a surface for it (SOS sheet, driver card,
   Focus Today are precedents). Never invent data to fill a surface.

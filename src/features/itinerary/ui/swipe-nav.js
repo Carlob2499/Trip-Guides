@@ -27,8 +27,8 @@ import { tapHaptic } from "../../../scripts/util.js";
     return isNaN(v) ? -1 : v; // -1 on special panels (budget/vote) → no swipe
   }
 
-  // A touch that begins inside a horizontally scrollable region (or a Leaflet
-  // map, which owns its gestures) belongs to that region.
+  // A touch that begins inside a horizontally scrollable region (or an itinerary
+  // map, which owns its own pan/zoom gestures) belongs to that region.
   function ownsGesture(el) {
     while (el && el !== content) {
       if (el.hasAttribute && el.hasAttribute("data-itin-map")) return true;

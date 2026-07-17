@@ -1,10 +1,8 @@
 # Block Types — when to use each of the 14 section kinds
 
 Extracted from the schema comments in `src/content.config.ts` (the source of truth —
-every field you write must validate against it; when in doubt, read it). A guide is
-`{ kicker?, title, dek?, footer?, country, theme?, verified?, draft?, intro?, sections[] }`
-and every section carries `type`, `group` (the nav-tab category label), and usually
-`title`.
+every field you write must validate against it; when in doubt, read it). Every section
+carries `type`, `group` (the nav-tab category label), and usually `title`.
 
 **Top-of-guide label rules (dedup + information density):**
 - `kicker` must carry information the title does not — the established pattern
@@ -73,58 +71,50 @@ and `raids` accept optional `collapsible: true` (renders the card as a native
 | A ranked/tiered set of picks (S/A/B, skip-vs-do) | `tierlist` | chip rows per tier, `hot[]` highlights must-dos |
 | Raid-boss counter tables (Pokémon GO) | `raids` | typed per-boss collapsible cards with counter tables |
 
-## Per-type notes (fields beyond the obvious)
+## Per-type notes
 
-- **`panel`** — `{ group, title?, body?, checklist?[] }`. The workhorse for Plan-tab
-  reference cards ("When you land", "Booking checklist", "Local essentials"). **Standard
-  for any guide with a flight:** the Booking checklist (or a flight panel) must state the
-  **booked airline's baggage allowance** — carry-on + checked, per fare, since hybrid/
-  low-cost carriers (e.g. Air Premia) don't bundle bags the way legacy carriers do; flag
-  `⚠ confirm your fare` and link the carrier's current baggage + flight-specific notices.
-  For a redeye/early arrival, "When you land" should note where to shower/refresh airside.
-- **`prose`** — `{ group, title?, body? }`. If you're tempted to put `<table>`,
-  `<details>`, or layout `<br/>` in a body, stop: pick a typed section instead.
-- **`list`** — `{ group, title?, items[] }`. Items may contain inline allowlist HTML.
-- **`routes`** — `{ group, title?, steps[] }`. Steps are HTML strings; use
-  single-quoted `href='…'` attributes (repo JSON convention), name the specific
-  service (`<b>M2</b>`, bus `<b>707</b>`), give `≈` times/fares.
-- **`map`** — `{ center:{lat,lng}, span?, points?[] }`. Each point:
-  `{ name, lat, lng, place_id?, local_script_name? }`. `place_id` is
-  verified-or-flagged, never guessed — an unverified value is the literal string
-  `__VERIFICATION_REQUIRED__`. `local_script_name` carries the native-script name
-  for taxi/local display. Coords come from `scripts/lookup-place.mjs`, not memory.
-- **`weather`** — `{ group, title?, note? }` only. Needs a `map` section somewhere in
-  the guide to source coords; otherwise it stays hidden. Don't invent coords for it.
-- **`holidays`** — `{ group, title?, note?, year? }`. Country comes from the guide's
-  `country` via the ISO map; dates from the `days` section. `year` optional
-  (defaults to the derived trip year).
-- **`days`** — items `{ date, title, pace?, note?, body?, fit?, checklist?[],
-  constraints?[], energy }`. `date` is a label like `"Wed Jul 8"`; `pace` is a
-  free-text schedule narrative (NOT a strenuousness rating); `energy` is the enum
-  `packed | balanced | slow` (defaults to `balanced`) that drives the Low-Energy
-  toggle — only tag `packed` when the day genuinely is. `body` is HTML;
-  `constraints` are strings like "Closed Mondays".
-- **`sights`** — items `{ name, kicker?, body?, img?:{file, alt?}, map?:{lat,lng} }`.
-  `img.file` is an exact Wikimedia Commons `File:` page filename confirmed to exist
-  (use `scripts/search-commons.mjs`); if unsure, omit the image entirely.
-- **`budget`** — `{ intro?, currency?, days?, party?, items[] }`. `party` must be a
-  positive integer (the per-person view divides by it). Items:
-  `{ label, basis: "day"|"trip", est, low?, high?, category?, per?: "person"|"group",
-  note?, split_type?, payment_preference? }`. `est` is a number in the guide's
-  currency — never a string, never a sentinel.
-- **`habitats`** — `windows[]`: `{ day, time, name, types?[], raids?[], targets?[],
-  mega?, tip? }`. `targets` render highlighted (the must-dos); `tip` is a short
+**Field shapes live in `src/content.config.ts` — read it for the exact fields of
+any type you're writing.** These notes carry only what the schema can't tell you:
+conventions, render behavior, and the verification rules attached to a field.
+
+- **`panel`** — the workhorse for Plan-tab reference cards ("When you land",
+  "Booking checklist", "Local essentials"). **Standard for any guide with a flight:**
+  the Booking checklist (or a flight panel) must state the **booked airline's baggage
+  allowance** — carry-on + checked, per fare, since hybrid/low-cost carriers (e.g. Air
+  Premia) don't bundle bags the way legacy carriers do; flag `⚠ confirm your fare` and
+  link the carrier's current baggage + flight-specific notices. For a redeye/early
+  arrival, "When you land" should note where to shower/refresh airside.
+- **`prose`** — if you're tempted to put `<table>`, `<details>`, or layout `<br/>` in
+  a body, stop: pick a typed section instead.
+- **`list`** — items may contain inline allowlist HTML.
+- **`routes`** — steps are HTML strings; use single-quoted `href='…'` attributes
+  (repo JSON convention), name the specific service (`<b>M2</b>`, bus `<b>707</b>`),
+  give `≈` times/fares.
+- **`map`** — `place_id` is verified-or-flagged, never guessed: an unverified value is
+  the literal string `__VERIFICATION_REQUIRED__`. `local_script_name` carries the
+  native-script name for taxi/local display. Coords come from
+  `scripts/lookup-place.mjs`, not memory.
+- **`weather`** — needs a `map` section somewhere in the guide to source coords;
+  otherwise it stays hidden. Don't invent coords for it.
+- **`holidays`** — country comes from the guide's `country` via the ISO map; dates
+  from the `days` section. `year` defaults to the derived trip year.
+- **`days`** — `date` is a label like `"Wed Jul 8"`; `pace` is a free-text schedule
+  narrative (NOT a strenuousness rating); `energy` (`packed | balanced | slow`,
+  default `balanced`) drives the Low-Energy toggle — only tag `packed` when the day
+  genuinely is. `constraints` are strings like "Closed Mondays".
+- **`sights`** — `img.file` is an exact Wikimedia Commons `File:` page filename
+  confirmed to exist (use `scripts/search-commons.mjs`); if unsure, omit the image
+  entirely.
+- **`budget`** — `party` must be a positive integer (the per-person view divides by
+  it). `est` is a number in the guide's currency — never a string, never a sentinel.
+- **`habitats`** — `targets` render highlighted (the must-dos); `tip` is a short
   tactical footnote (weakness, pass budget); prefix a chip with `✨` for
   shiny-eligible.
-- **`infogrid`** — `cards[]`: `{ icon?, label, body? }`. One emoji/glyph icon, a
-  short heading, one clause of detail (inline `<b>`, `<a>` allowed in body).
-- **`tierlist`** — `tiers[]`: `{ tier, icon?, chips[], hot?[], body? }`. `hot` lists
-  chip texts to render highlighted; `✨` prefix marks shiny-eligible; `body` is a 1–2
-  line elaboration.
-- **`raids`** — `bosses[]`: `{ name, tier: "3-star"|"5-star"|"primal"|"shadow"|
-  "super-mega", typing[], shiny_odds, shiny_note?, trainers, note?, strategy,
-  counters[] (1–10 of { pokemon, fast, charged, typing }) }`. `strategy` allows
-  inline `<b>`, `<a>` only.
+- **`infogrid`** — one emoji/glyph icon, a short heading, one clause of detail
+  (inline `<b>`, `<a>` allowed in body).
+- **`tierlist`** — `hot` lists chip texts to render highlighted; `✨` prefix marks
+  shiny-eligible; `body` is a 1–2 line elaboration.
+- **`raids`** — `strategy` allows inline `<b>`, `<a>` only.
 
 ## Placement conventions
 

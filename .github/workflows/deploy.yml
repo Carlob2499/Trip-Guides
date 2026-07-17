@@ -30,9 +30,11 @@ jobs:
       # always proceeds with last-good data.
       - run: node scripts/fetch-holidays.mjs
       # Google Maps browser key (optional). When the repo secret exists, guides
-      # build with the Google Maps provider; when absent, Leaflet/OSM is used.
-      # The key is a PUBLIC browser key — restrict it by HTTP referrer + API
-      # in Google Cloud Console; the secret only keeps it out of the repo.
+      # build with the Google Maps provider; when absent, the keyless
+      # OpenStreetMap iframe embedded in each map section stands as the map
+      # (src/features/maps/ never boots). The key is a PUBLIC browser key —
+      # restrict it by HTTP referrer + API in Google Cloud Console; the secret
+      # only keeps it out of the repo.
       - run: npm run build
         env:
           PUBLIC_GMAPS_KEY: ${{ secrets.PUBLIC_GMAPS_KEY }}

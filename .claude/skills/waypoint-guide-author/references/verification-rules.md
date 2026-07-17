@@ -5,10 +5,10 @@ flagged one from an omitted one. The block-type catalog tells you *where* a
 fact goes; this file tells you *whether it may go there at all, and in what
 state*. When authoring or researching a guide, these rules are binding.
 
-**The one-line bar** (the autogeneration test, from CLAUDE.md): before writing
-any fact, ask — *"Could a generic model have produced this from training data
-alone, without research and without knowing this traveler?"* If yes, it fails.
-Verify it, personalize it, or cut it.
+**The one-line bar** ("The bar", from CLAUDE.md): before writing any fact,
+ask — *"Could a generic AI have written this from training data alone, without
+research and without knowing this traveler?"* If yes, it fails. Verify it,
+personalize it, or cut it.
 
 ---
 
@@ -67,9 +67,7 @@ fact is unverified — flag or omit it.
 **Adversarial check before you trust a fact:** spend one search trying to
 *disprove* what you just found ("X closed", "X moved", "X price 2026"), not
 only to confirm it. A first result that matches your expectation is not
-verification; it may be a second copy of the same error (the global
-confirmation-bias rule). Seek the primary source and read it critically,
-rather than stopping the moment something says the expected thing.
+verification — see `~/.claude/CLAUDE.md` rule #10 (confirmation bias).
 
 **Conflicting sources:** do not average or pick silently. Record the range and
 flag it (see the denmark guide's "Akershus interior price (≈150 NOK — conflicting
@@ -147,10 +145,10 @@ is the human graduation call, never yours.
 event rosters) should carry their own verified date where practical, since the
 guide-level date will drift past them.
 
-**On every edit** — a changed perishable fact gets its verification date
-updated *as written*, never bolted on later. And run the CLAUDE.md continuity
-sweep: one changed fact ripples into splits, counts, day plans, and other
-stamps — grep the whole guide, not just the edited section.
+**On every edit** — CLAUDE.md already binds you to date a changed fact on write
+and to run the continuity sweep ("Editing a Guide — Continuity Is Mandatory").
+What that means here: one changed fact ripples into splits, counts, day plans,
+and *other stamps* — grep the whole guide, not just the edited section.
 
 ---
 
@@ -174,8 +172,8 @@ smooth, confident, unverified paragraph is a failing one.
 
 ## 8. Self-check before declaring done
 
-1. **Autogeneration test** on the whole draft — anything a generic model could
-   have written unresearched is cut or verified.
+1. **The bar** applied to the whole draft — anything a generic AI could have
+   written unresearched is cut or verified.
 2. Every perishable fact has a source + date, an `≈`, a `⚠`, or is omitted —
    nothing perishable sits bare.
 3. Every venue answers the four questions.
