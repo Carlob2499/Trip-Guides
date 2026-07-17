@@ -9,6 +9,10 @@
    4. Jump-to-today chip: during the trip, one floating tap to today's card.
    5. Haptic ticks on check-off (quiet, guarded). */
 
+// Cross-feature, but through the silo's public surface (never a deep import) — the
+// converter needs the rate live-data already applied, since this module loads after it.
+import { getLastRate } from "../../live-data/index.js";
+
 (function () {
   var storeKey = document.body.getAttribute("data-storekey") || "guide";
   function buzz(ms) { try { navigator.vibrate && navigator.vibrate(ms); } catch (e) {} }
@@ -117,10 +121,15 @@
   });
 
   /* ── 3. Currency quick-converter on the rate pill ──────────────────────── */
-  var rate = null, code = null;
-  document.addEventListener("tg:rate", function (e) {
-    if (e.detail && e.detail.rate) { rate = e.detail.rate; code = e.detail.code; }
-  });
+  // Seed from the live-data silo BEFORE listening: this module is imported after
+  // guide-ui.js (a load-bearing order in GuideLayout), and on a warm rate cache the
+  // silo applies the rate synchronously during guide-ui's evaluation — so tg:rate has
+  // already fired by the time we get here and the converter read "Live rate not loaded"
+  // on every second page view of the day. The listener still handles a cold fetch
+  // resolving later; getLastRate() covers the event we were never around for.
+  var seeded = getLastRate();
+  var rate = seeded ? seeded.rate : null;
+  var code = seeded ? seeded.code : null;
   var pill = document.getElementById("liveRatePill");
   if (pill) {
     var pop = document.createElement("div");
@@ -141,6 +150,14 @@
         "<br><b>" + v.toLocaleString() + " " + code + "</b> ≈ $" + (v / rate).toLocaleString(undefined, { maximumFractionDigits: 2 });
     }
     inp.addEventListener("input", render);
+    // Registered here, not above, for two reasons: `render` is block-scoped to this `if`
+    // (ES modules are strict, so a call from outside would throw), and with no pill there
+    // is no converter to update. Re-rendering on arrival also fixes the case where a cold
+    // fetch resolves while the popover is already open on a typed amount — it used to sit
+    // on "Live rate not loaded" until the user typed again.
+    document.addEventListener("tg:rate", function (e) {
+      if (e.detail && e.detail.rate) { rate = e.detail.rate; code = e.detail.code; render(); }
+    });
     pill.style.cursor = "pointer";
     pill.setAttribute("role", "button");
     pill.setAttribute("tabindex", "0");

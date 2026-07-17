@@ -10,7 +10,7 @@
    Consumers import ONLY from here. Both take config and are inert without it, so a guide
    with no currency or no map section simply doesn't light them up. */
 
-export { initRate } from "./ui/rate.js";
+export { initRate, getLastRate } from "./ui/rate.js";
 export { initWeather } from "./ui/weather.js";
 
 // Re-exported for tests and for anything that needs to judge rate/forecast data without

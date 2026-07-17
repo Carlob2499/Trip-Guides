@@ -7,10 +7,35 @@
 
 import { fmtRate, isCacheFresh, parseRateResponse } from "../model/rate";
 
+/* Last rate applied, remembered for LATE SUBSCRIBERS.
+   `tg:rate` is a transient event, and guide-ui.js (which calls initRate) is imported
+   BEFORE field-tools (which listens) — that order is a load-bearing invariant in
+   GuideLayout, not an accident. On a cold cache the fetch resolves asynchronously, so the
+   listener is registered by the time it fires and everything works. On a WARM cache
+   applyLive runs synchronously during guide-ui's module evaluation, the event fires into
+   an empty room, and the currency converter sat there reading "Live rate not loaded" —
+   on every second page view of the day, which is the common case for a traveller.
+
+   An event is the wrong contract for state someone might need after the fact. It stays
+   (for updates), but the value is now also readable via getLastRate(), so a subscriber
+   that arrives late can catch up instead of waiting for an event that already happened. */
+var _lastRate = null;
+
+/** The most recent rate applied this page-load, or null if none has been. Lets a module
+    imported after initRate() seed itself instead of missing the event. */
+export function getLastRate() {
+  return _lastRate;
+}
+
 export function initRate(cfg) {
   var curCode = cfg && cfg.curCode;
   var curFallbackRate = cfg && cfg.curFallbackRate;
   if (!curCode || !curFallbackRate || !window.fetch) return;
+
+  function remember(detail) {
+    _lastRate = detail;
+    document.dispatchEvent(new CustomEvent("tg:rate", { detail: detail }));
+  }
 
   function applyLive(rate, date) {
     var pill = document.getElementById("liveRatePill");
@@ -23,7 +48,7 @@ export function initRate(cfg) {
     if (foot) {
       foot.textContent = fmtRate(rate) + " " + curCode + " = $1 · Live · ECB · " + date;
     }
-    document.dispatchEvent(new CustomEvent("tg:rate", { detail: { rate: rate, date: date, code: curCode } }));
+    remember({ rate: rate, date: date, code: curCode });
   }
 
   function applyFallback(reason) {
@@ -47,7 +72,7 @@ export function initRate(cfg) {
     if (foot) {
       foot.textContent = fmtRate(c.rate) + " " + curCode + " = $1 · Rate locked " + c.date + " · offline";
     }
-    document.dispatchEvent(new CustomEvent("tg:rate", { detail: { rate: c.rate, date: c.date, code: curCode, locked: true } }));
+    remember({ rate: c.rate, date: c.date, code: curCode, locked: true });
   }
 
   // localStorage (not sessionStorage) so a previously-fetched rate survives across
