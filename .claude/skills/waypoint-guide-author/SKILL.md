@@ -35,15 +35,23 @@ helper scripts, and the done gate.
    `docs/NEW_GUIDE_INTAKE.md` explains intake → spec.
 3. **`references/block-types.md`** — when choosing or creating a section type.
 4. **The `denmark/` and `korea/` guide dirs** — the gold standard to match or beat.
-5. **`docs/TRAVELER_PATTERNS.md`** — how this group *actually* travels, learned from
+5. **`docs/TRAVELER_PATTERNS.md`** — how these travelers *actually* travel, learned from
    past trips (pace, heat, commute clustering, fixed-event anchors, food preferences,
    whether the group forks). Plus `learnings/<slug>.md` for any prior trip with the
    same travelers. **Consult these during intake and research** so a new guide starts
    personalized instead of generic — they are the answer to "could a generic AI have
    written this without knowing this traveler?".
+   **Establish WHICH PARTY the new guide is for, first, and use only that party's section
+   plus Cross-party.** The file is split by party (A = the Korea three, walkers, gaming
+   anchors; B = the Denmark five, family, walking is the binding constraint). They are
+   different travelers and their patterns contradict each other on pace and transit.
+   Applying the wrong party's patterns is not a small error — it is how Denmark's itinerary
+   ended up rated "marginally useful" by the people carrying it. If intake doesn't say who's
+   going, **ask** — don't infer from the last guide.
    Respect the provenance tags: plan around **[stated]** / **[observed]** /
    **[reported]** patterns; treat **[hypothesis]** as a question to test, never a fact.
-   An empty section there means no evidence exists — do not invent one.
+   An empty section there means no evidence exists — do not invent one. Every pattern
+   currently rests on one data point per trip; weight accordingly.
 
 ## Modes
 - **New guide** — intake first, then scaffold (`node scripts/scaffold-guide.mjs

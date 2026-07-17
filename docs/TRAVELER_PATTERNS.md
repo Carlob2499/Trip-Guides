@@ -1,8 +1,17 @@
-# Traveler patterns — how this group actually travels
+# Traveler patterns — how these travelers actually travel
 
 Cross-trip synthesis consulted by the `waypoint-guide-author` skill during intake and
 research, so new guides start personalized instead of generic. Written by the maker, never
 auto-generated.
+
+> **There is more than one travel party. Check which one you're planning for before you use
+> anything below.** This file used to describe a single group; Denmark's post-mortem proved
+> that wrong. **Party A** (Korea) is three mid-20s friends who walk everywhere and travel on
+> esports/gaming anchors. **Party B** (Denmark) is a five-person family trip where walking
+> was the binding constraint. They overlap only in the maker. A pattern proven on one party
+> is **not** evidence about the other — applying Korea's pace assumptions to a Party B trip
+> is exactly how Denmark's itinerary ended up "marginally useful". Only the
+> **Cross-party** section is safe to apply blind.
 
 **Read the provenance tags. They are the point.**
 
@@ -18,7 +27,10 @@ Honest property.
 
 ---
 
-## The group
+## Party A — the Korea three
+
+*Everything from here to the "Party B" heading is Party A only. Evidence base: the Korea
+2026 trip, whose post-mortem rests on **one** survey submission — real, but thin.*
 
 - 3 travelers, mid-20s, close friends. Korea 2026 was their first trip **together** in that
   country. **[stated]**
@@ -111,18 +123,101 @@ Honest property.
   → *Design implication:* state the T-money/cash requirement plainly in the money panel
   rather than assuming contactless-everywhere.
 
-## Accommodation
+## Accommodation (Party A)
 
-- Airbnb **AC** in Korean summer is not a nice-to-have — its absence was called out as
-  genuinely disruptive ("annoying for the price... can be extremely contentious"). **[reported]**
-  → *Design implication:* for a summer Korea booking checklist, verify AC explicitly as a
-  hard filter, not an assumed amenity.
+- Airbnb **AC** in Korean summer is not a nice-to-have — its absence was reported as
+  genuinely disruptive, and framed as poor value at the price paid. **[reported]**
+  → See **Cross-party** below: this one replicated on Denmark, so it is no longer a
+  Party-A-only observation.
+
+---
+
+# Party B — the Denmark five
+
+*Evidence base: **one recollection, narrated once, a month after the trip**. No Trip
+Feedback survey was ever submitted for Denmark. Thinner than Party A's. The patterns are
+real; treat any specific as soft. See `learnings/denmark.md`.*
+
+## The party
+
+- 5 travelers on a family trip (a GO Fest pair + "the mums", converging for dinners).
+  Not the Party A group; they overlap only in the maker. **[observed]** from the guide's own
+  two-crews-two-cities day structure.
+- **Walking is the binding constraint, and it is the single most important fact about this
+  party.** Subway routes were usable on paper but demanded far too much walking per leg to
+  be feasible; taxis were affordable, so Uber became the default mode. **[reported]**
+  → *Design implication:* plan for the **slowest walker, not the average one**. Do not
+  price a transit route as viable on fare and journey time alone — cost out the walk at each
+  end. For this party a cheap taxi isn't a luxury upgrade, it's the thing that makes the day
+  happen at all.
+- **Step-free beats short.** Stairs at the train overpasses near the base cut off ground
+  that a map said was perfectly walkable, and this was called out as a major hindrance to
+  finding navigable areas. **[reported]**
+  → *Design implication:* for a Party B guide, a route with steps is not a short route.
+  Check the base's step-free egress before endorsing the neighbourhood, and say so in the
+  guide rather than leaving the traveler to discover it.
+- **A cross-border day trip needs a better reason than proximity.** Malmö was cut short:
+  little the group wanted to do once there, and walking distances beyond what the group could manage. **[reported]**
+- **A cruise port stop has almost no slack.** Oslo after the guided tour amounted to a pier
+  walk, a Starbucks mug and a bakery before reboarding. **[reported]**
+  → *Design implication:* plan a port day **backwards from the reboarding time**, and treat
+  the guided tour as consuming the day rather than seeding it. (Compare Party A's Busan
+  day-trip lesson — same shape, different cause: plan backwards from the fixed departure.)
+- **A single-park event day worked, and absorbed most of the trip.** Concentrating GO Fest
+  into one green space removed all inter-cluster commuting. **[reported]**
+  → ⚠ *Unreconciled:* the account names **King's Garden (Kongens Have)**; the plan and the
+  official venue were **Fælledparken**, and Kongens Have appears nowhere in the guide. Do
+  not harden the park name into a pattern until it's confirmed.
+- Prices ran high across the board and the guide under-prepared them for it. **[reported]**
+  → *Design implication:* Nordic budget figures need to be sharp and honest, not indicative.
+- Convenience stores were far from the base, so **IKEA and the nearby mall became the
+  default meals** — cheap, reliable, close. **[reported]**
+
+## What Party B asked the product for, by name
+
+- A **daily weather forecast** — the weather kept turning over and was hard to plan around. **[reported]**
+- Korea's **scrolling day-by-day itinerary** — named explicitly as what would have made the
+  days runnable. **[reported]**
+- The verdict on the itinerary was **"marginally useful"**, and that it should have been at
+  Korea's standard. **[reported]**
+  → *Design implication:* this is a **product** finding, not a content one. Both features
+  exist and both shipped on Korea. Denmark predates them and never got them. A guide is not
+  finished when it ships — it's finished when it's at the current standard.
+
+---
+
+# Cross-party patterns
+
+*The only section safe to apply to any trip. A pattern earns a place here by replicating on
+**both** parties — not by seeming general.*
+
+- **AC is a hard booking filter, not an amenity.** Korea: the Airbnb's missing AC was
+  reported as genuinely disruptive and poor value. Denmark: the hotel had none and the
+  windows stayed open every night. **2 for 2, two different parties, two different
+  countries, both summer.** **[reported]**
+  → *Design implication:* verify AC explicitly on any summer booking, in the booking
+  checklist, as a pass/fail. This is the most strongly evidenced pattern in this file.
+- **A cheap, direct taxi beats a clever transit route — every time it has been tested.**
+  Korea: the Busan subway plan was dropped for a taxi the group found cheap and direct.
+  Denmark: the subway was abandoned for Uber. The *reasons* differ (Party A optimises for
+  directness, Party B for not walking), but the decision has never once gone the other way.
+  **[reported]**
+  → *Design implication:* don't reflexively recommend transit for cost savings when the taxi
+  fare is small in absolute terms. Give the taxi option first and the transit option as the
+  alternative, not the reverse.
+- **Trips are built around fixed anchor events**, and the anchors hold even when everything
+  else bends. Korea: GO Fest + MSI. Denmark: GO Fest + the Oslo cruise. **[stated]**
 
 ---
 
 ## Trips covered
 
-| Trip | Dates | Status |
-|---|---|---|
-| Denmark (Copenhagen) | — | live; no post-mortem written |
-| South Korea (Seoul · Daejeon · Busan) | Jul 8–15, 2026 | live; **reflected** (1 submission, 2026-07-16) — see `learnings/korea.md` |
+| Trip | Party | Dates | Status |
+|---|---|---|---|
+| Denmark (Copenhagen · Malmö · Oslo) | B — family of 5 | Jun 8–16, 2026 | live; **reflected** (1 recollection, 2026-07-17) — see `learnings/denmark.md` |
+| South Korea (Seoul · Daejeon · Busan) | A — 3 friends | Jul 8–15, 2026 | live; **reflected** (1 submission, 2026-07-16) — see `learnings/korea.md` |
+
+**Honest note on the evidence base:** every pattern in this file derives from **two trips,
+one data point each** — one survey submission and one month-old recollection. That is enough
+to plan from and nowhere near enough to generalise from. Weight them as leads that were
+right once, not as laws.
