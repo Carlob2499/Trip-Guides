@@ -9,6 +9,7 @@
    ships its own `fullscreenControl: true`, so a stale OSM button pointing at a removed,
    detached iframe would otherwise sit there doing nothing on click). */
 
+var mounts = [];
 document.querySelectorAll(".osmmap").forEach(function (frame) {
   var wrap = frame.parentElement;
   if (!wrap || !document.fullscreenEnabled) return;
@@ -25,7 +26,18 @@ document.querySelectorAll(".osmmap").forEach(function (frame) {
     if (frame.requestFullscreen) frame.requestFullscreen();
     else if (frame.webkitRequestFullscreen) frame.webkitRequestFullscreen();
   });
-  document.addEventListener("fullscreenchange", function () {
-    btn.textContent = document.fullscreenElement ? "✕" : "⤢";
-  });
+  mounts.push({ frame: frame, btn: btn });
 });
+
+// One shared handler for all maps, not one per frame: each button reflects only
+// ITS OWN frame's state. With a per-frame listener, fullscreening one map on a
+// multi-map guide flipped every button to ✕ (they all read the single
+// document.fullscreenElement). Now only the frame that's actually fullscreen shows ✕.
+if (mounts.length) {
+  document.addEventListener("fullscreenchange", function () {
+    var fsEl = document.fullscreenElement;
+    mounts.forEach(function (m) {
+      m.btn.textContent = fsEl === m.frame ? "✕" : "⤢";
+    });
+  });
+}

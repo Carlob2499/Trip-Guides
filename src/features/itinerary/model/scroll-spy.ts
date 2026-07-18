@@ -27,11 +27,17 @@ export function nearestToCenter(centers: number[], viewportCenter: number): numb
  * (top - threshold <= 0), scanning from the top and stopping at the first card
  * still below the fold. Card tops are in document order (monotonic), so this is
  * the deepest fully-scrolled-past day. Nothing crossed yet → 0.
+ *
+ * Takes `topAt(i)` as a lazy accessor rather than a precomputed array
+ * specifically so the early break avoids measuring cards past the fold — the UI
+ * hands in `i => dayEls[i].getBoundingClientRect().top`, and each rect read
+ * forces layout, so on a long itinerary reading only down to the fold (instead
+ * of every day) matters in the scroll hot path.
  */
-export function lastAboveFold(tops: number[], threshold: number): number {
+export function lastAboveFold(count: number, topAt: (i: number) => number, threshold: number): number {
   let idx = 0;
-  for (let i = 0; i < tops.length; i++) {
-    if (tops[i] - threshold <= 0) idx = i;
+  for (let i = 0; i < count; i++) {
+    if (topAt(i) - threshold <= 0) idx = i;
     else break;
   }
   return idx;

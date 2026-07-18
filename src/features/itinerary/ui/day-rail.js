@@ -73,8 +73,12 @@ import { lastAboveFold, nearestToCenter } from "../model/scroll-spy";
     setActive(nearestToCenter(centers, center));
   }
   function spyVertical() {
-    var tops = dayEls.map(function (el) { return el.getBoundingClientRect().top; });
-    setActive(lastAboveFold(tops, chromeH + 40));
+    // Lazy accessor so lastAboveFold's early break stops measuring cards past the
+    // fold — each getBoundingClientRect forces layout, so on a long day this reads
+    // only down to the fold instead of every day, every scroll frame.
+    setActive(lastAboveFold(dayEls.length, function (i) {
+      return dayEls[i].getBoundingClientRect().top;
+    }, chromeH + 40));
   }
 
   var ticking = false;
