@@ -1,21 +1,23 @@
 import { getCollection } from "astro:content";
-import { accentFor } from "../../lib/themes";
+// Same accent resolution as the guide page + hub (uniform across surfaces):
+// explicit theme > extracted cover palette > country accent.
+import { accentForGuide } from "../../lib/palettes";
 import sharp from "sharp";
 
 export async function getStaticPaths() {
   const guides = await getCollection("guides");
   return guides.map((g) => ({
     params: { slug: g.id },
-    props: { data: g.data },
+    props: { slug: g.id, data: g.data },
   }));
 }
 
-export async function GET({ props }: { props: { data: any } }) {
-  const { data } = props;
+export async function GET({ props }: { props: { slug: string; data: any } }) {
+  const { slug, data } = props;
   const title   = data.title  || "Guide";
   const country = data.country || "";
   const dek     = data.dek    || "";
-  const accent  = accentFor(country);
+  const accent  = accentForGuide(slug, data.theme, country);
 
   function xmlEscape(s: string) {
     return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");

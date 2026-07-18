@@ -57,7 +57,7 @@ Motion is only half the brief. The other half: deliver the right thing with **le
 | **V3c · Story-mode itinerary** | The days rail becomes navigation: a full-screen, swipeable day-by-day deck (one day per view) — the big less-scroll / retention payoff | shipped |
 | **V3b · Scroll-driven CSS** | Reveals on native `animation-timeline: view()` (off-main-thread); `reveal.js` is the fallback (bails when supported). Journey progress = the existing reading bar | shipped |
 | **V3d · Info-density & alignment** | Lead-first scannability: the card lead (already split from the fold) reads a touch stronger so the eye lands on the answer first. The density foundation (lead+fold, `--read` measure, mono data alignment) already existed — this is the scannability polish | shipped |
-| **V4 · Per-country identity** | Palette auto-extracted from the cover (node-vibrant), one signature motion set, motion-doctrine doc | later |
+| **V4 · Per-country identity** | Palette auto-extracted from each guide's own cover (`npm run extract-palette`, sharp — no new deps), contrast-gated ≥3:1 both grounds, committed to `src/data/palettes/`; ONE precedence (theme > extracted > country) on every surface via `src/lib/palettes.ts` (guide + hub + OG — fixing the latent theme-not-reaching-hub/OG gap); sky/water-suppression rule so the subject's built colour carries place. Motion doctrine: `docs/MOTION.md` | shipped |
 
 ## Guardrails (inherited, non-negotiable)
 

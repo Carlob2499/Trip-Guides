@@ -7,7 +7,8 @@ import Learnings from "../components/Learnings.astro";
 import Reminders from "../components/Reminders.astro";
 import { bucket } from "../lib/buckets";
 import { emergencyFor } from "../data/countries.mjs";
-import { accentFor, darken, currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
+import { darken, currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
+import { paletteFor, accentForGuide } from "../lib/palettes";
 import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
 import { collectWaypoints, collectDayEvents, buildSummary } from "../features/exports/index";
 // Self-hosted variable fonts (bundled, base-path-safe, offline-correct) — no CDN.
@@ -69,18 +70,18 @@ for (const g of order) {
 }
 const thumbSrc = (f: string) =>
   `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(f)}?width=320`;
-// A guide may override the country-derived palette with an explicit `theme`
-// (primary/secondary/accent, contrast-gated at build time). When absent — every
-// guide today — `accent` stays exactly the country colour, so no guide regresses.
-// `theme.primary` drives the existing `--accent` (all accent-coloured UI); the
-// three `--theme-*` vars are exposed for opt-in use (e.g. focus rings) and simply
-// equal the country accent when no theme is set, so `var(--theme-primary)` is
-// always safe.
-const accent  = guide.theme?.primary ?? accentFor(guide.country);
+// Accent precedence (src/lib/palettes.ts — the SAME resolution the hub + OG use):
+// explicit `theme` (zod-gated) → palette extracted from this guide's own cover photo
+// (`npm run extract-palette`, gated at generation) → country accent. The V4 identity
+// engine: a guide's colours come from its own imagery, and a guide with neither an
+// explicit theme nor an extracted palette keeps the country colour, unchanged.
+const guideSlug = Astro.url.pathname.split("/").filter(Boolean).pop() ?? "";
+const extracted = paletteFor(guideSlug);
+const accent  = accentForGuide(guideSlug, guide.theme, guide.country);
 const accent2 = darken(accent, 0.14);
-const themePrimary   = guide.theme?.primary   ?? accent;
-const themeSecondary = guide.theme?.secondary ?? accent;
-const themeAccent    = guide.theme?.accent    ?? accent;
+const themePrimary   = guide.theme?.primary   ?? extracted?.primary   ?? accent;
+const themeSecondary = guide.theme?.secondary ?? extracted?.secondary ?? accent;
+const themeAccent    = guide.theme?.accent    ?? extracted?.accent    ?? accent;
 const storeKey = (guide.title || "guide").replace(/\W+/g, "").toLowerCase();
 const navLabel = (s: any, g: string) => s.title || s.name || g;
 const localCur = currencyFor(guide.country);
@@ -97,7 +98,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 // Build it from the base + the last path segment so it works under the subpath —
 // the old code stripped "^/guides/" which never matched "/Trip-Guides/guides/...",
 // producing a double-slash, wrong-path URL.
-const ogSlug  = Astro.url.pathname.split("/").filter(Boolean).pop() ?? "";
+const ogSlug  = guideSlug;
 const ogImage = `${Astro.url.origin}${base}/og/${ogSlug}.png`;
 
 // Compute at-a-glance stats for the masthead stat bar

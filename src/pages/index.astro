@@ -1,7 +1,9 @@
 ---
 import { getCollection } from "astro:content";
 import PwaHead from "../components/PwaHead.astro";
-import { accentFor } from "../lib/themes";
+// Same accent resolution as the guide pages + OG (uniform across surfaces):
+// explicit theme > extracted cover palette > country accent (src/lib/palettes.ts).
+import { accentForGuide } from "../lib/palettes";
 import { continentFor, CONTINENT_ORDER } from "../data/countries.mjs";
 import { flattenSections } from "../features/exports/index";
 // Self-hosted variable fonts (bundled, base-path-safe, offline-correct) — no CDN.
@@ -162,7 +164,7 @@ const continents = CONTINENT_ORDER.filter(c => gridContinents.has(c));
         <a
           class="hub-hero"
           href={`${base}/guides/${hero.g.id}/`}
-          style={`--accent:${accentFor(hero.g.data.country)}`}
+          style={`--accent:${accentForGuide(hero.g.id, hero.g.data.theme, hero.g.data.country)}`}
           data-hero-start={heroIsPast ? undefined : hero.ex.startISO}
           data-hero-lat={heroIsPast ? undefined : hero.ex.mapCenter?.lat}
           data-hero-lng={heroIsPast ? undefined : hero.ex.mapCenter?.lng}
@@ -204,7 +206,7 @@ const continents = CONTINENT_ORDER.filter(c => gridContinents.has(c));
           <a
             class:list={["hubcard", { "hubcard-featured": g.id === heroId }]}
             href={`${base}/guides/${g.id}/`}
-            style={`--accent:${accentFor(g.data.country)}`}
+            style={`--accent:${accentForGuide(g.id, g.data.theme, g.data.country)}`}
             data-country={g.data.country}
             data-continent={continentFor(g.data.country)}
             data-start={ex.startISO}
