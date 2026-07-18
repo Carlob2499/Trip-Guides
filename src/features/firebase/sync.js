@@ -8,9 +8,20 @@
    presence can reuse the same primitive. */
 
 import { ready, hasFirebase } from "./client.js";
+import { addEntry, entriesForRoom, removeEntry } from "./model/outbox";
 
 // Unambiguous alphabet (no 0/o/1/l/i) — codes get read aloud and typed on phones.
 const CODE_ALPHABET = "abcdefghjkmnpqrstuvwxyz23456789";
+
+// Durable write outbox (see model/outbox.ts). localStorage-backed so an add made offline
+// survives a tab close — RTDB's own queue is memory-only.
+const OUTBOX_KEY = "tg-outbox";
+function readOutbox() {
+  try { return JSON.parse(localStorage.getItem(OUTBOX_KEY) || "{}"); } catch (_) { return {}; }
+}
+function writeOutbox(o) {
+  try { localStorage.setItem(OUTBOX_KEY, JSON.stringify(o)); } catch (_) {}
+}
 
 // Best-effort error beacon. A leaf feature that throws used to log ONLY to the traveler's own
 // phone console — invisible to the maker. This appends a bounded {guide,feature,message,ua,at}
@@ -70,6 +81,15 @@ export async function joinTrip(code) {
   const { ref, onValue, push, update, remove, set, serverTimestamp } = mod;
   const base = "trips/" + clean;
 
+  // Replay any adds a PRIOR session queued but never got the server to ack (the tab closed
+  // before RTDB's memory-only queue flushed). Idempotent — each entry's key is stable, so a
+  // re-set writes the same record even if RTDB also delivered it; on ack we clear the entry.
+  entriesForRoom(readOutbox(), base).forEach(function (e) {
+    set(ref(db, e.path), e.value)
+      .then(function () { writeOutbox(removeEntry(readOutbox(), e.path)); })
+      .catch(function () {});
+  });
+
   function collection(name) {
     const path = base + "/" + name;
     return {
@@ -80,7 +100,14 @@ export async function joinTrip(code) {
       // RTDB flushes the queue on reconnect. Use addAsync when the caller must KNOW it landed.
       add(value) {
         const r = push(ref(db, path));
-        set(r, Object.assign({ createdBy: uid, createdAt: serverTimestamp() }, value));
+        const fullPath = path + "/" + r.key;
+        // Persist to the outbox BEFORE the network call so an offline add survives a tab close.
+        // The durable copy uses a client createdAt (Date.now) rather than the serverTimestamp
+        // sentinel — a replayed offline write can't resolve a server clock, and it's a fallback.
+        writeOutbox(addEntry(readOutbox(), fullPath, Object.assign({ createdBy: uid, createdAt: Date.now() }, value)));
+        set(r, Object.assign({ createdBy: uid, createdAt: serverTimestamp() }, value))
+          .then(function () { writeOutbox(removeEntry(readOutbox(), fullPath)); })
+          .catch(function () {});
         return r.key;
       },
       // addAsync(value) → Promise<id> that settles only when the SERVER acknowledges the write.
