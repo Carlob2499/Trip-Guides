@@ -12,7 +12,7 @@
 
 import { settle } from "../model/settle";
 import { normalizeExpense, normalizeMember } from "../model/records";
-import { hasFirebase, joinTrip, normalizeCode } from "../../firebase/index.js";
+import { hasFirebase, joinTrip, roomId as guideRoomId } from "../../firebase/index.js";
 import { esc } from "../../../scripts/util.js";
 
 (function () {
@@ -176,11 +176,16 @@ import { esc } from "../../../scripts/util.js";
     if (!list) return;
     if (!state.members.length) { list.innerHTML = "<p class='split-empty'>Add the people splitting costs.</p>"; return; }
     list.innerHTML = state.members.map(function (m, i) {
+      // esc() the record id too, not just display strings: ids are Firebase keys, and a
+      // crafted key (via a direct REST write) could otherwise break out of the single-quoted
+      // attribute. Belt to the rules' key-charset braces. getAttribute decodes on read-back,
+      // so the id round-trips unchanged into ops.
+      var mid = esc(m.id);
       return "<div class='sm-row'>" +
         "<span class='sm-idx'>" + (i + 1) + "</span>" +
-        "<input class='split-in sm-name' type='text' placeholder='Name' value='" + esc(m.name) + "' data-mid='" + m.id + "' data-field='name' />" +
-        "<input class='split-in sm-pay' type='text' placeholder='Venmo / Zelle / Kakao Pay…' value='" + esc(m.payment || "") + "' data-mid='" + m.id + "' data-field='payment' />" +
-        "<button class='split-del' type='button' data-del-m='" + m.id + "' aria-label='Remove " + esc(m.name || "person") + "'>×</button>" +
+        "<input class='split-in sm-name' type='text' placeholder='Name' value='" + esc(m.name) + "' data-mid='" + mid + "' data-field='name' />" +
+        "<input class='split-in sm-pay' type='text' placeholder='Venmo / Zelle / Kakao Pay…' value='" + esc(m.payment || "") + "' data-mid='" + mid + "' data-field='payment' />" +
+        "<button class='split-del' type='button' data-del-m='" + mid + "' aria-label='Remove " + esc(m.name || "person") + "'>×</button>" +
         "</div>";
     }).join("");
     list.querySelectorAll("[data-field]").forEach(function (inp) {
@@ -195,7 +200,7 @@ import { esc } from "../../../scripts/util.js";
   function memberOptions(selId) {
     var chosen = memberPos(selId) !== -1 ? selId : (state.members[0] && state.members[0].id);
     return state.members.map(function (m, i) {
-      return "<option value='" + m.id + "'" + (m.id === chosen ? " selected" : "") + ">" + esc(m.name || ("Person " + (i + 1))) + "</option>";
+      return "<option value='" + esc(m.id) + "'" + (m.id === chosen ? " selected" : "") + ">" + esc(m.name || ("Person " + (i + 1))) + "</option>";
     }).join("");
   }
   function renderNewRowOptions() {
@@ -213,6 +218,7 @@ import { esc } from "../../../scripts/util.js";
     if (!state.expenses.length) { list.innerHTML = "<p class='split-empty'>No expenses yet — fill in the row above and tap + Add expense.</p>"; return; }
 
     list.innerHTML = state.expenses.map(function (exp) {
+      var eid = esc(exp.id); // escaped Firebase key for every attribute below (see members note)
       var shareIds = sharersOf(exp);
       // Only offer the who-shared-this row when there's actually a subset to pick — with
       // one person it's noise.
@@ -220,8 +226,8 @@ import { esc } from "../../../scripts/util.js";
         ? "<div class='se-parts'><span class='se-parts-lbl'>Split between</span>" +
             state.members.map(function (m, mi) {
               var on = shareIds.indexOf(m.id) !== -1;
-              return "<button type='button' class='se-part" + (on ? " se-part-on" : "") + "' data-eid='" + exp.id +
-                "' data-pid='" + m.id + "' aria-pressed='" + (on ? "true" : "false") + "'>" +
+              return "<button type='button' class='se-part" + (on ? " se-part-on" : "") + "' data-eid='" + eid +
+                "' data-pid='" + esc(m.id) + "' aria-pressed='" + (on ? "true" : "false") + "'>" +
                 esc(m.name || ("P" + (mi + 1))) + "</button>";
             }).join("") +
             (shareIds.length < state.members.length
@@ -243,16 +249,16 @@ import { esc } from "../../../scripts/util.js";
           shareIds.map(function (id) {
             var mi = memberPos(id), m = state.members[mi];
             return "<label class='se-cl'><span class='se-cl-name'>" + esc(m.name || ("P" + (mi + 1))) + "</span>" +
-              "<input class='split-in se-ca' type='number' min='0' step='0.01' inputmode='decimal' value='" + (parseFloat(caMap[id]) || 0).toFixed(2) + "' data-eid='" + exp.id + "' data-mid='" + id + "' /></label>";
+              "<input class='split-in se-ca' type='number' min='0' step='0.01' inputmode='decimal' value='" + (parseFloat(caMap[id]) || 0).toFixed(2) + "' data-eid='" + eid + "' data-mid='" + esc(id) + "' /></label>";
           }).join("") +
           (diff > 0.015 ? "<span class='se-warn'>Shares sum " + fmtUSD(sumCA) + " — total is " + fmtUSD(total) + "</span>" : "") + "</div>";
       }
-      return "<div class='se-row' data-eid='" + exp.id + "'><div class='se-main'>" +
-        "<select class='split-in se-payer' data-eid='" + exp.id + "'>" + memberOptions(exp.paidBy) + "</select>" +
-        "<input class='split-in se-desc' type='text' placeholder='What for?' value='" + esc(exp.desc || "") + "' data-eid='" + exp.id + "' data-field='desc' />" +
+      return "<div class='se-row' data-eid='" + eid + "'><div class='se-main'>" +
+        "<select class='split-in se-payer' data-eid='" + eid + "'>" + memberOptions(exp.paidBy) + "</select>" +
+        "<input class='split-in se-desc' type='text' placeholder='What for?' value='" + esc(exp.desc || "") + "' data-eid='" + eid + "' data-field='desc' />" +
         "<div class='se-amt-wrap'><span class='se-cur'>$</span>" +
-        "<input class='split-in se-amt' type='number' min='0' step='0.01' inputmode='decimal' placeholder='0.00' value='" + (exp.amount != null ? String(exp.amount) : "") + "' data-eid='" + exp.id + "' data-field='amount' /></div>" +
-        "<button class='split-del' type='button' data-del-e='" + exp.id + "' aria-label='Remove expense'>×</button>" +
+        "<input class='split-in se-amt' type='number' min='0' step='0.01' inputmode='decimal' placeholder='0.00' value='" + (exp.amount != null ? String(exp.amount) : "") + "' data-eid='" + eid + "' data-field='amount' /></div>" +
+        "<button class='split-del' type='button' data-del-e='" + eid + "' aria-label='Remove expense'>×</button>" +
         "</div>" + partBlock + customBlock + "</div>";
     }).join("");
 
@@ -372,16 +378,20 @@ import { esc } from "../../../scripts/util.js";
     el.setAttribute("data-state", stateName);
     var t = document.getElementById("sLiveText");
     if (t && text) t.textContent = text;
+    // The room is world-readable only when sync is actually live — surface the privacy
+    // notice then, and only then (local-only mode exposes nothing off-device).
+    var priv = document.getElementById("sPrivacy");
+    if (priv) priv.hidden = stateName !== "live";
   }
 
-  // Join the one shared room for this guide. No code, no UI — the guide's storeKey IS the
+  // Join the one shared room for this guide. No code, no UI — the guide's salted roomId IS the
   // room, so every device viewing the same guide edits the same budget automatically. The
   // room is the single source of truth (no local seed), so devices never inject stale copies.
   function autoConnect() {
-    var roomId = normalizeCode(wrap.dataset.sk || "guide");
-    if (!roomId) { load(); render(); return; }
+    var code = guideRoomId(); // salted room id from #tgConfig (legacy guides fall back to slug)
+    if (!code) { load(); render(); return; }
     setLive("connecting", "Connecting to your group’s live budget…");
-    joinTrip(roomId).then(function (r) {
+    joinTrip(code).then(function (r) {
       bindRoom(r); // room.onChange populates state + renders; flips the indicator to Live
     }).catch(function () {
       // Couldn't reach Firebase — fall back to this device's local copy so the tool still works.

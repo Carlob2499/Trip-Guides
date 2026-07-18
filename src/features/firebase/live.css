@@ -36,3 +36,18 @@
   0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--green) 55%, transparent); }
   50%      { box-shadow: 0 0 0 5px transparent; }
 }
+
+/* Room-visibility notice — shown only in the live/shared state (trip-split.js toggles [hidden]).
+   The room is world-readable by design, so this is the honest heads-up before anyone types a
+   payment handle. Quiet by default; a subtle amber edge marks it as a caution, not chrome. */
+.split-privacy {
+  margin: -.4rem 0 1rem;
+  padding: .5rem .7rem;
+  border: 1px solid color-mix(in srgb, #d98a00 40%, var(--rule));
+  border-left-width: 3px;
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, #d98a00 7%, transparent);
+  font-size: .8rem;
+  line-height: 1.5;
+  color: var(--muted);
+}

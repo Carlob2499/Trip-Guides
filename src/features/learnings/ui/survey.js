@@ -8,7 +8,7 @@
    but never rendered anywhere in the app (the private, candid channel). */
 
 import { esc, reducedMotion } from "../../../scripts/util.js";
-import { hasFirebase, joinTrip, normalizeCode } from "../../firebase/index.js";
+import { hasFirebase, joinTrip, roomId } from "../../firebase/index.js";
 import { buildFeedbackRecord } from "../model/feedback";
 
 export function initFeedback() {
@@ -195,7 +195,7 @@ export function initFeedback() {
     // Wait for the SERVER to acknowledge before telling anyone it landed. RTDB queues writes
     // while offline and that promise never settles, so race a timeout and say "queued" instead
     // of claiming success we can't prove.
-    joinTrip(normalizeCode(storeKey))
+    joinTrip(roomId())
       .then(function (room) {
         var ack = room.collection("feedback").addAsync(rec);
         var timeout = new Promise(function (resolve) { setTimeout(function () { resolve("queued"); }, 8000); });

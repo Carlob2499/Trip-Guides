@@ -289,6 +289,12 @@ const guides = defineCollection({
     // each one still spends a slot of the reader's attention, which is why they're capped
     // separately in the layout rather than being free.
     tabBudget: z.number().int().positive().optional(),
+    // Salted, unguessable id for this guide's shared Trip-Split / feedback / reminders room
+    // (16–40 lowercase alphanumerics, crypto-random, committed once by scripts/gen-room-id.mjs).
+    // Absent = legacy: the room falls back to the short guide slug, which the RTDB rules freeze
+    // read-only (writes require code length >= 16). New guides are born with one so their room is
+    // both writable and unguessable. Separate from `storeKey` (localStorage namespace) by design.
+    roomId: z.string().regex(/^[a-z0-9]{16,40}$/).optional(),
     intro: z.string().optional(),
     // ADDITIVE + OPTIONAL — the curated post-mortem: what REALLY happened vs the plan.
     // Hand-authored by the maker from the raw trip feedback (never auto-generated, never

@@ -14,6 +14,7 @@
 // currency, IANA tz, ISO code, capital coordinate).
 
 import { readFile, writeFile, mkdir, readdir } from "node:fs/promises";
+import { genRoomId } from "./gen-room-id.mjs";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -143,6 +144,10 @@ export function buildGuideObject(answers = {}) {
     // date is knowable and exactly what "new facts get a verification date on write,
     // never bolted on later" means. Korea/Denmark predate the gate and stay loose.
     provenance: "strict",
+    // Salted, unguessable id for this guide's shared Trip-Split / feedback / reminders room.
+    // Born with one so the room is writable (rules gate writes on length >= 16) AND unguessable,
+    // unlike the pre-hardening guides whose slug-keyed rooms are now frozen read-only.
+    roomId: genRoomId(),
     footer: "",
     sections,
   };

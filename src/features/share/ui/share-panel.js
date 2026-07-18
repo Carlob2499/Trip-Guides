@@ -35,7 +35,6 @@ export function initSharePanel(lockScroll, unlockScroll) {
   if (shareBackdrop && shareBackdrop.parentElement !== document.body) document.body.appendChild(shareBackdrop);
 
   var pageTitle = document.title;
-  var qrLibLoaded = false;
 
   // The URL to share must point at the SECTION the reader is on — tabs switch without
   // changing the URL, so this is built fresh from the active tab every time it's
@@ -47,20 +46,29 @@ export function initSharePanel(lockScroll, unlockScroll) {
     return buildPageUrl(base, t);
   }
 
-  function loadQRLib(cb) {
-    if (qrLibLoaded || window.QRCode) { qrLibLoaded = true; cb(); return; }
-    var s = document.createElement("script");
-    s.src = "https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js";
-    s.onload = function () { qrLibLoaded = true; cb(); };
-    s.onerror = function () {
-      // Offline or CDN failure — show a helpful message instead of an empty box
-      if (shareQrEl) {
-        shareQrEl.style.cssText = "display:flex;align-items:center;justify-content:center;height:80px;font-size:12px;color:var(--muted);text-align:center;padding:0 8px";
-        shareQrEl.textContent = "QR unavailable offline — use Copy link";
-      }
-      cb();
-    };
-    document.head.appendChild(s);
+  function qrUnavailable() {
+    if (!shareQrEl) return;
+    shareQrEl.style.cssText = "display:flex;align-items:center;justify-content:center;height:80px;font-size:12px;color:var(--muted);text-align:center;padding:0 8px";
+    shareQrEl.textContent = "QR unavailable — use Copy link";
+  }
+
+  // Render the QR for `url` into #shareQr. The generator is VENDORED (npm `qrcode`, lazy-
+  // import()ed into its own chunk) — no runtime CDN, so it works offline too, unlike the old
+  // jsdelivr <script>. Draws to a canvas with the current theme's ink/paper.
+  function renderQR(url) {
+    if (!shareQrEl) return;
+    shareQrEl.style.cssText = "";
+    shareQrEl.innerHTML = ""; // regenerate — the section may have changed
+    var canvas = document.createElement("canvas");
+    shareQrEl.appendChild(canvas);
+    var dark = document.documentElement.getAttribute("data-theme") === "dark";
+    import("qrcode").then(function (mod) {
+      var QR = mod && (mod.default || mod);
+      QR.toCanvas(canvas, url, {
+        width: 148, margin: 1, errorCorrectionLevel: "M",
+        color: { dark: dark ? "#e5e9e0" : "#1a2028", light: dark ? "#27211a" : "#ffffff" },
+      }, function (err) { if (err) qrUnavailable(); });
+    }).catch(qrUnavailable);
   }
 
   function openShare() {
@@ -75,21 +83,7 @@ export function initSharePanel(lockScroll, unlockScroll) {
     if (shareWALink) shareWALink.href = buildWhatsAppShareUrl(pageUrl);
     if (shareEmailLink) shareEmailLink.href = buildMailtoUrl(pageTitle, pageUrl);
     if (shareCopyBtn) shareCopyBtn.dataset.url = pageUrl;
-    if (shareQrEl) {
-      shareQrEl.innerHTML = ""; // regenerate — the section may have changed
-      loadQRLib(function () {
-        if (!window.QRCode) return;
-        var dark = document.documentElement.getAttribute("data-theme") === "dark";
-        try {
-          new window.QRCode(shareQrEl, {
-            text: pageUrl, width: 148, height: 148,
-            colorDark: dark ? "#e5e9e0" : "#1a2028",
-            colorLight: dark ? "#27211a" : "#ffffff",
-            correctLevel: window.QRCode.CorrectLevel.M
-          });
-        } catch (e) { /* QR lib unavailable */ }
-      });
-    }
+    renderQR(pageUrl);
     shareBtn && shareBtn.setAttribute("aria-expanded", "true");
   }
 

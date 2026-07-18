@@ -5,23 +5,54 @@
     "trips": {
       "$code": {
         ".read": "auth != null",
-        ".write": "auth != null",
-        ".validate": "$code.length >= 6 && $code.length <= 40",
+        ".write": "auth != null && $code.length >= 16 && $code.length <= 40",
+        ".validate": "$code.length >= 16 && $code.length <= 40",
         "members": {
           "$mid": {
+            ".validate": "$mid.matches(/^[A-Za-z0-9_-]{1,40}$/) && newData.hasChildren(['name'])",
             "name": { ".validate": "newData.isString() && newData.val().length <= 60" },
             "payment": { ".validate": "newData.isString() && newData.val().length <= 80" },
-            "$other": { ".validate": true }
+            "order": { ".validate": "newData.isNumber()" },
+            "createdBy": { ".validate": "newData.isString() && newData.val().length <= 64" },
+            "createdAt": { ".validate": "newData.isNumber()" },
+            "$other": { ".validate": false }
           }
         },
         "expenses": {
           "$eid": {
+            ".validate": "$eid.matches(/^[A-Za-z0-9_-]{1,40}$/)",
+            "paidBy": { ".validate": "newData.isString() && newData.val().length <= 64" },
             "desc": { ".validate": "newData.isString() && newData.val().length <= 120" },
             "amount": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000000" },
-            "$other": { ".validate": true }
+            "order": { ".validate": "newData.isNumber()" },
+            "createdBy": { ".validate": "newData.isString() && newData.val().length <= 64" },
+            "createdAt": { ".validate": "newData.isNumber()" },
+            "split": {
+              "$pid": { ".validate": "$pid.matches(/^[A-Za-z0-9_-]{1,40}$/) && newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000000" }
+            },
+            "participants": {
+              "$i": { ".validate": "newData.isString() && newData.val().length <= 40" }
+            },
+            "$other": { ".validate": false }
           }
         },
-        "$other": { ".validate": true }
+        "meta": {
+          "customSplit": { ".validate": "newData.isBoolean()" },
+          "$other": { ".validate": false }
+        },
+        "feedback": {
+          "$fid": {
+            ".validate": "$fid.matches(/^[A-Za-z0-9_-]{1,40}$/) && newData.hasChild('createdBy')",
+            "$field": { ".validate": "!newData.isString() || newData.val().length <= 4000" }
+          }
+        },
+        "reminders": {
+          "$rid": {
+            ".validate": "$rid.matches(/^[A-Za-z0-9_-]{1,40}$/) && newData.hasChild('createdBy')",
+            "$field": { ".validate": "!newData.isString() || newData.val().length <= 2000" }
+          }
+        },
+        "$other": { ".validate": false }
       }
     }
   }

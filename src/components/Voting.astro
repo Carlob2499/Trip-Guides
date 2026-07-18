@@ -170,22 +170,9 @@ import { esc } from "../scripts/util.js";
   var qrBtn = document.getElementById("voQrBtn");
   var qrBox = document.getElementById("voQrBox");
   var qrEl  = document.getElementById("voQrEl");
-  var qrLibState = "unloaded";
-  function loadQrLib(cb) {
-    if (qrLibState === "ready" || window.QRCode) { qrLibState = "ready"; cb(); return; }
-    if (qrLibState === "failed") { cb(); return; }
-    if (qrLibState === "loading") {
-      document.addEventListener("tg:qrlib-settled", function once() {
-        document.removeEventListener("tg:qrlib-settled", once); cb();
-      });
-      return;
-    }
-    qrLibState = "loading";
-    var s = document.createElement("script");
-    s.src = "https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js";
-    s.onload = function () { qrLibState = "ready"; document.dispatchEvent(new Event("tg:qrlib-settled")); cb(); };
-    s.onerror = function () { qrLibState = "failed"; document.dispatchEvent(new Event("tg:qrlib-settled")); cb(); };
-    document.head.appendChild(s);
+  function qrUnavailable() {
+    qrEl.textContent = "QR unavailable — use Copy vote link instead";
+    qrEl.style.cssText = "font-size:12px;color:var(--muted);text-align:center;padding:.5rem";
   }
   if (qrBtn && qrBox && qrEl) {
     qrBtn.addEventListener("click", function () {
@@ -193,23 +180,20 @@ import { esc } from "../scripts/util.js";
       qrBox.hidden = !opening;
       qrBtn.setAttribute("aria-expanded", String(opening));
       if (!opening) return;
-      loadQrLib(function () {
-        qrEl.innerHTML = "";
-        if (!window.QRCode) {
-          qrEl.textContent = "QR unavailable offline — use Copy vote link instead";
-          qrEl.style.cssText = "font-size:12px;color:var(--muted);text-align:center;padding:.5rem";
-          return;
-        }
-        var dark = document.documentElement.getAttribute("data-theme") === "dark";
-        try {
-          new window.QRCode(qrEl, {
-            text: voteLinkUrl(), width: 148, height: 148,
-            colorDark:  dark ? "#e5e9e0" : "#1a2028",
-            colorLight: dark ? "#27211a" : "#ffffff",
-            correctLevel: window.QRCode.CorrectLevel.M
-          });
-        } catch (e) { /* QR lib unavailable */ }
-      });
+      // Vendored generator (npm `qrcode`, lazy import — shared chunk with the share panel).
+      // No runtime CDN, so it renders offline too.
+      qrEl.style.cssText = "";
+      qrEl.innerHTML = "";
+      var canvas = document.createElement("canvas");
+      qrEl.appendChild(canvas);
+      var dark = document.documentElement.getAttribute("data-theme") === "dark";
+      import("qrcode").then(function (mod) {
+        var QR = mod && (mod.default || mod);
+        QR.toCanvas(canvas, voteLinkUrl(), {
+          width: 148, margin: 1, errorCorrectionLevel: "M",
+          color: { dark: dark ? "#e5e9e0" : "#1a2028", light: dark ? "#27211a" : "#ffffff" },
+        }, function (err) { if (err) qrUnavailable(); });
+      }).catch(qrUnavailable);
     });
   }
 

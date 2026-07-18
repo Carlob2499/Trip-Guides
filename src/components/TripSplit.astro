@@ -23,6 +23,14 @@ const { storeKey } = Astro.props;
     <span class="split-live-text" id="sLiveText">Connecting to your group’s live budget…</span>
   </div>
 
+  <!-- Room-visibility notice: this room is world-readable by design (zero-setup shared link),
+       so anyone who has the guide link can read the names + payment handles added here. Shown
+       only once sync is actually LIVE (local-only mode exposes nothing) — revealed by
+       trip-split.js's setLive("live"). -->
+  <p class="split-privacy" id="sPrivacy" hidden>
+    Anyone with this guide’s link can see the names and payment handles you add here — don’t add anything you wouldn’t share with the group.
+  </p>
+
   <!-- People -->
   <div class="split-card">
     <div class="sc-head">

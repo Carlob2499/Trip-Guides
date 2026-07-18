@@ -5,7 +5,7 @@
    earlier offline session — is ADOPTED into the shared room on connect, not stranded in a
    localStorage key that would never be read again. */
 
-import { hasFirebase, joinTrip, normalizeCode } from "../firebase/index.js";
+import { hasFirebase, joinTrip, roomId } from "../firebase/index.js";
 
 export function createGateway(storeKey) {
   var LS_KEY = "tg-remind-" + (storeKey || "guide");
@@ -32,7 +32,7 @@ export function createGateway(storeKey) {
         emit();
         return Promise.resolve({ live: false });
       }
-      return joinTrip(normalizeCode(storeKey)).then(function (r) {
+      return joinTrip(roomId()).then(function (r) {
         room = r;
         var col = room.collection("reminders");
         // Adopt pre-connect / offline-session items into the room BEFORE subscribing, so

@@ -5,7 +5,7 @@
    tab). The curated post-mortem (P3) renders into #learnCurated when the guide data carries it. */
 
 import { esc } from "../../../scripts/util.js";
-import { hasFirebase, joinTrip, normalizeCode } from "../../firebase/index.js";
+import { hasFirebase, joinTrip, roomId } from "../../firebase/index.js";
 import { aggregateVisited } from "../model/feedback";
 
 /* Per-day Plan ⇄ Actual toggle (P3). Server-rendered by DaysBlock on ONLY the days the
@@ -90,7 +90,7 @@ export function initLearningsTab() {
   // Live objective layer — only when Firebase is configured. With no config the curated
   // layer above still stands on its own.
   if (hasFirebase()) {
-    joinTrip(normalizeCode(storeKey)).then(function (room) {
+    joinTrip(roomId()).then(function (room) {
       room.collection("feedback").onChange(function (map) {
         var records = map ? Object.keys(map).map(function (k) { return map[k]; }) : [];
         if (records.length && !dismissed) reveal(true);
