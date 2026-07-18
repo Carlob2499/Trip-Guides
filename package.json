@@ -10,6 +10,7 @@
     "test": "vitest run",
     "test:visual": "playwright test",
     "typecheck": "astro check",
+    "aggregate-telemetry": "tsx scripts/aggregate-telemetry.ts",
     "create-guide": "tsx scripts/generate-guide.ts",
     "lookup-place": "node scripts/lookup-place.mjs",
     "search-commons": "node scripts/search-commons.mjs",

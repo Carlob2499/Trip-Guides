@@ -4,7 +4,7 @@
    joinTrip(code) and bind the returned room's collection()/doc() to your state. */
 
 export { hasFirebase } from "./client.js";
-export { joinTrip, generateTripCode, normalizeCode, reportError } from "./sync.js";
+export { joinTrip, generateTripCode, normalizeCode, reportError, bumpCounter } from "./sync.js";
 
 /* The room id for THIS guide's shared sync (Trip Split, feedback, reminders). Single source
    of truth: the salted `roomId` baked into #tgConfig by GuideLayout, falling back to the guide

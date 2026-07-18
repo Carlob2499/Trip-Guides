@@ -1,5 +1,24 @@
 # Adversarial Review & Transformation Roadmap — 17 Jul 2026
 
+## Progress log (updated 18 Jul 2026)
+
+- **R0 / P0 security — SHIPPED** (code): hardened RTDB rules, id-escaping + esc tests,
+  salted room ids (`gen-room-id.mjs` + scaffold), room-visibility notice, QR vendored
+  (share + voting; zero runtime CDNs). ⚠ **Manual step pending: publish `rules.json` to the
+  Firebase console** (steps + simulator cases handed off in chat).
+- **P1 correctness — PARTIAL**: #7 tablist ARIA + moderate a11y gate ✅ · #8 auto-versioned
+  sw cache ✅ · #11 error beacon ✅ · #9 typecheck gate 🔧 tooling added, ~49 errors (33 in
+  Voting.astro) deferred to its own session · #10 Trip Split offline queue ⏸ deferred (own
+  session, by decision) · #12 locale audit ⏭ skipped (low value; `tz-offset` must stay fixed).
+- **R1 telemetry — SHIPPED** (code): `src/features/telemetry/` silo (counts anonymous tab
+  opens), `telemetry/` rules node, footer disclosure, `aggregate-telemetry` weekly workflow →
+  `docs/telemetry/summary.{json,md}`, guide-author skill wired to read it. Populates once the
+  rules are published (`.read: true` on telemetry lets the keyless job read it).
+- **Next**: publish rules → verify telemetry lands → then R2 (generation pipeline) or the
+  deferred #9/#10, your call.
+
+---
+
 Three-lens adversarial review of Waypoint (CTO / end-users / efficiency exec),
 a prioritized measurable fix list with model assignments, and the roadmap to the
 twelve transformation goals. Every specific claim below marked **[verified]** was

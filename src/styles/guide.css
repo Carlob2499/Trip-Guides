@@ -493,6 +493,7 @@ details.card.is-collapsible>.block-body{padding:1.1rem 1.4rem 1.25rem}
 
 /* === OFFLINE NOTE ============================================================ */
 .offline-note{display:inline-block;margin-top:.4rem;font-size:.76rem;color:var(--muted)} /* no opacity — see .hol-credit */
+.foot-telemetry{display:inline-block;margin-top:.3rem;font-size:.72rem;color:var(--muted)}
 
 /* === RAID COUNTER TABLES & COLLAPSIBLE DETAILS =============================== */
 /* Used in GO Fest prose sections — <details>/<summary> for collapsible boss charts */

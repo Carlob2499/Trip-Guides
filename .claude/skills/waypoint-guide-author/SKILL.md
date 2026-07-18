@@ -77,6 +77,12 @@ Raise it only when the guide has genuinely earned the tab (Korea's 11 exist beca
 anchor events and a solo fork demand them), and prefer merging two thin groups first. Note
 the reader also sees 4 tool tabs on top of whatever you declare.
 
+**Cite evidence, not just doctrine.** `docs/telemetry/summary.md` (auto-generated weekly from
+anonymous tab-open counts, PII-free) ranks which tabs travelers actually opened on past guides.
+Consult it when deciding a new guide's groups and their order: a tab nobody opened is a merge
+candidate; a consistently top-ranked one earns prominence. Absent or thin data (a new deployment,
+a just-published guide) means no signal yet — fall back to the ranking rules above, don't invent one.
+
 ## Research workflow
 - Climb the source ladder with web search/fetch — reach a **T0 primary source**
   for every specific fact; **try to disprove it** before trusting it (details in

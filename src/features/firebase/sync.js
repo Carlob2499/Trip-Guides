@@ -36,6 +36,19 @@ export function reportError(detail) {
   } catch (e) { /* beacon must never surface its own failure */ }
 }
 
+// Best-effort atomic counter bump for anonymous telemetry (server-side increment, so two
+// devices opening the same tab never clobber each other). Same posture as the beacon:
+// never throws, no-op without config. `path` must already be a validated telemetry path.
+export function bumpCounter(path, by) {
+  if (!hasFirebase() || !path) return;
+  try {
+    ready().then(function (ctx) {
+      const { db, mod } = ctx;
+      mod.set(mod.ref(db, path), mod.increment(by || 1)).catch(function () {});
+    }).catch(function () {});
+  } catch (e) { /* telemetry is never allowed to break the page */ }
+}
+
 // A 10-char crypto-random room key — unguessable, so the code itself is the lock.
 export function generateTripCode() {
   const rnd = new Uint32Array(10);

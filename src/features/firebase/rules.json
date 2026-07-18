@@ -67,6 +67,20 @@
         "at": { ".validate": "newData.isNumber()" },
         "$other": { ".validate": false }
       }
+    },
+    "telemetry": {
+      ".read": true,
+      ".write": "auth != null",
+      "$guide": {
+        ".validate": "$guide.matches(/^[a-z0-9_-]{1,60}$/)",
+        "tabs": {
+          "$name": { ".validate": "$name.matches(/^[a-z0-9_-]{1,40}$/) && newData.isNumber() && newData.val() >= 0" }
+        },
+        "tools": {
+          "$name": { ".validate": "$name.matches(/^[a-z0-9_-]{1,40}$/) && newData.isNumber() && newData.val() >= 0" }
+        },
+        "$other": { ".validate": false }
+      }
     }
   }
 }
