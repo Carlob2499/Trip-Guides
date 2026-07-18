@@ -54,10 +54,12 @@ helper scripts, and the done gate.
    currently rests on one data point per trip; weight accordingly.
 
 ## Modes
-- **New guide** — intake first, then scaffold (`node scripts/scaffold-guide.mjs
-  --country "..."`, or the "New guide" issue form which scaffolds automatically) —
-  the scaffold pre-wires the map/weather/holidays live sections and an empty backbone,
-  every fact still unverified. Then research: fill it, running the self-correction loop
+- **New guide** — intake first (establish the **party** and the **anchor event** before
+  anything — see Read-first #5), then scaffold (`node scripts/scaffold-guide.mjs
+  --country "..." --dates "YYYY-MM-DD to YYYY-MM-DD"`, or the "New guide" issue form which
+  scaffolds automatically) — the scaffold pre-wires the map/weather/holidays live sections and
+  an empty backbone, every fact still unverified. Then research it via the **two-pass procedure**
+  below (Pass A canonical → Pass B local/authentic → reconcile), and run the self-correction loop
   (`npm run readiness -- --slug <slug>` + `npm run build` → fix → repeat until PASS).
 - **Research / fill a draft** — the main mode. Depth on the intake's top 2–3
   priorities; light touch elsewhere. If told to target one section, do only it.
@@ -85,10 +87,57 @@ Consult it when deciding a new guide's groups and their order: a tab nobody open
 candidate; a consistently top-ranked one earns prominence. Absent or thin data (a new deployment,
 a just-published guide) means no signal yet — fall back to the ranking rules above, don't invent one.
 
-## Research workflow
-- Climb the source ladder with web search/fetch — reach a **T0 primary source**
-  for every specific fact; **try to disprove it** before trusting it (details in
-  `verification-rules.md` §3).
+## Research workflow — TWO passes, then reconcile
+
+A guide is **generated twice, from two independent angles, then reconciled into one** — not
+written once and merely error-corrected afterward. The second generation is what *corroborates*
+the first; without it, a shallow or biased single pass ships unchallenged (the readiness loop
+only fixes detectable errors — it can't tell you a well-formed guide is thin or generic). Both
+passes obey the same fact discipline (ledger, legal states, provenance) further down; they
+differ only in **what they go looking for**.
+
+### Pass A — canonical & verified
+Primary/official sources first. The **anchor event — verify its date + venue against a T0 source
+before anything else** — then the must-dos, entry/visa, transit, hours, prices: the backbone.
+This is the classic research pass. Climb the source ladder with web search/fetch to a **T0
+primary source** for every specific fact, and **try to disprove it** before trusting it
+(`verification-rules.md` §3).
+
+### Pass B — local, authentic, crowd-aware
+Researched **independently from the intake** — do NOT produce it by editing Pass A, or you lose
+the second angle that makes reconciliation mean anything. Come at the destination from the
+resident / blog / forum / reddit side and ask *different* questions: When is each marquee sight
+actually empty — the off-peak hour, the side entrance, the day the tour buses skip? Where is the
+obvious pick a tourist trap, and what do locals do instead? What's the non-obvious neighborhood,
+the authentic version of the experience the guidebooks flatten? **Pass B's finds are T2 leads —
+each must be verified against a primary source before it enters the guide.** Authenticity never
+smuggles in an unverified fact; it changes *what* you research, not the bar it clears.
+
+### Reconcile → ONE guide, with a ledger
+Merge the two passes item by item into the single guide, and record the merge in the
+**`## Research reconciliation`** table of the intake doc (`guides-intake/<slug>.md`):
+- **AGREE** (both passes land on it) → high confidence; include.
+- **A-only** → is it a trap Pass B routed around? Add a crowd + best-time note, or swap to the
+  authentic version B found.
+- **B-only** → verify against a T0 source, *then* include.
+- **CONFLICT** (hours differ, "best X" differs) → resolve to the truth; record which source won
+  and why.
+
+The ledger is the durable proof the itinerary was corroborated, not single-sourced — it sits
+beside the plan like the Amendments log. When reconciliation forces a re-plan (an anchor moved, a
+neighborhood beats the intended one), also append it to the intake's **`## Amendments`** section.
+
+### Authenticity & crowd-awareness — woven, not a new tab
+Every marquee sight / food recommendation carries a **crowd reality + best-time (off-peak) note**,
+and where the obvious pick is a tourist trap, a **novel local alternative**. Write these into the
+existing `sights` / `days` bodies — no new section type, no tab-budget cost. This is the antidote
+to "reads AI-generated": a guide that knows *when* the famous canal is a wall of selfie sticks and
+where locals actually go is one a generic model couldn't have written. The **Travel style** intake
+field sets how hard Pass B leans here (off-the-beaten-path → aggressive; bucket-list → the must-see
+stays, but with the timing that makes it bearable). Judged by rubric row **#12 (authenticity &
+crowd-awareness)** plus #9 (party fit) and the bar test — not a hard auto-gate.
+
+### Fact discipline — applies to BOTH passes
 - Keep a **verification ledger while researching** — one row per perishable
   fact, captured as you go, not reconstructed after:
 
@@ -127,7 +176,7 @@ a just-published guide) means no signal yet — fall back to the ranking rules a
 
 ## Done gate — all of it, before calling anything finished
 
-**The bar is `docs/GUIDE_RUBRIC.md`** — the 12-dimension standard every guide is judged against
+**The bar is `docs/GUIDE_RUBRIC.md`** — the 13-dimension standard every guide is judged against
 (P0 blocks graduation; P0+P1 = Korea-tier). `readiness` + `build` auto-enforce the P0 mechanical
 half; the P1 rows (venue completeness, priority depth, party fit, honest gaps) are your judgment
 via the §8 self-check below. A `readiness` PASS means "no detectable errors," **not** "good."

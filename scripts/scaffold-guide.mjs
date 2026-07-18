@@ -163,6 +163,7 @@ export function buildIntakeMd(answers = {}) {
 > Operations". Keep this file next to the guide so future updates know the priorities.
 
 ## 1. The Traveler(s)
+- **Who is this for / party:** ${answers.party || ""}  *(→ pick the TRAVELER_PATTERNS party A/B/new before researching; do NOT infer from the last guide)*
 - Number of travelers: ${answers.travelers || ""}
 - Group makeup / ages / mobility / dietary (from Comments): ${answers.comments || ""}
 - First time or returning:
@@ -173,7 +174,7 @@ export function buildIntakeMd(answers = {}) {
 - Exact dates (start–end): ${[answers.start, answers.end].filter(Boolean).join(" – ")}
 - Cities: ${answers.cities || ""}
 - Number of nights / cities:
-- Fixed anchors (the non-negotiables):
+- **Anchor event (the non-negotiable the trip is built around):** ${answers.anchor || ""}  *(VERIFY this first, against a T0 source — dates + venue — before any other research)*
 - Pace preference: ${answers.pace || "packed / balanced / slow"}
 
 ## 3. Priorities — RANK them
@@ -182,6 +183,7 @@ Top 3, in order:
 2. ${prio[1] || ""}
 3. ${prio[2] || ""}
 - Niche interest: ${answers.niche || ""}
+- **Travel style:** ${answers.travelStyle || "bucket-list must-sees / off-the-beaten-path / balanced"}  *(→ drives Pass B's aggressiveness on crowd-avoidance + novel picks)*
 
 ## 4. Budget Reality
 - Per-day target (from form): ${answers.budget || ""}
@@ -204,6 +206,22 @@ Top 3, in order:
 - The 2–3 priorities driving depth:
 - Hard filters applied to every entry:
 - Verification focus (most perishable / most important to get right):
+
+## Research reconciliation (fill during the dual-pass — see the guide-author skill)
+> Pass A = canonical/verified (official, anchors, logistics). Pass B = local/authentic/crowd-aware
+> (resident + blog knowledge, off-peak timing, novel alternatives). Record what each pass found and
+> how conflicts resolved — this is the corroboration trail behind the guide.
+
+| Item | Pass A (canonical) | Pass B (local/authentic) | Reconciled → guide | Note (conflict / crowd / novel) |
+|------|--------------------|--------------------------|--------------------|---------------------------------|
+|      |                    |                          |                    |                                 |
+
+## Amendments (append-only — record every research-forced re-plan)
+> When research changes the plan (an anchor moved, a neighborhood beats the intended one, a day
+> collapsed), log it here with the reason. The intake above stays the ORIGINAL intent; this is the
+> diff. (Korea/Denmark were "corrected three times by running it" — that history now has a home.)
+
+- (none yet)
 `;
 }
 
@@ -247,12 +265,17 @@ async function main() {
     console.error("Usage: node scripts/scaffold-guide.mjs --country <name> [--cities ..] [--start YYYY-MM-DD --end YYYY-MM-DD] [--travelers N] [--pace ..] [--priorities a,b,c] [--niche ..] [--budget ..] [--comments ..] [--lat ..] [--lng ..] [--slug ..]");
     process.exit(1);
   }
+  // Accept EITHER --start/--end OR the issue form's --dates "YYYY-MM-DD to YYYY-MM-DD",
+  // so the CLI and the New-guide issue path take the same date format.
+  let [start, end] = [a.start, a.end];
+  if (a.dates && !start) [start, end] = a.dates.split(/\s+to\s+/i).map((s) => s.trim());
   const answers = {
     country: a.country, title: a.title, cities: a.cities,
-    slug: a.slug, start: a.start, end: a.end,
+    slug: a.slug, start, end,
     travelers: a.travelers, pace: a.pace, niche: a.niche, budget: a.budget, comments: a.comments,
+    anchor: a.anchor, party: a.party, travelStyle: a["travel-style"],
     priorities: a.priorities ? a.priorities.split(",").map((s) => s.trim()) : [],
-    dayLabels: dayLabelsFromRange(a.start, a.end),
+    dayLabels: dayLabelsFromRange(start, end),
     coords: (a.lat && a.lng) ? { lat: parseFloat(a.lat), lng: parseFloat(a.lng) } : null,
   };
   const res = await writeScaffold(answers);

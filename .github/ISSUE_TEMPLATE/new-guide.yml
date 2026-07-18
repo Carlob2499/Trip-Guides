@@ -35,11 +35,34 @@ body:
     validations:
       required: false
   - type: input
+    id: anchor
+    attributes:
+      label: Anchor event
+      description: >-
+        The one non-negotiable the trip is built around (a concert, a match, a festival, a
+        wedding). This is the most perishable, most important fact on the trip — the research
+        pass verifies its date + venue against an official source FIRST. Include a source URL
+        if you have one.
+      placeholder: e.g. Pokémon GO Wild Area — Mexico City, Nov 6–8 2026 (pokemongolive.com)
+    validations:
+      required: false
+  - type: input
     id: travelers
     attributes:
       label: Number of travelers
       description: Just the headcount. Anything more specific (solo/couple/family, ages, mobility needs) goes in Comments below.
       placeholder: e.g. 3
+    validations:
+      required: false
+  - type: input
+    id: party
+    attributes:
+      label: Who's this for / party
+      description: >-
+        Who is actually going — the more concrete the better. This maps the guide onto how these
+        specific travelers move (pace, walking tolerance, whether the group splits). Name a prior
+        trip if the same people traveled before ("the Korea group"), or describe them.
+      placeholder: e.g. the Korea group (3 mid-20s, gaming anchors, heavy walkers) / family of 5 with grandparents
     validations:
       required: false
   - type: dropdown
@@ -52,6 +75,21 @@ body:
         - packed
         - balanced
         - slow
+      default: 0
+    validations:
+      required: false
+  - type: dropdown
+    id: travel-style
+    attributes:
+      label: Travel style
+      description: >-
+        How far off the tourist trail? Drives how hard the research leans on crowd-avoidance and
+        non-obvious local picks versus the marquee must-sees.
+      options:
+        - undecided
+        - Bucket-list must-sees
+        - Off-the-beaten-path
+        - Balanced
       default: 0
     validations:
       required: false

@@ -25,7 +25,8 @@ Korea-tier quality bar (all P0 + all P1 = graduate-ready). **P2** is continuous 
 | 9 | Party fit ("bar test") | Personal | "could a generic AI have written this without knowing this traveler?" must be **no** — the correct TRAVELER_PATTERNS party is applied | human | **P1** |
 | 10 | Honest gaps | Honest | every unknown is `⚠`-flagged or omitted, never invented; an admitted blank is a feature | readiness + human | **P1** |
 | 11 | Recency | Verified | every perishable fact is within its `shelf_life`; the `verified` stamp is current for the trip | check-staleness + human | **P1** |
-| 12 | Design doctrine | — | tab-budget gate + a11y (axe, moderate+) pass; open-not-crowded; clickable-looks-clickable | build + axe + human | **P2** |
+| 12 | Authenticity & crowd-awareness | Personal | marquee sights/food carry a **crowd reality + off-peak best-time** note; where the obvious pick is a tourist trap, a **novel local alternative** is offered; the guide reads like someone who has *been*, not a model summarizing — passes the "bar test" | human | **P1** |
+| 13 | Design doctrine | — | tab-budget gate + a11y (axe, moderate+) pass; open-not-crowded; clickable-looks-clickable | build + axe + human | **P2** |
 
 ## Verdict logic
 - **Not ready** — any **P0** fails. (`npm run readiness` returns `NEEDS WORK`, exit 1; or `npm run build` errors.)
@@ -35,17 +36,32 @@ Korea-tier quality bar (all P0 + all P1 = graduate-ready). **P2** is continuous 
 ## What the machine can and cannot judge
 `readiness` + `build` enforce the mechanical half: schema, no fabricated placeholders, provenance
 hygiene, completeness, itinerary integrity. They are a **floor** — they stop broken/empty/
-unsourced guides. They cannot judge **depth, personalization, or actionability** (#7–#9): a guide
-can pass every automated check and still be shallow or generic. Those are the human/agent's job,
-and they are what separates a passing draft from a Korea-tier guide. **Readiness PASS means "no
-detectable errors," not "good."**
+unsourced guides. They cannot judge **depth, personalization, actionability, or authenticity**
+(#7–#9, #12): a guide can pass every automated check and still be shallow, generic, or read
+"AI-written." Those are the human/agent's job, and they are what separates a passing draft from a
+Korea-tier guide. **Readiness PASS means "no detectable errors," not "good."**
 
-## Known pipeline gaps (recorded, not yet fixed)
-- **Intake form** has no first-class *anchor event* field (it lands in free-text Comments) and no
-  structured *party / who-is-this-for* field to drive the TRAVELER_PATTERNS mapping. The anchor is
-  the most perishable, most important fact on an event trip — it deserves its own field.
-- **No amendment log.** The spec is written once, before research; when research forces a re-plan
-  (the Korea/Denmark builds were "corrected three times by running it"), there's no systematic
-  record of what changed and why. A `## Amendments` section in the saved intake would close it.
-- **Itinerary length vs trip span** (#5) is human-checked — the guide JSON has no stored "intended
-  trip length" to auto-compare against.
+**The method behind #8, #9, and #12 is the dual-pass procedure** (guide-author skill's Research
+workflow): a *single* research pass can corroborate no depth and surface no authentic angle — it
+only fills the guide once, and the readiness loop can only error-correct that one draft. Two
+independent passes (A canonical / B local-authentic) **reconciled** into one guide is what makes
+depth and authenticity achievable and auditable — the `## Research reconciliation` ledger in the
+intake doc is the evidence. Deliberately *not* a hard auto-gate: mechanically detecting "generic"
+cries wolf on good guides (the coverage-metric lesson), so authenticity is a human/rubric judgment,
+made reachable by the dual-pass method rather than enforced by a brittle detector.
+
+## Pipeline gaps — closed, and the one that remains
+- ~~**Intake form** has no first-class *anchor event* or *party* field.~~ **Closed** — the issue
+  form + `docs/NEW_GUIDE_INTAKE.md` now carry first-class **Anchor event**, **Who's this for /
+  party**, and **Travel style** fields, threaded through `issue-to-scaffold.mjs` and
+  `scaffold-guide.mjs` into the generated intake doc.
+- ~~**No amendment log** for research-forced re-plans.~~ **Closed** — every scaffolded intake now
+  has an append-only **`## Amendments`** section (plus a **`## Research reconciliation`** ledger
+  for the dual-pass corroboration trail).
+- ~~**No second generation to corroborate the first.**~~ **Closed** — the skill's Research workflow
+  is now a two-pass generate-then-reconcile procedure (see the dual-pass note above).
+- **Itinerary length vs trip span** (#5) is still human-checked — the guide JSON has no stored
+  "intended trip length" to auto-compare against. Mitigated at the source: the scaffold now emits
+  exactly the right number of dated day cards from the trip dates (`dayLabelsFromRange`), so the
+  residual risk is only later hand-drift, which the rubric row covers. A stored trip-span field for
+  a true auto-compare remains a future improvement.

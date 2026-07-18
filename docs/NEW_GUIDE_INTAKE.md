@@ -14,6 +14,12 @@
 ## 1. The Traveler(s)
 *Drives: voice, safety research, entry/visa research, accessibility of every recommendation.*
 
+- **Who is this for / party — name it concretely.** *Drives the `TRAVELER_PATTERNS.md`
+  mapping: pick party **A / B / a new pair** BEFORE researching, and use only that party's
+  section + Cross-party. Name a prior trip if the same people traveled ("the Korea group"),
+  or describe them. **Never infer the party from the last guide** — A and B contradict each
+  other on pace and transit, and applying the wrong one is how Denmark landed "marginally
+  useful."*
 - Who is going? (solo / couple / friends / family / mixed group)
 - Group size:
 - Ages / mobility needs / accessibility requirements:
@@ -26,9 +32,15 @@
 
 - Exact dates (start–end):
 - Number of nights / number of cities:
-- Fixed anchors — the non-negotiables the trip is built around (a wedding,
-  a concert, a conference, a match):
+- **Anchor event — the ONE non-negotiable the trip is built around** (a wedding, a concert,
+  a conference, a match). *Drives everything: it is the most perishable, most important fact
+  on the trip. **Pass A verifies its date + venue against a T0 (official) source FIRST**, before
+  any other research, and the itinerary is built around it. Capture what + dates + a source URL
+  if known:*
+- Other fixed anchors (secondary non-negotiables, if any):
 - Pace preference: packed / balanced / slow
+- **Travel style: bucket-list must-sees / off-the-beaten-path / balanced.** *Drives how hard
+  Pass B leans on crowd-avoidance and non-obvious local picks vs. the marquee must-sees.*
 
 ## 3. Priorities — RANK them, don't just list
 *Drives: which section types exist at all. The top 2–3 get depth; the
@@ -94,3 +106,32 @@ of the same destination. Often the most important section for fit.*
 - **Hard filters applied to every entry:**
 - **Verification focus** (what's most perishable / most important to get
   right for this traveler):
+
+---
+
+## Research reconciliation (fill DURING the dual-pass — the corroboration trail)
+*The guide-author skill's Research workflow runs TWO independent passes and reconciles them into
+one guide. This is where that reconciliation is recorded — the evidence that the itinerary was
+generated more than once and cross-checked, not written once and only error-corrected.*
+
+> **Pass A — canonical & verified:** primary/official sources → the anchor, the must-dos, logistics,
+> transit, the verification ledger.
+> **Pass B — local, authentic, crowd-aware:** researched *independently from this intake* (not by
+> editing A) → resident/blog/forum angle: off-peak timing, crowd reality, novel alternatives to the
+> tourist-trap version. **B's finds are T2 leads — each is verified against a primary source before
+> it enters the guide.**
+
+| Item | Pass A (canonical) | Pass B (local/authentic) | Reconciled → guide | Note (agree / conflict / crowd / novel) |
+|------|--------------------|--------------------------|--------------------|------------------------------------------|
+|      |                    |                          |                    |                                          |
+
+*Reconciliation rules: **AGREE** → high confidence. **A-only** → is it a trap B routed around? add a
+crowd + best-time note, or swap to the authentic version. **B-only** → verify T0, then include.
+**CONFLICT** (hours, "best" pick) → resolve to the truth, record which source won and why.*
+
+## Amendments (append-only — every research-forced re-plan)
+*The intake above stays the ORIGINAL intent. When research forces the plan to change — an anchor
+moved, a neighborhood beats the intended one, a day collapsed — log the diff here with the reason.
+(Korea and Denmark were "corrected three times by running it"; this is where that history lives.)*
+
+- (none yet)
