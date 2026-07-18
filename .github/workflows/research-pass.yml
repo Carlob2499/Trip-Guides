@@ -29,6 +29,14 @@ on:
         required: false
         type: string
         default: ""
+      model:
+        description: "Model for the research agent. Sonnet is the default (research is Sonnet work — see references/research-efficiency.md); pick Opus only for a genuinely contested reconcile."
+        required: false
+        type: choice
+        options:
+          - claude-sonnet-5
+          - claude-opus-4-8
+        default: claude-sonnet-5
 
 permissions:
   contents: write
@@ -74,15 +82,24 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           allowed_tools: "Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch"
+          # Model economy: research is Sonnet work (research-efficiency.md). The action has no
+          # `model` input — the CLI flag via claude_args is the supported mechanism.
+          claude_args: "--model ${{ inputs.model || 'claude-sonnet-5' }}"
           prompt: |
             Guide slug: ${{ inputs.slug }}
             Section focus: ${{ inputs.section || 'full pass — all sections' }}
 
             Use the waypoint-guide-author skill: read .claude/skills/waypoint-guide-author/SKILL.md
-            and its references/ (verification-rules.md, block-types.md) and follow them exactly —
-            the source-tier ladder, the verification ledger, the ≈/⚠ fact states, the deterministic
-            lookup scripts, the done gate, and the completion report. The CLAUDE.md accuracy standard
-            (auto-loaded) is also binding.
+            and its references/ (verification-rules.md, research-efficiency.md, block-types.md) and
+            follow them exactly — the source-tier ladder, the verification ledger, the ≈/⚠ fact
+            states, the deterministic lookup scripts, the done gate, and the completion report. The
+            CLAUDE.md accuracy standard (auto-loaded) is also binding.
+
+            RESEARCH EFFICIENCY IS BINDING (references/research-efficiency.md): scripts before web;
+            reuse the ledger before re-searching; go direct-to-primary and batch by VENUE (one fetch
+            answers where/how/when/book); max ~2 search rounds per fact then ship/flag/omit; a first
+            404 can be a live page (retry once, judge by content); bot-blocked → mark and move on;
+            aggregators are leads, never citations.
 
             Target guide: src/content/guides/${{ inputs.slug }}.json
             ${{ inputs.section != '' && format('Scope this pass to the "{0}" section only; leave all other sections as-is.', inputs.section) || '' }}

@@ -28,14 +28,18 @@ helper scripts, and the done gate.
 1. **`references/verification-rules.md`** — the binding fact decision layer
    (perishable-vs-durable, source tiers, ship/flag/omit, stopping conditions,
    the §8 self-check). Read before writing any fact.
-2. The **target guide** — `src/content/guides/<slug>/`; read only the group file
+2. **`references/research-efficiency.md`** — the binding model-economy + search-budget
+   rules (research runs on **Sonnet**, light Opus only for contested judgment; scripts
+   before web; two search rounds then ship/flag/omit; checkpoint often — the backbone
+   must be sustainable on Claude Pro). Follow it instead of rediscovering it.
+3. The **target guide** — `src/content/guides/<slug>/`; read only the group file
    the fact lives in, per CLAUDE.md's Operational Habits. Also read its
    **intake** `guides-intake/<slug>.md` if it exists (ranked priorities decide
    which sections get depth); else infer general scope and say so.
    `docs/NEW_GUIDE_INTAKE.md` explains intake → spec.
-3. **`references/block-types.md`** — when choosing or creating a section type.
-4. **The `denmark/` and `korea/` guide dirs** — the gold standard to match or beat.
-5. **`docs/TRAVELER_PATTERNS.md`** — how these travelers *actually* travel, learned from
+4. **`references/block-types.md`** — when choosing or creating a section type.
+5. **The `denmark/` and `korea/` guide dirs** — the gold standard to match or beat.
+6. **`docs/TRAVELER_PATTERNS.md`** — how these travelers *actually* travel, learned from
    past trips (pace, heat, commute clustering, fixed-event anchors, food preferences,
    whether the group forks). Plus `learnings/<slug>.md` for any prior trip with the
    same travelers. **Consult these during intake and research** so a new guide starts
@@ -55,7 +59,7 @@ helper scripts, and the done gate.
 
 ## Modes
 - **New guide** — intake first (establish the **party** and the **anchor event** before
-  anything — see Read-first #5), then scaffold (`node scripts/scaffold-guide.mjs
+  anything — see Read-first #6), then scaffold (`node scripts/scaffold-guide.mjs
   --country "..." --dates "YYYY-MM-DD to YYYY-MM-DD"`, or the "New guide" issue form which
   scaffolds automatically) — the scaffold pre-wires the map/weather/holidays live sections and
   an empty backbone, every fact still unverified. Then research it via the **two-pass procedure**
@@ -96,6 +100,11 @@ candidate; a consistently top-ranked one earns prominence. Absent or thin data (
 a just-published guide) means no signal yet — fall back to the ranking rules above, don't invent one.
 
 ## Research workflow — TWO passes, then reconcile
+
+**Model economy first:** this workflow is executed on **Sonnet** (light Opus only for a
+genuinely contested reconcile/anchor call) under the budgets in
+`references/research-efficiency.md` — plan-mode the pass, checkpoint each stage, two search
+rounds per fact then ship/flag/omit. Heavy models design the pipeline; they don't run it.
 
 A guide is **generated twice, from two independent angles, then reconciled into one** — not
 written once and merely error-corrected afterward. The second generation is what *corroborates*

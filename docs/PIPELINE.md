@@ -111,9 +111,25 @@ the creator asked for), then R3→R4→R5→R6. R3/R4 are independent of the pip
 interleave if a trip deadline appears. Guide #3 is built *after* P0–P4 land, as the first real
 end-to-end proof of the finished pipeline.
 
-**Per-session rule:** open with the phase's measurables, close with the Ship Loop. Use Fable/high
-where judgment concentrates (schema design, control flow, recert); Sonnet as the default executor;
-Haiku for sweeps and assets.
+**Per-session rule:** open with the phase's measurables, close with the Ship Loop.
+
+### Model economy — the backbone runs on Claude Pro
+
+The pipeline was *designed* on heavy models; it is *operated* on light ones. The steady state this
+repo must sustain — indefinitely, on a **Claude Pro** plan — is:
+
+| Work | Model | Why |
+|---|---|---|
+| Research passes (A + B), recert | **Sonnet** (workflow default, pinned via `claude_args`) | Verification is procedure-driven — the skill + gates carry the judgment |
+| Contested reconcile / anchor calls | light **Opus** (explicit dispatch choice) | Rare, bounded judgment moments |
+| Mechanical sweeps, formatting | Haiku / stay in Sonnet | — |
+| Pipeline/skill/design changes | Fable/Opus, **separate sessions** | Design is one-time; operation is forever |
+
+Guides are not numbered milestones — each is just the backbone exercising. What makes Pro
+sufficient: **plan-mode first** (plan cheap, execute the plan), **checkpoint-often** (the P2 spine —
+any session can stop at a stage and the next resumes, no re-research), and the **search budgets** in
+the skill's `references/research-efficiency.md` (scripts before web, direct-to-primary, batch by
+venue, two rounds then ship/flag/omit — binding on every research agent, headless or interactive).
 
 ---
 

@@ -106,6 +106,8 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           allowed_tools: "Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch"
+          # Recert is mechanical re-verification — Sonnet work by definition (research-efficiency.md).
+          claude_args: "--model claude-sonnet-5"
           prompt: |
             RECERT — re-verify the STALE facts of an already-published guide. This is maintenance, not
             new research: touch only the facts flagged below, keep everything else as-is, and keep the
@@ -114,9 +116,11 @@ jobs:
             Guide slug: ${{ matrix.slug }}
 
             Use the waypoint-guide-author skill: read .claude/skills/waypoint-guide-author/SKILL.md and
-            references/verification-rules.md and follow them exactly — especially the done gate's
-            "Recert pass" step and the "Editing a Guide — Continuity Is Mandatory" rule. CLAUDE.md's
-            accuracy standard (auto-loaded) is binding.
+            references/verification-rules.md + references/research-efficiency.md and follow them
+            exactly — especially the done gate's "Recert pass" step, the "Editing a Guide — Continuity
+            Is Mandatory" rule, and the search budgets (start from each fact's own source_url; ~2
+            rounds then downgrade to ⚠; a first 404 can be a live page). CLAUDE.md's accuracy
+            standard (auto-loaded) is binding.
 
             1. Get the punch list: `npm run recert -- --slug ${{ matrix.slug }}`. It lists each fact
                past its shelf life and the source_url to re-check it against.
