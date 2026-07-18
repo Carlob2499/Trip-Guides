@@ -5,7 +5,9 @@
 //
 // It does NOT check the JSON schema — that's `npm run build` (the content-collection gate). The
 // two run together in the guide-author skill's done-gate: build proves shape, readiness proves
-// research quality. Advisory + read-only, like every scripts/audit/* module.
+// research quality. It auto-enforces the P0 MECHANICAL rows of docs/GUIDE_RUBRIC.md (fabrication,
+// provenance, completeness, itinerary integrity); the P1 depth/personalization rows are the
+// human's §8 judgment — a PASS means "no detectable errors," not "good". Read-only, advisory.
 //
 // Usage:  node scripts/guide-readiness.mjs --slug kyoto-japan [--min-coverage 0.8]
 //         npm run readiness -- --slug kyoto-japan

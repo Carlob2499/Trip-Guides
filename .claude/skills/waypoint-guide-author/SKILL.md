@@ -127,6 +127,11 @@ a just-published guide) means no signal yet — fall back to the ranking rules a
 
 ## Done gate — all of it, before calling anything finished
 
+**The bar is `docs/GUIDE_RUBRIC.md`** — the 12-dimension standard every guide is judged against
+(P0 blocks graduation; P0+P1 = Korea-tier). `readiness` + `build` auto-enforce the P0 mechanical
+half; the P1 rows (venue completeness, priority depth, party fit, honest gaps) are your judgment
+via the §8 self-check below. A `readiness` PASS means "no detectable errors," **not** "good."
+
 **CLAUDE.md's Ship Loop governs every change and is not optional here** — build,
 `npm test`, verify in `astro preview`, grep compiled `dist/`. When you grep
 `dist/`, confirm the fact(s) you changed compiled through; on edits, also grep

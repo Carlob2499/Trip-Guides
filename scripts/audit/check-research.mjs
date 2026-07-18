@@ -60,12 +60,13 @@ export function checkResearchGuide(guide, slug) {
     }
   }
 
-  // 5. "Filled" typed sections left effectively empty.
+  // 5. Completeness — a "filled" typed section left effectively empty is not researched.
+  //    BLOCKING (rubric #4): a guide of empty scaffolded bodies must not read as ready. A
+  //    checklist-only panel is fine; References may be filled by a human later.
   for (const s of sections) {
     if ((s.type === "prose" || s.type === "panel") && s.title && s.body !== undefined) {
-      // References is allowed to be empty (a human fills sources); everything else isn't.
       if (String(s.group).toLowerCase() !== "references" && strip(s.body).length < 3 && !(s.checklist?.length)) {
-        add("info", `${s.type} "${s.title}" has an empty body`);
+        add("warn", `${s.type} "${s.title}" is empty — research + fill it, or cut the section`);
       }
     }
   }
@@ -79,7 +80,11 @@ export function checkResearchGuide(guide, slug) {
     let prev = null;
     for (const d of s.items) {
       const m = /([A-Z][a-z]{2})\s+(\d{1,2})/.exec(String(d.date || ""));
-      if (!m || !MONTHS.includes(m[1])) { add("info", `day "${d.date}" has no parseable "Mon D" date`); prev = null; continue; }
+      // Completeness (rubric #4): a real "Mon D" date, not a scaffold "Day N", is required —
+      // BLOCKING, so an unresearched itinerary of blank days can't pass.
+      if (!m || !MONTHS.includes(m[1])) { add("warn", `day "${d.date}" has no real "Mon D" date — an unresearched scaffold day`); prev = null; continue; }
+      // A dated day still needs a real body/plan, not an empty card.
+      if (strip(d.body).length < 3 && !(d.checklist?.length)) add("warn", `day "${d.date}" has no body/plan`);
       // Year-free ordinal (month index × 31 + day) — sufficient for contiguity within one trip.
       const ord = MONTHS.indexOf(m[1]) * 31 + Number(m[2]);
       if (prev != null && ord !== prev + 1 && ord !== prev) {
