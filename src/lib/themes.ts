@@ -22,7 +22,7 @@ export function accentFor(country: string): string {
 export function currencyFor(country: string): Currency | null {
   const d = countryData(country);
   if (!d?.currency) return null;
-  return { ...d.currency, approxRate: FALLBACK_RATES[d.currency.code] ?? null };
+  return { ...d.currency, approxRate: FALLBACK_RATES[d.currency.code as keyof typeof FALLBACK_RATES] ?? null };
 }
 
 // Country → IANA time zone (e.g. "Asia/Seoul") for the local-time pill + jet-lag calc.

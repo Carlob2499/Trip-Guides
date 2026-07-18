@@ -60,7 +60,9 @@ export async function GET({ props }: { props: { data: any } }) {
   // Social platforms (Twitter, WhatsApp, Facebook) require raster images for og:image.
   const pngBuffer = await sharp(Buffer.from(svg, "utf-8")).png().toBuffer();
 
-  return new Response(pngBuffer, {
+  // Wrap the node Buffer as a Uint8Array — a valid BodyInit (the DOM Response type doesn't
+  // accept Node's Buffer directly, though it works at runtime).
+  return new Response(new Uint8Array(pngBuffer), {
     headers: { "Content-Type": "image/png" },
   });
 }

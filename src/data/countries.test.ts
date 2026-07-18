@@ -4,12 +4,12 @@ import { COUNTRIES, CONTINENTS, CONTINENT_ORDER, ALIASES, continentFor } from ".
 
 describe("continent data", () => {
   it("assigns a continent to EVERY country — a new country can't ship without one", () => {
-    const missing = Object.keys(COUNTRIES).filter((c) => !CONTINENTS[c]);
+    const missing = Object.keys(COUNTRIES).filter((c) => !CONTINENTS[c as keyof typeof CONTINENTS]);
     expect(missing).toEqual([]);
   });
 
   it("has no continent entry for a country that doesn't exist (no stale keys)", () => {
-    const orphans = Object.keys(CONTINENTS).filter((c) => !COUNTRIES[c]);
+    const orphans = Object.keys(CONTINENTS).filter((c) => !COUNTRIES[c as keyof typeof COUNTRIES]);
     expect(orphans).toEqual([]);
   });
 

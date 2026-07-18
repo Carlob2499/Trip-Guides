@@ -249,27 +249,30 @@ const guides = defineCollection({
       primary: z.string().regex(/^#[0-9a-fA-F]{6}$/),
       secondary: z.string().regex(/^#[0-9a-fA-F]{6}$/),
       accent: z.string().regex(/^#[0-9a-fA-F]{6}$/),
-    }).refine(
-      // `primary` is the colour actually painted as accent UI on the page
-      // background (it becomes `--accent`), so it's the one that can break
-      // legibility. secondary/accent are exposed as CSS vars but not yet
-      // consumed as on-background text, so they aren't gated here — add a
-      // check against their own surface if/when something renders them.
-      (t) => contrastRatio(t.primary, LIGHT_BG) >= MIN_ACCENT_CONTRAST,
-      (t) => ({
-        message: `theme.primary ${t.primary} has only ${contrastRatio(t.primary, LIGHT_BG).toFixed(2)}:1 contrast against the light background ${LIGHT_BG} — needs ≥${MIN_ACCENT_CONTRAST}:1 to stay legible as accent text. Pick a deeper/more saturated colour.`,
-        path: ["primary"],
-      }),
-    ).refine(
-      // Same accent renders on the dark ground too (dark mode does not re-map
-      // --accent), so gate BOTH surfaces. Mid-value colours pass both; a very
-      // dark accent passes light-only and turns illegible in dark mode.
-      (t) => contrastRatio(t.primary, DARK_BG) >= MIN_ACCENT_CONTRAST,
-      (t) => ({
-        message: `theme.primary ${t.primary} has only ${contrastRatio(t.primary, DARK_BG).toFixed(2)}:1 contrast against the dark background ${DARK_BG} — needs ≥${MIN_ACCENT_CONTRAST}:1 on both grounds. Pick a mid-value colour (or supply a lighter tone).`,
-        path: ["primary"],
-      }),
-    ).optional(),
+    }).superRefine((t: { primary: string }, ctx: any) => {
+      // `primary` is the colour actually painted as accent UI on the page background (it
+      // becomes `--accent`), so it's the one that can break legibility. It renders on BOTH
+      // grounds (dark mode does not re-map --accent), so gate both — a mid-value colour passes
+      // both; a very dark accent passes light-only and turns illegible in dark mode.
+      // secondary/accent are exposed as CSS vars but not yet consumed as on-background text,
+      // so they aren't gated — add a check against their own surface if/when something renders them.
+      const light = contrastRatio(t.primary, LIGHT_BG);
+      if (light < MIN_ACCENT_CONTRAST) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["primary"],
+          message: `theme.primary ${t.primary} has only ${light.toFixed(2)}:1 contrast against the light background ${LIGHT_BG} — needs ≥${MIN_ACCENT_CONTRAST}:1 to stay legible as accent text. Pick a deeper/more saturated colour.`,
+        });
+      }
+      const dark = contrastRatio(t.primary, DARK_BG);
+      if (dark < MIN_ACCENT_CONTRAST) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["primary"],
+          message: `theme.primary ${t.primary} has only ${dark.toFixed(2)}:1 contrast against the dark background ${DARK_BG} — needs ≥${MIN_ACCENT_CONTRAST}:1 on both grounds. Pick a mid-value colour (or supply a lighter tone).`,
+        });
+      }
+    }).optional(),
     verified: z.string().optional(),  // freshness metadata for the maker/AI — NOT shown to travelers, EXCEPT a ⚠-prefixed value (e.g. an unconfirmed draft), which renders as a warning pill in the masthead
     draft: z.boolean().optional(),    // true = a "Guide-to-be" scaffold; listed in the home page's draft tier, not the curated grid
     // OPT-IN provenance enforcement. Absent = loose (every guide written before this

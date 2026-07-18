@@ -1,5 +1,4 @@
 import { describe, it, expect } from "vitest";
-// @ts-expect-error — plain-JS module, no types needed for this test
 import { todayInTz, esc } from "./util.js";
 
 // Fixed instants (injectable clock — never the real one).

@@ -93,7 +93,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 // Build it from the base + the last path segment so it works under the subpath —
 // the old code stripped "^/guides/" which never matched "/Trip-Guides/guides/...",
 // producing a double-slash, wrong-path URL.
-const ogSlug  = Astro.url.pathname.split("/").filter(Boolean).pop();
+const ogSlug  = Astro.url.pathname.split("/").filter(Boolean).pop() ?? "";
 const ogImage = `${Astro.url.origin}${base}/og/${ogSlug}.png`;
 
 // Compute at-a-glance stats for the masthead stat bar
@@ -584,6 +584,7 @@ const tripSummary = buildSummary(guide);
       import "../scripts/gsap-hero.js";
       import "../features/palette/index.js";
       import "../features/trip-split/index.ts";
+      import "../features/voting/index.js";
       import "../scripts/staleness-ui.js";
       import "../features/telemetry/index.js";
     </script>
