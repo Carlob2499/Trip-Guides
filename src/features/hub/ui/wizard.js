@@ -4,8 +4,8 @@
    drop a booking confirmation (.txt/.eml/.ics/.md) and the wizard prefills
    dates and attaches a parsed trip summary for the researcher.
    Output is the same prefilled GitHub issue the pipeline already consumes —
-   every downstream step (Groq generation, verification, graduation) is
-   untouched, so new guides inherit the whole feature set automatically. */
+   every downstream step (scaffold, the research self-correction pass, graduation)
+   is untouched, so new guides inherit the whole feature set automatically. */
 
 import { reducedMotion } from "../../../scripts/util.js";
 

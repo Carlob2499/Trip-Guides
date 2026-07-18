@@ -52,5 +52,12 @@ jobs:
           git pull --rebase origin main
           git push origin HEAD:main
           GUIDE_URL="https://carlob2499.github.io/Trip-Guides/guides/${SLUG}/"
-          gh issue comment "${ISSUE_NUM}" --body "Scaffolded ✅ — committed straight to \`main\`: [\`src/content/guides/${SLUG}.json\`](https://github.com/${GITHUB_REPOSITORY}/blob/main/src/content/guides/${SLUG}.json). It's live now in the *Guides-to-be* tier: ${GUIDE_URL}. It's a **draft** (\`draft: true\`) — a research pass fills the facts from here per the intake spec: [\`guides-intake/${SLUG}.md\`](https://github.com/${GITHUB_REPOSITORY}/blob/main/guides-intake/${SLUG}.md)."
+          gh issue comment "${ISSUE_NUM}" --body "Scaffolded ✅ — committed straight to \`main\`: [\`src/content/guides/${SLUG}.json\`](https://github.com/${GITHUB_REPOSITORY}/blob/main/src/content/guides/${SLUG}.json). It's live now in the *Guides-to-be* tier: ${GUIDE_URL}. It's a **draft** (\`draft: true\`) — the research pass fills the facts from here per the intake spec: [\`guides-intake/${SLUG}.md\`](https://github.com/${GITHUB_REPOSITORY}/blob/main/guides-intake/${SLUG}.md).
+
+          **Next — run the research pass (self-correction loop, on your Claude Max):**
+          • *Headless:* **Actions → Research pass → Run workflow → slug \`${SLUG}\`** (needs the \`CLAUDE_CODE_OAUTH_TOKEN\` secret).
+          • *Interactive (recommended):* open a local Claude Code / Cowork session on Max and paste:
+          \`\`\`
+          Run the research pass on ${SLUG} with the waypoint-guide-author skill: read guides-intake/${SLUG}.md, pick the traveler party from TRAVELER_PATTERNS, research every perishable fact from primary (T0) sources, then loop 'npm run readiness -- --slug ${SLUG}' + 'npm run build' → fix each finding → re-run until PASS. Keep draft:true.
+          \`\`\`"
           gh issue close "${ISSUE_NUM}"

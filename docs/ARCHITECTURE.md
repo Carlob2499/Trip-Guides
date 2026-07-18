@@ -38,7 +38,8 @@ self-boots to upgrade it only when `PUBLIC_GMAPS_KEY` is set.
   emergency numbers (imported by both TS and Node scripts).
 - `src/lib/` — pure build-time helpers (exports, holidays, map-pins, themes, settle) + tests.
 - `src/features/<name>/` — self-contained features (sealed dir, single `index.ts` public API).
-- `scripts/` — guide generation (`generate-guide.ts` + Groq pipeline), enrichers
+- `scripts/` — guide scaffolding (`scaffold-guide.mjs`), the research self-correction
+  gate (`guide-readiness.mjs` → `npm run readiness`), enrichers
   (`lookup-place`, `search-commons`, `fetch-wikivoyage`), the weekly content audit
   (`audit/*`), and the new-guide scaffold.
 - `.claude/skills/waypoint-guide-author/` — the content-authoring skill (verification and

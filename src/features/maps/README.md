@@ -80,9 +80,8 @@ twice:
 `deploy.yml` already passes both into the build (lines 40–41) — nothing to change there.
 Push anything to `main` and the next deploy picks them up.
 
-**Local dev** — `.env` in the repo root already exists (it holds `GROQ_API_KEY` for the
-guide generator) and is gitignored. **Append** these two lines rather than recreating the
-file, or you'll drop the generator's key:
+**Local dev** — put the two Maps keys in a gitignored `.env` at the repo root (create it if it
+doesn't exist; **append** if it does, so you don't clobber other keys):
 
 ```
 PUBLIC_GMAPS_KEY=your-key-here

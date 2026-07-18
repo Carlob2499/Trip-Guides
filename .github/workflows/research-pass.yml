@@ -1,11 +1,13 @@
 name: Research pass
 
-# Assisted research pass: Claude Code agent researches one guide, commits its findings
-# to a branch, and opens a draft PR for human review. Never auto-merges; draft: true
-# is always preserved on the guide JSON. Trigger manually via workflow_dispatch.
+# Assisted research pass: a Claude Code agent researches one guide, runs the self-correction
+# loop until it passes the readiness gate, commits to a branch, and opens a draft PR for human
+# review. Never auto-merges; draft: true is always preserved. Trigger via workflow_dispatch.
 #
-# Prerequisites:
-#   - ANTHROPIC_API_KEY secret set in repo Settings → Secrets → Actions
+# Runs on your Claude MAX subscription (not a pay-per-use API key), so a headless run costs ~$0
+# marginal against your plan. Prerequisites:
+#   - CLAUDE_CODE_OAUTH_TOKEN secret set in repo Settings → Secrets → Actions.
+#     Generate it once locally with `claude setup-token` (Pro/Max only) and paste the value.
 #   - The guide's scaffold exists at src/content/guides/<slug>.json
 #
 # Usage: Actions → Research pass → Run workflow → enter slug (and optionally section)
@@ -49,7 +51,8 @@ jobs:
       - name: Run research agent
         uses: anthropic/claude-code-action@v1
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Auth via the Claude Max subscription (claude setup-token), not a paid API key.
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           allowed_tools: "Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch"
           prompt: |
@@ -65,14 +68,25 @@ jobs:
             Target guide: src/content/guides/${{ inputs.slug }}.json
             ${{ inputs.section != '' && format('Scope this pass to the "{0}" section only; leave all other sections as-is.', inputs.section) || '' }}
 
-            When you have finished researching and editing:
+            SELF-CORRECTION LOOP — do not one-shot this. After a research pass:
+              a. Run `npm run readiness -- --slug ${{ inputs.slug }}` and `npm run build`.
+              b. For each BLOCKING (⚠) readiness finding and every schema error, FIX IT by
+                 re-researching that fact against a primary (T0) source — resolve the place_id
+                 with lookup-place.mjs, add the missing source_url, fill the empty section,
+                 correct the itinerary date. Never silence a flag you cannot source: downgrade
+                 it to ⚠ or omit it. Do not explain-and-move-on.
+              c. Re-run readiness + build. Repeat until readiness PASSes and build is clean —
+                 up to 4 rounds. If something genuinely cannot be sourced after that, leave it
+                 as a deliberately-explained ⚠ gap (an admitted blank is a feature).
 
-            1. Run `npm run build` and fix any schema validation errors before continuing.
-            2. Create a branch named `research/${{ inputs.slug }}` if it does not already exist,
+            Then open the PR:
+
+            1. Create a branch named `research/${{ inputs.slug }}` if it does not already exist,
                and commit your changes there with a clear message.
-            3. Push the branch and open a **draft PR** with:
+            2. Push the branch and open a **draft PR** with:
                  - Title: "Research pass: ${{ inputs.slug }}${{ inputs.section != '' && format(' ({0})', inputs.section) || '' }}"
                  - Body: your finish summary (what you researched, what you filled, what remains
-                   ⚠ unconfirmed) followed by the verification ledger table
-            4. NEVER remove `draft: true` from the guide JSON — graduating a guide is a human decision.
-            5. Never touch any guide other than src/content/guides/${{ inputs.slug }}.json.
+                   ⚠ unconfirmed), the FINAL `npm run readiness` output (PASS or the remaining
+                   explained gaps), and the verification ledger table.
+            3. NEVER remove `draft: true` from the guide JSON — graduating a guide is a human decision.
+            4. Never touch any guide other than src/content/guides/${{ inputs.slug }}.json.

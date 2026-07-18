@@ -55,8 +55,10 @@ helper scripts, and the done gate.
 
 ## Modes
 - **New guide** — intake first, then scaffold (`node scripts/scaffold-guide.mjs
-  --country "..."`) or a grounded Groq draft (`npm run create-guide -- --location
-  "City, Country"`, every fact still unverified), then research.
+  --country "..."`, or the "New guide" issue form which scaffolds automatically) —
+  the scaffold pre-wires the map/weather/holidays live sections and an empty backbone,
+  every fact still unverified. Then research: fill it, running the self-correction loop
+  (`npm run readiness -- --slug <slug>` + `npm run build` → fix → repeat until PASS).
 - **Research / fill a draft** — the main mode. Depth on the intake's top 2–3
   priorities; light touch elsewhere. If told to target one section, do only it.
 - **Edit an existing guide** — verify the new/changed fact per the rules
@@ -131,8 +133,19 @@ a just-published guide) means no signal yet — fall back to the ranking rules a
 for the **stale** string to prove none survived.
 
 Then these guide-content gates, on top of it:
-1. `node scripts/audit/check-research.mjs --slug <slug>` — clean, or every
-   finding explained in the report.
+1. **The self-correction loop — iterate, don't one-shot.** Run
+   `npm run readiness -- --slug <slug>`. It runs the mechanical research checks
+   + reports a `PASS` / `NEEDS WORK` verdict (exit 0/1). If `NEEDS WORK`, do NOT
+   explain-and-move-on: take each **blocking (⚠)** finding and *fix it by
+   re-researching that fact against a primary (T0) source* — resolve the
+   `place_id` with `lookup-place.mjs`, add the missing `source_url`, fill the
+   empty section, correct the itinerary date. Never silence a flag you can't
+   source: downgrade it to `⚠` or omit it. Then **re-run readiness, and repeat
+   until it PASSes** (or until every remaining item is a deliberately-explained
+   `⚠` gap — an admitted blank is a feature; a hidden one is not). `info`-level
+   items are advisory. The `citations` line is context only, not a target
+   (durable narrative legitimately has none). `readiness` is research quality;
+   `npm run build` is the schema gate — both must be clean.
 2. The **`verification-rules.md` §8 self-check**, line by line.
 3. **`verified` stamp** — `Checked [date] for [trip] · re-check before travel:
    [most perishable items]`; keep it `⚠`-prefixed on drafts and keep
