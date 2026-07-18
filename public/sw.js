@@ -13,10 +13,12 @@
   servers and are not precached, so interactive maps need a connection.
   The written "Key transit routes" steps work offline regardless.
 
-  When you publish a big update, bump CACHE below (v1 -> v2) so visitors get the
-  new version cleanly.
+  CACHE is auto-versioned at build: scripts/gen-sw-precache.mjs replaces the sentinel below
+  with a content hash of everything precached, so any shipped JS/CSS/HTML change invalidates
+  returning users' caches automatically — no manual bump. This committed value is only the
+  fallback if that step is skipped (e.g. serving public/ directly).
 */
-const CACHE = "tripguides-v51";
+const CACHE = "tripguides-dev";
 const BASE = "/Trip-Guides";
 /* CORE:BEGIN — the precache list. Rewritten in dist/ at build time by
    scripts/gen-sw-precache.mjs from the guides that actually built (so a new
