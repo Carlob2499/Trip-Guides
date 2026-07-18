@@ -1,69 +1,78 @@
-# Cover Art & the Magical Open — visual initiative
+# Animated Browsing — the "trip unfolds" motion system
 
-The design north-star for the site's visual identity work (roadmap R3 dynamic-runtime + R4
-per-country identity, pulled together because they're one idea). Sits beside `docs/PIPELINE.md`
-(the generation/maintenance north-star) — this is the *presentation* north-star.
+The presentation north-star (counterpart to `docs/PIPELINE.md`). The goal, in the creator's
+words: a **unique, truly animated way to browse** that feels social-media-native (a Snapchat-story
+first-open, scroll-driven motion, parallax) **and delivers information better** — tighter formatting,
+deliberate alignment, higher retention, less aimless scrolling.
 
 ## The one idea
 
-**A guide's cover is a single shared object.** The hub shows it as a card; tapping it **morphs that
-same cover into a full-bleed hero atop the guide** — "the card opens into the guide as if it had a
-cover hero page." Cover art and the magical open are not two features; the cover *is* the thing that
-morphs, so it must look intentional at both sizes (thumbnail card ↔ full-bleed hero).
+**A guide browses like a story, day by day.** A trip's real spine is its *days*, so the signature
+motion device is a **segmented story rail whose segments ARE the days** — an 8-day trip shows 8
+segments. It opens the guide (auto-advancing through the days like an Instagram/Snapchat story) and
+will later *become* the itinerary's navigation. One device that unifies the arrival animation, the
+browsing metaphor, and the information structure — and it could only belong to a travel guide
+("structure is information," not decoration). This is grounded in the subject, not a generic motion
+trend bolted on.
 
-Today the "cover" is auto-borrowed: the guide's **first sight photo**, tinted by the country
-`--accent` (`src/lib/themes.ts`). That's the seed we elevate into deliberate, per-trip cover art.
+## Direction history (so we don't relitigate)
 
-## Architecture decision: cross-document View Transitions, NOT a client router
+- **Kept (V1):** the hub card → guide masthead **View Transition morph** (browser-native cross-doc,
+  no SPA) + the optional `cover` schema field. This is the "card opens into the guide."
+- **Dropped (V2):** the palette **duotone graphic cards** — reverted. It read as "graphic poster,"
+  which wasn't the goal; the hub cards stay photo-forward.
+- **Now (V3):** motion. The magical open is a **one-time, first-open animation**, and motion is added
+  broadly in the social-media idiom (story reveal, parallax, scroll-driven reveals).
 
-The morph uses **browser-native cross-document View Transitions** — `@view-transition { navigation:
-auto }` in CSS plus a shared `view-transition-name: cover-<slug>` on the hub card/hero image and the
-guide's `.mast-img`. Deliberately **not** Astro's `<ClientRouter />` (the SPA variant):
+## Motion system (grounded in current technique)
 
-- The guide pages run heavy client JS on normal page load (tabs, Trip Split, maps, Firebase, palette,
-  SOS). A ClientRouter swaps the DOM without a real navigation, so all of that would need re-wiring to
-  `astro:page-load` — a large, fragile change with real regression risk.
-- Cross-document VT keeps every navigation a **real page load** (scripts run exactly as they do now),
-  adds **zero JS**, and **degrades gracefully**: browsers without support (Firefox today) just
-  navigate normally. Reduced-motion drops the animation, not the navigation.
+- **Native CSS scroll-driven animations** (`animation-timeline: scroll()/view()`) are the backbone
+  for scroll motion: off-main-thread, no JS, progressive-enhanced (Chrome/Edge since 2023, Safari 26;
+  a plain page elsewhere). This fits the offline-first, perf-budgeted site far better than
+  scroll-listener JS, and it's where award galleries have moved ("scrollytelling" — each scroll
+  reveals the next part).
+- **First-open story intro** (shipped, V3a): the day-segmented rail + staggered cover-text reveal,
+  once per guide (localStorage), skippable, reduced-motion-off, fault-safe (content is never left
+  hidden). Owns the arrival on first visit so `gsap-hero.js` stands down; repeat visits get the
+  normal quick arrival.
+- **Existing, kept:** hero parallax + Ken Burns (`hero-parallax.js`), the GSAP masthead arrival
+  (`gsap-hero.js`, repeat visits), scroll-reveal (`reveal.js`).
 
-The morph is the site's **signature** — so everything around it stays calm (a ~420ms editorial expand
-on a cubic-bezier, not a flashy zoom). Spend the boldness in one place.
+## Information delivery (the retention half)
 
-## Cover-art direction (the aesthetic — to build next, with sign-off)
-
-Every guide gets a cover that could only be *that* trip, generated at build from data it already has —
-no hand-design per guide, so every current and future guide inherits it:
-
-1. **Photo-grounded.** The guide's chosen cover photo (or its best sight photo) is the base — it roots
-   the cover in the real place, not an abstract graphic.
-2. **Palette-signed.** The country `theme` palette (accent/primary/secondary, already contrast-gated)
-   drives a duotone/gradient scrim + rule, so Korea and Denmark read as unmistakably *different*
-   countries at a glance, even as thumbnails.
-3. **Editorially titled.** The title in the display face (Bricolage Grotesque), with the country as a
-   quiet eyebrow — the masthead already does this; the card should echo it so card and hero feel like
-   the same object.
-4. **Procedural fallback.** A guide with no usable photo (a fresh scaffold) gets a palette-only cover
-   (gradient field + big country initial — the existing `hubcard-cover--typo`), so the system never
-   breaks and drafts still look intentional.
-
-Photos stay **Wikimedia-Commons-only** (verifiable licensing) — the cover never introduces an
-unlicensed asset. "Its own cover art" means *chosen + treated*, not *newly sourced*.
+Motion is only half the brief. The other half: deliver the right thing with **less scrolling**.
+- **One idea per view.** The itinerary story-mode (V3c) shows one day at a time (tap/swipe to
+  advance) instead of a long scroll — the socially-native, high-retention way to read a plan.
+- **Deliberate alignment.** A consistent editorial measure for prose; **data in the mono face on a
+  right rail** (dates, prices, transit) so the eye separates story from facts at a glance.
+- **Tighter formatting.** Denser cards, lead-first bodies, cut vertical sprawl — the reader reaches
+  the answer (where / how / when / book) without hunting.
 
 ## Phases
 
 | Step | Deliverable | State |
 |------|-------------|-------|
-| **V1 · Magical open** | Cross-doc VT morph card/hero → guide masthead hero; `transitions.css`; reduced-motion + graceful degradation | shipping now |
-| **V1 · Cover data** | Optional `cover {file, alt, credit, focal}` on the guide meta schema; hub + masthead prefer it over the first sight photo (backward-compatible) | shipping now |
-| **V2 · Cover-art treatment** | The duotone/palette + editorial cover component reused by card + hero; procedural fallback; per-guide `cover` chosen for Korea/Denmark | next (needs aesthetic sign-off) |
-| **V3 · R3 runtime rest** | View Transitions polish (title morph, back-nav), live-data tiles, offline/connection state machine, per-view (Focus Today / what's-open-now / weather day-swap) | after V2 |
-| **V4 · R4 identity engine** | Palette auto-extracted from the cover image at build (node-vibrant), one signature motion set, motion-doctrine doc | after V3 |
+| **V1 · Magical open** | Cross-doc View Transition morph (card → masthead) + optional `cover` field | shipped |
+| **V3a · First-open day-story intro** | Segmented **days** rail + staggered cover reveal, once per guide, reduced-motion-safe; `gsap-hero` stands down first visit | **shipping now** |
+| **V3b · Scroll-driven CSS** | Move reveals/progress to `animation-timeline: view()/scroll()` (off-main-thread), add a scroll "journey progress"; keep JS fallback | next |
+| **V3c · Story-mode itinerary** | The days rail becomes navigation: a full-screen, swipeable day-by-day deck (one day per view) — the big less-scroll / retention payoff | after V3b |
+| **V3d · Info-density & alignment** | Editorial measure + mono data-rail alignment; denser lead-first cards across block types | after V3c |
+| **V4 · Per-country identity** | Palette auto-extracted from the cover (node-vibrant), one signature motion set, motion-doctrine doc | later |
 
-## Guardrails (inherited)
+## Guardrails (inherited, non-negotiable)
 
-- Shared components are global; a cover change touches every guide at once — iterate freely there.
-- Uniform across surfaces: the same cover renders on card, hero, masthead, OG, print — apply any
-  treatment change to all in one pass; never render the same datum twice as if it were two things.
-- Clickability obvious; reduced-motion respected; base-path hrefs explicit; verify at 375px + desktop,
-  dark + light, in `astro preview` (never `astro dev` — OneDrive serves stale CSS).
+- **Reduced-motion**: every motion has a `prefers-reduced-motion` off-path; the site is fully usable
+  and readable without any animation.
+- **Fault-safe**: content is never hidden waiting on JS — reveals live under a JS-added class and the
+  base state is always visible.
+- **Perf budget + offline**: prefer native CSS motion (off-main-thread) over JS; no new heavy deps.
+- **Verify** in `astro preview` :4322 (never `astro dev` — OneDrive stale CSS), at mobile 375px +
+  desktop, dark + light, reduced-motion.
+
+## Sources (motion research, Jul 2026)
+
+- [MDN — Scroll-driven animations](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Scroll-driven_animations)
+- [Chrome for Developers — Animate on scroll](https://developer.chrome.com/docs/css-ui/scroll-driven-animations)
+- [WebKit — Scroll-driven animations with just CSS](https://webkit.org/blog/17101/a-guide-to-scroll-driven-animations-with-just-css/)
+- [Figma — Web design trends 2026](https://www.figma.com/resource-library/web-design-trends/)
+- [Lovable — Scrolling design patterns 2026](https://lovable.dev/guides/scrolling-designs-patterns-when-to-use)

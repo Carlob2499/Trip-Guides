@@ -27,6 +27,7 @@ import "../styles/field-tools.css";
 import "../styles/palette.css";
 import "../styles/print-day.css";
 import "../styles/transitions.css";
+import "../styles/story.css";
 import "../features/firebase/live.css";
 import { derivePins } from "../lib/map-pins";
 
@@ -342,6 +343,15 @@ const tripSummary = buildSummary(guide);
          MASTHEAD
          ═══════════════════════════════════════════════════════════════════ -->
     <header class={`masthead mast-hero ${heroSrc ? "mast-photo" : "mast-typo"}`} id="top" data-hero>
+      {/* First-open story rail — segments ARE the trip's days (structure is information).
+          Shown only during the one-time story intro (story-open.js); inert otherwise. */}
+      {heroSrc && dayCount > 0 && (
+        <div class="mast-story-rail" aria-hidden="true">
+          {Array.from({ length: Math.min(dayCount, 14) }).map((_, i) => (
+            <span class="mast-story-seg" style={`--seg:${i}`}></span>
+          ))}
+        </div>
+      )}
       <div class="mast-frame">
         {heroSrc && (
           <img class="mast-img" src={heroSrc} alt={coverAlt}
@@ -587,6 +597,7 @@ const tripSummary = buildSummary(guide);
       import "../features/sos/index.js";
       import "../scripts/lightbox.js";
       import "../scripts/hero-parallax.js";
+      import "../scripts/story-open.js";
       import "../scripts/gsap-hero.js";
       import "../features/palette/index.js";
       import "../features/trip-split/index.ts";

@@ -1,0 +1,49 @@
+/* First-open STORY intro (src/scripts/story-open.js) — a one-time, per-guide
+   "story opening" of the cover masthead, grounded in the trip itself: a segmented
+   progress rail whose SEGMENTS ARE THE TRIP'S DAYS ticks across the top (an 8-day
+   trip shows 8 segments filling in sequence), while the eyebrow → title → dek reveal
+   over the Ken-Burns cover. Then it settles into the guide.
+
+   Everything lives under body.story-playing — a class JS adds only on the first
+   visit and always removes — so content is NEVER left hidden if the script doesn't
+   run. Disabled under prefers-reduced-motion (JS short-circuits AND this CSS no-ops).
+   docs/VISUAL_COVERS.md. */
+
+/* ── Segmented day rail — the signature. Segments = days (structure is information).
+   Absolute at the TOP OF THE COVER (not the app chrome): the trip's days laid over
+   the trip's photo. .mast-hero is the positioning context (it holds the absolute
+   photo credit). */
+.mast-story-rail{
+  position:absolute;top:0;left:0;right:0;z-index:6;
+  display:flex;gap:4px;padding:10px 12px;
+  opacity:0;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(8,10,13,.55),transparent);
+  transition:opacity .35s ease;
+}
+body.story-playing .mast-story-rail{opacity:1}
+.mast-story-seg{
+  position:relative;flex:1 1 0;height:3px;border-radius:3px;overflow:hidden;
+  background:rgba(255,255,255,.32);
+}
+.mast-story-seg::after{
+  content:"";position:absolute;inset:0;width:0;border-radius:3px;background:#fff;
+}
+/* Each segment fills after the ones before it — a story advancing day by day. */
+body.story-playing .mast-story-seg::after{
+  animation:tgSegFill var(--seg-dur,300ms) linear forwards;
+  animation-delay:calc(var(--seg) * var(--seg-dur,300ms));
+}
+@keyframes tgSegFill{from{width:0}to{width:100%}}
+
+/* ── Staggered arrival of the cover text (only while the story plays). */
+body.story-playing .mast-eyebrow{animation:tgStoryUp .7s .28s both cubic-bezier(.2,.7,.2,1)}
+body.story-playing .mast-title  {animation:tgStoryUp .8s .46s both cubic-bezier(.2,.7,.2,1)}
+body.story-playing .mast-dek    {animation:tgStoryUp .7s .70s both cubic-bezier(.2,.7,.2,1)}
+@keyframes tgStoryUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+
+@media(prefers-reduced-motion:reduce){
+  .mast-story-rail{display:none}
+  body.story-playing .mast-eyebrow,
+  body.story-playing .mast-title,
+  body.story-playing .mast-dek{animation:none}
+}

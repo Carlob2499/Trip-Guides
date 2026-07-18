@@ -7,6 +7,10 @@ import { reducedMotion } from "./util.js";
 
 (function () {
   if (reducedMotion()) return;
+  // On a guide's FIRST open, story-open.js owns the arrival (the day-segmented story
+  // intro) and sets this flag synchronously before this module runs — stand down so
+  // the two don't animate the masthead at once. Repeat visits: story-open bailed, we run.
+  if (window.__storyIntro) return;
   var mast = document.querySelector(".mast-hero");
   if (!mast) return;
 
