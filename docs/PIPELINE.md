@@ -63,10 +63,15 @@ else is a gate a machine can run: research quality, schema, links, photos, recen
    `TRAVELER_PATTERNS.md` (shipped). Target: the post-mortem's party-pattern deltas are what the
    next intake's party selection reads, so each guide starts more personalized than the last.
 
-6. **REFRESH — the maintenance department.** A scheduled Action runs `check-staleness`, and for
-   each fact past its shelf life re-researches it under the same verification discipline and opens
-   a **freshness PR**. This is the missing half of "dynamic": a *published* guide never silently
-   rots (the MangoPlate class of failure). Reuses the dual-pass skill + the verify gate.
+6. **REFRESH — the maintenance department. Shipped (P3).** `recert.yml` runs on a weekly schedule
+   (and on demand): a detect job lists EVERY currently-stale guide (`npm run recert --json`, built on
+   `check-staleness`'s sweep of all non-draft guides), then a **matrix** runs one recert agent per
+   stale guide — each re-verifies only the flagged facts against primary sources, re-dates or
+   downgrades them, runs the continuity sweep + the verify gate, and opens an isolated **freshness
+   PR** (`recert/<slug>`). Never auto-merges; a human reviews each (and may just close it for a
+   concluded trip). This is the missing half of "dynamic": a *published* guide never silently rots
+   (the MangoPlate class). Recert is separate from the GENERATE checkpoint spine — a published
+   guide's freshness is recorded by its facts' `verified_on` dates, not by pipeline stages.
 
 ---
 
@@ -90,7 +95,7 @@ the compute layer** (issue-ops for on-demand generation). Native = PWA-first.
 | **P0 · Verify roll-up** ✅ | `npm run verify` — one verdict + rubric scorecard over readiness+staleness+audit; the gate every later stage reuses | VERIFY | Fable / high (shipped) |
 | **P1 · Intake unification** ✅ | `scripts/intake-schema.mjs` is the one source of truth (FIELDS + zod); the issue form, parser, and scaffold derive from it; a contract test fails CI on drift | INTAKE | Fable / high (shipped) |
 | **P2 · Resumable generate** ✅ | `scripts/pipeline.mjs` checkpoint spine (`<slug>.state.json`, stages scaffold→passA→passB→reconcile→verified); research-pass resumes the branch + commits per stage; `npm run pipeline --status` | GENERATE | Fable / high (shipped) |
-| **P3 · Recert / self-freshening** | Scheduled Action: stale facts → dual-pass re-research → freshness PR; verify gate blocks merge | REFRESH · dynamic #1 | Fable / high |
+| **P3 · Recert / self-freshening** ✅ | `recert.yml` (weekly + on-demand): detect all stale guides → **matrix** → per-guide recert agent re-verifies flagged facts → freshness PR; `npm run recert` builds the work-list; verify gate must PASS | REFRESH · dynamic #1 | Fable / high (shipped) |
 | **P4 · PR scorecard + graduate-on-evidence** | verify `--json` rendered as a PR comment; graduate gate consumes it | PUBLISH | Sonnet / medium |
 | **R3 · Dynamic runtime** | View Transitions, live-data tiles, offline/connection state machine, per-view (Focus Today / what's-open-now / weather day-swap) | dynamic #2 + #3 | Fable designs; Sonnet implements |
 | **R4 · Per-country visual identity** | Build-time country skin (palette from the guide's own imagery), one signature motion set, motion-doctrine doc | goals 8/9 | Fable spec; Sonnet implements |

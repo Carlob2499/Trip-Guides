@@ -13,6 +13,7 @@
     "readiness": "node scripts/guide-readiness.mjs",
     "verify": "node scripts/verify-guide.mjs",
     "pipeline": "node scripts/pipeline.mjs",
+    "recert": "node scripts/recert.mjs",
     "aggregate-telemetry": "tsx scripts/aggregate-telemetry.ts",
     "lookup-place": "node scripts/lookup-place.mjs",
     "search-commons": "node scripts/search-commons.mjs",

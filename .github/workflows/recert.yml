@@ -1,0 +1,144 @@
+name: Recert (self-freshening)
+
+# The maintenance department (pipeline REFRESH stage, "dynamic" sense #1). On a schedule it sweeps
+# EVERY published guide for facts past their shelf life and, for each stale guide, runs a Claude
+# agent that re-verifies those facts against primary sources and opens a "freshness PR" — so a
+# published guide never silently rots (the MangoPlate class of failure). Never auto-merges; a human
+# reviews + merges each freshness PR (and may simply close it for a concluded trip).
+#
+# COMPREHENSIVE BY DESIGN: the detect job lists ALL currently-stale guides (via `npm run recert
+# --json`, which builds on check-staleness's sweep of every non-draft guide), and the recert job is
+# a MATRIX over that list — one isolated freshness PR per guide, all in one scheduled run. Drafts are
+# the research pass's job, not recert's (check-staleness skips them).
+#
+# Runs on the Claude MAX subscription (CLAUDE_CODE_OAUTH_TOKEN), same as research-pass.yml → ~$0
+# marginal. Relationship to content-audit.yml: that workflow REPORTS staleness (+ link/photo rot) to
+# a tracking issue; this one ACTS on the staleness half by opening fix PRs. No overlap in effect.
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Mondays 06:00 UTC — weekly; fx facts (7-day shelf life) are caught within the week
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "Recert just this guide (leave blank to sweep ALL stale guides)."
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  # Build the list of guides needing recert. A manual dispatch with a slug targets just that one;
+  # otherwise every currently-stale guide. Empty list → the recert job is skipped (has_stale gate).
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      slugs: ${{ steps.list.outputs.slugs }}
+      has_stale: ${{ steps.list.outputs.has_stale }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - id: list
+        run: |
+          set -euo pipefail
+          if [ -n "${{ inputs.slug }}" ]; then
+            SLUGS="[\"${{ inputs.slug }}\"]"
+          else
+            SLUGS=$(node scripts/recert.mjs --json | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>process.stdout.write(JSON.stringify(JSON.parse(d).slugs)))")
+          fi
+          echo "slugs=$SLUGS" >> "$GITHUB_OUTPUT"
+          if [ "$SLUGS" = "[]" ]; then
+            echo "has_stale=false" >> "$GITHUB_OUTPUT"
+            echo "No guides need recert — all facts within shelf life."
+          else
+            echo "has_stale=true" >> "$GITHUB_OUTPUT"
+            echo "Stale guides to recert: $SLUGS"
+          fi
+
+  # One isolated freshness PR per stale guide. fail-fast off so one guide's failure doesn't cancel
+  # the others — comprehensiveness means every stale guide gets its own attempt.
+  recert:
+    needs: detect
+    if: needs.detect.outputs.has_stale == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        slug: ${{ fromJson(needs.detect.outputs.slugs) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure git identity
+        run: |
+          git config user.name  "waypoint-recert[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      # Resume the freshness branch if a prior run created it (so an existing open PR is updated in
+      # place rather than duplicated); otherwise start it fresh from the current published guide.
+      - name: Resume or start the freshness branch
+        run: |
+          BR="recert/${{ matrix.slug }}"
+          if git ls-remote --exit-code --heads origin "$BR" >/dev/null 2>&1; then
+            git fetch origin "$BR" && git checkout "$BR"
+            echo "Resumed $BR"
+          else
+            git checkout -b "$BR"
+            echo "Started $BR"
+          fi
+
+      - name: Run recert agent
+        uses: anthropic/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          allowed_tools: "Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch"
+          prompt: |
+            RECERT — re-verify the STALE facts of an already-published guide. This is maintenance, not
+            new research: touch only the facts flagged below, keep everything else as-is, and keep the
+            guide published (do NOT set draft: true).
+
+            Guide slug: ${{ matrix.slug }}
+
+            Use the waypoint-guide-author skill: read .claude/skills/waypoint-guide-author/SKILL.md and
+            references/verification-rules.md and follow them exactly — especially the done gate's
+            "Recert pass" step and the "Editing a Guide — Continuity Is Mandatory" rule. CLAUDE.md's
+            accuracy standard (auto-loaded) is binding.
+
+            1. Get the punch list: `npm run recert -- --slug ${{ matrix.slug }}`. It lists each fact
+               past its shelf life and the source_url to re-check it against.
+            2. For EACH flagged fact: re-verify against a PRIMARY (T0) source (start from the
+               source_url). If the value changed, update it AND re-date `verified_on` to today. If you
+               cannot confirm it from a primary source, downgrade it to ⚠ or omit it — never leave a
+               stale value presenting as verified, and never invent a fresh-looking figure.
+            3. CONTINUITY SWEEP (mandatory): a changed fact ripples. Grep the whole guide for every
+               touchpoint of each fact you changed (and the stale phrasings the change creates) and
+               fix them, per CLAUDE.md. Update the guide-level `verified` stamp date too.
+            4. SELF-CORRECTION LOOP: run `npm run verify -- --slug ${{ matrix.slug }}` + `npm run build`;
+               fix each blocking finding against a primary source; repeat until verify PASSes and build
+               is clean. (The recency row should clear once the dates are refreshed.)
+            5. Commit to the `recert/${{ matrix.slug }}` branch, push, and open OR update a PR
+               (idempotent — the branch may already have one):
+                 gh pr view --json number >/dev/null 2>&1 || gh pr create \
+                   --title "Recert: ${{ matrix.slug }}" \
+                   --body "<summary below>"
+               PR body: which facts were re-verified and whether each CHANGED / was CONFIRMED-unchanged
+               / was DOWNGRADED to ⚠, the FINAL `npm run verify` scorecard, and the updated ledger. If
+               this guide is a concluded trip and a fact can't sensibly be refreshed, say so — the
+               human may choose to close this PR rather than merge.
+
+            NEVER auto-merge. NEVER set draft: true. Touch only src/content/guides/${{ matrix.slug }}.json
+            (and its guides-intake/${{ matrix.slug }}.md). Do not touch any other guide.

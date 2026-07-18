@@ -68,6 +68,14 @@ helper scripts, and the done gate.
   CLAUDE.md's **"Editing a Guide — Continuity Is Mandatory"**: grep the whole
   guide for every touchpoint the change ripples into, fix what's in scope,
   stop-and-ask when it forks the plan.
+- **Recert a published guide** — the self-freshening / maintenance mode (the scheduled
+  `recert.yml`, or manual). Get the punch list with `npm run recert -- --slug <slug>` —
+  every fact past its shelf life + the `source_url` to re-check it against. Re-verify EACH
+  against a primary source: if it changed, update it and re-date `verified_on` to today; if
+  you can't confirm it, downgrade to `⚠` or omit — never leave a stale value presenting as
+  verified, never invent a fresh figure. Then the continuity sweep (above) and the verify
+  loop. This is a scoped edit: **touch only the flagged facts, keep the guide published**
+  (never set `draft: true`). It follows the done gate's **Recert pass** step (#4).
 - **Reflect on a trip** — when writing a `learnings` block, tag each `skipped[]` stop with
   the content `group` it belonged to where that's unambiguous, and **leave `group` off when
   it isn't**. It powers the Learnings tab's "what didn't survive contact" tally and the

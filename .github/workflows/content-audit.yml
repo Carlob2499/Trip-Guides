@@ -6,6 +6,10 @@ name: Content audit
 # separate research pass (the waypoint-guide-author skill) does the actual fixing.
 # See scripts/audit/*.mjs for the checks themselves; run any of them locally with
 # `node scripts/audit/run-audit.mjs --dry-run` (no GH_TOKEN needed for a dry run).
+#
+# Complements recert.yml, which does NOT overlap in effect: this REPORTS all four checks to an
+# issue; recert.yml ACTS on the staleness half only, opening per-guide freshness PRs (link/photo
+# rot still surfaces here for a human, since fixing those is a swap/removal, not a re-verification).
 on:
   schedule:
     # 03:00 UTC every Monday — an off-the-hour minute on purpose, so this doesn't
