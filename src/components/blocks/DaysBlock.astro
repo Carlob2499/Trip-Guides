@@ -13,6 +13,13 @@ const two = (n: number) => String(n + 1).padStart(2, "0");
 const actualFor = (date: string) =>
   (learnings?.days ?? []).find((d: any) => d.date === date) ?? null;
 ---
+{days.length > 0 && (
+  <button class="story-play" type="button" data-story-open aria-haspopup="dialog">
+    <span class="story-play-ico" aria-hidden="true">▶</span>
+    <span class="story-play-txt">Play the trip</span>
+    <span class="story-play-sub">{days.length} days · swipe through</span>
+  </button>
+)}
 <nav class="day-scrub" id="dayScrub" aria-label="Jump to a day">
   {days.map((d: any, di: number) => (
     <button class="dchip" type="button" data-day-jump={di} aria-label={`Jump to ${d.date}`}>

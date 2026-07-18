@@ -1,0 +1,87 @@
+/* STORY MODE — the itinerary as a full-screen, one-day-per-view deck (V3c;
+   docs/VISUAL_COVERS.md). Opens from [data-story-open]; driven by
+   features/itinerary/ui/story-mode.js. An immersive dark palette takeover; the
+   segmented rail at top = the trip's days (the signature browsing device). */
+
+body.sm-lock{overflow:hidden}
+
+.sm-overlay{
+  position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;color:#f3f5ef;
+  padding:calc(env(safe-area-inset-top,0px) + 14px) 16px calc(env(safe-area-inset-bottom,0px) + 14px);
+  background:radial-gradient(130% 90% at 50% -10%, color-mix(in srgb,var(--accent) 26%,#0b0e12), #0b0e12 68%);
+}
+.sm-overlay[hidden]{display:none}
+
+/* Day rail — segments = days: filled behind you (done), lit on the current day (now). */
+.sm-rail{display:flex;gap:5px;margin:0 46px 0 2px}
+.sm-seg{flex:1 1 0;height:3px;border-radius:3px;background:rgba(255,255,255,.24);transition:background .3s;cursor:pointer}
+.sm-seg.done{background:rgba(255,255,255,.6)}
+.sm-seg.now{background:var(--accent);box-shadow:0 0 10px color-mix(in srgb,var(--accent) 70%,transparent)}
+
+.sm-close{position:absolute;top:calc(env(safe-area-inset-top,0px) + 10px);right:12px;z-index:3;
+  width:38px;height:38px;border-radius:999px;border:1px solid rgba(255,255,255,.22);
+  background:rgba(20,24,28,.5);color:#f3f5ef;font-size:1rem;cursor:pointer;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.sm-close:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.sm-stage{flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
+.sm-panel{width:100%;max-width:34rem;max-height:100%;overflow:auto;padding:1rem .2rem;-webkit-overflow-scrolling:touch}
+.sm-panel:focus{outline:none}
+
+.sm-eyebrow{font-family:var(--font-data);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:color-mix(in srgb,var(--accent) 60%,#f3f5ef);margin:0}
+.sm-title{font-family:var(--font-display);font-weight:800;font-size:clamp(1.9rem,6vw,3.1rem);line-height:1.03;letter-spacing:-.03em;margin:.35rem 0 .5rem}
+.sm-tldr{font-family:var(--font-body);font-size:1.02rem;line-height:1.5;color:#dfe3da;max-width:32rem;margin:0}
+.sm-pace{font-family:var(--font-data);font-size:.82rem;color:#c7ccc0;margin:.55rem 0 0}
+.sm-stops{list-style:none;margin:1.1rem 0 0;padding:0}
+.sm-stop{display:flex;gap:.7rem;align-items:baseline;padding:.6rem .2rem;border-top:1px solid rgba(255,255,255,.12)}
+.sm-stop-n{font-family:var(--font-data);font-size:.72rem;color:color-mix(in srgb,var(--accent) 62%,#f3f5ef);min-width:1.4rem}
+.sm-stop-main{flex:1;display:flex;flex-direction:column;gap:.12rem}
+.sm-stop-name{font-family:var(--font-display);font-weight:600;font-size:1.02rem}
+.sm-stop-note{font-size:.86rem;color:#b9beb2;line-height:1.35}
+.sm-stop-time{font-family:var(--font-data);font-size:.78rem;color:#c7ccc0;white-space:nowrap}
+
+.sm-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:3;
+  width:44px;height:44px;border-radius:999px;border:1px solid rgba(255,255,255,.2);
+  background:rgba(20,24,28,.42);color:#f3f5ef;font-size:1.5rem;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  transition:background .15s,transform .15s}
+.sm-prev{left:8px}
+.sm-next{right:8px}
+.sm-nav:hover{background:rgba(30,36,42,.72);transform:translateY(-50%) scale(1.06)}
+.sm-nav:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.sm-hint{text-align:center;font-family:var(--font-data);font-size:.72rem;color:rgba(243,245,239,.5);margin:.4rem 0 0}
+.sm-live{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* Motion — confident slide+fade per day change; a small bounce at the first/last day. */
+@keyframes tgSmInR{from{opacity:0;transform:translateX(34px)}to{opacity:1;transform:none}}
+@keyframes tgSmInL{from{opacity:0;transform:translateX(-34px)}to{opacity:1;transform:none}}
+@keyframes tgSmBounce{0%,100%{transform:none}32%{transform:translateX(-10px)}}
+.sm-panel.sm-in-r{animation:tgSmInR .34s cubic-bezier(.2,.7,.2,1)}
+.sm-panel.sm-in-l{animation:tgSmInL .34s cubic-bezier(.2,.7,.2,1)}
+.sm-panel.sm-bounce{animation:tgSmBounce .3s ease}
+
+@media(min-width:700px){
+  .sm-panel{padding:1.5rem}
+  .sm-nav{width:48px;height:48px}
+  .sm-prev{left:max(16px,calc(50vw - 24rem))}
+  .sm-next{right:max(16px,calc(50vw - 24rem))}
+}
+@media(prefers-reduced-motion:reduce){
+  .sm-panel.sm-in-r,.sm-panel.sm-in-l,.sm-panel.sm-bounce{animation:none}
+  .sm-seg,.sm-nav{transition:none}
+}
+
+/* ── The "Play the trip" trigger, in the itinerary above the day scrubber. */
+.story-play{
+  display:inline-flex;align-items:baseline;gap:.6rem;margin:0 0 1rem;
+  padding:.72rem 1.15rem;border-radius:999px;cursor:pointer;
+  font-family:var(--font-display);font-weight:640;font-size:.98rem;letter-spacing:-.01em;
+  color:#f7f8f3;background:var(--accent);border:1px solid var(--accent);
+  transition:transform .15s,filter .15s;
+}
+.story-play:hover{transform:translateY(-1px);filter:brightness(1.06)}
+.story-play:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.story-play-ico{font-size:.72rem}
+.story-play-sub{font-family:var(--font-data);font-weight:500;font-size:.72rem;opacity:.85;letter-spacing:.02em}
+@media(prefers-reduced-motion:reduce){.story-play{transition:none}}
