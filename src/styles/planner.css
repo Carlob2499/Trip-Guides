@@ -88,9 +88,20 @@
 }
 @keyframes nowPulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 45%,transparent)}50%{box-shadow:0 0 0 6px transparent}}
 
-/* ── Offline pill (offline-pill.js) ───────────────────────────────────────── */
+/* ── Offline pill + connection state (offline-pill.js) ────────────────────────
+   offline-pill.js stamps <html data-conn="online|offline">. Live surfaces key off
+   it so they degrade EXPLICITLY when the connection drops — dimmed and inert, not
+   silently stale — and recover on their own when it returns. Content is never
+   touched; only live chrome dims. */
 .offline-pill{position:fixed;left:50%;bottom:4.2rem;transform:translateX(-50%);z-index:900;max-width:calc(100vw - 2rem);padding:.5rem .95rem;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:.72rem;letter-spacing:.03em;border-radius:999px;box-shadow:0 4px 18px rgba(10,14,18,.35);text-align:center}
 @media(min-width:900px){.offline-pill{bottom:1.6rem;left:1.6rem;transform:none}}
+html[data-conn="offline"] .wx-wrap,
+html[data-conn="offline"] .itin-map{opacity:.45;filter:grayscale(.55);pointer-events:none;transition:opacity .3s ease,filter .3s ease}
+html[data-conn="offline"] .split-live-dot{background:var(--muted);animation:none}
+@media(prefers-reduced-motion:reduce){
+  html[data-conn="offline"] .wx-wrap,
+  html[data-conn="offline"] .itin-map{transition:none}
+}
 .stop+.stop{border-top:1px dashed var(--rule)}
 .stop-num{flex:none;font-family:var(--font-data);font-size:.62rem;font-weight:700;color:var(--accent);letter-spacing:.04em}
 .stop-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:.05rem}

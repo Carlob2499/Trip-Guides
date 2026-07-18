@@ -16,7 +16,11 @@ import { reducedMotion } from "./util.js";
 
   import("gsap").then(function (m) {
     var gsap = m.gsap || m.default;
-    var tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+    // clearProps: GSAP releases the inline styles once each tween completes, so
+    // stylesheet owners (e.g. the offline degradation on .wx-wrap via
+    // html[data-conn="offline"]) can take over afterwards — one owner per property
+    // per element at any time (docs/MOTION.md rule 4).
+    var tl = gsap.timeline({ defaults: { ease: "power3.out", clearProps: "opacity,visibility,transform" } });
     tl.from(".mast-eyebrow", { y: 22, autoAlpha: 0, duration: 0.6 }, 0.05)
       .from(".mast-title",   { y: 34, autoAlpha: 0, duration: 0.75 }, 0.16)
       .from(".mast-dek",     { y: 24, autoAlpha: 0, duration: 0.7 }, 0.3)
