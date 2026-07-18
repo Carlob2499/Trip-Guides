@@ -19,6 +19,7 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { countryData, isoCodeFor } from "../src/data/countries.mjs";
+import { validateAnswers } from "./intake-schema.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const GUIDES_DIR = path.join(ROOT, "src", "content", "guides");
@@ -234,9 +235,16 @@ async function uniqueSlug(base) {
 
 // Write both files for a set of answers. Returns { slug, guidePath, intakePath }.
 export async function writeScaffold(answers) {
-  const slug = await uniqueSlug(slugify(answers.slug || answers.country || answers.title));
-  const guide = buildGuideObject(answers);
-  const intake = buildIntakeMd(answers);
+  // Validate against the shared intake schema (country required; everything else optional) — this
+  // is the one gate both entry points (CLI + issue form) pass through.
+  const v = validateAnswers(answers);
+  if (!v.ok) throw new Error(`invalid intake: ${v.error}`);
+  // Derive the day labels from the trip dates HERE, so every caller gets the right per-day card
+  // count without repeating dayLabelsFromRange (kept overridable for direct/test callers).
+  const a = answers.dayLabels ? answers : { ...answers, dayLabels: dayLabelsFromRange(answers.start, answers.end) };
+  const slug = await uniqueSlug(slugify(a.slug || a.country || a.title));
+  const guide = buildGuideObject(a);
+  const intake = buildIntakeMd(a);
   await mkdir(GUIDES_DIR, { recursive: true });
   await mkdir(INTAKE_DIR, { recursive: true });
   const guidePath = path.join(GUIDES_DIR, `${slug}.json`);
@@ -275,9 +283,9 @@ async function main() {
     travelers: a.travelers, pace: a.pace, niche: a.niche, budget: a.budget, comments: a.comments,
     anchor: a.anchor, party: a.party, travelStyle: a["travel-style"],
     priorities: a.priorities ? a.priorities.split(",").map((s) => s.trim()) : [],
-    dayLabels: dayLabelsFromRange(start, end),
     coords: (a.lat && a.lng) ? { lat: parseFloat(a.lat), lng: parseFloat(a.lng) } : null,
   };
+  // dayLabels is derived inside writeScaffold from start/end — the CLI no longer computes it.
   const res = await writeScaffold(answers);
   console.log(`[scaffold] wrote ${path.relative(ROOT, res.guidePath)} + ${path.relative(ROOT, res.intakePath)} (slug: ${res.slug})`);
 }

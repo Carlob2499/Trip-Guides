@@ -1,65 +1,25 @@
 // Bridges a "New guide" GitHub Issue Form to the scaffolder. Run by
-// .github/workflows/new-guide.yml. Reads the issue body from $ISSUE_BODY, extracts
-// the form fields (by their labels), writes the scaffold + intake via writeScaffold,
-// and emits the chosen slug to $GITHUB_OUTPUT for the workflow's commit steps.
+// .github/workflows/new-guide.yml. Reads the issue body from $ISSUE_BODY, parses + maps + validates
+// it via the shared intake-schema (the single source of truth — scripts/intake-schema.mjs), writes
+// the scaffold + intake via writeScaffold, and emits the chosen slug to $GITHUB_OUTPUT for the
+// workflow's commit steps.
 //
-// No third-party actions: the issue-form body is parsed here with a small regex.
+// All field knowledge (labels, kinds, null-ish defaults, the dates→start/end and priorities→array
+// transforms) lives in intake-schema.mjs, so this file can never drift from the issue form or the
+// scaffolder: it just wires them together.
 
 import { appendFileSync } from "node:fs";
-import { writeScaffold, dayLabelsFromRange } from "./scaffold-guide.mjs";
+import { writeScaffold } from "./scaffold-guide.mjs";
+import { parseIssueBody, answersFromForm, validateAnswers } from "./intake-schema.mjs";
 
 const body = process.env.ISSUE_BODY || "";
+const answers = answersFromForm(parseIssueBody(body));
 
-// Issue Forms render each field as "### <Label>\n\n<value>". Empty inputs render the
-// literal "_No response_". Extract a field's value by its label.
-function field(label) {
-  const esc = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const m = body.match(new RegExp("###\\s+" + esc + "\\s*\\n+([\\s\\S]*?)(?=\\n###\\s|$)"));
-  let v = m ? m[1].trim() : "";
-  if (v === "_No response_" || v === "_No response_.") v = "";
-  return v;
-}
-
-// Dropdowns carry a null-ish first option chosen as the default (so the field always
-// renders a value). Treat those as "unset" so they don't leak into the scaffold.
-// "— none —" uses an em dash (U+2014), matching the Issue Form exactly.
-const NULLISH = new Set(["undecided", "— none —"]);
-function choice(label) {
-  const v = field(label);
-  return NULLISH.has(v) ? "" : v;
-}
-
-const country = field("Country");
-if (!country) { console.error("[issue-to-scaffold] no Country field — aborting"); process.exit(1); }
-
-const dates = field("Trip dates");
-const [start, end] = dates ? dates.split(/\s+to\s+/i).map((s) => s.trim()) : [];
-
-// Three single-select rank fields → an ordered array (rank preserved), empties dropped.
-const priorities = [
-  choice("Priority #1 (most important)"),
-  choice("Priority #2"),
-  choice("Priority #3"),
-].filter(Boolean);
-
-const answers = {
-  country,
-  cities: field("City / cities"),
-  start, end,
-  travelers: field("Number of travelers"),
-  party: field("Who's this for / party"),
-  anchor: field("Anchor event"),
-  travelStyle: choice("Travel style"),
-  pace: choice("Pace"),
-  priorities,
-  niche: field("Niche interest"),
-  budget: choice("Budget"),
-  comments: field("Comments"),
-  dayLabels: dayLabelsFromRange(start, end),
-};
+const v = validateAnswers(answers);
+if (!v.ok) { console.error(`[issue-to-scaffold] invalid intake: ${v.error} — aborting`); process.exit(1); }
 
 const res = await writeScaffold(answers);
-console.log(`[issue-to-scaffold] wrote scaffold for ${country} (slug: ${res.slug})`);
+console.log(`[issue-to-scaffold] wrote scaffold for ${answers.country} (slug: ${res.slug})`);
 if (process.env.GITHUB_OUTPUT) {
-  appendFileSync(process.env.GITHUB_OUTPUT, `slug=${res.slug}\ncountry=${country}\n`);
+  appendFileSync(process.env.GITHUB_OUTPUT, `slug=${res.slug}\ncountry=${answers.country}\n`);
 }

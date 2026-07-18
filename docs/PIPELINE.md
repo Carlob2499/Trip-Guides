@@ -84,7 +84,7 @@ the compute layer** (issue-ops for on-demand generation). Native = PWA-first.
 | Phase | Deliverable | Serves | Model / effort |
 |-------|-------------|--------|----------------|
 | **P0 · Verify roll-up** ✅ | `npm run verify` — one verdict + rubric scorecard over readiness+staleness+audit; the gate every later stage reuses | VERIFY | Fable / high (shipped) |
-| **P1 · Intake unification** | One zod intake schema → issue form + scaffold + skill derive from it; no drift; phone-simple | INTAKE | Fable / high (schema is load-bearing) |
+| **P1 · Intake unification** ✅ | `scripts/intake-schema.mjs` is the one source of truth (FIELDS + zod); the issue form, parser, and scaffold derive from it; a contract test fails CI on drift | INTAKE | Fable / high (shipped) |
 | **P2 · Orchestration + resumable generate** | One command chains scaffold→dual-pass→verify; checkpoint after A / B / reconcile so a cut-off headless run resumes | GENERATE | Fable / high (control flow + failure modes) |
 | **P3 · Recert / self-freshening** | Scheduled Action: stale facts → dual-pass re-research → freshness PR; verify gate blocks merge | REFRESH · dynamic #1 | Fable / high |
 | **P4 · PR scorecard + graduate-on-evidence** | verify `--json` rendered as a PR comment; graduate gate consumes it | PUBLISH | Sonnet / medium |

@@ -6,6 +6,11 @@
 > priorities. See the project CLAUDE.md "Order of Operations" for how this
 > fits the build.
 >
+> *This is the human-canonical template. The **machine** intake — the quick-capture issue form,
+> the scaffolder, and answer validation — all derive from one source of truth,
+> `scripts/intake-schema.mjs` (`FIELDS` + a zod schema), guarded by a contract test so the surfaces
+> can't drift. Add a captured field there; keep this doc's prompts in step.*
+>
 > Each section notes what it drives downstream — answers here change what
 > gets researched, not just what gets written.
 
