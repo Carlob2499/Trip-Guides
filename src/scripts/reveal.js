@@ -8,6 +8,10 @@ import { reducedMotion } from "./util.js";
 
 (function () {
   if (reducedMotion()) return;
+  // Native CSS scroll-driven animations (styles/scroll-motion.css) handle the reveal
+  // off the main thread where supported — this JS is only the fallback. Bail so the two
+  // never both animate the same element.
+  if (window.CSS && CSS.supports && CSS.supports("animation-timeline: view()")) return;
   if (!("IntersectionObserver" in window)) return;
 
   var targets = Array.prototype.slice.call(

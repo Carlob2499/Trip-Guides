@@ -1,0 +1,25 @@
+/* Pervasive scroll motion — content rises into view as you scroll, using NATIVE CSS
+   scroll-driven animations (`animation-timeline: view()`): off the main thread, no JS,
+   silky on mobile. This is progressive enhancement — `reveal.js` provides the
+   IntersectionObserver fallback on browsers without `animation-timeline` (it bails when
+   this is supported, so the two never both run). Fully disabled under reduced-motion.
+   docs/VISUAL_COVERS.md (V3b). */
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .catblock .card,
+    .catblock .day,
+    .catblock .sight,
+    .hubcard {
+      animation: tgRise linear both;
+      animation-timeline: view();
+      /* Reveal as the item enters, finishing well before it's centred — so it's
+         settled by the time the eye reaches it, never mid-animation while reading. */
+      animation-range: entry 4% cover 22%;
+    }
+    @keyframes tgRise {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: none; }
+    }
+  }
+}
