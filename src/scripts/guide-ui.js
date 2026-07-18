@@ -7,6 +7,7 @@ import { resolveTripDate } from "../lib/trip-dates";
 import { initRate, initWeather } from "../features/live-data/index.js";
 import { initJetLag } from "./jetlag-ui.js";
 import { initSharePanel } from "../features/share/index.js";
+import { reportError } from "../features/firebase/index.js";
 
 const _cfgEl = document.getElementById("tgConfig");
 const _cfg = _cfgEl ? JSON.parse(_cfgEl.textContent || "{}") : {};
@@ -24,7 +25,12 @@ const daysForBanner     = _cfg.daysForBanner || [];
       // closures like showTab/hashKey) runs in one try; each independent leaf feature
       // after it gets its own, so a throw in one leaf can no longer kill the rest and
       // the console names the culprit instead of a single generic message.
-      function fail(name, e) { console.error("[guide-ui] " + name + " failed:", e); }
+      function fail(name, e) {
+        console.error("[guide-ui] " + name + " failed:", e);
+        // Also beacon it so the maker can SEE production failures, not just the traveler's own
+        // console. Best-effort + rate-limited inside reportError; never let it mask the original.
+        try { reportError({ guide: storeKey, feature: name, message: (e && e.message) || String(e) }); } catch (_) {}
+      }
 
 
       /* ── SHARED: SCROLL LOCK (used by both sheet and share modal) ─────── */

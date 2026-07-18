@@ -7,10 +7,34 @@
    Feature-agnostic: Trip Split is the first consumer; shared checklists / voting /
    presence can reuse the same primitive. */
 
-import { ready } from "./client.js";
+import { ready, hasFirebase } from "./client.js";
 
 // Unambiguous alphabet (no 0/o/1/l/i) — codes get read aloud and typed on phones.
 const CODE_ALPHABET = "abcdefghjkmnpqrstuvwxyz23456789";
+
+// Best-effort error beacon. A leaf feature that throws used to log ONLY to the traveler's own
+// phone console — invisible to the maker. This appends a bounded {guide,feature,message,ua,at}
+// record to the write-only `errors/` node (rules: .read false, .write auth). Never throws, never
+// blocks, rate-limited to the first few per session so a render loop can't flood the DB, and a
+// no-op when Firebase isn't configured. Reuses the SDK the sync features already loaded.
+let _errCount = 0;
+export function reportError(detail) {
+  if (_errCount >= 5 || !hasFirebase()) return;
+  _errCount++;
+  try {
+    ready().then(function (ctx) {
+      const { db, mod } = ctx;
+      const r = mod.push(mod.ref(db, "errors"));
+      mod.set(r, {
+        guide: String((detail && detail.guide) || "").slice(0, 60),
+        feature: String((detail && detail.feature) || "").slice(0, 60),
+        message: String((detail && detail.message) || "").slice(0, 500),
+        ua: String((typeof navigator !== "undefined" && navigator.userAgent) || "").slice(0, 200),
+        at: mod.serverTimestamp(),
+      }).catch(function () {});
+    }).catch(function () {});
+  } catch (e) { /* beacon must never surface its own failure */ }
+}
 
 // A 10-char crypto-random room key — unguessable, so the code itself is the lock.
 export function generateTripCode() {

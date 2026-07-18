@@ -54,6 +54,19 @@
         },
         "$other": { ".validate": false }
       }
+    },
+    "errors": {
+      ".read": false,
+      ".write": "auth != null",
+      "$eid": {
+        ".validate": "$eid.matches(/^[A-Za-z0-9_-]+$/)",
+        "guide": { ".validate": "newData.isString() && newData.val().length <= 60" },
+        "feature": { ".validate": "newData.isString() && newData.val().length <= 60" },
+        "message": { ".validate": "newData.isString() && newData.val().length <= 500" },
+        "ua": { ".validate": "newData.isString() && newData.val().length <= 200" },
+        "at": { ".validate": "newData.isNumber()" },
+        "$other": { ".validate": false }
+      }
     }
   }
 }
