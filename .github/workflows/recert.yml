@@ -136,9 +136,10 @@ jobs:
                    --title "Recert: ${{ matrix.slug }}" \
                    --body "<summary below>"
                PR body: which facts were re-verified and whether each CHANGED / was CONFIRMED-unchanged
-               / was DOWNGRADED to ⚠, the FINAL `npm run verify` scorecard, and the updated ledger. If
-               this guide is a concluded trip and a fact can't sensibly be refreshed, say so — the
-               human may choose to close this PR rather than merge.
+               / was DOWNGRADED to ⚠, the FINAL scorecard (paste the output of
+               `npm run verify -- --slug ${{ matrix.slug }} --markdown` verbatim), and the updated
+               ledger. If this guide is a concluded trip and a fact can't sensibly be refreshed, say
+               so — the human may choose to close this PR rather than merge.
 
             NEVER auto-merge. NEVER set draft: true. Touch only src/content/guides/${{ matrix.slug }}.json
             (and its guides-intake/${{ matrix.slug }}.md). Do not touch any other guide.

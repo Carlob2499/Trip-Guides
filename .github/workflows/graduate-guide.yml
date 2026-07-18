@@ -5,6 +5,12 @@ name: Graduate guide
 # workflow only runs when graduate-approved is ALSO applied, which requires write
 # access to the repo (GitHub's own permission model, not a custom check here) — so
 # graduation stays the owner's decision even though anyone can nominate.
+#
+# GRADUATE ON EVIDENCE (pipeline P4): approval is necessary but not sufficient. The guide is flipped
+# in the working tree, then gated on `npm run build` (schema) + `npm run verify` (research/recency);
+# the verify SCORECARD is posted to the issue either way. If the gate fails, the guide is NOT
+# published and the issue stays open — fix the findings and re-apply the label. Only a clean gate
+# commits the flip to main. This is what stops an empty/broken draft from graduating on a rubber stamp.
 on:
   issues:
     types: [labeled]
@@ -25,12 +31,51 @@ jobs:
         with:
           node-version: 22
 
-      - name: Flip draft:false
+      - name: Install dependencies
+        run: npm ci
+
+      # Flip draft off in the WORKING TREE only (not committed yet) — so the evidence gate below
+      # verifies the guide exactly as it will be published (draft: no → recency becomes live).
+      - name: Flip draft (working tree only)
         id: grad
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
         run: node scripts/graduate-guide.mjs
 
+      # The evidence gate: build (schema) + verify (research/recency), scorecard posted to the issue
+      # regardless of outcome. A failing gate blocks graduation (exit 1 → the commit step is skipped)
+      # and leaves the issue open.
+      - name: Evidence gate — build + verify + post scorecard
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SLUG: ${{ steps.grad.outputs.slug }}
+          ISSUE_NUM: ${{ github.event.issue.number }}
+        run: |
+          set +e
+          npm run build > build.log 2>&1; BUILD=$?
+          npm run verify --silent -- --slug "$SLUG" --markdown > scorecard.md; VERIFY=$?
+          {
+            echo "### Graduation evidence — \`$SLUG\`"
+            echo
+            cat scorecard.md
+            echo
+            if [ "$BUILD" -ne 0 ]; then
+              echo "> ❌ \`npm run build\` (schema) FAILED — this guide can't publish. Last lines:"
+              echo '```'
+              tail -n 20 build.log
+              echo '```'
+            else
+              echo "> ✅ \`npm run build\` (schema) clean."
+            fi
+          } > comment.md
+          gh issue comment "$ISSUE_NUM" --body-file comment.md
+          if [ "$VERIFY" -ne 0 ] || [ "$BUILD" -ne 0 ]; then
+            gh issue comment "$ISSUE_NUM" --body "❌ **Graduation blocked** — \`$SLUG\` does not pass the evidence gate (see the scorecard above). Fix the blocking findings, then re-apply the \`graduate-approved\` label to try again. The guide was NOT published."
+            exit 1
+          fi
+          echo "Evidence gate passed for $SLUG."
+
+      # Reached only when the gate passed. Commit the flip to main, record it, close the issue.
       - name: Commit straight to main, comment/close the issue
         env:
           GH_TOKEN: ${{ github.token }}
@@ -46,5 +91,5 @@ jobs:
           git pull --rebase origin main
           git push origin HEAD:main
           GUIDE_URL="https://carlob2499.github.io/Trip-Guides/guides/${SLUG}/"
-          gh issue comment "${ISSUE_NUM}" --body "Graduated ✅ — \`draft\` removed from \`src/content/guides/${SLUG}.json\`. It'll appear in the curated grid on the next deploy: ${GUIDE_URL}. Reminder: the \`verified\` freshness stamp on this guide wasn't touched — update it separately if it still reads as an unverified draft."
+          gh issue comment "${ISSUE_NUM}" --body "Graduated ✅ (evidence gate passed) — \`draft\` removed from \`src/content/guides/${SLUG}.json\`. It'll appear in the curated grid on the next deploy: ${GUIDE_URL}. Reminder: the \`verified\` freshness stamp wasn't touched — update it separately if it still reads as an unverified draft."
           gh issue close "${ISSUE_NUM}"

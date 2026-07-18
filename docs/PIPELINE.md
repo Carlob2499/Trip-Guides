@@ -55,9 +55,13 @@ else is a gate a machine can run: research quality, schema, links, photos, recen
    `GUIDE_RUBRIC`-shaped scorecard: AUTO rows the machine passes/fails, HUMAN rows the graduating
    reviewer checks. **Shipped this phase.** Schema stays the `npm run build` gate, called alongside.
 
-4. **PUBLISH — graduate on evidence.** `graduate-guide` flips draft→published (human decision,
-   already a script+workflow+issue-form). Target: the verify scorecard is posted on the research
-   PR, so graduation is a judgment against evidence, not vibes.
+4. **PUBLISH — graduate on evidence. Shipped (P4).** `graduate-guide` flips draft→published (a
+   human decision — nomination is open, approval needs write access). `npm run verify --markdown`
+   renders the rubric scorecard (AUTO gates + HUMAN checklist); `graduate-guide.yml` now flips in the
+   working tree, **gates on `npm run build` (schema) + `npm run verify` (research/recency)**, posts
+   the scorecard to the issue either way, and commits only if the gate passes — a failing draft can't
+   graduate on a rubber stamp, and the issue stays open with the evidence. The research/recert PRs
+   embed the same `--markdown` scorecard, so the reviewer sees the evidence before nominating.
 
 5. **LEARN — the loop closes on the next intake.** Trip feedback → `learnings/<slug>.md` +
    `TRAVELER_PATTERNS.md` (shipped). Target: the post-mortem's party-pattern deltas are what the
@@ -96,7 +100,7 @@ the compute layer** (issue-ops for on-demand generation). Native = PWA-first.
 | **P1 · Intake unification** ✅ | `scripts/intake-schema.mjs` is the one source of truth (FIELDS + zod); the issue form, parser, and scaffold derive from it; a contract test fails CI on drift | INTAKE | Fable / high (shipped) |
 | **P2 · Resumable generate** ✅ | `scripts/pipeline.mjs` checkpoint spine (`<slug>.state.json`, stages scaffold→passA→passB→reconcile→verified); research-pass resumes the branch + commits per stage; `npm run pipeline --status` | GENERATE | Fable / high (shipped) |
 | **P3 · Recert / self-freshening** ✅ | `recert.yml` (weekly + on-demand): detect all stale guides → **matrix** → per-guide recert agent re-verifies flagged facts → freshness PR; `npm run recert` builds the work-list; verify gate must PASS | REFRESH · dynamic #1 | Fable / high (shipped) |
-| **P4 · PR scorecard + graduate-on-evidence** | verify `--json` rendered as a PR comment; graduate gate consumes it | PUBLISH | Sonnet / medium |
+| **P4 · Graduate on evidence** ✅ | `npm run verify --markdown` scorecard; `graduate-guide.yml` gates on build + verify + posts it, blocks a failing draft; research/recert PRs embed it | PUBLISH | Fable / high (shipped) |
 | **R3 · Dynamic runtime** | View Transitions, live-data tiles, offline/connection state machine, per-view (Focus Today / what's-open-now / weather day-swap) | dynamic #2 + #3 | Fable designs; Sonnet implements |
 | **R4 · Per-country visual identity** | Build-time country skin (palette from the guide's own imagery), one signature motion set, motion-doctrine doc | goals 8/9 | Fable spec; Sonnet implements |
 | **R5 · Tool suite by demand** | Top-3 tools ranked by telemetry + post-mortems (visa/packing/phrase-cards/spend-export/golden-hour); cull below-median | goal 7 | Sonnet / Haiku |

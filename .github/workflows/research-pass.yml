@@ -142,9 +142,11 @@ jobs:
                 --title "Research pass: ${{ inputs.slug }}${{ inputs.section != '' && format(' ({0})', inputs.section) || '' }}" \
                 --body "<see below>"
             PR body: your finish summary (what you researched, what you filled, what remains ⚠
-            unconfirmed), the FINAL `npm run verify` scorecard, the verification ledger table, the
-            `## Research reconciliation` summary, the `--status` checkpoint list, and — if you
-            stopped early at a checkpoint — exactly which stages still remain.
+            unconfirmed), the FINAL scorecard (paste the output of
+            `npm run verify -- --slug ${{ inputs.slug }} --markdown` verbatim — that is the evidence
+            a human graduates against), the verification ledger table, the `## Research
+            reconciliation` summary, the `--status` checkpoint list, and — if you stopped early at a
+            checkpoint — exactly which stages still remain.
 
             NEVER remove `draft: true` from the guide JSON — graduating a guide is a human decision.
             Never touch any guide other than src/content/guides/${{ inputs.slug }}.json (and its
