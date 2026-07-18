@@ -11,6 +11,7 @@
     "test:visual": "playwright test",
     "typecheck": "astro check",
     "readiness": "node scripts/guide-readiness.mjs",
+    "verify": "node scripts/verify-guide.mjs",
     "aggregate-telemetry": "tsx scripts/aggregate-telemetry.ts",
     "lookup-place": "node scripts/lookup-place.mjs",
     "search-commons": "node scripts/search-commons.mjs",

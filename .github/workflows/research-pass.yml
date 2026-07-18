@@ -95,13 +95,14 @@ jobs:
             finishing the rest.
 
             SELF-CORRECTION LOOP — do not one-shot this. After the dual-pass draft is reconciled:
-              a. Run `npm run readiness -- --slug ${{ inputs.slug }}` and `npm run build`.
-              b. For each BLOCKING (⚠) readiness finding and every schema error, FIX IT by
+              a. Run `npm run verify -- --slug ${{ inputs.slug }}` (the rolled-up gate: research +
+                 recency + rubric scorecard) and `npm run build` (schema).
+              b. For each BLOCKING (⚠) verify finding and every schema error, FIX IT by
                  re-researching that fact against a primary (T0) source — resolve the place_id
                  with lookup-place.mjs, add the missing source_url, fill the empty section,
                  correct the itinerary date. Never silence a flag you cannot source: downgrade
                  it to ⚠ or omit it. Do not explain-and-move-on.
-              c. Re-run readiness + build. Repeat until readiness PASSes and build is clean —
+              c. Re-run verify + build. Repeat until verify PASSes and build is clean —
                  up to 4 rounds. If something genuinely cannot be sourced after that, leave it
                  as a deliberately-explained ⚠ gap (an admitted blank is a feature).
 
@@ -112,7 +113,7 @@ jobs:
             2. Push the branch and open a **draft PR** with:
                  - Title: "Research pass: ${{ inputs.slug }}${{ inputs.section != '' && format(' ({0})', inputs.section) || '' }}"
                  - Body: your finish summary (what you researched, what you filled, what remains
-                   ⚠ unconfirmed), the FINAL `npm run readiness` output (PASS or the remaining
+                   ⚠ unconfirmed), the FINAL `npm run verify` scorecard (PASS or the remaining
                    explained gaps), the verification ledger table, the `## Research reconciliation`
                    summary (what each pass found + how conflicts resolved), and — if you deferred
                    any Pass B work under the wall-clock note — exactly which items still need it.

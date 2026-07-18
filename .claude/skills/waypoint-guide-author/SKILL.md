@@ -60,7 +60,7 @@ helper scripts, and the done gate.
   scaffolds automatically) — the scaffold pre-wires the map/weather/holidays live sections and
   an empty backbone, every fact still unverified. Then research it via the **two-pass procedure**
   below (Pass A canonical → Pass B local/authentic → reconcile), and run the self-correction loop
-  (`npm run readiness -- --slug <slug>` + `npm run build` → fix → repeat until PASS).
+  (`npm run verify -- --slug <slug>` + `npm run build` → fix → repeat until PASS).
 - **Research / fill a draft** — the main mode. Depth on the intake's top 2–3
   priorities; light touch elsewhere. If told to target one section, do only it.
 - **Edit an existing guide** — verify the new/changed fact per the rules
@@ -188,18 +188,23 @@ for the **stale** string to prove none survived.
 
 Then these guide-content gates, on top of it:
 1. **The self-correction loop — iterate, don't one-shot.** Run
-   `npm run readiness -- --slug <slug>`. It runs the mechanical research checks
-   + reports a `PASS` / `NEEDS WORK` verdict (exit 0/1). If `NEEDS WORK`, do NOT
-   explain-and-move-on: take each **blocking (⚠)** finding and *fix it by
-   re-researching that fact against a primary (T0) source* — resolve the
-   `place_id` with `lookup-place.mjs`, add the missing `source_url`, fill the
-   empty section, correct the itinerary date. Never silence a flag you can't
-   source: downgrade it to `⚠` or omit it. Then **re-run readiness, and repeat
-   until it PASSes** (or until every remaining item is a deliberately-explained
-   `⚠` gap — an admitted blank is a feature; a hidden one is not). `info`-level
-   items are advisory. The `citations` line is context only, not a target
-   (durable narrative legitimately has none). `readiness` is research quality;
-   `npm run build` is the schema gate — both must be clean.
+   `npm run verify -- --slug <slug>` — the rolled-up gate (docs/PIPELINE.md, VERIFY
+   stage). It subsumes `npm run readiness` (fabrication · provenance · completeness ·
+   itinerary), adds a **recency** row (facts past shelf life) and, with `--network`, a
+   **content** row (dead links · missing Commons photos), and prints a `GUIDE_RUBRIC`
+   scorecard: AUTO rows it passes/fails + the HUMAN rows you still owe. It reports a
+   `PASS` / `NEEDS WORK` verdict (exit 0/1). If `NEEDS WORK`, do NOT explain-and-move-on:
+   take each **blocking (⚠)** finding and *fix it by re-researching that fact against a
+   primary (T0) source* — resolve the `place_id` with `lookup-place.mjs`, add the missing
+   `source_url`, fill the empty section, correct the itinerary date. Never silence a flag
+   you can't source: downgrade it to `⚠` or omit it. Then **re-run verify, and repeat
+   until it PASSes** (or until every remaining item is a deliberately-explained `⚠` gap —
+   an admitted blank is a feature; a hidden one is not). Recency is *advisory* in the
+   verdict (a concluded trip's facts are stale by nature; the recert workflow acts on live
+   ones), and the `citations` line is context only, not a target (durable narrative has
+   none). `verify` is research + recency + content quality; `npm run build` is the schema
+   gate — both must be clean. (Run `npm run verify -- --slug <slug> --network` before
+   graduating, to catch link-rot and missing photos.)
 2. The **`verification-rules.md` §8 self-check**, line by line.
 3. **`verified` stamp** — `Checked [date] for [trip] · re-check before travel:
    [most perishable items]`; keep it `⚠`-prefixed on drafts and keep

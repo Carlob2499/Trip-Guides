@@ -1,8 +1,9 @@
 # Guide Rubric — the standard every guide is judged against
 
 The single, prioritized bar for a Waypoint guide — used by the research self-correction loop
-(the `waypoint-guide-author` skill), by `npm run readiness`, and by the human who graduates a
-guide. Derived from the four properties (**Verified · Personal · Actionable · Honest**), the
+(the `waypoint-guide-author` skill), by `npm run verify` (the rolled-up gate that scores this
+rubric — see `docs/PIPELINE.md`), and by the human who graduates a guide. Derived from the four
+properties (**Verified · Personal · Actionable · Honest**), the
 verification rules (`.claude/skills/waypoint-guide-author/references/verification-rules.md`), and
 the post-mortems of the Korea/Denmark builds.
 
@@ -29,7 +30,7 @@ Korea-tier quality bar (all P0 + all P1 = graduate-ready). **P2** is continuous 
 | 13 | Design doctrine | — | tab-budget gate + a11y (axe, moderate+) pass; open-not-crowded; clickable-looks-clickable | build + axe + human | **P2** |
 
 ## Verdict logic
-- **Not ready** — any **P0** fails. (`npm run readiness` returns `NEEDS WORK`, exit 1; or `npm run build` errors.)
+- **Not ready** — any **P0** fails. (`npm run verify` returns `NEEDS WORK`, exit 1; or `npm run build` errors.)
 - **Ships as draft** — all **P0** pass. (`readiness` PASS + `build` clean, `draft: true` kept.)
 - **Graduate-ready (Korea-tier)** — all **P0** + all **P1** pass, judged by a human via the skill's §8 self-check. Graduation is always a human decision.
 
