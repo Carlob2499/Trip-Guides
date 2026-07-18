@@ -4,7 +4,7 @@
 // #tgConfig JSON script tag emitted by the layout.
 import { todayInTz } from "./util.js";
 import { resolveTripDate } from "../lib/trip-dates";
-import { initRate, initWeather } from "../features/live-data/index.js";
+import { initRate, initWeather, initDaySwap } from "../features/live-data/index.js";
 import { initJetLag } from "./jetlag-ui.js";
 import { initSharePanel } from "../features/share/index.js";
 import { reportError } from "../features/firebase/index.js";
@@ -584,6 +584,10 @@ const daysForBanner     = _cfg.daysForBanner || [];
              and is inert without config, so a guide with no currency or no map
              section simply never lights them up. */
           initRate({ curCode: curCode, curFallbackRate: curFallbackRate });
+          // Day-swap BEFORE weather: the cached-forecast path renders (and dispatches
+          // tg:wx) synchronously inside initWeather, so the listener must exist first
+          // (getLastWx covers the reverse order too — belt and braces).
+          initDaySwap({ daysForBanner: daysForBanner });
           initWeather({
             mapCenter: mapCenter,
             hasWeatherSection: hasWeatherSection,

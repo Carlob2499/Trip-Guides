@@ -140,6 +140,10 @@ auto-retries transient Pages failures; only investigate after three consecutive.
 
 ## Operational Habits (save tokens)
 
+- **Session start: Read `docs/HANDOFF.md` FIRST** — it is the warm-start context (state
+  snapshot + where-we-left-off + the re-prompt to open with). Do not re-derive history from
+  git log/memory sprawl. **Session end: rewrite its Snapshot + Where-we-left-off sections**
+  and commit. This replaces reading long conversation context between sessions.
 - **Guides are directories** (`src/content/guides/<slug>/` — `_guide.json` meta +
   `NN-<group>.json` per tab group): for a targeted edit, Read ONLY the group file it
   lives in — never assemble the whole guide. `ls` the dir to find the group. Drafts may

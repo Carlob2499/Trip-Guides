@@ -10,6 +10,12 @@ import { tripWindow } from "../../../lib/trip-dates";
 
 const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
+/* Validated daily forecast, kept for consumers that init after render (same
+   late-listener pattern as rate.js's getLastRate): check getLastWx() first,
+   then listen for `tg:wx`. */
+var lastWx = null;
+export function getLastWx() { return lastWx; }
+
 export function initWeather(cfg) {
   var wxWrap = document.getElementById("wxWrap");
   if (!wxWrap) return; // no mount on this page (masthead suppressed, no section)
@@ -70,6 +76,9 @@ export function initWeather(cfg) {
     var mount = document.getElementById("wxMount") || wxWrap;
     mount.innerHTML = html;
     wxWrap.removeAttribute("hidden");
+    // Announce the validated forecast for other consumers (day-swap advisory).
+    lastWx = d;
+    try { document.dispatchEvent(new CustomEvent("tg:wx", { detail: { daily: d } })); } catch (e) {}
   }
 
   // Cache keyed by coordinates; "today" in UTC (matches the rate service, avoiding a

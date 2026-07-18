@@ -15,6 +15,8 @@
 /* Weather strip as a tile — centered, capped (edge-to-edge made each day
    cell huge and sparse; ~52rem reads as a proper forecast band). */
 .wx-wrap{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md);padding:.5rem .8rem;margin:.9rem auto 0;max-width:52rem}
+/* Weather day-swap advisory (live-data/ui/day-swap.js) — one line under the strip. */
+.wx-swap{margin:.45rem .1rem .1rem;padding:.45rem .6rem;border-radius:var(--r-sm,6px);background:color-mix(in srgb,var(--accent) 10%,transparent);border:1px solid color-mix(in srgb,var(--accent) 35%,var(--rule));font-family:var(--font-data);font-size:.76rem;line-height:1.45;color:var(--ink)}
 
 /* What's-Next as the accent tile of the row — centered to match. */
 .whats-next{display:flex;align-items:baseline;justify-content:center;gap:.6rem;background:color-mix(in srgb,var(--accent) 12%,var(--card));border:1px solid color-mix(in srgb,var(--accent) 45%,var(--rule));border-radius:var(--r-md);padding:.65rem .95rem;margin:.6rem auto 0;max-width:52rem}

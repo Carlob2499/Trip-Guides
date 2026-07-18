@@ -11,7 +11,8 @@
    with no currency or no map section simply doesn't light them up. */
 
 export { initRate, getLastRate } from "./ui/rate.js";
-export { initWeather } from "./ui/weather.js";
+export { initWeather, getLastWx } from "./ui/weather.js";
+export { initDaySwap } from "./ui/day-swap.js";
 
 // Re-exported for tests and for anything that needs to judge rate/forecast data without
 // touching the DOM.

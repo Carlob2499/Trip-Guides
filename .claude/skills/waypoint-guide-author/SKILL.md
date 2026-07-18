@@ -194,6 +194,12 @@ crowd-awareness)** plus #9 (party fit) and the bar test — not a hard auto-gate
   existing guide without doing the backfill first — a half-dated guide flipped to strict
   just fails the build.
 
+- **Structured day tags** — when writing `days` items, set `energy`
+  (packed/balanced/slow → the Low-Energy toggle) and `env` (outdoor/indoor/mixed →
+  the weather day-swap advisory: rain on an `outdoor` day + a dry `indoor` day
+  nearby suggests the swap). Explicit tags only — the features stay silent on
+  untagged days rather than guessing from prose.
+
 ## Never guess what a script can verify
 - **coords / place_id** → `node scripts/lookup-place.mjs "<place>" --cc XX`
 - **`sights` photos** → `node scripts/search-commons.mjs "<subject>"` — only a

@@ -98,6 +98,12 @@ const section = z.discriminatedUnion("type", [
     // "balanced" before this field existed. The toggle only dims days explicitly
     // tagged "packed".
     energy: z.enum(["packed", "balanced", "slow"]).default("balanced"),
+    // ADDITIVE: where the day mostly happens. Explicit tag, same reasoning as `energy`
+    // (never inferred from prose — that would be a guess). Powers the weather day-swap
+    // advisory: rain forecast on an `outdoor` day + a dry `indoor` day in the same
+    // window → an advisory suggesting the swap. Absent = the advisory stays silent
+    // for that day. Research passes should set it when writing days.
+    env: z.enum(["outdoor", "indoor", "mixed"]).optional(),
     // ADDITIVE: one-sentence glanceable day summary, derived from the day's own
     // researched content (never new facts). Rendered huge in Focus Today and as
     // the day card's lead line. Researched guides should always set it.

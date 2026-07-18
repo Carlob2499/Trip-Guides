@@ -152,6 +152,7 @@ const lastDayDate  = (daysSec?.items?.[daysSec.items.length - 1]?.date as string
 // granularity only, same as the trip-countdown pill's own date parsing.
 const daysForBanner = (daysSec?.items ?? []).map((d: any) => ({
   date: d.date as string, title: d.title as string, fit: (d.fit as string) ?? null,
+  env: (d.env as string) ?? null, // outdoor|indoor|mixed — powers the weather day-swap advisory
 }));
 
 // Story-mode deck data — one tight card per day (date · title · tl;dr · pace · stops),
