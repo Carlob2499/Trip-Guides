@@ -222,8 +222,11 @@ Then these guide-content gates, on top of it:
    ones), and the `citations` line is context only, not a target (durable narrative has
    none). `verify` is research + recency + content quality; `npm run build` is the schema
    gate — both must be clean. (Run `npm run verify -- --slug <slug> --network` before
-   graduating, to catch link-rot and missing photos.) When verify PASSes, record the final
-   checkpoint: `npm run pipeline -- --slug <slug> --checkpoint verified`.
+   graduating, to catch link-rot and missing photos.) When verify PASSes: generate the
+   guide's identity palette from its cover/sight photos —
+   `npm run extract-palette -- --slug <slug>` (commit the generated
+   `src/data/palettes/<slug>.json`; harmless no-op without photos) — then record the
+   final checkpoint: `npm run pipeline -- --slug <slug> --checkpoint verified`.
 2. The **`verification-rules.md` §8 self-check**, line by line.
 3. **`verified` stamp** — `Checked [date] for [trip] · re-check before travel:
    [most perishable items]`; keep it `⚠`-prefixed on drafts and keep

@@ -134,7 +134,11 @@ jobs:
               c. Re-run verify + build. Repeat until verify PASSes and build is clean — up to 4
                  rounds. If something genuinely cannot be sourced after that, leave it as a
                  deliberately-explained ⚠ gap (an admitted blank is a feature).
-              d. → then: npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint verified
+              d. Once verify PASSes, generate the guide's identity palette from its new cover/
+                 sight photos: `npm run extract-palette -- --slug ${{ inputs.slug }}` (writes
+                 src/data/palettes/${{ inputs.slug }}.json — commit it; skips harmlessly if no
+                 photo). Then:
+                 npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint verified
                  && git add -A && git commit -m "research(${{ inputs.slug }}): verify PASS" && git push
 
             Then open or update the PR (idempotent — the branch may already have one from a prior run):
