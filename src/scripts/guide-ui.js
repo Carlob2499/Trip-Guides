@@ -104,7 +104,9 @@ const daysForBanner     = _cfg.daysForBanner || [];
               });
             });
             guideTabs.addEventListener("keydown", function (e) {
-              var tabs = Array.prototype.slice.call(guideTabs.querySelectorAll(".gtab"));
+              // Skip hidden tabs (e.g. Learnings before a trip is reflected on) so arrow
+              // navigation never lands focus on an invisible control.
+              var tabs = Array.prototype.slice.call(guideTabs.querySelectorAll(".gtab:not([hidden])"));
               var idx  = tabs.indexOf(document.activeElement);
               if (idx === -1) return;
               var next;

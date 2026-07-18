@@ -316,17 +316,18 @@ const tripSummary = buildSummary(guide);
     <nav class="guide-tabs-nav" aria-label="Guide sections">
     <div class="guide-tabs" id="guideTabs" role="tablist">
       {order.map((g, i) => (
-        <button class="gtab" role="tab" type="button" data-tab={i} data-full={g}
+        <button class="gtab" role="tab" type="button" id={`gtab-${i}`} data-tab={i} data-full={g}
+                aria-controls={`grp-${i}`}
                 aria-label={g} aria-selected={i === 0 ? "true" : "false"}>{shortLabel(g)}</button>
       ))}
-      <button class="gtab gtab-split" role="tab" type="button" data-tab="split"
-              aria-selected="false">$ Budget</button>
-      <button class="gtab gtab-vote" role="tab" type="button" data-tab="vote"
-              aria-selected="false">🗳 Vote</button>
-      <button class="gtab gtab-remind" role="tab" type="button" data-tab="remind"
-              aria-selected="false">📌 Reminders</button>
-      <button class="gtab gtab-learn" role="tab" type="button" data-tab="learn"
-              aria-selected="false" hidden>📓 Learnings</button>
+      <button class="gtab gtab-split" role="tab" type="button" id="gtab-split" data-tab="split"
+              aria-controls="tripSplit" aria-selected="false">$ Budget</button>
+      <button class="gtab gtab-vote" role="tab" type="button" id="gtab-vote" data-tab="vote"
+              aria-controls="tripVote" aria-selected="false">🗳 Vote</button>
+      <button class="gtab gtab-remind" role="tab" type="button" id="gtab-remind" data-tab="remind"
+              aria-controls="tripRemind" aria-selected="false">📌 Reminders</button>
+      <button class="gtab gtab-learn" role="tab" type="button" id="gtab-learn" data-tab="learn"
+              aria-controls="tripLearn" aria-selected="false" hidden>📓 Learnings</button>
     </div>
     </nav>
 
@@ -462,7 +463,7 @@ const tripSummary = buildSummary(guide);
           const subParts = solo ? [] : byG[g].map((o) => navLabel(o.s, g)).filter((t: string) => t && t !== g);
           const sub = subParts.slice(0, 4).join(" · ") + (subParts.length > 4 ? ` · +${subParts.length - 4} more` : "");
           return (
-            <div class="catblock" id={`grp-${ci}`} data-ci={ci} hidden={ci > 0}>
+            <div class="catblock" id={`grp-${ci}`} data-ci={ci} role="tabpanel" aria-labelledby={`gtab-${ci}`} hidden={ci > 0}>
               <header class="cat-opener">
                 <span class="cat-num" aria-hidden="true">{String(ci + 1).padStart(2, "0")}</span>
                 {groupImgs[g] && (

@@ -7,7 +7,7 @@ import "../features/reminders/ui/reminders.css";
 interface Props { storeKey: string }
 const { storeKey } = Astro.props;
 ---
-<div class="rm-wrap" id="tripRemind" data-sk={storeKey} hidden>
+<div class="rm-wrap" id="tripRemind" role="tabpanel" aria-labelledby="gtab-remind" data-sk={storeKey} hidden>
   <div class="rm-head">
     <p class="rm-eyebrow">Reminders</p>
     <h2 class="rm-title">Notable items</h2>

@@ -46,6 +46,22 @@ test.describe("desktop", () => {
     await expect(page.locator("#grp-3")).toBeHidden();
   });
 
+  test("tablist ARIA: ArrowRight roves focus + activates the next tab, panels are labelled tabpanels", async ({ page }) => {
+    await open(page);
+    await page.locator('.gtab[data-tab="0"]').focus();
+    await page.keyboard.press("ArrowRight");
+    // Automatic activation: focus follows AND the panel switches (roving tabindex + APG keys).
+    expect(await activeTab(page)).toBe("1");
+    expect(await page.evaluate(() => document.activeElement?.getAttribute("data-tab"))).toBe("1");
+    // Only the active tab is in the tab order (roving tabindex).
+    expect(await page.locator('.gtab[data-tab="0"]').getAttribute("tabindex")).toBe("-1");
+    expect(await page.locator('.gtab[data-tab="1"]').getAttribute("tabindex")).toBe("0");
+    // The tab points at its panel, and the panel is a labelled tabpanel.
+    expect(await page.locator('.gtab[data-tab="1"]').getAttribute("aria-controls")).toBe("grp-1");
+    await expect(page.locator("#grp-1")).toHaveAttribute("role", "tabpanel");
+    await expect(page.locator("#grp-1")).toHaveAttribute("aria-labelledby", "gtab-1");
+  });
+
   test("day-rail: a day chip becomes active; one chip per day", async ({ page }) => {
     await open(page, "#grp-3");
     const chips = page.locator("#dayScrub [data-day-jump]");

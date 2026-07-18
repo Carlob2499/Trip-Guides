@@ -28,15 +28,18 @@ for (const [name, path] of [
   test(`a11y — ${name}`, async ({ page }) => {
     await prep(page, path);
     const results = await new AxeBuilder({ page }).analyze();
-    const bad = results.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
-    const minor = results.violations.filter((v) => v.impact !== "serious" && v.impact !== "critical");
+    // Gate on moderate+ (was serious/critical). The landmark + full tablist ARIA work cleared
+    // every moderate finding, so this locks that in: only true `minor` stays non-blocking.
+    const BLOCKING = new Set(["moderate", "serious", "critical"]);
+    const bad = results.violations.filter((v) => BLOCKING.has(v.impact ?? ""));
+    const minor = results.violations.filter((v) => !BLOCKING.has(v.impact ?? ""));
     if (minor.length) {
-      console.log(`[a11y] ${name}: ${minor.length} minor/moderate finding(s) (non-blocking):`);
+      console.log(`[a11y] ${name}: ${minor.length} minor finding(s) (non-blocking):`);
       for (const v of minor) console.log(`  · ${v.id} (${v.impact}) — ${v.nodes.length} node(s): ${v.help}`);
     }
     expect(
       bad.map((v) => `${v.id} (${v.impact}) — ${v.help}\n  ${v.nodes.slice(0, 3).map((n) => n.target.join(" ")).join("\n  ")}`),
-      "serious/critical accessibility violations",
+      "moderate+ accessibility violations",
     ).toEqual([]);
   });
 }

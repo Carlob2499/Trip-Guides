@@ -7,7 +7,7 @@ const { storeKey } = Astro.props;
 
 <!-- Reuses Budget Calculator's box/button/card CSS (.split-*, .sc-*, .se-new-card) —
      purely presentational styles, nothing money-specific about them. -->
-<div class="split-wrap" id="tripVote" hidden data-sk={storeKey}>
+<div class="split-wrap" id="tripVote" role="tabpanel" aria-labelledby="gtab-vote" hidden data-sk={storeKey}>
 
   <div class="split-toolbar">
     <h2 class="split-title">Group Vote</h2>
