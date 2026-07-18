@@ -7,7 +7,7 @@ import { splitLead } from "../../lib/lead-split";
 const { sec, keyPrefix = "p" } = Astro.props;
 const { lead, more } = sec.collapsible ? { lead: sec.body, more: null } : splitLead(sec.body);
 ---
-{lead && <Fragment set:html={lead} />}
+{lead && <div class="card-lead" set:html={lead} />}
 {more && (
   <details class="card-more">
     <summary class="card-more-sum">More detail</summary>

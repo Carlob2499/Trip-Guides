@@ -176,6 +176,11 @@ a.stale-pill:hover{background:color-mix(in srgb,var(--warn) 12%,transparent)}
 
 /* Progressive disclosure — the density pass. The lead paragraph reads like a
    summary card; "More detail" opens the full researched depth in place. */
+/* The lead IS the answer — give it a touch more size + air so the eye lands on it
+   first and can move on without opening the fold (retention; less scrolling). V3d. */
+.catblock .card-lead{font-size:1.05em;line-height:1.5;color:var(--ink)}
+.catblock .card-lead>:first-child{margin-top:0}
+.catblock .card-lead>:last-child{margin-bottom:.35rem}
 .card-more{margin-top:.35rem;border-top:1px dashed var(--rule)}
 .card-more-sum{display:inline-flex;align-items:center;gap:.35rem;padding:.5rem 0 .3rem;font-family:var(--font-data);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);cursor:pointer;list-style:none;min-height:34px}
 .card-more-sum::-webkit-details-marker{display:none}

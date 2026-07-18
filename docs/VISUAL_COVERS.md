@@ -56,7 +56,7 @@ Motion is only half the brief. The other half: deliver the right thing with **le
 | **V3a · First-open day-story intro** | Segmented **days** rail + staggered cover reveal, once per guide, reduced-motion-safe; `gsap-hero` stands down first visit | **shipping now** |
 | **V3c · Story-mode itinerary** | The days rail becomes navigation: a full-screen, swipeable day-by-day deck (one day per view) — the big less-scroll / retention payoff | shipped |
 | **V3b · Scroll-driven CSS** | Reveals on native `animation-timeline: view()` (off-main-thread); `reveal.js` is the fallback (bails when supported). Journey progress = the existing reading bar | shipped |
-| **V3d · Info-density & alignment** | Refine the existing `--read` measure + mono data-rail alignment; denser lead-first cards across block types | shipping now |
+| **V3d · Info-density & alignment** | Lead-first scannability: the card lead (already split from the fold) reads a touch stronger so the eye lands on the answer first. The density foundation (lead+fold, `--read` measure, mono data alignment) already existed — this is the scannability polish | shipped |
 | **V4 · Per-country identity** | Palette auto-extracted from the cover (node-vibrant), one signature motion set, motion-doctrine doc | later |
 
 ## Guardrails (inherited, non-negotiable)
