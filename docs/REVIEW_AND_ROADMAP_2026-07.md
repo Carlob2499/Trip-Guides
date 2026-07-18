@@ -6,16 +6,19 @@
   salted room ids (`gen-room-id.mjs` + scaffold), room-visibility notice, QR vendored
   (share + voting; zero runtime CDNs). ⚠ **Manual step pending: publish `rules.json` to the
   Firebase console** (steps + simulator cases handed off in chat).
-- **P1 correctness — PARTIAL**: #7 tablist ARIA + moderate a11y gate ✅ · #8 auto-versioned
-  sw cache ✅ · #11 error beacon ✅ · #9 typecheck gate 🔧 tooling added, ~49 errors (33 in
-  Voting.astro) deferred to its own session · #10 Trip Split offline queue ⏸ deferred (own
-  session, by decision) · #12 locale audit ⏭ skipped (low value; `tz-offset` must stay fixed).
+- **P1 correctness — COMPLETE**: #7 tablist ARIA + moderate a11y gate ✅ · #8 auto-versioned
+  sw cache ✅ · #9 green `astro check` + CI typecheck gate ✅ (Voting extracted to a tested
+  silo — the last inline-script feature) · #10 Trip Split offline write queue ✅ (localStorage
+  outbox, idempotent replay; full offline E2E pending a writable guide #3) · #11 error beacon ✅
+  · #12 locale audit ⏭ skipped (low value; `tz-offset` must stay fixed-locale).
 - **R1 telemetry — SHIPPED** (code): `src/features/telemetry/` silo (counts anonymous tab
   opens), `telemetry/` rules node, footer disclosure, `aggregate-telemetry` weekly workflow →
   `docs/telemetry/summary.{json,md}`, guide-author skill wired to read it. Populates once the
   rules are published (`.read: true` on telemetry lets the keyless job read it).
-- **Next**: publish rules → verify telemetry lands → then R2 (generation pipeline) or the
-  deferred #9/#10, your call.
+- **Rules PUBLISHED** (18 Jul): hardened rules live — telemetry keyless read returns 200, trip
+  reads require auth (401 unauth), legacy rooms frozen read-only. Telemetry counts now accrue.
+- **Next**: R2 (generation pipeline — the flagship, wants Opus), or R3/R4/R5 (dynamic runtime,
+  per-country visual identity, demand-ranked tools).
 
 ---
 
