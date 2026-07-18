@@ -17,8 +17,14 @@
   rules are published (`.read: true` on telemetry lets the keyless job read it).
 - **Rules PUBLISHED** (18 Jul): hardened rules live — telemetry keyless read returns 200, trip
   reads require auth (401 unauth), legacy rooms frozen read-only. Telemetry counts now accrue.
-- **Next**: R2 (generation pipeline — the flagship, wants Opus), or R3/R4/R5 (dynamic runtime,
-  per-country visual identity, demand-ranked tools).
+- **R2 session 1 — SHIPPED** (18 Jul): the self-correction loop. `npm run readiness` is the
+  research gate (PASS/NEEDS WORK, exit 0/1) — calibrated (korea/denmark PASS, broken fixture
+  fails); wired into the guide-author skill's done-gate (iterate-until-clean) and research-pass.yml
+  (now on the Max OAuth token, not a paid API key). Groq draft path retired. **Next R2 sessions:**
+  build guide #3 to prove the loop end-to-end (needs a destination + party), then the ledger/metrics.
+- **Setup for the maker (optional):** to run research-pass headless on Max, add a
+  `CLAUDE_CODE_OAUTH_TOKEN` repo secret via `claude setup-token`. The interactive kickoff (printed
+  on every New-guide scaffold) needs no secret.
 
 ---
 
