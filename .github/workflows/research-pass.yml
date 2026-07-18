@@ -2,9 +2,13 @@ name: Research pass
 
 # Assisted research pass: a Claude Code agent researches one guide via the TWO-PASS procedure
 # (Pass A canonical/verified → Pass B local/authentic/crowd-aware → reconcile), runs the
-# self-correction loop until it passes the readiness gate, commits to a branch, and opens a draft
-# PR for human review. Never auto-merges; draft: true is always preserved. Trigger via
-# workflow_dispatch. A full dual pass is long — see the wall-clock note in the prompt.
+# self-correction loop until verify PASSes, commits to a branch, and opens a draft PR for human
+# review. Never auto-merges; draft: true is always preserved. Trigger via workflow_dispatch.
+#
+# RESUMABLE (pipeline P2): a full dual pass is long and can be cut off by the Action wall-clock or
+# your Max usage window. The agent commits + checkpoints (guides-intake/<slug>.state.json) after
+# EACH stage, and this job resumes the research/<slug> branch — so a re-run picks up at the next
+# un-done stage (`npm run pipeline -- --slug <slug> --status`) instead of restarting.
 #
 # Runs on your Claude MAX subscription (not a pay-per-use API key), so a headless run costs ~$0
 # marginal against your plan. Prerequisites:
@@ -50,6 +54,19 @@ jobs:
           git config user.name  "waypoint-research[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+      # Resume the research branch if a prior (cut-off) run created it, so the agent starts with the
+      # committed partial progress + checkpoint state in the working tree; otherwise start it fresh.
+      - name: Resume or start the research branch
+        run: |
+          BR="research/${{ inputs.slug }}"
+          if git ls-remote --exit-code --heads origin "$BR" >/dev/null 2>&1; then
+            git fetch origin "$BR" && git checkout "$BR"
+            echo "Resumed $BR"
+          else
+            git checkout -b "$BR"
+            echo "Started $BR"
+          fi
+
       - name: Run research agent
         uses: anthropic/claude-code-action@v1
         with:
@@ -70,16 +87,28 @@ jobs:
             Target guide: src/content/guides/${{ inputs.slug }}.json
             ${{ inputs.section != '' && format('Scope this pass to the "{0}" section only; leave all other sections as-is.', inputs.section) || '' }}
 
-            RESEARCH IS TWO PASSES, THEN RECONCILE — this is the core of the skill's Research
-            workflow; do NOT collapse it into a single pass:
+            RESUMABLE — START BY CHECKING WHERE YOU ARE. This run may be a fresh start OR a resume of
+            a prior run that was cut off. FIRST run:
+              npm run pipeline -- --slug ${{ inputs.slug }} --status
+            It prints which stages (scaffold → passA → passB → reconcile → verified) are already
+            cleared and the exact NEXT action. Do ONLY the un-done stages, in order. Never redo a
+            cleared stage — the committed work + checkpoint is the resume point.
+
+            RESEARCH IS TWO PASSES, THEN RECONCILE — the core of the skill's Research workflow; do
+            NOT collapse it into a single pass. After you FINISH each stage below, checkpoint it and
+            commit, so a cut-off run resumes here instead of restarting:
               PASS A — canonical & verified: primary/official sources. Verify the ANCHOR event's
                 date + venue against a T0 source FIRST, then the must-dos, entry/visa, transit,
                 hours, prices. Keep the verification ledger as you go.
+                → then: npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint passA
+                  && git add -A && git commit -m "research(${{ inputs.slug }}): Pass A" && git push
               PASS B — local, authentic, crowd-aware: research INDEPENDENTLY from the intake (do
                 not just re-read Pass A). Resident / blog / forum / reddit angle — off-peak timing
                 + crowd reality for every marquee sight, novel local alternatives where the obvious
                 pick is a tourist trap, the non-obvious neighborhood. Pass B's finds are T2 LEADS:
                 verify each against a primary source before it enters the guide.
+                → then: npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint passB
+                  && git add -A && git commit -m "research(${{ inputs.slug }}): Pass B" && git push
               RECONCILE into ONE guide and record it in the `## Research reconciliation` ledger of
                 guides-intake/${{ inputs.slug }}.md — AGREE → include; A-only → add a crowd +
                 best-time note, or swap to B's authentic version if A is a trap; B-only → verify T0
@@ -87,14 +116,14 @@ jobs:
                 research-forced re-plan in that doc's `## Amendments` section. Every marquee
                 sight/food rec carries a crowd + best-time note, woven into the existing
                 sights/days bodies (no new sections, no tab-budget cost).
+                → then: npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint reconcile
+                  && git add -A && git commit -m "research(${{ inputs.slug }}): reconcile" && git push
 
-            NOTE — a full dual pass is long and may approach the Action wall-clock / usage limit.
-            If so: take Pass A to a clean readiness PASS first, then run Pass B for the anchor + the
-            top-2 priorities, and state in the PR body which items still await Pass B. The
-            interactive Max session (see new-guide.yml's kickoff comment) is the fallback for
-            finishing the rest.
+            NOTE — a full dual pass is long. Committing after each stage IS the safety net: if you
+            run low on wall-clock or usage, stop at a clean checkpoint (commit + push) rather than
+            leaving a half-done uncommitted stage — a re-run resumes from the last checkpoint.
 
-            SELF-CORRECTION LOOP — do not one-shot this. After the dual-pass draft is reconciled:
+            SELF-CORRECTION LOOP (the `verified` stage) — do not one-shot this:
               a. Run `npm run verify -- --slug ${{ inputs.slug }}` (the rolled-up gate: research +
                  recency + rubric scorecard) and `npm run build` (schema).
               b. For each BLOCKING (⚠) verify finding and every schema error, FIX IT by
@@ -102,20 +131,21 @@ jobs:
                  with lookup-place.mjs, add the missing source_url, fill the empty section,
                  correct the itinerary date. Never silence a flag you cannot source: downgrade
                  it to ⚠ or omit it. Do not explain-and-move-on.
-              c. Re-run verify + build. Repeat until verify PASSes and build is clean —
-                 up to 4 rounds. If something genuinely cannot be sourced after that, leave it
-                 as a deliberately-explained ⚠ gap (an admitted blank is a feature).
+              c. Re-run verify + build. Repeat until verify PASSes and build is clean — up to 4
+                 rounds. If something genuinely cannot be sourced after that, leave it as a
+                 deliberately-explained ⚠ gap (an admitted blank is a feature).
+              d. → then: npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint verified
+                 && git add -A && git commit -m "research(${{ inputs.slug }}): verify PASS" && git push
 
-            Then open the PR:
+            Then open or update the PR (idempotent — the branch may already have one from a prior run):
+              gh pr view --json number >/dev/null 2>&1 || gh pr create --draft \
+                --title "Research pass: ${{ inputs.slug }}${{ inputs.section != '' && format(' ({0})', inputs.section) || '' }}" \
+                --body "<see below>"
+            PR body: your finish summary (what you researched, what you filled, what remains ⚠
+            unconfirmed), the FINAL `npm run verify` scorecard, the verification ledger table, the
+            `## Research reconciliation` summary, the `--status` checkpoint list, and — if you
+            stopped early at a checkpoint — exactly which stages still remain.
 
-            1. Create a branch named `research/${{ inputs.slug }}` if it does not already exist,
-               and commit your changes there with a clear message.
-            2. Push the branch and open a **draft PR** with:
-                 - Title: "Research pass: ${{ inputs.slug }}${{ inputs.section != '' && format(' ({0})', inputs.section) || '' }}"
-                 - Body: your finish summary (what you researched, what you filled, what remains
-                   ⚠ unconfirmed), the FINAL `npm run verify` scorecard (PASS or the remaining
-                   explained gaps), the verification ledger table, the `## Research reconciliation`
-                   summary (what each pass found + how conflicts resolved), and — if you deferred
-                   any Pass B work under the wall-clock note — exactly which items still need it.
-            3. NEVER remove `draft: true` from the guide JSON — graduating a guide is a human decision.
-            4. Never touch any guide other than src/content/guides/${{ inputs.slug }}.json.
+            NEVER remove `draft: true` from the guide JSON — graduating a guide is a human decision.
+            Never touch any guide other than src/content/guides/${{ inputs.slug }}.json (and its
+            guides-intake/${{ inputs.slug }}.md + .state.json).

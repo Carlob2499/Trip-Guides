@@ -20,6 +20,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { countryData, isoCodeFor } from "../src/data/countries.mjs";
 import { validateAnswers } from "./intake-schema.mjs";
+import { initState } from "./pipeline.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const GUIDES_DIR = path.join(ROOT, "src", "content", "guides");
@@ -251,7 +252,9 @@ export async function writeScaffold(answers) {
   const intakePath = path.join(INTAKE_DIR, `${slug}.md`);
   await writeFile(guidePath, JSON.stringify(guide, null, 2) + "\n");
   await writeFile(intakePath, intake);
-  return { slug, guidePath, intakePath };
+  // Initialize the pipeline checkpoint (scaffold cleared) so the research pass is resumable.
+  await initState(slug);
+  return { slug, guidePath, intakePath, statePath: path.join(INTAKE_DIR, `${slug}.state.json`) };
 }
 
 // ── CLI ──────────────────────────────────────────────────────────────────────

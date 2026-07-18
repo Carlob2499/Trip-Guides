@@ -127,6 +127,16 @@ The ledger is the durable proof the itinerary was corroborated, not single-sourc
 beside the plan like the Amendments log. When reconciliation forces a re-plan (an anchor moved, a
 neighborhood beats the intended one), also append it to the intake's **`## Amendments`** section.
 
+### Checkpoint each stage — the run is resumable
+The pipeline tracks progress in `guides-intake/<slug>.state.json` (stages: scaffold → passA → passB
+→ reconcile → verified) so a long run that gets interrupted resumes instead of restarting. **Start
+by running `npm run pipeline -- --slug <slug> --status`** — it shows which stages are already cleared
+and the exact next action; do only the un-done ones. After you FINISH a stage, record it —
+`npm run pipeline -- --slug <slug> --checkpoint <stage>` (add `--note "…"` for the trail) — and, in
+the headless Action, commit so the checkpoint persists. Never redo a cleared stage; the committed
+work is the resume point. (The scaffolder clears `scaffold`; you clear `verified` only once
+`npm run verify` PASSes — see the done gate.)
+
 ### Authenticity & crowd-awareness — woven, not a new tab
 Every marquee sight / food recommendation carries a **crowd reality + best-time (off-peak) note**,
 and where the obvious pick is a tourist trap, a **novel local alternative**. Write these into the
@@ -204,7 +214,8 @@ Then these guide-content gates, on top of it:
    ones), and the `citations` line is context only, not a target (durable narrative has
    none). `verify` is research + recency + content quality; `npm run build` is the schema
    gate — both must be clean. (Run `npm run verify -- --slug <slug> --network` before
-   graduating, to catch link-rot and missing photos.)
+   graduating, to catch link-rot and missing photos.) When verify PASSes, record the final
+   checkpoint: `npm run pipeline -- --slug <slug> --checkpoint verified`.
 2. The **`verification-rules.md` §8 self-check**, line by line.
 3. **`verified` stamp** — `Checked [date] for [trip] · re-check before travel:
    [most perishable items]`; keep it `⚠`-prefixed on drafts and keep
