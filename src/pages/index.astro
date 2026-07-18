@@ -12,6 +12,7 @@ import "../styles/base.css";
 import "../styles/hub.css";
 import "../styles/hub-cards.css";
 import "../styles/wizard.css";
+import "../styles/transitions.css";
 
 const guides = (await getCollection("guides")).sort((a, b) =>
   a.data.title.localeCompare(b.data.title)
@@ -60,11 +61,17 @@ const guideExtras = guides.map(g => {
   const mapSec  = flat.find((s: any) => s.type === "map" && typeof s.center?.lat === "number");
   const sight   = flat.filter((s: any) => s.type === "sights").flatMap((s: any) => s.items || []).find((it: any) => it?.img?.file);
   const month   = allItems[0]?.date?.split(/\s+/)[1] || "";
+  // The card/hero cover: the guide's own `cover` art when set, else its first sight photo
+  // (docs/VISUAL_COVERS.md). Same image the guide masthead uses — that's what makes them morph.
+  const cover = (g.data as any).cover;
+  const coverImg = cover?.file
+    ? { file: cover.file, alt: cover.alt || "", focal: cover.focal || null }
+    : (sight ? { file: sight.img.file, alt: sight.img.alt || sight.name, focal: null } : null);
   return {
     dayCount, badge, firstDate, lastDate, month,
     startISO: firstDate ? firstDate.toISOString().slice(0, 10) : "",
     mapCenter: mapSec ? { lat: mapSec.center.lat, lng: mapSec.center.lng } : null,
-    heroImg: sight ? { file: sight.img.file, alt: sight.img.alt || sight.name } : null,
+    heroImg: coverImg,
   };
 });
 
@@ -160,7 +167,8 @@ const continents = CONTINENT_ORDER.filter(c => gridContinents.has(c));
           data-hero-lng={heroIsPast ? undefined : hero.ex.mapCenter?.lng}
         >
           {heroSrc && (
-            <img class="hub-hero-img" src={heroSrc} alt={hero.ex.heroImg!.alt} loading="eager" fetchpriority="high" />
+            <img class="hub-hero-img" src={heroSrc} alt={hero.ex.heroImg!.alt} loading="eager" fetchpriority="high"
+                 style={`view-transition-name:cover-${hero.g.id}`} />
           )}
           <span class="hub-hero-scrim" aria-hidden="true"></span>
           <span class="hub-hero-body">
@@ -204,7 +212,11 @@ const continents = CONTINENT_ORDER.filter(c => gridContinents.has(c));
             {g.id === heroId && <span class="hubcard-featured-tag">Featured above</span>}
             {ex.heroImg ? (
               <span class="hubcard-cover">
-                <img class="hubcard-img" src={coverSrc(ex.heroImg)} alt="" loading="lazy" decoding="async" />
+                {/* The cover is the shared element that morphs into the guide masthead. The FEATURED
+                    guide already carries `cover-<slug>` on the hero above, so its card omits the name
+                    to keep it unique per page (a duplicate name disables the transition). */}
+                <img class="hubcard-img" src={coverSrc(ex.heroImg)} alt="" loading="lazy" decoding="async"
+                     style={g.id === heroId ? undefined : `view-transition-name:cover-${g.id}`} />
                 <span class="hubcard-cover-grad" aria-hidden="true"></span>
               </span>
             ) : (

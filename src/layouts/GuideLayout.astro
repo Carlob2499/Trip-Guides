@@ -26,6 +26,7 @@ import "../styles/mobile-nav.css";
 import "../styles/field-tools.css";
 import "../styles/palette.css";
 import "../styles/print-day.css";
+import "../styles/transitions.css";
 import "../features/firebase/live.css";
 import { derivePins } from "../lib/map-pins";
 
@@ -104,18 +105,22 @@ const _flat = flatSections(guide.sections || []);
 const dayCount   = _flat.filter((s: any) => s.type === "days"  ).reduce((n: number, s: any) => n + (s.items?.length || 0), 0);
 const sightCount = _flat.filter((s: any) => s.type === "sights").reduce((n: number, s: any) => n + (s.items?.length || 0), 0);
 
-// Masthead hero image — the first sights item that carries a Commons photo.
-// Present → full-bleed photo hero; absent (scaffolds) → bold typographic hero
-// on the accent field. Same Commons Special:FilePath thumbnailing as SightsBlock.
+// Masthead hero image = the guide's own COVER art when set, else its first sights photo
+// (docs/VISUAL_COVERS.md). This is the SAME image the hub card shows — the shared element
+// that morphs between them. Present → full-bleed photo hero; absent (scaffolds) → bold
+// typographic hero on the accent field. Same Commons Special:FilePath thumbnailing as SightsBlock.
 const heroSight = _flat
   .filter((s: any) => s.type === "sights")
   .flatMap((s: any) => s.items || [])
   .find((it: any) => it?.img?.file);
-const heroSrc = heroSight
-  ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(heroSight.img.file)}?width=1600`
+const coverFile  = (guide as any).cover?.file  ?? heroSight?.img?.file ?? null;
+const coverAlt   = (guide as any).cover?.alt   ?? heroSight?.img?.alt  ?? heroSight?.name ?? "";
+const coverFocal = (guide as any).cover?.focal ?? null;
+const heroSrc = coverFile
+  ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(coverFile)}?width=1600`
   : null;
-const heroCredit = heroSight
-  ? `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(heroSight.img.file)}`
+const heroCredit = coverFile
+  ? `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(coverFile)}`
   : null;
 
 // For weather widget — pull lat/lng from first map section
@@ -339,8 +344,9 @@ const tripSummary = buildSummary(guide);
     <header class={`masthead mast-hero ${heroSrc ? "mast-photo" : "mast-typo"}`} id="top" data-hero>
       <div class="mast-frame">
         {heroSrc && (
-          <img class="mast-img" src={heroSrc} alt={heroSight.img.alt || heroSight.name || ""}
-               loading="eager" fetchpriority="high" />
+          <img class="mast-img" src={heroSrc} alt={coverAlt}
+               loading="eager" fetchpriority="high"
+               style={`view-transition-name:cover-${ogSlug}${coverFocal ? `;object-position:${coverFocal}` : ""}`} />
         )}
         <span class="mast-scrim" aria-hidden="true"></span>
         <div class="mast-inner">

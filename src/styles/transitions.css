@@ -1,0 +1,33 @@
+/* ── Cross-document View Transitions ──────────────────────────────────────────
+   The "magical open": a hub card (or the featured hero) morphs into the guide's
+   masthead photo on navigation, and back. Browser-native CROSS-DOCUMENT view
+   transitions — no client router, no JS, no SPA. The shared element is matched by
+   `view-transition-name: cover-<slug>`, set inline on the hub card/hero image and
+   the guide's `.mast-img`.
+
+   Why not Astro's <ClientRouter />: the guide pages run heavy client JS on normal
+   page load (tabs, Trip Split, maps, Firebase). Cross-document VT keeps every
+   navigation a real page load, so that JS runs unchanged — and it degrades to a
+   plain navigation on browsers without support (Firefox today). See
+   docs/VISUAL_COVERS.md. */
+
+@view-transition {
+  navigation: auto;
+}
+
+/* Calm, deliberate morph — an editorial expand, not a flashy zoom. Applies to the
+   matched cover group and the root cross-fade alike. */
+::view-transition-group(*) {
+  animation-duration: 420ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Respect reduced-motion: keep the navigation working, drop the animation so it's
+   an instant swap rather than a morph. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

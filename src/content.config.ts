@@ -273,6 +273,17 @@ const guides = defineCollection({
         });
       }
     }).optional(),
+    // Optional per-trip COVER art (docs/VISUAL_COVERS.md) — the shared element that morphs from the
+    // hub card into the guide masthead. A Wikimedia Commons `File:` name (verifiable licensing, same
+    // as sights[].img). When absent, the hub card + masthead fall back to the guide's first sight
+    // photo, so no existing guide regresses. `focal` is an optional CSS object-position (e.g.
+    // "50% 30%") to keep the subject framed across the card ↔ hero size change.
+    cover: z.object({
+      file: z.string(),
+      alt: z.string().optional(),
+      credit: z.string().optional(),
+      focal: z.string().optional(),
+    }).optional(),
     verified: z.string().optional(),  // freshness metadata for the maker/AI — NOT shown to travelers, EXCEPT a ⚠-prefixed value (e.g. an unconfirmed draft), which renders as a warning pill in the masthead
     draft: z.boolean().optional(),    // true = a "Guide-to-be" scaffold; listed in the home page's draft tier, not the curated grid
     // OPT-IN provenance enforcement. Absent = loose (every guide written before this
