@@ -355,6 +355,13 @@ const tripSummary = buildSummary(guide);
 
     </div>{/* end .sticky-chrome */}
 
+    <!-- Cold-visitor framing — shown once per browser to shared-link recipients
+         (cold-open.js reveals it; dismiss persists). -->
+    <div class="cold-open" id="coldOpen" hidden>
+      <span class="cold-open-txt"><b>Waypoint</b> — personal, fact-checked travel guides. This one was researched and verified for a specific trip.</span>
+      <button class="cold-open-x" type="button" aria-label="Dismiss">✕</button>
+    </div>
+
     <!-- ═══════════════════════════════════════════════════════════════════════
          MASTHEAD
          ═══════════════════════════════════════════════════════════════════ -->
@@ -609,6 +616,7 @@ const tripSummary = buildSummary(guide);
       import "../scripts/section-flight.js";
       import "../scripts/micro.js";
       import "../scripts/onboard.js";
+      import "../scripts/cold-open.js";
       import "../scripts/scroll-memory.js";
       import "../scripts/offline-pill.js";
       import "../features/field-tools/index.js";

@@ -52,6 +52,11 @@ import { resolveSwipe } from "../model/gesture";
     panel.scrollTop = 0;
     var segs = rail.children;
     for (var s = 0; s < segs.length; s++) segs[s].className = "sm-seg" + (s < cur ? " done" : s === cur ? " now" : "");
+    var pos = overlay.querySelector(".sm-pos");
+    if (pos) pos.textContent = "Day " + (cur + 1) + " / " + N;
+    var prev = overlay.querySelector(".sm-prev"), next = overlay.querySelector(".sm-next");
+    if (prev) prev.disabled = cur === 0;
+    if (next) next.disabled = cur === N - 1;
     if (!reduce) {
       panel.classList.remove("sm-in-l", "sm-in-r");
       void panel.offsetWidth; // restart the animation
@@ -98,8 +103,13 @@ import { resolveSwipe } from "../model/gesture";
       railHtml +
       '<button class="sm-close" type="button" aria-label="Close day-by-day view">✕</button>' +
       '<div class="sm-stage"><article class="sm-panel" tabindex="-1"></article></div>' +
-      '<button class="sm-nav sm-prev" type="button" aria-label="Previous day">‹</button>' +
-      '<button class="sm-nav sm-next" type="button" aria-label="Next day">›</button>' +
+      // Prev/next live in a control bar BELOW the panel — never overlaying the day's
+      // text at any viewport (they used to float mid-stage and sat on top of content).
+      '<div class="sm-foot">' +
+        '<button class="sm-nav sm-prev" type="button" aria-label="Previous day">‹</button>' +
+        '<span class="sm-pos" aria-hidden="true"></span>' +
+        '<button class="sm-nav sm-next" type="button" aria-label="Next day">›</button>' +
+      '</div>' +
       '<p class="sm-hint">Swipe, tap ‹ ›, or use arrow keys · Esc to close</p>' +
       '<span class="sm-live" role="status" aria-live="polite"></span>';
     document.body.appendChild(overlay);

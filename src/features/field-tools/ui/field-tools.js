@@ -169,7 +169,11 @@ import { burnTotal, convertRate, decodeStops, encodeStops } from "../model/field
       if (!pop.hidden) {
         var r = pill.getBoundingClientRect();
         pop.style.top = (r.bottom + window.scrollY + 8) + "px";
-        pop.style.left = Math.max(8, Math.min(innerWidth - 250, r.left)) + "px";
+        // Clamp to the viewport using the popover's MEASURED width (it's visible by
+        // now, so offsetWidth is real) — the old hardcoded 250px assumption clipped
+        // the right edge on narrow screens whenever the popover rendered wider.
+        var w = pop.offsetWidth || 250;
+        pop.style.left = Math.max(8, Math.min(innerWidth - w - 8, r.left)) + "px";
         render();
         inp.focus();
       }

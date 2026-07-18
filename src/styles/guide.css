@@ -124,6 +124,12 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 :root{--read:42rem}
 .shell{max-width:1400px;margin:0 auto;padding:0 1.1rem}
 
+/* Cold-visitor framing strip (cold-open.js — first visit only, dismissible). */
+.cold-open{display:flex;align-items:center;gap:.7rem;justify-content:center;padding:.5rem 1rem;background:color-mix(in srgb,var(--accent) 10%,var(--card));border-bottom:1px solid var(--rule)}
+.cold-open-txt{font-family:var(--font-data);font-size:.76rem;color:var(--ink);letter-spacing:.01em}
+.cold-open-x{flex-shrink:0;width:30px;height:30px;border-radius:999px;border:1px solid var(--rule);background:var(--card);color:var(--muted);cursor:pointer;font-size:.72rem}
+.cold-open-x:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
 /* === CONTENT ================================================================= */
 .content{min-width:0;padding:1.2rem 0 3rem}
 .catblock{scroll-margin-top:var(--chrome-h)}
