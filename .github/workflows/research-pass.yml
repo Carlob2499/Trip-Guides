@@ -158,7 +158,13 @@ jobs:
             commit, so a cut-off run resumes here instead of restarting:
               PASS A — canonical & verified: primary/official sources. Verify the ANCHOR event's
                 date + venue against a T0 source FIRST, then the must-dos, entry/visa, transit,
-                hours, prices. Keep the verification ledger as you go.
+                hours, prices. Keep the verification ledger as you go. As soon as the guide's real
+                destination coordinates are set (map center / lookup-place.mjs), resolve its time
+                zone in the SAME step — `node scripts/lookup-tz.mjs <lat> <lng>` (offline, no
+                search) — and set the result explicitly in the guide's `tz` field. Do this for
+                every guide, not just ones that look unusual: a country's "typical" zone is a
+                fallback default, not a researched fact, and it has already shipped wrong (by
+                hours) for real trips before this script existed.
                 → then: npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint passA
                   && git add -A && git commit -m "research(${{ inputs.slug }}): Pass A" && git push
               PASS B — local, authentic, crowd-aware: research INDEPENDENTLY from the intake (do

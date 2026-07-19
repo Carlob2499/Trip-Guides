@@ -234,6 +234,16 @@ crowd-awareness)** plus #9 (party fit) and the bar test — not a hard auto-gate
 
 ## Never guess what a script can verify
 - **coords / place_id** → `node scripts/lookup-place.mjs "<place>" --cc XX`
+- **time zone** → once the guide's real coordinates are established (same step as
+  above, not a separate research round), `node scripts/lookup-tz.mjs <lat> <lng>` —
+  offline, boundary-accurate, zero web search. Set the result explicitly in the
+  guide's `tz` field (content.config.ts). **Do this for every guide, not just ones
+  you suspect are odd** — a country's "typical" zone (`src/lib/themes.ts`'s
+  country-table fallback) is a guess dressed as a default, and it fails silently:
+  Hawaii and Arizona both shipped with the wrong local time for real trips before
+  this script existed, and nothing caught it until a traveler would have. `tz` is
+  cheap (one function call, no network) — there's no efficiency argument for
+  skipping it, only for skipping it accidentally.
 - **`sights` photos** → `node scripts/search-commons.mjs "<subject>"` — only a
   Commons-confirmed filename in `img.file`; if none fits, omit the image.
 - **grounding text** → `node scripts/fetch-wikivoyage.mjs "<City, Country>"`

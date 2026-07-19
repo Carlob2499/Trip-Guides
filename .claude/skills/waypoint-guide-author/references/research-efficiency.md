@@ -22,9 +22,24 @@ execute the plan, don't wander.
 
 ## Search budget (per fact / per venue)
 
-- **Scripts before web, always.** `lookup-place.mjs` (coords/place_id), `search-commons.mjs`
-  (photos), `fetch-wikivoyage.mjs` (grounding leads) answer for free — never web-search what a
-  script answers.
+- **Scripts before web, always.** `lookup-place.mjs` (coords/place_id), `lookup-tz.mjs`
+  (time zone — offline, resolves from the coords `lookup-place.mjs` just gave you, so do
+  it in the SAME step, not a separate search round), `search-commons.mjs` (photos),
+  `fetch-wikivoyage.mjs` (grounding leads) answer for free — never web-search what a
+  script answers. A time-zone web search ("is Arizona on daylight saving") is *slower and
+  less reliable* than the one-line, zero-network `lookup-tz.mjs` call — if you catch
+  yourself about to search for a time zone, stop and run the script instead.
+- **Some facts are ALREADY geography- or country-driven at render time — don't
+  re-research them per guide.** Weather reads live from the guide's own `map` section
+  coordinates (Open-Meteo) — no research step needed beyond setting the map correctly.
+  Currency code, public holidays, and emergency numbers are correctly resolved from the
+  guide's `country` field (`src/data/countries.mjs`) *as long as `country` holds the
+  actual country name* — never a state, province, or other sub-region (that was the
+  Hawaii/Arizona bug's root cause: a state name in the `country` field broke every
+  country-keyed lookup at once, not just time zone). If a destination is a US state,
+  Canadian province, etc., `country` is still `"United States"` / `"Canada"` — the
+  state/province belongs in the title, kicker, and body copy, not in the field that
+  drives currency/holiday/emergency lookups.
 - **Reuse before re-search.** The verification ledger, the intake doc, and the existing guide are
   first stops. Never re-verify a fact the ledger already carries with a current date. In recert,
   start from the flagged fact's own `source_url`.
