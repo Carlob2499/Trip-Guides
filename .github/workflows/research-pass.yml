@@ -116,7 +116,7 @@ jobs:
 
       - name: Run research agent
         if: steps.budget.outputs.should_run == 'true'
-        uses: anthropic/claude-code-action@v1
+        uses: anthropics/claude-code-action@v1
         with:
           # Auth via the Claude Max subscription (claude setup-token), not a paid API key.
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
