@@ -4,7 +4,7 @@
 // #tgConfig JSON script tag emitted by the layout.
 import { todayInTz } from "./util.js";
 import { resolveTripDate } from "../lib/trip-dates";
-import { initRate, initWeather, initDaySwap } from "../features/live-data/index.js";
+import { initRate, initWeather, initDaySwap, initSun } from "../features/live-data/index.js";
 import { initJetLag } from "./jetlag-ui.js";
 import { initSharePanel } from "../features/share/index.js";
 import { reportError } from "../features/firebase/index.js";
@@ -595,6 +595,8 @@ const daysForBanner     = _cfg.daysForBanner || [];
             firstDayDate: firstDayDate,
             lastDayDate: lastDayDate,
           });
+          // Sun & daylight strip — pure math (no fetch), same mapCenter as weather.
+          initSun({ mapCenter: mapCenter, destTzIana: destTzIana });
           // ── 13. MAP FULLSCREEN BUTTON — moved to src/features/maps/ui/fullscreen.js
           // (imported by the maps silo, right beside the Google upgrade that can make
           // its button stale — the two now live together instead of racing blind).

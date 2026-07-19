@@ -11,7 +11,7 @@
 
 // Cross-feature, but through the silo's public surface (never a deep import) — the
 // converter needs the rate live-data already applied, since this module loads after it.
-import { getLastRate } from "../../live-data/index.js";
+import { getLastRate, solarTimesFor, daylightLeftLabel, fmtClock } from "../../live-data/index.js";
 import { burnTotal, convertRate, decodeStops, encodeStops } from "../model/field-math";
 
 (function () {
@@ -198,7 +198,21 @@ import { burnTotal, convertRate, decodeStops, encodeStops } from "../model/field
      already rendered; no second source of truth. */
   var todayCard = document.querySelector(".day-today");
   if (todayCard) {
+    var cfgElFT = document.getElementById("tgConfig");
+    var cfgFT = cfgElFT ? JSON.parse(cfgElFT.textContent || "{}") : {};
     var focusEl = null;
+    var focusSunEl = null;
+    function updateFocusSun() {
+      if (!focusSunEl || !cfgFT.mapCenter) return;
+      var t = solarTimesFor(cfgFT.mapCenter.lat, cfgFT.mapCenter.lng, new Date());
+      var left = daylightLeftLabel(new Date(), t);
+      if (left) {
+        focusSunEl.textContent = "☀︎ " + left + " of daylight left · sunset " + fmtClock(t.sunset, cfgFT.destTzIana);
+        focusSunEl.hidden = false;
+      } else {
+        focusSunEl.hidden = true;
+      }
+    }
     function openFocus() {
       if (!focusEl) {
         focusEl = document.createElement("div");
@@ -212,6 +226,7 @@ import { burnTotal, convertRate, decodeStops, encodeStops } from "../model/field
         head.className = "focus-head";
         head.innerHTML = '<p class="focus-date"></p><h2 class="focus-title"></h2>' +
           '<p class="focus-tldr"></p>' +
+          '<p class="focus-sun" hidden></p>' +
           '<button class="focus-x" type="button" aria-label="Close today view">✕</button>';
         head.querySelector(".focus-date").textContent = dateTxt;
         head.querySelector(".focus-title").textContent = title;
@@ -219,6 +234,7 @@ import { burnTotal, convertRate, decodeStops, encodeStops } from "../model/field
         var tldrEl = head.querySelector(".focus-tldr");
         if (tldrSrc) tldrEl.textContent = tldrSrc.textContent;
         else tldrEl.remove();
+        focusSunEl = head.querySelector(".focus-sun");
         focusEl.appendChild(head);
         var list = document.createElement("ol");
         list.className = "focus-stops";
@@ -269,6 +285,7 @@ import { burnTotal, convertRate, decodeStops, encodeStops } from "../model/field
           if (e.key === "Escape" && focusEl.classList.contains("focus-on")) closeFocus();
         });
       }
+      updateFocusSun(); // recomputed on every open — daylight-left is a moving target, unlike the rest of the header
       focusEl.classList.add("focus-on");
       document.body.classList.add("sheet-lock");
       focusEl.querySelector(".focus-x").focus();

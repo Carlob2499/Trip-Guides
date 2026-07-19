@@ -13,8 +13,10 @@
 export { initRate, getLastRate } from "./ui/rate.js";
 export { initWeather, getLastWx } from "./ui/weather.js";
 export { initDaySwap } from "./ui/day-swap.js";
+export { initSun } from "./ui/sun.js";
 
 // Re-exported for tests and for anything that needs to judge rate/forecast data without
 // touching the DOM.
 export { inBand, fmtRate, isCacheFresh, parseRateResponse, SANITY } from "./model/rate";
 export { wxIcon, wxDayOk, wxValidate, weatherWindow } from "./model/weather";
+export { solarTimesFor, daylightLeftLabel, fmtClock } from "./model/sun";

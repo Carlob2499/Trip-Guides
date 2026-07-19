@@ -123,6 +123,7 @@ html[data-swipe-hint="back"]::after{left:0;background:linear-gradient(to right,c
 
 /* ── Focus Today TL;DR ────────────────────────────────────────────────────── */
 .focus-tldr{margin:.45rem 0 0;font-family:var(--font-display);font-weight:640;font-size:1.1rem;line-height:1.4;color:var(--accent)}
+.focus-sun{margin:.5rem 0 0;font-family:var(--font-data);font-size:.82rem;color:var(--muted)}
 
 /* ── Budget burn pill ─────────────────────────────────────────────────────── */
 .gstat-burn{cursor:pointer;border-color:var(--accent);color:var(--accent)}
