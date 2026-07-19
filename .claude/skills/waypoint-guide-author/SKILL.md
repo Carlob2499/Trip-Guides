@@ -206,6 +206,14 @@ crowd-awareness)** plus #9 (party fit) and the bar test — not a hard auto-gate
   mid-crisis), so ship/flag/omit applies per-phrase — verify against a reliable
   bilingual source, never transliterate from memory. `lang` is the BCP-47 tag
   (e.g. `"ko-KR"`) that drives the Trip kit tab's speak button.
+- **Entry requirements** (guide-level `entry: [{homeCountry, visa, ...}]`,
+  docs/FEATURES.md #7) — one row per traveler home country (a party can mix
+  passports; ask during intake if unclear, never assume). `source_url` +
+  `verified_on` are SCHEMA-REQUIRED here (not optional like most provenance) —
+  research from each destination country's OFFICIAL immigration/entry page only,
+  never a paid visa API or an aggregator. A wrong visa claim can mean a denied
+  boarding, so omit the whole guide's entry card before shipping an unverified
+  one. Recert re-checks this on its normal shelf-life cadence like any other fact.
 
 ## Never guess what a script can verify
 - **coords / place_id** → `node scripts/lookup-place.mjs "<place>" --cc XX`

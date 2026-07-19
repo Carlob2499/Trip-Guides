@@ -544,7 +544,7 @@ const tripSummary = buildSummary(guide);
         <Voting storeKey={storeKey} />
         <Learnings storeKey={storeKey} learnings={guide.learnings ?? null} />
         <Reminders storeKey={storeKey} />
-        <TripKit storeKey={storeKey} country={guide.country} days={daysSec?.items ?? []} phrases={guide.phrases ?? null} />
+        <TripKit storeKey={storeKey} country={guide.country} days={daysSec?.items ?? []} phrases={guide.phrases ?? null} entry={guide.entry ?? null} />
       </main>
     </div>
 

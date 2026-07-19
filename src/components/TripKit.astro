@@ -1,17 +1,24 @@
 ---
 // Trip kit — a tool tab (like Budget/Vote/Reminders) housing focused, on-the-ground
-// helpers (docs/FEATURES.md: #5 arrival autopilot, #6 phrase cards, #7 entry-requirements
-// — the latter two land here in later commits). Server-rendered from data the guide
-// already carries; no new client JS needed for content (checkbox persistence is the
-// existing global guide-ui.js scan — see model/arrival.ts header).
+// helpers (docs/FEATURES.md #5 arrival autopilot, #6 phrase cards, #7 entry requirements).
+// Server-rendered from data the guide already carries; no new client JS needed for
+// content (checkbox persistence is the existing global guide-ui.js scan — see
+// model/arrival.ts header). Cards render in trip-chronological order: entry
+// requirements (settle before you book) → arrival autopilot (the day you land) →
+// phrase cards (useful any day) — each independently optional, never fabricated.
 import TransitLinks from "./TransitLinks.astro";
 import { deriveArrivalPlan } from "../features/trip-kit/index.js";
 import "../features/trip-kit/ui/trip-kit.css";
 
-interface Props { storeKey: string; country: string; days: any[]; phrases?: { lang?: string; items: any[] } | null }
-const { storeKey, country, days, phrases = null } = Astro.props;
+interface Props {
+  storeKey: string; country: string; days: any[];
+  phrases?: { lang?: string; items: any[] } | null;
+  entry?: any[] | null;
+}
+const { storeKey, country, days, phrases = null, entry = null } = Astro.props;
 const arrival = deriveArrivalPlan(days);
 const hasPhrases = !!(phrases && Array.isArray(phrases.items) && phrases.items.length);
+const hasEntry = !!(entry && entry.length);
 ---
 <div class="tk-wrap" id="tripKit" role="tabpanel" aria-labelledby="gtab-kit" data-sk={storeKey} hidden>
   <div class="tk-head">
@@ -19,6 +26,26 @@ const hasPhrases = !!(phrases && Array.isArray(phrases.items) && phrases.items.l
     <h2 class="tk-title">On-the-ground tools</h2>
     <p class="tk-desc">Focused helpers for specific moments of the trip — starting with the moment you land.</p>
   </div>
+
+  {hasEntry && (
+    <section class="tk-card" aria-labelledby="tk-entry-h">
+      <p class="tk-card-eyebrow">🛂 Entry requirements</p>
+      <h3 class="tk-card-title" id="tk-entry-h">Before you book</h3>
+      <div class="tk-entry-rows">
+        {entry!.map((e: any) => (
+          <div class="tk-entry-row">
+            <p class="tk-entry-country">{e.homeCountry}</p>
+            <p class="tk-entry-visa">{e.visa}</p>
+            {e.passportValidity && <p class="tk-entry-passport">Passport: {e.passportValidity}</p>}
+            {e.note && <p class="tk-entry-note">{e.note}</p>}
+            <p class="tk-entry-source">
+              Checked {e.verified_on} · <a href={e.source_url} target="_blank" rel="noopener">official source ↗</a>
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
 
   {arrival && (
     <section class="tk-card" aria-labelledby="tk-arrival-h">
@@ -80,8 +107,8 @@ const hasPhrases = !!(phrases && Array.isArray(phrases.items) && phrases.items.l
     </section>
   )}
 
-  {!arrival && !hasPhrases && (
-    <p class="tk-empty">Nothing here yet — this tab lights up as the guide's itinerary and phrase cards are filled in.</p>
+  {!arrival && !hasPhrases && !hasEntry && (
+    <p class="tk-empty">Nothing here yet — this tab lights up as the guide's itinerary, phrase cards, and entry requirements are filled in.</p>
   )}
 </div>
 

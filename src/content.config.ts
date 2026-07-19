@@ -310,6 +310,22 @@ const guides = defineCollection({
         ...provenance,
       })),
     }).optional(),
+    // Optional entry-requirements card (docs/FEATURES.md #7) — one row per traveler home
+    // country (a party can mix passports), guide-level for the SAME reason as `phrases`
+    // (one consumer: Trip kit; sidesteps the bucket()/tabBudget system). Deliberately
+    // stricter than `phrases`: `source_url` + `verified_on` are REQUIRED here, not the
+    // general-purpose optional `...provenance` — a bare, undated visa/entry claim is not
+    // a lesser version of this fact, it is a DIFFERENT (dangerous) claim, so the schema
+    // itself refuses to let one ship. Never a paid visa API (see docs/FEATURES.md's own
+    // cost screen) — this is pipeline-researched from each country's official entry page.
+    entry: z.array(z.object({
+      homeCountry: z.string(),        // the traveler's passport country, e.g. "United States"
+      visa: z.string(),               // e.g. "Visa-free — K-ETA required, up to 90 days"
+      passportValidity: z.string().optional(), // e.g. "6 months beyond entry date"
+      note: z.string().optional(),
+      source_url: z.string().url(),
+      verified_on: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    })).optional(),
     verified: z.string().optional(),  // freshness metadata for the maker/AI — NOT shown to travelers, EXCEPT a ⚠-prefixed value (e.g. an unconfirmed draft), which renders as a warning pill in the masthead
     draft: z.boolean().optional(),    // true = a "Guide-to-be" scaffold; listed in the home page's draft tier, not the curated grid
     // OPT-IN provenance enforcement. Absent = loose (every guide written before this

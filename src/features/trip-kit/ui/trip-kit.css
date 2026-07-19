@@ -38,4 +38,13 @@
 .tk-speak:hover { border-color: var(--accent); color: var(--accent); }
 .tk-speak:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
+/* Entry requirements — one row per traveler home country. */
+.tk-entry-rows { display: flex; flex-direction: column; gap: .8rem; margin-top: .3rem; }
+.tk-entry-row { border-top: 1px solid var(--rule); padding-top: .7rem; }
+.tk-entry-country { margin: 0 0 .2rem; font-family: var(--font-data); font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.tk-entry-visa { margin: 0 0 .25rem; font-size: 1.05rem; font-weight: 600; }
+.tk-entry-passport, .tk-entry-note { margin: 0 0 .2rem; font-size: .88rem; color: var(--muted); }
+.tk-entry-source { margin: .35rem 0 0; font-size: .74rem; color: var(--muted); }
+.tk-entry-source a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent); }
+
 @media print { .tk-wrap { display: none !important; } }
