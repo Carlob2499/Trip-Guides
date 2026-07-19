@@ -1,0 +1,60 @@
+---
+// Trip kit — a tool tab (like Budget/Vote/Reminders) housing focused, on-the-ground
+// helpers (docs/FEATURES.md: #5 arrival autopilot, #6 phrase cards, #7 entry-requirements
+// — the latter two land here in later commits). Server-rendered from data the guide
+// already carries; no new client JS needed for content (checkbox persistence is the
+// existing global guide-ui.js scan — see model/arrival.ts header).
+import TransitLinks from "./TransitLinks.astro";
+import { deriveArrivalPlan } from "../features/trip-kit/index.js";
+import "../features/trip-kit/ui/trip-kit.css";
+
+interface Props { storeKey: string; country: string; days: any[] }
+const { storeKey, country, days } = Astro.props;
+const arrival = deriveArrivalPlan(days);
+---
+<div class="tk-wrap" id="tripKit" role="tabpanel" aria-labelledby="gtab-kit" data-sk={storeKey} hidden>
+  <div class="tk-head">
+    <p class="tk-eyebrow">Trip kit</p>
+    <h2 class="tk-title">On-the-ground tools</h2>
+    <p class="tk-desc">Focused helpers for specific moments of the trip — starting with the moment you land.</p>
+  </div>
+
+  {arrival ? (
+    <section class="tk-card" aria-labelledby="tk-arrival-h">
+      <p class="tk-card-eyebrow">✈ Arrival autopilot · {arrival.date}</p>
+      <h3 class="tk-card-title" id="tk-arrival-h">{arrival.title}</h3>
+      {arrival.tldr && <p class="tk-card-tldr">{arrival.tldr}</p>}
+
+      {arrival.steps.length > 0 && (
+        <ol class="tk-steps">
+          {arrival.steps.map((s, i) => (
+            <li class="tk-step">
+              <span class="tk-step-n">{String(i + 1).padStart(2, "0")}</span>
+              <span class="tk-step-main">
+                <span class="tk-step-name">{s.name}</span>
+                {s.note && <span class="tk-step-note">{s.note}</span>}
+                {s.lat != null && s.lng != null && (
+                  <TransitLinks lat={s.lat} lng={s.lng} name={s.name} country={country} />
+                )}
+              </span>
+              {s.time && <span class="tk-step-time">{s.time}</span>}
+            </li>
+          ))}
+        </ol>
+      )}
+
+      {arrival.checklist.length > 0 && (
+        <div class="tk-checklist">
+          <p class="tk-checklist-label">Before you go</p>
+          {arrival.checklist.map((item, j) => (
+            <label class="check"><input type="checkbox" data-pkey={`tk-arr-${j}`} /><span class="check-txt">{item}</span></label>
+          ))}
+        </div>
+      )}
+
+      {arrival.fit && <p class="tk-fit">🧳 {arrival.fit}</p>}
+    </section>
+  ) : (
+    <p class="tk-empty">No arrival-day data yet — this card lights up once the itinerary's first day is filled in.</p>
+  )}
+</div>

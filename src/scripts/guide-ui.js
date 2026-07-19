@@ -68,6 +68,7 @@ const daysForBanner     = _cfg.daysForBanner || [];
             vote:   document.getElementById("tripVote"),
             learn:  document.getElementById("tripLearn"),
             remind: document.getElementById("tripRemind"),
+            kit:    document.getElementById("tripKit"),
           };
           var TAB_KEY = "tg-tab-" + STORE_KEY;
 
