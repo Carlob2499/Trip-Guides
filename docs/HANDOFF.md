@@ -19,68 +19,68 @@
 - North stars: `docs/PIPELINE.md` (generation/maintenance) · `docs/VISUAL_COVERS.md` +
   `docs/MOTION.md` (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar).
 
-## Snapshot (updated 2026-07-18, session close)
+## Snapshot (updated 2026-07-19, session close)
 
-**Backbone complete, the approved feature wave shipped, the pipeline went from 5 manual
-touchpoints to 2 — and this session it got its first real-world exercise, which surfaced
-and fixed 3 genuine bugs.** 450 tests, all on `main`.
+**Issue #9 (Hawaii) is scaffolded, fully researched, verified PASS, landed on `main`, and
+sitting on a graduation nomination — but by a MANUAL dual-pass, not the automated agent.**
+The automated agent is still blocked on one missing secret only the creator can supply.
+450 tests, all on `main`.
 
-- **Real-world round (this session):** the creator filed a real "New guide: Hawaii" issue
-  (#9) through the site and hit a live failure: `new-guide.yml`'s scaffold step never ran
-  `npm ci` before a script that imports `zod` → `ERR_MODULE_NOT_FOUND` on the very first
-  real issue. Fixed (added the install step). Separately, the New Guide wizard modal was
-  silently dropping 3 fields (anchor event, party, travel style) — the intake form never
-  asked for them, so nothing was there to transcribe into the GitHub issue; added the
-  inputs and wired them into the submit URL. Fixing that surfaced a second, independent
-  pre-existing bug: a double-matching CSS selector in `wizard.js`'s field-mapping orphaned
-  "End date" outside its step. Both wizard bugs fixed and verified end-to-end in-browser
-  (all 3 steps render and advance correctly) — commit `ced8d0d`. Also fixed 2 pre-existing
-  a11y color-contrast violations (Denmark light mode + a previously-undetected Korea
-  dark-mode mirror case) via `color-mix(in srgb, var(--accent) 70%, var(--ink) 30%)`,
-  root-caused to `MIN_ACCENT_CONTRAST=3.0` in `extract-palette.mjs` being sized for
-  large/decorative use, not the 4.5:1 small-text/active-tab uses it also serves.
-  **Issue #9 (Hawaii) itself never scaffolded** — it failed before the fix landed, so it
-  needs the `new-guide` label re-applied (or a fresh issue filed) to actually try again.
-
+- **Retrigger round (this session):** re-applied the `new-guide` label to issue #9 — the
+  scaffold succeeded this time (the prior session's `npm ci` fix held), landing as slug
+  `us` (country-derived from the intake's "US" field, not "hawaii" — expected, not a bug).
+  `research-pass.yml` then auto-dispatched and failed **twice**, surfacing two more real,
+  general bugs (not guide-specific): `anthropic/claude-code-action` was misspelled
+  `anthropics/claude-code-action` in all three agent-invoking workflows (research-pass,
+  modify-guide, recert — none had ever actually run before this), and `allowed_tools` is a
+  deprecated v0.x input on that action's v1.0 (moved into `claude_args`). Both fixed and
+  pushed. **The agent still can't run** — the repo has no `CLAUDE_CODE_OAUTH_TOKEN` secret
+  at all. Generating one needs `claude setup-token` in a real terminal (an interactive
+  OAuth login), which can't be done from here or from a phone without a terminal app —
+  purely the creator's action.
+- **To prove the pipeline's research side without the blocked agent**, ran the exact dual-pass
+  procedure by hand this session (Pass A canonical → Pass B local/authentic → reconcile →
+  self-correction loop) on Hawaii/Oʻahu: TheBus fares, TSA ID rules, the reef-safe-sunscreen
+  law, Diamond Head's mandatory-reservation rule, Helena's Hawaiian Food, all from primary
+  sources; 7-day itinerary; verify --network PASS (0 blocking, 0 dead links, 0 missing
+  photos); browser-verified desktop+mobile. Landed straight to `main` (2 commits) and filed
+  the graduation nomination as **issue #10**, exactly matching what the automated agent
+  would do on a verify PASS. **Still draft: true** — needs the human graduation checklist,
+  same as always. Also fixed a real general bug found along the way: `countries.mjs` had
+  one row for "United States" (Eastern time, DC coordinates) — wrong for Hawaii by 5–6
+  hours and ~4,800 miles — now has its own "Hawaii" row.
 - **Pipeline complete (P0–P4) + streamlined:** typed intake → resumable dual-pass research
   → `npm run verify` scorecard → graduate-on-evidence → weekly recert. Scaffold auto-starts
-  research; a persisted attempt counter caps stuck runs at 5 and files a `stuck` issue; a
-  verify PASS auto-merges to `main` (`scripts/land-branch.sh`) and auto-files the
-  graduation nomination. **Only manual step:** the owner's `graduate-approved` label — the
-  mechanical gates can't judge anchor/priority/party-fit/authenticity, so a confidently-wrong
-  fact still needs a human glance. **Scoped edits:** a **✎ Request a change** button on every
-  guide files an issue; `modify-approved` runs `modify-guide.yml` the same way.
-  `graduate-guide.mjs` now handles both flat-file and split-directory guide shapes.
+  research; a persisted attempt counter caps stuck runs at 5. **Only manual step (by
+  design):** the owner's `graduate-approved` label. **Scoped edits:** a **✎ Request a
+  change** button on every guide files an issue; `modify-approved` runs `modify-guide.yml`.
 - **Visual/motion + `docs/FEATURES.md` wave complete:** card→hero morph, first-open
-  day-story, story-mode itinerary, cover-extracted palettes, PWA, and all 7 planned
-  traveler features (transit deep-links, arrival autopilot, phrase cards, entry-requirements,
-  sun/daylight strip, advisory pill, trip recap). Held: #2/#3 (revivable). Dropped: #4.
+  day-story, story-mode itinerary, cover-extracted palettes, PWA, all 7 planned traveler
+  features. Held: #2/#3 (revivable). Dropped: #4.
 
-**Known waits:** R5 telemetry ranking needs real use; `docs/telemetry/summary.md` doesn't
-exist yet (no traffic); TRAVELER_PATTERNS grows only from real trips (2 data points total);
-#6/#7's phrase/entry CONTENT is still dormant on Korea/Denmark (mechanism shipped only);
-**the entire streamlined pipeline above is unproven end-to-end** — `guides-intake/` is
-empty, meaning no real guide has ever run through the dual-pass/checkpoint/auto-merge system
-yet. Everything is unit-tested (`pipeline.mjs`, `graduate-guide.mjs`) and the YAML was
-reviewed carefully, but there is no GitHub Actions runner in this environment to prove the
-`workflow_dispatch` chain live.
+**Known waits:** the automated agent chain (research-pass/modify-guide/recert) is STILL
+unproven end-to-end — every bug found so far was a config/wiring bug the agent never got
+past, not a content bug. The real proof only happens after the OAuth secret is added.
+TRAVELER_PATTERNS still has only 2 data points; Hawaii's solo-traveler profile matches
+neither existing party (logged in `guides-intake/us.md`'s Amendments as a new, unestablished
+pattern).
 
 ## Where we left off
 
-The wizard/a11y/npm-ci fixes from the real-world round are DONE, tested, built, and
-pushed. **The single highest-leverage next step is still the same one this doc named
-before that round started: get one guide all the way through the automated chain.**
-Issue #9 (Hawaii) is the natural candidate — it already exists, it just needs to actually
-scaffold now that the bug that killed it is fixed.
+**Two things are ready for the creator right now, independently:**
 
-1. **Re-trigger issue #9** (or file a fresh one) — re-apply the `new-guide` label (removing
-   + re-adding it re-fires the `labeled` event) and watch the Actions tab: scaffold →
-   research auto-starts → should land on `main` on its own (or leave a draft PR if it
-   can't). This is the end-to-end proof no amount of local testing can substitute for.
-2. Try the new **✎ Request a change** button on Korea or Denmark for a small known fix, to
-   prove `modify-guide.yml` end-to-end too.
-3. Revive a held feature (#2/#3), or populate #6/#7's dormant content via a research pass.
+1. **Review issue #10** (graduate: us/Hawaii) — the guide is fully researched, verified,
+   and live on `main` as a draft. Read it at `/guides/us/` and, if it holds up, apply
+   `graduate-approved` to feature it. Two open research-judgment calls worth a look first:
+   the island was resolved to Oʻahu only (not Maui — the original intake left it open) and
+   the entry-requirements card was omitted (home country was left blank in the intake).
+2. **Unblock the automated agent** — run `claude setup-token` in a real terminal, then add
+   the result as a repo secret named exactly `CLAUDE_CODE_OAUTH_TOKEN` (Settings → Secrets
+   and variables → Actions). Once that's done, filing a **fresh** New-guide issue (Hawaii's
+   already done by hand) is the real first end-to-end proof of the automated chain —
+   nothing else is blocking it now.
 
-**Re-prompt the creator with:** "The wizard now transcribes everything you fill in, and the
-bug that killed issue #9's scaffold is fixed. Want to re-trigger #9 (or file a fresh guide)
-and watch it run the full auto-chain for real, or work on something else first?"
+**Re-prompt the creator with:** "Hawaii is fully researched and waiting on your graduation
+call at issue #10 — but I did that by hand, not through the real pipeline, because the repo
+still has no CLAUDE_CODE_OAUTH_TOKEN secret. Want to add that (needs `claude setup-token` on
+your end) so the NEXT guide can prove the automated agent for real, or review #10 first?"
