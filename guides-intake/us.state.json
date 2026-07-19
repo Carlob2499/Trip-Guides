@@ -1,16 +1,21 @@
 {
   "slug": "us",
   "createdAt": "2026-07-19T05:00:00.000Z",
-  "updatedAt": "2026-07-19T06:36:09.687Z",
+  "updatedAt": "2026-07-19T21:22:47.792Z",
   "stages": {
     "scaffold": "2026-07-19T05:00:00.000Z",
     "passA": "2026-07-19T06:36:09.453Z",
     "passB": "2026-07-19T06:36:09.530Z",
     "reconcile": "2026-07-19T06:36:09.608Z",
-    "verified": "2026-07-19T06:36:09.687Z"
+    "verified": "2026-07-19T21:22:47.792Z"
   },
   "attempts": 0,
   "notes": [
-    "Re-scaffolded for Sedona after the Hawaii pivot — see guides-intake/us.md pivot note"
+    "Re-scaffolded for Sedona after the Hawaii pivot — see guides-intake/us.md pivot note",
+    {
+      "stage": "verified",
+      "note": "Graduation content pass: found + fixed active Pocket Fire/Oak Creek closures (Day 6 rewrite), tightened budget honesty flag to exact figures, corrected Mii amo package structure (2/3/4/7/10-night)",
+      "at": "2026-07-19T21:22:47.792Z"
+    }
   ]
 }
