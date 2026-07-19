@@ -25,4 +25,17 @@
 .tk-checklist-label { font-family: var(--font-data); font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 .2rem; }
 .tk-fit { margin: 0; font-size: .9rem; color: var(--muted); }
 
+/* Phrase cards — big native-script type is the point (readable at arm's length, shown
+   to someone else); everything around it stays quiet. */
+.tk-phrases { display: grid; grid-template-columns: 1fr; gap: .7rem; margin-top: .3rem; }
+@media (min-width: 640px) { .tk-phrases { grid-template-columns: 1fr 1fr; } }
+.tk-phrase { background: var(--bg); border: 1px solid var(--rule); border-radius: var(--r-sm, 6px); padding: .8rem .9rem; }
+.tk-phrase-situation { margin: 0 0 .35rem; font-family: var(--font-data); font-size: .74rem; color: var(--muted); }
+.tk-phrase-native { margin: 0 0 .15rem; font-size: 1.55rem; font-weight: 700; line-height: 1.25; }
+.tk-phrase-roman { margin: 0 0 .3rem; font-size: .86rem; color: var(--muted); font-style: italic; }
+.tk-phrase-note { margin: 0 0 .5rem; font-size: .82rem; color: var(--muted); }
+.tk-speak { display: inline-flex; align-items: center; gap: .3rem; padding: .35rem .7rem; border-radius: 999px; background: var(--card); border: 1px solid var(--rule); color: var(--ink); font-family: var(--font-data); font-size: .74rem; font-weight: 600; cursor: pointer; }
+.tk-speak:hover { border-color: var(--accent); color: var(--accent); }
+.tk-speak:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
 @media print { .tk-wrap { display: none !important; } }

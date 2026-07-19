@@ -199,6 +199,13 @@ crowd-awareness)** plus #9 (party fit) and the bar test — not a hard auto-gate
   the weather day-swap advisory: rain on an `outdoor` day + a dry `indoor` day
   nearby suggests the swap). Explicit tags only — the features stay silent on
   untagged days rather than guessing from prose.
+- **Phrase cards** (guide-level `phrases: {lang, items[]}`, docs/FEATURES.md #6) —
+  optional; when the trip warrants it, research 15–20 situational phrases
+  (allergy, taxi, help, directions) with the SAME rigor as any other fact: a
+  native-script phrase is safety-adjacent (a traveler may show it to a stranger
+  mid-crisis), so ship/flag/omit applies per-phrase — verify against a reliable
+  bilingual source, never transliterate from memory. `lang` is the BCP-47 tag
+  (e.g. `"ko-KR"`) that drives the Trip kit tab's speak button.
 
 ## Never guess what a script can verify
 - **coords / place_id** → `node scripts/lookup-place.mjs "<place>" --cc XX`

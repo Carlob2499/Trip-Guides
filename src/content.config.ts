@@ -290,6 +290,26 @@ const guides = defineCollection({
       credit: z.string().optional(),
       focal: z.string().optional(),
     }).optional(),
+    // Optional situational phrase cards (docs/FEATURES.md #6) — a guide-level field, NOT a
+    // section type: it's consumed by exactly one surface (the Trip kit tool tab), so it
+    // deliberately sits outside the sections/bucket()/tabBudget system entirely — a "phrases"
+    // section type routed through the normal per-group tabs would risk an empty/broken tab
+    // if a future guide gave it a `group` (bucket() groups ALL sections blindly; Block.astro
+    // has no case for a type it doesn't route). Same reasoning as `cover`: one additive field,
+    // one consumer, zero risk to the existing tab system. `lang` is a BCP-47 tag (e.g. "ko-KR")
+    // for the Web Speech API voice; each item's provenance is independently verified — a wrong
+    // native-script phrase is actively unsafe (a traveler may show it to someone in a real
+    // situation), so ship/flag/omit applies per-phrase, never a guessed transliteration.
+    phrases: z.object({
+      lang: z.string().optional(),
+      items: z.array(z.object({
+        situation: z.string(),        // e.g. "I have a food allergy"
+        native: z.string(),           // native-script phrase — VERIFIED only
+        romanization: z.string().optional(),
+        note: z.string().optional(),  // usage note, e.g. "point + show this screen"
+        ...provenance,
+      })),
+    }).optional(),
     verified: z.string().optional(),  // freshness metadata for the maker/AI — NOT shown to travelers, EXCEPT a ⚠-prefixed value (e.g. an unconfirmed draft), which renders as a warning pill in the masthead
     draft: z.boolean().optional(),    // true = a "Guide-to-be" scaffold; listed in the home page's draft tier, not the curated grid
     // OPT-IN provenance enforcement. Absent = loose (every guide written before this

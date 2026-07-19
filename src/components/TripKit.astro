@@ -8,9 +8,10 @@ import TransitLinks from "./TransitLinks.astro";
 import { deriveArrivalPlan } from "../features/trip-kit/index.js";
 import "../features/trip-kit/ui/trip-kit.css";
 
-interface Props { storeKey: string; country: string; days: any[] }
-const { storeKey, country, days } = Astro.props;
+interface Props { storeKey: string; country: string; days: any[]; phrases?: { lang?: string; items: any[] } | null }
+const { storeKey, country, days, phrases = null } = Astro.props;
 const arrival = deriveArrivalPlan(days);
+const hasPhrases = !!(phrases && Array.isArray(phrases.items) && phrases.items.length);
 ---
 <div class="tk-wrap" id="tripKit" role="tabpanel" aria-labelledby="gtab-kit" data-sk={storeKey} hidden>
   <div class="tk-head">
@@ -19,7 +20,7 @@ const arrival = deriveArrivalPlan(days);
     <p class="tk-desc">Focused helpers for specific moments of the trip — starting with the moment you land.</p>
   </div>
 
-  {arrival ? (
+  {arrival && (
     <section class="tk-card" aria-labelledby="tk-arrival-h">
       <p class="tk-card-eyebrow">✈ Arrival autopilot · {arrival.date}</p>
       <h3 class="tk-card-title" id="tk-arrival-h">{arrival.title}</h3>
@@ -54,7 +55,41 @@ const arrival = deriveArrivalPlan(days);
 
       {arrival.fit && <p class="tk-fit">🧳 {arrival.fit}</p>}
     </section>
-  ) : (
-    <p class="tk-empty">No arrival-day data yet — this card lights up once the itinerary's first day is filled in.</p>
+  )}
+
+  {hasPhrases && (
+    <section class="tk-card" aria-labelledby="tk-phrases-h">
+      <p class="tk-card-eyebrow">💬 Phrase cards</p>
+      <h3 class="tk-card-title" id="tk-phrases-h">Show this to someone</h3>
+      <p class="tk-card-tldr">Verified phrases in big, native-script type — point + show the screen, or tap to hear it spoken aloud.</p>
+      <div class="tk-phrases">
+        {phrases!.items.map((p: any, i: number) => (
+          <article class="tk-phrase">
+            <p class="tk-phrase-situation">{p.situation}</p>
+            <p class="tk-phrase-native" lang={phrases!.lang || undefined}>{p.native}</p>
+            {p.romanization && <p class="tk-phrase-roman">{p.romanization}</p>}
+            {p.note && <p class="tk-phrase-note">{p.note}</p>}
+            {phrases!.lang && (
+              <button class="tk-speak" type="button" data-speak-text={p.native} data-speak-lang={phrases!.lang} aria-label={`Speak: ${p.situation}`}>
+                🔊 <span>Speak</span>
+              </button>
+            )}
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {!arrival && !hasPhrases && (
+    <p class="tk-empty">Nothing here yet — this tab lights up as the guide's itinerary and phrase cards are filled in.</p>
   )}
 </div>
+
+<script>
+  import { initSpeak } from "../features/trip-kit/index.js";
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => initSpeak(), { once: true });
+  } else {
+    initSpeak();
+  }
+</script>

@@ -3,3 +3,4 @@
    here in later commits). Consumers import ONLY from here, never model/ or ui/ directly. */
 
 export { deriveArrivalPlan } from "./model/arrival";
+export { initSpeak } from "./ui/speak.js";
