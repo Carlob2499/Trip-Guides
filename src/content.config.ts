@@ -249,6 +249,17 @@ const guides = defineCollection({
     dek: z.string().optional(),
     footer: z.string().optional(),
     country: z.string(),          // sets the default accent colour (see src/lib/themes.ts)
+    // Optional IANA time zone override, e.g. "America/Phoenix". A country-level default
+    // (src/lib/themes.ts's tzFor) is wrong the moment a destination's local time differs
+    // from its country's "typical" zone — Hawaii and Arizona both proved this by hours,
+    // and it isn't a two-state problem: ANY country can have this same gap (a Canadian
+    // province, a Russian region, a Brazilian state). Research passes should ALWAYS set
+    // this explicitly once the guide's destination coordinates are verified — resolve it
+    // with `node scripts/lookup-tz.mjs <lat> <lng>` (offline, boundary-accurate), never
+    // guessed and never left to the country default. Absent = falls back to tzFor(country),
+    // which stays correct for guides where the country and its typical zone genuinely
+    // match (Denmark, South Korea, ...).
+    tz: z.string().regex(/^[A-Za-z]+(?:\/[A-Za-z_+-]+)+$/).optional(),
     // Optional override of the country-derived palette. Hex only; when absent,
     // src/lib/themes.ts's country lookup remains the sole colour source.
     theme: z.object({

@@ -109,20 +109,18 @@ export const COUNTRIES = {
   "Turkey":         { iso2: "TR", accent: "#b23a48", currency: { code: "TRY", symbol: "₺",  name: "Turkish Lira" },   tz: "Europe/Istanbul",   capital: { lat: 39.9334, lng: 32.8597 } },
 
   // ── Americas ──
+  // NOTE on `tz`/`capital` below: these are a FALLBACK ONLY, used before a guide sets its
+  // own map center, and by tzFor() only when a guide has no explicit `tz` override. A
+  // country this large has no single "typical" local time or geography — Hawaii and
+  // Arizona previously lived here as flat ad-hoc rows (5–6 hours and 1–2 hours off the
+  // mainland default respectively), which was the wrong fix: it doesn't scale (every
+  // large country has this problem, not just the US) and it made "country" ambiguous
+  // between an actual country and a US state. The real fix is per-guide: every guide's
+  // `tz` is resolved from its own verified coordinates via `node scripts/lookup-tz.mjs
+  // <lat> <lng>` (see content.config.ts) once research establishes the destination —
+  // never inferred from `country` for a country this size. `country` itself must always
+  // be the real country name ("United States"), never a state.
   "United States":  { iso2: "US", accent: "#34507a", currency: { code: "USD", symbol: "$",  name: "US Dollar" },      tz: "America/New_York",  capital: { lat: 38.9072, lng: -77.0369 } },
-  // Hawaii gets its own row rather than reusing "United States": the mainland tz/capital
-  // are wrong for it by 5–6 hours and ~4,800 miles — the one-tz-per-country model breaks
-  // for a US state whose local time and geography differ this much from the rest of the
-  // country. iso2 stays "US" (Hawaii observes the same federal holiday set for
-  // fetch-holidays.mjs); tz is Hawaii-Aleutian (no DST); capital is Honolulu, verified via
-  // Nominatim (scripts/lookup-place.mjs "Honolulu, Hawaii" --cc US).
-  "Hawaii":         { iso2: "US", accent: "#048096", currency: { code: "USD", symbol: "$",  name: "US Dollar" },      tz: "Pacific/Honolulu",  capital: { lat: 21.304547, lng: -157.855676 } },
-  // Same reasoning as Hawaii above: Arizona (outside the Navajo Nation) has observed
-  // Mountain Standard Time year-round since 1968 — it never springs forward, so
-  // "United States" → America/New_York would be off by 1-2 hours depending on the season.
-  // capital is Phoenix (Arizona's actual capital, matching every other row's convention),
-  // verified via Nominatim (scripts/lookup-place.mjs "Phoenix, Arizona" --cc US).
-  "Arizona":        { iso2: "US", accent: "#a2681c", currency: { code: "USD", symbol: "$",  name: "US Dollar" },      tz: "America/Phoenix",   capital: { lat: 33.4484367, lng: -112.074141 } },
   "Canada":         { iso2: "CA", accent: "#a4332a", currency: { code: "CAD", symbol: "$",  name: "Canadian Dollar" }, tz: "America/Toronto",  capital: { lat: 45.4215, lng: -75.6972 } },
   "Mexico":         { iso2: "MX", accent: "#2f6f4f", currency: { code: "MXN", symbol: "$",  name: "Mexican Peso" },   tz: "America/Mexico_City", capital: { lat: 19.4326, lng: -99.1332 } },
   "Brazil":         { iso2: "BR", accent: "#2e7d4f", currency: { code: "BRL", symbol: "R$", name: "Brazilian Real" }, tz: "America/Sao_Paulo", capital: { lat: -15.7939, lng: -47.8828 } },
@@ -202,8 +200,8 @@ export const CONTINENTS = {
   "Malaysia": "Asia", "Indonesia": "Asia", "Philippines": "Asia", "India": "Asia",
   "United Arab Emirates": "Asia", "Israel": "Asia",
   // North America (Costa Rica is Central America — conventionally grouped north)
-  "United States": "North America", "Hawaii": "North America", "Arizona": "North America",
-  "Canada": "North America", "Mexico": "North America", "Costa Rica": "North America",
+  "United States": "North America", "Canada": "North America", "Mexico": "North America",
+  "Costa Rica": "North America",
   // South America
   "Brazil": "South America", "Argentina": "South America", "Peru": "South America",
   "Chile": "South America", "Colombia": "South America",

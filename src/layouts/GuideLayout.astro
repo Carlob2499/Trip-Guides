@@ -87,9 +87,12 @@ const storeKey = (guide.title || "guide").replace(/\W+/g, "").toLowerCase();
 const navLabel = (s: any, g: string) => s.title || s.name || g;
 const localCur = currencyFor(guide.country);
 
-// Destination IANA time zone (e.g. "Asia/Seoul") — sourced from the country table.
+// Destination IANA time zone (e.g. "Asia/Seoul"). A guide-level `tz` (resolved from the
+// destination's actual verified coordinates via scripts/lookup-tz.mjs) wins when present;
+// the country table is a fallback default only, and is wrong whenever a destination's
+// local time differs from its country's typical zone (Hawaii, Arizona — see content.config.ts).
 // The client uses Intl with this, so the local-time pill + jet-lag calc are DST-correct.
-const destTzIana = tzFor(guide.country);
+const destTzIana = guide.tz || tzFor(guide.country);
 
 // Base path for the deploy (e.g. "/Trip-Guides" on GitHub Pages). Astro does not
 // auto-prepend the base to string/template hrefs, so home links build it explicitly.
