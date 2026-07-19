@@ -282,7 +282,8 @@
 .learn-actually { margin: 0 0 8px; }
 .learn-changed, .learn-key { margin: 14px 0 0; padding-left: 18px; }
 .learn-changed li, .learn-key li { margin: 3px 0; }
-.learn-foot { margin-top: 20px; }
+.learn-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: 20px; }
+.learn-recap-btn { text-decoration: none; }
 .lnw-open-inline { background: var(--bg); color: var(--accent); border: 1px solid var(--accent); }
 .lnw-open-inline:hover { background: var(--card); filter: none; }
 

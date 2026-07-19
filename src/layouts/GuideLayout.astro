@@ -542,7 +542,7 @@ const tripSummary = buildSummary(guide);
         })}
         <TripSplit storeKey={storeKey} />
         <Voting storeKey={storeKey} />
-        <Learnings storeKey={storeKey} learnings={guide.learnings ?? null} />
+        <Learnings storeKey={storeKey} learnings={guide.learnings ?? null} slug={guideSlug} title={guide.title} />
         <Reminders storeKey={storeKey} />
         <TripKit storeKey={storeKey} country={guide.country} days={daysSec?.items ?? []} phrases={guide.phrases ?? null} entry={guide.entry ?? null} />
       </main>

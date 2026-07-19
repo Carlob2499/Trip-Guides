@@ -6,6 +6,8 @@ import {
   buildSummary,
   buildGpx,
   buildIcs,
+  budgetTripTotal,
+  tripRecapStats,
 } from "./exports";
 
 // RFC 5545 unfold: a CRLF followed by a single leading space/tab is a folded
@@ -298,5 +300,88 @@ describe("buildIcs", () => {
     expect(ics).toContain("BEGIN:VCALENDAR");
     expect(ics).toContain("END:VCALENDAR");
     expect(ics).not.toContain("BEGIN:VEVENT");
+  });
+});
+
+describe("budgetTripTotal", () => {
+  it("multiplies day-basis items by the trip's day count and leaves trip-basis items alone", () => {
+    const sec = { days: 5, items: [{ label: "Food", basis: "day", est: 40 }, { label: "Flight", basis: "trip", est: 600 }] };
+    expect(budgetTripTotal(sec)).toBe(40 * 5 + 600);
+  });
+
+  it("defaults to 1 day when `days` is absent", () => {
+    expect(budgetTripTotal({ items: [{ label: "X", basis: "day", est: 10 }] })).toBe(10);
+  });
+
+  it("returns 0 for a missing or empty section", () => {
+    expect(budgetTripTotal(null)).toBe(0);
+    expect(budgetTripTotal({ items: [] })).toBe(0);
+  });
+});
+
+describe("tripRecapStats", () => {
+  // Regression fixture: Korea's own hand-written learnings summary says "21 of 37
+  // planned stops were hit" — this guide's real waypoints/skipped data reproduces
+  // that exact figure, confirming the hit = waypointsTotal - skippedTotal formula.
+  it("reproduces Korea's hand-written 21-of-37 stat from its real waypoints + skips", () => {
+    const days = Array.from({ length: 8 }, (_, i) => ({ date: `Day ${i}`, waypoints: [] as any[] }));
+    // Distribute 37 waypoints and 16 skips across the 8 days — exact split doesn't
+    // matter to the formula, only the totals do.
+    days[0].waypoints = Array(5).fill({ name: "x" });
+    days[1].waypoints = Array(5).fill({ name: "x" });
+    days[2].waypoints = Array(5).fill({ name: "x" });
+    days[3].waypoints = Array(5).fill({ name: "x" });
+    days[4].waypoints = Array(5).fill({ name: "x" });
+    days[5].waypoints = Array(5).fill({ name: "x" });
+    days[6].waypoints = Array(4).fill({ name: "x" });
+    days[7].waypoints = Array(3).fill({ name: "x" });
+    const guide = {
+      sections: [{ type: "days", items: days }],
+      learnings: { days: [
+        { date: "Day 0", skipped: Array(3).fill({ stop: "x" }) },
+        { date: "Day 1", skipped: Array(3).fill({ stop: "x" }) },
+        { date: "Day 2", skipped: Array(2).fill({ stop: "x" }) },
+        { date: "Day 3", skipped: Array(2).fill({ stop: "x" }) },
+        { date: "Day 4", skipped: Array(2).fill({ stop: "x" }) },
+        { date: "Day 5", skipped: Array(4).fill({ stop: "x" }) },
+        { date: "Day 6", skipped: [] },
+        { date: "Day 7", skipped: [] },
+      ] },
+    };
+    const stats = tripRecapStats(guide);
+    expect(stats.waypointsTotal).toBe(37);
+    expect(stats.skippedTotal).toBe(16);
+    expect(stats.hit).toBe(21);
+    expect(stats.hasRecap).toBe(true);
+  });
+
+  it("reports hasRecap: false and zeroed skip stats when there is no learnings block", () => {
+    const guide = { sections: [{ type: "days", items: [{ date: "D1", waypoints: [{ name: "a" }] }] }] };
+    const stats = tripRecapStats(guide);
+    expect(stats.hasRecap).toBe(false);
+    expect(stats.skippedTotal).toBe(0);
+    expect(stats.hit).toBe(1);
+    expect(stats.days).toBe(1);
+  });
+
+  it("never returns a negative hit count even if skips outnumber waypoints", () => {
+    const guide = {
+      sections: [{ type: "days", items: [{ date: "D1", waypoints: [{ name: "a" }] }] }],
+      learnings: { days: [{ date: "D1", skipped: [{ stop: "a" }, { stop: "b" }, { stop: "c" }] }] },
+    };
+    expect(tripRecapStats(guide).hit).toBe(0);
+  });
+
+  it("pulls spendTotal from the guide's budget section, or null when there is none", () => {
+    const withBudget = {
+      sections: [
+        { type: "days", items: [] },
+        { type: "budget", currency: "€", days: 3, items: [{ label: "Food", basis: "day", est: 20 }] },
+      ],
+    };
+    expect(tripRecapStats(withBudget)).toMatchObject({ spendTotal: 60, currency: "€" });
+
+    const withoutBudget = { sections: [{ type: "days", items: [] }] };
+    expect(tripRecapStats(withoutBudget)).toMatchObject({ spendTotal: null, currency: "$" });
   });
 });

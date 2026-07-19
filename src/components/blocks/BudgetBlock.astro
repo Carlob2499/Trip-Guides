@@ -1,4 +1,5 @@
 ---
+import { budgetTripTotal } from "../../features/exports/index";
 const { sec } = Astro.props;
 const cur   = (sec.currency ?? "$") as string;
 const days  = (sec.days    ?? 1)   as number;
@@ -32,7 +33,7 @@ function tripHigh(it: (typeof items)[0]) {
   return it.high != null ? (it.basis === "day" ? it.high * days : it.high) : null;
 }
 
-const estTotal  = items.reduce((t, it) => t + tripLine(it), 0);
+const estTotal  = budgetTripTotal(sec);
 const lowTotal  = items.reduce((t, it) => { const l = tripLow(it);  return t + (l != null ? l : tripLine(it)); }, 0);
 const highTotal = items.reduce((t, it) => { const h = tripHigh(it); return t + (h != null ? h : tripLine(it)); }, 0);
 const hasRange  = Math.round(lowTotal) !== Math.round(estTotal) || Math.round(highTotal) !== Math.round(estTotal);

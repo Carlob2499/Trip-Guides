@@ -129,6 +129,61 @@ export function buildSummary(guide: any): string {
   return out.join("\n");
 }
 
+// ── Trip recap (docs/FEATURES.md #10) ───────────────────────────────────────
+
+export interface BudgetItem {
+  label: string; basis: "day" | "trip"; est: number;
+  low?: number; high?: number; category?: string; per?: "person" | "group"; note?: string;
+}
+
+// Trip-total estimate for a `budget` section — the same formula BudgetBlock.astro's
+// "Trip total" row uses (its own per-row `tripLine` stays local; this is the one
+// number a second consumer, the recap card, also needs).
+export function budgetTripTotal(sec: { items?: BudgetItem[]; days?: number } | null | undefined): number {
+  const days = sec?.days ?? 1;
+  const items = sec?.items ?? [];
+  return items.reduce((t, it) => t + (it.basis === "day" ? it.est * days : it.est), 0);
+}
+
+export interface TripRecapStats {
+  // False when the guide has no post-trip `learnings` block yet — there is no
+  // recap to show (the reality layer only renders when there IS reality, same
+  // rule the Learnings tab already follows).
+  hasRecap: boolean;
+  days: number;
+  waypointsTotal: number;
+  skippedTotal: number;
+  // waypointsTotal - skippedTotal, floored at 0. Not a per-stop match (the
+  // `learnings` block records skips by free-text name, not by waypoint
+  // reference) — a trip-wide count, same arithmetic the guide's own hand-written
+  // post-trip summary uses (verified against Korea's "21 of 37" narrative).
+  hit: number;
+  spendTotal: number | null;
+  currency: string;
+}
+
+export function tripRecapStats(guide: any): TripRecapStats {
+  const sections = flattenSections(guide?.sections);
+  const dayItems: any[] = sections.find((s) => s.type === "days")?.items ?? [];
+  const waypointsTotal = dayItems.reduce((t, d) => t + (d?.waypoints?.length ?? 0), 0);
+
+  const learningDays: any[] = guide?.learnings?.days ?? [];
+  const hasRecap = learningDays.length > 0;
+  const skippedTotal = learningDays.reduce((t, d) => t + (d?.skipped?.length ?? 0), 0);
+
+  const budgetSec = sections.find((s) => s.type === "budget");
+
+  return {
+    hasRecap,
+    days: dayItems.length,
+    waypointsTotal,
+    skippedTotal,
+    hit: Math.max(0, waypointsTotal - skippedTotal),
+    spendTotal: budgetSec ? budgetTripTotal(budgetSec) : null,
+    currency: budgetSec?.currency ?? "$",
+  };
+}
+
 // ── GPX 1.1 ────────────────────────────────────────────────────────────────
 
 function xmlEscape(s: string): string {

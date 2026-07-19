@@ -7,11 +7,17 @@
    Everything stays inert until Firebase is configured (the silo gates on hasFirebase()). */
 import "../features/learnings/ui/learnings.css";
 import { tallySkipsByGroup } from "../features/learnings/index.js";
-interface Props { storeKey: string; learnings?: any }
-const { storeKey, learnings = null } = Astro.props;
+interface Props { storeKey: string; learnings?: any; slug: string; title?: string }
+const { storeKey, learnings = null, slug, title = "" } = Astro.props;
 // Which parts of the guide didn't survive contact, by declared group. Empty unless the
 // post-mortem tagged its skipped stops — no data, no heading (the honest-blank rule).
 const skipTally = tallySkipsByGroup(learnings?.days);
+// The recap card (docs/FEATURES.md #10) exists ONLY for guides with a post-trip
+// `learnings.days` entry — src/pages/recap/[slug].png.ts's own getStaticPaths
+// filters the same way, so this link never 404s.
+const hasRecap = (learnings?.days ?? []).length > 0;
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const recapUrl = `${base}/recap/${slug}.png`;
 ---
 <div class="lnw-modal" id="lnwModal" data-sk={storeKey} hidden aria-hidden="true">
   <div class="lnw-backdrop" data-lnw-close aria-hidden="true"></div>
@@ -86,6 +92,11 @@ const skipTally = tallySkipsByGroup(learnings?.days);
     <button class="lnw-open lnw-open-inline" type="button" data-lnw-open>
       <span class="lnw-open-ico" aria-hidden="true">✎</span>Add trip feedback
     </button>
+    {hasRecap && (
+      <a class="lnw-open lnw-open-inline learn-recap-btn" href={recapUrl} target="_blank" rel="noopener" download={`${(title || "trip").replace(/\W+/g, "-").toLowerCase()}-recap.png`}>
+        <span class="lnw-open-ico" aria-hidden="true">🖼</span>Share your trip recap
+      </a>
+    )}
   </div>
 </section>
 
