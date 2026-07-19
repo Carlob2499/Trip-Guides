@@ -19,35 +19,32 @@
 - North stars: `docs/PIPELINE.md` (generation/maintenance) · `docs/VISUAL_COVERS.md` +
   `docs/MOTION.md` (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar).
 
-## Snapshot (updated 2026-07-18)
+## Snapshot (updated 2026-07-18, session close)
 
-**Everything designed is built, tested (402), deployed on `main`.**
+**Backbone complete + a creator-approved feature wave queued.** 402 tests, all on `main`.
 
-- **Pipeline complete (P0–P4):** typed intake (issue form → zod contract) → resumable
-  dual-pass research (checkpoints in `guides-intake/<slug>.state.json`) → `npm run verify`
-  scorecard → graduate-on-evidence gate → weekly recert matrix (freshness PRs). Sonnet
-  pinned in research-pass.yml / recert.yml via `claude_args`.
-- **Visual/motion complete (V1, V3a–d, V4):** card→hero View-Transition morph · first-open
-  day-story intro · native scroll-driven reveals · story-mode itinerary (one day per view,
-  nav bar BELOW the panel) · lead-first scannability · per-guide palette extracted from each
-  cover (`npm run extract-palette`, sky-suppression rule) with one precedence on guide+hub+OG.
-- **Runtime:** connection state machine (`data-conn` — live tiles degrade explicitly),
-  cold-visitor strip, converter clamp, PWA already complete. Share/SOS/search/dark/exports
-  all functionally verified in-browser.
-- **Weather day-swap shipped:** optional `env: outdoor|indoor|mixed` on day items (explicit
-  tags only — no prose guessing); rain on an outdoor day + a dry indoor day nearby → one
-  advisory line under the wx strip (`live-data/model/day-swap.ts`, 8 tests). Dormant on
-  korea/denmark (past trips, untagged) by design.
+- **Pipeline complete (P0–P4):** typed intake → resumable dual-pass research (checkpoints)
+  → `npm run verify` scorecard → graduate-on-evidence → weekly recert matrix. Sonnet pinned
+  in research-pass.yml / recert.yml via `claude_args`.
+- **Visual/motion complete (V1, V3a–d, V4):** card→hero morph · first-open day-story ·
+  native scroll reveals · story-mode itinerary · lead scannability · cover-extracted
+  palettes (one precedence on guide+hub+OG). Runtime: connection state machine,
+  cold-visitor strip, weather day-swap (`env` tags, explicit-only), PWA complete. All
+  chrome (share/SOS/search/exports) functionally verified in-browser.
+- **NEW — `docs/FEATURES.md`:** ten researched features, scored (market + 2026 survey
+  discourse + $0-API constraint). **Approved wave: #1 transit deep-links → #5 arrival
+  autopilot → #6 phrase cards → #7 entry-requirements → #8 sun strip → #9 advisory pill →
+  #10 recap card.** One new **Trip kit** tool tab (houses 5/6/7). Held: #2 prep timeline,
+  #3 budget pact (revivable). Dropped: #4 reservation vault.
 
-**Known waits (not stalled):** R5 tool suite needs real telemetry; TRAVELER_PATTERNS grows
-only from real trips; what's-open-now blocked on structured hours data (don't fabricate).
+**Known waits:** R5 telemetry ranking needs real use; what's-open-now blocked on structured
+hours; TRAVELER_PATTERNS grows only from real trips.
 
 ## Where we left off
 
-The backbone is finished and idle, waiting to be exercised. **The single next action is a
-real trip:** file the New-guide issue form (or the hub's "Make a new guide") → run the
-research pass **on Sonnet** (Actions → Research pass, or the kickoff prompt the issue
-comment prints) → review the draft PR against the verify scorecard → graduate.
+The approved feature wave is next, one feature per session, in backlog order — **#1
+"Get me there" transit deep-links first** (docs/FEATURES.md has the integration notes).
 
-**Re-prompt the creator with:** "The backbone is ready and waiting on a real trip. Do you
-have a destination + travel party to file, or is there a code/design slice you want first?"
+**Re-prompt the creator with:** "⚠ Switch to **Sonnet** for this session (feature builds are
+Sonnet work). Next up per the approved backlog: #1 transit deep-links on every stop/sight —
+start it? (Or: file a real trip; or revive held features #2/#3.)"
