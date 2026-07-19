@@ -105,9 +105,12 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          allowed_tools: "Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch"
-          # Recert is mechanical re-verification — Sonnet work by definition (research-efficiency.md).
-          claude_args: "--model claude-sonnet-5"
+          # v1.0 action: `allowed_tools`/`model` are deprecated top-level inputs — both now go
+          # through claude_args (--allowedTools / --model). Recert is mechanical re-verification
+          # — Sonnet work by definition (research-efficiency.md).
+          claude_args: |
+            --model claude-sonnet-5
+            --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
           prompt: |
             RECERT — re-verify the STALE facts of an already-published guide. This is maintenance, not
             new research: touch only the facts flagged below, keep everything else as-is, and keep the

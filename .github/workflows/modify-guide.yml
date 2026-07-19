@@ -75,12 +75,14 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          allowed_tools: "Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch"
-          # Model economy: a scoped edit is Sonnet work, same as research/recert
-          # (references/research-efficiency.md) — no model choice exposed here, unlike
-          # research-pass.yml's dropdown, since there's no dual-pass reconcile judgment call
-          # that would ever warrant Opus for a single targeted fact fix.
-          claude_args: "--model claude-sonnet-5"
+          # v1.0 action: `allowed_tools`/`model` are deprecated top-level inputs — both now go
+          # through claude_args (--allowedTools / --model). Model economy: a scoped edit is
+          # Sonnet work, same as research/recert (references/research-efficiency.md) — no model
+          # choice exposed here, unlike research-pass.yml's dropdown, since there's no dual-pass
+          # reconcile judgment call that would ever warrant Opus for a single targeted fact fix.
+          claude_args: |
+            --model claude-sonnet-5
+            --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
           prompt: |
             Guide slug: ${{ steps.req.outputs.slug }}
             Requested change: ${{ steps.req.outputs.change }}

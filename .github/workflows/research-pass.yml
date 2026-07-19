@@ -121,10 +121,12 @@ jobs:
           # Auth via the Claude Max subscription (claude setup-token), not a paid API key.
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          allowed_tools: "Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch"
-          # Model economy: research is Sonnet work (research-efficiency.md). The action has no
-          # `model` input — the CLI flag via claude_args is the supported mechanism.
-          claude_args: "--model ${{ inputs.model || 'claude-sonnet-5' }}"
+          # v1.0 action: `allowed_tools`/`model` are deprecated top-level inputs — both now go
+          # through claude_args (--allowedTools / --model). Model economy: research is Sonnet
+          # work (research-efficiency.md).
+          claude_args: |
+            --model ${{ inputs.model || 'claude-sonnet-5' }}
+            --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
           prompt: |
             Guide slug: ${{ inputs.slug }}
             Section focus: ${{ inputs.section || 'full pass — all sections' }}
