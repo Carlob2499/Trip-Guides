@@ -1,49 +1,57 @@
 {
-  "kicker": "Field guide",
-  "title": "Hawaii - Honolulu? Maui? & US",
-  "dek": "",
-  "country": "US",
+  "kicker": "Honolulu, Oʻahu — Sep 2–8, 2026",
+  "title": "Hawaii",
+  "dek": "Six nights in Waikiki, built around a slow pace, a real spa morning, and plate lunch that isn't a resort buffet — a first solo trip with room to breathe. Everything below is checked; tick items off as you go and your progress saves.",
+  "country": "Hawaii",
   "draft": true,
-  "verified": "⚠ Draft scaffold — nothing here is researched or verified yet. This is a starting skeleton; every price, hour, address and fact must be added and checked against a primary source before use (see the intake spec + CLAUDE.md).",
+  "verified": "⚠ Draft — researched 19 Jul 2026 for the 2–8 Sep trip, via a manual dual-pass simulating the automated pipeline (the pipeline itself is still being wired up — see the guide's intake doc). Confirmed from primary sources: TheBus fares effective 1 Jul 2026 (thebus.org), TSA REAL ID/passport rules (tsa.gov), Hawaii's reef-safe sunscreen law HRS §342D (capitol.hawaii.gov), Diamond Head's mandatory-reservation rule (gostateparks.hawaii.gov), Helena's Hawaiian Food hours/address (helenashawaiianfood.com), Honolulu/Waikiki/Diamond Head/Ala Moana/Chinatown/HNL coordinates (OpenStreetMap Nominatim). ⚠ re-check before you go: Diamond Head's exact entry/parking fee (site didn't publish the dollar figure — confirm at booking), Moana Lani Spa's hours & booking (its own site blocked the automated fetch — call ahead), Ala Moana Center's exact daily hours and the Centerstage show schedule, lodging and rideshare prices (both move fast), and reconfirm TSA ID rules haven't changed again.",
   "provenance": "strict",
   "roomId": "26vjxw4w7rsypow7",
-  "footer": "",
+  "footer": "Location photos via Wikimedia Commons — tap any credit for its source, author and license.",
+  "intro": "One island, one base: Waikiki, for a slow six nights built around a spa morning, real Hawaiian plate lunch, and Diamond Head at a pace that doesn't rush it — Maui was on the table but a first solo trip on a slow pace does better without an inter-island flight to manage. September is Honolulu's warmest month (upper 20s°C / low-to-mid 80s°F) and its driest — pack reef-safe mineral sunscreen (it's the law here, not a suggestion) and something light for air-conditioned interiors.",
   "sections": [
     {
       "type": "panel",
       "group": "Plan",
       "title": "When you land",
-      "body": ""
+      "body": "<p>Arrive at Daniel K. Inouye International Airport (HNL). Rideshare/taxi pickup is Level 1 (ground floor) at both terminals, near baggage claim — a standard Uber/Lyft to Waikiki runs <b>≈$25–45</b> (higher if you land during the morning rush of Asia arrivals). The budget option is TheBus <b>route W</b> (CityExpress!), a flat <b>$3</b> fare direct to the Waikiki hotel zone.</p><p>Hawaii keeps its own time zone (Hawaii–Aleutian, no daylight saving) — from the mainland US that's 2–6 hours behind depending on the season and coast, so budget an easy first evening rather than planning anything for the arrival night.</p>",
+      "source_url": "https://www.uber.com/global/en/r/routes/hnl-to-waikiki-honolulu-hi-us/",
+      "verified_on": "2026-07-19",
+      "shelf_life": "transit"
     },
     {
       "type": "panel",
       "group": "Plan",
       "title": "Local essentials",
-      "body": ""
+      "body": "<p>English is the primary language; Hawaiian and Hawaiian Pidgin phrases are common in daily speech (see Etiquette below) but you won't need either to get by. Same electrical plugs and voltage as the mainland US — no adapter needed. Driving is on the right, same as the mainland. Tipping follows mainland US norms: <b>18–20%</b> at sit-down restaurants, $1–2/bag for hotel bellhops, $5–10/day for housekeeping.</p>"
     },
     {
       "type": "panel",
       "group": "Plan",
       "title": "Entry & documents",
-      "body": ""
+      "body": "<p>This is a <b>domestic US destination</b> — Hawaii is a US state, so a US citizen needs no passport or visa to visit. What you DO need at the TSA checkpoint for the flight itself: a <b>REAL ID–compliant driver's license</b> or another TSA-accepted photo ID (a US passport always works as a substitute). If you show up without an acceptable ID, TSA's ConfirmID process now costs <b>$45</b> as of 1 Feb 2026. ⚠ If you're flying to Hawaii from outside the US, entry rules depend on your own passport's visa status for the United States generally — that's a separate check this guide didn't have your home country to research (the intake left it blank).</p>",
+      "source_url": "https://www.tsa.gov/realid",
+      "verified_on": "2026-07-19",
+      "shelf_life": "default"
     },
     {
       "type": "panel",
       "group": "Plan",
       "title": "Phone & data",
-      "body": ""
+      "body": "<p>Hawaii runs on the same major US carriers (Verizon, AT&T, T-Mobile) as the mainland — if your plan already covers domestic US roaming, it works here with no changes and no local SIM needed. Coverage is strong in Honolulu/Waikiki; it thins out on Diamond Head's crater trail.</p>"
     },
     {
       "type": "panel",
       "group": "Plan",
       "title": "Booking checklist",
-      "body": "",
+      "body": "<p>September is Honolulu's warmest month — confirm AC (not just a ceiling fan) before booking, and book the Diamond Head reservation and any spa appointment as early as their windows allow (see Sights and Day 2/4 below).</p>",
       "checklist": [
         "Flights",
-        "Accommodation",
-        "Airport transfer",
+        "Accommodation (confirm AC)",
+        "Diamond Head reservation (opens 30 days out — book the moment it does)",
+        "Spa appointment (Day 2)",
         "Travel insurance",
-        "Any timed tickets"
+        "Reef-safe mineral sunscreen — pack before you go, Hawaii's supply is real but pricier"
       ]
     },
     {
@@ -60,40 +68,72 @@
       "type": "panel",
       "group": "Money & budget",
       "title": "Money & currency",
-      "body": ""
+      "body": "<p>US Dollar, same as the mainland — no currency exchange needed. Cards are accepted everywhere except a few old-school local spots (Helena's Hawaiian Food, Day 6, is <b>⚠ reportedly cash-only</b> — bring cash to be safe, an ATM is nearby on N. School St). Tipping norms match the mainland (see Local essentials above).</p>"
     },
     {
       "type": "budget",
       "group": "Money & budget",
       "title": "Budget & daily costs",
-      "intro": "Rough per-person estimates — replace the zeros with researched figures.",
+      "intro": "Solo traveler, Comfortable tier ($150–300/day target from intake). Figures below are sourced estimates (≈), not confirmed bookings — lodging and rideshare prices move week to week, so treat these as planning midpoints and re-check before you commit.",
       "currency": "$",
-      "days": 7,
+      "days": 6,
+      "party": 1,
       "items": [
         {
-          "label": "Lodging, per night",
+          "label": "Lodging, per night (Waikiki, comfortable/3–4★)",
           "basis": "day",
-          "est": 0
+          "est": 271,
+          "low": 213,
+          "high": 337,
+          "note": "≈$271/night average for a Waikiki double room; Thursdays run cheapest (≈$213), Saturdays highest (≈$337) — shift your stay's weekday mix if the total matters.",
+          "source_url": "https://www.budgetyourtrip.com/hotels/united-states-of-america/honolulu-5856195",
+          "verified_on": "2026-07-19",
+          "shelf_life": "venue"
         },
         {
           "label": "Food & drink, per day",
           "basis": "day",
-          "est": 0
+          "est": 65,
+          "note": "Own estimate, not a sourced figure — mixing plate lunch ($15–22, see Food & shopping) with one nicer meal."
         },
         {
           "label": "Local transport, per day",
           "basis": "day",
-          "est": 0
+          "est": 15,
+          "note": "TheBus 2-Hour Pass $3/ride or a 24-hour pass $7.50; occasional rideshare hop.",
+          "source_url": "https://www.thebus.org/Fare/TheBusFares20260701.asp",
+          "verified_on": "2026-07-19",
+          "shelf_life": "transit"
         },
         {
-          "label": "Sights & activities, per day",
-          "basis": "day",
-          "est": 0
+          "label": "Spa treatment (Day 2)",
+          "basis": "trip",
+          "est": 200,
+          "note": "⚠ Own estimate, not sourced — Moana Lani's price list wasn't reachable (site blocked the fetch). Confirm when you call to book."
+        },
+        {
+          "label": "Diamond Head entry + parking",
+          "basis": "trip",
+          "est": 15,
+          "note": "≈$5/person entry + ≈$10/vehicle parking for non-residents — official site confirms the fee exists and reservations are mandatory, but didn't publish the exact dollar figures on the page fetched; confirm at booking.",
+          "source_url": "https://gostateparks.hawaii.gov/diamondhead/about",
+          "verified_on": "2026-07-19",
+          "shelf_life": "venue"
+        },
+        {
+          "label": "Airport transfer (one-way, arrival)",
+          "basis": "trip",
+          "est": 35,
+          "note": "≈$25–45 rideshare; TheBus route W is a $3 flat-fare alternative if you're travelling light.",
+          "source_url": "https://www.uber.com/global/en/r/routes/hnl-to-waikiki-honolulu-hi-us/",
+          "verified_on": "2026-07-19",
+          "shelf_life": "transit"
         },
         {
           "label": "Flights — round trip",
           "basis": "trip",
-          "est": 0
+          "est": 0,
+          "note": "Omitted — depends entirely on your home airport; the intake didn't specify one."
         }
       ]
     },
@@ -101,29 +141,46 @@
       "type": "panel",
       "group": "Health & safety",
       "title": "Health & pharmacy",
-      "body": ""
+      "body": "<p><b>Sunscreen is a legal requirement here, not a suggestion.</b> Hawaii Revised Statutes §342D bans the sale of sunscreens containing oxybenzone or octinoxate without a prescription, because both damage coral reefs — bring reef-safe mineral sunscreen (zinc oxide or titanium dioxide) from home; it's sold locally but at a premium. Add a rash guard/sun shirt for long water days and reapply per the label.</p><p>September heat is real (see Weather above) — pace outdoor time for the cooler morning hours, especially the Diamond Head hike (Day 4), and carry water.</p><p>Ocean safety: check posted lifeguard flags before swimming — Waikiki is generally calm and well-patrolled, but conditions change by beach and season. Keep a legally-mandated distance from honu (green sea turtles) and monk seals if you spot one; both are protected species and approaching them is illegal as well as harmful.</p><p>For anything more than minor: Straub Medical Center and The Queen's Medical Center both run 24-hour emergency departments in urban Honolulu, a short rideshare from Waikiki.</p>",
+      "source_url": "https://www.capitol.hawaii.gov/sessions/session2018/bills/SB2571_CD1_.htm",
+      "verified_on": "2026-07-19",
+      "shelf_life": "default"
     },
     {
       "type": "panel",
       "group": "Etiquette & language",
       "title": "Etiquette & language",
-      "body": ""
+      "body": "<p>Hawaiʻi codified the <b>Aloha Spirit</b> into law in 1986 — kindness, unity, agreeableness, humility, patience. In practice: say <b>mahalo</b> (thank you) instead of “thanks,” make a genuine attempt at place names, and don't rush interactions.</p><ul><li><b>If someone gives you a lei</b>, accept it graciously — refusing one is a real social misstep, not a neutral choice. (A pregnant woman should ask for an open-ended lei rather than a closed loop.)</li><li><b>Heiau (ancient temples)</b> are active places of practice, not ruins — treat them like a working church: quiet voice, nothing climbed, nothing moved or taken.</li><li><b>Don't stack rocks into cairns for photos</b> — existing rock arrangements may carry cultural significance, and moving them disturbs the landscape.</li><li><b>Stay on marked trails</b>, especially on Diamond Head, to protect fragile terrain.</li><li><b>Don't honk</b> — it reads as aggressive here and locals reserve it for genuine emergencies. Let other drivers merge.</li><li><b>Remove your shoes</b> before entering a home (this can extend to some accommodations too).</li><li><b>Buy local where you can</b> — a family-run plate lunch counter over a resort buffet is both the better meal and the more respectful one.</li></ul>"
     },
     {
       "type": "routes",
       "group": "Getting around",
       "title": "Key transit routes",
-      "steps": []
+      "steps": [
+        "HNL Airport → Waikiki: TheBus route W ($3 flat fare, direct) or rideshare (≈$25–45, Level 1 pickup at both terminals).",
+        "Around Waikiki: walkable end to end (~2.5 km along the beach) — most of Days 1, 2 and 6 need no transit at all.",
+        "Waikiki → Chinatown (Day 3): TheBus (several routes run along Kalākaua/Ala Moana Blvd toward downtown) or a short rideshare — budget ≈20–25 minutes either way.",
+        "Waikiki → Diamond Head (Day 4): rideshare is simplest for an early start (~10–15 min); TheBus route 23 also serves the trailhead area.",
+        "Waikiki → Ala Moana Center (Day 5): TheBus runs frequently along this corridor, or a short rideshare (~10 min); the mall has 11,000+ free parking spaces if you're driving.",
+        "As elsewhere, a cheap direct rideshare beats a clever transit connection once the fare is small — TheBus is worth using for longer, well-served corridors (Chinatown, Ala Moana), less so for short awkward hops."
+      ],
+      "source_url": "https://www.thebus.org/Fare/TheBusFares20260701.asp",
+      "verified_on": "2026-07-19",
+      "shelf_life": "transit"
     },
     {
       "type": "map",
       "group": "Getting around",
       "title": "Orientation map",
-      "center": {
-        "lat": 38.9072,
-        "lng": -77.0369
-      },
-      "span": 0.08
+      "center": { "lat": 21.304547, "lng": -157.855676 },
+      "span": 0.12,
+      "points": [
+        { "name": "Daniel K. Inouye International Airport (HNL)", "lat": 21.3211445, "lng": -157.9184436, "place_id": "R2815931" },
+        { "name": "Waikiki Beach", "lat": 21.2741046, "lng": -157.8243118, "place_id": "W218679862" },
+        { "name": "Diamond Head State Monument", "lat": 21.2624863, "lng": -157.8067896, "place_id": "W38547440" },
+        { "name": "Ala Moana Center", "lat": 21.2914727, "lng": -157.8437734, "place_id": "W218572753" },
+        { "name": "Chinatown", "lat": 21.3129031, "lng": -157.8628003, "place_id": "N833661552" }
+      ]
     },
     {
       "type": "days",
@@ -132,45 +189,90 @@
       "items": [
         {
           "date": "Wed Sep 2",
-          "title": "",
-          "pace": "",
-          "body": ""
+          "title": "Arrival — ease in",
+          "pace": "Slow — nothing planned past landing",
+          "tldr": "Land, transfer to Waikiki, and let the trip start with a sunset walk, not a schedule.",
+          "body": "<p>Land at HNL, transfer to your Waikiki hotel (TheBus route W, $3, or rideshare ≈$25–45). Check in, unpack at your own pace. As the light turns gold, walk Waikiki Beach — no plan needed beyond that. Dinner nearby, early night; the time-zone shift makes an ambitious first evening a bad idea regardless of home base.</p>",
+          "energy": "slow",
+          "env": "mixed",
+          "waypoints": [
+            { "name": "HNL Airport", "lat": 21.3211445, "lng": -157.9184436 },
+            { "name": "Waikiki Beach (sunset walk)", "lat": 21.2741046, "lng": -157.8243118, "time": "≈17:30" }
+          ]
         },
         {
           "date": "Thu Sep 3",
-          "title": "",
-          "pace": "",
-          "body": ""
+          "title": "Spa morning",
+          "pace": "Slow — one booking, the rest of the day open",
+          "tldr": "A full spa morning at Waikiki's only oceanside spa, then the day stays unscheduled on purpose.",
+          "body": "<p><b>Moana Lani Spa</b>, inside the Moana Surfrider on Waikiki Beach — its own site blocked this guide's automated fetch, so <b>⚠ call ahead to book and confirm hours</b> rather than walking in. It's described as Waikiki's only oceanside spa (18,000+ sq ft), with couples' and solo treatment options. If it's booked out, SpaHalekulani (Halekulani Hotel) or the Kahala Spa are the other well-regarded Waikiki-area options. After: a slow lunch nearby, then the afternoon is deliberately left open — beach time, a nap, or nothing at all.</p><p><b>Book?</b> Call ahead — no confirmed online booking window found for this exact property.</p>",
+          "energy": "slow",
+          "env": "mixed",
+          "constraints": ["Call ahead — no walk-in confirmed"],
+          "waypoints": [
+            { "name": "Moana Lani Spa (Moana Surfrider, Waikiki Beach)", "time": "≈9:00" }
+          ]
         },
         {
           "date": "Fri Sep 4",
-          "title": "",
-          "pace": "",
-          "body": ""
+          "title": "Chinatown food walk",
+          "pace": "Balanced — one neighborhood, on foot",
+          "tldr": "A walkable food crawl through Chinatown — old-school noodle shops next to newer Vietnamese-inspired kitchens.",
+          "body": "<p>Late-morning start (no rush). TheBus or a short rideshare into Chinatown. Lunch at <b>The Pig and the Lady</b> (Vietnamese-inspired; known for banh mi and pho) or <b>Lucky Belly</b> (50 N Hotel St; Mon–Sat lunch 11am–2pm, dinner 5pm–midnight). Spend the afternoon on foot through the Chinatown Historic District — a mix of old noodle shops, Vietnamese bakeries, and newer kitchens. Evening at leisure back in Waikiki, or stay for dinner in Kakaʻako-adjacent spots if the day still has energy.</p><p><b>How from base?</b> TheBus or rideshare, ≈20–25 min. <b>Book?</b> Walk-in for most Chinatown spots; Lucky Belly's dinner service can queue on weekends.</p>",
+          "energy": "balanced",
+          "env": "outdoor",
+          "waypoints": [
+            { "name": "Chinatown Historic District", "lat": 21.3129031, "lng": -157.8628003, "time": "≈12:00" }
+          ]
         },
         {
           "date": "Sat Sep 5",
-          "title": "",
-          "pace": "",
-          "body": ""
+          "title": "Diamond Head, early",
+          "pace": "Balanced — one committed activity, cool-morning timing",
+          "tldr": "The Diamond Head crater trail before the day heats up — reservation booked weeks ahead, not a walk-up.",
+          "body": "<p><b>⚠ Reservation is mandatory</b> — Diamond Head State Monument's own site states plainly that visitors without one are turned away. Reservations open exactly 30 days ahead through the DLNR's Go Wild system; book the moment your window opens (for a Sep 5 visit, that's on or around Aug 6, 2026). Go early — the trail has little shade and September mornings are the coolest part of the day. Non-resident entry ≈$5/person + ≈$10/vehicle parking (exact figures weren't published on the page fetched — confirm at booking). Afternoon: nothing planned — this is the trip's one committed morning, deliberately balanced by open time after.</p><p><b>How from base?</b> Rideshare ≈10–15 min, or TheBus route 23. <b>When does it fit?</b> Morning only — go before 9am if you can. <b>Book?</b> Mandatory advance reservation, 30-day window.</p>",
+          "energy": "balanced",
+          "env": "outdoor",
+          "constraints": ["Advance reservation required — booked 30 days out, no walk-ins"],
+          "waypoints": [
+            { "name": "Diamond Head State Monument", "lat": 21.2624863, "lng": -157.8067896, "time": "≈7:30" }
+          ]
         },
         {
           "date": "Sun Sep 6",
-          "title": "",
-          "pace": "",
-          "body": ""
+          "title": "Ala Moana Center",
+          "pace": "Slow — one destination, all day if you want it",
+          "tldr": "The world's largest open-air mall, with daily hula at the Centerstage — a full slow day, not a quick errand.",
+          "body": "<p><b>Ala Moana Center</b> (1450 Ala Moana Blvd) — 350+ shops from luxury to surf, 160+ dining options, and daily hula/live-music performances at the Centerstage (⚠ exact show times weren't confirmed — check the day-of schedule when you arrive). Typical hours run ≈10am–8pm Mon–Sat, 11am–7pm Sun, but confirm before you go. Free parking (11,000+ spaces) if you're driving; otherwise TheBus or a short rideshare from Waikiki.</p><p><b>How from base?</b> TheBus (frequent) or rideshare, ≈10 min. <b>Book?</b> Walk-in.</p>",
+          "energy": "slow",
+          "env": "indoor",
+          "waypoints": [
+            { "name": "Ala Moana Center", "lat": 21.2914727, "lng": -157.8437734, "time": "≈11:00" }
+          ]
         },
         {
           "date": "Mon Sep 7",
-          "title": "",
-          "pace": "",
-          "body": ""
+          "title": "Helena's + Kakaʻako",
+          "pace": "Balanced — one meal to plan around, otherwise loose",
+          "tldr": "Honolulu's definitive plate lunch, then Kakaʻako's street murals and the SALT district on foot.",
+          "body": "<p><b>Helena's Hawaiian Food</b> (1240 N. School St; Tue–Fri 10am–7:30pm ONLY — closed Mon/Sat/Sun, so this is the one day this trip can do it) — the gold-standard plate lunch, running $15–22, a James Beard America's Classic. <b>⚠ Reportedly cash-only</b> per multiple reviews (not confirmed on their own site) — bring cash. After lunch: Kakaʻako's street-art murals on foot, then SALT at Our Kakaʻako for shops and casual dining. Evening at leisure — a last unhurried Waikiki sunset if the pace allows.</p><p><b>Where?</b> 1240 N. School St, Honolulu. <b>How from base?</b> Rideshare or TheBus, ≈15 min. <b>When does it fit?</b> Lunch only, Tue–Fri. <b>Book?</b> Walk-in; cash-only per reviews.</p>",
+          "energy": "balanced",
+          "env": "outdoor",
+          "constraints": ["Helena's is Tue–Fri 10am–7:30pm only"],
+          "source_url": "https://helenashawaiianfood.com/",
+          "verified_on": "2026-07-19",
+          "waypoints": [
+            { "name": "Helena's Hawaiian Food", "lat": 21.3308859, "lng": -157.865245, "time": "≈12:00" }
+          ]
         },
         {
           "date": "Tue Sep 8",
-          "title": "",
-          "pace": "",
-          "body": ""
+          "title": "Departure",
+          "pace": "Slow — light morning, nothing scheduled",
+          "tldr": "A light final morning before the flight home — no last-minute rush built into this plan.",
+          "body": "<p>Pack, a light breakfast, and — if your flight time allows — a last short beach walk. Transfer to HNL via TheBus route W or rideshare, same as arrival day.</p>",
+          "energy": "slow",
+          "env": "mixed"
         }
       ]
     },
@@ -178,19 +280,51 @@
       "type": "sights",
       "group": "Sights",
       "title": "Top sights",
-      "items": []
+      "items": [
+        {
+          "name": "Waikiki Beach",
+          "kicker": "The trip's daily constant",
+          "body": "<p>Two and a half kilometers of beach right along the hotel strip — walkable end to end, and the backdrop for arrival evening, spa-day downtime, and the last morning. Check posted lifeguard flags before swimming; conditions vary by section and season.</p>",
+          "img": { "file": "Waikiki Beach (2024)-L1004709.jpg", "alt": "Waikiki Beach with Diamond Head visible in the distance" },
+          "map": { "lat": 21.2741046, "lng": -157.8243118 }
+        },
+        {
+          "name": "Diamond Head State Monument",
+          "kicker": "Book 30 days ahead — no walk-ins",
+          "body": "<p>The crater-rim trail with the classic Waikiki-and-ocean panorama from the summit. The official site is explicit: <b>reservations are mandatory and walk-ups are turned away.</b> The 30-day booking window means this has to be arranged before the trip even starts, not decided on the day.</p>",
+          "map": { "lat": 21.2624863, "lng": -157.8067896 },
+          "source_url": "https://gostateparks.hawaii.gov/diamondhead/about",
+          "verified_on": "2026-07-19",
+          "shelf_life": "venue"
+        },
+        {
+          "name": "Ala Moana Center",
+          "kicker": "The world's largest open-air mall",
+          "body": "<p>350+ shops and 160+ dining options in an open-air layout, with daily hula and live music at the Centerstage. Big enough to fill an entire slow day without repeating yourself.</p>",
+          "map": { "lat": 21.2914727, "lng": -157.8437734 },
+          "source_url": "https://www.alamoanacenter.com/en/",
+          "verified_on": "2026-07-19",
+          "shelf_life": "venue"
+        },
+        {
+          "name": "Chinatown Historic District",
+          "kicker": "Old noodle shops next to new kitchens",
+          "body": "<p>Honolulu's most walkable food neighborhood — a mix of decades-old Chinese and Vietnamese businesses alongside newer spots like The Pig and the Lady. Best explored on foot, at a browsing pace.</p>",
+          "map": { "lat": 21.3129031, "lng": -157.8628003 }
+        }
+      ]
     },
     {
       "type": "prose",
       "group": "Food & shopping",
       "title": "What to eat",
-      "body": ""
+      "body": "<p><b>Plate lunch is the local food to know</b> — a scoop of rice, macaroni salad, and a protein, sold from family-run counters rather than restaurants. <a href=\"https://helenashawaiianfood.com/\">Helena's Hawaiian Food</a> (1240 N. School St, Tue–Fri 10am–7:30pm, $15–22/plate per reviews — their own site doesn't list prices — cash reportedly preferred) is the benchmark — a James Beard America's Classic, open since 1946.</p><p>Chinatown carries the trip's other food thread: <b>The Pig and the Lady</b> for Vietnamese-inspired banh mi and pho, and <b>Lucky Belly</b> (50 N Hotel St) for noodles, open through late dinner most nights.</p><p>Kakaʻako's SALT district (Day 6) is worth a browse for casual dining if Helena's leaves room.</p><p>A note on tourist-trap avoidance: resort-adjacent restaurants inside Waikiki's hotel strip skew expensive and generic — the food priority on this trip deliberately routes through Chinatown and Kakaʻako instead, both a short ride away rather than a long one.</p>"
     },
     {
       "type": "prose",
       "group": "References",
       "title": "Sources & further reading",
-      "body": ""
+      "body": "<ul><li><a href=\"https://www.tsa.gov/realid\">TSA — REAL ID</a> (entry documents)</li><li><a href=\"https://www.thebus.org/Fare/TheBusFares20260701.asp\">TheBus — official fares, effective 1 Jul 2026</a></li><li><a href=\"https://www.capitol.hawaii.gov/sessions/session2018/bills/SB2571_CD1_.htm\">Hawaii State Legislature — reef-safe sunscreen law (SB2571)</a></li><li><a href=\"https://gostateparks.hawaii.gov/diamondhead/about\">Hawaii DLNR — Diamond Head State Monument reservations</a></li><li><a href=\"https://helenashawaiianfood.com/\">Helena's Hawaiian Food — official site</a></li><li><a href=\"https://www.alamoanacenter.com/en/\">Ala Moana Center — official site</a></li><li><a href=\"https://www.moanalanispa.com/\">Moana Lani Spa</a> (site blocked automated fetch — call to confirm)</li></ul>"
     }
   ]
 }

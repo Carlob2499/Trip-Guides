@@ -46,10 +46,10 @@ Top 3, in order:
 ---
 
 ## Spec Summary (fill after intake, before research)
-- Section types to include / exclude (and why):
-- The 2–3 priorities driving depth:
-- Hard filters applied to every entry:
-- Verification focus (most perishable / most important to get right):
+- Section types to include / exclude (and why): Standard Plan/Money/Health/Etiquette/Getting around/Itinerary/Sights/Food/References set (9 groups, under the default tabBudget of 10). No `entry` card (home country unknown, see below) and no `advisory` pill (domestic US travel — the advisory-level mechanism is for international destinations).
+- The 2–3 priorities driving depth: Wellness/relaxation (#1) got the spa-day itinerary slot and the sun/reef-safety content; Food & dining (#2) got the Chinatown day + plate-lunch prose; Shopping (#3) got its own day (Ala Moana) but lighter prose depth, matching its #3 rank.
+- Hard filters applied to every entry: every venue answers where/how/when/book (verification-rules.md §5); every perishable fact carries ship/flag/omit state; every coordinate came from `lookup-place.mjs`, never guessed.
+- Verification focus: the Diamond Head mandatory-reservation rule (a real trip-planning trap if missed), TSA ID rules (recently changed — Feb 2026 fee), and the reef-safe sunscreen law (a legal requirement, not a suggestion).
 
 ## Research reconciliation (fill during the dual-pass — see the guide-author skill)
 > Pass A = canonical/verified (official, anchors, logistics). Pass B = local/authentic/crowd-aware
@@ -58,11 +58,18 @@ Top 3, in order:
 
 | Item | Pass A (canonical) | Pass B (local/authentic) | Reconciled → guide | Note (conflict / crowd / novel) |
 |------|--------------------|--------------------------|--------------------|---------------------------------|
-|      |                    |                          |                    |                                 |
+| Airport transfer | TheBus route W, $3 flat, official fare page | Locals/forums: rideshare $25–45, surge on Asia-arrival mornings | Both offered, rideshare first (cross-party pattern: cheap direct beats clever transit once the fare is small) | No conflict — Pass B adds the surge-timing caveat Pass A's fare page doesn't carry |
+| Food priority (#2) | Generic "Hawaiian food" searches surfaced resort-adjacent listicles | Wanderlustyle/local-guide sources named Helena's (cash, Tue–Fri only, James Beard award) and Chinatown (Pig and the Lady, Lucky Belly) as the non-touristy picks | Routed the whole Food day through Chinatown + Helena's, explicitly against the Waikiki resort-strip default | Novel pick — Pass A alone would have defaulted to hotel-adjacent dining |
+| Diamond Head | Generic sources say "iconic hike" with no access detail | DLNR's own site (Pass A once re-checked as T0): reservation is MANDATORY, "persons without a reservation will be turned away," 30-day booking window | Built into Day 4 as a pre-planned, reservation-gated morning, not a spontaneous stop | This started as a Pass B/general-knowledge item and got promoted to Pass A once the T0 source was checked — the reservation requirement would have broken the trip if left as assumed common knowledge |
+| Sunscreen | General "Hawaii bans some sunscreens" awareness | — | Elevated to a Health & pharmacy panel item with the actual HRS §342D citation, not just a packing-list bullet | Legal fact, not merely cultural — treated with the same rigor as an entry requirement |
+| Island choice (Oʻahu vs Maui) | Intake left this open ("Honolulu? Maui?") | — | Resolved to Oʻahu/Honolulu only — see Amendments below | Research-forced decision, logged as an amendment per the skill's convention |
 
 ## Amendments (append-only — record every research-forced re-plan)
 > When research changes the plan (an anchor moved, a neighborhood beats the intended one, a day
 > collapsed), log it here with the reason. The intake above stays the ORIGINAL intent; this is the
 > diff. (Korea/Denmark were "corrected three times by running it" — that history now has a home.)
 
-- (none yet)
+- **2026-07-19 — Island resolved to Oʻahu (Honolulu) only, not Maui.** The intake left this open ("Hawaii - Honolulu? Maui?"). For a first-time SOLO traveler on an explicitly SLOW pace, one week, wellness-first: Oʻahu keeps the trip to one base with no inter-island flight to manage, has the widest concentration of spa/wellness options (the #1 priority), and the strongest food and shopping density for #2/#3. Maui remains a reasonable choice for a different trip shape (a car-based, nature-heavy itinerary) but didn't fit this specific party/pace/priority combination. Ask the traveler to confirm before this guide graduates.
+- **2026-07-19 — No `entry` card; no `advisory` pill.** The intake's "Home country" field was left blank, and the `entry` schema field requires it (plus source_url + verified_on) — guessing a passport country for a real traveler is exactly the kind of fabrication the verification rules forbid, so the card is omitted rather than filled with an assumption. Separately, `advisory` is a US State Department mechanism for INTERNATIONAL destinations; Hawaii is domestic US travel, so the field doesn't apply and was left unset rather than forced.
+- **2026-07-19 — Party classification: neither TRAVELER_PATTERNS Party A nor Party B.** A single 52-year-old solo traveler doesn't match Party A (3 mid-20s friends, gaming anchors) or Party B (5-person family, walking-constrained). Only the Cross-party patterns were applied (cheap direct rideshare over clever transit; AC as a hard booking-checklist item). This guide's own post-trip feedback, if it happens, would be the first data point for a possible new solo-traveler party pattern — not assumed in advance.
+- **2026-07-19 — `src/data/countries.mjs` gained a dedicated "Hawaii" entry.** The scaffold's `country: "US"` mapped to the generic "United States" row (tz `America/New_York`, capital = Washington DC coordinates) — wrong by 5–6 hours and ~4,800 miles for a Hawaii guide. Added a new "Hawaii" row (`tz: "Pacific/Honolulu"`, capital = Honolulu, verified via Nominatim) rather than patching this guide alone, since any future Hawaii or similarly-distant-US-state guide would hit the identical bug.
