@@ -1,9 +1,9 @@
 name: Tests
 
-# Runs the Vitest suite + the Astro/TS type check on every PR (and on pushes to
-# main) so a broken test OR a type error blocks the merge instead of only
-# surfacing later in the Pages deploy. Deploy.yml also runs `npm test`, but only
-# after a push to main.
+# Runs the Vitest suite + the Astro/TS type check + the coverage gate on every PR
+# (and on pushes to main) so a broken test, a type error, OR a coverage regression
+# in the pure-logic core blocks the merge instead of only surfacing later in the
+# Pages deploy. Deploy.yml also runs `npm test`, but only after a push to main.
 on:
   pull_request:
   push:
@@ -24,3 +24,8 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run typecheck
+      # Gates only src/lib/** + every feature's model/ silo (see vitest.config.ts) —
+      # the pure-logic core the project actually invests test coverage in. UI glue
+      # (DOM IIFEs, untestable as-is per CLAUDE.md's sealed-silo split) is measured
+      # but never gated, so this never blocks on the intentional 0% there.
+      - run: npm run coverage

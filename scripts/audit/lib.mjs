@@ -29,16 +29,16 @@ const MONTH_RE = new RegExp(`\\b(${Object.keys(MONTHS).join("|")})[a-z]*\\.?\\s+
 //                   arrays, assembled in filename-sort order. `raw` is the
 //                   concatenation of every file's text so href/source_url
 //                   regex extraction keeps seeing everything.
-export async function readGuides() {
-  const entries = await readdir(GUIDES_DIR, { withFileTypes: true });
+export async function readGuides(guidesDir = GUIDES_DIR) {
+  const entries = await readdir(guidesDir, { withFileTypes: true });
   const out = [];
   for (const e of entries) {
     try {
       if (e.isFile() && e.name.endsWith(".json")) {
-        const raw = await readFile(path.join(GUIDES_DIR, e.name), "utf8");
+        const raw = await readFile(path.join(guidesDir, e.name), "utf8");
         out.push({ file: e.name, slug: e.name.replace(/\.json$/, ""), raw, guide: JSON.parse(raw) });
       } else if (e.isDirectory()) {
-        const dir = path.join(GUIDES_DIR, e.name);
+        const dir = path.join(guidesDir, e.name);
         const files = (await readdir(dir)).filter((f) => f.endsWith(".json"));
         if (!files.includes("_guide.json")) continue;
         const metaRaw = await readFile(path.join(dir, "_guide.json"), "utf8");

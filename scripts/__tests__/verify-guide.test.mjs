@@ -1,8 +1,24 @@
 // Tests for the verify roll-up gate (scripts/verify-guide.mjs): the verdict logic (evaluateGuide,
-// via the real readiness checks on mock guides) and the markdown scorecard renderer (P4).
+// via the real readiness checks on mock guides), the markdown scorecard renderer (P4), the plain-text
+// CLI renderer, and the verify() orchestrator (readGuides/checkStaleness/network audits mocked out —
+// this is a rollup gate, not the place to re-test the audit scripts it calls).
 
-import { describe, it, expect } from "vitest";
-import { evaluateGuide, renderMarkdown } from "../verify-guide.mjs";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+
+const readGuidesMock = vi.fn();
+const checkStalenessMock = vi.fn();
+const checkLinksMock = vi.fn();
+const checkPhotosMock = vi.fn();
+
+vi.mock("../audit/lib.mjs", async (importOriginal) => {
+  const actual = await importOriginal();
+  return { ...actual, readGuides: (...args) => readGuidesMock(...args) };
+});
+vi.mock("../audit/check-staleness.mjs", () => ({ checkStaleness: (...args) => checkStalenessMock(...args) }));
+vi.mock("../audit/check-links.mjs", () => ({ checkLinks: (...args) => checkLinksMock(...args) }));
+vi.mock("../audit/check-photos.mjs", () => ({ checkPhotos: (...args) => checkPhotosMock(...args) }));
+
+const { evaluateGuide, renderMarkdown, report, verify } = await import("../verify-guide.mjs");
 
 const CLEAN_STALENESS = { stale: [], sections: [], noDate: [], drafts: [] };
 
@@ -91,5 +107,135 @@ describe("renderMarkdown", () => {
     });
     expect(md).toContain("dead link: https://dead.example");
     expect(md).toContain("missing photo: File:Ghost.jpg");
+  });
+});
+
+describe("report (plain-text CLI renderer)", () => {
+  const base = {
+    slug: "korea", draft: false, pass: true, blockers: [],
+    readiness: { pass: true, warns: [], infos: [], coverage: {} },
+    recency: { status: "current", staleSections: [] },
+    content: { status: "skipped" },
+    noVerifiedDate: false,
+  };
+
+  it("renders a PASS header and the human checklist", () => {
+    const out = report(base);
+    expect(out).toContain("korea — PASS ✓");
+    expect(out).toContain("draft: no");
+    expect(out).toContain("P0 research   · PASS");
+    expect(out).toContain("verdict: PASS");
+    expect(out).toContain("[ ] #9  Party fit");
+  });
+
+  it("renders NEEDS WORK with each blocking finding listed", () => {
+    const out = report({
+      ...base, pass: false, blockers: ["research"],
+      readiness: { pass: false, warns: [{ severity: "warn", msg: "panel is empty" }], infos: [], coverage: {} },
+    });
+    expect(out).toContain("NEEDS WORK");
+    expect(out).toContain("P0 research   · FAIL");
+    expect(out).toContain("⚠ panel is empty");
+    expect(out).toContain("verdict: NEEDS WORK — fix the blocking gate(s): research");
+  });
+
+  it("reports content as skipped when --network wasn't run", () => {
+    expect(report(base)).toContain("P0 content    · skipped — run with --network");
+  });
+
+  it("reports dead links and missing photos when content failed", () => {
+    const out = report({
+      ...base, content: { status: "fail", deadLinks: [{ url: "https://dead.example" }], missingPhotos: [{ file: "File:Ghost.jpg" }] },
+    });
+    expect(out).toContain("✗ dead link: https://dead.example");
+    expect(out).toContain("✗ missing photo: File:Ghost.jpg");
+  });
+
+  it("reports draft recency as n/a", () => {
+    expect(report({ ...base, draft: true, recency: { status: "n/a", reason: "draft — unverified by design, not stale" } }))
+      .toContain("P1 recency    · n/a — draft — unverified by design, not stale");
+  });
+
+  it("reports stale sections with their category/age/shelf-life", () => {
+    const out = report({
+      ...base,
+      recency: {
+        status: "stale",
+        staleSections: [{ index: 2, title: "Money", category: "fx", date: "2026-06-01", ageDays: 40, life: 7, source: "https://x.example" }],
+        guideStale: null,
+      },
+    });
+    expect(out).toContain('§2 "Money" — fx fact 2026-06-01, 40d vs 7d · re-check: https://x.example');
+  });
+
+  it("notes a `verified` field with no parseable date", () => {
+    expect(report({ ...base, noVerifiedDate: true })).toContain("has a `verified` field but no parseable");
+  });
+});
+
+describe("verify() orchestrator", () => {
+  const GUIDE_A = {
+    file: "a.json", slug: "a",
+    guide: { verified: "Checked Jun 2026", sections: [{ type: "prose", group: "Overview", title: "About", body: "Lots to see and do here." }] },
+  };
+  const GUIDE_B = {
+    file: "b.json", slug: "b",
+    guide: { verified: "Checked Jun 2026", sections: [{ type: "prose", group: "Overview", title: "About", body: "Another fine destination." }] },
+  };
+  const CLEAN_STALENESS = { stale: [], sections: [], noDate: [], drafts: [] };
+
+  beforeEach(() => {
+    // Clears call history only (not implementations) — each test sets its own
+    // mockResolvedValue anyway, but a "was X called" assertion must not inherit
+    // calls left over from an earlier test in this block.
+    vi.clearAllMocks();
+  });
+
+  it("returns an error and no results when --slug names a guide that doesn't exist", async () => {
+    readGuidesMock.mockResolvedValue([GUIDE_A]);
+    const { results, error } = await verify({ slug: "nonexistent" });
+    expect(error).toBe('no guide with slug "nonexistent"');
+    expect(results).toEqual([]);
+    expect(checkStalenessMock).not.toHaveBeenCalled();
+  });
+
+  it("evaluates every guide when no --slug is given", async () => {
+    readGuidesMock.mockResolvedValue([GUIDE_A, GUIDE_B]);
+    checkStalenessMock.mockResolvedValue(CLEAN_STALENESS);
+    const { results, error, network } = await verify({});
+    expect(error).toBeNull();
+    expect(network).toBe(false);
+    expect(results.map((r) => r.slug)).toEqual(["a", "b"]);
+    expect(results.every((r) => r.content.status === "skipped")).toBe(true);
+  });
+
+  it("filters to just the named guide when --slug is given", async () => {
+    readGuidesMock.mockResolvedValue([GUIDE_A, GUIDE_B]);
+    checkStalenessMock.mockResolvedValue(CLEAN_STALENESS);
+    const { results } = await verify({ slug: "b" });
+    expect(results).toHaveLength(1);
+    expect(results[0].slug).toBe("b");
+  });
+
+  it("runs the network audits and folds dead links / missing photos into content when --network is set", async () => {
+    readGuidesMock.mockResolvedValue([GUIDE_A]);
+    checkStalenessMock.mockResolvedValue(CLEAN_STALENESS);
+    checkLinksMock.mockResolvedValue({ dead: [{ url: "https://dead.example", guides: ["a"] }] });
+    checkPhotosMock.mockResolvedValue({ missing: [] });
+    const { results, network } = await verify({ network: true });
+    expect(network).toBe(true);
+    expect(checkLinksMock).toHaveBeenCalled();
+    expect(checkPhotosMock).toHaveBeenCalled();
+    expect(results[0].content.status).toBe("fail");
+    expect(results[0].blockers).toContain("content");
+    expect(results[0].pass).toBe(false);
+  });
+
+  it("never runs the network audits when --network is not set", async () => {
+    readGuidesMock.mockResolvedValue([GUIDE_A]);
+    checkStalenessMock.mockResolvedValue(CLEAN_STALENESS);
+    await verify({});
+    expect(checkLinksMock).not.toHaveBeenCalled();
+    expect(checkPhotosMock).not.toHaveBeenCalled();
   });
 });

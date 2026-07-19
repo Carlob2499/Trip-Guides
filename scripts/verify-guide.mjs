@@ -97,7 +97,9 @@ export async function verify({ slug = null, network = false } = {}) {
   return { results, error: null, network };
 }
 
-function report(r) {
+// Plain-text CLI renderer — the default `npm run verify` output. Exported (alongside
+// renderMarkdown) so its branches are unit-testable without shelling out.
+export function report(r) {
   const L = [];
   L.push(`[verify] ${r.slug} — ${r.pass ? "PASS ✓" : "NEEDS WORK"}   (draft: ${r.draft ? "yes" : "no"})`);
   L.push(`  ── Automated gates (this is the machine verdict) ──`);

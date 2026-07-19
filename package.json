@@ -8,6 +8,7 @@
     "build": "astro build && node scripts/gen-sw-precache.mjs",
     "preview": "astro preview",
     "test": "vitest run",
+    "coverage": "vitest run --coverage",
     "test:visual": "playwright test",
     "typecheck": "astro check",
     "readiness": "node scripts/guide-readiness.mjs",
@@ -38,6 +39,7 @@
     "@astrojs/check": "^0.9.9",
     "@axe-core/playwright": "^4.12.1",
     "@playwright/test": "^1.61.1",
+    "@vitest/coverage-v8": "^4.1.10",
     "tsx": "^4.23.0",
     "typescript": "^6.0.3",
     "vitest": "^4.1.9"

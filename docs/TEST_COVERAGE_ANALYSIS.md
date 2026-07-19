@@ -2,24 +2,35 @@
 
 _Snapshot taken 2026-07-19. Reproduce with the command in "How these numbers were produced" below._
 
+**Status: implemented.** P1–P5 below are done (585 tests now, up from 455) and the
+coverage gate from the Infrastructure section is wired into CI. See the "✅ done"
+notes inline; P6 (the UI blind spots) is left as a judgment call for whoever picks
+up that feature next, not something to force in this pass.
+
 ## TL;DR
 
 The **pure-logic core is excellent** — every `model/` silo and almost every
-`src/lib/` module sits at 88–100%, backed by **455 passing unit tests across 38
-files**. That is exactly where the codebase chose to invest, and it shows.
+`src/lib/` module sits at 88–100%, backed by **585 passing unit tests across 44
+files** (was 455/38 before this pass). That is exactly where the codebase
+chose to invest, and it shows.
 
-The gaps are not in that core. They are in three places where *testable logic
-still lives in an untested file*:
+The gaps were not in that core. They were in three places where *testable logic
+lived in an untested file* — P1–P5 below closed the first two (and the
+reachable parts of the third):
 
 1. **The content-verification tooling** (`scripts/audit/`, `scripts/verify-guide.mjs`,
    `scripts/scaffold-guide.mjs`) — the machinery that enforces the product's #1
-   promise ("Verified"). Pure parsers here are only ~20% covered.
+   promise ("Verified"). Pure parsers here were only ~20% covered → now the
+   whole pure-logic surface of these scripts is tested (P1, P4).
 2. **The `content.config.ts` schema** — 495 lines of Zod that gate every guide,
-   with **zero tests asserting the rules themselves** (only build-time validation
-   of whatever guides happen to exist).
+   which had **zero tests asserting the rules themselves** (only build-time
+   validation of whatever guides happen to exist) → now 21 schema-contract
+   tests (P2).
 3. **A slice of the client layer with no automated test of any kind** — not unit,
    not Playwright — notably `share`, `sos`, `voting`, the hub `wizard`, `palette`,
-   `maps`, `reminders` UI.
+   `maps`, `reminders` UI. **Still open** (P6) — it's a design decision (peel
+   logic into `model/` vs. add a Playwright spec), left for whoever picks up
+   that feature next rather than forced in this pass.
 
 Most of the raw `dist`/UI 0% is **by design** (DOM glue), so the headline
 "19% lines" number is misleading. The recommendations below target *risk*, not
@@ -105,7 +116,13 @@ breakdown:
 
 ## Recommended improvements, ranked by risk × effort
 
-### P1 — Test the "Verified" enforcement engine (high value, low effort — pure fns)
+### P1 — Test the "Verified" enforcement engine (high value, low effort — pure fns) ✅ done
+
+`scripts/__tests__/audit-lib.test.mjs` covers all five parsers below plus
+`readGuides()` itself (refactored to take an injectable `guidesDir`, tested
+against an isolated temp dir for both guide shapes, malformed JSON, and
+non-guide directories) — 33 tests total.
+
 
 `scripts/audit/lib.mjs` holds the parsers every audit and the recert loop depend
 on, and they're pure and trivially testable:
@@ -122,48 +139,74 @@ on, and they're pure and trivially testable:
 A regression here silently lets stale or unverified facts ship — the exact
 failure the whole platform exists to prevent. **~1 test file, all synchronous.**
 
-### P2 — Schema-contract tests for `content.config.ts` (high value, medium effort)
+### P2 — Schema-contract tests for `content.config.ts` (high value, medium effort) ✅ done
 
-Build validates the guides that exist; it does **not** assert the refinements
-still reject what they're meant to reject. Add a small suite that feeds crafted
-objects to the exported schema and asserts:
+`src/content.config.test.ts` (21 tests) mocks the `astro:content` virtual module
+(a thin `{ z, defineCollection }` stand-in — this repo has one hoisted zod
+install, so it's the same `z` instance astro would hand back) so the real
+`guides` schema can be `safeParse`'d directly, no Astro build needed. Covers:
+tabBudget at/over the default and a custom-raised budget; the `theme.primary`
+WCAG contrast gate on both the light and dark background independently; the
+`provenance:"strict"` ≈-without-`verified_on` gate (and that ⚠ stays exempt);
+both `learnings.days` cross-reference checks (date must match an itinerary day,
+a skipped stop's `group` must be real); `roomId`'s regex; and `entry`/`advisory`'s
+required provenance fields.
 
-- `tabBudget` enforcement fails a guide that exceeds its declared budget, passes
-  one at exactly the budget (Korea's 11 / Denmark's 8 are the live cases).
-- The prose-tag allowlist (`<p><b><i><a><ul><li><ol>`) rejects a `<div>`/`<script>`.
-- `≈` / `⚠` flag fields and per-section "Checked [date]" stamps validate as
-  documented.
+**Correction from the original analysis:** the "prose tag allowlist" is *not*
+a `content.config.ts` refinement — grepping the schema found no such check. It's
+a `waypoint-guide-author`-skill convention only (human/AI judgment at write time,
+not machine-enforced), so there was nothing to add a schema test for.
 
-This locks the doctrine into a test instead of tribal knowledge, and catches a
-loosened refinement the day it's introduced rather than the day a guide trips it.
+### P3 — `firebase/sync.js` pure helpers (medium value, medium effort) ✅ done
 
-### P3 — `firebase/sync.js` pure helpers (medium value, medium effort)
+`src/features/firebase/sync.test.ts` (12 tests, `./client.js` mocked so no real
+Firebase SDK or network): `generateTripCode` (length 10, unambiguous-alphabet
+membership, and the actual security property — never `0/o/1/l/i`, not just a
+regex match); `normalizeCode` (RTDB-unsafe chars, truncation, empty input);
+`reportError`/`bumpCounter`'s no-op-without-config posture; and the `_errCount
+>= 5` rate-limit cap traced through 7 calls in one dedicated, order-sensitive
+test (module-level state, documented why it must run where it does).
+`scripts/__tests__/gen-room-id.test.mjs` (5 tests) covers `genRoomId` the same way.
 
-Extract and test the non-DOM logic (mirrors how `model/outbox.ts` was already
-peeled off and tested at 100%):
+### P4 — Raise the partially-covered build tooling ✅ done
 
-- **Room-code generation** — assert length (10), alphabet membership, and the
-  *absence* of ambiguous chars (`0/o/1/l/i` are deliberately excluded because
-  codes are read aloud). This is a security invariant: "the code itself is the lock."
-- `reportError` rate-limit — the `_errCount >= 5` cap must hold (a render loop
-  must not flood the DB).
-- `bumpCounter` / `reportError` — no-op when `hasFirebase()` is false.
+- `scripts/__tests__/scaffold-guide.test.mjs` (24 tests) — `slugify`,
+  `dayLabelsFromRange`, `buildGuideObject` (coord/iso wiring, niche section,
+  currency symbol, budget sizing, draft/provenance/roomId invariants),
+  `buildIntakeMd`. `writeScaffold`'s real disk I/O stays out of scope — it's
+  exercised end-to-end by `new-guide.yml`.
+- `scripts/split-guide.mjs` was refactored (same shape as `graduate-guide.mjs`):
+  extracted `groupSections()` (pure, throws on non-contiguity instead of
+  `console.error`+`process.exit`) and `splitGuide(slug, { guidesDir })` (real
+  I/O, injectable dir, returns a result object instead of exiting directly);
+  the CLI is now a thin `isMain()`-guarded wrapper. Verified byte-for-byte
+  identical CLI behavior (same log lines, same exit codes) by running it
+  against a throwaway guide in the real repo before/after.
+  `scripts/__tests__/split-guide.test.mjs` (12 tests) covers the pure grouping
+  logic plus the full split against an isolated temp dir.
+- `verify-guide.mjs`'s `report()` was exported (mirroring the existing
+  `renderMarkdown` export) and its branches tested; `verify()` itself is now
+  tested with `readGuides`/`checkStaleness`/`check-links`/`check-photos` mocked
+  out (7 new tests in `scripts/__tests__/verify-guide.test.mjs`, 21 total).
 
-Do the same for `gen-room-id.mjs` (id length ≥ the rules' write-gate).
+### P5 — Close the small model/lib edge gaps (low effort, tidy) — partially done
 
-### P4 — Raise the partially-covered build tooling
+Closed: `map-pins.ts`'s `derivePlannerData` was entirely untested (0 tests) —
+now 7 tests. `sun.ts`'s `fmtClock` was entirely untested — now 4 tests,
+including the invalid-timezone catch-fallback branch.
 
-`scaffold-guide.mjs` (11%) and `split-guide.mjs` (0%) transform guide JSON; a bug
-produces malformed guide directories. Add unit tests over their pure transform
-steps (they mirror the already-tested `graduate-guide`, `intake-schema`, and
-`recert` script tests, so the harness pattern exists). Push `verify-guide.mjs`
-(50%) up by covering the rubric/gate branches at 78–141.
-
-### P5 — Close the small model/lib edge gaps (low effort, tidy)
-
-- `src/lib/map-pins.ts` 39–59 (63% → the one weak tested lib module).
-- `sun.ts` 115–119 — `fmtClock`'s invalid-timezone catch fallback.
-- `staleness.ts` L44, `money.ts` L150, `settle.ts` 81/85 — single uncovered branches.
+**Left open, deliberately:** `money.ts` L150 and `staleness.ts` L44 are
+defensive "should never happen" internal-assertion branches, unreachable given
+the validation earlier in each function (staleness's date regex guarantees
+`Date.UTC(...)` can't produce `NaN`; money's largest-remainder math is provably
+in-range given finite non-negative weights). `settle.ts` 81/85 turned out to be
+the same shape — reaching them requires an intermediate greedy-match residual
+landing exactly on the `EPS` (0.005) boundary, and 0.005 has no exact binary
+floating-point representation, so a "0.005 minus 0.005" construction actually
+lands a few `Number.EPSILON` away from the boundary (confirmed by trying it —
+see git history if reviving this). Chasing an exact IEEE-754 boundary would be
+a flaky, engine-version-dependent test for a genuinely defensive line, not a
+real regression risk — not worth it.
 
 ### P6 — Decide coverage policy for the untested UI blind spots
 
@@ -178,29 +221,48 @@ wizard, palette, gmaps render, survey), pick one per feature intentionally:
 
 ---
 
-## Infrastructure recommendation
+## Infrastructure recommendation ✅ done
 
-There is currently **no coverage tooling wired in** — `@vitest/coverage-v8`
-isn't a dependency and there's no `coverage` script, so regressions in the
-well-covered core are invisible until someone notices. Suggest:
+`@vitest/coverage-v8` is now a devDependency, `npm run coverage` runs
+`vitest run --coverage`, and `vitest.config.ts` sets **per-glob thresholds**
+(not a repo-wide number, which the intentional 0% UI would either force near-zero
+or force fake tests to satisfy):
 
-1. Add `@vitest/coverage-v8` (dev) and a `"coverage": "vitest run --coverage"` script.
-2. Set per-directory thresholds that **ratchet the strengths and ignore the DOM
-   glue** — e.g. require `src/features/*/model/**` and `src/lib/**` to stay ≥ 90%,
-   rather than a misleading global gate that the intentional 0% UI would force low.
-   This protects the actual investment without pretending DOM glue should be 90%.
+```
+"src/lib/**":                    { statements: 90, branches: 80, functions: 95, lines: 95 }
+"src/features/*/model/**":       { statements: 90, branches: 80, functions: 90, lines: 95 }
+"scripts/audit/lib.mjs":         { statements: 65, branches: 65, functions: 60, lines: 65 }
+```
+
+Numbers sit a few points under what's currently measured — real regression
+gates, not aspirational targets. `.github/workflows/test.yml` now runs
+`npm run coverage` after `npm test`/`npm run typecheck`, so a regression in the
+gated globs blocks the PR. Verified the mechanism actually fails the build (not
+silently ignored) by temporarily setting an impossible threshold and confirming
+a nonzero exit + a clear `does not meet "..." threshold` message, then reverting.
 
 ---
 
 ## How these numbers were produced
 
+Originally (before `@vitest/coverage-v8` was a project dependency):
+
 ```bash
 npm install
-npm install -D @vitest/coverage-v8   # not yet a project dependency
+npm install -D @vitest/coverage-v8
 npx vitest run --coverage --coverage.provider=v8 --coverage.all \
   --coverage.include='src/**/*.{ts,js}' --coverage.include='scripts/**/*.{mjs,ts}' \
   --coverage.exclude='**/*.test.*' --coverage.exclude='**/mocks/**' \
   --coverage.reporter=text
 ```
 
-`npm test` alone = 455 tests / 38 files, ~3s, all green.
+Now that the Infrastructure section is wired in, the same full-repo report is just:
+
+```bash
+npm run coverage
+```
+
+(`vitest.config.ts`'s own `include`/`exclude`/`thresholds` apply automatically —
+only the gated globs fail the build, everything else is reported, not gated.)
+
+`npm test` alone = 585 tests / 44 files, ~3.5s, all green.

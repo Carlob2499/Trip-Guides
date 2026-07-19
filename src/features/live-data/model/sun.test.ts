@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { solarTimesFor, daylightLeftLabel } from "./sun";
+import { solarTimesFor, daylightLeftLabel, fmtClock } from "./sun";
 
 // Reference values from sunrise-sunset.org (USNO-derived, formatted=0/UTC) — fetched live
 // during development, not recalled from training data:
@@ -68,5 +68,28 @@ describe("daylightLeftLabel", () => {
   it("returns null after sunset", () => {
     const afterDusk = new Date(t.sunset!.getTime() + 5 * 60000);
     expect(daylightLeftLabel(afterDusk, t)).toBeNull();
+  });
+});
+
+describe("fmtClock", () => {
+  it("renders 24h HH:MM in the given IANA time zone", () => {
+    const d = new Date(Date.UTC(2026, 6, 9, 3, 5)); // 03:05 UTC
+    expect(fmtClock(d, "Asia/Seoul")).toBe("12:05"); // Seoul is UTC+9
+  });
+
+  it("renders in UTC when no time zone is given", () => {
+    const d = new Date(Date.UTC(2026, 6, 9, 3, 5));
+    expect(fmtClock(d)).toBe("03:05");
+  });
+
+  it("returns an em dash for a null date", () => {
+    expect(fmtClock(null)).toBe("—");
+  });
+
+  it("falls back to the system/UTC format when the time zone string is invalid", () => {
+    const d = new Date(Date.UTC(2026, 6, 9, 3, 5));
+    // Intl.DateTimeFormat throws RangeError on an unrecognized IANA zone — fmtClock's
+    // catch branch re-formats without a timeZone rather than letting that throw surface.
+    expect(fmtClock(d, "Not/A_Real_Zone")).toBe(fmtClock(d));
   });
 });
