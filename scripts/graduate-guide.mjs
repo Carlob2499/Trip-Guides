@@ -75,17 +75,28 @@ export async function graduateGuide(slug, { guidesDir = GUIDES_DIR } = {}) {
 }
 
 // ── CLI ──────────────────────────────────────────────────────────────────────
-// Reads the issue body from ISSUE_BODY (set by the workflow), writes slug/country to
-// GITHUB_OUTPUT on success. Exit codes preserved from before the refactor: 1 = no/invalid
-// slug field, 2 = guide not found (either shape), 3 = not a draft.
+// Two entry modes:
+//   ISSUE_BODY (set by graduate-guide.yml)  — the human-approved-label path: parses the
+//     "### Guide slug" field from a graduate-request issue, writes slug/country to
+//     GITHUB_OUTPUT on success.
+//   --slug <slug>                            — the auto-graduate path: research-pass.yml
+//     calls this directly once its OWN verify+build gate just passed (the pipeline's
+//     self-correction loop IS the evidence check; no issue, no human label, no
+//     GITHUB_OUTPUT — the caller already knows the slug and stays in the same job).
+// Exit codes preserved from before the refactor: 1 = no/invalid slug, 2 = guide not
+// found (either shape), 3 = not a draft.
 function isMain(moduleUrl) {
   return process.argv[1] != null && moduleUrl === pathToFileURL(process.argv[1]).href;
 }
 
 if (isMain(import.meta.url)) {
-  const body = process.env.ISSUE_BODY || "";
-  const { rawSlug } = parseIssueBody(body);
-  if (!rawSlug) { console.error("[graduate-guide] no Guide slug field — aborting"); process.exit(1); }
+  const slugFlag = process.argv.indexOf("--slug");
+  const direct = slugFlag !== -1;
+  const rawSlug = direct ? process.argv[slugFlag + 1] : parseIssueBody(process.env.ISSUE_BODY || "").rawSlug;
+  if (!rawSlug) {
+    console.error(direct ? "[graduate-guide] --slug needs a value" : "[graduate-guide] no Guide slug field — aborting");
+    process.exit(1);
+  }
 
   const slug = rawSlug.trim().toLowerCase();
   if (!isValidSlug(slug)) {

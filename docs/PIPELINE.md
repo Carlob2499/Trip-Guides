@@ -13,23 +13,29 @@ with model/effort per phase. Read it with `docs/GUIDE_RUBRIC.md` (the quality ba
 
 ## The lifecycle (the spine)
 
-A guide is not a document; it is an object with a lifecycle. The pipeline automates every arrow
-except the two diamonds, which are human decisions by design.
+A guide is not a document; it is an object with a lifecycle. On the happy path — the automated
+gates actually pass — every arrow is now automatic, PUBLISH included: an end-user files one
+intake and the next thing they see is a live, published guide, no approval step in between.
 
 ```
-   ┌─────────┐   ┌──────────┐   ┌─────────┐   ◆────────◆   ┌────────┐   ┌─────────┐
+   ┌─────────┐   ┌──────────┐   ┌─────────┐   ┌─────────┐   ┌────────┐   ┌─────────┐
    │ INTAKE  │──▶│ GENERATE │──▶│ VERIFY  │──▶│ PUBLISH │──▶│ LEARN  │──▶│ REFRESH │─┐
-   └─────────┘   └──────────┘   └─────────┘   ◆────────◆   └────────┘   └─────────┘ │
-    one typed     dual-pass       one rolled    human       trip          scheduled  │
-    intake, all   A+B →           -up gate +    graduates   feedback →    recert:    │
-    surfaces      reconcile       scorecard     on the      patterns →    stale facts│
-    agree         (resumable)     (this phase)  scorecard   next intake   re-researched
-                                                                          → freshness PR
+   └─────────┘   └──────────┘   └─────────┘   └─────────┘   └────────┘   └─────────┘ │
+    one typed     dual-pass       one rolled    auto on      trip          scheduled  │
+    intake, all   A+B →           -up gate +    verify        feedback →    recert:    │
+    surfaces      reconcile       scorecard     PASS —       patterns →    stale facts│
+    agree         (resumable)     (this phase)  no human     next intake   re-researched
+                                                 on this                  → freshness PR
+                                                 path
    REFRESH feeds back into VERIFY ─────────────────────────────────────────────────┘
 ```
 
-Two diamonds — **graduate draft→published** and **retire/soft-delete** — stay human. Everything
-else is a gate a machine can run: research quality, schema, links, photos, recency.
+**PUBLISH auto-resolves itself the moment VERIFY PASSes** — no diamond, no label, no human, per
+the explicit "an end-user can input information and see a new guide without other input" goal.
+It only becomes a human decision on the failure path: a guide that can't reach verify PASS lands
+as a draft PR instead, and a human either fixes it or force-graduates it by hand via
+`graduate-guide.yml` (the rescue path, see PUBLISH below). **retire/soft-delete** stays the one
+diamond that is *always* human — nothing in the pipeline ever decides to un-publish a guide.
 
 ---
 
@@ -60,22 +66,33 @@ else is a gate a machine can run: research quality, schema, links, photos, recen
    `GUIDE_RUBRIC`-shaped scorecard: AUTO rows the machine passes/fails, HUMAN rows the graduating
    reviewer checks. **Shipped this phase.** Schema stays the `npm run build` gate, called alongside.
 
-4. **PUBLISH — graduate on evidence. Shipped (P4).** `graduate-guide` flips draft→published (a
-   human decision — nomination is open, approval needs write access). `npm run verify --markdown`
-   renders the rubric scorecard (AUTO gates + HUMAN checklist); `graduate-guide.yml` now flips in the
-   working tree, **gates on `npm run build` (schema) + `npm run verify` (research/recency)**, posts
-   the scorecard to the issue either way, and commits only if the gate passes — a failing draft can't
-   graduate on a rubber stamp, and the issue stays open with the evidence. The research/recert PRs
-   embed the same `--markdown` scorecard, so the reviewer sees the evidence before nominating.
-   **The nomination is now filed automatically too (streamlining pass):** when a `research-pass.yml`
-   run reaches a full verify PASS, it merges its own branch to `main` (via `scripts/land-branch.sh`,
-   shared with the new `modify-guide.yml` edit flow below) and immediately opens the
-   `graduate-request` issue itself — the human's only remaining action, if the guide should be
-   featured, is applying `graduate-approved`. This is the ONE deliberately-kept manual checkpoint
-   in the whole pipeline: the mechanical gates can't judge rubric rows #6/#8/#9/#12 (anchor
-   coverage, priority depth, party fit, authenticity), so a confidently-wrong fact still needs a
-   human glance before it reaches the curated grid. A run that can't reach PASS (or hits a merge
-   conflict) falls back to a draft PR for human triage instead of losing the work.
+4. **PUBLISH — graduate on evidence, automatically. Shipped (P4), auto-graduated (streamlining
+   pass).** `npm run verify --markdown` renders the rubric scorecard (AUTO gates + HUMAN checklist)
+   — that verdict is now the *entire* publish decision. The moment `research-pass.yml`'s
+   self-correction loop reaches a full verify PASS, the SAME job calls
+   `node scripts/graduate-guide.mjs --slug <slug>` to remove `draft: true` right there (no separate
+   evidence run — the verify PASS the agent just confirmed **is** the evidence), then merges its
+   own branch straight to `main` via `scripts/land-branch.sh` (shared with `modify-guide.yml`
+   below). The guide is live on the very next Pages deploy. **No issue, no label, no human — this
+   is the arrow the goal asked to make fully autonomous.**
+
+   `graduate-guide.yml` still exists as the **manual override / rescue path**: a draft nominated
+   via `graduate-request` + approved via `graduate-approved` (write access required) still gates on
+   `npm run build` (schema) + `npm run verify` (research/recency), posts the scorecard to the issue
+   either way, and commits only if the gate passes. It's for what auto-graduation can't reach: a
+   draft finished/fixed by hand outside the pipeline, a pre-auto-graduation legacy guide, or a
+   draft PR a human hand-fixed after a failed run and wants published without a full re-run.
+
+   **The honest tradeoff, stated plainly:** rubric rows #6/#8/#9/#12 (anchor coverage, priority
+   depth, party fit, authenticity) are HUMAN-judged rows the machine cannot pass/fail — they are
+   still printed in every scorecard for visibility, but they no longer BLOCK publication. A guide
+   that passes every automated gate goes live even if a human never glanced at those rows. This is
+   a deliberate policy choice (the pipeline previously kept a human gate specifically so a wrong
+   anchor date or a generic-AI-shaped guide got caught before featuring it), traded off in favor of
+   the explicit "no other input" requirement. The mitigation: `docs/TRAVELER_PATTERNS.md` +
+   the Learnings loop still catch a bad party-fit call after the fact, and `modify-guide.yml` fixes
+   it without re-running the whole pipeline. A run that can't reach PASS (or hits a merge conflict
+   after graduating) falls back to a draft PR for human triage instead of losing the work.
 
 5. **EDIT — a scoped fix, not a full research pass.** `modify-guide.yml` handles "this one fact is
    wrong" without re-running Pass A/B: file a "Request a change" issue (a **✎ Request a change**
@@ -123,7 +140,7 @@ the compute layer** (issue-ops for on-demand generation). Native = PWA-first.
 | **P1 · Intake unification** ✅ | `scripts/intake-schema.mjs` is the one source of truth (FIELDS + zod); the issue form, parser, and scaffold derive from it; a contract test fails CI on drift | INTAKE | Fable / high (shipped) |
 | **P2 · Resumable generate** ✅ | `scripts/pipeline.mjs` checkpoint spine (`<slug>.state.json`, stages scaffold→passA→passB→reconcile→verified); research-pass resumes the branch + commits per stage; `npm run pipeline --status` | GENERATE | Fable / high (shipped) |
 | **P3 · Recert / self-freshening** ✅ | `recert.yml` (weekly + on-demand): detect all stale guides → **matrix** → per-guide recert agent re-verifies flagged facts → freshness PR; `npm run recert` builds the work-list; verify gate must PASS | REFRESH · dynamic #1 | Fable / high (shipped) |
-| **P4 · Graduate on evidence** ✅ | `npm run verify --markdown` scorecard; `graduate-guide.yml` gates on build + verify + posts it, blocks a failing draft; research/recert PRs embed it | PUBLISH | Fable / high (shipped) |
+| **P4 · Graduate on evidence, auto** ✅ | `npm run verify --markdown` scorecard; `research-pass.yml` auto-graduates (`graduate-guide.mjs --slug`) the moment verify PASSes — no human step on the happy path; `graduate-guide.yml` demoted to a manual-override/rescue path, still gates on build + verify + blocks a failing draft | PUBLISH | Fable / high (shipped) |
 | **R3 · Dynamic runtime** | View Transitions, live-data tiles, offline/connection state machine, per-view (Focus Today / what's-open-now / weather day-swap) | dynamic #2 + #3 | Fable designs; Sonnet implements |
 | **R4 · Per-country visual identity** | Build-time country skin (palette from the guide's own imagery), one signature motion set, motion-doctrine doc | goals 8/9 | Fable spec; Sonnet implements |
 | **R5 · Tool suite by demand** | Top-3 tools ranked by telemetry + post-mortems (visa/packing/phrase-cards/spend-export/golden-hour); cull below-median | goal 7 | Sonnet / Haiku |
@@ -158,16 +175,20 @@ venue, two rounds then ship/flag/omit — binding on every research agent, headl
 
 ## What "done" means for the pipeline (exit criteria)
 
-- Filing a trip reaches a corroborated, authentic, verify-PASSing guide **merged and live** in the
-  drafts tier with minimal human toil, and the human's remaining job is the rubric's HUMAN rows +
-  one label click to graduate — nothing mechanical. (A run that can't reach PASS still lands as a
-  draft PR — the toil floor, not the common case.)
+- Filing a trip reaches a corroborated, authentic, verify-PASSing guide **merged, published, and
+  live** with **zero human action** on the happy path — no label, no approval, no remaining job.
+  (A run that can't reach PASS still lands as a draft PR for a human to fix or force-graduate — the
+  toil floor, not the common case.)
+- The end-user sees **tangible progress while it runs**: a live progress view (elapsed timer +
+  per-stage checklist — scaffold → Pass A → Pass B → reconcile → verify → published) sourced from
+  the same git-tracked checkpoint state the pipeline already writes, so there is nothing to build
+  or maintain twice.
 - A **published** guide cannot silently rot: recert opens a freshness PR before facts mislead a
   traveler.
 - A wrong fact on any guide — draft or published — is one issue + one label away from a scoped fix,
   without re-running the whole research pass.
 - No stage depends on remembering to run a separate script: one intake, one generate (now
-  self-starting), one verify, one graduate, one recert, one modify — each a named command and a
-  workflow.
+  self-starting), one verify, one auto-graduate (manual `graduate-guide.yml` only as a rescue
+  path), one recert, one modify — each a named command and a workflow.
 - Every guide, current and future, inherits all of it, because the machinery lives at the
   pipeline/skill level, not per-guide.

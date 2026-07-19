@@ -1,16 +1,23 @@
 name: Graduate guide
 
-# Anyone can file a "Graduate a draft guide" issue (auto-applies graduate-request —
-# see .github/ISSUE_TEMPLATE/graduate-guide.yml) — that alone does nothing. This
-# workflow only runs when graduate-approved is ALSO applied, which requires write
-# access to the repo (GitHub's own permission model, not a custom check here) — so
-# graduation stays the owner's decision even though anyone can nominate.
+# MANUAL OVERRIDE / rescue path — NOT the primary route to publish anymore. A guide that
+# research-pass.yml successfully verified auto-graduates itself in that same run (see
+# scripts/graduate-guide.mjs --slug, called from research-pass.yml's self-correction loop) — no
+# issue, no label, no human. This workflow exists for what auto-graduation can't cover: a draft
+# that a human finished or fixed by hand outside the pipeline, an old guide scaffolded before
+# auto-graduation existed, or a draft PR a human triaged and wants published without re-running
+# the whole research pass. Anyone can file a "Graduate a draft guide" issue (auto-applies
+# graduate-request — see .github/ISSUE_TEMPLATE/graduate-guide.yml) — that alone does nothing.
+# This workflow only runs when graduate-approved is ALSO applied, which requires write access to
+# the repo (GitHub's own permission model, not a custom check here) — so this override path stays
+# the owner's decision even though anyone can nominate.
 #
 # GRADUATE ON EVIDENCE (pipeline P4): approval is necessary but not sufficient. The guide is flipped
 # in the working tree, then gated on `npm run build` (schema) + `npm run verify` (research/recency);
 # the verify SCORECARD is posted to the issue either way. If the gate fails, the guide is NOT
 # published and the issue stays open — fix the findings and re-apply the label. Only a clean gate
-# commits the flip to main. This is what stops an empty/broken draft from graduating on a rubber stamp.
+# commits the flip to main. This is what stops an empty/broken draft from graduating on a rubber stamp
+# — the same bar research-pass.yml's own auto-graduation step holds itself to.
 on:
   issues:
     types: [labeled]

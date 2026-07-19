@@ -1,9 +1,14 @@
 name: Research pass
 
-# Assisted research pass: a Claude Code agent researches one guide via the TWO-PASS procedure
+# Autonomous research pass: a Claude Code agent researches one guide via the TWO-PASS procedure
 # (Pass A canonical/verified → Pass B local/authentic/crowd-aware → reconcile), runs the
-# self-correction loop until verify PASSes, commits to a branch, and opens a draft PR for human
-# review. Never auto-merges; draft: true is always preserved. Trigger via workflow_dispatch.
+# self-correction loop until verify PASSes, AUTO-GRADUATES it (removes draft:true — the verify
+# PASS just confirmed IS the evidence gate; see scripts/graduate-guide.mjs --slug), commits to a
+# branch, and merges it straight to main. It goes live on the very next Pages deploy with ZERO
+# further action — an end-user who filed the New Guide issue never has to come back and approve
+# anything. Only a guide that DIDN'T reach verify PASS lands as a draft PR for human triage — that
+# is the one remaining human touchpoint, and it exists only because the guide genuinely isn't
+# ready, not because a routine pass needs rubber-stamping. Trigger via workflow_dispatch.
 #
 # RESUMABLE (pipeline P2): a full dual pass is long and can be cut off by the Action wall-clock or
 # your Max usage window. The agent commits + checkpoints (guides-intake/<slug>.state.json) after
@@ -202,9 +207,12 @@ jobs:
               d. Once verify PASSes, generate the guide's identity palette from its new cover/
                  sight photos: `npm run extract-palette -- --slug ${{ inputs.slug }}` (writes
                  src/data/palettes/${{ inputs.slug }}.json — commit it; skips harmlessly if no
-                 photo). Then:
-                 npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint verified
-                 && git add -A && git commit -m "research(${{ inputs.slug }}): verify PASS" && git push
+                 photo). Then AUTO-GRADUATE — the verify PASS you just confirmed IS the evidence
+                 gate (the same one a human approver would have re-run by hand), so this is where
+                 the guide goes live, no separate approval step:
+                 node scripts/graduate-guide.mjs --slug ${{ inputs.slug }}
+                 && npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint verified
+                 && git add -A && git commit -m "research(${{ inputs.slug }}): verify PASS — auto-graduated" && git push
 
             If you hit the 4-round cap still NEEDS WORK (verify never PASSed), commit and push
             whatever fix attempts you made anyway, so the branch on the remote reflects your
@@ -228,21 +236,18 @@ jobs:
 
             It prints exactly one line — read it, don't guess what happened:
 
-            - **`merged:<n>`** — the guide landed on `main`. `draft: true` is still set (landing
-              only merges the branch; it never graduates the guide). File the graduation
-              nomination yourself, so the human's only remaining action is one label click, not a
-              search for what to do next:
-                gh issue create --title "Graduate: ${{ inputs.slug }}" --label graduate-request \
-                  --body "$(printf '### Guide slug\n\n%s\n\n### Why is this ready?\n\n%s' '${{ inputs.slug }}' "$(cat /tmp/scorecard.md)")"
-              The field labels must match exactly — `graduate-guide.mjs` parses `### Guide slug`
-              and `### Why is this ready?` verbatim; anything else and the nomination silently
-              fails to parse.
-            - **`draft:<n>`** — either verify didn't reach PASS, or the auto-merge hit a conflict.
-              PR #<n> is where a human triages it. Do NOT file a graduation nomination in this case
-              — there is nothing ready to graduate yet.
+            - **`merged:<n>`** — the guide landed on `main` ALREADY graduated (step (d) removed
+              `draft: true` before you ever reached here). It goes live on the very next Pages
+              deploy — nothing further to do, no issue to file, no human approval to wait on.
+            - **`draft:<n>`** — one of two things happened, and the guide content itself tells you
+              which: if `draft: true` is STILL present in the file on this branch, step (d) never
+              ran — verify didn't reach PASS, and a human needs to fix the guide, not just approve
+              it. If `draft` is already gone but you're still seeing `draft:<n>`, verify passed
+              fine and step (d) already graduated it — the auto-merge simply hit a conflict, so a
+              human only needs to resolve that conflict and merge; nothing to re-research.
+              Either way, PR #<n> is where a human triages it — do not try to force a merge
+              yourself.
 
-            NEVER remove `draft: true` from the guide JSON yourself, in either case — the
-            nomination above plus the owner's `graduate-approved` label is the only path that
-            flips it, and that stays a human decision. Never touch any guide other than
+            Never touch any guide other than
             src/content/guides/${{ inputs.slug }}.json (or its split-directory equivalent) and its
-            guides-intake/${{ inputs.slug }}.md + .state.json.
+            guides-intake/${{ inputs.slug }}.md + .state.json + src/data/palettes/${{ inputs.slug }}.json.

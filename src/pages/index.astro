@@ -355,7 +355,7 @@ const continents = CONTINENT_ORDER.filter(c => gridContinents.has(c));
       import "../scripts/micro.js";
     </script>
 
-    <script is:inline>
+    <script is:inline define:vars={{ base }}>
       (function () {
         var darkBtn = document.getElementById("btnDark");
         function syncDark() {
@@ -435,6 +435,17 @@ const continents = CONTINENT_ORDER.filter(c => gridContinents.has(c));
             var url = "https://github.com/" + repo + "/issues/new?" + params.toString();
             window.open(url, "_blank", "noopener");
             closeModal();
+
+            // Send THIS tab straight to the live progress tracker — the one unavoidable manual
+            // step is clicking "Submit new issue" in the other tab; everything else, including
+            // watching it happen, needs no further input. The slug here is only a best-effort
+            // guess (mirrors scaffold-guide.mjs's slugify(); a same-name collision appends "-2"
+            // server-side) — the progress page itself handles a wrong guess with a manual
+            // correction input, and the bot's issue comment always carries the authoritative link.
+            var guessSlug = country.normalize("NFKD").replace(/[̀-ͯ]/g, "")
+              .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "guide";
+            location.href = base + "/progress/?slug=" + encodeURIComponent(guessSlug) +
+              "&country=" + encodeURIComponent(country);
           });
         }
       })();

@@ -1,8 +1,11 @@
 # Guide Rubric — the standard every guide is judged against
 
 The single, prioritized bar for a Waypoint guide — used by the research self-correction loop
-(the `waypoint-guide-author` skill), by `npm run verify` (the rolled-up gate that scores this
-rubric — see `docs/PIPELINE.md`), and by the human who graduates a guide. Derived from the four
+(the `waypoint-guide-author` skill) and by `npm run verify` (the rolled-up gate that scores this
+rubric — see `docs/PIPELINE.md`). That verify PASS is now also what auto-graduates a guide (no
+separate human approval on the happy path — see `docs/PIPELINE.md`'s PUBLISH stage); a human only
+ever reads this rubric directly when triaging a draft that couldn't reach PASS on its own. Derived
+from the four
 properties (**Verified · Personal · Actionable · Honest**), the
 verification rules (`.claude/skills/waypoint-guide-author/references/verification-rules.md`), and
 the post-mortems of the Korea/Denmark builds.

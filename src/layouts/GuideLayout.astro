@@ -432,17 +432,31 @@ const tripSummary = buildSummary(guide);
       </div>
 
       {guide.draft && (
-        <!-- Anyone can nominate; nothing here actually publishes anything — the
-             linked issue only auto-applies "graduate-request". Only the owner
-             applying "graduate-approved" (requires write access) flips draft:false,
-             via .github/workflows/graduate-guide.yml. -->
-        <p class="draft-graduate">
-          <a
-            class="draft-graduate-link"
-            href={`https://github.com/${REPO}/issues/new?template=graduate-guide.yml&labels=graduate-request&slug=${encodeURIComponent(ogSlug)}&title=${encodeURIComponent(`Graduate: ${ogSlug}`)}`}
-            target="_blank" rel="noopener"
-          >✓ Think this is ready? Nominate it for graduation</a>
-        </p>
+        <>
+          <!-- research-pass.yml auto-graduates a guide the moment its OWN verify PASS lands
+               (scripts/graduate-guide.mjs --slug) — so a guide still showing draft:true here is
+               either mid-pipeline right now, or a run that couldn't reach PASS and is sitting in
+               a draft PR for a human to fix. Either way, the live tracker is the honest first
+               stop — it shows which of those two is actually true. -->
+          <p class="draft-graduate">
+            <a class="draft-graduate-link" href={`${base}/progress/?slug=${encodeURIComponent(ogSlug)}`}>
+              ⏱ Track live progress
+            </a>
+          </p>
+          <!-- Anyone can nominate; nothing here actually publishes anything — the linked issue
+               only auto-applies "graduate-request". Only the owner applying "graduate-approved"
+               (requires write access) flips draft:false, via .github/workflows/graduate-guide.yml.
+               This is the MANUAL OVERRIDE path now (see that workflow's own header comment) — a
+               routine research pass never needs it, since it graduates itself on PASS. It's still
+               here for a draft finished/fixed by hand outside the pipeline. -->
+          <p class="draft-graduate">
+            <a
+              class="draft-graduate-link"
+              href={`https://github.com/${REPO}/issues/new?template=graduate-guide.yml&labels=graduate-request&slug=${encodeURIComponent(ogSlug)}&title=${encodeURIComponent(`Graduate: ${ogSlug}`)}`}
+              target="_blank" rel="noopener"
+            >✓ Think this is ready? Nominate it for graduation</a>
+          </p>
+        </>
       )}
 
       <!-- Renders on EVERY guide, draft or published — a wrong fact doesn't stop being wrong

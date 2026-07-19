@@ -21,66 +21,68 @@
 
 ## Snapshot (updated 2026-07-19, session close)
 
-**Hawaii → Sedona pivot done (issue #11 supersedes closed #10), and a real architectural
-bug behind it got fixed at the root, not patched per-destination.** The creator is adding
-the `CLAUDE_CODE_OAUTH_TOKEN` secret themselves next session ("when I get home") — that's
-the one remaining blocker on the automated agent, no longer an open question for me to
-chase. 455 tests, all on `main`.
+**The pipeline is now fully autonomous end-to-end, with live progress tracking.** Explicit
+goal this session: an end-user inputs trip info and sees a finished guide with no other
+input — no approval step in between — plus a timer and tangible viewing progress. 603
+tests, all on `main`.
 
-- **Retrigger + two agent-config bugs, then the Hawaii→Sedona pivot** (earlier this
-  session): re-triggered issue #9, fixed the `claude-code-action` org typo + deprecated
-  `allowed_tools` input (all 3 agent workflows), then the traveler changed destinations —
-  deleted the Hawaii guide entirely (commit `95e33fc`), closed #10, rebuilt fresh for
-  Sedona AZ under the same slug/intake parameters, filed **issue #11**. Full detail in git
-  log; not repeating it here.
-- **The real fix, this turn: time zone is now resolved from coordinates, not a country
-  table.** The creator's framing was exactly right — hardcoding "Hawaii" and "Arizona" as
-  flat rows in `countries.mjs` (which is what I'd done to unblock those two guides) was
-  the wrong fix: a 50-state table doesn't scale and every large country has this same gap,
-  not just the US. Added `geo-tz` (offline, timezone-boundary data, no network) +
-  `scripts/lookup-tz.mjs`, mirroring `lookup-place.mjs`'s exact conventions. Guides get an
-  explicit `tz` field (content.config.ts, same override pattern as `theme`) resolved from
-  their own verified coordinates — `GuideLayout.astro` prefers it over the country-table
-  fallback. Removed the ad-hoc Hawaii/Arizona rows entirely; Sedona's `country` field
-  reverted to the real country ("United States") with `tz: "America/Phoenix"` set
-  explicitly. Cross-checked currency/holidays/emergency-numbers/weather: all either
-  already correctly country-keyed (currency, holidays, SOS — genuinely national facts, not
-  geographic) or already coordinate-driven (weather, live from the guide's own map) — tz
-  was the only one with this bug. Wired into the pipeline: SKILL.md, research-efficiency.md,
-  and research-pass.yml's agent prompt all now name `lookup-tz.mjs` explicitly (resolve tz
-  in the same step as coordinates, for every guide) — `modify-guide.yml`/`recert.yml`
-  inherit this for free since both already point agents at SKILL.md.
-- **Pipeline complete (P0–P4) + streamlined:** typed intake → resumable dual-pass research
-  → `npm run verify` scorecard → graduate-on-evidence → weekly recert. **Only manual step
-  (by design):** the owner's `graduate-approved` label. **Scoped edits:** a **✎ Request a
-  change** button on every guide.
-- **Visual/motion + `docs/FEATURES.md` wave complete:** card→hero morph, first-open
-  day-story, story-mode itinerary, cover-extracted palettes, PWA, all 7 planned traveler
-  features. Held: #2/#3 (revivable). Dropped: #4.
+- **Auto-graduation (the core unlock):** `research-pass.yml`'s self-correction loop now
+  calls `node scripts/graduate-guide.mjs --slug <slug>` (new direct-slug CLI mode,
+  alongside the original ISSUE_BODY mode) the MOMENT its own verify PASS lands — same
+  commit that checkpoints `verified`. `draft: true` comes off right there and the branch
+  merges straight to `main`; it's live on the next Pages deploy with zero human touch.
+  `graduate-guide.yml` (the label-gated flow) is demoted to a manual OVERRIDE/rescue path
+  — still there for a draft finished/fixed by hand, still gates on build+verify. The
+  honest tradeoff (documented in `docs/PIPELINE.md`'s PUBLISH section): the HUMAN-judged
+  rubric rows (anchor quality, party fit, authenticity) no longer block publication, only
+  get printed for visibility — a deliberate policy call per the explicit "no other input"
+  ask, mitigated by the Learnings loop + `modify-guide.yml` catching a bad call after.
+- **Live progress tracker (the "tangible viewing progress" ask):** new
+  `src/features/pipeline-progress/` silo — reads the SAME git-tracked checkpoint state
+  `scripts/pipeline.mjs` already writes (`guides-intake/<slug>.state.json`, on the
+  `research/<slug>` branch while it's live, falling back to `main`) via
+  raw.githubusercontent.com, no new backend/secrets/Firebase. Renders a live elapsed timer
+  + step checklist (scaffold → Pass A → Pass B → reconcile → verify → published — the last
+  derived from whether the guide's own `main` JSON still has `draft:true`), with an honest
+  "taking longer than usual" note if `updatedAt` goes stale before done. New page
+  `src/pages/progress/` (slug from `?slug=` client-side — a static site can't
+  `getStaticPaths` something that doesn't exist yet). Wired from three places: the hub
+  wizard's submit handler redirects THIS tab there right after opening the GitHub issue
+  tab (slug predicted client-side, self-corrects via a manual-paste fallback if the guess
+  is wrong); `new-guide.yml`'s confirmation comment links the REAL slug; a draft guide's
+  own page (`GuideLayout.astro`) now also links it, for anyone who bookmarks the guide URL
+  directly instead of the issue.
+- **Docs brought current:** `docs/PIPELINE.md`'s lifecycle diagram + PUBLISH section +
+  exit criteria, `docs/GUIDE_RUBRIC.md`'s intro — all rewritten to describe auto-graduate
+  as the happy path, not the old label-gated one.
+- Everything from here down is prior-session history, kept for context: Sedona (`/guides/
+  us/`) shipped via the OLD manual-graduate flow — issue #11 (graduate-request) is still
+  open under that flow and still works exactly as before (auto-graduation doesn't touch
+  guides that predate it). Time zone resolves from a guide's own coordinates
+  (`scripts/lookup-tz.mjs` + `geo-tz`), not a country table — fixed at the root after the
+  Hawaii→Sedona pivot exposed the bug. Pipeline P0–P4 + visual/motion + `docs/FEATURES.md`
+  wave were already complete before this session.
 
-**Known waits:** the automated agent chain is STILL unproven end-to-end — every bug found
-so far was config/wiring the agent never got past, not a content bug; real proof waits on
-the OAuth secret (creator's doing it next session). TRAVELER_PATTERNS still has only 2 data
-points; this solo-traveler profile matches neither existing party (logged in
-`guides-intake/us.md`'s Amendments).
+**Known waits:** the fully-autonomous chain (scaffold → research → auto-publish → live) is
+STILL unproven end-to-end with a REAL Claude Max run — every prior bug found was
+config/wiring the agent never got past, not a content bug, and this session's changes are
+build/typecheck/test-verified + visually verified (mocked network) but not exercised by an
+actual `research-pass.yml` run yet. That still waits on the creator's `CLAUDE_CODE_OAUTH_TOKEN`
+secret. TRAVELER_PATTERNS still has only 2 data points.
 
 ## Where we left off
 
 **Ready for the creator right now:**
 
-1. **Review issue #11** (graduate: us/Sedona) — fully researched, verified, live on `main`
-   as a draft at `/guides/us/`. Apply `graduate-approved` if it holds up. Three open
-   judgment calls worth a look: rental-car-over-rideshare (checked live, but Sedona's
-   shuttle status could shift before the trip), Mii amo's multi-night booking model vs the
-   more flexible L'Auberge day-spa alternative, and an honest budget flag — Sedona's
-   lodging runs toward the top of the stated $150–300/day range once priced in.
-2. **The OAuth secret is being added next session, by the creator** — once
-   `CLAUDE_CODE_OAUTH_TOKEN` exists, filing a fresh New-guide issue is the real first
-   end-to-end proof of the automated chain. Nothing else is blocking it.
+1. **Once `CLAUDE_CODE_OAUTH_TOKEN` exists, file a fresh New-guide issue** — this is now
+   the real first end-to-end proof of BOTH the automated chain AND the new auto-graduate +
+   live-progress work in the same run. Watch the progress page in the bot's confirmation
+   comment; if it reaches verify PASS, the guide should go live with no further clicks.
+2. **Issue #11 (graduate: us/Sedona)** is still open under the old manual flow — apply
+   `graduate-approved` whenever it holds up; unaffected by this session's changes.
 
-**Re-prompt the creator with:** "Sedona is fully researched and waiting on your graduation
-call at issue #11. Also fixed a real architectural bug this session — time zone now
-resolves from a guide's actual coordinates instead of a hardcoded country table, so this
-won't recur for any future destination, US or otherwise. Once you've added the OAuth
-secret, want to file a fresh guide and watch the automated agent run for real, or review
-#11 first?"
+**Re-prompt the creator with:** "The New Guide pipeline is now fully autonomous — file the
+issue form, and if research reaches a verify PASS it graduates and publishes itself, no
+label click needed. There's also a live progress page now (timer + step checklist) linked
+from the bot's confirmation comment and from any draft guide's own page. Once you've added
+the OAuth secret, want to file a fresh guide and watch the whole thing run for real?"

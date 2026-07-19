@@ -1,0 +1,80 @@
+---
+// New Guide pipeline progress tracker — the "tangible viewing progress" surface (see
+// src/features/pipeline-progress/). A single static page: the slug/country comes from the
+// URL query string client-side (?slug=... or ?country=...), never from getStaticPaths, since
+// the whole point is tracking a guide that didn't exist at build time.
+import PwaHead from "../../components/PwaHead.astro";
+import "@fontsource-variable/bricolage-grotesque";
+import "@fontsource-variable/literata";
+import "@fontsource-variable/spline-sans-mono";
+import "../../styles/base.css";
+import "../../styles/progress.css";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Building your guide — Waypoint</title>
+    <meta name="description" content="Live progress for a guide currently being researched." />
+    <meta name="robots" content="noindex,nofollow" />
+    <PwaHead />
+  </head>
+  <body>
+    <div class="pg-wrap" id="pgRoot">
+      <p class="pg-kicker">New guide</p>
+      <h1 class="pg-head">Building <span class="pg-slug" id="pgSlug">your guide</span></h1>
+      <p class="pg-intro">
+        A research agent is verifying every fact against primary sources — dates, prices, hours,
+        transit, the works — before this guide ever appears. This page updates itself; you don't
+        need to do anything else.
+      </p>
+
+      <div class="pg-card">
+        <div class="pg-waiting" id="pgWaiting" hidden>
+          <div class="pg-timer-row">
+            <span class="pg-timer-label">Elapsed</span>
+            <span class="pg-timer" id="pgTimer">0s</span>
+          </div>
+          <div class="pg-bar-track"><div class="pg-bar-fill" id="pgBarFill"></div></div>
+          <p class="pg-percent" id="pgPercent">0%</p>
+          <ol class="pg-steps" id="pgSteps"></ol>
+          <p class="pg-stuck" id="pgStuckNote" hidden>
+            This is taking longer than usual. It hasn't failed — some destinations are just
+            harder to source — but if nothing changes for a while, check the confirmation
+            comment on your GitHub issue for the direct link, or come back later.
+          </p>
+        </div>
+
+        <div class="pg-done" id="pgDone" hidden>
+          <p class="pg-done-head">Your guide is ready.</p>
+          <a class="pg-done-link" id="pgDoneLink" href="#">View the guide →</a>
+        </div>
+
+        <div class="pg-correction" id="pgCorrection" hidden>
+          <p class="pg-correction-note">
+            Can't find it yet — the exact web address depends on the destination name, and this
+            page's first guess may not match. Paste the slug from your GitHub issue's
+            confirmation comment (the part of the guide's URL after <code>/guides/</code>):
+          </p>
+          <form class="pg-correction-form" id="pgSlugForm">
+            <input type="text" id="pgSlugInput" placeholder="e.g. south-korea" autocomplete="off" />
+            <button type="submit">Track</button>
+          </form>
+        </div>
+      </div>
+
+      <a class="pg-home-link" href={`${base}/`}>← Back to all guides</a>
+    </div>
+
+    <script type="application/json" id="pgConfig" set:html={JSON.stringify({ base })}></script>
+
+    <script>
+      import { initProgress } from "../../features/pipeline-progress/ui/progress.js";
+      initProgress();
+    </script>
+  </body>
+</html>
