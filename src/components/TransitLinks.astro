@@ -1,0 +1,21 @@
+---
+// "Get me there" — one-tap deep-links to a verified coordinate (docs/FEATURES.md #1).
+// All URL construction/verification lives in src/lib/transit-links.ts; this component is
+// pure rendering. Renders nothing when lat/lng are absent — a stop without coordinates
+// simply gets no button row, never a guessed link.
+import { transitLinks } from "../lib/transit-links";
+
+const { lat, lng, name, country, placeId = null } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const origin = `${Astro.url.origin}${base}`;
+const links = Number.isFinite(lat) && Number.isFinite(lng)
+  ? transitLinks(country, lat as number, lng as number, name || "", placeId, origin)
+  : [];
+---
+{links.length > 0 && (
+  <span class="transit-links">
+    {links.map((l) => (
+      <a class="transit-link" href={l.href} target="_blank" rel="noopener">{l.label} ↗</a>
+    ))}
+  </span>
+)}

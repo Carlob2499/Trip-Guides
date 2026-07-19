@@ -517,7 +517,7 @@ const tripSummary = buildSummary(guide);
                 {sub && <p class="cat-sub">{sub}</p>}
               </header>
               {byG[g].map((o) => (
-                <Block sec={o.s} sid={`sec-${o.i}`} ci={ci} solo={solo} holidays={holidayInfo} learnings={guide.learnings ?? null} mapPins={pinMap.get(o.s) ?? null} />
+                <Block sec={o.s} sid={`sec-${o.i}`} ci={ci} solo={solo} holidays={holidayInfo} learnings={guide.learnings ?? null} mapPins={pinMap.get(o.s) ?? null} country={guide.country} />
               ))}
               {byG[g].some((o: any) => o.s.type === "days") && (
                 <div class="lnw-cta">

@@ -1,6 +1,7 @@
 ---
 import { pinSlug } from "../../lib/map-pins";
-const { sec } = Astro.props;
+import TransitLinks from "../TransitLinks.astro";
+const { sec, country } = Astro.props;
 
 // Wikimedia's Special:FilePath already supports ?width= thumbnailing —
 // use that directly instead of pulling the image through Astro's optimizer.
@@ -10,8 +11,6 @@ const commonsSrc  = (f: string, w = 800) =>
   `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(f)}?width=${w}`;
 const commonsPage = (f: string) =>
   `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(f)}`;
-const gmaps = (m: any) =>
-  `https://www.google.com/maps/search/?api=1&query=${m.lat},${m.lng}`;
 ---
 {(sec.items || []).map((it: any) => (
   <article class={`card sight ${it.img ? "sight--photo" : "sight--text"}`} id={it.map ? `sight-${pinSlug(it.name)}` : undefined}>
@@ -38,10 +37,10 @@ const gmaps = (m: any) =>
       </div>
     )}
     <div class="sight-body">
-      <p>
-        <Fragment set:html={it.body || ""} />
-        {it.map && <> <a class="maplink" target="_blank" rel="noopener" href={gmaps(it.map)}>Open in Maps ↗</a></>}
-      </p>
+      <p><Fragment set:html={it.body || ""} /></p>
+      {it.map && (
+        <TransitLinks lat={it.map.lat} lng={it.map.lng} name={it.name} country={country} />
+      )}
     </div>
   </article>
 ))}

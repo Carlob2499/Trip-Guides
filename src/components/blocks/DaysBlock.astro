@@ -5,7 +5,8 @@
 //   2. The day cards, full width (single column).
 //   3. Per-day numbered stop lists from the additive `waypoints` field — the
 //      on-the-go itinerary ladder (time in data face, name, note).
-const { sec, keyPrefix = "dy", learnings = null } = Astro.props;
+import TransitLinks from "../TransitLinks.astro";
+const { sec, keyPrefix = "dy", learnings = null, country } = Astro.props;
 const days: any[] = sec.items || [];
 const two = (n: number) => String(n + 1).padStart(2, "0");
 // Curated post-mortem for THIS day, matched by date. Only days the maker actually
@@ -73,6 +74,9 @@ const actualFor = (date: string) =>
                   <span class="stop-main">
                     <span class="stop-name">{w.name}</span>
                     {w.note && <span class="stop-note">{w.note}</span>}
+                    {Number.isFinite(w.lat) && Number.isFinite(w.lng) && (
+                      <TransitLinks lat={w.lat} lng={w.lng} name={w.name} country={country} />
+                    )}
                   </span>
                   {w.time && <span class="stop-time">{w.time}</span>}
                 </li>
