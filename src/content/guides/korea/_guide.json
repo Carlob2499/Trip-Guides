@@ -141,5 +141,11 @@
       }
     ]
   },
+  "advisory": {
+    "level": 1,
+    "title": "Exercise Normal Precautions",
+    "source_url": "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/south-korea-travel-advisory.html",
+    "verified_on": "2026-07-18"
+  },
   "tabBudget": 11
 }

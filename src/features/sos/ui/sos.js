@@ -4,13 +4,20 @@
    non-technical traveler. This surfaces ONLY verified data (EMERGENCY table
    in src/data/countries.mjs, delivered via tgConfig; countries without
    verified numbers get no button at all — never guessed) as tel: links in
-   huge type. Works offline (numbers are baked into the page). */
+   huge type. Works offline (numbers are baked into the page).
+
+   Also surfaces the guide's official travel-advisory (docs/FEATURES.md #9), when
+   elevated (level >= 2) — the button itself renders even with no emergency numbers
+   researched yet, as long as an elevated advisory exists to show. */
 
 (function () {
   var cfgEl = document.getElementById("tgConfig");
   var cfg = cfgEl ? JSON.parse(cfgEl.textContent || "{}") : {};
   var em = cfg.emergency;
-  if (!em || !em.lines || !em.lines.length) return;
+  // Advisory pill (docs/FEATURES.md #9) — honest-blank: a normal-precautions guide
+  // (level 1, or the field absent/never researched) shows nothing here at all.
+  var adv = cfg.advisory && cfg.advisory.level >= 2 ? cfg.advisory : null;
+  if ((!em || !em.lines || !em.lines.length) && !adv) return;
 
   // Mount in the topbar chrome (top of screen, out of the thumb-rest zone —
   // far less likely to be hit by accident than a floating bottom-corner FAB),
@@ -29,30 +36,42 @@
     document.body.appendChild(btn);
   }
 
+  var hasEm = !!(em && em.lines && em.lines.length);
+
   var sheet = document.createElement("div");
   // A fallback entry (EU-wide 112 only, no researched local numbers) renders
   // warn-toned so it never masquerades as a fully-verified emergency sheet.
-  sheet.className = "sos-sheet" + (em.fallback ? " sos-sheet--fallback" : "");
+  sheet.className = "sos-sheet" + (hasEm && em.fallback ? " sos-sheet--fallback" : "");
   sheet.setAttribute("role", "dialog");
   sheet.setAttribute("aria-modal", "true");
   sheet.setAttribute("aria-label", "Emergency numbers");
   sheet.hidden = true;
-  var rows = em.lines.map(function (l) {
+  var rows = hasEm ? em.lines.map(function (l) {
     return '<a class="sos-row" href="tel:' + encodeURIComponent(l.num) + '">' +
       '<span class="sos-num"></span><span class="sos-label"></span></a>';
-  }).join("");
+  }).join("") : "";
   sheet.innerHTML =
     '<div class="sos-inner">' +
     '<p class="sos-head">Emergency<button class="sos-x" type="button" aria-label="Close">✕</button></p>' +
+    (adv ? '<a class="sos-advisory" target="_blank" rel="noopener"><span class="sos-advisory-level"></span><span class="sos-advisory-title"></span><span class="sos-advisory-summary"></span></a>' : '') +
     rows +
-    '<p class="sos-note"></p></div>';
+    (hasEm ? '<p class="sos-note"></p>' : '') + '</div>';
   document.body.appendChild(sheet);
   // Text set via textContent (never innerHTML) — data is trusted but keep the habit.
-  sheet.querySelectorAll(".sos-row").forEach(function (row, i) {
-    row.querySelector(".sos-num").textContent = em.lines[i].num;
-    row.querySelector(".sos-label").textContent = em.lines[i].label;
-  });
-  sheet.querySelector(".sos-note").textContent = em.note || "";
+  if (hasEm) {
+    sheet.querySelectorAll(".sos-row").forEach(function (row, i) {
+      row.querySelector(".sos-num").textContent = em.lines[i].num;
+      row.querySelector(".sos-label").textContent = em.lines[i].label;
+    });
+    sheet.querySelector(".sos-note").textContent = em.note || "";
+  }
+  if (adv) {
+    var advEl = sheet.querySelector(".sos-advisory");
+    advEl.href = adv.source_url;
+    advEl.querySelector(".sos-advisory-level").textContent = "⚠ Level " + adv.level;
+    advEl.querySelector(".sos-advisory-title").textContent = adv.title;
+    advEl.querySelector(".sos-advisory-summary").textContent = adv.summary || ("Official advisory — verified " + adv.verified_on + ". Tap for the source.");
+  }
 
   var lastFocus = null;
   function open() {

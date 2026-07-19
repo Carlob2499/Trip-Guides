@@ -214,6 +214,20 @@ crowd-awareness)** plus #9 (party fit) and the bar test — not a hard auto-gate
   never a paid visa API or an aggregator. A wrong visa claim can mean a denied
   boarding, so omit the whole guide's entry card before shipping an unverified
   one. Recert re-checks this on its normal shelf-life cadence like any other fact.
+- **Travel advisory** (guide-level `advisory: {level, title, summary?, source_url,
+  verified_on}`, docs/FEATURES.md #9) — the destination's CURRENT US State
+  Department advisory, `source_url` + `verified_on` SCHEMA-REQUIRED. Fetch it from
+  `https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/
+  <country-slug>-travel-advisory.html` — **this page is Cloudflare-gated against
+  plain `fetch()`/`curl`/WebFetch (403)**; it only resolves through an actual
+  browser tool (navigate, wait a few seconds for the challenge, then read the
+  page text — the "Level N: <title>" line is near the top). Don't attempt a
+  build-time automated fetch for this field the way `holidays` does; treat it as
+  a manual/browser research step, same cadence as `entry`. Record the level
+  ALWAYS, even a normal Level 1 — an omitted field reads as "never checked," and
+  that's a different (worse) claim than "checked, nothing elevated to report."
+  The pill itself only ever renders when level ≥ 2 (honest-blank doctrine); Level
+  1 stays silent by design, not by omission.
 
 ## Never guess what a script can verify
 - **coords / place_id** → `node scripts/lookup-place.mjs "<place>" --cc XX`

@@ -81,6 +81,13 @@ html[data-swipe-hint="back"]::after{left:0;background:linear-gradient(to right,c
 .sos-num{flex:none;min-width:4.2rem;font-family:var(--font-display);font-weight:800;font-size:1.7rem;letter-spacing:-.02em;color:#b3261e}
 .sos-label{font-size:.9rem;line-height:1.4;color:var(--ink)}
 .sos-note{margin:.7rem 0 0;font-size:.78rem;color:var(--muted)}
+/* Official travel-advisory notice (docs/FEATURES.md #9) — only present when elevated;
+   sits above the emergency numbers since "know the current advisory" outranks
+   "have the number ready" the moment a traveler opens this sheet. */
+.sos-advisory{display:flex;flex-direction:column;gap:.15rem;padding:.7rem .8rem;margin-bottom:.4rem;border:1px solid var(--warn);border-radius:var(--r-md,8px);text-decoration:none;background:color-mix(in srgb,var(--warn) 8%,transparent)}
+.sos-advisory-level{font-family:var(--font-data);font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--warn)}
+.sos-advisory-title{font-weight:700;color:var(--ink);font-size:1rem}
+.sos-advisory-summary{font-size:.82rem;color:var(--muted);line-height:1.4}
 /* Fallback sheet (EU-wide 112 only, no researched local numbers): warn-toned so
    it reads as "the universal number, not the researched sheet" at a glance. */
 .sos-sheet--fallback .sos-inner{border-top:3px solid var(--warn)}

@@ -238,6 +238,11 @@ const continents = CONTINENT_ORDER.filter(c => gridContinents.has(c));
               <span class="hubcard-meta">
                 {ex.dayCount > 0 && <span class="hubcard-days">{ex.dayCount} days</span>}
                 {ex.month && <span class="hubcard-days">{ex.month}</span>}
+                {(g.data as any).advisory?.level >= 2 && (
+                  <span class="hubcard-advisory" title={(g.data as any).advisory.title}>
+                    ⚠ Level {(g.data as any).advisory.level} advisory
+                  </span>
+                )}
               </span>
               <span class="hubcard-go">Open guide →</span>
             </span>

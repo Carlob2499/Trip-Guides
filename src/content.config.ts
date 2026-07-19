@@ -326,6 +326,21 @@ const guides = defineCollection({
       source_url: z.string().url(),
       verified_on: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
     })).optional(),
+    // Optional travel-advisory pill (docs/FEATURES.md #9) — the destination's current
+    // official advisory level, guide-level (one destination country per guide, same
+    // simplification `map`/`weather` already make). Always RECORD what was checked
+    // (even a normal Level 1), so a re-check never reads as "never verified" — but the
+    // pill itself renders ONLY when level >= 2 (honest-blank: normal precautions is not
+    // news). Primary source only — travel.state.gov (US State Dept) is bot-gated against
+    // plain fetches, so unlike `holidays` this is NOT build-time-fetched; it's
+    // pipeline/recert-researched like `entry`, same required source_url + verified_on.
+    advisory: z.object({
+      level: z.number().int().min(1).max(4),
+      title: z.string(),              // e.g. "Exercise Increased Caution"
+      summary: z.string().optional(), // one-line reason, from the advisory's own text
+      source_url: z.string().url(),
+      verified_on: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    }).optional(),
     verified: z.string().optional(),  // freshness metadata for the maker/AI — NOT shown to travelers, EXCEPT a ⚠-prefixed value (e.g. an unconfirmed draft), which renders as a warning pill in the masthead
     draft: z.boolean().optional(),    // true = a "Guide-to-be" scaffold; listed in the home page's draft tier, not the curated grid
     // OPT-IN provenance enforcement. Absent = loose (every guide written before this

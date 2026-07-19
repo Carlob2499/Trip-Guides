@@ -37,8 +37,12 @@ h1{font-family:var(--font-display);font-weight:800;letter-spacing:-.04em;line-he
 .hubcard-badge{font-family:var(--font-data);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);border-radius:99px;padding:.1rem .5rem;line-height:1.5;white-space:nowrap;margin-left:auto}
 
 /* Meta row — section/day count */
-.hubcard-meta{display:flex;gap:.4rem;margin-top:.1rem}
+.hubcard-meta{display:flex;gap:.4rem;margin-top:.1rem;flex-wrap:wrap}
 .hubcard-days{font-family:var(--font-data);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+
+/* Advisory pill (docs/FEATURES.md #9) — only rendered when the destination's official
+   travel advisory is elevated (level >= 2); a normal-precautions guide shows nothing. */
+.hubcard-advisory{font-family:var(--font-data);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--warn);border:1px solid var(--warn);border-radius:99px;padding:.1rem .5rem;line-height:1.5;white-space:nowrap}
 
 .hub-foot{border-top:1px solid var(--ink);text-align:center;padding:1.6rem 1.2rem;color:var(--muted);font-size:.82rem;max-width:1340px;margin:0 auto;width:100%;font-family:var(--font-data);letter-spacing:.04em}
 

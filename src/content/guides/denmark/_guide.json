@@ -44,5 +44,12 @@
       }
     ]
   },
+  "advisory": {
+    "level": 2,
+    "title": "Exercise Increased Caution",
+    "summary": "Terrorist groups continue plotting possible attacks in the Kingdom of Denmark.",
+    "source_url": "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/denmark-travel-advisory.html",
+    "verified_on": "2026-07-18"
+  },
   "tabBudget": 8
 }
