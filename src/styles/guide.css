@@ -25,7 +25,12 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 .tb-ico{width:17px;height:17px;flex:none;display:block}
 .topbar-sos{color:#b3261e;border-color:color-mix(in srgb,#b3261e 55%,var(--rule2));font-weight:700}
 .topbar-sos:hover{color:#fff;background:#b3261e;border-color:#b3261e}
-.topbar-search{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,var(--rule2))}
+/* Text role, not decoration — the raw per-guide accent is only contrast-gated to 3:1
+   (src/lib/contrast.ts's MIN_ACCENT_CONTRAST, sized for large/decorative UI), which isn't
+   enough for small body text at WCAG's 4.5:1. Blending 30% toward --ink pulls any
+   3:1-gated accent comfortably past 4.5:1 in both themes (verified against Korea's and
+   Denmark's actual extracted accents — this exact case is what axe caught on Denmark). */
+.topbar-search{color:color-mix(in srgb,var(--accent) 70%,var(--ink) 30%);border-color:color-mix(in srgb,var(--accent) 45%,var(--rule2))}
 /* Mobile: collapse chrome buttons to icons so the cluster never crowds. */
 @media(max-width:560px){.topbar-right{gap:.3rem}.topbar-btn .tb-label{display:none}.topbar-btn{width:38px;height:38px;min-height:38px;padding:0;border-radius:50%}.tb-ico{width:19px;height:19px}}
 
@@ -100,7 +105,10 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 .guide-tabs::-webkit-scrollbar{display:none}
 .gtab{flex:none;scroll-snap-align:center;background:color-mix(in srgb,var(--ink) 5%,transparent);border:1px solid transparent;border-radius:999px;padding:.5rem 1.05rem;min-height:38px;font-family:var(--font-display);font-size:.82rem;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;line-height:1.25;user-select:none;transition:background .18s,color .18s,box-shadow .2s,transform .2s var(--ease-spring)}
 .gtab:hover{color:var(--ink);background:color-mix(in srgb,var(--ink) 10%,transparent);transform:translateY(-1px)}
-.gtab.gtab-active{background:var(--accent);color:var(--bg);box-shadow:0 3px 14px color-mix(in srgb,var(--accent) 40%,transparent)}
+/* Background blended 30% toward --ink for the same reason as .topbar-search above: the raw
+   accent is only gated to 3:1 against --bg (src/lib/contrast.ts), not the 4.5:1 the --bg-
+   coloured label text drawn on top of it needs — axe caught this on Denmark's guide. */
+.gtab.gtab-active{background:color-mix(in srgb,var(--accent) 70%,var(--ink) 30%);color:var(--bg);box-shadow:0 3px 14px color-mix(in srgb,var(--accent) 40%,transparent)}
 .gtab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 /* Skip link — visually hidden until focused, then a clear chip at top-left. */
 .skip-link{position:fixed;left:.7rem;top:.7rem;z-index:999;padding:.55rem 1rem;background:var(--ink);color:var(--bg);border-radius:999px;font-family:var(--font-data);font-size:.78rem;text-decoration:none;transform:translateY(-300%);transition:transform .15s}
