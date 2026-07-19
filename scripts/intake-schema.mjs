@@ -37,7 +37,7 @@ const NULLISH = new Set(NULLISH_VALUES);
 //   rank        priority ordering (1..3) for the "priority" fields
 export const FIELDS = [
   { id: "country", label: "Country", kind: "input", required: true,
-    description: "Used to theme the guide and pull its currency, time zone, holidays, and a default map location.",
+    description: "Used to theme the guide and pull its currency and holidays. Time zone and map location are resolved separately, from the destination's actual coordinates during research — not from country.",
     placeholder: "e.g. Brazil", answerKey: "country" },
 
   { id: "cities", label: "City / cities", kind: "input", required: false,

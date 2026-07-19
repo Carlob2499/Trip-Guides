@@ -15,7 +15,7 @@ body:
     id: slug
     attributes:
       label: Guide slug
-      description: The guide's file name without ".json" (e.g. "korea" for src/content/guides/korea.json). The "Nominate for graduation" button on a draft page fills this in for you.
+      description: The guide's slug — its URL segment (e.g. "korea" for /guides/korea/). The "Nominate for graduation" button on a draft page fills this in for you.
       placeholder: e.g. korea
     validations:
       required: true

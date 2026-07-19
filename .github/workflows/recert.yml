@@ -148,5 +148,8 @@ jobs:
                ledger. If this guide is a concluded trip and a fact can't sensibly be refreshed, say
                so — the human may choose to close this PR rather than merge.
 
-            NEVER auto-merge. NEVER set draft: true. Touch only src/content/guides/${{ matrix.slug }}.json
-            (and its guides-intake/${{ matrix.slug }}.md). Do not touch any other guide.
+            NEVER auto-merge. NEVER set draft: true. Touch only ${{ matrix.slug }} — either
+            src/content/guides/${{ matrix.slug }}.json (flat) or
+            src/content/guides/${{ matrix.slug }}/ (split guide: _guide.json + its NN-*.json section
+            files — `ls` the directory to find which files actually hold the flagged facts) — and its
+            guides-intake/${{ matrix.slug }}.md. Do not touch any other guide.
