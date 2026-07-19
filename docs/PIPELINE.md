@@ -40,15 +40,20 @@ else is a gate a machine can run: research quality, schema, links, photos, recen
    can never drift. Fillable in a few taps from a phone. Captures party + anchor + ranked
    priorities + travel style (all shipped as fields; the *unification* is the remaining work).
 
-2. **GENERATE — dual-pass, resumable.** Pass A canonical/verified, Pass B local/authentic/
-   crowd-aware, reconciled into one guide with a reconciliation ledger (shipped). **Resumability
-   shipped (P2):** a git-tracked checkpoint (`guides-intake/<slug>.state.json`, managed by
-   `scripts/pipeline.mjs`) records the stages `scaffold → passA → passB → reconcile → verified`; the
-   scaffolder clears `scaffold`, the research agent clears the rest and commits after each, and
-   `research-pass.yml` resumes the `research/<slug>` branch — so a run cut off by a wall-clock/usage
-   limit picks up at the next un-done stage (`npm run pipeline -- --slug <slug> --status`) instead of
-   restarting. The research stages are judgment work, so the "chainer" is the research-pass Action /
-   interactive session; `pipeline.mjs` is the resumable spine it runs against.
+2. **GENERATE — dual-pass, resumable, auto-chained.** Pass A canonical/verified, Pass B local/
+   authentic/crowd-aware, reconciled into one guide with a reconciliation ledger (shipped).
+   **Resumability shipped (P2):** a git-tracked checkpoint (`guides-intake/<slug>.state.json`,
+   managed by `scripts/pipeline.mjs`) records the stages `scaffold → passA → passB → reconcile →
+   verified`; the scaffolder clears `scaffold`, the research agent clears the rest and commits
+   after each, and `research-pass.yml` resumes the `research/<slug>` branch — so a run cut off by
+   a wall-clock/usage limit picks up at the next un-done stage (`npm run pipeline -- --slug <slug>
+   --status`) instead of restarting. **Auto-chained + circuit-broken (streamlining pass):**
+   `new-guide.yml` dispatches `research-pass.yml` itself the moment a scaffold commits — filing
+   the New-guide issue is the only manual step to start a guide. Each run bumps a persisted
+   attempt counter before spending agent tokens; past 5 attempts without reaching `verified`, the
+   workflow stops and files a `stuck` issue instead of silently resuming forever. The research
+   stages stay judgment work, so the "chainer" is the research-pass Action / an interactive
+   session; `pipeline.mjs` is the resumable spine + attempt budget it runs against.
 
 3. **VERIFY — one rolled-up gate + scorecard.** `npm run verify` rolls readiness (research),
    staleness (recency), and the audit suite (links/photos) into ONE verdict plus a
@@ -62,12 +67,30 @@ else is a gate a machine can run: research quality, schema, links, photos, recen
    the scorecard to the issue either way, and commits only if the gate passes — a failing draft can't
    graduate on a rubber stamp, and the issue stays open with the evidence. The research/recert PRs
    embed the same `--markdown` scorecard, so the reviewer sees the evidence before nominating.
+   **The nomination is now filed automatically too (streamlining pass):** when a `research-pass.yml`
+   run reaches a full verify PASS, it merges its own branch to `main` (via `scripts/land-branch.sh`,
+   shared with the new `modify-guide.yml` edit flow below) and immediately opens the
+   `graduate-request` issue itself — the human's only remaining action, if the guide should be
+   featured, is applying `graduate-approved`. This is the ONE deliberately-kept manual checkpoint
+   in the whole pipeline: the mechanical gates can't judge rubric rows #6/#8/#9/#12 (anchor
+   coverage, priority depth, party fit, authenticity), so a confidently-wrong fact still needs a
+   human glance before it reaches the curated grid. A run that can't reach PASS (or hits a merge
+   conflict) falls back to a draft PR for human triage instead of losing the work.
 
-5. **LEARN — the loop closes on the next intake.** Trip feedback → `learnings/<slug>.md` +
+5. **EDIT — a scoped fix, not a full research pass.** `modify-guide.yml` handles "this one fact is
+   wrong" without re-running Pass A/B: file a "Request a change" issue (a **✎ Request a change**
+   button lives on every guide page, draft or published, next to the graduation-nomination link on
+   drafts), the owner applies `modify-approved`, and an agent in the guide-author skill's "Edit an
+   existing guide" mode verifies the specific fact, runs the mandatory continuity sweep, and lands
+   via the same `land-branch.sh` script — no graduate-request filing (an edit never changes
+   draft/published status). Same public-repo safety shape as graduation: filing does nothing;
+   only the owner's approval runs it.
+
+6. **LEARN — the loop closes on the next intake.** Trip feedback → `learnings/<slug>.md` +
    `TRAVELER_PATTERNS.md` (shipped). Target: the post-mortem's party-pattern deltas are what the
    next intake's party selection reads, so each guide starts more personalized than the last.
 
-6. **REFRESH — the maintenance department. Shipped (P3).** `recert.yml` runs on a weekly schedule
+7. **REFRESH — the maintenance department. Shipped (P3).** `recert.yml` runs on a weekly schedule
    (and on demand): a detect job lists EVERY currently-stale guide (`npm run recert --json`, built on
    `check-staleness`'s sweep of all non-draft guides), then a **matrix** runs one recert agent per
    stale guide — each re-verifies only the flagged facts against primary sources, re-dates or
@@ -135,11 +158,16 @@ venue, two rounds then ship/flag/omit — binding on every research agent, headl
 
 ## What "done" means for the pipeline (exit criteria)
 
-- Filing a trip reaches a corroborated, authentic, verify-PASSing **draft PR** with minimal human
-  toil, and the human's remaining job is the rubric's HUMAN rows + graduation — nothing mechanical.
+- Filing a trip reaches a corroborated, authentic, verify-PASSing guide **merged and live** in the
+  drafts tier with minimal human toil, and the human's remaining job is the rubric's HUMAN rows +
+  one label click to graduate — nothing mechanical. (A run that can't reach PASS still lands as a
+  draft PR — the toil floor, not the common case.)
 - A **published** guide cannot silently rot: recert opens a freshness PR before facts mislead a
   traveler.
-- No stage depends on remembering to run a separate script: one intake, one generate, one verify,
-  one graduate, one recert — each a named command and a workflow.
+- A wrong fact on any guide — draft or published — is one issue + one label away from a scoped fix,
+  without re-running the whole research pass.
+- No stage depends on remembering to run a separate script: one intake, one generate (now
+  self-starting), one verify, one graduate, one recert, one modify — each a named command and a
+  workflow.
 - Every guide, current and future, inherits all of it, because the machinery lives at the
   pipeline/skill level, not per-guide.

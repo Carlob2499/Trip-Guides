@@ -6,6 +6,7 @@ import { describe, it, expect, afterAll } from "vitest";
 import { existsSync, rmSync } from "node:fs";
 import {
   STAGE_ORDER, initState, checkpoint, readState, nextStage, statusLines, statePath,
+  bumpAttempt, statusJson,
 } from "../pipeline.mjs";
 
 const SLUG = "zz-pipeline-test"; // sorts last, never a real guide
@@ -80,5 +81,48 @@ describe("initState + checkpoint + readState (filesystem)", () => {
     await initState(SLUG, { force: true });
     for (const stage of ["passA", "passB", "reconcile", "verified"]) await checkpoint(SLUG, stage);
     expect(nextStage(await readState(SLUG))).toBe(null);
+  });
+});
+
+describe("bumpAttempt (circuit breaker)", () => {
+  it("starts a fresh guide at attempt 1", async () => {
+    await initState(SLUG, { force: true });
+    const state = await bumpAttempt(SLUG);
+    expect(state.attempts).toBe(1);
+  });
+
+  it("increments on every call and persists", async () => {
+    await initState(SLUG, { force: true });
+    await bumpAttempt(SLUG);
+    await bumpAttempt(SLUG);
+    const s = await bumpAttempt(SLUG);
+    expect(s.attempts).toBe(3);
+    expect((await readState(SLUG)).attempts).toBe(3);
+  });
+
+  it("self-heals when called with no prior state at all", async () => {
+    rmSync(statePath(SLUG), { force: true });
+    const s = await bumpAttempt(SLUG);
+    expect(s.attempts).toBe(1);
+    expect(nextStage(s)).toBe("scaffold"); // no stages cleared — bumpAttempt never fakes scaffold
+  });
+});
+
+describe("statusJson (machine-readable)", () => {
+  it("no state → nextStage scaffold, exists false, attempts 0", () => {
+    expect(statusJson(SLUG, null)).toEqual({ slug: SLUG, exists: false, nextStage: "scaffold", attempts: 0, updatedAt: null });
+  });
+
+  it("in-progress state → the correct nextStage and attempts carried through", () => {
+    const state = { updatedAt: "2026-01-01T00:00:00Z", attempts: 3, stages: { scaffold: "t", passA: null, passB: null, reconcile: null, verified: null } };
+    expect(statusJson(SLUG, state)).toEqual({ slug: SLUG, exists: true, nextStage: "passA", attempts: 3, updatedAt: "2026-01-01T00:00:00Z" });
+  });
+
+  it("all stages cleared → nextStage is null (JSON-serializable, not undefined)", () => {
+    const all = Object.fromEntries(STAGE_ORDER.map((s) => [s, "t"]));
+    const state = { updatedAt: "2026-01-01T00:00:00Z", attempts: 5, stages: all };
+    const json = statusJson(SLUG, state);
+    expect(json.nextStage).toBe(null);
+    expect(JSON.parse(JSON.stringify(json)).nextStage).toBe(null);
   });
 });

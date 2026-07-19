@@ -79,7 +79,18 @@ function emptyStages() {
 export async function initState(slug, { force = false, now = new Date().toISOString() } = {}) {
   const existing = await readState(slug);
   if (existing && !force) return existing;
-  return saveState({ slug, createdAt: now, updatedAt: now, stages: { ...emptyStages(), scaffold: now }, notes: [] });
+  return saveState({ slug, createdAt: now, updatedAt: now, stages: { ...emptyStages(), scaffold: now }, attempts: 0, notes: [] });
+}
+
+// How many times a research-pass RUN has started work on this guide (not stages — one run may
+// clear several stages, or none if it's cut off early). The circuit breaker: a headless run
+// that keeps getting cut off before reaching `verified` should eventually stop and ask a human
+// instead of silently resuming forever. Called once per workflow run, before the agent starts.
+export async function bumpAttempt(slug, { now = new Date().toISOString() } = {}) {
+  const state = (await readState(slug)) || { slug, createdAt: now, updatedAt: now, stages: emptyStages(), attempts: 0, notes: [] };
+  state.attempts = (state.attempts || 0) + 1;
+  state.updatedAt = now;
+  return saveState(state);
 }
 
 // Mark a stage cleared (idempotent — re-checkpointing refreshes the timestamp, never errors).
@@ -108,7 +119,7 @@ export function statusLines(slug, state) {
     lines.push(`  → scaffold it first (New-guide issue form or \`node scripts/scaffold-guide.mjs\`), which initializes state.`);
     return lines;
   }
-  lines.push(`[pipeline] ${slug} — ${nextStage(state) ? "IN PROGRESS" : "READY for human graduation"} (updated ${state.updatedAt})`);
+  lines.push(`[pipeline] ${slug} — ${nextStage(state) ? "IN PROGRESS" : "READY for human graduation"} (updated ${state.updatedAt}, ${state.attempts || 0} attempt(s))`);
   for (const s of STAGE_ORDER) {
     const at = state.stages?.[s];
     lines.push(`  ${at ? "✓" : "○"} ${STAGE_LABEL[s]}${at ? ` — ${at.slice(0, 10)}` : ""}`);
@@ -119,10 +130,23 @@ export function statusLines(slug, state) {
   return lines;
 }
 
+// Machine-readable status for a workflow step to branch on (`jq`) — the CLI/agent-facing
+// statusLines() above stays the human-readable default; this is additive, not a replacement.
+export function statusJson(slug, state) {
+  return {
+    slug,
+    exists: !!state,
+    nextStage: state ? nextStage(state) : "scaffold",
+    attempts: state?.attempts || 0,
+    updatedAt: state?.updatedAt || null,
+  };
+}
+
 // ── CLI ──────────────────────────────────────────────────────────────────────
-// node scripts/pipeline.mjs --slug korea --status
+// node scripts/pipeline.mjs --slug korea --status [--json]
 // node scripts/pipeline.mjs --slug korea --checkpoint passA --note "anchor verified vs official site"
 // node scripts/pipeline.mjs --slug korea --init [--force]
+// node scripts/pipeline.mjs --slug korea --bump-attempt [--json]
 function isMain(moduleUrl) {
   return process.argv[1] != null && moduleUrl === pathToFileURL(process.argv[1]).href;
 }
@@ -131,7 +155,8 @@ if (isMain(import.meta.url)) {
   const argv = process.argv.slice(2);
   const get = (flag) => (argv.includes(flag) ? argv[argv.indexOf(flag) + 1] : null);
   const slug = get("--slug");
-  if (!slug) { console.error("Usage: node scripts/pipeline.mjs --slug <slug> [--status | --init [--force] | --checkpoint <stage> [--note ..]]"); process.exit(1); }
+  if (!slug) { console.error("Usage: node scripts/pipeline.mjs --slug <slug> [--status [--json] | --init [--force] | --checkpoint <stage> [--note ..] | --bump-attempt [--json]]"); process.exit(1); }
+  const asJson = argv.includes("--json");
 
   if (argv.includes("--init")) {
     const state = await initState(slug, { force: argv.includes("--force") });
@@ -142,8 +167,14 @@ if (isMain(import.meta.url)) {
     const state = await checkpoint(slug, stage, { note: get("--note") });
     console.log(`[pipeline] ${slug} — checkpoint "${stage}" recorded.`);
     console.log(statusLines(slug, state).join("\n"));
+  } else if (argv.includes("--bump-attempt")) {
+    const state = await bumpAttempt(slug);
+    if (asJson) console.log(JSON.stringify(statusJson(slug, state)));
+    else { console.log(`[pipeline] ${slug} — attempt ${state.attempts} recorded.`); console.log(statusLines(slug, state).join("\n")); }
   } else {
     // default + --status: print state
-    console.log(statusLines(slug, await readState(slug)).join("\n"));
+    const state = await readState(slug);
+    if (asJson) console.log(JSON.stringify(statusJson(slug, state)));
+    else console.log(statusLines(slug, state).join("\n"));
   }
 }

@@ -71,7 +71,10 @@ helper scripts, and the done gate.
   (update its verification date as written), then run the continuity sweep from
   CLAUDE.md's **"Editing a Guide — Continuity Is Mandatory"**: grep the whole
   guide for every touchpoint the change ripples into, fix what's in scope,
-  stop-and-ask when it forks the plan.
+  stop-and-ask when it forks the plan. This mode is what `modify-guide.yml` runs headlessly for
+  a scoped "Request a change" issue (any guide page's **✎ Request a change** button) — same
+  discipline, just triggered by the owner's `modify-approved` label instead of an interactive
+  session, and landed via `scripts/land-branch.sh` instead of a hand-merged PR.
 - **Recert a published guide** — the self-freshening / maintenance mode (the scheduled
   `recert.yml`, or manual). Get the punch list with `npm run recert -- --slug <slug>` —
   every fact past its shelf life + the `source_url` to re-check it against. Re-verify EACH

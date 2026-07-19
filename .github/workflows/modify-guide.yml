@@ -1,0 +1,142 @@
+name: Modify guide
+
+# Fires only when the repo owner (write access required — GitHub's own permission model, not a
+# custom check here) applies `modify-approved` to an issue that also carries `modify-request`.
+# Filing the "Request a change" issue itself (.github/ISSUE_TEMPLATE/modify-guide.yml) never
+# touches anything — same two-label shape as graduate-guide.yml, and for the same reason: this
+# can target an ALREADY-PUBLISHED guide, so a drive-by request on a public repo must not
+# auto-execute without the owner's explicit approval.
+#
+# This is a SCOPED EDIT, not the dual-pass new-guide procedure — the agent runs in the
+# waypoint-guide-author skill's "Edit an existing guide" mode: verify the specific changed fact,
+# run the mandatory continuity sweep, self-correct against verify+build, then land via the same
+# scripts/land-branch.sh research-pass.yml uses. No checkpoint/resume spine (that's sized for a
+# multi-hour dual-pass build, not a scoped fact fix) and no graduate-request filing (an edit
+# never changes a guide's draft/published status, only its content).
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  modify:
+    if: >
+      github.event.label.name == 'modify-approved' &&
+      contains(github.event.issue.labels.*.name, 'modify-request')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Parse the change request
+        id: req
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          set -euo pipefail
+          OUT=$(node scripts/parse-modify-issue.mjs)
+          {
+            echo "slug=$(echo "$OUT" | jq -r '.slug')"
+            echo "section=$(echo "$OUT" | jq -r '.section')"
+            # "change" is free text and may contain newlines — GITHUB_OUTPUT needs the
+            # heredoc-delimiter form for multiline values, not plain key=value.
+            echo "change<<MODIFY_CHANGE_EOF"
+            echo "$OUT" | jq -r '.change'
+            echo "MODIFY_CHANGE_EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Configure git identity
+        run: |
+          git config user.name  "waypoint-modify[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      # A scoped edit branch, separate namespace from research/<slug> and recert/<slug> so none
+      # of the three ever collide on the same guide worked at the same time.
+      - name: Start the modify branch
+        env:
+          SLUG: ${{ steps.req.outputs.slug }}
+          ISSUE_NUM: ${{ github.event.issue.number }}
+        run: git checkout -b "modify/${SLUG}-${ISSUE_NUM}"
+
+      - name: Run edit agent
+        uses: anthropic/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          allowed_tools: "Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch"
+          # Model economy: a scoped edit is Sonnet work, same as research/recert
+          # (references/research-efficiency.md) — no model choice exposed here, unlike
+          # research-pass.yml's dropdown, since there's no dual-pass reconcile judgment call
+          # that would ever warrant Opus for a single targeted fact fix.
+          claude_args: "--model claude-sonnet-5"
+          prompt: |
+            Guide slug: ${{ steps.req.outputs.slug }}
+            Requested change: ${{ steps.req.outputs.change }}
+            Section hint: ${{ steps.req.outputs.section || '(not given — find it)' }}
+
+            Use the waypoint-guide-author skill: read .claude/skills/waypoint-guide-author/SKILL.md
+            and references/verification-rules.md + references/research-efficiency.md. This is the
+            skill's **"Edit an existing guide"** mode, NOT the dual-pass new-guide procedure —
+            do not scaffold, do not run Pass A/Pass B, do not touch guides-intake/ checkpoint state.
+
+            1. Read ONLY the section/group file the requested change actually lives in (per
+               CLAUDE.md's Operational Habits — `ls src/content/guides/${{ steps.req.outputs.slug }}/`
+               to find it if it's a split guide, or the single `${{ steps.req.outputs.slug }}.json`
+               if it's still flat).
+            2. Verify the new/changed fact per verification-rules.md — a primary (T0) source,
+               ship/flag/omit, dated on write. If the requested change turns out to be wrong (the
+               "fix" would make the guide less accurate, not more), do NOT apply it — instead
+               explain why in your finish summary and leave the guide as-is; the human reviews
+               that reasoning same as they'd review an accepted edit.
+            3. CONTINUITY SWEEP (mandatory, CLAUDE.md "Editing a Guide — Continuity Is
+               Mandatory") — grep the WHOLE guide for every touchpoint the change ripples into
+               (splits, counts, day plans, other stamps, cross-references), not just the section
+               you edited. Fix everything clearly in scope. If the change forks the plan (opens a
+               real decision only a human can make), stop and say so in your finish summary
+               instead of guessing.
+            4. Self-correct: run `npm run verify -- --slug ${{ steps.req.outputs.slug }}` and
+               `npm run build`. Fix each blocking finding against a primary source. Repeat until
+               verify PASSes and build is clean, or until 4 rounds — whichever comes first. Never
+               silence a flag you can't source: downgrade to `⚠` or omit it.
+            5. Commit and push your changes to THIS branch before landing it — land-branch.sh
+               opens a PR from the branch as it exists on the remote, so nothing you haven't
+               pushed can land:
+               `git add -A && git commit -m "modify(${{ steps.req.outputs.slug }}): <what changed>" && git push -u origin HEAD`
+
+            LANDING THE BRANCH — same mechanism research-pass.yml uses, not a hand-rolled PR:
+              npm run verify -- --slug ${{ steps.req.outputs.slug }} --markdown > /tmp/scorecard.md
+              # Prepend your finish summary (what changed, what you verified it against, any
+              # continuity fixes, anything you declined to change and why) above the scorecard
+              # in the same file.
+              NEXT_BUILD_OK=true   # set false if `npm run build` is still failing after 4 rounds
+              VERIFY_PASS=true     # set false if `npm run verify` is still NEEDS WORK after 4 rounds
+              PASSED=false; [ "$VERIFY_PASS" = "true" ] && [ "$NEXT_BUILD_OK" = "true" ] && PASSED=true
+              bash scripts/land-branch.sh "modify/${{ steps.req.outputs.slug }}-${{ github.event.issue.number }}" main \
+                "Modify ${{ steps.req.outputs.slug }} (from issue #${{ github.event.issue.number }})" \
+                /tmp/scorecard.md "$PASSED"
+
+            It prints exactly one line:
+            - **`merged:<n>`** — landed on `main`. The guide's draft/published status is
+              untouched (editing never graduates or un-graduates a guide). Comment on THIS issue
+              (issue #${{ github.event.issue.number }}) with your finish summary and a link to
+              the merge, then close it:
+                gh issue comment ${{ github.event.issue.number }} --body "<finish summary + link>"
+                gh issue close ${{ github.event.issue.number }}
+            - **`draft:<n>`** — verify didn't reach PASS, or the merge hit a conflict. Comment on
+              THIS issue explaining what's still wrong and linking PR #<n> for a human to finish
+              by hand. Do NOT close the issue in this case — it stays open until the edit lands.
+
+            Never touch any guide other than ${{ steps.req.outputs.slug }} (or its split-directory
+            equivalent). Never touch guides-intake/ state files — this mode doesn't use them.

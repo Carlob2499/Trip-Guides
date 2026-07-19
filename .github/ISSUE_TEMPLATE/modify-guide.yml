@@ -1,0 +1,37 @@
+name: Request a change
+description: Ask for a specific content fix or update on a guide — draft or already published.
+title: "Modify: "
+labels: ["modify-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Anyone can file this — filing it does **not** change anything. It's a
+        request for the site owner to review. Nothing runs until the owner
+        applies the `modify-approved` label (which requires write access to
+        this repo), at which point a scoped edit pass verifies and applies
+        just this change, then lands it the same way a research pass does.
+  - type: input
+    id: slug
+    attributes:
+      label: Guide slug
+      description: The guide's file name without ".json" (e.g. "korea" for src/content/guides/korea.json). The "Request a change" button on a guide page fills this in for you.
+      placeholder: e.g. korea
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: What needs to change
+      description: Be specific — a wrong price, a closed venue, an address, a missing detail. The more concrete, the less the research agent has to guess about scope.
+      placeholder: e.g. "The Gyeongbokgung admission price is now ₩3,000, not ₩1,000 — official site confirms the new 2026 rate."
+    validations:
+      required: true
+  - type: input
+    id: section
+    attributes:
+      label: Section
+      description: Optional — narrows the pass to one tab/section if you know it (e.g. "Food & shopping"). Leave blank to let the agent find it.
+      placeholder: e.g. Sights
+    validations:
+      required: false

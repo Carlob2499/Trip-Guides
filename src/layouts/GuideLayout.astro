@@ -442,6 +442,19 @@ const tripSummary = buildSummary(guide);
         </p>
       )}
 
+      <!-- Renders on EVERY guide, draft or published — a wrong fact doesn't stop being wrong
+           once a guide graduates. Same shape as the nomination link above: filing this issue
+           auto-applies "modify-request" and does nothing by itself; only the owner applying
+           "modify-approved" (requires write access) runs the edit, via
+           .github/workflows/modify-guide.yml. -->
+      <p class="draft-graduate">
+        <a
+          class="draft-graduate-link"
+          href={`https://github.com/${REPO}/issues/new?template=modify-guide.yml&labels=modify-request&slug=${encodeURIComponent(ogSlug)}&title=${encodeURIComponent(`Modify: ${ogSlug}`)}`}
+          target="_blank" rel="noopener"
+        >✎ Something needs fixing? Request a change</a>
+      </p>
+
       <!--
         JET-LAG CALCULATOR
         Collapsible — shown only when the guide's country has a known UTC offset.

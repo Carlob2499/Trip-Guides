@@ -21,11 +21,26 @@
 
 ## Snapshot (updated 2026-07-18, session close)
 
-**Backbone complete + the ENTIRE approved feature wave shipped.** 431 tests, all on `main`.
+**Backbone complete, the approved feature wave shipped, and the pipeline just went from
+5 manual touchpoints to 2.** ~450 tests, all on `main`.
 
-- **Pipeline complete (P0–P4):** typed intake → resumable dual-pass research (checkpoints)
-  → `npm run verify` scorecard → graduate-on-evidence → weekly recert matrix. Sonnet pinned
-  in research-pass.yml / recert.yml via `claude_args`.
+- **Pipeline complete (P0–P4) + streamlined this session:** typed intake → resumable
+  dual-pass research (checkpoints) → `npm run verify` scorecard → graduate-on-evidence →
+  weekly recert matrix. **New:** `new-guide.yml` auto-dispatches `research-pass.yml` the
+  moment a scaffold commits (filing the issue is now the only manual step to start a guide);
+  a persisted attempt counter (`pipeline.mjs --bump-attempt`) stops a stuck run after 5
+  attempts and files a `stuck` issue instead of resuming forever; on a full verify PASS the
+  research agent merges its own branch to `main` (`scripts/land-branch.sh`, real PR,
+  auto-merged — not a hand-rolled push) and auto-files the `graduate-request` nomination
+  itself. **The one deliberately-kept manual step:** graduating to the curated grid still
+  needs the owner's `graduate-approved` label — the mechanical gates can't judge rubric
+  rows #6/#8/#9/#12 (anchor/priority/party-fit/authenticity), so a confidently-wrong fact
+  still needs a human glance before it's presented as trustworthy (creator confirmed this
+  tradeoff explicitly). **New — scoped edits:** a **✎ Request a change** button on every
+  guide page (draft or published) files a "Request a change" issue; `modify-approved`
+  (owner-only) runs `modify-guide.yml`, the skill's "Edit an existing guide" mode, landed
+  the same way. Also fixed: `graduate-guide.mjs` only handled flat-file guides before —
+  now handles the split-directory shape too (Korea/Denmark's actual shape).
 - **Visual/motion complete (V1, V3a–d, V4):** card→hero morph · first-open day-story ·
   native scroll reveals · story-mode itinerary · lead scannability · cover-extracted
   palettes (one precedence on guide+hub+OG). Runtime: connection state machine,
@@ -33,35 +48,34 @@
   chrome (share/SOS/search/exports) functionally verified in-browser.
 - **`docs/FEATURES.md` wave — ALL SEVEN SHIPPED:** #1 transit deep-links · #5 arrival
   autopilot · #6 phrase cards · #7 entry-requirements (Trip kit tab houses 5/6/7) · #8 sun &
-  daylight strip (day-card chip + Focus Today "daylight left", pure client math, calibrated
-  against sunrise-sunset.org reference data) · #9 advisory pill (US State Dept per-country
-  pages — **bot-gated against build-time fetch, confirmed live; it's a manual/browser
-  research step, not automated** — hub badge + SOS sheet, honest-blank below Level 2) · #10
-  trip recap card (`src/pages/recap/[slug].png.ts`, sharp/SVG reuse; `hit = waypoints −
-  skipped` verified to reproduce Korea's own hand-written "21 of 37" figure; Learnings-tab
-  share link). Held: #2 prep timeline, #3 budget pact (revivable, one word). Dropped: #4
-  reservation vault.
+  daylight strip · #9 advisory pill (US State Dept, honest-blank below Level 2) · #10 trip
+  recap card. Held: #2 prep timeline, #3 budget pact (revivable). Dropped: #4 vault.
 
-**Known waits:** R5 telemetry ranking needs real use; what's-open-now blocked on structured
-hours; TRAVELER_PATTERNS grows only from real trips; #6/#7's actual phrase/entry CONTENT is
-still dormant on Korea/Denmark (mechanism shipped, a research pass populates it); #9's
-Korea/Denmark advisory levels are live-verified but decay on the normal recert cadence.
+**Known waits:** R5 telemetry ranking needs real use; `docs/telemetry/summary.md` doesn't
+exist yet (no traffic); TRAVELER_PATTERNS grows only from real trips (2 data points total);
+#6/#7's phrase/entry CONTENT is still dormant on Korea/Denmark (mechanism shipped only);
+**the entire streamlined pipeline above is unproven end-to-end** — `guides-intake/` is
+empty, meaning no real guide has ever run through the dual-pass/checkpoint/auto-merge system
+yet. Everything is unit-tested (`pipeline.mjs`, `graduate-guide.mjs`) and the YAML was
+reviewed carefully, but there is no GitHub Actions runner in this environment to prove the
+`workflow_dispatch` chain live.
 
 ## Where we left off
 
-The approved wave is DONE — nothing queued. Real options for the next session:
+The streamlining work is DONE and pushed. **The single highest-leverage next step is
+filing one real guide** — it's the first real proof the auto-chain → auto-merge →
+auto-nominate chain actually works under real interruption/retry conditions, not just in
+review. Everything else is secondary until that's proven.
 
-1. **Revive a held feature** — #2 prep timeline (T-minus deadlines on the booking
-   checklist) or #3 budget pact (intake budget vs Trip Split live actuals). Design work,
-   not pure Sonnet mechanism-building.
-2. **Populate #6/#7's dormant content** — a guide-author research pass to fill Korea's/
-   Denmark's phrase cards + entry requirements (currently shipped-but-empty by design).
-3. **Run the dual-pass pipeline on a real guide #3** — the machinery (generate+reconcile,
-   richer intake) shipped a while back; the first live run still needs a destination + new
-   traveler-pair intake from the creator.
-4. General maintenance/polish, or file a real trip.
+1. **File a real guide** (the priority) — Issues → New guide, fill in a real destination +
+   intake. Watch the Actions tab: scaffold → research auto-starts → should land on `main`
+   on its own (or leave a draft PR if it can't). This is the end-to-end proof no amount of
+   local testing can substitute for.
+2. Try the new **✎ Request a change** button on Korea or Denmark for a small known fix, to
+   prove `modify-guide.yml` end-to-end too.
+3. Revive a held feature (#2/#3), or populate #6/#7's dormant content via a research pass.
 
-**Re-prompt the creator with:** "The approved feature wave (#1/#5–#10) is fully shipped —
-431 tests green, all pushed to main. Nothing queued next. Pick one: revive held features
-#2/#3, run a research pass to populate #6/#7's dormant phrase/entry content, kick off a
-real guide #3 with the dual-pass pipeline, or something else entirely?"
+**Re-prompt the creator with:** "The pipeline is now far more automated — filing one
+New-guide issue should carry a guide to `main` with no further clicks, and one label click
+graduates it. This has never run for real. Want to file a real destination and watch it go,
+or work on something else first?"

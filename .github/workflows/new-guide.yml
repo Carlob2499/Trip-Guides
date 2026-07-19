@@ -13,11 +13,12 @@ on:
   issues:
     types: [labeled]
 
-# Least privilege: commit to main, comment/close the issue. No pull-requests
-# permission needed — there's no PR in this flow anymore.
+# Least privilege: commit to main, comment/close the issue, dispatch research-pass.yml.
+# No pull-requests permission needed — there's no PR in THIS flow.
 permissions:
   contents: write
   issues: write
+  actions: write
 
 jobs:
   scaffold:
@@ -54,10 +55,16 @@ jobs:
           GUIDE_URL="https://carlob2499.github.io/Trip-Guides/guides/${SLUG}/"
           gh issue comment "${ISSUE_NUM}" --body "Scaffolded ✅ — committed straight to \`main\`: [\`src/content/guides/${SLUG}.json\`](https://github.com/${GITHUB_REPOSITORY}/blob/main/src/content/guides/${SLUG}.json). It's live now in the *Guides-to-be* tier: ${GUIDE_URL}. It's a **draft** (\`draft: true\`) — the research pass fills the facts from here per the intake spec: [\`guides-intake/${SLUG}.md\`](https://github.com/${GITHUB_REPOSITORY}/blob/main/guides-intake/${SLUG}.md).
 
-          **Next — run the research pass (TWO-pass generate → reconcile). Research is SONNET work** (light Opus only for a contested reconcile — the skill's \`references/research-efficiency.md\` is binding), sized to run sustainably on Claude Pro; checkpoints mean any session can stop and the next resumes.
-          • *Headless:* **Actions → Research pass → Run workflow → slug \`${SLUG}\`** (needs the \`CLAUDE_CODE_OAUTH_TOKEN\` secret; defaults to Sonnet). A full dual pass is long — if it nears the run limit it stops at a clean checkpoint and a re-run resumes.
-          • *Interactive:* open a Claude Code session **on Sonnet** and paste:
+          **The research pass is starting automatically** (TWO-pass generate → reconcile, Sonnet by default — see \`references/research-efficiency.md\`). Track it under Actions → Research pass. If it reaches a full verify PASS, it merges itself to \`main\` and opens a graduation-nomination issue for you — the only thing left to do, if you want it featured, is apply the \`graduate-approved\` label there. If it can't reach PASS (or the run gets cut off), it leaves a draft PR for you instead, and re-running the same workflow resumes from the last checkpoint.
+
+          *Didn't start, or want to re-run/target one section?* Actions → Research pass → Run workflow → slug \`${SLUG}\` (optionally a \`section\`). Or interactively, on **Sonnet**:
           \`\`\`
           Run the research pass on ${SLUG} with the waypoint-guide-author skill (read its SKILL.md Research workflow first). Start with 'npm run pipeline -- --slug ${SLUG} --status' to see which stages remain (it's resumable — do only the un-done ones). Read guides-intake/${SLUG}.md and pick the traveler PARTY from TRAVELER_PATTERNS. Research in TWO independent passes: (A) canonical/verified — verify the ANCHOR event's date + venue against a T0 source FIRST, then must-dos / entry / transit / hours / prices from primary sources; (B) local/authentic/crowd-aware — off-peak timing + crowd reality for each marquee sight, novel local alternatives where the obvious pick is a tourist trap, verifying every Pass-B lead against a primary source before it enters the guide. Reconcile A + B into ONE guide and record it in the '## Research reconciliation' ledger of guides-intake/${SLUG}.md (log any research-forced re-plan in '## Amendments'). Checkpoint each stage as you finish it: 'npm run pipeline -- --slug ${SLUG} --checkpoint <passA|passB|reconcile>'. Then loop 'npm run verify -- --slug ${SLUG}' (rolled-up gate: research + recency + scorecard) + 'npm run build' → fix each finding against a T0 source → re-run until PASS, then '--checkpoint verified'. Keep draft:true.
           \`\`\`"
           gh issue close "${ISSUE_NUM}"
+
+      - name: Auto-start the research pass
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SLUG: ${{ steps.gen.outputs.slug }}
+        run: gh workflow run research-pass.yml -f slug="${SLUG}"

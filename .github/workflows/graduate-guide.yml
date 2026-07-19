@@ -86,7 +86,14 @@ jobs:
           set -euo pipefail
           git config user.name  "waypoint-scaffold[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add "src/content/guides/${SLUG}.json"
+          # Stage whichever shape scripts/graduate-guide.mjs actually wrote to — a flat
+          # src/content/guides/<slug>.json, or a split guide's src/content/guides/<slug>/_guide.json
+          # (mirrors graduate-guide.mjs's own flat-file-wins resolution order).
+          if [ -f "src/content/guides/${SLUG}.json" ]; then
+            git add "src/content/guides/${SLUG}.json"
+          else
+            git add "src/content/guides/${SLUG}/_guide.json"
+          fi
           git commit -m "Graduate guide: ${COUNTRY} (${SLUG}, from #${ISSUE_NUM})"
           git pull --rebase origin main
           git push origin HEAD:main

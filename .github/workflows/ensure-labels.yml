@@ -14,8 +14,11 @@ on:
       - .github/workflows/ensure-labels.yml
       - .github/ISSUE_TEMPLATE/new-guide.yml
       - .github/ISSUE_TEMPLATE/graduate-guide.yml
+      - .github/ISSUE_TEMPLATE/modify-guide.yml
       - .github/workflows/content-audit.yml
       - .github/workflows/graduate-guide.yml
+      - .github/workflows/research-pass.yml
+      - .github/workflows/modify-guide.yml
 
 # Label management lives under the issues API — that's all this needs.
 permissions:
@@ -46,4 +49,16 @@ jobs:
           gh label create graduate-approved \
             --color 5319E7 \
             --description "Owner-only: applying this label actually flips draft:false. Requires write access." \
+            --force
+          gh label create modify-request \
+            --color 0E8A16 \
+            --description "Requests a scoped content edit on a guide — anyone can open one" \
+            --force
+          gh label create modify-approved \
+            --color 5319E7 \
+            --description "Owner-only: applying this label actually runs the edit pass. Requires write access." \
+            --force
+          gh label create stuck \
+            --color D93F0B \
+            --description "An automated research pass hit its attempt cap without reaching verified" \
             --force

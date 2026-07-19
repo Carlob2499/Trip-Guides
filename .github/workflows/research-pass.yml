@@ -41,6 +41,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write
 
 jobs:
   research:
@@ -62,9 +63,47 @@ jobs:
           git config user.name  "waypoint-research[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+      # Circuit breaker (docs/PIPELINE.md P2 spine): a headless run that keeps getting cut off
+      # before reaching `verified` should eventually stop and ask a human instead of silently
+      # resuming forever. Runs BEFORE the agent so a stuck guide never spends agent tokens.
+      - name: Attempt budget
+        id: budget
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SLUG: ${{ inputs.slug }}
+        run: |
+          set -euo pipefail
+          NEXT=$(node scripts/pipeline.mjs --slug "$SLUG" --status --json | jq -r '.nextStage')
+          if [ "$NEXT" = "null" ]; then
+            echo "[budget] $SLUG already reached verified — nothing to do."
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          ATTEMPTS=$(node scripts/pipeline.mjs --slug "$SLUG" --bump-attempt --json | jq -r '.attempts')
+          CAP=5
+          if [ "$ATTEMPTS" -gt "$CAP" ]; then
+            echo "[budget] $SLUG has been attempted $ATTEMPTS times without reaching verified (cap: $CAP) — flagging instead of continuing."
+            TITLE="Research stuck: $SLUG"
+            STATUS_TEXT=$(node scripts/pipeline.mjs --slug "$SLUG" --status)
+            BODY=$(printf 'Automated research has run **%s** times for `%s` without reaching `verified`.\n\nCurrent status:\n```\n%s\n```\n\nThis destination may be genuinely hard to source (bot-blocked, sparse coverage) or stuck on one fact. Check `guides-intake/%s.md` and the `research/%s` branch, then either finish it by hand or re-run this workflow to keep trying — the attempt count only resets if `guides-intake/%s.state.json` is edited directly (git-tracked, so that is a deliberate act, not automatic).' "$ATTEMPTS" "$SLUG" "$STATUS_TEXT" "$SLUG" "$SLUG" "$SLUG")
+            EXISTING=$(gh issue list --search "\"$TITLE\" in:title" --state open --json number -q '.[0].number' 2>/dev/null || true)
+            if [ -n "$EXISTING" ]; then
+              gh issue comment "$EXISTING" --body "$BODY"
+            else
+              gh issue create --title "$TITLE" --body "$BODY" --label "stuck"
+            fi
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+
+          echo "[budget] $SLUG — attempt $ATTEMPTS of $CAP, proceeding."
+          echo "should_run=true" >> "$GITHUB_OUTPUT"
+
       # Resume the research branch if a prior (cut-off) run created it, so the agent starts with the
       # committed partial progress + checkpoint state in the working tree; otherwise start it fresh.
       - name: Resume or start the research branch
+        if: steps.budget.outputs.should_run == 'true'
         run: |
           BR="research/${{ inputs.slug }}"
           if git ls-remote --exit-code --heads origin "$BR" >/dev/null 2>&1; then
@@ -76,6 +115,7 @@ jobs:
           fi
 
       - name: Run research agent
+        if: steps.budget.outputs.should_run == 'true'
         uses: anthropic/claude-code-action@v1
         with:
           # Auth via the Claude Max subscription (claude setup-token), not a paid API key.
@@ -158,17 +198,43 @@ jobs:
                  npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint verified
                  && git add -A && git commit -m "research(${{ inputs.slug }}): verify PASS" && git push
 
-            Then open or update the PR (idempotent — the branch may already have one from a prior run):
-              gh pr view --json number >/dev/null 2>&1 || gh pr create --draft \
-                --title "Research pass: ${{ inputs.slug }}${{ inputs.section != '' && format(' ({0})', inputs.section) || '' }}" \
-                --body "<see below>"
-            PR body: your finish summary (what you researched, what you filled, what remains ⚠
-            unconfirmed), the FINAL scorecard (paste the output of
-            `npm run verify -- --slug ${{ inputs.slug }} --markdown` verbatim — that is the evidence
-            a human graduates against), the verification ledger table, the `## Research
-            reconciliation` summary, the `--status` checkpoint list, and — if you stopped early at a
-            checkpoint — exactly which stages still remain.
+            If you hit the 4-round cap still NEEDS WORK (verify never PASSed), commit and push
+            whatever fix attempts you made anyway, so the branch on the remote reflects your
+            actual last state, not just the last checkpoint:
+              git add -A && git commit -m "research(${{ inputs.slug }}): NEEDS WORK after 4 rounds" && git push
+            (skip this if there's nothing to commit — `git status --short` first).
 
-            NEVER remove `draft: true` from the guide JSON — graduating a guide is a human decision.
-            Never touch any guide other than src/content/guides/${{ inputs.slug }}.json (and its
-            guides-intake/${{ inputs.slug }}.md + .state.json).
+            LANDING THE BRANCH — this replaces "open a draft PR and wait for review". However the
+            self-correction loop above ended, write your finish summary (what you researched, what
+            you filled, what remains ⚠ unconfirmed, the verification ledger, the `## Research
+            reconciliation` summary, and — if you stopped early — exactly which stages remain) into
+            the scorecard file, then hand landing to the shared script rather than deciding by hand:
+
+              npm run verify -- --slug ${{ inputs.slug }} --markdown > /tmp/scorecard.md
+              # your finish summary goes ABOVE the scorecard in the same file, not a separate one
+              NEXT=$(node scripts/pipeline.mjs --slug ${{ inputs.slug }} --status --json | jq -r '.nextStage')
+              PASSED=false; [ "$NEXT" = "null" ] && PASSED=true   # true only if step (d) above actually checkpointed `verified`
+              bash scripts/land-branch.sh "research/${{ inputs.slug }}" main \
+                "Research pass: ${{ inputs.slug }}${{ inputs.section != '' && format(' ({0})', inputs.section) || '' }}" \
+                /tmp/scorecard.md "$PASSED"
+
+            It prints exactly one line — read it, don't guess what happened:
+
+            - **`merged:<n>`** — the guide landed on `main`. `draft: true` is still set (landing
+              only merges the branch; it never graduates the guide). File the graduation
+              nomination yourself, so the human's only remaining action is one label click, not a
+              search for what to do next:
+                gh issue create --title "Graduate: ${{ inputs.slug }}" --label graduate-request \
+                  --body "$(printf '### Guide slug\n\n%s\n\n### Why is this ready?\n\n%s' '${{ inputs.slug }}' "$(cat /tmp/scorecard.md)")"
+              The field labels must match exactly — `graduate-guide.mjs` parses `### Guide slug`
+              and `### Why is this ready?` verbatim; anything else and the nomination silently
+              fails to parse.
+            - **`draft:<n>`** — either verify didn't reach PASS, or the auto-merge hit a conflict.
+              PR #<n> is where a human triages it. Do NOT file a graduation nomination in this case
+              — there is nothing ready to graduate yet.
+
+            NEVER remove `draft: true` from the guide JSON yourself, in either case — the
+            nomination above plus the owner's `graduate-approved` label is the only path that
+            flips it, and that stays a human decision. Never touch any guide other than
+            src/content/guides/${{ inputs.slug }}.json (or its split-directory equivalent) and its
+            guides-intake/${{ inputs.slug }}.md + .state.json.
