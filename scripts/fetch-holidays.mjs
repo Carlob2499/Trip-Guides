@@ -10,26 +10,25 @@
 // reason to re-fetch them on every page load. Baking them into committed JSON keeps
 // the guide working offline with zero client JS and no failure mode in the browser.
 
-import { readFile, readdir, writeFile, mkdir } from "node:fs/promises";
+import { writeFile, mkdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 // Country → ISO 3166-1 alpha-2, shared with the site (single source of truth).
 // countries.mjs is plain ESM precisely so this Node script can import it too.
 import { COUNTRY_CODES } from "../src/data/countries.mjs";
+// Shared guide reader — understands BOTH content shapes (flat <slug>.json and
+// split <slug>/_guide.json + NN-*.json). A local readdir(GUIDES_DIR)-then-filter
+// used to live here instead; it silently stopped seeing Denmark/Korea the moment
+// they split into directories (readdir returns the bare dir name, which never
+// ends in ".json"), so their holiday data went stale with zero error, zero
+// warning — reusing readGuides() closes that gap for good instead of patching it
+// locally a second time.
+import { readGuides, flatten } from "./audit/lib.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const GUIDES_DIR = path.join(ROOT, "src", "content", "guides");
 const OUT_DIR = path.join(ROOT, "src", "data", "holidays");
 const MONTHS = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
-
-function flatten(sections, out = []) {
-  for (const s of sections || []) {
-    if (s && s.sections) flatten(s.sections, out);
-    else if (s) out.push(s);
-  }
-  return out;
-}
 
 function firstDayDate(sections) {
   const d = flatten(sections).find((s) => s.type === "days" && s.items?.length);
@@ -51,9 +50,9 @@ function deriveYear(date, now = new Date()) {
 }
 
 async function main() {
-  let files;
+  let entries;
   try {
-    files = (await readdir(GUIDES_DIR)).filter((f) => f.endsWith(".json"));
+    entries = await readGuides();
   } catch (err) {
     console.warn(`[holidays] cannot read guides dir (${err.message}) — skipping`);
     return;
@@ -61,10 +60,7 @@ async function main() {
 
   // Collect the unique (country, year) pairs actually used by a holidays section.
   const wanted = new Map(); // "CC-YYYY" -> { cc, year }
-  for (const f of files) {
-    let g;
-    try { g = JSON.parse(await readFile(path.join(GUIDES_DIR, f), "utf8")); }
-    catch (err) { console.warn(`[holidays] cannot parse ${f} (${err.message}) — skipped`); continue; }
+  for (const { file: f, guide: g } of entries) {
     const hol = flatten(g.sections).find((s) => s.type === "holidays");
     if (!hol) continue;
     const cc = COUNTRY_CODES[g.country];
