@@ -305,7 +305,7 @@ describe("buildIcs", () => {
 
 describe("budgetTripTotal", () => {
   it("multiplies day-basis items by the trip's day count and leaves trip-basis items alone", () => {
-    const sec = { days: 5, items: [{ label: "Food", basis: "day", est: 40 }, { label: "Flight", basis: "trip", est: 600 }] };
+    const sec = { days: 5, items: [{ label: "Food", basis: "day" as const, est: 40 }, { label: "Flight", basis: "trip" as const, est: 600 }] };
     expect(budgetTripTotal(sec)).toBe(40 * 5 + 600);
   });
 
