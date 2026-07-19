@@ -1,0 +1,326 @@
+{
+  "kicker": "Sedona, Arizona — Sep 2–8, 2026",
+  "title": "Sedona",
+  "dek": "Six nights among the red rocks, built around a slow pace, a real spa day, and food that isn't the Uptown tourist strip — a first solo trip with room to breathe. Everything below is checked; tick items off as you go and your progress saves.",
+  "country": "Arizona",
+  "draft": true,
+  "verified": "⚠ Draft — researched 19 Jul 2026 for the 2–8 Sep trip. Confirmed from primary sources: TSA REAL ID/passport rules (tsa.gov), the Red Rock Pass program and prices (fs.usda.gov, official Coconino National Forest), Sedona Shuttle's live route status (sedonashuttle.com — 2 of 3 free trailhead routes currently suspended), Tlaquepaque's own hours (tlaq.com family of sources), Helena's-equivalent local food picks cross-checked across multiple local guides, and Sedona/Cathedral Rock/Bell Rock/Airport Mesa/Tlaquepaque/Uptown/Phoenix coordinates (Nominatim). ⚠ re-check before you go: exact hotel and rental-car rates (both move week to week), L'Auberge de Sedona's current spa-treatment prices (not published online — call to book), Mii amo's current package availability, the Sedona Shuttle's route status again close to your dates (it was mid-change when checked), and the NWS flash-flood/monsoon forecast in the days immediately before you go.",
+  "provenance": "strict",
+  "roomId": "9x2mfk7w4qrvbhpz",
+  "footer": "Location photos via Wikimedia Commons — tap any credit for its source, author and license.",
+  "intro": "Six nights based in Sedona — a slow, single-base trip built around a spa day, real local food away from the Uptown strip, and the red rocks at an easy pace rather than a strenuous one. September falls squarely inside Arizona's monsoon season (mid-June through end of September) — afternoon thunderstorms and flash-flood risk are real considerations here, not a footnote, so outdoor time is planned for mornings. A rental car is the practical way to get around: rideshare coverage is inconsistent and, as of this check, two of Sedona's three free trailhead shuttle routes are suspended.",
+  "sections": [
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "When you land",
+      "body": "<p>The realistic gateway is <b>Phoenix Sky Harbor (PHX)</b> — Sedona has no meaningful commercial airport of its own. From PHX it's <b>≈116 miles / about 2 hours</b> by car via I-17 and AZ-179 (add 30 minutes for weekend/holiday traffic). Pick up a rental car at PHX rather than relying on rideshare once you're in Sedona (see Getting around). If you'd rather not drive the mountain road yourself, a door-to-door airport shuttle (Groome Transportation and others) runs <b>≈$55–100</b> per person, taking ≈2h45m. Flagstaff Pulliam is a smaller, closer alternative (≈30 min to Sedona) if it happens to serve your home airport — check before assuming PHX is your only option.</p><p>Budget this whole first day as travel — arriving in Sedona tired from a flight-plus-drive is normal, not a sign anything went wrong.</p>",
+      "source_url": "https://www.uber.com/global/en/r/routes/phx-to-sedona-az/",
+      "verified_on": "2026-07-19",
+      "shelf_life": "transit"
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Local essentials",
+      "body": "<p>English is the primary language. Same electrical plugs and voltage as anywhere else in the US — no adapter needed. Driving is on the right. Tipping follows standard US norms: <b>18–20%</b> at sit-down restaurants, $1–2/bag for hotel bellhops, $5–10/day for housekeeping. Sedona sits at about 4,350 ft elevation — noticeably higher and drier than most US cities; mild altitude effects (thirst, fatigue) are common for the first day or two.</p>"
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Entry & documents",
+      "body": "<p>This is a <b>domestic US destination</b> — Arizona is a US state, so a US citizen needs no passport or visa. At the TSA checkpoint for the flight itself: a <b>REAL ID–compliant driver's license</b> or another TSA-accepted photo ID (a US passport always works as a substitute). Without an acceptable ID, TSA's ConfirmID process costs <b>$45</b> as of 1 Feb 2026. ⚠ If flying in from outside the US, entry rules depend on your own passport's visa status for the United States generally — this guide's intake left home country blank, so that check wasn't done here.</p>",
+      "source_url": "https://www.tsa.gov/realid",
+      "verified_on": "2026-07-19",
+      "shelf_life": "default"
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Phone & data",
+      "body": "<p>Sedona runs on the same major US carriers as the rest of the country — if your plan covers domestic US roaming, it works here with no changes. Coverage is solid in town and along the main highways; it thins out in the canyons and at the more remote trailheads.</p>"
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Booking checklist",
+      "body": "<p>Sedona lodging runs on the pricier side for a US destination (see Budget below) — book early, and confirm AC even though this is high desert, not tropical, since September afternoons still reach the high 80s°F.</p>",
+      "checklist": [
+        "Flights into PHX (or Flagstaff, if it serves your route)",
+        "Rental car — book ahead, prices rise closer to the date",
+        "Accommodation (confirm AC)",
+        "Spa appointment (Day 2) — call L'Auberge or check Mii amo's package availability",
+        "Travel insurance",
+        "Red Rock Pass — buy the 7-day pass online or at a visitor center before your first trailhead stop"
+      ]
+    },
+    {
+      "type": "weather",
+      "group": "Plan",
+      "title": "Weather for your dates"
+    },
+    {
+      "type": "holidays",
+      "group": "Plan",
+      "title": "Public holidays & closures"
+    },
+    {
+      "type": "panel",
+      "group": "Money & budget",
+      "title": "Money & currency",
+      "body": "<p>US Dollar, no currency exchange needed. Cards are accepted almost everywhere in Sedona, including the local food spots below — this is not a cash-only town the way some destinations are. Tipping norms match the rest of the US (see Local essentials above).</p>"
+    },
+    {
+      "type": "budget",
+      "group": "Money & budget",
+      "title": "Budget & daily costs",
+      "intro": "Solo traveler, Comfortable tier ($150–300/day target from intake). Honest flag: Sedona's lodging runs well above the average for a US leisure destination — a realistic mid-range stay plus a rental car alone can approach the top of this budget before food or activities. Figures below are sourced estimates (≈), not confirmed bookings.",
+      "currency": "$",
+      "days": 6,
+      "party": 1,
+      "items": [
+        {
+          "label": "Lodging, per night (Sedona, 3★ average)",
+          "basis": "day",
+          "est": 173,
+          "low": 143,
+          "high": 231,
+          "note": "≈$173/night for a 3★ property; 2★ runs ≈$143, the town-wide all-hotel average is ≈$231 (pulled up by luxury resorts at $300–700+). Sedona is meaningfully pricier than a typical US leisure destination — shop early.",
+          "source_url": "https://www.budgetyourtrip.com/hotels/united-states-of-america/sedona-5313667",
+          "verified_on": "2026-07-19",
+          "shelf_life": "venue"
+        },
+        {
+          "label": "Rental car, per day (compact/mid-size)",
+          "basis": "day",
+          "est": 50,
+          "low": 39,
+          "high": 57,
+          "note": "≈$39–44/day for economy/compact, ≈$57/day for a mid-size — recommended over rideshare for this trip (see Getting around).",
+          "source_url": "https://www.kayak.com/Phoenix-Sky-Harbor-Intl-Airport-Car-Rentals.PHX.cap.ksp",
+          "verified_on": "2026-07-19",
+          "shelf_life": "transit"
+        },
+        {
+          "label": "Food & drink, per day",
+          "basis": "day",
+          "est": 65,
+          "note": "Own estimate, not a sourced figure — mixing a casual local breakfast/lunch spot with one nicer dinner."
+        },
+        {
+          "label": "Red Rock Pass (7-day)",
+          "basis": "trip",
+          "est": 15,
+          "note": "Covers parking at Coconino National Forest fee sites (Bell Rock, Cathedral Rock trailhead, and others) for the whole week — cheaper than the $5/day rate past 3 uses.",
+          "source_url": "https://www.fs.usda.gov/r03/coconino/passes/red-rock-coconino-passes-program",
+          "verified_on": "2026-07-19",
+          "shelf_life": "venue"
+        },
+        {
+          "label": "Spa treatment (Day 2)",
+          "basis": "trip",
+          "est": 220,
+          "note": "⚠ Own estimate, not sourced — L'Auberge de Sedona's spa menu (Deep Tissue, Swedish, Desert Flower, 60/90 min) doesn't publish prices online. Call ahead to confirm before booking."
+        },
+        {
+          "label": "Flights — round trip",
+          "basis": "trip",
+          "est": 0,
+          "note": "Omitted — depends entirely on your home airport; the intake didn't specify one."
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Health & safety",
+      "title": "Health & pharmacy",
+      "body": "<p><b>These dates fall inside Arizona's monsoon season (mid-June through end of September) — treat this as a real safety topic, not a packing footnote.</b> Afternoon thunderstorms can send flash floods through washes and canyons miles from where the storm actually hit, with no warning if you can't see the clouds. Six inches of fast-moving water can knock down an adult; 18 inches can carry away a vehicle. Practical rules: never hike during rain or an active storm forecast; never cross a running wash; finish outdoor plans by early afternoon before storms typically build; check the NWS forecast the morning of, not the night before.</p><p>Elevation (≈4,350 ft) and low humidity mean dehydration sneaks up faster than it would at sea level — carry more water than feels necessary, especially on any trail. High-desert sun is intense; sunscreen, a hat, and shade breaks matter even on a “short walk.”</p><p>For anything more than minor: Verde Valley Medical Center in Cottonwood (≈20 min from Sedona) is the nearest full hospital; Sedona itself has an urgent care clinic in town.</p>",
+      "source_url": "https://www.weather.gov/fgz/FlashFlood",
+      "verified_on": "2026-07-19",
+      "shelf_life": "default"
+    },
+    {
+      "type": "panel",
+      "group": "Etiquette & language",
+      "title": "Etiquette & language",
+      "body": "<p>Sedona's red rocks — including the sites marketed as “vortexes” — were sacred to the Yavapai and Hopi long before the New Age movement arrived. Treat them accordingly, whether or not you personally engage with the energy-site framing.</p><ul><li><b>Stay on marked trails</b> — off-trail travel damages fragile high-desert soil crust that takes decades to recover.</li><li><b>Don't build rock cairns or stack rocks</b> for photos — existing rock features may carry cultural or wayfinding significance, and moving them disrupts both.</li><li><b>Leave no trace</b> — carry out all trash, including fruit peels and anything else that feels “natural.”</li><li><b>Keep voices low at vortex/viewpoint sites</b> — you'll likely see people meditating, doing yoga, or holding quiet ceremony; treat it the way you'd treat any place of quiet reflection.</li><li><b>Don't leave offerings, ribbons, or crystals</b> at sites — well-intentioned but treated as littering and cultural appropriation by both land managers and Native communities.</li><li><b>Support local, Native-owned businesses where you can</b> — several galleries and shops in the area are Native-owned; ask, and prefer them over generic souvenir shops.</li></ul>"
+    },
+    {
+      "type": "routes",
+      "group": "Getting around",
+      "title": "Key transit routes",
+      "steps": [
+        "PHX Airport → Sedona: rental car, ≈2 hours via I-17/AZ-179 (add ≈30 min on weekends). This is the recommended default for the whole trip — see below.",
+        "⚠ Sedona's free trailhead shuttle is only PARTIALLY running as of this check: Route 15 (Cathedral Rock/Little Horse) is active; Routes 11 (Dry Creek/Mescal) and 14 (Soldier Pass) are currently suspended. Re-check sedonashuttle.com close to your dates — this could change either direction.",
+        "Sedona Shuttle Connect: on-demand curb-to-curb service, ≈$2/ride, where it's running — a backup option, not the primary plan, given the route suspensions above.",
+        "Rideshare (Uber/Lyft): available but reported inconsistent, especially in peak season, with drivers often based out of Flagstaff (≈30 min away) rather than Sedona itself. Don't plan around it being available on demand.",
+        "Around town (Uptown, Tlaquepaque): walkable once parked — most of Days 4 and 5 need no driving between stops once you've arrived.",
+        "Any trailhead parking (Bell Rock, Cathedral Rock, Airport Mesa's lower lot): requires the Red Rock Pass. Airport Mesa's rim pullouts are a free alternative with very limited spots — arrive early."
+      ],
+      "source_url": "https://sedonashuttle.com/",
+      "verified_on": "2026-07-19",
+      "shelf_life": "transit"
+    },
+    {
+      "type": "map",
+      "group": "Getting around",
+      "title": "Orientation map",
+      "center": { "lat": 34.8688613, "lng": -111.7614394 },
+      "span": 0.1,
+      "points": [
+        { "name": "Sedona", "lat": 34.8688613, "lng": -111.7614394, "place_id": "R10693662" },
+        { "name": "Cathedral Rock", "lat": 34.8200185, "lng": -111.7932108, "place_id": "N359263691" },
+        { "name": "Bell Rock", "lat": 34.8002966, "lng": -111.764598, "place_id": "N359262022" },
+        { "name": "Airport Mesa Viewpoint", "lat": 34.8558039, "lng": -111.7791227, "place_id": "N5351892824" },
+        { "name": "Tlaquepaque Arts & Shopping Village", "lat": 34.8619807, "lng": -111.7628127, "place_id": "W782880628" },
+        { "name": "Uptown Sedona", "lat": 34.869779, "lng": -111.7609231, "place_id": "N9788879382" }
+      ]
+    },
+    {
+      "type": "days",
+      "group": "Itinerary",
+      "title": "Day by day",
+      "items": [
+        {
+          "date": "Wed Sep 2",
+          "title": "Arrival — the long way in",
+          "pace": "Slow — travel day, nothing else planned",
+          "tldr": "Fly into PHX, drive ≈2 hours to Sedona, and let sunset at Airport Mesa be the only plan for the evening.",
+          "body": "<p>Land at PHX, pick up the rental car, drive ≈2 hours north to Sedona (I-17 → AZ-179). Check in, unpack at your own pace. As the light turns gold, head to <b>Airport Mesa's free rim pullouts</b> for sunset — arrive 30–45 minutes early, since the small free lots fill up and the paid $3 upper lot is the backup, not the plan. No dinner reservation needed tonight; keep it easy after a long travel day.</p>",
+          "energy": "slow",
+          "env": "mixed",
+          "constraints": ["Arrive at Airport Mesa 30-45 min before sunset — free lots fill fast"],
+          "waypoints": [
+            { "name": "PHX Airport", "lat": 33.4484367, "lng": -112.074141 },
+            { "name": "Airport Mesa Viewpoint (sunset)", "lat": 34.8558039, "lng": -111.7791227, "time": "≈sunset" }
+          ]
+        },
+        {
+          "date": "Thu Sep 3",
+          "title": "Spa day",
+          "pace": "Slow — one booking, the rest of the day open",
+          "tldr": "A full spa morning at L'Auberge de Sedona, then the day stays deliberately unscheduled.",
+          "body": "<p><b>L'Auberge de Sedona's L'Apothecary Spa</b>, set along Oak Creek — Deep Tissue, Swedish, or Desert Flower massage, 60 or 90 minutes. Prices aren't published online; <b>⚠ call ahead to book and confirm cost</b>. Mii amo, Sedona's best-known destination spa (built directly on one of the vortex sites), is the more immersive alternative if your dates and budget allow — but note their offerings are structured as 3/4/7/10-<i>night</i> packages, not simple day treatments, so it needs planning further ahead than a single spa afternoon. After your treatment: a slow lunch by the creek, afternoon left open on purpose.</p><p><b>Book?</b> Call ahead for L'Auberge (855-905-5745) — no confirmed online same-day booking found.</p>",
+          "energy": "slow",
+          "env": "mixed",
+          "constraints": ["Call ahead — no confirmed walk-in booking"],
+          "waypoints": [
+            { "name": "L'Auberge de Sedona spa", "time": "≈9:00" }
+          ]
+        },
+        {
+          "date": "Fri Sep 4",
+          "title": "Red rocks, the easy way",
+          "pace": "Balanced — morning outdoors, afternoon off (monsoon-aware)",
+          "tldr": "Cathedral Rock and Bell Rock from their easy, non-scramble vantage points — done by early afternoon before any monsoon storms build.",
+          "body": "<p>Morning start, Red Rock Pass on the dashboard. <b>Bell Rock Pathway</b> is a mostly flat, easy walk with red-rock views the whole way — no scrambling required. <b>Cathedral Rock</b>'s actual summit trail involves hand-over-hand rock scrambling and isn't the pick for a relaxed pace; view it instead from the pathway/vista areas, which need no climbing. Both sites are considered sacred by the Yavapai and Hopi — quiet voice, stay on trail, no cairns (see Etiquette). <b>Finish outdoor time by early afternoon</b> — September is inside monsoon season, and afternoon storms can trigger flash floods with no warning even from a clear sky overhead. Afternoon: back in town, rest or a slow lunch.</p><p><b>Where?</b> Both trailheads sit along AZ-179, ≈10–15 min from Uptown. <b>Book?</b> Walk-in; just bring the Red Rock Pass.</p>",
+          "energy": "balanced",
+          "env": "outdoor",
+          "constraints": ["Outdoor plans end by early afternoon — monsoon storm risk"],
+          "waypoints": [
+            { "name": "Bell Rock Pathway", "lat": 34.8002966, "lng": -111.764598, "time": "≈8:00" },
+            { "name": "Cathedral Rock (vista)", "lat": 34.8200185, "lng": -111.7932108, "time": "≈10:00" }
+          ]
+        },
+        {
+          "date": "Sat Sep 5",
+          "title": "Local food + Uptown",
+          "pace": "Balanced — one neighborhood, mostly on foot",
+          "tldr": "Breakfast at a local favorite, an afternoon browsing Uptown's galleries, dinner at Sedona's most in-demand kitchen.",
+          "body": "<p>Breakfast at <b>Wildcraft Cafe</b> (health-conscious, organic, open daily 8am–3pm) or the 30-year local institution <b>Coffee Pot Restaurant</b>. Spend the afternoon browsing <b>Uptown Sedona</b>'s galleries and shops on foot — lighter shopping than Day 5's dedicated stop, more about the wander. For dinner, <b>Elote Cafe</b> is Sedona's most in-demand table (bold Southwestern/Mexican flavors) — <b>reservations recommended</b>, not a walk-in bet on a Saturday. If it's booked out, <b>El Rincon</b> is a reliable, no-frills Mexican alternative.</p><p><b>Book?</b> Elote Cafe — reserve ahead. Everything else is walk-in.</p>",
+          "energy": "balanced",
+          "env": "mixed",
+          "constraints": ["Elote Cafe — reserve ahead, especially for a Saturday"],
+          "waypoints": [
+            { "name": "Uptown Sedona", "lat": 34.869779, "lng": -111.7609231, "time": "≈13:00" }
+          ]
+        },
+        {
+          "date": "Sun Sep 6",
+          "title": "Tlaquepaque",
+          "pace": "Slow — one destination, all day if you want it",
+          "tldr": "Sedona's arts-and-shopping village — Spanish colonial architecture, galleries, courtyards, and Sunday's slightly longer hours.",
+          "body": "<p><b>Tlaquepaque Arts & Shopping Village</b> — Spanish colonial-style courtyards built around sycamore trees, galleries, and boutiques rather than chain shopping. Hours run Mon–Thu 10am–5pm, <b>Fri–Sun 10am–6pm</b> — Sunday's extended hours make this a good full-day pick. Lunch on-site; several restaurants are tucked into the courtyards.</p><p><b>How from base?</b> A short drive or walk from Uptown, ≈5–10 min. <b>Book?</b> Walk-in for the village itself.</p>",
+          "energy": "slow",
+          "env": "mixed",
+          "source_url": "https://www.yelp.com/biz/tlaquepaque-arts-and-shopping-village-sedona",
+          "verified_on": "2026-07-19",
+          "waypoints": [
+            { "name": "Tlaquepaque Arts & Shopping Village", "lat": 34.8619807, "lng": -111.7628127, "time": "≈11:00" }
+          ]
+        },
+        {
+          "date": "Mon Sep 7",
+          "title": "Scenic drive + last relaxation",
+          "pace": "Slow — a drive, not a hike, and nothing after",
+          "tldr": "Oak Creek Canyon's scenic byway in the morning, then a deliberately empty final afternoon and evening.",
+          "body": "<p>A slow morning drive up <b>Oak Creek Canyon</b> along the Red Rock Scenic Byway — pull-offs and viewpoints rather than a hike, matching the pace this whole trip has kept. Back in Sedona by early afternoon (same monsoon-timing logic as Friday). The rest of the day is intentionally unplanned: a last easy walk, packing at a relaxed pace, an early dinner wherever felt good earlier in the week.</p>",
+          "energy": "slow",
+          "env": "outdoor",
+          "constraints": ["Back from the canyon drive by early afternoon — monsoon storm risk"]
+        },
+        {
+          "date": "Tue Sep 8",
+          "title": "Departure",
+          "pace": "Slow — budget the drive back",
+          "tldr": "A light final morning, then the ≈2-hour drive back to PHX — budget real time for it, not just the flight.",
+          "body": "<p>Pack, a light breakfast. Unlike a direct-arrival destination, getting to the airport here IS a significant part of the day — budget the full ≈2 hours back to PHX (more with weekend traffic) plus normal airport time, not just a short transfer.</p>",
+          "energy": "slow",
+          "env": "mixed"
+        }
+      ]
+    },
+    {
+      "type": "sights",
+      "group": "Sights",
+      "title": "Top sights",
+      "items": [
+        {
+          "name": "Cathedral Rock",
+          "kicker": "View it, don't scramble it",
+          "body": "<p>Sedona's most photographed formation. The actual summit trail requires hand-over-hand rock scrambling — not a fit for a relaxed pace or a first solo trip. The pathway and vista viewpoints deliver the same red-rock views without the climb. Considered sacred by the Yavapai and Hopi; stay on trail, keep voices low.</p>",
+          "img": { "file": "Cathedral Rock - Sedona AZ-1.jpg", "alt": "Cathedral Rock formation near Sedona" },
+          "map": { "lat": 34.8200185, "lng": -111.7932108 }
+        },
+        {
+          "name": "Bell Rock",
+          "kicker": "The easy red-rock walk",
+          "body": "<p>A mostly flat pathway with constant red-rock views and none of Cathedral Rock's scramble — the better pick for an easy morning. Requires the Red Rock Pass for trailhead parking.</p>",
+          "map": { "lat": 34.8002966, "lng": -111.764598 },
+          "source_url": "https://www.fs.usda.gov/r03/coconino/passes/red-rock-coconino-passes-program",
+          "verified_on": "2026-07-19",
+          "shelf_life": "venue"
+        },
+        {
+          "name": "Tlaquepaque Arts & Shopping Village",
+          "kicker": "Spanish colonial courtyards, not a mall",
+          "body": "<p>Built around existing sycamore trees rather than clearing them — galleries, boutiques, and restaurants inside genuinely distinctive architecture. Fri–Sun keeps later hours (10am–6pm) than the Mon–Thu schedule (10am–5pm).</p>",
+          "img": { "file": "Sedona Tlaquepaque (36369264511).jpg", "alt": "Tlaquepaque Arts & Shopping Village courtyard in Sedona" },
+          "map": { "lat": 34.8619807, "lng": -111.7628127 },
+          "source_url": "https://www.yelp.com/biz/tlaquepaque-arts-and-shopping-village-sedona",
+          "verified_on": "2026-07-19",
+          "shelf_life": "venue"
+        },
+        {
+          "name": "Airport Mesa Viewpoint",
+          "kicker": "Free sunset views, if you're early",
+          "body": "<p>360-degree red-rock views from a rim pulled right off Airport Road. The rim pullouts are free but hold only a few cars each — arrive 30-45 minutes before sunset. A paid $3 upper lot is the fallback if the free spots are gone.</p>",
+          "img": { "file": "Sedona Sunset Airport Mesa.jpg", "alt": "Sunset view from Airport Mesa near Sedona" },
+          "map": { "lat": 34.8558039, "lng": -111.7791227 }
+        }
+      ]
+    },
+    {
+      "type": "prose",
+      "group": "Food & shopping",
+      "title": "What to eat",
+      "body": "<p><b>Wildcraft Cafe</b> — health-conscious, organic, vegan/paleo/gluten-free options, open daily 8am–3pm — is the pick for an easy local breakfast or lunch that isn't a hotel buffet.</p><p><b>Elote Cafe</b> is Sedona's most in-demand table: bold, elevated Southwestern and Mexican cooking. Reserve ahead, especially on a weekend — it's not a reliable walk-in.</p><p><b>El Rincon</b> and <b>Tamaliza</b> both do traditional Mexican food without the elevated price or the wait — good backups if Elote is booked out.</p><p><b>Coffee Pot Restaurant</b> has been a west-side local institution for 30+ years — a straightforward, unpretentious breakfast spot.</p><p>A note on tourist-trap avoidance: the generic “best restaurants in Sedona” lists skew toward the Uptown strip closest to hotels — this guide deliberately routes through spots local guides actually name as where residents eat.</p>"
+    },
+    {
+      "type": "prose",
+      "group": "References",
+      "title": "Sources & further reading",
+      "body": "<ul><li><a href=\"https://www.tsa.gov/realid\">TSA — REAL ID</a> (entry documents)</li><li><a href=\"https://www.fs.usda.gov/r03/coconino/passes/red-rock-coconino-passes-program\">Coconino National Forest — Red Rock Pass Program</a></li><li><a href=\"https://sedonashuttle.com/\">Sedona Shuttle — live route status</a></li><li><a href=\"https://www.weather.gov/fgz/FlashFlood\">National Weather Service Flagstaff — Flash Flood safety</a></li><li><a href=\"https://tlaq.com/\">Tlaquepaque Arts & Shopping Village — official site</a></li><li><a href=\"https://www.lauberge.com/wellness-spa/\">L'Auberge de Sedona — L'Apothecary Spa</a></li><li><a href=\"https://miiamo.com/\">Mii amo — destination spa</a></li></ul>"
+    }
+  ]
+}

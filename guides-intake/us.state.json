@@ -1,0 +1,16 @@
+{
+  "slug": "us",
+  "createdAt": "2026-07-19T05:00:00.000Z",
+  "updatedAt": "2026-07-19T06:36:09.687Z",
+  "stages": {
+    "scaffold": "2026-07-19T05:00:00.000Z",
+    "passA": "2026-07-19T06:36:09.453Z",
+    "passB": "2026-07-19T06:36:09.530Z",
+    "reconcile": "2026-07-19T06:36:09.608Z",
+    "verified": "2026-07-19T06:36:09.687Z"
+  },
+  "attempts": 0,
+  "notes": [
+    "Re-scaffolded for Sedona after the Hawaii pivot — see guides-intake/us.md pivot note"
+  ]
+}
