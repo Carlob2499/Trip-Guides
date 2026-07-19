@@ -29,6 +29,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
+
+      # issue-to-scaffold.mjs → scaffold-guide.mjs → intake-schema.mjs imports `zod` — every
+      # other workflow in this repo installs dependencies before running a Node script; this
+      # one didn't, so the very first real issue filed through it failed at import time with
+      # ERR_MODULE_NOT_FOUND before ever reaching a line of this repo's own code.
+      - run: npm ci
 
       - name: Parse issue and generate scaffold
         id: gen
