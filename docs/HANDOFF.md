@@ -72,17 +72,27 @@ secret. TRAVELER_PATTERNS still has only 2 data points.
 
 ## Where we left off
 
+**Sedona (`/guides/us/`) is graduated and live — issue #11 closed.** Before graduating,
+ran a full content pass on its three flagged judgment calls (all resolved with fresh T0
+checks, not just re-approved): the shuttle suspension turned out to be an active Pocket
+Fire forest-closure order through Sep 30 — folded into Health & Safety, Getting Around,
+and a rewritten Day 6 (its Oak Creek Canyon drive is the one itinerary item inside the
+closure zone, now with a verified-safe fallback); Mii amo's package structure corrected to
+2/3/4/7/10-night (was missing the 2-night option); the budget honesty flag replaced with
+the actual recomputed figure (≈$327/day, ~9% over target, not just "approaching" it). Full
+trail in `guides-intake/us.md`.
+
 **Ready for the creator right now:**
 
 1. **Once `CLAUDE_CODE_OAUTH_TOKEN` exists, file a fresh New-guide issue** — this is now
-   the real first end-to-end proof of BOTH the automated chain AND the new auto-graduate +
+   the real first end-to-end proof of BOTH the automated chain AND the auto-graduate +
    live-progress work in the same run. Watch the progress page in the bot's confirmation
    comment; if it reaches verify PASS, the guide should go live with no further clicks.
-2. **Issue #11 (graduate: us/Sedona)** is still open under the old manual flow — apply
-   `graduate-approved` whenever it holds up; unaffected by this session's changes.
+   (Sedona doesn't test this path — it was graduated directly via the CLI, not through a
+   fresh research-pass.yml run.)
 
-**Re-prompt the creator with:** "The New Guide pipeline is now fully autonomous — file the
-issue form, and if research reaches a verify PASS it graduates and publishes itself, no
-label click needed. There's also a live progress page now (timer + step checklist) linked
-from the bot's confirmation comment and from any draft guide's own page. Once you've added
-the OAuth secret, want to file a fresh guide and watch the whole thing run for real?"
+**Re-prompt the creator with:** "Sedona is graduated and live — found and fixed a real
+issue along the way (an active wildfire closure near Sedona that affects one itinerary
+day) before publishing it. The New Guide pipeline itself is fully autonomous now too —
+once you've added the OAuth secret, want to file a fresh guide and watch the whole thing
+run for real, start to finish?"
