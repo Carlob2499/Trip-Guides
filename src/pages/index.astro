@@ -280,8 +280,16 @@ const continents = CONTINENT_ORDER.filter(c => gridContinents.has(c));
           </label>
         </div>
         <label class="ng-field">
+          <span>Anchor event</span>
+          <input type="text" id="ngAnchor" placeholder="e.g. Pokémon GO Wild Area — Mexico City, Nov 6–8 2026" autocomplete="off" />
+        </label>
+        <label class="ng-field">
           <span>Number of travelers</span>
           <input type="number" id="ngTravelers" min="1" placeholder="e.g. 3" />
+        </label>
+        <label class="ng-field">
+          <span>Who's this for / party</span>
+          <input type="text" id="ngParty" placeholder="e.g. the Korea group (3 mid-20s, heavy walkers) / family of 5 with grandparents" autocomplete="off" />
         </label>
         <label class="ng-field">
           <span>Pace</span>
@@ -290,6 +298,15 @@ const continents = CONTINENT_ORDER.filter(c => gridContinents.has(c));
             <option value="packed">packed</option>
             <option value="balanced">balanced</option>
             <option value="slow">slow</option>
+          </select>
+        </label>
+        <label class="ng-field">
+          <span>Travel style</span>
+          <select id="ngTravelStyle">
+            <option value="">undecided</option>
+            <option value="Bucket-list must-sees">Bucket-list must-sees</option>
+            <option value="Off-the-beaten-path">Off-the-beaten-path</option>
+            <option value="Balanced">Balanced</option>
           </select>
         </label>
         {[1, 2, 3].map((n) => (
@@ -404,8 +421,11 @@ const continents = CONTINENT_ORDER.filter(c => gridContinents.has(c));
             params.set("country", country);
             params.set("cities", val("ngCities"));
             params.set("dates", dates);
+            params.set("anchor", val("ngAnchor"));
             params.set("travelers", val("ngTravelers"));
+            params.set("party", val("ngParty"));
             params.set("pace", val("ngPace"));
+            params.set("travel-style", val("ngTravelStyle"));
             params.set("priority1", val("ngPriority1"));
             params.set("priority2", val("ngPriority2"));
             params.set("priority3", val("ngPriority3"));

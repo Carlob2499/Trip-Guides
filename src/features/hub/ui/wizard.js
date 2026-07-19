@@ -16,17 +16,29 @@ import { reducedMotion } from "../../../scripts/util.js";
 
   /* ── Carve the existing form into steps ─────────────────────────────────
      Step 1 Where & when · Step 2 Who & style · Step 3 What to research.
-     The fields already exist; the wizard re-parents them (no data change). */
+     The fields already exist; the wizard re-parents them (no data change).
+
+     .ng-row (the date pair) wraps two .ng-field labels — querying both classes
+     together double-matched the nested labels and silently overwrote the row's
+     mapping with just the start-date label, orphaning "End date" outside the
+     step it belonged to (previously masked because nothing sat between Start
+     and End; adding Anchor event between them made the misplacement visible).
+     Map rows first, then only .ng-field elements that AREN'T already part of
+     a mapped row. */
   var fields = {};
-  Array.prototype.forEach.call(form.querySelectorAll(".ng-field, .ng-row"), function (el) {
+  Array.prototype.forEach.call(form.querySelectorAll(".ng-row"), function (row) {
+    var input = row.querySelector("input,select,textarea");
+    if (input) fields[input.id] = row; // key the whole row by its first input (start date)
+  });
+  Array.prototype.forEach.call(form.querySelectorAll(".ng-field"), function (el) {
+    if (el.closest(".ng-row")) return; // already captured via its row above
     var input = el.querySelector("input,select,textarea");
-    if (input) fields[input.id] = el.classList.contains("ng-row") ? el : el;
-    // .ng-row holds the two date fields; key it by its first input.
+    if (input) fields[input.id] = el;
   });
 
   var steps = [
-    { title: "Where & when", ids: ["ngCountry", "ngCities", "ngStart"] },
-    { title: "Who & style", ids: ["ngTravelers", "ngPace", "ngBudget"] },
+    { title: "Where & when", ids: ["ngCountry", "ngCities", "ngStart", "ngAnchor"] },
+    { title: "Who & style", ids: ["ngTravelers", "ngParty", "ngPace", "ngTravelStyle", "ngBudget"] },
     { title: "What to research", ids: ["ngPriority1", "ngPriority2", "ngPriority3", "ngNiche", "ngComments"] },
   ];
 
