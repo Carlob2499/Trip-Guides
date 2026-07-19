@@ -21,35 +21,40 @@
 
 ## Snapshot (updated 2026-07-18, session close)
 
-**Backbone complete, the approved feature wave shipped, and the pipeline just went from
-5 manual touchpoints to 2.** ~450 tests, all on `main`.
+**Backbone complete, the approved feature wave shipped, the pipeline went from 5 manual
+touchpoints to 2 — and this session it got its first real-world exercise, which surfaced
+and fixed 3 genuine bugs.** 450 tests, all on `main`.
 
-- **Pipeline complete (P0–P4) + streamlined this session:** typed intake → resumable
-  dual-pass research (checkpoints) → `npm run verify` scorecard → graduate-on-evidence →
-  weekly recert matrix. **New:** `new-guide.yml` auto-dispatches `research-pass.yml` the
-  moment a scaffold commits (filing the issue is now the only manual step to start a guide);
-  a persisted attempt counter (`pipeline.mjs --bump-attempt`) stops a stuck run after 5
-  attempts and files a `stuck` issue instead of resuming forever; on a full verify PASS the
-  research agent merges its own branch to `main` (`scripts/land-branch.sh`, real PR,
-  auto-merged — not a hand-rolled push) and auto-files the `graduate-request` nomination
-  itself. **The one deliberately-kept manual step:** graduating to the curated grid still
-  needs the owner's `graduate-approved` label — the mechanical gates can't judge rubric
-  rows #6/#8/#9/#12 (anchor/priority/party-fit/authenticity), so a confidently-wrong fact
-  still needs a human glance before it's presented as trustworthy (creator confirmed this
-  tradeoff explicitly). **New — scoped edits:** a **✎ Request a change** button on every
-  guide page (draft or published) files a "Request a change" issue; `modify-approved`
-  (owner-only) runs `modify-guide.yml`, the skill's "Edit an existing guide" mode, landed
-  the same way. Also fixed: `graduate-guide.mjs` only handled flat-file guides before —
-  now handles the split-directory shape too (Korea/Denmark's actual shape).
-- **Visual/motion complete (V1, V3a–d, V4):** card→hero morph · first-open day-story ·
-  native scroll reveals · story-mode itinerary · lead scannability · cover-extracted
-  palettes (one precedence on guide+hub+OG). Runtime: connection state machine,
-  cold-visitor strip, weather day-swap (`env` tags, explicit-only), PWA complete. All
-  chrome (share/SOS/search/exports) functionally verified in-browser.
-- **`docs/FEATURES.md` wave — ALL SEVEN SHIPPED:** #1 transit deep-links · #5 arrival
-  autopilot · #6 phrase cards · #7 entry-requirements (Trip kit tab houses 5/6/7) · #8 sun &
-  daylight strip · #9 advisory pill (US State Dept, honest-blank below Level 2) · #10 trip
-  recap card. Held: #2 prep timeline, #3 budget pact (revivable). Dropped: #4 vault.
+- **Real-world round (this session):** the creator filed a real "New guide: Hawaii" issue
+  (#9) through the site and hit a live failure: `new-guide.yml`'s scaffold step never ran
+  `npm ci` before a script that imports `zod` → `ERR_MODULE_NOT_FOUND` on the very first
+  real issue. Fixed (added the install step). Separately, the New Guide wizard modal was
+  silently dropping 3 fields (anchor event, party, travel style) — the intake form never
+  asked for them, so nothing was there to transcribe into the GitHub issue; added the
+  inputs and wired them into the submit URL. Fixing that surfaced a second, independent
+  pre-existing bug: a double-matching CSS selector in `wizard.js`'s field-mapping orphaned
+  "End date" outside its step. Both wizard bugs fixed and verified end-to-end in-browser
+  (all 3 steps render and advance correctly) — commit `ced8d0d`. Also fixed 2 pre-existing
+  a11y color-contrast violations (Denmark light mode + a previously-undetected Korea
+  dark-mode mirror case) via `color-mix(in srgb, var(--accent) 70%, var(--ink) 30%)`,
+  root-caused to `MIN_ACCENT_CONTRAST=3.0` in `extract-palette.mjs` being sized for
+  large/decorative use, not the 4.5:1 small-text/active-tab uses it also serves.
+  **Issue #9 (Hawaii) itself never scaffolded** — it failed before the fix landed, so it
+  needs the `new-guide` label re-applied (or a fresh issue filed) to actually try again.
+
+- **Pipeline complete (P0–P4) + streamlined:** typed intake → resumable dual-pass research
+  → `npm run verify` scorecard → graduate-on-evidence → weekly recert. Scaffold auto-starts
+  research; a persisted attempt counter caps stuck runs at 5 and files a `stuck` issue; a
+  verify PASS auto-merges to `main` (`scripts/land-branch.sh`) and auto-files the
+  graduation nomination. **Only manual step:** the owner's `graduate-approved` label — the
+  mechanical gates can't judge anchor/priority/party-fit/authenticity, so a confidently-wrong
+  fact still needs a human glance. **Scoped edits:** a **✎ Request a change** button on every
+  guide files an issue; `modify-approved` runs `modify-guide.yml` the same way.
+  `graduate-guide.mjs` now handles both flat-file and split-directory guide shapes.
+- **Visual/motion + `docs/FEATURES.md` wave complete:** card→hero morph, first-open
+  day-story, story-mode itinerary, cover-extracted palettes, PWA, and all 7 planned
+  traveler features (transit deep-links, arrival autopilot, phrase cards, entry-requirements,
+  sun/daylight strip, advisory pill, trip recap). Held: #2/#3 (revivable). Dropped: #4.
 
 **Known waits:** R5 telemetry ranking needs real use; `docs/telemetry/summary.md` doesn't
 exist yet (no traffic); TRAVELER_PATTERNS grows only from real trips (2 data points total);
@@ -62,20 +67,20 @@ reviewed carefully, but there is no GitHub Actions runner in this environment to
 
 ## Where we left off
 
-The streamlining work is DONE and pushed. **The single highest-leverage next step is
-filing one real guide** — it's the first real proof the auto-chain → auto-merge →
-auto-nominate chain actually works under real interruption/retry conditions, not just in
-review. Everything else is secondary until that's proven.
+The wizard/a11y/npm-ci fixes from the real-world round are DONE, tested, built, and
+pushed. **The single highest-leverage next step is still the same one this doc named
+before that round started: get one guide all the way through the automated chain.**
+Issue #9 (Hawaii) is the natural candidate — it already exists, it just needs to actually
+scaffold now that the bug that killed it is fixed.
 
-1. **File a real guide** (the priority) — Issues → New guide, fill in a real destination +
-   intake. Watch the Actions tab: scaffold → research auto-starts → should land on `main`
-   on its own (or leave a draft PR if it can't). This is the end-to-end proof no amount of
-   local testing can substitute for.
+1. **Re-trigger issue #9** (or file a fresh one) — re-apply the `new-guide` label (removing
+   + re-adding it re-fires the `labeled` event) and watch the Actions tab: scaffold →
+   research auto-starts → should land on `main` on its own (or leave a draft PR if it
+   can't). This is the end-to-end proof no amount of local testing can substitute for.
 2. Try the new **✎ Request a change** button on Korea or Denmark for a small known fix, to
    prove `modify-guide.yml` end-to-end too.
 3. Revive a held feature (#2/#3), or populate #6/#7's dormant content via a research pass.
 
-**Re-prompt the creator with:** "The pipeline is now far more automated — filing one
-New-guide issue should carry a guide to `main` with no further clicks, and one label click
-graduates it. This has never run for real. Want to file a real destination and watch it go,
-or work on something else first?"
+**Re-prompt the creator with:** "The wizard now transcribes everything you fill in, and the
+bug that killed issue #9's scaffold is fixed. Want to re-trigger #9 (or file a fresh guide)
+and watch it run the full auto-chain for real, or work on something else first?"
