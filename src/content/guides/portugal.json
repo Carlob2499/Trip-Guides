@@ -1,0 +1,196 @@
+{
+  "kicker": "Field guide",
+  "title": "Lisbon, Porto & Portugal",
+  "dek": "",
+  "country": "Portugal",
+  "draft": true,
+  "verified": "⚠ Draft scaffold — nothing here is researched or verified yet. This is a starting skeleton; every price, hour, address and fact must be added and checked against a primary source before use (see the intake spec + CLAUDE.md).",
+  "provenance": "strict",
+  "roomId": "0ng69n48xy8abfb6",
+  "footer": "",
+  "sections": [
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "When you land",
+      "body": ""
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Local essentials",
+      "body": ""
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Entry & documents",
+      "body": ""
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Phone & data",
+      "body": ""
+    },
+    {
+      "type": "panel",
+      "group": "Plan",
+      "title": "Booking checklist",
+      "body": "",
+      "checklist": [
+        "Flights",
+        "Accommodation",
+        "Airport transfer",
+        "Travel insurance",
+        "Any timed tickets"
+      ]
+    },
+    {
+      "type": "weather",
+      "group": "Plan",
+      "title": "Weather for your dates"
+    },
+    {
+      "type": "holidays",
+      "group": "Plan",
+      "title": "Public holidays & closures"
+    },
+    {
+      "type": "panel",
+      "group": "Money & budget",
+      "title": "Money & currency",
+      "body": ""
+    },
+    {
+      "type": "budget",
+      "group": "Money & budget",
+      "title": "Budget & daily costs",
+      "intro": "Rough per-person estimates — replace the zeros with researched figures.",
+      "currency": "€",
+      "days": 7,
+      "items": [
+        {
+          "label": "Lodging, per night",
+          "basis": "day",
+          "est": 0
+        },
+        {
+          "label": "Food & drink, per day",
+          "basis": "day",
+          "est": 0
+        },
+        {
+          "label": "Local transport, per day",
+          "basis": "day",
+          "est": 0
+        },
+        {
+          "label": "Sights & activities, per day",
+          "basis": "day",
+          "est": 0
+        },
+        {
+          "label": "Flights — round trip",
+          "basis": "trip",
+          "est": 0
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "group": "Health & safety",
+      "title": "Health & pharmacy",
+      "body": ""
+    },
+    {
+      "type": "panel",
+      "group": "Etiquette & language",
+      "title": "Etiquette & language",
+      "body": ""
+    },
+    {
+      "type": "routes",
+      "group": "Getting around",
+      "title": "Key transit routes",
+      "steps": []
+    },
+    {
+      "type": "map",
+      "group": "Getting around",
+      "title": "Orientation map",
+      "center": {
+        "lat": 38.7223,
+        "lng": -9.1393
+      },
+      "span": 0.08
+    },
+    {
+      "type": "days",
+      "group": "Itinerary",
+      "title": "Day by day",
+      "items": [
+        {
+          "date": "Wed Jul 8",
+          "title": "",
+          "pace": "",
+          "body": ""
+        },
+        {
+          "date": "Thu Jul 9",
+          "title": "",
+          "pace": "",
+          "body": ""
+        },
+        {
+          "date": "Fri Jul 10",
+          "title": "",
+          "pace": "",
+          "body": ""
+        },
+        {
+          "date": "Sat Jul 11",
+          "title": "",
+          "pace": "",
+          "body": ""
+        },
+        {
+          "date": "Sun Jul 12",
+          "title": "",
+          "pace": "",
+          "body": ""
+        },
+        {
+          "date": "Mon Jul 13",
+          "title": "",
+          "pace": "",
+          "body": ""
+        },
+        {
+          "date": "Tue Jul 14",
+          "title": "",
+          "pace": "",
+          "body": ""
+        }
+      ]
+    },
+    {
+      "type": "sights",
+      "group": "Sights",
+      "title": "Top sights",
+      "items": []
+    },
+    {
+      "type": "prose",
+      "group": "Food & shopping",
+      "title": "What to eat",
+      "body": ""
+    },
+    {
+      "type": "prose",
+      "group": "References",
+      "title": "Sources & further reading",
+      "body": ""
+    }
+  ]
+}
