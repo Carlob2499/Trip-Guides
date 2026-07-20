@@ -23,7 +23,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           claude_args: |
             --model claude-sonnet-5
-            --allowedTools Read
+            --allowedTools Bash
           prompt: |
-            Reply with exactly: TOKEN_OK
-            Do not use any tools. Do nothing else.
+            Run exactly this one bash command and report its output, then stop:
+            echo "TOKEN_OK — auth verified"
