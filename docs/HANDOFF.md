@@ -112,7 +112,11 @@ session-by-session, each with its own ritual + clarifying questions):
 
 - `docs/PLAN_TRAVELER_FEATURES.md` — F0 (prove pipeline E2E, the gate) → F1 prep timeline →
   F2 budget pact → F3 populate dormant entry/phrases/env tags → F4 packing strip → F5 offline
-  confidence → F6 pre-trip auto-recert → F7 bar-test in verify loop.
+  confidence → F6 pre-trip auto-recert → F7 the Critic (own plan:
+  `docs/PLAN_PIPELINE_CRITIC.md`, staged C1 prompt-lens → C2 evidence gate → C3 full stage) →
+  F8 day-route optimizer (free what Wanderlog Pro charges for). Parity matrix + full
+  competitor sweep (incl. served-code inspection of Wanderlog/Mindtrip):
+  `docs/COMPETITIVE_LANDSCAPE.md`.
 - `docs/PLAN_VISUAL_OVERHAUL.md` — "The Overture & the Atlas": V1 foundation → V2 full-viewport
   intro hero before the guide grid (the creator's explicit ask) → V3 palette-tinted Atlas grid →
   V4 interior depth → V5 morph continuity → V6 QA/perf. Doctrine-bound to MOTION.md.

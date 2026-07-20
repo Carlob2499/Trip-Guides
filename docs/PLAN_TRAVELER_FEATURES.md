@@ -29,9 +29,12 @@ recap card) or the existing `live-data` models (weather, currency rate, rainy-da
   friction/stress** (Deloitte / Fullstory). → packing help, fewer decisions in-trip.
 - **~Half of group travelers have fought about money** on a trip (CIT Bank 2026, already in
   FEATURES.md). → budget pact.
-- Competitor scan (Wanderlog/TripIt/Polarsteps/AI planners): the market's paid moats are
-  email-import vaults and flight alerts (rejected here: no paid APIs, vault dropped by creator).
-  **Nobody competes on verified-fact freshness — that stays the moat**; these sessions deepen it.
+- **Full competitive sweep: `docs/COMPETITIVE_LANDSCAPE.md`** (Wanderlog, Mindtrip, Layla,
+  Stippl, GuideGeek, TripIt, Polarsteps, Roadtrippers, Elsewhere/kimkim — segments, parity
+  matrix, served-code inspection). Net: parity gaps worth closing are route optimization (F8),
+  packing (F4), proven offline (F5); live co-edit and booking/price APIs are **rejected with
+  reasons** (provenance moat, fee-funnel incentives). **Nobody competes on verified-fact
+  freshness — that stays the moat**; these sessions deepen it.
 
 ---
 
@@ -122,21 +125,36 @@ guides entering the T-7 window; probation mode first (report, don't auto-commit)
 supervised run, mirroring the auto-publish probation pattern. Update `/health/` verdict text.
 **Exit:** one real recert run on a live guide (post-F0, the token exists); HANDOFF.
 
-## Session F7 — The judgment layer: bar-test in the verify loop
+## Session F7 — The judgment layer: run the Critic plan
 
 **Why:** (from the Pass-C debate, 2026-07-20) the pipeline verifies facts but never judges the
-*guide*. Cheapest strong version: fold the bar test into the existing verify self-correction loop.
-**Clarifying questions:** (a) Confirm prompt-only scope (no new pipeline stage yet). (b) Which
-guide to trial it on.
-**Do:** prompt-only edit to `research-pass.yml`'s verify-loop step + the guide-author skill's done
-gate: before declaring PASS, read the full merged guide as the traveler; list every item a generic
-AI guide to this destination would also contain; replace or justify each against the intake
-ranking; log the pass's findings in the scorecard. NO new stage, NO STAGE_ORDER change.
-**Exit:** the next real research run's scorecard shows bar-test findings; evaluate on evidence
-whether a full Pass C stage is warranted (only then does it become its own plan). HANDOFF.
+*guide* — and per the competitive sweep, generic-AI convergence is every rival planner's shared
+weakness, so the critic is the anti-generic weapon.
+**Do:** execute **`docs/PLAN_PIPELINE_CRITIC.md`**, its own staged grand plan: C1 (bar-test as a
+prompt-only lens in the verify loop — buildable now), C2 (evidence gate after two real runs),
+C3 (promotion to a true Pass C stage only if the evidence says so). Its ritual, guardrails, and
+clarifying questions live there; this session IS that plan's next unrun session.
+
+## Session F8 — Day-route optimizer (beyond parity, free)
+
+**Why:** route optimization is Wanderlog **Pro's** headline paid feature ($39.99/yr, online-only)
+— and Waypoint already holds verified coordinates for every stop, so it can ship the same value
+free, client-side, and offline. Parity where it counts; beyond parity on price and honesty.
+**Clarifying questions:** (a) Suggest-only (like the rainy-day swap — advisory, never auto-apply)
+or a tap-to-reorder? Recommended: suggest-only, matching the honesty pattern. (b) Per-day scope
+only, or also flag "this stop belongs on a different day" (bigger; recommend deferring)?
+**Do:** pure model in a sealed silo (nearest-neighbor + 2-opt over the day's verified coords —
+tested against known-optimal fixtures; walking-distance heuristic, no routing API); a quiet
+"Reorder could save ≈N km of backtracking" advisory chip on day cards that opens the suggested
+order; honest-blank when a day has <3 located stops or the current order is already within
+tolerance. Zero network, zero schema changes.
+**Exit:** ship loop; advisory fires on a real guide day where reordering genuinely helps and
+stays silent elsewhere; HANDOFF.
 
 ---
 *Priority logic: F0 unlocks everything (factory proof). F1–F2 are the two research-validated,
 already-scoped features (held wave revived). F3 converts shipped mechanisms into real traveler
 safety value at pure research cost. F4–F5 are zero-API stress-reducers (packing 26%, offline
-confidence). F6–F7 deepen the moat (freshness + judgment). Re-sort only with new evidence.*
+confidence) that also close paid-competitor parity gaps. F6–F8 deepen the moat (freshness,
+judgment, and free-what-they-charge-for). Re-sort only with new evidence — the parity matrix in
+`docs/COMPETITIVE_LANDSCAPE.md` is the standing reference.*
