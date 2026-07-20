@@ -62,11 +62,15 @@ The Overture (V2) and the palette-tinted Atlas grid (V3) are both live on `main`
 with the intro, glides onto the guides, and each card now carries its own colour. Natural next
 moves, the creator's call:
 
-1. **V4 — Guide interior depth pass** (Opus, ~1.5–2.5h). Carry the new depth language INSIDE a
-   guide without touching the motion signature's ownership: one contour parallax layer behind the
-   masthead (extend `hero-parallax.js`, don't add a 2nd owner), unified section-entry easing,
-   verified-stamp settle micro-interaction. Opens with its clarifier: any guide sections to leave
-   visually untouched?
+1. **V4 — Guide interior depth pass** (IN PROGRESS). Findings from this session: the guide body
+   is deliberately calm-to-read with NO per-section "Checked" stamp shown (so the planned
+   stamp-settle has no target — dropped), and all live guides have opaque photo mastheads. Shipped
+   a SAFE first cut (option A): faint STATIC contours behind the masthead (`.mast-contours`,
+   z-index:-1, `src/lib/contours.ts`) — hero-zone only, never behind body text. But behind the
+   photo they're near-invisible at normal widths. **Awaiting creator's A/B call:** A = keep it
+   subtle (behind photo); B = a faint topographic overlay OVER the hero photo (visible, map-like,
+   on-theme). If B: move `.mast-contours` above the scrim at low opacity, tuned to keep the title
+   legible. `.mast-typo` scaffolds already have their own dot lattice — leave those alone.
 2. **V5 — Morph continuity** then **V6 — QA/perf** finish the visual plan.
 3. **F0 — prove the pipeline** (Opus driver, ~2–3h + wait). Needs the OAuth secret first — still
    the audit's #1 open item.
