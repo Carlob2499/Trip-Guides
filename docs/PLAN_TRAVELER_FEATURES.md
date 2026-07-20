@@ -21,6 +21,26 @@ recap card) or the existing `live-data` models (weather, currency rate, rainy-da
    this plan and its clarifying questions) and commit. The next session starts warm. Never skip
    this — it is how the plan survives session boundaries.
 
+## Model & time budget
+
+Per the repo's model-economy rule (HANDOFF operating rules): **Sonnet** for mechanical builds and
+all research/fact work; **Opus** where judgment or novel debugging dominates. The creator switches
+model at session start (`/model`) — each session's opening ritual includes reminding them.
+"Active" = hands-on agent time; "wall-clock" = pipeline runs you wait on, not attention.
+
+| Session | Model | Est. active | Notes |
+|---|---|---|---|
+| F0 pipeline proof | **Opus** driver (workflow agent stays Sonnet) | 1.5–3 h + 1–2 h wall-clock/run | Opus for first-run triage — failures will be novel; re-runs resume from checkpoints |
+| F1 prep timeline | Sonnet | 2–3.5 h | Schema (additive) + model + Trip kit card + sourced `due` research |
+| F2 budget pact | Sonnet | 1–2 h | Join logic + one chip; smallest build session |
+| F3 dormant content | Sonnet | 2–3 h | Pure guide-author research × 3 guides (entry, phrases, env tags) |
+| F4 packing strip | Sonnet | 1.5–2.5 h | Derivation model + Trip kit render |
+| F5 offline confidence | Sonnet | 2–3 h | Offline E2E debugging can drag; budget for it |
+| F6 pre-trip auto-recert | Sonnet | 1.5–2.5 h + first-run wall-clock | Probation mode first |
+| F7 the Critic | see `PLAN_PIPELINE_CRITIC.md` | (C1–C3 budgeted there) | |
+| F8 route optimizer | Sonnet | 2–3 h | 2-opt + fixtures + advisory chip |
+| **Plan total (excl. F7)** | | **≈ 14–22 h active** | Each session independently shippable |
+
 ## Research grounding (July 2026)
 
 - **61% of travelers** name hidden/unexpected fees as their top booking frustration; **31% are

@@ -121,6 +121,12 @@ session-by-session, each with its own ritual + clarifying questions):
   intro hero before the guide grid (the creator's explicit ask) → V3 palette-tinted Atlas grid →
   V4 interior depth → V5 morph continuity → V6 QA/perf. Doctrine-bound to MOTION.md.
 
+All three plans now carry a **Model & time budget** table (2026-07-20): per-session model
+(Sonnet for mechanical builds/research, Opus for design + judgment, per the operating rules
+above) and active-hours estimates. Totals: features ≈14–22 h (excl. F7), visual ≈9.5–16 h,
+critic ≈4–6 h. Session ritual everywhere: remind the creator to `/model`-switch at start, ask
+the session's clarifying questions, ship loop, rewrite this file at close.
+
 **Ready for the creator right now:**
 
 1. **Pick a plan and start its next session** (F0 needs `CLAUDE_CODE_OAUTH_TOKEN` — `claude
@@ -128,6 +134,7 @@ session-by-session, each with its own ritual + clarifying questions):
    clarifying questions and closes by rewriting this file.
 2. **Delete the leftover remote branch** (GitHub UI → branches → 🗑) so only `main` exists.
 
-**Re-prompt the creator with:** "Both grand plans are in the repo and every session is designed
-to start by asking you its clarifying questions. Want to open with V1 (visual foundation — no
-prerequisites) or F0 (prove the pipeline for real — needs the OAuth secret first)?"
+**Re-prompt the creator with:** "All plans are budgeted — every session now lists its model and
+time estimate. Cheapest high-value opener: V1 (Sonnet, ~2 h, no prerequisites) or F2 (Sonnet,
+~1–2 h). The gate everything else waits on is still F0 (Opus driver, ~2–3 h, needs the OAuth
+secret). Which do you want to run?"

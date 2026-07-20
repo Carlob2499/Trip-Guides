@@ -42,6 +42,22 @@ HANDOFF** naming the next session → commit. Visual sessions additionally run
 `npm run test:visual` and refresh Playwright snapshots deliberately (a visual overhaul EXPECTS
 diffs — review each, never blind-update).
 
+## Model & time budget
+
+Design sessions are the doctrine's Opus territory (HANDOFF operating rules: "Fable/Opus = design
+sessions"); the mechanical bookends (V1 foundation, V6 QA) run fine on Sonnet. The creator
+switches model at session start (`/model`) — each session's opening ritual includes the reminder.
+
+| Session | Model | Est. active | Notes |
+|---|---|---|---|
+| V1 foundation | Sonnet (Opus fine) | 1.5–2.5 h | Generators + tokens + stats collector; zero visual diff |
+| V2 the Overture | **Opus** | 2.5–4 h | The creative centerpiece; LCP/CLS + a11y guards take real care |
+| V3 the Atlas | **Opus** | 1.5–2.5 h | Palette tinting + reveal choreography |
+| V4 interior depth | **Opus** | 1.5–2.5 h | Extends existing owners — restraint is the skill |
+| V5 morph continuity | Sonnet (Opus if the morph fights back) | 1–2 h | Mostly View-Transition plumbing |
+| V6 QA + perf | Sonnet | 1.5–2.5 h | Matrix run + snapshot review + MOTION.md rewrite |
+| **Plan total** | | **≈ 9.5–16 h active** | Stop after any session; the site stays coherent |
+
 ---
 
 ## Session V1 — Foundation (no visible change yet)

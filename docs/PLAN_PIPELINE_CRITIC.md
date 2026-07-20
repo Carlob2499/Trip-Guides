@@ -30,6 +30,18 @@ Identical to the other grand plans (read `docs/HANDOFF.md` → session block →
 clarifiers → explicit go → build → ship loop → **rewrite HANDOFF naming the next session** →
 commit → push `main`).
 
+## Model & time budget
+
+| Session | Model | Est. active | Notes |
+|---|---|---|---|
+| C1 the lens | **Opus** | 1–1.5 h | Doctrine-writing — the bar-test prompt's wording IS the product |
+| C2 evidence gate | **Opus** | 0.75–1.5 h | Judgment session; gated on two real runs existing, not on effort |
+| C3 stage promotion | Sonnet (spec is explicit) | 2–3 h + one real-run wall-clock | Mechanical ripple; C1's charter is the spec |
+| **Plan total** | | **≈ 4–6 h active** | Plus the runtime cost C3 adds per guide (~+30–50%), paid only if promoted |
+
+The critique stage itself, if promoted, runs inside the pipeline on **Sonnet** like every other
+research stage (model-economy rule) — Opus only for a genuinely contested judgment reconcile.
+
 ---
 
 ## Session C1 — The critic as a lens (prompt-only; no new stage)
