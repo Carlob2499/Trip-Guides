@@ -38,15 +38,15 @@
 All three carry a **Model & time budget** table. Totals: features ≈14–22h (excl. F7), critic
 ≈4–6h, visual ≈9.5–16h.
 
-**This session ran V3 (The Atlas grid) — ✅ DONE, on `main`.** Option A (creator-picked from a
-rendered mock): each guide card now wears its own palette — a subtly tinted border at rest and a
-**glow in the guide's own colour on hover/focus** (`--accent` at 62%). Pure CSS in
-`hub-motion.css`; the reveal is the existing native `view()` system, untouched. Calm ground kept.
-Verified desktop+mobile × light+dark (glow reads best on dark). 636 tests, typecheck 0, perf OK.
-Prior sessions this builds on: **V2** — the Overture (full-viewport intro that auto-glides into
-the hub: `src/scripts/overture.js`, cancelable, once-per-visit, compact-on-return,
-reduced-motion-safe). **V1** — the foundation (`contours.ts`, `guide-stats.ts`,
-`paletteAccentsForGuide()`, the `--accent2`/`--accent-raw` card props V3 just consumed).
+**This session ran V4 (guide interior depth) — ✅ DONE, on `main`.** Option B (creator-picked): a
+faint topographic contour overlay OVER the guide hero photo (`.mast-contours` inside `.mast-frame`,
+above scrim / below title; light `.11`/`.07` strokes, title stays legible), static, photo-guides
+only. Dropped two planned items honestly (parallax → static suits a reading hero; verified-stamp
+settle → no per-section stamp exists to settle). 636 tests, typecheck 0, perf OK.
+Prior visual sessions (all live on `main`): **V3** Atlas grid (per-guide card border + hover glow),
+**V2** the Overture (full-viewport intro that auto-glides into the hub — `src/scripts/overture.js`,
+cancelable/once-per-visit/compact-return/reduced-motion-safe), **V1** foundation (`contours.ts`,
+`guide-stats.ts`, `paletteAccentsForGuide()`).
 
 **Still the #1 open item (the audit's top finding, unchanged):** the fully-autonomous research
 pipeline has NEVER completed a real end-to-end run. Waits on the creator adding
@@ -58,29 +58,23 @@ merged, safe to delete) needs the creator to delete it via GitHub UI — the san
 
 ## Where we left off
 
-The Overture (V2) and the palette-tinted Atlas grid (V3) are both live on `main` — the hub opens
-with the intro, glides onto the guides, and each card now carries its own colour. Natural next
-moves, the creator's call:
+The hub redesign arc is live on `main` — the Overture (V2) auto-glides into the palette-tinted
+Atlas grid (V3), and now the guide interiors carry a faint map-contour overlay on the hero (V4).
+Natural next moves, the creator's call:
 
-1. **V4 — Guide interior depth pass** (IN PROGRESS). Findings from this session: the guide body
-   is deliberately calm-to-read with NO per-section "Checked" stamp shown (so the planned
-   stamp-settle has no target — dropped), and all live guides have opaque photo mastheads. Shipped
-   a SAFE first cut (option A): faint STATIC contours behind the masthead (`.mast-contours`,
-   z-index:-1, `src/lib/contours.ts`) — hero-zone only, never behind body text. But behind the
-   photo they're near-invisible at normal widths. **Awaiting creator's A/B call:** A = keep it
-   subtle (behind photo); B = a faint topographic overlay OVER the hero photo (visible, map-like,
-   on-theme). If B: move `.mast-contours` above the scrim at low opacity, tuned to keep the title
-   legible. `.mast-typo` scaffolds already have their own dot lattice — leave those alone.
-2. **V5 — Morph continuity** then **V6 — QA/perf** finish the visual plan.
-3. **F0 — prove the pipeline** (Opus driver, ~2–3h + wait). Needs the OAuth secret first — still
+1. **V5 — Morph continuity** (Opus, ~1–2h). Extend the card→guide View-Transition morph: carry
+   the tapped card's palette accent into the guide masthead arrival; match the Overture route's
+   exit to the guide story-intro rail entry (the signature literally continues). Then **V6 —
+   QA/perf** closes the visual plan (Lighthouse vs. baseline, full matrix, MOTION.md rewrite).
+2. **F0 — prove the pipeline** (Opus driver, ~2–3h + wait). Needs the OAuth secret first — still
    the audit's #1 open item.
 
-Deferred polish worth a note (not blocking): a Lighthouse LCP/CLS pass on the new hero vs. the
-old masthead — V6 (QA) formally covers it, but if anything feels heavy on a real phone, check
-there first. Also still pending: the creator deletes the merged remote branch
+Deferred polish (not blocking): a Lighthouse LCP/CLS pass on the new hero (V6 covers it), and an
+eyeball of the V4 contour strokes over the REAL cover photos post-deploy (bump `.11` if faint on
+bright covers). Still pending: the creator deletes the merged remote branch
 `claude/test-coverage-analysis-siftjs` via GitHub UI (sandbox 403s on ref deletion).
 
-**Re-prompt the creator with:** "The Atlas grid is live — every guide card now glows in its own
-colour on hover. That's the hub redesign's payoff done. Next in the visual plan is V4 (carry the
-same depth INSIDE a guide page), then V5–V6 to finish. Or switch to F0 (prove the pipeline, needs
-the OAuth secret). Which one?"
+**Re-prompt the creator with:** "V4 is live — a faint topographic map-line overlay now floats over
+each guide's hero photo, title still crisp. The whole hub-and-guide visual overhaul is nearly done:
+just V5 (make the hub→guide transition one continuous move) and V6 (QA/perf) left. Or switch to F0
+(prove the pipeline, needs the OAuth secret). Which one?"

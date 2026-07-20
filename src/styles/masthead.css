@@ -11,17 +11,19 @@
 /* Reset the old centered text masthead — the hero owns this region now. */
 .mast-hero{padding:0;border-bottom:0;text-align:left;position:relative}
 
-/* V4 depth (docs/PLAN_VISUAL_OVERHAUL.md) — a faint static topographic layer behind the masthead,
-   carrying the Overture's contour language into the guide's hero zone. z-index:-1 so it sits
-   behind the (opaque) photo/accent frame AND behind the info-band content — it reads only in the
-   paper gaps (the stats band below the frame, and the side margins on wide screens), never behind
-   body text. Tinted from theme-aware tokens so it inverts for free. .mast-typo scaffolds already
-   carry their own dot lattice, so this stays subordinate to that. */
-.mast-contours{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+/* V4 depth (docs/PLAN_VISUAL_OVERHAUL.md, option B) — a faint topographic overlay OVER the hero
+   photo: it lives INSIDE .mast-frame, after the scrim and before .mast-inner, so it sits above the
+   photo + scrim but below the title (which is .mast-inner, painting later in flow). Light etched
+   strokes — the photo hero is always a dark scrim + light title in BOTH site themes, so fixed
+   white lines read consistently and need no theme tokens. Tuned faint so the title stays fully
+   legible. Photo guides only (rendered under `heroSrc`); .mast-typo scaffolds keep their own dot
+   lattice. Static by design — the guide is a reading surface, not a motion one. Clipped by the
+   frame's border-radius + overflow. */
+.mast-contours{position:absolute;inset:0;overflow:hidden;pointer-events:none}
 .mast-contours svg{position:absolute;inset:0;width:100%;height:100%}
 .mast-contours polyline{fill:none;stroke-width:1.4}
-[data-mast-contour="0"] polyline{stroke:color-mix(in srgb,var(--muted) 13%,transparent)}
-[data-mast-contour="1"] polyline{stroke:color-mix(in srgb,var(--accent) 11%,transparent)}
+[data-mast-contour="0"] polyline{stroke:rgba(255,255,255,.11)}
+[data-mast-contour="1"] polyline{stroke:rgba(255,255,255,.07)}
 
 .mast-frame{position:relative;max-width:1400px;margin:1.1rem auto 0;border-radius:var(--r-lg);overflow:hidden;isolation:isolate;min-height:clamp(300px,52vw,460px);display:flex}
 @media(min-width:900px){.mast-frame{min-height:clamp(380px,42vw,520px)}}

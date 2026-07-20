@@ -382,16 +382,6 @@ const tripSummary = buildSummary(guide);
          MASTHEAD
          ═══════════════════════════════════════════════════════════════════ -->
     <header class={`masthead mast-hero ${heroSrc ? "mast-photo" : "mast-typo"}`} id="top" data-hero>
-      {/* V4 depth — faint static contours in the masthead's paper zones (behind the frame; the
-          photo/accent frame is opaque, so these read in the margins + the info band below it,
-          and behind the title on typographic scaffolds). Hero-zone only — never behind body text. */}
-      <div class="mast-contours" aria-hidden="true">
-        {mastContours.map((layer, i) => (
-          <svg data-mast-contour={i} viewBox={`0 0 ${layer.viewBox} ${layer.viewBox}`} preserveAspectRatio="xMidYMid slice">
-            {layer.rings.map((points) => <polyline points={points} />)}
-          </svg>
-        ))}
-      </div>
       {/* First-open story rail — segments ARE the trip's days (structure is information).
           Shown only during the one-time story intro (story-open.js); inert otherwise. */}
       {heroSrc && dayCount > 0 && (
@@ -408,6 +398,19 @@ const tripSummary = buildSummary(guide);
                style={`view-transition-name:cover-${ogSlug}${coverFocal ? `;object-position:${coverFocal}` : ""}`} />
         )}
         <span class="mast-scrim" aria-hidden="true"></span>
+        {/* V4 depth (option B) — a faint topographic overlay OVER the hero photo (above the scrim,
+            below the title), carrying the Overture's map language into the guide's hero. Photo
+            guides only; .mast-typo scaffolds keep their own dot lattice. Light etched strokes,
+            tuned faint so the title stays fully legible. Static — a reading page, not a motion one. */}
+        {heroSrc && (
+          <div class="mast-contours" aria-hidden="true">
+            {mastContours.map((layer, i) => (
+              <svg data-mast-contour={i} viewBox={`0 0 ${layer.viewBox} ${layer.viewBox}`} preserveAspectRatio="xMidYMid slice">
+                {layer.rings.map((points) => <polyline points={points} />)}
+              </svg>
+            ))}
+          </div>
+        )}
         <div class="mast-inner">
           {/* Dedup guard: never render the eyebrow if it would repeat the
               title verbatim (e.g. title "South Korea", country "South Korea").

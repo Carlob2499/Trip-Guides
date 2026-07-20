@@ -147,16 +147,20 @@ enters as the Overture's route line terminates at it (the handoff moment).
 **Exit:** ship loop; every guide's card carries its own identity; dedup rule intact; HANDOFF.
 </details>
 
-## Session V4 — Guide interior depth pass
+## Session V4 — Guide interior depth pass — ✅ DONE (2026-07-20)
 
-**Goal:** carry the new depth language inside without touching the signature's ownership.
-**Clarifiers:** (a) any guide sections the creator wants left visually untouched?
-**Do:** masthead gains one contour parallax layer behind the existing cover treatment
-(hero-parallax.js owns the transform — extend it, don't add a second owner); section-entry
-choreography unified on the house ease; day-tab switch polish (existing owners only);
-per-section verified-stamp chips get a settle micro-interaction. No new owners, no new deps.
-**Exit:** ship loop on ALL THREE guides at both breakpoints; MOTION.md inventory updated;
-HANDOFF.
+**Shipped (option B — creator-picked after seeing both):** a faint topographic contour overlay
+OVER the guide hero photo (`.mast-contours` inside `.mast-frame`, above the scrim, below the
+title; light etched white strokes `.11`/`.07`, tuned so the title stays fully legible). Static by
+design (the guide is a reading surface — CLAUDE.md "calm to read"; depth stays in the hero, never
+behind body text). Photo guides only (`heroSrc`-guarded); `.mast-typo` scaffolds keep their own
+existing dot lattice, untouched. Verified via a dark photo stand-in (sandbox can't load Commons) —
+lines read as an on-theme map overlay, title crisp above them. Typecheck 0, 636 tests, perf OK.
+**Two planned items dropped, honestly:** the "parallax layer" (made it static — motion behind a
+reading hero fights calm; and a static overlay needs no `hero-parallax.js` change), and the
+"verified-stamp settle" (the guide body shows NO per-section Checked stamp by design — no target).
+**Worth a real-photo eyeball post-deploy:** confirm the strokes read well over the actual covers
+(bright-sky areas may want a hair more contrast) — bump the `.11` if so.
 
 ## Session V5 — Morph continuity (the route continues)
 
