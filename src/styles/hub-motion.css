@@ -1,0 +1,27 @@
+/* === HUB MOTION — Overture & Atlas foundation (docs/PLAN_VISUAL_OVERHAUL.md, session V1) =====
+   Tokens only — nothing in this file targets a real element yet, so importing it changes
+   nothing on screen (V1's own exit criterion). V2/V3 write the actual `.overture`/`.atlas`
+   component CSS against these tokens, alongside the markup they style (never split a
+   component's HTML and CSS across sessions — CLAUDE.md's no-half-finished-implementations rule).
+
+   Contour tints are derived from the SAME theme-aware tokens every other surface uses
+   (--muted, --accent2 from base.css) via color-mix, not a second hardcoded light/dark table —
+   they invert for free wherever base.css's --muted/--accent2 already do. Timing/easing is
+   base.css's existing scale (--ease-out-expo, --dur-hero, --dur-reveal) — this file adds no
+   new vocabulary, only reuses it, per MOTION.md rule 5. */
+
+:root {
+  --hub-contour-far:  color-mix(in srgb, var(--muted) 10%, transparent);
+  --hub-contour-mid:  color-mix(in srgb, var(--muted) 16%, transparent);
+  --hub-contour-near: color-mix(in srgb, var(--accent2) 12%, transparent);
+  --hub-route-stroke: var(--accent);
+}
+
+/* Reduced-motion policy for everything V2 adds under `.overture`/`.atlas` (MOTION.md rule 2):
+   parallax transforms and the scroll-drawn route line are disabled outright — the composition
+   renders in its settled end-state, fully visible, nothing looping or scroll-linked. Written
+   here now (ahead of the components) so V2 builds against a decision already made, not one it
+   has to re-litigate. No selectors exist to gate yet, so this block is presently a no-op. */
+@media (prefers-reduced-motion: reduce) {
+  /* .overture-contours, .route-path — reserved, populated in V2 */
+}

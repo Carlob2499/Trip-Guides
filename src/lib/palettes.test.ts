@@ -2,7 +2,7 @@
 // explicit theme > extracted cover palette > country accent. Korea/Denmark have
 // committed extracted palettes, so they double as fixtures.
 import { describe, it, expect } from "vitest";
-import { paletteFor, accentForGuide } from "./palettes";
+import { paletteFor, accentForGuide, paletteAccentsForGuide } from "./palettes";
 import { accentFor } from "./themes";
 
 describe("paletteFor", () => {
@@ -27,5 +27,22 @@ describe("accentForGuide precedence", () => {
   });
   it("falls back to the country accent when nothing else exists", () => {
     expect(accentForGuide("no-such-guide", null, "Japan")).toBe(accentFor("Japan"));
+  });
+});
+
+describe("paletteAccentsForGuide (V1 — Atlas card tinting, docs/PLAN_VISUAL_OVERHAUL.md)", () => {
+  it("gives all three stops from the extracted palette when one exists", () => {
+    const extracted = paletteFor("korea")!;
+    const accents = paletteAccentsForGuide("korea", undefined, "South Korea");
+    expect(accents).toEqual({ primary: extracted.primary, secondary: extracted.secondary, raw: extracted.accent });
+  });
+  it("collapses every stop to the single resolved accent when no palette exists", () => {
+    const accents = paletteAccentsForGuide("no-such-guide", null, "Japan");
+    const accent = accentFor("Japan");
+    expect(accents).toEqual({ primary: accent, secondary: accent, raw: accent });
+  });
+  it("an explicit theme overrides the WHOLE set, not just primary (a guide's own choice wins outright)", () => {
+    const accents = paletteAccentsForGuide("korea", { primary: "#123456" }, "South Korea");
+    expect(accents).toEqual({ primary: "#123456", secondary: "#123456", raw: "#123456" });
   });
 });

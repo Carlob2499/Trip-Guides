@@ -60,26 +60,41 @@ switches model at session start (`/model`) — each session's opening ritual inc
 
 ---
 
-## Session V1 — Foundation (no visible change yet)
+## Session V1 — Foundation — ✅ DONE (2026-07-20)
 
 **Goal:** the plumbing every later session stands on.
-**Clarifiers:** (a) confirm the Overture concept + headline copy direction (see V2 options);
-(b) full Overture every visit, or full on first visit / compact on return (recommended: full
-every visit but short — it's scroll-through, not a gate; revisit after feel-testing).
-**Do:** contour-SVG generator (build-time script → inline SVG, seeded per site palette, tested);
-build-time stats collector (guides count, verified-fact count, distinct primary sources — grep
-of content collections, tested — **real numbers only**); hub motion tokens + `hub-motion.css`
-scaffold with reduced-motion gates; expose per-guide palette tokens on hub card markup (data
-attrs); Overture ownership handshake (`window.__overture` flag, mirroring `__storyIntro`).
-**Exit:** ship loop green, zero visual diff (foundation only), MOTION.md inventory table gains
-the planned rows marked "pending." HANDOFF.
+**Clarifiers answered:** (a) headline voice → **"Every fact checked. Every trip yours."**
+(b) replay behavior → **full Overture on first visit, compact hero on return** (the
+higher-scope option — logged so V2 doesn't relitigate it).
+**Built:** `src/lib/contours.ts` (deterministic seeded contour-ring generator, pure, tested —
+same seed ⇒ byte-identical rings) + `src/lib/guide-stats.ts` (real counted stats: guide count,
+`source_url` occurrences at any depth, distinct source hostnames — walks raw guide data so it
+survives schema evolution, tested incl. a live sanity check against the actual repo content);
+`src/lib/palettes.ts` gained `paletteAccentsForGuide()` (the full 3-stop primary/secondary/raw
+set, falling back to a single collapsed accent when no extracted palette exists — tested);
+`src/styles/hub-motion.css` (contour-tint tokens derived via `color-mix` from the SAME
+theme-aware `--muted`/`--accent2` base.css tokens, so they invert for free — no parallel
+light/dark table; a reduced-motion block reserved for V2's selectors); hub card markup now
+carries `--accent2`/`--accent-raw` alongside the existing `--accent` (zero visual diff —
+verified via screenshot at mobile/desktop × light/dark × reduced-motion, byte-identical accent
+values to before). 636 tests green (was 621).
+**Deferred to V2, deliberately:** the `window.__overture` ownership-handshake flag and the
+`tg-overture-seen` first-visit localStorage key are NOT yet written — nothing exists today to
+hand off to or gate on, and per CLAUDE.md a component's markup+CSS+behavior ship together, not
+split across sessions. V2 owns both the flag and the key, matching how `story-open.js` owns its
+own check-and-animate in one script. **The key name is decided now so V2 doesn't re-litigate
+it: `tg-overture-seen`.**
 
 ## Session V2 — The Overture hero
 
 **Goal:** the creator's headline ask — the large intro before the guide menu.
-**Clarifiers:** (a) headline voice — pick or redirect: "Guides built from the ground truth." /
-"Every fact checked. Every trip yours." / "The atlas of trips that actually happened."; (b) may
-the wizard (New-guide form) move below the grid, or must it stay above the fold?
+**Headline (decided in V1): "Every fact checked. Every trip yours."**
+**Replay (decided in V1): full Overture on first visit (`localStorage['tg-overture-seen']`
+unset) → set the key, own the arrival (`window.__overture = true`, mirroring
+`window.__storyIntro`); on return, render a shorter/compact hero variant instead — no full
+contour+kinetic-type sequence.** Build BOTH variants in this session (they're one component).
+**Clarifier still open:** may the wizard (New-guide form) move below the grid, or must it stay
+above the fold? Ask before restructuring that section.
 **Do:** full-viewport hero section on `src/pages/index.astro`: three contour layers on
 `animation-timeline: scroll()` parallax (transform-only); kinetic headline (chars/words rise
 once on load, ≤1s, `story-open`-style class gate — base state visible); route-line SVG

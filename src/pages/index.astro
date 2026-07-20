@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import PwaHead from "../components/PwaHead.astro";
 // Same accent resolution as the guide pages + OG (uniform across surfaces):
 // explicit theme > extracted cover palette > country accent (src/lib/palettes.ts).
-import { accentForGuide } from "../lib/palettes";
+import { accentForGuide, paletteAccentsForGuide } from "../lib/palettes";
 import { continentFor, CONTINENT_ORDER } from "../data/countries.mjs";
 import { flattenSections } from "../features/exports/index";
 // Self-hosted variable fonts (bundled, base-path-safe, offline-correct) — no CDN.
@@ -16,6 +16,7 @@ import "../styles/hub-cards.css";
 import "../styles/wizard.css";
 import "../styles/transitions.css";
 import "../styles/scroll-motion.css";
+import "../styles/hub-motion.css";
 
 const guides = (await getCollection("guides")).sort((a, b) =>
   a.data.title.localeCompare(b.data.title)
@@ -202,11 +203,16 @@ const continents = CONTINENT_ORDER.filter(c => gridContinents.has(c));
       </div>
 
       <div class="hub-grid" id="hubGrid">
-        {gridGuides.map(({ g, ex }) => (
+        {gridGuides.map(({ g, ex }) => {
+          // The full 3-stop palette, not just --accent — unused until V3 (Atlas card tinting,
+          // docs/PLAN_VISUAL_OVERHAUL.md) wires --accent2/--accent-raw into real CSS. Set here
+          // now so V3 is a pure-CSS session, no markup change required.
+          const pal = paletteAccentsForGuide(g.id, g.data.theme, g.data.country);
+          return (
           <a
             class:list={["hubcard", { "hubcard-featured": g.id === heroId }]}
             href={`${base}/guides/${g.id}/`}
-            style={`--accent:${accentForGuide(g.id, g.data.theme, g.data.country)}`}
+            style={`--accent:${pal.primary};--accent2:${pal.secondary};--accent-raw:${pal.raw}`}
             data-country={g.data.country}
             data-continent={continentFor(g.data.country)}
             data-start={ex.startISO}
@@ -247,7 +253,8 @@ const continents = CONTINENT_ORDER.filter(c => gridContinents.has(c));
               <span class="hubcard-go">Open guide →</span>
             </span>
           </a>
-        ))}
+          );
+        })}
       </div>
       <p class="hub-empty" id="hubEmpty" hidden>No guides match — clear the search or pick another country.</p>
     </main>
