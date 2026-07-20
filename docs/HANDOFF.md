@@ -104,17 +104,26 @@ triggered a couple of times and never got past config/wiring. It still waits on 
 `CLAUDE_CODE_OAUTH_TOKEN` secret. Everything built since is test/visually verified, not
 run-for-real. Proving this out is the highest-value next step.
 
+**Update (2026-07-20, later):** audit fixes MERGED to `main` and verified live — verify-live ran
+green in real CI (deploy run 29716361601), `/health/` is live. Feature branch deleted locally;
+remote deletion is 403-blocked from the sandbox (relay forbids ref deletion) — **creator deletes
+`claude/test-coverage-analysis-siftjs` via GitHub UI**. Two GRAND PLANS added (research-grounded,
+session-by-session, each with its own ritual + clarifying questions):
+
+- `docs/PLAN_TRAVELER_FEATURES.md` — F0 (prove pipeline E2E, the gate) → F1 prep timeline →
+  F2 budget pact → F3 populate dormant entry/phrases/env tags → F4 packing strip → F5 offline
+  confidence → F6 pre-trip auto-recert → F7 bar-test in verify loop.
+- `docs/PLAN_VISUAL_OVERHAUL.md` — "The Overture & the Atlas": V1 foundation → V2 full-viewport
+  intro hero before the guide grid (the creator's explicit ask) → V3 palette-tinted Atlas grid →
+  V4 interior depth → V5 morph continuity → V6 QA/perf. Doctrine-bound to MOTION.md.
+
 **Ready for the creator right now:**
 
-1. **Merge `claude/test-coverage-analysis-siftjs` to `main`** to ship verify-live + the health
-   page. The post-deploy verify-live job will then guard every future deploy automatically.
-2. **Once `CLAUDE_CODE_OAUTH_TOKEN` exists, file a fresh New-guide issue** — the first real
-   end-to-end proof of the automated chain. Watch `/progress/`; the guide should reach verify PASS
-   and go live with no further clicks, then auto-file its "🚀 Auto-published" heads-up.
+1. **Pick a plan and start its next session** (F0 needs `CLAUDE_CODE_OAUTH_TOKEN` — `claude
+   setup-token` → repo secret; V1 needs nothing). Every session opens by asking the creator its
+   clarifying questions and closes by rewriting this file.
+2. **Delete the leftover remote branch** (GitHub UI → branches → 🗑) so only `main` exists.
 
-**Re-prompt the creator with:** "Acted on the audit: every deploy now runs a 'did it actually
-land?' check against the live site (proven working — all three guides confirmed live), auto-publish
-now leaves a vetoable heads-up instead of publishing silently, and there's a new `/health/` page
-showing each automation's real live status. The one thing still unproven is the big one the audit
-flagged — an actual end-to-end research run. Want to add the OAuth secret and finally run it for
-real?"
+**Re-prompt the creator with:** "Both grand plans are in the repo and every session is designed
+to start by asking you its clarifying questions. Want to open with V1 (visual foundation — no
+prerequisites) or F0 (prove the pipeline for real — needs the OAuth secret first)?"
