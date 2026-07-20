@@ -1,0 +1,217 @@
+[
+  {
+    "guide": "southkorea",
+    "tabs": [
+      {
+        "name": "itinerary",
+        "count": 9
+      },
+      {
+        "name": "getting-around",
+        "count": 7
+      },
+      {
+        "name": "essentials",
+        "count": 3
+      },
+      {
+        "name": "sights",
+        "count": 3
+      },
+      {
+        "name": "references",
+        "count": 2
+      },
+      {
+        "name": "daejeon-msi",
+        "count": 1
+      },
+      {
+        "name": "gaming-anime",
+        "count": 1
+      },
+      {
+        "name": "plan",
+        "count": 1
+      },
+      {
+        "name": "tokyo",
+        "count": 1
+      }
+    ],
+    "tools": [
+      {
+        "name": "kit",
+        "count": 4
+      },
+      {
+        "name": "split",
+        "count": 4
+      },
+      {
+        "name": "learn",
+        "count": 2
+      },
+      {
+        "name": "vote",
+        "count": 2
+      },
+      {
+        "name": "remind",
+        "count": 1
+      }
+    ],
+    "totalOpens": 41
+  },
+  {
+    "guide": "sedona",
+    "tabs": [
+      {
+        "name": "getting-around",
+        "count": 5
+      },
+      {
+        "name": "itinerary",
+        "count": 5
+      },
+      {
+        "name": "etiquette-language",
+        "count": 4
+      },
+      {
+        "name": "sights",
+        "count": 4
+      },
+      {
+        "name": "food-shopping",
+        "count": 3
+      },
+      {
+        "name": "health-safety",
+        "count": 3
+      },
+      {
+        "name": "money-budget",
+        "count": 3
+      },
+      {
+        "name": "plan",
+        "count": 2
+      },
+      {
+        "name": "references",
+        "count": 2
+      }
+    ],
+    "tools": [
+      {
+        "name": "kit",
+        "count": 1
+      },
+      {
+        "name": "remind",
+        "count": 1
+      },
+      {
+        "name": "split",
+        "count": 1
+      }
+    ],
+    "totalOpens": 34
+  },
+  {
+    "guide": "denmark",
+    "tabs": [
+      {
+        "name": "itinerary",
+        "count": 5
+      },
+      {
+        "name": "getting-around",
+        "count": 3
+      },
+      {
+        "name": "sights",
+        "count": 3
+      },
+      {
+        "name": "plan",
+        "count": 2
+      },
+      {
+        "name": "day-trips",
+        "count": 1
+      },
+      {
+        "name": "essentials",
+        "count": 1
+      },
+      {
+        "name": "food-shopping",
+        "count": 1
+      },
+      {
+        "name": "references",
+        "count": 1
+      }
+    ],
+    "tools": [
+      {
+        "name": "kit",
+        "count": 1
+      },
+      {
+        "name": "learn",
+        "count": 1
+      },
+      {
+        "name": "remind",
+        "count": 1
+      },
+      {
+        "name": "split",
+        "count": 1
+      },
+      {
+        "name": "vote",
+        "count": 1
+      }
+    ],
+    "totalOpens": 22
+  },
+  {
+    "guide": "hawaii",
+    "tabs": [
+      {
+        "name": "health-safety",
+        "count": 4
+      },
+      {
+        "name": "money-budget",
+        "count": 4
+      },
+      {
+        "name": "etiquette-language",
+        "count": 3
+      },
+      {
+        "name": "getting-around",
+        "count": 3
+      },
+      {
+        "name": "itinerary",
+        "count": 3
+      },
+      {
+        "name": "sights",
+        "count": 2
+      },
+      {
+        "name": "plan",
+        "count": 1
+      }
+    ],
+    "tools": [],
+    "totalOpens": 20
+  }
+]
