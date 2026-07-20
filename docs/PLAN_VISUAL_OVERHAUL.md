@@ -85,7 +85,23 @@ split across sessions. V2 owns both the flag and the key, matching how `story-op
 own check-and-animate in one script. **The key name is decided now so V2 doesn't re-litigate
 it: `tg-overture-seen`.**
 
-## Session V2 — The Overture hero
+## Session V2 — The Overture hero — ✅ DONE (2026-07-20)
+
+**Shipped (Option A + creator's auto-glide ask):** the hub masthead is now a full-viewport
+Overture — slim overlay bar (relocated `#btnDark`/`#btnNewGuide`, IDs preserved so the existing
+inline scripts still work) + generated contour parallax + kinetic Bricolage headline "Every fact
+checked. Every trip yours." + a real-numbers stats beat (3 · 22 · 14, counted at build) + the
+route line. On first visit it plays the intro, holds a beat, then **auto-glides** (eased,
+cancelable auto-scroll) down onto the hub — landing exactly on the featured band. Interruptible
+(any wheel/touch/key/pointer yields instantly), once-per-visit (`tg-overture-seen`), compact hero
+on return, fully off under reduced-motion. New `src/scripts/overture.js`; component CSS in
+`hub-motion.css`; markup + pre-paint state script in `index.astro`. **Behaviorally verified via
+Playwright** (glide lands on hub; early user-scroll is respected; return=compact, no scroll;
+reduced-motion=no scroll) at desktop + mobile, light + dark. Build clean, 636 tests, perf OK.
+**Wizard clarifier resolved by Option A:** the New-guide button became the slim `+ New guide`
+pill in the bar (still one tap); the form is still the same modal — not moved.
+
+<details><summary>Original V2 spec (for reference)</summary>
 
 **Goal:** the creator's headline ask — the large intro before the guide menu.
 **Headline (decided in V1): "Every fact checked. Every trip yours."**
@@ -105,6 +121,7 @@ CLS (all layers absolutely positioned, dimensions reserved); skip-to-guides link
 `prefers-reduced-motion` renders the full composition static; page fully usable with JS off.
 **Exit:** ship loop + visual snapshots reviewed; Lighthouse LCP/CLS on preview no worse than
 main; HANDOFF.
+</details>
 
 ## Session V3 — The Atlas grid
 

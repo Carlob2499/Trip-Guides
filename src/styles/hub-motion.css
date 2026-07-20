@@ -17,11 +17,132 @@
   --hub-route-stroke: var(--accent);
 }
 
-/* Reduced-motion policy for everything V2 adds under `.overture`/`.atlas` (MOTION.md rule 2):
-   parallax transforms and the scroll-drawn route line are disabled outright — the composition
-   renders in its settled end-state, fully visible, nothing looping or scroll-linked. Written
-   here now (ahead of the components) so V2 builds against a decision already made, not one it
-   has to re-litigate. No selectors exist to gate yet, so this block is presently a no-op. */
+/* ============================================================================================
+   THE OVERTURE (session V2) — Option A: the Overture IS the hub masthead. Full-viewport intro
+   that hands off to the guide grid, driven by src/scripts/overture.js. Every animated state
+   lives under `body.ov-play` (added only by that script when it plays), so the base markup is
+   fully visible with no JS — fault-safe (MOTION.md rule 3). */
+
+.overture {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Contour layers — generated at build time (src/lib/contours.ts). Three depths; the parallax
+   translateY is JS-owned (overture.js). Tinted from theme-aware tokens above, so they invert. */
+.ov-contours { position: absolute; inset: -12% -6%; z-index: 0; pointer-events: none; }
+.ov-contours svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+[data-ov-contour="0"] polyline { stroke: var(--hub-contour-far); }
+[data-ov-contour="1"] polyline { stroke: var(--hub-contour-mid); }
+[data-ov-contour="2"] polyline { stroke: var(--hub-contour-near); }
+.ov-contours polyline { fill: none; stroke-width: 1.4; }
+
+/* Slim overlay bar — carries the wordmark + the (relocated) theme toggle & new-guide button.
+   #btnDark / #btnNewGuide keep their IDs so the existing inline scripts still find them. */
+.ov-bar {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 3;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 1.3rem; max-width: 1100px; margin: 0 auto;
+}
+.ov-wordmark { font-family: var(--font-display); font-weight: 720; font-size: 1.05rem; letter-spacing: -.01em; color: var(--ink); }
+.ov-bar-actions { display: flex; align-items: center; gap: .55rem; }
+.ov-pill {
+  font-family: var(--font-data); font-size: .72rem; font-weight: 700; letter-spacing: .02em;
+  border: 1px solid var(--rule2); background: color-mix(in srgb, var(--card) 72%, transparent);
+  color: var(--ink); padding: .45rem .85rem; border-radius: 999px; cursor: pointer;
+  backdrop-filter: blur(6px); transition: background var(--dur-ui) var(--ease-out-expo), border-color var(--dur-ui);
+}
+.ov-pill:hover { border-color: var(--accent); }
+.ov-pill-solid { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.ov-pill-solid:hover { background: var(--accent); border-color: var(--accent); }
+.ov-pill-icon { width: 2.1rem; height: 2.1rem; padding: 0; display: grid; place-items: center; border-radius: 50%; font-size: .95rem; }
+
+/* The hero content — the block that recedes (scale + fade, JS-owned) as you leave. */
+.ov-inner { position: relative; z-index: 2; text-align: center; padding: 2rem 1.3rem; max-width: 54rem; margin: 0 auto; }
+.ov-eyebrow {
+  font-family: var(--font-data); font-weight: 700; font-size: .74rem; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--accent); margin: 0 0 1.3rem;
+}
+.ov-head { font-family: var(--font-display); font-weight: 780; font-size: clamp(2.5rem, 8vw, 5rem); line-height: 1.02; letter-spacing: -.03em; margin: 0; }
+.ov-line { display: block; }
+.ov-line-accent { color: var(--accent); }
+.ov-sub { font-family: var(--font-body); margin: 1.5rem auto 0; max-width: 42ch; font-size: 1.12rem; color: var(--muted); line-height: 1.6; }
+.ov-sub b { color: var(--ink); font-weight: 600; }
+
+/* Route line — the day-rail signature scaled to the page (MOTION.md), drawn on scroll (JS). */
+.ov-route { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); width: 120px; height: 42vh; z-index: 1; pointer-events: none; overflow: visible; }
+.ov-route-path { fill: none; stroke: var(--hub-route-stroke); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 5 9; }
+.ov-route-dot { fill: var(--accent); }
+
+/* On narrow screens the hero text fills the column, so the decorative route would collide with
+   it — hide it there; the cue pin still leads the eye down. */
+@media (max-width: 600px) { .ov-route { display: none; } }
+
+/* Scroll cue — the hint that the page will move (or you can). */
+.ov-cue {
+  position: absolute; left: 50%; bottom: 1.9rem; transform: translateX(-50%); z-index: 3;
+  display: flex; flex-direction: column; align-items: center; gap: .45rem;
+  font-family: var(--font-data); font-size: .66rem; font-weight: 700; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--muted); text-decoration: none;
+}
+.ov-cue-pin { width: 12px; height: 12px; border-radius: 50% 50% 50% 0; background: var(--accent); transform: rotate(-45deg); }
+
+/* Soft gradient veil at the base — melts the seam into the stats beat / hub below. */
+.overture::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 22vh; z-index: 1;
+  background: linear-gradient(to bottom, transparent, var(--bg)); pointer-events: none;
+}
+
+/* ── Kinetic arrival — plays ONLY under body.ov-play (overture.js, first visit + motion). The
+   hidden start states are scoped to .ov-play so the base render is always visible. ── */
+body.ov-play .ov-eyebrow,
+body.ov-play .ov-line,
+body.ov-play .ov-sub,
+body.ov-play .ov-cue,
+body.ov-play .ov-route { opacity: 0; }
+body.ov-play .ov-line { transform: translateY(.5em); }
+
+body.ov-play .ov-eyebrow { animation: ovFade .55s var(--ease-out-expo) .1s forwards; }
+body.ov-play .ov-line { animation: ovRise .7s var(--ease-out-expo) forwards; }
+body.ov-play .ov-line:nth-child(1) { animation-delay: .28s; }
+body.ov-play .ov-line:nth-child(2) { animation-delay: .46s; }
+body.ov-play .ov-sub { animation: ovFade .6s var(--ease-out-expo) .95s forwards; }
+body.ov-play .ov-route { animation: ovFade .6s ease-out 1.2s forwards; }
+body.ov-play .ov-cue { animation: ovCue 2.4s var(--ease-out-expo) 1.35s forwards; }
+@keyframes ovRise { to { opacity: 1; transform: none; } }
+@keyframes ovFade { to { opacity: 1; } }
+@keyframes ovCue { 0% { opacity: 0; transform: translate(-50%, 6px); } 30%,100% { opacity: 1; transform: translate(-50%, 0); } }
+
+/* ── Compact hero — return visits (`:root[data-overture="compact"]`, set pre-paint). A short
+   masthead, not a full screen: no big moment, the hub sits right below. Same markup. ── */
+:root[data-overture="compact"] .overture { display: block; min-height: auto; padding: 1.5rem 0 1rem; }
+:root[data-overture="compact"] .ov-bar { position: static; width: 100%; padding: 0 1.3rem .4rem; }
+:root[data-overture="compact"] .ov-inner { padding: 1.4rem 1.3rem .6rem; }
+:root[data-overture="compact"] .ov-head { font-size: clamp(1.9rem, 5vw, 2.6rem); }
+:root[data-overture="compact"] .ov-sub { font-size: .98rem; margin-top: 1rem; }
+:root[data-overture="compact"] .ov-cue,
+:root[data-overture="compact"] .ov-route { display: none; }
+:root[data-overture="compact"] .overture::after { display: none; }
+:root[data-overture="compact"] .ov-contours { opacity: .55; }
+
+/* ── The stats beat — real, build-time counted numbers (src/lib/guide-stats.ts). ── */
+.stats-beat { padding: 3vh 1.3rem 6vh; text-align: center; }
+.stats-beat-in { max-width: 46rem; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.6rem; }
+.stat-n { font-family: var(--font-display); font-weight: 760; font-size: clamp(2.1rem, 6vw, 3.2rem); line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums; }
+.stat-n.is-accent { color: var(--accent); }
+.stat-l { margin-top: .5rem; font-family: var(--font-data); font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.stats-note { margin: 2.2rem auto 0; max-width: 42ch; color: var(--muted); font-size: .92rem; font-family: var(--font-body); }
+:root[data-overture="compact"] .stats-beat { display: none; } /* returning visitors have seen it; go straight to guides */
+
+/* Reduced-motion (MOTION.md rule 2): no arrival animation, no parallax, no auto-glide (the
+   script bails before adding ov-play or listening to scroll). The composition renders in its
+   settled full state, fully visible. This block guarantees it even if ov-play were somehow set. */
 @media (prefers-reduced-motion: reduce) {
-  /* .overture-contours, .route-path — reserved, populated in V2 */
+  body.ov-play .ov-eyebrow, body.ov-play .ov-line, body.ov-play .ov-sub,
+  body.ov-play .ov-cue, body.ov-play .ov-route { opacity: 1; transform: none; animation: none; }
 }

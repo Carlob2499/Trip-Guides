@@ -38,18 +38,19 @@
 All three carry a **Model & time budget** table. Totals: features ≈14–22h (excl. F7), critic
 ≈4–6h, visual ≈9.5–16h.
 
-**This session ran V1 (Foundation) — ✅ DONE, on `main`.** Clarifiers answered: headline =
-**"Every fact checked. Every trip yours."**; replay = **full Overture on first visit, compact
-hero on return** (localStorage key decided: `tg-overture-seen`). Built: `src/lib/contours.ts`
-(seeded deterministic contour-ring generator), `src/lib/guide-stats.ts` (real counted stats —
-guide count, `source_url` occurrences, distinct sources — no invented numbers),
-`paletteAccentsForGuide()` in `src/lib/palettes.ts` (3-stop accent set), `src/styles/
-hub-motion.css` (token scaffold, inert), hub cards gained `--accent2`/`--accent-raw` custom
-props. **Zero visual diff, verified** (screenshots at mobile/desktop × light/dark ×
-reduced-motion — byte-identical accents to before). 636 tests green (was 621).
-**Deliberately deferred to V2:** the `window.__overture` handshake flag and the
-`tg-overture-seen` check/set — nothing exists yet to own or gate, and a component's
-markup+behavior ship together, not split across sessions.
+**This session ran V2 (The Overture hero) — ✅ DONE, on `main`.** The hub top is now Option A:
+a full-viewport cinematic intro that, on first visit, plays the kinetic headline then
+**auto-glides** down onto the hub (the creator's ask) — eased, cancelable, once-per-visit,
+compact-on-return, off under reduced-motion. New `src/scripts/overture.js` (owns the glide +
+recede + parallax + route + stats count-up); component CSS in `src/styles/hub-motion.css`;
+`index.astro` gained the Overture + stats-beat markup, a pre-paint `data-overture` state script,
+and the relocated `#btnDark`/`#btnNewGuide` (IDs preserved). Real build-time stats shown: 3
+trips · 22 sourced facts · 14 distinct sources. **Behaviorally verified via Playwright** (glide
+lands on hub; early user-scroll respected; return=compact; reduced-motion=no scroll) at
+desktop+mobile × light+dark. Build clean, typecheck 0, 636 tests, perf OK.
+V1 (prior session) built the foundation this stands on: `src/lib/contours.ts`,
+`src/lib/guide-stats.ts`, `paletteAccentsForGuide()`, and the `--accent2`/`--accent-raw` card
+props (the last still awaiting V3 to consume them).
 
 **Still the #1 open item (the audit's top finding, unchanged):** the fully-autonomous research
 pipeline has NEVER completed a real end-to-end run. Waits on the creator adding
@@ -61,16 +62,20 @@ merged, safe to delete) needs the creator to delete it via GitHub UI — the san
 
 ## Where we left off
 
-V1 shipped clean and is the base every other session builds on. Two natural next moves, equally
-valid — the creator's call:
+The Overture is live on `main` — the hub now opens with the cinematic intro that auto-glides
+into the guides. Natural next moves, the creator's call:
 
-1. **V2 — The Overture hero** (Opus, ~2.5–4h). The headline ask, ready to build: headline copy
-   and replay behavior are both already decided (above), so V2 opens only with its one
-   remaining clarifier — may the New-guide wizard move below the grid, or must it stay above
-   the fold?
+1. **V3 — The Atlas grid** (Opus, ~1.5–2.5h). The payoff the glide lands on: tint each guide
+   card with its own palette (the `--accent2`/`--accent-raw` props V1 already put on the markup —
+   so this is largely a pure-CSS session), staggered reveals, hover glow. Opens with its
+   clarifier: how bold may the tinting go (border+glow, recommended, vs full card-ground tint)?
 2. **F0 — prove the pipeline** (Opus driver, ~2–3h + wait). Needs the OAuth secret first.
 
-**Re-prompt the creator with:** "V1 is shipped and live on `main` — the foundation for the
-Overture hero is in place, zero visual change yet. Want to go straight into V2 (the actual
-intro hero — headline and replay behavior are already decided, one clarifier left) or switch to
-F0 (prove the pipeline for real, needs the OAuth secret)?"
+Deferred polish worth a note (not blocking): a Lighthouse LCP/CLS pass on the new hero vs. the
+old masthead — V6 (QA) formally covers it, but if anything feels heavy on a real phone, check
+there first.
+
+**Re-prompt the creator with:** "The Overture is live — the hub opens with the intro and glides
+you down onto the guides. Next in the visual plan is V3 (the Atlas grid — making the cards the
+payoff, each in its own colour; mostly CSS since V1 wired the palette props already). Want V3, or
+switch to F0 (prove the pipeline, needs the OAuth secret)?"

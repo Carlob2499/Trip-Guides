@@ -31,8 +31,7 @@ Anything new that wants to be flashy must strengthen this signature, not compete
 | Story-mode day slide/bounce | CSS keyframes toggled by class | `story-mode.css` |
 | Section flight, micro-interactions | existing modules | `section-flight.js`, `micro.js` |
 | Reading progress | scroll listener → `#readProg` | `guide-ui.js` |
-| *Overture contour parallax* (pending — V2, `docs/PLAN_VISUAL_OVERHAUL.md`) | `animation-timeline: scroll()`, transform-only | `hub-motion.css` tokens ready; component pending |
-| *Overture route-line draw* (pending — V2) | `stroke-dashoffset` on scroll timeline | pending |
+| Overture auto-glide + recede (hub intro → guide grid) | JS-owned: eased auto-scroll + scroll-linked scale/fade/parallax/route-draw, all cancelable | `overture.js` + `hub-motion.css` |
 | *Atlas card reveal + hover glow* (pending — V3) | `view()` reveal + palette-accent glow | `--accent2`/`--accent-raw` tokens ready (V1); component pending |
 
 ## The rules (non-negotiable)
