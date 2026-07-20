@@ -38,19 +38,15 @@
 All three carry a **Model & time budget** table. Totals: features ≈14–22h (excl. F7), critic
 ≈4–6h, visual ≈9.5–16h.
 
-**This session ran V2 (The Overture hero) — ✅ DONE, on `main`.** The hub top is now Option A:
-a full-viewport cinematic intro that, on first visit, plays the kinetic headline then
-**auto-glides** down onto the hub (the creator's ask) — eased, cancelable, once-per-visit,
-compact-on-return, off under reduced-motion. New `src/scripts/overture.js` (owns the glide +
-recede + parallax + route + stats count-up); component CSS in `src/styles/hub-motion.css`;
-`index.astro` gained the Overture + stats-beat markup, a pre-paint `data-overture` state script,
-and the relocated `#btnDark`/`#btnNewGuide` (IDs preserved). Real build-time stats shown: 3
-trips · 22 sourced facts · 14 distinct sources. **Behaviorally verified via Playwright** (glide
-lands on hub; early user-scroll respected; return=compact; reduced-motion=no scroll) at
-desktop+mobile × light+dark. Build clean, typecheck 0, 636 tests, perf OK.
-V1 (prior session) built the foundation this stands on: `src/lib/contours.ts`,
-`src/lib/guide-stats.ts`, `paletteAccentsForGuide()`, and the `--accent2`/`--accent-raw` card
-props (the last still awaiting V3 to consume them).
+**This session ran V3 (The Atlas grid) — ✅ DONE, on `main`.** Option A (creator-picked from a
+rendered mock): each guide card now wears its own palette — a subtly tinted border at rest and a
+**glow in the guide's own colour on hover/focus** (`--accent` at 62%). Pure CSS in
+`hub-motion.css`; the reveal is the existing native `view()` system, untouched. Calm ground kept.
+Verified desktop+mobile × light+dark (glow reads best on dark). 636 tests, typecheck 0, perf OK.
+Prior sessions this builds on: **V2** — the Overture (full-viewport intro that auto-glides into
+the hub: `src/scripts/overture.js`, cancelable, once-per-visit, compact-on-return,
+reduced-motion-safe). **V1** — the foundation (`contours.ts`, `guide-stats.ts`,
+`paletteAccentsForGuide()`, the `--accent2`/`--accent-raw` card props V3 just consumed).
 
 **Still the #1 open item (the audit's top finding, unchanged):** the fully-autonomous research
 pipeline has NEVER completed a real end-to-end run. Waits on the creator adding
@@ -62,20 +58,25 @@ merged, safe to delete) needs the creator to delete it via GitHub UI — the san
 
 ## Where we left off
 
-The Overture is live on `main` — the hub now opens with the cinematic intro that auto-glides
-into the guides. Natural next moves, the creator's call:
+The Overture (V2) and the palette-tinted Atlas grid (V3) are both live on `main` — the hub opens
+with the intro, glides onto the guides, and each card now carries its own colour. Natural next
+moves, the creator's call:
 
-1. **V3 — The Atlas grid** (Opus, ~1.5–2.5h). The payoff the glide lands on: tint each guide
-   card with its own palette (the `--accent2`/`--accent-raw` props V1 already put on the markup —
-   so this is largely a pure-CSS session), staggered reveals, hover glow. Opens with its
-   clarifier: how bold may the tinting go (border+glow, recommended, vs full card-ground tint)?
-2. **F0 — prove the pipeline** (Opus driver, ~2–3h + wait). Needs the OAuth secret first.
+1. **V4 — Guide interior depth pass** (Opus, ~1.5–2.5h). Carry the new depth language INSIDE a
+   guide without touching the motion signature's ownership: one contour parallax layer behind the
+   masthead (extend `hero-parallax.js`, don't add a 2nd owner), unified section-entry easing,
+   verified-stamp settle micro-interaction. Opens with its clarifier: any guide sections to leave
+   visually untouched?
+2. **V5 — Morph continuity** then **V6 — QA/perf** finish the visual plan.
+3. **F0 — prove the pipeline** (Opus driver, ~2–3h + wait). Needs the OAuth secret first — still
+   the audit's #1 open item.
 
 Deferred polish worth a note (not blocking): a Lighthouse LCP/CLS pass on the new hero vs. the
 old masthead — V6 (QA) formally covers it, but if anything feels heavy on a real phone, check
-there first.
+there first. Also still pending: the creator deletes the merged remote branch
+`claude/test-coverage-analysis-siftjs` via GitHub UI (sandbox 403s on ref deletion).
 
-**Re-prompt the creator with:** "The Overture is live — the hub opens with the intro and glides
-you down onto the guides. Next in the visual plan is V3 (the Atlas grid — making the cards the
-payoff, each in its own colour; mostly CSS since V1 wired the palette props already). Want V3, or
-switch to F0 (prove the pipeline, needs the OAuth secret)?"
+**Re-prompt the creator with:** "The Atlas grid is live — every guide card now glows in its own
+colour on hover. That's the hub redesign's payoff done. Next in the visual plan is V4 (carry the
+same depth INSIDE a guide page), then V5–V6 to finish. Or switch to F0 (prove the pipeline, needs
+the OAuth secret). Which one?"

@@ -139,6 +139,26 @@ body.ov-play .ov-cue { animation: ovCue 2.4s var(--ease-out-expo) 1.35s forwards
 .stats-note { margin: 2.2rem auto 0; max-width: 42ch; color: var(--muted); font-size: .92rem; font-family: var(--font-body); }
 :root[data-overture="compact"] .stats-beat { display: none; } /* returning visitors have seen it; go straight to guides */
 
+/* ============================================================================================
+   THE ATLAS (session V3) — Option A: each guide card wears its own colour. The per-guide
+   --accent / --accent-raw are already on every .hubcard (set in index.astro, V1), and this file
+   imports LAST so these win over hub.css's neutral defaults. The card ground stays calm neutral
+   — the boldness stays spent on the Overture (design doctrine: spend it once). Two touches:
+   a subtly colour-tinted border at rest, and a glow in the guide's own hue on hover/focus.
+   The staggered reveal is the existing native view() system (scroll-motion.css) — cards already
+   rise as the grid enters; nothing to add here. */
+.hubcard { border-color: color-mix(in srgb, var(--accent) 30%, var(--rule)); }
+.hubcard:hover,
+.hubcard:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--rule));
+  /* The signature: a coloured halo in the guide's own accent (the gated primary — saturated
+     enough to read on both grounds; the raw palette tone can be too light on the light theme).
+     The neutral second layer keeps the card grounded. The lift comes from hub.css's existing
+     :hover transform, which this does not override. */
+  box-shadow: 0 16px 44px -12px color-mix(in srgb, var(--accent) 62%, transparent),
+              0 2px 6px rgba(16, 20, 24, .1);
+}
+
 /* Reduced-motion (MOTION.md rule 2): no arrival animation, no parallax, no auto-glide (the
    script bails before adding ov-play or listening to scroll). The composition renders in its
    settled full state, fully visible. This block guarantees it even if ov-play were somehow set. */

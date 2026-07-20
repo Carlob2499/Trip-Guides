@@ -32,7 +32,8 @@ Anything new that wants to be flashy must strengthen this signature, not compete
 | Section flight, micro-interactions | existing modules | `section-flight.js`, `micro.js` |
 | Reading progress | scroll listener → `#readProg` | `guide-ui.js` |
 | Overture auto-glide + recede (hub intro → guide grid) | JS-owned: eased auto-scroll + scroll-linked scale/fade/parallax/route-draw, all cancelable | `overture.js` + `hub-motion.css` |
-| *Atlas card reveal + hover glow* (pending — V3) | `view()` reveal + palette-accent glow | `--accent2`/`--accent-raw` tokens ready (V1); component pending |
+| Atlas card hover glow + tinted border | per-guide `--accent` via `color-mix` (border + `:hover`/`:focus` box-shadow halo) | `hub-motion.css` |
+| Atlas card scroll reveal | existing native `view()` (reveal.js fallback) — unchanged | `scroll-motion.css` / `reveal.js` |
 
 ## The rules (non-negotiable)
 

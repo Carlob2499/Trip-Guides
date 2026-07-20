@@ -123,7 +123,19 @@ CLS (all layers absolutely positioned, dimensions reserved); skip-to-guides link
 main; HANDOFF.
 </details>
 
-## Session V3 — The Atlas grid
+## Session V3 — The Atlas grid — ✅ DONE (2026-07-20)
+
+**Shipped (Option A — border + glow, creator-picked from a rendered mock):** each guide card now
+wears its own palette — a subtly colour-tinted border at rest (`color-mix(--accent 30% --rule)`)
+and a **glow in the guide's own hue on hover/focus** (`--accent` at 62%, the gated primary — the
+raw tone washed out on light). Pure CSS in `hub-motion.css` (imports last, so it wins over
+hub.css's neutral defaults); the per-guide `--accent` was already on every card from V1. The
+staggered reveal is the pre-existing native `view()` system (scroll-motion.css) — cards already
+rise as the grid enters, so nothing added there. Calm neutral ground kept (boldness stays on the
+Overture). Verified at desktop+mobile × light+dark (glow reads best on dark, as expected);
+636 tests, typecheck 0, perf OK.
+
+<details><summary>Original V3 spec (for reference)</summary>
 
 **Goal:** make arriving at the guides feel like the payoff, not the leftovers.
 **Clarifiers:** (a) how bold may the palette tinting go — border+glow accents (recommended) or
@@ -133,6 +145,7 @@ reveals (reveal.js fallback per doctrine); hover: lift + palette glow + cover Ke
 (~150ms micro vocabulary); featured/hero card stays in grid marked ("Featured above"); grid
 enters as the Overture's route line terminates at it (the handoff moment).
 **Exit:** ship loop; every guide's card carries its own identity; dedup rule intact; HANDOFF.
+</details>
 
 ## Session V4 — Guide interior depth pass
 
