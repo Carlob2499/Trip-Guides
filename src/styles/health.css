@@ -1,0 +1,53 @@
+/* === PIPELINE HEALTH ==========================================================
+   The maker-facing "is the automation actually working" surface (audit Fix #4:
+   "put the pipeline's real track record somewhere visible"). Presentation only —
+   the live truth comes from GitHub's own status badges (zero backend, no secrets).
+   Styled entirely through base.css tokens so it stays congruent with the site. */
+
+.hl-wrap{max-width:46rem;margin:0 auto;padding:2.4rem 1.2rem 5rem}
+.hl-kicker{font-family:var(--font-data);font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 .3rem}
+.hl-head{font-family:var(--font-display);font-weight:760;font-size:1.9rem;letter-spacing:-.02em;margin:0 0 .55rem;line-height:1.1}
+.hl-intro{color:var(--muted);font-size:.96rem;line-height:1.55;margin:0 0 1.2rem;max-width:40rem}
+.hl-intro a{color:var(--accent)}
+
+/* Legend + "what green means" caveat */
+.hl-note{background:var(--bg2);border:1px solid var(--rule);border-radius:var(--r-md);padding:.85rem 1rem;font-size:.85rem;line-height:1.5;color:var(--muted);margin:0 0 2rem}
+.hl-note b{color:var(--ink)}
+
+/* The headline live-site card */
+.hl-hero{background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--green);border-radius:var(--r-lg);padding:1.2rem 1.3rem;margin:0 0 2rem}
+.hl-hero-row{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:.5rem}
+.hl-hero-title{font-family:var(--font-display);font-weight:720;font-size:1.1rem;margin:0}
+.hl-hero p{margin:.2rem 0 0;color:var(--muted);font-size:.9rem;line-height:1.55}
+.hl-hero p b{color:var(--ink)}
+.hl-badge{height:20px;display:inline-block;vertical-align:middle}
+.hl-badge img{height:20px;display:block}
+
+/* Group heading */
+.hl-group{font-family:var(--font-data);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:2.2rem 0 .4rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule)}
+.hl-group-sub{font-size:.84rem;color:var(--muted);margin:0 0 1rem;line-height:1.5}
+
+/* Each automation row */
+.hl-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.7rem}
+.hl-item{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md);padding:1rem 1.1rem;border-left:4px solid var(--rule2)}
+.hl-item.is-proven{border-left-color:var(--green)}
+.hl-item.is-unproven{border-left-color:var(--warn)}
+.hl-item.is-support{border-left-color:var(--rule2)}
+
+.hl-item-top{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap}
+.hl-item-name{font-family:var(--font-data);font-size:.92rem;font-weight:700;color:var(--ink)}
+.hl-item-name a{color:inherit;text-decoration:none;border-bottom:1px dotted var(--rule2)}
+.hl-item-name a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+.hl-item-desc{color:var(--muted);font-size:.9rem;line-height:1.5;margin:.5rem 0 0}
+.hl-verdict{margin:.6rem 0 0;font-size:.82rem;line-height:1.5;display:flex;gap:.5rem;align-items:baseline}
+.hl-verdict .dot{flex:none;width:.55rem;height:.55rem;border-radius:50%;margin-top:.35rem}
+.hl-verdict.v-proven .dot{background:var(--green)}
+.hl-verdict.v-unproven .dot{background:var(--warn)}
+.hl-verdict.v-support .dot{background:var(--rule2)}
+.hl-verdict b{color:var(--ink);font-weight:700}
+.hl-verdict span{color:var(--muted)}
+
+.hl-home-link{display:inline-block;margin-top:2.4rem;font-family:var(--font-data);font-size:.8rem;color:var(--muted);text-decoration:none}
+.hl-home-link:hover{color:var(--accent)}
+
+.hl-asof{margin-top:1.4rem;font-family:var(--font-data);font-size:.72rem;color:var(--muted)}

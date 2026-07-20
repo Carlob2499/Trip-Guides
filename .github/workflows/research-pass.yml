@@ -232,13 +232,17 @@ jobs:
               PASSED=false; [ "$NEXT" = "null" ] && PASSED=true   # true only if step (d) above actually checkpointed `verified`
               bash scripts/land-branch.sh "research/${{ inputs.slug }}" main \
                 "Research pass: ${{ inputs.slug }}${{ inputs.section != '' && format(' ({0})', inputs.section) || '' }}" \
-                /tmp/scorecard.md "$PASSED"
+                /tmp/scorecard.md "$PASSED" \
+                "https://carlob2499.github.io/Trip-Guides/guides/${{ inputs.slug }}/"
 
             It prints exactly one line — read it, don't guess what happened:
 
             - **`merged:<n>`** — the guide landed on `main` ALREADY graduated (step (d) removed
               `draft: true` before you ever reached here). It goes live on the very next Pages
-              deploy — nothing further to do, no issue to file, no human approval to wait on.
+              deploy — nothing further for you to do. land-branch.sh auto-files a "🚀 Auto-published"
+              heads-up issue (the probation notice: a human can eyeball it and veto/roll back, since
+              nobody approved it before it went live), and the deploy workflow's `verify-live` job
+              then confirms it's actually reachable and linked on the live site. Both are automatic.
             - **`draft:<n>`** — one of two things happened, and the guide content itself tells you
               which: if `draft: true` is STILL present in the file on this branch, step (d) never
               ran — verify didn't reach PASS, and a human needs to fix the guide, not just approve

@@ -19,6 +19,7 @@ on:
       - .github/workflows/graduate-guide.yml
       - .github/workflows/research-pass.yml
       - .github/workflows/modify-guide.yml
+      - .github/workflows/deploy.yml
 
 # Label management lives under the issues API — that's all this needs.
 permissions:
@@ -61,4 +62,12 @@ jobs:
           gh label create stuck \
             --color D93F0B \
             --description "An automated research pass hit its attempt cap without reaching verified" \
+            --force
+          gh label create deploy-verification \
+            --color B60205 \
+            --description "Post-deploy verify-live check found a published guide missing from the live site" \
+            --force
+          gh label create auto-published \
+            --color 5319E7 \
+            --description "A guide auto-published (verified) with no human approval — a vetoable heads-up" \
             --force

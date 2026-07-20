@@ -13,6 +13,7 @@
     "typecheck": "astro check",
     "readiness": "node scripts/guide-readiness.mjs",
     "verify": "node scripts/verify-guide.mjs",
+    "verify-live": "node scripts/verify-live.mjs",
     "pipeline": "node scripts/pipeline.mjs",
     "recert": "node scripts/recert.mjs",
     "extract-palette": "node scripts/extract-palette.mjs",

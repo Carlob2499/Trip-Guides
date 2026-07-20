@@ -1,0 +1,195 @@
+---
+// Pipeline Health — the maker-facing "is the automation actually working" surface.
+// Audit Fix #4: "put the pipeline's real track record somewhere visible" so judging it is a
+// 30-second glance, not an hour digging through GitHub's run history. The live truth comes from
+// GitHub's own workflow status badges (public SVGs, no backend, no secrets); the honest role +
+// caveat text beside each one is authored here so a green badge is never mistaken for "did its job".
+import PwaHead from "../../components/PwaHead.astro";
+import "@fontsource-variable/bricolage-grotesque";
+import "@fontsource-variable/literata";
+import "@fontsource-variable/spline-sans-mono";
+import "../../styles/base.css";
+import "../../styles/health.css";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+// Repo coordinates for badge + run-history links. Public, static — this is the same repo the
+// live site is built from (carlob2499.github.io/Trip-Guides).
+const OWNER = "carlob2499";
+const REPO = "Trip-Guides";
+const badge = (file: string) => `https://github.com/${OWNER}/${REPO}/actions/workflows/${file}/badge.svg`;
+const runsUrl = (file: string) => `https://github.com/${OWNER}/${REPO}/actions/workflows/${file}`;
+
+type State = "proven" | "unproven" | "support";
+interface Flow {
+  file: string;
+  name: string;
+  desc: string;
+  state: State;
+  verdict: string;
+}
+
+// The guide-lifecycle automations — the ones the audit is actually about. Ordered by how central
+// they are to the "hands-off guide factory" premise.
+const lifecycle: Flow[] = [
+  {
+    file: "research-pass.yml",
+    name: "research-pass",
+    desc: "Researches and writes a whole new guide unattended, verifying every fact against primary sources, then auto-publishes when it reaches the bar.",
+    state: "unproven",
+    verdict: "The centerpiece — and the least proven. It has only ever been triggered a couple of times, and hasn't completed a real end-to-end run. Run it once for real and watch it before trusting it.",
+  },
+  {
+    file: "modify-guide.yml",
+    name: "modify-guide",
+    desc: "Takes a single scoped fact-fix request (a price, an hour, a venue) and edits just that, with the same verification discipline.",
+    state: "unproven",
+    verdict: "Built and unit-tested in isolation, but has never actually made an edit on request. Exercise it on a small real change before relying on it.",
+  },
+  {
+    file: "recert.yml",
+    name: "recert",
+    desc: "Re-checks aging facts on a schedule so a guide doesn't quietly rot as prices and hours drift.",
+    state: "unproven",
+    verdict: "Has never run. The safety-against-staleness promise is only a promise until it fires at least once.",
+  },
+  {
+    file: "graduate-guide.yml",
+    name: "graduate-guide",
+    desc: "Publishes a draft guide once a human explicitly signs off — the manual override / rescue path now that research-pass auto-publishes.",
+    state: "support",
+    verdict: "A deliberate manual backstop, not something meant to run often. Fine that it's rarely used.",
+  },
+  {
+    file: "new-guide.yml",
+    name: "new-guide",
+    desc: "Turns a submitted request form into a scaffolded draft to research against.",
+    state: "proven",
+    verdict: "Works — this is the front door, and it has produced real scaffolds.",
+  },
+];
+
+// Everything else: the plumbing that keeps the site correct and shipped. Less glamorous, more
+// reliable — which is exactly the audit's point.
+const support: Flow[] = [
+  {
+    file: "deploy.yml",
+    name: "deploy",
+    desc: "Builds the site and publishes it live — now with a post-deploy verify-live gate that confirms every published guide is actually reachable and linked.",
+    state: "proven",
+    verdict: "The most reliable automation here. Never a failed deploy on record.",
+  },
+  {
+    file: "content-audit.yml",
+    name: "content-audit",
+    desc: "Scheduled sweep for dead links and missing photos across every guide.",
+    state: "proven",
+    verdict: "A clean track record on its own schedule — proof small, read-only automation is dependable here.",
+  },
+  {
+    file: "test.yml",
+    name: "test",
+    desc: "Runs the full test suite (plus coverage gates on the trip-planning math) on every push.",
+    state: "proven",
+    verdict: "Green is the norm; this is the safety net the whole repo leans on.",
+  },
+  {
+    file: "visual.yml",
+    name: "visual",
+    desc: "Playwright snapshots that catch unintended visual changes to the guides.",
+    state: "support",
+    verdict: "Support tooling — runs when UI changes touch it.",
+  },
+];
+
+const verdictClass: Record<State, string> = { proven: "v-proven", unproven: "v-unproven", support: "v-support" };
+const verdictLabel: Record<State, string> = { proven: "Proven", unproven: "Not proven yet", support: "Support" };
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pipeline health — Waypoint</title>
+    <meta name="description" content="Live status of Waypoint's automated guide pipeline." />
+    <meta name="robots" content="noindex,nofollow" />
+    <PwaHead />
+  </head>
+  <body>
+    <div class="hl-wrap">
+      <p class="hl-kicker">Behind the scenes</p>
+      <h1 class="hl-head">Pipeline health</h1>
+      <p class="hl-intro">
+        Every automation this site runs, with its <b>live</b> status pulled straight from GitHub —
+        so &ldquo;is the machine actually working?&rdquo; is a glance, not an investigation. Split by
+        what's earned trust versus what hasn't run for real yet.
+      </p>
+
+      <div class="hl-note">
+        <b>How to read a badge:</b> green means the last run <em>finished without erroring</em> — not
+        necessarily that it did its job (a workflow can run, find nothing to do, and pass). &ldquo;No
+        status&rdquo; means it has never run. The plain-English note under each one is the honest read.
+      </div>
+
+      <div class="hl-hero">
+        <div class="hl-hero-row">
+          <h2 class="hl-hero-title">✓ The live-site safety net is on</h2>
+          <a class="hl-badge" href={runsUrl("deploy.yml")} target="_blank" rel="noopener">
+            <img src={badge("deploy.yml")} alt="deploy workflow status" width="120" height="20" loading="lazy" />
+          </a>
+        </div>
+        <p>
+          Every deploy now ends with an automatic <b>&ldquo;did it actually land?&rdquo;</b> check: it
+          fetches the real production site and confirms each published guide is reachable <em>and</em>
+          linked from the homepage. If one isn't, the run goes red and files an issue &mdash; the exact
+          gap that once let a finished guide sit invisible for a day.
+        </p>
+      </div>
+
+      <p class="hl-group">The guide pipeline</p>
+      <p class="hl-group-sub">The automations that research, edit, publish, and re-check guides — the core promise.</p>
+      <ul class="hl-list">
+        {lifecycle.map((f) => (
+          <li class={`hl-item is-${f.state}`}>
+            <div class="hl-item-top">
+              <span class="hl-item-name"><a href={runsUrl(f.file)} target="_blank" rel="noopener">{f.name}</a></span>
+              <a class="hl-badge" href={runsUrl(f.file)} target="_blank" rel="noopener">
+                <img src={badge(f.file)} alt={`${f.name} workflow status`} width="120" height="20" loading="lazy" />
+              </a>
+            </div>
+            <p class="hl-item-desc">{f.desc}</p>
+            <p class={`hl-verdict ${verdictClass[f.state]}`}>
+              <span class="dot"></span>
+              <span><b>{verdictLabel[f.state]}.</b> {f.verdict}</span>
+            </p>
+          </li>
+        ))}
+      </ul>
+
+      <p class="hl-group">Plumbing</p>
+      <p class="hl-group-sub">Build, test, and housekeeping — less glamorous, more reliable.</p>
+      <ul class="hl-list">
+        {support.map((f) => (
+          <li class={`hl-item is-${f.state}`}>
+            <div class="hl-item-top">
+              <span class="hl-item-name"><a href={runsUrl(f.file)} target="_blank" rel="noopener">{f.name}</a></span>
+              <a class="hl-badge" href={runsUrl(f.file)} target="_blank" rel="noopener">
+                <img src={badge(f.file)} alt={`${f.name} workflow status`} width="120" height="20" loading="lazy" />
+              </a>
+            </div>
+            <p class="hl-item-desc">{f.desc}</p>
+            <p class={`hl-verdict ${verdictClass[f.state]}`}>
+              <span class="dot"></span>
+              <span><b>{verdictLabel[f.state]}.</b> {f.verdict}</span>
+            </p>
+          </li>
+        ))}
+      </ul>
+
+      <p class="hl-asof">Status badges are live from GitHub · role &amp; verdict notes last reviewed 2026-07-20</p>
+      <br />
+      <a class="hl-home-link" href={`${base}/`}>← Back to all guides</a>
+    </div>
+  </body>
+</html>

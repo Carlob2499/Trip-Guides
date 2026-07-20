@@ -19,12 +19,31 @@
 - North stars: `docs/PIPELINE.md` (generation/maintenance) · `docs/VISUAL_COVERS.md` +
   `docs/MOTION.md` (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar).
 
-## Snapshot (updated 2026-07-19, session close)
+## Snapshot (updated 2026-07-20, session close)
 
-**The pipeline is now fully autonomous end-to-end, with live progress tracking.** Explicit
-goal this session: an end-user inputs trip info and sees a finished guide with no other
-input — no approval step in between — plus a timer and tangible viewing progress. 603
-tests, all on `main`.
+**This session: an adversarial audit of the whole workflow, then acted on its findings.** The
+audit (delivered as a visual HTML artifact) checked the automation against GitHub's real run
+history and found the core gap isn't the design — it's that most automation has never completed
+a real run, and finished work had recently sat invisible because nothing confirmed it reached the
+live site. Fixes shipped this session (on `claude/test-coverage-analysis-siftjs`, 621 tests):
+
+- **`scripts/verify-live.mjs` (the "did it actually land?" gate)** — discovers every non-draft
+  guide in the repo, fetches the REAL production site, and confirms each is both reachable at its
+  URL AND linked from the homepage (the exact two-part check whose absence let Sedona sit invisible
+  for a day). Pure core (`discoverPublishedSlugs`, `diagnose`) unit-tested; shell retries for CDN
+  lag. Wired into `deploy.yml` as a post-deploy job that turns the run red + files a
+  `deploy-verification` issue on a real miss. Runnable by hand: `npm run verify-live`.
+- **Auto-publish probation** — `land-branch.sh` now takes an optional live-URL 6th arg; on a real
+  auto-publish merge it files a vetoable "🚀 Auto-published" issue with a one-line rollback path,
+  so a silent self-publish becomes one a human can still catch. `research-pass.yml` passes the URL.
+- **`/health/` — the Pipeline Health page (audit Fix #4, "make the track record visible")** — a
+  maker-facing page showing every workflow's LIVE status via GitHub badges (zero backend), split
+  proven / not-proven-yet / plumbing, each with an honest role + caveat note ("green ≠ did its
+  job"). New `src/pages/health/` + `src/styles/health.css`, styled through base.css tokens.
+
+**Prior session (kept for context): the pipeline was made fully autonomous end-to-end with live
+progress tracking** — an end-user inputs trip info and sees a finished guide with no approval step,
+plus a timer and tangible viewing progress.
 
 - **Auto-graduation (the core unlock):** `research-pass.yml`'s self-correction loop now
   calls `node scripts/graduate-guide.mjs --slug <slug>` (new direct-slug CLI mode,
@@ -72,27 +91,30 @@ secret. TRAVELER_PATTERNS still has only 2 data points.
 
 ## Where we left off
 
-**Sedona (`/guides/us/`) is graduated and live — issue #11 closed.** Before graduating,
-ran a full content pass on its three flagged judgment calls (all resolved with fresh T0
-checks, not just re-approved): the shuttle suspension turned out to be an active Pocket
-Fire forest-closure order through Sep 30 — folded into Health & Safety, Getting Around,
-and a rewritten Day 6 (its Oak Creek Canyon drive is the one itinerary item inside the
-closure zone, now with a verified-safe fallback); Mii amo's package structure corrected to
-2/3/4/7/10-night (was missing the 2-night option); the budget honesty flag replaced with
-the actual recomputed figure (≈$327/day, ~9% over target, not just "approaching" it). Full
-trail in `guides-intake/us.md`.
+**Audit-remediation work is on `claude/test-coverage-analysis-siftjs`, ready to merge to `main`.**
+`verify-live` was run against the REAL production site and confirmed all three guides (denmark,
+korea, us) live and linked — so the gate is proven against reality, not just unit tests. Build
+clean, 621 tests green, both themes of `/health/` visually verified at mobile + desktop. Live
+badges on `/health/` render as broken images only in the sandbox (no github.com egress there);
+they'll be real status pills on the deployed site.
+
+**Still the #1 open item (unchanged, and the audit's top finding):** the fully-autonomous chain
+(scaffold → research → auto-publish → live) has NEVER completed a real end-to-end run — it's been
+triggered a couple of times and never got past config/wiring. It still waits on the creator's
+`CLAUDE_CODE_OAUTH_TOKEN` secret. Everything built since is test/visually verified, not
+run-for-real. Proving this out is the highest-value next step.
 
 **Ready for the creator right now:**
 
-1. **Once `CLAUDE_CODE_OAUTH_TOKEN` exists, file a fresh New-guide issue** — this is now
-   the real first end-to-end proof of BOTH the automated chain AND the auto-graduate +
-   live-progress work in the same run. Watch the progress page in the bot's confirmation
-   comment; if it reaches verify PASS, the guide should go live with no further clicks.
-   (Sedona doesn't test this path — it was graduated directly via the CLI, not through a
-   fresh research-pass.yml run.)
+1. **Merge `claude/test-coverage-analysis-siftjs` to `main`** to ship verify-live + the health
+   page. The post-deploy verify-live job will then guard every future deploy automatically.
+2. **Once `CLAUDE_CODE_OAUTH_TOKEN` exists, file a fresh New-guide issue** — the first real
+   end-to-end proof of the automated chain. Watch `/progress/`; the guide should reach verify PASS
+   and go live with no further clicks, then auto-file its "🚀 Auto-published" heads-up.
 
-**Re-prompt the creator with:** "Sedona is graduated and live — found and fixed a real
-issue along the way (an active wildfire closure near Sedona that affects one itinerary
-day) before publishing it. The New Guide pipeline itself is fully autonomous now too —
-once you've added the OAuth secret, want to file a fresh guide and watch the whole thing
-run for real, start to finish?"
+**Re-prompt the creator with:** "Acted on the audit: every deploy now runs a 'did it actually
+land?' check against the live site (proven working — all three guides confirmed live), auto-publish
+now leaves a vetoable heads-up instead of publishing silently, and there's a new `/health/` page
+showing each automation's real live status. The one thing still unproven is the big one the audit
+flagged — an actual end-to-end research run. Want to add the OAuth secret and finally run it for
+real?"

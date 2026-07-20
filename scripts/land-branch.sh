@@ -13,7 +13,12 @@
 # (confirmed true for this repo — see new-guide.yml's own comment) so a plain `--merge` needs no
 # admin bypass.
 #
-# Usage: scripts/land-branch.sh <branch> <base> <title> <body-file> <passed:true|false>
+# Usage: scripts/land-branch.sh <branch> <base> <title> <body-file> <passed:true|false> [announce-url]
+# The optional 6th arg is the auto-publish "probation" hook (see the audit / Finding #5): when a
+# guide reaches `verified` and lands with NO human in the loop, passing its live URL here makes the
+# script file a visible, vetoable "🚀 just auto-published" notice with a one-line rollback path — so
+# a silent self-publish becomes a self-publish someone can still catch. Absent (the modify-guide
+# scoped-edit path) it's skipped: an edit to an already-live guide isn't a new publication.
 # Prints exactly one line to stdout:
 #   merged:<pr-number>   — landed on <base>, branch deleted
 #   draft:<pr-number>    — a draft PR exists for human triage (either the caller says the work
@@ -30,6 +35,7 @@ BASE="${2:?usage: land-branch.sh <branch> <base> <title> <body-file> <passed:tru
 TITLE="${3:?usage: land-branch.sh <branch> <base> <title> <body-file> <passed:true|false>}"
 BODY_FILE="${4:?usage: land-branch.sh <branch> <base> <title> <body-file> <passed:true|false>}"
 PASSED="${5:?usage: land-branch.sh <branch> <base> <title> <body-file> <passed:true|false>}"
+ANNOUNCE_URL="${6:-}"  # optional; only used on a successful auto-publish merge (see header)
 
 # Reuse an existing PR for this branch if a prior (interrupted) run already opened one — never
 # open a second PR for the same branch.
@@ -58,6 +64,20 @@ fi
 gh pr ready "$PR_NUM" >/dev/null 2>&1 || true
 if gh pr merge "$PR_NUM" --merge --delete-branch >/dev/null 2>&1; then
   echo "merged:$PR_NUM"
+  # Auto-publish probation: the guide just went live with nobody approving it first. File a loud,
+  # vetoable heads-up so that safety net isn't gone entirely — never fatal, so a notification
+  # hiccup can't fail a merge that already succeeded.
+  if [ -n "$ANNOUNCE_URL" ]; then
+    NOTE_FILE="$(mktemp)"
+    {
+      printf 'A research pass reached `verified` and **auto-published this guide** — it went live with no human approval step. This notice is the safety net.\n\n'
+      printf '**Live now:** %s\n\n' "$ANNOUNCE_URL"
+      printf 'Give it a look. If something is off, hold or roll it back by re-adding `"draft": true` to the guide meta file (`_guide.json`, or `<slug>.json` for a flat guide) and pushing to `main` — it drops off the live site on the next deploy. If it looks good, just close this issue.\n\n'
+      printf '_Auto-filed by land-branch.sh on merge of #%s._\n' "$PR_NUM"
+    } > "$NOTE_FILE"
+    gh issue create --title "🚀 Auto-published: $TITLE" --body-file "$NOTE_FILE" --label auto-published >/dev/null 2>&1 || true
+    rm -f "$NOTE_FILE"
+  fi
 else
   echo "[land-branch] merge failed (likely a conflict) — leaving $BRANCH as a draft PR for human triage" >&2
   gh pr ready "$PR_NUM" --undo >/dev/null 2>&1 || true
