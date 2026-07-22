@@ -141,7 +141,16 @@ body.ov-play .ov-cue { animation: ovCue 2.4s var(--ease-out-expo) 1.35s forwards
 .stat-n.is-accent { color: var(--accent); }
 .stat-l { margin-top: .5rem; font-family: var(--font-data); font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 .stats-note { margin: 2.2rem auto 0; max-width: 42ch; color: var(--muted); font-size: .92rem; font-family: var(--font-body); }
-:root[data-overture="compact"] .stats-beat { display: none; } /* returning visitors have seen it; go straight to guides */
+/* U12: a bounce-once visitor used to permanently lose the stats beat the moment
+   markSeen() fired (Overture play start) + compact mode hid it here — a real visitor
+   could see the count-up exactly once, ever, even across many later visits. Compact mode
+   now keeps it rendered, just smaller and without the count-up flourish (initOverture()
+   already skips the whole count-up IntersectionObserver block for compact — see its early
+   `if (isCompact) return`, so the static server-rendered final numbers are what show; no
+   JS change needed for that part). */
+:root[data-overture="compact"] .stats-beat { padding: 1.6vh 1.3rem 3vh; }
+:root[data-overture="compact"] .stat-n { font-size: clamp(1.5rem, 4vw, 2.1rem); }
+:root[data-overture="compact"] .stats-note { display: none; } /* the one-time framing line — the numbers alone carry it on repeat visits */
 
 /* ============================================================================================
    THE ATLAS (session V3) — Option A: each guide card wears its own colour. The per-guide

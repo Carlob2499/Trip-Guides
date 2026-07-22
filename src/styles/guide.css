@@ -523,6 +523,12 @@ details.card.is-collapsible>.block-body{padding:1.1rem 1.4rem 1.25rem}
 .offline-note{display:inline-block;margin-top:.4rem;font-size:.76rem;color:var(--muted)} /* no opacity — see .hol-credit */
 .foot-telemetry{display:inline-block;margin-top:.3rem;font-size:.72rem;color:var(--muted)}
 
+/* U11: a real, obviously-tappable pill (banned bare-text tap targets) — was an underlined
+   text link mid-masthead; now lives in the footer instead. */
+.foot-modify-pill{display:inline-flex;align-items:center;gap:.3rem;margin-top:.7rem;padding:.4rem .85rem;min-height:34px;font-family:var(--font-data);font-size:.72rem;letter-spacing:.02em;color:var(--muted);background:var(--card);border:1px solid var(--rule2);border-radius:999px;text-decoration:none;transition:color .15s,border-color .15s}
+.foot-modify-pill:hover{color:var(--ink);border-color:var(--ink)}
+.foot-modify-pill:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
 /* === RAID COUNTER TABLES & COLLAPSIBLE DETAILS =============================== */
 /* Used in GO Fest prose sections — <details>/<summary> for collapsible boss charts */
 .card table{width:100%;border-collapse:collapse;font-size:.83rem;margin:.5rem 0 .9rem}
@@ -607,7 +613,10 @@ details table{margin:.3rem 0 .4rem}
   so they're usable on paper.
 */
 @media print {
-  /* Hide every interactive or navigation element */
+  /* Hide every interactive or navigation element. U7: .cold-open/.whats-next/
+     .draft-graduate/.next-cta/.lnw-cta were missing — maker/tool CTAs (dismiss this
+     framing strip, jump to today, graduate this draft, log your trip feedback) have no
+     purpose on paper and printed as clutter/dead links. */
   .topbar, nav.topbar, .sticky-chrome, .guide-tabs,
   .botbar, .sheet, .sheet-backdrop,
   .split-wrap,
@@ -617,7 +626,8 @@ details table{margin:.3rem 0 .4rem}
   .toast,
   .bactual, .budget-toggle, .share-backdrop, .share-modal,
   [id="btnShare"],
-  .transit-links { display: none !important; }
+  .transit-links,
+  .cold-open, .whats-next, .draft-graduate, .next-cta, .lnw-cta { display: none !important; }
 
   /* Reset body for print */
   *, *::before, *::after { box-shadow: none !important; text-shadow: none !important; }

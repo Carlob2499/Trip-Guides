@@ -58,10 +58,13 @@
    arrival sequence and opener sweeps belong to gsap-hero.js (single owner —
    no CSS keyframes on these elements, so the two engines never fight). */
 
-/* Print: flatten to a plain heading */
+/* Print: flatten to a plain heading. U7: .mast-contours (the V4 topographic overlay) was
+   missing from this list — its faint on-screen strokes print as visible clutter over the
+   flattened white heading instead of disappearing with the photo/scrim it was designed to
+   sit on top of. */
 @media print{
   .mast-frame{min-height:0;border-radius:0}
-  .mast-img,.mast-scrim,.mast-credit{display:none}
+  .mast-img,.mast-scrim,.mast-credit,.mast-contours{display:none}
   .mast-inner{color:#111;padding:0}
   .mast-title,.mast-dek,.mast-eyebrow{color:#111;text-shadow:none}
 }

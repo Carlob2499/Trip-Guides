@@ -491,18 +491,9 @@ const tripSummary = buildSummary(guide);
         </>
       )}
 
-      <!-- Renders on EVERY guide, draft or published — a wrong fact doesn't stop being wrong
-           once a guide graduates. Same shape as the nomination link above: filing this issue
-           auto-applies "modify-request" and does nothing by itself; only the owner applying
-           "modify-approved" (requires write access) runs the edit, via
-           .github/workflows/modify-guide.yml. -->
-      <p class="draft-graduate">
-        <a
-          class="draft-graduate-link"
-          href={`https://github.com/${REPO}/issues/new?template=modify-guide.yml&labels=modify-request&slug=${encodeURIComponent(ogSlug)}&title=${encodeURIComponent(`Modify: ${ogSlug}`)}`}
-          target="_blank" rel="noopener"
-        >✎ Something needs fixing? Request a change</a>
-      </p>
+      <!-- U11: "Request a change" moved to the page footer — it was a bare underlined text
+           link mid-masthead (banned bare-text tap target; maker plumbing shown to every
+           traveler in the guide's most prominent spot). See <footer> below for the pill. -->
 
       <!--
         JET-LAG CALCULATOR
@@ -616,6 +607,18 @@ const tripSummary = buildSummary(guide);
       <span class="offline-note">Add this to your home screen and it works offline once opened — only the embedded maps need a connection.</span>
       <br />
       <span class="foot-telemetry">This guide counts anonymous tab opens (no names, no personal data) to learn which sections travelers actually use.</span>
+      <br />
+      <!-- U11: renders on EVERY guide, draft or published — a wrong fact doesn't stop being
+           wrong once a guide graduates. Filing this issue auto-applies "modify-request" and
+           does nothing by itself; only the owner applying "modify-approved" (requires write
+           access) runs the edit, via .github/workflows/modify-guide.yml. Restyled as a small
+           pill (was a bare underlined text link mid-masthead) and moved here, out of the
+           traveler-facing hero. -->
+      <a
+        class="foot-modify-pill"
+        href={`https://github.com/${REPO}/issues/new?template=modify-guide.yml&labels=modify-request&slug=${encodeURIComponent(ogSlug)}&title=${encodeURIComponent(`Modify: ${ogSlug}`)}`}
+        target="_blank" rel="noopener"
+      >✎ Request a change</a>
     </footer>
 
     <!-- ═══════════════════════════════════════════════════════════════════════

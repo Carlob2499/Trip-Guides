@@ -188,7 +188,11 @@ const contourLayers = [
       </div>
 
       <div class="ov-inner">
-        <p class="ov-eyebrow">Verified travel guides · {curated.length} destinations</p>
+        {/* U10: the guide count used to render here too ("· N destinations") AND as its
+            own real number in the stats beat below ("Trips, fully planned") — the same
+            fact shown twice as if it were two different things. The stats beat is the
+            authoritative count now; the eyebrow states what the guides ARE, not how many. */}
+        <p class="ov-eyebrow">Verified travel guides</p>
         <h1 class="ov-head">
           <span class="ov-line">Every fact checked.</span>
           <span class="ov-line ov-line-accent">Every trip yours.</span>

@@ -31,7 +31,12 @@
 .hub-search{width:100%;max-width:26rem;padding:.6rem .85rem;font:inherit;font-size:.95rem;color:var(--ink);background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md)}
 .hub-search:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .hub-chips{display:flex;flex-wrap:wrap;gap:.4rem}
-.hub-chip{font-family:var(--font-data);font-size:.74rem;font-weight:600;letter-spacing:.03em;padding:.42rem .8rem;min-height:34px;background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:999px;cursor:pointer;transition:border-color .15s,background .15s}
+.hub-chip{position:relative;font-family:var(--font-data);font-size:.74rem;font-weight:600;letter-spacing:.03em;padding:.42rem .8rem;min-height:34px;background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:999px;cursor:pointer;transition:border-color .15s,background .15s}
+/* U11: 34px was under the ~44px Apple HIG / Material tap-target minimum. A vertical-only
+   ::after halo (same technique as guide.css's touch-target expander) grows the effective
+   hit region without changing the chip's visual size or row density — horizontal growth is
+   deliberately left at 0 so adjacent chips (gap: .4rem) can never overlap hit regions. */
+.hub-chip::after{content:"";position:absolute;top:-5px;bottom:-5px;left:0;right:0}
 .hub-chip:hover{border-color:var(--ink)}
 .hub-chip-active{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 @media(prefers-reduced-motion:reduce){.hub-chip{transition:none}}

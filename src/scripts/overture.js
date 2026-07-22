@@ -58,13 +58,30 @@ export function initOverture() {
   const routeDot = ov.querySelector(".ov-route-dot");
   const hub = document.querySelector(".hub");
 
+  // U8: hub-motion.css hides .ov-route entirely below 600px (no room for the decorative
+  // line next to the hero text) — mirror that same breakpoint here so the per-frame
+  // getPointAtLength() route-drawing work never runs on an invisible object. This is
+  // exactly the device class most sensitive to wasted scroll-handler work, so it isn't
+  // just correctness, it's the actual perf cost the finding was about.
+  const routeVisible = window.matchMedia && window.matchMedia("(min-width: 600px)").matches;
+  // The cue text promised a route that doesn't exist below 600px ("Follow the route" at
+  // an invisible line) — say what's actually true on that viewport instead.
+  const cue = ov.querySelector(".ov-cue");
+  if (cue && !routeVisible) {
+    const pinEl = cue.querySelector(".ov-cue-pin");
+    cue.textContent = "";
+    if (pinEl) cue.appendChild(pinEl);
+    cue.appendChild(document.createTextNode("See the guides"));
+  }
+
   // First real visit with motion: play. Mark seen immediately so a mid-glide refresh won't replay.
   markSeen();
   document.body.classList.add("ov-play");
 
-  // Route line length for the draw-on-scroll effect.
+  // Route line length for the draw-on-scroll effect — skipped entirely when the route
+  // isn't visible (see routeVisible above).
   let routeLen = 0;
-  if (routePath && typeof routePath.getTotalLength === "function") {
+  if (routeVisible && routePath && typeof routePath.getTotalLength === "function") {
     routeLen = routePath.getTotalLength();
     routePath.style.strokeDasharray = String(routeLen);
     routePath.style.strokeDashoffset = String(routeLen);

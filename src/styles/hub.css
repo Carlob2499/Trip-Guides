@@ -68,3 +68,22 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .ng-err{color:var(--accent);font-size:.82rem}
 .ng-submit{margin-top:.4rem;font-family:var(--font-data);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--ink);color:var(--bg);border:none;border-radius:6px;padding:.62rem 1rem;cursor:pointer;transition:background .14s}
 .ng-submit:hover{background:var(--accent)}
+
+/* === PRINT (U7) ================================================================
+   The hub previously had no print styles at all — printing it produced the full
+   animated Overture hero, contour SVGs, live filter chrome, and (if open) the
+   new-guide modal. Minimal treatment: hide the decorative/interactive layers,
+   render the guide grid as a plain readable list. */
+@media print {
+  .overture, .ov-contours, .ov-route, .ov-cue, .ov-bar-actions,
+  .stats-beat, .hub-filter, .ng-backdrop, .ng-modal,
+  .hub-hero-cta { display: none !important; }
+  * , *::before, *::after { box-shadow: none !important; text-shadow: none !important; animation: none !important; transition: none !important; }
+  html, body { background: #fff !important; color: #111 !important; }
+  body::before { display: none !important; }
+  .hub-grid { display: block !important; }
+  .hubcard { display: block !important; break-inside: avoid; border: none !important; border-bottom: 1px solid #ccc !important; border-radius: 0 !important; box-shadow: none !important; margin-bottom: .8rem; padding-bottom: .6rem; }
+  .hubcard-cover, .hubcard-bar, .hubcard-featured-tag { display: none !important; }
+  .hubcard-title { color: #111 !important; }
+  .hubcard-dek, .hubcard-country, .hubcard-days { color: #333 !important; }
+}
