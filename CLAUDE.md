@@ -138,6 +138,20 @@ auto-retries transient Pages failures; only investigate after three consecutive.
 
 ---
 
+## Session Setup — Connectors (save tokens)
+
+This repo is a static Astro site deployed via GitHub Pages/Actions, with no email, calendar,
+Drive, research-paper, music, or Vercel workflow. Enable only:
+
+- **github** — PR/issue/CI work on this repo (actively used).
+- **Claude Code Remote** (routines/triggers) — small, occasionally useful for scheduled
+  work (e.g. recert).
+
+**Do not enable for this repo:** Gmail, Google Calendar, Google Drive, PubMed, Spotify,
+Vercel — none has a use here; each adds ~4–15k tokens of unused tool schema to every
+session. Re-evaluate only if a genuinely new workflow needs one (e.g. Vercel if hosting
+ever migrates off Pages).
+
 ## Operational Habits (save tokens)
 
 - **Session start: Read `docs/HANDOFF.md` FIRST** — it is the warm-start context (state
