@@ -68,6 +68,19 @@ jobs:
           git config user.name  "waypoint-research[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+      # S3: inputs.slug becomes a branch name, a path segment, and a bash/agent-prompt
+      # string in every step below — validate it here, first, via env: (never
+      # interpolated straight into a shell string) so an invalid slug never reaches any
+      # of those sinks.
+      - name: Validate slug input
+        env:
+          SLUG: ${{ inputs.slug }}
+        run: |
+          node --input-type=module -e "
+            import { isValidSlug } from './scripts/lib/slug.mjs';
+            if (!isValidSlug(process.env.SLUG)) { console.error('Invalid slug:', process.env.SLUG); process.exit(1); }
+          "
+
       # Circuit breaker (docs/PIPELINE.md P2 spine): a headless run that keeps getting cut off
       # before reaching `verified` should eventually stop and ask a human instead of silently
       # resuming forever. Runs BEFORE the agent so a stuck guide never spends agent tokens.

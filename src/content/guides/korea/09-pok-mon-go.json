@@ -472,7 +472,7 @@
       {
         "icon": "✨",
         "label": "Shiny rates",
-        "body": "<span class='shiny-pill'>✨ 1/20</span> for every legendary and Super Mega boss — the best odds in the game."
+        "body": "<b>✨ 1/20</b> for every legendary and Super Mega boss — the best odds in the game."
       },
       {
         "icon": "🕯️",
@@ -746,7 +746,7 @@
     "type": "tierlist",
     "group": "Pokémon GO",
     "title": "Priority targets — which raids to spend passes on",
-    "note": "Every GO Fest legendary 5★ and Super Mega is <span class='shiny-pill'>✨ 1/20</span> shiny — the best odds in the game. Tuned to your weekend: Saturday and Sunday are both Daejeon all day for the two of you (both in the arena for the LBF/Grand Final) — your third friend is in Tokyo this weekend (see the Tokyo tab). Already did Copenhagen? See the divergence card above — it reorders these for you. <b>Pass math:</b> Sat — 3–5 on Mega Mewtwo X, rest on Dragonflight. Sun — 3–4 on Mega Mewtwo Y, 2–3 on Xurkitree, rest on Twilight around the Grand Final.",
+    "note": "Every GO Fest legendary 5★ and Super Mega is <b>✨ 1/20</b> shiny — the best odds in the game. Tuned to your weekend: Saturday and Sunday are both Daejeon all day for the two of you (both in the arena for the LBF/Grand Final) — your third friend is in Tokyo this weekend (see the Tokyo tab). Already did Copenhagen? See the divergence card above — it reorders these for you. <b>Pass math:</b> Sat — 3–5 on Mega Mewtwo X, rest on Dragonflight. Sun — 3–4 on Mega Mewtwo Y, 2–3 on Xurkitree, rest on Twilight around the Grand Final.",
     "collapsible": true,
     "defaultOpen": true,
     "tiers": [

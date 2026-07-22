@@ -44,10 +44,16 @@ jobs:
           node-version: 22
       - run: npm ci
       - id: list
+        env:
+          INPUT_SLUG: ${{ inputs.slug }}
         run: |
           set -euo pipefail
-          if [ -n "${{ inputs.slug }}" ]; then
-            SLUGS="[\"${{ inputs.slug }}\"]"
+          if [ -n "$INPUT_SLUG" ]; then
+            node --input-type=module -e "
+              import { isValidSlug } from './scripts/lib/slug.mjs';
+              if (!isValidSlug(process.env.INPUT_SLUG)) { console.error('Invalid slug:', process.env.INPUT_SLUG); process.exit(1); }
+            "
+            SLUGS=$(jq -cn --arg s "$INPUT_SLUG" '[$s]')
           else
             SLUGS=$(node scripts/recert.mjs --json | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>process.stdout.write(JSON.stringify(JSON.parse(d).slugs)))")
           fi
@@ -81,6 +87,18 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      # Defense in depth: the detect job already validated a manual-dispatch slug, but the
+      # matrix also carries recert.mjs's own list — validate again here, first, before the
+      # slug is interpolated into a branch name below.
+      - name: Validate slug input
+        env:
+          SLUG: ${{ matrix.slug }}
+        run: |
+          node --input-type=module -e "
+            import { isValidSlug } from './scripts/lib/slug.mjs';
+            if (!isValidSlug(process.env.SLUG)) { console.error('Invalid slug:', process.env.SLUG); process.exit(1); }
+          "
 
       - name: Configure git identity
         run: |

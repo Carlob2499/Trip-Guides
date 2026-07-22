@@ -4,6 +4,7 @@
 // URL query string client-side (?slug=... or ?country=...), never from getStaticPaths, since
 // the whole point is tracking a guide that didn't exist at build time.
 import PwaHead from "../../components/PwaHead.astro";
+import { jsonEmbed } from "../../lib/json-embed";
 import "@fontsource-variable/bricolage-grotesque";
 import "@fontsource-variable/literata";
 import "@fontsource-variable/spline-sans-mono";
@@ -70,7 +71,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
       <a class="pg-home-link" href={`${base}/`}>← Back to all guides</a>
     </div>
 
-    <script type="application/json" id="pgConfig" set:html={JSON.stringify({ base })}></script>
+    <script type="application/json" id="pgConfig" set:html={jsonEmbed({ base })}></script>
 
     <script>
       import { initProgress } from "../../features/pipeline-progress/ui/progress.js";

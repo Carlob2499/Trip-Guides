@@ -21,6 +21,7 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { isValidSlug } from "./lib/slug.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const INTAKE_DIR = path.join(ROOT, "guides-intake");
@@ -156,6 +157,12 @@ if (isMain(import.meta.url)) {
   const get = (flag) => (argv.includes(flag) ? argv[argv.indexOf(flag) + 1] : null);
   const slug = get("--slug");
   if (!slug) { console.error("Usage: node scripts/pipeline.mjs --slug <slug> [--status [--json] | --init [--force] | --checkpoint <stage> [--note ..] | --bump-attempt [--json]]"); process.exit(1); }
+  if (!isValidSlug(slug)) {
+    // S4: an unvalidated slug becomes a path segment in statePath() below — `--slug
+    // ../../x` would write the state file outside guides-intake/ entirely.
+    console.error(`[pipeline] "${slug}" isn't a valid slug (lowercase, digits, single hyphens) — aborting before any path is built.`);
+    process.exit(1);
+  }
   const asJson = argv.includes("--json");
 
   if (argv.includes("--init")) {

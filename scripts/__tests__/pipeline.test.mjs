@@ -4,10 +4,14 @@
 
 import { describe, it, expect, afterAll } from "vitest";
 import { existsSync, rmSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import path from "node:path";
 import {
   STAGE_ORDER, initState, checkpoint, readState, nextStage, statusLines, statePath,
   bumpAttempt, statusJson,
 } from "../pipeline.mjs";
+
+const ROOT = path.resolve(import.meta.dirname, "../..");
 
 const SLUG = "zz-pipeline-test"; // sorts last, never a real guide
 afterAll(() => { if (existsSync(statePath(SLUG))) rmSync(statePath(SLUG)); });
@@ -105,6 +109,19 @@ describe("bumpAttempt (circuit breaker)", () => {
     const s = await bumpAttempt(SLUG);
     expect(s.attempts).toBe(1);
     expect(nextStage(s)).toBe("scaffold"); // no stages cleared — bumpAttempt never fakes scaffold
+  });
+});
+
+describe("CLI slug guard (S4 — path traversal)", () => {
+  it("--slug ../../x exits non-zero and writes nothing outside guides-intake", () => {
+    const traversalTarget = path.resolve(ROOT, "..", "..", "x.state.json");
+    expect(() => {
+      execFileSync("node", [path.join(ROOT, "scripts/pipeline.mjs"), "--slug", "../../x", "--status"], {
+        cwd: ROOT,
+        stdio: "pipe",
+      });
+    }).toThrow();
+    expect(existsSync(traversalTarget)).toBe(false);
   });
 });
 

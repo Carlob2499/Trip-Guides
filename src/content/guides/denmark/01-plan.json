@@ -30,7 +30,7 @@
     "type": "panel",
     "group": "Plan",
     "title": "The basics — what every first-timer should know",
-    "body": "<p><b>Emergency: 112.</b> Tap water is safe and delicious everywhere in Denmark — carry a refillable bottle. Tipping is not expected or required; rounding up at a restaurant is plenty. <a href='https://www.rejseplanen.dk' target='_blank' rel='noopener noreferrer'>Rejseplanen</a> is the official transit app — type in any two addresses and it gives you door-to-door directions. Two phrases go a long way: <em>tak</em> (thanks) and <em>hej</em> (hi, or bye).</p>"
+    "body": "<p><b>Emergency: 112.</b> Tap water is safe and delicious everywhere in Denmark — carry a refillable bottle. Tipping is not expected or required; rounding up at a restaurant is plenty. <a href='https://www.rejseplanen.dk' target='_blank' rel='noopener noreferrer'>Rejseplanen</a> is the official transit app — type in any two addresses and it gives you door-to-door directions. Two phrases go a long way: <i>tak</i> (thanks) and <i>hej</i> (hi, or bye).</p>"
   },
   {
     "type": "panel",

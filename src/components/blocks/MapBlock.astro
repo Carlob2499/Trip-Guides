@@ -8,7 +8,8 @@ const bbox = (c: any, span?: number) => {
   const s = span || 0.05;
   return [c.lng - s, c.lat - s * 0.6, c.lng + s, c.lat + s * 0.6].join("%2C");
 };
-const payload = JSON.stringify({
+import { jsonEmbed } from "../../lib/json-embed";
+const payload = jsonEmbed({
   center: { lat: sec.center.lat, lng: sec.center.lng },
   span: sec.span ?? null,
   pins: pins ?? [],

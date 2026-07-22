@@ -32,6 +32,42 @@ const provenance = {
   shelf_life: z.enum(["fx", "transit", "hours", "venue", "default"]).optional(),
 };
 
+// Prose tag allowlist (CLAUDE.md / waypoint-guide-author skill): guide bodies render via
+// `set:html` in 30+ places, so any string that reaches the reader as HTML must be
+// confined to this small, safe tag set — nothing that can execute script or navigate to
+// a dangerous scheme. Checked below on every HTML-bearing field (body/note/tip/strategy/
+// list items, etc.) rather than trusted as plain author text.
+const ALLOWED_TAGS = new Set(["p", "b", "i", "a", "ul", "li", "ol", "br"]);
+// `<span data-addr-kr="...">` is a load-bearing feature, not decoration: field-tools.js
+// / guide-ui.js query it to power tap-to-copy native-script addresses. Allowed ONLY in
+// that exact single-attribute shape — no other attribute (in particular no `on\w+=`)
+// rides along on the same tag.
+const SPAN_ADDR_RE = /^<span\s+data-addr-kr\s*=\s*(?:"[^"]*"|'[^']*')\s*>$/i;
+function findUnsafeHtml(value: string): string | null {
+  // Any tag not in the allowlist (opening or closing).
+  const tagRe = /<\/?\s*([a-zA-Z][a-zA-Z0-9]*)\b[^>]*>/g;
+  let m: RegExpExecArray | null;
+  while ((m = tagRe.exec(value))) {
+    const tag = m[1].toLowerCase();
+    if (tag === "span") {
+      if (m[0] === "</span>" || SPAN_ADDR_RE.test(m[0])) continue;
+      return `disallowed <span> shape (only [data-addr-kr] is permitted)`;
+    }
+    if (!ALLOWED_TAGS.has(tag)) return `disallowed tag <${tag}>`;
+    // on\w+= handler attribute on an otherwise-allowed tag.
+    if (/\bon\w+\s*=/i.test(m[0])) return `event handler attribute in <${tag}>`;
+    // javascript: scheme on an href.
+    if (tag === "a" && /href\s*=\s*["']?\s*javascript:/i.test(m[0])) {
+      return `javascript: href in <a>`;
+    }
+  }
+  return null;
+}
+// Fields across section types that are rendered as HTML via set:html — see
+// PanelBlock/ProseBlock/ListBlock/RoutesBlock/DaysBlock/etc. Walked generically below so
+// a new HTML-bearing field just needs adding to this list, not a new check.
+const HTML_FIELDS = ["body", "note", "tip", "strategy", "caption", "summary", "text"];
+
 // A point on the map.
 const coord = z.object({ lat: z.number(), lng: z.number() });
 
@@ -410,6 +446,34 @@ const guides = defineCollection({
   }).superRefine((g: any, ctx: any) => {
     // NOTE: each check below is its own block and must not `return` — an early return
     // here exits the whole superRefine and silently skips every later check.
+
+    // 0. Prose tag allowlist (S2). Walk every section for HTML-bearing string fields
+    // (see HTML_FIELDS) plus any string-array fields (items/steps/checklist) and
+    // recursively into nested object arrays (e.g. days[].items[].note) — a raw guide
+    // string reaching `set:html` outside `p b i a ul li ol br` (or carrying an on\w+=
+    // handler / javascript: href) is a stored-XSS vector, not a formatting choice.
+    const walkForUnsafeHtml = (val: unknown, path: (string | number)[]) => {
+      if (typeof val === "string") {
+        const reason = findUnsafeHtml(val);
+        if (reason) {
+          ctx.addIssue({
+            code: "custom",
+            path,
+            message: `section "${g.sections?.[path[1] as number]?.title ?? g.sections?.[path[1] as number]?.group ?? path[1]}": ${reason} — only p/b/i/a/ul/li/ol/br are allowed in guide HTML.`,
+          });
+        }
+      } else if (Array.isArray(val)) {
+        val.forEach((v, i) => walkForUnsafeHtml(v, [...path, i]));
+      } else if (val && typeof val === "object") {
+        for (const [k, v] of Object.entries(val)) walkForUnsafeHtml(v, [...path, k]);
+      }
+    };
+    g.sections.forEach((s: any, i: number) => {
+      for (const f of HTML_FIELDS) if (s[f] != null) walkForUnsafeHtml(s[f], ["sections", i, f]);
+      if (Array.isArray(s.items)) walkForUnsafeHtml(s.items, ["sections", i, "items"]);
+      if (Array.isArray(s.steps)) walkForUnsafeHtml(s.steps, ["sections", i, "steps"]);
+      if (Array.isArray(s.checklist)) walkForUnsafeHtml(s.checklist, ["sections", i, "checklist"]);
+    });
 
     // 1. The Plan ⇄ Actual join key is the day's date STRING, so a reworded label would
     // silently drop that day's whole reality layer. Fail the build instead: every

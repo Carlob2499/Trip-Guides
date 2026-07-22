@@ -38,10 +38,10 @@ export function parseIssueBody(body) {
 }
 
 // Slug must match what slugify() in scaffold-guide.mjs can produce — lowercase, digits, single
-// hyphens — never trust it as a path segment otherwise.
-export function isValidSlug(slug) {
-  return /^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug);
-}
+// hyphens — never trust it as a path segment otherwise. Re-exported from the shared
+// scripts/lib/slug.mjs so every pipeline entry point (this file, pipeline.mjs, the
+// workflows) validates identically instead of drifting.
+export { isValidSlug } from "./lib/slug.mjs";
 
 // Which shape this guide is in, or null if neither exists. The flat file wins if (somehow)
 // both existed, since that would mean an incomplete split — but that's not a case the build

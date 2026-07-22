@@ -243,3 +243,56 @@ describe("content.config guides schema — other field-level gates", () => {
     expect(result.success).toBe(false);
   });
 });
+
+describe("content.config guides schema — prose tag allowlist (S2)", () => {
+  it("passes clean allowlisted HTML", () => {
+    const result = schema.safeParse(
+      validGuide({ sections: [{ type: "prose", group: "Overview", body: "<p>Hello <b>world</b> <a href='https://x.com'>link</a></p>" }] }),
+    );
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects a <script> tag in body", () => {
+    const result = schema.safeParse(
+      validGuide({ sections: [{ type: "prose", group: "Overview", body: "<p>hi</p><script>alert(1)</script>" }] }),
+    );
+    expect(result.success).toBe(false);
+    expect(issuePaths(result)).toContain("sections.0.body");
+  });
+
+  it("rejects an onerror= handler on an <img>", () => {
+    const result = schema.safeParse(
+      validGuide({ sections: [{ type: "prose", group: "Overview", body: "<img src=x onerror=alert(1)>" }] }),
+    );
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects a javascript: href", () => {
+    const result = schema.safeParse(
+      validGuide({ sections: [{ type: "prose", group: "Overview", body: "<a href=\"javascript:alert(1)\">click</a>" }] }),
+    );
+    expect(result.success).toBe(false);
+  });
+
+  it("allows the data-addr-kr span (field-tools tap-to-copy)", () => {
+    const result = schema.safeParse(
+      validGuide({ sections: [{ type: "prose", group: "Overview", body: "<span data-addr-kr='서울'>Seoul</span>" }] }),
+    );
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects a span carrying any other attribute", () => {
+    const result = schema.safeParse(
+      validGuide({ sections: [{ type: "prose", group: "Overview", body: "<span style='color:red'>x</span>" }] }),
+    );
+    expect(result.success).toBe(false);
+  });
+
+  it("checks list items too", () => {
+    const result = schema.safeParse(
+      validGuide({ sections: [{ type: "list", group: "Overview", items: ["<script>bad()</script>"] }] }),
+    );
+    expect(result.success).toBe(false);
+    expect(issuePaths(result)).toContain("sections.0.items.0");
+  });
+});
