@@ -1,6 +1,6 @@
 {
-  "name": "Trip Guides",
-  "short_name": "Trip Guides",
+  "name": "Waypoint",
+  "short_name": "Waypoint",
   "description": "Curated, fact-checked travel guides — built to work on the move.",
   "start_url": "/Trip-Guides/",
   "scope": "/Trip-Guides/",

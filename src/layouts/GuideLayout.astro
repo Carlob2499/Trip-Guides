@@ -227,7 +227,7 @@ const tripSummary = buildSummary(guide);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{guide.title} — Trip Guide</title>
+    <title>{guide.title} — Waypoint</title>
     <meta name="description" content={guide.dek || guide.title} />
     {/* Drafts stay fully viewable/linkable (the homepage's Guides-to-be tier links
         directly to them) — only search indexing is suppressed in production, since
@@ -237,12 +237,12 @@ const tripSummary = buildSummary(guide);
       <meta name="robots" content="noindex, nofollow" />
     )}
     <meta property="og:type"        content="article" />
-    <meta property="og:title"       content={`${guide.title} — Trip Guide`} />
+    <meta property="og:title"       content={`${guide.title} — Waypoint`} />
     <meta property="og:description" content={guide.dek || guide.title} />
     <meta property="og:url"         content={Astro.url.href} />
     <meta property="og:image"       content={ogImage} />
     <meta name="twitter:card"       content="summary_large_image" />
-    <meta name="twitter:title"      content={`${guide.title} — Trip Guide`} />
+    <meta name="twitter:title"      content={`${guide.title} — Waypoint`} />
     <meta name="twitter:description" content={guide.dek || guide.title} />
     <meta name="twitter:image"      content={ogImage} />
     <link rel="canonical"           href={Astro.url.href} />
