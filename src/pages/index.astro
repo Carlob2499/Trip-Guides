@@ -6,6 +6,7 @@ import PwaHead from "../components/PwaHead.astro";
 import { accentForGuide, paletteAccentsForGuide } from "../lib/palettes";
 import { generateContourLayer } from "../lib/contours";
 import { computeGuideStats } from "../lib/guide-stats";
+import { tripWindow, localISODate } from "../lib/trip-dates";
 import { continentFor, CONTINENT_ORDER } from "../data/countries.mjs";
 import { flattenSections } from "../features/exports/index";
 // Self-hosted variable fonts (bundled, base-path-safe, offline-correct) — no CDN.
@@ -28,45 +29,35 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 // Repo the "Make a new guide" button files its GitHub issue against.
 const REPO = "Carlob2499/Trip-Guides";
 
-// Trip-date math below intentionally uses LOCAL time (not the UTC parsing in
-// lib/holidays.ts) — this badge is "N days away" relative to the visitor's own
-// clock, same as the countdown pill in GuideLayout.astro.
-const MONTH_MAP: Record<string, number> = {
-  Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11
-};
-
-function parseTripDate(dateStr: string | undefined): Date | null {
-  if (!dateStr) return null;
-  const parts = dateStr.split(/\s+/);
-  const mon = parts[1]; const d = parseInt(parts[2], 10);
-  if (!mon || isNaN(d) || MONTH_MAP[mon] == null) return null;
-  const now = new Date();
-  const dt  = new Date(now.getFullYear(), MONTH_MAP[mon], d);
-  if (dt < now && (now.getTime() - dt.getTime()) > 180 * 86400000) dt.setFullYear(now.getFullYear() + 1);
-  return dt;
-}
-
+// Trip-date math below uses the SAME shared resolver as the guide page's own countdown
+// (src/lib/trip-dates.ts) — this badge is "N days away" relative to the visitor's own
+// clock, and must read the same on the hub as on GuideLayout.astro's countdown pill
+// (R1/R2): two hand-rolled copies of this logic previously drifted (time-of-day vs
+// midnight math), so there is now exactly one implementation, imported, not duplicated.
 const now = new Date();
 const guideExtras = guides.map(g => {
   const flat = flattenSections(g.data.sections as any[] || []);
   const allDays = flat.filter((s: any) => s.type === "days");
   const allItems = allDays.flatMap((s: any) => s.items || []);
-  const firstDate = parseTripDate(allItems[0]?.date);
-  const lastDate  = parseTripDate(allItems[allItems.length - 1]?.date);
+  const firstDateStr = allItems[0]?.date;
+  const lastDateStr  = allItems[allItems.length - 1]?.date;
+  const win = tripWindow(firstDateStr, lastDateStr, now);
+  const firstDate = win.start;
+  const lastDate  = win.end;
   const dayCount  = allItems.length;
   let badge = "";
-  if (firstDate) {
-    const diff = Math.round((firstDate.getTime() - now.getTime()) / 86400000);
-    if (diff > 1)       badge = diff + " days away";
-    else if (diff === 1) badge = "Tomorrow!";
-    else if (diff === 0) badge = "Today!";
-    else if (diff >= -7) badge = "Now!";
-    else if (lastDate && lastDate > now) badge = "In progress";
+  if (win.hasDates) {
+    const diff = win.daysUntilStart;
+    if (diff > 1)          badge = diff + " days away";
+    else if (diff === 1)   badge = "Tomorrow!";
+    else if (diff === 0)   badge = "Today!";
+    else if (win.isOngoing) badge = "Now!"; // today falls within [start, end] inclusive
+    // else: trip is past — no badge (a finished trip gets the static heroWhen treatment below)
   }
   // Hero/filter extras — all derivable at build from data the guide already has.
   const mapSec  = flat.find((s: any) => s.type === "map" && typeof s.center?.lat === "number");
   const sight   = flat.filter((s: any) => s.type === "sights").flatMap((s: any) => s.items || []).find((it: any) => it?.img?.file);
-  const month   = allItems[0]?.date?.split(/\s+/)[1] || "";
+  const month   = firstDateStr?.split(/\s+/)[1] || "";
   // The card/hero cover: the guide's own `cover` art when set, else its first sight photo
   // (docs/MOTION.md). Same image the guide masthead uses — that's what makes them morph.
   const cover = (g.data as any).cover;
@@ -75,7 +66,10 @@ const guideExtras = guides.map(g => {
     : (sight ? { file: sight.img.file, alt: sight.img.alt || sight.name, focal: null } : null);
   return {
     dayCount, badge, firstDate, lastDate, month,
-    startISO: firstDate ? firstDate.toISOString().slice(0, 10) : "",
+    // R2: LOCAL calendar components, never `.toISOString()` (UTC conversion drifts the
+    // calendar day for any negative UTC offset) — this string is compared against
+    // hub.js's own client-side "today" string, so both sides must build it the same way.
+    startISO: firstDate ? localISODate(firstDate) : "",
     mapCenter: mapSec ? { lat: mapSec.center.lat, lng: mapSec.center.lng } : null,
     heroImg: coverImg,
   };

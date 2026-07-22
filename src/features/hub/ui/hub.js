@@ -3,6 +3,8 @@
    of cards. Weather peek reuses the guide pages' Open-Meteo + sessionStorage
    fetch-once pattern; offline or API failure just leaves the pill hidden. */
 
+import { localISODate } from "../../../lib/trip-dates";
+
 (function () {
   /* ── Hero: live countdown ─────────────────────────────────────────────── */
   var hero = document.querySelector(".hub-hero");
@@ -56,7 +58,11 @@
   var grid = document.getElementById("hubGrid");
   if (grid) {
     var cards = Array.prototype.slice.call(grid.querySelectorAll(".hubcard"));
-    var todayISO = new Date().toISOString().slice(0, 10);
+    // R2: LOCAL calendar components (localISODate), NOT `.toISOString()` — that converts
+    // to UTC first, so for any negative UTC offset "today" here could read as tomorrow's
+    // date while `data-start` (built the same way, server-side, from index.astro) still
+    // reads today's real local date — mis-sorting a trip starting today as already past.
+    var todayISO = localISODate(new Date());
     // Future trips first (soonest first), then past/undated alphabetically as built.
     var keyOf = function (c) {
       var s = c.getAttribute("data-start") || "";

@@ -2,8 +2,8 @@
 // single hashed module cached across every guide page (was ~950 lines inline per
 // page). Config that used to come from Astro define:vars is now read from the
 // #tgConfig JSON script tag emitted by the layout.
-import { todayInTz } from "./util.js";
-import { resolveTripDate } from "../lib/trip-dates";
+import { todayInTz, trapFocus, migrateStorageKey } from "./util.js";
+import { resolveTripDate, tripWindow } from "../lib/trip-dates";
 import { initRate, initWeather, initDaySwap, initSun } from "../features/live-data/index.js";
 import { initJetLag } from "./jetlag-ui.js";
 import { initSharePanel } from "../features/share/index.js";
@@ -469,12 +469,18 @@ const daysForBanner     = _cfg.daysForBanner || [];
             // must read the same on both surfaces regardless of time of day.
             var todayMid = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             var diff = Math.round((trip.getTime() - todayMid.getTime()) / 86400000);
+            // R1: whether the trip is still ongoing is a real fact — the LAST day's date,
+            // not a hardcoded "within 7 days of the start" guess. That guess lied on any
+            // trip longer than 8 days (day 9 read "9 days ago" while the trip was still
+            // running). tripWindow() reads lastDayDate (already threaded through _cfg)
+            // and falls back to the single-day case when there's no last day.
+            var win = tripWindow(firstDayDate, lastDayDate, now);
             var pill = document.createElement("span");
-            if (diff > 1)       { pill.className = "gstat gstat-countdown"; pill.textContent = diff + " days to go"; }
-            else if (diff === 1){ pill.className = "gstat gstat-countdown"; pill.textContent = "Tomorrow!"; }
-            else if (diff === 0){ pill.className = "gstat gstat-active";    pill.textContent = "Trip starts today!"; }
-            else if (diff >= -7){ pill.className = "gstat gstat-active";    pill.textContent = "Happening now!"; }
-            else                { pill.className = "gstat gstat-past";      pill.textContent = Math.abs(diff) + " days ago"; }
+            if (diff > 1)         { pill.className = "gstat gstat-countdown"; pill.textContent = diff + " days to go"; }
+            else if (diff === 1)  { pill.className = "gstat gstat-countdown"; pill.textContent = "Tomorrow!"; }
+            else if (diff === 0)  { pill.className = "gstat gstat-active";    pill.textContent = "Trip starts today!"; }
+            else if (win.isOngoing) { pill.className = "gstat gstat-active";    pill.textContent = "Happening now!"; }
+            else                  { pill.className = "gstat gstat-past";      pill.textContent = Math.abs(diff) + " days ago"; }
             statsEl.insertBefore(pill, statsEl.firstChild);
           })();
 

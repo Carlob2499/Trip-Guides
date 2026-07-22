@@ -35,6 +35,23 @@ export function resolveTripDate(str: string | null | undefined, now: Date): Date
   return d;
 }
 
+/**
+ * "YYYY-MM-DD" from a Date's LOCAL calendar components — never `.toISOString()`, which
+ * converts to UTC first. R2: a Date built at LOCAL midnight (e.g. `new Date(y, m, d)`)
+ * shifts to the PREVIOUS calendar day once `.toISOString()` converts it to UTC for any
+ * negative UTC offset (all of the Americas) — so a trip starting local-midnight Jan 15
+ * came out of `.toISOString().slice(0,10)` as "2026-01-14". Comparing that string against
+ * another built the same wrong way looked consistent locally but drifted a full day for
+ * anyone west of UTC, which is exactly how the hub and a guide page's countdown could
+ * disagree, and how the grid could mis-sort a trip starting "today" as already past.
+ */
+export function localISODate(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
 export interface TripWindow {
   start: Date | null;
   end: Date | null;

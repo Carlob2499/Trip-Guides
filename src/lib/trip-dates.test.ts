@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { resolveTripDate, tripWindow } from "./trip-dates";
+import { resolveTripDate, tripWindow, localISODate } from "./trip-dates";
 
 const iso = (d: Date | null) => (d ? `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}` : null);
 
@@ -95,5 +95,22 @@ describe("tripWindow", () => {
     const w = tripWindow("Wed Jul 8", null, new Date(2026, 6, 1));
     expect(iso(w.end)).toBe("2026-07-08");
     expect(w.lengthDays).toBe(1);
+  });
+});
+
+describe("localISODate (R2)", () => {
+  it("formats from LOCAL calendar components, zero-padded", () => {
+    expect(localISODate(new Date(2026, 0, 5))).toBe("2026-01-05");
+    expect(localISODate(new Date(2026, 11, 31))).toBe("2026-12-31");
+  });
+
+  it("reads the Date's own local getters, so it always agrees with how the Date was built", () => {
+    // The bug this replaces: `new Date(y, m, d).toISOString().slice(0, 10)` converts to
+    // UTC first, so a Date built at LOCAL midnight can come out as the PREVIOUS calendar
+    // day for any negative UTC offset. localISODate reads getFullYear/getMonth/getDate —
+    // the same local components the Date was constructed from — so it can never disagree
+    // with the calendar day the caller meant, regardless of the runtime's UTC offset.
+    const d = new Date(2026, 6, 15); // local midnight, Jul 15
+    expect(localISODate(d)).toBe(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`);
   });
 });
