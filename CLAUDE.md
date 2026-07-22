@@ -140,17 +140,26 @@ auto-retries transient Pages failures; only investigate after three consecutive.
 
 ## Session Setup — Connectors (save tokens)
 
-This repo is a static Astro site deployed via GitHub Pages/Actions, with no email, calendar,
-Drive, research-paper, music, or Vercel workflow. Enable only:
+**Required, verified 2026-07-22** against this repo's actual workflows (static Astro site,
+GitHub Pages/Actions deploy, no email/calendar/Drive/research-paper/music/Vercel touchpoint
+anywhere in `.github/workflows/`, `scripts/`, or `docs/`):
 
-- **github** — PR/issue/CI work on this repo (actively used).
-- **Claude Code Remote** (routines/triggers) — small, occasionally useful for scheduled
-  work (e.g. recert).
+- **github** — the only connector this repo's work depends on: PR/issue/CI, watching Actions
+  runs, the pipeline's issue-ops (new-guide, modify-guide, graduate-guide, recert workflows
+  all live here). 63 tools, ~19.6k tokens — heavy, but every one has a real call site.
+- **Claude Code Remote** (routines/triggers) — small (~6.5k tokens), occasionally useful for
+  scheduled work (e.g. a recert trigger, a `send_later` reminder). Keep it; it's cheap and
+  earns its place the moment a scheduled session is wanted.
 
-**Do not enable for this repo:** Gmail, Google Calendar, Google Drive, PubMed, Spotify,
-Vercel — none has a use here; each adds ~4–15k tokens of unused tool schema to every
-session. Re-evaluate only if a genuinely new workflow needs one (e.g. Vercel if hosting
-ever migrates off Pages).
+**Do not enable for this repo — confirmed zero use, not just unlikely use:** Gmail, Google
+Calendar, Google Drive, PubMed, Spotify, Vercel. None has a call site anywhere in this repo;
+each adds ~4–15k tokens of dead tool schema to every session (≈45k combined). Re-evaluate a
+specific one only if a genuinely new workflow needs it (e.g. Vercel if hosting ever migrates
+off Pages) — don't re-enable the whole set speculatively.
+
+**When starting a session on this repo:** if the connector picker shows more than github +
+Claude Code Remote enabled, disable the rest before doing real work — don't just note it here
+and let it ride.
 
 ## Operational Habits (save tokens)
 
