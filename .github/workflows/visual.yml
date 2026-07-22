@@ -90,6 +90,9 @@ jobs:
             exit 0
           fi
           git commit -m "CI: refresh Linux visual baselines [skip ci]"
+          # A6: rebase onto whatever landed on main since checkout so a same-window push
+          # elsewhere can't make this push fail.
+          git pull --rebase origin main
           git push
 
   # Report-only Lighthouse pass (perf/a11y/best-practices/SEO scores as a PR

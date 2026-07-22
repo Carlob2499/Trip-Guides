@@ -55,7 +55,11 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      # A6: the environment URL previously only ever read the FIRST attempt's output — if
+      # that attempt failed (continue-on-error masks it, so the job stays green) and a
+      # retry succeeded instead, this URL stayed blank even though the deploy landed.
+      # Fall through the retry chain to whichever attempt actually produced a URL.
+      url: ${{ steps.deployment.outputs.page_url || steps.deployment-retry.outputs.page_url || steps.deployment-final.outputs.page_url }}
     steps:
       # deploy-pages intermittently fails with "Deployment failed, try again
       # later" (Pages-side transient; observed repeatedly on this repo).

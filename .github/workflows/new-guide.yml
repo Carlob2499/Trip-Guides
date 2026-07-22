@@ -20,6 +20,16 @@ permissions:
   issues: write
   actions: write
 
+# A6: without this, the same "new-guide" label landing twice in quick succession (a
+# double-click, a relabel-after-edit) fires two concurrent scaffold jobs for the same
+# issue — both parse the same issue body and each commits its own scaffold straight to
+# main, producing a duplicate "slug-2" guide. One concurrency group per issue serializes
+# them; the second run queues (does not cancel — a scaffold commit is not idempotent to
+# interrupt mid-commit).
+concurrency:
+  group: new-guide-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
 jobs:
   scaffold:
     if: github.event.label.name == 'new-guide'
