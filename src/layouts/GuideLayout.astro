@@ -649,11 +649,16 @@ const tripSummary = buildSummary(guide);
             ))}
           </>
         ))}
-        <a class="sheet-cat sheet-split-link" data-tab="split" href="#">$ Budget Calculator</a>
-        <a class="sheet-cat sheet-vote-link" data-tab="vote" href="#">🗳 Group Vote</a>
-        <a class="sheet-cat sheet-remind-link" data-tab="remind" href="#">📌 Reminders</a>
-        <a class="sheet-cat sheet-learn-link" data-tab="learn" href="#" hidden>📓 Trip Learnings</a>
-        <a class="sheet-cat sheet-kit-link" data-tab="kit" href="#">🧳 Trip Kit</a>
+        {/* U2: `sheet-tool` marks every tool link (layout chrome, not a content group) so
+            mobile-nav.css can exclude ALL FIVE from the bearing-number counter in one rule.
+            Previously only split/vote had their own :not() exclusions — Reminders/
+            Learnings/Trip Kit kept incrementing the counter as if they were real content
+            chapters, so the sheet's numbering lied about how many sections a guide has. */}
+        <a class="sheet-cat sheet-tool sheet-split-link" data-tab="split" href="#">$ Budget Calculator</a>
+        <a class="sheet-cat sheet-tool sheet-vote-link" data-tab="vote" href="#">🗳 Group Vote</a>
+        <a class="sheet-cat sheet-tool sheet-remind-link" data-tab="remind" href="#">📌 Reminders</a>
+        <a class="sheet-cat sheet-tool sheet-learn-link" data-tab="learn" href="#" hidden>📓 Trip Learnings</a>
+        <a class="sheet-cat sheet-tool sheet-kit-link" data-tab="kit" href="#">🧳 Trip Kit</a>
       </div>
     </div>
 

@@ -59,3 +59,9 @@ a,button,[role="button"],input,select,summary{-webkit-tap-highlight-color:transp
 body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:1.02rem;line-height:1.72;-webkit-font-smoothing:antialiased}
 /* Fine paper-grain noise overlay — fixed, non-interactive, behind everything. */
 body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* Skip link — visually hidden until focused, then a clear chip at top-left. Shared by
+   EVERY page (U3): it used to live only in guide.css, so the hub had no skip link at all
+   despite its own V2 spec promising one. */
+.skip-link{position:fixed;left:.7rem;top:.7rem;z-index:999;padding:.55rem 1rem;background:var(--ink);color:var(--bg);border-radius:999px;font-family:var(--font-data);font-size:.78rem;text-decoration:none;transform:translateY(-300%);transition:transform .15s}
+.skip-link:focus-visible{transform:none;outline:3px solid var(--accent);outline-offset:2px}

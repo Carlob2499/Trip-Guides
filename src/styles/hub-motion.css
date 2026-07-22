@@ -58,6 +58,8 @@
   backdrop-filter: blur(6px); transition: background var(--dur-ui) var(--ease-out-expo), border-color var(--dur-ui);
 }
 .ov-pill:hover { border-color: var(--accent); }
+/* U6: no visible keyboard-focus state at all previously. */
+.ov-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .ov-pill-solid { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .ov-pill-solid:hover { background: var(--accent); border-color: var(--accent); }
 .ov-pill-icon { width: 2.1rem; height: 2.1rem; padding: 0; display: grid; place-items: center; border-radius: 50%; font-size: .95rem; }
@@ -91,6 +93,8 @@
   text-transform: uppercase; color: var(--muted); text-decoration: none;
 }
 .ov-cue-pin { width: 12px; height: 12px; border-radius: 50% 50% 50% 0; background: var(--accent); transform: rotate(-45deg); }
+/* U6: no visible keyboard-focus state at all previously. */
+.ov-cue:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
 
 /* Soft gradient veil at the base — melts the seam into the stats beat / hub below. */
 .overture::after {
@@ -148,6 +152,10 @@ body.ov-play .ov-cue { animation: ovCue 2.4s var(--ease-out-expo) 1.35s forwards
    The staggered reveal is the existing native view() system (scroll-motion.css) — cards already
    rise as the grid enters; nothing to add here. */
 .hubcard { border-color: color-mix(in srgb, var(--accent) 30%, var(--rule)); }
+/* U6: the shared hover/focus-visible styling below (a subtle border-tint + soft glow) reads
+   fine on hover but is too weak as the ONLY keyboard-focus signal — add a real outline that
+   fires for keyboard focus only, on top of the shared styling. */
+.hubcard:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .hubcard:hover,
 .hubcard:focus-visible {
   border-color: color-mix(in srgb, var(--accent) 55%, var(--rule));

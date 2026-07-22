@@ -9,8 +9,11 @@
   /* Bearing numbers via CSS counters — only real section groups count. */
   .sheet-list{counter-reset:bearing}
   .sheet-cat{display:flex;align-items:baseline;gap:.65rem;font-family:var(--font-display);font-size:1.18rem;font-weight:640;letter-spacing:-.015em;text-transform:none;color:var(--ink);padding:.6rem 1.2rem .35rem;min-height:46px}
-  .sheet-cat:not(.sheet-split-link):not(.sheet-vote-link)::before{counter-increment:bearing;content:counter(bearing,decimal-leading-zero);font-family:var(--font-data);font-size:.66rem;font-weight:700;letter-spacing:.08em;color:var(--accent)}
-  .sheet-split-link::before,.sheet-vote-link::before{content:"·";font-family:var(--font-data);color:var(--muted)}
+  /* U2: exclude every tool link (layout chrome — Budget/Vote/Reminders/Learnings/Trip Kit,
+     .sheet-tool) from the bearing-number counter in one rule, not per-tool :not()s that
+     silently miss any tool link added later. */
+  .sheet-cat:not(.sheet-tool)::before{counter-increment:bearing;content:counter(bearing,decimal-leading-zero);font-family:var(--font-data);font-size:.66rem;font-weight:700;letter-spacing:.08em;color:var(--accent)}
+  .sheet-tool::before{content:"·";font-family:var(--font-data);color:var(--muted)}
   .sheet-cat.active{color:var(--accent)}
   .sheet-link{padding-left:3rem;color:var(--muted);font-size:.95rem}
   .sheet-link.active{color:var(--accent)}

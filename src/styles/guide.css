@@ -110,9 +110,8 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
    coloured label text drawn on top of it needs — axe caught this on Denmark's guide. */
 .gtab.gtab-active{background:color-mix(in srgb,var(--accent) 70%,var(--ink) 30%);color:var(--bg);box-shadow:0 3px 14px color-mix(in srgb,var(--accent) 40%,transparent)}
 .gtab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-/* Skip link — visually hidden until focused, then a clear chip at top-left. */
-.skip-link{position:fixed;left:.7rem;top:.7rem;z-index:999;padding:.55rem 1rem;background:var(--ink);color:var(--bg);border-radius:999px;font-family:var(--font-data);font-size:.78rem;text-decoration:none;transform:translateY(-300%);transition:transform .15s}
-.skip-link:focus-visible{transform:none;outline:3px solid var(--accent);outline-offset:2px}
+/* U3: .skip-link moved to base.css (shared by every page) — it lived only here, so the
+   hub had no skip link at all despite its own V2 spec promising one. */
 @media(prefers-reduced-motion:reduce){.gtab{transition:none}.gtab:hover{transform:none}}
 .gtab-split{font-family:var(--font-data);font-size:.72rem;letter-spacing:.04em}
 @media(max-width:899px){.gtab{padding:.44rem .85rem;font-size:.78rem;min-height:36px}}
@@ -305,6 +304,8 @@ footer{border-top:1px solid var(--ink);text-align:center;padding:1.7rem 1.1rem;c
   .bs-chev{margin-left:auto;font-size:13px}
   /* Back-to-top button */
   .botTop{flex:0 0 auto;min-width:48px;min-height:48px;display:flex;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--rule2);border-radius:8px;color:var(--ink);text-decoration:none;font-size:1.1rem}
+  /* U6: the bottom nav bar had no visible keyboard-focus state at all. */
+  .botHome:focus-visible,.botTop:focus-visible,.botSections:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   /* Slide-up sheet backdrop */
   .sheet-backdrop{display:block;position:fixed;inset:0;z-index:45;background:rgba(16,20,24,0);pointer-events:none;transition:background .25s}
   .sheet-backdrop.open{background:rgba(16,20,24,.45);pointer-events:auto}
