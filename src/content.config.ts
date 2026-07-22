@@ -390,6 +390,14 @@ const guides = defineCollection({
     }).optional(),
     verified: z.string().optional(),  // freshness metadata for the maker/AI — NOT shown to travelers, EXCEPT a ⚠-prefixed value (e.g. an unconfirmed draft), which renders as a warning pill in the masthead
     draft: z.boolean().optional(),    // true = a "Guide-to-be" scaffold; listed in the home page's draft tier, not the curated grid
+    // D4: true once the trip has actually happened and concluded — distinct from `draft`
+    // (which is about NOT YET published/verified). A concluded trip's facts (hours, prices,
+    // transit) are stale by definition and always will be, so check-staleness.mjs skips an
+    // archived guide entirely instead of flagging it forever with no path to "current". The
+    // hub/site rendering is UNCHANGED by this flag — an archived guide still shows exactly as
+    // it did before; this only mutes the recert sweep's punch list for a trip nobody is
+    // recertifying facts for anymore.
+    archived: z.boolean().optional(),
     // OPT-IN provenance enforcement. Absent = loose (every guide written before this
     // gate existed keeps building untouched, and a partial backfill stays honest rather
     // than being forced to fake dates it doesn't have). "strict" = this guide promises

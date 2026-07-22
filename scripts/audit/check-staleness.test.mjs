@@ -38,6 +38,16 @@ beforeAll(async () => {
     ],
   };
   await writeFile(path.join(dir, "fixture-guide.json"), JSON.stringify(guide), "utf8");
+
+  // D4: an archived guide's facts are stale by definition (the trip concluded) and must be
+  // skipped entirely, not flagged forever with no path to "current".
+  const archivedGuide = {
+    title: "Concluded Trip",
+    country: "Testland",
+    archived: true,
+    sections: [{ type: "prose", group: "Overview", title: "Old fact", body: "x", verified_on: oldDate }],
+  };
+  await writeFile(path.join(dir, "archived-guide.json"), JSON.stringify(archivedGuide), "utf8");
 });
 
 afterAll(async () => {
@@ -64,5 +74,14 @@ describe("checkStaleness — nested item-level provenance (P6)", () => {
     const { sections } = await checkStaleness({ guidesDir: dir });
     const hit = sections.find((s) => s.title.includes("Fresh Sight"));
     expect(hit).toBeFalsy();
+  });
+});
+
+describe("checkStaleness — archived guide state (D4)", () => {
+  it("skips an archived guide entirely, listing it in `archived` not `sections`/`stale`", async () => {
+    const { archived, sections, stale } = await checkStaleness({ guidesDir: dir });
+    expect(archived).toContain("archived-guide");
+    expect(sections.some((s) => s.slug === "archived-guide")).toBe(false);
+    expect(stale.some((s) => s.slug === "archived-guide")).toBe(false);
   });
 });

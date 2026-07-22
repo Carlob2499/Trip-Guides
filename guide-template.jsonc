@@ -1,10 +1,17 @@
 // guide-template.jsonc — the fill-in model for a NEW country guide.
 //
 // This file is intentionally NOT in src/content/guides/, so it is never published.
-// To make a real guide: copy the shape below into src/content/guides/<country>.json,
+// To make a real guide: copy the shape below into src/content/guides/<country>.json
+// (or split into a src/content/guides/<country>/ directory — _guide.json meta +
+// NN-<group>.json section-array files, once it graduates — see `npm run split-guide`),
 // remove the comments (real .json files can't have them), fill every field with
 // VERIFIED facts, and delete any section you genuinely don't need. Research every
 // price/time/fact and every photo filename before publishing (see CLAUDE.md).
+//
+// D6: this template mirrors shipped field usage (us.json, korea) as of the 2026-07-20
+// review, not the pipeline's original day-one shape — every field below is something a
+// real, currently-published guide actually uses. Keep it that way: when a new field
+// ships to a real guide, add it here too (CLAUDE.md's "New guides inherit everything").
 //
 // The blocks below are the universal backbone — the sections a good, safe guide
 // should cover for any country. They are scaffolding to fill in, not content to
@@ -15,19 +22,72 @@
   "dek": "<one-line description of the trip>",
   "footer": "Verified <month year>. Re-check prices and hours before you travel.",
   "country": "<Country>",        // must match a key in src/lib/themes.ts (or add one)
+
+  // IANA time zone of the destination, e.g. "America/Phoenix", "Asia/Seoul". Resolve it
+  // during research with `node scripts/lookup-tz.mjs <lat> <lng>` (offline, no search) the
+  // moment the destination coordinates are set — NEVER leave this to the country-based
+  // fallback (tzFor() in GuideLayout.astro): that's a generic default, not a researched
+  // fact, and it has shipped wrong (by hours) for a real trip before this field existed.
+  // Powers the jet-lag calculator and the live weather strip.
+  "tz": "<IANA time zone, e.g. America/Phoenix>",
+
+  // OPT-IN provenance enforcement (D1/D2). "strict" = this guide promises that any
+  // section CLAIMING a check (a `≈` figure) carries the `verified_on` date of that check;
+  // see content.config.ts's strict-provenance superRefine. New guides should be born
+  // strict — omit only if you have a specific reason not to opt in yet.
+  "provenance": "strict",
+
+  // Salted, unguessable id for this guide's shared Trip-Split / feedback / reminders room
+  // (16-40 lowercase alphanumerics, crypto-random). Generate once with
+  // `node scripts/gen-room-id.mjs` and commit it — never hand-type one. Omit only for a
+  // guide that deliberately falls back to the (read-only, guessable) slug-derived room.
+  "roomId": "<16-40 lowercase alphanumeric chars, from scripts/gen-room-id.mjs>",
+
+  // Freshness metadata for the maker/AI — NOT shown to travelers, EXCEPT a ⚠-prefixed
+  // value (e.g. an unconfirmed draft), which renders as a warning pill in the masthead.
+  // Keep this in sync with per-section verified_on as you research — it's the guide-level
+  // stamp check-staleness.mjs reads when no more specific per-section date exists.
+  "verified": "⚠ draft — not yet researched",
+
+  // true once the trip has actually happened and concluded (D4). A concluded trip's facts
+  // are stale by definition, so check-staleness.mjs skips an archived guide entirely
+  // instead of flagging it forever with no path to "current". Leave unset until the trip
+  // is over; the hub/site rendering is unaffected either way.
+  // "archived": true,
+
+  // How many distinct content `group`s (= nav tabs) this guide may carry. Default 10 if
+  // omitted. Raise deliberately only if this guide has genuinely earned more (e.g. two
+  // anchor events) — see CLAUDE.md's Design Doctrine tab-budget rule.
+  // "tabBudget": 10,
+
   "intro": "",
   "sections": [
     // ---- Plan ----
-    { "type": "panel", "group": "Plan", "title": "When you land", "body": "<airport → lodging: the cheapest/easiest route, time, cost; for a redeye/early arrival, note where to shower/refresh at the airport>" },
+    { "type": "panel", "group": "Plan", "title": "When you land", "body": "<airport → lodging: the cheapest/easiest route, time, cost; for a redeye/early arrival, note where to shower/refresh at the airport>",
+      // ADDITIVE per-section provenance (used under provenance: "strict" — see above).
+      // source_url = the primary source consulted; verified_on = the YYYY-MM-DD it was
+      // checked; shelf_life = which category judges staleness (fx 7d · transit 90d ·
+      // hours 90d · venue 180d · default 90d — src/lib/staleness.ts). Every section or
+      // item that carries a `≈` (sourced-approximate) figure owes these; omit shelf_life
+      // for the default 90-day category.
+      "source_url": "<primary source URL>", "verified_on": "<YYYY-MM-DD>", "shelf_life": "transit" },
     { "type": "panel", "group": "Plan", "title": "Local essentials", "body": "<plug type & voltage, time zone, what's open/closed which day>" },
     { "type": "panel", "group": "Plan", "title": "Entry & documents", "body": "<visa/visa-free, passport validity, any arrival form>" },
     { "type": "panel", "group": "Plan", "title": "Booking checklist", "body": "<what to book, roughly in order>", "checklist": ["Flights — <carrier + flight nos, dep times>; ⚠ confirm times", "<b>Baggage</b> — the booked airline's carry-on + checked allowance (fare-dependent on hybrid/low-cost carriers); ⚠ confirm your fare and pre-pay any extra bags online", "<item — ≈ $cost>"] },
     { "type": "panel", "group": "Plan", "title": "Phone & data", "body": "<eSIM/SIM/roaming options that actually work here>" },
-    { "type": "panel", "group": "Plan", "title": "Holidays & your dates", "body": "<any public holidays, closures, or big events overlapping the travel dates>" },
+    // Live 7-day forecast strip. No coords of its own — it reads lat/lng from this
+    // guide's first `map` section at build/runtime, so it needs no per-guide config
+    // beyond that map existing. Hidden automatically if there's no map section.
+    { "type": "weather", "group": "Plan", "title": "Weather for your dates" },
+    // Live public-holiday/closure lookup for the trip's country + dates (Nager.Date,
+    // refreshed weekly by scripts/fetch-holidays.mjs). `note` is an optional caption;
+    // `year` defaults to the trip's own year.
+    { "type": "holidays", "group": "Plan", "title": "Public holidays & closures" },
 
     // ---- Money & budget ----
     { "type": "panel", "group": "Money & budget", "title": "Money & currency", "body": "<currency, rough rate, cards vs cash, tipping>" },
     { "type": "budget", "group": "Money & budget", "title": "Budget & daily costs", "currency": "$", "days": 7,
+      "party": 2, // positive integer — BudgetBlock.astro divides the trip total by this for the per-person view
       "intro": "Rough per-person estimates — confirm as you book; log your real spend below.",
       "items": [
         { "label": "Lodging, per night", "basis": "day", "est": 0 },
@@ -46,8 +106,39 @@
     // ---- the rest ----
     { "type": "routes", "group": "Getting around", "title": "Key transit routes", "steps": ["<step>", "<step>"] },
     { "type": "map",    "group": "Getting around", "title": "Orientation map", "center": { "lat": 0, "lng": 0 }, "span": 0.06 },
-    { "type": "days",   "group": "Itinerary", "title": "Day by day", "items": [ { "date": "<date>", "title": "<day title>", "pace": "<easy/full>", "body": "<plan>" } ] },
-    { "type": "sights", "group": "Sights", "title": "Top sights", "items": [ { "name": "<place>", "kicker": "<short tag>", "body": "<why>", "img": { "file": "<exact Wikimedia Commons filename>", "alt": "<alt>" }, "map": { "lat": 0, "lng": 0 } } ] },
+
+    { "type": "days",   "group": "Itinerary", "title": "Day by day", "items": [
+      { "date": "<Mon D, e.g. Wed Sep 2>", "title": "<day title>",
+        "pace": "<one-line pace description, e.g. 'Slow — travel day'>",
+        // ADDITIVE one-sentence glanceable summary — rendered huge in Focus Today and as
+        // the day card's lead line. Set this from the day's own researched content.
+        "tldr": "<one-sentence day summary>",
+        "body": "<full plan, HTML allowed from the prose allowlist: p b i a ul li ol br>",
+        // Explicit exertion tag for the Low-Energy toggle — a spectrum, never inferred
+        // from `pace`. Defaults to "balanced" if omitted.
+        "energy": "balanced", // "packed" | "balanced" | "slow"
+        // Where the day mostly happens — powers the weather day-swap advisory (an
+        // outdoor day + rain forecast + a same-window indoor day → a swap suggestion).
+        "env": "mixed", // "outdoor" | "indoor" | "mixed"
+        "constraints": ["<e.g. 'Closed Mondays', 'Advance booking required'>"],
+        // Ordered stops for the day — powers the day-synced planner map (pins + route
+        // line), the day stop-list, and GPX export. Coords MUST come from a verified
+        // source (scripts/lookup-place.mjs), never guessed.
+        "waypoints": [
+          { "name": "<stop name>", "lat": 0, "lng": 0, "time": "<display label, e.g. '08:00' or '≈14:30'>", "note": "<optional>" }
+        ]
+      }
+    ] },
+
+    { "type": "sights", "group": "Sights", "title": "Top sights", "items": [
+      { "name": "<place>", "kicker": "<short tag>", "body": "<why>",
+        "img": { "file": "<exact Wikimedia Commons filename>", "alt": "<alt>" },
+        "map": { "lat": 0, "lng": 0 },
+        // Per-item provenance — sights carry their own source_url/verified_on/shelf_life
+        // independent of the section wrapper (D2's widened advisory checks these too).
+        "source_url": "<primary source URL>", "verified_on": "<YYYY-MM-DD>", "shelf_life": "venue" }
+    ] },
+
     { "type": "prose",  "group": "Food & shopping", "title": "What to eat", "body": "<dishes, markets, where>" }
   ]
 }

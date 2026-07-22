@@ -109,6 +109,37 @@ export function checkResearchGuide(guide, slug) {
     for (const it of s.items || []) walkProv(it, `${s.type} item "${it.name || it.label || it.date || "?"}"`);
   }
 
+  // 8. Widened provenance advisory (D2) — content.config.ts's build-time gate only fires on
+  // `≈`-flagged text under `provenance: "strict"`, so a precise-looking but undated hour/price
+  // passes silently, and days/sights/budget item-level provenance are skipped entirely there.
+  // Reported here as ADVISORY (info, non-blocking) rather than promoted to a build error or a
+  // readiness "warn" — every shipped guide (including Denmark, which has zero structured
+  // verified_on at all — see D3) would otherwise start failing `npm run verify` retroactively.
+  // This is the punch list a research/recert pass works down, not a gate that blocks graduation.
+  const HARD_TIME_PRICE_RE = /\d{1,2}(:\d{2})?\s?(am|pm)|[–-]\s?\d{1,2}(:\d{2})?\s?(am|pm)|[$₩€£¥]\s?\d/i;
+  const PROVENANCE_SECTION_TYPES = new Set(["panel", "prose", "list", "routes", "days", "sights", "budget"]);
+  const hasHardFact = (text) => HARD_TIME_PRICE_RE.test(String(text ?? ""));
+  for (const s of sections) {
+    if (!PROVENANCE_SECTION_TYPES.has(s.type)) continue;
+    const label = `${s.type} "${s.title || s.group}"`;
+    // Section-level text (panel/prose body, list items, routes steps).
+    const sectionText = JSON.stringify({ body: s.body, items: s.type === "list" ? s.items : undefined, steps: s.steps });
+    if (!s.verified_on && hasHardFact(sectionText)) {
+      add("info", `${label} has an undated hour/price-looking figure but no verified_on (D2 advisory — precise text isn't automatically exempt from provenance)`);
+    }
+    // Item-level provenance (days[].items[], sights[].items[], budget[].items[]) — previously
+    // skipped entirely by the build-time strict gate, which only understands section-level
+    // verified_on on the four DATED_TYPES.
+    for (const it of s.items || []) {
+      if (it.verified_on) continue;
+      const itemText = JSON.stringify(it);
+      if (hasHardFact(itemText)) {
+        const itemLabel = it.name || it.title || it.label || it.date || "?";
+        add("info", `${s.type} item "${itemLabel}" (in ${label}) has an undated hour/price-looking figure but no verified_on (D2 advisory)`);
+      }
+    }
+  }
+
   return { slug, findings };
 }
 

@@ -2,6 +2,10 @@
 // a "Mon YYYY" date and flags anything older than the threshold. Draft guides
 // (draft: true) are skipped from age scoring — they're unverified by design, not
 // "stale"; that's already visible via the draft flag and the masthead ⚠ pill.
+// Archived guides (archived: true, D4) are also skipped — a concluded trip's facts
+// (hours, prices, transit) are stale by definition and always will be, so flagging
+// them forever with no path to "current" is structurally-blind noise, not a punch
+// list. The hub/site rendering is unchanged by `archived`; it only mutes recert.
 // This script does NOT re-verify anything itself — it produces the punch list a
 // human (or a Tier 2 research pass) acts on.
 
@@ -19,10 +23,12 @@ export async function checkStaleness({ thresholdDays = DEFAULT_THRESHOLD_DAYS, g
   const stale = [];
   const noDate = [];
   const drafts = [];
+  const archived = [];
   const sections = []; // per-section findings, judged by each fact's own shelf life
 
   for (const { slug, guide } of guides) {
     if (guide.draft) { drafts.push(slug); continue; }
+    if (guide.archived) { archived.push(slug); continue; }
 
     // Per-section provenance. The guide-level stamp below can only ever say "this guide
     // is old"; these say WHICH fact is old and what to re-check it against — which is
@@ -79,12 +85,13 @@ export async function checkStaleness({ thresholdDays = DEFAULT_THRESHOLD_DAYS, g
     if (age > thresholdDays) stale.push({ slug, date: date.toISOString().slice(0, 10), ageDays: age });
   }
 
-  return { thresholdDays, stale, noDate, drafts, sections, totalGuides: guides.length };
+  return { thresholdDays, stale, noDate, drafts, archived, sections, totalGuides: guides.length };
 }
 
 if (isMain(import.meta.url)) {
-  const { thresholdDays, stale, noDate, drafts, sections } = await checkStaleness();
-  console.log(`[staleness] guide-level threshold ${thresholdDays}d — ${stale.length} stale, ${noDate.length} no parseable date, ${drafts.length} drafts (skipped)`);
+  const { thresholdDays, stale, noDate, drafts, archived, sections } = await checkStaleness();
+  console.log(`[staleness] guide-level threshold ${thresholdDays}d — ${stale.length} stale, ${noDate.length} no parseable date, ${drafts.length} drafts (skipped), ${archived.length} archived (skipped)`);
+  for (const s of archived) console.log(`  · ${s} — archived, skipped`);
   for (const s of stale) console.log(`  ✗ ${s.slug} — last verified ${s.date} (${s.ageDays}d ago)`);
   for (const s of noDate) console.log(`  ? ${s.slug} — has a \`verified\` field but no "Mon YYYY" found in it`);
   console.log(`[staleness] per-section — ${sections.length} fact(s) past their own shelf life`);

@@ -296,3 +296,20 @@ describe("content.config guides schema — prose tag allowlist (S2)", () => {
     expect(issuePaths(result)).toContain("sections.0.items.0");
   });
 });
+
+describe("content.config guides schema — archived guide state (D4)", () => {
+  it("accepts a guide with archived: true", () => {
+    const result = schema.safeParse(validGuide({ archived: true }));
+    expect(result.success).toBe(true);
+  });
+
+  it("accepts a guide with archived omitted (default unset, not required)", () => {
+    const result = schema.safeParse(validGuide());
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects a non-boolean archived value", () => {
+    const result = schema.safeParse(validGuide({ archived: "yes" }));
+    expect(result.success).toBe(false);
+  });
+});
