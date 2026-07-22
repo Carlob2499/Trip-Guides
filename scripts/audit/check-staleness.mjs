@@ -5,7 +5,7 @@
 // This script does NOT re-verify anything itself — it produces the punch list a
 // human (or a Tier 2 research pass) acts on.
 
-import { readGuides, parseVerifiedDate, daysSince, isMain } from "./lib.mjs";
+import { readGuides, parseVerifiedDate, daysSince, isMain, flatten } from "./lib.mjs";
 
 export const DEFAULT_THRESHOLD_DAYS = 90;
 
@@ -14,8 +14,8 @@ export const DEFAULT_THRESHOLD_DAYS = 90;
 // `shelf_life` enum and the test in staleness.test.ts keep the two honest.
 const SHELF_LIFE_DAYS = { fx: 7, transit: 90, hours: 90, venue: 180, default: 90 };
 
-export async function checkStaleness({ thresholdDays = DEFAULT_THRESHOLD_DAYS } = {}) {
-  const guides = await readGuides();
+export async function checkStaleness({ thresholdDays = DEFAULT_THRESHOLD_DAYS, guidesDir } = {}) {
+  const guides = await readGuides(guidesDir);
   const stale = [];
   const noDate = [];
   const drafts = [];
@@ -27,18 +27,49 @@ export async function checkStaleness({ thresholdDays = DEFAULT_THRESHOLD_DAYS } 
     // Per-section provenance. The guide-level stamp below can only ever say "this guide
     // is old"; these say WHICH fact is old and what to re-check it against — which is
     // the difference between a report and a punch list.
-    for (const [i, s] of (guide.sections ?? []).entries()) {
-      if (!s?.verified_on) continue;
-      const d = new Date(s.verified_on + "T00:00:00Z");
-      if (Number.isNaN(d.getTime())) continue;
-      const life = SHELF_LIFE_DAYS[s.shelf_life ?? "default"] ?? SHELF_LIFE_DAYS.default;
-      const age = daysSince(d);
-      if (age > life) {
-        sections.push({
-          slug, index: i, title: s.title ?? s.group ?? `section ${i}`,
-          date: s.verified_on, ageDays: age, category: s.shelf_life ?? "default",
-          life, source: s.source_url ?? null,
-        });
+    //
+    // P6: `flatten()` unwraps any nested `sections` array so a future nested-section
+    // shape stays covered defensively; the flat top-level list is checked either way. On
+    // top of that, provenance can also live one level DEEPER than the section itself —
+    // days[].items[], sights[].items[], and budget[].items[] each carry their own
+    // optional verified_on/source_url/shelf_life (see content.config.ts `...provenance`
+    // spreads) — a per-fact date the previous section-only scan never looked at, so
+    // e.g. an individual stale sight or day sat invisible to recert forever even though
+    // the schema had been carrying its date all along. Reported by "section title →
+    // item name/date" path, not by numeric index, so the punch list points at something
+    // a human can actually find in the file.
+    const flatSections = flatten(guide.sections);
+    for (const [i, s] of flatSections.entries()) {
+      const path = s.title ?? s.group ?? `section ${i}`;
+      if (s?.verified_on) {
+        const d = new Date(s.verified_on + "T00:00:00Z");
+        if (!Number.isNaN(d.getTime())) {
+          const life = SHELF_LIFE_DAYS[s.shelf_life ?? "default"] ?? SHELF_LIFE_DAYS.default;
+          const age = daysSince(d);
+          if (age > life) {
+            sections.push({
+              slug, index: i, title: path,
+              date: s.verified_on, ageDays: age, category: s.shelf_life ?? "default",
+              life, source: s.source_url ?? null,
+            });
+          }
+        }
+      }
+      if (Array.isArray(s?.items)) {
+        for (const item of s.items) {
+          if (!item?.verified_on) continue;
+          const d = new Date(item.verified_on + "T00:00:00Z");
+          if (Number.isNaN(d.getTime())) continue;
+          const life = SHELF_LIFE_DAYS[item.shelf_life ?? "default"] ?? SHELF_LIFE_DAYS.default;
+          const age = daysSince(d);
+          if (age > life) {
+            sections.push({
+              slug, index: i, title: `${path} → ${item.name ?? item.title ?? item.label ?? "item"}`,
+              date: item.verified_on, ageDays: age, category: item.shelf_life ?? "default",
+              life, source: item.source_url ?? null,
+            });
+          }
+        }
       }
     }
 
