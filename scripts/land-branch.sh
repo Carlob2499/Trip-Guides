@@ -62,7 +62,9 @@ fi
 
 # Passing — try to land it for real.
 gh pr ready "$PR_NUM" >/dev/null 2>&1 || true
-if gh pr merge "$PR_NUM" --merge --delete-branch >/dev/null 2>&1; then
+MERGE_ERR_FILE="$(mktemp)"
+if gh pr merge "$PR_NUM" --merge --delete-branch >/dev/null 2>"$MERGE_ERR_FILE"; then
+  rm -f "$MERGE_ERR_FILE"
   echo "merged:$PR_NUM"
   # Auto-publish probation: the guide just went live with nobody approving it first. File a loud,
   # vetoable heads-up so that safety net isn't gone entirely — never fatal, so a notification
@@ -79,7 +81,19 @@ if gh pr merge "$PR_NUM" --merge --delete-branch >/dev/null 2>&1; then
     rm -f "$NOTE_FILE"
   fi
 else
-  echo "[land-branch] merge failed (likely a conflict) — leaving $BRANCH as a draft PR for human triage" >&2
-  gh pr ready "$PR_NUM" --undo >/dev/null 2>&1 || true
-  echo "draft:$PR_NUM"
+  # P4: only a genuine mergeability conflict is the documented "fall back to draft PR" path.
+  # Any other failure (auth, permissions, branch protection, rate limit) is a real error that
+  # would otherwise silently masquerade as "needs human triage" forever — surface it and fail
+  # loudly instead.
+  MERGE_ERR="$(cat "$MERGE_ERR_FILE")"
+  rm -f "$MERGE_ERR_FILE"
+  if echo "$MERGE_ERR" | grep -qiE "not mergeable|conflict"; then
+    echo "[land-branch] merge failed (mergeability conflict) — leaving $BRANCH as a draft PR for human triage" >&2
+    gh pr ready "$PR_NUM" --undo >/dev/null 2>&1 || true
+    echo "draft:$PR_NUM"
+  else
+    echo "[land-branch] gh pr merge failed for a reason OTHER than a mergeability conflict — not silently downgrading to draft-PR triage:" >&2
+    echo "$MERGE_ERR" >&2
+    exit 1
+  fi
 fi
