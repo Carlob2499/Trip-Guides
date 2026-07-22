@@ -13,13 +13,18 @@
 import { settle } from "../model/settle";
 import { normalizeExpense, normalizeMember } from "../model/records";
 import { hasFirebase, joinTrip, roomId as guideRoomId } from "../../firebase/index.js";
-import { esc } from "../../../scripts/util.js";
+import { esc, migrateStorageKey } from "../../../scripts/util.js";
 
 (function () {
   var wrap = document.getElementById("tripSplit");
   if (!wrap) return;
 
   var SK = "tg-split-" + (wrap.dataset.sk || "guide");
+  // R8: migrate this guide's on-device (solo-mode) split cache from the old
+  // title-derived key — only relevant when Firebase isn't configured (SHARED LIVE
+  // mode reads from the room, keyed by roomId, which this does not touch).
+  var legacyStoreKey = document.body.getAttribute("data-legacy-storekey") || null;
+  migrateStorageKey(localStorage, SK, legacyStoreKey ? "tg-split-" + legacyStoreKey : null);
   var state = { members: [], expenses: [], customSplit: false };
   var room = null;      // Firebase room when synced, else null
   var offFns = [];      // room onChange unsubscribers

@@ -21,6 +21,7 @@ const destTzIana        = _cfg.destTzIana || null;
 const curCode           = _cfg.curCode || null;
 const curFallbackRate   = _cfg.curFallbackRate || null;
 const daysForBanner     = _cfg.daysForBanner || [];
+const legacyStoreKey    = _cfg.legacyStoreKey || null;
       // Fault isolation: the coupled core (tab bar → budget, all bound by shared
       // closures like showTab/hashKey) runs in one try; each independent leaf feature
       // after it gets its own, so a throw in one leaf can no longer kill the rest and
@@ -41,6 +42,14 @@ const daysForBanner     = _cfg.daysForBanner || [];
       (function () {
         try {
           var STORE_KEY = "tripguide-" + (storeKey || "guide");
+          var LEGACY_STORE_KEY = legacyStoreKey ? "tripguide-" + legacyStoreKey : null;
+          // R8: one-time migration of this guide's checklist + budget localStorage from
+          // the old title-derived key to the new slug-derived one (see storeKey's own
+          // comment in GuideLayout.astro). No-op for every current guide (slug already
+          // normalizes to the same string as the title), and never overwrites data
+          // already saved under the new key.
+          migrateStorageKey(localStorage, STORE_KEY, LEGACY_STORE_KEY);
+          migrateStorageKey(localStorage, STORE_KEY + "-budget", LEGACY_STORE_KEY ? LEGACY_STORE_KEY + "-budget" : null);
 
           // Single source of month names, shared by every section below that parses
           // a guide date string like "Wed Jul 8" (jump-to-today, trip countdown,
@@ -149,24 +158,26 @@ const daysForBanner     = _cfg.daysForBanner || [];
           var deepLinkedTab = hashTabIdx >= 0;
           if (deepLinkedTab) {
             showTab(hashTabIdx);
-          } else if (specialPanels.hasOwnProperty(savedTab)) {
+          } else if (specialPanels.hasOwnProperty(savedTab) && specialPanels[savedTab]) {
+            // R6: `hasOwnProperty` alone only proves the KEY is a known special-tab name —
+            // not that THIS guide actually rendered that panel (e.g. a Learnings tab from a
+            // prior guide visit, saved under the same per-storeKey session key, before this
+            // guide has a `learnings` block: the DOM element is null). Restoring into a
+            // panel that doesn't exist hid every catblock (isSpecial short-circuits them
+            // all) with nothing left to un-hide — a blank content area with no active tab.
+            // Requiring the element to actually exist falls through to the numeric-tab
+            // branch below instead.
             showTab(savedTab);
           } else {
             var si = parseInt(savedTab || "0", 10);
             showTab(isNaN(si) || si >= catblocks.length ? 0 : si);
           }
 
-          /* ── SCROLL POSITION MEMORY ──────────────────────────────────── */
-          var SCROLL_KEY = "scroll-" + STORE_KEY;
-          var _savedY = sessionStorage.getItem(SCROLL_KEY);
-          if (_savedY) { requestAnimationFrame(function () { window.scrollTo(0, parseInt(_savedY, 10) || 0); }); }
-          var _scrollTimer;
-          window.addEventListener("scroll", function () {
-            clearTimeout(_scrollTimer);
-            _scrollTimer = setTimeout(function () {
-              try { sessionStorage.setItem(SCROLL_KEY, String(window.pageYOffset)); } catch (e) {}
-            }, 250);
-          }, { passive: true });
+          /* R4: the old whole-page scroll-position system that lived here (a raw
+             pageYOffset saved to sessionStorage, restored on load regardless of which
+             tab ended up active) has been REMOVED — it fought with scroll-memory.js's
+             PER-TAB system (src/scripts/scroll-memory.js), which now also restores at
+             load time, not just on tab click. One system, not two. */
 
           /* ── 1. DARK MODE TOGGLE ──────────────────────────────────────── */
           var darkBtn = document.getElementById("btnDark");
@@ -309,14 +320,21 @@ const daysForBanner     = _cfg.daysForBanner || [];
             btn.addEventListener("click", function () {
               var sid = btn.getAttribute("data-sid");
               var url = window.location.href.split("#")[0] + "#" + sid;
+              function marked() {
+                btn.textContent = "✓";
+                setTimeout(function () { btn.textContent = "#"; }, 1800);
+              }
+              // R7: without the fallback, a button was dead-silent (no copy, no feedback,
+              // no error) anywhere navigator.clipboard is absent (non-HTTPS context, older
+              // browser, some in-app webviews) — field-tools.js already had this pattern
+              // (window.prompt lets the reader select-and-copy by hand); this brought
+              // guide-ui.js's two copy buttons in line with it.
               if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(url).then(function () {
-                  btn.textContent = "✓";
-                  setTimeout(function () { btn.textContent = "#"; }, 1800);
-                }).catch(function () {
-                  btn.textContent = "✓";
-                  setTimeout(function () { btn.textContent = "#"; }, 1800);
+                navigator.clipboard.writeText(url).then(marked).catch(function () {
+                  window.prompt("Copy this link:", url);
                 });
+              } else {
+                window.prompt("Copy this link:", url);
               }
             });
           });
@@ -330,16 +348,24 @@ const daysForBanner     = _cfg.daysForBanner || [];
             btn.setAttribute("aria-label", "Copy Korean address");
             btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5"/></svg> <span lang="ko">주소 복사</span>';
             el.parentNode.insertBefore(btn, el.nextSibling);
+            function markCopied() {
+              btn.innerHTML = '<span lang="ko">✓ 복사됨</span>';
+              btn.classList.add("copied");
+              setTimeout(function () {
+                btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5"/></svg> <span lang="ko">주소 복사</span>';
+                btn.classList.remove("copied");
+              }, 1900);
+            }
             btn.addEventListener("click", function () {
+              // R7: same fallback as the anchor-copy button above (and field-tools.js's
+              // existing pattern) — without it this button was silently dead wherever
+              // navigator.clipboard is absent.
               if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(addr).then(function () {
-                  btn.innerHTML = '<span lang="ko">✓ 복사됨</span>';
-                  btn.classList.add("copied");
-                  setTimeout(function () {
-                    btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5"/></svg> <span lang="ko">주소 복사</span>';
-                    btn.classList.remove("copied");
-                  }, 1900);
+                navigator.clipboard.writeText(addr).then(markCopied).catch(function () {
+                  window.prompt("Copy this address:", addr);
                 });
+              } else {
+                window.prompt("Copy this address:", addr);
               }
             });
           });
@@ -397,9 +423,15 @@ const daysForBanner     = _cfg.daysForBanner || [];
             try { bstore = JSON.parse(localStorage.getItem(BKEY) || "{}"); } catch (e) { bstore = {}; }
             var cur    = bud.getAttribute("data-cur") || "$";
             var inputs = Array.prototype.slice.call(bud.querySelectorAll(".bactual"));
-            inputs.forEach(function (inp) {
+            inputs.forEach(function (inp, i) {
               var row = inp.closest(".brow");
-              var k   = hashKey((row && row.getAttribute("data-key")) || "");
+              var dataKey = row && row.getAttribute("data-key");
+              // R5: rows without data-key used to all hash the same empty string, so their
+              // saved values clobbered each other (every undeclared row shared one storage
+              // slot). Falling back to a per-ROW-INDEX key keeps them independent — still
+              // stable across reloads (row order doesn't change), just not stable across a
+              // guide edit that reorders rows, same caveat any index-based key would have.
+              var k = hashKey(dataKey || ("row-" + i));
               inp.dataset.pkey = k;
               if (bstore[k] != null) inp.value = bstore[k];
             });
@@ -624,7 +656,6 @@ const daysForBanner     = _cfg.daysForBanner || [];
         var bud = tog.closest(".budget");
         if (!bud) return;
         var btns  = tog.querySelectorAll(".btog-btn");
-        var party = parseInt(bud.getAttribute("data-party") || "1", 10);
         var cur   = bud.getAttribute("data-cur") || "$";
 
         function fmt(n) { return cur + Math.round(n).toLocaleString("en-US"); }

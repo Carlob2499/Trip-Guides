@@ -1,5 +1,16 @@
 import { describe, it, expect } from "vitest";
-import { todayInTz, esc } from "./util.js";
+import { todayInTz, esc, migrateStorageKey } from "./util.js";
+
+// A minimal Storage-shaped fake — no jsdom/localStorage needed, since
+// migrateStorageKey only ever calls getItem/setItem on whatever store it's given.
+function fakeStore(seed: Record<string, string> = {}) {
+  const data: Record<string, string> = { ...seed };
+  return {
+    getItem: (k: string) => (k in data ? data[k] : null),
+    setItem: (k: string, v: string) => { data[k] = v; },
+    _data: data,
+  };
+}
 
 // Fixed instants (injectable clock — never the real one).
 // 2026-07-10T20:00:00Z = Jul 11 05:00 in Seoul (UTC+9), Jul 10 16:00 in New York.
@@ -53,5 +64,37 @@ describe("todayInTz", () => {
     expect(todayInTz(null, INSTANT)).toBeNull();
     expect(todayInTz("", INSTANT)).toBeNull();
     expect(todayInTz("Not/AZone", INSTANT)).toBeNull();
+  });
+});
+
+describe("migrateStorageKey (R8 — storeKey title→slug migration)", () => {
+  it("copies the legacy key's value to the new key when the new key is empty", () => {
+    const store = fakeStore({ "old-key": "the-data" });
+    migrateStorageKey(store, "new-key", "old-key");
+    expect(store.getItem("new-key")).toBe("the-data");
+  });
+
+  it("never overwrites a new key that already has data", () => {
+    const store = fakeStore({ "old-key": "old-data", "new-key": "current-data" });
+    migrateStorageKey(store, "new-key", "old-key");
+    expect(store.getItem("new-key")).toBe("current-data");
+  });
+
+  it("no-ops when legacyKey === newKey (the common case — slug already equals normalized title)", () => {
+    const store = fakeStore({ "same-key": "the-data" });
+    migrateStorageKey(store, "same-key", "same-key");
+    expect(store.getItem("same-key")).toBe("the-data"); // unchanged, no crash
+  });
+
+  it("no-ops when there's no legacy key at all", () => {
+    const store = fakeStore({});
+    migrateStorageKey(store, "new-key", null);
+    expect(store.getItem("new-key")).toBeNull();
+  });
+
+  it("no-ops when the legacy key has nothing to migrate", () => {
+    const store = fakeStore({});
+    migrateStorageKey(store, "new-key", "old-key");
+    expect(store.getItem("new-key")).toBeNull();
   });
 });

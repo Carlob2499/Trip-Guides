@@ -262,10 +262,19 @@ export async function writeScaffold(answers) {
 //   --start 2026-03-01 --end 2026-03-08 --travelers 2 --pace balanced \
 //   --priorities "Food,Nature" --niche "live music" --budget "Mid-range ($75-150/day)" \
 //   --comments "one vegetarian" [--title "..."] [--lat -22.9 --lng -43.2] [--slug rio]
-function parseArgs(argv) {
+// R9: a flag immediately followed by ANOTHER flag (e.g. `--country --start X`, a missing
+// value rather than a deliberate valueless flag) used to swallow the next flag's name as
+// its own value — `country` would silently become the literal string "--start". Guarding
+// the lookahead means a flag with no value gets `true` instead (still truthy/usage-visible
+// in a printed args dump, unlike a wrong string that reads as if it were provided).
+export function parseArgs(argv) {
   const a = {};
   for (let i = 0; i < argv.length; i++) {
-    if (argv[i].startsWith("--")) { a[argv[i].slice(2)] = argv[i + 1]; i++; }
+    if (argv[i].startsWith("--")) {
+      const next = argv[i + 1];
+      if (next !== undefined && !next.startsWith("--")) { a[argv[i].slice(2)] = next; i++; }
+      else { a[argv[i].slice(2)] = true; }
+    }
   }
   return a;
 }

@@ -29,13 +29,6 @@ const SEEN_KEY = "tg-overture-seen";
 const HOLD_MS = 1200; // beat to read the headline before the glide begins
 const GLIDE_MS = 1500; // the eased descent into the hub
 
-function seen() {
-  try {
-    return !!localStorage.getItem(SEEN_KEY);
-  } catch {
-    return false;
-  }
-}
 function markSeen() {
   try {
     localStorage.setItem(SEEN_KEY, "1");

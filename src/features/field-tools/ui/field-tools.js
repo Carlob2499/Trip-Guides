@@ -97,6 +97,8 @@ import { trapFocus, migrateStorageKey } from "../../../scripts/util.js";
 
   /* ── 2. Stop check-off ─────────────────────────────────────────────────── */
   var STOPS_KEY = "tg-stops-" + storeKey;
+  // R8: migrate this guide's stop check-off state from the old title-derived key.
+  migrateStorageKey(localStorage, STOPS_KEY, legacyStoreKey ? "tg-stops-" + legacyStoreKey : null);
   function loadStops() {
     try { return JSON.parse(localStorage.getItem(STOPS_KEY)) || {}; } catch (e) { return {}; }
   }

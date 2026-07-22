@@ -5,7 +5,7 @@
 // scope here — this covers the logic a bug would corrupt silently.
 
 import { describe, it, expect } from "vitest";
-import { slugify, dayLabelsFromRange, buildGuideObject, buildIntakeMd } from "../scaffold-guide.mjs";
+import { slugify, dayLabelsFromRange, buildGuideObject, buildIntakeMd, parseArgs } from "../scaffold-guide.mjs";
 
 describe("slugify", () => {
   it("lowercases and hyphenates", () => {
@@ -156,5 +156,30 @@ describe("buildIntakeMd", () => {
     expect(md).toContain("# New Guide Intake — [Destination]");
     expect(md).toContain("Who is this for / party:**   *(→ pick");
     expect(md).toContain("1. \n2. \n3. ");
+  });
+});
+
+describe("parseArgs (R9 — a flag with no value doesn't swallow the next flag's name)", () => {
+  it("parses normal --flag value pairs", () => {
+    expect(parseArgs(["--country", "Brazil", "--travelers", "2"])).toEqual({
+      country: "Brazil", travelers: "2",
+    });
+  });
+
+  it("a flag directly followed by another flag gets true, NOT the next flag's name as its value", () => {
+    // The bug: `--country --start X` used to set country to the literal string "--start".
+    const a = parseArgs(["--country", "--start", "2026-03-01"]);
+    expect(a.country).toBe(true);
+    expect(a.start).toBe("2026-03-01");
+  });
+
+  it("a trailing flag with nothing after it gets true, not undefined-as-a-string", () => {
+    const a = parseArgs(["--country", "Brazil", "--dryrun"]);
+    expect(a.country).toBe("Brazil");
+    expect(a.dryrun).toBe(true);
+  });
+
+  it("handles an all-flags-no-values argv without throwing", () => {
+    expect(parseArgs(["--a", "--b", "--c"])).toEqual({ a: true, b: true, c: true });
   });
 });
