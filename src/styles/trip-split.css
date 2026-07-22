@@ -1,0 +1,144 @@
+/* === TRIP SPLIT (group budget calculator) & GROUP VOTE ========================
+   A3: split out of guide.css once it passed the ~800-line rule (CLAUDE.md's
+   guide.css-split-by-feature threshold) — these were previously the tail of
+   guide.css under a header comment mislabeled "BUDGET CALCULATOR" (that name
+   belongs to the PER-DAY budget rows/toggle earlier in guide.css; this file
+   is the separate TripSplit group-expense-and-settle-up tool + the Group Vote
+   panel, which reuses TripSplit's card/button styling — hence sharing one file). */
+
+.split-wrap{padding:1.4rem 0 3rem;max-width:680px}
+.split-toolbar{margin-bottom:1.2rem}
+.split-title{font-family:var(--font-display);font-weight:760;letter-spacing:-.03em;font-size:clamp(1.8rem,5vw,2.4rem);line-height:1.05;margin-bottom:.3rem}
+.split-desc{color:var(--muted);font-size:.92rem;line-height:1.6}
+.split-save-actions{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.7rem}
+/* cards */
+.split-card{background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:1.1rem 1.25rem;margin-bottom:.9rem;box-shadow:0 1px 3px rgba(16,20,24,.06)}
+.sc-head{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin-bottom:.75rem}
+.sc-label{font-family:var(--font-display);font-size:.7rem;font-weight:600;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+.sc-body{display:flex;flex-direction:column;gap:.5rem}
+/* buttons */
+.sc-add-btn,.sc-add-expense-btn{font-family:var(--font-data);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;background:none;border:1px solid var(--rule2);border-radius:4px;padding:.3rem .7rem;cursor:pointer;color:var(--muted);transition:color .14s,border-color .14s,background .14s,transform .2s var(--ease-spring);white-space:nowrap;flex:none}
+.sc-add-btn:hover,.sc-add-expense-btn:hover{color:var(--ink);border-color:var(--ink)}
+.sc-add-expense-btn{margin-bottom:.9rem;align-self:flex-start}
+/* member rows */
+.sm-row{display:grid;grid-template-columns:1.4rem 1fr 1.6fr 1.6rem;gap:.45rem;align-items:center}
+.sm-idx{font-family:var(--font-data);font-size:.72rem;color:var(--muted);text-align:center;line-height:1}
+/* shared input */
+.split-in{font:inherit;font-size:.9rem;border:1px solid var(--rule2);border-radius:4px;padding:.3rem .45rem;background:var(--card);color:var(--ink);width:100%;min-width:0;transition:border-color .14s}
+.split-in:focus{outline:2px solid var(--theme-primary,var(--accent));outline-offset:0;border-color:transparent}
+/* delete button */
+.split-del{background:none;border:none;cursor:pointer;font-size:1rem;color:var(--muted);padding:.1rem .35rem;border-radius:3px;line-height:1;transition:color .14s,background .14s;flex:none}
+.split-del:hover{color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
+/* split mode toggle */
+.sc-mode-toggle{display:flex;gap:.25rem}
+.scm-btn{font-family:var(--font-data);font-size:.68rem;letter-spacing:.04em;background:none;border:1px solid var(--rule2);border-radius:4px;padding:.26rem .6rem;cursor:pointer;color:var(--muted);transition:background .13s,color .13s,border-color .13s;white-space:nowrap}
+.scm-btn.scm-active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+/* expense header row */
+/* Header shares the committed-row grid (.se-main: drag | payer | desc | amount | del)
+   so the labels sit over their columns; the 3 labels are placed in cols 2–4. */
+.se-header{display:grid;grid-template-columns:1.3rem 7rem 1fr 5.5rem 1.6rem;gap:.4rem;padding:.1rem 0 .4rem;border-bottom:1px solid var(--rule);margin-bottom:.3rem}
+.se-h-payer,.se-h-desc,.se-h-amt{font-family:var(--font-data);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.se-h-payer{grid-column:2}
+.se-h-desc{grid-column:3}
+.se-h-amt{grid-column:4;text-align:right}
+/* add-expense box — boxed off so it never reads as a stray row in the list below */
+.se-new-card{background:var(--bg2);border:1px solid var(--rule);border-radius:6px;padding:.75rem .8rem;margin-bottom:.9rem}
+.se-new-card .sc-label{display:block;margin-bottom:.5rem}
+/* Add-expense button lives in a header row at the TOP of the entry box (mirrors the
+   People card's "+ Add person"), so it's the first, always-in-place control — not
+   hunted for below the inputs when tallying many expenses in a row. */
+.se-new-head{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.55rem}
+.se-new-head .sc-label{margin-bottom:0}
+.se-new-head .sc-add-expense-btn{margin-bottom:0}
+.se-new-row{display:grid;grid-template-columns:7rem 1fr 5.5rem;gap:.4rem;align-items:center;margin-bottom:.55rem}
+/* expense rows */
+.se-row{margin-bottom:.35rem}
+.se-main{display:grid;grid-template-columns:1.3rem 7rem 1fr 5.5rem 1.6rem;gap:.4rem;align-items:center}
+.se-drag{cursor:grab;color:var(--muted);font-size:.9rem;text-align:center;flex:none;user-select:none}
+.se-drag:active{cursor:grabbing}
+.se-dragging{opacity:.4}
+.se-amt-wrap{display:flex;align-items:center;gap:.2rem;min-width:0}
+.se-cur{font-family:var(--font-data);font-size:.78rem;color:var(--muted);flex:none}
+.se-amt{text-align:right}
+/* Strip the native number-input spinners (Chrome/Safari show them, Firefox varies)
+   so amount fields read consistently across browsers — same treatment as .bactual. */
+.se-amt,.se-ca{appearance:textfield;-moz-appearance:textfield}
+.se-amt::-webkit-inner-spin-button,.se-amt::-webkit-outer-spin-button,.se-ca::-webkit-inner-spin-button,.se-ca::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+/* custom split */
+/* Who shared an expense. Chips, not checkboxes — tap targets have to look tappable, and an
+   excluded person must read as clearly OFF rather than merely unstyled. */
+.se-parts{display:flex;flex-wrap:wrap;align-items:center;gap:.3rem .4rem;margin-top:.35rem;padding:.4rem .6rem;background:var(--bg2);border-radius:5px;border-left:3px solid var(--rule2)}
+.se-parts-lbl{font-family:var(--font-data);font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:.15rem}
+.se-part{padding:.22rem .55rem;border:1px solid var(--rule2);border-radius:999px;background:var(--bg);color:var(--muted);font-size:.78rem;font-weight:600;cursor:pointer;text-decoration:line-through;text-decoration-color:var(--rule2)}
+.se-part-on{background:var(--accent);border-color:var(--accent);color:#fff;text-decoration:none}
+.se-part:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+.se-parts-note{font-family:var(--font-data);font-size:.68rem;font-weight:700;color:var(--accent);margin-left:.1rem}
+.se-custom{display:flex;flex-wrap:wrap;gap:.4rem .6rem;margin-top:.4rem;padding:.55rem .6rem;background:var(--bg2);border-radius:5px;border-left:3px solid var(--rule2)}
+.se-custom--warn{border-left-color:var(--accent)}
+.se-cl{display:flex;flex-direction:column;gap:.18rem;min-width:5rem}
+.se-cl-name{font-family:var(--font-data);font-size:.62rem;letter-spacing:.04em;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.se-ca{text-align:right;font-size:.85rem}
+.se-warn{width:100%;font-family:var(--font-data);font-size:.65rem;color:var(--accent);letter-spacing:.02em}
+/* results */
+.split-settle-head{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin:.9rem 0 .5rem}
+.split-settle-head #sCopySettle{margin-left:auto}
+.split-settle-count{font-family:var(--font-data);font-size:.68rem;letter-spacing:.04em;color:var(--muted);background:var(--bg2);border:1px solid var(--rule2);border-radius:99px;padding:.12rem .55rem}
+/* balance rows */
+.sb-row{display:grid;grid-template-columns:1fr auto auto auto;gap:.3rem .7rem;align-items:center;padding:.38rem 0;border-bottom:1px solid var(--rule)}
+.sb-row:last-child{border-bottom:none}
+.sb-name{font-weight:600;font-size:.92rem}
+.sb-verb{font-size:.82rem;color:var(--muted)}
+.sb-amt{font-family:var(--font-data);font-size:.88rem;font-weight:600;text-align:right;white-space:nowrap}
+.sb-owed .sb-amt{color:var(--green)}
+.sb-owes .sb-amt{color:var(--accent)}
+.sb-even .sb-amt{color:var(--muted)}
+/* settlement rows */
+.st-row{background:var(--bg2);border:1px solid var(--rule);border-radius:6px;padding:.65rem .85rem;margin-bottom:.4rem}
+.st-parties{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;margin-bottom:.25rem}
+.st-from{font-weight:600}
+.st-arrow{color:var(--accent);font-size:1.1rem;line-height:1}
+.st-to{font-weight:600}
+.st-amt-row{display:flex;align-items:baseline;gap:.5rem}
+.st-usd{font-family:var(--font-data);font-size:1.05rem;font-weight:700}
+.st-via{margin-top:.25rem;font-size:.82rem;color:var(--muted);font-style:italic}
+.split-settle-ok{color:var(--green);font-size:.92rem;font-style:italic;padding:.3rem 0}
+/* summary bar */
+.split-summary{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;padding:.7rem 1rem;background:var(--bg2);border:1px solid var(--rule);border-radius:6px}
+.split-summary-lbl{font-family:var(--font-data);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);flex:1}
+.split-summary-val{font-family:var(--font-data);font-size:.92rem;font-weight:700}
+/* empty state */
+.split-empty{color:var(--muted);font-size:.88rem;font-style:italic;padding:.25rem 0}
+
+/* === GROUP VOTE (reuses the split-card / sc- / se-new-card box+button styles above) === */
+.vo-row{display:grid;grid-template-columns:1fr auto auto 1.6rem;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid var(--rule)}
+.vo-row:last-child{border-bottom:none}
+.vo-text{font-size:.92rem;overflow-wrap:anywhere}
+.vo-count{font-family:var(--font-data);font-size:.9rem;font-weight:700;color:var(--muted);min-width:1.4rem;text-align:right}
+.vo-btn{font-family:var(--font-data);font-size:.72rem;letter-spacing:.05em;background:none;border:1px solid var(--rule2);border-radius:4px;padding:.28rem .6rem;cursor:pointer;color:var(--muted);transition:color .13s,border-color .13s,background .13s;flex:none}
+.vo-btn:hover{color:var(--ink);border-color:var(--ink)}
+.vo-row--leader .vo-count{color:var(--accent)}
+.vo-row--leader .vo-text{font-weight:600}
+
+/* mobile tweaks — TripSplit/Vote's own share of guide.css's touch-target expander (the
+   general-purpose ones — .anchor-btn/.map-fs-btn/.copy-addr/.gtab — stay in guide.css,
+   since they're not TripSplit/Vote specific). */
+@media(max-width:599px){
+  .split-del{position:relative}
+  .split-del::after{content:"";position:absolute;inset:-11px}
+  .scm-btn,.vo-btn{position:relative}
+  .scm-btn::after,.vo-btn::after{content:"";position:absolute;top:-9px;bottom:-9px;left:0;right:0}
+  .sc-add-btn,.sc-add-expense-btn{position:relative}
+  .sc-add-btn::after,.sc-add-expense-btn::after{content:"";position:absolute;top:-8px;bottom:-8px;left:-4px;right:-4px}
+
+  .sm-row{grid-template-columns:1.4rem 1fr 1.6rem;grid-template-rows:auto auto}
+  .sm-pay{grid-column:2}
+  /* Drag-to-reorder is desktop-pointer-only (HTML5 DnD, no touch equivalent), so on
+     mobile drop the handle and its column — reclaims width so rows never overflow. */
+  .se-drag{display:none}
+  .se-main{grid-template-columns:5.5rem 1fr 4.5rem 1.6rem}
+  .se-header{grid-template-columns:5.5rem 1fr 4.5rem 1.6rem}
+  .se-h-payer{grid-column:1}
+  .se-h-desc{grid-column:2}
+  .se-h-amt{grid-column:3}
+  .se-new-row{grid-template-columns:5.5rem 1fr 4.5rem}
+}

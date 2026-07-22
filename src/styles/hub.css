@@ -1,28 +1,32 @@
 /* Design tokens, reset, and the noise texture live in base.css (imported first). */
 
-.hub-topbar{position:absolute;top:1rem;right:1.2rem}
-.topbar-btn{background:none;border:1px solid var(--rule2);border-radius:4px;padding:.3rem .55rem;cursor:pointer;color:var(--muted);font-size:.95rem;line-height:1;transition:color .15s,border-color .15s;font-family:inherit}
-.topbar-btn:hover{color:var(--ink);border-color:var(--ink)}
-/* base.css provides the shared body type/background; the hub adds a flex column
-   so the footer sinks to the bottom on short pages. */
-body{min-height:100vh;display:flex;flex-direction:column}
-.hub-masthead,.hub,.hub-foot{position:relative;z-index:1}
-/* Bricolage heavy for the brand name — the wayfinding identity anchor */
-h1{font-family:var(--font-display);font-weight:800;letter-spacing:-.04em;line-height:1.0}
-
-.hub-masthead{position:relative;padding:4rem 1.2rem 2.2rem;text-align:center;border-bottom:1px solid var(--ink);max-width:1340px;margin:0 auto;width:100%}
-.hub-rule{width:2.8rem;height:2px;background:var(--accent);margin:0 auto 1.3rem}
-.eyebrow{font-family:var(--font-data);font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--accent)}
-.hub-masthead h1{font-size:clamp(3rem,9vw,5.5rem);margin:.4rem 0 0}
-.dek{color:var(--muted);max-width:56ch;margin:.85rem auto 0;font-size:1.04rem}
-.hub-count{font-family:var(--font-data);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:.9rem auto 0;border:1px solid var(--rule2);border-radius:99px;display:inline-block;padding:.2rem .75rem}
+/* U4: removed dead pre-Overture CSS that shipped past the V2/V3 redesign — none of
+   .hub-topbar / .topbar-btn (hub.css's OWN copy; guide pages use the real, actively-used
+   .topbar-btn in guide.css instead, unaffected since hub.css is only ever imported here) /
+   .hub-masthead / .hub-rule / .eyebrow / .hub-masthead h1 / .dek / .hub-count /
+   .hub-new-btn match any element index.astro still renders (verified via grep — the
+   Overture's own .ov-* markup replaced all of it). Also merges what used to be two
+   separate `body{}` rules (A3) into one.
+   base.css provides the shared body type/background; the hub adds a flex column
+   so the footer sinks to the bottom on short pages, and never lets the page scroll
+   sideways (html is clipped in base.css too). */
+body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-width:100%}
+.hub,.hub-foot{position:relative;z-index:1}
 
 .hub{max-width:1340px;margin:0 auto;width:100%;padding:2rem 1.2rem 3rem;flex:1}
 .hub-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1.2rem}
 
 /* Hub cards: elevated with richer hierarchy — color accent bar at top, larger title */
-.hubcard{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-lg);padding:0;text-decoration:none;color:var(--ink);box-shadow:0 1px 3px rgba(16,20,24,.06);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;overflow:hidden}
-.hubcard:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(16,20,24,.12);border-color:var(--rule2)}
+.hubcard{display:flex;flex-direction:column;background:var(--card);border-radius:var(--r-lg);padding:0;text-decoration:none;color:var(--ink);box-shadow:0 1px 3px rgba(16,20,24,.06);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;overflow:hidden}
+/* U5: the neutral border color is wrapped in :where() (zero specificity) so
+   hub-motion.css's V3 Atlas per-guide tint (a plain `.hubcard{border-color:...}` rule,
+   same 0,1,0 specificity) always wins on MERIT, not on import order — previously this
+   neutral default and the tint rule tied on specificity, so whichever file happened to
+   import last silently won; reordering the imports would have silently killed the
+   tinting with no visible error. */
+:where(.hubcard){border:1px solid var(--rule)}
+.hubcard:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(16,20,24,.12)}
+:where(.hubcard:hover){border-color:var(--rule2)}
 /* Accent color bar across the top of each card */
 .hubcard-bar{height:4px;background:var(--accent);width:100%;flex:none}
 .hubcard-body{padding:1.3rem 1.4rem 1.25rem;display:flex;flex-direction:column;gap:.35rem;flex:1}
@@ -45,13 +49,6 @@ h1{font-family:var(--font-display);font-weight:800;letter-spacing:-.04em;line-he
 .hubcard-advisory{font-family:var(--font-data);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--warn);border:1px solid var(--warn);border-radius:99px;padding:.1rem .5rem;line-height:1.5;white-space:nowrap}
 
 .hub-foot{border-top:1px solid var(--ink);text-align:center;padding:1.6rem 1.2rem;color:var(--muted);font-size:.82rem;max-width:1340px;margin:0 auto;width:100%;font-family:var(--font-data);letter-spacing:.04em}
-
-/* never let the home page scroll sideways (html is clipped in base.css) */
-body{overflow-x:clip;max-width:100%}
-
-/* ── "Make a new guide" CTA ─────────────────────────────────────────────── */
-.hub-new-btn{margin:1.1rem auto 0;display:inline-block;font-family:var(--font-data);font-size:11px;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--bg);border:1px solid var(--ink);border-radius:99px;padding:.5rem 1.1rem;cursor:pointer;transition:background .15s,color .15s}
-.hub-new-btn:hover{background:var(--accent);border-color:var(--accent)}
 
 /* ── New-guide modal ────────────────────────────────────────────────────── */
 .ng-backdrop{position:fixed;inset:0;z-index:900;background:rgba(20,16,12,.5);opacity:0;pointer-events:none;transition:opacity .15s}
