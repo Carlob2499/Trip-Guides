@@ -258,7 +258,9 @@ jobs:
             reconciliation` summary, and — if you stopped early — exactly which stages remain) into
             the scorecard file, then hand landing to the shared script rather than deciding by hand:
 
-              npm run verify -- --slug ${{ inputs.slug }} --markdown > /tmp/scorecard.md
+              # P3: --network is required or the dead-link/photo gate never runs at all — an
+              # auto-published guide could otherwise carry dead citations and still show PASS.
+              npm run verify -- --slug ${{ inputs.slug }} --markdown --network > /tmp/scorecard.md
               # your finish summary goes ABOVE the scorecard in the same file, not a separate one
               NEXT=$(node scripts/pipeline.mjs --slug ${{ inputs.slug }} --status --json | jq -r '.nextStage')
               PASSED=false; [ "$NEXT" = "null" ] && PASSED=true   # true only if step (d) above actually checkpointed `verified`

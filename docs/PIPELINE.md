@@ -66,6 +66,11 @@ diamond that is *always* human — nothing in the pipeline ever decides to un-pu
    staleness (recency), and the audit suite (links/photos) into ONE verdict plus a
    `GUIDE_RUBRIC`-shaped scorecard: AUTO rows the machine passes/fails, HUMAN rows the graduating
    reviewer checks. **Shipped this phase.** Schema stays the `npm run build` gate, called alongside.
+   The dead-link/photo gate only runs with `--network` (it makes real HTTP requests, so it's
+   opt-in for local/offline runs) — both auto-publish paths (`research-pass.yml`'s final scorecard,
+   `graduate-guide.yml`'s evidence gate) pass `--network` explicitly so a guide can never
+   auto-publish with dead citations and a silent PASS. Budget the extra wall-clock: one HEAD check
+   per citation, so a guide with ~40 cited URLs adds roughly 20-40s to that job.
 
 4. **PUBLISH — graduate on evidence, automatically. Shipped (P4), auto-graduated (streamlining
    pass).** `npm run verify --markdown` renders the rubric scorecard (AUTO gates + HUMAN checklist)

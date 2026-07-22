@@ -60,7 +60,9 @@ jobs:
         run: |
           set +e
           npm run build > build.log 2>&1; BUILD=$?
-          npm run verify --silent -- --slug "$SLUG" --markdown > scorecard.md; VERIFY=$?
+          # P3: --network is required or the dead-link/photo gate in verify-guide.mjs never runs
+          # at all — the publish path was previously green even with dead citations.
+          npm run verify --silent -- --slug "$SLUG" --markdown --network > scorecard.md; VERIFY=$?
           {
             echo "### Graduation evidence — \`$SLUG\`"
             echo
