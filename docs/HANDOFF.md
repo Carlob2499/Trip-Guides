@@ -20,68 +20,45 @@
   (presentation/motion — absorbed VISUAL_COVERS) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (updated 2026-07-20, session close)
+## Snapshot (updated 2026-07-22, session close)
 
-**Three grand plans now govern all future work, each with a binding session ritual (open by
-`AskUserQuestion`-ing the session's clarifiers → build → ship loop → rewrite this file):**
+**The ACTIVE execution queue is `docs/PLAN_FIELD_REPORT_FIXES.md`** (E1→E8), built from the
+2026-07-22 Field Report (`docs/FIELD_REPORT_2026-07-22.md` — evidence base, reference-only:
+106-agent deep-research pass + three same-day codebase audits). It absorbs F0/F3/F8 from
+`PLAN_TRAVELER_FEATURES.md` (marked "moved" there); F1/F2/F4/F5/F6/F7 remain there, sequenced
+after it. `PLAN_VISUAL_OVERHAUL.md` still holds V5 (morph continuity) + V6 (QA/perf).
 
-- **`docs/PLAN_TRAVELER_FEATURES.md`** — F0 (prove the pipeline end-to-end, THE GATE, needs
-  `CLAUDE_CODE_OAUTH_TOKEN`) → F1 prep timeline → F2 budget pact → F3 dormant entry/phrases/env
-  content → F4 packing strip → F5 offline confidence → F6 pre-trip auto-recert → F7 the
-  Critic (C1 bar-test lens prompt-only → C2 evidence gate after 2 real runs → C3 promotion
-  only if evidence says so — now staged inside F7 itself; PLAN_PIPELINE_CRITIC.md absorbed) →
-  F8 free route optimizer. Grounded in `docs/COMPETITIVE_LANDSCAPE.md` (full market sweep incl.
-  served-code inspection of Wanderlog/Mindtrip).
-- **`docs/PLAN_VISUAL_OVERHAUL.md`** — "The Overture & the Atlas": a full-viewport intro hero
-  before the guide grid (creator's explicit ask), doctrine-bound to `MOTION.md`.
+- **Creator decisions locked 2026-07-22 (don't re-ask):** Korea AND Denmark both backfill
+  provenance and flip strict (Denmark via fresh re-verification dated today — never invented
+  backdates) · route optimizer = tap-to-apply (localStorage per-device, never edits guide
+  JSON) · entry cards = US + additional passports (countries named at E6 session start).
+- **Secret status corrected:** `CLAUDE_CODE_OAUTH_TOKEN` IS in place — confirmed valid
+  2026-07-20 (commits `e11dd7b`→`389b229`). What has never happened is the RUN (E2).
+- **CLAUDE.md gained the Clarifying-Questions Doctrine** — binding on every plan/prompt/
+  session: plans carry per-session clarifier blocks; sessions open with `AskUserQuestion`.
 
-All three carry a **Model & time budget** table. Totals: features ≈14–22h (excl. F7), critic
-≈4–6h, visual ≈9.5–16h.
+**Also on `main` (earlier 2026-07-22 sessions):** the 07-20 review execution plan was fully
+executed and removed (security floor, pipeline unblocking, schema widening, runtime/UX fixes,
+arch cleanup, test coverage — see git log `78fb1df`…`672855d`); docs consolidated ~25%
+(VISUAL_COVERS→MOTION, SILO_ROADMAP→ARCHITECTURE, critic plan→F7, honest SECURITY.md);
+connector policy asserted in CLAUDE.md (github + Claude Code Remote only). Visual arc V1–V4
+live; the V4 contour-visibility retune still needs a human real-photo eyeball (MOTION.md
+caveat; also E8 item 5).
 
-**This session ran V4 (guide interior depth) — ✅ DONE, on `main`.** Option B (creator-picked): a
-faint topographic contour overlay OVER the guide hero photo (`.mast-contours` inside `.mast-frame`,
-above scrim / below title; light `.11`/`.07` strokes, title stays legible), static, photo-guides
-only. Dropped two planned items honestly (parallax → static suits a reading hero; verified-stamp
-settle → no per-section stamp exists to settle). 636 tests, typecheck 0, perf OK.
-Prior visual sessions (all live on `main`): **V3** Atlas grid (per-guide card border + hover glow),
-**V2** the Overture (full-viewport intro that auto-glides into the hub — `src/scripts/overture.js`,
-cancelable/once-per-visit/compact-return/reduced-motion-safe), **V1** foundation (`contours.ts`,
-`guide-stats.ts`, `paletteAccentsForGuide()`).
-
-**Still the #1 open item (the audit's top finding, unchanged):** the fully-autonomous research
-pipeline has NEVER completed a real end-to-end run. Waits on the creator adding
-`CLAUDE_CODE_OAUTH_TOKEN` (repo secret via `claude setup-token`). This is Session F0.
-
-**Housekeeping still open:** the remote branch `claude/test-coverage-analysis-siftjs` (fully
-merged, safe to delete) needs the creator to delete it via GitHub UI — the sandbox's git relay
-403s on remote ref deletion.
-
-**Docs consolidation (2026-07-22, branch `claude/markdown-consolidation-audit-mljpss`):**
-markdown surface cut ~25% — deleted the superseded 07-17 review roadmap (open P2 UX items
-carried into REVIEW_EXECUTION_PLAN Phase 5), SILO_ROADMAP (contract → ARCHITECTURE.md),
-VISUAL_COVERS (→ MOTION.md), PLAN_PIPELINE_CRITIC (→ PLAN_TRAVELER_FEATURES F7); condensed
-TEST_COVERAGE_ANALYSIS, DENMARK_UPLIFT, PLAN_VISUAL_OVERHAUL (V1–V4 → record), README;
-replaced the fake SECURITY.md; fixed GUIDE_RUBRIC's stale "graduation always human" line.
+**Housekeeping still open:** creator deletes merged remote branch
+`claude/test-coverage-analysis-siftjs` via GitHub UI (sandbox 403s on ref deletion).
 
 ## Where we left off
 
-The hub redesign arc is live on `main` — the Overture (V2) auto-glides into the palette-tinted
-Atlas grid (V3), and now the guide interiors carry a faint map-contour overlay on the hero (V4).
-Natural next moves, the creator's call:
+The Field Report found the market evidence validates the verified-guide bet, and the audits
+found two load-bearing holes: the autonomous publish path graduates on an OFFLINE verify whose
+network content-gate fails OPEN (E1 fixes), and the factory has never actually run headless
+(E2 proves). The full queue: **E1** fail-closed gate → **E2** real end-to-end run → **E3**
+strict undated-figure gate → **E4/E5** Korea+Denmark backfill→strict → **E6** entry+phrases →
+**E7** route optimizer (tap-to-apply) → **E8** hygiene. Each session's exact edits, tests, and
+clarifiers are in the plan; the doctrine now requires opening every session with them.
 
-1. **V5 — Morph continuity** (Opus, ~1–2h). Extend the card→guide View-Transition morph: carry
-   the tapped card's palette accent into the guide masthead arrival; match the Overture route's
-   exit to the guide story-intro rail entry (the signature literally continues). Then **V6 —
-   QA/perf** closes the visual plan (Lighthouse vs. baseline, full matrix, MOTION.md rewrite).
-2. **F0 — prove the pipeline** (Opus driver, ~2–3h + wait). Needs the OAuth secret first — still
-   the audit's #1 open item.
-
-Deferred polish (not blocking): a Lighthouse LCP/CLS pass on the new hero (V6 covers it), and an
-eyeball of the V4 contour strokes over the REAL cover photos post-deploy (bump `.11` if faint on
-bright covers). Still pending: the creator deletes the merged remote branch
-`claude/test-coverage-analysis-siftjs` via GitHub UI (sandbox 403s on ref deletion).
-
-**Re-prompt the creator with:** "V4 is live — a faint topographic map-line overlay now floats over
-each guide's hero photo, title still crisp. The whole hub-and-guide visual overhaul is nearly done:
-just V5 (make the hub→guide transition one continuous move) and V6 (QA/perf) left. Or switch to F0
-(prove the pipeline, needs the OAuth secret). Which one?"
+**Re-prompt the creator with:** "The Field Report and its execution plan are committed. Next
+up is E1 — the fail-closed publish gate (Sonnet, ~2h): it's the trivial fix protecting the
+'verified' promise itself, and E2 (the first real pipeline run, Opus) is queued right behind
+it now that the token's confirmed. Start E1?"

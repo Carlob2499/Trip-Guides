@@ -128,6 +128,25 @@ is their single home; this file names the principle without repeating detail.
 
 ---
 
+## Clarifying-Questions Doctrine (binding on every plan, prompt, and session)
+
+Never silently pick a fork the creator hasn't decided — this generalizes the continuity
+rule's "when a change forks the plan, stop and ask" to ALL work:
+
+- **Every plan document** carries a per-session **Clarifying questions** block naming the
+  open decisions (scope forks, UX choices, data the creator must supply, anything
+  destructive/public-facing).
+- **Every executing session** opens by putting that block to the creator via
+  `AskUserQuestion` (plus any newly-warranted questions) and waits for explicit go
+  BEFORE building. Mid-session, a newly-discovered fork gets the same treatment.
+- **Drafting a new plan or prompt** = surfacing its open decisions as questions FIRST,
+  answers woven in before the plan is finalized. A question with an obvious conventional
+  default states the recommendation first and says why.
+- Questions are for genuine forks — not for facts the codebase can answer (grep it) or
+  choices with one sane default (pick it, state it, proceed).
+
+---
+
 ## The Ship Loop (every change ends this way)
 
 `npm run build` (zero schema errors) → `npm test` green → **verify in `astro preview`**

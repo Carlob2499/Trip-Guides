@@ -26,15 +26,15 @@ model at session start (`/model`) — each session's opening ritual includes rem
 
 | Session | Model | Est. active | Notes |
 |---|---|---|---|
-| F0 pipeline proof | **Opus** driver (workflow agent stays Sonnet) | 1.5–3 h + 1–2 h wall-clock/run | Opus for first-run triage — failures will be novel; re-runs resume from checkpoints |
+| F0 pipeline proof | — | — | **MOVED** → PLAN_FIELD_REPORT_FIXES E2 |
 | F1 prep timeline | Sonnet | 2–3.5 h | Schema (additive) + model + Trip kit card + sourced `due` research |
 | F2 budget pact | Sonnet | 1–2 h | Join logic + one chip; smallest build session |
-| F3 dormant content | Sonnet | 2–3 h | Pure guide-author research × 3 guides (entry, phrases, env tags) |
+| F3 dormant content | — | — | **MOVED** → PLAN_FIELD_REPORT_FIXES E6 |
 | F4 packing strip | Sonnet | 1.5–2.5 h | Derivation model + Trip kit render |
 | F5 offline confidence | Sonnet | 2–3 h | Offline E2E debugging can drag; budget for it |
 | F6 pre-trip auto-recert | Sonnet | 1.5–2.5 h + first-run wall-clock | Probation mode first |
 | F7 the Critic (C1–C3) | **Opus** C1–C2, Sonnet C3 | ≈4–6 h | Staged inside F7 below; C3 built only on C2's evidence |
-| F8 route optimizer | Sonnet | 2–3 h | 2-opt + fixtures + advisory chip |
+| F8 route optimizer | — | — | **MOVED** → PLAN_FIELD_REPORT_FIXES E7 (tap-to-apply) |
 | **Plan total** | | **≈ 18–28 h active** | Each session independently shippable |
 
 ## Research grounding (July 2026)
@@ -54,18 +54,10 @@ model at session start (`/model`) — each session's opening ritual includes rem
 
 ---
 
-## Session F0 — Prove the pipeline end-to-end (THE GATE)
+## Session F0 — MOVED → `PLAN_FIELD_REPORT_FIXES.md` session E2
 
-**Why first:** the audit's #1 finding — the research pipeline has never completed a real run.
-Every session below gains value from a working factory; nothing else proves it.
-**Prereq:** `CLAUDE_CODE_OAUTH_TOKEN` repo secret (creator adds via `claude setup-token`).
-**Clarifying questions:** (a) Is the secret in place? (b) Destination, party, dates, ranked
-priorities for the real test guide (use `docs/NEW_GUIDE_INTAKE.md`). (c) Budget cap for attempts.
-**Do:** file the New-guide issue (or scaffold directly), trigger `research-pass.yml`, babysit the
-run — watch checkpoints, the `/progress/` page, and fix any wiring failures as they surface
-(commit fixes to `main`). Expect wiring bugs; that is the point of the session.
-**Exit:** a real guide reaches `verified`, auto-publishes, its "🚀 Auto-published" issue appears,
-`verify-live` passes, and `/health/` shows research-pass green. Rewrite HANDOFF.
+The pipeline-proof session now lives there (sequenced after the E1 publish-gate fix so the
+run exercises the fixed gate). The OAuth secret is in place, confirmed valid 2026-07-20.
 
 ## Session F1 — Prep timeline: book-by deadlines (revive held #2)
 
@@ -93,19 +85,10 @@ visible? (b) Per-person or per-group framing?
 backend, zero new tabs. Tests on the join logic + currency handling (reuse `live-data/rate`).
 **Exit:** ship loop green; visible on a guide with real Trip Split seed data; HANDOFF.
 
-## Session F3 — Turn on the dormant safety content (research, not code)
+## Session F3 — MOVED → `PLAN_FIELD_REPORT_FIXES.md` session E6
 
-**Why:** `entry` (visa/passport — denied-boarding stakes) and `phrases` (allergy/taxi/help —
-safety-adjacent) shipped as mechanisms but are DORMANT on every guide. Content, not features, is
-the missing half. Also: tag each guide's days `env:"outdoor"`/`"indoor"` where honestly known so
-the existing rainy-day swap advisory can actually fire (it is silent without explicit tags).
-**Clarifying questions:** (a) Confirm traveler home country per guide (entry rules depend on it).
-(b) Any allergies/dietary needs to prioritize in phrase cards?
-**Do:** run the `waypoint-guide-author` skill per guide: populate `entry` from each destination's
-official entry page (T0 source, `source_url`+`verified_on` are schema-required), `phrases` with
-verified native script + romanization, and `env` day tags. No fabrication — a phrase or rule that
-can't be verified stays blank (honest-blank).
-**Exit:** entry + phrases live on all three guides; day-swap advisory armed; ship loop; HANDOFF.
+The dormant-content session now lives there, with the creator's 2026-07-22 decisions woven in
+(entry rows for US + additional passports, named at session start; ko-KR/da-DK phrase cards).
 
 ## Session F4 — Weather-aware packing strip
 
@@ -176,21 +159,10 @@ always, even when zero — silence is indistinguishable from not-run.
 *Escalation logic: C1 costs a prompt and can't hurt; C2 costs one reading session and prevents
 building on vibes; C3 is real construction, paid for only with C2's evidence.*
 
-## Session F8 — Day-route optimizer (beyond parity, free)
+## Session F8 — MOVED → `PLAN_FIELD_REPORT_FIXES.md` session E7
 
-**Why:** route optimization is Wanderlog **Pro's** headline paid feature ($39.99/yr, online-only)
-— and Waypoint already holds verified coordinates for every stop, so it can ship the same value
-free, client-side, and offline. Parity where it counts; beyond parity on price and honesty.
-**Clarifying questions:** (a) Suggest-only (like the rainy-day swap — advisory, never auto-apply)
-or a tap-to-reorder? Recommended: suggest-only, matching the honesty pattern. (b) Per-day scope
-only, or also flag "this stop belongs on a different day" (bigger; recommend deferring)?
-**Do:** pure model in a sealed silo (nearest-neighbor + 2-opt over the day's verified coords —
-tested against known-optimal fixtures; walking-distance heuristic, no routing API); a quiet
-"Reorder could save ≈N km of backtracking" advisory chip on day cards that opens the suggested
-order; honest-blank when a day has <3 located stops or the current order is already within
-tolerance. Zero network, zero schema changes.
-**Exit:** ship loop; advisory fires on a real guide day where reordering genuinely helps and
-stays silent elsewhere; HANDOFF.
+The route-optimizer session now lives there; the creator resolved its clarifier 2026-07-22 as
+**tap-to-apply** (localStorage per-device reorder + restore, never mutating guide JSON).
 
 ---
 *Priority logic: F0 unlocks everything (factory proof). F1–F2 are the two research-validated,
