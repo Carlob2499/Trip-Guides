@@ -81,9 +81,32 @@ jobs:
             if (!isValidSlug(process.env.SLUG)) { console.error('Invalid slug:', process.env.SLUG); process.exit(1); }
           "
 
+      # Resume the research branch if a prior (cut-off) run created it, so the agent starts with the
+      # committed partial progress + checkpoint state in the working tree; otherwise start it fresh.
+      # P1: this MUST happen before any state-file mutation below — bumping the attempt count on
+      # `main` first, then checking out this branch, made `git checkout` abort on the modified
+      # state file (every resumed run went red before the agent even started).
+      - name: Resume or start the research branch
+        env:
+          SLUG: ${{ inputs.slug }}
+        run: |
+          BR="research/${SLUG}"
+          if git ls-remote --exit-code --heads origin "$BR" >/dev/null 2>&1; then
+            git fetch origin "$BR" && git checkout "$BR"
+            echo "Resumed $BR"
+          else
+            git checkout -b "$BR"
+            echo "Started $BR"
+          fi
+
       # Circuit breaker (docs/PIPELINE.md P2 spine): a headless run that keeps getting cut off
       # before reaching `verified` should eventually stop and ask a human instead of silently
       # resuming forever. Runs BEFORE the agent so a stuck guide never spends agent tokens.
+      # P2: attempts are read/bumped and COMMITTED on THIS branch (research/<slug>), not on
+      # main — previously the bump only ever landed on main via a later merge that a failing
+      # guide never reaches, so main's copy of the state file stayed at attempts: 0 forever and
+      # the circuit breaker could never trip. Committing here, on the branch, right after the
+      # bump, is what makes the cap real.
       - name: Attempt budget
         id: budget
         env:
@@ -99,6 +122,16 @@ jobs:
           fi
 
           ATTEMPTS=$(node scripts/pipeline.mjs --slug "$SLUG" --bump-attempt --json | jq -r '.attempts')
+
+          # Persist the bumped attempt count on THIS branch now, so it survives even if this run
+          # is cut off before the agent commits anything else — the circuit breaker's memory
+          # must not depend on the agent ever reaching a commit step.
+          if ! git diff --quiet -- "guides-intake/${SLUG}.state.json"; then
+            git add "guides-intake/${SLUG}.state.json"
+            git commit -m "chore(pipeline): attempt ${ATTEMPTS}"
+            git push origin "HEAD:research/${SLUG}"
+          fi
+
           CAP=5
           if [ "$ATTEMPTS" -gt "$CAP" ]; then
             echo "[budget] $SLUG has been attempted $ATTEMPTS times without reaching verified (cap: $CAP) — flagging instead of continuing."
@@ -117,20 +150,6 @@ jobs:
 
           echo "[budget] $SLUG — attempt $ATTEMPTS of $CAP, proceeding."
           echo "should_run=true" >> "$GITHUB_OUTPUT"
-
-      # Resume the research branch if a prior (cut-off) run created it, so the agent starts with the
-      # committed partial progress + checkpoint state in the working tree; otherwise start it fresh.
-      - name: Resume or start the research branch
-        if: steps.budget.outputs.should_run == 'true'
-        run: |
-          BR="research/${{ inputs.slug }}"
-          if git ls-remote --exit-code --heads origin "$BR" >/dev/null 2>&1; then
-            git fetch origin "$BR" && git checkout "$BR"
-            echo "Resumed $BR"
-          else
-            git checkout -b "$BR"
-            echo "Started $BR"
-          fi
 
       - name: Run research agent
         if: steps.budget.outputs.should_run == 'true'
