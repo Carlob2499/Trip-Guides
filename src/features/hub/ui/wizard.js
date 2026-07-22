@@ -8,6 +8,7 @@
    is untouched, so new guides inherit the whole feature set automatically. */
 
 import { reducedMotion } from "../../../scripts/util.js";
+import { WIZARD_STEPS, validateStepTransition, parseBookingDocument, formatParsedNote } from "../model/wizard";
 
 (function () {
   var form = document.getElementById("ngForm");
@@ -36,11 +37,9 @@ import { reducedMotion } from "../../../scripts/util.js";
     if (input) fields[input.id] = el;
   });
 
-  var steps = [
-    { title: "Where & when", ids: ["ngCountry", "ngCities", "ngStart", "ngAnchor"] },
-    { title: "Who & style", ids: ["ngTravelers", "ngParty", "ngPace", "ngTravelStyle", "ngBudget"] },
-    { title: "What to research", ids: ["ngPriority1", "ngPriority2", "ngPriority3", "ngNiche", "ngComments"] },
-  ];
+  // A7: step layout is now the pure, tested WIZARD_STEPS (model/wizard.ts) — was an inline
+  // literal here with no test coverage on which field belongs to which step.
+  var steps = WIZARD_STEPS;
 
   var stepEls = steps.map(function (s, i) {
     var el = document.createElement("div");
@@ -106,30 +105,20 @@ import { reducedMotion } from "../../../scripts/util.js";
     }
   });
   function parseDoc(text, name) {
+    // A7: the actual extraction (dates/flights/lodging lines) is now the pure, tested
+    // parseBookingDocument() (model/wizard.ts) — this wrapper only does the DOM side
+    // (prefill start/end, render the summary, push the running note).
     var out = document.getElementById("ngDocOut");
-    var found = [];
-    // ISO + iCal dates → prefill start/end with min/max.
-    var iso = (text.match(/\b(20\d{2})-?(0[1-9]|1[0-2])-?(0[1-9]|[12]\d|3[01])\b/g) || [])
-      .map(function (s) { return s.replace(/(\d{4})-?(\d{2})-?(\d{2})/, "$1-$2-$3"); })
-      .filter(function (s, i, a) { return a.indexOf(s) === i; }).sort();
-    if (iso.length) {
+    var doc = parseBookingDocument(text);
+    if (doc.isoDates.length) {
       var sEl = document.getElementById("ngStart"), eEl = document.getElementById("ngEnd");
-      if (sEl && !sEl.value) sEl.value = iso[0];
-      if (eEl && !eEl.value) eEl.value = iso[iso.length - 1];
-      found.push(iso.length + " date" + (iso.length > 1 ? "s" : "") + " (" + iso[0] + " → " + iso[iso.length - 1] + ")");
+      if (sEl && !sEl.value) sEl.value = doc.isoDates[0];
+      if (eEl && !eEl.value) eEl.value = doc.isoDates[doc.isoDates.length - 1];
     }
-    // Flight numbers + likely confirmation codes — attached, never guessed at.
-    var flights = (text.match(/\b[A-Z]{2}\s?\d{2,4}\b/g) || []).slice(0, 6);
-    if (flights.length) found.push("flights: " + flights.join(", "));
-    var hotels = (text.split(/\r?\n/).filter(function (l) {
-      return /hotel|hostel|airbnb|check-?in|reservation/i.test(l) && l.trim().length < 120;
-    }).slice(0, 4));
-    if (hotels.length) found.push("lodging lines: " + hotels.length);
-    parsedNotes.push("From " + name + ": " + (found.join(" · ") || "no structured data found") +
-      (hotels.length ? "\n  " + hotels.map(function (l) { return l.trim(); }).join("\n  ") : ""));
+    parsedNotes.push(formatParsedNote(name, doc));
     if (out) {
       out.hidden = false;
-      out.textContent = "✓ Parsed " + name + (found.length ? " — " + found.join(" · ") : " — nothing recognized (it still attaches as notes)");
+      out.textContent = "✓ Parsed " + name + (doc.summary !== "no structured data found" ? " — " + doc.summary : " — nothing recognized (it still attaches as notes)");
     }
   }
 
@@ -175,17 +164,19 @@ import { reducedMotion } from "../../../scripts/util.js";
   }
   function go(dir) {
     if (animating) return;
-    var next = cur + dir;
-    if (next < 0 || next >= steps.length) return;
-    if (dir > 0 && cur === 0) {
-      var c = document.getElementById("ngCountry");
-      if (c && !c.value.trim()) {
-        if (errEl) { errEl.textContent = "Country is required."; errEl.removeAttribute("hidden"); }
-        c.focus();
-        return;
+    // A7: the bounds-check + Country guard is now the pure, tested
+    // validateStepTransition() (model/wizard.ts).
+    var c = document.getElementById("ngCountry");
+    var result = validateStepTransition(cur, dir, steps.length, c ? c.value : "");
+    if (!result.ok) {
+      if (result.error) {
+        if (errEl) { errEl.textContent = result.error; errEl.removeAttribute("hidden"); }
+        if (c) c.focus();
       }
-      if (errEl) errEl.setAttribute("hidden", "");
+      return;
     }
+    if (errEl) errEl.setAttribute("hidden", "");
+    var next = result.nextStep;
     var fromEl = stepEls[cur], toEl = stepEls[next];
     cur = next;
     var reduced = reducedMotion();

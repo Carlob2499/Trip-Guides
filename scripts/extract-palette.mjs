@@ -48,7 +48,7 @@ function contrast(hexA, hexB) {
   const [hi, lo] = la > lb ? [la, lb] : [lb, la];
   return (hi + 0.05) / (lo + 0.05);
 }
-function rgbToHsl(r, g, b) {
+export function rgbToHsl(r, g, b) {
   r /= 255; g /= 255; b /= 255;
   const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min;
   let h = 0;
@@ -61,7 +61,7 @@ function rgbToHsl(r, g, b) {
   const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
   return [h, s, l];
 }
-function hslToHex(h, s, l) {
+export function hslToHex(h, s, l) {
   const c = (1 - Math.abs(2 * l - 1)) * s, x = c * (1 - Math.abs(((h * 6) % 2) - 1)), m = l - c / 2;
   let [r, g, b] = h < 1 / 6 ? [c, x, 0] : h < 2 / 6 ? [x, c, 0] : h < 3 / 6 ? [0, c, x]
     : h < 4 / 6 ? [0, x, c] : h < 5 / 6 ? [x, 0, c] : [c, 0, x];
@@ -72,7 +72,7 @@ function hslToHex(h, s, l) {
 // Both-grounds passes live in a mid band: dark enough for the cream bg, light
 // enough for the ink bg — exactly the "mid-value colour" the zod gate's comment
 // prescribes. Prefer values near the extracted lightness.
-function gate(h, s, l0) {
+export function gate(h, s, l0) {
   const cand = [];
   for (let l = 0.2; l <= 0.68; l += 0.01) {
     const c = hslToHex(h, s, l);
@@ -92,7 +92,7 @@ function gate(h, s, l0) {
 // saturated sky/water field from outvoting a small, vivid subject (Nyhavn's facades,
 // a palace's dancheong — the things a cover is ABOUT). Skip near-gray + extreme-value
 // pixels. Returns [h, s, l] of the winning bucket's saturation-weighted mean.
-function dominantVibrant(pixels) {
+export function dominantVibrant(pixels) {
   const BUCKETS = 24;
   const acc = Array.from({ length: BUCKETS }, () => ({ n: 0, sw: 0, h: 0, s: 0, l: 0 }));
   for (let i = 0; i < pixels.length; i += 3) {
