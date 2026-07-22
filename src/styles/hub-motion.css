@@ -11,9 +11,13 @@
    new vocabulary, only reuses it, per MOTION.md rule 5. */
 
 :root {
-  --hub-contour-far:  color-mix(in srgb, var(--muted) 10%, transparent);
-  --hub-contour-mid:  color-mix(in srgb, var(--muted) 16%, transparent);
-  --hub-contour-near: color-mix(in srgb, var(--accent2) 12%, transparent);
+  /* U9: raised from 10/16/12% — the V4 "eyeball post-deploy" note flagged these as possibly
+     imperceptible. Chosen values recorded in docs/MOTION.md along with the caveat that this
+     pass could NOT be visually confirmed with a real screenshot in this environment (no
+     browser/screenshot tool available) — a human should eyeball it post-deploy per that doc. */
+  --hub-contour-far:  color-mix(in srgb, var(--muted) 16%, transparent);
+  --hub-contour-mid:  color-mix(in srgb, var(--muted) 24%, transparent);
+  --hub-contour-near: color-mix(in srgb, var(--accent2) 18%, transparent);
   --hub-route-stroke: var(--accent);
 }
 

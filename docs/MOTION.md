@@ -93,3 +93,25 @@ tighter lead-first cards — the reader reaches where/how/when/book without hunt
 Sources (Jul 2026): [MDN scroll-driven animations](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Scroll-driven_animations) ·
 [Chrome: animate on scroll](https://developer.chrome.com/docs/css-ui/scroll-driven-animations) ·
 [WebKit: scroll-driven with just CSS](https://webkit.org/blog/17101/a-guide-to-scroll-driven-animations-with-just-css/)
+
+## Contour visibility pass (U9, 2026-07-22)
+
+The V4 signature contour textures (hub Overture background + guide masthead overlay) shipped
+with an open "eyeball post-deploy" note — the strokes were possibly too faint to register at
+all (`.11`/`.07` alpha on the masthead; ~10–16% tints on the hub). Raised once, values below.
+
+| Layer | Was | Now |
+|---|---|---|
+| Hub `--hub-contour-far` | `muted` @ 10% | `muted` @ 16% |
+| Hub `--hub-contour-mid` | `muted` @ 16% | `muted` @ 24% |
+| Hub `--hub-contour-near` | `accent2` @ 12% | `accent2` @ 18% |
+| Masthead `[data-mast-contour="0"]` | `rgba(255,255,255,.11)` | `rgba(255,255,255,.15)` |
+| Masthead `[data-mast-contour="1"]` | `rgba(255,255,255,.07)` | `rgba(255,255,255,.10)` |
+
+**Caveat — this pass was NOT visually confirmed with a real screenshot.** The environment this
+change shipped from has no browser/screenshot tool available, so the values above are a
+reasoned adjustment (roughly +60% relative alpha across the board — enough to plausibly cross
+the imperceptibility line without risking overwhelming the photo/title, but not derived from an
+actual before/after comparison). **A human should eyeball this at `astro preview` (desktop +
+mobile, both themes, over real cover photos) at the next opportunity** and step back halfway if
+the strokes now compete with title legibility, per the original review finding (SEV-4 U9).
