@@ -7,58 +7,17 @@
 
 ---
 
-## Part 1 — The verdict
+## Part 1 — The verdict (compressed; full essay in this file's git history)
 
-### What this repo's true end-goal is
-
-Stated: verified, personalized, honest travel guides. **Implied and structural: a fully
-autonomous guide factory** — GitHub issue → scaffold → two-pass research → verify →
-auto-graduate → deploy → verify-live, with a learnings loop that personalizes the next
-guide. The pipeline is the product; guides are the backbone exercising (HANDOFF's own
-words).
-
-### Is it being met?
-
-**No — the core claim is unproven, and the gap is self-inflicted.**
-
-- The autonomous pipeline has **never completed a real end-to-end run** (HANDOFF.md:51-53).
-  The blocking secret was finally confirmed valid (commit `389b229`) — and F0 *still*
-  hasn't run. Nothing external blocks it anymore.
-- Inventory: **3 guides** (one hand-researched), against ~2,600 lines of planning docs,
-  including three "grand plans" (27–44h of future sessions) and a Critic layer designed
-  for a pipeline that is 0-for-real-runs. The last ~10 commits are hub visual polish.
-- Worse: this review found the pipeline's resilience machinery is broken **in exactly the
-  failure modes it was built for** — a resumed run wedges red at branch checkout (C1),
-  the 5-attempt circuit breaker can never fire (C2), and the dead-link/photo gate is
-  skipped on the publish path (C3). A first *uninterrupted* run plausibly succeeds; the
-  first interrupted one wedges.
-
-### What's genuinely excellent (don't churn these)
-
-- The **learnings loop is real, not scaffolding** — Korea has a real survey submission,
-  per-day skip data, honest private synthesis; Denmark documents its own synthesis error.
-  This is the product's actual differentiation, proven once.
-- The **unit test suite (636 tests) is real signal** — behavioral assertions, zero-network,
-  zero-clock, honest per-glob coverage gates. Not padding.
-- SOS/field-tools UX passes the repo's own emergency-access doctrine; Firebase/Maps
-  correctly follow the config-gate + lazy-import rule; exit codes in the deploy/verify-live
-  loop are honest.
-
-### What ascends it from mediocrity to engineering marvel
-
-1. **Make the doctrine mechanical.** The repo's two proudest rules — "every perishable
-   fact has a source + date" and "prose obeys the tag allowlist" — are enforced nowhere.
-   The schema lets both shipped guides skip `provenance: "strict"`; 30+ `set:html` sinks
-   render unvalidated guide HTML. A doctrine the build doesn't enforce is a wish.
-2. **Fix the pipeline's failure paths, then run F0.** The happy path is wired coherently;
-   the recovery paths are dead code. Fix C1/C2/C3, run one real end-to-end guide, and
-   ~200 lines of PIPELINE.md convert from claim to capability.
-3. **Finish what was started.** The Waypoint rename half-done (PWA installs as "Trip
-   Guides"), guide.css at its own split threshold, dead pre-Overture CSS shipped, the
-   silo migration stopped halfway through `guide-ui.js`, the template lagging shipped
-   reality. Marvel-grade repos have no half-turned keys.
-4. **Stop planning, start closing loops.** No new PLAN_*.md until the previous plan's
-   first session ships. Two closed learnings loops is a pattern; one is an anecdote.
+The repo's structural goal is a fully autonomous guide factory — and that core claim is
+unproven: the pipeline has **never completed a real end-to-end run**, the blocking secret is
+confirmed valid (`389b229`), and this review found the resilience machinery broken in exactly
+the failure modes it was built for (P1–P3 below). Genuinely excellent and not to be churned:
+the learnings loop (real, closed once), the unit suite (real signal), SOS/field-tools UX,
+config-gated SDKs. The path up: **make the doctrine mechanical** (Phase 1/3 — an unenforced
+rule is a wish), **fix the failure paths then run F0** (Phase 2/8), **finish half-turned keys**
+(rename, CSS debt, template parity), and **no new PLAN_*.md until the previous plan's first
+session ships**.
 
 ---
 
@@ -293,13 +252,19 @@ words).
    strong, step back halfway. Record the chosen values in `docs/MOTION.md`.
    → Commits: `fix(brand): finish Waypoint rename`, `fix(ux): sheet numbering + a11y floor`, `refactor(css): dead hub styles, :where() tint seam, split trip-split.css`, `fix(print/mobile): …`, `tune(visual): contour visibility pass`
 
+   **Carried forward — unexecuted P2 UX items from the (removed) 2026-07-17 review, do
+   opportunistically in this phase or log as issues:** active tab scrolls into view on
+   mobile deep-link load · mobile masthead density (pills ≤2 rows, jet-lag bar folded) ·
+   de-button inert stat pills · persistent ⌘K affordance ≥1100px · converter popover
+   real-width clamp + focus trap · one folded "What is Waypoint?" line for cold visitors.
+
 ### Phase 6 — Architecture cleanup (A1, A2, A4)
 
 1. **Silo contracts (A1).** Re-export `story-mode` init from `features/itinerary/index.js`
    and `initProgress` from `features/pipeline-progress/index.ts`; update the two imports.
    For feature CSS: add a documented `styles.css` (or index re-export) per silo
    (firebase, trip-kit, learnings, reminders) and import that; note the blessed pattern
-   in `docs/SILO_ROADMAP.md`.
+   in `docs/ARCHITECTURE.md` (which now carries the silo contract).
 2. **De-inline index.astro (A2).** Move the modal + dark-toggle script (`index.astro:429-523`)
    into `src/features/hub/ui/` (hub silo already loads on the page). Extract ONE
    `initDarkToggle()` into `src/scripts/theme.js`; use it from hub and `guide-ui.js`;
@@ -316,7 +281,7 @@ words).
 
 1. Extract `wizard.js` step/validation logic into `src/features/hub/model/wizard.ts`
    (pure, zod-typed) + unit tests (valid path, each invalid field, step transitions) —
-   TEST_COVERAGE_ANALYSIS.md:216 names this the top candidate.
+   TEST_COVERAGE_ANALYSIS.md §P6 names this the top candidate.
 2. Playwright specs: `sos.spec.ts` (open via button, focus lands inside, Escape closes,
    numbers render from guide data) and `share-panel.spec.ts` (links carry correct
    encoded URL/title). Follow existing patterns in `tests/visual/`.

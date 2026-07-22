@@ -115,7 +115,7 @@ const dayCount   = _flat.filter((s: any) => s.type === "days"  ).reduce((n: numb
 const sightCount = _flat.filter((s: any) => s.type === "sights").reduce((n: number, s: any) => n + (s.items?.length || 0), 0);
 
 // Masthead hero image = the guide's own COVER art when set, else its first sights photo
-// (docs/VISUAL_COVERS.md). This is the SAME image the hub card shows — the shared element
+// (docs/MOTION.md). This is the SAME image the hub card shows — the shared element
 // that morphs between them. Present → full-bleed photo hero; absent (scaffolds) → bold
 // typographic hero on the accent field. Same Commons Special:FilePath thumbnailing as SightsBlock.
 const heroSight = _flat

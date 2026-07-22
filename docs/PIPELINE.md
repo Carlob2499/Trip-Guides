@@ -4,8 +4,9 @@ The north star for what this repo *is*: **a factory-with-a-maintenance-departmen
 researched, creator-tailored travel guides — where creating a guide and keeping it fresh are both
 nearly toil-free, and human effort is spent only where judgment genuinely lives.**
 
-This doc is the durable plan future sessions execute against (like `REVIEW_AND_ROADMAP_2026-07.md`,
-which it supersedes for *pipeline* scope). It states the target, the gaps, and the sequenced program
+This doc is the durable plan future sessions execute against (it superseded the Jul-2026
+adversarial-review roadmap, now removed — git history has it). It states the target, the gaps,
+and the sequenced program
 with model/effort per phase. Read it with `docs/GUIDE_RUBRIC.md` (the quality bar) and the
 `waypoint-guide-author` skill (the research discipline).
 

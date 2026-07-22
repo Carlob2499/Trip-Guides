@@ -1,14 +1,8 @@
-# Trip Guides
+# Waypoint (Trip-Guides)
 
-This is your travel-guide blog. You write each destination as one simple
-**content file**, and the project turns it into a polished web page. The look
-and feel are exactly the same as the guides you already had — this just makes
-them easier to add to, publish, and grow.
-
-You do **not** need to read or write code to run this. The two things you'll
-ever touch are explained below.
-
----
+Your travel-guide site. You write each destination as simple **content files**, and the
+project turns them into polished web pages. You do **not** need to read or write code to
+run this.
 
 ## The idea in one picture
 
@@ -16,148 +10,75 @@ ever touch are explained below.
 src/content/guides/korea/           ← YOU edit these (the "recipe cards")
   _guide.json                         · the guide's title, dates, intro
   01-plan.json … 10-tokyo.json        · one small file per tab of the guide
-src/content/guides/denmark/         ← same shape, one folder per destination
-        │
         ▼
    the project's components          ← the "appliances" — leave these alone
-        │
         ▼
    finished web pages                ← built automatically when you publish
 ```
 
-Everything you care about lives in **`src/content/guides/`**. Each **folder**
-there is one destination — `_guide.json` holds the guide's identity, and each
-numbered file holds one tab's sections, so you only ever open the small file
-you're changing. (A brand-new draft can also be a single `<name>.json` file —
-both shapes work.) Everything else is the machinery that turns those files
-into pages — you can ignore it.
+Everything you care about lives in **`src/content/guides/`** — one folder per destination;
+`_guide.json` holds the guide's identity, each numbered file holds one tab's sections, so
+you only ever open the small file you're changing. (A brand-new draft can also be a single
+`<name>.json` file — both shapes work.)
 
----
+## Publishing on the web (one-time, ~15 minutes)
 
-## How to publish it on the web (about 15 minutes, one time)
+The site is static — pre-built pages, served free and fast by GitHub Pages:
 
-> The short version is below; if a build ever fails, see **Troubleshooting** at the end.
+1. Put the project in a GitHub repository named `Trip-Guides` (the name must match `base`
+   in `astro.config.mjs`).
+2. **Settings → Pages → Source → GitHub Actions.** The recipe in
+   `.github/workflows/deploy.yml` builds and publishes for you.
+3. Wait for the green check in the **Actions** tab (~1–3 min). Your address appears at
+   Settings → Pages: `https://your-username.github.io/Trip-Guides/`.
 
-The site is "static," meaning the pages are pre-built and then just served —
-fast, cheap (free), and reliable. Your sight photos are automatically converted
-to fast, modern WebP images during the build on the host (no work for you); if a
-photo ever can't be reached, the guide shows the plain version instead, so the
-site never breaks. The normal flow:
-
-1. **Put the project on GitHub.** Make a free account at github.com, create a
-   new repository named `Trip-Guides`, and upload this folder's contents (GitHub
-   lets you drag files in through the website — you don't need the command line).
-2. **Turn on GitHub Pages.** In the repo, go to **Settings → Pages → Source** and
-   choose **GitHub Actions**. No second account or host to connect — GitHub builds
-   and serves the site itself, using the recipe already in the repo
-   (`.github/workflows/deploy.yml`).
-3. **Wait for the green check.** The **Actions** tab shows the "Deploy to GitHub
-   Pages" build running (~1–3 minutes). It installs, runs `npm run build`, and
-   publishes the `dist` folder for you.
-4. Your address appears at **Settings → Pages**:
-   `https://your-username.github.io/Trip-Guides/`. Done. A custom domain can be
-   added there later.
-
-After that, **every time you change a guide and save it on GitHub, the site
-rebuilds and updates itself automatically** — usually within a minute or two.
-
-> The repo name must match the `base` in `astro.config.mjs` (`/Trip-Guides`).
-> Official step-by-step: https://docs.astro.build/en/guides/deploy/github/
-
----
+After that, **every saved change rebuilds and updates the site automatically.** Photos are
+converted to fast WebP during the build; if one can't be reached, the plain version shows
+instead — the site never breaks on a bad photo, and a failed build leaves the last working
+version live.
 
 ## Start a new guide (the quick way)
 
-On the home page, click **"＋ Make a new guide."** Enter a country (and, optionally,
-cities, dates, who's going, and priorities) and it opens a pre-filled GitHub issue.
-Submitting it runs an automation that commits a **draft scaffold** — the standard guide
-structure with live weather, public-holiday, and currency data already wired in for that
-country — and opens it as a pull request. The draft lives at its own URL (it is not shown
-on the home page until it graduates); a later research pass fills the facts (per CLAUDE.md)
-and, once verified (`draft: false`), it appears in the main grid. Works for **any**
-country. *(No setup needed — the `new-guide` label the automation relies on is created
-automatically by the `ensure-labels` workflow.)*
+On the home page, click **"＋ Make a new guide."** Enter a country (plus optional cities,
+dates, party, priorities) and it opens a pre-filled GitHub issue. Submitting it commits a
+**draft scaffold** — the standard guide structure with live weather, holiday, and currency
+data wired in — as a pull request. The draft lives at its own URL (hidden from the home
+page) until a research pass fills and verifies the facts (`draft: false`), then it appears
+in the main grid. Works for any country; no setup needed.
 
-## How to add a new destination by hand
+**By hand:** copy an existing guide folder (`src/content/guides/denmark/` is the best
+example), rename it (the folder name becomes the web address), and edit `title`, `country`,
+`dek`, and the `sections`. The home page picks it up automatically.
 
-1. Copy an existing guide folder — `src/content/guides/denmark/` is the best
-   example — and rename it, e.g. `portugal/`. The folder name becomes the web
-   address (`/guides/portugal/`). (A single `portugal.json` file in the old
-   one-file shape works too.)
-2. Edit the fields: `title`, `country`, `dek` (the one-line description), and
-   the `sections`. Keep the same shapes you see in the example.
-3. Save. The home page picks it up and adds a card automatically — you never
-   edit a list of destinations by hand.
+**Two built-in guardrails:** a malformed guide **stops the build and names the exact file
+and field** — a broken guide can never quietly go live; and country colours live in one
+place (`src/lib/themes.ts`).
 
-**Two helpful guardrails are built in:**
+## Section types
 
-- If a guide file is missing something it needs, or a section is malformed, the
-  build **stops and tells you exactly which file and field** — so a broken guide
-  can never quietly go live. (This is your accuracy-first rule, enforced by the
-  tool instead of by memory.)
-- Country colours live in **one** place — `src/lib/themes.ts`. Add a line there
-  for a new country's accent colour and every page uses it.
+Each section has a `type` and a `group` (its navigation tab): `panel`, `prose`, `list`,
+`routes`, `map`, `days`, `sights`, `budget`, `weather` (needs a `map` in the same guide),
+`holidays`, and `raids`, plus a few specialty types. `guide-template.jsonc` shows the
+common backbone; `src/content.config.ts` is the full, authoritative list of fields.
 
-### The section types you can use
+## Working with Claude
 
-Each section has a `type` and a `group` (the category it appears under in the
-navigation). The available types: `panel` (a reference card with an optional
-checklist), `prose` (a plain note), `list` (a checklist), `routes` (numbered
-directions), `map` (an interactive map), `days` (the day-by-day itinerary),
-`sights` (photo cards), `budget` (the cost calculator), `weather` (a live
-forecast strip — needs a `map` section in the same guide for coordinates),
-`holidays` (public holidays during the trip), and `raids` (Pokémon GO raid
-counter tables). The example files show each one in use — `guide-template.jsonc`
-covers the common "universal backbone" set; see `src/content.config.ts` for the
-full, authoritative list of fields each type accepts.
+Because the project is just text files, Claude can read it, write guides, adjust
+components, and run the build to catch problems before you publish — smoothest via
+**Claude Code** pointed at this folder.
 
----
+## Running locally (optional)
 
-## How Claude works on this with you
+Install Node.js, then `npm install` once; `npm run dev` for a live preview or
+`npm run build` for the final pages in `dist/`.
 
-Because the project is just text files, Claude can read it, write new guides,
-adjust components, and run the build to catch problems before you publish. The
-smoothest setup for ongoing work is **Claude Code** (Anthropic's command-line
-tool) pointed at this folder: Claude edits, runs the build, fixes anything that
-breaks, and you review the changes. You can also just ask in chat and get edited
-files back.
-
----
-
-## For the curious: the folder map
-
-```
-src/
-  content/guides/<name>/  the guides themselves — what you edit
-  content.config.ts       the "checker": rules every guide must satisfy
-  lib/themes.ts           country -> accent colour (single source)
-  lib/buckets.ts          groups sections into categories
-  components/Block.astro  draws one section (panel, days, sights, ...)
-  layouts/GuideLayout.astro  the page frame + nav + the small interactive bits
-  pages/index.astro       the home page (lists all guides)
-  pages/guides/[slug].astro  makes one page per guide file
-  styles/                 the look (lifted unchanged from your originals)
-astro.config.mjs          one-time settings (set your web address here)
-package.json              the project's dependency list
-```
-
-## Running it on your own computer (optional)
-
-If you ever want to preview locally: install Node.js, then in this folder run
-`npm install` once, and `npm run dev` to open a live preview, or `npm run build`
-to produce the final pages in a `dist/` folder.
-
----
-
-## Troubleshooting (if a GitHub build fails)
+## Troubleshooting a failed build
 
 Open the **Actions** tab and click the red run:
 
-- **The log names a content file** (e.g. `korea/08-food-and-shopping.json`): the built-in
-  checker caught a typo or missing field — fix that file and commit; the rebuild is automatic.
-- **Pages shows a 404 after a successful build:** the `base` in `astro.config.mjs` must match
-  your repo name (`/Trip-Guides`).
-- **A photo didn't load but the site deployed:** the safety net worked — that one photo fell
-  back to the plain version; everything else is fine.
-- **Your live site never breaks on a bad edit:** it stays on the last working version until a
-  build succeeds.
+- **The log names a content file** — the checker caught a typo or missing field; fix that
+  file and commit. The rebuild is automatic.
+- **404 after a successful build** — the `base` in `astro.config.mjs` must match the repo
+  name (`/Trip-Guides`).
+- **A photo didn't load but the site deployed** — the safety net worked; that photo fell
+  back to the plain version.

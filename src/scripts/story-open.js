@@ -1,7 +1,7 @@
 /* Waypoint first-open STORY intro — a one-time, per-guide "story opening" of the
    cover masthead. A segmented progress rail whose segments are the trip's DAYS
    ticks across the top while the cover text reveals; then it settles into the guide.
-   (docs/VISUAL_COVERS.md — the signature browsing motion.)
+   (docs/MOTION.md — the signature browsing motion.)
 
    - Plays ONCE per guide (localStorage `tg-story-<slug>`); repeat visits get the
      normal masthead arrival instead.

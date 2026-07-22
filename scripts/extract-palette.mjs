@@ -1,4 +1,4 @@
-// Per-guide palette extraction — the identity engine (docs/VISUAL_COVERS.md, V4).
+// Per-guide palette extraction — the identity engine (docs/MOTION.md, V4).
 //
 // Each guide's accent is derived from ITS OWN cover photo (guide.cover.file, else its first
 // sights photo): fetch a small Commons thumbnail, find the dominant *vibrant* hue with sharp

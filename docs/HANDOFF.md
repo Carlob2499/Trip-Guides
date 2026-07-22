@@ -16,8 +16,8 @@
   backbone exercising.
 - Ship loop on every change: build → test → `astro preview` :4322 (never `astro dev`) →
   grep `dist/` → commit → push to `main` (the only branch — `verify-live` guards every deploy).
-- North stars: `docs/PIPELINE.md` (generation/maintenance) · `docs/VISUAL_COVERS.md` +
-  `docs/MOTION.md` (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
+- North stars: `docs/PIPELINE.md` (generation/maintenance) · `docs/MOTION.md`
+  (presentation/motion — absorbed VISUAL_COVERS) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
 ## Snapshot (updated 2026-07-20, session close)
@@ -27,9 +27,9 @@
 
 - **`docs/PLAN_TRAVELER_FEATURES.md`** — F0 (prove the pipeline end-to-end, THE GATE, needs
   `CLAUDE_CODE_OAUTH_TOKEN`) → F1 prep timeline → F2 budget pact → F3 dormant entry/phrases/env
-  content → F4 packing strip → F5 offline confidence → F6 pre-trip auto-recert → F7 runs
-  **`docs/PLAN_PIPELINE_CRITIC.md`** (the debated "third iteration": C1 bar-test lens
-  prompt-only → C2 evidence gate after 2 real runs → C3 promotion only if evidence says so) →
+  content → F4 packing strip → F5 offline confidence → F6 pre-trip auto-recert → F7 the
+  Critic (C1 bar-test lens prompt-only → C2 evidence gate after 2 real runs → C3 promotion
+  only if evidence says so — now staged inside F7 itself; PLAN_PIPELINE_CRITIC.md absorbed) →
   F8 free route optimizer. Grounded in `docs/COMPETITIVE_LANDSCAPE.md` (full market sweep incl.
   served-code inspection of Wanderlog/Mindtrip).
 - **`docs/PLAN_VISUAL_OVERHAUL.md`** — "The Overture & the Atlas": a full-viewport intro hero
@@ -55,6 +55,13 @@ pipeline has NEVER completed a real end-to-end run. Waits on the creator adding
 **Housekeeping still open:** the remote branch `claude/test-coverage-analysis-siftjs` (fully
 merged, safe to delete) needs the creator to delete it via GitHub UI — the sandbox's git relay
 403s on remote ref deletion.
+
+**Docs consolidation (2026-07-22, branch `claude/markdown-consolidation-audit-mljpss`):**
+markdown surface cut ~25% — deleted the superseded 07-17 review roadmap (open P2 UX items
+carried into REVIEW_EXECUTION_PLAN Phase 5), SILO_ROADMAP (contract → ARCHITECTURE.md),
+VISUAL_COVERS (→ MOTION.md), PLAN_PIPELINE_CRITIC (→ PLAN_TRAVELER_FEATURES F7); condensed
+TEST_COVERAGE_ANALYSIS, DENMARK_UPLIFT, PLAN_VISUAL_OVERHAUL (V1–V4 → record), README;
+replaced the fake SECURITY.md; fixed GUIDE_RUBRIC's stale "graduation always human" line.
 
 ## Where we left off
 

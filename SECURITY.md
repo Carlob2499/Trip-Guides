@@ -1,21 +1,9 @@
 # Security Policy
 
-## Supported Versions
+This is a personal static travel-guide site (GitHub Pages + a config-gated Firebase Realtime
+Database). There are no versioned releases; only `main` is deployed and supported.
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
-
-| Version | Supported          |
-| ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
-
-## Reporting a Vulnerability
-
-Use this section to tell people how to report a vulnerability.
-
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+**Reporting:** open a GitHub issue on this repository (or use GitHub's private vulnerability
+reporting if enabled). Please include steps to reproduce. The Firebase trust model — anonymous
+auth + unguessable room codes, field-size caps, not private-by-login — is documented honestly
+in `src/features/firebase/README.md`.

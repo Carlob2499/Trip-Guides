@@ -9,7 +9,7 @@
    page load (tabs, Trip Split, maps, Firebase). Cross-document VT keeps every
    navigation a real page load, so that JS runs unchanged — and it degrades to a
    plain navigation on browsers without support (Firefox today). See
-   docs/VISUAL_COVERS.md. */
+   docs/MOTION.md. */
 
 @view-transition {
   navigation: auto;

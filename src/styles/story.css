@@ -7,7 +7,7 @@
    Everything lives under body.story-playing — a class JS adds only on the first
    visit and always removes — so content is NEVER left hidden if the script doesn't
    run. Disabled under prefers-reduced-motion (JS short-circuits AND this CSS no-ops).
-   docs/VISUAL_COVERS.md. */
+   docs/MOTION.md. */
 
 /* ── Segmented day rail — the signature. Segments = days (structure is information).
    Absolute at the TOP OF THE COVER (not the app chrome): the trip's days laid over

@@ -290,7 +290,7 @@ const guides = defineCollection({
         });
       }
     }).optional(),
-    // Optional per-trip COVER art (docs/VISUAL_COVERS.md) — the shared element that morphs from the
+    // Optional per-trip COVER art (docs/MOTION.md) — the shared element that morphs from the
     // hub card into the guide masthead. A Wikimedia Commons `File:` name (verifiable licensing, same
     // as sights[].img). When absent, the hub card + masthead fall back to the guide's first sight
     // photo, so no existing guide regresses. `focal` is an optional CSS object-position (e.g.

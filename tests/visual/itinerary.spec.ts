@@ -2,7 +2,7 @@
    chrome it interleaves with in the page bundle. This suite exists to make the
    itinerary-silo migration PROVABLE: it must pass on the pre-move build AND the
    post-move build unchanged. It exercises the exact listener collisions the
-   SILO_ROADMAP flagged as order-sensitive:
+   silo migration (docs/ARCHITECTURE.md) flagged as order-sensitive:
      · guide-ui + scroll-memory  — tab switch (click + deep-link)
      · spine                     — a reading-rail tick drives the real tab (≥1100px)
      · day-rail                  — a day chip activates + is the day nav

@@ -9,17 +9,13 @@ recap card) or the existing `live-data` models (weather, currency rate, rainy-da
 
 ## The session ritual (binding for EVERY session below)
 
-1. **Start:** read `docs/HANDOFF.md` first (warm start), then this plan's session block.
-2. **Ask before building:** put the session's *Clarifying questions* to the creator via
-   `AskUserQuestion` — plus any others genuinely warranted. Wait for explicit go.
-3. **Build** within the session's scope. Repo law applies: sealed silos, BASE_URL hrefs,
-   verification dates on new facts, tab budget, no paid APIs (the pipeline is the backend).
-4. **Ship loop every change:** `npm run build` → `npm test` → `astro preview` :4322 at 375px +
-   desktop + dark + reduced-motion → grep `dist/` → commit → push `main` (the only branch).
-   `verify-live` then guards the deploy automatically.
-5. **End: rewrite `docs/HANDOFF.md`** (Snapshot + Where-we-left-off, naming the NEXT session of
-   this plan and its clarifying questions) and commit. The next session starts warm. Never skip
-   this — it is how the plan survives session boundaries.
+Read `docs/HANDOFF.md` first (warm start) → read the session block → put the session's
+*Clarifying questions* to the creator via `AskUserQuestion`, wait for explicit go → build
+within scope (repo law applies: sealed silos, BASE_URL hrefs, verification dates on new facts,
+tab budget, no paid APIs) → CLAUDE.md's ship loop on every change (`verify-live` guards the
+deploy) → **end by rewriting `docs/HANDOFF.md`** (Snapshot + Where-we-left-off, naming the
+NEXT session and its clarifiers) and committing. Never skip the HANDOFF rewrite — it is how
+the plan survives session boundaries.
 
 ## Model & time budget
 
@@ -37,9 +33,9 @@ model at session start (`/model`) — each session's opening ritual includes rem
 | F4 packing strip | Sonnet | 1.5–2.5 h | Derivation model + Trip kit render |
 | F5 offline confidence | Sonnet | 2–3 h | Offline E2E debugging can drag; budget for it |
 | F6 pre-trip auto-recert | Sonnet | 1.5–2.5 h + first-run wall-clock | Probation mode first |
-| F7 the Critic | see `PLAN_PIPELINE_CRITIC.md` | (C1–C3 budgeted there) | |
+| F7 the Critic (C1–C3) | **Opus** C1–C2, Sonnet C3 | ≈4–6 h | Staged inside F7 below; C3 built only on C2's evidence |
 | F8 route optimizer | Sonnet | 2–3 h | 2-opt + fixtures + advisory chip |
-| **Plan total (excl. F7)** | | **≈ 14–22 h active** | Each session independently shippable |
+| **Plan total** | | **≈ 18–28 h active** | Each session independently shippable |
 
 ## Research grounding (July 2026)
 
@@ -145,15 +141,40 @@ guides entering the T-7 window; probation mode first (report, don't auto-commit)
 supervised run, mirroring the auto-publish probation pattern. Update `/health/` verdict text.
 **Exit:** one real recert run on a live guide (post-F0, the token exists); HANDOFF.
 
-## Session F7 — The judgment layer: run the Critic plan
+## Session F7 — The Critic: the pipeline's judgment layer (staged C1→C2→C3)
 
-**Why:** (from the Pass-C debate, 2026-07-20) the pipeline verifies facts but never judges the
-*guide* — and per the competitive sweep, generic-AI convergence is every rival planner's shared
-weakness, so the critic is the anti-generic weapon.
-**Do:** execute **`docs/PLAN_PIPELINE_CRITIC.md`**, its own staged grand plan: C1 (bar-test as a
-prompt-only lens in the verify loop — buildable now), C2 (evidence gate after two real runs),
-C3 (promotion to a true Pass C stage only if the evidence says so). Its ritual, guardrails, and
-clarifying questions live there; this session IS that plan's next unrun session.
+**Why:** (the Pass-C debate, 2026-07-20) the pipeline verifies facts but never judges the
+*guide* — and generic-AI convergence is every rival planner's shared weakness, so the critic is
+the anti-generic weapon. A third *gathering* pass would re-tread A/B for nothing; the value is a
+**critique-and-repair lens** attacking exactly the rubric rows auto-publish stopped enforcing
+(anchor quality, party fit, authenticity). It must *earn* stage-hood on evidence, not faith.
+
+**Guardrails (binding at every stage):** (1) Critic ≠ editor — every change re-enters the
+verification ledger (`source_url` + `verified_on`, continuity sweep); a rewrite that orphans a
+citation is a defect. (2) Honest-blank survives critique — never fill a gap to feel complete.
+(3) The instrument is the bar test: "Would this item appear in ANY generic AI guide? If yes:
+replace it, or justify it against THIS traveler's ranked priorities." (4) Findings are logged
+always, even when zero — silence is indistinguishable from not-run.
+
+- **C1 — the lens (prompt-only; no new stage; Opus, 1–1.5 h).** Edit `research-pass.yml`'s
+  verify self-correction loop + the guide-author skill's done gate: before verify may declare
+  PASS, run the bar test across the merged guide, fix findings under guardrail #1, write the
+  findings block into the scorecard. NO `STAGE_ORDER`/schema/checkpoint change. Exit: a dry-run
+  against Korea or Sedona produces a real findings block.
+- **C2 — the evidence gate (Opus, 0.75–1.5 h). Trigger, not schedule:** only after **two real
+  research passes** have run C1's checklist (F0 counts as the first). Read both runs' findings:
+  did the critic catch real blandness the mechanical verify missed? Did repairs survive
+  verification? What did it cost? Record the verdict here under a dated **Evidence** heading,
+  then `AskUserQuestion` the creator: promote (C3), stay prompt-only, or drop.
+- **C3 — promotion to a true Pass C stage (Sonnet, 2–3 h; only if C2 says so).** The full
+  continuity-swept ripple: `critique` into `STAGE_ORDER` between `reconcile` and `verified`
+  (`scripts/pipeline.mjs` + tests), pipeline-progress model/labels/mocks, `research-pass.yml`
+  stage charter (C1 checklist + guardrails verbatim), scorecard + `docs/PIPELINE.md` +
+  `docs/GUIDE_RUBRIC.md` updated, attempt-cap wiring. Runtime cost ~+30–50%/run, paid only if
+  promoted. Exit: one real run completes with the stage visible on `/progress/` + `/health/`.
+
+*Escalation logic: C1 costs a prompt and can't hurt; C2 costs one reading session and prevents
+building on vibes; C3 is real construction, paid for only with C2's evidence.*
 
 ## Session F8 — Day-route optimizer (beyond parity, free)
 

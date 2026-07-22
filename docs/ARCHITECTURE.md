@@ -52,6 +52,15 @@ self-boots to upgrade it only when `PUBLIC_GMAPS_KEY` is set.
   guide at once (intended).
 - **New feature = its own folder** — `src/features/<name>/` with a single `index.ts` API;
   third-party SDKs behind a config gate + lazy import (Firebase / Google Maps are the pattern).
+  **The silo contract** (migration complete — all 8 features sealed; this is now the standing
+  rule, formerly `docs/SILO_ROADMAP.md`): `index.ts` is the ONLY public surface (no deep
+  cross-feature imports, ever) · `model/` = zod + pure tested logic · `ui/` · `mocks/`
+  (real-shaped seeds; tests run zero-network) · `__tests__/`. Data access sits behind an
+  injectable gateway in `index.ts` (backend-ready). Lazy: a feature is its own `import()`
+  chunk. No speculative silos. **Deliberate deviation:** feature CSS stays in `src/styles/` —
+  Astro bundles all imported sheets per-page anyway, and GuideLayout's single ordered import
+  list IS the cascade contract. Cross-cutting page chrome (guide-ui, scroll-memory, reveal,
+  lightbox, …) stays flat in `src/scripts/` — it is the page, not a feature.
 - **Exports are build-time endpoints** (`getStaticPaths` + GET), mirroring the OG image — no
   separate pre-build step, no runtime.
 - **Base-path hrefs are explicit** — every internal `/`-href uses `import.meta.env.BASE_URL`.
@@ -71,9 +80,8 @@ self-boots to upgrade it only when `PUBLIC_GMAPS_KEY` is set.
 
 ## Backlog (each gets its own planning session)
 
-- **Convergence with WayPoint-V2 / WayFinder** — feature-silo the codebase, split the
-  monolithic guide JSONs into per-section files, add recertification CI + provenance. See the
-  approved convergence plan.
+- ~~Convergence with WayPoint-V2 / WayFinder~~ — **done** (silos, per-section guide files,
+  recert CI + provenance all shipped; see `CHANGELOG.md` 2026-07-16).
 - **Decap CMS** — form-based editor over the JSON, no backend.
 - **Template extraction** — split personal data from destination data; publish as a GitHub
   template repo.

@@ -1,5 +1,5 @@
 /* STORY MODE — the itinerary as a full-screen, one-day-per-view deck (V3c;
-   docs/VISUAL_COVERS.md). Opens from [data-story-open]; driven by
+   docs/MOTION.md). Opens from [data-story-open]; driven by
    features/itinerary/ui/story-mode.js. An immersive dark palette takeover; the
    segmented rail at top = the trip's days (the signature browsing device). */
 

@@ -68,7 +68,7 @@ const guideExtras = guides.map(g => {
   const sight   = flat.filter((s: any) => s.type === "sights").flatMap((s: any) => s.items || []).find((it: any) => it?.img?.file);
   const month   = allItems[0]?.date?.split(/\s+/)[1] || "";
   // The card/hero cover: the guide's own `cover` art when set, else its first sight photo
-  // (docs/VISUAL_COVERS.md). Same image the guide masthead uses — that's what makes them morph.
+  // (docs/MOTION.md). Same image the guide masthead uses — that's what makes them morph.
   const cover = (g.data as any).cover;
   const coverImg = cover?.file
     ? { file: cover.file, alt: cover.alt || "", focal: cover.focal || null }

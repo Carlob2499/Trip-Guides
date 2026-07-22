@@ -99,7 +99,7 @@ is their single home; this file names the principle without repeating detail.
   pure tested logic), `ui/`, `mocks/` (real-shaped seeds; tests run zero-network), and
   `__tests__/`. Data access sits behind an injectable gateway in `index.ts` (backend-ready:
   a source swap never touches `ui/`). `src/features/firebase/` is the reference; full
-  contract + migration order: `docs/SILO_ROADMAP.md`. A small single-module client behavior
+  contract: `docs/ARCHITECTURE.md`. A small single-module client behavior
   still just goes in `src/scripts/`; no speculative silos.
 - **Third-party SDKs stay behind a config gate + lazy import** — commit an empty/public config so the
   build is inert until configured (Vite tree-shakes the whole path when the config is empty), and
@@ -150,7 +150,7 @@ auto-retries transient Pages failures; only investigate after three consecutive.
   still be single `<slug>.json` files (both shapes build); split one with
   `npm run split-guide -- <slug>`.
 - **New client behavior → its feature silo** (`src/features/<name>/`, see
-  `docs/SILO_ROADMAP.md`) or `src/scripts/` for page chrome — never inline back into
+  `docs/ARCHITECTURE.md`) or `src/scripts/` for page chrome — never inline back into
   `GuideLayout.astro`.
 - **`guide.css` past ~800 lines → split by feature** (as `base.css` was). Not before.
 - **Greppable questions** (dead selectors, dup props, fact diffs) → a local grep/script,

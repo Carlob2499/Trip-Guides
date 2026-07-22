@@ -3,7 +3,7 @@
    silky on mobile. This is progressive enhancement — `reveal.js` provides the
    IntersectionObserver fallback on browsers without `animation-timeline` (it bails when
    this is supported, so the two never both run). Fully disabled under reduced-motion.
-   docs/VISUAL_COVERS.md (V3b). */
+   docs/MOTION.md (V3b). */
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {

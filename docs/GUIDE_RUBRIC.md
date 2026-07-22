@@ -35,7 +35,10 @@ Korea-tier quality bar (all P0 + all P1 = graduate-ready). **P2** is continuous 
 ## Verdict logic
 - **Not ready** — any **P0** fails. (`npm run verify` returns `NEEDS WORK`, exit 1; or `npm run build` errors.)
 - **Ships as draft** — all **P0** pass. (`readiness` PASS + `build` clean, `draft: true` kept.)
-- **Graduate-ready (Korea-tier)** — all **P0** + all **P1** pass, judged by a human via the skill's §8 self-check. Graduation is always a human decision.
+- **Graduate-ready (Korea-tier)** — all **P0** + all **P1** pass. On the pipeline's happy path a
+  full verify PASS **auto-graduates** (see PIPELINE.md's PUBLISH stage — the HUMAN rows print for
+  visibility but no longer block); a human judges the P1 HUMAN rows via the skill's §8 self-check
+  when triaging a draft that couldn't reach PASS, and retire/un-publish stays always-human.
 
 ## What the machine can and cannot judge
 `readiness` + `build` enforce the mechanical half: schema, no fabricated placeholders, provenance

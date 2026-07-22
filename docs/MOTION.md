@@ -1,8 +1,8 @@
 # Motion Doctrine — one signature, governed motion
 
 Motion on Waypoint is a governed system, the way the tab budget governs tabs — not an accretion
-of effects. This doc is the standard every motion change is judged against. Companion to
-`docs/VISUAL_COVERS.md` (what shipped and why); this is the *rulebook*.
+of effects. This doc is the *rulebook* every motion change is judged against, plus the shipped
+record (it absorbed `VISUAL_COVERS.md`).
 
 ## The signature: the trip unfolds, day by day
 
@@ -75,3 +75,21 @@ Each guide's accent is extracted from ITS OWN cover photo (`npm run extract-pale
 inside the extractor: **sky/water hues are generic; the subject's built colour carries place**
 (Nyhavn's amber, Gyeonghoeru's dancheong green) — a photo offering nothing but blue keeps its
 blue. Re-run the extractor when a guide's cover changes.
+
+## Shipped record + direction history (so we don't relitigate)
+
+All phases of the original "trip unfolds" system are **shipped**: V1 card→masthead View
+Transition morph + optional `cover` field · V3a first-open day-story intro · V3b native
+scroll-driven reveals (`reveal.js` fallback) · V3c story-mode itinerary (the one-day-per-view
+deck — the less-scroll/retention payoff) · V3d lead-first density polish · V4 per-country
+palette identity (above). **Dropped (V2): palette duotone graphic cards** — read as "graphic
+poster"; hub cards stay photo-forward. The hub Overture/Atlas work continues in
+`docs/PLAN_VISUAL_OVERHAUL.md`.
+
+Information-delivery half of the brief (retention, not just motion): one idea per view
+(story mode), a consistent editorial measure with mono-face data on the right rail, and
+tighter lead-first cards — the reader reaches where/how/when/book without hunting.
+
+Sources (Jul 2026): [MDN scroll-driven animations](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Scroll-driven_animations) ·
+[Chrome: animate on scroll](https://developer.chrome.com/docs/css-ui/scroll-driven-animations) ·
+[WebKit: scroll-driven with just CSS](https://webkit.org/blog/17101/a-guide-to-scroll-driven-animations-with-just-css/)

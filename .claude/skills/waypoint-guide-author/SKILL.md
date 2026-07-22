@@ -39,23 +39,15 @@ helper scripts, and the done gate.
    `docs/NEW_GUIDE_INTAKE.md` explains intake → spec.
 4. **`references/block-types.md`** — when choosing or creating a section type.
 5. **The `denmark/` and `korea/` guide dirs** — the gold standard to match or beat.
-6. **`docs/TRAVELER_PATTERNS.md`** — how these travelers *actually* travel, learned from
-   past trips (pace, heat, commute clustering, fixed-event anchors, food preferences,
-   whether the group forks). Plus `learnings/<slug>.md` for any prior trip with the
-   same travelers. **Consult these during intake and research** so a new guide starts
-   personalized instead of generic — they are the answer to "could a generic AI have
-   written this without knowing this traveler?".
-   **Establish WHICH PARTY the new guide is for, first, and use only that party's section
-   plus Cross-party.** The file is split by party (A = the Korea three, walkers, gaming
-   anchors; B = the Denmark five, family, walking is the binding constraint). They are
-   different travelers and their patterns contradict each other on pace and transit.
-   Applying the wrong party's patterns is not a small error — it is how Denmark's itinerary
-   ended up rated "marginally useful" by the people carrying it. If intake doesn't say who's
-   going, **ask** — don't infer from the last guide.
-   Respect the provenance tags: plan around **[stated]** / **[observed]** /
-   **[reported]** patterns; treat **[hypothesis]** as a question to test, never a fact.
-   An empty section there means no evidence exists — do not invent one. Every pattern
-   currently rests on one data point per trip; weight accordingly.
+6. **`docs/TRAVELER_PATTERNS.md`** — how these travelers *actually* travel, plus
+   `learnings/<slug>.md` for any prior trip with the same travelers. **Consult during intake
+   and research** so a new guide starts personalized, and **establish WHICH PARTY the guide
+   is for FIRST** — use only that party's section plus Cross-party (the file's header
+   explains why; parties A and B contradict each other on pace and transit, and applying the
+   wrong one is how Denmark landed "marginally useful"). If intake doesn't say who's going,
+   **ask** — never infer from the last guide. Respect the provenance tags
+   ([stated]/[observed]/[reported]; [hypothesis] is a question, never a fact); an empty
+   section means no evidence — do not invent one.
 
 ## Modes
 - **New guide** — intake first (establish the **party** and the **anchor event** before
@@ -104,10 +96,9 @@ a just-published guide) means no signal yet — fall back to the ranking rules a
 
 ## Research workflow — TWO passes, then reconcile
 
-**Model economy first:** this workflow is executed on **Sonnet** (light Opus only for a
-genuinely contested reconcile/anchor call) under the budgets in
-`references/research-efficiency.md` — plan-mode the pass, checkpoint each stage, two search
-rounds per fact then ship/flag/omit. Heavy models design the pipeline; they don't run it.
+**Model economy first:** the budgets and model assignments in
+`references/research-efficiency.md` are binding — plan-mode the pass, checkpoint each stage,
+two search rounds per fact then ship/flag/omit.
 
 A guide is **generated twice, from two independent angles, then reconciled into one** — not
 written once and merely error-corrected afterward. The second generation is what *corroborates*
@@ -219,31 +210,23 @@ crowd-awareness)** plus #9 (party fit) and the bar test — not a hard auto-gate
   one. Recert re-checks this on its normal shelf-life cadence like any other fact.
 - **Travel advisory** (guide-level `advisory: {level, title, summary?, source_url,
   verified_on}`, docs/FEATURES.md #9) — the destination's CURRENT US State
-  Department advisory, `source_url` + `verified_on` SCHEMA-REQUIRED. Fetch it from
-  `https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/
-  <country-slug>-travel-advisory.html` — **this page is Cloudflare-gated against
-  plain `fetch()`/`curl`/WebFetch (403)**; it only resolves through an actual
-  browser tool (navigate, wait a few seconds for the challenge, then read the
-  page text — the "Level N: <title>" line is near the top). Don't attempt a
-  build-time automated fetch for this field the way `holidays` does; treat it as
-  a manual/browser research step, same cadence as `entry`. Record the level
-  ALWAYS, even a normal Level 1 — an omitted field reads as "never checked," and
-  that's a different (worse) claim than "checked, nothing elevated to report."
-  The pill itself only ever renders when level ≥ 2 (honest-blank doctrine); Level
-  1 stays silent by design, not by omission.
+  Department advisory (`travel.state.gov/.../ <country-slug>-travel-advisory.html`),
+  `source_url` + `verified_on` SCHEMA-REQUIRED. **The page is Cloudflare-gated
+  against plain `fetch()`/`curl`/WebFetch (403)** — it only resolves through an
+  actual browser tool (navigate, wait out the challenge, read the "Level N:
+  <title>" line near the top); never a build-time fetch. Record the level ALWAYS,
+  even a normal Level 1 — an omitted field reads as "never checked," a worse claim
+  than "checked, nothing elevated." The pill only renders at level ≥ 2
+  (honest-blank); Level 1 stays silent by design, not by omission.
 
 ## Never guess what a script can verify
 - **coords / place_id** → `node scripts/lookup-place.mjs "<place>" --cc XX`
-- **time zone** → once the guide's real coordinates are established (same step as
-  above, not a separate research round), `node scripts/lookup-tz.mjs <lat> <lng>` —
-  offline, boundary-accurate, zero web search. Set the result explicitly in the
-  guide's `tz` field (content.config.ts). **Do this for every guide, not just ones
-  you suspect are odd** — a country's "typical" zone (`src/lib/themes.ts`'s
-  country-table fallback) is a guess dressed as a default, and it fails silently:
-  Hawaii and Arizona both shipped with the wrong local time for real trips before
-  this script existed, and nothing caught it until a traveler would have. `tz` is
-  cheap (one function call, no network) — there's no efficiency argument for
-  skipping it, only for skipping it accidentally.
+- **time zone** → in the SAME step the coords are established (not a separate round),
+  `node scripts/lookup-tz.mjs <lat> <lng>` — offline, boundary-accurate. Set the guide's
+  `tz` field explicitly, **for every guide, not just odd-looking ones**: the country-table
+  fallback is a guess dressed as a default and fails silently (Hawaii and Arizona both
+  shipped wrong local times before this script). One zero-network call — there is no
+  efficiency argument for skipping it.
 - **`sights` photos** → `node scripts/search-commons.mjs "<subject>"` — only a
   Commons-confirmed filename in `img.file`; if none fits, omit the image.
 - **grounding text** → `node scripts/fetch-wikivoyage.mjs "<City, Country>"`
@@ -263,27 +246,19 @@ for the **stale** string to prove none survived.
 
 Then these guide-content gates, on top of it:
 1. **The self-correction loop — iterate, don't one-shot.** Run
-   `npm run verify -- --slug <slug>` — the rolled-up gate (docs/PIPELINE.md, VERIFY
-   stage). It subsumes `npm run readiness` (fabrication · provenance · completeness ·
-   itinerary), adds a **recency** row (facts past shelf life) and, with `--network`, a
-   **content** row (dead links · missing Commons photos), and prints a `GUIDE_RUBRIC`
-   scorecard: AUTO rows it passes/fails + the HUMAN rows you still owe. It reports a
-   `PASS` / `NEEDS WORK` verdict (exit 0/1). If `NEEDS WORK`, do NOT explain-and-move-on:
-   take each **blocking (⚠)** finding and *fix it by re-researching that fact against a
-   primary (T0) source* — resolve the `place_id` with `lookup-place.mjs`, add the missing
-   `source_url`, fill the empty section, correct the itinerary date. Never silence a flag
-   you can't source: downgrade it to `⚠` or omit it. Then **re-run verify, and repeat
-   until it PASSes** (or until every remaining item is a deliberately-explained `⚠` gap —
-   an admitted blank is a feature; a hidden one is not). Recency is *advisory* in the
-   verdict (a concluded trip's facts are stale by nature; the recert workflow acts on live
-   ones), and the `citations` line is context only, not a target (durable narrative has
-   none). `verify` is research + recency + content quality; `npm run build` is the schema
-   gate — both must be clean. (Run `npm run verify -- --slug <slug> --network` before
-   graduating, to catch link-rot and missing photos.) When verify PASSes: generate the
-   guide's identity palette from its cover/sight photos —
-   `npm run extract-palette -- --slug <slug>` (commit the generated
-   `src/data/palettes/<slug>.json`; harmless no-op without photos) — then record the
-   final checkpoint: `npm run pipeline -- --slug <slug> --checkpoint verified`.
+   `npm run verify -- --slug <slug>` — the rolled-up gate (docs/PIPELINE.md, VERIFY stage):
+   readiness (fabrication · provenance · completeness · itinerary) + a **recency** row +
+   (with `--network`) a **content** row (dead links · missing Commons photos), printed as a
+   `GUIDE_RUBRIC` scorecard with a `PASS`/`NEEDS WORK` verdict (exit 0/1). On `NEEDS WORK`,
+   do NOT explain-and-move-on: fix each blocking (⚠) finding *by re-researching that fact
+   against a primary (T0) source* — never silence a flag you can't source; downgrade to `⚠`
+   or omit. **Re-run verify until it PASSes** (or every remaining item is a
+   deliberately-explained `⚠` gap). Recency is advisory (a concluded trip's facts are stale
+   by nature; recert acts on live ones); the `citations` line is context, not a target.
+   `npm run build` is the separate schema gate — both must be clean. Run `--network` before
+   graduating. When verify PASSes: `npm run extract-palette -- --slug <slug>` (commit the
+   generated palette; harmless no-op without photos), then
+   `npm run pipeline -- --slug <slug> --checkpoint verified`.
 2. The **`verification-rules.md` §8 self-check**, line by line.
 3. **`verified` stamp** — `Checked [date] for [trip] · re-check before travel:
    [most perishable items]`; keep it `⚠`-prefixed on drafts and keep
