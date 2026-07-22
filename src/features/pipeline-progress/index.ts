@@ -17,3 +17,8 @@ export {
 export type { PipelineState, ProgressView, StageView, Stage, PipelineStage } from "./model/progress";
 export { createGithubGateway } from "./gateway";
 export type { ProgressGateway, GithubGatewayOptions } from "./gateway";
+
+// A1: re-exported so the progress PAGE can boot the UI through this silo's own public
+// surface instead of a deep import into ui/ (progress/index.astro used to import
+// "../../features/pipeline-progress/ui/progress.js" directly).
+export { initProgress } from "./ui/progress.js";

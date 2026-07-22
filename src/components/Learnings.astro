@@ -5,7 +5,7 @@
    · the #tripLearn special-panel (the Learnings tab) — a sibling of #tripSplit / #tripVote,
      hidden until Firebase has ≥1 feedback record for this guide (tab.js reveals its gtab).
    Everything stays inert until Firebase is configured (the silo gates on hasFirebase()). */
-import "../features/learnings/ui/learnings.css";
+import "../features/learnings/styles.css";
 import { tallySkipsByGroup } from "../features/learnings/index.js";
 interface Props { storeKey: string; learnings?: any; slug: string; title?: string }
 const { storeKey, learnings = null, slug, title = "" } = Astro.props;

@@ -57,10 +57,17 @@ self-boots to upgrade it only when `PUBLIC_GMAPS_KEY` is set.
   cross-feature imports, ever) · `model/` = zod + pure tested logic · `ui/` · `mocks/`
   (real-shaped seeds; tests run zero-network) · `__tests__/`. Data access sits behind an
   injectable gateway in `index.ts` (backend-ready). Lazy: a feature is its own `import()`
-  chunk. No speculative silos. **Deliberate deviation:** feature CSS stays in `src/styles/` —
-  Astro bundles all imported sheets per-page anyway, and GuideLayout's single ordered import
-  list IS the cascade contract. Cross-cutting page chrome (guide-ui, scroll-memory, reveal,
-  lightbox, …) stays flat in `src/scripts/` — it is the page, not a feature.
+  chunk. No speculative silos. **Feature CSS** is a per-silo call: page-chrome styling that
+  isn't really "one feature's" (masthead, tabs, print rules, …) stays centralized in
+  `src/styles/` — Astro bundles all imported sheets per-page anyway, and GuideLayout's single
+  ordered import list IS the cascade contract. A feature with its OWN self-contained styling
+  (firebase, trip-kit, learnings, reminders are the shipped examples) instead ships a
+  **`styles.css` at the silo's ROOT** (sibling to `index.ts`, never under `ui/`) — the
+  consumer imports `features/<name>/styles.css`, one hop below the silo boundary, same as
+  importing the silo's `index.ts` itself; never a deeper path like `ui/<name>.css` (A1 — that
+  was a real bug: 4 components were doing exactly that, reaching past the silo boundary to
+  style a feature they don't own). Cross-cutting page chrome (guide-ui, scroll-memory,
+  reveal, lightbox, …) stays flat in `src/scripts/` — it is the page, not a feature.
 - **Exports are build-time endpoints** (`getStaticPaths` + GET), mirroring the OG image — no
   separate pre-build step, no runtime.
 - **Base-path hrefs are explicit** — every internal `/`-href uses `import.meta.env.BASE_URL`.

@@ -1,6 +1,9 @@
 /* Trip kit tab (docs/FEATURES.md #5/#6/#7) — same head/wrap conventions as
-   Reminders (src/features/reminders/ui/reminders.css). Content is server-rendered;
-   this is pure presentation. */
+   Reminders (src/features/reminders/styles.css). Content is server-rendered;
+   this is pure presentation.
+   A1: lives at the silo ROOT as `styles.css` (not under ui/) — the blessed
+   per-silo CSS pattern (docs/ARCHITECTURE.md), so a consumer imports
+   "../features/trip-kit/styles.css" instead of reaching into ui/. */
 .tk-wrap { max-width: 760px; margin: 0 auto; }
 .tk-head { margin-bottom: 14px; }
 .tk-eyebrow { font-family: var(--font-data); font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin: 0 0 .3rem; }

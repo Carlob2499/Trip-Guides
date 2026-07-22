@@ -3,6 +3,7 @@
 // page). Config that used to come from Astro define:vars is now read from the
 // #tgConfig JSON script tag emitted by the layout.
 import { todayInTz, trapFocus, migrateStorageKey } from "./util.js";
+import { initDarkToggle } from "./theme.js";
 import { resolveTripDate, tripWindow } from "../lib/trip-dates";
 import { initRate, initWeather, initDaySwap, initSun } from "../features/live-data/index.js";
 import { initJetLag } from "./jetlag-ui.js";
@@ -180,34 +181,11 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
              load time, not just on tab click. One system, not two. */
 
           /* ── 1. DARK MODE TOGGLE ──────────────────────────────────────── */
-          var darkBtn = document.getElementById("btnDark");
-          function syncDarkUI() {
-            var dark = document.documentElement.getAttribute("data-theme") === "dark";
-            // Keep the PWA / browser-chrome tint (address bar, iOS status bar) in sync
-            // with the real theme. Reading computed --bg covers the manual toggle AND
-            // the OS-preference auto-dark path, so it can never drift from the page.
-            var tc = document.querySelector('meta[name="theme-color"]');
-            if (tc) {
-              var bg = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
-              if (bg) tc.setAttribute("content", bg);
-            }
-            if (!darkBtn) return;
-            var moon = "<svg class='tb-ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z'/></svg>";
-            var sun = "<svg class='tb-ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><circle cx='12' cy='12' r='4'/><path d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4'/></svg>";
-            darkBtn.innerHTML = dark ? sun : moon;
-            darkBtn.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
-            darkBtn.title = dark ? "Switch to light mode" : "Switch to dark mode";
-          }
-          syncDarkUI();
-          if (darkBtn) {
-            darkBtn.addEventListener("click", function () {
-              var dark = document.documentElement.getAttribute("data-theme") === "dark";
-              var next = dark ? "light" : "dark";
-              document.documentElement.setAttribute("data-theme", next);
-              try { localStorage.setItem("tg-theme", next); } catch (e) {}
-              syncDarkUI();
-            });
-          }
+          // A2: shared with the hub via src/scripts/theme.js — was a byte-different
+          // duplicate implementation here (SVG icons + theme-color sync) vs. index.astro's
+          // own copy (plain-text glyph, no theme-color sync). Same "tg-theme" key both
+          // copies already used, so no migration needed.
+          initDarkToggle("btnDark");
 
           /* ── 2. MOBILE SHEET ─────────────────────────────────────────── */
           var sheet    = document.querySelector(".sheet");

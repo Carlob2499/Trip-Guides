@@ -16,7 +16,8 @@
 
 import { readFile, writeFile, mkdir, rm, access } from "node:fs/promises";
 import path from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
+import { isMain } from "./audit/lib.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const GUIDES_DIR = path.join(ROOT, "src", "content", "guides");
@@ -86,10 +87,6 @@ export async function splitGuide(slug, { guidesDir = GUIDES_DIR } = {}) {
 }
 
 // ── CLI ──────────────────────────────────────────────────────────────────────
-function isMain(moduleUrl) {
-  return process.argv[1] != null && moduleUrl === pathToFileURL(process.argv[1]).href;
-}
-
 if (isMain(import.meta.url)) {
   const slug = process.argv[2];
   if (!slug) { console.error("usage: node scripts/split-guide.mjs <slug>"); process.exit(1); }

@@ -92,6 +92,10 @@ jobs:
           SLUG: ${{ steps.grad.outputs.slug }}
           COUNTRY: ${{ steps.grad.outputs.country }}
           ISSUE_NUM: ${{ github.event.issue.number }}
+          # A4: was hardcoded identically here, in new-guide.yml, research-pass.yml,
+          # astro.config.mjs, and verify-live.mjs (6 copies). SITE_BASE_URL lets any of
+          # them swap targets without editing source; this is the shared default.
+          SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://carlob2499.github.io/Trip-Guides' }}
         run: |
           set -euo pipefail
           git config user.name  "waypoint-scaffold[bot]"
@@ -107,6 +111,6 @@ jobs:
           git commit -m "Graduate guide: ${COUNTRY} (${SLUG}, from #${ISSUE_NUM})"
           git pull --rebase origin main
           git push origin HEAD:main
-          GUIDE_URL="https://carlob2499.github.io/Trip-Guides/guides/${SLUG}/"
+          GUIDE_URL="${SITE_BASE_URL}/guides/${SLUG}/"
           gh issue comment "${ISSUE_NUM}" --body "Graduated ✅ (evidence gate passed) — \`draft\` removed from \`src/content/guides/${SLUG}.json\`. It'll appear in the curated grid on the next deploy: ${GUIDE_URL}. Reminder: the \`verified\` freshness stamp wasn't touched — update it separately if it still reads as an unverified draft."
           gh issue close "${ISSUE_NUM}"

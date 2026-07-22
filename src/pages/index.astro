@@ -165,7 +165,7 @@ const contourLayers = [
       })();
     </script>
   </head>
-  <body>
+  <body data-base={base}>
     <a class="skip-link" href="#hubGrid">Skip to guides</a>
     <!-- THE OVERTURE (V2) — the hub masthead as a full-viewport intro that hands off to the
          guide grid via src/scripts/overture.js. Base markup is fully visible with no JS; the
@@ -425,112 +425,13 @@ const contourLayers = [
       initOverture();
     </script>
 
-    <script is:inline define:vars={{ base }}>
-      (function () {
-        var darkBtn = document.getElementById("btnDark");
-        function syncDark() {
-          var dark = document.documentElement.getAttribute("data-theme") === "dark";
-          if (!darkBtn) return;
-          darkBtn.textContent = dark ? "☀" : "◑";
-          darkBtn.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
-          darkBtn.title = dark ? "Switch to light mode" : "Switch to dark mode";
-        }
-        syncDark();
-        if (darkBtn) {
-          darkBtn.addEventListener("click", function () {
-            var dark = document.documentElement.getAttribute("data-theme") === "dark";
-            var next = dark ? "light" : "dark";
-            document.documentElement.setAttribute("data-theme", next);
-            try { localStorage.setItem("tg-theme", next); } catch (e) {}
-            syncDark();
-          });
-        }
+    <!-- A2: the dark-toggle + new-guide-modal script that used to live here (an
+         `is:inline define:vars={{ base }}` block, ~95 lines, including a duplicate
+         dark-mode-toggle implementation) now boots from the hub silo as real modules —
+         see src/features/hub/index.js (initDarkToggle from scripts/theme.js,
+         initNewGuideModal from features/hub/ui/new-guide-modal.js), imported via the
+         "../features/hub/index.js" import already above. `base` is read there from
+         `data-base` on <body> instead of define:vars. -->
 
-        /* ── New-guide modal ── */
-        var openBtn  = document.getElementById("btnNewGuide");
-        var modal    = document.getElementById("ngModal");
-        var backdrop = document.getElementById("ngBackdrop");
-        var closeBtn = document.getElementById("ngClose");
-        var form     = document.getElementById("ngForm");
-        var errEl    = document.getElementById("ngErr");
-        if (!openBtn || !modal) return;
-        var repo = modal.getAttribute("data-repo");
-
-        function openModal() {
-          modal.removeAttribute("hidden");
-          backdrop.classList.add("open");
-          var c = document.getElementById("ngCountry"); if (c) c.focus();
-        }
-        function closeModal() {
-          modal.setAttribute("hidden", "");
-          backdrop.classList.remove("open");
-          openBtn.focus();
-        }
-        openBtn.addEventListener("click", openModal);
-        if (closeBtn) closeBtn.addEventListener("click", closeModal);
-        if (backdrop) backdrop.addEventListener("click", closeModal);
-        document.addEventListener("keydown", function (e) {
-          if (e.key === "Escape" && !modal.hasAttribute("hidden")) closeModal();
-          // R3: claimed aria-modal without trapping focus. This is:inline script can't
-          // `import` src/scripts/util.js's shared trapFocus (define:vars requires
-          // is:inline, which disables module processing) — Phase 6 (A2) moves this whole
-          // modal script into the hub silo as a real module, where it'll use the shared
-          // helper instead of this small duplicate.
-          if (e.key === "Tab" && !modal.hasAttribute("hidden")) {
-            var fs = modal.querySelectorAll('a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])');
-            if (!fs.length) return;
-            var first = fs[0], last = fs[fs.length - 1];
-            if (e.shiftKey && document.activeElement === first)      { e.preventDefault(); last.focus(); }
-            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-          }
-        });
-
-        function val(id) { var el = document.getElementById(id); return el ? el.value.trim() : ""; }
-
-        if (form) {
-          form.addEventListener("submit", function (e) {
-            e.preventDefault();
-            var country = val("ngCountry");
-            if (!country) {
-              if (errEl) { errEl.textContent = "Country is required."; errEl.removeAttribute("hidden"); }
-              return;
-            }
-            var dates = [val("ngStart"), val("ngEnd")].filter(Boolean).join(" to ");
-            var params = new URLSearchParams();
-            params.set("template", "new-guide.yml");
-            params.set("labels", "new-guide");
-            params.set("title", "New guide: " + country);
-            params.set("country", country);
-            params.set("cities", val("ngCities"));
-            params.set("dates", dates);
-            params.set("anchor", val("ngAnchor"));
-            params.set("travelers", val("ngTravelers"));
-            params.set("party", val("ngParty"));
-            params.set("pace", val("ngPace"));
-            params.set("travel-style", val("ngTravelStyle"));
-            params.set("priority1", val("ngPriority1"));
-            params.set("priority2", val("ngPriority2"));
-            params.set("priority3", val("ngPriority3"));
-            params.set("niche", val("ngNiche"));
-            params.set("budget", val("ngBudget"));
-            params.set("comments", val("ngComments"));
-            var url = "https://github.com/" + repo + "/issues/new?" + params.toString();
-            window.open(url, "_blank", "noopener");
-            closeModal();
-
-            // Send THIS tab straight to the live progress tracker — the one unavoidable manual
-            // step is clicking "Submit new issue" in the other tab; everything else, including
-            // watching it happen, needs no further input. The slug here is only a best-effort
-            // guess (mirrors scaffold-guide.mjs's slugify(); a same-name collision appends "-2"
-            // server-side) — the progress page itself handles a wrong guess with a manual
-            // correction input, and the bot's issue comment always carries the authoritative link.
-            var guessSlug = country.normalize("NFKD").replace(/[̀-ͯ]/g, "")
-              .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "guide";
-            location.href = base + "/progress/?slug=" + encodeURIComponent(guessSlug) +
-              "&country=" + encodeURIComponent(country);
-          });
-        }
-      })();
-    </script>
   </body>
 </html>

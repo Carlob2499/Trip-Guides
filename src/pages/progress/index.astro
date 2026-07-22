@@ -74,7 +74,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
     <script type="application/json" id="pgConfig" set:html={jsonEmbed({ base })}></script>
 
     <script>
-      import { initProgress } from "../../features/pipeline-progress/ui/progress.js";
+      import { initProgress } from "../../features/pipeline-progress/index.js";
       initProgress();
     </script>
   </body>

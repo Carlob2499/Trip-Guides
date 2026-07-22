@@ -1,7 +1,10 @@
 /* Status line for the shared Trip Split budget. Everyone viewing a guide edits ONE live
    budget (keyed by the guide) — so there is no setup UI and no code, just a small,
    non-interactive indicator of the connection. Only shown when Firebase is configured;
-   with no config the budget calculator is a private, on-device tool exactly as before. */
+   with no config the budget calculator is a private, on-device tool exactly as before.
+   A1: `styles.css` at the silo root is the blessed per-silo CSS pattern
+   (docs/ARCHITECTURE.md) — a consumer imports "../features/firebase/styles.css",
+   never a deep path into this silo's other files. (Formerly named live.css.) */
 
 .split-live {
   display: flex;

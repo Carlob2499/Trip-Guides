@@ -18,8 +18,9 @@
 import { readFile, writeFile, mkdir, readdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 import sharp from "sharp";
+import { isMain } from "./audit/lib.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const GUIDES_DIR = path.join(ROOT, "src", "content", "guides");
@@ -176,8 +177,6 @@ export async function extractFor(slug, guide) {
     lightRatio: contrast(primary, LIGHT_BG).toFixed(2),
     darkRatio: contrast(primary, DARK_BG).toFixed(2) };
 }
-
-function isMain(u) { return process.argv[1] != null && u === pathToFileURL(process.argv[1]).href; }
 
 if (isMain(import.meta.url)) {
   const argv = process.argv.slice(2);

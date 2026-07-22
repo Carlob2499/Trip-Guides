@@ -20,8 +20,9 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 import { isValidSlug } from "./lib/slug.mjs";
+import { isMain } from "./audit/lib.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const INTAKE_DIR = path.join(ROOT, "guides-intake");
@@ -148,10 +149,6 @@ export function statusJson(slug, state) {
 // node scripts/pipeline.mjs --slug korea --checkpoint passA --note "anchor verified vs official site"
 // node scripts/pipeline.mjs --slug korea --init [--force]
 // node scripts/pipeline.mjs --slug korea --bump-attempt [--json]
-function isMain(moduleUrl) {
-  return process.argv[1] != null && moduleUrl === pathToFileURL(process.argv[1]).href;
-}
-
 if (isMain(import.meta.url)) {
   const argv = process.argv.slice(2);
   const get = (flag) => (argv.includes(flag) ? argv[argv.indexOf(flag) + 1] : null);

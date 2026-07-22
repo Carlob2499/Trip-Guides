@@ -17,21 +17,19 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
+import { isMain } from "./audit/lib.mjs";
+// A4: imported from intake-schema.mjs (the single source of this regex now) instead of
+// keeping a byte-identical duplicate here. Extracts a GitHub issue-form field's value
+// from the rendered issue body: "### <label>\n\n<value>" blocks, GitHub's own
+// "_No response_" placeholder normalized to empty. Re-exported as `field` (its name
+// here) since parse-modify-issue.mjs and graduate-guide.test.mjs both import it from
+// this module by that name.
+import { matchField as field } from "./intake-schema.mjs";
+export { field };
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const GUIDES_DIR = path.join(ROOT, "src", "content", "guides");
-
-// Extract a GitHub issue-form field's value from the rendered issue body — same convention
-// `issue-to-scaffold.mjs` and this file have always used: "### <label>\n\n<value>" blocks,
-// GitHub's own "_No response_" placeholder normalized to empty.
-export function field(body, label) {
-  const esc = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const m = String(body || "").match(new RegExp("###\\s+" + esc + "\\s*\\n+([\\s\\S]*?)(?=\\n###\\s|$)"));
-  let v = m ? m[1].trim() : "";
-  if (v === "_No response_" || v === "_No response_.") v = "";
-  return v;
-}
 
 export function parseIssueBody(body) {
   return { rawSlug: field(body, "Guide slug") };
@@ -85,9 +83,6 @@ export async function graduateGuide(slug, { guidesDir = GUIDES_DIR } = {}) {
 //     GITHUB_OUTPUT — the caller already knows the slug and stays in the same job).
 // Exit codes preserved from before the refactor: 1 = no/invalid slug, 2 = guide not
 // found (either shape), 3 = not a draft.
-function isMain(moduleUrl) {
-  return process.argv[1] != null && moduleUrl === pathToFileURL(process.argv[1]).href;
-}
 
 if (isMain(import.meta.url)) {
   const slugFlag = process.argv.indexOf("--slug");

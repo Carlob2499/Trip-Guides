@@ -103,9 +103,11 @@ export const ANSWER_KEYS = (() => {
 
 // Issue Forms render each answered field as "### <Label>\n\n<value>"; an empty input renders the
 // literal "_No response_". Pull a field's value out of the body by its label.
-function matchField(body, label) {
+// A4: exported so graduate-guide.mjs (and anything importing `field` from there, e.g.
+// parse-modify-issue.mjs) shares this ONE regex instead of keeping its own byte-identical copy.
+export function matchField(body, label) {
   const esc = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const m = body.match(new RegExp("###\\s+" + esc + "\\s*\\n+([\\s\\S]*?)(?=\\n###\\s|$)"));
+  const m = String(body || "").match(new RegExp("###\\s+" + esc + "\\s*\\n+([\\s\\S]*?)(?=\\n###\\s|$)"));
   let v = m ? m[1].trim() : "";
   if (v === "_No response_" || v === "_No response_.") v = "";
   return v;

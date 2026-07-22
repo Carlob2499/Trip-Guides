@@ -1,5 +1,8 @@
 /* Reminders / Notable Items — the group's shared scratchpad. Uses the guide design tokens
-   so light/dark/mobile come free. */
+   so light/dark/mobile come free.
+   A1: lives at the silo root as `styles.css` — the blessed per-silo CSS pattern
+   (docs/ARCHITECTURE.md); a consumer imports "../features/reminders/styles.css",
+   not a deep path into ui/. */
 
 .rm-wrap { max-width: 760px; margin: 0 auto; }
 .rm-head { margin-bottom: 14px; }

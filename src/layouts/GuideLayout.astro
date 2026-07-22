@@ -35,7 +35,7 @@ import "../styles/transitions.css";
 import "../styles/story.css";
 import "../styles/story-mode.css";
 import "../styles/scroll-motion.css";
-import "../features/firebase/live.css";
+import "../features/firebase/styles.css";
 import { derivePins } from "../lib/map-pins";
 
 // Build-time public-holiday data (Nager.Date), written by scripts/fetch-holidays.mjs
@@ -687,7 +687,6 @@ const tripSummary = buildSummary(guide);
       // imported at day-rail's original slot; its index preserves their exec
       // order. guide-ui above stays first (the one load-bearing invariant).
       import "../features/itinerary/index.js";
-      import "../features/itinerary/ui/story-mode.js";
       import "../scripts/reveal.js";
       import "../scripts/section-flight.js";
       import "../scripts/micro.js";

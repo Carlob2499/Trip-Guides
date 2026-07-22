@@ -19,11 +19,15 @@
 
 import { readdirSync, readFileSync, statSync, existsSync } from "node:fs";
 import path from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
+import { isMain } from "./audit/lib.mjs";
+import { SITE_BASE_URL } from "./site-config.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const GUIDES_DIR = path.join(ROOT, "src", "content", "guides");
-const DEFAULT_BASE = "https://carlob2499.github.io/Trip-Guides";
+// A4: from the shared scripts/site-config.mjs (which itself already honors
+// SITE_BASE_URL) — was hardcoded here identically to astro.config.mjs + 3 workflow YAMLs.
+const DEFAULT_BASE = SITE_BASE_URL;
 
 /** Problem kinds diagnose() can report, so callers/tests key off constants not strings. */
 export const PROBLEM = {
@@ -145,10 +149,6 @@ export async function checkLive(opts = {}) {
     if (result.ok) break;
   }
   return { ...result, expected, base };
-}
-
-function isMain(moduleUrl) {
-  return process.argv[1] != null && moduleUrl === pathToFileURL(process.argv[1]).href;
 }
 
 if (isMain(import.meta.url)) {

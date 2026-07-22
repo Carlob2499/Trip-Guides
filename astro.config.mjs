@@ -1,8 +1,9 @@
 import { defineConfig } from 'astro/config';
+import { SITE_ORIGIN, SITE_BASE_PATH } from './scripts/site-config.mjs';
 
 export default defineConfig({
-  site: 'https://carlob2499.github.io',
-  base: '/Trip-Guides',
+  site: SITE_ORIGIN,
+  base: SITE_BASE_PATH,
 
   // Allow the build to fetch + optimise the Wikimedia photos into fast, modern
   // WebP images served from your own site. This runs on the deploy server

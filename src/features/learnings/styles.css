@@ -1,7 +1,10 @@
 /* Trip Learnings — feedback trigger + survey modal. Uses the guide's design tokens
    (--accent / --card / --ink / --rule / --muted from base.css) so it inherits light,
    dark, and high-contrast automatically. Motion is JS-gated (reducedMotion) and this
-   file adds no transitions that would fight prefers-reduced-motion. */
+   file adds no transitions that would fight prefers-reduced-motion.
+   A1: lives at the silo root as `styles.css` — the blessed per-silo CSS pattern
+   (docs/ARCHITECTURE.md); a consumer imports "../features/learnings/styles.css",
+   not a deep path into ui/. */
 
 /* ── Trigger (foot of the itinerary) ──────────────────────────────────────── */
 .lnw-cta {

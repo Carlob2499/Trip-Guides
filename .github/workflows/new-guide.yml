@@ -59,6 +59,9 @@ jobs:
           SLUG: ${{ steps.gen.outputs.slug }}
           COUNTRY: ${{ steps.gen.outputs.country }}
           ISSUE_NUM: ${{ github.event.issue.number }}
+          # A4: was hardcoded identically here, in graduate-guide.yml, research-pass.yml,
+          # astro.config.mjs, and verify-live.mjs (6 copies).
+          SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://carlob2499.github.io/Trip-Guides' }}
         run: |
           set -euo pipefail
           git config user.name  "waypoint-scaffold[bot]"
@@ -69,8 +72,8 @@ jobs:
           # scaffold or push happened while this job ran, then push.
           git pull --rebase origin main
           git push origin HEAD:main
-          GUIDE_URL="https://carlob2499.github.io/Trip-Guides/guides/${SLUG}/"
-          PROGRESS_URL="https://carlob2499.github.io/Trip-Guides/progress/?slug=${SLUG}"
+          GUIDE_URL="${SITE_BASE_URL}/guides/${SLUG}/"
+          PROGRESS_URL="${SITE_BASE_URL}/progress/?slug=${SLUG}"
           gh issue comment "${ISSUE_NUM}" --body "Scaffolded ✅ — committed straight to \`main\`: [\`src/content/guides/${SLUG}.json\`](https://github.com/${GITHUB_REPOSITORY}/blob/main/src/content/guides/${SLUG}.json). It's a **draft** (\`draft: true\`) — reachable directly at ${GUIDE_URL} (not listed on the hub grid while it's a draft) — and the research pass fills the facts from here per the intake spec: [\`guides-intake/${SLUG}.md\`](https://github.com/${GITHUB_REPOSITORY}/blob/main/guides-intake/${SLUG}.md).
 
           **Watch it happen:** ${PROGRESS_URL} — a live timer + step checklist (scaffold → Pass A → Pass B → reconcile → verify → published). Nothing to do here; that page updates itself.

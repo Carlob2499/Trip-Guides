@@ -51,6 +51,11 @@ permissions:
 jobs:
   research:
     runs-on: ubuntu-latest
+    # A4: job-level so it's in scope for every step INCLUDING the agent action below (whose
+    # own bash tool calls inherit the job's environment) — was hardcoded identically here,
+    # in graduate-guide.yml, new-guide.yml, astro.config.mjs, and verify-live.mjs.
+    env:
+      SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://carlob2499.github.io/Trip-Guides' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -268,7 +273,7 @@ jobs:
               bash scripts/land-branch.sh "research/${{ inputs.slug }}" main \
                 "Research pass: ${{ inputs.slug }}${{ inputs.section != '' && format(' ({0})', inputs.section) || '' }}" \
                 /tmp/scorecard.md "$PASSED" \
-                "https://carlob2499.github.io/Trip-Guides/guides/${{ inputs.slug }}/"
+                "$SITE_BASE_URL/guides/${{ inputs.slug }}/"
 
             It prints exactly one line — read it, don't guess what happened:
 
