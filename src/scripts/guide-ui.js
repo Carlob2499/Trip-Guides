@@ -229,13 +229,12 @@ const daysForBanner     = _cfg.daysForBanner || [];
             });
             document.addEventListener("keydown", function (e) {
               if (e.key === "Escape" && sheet.classList.contains("open")) { closeSheet(); return; }
-              if (e.key === "Tab" && sheet.classList.contains("open")) {
-                var fs = sheet.querySelectorAll("a"); if (!fs.length) return;
-                var first = fs[0], last = fs[fs.length - 1];
-                if (e.shiftKey && document.activeElement === first)      { e.preventDefault(); last.focus(); }
-                else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-              }
             });
+            // R3: shared trap (src/scripts/util.js) — this WAS the one dialog of four
+            // that actually trapped focus; extracted so lightbox/SOS/addr-card/new-guide
+            // modal can all share the same, single-tested implementation instead of each
+            // claiming aria-modal without backing it.
+            trapFocus(sheet, function () { return sheet.classList.contains("open"); });
             // Swipe down to close on mobile
             var _swipeY = 0;
             sheet.addEventListener("touchstart", function (e) { _swipeY = e.touches[0].clientY; }, { passive: true });

@@ -1,7 +1,12 @@
 /* Waypoint lightbox — tap any venue photo to view it full-screen with its
    caption and Commons credit. Mobile-first (photos are small in the card
    grid; the detail is in the full image). Esc/backdrop/✕ close; focus is
-   trapped on the close button and returned on exit. */
+   trapped inside the dialog (R3 — src/scripts/util.js's shared trapFocus;
+   this claimed aria-modal + "focus is trapped" before without actually
+   wiring a Tab-wrap, so Tab could walk out to the ✕ button, the Commons
+   credit link, then straight out into the page behind it) and returned on exit. */
+
+import { trapFocus } from "./util.js";
 
 (function () {
   var box = null, lastFocus = null;
@@ -22,6 +27,7 @@
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape" && box.classList.contains("lb-on")) close();
     });
+    trapFocus(box, function () { return box.classList.contains("lb-on"); });
   }
   function close() {
     box.classList.remove("lb-on");

@@ -8,7 +8,12 @@
 
    Also surfaces the guide's official travel-advisory (docs/FEATURES.md #9), when
    elevated (level >= 2) — the button itself renders even with no emergency numbers
-   researched yet, as long as an elevated advisory exists to show. */
+   researched yet, as long as an elevated advisory exists to show.
+
+   R3: claimed aria-modal without trapping focus — Tab could walk out of the sheet into
+   the page behind it. Now uses src/scripts/util.js's shared trapFocus. */
+
+import { trapFocus } from "../../../scripts/util.js";
 
 (function () {
   var cfgEl = document.getElementById("tgConfig");
@@ -89,4 +94,5 @@
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && !sheet.hidden) close();
   });
+  trapFocus(sheet, function () { return !sheet.hidden; });
 })();

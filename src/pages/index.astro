@@ -466,6 +466,18 @@ const contourLayers = [
         if (backdrop) backdrop.addEventListener("click", closeModal);
         document.addEventListener("keydown", function (e) {
           if (e.key === "Escape" && !modal.hasAttribute("hidden")) closeModal();
+          // R3: claimed aria-modal without trapping focus. This is:inline script can't
+          // `import` src/scripts/util.js's shared trapFocus (define:vars requires
+          // is:inline, which disables module processing) — Phase 6 (A2) moves this whole
+          // modal script into the hub silo as a real module, where it'll use the shared
+          // helper instead of this small duplicate.
+          if (e.key === "Tab" && !modal.hasAttribute("hidden")) {
+            var fs = modal.querySelectorAll('a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])');
+            if (!fs.length) return;
+            var first = fs[0], last = fs[fs.length - 1];
+            if (e.shiftKey && document.activeElement === first)      { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+          }
         });
 
         function val(id) { var el = document.getElementById(id); return el ? el.value.trim() : ""; }

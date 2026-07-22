@@ -13,9 +13,11 @@
 // converter needs the rate live-data already applied, since this module loads after it.
 import { getLastRate, solarTimesFor, daylightLeftLabel, fmtClock } from "../../live-data/index.js";
 import { burnTotal, convertRate, decodeStops, encodeStops } from "../model/field-math";
+import { trapFocus, migrateStorageKey } from "../../../scripts/util.js";
 
 (function () {
   var storeKey = document.body.getAttribute("data-storekey") || "guide";
+  var legacyStoreKey = document.body.getAttribute("data-legacy-storekey") || null;
   function buzz(ms) { try { navigator.vibrate && navigator.vibrate(ms); } catch (e) {} }
 
   /* Shared mini-toast (independent of guide-ui internals). */
@@ -68,6 +70,8 @@ import { burnTotal, convertRate, decodeStops, encodeStops } from "../model/field
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape" && !addrCard.hidden) closeCard();
     });
+    // R3: claimed aria-modal without trapping focus — src/scripts/util.js's shared trap.
+    trapFocus(addrCard, function () { return !addrCard.hidden; });
   }
   document.querySelectorAll("[data-addr-kr]").forEach(function (el) {
     el.classList.add("addr-copy");
