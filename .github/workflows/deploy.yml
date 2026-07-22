@@ -26,6 +26,10 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
+      # P5: gate the deploy on typecheck too — previously only test.yml (a parallel, non-required
+      # check) ran it, so the pipeline could push straight to a main deploy regardless of
+      # typecheck's result.
+      - run: npm run typecheck
       # Refresh public-holiday data (Nager.Date) before building. The script is
       # self-healing: on any fetch error it keeps the committed JSON, so the build
       # always proceeds with last-good data.

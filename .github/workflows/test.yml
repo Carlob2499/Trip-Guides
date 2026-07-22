@@ -22,8 +22,10 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm test
       - run: npm run typecheck
+      # A5: `npm test` + `npm run coverage` both ran the full vitest suite (coverage is a
+      # superset — it runs every test AND instruments it) — dropped the bare run since
+      # coverage already exercises every test.
       # Gates only src/lib/** + every feature's model/ silo (see vitest.config.ts) —
       # the pure-logic core the project actually invests test coverage in. UI glue
       # (DOM IIFEs, untestable as-is per CLAUDE.md's sealed-silo split) is measured
