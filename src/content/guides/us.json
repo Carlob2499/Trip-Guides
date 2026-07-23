@@ -51,7 +51,13 @@
         "Accommodation (confirm AC)",
         "Spa appointment (Day 2) — call L'Auberge or check Mii amo's package availability",
         "Travel insurance",
-        "Red Rock Pass — buy the 7-day pass online or at a visitor center before your first trailhead stop"
+        {
+          "text": "Red Rock Pass — buy the 7-day pass online or at a visitor center before your first trailhead stop",
+          "due": "2026-09-04",
+          "note": "the first trailhead day is Fri Sep 4 (Bell Rock Pathway) — this is that day, not an invented cutoff",
+          "source_url": "https://www.fs.usda.gov/r03/coconino/passes/red-rock-coconino-passes-program",
+          "verified_on": "2026-07-23"
+        }
       ]
     },
     {

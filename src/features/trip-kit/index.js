@@ -3,5 +3,6 @@
    here in later commits). Consumers import ONLY from here, never model/ or ui/ directly. */
 
 export { deriveArrivalPlan } from "./model/arrival";
+export { deriveBookByTimeline } from "./model/book-by";
 export { initSpeak } from "./ui/speak.js";
 export { initEntrySelect } from "./ui/entry-select.js";

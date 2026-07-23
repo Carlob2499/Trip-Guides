@@ -6,6 +6,7 @@
 //   3. Per-day numbered stop lists from the additive `waypoints` field — the
 //      on-the-go itinerary ladder (time in data face, name, note).
 import TransitLinks from "../TransitLinks.astro";
+import { checklistText } from "../../lib/checklist";
 const { sec, keyPrefix = "dy", learnings = null, country } = Astro.props;
 const days: any[] = sec.items || [];
 const two = (n: number) => String(n + 1).padStart(2, "0");
@@ -90,8 +91,8 @@ const actualFor = (date: string) =>
           {d.checklist && d.checklist.length > 0 && (
             <div class="daykit">
               <span class="kit-label">Day kit</span>
-              {d.checklist.map((i: string, j: number) => (
-                <label class="check"><input type="checkbox" data-pkey={`${keyPrefix}-d${di}-${j}`} /><span class="check-txt"><Fragment set:html={i} /></span></label>
+              {d.checklist.map((i: any, j: number) => (
+                <label class="check"><input type="checkbox" data-pkey={`${keyPrefix}-d${di}-${j}`} /><span class="check-txt"><Fragment set:html={checklistText(i)} /></span></label>
               ))}
             </div>
           )}

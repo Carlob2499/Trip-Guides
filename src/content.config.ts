@@ -32,6 +32,24 @@ const provenance = {
   shelf_life: z.enum(["fx", "transit", "hours", "venue", "default"]).optional(),
 };
 
+// F1 (docs/PLAN_TRAVELER_FEATURES.md): a checklist item stays a bare string for every guide
+// that has no book-by deadline for it (back-compat — every existing guide validates
+// unchanged) OR upgrades to an object carrying an optional `due` (ISO date) — the Trip Kit's
+// "Book by" card buckets these into overdue/soon/later. A `due` is a perishable fact (things
+// sell out, prices rise) so — same discipline as `entry[]` — it may not ship undated: setting
+// `due` REQUIRES `source_url` + `verified_on`, enforced below rather than merely documented.
+const checklistItem = z.union([
+  z.string(),
+  z.object({
+    text: z.string(),
+    due: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    note: z.string().optional(), // room for a fee-honest total ("≈$45 booking fee, confirmed Jul 2026") where sourced
+    ...provenance,
+  }).refine((v) => !v.due || (v.source_url && v.verified_on), {
+    message: "a checklist item's `due` date is perishable — it needs source_url + verified_on, same discipline as entry[]",
+  }),
+]);
+
 // Prose tag allowlist (CLAUDE.md / waypoint-guide-author skill): guide bodies render via
 // `set:html` in 30+ places, so any string that reaches the reader as HTML must be
 // confined to this small, safe tag set — nothing that can execute script or navigate to
@@ -105,7 +123,7 @@ const collapse = {
 };
 
 const section = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("panel"),  group: z.string(), title: z.string().optional(), body: z.string().optional(), checklist: z.array(z.string()).optional(), ...collapse, ...provenance }),
+  z.object({ type: z.literal("panel"),  group: z.string(), title: z.string().optional(), body: z.string().optional(), checklist: z.array(checklistItem).optional(), ...collapse, ...provenance }),
   z.object({ type: z.literal("prose"),  group: z.string(), title: z.string().optional(), body: z.string().optional(), ...collapse, ...provenance }),
   z.object({ type: z.literal("list"),   group: z.string(), title: z.string().optional(), items: z.array(z.string()), ...collapse, ...provenance }),
   z.object({ type: z.literal("routes"), group: z.string(), title: z.string().optional(), steps: z.array(z.string()), ...provenance }),
@@ -124,7 +142,7 @@ const section = z.discriminatedUnion("type", [
   z.object({ type: z.literal("days"),   group: z.string(), title: z.string().optional(), items: z.array(z.object({
     date: z.string(), title: z.string(),
     pace: z.string().optional(), note: z.string().optional(), body: z.string().optional(), fit: z.string().optional(),
-    checklist: z.array(z.string()).optional(),
+    checklist: z.array(checklistItem).optional(),
     constraints: z.array(z.string()).optional(), // e.g. "Closed Mondays", "Advance booking required"
     // Explicit exertion tag for the Low-Energy toggle, on a spectrum (not derived
     // from `pace` — that's a free-text schedule narrative, not a strenuousness

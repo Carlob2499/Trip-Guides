@@ -134,7 +134,13 @@
       "<a href='https://www.kakaocorp.com/page/service/service/KakaoT?lang=en' target='_blank' rel='noopener noreferrer'>Kakao T</a> app on all three phones — the two of you use it for Daejeon (Jul 11) and the Daejeon Station taxi (Jul 13 — Busan itself is subway); handy in Seoul for everyone.",
       "Pokémon GO: bag cleared to ≥500 free slots, Remote Raid Passes stocked, Lucky Eggs and Star Pieces packed, charged TMs in bag for GO Fest.",
       "NOL World app installed on both Daejeon-trip phones; MSI tickets confirmed showing in the app (name-tied — no screenshots, prints, or transfers).",
-      "e-Arrival Card (electronic): complete at e-arrivalcard.go.kr within 72 hours of landing — easiest to fill out on the plane.",
+      {
+        "text": "e-Arrival Card (electronic): complete at e-arrivalcard.go.kr within 72 hours of landing — easiest to fill out on the plane.",
+        "due": "2026-07-09",
+        "note": "must be done before landing (Jul 9, ≈04:55 KST) — the 72-hour window just sets how early you're allowed to start, not a separate later cutoff",
+        "source_url": "https://www.e-arrivalcard.go.kr",
+        "verified_on": "2026-07-23"
+      },
       "Re-verify GO Fest Global boss list the week of Jul 8. Niantic adjusts lineups up to 48 hours before an event; the counters in this guide are for the announced roster.",
       "Cash: ≈₩200,000–300,000 per person (convenience stores + street food are often cash-only). Alternatively, load Wise or Revolut before departure for fee-free ATM withdrawals.",
       "Power adapter: Korea uses 220V Type C/F round-pin plugs (same as continental Europe). One adapter per person — USB-C PDs are fine.",

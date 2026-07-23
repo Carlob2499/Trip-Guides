@@ -22,6 +22,8 @@ export type ArrivalPlan = {
   checklist: string[];
 } | null;
 
+import { checklistText } from "../../../lib/checklist";
+
 export function deriveArrivalPlan(days: any[] | null | undefined): ArrivalPlan {
   const d0 = Array.isArray(days) ? days[0] : null;
   if (!d0 || !d0.date) return null;
@@ -37,6 +39,6 @@ export function deriveArrivalPlan(days: any[] | null | undefined): ArrivalPlan {
       lat: Number.isFinite(w.lat) ? w.lat : null,
       lng: Number.isFinite(w.lng) ? w.lng : null,
     })),
-    checklist: Array.isArray(d0.checklist) ? d0.checklist : [],
+    checklist: Array.isArray(d0.checklist) ? d0.checklist.map(checklistText) : [],
   };
 }

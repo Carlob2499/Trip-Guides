@@ -4,6 +4,7 @@
 // never dropped). Sections that are already collapsible keep their body whole
 // (no nested <details>).
 import { splitLead } from "../../lib/lead-split";
+import { checklistText } from "../../lib/checklist";
 const { sec, keyPrefix = "p" } = Astro.props;
 const { lead, more } = sec.collapsible ? { lead: sec.body, more: null } : splitLead(sec.body);
 ---
@@ -14,6 +15,6 @@ const { lead, more } = sec.collapsible ? { lead: sec.body, more: null } : splitL
     <Fragment set:html={more} />
   </details>
 )}
-{(sec.checklist || []).map((i: string, j: number) => (
-  <label class="check"><input type="checkbox" data-pkey={`${keyPrefix}-${j}`} /><span class="check-txt"><Fragment set:html={i} /></span></label>
+{(sec.checklist || []).map((i: any, j: number) => (
+  <label class="check"><input type="checkbox" data-pkey={`${keyPrefix}-${j}`} /><span class="check-txt"><Fragment set:html={checklistText(i)} /></span></label>
 ))}

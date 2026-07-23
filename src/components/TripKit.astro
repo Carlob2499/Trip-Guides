@@ -1,24 +1,28 @@
 ---
 // Trip kit — a tool tab (like Budget/Vote/Reminders) housing focused, on-the-ground
-// helpers (docs/FEATURES.md #5 arrival autopilot, #6 phrase cards, #7 entry requirements).
-// Server-rendered from data the guide already carries; no new client JS needed for
-// content (checkbox persistence is the existing global guide-ui.js scan — see
-// model/arrival.ts header). Cards render in trip-chronological order: entry
-// requirements (settle before you book) → arrival autopilot (the day you land) →
-// phrase cards (useful any day) — each independently optional, never fabricated.
+// helpers (docs/FEATURES.md #5 arrival autopilot, #6 phrase cards, #7 entry requirements,
+// F1 prep timeline). Server-rendered from data the guide already carries; no new client JS
+// needed for content (checkbox persistence is the existing global guide-ui.js scan — see
+// model/arrival.ts header). Cards render in trip-chronological order: entry requirements
+// (settle before you book) → book-by timeline (things with a deadline) → arrival autopilot
+// (the day you land) → phrase cards (useful any day) — each independently optional, never
+// fabricated.
 import TransitLinks from "./TransitLinks.astro";
-import { deriveArrivalPlan } from "../features/trip-kit/index.js";
+import { deriveArrivalPlan, deriveBookByTimeline } from "../features/trip-kit/index.js";
 import "../features/trip-kit/styles.css";
 
 interface Props {
-  storeKey: string; country: string; days: any[];
+  storeKey: string; country: string; days: any[]; sections?: any[];
   phrases?: { lang?: string; items: any[] } | null;
   entry?: any[] | null;
 }
-const { storeKey, country, days, phrases = null, entry = null } = Astro.props;
+const { storeKey, country, days, sections = [], phrases = null, entry = null } = Astro.props;
 const arrival = deriveArrivalPlan(days);
+const bookBy = deriveBookByTimeline(sections);
 const hasPhrases = !!(phrases && Array.isArray(phrases.items) && phrases.items.length);
 const hasEntry = !!(entry && entry.length);
+const hasBookBy = bookBy.length > 0;
+const BUCKET_LABEL: Record<string, string> = { overdue: "Overdue", soon: "Next 2 weeks", later: "Later" };
 ---
 <div class="tk-wrap" id="tripKit" role="tabpanel" aria-labelledby="gtab-kit" data-sk={storeKey} hidden>
   <div class="tk-head">
@@ -54,6 +58,33 @@ const hasEntry = !!(entry && entry.length);
           </div>
         ))}
       </div>
+    </section>
+  )}
+
+  {hasBookBy && (
+    <section class="tk-card" aria-labelledby="tk-bookby-h">
+      <p class="tk-card-eyebrow">🗓 Book by</p>
+      <h3 class="tk-card-title" id="tk-bookby-h">Things with a deadline</h3>
+      {(["overdue", "soon", "later"] as const).map((bucket) => {
+        const bucketItems = bookBy.filter((i) => i.bucket === bucket);
+        return bucketItems.length > 0 && (
+          <div class={`tk-bookby-group tk-bookby-${bucket}`}>
+            <p class="tk-bookby-bucket">{BUCKET_LABEL[bucket]}</p>
+            <ul class="tk-bookby-list">
+              {bucketItems.map((item) => (
+                <li class="tk-bookby-item">
+                  <span class="tk-bookby-text">{item.text}</span>
+                  <span class="tk-bookby-due">
+                    {item.due}
+                    {item.note && <span class="tk-bookby-note"> — {item.note}</span>}
+                    {item.source_url && <> · <a href={item.source_url} target="_blank" rel="noopener">source ↗</a></>}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      })}
     </section>
   )}
 
@@ -117,7 +148,7 @@ const hasEntry = !!(entry && entry.length);
     </section>
   )}
 
-  {!arrival && !hasPhrases && !hasEntry && (
+  {!arrival && !hasPhrases && !hasEntry && !hasBookBy && (
     <p class="tk-empty">Nothing here yet — this tab lights up as the guide's itinerary, phrase cards, and entry requirements are filled in.</p>
   )}
 </div>
