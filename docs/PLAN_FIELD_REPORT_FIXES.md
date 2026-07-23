@@ -60,7 +60,7 @@ live run — so the deferral costs nothing but the proof itself.
 | E5 Denmark backfill → strict | Sonnet (guide-author skill) | 3–4 h | `research(denmark):` — **DONE** |
 | E6 entry + phrases (was F3) | Sonnet (guide-author skill) | 2–3 h | `research(content):` — **DONE** |
 | E7 route optimizer, tap-to-apply (was F8) | Sonnet (Opus if the geometry fights) | 3–4 h | `feat(route-opt):` — **DONE** |
-| E8 hygiene sweep | Sonnet / Haiku | 1–1.5 h | `chore:` — **DONE (items 1–4); item 5 is the creator's, not attempted** |
+| E8 hygiene sweep | Sonnet / Haiku | 1–1.5 h | `chore:` — **DONE (all 5 items — item 5 settled 2026-07-23, kept as-is)** |
 | **Total** | | **≈ 17–24 h active** (≈ 15.5–21 h with E2 deferred) | |
 
 **Order is load-bearing:** with E2 deferred, the active sequence is **E1 → E3 → E4 → E5 → E6 →
@@ -286,10 +286,13 @@ on a real guide day where reordering genuinely helps and stays silent elsewhere.
 4. **Map-tile offline decision, recorded:** keep tiles uncached (third-party, cache bloat);
    document the limitation + the `routes`-blocks-work-offline mitigation in
    `src/features/maps/README.md`.
-5. **Human eyeball (creator, not agent):** the 2026-07-22 contour-visibility values
-   (`MOTION.md` "Contour visibility pass") still need a real-photo check at `astro preview`,
-   both themes, 375px + desktop — step back halfway if strokes fight the title.
-**Exit:** ship loop; nothing on the Field Report's P2·7 list left silently open.
+5. **Human eyeball (creator, not agent) — ✅ SETTLED (2026-07-23):** the 2026-07-22
+   contour-visibility values (`MOTION.md` "Contour visibility pass") were screenshotted at
+   `astro preview` (masthead desktop/mobile × light/dark over real cover photos, plus the hub)
+   and reviewed by the creator — **kept as-is**, no step-back. Lines read clearly in every state
+   without fighting title legibility.
+**Exit:** ship loop; nothing on the Field Report's P2·7 list left silently open. **All of E1–E8
+are now done.**
 
 ---
 *Priority logic: E1 is a trivial change protecting the product's #1 promise; E2 (deferred —

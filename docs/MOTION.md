@@ -113,13 +113,12 @@ all (`.11`/`.07` alpha on the masthead; ~10–16% tints on the hub). Raised once
 | Masthead `[data-mast-contour="0"]` | `rgba(255,255,255,.11)` | `rgba(255,255,255,.15)` |
 | Masthead `[data-mast-contour="1"]` | `rgba(255,255,255,.07)` | `rgba(255,255,255,.10)` |
 
-**Update (2026-07-23):** real Playwright screenshots were taken of the Korea guide masthead
+**Settled (2026-07-23):** real Playwright screenshots were taken of the Korea guide masthead
 (desktop + mobile, light + dark, over its real loaded cover photo, plus over the dark
-no-photo fallback) and of the hub's pre-auto-glide contour layer. The strokes render clearly
-and legibly in all four masthead states without competing with title legibility — the values
-above held up. **The keep-as-is-or-step-back-halfway call is still the creator's, not an
-agent's, per the original SEV-4 finding** — screenshots were sent via `SendUserFile`; this note
-updates once their reply lands.
+no-photo fallback) and of the hub's pre-auto-glide contour layer, and reviewed by the creator.
+**Kept as-is — no step-back.** The strokes render clearly and legibly in all four masthead
+states without competing with title legibility; the U9 values hold. This closes the last open
+item in `docs/PLAN_FIELD_REPORT_FIXES.md` (E8 item 5).
 
 ## V6 — QA and the honest pass (2026-07-23)
 
