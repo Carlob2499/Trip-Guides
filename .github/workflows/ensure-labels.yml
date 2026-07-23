@@ -21,6 +21,7 @@ on:
       - .github/workflows/modify-guide.yml
       - .github/workflows/deploy.yml
       - .github/workflows/token-canary.yml
+      - .github/workflows/pretrip-check.yml
 
 # Label management lives under the issues API — that's all this needs.
 permissions:
@@ -79,4 +80,8 @@ jobs:
           gh label create run-ledger \
             --color C5DEF5 \
             --description "The pipeline run ledger — research/recert runs append a comment for the skill-retro proposer" \
+            --force
+          gh label create pretrip-check \
+            --color FBCA04 \
+            --description "The daily pre-trip tracking issue — guides entering their T-7 departure window with stale facts" \
             --force
