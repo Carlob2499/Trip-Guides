@@ -153,4 +153,28 @@ describe("check-research — D2 promoted to blocking (E3) on provenance:\"strict
     const found = warns(guide).some((f) => f.msg.includes("Hotel"));
     expect(found).toBe(true);
   });
+
+  it("never flags a list[] item at the item level — a bare string has no field to hang a per-item verified_on on", () => {
+    const guide = {
+      provenance: "strict",
+      verified: "Checked Jan 2026",
+      sections: [
+        { type: "list", group: "Food", title: "Where to eat", verified_on: "2026-01-01", source_url: "https://example.com", items: ["Tickets cost $20 at the door."] },
+      ],
+    };
+    const msgs = [...warns(guide), ...infos(guide)].map((f) => f.msg);
+    expect(msgs.some((m) => m.includes("list item"))).toBe(false);
+  });
+
+  it("still catches a list[] section's undated hard fact at the SECTION level, promoted to warn under strict", () => {
+    const guide = {
+      provenance: "strict",
+      verified: "Checked Jan 2026",
+      sections: [
+        { type: "list", group: "Food", title: "Where to eat", items: ["Tickets cost $20 at the door."] },
+      ],
+    };
+    const found = warns(guide).some((f) => f.msg.includes("Where to eat"));
+    expect(found).toBe(true);
+  });
 });

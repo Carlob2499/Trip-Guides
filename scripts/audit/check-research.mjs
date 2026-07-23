@@ -142,7 +142,13 @@ export function checkResearchGuide(guide, slug) {
     if (!s.verified_on && hasHardFact(sectionText)) {
       add(d2Severity(sectionText), `${label} has an undated hour/price-looking figure but no verified_on (D2 advisory — precise text isn't automatically exempt from provenance)`);
     }
-    // Item-level provenance (days[].items[], sights[].items[], budget[].items[]).
+    // Item-level provenance (days[].items[], sights[].items[], budget[].items[]) — NOT
+    // list[], whose items are bare strings with no field to hang a per-item verified_on
+    // on at all. A list item's only coverage is the section-level check above (which
+    // already scans s.items for "list"); looping it here too would flag every list item
+    // with a hard fact as permanently unfixable under strict — there is no per-item date
+    // it could ever carry to clear the finding.
+    if (s.type === "list") continue;
     for (const it of s.items || []) {
       if (it.verified_on) continue;
       const itemText = JSON.stringify(it);
