@@ -47,6 +47,25 @@ export const EMERGENCY = {
     ],
     note: "112 works in Denmark, Sweden and Norway alike. Full detail in Health & safety.",
   },
+  // E8·3: verified 2026-07-23. 911 is federally mandated as the single nationwide
+  // emergency number for all telephone service (the Wireless Communications and Public
+  // Safety Act of 1999, the "911 Act"; FCC: https://www.fcc.gov/general/9-1-1-and-e9-1-1-services).
+  "United States": {
+    lines: [
+      { label: "Police / Fire / Ambulance", num: "911" },
+    ],
+    note: "911 is the universal US emergency number — works from any phone, no area code needed.",
+  },
+  // E8·3: verified 2026-07-23. 911 is Mexico's single nationwide-harmonized emergency
+  // number (Federal Telecommunications Institute / IFT guidelines, migrating the older
+  // 060/065/068/080 lines onto it; source: https://pvangels.com/news-mexico/176833/mexico-officially-establishes-911-emergency-number,
+  // reporting the IFT's own announcement). Free from any phone, including zero-balance.
+  "Mexico": {
+    lines: [
+      { label: "Police / Fire / Ambulance", num: "911" },
+    ],
+    note: "911 is Mexico's unified nationwide emergency number, free from any phone. Operators may be Spanish-only outside tourist areas — ask for an English-speaking operator.",
+  },
 };
 
 // Countries where 112 is the statutory universal emergency number: EU law makes

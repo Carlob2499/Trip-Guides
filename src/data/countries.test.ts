@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 // @ts-ignore — plain .mjs data module, no types needed for these shape assertions
-import { COUNTRIES, CONTINENTS, CONTINENT_ORDER, ALIASES, continentFor } from "./countries.mjs";
+import { COUNTRIES, CONTINENTS, CONTINENT_ORDER, ALIASES, continentFor, emergencyFor } from "./countries.mjs";
 
 describe("continent data", () => {
   it("assigns a continent to EVERY country — a new country can't ship without one", () => {
@@ -42,5 +42,33 @@ describe("continent data", () => {
     expect(continentFor("Atlantis")).toBeNull();
     expect(continentFor("")).toBeNull();
     expect(continentFor(undefined)).toBeNull();
+  });
+});
+
+describe("emergencyFor (E8·3: SOS coverage)", () => {
+  it("returns a verified entry for a researched country", () => {
+    expect(emergencyFor("South Korea")?.lines).toContainEqual({ label: "Police", num: "112" });
+    expect(emergencyFor("Denmark")?.fallback).toBeUndefined();
+  });
+
+  it("US and Mexico now have verified 911 entries, not the generic EU fallback", () => {
+    const us = emergencyFor("United States");
+    expect(us?.fallback).toBeUndefined();
+    expect(us?.lines).toContainEqual({ label: "Police / Fire / Ambulance", num: "911" });
+
+    const mx = emergencyFor("Mexico");
+    expect(mx?.fallback).toBeUndefined();
+    expect(mx?.lines).toContainEqual({ label: "Police / Fire / Ambulance", num: "911" });
+  });
+
+  it("Portugal has no verified entry of its own but gets the honest EU-112 fallback, flagged", () => {
+    const pt = emergencyFor("Portugal");
+    expect(pt?.fallback).toBe(true);
+    expect(pt?.lines).toContainEqual({ label: "All emergencies — universal EU number", num: "112" });
+  });
+
+  it("returns null for a country with neither a verified entry nor EU-112 coverage", () => {
+    expect(emergencyFor("Thailand")).toBeNull();
+    expect(emergencyFor("Atlantis")).toBeNull();
   });
 });

@@ -7,7 +7,8 @@ import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { mkdtemp, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { checkStaleness } from "./check-staleness.mjs";
+import { checkStaleness, SHELF_LIFE_DAYS } from "./check-staleness.mjs";
+import { SHELF_LIFE_DAYS as SHELF_LIFE_DAYS_TS } from "../../src/lib/staleness.ts";
 
 let dir;
 
@@ -83,5 +84,11 @@ describe("checkStaleness — archived guide state (D4)", () => {
     expect(archived).toContain("archived-guide");
     expect(sections.some((s) => s.slug === "archived-guide")).toBe(false);
     expect(stale.some((s) => s.slug === "archived-guide")).toBe(false);
+  });
+});
+
+describe("E8·1 — SHELF_LIFE_DAYS stays in sync across its two copies", () => {
+  it("check-staleness.mjs's copy deep-equals src/lib/staleness.ts's", () => {
+    expect(SHELF_LIFE_DAYS).toEqual(SHELF_LIFE_DAYS_TS);
   });
 });

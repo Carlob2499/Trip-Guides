@@ -114,6 +114,29 @@ rather than hide it. The GitHub secret only keeps it out of git history — the 
 restriction in step 2 is what actually protects it. **If you skip step 2, the key is
 usable by anyone who views source.**
 
+## Offline: map tiles are NOT cached (a decision, not a bug)
+
+The service worker precache (`scripts/gen-sw-precache.mjs`) caches each guide's own HTML,
+JSON, and photo assets for offline use — but deliberately does **not** cache OSM or Google
+Maps tile imagery, for either map path above. A tile layer is a live, per-viewport,
+per-zoom-level fetch against a third party's server; caching it would mean either an
+unbounded, ever-growing cache (every pan/zoom pulls new tiles) or a fixed, arbitrary set of
+zoom levels chosen in advance — both are worse than the honest answer: maps need a
+connection, offline guides don't get pins.
+
+This is why every `map` section has a `routes` sibling type (plain numbered directions —
+`type: "routes"`, `content.config.ts:111`) rather than relying on the map alone: `routes`
+is just text, baked into the same cached page as everything else, so turn-by-turn
+directions still work with no signal even though the visual map doesn't render. A guide
+that leans on `routes` for its actually-load-bearing directions (not just the map as a
+nice-to-have) is more offline-resilient by construction — no code change needed, just using
+the block type that already exists for this.
+
+If offline map tiles are ever revisited, the real options are a small fixed-radius tile
+cache around each guide's known waypoints (bounded, but adds real storage cost and staleness
+risk) or an offline-tile library swap (a real dependency, not a config flag) — neither is
+free, so this stays a recorded trade-off rather than a silent gap.
+
 ## Gotcha the two halves share
 
 `fullscreen.js` wires its ⤢ button at page load. `gmaps-render.js` upgrades lazily

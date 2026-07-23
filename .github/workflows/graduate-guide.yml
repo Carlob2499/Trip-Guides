@@ -101,13 +101,17 @@ jobs:
           git config user.name  "waypoint-scaffold[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           # Stage whichever shape scripts/graduate-guide.mjs actually wrote to — a flat
-          # src/content/guides/<slug>.json, or a split guide's src/content/guides/<slug>/_guide.json
-          # (mirrors graduate-guide.mjs's own flat-file-wins resolution order).
-          if [ -f "src/content/guides/${SLUG}.json" ]; then
-            git add "src/content/guides/${SLUG}.json"
-          else
-            git add "src/content/guides/${SLUG}/_guide.json"
-          fi
+          # src/content/guides/<slug>.json, or a split guide's src/content/guides/<slug>/_guide.json.
+          # E8·2: the flat-vs-directory resolution order used to be re-implemented inline here;
+          # now it calls the single shared resolver (scripts/lib/guide-shape.mjs) instead.
+          META_PATH=$(node -e '
+            import("./scripts/lib/guide-shape.mjs").then(({ resolveGuidePath }) => {
+              const r = resolveGuidePath(process.argv[1], "src/content/guides");
+              if (!r) process.exit(1);
+              console.log(r.metaPath);
+            });
+          ' "${SLUG}")
+          git add "$META_PATH"
           git commit -m "Graduate guide: ${COUNTRY} (${SLUG}, from #${ISSUE_NUM})"
           git pull --rebase origin main
           git push origin HEAD:main

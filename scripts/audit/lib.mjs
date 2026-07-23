@@ -6,6 +6,7 @@
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { resolveGuidePath } from "../lib/guide-shape.mjs";
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 export const GUIDES_DIR = path.join(ROOT, "src", "content", "guides");
@@ -35,13 +36,21 @@ export async function readGuides(guidesDir = GUIDES_DIR) {
   for (const e of entries) {
     try {
       if (e.isFile() && e.name.endsWith(".json")) {
-        const raw = await readFile(path.join(guidesDir, e.name), "utf8");
-        out.push({ file: e.name, slug: e.name.replace(/\.json$/, ""), raw, guide: JSON.parse(raw) });
+        const slug = e.name.replace(/\.json$/, "");
+        // E8·2: same shared tie-break as graduate-guide.mjs — if a slug somehow has BOTH a
+        // flat file and a directory, the flat file wins and this entry is skipped (the
+        // directory-shaped entry for the same slug handles it instead, also via the resolver).
+        const located = resolveGuidePath(slug, guidesDir);
+        if (!located || located.isDirectory) continue;
+        const raw = await readFile(located.metaPath, "utf8");
+        out.push({ file: e.name, slug, raw, guide: JSON.parse(raw) });
       } else if (e.isDirectory()) {
-        const dir = path.join(guidesDir, e.name);
+        const slug = e.name;
+        const located = resolveGuidePath(slug, guidesDir);
+        if (!located || !located.isDirectory) continue; // no _guide.json, or a same-slug flat file wins
+        const dir = path.join(guidesDir, slug);
         const files = (await readdir(dir)).filter((f) => f.endsWith(".json"));
-        if (!files.includes("_guide.json")) continue;
-        const metaRaw = await readFile(path.join(dir, "_guide.json"), "utf8");
+        const metaRaw = await readFile(located.metaPath, "utf8");
         const sections = [];
         let raw = metaRaw;
         for (const f of files.filter((f) => f !== "_guide.json").sort()) {
@@ -49,7 +58,7 @@ export async function readGuides(guidesDir = GUIDES_DIR) {
           raw += "\n" + txt;
           sections.push(...JSON.parse(txt));
         }
-        out.push({ file: e.name + "/", slug: e.name, raw, guide: { ...JSON.parse(metaRaw), sections } });
+        out.push({ file: e.name + "/", slug, raw, guide: { ...JSON.parse(metaRaw), sections } });
       }
     } catch (err) {
       console.warn(`[audit] cannot parse ${e.name}: ${err.message} — skipped`);

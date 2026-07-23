@@ -234,4 +234,14 @@ describe("readGuides (filesystem, isolated temp dir)", () => {
     await writeFile(path.join(guidesDir, "README.md"), "# not a guide");
     expect(await readGuides(guidesDir)).toEqual([]);
   });
+
+  it("E8·2: when a slug has both shapes, the flat file wins (shared tie-break, same as resolveGuidePath)", async () => {
+    await writeFile(path.join(guidesDir, "dupe.json"), JSON.stringify({ title: "Flat wins" }));
+    const dir = path.join(guidesDir, "dupe");
+    await mkdir(dir, { recursive: true });
+    await writeFile(path.join(dir, "_guide.json"), JSON.stringify({ title: "Directory loses" }));
+    const guides = await readGuides(guidesDir);
+    expect(guides).toHaveLength(1);
+    expect(guides[0].guide.title).toBe("Flat wins");
+  });
 });

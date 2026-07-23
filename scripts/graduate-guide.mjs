@@ -15,10 +15,10 @@
 // `_guide.json` instead of `<slug>.json` — no section files are touched.
 
 import { readFile, writeFile } from "node:fs/promises";
-import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { isMain } from "./audit/lib.mjs";
+import { resolveGuidePath as resolveGuidePathShared } from "./lib/guide-shape.mjs";
 // A4: imported from intake-schema.mjs (the single source of this regex now) instead of
 // keeping a byte-identical duplicate here. Extracts a GitHub issue-form field's value
 // from the rendered issue body: "### <label>\n\n<value>" blocks, GitHub's own
@@ -41,16 +41,12 @@ export function parseIssueBody(body) {
 // workflows) validates identically instead of drifting.
 export { isValidSlug } from "./lib/slug.mjs";
 
-// Which shape this guide is in, or null if neither exists. The flat file wins if (somehow)
-// both existed, since that would mean an incomplete split — but that's not a case the build
-// itself tolerates (the content loader picks one shape per slug), so it's here only as a
-// defensive tie-break, not an expected path.
+// E8·2: the flat-vs-directory resolution order now lives once in scripts/lib/guide-shape.mjs
+// (shared with graduate-guide.yml's own copy, via the `node -e` call below, and with
+// audit/lib.mjs's readGuides) — re-exported here under this module's original name and
+// default-guidesDir signature so every existing importer keeps working unchanged.
 export function resolveGuidePath(slug, guidesDir = GUIDES_DIR) {
-  const flatPath = path.join(guidesDir, `${slug}.json`);
-  if (existsSync(flatPath)) return { metaPath: flatPath, isDirectory: false };
-  const dirMetaPath = path.join(guidesDir, slug, "_guide.json");
-  if (existsSync(dirMetaPath)) return { metaPath: dirMetaPath, isDirectory: true };
-  return null;
+  return resolveGuidePathShared(slug, guidesDir);
 }
 
 export const GRADUATE_ERRORS = {

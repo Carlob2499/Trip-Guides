@@ -14,9 +14,9 @@ import { readGuides, parseVerifiedDate, daysSince, isMain, flatten } from "./lib
 export const DEFAULT_THRESHOLD_DAYS = 90;
 
 // Mirrors SHELF_LIFE_DAYS in src/lib/staleness.ts. Duplicated rather than imported
-// because this script is plain .mjs run by node with no TS pipeline; the schema's
-// `shelf_life` enum and the test in staleness.test.ts keep the two honest.
-const SHELF_LIFE_DAYS = { fx: 7, transit: 90, hours: 90, venue: 180, default: 90 };
+// because this script is plain .mjs run by node with no TS pipeline; exported so
+// check-staleness.test.mjs can assert the two never drift apart (deep-equal test).
+export const SHELF_LIFE_DAYS = { fx: 7, transit: 90, hours: 90, venue: 180, default: 90 };
 
 export async function checkStaleness({ thresholdDays = DEFAULT_THRESHOLD_DAYS, guidesDir } = {}) {
   const guides = await readGuides(guidesDir);
