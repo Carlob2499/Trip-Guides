@@ -1,18 +1,55 @@
 /* Waypoint hub — the "Make a new guide" modal: open/close/backdrop/Escape/focus-trap, and
-   the submit handler that builds the prefilled GitHub issue URL and sends this tab to the
-   live progress tracker. (The multi-step FORM inside the modal — step navigation, field
-   carving — is wizard.js; this is the modal shell around it.)
+   the submit handler. Two submit paths:
+     · ZERO-CLICK (W5) — when the Cloudflare intake proxy is configured (intake-proxy-config.js),
+       POST the intake straight to the Worker, which files the issue for the visitor (no GitHub
+       account, no click), then send this tab to the progress tracker.
+     · FALLBACK — proxy not configured, or its request failed: open a prefilled GitHub issue in a
+       new tab (the one-click path) exactly as before, then send this tab to the tracker.
+   The FALLBACK is the original behavior; the zero-click path is pure progressive enhancement.
 
-   A2: extracted from an `is:inline define:vars={{ base }}` script in index.astro (~95 lines
-   of inline script, alongside a duplicate dark-mode-toggle implementation — see theme.js).
-   `define:vars` requires `is:inline`, which disables Astro's script processing (no imports,
-   no shared modules) — that's why this used to duplicate trapFocus's logic inline instead of
-   importing the shared helper. As a real module it can now import both shared helpers
-   properly. `base` (the site's BASE_URL) is no longer threaded via define:vars; it's read
-   from `document.body.dataset.base`, the same data-attribute convention storeKey/
-   legacyStoreKey already use on the guide pages. */
+   A2: extracted from an `is:inline define:vars={{ base }}` script in index.astro. `base` (the
+   site's BASE_URL) is read from `document.body.dataset.base`. */
 
 import { trapFocus } from "../../../scripts/util.js";
+import { INTAKE_PROXY } from "../intake-proxy-config.js";
+
+// Best-effort slug guess, mirroring scaffold-guide.mjs's slugify (a collision gets "-2"
+// server-side; the bot's issue comment carries the authoritative link either way).
+function guessSlug(country) {
+  return country.normalize("NFKD").replace(/[̀-ͯ]/g, "")
+    .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "guide";
+}
+
+// Get a Cloudflare Turnstile token if a site key is configured. Fully defensive: any hiccup
+// (script blocked, timeout, no key) resolves to "" so the caller falls through to the GitHub
+// path rather than trapping the user — the Worker rejects a missing token only when ITS secret is
+// set, and that rejection just triggers the same fallback.
+function getTurnstileToken(siteKey) {
+  return new Promise(function (resolve) {
+    if (!siteKey) return resolve("");
+    let done = false;
+    const finish = (t) => { if (!done) { done = true; resolve(t || ""); } };
+    function run() {
+      try {
+        let el = document.getElementById("ngTurnstile");
+        if (!el) { el = document.createElement("div"); el.id = "ngTurnstile"; el.style.display = "none"; document.body.appendChild(el); }
+        const id = window.turnstile.render(el, {
+          sitekey: siteKey, size: "invisible",
+          callback: finish, "error-callback": () => finish(""),
+        });
+        window.turnstile.execute(id);
+      } catch (_) { finish(""); }
+    }
+    if (window.turnstile) run();
+    else {
+      const s = document.createElement("script");
+      s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+      s.async = true; s.onload = run; s.onerror = () => finish("");
+      document.head.appendChild(s);
+    }
+    setTimeout(() => finish(""), 8000);
+  });
+}
 
 export function initNewGuideModal() {
   const base = document.body.getAttribute("data-base") || "";
@@ -42,8 +79,6 @@ export function initNewGuideModal() {
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && !modal.hasAttribute("hidden")) closeModal();
   });
-  // R3: shared trap (src/scripts/util.js) — this modal claimed aria-modal without actually
-  // trapping focus until this extraction made a real `import` possible.
   trapFocus(modal, function () { return !modal.hasAttribute("hidden"); });
 
   function val(id) {
@@ -51,47 +86,74 @@ export function initNewGuideModal() {
     return el ? el.value.trim() : "";
   }
 
+  // Collect the intake by ISSUE-FORM field id — the exact keys renderIssueBody / the GitHub issue
+  // template consume, so the proxy and the fallback file identical issues.
+  function collectRaw(country) {
+    return {
+      country,
+      cities: val("ngCities"),
+      dates: [val("ngStart"), val("ngEnd")].filter(Boolean).join(" to "),
+      anchor: val("ngAnchor"),
+      travelers: val("ngTravelers"),
+      party: val("ngParty"),
+      pace: val("ngPace"),
+      "travel-style": val("ngTravelStyle"),
+      priority1: val("ngPriority1"),
+      priority2: val("ngPriority2"),
+      priority3: val("ngPriority3"),
+      niche: val("ngNiche"),
+      budget: val("ngBudget"),
+      comments: val("ngComments"),
+    };
+  }
+
+  function toProgress(country, slug) {
+    location.href = base + "/progress/?slug=" + encodeURIComponent(slug || guessSlug(country)) +
+      "&country=" + encodeURIComponent(country);
+  }
+
+  // FALLBACK: prefilled GitHub issue in a new tab (the original one-click path).
+  function fallbackToGitHub(raw, country) {
+    const params = new URLSearchParams();
+    params.set("template", "new-guide.yml");
+    params.set("labels", "new-guide");
+    params.set("title", "New guide: " + country);
+    for (const [k, v] of Object.entries(raw)) params.set(k, v);
+    window.open("https://github.com/" + repo + "/issues/new?" + params.toString(), "_blank", "noopener");
+    closeModal();
+    toProgress(country);
+  }
+
   if (form) {
-    form.addEventListener("submit", function (e) {
+    form.addEventListener("submit", async function (e) {
       e.preventDefault();
       const country = val("ngCountry");
       if (!country) {
         if (errEl) { errEl.textContent = "Country is required."; errEl.removeAttribute("hidden"); }
         return;
       }
-      const dates = [val("ngStart"), val("ngEnd")].filter(Boolean).join(" to ");
-      const params = new URLSearchParams();
-      params.set("template", "new-guide.yml");
-      params.set("labels", "new-guide");
-      params.set("title", "New guide: " + country);
-      params.set("country", country);
-      params.set("cities", val("ngCities"));
-      params.set("dates", dates);
-      params.set("anchor", val("ngAnchor"));
-      params.set("travelers", val("ngTravelers"));
-      params.set("party", val("ngParty"));
-      params.set("pace", val("ngPace"));
-      params.set("travel-style", val("ngTravelStyle"));
-      params.set("priority1", val("ngPriority1"));
-      params.set("priority2", val("ngPriority2"));
-      params.set("priority3", val("ngPriority3"));
-      params.set("niche", val("ngNiche"));
-      params.set("budget", val("ngBudget"));
-      params.set("comments", val("ngComments"));
-      const url = "https://github.com/" + repo + "/issues/new?" + params.toString();
-      window.open(url, "_blank", "noopener");
-      closeModal();
+      const raw = collectRaw(country);
 
-      // Send THIS tab straight to the live progress tracker — the one unavoidable manual
-      // step is clicking "Submit new issue" in the other tab; everything else, including
-      // watching it happen, needs no further input. The slug here is only a best-effort
-      // guess (mirrors scaffold-guide.mjs's slugify(); a same-name collision appends "-2"
-      // server-side) — the progress page itself handles a wrong guess with a manual
-      // correction input, and the bot's issue comment always carries the authoritative link.
-      const guessSlug = country.normalize("NFKD").replace(/[̀-ͯ]/g, "")
-        .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "guide";
-      location.href = base + "/progress/?slug=" + encodeURIComponent(guessSlug) +
-        "&country=" + encodeURIComponent(country);
+      // ZERO-CLICK: file via the Worker when configured. Any failure falls through to GitHub.
+      if (INTAKE_PROXY.url) {
+        try {
+          const turnstileToken = await getTurnstileToken(INTAKE_PROXY.turnstileSiteKey);
+          const res = await fetch(INTAKE_PROXY.url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(Object.assign({ turnstileToken }, raw)),
+          });
+          if (res.ok) {
+            const data = await res.json();
+            closeModal();
+            toProgress(country, data.slug);
+            return;
+          }
+        } catch (_) {
+          // network/proxy error — fall through to the GitHub path so the user still succeeds.
+        }
+      }
+      fallbackToGitHub(raw, country);
     });
   }
 }

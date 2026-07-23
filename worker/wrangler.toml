@@ -1,0 +1,19 @@
+# Cloudflare Worker config for the zero-click intake proxy (W5). Deployed by
+# .github/workflows/deploy-worker.yml (cloudflare/wrangler-action), never by hand.
+name = "waypoint-intake"
+main = "index.mjs"
+compatibility_date = "2024-11-01"
+
+# Non-secret config. Secrets (GH_TOKEN, TURNSTILE_SECRET) are set separately with
+# `npx wrangler secret put <NAME>` — never committed.
+[vars]
+REPO = "Carlob2499/Trip-Guides"
+ALLOWED_ORIGIN = "https://carlob2499.github.io"
+AUTO_CAP = "3"
+
+# Optional per-IP weekly rate limiting. The Worker runs fine without it (the counter is simply
+# skipped); to enable, create the namespace once and uncomment with its id:
+#   npx wrangler kv namespace create RATE
+# [[kv_namespaces]]
+# binding = "RATE"
+# id = "REPLACE_WITH_YOUR_KV_ID"

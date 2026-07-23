@@ -1,0 +1,53 @@
+name: Deploy intake worker
+
+# Deploys the zero-click intake proxy (worker/) to Cloudflare (W5). Runs when the Worker or the pure
+# logic it bundles changes. INERT until configured: if the CLOUDFLARE_API_TOKEN secret isn't set,
+# every step is skipped and the job passes green — so this can sit in the repo doing nothing until
+# the owner opts in (create a free Cloudflare account → add the API token secret). The site on
+# GitHub Pages is untouched either way.
+on:
+  push:
+    branches: [main]
+    paths:
+      - worker/**
+      - scripts/intake-proxy.mjs
+      - scripts/intake-schema.mjs
+      - .github/workflows/deploy-worker.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Is Cloudflare configured?
+        id: cfg
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -n "$TOKEN" ]; then
+            echo "go=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "go=false" >> "$GITHUB_OUTPUT"
+            echo "CLOUDFLARE_API_TOKEN not set — the zero-click proxy stays off. Add the secret to enable it."
+          fi
+      - if: steps.cfg.outputs.go == 'true'
+        uses: actions/checkout@v4
+      - if: steps.cfg.outputs.go == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - if: steps.cfg.outputs.go == 'true'
+        run: npm ci
+      # wrangler-action installs + runs wrangler; workingDirectory points it at worker/wrangler.toml.
+      # The Worker's `import "../scripts/intake-proxy.mjs"` bundles fine — esbuild follows it out of
+      # worker/ into the repo (that's why npm ci above installs zod for the bundle).
+      - if: steps.cfg.outputs.go == 'true'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: worker
+          command: deploy
