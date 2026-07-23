@@ -170,7 +170,7 @@ export function buildIntakeMd(answers = {}) {
 - Group makeup / ages / mobility / dietary (from Comments): ${answers.comments || ""}
 - First time or returning:
 - Languages spoken:
-- Home country (drives visa & entry research):
+- **Traveler passport countries (drives visa & entry research):** ${answers.passportCountries || ""}  *(a party can mix — each named country gets its own researched entry row, schema-required source+date; the Trip Kit shows a dropdown so each traveler picks their own)*
 
 ## 2. Trip Shape
 - Exact dates (start–end): ${[answers.start, answers.end].filter(Boolean).join(" – ")}
@@ -282,7 +282,7 @@ export function parseArgs(argv) {
 async function main() {
   const a = parseArgs(process.argv.slice(2));
   if (!a.country && !a.title) {
-    console.error("Usage: node scripts/scaffold-guide.mjs --country <name> [--cities ..] [--start YYYY-MM-DD --end YYYY-MM-DD] [--travelers N] [--pace ..] [--priorities a,b,c] [--niche ..] [--budget ..] [--comments ..] [--lat ..] [--lng ..] [--slug ..]");
+    console.error("Usage: node scripts/scaffold-guide.mjs --country <name> [--cities ..] [--start YYYY-MM-DD --end YYYY-MM-DD] [--travelers N] [--pace ..] [--priorities a,b,c] [--niche ..] [--budget ..] [--comments ..] [--passport-countries ..] [--lat ..] [--lng ..] [--slug ..]");
     process.exit(1);
   }
   // Accept EITHER --start/--end OR the issue form's --dates "YYYY-MM-DD to YYYY-MM-DD",
@@ -293,7 +293,7 @@ async function main() {
     country: a.country, title: a.title, cities: a.cities,
     slug: a.slug, start, end,
     travelers: a.travelers, pace: a.pace, niche: a.niche, budget: a.budget, comments: a.comments,
-    anchor: a.anchor, party: a.party, travelStyle: a["travel-style"],
+    anchor: a.anchor, party: a.party, travelStyle: a["travel-style"], passportCountries: a["passport-countries"],
     priorities: a.priorities ? a.priorities.split(",").map((s) => s.trim()) : [],
     coords: (a.lat && a.lng) ? { lat: parseFloat(a.lat), lng: parseFloat(a.lng) } : null,
   };

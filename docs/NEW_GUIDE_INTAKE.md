@@ -30,7 +30,11 @@
 - Ages / mobility needs / accessibility requirements:
 - First time to this destination, or returning?
 - Languages spoken:
-- Home country (drives visa & entry-requirement research):
+- **Traveler passport countries (drives visa & entry-requirement research)** — every passport
+  held on this trip, comma-separated; a party can mix. Each named country gets its own
+  researched `entry[]` row (schema-required source + verification date); the Trip Kit shows a
+  dropdown so each traveler picks their own — only the countries actually named here ship, no
+  placeholder rows:
 
 ## 2. Trip Shape
 *Drives: weather strip, holiday/closure checks, event lookups, seasonal warnings, pacing of day cards.*

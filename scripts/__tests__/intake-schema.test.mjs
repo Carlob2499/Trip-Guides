@@ -67,6 +67,7 @@ const FULL_BODY = [
   "### Anchor event", "", "NOS Alive festival — Lisbon, Jul 9-11 2026", "",
   "### Number of travelers", "", "3", "",
   "### Who's this for / party", "", "the Korea group (3 mid-20s, heavy walkers)", "",
+  "### Traveler passport countries", "", "United States, United Kingdom", "",
   "### Pace", "", "balanced", "",
   "### Travel style", "", "Off-the-beaten-path", "",
   "### Priority #1 (most important)", "", "Food & dining", "",
@@ -85,6 +86,7 @@ describe("parseIssueBody + answersFromForm", () => {
     expect(answers.cities).toBe("Lisbon, Porto");
     expect(answers.travelers).toBe("3");
     expect(answers.party).toBe("the Korea group (3 mid-20s, heavy walkers)");
+    expect(answers.passportCountries).toBe("United States, United Kingdom");
     expect(answers.pace).toBe("balanced");
     expect(answers.travelStyle).toBe("Off-the-beaten-path"); // travel-style → travelStyle
     expect(answers.anchor).toContain("NOS Alive");
@@ -121,8 +123,8 @@ describe("intake doc surfaces every captured field", () => {
   const answers = answersFromForm(parseIssueBody(FULL_BODY));
   const md = buildIntakeMd(answers);
   for (const val of ["Portugal", "Lisbon, Porto", "2026-07-08", "NOS Alive", "3",
-    "the Korea group", "balanced", "Off-the-beaten-path", "Food & dining", "Culture / history",
-    "Mid-range ($75–150/day)", "one vegetarian"]) {
+    "the Korea group", "United States, United Kingdom", "balanced", "Off-the-beaten-path",
+    "Food & dining", "Culture / history", "Mid-range ($75–150/day)", "one vegetarian"]) {
     it(`renders "${val}"`, () => expect(md).toContain(val));
   }
 });

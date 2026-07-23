@@ -65,6 +65,18 @@ body:
       placeholder: e.g. the Korea group (3 mid-20s, gaming anchors, heavy walkers) / family of 5 with grandparents
     validations:
       required: false
+  - type: input
+    id: passport-countries
+    attributes:
+      label: Traveler passport countries
+      description: >-
+        Every passport held on this trip, comma-separated (a party can mix). Drives which
+        countries get an entry/visa row researched for the Trip Kit's entry-requirements card —
+        travelers pick their own from a dropdown, so more here means more of the party is
+        covered, not more clutter for anyone.
+      placeholder: e.g. United States, United Kingdom
+    validations:
+      required: false
   - type: dropdown
     id: pace
     attributes:

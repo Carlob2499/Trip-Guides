@@ -59,6 +59,10 @@ export const FIELDS = [
     description: "Who is actually going — the more concrete the better. This maps the guide onto how these specific travelers move (pace, walking tolerance, whether the group splits). Name a prior trip if the same people traveled before (\"the Korea group\"), or describe them.",
     placeholder: "e.g. the Korea group (3 mid-20s, gaming anchors, heavy walkers) / family of 5 with grandparents" },
 
+  { id: "passport-countries", label: "Traveler passport countries", kind: "input", required: false, answerKey: "passportCountries",
+    description: "Every passport held on this trip, comma-separated (a party can mix). Drives which countries get an entry/visa row researched for the Trip Kit's entry-requirements card — travelers pick their own from a dropdown, so more here means more of the party is covered, not more clutter for anyone.",
+    placeholder: "e.g. United States, United Kingdom" },
+
   { id: "pace", label: "Pace", kind: "dropdown", required: false, answerKey: "pace",
     description: "How packed should the days be?",
     options: ["undecided", "packed", "balanced", "slow"], nullish: "undecided" },
@@ -161,6 +165,7 @@ export const IntakeAnswers = z.object({
   anchor: z.string().optional(),
   travelers: z.string().optional(),
   party: z.string().optional(),
+  passportCountries: z.string().optional(),
   pace: z.string().optional(),
   travelStyle: z.string().optional(),
   priorities: z.array(z.string()).optional(),
