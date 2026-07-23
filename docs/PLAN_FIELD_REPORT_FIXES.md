@@ -59,7 +59,7 @@ live run — so the deferral costs nothing but the proof itself.
 | E4 Korea backfill → strict | Sonnet (guide-author skill) | 3–4 h | `research(korea):` — **DONE** |
 | E5 Denmark backfill → strict | Sonnet (guide-author skill) | 3–4 h | `research(denmark):` — **DONE** |
 | E6 entry + phrases (was F3) | Sonnet (guide-author skill) | 2–3 h | `research(content):` — **DONE** |
-| E7 route optimizer, tap-to-apply (was F8) | Sonnet (Opus if the geometry fights) | 3–4 h | `feat(route-opt):` |
+| E7 route optimizer, tap-to-apply (was F8) | Sonnet (Opus if the geometry fights) | 3–4 h | `feat(route-opt):` — **DONE** |
 | E8 hygiene sweep | Sonnet / Haiku | 1–1.5 h | `chore:` |
 | **Total** | | **≈ 17–24 h active** (≈ 15.5–21 h with E2 deferred) | |
 

@@ -22,10 +22,10 @@
 
 ## Snapshot (updated 2026-07-23, session close)
 
-**The ACTIVE execution queue is `docs/PLAN_FIELD_REPORT_FIXES.md`** (E1→E8). E1/E3/E4/E5/E6 are
-**DONE**; E2 is **deferred** (no trip planned — resume whenever one exists); next up is **E7**.
-`PLAN_TRAVELER_FEATURES.md` holds F1/F2/F4-F7 after this queue; `PLAN_VISUAL_OVERHAUL.md` holds
-V5/V6.
+**The ACTIVE execution queue is `docs/PLAN_FIELD_REPORT_FIXES.md`** (E1→E8). E1/E3/E4/E5/E6/E7 are
+**DONE**; E2 is **deferred** (no trip planned — resume whenever one exists); next up is **E8**
+(hygiene sweep, no clarifying questions, proceed directly). `PLAN_TRAVELER_FEATURES.md` holds
+F1/F2/F4-F7 after this queue; `PLAN_VISUAL_OVERHAUL.md` holds V5/V6.
 
 - **E6 redesign (creator direction, 2026-07-23):** rather than asking per-guide which passport
   countries to research, `passport-countries` is now a real field across all three intake
@@ -45,34 +45,34 @@ contour-visibility still needs a human real-photo eyeball (MOTION.md caveat).
 ## Where we left off
 
 **E4 + E5** (`research(korea):`, `research(denmark):`): both guides flipped to
-`provenance: "strict"`, surfacing real corrections along the way (Korea: MMCA's fee dropped to
-free, Leeum's roughly doubled; Denmark: a City Pass 48h price disagreement recorded, not
-resolved silently). Both PASS `verify` offline + `--network`.
+`provenance: "strict"`, surfacing real corrections (Korea: MMCA's fee dropped to free, Leeum's
+roughly doubled; Denmark: a City Pass 48h price disagreement recorded, not resolved silently).
 
-**E6** (`feat(intake):`, `feat(trip-kit):`, `research(entry):`, `research(phrases):`, 4 commits):
-- Intake: `passport-countries` field wired through the issue form, `intake-schema.mjs`
-  (FIELDS + zod), `scaffold-guide.mjs` (CLI + `buildIntakeMd`), and `NEW_GUIDE_INTAKE.md`.
-- UI: `TripKit.astro`'s entry-requirements card shows a country picker only when `entry[]` has
-  >1 row; single-row guides are unchanged. New `ui/entry-select.js` (untested by design, matches
-  `ui/speak.js`'s DOM-glue pattern).
-- Content: `entry[]` + `phrases` populated for Korea + Denmark — **US passport only**, the one
-  country either trip has actual evidence for. Korea: K-ETA's exemption for US citizens through
-  Dec 31, 2026, confirmed via a Korean MOFA consulate notice (a contradicting blog claim that
-  K-ETA is mandatory again was checked against this official source and is wrong). Denmark: the
-  Schengen 90/180-day rule + passport validity, confirmed via the EU's own Your Europe page.
-  5 phrase cards per guide (ko-KR / da-DK), each translation cross-checked against an
-  independent reputable source before shipping (a wrong native-script phrase is safety-adjacent).
-  No allergy/dietary fact was invented for either party — neither guide records one, so only the
-  generic "I'm vegetarian" situational card shipped, nothing more specific.
-- Verified: build clean, verify PASS offline + `--network` (0 dead links) on both guides,
-  717/717 tests, typecheck 0 errors, dark + mobile 375px eyeballed in preview (screenshots).
+**E6** (4 commits): `passport-countries` is now a real intake field across all three surfaces
+(issue form, `intake-schema.mjs`, `scaffold-guide.mjs`) — systematic for every future guide, not
+an ad-hoc question. `TripKit.astro`'s entry card is dropdown-driven for >1 `entry[]` row. Korea +
+Denmark got real `entry[]` + `phrases` content — **US passport only**, the one country either
+trip has evidence for (Korea: K-ETA's exemption through Dec 31 2026, a Korean MOFA consulate
+notice; Denmark: Schengen 90/180-day rule, the EU's Your Europe page). 5 cross-checked phrase
+cards per guide (ko-KR/da-DK); no allergy/dietary fact invented for either party.
 
-**Next up: E7 — day-route optimizer, tap-to-apply.** Sonnet (Opus if the geometry fights). New
-sealed silo `src/features/route-opt/`, zero network/schema/guide-JSON changes — see the plan's
-E7 section for the full spec (haversine + 2-opt, localStorage-only reorder, GPX/ICS/print keep
-guide order).
+**E7** (1 commit): new sealed silo `src/features/route-opt/` — haversine + NN + 2-opt over a
+day's located waypoints, zero network/schema/guide-JSON changes. Advisory chip fires only above
+a real savings threshold; verified against REAL guide data (not invented fixtures) — fires on
+exactly one real day each in Korea (≈6.44km) and Denmark (≈1.5km), cross-checked with an
+independent Python re-implementation before any UI was written. Model unit-tested (8 tests); DOM
+half covered by `tests/visual/route-opt.spec.ts` (chip/sheet/apply/restore/reload/Escape) —
+all green, pre-existing itinerary suite unaffected.
 
-**Re-prompt the creator with:** "E6 is shipped — passport-countries is now a real intake field,
-the Trip Kit's entry card is dropdown-ready for multi-passport parties, and Korea + Denmark both
-have real entry + phrase-card content for their US-passport travelers. Next up is E7 (route
-optimizer, tap-to-apply, Sonnet, ~3-4h) — want me to start it?"
+All of E4–E7: build clean, full test suite green, typecheck 0 errors, mobile 375px + desktop +
+dark + reduced-motion eyeballed in preview each time.
+
+**Next up: E8 — hygiene sweep (no half-turned keys).** Sonnet/Haiku, no clarifying questions
+(plan says proceed directly). 5 items: shelf-life constant dedup test, guide-shape resolution
+dedup, SOS coverage for us/mexico/portugal, map-tile offline decision documented, and a human
+eyeball on the V4 contour-visibility pass (that last one is the creator's, not an agent's).
+
+**Re-prompt the creator with:** "E1 through E7 are all shipped and pushed — the Field Report's
+whole active queue except the deferred E2 (no trip planned yet) is done, including the route
+optimizer. Next up is E8, the hygiene sweep (~1-1.5h) — one item in it (the V4 contour-visibility
+eyeball) needs you personally, not me."
