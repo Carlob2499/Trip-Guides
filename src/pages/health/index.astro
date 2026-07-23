@@ -54,6 +54,13 @@ const lifecycle: Flow[] = [
     verdict: "Has never run. The safety-against-staleness promise is only a promise until it fires at least once.",
   },
   {
+    file: "pretrip-check.yml",
+    name: "pretrip-check",
+    desc: "Daily check for guides entering their 7-day-before-departure window, so freshness is checked when it matters most — not just on recert's weekly clock, which has no idea when anyone is actually about to travel.",
+    state: "unproven",
+    verdict: "Just added, report-only by design (it names commands for a human to run — it never invokes an agent or opens a PR itself). Like recert, it needs a real guide to actually enter its window before it's proven, not just built.",
+  },
+  {
     file: "graduate-guide.yml",
     name: "graduate-guide",
     desc: "Publishes a draft guide once a human explicitly signs off — the manual override / rescue path now that research-pass auto-publishes.",

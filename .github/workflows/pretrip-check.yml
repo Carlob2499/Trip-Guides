@@ -1,0 +1,34 @@
+name: Pre-trip check
+
+# Daily (not weekly, like recert.yml/content-audit.yml) — "entering the 7-day window before
+# departure" is a daily-granularity event, and recert.yml's own schedule has no concept of a
+# guide's trip dates at all (it only tracks each FACT's age vs its shelf life). This closes
+# that specific gap with the cheapest safe first phase: report-only, mirroring
+# content-audit.yml's single-tracking-issue pattern (find-or-update, never duplicates) — it
+# never invokes an agent and never opens a PR. If a guide is entering its window AND has real
+# stale facts, the issue names the exact commands (`npm run recert -- --slug <slug>`, or
+# dispatch recert.yml itself) for a human to run; automatically triggering the full agentic
+# recert pipeline is a later, evidence-earned phase, not this one.
+on:
+  schedule:
+    # 41 min past the hour, daily — an off-the-hour minute on purpose (see content-audit.yml).
+    - cron: "41 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  pretrip-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Run pre-trip check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: npm run pretrip-check

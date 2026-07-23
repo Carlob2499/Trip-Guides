@@ -16,6 +16,7 @@
     "verify-live": "node scripts/verify-live.mjs",
     "pipeline": "node scripts/pipeline.mjs",
     "recert": "node scripts/recert.mjs",
+    "pretrip-check": "tsx scripts/pretrip-check.ts",
     "extract-palette": "node scripts/extract-palette.mjs",
     "aggregate-telemetry": "tsx scripts/aggregate-telemetry.ts",
     "lookup-place": "node scripts/lookup-place.mjs",
