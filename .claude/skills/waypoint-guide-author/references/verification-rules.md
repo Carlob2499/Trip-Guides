@@ -172,8 +172,17 @@ smooth, confident, unverified paragraph is a failing one.
 
 ## 8. Self-check before declaring done
 
-1. **The bar** applied to the whole draft — anything a generic AI could have
-   written unresearched is cut or verified.
+1. **The bar** applied to the whole draft, item by item — for each load-bearing pick (an
+   anchor rec, a marquee sight/food choice, a party-fit claim; `docs/GUIDE_RUBRIC.md` rows
+   #6/#9/#12), ask: *"Would this appear in ANY generic AI guide, unresearched, without
+   knowing this traveler?"* If yes: **replace** it with something this traveler's own
+   ranked priorities actually justify, or **write the justification down** — don't just cut
+   silently or wave it through because it isn't factually wrong. Anything a generic AI
+   could have written unresearched is cut, verified, or explicitly justified — never left
+   bland-but-technically-correct and unflagged. Any replacement re-enters gate #2 below
+   (source + date) and the continuity sweep (CLAUDE.md) for whatever it ripples into — a
+   rewrite that orphans a citation is a defect, not progress. Record the outcome even when
+   nothing needed changing ("bar test: clean, no replacements") — silence reads as "not run".
 2. Every perishable fact has a source + date, an `≈`, a `⚠`, or is omitted —
    nothing perishable sits bare.
 3. Every venue answers the four questions.

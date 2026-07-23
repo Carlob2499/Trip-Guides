@@ -256,7 +256,29 @@ jobs:
                    a human sees why this run stopped short of a verdict, not a false PASS), and let
                    landing take the NEEDS-WORK/draft-PR path below.
                  Only a full networked PASS from this step licenses step (d).
-              d. Once step (c2)'s networked verify PASSes, generate the guide's identity palette from its new cover/
+              c3. THE CRITIC — the bar test (F7·C1, docs/PLAN_TRAVELER_FEATURES.md). A prompt-only
+                 lens on this SAME loop, not a new stage — nothing here touches STAGE_ORDER, the
+                 schema, or a checkpoint. Before step (d) is licensed, read the WHOLE merged guide
+                 (not just what this pass touched) and ask ONE question per load-bearing item — an
+                 anchor rec, a marquee sight/food pick, a claim about party fit or authenticity
+                 (docs/GUIDE_RUBRIC.md rows #6/#9/#12): "Would this appear in ANY generic AI guide,
+                 unresearched, without knowing this traveler?" If yes: either REPLACE it with
+                 something this traveler's OWN ranked priorities justify, or write an explicit
+                 justification against those priorities into the finish summary — never let a
+                 bland-but-not-wrong item pass unflagged. Guardrails, binding:
+                   - Critic ≠ editor. Any replacement re-enters the SAME verification ledger as
+                     every other fact (source_url + verified_on) and the SAME continuity sweep
+                     (CLAUDE.md) for anything it ripples into. A rewrite that orphans a citation
+                     or breaks continuity is a defect, full stop — it does not get graduated on
+                     the strength of "at least it's not generic now".
+                   - Honest-blank survives critique. Never fill a genuine gap just to feel
+                     complete — an admitted blank was already a feature before this step existed.
+                   - Findings are logged ALWAYS, even zero. Write a `## Critic findings` section
+                     into the scorecard every run: either the specific items replaced/justified,
+                     or the explicit line "none — the guide passed the bar test". Silence must
+                     never be mistaken for "this step didn't run".
+              d. Once step (c2)'s networked verify PASSes AND step (c3)'s findings are written,
+                 generate the guide's identity palette from its new cover/
                  sight photos: `npm run extract-palette -- --slug ${{ inputs.slug }}` (writes
                  src/data/palettes/${{ inputs.slug }}.json — commit it; skips harmlessly if no
                  photo). Then AUTO-GRADUATE — the verify PASS you just confirmed IS the evidence
@@ -275,7 +297,8 @@ jobs:
             LANDING THE BRANCH — this replaces "open a draft PR and wait for review". However the
             self-correction loop above ended, write your finish summary (what you researched, what
             you filled, what remains ⚠ unconfirmed, the verification ledger, the `## Research
-            reconciliation` summary, and — if you stopped early — exactly which stages remain) into
+            reconciliation` summary, step (c3)'s `## Critic findings` — always present, even a
+            single "none" line — and, if you stopped early, exactly which stages remain) into
             the scorecard file, then hand landing to the shared script rather than deciding by hand:
 
               # P3: --network is required or the dead-link/photo gate never runs at all — an

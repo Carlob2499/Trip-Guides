@@ -256,8 +256,17 @@ Then these guide-content gates, on top of it:
    deliberately-explained `⚠` gap). Recency is advisory (a concluded trip's facts are stale
    by nature; recert acts on live ones); the `citations` line is context, not a target.
    `npm run build` is the separate schema gate — both must be clean. Run `--network` before
-   graduating. When verify PASSes: `npm run extract-palette -- --slug <slug>` (commit the
-   generated palette; harmless no-op without photos), then
+   graduating.
+   **Before treating a PASS as license to proceed** (F7·C1, the Critic lens — prompt-only,
+   no new stage): read the whole merged guide against the bar — "would this appear in ANY
+   generic AI guide, unresearched, without knowing this traveler?" (rubric rows #6/#9/#12:
+   anchor quality, party fit, authenticity). Replace what fails it, or justify it explicitly
+   against this traveler's ranked priorities; never leave a bland-but-technically-correct
+   item unflagged just because `verify` didn't catch it. A replacement re-enters the SAME
+   ledger (source + date, continuity sweep) as everything else — it is never exempt.
+   Log the outcome always, even "none" — see `verification-rules.md` §8 item 1.
+   When verify PASSes AND the bar test is recorded: `npm run extract-palette -- --slug <slug>`
+   (commit the generated palette; harmless no-op without photos), then
    `npm run pipeline -- --slug <slug> --checkpoint verified`.
 2. The **`verification-rules.md` §8 self-check**, line by line.
 3. **`verified` stamp** — `Checked [date] for [trip] · re-check before travel:
