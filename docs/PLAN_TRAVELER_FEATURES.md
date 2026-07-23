@@ -27,13 +27,13 @@ model at session start (`/model`) — each session's opening ritual includes rem
 | Session | Model | Est. active | Notes |
 |---|---|---|---|
 | F0 pipeline proof | — | — | **MOVED** → PLAN_FIELD_REPORT_FIXES E2 |
-| F1 prep timeline | Sonnet | 2–3.5 h | Schema (additive) + model + Trip kit card + sourced `due` research |
-| F2 budget pact | Sonnet | 1–2 h | Join logic + one chip; smallest build session |
+| F1 prep timeline | Sonnet | 2–3.5 h | Schema (additive) + model + Trip kit card + sourced `due` research — **DONE** |
+| F2 budget pact | Sonnet | 1–2 h | Join logic + one chip; smallest build session — **DONE** (design deviated from spec — see HANDOFF) |
 | F3 dormant content | — | — | **MOVED** → PLAN_FIELD_REPORT_FIXES E6 |
-| F4 packing strip | Sonnet | 1.5–2.5 h | Derivation model + Trip kit render |
-| F5 offline confidence | Sonnet | 2–3 h | Offline E2E debugging can drag; budget for it |
-| F6 pre-trip auto-recert | Sonnet | 1.5–2.5 h + first-run wall-clock | Probation mode first |
-| F7 the Critic (C1–C3) | **Opus** C1–C2, Sonnet C3 | ≈4–6 h | Staged inside F7 below; C3 built only on C2's evidence |
+| F4 packing strip | Sonnet | 1.5–2.5 h | Derivation model + Trip kit render — **DONE** |
+| F5 offline confidence | Sonnet | 2–3 h | Offline E2E debugging can drag; budget for it — **DONE** |
+| F6 pre-trip auto-recert | Sonnet | 1.5–2.5 h + first-run wall-clock | Probation mode first — **DONE** |
+| F7 the Critic (C1–C3) | **Opus** C1–C2, Sonnet C3 | ≈4–6 h | **C1 DONE** (built on Sonnet, no model switch available — flagged to creator); C2/C3 blocked on 2 real research passes, same real-trip gate as E2 |
 | F8 route optimizer | — | — | **MOVED** → PLAN_FIELD_REPORT_FIXES E7 (tap-to-apply) |
 | **Plan total** | | **≈ 18–28 h active** | Each session independently shippable |
 
@@ -84,6 +84,16 @@ visible? (b) Per-person or per-group framing?
 (existing silo); a single pact line/chip in the Budget tab ("Day 4: ≈$61 over plan"); zero new
 backend, zero new tabs. Tests on the join logic + currency handling (reuse `live-data/rate`).
 **Exit:** ship loop green; visible on a guide with real Trip Split seed data; HANDOFF.
+
+**Shipped design, deviated from the spec above — reality-checked before building:** the
+intake's budget-tier string ("Mid-range ($75–150/day)") never actually reaches a shipped
+guide as structured data (it lives only in a per-guide intake `.md` several guides don't
+even keep), and Trip Split tracks a single running grand total with no per-day breakdown
+and no currency field — neither can support the "Day 4: over plan" framing at all. Built
+instead as `src/features/budget-pact/`, joining the Budget tab's OWN already-numeric
+per-item plan (`basis: "day"|"trip"`) against that SAME section's own "your spend" inputs
+— already numeric, already per-day, already in the guide's currency, zero new backend
+either way. See the commit for the full reasoning.
 
 ## Session F3 — MOVED → `PLAN_FIELD_REPORT_FIXES.md` session E6
 
