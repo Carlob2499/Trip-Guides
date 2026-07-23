@@ -5,24 +5,29 @@ name: Pre-trip check
 # guide's trip dates at all (it only tracks each FACT's age vs its shelf life). This closes
 # that specific gap with the cheapest safe first phase: report-only, mirroring
 # content-audit.yml's single-tracking-issue pattern (find-or-update, never duplicates) — it
-# never invokes an agent and never opens a PR. If a guide is entering its window AND has real
-# stale facts, the issue names the exact commands (`npm run recert -- --slug <slug>`, or
-# dispatch recert.yml itself) for a human to run; automatically triggering the full agentic
-# recert pipeline is a later, evidence-earned phase, not this one.
+# reports to a tracking issue AND (W1) auto-dispatches recert.yml for any in-window guide with
+# real stale facts — the evidence-earned phase 2. AUTO_DISPATCH=1 (below) enables it; the dispatch
+# is deduped so it never stacks on an in-flight recert, and recert.yml still opens a human-reviewed
+# freshness PR and never auto-merges, so only the mechanical trigger is automated, not the judgment.
 on:
   schedule:
     # 41 min past the hour, daily — an off-the-hour minute on purpose (see content-audit.yml).
     - cron: "41 5 * * *"
   workflow_dispatch:
 
+# issues: write for the tracking issue; actions: write so it can `gh workflow run recert.yml`.
 permissions:
   issues: write
+  actions: write
 
 jobs:
   pretrip-check:
     runs-on: ubuntu-latest
     steps:
+      # fetch-depth 0 so `git ls-remote` can see remote recert/<slug> branches for the dedupe check.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -31,4 +36,5 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
+          AUTO_DISPATCH: "1"
         run: npm run pretrip-check
