@@ -1,0 +1,4 @@
+/* Budget pact (docs/PLAN_TRAVELER_FEATURES.md F2) — one honest line under the Budget tab's
+   plan/actual grid; absent until a traveler has entered at least one real spend figure. */
+.budget-pact { margin: .7rem 0 0; padding: .55rem .7rem; border-radius: var(--r-sm, 6px); background: color-mix(in srgb, var(--accent) 10%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--rule)); font-family: var(--font-data); font-size: .82rem; line-height: 1.5; color: var(--ink); }
+.budget-pact-over { background: color-mix(in srgb, #b23a48 12%, transparent); border-color: color-mix(in srgb, #b23a48 40%, var(--rule)); }

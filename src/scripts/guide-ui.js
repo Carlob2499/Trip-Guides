@@ -9,6 +9,7 @@ import { initRate, initWeather, initDaySwap, initSun } from "../features/live-da
 import { initJetLag } from "./jetlag-ui.js";
 import { initSharePanel } from "../features/share/index.js";
 import { reportError } from "../features/firebase/index.js";
+import { initBudgetPact } from "../features/budget-pact/index.js";
 
 const _cfgEl = document.getElementById("tgConfig");
 const _cfg = _cfgEl ? JSON.parse(_cfgEl.textContent || "{}") : {};
@@ -612,6 +613,9 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           });
           // Sun & daylight strip — pure math (no fetch), same mapCenter as weather.
           initSun({ mapCenter: mapCenter, destTzIana: destTzIana });
+          // Budget pact (F1's neighbor, F2) — joins the Budget tab's own plan against its own
+          // "your spend" actuals; needs the same trip dates weather/sun already have.
+          initBudgetPact({ firstDayDate: firstDayDate, lastDayDate: lastDayDate });
           // ── 13. MAP FULLSCREEN BUTTON — moved to src/features/maps/ui/fullscreen.js
           // (imported by the maps silo, right beside the Google upgrade that can make
           // its button stale — the two now live together instead of racing blind).

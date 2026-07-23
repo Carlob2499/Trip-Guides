@@ -39,7 +39,7 @@ const highTotal = items.reduce((t, it) => { const h = tripHigh(it); return t + (
 const hasRange  = Math.round(lowTotal) !== Math.round(estTotal) || Math.round(highTotal) !== Math.round(estTotal);
 ---
 
-<div class="budget" data-cur={cur} data-party={party}>
+<div class="budget" data-cur={cur} data-party={party} data-days={days}>
   {sec.intro && <p class="budget-intro"><Fragment set:html={sec.intro} /></p>}
 
   {party > 1 && (
@@ -85,7 +85,9 @@ const hasRange  = Math.round(lowTotal) !== Math.round(estTotal) || Math.round(hi
                    data-trip-lo={lo  ?? ""}
                    data-trip-hi={hi  ?? ""}
                    data-pp-lo={loPP  ?? ""}
-                   data-pp-hi={hiPP  ?? ""}>
+                   data-pp-hi={hiPP  ?? ""}
+                   data-basis={it.basis}
+                   data-rate={it.basis === "day" ? it.est : ""}>
                 <span class="blabel">
                   {it.label}
                   {it.per === "group" && <span class="bpill">group</span>}
