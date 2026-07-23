@@ -10,6 +10,7 @@ import { initJetLag } from "./jetlag-ui.js";
 import { initSharePanel } from "../features/share/index.js";
 import { reportError } from "../features/firebase/index.js";
 import { initBudgetPact } from "../features/budget-pact/index.js";
+import { initPacking } from "../features/trip-kit/index.js";
 
 const _cfgEl = document.getElementById("tgConfig");
 const _cfg = _cfgEl ? JSON.parse(_cfgEl.textContent || "{}") : {};
@@ -616,6 +617,9 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           // Budget pact (F1's neighbor, F2) — joins the Budget tab's own plan against its own
           // "your spend" actuals; needs the same trip dates weather/sun already have.
           initBudgetPact({ firstDayDate: firstDayDate, lastDayDate: lastDayDate });
+          // Packing strip (F4) — piggybacks on whatever initWeather already fetched above
+          // (getLastWx/tg:wx); never triggers its own fetch.
+          initPacking({ mapCenter: mapCenter, firstDayDate: firstDayDate, lastDayDate: lastDayDate });
           // ── 13. MAP FULLSCREEN BUTTON — moved to src/features/maps/ui/fullscreen.js
           // (imported by the maps silo, right beside the Google upgrade that can make
           // its button stale — the two now live together instead of racing blind).

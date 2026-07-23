@@ -55,6 +55,12 @@
 .tk-entry-source { margin: .35rem 0 0; font-size: .74rem; color: var(--muted); }
 .tk-entry-source a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent); }
 
+/* Packing strip (F4) — a short, honest list; the card itself stays hidden until real
+   forecast data resolves into at least one genuine signal (ui/packing.js). */
+.tk-packing-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .5rem; }
+.tk-packing-list li { border-top: 1px solid var(--rule); padding-top: .5rem; font-size: .92rem; }
+.tk-packing-list li:first-child { border-top: none; padding-top: 0; }
+
 /* Prep timeline / book-by (F1) — grouped overdue → soon → later; overdue gets a warm
    accent tint so it doesn't read as just another list item. */
 .tk-bookby-group { margin-top: .8rem; }

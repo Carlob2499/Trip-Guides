@@ -1,12 +1,15 @@
 ---
 // Trip kit — a tool tab (like Budget/Vote/Reminders) housing focused, on-the-ground
 // helpers (docs/FEATURES.md #5 arrival autopilot, #6 phrase cards, #7 entry requirements,
-// F1 prep timeline). Server-rendered from data the guide already carries; no new client JS
-// needed for content (checkbox persistence is the existing global guide-ui.js scan — see
-// model/arrival.ts header). Cards render in trip-chronological order: entry requirements
-// (settle before you book) → book-by timeline (things with a deadline) → arrival autopilot
-// (the day you land) → phrase cards (useful any day) — each independently optional, never
-// fabricated.
+// F1 prep timeline, F4 packing strip). Server-rendered from data the guide already carries;
+// no new client JS needed for content (checkbox persistence is the existing global
+// guide-ui.js scan — see model/arrival.ts header). Cards render in trip-chronological
+// order: entry requirements (settle before you book) → book-by timeline (things with a
+// deadline) → packing (what to bring) → arrival autopilot (the day you land) → phrase
+// cards (useful any day) — each independently optional, never fabricated. The packing
+// card is the one exception to "server-rendered": its content depends on a live
+// forecast, so it ships hidden and is revealed client-side (ui/packing.js) only when a
+// real one resolves into a genuine signal — see that file for why.
 import TransitLinks from "./TransitLinks.astro";
 import { deriveArrivalPlan, deriveBookByTimeline } from "../features/trip-kit/index.js";
 import "../features/trip-kit/styles.css";
@@ -22,6 +25,9 @@ const bookBy = deriveBookByTimeline(sections);
 const hasPhrases = !!(phrases && Array.isArray(phrases.items) && phrases.items.length);
 const hasEntry = !!(entry && entry.length);
 const hasBookBy = bookBy.length > 0;
+// Only a guide that actually fetches a forecast (has a `weather` section) can ever
+// populate this card — no point shipping a container that can never reveal itself.
+const hasWeatherSection = sections.some((s: any) => s?.type === "weather");
 const BUCKET_LABEL: Record<string, string> = { overdue: "Overdue", soon: "Next 2 weeks", later: "Later" };
 ---
 <div class="tk-wrap" id="tripKit" role="tabpanel" aria-labelledby="gtab-kit" data-sk={storeKey} hidden>
@@ -85,6 +91,14 @@ const BUCKET_LABEL: Record<string, string> = { overdue: "Overdue", soon: "Next 2
           </div>
         );
       })}
+    </section>
+  )}
+
+  {hasWeatherSection && (
+    <section class="tk-card" id="tkPackingCard" aria-labelledby="tk-packing-h" hidden>
+      <p class="tk-card-eyebrow">🎒 Packing</p>
+      <h3 class="tk-card-title" id="tk-packing-h">What to bring</h3>
+      <ul class="tk-packing-list" id="tkPackingList"></ul>
     </section>
   )}
 

@@ -20,3 +20,4 @@ export { initSun } from "./ui/sun.js";
 export { inBand, fmtRate, isCacheFresh, parseRateResponse, SANITY } from "./model/rate";
 export { wxIcon, wxDayOk, wxValidate, weatherWindow } from "./model/weather";
 export { solarTimesFor, daylightLeftLabel, fmtClock } from "./model/sun";
+export { derivePackingList } from "./model/packing";
