@@ -61,6 +61,44 @@
       "verified_on": "2026-07-23"
     }
   ],
+  "phrases": {
+    "lang": "da-DK",
+    "items": [
+      {
+        "situation": "Do you speak English?",
+        "native": "Taler du engelsk?",
+        "note": "nearly everyone in Copenhagen does — useful for older locals or outside the city",
+        "source_url": "https://storylearning.com/learn/danish/danish-tips/common-danish-phrases",
+        "verified_on": "2026-07-23"
+      },
+      {
+        "situation": "Where is the bathroom?",
+        "native": "Hvor er toilettet?",
+        "source_url": "https://www.learnwitholiver.com/danish/translate-sentence-358",
+        "verified_on": "2026-07-23"
+      },
+      {
+        "situation": "How much does this cost?",
+        "native": "Hvor meget koster det?",
+        "note": "point at the item + show this screen",
+        "source_url": "https://www.learnwitholiver.com/danish/translate-sentence-390",
+        "verified_on": "2026-07-23"
+      },
+      {
+        "situation": "Can you help me?",
+        "native": "Kan du hjælpe mig?",
+        "source_url": "https://www.mondly.com/phrasebook/danish-phrases/category/essential-expressions/can-you-help-me",
+        "verified_on": "2026-07-23"
+      },
+      {
+        "situation": "I'm vegetarian",
+        "native": "Jeg er vegetar",
+        "note": "point + show this screen ordering food",
+        "source_url": "https://www.learnwitholiver.com/english-da/translate-word-781-vegetarian",
+        "verified_on": "2026-07-23"
+      }
+    ]
+  },
   "tabBudget": 8,
   "archived": true,
   "provenance": "strict"

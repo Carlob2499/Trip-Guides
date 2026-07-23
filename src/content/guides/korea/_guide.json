@@ -157,6 +157,48 @@
       "verified_on": "2026-07-23"
     }
   ],
+  "phrases": {
+    "lang": "ko-KR",
+    "items": [
+      {
+        "situation": "Do you speak English?",
+        "native": "영어 하세요?",
+        "romanization": "yeongeo haseyo?",
+        "source_url": "https://www.90daykorean.com/english-in-korean/",
+        "verified_on": "2026-07-23"
+      },
+      {
+        "situation": "Where is the bathroom?",
+        "native": "화장실이 어디예요?",
+        "romanization": "hwajangsiri eodiyeyo?",
+        "source_url": "https://www.learnwitholiver.com/korean/translate-sentence-482",
+        "verified_on": "2026-07-23"
+      },
+      {
+        "situation": "How much is this?",
+        "native": "이거 얼마예요?",
+        "romanization": "igeo eolmayeyo?",
+        "note": "point at the item + show this screen",
+        "source_url": "https://www.90daykorean.com/how-much-in-korean/",
+        "verified_on": "2026-07-23"
+      },
+      {
+        "situation": "Please help me",
+        "native": "도와주세요",
+        "romanization": "dowajuseyo",
+        "source_url": "https://www.90daykorean.com/help-me-in-korean/",
+        "verified_on": "2026-07-23"
+      },
+      {
+        "situation": "I'm vegetarian",
+        "native": "저는 채식주의자예요",
+        "romanization": "jeoneun chaesikjuuijayeyo",
+        "note": "point + show this screen ordering food",
+        "source_url": "https://dictionary.cambridge.org/dictionary/english-korean/vegetarian",
+        "verified_on": "2026-07-23"
+      }
+    ]
+  },
   "tabBudget": 11,
   "archived": true,
   "provenance": "strict"
