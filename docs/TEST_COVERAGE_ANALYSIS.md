@@ -8,7 +8,7 @@ history of this file). 585+ tests; reproduce numbers with `npm run coverage`._
 | Layer | Tool | Runs in CI | Guards |
 |---|---|---|---|
 | **Unit** | Vitest (`npm test`) | `test.yml`, `deploy.yml` | Pure logic in `model/` + `src/lib/` + `scripts/__tests__/` |
-| **Interaction / visual** | Playwright (`npm run test:visual`) | `visual.yml` | Built-page screenshots + real interaction flows + axe a11y |
+| **Accessibility / E2E** | Playwright (`npm run test:e2e`) | `a11y.yml` (axe gate; behavioral specs run locally) | axe a11y over hub + both guides + behavioral flows (SOS, offline, share, itinerary…). Screenshot-diff removed — it failed on every intentional visual change |
 | **Content facts** | audit/verify scripts | `content-audit.yml`, `recert.yml`, `graduate-guide.yml` | Link liveness, Commons photos, staleness, research gates |
 
 The structural rule: each feature splits into a pure, heavily-tested `model/` and DOM-only

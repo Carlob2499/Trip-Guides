@@ -125,6 +125,37 @@ diamond that is *always* human — nothing in the pipeline ever decides to un-pu
 
 ---
 
+## Shipped since — the W-series (2026-07-23)
+
+A skill-loop optimization arc that closed the remaining manual seams. Each ends the arc's own Ship
+Loop (build + test + typecheck green); all inert-until-configured pieces degrade gracefully.
+
+- **INTAKE — zero-click option (W5).** A Cloudflare Worker (`worker/`, deployed by
+  `deploy-worker.yml`, config-gated by `src/features/hub/intake-proxy-config.js`) files the
+  `new-guide` issue FOR an anonymous visitor — no GitHub account, no click — validating with the
+  same intake schema and rate-limiting anonymous submissions (Turnstile + per-IP cap). The site
+  stays on Pages; the wizard falls back to the prefilled-issue path when the proxy is off. Booking
+  upload now also parses **PDFs** client-side (W4, `pdf-text.ts`), still never uploading the file.
+- **LEARN — automated (W2).** `feedback-export.yml` + `scripts/export-feedback.mjs` read new trip
+  feedback via a read-only service account and draft the synthesis (`learnings/<slug>.md` + the
+  public `learnings` block + party-scoped `TRAVELER_PATTERNS.md` deltas) as a **review PR** — the
+  maker edits, no longer types. Freeform stays summarized-only, never verbatim; the sync marker
+  (`learnings/.sync.json`) advances only on merge.
+- **REFRESH — pre-trip auto-dispatch (W1).** `pretrip-check.ts` now dispatches `recert.yml` for any
+  T-7 guide with real stale facts (deduped, `AUTO_DISPATCH`-gated) — the daily granularity recert's
+  weekly sweep lacked, so a guide can't reach departure on facts that went stale between Mondays.
+  recert still opens a human-reviewed freshness PR.
+- **IMPROVE — the self-improvement loop (W3).** Every research/recert run appends a report to a
+  pinned **run-ledger** issue (`append-run-report.mjs`); a monthly **skill-retro** agent proposes
+  evidence-cited skill edits as a review PR; and **`skill-evals.yml`** runs the skill's evals on any
+  `.claude/skills/**` PR (`run-skill-evals.mjs` — deterministic gate + Haiku judge), so a skill edit
+  can't regress the guide-authoring quality unnoticed.
+- **Hardening (W0).** Token-expiry canary (`token-canary.yml` — the agent pipeline's silent SPOF),
+  modify-guide `section`-field injection sanitization, and the flaky screenshot-diff gate removed in
+  favor of a slim reliable a11y gate (`a11y.yml`).
+
+---
+
 ## The three senses of "dynamic" (all three are in scope)
 
 | Sense | Meaning | Where it's built |

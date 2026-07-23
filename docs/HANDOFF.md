@@ -17,72 +17,54 @@
 - Ship loop on every change: build → test → `astro preview` :4322 (never `astro dev`) →
   grep `dist/` → commit → push to `main` (the only branch — `verify-live` guards every deploy).
 - North stars: `docs/PIPELINE.md` (generation/maintenance) · `docs/MOTION.md`
-  (presentation/motion — absorbed VISUAL_COVERS) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
+  (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
 ## Snapshot (updated 2026-07-23, session close)
 
-**All three standing plans are now fully CLEARED — `docs/PLAN_FIELD_REPORT_FIXES.md` (E1–E8, all
-8 items including item 5), `docs/PLAN_TRAVELER_FEATURES.md` (F1/F2/F4–F7·C1), and
-`docs/PLAN_VISUAL_OVERHAUL.md` (V1–V6) are all done.** E8 item 5 (the contour-visibility
-human eyeball) was settled this session — **kept as-is, no step-back**; see `docs/MOTION.md`'s
-U9 section. What's left, gated on things only the creator can supply:
-- **E2** — the real end-to-end pipeline proof — needs an actual trip to plan.
-- **F7 C2** — needs evidence from **two real research passes** running C1's bar test first;
-  same real-trip gate as E2. C3 only builds if C2's evidence says so.
+**The skill-loop optimization arc (W-series) shipped this session — W0–W5 done, committed, all
+verified (build clean · 805 tests green · typecheck 0 · perf budget OK).** Plan doc:
+`~/.claude/plans/twinkling-orbiting-whisper.md`. What landed:
+- **W0 hardening** — killed the flaky screenshot-diff gate (kept axe as slim `a11y.yml`), added
+  the OAuth-**token canary** (`token-canary.yml` — the agent pipeline's silent single point of
+  failure), sanitized the modify-guide `section` injection surface, removed the orphan GROQ key
+  from `.env` (revoke still owed — see below), fixed a non-hermetic `fmtClock` test.
+- **W1** — `pretrip-check.ts` auto-dispatches `recert.yml` for T-7 guides with stale facts.
+- **W2** — LEARN loop automated: `feedback-export.yml` drafts the synthesis as a review PR.
+- **W3** — IMPROVE loop: run-ledger issue + monthly skill-retro + wired `skill-evals.yml`.
+- **W4** — the intake wizard parses **PDF** booking confirmations client-side (ephemeral).
+- **W5** — **zero-click intake**: a Cloudflare Worker (`worker/`) files the issue for anonymous
+  visitors; the site stays on Pages; wizard falls back to the GitHub path when unconfigured.
 
-**No grand plan is queued up next.** When the creator's ready to pick a new direction, the north
-stars (below) are the place to look, or ask what's on their mind. Three GitHub issues (#17, #18,
-#19) were filed this arc for pre-existing, out-of-scope findings — see below.
+**W6 (the real end-to-end E2 proof) is the one deferred item — gated on a real trip to plan**
+(creator's explicit choice). When a trip exists, run it through the by-then-current front door and
+write `docs/E2_FIELD_REPORT.md` (it also becomes ledger run #1 + the C2 critic evidence).
 
-- **CLAUDE.md carries the Clarifying-Questions Doctrine** — binding on every plan/prompt/session.
-- **Secret status:** `CLAUDE_CODE_OAUTH_TOKEN` confirmed valid 2026-07-20.
-- **Housekeeping still open:** creator deletes merged remote branch
-  `claude/test-coverage-analysis-siftjs` via GitHub UI (sandbox 403s on ref deletion).
+**Owner tasks to activate the inert pieces (each guided; the code is done and self-deploys):**
+1. **Revoke** the old GROQ key at the Groq console (it's out of `.env` but not revoked).
+2. **W2:** mint a read-only Firebase RTDB service account → repo secret `FIREBASE_SERVICE_ACCOUNT`.
+3. **W5:** free Cloudflare account → `CLOUDFLARE_API_TOKEN` repo secret + a fine-grained PAT
+   (`wrangler secret put GH_TOKEN`); then paste the deployed URL into `intake-proxy-config.js`.
+   Optional: Turnstile keys + a KV namespace for the rate cap. Full steps in `worker/README.md`.
+
+**Secret status:** `CLAUDE_CODE_OAUTH_TOKEN` valid (2026-07-20; the canary now watches it).
+**Housekeeping still open:** creator deletes merged remote branch
+`claude/test-coverage-analysis-siftjs` via GitHub UI (sandbox 403s on ref deletion).
 
 ## Where we left off
 
-**F1–F7·C1** (prior session): checklist upgrade + book-by timeline, budget-pact silo,
-weather-aware packing, offline-proof E2E, pre-trip auto-recert, and the Critic bar-test lens.
-Full detail in git history / prior HANDOFF revisions — all shipped, tested, pushed.
+The W-series arc is complete and pushed. Every phase carries its own tests and the pieces that
+need owner secrets (W2 Firebase, W5 Cloudflare) are inert-until-configured — they don't break
+anything while unset. The three prior standing plans (field-report fixes, traveler features,
+visual overhaul) remain fully cleared. The only substantive work left anywhere is **W6** (prove
+the pipeline end-to-end on a real trip) and, downstream of it, the critic **C2/C3** upgrades that
+need evidence from two real research passes.
 
-**E8 item 5 — SETTLED (this session):** real Playwright screenshots of the Korea guide masthead
-(desktop/mobile × light/dark) and a pre-auto-glide hub zoom verified the V4 contour pass that
-originally shipped with no screenshot tool available. Contours are clearly visible and legible
-in all four masthead states, title legibility preserved throughout. Reviewed by the creator —
-**kept as-is, no step-back.** This closes the last open item in
-`docs/PLAN_FIELD_REPORT_FIXES.md`; all of E1–E8 are now done.
-
-**V5 — morph continuity** (this session): the hub card's accent bar (`.hubcard-bar`) and the
-guide masthead's accent rule (`.masthead-rule`) now share `view-transition-name:accent-<slug>` —
-the trip's colour visibly travels across the hub→guide navigation, confirmed live (a
-mid-transition Playwright screenshot caught the bar sitting at its morph target). The plan's
-other ask — the Overture route line's exit state matching the story-rail entry — isn't a literal
-shared element (the route line has no tap-time hook and is normally off-screen by tap time,
-confirmed via research agent); shipped the honest equivalent instead: the story-rail's segment
-fill now uses the guide's own `--accent` instead of a fixed white. OG images, print styles,
-`/progress/`, `/health/` all confirmed untouched. Reduced-motion fallback clean.
-
-**V6 — QA and the honest pass** (this session, closes the plan): running the full Playwright
-suite together for the first time this arc surfaced real findings the overhaul itself never
-caused — refreshed 8 visual baselines stale since before V1 (reviewed each by eye first, none
-blind-updated), fixed a genuine a11y landmark regression (`<section class="overture">` →
-`<header>`, the Overture hero's content wasn't contained by any landmark), fixed a genuine WCAG
-contrast failure (`.bs-pos` read 2.87:1 against `.botSections`'s always-inverted background,
-fixed theme-independently), and fixed two label/name-mismatch findings. Recorded this site's
-first-ever Lighthouse numbers (90s across the board; CLS held at a steady ~0.244, filed as
-follow-up #19). Confirmed the perf budget gate passes with headroom, and that 3 unrelated
-pre-existing E2E failures (SOS focus-trap wrap, two Trip-Split network-harness tests — filed as
-#17, #18) aren't caused by this arc. Full detail: `docs/MOTION.md`'s own "V6" section.
-
-All of F1–F7·C1 + V5 + V6: build clean, full test suite green (762/762), typecheck 0 errors,
-mobile 375px + desktop + dark + reduced-motion + JS-off all verified in preview.
-
-**Re-prompt the creator with:** "All three standing plans are now fully cleared — E8 item 5 is
-settled (kept as-is, no step-back), which closes out `PLAN_FIELD_REPORT_FIXES.md` entirely, and
-`PLAN_VISUAL_OVERHAUL.md` closed out last session (V1–V6). Along the way this arc found and fixed
-a couple of real accessibility bugs (a landmark gap, a contrast failure) and filed 3 GitHub issues
-for pre-existing bugs that turned up but aren't part of any plan (#17 SOS focus-trap, #18 two
-Trip-Split test flakes, #19 a steady CLS reading worth root-causing later). No grand plan is
-queued up next — what would you like to work on? The only things left anywhere are E2 and F7-C2,
-both gated on a real trip to plan whenever one's ready."
+**Re-prompt the creator with:** "The skill-loop optimization arc is done and live — hardening +
+the token canary (W0), pre-trip auto-recert (W1), the automated learnings loop (W2), the
+self-improvement loop of run-ledger + skill-retro + wired evals (W3), PDF booking parsing (W4),
+and the zero-click Cloudflare intake proxy (W5). Three things are waiting on you: revoke the old
+GROQ key, and — whenever you want to switch the automated learnings loop and the zero-click intake
+on — add the Firebase service-account and Cloudflare secrets (guided, ~5 min each; `worker/README.md`
+has the steps). The one piece of the plan left to prove is the real end-to-end run (W6), which just
+needs an actual trip to plan. What would you like to do next?"
