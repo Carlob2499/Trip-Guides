@@ -12,6 +12,15 @@ today, never invented backdates) · the OAuth secret is in place and was confirm
 (the additional countries are an E6 session-start clarifier — the creator chose "+ other" without
 naming them) · route optimizer is **tap-to-apply**, not suggest-only.
 
+**E2 DEFERRED (2026-07-22, creator's call) — not dropped, not scheduled.** No trip is planned
+yet, and E2 is a real end-to-end pipeline run for an actual guide (it needs a genuine
+destination/party/dates per its own clarifiers) — running it against a placeholder trip would
+prove nothing real and would publish a throwaway guide. **The queue re-sequences around it:**
+E1 → E3 → E4 → E5 → E6 → E7 → E8, in that order, with E2 picked up whenever a real trip exists
+to plan (file the New-guide issue for it same as any real guide, then resume this plan at E2).
+Nothing in E3–E8 depends on E2 having run — E1's gate fix is proven by its own tests, not by a
+live run — so the deferral costs nothing but the proof itself.
+
 ## Binding rules for every session (the error-elimination contract)
 
 1. **Model & switching.** Each session header names its model; the executor switches via
@@ -45,18 +54,21 @@ naming them) · route optimizer is **tap-to-apply**, not suggest-only.
 | Session | Model | Est. active | Prefix |
 |---|---|---|---|
 | E1 fail-closed publish gate | Sonnet | 1.5–2.5 h | `fix(pipeline):` |
-| E2 prove the pipeline (was F0) | **Opus** driver (workflow agent stays Sonnet) | 1.5–3 h + 1–2 h wall-clock | `fix(pipeline):` |
+| E2 prove the pipeline (was F0) | **Opus** driver (workflow agent stays Sonnet) | 1.5–3 h + 1–2 h wall-clock | `fix(pipeline):` — **DEFERRED, no trip planned yet** |
 | E3 strict undated-figure gate | Sonnet | 1–2 h | `feat(verify):` |
 | E4 Korea backfill → strict | Sonnet (guide-author skill) | 3–4 h | `research(korea):` |
 | E5 Denmark backfill → strict | Sonnet (guide-author skill) | 3–4 h | `research(denmark):` |
 | E6 entry + phrases (was F3) | Sonnet (guide-author skill) | 2–3 h | `research(content):` |
 | E7 route optimizer, tap-to-apply (was F8) | Sonnet (Opus if the geometry fights) | 3–4 h | `feat(route-opt):` |
 | E8 hygiene sweep | Sonnet / Haiku | 1–1.5 h | `chore:` |
-| **Total** | | **≈ 17–24 h active** | |
+| **Total** | | **≈ 17–24 h active** (≈ 15.5–21 h with E2 deferred) | |
 
-**Order is load-bearing:** E1 before E2 (the run must exercise the fixed gate) · E3 before
-E4/E5 (the backfills must satisfy the stronger gate, or they'd flip strict and immediately be
-under-gated) · E4/E5 before E6 is preferred but not required · E7/E8 anytime after E1.
+**Order is load-bearing:** with E2 deferred, the active sequence is **E1 → E3 → E4 → E5 → E6 →
+E7 → E8**. E3 before E4/E5 (the backfills must satisfy the stronger gate, or they'd flip strict
+and immediately be under-gated) · E4/E5 before E6 is preferred but not required · E7/E8 anytime
+after E1. When a real trip exists, resume at E2 — file its New-guide issue and pick this plan
+back up there; E2 still logically sits right after E1 (the run should exercise the fixed gate),
+it just isn't next chronologically.
 
 ---
 
@@ -111,7 +123,13 @@ post-graduation `--network` scorecard is cosmetic (`PASSED` derives from the che
 (auto + manual) written into the commit body showing dead-link, outage, and clean scenarios
 each landing in the correct terminal state.
 
-## E2 — Prove the pipeline end-to-end (THE GATE — was F0)
+## E2 — Prove the pipeline end-to-end (THE GATE — was F0) — **DEFERRED, no trip planned yet**
+
+> **Do not run this session until a real trip exists to plan.** The creator deferred it
+> 2026-07-22: an end-to-end run needs a genuine destination/party/dates (clarifier (a) below),
+> and running it against a placeholder would publish a throwaway guide and prove nothing.
+> Resume here the moment a real trip is on the table — file its New-guide issue and pick this
+> plan back up at this session. Everything below is unchanged and ready to execute then.
 
 **Why:** the headless Action → auto-merge loop has never fired. The spine was proven once,
 interactively (Sedona: all checkpoints, human commit authors, `attempts: 0`). The secret
@@ -263,9 +281,11 @@ on a real guide day where reordering genuinely helps and stays silent elsewhere.
 **Exit:** ship loop; nothing on the Field Report's P2·7 list left silently open.
 
 ---
-*Priority logic: E1 is a trivial change protecting the product's #1 promise; E2 proves the
-factory AND validates E1; E3 hardens the gate the backfills must then satisfy; E4/E5 make the
-rendered exemplars doctrine-true; E6 converts shipped mechanisms into traveler value at pure
-research cost; E7 closes the one plain parity gap (free + offline vs. their $39.99/yr + online);
-E8 leaves no half-turned keys. The Critic stays where it is (PLAN_TRAVELER_FEATURES F7),
-evidence-gated — the Field Report's single-pass finding is the reason not to accelerate it.*
+*Priority logic: E1 is a trivial change protecting the product's #1 promise; E2 (deferred —
+proves the factory AND validates E1, whenever a real trip exists) resumes right after E1 in
+logic though not in current schedule; E3 hardens the gate the backfills must then satisfy;
+E4/E5 make the rendered exemplars doctrine-true; E6 converts shipped mechanisms into traveler
+value at pure research cost; E7 closes the one plain parity gap (free + offline vs. their
+$39.99/yr + online); E8 leaves no half-turned keys. The Critic stays where it is
+(PLAN_TRAVELER_FEATURES F7), evidence-gated — the Field Report's single-pass finding is the
+reason not to accelerate it.*

@@ -28,14 +28,16 @@
 `PLAN_TRAVELER_FEATURES.md` (marked "moved" there); F1/F2/F4/F5/F6/F7 remain there, sequenced
 after it. `PLAN_VISUAL_OVERHAUL.md` still holds V5 (morph continuity) + V6 (QA/perf).
 
-- **E1 is DONE (this session)** — the fail-closed `--network` publish gate. See "Where we left
-  off" below for what shipped.
+- **E1 is DONE** — the fail-closed `--network` publish gate. See "Where we left off" below.
+- **E2 is DEFERRED (creator's call, 2026-07-23) — no trip planned yet.** Not dropped: resume
+  it the moment a real destination/party/dates exist to plan (file that guide's New-guide issue,
+  then pick this plan back up at E2). The active sequence is now **E3 → E4 → E5 → E6 → E7 → E8**.
 - **Creator decisions locked 2026-07-22 (don't re-ask):** Korea AND Denmark both backfill
   provenance and flip strict (Denmark via fresh re-verification dated today — never invented
   backdates) · route optimizer = tap-to-apply (localStorage per-device, never edits guide
   JSON) · entry cards = US + additional passports (countries named at E6 session start).
 - **Secret status corrected:** `CLAUDE_CODE_OAUTH_TOKEN` IS in place — confirmed valid
-  2026-07-20 (commits `e11dd7b`→`389b229`). What has never happened is the RUN (E2).
+  2026-07-20 (commits `e11dd7b`→`389b229`). Whenever E2 resumes, the secret is not a blocker.
 - **CLAUDE.md gained the Clarifying-Questions Doctrine** — binding on every plan/prompt/
   session: plans carry per-session clarifier blocks; sessions open with `AskUserQuestion`.
 
@@ -67,12 +69,16 @@ inherits the fix for free. Table-top trace of both paths (dead-link/outage/clean
 third commit's body. Ship loop ran clean: build, `npm test` (707/707), typecheck (0 errors),
 workflow YAML re-read + sanity-parsed. No UI touched, so no `astro preview` pass was needed.
 
-**Next up: E2 — prove the pipeline end-to-end (Opus driver).** The secret is confirmed valid;
-the one thing that's never happened is a real headless run exercising the now-fixed gate. E2's
-session-start clarifiers (destination/party/dates/priorities for the test guide; attempt
-budget) still need an `AskUserQuestion` before starting, per the plan and doctrine.
+**E2 deferred 2026-07-23 — no trip planned yet.** It still logically sits right after E1 (the
+real run should exercise the fixed gate) but needs a genuine destination/party/dates, which
+don't exist. It stays in the plan, unscheduled; resume it the moment a real trip does.
 
-**Re-prompt the creator with:** "E1 (fail-closed publish gate) is shipped and pushed. Next up is
-E2 — the first real end-to-end pipeline run (Opus driver, workflow agent stays Sonnet): file a
-real guide, watch it move through checkpoints, fix any wiring failures live. Needs a destination/
-party/dates/priorities for the test guide and an attempt-budget default. Start E2?"
+**Next up: E3 — promote the undated-figure detector to blocking on strict guides.** Sonnet.
+No clarifiers to ask (settled by the Field Report review) — but E3 requires sweeping the
+already-strict, already-published `us.json` in the SAME session so `main` never goes red once
+the stricter gate is live. Read the session's full "Do" list in the plan before starting.
+
+**Re-prompt the creator with:** "E1 (fail-closed publish gate) is shipped and pushed; E2 (the
+real pipeline run) is deferred until a trip's planned. Next up is E3 — tightening the strict
+gate to catch undated hours/prices, plus sweeping `us.json` so it doesn't break under the
+stricter rule (Sonnet, ~1-2h). Start E3?"
