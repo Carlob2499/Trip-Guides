@@ -111,31 +111,44 @@ export function checkResearchGuide(guide, slug) {
 
   // 8. Widened provenance advisory (D2) — content.config.ts's build-time gate only fires on
   // `≈`-flagged text under `provenance: "strict"`, so a precise-looking but undated hour/price
-  // passes silently, and days/sights/budget item-level provenance are skipped entirely there.
-  // Reported here as ADVISORY (info, non-blocking) rather than promoted to a build error or a
-  // readiness "warn" — every shipped guide (including Denmark, which has zero structured
-  // verified_on at all — see D3) would otherwise start failing `npm run verify` retroactively.
-  // This is the punch list a research/recert pass works down, not a gate that blocks graduation.
+  // passed silently, and days/sights/budget item-level provenance was skipped entirely there
+  // (the gate only understands section-level verified_on on the four DATED_TYPES).
+  //
+  // Severity now depends on the guide's own opt-in: non-strict guides get "info" (the original
+  // advisory behavior — every guide written before `provenance:"strict"` existed, including
+  // Denmark's zero-structured-dates case, keeps passing `npm run verify` unchanged). A STRICT
+  // guide gets "warn" (readiness-blocking), because under strict the guide has explicitly
+  // promised every perishable fact is sourced+dated — a confident, undated figure is exactly
+  // the "could a generic AI have written this" shape the doctrine exists to catch, and it was
+  // previously invisible because the schema gate keys on the `≈` marker, not on the fact.
+  //
+  // `⚠` stays exempt even under strict, matching the schema gate's own ≈/⚠ distinction
+  // (verification-rules.md §4): `⚠` already tells the reader the fact is a known,
+  // unconfirmed gap — it is the correct honest state, not a violation to escalate. `≈` text
+  // gets NO such exemption here: for panel/prose/list/routes the schema gate already blocks
+  // an undated `≈` at the build level, but for days/sights/budget ITEMS (outside the schema
+  // gate's DATED_TYPES) an undated `≈` was never caught anywhere until this check — promoting
+  // it to "warn" under strict closes that gap.
   const HARD_TIME_PRICE_RE = /\d{1,2}(:\d{2})?\s?(am|pm)|[–-]\s?\d{1,2}(:\d{2})?\s?(am|pm)|[$₩€£¥]\s?\d/i;
   const PROVENANCE_SECTION_TYPES = new Set(["panel", "prose", "list", "routes", "days", "sights", "budget"]);
   const hasHardFact = (text) => HARD_TIME_PRICE_RE.test(String(text ?? ""));
+  const isStrict = guide.provenance === "strict";
+  const d2Severity = (text) => (isStrict && !/⚠/.test(String(text ?? "")) ? "warn" : "info");
   for (const s of sections) {
     if (!PROVENANCE_SECTION_TYPES.has(s.type)) continue;
     const label = `${s.type} "${s.title || s.group}"`;
     // Section-level text (panel/prose body, list items, routes steps).
     const sectionText = JSON.stringify({ body: s.body, items: s.type === "list" ? s.items : undefined, steps: s.steps });
     if (!s.verified_on && hasHardFact(sectionText)) {
-      add("info", `${label} has an undated hour/price-looking figure but no verified_on (D2 advisory — precise text isn't automatically exempt from provenance)`);
+      add(d2Severity(sectionText), `${label} has an undated hour/price-looking figure but no verified_on (D2 advisory — precise text isn't automatically exempt from provenance)`);
     }
-    // Item-level provenance (days[].items[], sights[].items[], budget[].items[]) — previously
-    // skipped entirely by the build-time strict gate, which only understands section-level
-    // verified_on on the four DATED_TYPES.
+    // Item-level provenance (days[].items[], sights[].items[], budget[].items[]).
     for (const it of s.items || []) {
       if (it.verified_on) continue;
       const itemText = JSON.stringify(it);
       if (hasHardFact(itemText)) {
         const itemLabel = it.name || it.title || it.label || it.date || "?";
-        add("info", `${s.type} item "${itemLabel}" (in ${label}) has an undated hour/price-looking figure but no verified_on (D2 advisory)`);
+        add(d2Severity(itemText), `${s.type} item "${itemLabel}" (in ${label}) has an undated hour/price-looking figure but no verified_on (D2 advisory)`);
       }
     }
   }

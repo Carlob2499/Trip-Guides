@@ -89,3 +89,68 @@ describe("check-research — widened provenance advisory (D2)", () => {
     expect(msgs.some((m) => m.includes("Tipping"))).toBe(false);
   });
 });
+
+describe("check-research — D2 promoted to blocking (E3) on provenance:\"strict\" guides", () => {
+  it("promotes an undated price to a blocking warn on a strict guide", () => {
+    const guide = {
+      provenance: "strict",
+      verified: "Checked Jan 2026",
+      sections: [{ type: "panel", group: "Essentials", title: "Entry fee", body: "Tickets cost $20 at the door." }],
+    };
+    const found = warns(guide).some((f) => f.msg.includes("Entry fee") && f.msg.includes("D2 advisory"));
+    expect(found).toBe(true);
+  });
+
+  it("stays advisory (info, non-blocking) on a non-strict guide with the identical fact", () => {
+    const guide = {
+      verified: "Checked Jan 2026",
+      sections: [{ type: "panel", group: "Essentials", title: "Entry fee", body: "Tickets cost $20 at the door." }],
+    };
+    expect(warns(guide).length).toBe(0);
+    expect(infos(guide).some((f) => f.msg.includes("Entry fee"))).toBe(true);
+  });
+
+  it("a dated price on a strict guide stays clean (no D2 finding at all)", () => {
+    const guide = {
+      provenance: "strict",
+      verified: "Checked Jan 2026",
+      sections: [{ type: "panel", group: "Essentials", title: "Entry fee", body: "Tickets cost $20 at the door.", verified_on: "2026-01-01", source_url: "https://example.com" }],
+    };
+    const msgs = [...warns(guide), ...infos(guide)].map((f) => f.msg);
+    expect(msgs.some((m) => m.includes("Entry fee"))).toBe(false);
+  });
+
+  it("an honestly ⚠-flagged figure stays advisory even on a strict guide — the flag is not a violation to escalate", () => {
+    const guide = {
+      provenance: "strict",
+      verified: "Checked Jan 2026",
+      sections: [{ type: "panel", group: "Essentials", title: "Entry fee", body: "Tickets cost $20 at the door. ⚠ confirm before you go." }],
+    };
+    expect(warns(guide).length).toBe(0);
+    expect(infos(guide).some((f) => f.msg.includes("Entry fee"))).toBe(true);
+  });
+
+  it("promotes item-level undated figures too — the gap the schema's DATED_TYPES gate never covered", () => {
+    const guide = {
+      provenance: "strict",
+      verified: "Checked Jan 2026",
+      sections: [
+        { type: "days", group: "Days", title: "Days", items: [{ date: "Jan 1", title: "Day 1", body: "Museum opens at 10am." }] },
+      ],
+    };
+    const found = warns(guide).some((f) => f.msg.includes("Day 1"));
+    expect(found).toBe(true);
+  });
+
+  it("promotes an item-level undated ≈ the same as a bare figure — ≈ is not exempt, only ⚠ is", () => {
+    const guide = {
+      provenance: "strict",
+      verified: "Checked Jan 2026",
+      sections: [
+        { type: "budget", group: "Budget", title: "Budget", items: [{ label: "Hotel", amount: 0, note: "Rate is ≈₩120,000/night." }] },
+      ],
+    };
+    const found = warns(guide).some((f) => f.msg.includes("Hotel"));
+    expect(found).toBe(true);
+  });
+});
