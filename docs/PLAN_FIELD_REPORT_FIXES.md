@@ -58,7 +58,7 @@ live run — so the deferral costs nothing but the proof itself.
 | E3 strict undated-figure gate | Sonnet | 1–2 h | `feat(verify):` — **DONE** |
 | E4 Korea backfill → strict | Sonnet (guide-author skill) | 3–4 h | `research(korea):` — **DONE** |
 | E5 Denmark backfill → strict | Sonnet (guide-author skill) | 3–4 h | `research(denmark):` — **DONE** |
-| E6 entry + phrases (was F3) | Sonnet (guide-author skill) | 2–3 h | `research(content):` |
+| E6 entry + phrases (was F3) | Sonnet (guide-author skill) | 2–3 h | `research(content):` — **DONE** |
 | E7 route optimizer, tap-to-apply (was F8) | Sonnet (Opus if the geometry fights) | 3–4 h | `feat(route-opt):` |
 | E8 hygiene sweep | Sonnet / Haiku | 1–1.5 h | `chore:` |
 | **Total** | | **≈ 17–24 h active** (≈ 15.5–21 h with E2 deferred) | |
@@ -69,6 +69,17 @@ and immediately be under-gated) · E4/E5 before E6 is preferred but not required
 after E1. When a real trip exists, resume at E2 — file its New-guide issue and pick this plan
 back up there; E2 still logically sits right after E1 (the run should exercise the fixed gate),
 it just isn't next chronologically.
+
+**E6 done, note on scope:** E6 shipped in two parts — (1) a durable fix, not just a one-off:
+`passport-countries` is now a real field across all three intake surfaces (issue form,
+`intake-schema.mjs`, `scaffold-guide.mjs`), so every future guide captures this systematically
+instead of being asked about ad hoc; `TripKit.astro`'s entry-requirements card is now
+dropdown-driven for any guide with more than one `entry[]` row (single-row guides are unchanged).
+(2) `entry[]` + `phrases` content populated for Korea + Denmark, but ONLY for United States —
+the one passport country either trip has actual evidence for (US-booked Airbnb, a US phone
+needing a Korean e-SIM, etc.). No other passport country was invented for these two guides;
+broader coverage arrives guide-by-guide as the new intake field is actually answered for real
+future trips. Next up is **E7**.
 
 ---
 

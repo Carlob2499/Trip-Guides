@@ -22,53 +22,57 @@
 
 ## Snapshot (updated 2026-07-23, session close)
 
-**The ACTIVE execution queue is `docs/PLAN_FIELD_REPORT_FIXES.md`** (E1→E8). E1/E3/E4/E5 are
-**DONE**; E2 is **deferred** (no trip planned — resume whenever one exists); next up is **E6**.
+**The ACTIVE execution queue is `docs/PLAN_FIELD_REPORT_FIXES.md`** (E1→E8). E1/E3/E4/E5/E6 are
+**DONE**; E2 is **deferred** (no trip planned — resume whenever one exists); next up is **E7**.
 `PLAN_TRAVELER_FEATURES.md` holds F1/F2/F4-F7 after this queue; `PLAN_VISUAL_OVERHAUL.md` holds
 V5/V6.
 
-- **Creator decisions locked 2026-07-22 (don't re-ask):** route optimizer = tap-to-apply · entry
-  cards = US + additional passports (**countries still unnamed — E6's session-start question,
-  asked below**).
+- **E6 redesign (creator direction, 2026-07-23):** rather than asking per-guide which passport
+  countries to research, `passport-countries` is now a real field across all three intake
+  surfaces (issue form, `intake-schema.mjs`, `scaffold-guide.mjs`) — systematic for every future
+  guide. `TripKit.astro`'s entry card is dropdown-driven whenever a guide has >1 `entry[]` row.
 - **Secret status:** `CLAUDE_CODE_OAUTH_TOKEN` confirmed valid 2026-07-20 — not a blocker
   whenever E2 resumes.
 - **CLAUDE.md carries the Clarifying-Questions Doctrine** — binding on every plan/prompt/session.
 
-**Also on `main` (2026-07-22):** the 07-20 review plan fully executed + removed; docs
-consolidated ~25%; connector policy asserted (github + Claude Code Remote only). Visual arc
-V1–V4 live; V4 contour-visibility still needs a human real-photo eyeball (MOTION.md caveat).
+**Also on `main`:** the 07-20 review plan fully executed + removed; docs consolidated ~25%;
+connector policy asserted (github + Claude Code Remote only). Visual arc V1–V4 live; V4
+contour-visibility still needs a human real-photo eyeball (MOTION.md caveat).
 
 **Housekeeping still open:** creator deletes merged remote branch
 `claude/test-coverage-analysis-siftjs` via GitHub UI (sandbox 403s on ref deletion).
 
 ## Where we left off
 
-**E1** (`fix(pipeline):`, 3 commits): auto-publish path no longer fails open on a network/API
-outage; `PASSED` derives from the real verify exit code.
+**E4 + E5** (`research(korea):`, `research(denmark):`): both guides flipped to
+`provenance: "strict"`, surfacing real corrections along the way (Korea: MMCA's fee dropped to
+free, Leeum's roughly doubled; Denmark: a City Pass 48h price disagreement recorded, not
+resolved silently). Both PASS `verify` offline + `--network`.
 
-**E3** (`feat(verify):` + `fix(verify):`, 2 commits): undated-figure detector now blocks on
-strict guides, not just informs; found and fixed its own bug mid-session (list-type items can
-never carry a per-item date — section-level coverage is the only one possible, code corrected
-+ tested). Required sweep of `us.json` found two REAL stale/unconfirmed facts (an unofficial
-parking fee, a restaurant's actually-wrong posted hours) — fixed honestly, not just dated.
+**E6** (`feat(intake):`, `feat(trip-kit):`, `research(entry):`, `research(phrases):`, 4 commits):
+- Intake: `passport-countries` field wired through the issue form, `intake-schema.mjs`
+  (FIELDS + zod), `scaffold-guide.mjs` (CLI + `buildIntakeMd`), and `NEW_GUIDE_INTAKE.md`.
+- UI: `TripKit.astro`'s entry-requirements card shows a country picker only when `entry[]` has
+  >1 row; single-row guides are unchanged. New `ui/entry-select.js` (untested by design, matches
+  `ui/speak.js`'s DOM-glue pattern).
+- Content: `entry[]` + `phrases` populated for Korea + Denmark — **US passport only**, the one
+  country either trip has actual evidence for. Korea: K-ETA's exemption for US citizens through
+  Dec 31, 2026, confirmed via a Korean MOFA consulate notice (a contradicting blog claim that
+  K-ETA is mandatory again was checked against this official source and is wrong). Denmark: the
+  Schengen 90/180-day rule + passport validity, confirmed via the EU's own Your Europe page.
+  5 phrase cards per guide (ko-KR / da-DK), each translation cross-checked against an
+  independent reputable source before shipping (a wrong native-script phrase is safety-adjacent).
+  No allergy/dietary fact was invented for either party — neither guide records one, so only the
+  generic "I'm vegetarian" situational card shipped, nothing more specific.
+- Verified: build clean, verify PASS offline + `--network` (0 dead links) on both guides,
+  717/717 tests, typecheck 0 errors, dark + mobile 375px eyeballed in preview (screenshots).
 
-**E4 + E5** (`research(korea):`, `research(denmark):`, 2 commits): both guides flipped to
-`provenance: "strict"`. Korea backfilled mostly from its own rich multi-date `verified` stamp;
-Denmark (undated stamp) via fresh re-verification today, per the creator's explicit direction —
-never invented dates. Both surfaced real corrections (Korea: MMCA's fee dropped to free, Leeum's
-roughly doubled; Denmark: a genuine City Pass 48h price disagreement, recorded not resolved
-silently) and both leave personal/dynamic estimates (bookings, spending ranges, demand-priced
-fares) honestly `⚠`-flagged rather than falsely dated. Both PASS `npm run verify` offline AND
-`--network` (0 dead links, 0 missing photos on either). 715/715 tests, typecheck clean throughout.
+**Next up: E7 — day-route optimizer, tap-to-apply.** Sonnet (Opus if the geometry fights). New
+sealed silo `src/features/route-opt/`, zero network/schema/guide-JSON changes — see the plan's
+E7 section for the full spec (haversine + 2-opt, localStorage-only reorder, GPX/ICS/print keep
+guide order).
 
-**Next up: E6 — dormant `entry` + `phrases` content.** Sonnet, guide-author skill. **Blocked on
-one open question the creator hasn't answered yet: which additional passport countries** (beyond
-US) need entry rows — a party can mix passports, and this can't be guessed. Ask via
-`AskUserQuestion` at session start before any research begins; also confirm any allergies/dietary
-needs to prioritize in phrase cards (E6's second clarifier).
-
-**Re-prompt the creator with:** "E1, E3, E4, and E5 are all shipped and pushed — both Korea and
-Denmark are now `provenance:\"strict\"`, machine-enforced, not just prose promises. Next up is
-E6 (entry + phrase cards, Sonnet, ~2-3h), but it's blocked on one thing only you can answer:
-which passport countries besides US need entry rows for the party? And any allergies/dietary
-needs for the phrase cards?"
+**Re-prompt the creator with:** "E6 is shipped — passport-countries is now a real intake field,
+the Trip Kit's entry card is dropdown-ready for multi-passport parties, and Korea + Denmark both
+have real entry + phrase-card content for their US-passport travelers. Next up is E7 (route
+optimizer, tap-to-apply, Sonnet, ~3-4h) — want me to start it?"
