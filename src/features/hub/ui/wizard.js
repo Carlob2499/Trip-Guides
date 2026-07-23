@@ -90,17 +90,31 @@ import { WIZARD_STEPS, validateStepTransition, parseBookingDocument, formatParse
   var docWrap = document.createElement("div");
   docWrap.className = "ngw-doc";
   docWrap.innerHTML =
-    '<label class="ngw-doc-btn">📄 Have bookings? Drop a confirmation (.txt / .eml / .ics / .md)' +
-    '<input type="file" id="ngDoc" accept=".txt,.eml,.ics,.md,.csv" hidden multiple /></label>' +
+    '<label class="ngw-doc-btn">📄 Have bookings? Drop a confirmation (.pdf / .txt / .eml / .ics / .md)' +
+    '<input type="file" id="ngDoc" accept=".pdf,.txt,.eml,.ics,.md,.csv" hidden multiple /></label>' +
     '<p class="ngw-doc-out" id="ngDocOut" hidden></p>';
   stepEls[0].appendChild(docWrap);
   var parsedNotes = [];
   document.addEventListener("change", function (e) {
     if (e.target && e.target.id === "ngDoc") {
       Array.prototype.forEach.call(e.target.files || [], function (file) {
+        var isPdf = file.type === "application/pdf" || /\.pdf$/i.test(file.name);
         var reader = new FileReader();
-        reader.onload = function () { parseDoc(String(reader.result || ""), file.name); };
-        reader.readAsText(file);
+        if (isPdf) {
+          // PDFs: read the bytes, extract text in-browser via the lazy pdf.js chunk (nothing is
+          // uploaded), then run the SAME parser as the text formats. Fail-soft — a scanned/
+          // image-only or unreadable PDF still "attaches" as a note via parseDoc("").
+          reader.onload = function () {
+            import("../model/pdf-text")
+              .then(function (m) { return m.extractPdfText(reader.result); })
+              .then(function (text) { parseDoc(text, file.name); })
+              .catch(function () { parseDoc("", file.name); });
+          };
+          reader.readAsArrayBuffer(file);
+        } else {
+          reader.onload = function () { parseDoc(String(reader.result || ""), file.name); };
+          reader.readAsText(file);
+        }
       });
     }
   });
