@@ -16,13 +16,16 @@
     "type": "panel",
     "group": "Getting around",
     "title": "Transit passes — which one to buy and when",
-    "body": "<p>Three real options for this trip, from simplest to most comprehensive:</p><p><b>City Pass Small</b> — the default choice, bought in the <a href='https://dinoffentligetransport.dk/en/find-tickets/day-tickets/city-pass' target='_blank' rel='noopener noreferrer'>DOT Tickets app</a>. Covers all metro lines (M1–M4), S-tog commuter rail, local buses, and harbour buses 991/992. Zones 1–4, which includes the CPH airport. Verified 2026 prices: <b>24h = 100 DKK, 48h = 160 DKK, 96h = 280 DKK, 120h = 340 DKK.</b> Note: there is no 72-hour option — the jump is from 48h to 96h.</p><p><b>Copenhagen Card (DISCOVER)</b> — covers unlimited transit in all zones (including airport) <i>plus</i> free admission to 80+ attractions, including Rosenborg Castle, the Round Tower, and the National Museum. Verified 2026 prices: <b>24h = 589 DKK, 48h = 859 DKK, 72h = 1,039 DKK.</b> Worth doing the maths before you buy — it only makes sense on days you're visiting 3+ paid attractions. Full pricing at <a href='https://copenhagencard.com/view/prices' target='_blank' rel='noopener noreferrer'>copenhagencard.com</a>.</p><p><b>Single tickets</b> — fine for one-off journeys. A standard 2-zone city ticket is ≈26 DKK; the airport is a 3-zone journey if you're buying a single (~36–40 DKK, but a City Pass Small covers it). Buy at station machines or in the DOT app.</p><p><b>What City Pass does NOT cover:</b> the Øresundståg to Malmö, the Go Nordic Cruiseline ferry, or any travel in Sweden or Norway.</p>",
+    "body": "<p>Three real options for this trip, from simplest to most comprehensive:</p><p><b>City Pass Small</b> — the default choice, bought in the <a href='https://dinoffentligetransport.dk/en/find-tickets/day-tickets/city-pass' target='_blank' rel='noopener noreferrer'>DOT Tickets app</a>. Covers all metro lines (M1–M4), S-tog commuter rail, local buses, and harbour buses 991/992. Zones 1–4, which includes the CPH airport. Prices: <b>24h = 100 DKK</b> (confirmed current), <b>48h ≈160–180 DKK</b> (⚠ sources disagree on the exact 48h figure — confirm at purchase), <b>96h = 280 DKK, 120h = 340 DKK</b> (⚠ not independently re-checked this pass). Note: there is no 72-hour option — the jump is from 48h to 96h.</p><p><b>Copenhagen Card (DISCOVER)</b> — covers unlimited transit in all zones (including airport) <i>plus</i> free admission to 80+ attractions, including Rosenborg Castle, the Round Tower, and the National Museum. Prices as of the original research: <b>24h = 589 DKK, 48h = 859 DKK, 72h = 1,039 DKK</b> (⚠ not independently re-checked this pass — confirm at copenhagencard.com before buying). Worth doing the maths before you buy — it only makes sense on days you're visiting 3+ paid attractions. Full pricing at <a href='https://copenhagencard.com/view/prices' target='_blank' rel='noopener noreferrer'>copenhagencard.com</a>.</p><p><b>Single tickets</b> — fine for one-off journeys. A standard 2-zone city ticket is ≈26 DKK; the airport is a 3-zone journey if you're buying a single (~36–40 DKK, but a City Pass Small covers it). Buy at station machines or in the DOT app.</p><p><b>What City Pass does NOT cover:</b> the Øresundståg to Malmö, the Go Nordic Cruiseline ferry, or any travel in Sweden or Norway.</p>",
     "checklist": [
       "Download the DOT Tickets app before you leave home",
-      "Buy City Pass Small on arrival at the airport — 100 DKK/24h (verified 2026 price)",
+      "Buy City Pass Small on arrival at the airport — 100 DKK/24h (confirmed current)",
       "Malmö day (Jun 10): buy a separate Øresundståg cross-border ticket at Nørreport station",
       "Museum-heavy days: check if Copenhagen Card (589+ DKK) saves money vs City Pass + individual entries"
-    ]
+    ],
+    "verified_on": "2026-07-23",
+    "shelf_life": "transit",
+    "source_url": "https://www.publictransport.dk/tickets/citypass"
   },
   {
     "type": "routes",
@@ -35,8 +38,11 @@
       "<b>Fri PM — GO Fest group · Park exit → lunch → Stamp Rally begins:</b> Session ends 13:00. Walk west (~20 min) and stop at <b>Torvehallerne</b> for lunch — the market exits directly onto Nørreport station. Then walk ~15 min south down Strøget to <b>LEGO Store Vimmelskaftet</b> (open until 18:00 today) for your first Stamp Rally stamps. Evening: <b>LEGO Store Tivoli Gardens</b> is open until 22:00 if you want more stamps — no rush.",
       "<b>Fri — Mom's group · Hop-on-hop-off bus day:</b> Board at <b>Kongens Nytorv</b> or <b>Rådhuspladsen</b>. Suggested stops: <b>Nyhavn</b> (waterfront, canal views) → <b>Rosenborg Castle</b> and the King's Garden → <b>Frederiksberg</b> palace park. All on the bus pass; no separate tickets needed for transport.",
       "<b>Sat — GO Fest group · Citywide play → leave by 16:30:</b> Best PokéStop clusters: <b>Strøget/Vimmelskaftet</b> (LEGO Store, Royal Copenhagen, central stops) and the <b>Nyhavn–Kongens Nytorv loop</b> (waterfront, dense stops). For the Stamp Rally: <b>LEGO Vimmelskaftet</b> is open 10:00–18:00, <b>LEGO Tivoli Gardens</b> 10:00–22:00. Collect your remaining stamps for the 5-stamp Pikachu encounter. <b>Hard stop at 16:30</b> — leave wherever you are.",
-      "<b>Sat — Mom's group · Tivoli → Vækst:</b> <a href='https://shop.tivoli.dk/en/billetter-og-tivolikort/entre' target='_blank' rel='noopener noreferrer'>Tivoli Gardens</a>, Vesterbrogade 3 — 10-min walk or short metro from CABINN. Buy tickets at tivoli.dk in advance to skip the queue (dynamic pricing, from ≈150 DKK in summer; verify before going). Leave Tivoli by <b>17:00</b> — taxi to Vækst is ~10–15 min. <b>All five people at Vækst at 17:30.</b>"
-    ]
+      "<b>Sat — Mom's group · Tivoli → Vækst:</b> <a href='https://shop.tivoli.dk/en/billetter-og-tivolikort/entre' target='_blank' rel='noopener noreferrer'>Tivoli Gardens</a>, Vesterbrogade 3 — 10-min walk or short metro from CABINN. Buy tickets at tivoli.dk in advance to skip the queue (⚠ dynamic pricing, from ≈150 DKK in summer — confirm at tivoli.dk before going). Leave Tivoli by <b>17:00</b> — taxi to Vækst is ~10–15 min. <b>All five people at Vækst at 17:30.</b>"
+    ],
+    "verified_on": "2026-06-08",
+    "shelf_life": "transit",
+    "source_url": "https://www.rejseplanen.dk"
   },
   {
     "type": "map",

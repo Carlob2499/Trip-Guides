@@ -52,5 +52,6 @@
     "verified_on": "2026-07-18"
   },
   "tabBudget": 8,
-  "archived": true
+  "archived": true,
+  "provenance": "strict"
 }

@@ -3,7 +3,10 @@
     "type": "panel",
     "group": "Essentials",
     "title": "Currency & how to pay",
-    "body": "<p>Denmark uses the <b>krone (DKK)</b> — not the euro. Rough mid-2026 guide rate (verify before you go): <b>100 DKK ≈ $15.50 USD</b>. Your day trips use different currencies: <b>100 SEK ≈ $10–11</b> (Sweden) and <b>100 NOK ≈ $9–10</b> (Norway).</p><p>Cards and contactless payments work essentially everywhere in Denmark — you may never need to touch cash. Tipping is not part of Danish culture; rounding up at a restaurant for genuinely good service is plenty, and no one expects it.</p>"
+    "body": "<p>Denmark uses the <b>krone (DKK)</b> — not the euro. Rate as of this check: <b>100 DKK ≈ $15.25 USD</b> (⚠ exchange rates move daily — verify again before you go). Your day trips use different currencies: <b>100 SEK ≈ $10.30</b> (Sweden) and <b>100 NOK ≈ $10.40</b> (Norway).</p><p>Cards and contactless payments work essentially everywhere in Denmark — you may never need to touch cash. Tipping is not part of Danish culture; rounding up at a restaurant for genuinely good service is plenty, and no one expects it.</p>",
+    "verified_on": "2026-07-23",
+    "shelf_life": "fx",
+    "source_url": "https://wise.com/us/currency-converter/dkk-to-usd-rate"
   },
   {
     "type": "budget",
@@ -23,13 +26,13 @@
         "label": "Food & coffee, per day",
         "basis": "day",
         "est": 55,
-        "note": "Restaurant mains ≈$25–48; bakeries and street food are much cheaper. Torvehallerne lunch ≈$12–20."
+        "note": "Restaurant mains ≈$25–48; bakeries and street food are much cheaper. Torvehallerne lunch ≈$12–20. (⚠ a personal spending estimate, not a single sourced figure.)"
       },
       {
         "label": "Local transport — City Pass Small (100 DKK/day)",
         "basis": "day",
         "est": 16,
-        "note": "100 DKK ≈ $15.50. Covers metro, bus, S-tog and harbour buses in zones 1–4 (including the airport). Check current price at dinoffentligetransport.dk."
+        "note": "100 DKK ≈ $15.25 at today's rate. Covers metro, bus, S-tog and harbour buses in zones 1–4 (including the airport). (⚠ check the current DKK price at dinoffentligetransport.dk — the pass fee itself, not just the conversion, can change.)"
       },
       {
         "label": "Sights & entries, per day",
@@ -40,7 +43,7 @@
         "label": "Flights — round trip",
         "basis": "trip",
         "est": 650,
-        "note": "NYC↔CPH runs roughly $400–1,200 by date and timing."
+        "note": "NYC↔CPH runs roughly $400–1,200 by date and timing. (⚠ airfare is dynamic — a planning range, not a quote.)"
       },
       {
         "label": "Go Nordic Cruiseline ferry — return cabin",
@@ -58,13 +61,19 @@
         "label": "GO Fest park ticket (200 kr per session)",
         "basis": "trip",
         "est": 31,
-        "note": "200 kr ≈ $31. Morning (9:00–13:00) or Afternoon (14:00–18:00) session. Includes full citywide access that day."
+        "note": "200 kr ≈ $31. Morning (9:00–13:00) or Afternoon (14:00–18:00) session. Includes full citywide access that day.",
+        "verified_on": "2026-06-08",
+        "shelf_life": "venue",
+        "source_url": "https://pokemongo.com/en/gofest/copenhagen/tickets"
       },
       {
         "label": "GO Fest Premier Access (optional add-on)",
         "basis": "trip",
         "est": 99,
-        "note": "640 kr ≈ $99. Exclusive collectible + voucher codes for 100+ in-game items. Set to 0 if skipping."
+        "note": "640 kr ≈ $99. Exclusive collectible + voucher codes for 100+ in-game items. Set to 0 if skipping.",
+        "verified_on": "2026-06-08",
+        "shelf_life": "venue",
+        "source_url": "https://pokemongo.com/en/gofest/copenhagen/tickets"
       },
       {
         "label": "Mom's group — canal tour + hop-on-hop-off (per person, 2 days)",
