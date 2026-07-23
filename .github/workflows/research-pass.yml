@@ -280,10 +280,16 @@ jobs:
 
               # P3: --network is required or the dead-link/photo gate never runs at all — an
               # auto-published guide could otherwise carry dead citations and still show PASS.
+              # The verify EXIT CODE is captured (not just its markdown text) because PASSED must
+              # gate on both signals: `nextStage=null` alone doesn't prove this LAST networked run
+              # was clean — content could be unverifiable/failing on this specific invocation.
+              set +e
               npm run verify -- --slug ${{ inputs.slug }} --markdown --network > /tmp/scorecard.md
+              VERIFY_EXIT=$?
+              set -e
               # your finish summary goes ABOVE the scorecard in the same file, not a separate one
               NEXT=$(node scripts/pipeline.mjs --slug ${{ inputs.slug }} --status --json | jq -r '.nextStage')
-              PASSED=false; [ "$NEXT" = "null" ] && PASSED=true   # true only if step (d) above actually checkpointed `verified`
+              PASSED=false; [ "$NEXT" = "null" ] && [ "$VERIFY_EXIT" -eq 0 ] && PASSED=true   # true only if step (d) graduated AND this networked verify run itself PASSed
               bash scripts/land-branch.sh "research/${{ inputs.slug }}" main \
                 "Research pass: ${{ inputs.slug }}${{ inputs.section != '' && format(' ({0})', inputs.section) || '' }}" \
                 /tmp/scorecard.md "$PASSED" \
