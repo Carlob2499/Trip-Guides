@@ -57,7 +57,7 @@ hue, not the same DOM node. OG images, print styles, `/progress/`, `/health/` al
 untouched (no shared CSS beyond base.css's unrelated root-crossfade). Reduced-motion fallback
 verified clean (zero `pageerror`s, no VT animation).
 
-## Session V6 — QA, performance, and the honest pass
+## Session V6 — QA, performance, and the honest pass — ✅ DONE (2026-07-23)
 
 **Goal:** prove the overhaul cost nothing it shouldn't.
 **Do:** perf budget + Lighthouse against main baseline (document numbers in the session
@@ -67,6 +67,16 @@ MOTION.md rewritten so the doctrine describes what NOW exists (the doc is the ru
 must not drift). File follow-up issues for anything consciously deferred.
 **Exit:** ship loop; MOTION.md current; HANDOFF closes the plan with an honest "what changed /
 what it cost / what was deferred" summary.
+
+**Shipped:** full findings + fixes recorded in `docs/MOTION.md`'s own "V6 — QA and the honest
+pass" section (the durable record — not duplicated here). Short version: refreshed 8 stale
+visual baselines (dated to before V1, reviewed each by eye first), fixed a real a11y landmark
+regression and a real WCAG contrast failure found by actually running the full suite together
+for the first time, reworded two label/name-mismatches, recorded first-ever Lighthouse numbers
+for this site (90s across the board except a noisy perf/TBT reading and a steady ~0.244 CLS —
+filed as issue #19), confirmed the perf budget gate passes with headroom, and confirmed
+offline/reduced-motion/JS-off all still clean. Filed 3 GitHub issues (#17, #18, #19) for
+findings genuinely out of this plan's scope rather than fixing unrelated code under its banner.
 
 ## Model & time budget (remaining)
 
