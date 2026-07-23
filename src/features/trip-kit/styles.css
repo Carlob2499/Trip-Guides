@@ -41,7 +41,12 @@
 .tk-speak:hover { border-color: var(--accent); color: var(--accent); }
 .tk-speak:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
-/* Entry requirements — one row per traveler home country. */
+/* Entry requirements — one row per traveler home country; a picker appears only when the
+   guide has entry rows for more than one passport country (single-row guides skip it). */
+.tk-entry-picker { display: flex; flex-direction: column; gap: .25rem; margin: 0 0 .7rem; }
+.tk-entry-picker-label { font-family: var(--font-data); font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.tk-entry-select { border: 1px solid var(--rule2, var(--rule)); border-radius: 4px; padding: .4rem .5rem; font: inherit; font-size: .92rem; background: var(--card); color: var(--ink); }
+.tk-entry-select:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
 .tk-entry-rows { display: flex; flex-direction: column; gap: .8rem; margin-top: .3rem; }
 .tk-entry-row { border-top: 1px solid var(--rule); padding-top: .7rem; }
 .tk-entry-country { margin: 0 0 .2rem; font-family: var(--font-data); font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }

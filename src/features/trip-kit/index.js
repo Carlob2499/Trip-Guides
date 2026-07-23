@@ -4,3 +4,4 @@
 
 export { deriveArrivalPlan } from "./model/arrival";
 export { initSpeak } from "./ui/speak.js";
+export { initEntrySelect } from "./ui/entry-select.js";

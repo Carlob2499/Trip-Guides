@@ -31,9 +31,19 @@ const hasEntry = !!(entry && entry.length);
     <section class="tk-card" aria-labelledby="tk-entry-h">
       <p class="tk-card-eyebrow">🛂 Entry requirements</p>
       <h3 class="tk-card-title" id="tk-entry-h">Before you book</h3>
+      {entry!.length > 1 && (
+        <label class="tk-entry-picker">
+          <span class="tk-entry-picker-label">Your passport</span>
+          <select class="tk-entry-select" id="tkEntrySelect">
+            {entry!.map((e: any, i: number) => (
+              <option value={String(i)}>{e.homeCountry}</option>
+            ))}
+          </select>
+        </label>
+      )}
       <div class="tk-entry-rows">
-        {entry!.map((e: any) => (
-          <div class="tk-entry-row">
+        {entry!.map((e: any, i: number) => (
+          <div class="tk-entry-row" data-entry-idx={String(i)} hidden={entry!.length > 1 && i !== 0}>
             <p class="tk-entry-country">{e.homeCountry}</p>
             <p class="tk-entry-visa">{e.visa}</p>
             {e.passportValidity && <p class="tk-entry-passport">Passport: {e.passportValidity}</p>}
@@ -113,10 +123,11 @@ const hasEntry = !!(entry && entry.length);
 </div>
 
 <script>
-  import { initSpeak } from "../features/trip-kit/index.js";
+  import { initSpeak, initEntrySelect } from "../features/trip-kit/index.js";
+  const initAll = () => { initSpeak(); initEntrySelect(); };
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => initSpeak(), { once: true });
+    document.addEventListener("DOMContentLoaded", initAll, { once: true });
   } else {
-    initSpeak();
+    initAll();
   }
 </script>
