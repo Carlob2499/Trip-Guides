@@ -147,6 +147,16 @@
     "source_url": "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/south-korea-travel-advisory.html",
     "verified_on": "2026-07-18"
   },
+  "entry": [
+    {
+      "homeCountry": "United States",
+      "visa": "Visa-free for tourism, stays up to 90 days. K-ETA (Korea's electronic travel authorization) is temporarily waived for US citizens through Dec 31, 2026 — without it, complete the digital e-Arrival Card within 72 hours of arrival instead.",
+      "passportValidity": "Valid through your date of entry is Korea's actual rule; 6+ months remaining is the safe international standard to travel on regardless.",
+      "note": "The K-ETA waiver is an annual extension, not permanent — if this trip were happening after 2026, K-ETA would need re-confirming before booking.",
+      "source_url": "https://atlanta.mofa.go.kr/us-atlanta-en/brd/m_24389/view.do?seq=28",
+      "verified_on": "2026-07-23"
+    }
+  ],
   "tabBudget": 11,
   "archived": true,
   "provenance": "strict"

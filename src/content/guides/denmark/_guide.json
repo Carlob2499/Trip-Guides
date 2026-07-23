@@ -51,6 +51,16 @@
     "source_url": "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/denmark-travel-advisory.html",
     "verified_on": "2026-07-18"
   },
+  "entry": [
+    {
+      "homeCountry": "United States",
+      "visa": "Visa-free for tourism, stays up to 90 days in any 180-day period across the whole Schengen area — this trip's Malmö and Oslo legs count on the same 90 days, not separately.",
+      "passportValidity": "Valid at least 3 months beyond your Schengen departure date, and issued within the last 10 years.",
+      "note": "ETIAS (a pre-travel authorization for visa-exempt visitors) isn't live yet — it's expected to launch in Q4 2026, after this trip's Jun 2026 dates. A trip planned for after ETIAS launches would need to add that step.",
+      "source_url": "https://europa.eu/youreurope/citizens/travel/entry-exit/non-eu-nationals/index_en.htm",
+      "verified_on": "2026-07-23"
+    }
+  ],
   "tabBudget": 8,
   "archived": true,
   "provenance": "strict"
