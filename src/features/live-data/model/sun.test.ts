@@ -89,7 +89,8 @@ describe("fmtClock", () => {
   it("falls back to the system/UTC format when the time zone string is invalid", () => {
     const d = new Date(Date.UTC(2026, 6, 9, 3, 5));
     // Intl.DateTimeFormat throws RangeError on an unrecognized IANA zone — fmtClock's
-    // catch branch re-formats without a timeZone rather than letting that throw surface.
+    // catch branch re-formats in UTC (like the no-zone default) rather than letting that
+    // throw surface, so both render the same deterministic string on any host.
     expect(fmtClock(d, "Not/A_Real_Zone")).toBe(fmtClock(d));
   });
 });

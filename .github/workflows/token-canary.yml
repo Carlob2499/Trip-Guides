@@ -1,0 +1,52 @@
+name: Token canary
+
+# The entire autonomous content pipeline — research-pass, recert, modify — runs on ONE secret:
+# CLAUDE_CODE_OAUTH_TOKEN (a Claude Max `claude setup-token` credential). Those tokens expire, and
+# when this one does, every agent workflow fails SILENTLY: deploy.yml, test.yml, and the audits keep
+# passing (none of them use an agent), so nothing turns red — the pipeline just quietly stops
+# generating and self-freshening guides. This canary is the smoke alarm: a tiny weekly Haiku call
+# that costs effectively nothing on the Max plan, files a loud tracking issue the moment the token
+# stops working, and closes it again automatically once a rotated token works.
+on:
+  schedule:
+    # Mondays 07:37 UTC — off-the-hour, and after recert's 06:00 sweep so a dead token is caught
+    # the same morning the week's real agent work would have failed.
+    - cron: "37 7 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # The probe: the smallest possible agent call — Haiku, no tools, one-word reply. If the token
+      # is dead the action fails here; continue-on-error lets the next step branch on the outcome
+      # instead of aborting the job before it can file the alert.
+      - name: Probe the OAuth token
+        id: probe
+        continue-on-error: true
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          claude_args: --model claude-haiku-4-5
+          prompt: |
+            Reply with exactly the two characters: OK
+            Do not use any tools. Do not say anything else.
+
+      # File / update / close the tracking issue based on whether the probe succeeded.
+      - name: Alert or clear
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          OUTCOME: ${{ steps.probe.outcome }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: node scripts/token-canary-report.mjs

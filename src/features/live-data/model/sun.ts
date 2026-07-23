@@ -113,9 +113,13 @@ export function daylightLeftLabel(now: Date, times: SolarTimes): string | null {
 
 export function fmtClock(d: Date | null, tzIana?: string | null): string {
   if (!d) return "—";
+  // Absent or invalid time zone → UTC, never the host's local zone. Every production caller passes
+  // a real IANA zone; the fallback only matters for determinism — a clock formatter must render the
+  // same string on a UTC CI runner and on a UTC-offset dev machine, not silently follow whichever
+  // zone the process happens to run in.
   try {
-    return new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: tzIana || undefined }).format(d);
+    return new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: tzIana || "UTC" }).format(d);
   } catch (_) {
-    return new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false }).format(d);
+    return new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "UTC" }).format(d);
   }
 }

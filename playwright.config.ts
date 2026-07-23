@@ -1,11 +1,12 @@
-/* Visual-regression harness (convergence Phase 2). Screenshots of the built site
-   diffed against committed baselines — catches the class of bug unit tests
-   structurally can't (layout collapse, colour collisions, motion regressions;
-   WayPoint-V2's retrospective counted five). Deterministic by construction:
-   fixed clock, external requests blocked, animations disabled (see the spec).
-   Runs against `astro preview` on :4322 — the ONLY trusted preview per CLAUDE.md
-   (OneDrive HMR serves stale CSS on `astro dev`). CI builds first; locally run
-   `npm run build` before `npm run test:visual`. */
+/* Playwright harness for the site's behavioral + accessibility E2E specs (tests/visual/).
+   The screenshot-diff suite that used to live here was removed — it failed on every intentional
+   visual change, which is exactly the wrong signal. What remains is real-behavior coverage: the
+   axe accessibility gate (a11y.spec.ts, CI-gated via .github/workflows/a11y.yml) plus behavioral
+   specs (sos, offline, share-panel, itinerary, route-opt, overture, field-tools) run locally with
+   `npm run test:e2e`. Deterministic by construction: fixed clock, external requests blocked (see
+   each spec). Runs against `astro preview` on :4322 — the ONLY trusted preview per CLAUDE.md
+   (OneDrive HMR serves stale CSS on `astro dev`). CI builds first; locally run `npm run build`
+   before `npm run test:e2e`. */
 import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
@@ -14,13 +15,6 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? "github" : "list",
-  expect: {
-    toHaveScreenshot: {
-      // Tolerate antialiasing/font-raster drift across machines, not layout drift.
-      maxDiffPixelRatio: 0.02,
-      animations: "disabled",
-    },
-  },
   use: { baseURL: "http://localhost:4322" },
   webServer: {
     // The port MUST be passed: `astro preview` defaults to 4321, so a bare `npm run preview`

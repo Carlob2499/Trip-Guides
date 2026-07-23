@@ -41,6 +41,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # W0/S2: parse-modify-issue.mjs now SANITIZES the `section` field (first line only, length-
+      # capped, injection-punctuation allowlisted) before it reaches GITHUB_OUTPUT — so the
+      # `Section hint:` interpolation in the agent prompt below can never carry a multi-line
+      # prompt-injection payload from a public issue body. The `change` text stays DATA-channel
+      # only (change.txt), never interpolated. Both untrusted fields are now neutralized.
       - name: Parse the change request
         id: req
         env:

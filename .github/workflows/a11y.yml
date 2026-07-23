@@ -1,0 +1,37 @@
+name: Accessibility
+
+# The axe-core accessibility gate — hub + both guides, zero moderate/serious/critical violations
+# (tests/visual/a11y.spec.ts). This is GUIDE_RUBRIC row 13 and the design doctrine's a11y floor,
+# so it stays a hard, blocking gate.
+#
+# It used to ride inside visual.yml alongside the screenshot-diff suite. That pixel-diff gate was
+# removed (it failed on every intentional visual change — the whole point of a design change is that
+# pixels move, so a baseline compare cried wolf on every legitimate edit). This slim workflow keeps
+# the accessibility gate — which catches real, non-cosmetic regressions — without any baseline
+# machinery to drift or re-arm. The other Playwright specs under tests/visual/ (sos, offline,
+# share-panel, itinerary, route-opt, overture, field-tools) are behavioral E2E kept for local
+# `npm run test:e2e` runs; they aren't CI-gated here while their known flakes (issues #17/#18) stand,
+# so this gate can never go red for a reason unrelated to accessibility.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  a11y:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      # playwright.config.ts's webServer boots `astro preview` on :4322 automatically; the spec
+      # runs axe against the built dist under the /Trip-Guides base path.
+      - run: npx playwright test tests/visual/a11y.spec.ts

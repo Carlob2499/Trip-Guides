@@ -20,6 +20,7 @@ on:
       - .github/workflows/research-pass.yml
       - .github/workflows/modify-guide.yml
       - .github/workflows/deploy.yml
+      - .github/workflows/token-canary.yml
 
 # Label management lives under the issues API — that's all this needs.
 permissions:
@@ -70,4 +71,8 @@ jobs:
           gh label create auto-published \
             --color 5319E7 \
             --description "A guide auto-published (verified) with no human approval — a vetoable heads-up" \
+            --force
+          gh label create token-canary \
+            --color B60205 \
+            --description "The weekly OAuth-token canary failed — the agent pipeline is down until the token is rotated" \
             --force

@@ -9,7 +9,7 @@
     "preview": "astro preview",
     "test": "vitest run",
     "coverage": "vitest run --coverage",
-    "test:visual": "playwright test",
+    "test:e2e": "playwright test",
     "typecheck": "astro check",
     "readiness": "node scripts/guide-readiness.mjs",
     "verify": "node scripts/verify-guide.mjs",
