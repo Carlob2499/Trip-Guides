@@ -70,7 +70,7 @@ const actualFor = (date: string) =>
           {d.waypoints && d.waypoints.length > 0 && (
             <ol class="stops" aria-label="Stops this day">
               {d.waypoints.map((w: any, wi: number) => (
-                <li class="stop">
+                <li class="stop" data-lat={Number.isFinite(w.lat) ? w.lat : undefined} data-lng={Number.isFinite(w.lng) ? w.lng : undefined}>
                   <span class="stop-num">{String(wi + 1).padStart(2, "0")}</span>
                   <span class="stop-main">
                     <span class="stop-name">{w.name}</span>
