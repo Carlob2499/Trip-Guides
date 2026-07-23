@@ -28,10 +28,10 @@
 `PLAN_TRAVELER_FEATURES.md` (marked "moved" there); F1/F2/F4/F5/F6/F7 remain there, sequenced
 after it. `PLAN_VISUAL_OVERHAUL.md` still holds V5 (morph continuity) + V6 (QA/perf).
 
-- **E1 is DONE** — the fail-closed `--network` publish gate. See "Where we left off" below.
+- **E1 and E3 are DONE.** E2 remains deferred. See "Where we left off" below for E3.
 - **E2 is DEFERRED (creator's call, 2026-07-23) — no trip planned yet.** Not dropped: resume
   it the moment a real destination/party/dates exist to plan (file that guide's New-guide issue,
-  then pick this plan back up at E2). The active sequence is now **E3 → E4 → E5 → E6 → E7 → E8**.
+  then pick this plan back up at E2). The active sequence is now **E4 → E5 → E6 → E7 → E8**.
 - **Creator decisions locked 2026-07-22 (don't re-ask):** Korea AND Denmark both backfill
   provenance and flip strict (Denmark via fresh re-verification dated today — never invented
   backdates) · route optimizer = tap-to-apply (localStorage per-device, never edits guide
@@ -54,31 +54,36 @@ caveat; also E8 item 5).
 
 ## Where we left off
 
-**E1 shipped this session (3 commits, `fix(pipeline):` prefix):**
-1. `verify-guide.mjs` gained an `unverifiable` content state — a Commons API outage or a total
-   link-probe outage used to leave `dead`/`missing` both empty, which read as a clean pass (the
-   fail-open hole). Now it blocks (`content-unverifiable`); a single flaky link stays advisory.
-   5 new tests, 28/28 green in that file.
-2. `research-pass.yml` gained step (c2), a FINAL NETWORK GATE between the offline
-   self-correction loop and auto-graduation — the offline rounds never checked links/photos, so
-   the loop could reach "PASS" having proven nothing about content.
-3. `research-pass.yml`'s landing snippet now derives `PASSED` from the actual verify exit code,
-   not `nextStage=null` alone.
-`graduate-guide.yml` (manual path) needed no change — already gates on the raw exit code, so it
-inherits the fix for free. Table-top trace of both paths (dead-link/outage/clean) is in the
-third commit's body. Ship loop ran clean: build, `npm test` (707/707), typecheck (0 errors),
-workflow YAML re-read + sanity-parsed. No UI touched, so no `astro preview` pass was needed.
+**E1** (3 commits): `verify-guide.mjs` gained an `unverifiable` content state so a Commons/
+network outage blocks instead of reading as a clean pass; `research-pass.yml` gained a final
+networked gate before auto-graduation and derives `PASSED` from the real verify exit code, not
+the checkpoint alone. `graduate-guide.yml` inherited the fix for free (already gated on exit
+code). Ship loop clean, 707/707 tests.
 
-**E2 deferred 2026-07-23 — no trip planned yet.** It still logically sits right after E1 (the
-real run should exercise the fixed gate) but needs a genuine destination/party/dates, which
-don't exist. It stays in the plan, unscheduled; resume it the moment a real trip does.
+**E2 deferred** — no trip planned. Stays in the plan, unscheduled; resume the moment one exists.
 
-**Next up: E3 — promote the undated-figure detector to blocking on strict guides.** Sonnet.
-No clarifiers to ask (settled by the Field Report review) — but E3 requires sweeping the
-already-strict, already-published `us.json` in the SAME session so `main` never goes red once
-the stricter gate is live. Read the session's full "Do" list in the plan before starting.
+**E3** (1 commit): `check-research.mjs`'s undated-figure detector is now conditional on
+`guide.provenance === "strict"` — non-strict guides unchanged (info-only); a strict guide gets a
+blocking `warn`, closing the gap where the schema gate only ever caught an undated `≈`, never a
+confidently bare figure. `⚠` stays exempt (matches the schema's own ≈/⚠ distinction); `≈` is
+NOT exempt for item-level facts (outside the schema's DATED_TYPES). 6 new tests, all 6 existing
+D2 tests pass unchanged.
 
-**Re-prompt the creator with:** "E1 (fail-closed publish gate) is shipped and pushed; E2 (the
-real pipeline run) is deferred until a trip's planned. Next up is E3 — tightening the strict
-gate to catch undated hours/prices, plus sweeping `us.json` so it doesn't break under the
-stricter rule (Sonnet, ~1-2h). Start E3?"
+**The required same-session sweep of `us.json`** (the only strict+published guide) found real
+issues, verified live rather than guessed: the Airport Mesa "$3 upper lot" fee has no official
+source (only travel-blog/forum agreement — T2, not enough) → `⚠`-flagged instead of dated.
+Wildcraft Cafe's "open daily 8am–3pm" conflicted with current listings (weekend hours differ) →
+the specific wrong claim was removed, not just flagged. US tipping figures are genuinely-varying
+convention → `⚠`-flagged. `verified` stamp got an honest addendum. `us` now PASSes
+(0 blocking, 3 advisory); mexico/portugal's pre-existing NEEDS WORK (empty scaffolds) is
+unrelated, as the plan anticipated. Full ship loop clean, 713/713 tests.
+
+**Next up: E4 — Korea provenance backfill → `provenance:"strict"`.** Sonnet, guide-author
+skill. Its clarifier (value corrections vs. dates-only when today's re-check disagrees with a
+shipped figure) needs `AskUserQuestion` before starting — read the session block in the plan.
+
+**Re-prompt the creator with:** "E1 and E3 are shipped and pushed (E3 also found and honestly
+fixed two real stale/unconfirmed facts in the us guide during its required sweep — not just a
+gate change). E2 stays deferred. Next up is E4 — the Korea provenance backfill to strict
+(Sonnet, guide-author skill, ~3-4h): one clarifier first (apply value corrections when today's
+re-check disagrees with the shipped figure, or dates-only?). Start E4?"
