@@ -34,7 +34,7 @@ Full session narratives: this file's git history + HANDOFF snapshots.
   honestly: hero parallax layer, verified-stamp settle (no target exists). Open item: eyeball
   strokes over REAL cover photos post-deploy; bump `.11` if faint.
 
-## Session V5 — Morph continuity (the route continues)
+## Session V5 — Morph continuity (the route continues) — ✅ DONE (2026-07-23)
 
 **Goal:** hub→guide navigation reads as one continuous journey.
 **Do:** extend the existing cross-document View-Transition morph: the tapped card's palette
@@ -42,6 +42,20 @@ accent carries into the guide masthead arrival; the Overture route line's exit s
 guide's story-intro rail entry (the signature literally continues). Verify OG images, print
 styles, and `/progress/`+`/health/` pages are untouched. Fallback (no VT support) stays clean.
 **Exit:** ship loop; morph verified on all three guides; HANDOFF.
+
+**Shipped:** the accent carry is a real shared-element morph — `.hubcard-bar` (hub card) and
+`.masthead-rule` (guide masthead) now share `view-transition-name:accent-<slug>`, so the trip's
+colour visibly travels across the navigation (confirmed live via Playwright: mid-transition
+screenshot shows the accent bar positioned exactly at its morph target, and the settled masthead
+computed a real per-guide accent, not a default). **Deviated honestly on the route-line half:**
+a literal shared element for "the route line's exit state" isn't feasible — `.ov-route-path` has
+no tap-time hook and is normally scrolled off-screen by the time a card is tapped (confirmed via
+research agent). Shipped the honest equivalent instead: `.mast-story-seg::after` (the story-rail
+fill) now uses the guide's own `var(--accent)` instead of a fixed white, so the same colour that
+drew the route down the hub arrives again as the trip's days draw in on the guide side — same
+hue, not the same DOM node. OG images, print styles, `/progress/`, `/health/` all confirmed
+untouched (no shared CSS beyond base.css's unrelated root-crossfade). Reduced-motion fallback
+verified clean (zero `pageerror`s, no VT animation).
 
 ## Session V6 — QA, performance, and the honest pass
 

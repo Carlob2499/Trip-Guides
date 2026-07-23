@@ -438,7 +438,11 @@ const tripSummary = buildSummary(guide);
           <a class="mast-credit" href={heroCredit} target="_blank" rel="noopener" aria-label="Photo source on Wikimedia Commons">Photo: Wikimedia Commons ↗</a>
         )}
       </div>
-      <div class="masthead-rule" aria-hidden="true"></div>
+      {/* V5: shares a view-transition-name with the hub card's `.hubcard-bar` — the accent
+          literally morphs from the card into this rule on arrival, rather than merely
+          coincidentally matching (both sides compute the same accent independently via
+          accentForGuide(), but only this shared name makes the transition itself carry it). */}
+      <div class="masthead-rule" aria-hidden="true" style={`view-transition-name:accent-${ogSlug}`}></div>
 
       <!-- What's-Next banner — populated client-side against the device clock;
            FIRST in the masthead flow because it's the most actionable element

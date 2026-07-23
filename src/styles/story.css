@@ -7,7 +7,13 @@
    Everything lives under body.story-playing — a class JS adds only on the first
    visit and always removes — so content is NEVER left hidden if the script doesn't
    run. Disabled under prefers-reduced-motion (JS short-circuits AND this CSS no-ops).
-   docs/MOTION.md. */
+   docs/MOTION.md.
+
+   V5: the segment fill is the guide's OWN accent, not a fixed white — the hub's
+   Overture route line (also accent-coloured, hub-motion.css) has already scrolled
+   off-screen by the time a card is tapped, so no literal shared element is possible;
+   this is the honest version of "the route continues" — the same colour, arriving
+   here as the trip's days draw in, one at a time, same as the route drew down the hub. */
 
 /* ── Segmented day rail — the signature. Segments = days (structure is information).
    Absolute at the TOP OF THE COVER (not the app chrome): the trip's days laid over
@@ -26,7 +32,7 @@ body.story-playing .mast-story-rail{opacity:1}
   background:rgba(255,255,255,.32);
 }
 .mast-story-seg::after{
-  content:"";position:absolute;inset:0;width:0;border-radius:3px;background:#fff;
+  content:"";position:absolute;inset:0;width:0;border-radius:3px;background:var(--accent);
 }
 /* Each segment fills after the ones before it — a story advancing day by day. */
 body.story-playing .mast-story-seg::after{

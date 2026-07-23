@@ -295,7 +295,12 @@ const contourLayers = [
                 <span class="hubcard-cover-initial">{g.data.country.slice(0, 1)}</span>
               </span>
             )}
-            <span class="hubcard-bar" aria-hidden="true"></span>
+            {/* V5: the accent bar morphs into the guide masthead's own accent rule
+                (`.masthead-rule`) on navigation — the palette literally carries across,
+                not just coincidentally matches. Same duplicate-name guard as the cover
+                photo above (the featured hero has no bar of its own to share the name with,
+                so only its grid-card twin gets one). */}
+            <span class="hubcard-bar" aria-hidden="true" style={g.id === heroId ? undefined : `view-transition-name:accent-${g.id}`}></span>
             <span class="hubcard-body">
               <span class="hubcard-top">
                 <span class="hubcard-country">{g.data.country}</span>

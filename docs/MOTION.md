@@ -14,7 +14,11 @@ days**. It appears exactly three ways, and they are the same object:
 2. **Story-mode itinerary** — the rail becomes navigation in the full-screen one-day-per-view
    deck (`story-mode.js` + `story-mode.css`).
 3. **The card→hero morph** — the guide "opens" from its hub card via cross-document View
-   Transitions (`transitions.css`).
+   Transitions (`transitions.css`). **V5:** the hub card's accent bar (`.hubcard-bar`) shares a
+   `view-transition-name` with the masthead's own accent rule (`.masthead-rule`) — the trip's
+   colour literally carries across the navigation, not just coincidentally matches (both sides
+   already computed the same accent independently via `accentForGuide()`; the shared name is
+   what makes the transition itself carry it).
 
 Anything new that wants to be flashy must strengthen this signature, not compete with it.
 (Design rule: spend the boldness in one place.)
@@ -24,7 +28,8 @@ Anything new that wants to be flashy must strengthen this signature, not compete
 | Motion | Mechanism | Owner |
 |---|---|---|
 | Card → masthead morph | cross-doc View Transitions, `cover-<slug>` names | `transitions.css` |
-| First-open day-story | CSS keyframes under `body.story-playing` | `story.css` + `story-open.js` |
+| Card accent bar → masthead rule morph | cross-doc View Transitions, `accent-<slug>` names | `index.astro` + `GuideLayout.astro` |
+| First-open day-story | CSS keyframes under `body.story-playing`; segment fill is the guide's own `--accent` (V5 — echoes the hub Overture route line's colour, since the route itself has scrolled off-screen by tap time and can't be a literal shared element) | `story.css` + `story-open.js` |
 | Masthead arrival (repeat visits) | GSAP timeline (lazy import) | `gsap-hero.js` |
 | Hero parallax + Ken Burns | rAF transform (JS owns the transform) | `hero-parallax.js` |
 | Scroll reveals (cards/days/sights) | **native** `animation-timeline: view()`; IO fallback | `scroll-motion.css` / `reveal.js` |
