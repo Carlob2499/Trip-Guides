@@ -1,0 +1,76 @@
+name: Skill evals
+
+# Regression gate for the waypoint-guide-author skill (W3 IMPROVE loop). Runs on any PR that edits
+# .claude/skills/** (so the monthly skill-retro PR and any hand edit both trigger it) and on demand.
+# It runs the skill's eval prompt headless — a real agent pass against the CURRENT skill text — then
+# asserts the result two ways:
+#   · DETERMINISTIC (scripts/run-skill-evals.mjs): price propagated to every touchpoint, no stale
+#     value, draft flag intact. Blocking — a red job means the skill edit regressed a mechanical
+#     property. (Proven to catch a sabotaged propagation by run-skill-evals.test.mjs.)
+#   · JUDGMENT (a Haiku judge): the fuzzy assertions from evals.json (continuity evidenced,
+#     completion report present). Advisory — printed for the maker.
+#
+# Currently wires eval 2 (the korea SPAREX price change) — deterministic, cheap, high-signal, and
+# needs no fixture setup. Eval 1 (germany Money-section fill) additionally needs a throwaway germany
+# scaffold; it is a documented follow-up, NOT silently dropped. The agent edits korea only in the
+# runner's working tree and nothing is committed, so main's korea guide is never touched.
+on:
+  pull_request:
+    paths:
+      - .claude/skills/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  eval2:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Run eval 2 (korea SPAREX price change) against the current skill
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          claude_args: |
+            --model claude-sonnet-5
+            --allowedTools Bash,Read,Write,Edit,Glob,Grep
+          # The eval prompt is evals.json eval id 2, verbatim, plus the skill-invocation preamble the
+          # real pipeline uses. Do NOT commit — this is an evaluation, the working tree is discarded.
+          prompt: |
+            Use the waypoint-guide-author skill: read .claude/skills/waypoint-guide-author/SKILL.md and
+            its references/, and follow them exactly (this is the "Edit an existing guide" mode).
+
+            EVAL TASK: The SPAREX Dongdaemun jimjilbang in the korea guide changed its daytime entry
+            price to ₩14,000 (enter by 20:00). Update the guide (src/content/guides/korea/ — find the
+            group file the fact lives in). Do the mandatory continuity sweep so EVERY touchpoint of
+            the price (budget note AND Day 1 body) is updated, carry the verification state on the
+            changed figure, and end with a completion report. Do NOT commit or open a PR — just make
+            the edits in the working tree.
+
+      - name: Deterministic checks (blocking)
+        run: node scripts/run-skill-evals.mjs --eval=2
+
+      - name: Judgment checks (advisory Haiku judge)
+        continue-on-error: true
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          claude_args: |
+            --model claude-haiku-4-5
+            --allowedTools Bash,Read,Grep
+          prompt: |
+            Judge the korea guide edit just made (see `git diff` in the working tree) against these
+            two assertions from the skill eval. Answer each strictly PASS or FAIL with one sentence:
+            1. continuity-evidence: the change was swept across the guide, not a single line edited.
+            2. completion-report-present: a completion summary (flagged / omitted / conflicts) was
+               produced. (Check the agent's output above and the edited files.)
+            Print a final "JUDGE: <n>/2 pass". This step is advisory — it never fails the job.

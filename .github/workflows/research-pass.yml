@@ -338,3 +338,24 @@ jobs:
             Never touch any guide other than
             src/content/guides/${{ inputs.slug }}.json (or its split-directory equivalent) and its
             guides-intake/${{ inputs.slug }}.md + .state.json + src/data/palettes/${{ inputs.slug }}.json.
+
+            FINALLY, write a short run report to `run-report.md` (repo root, gitignored — do NOT
+            commit it): a `## Run report` heading then 3-5 bullets — outcome (published / draft /
+            stuck), roughly how many searches you ran, anything the critic/bar-test caught, and any
+            place the skill or its references slowed you down or were unclear. This feeds the
+            monthly skill-retro; be concrete.
+
+      # W3: deposit a run report on the pipeline ledger issue regardless of how the agent finished,
+      # so the skill-retro proposer has evidence to reason over. `|| true` — the ledger never fails
+      # the run.
+      - name: Append run report to the ledger
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          WORKFLOW: research-pass
+          SLUG: ${{ inputs.slug }}
+          MODEL: ${{ inputs.model || 'claude-sonnet-5' }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          NOTE_FILE: run-report.md
+        run: node scripts/append-run-report.mjs || true

@@ -173,3 +173,22 @@ jobs:
             src/content/guides/${{ matrix.slug }}/ (split guide: _guide.json + its NN-*.json section
             files — `ls` the directory to find which files actually hold the flagged facts) — and its
             guides-intake/${{ matrix.slug }}.md. Do not touch any other guide.
+
+            FINALLY, write a short run report to `run-report.md` (repo root, gitignored — do NOT
+            commit it): a `## Run report` heading then 3-5 bullets — what you re-verified and whether
+            each changed / was confirmed / was downgraded, roughly how many searches, and any place
+            the skill slowed you down. This feeds the monthly skill-retro; be concrete.
+
+      # W3: deposit a run report on the pipeline ledger issue (one per matrix guide), so the
+      # skill-retro proposer has evidence. `|| true` — the ledger never fails the run.
+      - name: Append run report to the ledger
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          WORKFLOW: recert
+          SLUG: ${{ matrix.slug }}
+          MODEL: claude-sonnet-5
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          NOTE_FILE: run-report.md
+        run: node scripts/append-run-report.mjs || true

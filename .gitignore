@@ -12,3 +12,5 @@ playwright-report/
 coverage/
 # W2 feedback-export: the agent's working file carries freeform (private) — never committed.
 feedback-export.working.json
+# W3 run ledger: the agent's per-run report is posted to an issue, never committed to the guide PR.
+run-report.md

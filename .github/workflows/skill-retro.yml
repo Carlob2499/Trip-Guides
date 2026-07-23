@@ -1,0 +1,78 @@
+name: Skill retro (IMPROVE loop)
+
+# The self-improvement proposer (W3). Monthly, an agent reads the pipeline run ledger (the issue
+# append-run-report.mjs maintains) plus any field reports, and proposes edits to the
+# waypoint-guide-author skill — each citing the SPECIFIC run evidence that motivated it (a
+# repeated critic catch, a recurring skill-friction note, a guide that took too many attempts). It
+# opens a REVIEW PR; the maker decides. Never auto-merges.
+#
+# Guard: because a skill edit can regress guide quality, the PR must pass skill-evals.yml (the wired
+# regression evals) before the maker reviews — the eval workflow runs automatically on any PR that
+# touches .claude/skills/**, so this PR triggers it by construction.
+on:
+  schedule:
+    - cron: "0 9 1 * *" # 09:00 UTC on the 1st of each month
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+
+jobs:
+  retro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Configure git identity
+        run: |
+          git config user.name  "waypoint-retro[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Start the retro branch
+        run: git checkout -b "retro/skill-${{ github.run_id }}"
+      - name: Run retro agent
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Reading a ledger and proposing careful, evidence-cited skill edits is Sonnet work.
+          claude_args: |
+            --model claude-sonnet-5
+            --allowedTools Bash,Read,Write,Edit,Glob,Grep
+          prompt: |
+            You are proposing improvements to the waypoint-guide-author skill, as a REVIEW PR the
+            maker will decide on. Evidence-driven only — never edit the skill on a hunch.
+
+            1. Read the pipeline run ledger (the evidence): find the open issue titled
+               "📒 Pipeline run ledger" and read its comments —
+                 gh issue list --search '"📒 Pipeline run ledger" in:title' --state open --json number \
+                   --jq '.[0].number'
+               then `gh issue view <n> --comments`. Also read docs/E2_FIELD_REPORT.md if it exists,
+               and skim learnings/*.md and docs/TRAVELER_PATTERNS.md for recurring themes.
+
+            2. Look for PATTERNS across multiple runs, not one-offs: the same critic catch recurring,
+               the same skill-friction note from several agents, guides repeatedly needing many
+               attempts for the same reason, a verification rule that keeps being misapplied.
+
+            3. Read the skill: .claude/skills/waypoint-guide-author/SKILL.md and its references/
+               (verification-rules.md, research-efficiency.md, block-types.md).
+
+            4. Propose MINIMAL, targeted edits that address the observed patterns. For EACH edit,
+               the PR body must cite the specific ledger evidence that motivated it (quote the
+               recurring note / name the runs). If the ledger shows no clear pattern, propose NOTHING
+               and say so — an honest "no change warranted this month" is a valid, good outcome. Do
+               not invent problems to look busy.
+
+            5. Land as a REVIEW PR — never auto-merge:
+                 git add -A && git commit -m "retro: skill edits from ledger evidence" && git push -u origin HEAD
+                 gh pr create --title "Skill retro: <one-line theme>" --body "<evidence-cited rationale per edit>"
+               If you propose nothing, do NOT open a PR — just print your reasoning and exit. Touch
+               only .claude/skills/waypoint-guide-author/**. The PR will trigger skill-evals.yml;
+               the maker reviews only after evals pass.

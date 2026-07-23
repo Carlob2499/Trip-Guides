@@ -76,3 +76,7 @@ jobs:
             --color B60205 \
             --description "The weekly OAuth-token canary failed — the agent pipeline is down until the token is rotated" \
             --force
+          gh label create run-ledger \
+            --color C5DEF5 \
+            --description "The pipeline run ledger — research/recert runs append a comment for the skill-retro proposer" \
+            --force
