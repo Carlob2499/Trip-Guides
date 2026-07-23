@@ -55,9 +55,9 @@ live run — so the deferral costs nothing but the proof itself.
 |---|---|---|---|
 | E1 fail-closed publish gate | Sonnet | 1.5–2.5 h | `fix(pipeline):` |
 | E2 prove the pipeline (was F0) | **Opus** driver (workflow agent stays Sonnet) | 1.5–3 h + 1–2 h wall-clock | `fix(pipeline):` — **DEFERRED, no trip planned yet** |
-| E3 strict undated-figure gate | Sonnet | 1–2 h | `feat(verify):` |
-| E4 Korea backfill → strict | Sonnet (guide-author skill) | 3–4 h | `research(korea):` |
-| E5 Denmark backfill → strict | Sonnet (guide-author skill) | 3–4 h | `research(denmark):` |
+| E3 strict undated-figure gate | Sonnet | 1–2 h | `feat(verify):` — **DONE** |
+| E4 Korea backfill → strict | Sonnet (guide-author skill) | 3–4 h | `research(korea):` — **DONE** |
+| E5 Denmark backfill → strict | Sonnet (guide-author skill) | 3–4 h | `research(denmark):` — **DONE** |
 | E6 entry + phrases (was F3) | Sonnet (guide-author skill) | 2–3 h | `research(content):` |
 | E7 route optimizer, tap-to-apply (was F8) | Sonnet (Opus if the geometry fights) | 3–4 h | `feat(route-opt):` |
 | E8 hygiene sweep | Sonnet / Haiku | 1–1.5 h | `chore:` |

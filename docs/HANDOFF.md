@@ -22,68 +22,53 @@
 
 ## Snapshot (updated 2026-07-23, session close)
 
-**The ACTIVE execution queue is `docs/PLAN_FIELD_REPORT_FIXES.md`** (E1→E8), built from the
-2026-07-22 Field Report (`docs/FIELD_REPORT_2026-07-22.md` — evidence base, reference-only:
-106-agent deep-research pass + three same-day codebase audits). It absorbs F0/F3/F8 from
-`PLAN_TRAVELER_FEATURES.md` (marked "moved" there); F1/F2/F4/F5/F6/F7 remain there, sequenced
-after it. `PLAN_VISUAL_OVERHAUL.md` still holds V5 (morph continuity) + V6 (QA/perf).
+**The ACTIVE execution queue is `docs/PLAN_FIELD_REPORT_FIXES.md`** (E1→E8). E1/E3/E4/E5 are
+**DONE**; E2 is **deferred** (no trip planned — resume whenever one exists); next up is **E6**.
+`PLAN_TRAVELER_FEATURES.md` holds F1/F2/F4-F7 after this queue; `PLAN_VISUAL_OVERHAUL.md` holds
+V5/V6.
 
-- **E1 and E3 are DONE.** E2 remains deferred. See "Where we left off" below for E3.
-- **E2 is DEFERRED (creator's call, 2026-07-23) — no trip planned yet.** Not dropped: resume
-  it the moment a real destination/party/dates exist to plan (file that guide's New-guide issue,
-  then pick this plan back up at E2). The active sequence is now **E4 → E5 → E6 → E7 → E8**.
-- **Creator decisions locked 2026-07-22 (don't re-ask):** Korea AND Denmark both backfill
-  provenance and flip strict (Denmark via fresh re-verification dated today — never invented
-  backdates) · route optimizer = tap-to-apply (localStorage per-device, never edits guide
-  JSON) · entry cards = US + additional passports (countries named at E6 session start).
-- **Secret status corrected:** `CLAUDE_CODE_OAUTH_TOKEN` IS in place — confirmed valid
-  2026-07-20 (commits `e11dd7b`→`389b229`). Whenever E2 resumes, the secret is not a blocker.
-- **CLAUDE.md gained the Clarifying-Questions Doctrine** — binding on every plan/prompt/
-  session: plans carry per-session clarifier blocks; sessions open with `AskUserQuestion`.
+- **Creator decisions locked 2026-07-22 (don't re-ask):** route optimizer = tap-to-apply · entry
+  cards = US + additional passports (**countries still unnamed — E6's session-start question,
+  asked below**).
+- **Secret status:** `CLAUDE_CODE_OAUTH_TOKEN` confirmed valid 2026-07-20 — not a blocker
+  whenever E2 resumes.
+- **CLAUDE.md carries the Clarifying-Questions Doctrine** — binding on every plan/prompt/session.
 
-**Also on `main` (earlier 2026-07-22 sessions):** the 07-20 review execution plan was fully
-executed and removed (security floor, pipeline unblocking, schema widening, runtime/UX fixes,
-arch cleanup, test coverage — see git log `78fb1df`…`672855d`); docs consolidated ~25%
-(VISUAL_COVERS→MOTION, SILO_ROADMAP→ARCHITECTURE, critic plan→F7, honest SECURITY.md);
-connector policy asserted in CLAUDE.md (github + Claude Code Remote only). Visual arc V1–V4
-live; the V4 contour-visibility retune still needs a human real-photo eyeball (MOTION.md
-caveat; also E8 item 5).
+**Also on `main` (2026-07-22):** the 07-20 review plan fully executed + removed; docs
+consolidated ~25%; connector policy asserted (github + Claude Code Remote only). Visual arc
+V1–V4 live; V4 contour-visibility still needs a human real-photo eyeball (MOTION.md caveat).
 
 **Housekeeping still open:** creator deletes merged remote branch
 `claude/test-coverage-analysis-siftjs` via GitHub UI (sandbox 403s on ref deletion).
 
 ## Where we left off
 
-**E1** (3 commits): `verify-guide.mjs` gained an `unverifiable` content state so a Commons/
-network outage blocks instead of reading as a clean pass; `research-pass.yml` gained a final
-networked gate before auto-graduation and derives `PASSED` from the real verify exit code, not
-the checkpoint alone. `graduate-guide.yml` inherited the fix for free (already gated on exit
-code). Ship loop clean, 707/707 tests.
+**E1** (`fix(pipeline):`, 3 commits): auto-publish path no longer fails open on a network/API
+outage; `PASSED` derives from the real verify exit code.
 
-**E2 deferred** — no trip planned. Stays in the plan, unscheduled; resume the moment one exists.
+**E3** (`feat(verify):` + `fix(verify):`, 2 commits): undated-figure detector now blocks on
+strict guides, not just informs; found and fixed its own bug mid-session (list-type items can
+never carry a per-item date — section-level coverage is the only one possible, code corrected
++ tested). Required sweep of `us.json` found two REAL stale/unconfirmed facts (an unofficial
+parking fee, a restaurant's actually-wrong posted hours) — fixed honestly, not just dated.
 
-**E3** (1 commit): `check-research.mjs`'s undated-figure detector is now conditional on
-`guide.provenance === "strict"` — non-strict guides unchanged (info-only); a strict guide gets a
-blocking `warn`, closing the gap where the schema gate only ever caught an undated `≈`, never a
-confidently bare figure. `⚠` stays exempt (matches the schema's own ≈/⚠ distinction); `≈` is
-NOT exempt for item-level facts (outside the schema's DATED_TYPES). 6 new tests, all 6 existing
-D2 tests pass unchanged.
+**E4 + E5** (`research(korea):`, `research(denmark):`, 2 commits): both guides flipped to
+`provenance: "strict"`. Korea backfilled mostly from its own rich multi-date `verified` stamp;
+Denmark (undated stamp) via fresh re-verification today, per the creator's explicit direction —
+never invented dates. Both surfaced real corrections (Korea: MMCA's fee dropped to free, Leeum's
+roughly doubled; Denmark: a genuine City Pass 48h price disagreement, recorded not resolved
+silently) and both leave personal/dynamic estimates (bookings, spending ranges, demand-priced
+fares) honestly `⚠`-flagged rather than falsely dated. Both PASS `npm run verify` offline AND
+`--network` (0 dead links, 0 missing photos on either). 715/715 tests, typecheck clean throughout.
 
-**The required same-session sweep of `us.json`** (the only strict+published guide) found real
-issues, verified live rather than guessed: the Airport Mesa "$3 upper lot" fee has no official
-source (only travel-blog/forum agreement — T2, not enough) → `⚠`-flagged instead of dated.
-Wildcraft Cafe's "open daily 8am–3pm" conflicted with current listings (weekend hours differ) →
-the specific wrong claim was removed, not just flagged. US tipping figures are genuinely-varying
-convention → `⚠`-flagged. `verified` stamp got an honest addendum. `us` now PASSes
-(0 blocking, 3 advisory); mexico/portugal's pre-existing NEEDS WORK (empty scaffolds) is
-unrelated, as the plan anticipated. Full ship loop clean, 713/713 tests.
+**Next up: E6 — dormant `entry` + `phrases` content.** Sonnet, guide-author skill. **Blocked on
+one open question the creator hasn't answered yet: which additional passport countries** (beyond
+US) need entry rows — a party can mix passports, and this can't be guessed. Ask via
+`AskUserQuestion` at session start before any research begins; also confirm any allergies/dietary
+needs to prioritize in phrase cards (E6's second clarifier).
 
-**Next up: E4 — Korea provenance backfill → `provenance:"strict"`.** Sonnet, guide-author
-skill. Its clarifier (value corrections vs. dates-only when today's re-check disagrees with a
-shipped figure) needs `AskUserQuestion` before starting — read the session block in the plan.
-
-**Re-prompt the creator with:** "E1 and E3 are shipped and pushed (E3 also found and honestly
-fixed two real stale/unconfirmed facts in the us guide during its required sweep — not just a
-gate change). E2 stays deferred. Next up is E4 — the Korea provenance backfill to strict
-(Sonnet, guide-author skill, ~3-4h): one clarifier first (apply value corrections when today's
-re-check disagrees with the shipped figure, or dates-only?). Start E4?"
+**Re-prompt the creator with:** "E1, E3, E4, and E5 are all shipped and pushed — both Korea and
+Denmark are now `provenance:\"strict\"`, machine-enforced, not just prose promises. Next up is
+E6 (entry + phrase cards, Sonnet, ~2-3h), but it's blocked on one thing only you can answer:
+which passport countries besides US need entry rows for the party? And any allergies/dietary
+needs for the phrase cards?"
