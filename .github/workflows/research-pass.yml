@@ -242,7 +242,21 @@ jobs:
               c. Re-run verify + build. Repeat until verify PASSes and build is clean — up to 4
                  rounds. If something genuinely cannot be sourced after that, leave it as a
                  deliberately-explained ⚠ gap (an admitted blank is a feature).
-              d. Once verify PASSes, generate the guide's identity palette from its new cover/
+              c2. FINAL NETWORK GATE — the offline rounds above never checked links or Commons
+                 photos; this is the ONLY gate that does, and it must PASS before anything
+                 graduates. Run `npm run verify -- --slug ${{ inputs.slug }} --network`.
+                 - If it reports content FAIL, fix each finding (dead link → re-source the fact
+                   from a live primary; missing photo → correct the Commons filename via
+                   search-commons.mjs or omit the image) and re-run this same networked verify —
+                   do not fall back to the offline round (a) command from here on.
+                 - If it reports UNVERIFIABLE (a Commons API outage or every link probe failing —
+                   this run's checker couldn't do its job, which is not the same as "checked,
+                   found nothing wrong"), wait 60s and retry ONCE. If it's still UNVERIFIABLE, do
+                   NOT graduate — commit your work as-is, write the outage into the scorecard (so
+                   a human sees why this run stopped short of a verdict, not a false PASS), and let
+                   landing take the NEEDS-WORK/draft-PR path below.
+                 Only a full networked PASS from this step licenses step (d).
+              d. Once step (c2)'s networked verify PASSes, generate the guide's identity palette from its new cover/
                  sight photos: `npm run extract-palette -- --slug ${{ inputs.slug }}` (writes
                  src/data/palettes/${{ inputs.slug }}.json — commit it; skips harmlessly if no
                  photo). Then AUTO-GRADUATE — the verify PASS you just confirmed IS the evidence
