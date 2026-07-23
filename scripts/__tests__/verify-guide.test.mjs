@@ -66,6 +66,42 @@ describe("evaluateGuide verdict", () => {
     expect(r.blockers).toContain("content");
     expect(r.pass).toBe(false);
   });
+
+  it("a Commons API failure marks content unverifiable and blocks (fail-closed, not fail-open)", () => {
+    const guide = { verified: "Checked Jun 2026", sections: [{ type: "prose", group: "Overview", title: "About", body: "Lots to see here." }] };
+    const net = { links: { dead: [], checked: 3, error: [] }, photos: { missing: [], apiError: "Commons API HTTP 503" } };
+    const r = evaluateGuide(guide, "n", CLEAN_STALENESS, net);
+    expect(r.content.status).toBe("unverifiable");
+    expect(r.content.reason).toContain("Commons API");
+    expect(r.blockers).toContain("content-unverifiable");
+    expect(r.pass).toBe(false);
+  });
+
+  it("every link probe failing (network outage) marks content unverifiable and blocks", () => {
+    const guide = { verified: "Checked Jun 2026", sections: [{ type: "prose", group: "Overview", title: "About", body: "Lots to see here." }] };
+    const net = { links: { dead: [], checked: 5, error: [{ url: "https://a" }, { url: "https://b" }, { url: "https://c" }, { url: "https://d" }, { url: "https://e" }] }, photos: { missing: [], apiError: null } };
+    const r = evaluateGuide(guide, "n", CLEAN_STALENESS, net);
+    expect(r.content.status).toBe("unverifiable");
+    expect(r.content.reason).toBe("all link probes failed — network outage");
+    expect(r.blockers).toContain("content-unverifiable");
+    expect(r.pass).toBe(false);
+  });
+
+  it("a single flaky error link among otherwise-checked links stays advisory — still PASSes", () => {
+    const guide = { verified: "Checked Jun 2026", sections: [{ type: "prose", group: "Overview", title: "About", body: "Lots to see here." }] };
+    const net = { links: { dead: [], checked: 5, error: [{ url: "https://flaky" }] }, photos: { missing: [], apiError: null } };
+    const r = evaluateGuide(guide, "n", CLEAN_STALENESS, net);
+    expect(r.content.status).toBe("pass");
+    expect(r.pass).toBe(true);
+  });
+
+  it("a clean network check (no dead links, no missing photos, no outage) PASSes", () => {
+    const guide = { verified: "Checked Jun 2026", sections: [{ type: "prose", group: "Overview", title: "About", body: "Lots to see here." }] };
+    const net = { links: { dead: [], checked: 5, error: [] }, photos: { missing: [], apiError: null } };
+    const r = evaluateGuide(guide, "n", CLEAN_STALENESS, net);
+    expect(r.content.status).toBe("pass");
+    expect(r.pass).toBe(true);
+  });
 });
 
 describe("renderMarkdown", () => {
@@ -108,6 +144,16 @@ describe("renderMarkdown", () => {
     expect(md).toContain("dead link: https://dead.example");
     expect(md).toContain("missing photo: File:Ghost.jpg");
   });
+
+  it("renders unverifiable content distinctly from a clean pass", () => {
+    const md = renderMarkdown({
+      ...base, pass: false, blockers: ["content-unverifiable"],
+      content: { status: "unverifiable", reason: "Commons API: HTTP 503", deadLinks: [], missingPhotos: [] },
+    });
+    expect(md).toContain("UNVERIFIABLE");
+    expect(md).toContain("do NOT publish on this run");
+    expect(md).toContain("Verdict: ❌ NEEDS WORK");
+  });
 });
 
 describe("report (plain-text CLI renderer)", () => {
@@ -149,6 +195,16 @@ describe("report (plain-text CLI renderer)", () => {
     });
     expect(out).toContain("✗ dead link: https://dead.example");
     expect(out).toContain("✗ missing photo: File:Ghost.jpg");
+  });
+
+  it("reports unverifiable content as a distinct do-NOT-publish state", () => {
+    const out = report({
+      ...base, pass: false, blockers: ["content-unverifiable"],
+      content: { status: "unverifiable", reason: "all link probes failed — network outage", deadLinks: [], missingPhotos: [] },
+    });
+    expect(out).toContain("P0 content    · UNVERIFIABLE");
+    expect(out).toContain("do NOT publish on this run");
+    expect(out).toContain("verdict: NEEDS WORK — fix the blocking gate(s): content-unverifiable");
   });
 
   it("reports draft recency as n/a", () => {
@@ -228,6 +284,17 @@ describe("verify() orchestrator", () => {
     expect(checkPhotosMock).toHaveBeenCalled();
     expect(results[0].content.status).toBe("fail");
     expect(results[0].blockers).toContain("content");
+    expect(results[0].pass).toBe(false);
+  });
+
+  it("folds a Commons API failure into an unverifiable, failing verdict (fail-closed on outage)", async () => {
+    readGuidesMock.mockResolvedValue([GUIDE_A]);
+    checkStalenessMock.mockResolvedValue(CLEAN_STALENESS);
+    checkLinksMock.mockResolvedValue({ checked: 2, dead: [], blocked: [], error: [], other: [] });
+    checkPhotosMock.mockResolvedValue({ checked: 0, missing: [], apiError: "Commons API HTTP 503" });
+    const { results } = await verify({ network: true });
+    expect(results[0].content.status).toBe("unverifiable");
+    expect(results[0].blockers).toContain("content-unverifiable");
     expect(results[0].pass).toBe(false);
   });
 

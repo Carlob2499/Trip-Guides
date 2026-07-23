@@ -58,17 +58,29 @@ export function evaluateGuide(guide, slug, staleness, net) {
       : { status: "current", staleSections: [], guideStale: null };
 
   // Content (P0, only when --network ran): this guide's dead links / missing photos.
+  // A checker that couldn't run at all (Commons API down, or every link probe failed —
+  // a network outage on this run) is NOT the same as "checked, found nothing wrong" —
+  // report it as unverifiable so a fail-open outage never reads as a clean pass.
   let content = { status: "skipped" };
   if (net) {
-    const deadLinks = net.links.dead.filter((l) => l.guides.includes(slug));
-    const missingPhotos = net.photos.missing.filter((p) => p.guides.includes(slug));
-    content = { status: (deadLinks.length || missingPhotos.length) ? "fail" : "pass", deadLinks, missingPhotos };
+    const linksChecked = net.links.checked ?? 0;
+    const linksErrored = net.links.error?.length ?? 0;
+    if (net.photos.apiError) {
+      content = { status: "unverifiable", reason: `Commons API: ${net.photos.apiError}`, deadLinks: [], missingPhotos: [] };
+    } else if (linksChecked > 0 && linksErrored === linksChecked) {
+      content = { status: "unverifiable", reason: "all link probes failed — network outage", deadLinks: [], missingPhotos: [] };
+    } else {
+      const deadLinks = net.links.dead.filter((l) => l.guides.includes(slug));
+      const missingPhotos = net.photos.missing.filter((p) => p.guides.includes(slug));
+      content = { status: (deadLinks.length || missingPhotos.length) ? "fail" : "pass", deadLinks, missingPhotos };
+    }
   }
 
   // Blocking gates → the exit-code verdict. Recency is intentionally NOT blocking.
   const blockers = [];
   if (!readiness.pass) blockers.push("research");
   if (content.status === "fail") blockers.push("content");
+  if (content.status === "unverifiable") blockers.push("content-unverifiable");
   const pass = blockers.length === 0;
 
   return { slug, draft, pass, blockers, readiness, recency, content, noVerifiedDate };
@@ -112,6 +124,8 @@ export function report(r) {
   // P0 content (network)
   if (r.content.status === "skipped") {
     L.push(`  P0 content    · skipped — run with --network to check links + Commons photos`);
+  } else if (r.content.status === "unverifiable") {
+    L.push(`  P0 content    · UNVERIFIABLE — ${r.content.reason} — could not check, do NOT publish on this run`);
   } else {
     const c = r.content;
     L.push(`  P0 content    · ${c.status === "pass" ? "PASS" : "FAIL"} — ${c.deadLinks.length} dead link(s), ${c.missingPhotos.length} missing photo(s)`);
@@ -160,6 +174,7 @@ export function renderMarkdown(r) {
   L.push(`| Research — fabrication · provenance · completeness · itinerary | P0 | ${rd.pass ? "✅ PASS" : "❌ FAIL"} — ${rd.warns.length} blocking, ${rd.infos.length} advisory |`);
   let content;
   if (r.content.status === "skipped") content = "⏭ skipped — run `--network`";
+  else if (r.content.status === "unverifiable") content = `⚠ UNVERIFIABLE — ${r.content.reason} — could not check, do NOT publish on this run`;
   else content = `${r.content.status === "pass" ? "✅ PASS" : "❌ FAIL"} — ${r.content.deadLinks.length} dead link(s), ${r.content.missingPhotos.length} missing photo(s)`;
   L.push(`| Content — links · Commons photos | P0 | ${content} |`);
   let recency;
