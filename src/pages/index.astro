@@ -170,7 +170,7 @@ const contourLayers = [
     <!-- THE OVERTURE (V2) — the hub masthead as a full-viewport intro that hands off to the
          guide grid via src/scripts/overture.js. Base markup is fully visible with no JS; the
          script only adds motion. #btnDark / #btnNewGuide keep their IDs for the inline scripts. -->
-    <section class="overture" id="overture">
+    <header class="overture" id="overture">
       <div class="ov-contours" aria-hidden="true">
         {contourLayers.map((layer, i) => (
           <svg data-ov-contour={i} viewBox={`0 0 ${layer.viewBox} ${layer.viewBox}`} preserveAspectRatio="xMidYMid slice">
@@ -211,7 +211,7 @@ const contourLayers = [
       <a class="ov-cue" href="#hubStart">
         <span class="ov-cue-pin" aria-hidden="true"></span>Follow the route
       </a>
-    </section>
+    </header>
 
     <section class="stats-beat" aria-label="What's inside these guides">
       <div class="stats-beat-in">

@@ -113,10 +113,56 @@ all (`.11`/`.07` alpha on the masthead; ~10–16% tints on the hub). Raised once
 | Masthead `[data-mast-contour="0"]` | `rgba(255,255,255,.11)` | `rgba(255,255,255,.15)` |
 | Masthead `[data-mast-contour="1"]` | `rgba(255,255,255,.07)` | `rgba(255,255,255,.10)` |
 
-**Caveat — this pass was NOT visually confirmed with a real screenshot.** The environment this
-change shipped from has no browser/screenshot tool available, so the values above are a
-reasoned adjustment (roughly +60% relative alpha across the board — enough to plausibly cross
-the imperceptibility line without risking overwhelming the photo/title, but not derived from an
-actual before/after comparison). **A human should eyeball this at `astro preview` (desktop +
-mobile, both themes, over real cover photos) at the next opportunity** and step back halfway if
-the strokes now compete with title legibility, per the original review finding (SEV-4 U9).
+**Update (2026-07-23):** real Playwright screenshots were taken of the Korea guide masthead
+(desktop + mobile, light + dark, over its real loaded cover photo, plus over the dark
+no-photo fallback) and of the hub's pre-auto-glide contour layer. The strokes render clearly
+and legibly in all four masthead states without competing with title legibility — the values
+above held up. **The keep-as-is-or-step-back-halfway call is still the creator's, not an
+agent's, per the original SEV-4 finding** — screenshots were sent via `SendUserFile`; this note
+updates once their reply lands.
+
+## V6 — QA and the honest pass (2026-07-23)
+
+First time the FULL Playwright suite (all specs, not just the one targeted per session) ran
+together this arc — surfaced findings the visual overhaul itself never touched but that a
+genuine "did this cost anything" pass has to report:
+
+- **Visual snapshot baselines were stale since before V1** — every committed `-linux.png` still
+  showed the pre-Overture hub design. Reviewed each of the 8 diffs by eye (not blind-updated —
+  every one traced to already-shipped, already-reviewed V1–V5 markup) before refreshing.
+- **Real a11y regression, not caused by V5:** the Overture hero (`.ov-wordmark`/`.ov-inner`, V1/V2)
+  sat in a bare `<section>` with no accessible name, so axe flagged its content as not contained
+  by any landmark. `<section class="overture">` → `<header class="overture">` (a top-level
+  `<header>` is an implicit banner landmark) — zero visual/behavioral change, confirmed via
+  pixel-identical snapshots before/after.
+- **Real contrast bug:** `.bs-pos` (the bottom-bar "N/total" indicator) used the raw per-guide
+  `--accent` as text color against `.botSections`'s background — which is `var(--ink)`, i.e.
+  intentionally INVERTED relative to the page theme in both light and dark mode. Korea's accent
+  measured 2.87:1 against it (needs 4.5:1). Fixed theme-independently by blending toward
+  `var(--bg)` (the button's own established contrast partner) instead of a theme-conditional
+  override — verified back over 4.5:1 in both themes by hand and confirmed 100 a11y score via
+  Lighthouse afterward.
+- **Two label/name-mismatch findings** (WCAG 2.5.3): the hub-link `aria-label="All guides"` and
+  the photo-credit `aria-label="Photo source on Wikimedia Commons"` both discarded their own
+  visible text. Reworded to include it (`"Waypoint — all guides"` /
+  `"Photo: Wikimedia Commons — view source"`) rather than removing the labels — the extra context
+  they added was worth keeping.
+- **Lighthouse numbers recorded** (local `astro preview`, mobile emulation, no prior baseline
+  existed to diff against — this IS the first-recorded baseline): hub 89 perf / 100 a11y / 96
+  best-practices / 91 SEO. Korea guide, after the fixes above: 100 a11y / 96 best-practices / 100
+  SEO; perf and TBT were noisy run-to-run in this sandbox (46–89, plausibly CPU-contention
+  artifacts, not a real regression) but **CLS held steady at ≈0.244** ("needs improvement") across
+  every run — a real, unexplained signal. Root cause not found this session (ruled out: the cover
+  photo, which is `position:absolute` and can't itself shift layout); filed as a follow-up
+  (github.com/Carlob2499/Trip-Guides/issues/19) rather than guessed at.
+- **Perf budget gate** (`scripts/check-perf-budget.mjs`): JS 593 KB / 900 KB budget, CSS 126 KB /
+  300 KB, largest bundle 141 KB — comfortable headroom, the overhaul didn't bloat the bundle.
+  Confirmed unrelated pre-existing E2E flakes (SOS focus-trap wrap, two Trip-Split network-harness
+  tests) are NOT caused by this arc (`git diff` against pre-session `main` touches none of their
+  source) and filed them (#17, #18) rather than fixing out-of-scope code under this plan's banner.
+- **JS-off, reduced-motion, full 375px/desktop × dark/light matrix:** all clean. The guide page
+  degrades to a flat, fully-readable single-scroll document with an explicit "This guide reads
+  fine without JavaScript" note — by design, unaffected by this arc.
+
+This closes `docs/PLAN_VISUAL_OVERHAUL.md`. The doctrine above (signature, inventory, rules,
+identity engine) reflects what's actually shipped as of this pass.

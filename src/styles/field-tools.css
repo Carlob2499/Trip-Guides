@@ -137,7 +137,12 @@ html[data-swipe-hint="back"]::after{left:0;background:linear-gradient(to right,c
 .gstat-burn:hover{background:color-mix(in srgb,var(--accent) 12%,transparent)}
 
 /* ── Bottom-bar section position ─────────────────────────────────────────── */
-.bs-pos{font-family:var(--font-data);font-size:.62rem;font-weight:700;color:var(--accent);margin-left:.35rem}
+/* V6: raw --accent text failed WCAG contrast (2.87:1, needs 4.5:1) against
+   .botSections's background — that button is ALWAYS inverted (background:var(--ink),
+   color:var(--bg)) relative to the page theme, in both light AND dark mode, so the
+   fix can't be theme-conditional either — blend toward --bg (the button's own,
+   theme-correct foreground) instead of the raw per-guide accent hue. */
+.bs-pos{font-family:var(--font-data);font-size:.62rem;font-weight:700;color:color-mix(in srgb,var(--accent) 55%,var(--bg) 45%);margin-left:.35rem}
 
 @media(prefers-reduced-motion:reduce){.spine-fill,.spine-tip{transition:none}.day-kitcount.done{animation:none}.today-chip{animation:none}}
 @media print{.spine,.today-chip,.ft-toast,.cur-pop,.lb-backdrop,.sos-btn,.sos-sheet,.addr-card,.focus-today{display:none!important}}

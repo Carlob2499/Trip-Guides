@@ -289,7 +289,7 @@ const tripSummary = buildSummary(guide);
          TOP NAVIGATION BAR
          ═══════════════════════════════════════════════════════════════════ -->
     <nav class="topbar" aria-label="Site navigation">
-      <a href={`${base}/`} class="topbar-home" aria-label="All guides">
+      <a href={`${base}/`} class="topbar-home" aria-label="Waypoint — all guides">
         <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
           <path d="M1 5h12M1 5l4-4M1 5l4 4" stroke="currentColor" stroke-width="1.6"
                 stroke-linecap="round" stroke-linejoin="round"/>
@@ -435,7 +435,7 @@ const tripSummary = buildSummary(guide);
           {guide.dek && <p class="dek mast-dek">{guide.dek}</p>}
         </div>
         {heroCredit && (
-          <a class="mast-credit" href={heroCredit} target="_blank" rel="noopener" aria-label="Photo source on Wikimedia Commons">Photo: Wikimedia Commons ↗</a>
+          <a class="mast-credit" href={heroCredit} target="_blank" rel="noopener" aria-label="Photo: Wikimedia Commons — view source">Photo: Wikimedia Commons ↗</a>
         )}
       </div>
       {/* V5: shares a view-transition-name with the hub card's `.hubcard-bar` — the accent
