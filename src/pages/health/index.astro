@@ -96,9 +96,9 @@ const support: Flow[] = [
   {
     file: "visual.yml",
     name: "visual",
-    desc: "Playwright snapshots that catch unintended visual changes to the guides.",
-    state: "support",
-    verdict: "Support tooling — runs when UI changes touch it.",
+    desc: "Playwright snapshots that catch unintended visual changes to the guides, plus a real airplane-mode suite (tests/visual/offline.spec.ts) proving the service-worker precache actually works offline.",
+    state: "proven",
+    verdict: "The offline claim used to be an assumption — now every guide is tested loading with zero network after the service worker takes control, and the \"Works offline\" badge is checked against real Cache Storage state, not just navigator.onLine.",
   },
 ];
 
