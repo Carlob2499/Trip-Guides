@@ -72,7 +72,10 @@
       "MSI tickets loaded and tested in NOL World app (no screenshots)",
       "GO Fest teams pre-built; Pokémon storage cleared to 400+",
       "Departure airport confirmed: Newark Liberty EWR — not JFK"
-    ]
+    ],
+    "verified_on": "2026-06-28",
+    "shelf_life": "transit",
+    "source_url": "https://www.letskorail.com"
   },
   {
     "type": "panel",
@@ -93,7 +96,10 @@
     "type": "panel",
     "group": "Plan",
     "title": "Phone & data",
-    "body": "<p><b>Verizon TravelPass</b> — text <b>TRAVEL to 4004</b> to activate ($12/line/day). Easy and reliable. A local eSIM is roughly half the price if your phone is unlocked:</p><ul><li><b>Korean eSIMs from KT, SKT, or LG U+</b> run about <b>₩26,000–35,000 (~$17–23) for 7–10 days</b> of unlimited LTE data. Speed throttles to 5 Mbps after 3 GB/day but stays usable for maps and translation. Buy in advance at <a href='https://roaming.kt.com/esim/eng/main.asp' target='_blank' rel='noopener noreferrer'>KT Roaming</a>, <a href='https://www.trazy.com' target='_blank' rel='noopener noreferrer'>Trazy</a>, or <a href='https://www.kkday.com/en-us/product/165904' target='_blank' rel='noopener noreferrer'>KKday</a> — or at a telecom counter in ICN T1 arrivals (open from ≈07:00 KST on arrival morning). Confirm your phone is carrier-unlocked before you leave home.</li><li>Resellers ByteSIM and TooSIM often have the same networks at slightly lower prices with English checkout.</li></ul><p>Apps that actually matter: <a href='https://map.kakao.com' target='_blank' rel='noopener noreferrer'><b>KakaoMap</b></a> or <a href='https://map.naver.com' target='_blank' rel='noopener noreferrer'><b>Naver Map</b></a> for directions (Google Maps routing is severely limited in Korea), <a href='https://www.kakaocorp.com/page/service/service/KakaoT?lang=en' target='_blank' rel='noopener noreferrer'><b>Kakao T</b></a> for taxis, <a href='https://papago.naver.com' target='_blank' rel='noopener noreferrer'><b>Papago</b></a> for translation — download the Korean offline language pack before you leave (Papago → Languages → Korean → Download), <a href='https://www.letskorail.com' target='_blank' rel='noopener noreferrer'><b>Korail / KorailTalk</b></a> for KTX tickets.</p>"
+    "body": "<p><b>Verizon TravelPass</b> — text <b>TRAVEL to 4004</b> to activate ($12/line/day). Easy and reliable. A local eSIM is roughly half the price if your phone is unlocked:</p><ul><li><b>Korean eSIMs from KT, SKT, or LG U+</b> run about <b>₩26,000–35,000 (~$17–23) for 7–10 days</b> of unlimited LTE data. Speed throttles to 5 Mbps after 3 GB/day but stays usable for maps and translation. Buy in advance at <a href='https://roaming.kt.com/esim/eng/main.asp' target='_blank' rel='noopener noreferrer'>KT Roaming</a>, <a href='https://www.trazy.com' target='_blank' rel='noopener noreferrer'>Trazy</a>, or <a href='https://www.kkday.com/en-us/product/165904' target='_blank' rel='noopener noreferrer'>KKday</a> — or at a telecom counter in ICN T1 arrivals (open from ≈07:00 KST on arrival morning). Confirm your phone is carrier-unlocked before you leave home.</li><li>Resellers ByteSIM and TooSIM often have the same networks at slightly lower prices with English checkout.</li></ul><p>Apps that actually matter: <a href='https://map.kakao.com' target='_blank' rel='noopener noreferrer'><b>KakaoMap</b></a> or <a href='https://map.naver.com' target='_blank' rel='noopener noreferrer'><b>Naver Map</b></a> for directions (Google Maps routing is severely limited in Korea), <a href='https://www.kakaocorp.com/page/service/service/KakaoT?lang=en' target='_blank' rel='noopener noreferrer'><b>Kakao T</b></a> for taxis, <a href='https://papago.naver.com' target='_blank' rel='noopener noreferrer'><b>Papago</b></a> for translation — download the Korean offline language pack before you leave (Papago → Languages → Korean → Download), <a href='https://www.letskorail.com' target='_blank' rel='noopener noreferrer'><b>Korail / KorailTalk</b></a> for KTX tickets.</p>",
+    "verified_on": "2026-06-28",
+    "shelf_life": "default",
+    "source_url": "https://roaming.kt.com/esim/eng/main.asp"
   },
   {
     "type": "panel",
@@ -111,7 +117,10 @@
     "type": "prose",
     "group": "Plan",
     "title": "Rainy day fallback — when the monsoon hits",
-    "body": "<p>Expect at least 1–2 full-rain days in July. The rain can be heavy but rarely lasts the whole day. Have a plan ready:</p><ul><li><b>Stay underground:</b> Seoul's subway-connected underground malls are enormous. The Hongdae Shopping Street (under Hongik University Station) and Gangnam's COEX Underground Mall are both walkable and free to enter — good for an entire afternoon.</li><li><b>COEX Aquarium</b> (Samseong Station, Line 2): 45,000+ sea creatures, 2–3 hours easy. ≈₩33,000–35,000 pp — <b>⚠ verify price and book online</b> to skip the queue. Open daily.</li><li><b>Seoul Museum of Art (SeMA)</b> (City Hall, Line 1/2): free admission for main exhibitions, strong contemporary Korean art, fully dry. Takes 1.5–2 hours.</li><li><b>PC Bang:</b> Full-spec gaming PCs, ≈₩1,500–2,500/hr, unlimited snacks at the counter. There's one within 5 minutes of any Hongdae station exit. Unironically one of the best rainy-day options for this group.</li><li><b>Cinema:</b> CGV or Megabox near Hapjeong Station (one stop from Hongdae). Korean cinemas are excellent — huge screens, reclining seats, ≈₩12,000–15,000 pp. Both apps have English filter for subtitled showings.</li><li><b>Rainy day = great raiding:</b> Fewer players competing for gyms. Head to COEX, Times Square (Yeongdeungpo, Line 1/5), or Lotte World Tower (Jamsil, Line 2/8) — all have indoor gyms and PokéStops. Light rain also boosts Water-type Incense spawns.</li></ul>"
+    "body": "<p>Expect at least 1–2 full-rain days in July. The rain can be heavy but rarely lasts the whole day. Have a plan ready:</p><ul><li><b>Stay underground:</b> Seoul's subway-connected underground malls are enormous. The Hongdae Shopping Street (under Hongik University Station) and Gangnam's COEX Underground Mall are both walkable and free to enter — good for an entire afternoon.</li><li><b>COEX Aquarium</b> (Samseong Station, Line 2): 45,000+ sea creatures, 2–3 hours easy. ≈₩33,000–35,000 pp (SEA LIFE COEX's own current pricing: ₩35,000 walk-in adult, ₩28,000 booked online — book ahead) to skip the queue. Open daily.</li><li><b>Seoul Museum of Art (SeMA)</b> (City Hall, Line 1/2): free admission for main exhibitions, strong contemporary Korean art, fully dry. Takes 1.5–2 hours.</li><li><b>PC Bang:</b> Full-spec gaming PCs, ≈₩1,500–2,500/hr, unlimited snacks at the counter. There's one within 5 minutes of any Hongdae station exit. Unironically one of the best rainy-day options for this group.</li><li><b>Cinema:</b> CGV or Megabox near Hapjeong Station (one stop from Hongdae). Korean cinemas are excellent — huge screens, reclining seats, ≈₩12,000–15,000 pp. Both apps have English filter for subtitled showings.</li><li><b>Rainy day = great raiding:</b> Fewer players competing for gyms. Head to COEX, Times Square (Yeongdeungpo, Line 1/5), or Lotte World Tower (Jamsil, Line 2/8) — all have indoor gyms and PokéStops. Light rain also boosts Water-type Incense spawns.</li></ul>",
+    "verified_on": "2026-07-23",
+    "shelf_life": "venue",
+    "source_url": "https://www.visitsealife.com/coex-seoul/en/tickets-passes/"
   },
   {
     "type": "panel",
@@ -131,7 +140,10 @@
       "Power adapter: Korea uses 220V Type C/F round-pin plugs (same as continental Europe). One adapter per person — USB-C PDs are fine.",
       "Heat prep packed: hat (arena AC won't help you outdoors), sunscreen SPF 50+, electrolyte tablets. Seoul in July averages 28–31°C with high humidity.",
       "Leave home contact a copy of your itinerary: Seoul Jul 8–10 & Jul 13–15 (Busan day trip Jul 13), Daejeon Jul 11–12 (Daejeon I-Hotel, 27-5 Expo-ro 123beon-gil, Yuseong-gu)."
-    ]
+    ],
+    "verified_on": "2026-06-28",
+    "shelf_life": "transit",
+    "source_url": "https://www.letskorail.com"
   },
   {
     "type": "holidays",

@@ -25,7 +25,7 @@
         "high": 2008,
         "category": "Accommodation",
         "per": "group",
-        "note": "<span data-addr-kr='서울 종로구 종로 19'>19 Jong-ro, Jongno-gu</span> — across from Olive Young Jonggak. $2,007.90 confirmed for 7 nights ÷ 3 = ≈$669/person (all three on the booking). Luggage stays here Jul 11–12 while you're away — two in Daejeon, the third in Tokyo."
+        "note": "<span data-addr-kr='서울 종로구 종로 19'>19 Jong-ro, Jongno-gu</span> — across from Olive Young Jonggak. $2,007.90 confirmed for 7 nights ÷ 3 = ≈$669/person (all three on the booking). Luggage stays here Jul 11–12 while you're away — two in Daejeon, the third in Tokyo. (⚠ this is a personal booking total, confirmed against the traveler's own receipt 2026-07-08 — there is no public listing price to cite.)"
       },
       {
         "label": "Daejeon I-Hotel — 2 nights (Jul 11–12)",
@@ -35,7 +35,7 @@
         "high": 200,
         "category": "Accommodation",
         "per": "group",
-        "note": "27-5 Expo-ro 123beon-gil, 2-min walk from DCC II. <b>Just the two of you here now</b> — the third is in Tokyo this weekend. Split ÷2 = ≈$80 each (the per-person toggle above still divides by 3, so use ≈$80 for this line)."
+        "note": "27-5 Expo-ro 123beon-gil, 2-min walk from DCC II. <b>Just the two of you here now</b> — the third is in Tokyo this weekend. Split ÷2 = ≈$80 each (the per-person toggle above still divides by 3, so use ≈$80 for this line). (⚠ a personal booking total, not a published rate — no public source to cite.)"
       },
       {
         "label": "Meals per day",
@@ -44,7 +44,7 @@
         "low": 12,
         "high": 55,
         "category": "Food & drinks",
-        "note": "Low = convenience-store day (triangle gimbap + cup noodles ≈₩7,000). High = sit-down AYCE BBQ with drinks. Most days land ₩25,000–40,000 ($17–27) for 3 meals."
+        "note": "Low = convenience-store day (triangle gimbap + cup noodles ≈₩7,000). High = sit-down AYCE BBQ with drinks. Most days land ₩25,000–40,000 ($17–27) for 3 meals. (⚠ a personal spending estimate, not a single sourced figure — actual cost varies by choice.)"
       },
       {
         "label": "Drinks & alcohol per day",
@@ -53,7 +53,7 @@
         "low": 0,
         "high": 25,
         "category": "Food & drinks",
-        "note": "Soju ≈₩1,500 at a convenience store; ≈₩4,000–6,000 at a restaurant. BBQ nights will push this higher. Skip if you're not drinking: $0."
+        "note": "Soju ≈₩1,500 at a convenience store; ≈₩4,000–6,000 at a restaurant. BBQ nights will push this higher. Skip if you're not drinking: $0. (⚠ a personal spending estimate, not a single sourced figure.)"
       },
       {
         "label": "Seoul subway (T-money) per day",
@@ -62,7 +62,7 @@
         "low": 3,
         "high": 10,
         "category": "Transport",
-        "note": "≈₩1,350/ride on T-money. A sightseeing day is 4–6 rides (~₩7,000). Late Hongdae nights add 2 more."
+        "note": "≈₩1,350/ride on T-money at the time this was written. A sightseeing day is 4–6 rides (~₩7,000). Late Hongdae nights add 2 more. (⚠ current 2026 tourist-guide sources cite ₩1,550, not ₩1,350 — Seoul raised base fares at some point in 2026 and sources disagree on the exact date, so this trip's actual fare may sit at either figure; re-check before relying on it.)"
       },
       {
         "label": "Taxis (whole trip total)",
@@ -71,7 +71,10 @@
         "low": 3,
         "high": 35,
         "category": "Transport",
-        "note": "Base fare ₩4,800. Key rides: Daejeon Station → I-Hotel (≈₩11,000 total, ≈₩5,500 each split 2). Budget 3–5 rides total — late-night Hongdae is the most likely use."
+        "note": "Base fare ₩4,800 (confirmed current as of this check). Key rides: Daejeon Station → I-Hotel (≈₩11,000 total, ≈₩5,500 each split 2 — a personal estimate). Budget 3–5 rides total — late-night Hongdae is the most likely use.",
+        "verified_on": "2026-07-23",
+        "shelf_life": "transit",
+        "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=140661"
       },
       {
         "label": "Airport Limousine 6002 — inbound + outbound",
@@ -80,7 +83,10 @@
         "low": 6,
         "high": 26,
         "category": "Transport",
-        "note": "Limousine Bus 6002: ₩17,000 each way per person → ≈₩34,000 round trip ≈ $25. Cheaper alternative: AREX All-Stop ≈₩4,050 each way (≈$6 round trip) — faster clock, but you carry bags through the subway."
+        "note": "Limousine Bus 6002: ₩17,000 each way per person (confirmed current) → ≈₩34,000 round trip ≈ $25. Cheaper alternative: AREX All-Stop ≈₩4,050 each way (≈$6 round trip) — faster clock, but you carry bags through the subway.",
+        "verified_on": "2026-07-23",
+        "shelf_life": "transit",
+        "source_url": "https://mileasia.com/korea/incheon-airport-limousine-bus/"
       },
       {
         "label": "KTX — Seoul→Daejeon + Monday Busan day-trip legs",
@@ -98,7 +104,10 @@
         "low": 0,
         "high": 3,
         "category": "Activities & entries",
-        "note": "₩3,000 adult (≈$2). Free if you arrive wearing a hanbok — hanbok rental ≈₩15,000–25,000/hour near the north gate."
+        "note": "₩3,000 adult (≈$2, confirmed current). Free if you arrive wearing a hanbok — hanbok rental ≈₩15,000–25,000/hour near the north gate (personal-vendor estimate, not a fixed official rate).",
+        "verified_on": "2026-07-23",
+        "shelf_life": "venue",
+        "source_url": "https://english.visitseoul.net/attractions/Gyeongbokgung/ENP000072"
       },
       {
         "label": "Changdeokgung + Huwon (Secret Garden)",
@@ -107,7 +116,10 @@
         "low": 6,
         "high": 6,
         "category": "Activities & entries",
-        "note": "₩3,000 palace + ₩5,000 Huwon tour = ₩8,000/person (≈$5.40). English Huwon tours at 10:30, 11:30, 14:30, 15:30 — book online in advance (50 slots)."
+        "note": "₩3,000 palace + ₩5,000 Huwon tour = ₩8,000/person (≈$5.40, confirmed current). English Huwon tours at 10:30, 11:30, 14:30, 15:30 — book online in advance (50 slots).",
+        "verified_on": "2026-07-23",
+        "shelf_life": "venue",
+        "source_url": "https://www.cdg.go.kr"
       },
       {
         "label": "N Seoul Tower observatory",
@@ -116,7 +128,7 @@
         "low": 17,
         "high": 22,
         "category": "Activities & entries",
-        "note": "≈₩23,000 online discount / ₩29,000 at the gate — buy online at nseoultower.co.kr. Namsan cable car ≈₩15,000 round-trip if you don't walk up (very hot in July)."
+        "note": "₩29,000 at the gate (confirmed current). The online-discount figure varies by vendor — nseoultower.co.kr's own direct discount and third-party resellers (Klook etc.) don't always quote the same price, so treat ≈₩18,000–23,000 online as a range, not a fixed number (⚠ confirm the actual online price at checkout). Namsan cable car ≈₩15,000 round-trip if you don't walk up (very hot in July)."
       },
       {
         "label": "Namsan cable car (round-trip)",
@@ -125,7 +137,10 @@
         "low": 1,
         "high": 11,
         "category": "Activities & entries",
-        "note": "₩15,000 RT per person (≈$11). Low = Bus 03 from Chungmuro Station (₩1,350) if you want to save. In July heat, the cable car is worth it for the descent."
+        "note": "₩15,000 RT per person (≈$11, roughly consistent with current listings). Low = Bus 03 from Chungmuro Station (₩1,350) if you want to save. In July heat, the cable car is worth it for the descent.",
+        "verified_on": "2026-07-23",
+        "shelf_life": "venue",
+        "source_url": "https://www.nseoultower.co.kr"
       },
       {
         "label": "SPAREX Dongdaemun jimjilbang",
@@ -161,7 +176,7 @@
         "low": 2,
         "high": 15,
         "category": "Experiences",
-        "note": "≈₩1,000–2,000/hour. Budget 3–6 hours total across the trip. Hongdae has good options open 24 hours."
+        "note": "≈₩1,000–2,000/hour. Budget 3–6 hours total across the trip. Hongdae has good options open 24 hours. (⚠ price varies by shop — a personal estimate range, not one sourced figure.)"
       },
       {
         "label": "Norebang — 1 session",
@@ -170,7 +185,7 @@
         "low": 5,
         "high": 14,
         "category": "Experiences",
-        "note": "≈₩15,000–25,000/hour for a group room, split 3 ways = ≈₩5,000–8,300/person (≈$3.30–5.50). Best on Tuesday Jul 14 evening in Hongdae."
+        "note": "≈₩15,000–25,000/hour for a group room, split 3 ways = ≈₩5,000–8,300/person (≈$3.30–5.50). Best on Tuesday Jul 14 evening in Hongdae. (⚠ price varies by venue — a personal estimate range.)"
       },
       {
         "label": "Pokémon GO in-app items",
@@ -179,7 +194,7 @@
         "low": 0,
         "high": 35,
         "category": "Experiences",
-        "note": "9 free Raid Passes/day during GO Fest covers most raiding. Optional: Charged TMs (≈₩1,100), Star Pieces, Remote Raid Passes. Can easily be $0."
+        "note": "9 free Raid Passes/day during GO Fest covers most raiding. Optional: Charged TMs (≈₩1,100), Star Pieces, Remote Raid Passes. Can easily be $0. (⚠ a personal spending choice, not a fixed price.)"
       },
       {
         "label": "Souvenirs, K-beauty & shopping",
@@ -188,7 +203,7 @@
         "low": 20,
         "high": 300,
         "category": "Shopping",
-        "note": "Highly variable. Olive Young (K-beauty), Hongdae streetwear, Yongsan electronics, Insadong crafts. Claim VAT refund (10%) on purchases over ₩15,000 at the airport before check-in."
+        "note": "Highly variable (⚠ this line is deliberately a personal-spending guess, not a sourced figure). Olive Young (K-beauty), Hongdae streetwear, Yongsan electronics, Insadong crafts. Claim VAT refund (10%) on purchases over ₩15,000 at the airport before check-in."
       }
     ]
   },
@@ -221,7 +236,7 @@
     "type": "prose",
     "group": "Essentials",
     "title": "What to wear — July in Korea",
-    "body": "<p>July is 30–35 °C and brutally humid. What you pack will make or break day 3 when the heat exhaustion hits.</p><ul><li><b>Shirts: linen or moisture-wicking synthetic only.</b> Cotton saturates and stays wet all day in 80% humidity — you'll feel it by noon. Pack one quick-dry shirt per day minimum; they rinse and dry overnight in the hotel.</li><li><b>Bottoms: lightweight shorts or thin chinos</b> — both are fine in Seoul. Shorts are totally normal in the city; Korean dress culture is casual outside of formal workplaces. Avoid jeans in July: they trap heat and dry slowly.</li><li><b>Shoes: comfortable walking shoes with broken-in soles.</b> You'll walk 10–15 km/day on mixed surfaces (stone palace courtyards, uneven sidewalks, tiled subway stations). Sandals are fine for Hongdae evenings but not a full sightseeing day. If any of you haven't broken in your shoes yet — do it this week.</li><li><b>Compact folding umbrella — non-negotiable.</b> Heavy rain hits without warning during jangma. A good compact umbrella folds to 25 cm and costs under $15 at home; convenience stores sell them but they're flimsy.</li><li><b>Indoor layer (thin jacket or cardigan).</b> Korean malls, restaurants, subway trains, and arenas run AC at 16–18 °C. The temperature swing between outside (34 °C) and inside (18 °C) is the most common reason people get sick mid-trip. Keep a light layer in your bag at all times — critical for DCC II during MSI.</li><li><b>MSI / arena:</b> team jerseys and esports gear are welcome; no dress code at DCC II beyond the no-huge-bag rule. Bring that AC layer.</li><li><b>Jimjilbang (Day 1, SPAREX):</b> the facility provides shorts and a T-shirt — you need nothing special except flip-flops for walking between the pools. Leave your shoes at the locker.</li><li><b>Daejeon day:</b> same as Seoul. You'll be outdoors at EXPO Science Park for 6+ hours before the match — quick-dry fabric matters most on Saturday.</li></ul>"
+    "body": "<p>July is 30–35 °C and brutally humid. What you pack will make or break day 3 when the heat exhaustion hits.</p><ul><li><b>Shirts: linen or moisture-wicking synthetic only.</b> Cotton saturates and stays wet all day in 80% humidity — you'll feel it by noon. Pack one quick-dry shirt per day minimum; they rinse and dry overnight in the hotel.</li><li><b>Bottoms: lightweight shorts or thin chinos</b> — both are fine in Seoul. Shorts are totally normal in the city; Korean dress culture is casual outside of formal workplaces. Avoid jeans in July: they trap heat and dry slowly.</li><li><b>Shoes: comfortable walking shoes with broken-in soles.</b> You'll walk 10–15 km/day on mixed surfaces (stone palace courtyards, uneven sidewalks, tiled subway stations). Sandals are fine for Hongdae evenings but not a full sightseeing day. If any of you haven't broken in your shoes yet — do it this week.</li><li><b>Compact folding umbrella — non-negotiable.</b> Heavy rain hits without warning during jangma. A good compact umbrella folds to 25 cm and costs roughly $10–15 at home (⚠ a rough reference price, not a sourced figure); convenience stores sell them but they're flimsy.</li><li><b>Indoor layer (thin jacket or cardigan).</b> Korean malls, restaurants, subway trains, and arenas run AC at 16–18 °C. The temperature swing between outside (34 °C) and inside (18 °C) is the most common reason people get sick mid-trip. Keep a light layer in your bag at all times — critical for DCC II during MSI.</li><li><b>MSI / arena:</b> team jerseys and esports gear are welcome; no dress code at DCC II beyond the no-huge-bag rule. Bring that AC layer.</li><li><b>Jimjilbang (Day 1, SPAREX):</b> the facility provides shorts and a T-shirt — you need nothing special except flip-flops for walking between the pools. Leave your shoes at the locker.</li><li><b>Daejeon day:</b> same as Seoul. You'll be outdoors at EXPO Science Park for 6+ hours before the match — quick-dry fabric matters most on Saturday.</li></ul>"
   },
   {
     "type": "prose",
