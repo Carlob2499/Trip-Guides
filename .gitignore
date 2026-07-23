@@ -10,5 +10,5 @@ CLAUDE.md
 test-results/
 playwright-report/
 coverage/
-_lhroot/
-.lighthouseci/
+# W2 feedback-export: the agent's working file carries freeform (private) — never committed.
+feedback-export.working.json
