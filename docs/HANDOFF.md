@@ -20,7 +20,42 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (updated 2026-07-23, session close)
+## Snapshot (updated 2026-07-24, session close)
+
+**Astro 6.4.8 → 7.1.3 landed, plus a repo-wide code-quality pass.** `astro check` went
+**286 hints → 10**, `npm audit --omit=dev` went **4 high → 0**, and the build got ~3× faster
+(4.93s → 1.41s). 808 tests green throughout.
+
+- **Typecheck cleanup** — 244 of the hints were one import: `src/content.config.ts` pulled `z`
+  from `astro:content`, which Astro 7 REMOVES; it now comes from `astro/zod`. Plus dead code,
+  no-op awaits, `toThrowError`→`toThrow`, explicit `is:inline`. The **10 remaining hints are
+  deliberate and documented in code** (the UTF-8-safe base64 idiom in `vote-link.ts` /
+  `field-math.ts` — do NOT "modernize", already-shared links depend on it; the `execCommand`
+  clipboard fallback; Google's verbatim maps loader; `gateway.js`'s order-sensitive chain).
+- **Astro 7** — a parallel audit of every documented breaking change found **3 real blockers**
+  where JSX whitespace rules would glue words together (homepage hero ABOVE THE FOLD, raid
+  citations, health page). Fixed with `{" "}` *before* upgrading. Verified by building both
+  versions and comparing served pages: `/health/` pixel-identical, only delta anywhere is the
+  live FX chip's load timing. **Guide content was never exposed** — all guide prose is injected
+  via `set:html`, so the compiler never parses it.
+- Settled empirically: **Astro 7 strips only NEWLINE whitespace between inline elements; same-line
+  spaces survive.** That cleared ~10 further flagged sites with no change needed.
+- Also fixed: the Worker's `AUTO_CAP=0` rejected every submission instead of queueing them, and a
+  blank value silently DISABLED the quota cap; `/health` advertised the deleted `visual.yml`.
+
+**Verification gotchas worth reusing** (both cost real time this session): `file://` screenshots of
+this site are worthless — every internal href is an absolute `/Trip-Guides/` path, so CSS never
+loads; screenshot over HTTP. And any pixel compare MUST block the public internet, or the live
+GitHub status badges and FX chip make unrelated runs look like regressions.
+
+**Open, not blocking:** the guide **prose readability** finding — mobile renders **30 chars/line**
+(desktop 62; ideal 45–75) because `div.shell` and `div.card` stack two gutters (80px of 375px),
+and `.card p{line-height:1.75}` compounds it. Content is NOT the problem (89% of Korea's 326
+blocks are ≤60 words); the column is too narrow. Proposed, not yet done: mobile-only gutter +
+leading fix (~25% less scrolling, zero content edits), then restructure the 35 long blocks
+(day-plan `li`, `.card-lead`) into typed fields.
+
+## Snapshot (2026-07-23 — superseded, kept for the W-series record)
 
 **The skill-loop optimization arc (W-series) shipped this session — W0–W5 done, committed, all
 verified (build clean · 805 tests green · typecheck 0 · perf budget OK).** Plan doc:
