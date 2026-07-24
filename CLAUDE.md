@@ -157,6 +157,35 @@ auto-retries transient Pages failures; only investigate after three consecutive.
 
 ---
 
+## Boundary Checks (binding — the class of bug tests structurally cannot catch)
+
+Unit tests verify code against its author's assumptions; they say nothing about the systems that
+code *meets*. Every defect that survived the W-series' 805 green tests lived at exactly one such
+seam — a competing config file, a GitHub label that didn't exist, a token the API rejected, a
+popup the browser silently blocked. Boundaries are RARE (four in a 44-file arc), so these are
+cheap. Run them **whenever a change touches one** — not on every change:
+
+1. **Grep the environment before adding config.** Adding a wrangler/CI/tool config? First `find`
+   for existing configs of that tool. Discovery mechanisms pick a winner and it may not be yours:
+   a stray root `wrangler.jsonc` silently beat `worker/wrangler.toml` and tried to deploy the
+   whole site instead of the Worker.
+2. **Force the failure path once.** A fallback that has never executed is an assumption, not a
+   feature. Point the primary at a dead URL (or unset its credential), watch the fallback actually
+   run, then revert. This is how `window.open`-after-`await` was caught dying silently to popup
+   blockers — the wizard would have filed nothing and reported nothing.
+3. **Smoke the real integration the moment it exists.** ONE request against the DEPLOYED thing
+   proves more than the whole unit suite. Use an intentionally-invalid payload that trips your own
+   validation: it confirms live + wired + running your code, and creates nothing.
+4. **Explicit over ambient.** Name the config, the path, the version (`--config wrangler.toml`).
+   Anything resolved implicitly from the environment is a bug waiting for the environment to change.
+
+**Do not generalize this into "more tests."** Most of this repo is pure logic where the existing
+unit gates are the right and cheapest tool; blanket end-to-end testing would be slower AND would
+still miss all four of the above. The skill is noticing the few places code meets a system it does
+not control, and spending thirty seconds there.
+
+---
+
 ## Session Setup — Connectors (save tokens)
 
 **Required, verified 2026-07-22** against this repo's actual workflows (static Astro site,
