@@ -64,11 +64,14 @@ const summaryHTML = (boss: any) => {
 
 <p class="raid-sources">
   <small>
-    Counter data:
-    <a href="https://www.dittobase.com/pokemon-go" target="_blank" rel="noopener noreferrer">Dittobase.com</a> ·
-    <a href="https://pokemongohub.net" target="_blank" rel="noopener noreferrer">Pokémon GO Hub</a> ·
-    <a href="https://www.pokebattler.com" target="_blank" rel="noopener noreferrer">Pokébattler.com</a>
-    (June 2026). Shiny rates:
+    {/* Every {" "} below is load-bearing: Astro 7 compiles with JSX whitespace rules, which strip
+        the newline between a text node and the next inline <a>. Without them this citation line
+        renders "Counter data:Dittobase.com ·Pokémon GO Hub ·Pokébattler.com(June 2026)". */}
+    Counter data:{" "}
+    <a href="https://www.dittobase.com/pokemon-go" target="_blank" rel="noopener noreferrer">Dittobase.com</a> ·{" "}
+    <a href="https://pokemongohub.net" target="_blank" rel="noopener noreferrer">Pokémon GO Hub</a> ·{" "}
+    <a href="https://www.pokebattler.com" target="_blank" rel="noopener noreferrer">Pokébattler.com</a>{" "}
+    (June 2026). Shiny rates:{" "}
     <a href="https://www.locachange.com/pokemon-go/go-fest-shiny-odds-and-list/" target="_blank" rel="noopener noreferrer">GO Fest shiny rates guide</a>.
   </small>
 </p>
