@@ -4,6 +4,7 @@ import PwaHead from "../components/PwaHead.astro";
 // Same accent resolution as the guide pages + OG (uniform across surfaces):
 // explicit theme > extracted cover palette > country accent (src/lib/palettes.ts).
 import { accentForGuide, paletteAccentsForGuide } from "../lib/palettes";
+import { accentTokens, accentStyle } from "../lib/accent-tokens";
 import { generateContourLayer } from "../lib/contours";
 import { computeGuideStats } from "../lib/guide-stats";
 import { tripWindow, localISODate } from "../lib/trip-dates";
@@ -230,7 +231,7 @@ const contourLayers = [
         <a
           class="hub-hero"
           href={`${base}/guides/${hero.g.id}/`}
-          style={`--accent:${accentForGuide(hero.g.id, hero.g.data.theme, hero.g.data.country)}`}
+          style={accentStyle(accentTokens(accentForGuide(hero.g.id, hero.g.data.theme, hero.g.data.country)))}
           data-hero-start={heroIsPast ? undefined : hero.ex.startISO}
           data-hero-lat={heroIsPast ? undefined : hero.ex.mapCenter?.lat}
           data-hero-lng={heroIsPast ? undefined : hero.ex.mapCenter?.lng}
@@ -277,7 +278,7 @@ const contourLayers = [
           <a
             class:list={["hubcard", { "hubcard-featured": g.id === heroId }]}
             href={`${base}/guides/${g.id}/`}
-            style={`--accent:${pal.primary};--accent2:${pal.secondary};--accent-raw:${pal.raw}`}
+            style={accentStyle(accentTokens(pal.primary, pal.raw))}
             data-country={g.data.country}
             data-continent={continentFor(g.data.country)}
             data-start={ex.startISO}

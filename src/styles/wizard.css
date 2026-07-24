@@ -7,7 +7,7 @@
 .ngw-step{display:none}
 .ngw-step.ngw-on{display:block}
 .ngw-head{display:flex;align-items:baseline;gap:.6rem;margin:.2rem 0 .9rem;font-family:var(--font-display);font-weight:720;font-size:1.15rem;letter-spacing:-.015em}
-.ngw-num{font-family:var(--font-data);font-size:.66rem;font-weight:700;letter-spacing:.08em;color:var(--accent)}
+.ngw-num{font-family:var(--font-data);font-size:.66rem;font-weight:700;letter-spacing:.08em;color:var(--accent-ink)}
 
 .ngw-nav{display:flex;align-items:center;gap:.8rem;margin:1rem 0 .4rem}
 .ngw-back,.ngw-next{padding:.55rem 1.1rem;border-radius:999px;font-family:var(--font-display);font-weight:640;font-size:.88rem;cursor:pointer;border:1px solid var(--rule);background:var(--card);color:var(--ink);transition:background .18s,color .18s,border-color .18s}

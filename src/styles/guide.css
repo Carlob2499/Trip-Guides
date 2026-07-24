@@ -6,7 +6,7 @@ html{scroll-behavior:smooth;scroll-padding-top:var(--chrome-h)}
    All headings share the display face; body text is Literata. */
 h1{font-family:var(--font-display);font-weight:780;letter-spacing:-.035em;line-height:1.02;text-wrap:balance}
 h2,h3,h4{font-family:var(--font-display);font-weight:400;line-height:1.15;text-wrap:balance}
-a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
+a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 
 /* === TOP NAVIGATION BAR ===================================================== */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:.42rem 1.1rem;border-bottom:1px solid var(--rule);background:var(--bg)}
@@ -38,7 +38,7 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
 .masthead{padding:3.2rem 1.1rem 2rem;border-bottom:1px solid var(--ink);text-align:center}
 /* Thin accent rule above the eyebrow — the editorial "this page starts here" signal */
 .masthead-rule{width:2.8rem;height:2px;background:var(--accent);margin:0 auto 1.3rem}
-.eyebrow{font-family:var(--font-data);font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--accent)}
+.eyebrow{font-family:var(--font-data);font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--accent-ink)}
 /* Display face at masthead scale — publication, not dashboard */
 .masthead h1{font-size:clamp(2.8rem,8vw,4.8rem);margin:.4rem 0 0;letter-spacing:-.02em;font-optical-sizing:auto}
 .dek{color:var(--muted);max-width:58ch;margin:.8rem auto 0;font-size:1.05rem;line-height:1.65}
@@ -54,7 +54,7 @@ a{color:var(--accent);text-underline-offset:2px;transition:color .13s}
    requiring write access) is what actually flips draft:false. */
 .draft-graduate{text-align:center;margin:.6rem auto 0;font-size:.8rem}
 .draft-graduate-link{color:var(--green);text-decoration:underline;text-underline-offset:2px}
-.draft-graduate-link:hover{color:var(--accent)}
+.draft-graduate-link:hover{color:var(--accent-ink)}
 
 /* === WHAT'S NEXT BANNER ======================================================= */
 /* Populated client-side against the device clock; only shown during the trip's
@@ -195,7 +195,7 @@ a.stale-pill:hover{background:color-mix(in srgb,var(--warn) 12%,transparent)}
 .catblock .card-lead>:first-child{margin-top:0}
 .catblock .card-lead>:last-child{margin-bottom:.35rem}
 .card-more{margin-top:.35rem;border-top:1px dashed var(--rule)}
-.card-more-sum{display:inline-flex;align-items:center;gap:.35rem;padding:.5rem 0 .3rem;font-family:var(--font-data);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);cursor:pointer;list-style:none;min-height:34px}
+.card-more-sum{display:inline-flex;align-items:center;gap:.35rem;padding:.5rem 0 .3rem;font-family:var(--font-data);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink);cursor:pointer;list-style:none;min-height:34px}
 .card-more-sum::-webkit-details-marker{display:none}
 .card-more-sum::after{content:"↓";transition:transform .2s}
 .card-more[open] .card-more-sum::after{transform:rotate(180deg)}
@@ -225,7 +225,7 @@ a.stale-pill:hover{background:color-mix(in srgb,var(--warn) 12%,transparent)}
 .card:has(.steps){border-left:3px solid var(--accent)}
 /* .check:first-child never fires (block-title-row is always first) — target any card with checkboxes */
 .card:has(.check){background:color-mix(in srgb,var(--accent) 2%,var(--card))}
-.tag{display:inline-block;font-family:var(--font-data);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.3rem}
+.tag{display:inline-block;font-family:var(--font-data);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-ink);margin-bottom:.3rem}
 .note{font-size:.9rem;color:var(--muted)}
 .cardimg{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:5px;margin:.1rem 0 .2rem;background:var(--bg2)}
 .imgfail{position:relative}
@@ -237,21 +237,21 @@ a.stale-pill:hover{background:color-mix(in srgb,var(--warn) 12%,transparent)}
    doctrine: this can be 2-3 links in a row and must read as tappable at a glance. */
 .transit-links{display:inline-flex;flex-wrap:wrap;gap:.35rem;margin:.3rem 0 0}
 .transit-link{display:inline-flex;align-items:center;gap:.2rem;padding:.24rem .55rem;border-radius:999px;background:var(--card);border:1px solid var(--rule);color:var(--ink);font-family:var(--font-data);font-size:.68rem;font-weight:600;letter-spacing:.01em;text-decoration:none;white-space:nowrap;transition:border-color .15s,color .15s}
-.transit-link:hover{border-color:var(--accent);color:var(--accent)}
+.transit-link:hover{border-color:var(--accent);color:var(--accent-ink)}
 .transit-link:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 
 /* === DAY-BY-DAY ============================================================== */
 .day{display:grid;grid-template-columns:92px 1fr;gap:1rem;padding:1.1rem;border-radius:6px;background:var(--bg2);margin-bottom:.5rem;border:1px solid var(--rule)}
 .day:last-child{margin-bottom:0}
 .day-today{border-color:var(--accent)!important;box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 18%,transparent)}
-.day .d{font-family:var(--font-data);font-size:.74rem;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);padding-top:.35rem}
+.day .d{font-family:var(--font-data);font-size:.74rem;letter-spacing:.05em;text-transform:uppercase;color:var(--accent-ink);padding-top:.35rem}
 .day .b strong{display:block;font-family:var(--font-display);font-size:1.22rem;line-height:1.2;margin-bottom:.25rem}
 .day-kitcount{display:inline-block;font-family:var(--font-data);font-size:.64rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:var(--bg);border:1px solid var(--rule);border-radius:20px;padding:.12rem .55rem;margin-bottom:.45rem;line-height:1.3;vertical-align:middle}
 .day-kitcount.done{color:var(--green);border-color:var(--green)}
 .day-sun{display:inline-flex;align-items:center;gap:.3rem;font-family:var(--font-data);font-size:.74rem;color:var(--muted);margin:0 0 .45rem}
-.day-sun .sun-ico{color:var(--accent)}
+.day-sun .sun-ico{color:var(--accent-ink)}
 .day-sun .sun-sep{opacity:.5}
-.day-sun .sun-golden{color:var(--accent)}
+.day-sun .sun-golden{color:var(--accent-ink)}
 .pace{font-size:.78rem;color:var(--muted);font-family:var(--font-data);margin:.25rem 0 .6rem;line-height:1.55;padding-left:.7rem;border-left:2px solid var(--rule2);overflow-wrap:anywhere}
 .lsnote{display:block;font-size:.9rem;color:var(--green);margin:.5rem 0 .15rem;font-style:italic;line-height:1.55}
 .fit{font-size:.88rem;color:var(--muted);margin-top:.35rem}
@@ -264,7 +264,7 @@ a.stale-pill:hover{background:color-mix(in srgb,var(--warn) 12%,transparent)}
 
 /* === CHECKLISTS ============================================================== */
 .check{display:flex;gap:.6rem;align-items:flex-start;font-size:.95rem;padding:.32rem 0;cursor:pointer;transition:color .12s}
-.check:hover{color:var(--accent2)}
+.check:hover{color:var(--accent-ink)}
 .check input{margin-top:.28rem;width:1.05rem;height:1.05rem;accent-color:var(--accent);flex:none;cursor:pointer}
 /* The label text (which may carry inline <b>/<a>) must be ONE flex item so it
    flows and wraps as normal text; without this wrapper each inline tag becomes a
@@ -316,9 +316,9 @@ footer{border-top:1px solid var(--ink);text-align:center;padding:1.7rem 1.1rem;c
   .sheet-head{flex:none;font-family:var(--font-display);font-size:1.3rem;padding:.3rem 1.2rem .65rem;border-bottom:1px solid var(--rule)}
   .sheet-list{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:.3rem 0 1rem}
   .sheet-cat{display:block;font-family:var(--font-data);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:1rem 1.2rem .25rem;text-decoration:none}
-  .sheet-cat.active{color:var(--accent)}
+  .sheet-cat.active{color:var(--accent-ink)}
   .sheet-link{display:flex;align-items:center;min-height:46px;padding:.2rem 1.2rem;color:var(--ink);text-decoration:none;font-size:1rem}
-  .sheet-link.active{color:var(--accent);font-weight:600}
+  .sheet-link.active{color:var(--accent-ink);font-weight:600}
   .sheet-cat:active,.sheet-link:active{background:var(--bg2)}
   body.sheet-lock{overflow:hidden}
 }
@@ -372,7 +372,7 @@ body{overflow-x:clip}
 .brange{display:block;font-size:.68rem;color:var(--muted);margin-top:.05rem}
 .btot-range{display:block;font-size:.72rem;font-weight:400;color:var(--muted);margin-top:.15rem}
 .bpill{display:inline-block;font-size:.6rem;font-family:var(--font-data);letter-spacing:.03em;background:var(--bg2);border:1px solid var(--rule2);border-radius:3px;padding:0 .38rem;color:var(--muted);line-height:1.7;margin-left:.3rem;vertical-align:middle}
-.brate-link{color:var(--accent)}
+.brate-link{color:var(--accent-ink)}
 .brate-link:hover{text-decoration:underline}
 
 /* === READING PROGRESS BAR =================================================== */
@@ -381,9 +381,9 @@ body{overflow-x:clip}
 
 /* === STATS BAR PILL VARIANTS ================================================ */
 /* countdown — accent-coloured, draws the eye */
-.gstat-countdown{color:var(--accent);border-color:var(--accent);font-weight:600}
+.gstat-countdown{color:var(--accent-ink);border-color:var(--accent);font-weight:600}
 /* active (trip happening now / today) — bolder accent */
-.gstat-active{color:var(--accent);border-color:var(--accent);font-weight:700}
+.gstat-active{color:var(--accent-ink);border-color:var(--accent);font-weight:700}
 /* past trip — muted, unobtrusive */
 .gstat-past{color:var(--muted);border-color:var(--rule)}
 /* offline ready — green = good-to-go */
@@ -480,7 +480,7 @@ body{overflow-x:clip}
 .share-dl{display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.45rem .4rem;border:1px solid var(--rule2);border-radius:5px;text-decoration:none;font-size:.85rem;color:var(--muted);transition:color .14s,border-color .14s}
 .share-dl:hover{color:var(--ink);border-color:var(--ink)}
 .share-dl:only-child{grid-column:1 / -1}
-.share-dl-ext{font-family:var(--font-data);font-size:9px;letter-spacing:.05em;color:var(--accent)}
+.share-dl-ext{font-family:var(--font-data);font-size:9px;letter-spacing:.05em;color:var(--accent-ink)}
 /* Share-summary button — full-width action under the URL row */
 .share-summary-btn{width:100%;margin-bottom:.85rem;font-family:var(--font-data);font-size:10px;letter-spacing:.06em;text-transform:uppercase;background:none;color:var(--muted);border:1px solid var(--rule2);border-radius:5px;padding:.5rem .6rem;cursor:pointer;transition:color .14s,border-color .14s}
 .share-summary-btn:hover{color:var(--ink);border-color:var(--ink)}
@@ -494,10 +494,10 @@ body{overflow-x:clip}
 .anchor-btn{flex:none;background:none;border:none;padding:.1rem .3rem;cursor:pointer;font-family:var(--font-data);font-size:.7rem;color:var(--muted);opacity:0;border-radius:3px;transition:opacity .15s,color .15s,background .15s;line-height:1;align-self:center}
 .anchor-btn:focus-visible{opacity:1;outline:2px solid var(--theme-primary,var(--accent));outline-offset:2px}
 .card:hover .anchor-btn,.block:hover .anchor-btn{opacity:.45}
-.card:hover .anchor-btn:hover,.block:hover .anchor-btn:hover{opacity:1;color:var(--accent)}
+.card:hover .anchor-btn:hover,.block:hover .anchor-btn:hover{opacity:1;color:var(--accent-ink)}
 @media(hover:none){.anchor-btn{opacity:.3}}
 .copy-addr{display:inline-flex;align-items:center;gap:.25em;font-family:var(--font-data);font-size:.62rem;letter-spacing:.04em;color:var(--muted);background:var(--bg);border:1px solid var(--rule);border-radius:4px;padding:.1rem .4rem;cursor:pointer;vertical-align:middle;margin-left:.35em;line-height:1.4;transition:color .15s,border-color .15s,background .15s;white-space:nowrap}
-.copy-addr:hover{color:var(--accent);border-color:var(--accent)}
+.copy-addr:hover{color:var(--accent-ink);border-color:var(--accent)}
 .copy-addr.copied{color:var(--green);border-color:var(--green)}
 
 /* === COLLAPSIBLE SECTION CARD (opt-in via `collapsible:true`) ================ */
@@ -543,9 +543,9 @@ details.card.is-collapsible>.block-body{padding:1.1rem 1.4rem 1.25rem}
 details{margin:.3rem 0;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
 details summary{cursor:pointer;padding:.55rem .8rem;font-weight:600;font-size:.92rem;list-style:none;display:flex;align-items:center;gap:.5rem;user-select:none;background:var(--bg2)}
 details summary::-webkit-details-marker{display:none}
-details summary::before{content:"▶";font-size:.65rem;color:var(--accent);transition:transform .18s;flex:none}
+details summary::before{content:"▶";font-size:.65rem;color:var(--accent-ink);transition:transform .18s;flex:none}
 details[open] summary::before{transform:rotate(90deg)}
-details[open] summary{border-bottom:1px solid var(--rule);color:var(--accent)}
+details[open] summary{border-bottom:1px solid var(--rule);color:var(--accent-ink)}
 details > *:not(summary){padding:.55rem .8rem}
 details table{margin:.3rem 0 .4rem}
 .raid-intro{font-size:.88rem;color:var(--muted);margin:.1rem 0 .6rem;line-height:1.5}
@@ -559,7 +559,7 @@ details table{margin:.3rem 0 .4rem}
 .hab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.9rem;margin:.2rem 0 .3rem}
 .hab-card{background:var(--bg2);border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:7px;padding:.85rem .95rem;min-width:0}
 .hab-head{display:flex;align-items:baseline;justify-content:space-between;gap:.5rem}
-.hab-day{font-family:var(--font-display);font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+.hab-day{font-family:var(--font-display);font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent-ink)}
 .hab-time{font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
 .hab-name{margin:.2rem 0 .5rem;font-size:1.02rem;line-height:1.2}
 .hab-types{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.6rem}
@@ -575,7 +575,7 @@ details table{margin:.3rem 0 .4rem}
 /* Shiny-odds badge — a tiny, instantly-recognizable ✨ pill instead of reading
    "Shiny 1/20" as plain text buried in a sentence. Used in raid-boss summaries
    and anywhere else a shiny rate needs to jump out at a glance. */
-.shiny-pill{display:inline-flex;align-items:center;gap:.2em;font-family:var(--font-data);font-size:.7rem;font-weight:700;color:var(--accent2);background:color-mix(in srgb,var(--accent) 12%,var(--card));border:1px solid color-mix(in srgb,var(--accent) 35%,var(--rule2));border-radius:99px;padding:.08rem .5rem .08rem .4rem;white-space:nowrap}
+.shiny-pill{display:inline-flex;align-items:center;gap:.2em;font-family:var(--font-data);font-size:.7rem;font-weight:700;color:var(--accent-ink);background:color-mix(in srgb,var(--accent) 12%,var(--card));border:1px solid color-mix(in srgb,var(--accent) 35%,var(--rule2));border-radius:99px;padding:.08rem .5rem .08rem .4rem;white-space:nowrap}
 
 /* === INFOGRID (compact icon-labeled fact cards) ============================= */
 /* Replaces "here's everything you need to know" bullet-list prose with one short
@@ -599,7 +599,7 @@ details table{margin:.3rem 0 .4rem}
 .tl-chips{display:flex;flex-wrap:wrap;gap:.32rem}
 .tl-chip{font-size:.8rem;line-height:1.4;background:var(--card);border:1px solid var(--rule);border-radius:5px;padding:.14rem .5rem}
 .tl-chip-hot{background:color-mix(in srgb,var(--accent) 14%,var(--card));border-color:color-mix(in srgb,var(--accent) 40%,var(--rule2));font-weight:600}
-.tl-chip-shiny{color:var(--accent2)}
+.tl-chip-shiny{color:var(--accent-ink)}
 .tl-body{font-size:.8rem;color:var(--muted);line-height:1.45;margin-top:.45rem}
 /* First tier (typically "S — must do") gets the accent border to read as top priority
    at a glance without needing to parse the label text first. */

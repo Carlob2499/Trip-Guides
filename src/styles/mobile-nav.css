@@ -12,11 +12,11 @@
   /* U2: exclude every tool link (layout chrome — Budget/Vote/Reminders/Learnings/Trip Kit,
      .sheet-tool) from the bearing-number counter in one rule, not per-tool :not()s that
      silently miss any tool link added later. */
-  .sheet-cat:not(.sheet-tool)::before{counter-increment:bearing;content:counter(bearing,decimal-leading-zero);font-family:var(--font-data);font-size:.66rem;font-weight:700;letter-spacing:.08em;color:var(--accent)}
+  .sheet-cat:not(.sheet-tool)::before{counter-increment:bearing;content:counter(bearing,decimal-leading-zero);font-family:var(--font-data);font-size:.66rem;font-weight:700;letter-spacing:.08em;color:var(--accent-ink)}
   .sheet-tool::before{content:"·";font-family:var(--font-data);color:var(--muted)}
-  .sheet-cat.active{color:var(--accent)}
+  .sheet-cat.active{color:var(--accent-ink)}
   .sheet-link{padding-left:3rem;color:var(--muted);font-size:.95rem}
-  .sheet-link.active{color:var(--accent)}
+  .sheet-link.active{color:var(--accent-ink)}
 
   /* Staggered rise-in on open. */
   .sheet .sheet-cat,.sheet .sheet-link{opacity:0;transform:translateY(14px);transition:opacity .28s ease,transform .34s cubic-bezier(.2,1.1,.3,1)}

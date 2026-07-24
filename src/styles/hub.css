@@ -34,11 +34,11 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .hubcard-country{font-family:var(--font-data);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .hubcard-title{font-family:var(--font-display);font-weight:720;font-size:1.6rem;line-height:1.06;margin-top:.1rem;letter-spacing:-.025em}
 .hubcard-dek{color:var(--muted);font-size:.91rem;line-height:1.5;flex:1}
-.hubcard-go{margin-top:.65rem;font-family:var(--font-data);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);transition:letter-spacing .15s}
+.hubcard-go{margin-top:.65rem;font-family:var(--font-data);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink);transition:letter-spacing .15s}
 .hubcard:hover .hubcard-go{letter-spacing:.12em}
 
 /* Trip countdown badge — sits next to country label */
-.hubcard-badge{font-family:var(--font-data);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);border-radius:99px;padding:.1rem .5rem;line-height:1.5;white-space:nowrap;margin-left:auto}
+.hubcard-badge{font-family:var(--font-data);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-ink);border:1px solid var(--accent);border-radius:99px;padding:.1rem .5rem;line-height:1.5;white-space:nowrap;margin-left:auto}
 
 /* Meta row — section/day count */
 .hubcard-meta{display:flex;gap:.4rem;margin-top:.1rem;flex-wrap:wrap}
@@ -65,7 +65,7 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .ng-field input,.ng-field select{font:inherit;font-size:.92rem;background:var(--bg2);color:var(--ink);border:1px solid var(--rule2);border-radius:6px;padding:.5rem .6rem;width:100%}
 .ng-field input:focus,.ng-field select:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
 .ng-row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
-.ng-err{color:var(--accent);font-size:.82rem}
+.ng-err{color:var(--accent-ink);font-size:.82rem}
 .ng-submit{margin-top:.4rem;font-family:var(--font-data);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--ink);color:var(--bg);border:none;border-radius:6px;padding:.62rem 1rem;cursor:pointer;transition:background .14s}
 .ng-submit:hover{background:var(--accent)}
 

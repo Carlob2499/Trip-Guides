@@ -28,7 +28,7 @@
 .split-in:focus{outline:2px solid var(--theme-primary,var(--accent));outline-offset:0;border-color:transparent}
 /* delete button */
 .split-del{background:none;border:none;cursor:pointer;font-size:1rem;color:var(--muted);padding:.1rem .35rem;border-radius:3px;line-height:1;transition:color .14s,background .14s;flex:none}
-.split-del:hover{color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.split-del:hover{color:var(--accent-ink);background:color-mix(in srgb,var(--accent) 10%,transparent)}
 /* split mode toggle */
 .sc-mode-toggle{display:flex;gap:.25rem}
 .scm-btn{font-family:var(--font-data);font-size:.68rem;letter-spacing:.04em;background:none;border:1px solid var(--rule2);border-radius:4px;padding:.26rem .6rem;cursor:pointer;color:var(--muted);transition:background .13s,color .13s,border-color .13s;white-space:nowrap}
@@ -71,14 +71,14 @@
 .se-parts-lbl{font-family:var(--font-data);font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:.15rem}
 .se-part{padding:.22rem .55rem;border:1px solid var(--rule2);border-radius:999px;background:var(--bg);color:var(--muted);font-size:.78rem;font-weight:600;cursor:pointer;text-decoration:line-through;text-decoration-color:var(--rule2)}
 .se-part-on{background:var(--accent);border-color:var(--accent);color:#fff;text-decoration:none}
-.se-part:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
-.se-parts-note{font-family:var(--font-data);font-size:.68rem;font-weight:700;color:var(--accent);margin-left:.1rem}
+.se-part:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.se-parts-note{font-family:var(--font-data);font-size:.68rem;font-weight:700;color:var(--accent-ink);margin-left:.1rem}
 .se-custom{display:flex;flex-wrap:wrap;gap:.4rem .6rem;margin-top:.4rem;padding:.55rem .6rem;background:var(--bg2);border-radius:5px;border-left:3px solid var(--rule2)}
 .se-custom--warn{border-left-color:var(--accent)}
 .se-cl{display:flex;flex-direction:column;gap:.18rem;min-width:5rem}
 .se-cl-name{font-family:var(--font-data);font-size:.62rem;letter-spacing:.04em;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .se-ca{text-align:right;font-size:.85rem}
-.se-warn{width:100%;font-family:var(--font-data);font-size:.65rem;color:var(--accent);letter-spacing:.02em}
+.se-warn{width:100%;font-family:var(--font-data);font-size:.65rem;color:var(--accent-ink);letter-spacing:.02em}
 /* results */
 .split-settle-head{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin:.9rem 0 .5rem}
 .split-settle-head #sCopySettle{margin-left:auto}
@@ -90,13 +90,13 @@
 .sb-verb{font-size:.82rem;color:var(--muted)}
 .sb-amt{font-family:var(--font-data);font-size:.88rem;font-weight:600;text-align:right;white-space:nowrap}
 .sb-owed .sb-amt{color:var(--green)}
-.sb-owes .sb-amt{color:var(--accent)}
+.sb-owes .sb-amt{color:var(--accent-ink)}
 .sb-even .sb-amt{color:var(--muted)}
 /* settlement rows */
 .st-row{background:var(--bg2);border:1px solid var(--rule);border-radius:6px;padding:.65rem .85rem;margin-bottom:.4rem}
 .st-parties{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;margin-bottom:.25rem}
 .st-from{font-weight:600}
-.st-arrow{color:var(--accent);font-size:1.1rem;line-height:1}
+.st-arrow{color:var(--accent-ink);font-size:1.1rem;line-height:1}
 .st-to{font-weight:600}
 .st-amt-row{display:flex;align-items:baseline;gap:.5rem}
 .st-usd{font-family:var(--font-data);font-size:1.05rem;font-weight:700}
@@ -116,7 +116,7 @@
 .vo-count{font-family:var(--font-data);font-size:.9rem;font-weight:700;color:var(--muted);min-width:1.4rem;text-align:right}
 .vo-btn{font-family:var(--font-data);font-size:.72rem;letter-spacing:.05em;background:none;border:1px solid var(--rule2);border-radius:4px;padding:.28rem .6rem;cursor:pointer;color:var(--muted);transition:color .13s,border-color .13s,background .13s;flex:none}
 .vo-btn:hover{color:var(--ink);border-color:var(--ink)}
-.vo-row--leader .vo-count{color:var(--accent)}
+.vo-row--leader .vo-count{color:var(--accent-ink)}
 .vo-row--leader .vo-text{font-weight:600}
 
 /* mobile tweaks — TripSplit/Vote's own share of guide.css's touch-target expander (the

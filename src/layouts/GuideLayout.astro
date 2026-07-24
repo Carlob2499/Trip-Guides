@@ -9,8 +9,9 @@ import Reminders from "../components/Reminders.astro";
 import TripKit from "../components/TripKit.astro";
 import { bucket } from "../lib/buckets";
 import { emergencyFor } from "../data/countries.mjs";
-import { darken, currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
+import { currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
 import { paletteFor, accentForGuide } from "../lib/palettes";
+import { accentTokens, accentStyle } from "../lib/accent-tokens";
 import { generateContourLayer } from "../lib/contours";
 import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
 import { collectWaypoints, collectDayEvents, buildSummary } from "../features/exports/index";
@@ -84,7 +85,10 @@ const thumbSrc = (f: string) =>
 const guideSlug = Astro.url.pathname.split("/").filter(Boolean).pop() ?? "";
 const extracted = paletteFor(guideSlug);
 const accent  = accentForGuide(guideSlug, guide.theme, guide.country);
-const accent2 = darken(accent, 0.14);
+// Text shade comes from accentTokens (src/lib/accent-tokens.ts) — the SAME derivation the hub
+// card uses. It used to be `darken(accent, 0.14)` here and the palette's `secondary` there, which
+// is how one token name ended up meaning two colours and shipping 3.32:1 link text.
+const tokens = accentTokens(accent, extracted?.accent);
 const themePrimary   = guide.theme?.primary   ?? extracted?.primary   ?? accent;
 const themeSecondary = guide.theme?.secondary ?? extracted?.secondary ?? accent;
 const themeAccent    = guide.theme?.accent    ?? extracted?.accent    ?? accent;
@@ -226,7 +230,7 @@ const hasDayEvents = collectDayEvents(guide).length > 0;
 const tripSummary = buildSummary(guide);
 ---
 <!doctype html>
-<html lang="en" style={`--accent:${accent};--accent2:${accent2};--theme-primary:${themePrimary};--theme-secondary:${themeSecondary};--theme-accent:${themeAccent}`}>
+<html lang="en" style={accentStyle(tokens, { "--theme-primary": themePrimary, "--theme-secondary": themeSecondary, "--theme-accent": themeAccent })}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

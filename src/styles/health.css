@@ -8,7 +8,7 @@
 .hl-kicker{font-family:var(--font-data);font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 .3rem}
 .hl-head{font-family:var(--font-display);font-weight:760;font-size:1.9rem;letter-spacing:-.02em;margin:0 0 .55rem;line-height:1.1}
 .hl-intro{color:var(--muted);font-size:.96rem;line-height:1.55;margin:0 0 1.2rem;max-width:40rem}
-.hl-intro a{color:var(--accent)}
+.hl-intro a{color:var(--accent-ink)}
 
 /* Legend + "what green means" caveat */
 .hl-note{background:var(--bg2);border:1px solid var(--rule);border-radius:var(--r-md);padding:.85rem 1rem;font-size:.85rem;line-height:1.5;color:var(--muted);margin:0 0 2rem}
@@ -37,7 +37,7 @@
 .hl-item-top{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap}
 .hl-item-name{font-family:var(--font-data);font-size:.92rem;font-weight:700;color:var(--ink)}
 .hl-item-name a{color:inherit;text-decoration:none;border-bottom:1px dotted var(--rule2)}
-.hl-item-name a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+.hl-item-name a:hover{color:var(--accent-ink);border-bottom-color:var(--accent)}
 .hl-item-desc{color:var(--muted);font-size:.9rem;line-height:1.5;margin:.5rem 0 0}
 .hl-verdict{margin:.6rem 0 0;font-size:.82rem;line-height:1.5;display:flex;gap:.5rem;align-items:baseline}
 .hl-verdict .dot{flex:none;width:.55rem;height:.55rem;border-radius:50%;margin-top:.35rem}
@@ -48,6 +48,6 @@
 .hl-verdict span{color:var(--muted)}
 
 .hl-home-link{display:inline-block;margin-top:2.4rem;font-family:var(--font-data);font-size:.8rem;color:var(--muted);text-decoration:none}
-.hl-home-link:hover{color:var(--accent)}
+.hl-home-link:hover{color:var(--accent-ink)}
 
 .hl-asof{margin-top:1.4rem;font-family:var(--font-data);font-size:.72rem;color:var(--muted)}

@@ -17,7 +17,7 @@
      browser/screenshot tool available) — a human should eyeball it post-deploy per that doc. */
   --hub-contour-far:  color-mix(in srgb, var(--muted) 16%, transparent);
   --hub-contour-mid:  color-mix(in srgb, var(--muted) 24%, transparent);
-  --hub-contour-near: color-mix(in srgb, var(--accent2) 18%, transparent);
+  --hub-contour-near: color-mix(in srgb, var(--accent-ink) 18%, transparent);
   --hub-route-stroke: var(--accent);
 }
 
@@ -72,11 +72,11 @@
 .ov-inner { position: relative; z-index: 2; text-align: center; padding: 2rem 1.3rem; max-width: 54rem; margin: 0 auto; }
 .ov-eyebrow {
   font-family: var(--font-data); font-weight: 700; font-size: .74rem; letter-spacing: .2em;
-  text-transform: uppercase; color: var(--accent); margin: 0 0 1.3rem;
+  text-transform: uppercase; color: var(--accent-ink); margin: 0 0 1.3rem;
 }
 .ov-head { font-family: var(--font-display); font-weight: 780; font-size: clamp(2.5rem, 8vw, 5rem); line-height: 1.02; letter-spacing: -.03em; margin: 0; }
 .ov-line { display: block; }
-.ov-line-accent { color: var(--accent); }
+.ov-line-accent { color: var(--accent-ink); }
 .ov-sub { font-family: var(--font-body); margin: 1.5rem auto 0; max-width: 42ch; font-size: 1.12rem; color: var(--muted); line-height: 1.6; }
 .ov-sub b { color: var(--ink); font-weight: 600; }
 
@@ -142,7 +142,7 @@ body.ov-play .ov-cue { animation: ovCue 2.4s var(--ease-out-expo) 1.35s forwards
 .stats-beat { padding: 3vh 1.3rem 6vh; text-align: center; }
 .stats-beat-in { max-width: 46rem; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.6rem; }
 .stat-n { font-family: var(--font-display); font-weight: 760; font-size: clamp(2.1rem, 6vw, 3.2rem); line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums; }
-.stat-n.is-accent { color: var(--accent); }
+.stat-n.is-accent { color: var(--accent-ink); }
 .stat-l { margin-top: .5rem; font-family: var(--font-data); font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 .stats-note { margin: 2.2rem auto 0; max-width: 42ch; color: var(--muted); font-size: .92rem; font-family: var(--font-body); }
 /* U12: a bounce-once visitor used to permanently lose the stats beat the moment
