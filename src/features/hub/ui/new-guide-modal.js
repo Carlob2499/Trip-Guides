@@ -112,14 +112,28 @@ export function initNewGuideModal() {
       "&country=" + encodeURIComponent(country);
   }
 
-  // FALLBACK: prefilled GitHub issue in a new tab (the original one-click path).
-  function fallbackToGitHub(raw, country) {
+  function githubIssueUrl(raw, country) {
     const params = new URLSearchParams();
     params.set("template", "new-guide.yml");
     params.set("labels", "new-guide");
     params.set("title", "New guide: " + country);
     for (const [k, v] of Object.entries(raw)) params.set(k, v);
-    window.open("https://github.com/" + repo + "/issues/new?" + params.toString(), "_blank", "noopener");
+    return "https://github.com/" + repo + "/issues/new?" + params.toString();
+  }
+
+  // FALLBACK: prefilled GitHub issue (the original one-click path).
+  // `afterAwait` is load-bearing, not cosmetic: once we've awaited the proxy request, window.open
+  // is no longer inside the user-gesture context, so popup blockers eat it SILENTLY — the traveler
+  // would click Submit, get sent to /progress/, and no issue would ever be filed. In that case
+  // navigate THIS tab to the issue instead. With no await (proxy off) we're still in the gesture,
+  // so the original open-a-tab-and-watch-progress behavior is kept.
+  function fallbackToGitHub(raw, country, afterAwait) {
+    const url = githubIssueUrl(raw, country);
+    if (afterAwait) {
+      location.href = url;
+      return;
+    }
+    window.open(url, "_blank", "noopener");
     closeModal();
     toProgress(country);
   }
@@ -135,7 +149,9 @@ export function initNewGuideModal() {
       const raw = collectRaw(country);
 
       // ZERO-CLICK: file via the Worker when configured. Any failure falls through to GitHub.
+      let proxyTried = false;
       if (INTAKE_PROXY.url) {
+        proxyTried = true;
         try {
           const turnstileToken = await getTurnstileToken(INTAKE_PROXY.turnstileSiteKey);
           const res = await fetch(INTAKE_PROXY.url, {
@@ -153,7 +169,7 @@ export function initNewGuideModal() {
           // network/proxy error — fall through to the GitHub path so the user still succeeds.
         }
       }
-      fallbackToGitHub(raw, country);
+      fallbackToGitHub(raw, country, proxyTried);
     });
   }
 }
