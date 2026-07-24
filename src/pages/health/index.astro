@@ -101,11 +101,11 @@ const support: Flow[] = [
     verdict: "Green is the norm; this is the safety net the whole repo leans on.",
   },
   {
-    file: "visual.yml",
-    name: "visual",
-    desc: "Playwright snapshots that catch unintended visual changes to the guides, plus a real airplane-mode suite (tests/visual/offline.spec.ts) proving the service-worker precache actually works offline.",
+    file: "a11y.yml",
+    name: "a11y",
+    desc: "An axe-core accessibility gate over the hub and every guide, blocking on any moderate, serious, or critical violation. This is the rubric's accessibility row, enforced rather than asserted.",
     state: "proven",
-    verdict: "The offline claim used to be an assumption — now every guide is tested loading with zero network after the service worker takes control, and the \"Works offline\" badge is checked against real Cache Storage state, not just navigator.onLine.",
+    verdict: "It replaced a screenshot-diff gate that cried wolf on every intentional design change — a pixel compare fails precisely when you meant to move pixels. This one only fails for reasons that actually harm a reader. The behavioural suites (offline, SOS, share, itinerary) still run locally via npm run test:e2e; they are deliberately not gated here, so this check can never go red for a reason unrelated to accessibility.",
   },
 ];
 
