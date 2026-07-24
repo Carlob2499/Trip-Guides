@@ -58,4 +58,9 @@ jobs:
           # updated "to prevent critical errors". Pin the current major instead.
           wranglerVersion: "4"
           workingDirectory: worker
-          command: deploy
+          # `--config` is REQUIRED, not decorative: a vestigial `wrangler.jsonc` at the repo root
+          # (from an earlier hosting experiment — it declares the ASTRO SITE as static assets in
+          # ./dist) otherwise wins config discovery, and wrangler tries to deploy the website
+          # instead of this Worker, failing on a dist/ that a Worker deploy never builds. Naming
+          # the config removes the ambiguity entirely.
+          command: deploy --config wrangler.toml
