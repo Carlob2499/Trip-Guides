@@ -245,7 +245,7 @@ import { trapFocus, migrateStorageKey } from "../../../scripts/util.js";
         var list = document.createElement("ol");
         list.className = "focus-stops";
         var srcStops = todayCard.querySelectorAll(".stop");
-        srcStops.forEach(function (src, i) {
+        srcStops.forEach(function (src) {
           var li = document.createElement("li");
           li.className = "focus-stop" + (src.classList.contains("stop-done") ? " focus-done" : "");
           li.setAttribute("role", "checkbox");

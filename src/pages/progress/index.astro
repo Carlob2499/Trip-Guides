@@ -71,7 +71,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
       <a class="pg-home-link" href={`${base}/`}>← Back to all guides</a>
     </div>
 
-    <script type="application/json" id="pgConfig" set:html={jsonEmbed({ base })}></script>
+    <script type="application/json" is:inline id="pgConfig" set:html={jsonEmbed({ base })}></script>
 
     <script>
       import { initProgress } from "../../features/pipeline-progress/index.js";

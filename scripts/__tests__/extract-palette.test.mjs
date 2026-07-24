@@ -5,7 +5,7 @@
 // code, generated on the fly so there's no binary fixture to keep in sync.
 import { describe, it, expect } from "vitest";
 import sharp from "sharp";
-import { dominantVibrant, rgbToHsl, hslToHex, gate } from "../extract-palette.mjs";
+import { dominantVibrant, rgbToHsl, gate } from "../extract-palette.mjs";
 
 async function solidColorPixels(r, g, b, w = 8, h = 8) {
   const { data } = await sharp({ create: { width: w, height: h, channels: 3, background: { r, g, b } } })

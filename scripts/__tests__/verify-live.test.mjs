@@ -34,27 +34,27 @@ describe("discoverPublishedSlugs (pure, real temp dir)", () => {
   it("includes flat and directory guides with no draft flag", async () => {
     await flat("us", { title: "Sedona" });
     await dirGuide("korea", { title: "Korea" });
-    expect(await discoverPublishedSlugs(dir)).toEqual(["korea", "us"]);
+    expect(discoverPublishedSlugs(dir)).toEqual(["korea", "us"]);
   });
 
   it("excludes guides marked draft:true, in either shape", async () => {
     await flat("live", { title: "Live" });
     await flat("hidden", { title: "Hidden", draft: true });
     await dirGuide("draftdir", { title: "Draft dir", draft: true });
-    expect(await discoverPublishedSlugs(dir)).toEqual(["live"]);
+    expect(discoverPublishedSlugs(dir)).toEqual(["live"]);
   });
 
   it("treats draft:false and a missing draft key as published", async () => {
     await flat("a", { draft: false });
     await flat("b", {});
-    expect(await discoverPublishedSlugs(dir)).toEqual(["a", "b"]);
+    expect(discoverPublishedSlugs(dir)).toEqual(["a", "b"]);
   });
 
   it("skips a directory with no _guide.json and malformed JSON without throwing", async () => {
     await mkdir(path.join(dir, "empty"), { recursive: true });
     await writeFile(path.join(dir, "broken.json"), "{ not json");
     await flat("ok", { title: "OK" });
-    expect(await discoverPublishedSlugs(dir)).toEqual(["ok"]);
+    expect(discoverPublishedSlugs(dir)).toEqual(["ok"]);
   });
 
   it("returns [] for a nonexistent dir", () => {
@@ -126,7 +126,6 @@ describe("diagnose (pure verdict)", () => {
 });
 
 describe("checkLive (shell, injected fetch — no network, no real clock)", () => {
-  const guidesDir = path.join(tmpdir(), "verify-live-fixture-DOES-NOT-EXIST");
   // Injected fetch keyed by URL substring; returns a Response-like object.
   const makeFetch = (routes) => async (url) => {
     for (const [needle, resp] of routes) {

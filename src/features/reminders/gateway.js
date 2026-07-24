@@ -26,6 +26,10 @@ export function createGateway(storeKey) {
     /* Start the data source. Resolves {live:true} once the shared room is connected,
        {live:false} for the local-only mode; rejects when Firebase is configured but
        unreachable (the caller shows offline — local items still emitted). */
+    // TypeScript suggests converting this to an async function. Deliberately NOT done: the .then()
+    // chain below is order-sensitive (stranded local items must be adopted BEFORE subscribing, see
+    // the comment there), and rewriting control flow to silence a cosmetic hint is exactly the kind
+    // of "harmless" change that moves an await by one tick and loses a write.
     connect: function () {
       if (!hasFirebase()) {
         items = readLocal();

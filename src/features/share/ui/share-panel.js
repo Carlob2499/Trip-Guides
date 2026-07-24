@@ -147,6 +147,10 @@ export function initSharePanel(lockScroll, unlockScroll) {
         ta.style.cssText = "position:fixed;opacity:0;top:0;left:0;width:1px;height:1px";
         document.body.appendChild(ta);
         ta.focus(); ta.select();
+        // execCommand is deprecated and stays ON PURPOSE: this whole function is the FALLBACK for
+        // browsers where navigator.clipboard is missing or rejects (older iOS Safari, and any
+        // non-secure context). The modern API is already tried first at the top of the handler —
+        // deleting this branch would make "Copy link" silently do nothing for those visitors.
         try { document.execCommand("copy"); flash(); } catch (e) {}
         document.body.removeChild(ta);
       }

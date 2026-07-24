@@ -14,7 +14,7 @@
   var rail = document.createElement("nav");
   rail.className = "spine";
   rail.setAttribute("aria-label", "Reading progress");
-  var ticks = gtabs.map(function (t, i) {
+  var ticks = gtabs.map(function (t) {
     var tick = document.createElement("button");
     tick.type = "button";
     tick.className = "spine-tick";

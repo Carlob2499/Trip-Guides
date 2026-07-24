@@ -16,7 +16,7 @@ const payload = jsonEmbed({
 });
 ---
 <div class="itin-map" data-itin-map>
-  <script type="application/json" data-map-data set:html={payload} />
+  <script type="application/json" is:inline data-map-data set:html={payload} />
   <iframe class="osmmap" loading="lazy" title="Area map" allowfullscreen
     src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox(sec.center, sec.span)}&layer=mapnik&marker=${sec.center.lat}%2C${sec.center.lng}`}>
   </iframe>

@@ -11,9 +11,8 @@
    their GitHub issue-confirmation comment (which always carries a `?slug=` progress link built
    from the REAL slug — see new-guide.yml). Honest-by-design: never claim progress for a guide
    this can't actually find. */
-import { deriveProgress, formatElapsed, predictSlug, STAGE_ORDER, createGithubGateway } from "../index";
+import { deriveProgress, formatElapsed, predictSlug, createGithubGateway } from "../index";
 
-const REPO = "Carlob2499/Trip-Guides";
 const OWNER = "Carlob2499";
 const NAME = "Trip-Guides";
 const POLL_MS = 15000;

@@ -14,7 +14,7 @@ describe('formatMinor', () => {
   });
 
   it('fails loudly on unknown currencies instead of guessing the exponent', () => {
-    expect(() => formatMinor(100, 'XYZ')).toThrowError(/unknown currency/);
+    expect(() => formatMinor(100, 'XYZ')).toThrow(/unknown currency/);
   });
 });
 
@@ -76,7 +76,7 @@ describe('computeSplits — PERCENTAGE', () => {
   });
 
   it('rejects percentages that do not sum to 100', () => {
-    expect(() => computeSplits(100, 'PERCENTAGE', [p('a', 60), p('b', 30)])).toThrowError(
+    expect(() => computeSplits(100, 'PERCENTAGE', [p('a', 60), p('b', 30)])).toThrow(
       SplitError,
     );
   });
@@ -95,11 +95,11 @@ describe('computeSplits — EXACT', () => {
   it('rejects exact amounts that do not sum to the total', () => {
     expect(() =>
       computeSplits(87000, 'EXACT', [p('a', 40000), p('b', 27000), p('c', 19999)]),
-    ).toThrowError(/sum to 86999, expected 87000/);
+    ).toThrow(/sum to 86999, expected 87000/);
   });
 
   it('rejects non-integer exact weights', () => {
-    expect(() => computeSplits(100, 'EXACT', [p('a', 50.5), p('b', 49.5)])).toThrowError(
+    expect(() => computeSplits(100, 'EXACT', [p('a', 50.5), p('b', 49.5)])).toThrow(
       SplitError,
     );
   });
@@ -107,27 +107,27 @@ describe('computeSplits — EXACT', () => {
 
 describe('computeSplits — input validation', () => {
   it('rejects a negative total', () => {
-    expect(() => computeSplits(-1, 'EQUAL', [p('a')])).toThrowError(SplitError);
+    expect(() => computeSplits(-1, 'EQUAL', [p('a')])).toThrow(SplitError);
   });
 
   it('rejects a non-integer total', () => {
-    expect(() => computeSplits(10.5, 'EQUAL', [p('a')])).toThrowError(SplitError);
+    expect(() => computeSplits(10.5, 'EQUAL', [p('a')])).toThrow(SplitError);
   });
 
   it('rejects an empty participant list', () => {
-    expect(() => computeSplits(100, 'EQUAL', [])).toThrowError(SplitError);
+    expect(() => computeSplits(100, 'EQUAL', [])).toThrow(SplitError);
   });
 
   it('rejects duplicate members', () => {
-    expect(() => computeSplits(100, 'EQUAL', [p('a'), p('a')])).toThrowError(SplitError);
+    expect(() => computeSplits(100, 'EQUAL', [p('a'), p('a')])).toThrow(SplitError);
   });
 
   it('rejects missing weights for weighted methods', () => {
-    expect(() => computeSplits(100, 'SHARES', [p('a'), p('b', 1)])).toThrowError(SplitError);
+    expect(() => computeSplits(100, 'SHARES', [p('a'), p('b', 1)])).toThrow(SplitError);
   });
 
   it('rejects all-zero weights', () => {
-    expect(() => computeSplits(100, 'SHARES', [p('a', 0), p('b', 0)])).toThrowError(
+    expect(() => computeSplits(100, 'SHARES', [p('a', 0), p('b', 0)])).toThrow(
       SplitError,
     );
   });

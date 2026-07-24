@@ -13,7 +13,7 @@
 // Reused, not duplicated: country facts come from src/data/countries.mjs (accent,
 // currency, IANA tz, ISO code, capital coordinate).
 
-import { readFile, writeFile, mkdir, readdir } from "node:fs/promises";
+import { writeFile, mkdir } from "node:fs/promises";
 import { genRoomId } from "./gen-room-id.mjs";
 import { existsSync } from "node:fs";
 import path from "node:path";

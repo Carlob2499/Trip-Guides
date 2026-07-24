@@ -145,7 +145,7 @@ const BUCKET_LABEL: Record<string, string> = { overdue: "Overdue", soon: "Next 2
       <h3 class="tk-card-title" id="tk-phrases-h">Show this to someone</h3>
       <p class="tk-card-tldr">Verified phrases in big, native-script type — point + show the screen, or tap to hear it spoken aloud.</p>
       <div class="tk-phrases">
-        {phrases!.items.map((p: any, i: number) => (
+        {phrases!.items.map((p: any) => (
           <article class="tk-phrase">
             <p class="tk-phrase-situation">{p.situation}</p>
             <p class="tk-phrase-native" lang={phrases!.lang || undefined}>{p.native}</p>

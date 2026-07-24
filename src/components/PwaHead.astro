@@ -12,7 +12,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 <meta name="apple-mobile-web-app-title" content="Trip Guides" />
 <meta name="mobile-web-app-capable" content="yes" />
-<script define:vars={{ swUrl: `${base}/sw.js` }}>
+<script is:inline define:vars={{ swUrl: `${base}/sw.js` }}>
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", function () {
       navigator.serviceWorker.register(swUrl).catch(function (e) {

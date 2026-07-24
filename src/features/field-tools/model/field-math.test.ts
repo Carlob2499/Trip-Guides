@@ -51,6 +51,8 @@ describe("encodeStops / decodeStops", () => {
 
   it("never pollutes the prototype from a crafted payload", () => {
     // A raw JSON payload with a __proto__ key, base64'd by hand.
+    // `unescape` is deprecated but deliberate: this fixture has to be encoded the SAME way
+    // encodeStops encodes, or the test would be exercising a payload the decoder never sees.
     const raw = btoa(unescape(encodeURIComponent('{"__proto__":{"polluted":1},"2-4":1}')));
     const out = decodeStops(raw);
     expect(out).toEqual({ "2-4": 1 });

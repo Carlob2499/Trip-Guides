@@ -16,7 +16,6 @@
 // the same with SHELF_LIFE_DAYS). Keep in sync with content.config.ts if the floor/grounds change.
 
 import { readFile, writeFile, mkdir, readdir } from "node:fs/promises";
-import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";

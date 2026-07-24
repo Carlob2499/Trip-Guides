@@ -16,6 +16,11 @@ export function boot(cfg) {
   function loadApi() {
     if (loaded) return loaded;
     loaded = new Promise(function (resolve, reject) {
+      /* VENDOR CODE — Google's published inline bootstrap loader, pasted verbatim and minified by
+         them. TypeScript flags three hints inside it (window.maps ×2, a no-op await); all three are
+         Google's, not ours, and they stay. Hand-editing minified upstream code to satisfy a linter
+         means owning it forever and re-doing it at every Google update. Leave as-is; replace only
+         by pasting a newer official snippet. */
       /* eslint-disable */
       (g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })({ key: cfg.gmapsKey, v: "weekly" });
       /* eslint-enable */

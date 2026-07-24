@@ -1,4 +1,8 @@
-import { defineCollection, z } from "astro:content";
+// `z` comes from "astro/zod", NOT "astro:content": Astro deprecated the astro:content re-export
+// and removes it in Astro 7 ("TODO: remove in Astro 7" sits above the declaration in Astro's own
+// types). Same zod instance either way — this is an import-path change, not a validation change.
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
 import { contrastRatio } from "./lib/contrast";
 
 // Light page background (base.css `--bg`). A guide `theme.primary` becomes the
@@ -21,7 +25,7 @@ const MIN_ACCENT_CONTRAST = 3.0;
 // checked. These power the weekly recert audit (link HEAD-checks + shelf-life
 // flagging) and the staleness UI; inline <a href> citations remain equally valid.
 const provenance = {
-  source_url: z.string().url().optional(),
+  source_url: z.url().optional(),
   verified_on: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
   // Which shelf life judges this fact — the categories in src/lib/staleness.ts
   // (fx 7d · transit 90d · hours 90d · venue 180d · default 90d). Omit for `default`.
@@ -388,7 +392,7 @@ const guides = defineCollection({
       visa: z.string(),               // e.g. "Visa-free — K-ETA required, up to 90 days"
       passportValidity: z.string().optional(), // e.g. "6 months beyond entry date"
       note: z.string().optional(),
-      source_url: z.string().url(),
+      source_url: z.url(),
       verified_on: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
     })).optional(),
     // Optional travel-advisory pill (docs/FEATURES.md #9) — the destination's current
@@ -403,7 +407,7 @@ const guides = defineCollection({
       level: z.number().int().min(1).max(4),
       title: z.string(),              // e.g. "Exercise Increased Caution"
       summary: z.string().optional(), // one-line reason, from the advisory's own text
-      source_url: z.string().url(),
+      source_url: z.url(),
       verified_on: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
     }).optional(),
     verified: z.string().optional(),  // freshness metadata for the maker/AI — NOT shown to travelers, EXCEPT a ⚠-prefixed value (e.g. an unconfirmed draft), which renders as a warning pill in the masthead

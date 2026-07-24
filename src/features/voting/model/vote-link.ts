@@ -32,6 +32,14 @@ export function decodeVote(param: string): VoteState | null {
   }
 }
 
+/* `escape`/`unescape` below are flagged deprecated by TypeScript. They stay ON PURPOSE.
+   This is the canonical UTF-8-safe base64 idiom: btoa() throws on any code point above U+00FF, so
+   accented, Korean, and emoji trip data has to be squeezed into the latin1 range first, and
+   unescape(encodeURIComponent(…)) does exactly that. The pair is symmetric and lossless.
+   Do not "modernize" this casually: vote links ALREADY SHARED with other people were encoded by
+   this exact function, and a TextEncoder rewrite that differs in any edge case silently breaks
+   every link in the wild. Deprecated-but-correct beats modern-but-subtly-different here. If it is
+   ever replaced, do it behind round-trip tests that decode links produced by THIS implementation. */
 function toB64Url(str: string): string {
   return btoa(unescape(encodeURIComponent(str)))
     .replace(/\+/g, "-")

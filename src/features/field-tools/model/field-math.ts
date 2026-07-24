@@ -34,6 +34,10 @@ export function convertRate(amount: number, rate: number | null | undefined): Co
 const STOP_KEY = /^\d+-\d+$/;
 export type StopState = Record<string, number>;
 
+/* `unescape`/`escape` here are flagged deprecated by TypeScript and stay ON PURPOSE — same reason
+   as vote-link.ts: btoa() throws above U+00FF, so this is the standard UTF-8-safe base64 idiom.
+   The ?stops= param it produces travels in URLs travellers share mid-trip; changing the encoding
+   would invalidate links already sent. Replace only behind round-trip tests. */
 export function encodeStops(state: StopState): string {
   return btoa(unescape(encodeURIComponent(JSON.stringify(state))));
 }
