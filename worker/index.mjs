@@ -20,7 +20,7 @@
 //   RATE             (KV)      optional KV namespace for the per-IP counter (rate limiting off if unbound)
 
 import {
-  answersFromForm, validateAnswers, renderIssueBody, intakeRateDecision, guessSlug,
+  answersFromForm, validateAnswers, renderIssueBody, intakeRateDecision, rateThresholds, guessSlug,
 } from "../scripts/intake-proxy.mjs";
 
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
@@ -85,12 +85,12 @@ export default {
 
     // Per-IP weekly rate limit (skipped if no KV bound). Anonymous intake spends the maker's Claude
     // quota, so a stranger can't trigger unlimited research runs.
-    const cap = Number(env.AUTO_CAP || 3);
+    const { cap, hardMax } = rateThresholds(env.AUTO_CAP);
     const week = Math.floor(Date.now() / WEEK_MS);
     const key = `rl:${ip}:${week}`;
     let count = 0;
     if (env.RATE && ip) count = Number(await env.RATE.get(key)) || 0;
-    const decision = intakeRateDecision(count, { cap, hardMax: cap * 3 });
+    const decision = intakeRateDecision(count, { cap, hardMax });
     if (!decision.accept) {
       return json({ error: "too many requests this week — try later, or file on GitHub" }, 429, cors);
     }

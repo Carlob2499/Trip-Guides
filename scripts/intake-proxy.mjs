@@ -34,6 +34,23 @@ export function intakeRateDecision(count, { cap = 3, hardMax = 10 } = {}) {
   return { accept: true, withLabel: true, reason: "ok" };
 }
 
+// Turn the raw AUTO_CAP env var into the two thresholds intakeRateDecision needs. This is judgment,
+// not I/O, so it lives here where it can be tested — the Worker is meant to be I/O only.
+//   · a missing/garbage AUTO_CAP falls back to the default rather than silently DISABLING the cap
+//     (every comparison against NaN is false, which would auto-research every submission forever).
+//   · hardMax floors at 1, so AUTO_CAP=0 means what setting it to 0 obviously intends — "never
+//     auto-research, queue EVERYTHING for my approval" — and not "reject everything". A plain
+//     cap * 3 gives hardMax 0 there, and the very first submission (count 0 >= 0) is rejected.
+// A BLANK value reads as unset, not as 0: Number("") and Number(null) are both 0, so without the
+// blank guard, accidentally emptying the var would quietly stop every submission auto-researching.
+// Only an explicit numeric 0 means "queue everything".
+export function rateThresholds(rawAutoCap, fallback = 3) {
+  const s = rawAutoCap == null ? "" : String(rawAutoCap).trim();
+  const n = s === "" ? NaN : Number(s);
+  const cap = Number.isFinite(n) && n >= 0 ? n : fallback;
+  return { cap, hardMax: Math.max(cap * 3, 1) };
+}
+
 // Best-effort slug guess from the country, mirroring scaffold-guide.mjs's slugify so the progress
 // page can start polling immediately (a same-name collision gets "-2" server-side; the bot's issue
 // comment carries the authoritative link either way).

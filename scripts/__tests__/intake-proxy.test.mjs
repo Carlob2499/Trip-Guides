@@ -4,7 +4,7 @@
 // hand-filed one. Plus the rate thresholds that protect the maker's Claude quota.
 
 import { describe, it, expect } from "vitest";
-import { renderIssueBody, intakeRateDecision, guessSlug } from "../intake-proxy.mjs";
+import { renderIssueBody, intakeRateDecision, rateThresholds, guessSlug } from "../intake-proxy.mjs";
 import { parseIssueBody, answersFromForm } from "../intake-schema.mjs";
 
 describe("renderIssueBody ↔ parseIssueBody round-trip", () => {
@@ -56,6 +56,27 @@ describe("intakeRateDecision", () => {
   it("honors custom thresholds", () => {
     expect(intakeRateDecision(1, { cap: 1, hardMax: 2 }).withLabel).toBe(false);
     expect(intakeRateDecision(2, { cap: 1, hardMax: 2 }).accept).toBe(false);
+  });
+});
+
+describe("rateThresholds", () => {
+  it("derives the pair the Worker feeds intakeRateDecision", () => {
+    expect(rateThresholds("3")).toEqual({ cap: 3, hardMax: 9 });
+  });
+  it("AUTO_CAP=0 queues EVERYTHING for approval rather than rejecting everything", () => {
+    // The bug this pins: a plain `cap * 3` makes hardMax 0 here, so the very first submission
+    // (count 0 >= hardMax 0) 429s — an owner who set the cap to 0 to stop auto-research would
+    // have silently broken intake altogether instead.
+    const { cap, hardMax } = rateThresholds("0");
+    const d = intakeRateDecision(0, { cap, hardMax });
+    expect(d.accept).toBe(true);
+    expect(d.withLabel).toBe(false);
+  });
+  it("falls back to the default rather than DISABLING the cap on a garbage value", () => {
+    // NaN thresholds make every comparison false → withLabel true forever → unlimited auto-research.
+    for (const bad of [undefined, "", "abc", "-1", null]) {
+      expect(rateThresholds(bad)).toEqual({ cap: 3, hardMax: 9 });
+    }
   });
 });
 
