@@ -49,5 +49,13 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          # Optional but recommended: with an account id, wrangler skips its /memberships lookup
+          # entirely. That lookup needs a User→Memberships:Read permission the "Edit Cloudflare
+          # Workers" token template does NOT grant, and it's a common source of confusing auth
+          # failures. Unset → wrangler falls back to the lookup (previous behavior).
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # The action defaults to wrangler 3.90.0, which warns it is out of date and asks to be
+          # updated "to prevent critical errors". Pin the current major instead.
+          wranglerVersion: "4"
           workingDirectory: worker
           command: deploy
