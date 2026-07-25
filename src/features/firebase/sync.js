@@ -87,8 +87,26 @@ export async function joinTrip(code) {
   entriesForRoom(readOutbox(), base).forEach(function (e) {
     set(ref(db, e.path), e.value)
       .then(function () { writeOutbox(removeEntry(readOutbox(), e.path)); })
-      .catch(function () {});
+      .catch(function (err) { onWriteFailed(e.path, err); });
   });
+
+  /* A rejected write used to be swallowed, and that is exactly how Trip Split's "+ Add person"
+     came to do nothing at all: RTDB applies the write locally first, so a row appears, the server
+     then rejects it, the row vanishes, and not one word reaches the user or the console. It hid
+     for as long as it did because the guides it affected had no valid roomId, so the rules denied
+     every write — a path nobody had ever executed.
+     The distinction that matters is PERMANENT vs transient. An offline write is queued and will
+     flush on reconnect, so the outbox entry must survive. permission_denied never will, so
+     keeping it means retrying a doomed write on every future page load. */
+  function onWriteFailed(fullPath, err) {
+    const code = String((err && (err.code || err.message)) || "unknown");
+    const permanent = /permission[_ ]denied/i.test(code);
+    if (permanent) writeOutbox(removeEntry(readOutbox(), fullPath));
+    try {
+      console.error("[waypoint sync] write to " + fullPath + (permanent ? " REJECTED (permanent): " : " failed, will retry: ") + code);
+      document.dispatchEvent(new CustomEvent("tg:sync-error", { detail: { path: fullPath, permanent, code } }));
+    } catch { /* no DOM (tests / SSR) — the console line above is the record */ }
+  }
 
   function collection(name) {
     const path = base + "/" + name;
@@ -107,7 +125,7 @@ export async function joinTrip(code) {
         writeOutbox(addEntry(readOutbox(), fullPath, Object.assign({ createdBy: uid, createdAt: Date.now() }, value)));
         set(r, Object.assign({ createdBy: uid, createdAt: serverTimestamp() }, value))
           .then(function () { writeOutbox(removeEntry(readOutbox(), fullPath)); })
-          .catch(function () {});
+          .catch(function (err) { onWriteFailed(fullPath, err); });
         return r.key;
       },
       // addAsync(value) → Promise<id> that settles only when the SERVER acknowledges the write.
