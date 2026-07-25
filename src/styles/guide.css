@@ -77,7 +77,7 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
    be glanceable, not just another muted stat pill. */
 .whats-next{display:flex;align-items:baseline;gap:.55rem;flex-wrap:wrap;justify-content:center;margin:.75rem auto 0;max-width:36rem;padding:.6rem 1rem;background:var(--accent);border-radius:6px}
 .wn-label{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--bg);opacity:.85;flex:none}
-.wn-text{font-size:.92rem;font-weight:600;color:var(--bg);overflow-wrap:anywhere}
+.wn-text{font-size:var(--text-small);font-weight:600;color:var(--bg);overflow-wrap:anywhere}
 
 /* === TOAST ==================================================================== */
 /* Transient feedback (save/copy confirmations) — destination for flash().
@@ -268,7 +268,7 @@ a.stale-pill:hover{background:color-mix(in srgb,var(--warn) 12%,transparent)}
 .day:last-child{margin-bottom:0}
 .day-today{border-color:var(--accent)!important;box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 18%,transparent)}
 .day .d{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink);padding-top:.35rem}
-.day .b strong{display:block;font-family:var(--font-display);font-size:1.22rem;line-height:1.2;margin-bottom:.25rem}
+.day .b strong{display:block;font-family:var(--font-display);font-size:var(--text-lead);line-height:1.2;margin-bottom:.25rem}
 .day-kitcount{display:inline-block;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);background:var(--bg);border:1px solid var(--rule);border-radius:20px;padding:.12rem .55rem;margin-bottom:.45rem;line-height:1.3;vertical-align:middle}
 .day-kitcount.done{color:var(--green);border-color:var(--green)}
 .day-sun{display:inline-flex;align-items:center;gap:.3rem;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);margin:0 0 .45rem}
@@ -286,7 +286,7 @@ a.stale-pill:hover{background:color-mix(in srgb,var(--warn) 12%,transparent)}
 .sight-name{font-size:var(--text-h4);margin:.05rem 0 .4rem}
 
 /* === CHECKLISTS ============================================================== */
-.check{display:flex;gap:.6rem;align-items:flex-start;font-size:.95rem;padding:.32rem 0;cursor:pointer;transition:color .12s}
+.check{display:flex;gap:.6rem;align-items:flex-start;font-size:var(--text-body);padding:.32rem 0;cursor:pointer;transition:color .12s}
 .check:hover{color:var(--accent-ink)}
 .check input{margin-top:.28rem;width:1.05rem;height:1.05rem;accent-color:var(--accent);flex:none;cursor:pointer}
 /* The label text (which may carry inline <b>/<a>) must be ONE flex item so it
@@ -326,7 +326,7 @@ footer{border-top:1px solid var(--ink);text-align:center;padding:1.7rem 1.1rem;c
   .bs-cur{font-size:var(--text-control);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .bs-chev{margin-left:auto;font-size:var(--text-control)}
   /* Back-to-top button */
-  .botTop{flex:0 0 auto;min-width:48px;min-height:48px;display:flex;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--rule2);border-radius:8px;color:var(--ink);text-decoration:none;font-size:1.1rem}
+  .botTop{flex:0 0 auto;min-width:48px;min-height:48px;display:flex;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--rule2);border-radius:8px;color:var(--ink);text-decoration:none;font-size:var(--text-lead)}
   /* U6: the bottom nav bar had no visible keyboard-focus state at all. */
   .botHome:focus-visible,.botTop:focus-visible,.botSections:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   /* Slide-up sheet backdrop */
@@ -374,7 +374,7 @@ body{overflow-x:clip}
 .budget-foot{margin-top:.55rem;font-size:var(--text-caption);color:var(--muted);line-height:1.4}
 @media(max-width:520px){
   .brow{grid-template-columns:1fr 4.8rem 4.2rem;gap:.4rem;padding:.5rem .55rem}
-  .bhead{font-size:.6rem}
+  .bhead{font-size:var(--text-nano)}
   .bactual{font-size:var(--text-control)}
 }
 
@@ -397,7 +397,7 @@ body{overflow-x:clip}
 .bday-rate{display:block;font-size:var(--text-micro);color:var(--muted);margin-top:.1rem}
 .brange{display:block;font-size:var(--text-micro);color:var(--muted);margin-top:.05rem}
 .btot-range{display:block;font-size:var(--text-control-sm);font-weight:400;color:var(--muted);margin-top:.15rem}
-.bpill{display:inline-block;font-size:.6rem;font-family:var(--font-data);letter-spacing:.03em;background:var(--bg2);border:1px solid var(--rule2);border-radius:3px;padding:0 .38rem;color:var(--muted);line-height:1.7;margin-left:.3rem;vertical-align:middle}
+.bpill{display:inline-block;font-size:var(--text-nano);font-family:var(--font-data);letter-spacing:.03em;background:var(--bg2);border:1px solid var(--rule2);border-radius:3px;padding:0 .38rem;color:var(--muted);line-height:1.7;margin-left:.3rem;vertical-align:middle}
 .brate-link{color:var(--accent-ink)}
 .brate-link:hover{text-decoration:underline}
 
@@ -436,10 +436,10 @@ body{overflow-x:clip}
 .wx-strip:has(.wx-day:nth-child(8)) .wx-day{flex:0 0 4.6rem;min-width:4.6rem;scroll-snap-align:start}
 .wx-name{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);line-height:1}
 .wx-date{font-family:var(--font-data);font-size:.54rem;color:var(--muted);opacity:.7;line-height:1}
-.wx-icon{font-size:1.2rem;line-height:1;margin:.1rem 0}
+.wx-icon{font-size:var(--text-lead);line-height:1;margin:.1rem 0}
 .wx-hi{font-weight:600;font-size:var(--text-control);color:var(--ink);line-height:1}
 .wx-lo{font-size:var(--text-control-sm);color:var(--muted);line-height:1}
-.wx-credit{font-family:var(--font-data);font-size:.58rem;color:var(--muted);text-align:right;margin-top:.28rem;opacity:.7}
+.wx-credit{font-family:var(--font-data);font-size:var(--text-nano);color:var(--muted);text-align:right;margin-top:.28rem;opacity:.7}
 .wx-src{color:var(--muted);text-decoration:underline;text-underline-offset:2px}
 /* In-flow weather SECTION (vs the centred masthead strip): full content width. */
 .wx-block{max-width:100%;margin:0}
@@ -471,7 +471,7 @@ body{overflow-x:clip}
 .hol-near li{padding:.15rem 0;color:var(--ink)}
 .hol-rel{color:var(--muted)}
 .hol-note{font-size:var(--text-control);color:var(--muted);margin:.6rem 0 0}
-.hol-credit{font-family:var(--font-data);font-size:.58rem;color:var(--muted);text-align:right;margin-top:.4rem} /* no opacity knockdown — --muted alone holds ≥4.5:1; dimming tiny text broke the contrast gate */
+.hol-credit{font-family:var(--font-data);font-size:var(--text-nano);color:var(--muted);text-align:right;margin-top:.4rem} /* no opacity knockdown — --muted alone holds ≥4.5:1; dimming tiny text broke the contrast gate */
 .hol-src{color:var(--muted);text-decoration:underline;text-underline-offset:2px}
 /* If holiday data is unavailable the wrapper stays [hidden]; collapse the empty
    .block so there's no gap where the section would have been. */
@@ -488,7 +488,7 @@ body{overflow-x:clip}
 .share-backdrop.open{display:block}
 .share-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:910;width:min(360px,calc(100vw - 2rem));max-height:calc(100dvh - 1.5rem);overflow-y:auto;background:var(--card);border:1px solid var(--rule2);border-radius:var(--r-lg);box-shadow:0 18px 60px rgba(0,0,0,.35);padding:1.4rem 1.6rem}
 .share-head{font-family:var(--font-display);font-size:var(--text-body);font-weight:600;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem}
-.share-close{background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--muted);padding:.1rem .3rem;line-height:1;border-radius:3px;transition:color .14s}
+.share-close{background:none;border:none;cursor:pointer;font-size:var(--text-lead);color:var(--muted);padding:.1rem .3rem;line-height:1;border-radius:3px;transition:color .14s}
 .share-close:hover{color:var(--ink)}
 .share-qr-wrap{display:flex;justify-content:center;background:var(--bg2);border-radius:6px;padding:.85rem;margin-bottom:1rem}
 .share-qr-wrap canvas,.share-qr-wrap img{display:block;border-radius:4px}
@@ -506,7 +506,7 @@ body{overflow-x:clip}
 .share-dl{display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.45rem .4rem;border:1px solid var(--rule2);border-radius:5px;text-decoration:none;font-size:var(--text-small);color:var(--muted);transition:color .14s,border-color .14s}
 .share-dl:hover{color:var(--ink);border-color:var(--ink)}
 .share-dl:only-child{grid-column:1 / -1}
-.share-dl-ext{font-family:var(--font-data);font-size:9px;letter-spacing:.05em;color:var(--accent-ink)}
+.share-dl-ext{font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:.05em;color:var(--accent-ink)}
 /* Share-summary button — full-width action under the URL row */
 .share-summary-btn{width:100%;margin-bottom:.85rem;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;background:none;color:var(--muted);border:1px solid var(--rule2);border-radius:5px;padding:.5rem .6rem;cursor:pointer;transition:color .14s,border-color .14s}
 .share-summary-btn:hover{color:var(--ink);border-color:var(--ink)}
@@ -522,7 +522,7 @@ body{overflow-x:clip}
 .card:hover .anchor-btn,.block:hover .anchor-btn{opacity:.45}
 .card:hover .anchor-btn:hover,.block:hover .anchor-btn:hover{opacity:1;color:var(--accent-ink)}
 @media(hover:none){.anchor-btn{opacity:.3}}
-.copy-addr{display:inline-flex;align-items:center;gap:.25em;font-family:var(--font-data);font-size:.62rem;letter-spacing:.04em;color:var(--muted);background:var(--bg);border:1px solid var(--rule);border-radius:4px;padding:.1rem .4rem;cursor:pointer;vertical-align:middle;margin-left:.35em;line-height:1.4;transition:color .15s,border-color .15s,background .15s;white-space:nowrap}
+.copy-addr{display:inline-flex;align-items:center;gap:.25em;font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:.04em;color:var(--muted);background:var(--bg);border:1px solid var(--rule);border-radius:4px;padding:.1rem .4rem;cursor:pointer;vertical-align:middle;margin-left:.35em;line-height:1.4;transition:color .15s,border-color .15s,background .15s;white-space:nowrap}
 .copy-addr:hover{color:var(--accent-ink);border-color:var(--accent)}
 .copy-addr.copied{color:var(--green);border-color:var(--green)}
 
@@ -567,7 +567,7 @@ details.card.is-collapsible>.block-body{padding:1.1rem 1.4rem 1.25rem}
    Desktop keeps the normal full-width table. */
 @media(max-width:720px){.card table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}}
 details{margin:.3rem 0;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
-details summary{cursor:pointer;padding:.55rem .8rem;font-weight:600;font-size:.92rem;list-style:none;display:flex;align-items:center;gap:.5rem;user-select:none;background:var(--bg2)}
+details summary{cursor:pointer;padding:.55rem .8rem;font-weight:600;font-size:var(--text-small);list-style:none;display:flex;align-items:center;gap:.5rem;user-select:none;background:var(--bg2)}
 details summary::-webkit-details-marker{display:none}
 details summary::before{content:"▶";font-size:.65rem;color:var(--accent-ink);transition:transform .18s;flex:none}
 details[open] summary::before{transform:rotate(90deg)}

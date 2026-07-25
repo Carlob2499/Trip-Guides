@@ -7,8 +7,8 @@
 .tk-wrap { max-width: 760px; margin: 0 auto; }
 .tk-head { margin-bottom: 14px; }
 .tk-eyebrow { font-family: var(--font-data); font-size: var(--text-micro); font-weight: 700; letter-spacing: var(--tracking-micro); text-transform: uppercase; color: var(--accent-ink); margin: 0 0 .3rem; }
-.tk-title { margin: 0 0 4px; font-size: 1.5rem; line-height: 1.15; }
-.tk-desc { margin: 0; color: var(--muted); font-size: .95rem; }
+.tk-title { margin: 0 0 4px; font-size:var(--text-h3); line-height: 1.15; }
+.tk-desc { margin: 0; color: var(--muted); font-size:var(--text-body); }
 .tk-empty { color: var(--muted); font-style: italic; padding: 1rem 0; }
 
 .tk-card { background: var(--card); border: 1px solid var(--rule); border-radius: var(--r-md); padding: 1.1rem 1.2rem; margin-top: 1.1rem; }
@@ -45,7 +45,7 @@
    guide has entry rows for more than one passport country (single-row guides skip it). */
 .tk-entry-picker { display: flex; flex-direction: column; gap: .25rem; margin: 0 0 .7rem; }
 .tk-entry-picker-label { font-family: var(--font-data); font-size: var(--text-micro); font-weight: 700; letter-spacing: var(--tracking-micro); text-transform: uppercase; color: var(--muted); }
-.tk-entry-select { border: 1px solid var(--rule2, var(--rule)); border-radius: 4px; padding: .4rem .5rem; font: inherit; font-size: .92rem; background: var(--card); color: var(--ink); }
+.tk-entry-select { border: 1px solid var(--rule2, var(--rule)); border-radius: 4px; padding: .4rem .5rem; font: inherit; font-size:var(--text-small); background: var(--card); color: var(--ink); }
 .tk-entry-select:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
 .tk-entry-rows { display: flex; flex-direction: column; gap: .8rem; margin-top: .3rem; }
 .tk-entry-row { border-top: 1px solid var(--rule); padding-top: .7rem; }
@@ -58,7 +58,7 @@
 /* Packing strip (F4) — a short, honest list; the card itself stays hidden until real
    forecast data resolves into at least one genuine signal (ui/packing.js). */
 .tk-packing-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .5rem; }
-.tk-packing-list li { border-top: 1px solid var(--rule); padding-top: .5rem; font-size: .92rem; }
+.tk-packing-list li { border-top: 1px solid var(--rule); padding-top: .5rem; font-size:var(--text-small); }
 .tk-packing-list li:first-child { border-top: none; padding-top: 0; }
 
 /* Prep timeline / book-by (F1) — grouped overdue → soon → later; overdue gets a warm

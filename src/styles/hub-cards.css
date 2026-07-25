@@ -20,7 +20,7 @@
 /* A finished trip's date is a fact, not a countdown — drop the accent fill so it reads as
    a quiet timestamp beside the other meta pills instead of shouting urgency that's over. */
 .hub-hero-count.hub-hero-past{background:rgba(20,24,28,.55);border-color:rgba(244,246,239,.25);color:#dfe4d8}
-.hub-hero-cta{align-self:flex-start;margin-top:.55rem;font-family:var(--font-display);font-weight:640;font-size:.92rem;letter-spacing:-.01em;padding:.6rem 1.15rem;border-radius:999px;background:#14181c;color:#f4f6ef;border:1px solid rgba(244,246,239,.18);transition:transform .15s,background .15s}
+.hub-hero-cta{align-self:flex-start;margin-top:.55rem;font-family:var(--font-display);font-weight:640;font-size:var(--text-small);letter-spacing:-.01em;padding:.6rem 1.15rem;border-radius:999px;background:#14181c;color:#f4f6ef;border:1px solid rgba(244,246,239,.18);transition:transform .15s,background .15s}
 .hub-hero:hover .hub-hero-cta{transform:translateY(-2px);background:#1e242b}
 .hub-hero:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 @media(min-width:900px){.hub-hero{min-height:420px}.hub-hero-body{min-height:420px;padding:2rem 2rem 1.8rem}}
@@ -28,7 +28,7 @@
 
 /* ── Search + country chips ───────────────────────────────────────────────── */
 .hub-filter{display:flex;flex-direction:column;gap:.65rem;margin:0 0 1.2rem}
-.hub-search{width:100%;max-width:26rem;padding:.6rem .85rem;font:inherit;font-size:.95rem;color:var(--ink);background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md)}
+.hub-search{width:100%;max-width:26rem;padding:.6rem .85rem;font:inherit;font-size:var(--text-body);color:var(--ink);background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md)}
 .hub-search:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .hub-chips{display:flex;flex-wrap:wrap;gap:.4rem}
 .hub-chip{position:relative;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.03em;padding:.42rem .8rem;min-height:34px;background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:999px;cursor:pointer;transition:border-color .15s,background .15s}
@@ -56,7 +56,7 @@
 .hubcard-featured:hover .hubcard-img,.hubcard-featured:focus-visible .hubcard-img{opacity:1}
 .hubcard-featured-tag{
   position:absolute;top:.5rem;left:.5rem;z-index:2;
-  font-family:var(--font-data);font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  font-family:var(--font-data);font-size:var(--text-nano);font-weight:700;letter-spacing:.1em;text-transform:uppercase;
   padding:.22rem .5rem;border-radius:999px;
   background:rgba(20,24,28,.72);color:#dfe4d8;border:1px solid rgba(244,246,239,.28);
   backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);

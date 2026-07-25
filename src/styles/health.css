@@ -6,8 +6,8 @@
 
 .hl-wrap{max-width:46rem;margin:0 auto;padding:2.4rem 1.2rem 5rem}
 .hl-kicker{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin:0 0 .3rem}
-.hl-head{font-family:var(--font-display);font-weight:760;font-size:1.9rem;letter-spacing:-.02em;margin:0 0 .55rem;line-height:1.1}
-.hl-intro{color:var(--muted);font-size:.96rem;line-height:1.55;margin:0 0 1.2rem;max-width:40rem}
+.hl-head{font-family:var(--font-display);font-weight:760;font-size:var(--text-h2);letter-spacing:-.02em;margin:0 0 .55rem;line-height:1.1}
+.hl-intro{color:var(--muted);font-size:var(--text-body);line-height:1.55;margin:0 0 1.2rem;max-width:40rem}
 .hl-intro a{color:var(--accent-ink)}
 
 /* Legend + "what green means" caveat */
@@ -17,7 +17,7 @@
 /* The headline live-site card */
 .hl-hero{background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--green);border-radius:var(--r-lg);padding:1.2rem 1.3rem;margin:0 0 2rem}
 .hl-hero-row{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:.5rem}
-.hl-hero-title{font-family:var(--font-display);font-weight:720;font-size:1.1rem;margin:0}
+.hl-hero-title{font-family:var(--font-display);font-weight:720;font-size:var(--text-lead);margin:0}
 .hl-hero p{margin:.2rem 0 0;color:var(--muted);font-size:var(--text-small);line-height:1.55}
 .hl-hero p b{color:var(--ink)}
 .hl-badge{height:20px;display:inline-block;vertical-align:middle}
@@ -35,7 +35,7 @@
 .hl-item.is-support{border-left-color:var(--rule2)}
 
 .hl-item-top{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap}
-.hl-item-name{font-family:var(--font-data);font-size:.92rem;font-weight:700;color:var(--ink)}
+.hl-item-name{font-family:var(--font-data);font-size:var(--text-small);font-weight:700;color:var(--ink)}
 .hl-item-name a{color:inherit;text-decoration:none;border-bottom:1px dotted var(--rule2)}
 .hl-item-name a:hover{color:var(--accent-ink);border-bottom-color:var(--accent)}
 .hl-item-desc{color:var(--muted);font-size:var(--text-small);line-height:1.5;margin:.5rem 0 0}

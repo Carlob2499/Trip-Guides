@@ -74,7 +74,7 @@
   border-radius: 50%;
   background: transparent;
   color: var(--muted);
-  font-size: 1.4rem;
+  font-size:var(--text-h4);
   line-height: 1;
   cursor: pointer;
 }
@@ -88,7 +88,7 @@
   font-weight: 700;
 }
 .lnw-title { margin: 0 0 14px; font-size:var(--text-h4); line-height: 1.2; }
-.lnw-lede { margin: 0 0 14px; color: var(--muted); font-size: 0.95rem; }
+.lnw-lede { margin: 0 0 14px; color: var(--muted); font-size:var(--text-body); }
 .lnw-lede.lnw-warn { color: var(--warn); font-weight: 600; }
 
 /* ── Ratings step ─────────────────────────────────────────────────────────── */
@@ -132,7 +132,7 @@
   padding: 8px 0;
   border-bottom: 1px solid var(--rule);
 }
-.lnw-stop-name { font-size: 0.96rem; }
+.lnw-stop-name { font-size:var(--text-body); }
 .lnw-toggle { display: inline-flex; border: 1px solid var(--rule2); border-radius: 999px; overflow: hidden; }
 .lnw-tg {
   padding: 6px 13px;
@@ -166,7 +166,7 @@
   background: var(--bg);
   color: var(--ink);
   font: inherit;
-  font-size: 0.95rem;
+  font-size:var(--text-body);
   resize: vertical;
 }
 .lnw-ta:focus-visible, .lnw-reason:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
@@ -214,7 +214,7 @@
   text-transform: uppercase;
   font-weight: 700;
 }
-.learn-title { margin: 0; font-size: 1.5rem; line-height: 1.15; }
+.learn-title { margin: 0; font-size:var(--text-h3); line-height: 1.15; }
 .learn-x {
   flex: none;
   width: 34px;

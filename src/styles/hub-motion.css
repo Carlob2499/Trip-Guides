@@ -66,7 +66,7 @@
 .ov-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .ov-pill-solid { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .ov-pill-solid:hover { background: var(--accent); border-color: var(--accent); }
-.ov-pill-icon { width: 2.1rem; height: 2.1rem; padding: 0; display: grid; place-items: center; border-radius: 50%; font-size: .95rem; }
+.ov-pill-icon { width: 2.1rem; height: 2.1rem; padding: 0; display: grid; place-items: center; border-radius: 50%; font-size:var(--text-body); }
 
 /* The hero content — the block that recedes (scale + fade, JS-owned) as you leave. */
 .ov-inner { position: relative; z-index: 2; text-align: center; padding: 2rem 1.3rem; max-width: 54rem; margin: 0 auto; }
@@ -144,7 +144,7 @@ body.ov-play .ov-cue { animation: ovCue 2.4s var(--ease-out-expo) 1.35s forwards
 .stat-n { font-family: var(--font-display); font-weight: 760; font-size: clamp(2.1rem, 6vw, 3.2rem); line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums; }
 .stat-n.is-accent { color: var(--accent-ink); }
 .stat-l { margin-top: .5rem; font-family: var(--font-data); font-size: var(--text-micro); font-weight: 700; letter-spacing: var(--tracking-micro); text-transform: uppercase; color: var(--muted); }
-.stats-note { margin: 2.2rem auto 0; max-width: 42ch; color: var(--muted); font-size: .92rem; font-family: var(--font-body); }
+.stats-note { margin: 2.2rem auto 0; max-width: 42ch; color: var(--muted); font-size:var(--text-small); font-family: var(--font-body); }
 /* U12: a bounce-once visitor used to permanently lose the stats beat the moment
    markSeen() fired (Overture play start) + compact mode hid it here — a real visitor
    could see the count-up exactly once, ever, even across many later visits. Compact mode

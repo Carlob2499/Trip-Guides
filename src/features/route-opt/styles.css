@@ -10,7 +10,7 @@
 .ro-sheet-inner{width:100%;max-width:26rem;max-height:85vh;overflow-y:auto;background:var(--card);border-radius:var(--r-lg);padding:1.3rem}
 .ro-sheet-eyebrow{margin:0 0 .25rem;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink)}
 .ro-sheet-title{margin:0 0 .7rem;font-size:var(--text-lead);line-height:1.25}
-.ro-sheet-order{margin:0 0 .8rem;padding-left:1.3rem;font-size:.92rem;line-height:1.6;color:var(--ink)}
+.ro-sheet-order{margin:0 0 .8rem;padding-left:1.3rem;font-size:var(--text-small);line-height:1.6;color:var(--ink)}
 .ro-sheet-note{margin:0 0 1rem;font-size:var(--text-caption);line-height:1.45;color:var(--muted)}
 .ro-sheet-row{display:flex;gap:.6rem;flex-wrap:wrap}
 .ro-sheet-apply{padding:.65rem 1.2rem;background:var(--ink);color:var(--bg);border:none;border-radius:999px;font-family:var(--font-data);font-size:var(--text-control);font-weight:700;cursor:pointer}

@@ -53,7 +53,7 @@
    white while staying visually a translucent pill, not a solid one (verified: computed the actual
    composited RGB against white, not just eyeballed the alpha). Hover's .62 was already fine
    (5.51:1 with #fff text) and is untouched. */
-.imgcredit--onphoto{position:absolute;top:.55rem;right:.55rem;left:auto;margin:0;padding:.2rem .5rem;font-size:.6rem;color:rgba(244,246,239,.85);background:rgba(10,13,16,.68);border-radius:999px;text-align:right;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.imgcredit--onphoto{position:absolute;top:.55rem;right:.55rem;left:auto;margin:0;padding:.2rem .5rem;font-size:var(--text-nano);color:rgba(244,246,239,.85);background:rgba(10,13,16,.68);border-radius:999px;text-align:right;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .imgcredit--onphoto a,.imgcredit--onphoto{border-bottom:0;text-decoration:none}
 .imgcredit--onphoto:hover{background:rgba(10,13,16,.62);color:#fff}
 

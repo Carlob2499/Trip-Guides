@@ -68,16 +68,32 @@
        · --text-micro/--tracking-micro: migrated wholesale, the fix for the diagnosed
          "undeclared 4th role" (uppercase tracked micro-labels spanning 12 sizes, 9 tracking
          values and 2 typefaces for what is structurally one role).
-       · Everything within 4% of a step is now ON that step. Exact matches cannot change size at
-         all; the rest shift by at most half a pixel (the widest is .85rem -> .88rem, 13.6px ->
-         14.08px), which is why absorbing them was safe to do in one pass.
-       · What deliberately REMAINS hardcoded: ~70 declarations further than 4% from any step,
-         where adopting one would be a visible size change and therefore a design decision per
-         cluster, plus ~20 that are clamp()/em/pt and have no business being a fixed step.
-     Two sites are left hardcoded ON PURPOSE despite matching a step, and should stay that way:
-     the collapsible-card summary::before (.68rem sizes content:"▶", a glyph, not a label) and
-     .day-num (planner.css documents its size as contrast-gated at the bold-large-text cutoff,
-     and its mobile override is a literal — tokenizing half the rule would split it). */
+       · 360 of 388 declarations now resolve through a token (was 60). This happened in three
+         passes of widening tolerance — exact matches first (cannot change size), then within
+         4% (at most half a pixel), then within 8% once the visible changes were reviewed and
+         agreed. Largest single shift on the site: 7.7%.
+       · What deliberately REMAINS hardcoded, and why: ~20 clamp()/em/pt values, which are
+         fluid, relative or physical-print sizes and have no business being a fixed step; the
+         five load-bearing sites listed below; print-day.css, a different medium entirely; and
+         exactly two genuine outliers — .wx-date (8.64px, below even --text-nano) and
+         .hubcard-cover-initial (4.6rem, a decorative cover letter, not a heading).
+     FIVE sites are left hardcoded ON PURPOSE and must stay that way — each because its size is
+     load-bearing for something OTHER than the type role:
+       · two collapsible-card summary::before rules — font-size there sizes content:"▶", a glyph.
+       · .day-num, desktop AND mobile — planner.css documents it as contrast-gated at axe's
+         bold-large-text cutoff; its mobile 1.2rem is only 4.3% from --text-lead, so a looser
+         tolerance would have crossed the threshold and silently changed the contrast bar.
+       · .sos-num — the emergency phone number. Snapping its 1.7rem down to --text-h3 would
+         trade real legibility for tidiness on the one number someone reads in an emergency. */
+  --text-nano:.6rem;        /* fine print BELOW the label scale: photo/data credits (.mast-credit,
+                                .imgcredit--onphoto, .wx-credit, .hol-credit), tiny badges
+                                (.hubcard-featured-tag, .bpill) and bare numerals (.stop-num,
+                                .dchip-num). 12 declarations sat under the old floor at .58-.62rem
+                                — the same "authors reaching past the scale" signal that produced
+                                the control steps, so it gets a step instead of being forced up
+                                13% into --text-micro. NOTE: everything here is small text for
+                                contrast purposes (well under the 18.7px large-text cutoff) and
+                                stays that way, so the credit badges' hard-won 4.5:1 is unaffected. */
   --text-micro:.68rem;      /* uppercase tracked micro-labels — MIGRATED: 44 rules use --font-data
                                 already (the majority); 5 use --font-display for the same job */
   --tracking-micro:.06em;   /* the modal value: 16 of ~50 existing rules already use this exact

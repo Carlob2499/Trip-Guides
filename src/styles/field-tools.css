@@ -23,7 +23,7 @@
 
 /* ── Currency converter popover ───────────────────────────────────────────── */
 .cur-pop{position:absolute;z-index:120;width:240px;padding:.75rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md);box-shadow:0 10px 32px rgba(10,14,18,.3)}
-.cur-in{width:100%;padding:.45rem .6rem;font:inherit;font-size:.95rem;color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:var(--r-sm)}
+.cur-in{width:100%;padding:.45rem .6rem;font:inherit;font-size:var(--text-body);color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:var(--r-sm)}
 .cur-out{margin-top:.5rem;font-family:var(--font-data);font-size:var(--text-control);line-height:1.7;color:var(--ink)}
 
 /* ── Jump-to-today chip ───────────────────────────────────────────────────── */
@@ -119,17 +119,17 @@ html[data-swipe-hint="back"]::after{left:0;background:linear-gradient(to right,c
 .focus-done{opacity:.45}
 .focus-done .focus-name{text-decoration:line-through}
 .focus-stop:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-.focus-full{margin-top:.4rem;padding:.8rem 1.1rem;background:transparent;color:var(--ink);border:1px dashed var(--rule2);border-radius:var(--r-md);font-family:var(--font-display);font-weight:640;font-size:.95rem;cursor:pointer}
+.focus-full{margin-top:.4rem;padding:.8rem 1.1rem;background:transparent;color:var(--ink);border:1px dashed var(--rule2);border-radius:var(--r-md);font-family:var(--font-display);font-weight:640;font-size:var(--text-body);cursor:pointer}
 
 /* ── Share-modal install note ─────────────────────────────────────────────── */
 .share-install{margin:.9rem 0 0;padding:.6rem .8rem;background:color-mix(in srgb,var(--accent) 8%,var(--card));border:1px solid var(--rule);border-radius:var(--r-sm);font-size:var(--text-control);line-height:1.55;color:var(--ink)}
 
 /* ── Driver card English subtitle ─────────────────────────────────────────── */
-.addr-card-en{margin:.55rem 0 0;font-size:.95rem;color:var(--muted);line-height:1.45}
+.addr-card-en{margin:.55rem 0 0;font-size:var(--text-body);color:var(--muted);line-height:1.45}
 .addr-card-en:empty{display:none}
 
 /* ── Focus Today TL;DR ────────────────────────────────────────────────────── */
-.focus-tldr{margin:.45rem 0 0;font-family:var(--font-display);font-weight:640;font-size:1.1rem;line-height:1.4;color:var(--accent-ink)}
+.focus-tldr{margin:.45rem 0 0;font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);line-height:1.4;color:var(--accent-ink)}
 .focus-sun{margin:.5rem 0 0;font-family:var(--font-data);font-size:var(--text-control);color:var(--muted)}
 
 /* ── Budget burn pill ─────────────────────────────────────────────────────── */
@@ -142,7 +142,7 @@ html[data-swipe-hint="back"]::after{left:0;background:linear-gradient(to right,c
    color:var(--bg)) relative to the page theme, in both light AND dark mode, so the
    fix can't be theme-conditional either — blend toward --bg (the button's own,
    theme-correct foreground) instead of the raw per-guide accent hue. */
-.bs-pos{font-family:var(--font-data);font-size:.62rem;font-weight:700;color:color-mix(in srgb,var(--accent) 55%,var(--bg) 45%);margin-left:.35rem}
+.bs-pos{font-family:var(--font-data);font-size:var(--text-nano);font-weight:700;color:color-mix(in srgb,var(--accent) 55%,var(--bg) 45%);margin-left:.35rem}
 
 @media(prefers-reduced-motion:reduce){.spine-fill,.spine-tip{transition:none}.day-kitcount.done{animation:none}.today-chip{animation:none}}
 @media print{.spine,.today-chip,.ft-toast,.cur-pop,.lb-backdrop,.sos-btn,.sos-sheet,.addr-card,.focus-today{display:none!important}}

@@ -9,7 +9,7 @@
 .dchip{flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:.15rem;min-width:4.6rem;min-height:44px;padding:.45rem .6rem .4rem;background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:var(--r-md);cursor:pointer;transition:background .15s,border-color .15s,transform .2s var(--ease-spring);text-align:left}
 .dchip:hover{border-color:var(--accent);transform:translateY(-1px)}
 .dchip:active{transform:scale(.94)}
-.dchip-num{font-family:var(--font-data);font-size:.62rem;font-weight:700;letter-spacing:.06em;color:var(--accent-ink);line-height:1}
+.dchip-num{font-family:var(--font-data);font-size:var(--text-nano);font-weight:700;letter-spacing:.06em;color:var(--accent-ink);line-height:1}
 .dchip-date{font-family:var(--font-display);font-size:var(--text-caption);font-weight:640;letter-spacing:-.01em;white-space:nowrap;line-height:1.15}
 /* The chip's ground is --accent, which does not re-map by theme — so its ink must not either.
    --accent-ink on .dchip-num is right on a PAGE surface and wrong here, where the ground is the
@@ -118,8 +118,8 @@ html[data-conn="offline"] .split-live-dot{background:var(--muted);animation:none
   html[data-conn="offline"] .itin-map{transition:none}
 }
 .stop+.stop{border-top:1px dashed var(--rule)}
-.stop-num{flex:none;font-family:var(--font-data);font-size:.62rem;font-weight:700;color:var(--accent-ink);letter-spacing:.04em}
+.stop-num{flex:none;font-family:var(--font-data);font-size:var(--text-nano);font-weight:700;color:var(--accent-ink);letter-spacing:.04em}
 .stop-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:.05rem}
-.stop-name{font-family:var(--font-display);font-weight:640;font-size:.95rem;letter-spacing:-.01em;line-height:1.3}
+.stop-name{font-family:var(--font-display);font-weight:640;font-size:var(--text-body);letter-spacing:-.01em;line-height:1.3}
 .stop-note{font-size:var(--text-control);color:var(--muted);line-height:1.45}
 .stop-time{flex:none;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);font-variant-numeric:tabular-nums}

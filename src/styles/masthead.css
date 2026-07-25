@@ -64,7 +64,7 @@
 
 /* Same badge-on-photo pattern as sights.css's .imgcredit--onphoto, same fix: .42 alpha composited
    to 2.23:1 against a worst-case white photo pixel. .68 clears 4.79:1. */
-.mast-credit{position:absolute;right:.7rem;top:.7rem;z-index:1;font-family:var(--font-data);font-size:.6rem;letter-spacing:.02em;color:rgba(244,246,239,.82);background:rgba(12,15,18,.68);padding:.24rem .5rem;border-radius:999px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);text-decoration:none}
+.mast-credit{position:absolute;right:.7rem;top:.7rem;z-index:1;font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:.02em;color:rgba(244,246,239,.82);background:rgba(12,15,18,.68);padding:.24rem .5rem;border-radius:999px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);text-decoration:none}
 .mast-credit:hover{color:#fff;background:rgba(12,15,18,.62)}
 
 /* The accent rule centers over the meta band (which is centered below). */

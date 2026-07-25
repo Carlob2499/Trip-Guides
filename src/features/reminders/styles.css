@@ -14,8 +14,8 @@
   text-transform: uppercase;
   font-weight: 700;
 }
-.rm-title { margin: 0 0 4px; font-size: 1.5rem; line-height: 1.15; }
-.rm-desc { margin: 0; color: var(--muted); font-size: 0.95rem; }
+.rm-title { margin: 0 0 4px; font-size:var(--text-h3); line-height: 1.15; }
+.rm-desc { margin: 0; color: var(--muted); font-size:var(--text-body); }
 
 /* Honest about what "shared" means — this is the same open room as the budget, so a door
    code here is visible to anyone holding the guide link. Say so where it's typed, not in a doc. */
@@ -46,7 +46,7 @@
   background: var(--bg);
   color: var(--ink);
   font: inherit;
-  font-size: 0.92rem;
+  font-size:var(--text-small);
 }
 .rm-in-label { flex: 1 1 8rem; min-width: 0; }
 .rm-in-text { flex: 3 1 14rem; min-width: 0; }
