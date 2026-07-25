@@ -40,7 +40,7 @@
 .pg-correction[hidden]{display:none}
 .pg-correction-note{font-size:var(--text-control);color:var(--muted);margin:0 0 .6rem;line-height:1.45}
 .pg-correction-form{display:flex;gap:.5rem}
-.pg-correction-form input{flex:1;padding:.6rem .8rem;border-radius:var(--r-md);border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-small)}
+.pg-correction-form input{flex:1;padding:.6rem .8rem;border-radius:var(--r-md);border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
 .pg-correction-form button{padding:.6rem 1.1rem;border-radius:var(--r-md);border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);cursor:pointer}
 .pg-correction-form button:hover{background:var(--accent);border-color:var(--accent)}
 

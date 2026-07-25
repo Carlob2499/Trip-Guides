@@ -62,7 +62,7 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .ng-field{display:flex;flex-direction:column;gap:.3rem;border:none;padding:0;min-width:0}
 .ng-field>span{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
 .ng-field em{font-style:normal;color:var(--rule2)}
-.ng-field input,.ng-field select{font:inherit;font-size:var(--text-small);background:var(--bg2);color:var(--ink);border:1px solid var(--rule2);border-radius:6px;padding:.5rem .6rem;width:100%}
+.ng-field input,.ng-field select{font:inherit;font-size:var(--text-body);background:var(--bg2);color:var(--ink);border:1px solid var(--rule2);border-radius:6px;padding:.5rem .6rem;width:100%}
 .ng-field input:focus,.ng-field select:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
 .ng-row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
 .ng-err{color:var(--accent-ink);font-size:var(--text-control)}

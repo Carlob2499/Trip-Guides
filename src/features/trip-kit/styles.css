@@ -45,7 +45,7 @@
    guide has entry rows for more than one passport country (single-row guides skip it). */
 .tk-entry-picker { display: flex; flex-direction: column; gap: .25rem; margin: 0 0 .7rem; }
 .tk-entry-picker-label { font-family: var(--font-data); font-size: var(--text-micro); font-weight: 700; letter-spacing: var(--tracking-micro); text-transform: uppercase; color: var(--muted); }
-.tk-entry-select { border: 1px solid var(--rule2, var(--rule)); border-radius: 4px; padding: .4rem .5rem; font: inherit; font-size:var(--text-small); background: var(--card); color: var(--ink); }
+.tk-entry-select { border: 1px solid var(--rule2, var(--rule)); border-radius: 4px; padding: .4rem .5rem; font: inherit; font-size:var(--text-body); background: var(--card); color: var(--ink); }
 .tk-entry-select:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
 .tk-entry-rows { display: flex; flex-direction: column; gap: .8rem; margin-top: .3rem; }
 .tk-entry-row { border-top: 1px solid var(--rule); padding-top: .7rem; }
