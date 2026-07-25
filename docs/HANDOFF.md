@@ -40,64 +40,78 @@ tests, `astro check` 0 errors, e2e **55/55**.
   GPX 1.1 and RFC 5545 (CRLF, ≤75 **octets** per folded line, VEVENT completeness, unique UIDs,
   escaped `,`/`;`). The unit tests only ever saw strings their author typed; real guide prose is
   what breaks folding. Slugs come from disk, so a new guide is covered the moment it exists.
-- **ESLint is installed and advisory, not a gate.** `npm run lint` → **277 errors**: 154
-  `no-explicit-any`, 46 `no-unused-vars`, 35 `no-empty`, 24 `no-undef`, 18 misc. It is deliberately
-  NOT wired into `build` or CI, per this repo's own precedent that gates are real regression gates,
-  not day-one build breakers.
+- **ESLint went 277 → 0 and is now a CI gate** (a `npm run lint` step in `test.yml`, wired only
+  once it was at zero so red always means a new regression). Three quarters of the 277 was the
+  config describing the wrong world: `public/sw.js` and `worker/index.mjs` are service workers
+  linted as Node, and 81 more were this repo's deliberate `catch { }` idiom.
+- **Its first pass found a live crash nothing else could see.** `scripts/graduate-guide.mjs` called
+  an `isValidSlug` it only ever RE-exported — `export { x } from "…"` gives importers the symbol but
+  creates no local binding — so the CLI threw `ReferenceError`. 832 unit tests, `astro check` and
+  55 e2e were all green over it, because every one of them exercises the module from outside, where
+  forwarding works. Fixed and verified by running the CLI.
+- **`no-explicit-any` is OFF, as a recorded debt.** All 154 are one shape: functions walking the
+  guide JSON, plus `.astro` props Astro hands over untyped. The real type already exists —
+  `CollectionEntry<"guides">["data"]`, inferred from the Zod schema — and threading it through the
+  section discriminated union is a project, not a lint fix. `astro check` remains the type gate at
+  0 errors.
+- **`fast-uri` pinned to 3.1.4** via `overrides`, clearing the one high Dependabot alert. Dev-only,
+  four levels deep under `@astrojs/check`; it never reached the shipped bundle.
 
 ## Left to do
 
-1. **ESLint config tuning is BLOCKED by the `config-protection` hook.** The needed change is one
-   block: `globals.serviceworker` for `public/sw.js` + `worker/**` (the 24 `no-undef` name globals
-   that genuinely exist there — `self`, `caches`, `clients`, `fetch`; there is no source-side fix
-   for a correct global being called undefined), plus `allowEmptyCatch` and `caughtErrors: "none"`
-   for the repo's deliberate progressive-enhancement idiom. That takes 277 → roughly 12 real
-   findings. Then decide whether `no-explicit-any` earns its 154, given `astro check` is the type
-   gate and is clean.
-2. **The ~12 genuine lint findings** (5 `no-var`, 4 `no-prototype-builtins`, 7
-   `no-unused-expressions`, 1 `no-irregular-whitespace`) — real, small, worth fixing once the noise
-   is gone and the signal is visible.
-3. **Dead-file / line-by-line inefficiency audit — requested, not started.**
-4. Not built: the PostToolUse typecheck hook in `.claude/settings.json`, and trimming `CLAUDE.md`
+1. **The `no-explicit-any` debt** (Snapshot above). The unlock is typing the guide-JSON walkers
+   against `CollectionEntry<"guides">["data"]` and the section union, then turning the rule back on.
+   Biggest single files: `exports.ts` (14), `map-pins.ts` (14), `content.config.ts` (12),
+   `GuideLayout.astro` (28).
+2. **Dead-file audit: mechanical half done, judgment half open.** All 289 source files under
+   `src/ scripts/ worker/` were scanned — **zero dead modules**; the only unreferenced files are
+   tests (nothing imports a test) and `src/env.d.ts` (ambient). What remains is a call only the
+   creator can make: six docs read as completed-work records — `PLAN_FIELD_REPORT_FIXES.md` (22KB),
+   `PLAN_TRAVELER_FEATURES.md`, `PLAN_VISUAL_OVERHAUL.md`, `FIELD_REPORT_2026-07-22.md`,
+   `DENMARK_UPLIFT.md`, `TEST_COVERAGE_ANALYSIS.md`. Record or relic is not a mechanical question.
+3. Not built: the PostToolUse typecheck hook in `.claude/settings.json`, and trimming `CLAUDE.md`
    toward 200 lines (it grew this session).
-5. **Unverified:** `scaffold-guide.mjs`'s new end-to-end directory path. Creating a throwaway guide
+4. **Unverified:** `scaffold-guide.mjs`'s new end-to-end directory path. Creating a throwaway guide
    would leave artifacts the destructive-op guard prevents cleaning up.
 
 ## Owner tasks (need the creator, not the agent)
 
-1. **Permanently delete the retired guides**, or restore them. They were moved, not deleted, to
-   `…/scratchpad/retired-guides/` (mexico, portugal, and both intake `.md`s). The session scratchpad
-   is not permanent storage.
-2. **Sanction the `eslint.config.mjs` change** (Left to do #1) — the hook blocks it, and the agent
-   cannot disable the hook: the permission classifier refuses edits to `~/.claude/`.
-3. **Revoke** the old GROQ key at the Groq console (out of `.env`, not revoked).
-4. **W5 label-free test — approved but NEVER RUN.** `GH_TOKEN` is on the Worker; disable
-   `New guide scaffold`, POST a real payload, confirm the issue files, delete it, re-enable.
-5. **W2:** mint a read-only Firebase RTDB service account → repo secret `FIREBASE_SERVICE_ACCOUNT`.
-6. Delete merged remote branch `claude/test-coverage-analysis-siftjs` (sandbox 403s on ref deletion).
-7. Commit `eae5573`'s subject line is a literal `@` (PowerShell here-string leaked into Bash); the
+1. **Re-enable the `config-protection` hook** if it is still off. It was disabled at
+   `~/.claude/settings.json` line 53 to let the ESLint config be fixed; that work is done. The
+   agent cannot restore it — the permission classifier refuses edits to `~/.claude/`.
+2. Commit `eae5573`'s subject line is a literal `@` (PowerShell here-string leaked into Bash); the
    body is intact. The Fact-Forcing Gate blocks `--amend`.
+3. **Shell reminder:** commands in this repo's docs are Git Bash. Running `rm -rf` or
+   `git show … > file` in PowerShell fails or writes UTF-16 — both happened this session.
+
+**Closed this session:** GROQ key revoked · `FIREBASE_SERVICE_ACCOUNT` minted · merged remote
+branches deleted (`origin` is `main`-only) · **W5 label-free test RUN and CONFIRMED**, so the
+zero-click intake path is proven end to end for the first time · retired guides permanently deleted.
 
 **W6 (real end-to-end pipeline proof) stays deferred, gated on an actual trip** — creator's choice.
 The W0–W5 arc is complete and live; detail in `docs/PIPELINE.md` and the git log.
 
 ## Where we left off
 
-The catalog is uniform and defended. The lesson worth keeping: **two shapes that both build is not
-a tolerated variation, it is an undetected one** — the flat guide won path resolution, so the shape
-that was supposed to be legacy was the shape that would have silently won. Uniformity had to become
-a test before it could become a fact.
+Two lessons, and they are the same lesson from opposite ends.
 
-Three things are open and all three need the creator, not more agent work: the ESLint config is
-hook-blocked, the retired guides are parked in a temp directory rather than deleted, and the
-dead-file audit was requested but never started.
+**Two shapes that both build is not a tolerated variation, it is an undetected one.** The flat guide
+won path resolution, so the shape meant to be legacy was the shape that would have silently won.
+Uniformity had to become a test before it could become a fact.
 
-**Re-prompt the creator with:** "Every trip is now a directory, the scaffold emits that shape for
-new guides, and a test fails the build on a flat one — the reason it mattered is that a flat guide
-*wins* path resolution, so the legacy shape would have quietly shadowed the new one. Mexico and
-Portugal are out of the repo, though I moved them to the scratchpad rather than deleting them, so
-that is on you. I also added a gate on the built `.gpx`/`.ics` files — the unit tests only ever saw
-strings we typed, and real guide prose is what breaks iCalendar line folding; e2e is 55/55. ESLint
-is in and reports 277 findings, but I could not tune its config — the config-protection hook blocks
-it and I cannot disable that hook. About 24 of those errors are phantom. Do you want to unblock the
-config, or should I start on the dead-file audit?"
+**Every gate this repo owned tested the code from OUTSIDE, so none of them could see a module whose
+own scope was broken.** `graduate-guide.mjs` re-exported `isValidSlug` without importing it: fine
+for every importer, `ReferenceError` for the module itself. 832 unit tests, `astro check` and 55 e2e
+were green over a crash. ESLint found it on its first run, which is the whole argument for adding a
+tool that reads the file rather than calling it.
+
+**Re-prompt the creator with:** "Everything from last session is closed. Every trip is a directory
+now, the scaffold emits that shape, and a test fails the build on a flat one — it mattered because a
+flat guide *wins* path resolution, so the legacy shape would have quietly shadowed the new one.
+Mexico and Portugal are gone. There's a new gate on the built `.gpx`/`.ics` files, because the unit
+tests only ever saw strings we typed and real guide prose is what breaks iCalendar folding. ESLint
+went 277 to 0 and is wired into CI — and on its first run it found a live `ReferenceError` in
+graduate-guide that 832 green tests, astro check and 55 e2e all missed, because every one of them
+tests from outside the module. Two things are open: 154 `any`s in the guide-JSON walkers, which
+wants the Zod-inferred type threaded through the section union, and six completed-plan docs that
+need you to say whether they're records or relics. Which one?"
