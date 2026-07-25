@@ -7,6 +7,7 @@
    Key safety: the key is a PUBLIC browser key by design — restrict it to this
    site's HTTP referrers and to the Maps JavaScript API in Google Cloud Console. */
 
+/* global google */ // injected on window by the Maps JS SDK once its loader script resolves
 export function boot(cfg) {
   var mounts = Array.prototype.slice.call(document.querySelectorAll("[data-itin-map]"));
   if (!mounts.length) return;

@@ -84,15 +84,15 @@ export function initSharePanel(lockScroll, unlockScroll) {
     if (shareEmailLink) shareEmailLink.href = buildMailtoUrl(pageTitle, pageUrl);
     if (shareCopyBtn) shareCopyBtn.dataset.url = pageUrl;
     renderQR(pageUrl);
-    shareBtn && shareBtn.setAttribute("aria-expanded", "true");
+    if (shareBtn) shareBtn.setAttribute("aria-expanded", "true");
   }
 
   function closeShare() {
     shareModal.setAttribute("hidden", "");
     shareBackdrop.classList.remove("open");
     unlockScroll();
-    shareBtn && shareBtn.setAttribute("aria-expanded", "false");
-    shareBtn && shareBtn.focus();
+    if (shareBtn) shareBtn.setAttribute("aria-expanded", "false");
+    if (shareBtn) shareBtn.focus();
   }
 
   shareBtn.addEventListener("click", openShare);

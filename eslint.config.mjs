@@ -35,19 +35,50 @@ export default tseslint.config(
 
   {
     /* Node-side: build scripts, the pipeline spine, and everything running under Vitest. */
-    files: ["scripts/**/*.{mjs,ts}", "**/*.test.{ts,mjs}", "*.config.{ts,mjs}", "worker/**/*.{js,ts}"],
+    files: ["scripts/**/*.{mjs,ts}", "**/*.test.{ts,mjs}", "*.config.{ts,mjs}"],
     languageOptions: { globals: { ...globals.node } },
   },
 
   {
-    /* Unused-vars is the rule earning ESLint its place here, so it stays ON — but an argument
-       kept for signature shape, and a caught error deliberately ignored, are both intentional.
-       The underscore prefix is how you say so out loud. */
+    /* Service-worker scope — public/sw.js (the offline shell) and the Cloudflare Worker. Neither
+       runs in the window nor in Node: self, caches, clients, skipWaiting and the Fetch API are
+       REAL here. Linting them as Node reported 24 no-undef errors for globals that genuinely
+       exist, and there is no source-side fix for a correct global being called undefined — the
+       config was simply naming the wrong runtime. */
+    files: ["public/sw.js", "worker/**/*.{js,mjs,ts}"],
+    languageOptions: { globals: { ...globals.serviceworker } },
+  },
+
+  {
     rules: {
+      /* Unused-vars is the rule earning ESLint its place here, so it stays ON — but an argument
+         kept for signature shape is intentional, and the underscore prefix is how you say so.
+         caughtErrors is OFF because this codebase's dominant idiom is progressive enhancement:
+         `try { localStorage… } catch { }` where the binding exists only because older syntax
+         required it. Reporting 40-odd of those buries the handful of real unused bindings, which
+         is the exact failure mode of a noisy linter — it trains you to skim past it. */
       "@typescript-eslint/no-unused-vars": [
         "error",
-        { argsIgnorePattern: "^_", varsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^_" },
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_", caughtErrors: "none" },
       ],
+
+      /* Same idiom, seen from the other side. An empty catch here is a DECISION — the feature
+         degrades and the page carries on — not an oversight. Every other empty block still
+         reports, because an empty `if` or `for` really is one. */
+      "no-empty": ["error", { allowEmptyCatch: true }],
+
+      /* OFF, and this is a debt, not an opinion. 154 sites, and they are one shape: functions
+         that WALK the guide JSON — flattenSections, collectWaypoints, derivePlannerData — plus
+         the .astro getStaticPaths props Astro itself hands over untyped. The real type already
+         exists (CollectionEntry<"guides">["data"], inferred from the Zod schema in
+         content.config.ts); threading it through the section discriminated union is a project,
+         not a lint fix.
+         Leaving the rule ON would have left `npm run lint` printing 154 errors forever, and a
+         command that always fails is a command nobody runs — which is how the real finding in
+         this same first pass (graduate-guide.mjs calling an isValidSlug it never imported, a
+         ReferenceError the whole green test suite could not see) would have stayed buried.
+         astro check remains the type gate and is at 0 errors. */
+      "@typescript-eslint/no-explicit-any": "off",
     },
   },
 );

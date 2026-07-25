@@ -21,7 +21,7 @@ export function reducedMotion() {
 /* A single short vibration for a confirmed tap. No-ops silently where the
    Vibration API is absent (all desktop, iOS Safari) — callers don't guard. */
 export function tapHaptic() {
-  try { navigator.vibrate && navigator.vibrate(9); } catch (e) {}
+  try { if (navigator.vibrate) navigator.vibrate(9); } catch { /* no haptics */ }
 }
 
 /* R8: one-time storage-key migration. storeKey moved from title-derived to

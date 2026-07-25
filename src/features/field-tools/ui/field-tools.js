@@ -18,7 +18,7 @@ import { trapFocus, migrateStorageKey } from "../../../scripts/util.js";
 (function () {
   var storeKey = document.body.getAttribute("data-storekey") || "guide";
   var legacyStoreKey = document.body.getAttribute("data-legacy-storekey") || null;
-  function buzz(ms) { try { navigator.vibrate && navigator.vibrate(ms); } catch (e) {} }
+  function buzz(ms) { try { if (navigator.vibrate) navigator.vibrate(ms); } catch { /* no haptics */ } }
 
   /* Shared mini-toast (independent of guide-ui internals). */
   var toast = document.createElement("div");

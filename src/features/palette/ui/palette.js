@@ -158,7 +158,8 @@
     var inField = /^(INPUT|TEXTAREA|SELECT)$/.test((e.target.tagName || "")) || e.target.isContentEditable;
     if ((e.key === "k" || e.key === "K") && (e.ctrlKey || e.metaKey)) {
       e.preventDefault();
-      (overlay && overlay.classList.contains("pal-open")) ? close() : open();
+      if (overlay && overlay.classList.contains("pal-open")) close();
+      else open();
     } else if (e.key === "/" && !inField && !e.ctrlKey && !e.metaKey && !e.altKey) {
       e.preventDefault();
       open();

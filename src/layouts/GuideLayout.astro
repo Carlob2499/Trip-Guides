@@ -262,8 +262,8 @@ const tripSummary = buildSummary(guide);
     -->
     <script is:inline>
       (function () {
-        var s = localStorage.getItem("tg-theme");
-        var preferDark = window.matchMedia && window.matchMedia("(prefers-color-scheme:dark)").matches;
+        const s = localStorage.getItem("tg-theme");
+        const preferDark = window.matchMedia && window.matchMedia("(prefers-color-scheme:dark)").matches;
         if (s === "dark" || (s === null && preferDark)) {
           document.documentElement.setAttribute("data-theme", "dark");
         } else if (s === "light") {

@@ -82,10 +82,15 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             remind: document.getElementById("tripRemind"),
             kit:    document.getElementById("tripKit"),
           };
+          // Via Object.prototype, not specialPanels.hasOwnProperty: the keys come from a URL
+          // hash and localStorage, so a tab named "hasOwnProperty" or "__proto__" would
+          // otherwise call something that isn't the check we meant.
+          function hasPanel(key) { return Object.prototype.hasOwnProperty.call(specialPanels, key); }
+
           var TAB_KEY = "tg-tab-" + STORE_KEY;
 
           function showTab(idx) {
-            var isSpecial = typeof idx === "string" && specialPanels.hasOwnProperty(idx);
+            var isSpecial = typeof idx === "string" && hasPanel(idx);
             catblocks.forEach(function (b, i) { b.hidden = isSpecial || i !== idx; });
             Object.keys(specialPanels).forEach(function (key) {
               var panel = specialPanels[key];
@@ -116,7 +121,7 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             guideTabs.querySelectorAll(".gtab").forEach(function (btn) {
               btn.addEventListener("click", function () {
                 var t = this.dataset.tab;
-                showTab(specialPanels.hasOwnProperty(t) ? t : parseInt(t, 10));
+                showTab(hasPanel(t) ? t : parseInt(t, 10));
                 // Post-switch scrolling is owned by scroll-memory.js (per-tab
                 // position restore) — a hard jump to page top re-showed the
                 // hero on every section change and lost the reader's place.
@@ -161,7 +166,7 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           var deepLinkedTab = hashTabIdx >= 0;
           if (deepLinkedTab) {
             showTab(hashTabIdx);
-          } else if (specialPanels.hasOwnProperty(savedTab) && specialPanels[savedTab]) {
+          } else if (hasPanel(savedTab) && specialPanels[savedTab]) {
             // R6: `hasOwnProperty` alone only proves the KEY is a known special-tab name —
             // not that THIS guide actually rendered that panel (e.g. a Learnings tab from a
             // prior guide visit, saved under the same per-storeKey session key, before this
@@ -210,7 +215,7 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             sheet.querySelectorAll("a").forEach(function (a) {
               a.addEventListener("click", function () {
                 var t = this.dataset.tab;
-                if (specialPanels.hasOwnProperty(t)) {
+                if (hasPanel(t)) {
                   showTab(t);
                 } else if (t !== undefined && t !== "") {
                   showTab(parseInt(t, 10));
@@ -240,7 +245,8 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             document.querySelectorAll(".sheet-link").forEach(function (a) {
               var on = a.getAttribute("href") === "#" + secId;
               a.classList.toggle("active", on);
-              on ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current");
+              if (on) a.setAttribute("aria-current", "true");
+            else a.removeAttribute("aria-current");
             });
             document.querySelectorAll(".sheet-cat").forEach(function (a) {
               a.classList.toggle("active", a.dataset.cat === String(cat));
@@ -282,8 +288,8 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
               var dEl = card.querySelector(".d");
               if (!dEl) return;
               var txt = dEl.textContent || "";
-              if (txt.indexOf(plain) !== -1 || txt.indexOf(plain.replace(/ /g, " ")) !== -1 ||
-                  txt.replace(/ /g, " ").indexOf(plain) !== -1) {
+              if (txt.indexOf(plain) !== -1 || txt.indexOf(plain.replace(/ /g, "\u00a0")) !== -1 ||
+                  txt.replace(/\u00a0/g, " ").indexOf(plain) !== -1) {
                 card.classList.add("day-today");
                 // Keep the today marker (the Focus Today chip depends on it), but don't
                 // hijack the tab/scroll if the visitor arrived via an explicit deep link.

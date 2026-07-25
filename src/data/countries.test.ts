@@ -1,5 +1,4 @@
 import { describe, it, expect } from "vitest";
-// @ts-ignore — plain .mjs data module, no types needed for these shape assertions
 import { COUNTRIES, CONTINENTS, CONTINENT_ORDER, ALIASES, continentFor, emergencyFor } from "./countries.mjs";
 
 describe("continent data", () => {
