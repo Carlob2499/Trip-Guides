@@ -19,7 +19,7 @@
 .ngw-dot{width:8px;height:8px;border-radius:50%;background:var(--rule2)}
 .ngw-dot-on{background:var(--accent)}
 
-.ngw-chips-label{margin:.4rem 0 .4rem;font-family:var(--font-data);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.ngw-chips-label{margin:.4rem 0 .4rem;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
 .ngw-chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.9rem}
 .ngw-chip{padding:.42rem .8rem;min-height:36px;border-radius:999px;border:1px solid var(--rule);background:var(--card);color:var(--ink);font-family:var(--font-display);font-weight:600;font-size:.8rem;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
 .ngw-chip:hover{border-color:var(--accent)}

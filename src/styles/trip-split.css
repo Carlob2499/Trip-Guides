@@ -14,10 +14,10 @@
 /* cards */
 .split-card{background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:1.1rem 1.25rem;margin-bottom:.9rem;box-shadow:0 1px 3px rgba(16,20,24,.06)}
 .sc-head{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin-bottom:.75rem}
-.sc-label{font-family:var(--font-display);font-size:.7rem;font-weight:600;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+.sc-label{font-family:var(--font-data);font-size:var(--text-micro);font-weight:600;letter-spacing:var(--tracking-micro);color:var(--muted);text-transform:uppercase}
 .sc-body{display:flex;flex-direction:column;gap:.5rem}
 /* buttons */
-.sc-add-btn,.sc-add-expense-btn{font-family:var(--font-data);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;background:none;border:1px solid var(--rule2);border-radius:4px;padding:.3rem .7rem;cursor:pointer;color:var(--muted);transition:color .14s,border-color .14s,background .14s,transform .2s var(--ease-spring);white-space:nowrap;flex:none}
+.sc-add-btn,.sc-add-expense-btn{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;background:none;border:1px solid var(--rule2);border-radius:4px;padding:.3rem .7rem;cursor:pointer;color:var(--muted);transition:color .14s,border-color .14s,background .14s,transform .2s var(--ease-spring);white-space:nowrap;flex:none}
 .sc-add-btn:hover,.sc-add-expense-btn:hover{color:var(--ink);border-color:var(--ink)}
 .sc-add-expense-btn{margin-bottom:.9rem;align-self:flex-start}
 /* member rows */
@@ -37,7 +37,7 @@
 /* Header shares the committed-row grid (.se-main: drag | payer | desc | amount | del)
    so the labels sit over their columns; the 3 labels are placed in cols 2–4. */
 .se-header{display:grid;grid-template-columns:1.3rem 7rem 1fr 5.5rem 1.6rem;gap:.4rem;padding:.1rem 0 .4rem;border-bottom:1px solid var(--rule);margin-bottom:.3rem}
-.se-h-payer,.se-h-desc,.se-h-amt{font-family:var(--font-data);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.se-h-payer,.se-h-desc,.se-h-amt{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
 .se-h-payer{grid-column:2}
 .se-h-desc{grid-column:3}
 .se-h-amt{grid-column:4;text-align:right}
@@ -68,7 +68,7 @@
 /* Who shared an expense. Chips, not checkboxes — tap targets have to look tappable, and an
    excluded person must read as clearly OFF rather than merely unstyled. */
 .se-parts{display:flex;flex-wrap:wrap;align-items:center;gap:.3rem .4rem;margin-top:.35rem;padding:.4rem .6rem;background:var(--bg2);border-radius:5px;border-left:3px solid var(--rule2)}
-.se-parts-lbl{font-family:var(--font-data);font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:.15rem}
+.se-parts-lbl{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin-right:.15rem}
 .se-part{padding:.22rem .55rem;border:1px solid var(--rule2);border-radius:999px;background:var(--bg);color:var(--muted);font-size:.78rem;font-weight:600;cursor:pointer;text-decoration:line-through;text-decoration-color:var(--rule2)}
 .se-part-on{background:var(--accent);border-color:var(--accent);color:#fff;text-decoration:none}
 .se-part:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
@@ -104,7 +104,7 @@
 .split-settle-ok{color:var(--green);font-size:.92rem;font-style:italic;padding:.3rem 0}
 /* summary bar */
 .split-summary{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;padding:.7rem 1rem;background:var(--bg2);border:1px solid var(--rule);border-radius:6px}
-.split-summary-lbl{font-family:var(--font-data);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);flex:1}
+.split-summary-lbl{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);flex:1}
 .split-summary-val{font-family:var(--font-data);font-size:.92rem;font-weight:700}
 /* empty state */
 .split-empty{color:var(--muted);font-size:.88rem;font-style:italic;padding:.25rem 0}

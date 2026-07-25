@@ -6,13 +6,13 @@
    "../features/trip-kit/styles.css" instead of reaching into ui/. */
 .tk-wrap { max-width: 760px; margin: 0 auto; }
 .tk-head { margin-bottom: 14px; }
-.tk-eyebrow { font-family: var(--font-data); font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent-ink); margin: 0 0 .3rem; }
+.tk-eyebrow { font-family: var(--font-data); font-size: var(--text-micro); font-weight: 700; letter-spacing: var(--tracking-micro); text-transform: uppercase; color: var(--accent-ink); margin: 0 0 .3rem; }
 .tk-title { margin: 0 0 4px; font-size: 1.5rem; line-height: 1.15; }
 .tk-desc { margin: 0; color: var(--muted); font-size: .95rem; }
 .tk-empty { color: var(--muted); font-style: italic; padding: 1rem 0; }
 
 .tk-card { background: var(--card); border: 1px solid var(--rule); border-radius: var(--r-md); padding: 1.1rem 1.2rem; margin-top: 1.1rem; }
-.tk-card-eyebrow { font-family: var(--font-data); font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-ink); margin: 0 0 .3rem; }
+.tk-card-eyebrow { font-family: var(--font-data); font-size: var(--text-micro); font-weight: 700; letter-spacing: var(--tracking-micro); text-transform: uppercase; color: var(--accent-ink); margin: 0 0 .3rem; }
 .tk-card-title { margin: 0 0 .35rem; font-size: 1.25rem; line-height: 1.2; }
 .tk-card-tldr { margin: 0 0 .8rem; color: var(--ink); font-size: 1rem; line-height: 1.5; }
 
@@ -25,7 +25,7 @@
 .tk-step-time { font-family: var(--font-data); font-size: .78rem; color: var(--muted); white-space: nowrap; }
 
 .tk-checklist { margin: 0 0 .8rem; padding-top: .3rem; }
-.tk-checklist-label { font-family: var(--font-data); font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 .2rem; }
+.tk-checklist-label { font-family: var(--font-data); font-size: var(--text-micro); font-weight: 700; letter-spacing: var(--tracking-micro); text-transform: uppercase; color: var(--muted); margin: 0 0 .2rem; }
 .tk-fit { margin: 0; font-size: .9rem; color: var(--muted); }
 
 /* Phrase cards — big native-script type is the point (readable at arm's length, shown
@@ -44,12 +44,12 @@
 /* Entry requirements — one row per traveler home country; a picker appears only when the
    guide has entry rows for more than one passport country (single-row guides skip it). */
 .tk-entry-picker { display: flex; flex-direction: column; gap: .25rem; margin: 0 0 .7rem; }
-.tk-entry-picker-label { font-family: var(--font-data); font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.tk-entry-picker-label { font-family: var(--font-data); font-size: var(--text-micro); font-weight: 700; letter-spacing: var(--tracking-micro); text-transform: uppercase; color: var(--muted); }
 .tk-entry-select { border: 1px solid var(--rule2, var(--rule)); border-radius: 4px; padding: .4rem .5rem; font: inherit; font-size: .92rem; background: var(--card); color: var(--ink); }
 .tk-entry-select:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
 .tk-entry-rows { display: flex; flex-direction: column; gap: .8rem; margin-top: .3rem; }
 .tk-entry-row { border-top: 1px solid var(--rule); padding-top: .7rem; }
-.tk-entry-country { margin: 0 0 .2rem; font-family: var(--font-data); font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.tk-entry-country { margin: 0 0 .2rem; font-family: var(--font-data); font-size: var(--text-micro); font-weight: 700; letter-spacing: var(--tracking-micro); text-transform: uppercase; color: var(--muted); }
 .tk-entry-visa { margin: 0 0 .25rem; font-size: 1.05rem; font-weight: 600; }
 .tk-entry-passport, .tk-entry-note { margin: 0 0 .2rem; font-size: .88rem; color: var(--muted); }
 .tk-entry-source { margin: .35rem 0 0; font-size: .74rem; color: var(--muted); }
@@ -65,7 +65,7 @@
    accent tint so it doesn't read as just another list item. */
 .tk-bookby-group { margin-top: .8rem; }
 .tk-bookby-group:first-child { margin-top: 0; }
-.tk-bookby-bucket { margin: 0 0 .35rem; font-family: var(--font-data); font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.tk-bookby-bucket { margin: 0 0 .35rem; font-family: var(--font-data); font-size: var(--text-micro); font-weight: 700; letter-spacing: var(--tracking-micro); text-transform: uppercase; color: var(--muted); }
 .tk-bookby-overdue .tk-bookby-bucket { color: var(--accent-ink); }
 .tk-bookby-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .5rem; }
 .tk-bookby-item { border-top: 1px solid var(--rule); padding-top: .5rem; display: flex; flex-direction: column; gap: .15rem; }

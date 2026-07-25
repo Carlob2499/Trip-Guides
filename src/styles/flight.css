@@ -14,7 +14,7 @@
 .cat-opener{position:relative;max-width:var(--read);margin:0 auto .4rem;padding:1.6rem 0 .2rem;overflow:hidden}
 .cat-num{position:absolute;right:-.05em;top:-.35rem;z-index:0;font-family:var(--font-display);font-weight:800;font-size:clamp(4.6rem,9vw,7.5rem);line-height:1;letter-spacing:-.05em;color:color-mix(in srgb,var(--accent) 14%,transparent);-webkit-text-stroke:1.5px color-mix(in srgb,var(--accent) 34%,transparent);user-select:none;pointer-events:none}
 .cat-opener .cat-title{position:relative;z-index:1;margin:0}
-.cat-sub{position:relative;z-index:1;margin:.3rem 0 0;font-family:var(--font-data);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.cat-sub{position:relative;z-index:1;margin:.3rem 0 0;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
 
 /* ── Opener photo fan — a group's own verified photos, fanned like a hand of
       postcards beside the numeral (static). ────────────────────────────────── */
@@ -35,7 +35,7 @@
 
 /* ── Next-section CTA — the guided reading chain ─────────────────────────── */
 .next-cta{display:flex;align-items:center;gap:1rem;width:100%;max-width:var(--read);margin:2.2rem auto .4rem;padding:1.15rem 1.4rem;background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:var(--r-lg);cursor:pointer;text-align:left;transition:background .22s,color .22s,border-color .22s,transform .2s var(--ease-spring)}
-.next-cta-label{font-family:var(--font-data);font-size:.64rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transition:color .22s}
+.next-cta-label{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);transition:color .22s}
 .next-cta-title{flex:1;font-family:var(--font-display);font-weight:720;font-size:1.35rem;letter-spacing:-.02em;line-height:1.1}
 .next-cta-arrow{font-size:1.5rem;line-height:1;transition:transform .22s cubic-bezier(.2,.7,.2,1)}
 .next-cta:hover{background:var(--ink);color:var(--bg);border-color:var(--ink);transform:translateY(-2px)}

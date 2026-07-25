@@ -5,7 +5,7 @@
    Styled entirely through base.css tokens so it stays congruent with the site. */
 
 .hl-wrap{max-width:46rem;margin:0 auto;padding:2.4rem 1.2rem 5rem}
-.hl-kicker{font-family:var(--font-data);font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 .3rem}
+.hl-kicker{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin:0 0 .3rem}
 .hl-head{font-family:var(--font-display);font-weight:760;font-size:1.9rem;letter-spacing:-.02em;margin:0 0 .55rem;line-height:1.1}
 .hl-intro{color:var(--muted);font-size:.96rem;line-height:1.55;margin:0 0 1.2rem;max-width:40rem}
 .hl-intro a{color:var(--accent-ink)}
@@ -24,7 +24,7 @@
 .hl-badge img{height:20px;display:block}
 
 /* Group heading */
-.hl-group{font-family:var(--font-data);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:2.2rem 0 .4rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule)}
+.hl-group{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin:2.2rem 0 .4rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule)}
 .hl-group-sub{font-size:.84rem;color:var(--muted);margin:0 0 1rem;line-height:1.5}
 
 /* Each automation row */
