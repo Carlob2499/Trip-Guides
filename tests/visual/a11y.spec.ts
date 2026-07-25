@@ -67,8 +67,9 @@ type Baseline = { max: number; why: string };
 // Keyed by "<rule id>/<messageKey>" (messageKey is color-contrast's own sub-reason for why it
 // couldn't resolve pass/fail; other rules that lack one use "default"). Each entry is a MAX, not a
 // fixed count — the number may only SHRINK as more real fixes land; if it ever needs to grow, that
-// growth must be reviewed and re-justified here, not silently absorbed. Every entry below was
-// verified against the real rendered page, not assumed from the selector name or node count alone.
+// growth must be reviewed and re-justified here, not silently absorbed — with exactly one
+// documented exception, LAYOUT_JITTER below. Every entry below was verified against the real
+// rendered page, not assumed from the selector name or node count alone.
 const PSEUDO_CONTENT_WHY =
   "Real, sizeable ancestor pseudo-elements axe's ancestor+size heuristic flags conservatively " +
   "without testing real geometric overlap: ol.steps li::before (a real ~23px numbered-step badge, " +
@@ -107,6 +108,23 @@ const FRAME_TESTED_WHY =
   "source) — it can never resolve pass/fail for a cross-origin OpenStreetMap iframe it has no way to " +
   "inject its test script into. Structurally permanent, not a code gap; frame-title-unique (a " +
   "DIFFERENT, genuinely fixable rule) was fixed separately and is not in this allowlist.";
+
+/* A color-contrast incomplete COUNT is a function of text reflow, not of correctness. axe flags one
+   node per text node whose ancestor carries a sizeable pseudo-element, so re-wrapping the same prose
+   across a different number of lines changes the tally without changing a single colour. Measured on
+   the Korea guide, same build, only the viewport differing: 28 nodes at 1280px, 30 at 1100px. CI
+   counts 29 where this machine counts 28 — same mechanism, different glyph advances under Linux font
+   metrics. Pinning these to one machine's exact observed count therefore gates CI on the font stack
+   of whoever last ran the suite, which is precisely how `pseudoContent: 29 > max 28` turned the
+   Accessibility workflow red on a push containing no accessibility change at all.
+   So colour-contrast keys carry a small tolerance, sized one above the largest reflow swing actually
+   measured (2). Everything else stays exact — frame-tested counts iframes, which reflow cannot move.
+   This does not blunt the gate that matters: `unrecognised` below still fails at ZERO tolerance on
+   any node of a kind not already justified here, and that novelty check — not a count creeping by
+   one — is the mechanism that surfaces a real bug like the broken-photo caption pair. */
+const LAYOUT_JITTER = 3;
+const ceilingFor = (key: string, max: number) =>
+  key.startsWith("color-contrast/") ? max + LAYOUT_JITTER : max;
 
 const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
   hub: {
@@ -201,13 +219,18 @@ for (const [name, path] of [
           `(add a verified INCOMPLETE_BASELINE entry explaining why, per the pattern in this file)`,
       ).toEqual([]);
       const grown = Object.entries(counts)
-        .filter(([key, count]) => count > (baseline[key]?.max ?? 0))
-        .map(([key, count]) => `${key}: ${count} > baseline max ${baseline[key]?.max}`);
+        .filter(([key, count]) => count > ceilingFor(key, baseline[key]?.max ?? 0))
+        .map(
+          ([key, count]) =>
+            `${key}: ${count} > ${ceilingFor(key, baseline[key]?.max ?? 0)} ` +
+            `(baseline max ${baseline[key]?.max}${key.startsWith("color-contrast/") ? ` + ${LAYOUT_JITTER} jitter` : ""})`,
+        );
       expect(
         grown,
         `${name} (${scheme}): a documented incomplete case grew past its recorded baseline — new ` +
-          `nodes are hitting an already-known "couldn't resolve" mechanism. Re-verify they're really ` +
-          `the same mechanism (not a new bug wearing the same messageKey) before raising the max`,
+          `nodes are hitting an already-known "couldn't resolve" mechanism, by more than reflow alone ` +
+          `can explain (see LAYOUT_JITTER). Re-verify they're really the same mechanism (not a new bug ` +
+          `wearing the same messageKey) before raising the max`,
       ).toEqual([]);
     });
   }
