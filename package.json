@@ -11,6 +11,7 @@
     "coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "typecheck": "astro check",
+    "lint": "eslint .",
     "readiness": "node scripts/guide-readiness.mjs",
     "verify": "node scripts/verify-guide.mjs",
     "verify-live": "node scripts/verify-live.mjs",
@@ -41,12 +42,18 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
     "@axe-core/playwright": "^4.12.1",
+    "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.61.1",
     "@vitest/coverage-v8": "^4.1.10",
+    "astro-eslint-parser": "^3.0.0",
+    "eslint": "^10.8.0",
+    "eslint-plugin-astro": "^3.0.1",
+    "globals": "^17.7.0",
     "google-auth-library": "^10.9.0",
     "semver": "^7.8.2",
     "tsx": "^4.23.0",
     "typescript": "^6.0.3",
+    "typescript-eslint": "^8.65.0",
     "vitest": "^4.1.9"
   },
   "engines": {
