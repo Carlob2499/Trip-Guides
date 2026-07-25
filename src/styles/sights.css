@@ -29,10 +29,31 @@
 .sight-media-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,13,16,.82) 0%,rgba(10,13,16,.30) 42%,rgba(10,13,16,0) 68%)}
 
 .sight-media-cap{position:absolute;left:0;right:0;bottom:0;margin:0;padding:.9rem 1rem .85rem;color:#f4f6ef}
-.tag--onphoto{color:#e9ede2;opacity:.95;margin-bottom:.15rem;text-shadow:0 1px 6px rgba(0,0,0,.4)}
-.sight-name--onphoto{color:#fff;margin:0;font-size:1.32rem;line-height:1.12;text-shadow:0 1px 12px rgba(0,0,0,.4)}
+/* DEFAULT is the SAFE state, not the photo-tuned one — this used to be backwards. .cardimg is
+   loading="lazy", so onload/onerror often haven't fired yet when this first paints (confirmed live:
+   under a blocked/slow network the image sits in this exact default state indefinitely, never
+   reaching .media-fail, since a lazy image that never starts loading never errors either). The
+   default background here is the loading-skeleton gradient above (--bg2-toned), and near-white text
+   on that measured 1.11:1/1.32:1 — the same failure .media-fail already fixed, reached by a path
+   that fix didn't cover. var(--ink) is safe against both the skeleton AND the .media-fail flat
+   --bg2, so it can be the one default instead of two special-cased overrides. */
+.tag--onphoto{color:var(--ink);opacity:.95;margin-bottom:.15rem}
+.sight-name--onphoto{color:var(--ink);margin:0;font-size:1.32rem;line-height:1.12}
+/* Photo-tuned near-white + shadow is now OPT-IN, gated on .media-ok (new onload handler in
+   SightsBlock.astro, mirroring the existing onerror -> .media-fail pattern) confirming a real
+   photo is actually painted behind the caption. @media screen: print already flattens this pair to
+   #111 unconditionally (see the @media print block below) and must keep winning there. */
+@media screen{
+  .sight-media.media-ok .tag--onphoto{color:#e9ede2;text-shadow:0 1px 6px rgba(0,0,0,.4)}
+  .sight-media.media-ok .sight-name--onphoto{color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.4)}
+}
 
-.imgcredit--onphoto{position:absolute;top:.55rem;right:.55rem;left:auto;margin:0;padding:.2rem .5rem;font-size:.6rem;color:rgba(244,246,239,.85);background:rgba(10,13,16,.42);border-radius:999px;text-align:right;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+/* Badge sits on real photo pixels, so its worst case is a pure-white area of the photo, not --card.
+   At the old .42 alpha that composited to 2.30:1 — badly short of 4.5:1. .68 clears 5.11:1 against
+   white while staying visually a translucent pill, not a solid one (verified: computed the actual
+   composited RGB against white, not just eyeballed the alpha). Hover's .62 was already fine
+   (5.51:1 with #fff text) and is untouched. */
+.imgcredit--onphoto{position:absolute;top:.55rem;right:.55rem;left:auto;margin:0;padding:.2rem .5rem;font-size:.6rem;color:rgba(244,246,239,.85);background:rgba(10,13,16,.68);border-radius:999px;text-align:right;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .imgcredit--onphoto a,.imgcredit--onphoto{border-bottom:0;text-decoration:none}
 .imgcredit--onphoto:hover{background:rgba(10,13,16,.62);color:#fff}
 

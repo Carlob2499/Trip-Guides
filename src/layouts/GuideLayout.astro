@@ -18,6 +18,7 @@ import { collectWaypoints, collectDayEvents, buildSummary } from "../features/ex
 // Self-hosted variable fonts (bundled, base-path-safe, offline-correct) — no CDN.
 import "@fontsource-variable/bricolage-grotesque";
 import "@fontsource-variable/literata";
+import "@fontsource-variable/literata/wght-italic.css";
 import "@fontsource-variable/spline-sans-mono";
 import "../styles/base.css";
 import "../styles/guide.css";
@@ -411,6 +412,7 @@ const tripSummary = buildSummary(guide);
         {heroSrc && (
           <img class="mast-img" src={heroSrc} alt={coverAlt}
                loading="eager" fetchpriority="high"
+               onerror="this.closest('.mast-frame').classList.add('mast-media-fail')"
                style={`view-transition-name:cover-${ogSlug}${coverFocal ? `;object-position:${coverFocal}` : ""}`} />
         )}
         <span class="mast-scrim" aria-hidden="true"></span>

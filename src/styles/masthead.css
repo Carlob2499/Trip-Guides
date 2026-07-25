@@ -33,6 +33,23 @@
 .mast-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transform-origin:60% 40%}
 .mast-scrim{position:absolute;inset:0;z-index:-1}
 .mast-photo .mast-scrim{background:linear-gradient(to top,rgba(12,15,18,.86) 0%,rgba(12,15,18,.42) 48%,rgba(12,15,18,.10) 100%)}
+/* Cover photo can fail (network blocked, offline, a renamed/broken Commons file); GuideLayout.astro's
+   onerror adds .mast-media-fail to .mast-frame. Without this the scrim/title/dek keep their
+   photo-tuned colours over nothing — measured live at their real on-screen scrim alpha: eyebrow
+   2.68:1, credit 3.22:1 (both fail 4.5:1); title/dek pass only because large text needs just 3:1.
+   Must hide .mast-img itself (not just the scrim) — otherwise the browser's native broken-image
+   glyph + coverAlt text render, uncontrolled, on top of the flattened surface underneath, since
+   .mast-frame's isolation:isolate makes its own background paint behind the img's negative z-index.
+   @media screen only: the existing @media print block below already unconditionally hides .mast-img
+   and forces #111 on the text — this override's higher specificity would otherwise win over that
+   forcing during print too (a media query doesn't change specificity), printing dark-theme --ink
+   onto white paper. */
+@media screen{
+  .mast-frame.mast-media-fail{background:var(--bg2)}
+  .mast-frame.mast-media-fail .mast-img,.mast-frame.mast-media-fail .mast-scrim,.mast-frame.mast-media-fail .mast-contours{display:none}
+  .mast-frame.mast-media-fail .mast-eyebrow,.mast-frame.mast-media-fail .mast-title,.mast-frame.mast-media-fail .mast-dek{color:var(--ink);text-shadow:none}
+  .mast-frame.mast-media-fail .mast-credit{color:var(--ink);background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
+}
 
 /* Typographic hero (scaffolds): accent field + dot lattice */
 .mast-typo .mast-frame{background:var(--accent)}
@@ -45,7 +62,9 @@
 .mast-title{font-family:var(--font-display);font-weight:800;font-size:clamp(2.4rem,7.2vw,5.4rem);line-height:.98;letter-spacing:-.035em;margin:.35rem 0 0;color:#fff;text-shadow:0 2px 24px rgba(0,0,0,.32)}
 .mast-dek{color:#eef1e9;max-width:54ch;margin:.75rem 0 0;font-size:clamp(1rem,1.4vw,1.14rem);line-height:1.55;text-shadow:0 1px 10px rgba(0,0,0,.28)}
 
-.mast-credit{position:absolute;right:.7rem;top:.7rem;z-index:1;font-family:var(--font-data);font-size:.6rem;letter-spacing:.02em;color:rgba(244,246,239,.82);background:rgba(12,15,18,.42);padding:.24rem .5rem;border-radius:999px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);text-decoration:none}
+/* Same badge-on-photo pattern as sights.css's .imgcredit--onphoto, same fix: .42 alpha composited
+   to 2.23:1 against a worst-case white photo pixel. .68 clears 4.79:1. */
+.mast-credit{position:absolute;right:.7rem;top:.7rem;z-index:1;font-family:var(--font-data);font-size:.6rem;letter-spacing:.02em;color:rgba(244,246,239,.82);background:rgba(12,15,18,.68);padding:.24rem .5rem;border-radius:999px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);text-decoration:none}
 .mast-credit:hover{color:#fff;background:rgba(12,15,18,.62)}
 
 /* The accent rule centers over the meta band (which is centered below). */

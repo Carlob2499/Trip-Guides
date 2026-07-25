@@ -22,6 +22,7 @@ const commonsPage = (f: string) =>
           src={commonsSrc(it.img.file, 800)}
           srcset={`${commonsSrc(it.img.file, 480)} 480w, ${commonsSrc(it.img.file, 800)} 800w, ${commonsSrc(it.img.file, 1200)} 1200w`}
           sizes="(max-width:899px) 100vw, 420px"
+          onload="this.closest('.sight-media').classList.add('media-ok')"
           onerror="this.closest('.sight-media').classList.add('media-fail')" />
         <span class="sight-media-grad" aria-hidden="true"></span>
         <figcaption class="sight-media-cap">
