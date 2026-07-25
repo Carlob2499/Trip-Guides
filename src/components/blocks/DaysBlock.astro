@@ -66,7 +66,7 @@ const actualFor = (date: string) =>
           {d.checklist && d.checklist.length > 0 && (
             <span class="day-kitcount" hidden aria-live="polite"></span>
           )}
-          <span class="day-sun" hidden></span>
+          <span class="day-sun" role="group" hidden></span>
           {d.pace && <div class="pace">⏱ {d.pace}</div>}
           {d.waypoints && d.waypoints.length > 0 && (
             <ol class="stops" aria-label="Stops this day">
