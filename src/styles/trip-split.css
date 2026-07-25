@@ -24,7 +24,7 @@
 .sm-row{display:grid;grid-template-columns:1.4rem 1fr 1.6fr 1.6rem;gap:.45rem;align-items:center}
 .sm-idx{font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);text-align:center;line-height:1}
 /* shared input */
-.split-in{font:inherit;font-size:var(--text-small);border:1px solid var(--rule2);border-radius:4px;padding:.3rem .45rem;background:var(--card);color:var(--ink);width:100%;min-width:0;transition:border-color .14s}
+.split-in{font:inherit;font-size:var(--text-body);border:1px solid var(--rule2);border-radius:4px;padding:.3rem .45rem;background:var(--card);color:var(--ink);width:100%;min-width:0;transition:border-color .14s}
 .split-in:focus{outline:2px solid var(--theme-primary,var(--accent));outline-offset:0;border-color:transparent}
 /* delete button */
 .split-del{background:none;border:none;cursor:pointer;font-size:var(--text-body);color:var(--muted);padding:.1rem .35rem;border-radius:3px;line-height:1;transition:color .14s,background .14s;flex:none}

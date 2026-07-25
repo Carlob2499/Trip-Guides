@@ -23,21 +23,22 @@ import { fileURLToPath } from "node:url";
 
 const SRC = fileURLToPath(new URL("..", import.meta.url));
 
-/** The declared scale, mirrored from base.css purely to make failure messages useful.
-    For the fluid heading steps this is the clamp's MAX (its desktop rendering). */
-const SCALE: Record<string, number> = {
-  "--text-nano": 0.6,
-  "--text-micro": 0.68,
-  "--text-control-sm": 0.72,
-  "--text-caption": 0.78,
-  "--text-control": 0.82,
-  "--text-small": 0.88,
-  "--text-body": 1.02,
-  "--text-lead": 1.15,
-  "--text-h4": 1.3,
-  "--text-h3": 1.6,
-  "--text-h2": 2.0,
-};
+/* PARSED from base.css, never mirrored. A hand-copied table looks harmless and rots silently:
+   the 16px control check below reads these numbers, so a stale copy would let a control sit
+   under the threshold while the test reported green. That is the same shape as the stale
+   "southkorea" storage key that made two specs assert against data the page never touched.
+   For a fluid step the clamp's MAX is used — its desktop rendering, and the widest it gets. */
+const BASE_CSS = readFileSync(join(SRC, "styles/base.css"), "utf8");
+
+const SCALE: Record<string, number> = Object.fromEntries(
+  [...BASE_CSS.matchAll(/(--text-[\w-]+)\s*:\s*([^;]+);/g)].flatMap(([, token, raw]) => {
+    const value = raw.trim();
+    const clamped = value.match(/clamp\([^,]+,[^,]+,\s*([\d.]+)rem\s*\)/);
+    const plain = value.match(/^([\d.]+)rem$/);
+    const rem = clamped ? parseFloat(clamped[1]) : plain ? parseFloat(plain[1]) : null;
+    return rem === null ? [] : [[token, rem] as const];
+  }),
+);
 
 type Exception = { marker: string; value: string; why: string };
 
@@ -117,6 +118,17 @@ function suggest(value: string): string {
 }
 
 describe("type scale", () => {
+  /* Guards the guard. Everything below reads SCALE, and every one of those checks would
+     report GREEN if the parse silently produced {} — the failure mode where a test protects
+     nothing and says so cheerfully. */
+  test("the scale actually parsed out of base.css", () => {
+    expect(Object.keys(SCALE).length, "no --text-* steps parsed from base.css").toBeGreaterThan(8);
+    for (const required of ["--text-body", "--text-small", "--text-h3"]) {
+      expect(SCALE[required], `${required} missing from the parsed scale`).toBeGreaterThan(0);
+    }
+    expect(SCALE["--text-body"] * 16, "--text-body must stay >=16px; controls depend on it").toBeGreaterThanOrEqual(16);
+  });
+
   test("no bare font-size literal outside the declared scale or the justified exceptions", () => {
     const offenders: string[] = [];
 
@@ -150,9 +162,11 @@ describe("type scale", () => {
      focus, and never zooms back out — the reader is left on a magnified, sideways-scrolling
      page after tapping a search box. So 16px is a behavioural floor for controls, not a
      stylistic preference, and it is worth a gate of its own.
-     Matched by selector text, which means this only guards controls it can recognise: element
-     selectors, plus the class-named ones listed here. A genuinely new control class needs
-     adding — the browser knows what an <input> is, a stylesheet does not. */
+     Matched by selector text, so this only guards controls it can RECOGNISE. That limit is
+     real and was demonstrated: .bactual and .split-in below were both under 16px and invisible
+     to this list until the DOM-based check in tests/visual/a11y.spec.ts found them by asking
+     the rendered page instead. Treat that spec as the authority and this as the fast unit-level
+     echo of it — a stylesheet cannot tell what an <input> is. */
   const CONTROL_SELECTORS = [
     ".cur-in",
     ".hub-search",
@@ -162,6 +176,8 @@ describe("type scale", () => {
     ".tk-entry-select",
     ".rm-in",
     ".lnw-ta",
+    ".bactual",
+    ".split-in",
   ];
 
   test("text-entry controls are >=16px, so iOS does not zoom the page on focus", () => {
@@ -203,9 +219,7 @@ describe("type scale", () => {
   });
 
   test("every --text-* token referenced anywhere in src is actually declared in base.css", () => {
-    const declared = new Set(
-      [...readFileSync(join(SRC, "styles/base.css"), "utf8").matchAll(/(--text-[\w-]+)\s*:/g)].map((m) => m[1]),
-    );
+    const declared = new Set([...BASE_CSS.matchAll(/(--text-[\w-]+)\s*:/g)].map((m) => m[1]));
 
     const dangling: string[] = [];
     for (const file of cssFiles(SRC)) {
