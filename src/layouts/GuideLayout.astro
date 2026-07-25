@@ -640,7 +640,11 @@ const tripSummary = buildSummary(guide);
          · Sections — opens the slide-up section sheet
          · ↑        — scroll to top
          ═══════════════════════════════════════════════════════════════════ -->
-    <div class="botbar">
+    <!-- A <nav>, not a <div>: these are the only controls on the page at phone widths, and as a
+         plain div they sat OUTSIDE every landmark — so a screen-reader user navigating by
+         landmark skipped the entire mobile navigation. Invisible to the a11y gate until it
+         started auditing a narrow viewport, because .botbar is display:none on wide ones. -->
+    <nav class="botbar" aria-label="Guide shortcuts">
       <a class="botHome" href={`${base}/`} aria-label="All guides" title="All guides">⌂</a>
       <button class="botSections" id="sheetOpen" type="button"
               aria-haspopup="dialog" aria-expanded="false">
@@ -649,7 +653,7 @@ const tripSummary = buildSummary(guide);
         <span class="bs-chev" aria-hidden="true">▾</span>
       </button>
       <a class="botTop" href="#top" aria-label="Back to top">↑</a>
-    </div>
+    </nav>
 
     <!-- Slide-up section sheet (mobile) -->
     <div class="sheet-backdrop"></div>
