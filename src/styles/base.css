@@ -117,7 +117,15 @@
      of 4.5:1) only above 18.7px, and every floor here stays above it — see .day-num, whose
      size is pinned as a literal for exactly this reason. */
   --text-h4:clamp(1.2rem,1.1rem + .4vw,1.3rem);    /* 19.2px -> 20.8px */
-  --text-h3:clamp(1.4rem,1.28rem + .6vw,1.6rem);   /* 22.4px -> 25.6px */
+  /* --text-h3 is FIXED, and deliberately so — it was briefly fluid and that was a bug.
+     guide.css sets h2,h3,h4{font-weight:400}, so headings here are NOT bold, which puts
+     their large-text line at 24px rather than 18.7px. 1.6rem is 25.6px, just above it; any
+     useful fluid range drops under 24px at phone widths and silently re-grades every
+     <h2 class="learn-title"/"rm-title"/"tk-title"> from needing 3:1 to needing 4.5:1.
+     The axe gate cannot catch that — it audits one viewport (1280px), where the size never
+     changes. A token whose only safe range is 24->25.6px isn't worth being fluid for, so
+     this stays a constant instead of pretending. */
+  --text-h3:1.6rem;                                /* 25.6px, fixed — see above */
   --text-h2:clamp(1.75rem,1.5rem + 1.2vw,2rem);    /* 28px   -> 32px   */
   --text-display:clamp(2.8rem,8vw,4.8rem); /* MATCHES .masthead h1's clamp in guide.css, not new */
   --r-sm:6px;--r-md:10px;--r-lg:16px; /* radius scale — rounded-container language */
