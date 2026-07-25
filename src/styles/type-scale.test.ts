@@ -23,7 +23,8 @@ import { fileURLToPath } from "node:url";
 
 const SRC = fileURLToPath(new URL("..", import.meta.url));
 
-/** The declared scale, mirrored from base.css purely to make failure messages useful. */
+/** The declared scale, mirrored from base.css purely to make failure messages useful.
+    For the fluid heading steps this is the clamp's MAX (its desktop rendering). */
 const SCALE: Record<string, number> = {
   "--text-nano": 0.6,
   "--text-micro": 0.68,
@@ -142,6 +143,62 @@ describe("type scale", () => {
         "other than the type role, the way .day-num's is contrast-gated — add it to ALLOWED " +
         "in this file WITH the reason. The list is closed on purpose: 82 distinct values " +
         "accumulated once already because nothing said no",
+    ).toEqual([]);
+  });
+
+  /* iOS Safari zooms the whole page in when a text-entry control smaller than 16px takes
+     focus, and never zooms back out — the reader is left on a magnified, sideways-scrolling
+     page after tapping a search box. So 16px is a behavioural floor for controls, not a
+     stylistic preference, and it is worth a gate of its own.
+     Matched by selector text, which means this only guards controls it can recognise: element
+     selectors, plus the class-named ones listed here. A genuinely new control class needs
+     adding — the browser knows what an <input> is, a stylesheet does not. */
+  const CONTROL_SELECTORS = [
+    ".cur-in",
+    ".hub-search",
+    ".pal-input",
+    ".jl-select",
+    ".share-url-txt",
+    ".tk-entry-select",
+    ".rm-in",
+    ".lnw-ta",
+  ];
+
+  test("text-entry controls are >=16px, so iOS does not zoom the page on focus", () => {
+    const tooSmall: string[] = [];
+
+    for (const file of cssFiles(SRC)) {
+      const rel = relative(SRC, file).replace(/\\/g, "/");
+      readFileSync(file, "utf8")
+        .split(/\r?\n/)
+        .forEach((line, i) => {
+          const isControl =
+            /(^|[\s,{])(input|select|textarea)[\s,{:]/.test(line) ||
+            CONTROL_SELECTORS.some((s) => line.includes(s + "{") || line.includes(s + " ") || line.includes(s + ","));
+          if (!isControl) return;
+
+          const token = line.match(/font-size:\s*var\((--text-[\w-]+)\)/);
+          if (token) {
+            const rem = SCALE[token[1]];
+            if (rem !== undefined && rem * 16 < 16) {
+              tooSmall.push(`${rel}:${i + 1}  var(${token[1]}) = ${(rem * 16).toFixed(2)}px`);
+            }
+            return;
+          }
+          const literal = line.match(/font-size:\s*([\d.]+)(rem|px)(?=[;}\s])/);
+          if (literal) {
+            const px = literal[2] === "rem" ? parseFloat(literal[1]) * 16 : parseFloat(literal[1]);
+            if (px < 16) tooSmall.push(`${rel}:${i + 1}  ${literal[1]}${literal[2]} = ${px.toFixed(2)}px`);
+          }
+        });
+    }
+
+    expect(
+      tooSmall,
+      "A text-entry control is under 16px. iOS Safari will zoom the page in when it takes " +
+        "focus and will not zoom back out, stranding the reader on a magnified page after a " +
+        "single tap. Use var(--text-body) (16.32px). This is a behavioural threshold, not a " +
+        "size preference — do not 'fix' it by shrinking the requirement",
     ).toEqual([]);
   });
 

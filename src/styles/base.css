@@ -105,9 +105,20 @@
   --text-small:.88rem;      /* secondary body text, UI chrome */
   --text-body:1.02rem;      /* primary reading size — body{font-size} reads this token */
   --text-lead:1.15rem;      /* lead paragraphs, dek text */
-  --text-h4:1.3rem;         /* card / sheet / section titles */
-  --text-h3:1.6rem;
-  --text-h2:2rem;
+  /* The heading band is FLUID; body and UI text deliberately are not. A phone is held closer
+     than a monitor, so reading text wants the same physical size on both and shrinking it
+     hurts — but a 32px section head that is right on a desktop is overbearing at 375px. Each
+     clamp's MAX is the previous fixed value, so desktop rendering is unchanged and only narrow
+     viewports gain room.
+     The middle term always carries a rem component. A pure-vw middle would lock the size to
+     the viewport and stop responding to the reader's own font-size setting — a WCAG 1.4.4
+     failure that looks fine to anyone who never changes that setting.
+     Kept clear of the contrast cliff on purpose: WCAG grades bold text as LARGE (3:1 instead
+     of 4.5:1) only above 18.7px, and every floor here stays above it — see .day-num, whose
+     size is pinned as a literal for exactly this reason. */
+  --text-h4:clamp(1.2rem,1.1rem + .4vw,1.3rem);    /* 19.2px -> 20.8px */
+  --text-h3:clamp(1.4rem,1.28rem + .6vw,1.6rem);   /* 22.4px -> 25.6px */
+  --text-h2:clamp(1.75rem,1.5rem + 1.2vw,2rem);    /* 28px   -> 32px   */
   --text-display:clamp(2.8rem,8vw,4.8rem); /* MATCHES .masthead h1's clamp in guide.css, not new */
   --r-sm:6px;--r-md:10px;--r-lg:16px; /* radius scale — rounded-container language */
   /* Motion tokens — the single timing vocabulary for CSS + GSAP alike (adopted from
