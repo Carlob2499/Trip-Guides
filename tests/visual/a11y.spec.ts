@@ -8,7 +8,24 @@ import AxeBuilder from "@axe-core/playwright";
 
 const FIXED_TIME = new Date("2026-09-01T10:00:00+09:00");
 
-async function prep(page: Page, path: string, scheme: "light" | "dark") {
+/* A fluid size is unaudited at every width this gate does not visit — and that is not
+   hypothetical. --text-h3 was briefly made fluid and fell under WCAG's 24px large-text line at
+   phone widths, silently re-grading three <h2>s (weight 400, so 24px is their boundary, not
+   18.7px) from a 3:1 requirement to 4.5:1. Nothing here could see it, because the gate only
+   ever looked at 1280px. It looks at both ends now: any size that changes with viewport gets
+   audited where it changes. */
+const VIEWPORTS = [
+  { label: "desktop", width: 1280, height: 800 },
+  { label: "mobile", width: 375, height: 812 },
+] as const;
+
+type Viewport = (typeof VIEWPORTS)[number];
+
+/* Flattened so the test body's nesting (and therefore this file's diff) stays as it was. */
+const COMBOS = (["light", "dark"] as const).flatMap((scheme) => VIEWPORTS.map((vp) => ({ scheme, vp })));
+
+async function prep(page: Page, path: string, scheme: "light" | "dark", vp: Viewport) {
+  await page.setViewportSize({ width: vp.width, height: vp.height });
   await page.route("**/*", (route) =>
     route.request().url().startsWith("http://localhost:4322") ? route.continue() : route.abort(),
   );
@@ -168,6 +185,54 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
   },
 };
 
+/* Narrow viewports reflow the same prose across more lines, and a colour-contrast incomplete
+   is counted PER TEXT NODE — so mobile legitimately reports more of the identical mechanism.
+   These are raises over the desktop numbers above, seeded from measurement rather than guessed,
+   and only where mobile genuinely renders more. Where mobile renders FEWER, the desktop max
+   stands as a (looser but safe) ceiling rather than being tracked twice. */
+const MOBILE_DELTA: Record<string, Record<string, Baseline>> = {
+  "denmark guide": {
+    // Measured 24 at 375px against 19 at 1280px — the same ol.steps li::before mechanism
+    // already justified above, simply spread over more wrapped lines in a narrow column.
+    // Korea needs no entry: its desktop max of 28 already covers what mobile renders.
+    "color-contrast/pseudoContent": { max: 24, why: PSEUDO_CONTENT_WHY },
+  },
+};
+
+/* iOS Safari zooms the page in when a text-entry control under 16px takes focus, and does not
+   zoom back out. src/styles/type-scale.test.ts guards this too, but only by reading selectors
+   out of the stylesheet — so it can only see controls it has been told about, and a new class
+   name escapes silently. This one asks the rendered DOM instead, which knows what an <input>
+   actually is. Runs at mobile, where the bug is felt. */
+for (const [name, path] of [
+  ["hub", "/Trip-Guides/"],
+  ["korea guide", "/Trip-Guides/guides/korea/"],
+] as const) {
+  test(`form controls are >=16px so iOS never zoom-traps — ${name}`, async ({ page }) => {
+    await prep(page, path, "light", VIEWPORTS[1]);
+    const small = await page.evaluate(() =>
+      [...document.querySelectorAll("input, select, textarea")]
+        .filter((el) => {
+          const t = (el as HTMLInputElement).type;
+          /* Only TEXT-ENTRY controls. The zoom trap is triggered by focusing something you
+             type into; a checkbox, slider or file picker opens a native control instead and
+             never zooms, so including them would report noise that cannot be "fixed". */
+          return !["hidden", "checkbox", "radio", "range", "color", "submit", "button", "file", "image", "reset"].includes(t);
+        })
+        .map((el) => ({ sel: el.className || el.tagName, px: parseFloat(getComputedStyle(el).fontSize) }))
+        .filter((r) => r.px < 16)
+        .map((r) => `${r.sel} = ${r.px}px`),
+    );
+    expect(
+      small,
+      `${name}: a text-entry control renders under 16px. iOS Safari will zoom the page in on ` +
+        `focus and will not zoom back out, stranding the reader on a magnified page after one ` +
+        `tap. Give it var(--text-body). Non-text controls (checkbox, radio, range…) are excluded ` +
+        `because the zoom behaviour does not apply to them`,
+    ).toEqual([]);
+  });
+}
+
 // Every page shape the site builds: the hub, and BOTH guides. Korea and Denmark
 // differ in ways axe can see — Denmark has no learnings block (so no reality
 // layer), Korea carries four extra content groups and a habitats/raids grid — so
@@ -178,9 +243,9 @@ for (const [name, path] of [
   ["korea guide", "/Trip-Guides/guides/korea/"],
   ["denmark guide", "/Trip-Guides/guides/denmark/"],
 ] as const) {
-  for (const scheme of ["light", "dark"] as const) {
-    test(`a11y — ${name} (${scheme})`, async ({ page }) => {
-      await prep(page, path, scheme);
+  for (const { scheme, vp } of COMBOS) {
+    test(`a11y — ${name} (${scheme}, ${vp.label})`, async ({ page }) => {
+      await prep(page, path, scheme, vp);
       await assertContentVisible(page, name);
       const results = await new AxeBuilder({ page }).analyze();
 
@@ -201,7 +266,10 @@ for (const [name, path] of [
       // Incomplete: every node's (rule, messageKey) must be in the baseline for THIS page, and the
       // observed count must not EXCEED the recorded max. Anything else fails loudly — an
       // unrecognised incomplete node is exactly how two real contrast bugs hid here before.
-      const baseline = INCOMPLETE_BASELINE[name] ?? {};
+      const baseline = {
+        ...(INCOMPLETE_BASELINE[name] ?? {}),
+        ...(vp.label === "mobile" ? (MOBILE_DELTA[name] ?? {}) : {}),
+      };
       const counts: Record<string, number> = {};
       const unrecognised: string[] = [];
       for (const v of results.incomplete) {
@@ -214,7 +282,7 @@ for (const [name, path] of [
       }
       expect(
         unrecognised,
-        `${name} (${scheme}): incomplete node(s) with no baseline entry — a NEW, undocumented ` +
+        `${name} (${scheme}, ${vp.label}):incomplete node(s) with no baseline entry — a NEW, undocumented ` +
           `"couldn't resolve" case appeared. Either it's a real bug (fix it) or genuinely fine ` +
           `(add a verified INCOMPLETE_BASELINE entry explaining why, per the pattern in this file)`,
       ).toEqual([]);
@@ -227,7 +295,7 @@ for (const [name, path] of [
         );
       expect(
         grown,
-        `${name} (${scheme}): a documented incomplete case grew past its recorded baseline — new ` +
+        `${name} (${scheme}, ${vp.label}):a documented incomplete case grew past its recorded baseline — new ` +
           `nodes are hitting an already-known "couldn't resolve" mechanism, by more than reflow alone ` +
           `can explain (see LAYOUT_JITTER). Re-verify they're really the same mechanism (not a new bug ` +
           `wearing the same messageKey) before raising the max`,
