@@ -1,0 +1,68 @@
+[
+  {
+    "type": "panel",
+    "group": "Money & budget",
+    "title": "Money & currency",
+    "body": "<p>US Dollar, no currency exchange needed. Cards are accepted almost everywhere in Sedona, including the local food spots below — this is not a cash-only town the way some destinations are. Tipping norms match the rest of the US (see Local essentials above).</p>"
+  },
+  {
+    "type": "budget",
+    "group": "Money & budget",
+    "title": "Budget & daily costs",
+    "intro": "Solo traveler, Comfortable tier ($150–300/day target from intake). Honest flag, done in the actual numbers below rather than a hedge: lodging + rental car alone run ≈$223/day — comfortably inside the target. Add food and it's ≈$288/day — still just under it. But add this trip's one splurge, the spa treatment, and the total for the week comes to ≈$1,963 over 6 days, or ≈$327/day — about 9% over the stated $300/day ceiling, not merely 'approaching' it. That's the honest tradeoff of the Day 2 spa pick, not a rounding error; the flights line below is also $0 (destination unknown), so a real home airport adds more on top. Figures below are sourced estimates (≈), not confirmed bookings.",
+    "currency": "$",
+    "days": 6,
+    "party": 1,
+    "items": [
+      {
+        "label": "Lodging, per night (Sedona, 3★ average)",
+        "basis": "day",
+        "est": 173,
+        "low": 143,
+        "high": 231,
+        "note": "≈$173/night for a 3★ property; 2★ runs ≈$143, the town-wide all-hotel average is ≈$231 (pulled up by luxury resorts at $300–700+). Sedona is meaningfully pricier than a typical US leisure destination — shop early.",
+        "source_url": "https://www.budgetyourtrip.com/hotels/united-states-of-america/sedona-5313667",
+        "verified_on": "2026-07-19",
+        "shelf_life": "venue"
+      },
+      {
+        "label": "Rental car, per day (compact/mid-size)",
+        "basis": "day",
+        "est": 50,
+        "low": 39,
+        "high": 57,
+        "note": "≈$39–44/day for economy/compact, ≈$57/day for a mid-size — recommended over rideshare for this trip (see Getting around).",
+        "source_url": "https://www.kayak.com/Phoenix-Sky-Harbor-Intl-Airport-Car-Rentals.PHX.cap.ksp",
+        "verified_on": "2026-07-19",
+        "shelf_life": "transit"
+      },
+      {
+        "label": "Food & drink, per day",
+        "basis": "day",
+        "est": 65,
+        "note": "Own estimate, not a sourced figure — mixing a casual local breakfast/lunch spot with one nicer dinner."
+      },
+      {
+        "label": "Red Rock Pass (7-day)",
+        "basis": "trip",
+        "est": 15,
+        "note": "Covers parking at Coconino National Forest fee sites (Bell Rock, Cathedral Rock trailhead, and others) for the whole week — cheaper than the $5/day rate past 3 uses.",
+        "source_url": "https://www.fs.usda.gov/r03/coconino/passes/red-rock-coconino-passes-program",
+        "verified_on": "2026-07-19",
+        "shelf_life": "venue"
+      },
+      {
+        "label": "Spa treatment (Day 2)",
+        "basis": "trip",
+        "est": 220,
+        "note": "⚠ Own estimate, not sourced — L'Auberge de Sedona's spa menu (Deep Tissue, Swedish, Desert Flower, 60/90 min) doesn't publish prices online. Call ahead to confirm before booking."
+      },
+      {
+        "label": "Flights — round trip",
+        "basis": "trip",
+        "est": 0,
+        "note": "Omitted — depends entirely on your home airport; the intake didn't specify one."
+      }
+    ]
+  }
+]

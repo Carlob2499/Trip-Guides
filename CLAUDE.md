@@ -215,11 +215,15 @@ and let it ride.
   snapshot + where-we-left-off + the re-prompt to open with). Do not re-derive history from
   git log/memory sprawl. **Session end: rewrite its Snapshot + Where-we-left-off sections**
   and commit. This replaces reading long conversation context between sessions.
-- **Guides are directories** (`src/content/guides/<slug>/` — `_guide.json` meta +
-  `NN-<group>.json` per tab group): for a targeted edit, Read ONLY the group file it
-  lives in — never assemble the whole guide. `ls` the dir to find the group. Drafts may
-  still be single `<slug>.json` files (both shapes build); split one with
-  `npm run split-guide -- <slug>`.
+- **Every guide is a directory — no exceptions, drafts included** (`src/content/guides/<slug>/`
+  — `_guide.json` meta + `NN-<group>.json` per tab group). The catalog has exactly ONE shape:
+  `scaffold-guide.mjs` emits it for every new guide, and
+  `scripts/__tests__/guide-shape-uniform.test.mjs` fails the suite on a flat `<slug>.json`.
+  Both shapes still *build*, which is why the split went unnoticed for three guides — and the
+  flat file WINS in `resolveGuidePath`, so a stray one silently shadows the directory beside it.
+  Import an outside single-file guide with `npm run split-guide -- <slug>`, then delete the flat
+  file. For a targeted edit, Read ONLY the group file the fact lives in — never assemble the
+  whole guide; `ls` the dir to find the group.
 - **New client behavior → its feature silo** (`src/features/<name>/`, see
   `docs/ARCHITECTURE.md`) or `src/scripts/` for page chrome — never inline back into
   `GuideLayout.astro`.

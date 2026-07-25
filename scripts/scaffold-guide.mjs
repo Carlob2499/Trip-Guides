@@ -1,6 +1,6 @@
 // Deterministic "new guide" scaffolder. Pure Node, no network. Turns a few
 // quick-start answers into two committed files:
-//   1. src/content/guides/<slug>.json  — a draft guide built on the canonical
+//   1. src/content/guides/<slug>/      — a draft guide built on the canonical
 //      backbone (the universal section groups + empty activity cards/checklists),
 //      with the API-driven sections (map + weather + holidays) PRE-WIRED so live
 //      weather / holidays / currency light up immediately, before any research.
@@ -14,6 +14,7 @@
 // currency, IANA tz, ISO code, capital coordinate).
 
 import { writeFile, mkdir } from "node:fs/promises";
+import { splitGuide } from "./split-guide.mjs";
 import { genRoomId } from "./gen-room-id.mjs";
 import { existsSync } from "node:fs";
 import path from "node:path";
@@ -227,10 +228,15 @@ Top 3, in order:
 `;
 }
 
-// Pick a slug not already used by a guide file.
+// Pick a slug not already used by a guide, in EITHER shape. The directory is the only shape this
+// scaffolder emits now, but a legacy flat <slug>.json must still block the slug: resolveGuidePath
+// (scripts/lib/guide-shape.mjs) lets the flat file WIN, so colliding with one would silently
+// shadow the guide just created.
 async function uniqueSlug(base) {
   let slug = base, n = 2;
-  while (existsSync(path.join(GUIDES_DIR, `${slug}.json`))) { slug = `${base}-${n++}`; }
+  while (existsSync(path.join(GUIDES_DIR, `${slug}.json`)) || existsSync(path.join(GUIDES_DIR, slug))) {
+    slug = `${base}-${n++}`;
+  }
   return slug;
 }
 
@@ -248,10 +254,17 @@ export async function writeScaffold(answers) {
   const intake = buildIntakeMd(a);
   await mkdir(GUIDES_DIR, { recursive: true });
   await mkdir(INTAKE_DIR, { recursive: true });
-  const guidePath = path.join(GUIDES_DIR, `${slug}.json`);
   const intakePath = path.join(INTAKE_DIR, `${slug}.md`);
-  await writeFile(guidePath, JSON.stringify(guide, null, 2) + "\n");
   await writeFile(intakePath, intake);
+  /* Every guide is a DIRECTORY — one uniform shape across the whole catalog, drafts included.
+     The flat <slug>.json is written only as the splitter's input and is removed by it, so a new
+     guide never exists in the legacy shape even momentarily on disk after this returns.
+     splitGuide is reused rather than re-deriving the NN-<group>.json ordering here: that naming
+     decision lives in exactly one place, the same reason guide-shape.mjs exists. */
+  const flatSeed = path.join(GUIDES_DIR, `${slug}.json`);
+  await writeFile(flatSeed, JSON.stringify(guide, null, 2) + "\n");
+  await splitGuide(slug, { guidesDir: GUIDES_DIR });
+  const guidePath = path.join(GUIDES_DIR, slug);
   // Initialize the pipeline checkpoint (scaffold cleared) so the research pass is resumable.
   await initState(slug);
   return { slug, guidePath, intakePath, statePath: path.join(INTAKE_DIR, `${slug}.state.json`) };

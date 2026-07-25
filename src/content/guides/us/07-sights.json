@@ -1,0 +1,63 @@
+[
+  {
+    "type": "sights",
+    "group": "Sights",
+    "title": "Top sights",
+    "items": [
+      {
+        "name": "Cathedral Rock",
+        "kicker": "View it, don't scramble it",
+        "body": "<p>Sedona's most photographed formation. The actual summit trail requires hand-over-hand rock scrambling — not a fit for a relaxed pace or a first solo trip. The pathway and vista viewpoints deliver the same red-rock views without the climb. Considered sacred by the Yavapai and Hopi; stay on trail, keep voices low.</p>",
+        "img": {
+          "file": "Cathedral Rock - Sedona AZ-1.jpg",
+          "alt": "Cathedral Rock formation near Sedona"
+        },
+        "map": {
+          "lat": 34.8200185,
+          "lng": -111.7932108
+        }
+      },
+      {
+        "name": "Bell Rock",
+        "kicker": "The easy red-rock walk",
+        "body": "<p>A mostly flat pathway with constant red-rock views and none of Cathedral Rock's scramble — the better pick for an easy morning. Requires the Red Rock Pass for trailhead parking.</p>",
+        "map": {
+          "lat": 34.8002966,
+          "lng": -111.764598
+        },
+        "source_url": "https://www.fs.usda.gov/r03/coconino/passes/red-rock-coconino-passes-program",
+        "verified_on": "2026-07-19",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Tlaquepaque Arts & Shopping Village",
+        "kicker": "Spanish colonial courtyards, not a mall",
+        "body": "<p>Built around existing sycamore trees rather than clearing them — galleries, boutiques, and restaurants inside genuinely distinctive architecture. Fri–Sun keeps later hours (10am–6pm) than the Mon–Thu schedule (10am–5pm).</p>",
+        "img": {
+          "file": "Sedona Tlaquepaque (36369264511).jpg",
+          "alt": "Tlaquepaque Arts & Shopping Village courtyard in Sedona"
+        },
+        "map": {
+          "lat": 34.8619807,
+          "lng": -111.7628127
+        },
+        "source_url": "https://www.yelp.com/biz/tlaquepaque-arts-and-shopping-village-sedona",
+        "verified_on": "2026-07-19",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Airport Mesa Viewpoint",
+        "kicker": "Free sunset views, if you're early",
+        "body": "<p>360-degree red-rock views from a rim pulled right off Airport Road. The rim pullouts are free but hold only a few cars each — arrive 30-45 minutes before sunset. A paid upper lot (⚠ ≈$3 — confirm current rate) is the fallback if the free spots are gone.</p>",
+        "img": {
+          "file": "Sedona Sunset Airport Mesa.jpg",
+          "alt": "Sunset view from Airport Mesa near Sedona"
+        },
+        "map": {
+          "lat": 34.8558039,
+          "lng": -111.7791227
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,66 @@
+[
+  {
+    "type": "routes",
+    "group": "Getting around",
+    "title": "Key transit routes",
+    "steps": [
+      "PHX Airport → Sedona: rental car, ≈2 hours via I-17/AZ-179 (add ≈30 min on weekends). This is the recommended default for the whole trip — see below.",
+      "⚠ Sedona's free trailhead shuttle is only PARTIALLY running: Route 15 (Cathedral Rock/Little Horse) is active; Routes 11 (Dry Creek/Mescal) and 14 (Soldier Pass) are suspended because of the Pocket Fire closure (Forest Order #03-04-00-26-004, in effect through Sep 30 2026 unless rescinded early — see Health & safety). Since the order covers your whole trip window, plan around both routes staying down; re-check sedonashuttle.com and the Coconino NF alerts page close to your dates only to see if it lifted early.",
+      "Sedona Shuttle Connect: on-demand curb-to-curb service, ≈$2/ride, where it's running — a backup option, not the primary plan, given the route suspensions above.",
+      "Rideshare (Uber/Lyft): available but reported inconsistent, especially in peak season, with drivers often based out of Flagstaff (≈30 min away) rather than Sedona itself. Don't plan around it being available on demand.",
+      "Around town (Uptown, Tlaquepaque): walkable once parked — most of Days 4 and 5 need no driving between stops once you've arrived.",
+      "Any trailhead parking (Bell Rock, Cathedral Rock, Airport Mesa's lower lot): requires the Red Rock Pass. Airport Mesa's rim pullouts are a free alternative with very limited spots — arrive early."
+    ],
+    "source_url": "https://sedonashuttle.com/",
+    "verified_on": "2026-07-19",
+    "shelf_life": "transit"
+  },
+  {
+    "type": "map",
+    "group": "Getting around",
+    "title": "Orientation map",
+    "center": {
+      "lat": 34.8688613,
+      "lng": -111.7614394
+    },
+    "span": 0.1,
+    "points": [
+      {
+        "name": "Sedona",
+        "lat": 34.8688613,
+        "lng": -111.7614394,
+        "place_id": "R10693662"
+      },
+      {
+        "name": "Cathedral Rock",
+        "lat": 34.8200185,
+        "lng": -111.7932108,
+        "place_id": "N359263691"
+      },
+      {
+        "name": "Bell Rock",
+        "lat": 34.8002966,
+        "lng": -111.764598,
+        "place_id": "N359262022"
+      },
+      {
+        "name": "Airport Mesa Viewpoint",
+        "lat": 34.8558039,
+        "lng": -111.7791227,
+        "place_id": "N5351892824"
+      },
+      {
+        "name": "Tlaquepaque Arts & Shopping Village",
+        "lat": 34.8619807,
+        "lng": -111.7628127,
+        "place_id": "W782880628"
+      },
+      {
+        "name": "Uptown Sedona",
+        "lat": 34.869779,
+        "lng": -111.7609231,
+        "place_id": "N9788879382"
+      }
+    ]
+  }
+]
