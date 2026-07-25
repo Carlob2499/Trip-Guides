@@ -14,19 +14,60 @@
 :root{
   --bg:#e9ebe3;--bg2:#dee2d6;--ink:#1a2028;--card:#f4f6ef;--rule:#c9cfc0;--rule2:#a9b2a0;
   --muted:#565f4e;--accent:#9c4421;--green:#3f6b4a;--warn:#8a5108;--chrome-h:94px;
-  /* Accent has TWO jobs and they need different colours, which is what --accent2 failed to say.
-     --accent is identity: fills, borders, large display type. --accent-ink is accent as TEXT and
-     carries a contract — >=4.5:1 on every surface. Per-guide pages override all three inline from
-     src/lib/accent-tokens.ts; these are the defaults for pages with no guide (hub chrome, health,
-     progress). --accent-ink-dark travels alongside because a media query cannot recompute a
-     colour, and the dark block below swaps it in. */
-  --accent-ink-light:#9c4421;--accent-ink-dark:#bd7d63;--accent-ink:var(--accent-ink-light);
+  /* Accent has THREE jobs and they need different colours, which is what --accent2 failed to say.
+     --accent is identity: fills, borders, large display type — never contrast-gated.
+     --accent-ink is accent as TEXT ON a page surface: >=4.5:1 on every surface, flat or
+       accent-tinted. It has two correct answers, so both candidates travel together and the dark
+       block below swaps one in — a media query cannot recompute a colour.
+     --on-accent is text ON an accent FILL. Exactly one correct answer, because its ground is
+       --accent, which is deliberately NOT re-mapped by theme; so unlike --accent-ink it does not
+       appear in the dark block, and must not. Rules that used to reach for #fff or var(--bg) here
+       were following the PAGE theme while the fill under them stayed put — always wrong on one side.
+     Per-guide pages override all of these inline from src/lib/accent-tokens.ts; the values here are
+     the derived defaults for pages with no guide (hub chrome, health, progress). Do not hand-edit
+     them — they are exactly what accentTokens("#9c4421") returns, and a test pins that. */
+  --accent-ink-light:#893b1d;--accent-ink-dark:#c2866e;--accent-ink:var(--accent-ink-light);
+  --on-accent:#f0d2c7;
   /* Type system — three roles, all self-hosted variable fonts (@fontsource):
      display = signage (headings, tabs, wayfinding), body = long-form reference
      reading (the researched content), data = times/prices/coords/stamps. */
-  --font-display:'Bricolage Grotesque Variable',-apple-system,system-ui,sans-serif;
-  --font-body:'Literata Variable',Georgia,'Times New Roman',serif;
-  --font-data:'Spline Sans Mono Variable',ui-monospace,'Courier New',monospace;
+  /* CJK fallback: Korea guide content renders real Hangul through all three roles (.addr-card-big
+     via --font-display, inline prose glosses + .tk-phrase-native via --font-body, .tag/kicker labels
+     + hardcoded UI strings via --font-data) and none of the three webfonts or their Latin fallbacks
+     cover it, so it fell through to an unpicked OS default (Malgun Gothic on Windows — confirmed via
+     Chrome's font resolver). Fallback picked per role's design intent, not just "any CJK font": a
+     serif for --font-body (AppleMyungjo — macOS, confirmed via Apple's own bundled-fonts page;
+     Batang — Windows, confirmed via Microsoft Learn's typeface list; Noto Serif CJK KR — Android,
+     confirmed via AOSP's fonts.xml lang="ko" fallbackFor="serif" mapping), a sans for --font-display/
+     --font-data (Apple SD Gothic Neo — macOS/iOS; Malgun Gothic — Windows; Noto Sans CJK KR —
+     Android, same AOSP source). Zero byte cost: these are OS-installed system fonts, never fetched.
+     iOS has no verified bundled serif Korean face, so --font-body's Hangul falls through past this
+     list to the bare `serif` keyword there — Safari's own CJK substitution resolves it (in practice
+     the same sans face iOS already uses), an accepted platform gap rather than an invented font name. */
+  --font-display:'Bricolage Grotesque Variable','Apple SD Gothic Neo','Malgun Gothic','Noto Sans CJK KR',-apple-system,system-ui,sans-serif;
+  --font-body:'Literata Variable',Georgia,'Times New Roman',AppleMyungjo,Batang,'Noto Serif CJK KR',serif;
+  --font-data:'Spline Sans Mono Variable',ui-monospace,'Courier New','Apple SD Gothic Neo','Malgun Gothic','Noto Sans CJK KR',monospace;
+  /* Type SCALE — semantic size steps, declared but not yet fully migrated (72-82 distinct
+     font-size declarations exist across the codebase today; this is the target to consolidate
+     toward, staged deliberately rather than one massive scattered diff). Anchored to two values
+     that were ALREADY load-bearing before this scale existed, not invented fresh: --text-body
+     matches body's own font-size (base.css, below), --text-display matches .masthead h1's clamp
+     (guide.css) — so declaring the scale doesn't silently redefine either.
+     --text-micro/--tracking-micro ARE migrated this pass — they're the fix for the diagnosed
+     "undeclared 4th role": 49 uppercase-tracked micro-label rules (tags, kickers, eyebrows) span
+     12 font-sizes, 9 letter-spacing values, and 2 typefaces for what is structurally one role. */
+  --text-micro:.68rem;      /* uppercase tracked micro-labels — MIGRATED: 44 rules use --font-data
+                                already (the majority); 5 use --font-display for the same job */
+  --tracking-micro:.06em;   /* the modal value: 16 of ~50 existing rules already use this exact
+                                tracking; a few larger display-scale eyebrows (e.g. the masthead's
+                                own eyebrow) deliberately track wider and stay outside this token */
+  --text-caption:.78rem;    /* small captions, meta text — not yet migrated */
+  --text-small:.88rem;      /* secondary body text, UI chrome — not yet migrated */
+  --text-body:1.02rem;      /* primary reading size — MATCHES body{font-size} below, not new */
+  --text-lead:1.15rem;      /* lead paragraphs, dek text — not yet migrated */
+  --text-h3:1.6rem;         /* not yet migrated */
+  --text-h2:2rem;           /* not yet migrated */
+  --text-display:clamp(2.8rem,8vw,4.8rem); /* MATCHES .masthead h1's clamp in guide.css, not new */
   --r-sm:6px;--r-md:10px;--r-lg:16px; /* radius scale — rounded-container language */
   /* Motion tokens — the single timing vocabulary for CSS + GSAP alike (adopted from
      the WayPoint-V2 design manifesto). Rules of use: entries/reveals ride

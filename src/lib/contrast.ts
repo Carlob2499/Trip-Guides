@@ -41,11 +41,41 @@ export function contrastRatio(a: string, b: string): number {
 // Minimal intervention is deliberate — it stops at the FIRST shade that clears the bar, so a
 // guide's identity colour is never pushed further than legibility requires.
 export function readableOn(fg: string, bg: string, target = 4.5): string {
-  if (contrastRatio(fg, bg) >= target) return fg;
+  return readableOnAll(fg, [bg], target);
+}
+
+// Mix two #RRGGBB colours the way CSS `color-mix(in srgb, a <t*100>%, b)` does.
+//
+// `in srgb` interpolates the GAMMA-ENCODED coordinates (interpolating light-linear values is
+// `srgb-linear`'s job, not this one), so a plain per-channel lerp is not an approximation here — it
+// is the definition. Verified against the rendered page rather than trusted:
+// `color-mix(in srgb, #a77e3e 12%, #1e242b)` resolves to #2e2f2d in the browser, and so does this.
+export function mix(a: string, b: string, t: number): string {
+  const na = parseInt(a.slice(1), 16), nb = parseInt(b.slice(1), 16);
+  const ch = (shift: number) =>
+    Math.round((((na >> shift) & 255) * t) + (((nb >> shift) & 255) * (1 - t)));
+  return "#" + ((1 << 24) | (ch(16) << 16) | (ch(8) << 8) | ch(0)).toString(16).slice(1);
+}
+
+// Move `fg` away from EVERY ground in `bgs` until it clears `target` against all of them.
+//
+// Why a set and not just the hardest ground: "clear the worst surface and the rest follow" holds
+// only while the text stays on one side of every ground. A pale accent can satisfy the DARKEST light
+// surface by being lighter than it, and then fail a lighter surface — the monotonicity argument
+// silently inverts. Checking the whole set makes the guarantee hold by construction rather than by
+// luck about which accents happen to ship today.
+//
+// Direction is still chosen once, from the hardest ground, because a set straddling light and dark
+// would have no single answer — callers pass one mode's surfaces at a time.
+export function readableOnAll(fg: string, bgs: readonly string[], target = 4.5): string {
+  if (bgs.every((bg) => contrastRatio(fg, bg) >= target)) return fg;
   const n = parseInt(fg.slice(1), 16);
   let [r, g, b] = [(n >> 16) & 255, (n >> 8) & 255, n & 255];
-  // A mid-grey surface is the tipping point: below it, text must get lighter to separate.
-  const lighten = relativeLuminance(bg) < 0.18;
+  // A mid-grey surface is the tipping point: below it, text must get lighter to separate. The
+  // ground that decides the sign is the one the text is currently CLOSEST to, since that is the
+  // constraint that binds last.
+  const worst = bgs.reduce((w, c) => (contrastRatio(fg, c) < contrastRatio(fg, w) ? c : w));
+  const lighten = relativeLuminance(worst) < 0.18;
   const hex = () => "#" + ((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1);
   for (let i = 0; i < 96; i++) {
     if (lighten) {
@@ -58,7 +88,7 @@ export function readableOn(fg: string, bg: string, target = 4.5): string {
       b = Math.floor(b * 0.94);
     }
     const out = hex();
-    if (contrastRatio(out, bg) >= target) return out;
+    if (bgs.every((bg) => contrastRatio(out, bg) >= target)) return out;
     if (lighten ? r === 255 && g === 255 && b === 255 : r === 0 && g === 0 && b === 0) return out;
   }
   return hex();
