@@ -7,13 +7,19 @@ import { test, expect, type Page } from "@playwright/test";
 
 const FIXED_TIME = new Date("2026-09-01T10:00:00+09:00"); // UTC date 2026-09-01
 const UTC_DAY = "2026-09-01";
-const KOREA = "/Trip-Guides/guides/korea/";
 const RATE = 1479.45; // USD → KRW, as the pill applies it
 
-// storeKey/curCode are baked into the built Korea page's #tgConfig.
-const SPLIT_KEY = "tg-split-southkorea";
-const STOPS_KEY = "tg-stops-southkorea";
-const RATE_KEY = "tg-rate-KRW";
+/* Every per-device storage key this suite seeds is namespaced by the guide's storeKey, which
+   GuideLayout derives from the SLUG (`slug.replace(/\W+/g,"").toLowerCase()`) — not the title.
+   Both the URL and the keys derive from SLUG here on purpose: these keys had silently drifted
+   to a stale "southkorea" (the pre-R8 title-derived value, now only `legacyStoreKey`), so two
+   tests below spent a full session asserting against storage the page never reads. Rename the
+   slug and every key follows. */
+const SLUG = "korea";
+const KOREA = `/Trip-Guides/guides/${SLUG}/`;
+const SPLIT_KEY = `tg-split-${SLUG}`;
+const STOPS_KEY = `tg-stops-${SLUG}`;
+const RATE_KEY = "tg-rate-KRW"; // currency-keyed, not guide-keyed
 
 async function blockNet(page: Page) {
   await page.route("**/*", (route) =>

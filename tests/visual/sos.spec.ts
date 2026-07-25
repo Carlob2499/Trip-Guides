@@ -45,19 +45,20 @@ test("Tab wraps focus inside the open SOS sheet instead of escaping to the page 
   const sheet = page.locator(".sos-sheet");
   await expect(sheet).toBeVisible();
 
-  // Tab forward through every focusable element in the sheet; the NEXT Tab past the
-  // last one must wrap back to the first, never escape to something outside the sheet.
   const focusables = sheet.locator(
     'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
   );
   const count = await focusables.count();
   expect(count).toBeGreaterThan(0);
 
+  /* Opening the sheet already puts focus on the FIRST focusable (.sos-x — asserted by the
+     first test in this file), so a full cycle is exactly `count` Tabs: count-1 to walk to
+     the last focusable, then one more that must WRAP to the first rather than escaping to
+     the page behind the sheet. Pressing count+1 lands one PAST the wrap — which is what
+     this test used to do, failing on a focus trap that was working correctly all along. */
   for (let i = 0; i < count; i++) {
     await page.keyboard.press("Tab");
   }
-  // One more Tab past the last focusable should wrap to the first (the close button).
-  await page.keyboard.press("Tab");
   await expect(sheet.locator(".sos-x")).toBeFocused();
 });
 
