@@ -5,18 +5,22 @@
 
 export { hasFirebase } from "./client.js";
 export { joinTrip, generateTripCode, normalizeCode, reportError, bumpCounter } from "./sync.js";
+export { isValidRoomId, resolveRoomId, isPermanentWriteError, ROOM_ID_RE } from "./model/room";
 
-/* The room id for THIS guide's shared sync (Trip Split, feedback, reminders). Single source
-   of truth: the salted `roomId` baked into #tgConfig by GuideLayout, falling back to the guide
-   slug for legacy guides (which the RTDB rules then freeze read-only). Every consumer joins via
-   this instead of computing normalizeCode(storeKey) itself, so room identity lives in one place.
+import { resolveRoomId } from "./model/room";
+
+/* The room id for THIS guide's shared sync (Trip Split, feedback, reminders). Single source of
+   truth: the `roomId` baked into #tgConfig by GuideLayout. It does NOT fall back to the guide
+   slug — that fallback is what silently broke Trip Split, because rules.json requires a 16–40
+   char room code and every slug is shorter, so the panel rendered live and editable while the
+   server denied every write. No roomId now means "" and local-only, which is what the feature
+   already documents for unconfigured sync; see model/room.ts for the full account.
    Kept separate from a feature's localStorage namespace (storeKey) on purpose. */
 export function roomId() {
   try {
     var el = document.getElementById("tgConfig");
-    var cfg = el ? JSON.parse(el.textContent || "{}") : {};
-    return String(cfg.roomId || cfg.storeKey || "guide");
+    return resolveRoomId(el ? JSON.parse(el.textContent || "{}") : {});
   } catch (e) {
-    return "guide";
+    return "";
   }
 }

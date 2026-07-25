@@ -9,6 +9,7 @@
 
 import { ready, hasFirebase } from "./client.js";
 import { addEntry, entriesForRoom, removeEntry } from "./model/outbox";
+import { isPermanentWriteError } from "./model/room";
 
 // Unambiguous alphabet (no 0/o/1/l/i) — codes get read aloud and typed on phones.
 const CODE_ALPHABET = "abcdefghjkmnpqrstuvwxyz23456789";
@@ -100,7 +101,7 @@ export async function joinTrip(code) {
      keeping it means retrying a doomed write on every future page load. */
   function onWriteFailed(fullPath, err) {
     const code = String((err && (err.code || err.message)) || "unknown");
-    const permanent = /permission[_ ]denied/i.test(code);
+    const permanent = isPermanentWriteError(err);
     if (permanent) writeOutbox(removeEntry(readOutbox(), fullPath));
     try {
       console.error("[waypoint sync] write to " + fullPath + (permanent ? " REJECTED (permanent): " : " failed, will retry: ") + code);

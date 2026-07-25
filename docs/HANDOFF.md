@@ -56,22 +56,52 @@ tests, `astro check` 0 errors, e2e **55/55**.
   0 errors.
 - **`fast-uri` pinned to 3.1.4** via `overrides`, clearing the one high Dependabot alert. Dev-only,
   four levels deep under `@astrojs/check`; it never reached the shipped bundle.
+- **CodeQL: 4 of 8 alerts were real.** The worst was `exports.ts` double-unescaping — `htmlToText`
+  decoded `&amp;` FIRST, so an author writing `&amp;lt;b&amp;gt;` (meaning the literal text
+  `&lt;b&gt;`) had it decoded twice into `<b>`, which the next line stripped as a tag. The word did
+  not come out wrong, **it came out missing**, in every shipped `.ics`/`.gpx`. Also: `staleness-ui`
+  assigned `data-source-url` straight to `href` (the schema's `z.url()` accepts `javascript:`),
+  `progress.js` took `?slug=` unvalidated into an href, `field-tools` interpolated an unowned
+  currency code into `innerHTML`. The other 4 are documented false positives — dismiss in the
+  Security tab.
+- **Trip Split's "+ Add person" was writing to a room the rules always denied.** Denmark and Korea
+  had no `roomId`, so `GuideLayout`'s `guide.roomId ?? storeKey` fallback handed Firebase the slug
+  — `"denmark"`, 7 chars, against a rule requiring 16–40. Invisible because `trip-split.js:121`
+  routes to the room and never touches local state, and `sync.js` ended the write with
+  `.catch(function () {})`. RTDB applies writes locally first, so a row appeared, the server
+  rejected it, the row vanished, silently. Both guides now carry real 16-char codes and `sync.js`
+  surfaces failures, distinguishing PERMANENT rejections from offline queuing. Confirmed working
+  live by the creator.
 
 ## Left to do
 
-1. **The `no-explicit-any` debt** (Snapshot above). The unlock is typing the guide-JSON walkers
+1. **Korea's live budget was recovered, and the recovery is the lesson.** Its 3 members and 23
+   expenses ($4,293.09) were at `trips/southkorea` — the title-derived room from before the slug
+   change, writable back then because the 16-char rule did not yet exist. Copied to
+   `trips/0286df0ea411ae7e`; the old node is UNTOUCHED as a backup. `_guide.json` records
+   `roomMigratedFrom: "southkorea"`. Guard added: `model/room.ts` (no storeKey fallback, ever) +
+   `scripts/__tests__/guide-room-id.test.mjs`. Both were deliberately failed before being trusted.
+2. **The `no-explicit-any` debt** (Snapshot above). The unlock is typing the guide-JSON walkers
    against `CollectionEntry<"guides">["data"]` and the section union, then turning the rule back on.
    Biggest single files: `exports.ts` (14), `map-pins.ts` (14), `content.config.ts` (12),
    `GuideLayout.astro` (28).
-2. **Dead-file audit: mechanical half done, judgment half open.** All 289 source files under
+2. **Room codes are committed to a PUBLIC repo** (all three guides). Deliberate — the creator
+   chose zero-setup sync for three travellers over secrecy — but anyone reading the repo can read
+   and write those budgets. The alternative, a `#room=` fragment shared privately, stays open.
+3. **The room guard cannot check whether an old room is POPULATED** — no credentials, no network
+   to the DB at build time, and a build that depends on a live datastore is its own hazard. The
+   historical half of `guide-room-id.test.mjs` compares working tree vs HEAD, which catches the
+   mistake at the moment it is made and is a no-op in CI. The valid + unique checks are the
+   unconditional ones. Stated in the test itself, not hidden.
+4. **Dead-file audit: mechanical half done, judgment half open.** All 289 source files under
    `src/ scripts/ worker/` were scanned — **zero dead modules**; the only unreferenced files are
    tests (nothing imports a test) and `src/env.d.ts` (ambient). What remains is a call only the
    creator can make: six docs read as completed-work records — `PLAN_FIELD_REPORT_FIXES.md` (22KB),
    `PLAN_TRAVELER_FEATURES.md`, `PLAN_VISUAL_OVERHAUL.md`, `FIELD_REPORT_2026-07-22.md`,
    `DENMARK_UPLIFT.md`, `TEST_COVERAGE_ANALYSIS.md`. Record or relic is not a mechanical question.
-3. Not built: the PostToolUse typecheck hook in `.claude/settings.json`, and trimming `CLAUDE.md`
+5. Not built: the PostToolUse typecheck hook in `.claude/settings.json`, and trimming `CLAUDE.md`
    toward 200 lines (it grew this session).
-4. **Unverified:** `scaffold-guide.mjs`'s new end-to-end directory path. Creating a throwaway guide
+6. **Unverified:** `scaffold-guide.mjs`'s new end-to-end directory path. Creating a throwaway guide
    would leave artifacts the destructive-op guard prevents cleaning up.
 
 ## Owner tasks (need the creator, not the agent)

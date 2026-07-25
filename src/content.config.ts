@@ -443,6 +443,13 @@ const guides = defineCollection({
     // read-only (writes require code length >= 16). New guides are born with one so their room is
     // both writable and unguessable. Separate from `storeKey` (localStorage namespace) by design.
     roomId: z.string().regex(/^[a-z0-9]{16,40}$/).optional(),
+    // The room this guide's data was moved FROM, recorded when a roomId changes. Deliberately a
+    // free string, not the roomId regex: the room you are migrating away from is usually an old
+    // INVALID one (korea's live budget sat in `trips/southkorea`, from the title-derived era),
+    // which is the whole reason it needed moving. Enforced by
+    // scripts/__tests__/guide-room-id.test.mjs — a silent switch points the guide at an empty
+    // room while the old one keeps the data, and the reader just sees a confident empty budget.
+    roomMigratedFrom: z.string().optional(),
     intro: z.string().optional(),
     // ADDITIVE + OPTIONAL — the curated post-mortem: what REALLY happened vs the plan.
     // Hand-authored by the maker from the raw trip feedback (never auto-generated, never
