@@ -22,7 +22,7 @@
 .tk-step-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .15rem; }
 .tk-step-name { font-weight: 600; }
 .tk-step-note { font-size: .86rem; color: var(--muted); line-height: 1.4; }
-.tk-step-time { font-family: var(--font-data); font-size: .78rem; color: var(--muted); white-space: nowrap; }
+.tk-step-time { font-family: var(--font-data); font-size:var(--text-caption); color: var(--muted); white-space: nowrap; }
 
 .tk-checklist { margin: 0 0 .8rem; padding-top: .3rem; }
 .tk-checklist-label { font-family: var(--font-data); font-size: var(--text-micro); font-weight: 700; letter-spacing: var(--tracking-micro); text-transform: uppercase; color: var(--muted); margin: 0 0 .2rem; }
@@ -51,7 +51,7 @@
 .tk-entry-row { border-top: 1px solid var(--rule); padding-top: .7rem; }
 .tk-entry-country { margin: 0 0 .2rem; font-family: var(--font-data); font-size: var(--text-micro); font-weight: 700; letter-spacing: var(--tracking-micro); text-transform: uppercase; color: var(--muted); }
 .tk-entry-visa { margin: 0 0 .25rem; font-size: 1.05rem; font-weight: 600; }
-.tk-entry-passport, .tk-entry-note { margin: 0 0 .2rem; font-size: .88rem; color: var(--muted); }
+.tk-entry-passport, .tk-entry-note { margin: 0 0 .2rem; font-size:var(--text-small); color: var(--muted); }
 .tk-entry-source { margin: .35rem 0 0; font-size: .74rem; color: var(--muted); }
 .tk-entry-source a { color: var(--accent-ink); text-decoration: none; border-bottom: 1px solid var(--accent); }
 

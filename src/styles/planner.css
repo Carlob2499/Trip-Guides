@@ -10,7 +10,7 @@
 .dchip:hover{border-color:var(--accent);transform:translateY(-1px)}
 .dchip:active{transform:scale(.94)}
 .dchip-num{font-family:var(--font-data);font-size:.62rem;font-weight:700;letter-spacing:.06em;color:var(--accent-ink);line-height:1}
-.dchip-date{font-family:var(--font-display);font-size:.78rem;font-weight:640;letter-spacing:-.01em;white-space:nowrap;line-height:1.15}
+.dchip-date{font-family:var(--font-display);font-size:var(--text-caption);font-weight:640;letter-spacing:-.01em;white-space:nowrap;line-height:1.15}
 /* The chip's ground is --accent, which does not re-map by theme — so its ink must not either.
    --accent-ink on .dchip-num is right on a PAGE surface and wrong here, where the ground is the
    fill itself; it measured 3.58:1 (light) and 2.56:1 (dark) on Denmark. */
@@ -91,7 +91,7 @@
 .stops{list-style:none;margin:.55rem 0 .35rem;padding:0;border-left:2px solid color-mix(in srgb,var(--accent) 45%,var(--rule));display:flex;flex-direction:column}
 .stop{display:flex;align-items:baseline;gap:.55rem;padding:.34rem 0 .34rem .65rem;min-width:0}
 /* ── Day TL;DR — the one-line glance summary ──────────────────────────────── */
-.day-tldr{margin:.2rem 0 .5rem;font-family:var(--font-display);font-weight:640;font-size:1.02rem;line-height:1.4;letter-spacing:-.01em;color:var(--accent-ink)}
+.day-tldr{margin:.2rem 0 .5rem;font-family:var(--font-display);font-weight:640;font-size:var(--text-body);line-height:1.4;letter-spacing:-.01em;color:var(--accent-ink)}
 
 /* ── Now-line: live stop states on today's card (now-line.js) ─────────────── */
 .stop-past{opacity:.5}

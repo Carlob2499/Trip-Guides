@@ -47,26 +47,35 @@
   --font-display:'Bricolage Grotesque Variable','Apple SD Gothic Neo','Malgun Gothic','Noto Sans CJK KR',-apple-system,system-ui,sans-serif;
   --font-body:'Literata Variable',Georgia,'Times New Roman',AppleMyungjo,Batang,'Noto Serif CJK KR',serif;
   --font-data:'Spline Sans Mono Variable',ui-monospace,'Courier New','Apple SD Gothic Neo','Malgun Gothic','Noto Sans CJK KR',monospace;
-  /* Type SCALE — semantic size steps, declared but not yet fully migrated (72-82 distinct
-     font-size declarations exist across the codebase today; this is the target to consolidate
-     toward, staged deliberately rather than one massive scattered diff). Anchored to two values
-     that were ALREADY load-bearing before this scale existed, not invented fresh: --text-body
-     matches body's own font-size (base.css, below), --text-display matches .masthead h1's clamp
-     (guide.css) — so declaring the scale doesn't silently redefine either.
-     --text-micro/--tracking-micro ARE migrated this pass — they're the fix for the diagnosed
-     "undeclared 4th role": 49 uppercase-tracked micro-label rules (tags, kickers, eyebrows) span
-     12 font-sizes, 9 letter-spacing values, and 2 typefaces for what is structurally one role. */
+  /* Type SCALE — semantic size steps. Anchored to two values that were ALREADY load-bearing
+     before this scale existed, not invented fresh: --text-body matches body's own font-size
+     (which now READS the token, below, so the anchor is stated once instead of duplicated),
+     --text-display matches .masthead h1's clamp (guide.css) — so declaring the scale never
+     silently redefined either.
+     MIGRATION STATUS (measured, not estimated — 388 font-size declarations exist in src/):
+       · --text-micro/--tracking-micro: migrated wholesale, the fix for the diagnosed
+         "undeclared 4th role" (uppercase tracked micro-labels spanning 12 sizes, 9 tracking
+         values and 2 typefaces for what is structurally one role).
+       · Every OTHER step: the declarations that already equalled a step exactly are now on the
+         token (zero rendered change, by construction). What remains hardcoded is the genuinely
+         off-scale majority — ~250 declarations across ~74 distinct values, each of which would
+         SHIFT in size to adopt a step. That is a per-cluster design decision, not a refactor,
+         and it is deliberately not being absorbed silently.
+     Two exact-match sites were left hardcoded ON PURPOSE, and should stay that way: the
+     collapsible-card summary::before (.68rem sizes content:"▶", a glyph, not a label) and
+     .day-num (planner.css documents its size as contrast-gated at the bold-large-text cutoff,
+     and its mobile override is a literal — tokenizing half the rule would split it). */
   --text-micro:.68rem;      /* uppercase tracked micro-labels — MIGRATED: 44 rules use --font-data
                                 already (the majority); 5 use --font-display for the same job */
   --tracking-micro:.06em;   /* the modal value: 16 of ~50 existing rules already use this exact
                                 tracking; a few larger display-scale eyebrows (e.g. the masthead's
                                 own eyebrow) deliberately track wider and stay outside this token */
-  --text-caption:.78rem;    /* small captions, meta text — not yet migrated */
-  --text-small:.88rem;      /* secondary body text, UI chrome — not yet migrated */
-  --text-body:1.02rem;      /* primary reading size — MATCHES body{font-size} below, not new */
-  --text-lead:1.15rem;      /* lead paragraphs, dek text — not yet migrated */
-  --text-h3:1.6rem;         /* not yet migrated */
-  --text-h2:2rem;           /* not yet migrated */
+  --text-caption:.78rem;    /* small captions, meta text */
+  --text-small:.88rem;      /* secondary body text, UI chrome */
+  --text-body:1.02rem;      /* primary reading size — body{font-size} reads this token */
+  --text-lead:1.15rem;      /* lead paragraphs, dek text */
+  --text-h3:1.6rem;
+  --text-h2:2rem;
   --text-display:clamp(2.8rem,8vw,4.8rem); /* MATCHES .masthead h1's clamp in guide.css, not new */
   --r-sm:6px;--r-md:10px;--r-lg:16px; /* radius scale — rounded-container language */
   /* Motion tokens — the single timing vocabulary for CSS + GSAP alike (adopted from
@@ -112,12 +121,12 @@ html{-webkit-text-size-adjust:100%;overflow-x:clip;max-width:100%}
    instead. touch-action:manipulation removes the ~300ms tap delay some mobile
    browsers still apply and stops accidental double-tap-zoom on controls. */
 a,button,[role="button"],input,select,summary{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:1.02rem;line-height:1.72;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:var(--text-body);line-height:1.72;-webkit-font-smoothing:antialiased}
 /* Fine paper-grain noise overlay — fixed, non-interactive, behind everything. */
 body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
 /* Skip link — visually hidden until focused, then a clear chip at top-left. Shared by
    EVERY page (U3): it used to live only in guide.css, so the hub had no skip link at all
    despite its own V2 spec promising one. */
-.skip-link{position:fixed;left:.7rem;top:.7rem;z-index:999;padding:.55rem 1rem;background:var(--ink);color:var(--bg);border-radius:999px;font-family:var(--font-data);font-size:.78rem;text-decoration:none;transform:translateY(-300%);transition:transform .15s}
+.skip-link{position:fixed;left:.7rem;top:.7rem;z-index:999;padding:.55rem 1rem;background:var(--ink);color:var(--bg);border-radius:999px;font-family:var(--font-data);font-size:var(--text-caption);text-decoration:none;transform:translateY(-300%);transition:transform .15s}
 .skip-link:focus-visible{transform:none;outline:3px solid var(--accent);outline-offset:2px}

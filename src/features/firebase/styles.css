@@ -16,7 +16,7 @@
   border-radius: var(--r-md);
   background: color-mix(in srgb, var(--accent) 5%, transparent);
   font-family: var(--font-data);
-  font-size: .78rem;
+  font-size:var(--text-caption);
   color: var(--muted);
 }
 .split-live-dot {

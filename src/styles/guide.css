@@ -97,13 +97,13 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 .jl-inner{padding:.75rem .05rem .3rem}
 .jl-row{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:.55rem}
 .jl-label{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);flex:0 0 7.5rem;line-height:1.4}
-.jl-select{flex:1;min-width:0;border:1px solid var(--rule2);border-radius:4px;padding:.35rem .5rem;font:inherit;font-size:.88rem;background:var(--card);color:var(--ink)}
+.jl-select{flex:1;min-width:0;border:1px solid var(--rule2);border-radius:4px;padding:.35rem .5rem;font:inherit;font-size:var(--text-small);background:var(--card);color:var(--ink)}
 .jl-select:focus{outline:2px solid var(--theme-primary,var(--accent));outline-offset:0;border-color:transparent}
 .jl-output{margin-top:.55rem;padding:.7rem .9rem;background:var(--bg2);border-radius:5px;border-left:3px solid var(--accent);font-size:.9rem}
 .jl-result{font-weight:600;margin-bottom:.4rem;line-height:1.4}
 .jl-tips{padding-left:1.1rem;color:var(--muted);font-size:.86rem;line-height:1.65;margin-top:.3rem}
 .jl-tips li{margin-bottom:.2rem}
-.jl-none{color:var(--muted);font-size:.88rem;font-style:italic}
+.jl-none{color:var(--muted);font-size:var(--text-small);font-style:italic}
 
 /* === STICKY CHROME (topbar + guide tab bar) ================================= */
 .sticky-chrome{position:sticky;top:0;z-index:50;background:var(--bg)}
@@ -129,7 +129,7 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
    hub had no skip link at all despite its own V2 spec promising one. */
 @media(prefers-reduced-motion:reduce){.gtab{transition:none}.gtab:hover{transform:none}}
 .gtab-split{font-family:var(--font-data);font-size:.72rem;letter-spacing:.04em}
-@media(max-width:899px){.gtab{padding:.44rem .85rem;font-size:.78rem;min-height:36px}}
+@media(max-width:899px){.gtab{padding:.44rem .85rem;font-size:var(--text-caption);min-height:36px}}
 /* Tactile press feedback — guide action buttons compress on :active and spring
    back on release (var(--ease-spring) overshoot on the transform channel) for a
    physical, app-like "pressed" feel. Interactive controls only — not cards or
@@ -163,7 +163,7 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 /* Staleness downgrade pill (staleness-ui.js) — appears only on sections whose
    structured verified_on has outlived its shelf life. Warn tone, never red
    (red is reserved for emergencies); links to the recorded source when present. */
-.stale-pill{display:inline-block;margin-left:.55rem;padding:.1rem .5rem;border:1px solid var(--warn);border-radius:999px;font-family:var(--font-data);font-size:.68rem;letter-spacing:.03em;color:var(--warn);text-decoration:none;vertical-align:middle;white-space:nowrap}
+.stale-pill{display:inline-block;margin-left:.55rem;padding:.1rem .5rem;border:1px solid var(--warn);border-radius:999px;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:.03em;color:var(--warn);text-decoration:none;vertical-align:middle;white-space:nowrap}
 a.stale-pill:hover{background:color-mix(in srgb,var(--warn) 12%,transparent)}
 /* Below 900px the sticky chrome is shorter — retune --chrome-h once; scroll-padding
    and every scroll-margin above follow automatically. */
@@ -259,7 +259,7 @@ a.stale-pill:hover{background:color-mix(in srgb,var(--warn) 12%,transparent)}
    sight cards + day-waypoint stops. Buttons, not bare text links, per the clickability
    doctrine: this can be 2-3 links in a row and must read as tappable at a glance. */
 .transit-links{display:inline-flex;flex-wrap:wrap;gap:.35rem;margin:.3rem 0 0}
-.transit-link{display:inline-flex;align-items:center;gap:.2rem;padding:.24rem .55rem;border-radius:999px;background:var(--card);border:1px solid var(--rule);color:var(--ink);font-family:var(--font-data);font-size:.68rem;font-weight:600;letter-spacing:.01em;text-decoration:none;white-space:nowrap;transition:border-color .15s,color .15s}
+.transit-link{display:inline-flex;align-items:center;gap:.2rem;padding:.24rem .55rem;border-radius:999px;background:var(--card);border:1px solid var(--rule);color:var(--ink);font-family:var(--font-data);font-size:var(--text-micro);font-weight:600;letter-spacing:.01em;text-decoration:none;white-space:nowrap;transition:border-color .15s,color .15s}
 .transit-link:hover{border-color:var(--accent);color:var(--accent-ink)}
 .transit-link:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 
@@ -275,9 +275,9 @@ a.stale-pill:hover{background:color-mix(in srgb,var(--warn) 12%,transparent)}
 .day-sun .sun-ico{color:var(--accent-ink)}
 .day-sun .sun-sep{opacity:.5}
 .day-sun .sun-golden{color:var(--accent-ink)}
-.pace{font-size:.78rem;color:var(--muted);font-family:var(--font-data);margin:.25rem 0 .6rem;line-height:1.55;padding-left:.7rem;border-left:2px solid var(--rule2);overflow-wrap:anywhere}
+.pace{font-size:var(--text-caption);color:var(--muted);font-family:var(--font-data);margin:.25rem 0 .6rem;line-height:1.55;padding-left:.7rem;border-left:2px solid var(--rule2);overflow-wrap:anywhere}
 .lsnote{display:block;font-size:.9rem;color:var(--green);margin:.5rem 0 .15rem;font-style:italic;line-height:1.55}
-.fit{font-size:.88rem;color:var(--muted);margin-top:.35rem}
+.fit{font-size:var(--text-small);color:var(--muted);margin-top:.35rem}
 .daykit{margin-top:.6rem;padding:.6rem .8rem;background:var(--bg);border-radius:5px;border:1px solid var(--rule)}
 .kit-label{display:block;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin-bottom:.2rem}
 @media(max-width:520px){.day{grid-template-columns:1fr;gap:.3rem}.day .d{padding-top:0}}
@@ -365,13 +365,13 @@ body{overflow-x:clip}
 .blabel{display:flex;flex-direction:column;gap:.12rem;min-width:0;overflow-wrap:break-word;line-height:1.3}
 .bnote{font-style:normal;font-size:.76rem;color:var(--muted);line-height:1.35}
 .best{font-variant-numeric:tabular-nums;white-space:nowrap}
-.best small{display:block;font-size:.68rem;color:var(--muted)}
+.best small{display:block;font-size:var(--text-micro);color:var(--muted)}
 .bactual{width:100%;border:1px solid var(--rule2);border-radius:4px;padding:.32rem .35rem;font:inherit;font-size:.85rem;text-align:right;background:var(--card);color:var(--ink);-moz-appearance:textfield}
 .bactual::-webkit-outer-spin-button,.bactual::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .bactual:focus{outline:2px solid var(--theme-primary,var(--accent));outline-offset:0;border-color:var(--theme-primary,var(--accent))}
 .btotal{background:var(--bg2);font-weight:600}
 .best-total,.bact-total{font-variant-numeric:tabular-nums;white-space:nowrap}
-.budget-foot{margin-top:.55rem;font-size:.78rem;color:var(--muted);line-height:1.4}
+.budget-foot{margin-top:.55rem;font-size:var(--text-caption);color:var(--muted);line-height:1.4}
 @media(max-width:520px){
   .brow{grid-template-columns:1fr 4.8rem 4.2rem;gap:.4rem;padding:.5rem .55rem}
   .bhead{font-size:.6rem}
@@ -394,8 +394,8 @@ body{overflow-x:clip}
 .bsub-est{font-size:.85rem;font-variant-numeric:tabular-nums;color:var(--muted)}
 .bsub-act{font-size:.85rem;font-variant-numeric:tabular-nums;color:var(--muted)}
 .best-val{font-variant-numeric:tabular-nums;white-space:nowrap}
-.bday-rate{display:block;font-size:.68rem;color:var(--muted);margin-top:.1rem}
-.brange{display:block;font-size:.68rem;color:var(--muted);margin-top:.05rem}
+.bday-rate{display:block;font-size:var(--text-micro);color:var(--muted);margin-top:.1rem}
+.brange{display:block;font-size:var(--text-micro);color:var(--muted);margin-top:.05rem}
 .btot-range{display:block;font-size:.72rem;font-weight:400;color:var(--muted);margin-top:.15rem}
 .bpill{display:inline-block;font-size:.6rem;font-family:var(--font-data);letter-spacing:.03em;background:var(--bg2);border:1px solid var(--rule2);border-radius:3px;padding:0 .38rem;color:var(--muted);line-height:1.7;margin-left:.3rem;vertical-align:middle}
 .brate-link{color:var(--accent-ink)}
@@ -461,9 +461,9 @@ body{overflow-x:clip}
 .hol-date{font-family:var(--font-data);font-size:.76rem;white-space:nowrap;color:var(--ink)}
 .hol-name{font-weight:600;color:var(--ink)}
 .hol-local{font-weight:400;color:var(--muted)}
-.hol-flag{color:var(--muted);font-size:.78rem}
+.hol-flag{color:var(--muted);font-size:var(--text-caption)}
 /* Reassuring state when nothing falls during the trip. */
-.hol-clear{font-size:.88rem;color:var(--ink);margin:0;padding:.55rem .75rem;background:var(--bg2);border:1px solid var(--rule);border-radius:7px}
+.hol-clear{font-size:var(--text-small);color:var(--ink);margin:0;padding:.55rem .75rem;background:var(--bg2);border:1px solid var(--rule);border-radius:7px}
 /* Context list for holidays just before/after the trip. */
 .hol-near{margin:.6rem 0 0;font-size:.82rem}
 .hol-near-label{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
@@ -478,7 +478,7 @@ body{overflow-x:clip}
 .block:has(> .hol-wrap[hidden]){margin-bottom:0}
 
 /* === MAP FULLSCREEN BUTTON ================================================== */
-.map-fs-btn{position:absolute;top:.42rem;right:.42rem;z-index:2;background:var(--card);border:1px solid var(--rule2);border-radius:4px;padding:.25rem .4rem;cursor:pointer;font-size:.88rem;color:var(--muted);line-height:1;transition:color .13s,border-color .13s;font-family:inherit}
+.map-fs-btn{position:absolute;top:.42rem;right:.42rem;z-index:2;background:var(--card);border:1px solid var(--rule2);border-radius:4px;padding:.25rem .4rem;cursor:pointer;font-size:var(--text-small);color:var(--muted);line-height:1;transition:color .13s,border-color .13s;font-family:inherit}
 .map-fs-btn:hover{color:var(--ink);border-color:var(--ink)}
 /* Full-bleed when the container is promoted to fullscreen element */
 .osmmap:fullscreen,.osmmap:-webkit-full-screen{width:100%;height:100%;border-radius:0}
@@ -487,7 +487,7 @@ body{overflow-x:clip}
 .share-backdrop{position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.45);display:none}
 .share-backdrop.open{display:block}
 .share-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:910;width:min(360px,calc(100vw - 2rem));max-height:calc(100dvh - 1.5rem);overflow-y:auto;background:var(--card);border:1px solid var(--rule2);border-radius:var(--r-lg);box-shadow:0 18px 60px rgba(0,0,0,.35);padding:1.4rem 1.6rem}
-.share-head{font-family:var(--font-display);font-size:1.02rem;font-weight:600;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+.share-head{font-family:var(--font-display);font-size:var(--text-body);font-weight:600;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem}
 .share-close{background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--muted);padding:.1rem .3rem;line-height:1;border-radius:3px;transition:color .14s}
 .share-close:hover{color:var(--ink)}
 .share-qr-wrap{display:flex;justify-content:center;background:var(--bg2);border-radius:6px;padding:.85rem;margin-bottom:1rem}
@@ -574,20 +574,20 @@ details[open] summary::before{transform:rotate(90deg)}
 details[open] summary{border-bottom:1px solid var(--rule);color:var(--accent-ink)}
 details > *:not(summary){padding:.55rem .8rem}
 details table{margin:.3rem 0 .4rem}
-.raid-intro{font-size:.88rem;color:var(--muted);margin:.1rem 0 .6rem;line-height:1.5}
+.raid-intro{font-size:var(--text-small);color:var(--muted);margin:.1rem 0 .6rem;line-height:1.5}
 .raid-tier-label{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;text-transform:uppercase;letter-spacing:var(--tracking-micro);color:var(--muted);margin:.9rem 0 .25rem;padding:.18rem 0 .18rem .1rem;border-bottom:1px solid var(--rule2)}
-.raid-sources{margin:.8rem 0 .1rem;font-size:.78rem;color:var(--muted)}
+.raid-sources{margin:.8rem 0 .1rem;font-size:var(--text-caption);color:var(--muted)}
 
 /* === HABITATS (GO Fest rotation card grid) ================================== */
 /* Responsive grid: multi-column on desktop, single column on mobile. minmax()
    floor keeps chips readable; auto-fill packs as many columns as fit the width. */
-.hab-note{font-size:.88rem;color:var(--muted);margin:.1rem 0 .8rem;line-height:1.5}
+.hab-note{font-size:var(--text-small);color:var(--muted);margin:.1rem 0 .8rem;line-height:1.5}
 .hab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.9rem;margin:.2rem 0 .3rem}
 .hab-card{background:var(--bg2);border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:7px;padding:.85rem .95rem;min-width:0}
 .hab-head{display:flex;align-items:baseline;justify-content:space-between;gap:.5rem}
 .hab-day{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;text-transform:uppercase;letter-spacing:var(--tracking-micro);color:var(--accent-ink)}
-.hab-time{font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
-.hab-name{margin:.2rem 0 .5rem;font-size:1.02rem;line-height:1.2}
+.hab-time{font-size:var(--text-caption);color:var(--muted);font-variant-numeric:tabular-nums}
+.hab-name{margin:.2rem 0 .5rem;font-size:var(--text-body);line-height:1.2}
 .hab-types{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.6rem}
 .hab-type{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;text-transform:uppercase;letter-spacing:var(--tracking-micro);color:var(--muted);background:color-mix(in srgb,var(--accent) 8%,var(--card));border:1px solid var(--rule2);border-radius:4px;padding:.12rem .4rem}
 .hab-row{display:grid;grid-template-columns:4.2rem 1fr;gap:.4rem;align-items:start;margin-top:.4rem}
@@ -595,7 +595,7 @@ details table{margin:.3rem 0 .4rem}
 .hab-chips{display:flex;flex-wrap:wrap;gap:.28rem;min-width:0}
 .hab-chip{font-size:.75rem;line-height:1.35;background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:.1rem .38rem;color:var(--ink,inherit)}
 .hab-chip-hot{background:color-mix(in srgb,var(--accent) 14%,var(--card));border-color:color-mix(in srgb,var(--accent) 40%,var(--rule2));font-weight:600}
-.hab-mega{margin:.55rem 0 0;font-size:.78rem;color:var(--muted);line-height:1.4;border-top:1px dashed var(--rule2);padding-top:.4rem}
+.hab-mega{margin:.55rem 0 0;font-size:var(--text-caption);color:var(--muted);line-height:1.4;border-top:1px dashed var(--rule2);padding-top:.4rem}
 @media(max-width:420px){.hab-row{grid-template-columns:1fr;gap:.15rem}.hab-label{padding-top:0}}
 
 /* Shiny-odds badge — a tiny, instantly-recognizable ✨ pill instead of reading
@@ -606,18 +606,18 @@ details table{margin:.3rem 0 .4rem}
 /* === INFOGRID (compact icon-labeled fact cards) ============================= */
 /* Replaces "here's everything you need to know" bullet-list prose with one short
    fact per tile — reduces read time in a sunlit/rushed on-the-move setting. */
-.ig-note{font-size:.88rem;color:var(--muted);margin:.1rem 0 .8rem;line-height:1.5}
+.ig-note{font-size:var(--text-small);color:var(--muted);margin:.1rem 0 .8rem;line-height:1.5}
 .ig-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.7rem;margin:.2rem 0 .3rem}
 .ig-card{display:flex;gap:.6rem;align-items:flex-start;background:var(--bg2);border:1px solid var(--rule);border-radius:7px;padding:.7rem .8rem;min-width:0}
 .ig-icon{flex:none;font-size:1.3rem;line-height:1;margin-top:.05rem}
 .ig-text{min-width:0}
-.ig-label{font-weight:600;font-size:.88rem;line-height:1.3}
+.ig-label{font-weight:600;font-size:var(--text-small);line-height:1.3}
 .ig-body{font-size:.8rem;color:var(--muted);line-height:1.4;margin-top:.18rem}
 
 /* === TIERLIST (ranked chip groups — priority picks, skip-vs-fresh divergence) = */
 /* Replaces paragraph rankings ("S — do X, Y, Z...") with scannable chip rows: the
    pick's name is readable in one glance instead of parsed out of a sentence. */
-.tl-note{font-size:.88rem;color:var(--muted);margin:.1rem 0 .8rem;line-height:1.5}
+.tl-note{font-size:var(--text-small);color:var(--muted);margin:.1rem 0 .8rem;line-height:1.5}
 .tl-list{display:flex;flex-direction:column;gap:.8rem}
 .tl-tier{border-left:3px solid var(--rule2);padding-left:.75rem}
 .tl-tier-head{display:flex;align-items:center;gap:.4rem;font-family:var(--font-display);font-weight:700;font-size:.82rem;margin-bottom:.4rem}

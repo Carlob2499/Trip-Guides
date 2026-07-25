@@ -119,7 +119,7 @@
 .lnw-day {
   margin: 16px 0 6px;
   color: var(--accent-ink);
-  font-size: 0.78rem;
+  font-size:var(--text-caption);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   font-weight: 700;
@@ -277,7 +277,7 @@
 .learn-day-date {
   margin: 0 0 4px;
   color: var(--accent-ink);
-  font-size: 0.78rem;
+  font-size:var(--text-caption);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   font-weight: 700;
@@ -303,7 +303,7 @@
   border: 0;
   background: var(--bg);
   color: var(--muted);
-  font-size: 0.78rem;
+  font-size:var(--text-caption);
   font-weight: 600;
   cursor: pointer;
 }
@@ -317,7 +317,7 @@
 .learn-tally-note {
   margin: 2px 0 8px;
   color: var(--muted);
-  font-size: 0.78rem;
+  font-size:var(--text-caption);
   line-height: 1.4;
 }
 .learn-tally { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }

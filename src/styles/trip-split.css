@@ -31,7 +31,7 @@
 .split-del:hover{color:var(--accent-ink);background:color-mix(in srgb,var(--accent) 10%,transparent)}
 /* split mode toggle */
 .sc-mode-toggle{display:flex;gap:.25rem}
-.scm-btn{font-family:var(--font-data);font-size:.68rem;letter-spacing:.04em;background:none;border:1px solid var(--rule2);border-radius:4px;padding:.26rem .6rem;cursor:pointer;color:var(--muted);transition:background .13s,color .13s,border-color .13s;white-space:nowrap}
+.scm-btn{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:.04em;background:none;border:1px solid var(--rule2);border-radius:4px;padding:.26rem .6rem;cursor:pointer;color:var(--muted);transition:background .13s,color .13s,border-color .13s;white-space:nowrap}
 .scm-btn.scm-active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 /* expense header row */
 /* Header shares the committed-row grid (.se-main: drag | payer | desc | amount | del)
@@ -58,7 +58,7 @@
 .se-drag:active{cursor:grabbing}
 .se-dragging{opacity:.4}
 .se-amt-wrap{display:flex;align-items:center;gap:.2rem;min-width:0}
-.se-cur{font-family:var(--font-data);font-size:.78rem;color:var(--muted);flex:none}
+.se-cur{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);flex:none}
 .se-amt{text-align:right}
 /* Strip the native number-input spinners (Chrome/Safari show them, Firefox varies)
    so amount fields read consistently across browsers — same treatment as .bactual. */
@@ -69,10 +69,10 @@
    excluded person must read as clearly OFF rather than merely unstyled. */
 .se-parts{display:flex;flex-wrap:wrap;align-items:center;gap:.3rem .4rem;margin-top:.35rem;padding:.4rem .6rem;background:var(--bg2);border-radius:5px;border-left:3px solid var(--rule2)}
 .se-parts-lbl{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin-right:.15rem}
-.se-part{padding:.22rem .55rem;border:1px solid var(--rule2);border-radius:999px;background:var(--bg);color:var(--muted);font-size:.78rem;font-weight:600;cursor:pointer;text-decoration:line-through;text-decoration-color:var(--rule2)}
+.se-part{padding:.22rem .55rem;border:1px solid var(--rule2);border-radius:999px;background:var(--bg);color:var(--muted);font-size:var(--text-caption);font-weight:600;cursor:pointer;text-decoration:line-through;text-decoration-color:var(--rule2)}
 .se-part-on{background:var(--accent);border-color:var(--accent);color:#fff;text-decoration:none}
 .se-part:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
-.se-parts-note{font-family:var(--font-data);font-size:.68rem;font-weight:700;color:var(--accent-ink);margin-left:.1rem}
+.se-parts-note{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;color:var(--accent-ink);margin-left:.1rem}
 .se-custom{display:flex;flex-wrap:wrap;gap:.4rem .6rem;margin-top:.4rem;padding:.55rem .6rem;background:var(--bg2);border-radius:5px;border-left:3px solid var(--rule2)}
 .se-custom--warn{border-left-color:var(--accent)}
 .se-cl{display:flex;flex-direction:column;gap:.18rem;min-width:5rem}
@@ -82,13 +82,13 @@
 /* results */
 .split-settle-head{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin:.9rem 0 .5rem}
 .split-settle-head #sCopySettle{margin-left:auto}
-.split-settle-count{font-family:var(--font-data);font-size:.68rem;letter-spacing:.04em;color:var(--muted);background:var(--bg2);border:1px solid var(--rule2);border-radius:99px;padding:.12rem .55rem}
+.split-settle-count{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:.04em;color:var(--muted);background:var(--bg2);border:1px solid var(--rule2);border-radius:99px;padding:.12rem .55rem}
 /* balance rows */
 .sb-row{display:grid;grid-template-columns:1fr auto auto auto;gap:.3rem .7rem;align-items:center;padding:.38rem 0;border-bottom:1px solid var(--rule)}
 .sb-row:last-child{border-bottom:none}
 .sb-name{font-weight:600;font-size:.92rem}
 .sb-verb{font-size:.82rem;color:var(--muted)}
-.sb-amt{font-family:var(--font-data);font-size:.88rem;font-weight:600;text-align:right;white-space:nowrap}
+.sb-amt{font-family:var(--font-data);font-size:var(--text-small);font-weight:600;text-align:right;white-space:nowrap}
 .sb-owed .sb-amt{color:var(--green)}
 .sb-owes .sb-amt{color:var(--accent-ink)}
 .sb-even .sb-amt{color:var(--muted)}
@@ -107,7 +107,7 @@
 .split-summary-lbl{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);flex:1}
 .split-summary-val{font-family:var(--font-data);font-size:.92rem;font-weight:700}
 /* empty state */
-.split-empty{color:var(--muted);font-size:.88rem;font-style:italic;padding:.25rem 0}
+.split-empty{color:var(--muted);font-size:var(--text-small);font-style:italic;padding:.25rem 0}
 
 /* === GROUP VOTE (reuses the split-card / sc- / se-new-card box+button styles above) === */
 .vo-row{display:grid;grid-template-columns:1fr auto auto 1.6rem;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid var(--rule)}
