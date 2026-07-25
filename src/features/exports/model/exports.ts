@@ -30,11 +30,15 @@ export function flattenSections(sections: any[] | undefined | null, out: any[] =
 function htmlToText(s: string | undefined | null): string {
   if (!s) return "";
   return String(s)
-    .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+    // &amp; is unescaped LAST, and the order is the whole point. Going first, "&amp;lt;b&gt;"
+    // becomes "&lt;b&gt;" on this pass and then "<b>" on the next — text the author escaped on
+    // purpose, revived as markup. Doing it last means each entity is decoded exactly once.
+    .replace(/&lt;/g, "<").replace(/&gt;/g, ">")
     .replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/&apos;/g, "'")
     .replace(/&nbsp;/g, " ")
     .replace(/<a\b[^>]*>(.*?)<\/a>/gis, "$1")   // keep link text, drop the tag
     .replace(/<[^>]+>/g, " ")                    // drop every other tag
+    .replace(/&amp;/g, "&")
     .replace(/\s+/g, " ")
     .trim();
 }

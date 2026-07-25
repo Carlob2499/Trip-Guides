@@ -27,7 +27,11 @@ import { staleness, SHELF_LIFE_DAYS } from "../lib/staleness";
     var s = staleness(date, cat, now);
     if (!s || !s.stale) return;
     var row = el.querySelector(".block-title-row") || el.querySelector(".card") || el;
+    // http(s) only. The schema types source_url as z.url(), and "javascript:alert(1)" IS a
+    // valid URL — so the only thing standing between guide data and a clickable script link
+    // is this check. Anything else renders as a plain <span>, losing the link, not the fact.
     var src = el.getAttribute("data-source-url");
+    if (src && !/^https?:\/\//i.test(src)) src = null;
     var pill = document.createElement(src ? "a" : "span");
     pill.className = "stale-pill";
     pill.textContent = "⚠ verified " + date + " — re-check";

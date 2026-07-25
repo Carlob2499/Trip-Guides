@@ -136,7 +136,11 @@ import { trapFocus, migrateStorageKey } from "../../../scripts/util.js";
   // resolving later; getLastRate() covers the event we were never around for.
   var seeded = getLastRate();
   var rate = seeded ? seeded.rate : null;
-  var code = seeded ? seeded.code : null;
+  // A currency code is three letters and nothing else. It reaches innerHTML below, and it
+  // arrives from guide data or a CustomEvent detail — neither of which this module owns —
+  // so it is narrowed here, at the boundary, instead of being escaped at every use site.
+  var asCode = function (c) { return /^[A-Za-z]{3}$/.test(String(c || "")) ? String(c).toUpperCase() : ""; };
+  var code = seeded ? asCode(seeded.code) : null;
   var pill = document.getElementById("liveRatePill");
   if (pill) {
     var pop = document.createElement("div");
@@ -165,7 +169,7 @@ import { trapFocus, migrateStorageKey } from "../../../scripts/util.js";
     // fetch resolves while the popover is already open on a typed amount — it used to sit
     // on "Live rate not loaded" until the user typed again.
     document.addEventListener("tg:rate", function (e) {
-      if (e.detail && e.detail.rate) { rate = e.detail.rate; code = e.detail.code; render(); }
+      if (e.detail && e.detail.rate) { rate = e.detail.rate; code = asCode(e.detail.code); render(); }
     });
     pill.style.cursor = "pointer";
     pill.setAttribute("role", "button");

@@ -46,7 +46,12 @@ export function initProgress() {
   const base = cfg.base || "/";
 
   const params = new URLSearchParams(location.search);
+  // Same shape scaffold-guide.mjs's slugify() emits and scripts/lib/slug.mjs validates. The
+  // slug arrives from ?slug= and ends up in an href, so anything not matching is dropped
+  // rather than linked — the page's own "paste the real slug" correction path handles it.
+  const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
   let slug = (params.get("slug") || "").trim().toLowerCase();
+  if (slug && !SLUG_RE.test(slug)) slug = "";
   let guessed = !slug && !!params.get("country");
   if (!slug && params.get("country")) slug = predictSlug(params.get("country"));
 

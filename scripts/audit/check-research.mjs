@@ -11,6 +11,9 @@ import { readGuides, flatten, isMain, parseVerifiedDate } from "./lib.mjs";
 
 const PLACEHOLDER = "__VERIFICATION_REQUIRED__";
 // A body with almost no real content is a "filled" section that isn't actually filled.
+// NOT a sanitizer (see the same note in guide-readiness.mjs) — one pass over <[^>]+> is
+// trivially defeated. It exists to ask "is there any real prose here", a build-time length
+// question about our own content. Its output is counted, never rendered.
 const strip = (html) => String(html || "").replace(/<[^>]+>/g, "").trim();
 
 export function checkResearchGuide(guide, slug) {

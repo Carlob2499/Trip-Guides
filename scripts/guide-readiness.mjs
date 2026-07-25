@@ -18,6 +18,9 @@ import { checkResearchGuide } from "./audit/check-research.mjs";
 // Prose-like sections carry perishable facts AND support provenance (source_url/verified_on) —
 // they're the ones the skill's strict mode gates. The coverage proxy is measured over these.
 const FACT_TYPES = new Set(["panel", "prose", "list", "routes"]);
+// NOT a sanitizer, and must never be used as one — a single pass over <[^>]+> is trivially
+// defeated ("<<b>>" leaves a stray ">"). Its only job is to approximate VISIBLE TEXT LENGTH for
+// the coverage metric below. Nothing it returns is ever rendered or written to a page.
 const strip = (html) => String(html || "").replace(/<[^>]+>/g, "").trim();
 
 // A fact section is "sourced" if it carries a structured source_url OR an inline <a href>

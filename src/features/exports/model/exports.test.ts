@@ -190,6 +190,19 @@ describe("buildSummary", () => {
     expect(summary).toBe("Japan Trip — A week in Tokyo");
   });
 
+  // Regression: htmlToText used to unescape &amp; FIRST, so an author writing "&amp;lt;b&amp;gt;"
+  // — meaning the literal TEXT "&lt;b&gt;" — got it decoded twice, to "<b>", which the next pass
+  // then stripped as a tag. The word did not come out wrong, it came out MISSING. Decoding &amp;
+  // last means each entity is decoded exactly once. CodeQL js/double-escaping caught it.
+  it("decodes each entity exactly once, so an escaped entity survives as text", () => {
+    const summary = buildSummary({ title: "T", dek: "Tokyo &amp;lt;b&amp;gt; Kyoto" });
+    expect(summary).toBe("T — Tokyo &lt;b&gt; Kyoto");
+  });
+
+  it("keeps a literal ampersand from &amp; without eating what follows", () => {
+    expect(buildSummary({ title: "T", dek: "Bed &amp; breakfast" })).toBe("T — Bed & breakfast");
+  });
+
   it("lists planned days with their date prefix when present", () => {
     const guide = { title: "T", sections: [{ type: "days", items: [{ date: "Jul 8", title: "Arrive" }, { title: "No date" }] }] };
     const summary = buildSummary(guide);
