@@ -28,7 +28,7 @@ body.sm-lock{overflow:hidden}
 .sm-panel{width:100%;max-width:34rem;max-height:100%;overflow:auto;padding:1rem .2rem;-webkit-overflow-scrolling:touch}
 .sm-panel:focus{outline:none}
 
-.sm-eyebrow{font-family:var(--font-data);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:color-mix(in srgb,var(--accent) 60%,#f3f5ef);margin:0}
+.sm-eyebrow{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:color-mix(in srgb,var(--accent) 60%,#f3f5ef);margin:0}
 .sm-title{font-family:var(--font-display);font-weight:800;font-size:clamp(1.9rem,6vw,3.1rem);line-height:1.03;letter-spacing:-.03em;margin:.35rem 0 .5rem}
 .sm-tldr{font-family:var(--font-body);font-size:1.02rem;line-height:1.5;color:#dfe3da;max-width:32rem;margin:0}
 .sm-pace{font-family:var(--font-data);font-size:.82rem;color:#c7ccc0;margin:.55rem 0 0}
@@ -77,11 +77,14 @@ body.sm-lock{overflow:hidden}
   display:inline-flex;align-items:baseline;gap:.6rem;margin:0 0 1rem;
   padding:.72rem 1.15rem;border-radius:999px;cursor:pointer;
   font-family:var(--font-display);font-weight:640;font-size:.98rem;letter-spacing:-.01em;
-  color:#f7f8f3;background:var(--accent);border:1px solid var(--accent);
+  color:var(--on-accent);background:var(--accent);border:1px solid var(--accent);
   transition:transform .15s,filter .15s;
 }
 .story-play:hover{transform:translateY(-1px);filter:brightness(1.06)}
 .story-play:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .story-play-ico{font-size:.72rem}
-.story-play-sub{font-family:var(--font-data);font-weight:500;font-size:.72rem;opacity:.85;letter-spacing:.02em}
+/* No opacity here. It used to carry .85, which composites the ink back TOWARD the fill it sits on
+   and undoes the guarantee --on-accent just made (2.95:1 on Denmark's gold). The de-emphasis this
+   was reaching for is already carried by the size and weight step down from .story-play itself. */
+.story-play-sub{font-family:var(--font-data);font-weight:500;font-size:.72rem;letter-spacing:.02em}
 @media(prefers-reduced-motion:reduce){.story-play{transition:none}}

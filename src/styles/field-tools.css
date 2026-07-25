@@ -27,7 +27,7 @@
 .cur-out{margin-top:.5rem;font-family:var(--font-data);font-size:.8rem;line-height:1.7;color:var(--ink)}
 
 /* ── Jump-to-today chip ───────────────────────────────────────────────────── */
-.today-chip{position:fixed;left:50%;bottom:5.2rem;transform:translateX(-50%);z-index:70;padding:.6rem 1.1rem;background:var(--accent);color:var(--bg);border:none;border-radius:999px;font-family:var(--font-display);font-weight:640;font-size:.9rem;box-shadow:0 6px 22px color-mix(in srgb,var(--accent) 45%,transparent);cursor:pointer}
+.today-chip{position:fixed;left:50%;bottom:5.2rem;transform:translateX(-50%);z-index:70;padding:.6rem 1.1rem;background:var(--accent);color:var(--on-accent);border:none;border-radius:999px;font-family:var(--font-display);font-weight:640;font-size:.9rem;box-shadow:0 6px 22px color-mix(in srgb,var(--accent) 45%,transparent);cursor:pointer}
 @media(min-width:900px){.today-chip{bottom:1.7rem;left:auto;right:6rem;transform:none}}
 @media(prefers-reduced-motion:no-preference){.today-chip{animation:chipIn .5s cubic-bezier(.2,1.2,.3,1) .8s both}}
 @keyframes chipIn{from{opacity:0;transform:translateX(-50%) translateY(16px)}to{opacity:1}}
@@ -85,7 +85,7 @@ html[data-swipe-hint="back"]::after{left:0;background:linear-gradient(to right,c
    sits above the emergency numbers since "know the current advisory" outranks
    "have the number ready" the moment a traveler opens this sheet. */
 .sos-advisory{display:flex;flex-direction:column;gap:.15rem;padding:.7rem .8rem;margin-bottom:.4rem;border:1px solid var(--warn);border-radius:var(--r-md,8px);text-decoration:none;background:color-mix(in srgb,var(--warn) 8%,transparent)}
-.sos-advisory-level{font-family:var(--font-data);font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--warn)}
+.sos-advisory-level{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--warn)}
 .sos-advisory-title{font-weight:700;color:var(--ink);font-size:1rem}
 .sos-advisory-summary{font-size:.82rem;color:var(--muted);line-height:1.4}
 /* Fallback sheet (EU-wide 112 only, no researched local numbers): warn-toned so
@@ -108,7 +108,7 @@ html[data-swipe-hint="back"]::after{left:0;background:linear-gradient(to right,c
 .focus-today{position:fixed;inset:0;z-index:310;display:none;flex-direction:column;background:var(--bg);padding:1rem 1.1rem calc(1.2rem + env(safe-area-inset-bottom));overflow-y:auto}
 .focus-today.focus-on{display:flex}
 .focus-head{position:relative;padding:0 3rem .8rem 0;border-bottom:2px solid var(--accent)}
-.focus-date{margin:0;font-family:var(--font-data);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-ink)}
+.focus-date{margin:0;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink)}
 .focus-title{margin:.2rem 0 0;font-family:var(--font-display);font-weight:780;font-size:clamp(1.5rem,6vw,2.2rem);line-height:1.08;letter-spacing:-.025em}
 .focus-x{position:absolute;right:0;top:0;width:42px;height:42px;background:var(--card);border:1px solid var(--rule);border-radius:999px;color:var(--ink);cursor:pointer}
 .focus-stops{list-style:none;margin:1rem 0;padding:0;display:flex;flex-direction:column;gap:.55rem;flex:1}

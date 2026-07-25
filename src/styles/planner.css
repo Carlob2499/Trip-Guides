@@ -11,8 +11,11 @@
 .dchip:active{transform:scale(.94)}
 .dchip-num{font-family:var(--font-data);font-size:.62rem;font-weight:700;letter-spacing:.06em;color:var(--accent-ink);line-height:1}
 .dchip-date{font-family:var(--font-display);font-size:.78rem;font-weight:640;letter-spacing:-.01em;white-space:nowrap;line-height:1.15}
-.dchip-active{background:var(--accent);border-color:var(--accent);color:var(--bg)}
-.dchip-active .dchip-num{color:color-mix(in srgb,var(--bg) 78%,transparent)}
+/* The chip's ground is --accent, which does not re-map by theme — so its ink must not either.
+   --accent-ink on .dchip-num is right on a PAGE surface and wrong here, where the ground is the
+   fill itself; it measured 3.58:1 (light) and 2.56:1 (dark) on Denmark. */
+.dchip-active{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.dchip-active .dchip-num{color:var(--on-accent)}
 @media(prefers-reduced-motion:reduce){.dchip{transition:none}.dchip:hover,.dchip:active{transform:none}}
 
 /* ── Itinerary — single column of day cards (the day scrubber sticks above). ─ */
@@ -68,8 +71,20 @@
   .planner-days .day{scroll-snap-align:start;scroll-margin-top:calc(var(--chrome-h) + 3.4rem)}
 }
 
-/* ── Day number in the date gutter — editorial ghost numeral ──────────────── */
-.day-num{display:block;font-family:var(--font-display);font-weight:800;font-size:2rem;line-height:.95;letter-spacing:-.04em;color:color-mix(in srgb,var(--accent) 42%,var(--bg2));margin:0 0 .3rem}
+/* ── Day number in the date gutter — muted numeral, not full ink ──────────── */
+/* Was color-mix(--accent 42%, --bg2) — deriving from the IDENTITY token instead of the TEXT
+   token. --accent is explicitly never contrast-gated (accent-tokens.ts), so no dilution of it
+   could pass: pure undiluted accent only reaches 2.88:1 (korea/dark) / 2.80:1 (denmark/light) on
+   --bg2, and axe grades this 32px/800 numeral as LARGE text (3:1), not small (4.5:1) — so both
+   were short of the bar that actually applies, not just close. Deriving from --accent-ink instead
+   inherits its >=4.5:1 contract and dilutes back toward the surface to stay recessive; 80% is the
+   first step with real headroom (worst case ~3.14:1 across a full accent-gamut sweep). The date
+   text beside it stays full --accent-ink, so the hierarchy — numeral recedes behind the date —
+   survives; what changes is that the numeral is muted rather than sub-legible. */
+.day-num{display:block;font-family:var(--font-display);font-weight:800;font-size:2rem;line-height:.95;letter-spacing:-.04em;color:color-mix(in srgb,var(--accent-ink) 80%,var(--bg2));margin:0 0 .3rem}
+/* 1.2rem is load-bearing, not taste: 19.2px bold = 14.4pt, just above axe's bold-large cutoff
+   (14pt = 18.667px). Below ~1.17rem the numeral re-grades as SMALL text, the bar jumps 3:1 -> 4.5:1,
+   and the mix above (3.6-4.4:1 at desktop size) can start failing at mobile widths only. */
 @media(max-width:520px){.day-num{display:inline-block;font-size:1.2rem;margin:0 .45rem 0 0;vertical-align:-2px}}
 
 /* ── Numbered stop list (waypoints) — the on-the-go itinerary ladder ──────── */
