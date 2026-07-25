@@ -53,10 +53,10 @@
   display: flex; align-items: center; justify-content: space-between;
   padding: 1rem 1.3rem; max-width: 1100px; margin: 0 auto;
 }
-.ov-wordmark { font-family: var(--font-display); font-weight: 720; font-size: 1.05rem; letter-spacing: -.01em; color: var(--ink); }
+.ov-wordmark { font-family: var(--font-display); font-weight: 720; font-size:var(--text-body); letter-spacing: -.01em; color: var(--ink); }
 .ov-bar-actions { display: flex; align-items: center; gap: .55rem; }
 .ov-pill {
-  font-family: var(--font-data); font-size: .72rem; font-weight: 700; letter-spacing: .02em;
+  font-family: var(--font-data); font-size:var(--text-control-sm); font-weight: 700; letter-spacing: .02em;
   border: 1px solid var(--rule2); background: color-mix(in srgb, var(--card) 72%, transparent);
   color: var(--ink); padding: .45rem .85rem; border-radius: 999px; cursor: pointer;
   backdrop-filter: blur(6px); transition: background var(--dur-ui) var(--ease-out-expo), border-color var(--dur-ui);
@@ -71,13 +71,13 @@
 /* The hero content — the block that recedes (scale + fade, JS-owned) as you leave. */
 .ov-inner { position: relative; z-index: 2; text-align: center; padding: 2rem 1.3rem; max-width: 54rem; margin: 0 auto; }
 .ov-eyebrow {
-  font-family: var(--font-data); font-weight: 700; font-size: .74rem; letter-spacing: .2em;
+  font-family: var(--font-data); font-weight: 700; font-size:var(--text-control-sm); letter-spacing: .2em;
   text-transform: uppercase; color: var(--accent-ink); margin: 0 0 1.3rem;
 }
 .ov-head { font-family: var(--font-display); font-weight: 780; font-size: clamp(2.5rem, 8vw, 5rem); line-height: 1.02; letter-spacing: -.03em; margin: 0; }
 .ov-line { display: block; }
 .ov-line-accent { color: var(--accent-ink); }
-.ov-sub { font-family: var(--font-body); margin: 1.5rem auto 0; max-width: 42ch; font-size: 1.12rem; color: var(--muted); line-height: 1.6; }
+.ov-sub { font-family: var(--font-body); margin: 1.5rem auto 0; max-width: 42ch; font-size:var(--text-lead); color: var(--muted); line-height: 1.6; }
 .ov-sub b { color: var(--ink); font-weight: 600; }
 
 /* Route line — the day-rail signature scaled to the page (MOTION.md), drawn on scroll (JS). */
@@ -93,7 +93,7 @@
 .ov-cue {
   position: absolute; left: 50%; bottom: 1.9rem; transform: translateX(-50%); z-index: 3;
   display: flex; flex-direction: column; align-items: center; gap: .45rem;
-  font-family: var(--font-data); font-size: .66rem; font-weight: 700; letter-spacing: .18em;
+  font-family: var(--font-data); font-size:var(--text-micro); font-weight: 700; letter-spacing: .18em;
   text-transform: uppercase; color: var(--muted); text-decoration: none;
 }
 .ov-cue-pin { width: 12px; height: 12px; border-radius: 50% 50% 50% 0; background: var(--accent); transform: rotate(-45deg); }
@@ -132,7 +132,7 @@ body.ov-play .ov-cue { animation: ovCue 2.4s var(--ease-out-expo) 1.35s forwards
 :root[data-overture="compact"] .ov-bar { position: static; width: 100%; padding: 0 1.3rem .4rem; }
 :root[data-overture="compact"] .ov-inner { padding: 1.4rem 1.3rem .6rem; }
 :root[data-overture="compact"] .ov-head { font-size: clamp(1.9rem, 5vw, 2.6rem); }
-:root[data-overture="compact"] .ov-sub { font-size: .98rem; margin-top: 1rem; }
+:root[data-overture="compact"] .ov-sub { font-size:var(--text-body); margin-top: 1rem; }
 :root[data-overture="compact"] .ov-cue,
 :root[data-overture="compact"] .ov-route { display: none; }
 :root[data-overture="compact"] .overture::after { display: none; }

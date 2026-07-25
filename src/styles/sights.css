@@ -23,7 +23,7 @@
 /* Failed image → static "loads online" plate (no infinite shimmer). */
 .sight-media.media-fail{animation:none;background:var(--bg2)}
 .sight-media.media-fail .cardimg{display:none}
-.sight-media.media-fail::after{content:"Photo loads online";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-data);font-size:.72rem;letter-spacing:.04em;color:var(--muted)}
+.sight-media.media-fail::after{content:"Photo loads online";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-data);font-size:var(--text-control-sm);letter-spacing:.04em;color:var(--muted)}
 .sight-media.media-fail .sight-media-grad,.sight-media.media-fail .imgcredit{display:none}
 
 .sight-media-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,13,16,.82) 0%,rgba(10,13,16,.30) 42%,rgba(10,13,16,0) 68%)}
@@ -38,7 +38,7 @@
    that fix didn't cover. var(--ink) is safe against both the skeleton AND the .media-fail flat
    --bg2, so it can be the one default instead of two special-cased overrides. */
 .tag--onphoto{color:var(--ink);opacity:.95;margin-bottom:.15rem}
-.sight-name--onphoto{color:var(--ink);margin:0;font-size:1.32rem;line-height:1.12}
+.sight-name--onphoto{color:var(--ink);margin:0;font-size:var(--text-h4);line-height:1.12}
 /* Photo-tuned near-white + shadow is now OPT-IN, gated on .media-ok (new onload handler in
    SightsBlock.astro, mirroring the existing onerror -> .media-fail pattern) confirming a real
    photo is actually painted behind the caption. @media screen: print already flattens this pair to

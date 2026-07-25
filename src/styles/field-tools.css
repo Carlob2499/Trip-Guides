@@ -9,7 +9,7 @@
 .addr-copy:hover,.addr-copy:focus-visible{background:color-mix(in srgb,var(--accent) 12%,transparent);outline:none}
 
 /* ── Mini toast ───────────────────────────────────────────────────────────── */
-.ft-toast{position:fixed;left:50%;bottom:5.4rem;transform:translate(-50%,8px);z-index:940;padding:.5rem .95rem;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:.74rem;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+.ft-toast{position:fixed;left:50%;bottom:5.4rem;transform:translate(-50%,8px);z-index:940;padding:.5rem .95rem;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:var(--text-control-sm);border-radius:999px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
 .ft-toast-on{opacity:1;transform:translate(-50%,0)}
 @media(min-width:900px){.ft-toast{bottom:1.6rem}}
 
@@ -24,10 +24,10 @@
 /* ── Currency converter popover ───────────────────────────────────────────── */
 .cur-pop{position:absolute;z-index:120;width:240px;padding:.75rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md);box-shadow:0 10px 32px rgba(10,14,18,.3)}
 .cur-in{width:100%;padding:.45rem .6rem;font:inherit;font-size:.95rem;color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:var(--r-sm)}
-.cur-out{margin-top:.5rem;font-family:var(--font-data);font-size:.8rem;line-height:1.7;color:var(--ink)}
+.cur-out{margin-top:.5rem;font-family:var(--font-data);font-size:var(--text-control);line-height:1.7;color:var(--ink)}
 
 /* ── Jump-to-today chip ───────────────────────────────────────────────────── */
-.today-chip{position:fixed;left:50%;bottom:5.2rem;transform:translateX(-50%);z-index:70;padding:.6rem 1.1rem;background:var(--accent);color:var(--on-accent);border:none;border-radius:999px;font-family:var(--font-display);font-weight:640;font-size:.9rem;box-shadow:0 6px 22px color-mix(in srgb,var(--accent) 45%,transparent);cursor:pointer}
+.today-chip{position:fixed;left:50%;bottom:5.2rem;transform:translateX(-50%);z-index:70;padding:.6rem 1.1rem;background:var(--accent);color:var(--on-accent);border:none;border-radius:999px;font-family:var(--font-display);font-weight:640;font-size:var(--text-small);box-shadow:0 6px 22px color-mix(in srgb,var(--accent) 45%,transparent);cursor:pointer}
 @media(min-width:900px){.today-chip{bottom:1.7rem;left:auto;right:6rem;transform:none}}
 @media(prefers-reduced-motion:no-preference){.today-chip{animation:chipIn .5s cubic-bezier(.2,1.2,.3,1) .8s both}}
 @keyframes chipIn{from{opacity:0;transform:translateX(-50%) translateY(16px)}to{opacity:1}}
@@ -39,9 +39,9 @@
 .lb-backdrop.lb-on{display:flex}
 .lb-fig{position:relative;margin:0;max-width:min(1200px,96vw);max-height:92vh;display:flex;flex-direction:column}
 .lb-img{max-width:100%;max-height:82vh;object-fit:contain;border-radius:var(--r-md)}
-.lb-cap{margin-top:.6rem;color:#dfe4d8;font-size:.85rem;display:flex;gap:.8rem;align-items:baseline;flex-wrap:wrap}
-.lb-credit{color:#aeb8a6;font-family:var(--font-data);font-size:.7rem}
-.lb-x{position:absolute;top:-.4rem;right:-.4rem;z-index:2;width:40px;height:40px;background:var(--ink);color:var(--bg);border:1px solid rgba(244,246,239,.25);border-radius:50%;cursor:pointer;font-size:.9rem}
+.lb-cap{margin-top:.6rem;color:#dfe4d8;font-size:var(--text-small);display:flex;gap:.8rem;align-items:baseline;flex-wrap:wrap}
+.lb-credit{color:#aeb8a6;font-family:var(--font-data);font-size:var(--text-control-sm)}
+.lb-x{position:absolute;top:-.4rem;right:-.4rem;z-index:2;width:40px;height:40px;background:var(--ink);color:var(--bg);border:1px solid rgba(244,246,239,.25);border-radius:50%;cursor:pointer;font-size:var(--text-small)}
 .lb-x:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 
 /* ── Swipe edge glow ──────────────────────────────────────────────────────── */
@@ -75,19 +75,19 @@ html[data-swipe-hint="back"]::after{left:0;background:linear-gradient(to right,c
 .sos-sheet[hidden]{display:none}
 .sos-inner{width:100%;max-width:30rem;background:var(--card);border-radius:16px 16px 0 0;padding:1rem 1.2rem calc(1.2rem + env(safe-area-inset-bottom))}
 @media(min-width:900px){.sos-sheet{align-items:center}.sos-inner{border-radius:var(--r-lg)}}
-.sos-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 .6rem;font-family:var(--font-display);font-weight:720;font-size:1.3rem}
+.sos-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 .6rem;font-family:var(--font-display);font-weight:720;font-size:var(--text-h4)}
 .sos-x{width:36px;height:36px;background:transparent;border:1px solid var(--rule);border-radius:999px;color:var(--muted);cursor:pointer}
 .sos-row{display:flex;align-items:center;gap:.9rem;padding:.7rem .2rem;border-top:1px solid var(--rule);text-decoration:none;color:var(--ink)}
 .sos-num{flex:none;min-width:4.2rem;font-family:var(--font-display);font-weight:800;font-size:1.7rem;letter-spacing:-.02em;color:#b3261e}
-.sos-label{font-size:.9rem;line-height:1.4;color:var(--ink)}
+.sos-label{font-size:var(--text-small);line-height:1.4;color:var(--ink)}
 .sos-note{margin:.7rem 0 0;font-size:var(--text-caption);color:var(--muted)}
 /* Official travel-advisory notice (docs/FEATURES.md #9) — only present when elevated;
    sits above the emergency numbers since "know the current advisory" outranks
    "have the number ready" the moment a traveler opens this sheet. */
 .sos-advisory{display:flex;flex-direction:column;gap:.15rem;padding:.7rem .8rem;margin-bottom:.4rem;border:1px solid var(--warn);border-radius:var(--r-md,8px);text-decoration:none;background:color-mix(in srgb,var(--warn) 8%,transparent)}
 .sos-advisory-level{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--warn)}
-.sos-advisory-title{font-weight:700;color:var(--ink);font-size:1rem}
-.sos-advisory-summary{font-size:.82rem;color:var(--muted);line-height:1.4}
+.sos-advisory-title{font-weight:700;color:var(--ink);font-size:var(--text-body)}
+.sos-advisory-summary{font-size:var(--text-control);color:var(--muted);line-height:1.4}
 /* Fallback sheet (EU-wide 112 only, no researched local numbers): warn-toned so
    it reads as "the universal number, not the researched sheet" at a glance. */
 .sos-sheet--fallback .sos-inner{border-top:3px solid var(--warn)}
@@ -98,11 +98,11 @@ html[data-swipe-hint="back"]::after{left:0;background:linear-gradient(to right,c
 .addr-card{position:fixed;inset:0;z-index:320;display:flex;align-items:center;justify-content:center;background:rgba(8,11,14,.75);padding:1rem}
 .addr-card[hidden]{display:none}
 .addr-card-inner{width:100%;max-width:34rem;background:var(--card);border-radius:var(--r-lg);padding:1.4rem;text-align:center}
-.addr-card-hint{margin:0 0 .8rem;font-family:var(--font-data);font-size:.72rem;letter-spacing:.06em;color:var(--muted)}
+.addr-card-hint{margin:0 0 .8rem;font-family:var(--font-data);font-size:var(--text-control-sm);letter-spacing:.06em;color:var(--muted)}
 .addr-card-big{margin:0;font-family:var(--font-display);font-weight:720;font-size:clamp(1.7rem,7vw,2.6rem);line-height:1.35;color:var(--ink);word-break:keep-all}
 .addr-card-row{display:flex;gap:.6rem;justify-content:center;margin-top:1.2rem;flex-wrap:wrap}
-.addr-card-copy{padding:.65rem 1.2rem;background:var(--ink);color:var(--bg);border:none;border-radius:999px;font-family:var(--font-data);font-size:.82rem;font-weight:700;cursor:pointer}
-.addr-card-x{padding:.65rem 1.2rem;background:transparent;color:var(--muted);border:1px solid var(--rule);border-radius:999px;font-size:.82rem;cursor:pointer}
+.addr-card-copy{padding:.65rem 1.2rem;background:var(--ink);color:var(--bg);border:none;border-radius:999px;font-family:var(--font-data);font-size:var(--text-control);font-weight:700;cursor:pointer}
+.addr-card-x{padding:.65rem 1.2rem;background:transparent;color:var(--muted);border:1px solid var(--rule);border-radius:999px;font-size:var(--text-control);cursor:pointer}
 
 /* ── Focus Today overlay ──────────────────────────────────────────────────── */
 .focus-today{position:fixed;inset:0;z-index:310;display:none;flex-direction:column;background:var(--bg);padding:1rem 1.1rem calc(1.2rem + env(safe-area-inset-bottom));overflow-y:auto}
@@ -113,16 +113,16 @@ html[data-swipe-hint="back"]::after{left:0;background:linear-gradient(to right,c
 .focus-x{position:absolute;right:0;top:0;width:42px;height:42px;background:var(--card);border:1px solid var(--rule);border-radius:999px;color:var(--ink);cursor:pointer}
 .focus-stops{list-style:none;margin:1rem 0;padding:0;display:flex;flex-direction:column;gap:.55rem;flex:1}
 .focus-stop{display:grid;grid-template-columns:5.2rem 1fr;gap:.15rem .8rem;padding:.85rem .9rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md);cursor:pointer}
-.focus-time{grid-row:span 2;align-self:center;font-family:var(--font-data);font-size:.85rem;font-weight:700;color:var(--accent-ink);font-variant-numeric:tabular-nums}
+.focus-time{grid-row:span 2;align-self:center;font-family:var(--font-data);font-size:var(--text-small);font-weight:700;color:var(--accent-ink);font-variant-numeric:tabular-nums}
 .focus-name{font-family:var(--font-display);font-weight:680;font-size:var(--text-lead);line-height:1.25}
-.focus-note{font-size:.85rem;color:var(--muted);line-height:1.45}
+.focus-note{font-size:var(--text-small);color:var(--muted);line-height:1.45}
 .focus-done{opacity:.45}
 .focus-done .focus-name{text-decoration:line-through}
 .focus-stop:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .focus-full{margin-top:.4rem;padding:.8rem 1.1rem;background:transparent;color:var(--ink);border:1px dashed var(--rule2);border-radius:var(--r-md);font-family:var(--font-display);font-weight:640;font-size:.95rem;cursor:pointer}
 
 /* ── Share-modal install note ─────────────────────────────────────────────── */
-.share-install{margin:.9rem 0 0;padding:.6rem .8rem;background:color-mix(in srgb,var(--accent) 8%,var(--card));border:1px solid var(--rule);border-radius:var(--r-sm);font-size:.82rem;line-height:1.55;color:var(--ink)}
+.share-install{margin:.9rem 0 0;padding:.6rem .8rem;background:color-mix(in srgb,var(--accent) 8%,var(--card));border:1px solid var(--rule);border-radius:var(--r-sm);font-size:var(--text-control);line-height:1.55;color:var(--ink)}
 
 /* ── Driver card English subtitle ─────────────────────────────────────────── */
 .addr-card-en{margin:.55rem 0 0;font-size:.95rem;color:var(--muted);line-height:1.45}
@@ -130,7 +130,7 @@ html[data-swipe-hint="back"]::after{left:0;background:linear-gradient(to right,c
 
 /* ── Focus Today TL;DR ────────────────────────────────────────────────────── */
 .focus-tldr{margin:.45rem 0 0;font-family:var(--font-display);font-weight:640;font-size:1.1rem;line-height:1.4;color:var(--accent-ink)}
-.focus-sun{margin:.5rem 0 0;font-family:var(--font-data);font-size:.82rem;color:var(--muted)}
+.focus-sun{margin:.5rem 0 0;font-family:var(--font-data);font-size:var(--text-control);color:var(--muted)}
 
 /* ── Budget burn pill ─────────────────────────────────────────────────────── */
 .gstat-burn{cursor:pointer;border-color:var(--accent);color:var(--accent-ink)}

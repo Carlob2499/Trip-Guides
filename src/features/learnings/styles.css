@@ -31,8 +31,8 @@
 }
 .lnw-open:hover { filter: brightness(1.06); }
 .lnw-open:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 3px; }
-.lnw-open-ico { font-size: 1rem; }
-.lnw-cta-note { color: var(--muted); font-size: 0.9rem; }
+.lnw-open-ico { font-size:var(--text-body); }
+.lnw-cta-note { color: var(--muted); font-size:var(--text-small); }
 
 /* ── Modal overlay ────────────────────────────────────────────────────────── */
 .lnw-modal {
@@ -82,12 +82,12 @@
 .lnw-eyebrow {
   margin: 0 0 4px;
   color: var(--accent-ink);
-  font-size: 0.72rem;
+  font-size:var(--text-control-sm);
   letter-spacing: 0.09em;
   text-transform: uppercase;
   font-weight: 700;
 }
-.lnw-title { margin: 0 0 14px; font-size: 1.32rem; line-height: 1.2; }
+.lnw-title { margin: 0 0 14px; font-size:var(--text-h4); line-height: 1.2; }
 .lnw-lede { margin: 0 0 14px; color: var(--muted); font-size: 0.95rem; }
 .lnw-lede.lnw-warn { color: var(--warn); font-weight: 600; }
 
@@ -139,7 +139,7 @@
   border: 0;
   background: var(--bg);
   color: var(--muted);
-  font-size: 0.85rem;
+  font-size:var(--text-small);
   font-weight: 600;
   cursor: pointer;
 }
@@ -154,7 +154,7 @@
   background: var(--bg);
   color: var(--ink);
   font: inherit;
-  font-size: 0.9rem;
+  font-size:var(--text-small);
 }
 
 /* ── Freeform step ────────────────────────────────────────────────────────── */
@@ -209,7 +209,7 @@
 .learn-eyebrow {
   margin: 0 0 2px;
   color: var(--accent-ink);
-  font-size: 0.72rem;
+  font-size:var(--text-control-sm);
   letter-spacing: 0.09em;
   text-transform: uppercase;
   font-weight: 700;
@@ -223,7 +223,7 @@
   border-radius: 50%;
   background: var(--bg);
   color: var(--muted);
-  font-size: 1.3rem;
+  font-size:var(--text-h4);
   line-height: 1;
   cursor: pointer;
 }
@@ -235,20 +235,20 @@
   background: var(--card);
 }
 .learn-empty { margin: 0; color: var(--muted); }
-.learn-stat { margin: 0 0 6px; font-size: 1.05rem; }
+.learn-stat { margin: 0 0 6px; font-size:var(--text-body); }
 .learn-pct {
   margin-left: 8px;
   padding: 2px 8px;
   border-radius: 999px;
   background: var(--green);
   color: #fff;
-  font-size: 0.8rem;
+  font-size:var(--text-control);
   font-weight: 700;
 }
 .learn-sub {
   margin: 14px 0 6px;
   color: var(--accent-ink);
-  font-size: 0.76rem;
+  font-size:var(--text-caption);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   font-weight: 700;
@@ -331,10 +331,10 @@
   border-radius: 8px;
   background: var(--card);
 }
-.learn-tally-group { font-size: 0.86rem; font-weight: 600; }
+.learn-tally-group { font-size:var(--text-small); font-weight: 600; }
 .learn-tally-count {
   font-family: var(--font-data);
-  font-size: 0.82rem;
+  font-size:var(--text-control);
   font-variant-numeric: tabular-nums;
   color: var(--warn);
   border: 1px solid var(--warn);

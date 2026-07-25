@@ -15,7 +15,7 @@
 .hub-hero-eyebrow{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:#dfe4d8}
 .hub-hero-title{font-family:var(--font-display);font-weight:780;font-size:clamp(1.7rem,4.6vw,3rem);letter-spacing:-.03em;line-height:1.04;text-shadow:0 1px 12px rgba(0,0,0,.35)}
 .hub-hero-meta{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.15rem}
-.hub-hero-count,.hub-hero-wx,.hub-hero-days{font-family:var(--font-data);font-size:.74rem;font-weight:600;padding:.28rem .6rem;border-radius:999px;background:rgba(20,24,28,.55);border:1px solid rgba(244,246,239,.25);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.hub-hero-count,.hub-hero-wx,.hub-hero-days{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;padding:.28rem .6rem;border-radius:999px;background:rgba(20,24,28,.55);border:1px solid rgba(244,246,239,.25);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .hub-hero-count{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 /* A finished trip's date is a fact, not a countdown — drop the accent fill so it reads as
    a quiet timestamp beside the other meta pills instead of shouting urgency that's over. */
@@ -31,7 +31,7 @@
 .hub-search{width:100%;max-width:26rem;padding:.6rem .85rem;font:inherit;font-size:.95rem;color:var(--ink);background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md)}
 .hub-search:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .hub-chips{display:flex;flex-wrap:wrap;gap:.4rem}
-.hub-chip{position:relative;font-family:var(--font-data);font-size:.74rem;font-weight:600;letter-spacing:.03em;padding:.42rem .8rem;min-height:34px;background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:999px;cursor:pointer;transition:border-color .15s,background .15s}
+.hub-chip{position:relative;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.03em;padding:.42rem .8rem;min-height:34px;background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:999px;cursor:pointer;transition:border-color .15s,background .15s}
 /* U11: 34px was under the ~44px Apple HIG / Material tap-target minimum. A vertical-only
    ::after halo (same technique as guide.css's touch-target expander) grows the effective
    hit region without changing the chip's visual size or row density — horizontal growth is

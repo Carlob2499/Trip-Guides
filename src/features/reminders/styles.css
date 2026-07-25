@@ -9,7 +9,7 @@
 .rm-eyebrow {
   margin: 0 0 2px;
   color: var(--accent-ink);
-  font-size: 0.72rem;
+  font-size:var(--text-control-sm);
   letter-spacing: 0.09em;
   text-transform: uppercase;
   font-weight: 700;
@@ -26,7 +26,7 @@
   background: var(--bg2);
   border-radius: 0 6px 6px 0;
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size:var(--text-control);
 }
 
 .rm-new {
@@ -79,11 +79,11 @@
 /* A pinned item is the one you're about to need at a station entrance — give it the accent
    edge so it's findable at a glance, one-handed, in the rain. */
 .rm-item-pinned { border-left: 3px solid var(--accent); }
-.rm-ico { flex: none; font-size: 1rem; line-height: 1.5; }
+.rm-ico { flex: none; font-size:var(--text-body); line-height: 1.5; }
 .rm-body { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .rm-label {
   font-family: var(--font-data);
-  font-size: 0.66rem;
+  font-size:var(--text-micro);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -94,7 +94,7 @@
    it be selectable at a size you can actually read. */
 .rm-code {
   font-family: var(--font-data);
-  font-size: 1.12rem;
+  font-size:var(--text-lead);
   font-weight: 700;
   letter-spacing: 0.06em;
   user-select: all;
@@ -109,14 +109,14 @@
   line-height: 1;
   padding: 2px 4px;
 }
-.rm-pin { font-size: 1.05rem; }
-.rm-del { font-size: 1.25rem; }
+.rm-pin { font-size:var(--text-body); }
+.rm-del { font-size:var(--text-h4); }
 .rm-pin[aria-pressed="true"] { color: var(--accent-ink); }
 .rm-pin:hover, .rm-del:hover { color: var(--ink); }
 .rm-pin:focus-visible, .rm-del:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
 
 /* Live indicator — mirrors the budget's passive status line. */
-.rm-live { display: inline-flex; align-items: center; gap: 7px; margin-top: 12px; font-size: 0.82rem; color: var(--muted); }
+.rm-live { display: inline-flex; align-items: center; gap: 7px; margin-top: 12px; font-size:var(--text-control); color: var(--muted); }
 .rm-live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--rule2); }
 .rm-live[data-state="live"] .rm-live-dot { background: var(--green); }
 .rm-live[data-state="offline"] .rm-live-dot { background: var(--warn); }

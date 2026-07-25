@@ -13,6 +13,6 @@
 @media(prefers-reduced-motion:reduce){.pin-flash{transition:none}}
 
 /* Google info-window content (rendered only when the Google renderer is active). */
-.wpop-local{display:block;font-family:var(--font-data);font-size:.8rem;color:var(--muted);margin-top:.15rem}
+.wpop-local{display:block;font-family:var(--font-data);font-size:var(--text-control);color:var(--muted);margin-top:.15rem}
 .wpop-dir,.wpop-jump{display:inline-block;margin-top:.35rem;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink)}
 .wpop-dir{margin-right:.7rem}

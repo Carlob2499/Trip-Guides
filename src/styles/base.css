@@ -52,17 +52,30 @@
      (which now READS the token, below, so the anchor is stated once instead of duplicated),
      --text-display matches .masthead h1's clamp (guide.css) — so declaring the scale never
      silently redefined either.
+     THE SCALE NAMES CONTROLS NOW, NOT JUST PROSE. micro/caption/small/body/lead/h* are all
+     PROSE roles, and for a long time they were the only steps on offer — so anything that was
+     a button, tab, pill, badge or counter had nowhere to land and invented its own size. That
+     shows up in the measurements as two of the largest clusters in the entire codebase sitting
+     in the GAPS between prose steps: 27 declarations at .72rem and 26 at .82rem, none of them
+     prose (.topbar-btn, .cold-open-x, .ov-pill, .offline-pill, .tk-step-n, .pg-percent at the
+     smaller one; .gtab, .ro-sheet-apply, .addr-card-copy, footer, .wx-note at the larger). 47
+     authors independently reaching past the scale is the scale being under-specified, not 47
+     mistakes — so --text-control-sm and --text-control name that role at its two real
+     densities, and --text-h4 does the same for the card/sheet titles clustered at ~1.3rem
+     inside the old 1.15 -> 1.6 gap. Naming those three steps converted 79 declarations from
+     "would have to shift size" to "already exact", which is why they exist.
      MIGRATION STATUS (measured, not estimated — 388 font-size declarations exist in src/):
        · --text-micro/--tracking-micro: migrated wholesale, the fix for the diagnosed
          "undeclared 4th role" (uppercase tracked micro-labels spanning 12 sizes, 9 tracking
          values and 2 typefaces for what is structurally one role).
-       · Every OTHER step: the declarations that already equalled a step exactly are now on the
-         token (zero rendered change, by construction). What remains hardcoded is the genuinely
-         off-scale majority — ~250 declarations across ~74 distinct values, each of which would
-         SHIFT in size to adopt a step. That is a per-cluster design decision, not a refactor,
-         and it is deliberately not being absorbed silently.
-     Two exact-match sites were left hardcoded ON PURPOSE, and should stay that way: the
-     collapsible-card summary::before (.68rem sizes content:"▶", a glyph, not a label) and
+       · Everything within 4% of a step is now ON that step. Exact matches cannot change size at
+         all; the rest shift by at most half a pixel (the widest is .85rem -> .88rem, 13.6px ->
+         14.08px), which is why absorbing them was safe to do in one pass.
+       · What deliberately REMAINS hardcoded: ~70 declarations further than 4% from any step,
+         where adopting one would be a visible size change and therefore a design decision per
+         cluster, plus ~20 that are clamp()/em/pt and have no business being a fixed step.
+     Two sites are left hardcoded ON PURPOSE despite matching a step, and should stay that way:
+     the collapsible-card summary::before (.68rem sizes content:"▶", a glyph, not a label) and
      .day-num (planner.css documents its size as contrast-gated at the bold-large-text cutoff,
      and its mobile override is a literal — tokenizing half the rule would split it). */
   --text-micro:.68rem;      /* uppercase tracked micro-labels — MIGRATED: 44 rules use --font-data
@@ -70,10 +83,13 @@
   --tracking-micro:.06em;   /* the modal value: 16 of ~50 existing rules already use this exact
                                 tracking; a few larger display-scale eyebrows (e.g. the masthead's
                                 own eyebrow) deliberately track wider and stay outside this token */
+  --text-control-sm:.72rem; /* compact controls: pills, badges, counters, icon buttons */
   --text-caption:.78rem;    /* small captions, meta text */
+  --text-control:.82rem;    /* standard controls: tabs, action buttons, and the notes beside them */
   --text-small:.88rem;      /* secondary body text, UI chrome */
   --text-body:1.02rem;      /* primary reading size — body{font-size} reads this token */
   --text-lead:1.15rem;      /* lead paragraphs, dek text */
+  --text-h4:1.3rem;         /* card / sheet / section titles */
   --text-h3:1.6rem;
   --text-h2:2rem;
   --text-display:clamp(2.8rem,8vw,4.8rem); /* MATCHES .masthead h1's clamp in guide.css, not new */

@@ -4,7 +4,7 @@
    a clean single sheet (stops ladder, checklist, notes). Normal Ctrl+P without
    the attribute keeps the existing full-guide print behavior. */
 
-.day-print-btn{display:inline-flex;align-items:center;gap:.3rem;margin:.4rem 0 0;padding:.3rem .7rem;font-family:var(--font-data);font-size:.7rem;font-weight:600;color:var(--muted);background:transparent;border:1px solid var(--rule);border-radius:999px;cursor:pointer}
+.day-print-btn{display:inline-flex;align-items:center;gap:.3rem;margin:.4rem 0 0;padding:.3rem .7rem;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;color:var(--muted);background:transparent;border:1px solid var(--rule);border-radius:999px;cursor:pointer}
 .day-print-btn:hover{color:var(--ink);border-color:var(--ink)}
 
 @media print{

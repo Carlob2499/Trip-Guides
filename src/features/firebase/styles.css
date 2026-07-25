@@ -50,7 +50,7 @@
   border-left-width: 3px;
   border-radius: var(--r-md);
   background: color-mix(in srgb, #d98a00 7%, transparent);
-  font-size: .8rem;
+  font-size:var(--text-control);
   line-height: 1.5;
   color: var(--muted);
 }
