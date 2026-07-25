@@ -39,7 +39,12 @@ export function parseIssueBody(body) {
 // hyphens — never trust it as a path segment otherwise. Re-exported from the shared
 // scripts/lib/slug.mjs so every pipeline entry point (this file, pipeline.mjs, the
 // workflows) validates identically instead of drifting.
-export { isValidSlug } from "./lib/slug.mjs";
+// import-then-export, NOT a bare re-export: `export { x } from "…"` forwards the symbol to
+// importers without creating a local binding, so the CLI path below called an undefined
+// isValidSlug and threw. The tests never saw it — they import the symbol from outside, where
+// forwarding works fine.
+import { isValidSlug } from "./lib/slug.mjs";
+export { isValidSlug };
 
 // E8·2: the flat-vs-directory resolution order now lives once in scripts/lib/guide-shape.mjs
 // (shared with graduate-guide.yml's own copy, via the `node -e` call below, and with
