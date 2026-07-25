@@ -43,7 +43,7 @@ body:
         wedding). This is the most perishable, most important fact on the trip — the research
         pass verifies its date + venue against an official source FIRST. Include a source URL
         if you have one.
-      placeholder: e.g. Pokémon GO Wild Area — Mexico City, Nov 6–8 2026 (pokemongolive.com)
+      placeholder: e.g. the festival, concert or match the trip is built around — with its official source URL
     validations:
       required: false
   - type: input
