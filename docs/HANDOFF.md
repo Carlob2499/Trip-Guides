@@ -37,12 +37,16 @@ all pushed, all three CI workflows green.
   Colour-contrast keys now carry a documented ±3 tolerance (`LAYOUT_JITTER`), everything else stays
   exact, and both failure branches were deliberately triggered to prove it still bites. The
   zero-tolerance novelty check — the part that catches real bugs — is untouched.
-- **Type scale: 60 → 296 of 388 declarations tokenized (76%); distinct hardcoded values 82 → 42.**
-  The unlock: the scale only named PROSE roles, so every button/tab/pill invented its own size — 27
-  declarations at `.72rem`, 26 at `.82rem`, both sitting in GAPS between steps. Added
-  `--text-control-sm` (.72), `--text-control` (.82), `--text-h4` (1.3). **Naming those three turned
-  79 declarations from "must shift size" into "already exact"**, so migrating 179 (57 exact + 122
-  within 4%) moved nothing more than 3.9% — half a pixel. Verified rendered, not computed.
+- **Type scale: 60 → 360 of 388 declarations tokenized (93%), in three widening passes**, and now
+  GUARDED — `src/styles/type-scale.test.ts` fails the build on a new bare literal, so the number
+  can't quietly slide back. The unlock: the scale only named PROSE roles, so every button/tab/pill
+  invented its own size — 27 declarations at `.72rem`, 26 at `.82rem`, both in GAPS between steps.
+  Added `--text-control-sm` (.72), `--text-control` (.82), `--text-h4` (1.3); **naming those three
+  turned 79 declarations from "must shift size" into "already exact."** A later pass added
+  `--text-nano` (.6) for 12 credits/badges/numerals sitting below the old floor. Largest size
+  change on the whole site across all three passes: 7.7%. Verified rendered, not computed.
+  Side effect worth knowing: `.cur-in`/`.hub-search` crossed 16px, so iOS stops auto-zooming those
+  inputs on focus.
 - **Four sites are hard-skipped and must stay so:** two `summary::before` rules (font-size there
   sizes `content:"▶"`, a glyph) and `.day-num`'s desktop AND mobile rules, contrast-gated at axe's
   bold-large-text cutoff — its mobile `1.2rem` is only 4.3% from `--text-lead`, so a looser
@@ -67,17 +71,19 @@ made CI fail on font metrics, which teaches everyone to ignore a red a11y workfl
 
 ## Left to do
 
-1. **The last 70 off-scale font-sizes** — everything within 4% of a step is already on one. What
-   remains is >4% from any step, so adopting one is a VISIBLE size change: a design decision per
-   cluster, best made with the pages on screen, not a refactor. The clusters worth deciding, by
-   size (value, count, nearest step, shift it would take):
-   `.92rem` ×16 → small +4.5% · `.95rem` ×12 → body −6.9% · `1.1rem` ×8 → lead −4.3% ·
-   `.62rem` ×5 and `.6rem` ×5 and `.58rem` ×2 → micro −9/−12/−15% (a genuine sub-micro cluster —
-   consider whether it wants its own step rather than being forced up) · `1.5rem` ×5 → h3 −6.3% ·
-   `1.4rem` ×2 → h4 +7.7%. The tail below that is 1–2 uses each.
-2. **20 `clamp()`/`em`/`pt` font-sizes are deliberately NOT scale candidates** — responsive display
-   clamps, intentionally-relative `em`, and print `pt`. Leave them.
-3. Nothing else is outstanding. Both earlier open items are closed (see Snapshot).
+1. **Form inputs are split across two sizes, and it's a real iOS bug** — `.cur-in` and
+   `.hub-search` are now ≥16px so Safari no longer auto-zooms on focus, but `.ng-field input`,
+   `.tk-entry-select` and `.rm-in` sit at 14.08px and still trigger it. Making them all
+   `--text-body` fixes the zoom-jump but visibly enlarges those fields, so it wants a decision
+   rather than a codemod.
+2. **Fluid type for the heading band** (the ~1.3–1.6rem sizes) is the open architectural idea —
+   phone-vs-desktop is currently handled by hand-written breakpoints. Body/UI text should stay
+   fixed (a phone is held closer; shrinking body text hurts). Two cautions live in
+   `base.css`'s comment and `.day-num`: fluid sizes cross axe's 18.7px large-text threshold
+   continuously, at widths nobody tests, silently changing which contrast bar applies.
+3. **The type scale is otherwise closed and now self-defending** — 360/388 tokenized, with
+   `src/styles/type-scale.test.ts` failing the build on any new bare literal. To add a legitimate
+   exception, extend its ALLOWED list with a reason; the list is closed on purpose.
 
 ## Owner tasks (unchanged, still outstanding)
 
@@ -97,9 +103,9 @@ zero-click Worker) is complete and live; detail in `docs/PIPELINE.md` and the gi
 ## Where we left off
 
 Everything open at close #5 is closed (details in Snapshot). The through-line: the type-scale
-migration turned out to be a NAMING problem, not a sizing problem — name the roles the codebase is
-already using and most of the "migration" becomes exact matches. What remains needs eyes on pages,
-not a codemod.
+migration was a NAMING problem, not a sizing problem — name the roles the codebase is already
+using and most of the "migration" becomes exact matches. It ended at 93% with a drift guard
+holding it there, because adoption is a state you hold, not one you reach.
 
 Still deliberately untouched: `git stash list` holds `stash@{0}: WIP on main: 541b755 …`, based on
 a commit far behind `main`.
@@ -109,9 +115,10 @@ are fixed — all three were test bugs, not source bugs, so e2e is 41/41 for the
 found and fixed a CI red we'd caused ourselves: the a11y gate was pinning its baselines to whatever
 machine last ran the suite, so CI's Linux fonts made it fail on a push with no a11y change in it;
 it now has a measured tolerance, and I deliberately failed both of its branches to confirm it still
-catches real growth. The type scale got to 76% tokenized (60 → 296 of 388), and the reason it could
-is worth knowing: the scale only ever named prose roles, so every button, tab and pill in the
-codebase had invented its own size — 47 of them clustered in the gaps between steps. Naming those
-control sizes turned 79 declarations from 'must shift' into 'already exact', so the biggest size
-change anywhere on the site was half a pixel. What's left is 70 genuinely off-scale sizes that want
-your eyes on the actual pages rather than a codemod — want to do that pass, or move on?"
+catches real growth. The type scale is done and defended: 93% tokenized (60 → 360 of 388), with a
+guard that fails the build on any new stray size. The reason it got that far is worth knowing — the
+scale only ever named prose roles, so every button, tab and pill had invented its own size, 47 of
+them clustered in the gaps between steps. Naming those control sizes turned 79 declarations from
+'must shift' into 'already exact', so the biggest change anywhere on the site was 7.7%. Two things
+left on my list, both needing you rather than a codemod: some form inputs are still under 16px and
+will make iOS zoom when tapped, and fluid sizing for the heading band is an open idea. Where next?"
