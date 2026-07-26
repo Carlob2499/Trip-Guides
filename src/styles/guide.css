@@ -251,8 +251,6 @@ a.stale-pill:hover{background:color-mix(in srgb,var(--warn) 12%,transparent)}
 .tag{display:inline-block;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink);margin-bottom:.3rem}
 .note{font-size:var(--text-small);color:var(--muted)}
 .cardimg{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:5px;margin:.1rem 0 .2rem;background:var(--bg2)}
-.imgfail{position:relative}
-.imgfail::after{content:"Photo loads online";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-data);font-size:var(--text-control-sm);letter-spacing:.04em;color:var(--muted);background:var(--bg2)}
 .imgcredit{display:block;font-size:var(--text-control-sm);color:var(--muted);margin:0 0 .85rem;text-align:right;font-family:var(--font-data)}
 .imgcredit a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--rule2)}
 /* "Get me there" transit deep-links (docs/FEATURES.md #1) — a small pill-button row on
@@ -680,7 +678,6 @@ details table{margin:.3rem 0 .4rem}
 
   /* Images: keep with their caption, limit size */
   .cardimg { max-height: 180px; object-fit: cover; break-inside: avoid; }
-  .imgfail { display: none !important; }
 
   /* Budget: hide "Your spend" column and inputs, keep estimates + trip total visible */
   /* .btotal is excluded so the user's persisted actual-spend total prints correctly */

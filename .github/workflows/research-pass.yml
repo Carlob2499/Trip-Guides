@@ -19,14 +19,14 @@ name: Research pass
 # marginal against your plan. Prerequisites:
 #   - CLAUDE_CODE_OAUTH_TOKEN secret set in repo Settings → Secrets → Actions.
 #     Generate it once locally with `claude setup-token` (Pro/Max only) and paste the value.
-#   - The guide's scaffold exists at src/content/guides/<slug>.json
+#   - The guide's scaffold exists at src/content/guides/<slug>/ (_guide.json + NN-*.json)
 #
 # Usage: Actions → Research pass → Run workflow → enter slug (and optionally section)
 on:
   workflow_dispatch:
     inputs:
       slug:
-        description: "Guide slug (e.g. japan, sweden). Must match src/content/guides/<slug>.json"
+        description: "Guide slug (e.g. japan, sweden). Must match src/content/guides/<slug>/"
         required: true
         type: string
       section:
@@ -186,7 +186,10 @@ jobs:
             404 can be a live page (retry once, judge by content); bot-blocked → mark and move on;
             aggregators are leads, never citations.
 
-            Target guide: src/content/guides/${{ inputs.slug }}.json
+            Target guide: the DIRECTORY src/content/guides/${{ inputs.slug }}/ — _guide.json (meta)
+            + one NN-<group>.json per tab group. Edit the group file a fact lives in; NEVER create a
+            flat src/content/guides/${{ inputs.slug }}.json (a flat file wins path resolution and
+            would silently shadow the directory — the build fails on one).
             ${{ inputs.section != '' && format('Scope this pass to the "{0}" section only; leave all other sections as-is.', inputs.section) || '' }}
 
             RESUMABLE — START BY CHECKING WHERE YOU ARE. This run may be a fresh start OR a resume of
@@ -336,7 +339,7 @@ jobs:
               yourself.
 
             Never touch any guide other than
-            src/content/guides/${{ inputs.slug }}.json (or its split-directory equivalent) and its
+            src/content/guides/${{ inputs.slug }}/ and its
             guides-intake/${{ inputs.slug }}.md + .state.json + src/data/palettes/${{ inputs.slug }}.json.
 
             FINALLY, write a short run report to `run-report.md` (repo root, gitignored — do NOT

@@ -20,58 +20,37 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (updated 2026-07-25, session close #7)
+## Snapshot (updated 2026-07-26, session close #8 — the audit session)
 
-**The catalog now has exactly one shape, and three gates hold it there.** Build clean, 832 unit
-tests, `astro check` 0 errors, e2e **55/55**.
+**A full adversarial audit ran (3 parallel passes: design/frontend, CI + live run history,
+build/perf) and its findings + executor program live in `docs/PLAN_MODERNIZE.md` — read that
+file, it is this session's real output.** Branch `claude/waypoint-audit-modernize-tne4ce`.
+Build clean, **848** unit tests, lint 0, `astro check` 0 errors.
 
-- **Every guide is a directory.** Three of five were still flat `<slug>.json` and nothing said so —
-  both shapes build, and the flat file *wins* in `resolveGuidePath`, so a stray one silently
-  shadows the directory beside it. Split via the existing tested `split-guide.mjs`;
-  `scaffold-guide.mjs` now writes the flat file only as that splitter's input, so a new guide never
-  persists in the legacy shape, and `uniqueSlug()` checks directory collisions too.
-  `scripts/__tests__/guide-shape-uniform.test.mjs` fails the suite on any flat guide.
-- **Mexico and Portugal are out.** Their guide directories and intake `.md` files were MOVED, not
-  deleted — see Owner tasks. Deliberately kept: `src/data/countries.mjs` holds verified, dated
-  emergency-number data for both, which serves the SOS sheet and any future guide there; deleting
-  it would destroy research, not remove a relic. Two form placeholders naming Mexico City are now
-  generic. `dist/` greps clean.
-- **`tests/visual/exports.spec.ts` is new** — it holds the SERVED `.gpx`/`.ics` for every guide to
-  GPX 1.1 and RFC 5545 (CRLF, ≤75 **octets** per folded line, VEVENT completeness, unique UIDs,
-  escaped `,`/`;`). The unit tests only ever saw strings their author typed; real guide prose is
-  what breaks folding. Slugs come from disk, so a new guide is covered the moment it exists.
-- **ESLint went 277 → 0 and is now a CI gate** (a `npm run lint` step in `test.yml`, wired only
-  once it was at zero so red always means a new regression). Three quarters of the 277 was the
-  config describing the wrong world: `public/sw.js` and `worker/index.mjs` are service workers
-  linted as Node, and 81 more were this repo's deliberate `catch { }` idiom.
-- **Its first pass found a live crash nothing else could see.** `scripts/graduate-guide.mjs` called
-  an `isValidSlug` it only ever RE-exported — `export { x } from "…"` gives importers the symbol but
-  creates no local binding — so the CLI threw `ReferenceError`. 832 unit tests, `astro check` and
-  55 e2e were all green over it, because every one of them exercises the module from outside, where
-  forwarding works. Fixed and verified by running the CLI.
-- **`no-explicit-any` is OFF, as a recorded debt.** All 154 are one shape: functions walking the
-  guide JSON, plus `.astro` props Astro hands over untyped. The real type already exists —
-  `CollectionEntry<"guides">["data"]`, inferred from the Zod schema — and threading it through the
-  section discriminated union is a project, not a lint fix. `astro check` remains the type gate at
-  0 errors.
-- **`fast-uri` pinned to 3.1.4** via `overrides`, clearing the one high Dependabot alert. Dev-only,
-  four levels deep under `@astrojs/check`; it never reached the shipped bundle.
-- **CodeQL: 4 of 8 alerts were real.** The worst was `exports.ts` double-unescaping — `htmlToText`
-  decoded `&amp;` FIRST, so an author writing `&amp;lt;b&amp;gt;` (meaning the literal text
-  `&lt;b&gt;`) had it decoded twice into `<b>`, which the next line stripped as a tag. The word did
-  not come out wrong, **it came out missing**, in every shipped `.ics`/`.gpx`. Also: `staleness-ui`
-  assigned `data-source-url` straight to `href` (the schema's `z.url()` accepts `javascript:`),
-  `progress.js` took `?slug=` unvalidated into an href, `field-tools` interpolated an unowned
-  currency code into `innerHTML`. The other 4 are documented false positives — dismiss in the
-  Security tab.
-- **Trip Split's "+ Add person" was writing to a room the rules always denied.** Denmark and Korea
-  had no `roomId`, so `GuideLayout`'s `guide.roomId ?? storeKey` fallback handed Firebase the slug
-  — `"denmark"`, 7 chars, against a rule requiring 16–40. Invisible because `trip-split.js:121`
-  routes to the room and never touches local state, and `sync.js` ended the write with
-  `.catch(function () {})`. RTDB applies writes locally first, so a row appeared, the server
-  rejected it, the row vanished, silently. Both guides now carry real 16-char codes and `sync.js`
-  surfaces failures, distinguishing PERMANENT rejections from offline queuing. Confirmed working
-  live by the creator.
+- **The finding that matters: the agent half of the pipeline has NEVER run.** research-pass: 2
+  runs, both died pre-work (org typo; missing token). recert: 1 run, first model call errored
+  (`is_error`, 1 turn, $0) — the "cosmetic" diagnosis in 389b229 is contradicted by that shape.
+  The `us` guide was researched interactively (state stamps 80 ms apart, attempts 0). Three
+  untested seams stacked behind it: the action's human-actor gate vs the bot auto-dispatch,
+  `gh` auth inside the agent's Bash, and token-canary alerting "rotate" on any `is_error`.
+  M0 in PLAN_MODERNIZE is the resuscitation session — it gates everything else.
+- **Fixed this session:** Trip Split desktop rows were misaligned (5-col grid for a drag handle
+  the JS no longer renders — payer select crammed into a 1.3rem column; CSS-only fix, no data
+  touched) · dead `.se-drag`/`.imgfail` rules removed · root `mexico.json` (UTF-16 mojibake
+  stray) and root `wrangler.jsonc` (the Boundary-Check-#1 footgun) deleted · every stale flat
+  `<slug>.json` reference in new-guide/graduate-guide/research-pass fixed (the scaffold comment
+  404'd for every future guide; the research prompt could have induced an agent to CREATE a
+  shadowing flat file).
+- **Measured baseline (details in the plan):** first-paint JS lean (~35 KB gz guide), CLS 0.244
+  with cause identified (4 post-paint injected strips + 0/21 images with dimensions), zero
+  modulepreload/font preloads, no `--space-*`/z-index scales (skip-link paints under story
+  mode), 111 `: any`, dist 3.95 MB (42% on-demand pdfjs, NOT in the SW precache).
+
+Standing context from session #7 (detail in git history / `git show 3dc5349:docs/HANDOFF.md`):
+every guide is a directory and a test enforces it · Mexico/Portugal retired (their researched
+`countries.mjs` rows deliberately kept) · served `.gpx`/`.ics` spec-tested · ESLint 277→0 and a
+CI gate · CodeQL's 4 real alerts fixed · Trip Split room codes real + sync failures surfaced,
+confirmed live by the creator.
 
 ## Left to do
 
@@ -123,25 +102,19 @@ The W0–W5 arc is complete and live; detail in `docs/PIPELINE.md` and the git l
 
 ## Where we left off
 
-Two lessons, and they are the same lesson from opposite ends.
+The lesson of the audit: **every green gate this repo owns measures the artifact; none of them
+measure the factory.** 848 tests, lint 0, typecheck 0, 248 green deploys — and the agent layer
+of the pipeline has still never executed one research stage, because run *history* was the gate
+nobody read. The `us` guide passing every check made the pipeline look proven while proving only
+that a human can do the pipeline's job.
 
-**Two shapes that both build is not a tolerated variation, it is an undetected one.** The flat guide
-won path resolution, so the shape meant to be legacy was the shape that would have silently won.
-Uniformity had to become a test before it could become a fact.
-
-**Every gate this repo owned tested the code from OUTSIDE, so none of them could see a module whose
-own scope was broken.** `graduate-guide.mjs` re-exported `isValidSlug` without importing it: fine
-for every importer, `ReferenceError` for the module itself. 832 unit tests, `astro check` and 55 e2e
-were green over a crash. ESLint found it on its first run, which is the whole argument for adding a
-tool that reads the file rather than calling it.
-
-**Re-prompt the creator with:** "Everything from last session is closed. Every trip is a directory
-now, the scaffold emits that shape, and a test fails the build on a flat one — it mattered because a
-flat guide *wins* path resolution, so the legacy shape would have quietly shadowed the new one.
-Mexico and Portugal are gone. There's a new gate on the built `.gpx`/`.ics` files, because the unit
-tests only ever saw strings we typed and real guide prose is what breaks iCalendar folding. ESLint
-went 277 to 0 and is wired into CI — and on its first run it found a live `ReferenceError` in
-graduate-guide that 832 green tests, astro check and 55 e2e all missed, because every one of them
-tests from outside the module. Two things are open: 154 `any`s in the guide-JSON walkers, which
-wants the Zod-inferred type threaded through the section union, and six completed-plan docs that
-need you to say whether they're records or relics. Which one?"
+**Re-prompt the creator with:** "The full adversarial audit is done — findings and the M0–M6
+executor program are in `docs/PLAN_MODERNIZE.md` on branch
+`claude/waypoint-audit-modernize-tne4ce`. Headline: the agent half of the new-guide pipeline has
+never run (both research-pass runs died pre-work, recert's one run errored on its first model
+call, and Sedona was researched by hand) — M0 resuscitates and proves it end to end, and it
+gates everything else. Already fixed on the branch: a live Trip Split desktop misalignment, the
+dead drag/imgfail CSS, the stray mexico.json and root wrangler.jsonc, and the flat-path 404s in
+three workflows. Five clarifying questions are at the bottom of the plan (throwaway-guide
+cleanup, backend stance, room-code privacy, the six record-or-relic docs, and the M4 visual
+direction). Answer those, then M0 on Sonnet?"

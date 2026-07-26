@@ -74,7 +74,7 @@ jobs:
           git push origin HEAD:main
           GUIDE_URL="${SITE_BASE_URL}/guides/${SLUG}/"
           PROGRESS_URL="${SITE_BASE_URL}/progress/?slug=${SLUG}"
-          gh issue comment "${ISSUE_NUM}" --body "Scaffolded ✅ — committed straight to \`main\`: [\`src/content/guides/${SLUG}.json\`](https://github.com/${GITHUB_REPOSITORY}/blob/main/src/content/guides/${SLUG}.json). It's a **draft** (\`draft: true\`) — reachable directly at ${GUIDE_URL} (not listed on the hub grid while it's a draft) — and the research pass fills the facts from here per the intake spec: [\`guides-intake/${SLUG}.md\`](https://github.com/${GITHUB_REPOSITORY}/blob/main/guides-intake/${SLUG}.md).
+          gh issue comment "${ISSUE_NUM}" --body "Scaffolded ✅ — committed straight to \`main\`: [\`src/content/guides/${SLUG}/\`](https://github.com/${GITHUB_REPOSITORY}/tree/main/src/content/guides/${SLUG}) (\`_guide.json\` + per-tab \`NN-*.json\`). It's a **draft** (\`draft: true\`) — reachable directly at ${GUIDE_URL} (not listed on the hub grid while it's a draft) — and the research pass fills the facts from here per the intake spec: [\`guides-intake/${SLUG}.md\`](https://github.com/${GITHUB_REPOSITORY}/blob/main/guides-intake/${SLUG}.md).
 
           **Watch it happen:** ${PROGRESS_URL} — a live timer + step checklist (scaffold → Pass A → Pass B → reconcile → verify → published). Nothing to do here; that page updates itself.
 
