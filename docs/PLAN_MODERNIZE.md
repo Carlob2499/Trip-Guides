@@ -366,30 +366,81 @@ The five moves from §1.4, as one coherent pass (uniform-across-surfaces rule ap
 - Skills: `frontend-design` ON (Opus session); `ui-ux-pro-max` optional for palette/pattern
   cross-checks. Creator reviews the Opus spec (one message) before the Sonnet sweep.
 
-### M5 · Dynamic runtime (R3) — **Opus designs, Sonnet implements** (gated on Q2/Q3)
+### M5 · Dynamic runtime (R3) — **DONE 2026-07-26**
 
-PIPELINE.md's R3, unchanged in scope, sequenced after M2 (View Transitions on a CLS-0 base):
-hub⇄guide View Transitions, live-tile connection state machine, per-view layer (Focus Today /
-what's-open-now / weather day-swap). No new backend required for any of it — see Q2.
+**Surveyed before building, and most of R3 was already shipped** — worth recording so it isn't
+"re-done" later: cross-document View Transitions are live (`transitions.css`, `@view-transition`
++ the shared `cover-<slug>` element morphing hub card → guide masthead, with a reduced-motion
+branch); the connection state machine is live (`offline-pill.js`, literally headed "connection
+state machine (R3)", stamping `html[data-conn]` with CSS that dims live surfaces explicitly
+rather than leaving them silently stale); Focus Today ships in `field-tools`. So M5's real
+outstanding scope was the room-code work the creator asked for.
 
-Added per creator (2026-07-26): **room-code options** — zero-setup default stays, plus
-(a) a `#room=<code>` URL-fragment override: a group that wants privacy generates its own code
-(`scripts/gen-room-id.mjs` already exists) and shares the link privately; the fragment never
-reaches a server and is never committed, and the client prefers it over the guide's `roomId`;
-(b) **post-trip room lock**: N days after the trip's end date the client drops to read-only
-display — the data keeps serving the recap card and Plan⇄Actual, but no write UI is offered
-(that's the post-trip usefulness: the room becomes the trip's financial record, and locking
-protects it). A rules-level write-freeze is a possible later hardening; the client lock touches
-no existing data and no rules semantics.
+**`#room=` override** (`parseRoomHash`, `resolveRoomId(cfg, hash)` — pure, 12 new tests). The
+zero-setup default is untouched and still the default. A group wanting privacy generates a code
+(`scripts/gen-room-id.mjs`) and shares the link; a URL fragment is the right carrier precisely
+because browsers never send it to a server, so the code never enters the repo. Same 16–40 char
+validation as any other room code, so the URL can't smuggle a short guessable one in either.
+Wired at the single chokepoint (`firebase/index.js`'s `roomId()`), and `resolveRoomId(cfg)` with
+one argument behaves exactly as before.
 
-### M6 · Type-safety payoff — **Sonnet** (mechanical, anytime after M0)
+**Post-trip lock** — the answer to "what use is a room code post-trip?". The room stops being a
+live scratchpad and becomes the trip's financial record (it still feeds the recap and Plan⇄Actual);
+locking protects that record and retires a public code as a standing write invitation.
+`isPostTripLocked(end, now, graceDays)` is pure and tested; an UNDATED trip is never locked,
+because guessing "probably over" about someone's live trip is the worse failure. Client-side
+only — every `op*` in trip-split early-returns and `applyLock()` disables the controls with an
+explanatory note (a field that accepts typing and silently discards it is exactly the "slow
+failure wearing a helpful face" `model/room.ts` already warns about). **No database write, no
+rules change**, so no existing figure can be altered.
 
-Thread `CollectionEntry<"guides">["data"]` + the section discriminated union through the known
-hot files (`GuideLayout.astro` 24, `exports.ts` 14, `map-pins.ts` 14, `content.config.ts` 12,
-block components' map callbacks); turn `no-explicit-any` back ON. While in there: replace
-deprecated `unescape` (`vote-link.ts:44`), remove the `derivePlannerData` dead export, verify
-then remove the never-painting `.cardimg` base rule, split guide.css when it crosses 800.
-ESLint's first run found a live crash the whole test suite missed — this debt is the same class.
+**Shipped OPT-IN, default off** (`budgetLock` in `content.config.ts`). Caught while verifying:
+Korea's trip ended 15 Jul, so a 14-day grace would have silently frozen the creator's LIVE
+budget on 30 Jul — four days after this shipped. Freezing a surface people type into is a real
+behaviour change and not a fork to pick on their behalf. Verified in `dist/`: every guide ships
+`"budgetLock":false`.
+
+### M6 · Type-safety payoff — **DONE 2026-07-26** (the rule is ON, as a ratchet)
+
+`src/lib/guide-types.ts` now names the type once, DERIVED from the Zod schema rather than
+hand-written: `GuideData` = `CollectionEntry<"guides">["data"]`, `Section` = its section union,
+`SectionOf<T>` narrows to one kind, plus `DayItem`/`SightItem`/`isSection()`. A schema change
+propagates automatically; a stale interface can't drift from what the build validates.
+
+Converted, with the build output **byte-identical** before and after (same SW content hash —
+proof these were purely type-level, zero runtime effect): `map-pins.ts` (12→0), `buckets.ts`,
+`exports.ts` (11→0, incl. `flattenSections`/`collectWaypoints`/`buildGpx`/`buildIcs`), and the
+hub's own derivation in `index.astro`. **150 → 118 occurrences.**
+
+Three real defects the types surfaced, none of which any test could see:
+- `PlannerDay.energy` was typed `string` while the schema has always been a 3-value enum, and
+  `PlannerStop.lat/lng` were `number | null` while the mapping could yield `undefined` — a
+  hand-written type quietly drifting from the schema it mirrors.
+- `GuideLayout` looked up map pins with an unnarrowed section (`pinMap.get(o.s)`) where only a
+  map section can ever be a key.
+- The hub's `sight` predicate didn't narrow `img`, so `sight.img.file` was an unchecked access.
+
+**`no-explicit-any` is ON** (`"error"`), with an explicit 33-path exception list in
+`eslint.config.mjs` — a shrinking TODO that lives in the config where it is seen, instead of a
+rule switched off where it isn't. Converted files can no longer regress. **Forced the failure
+path once** (Boundary Check #2): adding an `any` to `buckets.ts` produces exactly one lint
+error; reverting returns to green. Also caught while wiring it: paths containing `[slug]` are
+glob CHARACTER CLASSES, so the four `[slug]` endpoints matched nothing and stayed red until
+rewritten with `*` — the config was silently not doing what it said.
+
+The stubborn tail is the `.astro` components (72 of the remaining 118): Astro types
+`Astro.props` as `any`, so each block component needs its own `Props` interface. Mechanical,
+individually small, and now gated against growth — the right shape for incremental work.
+
+Also corrected from the audit's M6 list: `vote-link.ts`'s deprecated `unescape` is NOT dead
+weight. The file carries an explicit warning that vote links **already shared with people**
+were encoded by that exact function and a TextEncoder rewrite differing in any edge case
+breaks every link in the wild. Left alone, deliberately. Likewise `derivePlannerData` and
+`relativeLuminance` were flagged as "unused exports" — both are tested public API of their
+modules, and deleting tested, working code to satisfy a reachability scan is not a cleanup.
+
+`guide.css` was split at its threshold: the print block moved to `src/styles/print.css`
+(one self-contained media query, no cascade interaction), 790 → 696 lines.
 
 ### Skill & token policy (standing, all M-sessions)
 
@@ -433,3 +484,35 @@ ESLint's first run found a live crash the whole test suite missed — this debt 
 5. **Q5 · M4 look changes — APPROVED**, with the creator's stated priority: the "More detail"
    controls (M4 item 6) must look far better and behave more intelligently. Implementation
    still pauses for the creator's one-message review of the Opus spec.
+
+---
+
+## Part 4 — Deliberately NOT done (and why)
+
+Everything in M1–M6 is complete; only M0's end-to-end proof remains, gated on the token. These
+three were in scope and were consciously left, rather than rushed:
+
+1. **`modulepreload` hints + font preloads (M2 tail).** Real wins — the ~11-chunk first-paint
+   graph is discovered as a sequential parse-time waterfall, and the two above-fold latin font
+   subsets aren't preloaded. Both need the built asset's real hashed filenames, which means
+   either a Vite manifest read or an `?url` import wired into the layout head. A hardcoded or
+   guessed hash silently 404s and is invisible until someone looks at a network panel, so this
+   wants a small build-time integration and a `dist/` assertion, not a hand-written tag.
+2. **The `--space-*` spacing scale (M3 tail).** The scale itself is easy; adopting it is not.
+   The repo has dozens of near-identical-but-unequal paddings (`.42rem 1.1rem`, `.34rem .72rem`,
+   `.55rem .8rem`…), and snapping them to a scale CHANGES pixels on nearly every surface. That
+   is a visual-design decision needing a real before/after review, which this environment cannot
+   do (no reliable screenshot path — see the a11y note in M4). Landing it blind would violate
+   the same "verify the px math, don't just assert zero visual change" lesson M3 already learned
+   the hard way with `--text-h1`.
+3. **Typing the `.astro` block props (M6 tail — 72 of the remaining 118 `any`s).** Astro types
+   `Astro.props` as `any`, so this is one `Props` interface per block component, each needing
+   the right `SectionOf<T>` and a check that the renderer still compiles against the narrowed
+   type. Mechanical and low-risk individually, but eleven components in one unverifiable pass is
+   how a silent rendering regression ships. The ratchet in `eslint.config.mjs` now prevents the
+   pile from growing, which is what makes doing them incrementally safe.
+
+Also worth keeping visible: **`a11y.spec.ts`'s `color-contrast/bgOverlap` baselines are
+calibrated to a different machine** than this sandbox (proven by node-level diff against
+fully-stashed code — see M4). They should be re-recorded from CI's own runner, which is the only
+machine whose counts the gate should encode.

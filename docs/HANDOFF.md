@@ -20,13 +20,13 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (updated 2026-07-26, session close #10 — M1–M4 COMPLETE; M0 blocked on the token)
+## Snapshot (updated 2026-07-26, session close #11 — M1–M6 COMPLETE; only M0's E2E proof left)
 
-**M1, M2, M3 and M4 are all COMPLETE. M0 is diagnosed and blocked on ONE owner action (rotate
-the OAuth token).** Branch `claude/waypoint-audit-modernize-tne4ce`. Full audit + executor
+**M1 through M6 are all COMPLETE. The ONLY thing left in the whole programme is M0's
+end-to-end pipeline proof, which is blocked on ONE owner action: rotate the OAuth token.** Branch `claude/waypoint-audit-modernize-tne4ce`. Full audit + executor
 program in `docs/PLAN_MODERNIZE.md` — read that file for the complete record; this is a summary.
-Build clean, **858** tests, lint 0, `astro check` 0 errors, perf budget green (worst first-paint
-page 124 KB / 200 KB).
+Build clean, **870** tests, lint 0 (`no-explicit-any` now ON as a ratchet), `astro check` 0
+errors, perf budget green (worst first-paint page 125 KB / 200 KB).
 
 - **M0 (blocked on the creator): `CLAUDE_CODE_OAUTH_TOKEN` is expired/revoked** — confirmed via a
   live dispatch: `401 OAuth access token is invalid`, not the "cosmetic" misdiagnosis from July
@@ -85,6 +85,26 @@ page 124 KB / 200 KB).
   `bgOverlap` failure all the way to the pre-session commit — it reproduces on fully-stashed code,
   so it's environment/font-stack drift the test's own comments already document, not a
   regression.
+- **M5 (dynamic runtime / room codes) DONE.** Surveyed first: View Transitions and the
+  connection state machine were ALREADY shipped in earlier sessions (transitions.css,
+  offline-pill.js) — recorded so nobody rebuilds them. The real work was the room-code options:
+  a `#room=` fragment override (private code, never enters the repo, never sent to a server;
+  same 16–40 char rule; wired at the one chokepoint) and a post-trip read-only lock that turns a
+  settled trip's budget into its financial record. **Opt-in, default off** (`budgetLock`): a
+  14-day grace would have silently frozen Korea's LIVE budget on 30 Jul, four days after
+  shipping, and that is not a fork to pick for the creator. Client-side only — no DB or rules
+  change. Verified in dist/: every guide ships `"budgetLock":false`.
+- **M6 (type safety) DONE — the rule is ON as a ratchet.** `src/lib/guide-types.ts` derives
+  `GuideData`/`Section`/`SectionOf<T>` from the Zod schema (never hand-written). Converted the
+  core walkers (map-pins, buckets, exports, hub derivation): **150 → 118** `any`s, with the
+  build output **byte-identical** before/after (same SW content hash — proof it was purely
+  type-level). The types surfaced 3 real defects no test could see, incl. `PlannerDay.energy`
+  typed `string` against a 3-value schema enum. `no-explicit-any` is now `"error"` with a
+  33-path exception list in eslint.config.mjs — a shrinking TODO in the config instead of a
+  rule switched off. Forced the failure once to prove it bites. Also learned the hard way:
+  `[slug]` in an ESLint `files` path is a glob CHARACTER CLASS, so those four endpoints matched
+  nothing until rewritten with `*`. guide.css split at its threshold (print block → print.css,
+  790 → 696 lines).
 - **Session #8 also fixed:** a live Trip Split desktop misalignment, dead `.se-drag`/`.imgfail`
   CSS, stray `mexico.json` + root `wrangler.jsonc`, stale flat-`<slug>.json` references.
 
@@ -150,20 +170,17 @@ region needed `tabindex`); one apparent a11y regression was investigated to grou
 be pre-existing environment drift, not a session-created bug — both documented in the plan rather
 than either ignored or wrongly "fixed."
 
-**Re-prompt the creator with:** "M1 through M4 are complete and pushed. M0's diagnosis is done: `CLAUDE_CODE_OAUTH_TOKEN` is expired —
-confirmed from the actual API response (401 OAuth access token is invalid), not inferred. Rotate
-it (`claude setup-token` → repo secret → re-run Token canary) and I'll immediately run the
-pipeline's first-ever real end-to-end proof: a throwaway guide through scaffold → research →
-verify → auto-graduate → land → live. While waiting on that, I finished M1 (CI efficiency), M2
-(the CLS 0.244's root causes — nav-hint, guide-stats, a real per-page perf budget), M3 (z-index
-scale, the skip-link/story-mode bug, a dead CSS declaration), and M4's centerpiece — the 'More
-detail' redesign you specifically asked for: it's now a real chip control, refuses to fold
-warnings, shows a fade preview of what's hidden, and animates open. 854 tests green. Full detail,
-including an a11y investigation that found one real bug and ruled out a false one, in
-`docs/PLAN_MODERNIZE.md`. M4 is now finished too — one icon language (every emoji gone from the
-chrome), a 2-up editorial hub, a one-row desktop tab strip, one onboarding device per view, and
-a colophon footer that signs each guide with its own counted verification numbers. 858 tests
-green. What's left: M0's end-to-end proof (needs the token), M5 (dynamic runtime / room-code
-options), M6 (the 111 `any`s), and the deferred M2 items — modulepreload/font preloads and the
-spacing-scale sweep. Note guide.css is at 790/800 lines; the next thing to touch it should split
-it."
+**Re-prompt the creator with:** "The whole M0–M6 programme is done except one thing, and that
+one thing needs you: `CLAUDE_CODE_OAUTH_TOKEN` is expired (confirmed from the real API response
+— 401 OAuth access token is invalid). Rotate it (`claude setup-token` → repo secret → re-run
+Token canary) and I'll run the pipeline's first-ever real end-to-end proof: a throwaway guide
+through scaffold → research → verify → auto-graduate → land → live. Everything else shipped:
+CI efficiency, the CLS root causes, the design-token foundation, the full visual pass (one icon
+language, editorial hub, one-row tab strip, sequenced onboarding, a colophon footer that signs
+each guide with its own counted verification numbers, and the More-detail redesign you asked
+for), room-code options (`#room=` override + an OPT-IN post-trip lock — default off, because
+turning it on by default would have frozen Korea's live budget on 30 Jul), and the type-safety
+debt (150→118 `any`s, `no-explicit-any` now ON as a ratchet with a shrinking exception list).
+870 tests green. Three things I deliberately did NOT do, each with a reason in the plan:
+modulepreload/font-preload hints, the `--space-*` spacing sweep, and typing the `.astro` block
+props — all real, all wanting their own pass rather than a rushed one."

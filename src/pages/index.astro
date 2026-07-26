@@ -8,6 +8,7 @@ import { accentForGuide, paletteAccentsForGuide } from "../lib/palettes";
 import { accentTokens, accentStyle } from "../lib/accent-tokens";
 import { generateContourLayer } from "../lib/contours";
 import { computeGuideStats } from "../lib/guide-stats";
+import type { SectionOf, SightItem } from "../lib/guide-types";
 import { tripWindow, localISODate } from "../lib/trip-dates";
 import { continentFor, CONTINENT_ORDER } from "../data/countries.mjs";
 import { flattenSections } from "../features/exports/index";
@@ -58,8 +59,12 @@ const guideExtras = guides.map(g => {
     // else: trip is past — no badge (a finished trip gets the static heroWhen treatment below)
   }
   // Hero/filter extras — all derivable at build from data the guide already has.
-  const mapSec  = flat.find((s: any) => s.type === "map" && typeof s.center?.lat === "number");
-  const sight   = flat.filter((s: any) => s.type === "sights").flatMap((s: any) => s.items || []).find((it: any) => it?.img?.file);
+  const mapSec  = flat.find((s): s is SectionOf<"map"> => s.type === "map" && typeof s.center?.lat === "number");
+  // The predicate narrows `img` for the consumer below, which the plain `!!it?.img?.file`
+  // form did not — that is why `sight.img.file` was flagged as possibly-undefined.
+  const sight = flat.filter((s): s is SectionOf<"sights"> => s.type === "sights")
+    .flatMap((s) => s.items || [])
+    .find((it): it is SightItem & { img: NonNullable<SightItem["img"]> } => !!it?.img?.file);
   const month   = firstDateStr?.split(/\s+/)[1] || "";
   // The card/hero cover: the guide's own `cover` art when set, else its first sight photo
   // (docs/MOTION.md). Same image the guide masthead uses — that's what makes them morph.

@@ -6,7 +6,14 @@
 // Date parsing is reused from ./holidays.ts so the iCal calendar resolves the
 // same trip year the holidays block already uses.
 
+import type { GuideData, Section, SectionOf } from "../../../lib/guide-types";
 import { parseGuideDate, deriveTripYear } from "../../../lib/holidays";
+
+/* Every public entry point here takes the WHOLE guide. `GuideData` is the exact validated
+   shape, but these are also called from build scripts and tests with hand-built objects that
+   carry only the fields a given export reads — so the parameter is GuideData widened to allow
+   that, rather than `any`, which gave up on checking the fields that ARE read. */
+export type GuideLike = Partial<GuideData> & { sections?: readonly Section[] };
 
 export interface Waypoint { lat: number; lng: number; name: string; }
 export interface DayEvent { date: Date; title: string; desc?: string; }
@@ -14,9 +21,16 @@ export interface DayEvent { date: Date; title: string; desc?: string; }
 // Recursive flatten — mirrors `flatten` in scripts/fetch-holidays.mjs and
 // `flatSections` in GuideLayout.astro. The schema is currently flat, but guides
 // may nest `sections`, so handle it defensively.
-export function flattenSections(sections: any[] | undefined | null, out: any[] = []): any[] {
+export function flattenSections(
+  sections: readonly Section[] | undefined | null,
+  out: Section[] = [],
+): Section[] {
   for (const s of sections || []) {
-    if (s && Array.isArray(s.sections)) flattenSections(s.sections, out);
+    // The schema (content.config.ts) has NO nested-sections member, and no guide on disk uses
+    // one — verified. This branch is defence for malformed/legacy input reaching a build, not a
+    // supported shape, hence the local cast rather than widening Section for everyone.
+    const nested = (s as { sections?: unknown })?.sections;
+    if (s && Array.isArray(nested)) flattenSections(nested as Section[], out);
     else if (s) out.push(s);
   }
   return out;
@@ -48,11 +62,11 @@ function htmlToText(s: string | undefined | null): string {
 // De-duped on the exact lat,lng,name triplet. Names: a map section's
 // `title`, or "<Country> map point" when untitled; a sight's `name`; a
 // waypoint's `name`.
-export function collectWaypoints(guide: any): Waypoint[] {
+export function collectWaypoints(guide: GuideLike): Waypoint[] {
   const country = guide?.country || "";
   const seen = new Set<string>();
   const out: Waypoint[] = [];
-  const push = (lat: any, lng: any, name: string) => {
+  const push = (lat: unknown, lng: unknown, name: string) => {
     if (typeof lat !== "number" || typeof lng !== "number") return;
     if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
     const key = `${lat},${lng},${name}`;
@@ -79,15 +93,16 @@ export function collectWaypoints(guide: any): Waypoint[] {
 }
 
 // The first `days` item's date string across the guide — anchors the trip year.
-function firstDayDate(guide: any): string | null {
-  const d = flattenSections(guide?.sections).find((s) => s.type === "days" && s.items?.length);
+function firstDayDate(guide: GuideLike): string | null {
+  const d = flattenSections(guide?.sections)
+    .find((s): s is SectionOf<"days"> => s.type === "days" && !!s.items?.length);
   return d?.items?.[0]?.date ?? null;
 }
 
 // One event per day card whose date string parses. Unparseable dates are
 // skipped (graceful — the file still emits). `desc` is the day's note (or, if
 // absent, its `fit`) stripped to plain text.
-export function collectDayEvents(guide: any): DayEvent[] {
+export function collectDayEvents(guide: GuideLike): DayEvent[] {
   const year = deriveTripYear(firstDayDate(guide));
   const out: DayEvent[] = [];
   for (const s of flattenSections(guide?.sections)) {
@@ -105,7 +120,7 @@ export function collectDayEvents(guide: any): DayEvent[] {
 // A brief, human-readable digest for the "Share summary" button: theme line,
 // the planned day-by-day one-liners, and the key locations. Plain text — the
 // client appends the guide URL at share time. Returns "" only for an empty guide.
-export function buildSummary(guide: any): string {
+export function buildSummary(guide: GuideLike): string {
   const out: string[] = [];
   const title = guide?.title || "Trip Guide";
   out.push(guide?.dek ? `${title} — ${htmlToText(guide.dek)}` : title);
@@ -166,7 +181,7 @@ export interface TripRecapStats {
   currency: string;
 }
 
-export function tripRecapStats(guide: any): TripRecapStats {
+export function tripRecapStats(guide: GuideLike): TripRecapStats {
   const sections = flattenSections(guide?.sections);
   const dayItems: any[] = sections.find((s) => s.type === "days")?.items ?? [];
   const waypointsTotal = dayItems.reduce((t, d) => t + (d?.waypoints?.length ?? 0), 0);
@@ -196,7 +211,7 @@ function xmlEscape(s: string): string {
     .replace(/"/g, "&quot;").replace(/'/g, "&apos;");
 }
 
-export function buildGpx(guide: any): string {
+export function buildGpx(guide: GuideLike): string {
   const wpts = collectWaypoints(guide).map((p) =>
     `  <wpt lat="${p.lat}" lon="${p.lng}">\n    <name>${xmlEscape(p.name)}</name>\n  </wpt>`
   ).join("\n");
@@ -234,7 +249,7 @@ function fold(line: string): string {
   return segs.join("\r\n ");
 }
 
-export function buildIcs(guide: any, slug: string): string {
+export function buildIcs(guide: GuideLike, slug: string): string {
   const dtstamp = stamp(new Date());
   const lines: string[] = [
     "BEGIN:VCALENDAR",

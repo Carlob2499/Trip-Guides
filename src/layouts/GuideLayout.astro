@@ -24,6 +24,7 @@ import "@fontsource-variable/literata/wght-italic.css";
 import "@fontsource-variable/spline-sans-mono";
 import "../styles/base.css";
 import "../styles/guide.css";
+import "../styles/print.css";
 import "../styles/trip-split.css";
 import "../styles/masthead.css";
 import "../styles/sights.css";
@@ -624,7 +625,7 @@ const tripSummary = buildSummary(guide);
                 {sub && <p class="cat-sub">{sub}</p>}
               </header>
               {byG[g].map((o) => (
-                <Block sec={o.s} sid={`sec-${o.i}`} ci={ci} solo={solo} holidays={holidayInfo} learnings={guide.learnings ?? null} mapPins={pinMap.get(o.s) ?? null} country={guide.country} />
+                <Block sec={o.s} sid={`sec-${o.i}`} ci={ci} solo={solo} holidays={holidayInfo} learnings={guide.learnings ?? null} mapPins={o.s.type === "map" ? (pinMap.get(o.s) ?? null) : null} country={guide.country} />
               ))}
               {byG[g].some((o: any) => o.s.type === "days") && (
                 <div class="lnw-cta">
