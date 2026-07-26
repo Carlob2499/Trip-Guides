@@ -512,10 +512,19 @@ three were in scope and were consciously left, rather than rushed:
    how a silent rendering regression ships. The ratchet in `eslint.config.mjs` now prevents the
    pile from growing, which is what makes doing them incrementally safe.
 
-Also worth keeping visible: **`a11y.spec.ts`'s `color-contrast/bgOverlap` baselines are
+~~Also worth keeping visible: **`a11y.spec.ts`'s `color-contrast/bgOverlap` baselines are
 calibrated to a different machine** than this sandbox (proven by node-level diff against
 fully-stashed code — see M4). They should be re-recorded from CI's own runner, which is the only
-machine whose counts the gate should encode.
+machine whose counts the gate should encode.~~
+
+**Resolved 2026-07-26, and the diagnosis above was wrong.** Machine calibration was not the cause:
+CI and the sandbox report the *same* counts (denmark 47, korea 65). M4's own tab icons were. Adding
+an inline `<svg class="gtab-ico">` inside each `.gtab` defeats axe's stacking-order reimplementation
+per tab, so each guide grew by exactly its tab count — 8 for denmark, 11 for korea. The gate could
+not see this because `unrecognised` keys on rule + messageKey, so a wholly new element family
+inherited an existing justification silently; only dumping the node selectors showed it. Real
+composited contrast was then measured on the new family before the baselines were raised: worst
+case 4.77:1 against the 4.5:1 required. Baselines re-recorded from CI's runner, as this note asked.
 
 ---
 

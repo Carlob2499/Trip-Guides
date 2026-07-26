@@ -100,7 +100,14 @@ const bgOverlapWhy = (fixedCaptionBugs: string) =>
   "(not real elementsFromPoint) disagrees with real paint order under position:absolute siblings + " +
   "isolation-like stacking — a genuine tooling limitation (verified: real rendering puts the caption " +
   "on top; axe's custom grid says otherwise) for the one case that can't be made deterministic: a " +
-  "REAL, successfully-loaded photo, whose brightness this repo cannot control or sample at scan time.";
+  "REAL, successfully-loaded photo, whose brightness this repo cannot control or sample at scan time. " +
+  "And, on guide pages only, (c) EVERY .gtab tab button, which gained an inline <svg class=gtab-ico> " +
+  "sibling to its label — the same axe stacking-order reimplementation as (b), defeated the same way " +
+  "but by an in-flow SVG rather than an absolute caption. Counted, not guessed: denmark grew by " +
+  "exactly its 8 tabs and korea by exactly its 11, identically on CI and locally, and the tabs' own " +
+  "colour rules were untouched by the change that added the icons. Measured the real composited " +
+  "contrast rather than trusting that: worst case 4.77:1 (denmark, light, the active tab) against " +
+  "the 4.5:1 required at 13.12px/600.";
 const SHORT_TEXT_CONTENT_WHY =
   "Single-glyph text axe can't confidently rate a font's rendered ink coverage for (the .sun-sep " +
   "itinerary separator, single-digit stat counters). Verified via the same --muted/--ink tokens " +
@@ -158,7 +165,10 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
   },
   "korea guide": {
     "color-contrast/bgOverlap": {
-      max: 54,
+      // 54 -> 65: +11, korea's 11 tab buttons, per (c) in the why. Recorded from CI's own runner,
+      // which reported 65 on desktop and 58 on mobile — mobile renders fewer, so desktop is the
+      // ceiling, exactly as MOBILE_DELTA's note below describes.
+      max: 65,
       why: bgOverlapWhy(
         "sight-card captions/credit under a still-loading OR explicitly-failed photo (sights.css's " +
           ".media-ok/.media-fail split) and the masthead's broken-cover-photo fallback (masthead.css)",
@@ -172,7 +182,10 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
   },
   "denmark guide": {
     "color-contrast/bgOverlap": {
-      max: 39,
+      // 39 -> 47: +8, denmark's 8 tab buttons, per (c) in the why. CI reported 47 desktop / 43
+      // mobile; this machine reported 47 too, which is what rules OUT the "baselines calibrated to
+      // a different machine" theory recorded in PLAN_MODERNIZE.md — the two agree exactly.
+      max: 47,
       why: bgOverlapWhy(
         "sight-card captions/credit under a still-loading OR explicitly-failed photo (sights.css's " +
           ".media-ok/.media-fail split) and the masthead's broken-cover-photo fallback (masthead.css)",
