@@ -12,12 +12,34 @@
 
 import { settle } from "../model/settle";
 import { normalizeExpense, normalizeMember } from "../model/records";
-import { hasFirebase, joinTrip, roomId as guideRoomId } from "../../firebase/index.js";
+import { hasFirebase, joinTrip, roomId as guideRoomId, isPostTripLocked } from "../../firebase/index.js";
+import { tripWindow } from "../../../lib/trip-dates";
 import { esc, migrateStorageKey } from "../../../scripts/util.js";
 
 (function () {
   var wrap = document.getElementById("tripSplit");
   if (!wrap) return;
+
+  /* M5 — POST-TRIP LOCK. Two weeks after the last day, this guide's budget stops being a live
+     scratchpad and becomes the trip's financial record: the numbers keep rendering (and keep
+     feeding the recap + Plan⇄Actual), but nothing new can be typed into a settled trip, and a
+     room code committed to a public repo stops being a standing write invitation.
+     Client-side only — no database or rules change, so no existing figure can be altered or
+     lost by this. An undated guide is never locked (see model/room.ts). */
+  var LOCKED = (function () {
+    try {
+      var el = document.getElementById("tgConfig");
+      if (!el) return false;
+      var cfg = JSON.parse(el.textContent || "{}");
+      // OPT-IN per guide (content.config.ts `budgetLock`), default OFF. Freezing a surface
+      // people type into is a real behaviour change: defaulting it on would have silently
+      // locked Korea's live budget four days after this shipped. The creator turns it on for
+      // a trip that is genuinely settled.
+      if (!cfg.budgetLock) return false;
+      var win = tripWindow(cfg.firstDayDate, cfg.lastDayDate, new Date());
+      return isPostTripLocked(win.end, new Date());
+    } catch (e) { return false; }
+  })();
 
   var SK = "tg-split-" + (wrap.dataset.sk || "guide");
   // R8: migrate this guide's on-device (solo-mode) split cache from the old
@@ -95,6 +117,7 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
   // Toggle one person in/out of an expense. Excluding the last sharer is refused — an
   // expense nobody shares has no meaning and would divide by zero.
   function opToggleSharer(eid, mid) {
+    if (LOCKED) return; // M5 post-trip lock — the record is settled
     var e = expenseById(eid); if (!e) return;
     var cur = sharersOf(e);
     var next = cur.indexOf(mid) !== -1 ? cur.filter(function (x) { return x !== mid; }) : cur.concat([mid]);
@@ -118,14 +141,17 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
      In synced mode the mutation writes one record; the room's onChange echo (fired
      locally by Realtime Database, so it feels instant) rebuilds state and re-renders. */
   function opAddMember() {
+    if (LOCKED) return; // M5 post-trip lock — the record is settled
     if (room) { room.collection("members").add({ name: "", payment: "", order: nextOrder() }); }
     else { state.members.push(normalizeMember({ id: newId() })); persist(); renderMembers(); renderNewRowOptions(); renderExpenses(); }
   }
   function opMemberField(id, field, value) {
+    if (LOCKED) return; // M5 post-trip lock — the record is settled
     if (room) { var p = {}; p[field] = value; room.collection("members").update(id, p); }
     else { var m = memberById(id); if (m) { m[field] = value; persist(); if (field === "name") renderNewRowOptions(); renderResults(); } }
   }
   function opMemberDel(id) {
+    if (LOCKED) return; // M5 post-trip lock — the record is settled
     if (room) {
       room.collection("members").remove(id);
       var fallback = (state.members.filter(function (x) { return x.id !== id; })[0] || {}).id || "";
@@ -152,14 +178,17 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
     }
   }
   function opAddExpense(data) {
+    if (LOCKED) return; // M5 post-trip lock — the record is settled
     if (room) { room.collection("expenses").add(Object.assign({ order: nextOrder() }, data)); }
     else { state.expenses.push(Object.assign({ id: newId() }, data)); persist(); renderExpenses(); renderResults(); }
   }
   function opExpenseField(id, patch) {
+    if (LOCKED) return; // M5 post-trip lock — the record is settled
     if (room) { room.collection("expenses").update(id, patch); }
     else { var e = expenseById(id); if (e) { Object.assign(e, patch); persist(); renderResults(); } }
   }
   function opExpenseSplit(id, mid, value) {
+    if (LOCKED) return; // M5 post-trip lock — the record is settled
     var e = expenseById(id);
     var cur = e && e.split ? Object.assign({}, e.split) : {};
     cur[mid] = parseFloat(value) || 0;
@@ -167,10 +196,12 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
     else { if (e) { e.split = cur; persist(); renderResults(); } }
   }
   function opExpenseDel(id) {
+    if (LOCKED) return; // M5 post-trip lock — the record is settled
     if (room) { room.collection("expenses").remove(id); }
     else { for (var i = 0; i < state.expenses.length; i++) if (state.expenses[i].id === id) { state.expenses.splice(i, 1); break; } persist(); renderExpenses(); renderResults(); }
   }
   function opSetCustomSplit(v) {
+    if (LOCKED) return; // M5 post-trip lock — the record is settled
     if (room) { room.doc("meta").update({ customSplit: v }); }
     else { state.customSplit = v; persist(); syncModeUI(); renderExpenses(); renderResults(); }
   }
@@ -333,7 +364,34 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
       }
     }
   }
-  function render() { renderMembers(); renderNewRowOptions(); renderExpenses(); renderResults(); }
+  function render() {
+    renderMembers(); renderNewRowOptions(); renderExpenses(); renderResults();
+    applyLock();
+  }
+
+  /* M5 — make the lock VISIBLE and real, not just an early-return in the op functions.
+     Runs after every render because the rows are rebuilt from scratch each time. Disabling
+     the controls is the honest presentation: a field that accepts your typing and silently
+     discards it is precisely the "slow failure wearing a helpful face" model/room.ts warns
+     about. The figures themselves stay fully readable — that is the whole point of keeping
+     the record. */
+  function applyLock() {
+    if (!LOCKED) return;
+    wrap.setAttribute("data-locked", "1");
+    wrap.querySelectorAll("input, select, button").forEach(function (el) {
+      if (el.closest("[data-split-lock-note]")) return;
+      el.disabled = true;
+    });
+    if (!wrap.querySelector("[data-split-lock-note]")) {
+      var note = document.createElement("p");
+      note.className = "split-lock-note";
+      note.setAttribute("data-split-lock-note", "");
+      note.setAttribute("role", "note");
+      note.textContent =
+        "This trip is settled — the budget is now a read-only record. Totals and who-owes-who stay here for good.";
+      wrap.insertBefore(note, wrap.firstChild);
+    }
+  }
 
   /* ── live sync (records → state) ──────────────────────────────────────────── */
   function orderedFrom(map) {

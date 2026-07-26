@@ -455,6 +455,18 @@ const guides = defineCollection({
     // scripts/__tests__/guide-room-id.test.mjs — a silent switch points the guide at an empty
     // room while the old one keeps the data, and the reader just sees a confident empty budget.
     roomMigratedFrom: z.string().optional(),
+    // M5 — OPT-IN post-trip budget lock. When true, this guide's Trip Split becomes a read-only
+    // record once the trip is `POST_TRIP_GRACE_DAYS` past its last day (see
+    // features/firebase/model/room.ts): the figures keep rendering and keep feeding the recap,
+    // but no new edits are accepted from the client, and a room code committed to a public repo
+    // stops being a standing write invitation.
+    //
+    // DEFAULT OFF, deliberately. Locking is a real behaviour change on a surface people type
+    // into, and defaulting it on would have silently frozen Korea's live budget days after this
+    // shipped (its trip ended 15 Jul; a 14-day grace lands on 30 Jul) — exactly the kind of fork
+    // CLAUDE.md says not to pick on the creator's behalf. Set it per guide, when that trip is
+    // genuinely settled.
+    budgetLock: z.boolean().optional(),
     intro: z.string().optional(),
     // ADDITIVE + OPTIONAL — the curated post-mortem: what REALLY happened vs the plan.
     // Hand-authored by the maker from the raw trip feedback (never auto-generated, never

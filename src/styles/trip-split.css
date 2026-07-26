@@ -134,3 +134,11 @@
   .se-header{grid-template-columns:5.5rem 1fr 4.5rem 1.6rem}
   .se-new-row{grid-template-columns:5.5rem 1fr 4.5rem}
 }
+
+/* M5 — post-trip read-only lock (see features/trip-split/ui/trip-split.js). The record stays
+   fully legible; only the write affordances go quiet, so a settled trip reads as finished
+   rather than broken. */
+.split-lock-note{margin:0 0 .9rem;padding:.6rem .85rem;background:var(--bg2);border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:var(--r-md);font-size:var(--text-small);color:var(--muted);line-height:1.5}
+#tripSplit[data-locked] .split-in:disabled,#tripSplit[data-locked] button:disabled{opacity:.72;cursor:default}
+#tripSplit[data-locked] .sc-add-btn,#tripSplit[data-locked] .sc-add-expense-btn,
+#tripSplit[data-locked] .se-new-card,#tripSplit[data-locked] .split-del{display:none}
