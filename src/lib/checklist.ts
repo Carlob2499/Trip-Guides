@@ -1,4 +1,4 @@
-/* F1 (docs/PLAN_TRAVELER_FEATURES.md): a checklist item is a bare string on every guide with
+/* F1 (docs/archive/PLAN_TRAVELER_FEATURES.md): a checklist item is a bare string on every guide with
    no book-by deadline for it, or an upgraded { text, due?, ... } object once one is sourced
    (content.config.ts's `checklistItem` union) — every renderer of a checklist needs the
    display text regardless of which shape a given item is, so that extraction lives once here. */

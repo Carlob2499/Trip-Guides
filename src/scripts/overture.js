@@ -1,5 +1,5 @@
 /* Overture — the hub's cinematic first screen that hands off to the guide grid.
-   docs/PLAN_VISUAL_OVERHAUL.md session V2, Option A (the Overture IS the masthead).
+   docs/archive/PLAN_VISUAL_OVERHAUL.md session V2, Option A (the Overture IS the masthead).
 
    First visit (localStorage['tg-overture-seen'] unset): play the kinetic intro, hold a beat,
    then AUTO-GLIDE — an eased auto-scroll down into the hub while the Overture recedes through a

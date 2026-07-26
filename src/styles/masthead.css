@@ -11,7 +11,7 @@
 /* Reset the old centered text masthead — the hero owns this region now. */
 .mast-hero{padding:0;border-bottom:0;text-align:left;position:relative}
 
-/* V4 depth (docs/PLAN_VISUAL_OVERHAUL.md, option B) — a faint topographic overlay OVER the hero
+/* V4 depth (docs/archive/PLAN_VISUAL_OVERHAUL.md, option B) — a faint topographic overlay OVER the hero
    photo: it lives INSIDE .mast-frame, after the scrim and before .mast-inner, so it sits above the
    photo + scrim but below the title (which is .mast-inner, painting later in flow). Light etched
    strokes — the photo hero is always a dark scrim + light title in BOTH site themes, so fixed

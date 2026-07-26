@@ -1,4 +1,4 @@
-// Budget pact: plan vs. actual (docs/PLAN_TRAVELER_FEATURES.md F2). Joins the guide's OWN
+// Budget pact: plan vs. actual (docs/archive/PLAN_TRAVELER_FEATURES.md F2). Joins the guide's OWN
 // already-numeric Budget-tab plan (per-item `basis: "day"|"trip"` estimates) against the
 // SAME section's own "your spend" actual entries — not Trip Split, which the plan doc names
 // but which (checked against the real silo before building this) tracks only a single

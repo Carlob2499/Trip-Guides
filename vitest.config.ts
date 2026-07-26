@@ -19,7 +19,7 @@ export default defineConfig({
       // threshold would either sit near-zero (useless) or force fake tests on that glue.
       // Instead, gate only the pure-logic core the project actually invests in: every
       // feature's model/ silo and src/lib/. Numbers sit a few points under what's
-      // currently measured (see docs/TEST_COVERAGE_ANALYSIS.md) — real regression gates,
+      // currently measured (see docs/archive/TEST_COVERAGE_ANALYSIS.md) — real regression gates,
       // not aspirational targets that break the build on day one.
       thresholds: {
         "src/lib/**": { statements: 90, branches: 80, functions: 95, lines: 95 },

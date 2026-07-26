@@ -155,6 +155,10 @@ run. 248 deploy runs to date multiply all of it.
 - Cache `~/.cache/ms-playwright` keyed on the Playwright version.
 - Fix vestigial refs: `run-skill-evals.mjs` eval-1's `guides/germany.json` fixture → directory
   shape; `skill-retro.yml:57`'s nonexistent `docs/E2_FIELD_REPORT.md`.
+- **PR preview deployments (from Q2):** Cloudflare Pages free-tier project building `dist/` on
+  every PR → a live preview URL in each recert freshness PR and draft-guide triage PR. Prod
+  stays GitHub Pages. Mind `import.meta.env.BASE_URL` (previews serve at root, prod at
+  `/Trip-Guides`) — the explicit-base-path rule makes this a config knob, not a rewrite.
 - Measure before/after: CI minutes per main push (expect roughly −40%).
 
 ### M2 · Performance & CLS zero — **Sonnet** (1–2 sessions)
@@ -215,6 +219,28 @@ The five moves from §1.4, as one coherent pass (uniform-across-surfaces rule ap
 5. **Colophon footer**: the verification signature — "Checked [date]" stamp, this guide's
    source/fact counts (`computeGuideStats` already computes them), offline note, request-a-change
    pill. The moat, signing every page.
+6. **"More detail" v2 — creator-requested centerpiece.** Current state: `splitLead`
+   (`src/lib/lead-split.ts`) folds everything after a card's first `</p>` behind a native
+   `<details class="card-more">` when the remainder ≥260 chars; the summary is a micro-caption +
+   `↓` over a dashed rule (`guide.css:212-219`) — a bare-text tap target, against the site's own
+   clickability doctrine, with a generic label and a snap open. The v2 spec:
+   - **Looks like a control**: the summary becomes a chip/pill from the site's control vocabulary
+     (visible fill, hover, focus-visible, chevron), same vocabulary as the M4-1 icon pass.
+   - **Knows what it's hiding**: optional `moreLabel` field in the section schema (typed,
+     falls back to "More detail"); plus an auto count suffix when unlabeled ("· 2 more
+     paragraphs") derived at build time — never a lie, it's computed from the real remainder.
+   - **Smarter split**: `splitLead` v2 refuses to fold operational content — if the remainder
+     contains a `⚠` flag, a `<ul>/<ol>` (steps), or looks like hours/prices, the cut point moves
+     past it or the fold is skipped entirely. Honesty rule: a warning is never behind a tap.
+   - **Fade-out preview**: a one-line masked preview of the folded content under the lead
+     (gradient mask) so the reader sees *that* and *what kind of* content awaits — the strongest
+     disclosure affordance in editorial design, zero JS.
+   - **Smooth open**: CSS-only `::details-content` + `interpolate-size: allow-keywords`
+     animation (progressive enhancement — browsers without it get today's snap), honoring
+     reduced-motion. No JS, no layout thrash.
+   - **One disclosure vocabulary site-wide**: RaidBlock's `<details>`, collapsible sections, and
+     card-more all adopt the same chip + chevron + animation, so "this expands" reads
+     identically everywhere.
 - Skills: `frontend-design` ON (Opus session); `ui-ux-pro-max` optional for palette/pattern
   cross-checks. Creator reviews the Opus spec (one message) before the Sonnet sweep.
 
@@ -223,6 +249,16 @@ The five moves from §1.4, as one coherent pass (uniform-across-surfaces rule ap
 PIPELINE.md's R3, unchanged in scope, sequenced after M2 (View Transitions on a CLS-0 base):
 hub⇄guide View Transitions, live-tile connection state machine, per-view layer (Focus Today /
 what's-open-now / weather day-swap). No new backend required for any of it — see Q2.
+
+Added per creator (2026-07-26): **room-code options** — zero-setup default stays, plus
+(a) a `#room=<code>` URL-fragment override: a group that wants privacy generates its own code
+(`scripts/gen-room-id.mjs` already exists) and shares the link privately; the fragment never
+reaches a server and is never committed, and the client prefers it over the guide's `roomId`;
+(b) **post-trip room lock**: N days after the trip's end date the client drops to read-only
+display — the data keeps serving the recap card and Plan⇄Actual, but no write UI is offered
+(that's the post-trip usefulness: the room becomes the trip's financial record, and locking
+protects it). A rules-level write-freeze is a possible later hardening; the client lock touches
+no existing data and no rules semantics.
 
 ### M6 · Type-safety payoff — **Sonnet** (mechanical, anytime after M0)
 
@@ -247,24 +283,31 @@ ESLint's first run found a live crash the whole test suite missed — this debt 
 
 ---
 
-## Part 3 — Clarifying questions (binding; put to the creator before the gated work)
+## Part 3 — Clarifying questions (answered by the creator, 2026-07-26)
 
-1. **Q1 · M0 throwaway cleanup:** the end-to-end proof creates a real (published) throwaway
-   guide. Approve its full removal afterward (guide dir, intake files, palette, research branch,
-   and un-listing from the hub) — the destructive-op guard requires your explicit OK?
-   *Recommended: yes, with the throwaway slug prefixed `zz-` so it's unambiguous.*
-2. **Q2 · Backend stance:** the audit found **no feature that needs a bigger backend** — the
-   settled Pages + Firebase free tier + Actions-as-compute stance covers M0–M6, and the existing
-   Cloudflare Worker is the extension point if a dynamic feature ever needs server logic.
-   *Recommended: reaffirm the settled stance.* Say the word only if you harbor an ambition
-   (accounts, comments, paid guides…) that should reshape M5.
-3. **Q3 · Room codes in a public repo** (open HANDOFF item): keep the zero-setup tradeoff, or
-   move codes to a privately-shared `#room=` fragment (a small M5 work item)? *No default — this
-   is a privacy call only you can make.*
-4. **Q4 · Six completed-plan docs** (PLAN_FIELD_REPORT_FIXES, PLAN_TRAVELER_FEATURES,
-   PLAN_VISUAL_OVERHAUL, FIELD_REPORT_2026-07-22, DENMARK_UPLIFT, TEST_COVERAGE_ANALYSIS):
-   *Recommended: archive to `docs/archive/` — greppable history out of the working set.* Delete
-   only on your say-so.
-5. **Q5 · M4 look changes:** the emoji→SVG tab swap and the 2-up hub visibly change every page.
-   Approve the direction now (implementation still pauses for your one-message review of the
-   Opus spec), or park M4?
+1. **Q1 · M0 throwaway cleanup — APPROVED.** The end-to-end proof's throwaway guide (slug
+   prefixed `zz-`) gets fully removed afterward: guide dir, intake files, palette, research
+   branch, hub listing.
+2. **Q2 · Backend / hosting — creator raised Vercel (Hobby tier) for feature-expansion parity.**
+   Orchestrator's verdict, from verified Hobby limits: **stay on Pages for production; adopt PR
+   preview deployments additively.** Reasoning: (a) every parity feature in
+   COMPETITIVE_LANDSCAPE's matrix that remains open (route optimization F8, packing F4, offline
+   F5, prep timeline F2, budget pact F3, R3 runtime) is client-side over build-time data — none
+   needs SSR/functions; (b) Vercel Hobby is non-commercial-only, 100 GB bandwidth, ~1 M
+   invocations, 4 h active CPU/mo, **and has no overage path — at the cap the deployment
+   PAUSES and the site goes offline until reset**. A travel product whose SOS sheet is relied
+   on mid-trip must not have a hard offline cliff; Pages has no such cliff and 248 green
+   deploys of proven machinery; (c) the one genuinely valuable Vercel capability — a live
+   preview URL per PR (recert freshness PRs, draft-guide triage PRs become click-to-review) —
+   is available without moving prod: **Cloudflare Pages free tier** (unlimited bandwidth,
+   preview deploys, account already exists for the Worker) building `dist/` per PR. Logged as
+   an M1 work item. The static/no-account/offline architecture stays the differentiator the
+   competitive doc says it is. Firebase + the existing Worker remain the dynamic extension
+   points.
+3. **Q3 · Room codes — zero-setup tradeoff ACCEPTED**; creator wants an *option* on top →
+   the `#room=` override + post-trip lock, spec'd in M5 above.
+4. **Q4 · Six completed-plan docs — ARCHIVED** (done this session: `docs/archive/`, all
+   path-qualified references repointed, build/test/lint green).
+5. **Q5 · M4 look changes — APPROVED**, with the creator's stated priority: the "More detail"
+   controls (M4 item 6) must look far better and behave more intelligently. Implementation
+   still pauses for the creator's one-message review of the Opus spec.

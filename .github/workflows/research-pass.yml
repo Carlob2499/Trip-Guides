@@ -259,7 +259,7 @@ jobs:
                    a human sees why this run stopped short of a verdict, not a false PASS), and let
                    landing take the NEEDS-WORK/draft-PR path below.
                  Only a full networked PASS from this step licenses step (d).
-              c3. THE CRITIC — the bar test (F7·C1, docs/PLAN_TRAVELER_FEATURES.md). A prompt-only
+              c3. THE CRITIC — the bar test (F7·C1, docs/archive/PLAN_TRAVELER_FEATURES.md). A prompt-only
                  lens on this SAME loop, not a new stage — nothing here touches STAGE_ORDER, the
                  schema, or a checkpoint. Before step (d) is licensed, read the WHOLE merged guide
                  (not just what this pass touched) and ask ONE question per load-bearing item — an

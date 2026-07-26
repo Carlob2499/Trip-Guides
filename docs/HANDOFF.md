@@ -75,9 +75,8 @@ confirmed live by the creator.
 4. **Dead-file audit: mechanical half done, judgment half open.** All 289 source files under
    `src/ scripts/ worker/` were scanned — **zero dead modules**; the only unreferenced files are
    tests (nothing imports a test) and `src/env.d.ts` (ambient). What remains is a call only the
-   creator can make: six docs read as completed-work records — `PLAN_FIELD_REPORT_FIXES.md` (22KB),
-   `PLAN_TRAVELER_FEATURES.md`, `PLAN_VISUAL_OVERHAUL.md`, `FIELD_REPORT_2026-07-22.md`,
-   `DENMARK_UPLIFT.md`, `TEST_COVERAGE_ANALYSIS.md`. Record or relic is not a mechanical question.
+   creator can make: ~~six completed-work docs~~ — RESOLVED 2026-07-26: archived to
+   `docs/archive/`, references repointed.
 5. Not built: the PostToolUse typecheck hook in `.claude/settings.json`, and trimming `CLAUDE.md`
    toward 200 lines (it grew this session).
 6. **Unverified:** `scaffold-guide.mjs`'s new end-to-end directory path. Creating a throwaway guide

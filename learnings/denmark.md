@@ -65,7 +65,7 @@ on a map. That's a research failure, not bad luck.
 ## What the guide got wrong (product, not content)
 
 Two features were asked for **by name**. Measuring them (2026-07-17) corrected my first
-read of both — full workings in `docs/DENMARK_UPLIFT.md`:
+read of both — full workings in `docs/archive/DENMARK_UPLIFT.md`:
 
 1. **Korea's scrolling day-by-day itinerary — already on Denmark, and always was fine.**
    It renders identically on both guides today. This was never a Denmark gap; it's a

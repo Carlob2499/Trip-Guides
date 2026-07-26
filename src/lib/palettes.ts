@@ -33,7 +33,7 @@ export function accentForGuide(slug: string, theme: { primary?: string } | undef
 export type GuideAccents = { primary: string; secondary: string; raw: string };
 
 /** The full 3-stop accent set for a guide (Atlas card tinting, V3 — see
- *  docs/PLAN_VISUAL_OVERHAUL.md). Same precedence as accentForGuide, but a guide with no
+ *  docs/archive/PLAN_VISUAL_OVERHAUL.md). Same precedence as accentForGuide, but a guide with no
  *  extracted palette (explicit `theme`, or a typographic-cover guide) has no secondary/raw
  *  to give — every stop falls back to the single resolved accent so a card never renders a
  *  broken color, it just doesn't get the extra depth. */

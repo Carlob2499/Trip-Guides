@@ -125,7 +125,7 @@ const gridContinents = new Set(
 );
 const continents = CONTINENT_ORDER.filter(c => gridContinents.has(c));
 
-// Overture (V2, docs/PLAN_VISUAL_OVERHAUL.md) — real, build-time-counted stats for the intro's
+// Overture (V2, docs/archive/PLAN_VISUAL_OVERHAUL.md) — real, build-time-counted stats for the intro's
 // stats beat (never hand-typed numbers; recomputed every build) + three deterministic contour
 // layers for its parallax backdrop. Fixed seeds ⇒ identical rings every build.
 const stats = computeGuideStats(guides.map((g) => g.data));
@@ -272,7 +272,7 @@ const contourLayers = [
       <div class="hub-grid" id="hubGrid">
         {gridGuides.map(({ g, ex }) => {
           // The full 3-stop palette, not just --accent — unused until V3 (Atlas card tinting,
-          // docs/PLAN_VISUAL_OVERHAUL.md) wires --accent2/--accent-raw into real CSS. Set here
+          // docs/archive/PLAN_VISUAL_OVERHAUL.md) wires --accent2/--accent-raw into real CSS. Set here
           // now so V3 is a pure-CSS session, no markup change required.
           const pal = paletteAccentsForGuide(g.id, g.data.theme, g.data.country);
           return (

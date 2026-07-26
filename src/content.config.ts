@@ -36,7 +36,7 @@ const provenance = {
   shelf_life: z.enum(["fx", "transit", "hours", "venue", "default"]).optional(),
 };
 
-// F1 (docs/PLAN_TRAVELER_FEATURES.md): a checklist item stays a bare string for every guide
+// F1 (docs/archive/PLAN_TRAVELER_FEATURES.md): a checklist item stays a bare string for every guide
 // that has no book-by deadline for it (back-compat — every existing guide validates
 // unchanged) OR upgrades to an object carrying an optional `due` (ISO date) — the Trip Kit's
 // "Book by" card buckets these into overdue/soon/later. A `due` is a perishable fact (things

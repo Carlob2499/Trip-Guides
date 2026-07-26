@@ -1,4 +1,4 @@
-/* === HUB MOTION — Overture & Atlas foundation (docs/PLAN_VISUAL_OVERHAUL.md, session V1) =====
+/* === HUB MOTION — Overture & Atlas foundation (docs/archive/PLAN_VISUAL_OVERHAUL.md, session V1) =====
    Tokens only — nothing in this file targets a real element yet, so importing it changes
    nothing on screen (V1's own exit criterion). V2/V3 write the actual `.overture`/`.atlas`
    component CSS against these tokens, alongside the markup they style (never split a

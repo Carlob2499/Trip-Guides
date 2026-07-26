@@ -1,4 +1,4 @@
-/* Offline confidence (docs/PLAN_TRAVELER_FEATURES.md F5) — proves the service-worker
+/* Offline confidence (docs/archive/PLAN_TRAVELER_FEATURES.md F5) — proves the service-worker
    precache actually works, which nothing in this repo had verified before this suite.
    Two phases per the SW's own contract: (1) a normal online load lets the worker install
    and its CORE precache populate — a page loaded before that point isn't yet CONTROLLED
