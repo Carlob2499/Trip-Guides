@@ -22,6 +22,13 @@
 
 ## Snapshot (updated 2026-07-26, session close #11 — M1–M6 COMPLETE; only M0's E2E proof left)
 
+> **Merged to `main` 2026-07-26 (`834b741`, fast-forward), then `fc81804`.** `origin` is
+> `main`-only again apart from the merged `claude/waypoint-audit-modernize-tne4ce`, which is now
+> redundant and safe to delete. All gates green on `main`: lint 0, `astro check` 0 errors, **876**
+> unit, Accessibility green after the tab-icon baseline fix (see Where we left off), Pages +
+> intake-worker deployed. `claude/test-coverage-analysis-siftjs` was already fully contained in
+> `main` — a stale local ref, nothing to merge.
+
 **M1 through M6 are all COMPLETE. The ONLY thing left in the whole programme is M0's
 end-to-end pipeline proof, which is blocked on ONE owner action: rotate the OAuth token.** Branch `claude/waypoint-audit-modernize-tne4ce`. Full audit + executor
 program in `docs/PLAN_MODERNIZE.md` — read that file for the complete record; this is a summary.
@@ -181,9 +188,23 @@ factory. This session answered *why* the factory never ran — not a guess, a 40
 a live dispatch — then spent the wait on everything else the plan could reach without the token:
 CI efficiency, the CLS root causes, the type-scale/z-index foundation, and the creator's specific
 priority (More detail v2). One real a11y bug was caught and fixed along the way (a scrollable
-region needed `tabindex`); one apparent a11y regression was investigated to ground and proven to
-be pre-existing environment drift, not a session-created bug — both documented in the plan rather
-than either ignored or wrongly "fixed."
+region needed `tabindex`).
+
+**Correction, on merging this branch to `main`: the second a11y finding was NOT environment
+drift.** It was recorded as baselines "calibrated to a different machine" and left. Merging turned
+the Accessibility workflow red on all eight guide combinations — the branch had never run that
+workflow, so nothing surfaced it until then. CI and the sandbox in fact report *identical* counts
+(denmark 47, korea 65); the cause was this branch's own tab icons. An inline `<svg class="gtab-ico">`
+inside each `.gtab` defeats axe's stacking-order reimplementation once per tab, so each guide grew
+by exactly its tab count: +8 denmark, +11 korea.
+
+The part worth carrying forward is *why the gate could not say so itself*. `unrecognised` — the
+zero-tolerance novelty check the file calls "the mechanism that surfaces a real bug" — keys on
+rule + messageKey, never on the element. So a wholly new element family inherited a justification
+written about sight-card photo captions and passed silently; only dumping the node selectors
+showed it. The count check caught the symptom, the novelty check missed the cause. Real composited
+contrast was then measured before any baseline moved (worst case 4.77:1 against 4.5:1 required),
+and the new numbers were deliberately failed at 43 before being trusted at 47. Fixed in `fc81804`.
 
 **Re-prompt the creator with:** "The whole M0–M6 programme is done except one thing, and that
 one thing needs you: `CLAUDE_CODE_OAUTH_TOKEN` is expired (confirmed from the real API response
