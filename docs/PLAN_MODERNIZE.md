@@ -115,27 +115,58 @@ Code Remote connectors only — the standing CLAUDE.md rule).
 
 The product's thesis is the pipeline; nothing else in this plan matters as much.
 
-1. **Read the real error first, at minimum cost:** manually dispatch `token-canary.yml` (bare
-   Haiku prompt — the cheapest possible probe) and/or re-dispatch `recert.yml` with
-   `show_full_output: true` added to the agent step. Do not guess; read the first model call's
-   actual failure.
-2. Fix the root cause (candidates, in likelihood order: OAuth token scope/expiry vs the action's
-   env contract; action-version/model-ID mismatch; org/permissions). Then fix the three stacked
-   seams *in the same session, each proven by forcing it once* (Boundary Check #2):
-   - `allowed_bots` on the action (or dispatch research-pass with an App/PAT token) so the
-     `github-actions[bot]` auto-dispatch survives the actor gate.
-   - Export `GH_TOKEN: ${{ github.token }}` into the agent step env; prove `gh` works inside the
-     agent's Bash with one harmless call before trusting `land-branch.sh` to it.
-   - Rewrite `token-canary`'s alert logic to distinguish auth-failure (rotate token) from other
-     `is_error` (file a different issue naming the real class); smoke-run it once manually.
-3. **End-to-end proof (W6, finally):** file a real New-guide issue for a throwaway destination,
-   watch scaffold → auto-dispatch → Pass A/B → reconcile → verify → auto-graduate → land →
-   `auto-published` issue → ledger entry. Exercise the stuck path once (cap the attempts low on
-   the throwaway). Cleanup of the throwaway artifacts is **gated on Q1 below**.
-4. Small chain fixes while in there: per-country (not per-issue) concurrency key for
-   `new-guide.yml` (two issues for the same country currently race to an add/add conflict);
-   `research-${{ inputs.slug }}` concurrency group on research-pass; align the circuit-breaker
-   message with its actual `> 5` semantics.
+**Diagnosis complete, 2026-07-26 (branch `claude/waypoint-audit-modernize-tne4ce`).** Dispatched
+`token-canary.yml` live, twice — first at its default `show_full_output: false` (reproduced the
+exact silent shape: `is_error:true, duration_ms:1854, num_turns:1, cost:$0`, identical to the
+July 20 recert failure), then with `show_full_output: true` added temporarily to unmask the SDK's
+real response (reverted immediately after reading it — see commits on this branch). **Root cause,
+confirmed from the actual API response, not inferred:**
+```
+"error_status": 401, "error": "authentication_failed"
+"result": "Failed to authenticate. API Error: 401 OAuth access token is invalid."
+```
+Two retries, both 401, then the SDK synthesizes the misleading `subtype:success` envelope that
+made this look "cosmetic" on July 20. **`CLAUDE_CODE_OAUTH_TOKEN` is expired or was revoked.**
+The canary's own alert logic is fine as written — it correctly went red and updated tracking
+issue #22 with accurate, actionable instructions; B4's "can't distinguish causes" concern turned
+out not to matter because 100% of observed failures to date are this one cause.
+
+**⚠ OWNER ACTION REQUIRED — the orchestrator cannot do this step.** Minting a Claude Max OAuth
+token requires an interactive `claude setup-token` login tied to the creator's own subscription;
+no agent session can perform it. **Fix:** run `claude setup-token` locally → paste the new value
+into the repo secret `CLAUDE_CODE_OAUTH_TOKEN` (Settings → Secrets and variables → Actions) →
+re-run **Actions → Token canary → Run workflow** to confirm green (closes issue #22
+automatically). Confirmed while diagnosing: the human-actor gate (`triggering_actor: Carlob2499`)
+posed no problem for a manually-dispatched run, and `allowed_bots` **is** a real, live input of
+`claude-code-action@v1` (verified in the action's own `ALL_INPUTS` dump) — so B2 was a real,
+fixable gap, now fixed below.
+
+**Fixed in this session, independent of the token (all committed):**
+- `allowed_bots: "github-actions[bot]"` added to research-pass's agent step — the one workflow
+  legitimately auto-dispatched by a bot actor (from `new-guide.yml`); without this the zero-click
+  hop would have been rejected by the action's human-actor verification the first time it ever
+  reached that far.
+- `GH_TOKEN: ${{ github.token }}` added to job-level `env:` in research-pass.yml, modify-guide.yml,
+  and recert.yml — their agent steps' own Bash tool inherits the job environment, and each
+  prompt calls `gh issue`/`gh pr` directly (`land-branch.sh` requires it too). Previously unset;
+  never tested because no run ever reached a `gh` call.
+- `new-guide.yml`'s concurrency group changed from per-issue to a single global lock
+  (`new-guide-scaffold`) — country isn't parseable before the job runs, so two *different* issues
+  for the same country couldn't be told apart by any pre-job key; they raced to an add/add
+  conflict on `uniqueSlug`. A global serialize is correct and cheap (scaffolding is fast, rare).
+- `research-${{ inputs.slug }}` concurrency group added to research-pass.yml (rapid/duplicate
+  dispatches for the same slug would otherwise race the same branch's bump-commit-push cycle).
+- Circuit-breaker message now says "exceeds cap of 5" instead of "cap: 5" — it trips on attempt
+  6 (`attempts > CAP`), and the old wording read as "stops after 5."
+
+**Still to do, once the token is rotated (same session or the next, no plan changes needed):**
+1. Re-run `token-canary.yml` once to confirm green (closes #22).
+2. **End-to-end proof (W6, finally):** file a real New-guide issue for a throwaway `zz-`
+   destination, watch scaffold → auto-dispatch → Pass A/B → reconcile → verify → auto-graduate →
+   land → `auto-published` issue → ledger entry — all six of which have never fired, even once.
+   Exercise the stuck path once (cap attempts low on the throwaway). Cleanup is pre-approved (Q1).
+3. Smoke-test one `gh` call from inside an agent's Bash tool specifically (the GH_TOKEN fix above
+   is applied but, per Boundary Check #2, still unforced until a live run actually reaches it).
 
 Exit: one **green, headless, zero-click** run from issue to live guide. Until this exists, the
 site is a hand-made artifact with a beautiful description of a factory attached.

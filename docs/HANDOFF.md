@@ -20,31 +20,39 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (updated 2026-07-26, session close #8 — the audit session)
+## Snapshot (updated 2026-07-26, session close #9 — M0, the pipeline diagnosis)
 
-**A full adversarial audit ran (3 parallel passes: design/frontend, CI + live run history,
-build/perf) and its findings + executor program live in `docs/PLAN_MODERNIZE.md` — read that
-file, it is this session's real output.** Branch `claude/waypoint-audit-modernize-tne4ce`.
-Build clean, **848** unit tests, lint 0, `astro check` 0 errors.
+**The agent pipeline's root cause is now KNOWN, not guessed — confirmed from a live dispatch's
+actual API response.** Branch `claude/waypoint-audit-modernize-tne4ce`. Full audit + executor
+program in `docs/PLAN_MODERNIZE.md`. Build clean, 848 tests, lint 0, `astro check` 0 errors.
 
-- **The finding that matters: the agent half of the pipeline has NEVER run.** research-pass: 2
-  runs, both died pre-work (org typo; missing token). recert: 1 run, first model call errored
-  (`is_error`, 1 turn, $0) — the "cosmetic" diagnosis in 389b229 is contradicted by that shape.
-  The `us` guide was researched interactively (state stamps 80 ms apart, attempts 0). Three
-  untested seams stacked behind it: the action's human-actor gate vs the bot auto-dispatch,
-  `gh` auth inside the agent's Bash, and token-canary alerting "rotate" on any `is_error`.
-  M0 in PLAN_MODERNIZE is the resuscitation session — it gates everything else.
-- **Fixed this session:** Trip Split desktop rows were misaligned (5-col grid for a drag handle
-  the JS no longer renders — payer select crammed into a 1.3rem column; CSS-only fix, no data
-  touched) · dead `.se-drag`/`.imgfail` rules removed · root `mexico.json` (UTF-16 mojibake
-  stray) and root `wrangler.jsonc` (the Boundary-Check-#1 footgun) deleted · every stale flat
-  `<slug>.json` reference in new-guide/graduate-guide/research-pass fixed (the scaffold comment
-  404'd for every future guide; the research prompt could have induced an agent to CREATE a
-  shadowing flat file).
+- **`CLAUDE_CODE_OAUTH_TOKEN` is expired or revoked.** Dispatched `token-canary.yml` live with
+  `show_full_output: true` temporarily added (reverted after reading it): the real SDK response
+  is `error_status: 401, error: "authentication_failed", result: "Failed to authenticate. API
+  Error: 401 OAuth access token is invalid."` — two retries, both 401, then the SDK synthesizes
+  the misleading `is_error:true / $0 / 1 turn` envelope that made the July 20 recert failure look
+  cosmetic. It wasn't. The canary's own alert logic is fine — it correctly went red and updated
+  tracking issue #22 with the right fix instructions.
+- **⚠ OWNER ACTION, next session: rotate the token.** Run `claude setup-token` locally (needs the
+  creator's own Max login — no agent session can do this) → paste into the `CLAUDE_CODE_OAUTH_TOKEN`
+  repo secret → re-run **Actions → Token canary** to confirm green (auto-closes #22). Once green,
+  M0 continues immediately: the W6 end-to-end proof (a real `zz-` throwaway guide through the
+  whole scaffold → research → verify → graduate → land chain, gated cleanup pre-approved) has
+  never fired even once and is the very next step, same session.
+- **Fixed this session, independent of the token:** `allowed_bots: "github-actions[bot]"` on
+  research-pass's agent step (confirmed via the live dispatch's own `ALL_INPUTS` dump that this
+  input is real — B2 was a genuine gap) · `GH_TOKEN` job-level env added to research-pass,
+  modify-guide, and recert so their agents' Bash-tool `gh` calls have a credential (B3) ·
+  new-guide's concurrency key changed from per-issue to a single global lock (two different
+  issues for the same country could race an add/add conflict — B7) · research-pass gained its own
+  `research-<slug>` concurrency group · circuit-breaker message fixed to say "exceeds cap of 5."
+- **Previous session (#8) also fixed:** a live Trip Split desktop misalignment (5-col grid for a
+  drag handle the JS no longer renders), dead `.se-drag`/`.imgfail` CSS, stray `mexico.json` +
+  root `wrangler.jsonc`, stale flat-`<slug>.json` references across three workflows.
 - **Measured baseline (details in the plan):** first-paint JS lean (~35 KB gz guide), CLS 0.244
-  with cause identified (4 post-paint injected strips + 0/21 images with dimensions), zero
-  modulepreload/font preloads, no `--space-*`/z-index scales (skip-link paints under story
-  mode), 111 `: any`, dist 3.95 MB (42% on-demand pdfjs, NOT in the SW precache).
+  with cause identified (4 post-paint injected strips + 0/21 images with dimensions), no
+  `--space-*`/z-index scales (skip-link paints under story mode), 111 `: any`, dist 3.95 MB (42%
+  on-demand pdfjs, NOT in the SW precache).
 
 Standing context from session #7 (detail in git history / `git show 3dc5349:docs/HANDOFF.md`):
 every guide is a directory and a test enforces it · Mexico/Portugal retired (their researched
@@ -84,36 +92,30 @@ confirmed live by the creator.
 
 ## Owner tasks (need the creator, not the agent)
 
-1. **Re-enable the `config-protection` hook** if it is still off. It was disabled at
-   `~/.claude/settings.json` line 53 to let the ESLint config be fixed; that work is done. The
-   agent cannot restore it — the permission classifier refuses edits to `~/.claude/`.
-2. Commit `eae5573`'s subject line is a literal `@` (PowerShell here-string leaked into Bash); the
+1. **Rotate `CLAUDE_CODE_OAUTH_TOKEN` — blocks M0 from finishing.** `claude setup-token` locally →
+   repo secret → re-run Token canary. See Snapshot above; this is the only thing standing between
+   here and the pipeline's first-ever real end-to-end run.
+2. **Re-enable the `config-protection` hook** if it is still off (`~/.claude/settings.json` line
+   53) — the agent cannot; the permission classifier refuses edits to `~/.claude/`.
+3. Commit `eae5573`'s subject line is a literal `@` (PowerShell here-string leaked into Bash); the
    body is intact. The Fact-Forcing Gate blocks `--amend`.
-3. **Shell reminder:** commands in this repo's docs are Git Bash. Running `rm -rf` or
-   `git show … > file` in PowerShell fails or writes UTF-16 — both happened this session.
+4. **Shell reminder:** commands in this repo's docs are Git Bash — `rm -rf` / `git show … > file`
+   in PowerShell fails or writes UTF-16.
 
-**Closed this session:** GROQ key revoked · `FIREBASE_SERVICE_ACCOUNT` minted · merged remote
-branches deleted (`origin` is `main`-only) · **W5 label-free test RUN and CONFIRMED**, so the
-zero-click intake path is proven end to end for the first time · retired guides permanently deleted.
-
-**W6 (real end-to-end pipeline proof) stays deferred, gated on an actual trip** — creator's choice.
-The W0–W5 arc is complete and live; detail in `docs/PIPELINE.md` and the git log.
+**W6 (real end-to-end pipeline proof)** is no longer deferred — it's the next concrete step, once
+the token is rotated. Detail in `docs/PIPELINE.md` and `docs/PLAN_MODERNIZE.md`'s M0.
 
 ## Where we left off
 
-The lesson of the audit: **every green gate this repo owns measures the artifact; none of them
-measure the factory.** 848 tests, lint 0, typecheck 0, 248 green deploys — and the agent layer
-of the pipeline has still never executed one research stage, because run *history* was the gate
-nobody read. The `us` guide passing every check made the pipeline look proven while proving only
-that a human can do the pipeline's job.
+Two sessions ago the audit's lesson was: every green gate here measures the artifact, not the
+factory. This session answered *why* the factory never ran — not a guess, a 401 read straight off
+a live dispatch. The fix is now a five-minute human action away, not a mystery.
 
-**Re-prompt the creator with:** "The full adversarial audit is done — findings and the M0–M6
-executor program are in `docs/PLAN_MODERNIZE.md` on branch
-`claude/waypoint-audit-modernize-tne4ce`. Headline: the agent half of the new-guide pipeline has
-never run (both research-pass runs died pre-work, recert's one run errored on its first model
-call, and Sedona was researched by hand) — M0 resuscitates and proves it end to end, and it
-gates everything else. Already fixed on the branch: a live Trip Split desktop misalignment, the
-dead drag/imgfail CSS, the stray mexico.json and root wrangler.jsonc, and the flat-path 404s in
-three workflows. Five clarifying questions are at the bottom of the plan (throwaway-guide
-cleanup, backend stance, room-code privacy, the six record-or-relic docs, and the M4 visual
-direction). Answer those, then M0 on Sonnet?"
+**Re-prompt the creator with:** "M0's diagnosis is done: `CLAUDE_CODE_OAUTH_TOKEN` is expired —
+confirmed from the actual API response (401 OAuth access token is invalid), not inferred. Rotate
+it (`claude setup-token` → repo secret → re-run Token canary) and I'll immediately run the
+pipeline's first-ever real end-to-end proof: a throwaway guide through scaffold → research →
+verify → auto-graduate → land → live. Already fixed on the branch while waiting on that: the
+bot-actor gate, `gh` auth inside the agents' Bash tool, a real race condition in new-guide's
+concurrency, and the circuit-breaker's off-by-one message. Full detail in
+`docs/PLAN_MODERNIZE.md`'s M0."

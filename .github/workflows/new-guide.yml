@@ -26,8 +26,15 @@ permissions:
 # main, producing a duplicate "slug-2" guide. One concurrency group per issue serializes
 # them; the second run queues (does not cancel — a scaffold commit is not idempotent to
 # interrupt mid-commit).
+#
+# B7: a single GLOBAL group (not per-issue) — country isn't known until issue-to-scaffold.mjs
+# parses the body INSIDE the job, so two DIFFERENT issues for the same country can't be told
+# apart by a pre-job concurrency key. Two different issues used to run concurrently, both
+# compute the same uniqueSlug from independent checkouts, and the second `git pull --rebase`
+# hit an add/add conflict on identical paths. Serializing every scaffold run (fast, infrequent)
+# trades a little parallelism for correctness.
 concurrency:
-  group: new-guide-${{ github.event.issue.number }}
+  group: new-guide-scaffold
   cancel-in-progress: false
 
 jobs:

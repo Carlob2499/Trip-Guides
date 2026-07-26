@@ -28,6 +28,11 @@ jobs:
       github.event.label.name == 'modify-approved' &&
       contains(github.event.issue.labels.*.name, 'modify-request')
     runs-on: ubuntu-latest
+    # M0/B3: job-level so the agent action's own Bash tool (which inherits the job's
+    # environment) has a gh credential — the prompt below calls `gh issue comment`/`gh
+    # pr create` directly.
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:

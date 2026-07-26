@@ -48,14 +48,24 @@ permissions:
   pull-requests: write
   issues: write
 
+# M0/B3: rapid re-dispatches (or two dispatches for the same slug) would otherwise race the
+# same research/<slug> branch — each bump-commit-push cycle able to collide with the other's.
+concurrency:
+  group: research-${{ inputs.slug }}
+  cancel-in-progress: false
+
 jobs:
   research:
     runs-on: ubuntu-latest
     # A4: job-level so it's in scope for every step INCLUDING the agent action below (whose
     # own bash tool calls inherit the job's environment) — was hardcoded identically here,
     # in graduate-guide.yml, new-guide.yml, astro.config.mjs, and verify-live.mjs.
+    # M0/B3: GH_TOKEN here too — land-branch.sh and the prompt's own `gh issue`/`gh pr` calls
+    # run inside the agent's Bash tool, which inherits this job's environment; unset, `gh`
+    # inside the agent has no credential and every gh call in the prompt would fail unproven.
     env:
       SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://carlob2499.github.io/Trip-Guides' }}
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -138,9 +148,12 @@ jobs:
             git push origin "HEAD:research/${SLUG}"
           fi
 
+          # M0/B9: trips the run AFTER the cap-th attempt (attempts > CAP), so the message names
+          # the actual triggering count, not CAP itself — "cap: 5" read as "stops after 5" when
+          # it stops after 6.
           CAP=5
           if [ "$ATTEMPTS" -gt "$CAP" ]; then
-            echo "[budget] $SLUG has been attempted $ATTEMPTS times without reaching verified (cap: $CAP) — flagging instead of continuing."
+            echo "[budget] $SLUG has been attempted $ATTEMPTS times without reaching verified (exceeds cap of $CAP) — flagging instead of continuing."
             TITLE="Research stuck: $SLUG"
             STATUS_TEXT=$(node scripts/pipeline.mjs --slug "$SLUG" --status)
             BODY=$(printf 'Automated research has run **%s** times for `%s` without reaching `verified`.\n\nCurrent status:\n```\n%s\n```\n\nThis destination may be genuinely hard to source (bot-blocked, sparse coverage) or stuck on one fact. Check `guides-intake/%s.md` and the `research/%s` branch, then either finish it by hand or re-run this workflow to keep trying — the attempt count only resets if `guides-intake/%s.state.json` is edited directly (git-tracked, so that is a deliberate act, not automatic).' "$ATTEMPTS" "$SLUG" "$STATUS_TEXT" "$SLUG" "$SLUG" "$SLUG")
@@ -164,6 +177,11 @@ jobs:
           # Auth via the Claude Max subscription (claude setup-token), not a paid API key.
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          # M0/B2: new-guide.yml auto-dispatches this workflow with `GH_TOKEN: github.token`,
+          # so the triggering actor is github-actions[bot] — the action verifies a HUMAN actor
+          # by default and would otherwise reject the zero-click auto-dispatch. This is the one
+          # workflow that legitimately runs unattended from a bot trigger.
+          allowed_bots: "github-actions[bot]"
           # v1.0 action: `allowed_tools`/`model` are deprecated top-level inputs — both now go
           # through claude_args (--allowedTools / --model). Model economy: research is Sonnet
           # work (research-efficiency.md).
