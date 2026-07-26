@@ -105,6 +105,21 @@ errors, perf budget green (worst first-paint page 125 KB / 200 KB).
   `[slug]` in an ESLint `files` path is a glob CHARACTER CLASS, so those four endpoints matched
   nothing until rewritten with `*`. guide.css split at its threshold (print block → print.css,
   790 → 696 lines).
+- **Tooling follow-ups (2026-07-26, Part 5 of the plan):** `playwright.config.ts` now resolves
+  Chromium adaptively — the managed browser wins when installed (CI unchanged), a pre-installed
+  one is used only when it is genuinely absent, `PW_CHROMIUM_PATH` overrides. **Visual
+  verification works again from a plain `npx playwright test`**, which un-blocks the deferred
+  `--space-*` sweep. The token canary now @-mentions AND assigns the repo owner, routing the
+  alert through GitHub's own email/mobile-push path (a Claude routine was built and deleted —
+  routine sessions can't be granted the github connector here, and this environment's proxy
+  intercepts api.github.com either way, so it could not see what it was checking). The wizard's
+  PDF upload now derives COUNTRY — the one required field — from the real country table,
+  prefilling only on exactly one match. **a11y baselines deliberately NOT re-recorded** from
+  this sandbox: they are calibrated to CI's font stack, and rewriting them here would turn CI
+  red. That belongs on CI's runner.
+- **Connector hygiene (owner action):** this session ran with Dropbox, Gmail, Calendar, Drive,
+  PubMed, Spotify and Vercel attached — zero call sites, ~45k tokens of dead schema per session.
+  `CLAUDE.md`'s policy (github + Claude Code Remote only) is correct and is not being followed.
 - **Session #8 also fixed:** a live Trip Split desktop misalignment, dead `.se-drag`/`.imgfail`
   CSS, stray `mexico.json` + root `wrangler.jsonc`, stale flat-`<slug>.json` references.
 

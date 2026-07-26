@@ -25,8 +25,27 @@ function today() {
   return new Date().toISOString().slice(0, 10);
 }
 
+/* The repo owner, derived from GH_REPO ("owner/repo") rather than hardcoded. Used to ASSIGN and
+   @-MENTION them on the alert.
+
+   Why this matters more than it looks: the canary already detected the dead token correctly and
+   filed this issue — and the pipeline still stayed broken for days, because an issue nobody
+   opens is not an alert. Assigning + mentioning routes it through GitHub's OWN notification
+   path (email, and mobile push if the GitHub app is installed), which needs no extra service,
+   no webhook, and no connector. A scheduled external watcher was considered and rejected: it
+   would have had to reach api.github.com from an environment whose proxy intercepts it, i.e. a
+   health check that cannot see the thing it is checking. */
+function ownerLogin() {
+  const repo = process.env.GH_REPO || "";
+  const owner = repo.split("/")[0];
+  return /^[A-Za-z0-9-]+$/.test(owner) ? owner : null;
+}
+
 function body(runUrl) {
+  const owner = ownerLogin();
   return [
+    owner ? `@${owner} — the agent pipeline is down until this is rotated.` : "",
+    "",
     `_Detected ${today()} (UTC)._`,
     "",
     "The weekly token canary could not complete a minimal Claude call — **`CLAUDE_CODE_OAUTH_TOKEN` is almost certainly expired or revoked.**",
@@ -62,6 +81,17 @@ if (outcome === "success") {
     console.log(`[token-canary] red — updated issue #${existing}`);
   } else {
     gh(["issue", "create", "--title", TITLE, "--body", body(runUrl), "--label", LABEL]);
+    // Assign separately, and never let it fail the run: filing the alert is the job, and an
+    // assignment that bounces (permissions, a renamed account) must not swallow the alert
+    // itself. The @mention in the body above already notifies regardless.
+    const owner = ownerLogin();
+    if (owner) {
+      try {
+        gh(["issue", "edit", String(findOpenIssue()), "--add-assignee", owner]);
+      } catch {
+        console.log("[token-canary] note: could not assign to " + owner + " (issue still filed + mentions them)");
+      }
+    }
     console.log("[token-canary] red — opened tracking issue");
   }
 }

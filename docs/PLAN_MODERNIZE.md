@@ -516,3 +516,49 @@ Also worth keeping visible: **`a11y.spec.ts`'s `color-contrast/bgOverlap` baseli
 calibrated to a different machine** than this sandbox (proven by node-level diff against
 fully-stashed code — see M4). They should be re-recorded from CI's own runner, which is the only
 machine whose counts the gate should encode.
+
+---
+
+## Part 5 — Tooling & intake follow-ups (2026-07-26)
+
+**Connectors.** This session ran with Dropbox, Gmail, Google Calendar, Google Drive, PubMed,
+Spotify and Vercel attached — seven servers with **zero call sites in this repo**, six of them
+already named in `CLAUDE.md`'s verified do-not-enable list (~45k tokens of dead schema per
+session, before any work starts). The standing policy is unchanged and correct: **github +
+Claude Code Remote only**. This is an owner action in the connector picker.
+
+**Playwright browser resolution — FIXED.** `@playwright/test` 1.61.1 pins Chromium revision
+1228; this image pre-bakes r1194 and blocks the download, so `npx playwright test` died with
+"Executable doesn't exist" even though a working Chromium was sitting at
+`/opt/pw-browsers/chromium`. That is why the a11y gate could only be run this session by
+hand-building a throwaway config, and why the `--space-*` sweep was deferred as unverifiable.
+`playwright.config.ts` now resolves the browser adaptively: the managed browser wins whenever
+it is actually installed (CI always — the config is byte-for-byte inert there), and a
+pre-installed binary is used only when the managed one is genuinely absent, with
+`PW_CHROMIUM_PATH` as an explicit override. Verified: `npx playwright test` now runs the a11y
+spec with no special flags. **Downgrading Playwright was rejected** — holding the whole test
+framework back to suit one image's pre-baked browser is the wrong trade.
+
+**Token alerting — FIXED in the repo, not with a routine.** A scheduled Claude Code Remote
+routine was built and then **deleted**, because it could not do its job: routine-fired sessions
+here cannot be granted the github connector through the trigger API (the org disallows it), and
+the fallback — plain `api.github.com` over HTTPS — is intercepted by this environment's agent
+proxy, which returns "GitHub access is not enabled for this session" for authenticated AND
+unauthenticated requests alike (smoke-tested both). A weekly health check that cannot see the
+thing it checks is worse than none. The working fix lives in `scripts/token-canary-report.mjs`:
+the canary alert now **@-mentions and assigns the repo owner** (derived from `GH_REPO`, never
+hardcoded), routing it through GitHub's own notification path — email, plus mobile push if the
+GitHub app is installed — with no external service, webhook, or connector. Assignment is
+wrapped so a bounced assign can never swallow the alert itself. If a phone push from a *Claude*
+routine is still wanted, it has to be created from the claude.ai routines UI where the github
+connector can be attached.
+
+**Wizard intake — country is now derived.** `parseBookingDocument` extracted dates, flights and
+lodging lines but not COUNTRY, the one field the form actually requires, so a traveller who
+dropped in a booking still had to type it. It now matches against the SAME country table +
+alias map the scaffolder validates against (`src/data/countries.mjs`) — word-boundary matched,
+longest-name-first, aliases resolved to canonical names. The UI prefills only when there is
+**exactly one** match and the field is empty: two matches means the document also names a
+transit hub or a billing address, and a coin-flip prefill into the required field is worse than
+leaving it blank. 6 new tests, including "Chinatown" must not match China, and the no-match case
+returning an honest empty list.
