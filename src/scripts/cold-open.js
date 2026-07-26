@@ -9,7 +9,14 @@
   if (!strip) return;
   var KEY = "tg-whatis";
   try { if (localStorage.getItem(KEY)) return; } catch (e) { return; }
+  // M4 item 4 — ONE onboarding device per view (MOTION.md: "spend the boldness in one place").
+  // A cold first open used to fire the story intro, this strip, AND the nav-hint into the same
+  // viewport. The story intro owns visit 1, so stand down while it plays and WITHOUT marking
+  // this seen — the framing simply waits for the next visit rather than being burned unread.
+  if (window.__storyIntro) return;
   strip.hidden = false;
+  // Claim this view so onboard.js's nav-hint defers to the next one.
+  window.__onboardShown = true;
   var btn = strip.querySelector(".cold-open-x");
   function dismiss() {
     strip.hidden = true;

@@ -1,0 +1,50 @@
+---
+/* M4 item 1 — ONE icon language.
+   The site's chrome previously mixed three vocabularies: crisp stroke SVGs (Share, GPX,
+   calendar), raw text glyphs (◑ ⌂ ↑ ▾), and platform emoji in the tab bar and mobile sheet
+   ($ 🗳 📌 📓 🧳). Emoji render differently on every OS, break the mono-label typography,
+   are announced by their emoji name to screen readers, and read "hobby site" against an
+   otherwise rigorous cartographic identity — the single most visible off-brand element.
+
+   This is the one place that vocabulary lives. All paths are 24x24, stroke-only, and inherit
+   `currentColor` + the 1.8px stroke weight the existing Share/GPX/calendar icons already use,
+   so a new icon can never drift in weight or colour from the rest.
+
+   Always decorative: every icon here is `aria-hidden`, because in every call site the control
+   ALSO carries a real text label (visible, or visually-hidden + aria-label on the desktop
+   icon-only tool tabs). An icon is never the accessible name. */
+interface Props {
+  name: keyof typeof PATHS;
+  size?: number;
+  class?: string;
+}
+const PATHS = {
+  // Tool tabs
+  budget: '<path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+  vote: '<path d="M9 12.5l2 2 4.5-4.5"/><path d="M3 17V9.2a2 2 0 0 1 1.3-1.9l7-2.6a2 2 0 0 1 1.4 0l7 2.6A2 2 0 0 1 21 9.2V17"/><path d="M3 17h18v3a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>',
+  remind: '<path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/>',
+  learn: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+  kit: '<rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V4.5A1.5 1.5 0 0 1 9.5 3h5A1.5 1.5 0 0 1 16 4.5V7M9 21V7M15 21V7"/>',
+  // Chrome
+  home: '<path d="M3 10.2 12 3l9 7.2"/><path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5"/><path d="M9.5 21v-6.5h5V21"/>',
+  top: '<path d="M12 20V4M5 11l7-7 7 7"/>',
+  chevron: '<path d="m6 9 6 6 6-6"/>',
+  moon: '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>',
+  edit: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',
+  phone: '<rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/>',
+  image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="m21 16-5-5-9 9"/>',
+  check: '<path d="m4.5 12.5 5 5 10-11"/>',
+  shield: '<path d="M12 22s8-3.5 8-10V5.5l-8-3-8 3V12c0 6.5 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/>',
+  calendar: '<rect x="3" y="4.5" width="18" height="17" rx="2"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/>',
+  chat: '<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-3.9-.9L3 21l1.9-4.6A8.4 8.4 0 0 1 12 3.2a8.4 8.4 0 0 1 9 8.3Z"/>',
+  plane: '<path d="M2 13.5 21 4l-4 10.5L21 21l-6.5-3-4 3.5-1-4.5Z"/>',
+} as const;
+const { name, size = 16, class: cls = "" } = Astro.props;
+const d = PATHS[name];
+---
+{d && (
+  <svg class={`wp-ico ${cls}`.trim()} width={size} height={size} viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true" focusable="false" set:html={d} />
+)}

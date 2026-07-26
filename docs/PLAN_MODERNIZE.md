@@ -264,10 +264,66 @@ scrollable region without keyboard access (`scrollable-region-focusable`) — fi
 `tabindex="0"` on `#guideStats` (no `aria-label`; a bare div's implicit "generic" role prohibits
 ARIA naming, which axe's `aria-prohibited-attr` correctly caught on the first attempt).
 
-Remaining M4 items (1–5: icon language, editorial hub, tab-bar strategy, first-visit
-choreography, colophon footer) are unstarted — genuinely larger, more visually pervasive changes
-(icon swap touches every page; hub layout is the front door) that deserve the Opus spec + creator
-review pass this section already calls for, not a rushed extension of this session.
+**Items 1–5 SHIPPED 2026-07-26 (Opus session) — M4 is COMPLETE.**
+
+1. **One icon language.** `src/components/Icon.astro` is now the single home for the chrome
+   vocabulary: 19 stroke paths, all 24×24, `currentColor`, 1.8px — the same weight the existing
+   Share/GPX/calendar icons already used, so a new icon cannot drift. Replaced across every
+   surface: the 5 tool tabs, the 5 mobile-sheet tool rows, the bottom bar (`⌂ ↑ ▾`), the
+   dark-mode toggle's server-rendered first-paint state (it was a bare `◑` that flashed for one
+   frame before theme.js swapped in the real SVG), Trip Kit's 5 card eyebrows, the Learnings
+   buttons, the jet-lag plane, the day-pace clock, the footer pencil, and the share-install
+   phone. **`dist/` now greps clean of every one of those glyphs.** Accessible names were
+   preserved deliberately: every icon is `aria-hidden` and every control keeps real text, so
+   screen readers no longer announce emoji names ("ballot box with ballot Vote") while losing
+   nothing. Deliberately NOT converted: `reminders.js`'s `KIND_ICON` map (🔑🕘🔗📌) — those are
+   JS-rendered per-item *content type* markers inside a feature silo, not page chrome, and
+   converting them means threading SVG strings through a template that currently concatenates
+   text. Flagged, not silently skipped.
+2. **Editorial hub.** `.hub-grid` carries `data-count`; at ≤4 guides and ≥900px it becomes a
+   2-up layout with 3:2 covers, and a 3-guide catalog closes as 2 + 1 with the last card
+   full-bleed at 21:9 (an odd third card at half width reads as a gap, not a finish). At 5+ the
+   original `auto-fill, minmax(270px)` stands untouched, so this needs no revisiting as the
+   catalog grows. The "Featured above" dedup marker is unchanged — the grid stays the complete
+   index.
+3. **Tab-bar strategy.** The tool tabs stay in the SAME tablist (one arrow-key ring, every
+   `aria-controls` intact — collapsing them into a popover would have broken the tablist's ARIA
+   structure for a purely visual win). Instead `.gtab-tool` sets them off with a divider, and at
+   ≥900px their labels go **clipped, not `display:none`** — clipped text stays in the
+   accessibility tree, so the strip collapses to one row on desktop while every accessible name
+   survives verbatim. Mobile keeps the labels.
+4. **First-visit choreography.** Story intro owns visit 1; the cold-open framing takes the next
+   eligible view; the nav-hint waits its turn — one device per view, and none of them burn their
+   "seen" flag while standing down. **This required fixing a real latent ordering bug:**
+   `story-open.js` was imported BELOW `cold-open.js` and `onboard.js`, so the
+   `window.__storyIntro` flag those two would need to check was always `undefined` when they ran.
+   It now sits above them (and still above `gsap-hero.js`, its other ordering constraint).
+5. **Colophon footer.** `{guide.footer}` + three `<br>`-separated spans became a signature block:
+   a verification claim, then this guide's OWN counted numbers, then the small print and the
+   request-a-change pill. The numbers are counted at build from the guide's own data — Korea
+   renders "45 verified facts / 23 primary sources", Denmark 21/16, Sedona 11/7. **The "Checked"
+   stamp needed real work to be honest:** the guide-level `verified` field is free prose
+   ("Checked 28 Jun 2026 for the 8–15 Jul trip; …"), so the existing ISO-matching `verifiedDate`
+   was `null` on every real guide and the row would silently never render. Added
+   `latestVerifiedOn()` to `guide-stats.ts` (4 new tests) — the max of the per-fact `verified_on`
+   provenance dates, which IS machine-readable and is a true statement. All three guides now show
+   a real "Last checked 2026-07-23".
+
+**A11y verification (this pass changed every tab's accessible name, so it was checked, not
+assumed).** Ran the full gate against the sandbox's pre-installed Chromium via a temporary local
+config (not committed). 8 passed, 6 failed — all six `color-contrast/bgOverlap` over the
+documented `LAYOUT_JITTER` ceiling. **Proven not ours, by node-level diff rather than by
+argument:** a temporary diagnostic spec mirroring `prep()` exactly dumped the offending node
+targets with M4 applied (58 nodes) and again with all `src/` changes stashed (58 nodes) — the
+counts and the node sets are *identical*, so M4 contributed zero. This is the same photo-load /
+font-metric drift already documented in `a11y.spec.ts`'s own comments and in M4-item-6's note
+above; the baseline was calibrated on a different Chromium. Someone should re-baseline those
+numbers from CI's own runner, which is the only machine whose counts the gate should encode.
+
+**Note for the next session:** `src/styles/guide.css` is at **790 lines** against CLAUDE.md's
+~800-line split threshold. It was not split here (the rule says "not before"), but the next
+feature to touch it will cross the line — the print block (~77 lines) and the colophon block are
+the natural first carve-outs.
 
 The five moves from §1.4, as one coherent pass (uniform-across-surfaces rule applies):
 

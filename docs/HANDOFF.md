@@ -20,13 +20,13 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (updated 2026-07-26, session close #9 — M0 diagnosis + M1/M2/M3/M4-item-6 shipped)
+## Snapshot (updated 2026-07-26, session close #10 — M1–M4 COMPLETE; M0 blocked on the token)
 
-**The agent pipeline's root cause is KNOWN (confirmed from a live dispatch's actual API
-response), and M1/M2/M3 plus M4's creator-priority item are DONE.** Branch
-`claude/waypoint-audit-modernize-tne4ce`. Full audit + executor program in
-`docs/PLAN_MODERNIZE.md` — read that file for the complete record; this is a summary. Build
-clean, **854** tests, lint 0, `astro check` 0 errors.
+**M1, M2, M3 and M4 are all COMPLETE. M0 is diagnosed and blocked on ONE owner action (rotate
+the OAuth token).** Branch `claude/waypoint-audit-modernize-tne4ce`. Full audit + executor
+program in `docs/PLAN_MODERNIZE.md` — read that file for the complete record; this is a summary.
+Build clean, **858** tests, lint 0, `astro check` 0 errors, perf budget green (worst first-paint
+page 124 KB / 200 KB).
 
 - **M0 (blocked on the creator): `CLAUDE_CODE_OAUTH_TOKEN` is expired/revoked** — confirmed via a
   live dispatch: `401 OAuth access token is invalid`, not the "cosmetic" misdiagnosis from July
@@ -50,7 +50,30 @@ clean, **854** tests, lint 0, `astro check` 0 errors.
   the px math before landing a "zero visual change" claim, don't just assert it); a dead duplicate
   `font-weight` declaration removed; two stale hub-motion.css comments fixed. Spacing-scale sweep
   and `.day`'s two-file styling are real but deferred — 15+ files, needs its own pass.
-- **M4 item 6 (More detail v2) shipped — creator's explicit priority.** `.card-more-sum` is now a
+- **M4 is now COMPLETE (items 1–5 shipped this session, Opus).** Full detail in the plan.
+  **Icons:** `src/components/Icon.astro` is the single home for 19 stroke paths; every emoji and
+  text glyph is gone from the chrome — tool tabs, mobile sheet, bottom bar, dark toggle (its `◑`
+  used to flash for a frame before JS swapped it), Trip Kit eyebrows, jet-lag, day-pace, footer.
+  `dist/` greps clean. Accessible names preserved (icons `aria-hidden`, controls keep real text),
+  so screen readers stop announcing emoji names. Left deliberately: `reminders.js`'s KIND_ICON
+  map — JS-rendered content-type markers in a silo, not chrome.
+  **Hub:** `data-count` drives a 2-up editorial layout with bigger covers at ≤4 guides (3 closes
+  as 2 + 1, last card full-bleed); the original auto-fill returns at 5+, untouched.
+  **Tabs:** tool tabs stay in the same tablist (ARIA and arrow-key ring intact) but get a divider
+  and, at ≥900px, CLIPPED labels — clipped text stays in the a11y tree, so the strip fits one row
+  on desktop with every accessible name intact.
+  **Choreography:** story intro → cold-open → nav-hint, one per view, none burning its flag while
+  standing down. This exposed a real latent bug: `story-open.js` was imported BELOW the two
+  scripts that needed its `window.__storyIntro` flag, so it was always `undefined` when they read
+  it. Fixed by reordering (still above `gsap-hero.js`, its other constraint).
+  **Colophon:** the footer is now a signature — claim, this guide's own counted numbers, small
+  print, request-a-change pill. Korea shows 45 verified facts / 23 primary sources, Denmark
+  21/16, Sedona 11/7. The "Checked" stamp needed real work to be honest: the guide-level
+  `verified` field is free prose, so the ISO-matching `verifiedDate` was null on every guide and
+  the row would have silently never rendered — added `latestVerifiedOn()` (4 tests) over the
+  per-fact provenance dates, which are machine-readable. All three guides now show a true
+  "Last checked 2026-07-23".
+- **M4 item 6 (More detail v2) shipped last session — creator's explicit priority.** `.card-more-sum` is now a
   real chip (fill/border/hover/focus-visible/chevron); `moreLabel` is a real schema field with an
   honest computed-count fallback; the split refuses to fold a `⚠` or `<ul>/<ol>` remainder (shows
   everything rather than hide a warning); a masked fade-out preview renders above the closed chip;
@@ -61,9 +84,7 @@ clean, **854** tests, lint 0, `astro check` 0 errors.
   `.guide-stats` change (`tabindex="0"`, scrollable-region-focusable), and bisected a 4-test
   `bgOverlap` failure all the way to the pre-session commit — it reproduces on fully-stashed code,
   so it's environment/font-stack drift the test's own comments already document, not a
-  regression. M4 items 1–5 (icon language, editorial hub, tab strategy, onboarding choreography,
-  colophon footer) are unstarted — larger, more visually pervasive, deserve the Opus-spec +
-  creator-review pass the plan calls for rather than a rushed extension of this session.
+  regression.
 - **Session #8 also fixed:** a live Trip Split desktop misalignment, dead `.se-drag`/`.imgfail`
   CSS, stray `mexico.json` + root `wrangler.jsonc`, stale flat-`<slug>.json` references.
 
@@ -129,7 +150,7 @@ region needed `tabindex`); one apparent a11y regression was investigated to grou
 be pre-existing environment drift, not a session-created bug — both documented in the plan rather
 than either ignored or wrongly "fixed."
 
-**Re-prompt the creator with:** "M0's diagnosis is done: `CLAUDE_CODE_OAUTH_TOKEN` is expired —
+**Re-prompt the creator with:** "M1 through M4 are complete and pushed. M0's diagnosis is done: `CLAUDE_CODE_OAUTH_TOKEN` is expired —
 confirmed from the actual API response (401 OAuth access token is invalid), not inferred. Rotate
 it (`claude setup-token` → repo secret → re-run Token canary) and I'll immediately run the
 pipeline's first-ever real end-to-end proof: a throwaway guide through scaffold → research →
@@ -139,5 +160,10 @@ scale, the skip-link/story-mode bug, a dead CSS declaration), and M4's centerpie
 detail' redesign you specifically asked for: it's now a real chip control, refuses to fold
 warnings, shows a fade preview of what's hidden, and animates open. 854 tests green. Full detail,
 including an a11y investigation that found one real bug and ruled out a false one, in
-`docs/PLAN_MODERNIZE.md`. Remaining M4 items (icon language, hub layout, onboarding
-choreography, footer) are next, sized for their own Opus-spec pass."
+`docs/PLAN_MODERNIZE.md`. M4 is now finished too — one icon language (every emoji gone from the
+chrome), a 2-up editorial hub, a one-row desktop tab strip, one onboarding device per view, and
+a colophon footer that signs each guide with its own counted verification numbers. 858 tests
+green. What's left: M0's end-to-end proof (needs the token), M5 (dynamic runtime / room-code
+options), M6 (the 111 `any`s), and the deferred M2 items — modulepreload/font preloads and the
+spacing-scale sweep. Note guide.css is at 790/800 lines; the next thing to touch it should split
+it."

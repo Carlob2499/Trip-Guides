@@ -1,4 +1,5 @@
 ---
+import Icon from "../Icon.astro";
 // Day-by-day itinerary — the heart of the Plan view. Renders:
 //   1. A numbered day-scrubber (color-block chips) — sticky, scroll-synced +
 //      click-to-jump via day-rail.js.
@@ -67,7 +68,7 @@ const actualFor = (date: string) =>
             <span class="day-kitcount" hidden aria-live="polite"></span>
           )}
           <span class="day-sun" role="group" hidden></span>
-          {d.pace && <div class="pace">⏱ {d.pace}</div>}
+          {d.pace && <div class="pace"><Icon name="clock" size={13} /> {d.pace}</div>}
           {d.waypoints && d.waypoints.length > 0 && (
             <ol class="stops" aria-label="Stops this day">
               {d.waypoints.map((w: any, wi: number) => (

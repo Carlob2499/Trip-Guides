@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import PwaHead from "../components/PwaHead.astro";
+import Icon from "../components/Icon.astro";
 // Same accent resolution as the guide pages + OG (uniform across surfaces):
 // explicit theme > extracted cover palette > country accent (src/lib/palettes.ts).
 import { accentForGuide, paletteAccentsForGuide } from "../lib/palettes";
@@ -190,7 +191,7 @@ const contourLayers = [
         <span class="ov-wordmark">Waypoint</span>
         <div class="ov-bar-actions">
           <button id="btnNewGuide" class="ov-pill ov-pill-solid" type="button">＋ New guide</button>
-          <button id="btnDark" class="ov-pill ov-pill-icon" aria-label="Switch to dark mode" title="Switch to dark mode">◑</button>
+          <button id="btnDark" class="ov-pill ov-pill-icon" aria-label="Switch to dark mode" title="Switch to dark mode"><Icon name="moon" class="tb-ico" /></button>
         </div>
       </div>
 
@@ -275,7 +276,12 @@ const contourLayers = [
         </div>
       </div>
 
-      <div class="hub-grid" id="hubGrid">
+      {/* M4 item 2 — the grid's `auto-fill, minmax(270px)` is a MANY-items pattern; against a
+          curated catalog of three it rendered three modest cards under a full-viewport hero,
+          making the weakest beat on the page the one that lists the product. `data-count` lets
+          CSS switch to a 2-up editorial layout with larger covers while the catalog is small,
+          and fall back to the original auto-fill at 5+ with no markup change. */}
+      <div class="hub-grid" id="hubGrid" data-count={gridGuides.length}>
         {gridGuides.map(({ g, ex }) => {
           // The full 3-stop palette, not just --accent — unused until V3 (Atlas card tinting,
           // docs/archive/PLAN_VISUAL_OVERHAUL.md) wires --accent2/--accent-raw into real CSS. Set here

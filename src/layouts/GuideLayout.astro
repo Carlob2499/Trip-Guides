@@ -1,5 +1,6 @@
 ﻿---
 import Block from "../components/Block.astro";
+import Icon from "../components/Icon.astro";
 import PwaHead from "../components/PwaHead.astro";
 import { jsonEmbed } from "../lib/json-embed";
 import TripSplit from "../components/TripSplit.astro";
@@ -14,6 +15,7 @@ import { paletteFor, accentForGuide } from "../lib/palettes";
 import { accentTokens, accentStyle } from "../lib/accent-tokens";
 import { generateContourLayer } from "../lib/contours";
 import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
+import { computeGuideStats, latestVerifiedOn } from "../lib/guide-stats";
 import { collectWaypoints, collectDayEvents, buildSummary } from "../features/exports/index";
 // Self-hosted variable fonts (bundled, base-path-safe, offline-correct) — no CDN.
 import "@fontsource-variable/bricolage-grotesque";
@@ -210,6 +212,18 @@ const verifiedWarning = guide.verified?.trimStart().startsWith("⚠") ? guide.ve
 // stamp when present (surfaced, never invented; no date → no chip).
 const verifiedDate = guide.verified?.match(/\d{4}-\d{2}-\d{2}/)?.[0] ?? null;
 
+// M4 item 5 — the colophon's numbers, counted from THIS guide's own data by the same walker the
+// hub's Overture uses (src/lib/guide-stats.ts: a "verified fact" is any node carrying a
+// source_url; sources are distinct hostnames). Counted, never typed — a footer that claims
+// "47 verified facts" has to mean exactly that on every rebuild. Zero counts render nothing:
+// an unresearched scaffold gets an honest blank, not a row of zeroes.
+const colophon = computeGuideStats([guide]);
+// The guide-level `verified` field is free prose ("Checked 28 Jun 2026 for the 8–15 Jul
+// trip; …"), so `verifiedDate` above is null on every real guide — the per-FACT provenance
+// dates are the machine-readable ones. Their maximum is a true, checkable statement, and
+// falls back to the guide-level ISO date if a guide ever carries one.
+const colophonChecked = verifiedDate ?? latestVerifiedOn([guide]);
+
 // Public holidays — if the guide has a `holidays` section, look up the build-time
 // data for this country + trip year and slice it around the trip dates. All
 // server-side; the block hides when there's no country mapping or no data file.
@@ -311,11 +325,13 @@ const tripSummary = buildSummary(guide);
              sos.js so they share the chrome-button styling. -->
         <button id="btnShare" class="topbar-btn" aria-label="Share this guide" title="Share this guide"><svg class="tb-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg> <span class="tb-label">Share</span></button>
         <!--
-          Dark-mode toggle — icon and aria-label are updated by JS.
-          ◑ = currently light → click to go dark
-          ☀ = currently dark  → click to go light
+          Dark-mode toggle — icon and aria-label are swapped by theme.js on load (moon =
+          currently light, click for dark; sun = currently dark, click for light). The moon
+          below is the SERVER-RENDERED first-paint state and must match theme.js's own MOON_SVG:
+          it used to be a bare text glyph, which flashed for one frame before JS replaced it
+          with the real icon (M4 item 1 — one icon language, no glyph fallbacks).
         -->
-        <button id="btnDark" class="topbar-btn" aria-label="Switch to dark mode" title="Switch to dark mode">◑</button>
+        <button id="btnDark" class="topbar-btn" aria-label="Switch to dark mode" title="Switch to dark mode"><Icon name="moon" class="tb-ico" /></button>
       </div>
     </nav>
 
@@ -346,7 +362,7 @@ const tripSummary = buildSummary(guide);
           Email
         </a>
       </div>
-      <p class="share-install">📲 <b>Save this guide to your phone:</b> open your browser menu and choose <i>Add to Home Screen</i> — it then works offline for the whole trip (maps and photos still need a connection).</p>
+      <p class="share-install"><Icon name="phone" size={15} /> <b>Save this guide to your phone:</b> open your browser menu and choose <i>Add to Home Screen</i> — it then works offline for the whole trip (maps and photos still need a connection).</p>
       {(hasWaypoints || hasDayEvents) && (
         <div class="share-downloads">
           <p class="share-dl-head">Take it with you</p>
@@ -378,16 +394,30 @@ const tripSummary = buildSummary(guide);
                 aria-controls={`grp-${i}`}
                 aria-label={g} aria-selected={i === 0 ? "true" : "false"}>{shortLabel(g)}</button>
       ))}
-      <button class="gtab gtab-split" role="tab" type="button" id="gtab-split" data-tab="split"
-              aria-controls="tripSplit" aria-selected="false">$ Budget</button>
-      <button class="gtab gtab-vote" role="tab" type="button" id="gtab-vote" data-tab="vote"
-              aria-controls="tripVote" aria-selected="false">🗳 Vote</button>
-      <button class="gtab gtab-remind" role="tab" type="button" id="gtab-remind" data-tab="remind"
-              aria-controls="tripRemind" aria-selected="false">📌 Reminders</button>
-      <button class="gtab gtab-learn" role="tab" type="button" id="gtab-learn" data-tab="learn"
-              aria-controls="tripLearn" aria-selected="false" hidden>📓 Learnings</button>
-      <button class="gtab gtab-kit" role="tab" type="button" id="gtab-kit" data-tab="kit"
-              aria-controls="tripKit" aria-selected="false">🧳 Trip kit</button>
+      {/* M4 item 3 — the TOOL tabs are layout chrome by CLAUDE.md's own definition, not content
+          groups, and Korea's 13 content tabs + these 5 made the strip scroll even on a 1400px
+          desktop. They stay in the SAME tablist (one tab set, one arrow-key ring, aria-controls
+          untouched — collapsing them into a popover would have broken the tablist's ARIA
+          structure for a purely visual win). Instead `.gtab-tool` marks them: a separator rule
+          sets them off as chrome, and on desktop their labels go visually-hidden (clipped, NOT
+          display:none — clipped text stays in the accessibility tree) so the strip fits one row
+          while every accessible name survives verbatim. Mobile keeps the labels: the strip
+          scrolls there by design and the sheet below spells them out in full anyway. */}
+      <button class="gtab gtab-tool gtab-split" role="tab" type="button" id="gtab-split" data-tab="split"
+              aria-controls="tripSplit" aria-selected="false"
+              aria-label="Budget calculator" title="Budget calculator"><Icon name="budget" class="gtab-ico" /><span class="gtab-txt">Budget</span></button>
+      <button class="gtab gtab-tool gtab-vote" role="tab" type="button" id="gtab-vote" data-tab="vote"
+              aria-controls="tripVote" aria-selected="false"
+              aria-label="Group vote" title="Group vote"><Icon name="vote" class="gtab-ico" /><span class="gtab-txt">Vote</span></button>
+      <button class="gtab gtab-tool gtab-remind" role="tab" type="button" id="gtab-remind" data-tab="remind"
+              aria-controls="tripRemind" aria-selected="false"
+              aria-label="Reminders" title="Reminders"><Icon name="remind" class="gtab-ico" /><span class="gtab-txt">Reminders</span></button>
+      <button class="gtab gtab-tool gtab-learn" role="tab" type="button" id="gtab-learn" data-tab="learn"
+              aria-controls="tripLearn" aria-selected="false" hidden
+              aria-label="Trip learnings" title="Trip learnings"><Icon name="learn" class="gtab-ico" /><span class="gtab-txt">Learnings</span></button>
+      <button class="gtab gtab-tool gtab-kit" role="tab" type="button" id="gtab-kit" data-tab="kit"
+              aria-controls="tripKit" aria-selected="false"
+              aria-label="Trip kit" title="Trip kit"><Icon name="kit" class="gtab-ico" /><span class="gtab-txt">Trip kit</span></button>
     </div>
     </nav>
 
@@ -493,7 +523,7 @@ const tripSummary = buildSummary(guide);
                stop — it shows which of those two is actually true. -->
           <p class="draft-graduate">
             <a class="draft-graduate-link" href={`${base}/progress/?slug=${encodeURIComponent(ogSlug)}`}>
-              ⏱ Track live progress
+              <Icon name="clock" size={14} /> Track live progress
             </a>
           </p>
           <!-- Anyone can nominate; nothing here actually publishes anything — the linked issue
@@ -526,9 +556,9 @@ const tripSummary = buildSummary(guide);
         <div class="jl-wrap">
           <button class="jl-toggle" id="jlToggle" type="button"
                   aria-expanded="false" aria-controls="jlPanel">
-            <span class="jl-icon" aria-hidden="true">✈</span>
+            <Icon name="plane" size={15} class="jl-icon" />
             <span>Jet-lag calculator</span>
-            <span class="jl-chev" aria-hidden="true">▾</span>
+            <Icon name="chevron" size={13} class="jl-chev" />
           </button>
           <div id="jlPanel" hidden data-dest-tz={destTzIana}>
             <div class="jl-inner">
@@ -599,7 +629,7 @@ const tripSummary = buildSummary(guide);
               {byG[g].some((o: any) => o.s.type === "days") && (
                 <div class="lnw-cta">
                   <button class="lnw-open" type="button" data-lnw-open hidden>
-                    <span class="lnw-open-ico" aria-hidden="true">✎</span>Trip Feedback
+                    <Icon name="edit" size={14} class="lnw-open-ico" />Trip Feedback
                   </button>
                   <span class="lnw-cta-note">Traveled this? Log what worked and what you’d change.</span>
                 </div>
@@ -622,24 +652,51 @@ const tripSummary = buildSummary(guide);
       </main>
     </div>
 
-    <footer>
-      {guide.footer}
-      <br />
-      <span class="offline-note">Add this to your home screen and it works offline once opened — only the embedded maps need a connection.</span>
-      <br />
-      <span class="foot-telemetry">This guide counts anonymous tab opens (no names, no personal data) to learn which sections travelers actually use.</span>
-      <br />
-      <!-- U11: renders on EVERY guide, draft or published — a wrong fact doesn't stop being
-           wrong once a guide graduates. Filing this issue auto-applies "modify-request" and
-           does nothing by itself; only the owner applying "modify-approved" (requires write
-           access) runs the edit, via .github/workflows/modify-guide.yml. Restyled as a small
-           pill (was a bare underlined text link mid-masthead) and moved here, out of the
-           traveler-facing hero. -->
-      <a
-        class="foot-modify-pill"
-        href={`https://github.com/${REPO}/issues/new?template=modify-guide.yml&labels=modify-request&slug=${encodeURIComponent(ogSlug)}&title=${encodeURIComponent(`Modify: ${ogSlug}`)}`}
-        target="_blank" rel="noopener"
-      >✎ Request a change</a>
+    <!-- M4 item 5 — COLOPHON. This was the weakest surface on an otherwise composed page:
+         `{guide.footer}` plus three <br>-separated muted spans. It is also the natural home for
+         the product's one real differentiator — that every perishable fact here was checked
+         against a primary source on a date — so it now signs the page instead of trailing off.
+         Every number is counted from this guide's own data at build time (see `colophon` above);
+         a stat with nothing to report renders nothing at all, per the honest-blank rule. -->
+    <footer class="colophon">
+      <div class="colo-sig">
+        <span class="colo-mark" aria-hidden="true"><Icon name="shield" size={18} /></span>
+        <div class="colo-sig-txt">
+          <p class="colo-claim">Every perishable fact on this page was checked against a primary source.</p>
+          {guide.footer && <p class="colo-footer-note">{guide.footer}</p>}
+        </div>
+      </div>
+
+      {(colophonChecked || colophon.verifiedFactCount > 0 || colophon.sourceCount > 0) && (
+        <dl class="colo-stats">
+          {colophonChecked && (
+            <div class="colo-stat"><dt>Last checked</dt><dd>{colophonChecked}</dd></div>
+          )}
+          {colophon.verifiedFactCount > 0 && (
+            <div class="colo-stat"><dt>Verified facts</dt><dd>{colophon.verifiedFactCount}</dd></div>
+          )}
+          {colophon.sourceCount > 0 && (
+            <div class="colo-stat"><dt>Primary sources</dt><dd>{colophon.sourceCount}</dd></div>
+          )}
+        </dl>
+      )}
+
+      <div class="colo-foot">
+        <p class="colo-notes">
+          <span class="offline-note">Add this to your home screen and it works offline once opened — only the embedded maps need a connection.</span>
+          {" "}
+          <span class="foot-telemetry">This guide counts anonymous tab opens (no names, no personal data) to learn which sections travelers actually use.</span>
+        </p>
+        <!-- U11: renders on EVERY guide, draft or published — a wrong fact doesn't stop being
+             wrong once a guide graduates. Filing this issue auto-applies "modify-request" and
+             does nothing by itself; only the owner applying "modify-approved" (requires write
+             access) runs the edit, via .github/workflows/modify-guide.yml. -->
+        <a
+          class="foot-modify-pill"
+          href={`https://github.com/${REPO}/issues/new?template=modify-guide.yml&labels=modify-request&slug=${encodeURIComponent(ogSlug)}&title=${encodeURIComponent(`Modify: ${ogSlug}`)}`}
+          target="_blank" rel="noopener"
+        ><Icon name="edit" size={14} /> Request a change</a>
+      </div>
     </footer>
 
     <!-- ═══════════════════════════════════════════════════════════════════════
@@ -654,14 +711,14 @@ const tripSummary = buildSummary(guide);
          landmark skipped the entire mobile navigation. Invisible to the a11y gate until it
          started auditing a narrow viewport, because .botbar is display:none on wide ones. -->
     <nav class="botbar" aria-label="Guide shortcuts">
-      <a class="botHome" href={`${base}/`} aria-label="All guides" title="All guides">⌂</a>
+      <a class="botHome" href={`${base}/`} aria-label="All guides" title="All guides"><Icon name="home" size={18} /></a>
       <button class="botSections" id="sheetOpen" type="button"
               aria-haspopup="dialog" aria-expanded="false">
         <span class="bs-label">Sections</span>
         <span class="bs-cur" id="curCat"></span>
-        <span class="bs-chev" aria-hidden="true">▾</span>
+        <Icon name="chevron" size={14} class="bs-chev" />
       </button>
-      <a class="botTop" href="#top" aria-label="Back to top">↑</a>
+      <a class="botTop" href="#top" aria-label="Back to top"><Icon name="top" size={18} /></a>
     </nav>
 
     <!-- Slide-up section sheet (mobile) -->
@@ -683,11 +740,11 @@ const tripSummary = buildSummary(guide);
             Previously only split/vote had their own :not() exclusions — Reminders/
             Learnings/Trip Kit kept incrementing the counter as if they were real content
             chapters, so the sheet's numbering lied about how many sections a guide has. */}
-        <a class="sheet-cat sheet-tool sheet-split-link" data-tab="split" href="#">$ Budget Calculator</a>
-        <a class="sheet-cat sheet-tool sheet-vote-link" data-tab="vote" href="#">🗳 Group Vote</a>
-        <a class="sheet-cat sheet-tool sheet-remind-link" data-tab="remind" href="#">📌 Reminders</a>
-        <a class="sheet-cat sheet-tool sheet-learn-link" data-tab="learn" href="#" hidden>📓 Trip Learnings</a>
-        <a class="sheet-cat sheet-tool sheet-kit-link" data-tab="kit" href="#">🧳 Trip Kit</a>
+        <a class="sheet-cat sheet-tool sheet-split-link" data-tab="split" href="#"><Icon name="budget" class="sheet-ico" />Budget Calculator</a>
+        <a class="sheet-cat sheet-tool sheet-vote-link" data-tab="vote" href="#"><Icon name="vote" class="sheet-ico" />Group Vote</a>
+        <a class="sheet-cat sheet-tool sheet-remind-link" data-tab="remind" href="#"><Icon name="remind" class="sheet-ico" />Reminders</a>
+        <a class="sheet-cat sheet-tool sheet-learn-link" data-tab="learn" href="#" hidden><Icon name="learn" class="sheet-ico" />Trip Learnings</a>
+        <a class="sheet-cat sheet-tool sheet-kit-link" data-tab="kit" href="#"><Icon name="kit" class="sheet-ico" />Trip Kit</a>
       </div>
     </div>
 
@@ -715,8 +772,15 @@ const tripSummary = buildSummary(guide);
       import "../scripts/reveal.js";
       import "../scripts/section-flight.js";
       import "../scripts/micro.js";
-      import "../scripts/onboard.js";
+      // M4 item 4 — ORDER IS LOAD-BEARING for the onboarding choreography. ES modules evaluate
+      // in import order, so story-open must run FIRST to set window.__storyIntro; cold-open
+      // then stands down while the story plays and otherwise claims the view; onboard's
+      // nav-hint defers to both. story-open previously sat below these three, so its flag was
+      // always undefined when they read it and all three could fire into one viewport.
+      // It still runs before gsap-hero (below), which is its other ordering constraint.
+      import "../scripts/story-open.js";
       import "../scripts/cold-open.js";
+      import "../scripts/onboard.js";
       import "../scripts/scroll-memory.js";
       import "../scripts/offline-pill.js";
       import "../features/field-tools/index.js";
@@ -724,7 +788,6 @@ const tripSummary = buildSummary(guide);
       import "../features/sos/index.js";
       import "../scripts/lightbox.js";
       import "../scripts/hero-parallax.js";
-      import "../scripts/story-open.js";
       import "../scripts/gsap-hero.js";
       import "../features/palette/index.js";
       import "../features/trip-split/index.ts";

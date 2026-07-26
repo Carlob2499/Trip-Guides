@@ -13,7 +13,12 @@
      .sheet-tool) from the bearing-number counter in one rule, not per-tool :not()s that
      silently miss any tool link added later. */
   .sheet-cat:not(.sheet-tool)::before{counter-increment:bearing;content:counter(bearing,decimal-leading-zero);font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:.08em;color:var(--accent-ink)}
-  .sheet-tool::before{content:"·";font-family:var(--font-data);color:var(--muted)}
+  /* M4 item 1 — a tool row now leads with its real stroke icon instead of the "·" placeholder
+     bullet plus a platform emoji. The icon replaces the ::before marker entirely (the bullet
+     only ever existed to fill the slot the bearing number occupies on content rows). */
+  .sheet-tool::before{content:none}
+  .sheet-tool{align-items:center}
+  .sheet-ico{flex:none;color:var(--muted)}
   .sheet-cat.active{color:var(--accent-ink)}
   .sheet-link{padding-left:3rem;color:var(--muted);font-size:var(--text-body)}
   .sheet-link.active{color:var(--accent-ink)}
