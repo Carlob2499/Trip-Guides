@@ -20,39 +20,52 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (updated 2026-07-26, session close #9 — M0, the pipeline diagnosis)
+## Snapshot (updated 2026-07-26, session close #9 — M0 diagnosis + M1/M2/M3/M4-item-6 shipped)
 
-**The agent pipeline's root cause is now KNOWN, not guessed — confirmed from a live dispatch's
-actual API response.** Branch `claude/waypoint-audit-modernize-tne4ce`. Full audit + executor
-program in `docs/PLAN_MODERNIZE.md`. Build clean, 848 tests, lint 0, `astro check` 0 errors.
+**The agent pipeline's root cause is KNOWN (confirmed from a live dispatch's actual API
+response), and M1/M2/M3 plus M4's creator-priority item are DONE.** Branch
+`claude/waypoint-audit-modernize-tne4ce`. Full audit + executor program in
+`docs/PLAN_MODERNIZE.md` — read that file for the complete record; this is a summary. Build
+clean, **854** tests, lint 0, `astro check` 0 errors.
 
-- **`CLAUDE_CODE_OAUTH_TOKEN` is expired or revoked.** Dispatched `token-canary.yml` live with
-  `show_full_output: true` temporarily added (reverted after reading it): the real SDK response
-  is `error_status: 401, error: "authentication_failed", result: "Failed to authenticate. API
-  Error: 401 OAuth access token is invalid."` — two retries, both 401, then the SDK synthesizes
-  the misleading `is_error:true / $0 / 1 turn` envelope that made the July 20 recert failure look
-  cosmetic. It wasn't. The canary's own alert logic is fine — it correctly went red and updated
-  tracking issue #22 with the right fix instructions.
-- **⚠ OWNER ACTION, next session: rotate the token.** Run `claude setup-token` locally (needs the
-  creator's own Max login — no agent session can do this) → paste into the `CLAUDE_CODE_OAUTH_TOKEN`
-  repo secret → re-run **Actions → Token canary** to confirm green (auto-closes #22). Once green,
-  M0 continues immediately: the W6 end-to-end proof (a real `zz-` throwaway guide through the
-  whole scaffold → research → verify → graduate → land chain, gated cleanup pre-approved) has
-  never fired even once and is the very next step, same session.
-- **Fixed this session, independent of the token:** `allowed_bots: "github-actions[bot]"` on
-  research-pass's agent step (confirmed via the live dispatch's own `ALL_INPUTS` dump that this
-  input is real — B2 was a genuine gap) · `GH_TOKEN` job-level env added to research-pass,
-  modify-guide, and recert so their agents' Bash-tool `gh` calls have a credential (B3) ·
-  new-guide's concurrency key changed from per-issue to a single global lock (two different
-  issues for the same country could race an add/add conflict — B7) · research-pass gained its own
-  `research-<slug>` concurrency group · circuit-breaker message fixed to say "exceeds cap of 5."
-- **Previous session (#8) also fixed:** a live Trip Split desktop misalignment (5-col grid for a
-  drag handle the JS no longer renders), dead `.se-drag`/`.imgfail` CSS, stray `mexico.json` +
-  root `wrangler.jsonc`, stale flat-`<slug>.json` references across three workflows.
-- **Measured baseline (details in the plan):** first-paint JS lean (~35 KB gz guide), CLS 0.244
-  with cause identified (4 post-paint injected strips + 0/21 images with dimensions), no
-  `--space-*`/z-index scales (skip-link paints under story mode), 111 `: any`, dist 3.95 MB (42%
-  on-demand pdfjs, NOT in the SW precache).
+- **M0 (blocked on the creator): `CLAUDE_CODE_OAUTH_TOKEN` is expired/revoked** — confirmed via a
+  live dispatch: `401 OAuth access token is invalid`, not the "cosmetic" misdiagnosis from July
+  20. **Owner action next session:** `claude setup-token` locally → repo secret → re-run Token
+  canary (closes issue #22) → then the W6 end-to-end proof (a real `zz-` throwaway guide through
+  the whole chain) runs for the first time ever, same session. Independent-of-token M0 fixes
+  already shipped: `allowed_bots` on research-pass's agent step, `GH_TOKEN` job-level env on
+  three agent workflows, new-guide's concurrency race fixed, circuit-breaker message fixed.
+- **M1 (CI efficiency) shipped:** paths-ignore + concurrency + Playwright browser cache on
+  test.yml/a11y.yml, cache:npm on the two workflows that needed it, a stale-fixture bug fixed in
+  the skill-evals script.
+- **M2 (CLS) shipped:** nav-hint now overlays instead of pushing content (the CLS 0.244's most
+  reliable contributor), `.guide-stats` changed from wrap to scroll (pill-append could no longer
+  shift height), hero srcset/sizes on both heroes, and `check-perf-budget.mjs` now derives a real
+  per-page first-paint budget from the built artifact's actual script/import graph (measured:
+  worst page 124 KB / 200 KB) instead of one 900 KB total that was ~78% lazy chunks.
+- **M3 (design tokens) shipped, scoped to zero-visual-change + two real bugs:** z-index scale
+  named in base.css; fixed the confirmed bug (skip-link painted UNDER story-mode, now explicitly
+  above it) and a 9000-vs-everything-else-900s outlier; `--text-h1` token added at `.cat-title`'s
+  EXACT existing size (caught and corrected a draft that would have silently enlarged it — verify
+  the px math before landing a "zero visual change" claim, don't just assert it); a dead duplicate
+  `font-weight` declaration removed; two stale hub-motion.css comments fixed. Spacing-scale sweep
+  and `.day`'s two-file styling are real but deferred — 15+ files, needs its own pass.
+- **M4 item 6 (More detail v2) shipped — creator's explicit priority.** `.card-more-sum` is now a
+  real chip (fill/border/hover/focus-visible/chevron); `moreLabel` is a real schema field with an
+  honest computed-count fallback; the split refuses to fold a `⚠` or `<ul>/<ol>` remainder (shows
+  everything rather than hide a warning); a masked fade-out preview renders above the closed chip;
+  the open animates via `@supports`-gated CSS (`::details-content`/`interpolate-size`), snap
+  fallback everywhere unsupported. Verified live in `dist/`. **A11y investigation note:** manually
+  ran the full a11y gate (this sandbox has no `playwright install` path, so via a temp local
+  config against the pre-installed Chromium); found and fixed one real issue from the M2
+  `.guide-stats` change (`tabindex="0"`, scrollable-region-focusable), and bisected a 4-test
+  `bgOverlap` failure all the way to the pre-session commit — it reproduces on fully-stashed code,
+  so it's environment/font-stack drift the test's own comments already document, not a
+  regression. M4 items 1–5 (icon language, editorial hub, tab strategy, onboarding choreography,
+  colophon footer) are unstarted — larger, more visually pervasive, deserve the Opus-spec +
+  creator-review pass the plan calls for rather than a rushed extension of this session.
+- **Session #8 also fixed:** a live Trip Split desktop misalignment, dead `.se-drag`/`.imgfail`
+  CSS, stray `mexico.json` + root `wrangler.jsonc`, stale flat-`<slug>.json` references.
 
 Standing context from session #7 (detail in git history / `git show 3dc5349:docs/HANDOFF.md`):
 every guide is a directory and a test enforces it · Mexico/Portugal retired (their researched
@@ -109,13 +122,22 @@ the token is rotated. Detail in `docs/PIPELINE.md` and `docs/PLAN_MODERNIZE.md`'
 
 Two sessions ago the audit's lesson was: every green gate here measures the artifact, not the
 factory. This session answered *why* the factory never ran — not a guess, a 401 read straight off
-a live dispatch. The fix is now a five-minute human action away, not a mystery.
+a live dispatch — then spent the wait on everything else the plan could reach without the token:
+CI efficiency, the CLS root causes, the type-scale/z-index foundation, and the creator's specific
+priority (More detail v2). One real a11y bug was caught and fixed along the way (a scrollable
+region needed `tabindex`); one apparent a11y regression was investigated to ground and proven to
+be pre-existing environment drift, not a session-created bug — both documented in the plan rather
+than either ignored or wrongly "fixed."
 
 **Re-prompt the creator with:** "M0's diagnosis is done: `CLAUDE_CODE_OAUTH_TOKEN` is expired —
 confirmed from the actual API response (401 OAuth access token is invalid), not inferred. Rotate
 it (`claude setup-token` → repo secret → re-run Token canary) and I'll immediately run the
 pipeline's first-ever real end-to-end proof: a throwaway guide through scaffold → research →
-verify → auto-graduate → land → live. Already fixed on the branch while waiting on that: the
-bot-actor gate, `gh` auth inside the agents' Bash tool, a real race condition in new-guide's
-concurrency, and the circuit-breaker's off-by-one message. Full detail in
-`docs/PLAN_MODERNIZE.md`'s M0."
+verify → auto-graduate → land → live. While waiting on that, I finished M1 (CI efficiency), M2
+(the CLS 0.244's root causes — nav-hint, guide-stats, a real per-page perf budget), M3 (z-index
+scale, the skip-link/story-mode bug, a dead CSS declaration), and M4's centerpiece — the 'More
+detail' redesign you specifically asked for: it's now a real chip control, refuses to fold
+warnings, shows a fade preview of what's hidden, and animates open. 854 tests green. Full detail,
+including an a11y investigation that found one real bug and ruled out a false one, in
+`docs/PLAN_MODERNIZE.md`. Remaining M4 items (icon language, hub layout, onboarding
+choreography, footer) are next, sized for their own Opus-spec pass."

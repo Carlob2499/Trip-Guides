@@ -214,14 +214,36 @@ a.stale-pill:hover{background:color-mix(in srgb,var(--warn) 12%,transparent)}
 .catblock .card-lead{font-size:1.05em;line-height:1.5;color:var(--ink)}
 .catblock .card-lead>:first-child{margin-top:0}
 .catblock .card-lead>:last-child{margin-bottom:.35rem}
-.card-more{margin-top:.35rem;border-top:1px dashed var(--rule)}
-.card-more-sum{display:inline-flex;align-items:center;gap:.35rem;padding:.5rem 0 .3rem;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink);cursor:pointer;list-style:none;min-height:34px}
+/* M4 "More detail" v2 (creator priority) — a real chip control instead of a bare-text caption
+   over a dashed rule, matching the site's existing details/summary chevron vocabulary (guide.css
+   "details summary" below) so "this expands" reads identically everywhere. .card-more-wrap holds
+   two parts in DOM order (details, then the preview) with `order` flipping them visually — that
+   DOM order is what lets the closed-vs-open sibling selector below work; a preview rendered
+   BEFORE <details> in the markup couldn't be targeted by "when .card-more is [open]". */
+.card-more-wrap{display:flex;flex-direction:column}
+.card-more{order:2;margin-top:.5rem}
+.card-more-preview{order:1;position:relative;margin:.2rem 0 0;padding:0;font-size:var(--text-small);color:var(--muted);line-height:1.5;overflow:hidden;white-space:nowrap;text-overflow:clip;
+  -webkit-mask-image:linear-gradient(to right,black 55%,transparent 100%);mask-image:linear-gradient(to right,black 55%,transparent 100%)}
+.card-more[open] ~ .card-more-preview{display:none}
+.card-more-sum{display:inline-flex;align-items:center;gap:.4rem;margin-top:.4rem;padding:.4rem .8rem;min-height:36px;background:var(--bg2);border:1px solid var(--rule2);border-radius:999px;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;letter-spacing:.02em;color:var(--accent-ink);cursor:pointer;list-style:none;transition:background .15s,border-color .15s,color .15s}
 .card-more-sum::-webkit-details-marker{display:none}
-.card-more-sum::after{content:"↓";transition:transform .2s}
-.card-more[open] .card-more-sum::after{transform:rotate(180deg)}
+.card-more-sum::before{content:"▶";flex:none;font-size:var(--text-nano);transition:transform .2s}
+.card-more-sum:hover{background:var(--card);border-color:var(--accent-ink)}
+.card-more-sum:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.card-more[open] .card-more-sum::before{transform:rotate(90deg)}
+.card-more[open] .card-more-sum{color:var(--ink);border-color:var(--rule2)}
 .card-more[open]{padding-bottom:.2rem}
-@media(prefers-reduced-motion:reduce){.card-more-sum::after{transition:none}}
-@media print{.card-more{border:none}.card-more:not([open])>*:not(summary){display:block}.card-more-sum{display:none}}
+@media(prefers-reduced-motion:reduce){.card-more-sum::before{transition:none}}
+@media print{.card-more-preview{display:none}.card-more{border:none}.card-more:not([open])>*:not(summary){display:block}.card-more-sum{display:none}}
+
+/* CSS-only smooth open — progressive enhancement (Chrome 131+/equivalents); browsers without
+   ::details-content support keep today's instant native toggle, nothing breaks. */
+@supports (interpolate-size: allow-keywords) {
+  .card-more{interpolate-size:allow-keywords}
+  .card-more::details-content{height:0;overflow:hidden;transition:height .3s var(--ease-out-expo),content-visibility .3s allow-discrete}
+  .card-more[open]::details-content{height:auto}
+  @media(prefers-reduced-motion:reduce){.card-more::details-content{transition:none}}
+}
 /* Sights: responsive image grid across the full shell width. */
 .block:has(.sight){max-width:100%;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem 1.1rem;align-items:start}
 .block:has(.sight) .block-title-row{grid-column:1/-1;margin-bottom:0}

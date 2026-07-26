@@ -1,19 +1,26 @@
 ---
 // Density pass: the first paragraph is the card's lead; substantial remainders
-// fold behind a native "More detail" toggle (splitLead — content deferred,
-// never dropped). Sections that are already collapsible keep their body whole
+// fold behind a "More detail" toggle (splitLead — content deferred, never
+// dropped; refuses to fold a ⚠ warning or a <ul>/<ol> procedure — see
+// lead-split.ts). Sections that are already collapsible keep their body whole
 // (no nested <details>).
-import { splitLead } from "../../lib/lead-split";
+import { splitLead, moreDetailLabel } from "../../lib/lead-split";
 import { checklistText } from "../../lib/checklist";
 const { sec, keyPrefix = "p" } = Astro.props;
-const { lead, more } = sec.collapsible ? { lead: sec.body, more: null } : splitLead(sec.body);
+const { lead, more, moreParagraphCount, morePreview } = sec.collapsible
+  ? { lead: sec.body, more: null, moreParagraphCount: 0, morePreview: "" }
+  : splitLead(sec.body);
+const label = moreDetailLabel(sec.moreLabel, moreParagraphCount);
 ---
 {lead && <div class="card-lead" set:html={lead} />}
 {more && (
-  <details class="card-more">
-    <summary class="card-more-sum">More detail</summary>
-    <Fragment set:html={more} />
-  </details>
+  <div class="card-more-wrap">
+    <details class="card-more">
+      <summary class="card-more-sum">{label}</summary>
+      <Fragment set:html={more} />
+    </details>
+    <p class="card-more-preview" aria-hidden="true">{morePreview}</p>
+  </div>
 )}
 {(sec.checklist || []).map((i: any, j: number) => (
   <label class="check"><input type="checkbox" data-pkey={`${keyPrefix}-${j}`} /><span class="check-txt"><Fragment set:html={checklistText(i)} /></span></label>

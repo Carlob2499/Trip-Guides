@@ -126,9 +126,14 @@ const collapse = {
   defaultOpen: z.boolean().optional(),
 };
 
+// M4: optional override for the "More detail" toggle's label (src/lib/lead-split.ts's density
+// pass) — e.g. "Ticketing fine print" tells the reader what's folded instead of a bare "More
+// detail". Unset falls back to an honest computed paragraph count.
+const moreDetail = { moreLabel: z.string().optional() };
+
 const section = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("panel"),  group: z.string(), title: z.string().optional(), body: z.string().optional(), checklist: z.array(checklistItem).optional(), ...collapse, ...provenance }),
-  z.object({ type: z.literal("prose"),  group: z.string(), title: z.string().optional(), body: z.string().optional(), ...collapse, ...provenance }),
+  z.object({ type: z.literal("panel"),  group: z.string(), title: z.string().optional(), body: z.string().optional(), checklist: z.array(checklistItem).optional(), ...collapse, ...moreDetail, ...provenance }),
+  z.object({ type: z.literal("prose"),  group: z.string(), title: z.string().optional(), body: z.string().optional(), ...collapse, ...moreDetail, ...provenance }),
   z.object({ type: z.literal("list"),   group: z.string(), title: z.string().optional(), items: z.array(z.string()), ...collapse, ...provenance }),
   z.object({ type: z.literal("routes"), group: z.string(), title: z.string().optional(), steps: z.array(z.string()), ...provenance }),
   z.object({ type: z.literal("map"),    group: z.string(), title: z.string().optional(), center: coord, span: z.number().optional(), points: z.array(mapPoint).optional() }),

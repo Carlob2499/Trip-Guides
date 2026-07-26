@@ -472,7 +472,11 @@ const tripSummary = buildSummary(guide);
       )}
 
       <!-- Stats bar — always rendered so JS can inject dynamic pills -->
-      <div class="guide-stats" id="guideStats">
+      {/* M2: nowrap+overflow-x (CLS fix, see overview.css) makes this a scrollable region —
+          tabindex so keyboard users can actually scroll it (axe scrollable-region-focusable).
+          No aria-label: a plain div's implicit role is "generic", which ARIA prohibits naming
+          (axe's aria-prohibited-attr correctly caught this on the first attempt). */}
+      <div class="guide-stats" id="guideStats" tabindex="0">
         {dayCount   > 0 && <span class="gstat">{dayCount} days</span>}
         {sightCount > 0 && <span class="gstat">{sightCount} sights</span>}
         {verifiedWarning && <span class="gstat gstat-warning">{verifiedWarning}</span>}

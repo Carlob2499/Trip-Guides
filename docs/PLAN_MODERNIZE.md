@@ -234,6 +234,41 @@ Zero visual change intended; makes the system actually single-source before M4 b
 
 ### M4 · Visual elevation — **Opus designs + creator review, Sonnet implements** (gated on Q5)
 
+**Item 6 (More detail v2) SHIPPED 2026-07-26** — creator's explicit priority, built ahead of the
+rest of M4 rather than waiting on an Opus spec pass, since the spec below was already concrete
+enough to implement directly. All six sub-points delivered: `.card-more-sum` is now a real chip
+(bg2 fill, border, hover, `:focus-visible` ring, chevron matching the site's existing bare
+`details summary` vocabulary — verified they now visually match); `moreLabel` is a real optional
+schema field with an honest computed-paragraph-count fallback (`moreDetailLabel()`,
+`lead-split.ts`); the split refuses to fold a remainder carrying `⚠` or `<ul>/<ol>` (shows
+everything instead of moving the cut, per lead-split.test.ts's new coverage); a masked fade-out
+preview line renders above the chip when closed; the open animation is a `@supports`-gated
+CSS-only `::details-content` + `interpolate-size` block, reduced-motion respected, with the old
+instant-snap as the automatic fallback everywhere the feature isn't supported yet. Verified live
+in `dist/`: real Korea-guide content renders `"More detail · 3 more paragraphs"` and the correct
+masked preview text. 854/854 tests green (added 6), lint 0, typecheck 0.
+
+**A11y note from verifying this pass:** ran the full `a11y.spec.ts` gate manually against this
+sandbox's pre-installed Chromium (the standard `npx playwright install` path is unavailable here
+per environment policy) via a temporary local config, not committed. 10/14 passed; the 4 desktop
+failures are `color-contrast/bgOverlap` exceeding the test's own documented `LAYOUT_JITTER`
+tolerance (39+3=42 baseline vs. 52 observed) on Korea/Denmark guide desktop views. **Isolated by
+bisection — this is NOT caused by any change in this session**: reverting nav-hint's positioning,
+reverting the `.guide-stats` scroll fix, and finally testing the FULLY-STASHED pre-session commit
+all reproduce the identical 52-count failure. This is exactly the "different machine, different
+font metrics" class of drift `a11y.spec.ts`'s own comments already document (its baseline was
+calibrated on a different Chromium/font stack than this sandbox's). Not a regression; flagged so
+a future session doesn't waste time re-litigating it. One real a11y issue WAS found and fixed
+during this same investigation: the M2 `.guide-stats` nowrap+overflow-x change made it a
+scrollable region without keyboard access (`scrollable-region-focusable`) — fixed with
+`tabindex="0"` on `#guideStats` (no `aria-label`; a bare div's implicit "generic" role prohibits
+ARIA naming, which axe's `aria-prohibited-attr` correctly caught on the first attempt).
+
+Remaining M4 items (1–5: icon language, editorial hub, tab-bar strategy, first-visit
+choreography, colophon footer) are unstarted — genuinely larger, more visually pervasive changes
+(icon swap touches every page; hub layout is the front door) that deserve the Opus spec + creator
+review pass this section already calls for, not a rushed extension of this session.
+
 The five moves from §1.4, as one coherent pass (uniform-across-surfaces rule applies):
 
 1. **One icon language**: replace tab-bar/sheet emoji (`🗳 📌 📓 🧳 $`) and text glyphs
