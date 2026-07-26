@@ -142,8 +142,13 @@ const heroSight = _flat
 const coverFile  = (guide as any).cover?.file  ?? heroSight?.img?.file ?? null;
 const coverAlt   = (guide as any).cover?.alt   ?? heroSight?.img?.alt  ?? heroSight?.name ?? "";
 const coverFocal = (guide as any).cover?.focal ?? null;
-const heroSrc = coverFile
-  ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(coverFile)}?width=1600`
+const mastCommonsSrc = (w: number) =>
+  coverFile ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(coverFile)}?width=${w}` : null;
+const heroSrc = mastCommonsSrc(1600);
+// M2: a 375px phone was downloading the full 1600px masthead hero — same responsive
+// treatment SightsBlock already gives every sight photo.
+const heroSrcset = coverFile
+  ? `${mastCommonsSrc(480)} 480w, ${mastCommonsSrc(800)} 800w, ${mastCommonsSrc(1200)} 1200w, ${mastCommonsSrc(1600)} 1600w`
   : null;
 // V4 (docs/archive/PLAN_VISUAL_OVERHAUL.md) — a faint topographic contour layer in the masthead's paper
 // zones, carrying the Overture's depth language into the guide's hero. STATIC on purpose: the
@@ -366,7 +371,7 @@ const tripSummary = buildSummary(guide);
     <!-- ═══════════════════════════════════════════════════════════════════════
          GUIDE TAB BAR — one tab per section group + Budget Calculator + Vote tools
          ═══════════════════════════════════════════════════════════════════ -->
-    <nav class="guide-tabs-nav" aria-label="Guide sections">
+    <nav class="guide-tabs-nav" aria-label="Guide sections" data-hint-anchor>
     <div class="guide-tabs" id="guideTabs" role="tablist">
       {order.map((g, i) => (
         <button class="gtab" role="tab" type="button" id={`gtab-${i}`} data-tab={i} data-full={g}
@@ -410,7 +415,7 @@ const tripSummary = buildSummary(guide);
       )}
       <div class="mast-frame">
         {heroSrc && (
-          <img class="mast-img" src={heroSrc} alt={coverAlt}
+          <img class="mast-img" src={heroSrc} srcset={heroSrcset} sizes="100vw" alt={coverAlt}
                loading="eager" fetchpriority="high"
                onerror="this.closest('.mast-frame').classList.add('mast-media-fail')"
                style={`view-transition-name:cover-${ogSlug}${coverFocal ? `;object-position:${coverFocal}` : ""}`} />

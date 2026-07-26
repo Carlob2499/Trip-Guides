@@ -109,8 +109,13 @@ const heroWhen = heroIsPast && hero?.ex.lastDate
 // reads as the same trip, not a second one.
 const gridGuides = curated;
 const heroId = hero?.g.id ?? null;
-const heroSrc = hero?.ex.heroImg
-  ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(hero.ex.heroImg.file)}?width=1400`
+const heroCommonsSrc = (w: number) =>
+  hero?.ex.heroImg ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(hero.ex.heroImg.file)}?width=${w}` : null;
+const heroSrc = heroCommonsSrc(1400);
+// M2: a 375px phone was downloading the full 1400px hero — same responsive treatment
+// SightsBlock already gives every sight photo.
+const heroSrcset = hero?.ex.heroImg
+  ? `${heroCommonsSrc(480)} 480w, ${heroCommonsSrc(800)} 800w, ${heroCommonsSrc(1400)} 1400w`
   : null;
 // Card cover thumbnails — same Commons thumbnailing at grid width.
 const coverSrc = (img: { file: string } | null) =>
@@ -238,7 +243,8 @@ const contourLayers = [
           data-hero-lng={heroIsPast ? undefined : hero.ex.mapCenter?.lng}
         >
           {heroSrc && (
-            <img class="hub-hero-img" src={heroSrc} alt={hero.ex.heroImg!.alt} loading="eager" fetchpriority="high"
+            <img class="hub-hero-img" src={heroSrc} srcset={heroSrcset} sizes="100vw"
+                 alt={hero.ex.heroImg!.alt} loading="eager" fetchpriority="high"
                  style={`view-transition-name:cover-${hero.g.id}`} />
           )}
           <span class="hub-hero-scrim" aria-hidden="true"></span>

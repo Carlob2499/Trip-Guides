@@ -6,11 +6,19 @@ name: Tests
 # Pages deploy. Deploy.yml also runs `npm test`, but only after a push to main.
 on:
   pull_request:
+    paths-ignore: [docs/**, learnings/**, guides-intake/**, "**.md"]
   push:
     branches: [main]
+    paths-ignore: [docs/**, learnings/**, guides-intake/**, "**.md"]
 
 permissions:
   contents: read
+
+# M1: cancel a superseded run for the same ref — a rapid follow-up push shouldn't burn CI
+# minutes finishing a run whose result no longer matters.
+concurrency:
+  group: test-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:

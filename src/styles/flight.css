@@ -26,7 +26,12 @@
 @media(max-width:640px){.cat-fan{width:96px;height:66px}.cat-fan-img{width:64px;height:46px}.cat-fan-1{left:18px}.cat-fan-2{left:36px}}
 
 /* ── First-visit navigation hint ─────────────────────────────────────────── */
-.nav-hint{display:flex;align-items:center;gap:.7rem;max-width:var(--read);margin:.7rem auto 0;padding:.55rem .9rem;background:color-mix(in srgb,var(--accent) 10%,var(--card));border:1px dashed color-mix(in srgb,var(--accent) 45%,var(--rule));border-radius:var(--r-md);font-size:var(--text-small);color:var(--ink);transition:opacity .35s,transform .35s}
+/* M2/CLS: [data-hint-anchor] (the tab nav) is the positioning context — nav-hint OVERLAYS
+   just below the tab bar instead of inserting into flow, so it can never push page content
+   down after paint. It has its own background + shadow so it reads as a floating strip, not
+   a layout row. */
+[data-hint-anchor]{position:relative}
+.nav-hint{position:absolute;top:100%;left:0;right:0;display:flex;align-items:center;gap:.7rem;max-width:var(--read);margin:.5rem auto 0;padding:.55rem .9rem;background:color-mix(in srgb,var(--accent) 10%,var(--card));border:1px dashed color-mix(in srgb,var(--accent) 45%,var(--rule));border-radius:var(--r-md);box-shadow:0 6px 16px rgba(0,0,0,.12);font-size:var(--text-small);color:var(--ink);transition:opacity .35s,transform .35s}
 .nav-hint-txt{flex:1;line-height:1.5}
 .nav-hint-x{flex:none;width:30px;height:30px;background:transparent;border:1px solid var(--rule);border-radius:999px;color:var(--muted);cursor:pointer;font-size:var(--text-control-sm)}
 .nav-hint-x:hover{color:var(--ink);border-color:var(--ink)}
