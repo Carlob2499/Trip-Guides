@@ -5,7 +5,10 @@ html{scroll-behavior:smooth;scroll-padding-top:var(--chrome-h)}
 /* Display h1 uses Bricolage Grotesque (characterful display face).
    All headings share the display face; body text is Literata. */
 h1{font-family:var(--font-display);font-weight:780;letter-spacing:-.035em;line-height:1.02;text-wrap:balance}
-h2,h3,h4{font-family:var(--font-display);font-weight:400;line-height:1.15;text-wrap:balance}
+/* M3: font-weight lives ONLY in the combined heading-role rule below (line ~350) — this rule
+   used to also declare font-weight:400 here, which the later, equal-specificity rule always
+   overrode (640 is what has ever rendered). Removing the dead declaration, not changing output. */
+h2,h3,h4{font-family:var(--font-display);line-height:1.15;text-wrap:balance}
 a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 
 /* === TOP NAVIGATION BAR ===================================================== */
@@ -155,7 +158,9 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 /* === CONTENT ================================================================= */
 .content{min-width:0;padding:1.2rem 0 3rem}
 .catblock{scroll-margin-top:var(--chrome-h)}
-.cat-title{font-family:var(--font-display);font-size:clamp(1.5rem,4vw,2.2rem);margin:2.4rem 0 1rem;padding-bottom:.45rem;border-bottom:2px solid var(--ink);display:flex;align-items:baseline;gap:.6rem}
+/* M3: was its own bespoke clamp(1.5rem,4vw,2.2rem) — --text-h1 is that exact missing step,
+   named in base.css so the type scale's "no undeclared roles" claim is true again. */
+.cat-title{font-family:var(--font-display);font-size:var(--text-h1);margin:2.4rem 0 1rem;padding-bottom:.45rem;border-bottom:2px solid var(--ink);display:flex;align-items:baseline;gap:.6rem}
 .catblock:first-child .cat-title{margin-top:.3rem}
 .cat-title::before{content:"";flex:none;width:.5rem;height:.5rem;background:var(--accent)}
 .block{scroll-margin-top:var(--chrome-h);margin-bottom:1rem}
