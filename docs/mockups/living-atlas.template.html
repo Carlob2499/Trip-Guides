@@ -1,16 +1,15 @@
-<title>Waypoint — The Living Atlas · Design Study Nº 2 (Field Edition)</title>
+<title>Waypoint — The Living Atlas · Design Study Nº 3 (Quiet Edition)</title>
 <style>
 /* ================= FONTS ================= */
-/* The proposed Field Edition system */
-@font-face{font-family:'Fraunces';src:url(@@FRA@@) format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
-@font-face{font-family:'Fraunces';src:url(@@FRAI@@) format('woff2');font-weight:100 900;font-style:italic;font-display:swap}
+/* The Quiet Edition system: ONE serif (Literata, optical sizes) + ONE quiet humanist sans */
 @font-face{font-family:'Literata';src:url(@@LIT@@) format('woff2');font-weight:200 900;font-style:normal;font-display:swap}
 @font-face{font-family:'Literata';src:url(@@LITI@@) format('woff2');font-weight:200 900;font-style:italic;font-display:swap}
-@font-face{font-family:'Courier Prime';src:url(@@CP4@@) format('woff2');font-weight:400;font-display:swap}
-@font-face{font-family:'Courier Prime';src:url(@@CP7@@) format('woff2');font-weight:700;font-display:swap}
-/* The outgoing faces — embedded ONLY for the before/after specimen */
+@font-face{font-family:'Source Sans 3';src:url(@@SS3@@) format('woff2');font-weight:200 900;font-display:swap}
+/* Embedded ONLY for the specimen's history row */
 @font-face{font-family:'Bricolage Grotesque';src:url(@@BG@@) format('woff2');font-weight:200 800;font-display:swap}
 @font-face{font-family:'Spline Sans Mono';src:url(@@SSM@@) format('woff2');font-weight:300 700;font-display:swap}
+@font-face{font-family:'Fraunces';src:url(@@FRA@@) format('woff2');font-weight:100 900;font-display:swap}
+@font-face{font-family:'Courier Prime';src:url(@@CP4@@) format('woff2');font-weight:400;font-display:swap}
 
 /* ================= TOKENS — the drafting board ================= */
 :root{
@@ -26,11 +25,13 @@
   --korea:#646b2e; --denmark:#c7a269; --sedona:#9b592b;
   --gold:#c7a269;  /* chrome accent: darkened in light theme for contrast */
   --green:#9aa64a; /* decided-state green: darkened in light theme */
-  --disp:'Fraunces',Georgia,serif;
+  --disp:'Literata',Georgia,serif;       /* display = the same serif at display optical sizes */
   --serif:'Literata',Georgia,serif;
-  --mono:'Courier Prime','Courier New',monospace;
+  --mono:'Source Sans 3',system-ui,sans-serif;  /* labels + data: one quiet humanist sans */
   --old-disp:'Bricolage Grotesque',system-ui,sans-serif;
   --old-mono:'Spline Sans Mono',ui-monospace,monospace;
+  --n2-disp:'Fraunces',serif;
+  --n2-mono:'Courier Prime',monospace;
   --frame-r:14px;
   color-scheme: dark;
 }
@@ -41,6 +42,9 @@
 :root[data-theme="light"]{--board:#e8e6da;--board-2:#dfddcf;--board-ink:#24261b;--board-muted:#6c6d5a;--board-line:rgba(36,38,27,.16);--gold:#8a6a2e;--green:#5d6524;color-scheme:light}
 
 *{box-sizing:border-box}
+/* Quiet sans labels want a touch more weight + tabular digits at small sizes */
+.tb-eyebrow,.plate-no,.frame-cap,.exl-label,.m-eyebrow,.note .tag,.sec-kick,.stamp,.fh,.fno,.s-no,.spec-role,.v-row.v-h,.sheet-t,.ph-kick,.sh-h{font-weight:560}
+.rail,.spec,.src dl,.leg-meta .data{font-variant-numeric:tabular-nums}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--board);color:var(--board-ink);font-family:var(--serif);font-size:17px;line-height:1.6;
   background-image:radial-gradient(1200px 700px at 80% -10%,var(--board-2),transparent 70%)}
@@ -55,7 +59,7 @@ button{font:inherit;cursor:pointer}
 header.tb{padding:clamp(48px,8vh,96px) 0 40px;border-bottom:1px solid var(--board-line)}
 .tb-eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--board-muted);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
 .tb-eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--sedona);display:inline-block}
-h1{font-family:var(--disp);font-weight:620;font-size:clamp(44px,7.5vw,92px);line-height:.98;letter-spacing:-.01em;margin:.25em 0 .2em;text-wrap:balance;font-variation-settings:'opsz' 100,'SOFT' 40,'WONK' 1}
+h1{font-family:var(--disp);font-weight:620;font-size:clamp(44px,7.5vw,92px);line-height:.98;letter-spacing:-.01em;margin:.25em 0 .2em;text-wrap:balance;font-variation-settings:'opsz' 72}
 h1 em{font-style:italic;color:var(--gold)}
 .tb-dek{max-width:62ch;font-size:clamp(17px,1.5vw,20px);color:var(--board-ink)}
 .tb-dek i{color:var(--board-muted)}
@@ -69,7 +73,7 @@ h1 em{font-style:italic;color:var(--gold)}
 .plate-head{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-bottom:8px}
 .plate-no{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--board-muted)}
 .plate-no b{color:var(--board-ink);font-weight:600}
-.plate h2{font-family:var(--disp);font-weight:600;font-size:clamp(26px,3.4vw,40px);letter-spacing:-.005em;margin:0;text-wrap:balance;font-variation-settings:'opsz' 60,'SOFT' 30}
+.plate h2{font-family:var(--disp);font-weight:600;font-size:clamp(26px,3.4vw,40px);letter-spacing:-.005em;margin:0;text-wrap:balance;font-variation-settings:'opsz' 48}
 .plate-sub{max-width:70ch;color:var(--board-muted);font-style:italic;margin:6px 0 30px}
 .plate-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:28px}
 @media(min-width:1080px){.plate-grid{grid-template-columns:minmax(0,7.2fr) minmax(0,2.8fr)}}
@@ -94,9 +98,9 @@ h1 em{font-style:italic;color:var(--gold)}
 .v-row:first-child{border-top:none}
 .v-row.v-h{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--board-muted);background:color-mix(in srgb,var(--board-2) 90%,transparent)}
 .v-row s{font-family:var(--old-disp);font-size:13.5px;color:var(--board-muted);text-decoration-color:color-mix(in srgb,#a33327 55%,transparent)}
-.v-row b{font-family:var(--disp);font-weight:620;font-size:16.5px;color:var(--board-ink);font-variation-settings:'opsz' 40,'SOFT' 40}
+.v-row b{font-family:var(--disp);font-weight:620;font-size:16.5px;color:var(--board-ink);font-variation-settings:'opsz' 36}
 .v-row span{font-size:13.5px;color:var(--board-muted)}
-.v-row span em{font-family:var(--disp);font-style:normal;font-weight:560;font-size:15px;color:var(--board-ink);font-variation-settings:'opsz' 30,'SOFT' 40}
+.v-row span em{font-family:var(--disp);font-style:normal;font-weight:560;font-size:15px;color:var(--board-ink);font-variation-settings:'opsz' 24}
 .voice-note{max-width:75ch;color:var(--board-muted);font-size:14.5px;margin:18px 0 0}
 .voice-note i{color:var(--board-ink)}
 @media(max-width:640px){.v-row{grid-template-columns:minmax(70px,.8fr) minmax(0,2fr);}.v-row s{display:none}.v-row.v-h span:first-child{display:none}}
@@ -122,15 +126,10 @@ h1 em{font-style:italic;color:var(--gold)}
 @keyframes kb{from{transform:scale(1.02) translate(0,0)}to{transform:scale(1.13) translate(-1.6%,1.2%)}}
 @keyframes drift{from{transform:translateX(-18%)}to{transform:translateX(18%)}}
 .paused .cover,.paused .shimmer{animation-play-state:paused}
-.hero-route{position:absolute;inset:0;width:100%;height:100%}
-.hero-route path{fill:none;stroke:rgba(255,246,235,.85);stroke-width:1.6;stroke-dasharray:4 7;stroke-linecap:round}
-.hero-route .draw{stroke:#e8b98a;stroke-width:2;stroke-dasharray:640;stroke-dashoffset:640}
-.inview .hero-route .draw{animation:draw 2.8s cubic-bezier(.2,.7,.2,1) .5s forwards}
 @keyframes draw{to{stroke-dashoffset:0}}
-.hero-route circle{fill:#f3e0c8}
 .hero-inner{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(18px,4%,42px)}
 .hero-inner .m-eyebrow{color:#f0d9bd}
-.hero-title{font-family:var(--disp);font-weight:590;color:#fff;font-size:clamp(42px,7vw,84px);line-height:.95;letter-spacing:0;margin:8px 0 14px;text-shadow:0 2px 30px rgba(0,0,0,.35);font-variation-settings:'opsz' 144,'SOFT' 50,'WONK' 1}
+.hero-title{font-family:var(--disp);font-weight:590;color:#fff;font-size:clamp(42px,7vw,84px);line-height:.95;letter-spacing:0;margin:8px 0 14px;text-shadow:0 2px 30px rgba(0,0,0,.35);font-variation-settings:'opsz' 72}
 .hero-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .chip-accent{background:#9b592b;color:#fff}
 .chip-ghost{border:1px solid rgba(255,255,255,.5);color:#fff}
@@ -164,15 +163,9 @@ h1 em{font-style:italic;color:var(--gold)}
 .dayrail span{width:4px;height:26px;border-radius:99px;background:rgba(255,255,255,.28)}
 .dayrail span.done{background:#aab55a}
 .dayrail span.now{background:#d3e07c;box-shadow:0 0 12px rgba(211,224,124,.8)}
-.mast-route{position:absolute;inset:0;width:100%;height:100%}
-.mast-route path{fill:none;stroke:#d3e07c;stroke-width:2;stroke-dasharray:520;stroke-dashoffset:520;filter:drop-shadow(0 1px 6px rgba(0,0,0,.5))}
-.inview .mast-route path{animation:draw 2.6s cubic-bezier(.2,.7,.2,1) .4s forwards}
-.mast-route circle{fill:#eef3cd}
-.mast-route text{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;fill:rgba(255,255,255,.92);text-transform:uppercase}
-@media(max-width:700px){.mast-route text{display:none}}
 .mast-inner{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(18px,4%,42px) clamp(18px,4%,42px) clamp(14px,3%,28px) clamp(40px,6%,64px)}
 .mast-inner .m-eyebrow{color:#dfe6b0}
-.mast-title{font-family:var(--disp);font-weight:590;color:#fff;font-size:clamp(40px,6.4vw,78px);line-height:.95;letter-spacing:0;margin:8px 0 10px;font-variation-settings:'opsz' 144,'SOFT' 50,'WONK' 1}
+.mast-title{font-family:var(--disp);font-weight:590;color:#fff;font-size:clamp(40px,6.4vw,78px);line-height:.95;letter-spacing:0;margin:8px 0 10px;font-variation-settings:'opsz' 72}
 .mast-dek{max-width:52ch;color:rgba(255,255,255,.92);font-size:clamp(14px,1.4vw,16.5px);margin:0 0 18px}
 
 /* ================= EXPEDITION LINE ================= */
@@ -213,11 +206,11 @@ h1 em{font-style:italic;color:var(--gold)}
 @media(min-width:640px) and (max-width:1019px){.mobile-pair{grid-template-columns:auto auto}}
 .phone{width:270px;max-width:100%;border:1px solid var(--plate-line);border-radius:26px;background:#fff;overflow:hidden;box-shadow:0 18px 50px -20px rgba(0,0,0,.35);position:relative;display:flex;flex-direction:column;height:520px}
 .ph-top{display:flex;justify-content:space-between;align-items:center;padding:12px 14px 10px;border-bottom:1px solid var(--plate-line)}
-.ph-title{font-family:var(--disp);font-weight:600;font-size:14px;color:var(--plate-ink);font-variation-settings:'opsz' 30,'SOFT' 40}
+.ph-title{font-family:var(--disp);font-weight:600;font-size:14px;color:var(--plate-ink);font-variation-settings:'opsz' 24}
 .ph-sos{width:24px;height:24px;border-radius:50%;border:1px solid color-mix(in srgb,#a33327 45%,transparent);color:#a33327;display:grid;place-items:center}
 .ph-read{flex:1;padding:16px 14px 0;overflow:hidden}
 .ph-kick{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--plate-muted)}
-.ph-h{font-family:var(--disp);font-weight:600;font-size:21px;color:var(--plate-ink);margin:4px 0 8px;font-variation-settings:'opsz' 40,'SOFT' 40}
+.ph-h{font-family:var(--disp);font-weight:600;font-size:21px;color:var(--plate-ink);margin:4px 0 8px;font-variation-settings:'opsz' 36}
 .ph-p{font-size:11.5px;line-height:1.55;color:var(--plate-ink);margin:0}
 .ph-nextband{display:flex;gap:8px;align-items:baseline;border:1px solid var(--plate-line);border-radius:10px;padding:9px 12px;margin-top:14px;background:var(--plate-paper)}
 .ph-nextband span{font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;color:var(--plate-muted)}
@@ -240,7 +233,7 @@ h1 em{font-style:italic;color:var(--gold)}
 .sp-row i{width:9px;height:9px;border-radius:50%;border:2px solid var(--plate-muted);background:#fff;flex:0 0 auto;position:relative;z-index:1;align-self:center}
 .sp-row.done i{border-color:var(--korea);background:color-mix(in srgb,var(--korea) 40%,#fff)}
 .sp-row.on i{border-color:var(--korea);background:var(--korea);box-shadow:0 0 0 3px color-mix(in srgb,var(--korea) 22%,transparent)}
-.sp-row b{font-family:var(--disp);font-weight:620;font-size:13px;color:var(--plate-ink);min-width:58px;font-variation-settings:'opsz' 30,'SOFT' 40}
+.sp-row b{font-family:var(--disp);font-weight:620;font-size:13px;color:var(--plate-ink);min-width:58px;font-variation-settings:'opsz' 24}
 .sp-row.on b{color:var(--korea)}
 .sp-row span{font-size:10.5px;color:var(--plate-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
 .sp-row u{text-decoration:none;font-family:var(--mono);font-size:8.5px;color:var(--korea)}
@@ -257,11 +250,11 @@ h1 em{font-style:italic;color:var(--gold)}
 /* ================= PLATE 04 — INTERIOR ================= */
 .interior{background:var(--plate-paper);border-radius:var(--frame-r);padding:clamp(18px,4%,40px);position:relative;overflow:hidden;color:var(--plate-ink)}
 .gridref{position:absolute;top:18px;right:24px;text-align:right}
-.gridref .no{font-family:var(--disp);font-weight:640;font-size:clamp(64px,9vw,110px);line-height:.8;color:transparent;-webkit-text-stroke:1.5px rgba(35,37,28,.18);letter-spacing:-.01em;font-variation-settings:'opsz' 144}
+.gridref .no{font-family:var(--disp);font-weight:640;font-size:clamp(64px,9vw,110px);line-height:.8;color:transparent;-webkit-text-stroke:1.5px rgba(35,37,28,.18);letter-spacing:-.01em;font-variation-settings:'opsz' 72}
 .gridref .co{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;color:var(--plate-muted);text-transform:uppercase;margin-top:8px}
 .sec-head{display:flex;align-items:baseline;gap:14px;margin:0 0 4px}
 .sec-head .sq{width:9px;height:9px;background:var(--korea)}
-.sec-head h3{font-family:var(--disp);font-weight:600;font-size:clamp(26px,3.5vw,38px);margin:0;letter-spacing:0;font-variation-settings:'opsz' 60,'SOFT' 40}
+.sec-head h3{font-family:var(--disp);font-weight:600;font-size:clamp(26px,3.5vw,38px);margin:0;letter-spacing:0;font-variation-settings:'opsz' 48}
 .sec-kick{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--plate-muted);margin-bottom:22px}
 .topo{margin:26px -8px;opacity:.5}
 .topo path{fill:none;stroke:var(--korea);stroke-width:1;opacity:.55}
@@ -304,6 +297,49 @@ h1 em{font-style:italic;color:var(--gold)}
 .zoom svg .pt2{fill:var(--korea)}
 .zoom svg .ghost{fill:none;stroke:rgba(35,37,28,.2);stroke-width:1}
 
+/* ================= PLATE 05·B — SECTION ANCHORS ================= */
+.anch-frame{background:var(--plate-paper);padding:clamp(16px,3%,28px)}
+.anch-photo{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:16/4.6;min-width:0}
+.ap-img{position:absolute;inset:-6%;background:url(@@KOREA@@) center 42%/cover}
+.watch.inview .ap-img{animation:kb 30s ease-in-out infinite alternate}
+.ap-scrim{position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,14,8,.72),rgba(12,14,8,.15) 55%,transparent)}
+.ap-txt{position:absolute;left:20px;bottom:40px;display:flex;flex-direction:column;gap:2px}
+.ap-txt .m-eyebrow{color:#dfe6b0;font-size:9.5px}
+.ap-txt b{font-family:var(--disp);font-weight:580;font-size:30px;color:#fff;font-variation-settings:'opsz' 48}
+.ap-txt i{font-family:var(--serif);font-style:italic;font-size:13px;color:rgba(255,255,255,.88)}
+.anch-fig{border:1px solid var(--plate-line);border-radius:12px;background:#fff;padding:14px 18px 10px;margin:-26px 18px 0;position:relative;box-shadow:0 10px 30px -14px rgba(0,0,0,.25)}
+.anch-fig.solo{margin:0;height:100%}
+.af-t{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--plate-muted);font-weight:560;display:block;margin-bottom:6px}
+.tl{width:100%;height:auto}
+.tl path{stroke:var(--korea);stroke-width:2}
+.tl circle{fill:#fff;stroke:var(--korea);stroke-width:2}
+.tl .tl-alt circle{fill:color-mix(in srgb,var(--korea) 30%,#fff)}
+.tl .tl-now circle{fill:var(--korea)}
+.tl text{font-family:var(--mono);font-size:11px;fill:var(--plate-muted);text-anchor:middle;font-weight:500}
+.tl .tl-w{fill:var(--plate-ink);font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.watch.inview .fig-draw{animation:draw .9s cubic-bezier(.2,.7,.2,1) .2s forwards}
+.anch-row{display:grid;grid-template-columns:1fr;gap:14px;margin-top:16px}
+@media(min-width:820px){.anch-row{grid-template-columns:1fr 1fr}}
+.metro{width:100%;height:auto}
+.metro path{stroke:#b96a2e;stroke-width:4;stroke-linecap:round}
+.metro circle{fill:#fff;stroke:#b96a2e;stroke-width:2.5}
+.metro text{font-family:var(--mono);font-size:10.5px;fill:var(--plate-muted);text-anchor:middle;font-weight:500}
+.metro .mt-line{text-anchor:start;fill:var(--plate-ink);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:10px}
+.metro .mt-fare{text-anchor:start;font-size:10.5px}
+.ringwrap{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.ring{width:84px;flex:0 0 auto;transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:var(--plate-line);stroke-width:7}
+.ring-fill{fill:none;stroke:var(--korea);stroke-width:7;stroke-linecap:round;stroke-dashoffset:214}
+.watch.inview .ring-fill{animation:ringdraw 1s cubic-bezier(.2,.7,.2,1) .3s forwards}
+@keyframes ringdraw{to{stroke-dashoffset:76}}
+.ring-txt{display:flex;flex-direction:column}
+.ring-txt b{font-family:var(--disp);font-weight:600;font-size:26px;color:var(--plate-ink);font-variation-settings:'opsz' 36}
+.ring-txt b span{font-size:15px;color:var(--plate-muted);font-weight:480}
+.ring-txt i{font-family:var(--serif);font-style:italic;font-size:12px;color:var(--plate-muted)}
+.ring-list{list-style:none;margin:0;padding:0;font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--plate-muted);min-width:180px;flex:1}
+.ring-list .ok::before{content:"✓ ";color:var(--korea)}
+.ring-list .due::before{content:"○ ";color:#8a6d1f}
+
 /* ================= PLATE 07 — SOURCEBOOK ================= */
 .paint-frame{padding:16px 16px 6px;background:var(--plate-paper)}
 .paint-row{display:grid;grid-template-columns:1fr;gap:12px}
@@ -320,7 +356,7 @@ h1 em{font-style:italic;color:var(--gold)}
 @keyframes pdrift{from{transform:translateX(-8px)}to{transform:translateX(8px)}}
 .p-mist{position:absolute;inset:auto 0 0 0;height:46%;background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,.10) 45%,transparent 70%);mix-blend-mode:overlay;animation:drift 22s ease-in-out infinite alternate}
 .p-tag{position:absolute;left:12px;bottom:10px;display:flex;flex-direction:column;gap:1px}
-.p-tag b{font-family:var(--disp);font-weight:600;color:#fff;font-size:17px;text-shadow:0 1px 10px rgba(0,0,0,.45);font-variation-settings:'opsz' 40,'SOFT' 50}
+.p-tag b{font-family:var(--disp);font-weight:600;color:#fff;font-size:17px;text-shadow:0 1px 10px rgba(0,0,0,.45);font-variation-settings:'opsz' 36}
 .p-tag span{font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.85)}
 .paint-note{font-family:var(--serif);font-size:13px;color:var(--plate-muted);padding:12px 6px 10px;margin:0;max-width:90ch}
 .paint-note i{color:var(--plate-ink)}
@@ -331,7 +367,7 @@ h1 em{font-style:italic;color:var(--gold)}
 .src.reco2{border-color:color-mix(in srgb,var(--green) 55%,transparent)}
 .src.dead{opacity:.75}
 .s-no{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--board-muted)}
-.src h4{font-family:var(--disp);font-weight:620;font-size:19px;margin:0;color:var(--board-ink);font-variation-settings:'opsz' 40,'SOFT' 30}
+.src h4{font-family:var(--disp);font-weight:620;font-size:19px;margin:0;color:var(--board-ink);font-variation-settings:'opsz' 36}
 .src h4 em{font-style:italic;font-weight:480;color:var(--board-muted)}
 .src p{margin:0;font-size:13.5px;line-height:1.5;color:var(--board-muted);flex:1}
 .src p i{color:var(--board-ink)}
@@ -353,7 +389,7 @@ h1 em{font-style:italic;color:var(--gold)}
 .fac-json span,.fac-layout span,.fac-born span{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--plate-muted)}
 .fac-json b{font-family:var(--mono);font-size:12px;color:var(--plate-ink);font-weight:700}
 .fac-json i{font-family:var(--serif);font-style:italic;font-size:12px;color:var(--plate-muted)}
-.fac-born b{font-family:var(--disp);font-weight:620;font-size:20px;color:var(--plate-ink);line-height:1.15;font-variation-settings:'opsz' 40,'SOFT' 40}
+.fac-born b{font-family:var(--disp);font-weight:620;font-size:20px;color:var(--plate-ink);line-height:1.15;font-variation-settings:'opsz' 36}
 .fac-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
 .fac-chips em{font-family:var(--mono);font-style:normal;font-size:10px;letter-spacing:.04em;border:1px solid var(--plate-line);border-radius:999px;padding:4px 10px;color:var(--plate-ink);background:var(--plate-paper)}
 .fac-ledger{display:grid;grid-template-columns:1fr;gap:14px;margin-top:18px}
@@ -371,7 +407,7 @@ h1 em{font-style:italic;color:var(--gold)}
 .sh-h{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--plate-muted);display:block;margin-bottom:8px}
 .sh-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 @media(min-width:700px){.sh-row{grid-template-columns:repeat(4,1fr)}}
-.sh-row i{font-style:normal;font-family:var(--disp);font-weight:600;font-size:14px;color:var(--plate-ink);background:#fff;border:1px solid var(--plate-line);border-top:3px solid var(--a,#888);border-radius:8px;padding:18px 12px 12px;font-variation-settings:'opsz' 30,'SOFT' 40}
+.sh-row i{font-style:normal;font-family:var(--disp);font-weight:600;font-size:14px;color:var(--plate-ink);background:#fff;border:1px solid var(--plate-line);border-top:3px solid var(--a,#888);border-radius:8px;padding:18px 12px 12px;font-variation-settings:'opsz' 24}
 
 /* ================= OPTIONS ================= */
 .paths{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;margin-top:34px}
@@ -403,48 +439,54 @@ footer .rule{height:1px;background:var(--board-line);margin-bottom:22px}
 footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
 
 @media (prefers-reduced-motion: reduce){
-  .living .cover,.living .shimmer,.living .mast-shimmer,.hcard:hover .ph>div,.drift,.p-mist{animation:none!important}
-  .inview .hero-route .draw,.inview .mast-route path{animation:none!important;stroke-dashoffset:0!important}
+  .living .cover,.living .shimmer,.living .mast-shimmer,.hcard:hover .ph>div,.drift,.p-mist,.watch.inview .ap-img,.watch.inview .ring-fill{animation:none!important}
+  .ring-fill{stroke-dashoffset:76!important}
+  .inview .fig-draw{animation:none!important;stroke-dashoffset:0!important}
   .credit .live{animation:none}
   html{scroll-behavior:auto}
 }
 </style>
 
 <header class="tb wrap">
-  <div class="tb-eyebrow"><span>Waypoint</span><span class="dot"></span><span>Design Study Nº 2 · Field Edition</span><span class="dot"></span><span>2026-07-27</span></div>
+  <div class="tb-eyebrow"><span>Waypoint</span><span class="dot"></span><span>Design Study Nº 3 · Quiet Edition</span><span class="dot"></span><span>2026-07-27</span></div>
   <h1>The Living <em>Atlas</em></h1>
-  <p class="tb-dek">Second pass, four new decisions in. The type sheds its code for faces that belong outdoors. The section titles find a human voice. Navigation splits by device — <b>desktop wears the journey as a horizon; mobile carries it as a spine in the thumb's reach</b> — and one law sits over all of it: <i>the visuals may never outrank the scrolling.</i> Covers stay pathos; the ledger stays ethos.</p>
+  <p class="tb-dek">Third pass, corrected where round two overshot. The type gets <b>quiet</b> — one serif wearing both hats, one humanist sans for the numbers. Labels go back to meaning things. Covers lose the flies on the wall. And the prose walls break: <b>every section now opens with a visual anchor</b> — a figure drawn from the guide's own data, a photo where one earns its place. The law stands: <i>the visuals may never outrank the scrolling.</i></p>
   <div class="tb-stamps">
-    <span class="stamp">TYPE <b>Fraunces · Literata · Courier Prime</b> — the Field Edition (proposed)</span>
+    <span class="stamp">TYPE <b>Literata (one serif, optical sizes) + Source Sans 3</b> — the Quiet Edition (proposed)</span>
     <span class="stamp">ACCENTS <b>#646b2e · #c7a269 · #9b592b</b> — extracted, per guide</span>
     <span class="stamp">NAV <b>pills retired</b> · horizon on desktop · sheet + bar on mobile</span>
+    <span class="stamp">NEW <b>clean covers</b> · <b>literal labels</b> · <b>section anchors</b> — all decided 2026-07-27</span>
     <span class="stamp">REGISTERS <b>covers = pathos</b> · <b>content = ethos</b> — decided 2026-07-27</span>
   </div>
 </header>
 
 <!-- ================= FOUNDATION — TYPE ================= -->
 <section class="plate wrap" id="type">
-  <div class="plate-head"><span class="plate-no">FOUNDATION · <b>TYPE</b></span><h2>First, the type sheds its code</h2></div>
-  <p class="plate-sub">The critique was right: a geometric grotesque and an IDE mono read as software, and Waypoint is not software — it's a field journal. The proposal keeps Literata's book voice and swaps the loud parts: display becomes Fraunces (the warmth of old naturalist covers, with real optical sizes), and data becomes Courier Prime — not code, <i>typed</i>: the expedition log, hammered out at camp.</p>
+  <div class="plate-head"><span class="plate-no">FOUNDATION · <b>TYPE</b></span><h2>The type gets quiet</h2></div>
+  <p class="plate-sub">Round two overcorrected — a wonky serif plus a typewriter was a costume, and three loud voices read as clutter. The Quiet Edition subtracts instead: <b>one serif, Literata, wearing both hats through its real optical sizes</b> — dense and bookish at text size, opened-up and elegant at display size — and <b>one quiet humanist sans, Source Sans 3</b>, for every label and number. Two voices. Nothing performs.</p>
   <div class="spec-grid">
     <div class="spec-card">
-      <div class="spec-role">Display — titles, stations, numbers</div>
-      <div class="spec-old" style="font-family:var(--old-disp);font-weight:750">South Korea</div>
-      <div class="spec-was">Bricolage Grotesque — engineered, startup-brochure</div>
-      <div class="spec-new" style="font-family:var(--disp);font-weight:590;font-variation-settings:'opsz' 144,'SOFT' 50,'WONK' 1">South Korea</div>
-      <div class="spec-now">Fraunces — soft, slightly wonky, park-poster warm</div>
+      <div class="spec-role">Display — titles &amp; stations</div>
+      <div class="spec-old" style="font-family:var(--old-disp);font-weight:750;font-size:26px">South Korea</div>
+      <div class="spec-was">shipped: Bricolage — engineered, startup-brochure</div>
+      <div class="spec-old" style="font-family:var(--n2-disp);font-weight:590;font-size:26px">South Korea</div>
+      <div class="spec-was">study Nº 2: Fraunces — warm but wonky; read as costume</div>
+      <div class="spec-new" style="font-family:var(--disp);font-weight:560;font-variation-settings:'opsz' 72">South Korea</div>
+      <div class="spec-now">Nº 3: Literata at display optical size — the body face, grown up. One voice, start to finish.</div>
     </div>
     <div class="spec-card">
       <div class="spec-role">Body — the reading voice</div>
       <div class="spec-new" style="font-family:var(--serif);font-size:19px;line-height:1.55;font-weight:430">Book the Secret Garden tour for Tue Jul 14 — the palace is walk-up; the garden is the reason you set an alarm.</div>
-      <div class="spec-now">Literata stays — it was always a book, never code. Continuity where continuity earns it.</div>
+      <div class="spec-now">Literata, unchanged through every round — it was always the natural one. Now the headlines are simply more of it.</div>
     </div>
     <div class="spec-card">
       <div class="spec-role">Data — prices, times, stamps, labels</div>
-      <div class="spec-old" style="font-family:var(--old-mono);font-size:14px">KTX 10:44 → 12:53 · ≈₩23,700 · CHECKED 2026-07-23</div>
-      <div class="spec-was">Spline Sans Mono — reads as an IDE</div>
-      <div class="spec-new" style="font-family:var(--mono);font-size:14px;font-weight:400">KTX 10:44 → 12:53 · ≈₩23,700 · CHECKED 2026-07-23</div>
-      <div class="spec-now">Courier Prime — the same honesty, typed on paper instead of printed to a terminal</div>
+      <div class="spec-old" style="font-family:var(--old-mono);font-size:13.5px">KTX 10:44 → 12:53 · ≈₩23,700</div>
+      <div class="spec-was">shipped: Spline Mono — reads as an IDE</div>
+      <div class="spec-old" style="font-family:var(--n2-mono);font-size:13.5px">KTX 10:44 → 12:53 · ≈₩23,700</div>
+      <div class="spec-was">study Nº 2: Courier — typed, but kitsch at scale</div>
+      <div class="spec-new" style="font-family:var(--mono);font-size:15px;font-weight:480;font-variant-numeric:tabular-nums">KTX 10:44 → 12:53 · ≈₩23,700 · Checked 2026-07-23</div>
+      <div class="spec-now">Nº 3: Source Sans 3 — a quiet humanist sans with tabular figures. Labels stop being a personality and start being labels.</div>
     </div>
   </div>
 </section>
@@ -461,10 +503,6 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
           <div class="cover"></div>
           <div class="shimmer"></div>
           <div class="scrim"></div>
-          <svg class="hero-route" viewBox="0 0 1000 460" preserveAspectRatio="none" aria-hidden="true">
-            <path class="draw" d="M60,300 C220,240 340,330 470,265 S740,150 940,190"/>
-            <circle cx="60" cy="300" r="4"/><circle cx="470" cy="265" r="4"/><circle cx="940" cy="190" r="5"/>
-          </svg>
           <div class="credit"><span class="live"></span><span>Ambient · 8s loop · licensed footage, credited · graded to accent</span></div>
           <div class="plate-ref">Plate Nº 01<br>United States</div>
           <div class="hero-inner">
@@ -516,11 +554,11 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
 
 <!-- ================= PLATE 02 ================= -->
 <section class="plate wrap" id="p2">
-  <div class="plate-head"><span class="plate-no">PLATE <b>02</b></span><h2>The masthead: living cover + the guide's own route</h2></div>
-  <p class="plate-sub">As the title settles, the trip's real geography draws itself — Seoul, Daejeon, Busan, from the guide's actual map pins. The day rail keeps its post on the left. Below, the Expedition Line replaces two rows of pills.</p>
+  <div class="plate-head"><span class="plate-no">PLATE <b>02</b></span><h2>The masthead goes clean</h2></div>
+  <p class="plate-sub">Decided: nothing crawls over the photograph. The cover is image, title, scrim — full stop. The day rail keeps its quiet post on the left edge; the trip's geography moved where it works for a living: the journey sheet, the day-leg headers, and the map.</p>
   <div class="plate-grid">
     <div>
-      <div class="frame-cap"><span>GUIDE · KOREA MASTHEAD · DESKTOP</span><span class="sim">route from real pins only</span></div>
+      <div class="frame-cap"><span>GUIDE · KOREA MASTHEAD · DESKTOP</span><span class="sim">clean cover — decided</span></div>
       <div class="frame">
         <div class="mast living" id="mast">
           <div class="cover"></div>
@@ -529,13 +567,6 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
           <div class="dayrail" aria-hidden="true">
             <span class="done"></span><span class="done"></span><span class="done"></span><span class="now"></span><span></span><span></span><span></span><span></span>
           </div>
-          <svg class="mast-route" viewBox="0 0 1000 480" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M640,140 C700,210 660,260 700,310 C730,350 800,370 860,392"/>
-            <circle cx="640" cy="140" r="4.5"/><circle cx="700" cy="310" r="4"/><circle cx="860" cy="392" r="4"/>
-            <text x="655" y="136">Seoul</text>
-            <text x="715" y="306">Daejeon</text>
-            <text x="812" y="416">Busan</text>
-          </svg>
           <div class="mast-inner">
             <span class="m-eyebrow">Seoul · Daejeon · Busan — Jul 8–15, 2026</span>
             <div class="mast-title">South Korea</div>
@@ -549,14 +580,14 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
               <div class="exl-track"></div>
               <div class="exl-fill" style="width:34%"></div>
               <div class="exl-st">
-                <button type="button" class="done"><span class="pt"></span><span class="lb">Fly</span></button>
-                <button type="button" class="done"><span class="pt"></span><span class="lb">Pocket</span></button>
-                <button type="button" class="on"><span class="pt"></span><span class="lb">Moving</span></button>
+                <button type="button" class="done"><span class="pt"></span><span class="lb">Plan</span></button>
+                <button type="button" class="done"><span class="pt"></span><span class="lb">Essentials</span></button>
+                <button type="button" class="on"><span class="pt"></span><span class="lb">Transit</span></button>
                 <button type="button"><span class="pt"></span><span class="lb">Days</span></button>
-                <button type="button"><span class="pt"></span><span class="lb">Walks</span></button>
+                <button type="button"><span class="pt"></span><span class="lb">Sights</span></button>
                 <button type="button"><span class="pt"></span><span class="lb">Daejeon</span></button>
                 <button type="button"><span class="pt"></span><span class="lb">Food</span></button>
-                <button type="button"><span class="pt"></span><span class="lb">Receipts</span></button>
+                <button type="button"><span class="pt"></span><span class="lb">Sources</span></button>
               </div>
             </div>
             <div class="exl-tools">
@@ -570,8 +601,8 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
       </div>
     </div>
     <aside class="notes">
-      <div class="note k"><span class="tag">B1 · The route is ethos, not pathos</span><p>Footage may be liberal; <i>geography may not</i>. The route layer draws only from the guide's map-section pins — it asserts facts. A guide without pins gets contours, <b>never a decorative squiggle</b>.</p></div>
-      <div class="note k"><span class="tag">B2 · The rail keeps its job</span><p>Day rail (left) is untouched — story intro, story mode, and the morph already own it. The route-draw is its geographic twin: same accent, same once-per-arrival discipline.</p></div>
+      <div class="note k"><span class="tag">B1 · The photo earns silence</span><p>Route lines on covers were flies on the wall — gone. Geography still exists where it informs: the sheet's spine, the day-leg headers (<i>Daejeon → Busan · KTX 10:44</i>), the map itself. Ornament never outranks the image.</p></div>
+      <div class="note k"><span class="tag">B2 · The rail keeps its job</span><p>Day rail (left) stays — story intro, story mode, and the morph already own it, and it sits beside the photo, not on it.</p></div>
       <div class="note k"><span class="tag">B3 · One fill, two meanings</span><p>The accent fill below is simultaneously <i>where you are</i> (station) and <i>how far you've read</i> (the glowing tip creeps within the segment). Today those are two separate widgets.</p></div>
     </aside>
   </div>
@@ -579,23 +610,23 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
 
 <!-- ================= PLATE 03 — THE VOICE ================= -->
 <section class="plate wrap" id="voice">
-  <div class="plate-head"><span class="plate-no">PLATE <b>03</b></span><h2>The titles find their voice</h2></div>
-  <p class="plate-sub">"Plan · Essentials · Itinerary · References" is CMS furniture — any generator would emit it. The rule that replaces it: <b>a title names what the traveler is doing, not what the database calls the bucket</b>. Two levels: a one-word station for the line and the sheet, a full phrase at the section head — with a typed descriptor so scanning never suffers. Korea, re-titled:</p>
+  <div class="plate-head"><span class="plate-no">PLATE <b>03</b></span><h2>Titles: information first, warmth second</h2></div>
+  <p class="plate-sub">Round two's re-titles traded information for cleverness — "Pocket" and "Receipts" make you decode a metaphor before you know where you're going. Corrected rule, now decided: <b>the label you navigate by is literal, always.</b> The warmth lives one level down, in a small descriptor under each section head, where it can charm without costing a single wayfinding glance.</p>
   <div class="voice-grid">
-    <div class="v-row v-h"><span>Was</span><span>Station</span><span>Section head + descriptor</span></div>
-    <div class="v-row"><s>Plan</s><b>Fly</b><span><em>Before you fly</em> · bookings, jet lag, groundwork</span></div>
-    <div class="v-row"><s>Essentials</s><b>Pocket</b><span><em>In your pocket</em> · cash, data, apps, 112/119</span></div>
-    <div class="v-row"><s>Getting around</s><b>Moving</b><span><em>Moving through Seoul</em> · T-money, KTX, taxis</span></div>
-    <div class="v-row"><s>Itinerary</s><b>Days</b><span><em>Day by day</em> · all eight days, mapped</span></div>
-    <div class="v-row"><s>Sights</s><b>Walks</b><span><em>Worth the walk</em> · palaces, markets, lookouts</span></div>
-    <div class="v-row"><s>Daejeon &amp; MSI</s><b>Daejeon</b><span><em>The Daejeon weekend</em> · MSI 2026, two nights</span></div>
-    <div class="v-row"><s>Gaming</s><b>Arcade</b><span><em>Arcade nights</em> · PC bangs &amp; Yongsan</span></div>
-    <div class="v-row"><s>Food</s><b>Food</b><span><em>Hungry in Seoul</em> · street stalls to charcoal BBQ</span></div>
-    <div class="v-row"><s>Pokémon GO</s><b>GO</b><span><em>GO Fest week</em> · raids, spawns, rain plans</span></div>
-    <div class="v-row"><s>Tokyo</s><b>Tokyo</b><span><em>The Tokyo detour</em> · the third traveler's leg</span></div>
-    <div class="v-row"><s>References</s><b>Receipts</b><span><em>The receipts</em> · every source, dated</span></div>
+    <div class="v-row v-h"><span>Nº 2 (withdrawn)</span><span>Label — literal</span><span>Descriptor — where the warmth lives</span></div>
+    <div class="v-row"><s>Fly</s><b>Plan</b><span>bookings, jet lag, and the groundwork before you fly</span></div>
+    <div class="v-row"><s>Pocket</s><b>Essentials</b><span>cash, data, apps — and 112/119 one tap away</span></div>
+    <div class="v-row"><s>Moving</s><b>Transit</b><span>T-money, KTX, taxis — moving through Seoul without friction</span></div>
+    <div class="v-row"><s>Days</s><b>Days</b><span>all eight days, mapped hour by hour</span></div>
+    <div class="v-row"><s>Walks</s><b>Sights</b><span>palaces, markets, lookouts — and when each is worth it</span></div>
+    <div class="v-row"><s>—</s><b>Daejeon &amp; MSI</b><span>the finals weekend, two nights, already ticketed</span></div>
+    <div class="v-row"><s>Arcade</s><b>Gaming</b><span>PC bangs, Yongsan, and where Seoul plays at night</span></div>
+    <div class="v-row"><s>—</s><b>Food</b><span>street stalls to charcoal BBQ, ranked by your priorities</span></div>
+    <div class="v-row"><s>—</s><b>Pokémon GO</b><span>GO Fest week — raids, spawns, and the rain plan</span></div>
+    <div class="v-row"><s>—</s><b>Tokyo</b><span>the third traveler's detour, kept in sync</span></div>
+    <div class="v-row"><s>Receipts</s><b>Sources</b><span>every fact, traced and dated — the receipts</span></div>
   </div>
-  <p class="voice-note">Titles are content, so they live in each guide's JSON and get the creator's sign-off per guide — the <i>standard</i> (verb-forward or place-forward, never bucket-nouns; one word for the station, a phrase for the head) goes into the guide-author skill so every future guide is born with a voice. "The receipts" is the thesis in two words: even the personality serves the verification story.</p>
+  <p class="voice-note">Labels are wayfinding; descriptors are voice. The only label-level changes that survive are ones that <i>gain</i> information per glance: Itinerary→<b>Days</b> (shorter and plainer), Getting around→<b>Transit</b> (one word, same meaning), References→<b>Sources</b> (says what's actually inside). "The receipts" survives too — demoted to the descriptor, where a wink belongs.</p>
 </section>
 
 <!-- ================= PLATE 04 — NAV SPLIT ================= -->
@@ -613,23 +644,23 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
           </div>
         </div>
         <div class="exl-wrap" style="--exl-accent:#646b2e;border-top:1px dashed var(--plate-line)">
-          <div class="exl-label"><span>Desktop — the horizon: one-word stations on the journey line</span><span class="exl-read" id="readout">§3 of 11 · 34% read</span></div>
+          <div class="exl-label"><span>Desktop — the horizon: literal stations on the journey line</span><span class="exl-read" id="readout">§3 of 11 · 34% read</span></div>
           <div class="exl">
             <div class="exl-line" id="exlDemo">
               <div class="exl-track"></div>
               <div class="exl-fill" id="exlFill"></div>
               <div class="exl-st" id="exlSt" role="tablist" aria-label="Guide sections">
-                <button role="tab" type="button"><span class="pt"></span><span class="lb">Fly</span></button>
-                <button role="tab" type="button"><span class="pt"></span><span class="lb">Pocket</span></button>
-                <button role="tab" type="button"><span class="pt"></span><span class="lb">Moving</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Plan</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Essentials</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Transit</span></button>
                 <button role="tab" type="button"><span class="pt"></span><span class="lb">Days</span></button>
-                <button role="tab" type="button"><span class="pt"></span><span class="lb">Walks</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Sights</span></button>
                 <button role="tab" type="button"><span class="pt"></span><span class="lb">Daejeon</span></button>
-                <button role="tab" type="button"><span class="pt"></span><span class="lb">Arcade</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Gaming</span></button>
                 <button role="tab" type="button"><span class="pt"></span><span class="lb">Food</span></button>
                 <button role="tab" type="button"><span class="pt"></span><span class="lb">GO</span></button>
                 <button role="tab" type="button"><span class="pt"></span><span class="lb">Tokyo</span></button>
-                <button role="tab" type="button"><span class="pt"></span><span class="lb">Receipts</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Sources</span></button>
               </div>
             </div>
             <div class="exl-tools">
@@ -645,10 +676,10 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
           <div class="phone">
             <div class="ph-top"><span class="ph-title">South Korea</span><span class="ph-sos" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" width="13" height="13"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.4M8 11h.01"/></svg></span></div>
             <div class="ph-read">
-              <div class="ph-kick">§3 · T-money, KTX, taxis</div>
-              <div class="ph-h">Moving through Seoul</div>
+              <div class="ph-kick">§3 · Transit</div>
+              <div class="ph-h">Transit</div>
               <p class="ph-p">Line 3 to Anguk for the palaces; Kakao T when the bags win. Google Maps barely routes here — <b>KakaoMap or Naver Map</b>, downloaded before you fly…</p>
-              <div class="ph-nextband"><span>NEXT</span><b>Day by day</b><span class="ph-arrow">→</span></div>
+              <div class="ph-nextband"><span>NEXT</span><b>Days</b><span class="ph-arrow">→</span></div>
             </div>
             <button class="ph-today" type="button">☼ Today · Mon Jul 13 · Busan day trip</button>
             <div class="ph-nav" aria-hidden="true">
@@ -664,14 +695,14 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
               <div class="sheet-grab" aria-hidden="true"></div>
               <div class="sheet-t">The journey · 8 days · 34% read</div>
               <div class="spine">
-                <div class="sp-row done"><i></i><b>Fly</b><span>Before you fly</span><u>✓</u></div>
-                <div class="sp-row done"><i></i><b>Pocket</b><span>In your pocket</span><u>✓</u></div>
-                <div class="sp-row on"><i></i><b>Moving</b><span>Moving through Seoul</span><u>· reading</u></div>
-                <div class="sp-row open"><i></i><b>Days</b><span>Day by day</span><u>8</u></div>
+                <div class="sp-row done"><i></i><b>Plan</b><span>bookings &amp; groundwork</span><u>✓</u></div>
+                <div class="sp-row done"><i></i><b>Essentials</b><span>cash, data, apps, 112/119</span><u>✓</u></div>
+                <div class="sp-row on"><i></i><b>Transit</b><span>T-money, KTX, taxis</span><u>· reading</u></div>
+                <div class="sp-row open"><i></i><b>Days</b><span>all eight days, mapped</span><u>8</u></div>
                 <div class="sp-sub"><em>Jul 11 · KTX to Daejeon</em><em class="now">Jul 13 · Busan day trip</em><em>Jul 14 · Secret Garden 10:30</em></div>
-                <div class="sp-row"><i></i><b>Walks</b><span>Worth the walk</span></div>
-                <div class="sp-row"><i></i><b>Daejeon</b><span>The Daejeon weekend</span></div>
-                <div class="sp-row"><i></i><b>Receipts</b><span>The receipts</span></div>
+                <div class="sp-row"><i></i><b>Sights</b><span>palaces, markets, lookouts</span></div>
+                <div class="sp-row"><i></i><b>Daejeon</b><span>MSI finals weekend</span></div>
+                <div class="sp-row"><i></i><b>Sources</b><span>every fact, traced &amp; dated</span></div>
                 <div class="sp-more">+ 4 more stops</div>
               </div>
             </div>
@@ -713,8 +744,8 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
             <div class="no">№04</div>
             <div class="co">Grid E-4 · 37.5794° N · 126.9910° E</div>
           </div>
-          <div class="sec-head"><span class="sq"></span><h3>Day by day</h3></div>
-          <div class="sec-kick">Stop 04 of 11 · all eight days, mapped · Checked 2026-07-23</div>
+          <div class="sec-head"><span class="sq"></span><h3>Days</h3></div>
+          <div class="sec-kick">Stop 04 of 11 · all eight days, mapped hour by hour · Checked 2026-07-23</div>
           <div class="legcard">
             <div class="leg-route" aria-hidden="true"><i></i><u></u><i class="hollow"></i></div>
             <div class="leg-meta">
@@ -750,6 +781,63 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
       <div class="note k"><span class="tag">D2 · The editorial measure</span><p>Serif lead at ~62ch does the persuading; the mono rail holds the numbers, flags, and the verification stamp. Readers stop hunting through bold-spans for the price.</p></div>
       <div class="note k"><span class="tag">D3 · Honesty as a visual system</span><p>≈, ⚠, and <i>Checked</i> stamps stop being inline typography and become the rail's grammar — the colophon's signature, extended upward through the whole guide.</p></div>
     </aside>
+  </div>
+</section>
+
+<!-- ================= PLATE 05·B — SECTION ANCHORS ================= -->
+<section class="plate wrap" id="p5anchor">
+  <div class="plate-head"><span class="plate-no">PLATE <b>05·B</b></span><h2>Every section opens with an anchor</h2></div>
+  <p class="plate-sub">The guides are prose-heavy, and prose walls are where attention dies. Decided: every section opens with a <b>visual anchor — a figure drawn from the guide's own data, plus a photo band where a good image exists</b>. The figure is the section's thesis at a glance; the prose becomes the detail you drill into, not the wall you face. One gentle draw-in per section, first time it scrolls into view — then everything holds still.</p>
+  <div class="frame anch-frame">
+    <div class="anch watch">
+      <div class="anch-photo"><div class="ap-img"></div><div class="ap-scrim"></div>
+        <div class="ap-txt"><span class="m-eyebrow">Stop 04 · Checked 2026-07-23</span><b>Days</b><i>all eight days, mapped hour by hour</i></div>
+      </div>
+      <div class="anch-fig">
+        <span class="af-t">The shape of the trip — drawn from the day entries</span>
+        <svg viewBox="0 0 640 74" class="tl" aria-hidden="true">
+          <path class="fig-draw" d="M24,34 H616" stroke-dasharray="600" stroke-dashoffset="600"/>
+          <g class="tl-stop"><circle cx="24" cy="34" r="5"/><text x="24" y="62">Jul 8</text><text class="tl-w" x="24" y="16">arrive</text></g>
+          <g class="tl-stop"><circle cx="108" cy="34" r="5"/><text x="108" y="62">9</text></g>
+          <g class="tl-stop"><circle cx="192" cy="34" r="5"/><text x="192" y="62">10</text></g>
+          <g class="tl-stop tl-alt"><circle cx="276" cy="34" r="5"/><text x="276" y="62">11</text><text class="tl-w" x="276" y="16">Daejeon</text></g>
+          <g class="tl-stop tl-alt"><circle cx="360" cy="34" r="5"/><text x="360" y="62">12</text><text class="tl-w" x="360" y="16">MSI</text></g>
+          <g class="tl-stop tl-now"><circle cx="444" cy="34" r="7"/><text x="444" y="62">13</text><text class="tl-w" x="444" y="16">Busan</text></g>
+          <g class="tl-stop"><circle cx="528" cy="34" r="5"/><text x="528" y="62">14</text><text class="tl-w" x="528" y="16">Huwon</text></g>
+          <g class="tl-stop"><circle cx="616" cy="34" r="5"/><text x="616" y="62">15</text><text class="tl-w" x="616" y="16">fly home</text></g>
+        </svg>
+      </div>
+    </div>
+    <div class="anch-row">
+      <div class="anch-half watch">
+        <div class="anch-fig solo">
+          <span class="af-t">Transit — the lines you'll actually ride, from the guide's transit links</span>
+          <svg viewBox="0 0 320 92" class="metro" aria-hidden="true">
+            <path class="fig-draw m3" d="M56,64 H300" stroke-dasharray="250" stroke-dashoffset="250"/>
+            <g class="mt-stop"><circle cx="56" cy="64" r="5"/><text x="56" y="86">Gyeongbokgung</text></g>
+            <g class="mt-stop"><circle cx="130" cy="64" r="5"/><text x="130" y="86">Anguk</text></g>
+            <g class="mt-stop"><circle cx="240" cy="64" r="5"/><text x="240" y="86">Jongno 3-ga</text></g>
+            <g class="mt-stop"><circle cx="300" cy="64" r="5"/></g>
+            <text class="mt-line" x="20" y="30">LINE 3 · airport limousine 6002 · Kakao T</text>
+            <text class="mt-fare" x="20" y="46">T-money base fare ₩1,400 · tap in, tap out</text>
+          </svg>
+        </div>
+      </div>
+      <div class="anch-half watch">
+        <div class="anch-fig solo">
+          <span class="af-t">Plan — booking progress, from the checklist state</span>
+          <div class="ringwrap">
+            <svg viewBox="0 0 84 84" class="ring" aria-hidden="true">
+              <circle cx="42" cy="42" r="34" class="ring-bg"/>
+              <circle cx="42" cy="42" r="34" class="ring-fill" stroke-dasharray="214"/>
+            </svg>
+            <div class="ring-txt"><b>9<span>/14</span></b><i>booked or done</i></div>
+            <ul class="ring-list"><li class="ok">Flights · Airbnb · MSI tickets · I-Hotel</li><li class="due">KTX legs · Huwon tour — ⚠ both sell out</li></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="paint-note">All three figures are <i>derived, not drawn by hand</i>: the timeline from day entries, the transit line from the guide's transit links, the ring from live checklist state — so every guide, current and future, generates its own anchors. Photo bands are the curated upgrade; a section without one gets the figure on paper, which is already enough to break the wall of prose. Motion budget: one draw-in per figure per visit, ~600ms, then stillness. Reduced-motion: figures render complete.</p>
   </div>
 </section>
 
@@ -888,28 +976,30 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
   <div class="plate-head"><span class="plate-no">THE WAY <b>FORWARD</b></span><h2>One programme, five moves</h2></div>
   <p class="plate-sub">The three-path menu didn't earn its keep, so here's the honest version: a sequence, reorderable, with the foundation first — because every later surface inherits the type and the voice.</p>
   <div class="prog">
-    <div class="fork"><span class="fno">R1</span><p><b>Field type + the voice.</b> Swap the faces site-wide (Fraunces / Literata / Courier Prime — self-hosted fontsource, same as today) and re-title the guides to the new standard, with your sign-off per guide. Zero JS, one session, and every screen changes temperature at once.</p></div>
+    <div class="fork"><span class="fno">R1</span><p><b>Field type + the voice.</b> Collapse to two faces site-wide (Literata via optical sizes + Source Sans 3 — self-hosted fontsource, same as today) and settle the labels: literal always, warmth in the descriptors. Zero JS, one session, and every screen changes temperature at once.</p></div>
     <div class="fork"><span class="fno">R2</span><p><b>Mobile goes native.</b> Bottom bar (Journey · Today · Map · Kit), the journey sheet, the floating Today chip; the mobile pill strip retires. The critiqued pain dies first. SOS keeps its post.</p></div>
     <div class="fork"><span class="fno">R3</span><p><b>Desktop wears the horizon.</b> The line replaces pills on desktop only, absorbs the reading-progress bar, keeps tablist semantics and the arrow-key ring.</p></div>
     <div class="fork"><span class="fno">R4</span><p><b>Living covers.</b> The pathos layer as already decided — masthead first, then hub. Liberal sourcing, credited, accent-graded, gated on reduced-motion and Save-Data.</p></div>
-    <div class="fork"><span class="fno">R5</span><p><b>The interior atlas.</b> Leg headers from real pins, grid references, the editorial measure with the typed numbers rail.</p></div>
+    <div class="fork"><span class="fno">R5</span><p><b>The interior atlas + section anchors.</b> Every section opens with its data-drawn figure (+ photo band where curated); leg headers from real pins; the editorial measure with the quiet numbers rail.</p></div>
   </div>
   <div class="forks">
     <span class="fh">The decision ledger</span>
-    <h3>Two decided, four still yours</h3>
+    <h3>Six decided, three still yours</h3>
     <div class="fork"><span class="fno">№1</span><p><b>Video sourcing — <span style="color:var(--green)">decided 2026-07-27</span>.</b> Covers are pathos: liberal, licensed, credited, accent-graded. Verification never blesses a cover. <span class="rec" style="color:var(--green);border-color:color-mix(in srgb,var(--green) 45%,transparent)">✓ liberal covers · rigorous content</span></p></div>
     <div class="fork"><span class="fno">№2</span><p><b>The pills — <span style="color:var(--green)">decided 2026-07-27</span>.</b> Retired on both devices; desktop gets the horizon, mobile gets the bar + sheet. <span class="rec" style="color:var(--green);border-color:color-mix(in srgb,var(--green) 45%,transparent)">✓ nav splits by device</span></p></div>
     <div class="fork"><span class="fno">№3</span><p><b>The four bottom-bar destinations.</b> Proposed: Journey · Today · Map · Kit. Swap one for Trip Split? For Search? Four is the budget; naming them is yours.</p></div>
-    <div class="fork"><span class="fno">№4</span><p><b>The titles are content.</b> Korea&#39;s eleven re-titles above need your pen — approve, edit, or reject line by line; the <i>standard</i> ships either way. <span class="rec">rec · approve with edits</span></p></div>
-    <div class="fork"><span class="fno">№5</span><p><b>The faces.</b> Fraunces + Literata + Courier Prime is this study&#39;s proposal — the specimen sits at the top of the page. If it doesn&#39;t sing, the next round brings two alternates staged the same way.</p></div>
+    <div class="fork"><span class="fno">№4</span><p><b>Titles — <span style="color:var(--green)">decided 2026-07-27</span>.</b> Labels literal, always; warmth demoted to the descriptors. Three label upgrades survive: Days, Transit, Sources. <span class="rec" style="color:var(--green);border-color:color-mix(in srgb,var(--green) 45%,transparent)">✓ information first</span></p></div>
+    <div class="fork"><span class="fno">№5</span><p><b>The faces, round three.</b> Quiet Edition: Literata alone (display via optical sizes) + Source Sans 3 for labels and numbers — subtraction instead of a new costume. The specimen at the top shows all three generations side by side. Your eye decides. <span class="rec">rec · this one — it can't clash with itself</span></p></div>
     <div class="fork"><span class="fno">№6</span><p><b>Video weight + pin-less route-draw</b> — unchanged from Study Nº 1: masthead-first, and contours until real pins exist. <span class="rec">rec · both defaults</span></p></div>
+    <div class="fork"><span class="fno">№8</span><p><b>Covers — <span style="color:var(--green)">decided 2026-07-27</span>.</b> Clean: image, title, scrim. Route lines off the photographs; geography lives in the sheet, the leg headers, the map. <span class="rec" style="color:var(--green);border-color:color-mix(in srgb,var(--green) 45%,transparent)">✓ nothing crawls on the photo</span></p></div>
+    <div class="fork"><span class="fno">№9</span><p><b>Section anchors — <span style="color:var(--green)">decided 2026-07-27</span>.</b> Figure + photo: data-drawn figures automatic for every section and every guide; photo bands where curated. One draw-in per figure, then stillness. <span class="rec" style="color:var(--green);border-color:color-mix(in srgb,var(--green) 45%,transparent)">✓ both</span></p></div>
     <div class="fork"><span class="fno">№7</span><p><b>The cover stack</b> (Plate 07). Painted Atlas as the automatic default for every guide, footage as a curated per-guide upgrade, own-footage after trips? And hosting: hot-link the libraries' CDNs, or self-host on the existing Cloudflare account? <span class="rec">rec · painted default + hot-link first</span></p></div>
   </div>
 </section>
 
 <footer class="wrap">
   <div class="rule"></div>
-  <p>Design study Nº 2 (Field Edition) — nothing ships until the open forks are decided. Companion plan: <code>docs/PLAN_VISUAL_REDESIGN.md</code> on <code>claude/website-visual-redesign-upnl05</code>. Paper and accents are Waypoint's shipped system; the type is this study's proposal, embedded from fontsource like the site's own faces; photos are the guides' Commons covers. Motion here is CSS simulation of the proposed ambient loops — and this page honors <code>prefers-reduced-motion</code>, as would the real thing.</p>
+  <p>Design study Nº 3 (Quiet Edition) — nothing ships until the open forks are decided. Companion plan: <code>docs/PLAN_VISUAL_REDESIGN.md</code> on <code>claude/website-visual-redesign-upnl05</code>. Paper and accents are Waypoint's shipped system; the type is this study's proposal, embedded from fontsource like the site's own faces; photos are the guides' Commons covers. Motion here is CSS simulation of the proposed ambient loops — and this page honors <code>prefers-reduced-motion</code>, as would the real thing.</p>
 </footer>
 
 <script>
@@ -922,14 +1012,15 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
     pb.setAttribute('aria-pressed', String(p));
     pb.setAttribute('aria-label', p ? 'Play ambient motion' : 'Pause ambient motion');
   });
-  // Route draws trigger when plates enter view
+  // Figure draw-ins trigger when anchors enter view
+  var watched = Array.prototype.slice.call(document.querySelectorAll('.watch'));
   if ('IntersectionObserver' in window && !rm) {
     var io = new IntersectionObserver(function(es){
       es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('inview'); io.unobserve(e.target); } });
     }, {threshold:.35});
-    io.observe(hero); io.observe(document.getElementById('mast'));
+    watched.forEach(function(el){ io.observe(el); });
   } else {
-    hero.classList.add('inview'); document.getElementById('mast').classList.add('inview');
+    watched.forEach(function(el){ el.classList.add('inview'); });
   }
   // Plate 03 — interactive Expedition Line
   var st = document.getElementById('exlSt'), fill = document.getElementById('exlFill'), read = document.getElementById('readout');

@@ -24,15 +24,15 @@ const PHOTOS = {
 // cache and fall back to a jsdelivr fetch of the same fontsource files.
 const FONTS = {
   "@@BG@@": fontDir("bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2"),
-  "@@LIT@@": fontDir("literata/files/literata-latin-wght-normal.woff2"),
-  "@@LITI@@": fontDir("literata/files/literata-latin-wght-italic.woff2"),
+  // "standard" variant = wght + opsz — the optical axis is the Quiet Edition's display voice
+  "@@LIT@@": fontDir("literata/files/literata-latin-standard-normal.woff2"),
+  "@@LITI@@": fontDir("literata/files/literata-latin-standard-italic.woff2"),
   "@@SSM@@": fontDir("spline-sans-mono/files/spline-sans-mono-latin-wght-normal.woff2"),
 };
 const REMOTE_FONTS = {
+  "@@SS3@@": "@fontsource-variable/source-sans-3/files/source-sans-3-latin-wght-normal.woff2",
   "@@FRA@@": "@fontsource-variable/fraunces/files/fraunces-latin-full-normal.woff2",
-  "@@FRAI@@": "@fontsource-variable/fraunces/files/fraunces-latin-full-italic.woff2",
   "@@CP4@@": "@fontsource/courier-prime/files/courier-prime-latin-400-normal.woff2",
-  "@@CP7@@": "@fontsource/courier-prime/files/courier-prime-latin-700-normal.woff2",
 };
 
 const commons = (file) =>

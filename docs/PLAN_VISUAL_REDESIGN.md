@@ -112,25 +112,23 @@ object, not a rewire. Desktop had no crowding problem; it changes clothes, not s
 - **Same-object rule still holds** (uniform application): hub Overture route → desktop
   horizon → mobile sheet spine → story-mode rail → print/OG route strip.
 
-## Move D — The voice (new, 2026-07-27) + the Field Edition type
+## Move D — The voice (REVISED 2026-07-27, round 3 — titles DECIDED) + the Quiet Edition type
 
-**Titles.** "Plan · Essentials · Itinerary · References" is CMS furniture — the creator's
-critique ("AI-slop") is correct. The standard that replaces it: **a title names what the
-traveler is doing, not what the database calls the bucket** — verb-forward or place-forward,
-never bucket-nouns. Two levels: a ONE-WORD station (line + sheet) and a full phrase at the
-section head, always with a typed descriptor so scanning never suffers. Korea's proposal
-(needs creator sign-off — titles are content): Fly/Before you fly · Pocket/In your pocket ·
-Moving/Moving through Seoul · Days/Day by day · Walks/Worth the walk · Daejeon/The Daejeon
-weekend · Arcade/Arcade nights · Food/Hungry in Seoul · GO/GO Fest week · Tokyo/The Tokyo
-detour · Receipts/The receipts. The standard goes into the `waypoint-guide-author` skill so
-every future guide is born with a voice; per-guide titles get creator sign-off.
+**Titles — DECIDED: information first, warmth second.** Round 2's evocative one-worders
+("Pocket", "Receipts") traded wayfinding for cleverness and were withdrawn. The standing
+rule: **the label you navigate by is literal, always**; the warmth lives in a small
+descriptor under each section head. Only label changes that GAIN information per glance
+survive: Itinerary→**Days**, Getting around→**Transit**, References→**Sources**. Korea's
+descriptor set is staged in the design study (Plate 03). Standard goes into the
+`waypoint-guide-author` skill; descriptors are content and get per-guide sign-off.
 
-**Type — the Field Edition (proposed; fork).** The shipped display/data faces read as
-software (geometric grotesque + IDE mono) against Waypoint's natural themes. Proposal:
-**Fraunces** (display — variable opsz/SOFT/WONK; naturalist-cover warmth) · **Literata
-stays** (body — it was always a book) · **Courier Prime** (data — not code, *typed*: the
-expedition log). All fontsource, self-hosted like today's faces; swap is token-level in
-`base.css`. Bricolage Grotesque + Spline Sans Mono retire.
+**Type — the Quiet Edition (round-3 proposal; fork №5 restaged).** Round 2's
+Fraunces + Courier read as costume — three loud voices = clutter. The correction is
+subtraction: **ONE serif — Literata — wearing display AND body through its real optical
+sizes** (the `standard` fontsource variant carries `opsz`), plus **ONE quiet humanist
+sans — Source Sans 3 — for every label and number** (tabular figures). Two voices total;
+Bricolage Grotesque and Spline Sans Mono retire; no new serif enters. The three-generation
+specimen (shipped → Nº 2 withdrawn → Nº 3) is in the study's Foundation section.
 
 ## Move A½ — The motion sourcebook (added 2026-07-27; creator asked for more options)
 
@@ -183,10 +181,18 @@ atlas at different zooms**:
 
 - **Hub = continental zoom** (already closest to done): Overture route + contours; grid cards
   styled as numbered plates ("Plate 03 — South Korea").
-- **Masthead = country zoom:** the living cover, over/under which the guide's OWN route —
-  its real map-section pins connected day by day — draws once as the title settles (real
-  coordinates only; a guide without a map section gets contours, never a fake squiggle —
-  the Honest property applies to ornament too).
+- **Masthead = country zoom — CLEAN (decided 2026-07-27):** the living cover carries only
+  image, title, and scrim. The route-draw overlay was cut ("flies on the wall"); the guide's
+  real geography lives in the journey sheet's spine, the day-leg headers, and the map
+  surface. Nothing crawls over a photograph.
+- **Section anchors (decided 2026-07-27 — figure + photo):** every section opens with a
+  visual anchor. Baseline: a figure DERIVED from the guide's own data — day-timeline from
+  day entries, transit-line diagram from transit links, booking ring from checklist state —
+  so every current and future guide generates its own anchors with zero hand-drawing.
+  Upgrade: a photo band where a good image exists (Commons, credited, ambient). Motion
+  budget: one draw-in per figure on first view (~600 ms), then stillness; reduced-motion
+  renders figures complete. This is the anti-prose-wall move: the figure is the section's
+  thesis at a glance.
 - **Interior gets the cartographic DNA back:** thin topo-rule dividers between groups;
   section numbers styled as chart indices (№ 01); day entries get a route-leg header
   (Day 4 · Jongno → Changdeokgung · 4.2 km) derived from existing pin data. The two-column
@@ -210,11 +216,11 @@ atlas at different zooms**:
 
 | Phase | Scope | Risk gates |
 |---|---|---|
-| R1 | Field type (token-level swap in base.css) + the voice (titles per guide, creator-signed; standard into guide-author skill) | zero-layout-shift check per surface (type metrics differ); grep dist/ for old family names; a11y contrast re-verify |
+| R1 | Quiet type (token-level: Literata `standard` opsz variant + Source Sans 3 in base.css) + literal labels & descriptors per guide (creator-signed; standard into guide-author skill) | zero-layout-shift check per surface (type metrics differ); grep dist/ for old family names; a11y contrast re-verify |
 | R2 | Mobile goes native: bottom bar (4 destinations), journey sheet, Today chip; mobile pill strip retires; SOS post kept | thumb-reach on real device; sheet = plain scroll, no scroll-jack; a11y (sheet as dialog/nav landmark); baselines re-recorded on CI |
 | R3 | Desktop horizon: line replaces pills (desktop only), absorbs reading progress, tablist semantics kept | a11y suite green; arrow-key ring intact |
 | R4 | Living covers (pathos, as decided): masthead first, then hub + hover previews | licensed-footage delivery smoke test from deployed site; Save-Data/reduced-motion forced once each; credit+license in schema; CLS re-measure |
-| R5 | Interior atlas: leg headers from real pins, grid refs, editorial measure; route-carry view-transitions | reduced-motion path; pin-less fallback; print + OG parity |
+| R5 | Interior atlas + section anchors: data-drawn figures for every section (+ photo bands where curated), leg headers from real pins, grid refs, editorial measure | reduced-motion path (figures render complete); pin-less fallback; print + OG parity; anchors derive from data only — never hand-drawn |
 
 ## Clarifying questions (gate — put to the creator via AskUserQuestion before any phase builds)
 
@@ -227,10 +233,14 @@ atlas at different zooms**:
    See Move B.
 3. **The four bottom-bar destinations.** Proposed: Journey · Today · Map · Kit. Swap one for
    Trip Split? For Search? Four is the budget; the names are the creator's call.
-4. **The re-titles are content.** Korea's eleven proposed titles (Move D) need per-line
-   creator sign-off — approve/edit/reject; the *standard* ships either way.
-5. **The faces.** Fraunces + Literata + Courier Prime is the proposal (specimen in the
-   design study). If it doesn't sing, the next round stages two alternates the same way.
+4. ~~**The re-titles.**~~ **DECIDED 2026-07-27 (creator):** labels literal always; warmth in
+   descriptors only; Days/Transit/Sources are the surviving label upgrades. Descriptor text
+   still gets per-guide sign-off (it's content).
+5. **The faces, round three.** Quiet Edition staged: Literata alone (display via optical
+   sizes) + Source Sans 3. Awaiting the creator's eye on the three-generation specimen.
+   *Rec: this one — one family can't clash with itself.*
+5b. **DECIDED 2026-07-27 (creator):** covers are CLEAN (no route overlay — "flies on the
+   wall"), and every section gets an anchor (figure + photo — "both").
 6. **Hero video weight ceiling** (~4 MB, masthead-only first — rec) and **pin-less
    route-draw** (contours until real pins exist — rec): both carried from Study Nº 1,
    defaults recommended.
