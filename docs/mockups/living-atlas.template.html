@@ -1,0 +1,717 @@
+<title>Waypoint — The Living Atlas · Design Study Nº 1</title>
+<style>
+/* ================= FONTS — Waypoint's real faces, embedded ================= */
+@font-face{font-family:'Bricolage Grotesque';src:url(@@BG@@) format('woff2');font-weight:200 800;font-display:swap}
+@font-face{font-family:'Literata';src:url(@@LIT@@) format('woff2');font-weight:200 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Literata';src:url(@@LITI@@) format('woff2');font-weight:200 900;font-style:italic;font-display:swap}
+@font-face{font-family:'Spline Sans Mono';src:url(@@SSM@@) format('woff2');font-weight:300 700;font-display:swap}
+
+/* ================= TOKENS — the drafting board ================= */
+:root{
+  --board:#171a10;          /* dark olive-ink, biased toward Korea's extracted accent */
+  --board-2:#1d2114;
+  --board-ink:#e9e7da;
+  --board-muted:#a2a28d;
+  --board-line:rgba(233,231,218,.14);
+  --plate-paper:#edece4;    /* Waypoint's paper, constant inside every mock */
+  --plate-ink:#23251c;
+  --plate-muted:#6f705f;
+  --plate-line:rgba(35,37,28,.16);
+  --korea:#646b2e; --denmark:#c7a269; --sedona:#9b592b;
+  --gold:#c7a269;  /* chrome accent: darkened in light theme for contrast */
+  --disp:'Bricolage Grotesque',system-ui,sans-serif;
+  --serif:'Literata',Georgia,serif;
+  --mono:'Spline Sans Mono',ui-monospace,monospace;
+  --frame-r:14px;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light){
+  :root{--board:#e8e6da;--board-2:#dfddcf;--board-ink:#24261b;--board-muted:#6c6d5a;--board-line:rgba(36,38,27,.16);--gold:#8a6a2e;color-scheme:light}
+}
+:root[data-theme="dark"]{--board:#171a10;--board-2:#1d2114;--board-ink:#e9e7da;--board-muted:#a2a28d;--board-line:rgba(233,231,218,.14);--gold:#c7a269;color-scheme:dark}
+:root[data-theme="light"]{--board:#e8e6da;--board-2:#dfddcf;--board-ink:#24261b;--board-muted:#6c6d5a;--board-line:rgba(36,38,27,.16);--gold:#8a6a2e;color-scheme:light}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--board);color:var(--board-ink);font-family:var(--serif);font-size:17px;line-height:1.6;
+  background-image:radial-gradient(1200px 700px at 80% -10%,var(--board-2),transparent 70%)}
+img{max-width:100%;display:block}
+a{color:inherit}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:4px}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(16px,4vw,48px)}
+
+/* ================= TITLE BLOCK ================= */
+header.tb{padding:clamp(48px,8vh,96px) 0 40px;border-bottom:1px solid var(--board-line)}
+.tb-eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--board-muted);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.tb-eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--sedona);display:inline-block}
+h1{font-family:var(--disp);font-weight:750;font-size:clamp(44px,7.5vw,92px);line-height:.98;letter-spacing:-.02em;margin:.25em 0 .2em;text-wrap:balance}
+h1 em{font-style:normal;color:var(--gold)}
+.tb-dek{max-width:62ch;font-size:clamp(17px,1.5vw,20px);color:var(--board-ink)}
+.tb-dek i{color:var(--board-muted)}
+.tb-stamps{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.stamp{font-family:var(--mono);font-size:11px;letter-spacing:.08em;padding:7px 12px;border:1px solid var(--board-line);border-radius:999px;color:var(--board-muted)}
+@media(min-width:700px){.stamp{white-space:nowrap}}
+.stamp b{color:var(--board-ink);font-weight:500}
+
+/* ================= PLATE SCAFFOLD ================= */
+.plate{padding:clamp(48px,8vh,88px) 0;border-bottom:1px solid var(--board-line)}
+.plate-head{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-bottom:8px}
+.plate-no{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--board-muted)}
+.plate-no b{color:var(--board-ink);font-weight:600}
+.plate h2{font-family:var(--disp);font-weight:700;font-size:clamp(26px,3.4vw,40px);letter-spacing:-.015em;margin:0;text-wrap:balance}
+.plate-sub{max-width:70ch;color:var(--board-muted);font-style:italic;margin:6px 0 30px}
+.plate-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:28px}
+@media(min-width:1080px){.plate-grid{grid-template-columns:minmax(0,7.2fr) minmax(0,2.8fr)}}
+.frame{border:1px solid var(--board-line);border-radius:var(--frame-r);overflow:hidden;background:var(--plate-paper);box-shadow:0 30px 80px -30px rgba(0,0,0,.55)}
+.frame-cap{display:flex;justify-content:space-between;gap:10px;align-items:center;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--board-muted);padding:0 4px 10px}
+.frame-cap .sim{border:1px solid var(--board-line);border-radius:999px;padding:3px 9px;letter-spacing:.1em}
+.notes{display:flex;flex-direction:column;gap:18px;align-self:start}
+.note{border-left:2px solid var(--board-line);padding:2px 0 2px 16px}
+.note .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;color:var(--board-muted);display:block;margin-bottom:4px}
+.note p{margin:0;font-size:15px;line-height:1.55;color:var(--board-ink)}
+.note p i{color:var(--board-muted)}
+.note.k{border-left-color:var(--korea)}.note.d{border-left-color:var(--denmark)}.note.s{border-left-color:var(--sedona)}
+
+/* ================= SHARED MOCK BITS (inside plates = Waypoint light theme) ================= */
+.m-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase}
+.m-chip{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;padding:6px 12px;border-radius:999px;display:inline-flex;align-items:center;gap:6px}
+.m-btn{font-family:var(--disp);font-weight:600;font-size:14px;padding:10px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.55);background:rgba(14,15,10,.35);color:#fff;backdrop-filter:blur(4px)}
+
+/* ================= PLATE 01 — HUB HERO, LIVING COVER ================= */
+.hero{position:relative;aspect-ratio:16/7.4;background:#101208;overflow:hidden;border-radius:var(--frame-r)}
+@media(max-width:700px){.hero{aspect-ratio:3/3.4}} /* phones: the hero goes portrait — no min-height (with aspect-ratio it transfers into a min-WIDTH and blows the frame) */
+.hero .cover{position:absolute;inset:-6%;background:url(@@SEDONA@@) center 38%/cover no-repeat;transform-origin:55% 45%}
+.living .cover{animation:kb 26s ease-in-out infinite alternate}
+.hero .shimmer{position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,235,210,.14) 46%,transparent 62%);mix-blend-mode:overlay}
+.living .shimmer{animation:drift 13s ease-in-out infinite alternate}
+.hero .scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,10,6,.18) 0%,transparent 34%,rgba(12,10,6,.78) 100%),linear-gradient(60deg,rgba(155,89,43,.28),transparent 55%)}
+@keyframes kb{from{transform:scale(1.02) translate(0,0)}to{transform:scale(1.13) translate(-1.6%,1.2%)}}
+@keyframes drift{from{transform:translateX(-18%)}to{transform:translateX(18%)}}
+.paused .cover,.paused .shimmer{animation-play-state:paused}
+.hero-route{position:absolute;inset:0;width:100%;height:100%}
+.hero-route path{fill:none;stroke:rgba(255,246,235,.85);stroke-width:1.6;stroke-dasharray:4 7;stroke-linecap:round}
+.hero-route .draw{stroke:#e8b98a;stroke-width:2;stroke-dasharray:640;stroke-dashoffset:640}
+.inview .hero-route .draw{animation:draw 2.8s cubic-bezier(.2,.7,.2,1) .5s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.hero-route circle{fill:#f3e0c8}
+.hero-inner{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(18px,4%,42px)}
+.hero-inner .m-eyebrow{color:#f0d9bd}
+.hero-title{font-family:var(--disp);font-weight:780;color:#fff;font-size:clamp(42px,7vw,84px);line-height:.95;letter-spacing:-.02em;margin:8px 0 14px;text-shadow:0 2px 30px rgba(0,0,0,.35)}
+.hero-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.chip-accent{background:#9b592b;color:#fff}
+.chip-ghost{border:1px solid rgba(255,255,255,.5);color:#fff}
+.plate-ref{position:absolute;top:18px;right:20px;font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;color:rgba(255,248,240,.85);text-transform:uppercase;text-align:right;line-height:1.7}
+.credit{position:absolute;left:20px;top:18px;display:flex;gap:8px;align-items:baseline;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:rgba(255,248,240,.75);text-transform:uppercase;max-width:calc(100% - 140px);line-height:1.6}
+.credit .live{flex:0 0 auto}
+@media(max-width:700px){.plate-ref{display:none}.credit{max-width:calc(100% - 40px)}}
+.credit .live{width:7px;height:7px;border-radius:50%;background:#e8b98a;animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.pause{position:absolute;right:20px;bottom:20px;width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.55);background:rgba(12,10,6,.45);color:#fff;display:grid;place-items:center;backdrop-filter:blur(4px)}
+.hub-card-demo{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:16px;background:var(--plate-paper)}
+@media(max-width:640px){.hub-card-demo{grid-template-columns:1fr}}
+.hcard{position:relative;border:1px solid var(--plate-line);border-radius:12px;overflow:hidden;background:#fff}
+.hcard .ph{position:relative;aspect-ratio:16/8;overflow:hidden}
+.hcard .ph>div{position:absolute;inset:-5%;background:url(@@DENMARK@@) center 60%/cover}
+.hcard:hover .ph>div,.hcard:focus-within .ph>div{animation:kb 18s ease-in-out infinite alternate}
+.hcard .bar{height:3px;background:var(--denmark)}
+.hcard .bd{padding:14px 16px 16px}
+.hcard .m-eyebrow{color:var(--plate-muted);font-size:10px}
+.hcard h4{font-family:var(--disp);font-weight:700;color:var(--plate-ink);font-size:22px;margin:4px 0 6px}
+.hcard p{margin:0;font-size:13.5px;line-height:1.5;color:var(--plate-muted)}
+.hcard .hint{position:absolute;top:10px;right:10px;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:#fff;background:rgba(14,15,10,.55);border-radius:999px;padding:4px 9px;text-transform:uppercase}
+
+/* ================= PLATE 02 — GUIDE MASTHEAD ================= */
+.mast{position:relative;aspect-ratio:16/8.2;background:#0e1009;overflow:hidden;border-radius:var(--frame-r)}
+@media(max-width:700px){.mast{aspect-ratio:3/3.8}}
+.mast .cover{position:absolute;inset:-6%;background:url(@@KOREA@@) center 30%/cover no-repeat}
+.living .mast-shimmer{position:absolute;inset:0;background:linear-gradient(100deg,transparent 35%,rgba(214,255,170,.10) 50%,transparent 65%);mix-blend-mode:overlay;animation:drift 15s ease-in-out infinite alternate}
+.mast .scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,12,6,.25),transparent 30%,rgba(10,12,6,.82) 92%),linear-gradient(75deg,rgba(53,57,25,.45),transparent 60%)}
+.dayrail{position:absolute;left:16px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:7px}
+.dayrail span{width:4px;height:26px;border-radius:99px;background:rgba(255,255,255,.28)}
+.dayrail span.done{background:#aab55a}
+.dayrail span.now{background:#d3e07c;box-shadow:0 0 12px rgba(211,224,124,.8)}
+.mast-route{position:absolute;inset:0;width:100%;height:100%}
+.mast-route path{fill:none;stroke:#d3e07c;stroke-width:2;stroke-dasharray:520;stroke-dashoffset:520;filter:drop-shadow(0 1px 6px rgba(0,0,0,.5))}
+.inview .mast-route path{animation:draw 2.6s cubic-bezier(.2,.7,.2,1) .4s forwards}
+.mast-route circle{fill:#eef3cd}
+.mast-route text{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;fill:rgba(255,255,255,.92);text-transform:uppercase}
+.mast-inner{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(18px,4%,42px) clamp(18px,4%,42px) clamp(14px,3%,28px) clamp(40px,6%,64px)}
+.mast-inner .m-eyebrow{color:#dfe6b0}
+.mast-title{font-family:var(--disp);font-weight:790;color:#fff;font-size:clamp(40px,6.4vw,78px);line-height:.95;letter-spacing:-.02em;margin:8px 0 10px}
+.mast-dek{max-width:52ch;color:rgba(255,255,255,.92);font-size:clamp(14px,1.4vw,16.5px);margin:0 0 18px}
+
+/* ================= EXPEDITION LINE ================= */
+.exl-wrap{background:var(--plate-paper);padding:18px clamp(14px,3%,30px) 22px;border-radius:0 0 var(--frame-r) var(--frame-r)}
+.exl-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--plate-muted);margin-bottom:12px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.exl{display:flex;align-items:flex-start;gap:18px}
+.exl-line{position:relative;flex:1;min-width:0;padding-top:9px}
+.exl-track{position:absolute;left:0;right:0;top:14px;height:2px;background:var(--plate-line);border-radius:2px}
+.exl-fill{position:absolute;left:0;top:13px;height:4px;border-radius:4px;background:linear-gradient(90deg,color-mix(in srgb,var(--exl-accent,#646b2e) 55%,transparent),var(--exl-accent,#646b2e));width:0;transition:width .55s cubic-bezier(.2,.7,.2,1)}
+.exl-fill::after{content:"";position:absolute;right:-3px;top:50%;width:10px;height:10px;border-radius:50%;background:var(--exl-accent,#646b2e);transform:translateY(-50%);box-shadow:0 0 0 4px color-mix(in srgb,var(--exl-accent,#646b2e) 22%,transparent)}
+.exl-st{display:flex;justify-content:space-between;position:relative}
+.exl-st button{appearance:none;background:none;border:none;padding:0;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;color:var(--plate-muted)}
+.exl-st .pt{width:11px;height:11px;border-radius:50%;border:2px solid var(--plate-muted);background:var(--plate-paper);transition:all .3s}
+.exl-st button.on{color:var(--plate-ink)}
+.exl-st button.on .pt{border-color:var(--exl-accent,#646b2e);background:var(--exl-accent,#646b2e);box-shadow:0 0 0 4px color-mix(in srgb,var(--exl-accent,#646b2e) 20%,transparent)}
+.exl-st button.done .pt{border-color:var(--exl-accent,#646b2e);background:color-mix(in srgb,var(--exl-accent,#646b2e) 45%,var(--plate-paper))}
+.exl-st .lb{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;max-width:9ch;overflow:hidden;text-overflow:ellipsis}
+.exl-st button.on .lb{font-weight:600;max-width:none}
+@media(max-width:760px){.exl-st .lb{display:none}.exl-st button.on .lb{display:block}}
+.exl-tools{display:flex;align-items:center;gap:8px;padding-top:2px}
+.exl-div{width:1px;height:30px;background:var(--plate-line);margin-right:6px}
+.tool{width:30px;height:30px;border-radius:50%;border:1px solid var(--plate-line);background:#fff;color:var(--plate-ink);display:grid;place-items:center}
+.tool.sos{color:#a33327;border-color:color-mix(in srgb,#a33327 40%,transparent)}
+.tool svg{width:14px;height:14px}
+.exl-read{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:var(--plate-muted);text-transform:uppercase}
+
+/* before strip */
+.before{background:var(--plate-paper);border-radius:var(--frame-r) var(--frame-r) 0 0;padding:16px clamp(14px,3%,30px) 6px}
+.before .pills{display:flex;gap:7px;flex-wrap:wrap;filter:grayscale(1);opacity:.75}
+.before .pill{font-family:var(--disp);font-weight:600;font-size:11.5px;color:var(--plate-ink);background:rgba(35,37,28,.08);padding:7px 13px;border-radius:999px}
+.before .pill.on{background:var(--plate-ink);color:var(--plate-paper)}
+.strike{position:relative}
+.strike::after{content:"";position:absolute;left:-6px;right:-6px;top:50%;height:2px;background:#a33327;transform:rotate(-1.2deg);opacity:.85}
+
+/* mobile mock */
+.mobile-pair{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;padding:22px;background:var(--plate-paper);border-radius:0 0 var(--frame-r) var(--frame-r);align-items:end;justify-items:center}
+@media(min-width:860px){.mobile-pair{grid-template-columns:auto 1fr}}
+.phone{width:300px;max-width:100%;border:1px solid var(--plate-line);border-radius:26px;background:#fff;overflow:hidden;box-shadow:0 18px 50px -20px rgba(0,0,0,.35)}
+.phone .ph-hero{position:relative;height:120px;overflow:hidden}
+.phone .ph-hero>div{position:absolute;inset:-6%;background:url(@@KOREA@@) center 30%/cover}
+.phone .ph-hero span{position:absolute;left:12px;bottom:8px;font-family:var(--disp);font-weight:750;color:#fff;font-size:22px;text-shadow:0 1px 12px rgba(0,0,0,.5)}
+.phone .ph-body{padding:12px 12px 0;font-size:11px;color:var(--plate-muted);line-height:1.5}
+.phone .ph-body b{color:var(--plate-ink);font-family:var(--disp);font-size:12.5px}
+.ph-exl{margin:10px 0 0;border-top:1px solid var(--plate-line);padding:10px 0 6px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.ph-exl::-webkit-scrollbar{display:none}
+.ph-exl-inner{display:flex;gap:26px;min-width:max-content;padding:8px 14px 4px;position:relative}
+.ph-exl-inner::before{content:"";position:absolute;left:0;right:0;top:13px;height:2px;background:var(--plate-line)}
+.ph-exl-inner::after{content:"";position:absolute;left:0;width:112px;top:12px;height:4px;border-radius:4px;background:var(--korea)}
+.ph-st{display:flex;flex-direction:column;gap:6px;align-items:center;scroll-snap-align:center}
+.ph-st i{width:9px;height:9px;border-radius:50%;border:2px solid var(--plate-muted);background:#fff;display:block}
+.ph-st.on i{background:var(--korea);border-color:var(--korea)}
+.ph-st span{font-family:var(--mono);font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--plate-muted)}
+.ph-st.on span{color:var(--plate-ink);font-weight:600}
+.ph-bar{display:flex;border-top:1px solid var(--plate-line);margin-top:4px}
+.ph-bar div{flex:1;display:grid;place-items:center;padding:10px 0;color:var(--plate-muted)}
+.ph-bar svg{width:16px;height:16px}
+.mobile-notes{max-width:46ch}
+.mobile-notes .swipe{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--plate-muted);display:inline-flex;align-items:center;gap:8px;border:1px solid var(--plate-line);border-radius:999px;padding:6px 12px;margin-bottom:14px}
+.mobile-notes p{color:var(--plate-ink);font-size:15px;margin:0 0 10px}
+.mobile-notes p i{color:var(--plate-muted)}
+
+/* ================= PLATE 04 — INTERIOR ================= */
+.interior{background:var(--plate-paper);border-radius:var(--frame-r);padding:clamp(18px,4%,40px);position:relative;overflow:hidden;color:var(--plate-ink)}
+.gridref{position:absolute;top:18px;right:24px;text-align:right}
+.gridref .no{font-family:var(--disp);font-weight:800;font-size:clamp(64px,9vw,110px);line-height:.8;color:transparent;-webkit-text-stroke:1.5px rgba(35,37,28,.18);letter-spacing:-.03em}
+.gridref .co{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;color:var(--plate-muted);text-transform:uppercase;margin-top:8px}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin:0 0 4px}
+.sec-head .sq{width:9px;height:9px;background:var(--korea)}
+.sec-head h3{font-family:var(--disp);font-weight:750;font-size:clamp(26px,3.5vw,38px);margin:0;letter-spacing:-.015em}
+.sec-kick{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--plate-muted);margin-bottom:22px}
+.topo{margin:26px -8px;opacity:.5}
+.topo path{fill:none;stroke:var(--korea);stroke-width:1;opacity:.55}
+.topo path:nth-child(2){opacity:.3;stroke:var(--plate-muted)}
+.legcard{border:1px solid var(--plate-line);border-radius:12px;background:#fff;padding:16px 18px;margin:0 0 22px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.leg-route{display:flex;align-items:center;gap:0;flex:0 0 auto}
+.leg-route i{width:9px;height:9px;border-radius:50%;background:var(--korea);display:block}
+.leg-route u{width:52px;height:2px;background:repeating-linear-gradient(90deg,var(--korea) 0 5px,transparent 5px 9px);display:block;text-decoration:none}
+.leg-route i.hollow{background:#fff;border:2px solid var(--korea)}
+.leg-meta{min-width:0}
+.leg-meta .day{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--plate-muted)}
+.leg-meta h4{font-family:var(--disp);font-weight:700;font-size:19px;margin:3px 0 2px}
+.leg-meta .data{font-family:var(--mono);font-size:11.5px;color:var(--plate-muted)}
+.leg-meta .data b{color:var(--korea);font-weight:600}
+.ed-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:22px}
+@media(min-width:880px){.ed-grid{grid-template-columns:minmax(0,1.7fr) minmax(0,1fr)}}
+.ed-lead{font-size:clamp(16.5px,1.6vw,19px);line-height:1.65;max-width:62ch;margin:0}
+.ed-lead b{font-weight:700}
+.ed-lead .flag{color:#8a6d1f;font-style:normal}
+.rail{border:1px solid var(--plate-line);border-radius:12px;background:#fff;padding:16px 18px;font-family:var(--mono);font-size:12px;line-height:1.7;align-self:start}
+.rail .rt{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--plate-muted);border-bottom:1px solid var(--plate-line);padding-bottom:8px;margin-bottom:10px}
+.rail dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 14px}
+.rail dt{color:var(--plate-muted)}
+.rail dd{margin:0;color:var(--plate-ink);font-variant-numeric:tabular-nums}
+.rail .warn{color:#8a6d1f}
+.rail .stamp2{margin-top:10px;padding-top:8px;border-top:1px solid var(--plate-line);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--korea)}
+
+/* ================= PLATE 05 — CONTINUUM ================= */
+.cont{position:relative;background:var(--plate-paper);border-radius:var(--frame-r);padding:clamp(22px,4%,40px)}
+.cont-line{position:absolute;left:6%;right:6%;top:52%;height:2px;background:repeating-linear-gradient(90deg,var(--korea) 0 6px,transparent 6px 11px);opacity:.5}
+.cont-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;position:relative}
+@media(min-width:880px){.cont-grid{grid-template-columns:repeat(4,1fr)}}
+.zoom{border:1px solid var(--plate-line);border-radius:12px;background:#fff;padding:14px;min-height:170px;display:flex;flex-direction:column;color:var(--plate-ink)}
+.zoom .zt{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--plate-muted);display:flex;justify-content:space-between}
+.zoom .art{flex:1;display:grid;place-items:center;padding:10px 0}
+.zoom h5{font-family:var(--disp);font-weight:700;font-size:15px;margin:0;letter-spacing:-.01em}
+.zoom p{margin:2px 0 0;font-size:12px;color:var(--plate-muted);line-height:1.45}
+.zoom svg{width:100%;max-width:150px;height:74px}
+.zoom svg .ln{fill:none;stroke:var(--korea);stroke-width:1.6;stroke-dasharray:3 5;stroke-linecap:round}
+.zoom svg .pt2{fill:var(--korea)}
+.zoom svg .ghost{fill:none;stroke:rgba(35,37,28,.2);stroke-width:1}
+
+/* ================= OPTIONS ================= */
+.paths{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;margin-top:34px}
+@media(min-width:900px){.paths{grid-template-columns:repeat(3,1fr)}}
+.path{border:1px solid var(--board-line);border-radius:16px;padding:24px 24px 20px;display:flex;flex-direction:column;gap:10px;background:color-mix(in srgb,var(--board-2) 60%,transparent);position:relative}
+.path.reco{border-color:color-mix(in srgb,var(--gold) 55%,transparent)}
+.reco-tag{position:absolute;top:-11px;left:20px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;background:var(--gold);color:#fdfcf6;border-radius:999px;padding:4px 11px;font-weight:600}
+:root[data-theme="dark"] .reco-tag{color:#221b0e}
+@media(prefers-color-scheme:dark){.reco-tag{color:#221b0e}:root[data-theme="light"] .reco-tag{color:#fdfcf6}}
+.path .pt-no{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;color:var(--board-muted);text-transform:uppercase}
+.path h3{font-family:var(--disp);font-weight:720;font-size:24px;margin:0;letter-spacing:-.015em}
+.path>p{margin:0;font-size:14.5px;line-height:1.55;color:var(--board-ink);flex:1}
+.path>p i{color:var(--board-muted)}
+.spec{border-top:1px solid var(--board-line);padding-top:12px;display:grid;grid-template-columns:auto 1fr;gap:4px 16px;font-family:var(--mono);font-size:11px}
+.spec dt{color:var(--board-muted);letter-spacing:.08em;text-transform:uppercase}
+.spec dd{margin:0;color:var(--board-ink)}
+.forks{margin-top:44px;border:1px solid var(--board-line);border-radius:16px;padding:26px clamp(18px,3.5vw,34px)}
+.forks h3{font-family:var(--disp);font-weight:700;font-size:21px;margin:0 0 6px}
+.forks .fh{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--board-muted)}
+.fork{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:14px 0;border-top:1px solid var(--board-line);align-items:baseline}
+.fork:first-of-type{border-top:none;margin-top:12px}
+.fork .fno{font-family:var(--mono);font-size:11px;color:var(--board-muted)}
+.fork p{margin:0;font-size:14.5px;line-height:1.5}
+.fork p b{font-weight:600}
+.fork p .rec{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);border-radius:999px;padding:2px 8px}
+footer{padding:48px 0 72px;color:var(--board-muted);font-size:13.5px}
+footer .rule{height:1px;background:var(--board-line);margin-bottom:22px}
+footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
+
+@media (prefers-reduced-motion: reduce){
+  .living .cover,.living .shimmer,.living .mast-shimmer,.hcard:hover .ph>div{animation:none!important}
+  .inview .hero-route .draw,.inview .mast-route path{animation:none!important;stroke-dashoffset:0!important}
+  .credit .live{animation:none}
+  html{scroll-behavior:auto}
+}
+</style>
+
+<header class="tb wrap">
+  <div class="tb-eyebrow"><span>Waypoint</span><span class="dot"></span><span>Design Study Nº 1</span><span class="dot"></span><span>2026-07-27</span></div>
+  <h1>The Living <em>Atlas</em></h1>
+  <p class="tb-dek">Five plates and three ways forward. The thesis: promote the signature you already own — <i>the trip unfolds, day by day</i> — from three appearances to every surface. Heroes become living covers; the pill toolbar becomes the route itself; hub, guide, and day become one map at different zooms. <i>Everything below is drawn in Waypoint's own faces, paper, and extracted accents.</i></p>
+  <div class="tb-stamps">
+    <span class="stamp">TYPE <b>Bricolage · Literata · Spline Mono</b> — the shipped system</span>
+    <span class="stamp">ACCENTS <b>#646b2e · #c7a269 · #9b592b</b> — extracted, per guide</span>
+    <span class="stamp">MOTION HERE <b>CSS simulation</b> · production = 6–10s Commons WebM</span>
+  </div>
+</header>
+
+<!-- ================= PLATE 01 ================= -->
+<section class="plate wrap" id="p1">
+  <div class="plate-head"><span class="plate-no">PLATE <b>01</b></span><h2>The hub hero becomes a living cover</h2></div>
+  <p class="plate-sub">Same layout, same type, same truth — but the place moves. Sedona's clouds drift; Nyhavn's water works; a Jongno crosswalk pulses. Sourced and credited exactly like the photos are today.</p>
+  <div class="plate-grid">
+    <div>
+      <div class="frame-cap"><span>HUB · NEXT-TRIP HERO · DESKTOP 1440</span><span class="sim">motion simulated in CSS</span></div>
+      <div class="frame">
+        <div class="hero living" id="hero1">
+          <div class="cover"></div>
+          <div class="shimmer"></div>
+          <div class="scrim"></div>
+          <svg class="hero-route" viewBox="0 0 1000 460" preserveAspectRatio="none" aria-hidden="true">
+            <path class="draw" d="M60,300 C220,240 340,330 470,265 S740,150 940,190"/>
+            <circle cx="60" cy="300" r="4"/><circle cx="470" cy="265" r="4"/><circle cx="940" cy="190" r="5"/>
+          </svg>
+          <div class="credit"><span class="live"></span><span>Ambient · 8s loop · Video: Wikimedia Commons · CC BY-SA</span></div>
+          <div class="plate-ref">Plate Nº 01<br>United States</div>
+          <div class="hero-inner">
+            <span class="m-eyebrow">Next trip · United States</span>
+            <div class="hero-title">Sedona</div>
+            <div class="hero-row">
+              <span class="m-chip chip-accent">37 days to go</span>
+              <span class="m-chip chip-ghost">7 days planned</span>
+              <button class="m-btn" type="button">Open the guide →</button>
+            </div>
+          </div>
+          <button class="pause" id="pauseBtn" type="button" aria-label="Pause ambient motion" aria-pressed="false">
+            <svg width="12" height="14" viewBox="0 0 12 14" fill="currentColor" aria-hidden="true"><rect x="1" y="1" width="3.4" height="12" rx="1"/><rect x="7.6" y="1" width="3.4" height="12" rx="1"/></svg>
+          </button>
+        </div>
+        <div class="hub-card-demo">
+          <div class="hcard" tabindex="0">
+            <div class="ph"><div></div></div>
+            <div class="bar"></div>
+            <span class="hint">Hover → preview</span>
+            <div class="bd">
+              <span class="m-eyebrow">Denmark</span>
+              <h4>Denmark</h4>
+              <p>Grid cards stay photo-first and quiet. On hover or focus — desktop only, one at a time — the cover breathes. Never N autoplaying videos in a grid.</p>
+            </div>
+          </div>
+          <div class="hcard">
+            <div class="ph" style="display:grid;place-items:center;background:repeating-linear-gradient(115deg,rgba(35,37,28,.05) 0 2px,transparent 2px 14px),#e4e3d8">
+              <span style="font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--plate-muted);text-transform:uppercase;text-align:center;line-height:2">poster → photo → palette+contours<br>the fallback chain, unchanged</span>
+            </div>
+            <div class="bar" style="background:var(--korea)"></div>
+            <div class="bd">
+              <span class="m-eyebrow">No video? No lesser guide</span>
+              <h4>Honest fallbacks</h4>
+              <p>Video is an enhancement gated on reduced-motion, Save-Data, and in-view. First paint is the poster — today's photo — always.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      <div class="note s"><span class="tag">A1 · Sourcing</span><p>Commons hosts WebM under the same <i>File:</i> + license model as photos. A video is a <b>sourced, credited fact about the place</b> — the credit line renders top-left, always visible.</p></div>
+      <div class="note s"><span class="tag">A2 · The morph stays cheap</span><p>The card→hero View Transition carries the <i>poster</i>; video cross-fades in ~300ms after arrival on the house ease. CLS: video is absolutely positioned, exactly like the photo.</p></div>
+      <div class="note s"><span class="tag">A3 · Control</span><p>A visible pause (bottom-right) satisfies WCAG 2.2.2 and taste alike. Reduced-motion users never see motion at all — try the toggle: this mock obeys it.</p></div>
+      <div class="note s"><span class="tag">A4 · Budget</span><p>Video never counts against the 200&nbsp;KB first-paint budget; it's a lazy, hot-linked stream with a ~4&nbsp;MB ceiling — <i>nothing heavy enters the repo</i>.</p></div>
+    </aside>
+  </div>
+</section>
+
+<!-- ================= PLATE 02 ================= -->
+<section class="plate wrap" id="p2">
+  <div class="plate-head"><span class="plate-no">PLATE <b>02</b></span><h2>The masthead: living cover + the guide's own route</h2></div>
+  <p class="plate-sub">As the title settles, the trip's real geography draws itself — Seoul, Daejeon, Busan, from the guide's actual map pins. The day rail keeps its post on the left. Below, the Expedition Line replaces two rows of pills.</p>
+  <div class="plate-grid">
+    <div>
+      <div class="frame-cap"><span>GUIDE · KOREA MASTHEAD · DESKTOP</span><span class="sim">route from real pins only</span></div>
+      <div class="frame">
+        <div class="mast living" id="mast">
+          <div class="cover"></div>
+          <div class="mast-shimmer"></div>
+          <div class="scrim"></div>
+          <div class="dayrail" aria-hidden="true">
+            <span class="done"></span><span class="done"></span><span class="done"></span><span class="now"></span><span></span><span></span><span></span><span></span>
+          </div>
+          <svg class="mast-route" viewBox="0 0 1000 480" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M640,140 C700,210 660,260 700,310 C730,350 800,370 860,392"/>
+            <circle cx="640" cy="140" r="4.5"/><circle cx="700" cy="310" r="4"/><circle cx="860" cy="392" r="4"/>
+            <text x="655" y="136">Seoul</text>
+            <text x="715" y="306">Daejeon</text>
+            <text x="812" y="416">Busan</text>
+          </svg>
+          <div class="mast-inner">
+            <span class="m-eyebrow">Seoul · Daejeon · Busan — Jul 8–15, 2026</span>
+            <div class="mast-title">South Korea</div>
+            <p class="mast-dek">Eight days based in Seoul — palaces, markets, gaming districts and street food — with a weekend in Daejeon for MSI 2026.</p>
+          </div>
+        </div>
+        <div class="exl-wrap" style="--exl-accent:#646b2e">
+          <div class="exl-label"><span>Expedition line — section nav + reading progress, one object</span><span>replaces pill strip & progress bar</span></div>
+          <div class="exl">
+            <div class="exl-line">
+              <div class="exl-track"></div>
+              <div class="exl-fill" style="width:34%"></div>
+              <div class="exl-st">
+                <button type="button" class="done"><span class="pt"></span><span class="lb">Plan</span></button>
+                <button type="button" class="done"><span class="pt"></span><span class="lb">Essentials</span></button>
+                <button type="button" class="on"><span class="pt"></span><span class="lb">Getting around</span></button>
+                <button type="button"><span class="pt"></span><span class="lb">Itinerary</span></button>
+                <button type="button"><span class="pt"></span><span class="lb">Sights</span></button>
+                <button type="button"><span class="pt"></span><span class="lb">Daejeon</span></button>
+                <button type="button"><span class="pt"></span><span class="lb">Food</span></button>
+                <button type="button"><span class="pt"></span><span class="lb">References</span></button>
+              </div>
+            </div>
+            <div class="exl-tools">
+              <span class="exl-div"></span>
+              <button class="tool" type="button" aria-label="Search"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg></button>
+              <button class="tool sos" type="button" aria-label="SOS"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.4M8 11h.01"/></svg></button>
+              <button class="tool" type="button" aria-label="Share"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 10V2.5M5.5 5 8 2.5 10.5 5M3 8v5h10V8"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      <div class="note k"><span class="tag">B1 · Real geography or none</span><p>The route layer draws only from the guide's map-section pins. A guide without pins gets contours — <b>never a decorative squiggle</b>. The Honest property applies to ornament.</p></div>
+      <div class="note k"><span class="tag">B2 · The rail keeps its job</span><p>Day rail (left) is untouched — story intro, story mode, and the morph already own it. The route-draw is its geographic twin: same accent, same once-per-arrival discipline.</p></div>
+      <div class="note k"><span class="tag">B3 · One fill, two meanings</span><p>The accent fill below is simultaneously <i>where you are</i> (station) and <i>how far you've read</i> (the glowing tip creeps within the segment). Today those are two separate widgets.</p></div>
+    </aside>
+  </div>
+</section>
+
+<!-- ================= PLATE 03 ================= -->
+<section class="plate wrap" id="p3">
+  <div class="plate-head"><span class="plate-no">PLATE <b>03</b></span><h2>The Expedition Line, up close — and at 375px</h2></div>
+  <p class="plate-sub">Before/after, then the interactive proof. Click any station. Semantics don't change — same tablist, same arrow-key ring, labels stay in the accessibility tree even where they compress to ticks.</p>
+  <div class="plate-grid">
+    <div>
+      <div class="frame-cap"><span>NAV · BEFORE / AFTER · INTERACTIVE</span><span class="sim">click the stations</span></div>
+      <div class="frame">
+        <div class="before">
+          <div class="exl-label"><span class="strike">Today — eleven look-alike pills + five icons</span><span>weight without hierarchy</span></div>
+          <div class="pills" aria-hidden="true">
+            <span class="pill on">Plan</span><span class="pill">Essentials</span><span class="pill">Getting around</span><span class="pill">Itinerary</span><span class="pill">Sights</span><span class="pill">Daejeon &amp; MSI</span><span class="pill">Gaming</span><span class="pill">Food</span><span class="pill">Pokémon GO</span><span class="pill">Tokyo</span><span class="pill">References</span>
+          </div>
+        </div>
+        <div class="exl-wrap" style="--exl-accent:#646b2e;border-top:1px dashed var(--plate-line)">
+          <div class="exl-label"><span>Proposed — the trip drawn as a line; sections are stations on it</span><span class="exl-read" id="readout">§3 of 11 · 34% read</span></div>
+          <div class="exl">
+            <div class="exl-line" id="exlDemo">
+              <div class="exl-track"></div>
+              <div class="exl-fill" id="exlFill"></div>
+              <div class="exl-st" id="exlSt" role="tablist" aria-label="Guide sections">
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Plan</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Essentials</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Getting</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Itinerary</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Sights</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Daejeon</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Gaming</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Food</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Pokémon</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Tokyo</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">References</span></button>
+              </div>
+            </div>
+            <div class="exl-tools">
+              <span class="exl-div"></span>
+              <button class="tool" type="button" aria-label="Search"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg></button>
+              <button class="tool sos" type="button" aria-label="SOS"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.4M8 11h.01"/></svg></button>
+              <button class="tool" type="button" aria-label="Share"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 10V2.5M5.5 5 8 2.5 10.5 5M3 8v5h10V8"/></svg></button>
+              <button class="tool" type="button" aria-label="Trip kit"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="12" height="8" rx="1.5"/><path d="M6 5V3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5V5"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="mobile-pair">
+          <div class="phone">
+            <div class="ph-hero"><div></div><span>South Korea</span></div>
+            <div class="ph-body"><b>When you land</b><br>Terminal 1, Incheon — ~04:55 KST Thu Jul 9. Clear immigration, shower at the airport, Limousine 6002 into Jongno…</div>
+            <div class="ph-exl" aria-label="Sections (swipe)">
+              <div class="ph-exl-inner">
+                <div class="ph-st"><i></i><span>Plan</span></div>
+                <div class="ph-st"><i></i><span>Essent.</span></div>
+                <div class="ph-st on"><i></i><span>Getting</span></div>
+                <div class="ph-st"><i></i><span>Itiner.</span></div>
+                <div class="ph-st"><i></i><span>Sights</span></div>
+                <div class="ph-st"><i></i><span>Daejeon</span></div>
+                <div class="ph-st"><i></i><span>Gaming</span></div>
+                <div class="ph-st"><i></i><span>Food</span></div>
+                <div class="ph-st"><i></i><span>Pokémon</span></div>
+                <div class="ph-st"><i></i><span>Tokyo</span></div>
+                <div class="ph-st"><i></i><span>Refs</span></div>
+              </div>
+            </div>
+            <div class="ph-bar" aria-hidden="true">
+              <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg></div>
+              <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 13 8 3l6 10z"/></svg></div>
+              <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="12" height="8" rx="1.5"/><path d="M6 5V3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5V5"/></svg></div>
+              <div style="color:#a33327"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.4M8 11h.01"/></svg></div>
+            </div>
+          </div>
+          <div class="mobile-notes">
+            <span class="swipe">← the 375px stress case · swipe the line →</span>
+            <p>Korea's eleven groups are the hardest test in the catalog — that's why the mock uses them. The line scrolls with snap; <b>only the active station keeps its label</b>, every label stays in the a11y tree (the M4 clipped-label pattern, reused).</p>
+            <p><i>If a real-thumb prototype doesn't hold at 375px, the fallback is line-above-pills — same object, half the drasticness. That's Fork №2, below.</i></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      <div class="note k"><span class="tag">C1 · Hierarchy at last</span><p>Content stations sit <i>on</i> the journey; tools sit <i>off</i> it, past the divider, as a compass cluster. Plan no longer weighs the same as References — position on the line <b>is</b> the information.</p></div>
+      <div class="note k"><span class="tag">C2 · Progress absorbed</span><p>The separate reading-progress bar retires. Its meaning moves into the line's glowing tip — one object fewer, one meaning richer.</p></div>
+      <div class="note k"><span class="tag">C3 · What the tests see</span><p>Same <i>tablist</i> role, same targets, same arrow-key ring. The a11y suite keeps passing; only visual baselines re-record — deliberately, on CI's runner.</p></div>
+    </aside>
+  </div>
+</section>
+
+<!-- ================= PLATE 04 ================= -->
+<section class="plate wrap" id="p4">
+  <div class="plate-head"><span class="plate-no">PLATE <b>04</b></span><h2>The interior gets its cartography back</h2></div>
+  <p class="plate-sub">Past the masthead today, the atlas disappears into a two-column card wall. The fix isn't more decoration — it's structure that was always latent in the data: grid references, route legs, an editorial measure with the numbers in a mono rail.</p>
+  <div class="plate-grid">
+    <div>
+      <div class="frame-cap"><span>GUIDE INTERIOR · SECTION OPENING + DAY LEG · KOREA</span><span class="sim">all copy real, from the shipped guide</span></div>
+      <div class="frame">
+        <div class="interior">
+          <div class="gridref" aria-hidden="true">
+            <div class="no">№04</div>
+            <div class="co">Grid E-4 · 37.5794° N · 126.9910° E</div>
+          </div>
+          <div class="sec-head"><span class="sq"></span><h3>Itinerary</h3></div>
+          <div class="sec-kick">Section 04 of 11 · 8 days · Checked 2026-07-23</div>
+          <div class="legcard">
+            <div class="leg-route" aria-hidden="true"><i></i><u></u><i class="hollow"></i></div>
+            <div class="leg-meta">
+              <span class="day">Day 6 · Mon Jul 13 · the long day</span>
+              <h4>Daejeon → Busan → Seoul</h4>
+              <span class="data">KTX 10:44 → 12:53 · <b>≈₩23,700</b> · evening return 18:00 → 20:52 · ⚠ finals-weekend trains fill fast</span>
+            </div>
+          </div>
+          <svg class="topo" viewBox="0 0 900 46" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0,30 C90,12 170,40 260,26 S430,8 540,24 720,44 900,18"/>
+            <path d="M0,40 C110,26 200,46 300,36 S470,20 580,34 760,50 900,30"/>
+          </svg>
+          <div class="ed-grid">
+            <p class="ed-lead">Book the <b>Changdeokgung Secret Garden (Huwon) 10:30 English tour</b> for Tue Jul 14 — official info via cdg.go.kr, <span class="flag">50 online slots per session; it sells out</span>. The palace on its own is walk-up; the Secret Garden is the reason you set an alarm. Drop your bags, take Line 3 to Anguk, and be at the ticket office fifteen minutes early — <i>the tour leaves without stragglers.</i></p>
+            <div class="rail">
+              <div class="rt">The numbers · verified</div>
+              <dl>
+                <dt>Palace</dt><dd>₩3,000</dd>
+                <dt>Huwon tour</dt><dd>₩5,000</dd>
+                <dt>Total</dt><dd>₩8,000 / person</dd>
+                <dt>Slots</dt><dd>50 / session</dd>
+                <dt>Book at</dt><dd>cdg.go.kr</dd>
+                <dt>Status</dt><dd class="warn">⚠ sells out weeks ahead</dd>
+              </dl>
+              <div class="stamp2">✓ Checked 2026-07-23 · primary source</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      <div class="note k"><span class="tag">D1 · Latent structure, not ornament</span><p>The leg header (<i>Daejeon → Busan → Seoul · KTX 10:44</i>) is assembled from data every day entry already carries. Nothing is invented — the atlas look is the data made visible.</p></div>
+      <div class="note k"><span class="tag">D2 · The editorial measure</span><p>Serif lead at ~62ch does the persuading; the mono rail holds the numbers, flags, and the verification stamp. Readers stop hunting through bold-spans for the price.</p></div>
+      <div class="note k"><span class="tag">D3 · Honesty as a visual system</span><p>≈, ⚠, and <i>Checked</i> stamps stop being inline typography and become the rail's grammar — the colophon's signature, extended upward through the whole guide.</p></div>
+    </aside>
+  </div>
+</section>
+
+<!-- ================= PLATE 05 ================= -->
+<section class="plate wrap" id="p5">
+  <div class="plate-head"><span class="plate-no">PLATE <b>05</b></span><h2>The end-goal: one atlas, four zooms</h2></div>
+  <p class="plate-sub">Where this all lands. Every surface is the same map at a different altitude, connected by one continuous line — and the View Transitions you already ship are the camera moving between them.</p>
+  <div class="frame-cap"><span>SYSTEM DIAGRAM · NAVIGATION = ZOOM</span><span class="sim">the grander end-goal</span></div>
+  <div class="cont">
+    <div class="cont-line" aria-hidden="true"></div>
+    <div class="cont-grid">
+      <div class="zoom">
+        <div class="zt"><span>Zoom I</span><span>Hub</span></div>
+        <div class="art"><svg viewBox="0 0 150 74" aria-hidden="true">
+          <circle class="ghost" cx="30" cy="40" r="17"/><circle class="ghost" cx="86" cy="30" r="24"/><circle class="ghost" cx="128" cy="48" r="13"/>
+          <path class="ln" d="M14,58 C40,40 70,52 96,30 S130,18 144,24"/>
+          <circle class="pt2" cx="14" cy="58" r="3"/><circle class="pt2" cx="96" cy="30" r="3"/><circle class="pt2" cx="144" cy="24" r="3"/>
+        </svg></div>
+        <h5>The Atlas</h5><p>Overture route over contours; guides as numbered plates. Mostly shipped — it becomes the table of contents of everything below.</p>
+      </div>
+      <div class="zoom">
+        <div class="zt"><span>Zoom II</span><span>Guide</span></div>
+        <div class="art"><svg viewBox="0 0 150 74" aria-hidden="true">
+          <path class="ghost" d="M30,10 C60,4 120,14 130,34 S100,68 60,66 14,50 18,32 20,14 30,10Z"/>
+          <path class="ln" d="M52,22 C70,34 66,44 84,52 S110,58 122,60"/>
+          <circle class="pt2" cx="52" cy="22" r="3.5"/><circle class="pt2" cx="84" cy="52" r="3"/><circle class="pt2" cx="122" cy="60" r="3"/>
+        </svg></div>
+        <h5>The Country</h5><p>Living cover, the guide's own route drawn from its pins, Expedition Line as the spine. Plates 01–03.</p>
+      </div>
+      <div class="zoom">
+        <div class="zt"><span>Zoom III</span><span>Day</span></div>
+        <div class="art"><svg viewBox="0 0 150 74" aria-hidden="true">
+          <path class="ln" d="M14,37 H136"/>
+          <circle class="pt2" cx="14" cy="37" r="3"/><circle class="pt2" cx="44" cy="37" r="3"/><circle class="pt2" cx="74" cy="37" r="4.5"/><circle class="pt2" cx="104" cy="37" r="3"/><circle class="pt2" cx="136" cy="37" r="3"/>
+          <rect class="ghost" x="58" y="12" width="32" height="14" rx="3"/>
+        </svg></div>
+        <h5>The Leg</h5><p>Day entries open with their route leg — distance, line, departure. Story mode is this zoom in full-screen. Plate 04.</p>
+      </div>
+      <div class="zoom">
+        <div class="zt"><span>Zoom IV</span><span>Venue</span></div>
+        <div class="art"><svg viewBox="0 0 150 74" aria-hidden="true">
+          <path class="ghost" d="M10,60 C40,50 60,64 90,56 S130,44 144,48"/>
+          <path class="ln" d="M75,44 C75,30 62,26 62,16 a13,13 0 1 1 26 0 c0,10 -13,14 -13,28Z"/>
+          <circle class="pt2" cx="75" cy="16" r="4"/>
+        </svg></div>
+        <h5>The Waypoint</h5><p>Any venue tap opens the map as an overlay sheet — "where is this, from here." The map stops being a tab; it becomes the deepest zoom.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= OPTIONS ================= -->
+<section class="plate wrap" id="options">
+  <div class="plate-head"><span class="plate-no">THE WAY <b>FORWARD</b></span><h2>Three paths, one destination</h2></div>
+  <p class="plate-sub">All three end at the full Living Atlas; they differ in what ships first and what risk gets retired first. Pick one — or reorder me.</p>
+  <div class="paths">
+    <div class="path reco">
+      <span class="reco-tag">Recommended start</span>
+      <span class="pt-no">Path A · Hero-first</span>
+      <h3>Make it breathe</h3>
+      <p>Ship one living cover (Korea masthead) end-to-end: schema field, Commons WebM sourcing, gates, fallback chain, pause control. Then the hub hero + hover previews. <i>Smallest blast radius; proves the sourcing/licensing pipeline everything else leans on; visible wow in the first ship.</i></p>
+      <dl class="spec">
+        <dt>Plates</dt><dd>01 – 02 (cover half)</dd>
+        <dt>First ship</dt><dd>one masthead, ~1 session</dd>
+        <dt>Retires</dt><dd>the sourcing fork (№1)</dd>
+        <dt>Risk</dt><dd>low — enhancement layer only</dd>
+      </dl>
+    </div>
+    <div class="path">
+      <span class="pt-no">Path B · Navigation-first</span>
+      <h3>Redraw the spine</h3>
+      <p>Build the Expedition Line behind the existing tablist semantics, absorb the progress bar, prototype the 375px scrub on Korea's eleven groups before anything else. <i>The structural payoff lands first; heroes wait. Choose this if the pill strip bothers you more than the still photos do.</i></p>
+      <dl class="spec">
+        <dt>Plates</dt><dd>02 (line half) – 03</dd>
+        <dt>First ship</dt><dd>guide nav, ~2 sessions</dd>
+        <dt>Retires</dt><dd>replace-vs-augment fork (№2)</dd>
+        <dt>Risk</dt><dd>medium — touches a11y baselines</dd>
+      </dl>
+    </div>
+    <div class="path">
+      <span class="pt-no">Path C · The full arc</span>
+      <h3>The Living Atlas</h3>
+      <p>A→B→interior→continuum as one programme: P1 living cover, P2 hub, P3 Expedition Line, P4 route-carry transitions, P5 interior atlas pass. <i>Each phase lands the full ship loop; the arc ends with every surface a zoom of one map. This is the destination either way — Path C just commits now.</i></p>
+      <dl class="spec">
+        <dt>Plates</dt><dd>01 – 05, in order</dd>
+        <dt>First ship</dt><dd>same as Path A</dd>
+        <dt>Retires</dt><dd>all five forks, sequenced</dd>
+        <dt>Risk</dt><dd>staged — every phase gated</dd>
+      </dl>
+    </div>
+  </div>
+  <div class="forks">
+    <span class="fh">Open forks — yours, not mine</span>
+    <h3>Five decisions gate the build</h3>
+    <div class="fork"><span class="fno">№1</span><p><b>Video sourcing.</b> Commons-only, or creator-shot footage via the same File:-style field, or licensed stock? <span class="rec">rec · Commons-first + own-footage override</span></p></div>
+    <div class="fork"><span class="fno">№2</span><p><b>Expedition Line: replace or augment?</b> Wholesale replacement is the drastic path; Korea at 375px is the test that decides it. <span class="rec">rec · replace, with the augment fallback pre-agreed</span></p></div>
+    <div class="fork"><span class="fno">№3</span><p><b>Video weight.</b> ~4&nbsp;MB Commons hot-links on hub <i>and</i> mastheads, or masthead-only first? Save-Data gates help but don't decide the default.</p></div>
+    <div class="fork"><span class="fno">№4</span><p><b>Route-draw for pin-less guides.</b> Ship with center-only map data, or contours-only until real pins exist? <span class="rec">rec · contours until pins — honest ornament</span></p></div>
+    <div class="fork"><span class="fno">№5</span><p><b>Phase order</b> — which path above. <span class="rec">rec · Path A, then fold into C</span></p></div>
+  </div>
+</section>
+
+<footer class="wrap">
+  <div class="rule"></div>
+  <p>Design study only — nothing ships until the forks are decided. Companion plan: <code>docs/PLAN_VISUAL_REDESIGN.md</code> on <code>claude/website-visual-redesign-upnl05</code>. Type, paper, and accents are Waypoint's shipped system; photos are the guides' own Commons covers, credited above. Motion here is CSS simulation of the proposed 6–10s ambient loops — and this page honors <code>prefers-reduced-motion</code>, as would the real thing.</p>
+</footer>
+
+<script>
+(function(){
+  var rm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Plate 01 — pause control
+  var hero = document.getElementById('hero1'), pb = document.getElementById('pauseBtn');
+  if (pb) pb.addEventListener('click', function(){
+    var p = hero.classList.toggle('paused');
+    pb.setAttribute('aria-pressed', String(p));
+    pb.setAttribute('aria-label', p ? 'Play ambient motion' : 'Pause ambient motion');
+  });
+  // Route draws trigger when plates enter view
+  if ('IntersectionObserver' in window && !rm) {
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('inview'); io.unobserve(e.target); } });
+    }, {threshold:.35});
+    io.observe(hero); io.observe(document.getElementById('mast'));
+  } else {
+    hero.classList.add('inview'); document.getElementById('mast').classList.add('inview');
+  }
+  // Plate 03 — interactive Expedition Line
+  var st = document.getElementById('exlSt'), fill = document.getElementById('exlFill'), read = document.getElementById('readout');
+  var btns = Array.prototype.slice.call(st.querySelectorAll('button'));
+  function setActive(i){
+    btns.forEach(function(b,j){
+      b.classList.toggle('on', j===i);
+      b.classList.toggle('done', j<i);
+      b.setAttribute('aria-selected', String(j===i));
+      b.tabIndex = j===i ? 0 : -1;
+    });
+    var line = document.getElementById('exlDemo');
+    var target = btns[i].offsetLeft + btns[i].offsetWidth/2 - line.getBoundingClientRect().left + line.scrollLeft;
+    // offsetLeft is relative to .exl-st which spans the line — use center of the button
+    var pct = (btns[i].offsetLeft + btns[i].offsetWidth/2) / st.offsetWidth * 100;
+    fill.style.width = Math.max(2, Math.min(100, pct)) + '%';
+    read.textContent = '§' + (i+1) + ' of ' + btns.length + ' · ' + Math.round(pct) + '% read';
+  }
+  btns.forEach(function(b,i){
+    b.addEventListener('click', function(){ setActive(i); });
+    b.addEventListener('keydown', function(ev){
+      var d = ev.key==='ArrowRight' ? 1 : ev.key==='ArrowLeft' ? -1 : 0;
+      if (d){ ev.preventDefault(); var n = (i + d + btns.length) % btns.length; setActive(n); btns[n].focus(); }
+    });
+  });
+  setActive(2);
+  addEventListener('resize', function(){ var i = btns.findIndex(function(b){return b.classList.contains('on')}); if(i>-1) setActive(i); });
+})();
+</script>

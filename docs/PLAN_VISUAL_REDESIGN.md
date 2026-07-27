@@ -5,6 +5,13 @@
 > is building yet — the Clarifying questions below gate every phase, per the
 > Clarifying-Questions Doctrine. This doc extends `docs/MOTION.md`'s doctrine; it does not
 > replace it.
+>
+> **Mock-ups exist** (2026-07-27): `node docs/mockups/build-mockup.mjs` renders the five-plate
+> design study (`docs/mockups/living-atlas.html`, gitignored — it embeds ~1.2 MB of fonts +
+> Commons photos as data URIs). Plates: living hub hero (Sedona) · Korea masthead + route
+> draw · Expedition Line before/after + interactive + 375 px · interior atlas pass · the
+> four-zoom continuum · the three paths + five forks. Motion is CSS simulation of the
+> proposed 6–10 s ambient loops; the page honors `prefers-reduced-motion`.
 
 ## The diagnosis (what a fresh-eyes render review shows)
 
