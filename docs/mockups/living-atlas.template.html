@@ -304,6 +304,75 @@ h1 em{font-style:italic;color:var(--gold)}
 .zoom svg .pt2{fill:var(--korea)}
 .zoom svg .ghost{fill:none;stroke:rgba(35,37,28,.2);stroke-width:1}
 
+/* ================= PLATE 07 — SOURCEBOOK ================= */
+.paint-frame{padding:16px 16px 6px;background:var(--plate-paper)}
+.paint-row{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:760px){.paint-row{grid-template-columns:repeat(3,1fr)}}
+.paint{position:relative;aspect-ratio:16/9.5;border-radius:10px;overflow:hidden;border:1px solid var(--plate-line)}
+.p-sky{position:absolute;inset:0;background:linear-gradient(180deg,var(--sky1),var(--sky2))}
+.p-sun,.p-moon{position:absolute;top:16%;right:14%;width:26px;height:26px;border-radius:50%;background:#f4e8c8;box-shadow:0 0 26px 8px rgba(244,232,200,.5)}
+.p-moon{background:#e8ecf2;box-shadow:0 0 20px 5px rgba(232,236,242,.35);clip-path:circle(50%)}
+.p-dawn{top:38%;background:#f4c88a;box-shadow:0 0 34px 12px rgba(244,200,138,.55)}
+.p-terrain{position:absolute;left:-5%;bottom:0;width:110%;height:78%}
+.drift{animation:pdrift 46s ease-in-out infinite alternate}
+.drift.d2{animation-duration:34s;animation-direction:alternate-reverse}
+.drift.d3{animation-duration:26s}
+@keyframes pdrift{from{transform:translateX(-8px)}to{transform:translateX(8px)}}
+.p-mist{position:absolute;inset:auto 0 0 0;height:46%;background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,.10) 45%,transparent 70%);mix-blend-mode:overlay;animation:drift 22s ease-in-out infinite alternate}
+.p-tag{position:absolute;left:12px;bottom:10px;display:flex;flex-direction:column;gap:1px}
+.p-tag b{font-family:var(--disp);font-weight:600;color:#fff;font-size:17px;text-shadow:0 1px 10px rgba(0,0,0,.45);font-variation-settings:'opsz' 40,'SOFT' 50}
+.p-tag span{font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.85)}
+.paint-note{font-family:var(--serif);font-size:13px;color:var(--plate-muted);padding:12px 6px 10px;margin:0;max-width:90ch}
+.paint-note i{color:var(--plate-ink)}
+.src-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:26px}
+@media(min-width:760px){.src-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1080px){.src-grid{grid-template-columns:repeat(3,1fr)}}
+.src{border:1px solid var(--board-line);border-radius:14px;padding:20px 20px 16px;background:color-mix(in srgb,var(--board-2) 55%,transparent);display:flex;flex-direction:column;gap:8px;position:relative}
+.src.reco2{border-color:color-mix(in srgb,var(--green) 55%,transparent)}
+.src.dead{opacity:.75}
+.s-no{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--board-muted)}
+.src h4{font-family:var(--disp);font-weight:620;font-size:19px;margin:0;color:var(--board-ink);font-variation-settings:'opsz' 40,'SOFT' 30}
+.src h4 em{font-style:italic;font-weight:480;color:var(--board-muted)}
+.src p{margin:0;font-size:13.5px;line-height:1.5;color:var(--board-muted);flex:1}
+.src p i{color:var(--board-ink)}
+.src dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;font-family:var(--mono);font-size:10.5px;margin:6px 0 0;border-top:1px solid var(--board-line);padding-top:10px}
+.src dt{color:var(--board-muted);text-transform:uppercase;letter-spacing:.08em}
+.src dd{margin:0;color:var(--board-ink)}
+.s-verdict{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent);border-radius:999px;padding:3px 10px;align-self:flex-start;margin-top:8px}
+.src.reco2 .s-verdict{color:var(--green);border-color:color-mix(in srgb,var(--green) 45%,transparent)}
+.src.dead .s-verdict{color:#b06a5a;border-color:color-mix(in srgb,#b06a5a 45%,transparent)}
+
+/* ================= PLATE 08 — FACTORY ================= */
+.fac-frame{background:var(--plate-paper);padding:clamp(18px,3.5%,32px)}
+.fac-flow{display:flex;gap:14px;align-items:stretch;flex-wrap:wrap}
+.fac-json,.fac-layout,.fac-born{border:1px solid var(--plate-line);border-radius:12px;background:#fff;padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.fac-json{flex:1 1 180px}
+.fac-layout{flex:2.2 1 300px}
+.fac-born{flex:0.9 1 140px;justify-content:center;background:color-mix(in srgb,var(--korea) 8%,#fff)}
+.fac-flow>span.fac-arrow{align-self:center;color:var(--korea);font-size:20px}
+.fac-json span,.fac-layout span,.fac-born span{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--plate-muted)}
+.fac-json b{font-family:var(--mono);font-size:12px;color:var(--plate-ink);font-weight:700}
+.fac-json i{font-family:var(--serif);font-style:italic;font-size:12px;color:var(--plate-muted)}
+.fac-born b{font-family:var(--disp);font-weight:620;font-size:20px;color:var(--plate-ink);line-height:1.15;font-variation-settings:'opsz' 40,'SOFT' 40}
+.fac-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.fac-chips em{font-family:var(--mono);font-style:normal;font-size:10px;letter-spacing:.04em;border:1px solid var(--plate-line);border-radius:999px;padding:4px 10px;color:var(--plate-ink);background:var(--plate-paper)}
+.fac-ledger{display:grid;grid-template-columns:1fr;gap:14px;margin-top:18px}
+@media(min-width:860px){.fac-ledger{grid-template-columns:repeat(3,1fr)}}
+.fl-col{border:1px solid var(--plate-line);border-radius:12px;background:#fff;padding:14px 16px}
+.fl-h{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;display:inline-block;border-radius:999px;padding:3px 10px;margin-bottom:8px}
+.fl-h.auto{color:#3f5a2e;background:color-mix(in srgb,var(--korea) 16%,#fff)}
+.fl-h.cur{color:#6b4e1e;background:color-mix(in srgb,#c7a269 22%,#fff)}
+.fl-h.sign{color:#6b3a2a;background:color-mix(in srgb,#9b592b 16%,#fff)}
+.fl-col p{margin:0;font-size:12.5px;line-height:1.55;color:var(--plate-muted)}
+.shelf-frame{background:var(--plate-paper);padding:clamp(18px,3.5%,32px)}
+.shelf-note{font-family:var(--serif);font-size:13.5px;color:var(--plate-muted);margin:0 0 18px;max-width:80ch}
+.shelf-note b{color:var(--plate-ink)}
+.shelf{margin-bottom:14px}
+.sh-h{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--plate-muted);display:block;margin-bottom:8px}
+.sh-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:700px){.sh-row{grid-template-columns:repeat(4,1fr)}}
+.sh-row i{font-style:normal;font-family:var(--disp);font-weight:600;font-size:14px;color:var(--plate-ink);background:#fff;border:1px solid var(--plate-line);border-top:3px solid var(--a,#888);border-radius:8px;padding:18px 12px 12px;font-variation-settings:'opsz' 30,'SOFT' 40}
+
 /* ================= OPTIONS ================= */
 .paths{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;margin-top:34px}
 @media(min-width:900px){.paths{grid-template-columns:repeat(3,1fr)}}
@@ -334,7 +403,7 @@ footer .rule{height:1px;background:var(--board-line);margin-bottom:22px}
 footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
 
 @media (prefers-reduced-motion: reduce){
-  .living .cover,.living .shimmer,.living .mast-shimmer,.hcard:hover .ph>div{animation:none!important}
+  .living .cover,.living .shimmer,.living .mast-shimmer,.hcard:hover .ph>div,.drift,.p-mist{animation:none!important}
   .inview .hero-route .draw,.inview .mast-route path{animation:none!important;stroke-dashoffset:0!important}
   .credit .live{animation:none}
   html{scroll-behavior:auto}
@@ -732,6 +801,88 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
   </div>
 </section>
 
+<!-- ================= PLATE 07 — MOTION SOURCEBOOK ================= -->
+<section class="plate wrap" id="p7src">
+  <div class="plate-head"><span class="plate-no">PLATE <b>07</b></span><h2>The motion sourcebook — six ways to make a cover live</h2></div>
+  <p class="plate-sub">Video is one instrument, not the whole orchestra. Ranked by how well each serves pathos-with-honesty — and note the one that costs zero bytes of footage and works for <b>every guide automatically</b>, which is why it doubles as the answer to "what happens when we add more trips."</p>
+
+  <div class="frame-cap"><span>OPTION 4 · THE PAINTED ATLAS · LIVE — THIS IS CSS, NO FOOTAGE</span><span class="sim">palette-driven · local-time skies</span></div>
+  <div class="frame paint-frame">
+    <div class="paint-row">
+      <div class="paint" style="--pa:#646b2e;--pd:#20240f;--sky1:#101a24;--sky2:#2a3a2e">
+        <div class="p-sky"></div><span class="p-moon"></span>
+        <svg class="p-terrain" viewBox="0 0 400 150" preserveAspectRatio="none" aria-hidden="true">
+          <g class="drift d1"><path d="M-20,150 L-20,96 C50,70 90,110 160,92 S300,60 420,88 L420,150 Z" fill="color-mix(in srgb,var(--pa) 34%, var(--sky1))"/></g>
+          <g class="drift d2"><path d="M-20,150 L-20,116 C70,96 130,128 210,112 S330,92 420,110 L420,150 Z" fill="color-mix(in srgb,var(--pa) 52%, var(--pd))"/></g>
+          <g class="drift d3"><path d="M-20,150 L-20,132 C90,120 170,144 260,132 S360,120 420,130 L420,150 Z" fill="var(--pd)"/></g>
+        </svg>
+        <div class="p-mist"></div>
+        <div class="p-tag"><b>South Korea</b><span>Seoul · 21:40 · night sky</span></div>
+      </div>
+      <div class="paint" style="--pa:#c7a269;--pd:#4a3a20;--sky1:#b9c9d6;--sky2:#e6d9bd">
+        <div class="p-sky"></div><span class="p-sun"></span>
+        <svg class="p-terrain" viewBox="0 0 400 150" preserveAspectRatio="none" aria-hidden="true">
+          <g class="drift d1"><path d="M-20,150 L-20,104 C60,86 120,112 200,98 S320,78 420,96 L420,150 Z" fill="color-mix(in srgb,var(--pa) 38%, var(--sky1))"/></g>
+          <g class="drift d2"><path d="M-20,150 L-20,122 C80,106 150,132 240,118 S350,102 420,116 L420,150 Z" fill="color-mix(in srgb,var(--pa) 55%, var(--pd))"/></g>
+          <g class="drift d3"><path d="M-20,150 L-20,136 C100,126 190,146 280,136 S370,126 420,134 L420,150 Z" fill="var(--pd)"/></g>
+        </svg>
+        <div class="p-mist"></div>
+        <div class="p-tag"><b>Denmark</b><span>Copenhagen · 14:40 · daylight</span></div>
+      </div>
+      <div class="paint" style="--pa:#9b592b;--pd:#3a2012;--sky1:#2c1e2e;--sky2:#c96f3a">
+        <div class="p-sky"></div><span class="p-sun p-dawn"></span>
+        <svg class="p-terrain" viewBox="0 0 400 150" preserveAspectRatio="none" aria-hidden="true">
+          <g class="drift d1"><path d="M-20,150 L-20,90 C40,110 80,66 150,96 S280,54 420,92 L420,150 Z" fill="color-mix(in srgb,var(--pa) 36%, var(--sky1))"/></g>
+          <g class="drift d2"><path d="M-20,150 L-20,118 C70,100 140,130 220,110 S340,96 420,112 L420,150 Z" fill="color-mix(in srgb,var(--pa) 56%, var(--pd))"/></g>
+          <g class="drift d3"><path d="M-20,150 L-20,134 C90,124 180,146 270,132 S370,124 420,132 L420,150 Z" fill="var(--pd)"/></g>
+        </svg>
+        <div class="p-mist"></div>
+        <div class="p-tag"><b>Sedona</b><span>Arizona · 05:40 · dawn</span></div>
+      </div>
+    </div>
+    <p class="paint-note">Three guides, one component: terrain painted from each guide's <i>extracted palette</i>, sky keyed to the destination's <i>local clock</i> (the masthead already computes it), contours drifting like slow weather. Zero assets, zero sourcing, honors reduced-motion — and every future guide is born with it.</p>
+  </div>
+
+  <div class="src-grid">
+    <div class="src"><span class="s-no">01</span><h4>Licensed stock loops</h4><p>Pexels · Coverr · Mixkit · Pixabay — real cinematic footage of the real place, free licenses, chosen for feeling.</p><dl><dt>Bytes</dt><dd>~2–4 MB/loop</dd><dt>Feels</dt><dd>most cinematic</dd><dt>Scales</dt><dd>curated per guide</dd></dl><span class="s-verdict">the flagship, as proposed</span></div>
+    <div class="src"><span class="s-no">02</span><h4>Commons WebM</h4><p>Same File:/credit pipeline as today's photos. Selection thinner, quality varies — but zero new licensing surface.</p><dl><dt>Bytes</dt><dd>~2–6 MB</dd><dt>Feels</dt><dd>documentary</dd><dt>Scales</dt><dd>curated per guide</dd></dl><span class="s-verdict">fallback library</span></div>
+    <div class="src"><span class="s-no">03</span><h4>Cinemagraph / animated AVIF</h4><p>A still where one thing moves — steam, water, a flag. Ships as an image, autoplays like one, weighs a fraction of video.</p><dl><dt>Bytes</dt><dd>~0.3–1 MB</dd><dt>Feels</dt><dd>quiet, uncanny-good</dd><dt>Scales</dt><dd>made per guide</dd></dl><span class="s-verdict">the connoisseur option</span></div>
+    <div class="src reco2"><span class="s-no">04</span><h4>The Painted Atlas <em>(above)</em></h4><p>CSS/SVG terrain from the guide's own palette + local-time sky. No footage exists or is needed; it IS the design system moving.</p><dl><dt>Bytes</dt><dd>~0 (CSS)</dd><dt>Feels</dt><dd>crafted, ownable</dd><dt>Scales</dt><dd><b>automatic, every guide</b></dd></dl><span class="s-verdict">the universal default</span></div>
+    <div class="src"><span class="s-no">05</span><h4>Your own footage</h4><p>Phone clips from the actual trips. And the learnings loop already points here: <i>after</i> a trip, the cover can become what you actually saw — Plan⇄Actual, as cinema.</p><dl><dt>Bytes</dt><dd>self-hosted</dd><dt>Feels</dt><dd>the most Waypoint</dd><dt>Scales</dt><dd>grows with travel</dd></dl><span class="s-verdict">the long game</span></div>
+    <div class="src dead"><span class="s-no">06</span><h4>AI-generated video</h4><p>Possible (Veo, Runway) — declined. Even pathos should be footage <i>of the actual place</i>; synthetic scenery quietly lies about somewhere real. Embeds (YouTube/Vimeo) also declined: tracking + chrome. Lottie: a runtime dep for an app-ish look — reserved, not recommended.</p><span class="s-verdict">declined, with reasons</span></div>
+  </div>
+  <p class="voice-note"><b>Delivery, all options:</b> poster-first, lazily loaded, gated on reduced-motion + Save-Data + in-view, visible pause, credit line where footage exists. Hosting: hot-link the libraries' CDNs to keep the repo weightless, or self-host on the Cloudflare account the intake worker already lives on — that's a fork only if hot-linking proves flaky. <b>The stack:</b> Painted Atlas from birth → stock/Commons/cinemagraph as a curated upgrade → your own footage after the trip. "Living" becomes a property of the system, not of sourcing.</p>
+</section>
+
+<!-- ================= PLATE 08 — THE FACTORY ================= -->
+<section class="plate wrap" id="p8fac">
+  <div class="plate-head"><span class="plate-no">PLATE <b>08</b></span><h2>The factory — any country, born in this format</h2></div>
+  <p class="plate-sub">Your architecture already answers the expansion question: <b>shared components are global; only JSON is per-country.</b> Everything in this study lives at the layout level — so the pipeline that scaffolds a new guide today would scaffold it into the Living Atlas tomorrow. Nothing is re-designed per country, ever.</p>
+  <div class="frame fac-frame">
+    <div class="fac-flow">
+      <div class="fac-json"><span>the only per-country part</span><b>_guide.json</b><b>01-fly.json … NN-receipts.json</b><i>facts · titles · pins · photos · dates</i></div>
+      <span class="fac-arrow">→</span>
+      <div class="fac-layout"><span>one shared layout renders</span>
+        <div class="fac-chips"><em>Living cover</em><em>Palette extraction</em><em>Route from pins</em><em>Horizon (desktop)</em><em>Sheet + bar (mobile)</em><em>Atlas interior</em><em>Local-time sky</em><em>Colophon + counts</em><em>OG · print · story</em></div>
+      </div>
+      <span class="fac-arrow">→</span>
+      <div class="fac-born"><span>born formatted</span><b>Any country.<br>Day one.</b></div>
+    </div>
+    <div class="fac-ledger">
+      <div class="fl-col"><span class="fl-h auto">Automatic at scaffold</span><p>The format itself · Painted Atlas cover · palette from first photo · route once pins exist · nav on both devices · stats, colophon, OG, print · tab-budget enforcement</p></div>
+      <div class="fl-col"><span class="fl-h cur">Curated once per guide</span><p>Cover footage (an upgrade over the painted default, never a requirement) · the cover photo/poster · tab budget if it differs</p></div>
+      <div class="fl-col"><span class="fl-h sign">Creator-signed</span><p>Section titles (the voice standard proposes; you approve) · every fact, as ever — the ethos register never automates</p></div>
+    </div>
+  </div>
+  <div class="frame-cap" style="margin-top:26px"><span>THE HUB AT 10+ GUIDES · SHELVES BY CONTINENT</span><span class="sim">already count-aware today</span></div>
+  <div class="frame shelf-frame">
+    <p class="shelf-note">The hub is already count-aware (editorial 2-up at ≤4, grid at 5+). The next tier is designed now so growth never surprises: at 10+, the Atlas grows <b>shelves</b> — continent rows, the search that already exists, the featured hero unchanged. Every guide stays in the complete index; nothing vanishes into pagination.</p>
+    <div class="shelf"><span class="sh-h">Asia · 4</span><div class="sh-row"><i style="--a:#646b2e">South Korea</i><i style="--a:#8a4a3a">Japan</i><i style="--a:#4a6b4a">Vietnam</i><i style="--a:#7a5a2e">Thailand</i></div></div>
+    <div class="shelf"><span class="sh-h">Europe · 3</span><div class="sh-row"><i style="--a:#c7a269">Denmark</i><i style="--a:#5a6b7a">Iceland</i><i style="--a:#8a6a3a">Portugal</i></div></div>
+    <div class="shelf"><span class="sh-h">Americas · 3</span><div class="sh-row"><i style="--a:#9b592b">Sedona</i><i style="--a:#6b4a5a">Mexico City</i><i style="--a:#4a5a3a">Peru</i></div></div>
+  </div>
+</section>
+
 <!-- ================= OPTIONS ================= -->
 <section class="plate wrap" id="options">
   <div class="plate-head"><span class="plate-no">THE WAY <b>FORWARD</b></span><h2>One programme, five moves</h2></div>
@@ -752,6 +903,7 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
     <div class="fork"><span class="fno">№4</span><p><b>The titles are content.</b> Korea&#39;s eleven re-titles above need your pen — approve, edit, or reject line by line; the <i>standard</i> ships either way. <span class="rec">rec · approve with edits</span></p></div>
     <div class="fork"><span class="fno">№5</span><p><b>The faces.</b> Fraunces + Literata + Courier Prime is this study&#39;s proposal — the specimen sits at the top of the page. If it doesn&#39;t sing, the next round brings two alternates staged the same way.</p></div>
     <div class="fork"><span class="fno">№6</span><p><b>Video weight + pin-less route-draw</b> — unchanged from Study Nº 1: masthead-first, and contours until real pins exist. <span class="rec">rec · both defaults</span></p></div>
+    <div class="fork"><span class="fno">№7</span><p><b>The cover stack</b> (Plate 07). Painted Atlas as the automatic default for every guide, footage as a curated per-guide upgrade, own-footage after trips? And hosting: hot-link the libraries' CDNs, or self-host on the existing Cloudflare account? <span class="rec">rec · painted default + hot-link first</span></p></div>
   </div>
 </section>
 

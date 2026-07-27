@@ -132,6 +132,50 @@ stays** (body — it was always a book) · **Courier Prime** (data — not code,
 expedition log). All fontsource, self-hosted like today's faces; swap is token-level in
 `base.css`. Bricolage Grotesque + Spline Sans Mono retire.
 
+## Move A½ — The motion sourcebook (added 2026-07-27; creator asked for more options)
+
+Video is one instrument. The full option set, ranked by pathos-with-honesty:
+
+1. **Licensed stock loops** (Pexels/Coverr/Mixkit/Pixabay) — the flagship as proposed;
+   ~2–4 MB, real footage of the real place, curated per guide.
+2. **Commons WebM** — fallback library; same File:/credit pipeline as photos.
+3. **Cinemagraph / animated AVIF** — a still where one thing moves; ships and autoplays as
+   an image, ~0.3–1 MB; the quiet connoisseur option.
+4. **The Painted Atlas (the universal default)** — CSS/SVG terrain painted from the guide's
+   own extracted palette, sky keyed to the destination's local clock (already computed for
+   the masthead), contour layers drifting like slow weather. ZERO assets, zero sourcing,
+   reduced-motion clean — and **automatic for every guide from birth**, which makes "living"
+   a property of the system rather than of sourcing. Live demo in the design study, Plate 07.
+5. **Creator's own footage** — the long game; the learnings loop points here (after a trip,
+   the cover can become what was actually seen — Plan⇄Actual as cinema).
+6. **Declined, with reasons:** AI-generated video (even pathos should be footage of the
+   actual place; synthetic scenery quietly lies), YouTube/Vimeo embeds (tracking + chrome +
+   CSP), Lottie (runtime dependency for an app-ish look — reserved).
+
+**The stack:** Painted Atlas from birth → stock/Commons/cinemagraph as curated per-guide
+upgrades → own footage after trips. Delivery for all: poster-first, lazy, gated
+(reduced-motion / Save-Data / in-view), visible pause, credit where footage exists.
+Hosting: hot-link library CDNs first; the existing Cloudflare account is the self-host
+fallback if hot-linking proves flaky.
+
+## Scale — the factory (added 2026-07-27; creator asked about expansion)
+
+The architecture already answers it: **shared components are global; only JSON is
+per-country** (CLAUDE.md guardrail). Every surface in this plan lives at the layout level,
+so `scaffold-guide.mjs` + the new-guide pipeline produce the full format for any country
+with zero per-country design work:
+
+- **Automatic at scaffold:** the format itself, Painted Atlas cover, palette extraction from
+  the first photo, route-draw once pins exist, both navigation organs, stats/colophon/OG/
+  print, tab-budget enforcement.
+- **Curated once per guide:** cover footage (an upgrade over the painted default, never a
+  requirement), the cover photo/poster, a non-default tab budget.
+- **Creator-signed, never automated:** section titles (the voice standard proposes; the
+  creator approves) and every fact — the ethos register has no autopilot.
+- **Hub at scale:** already count-aware (editorial 2-up ≤4, grid 5+). Designed next tier:
+  at 10+ guides the Atlas grows continent shelves + the existing search; every guide stays
+  in the complete index (completeness beats tidiness — no pagination black holes).
+
 ## Move C — One cartographic world (visual integration end-goal)
 
 The hub, guide interior, story mode, OG, share, and print surfaces read as **plates of one
@@ -190,3 +234,7 @@ atlas at different zooms**:
 6. **Hero video weight ceiling** (~4 MB, masthead-only first — rec) and **pin-less
    route-draw** (contours until real pins exist — rec): both carried from Study Nº 1,
    defaults recommended.
+7. **The cover stack** (Move A½): Painted Atlas as the automatic default for every guide,
+   footage as a curated per-guide upgrade, own footage after trips? And hosting: hot-link
+   library CDNs vs. self-host on the existing Cloudflare account?
+   *Rec: painted default + hot-link first.*
