@@ -6,7 +6,7 @@
 //
 // Fonts come from the repo's own @fontsource packages; photos are the guides' real
 // Commons covers at width=900, fetched at build time (same hot-link source the site uses).
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -34,10 +34,22 @@ let html = readFileSync(join(here, "living-atlas.template.html"), "utf8");
 for (const [token, path] of Object.entries(FONTS)) {
   html = html.replaceAll(token, toDataUri(readFileSync(path), "font/woff2"));
 }
+// Commons rate-limits repeat fetches (429), so fetched photos are cached locally
+// (docs/mockups/.cache, gitignored) and reused on later builds.
+const cacheDir = join(here, ".cache");
+mkdirSync(cacheDir, { recursive: true });
 for (const [token, file] of Object.entries(PHOTOS)) {
-  const res = await fetch(commons(file));
-  if (!res.ok) throw new Error(`Commons fetch failed (${res.status}): ${file}`);
-  html = html.replaceAll(token, toDataUri(await res.arrayBuffer(), "image/jpeg"));
+  const cached = join(cacheDir, file.replace(/[^\w.-]+/g, "_"));
+  let bytes;
+  if (existsSync(cached)) {
+    bytes = readFileSync(cached);
+  } else {
+    const res = await fetch(commons(file));
+    if (!res.ok) throw new Error(`Commons fetch failed (${res.status}): ${file}`);
+    bytes = Buffer.from(await res.arrayBuffer());
+    writeFileSync(cached, bytes);
+  }
+  html = html.replaceAll(token, toDataUri(bytes, "image/jpeg"));
 }
 const out = join(here, "living-atlas.html");
 writeFileSync(out, html);

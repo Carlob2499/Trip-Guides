@@ -37,6 +37,17 @@ per-guide extracted accent, the day-rail signature — is strong **at the edges*
 **One journey, one line: the whole site is a single atlas you zoom into — every hero alive,
 every navigation surface a segment of the route, every fact signed.**
 
+## The two registers (decided by the creator, 2026-07-27)
+
+The site speaks in two deliberately split registers. **Covers and motion are pathos** — their
+job is the web user's heart, and they are LIBERAL: footage chosen for feeling, from any
+well-licensed source, graded toward the guide's accent. **Content is ethos** — the ledger,
+and it does not bend: every price, hour, route, and claim stays verified under the full
+apparatus. The boundary rule: *the shell may seduce; the spine may not lie.* A cover never
+carries a fact flag (≈/⚠/Checked belong to content only), and the pathos license never
+crosses into anything that asserts a fact — geography, routes, dates, and text overlays
+remain ethos even when they appear inside a hero.
+
 The existing signature ("the trip unfolds, day by day" — the segmented rail) is not replaced;
 it is *promoted*. Today it appears three ways (story intro, story mode, card→hero morph).
 The end state is that it appears everywhere navigation appears, because the navigation IS the
@@ -50,11 +61,14 @@ animation *event* — the ground layer under the existing choreography. The stor
 rail ticks over a living cover instead of a frozen one, which strengthens the signature
 (MOTION.md: spend the boldness in one place).
 
-- **Sourcing keeps the verification ethos.** Wikimedia Commons hosts WebM video under the
-  same `File:` + licensing model as photos — the existing `File:` validation and credit line
-  extend to video verbatim. Schema: `cover.video: { file, credit?, poster? }` beside the
-  existing `cover`. The poster IS the current photo — palette extraction is untouched (runs
-  on the poster; the identity engine's input does not change).
+- **Sourcing is liberal — the pathos register (see Two Registers above).** Footage may come
+  from any well-licensed library (Pexels, Coverr, Mixkit, Commons, creator-shot), chosen for
+  feeling rather than documentary fidelity, and may be graded/tinted toward the guide's
+  accent for cohesion. Two invariants survive from the photo pipeline: every clip is
+  **credited** (visible credit line, license recorded in the schema) and every clip is
+  **licensed for this use**. Schema: `cover.video: { src, credit, license, poster? }` beside
+  the existing `cover`. The poster IS the current photo — palette extraction is untouched
+  (runs on the poster; the identity engine's input does not change).
 - **Delivery is tiered, poster-first, budget-safe.** The photo renders exactly as today
   (first paint unchanged — the 200 KB per-page budget never sees video). Video is a lazy
   enhancement gated on ALL of: `prefers-reduced-motion: no-preference`, Save-Data off,
@@ -119,14 +133,15 @@ atlas at different zooms**:
   scroll-driven, per MOTION.md rule 1).
 - No autoplaying grids, no audio, no scroll-jacking, no loop that competes with the story
   intro (one owner per property per element).
-- No invented geography and no invented footage: a video, like a photo, is a sourced,
-  credited, validated fact about the place.
+- No invented geography, ever — routes, pins, and any text that asserts a fact stay in the
+  ethos register even when rendered inside a hero. Footage is liberal (pathos) but always
+  licensed and credited, and never carries or implies a verification flag.
 
 ## Phasing (each phase lands the full ship loop + boundary checks)
 
 | Phase | Scope | Risk gates |
 |---|---|---|
-| P1 | Living cover on ONE guide masthead (schema field, lazy module, gates, fallback chain) | Commons video hot-link smoke test from the deployed site (boundary check #3); Save-Data/reduced-motion forced once each (#2) |
+| P1 | Living cover on ONE guide masthead (schema field, lazy module, gates, fallback chain) | Licensed-footage delivery smoke test from the deployed site (boundary check #3); Save-Data/reduced-motion forced once each (#2); credit + license recorded in schema |
 | P2 | Living covers: hub hero + hover previews; morph-then-crossfade | CLS re-measure; autoplay ceiling |
 | P3 | Expedition Line on guide pages (replaces pill strip visual, keeps tablist semantics); absorbs reading progress | a11y suite green; 375 px Korea stress; baselines re-recorded on CI |
 | P4 | Route-carry: hub route ⇄ Expedition Line view-transition; masthead route draw | reduced-motion path; guides-without-maps fallback |
@@ -134,10 +149,10 @@ atlas at different zooms**:
 
 ## Clarifying questions (gate — put to the creator via AskUserQuestion before any phase builds)
 
-1. **Video sourcing policy.** Commons-only (keeps the verification model intact; selection is
-   thinner and quality varies) vs. allowing creator-shot footage via the same `File:`-style
-   field vs. licensed stock (changes the attribution story). *Recommendation: Commons-first
-   with an own-footage override — both keep "every cover is a sourced fact."*
+1. ~~**Video sourcing policy.**~~ **DECIDED 2026-07-27 (creator):** covers are the pathos
+   layer — liberal sourcing from any well-licensed library, chosen for feeling, credited,
+   accent-graded. The verification apparatus applies to content only. See "The two registers"
+   above.
 2. **Expedition Line: replace or augment?** Wholesale replacement of the pill strip is the
    drastic path and the recommendation; the risk is Korea's 11 groups at 375 px. If the
    scrub/overflow prototype doesn't hold, fall back to line-above-pills (augment), which

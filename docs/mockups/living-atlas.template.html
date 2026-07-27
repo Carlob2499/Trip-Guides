@@ -19,6 +19,7 @@
   --plate-line:rgba(35,37,28,.16);
   --korea:#646b2e; --denmark:#c7a269; --sedona:#9b592b;
   --gold:#c7a269;  /* chrome accent: darkened in light theme for contrast */
+  --green:#9aa64a; /* decided-state green: darkened in light theme */
   --disp:'Bricolage Grotesque',system-ui,sans-serif;
   --serif:'Literata',Georgia,serif;
   --mono:'Spline Sans Mono',ui-monospace,monospace;
@@ -26,10 +27,10 @@
   color-scheme: dark;
 }
 @media (prefers-color-scheme: light){
-  :root{--board:#e8e6da;--board-2:#dfddcf;--board-ink:#24261b;--board-muted:#6c6d5a;--board-line:rgba(36,38,27,.16);--gold:#8a6a2e;color-scheme:light}
+  :root{--board:#e8e6da;--board-2:#dfddcf;--board-ink:#24261b;--board-muted:#6c6d5a;--board-line:rgba(36,38,27,.16);--gold:#8a6a2e;--green:#5d6524;color-scheme:light}
 }
-:root[data-theme="dark"]{--board:#171a10;--board-2:#1d2114;--board-ink:#e9e7da;--board-muted:#a2a28d;--board-line:rgba(233,231,218,.14);--gold:#c7a269;color-scheme:dark}
-:root[data-theme="light"]{--board:#e8e6da;--board-2:#dfddcf;--board-ink:#24261b;--board-muted:#6c6d5a;--board-line:rgba(36,38,27,.16);--gold:#8a6a2e;color-scheme:light}
+:root[data-theme="dark"]{--board:#171a10;--board-2:#1d2114;--board-ink:#e9e7da;--board-muted:#a2a28d;--board-line:rgba(233,231,218,.14);--gold:#c7a269;--green:#9aa64a;color-scheme:dark}
+:root[data-theme="light"]{--board:#e8e6da;--board-2:#dfddcf;--board-ink:#24261b;--board-muted:#6c6d5a;--board-line:rgba(36,38,27,.16);--gold:#8a6a2e;--green:#5d6524;color-scheme:light}
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -290,18 +291,19 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
 <header class="tb wrap">
   <div class="tb-eyebrow"><span>Waypoint</span><span class="dot"></span><span>Design Study Nº 1</span><span class="dot"></span><span>2026-07-27</span></div>
   <h1>The Living <em>Atlas</em></h1>
-  <p class="tb-dek">Five plates and three ways forward. The thesis: promote the signature you already own — <i>the trip unfolds, day by day</i> — from three appearances to every surface. Heroes become living covers; the pill toolbar becomes the route itself; hub, guide, and day become one map at different zooms. <i>Everything below is drawn in Waypoint's own faces, paper, and extracted accents.</i></p>
+  <p class="tb-dek">Five plates and three ways forward. The thesis: promote the signature you already own — <i>the trip unfolds, day by day</i> — from three appearances to every surface. Heroes become living covers; the pill toolbar becomes the route itself; hub, guide, and day become one map at different zooms. And the site speaks in <b>two registers, deliberately split</b>: covers court the heart — pathos, liberal — while the content keeps the ledger — ethos, verified. <i>The shell may seduce; the spine may not lie.</i></p>
   <div class="tb-stamps">
     <span class="stamp">TYPE <b>Bricolage · Literata · Spline Mono</b> — the shipped system</span>
     <span class="stamp">ACCENTS <b>#646b2e · #c7a269 · #9b592b</b> — extracted, per guide</span>
-    <span class="stamp">MOTION HERE <b>CSS simulation</b> · production = 6–10s Commons WebM</span>
+    <span class="stamp">MOTION HERE <b>CSS simulation</b> · production = 6–10s licensed cinematic loops</span>
+    <span class="stamp">REGISTERS <b>covers = pathos</b> · <b>content = ethos</b> — decided 2026-07-27</span>
   </div>
 </header>
 
 <!-- ================= PLATE 01 ================= -->
 <section class="plate wrap" id="p1">
   <div class="plate-head"><span class="plate-no">PLATE <b>01</b></span><h2>The hub hero becomes a living cover</h2></div>
-  <p class="plate-sub">Same layout, same type, same truth — but the place moves. Sedona's clouds drift; Nyhavn's water works; a Jongno crosswalk pulses. Sourced and credited exactly like the photos are today.</p>
+  <p class="plate-sub">Same layout, same type — but the place moves. Sedona's clouds drift; Nyhavn's water works; a Jongno crosswalk pulses. The cover is the overture, not the ledger: footage is chosen for <i>feeling</i>, from any well-licensed source, credited and graded toward the guide's accent — while every fact beneath it stays verified.</p>
   <div class="plate-grid">
     <div>
       <div class="frame-cap"><span>HUB · NEXT-TRIP HERO · DESKTOP 1440</span><span class="sim">motion simulated in CSS</span></div>
@@ -314,7 +316,7 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
             <path class="draw" d="M60,300 C220,240 340,330 470,265 S740,150 940,190"/>
             <circle cx="60" cy="300" r="4"/><circle cx="470" cy="265" r="4"/><circle cx="940" cy="190" r="5"/>
           </svg>
-          <div class="credit"><span class="live"></span><span>Ambient · 8s loop · Video: Wikimedia Commons · CC BY-SA</span></div>
+          <div class="credit"><span class="live"></span><span>Ambient · 8s loop · licensed footage, credited · graded to accent</span></div>
           <div class="plate-ref">Plate Nº 01<br>United States</div>
           <div class="hero-inner">
             <span class="m-eyebrow">Next trip · United States</span>
@@ -355,7 +357,7 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
       </div>
     </div>
     <aside class="notes">
-      <div class="note s"><span class="tag">A1 · Sourcing</span><p>Commons hosts WebM under the same <i>File:</i> + license model as photos. A video is a <b>sourced, credited fact about the place</b> — the credit line renders top-left, always visible.</p></div>
+      <div class="note s"><span class="tag">A1 · Two registers — decided</span><p>Covers are <b>pathos</b>: footage from any well-licensed library (Pexels, Coverr, Commons, your own), chosen for feeling, credited top-left, graded toward the guide's accent. The ≈/⚠/Checked apparatus <b>never blesses a cover</b> — it belongs to the ledger below, which stays ethos: every price, hour, and route verified.</p></div>
       <div class="note s"><span class="tag">A2 · The morph stays cheap</span><p>The card→hero View Transition carries the <i>poster</i>; video cross-fades in ~300ms after arrival on the house ease. CLS: video is absolutely positioned, exactly like the photo.</p></div>
       <div class="note s"><span class="tag">A3 · Control</span><p>A visible pause (bottom-right) satisfies WCAG 2.2.2 and taste alike. Reduced-motion users never see motion at all — try the toggle: this mock obeys it.</p></div>
       <div class="note s"><span class="tag">A4 · Budget</span><p>Video never counts against the 200&nbsp;KB first-paint budget; it's a lazy, hot-linked stream with a ~4&nbsp;MB ceiling — <i>nothing heavy enters the repo</i>.</p></div>
@@ -419,7 +421,7 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
       </div>
     </div>
     <aside class="notes">
-      <div class="note k"><span class="tag">B1 · Real geography or none</span><p>The route layer draws only from the guide's map-section pins. A guide without pins gets contours — <b>never a decorative squiggle</b>. The Honest property applies to ornament.</p></div>
+      <div class="note k"><span class="tag">B1 · The route is ethos, not pathos</span><p>Footage may be liberal; <i>geography may not</i>. The route layer draws only from the guide's map-section pins — it asserts facts. A guide without pins gets contours, <b>never a decorative squiggle</b>.</p></div>
       <div class="note k"><span class="tag">B2 · The rail keeps its job</span><p>Day rail (left) is untouched — story intro, story mode, and the morph already own it. The route-draw is its geographic twin: same accent, same once-per-arrival discipline.</p></div>
       <div class="note k"><span class="tag">B3 · One fill, two meanings</span><p>The accent fill below is simultaneously <i>where you are</i> (station) and <i>how far you've read</i> (the glowing tip creeps within the segment). Today those are two separate widgets.</p></div>
     </aside>
@@ -621,11 +623,11 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
       <span class="reco-tag">Recommended start</span>
       <span class="pt-no">Path A · Hero-first</span>
       <h3>Make it breathe</h3>
-      <p>Ship one living cover (Korea masthead) end-to-end: schema field, Commons WebM sourcing, gates, fallback chain, pause control. Then the hub hero + hover previews. <i>Smallest blast radius; proves the sourcing/licensing pipeline everything else leans on; visible wow in the first ship.</i></p>
+      <p>Ship one living cover (Korea masthead) end-to-end: schema field, licensed cinematic sourcing, accent grading, gates, fallback chain, pause control. Then the hub hero + hover previews. <i>Smallest blast radius; proves the credit + delivery pipeline everything else leans on; visible wow in the first ship.</i></p>
       <dl class="spec">
         <dt>Plates</dt><dd>01 – 02 (cover half)</dd>
         <dt>First ship</dt><dd>one masthead, ~1 session</dd>
-        <dt>Retires</dt><dd>the sourcing fork (№1)</dd>
+        <dt>Retires</dt><dd>the weight fork (№3)</dd>
         <dt>Risk</dt><dd>low — enhancement layer only</dd>
       </dl>
     </div>
@@ -655,7 +657,7 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
   <div class="forks">
     <span class="fh">Open forks — yours, not mine</span>
     <h3>Five decisions gate the build</h3>
-    <div class="fork"><span class="fno">№1</span><p><b>Video sourcing.</b> Commons-only, or creator-shot footage via the same File:-style field, or licensed stock? <span class="rec">rec · Commons-first + own-footage override</span></p></div>
+    <div class="fork"><span class="fno">№1</span><p><b>Video sourcing — <span style="color:var(--green)">decided 2026-07-27</span>.</b> Covers are the pathos layer: any well-licensed cinematic footage, chosen for feeling, credited, graded toward the accent. The verification apparatus applies to content only — it never blesses a cover. <span class="rec" style="color:var(--green);border-color:color-mix(in srgb,var(--green) 45%,transparent)">✓ liberal covers · rigorous content</span></p></div>
     <div class="fork"><span class="fno">№2</span><p><b>Expedition Line: replace or augment?</b> Wholesale replacement is the drastic path; Korea at 375px is the test that decides it. <span class="rec">rec · replace, with the augment fallback pre-agreed</span></p></div>
     <div class="fork"><span class="fno">№3</span><p><b>Video weight.</b> ~4&nbsp;MB Commons hot-links on hub <i>and</i> mastheads, or masthead-only first? Save-Data gates help but don't decide the default.</p></div>
     <div class="fork"><span class="fno">№4</span><p><b>Route-draw for pin-less guides.</b> Ship with center-only map data, or contours-only until real pins exist? <span class="rec">rec · contours until pins — honest ornament</span></p></div>
