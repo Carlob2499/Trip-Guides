@@ -202,6 +202,31 @@ atlas at different zooms**:
   as an overlay sheet ("where is this, from here") — reusing the map feature, not rebuilding
   it. Surfacing beats sourcing.
 
+## Move F — The Composer (added 2026-07-27; creator-requested): tabs assemble themselves
+
+Today tabs are buckets chosen at scaffold time. The Composer inverts it: **research emits
+tagged units; deterministic code assembles each guide's tabs; the creator signs.** No model
+ever freelances information architecture.
+
+- **Unit facets join the schema.** Every content unit (venue, brief, checklist, day,
+  warning) carries: `theme` · `phase` (before / arrival / daily / leaving) · `rank` (from
+  the intake's ranked priorities) · `weight` (derived: item counts / prose length / ⚠
+  presence). The research pass the pipeline already runs is where tagging happens — the
+  agent tags, nothing more.
+- **`scripts/compose-guide.mjs`** — pure, unit-tested, beside `scaffold-guide.mjs`. Rules,
+  in order: **Spine** (Plan · Essentials · Transit · Days · Sources always exist — but may
+  fold when near-empty, e.g. Sedona's Transit folds into Plan/Days for a one-car trip);
+  **Anchor** (a top-2 intake priority with sufficient weight earns its own tab — Korea's
+  MSI + GO Fest); **Merge** (a theme below threshold folds into its host — no one-paragraph
+  tabs); **Reader-order** (tabs sort by when the traveler needs them, never alphabet);
+  **Budget** (`tabBudget` binds; merging may never hide a ⚠ — that fails the build instead).
+- **Pipeline integration:** scaffold calls compose for new guides (auto); CI +
+  research-pass run `compose --check` on edits. **Drafts recompose freely before
+  graduation; LIVE guides get proposals only** — a compose-check comment naming the change
+  and waiting for sign-off (the continuity doctrine already demands this).
+- **Naming rides Move D:** labels come from the literal-label vocabulary keyed by facets;
+  descriptors are generated as proposals and remain creator-signed content.
+
 ## What this deliberately does NOT do
 
 - No new JS motion dependency (GSAP stays the only one; route drawing is SVG + CSS
@@ -221,8 +246,45 @@ atlas at different zooms**:
 | R3 | Desktop horizon: line replaces pills (desktop only), absorbs reading progress, tablist semantics kept | a11y suite green; arrow-key ring intact |
 | R4 | Living covers (pathos, as decided): masthead first, then hub + hover previews | licensed-footage delivery smoke test from deployed site; Save-Data/reduced-motion forced once each; credit+license in schema; CLS re-measure |
 | R5 | Interior atlas + section anchors: data-drawn figures for every section (+ photo bands where curated), leg headers from real pins, grid refs, editorial measure | reduced-motion path (figures render complete); pin-less fallback; print + OG parity; anchors derive from data only — never hand-drawn |
+| R6 | The Composer: unit facets in schema, `compose-guide.mjs` (pure + tested), scaffold/research-pass integration, `--check` proposals for live guides | composer output is byte-deterministic given the same units (test); force one failure (⚠-hiding merge must fail the build); live-guide check-mode NEVER writes; guide-shape test still green |
 
-## Clarifying questions (gate — put to the creator via AskUserQuestion before any phase builds)
+## Execution protocol (unattended Opus sessions — read before running any phase)
+
+**Session contract, every phase:** (1) ENTRY — on branch, previous phase merged, all gates
+green, HANDOFF read. (2) WORK — this phase's scope and nothing else; a discovered fork
+outside scope is recorded in the plan, not improvised. (3) EXIT — the full ship loop
+(`npm run build` 0 errors · `npm test` green · `astro preview` at 375px + desktop, dark,
+reduced-motion · grep `dist/`) + boundary checks where a phase touches a seam + commit +
+push + HANDOFF Snapshot/Where-we-left-off rewritten. A phase that cannot pass its gates
+STOPS AND REPORTS; it never pushes past a red gate.
+
+**Hard boundaries (no phase may cross without the creator):** title/descriptor text on
+live guides · live-guide recomposition (proposal-only, always) · footage selection ·
+re-recording a11y baselines anywhere but CI · anything the morning answers below left
+unanswered.
+
+**Per-phase session prompts (paste one per session):**
+- R1: "Execute R1 of docs/PLAN_VISUAL_REDESIGN.md: Quiet type + literal labels. Creator
+  answers: [Q1/Q2]. Ship loop + zero-layout-shift gate."
+- R2: "Execute R2: mobile bottom bar + journey sheet + Today chip per the plan. Bar
+  destinations: [Q3]. Ship loop + a11y gates."
+- R3: "Execute R3: desktop horizon line replacing pills, absorbing reading progress."
+- R4: "Execute R4: living covers — Painted Atlas default + footage upgrades per [Q4]."
+- R5: "Execute R5: section anchors + interior atlas per the plan."
+- R6: "Execute R6: the Composer per Move F. Authority: [Q5]."
+
+Model routing: R1–R6 are Opus design/build sessions; composer unit-tagging rides the
+existing (Sonnet) research pass.
+
+## The morning questions (2026-07-27 — the six answers that unlock unattended execution)
+
+Q1 Quiet Edition type: lock / adjust / restage? · Q2 Korea descriptors: approve / edit /
+rewrite? · Q3 Bottom-bar four: Journey·Today·Map·Kit or swaps? · Q4 Cover stack: painted
+default + hot-link confirmed? · Q5 Composer authority: drafts auto + live proposal-only?
+· Q6 Unattended range: R1 only / R1–R3 / full R1–R6? (Full text + options: the design
+study's "Morning questions" section.)
+
+## Clarifying questions (historical gate record — superseded where marked decided)
 
 1. ~~**Video sourcing policy.**~~ **DECIDED 2026-07-27 (creator):** covers are the pathos
    layer — liberal sourcing from any well-licensed library, chosen for feeling, credited,

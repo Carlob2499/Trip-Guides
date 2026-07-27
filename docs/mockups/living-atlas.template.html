@@ -409,6 +409,40 @@ h1 em{font-style:italic;color:var(--gold)}
 @media(min-width:700px){.sh-row{grid-template-columns:repeat(4,1fr)}}
 .sh-row i{font-style:normal;font-family:var(--disp);font-weight:600;font-size:14px;color:var(--plate-ink);background:#fff;border:1px solid var(--plate-line);border-top:3px solid var(--a,#888);border-radius:8px;padding:18px 12px 12px;font-variation-settings:'opsz' 24}
 
+/* ================= PLATE 09 — COMPOSER ================= */
+.cmp-demos{display:grid;grid-template-columns:1fr;gap:14px;margin-top:18px}
+@media(min-width:1000px){.cmp-demos{grid-template-columns:repeat(3,1fr)}}
+.cmp-demo{border:1px solid var(--plate-line);border-radius:12px;background:#fff;padding:14px 16px}
+.cmp-t{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--plate-muted);font-weight:560;display:block;margin-bottom:10px}
+.cmp-tabs{display:flex;flex-wrap:wrap;gap:5px}
+.cmp-tabs i{font-style:normal;font-family:var(--mono);font-size:10.5px;font-weight:500;color:var(--plate-ink);border:1px solid var(--plate-line);border-radius:999px;padding:4px 9px}
+.cmp-tabs i.sp{background:var(--plate-paper);color:var(--plate-muted)}
+.cmp-tabs i.an{background:color-mix(in srgb,var(--korea) 14%,#fff);border-color:color-mix(in srgb,var(--korea) 45%,transparent);color:#3f4a1e;font-weight:600}
+.cmp-demo p{margin:10px 0 0;font-size:12px;line-height:1.55;color:var(--plate-muted)}
+.cmp-demo p b{color:var(--plate-ink)}
+.cmp-check{border:1px dashed color-mix(in srgb,#8a6d1f 45%,transparent);border-radius:12px;background:color-mix(in srgb,#c7a269 8%,#fff);padding:14px 16px;margin-top:16px}
+.cc-t{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#6b4e1e;font-weight:600;display:block;margin-bottom:8px}
+.cc-row{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.cc-badge{font-family:var(--mono);font-size:10px;font-weight:700;background:var(--plate-ink);color:var(--plate-paper);border-radius:6px;padding:3px 8px;white-space:nowrap}
+.cc-row p{margin:0;font-size:13px;color:var(--plate-ink);flex:1;min-width:220px}
+.cc-wait{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#8a6d1f;border:1px solid color-mix(in srgb,#8a6d1f 40%,transparent);border-radius:999px;padding:2px 8px;white-space:nowrap}
+
+/* ================= MORNING QUESTIONS ================= */
+.mq{border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);border-radius:16px;padding:26px clamp(18px,3.5vw,34px);margin-top:44px;background:color-mix(in srgb,var(--board-2) 70%,transparent)}
+.mq h3{font-family:var(--disp);font-weight:600;font-size:24px;margin:0 0 4px;font-variation-settings:'opsz' 48}
+.mq .fh{color:var(--gold)}
+.mq-item{border-top:1px solid var(--board-line);padding:16px 0;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:baseline}
+.mq-item:first-of-type{border-top:none;margin-top:10px}
+.mq-item .fno{color:var(--gold);font-weight:600}
+.mq-item p{margin:0;font-size:15px;line-height:1.6}
+.mq-item p b{font-weight:640}
+.mq-item p .opts{display:block;margin-top:6px;font-family:var(--mono);font-size:11.5px;color:var(--board-muted);line-height:1.9}
+.mq-item p .opts b{color:var(--board-ink);font-weight:600}
+
+/* wide figures scroll inside their card on small screens */
+.anch-fig{overflow-x:auto}
+.anch-fig .tl{min-width:520px}
+
 /* ================= OPTIONS ================= */
 .paths{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;margin-top:34px}
 @media(min-width:900px){.paths{grid-template-columns:repeat(3,1fr)}}
@@ -455,7 +489,7 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
     <span class="stamp">TYPE <b>Literata (one serif, optical sizes) + Source Sans 3</b> — the Quiet Edition (proposed)</span>
     <span class="stamp">ACCENTS <b>#646b2e · #c7a269 · #9b592b</b> — extracted, per guide</span>
     <span class="stamp">NAV <b>pills retired</b> · horizon on desktop · sheet + bar on mobile</span>
-    <span class="stamp">NEW <b>clean covers</b> · <b>literal labels</b> · <b>section anchors</b> — all decided 2026-07-27</span>
+    <span class="stamp">NEW <b>clean covers</b> · <b>literal labels</b> · <b>section anchors</b> — decided · <b>the Composer</b> — proposed</span>
     <span class="stamp">REGISTERS <b>covers = pathos</b> · <b>content = ethos</b> — decided 2026-07-27</span>
   </div>
 </header>
@@ -971,9 +1005,51 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
   </div>
 </section>
 
+<!-- ================= PLATE 09 — THE COMPOSER ================= -->
+<section class="plate wrap" id="p9cmp">
+  <div class="plate-head"><span class="plate-no">PLATE <b>09</b></span><h2>The Composer — tabs that assemble themselves</h2></div>
+  <p class="plate-sub">Today, tabs are buckets chosen at scaffold time and content is poured into them. The Composer inverts that: <b>research produces tagged units; deterministic rules assemble the tabs each specific guide deserves</b> — and the same engine runs for every future guide as a pipeline step. The agent tags; the code composes; you sign. No model ever freelances your information architecture.</p>
+
+  <div class="frame fac-frame">
+    <div class="fac-flow">
+      <div class="fac-json"><span>research pass emits</span><b>tagged units</b><i>every venue, brief, checklist &amp; warning carries: theme · trip-phase · priority rank (from your intake) · weight</i></div>
+      <span class="fac-arrow">→</span>
+      <div class="fac-layout"><span>compose-guide.mjs — code, deterministic, tested</span>
+        <div class="fac-chips"><em>Spine rule — Plan · Essentials · Transit · Days · Sources always exist</em><em>Anchor rule — a top-2 priority with weight earns its own tab</em><em>Merge rule — thin themes fold into their host, never a one-paragraph tab</em><em>Reader-order rule — tabs sort by when you need them, not alphabet</em><em>Budget rule — tabBudget binds; merging never hides a ⚠</em></div>
+      </div>
+      <span class="fac-arrow">→</span>
+      <div class="fac-born"><span>emerges per guide</span><b>This guide's own tabs.</b></div>
+    </div>
+
+    <div class="cmp-demos">
+      <div class="cmp-demo">
+        <span class="cmp-t">Korea — two anchor events, three travelers</span>
+        <div class="cmp-tabs"><i class="sp">Plan</i><i class="sp">Essentials</i><i class="sp">Transit</i><i class="sp">Days</i><i>Sights</i><i class="an">Daejeon &amp; MSI</i><i>Gaming</i><i>Food</i><i class="an">GO Fest</i><i>Tokyo</i><i class="sp">Sources</i></div>
+        <p>MSI and GO Fest rank top-2 in the intake and carry weight → both earn anchor tabs. Eleven total; the per-guide budget of 11 holds.</p>
+      </div>
+      <div class="cmp-demo">
+        <span class="cmp-t">Denmark — city trip, one anchor</span>
+        <div class="cmp-tabs"><i class="sp">Plan</i><i class="sp">Essentials</i><i class="sp">Transit</i><i class="sp">Days</i><i>Sights</i><i class="an">GO Fest</i><i>Food</i><i class="sp">Sources</i></div>
+        <p>Same engine, different trip: GO Fest earns its anchor; there's no gaming theme beyond it, so no Gaming tab exists to sit half-empty. Eight tabs, as Denmark declares.</p>
+      </div>
+      <div class="cmp-demo">
+        <span class="cmp-t">Sedona — solo, slow, one car</span>
+        <div class="cmp-tabs"><i class="sp">Plan</i><i class="sp">Essentials</i><i class="sp">Days</i><i class="an">Trails</i><i class="an">Spa &amp; slow</i><i>Food</i><i class="sp">Sources</i></div>
+        <p>The composer's honest surprise: solo car trip → the transit theme is two facts, so <b>Transit folds into Plan &amp; Days</b> and the spine flexes. What ranked first — trails, rest — becomes the anchors. Seven tabs for a seven-day breath.</p>
+      </div>
+    </div>
+
+    <div class="cmp-check">
+      <span class="cc-t">And when content changes on a LIVE guide — a proposal, never a silent reshuffle</span>
+      <div class="cc-row"><span class="cc-badge">compose-check</span><p>"Gaming" fell below the weight threshold after the arcade closure edit → <b>proposal:</b> fold 2 remaining units into <i>Days · evenings</i>. Tab plan unchanged until you approve. <span class="cc-wait">awaiting sign-off</span></p></div>
+    </div>
+    <p class="paint-note">Where it lives: unit facets join the schema (tagged during the research pass the pipeline already runs) · <i>compose-guide.mjs</i> beside <i>scaffold-guide.mjs</i>, pure and unit-tested · scaffold calls it for new guides, CI runs it in check-mode for edits. Drafts recompose freely before graduation; live guides get proposals — the continuity doctrine already demands nothing less.</p>
+  </div>
+</section>
+
 <!-- ================= OPTIONS ================= -->
 <section class="plate wrap" id="options">
-  <div class="plate-head"><span class="plate-no">THE WAY <b>FORWARD</b></span><h2>One programme, five moves</h2></div>
+  <div class="plate-head"><span class="plate-no">THE WAY <b>FORWARD</b></span><h2>One programme, six moves</h2></div>
   <p class="plate-sub">The three-path menu didn't earn its keep, so here's the honest version: a sequence, reorderable, with the foundation first — because every later surface inherits the type and the voice.</p>
   <div class="prog">
     <div class="fork"><span class="fno">R1</span><p><b>Field type + the voice.</b> Collapse to two faces site-wide (Literata via optical sizes + Source Sans 3 — self-hosted fontsource, same as today) and settle the labels: literal always, warmth in the descriptors. Zero JS, one session, and every screen changes temperature at once.</p></div>
@@ -981,6 +1057,14 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
     <div class="fork"><span class="fno">R3</span><p><b>Desktop wears the horizon.</b> The line replaces pills on desktop only, absorbs the reading-progress bar, keeps tablist semantics and the arrow-key ring.</p></div>
     <div class="fork"><span class="fno">R4</span><p><b>Living covers.</b> The pathos layer as already decided — masthead first, then hub. Liberal sourcing, credited, accent-graded, gated on reduced-motion and Save-Data.</p></div>
     <div class="fork"><span class="fno">R5</span><p><b>The interior atlas + section anchors.</b> Every section opens with its data-drawn figure (+ photo band where curated); leg headers from real pins; the editorial measure with the quiet numbers rail.</p></div>
+    <div class="fork"><span class="fno">R6</span><p><b>The Composer.</b> Unit facets into the schema, <i>compose-guide.mjs</i> beside the scaffolder (pure, tested), scaffold + research-pass integration for new guides, check-mode proposals for live ones. From then on, every guide's tabs assemble themselves.</p></div>
+  </div>
+  <div class="forks" style="margin-top:26px">
+    <span class="fh">Built for unattended execution</span>
+    <h3>How Opus runs this without you in the room</h3>
+    <div class="fork"><span class="fno">⚙</span><p>Each R-phase is a self-contained session: <b>entry</b> = previous phase merged, gates green · <b>work</b> = the phase scope, nothing else · <b>exit</b> = the full ship loop (build, tests, a11y, perf budget, grep dist/) + commit + push + HANDOFF updated. A phase that can't pass its gates stops and reports — it never improvises past a red gate.</p></div>
+    <div class="fork"><span class="fno">✋</span><p><b>Hard sign-off boundaries the machine may not cross:</b> descriptor/title text on live guides (content), any live-guide recomposition (proposal-only), publishing footage choices, and re-recording a11y baselines anywhere but CI. Everything else inside a phase's scope is pre-authorized by your morning answers below.</p></div>
+    <div class="fork"><span class="fno">▦</span><p>The execution spec lives in <b>docs/PLAN_VISUAL_REDESIGN.md</b> on the branch — phases, gates, boundaries, and a ready-to-paste prompt per phase. An Opus session needs only: the branch, the plan, and your answers.</p></div>
   </div>
   <div class="forks">
     <span class="fh">The decision ledger</span>
@@ -995,11 +1079,22 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
     <div class="fork"><span class="fno">№9</span><p><b>Section anchors — <span style="color:var(--green)">decided 2026-07-27</span>.</b> Figure + photo: data-drawn figures automatic for every section and every guide; photo bands where curated. One draw-in per figure, then stillness. <span class="rec" style="color:var(--green);border-color:color-mix(in srgb,var(--green) 45%,transparent)">✓ both</span></p></div>
     <div class="fork"><span class="fno">№7</span><p><b>The cover stack</b> (Plate 07). Painted Atlas as the automatic default for every guide, footage as a curated per-guide upgrade, own-footage after trips? And hosting: hot-link the libraries' CDNs, or self-host on the existing Cloudflare account? <span class="rec">rec · painted default + hot-link first</span></p></div>
   </div>
+
+  <div class="mq" id="morning">
+    <span class="fh">Good morning — six answers unlock the build</span>
+    <h3>The morning questions</h3>
+    <div class="mq-item"><span class="fno">Q1</span><p><b>Does the Quiet Edition type sing?</b> Judge the three-generation specimen at the top of this page — Literata wearing display + body, Source Sans 3 on the numbers.<span class="opts"><b>a)</b> yes, lock it in (R1 builds it) &nbsp; <b>b)</b> close — adjust weight/size, tell me what feels off &nbsp; <b>c)</b> no — stage two fresh directions</span></p></div>
+    <div class="mq-item"><span class="fno">Q2</span><p><b>Korea's descriptor lines</b> (Plate 03, right column) — they're content, so they need your pen before R1 ships them.<span class="opts"><b>a)</b> approved as staged &nbsp; <b>b)</b> approved with edits (mark them up) &nbsp; <b>c)</b> I'll rewrite them myself</span></p></div>
+    <div class="mq-item"><span class="fno">Q3</span><p><b>The four bottom-bar destinations</b> for mobile (Plate 04).<span class="opts"><b>a)</b> Journey · Today · Map · Kit as proposed &nbsp; <b>b)</b> swap Kit → Trip Split &nbsp; <b>c)</b> swap Map → Search &nbsp; <b>d)</b> your own four</span></p></div>
+    <div class="mq-item"><span class="fno">Q4</span><p><b>The cover stack</b> (Plate 07): Painted Atlas automatic for every guide, real footage as a curated upgrade, hot-linked from the libraries' CDNs first.<span class="opts"><b>a)</b> confirm all three &nbsp; <b>b)</b> painted default but self-host footage on Cloudflare &nbsp; <b>c)</b> footage-first, painted only as fallback</span></p></div>
+    <div class="mq-item"><span class="fno">Q5</span><p><b>The Composer's authority</b> (Plate 09): may it auto-apply tab plans to DRAFTS before graduation, with live guides always proposal-only?<span class="opts"><b>a)</b> yes — drafts auto, live proposal-only (rec) &nbsp; <b>b)</b> proposals everywhere, even drafts &nbsp; <b>c)</b> also let it auto-apply to live guides with a changelog</span></p></div>
+    <div class="mq-item"><span class="fno">Q6</span><p><b>How far may Opus run unattended?</b> Phases gate themselves and stop on red either way.<span class="opts"><b>a)</b> R1 only, then report &nbsp; <b>b)</b> R1 → R3 (type, mobile, desktop nav), then report &nbsp; <b>c)</b> the full arc R1 → R6, reporting per phase</span></p></div>
+  </div>
 </section>
 
 <footer class="wrap">
   <div class="rule"></div>
-  <p>Design study Nº 3 (Quiet Edition) — nothing ships until the open forks are decided. Companion plan: <code>docs/PLAN_VISUAL_REDESIGN.md</code> on <code>claude/website-visual-redesign-upnl05</code>. Paper and accents are Waypoint's shipped system; the type is this study's proposal, embedded from fontsource like the site's own faces; photos are the guides' Commons covers. Motion here is CSS simulation of the proposed ambient loops — and this page honors <code>prefers-reduced-motion</code>, as would the real thing.</p>
+  <p>Design study Nº 3 (Quiet Edition) — built for unattended Opus execution; the morning questions above unlock it. Companion plan: <code>docs/PLAN_VISUAL_REDESIGN.md</code> on <code>claude/website-visual-redesign-upnl05</code>. Paper and accents are Waypoint's shipped system; the type is this study's proposal, embedded from fontsource like the site's own faces; photos are the guides' Commons covers. Motion here is CSS simulation of the proposed ambient loops — and this page honors <code>prefers-reduced-motion</code>, as would the real thing.</p>
 </footer>
 
 <script>
