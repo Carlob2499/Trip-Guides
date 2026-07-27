@@ -6,12 +6,14 @@
 > Clarifying-Questions Doctrine. This doc extends `docs/MOTION.md`'s doctrine; it does not
 > replace it.
 >
-> **Mock-ups exist** (2026-07-27): `node docs/mockups/build-mockup.mjs` renders the five-plate
-> design study (`docs/mockups/living-atlas.html`, gitignored — it embeds ~1.2 MB of fonts +
-> Commons photos as data URIs). Plates: living hub hero (Sedona) · Korea masthead + route
-> draw · Expedition Line before/after + interactive + 375 px · interior atlas pass · the
-> four-zoom continuum · the three paths + five forks. Motion is CSS simulation of the
-> proposed 6–10 s ambient loops; the page honors `prefers-reduced-motion`.
+> **Mock-ups exist — Study Nº 2, Field Edition** (2026-07-27):
+> `node docs/mockups/build-mockup.mjs` renders the design study
+> (`docs/mockups/living-atlas.html`, gitignored — it embeds ~1.4 MB of fonts + Commons
+> photos as data URIs). Sections: type specimen (Field Edition vs shipped faces) · living
+> hub hero (Sedona) · Korea masthead + route draw · the voice (Korea's 11 re-titles) ·
+> nav split (desktop horizon interactive + mobile bar/sheet phones) · interior atlas ·
+> four-zoom continuum · the R1–R5 programme + decision ledger. Motion is CSS simulation;
+> the page honors `prefers-reduced-motion`.
 
 ## The diagnosis (what a fresh-eyes render review shows)
 
@@ -84,28 +86,51 @@ rail ticks over a living cover instead of a frozen one, which strengthens the si
   lazy module); rule 7 amended to name video's own budget (video never counts against JS
   first-paint; it has its own byte + autoplay-count ceiling). Rules 2/3/4 apply as written.
 
-## Move B — The Expedition Line (the navigation end-goal)
+## Move B — Navigation splits by device (revised 2026-07-27; fork №2 DECIDED: pills retire)
 
-Retire the gray pill toolbar as the *identity* of navigation. In its place: **one horizontal
-route element — the trip drawn as a line with stations — that is simultaneously the section
-nav, the reading progress, and the same object as the hub Overture route and the story-mode
-day rail.**
+The pill toolbar retires on both devices — but its replacement is **not the same organ on
+both**. The dev critique was right: mobile was a shrunken desktop, and 11 groups never fit a
+375 px strip with dignity. The journey line is ONE object worn two ways:
 
-- Content groups become **stations on the line**: current section = filled station + label in
-  the guide accent; others = ticks with labels (clipped-label pattern from M4 already proves
-  labels can compress without leaving the a11y tree). The line's traveled portion fills as
-  you read — absorbing the separate `#readProg` progress bar (one object, not two).
-- **Tool tabs collapse into a compass cluster** at the line's end (Search/SOS/Share/tools) —
-  chrome, visually distinct from stations, exactly as the M4 divider already hints.
-- **Mobile:** the line lives above the existing bottom bar and is thumb-scrubbable like a
-  timeline; stations snap. 375 px with Korea's 11 groups is the stress case (see Q2).
-- **Semantics survive:** same `tablist`/arrow-key ring, same targets — this is a re-skin of
-  the *object*, not a rewire of the interaction. The a11y suite's tab assertions keep
-  passing; visual baselines are re-recorded deliberately, on CI's runner.
-- **The same object everywhere** (uniform-application rule): hub Overture route → guide
-  Expedition Line → story-mode rail → print header rail → OG images' route strip. The V5
-  accent-carry View Transition extends naturally: the hub card's route segment morphs into
-  the guide's Expedition Line.
+**Desktop — the horizon.** A horizontal journey line under the masthead: one-word stations
+(see Move D — the voice makes 11 stations fit one row), current station filled in the guide
+accent, the traveled portion absorbing `#readProg` (one object, not two). Tools collapse to
+a compass cluster past a divider. Same `tablist`/arrow-key semantics — a re-skin of the
+object, not a rewire. Desktop had no crowding problem; it changes clothes, not species.
+
+**Mobile — the spine (app-native).** No strips at all:
+- **Bottom bar, four honest destinations:** Journey · Today · Map · Kit (final names = fork).
+  SOS keeps its own red post top-right on every screen — an emergency never hides in a drawer.
+- **The journey sheet** (bottom sheet, half-height, grabber, plain scroll): the same journey
+  object turned vertical — every stop with full title + typed descriptor, done-ticks from
+  reading progress, today's leg highlighted inside Day-by-day. It is a live table of contents,
+  in thumb range, the pattern maps/booking apps already taught users.
+- **Reading is sacred:** one section at a time, compact header, the existing next-section
+  band as the linear path, a floating trip-aware **Today** chip. Nothing competes with scroll.
+- **The law over all of it: chrome is still.** Motion lives in the covers; chrome never
+  animates on its own; the sheet moves only under a thumb; no scroll-jacking, ever.
+- **Same-object rule still holds** (uniform application): hub Overture route → desktop
+  horizon → mobile sheet spine → story-mode rail → print/OG route strip.
+
+## Move D — The voice (new, 2026-07-27) + the Field Edition type
+
+**Titles.** "Plan · Essentials · Itinerary · References" is CMS furniture — the creator's
+critique ("AI-slop") is correct. The standard that replaces it: **a title names what the
+traveler is doing, not what the database calls the bucket** — verb-forward or place-forward,
+never bucket-nouns. Two levels: a ONE-WORD station (line + sheet) and a full phrase at the
+section head, always with a typed descriptor so scanning never suffers. Korea's proposal
+(needs creator sign-off — titles are content): Fly/Before you fly · Pocket/In your pocket ·
+Moving/Moving through Seoul · Days/Day by day · Walks/Worth the walk · Daejeon/The Daejeon
+weekend · Arcade/Arcade nights · Food/Hungry in Seoul · GO/GO Fest week · Tokyo/The Tokyo
+detour · Receipts/The receipts. The standard goes into the `waypoint-guide-author` skill so
+every future guide is born with a voice; per-guide titles get creator sign-off.
+
+**Type — the Field Edition (proposed; fork).** The shipped display/data faces read as
+software (geometric grotesque + IDE mono) against Waypoint's natural themes. Proposal:
+**Fraunces** (display — variable opsz/SOFT/WONK; naturalist-cover warmth) · **Literata
+stays** (body — it was always a book) · **Courier Prime** (data — not code, *typed*: the
+expedition log). All fontsource, self-hosted like today's faces; swap is token-level in
+`base.css`. Bricolage Grotesque + Spline Sans Mono retire.
 
 ## Move C — One cartographic world (visual integration end-goal)
 
@@ -137,15 +162,15 @@ atlas at different zooms**:
   ethos register even when rendered inside a hero. Footage is liberal (pathos) but always
   licensed and credited, and never carries or implies a verification flag.
 
-## Phasing (each phase lands the full ship loop + boundary checks)
+## Phasing (revised 2026-07-27 — foundation first; each phase lands the full ship loop + boundary checks)
 
 | Phase | Scope | Risk gates |
 |---|---|---|
-| P1 | Living cover on ONE guide masthead (schema field, lazy module, gates, fallback chain) | Licensed-footage delivery smoke test from the deployed site (boundary check #3); Save-Data/reduced-motion forced once each (#2); credit + license recorded in schema |
-| P2 | Living covers: hub hero + hover previews; morph-then-crossfade | CLS re-measure; autoplay ceiling |
-| P3 | Expedition Line on guide pages (replaces pill strip visual, keeps tablist semantics); absorbs reading progress | a11y suite green; 375 px Korea stress; baselines re-recorded on CI |
-| P4 | Route-carry: hub route ⇄ Expedition Line view-transition; masthead route draw | reduced-motion path; guides-without-maps fallback |
-| P5 | Interior atlas pass: topo dividers, chart indices, day route-leg headers, editorial measure | tab budget untouched; print + OG parity (uniform application) |
+| R1 | Field type (token-level swap in base.css) + the voice (titles per guide, creator-signed; standard into guide-author skill) | zero-layout-shift check per surface (type metrics differ); grep dist/ for old family names; a11y contrast re-verify |
+| R2 | Mobile goes native: bottom bar (4 destinations), journey sheet, Today chip; mobile pill strip retires; SOS post kept | thumb-reach on real device; sheet = plain scroll, no scroll-jack; a11y (sheet as dialog/nav landmark); baselines re-recorded on CI |
+| R3 | Desktop horizon: line replaces pills (desktop only), absorbs reading progress, tablist semantics kept | a11y suite green; arrow-key ring intact |
+| R4 | Living covers (pathos, as decided): masthead first, then hub + hover previews | licensed-footage delivery smoke test from deployed site; Save-Data/reduced-motion forced once each; credit+license in schema; CLS re-measure |
+| R5 | Interior atlas: leg headers from real pins, grid refs, editorial measure; route-carry view-transitions | reduced-motion path; pin-less fallback; print + OG parity |
 
 ## Clarifying questions (gate — put to the creator via AskUserQuestion before any phase builds)
 
@@ -153,15 +178,15 @@ atlas at different zooms**:
    layer — liberal sourcing from any well-licensed library, chosen for feeling, credited,
    accent-graded. The verification apparatus applies to content only. See "The two registers"
    above.
-2. **Expedition Line: replace or augment?** Wholesale replacement of the pill strip is the
-   drastic path and the recommendation; the risk is Korea's 11 groups at 375 px. If the
-   scrub/overflow prototype doesn't hold, fall back to line-above-pills (augment), which
-   keeps the object but halves the payoff.
-3. **Hero video weight ceiling and count.** Is ~4 MB/loop over Commons hot-links acceptable
-   on the hub hero AND guide mastheads, or masthead-only first? (Hub currently also serves
-   users on hotel wifi — the Save-Data gate helps but doesn't decide the default.)
-4. **Does the masthead route-draw ship for guides whose map data is center-only** (no
-   per-day pins), or is the honest fallback (contours only) the rule until pins exist?
-5. **Phase order.** Hero-first (P1–P2, visible wow soonest) vs. navigation-first (P3, the
-   structural payoff). *Recommendation: P1 first — smallest blast radius, proves the
-   sourcing/licensing pipeline the rest depends on.*
+2. ~~**Expedition Line: replace or augment?**~~ **DECIDED 2026-07-27 (creator):** pills
+   retire on both devices; navigation splits by device (desktop horizon, mobile bar + sheet).
+   See Move B.
+3. **The four bottom-bar destinations.** Proposed: Journey · Today · Map · Kit. Swap one for
+   Trip Split? For Search? Four is the budget; the names are the creator's call.
+4. **The re-titles are content.** Korea's eleven proposed titles (Move D) need per-line
+   creator sign-off — approve/edit/reject; the *standard* ships either way.
+5. **The faces.** Fraunces + Literata + Courier Prime is the proposal (specimen in the
+   design study). If it doesn't sing, the next round stages two alternates the same way.
+6. **Hero video weight ceiling** (~4 MB, masthead-only first — rec) and **pin-less
+   route-draw** (contours until real pins exist — rec): both carried from Study Nº 1,
+   defaults recommended.

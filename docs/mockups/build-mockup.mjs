@@ -19,11 +19,20 @@ const PHOTOS = {
   "@@DENMARK@@": "Nyhavn-Copenhagen.JPG",
   "@@SEDONA@@": "Cathedral Rock - Sedona AZ-1.jpg",
 };
+// Shipped faces come from the repo's node_modules; the Field Edition proposal faces
+// (Fraunces, Courier Prime) are not (yet) dependencies, so they resolve from the local
+// cache and fall back to a jsdelivr fetch of the same fontsource files.
 const FONTS = {
   "@@BG@@": fontDir("bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2"),
   "@@LIT@@": fontDir("literata/files/literata-latin-wght-normal.woff2"),
   "@@LITI@@": fontDir("literata/files/literata-latin-wght-italic.woff2"),
   "@@SSM@@": fontDir("spline-sans-mono/files/spline-sans-mono-latin-wght-normal.woff2"),
+};
+const REMOTE_FONTS = {
+  "@@FRA@@": "@fontsource-variable/fraunces/files/fraunces-latin-full-normal.woff2",
+  "@@FRAI@@": "@fontsource-variable/fraunces/files/fraunces-latin-full-italic.woff2",
+  "@@CP4@@": "@fontsource/courier-prime/files/courier-prime-latin-400-normal.woff2",
+  "@@CP7@@": "@fontsource/courier-prime/files/courier-prime-latin-700-normal.woff2",
 };
 
 const commons = (file) =>
@@ -33,6 +42,21 @@ const toDataUri = (buf, mime) => `data:${mime};base64,${Buffer.from(buf).toStrin
 let html = readFileSync(join(here, "living-atlas.template.html"), "utf8");
 for (const [token, path] of Object.entries(FONTS)) {
   html = html.replaceAll(token, toDataUri(readFileSync(path), "font/woff2"));
+}
+const cacheDirEarly = join(here, ".cache");
+mkdirSync(cacheDirEarly, { recursive: true });
+for (const [token, pkgPath] of Object.entries(REMOTE_FONTS)) {
+  const cached = join(cacheDirEarly, pkgPath.replace(/[^\w.-]+/g, "_"));
+  let bytes;
+  if (existsSync(cached)) {
+    bytes = readFileSync(cached);
+  } else {
+    const res = await fetch(`https://cdn.jsdelivr.net/npm/${pkgPath}`);
+    if (!res.ok) throw new Error(`font fetch failed (${res.status}): ${pkgPath}`);
+    bytes = Buffer.from(await res.arrayBuffer());
+    writeFileSync(cached, bytes);
+  }
+  html = html.replaceAll(token, toDataUri(bytes, "font/woff2"));
 }
 // Commons rate-limits repeat fetches (429), so fetched photos are cached locally
 // (docs/mockups/.cache, gitignored) and reused on later builds.

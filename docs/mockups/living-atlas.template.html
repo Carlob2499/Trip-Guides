@@ -1,9 +1,15 @@
-<title>Waypoint — The Living Atlas · Design Study Nº 1</title>
+<title>Waypoint — The Living Atlas · Design Study Nº 2 (Field Edition)</title>
 <style>
-/* ================= FONTS — Waypoint's real faces, embedded ================= */
-@font-face{font-family:'Bricolage Grotesque';src:url(@@BG@@) format('woff2');font-weight:200 800;font-display:swap}
+/* ================= FONTS ================= */
+/* The proposed Field Edition system */
+@font-face{font-family:'Fraunces';src:url(@@FRA@@) format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Fraunces';src:url(@@FRAI@@) format('woff2');font-weight:100 900;font-style:italic;font-display:swap}
 @font-face{font-family:'Literata';src:url(@@LIT@@) format('woff2');font-weight:200 900;font-style:normal;font-display:swap}
 @font-face{font-family:'Literata';src:url(@@LITI@@) format('woff2');font-weight:200 900;font-style:italic;font-display:swap}
+@font-face{font-family:'Courier Prime';src:url(@@CP4@@) format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Courier Prime';src:url(@@CP7@@) format('woff2');font-weight:700;font-display:swap}
+/* The outgoing faces — embedded ONLY for the before/after specimen */
+@font-face{font-family:'Bricolage Grotesque';src:url(@@BG@@) format('woff2');font-weight:200 800;font-display:swap}
 @font-face{font-family:'Spline Sans Mono';src:url(@@SSM@@) format('woff2');font-weight:300 700;font-display:swap}
 
 /* ================= TOKENS — the drafting board ================= */
@@ -20,9 +26,11 @@
   --korea:#646b2e; --denmark:#c7a269; --sedona:#9b592b;
   --gold:#c7a269;  /* chrome accent: darkened in light theme for contrast */
   --green:#9aa64a; /* decided-state green: darkened in light theme */
-  --disp:'Bricolage Grotesque',system-ui,sans-serif;
+  --disp:'Fraunces',Georgia,serif;
   --serif:'Literata',Georgia,serif;
-  --mono:'Spline Sans Mono',ui-monospace,monospace;
+  --mono:'Courier Prime','Courier New',monospace;
+  --old-disp:'Bricolage Grotesque',system-ui,sans-serif;
+  --old-mono:'Spline Sans Mono',ui-monospace,monospace;
   --frame-r:14px;
   color-scheme: dark;
 }
@@ -45,10 +53,10 @@ button{font:inherit;cursor:pointer}
 
 /* ================= TITLE BLOCK ================= */
 header.tb{padding:clamp(48px,8vh,96px) 0 40px;border-bottom:1px solid var(--board-line)}
-.tb-eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--board-muted);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.tb-eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--board-muted);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
 .tb-eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--sedona);display:inline-block}
-h1{font-family:var(--disp);font-weight:750;font-size:clamp(44px,7.5vw,92px);line-height:.98;letter-spacing:-.02em;margin:.25em 0 .2em;text-wrap:balance}
-h1 em{font-style:normal;color:var(--gold)}
+h1{font-family:var(--disp);font-weight:620;font-size:clamp(44px,7.5vw,92px);line-height:.98;letter-spacing:-.01em;margin:.25em 0 .2em;text-wrap:balance;font-variation-settings:'opsz' 100,'SOFT' 40,'WONK' 1}
+h1 em{font-style:italic;color:var(--gold)}
 .tb-dek{max-width:62ch;font-size:clamp(17px,1.5vw,20px);color:var(--board-ink)}
 .tb-dek i{color:var(--board-muted)}
 .tb-stamps{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
@@ -61,7 +69,7 @@ h1 em{font-style:normal;color:var(--gold)}
 .plate-head{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-bottom:8px}
 .plate-no{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--board-muted)}
 .plate-no b{color:var(--board-ink);font-weight:600}
-.plate h2{font-family:var(--disp);font-weight:700;font-size:clamp(26px,3.4vw,40px);letter-spacing:-.015em;margin:0;text-wrap:balance}
+.plate h2{font-family:var(--disp);font-weight:600;font-size:clamp(26px,3.4vw,40px);letter-spacing:-.005em;margin:0;text-wrap:balance;font-variation-settings:'opsz' 60,'SOFT' 30}
 .plate-sub{max-width:70ch;color:var(--board-muted);font-style:italic;margin:6px 0 30px}
 .plate-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:28px}
 @media(min-width:1080px){.plate-grid{grid-template-columns:minmax(0,7.2fr) minmax(0,2.8fr)}}
@@ -79,6 +87,29 @@ h1 em{font-style:normal;color:var(--gold)}
 .m-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase}
 .m-chip{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;padding:6px 12px;border-radius:999px;display:inline-flex;align-items:center;gap:6px}
 .m-btn{font-family:var(--disp);font-weight:600;font-size:14px;padding:10px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.55);background:rgba(14,15,10,.35);color:#fff;backdrop-filter:blur(4px)}
+
+/* ================= PLATE 03 — VOICE TABLE ================= */
+.voice-grid{border:1px solid var(--board-line);border-radius:14px;overflow:hidden;background:color-mix(in srgb,var(--board-2) 55%,transparent)}
+.v-row{display:grid;grid-template-columns:minmax(90px,.9fr) minmax(70px,.7fr) minmax(0,2.4fr);gap:14px;padding:11px 20px;border-top:1px solid var(--board-line);align-items:baseline}
+.v-row:first-child{border-top:none}
+.v-row.v-h{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--board-muted);background:color-mix(in srgb,var(--board-2) 90%,transparent)}
+.v-row s{font-family:var(--old-disp);font-size:13.5px;color:var(--board-muted);text-decoration-color:color-mix(in srgb,#a33327 55%,transparent)}
+.v-row b{font-family:var(--disp);font-weight:620;font-size:16.5px;color:var(--board-ink);font-variation-settings:'opsz' 40,'SOFT' 40}
+.v-row span{font-size:13.5px;color:var(--board-muted)}
+.v-row span em{font-family:var(--disp);font-style:normal;font-weight:560;font-size:15px;color:var(--board-ink);font-variation-settings:'opsz' 30,'SOFT' 40}
+.voice-note{max-width:75ch;color:var(--board-muted);font-size:14.5px;margin:18px 0 0}
+.voice-note i{color:var(--board-ink)}
+@media(max-width:640px){.v-row{grid-template-columns:minmax(70px,.8fr) minmax(0,2fr);}.v-row s{display:none}.v-row.v-h span:first-child{display:none}}
+
+/* ================= FOUNDATION — TYPE SPECIMEN ================= */
+.spec-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+@media(min-width:960px){.spec-grid{grid-template-columns:repeat(3,1fr)}}
+.spec-card{border:1px solid var(--board-line);border-radius:14px;padding:22px 22px 18px;background:color-mix(in srgb,var(--board-2) 55%,transparent);display:flex;flex-direction:column;gap:8px}
+.spec-role{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--board-muted);border-bottom:1px solid var(--board-line);padding-bottom:10px;margin-bottom:6px}
+.spec-old{font-size:30px;color:var(--board-muted);text-decoration:line-through;text-decoration-color:color-mix(in srgb,#a33327 65%,transparent);text-decoration-thickness:2px;line-height:1.15}
+.spec-was{font-family:var(--serif);font-style:italic;font-size:12.5px;color:var(--board-muted)}
+.spec-new{font-size:34px;color:var(--board-ink);line-height:1.1;margin-top:6px}
+.spec-now{font-family:var(--serif);font-style:italic;font-size:12.5px;color:var(--board-muted)}
 
 /* ================= PLATE 01 — HUB HERO, LIVING COVER ================= */
 .hero{position:relative;aspect-ratio:16/7.4;background:#101208;overflow:hidden;border-radius:var(--frame-r)}
@@ -99,7 +130,7 @@ h1 em{font-style:normal;color:var(--gold)}
 .hero-route circle{fill:#f3e0c8}
 .hero-inner{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(18px,4%,42px)}
 .hero-inner .m-eyebrow{color:#f0d9bd}
-.hero-title{font-family:var(--disp);font-weight:780;color:#fff;font-size:clamp(42px,7vw,84px);line-height:.95;letter-spacing:-.02em;margin:8px 0 14px;text-shadow:0 2px 30px rgba(0,0,0,.35)}
+.hero-title{font-family:var(--disp);font-weight:590;color:#fff;font-size:clamp(42px,7vw,84px);line-height:.95;letter-spacing:0;margin:8px 0 14px;text-shadow:0 2px 30px rgba(0,0,0,.35);font-variation-settings:'opsz' 144,'SOFT' 50,'WONK' 1}
 .hero-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .chip-accent{background:#9b592b;color:#fff}
 .chip-ghost{border:1px solid rgba(255,255,255,.5);color:#fff}
@@ -138,9 +169,10 @@ h1 em{font-style:normal;color:var(--gold)}
 .inview .mast-route path{animation:draw 2.6s cubic-bezier(.2,.7,.2,1) .4s forwards}
 .mast-route circle{fill:#eef3cd}
 .mast-route text{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;fill:rgba(255,255,255,.92);text-transform:uppercase}
+@media(max-width:700px){.mast-route text{display:none}}
 .mast-inner{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(18px,4%,42px) clamp(18px,4%,42px) clamp(14px,3%,28px) clamp(40px,6%,64px)}
 .mast-inner .m-eyebrow{color:#dfe6b0}
-.mast-title{font-family:var(--disp);font-weight:790;color:#fff;font-size:clamp(40px,6.4vw,78px);line-height:.95;letter-spacing:-.02em;margin:8px 0 10px}
+.mast-title{font-family:var(--disp);font-weight:590;color:#fff;font-size:clamp(40px,6.4vw,78px);line-height:.95;letter-spacing:0;margin:8px 0 10px;font-variation-settings:'opsz' 144,'SOFT' 50,'WONK' 1}
 .mast-dek{max-width:52ch;color:rgba(255,255,255,.92);font-size:clamp(14px,1.4vw,16.5px);margin:0 0 18px}
 
 /* ================= EXPEDITION LINE ================= */
@@ -177,26 +209,46 @@ h1 em{font-style:normal;color:var(--gold)}
 
 /* mobile mock */
 .mobile-pair{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;padding:22px;background:var(--plate-paper);border-radius:0 0 var(--frame-r) var(--frame-r);align-items:end;justify-items:center}
-@media(min-width:860px){.mobile-pair{grid-template-columns:auto 1fr}}
-.phone{width:300px;max-width:100%;border:1px solid var(--plate-line);border-radius:26px;background:#fff;overflow:hidden;box-shadow:0 18px 50px -20px rgba(0,0,0,.35)}
-.phone .ph-hero{position:relative;height:120px;overflow:hidden}
-.phone .ph-hero>div{position:absolute;inset:-6%;background:url(@@KOREA@@) center 30%/cover}
-.phone .ph-hero span{position:absolute;left:12px;bottom:8px;font-family:var(--disp);font-weight:750;color:#fff;font-size:22px;text-shadow:0 1px 12px rgba(0,0,0,.5)}
-.phone .ph-body{padding:12px 12px 0;font-size:11px;color:var(--plate-muted);line-height:1.5}
-.phone .ph-body b{color:var(--plate-ink);font-family:var(--disp);font-size:12.5px}
-.ph-exl{margin:10px 0 0;border-top:1px solid var(--plate-line);padding:10px 0 6px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
-.ph-exl::-webkit-scrollbar{display:none}
-.ph-exl-inner{display:flex;gap:26px;min-width:max-content;padding:8px 14px 4px;position:relative}
-.ph-exl-inner::before{content:"";position:absolute;left:0;right:0;top:13px;height:2px;background:var(--plate-line)}
-.ph-exl-inner::after{content:"";position:absolute;left:0;width:112px;top:12px;height:4px;border-radius:4px;background:var(--korea)}
-.ph-st{display:flex;flex-direction:column;gap:6px;align-items:center;scroll-snap-align:center}
-.ph-st i{width:9px;height:9px;border-radius:50%;border:2px solid var(--plate-muted);background:#fff;display:block}
-.ph-st.on i{background:var(--korea);border-color:var(--korea)}
-.ph-st span{font-family:var(--mono);font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--plate-muted)}
-.ph-st.on span{color:var(--plate-ink);font-weight:600}
-.ph-bar{display:flex;border-top:1px solid var(--plate-line);margin-top:4px}
-.ph-bar div{flex:1;display:grid;place-items:center;padding:10px 0;color:var(--plate-muted)}
-.ph-bar svg{width:16px;height:16px}
+@media(min-width:1020px){.mobile-pair{grid-template-columns:auto auto 1fr}}
+@media(min-width:640px) and (max-width:1019px){.mobile-pair{grid-template-columns:auto auto}}
+.phone{width:270px;max-width:100%;border:1px solid var(--plate-line);border-radius:26px;background:#fff;overflow:hidden;box-shadow:0 18px 50px -20px rgba(0,0,0,.35);position:relative;display:flex;flex-direction:column;height:520px}
+.ph-top{display:flex;justify-content:space-between;align-items:center;padding:12px 14px 10px;border-bottom:1px solid var(--plate-line)}
+.ph-title{font-family:var(--disp);font-weight:600;font-size:14px;color:var(--plate-ink);font-variation-settings:'opsz' 30,'SOFT' 40}
+.ph-sos{width:24px;height:24px;border-radius:50%;border:1px solid color-mix(in srgb,#a33327 45%,transparent);color:#a33327;display:grid;place-items:center}
+.ph-read{flex:1;padding:16px 14px 0;overflow:hidden}
+.ph-kick{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--plate-muted)}
+.ph-h{font-family:var(--disp);font-weight:600;font-size:21px;color:var(--plate-ink);margin:4px 0 8px;font-variation-settings:'opsz' 40,'SOFT' 40}
+.ph-p{font-size:11.5px;line-height:1.55;color:var(--plate-ink);margin:0}
+.ph-nextband{display:flex;gap:8px;align-items:baseline;border:1px solid var(--plate-line);border-radius:10px;padding:9px 12px;margin-top:14px;background:var(--plate-paper)}
+.ph-nextband span{font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;color:var(--plate-muted)}
+.ph-nextband b{font-family:var(--disp);font-weight:600;font-size:12.5px;color:var(--plate-ink)}
+.ph-nextband .ph-arrow{margin-left:auto;color:var(--korea);font-size:12px}
+.ph-today{position:absolute;left:50%;transform:translateX(-50%);bottom:64px;font-family:var(--mono);font-size:9px;letter-spacing:.04em;background:var(--plate-ink);color:var(--plate-paper);border:none;border-radius:999px;padding:8px 13px;box-shadow:0 8px 22px -8px rgba(0,0,0,.5);white-space:nowrap}
+.ph-nav{display:flex;border-top:1px solid var(--plate-line);background:#fff;margin-top:auto}
+.ph-nav div{flex:1;display:flex;flex-direction:column;gap:3px;align-items:center;padding:8px 0 10px;color:var(--plate-muted)}
+.ph-nav div.on{color:var(--korea)}
+.ph-nav svg{width:17px;height:17px}
+.ph-nav span{font-family:var(--mono);font-size:8px;letter-spacing:.06em;text-transform:uppercase}
+.ph-dim .ph-top{opacity:.45}
+.sheet{margin-top:auto;background:#fff;border:1px solid var(--plate-line);border-bottom:none;border-radius:18px 18px 0 0;box-shadow:0 -14px 40px -18px rgba(0,0,0,.4);padding:8px 14px 10px;position:relative}
+.ph-dim .sheet{background:linear-gradient(180deg,#fff,var(--plate-paper))}
+.sheet-grab{width:36px;height:4px;border-radius:99px;background:var(--plate-line);margin:2px auto 10px}
+.sheet-t{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--plate-muted);margin-bottom:8px}
+.spine{position:relative}
+.spine::before{content:"";position:absolute;left:5px;top:8px;bottom:14px;width:2px;background:var(--plate-line)}
+.sp-row{display:flex;gap:10px;align-items:baseline;padding:5.5px 0;position:relative}
+.sp-row i{width:9px;height:9px;border-radius:50%;border:2px solid var(--plate-muted);background:#fff;flex:0 0 auto;position:relative;z-index:1;align-self:center}
+.sp-row.done i{border-color:var(--korea);background:color-mix(in srgb,var(--korea) 40%,#fff)}
+.sp-row.on i{border-color:var(--korea);background:var(--korea);box-shadow:0 0 0 3px color-mix(in srgb,var(--korea) 22%,transparent)}
+.sp-row b{font-family:var(--disp);font-weight:620;font-size:13px;color:var(--plate-ink);min-width:58px;font-variation-settings:'opsz' 30,'SOFT' 40}
+.sp-row.on b{color:var(--korea)}
+.sp-row span{font-size:10.5px;color:var(--plate-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+.sp-row u{text-decoration:none;font-family:var(--mono);font-size:8.5px;color:var(--korea)}
+.sp-sub{display:flex;flex-direction:column;gap:3px;padding:2px 0 6px 30px}
+.sp-sub em{font-family:var(--mono);font-style:normal;font-size:9px;color:var(--plate-muted)}
+.sp-sub em.now{color:var(--plate-ink);font-weight:700}
+.sp-sub em.now::before{content:"▸ ";color:var(--korea)}
+.sp-more{font-family:var(--mono);font-size:9px;color:var(--plate-muted);padding:4px 0 2px 30px}
 .mobile-notes{max-width:46ch}
 .mobile-notes .swipe{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--plate-muted);display:inline-flex;align-items:center;gap:8px;border:1px solid var(--plate-line);border-radius:999px;padding:6px 12px;margin-bottom:14px}
 .mobile-notes p{color:var(--plate-ink);font-size:15px;margin:0 0 10px}
@@ -205,11 +257,11 @@ h1 em{font-style:normal;color:var(--gold)}
 /* ================= PLATE 04 — INTERIOR ================= */
 .interior{background:var(--plate-paper);border-radius:var(--frame-r);padding:clamp(18px,4%,40px);position:relative;overflow:hidden;color:var(--plate-ink)}
 .gridref{position:absolute;top:18px;right:24px;text-align:right}
-.gridref .no{font-family:var(--disp);font-weight:800;font-size:clamp(64px,9vw,110px);line-height:.8;color:transparent;-webkit-text-stroke:1.5px rgba(35,37,28,.18);letter-spacing:-.03em}
+.gridref .no{font-family:var(--disp);font-weight:640;font-size:clamp(64px,9vw,110px);line-height:.8;color:transparent;-webkit-text-stroke:1.5px rgba(35,37,28,.18);letter-spacing:-.01em;font-variation-settings:'opsz' 144}
 .gridref .co{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;color:var(--plate-muted);text-transform:uppercase;margin-top:8px}
 .sec-head{display:flex;align-items:baseline;gap:14px;margin:0 0 4px}
 .sec-head .sq{width:9px;height:9px;background:var(--korea)}
-.sec-head h3{font-family:var(--disp);font-weight:750;font-size:clamp(26px,3.5vw,38px);margin:0;letter-spacing:-.015em}
+.sec-head h3{font-family:var(--disp);font-weight:600;font-size:clamp(26px,3.5vw,38px);margin:0;letter-spacing:0;font-variation-settings:'opsz' 60,'SOFT' 40}
 .sec-kick{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--plate-muted);margin-bottom:22px}
 .topo{margin:26px -8px;opacity:.5}
 .topo path{fill:none;stroke:var(--korea);stroke-width:1;opacity:.55}
@@ -267,6 +319,7 @@ h1 em{font-style:normal;color:var(--gold)}
 .spec{border-top:1px solid var(--board-line);padding-top:12px;display:grid;grid-template-columns:auto 1fr;gap:4px 16px;font-family:var(--mono);font-size:11px}
 .spec dt{color:var(--board-muted);letter-spacing:.08em;text-transform:uppercase}
 .spec dd{margin:0;color:var(--board-ink)}
+.prog{border:1px solid var(--board-line);border-radius:16px;padding:10px clamp(18px,3.5vw,34px) 16px;margin-top:34px}
 .forks{margin-top:44px;border:1px solid var(--board-line);border-radius:16px;padding:26px clamp(18px,3.5vw,34px)}
 .forks h3{font-family:var(--disp);font-weight:700;font-size:21px;margin:0 0 6px}
 .forks .fh{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--board-muted)}
@@ -289,16 +342,43 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
 </style>
 
 <header class="tb wrap">
-  <div class="tb-eyebrow"><span>Waypoint</span><span class="dot"></span><span>Design Study Nº 1</span><span class="dot"></span><span>2026-07-27</span></div>
+  <div class="tb-eyebrow"><span>Waypoint</span><span class="dot"></span><span>Design Study Nº 2 · Field Edition</span><span class="dot"></span><span>2026-07-27</span></div>
   <h1>The Living <em>Atlas</em></h1>
-  <p class="tb-dek">Five plates and three ways forward. The thesis: promote the signature you already own — <i>the trip unfolds, day by day</i> — from three appearances to every surface. Heroes become living covers; the pill toolbar becomes the route itself; hub, guide, and day become one map at different zooms. And the site speaks in <b>two registers, deliberately split</b>: covers court the heart — pathos, liberal — while the content keeps the ledger — ethos, verified. <i>The shell may seduce; the spine may not lie.</i></p>
+  <p class="tb-dek">Second pass, four new decisions in. The type sheds its code for faces that belong outdoors. The section titles find a human voice. Navigation splits by device — <b>desktop wears the journey as a horizon; mobile carries it as a spine in the thumb's reach</b> — and one law sits over all of it: <i>the visuals may never outrank the scrolling.</i> Covers stay pathos; the ledger stays ethos.</p>
   <div class="tb-stamps">
-    <span class="stamp">TYPE <b>Bricolage · Literata · Spline Mono</b> — the shipped system</span>
+    <span class="stamp">TYPE <b>Fraunces · Literata · Courier Prime</b> — the Field Edition (proposed)</span>
     <span class="stamp">ACCENTS <b>#646b2e · #c7a269 · #9b592b</b> — extracted, per guide</span>
-    <span class="stamp">MOTION HERE <b>CSS simulation</b> · production = 6–10s licensed cinematic loops</span>
+    <span class="stamp">NAV <b>pills retired</b> · horizon on desktop · sheet + bar on mobile</span>
     <span class="stamp">REGISTERS <b>covers = pathos</b> · <b>content = ethos</b> — decided 2026-07-27</span>
   </div>
 </header>
+
+<!-- ================= FOUNDATION — TYPE ================= -->
+<section class="plate wrap" id="type">
+  <div class="plate-head"><span class="plate-no">FOUNDATION · <b>TYPE</b></span><h2>First, the type sheds its code</h2></div>
+  <p class="plate-sub">The critique was right: a geometric grotesque and an IDE mono read as software, and Waypoint is not software — it's a field journal. The proposal keeps Literata's book voice and swaps the loud parts: display becomes Fraunces (the warmth of old naturalist covers, with real optical sizes), and data becomes Courier Prime — not code, <i>typed</i>: the expedition log, hammered out at camp.</p>
+  <div class="spec-grid">
+    <div class="spec-card">
+      <div class="spec-role">Display — titles, stations, numbers</div>
+      <div class="spec-old" style="font-family:var(--old-disp);font-weight:750">South Korea</div>
+      <div class="spec-was">Bricolage Grotesque — engineered, startup-brochure</div>
+      <div class="spec-new" style="font-family:var(--disp);font-weight:590;font-variation-settings:'opsz' 144,'SOFT' 50,'WONK' 1">South Korea</div>
+      <div class="spec-now">Fraunces — soft, slightly wonky, park-poster warm</div>
+    </div>
+    <div class="spec-card">
+      <div class="spec-role">Body — the reading voice</div>
+      <div class="spec-new" style="font-family:var(--serif);font-size:19px;line-height:1.55;font-weight:430">Book the Secret Garden tour for Tue Jul 14 — the palace is walk-up; the garden is the reason you set an alarm.</div>
+      <div class="spec-now">Literata stays — it was always a book, never code. Continuity where continuity earns it.</div>
+    </div>
+    <div class="spec-card">
+      <div class="spec-role">Data — prices, times, stamps, labels</div>
+      <div class="spec-old" style="font-family:var(--old-mono);font-size:14px">KTX 10:44 → 12:53 · ≈₩23,700 · CHECKED 2026-07-23</div>
+      <div class="spec-was">Spline Sans Mono — reads as an IDE</div>
+      <div class="spec-new" style="font-family:var(--mono);font-size:14px;font-weight:400">KTX 10:44 → 12:53 · ≈₩23,700 · CHECKED 2026-07-23</div>
+      <div class="spec-now">Courier Prime — the same honesty, typed on paper instead of printed to a terminal</div>
+    </div>
+  </div>
+</section>
 
 <!-- ================= PLATE 01 ================= -->
 <section class="plate wrap" id="p1">
@@ -400,14 +480,14 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
               <div class="exl-track"></div>
               <div class="exl-fill" style="width:34%"></div>
               <div class="exl-st">
-                <button type="button" class="done"><span class="pt"></span><span class="lb">Plan</span></button>
-                <button type="button" class="done"><span class="pt"></span><span class="lb">Essentials</span></button>
-                <button type="button" class="on"><span class="pt"></span><span class="lb">Getting around</span></button>
-                <button type="button"><span class="pt"></span><span class="lb">Itinerary</span></button>
-                <button type="button"><span class="pt"></span><span class="lb">Sights</span></button>
+                <button type="button" class="done"><span class="pt"></span><span class="lb">Fly</span></button>
+                <button type="button" class="done"><span class="pt"></span><span class="lb">Pocket</span></button>
+                <button type="button" class="on"><span class="pt"></span><span class="lb">Moving</span></button>
+                <button type="button"><span class="pt"></span><span class="lb">Days</span></button>
+                <button type="button"><span class="pt"></span><span class="lb">Walks</span></button>
                 <button type="button"><span class="pt"></span><span class="lb">Daejeon</span></button>
                 <button type="button"><span class="pt"></span><span class="lb">Food</span></button>
-                <button type="button"><span class="pt"></span><span class="lb">References</span></button>
+                <button type="button"><span class="pt"></span><span class="lb">Receipts</span></button>
               </div>
             </div>
             <div class="exl-tools">
@@ -428,38 +508,59 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
   </div>
 </section>
 
-<!-- ================= PLATE 03 ================= -->
-<section class="plate wrap" id="p3">
-  <div class="plate-head"><span class="plate-no">PLATE <b>03</b></span><h2>The Expedition Line, up close — and at 375px</h2></div>
-  <p class="plate-sub">Before/after, then the interactive proof. Click any station. Semantics don't change — same tablist, same arrow-key ring, labels stay in the accessibility tree even where they compress to ticks.</p>
+<!-- ================= PLATE 03 — THE VOICE ================= -->
+<section class="plate wrap" id="voice">
+  <div class="plate-head"><span class="plate-no">PLATE <b>03</b></span><h2>The titles find their voice</h2></div>
+  <p class="plate-sub">"Plan · Essentials · Itinerary · References" is CMS furniture — any generator would emit it. The rule that replaces it: <b>a title names what the traveler is doing, not what the database calls the bucket</b>. Two levels: a one-word station for the line and the sheet, a full phrase at the section head — with a typed descriptor so scanning never suffers. Korea, re-titled:</p>
+  <div class="voice-grid">
+    <div class="v-row v-h"><span>Was</span><span>Station</span><span>Section head + descriptor</span></div>
+    <div class="v-row"><s>Plan</s><b>Fly</b><span><em>Before you fly</em> · bookings, jet lag, groundwork</span></div>
+    <div class="v-row"><s>Essentials</s><b>Pocket</b><span><em>In your pocket</em> · cash, data, apps, 112/119</span></div>
+    <div class="v-row"><s>Getting around</s><b>Moving</b><span><em>Moving through Seoul</em> · T-money, KTX, taxis</span></div>
+    <div class="v-row"><s>Itinerary</s><b>Days</b><span><em>Day by day</em> · all eight days, mapped</span></div>
+    <div class="v-row"><s>Sights</s><b>Walks</b><span><em>Worth the walk</em> · palaces, markets, lookouts</span></div>
+    <div class="v-row"><s>Daejeon &amp; MSI</s><b>Daejeon</b><span><em>The Daejeon weekend</em> · MSI 2026, two nights</span></div>
+    <div class="v-row"><s>Gaming</s><b>Arcade</b><span><em>Arcade nights</em> · PC bangs &amp; Yongsan</span></div>
+    <div class="v-row"><s>Food</s><b>Food</b><span><em>Hungry in Seoul</em> · street stalls to charcoal BBQ</span></div>
+    <div class="v-row"><s>Pokémon GO</s><b>GO</b><span><em>GO Fest week</em> · raids, spawns, rain plans</span></div>
+    <div class="v-row"><s>Tokyo</s><b>Tokyo</b><span><em>The Tokyo detour</em> · the third traveler's leg</span></div>
+    <div class="v-row"><s>References</s><b>Receipts</b><span><em>The receipts</em> · every source, dated</span></div>
+  </div>
+  <p class="voice-note">Titles are content, so they live in each guide's JSON and get the creator's sign-off per guide — the <i>standard</i> (verb-forward or place-forward, never bucket-nouns; one word for the station, a phrase for the head) goes into the guide-author skill so every future guide is born with a voice. "The receipts" is the thesis in two words: even the personality serves the verification story.</p>
+</section>
+
+<!-- ================= PLATE 04 — NAV SPLIT ================= -->
+<section class="plate wrap" id="p4nav">
+  <div class="plate-head"><span class="plate-no">PLATE <b>04</b></span><h2>Two devices, two organs, one journey</h2></div>
+  <p class="plate-sub">The dev critique stands: mobile was a shrunken desktop — pills, strips, and bars all competing at 375px. The split: <b>desktop wears the journey as a horizon</b> (the line under the masthead, stations clickable); <b>mobile carries it as a spine</b> — a bottom bar with four honest destinations and a thumb-height journey sheet, the pattern every well-made app already taught your hands.</p>
   <div class="plate-grid">
     <div>
-      <div class="frame-cap"><span>NAV · BEFORE / AFTER · INTERACTIVE</span><span class="sim">click the stations</span></div>
+      <div class="frame-cap"><span>NAV · DESKTOP HORIZON + MOBILE SPINE · INTERACTIVE</span><span class="sim">click the stations</span></div>
       <div class="frame">
         <div class="before">
-          <div class="exl-label"><span class="strike">Today — eleven look-alike pills + five icons</span><span>weight without hierarchy</span></div>
+          <div class="exl-label"><span class="strike">Retired — eleven look-alike pills + five icons</span><span>decided 2026-07-27</span></div>
           <div class="pills" aria-hidden="true">
             <span class="pill on">Plan</span><span class="pill">Essentials</span><span class="pill">Getting around</span><span class="pill">Itinerary</span><span class="pill">Sights</span><span class="pill">Daejeon &amp; MSI</span><span class="pill">Gaming</span><span class="pill">Food</span><span class="pill">Pokémon GO</span><span class="pill">Tokyo</span><span class="pill">References</span>
           </div>
         </div>
         <div class="exl-wrap" style="--exl-accent:#646b2e;border-top:1px dashed var(--plate-line)">
-          <div class="exl-label"><span>Proposed — the trip drawn as a line; sections are stations on it</span><span class="exl-read" id="readout">§3 of 11 · 34% read</span></div>
+          <div class="exl-label"><span>Desktop — the horizon: one-word stations on the journey line</span><span class="exl-read" id="readout">§3 of 11 · 34% read</span></div>
           <div class="exl">
             <div class="exl-line" id="exlDemo">
               <div class="exl-track"></div>
               <div class="exl-fill" id="exlFill"></div>
               <div class="exl-st" id="exlSt" role="tablist" aria-label="Guide sections">
-                <button role="tab" type="button"><span class="pt"></span><span class="lb">Plan</span></button>
-                <button role="tab" type="button"><span class="pt"></span><span class="lb">Essentials</span></button>
-                <button role="tab" type="button"><span class="pt"></span><span class="lb">Getting</span></button>
-                <button role="tab" type="button"><span class="pt"></span><span class="lb">Itinerary</span></button>
-                <button role="tab" type="button"><span class="pt"></span><span class="lb">Sights</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Fly</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Pocket</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Moving</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Days</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Walks</span></button>
                 <button role="tab" type="button"><span class="pt"></span><span class="lb">Daejeon</span></button>
-                <button role="tab" type="button"><span class="pt"></span><span class="lb">Gaming</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Arcade</span></button>
                 <button role="tab" type="button"><span class="pt"></span><span class="lb">Food</span></button>
-                <button role="tab" type="button"><span class="pt"></span><span class="lb">Pokémon</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">GO</span></button>
                 <button role="tab" type="button"><span class="pt"></span><span class="lb">Tokyo</span></button>
-                <button role="tab" type="button"><span class="pt"></span><span class="lb">References</span></button>
+                <button role="tab" type="button"><span class="pt"></span><span class="lb">Receipts</span></button>
               </div>
             </div>
             <div class="exl-tools">
@@ -473,49 +574,66 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
         </div>
         <div class="mobile-pair">
           <div class="phone">
-            <div class="ph-hero"><div></div><span>South Korea</span></div>
-            <div class="ph-body"><b>When you land</b><br>Terminal 1, Incheon — ~04:55 KST Thu Jul 9. Clear immigration, shower at the airport, Limousine 6002 into Jongno…</div>
-            <div class="ph-exl" aria-label="Sections (swipe)">
-              <div class="ph-exl-inner">
-                <div class="ph-st"><i></i><span>Plan</span></div>
-                <div class="ph-st"><i></i><span>Essent.</span></div>
-                <div class="ph-st on"><i></i><span>Getting</span></div>
-                <div class="ph-st"><i></i><span>Itiner.</span></div>
-                <div class="ph-st"><i></i><span>Sights</span></div>
-                <div class="ph-st"><i></i><span>Daejeon</span></div>
-                <div class="ph-st"><i></i><span>Gaming</span></div>
-                <div class="ph-st"><i></i><span>Food</span></div>
-                <div class="ph-st"><i></i><span>Pokémon</span></div>
-                <div class="ph-st"><i></i><span>Tokyo</span></div>
-                <div class="ph-st"><i></i><span>Refs</span></div>
+            <div class="ph-top"><span class="ph-title">South Korea</span><span class="ph-sos" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" width="13" height="13"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.4M8 11h.01"/></svg></span></div>
+            <div class="ph-read">
+              <div class="ph-kick">§3 · T-money, KTX, taxis</div>
+              <div class="ph-h">Moving through Seoul</div>
+              <p class="ph-p">Line 3 to Anguk for the palaces; Kakao T when the bags win. Google Maps barely routes here — <b>KakaoMap or Naver Map</b>, downloaded before you fly…</p>
+              <div class="ph-nextband"><span>NEXT</span><b>Day by day</b><span class="ph-arrow">→</span></div>
+            </div>
+            <button class="ph-today" type="button">☼ Today · Mon Jul 13 · Busan day trip</button>
+            <div class="ph-nav" aria-hidden="true">
+              <div class="on"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12 C5 6 11 10 14 4"/><circle cx="2" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="14" cy="4" r="1.6" fill="currentColor" stroke="none"/></svg><span>Journey</span></div>
+              <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="3"/><path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M12.6 3.4l-1.4 1.4M4.8 11.2l-1.4 1.4"/></svg><span>Today</span></div>
+              <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 14s4.5-4.2 4.5-7.5a4.5 4.5 0 1 0-9 0C3.5 9.8 8 14 8 14Z"/><circle cx="8" cy="6.5" r="1.6"/></svg><span>Map</span></div>
+              <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="12" height="8" rx="1.5"/><path d="M6 5V3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5V5"/></svg><span>Kit</span></div>
+            </div>
+          </div>
+          <div class="phone ph-dim">
+            <div class="ph-top"><span class="ph-title">South Korea</span><span class="ph-sos" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" width="13" height="13"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.4M8 11h.01"/></svg></span></div>
+            <div class="sheet">
+              <div class="sheet-grab" aria-hidden="true"></div>
+              <div class="sheet-t">The journey · 8 days · 34% read</div>
+              <div class="spine">
+                <div class="sp-row done"><i></i><b>Fly</b><span>Before you fly</span><u>✓</u></div>
+                <div class="sp-row done"><i></i><b>Pocket</b><span>In your pocket</span><u>✓</u></div>
+                <div class="sp-row on"><i></i><b>Moving</b><span>Moving through Seoul</span><u>· reading</u></div>
+                <div class="sp-row open"><i></i><b>Days</b><span>Day by day</span><u>8</u></div>
+                <div class="sp-sub"><em>Jul 11 · KTX to Daejeon</em><em class="now">Jul 13 · Busan day trip</em><em>Jul 14 · Secret Garden 10:30</em></div>
+                <div class="sp-row"><i></i><b>Walks</b><span>Worth the walk</span></div>
+                <div class="sp-row"><i></i><b>Daejeon</b><span>The Daejeon weekend</span></div>
+                <div class="sp-row"><i></i><b>Receipts</b><span>The receipts</span></div>
+                <div class="sp-more">+ 4 more stops</div>
               </div>
             </div>
-            <div class="ph-bar" aria-hidden="true">
-              <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg></div>
-              <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 13 8 3l6 10z"/></svg></div>
-              <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="12" height="8" rx="1.5"/><path d="M6 5V3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5V5"/></svg></div>
-              <div style="color:#a33327"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.4M8 11h.01"/></svg></div>
+            <div class="ph-nav" aria-hidden="true">
+              <div class="on"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12 C5 6 11 10 14 4"/><circle cx="2" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="14" cy="4" r="1.6" fill="currentColor" stroke="none"/></svg><span>Journey</span></div>
+              <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="3"/><path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M12.6 3.4l-1.4 1.4M4.8 11.2l-1.4 1.4"/></svg><span>Today</span></div>
+              <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 14s4.5-4.2 4.5-7.5a4.5 4.5 0 1 0-9 0C3.5 9.8 8 14 8 14Z"/><circle cx="8" cy="6.5" r="1.6"/></svg><span>Map</span></div>
+              <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="12" height="8" rx="1.5"/><path d="M6 5V3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5V5"/></svg><span>Kit</span></div>
             </div>
           </div>
           <div class="mobile-notes">
-            <span class="swipe">← the 375px stress case · swipe the line →</span>
-            <p>Korea's eleven groups are the hardest test in the catalog — that's why the mock uses them. The line scrolls with snap; <b>only the active station keeps its label</b>, every label stays in the a11y tree (the M4 clipped-label pattern, reused).</p>
-            <p><i>If a real-thumb prototype doesn't hold at 375px, the fallback is line-above-pills — same object, half the drasticness. That's Fork №2, below.</i></p>
+            <span class="swipe">375px · reading state → journey sheet</span>
+            <p><b>Left — reading is sacred.</b> One section at a time, a compact header that gets out of the way, the next-section band Waypoint already ships, and a trip-aware <i>Today</i> chip floating in thumb reach. No strips, no pill rows, no competing chrome.</p>
+            <p><b>Right — the sheet is the spine.</b> The same journey object, turned vertical: every stop with its full title, done-ticks from reading progress, today's leg highlighted inside <i>Day by day</i>. Half-height, grabbable, plain scroll inside — the pattern every maps and booking app already taught your thumb.</p>
+            <p><i>Eleven stops don't fit a 375px strip with dignity — so mobile stops pretending to be a strip.</i></p>
           </div>
         </div>
       </div>
     </div>
     <aside class="notes">
-      <div class="note k"><span class="tag">C1 · Hierarchy at last</span><p>Content stations sit <i>on</i> the journey; tools sit <i>off</i> it, past the divider, as a compass cluster. Plan no longer weighs the same as References — position on the line <b>is</b> the information.</p></div>
-      <div class="note k"><span class="tag">C2 · Progress absorbed</span><p>The separate reading-progress bar retires. Its meaning moves into the line's glowing tip — one object fewer, one meaning richer.</p></div>
-      <div class="note k"><span class="tag">C3 · What the tests see</span><p>Same <i>tablist</i> role, same targets, same arrow-key ring. The a11y suite keeps passing; only visual baselines re-record — deliberately, on CI's runner.</p></div>
+      <div class="note k"><span class="tag">D1 · Four honest destinations</span><p><b>Journey · Today · Map · Kit.</b> Everything else lives inside one of them. SOS keeps its own red post, top-right on every screen — an emergency never hides in a drawer.</p></div>
+      <div class="note k"><span class="tag">D2 · The sheet is the spine</span><p>The same journey object as desktop's horizon, turned vertical and moved into thumb range. It's a live table of contents: done-ticks from reading progress, today's leg lit inside <i>Day by day</i>.</p></div>
+      <div class="note k"><span class="tag">D3 · Chrome is still</span><p>The law that keeps visuals under UX: <b>motion lives in the covers; chrome never animates on its own.</b> The sheet moves only when a thumb moves it, scrolling is always plain scrolling, and nothing ever animates between the reader and a tap.</p></div>
+      <div class="note k"><span class="tag">D4 · Desktop untouched where it works</span><p>Desktop had no crowding problem, so it keeps the one-glance horizon — same tablist semantics, same arrow-key ring. Only mobile changes species.</p></div>
     </aside>
   </div>
 </section>
 
-<!-- ================= PLATE 04 ================= -->
-<section class="plate wrap" id="p4">
-  <div class="plate-head"><span class="plate-no">PLATE <b>04</b></span><h2>The interior gets its cartography back</h2></div>
+<!-- ================= PLATE 05 ================= -->
+<section class="plate wrap" id="p5int">
+  <div class="plate-head"><span class="plate-no">PLATE <b>05</b></span><h2>The interior gets its cartography back</h2></div>
   <p class="plate-sub">Past the masthead today, the atlas disappears into a two-column card wall. The fix isn't more decoration — it's structure that was always latent in the data: grid references, route legs, an editorial measure with the numbers in a mono rail.</p>
   <div class="plate-grid">
     <div>
@@ -526,8 +644,8 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
             <div class="no">№04</div>
             <div class="co">Grid E-4 · 37.5794° N · 126.9910° E</div>
           </div>
-          <div class="sec-head"><span class="sq"></span><h3>Itinerary</h3></div>
-          <div class="sec-kick">Section 04 of 11 · 8 days · Checked 2026-07-23</div>
+          <div class="sec-head"><span class="sq"></span><h3>Day by day</h3></div>
+          <div class="sec-kick">Stop 04 of 11 · all eight days, mapped · Checked 2026-07-23</div>
           <div class="legcard">
             <div class="leg-route" aria-hidden="true"><i></i><u></u><i class="hollow"></i></div>
             <div class="leg-meta">
@@ -566,9 +684,9 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
   </div>
 </section>
 
-<!-- ================= PLATE 05 ================= -->
-<section class="plate wrap" id="p5">
-  <div class="plate-head"><span class="plate-no">PLATE <b>05</b></span><h2>The end-goal: one atlas, four zooms</h2></div>
+<!-- ================= PLATE 06 ================= -->
+<section class="plate wrap" id="p6">
+  <div class="plate-head"><span class="plate-no">PLATE <b>06</b></span><h2>The end-goal: one atlas, four zooms</h2></div>
   <p class="plate-sub">Where this all lands. Every surface is the same map at a different altitude, connected by one continuous line — and the View Transitions you already ship are the camera moving between them.</p>
   <div class="frame-cap"><span>SYSTEM DIAGRAM · NAVIGATION = ZOOM</span><span class="sim">the grander end-goal</span></div>
   <div class="cont">
@@ -616,58 +734,30 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
 
 <!-- ================= OPTIONS ================= -->
 <section class="plate wrap" id="options">
-  <div class="plate-head"><span class="plate-no">THE WAY <b>FORWARD</b></span><h2>Three paths, one destination</h2></div>
-  <p class="plate-sub">All three end at the full Living Atlas; they differ in what ships first and what risk gets retired first. Pick one — or reorder me.</p>
-  <div class="paths">
-    <div class="path reco">
-      <span class="reco-tag">Recommended start</span>
-      <span class="pt-no">Path A · Hero-first</span>
-      <h3>Make it breathe</h3>
-      <p>Ship one living cover (Korea masthead) end-to-end: schema field, licensed cinematic sourcing, accent grading, gates, fallback chain, pause control. Then the hub hero + hover previews. <i>Smallest blast radius; proves the credit + delivery pipeline everything else leans on; visible wow in the first ship.</i></p>
-      <dl class="spec">
-        <dt>Plates</dt><dd>01 – 02 (cover half)</dd>
-        <dt>First ship</dt><dd>one masthead, ~1 session</dd>
-        <dt>Retires</dt><dd>the weight fork (№3)</dd>
-        <dt>Risk</dt><dd>low — enhancement layer only</dd>
-      </dl>
-    </div>
-    <div class="path">
-      <span class="pt-no">Path B · Navigation-first</span>
-      <h3>Redraw the spine</h3>
-      <p>Build the Expedition Line behind the existing tablist semantics, absorb the progress bar, prototype the 375px scrub on Korea's eleven groups before anything else. <i>The structural payoff lands first; heroes wait. Choose this if the pill strip bothers you more than the still photos do.</i></p>
-      <dl class="spec">
-        <dt>Plates</dt><dd>02 (line half) – 03</dd>
-        <dt>First ship</dt><dd>guide nav, ~2 sessions</dd>
-        <dt>Retires</dt><dd>replace-vs-augment fork (№2)</dd>
-        <dt>Risk</dt><dd>medium — touches a11y baselines</dd>
-      </dl>
-    </div>
-    <div class="path">
-      <span class="pt-no">Path C · The full arc</span>
-      <h3>The Living Atlas</h3>
-      <p>A→B→interior→continuum as one programme: P1 living cover, P2 hub, P3 Expedition Line, P4 route-carry transitions, P5 interior atlas pass. <i>Each phase lands the full ship loop; the arc ends with every surface a zoom of one map. This is the destination either way — Path C just commits now.</i></p>
-      <dl class="spec">
-        <dt>Plates</dt><dd>01 – 05, in order</dd>
-        <dt>First ship</dt><dd>same as Path A</dd>
-        <dt>Retires</dt><dd>all five forks, sequenced</dd>
-        <dt>Risk</dt><dd>staged — every phase gated</dd>
-      </dl>
-    </div>
+  <div class="plate-head"><span class="plate-no">THE WAY <b>FORWARD</b></span><h2>One programme, five moves</h2></div>
+  <p class="plate-sub">The three-path menu didn't earn its keep, so here's the honest version: a sequence, reorderable, with the foundation first — because every later surface inherits the type and the voice.</p>
+  <div class="prog">
+    <div class="fork"><span class="fno">R1</span><p><b>Field type + the voice.</b> Swap the faces site-wide (Fraunces / Literata / Courier Prime — self-hosted fontsource, same as today) and re-title the guides to the new standard, with your sign-off per guide. Zero JS, one session, and every screen changes temperature at once.</p></div>
+    <div class="fork"><span class="fno">R2</span><p><b>Mobile goes native.</b> Bottom bar (Journey · Today · Map · Kit), the journey sheet, the floating Today chip; the mobile pill strip retires. The critiqued pain dies first. SOS keeps its post.</p></div>
+    <div class="fork"><span class="fno">R3</span><p><b>Desktop wears the horizon.</b> The line replaces pills on desktop only, absorbs the reading-progress bar, keeps tablist semantics and the arrow-key ring.</p></div>
+    <div class="fork"><span class="fno">R4</span><p><b>Living covers.</b> The pathos layer as already decided — masthead first, then hub. Liberal sourcing, credited, accent-graded, gated on reduced-motion and Save-Data.</p></div>
+    <div class="fork"><span class="fno">R5</span><p><b>The interior atlas.</b> Leg headers from real pins, grid references, the editorial measure with the typed numbers rail.</p></div>
   </div>
   <div class="forks">
-    <span class="fh">Open forks — yours, not mine</span>
-    <h3>Five decisions gate the build</h3>
-    <div class="fork"><span class="fno">№1</span><p><b>Video sourcing — <span style="color:var(--green)">decided 2026-07-27</span>.</b> Covers are the pathos layer: any well-licensed cinematic footage, chosen for feeling, credited, graded toward the accent. The verification apparatus applies to content only — it never blesses a cover. <span class="rec" style="color:var(--green);border-color:color-mix(in srgb,var(--green) 45%,transparent)">✓ liberal covers · rigorous content</span></p></div>
-    <div class="fork"><span class="fno">№2</span><p><b>Expedition Line: replace or augment?</b> Wholesale replacement is the drastic path; Korea at 375px is the test that decides it. <span class="rec">rec · replace, with the augment fallback pre-agreed</span></p></div>
-    <div class="fork"><span class="fno">№3</span><p><b>Video weight.</b> ~4&nbsp;MB Commons hot-links on hub <i>and</i> mastheads, or masthead-only first? Save-Data gates help but don't decide the default.</p></div>
-    <div class="fork"><span class="fno">№4</span><p><b>Route-draw for pin-less guides.</b> Ship with center-only map data, or contours-only until real pins exist? <span class="rec">rec · contours until pins — honest ornament</span></p></div>
-    <div class="fork"><span class="fno">№5</span><p><b>Phase order</b> — which path above. <span class="rec">rec · Path A, then fold into C</span></p></div>
+    <span class="fh">The decision ledger</span>
+    <h3>Two decided, four still yours</h3>
+    <div class="fork"><span class="fno">№1</span><p><b>Video sourcing — <span style="color:var(--green)">decided 2026-07-27</span>.</b> Covers are pathos: liberal, licensed, credited, accent-graded. Verification never blesses a cover. <span class="rec" style="color:var(--green);border-color:color-mix(in srgb,var(--green) 45%,transparent)">✓ liberal covers · rigorous content</span></p></div>
+    <div class="fork"><span class="fno">№2</span><p><b>The pills — <span style="color:var(--green)">decided 2026-07-27</span>.</b> Retired on both devices; desktop gets the horizon, mobile gets the bar + sheet. <span class="rec" style="color:var(--green);border-color:color-mix(in srgb,var(--green) 45%,transparent)">✓ nav splits by device</span></p></div>
+    <div class="fork"><span class="fno">№3</span><p><b>The four bottom-bar destinations.</b> Proposed: Journey · Today · Map · Kit. Swap one for Trip Split? For Search? Four is the budget; naming them is yours.</p></div>
+    <div class="fork"><span class="fno">№4</span><p><b>The titles are content.</b> Korea&#39;s eleven re-titles above need your pen — approve, edit, or reject line by line; the <i>standard</i> ships either way. <span class="rec">rec · approve with edits</span></p></div>
+    <div class="fork"><span class="fno">№5</span><p><b>The faces.</b> Fraunces + Literata + Courier Prime is this study&#39;s proposal — the specimen sits at the top of the page. If it doesn&#39;t sing, the next round brings two alternates staged the same way.</p></div>
+    <div class="fork"><span class="fno">№6</span><p><b>Video weight + pin-less route-draw</b> — unchanged from Study Nº 1: masthead-first, and contours until real pins exist. <span class="rec">rec · both defaults</span></p></div>
   </div>
 </section>
 
 <footer class="wrap">
   <div class="rule"></div>
-  <p>Design study only — nothing ships until the forks are decided. Companion plan: <code>docs/PLAN_VISUAL_REDESIGN.md</code> on <code>claude/website-visual-redesign-upnl05</code>. Type, paper, and accents are Waypoint's shipped system; photos are the guides' own Commons covers, credited above. Motion here is CSS simulation of the proposed 6–10s ambient loops — and this page honors <code>prefers-reduced-motion</code>, as would the real thing.</p>
+  <p>Design study Nº 2 (Field Edition) — nothing ships until the open forks are decided. Companion plan: <code>docs/PLAN_VISUAL_REDESIGN.md</code> on <code>claude/website-visual-redesign-upnl05</code>. Paper and accents are Waypoint's shipped system; the type is this study's proposal, embedded from fontsource like the site's own faces; photos are the guides' Commons covers. Motion here is CSS simulation of the proposed ambient loops — and this page honors <code>prefers-reduced-motion</code>, as would the real thing.</p>
 </footer>
 
 <script>
