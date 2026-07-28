@@ -241,6 +241,7 @@ figure honestly gets none (the pin-less fallback is a blank, not a guess):
 Motion: one draw-in per figure on first view (~600 ms), then stillness — implemented with
 reveal.js's safety rail (markup renders COMPLETE; JS adds the pending state only when
 motion is welcome, and a timeout finishes every frame if the observer never delivers).
-Reduced-motion never sees an entrance. Descriptors ship alongside as the voice layer
-("labels literal, always; warmth in the descriptors") — creator-signed content, schema-
-guarded so a group rename errors instead of silently orphaning its line.
+Reduced-motion never sees an entrance. Descriptors ship alongside — creator-signed
+content, schema-guarded so a group rename errors instead of silently orphaning its line.
+(Voice standard revised 2026-07-28: rare + informational-only, block-types.md — the
+original "warmth in the descriptors" framing is superseded.)

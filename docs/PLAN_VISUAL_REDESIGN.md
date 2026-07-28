@@ -119,7 +119,11 @@ object, not a rewire. Desktop had no crowding problem; it changes clothes, not s
 rule: **the label you navigate by is literal, always**; the warmth lives in a small
 descriptor under each section head. Only label changes that GAIN information per glance
 survive: Itinerary→**Days**, Getting around→**Transit**, References→**Sources**. Korea's
-descriptor set is staged in the design study (Plate 03). Standard goes into the
+descriptor set is staged in the design study (Plate 03). **REVISED 2026-07-28 (creator):
+the "warmth" half is withdrawn — the shipped Korea set read as AI-written and was cut to
+three informational lines. Descriptors are now RARE + informational-only (flat facts
+where the label alone can't carry the meaning); the full ruling + banned patterns live
+in the guide-author skill's block-types.md voice standard.** Standard goes into the
 `waypoint-guide-author` skill; descriptors are content and get per-guide sign-off.
 
 **Type — the Quiet Edition (round-3 proposal; fork №5 restaged).** Round 2's
@@ -361,7 +365,8 @@ study's "Morning questions" section.)
    Trip Split? For Search? Four is the budget; the names are the creator's call.
 4. ~~**The re-titles.**~~ **DECIDED 2026-07-27 (creator):** labels literal always; warmth in
    descriptors only; Days/Transit/Sources are the surviving label upgrades. Descriptor text
-   still gets per-guide sign-off (it's content).
+   still gets per-guide sign-off (it's content). **REVISED 2026-07-28 (creator): the warmth
+   slot is withdrawn — descriptors are rare + informational-only (see Move D).**
 5. **The faces, round three.** Quiet Edition staged: Literata alone (display via optical
    sizes) + Source Sans 3. Awaiting the creator's eye on the three-generation specimen.
    *Rec: this one — one family can't clash with itself.*

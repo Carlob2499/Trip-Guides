@@ -143,18 +143,38 @@ conventions, render behavior, and the verification rules attached to a field.
 The label a traveler navigates by is LITERAL, always — one plain word that names the
 bucket at a glance: `Plan · Essentials · Transit · Days · Sights · Food · Sources`
 (plus trip-specific anchors like `Daejeon & MSI`). Never re-spend wayfinding on
-cleverness ("Pocket", "Receipts" were tried and withdrawn). The warmth lives ONE level
-down, in the section-head descriptor line — a short phrase under the heading where a
-wink is welcome ("every fact, traced and dated — the receipts"). Descriptors are
-content: proposed by the author, signed by the creator per guide.
+cleverness ("Pocket", "Receipts" were tried and withdrawn).
+
+**Descriptors are RARE and informational-only (creator's ruling, 2026-07-28 — this
+supersedes the original "warmth lives one level down" doctrine).** The first shipped
+set (Korea, eleven lines) was rejected by the creator as AI-sounding, and the autopsy
+is worth keeping: eight of eleven shared one machine rhythm — a short list, an em-dash
+pivot, a quip tail ("cash, data, etiquette — and 112/119 one tap away" · "every fact,
+traced and dated — the receipts") — and the quips praised the guide instead of
+informing the reader. The root cause was structural: a slot whose only job is
+personality produces fake personality, on schedule. So the slot's job changed:
+
+- **Write a descriptor ONLY where the literal label cannot carry the meaning** — in
+  practice, trip-specific groups a stranger wouldn't parse ("Daejeon & MSI" → "The MSI
+  weekend in Daejeon"). Standard groups (Plan, Transit, Days, Sights, Food, Sources,
+  Essentials) get NONE: without a descriptor the chapter opener derives its subtitle
+  from the group's real section titles — actual data, no invented copy, and already
+  the register real travel sites use.
+- **Flat statement of fact, in words a stranger would use.** The test: *would
+  Wikivoyage write this sentence?* Banned by name: the em-dash quip pivot, the
+  triplet-list-plus-tail rhythm, self-referential praise ("the receipts", "kept in
+  sync", "without friction"), and any line that would work as ad copy.
+- **If the derived subtitle already says it, write nothing.** An absent descriptor is
+  the honest-blank rule working, not a gap.
 
 **Mechanics (R5, shipped 2026-07-28):** descriptors live in `_guide.json` as a
 `descriptors` record keyed by EXACT group name — the schema rejects a key no section
 uses, so renaming a group without moving its descriptor fails the build instead of
-silently dropping the line. The hard rule when writing one: a descriptor may only
-assert what the guide actually contains (grep before you charm — "the rain plan" was
-cut from Korea's GO descriptor because no rain plan exists in that group; every other
-phrase was token-verified against the group files first).
+silently dropping the line. And a descriptor may only assert what the guide actually
+contains — grep the group file for every claim word BEFORE writing it. Two real
+catches prove the rule earns its keep: "the rain plan" was cut because no rain plan
+existed in that group, and a drafted "GO Fest Seoul" was corrected to the "GO Fest
+Global" the content actually names.
 
 ## Composer facets (R6, shipped 2026-07-28)
 

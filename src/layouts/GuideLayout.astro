@@ -671,8 +671,8 @@ const tripSummary = buildSummary(guide);
         </noscript>
         {order.map((g, ci) => {
           const solo = byG[g].length === 1;
-          // R5: a creator-signed voice descriptor wins the line under the title
-          // ("labels literal, always; warmth in the descriptors"); without one, the
+          // R5: a creator-signed descriptor wins the line under the title (rare,
+          // informational-only — voice standard rev. 2026-07-28); without one, the
           // chapter-opener falls back to the derived contents line — what's inside,
           // from the section titles already in the data (no invented copy).
           const descriptor = (guide as any).descriptors?.[g] ?? null;

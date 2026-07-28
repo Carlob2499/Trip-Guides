@@ -244,9 +244,12 @@ standard" · "Composer facets" · "Cover art"):
    folds; the scaffold seeded these on its shells, keep them honest as you rewrite), and
    `rank` on the intake's ranked priority themes — an untagged priority theme can be
    budget-merged away; a ranked one earns its anchor tab.
-2. **Descriptors** — the `descriptors` record in `_guide.json`: one short voice line per
-   major group. A descriptor may only assert what its group verifiably contains — grep
-   the group file for every claim word before writing it. Skip a group rather than pad.
+2. **Descriptors** — RARE and informational-only (creator's ruling; full rules + the
+   banned slop patterns: `block-types.md` voice standard). Write one ONLY where the
+   literal label can't carry the meaning (trip-specific groups like "Daejeon & MSI");
+   standard groups get NONE — the derived subtitle from real section titles is the
+   better line. Flat statement of fact a stranger would understand ("would Wikivoyage
+   write this?"); grep the group file for every claim word before writing it.
 3. **Cover** — if a signature Commons photo exists, set `cover` (file + credit + license
    + focal), filename validated via `search-commons.mjs`. The Painted Atlas is the honest
    default, not a failure: skip rather than force a mediocre or wrong-place photo.

@@ -20,7 +20,23 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (updated 2026-07-28, session close #14 — R1–R6 shipped + pipeline congruence: the factory now delivers the vision)
+## Snapshot (updated 2026-07-28, session close #15 — descriptor ruling + THE ARC IS ON MAIN; redesign branch deleted)
+
+**Session #15 (same day):** the creator rejected Korea's eleven descriptors as AI-sounding —
+and ruled. The autopsy (eight of eleven shared one list–em-dash–quip rhythm; the quips praised
+the guide instead of informing) is now doctrine: **descriptors are RARE + informational-only**
+— written only where the literal label can't carry the meaning, as flat facts a stranger would
+use ("would Wikivoyage write this?"), with the slop patterns banned by name in block-types.md's
+voice standard (the single home; SKILL.md duty #2 + the research-pass prompt point there).
+Korea kept three, rewritten flat: "The MSI weekend in Daejeon" · "GO Fest Global runs during
+the trip" · "One traveler's solo Tokyo weekend" (each token-verified — the grep rule caught a
+drafted "GO Fest Seoul" that the content calls GO Fest Global). The other eight groups fall
+back to the derived contents subtitle — real data, no invented copy. On the creator's explicit
+word, the whole Living Atlas branch (R1–R6 + pipeline congruence + this ruling) was then
+**merged to `main` and `claude/website-visual-redesign-upnl05` was deleted.** Watch the first
+main deploy + the Accessibility workflow (baselines re-record on CI per the #12 lesson).
+
+## Previous snapshot (2026-07-28, session close #14 — R1–R6 shipped + pipeline congruence: the factory now delivers the vision)
 
 **Session #14 (same day, after the arc):** the creator asked what to expand next and for the
 GENERATION flow to deliver the Living Atlas automatically. Audit found the R1–R6 surfaces all
@@ -262,7 +278,16 @@ showed it. The count check caught the symptom, the novelty check missed the caus
 contrast was then measured before any baseline moved (worst case 4.77:1 against 4.5:1 required),
 and the new numbers were deliberately failed at 43 before being trusted at 47. Fixed in `fc81804`.
 
-**Re-prompt the creator with (2026-07-28, session #14):** "The pipeline now delivers the Living
+**Re-prompt the creator with (2026-07-28, session #15):** "The Living Atlas is LIVE on main —
+R1–R6, the pipeline congruence, and your descriptor ruling, merged on your word; the redesign
+branch is deleted. Check the live site: Korea's chapter openers now carry three flat facts and
+otherwise the derived subtitles. Watch the Accessibility workflow's first main run — baselines
+re-record on CI there, and the #12 lesson says the first red may just be that re-record. Still
+standing: the `us` composition proposal (R6 ledger has the exact command), and rotating
+`CLAUDE_CODE_OAUTH_TOKEN` for the pipeline's first end-to-end proof — the cheapest full test
+of everything shipped today is one throwaway New Guide issue after that rotation."
+
+**Prior re-prompt (superseded, session #14):** "The pipeline now delivers the Living
 Atlas unattended: file a New Guide issue and the guide that auto-publishes arrives composed
 (tabs assembled inside the draft window — a wiring flaw that silently disabled this for new
 guides is fixed), descriptor-voiced, facet-tagged, covered (photo when a signature Commons shot

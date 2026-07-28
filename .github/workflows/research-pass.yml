@@ -260,11 +260,13 @@ jobs:
                  with real weight earns an anchor tab). The scaffold seeded `phase` on its
                  backbone shells; keep those honest as you rewrite, and rank the intake's actual
                  priorities — an untagged priority theme can be budget-merged away.
-              2. DESCRIPTORS — write the `descriptors` record in _guide.json: one short voice
-                 line per major group (the warmth lives here, labels stay literal). HARD RULE:
-                 a descriptor may only assert what its group verifiably contains — grep the
-                 group file for every claim word BEFORE writing it (the "rain plan" lesson).
-                 Skip a group rather than pad one; a missing line renders the derived label.
+              2. DESCRIPTORS — RARE and informational-only (creator's ruling; the banned slop
+                 patterns are named in block-types.md's voice standard). Write one ONLY where
+                 the literal label cannot carry the meaning — trip-specific groups a stranger
+                 wouldn't parse. Standard groups (Plan/Transit/Days/Sights/Food/Sources) get
+                 NONE: the derived subtitle from the group's real section titles is the better
+                 line. When you do write one: a flat statement of fact ("would Wikivoyage
+                 write this sentence?"), and grep the group file for every claim word FIRST.
               3. COVER — if a signature Commons photo of the destination exists, set `cover`
                  (file + credit + license + focal) — validate the filename via
                  search-commons.mjs, never from memory. The Painted Atlas is the honest
