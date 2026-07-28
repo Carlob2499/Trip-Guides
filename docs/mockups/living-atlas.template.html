@@ -427,6 +427,57 @@ h1 em{font-style:italic;color:var(--gold)}
 .cc-row p{margin:0;font-size:13px;color:var(--plate-ink);flex:1;min-width:220px}
 .cc-wait{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#8a6d1f;border:1px solid color-mix(in srgb,#8a6d1f 40%,transparent);border-radius:999px;padding:2px 8px;white-space:nowrap}
 
+/* ================= PLATE 10 — MOTION LANGUAGES ================= */
+.ml-grid{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:1000px){.ml-grid{grid-template-columns:repeat(3,1fr)}}
+.ml-card{border:1px solid var(--board-line);border-radius:16px;padding:18px 18px 16px;background:color-mix(in srgb,var(--board-2) 55%,transparent);display:flex;flex-direction:column;gap:12px}
+.ml-card.reco3{border-color:color-mix(in srgb,var(--gold) 55%,transparent)}
+.ml-t{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--board-ink);font-weight:600}
+.ml-t em{font-style:normal;color:var(--gold)}
+.ml-scene{border-radius:12px;overflow:hidden;border:1px solid var(--board-line);background:var(--plate-paper)}
+.ml-cover{position:relative;aspect-ratio:16/7;overflow:hidden}
+.ml-img{position:absolute;inset:-7%;background:url(@@KOREA@@) center 30%/cover;animation:kb 26s ease-in-out infinite alternate}
+.ml-haze{position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(230,255,200,.12) 50%,transparent 70%);mix-blend-mode:overlay;animation:drift 14s ease-in-out infinite alternate}
+.ml-scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,12,6,.1),rgba(10,12,6,.62))}
+.ml-cover b{position:absolute;left:12px;bottom:8px;font-family:var(--disp);font-weight:590;font-size:21px;color:#fff;font-variation-settings:'opsz' 72;text-shadow:0 1px 12px rgba(0,0,0,.5)}
+.ml-horizon{position:relative;height:34px;margin:0 12px}
+.ml-track{position:absolute;left:0;right:0;top:16px;height:2px;background:var(--plate-line)}
+.ml-fill{position:absolute;left:0;top:15px;height:4px;border-radius:4px;background:var(--korea);width:42%}
+.ml-fill::after{content:"";position:absolute;right:-3px;top:50%;transform:translateY(-50%);width:8px;height:8px;border-radius:50%;background:var(--korea)}
+.ml-st{position:absolute;top:13px;width:9px;height:9px;border-radius:50%;background:var(--plate-paper);border:2px solid var(--plate-muted)}
+.ml-st.on{border-color:var(--korea);background:var(--korea)}
+.ml-st.s1{left:4%}.ml-st.s2{left:26%}.ml-st.s3{left:47%}.ml-st.s4{left:69%}.ml-st.s5{left:91%}
+.ml-fig{padding:2px 12px 10px}
+.ml-fig svg{width:100%;height:auto}
+.ml-line{stroke:var(--korea);stroke-width:1.6;fill:none}
+.ml-d{fill:#fff;stroke:var(--korea);stroke-width:1.6}
+.ml-d.today{fill:var(--korea)}
+/* B — the journey breathes: fill creeps, tip glows, today pulses */
+.ml-b .ml-fill{animation:creep 16s ease-in-out infinite alternate}
+@keyframes creep{from{width:40%}to{width:47%}}
+.ml-b .ml-fill::after{animation:tipglow 3.2s ease-in-out infinite}
+@keyframes tipglow{0%,100%{box-shadow:0 0 0 0 rgba(100,107,46,.45)}50%{box-shadow:0 0 0 6px rgba(100,107,46,0)}}
+.ml-b .ml-d.today{transform-origin:center;transform-box:fill-box;animation:todaybreathe 3.2s ease-in-out infinite}
+@keyframes todaybreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.35)}}
+/* C — cinema: a looped 9s entrance scene */
+.ml-c .ml-cover b{animation:cinetitle 9s cubic-bezier(.2,.7,.2,1) infinite}
+@keyframes cinetitle{0%,4%{opacity:0;transform:translateY(14px)}12%,92%{opacity:1;transform:translateY(0)}100%{opacity:0}}
+.ml-c .ml-fill{animation:cinefill 9s cubic-bezier(.2,.7,.2,1) infinite}
+@keyframes cinefill{0%,14%{width:0}32%,92%{width:42%}100%{width:0}}
+.ml-c .ml-st{animation:cinest 9s ease infinite}
+.ml-c .ml-st.s2{animation-delay:.25s}.ml-c .ml-st.s3{animation-delay:.5s}.ml-c .ml-st.s4{animation-delay:.75s}.ml-c .ml-st.s5{animation-delay:1s}
+@keyframes cinest{0%,16%{opacity:0;transform:scale(.3)}26%,90%{opacity:1;transform:scale(1)}97%,100%{opacity:0}}
+.ml-c .ml-line{stroke-dasharray:200;animation:cineline 9s ease infinite}
+@keyframes cineline{0%,36%{stroke-dashoffset:200}56%,92%{stroke-dashoffset:0}100%{stroke-dashoffset:200}}
+.ml-c .ml-d{animation:cinedot 9s ease infinite}
+@keyframes cinedot{0%,50%{opacity:0}58%,92%{opacity:1}100%{opacity:0}}
+.ml-c .ml-d.today{transform-box:fill-box;animation:cinetravel 9s ease infinite}
+@keyframes cinetravel{0%,58%{opacity:0;transform:translateX(-40px)}64%{opacity:1}78%,92%{opacity:1;transform:translateX(0)}100%{opacity:0}}
+.ml-spec{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-family:var(--mono);font-size:10.5px;margin:0;border-top:1px solid var(--board-line);padding-top:10px}
+.ml-spec dt{color:var(--board-muted);text-transform:uppercase;letter-spacing:.08em}
+.ml-spec dd{margin:0;color:var(--board-ink)}
+.ml-card>p{margin:0;font-size:13px;line-height:1.5;color:var(--board-muted)}
+
 /* ================= MORNING QUESTIONS ================= */
 .mq{border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);border-radius:16px;padding:26px clamp(18px,3.5vw,34px);margin-top:44px;background:color-mix(in srgb,var(--board-2) 70%,transparent)}
 .mq h3{font-family:var(--disp);font-weight:600;font-size:24px;margin:0 0 4px;font-variation-settings:'opsz' 48}
@@ -475,6 +526,7 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
 @media (prefers-reduced-motion: reduce){
   .living .cover,.living .shimmer,.living .mast-shimmer,.hcard:hover .ph>div,.drift,.p-mist,.watch.inview .ap-img,.watch.inview .ring-fill{animation:none!important}
   .ring-fill{stroke-dashoffset:76!important}
+  .ml-scene *,.ml-scene *::after{animation:none!important}
   .inview .fig-draw{animation:none!important;stroke-dashoffset:0!important}
   .credit .live{animation:none}
   html{scroll-behavior:auto}
@@ -1047,6 +1099,51 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
   </div>
 </section>
 
+<!-- ================= PLATE 10 — MOTION LANGUAGES ================= -->
+<section class="plate wrap" id="p10ml">
+  <div class="plate-head"><span class="plate-no">PLATE <b>10</b></span><h2>The motion languages — pick the site's pulse</h2></div>
+  <p class="plate-sub">Motion is the key, so this is the one decision I won't guess for you. Three complete motion languages, <b>each playing live below</b> on the same miniature guide screen — cover, horizon, figure. Whichever you choose becomes MOTION.md's next chapter and every R-phase executes inside it. All three honor reduced-motion absolutely; they differ in how much of the page is allowed to breathe.</p>
+  <div class="ml-grid">
+    <div class="ml-card">
+      <span class="ml-t">A · Still waters</span>
+      <div class="ml-scene ml-a">
+        <div class="ml-cover"><div class="ml-img"></div><div class="ml-scrim"></div><b>South Korea</b></div>
+        <div class="ml-horizon"><i class="ml-track"></i><i class="ml-fill"></i>
+          <span class="ml-st s1"></span><span class="ml-st s2"></span><span class="ml-st s3 on"></span><span class="ml-st s4"></span><span class="ml-st s5"></span>
+        </div>
+        <div class="ml-fig"><svg viewBox="0 0 220 34"><path class="ml-line" d="M12,17 H208"/><circle class="ml-d" cx="12" cy="17" r="3.5"/><circle class="ml-d" cx="61" cy="17" r="3.5"/><circle class="ml-d today" cx="110" cy="17" r="5"/><circle class="ml-d" cx="159" cy="17" r="3.5"/><circle class="ml-d" cx="208" cy="17" r="3.5"/></svg></div>
+      </div>
+      <dl class="ml-spec"><dt>Energy</dt><dd>lowest — a held breath</dd><dt>Motion lives in</dt><dd>covers only; figures draw once</dd><dt>Risk</dt><dd>none — it's today's doctrine, polished</dd></dl>
+      <p>The current law at its purest: the place moves, the page holds still. Concentration is absolute; the covers carry all the pathos alone.</p>
+    </div>
+    <div class="ml-card reco3">
+      <span class="ml-t">B · The journey breathes <em>· recommended</em></span>
+      <div class="ml-scene ml-b">
+        <div class="ml-cover"><div class="ml-img"></div><div class="ml-haze"></div><div class="ml-scrim"></div><b>South Korea</b></div>
+        <div class="ml-horizon"><i class="ml-track"></i><i class="ml-fill"></i>
+          <span class="ml-st s1"></span><span class="ml-st s2"></span><span class="ml-st s3 on"></span><span class="ml-st s4"></span><span class="ml-st s5"></span>
+        </div>
+        <div class="ml-fig"><svg viewBox="0 0 220 34"><path class="ml-line" d="M12,17 H208"/><circle class="ml-d" cx="12" cy="17" r="3.5"/><circle class="ml-d" cx="61" cy="17" r="3.5"/><circle class="ml-d today" cx="110" cy="17" r="5"/><circle class="ml-d" cx="159" cy="17" r="3.5"/><circle class="ml-d" cx="208" cy="17" r="3.5"/></svg></div>
+      </div>
+      <dl class="ml-spec"><dt>Energy</dt><dd>quiet pulse — alive, never busy</dd><dt>Motion lives in</dt><dd>covers + the journey's own signs of life: the horizon's read-fill creeps, its tip glows, today's dot breathes</dd><dt>Risk</dt><dd>low — nothing moves between you and a tap</dd></dl>
+      <p>The middle way: the page has a heartbeat, but only on the objects that MEAN progress — the fill you've read, the day you're in. Chrome stays still; the journey doesn't.</p>
+    </div>
+    <div class="ml-card">
+      <span class="ml-t">C · Cinema</span>
+      <div class="ml-scene ml-c">
+        <div class="ml-cover"><div class="ml-img"></div><div class="ml-scrim"></div><b>South Korea</b></div>
+        <div class="ml-horizon"><i class="ml-track"></i><i class="ml-fill"></i>
+          <span class="ml-st s1"></span><span class="ml-st s2"></span><span class="ml-st s3 on"></span><span class="ml-st s4"></span><span class="ml-st s5"></span>
+        </div>
+        <div class="ml-fig"><svg viewBox="0 0 220 34"><path class="ml-line" d="M12,17 H208"/><circle class="ml-d" cx="12" cy="17" r="3.5"/><circle class="ml-d" cx="61" cy="17" r="3.5"/><circle class="ml-d today" cx="110" cy="17" r="5"/><circle class="ml-d" cx="159" cy="17" r="3.5"/><circle class="ml-d" cx="208" cy="17" r="3.5"/></svg></div>
+      </div>
+      <dl class="ml-spec"><dt>Energy</dt><dd>theatrical — every arrival is a scene</dd><dt>Motion lives in</dt><dd>everywhere on entry: title rises, horizon draws, stations land in sequence, the day-dot travels — then stillness until the next scene</dd><dt>Risk</dt><dd>real — choreography can outrank scrolling if even slightly overdone</dd></dl>
+      <p>The full overture on every arrival (here looped so you can study it; in production it plays once per view). Spectacular — and the hardest to keep under the law.</p>
+    </div>
+  </div>
+  <p class="voice-note"><b>My recommendation is B.</b> A is safe but spends your "motion is the key" mandate timidly; C is gorgeous but gambles the concentration you just asked me to protect. B gives the site a living pulse precisely where meaning lives — progress, today, the journey — and it layers cleanly ON TOP of the covers (any source from Plate 07) and the anchors (Plate 05·B). If B wins, MOTION.md gains the rule that makes it safe forever: <i>continuous motion is reserved for objects that encode live meaning; decoration gets one entrance, then stillness.</i></p>
+</section>
+
 <!-- ================= OPTIONS ================= -->
 <section class="plate wrap" id="options">
   <div class="plate-head"><span class="plate-no">THE WAY <b>FORWARD</b></span><h2>One programme, six moves</h2></div>
@@ -1061,34 +1158,31 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--board-ink)}
   </div>
   <div class="forks" style="margin-top:26px">
     <span class="fh">Built for unattended execution</span>
-    <h3>How Opus runs this without you in the room</h3>
+    <h3>How Fable runs this without you in the room</h3>
     <div class="fork"><span class="fno">⚙</span><p>Each R-phase is a self-contained session: <b>entry</b> = previous phase merged, gates green · <b>work</b> = the phase scope, nothing else · <b>exit</b> = the full ship loop (build, tests, a11y, perf budget, grep dist/) + commit + push + HANDOFF updated. A phase that can't pass its gates stops and reports — it never improvises past a red gate.</p></div>
     <div class="fork"><span class="fno">✋</span><p><b>Hard sign-off boundaries the machine may not cross:</b> descriptor/title text on live guides (content), any live-guide recomposition (proposal-only), publishing footage choices, and re-recording a11y baselines anywhere but CI. Everything else inside a phase's scope is pre-authorized by your morning answers below.</p></div>
-    <div class="fork"><span class="fno">▦</span><p>The execution spec lives in <b>docs/PLAN_VISUAL_REDESIGN.md</b> on the branch — phases, gates, boundaries, and a ready-to-paste prompt per phase. An Opus session needs only: the branch, the plan, and your answers.</p></div>
+    <div class="fork"><span class="fno">▦</span><p>The execution spec lives in <b>docs/PLAN_VISUAL_REDESIGN.md</b> on the branch — phases, gates, boundaries, and a ready-to-paste prompt per phase. A Fable session needs only: the branch, the plan, and your one remaining answer — Fable authored every study and the protocol, so nothing is lost in translation. (Opus remains the fallback executor if Fable is ever unavailable.)</p></div>
   </div>
   <div class="forks">
     <span class="fh">The decision ledger</span>
-    <h3>Six decided, three still yours</h3>
+    <h3>Nine decided, one still yours: the motion language</h3>
     <div class="fork"><span class="fno">№1</span><p><b>Video sourcing — <span style="color:var(--green)">decided 2026-07-27</span>.</b> Covers are pathos: liberal, licensed, credited, accent-graded. Verification never blesses a cover. <span class="rec" style="color:var(--green);border-color:color-mix(in srgb,var(--green) 45%,transparent)">✓ liberal covers · rigorous content</span></p></div>
     <div class="fork"><span class="fno">№2</span><p><b>The pills — <span style="color:var(--green)">decided 2026-07-27</span>.</b> Retired on both devices; desktop gets the horizon, mobile gets the bar + sheet. <span class="rec" style="color:var(--green);border-color:color-mix(in srgb,var(--green) 45%,transparent)">✓ nav splits by device</span></p></div>
-    <div class="fork"><span class="fno">№3</span><p><b>The four bottom-bar destinations.</b> Proposed: Journey · Today · Map · Kit. Swap one for Trip Split? For Search? Four is the budget; naming them is yours.</p></div>
+    <div class="fork"><span class="fno">№3</span><p><b>Bottom bar — <span style="color:var(--green)">decided 2026-07-28 (delegated)</span>.</b> Journey · Today · Map · Kit. Search lives at the top of the journey sheet; Trip Split lives inside Kit. <span class="rec" style="color:var(--green);border-color:color-mix(in srgb,var(--green) 45%,transparent)">✓ four honest destinations</span></p></div>
     <div class="fork"><span class="fno">№4</span><p><b>Titles — <span style="color:var(--green)">decided 2026-07-27</span>.</b> Labels literal, always; warmth demoted to the descriptors. Three label upgrades survive: Days, Transit, Sources. <span class="rec" style="color:var(--green);border-color:color-mix(in srgb,var(--green) 45%,transparent)">✓ information first</span></p></div>
-    <div class="fork"><span class="fno">№5</span><p><b>The faces, round three.</b> Quiet Edition: Literata alone (display via optical sizes) + Source Sans 3 for labels and numbers — subtraction instead of a new costume. The specimen at the top shows all three generations side by side. Your eye decides. <span class="rec">rec · this one — it can't clash with itself</span></p></div>
+    <div class="fork"><span class="fno">№5</span><p><b>The faces — <span style="color:var(--green)">decided 2026-07-28 (delegated)</span>.</b> The Quiet Edition ships: Literata alone via optical sizes + Source Sans 3. One family can't clash with itself; say the word any time and R1 restages alternates instead. <span class="rec" style="color:var(--green);border-color:color-mix(in srgb,var(--green) 45%,transparent)">✓ two voices, nothing performs</span></p></div>
     <div class="fork"><span class="fno">№6</span><p><b>Video weight + pin-less route-draw</b> — unchanged from Study Nº 1: masthead-first, and contours until real pins exist. <span class="rec">rec · both defaults</span></p></div>
     <div class="fork"><span class="fno">№8</span><p><b>Covers — <span style="color:var(--green)">decided 2026-07-27</span>.</b> Clean: image, title, scrim. Route lines off the photographs; geography lives in the sheet, the leg headers, the map. <span class="rec" style="color:var(--green);border-color:color-mix(in srgb,var(--green) 45%,transparent)">✓ nothing crawls on the photo</span></p></div>
     <div class="fork"><span class="fno">№9</span><p><b>Section anchors — <span style="color:var(--green)">decided 2026-07-27</span>.</b> Figure + photo: data-drawn figures automatic for every section and every guide; photo bands where curated. One draw-in per figure, then stillness. <span class="rec" style="color:var(--green);border-color:color-mix(in srgb,var(--green) 45%,transparent)">✓ both</span></p></div>
-    <div class="fork"><span class="fno">№7</span><p><b>The cover stack</b> (Plate 07). Painted Atlas as the automatic default for every guide, footage as a curated per-guide upgrade, own-footage after trips? And hosting: hot-link the libraries' CDNs, or self-host on the existing Cloudflare account? <span class="rec">rec · painted default + hot-link first</span></p></div>
+    <div class="fork"><span class="fno">№7</span><p><b>The cover stack — <span style="color:var(--green)">decided 2026-07-28 (delegated)</span>.</b> Painted Atlas automatic for every guide · real footage as the curated upgrade · hot-linked first, Cloudflare self-host as the fallback the moment hot-linking flakes. <span class="rec" style="color:var(--green);border-color:color-mix(in srgb,var(--green) 45%,transparent)">✓ living from birth</span></p></div>
   </div>
 
   <div class="mq" id="morning">
-    <span class="fh">Good morning — six answers unlock the build</span>
-    <h3>The morning questions</h3>
-    <div class="mq-item"><span class="fno">Q1</span><p><b>Does the Quiet Edition type sing?</b> Judge the three-generation specimen at the top of this page — Literata wearing display + body, Source Sans 3 on the numbers.<span class="opts"><b>a)</b> yes, lock it in (R1 builds it) &nbsp; <b>b)</b> close — adjust weight/size, tell me what feels off &nbsp; <b>c)</b> no — stage two fresh directions</span></p></div>
-    <div class="mq-item"><span class="fno">Q2</span><p><b>Korea's descriptor lines</b> (Plate 03, right column) — they're content, so they need your pen before R1 ships them.<span class="opts"><b>a)</b> approved as staged &nbsp; <b>b)</b> approved with edits (mark them up) &nbsp; <b>c)</b> I'll rewrite them myself</span></p></div>
-    <div class="mq-item"><span class="fno">Q3</span><p><b>The four bottom-bar destinations</b> for mobile (Plate 04).<span class="opts"><b>a)</b> Journey · Today · Map · Kit as proposed &nbsp; <b>b)</b> swap Kit → Trip Split &nbsp; <b>c)</b> swap Map → Search &nbsp; <b>d)</b> your own four</span></p></div>
-    <div class="mq-item"><span class="fno">Q4</span><p><b>The cover stack</b> (Plate 07): Painted Atlas automatic for every guide, real footage as a curated upgrade, hot-linked from the libraries' CDNs first.<span class="opts"><b>a)</b> confirm all three &nbsp; <b>b)</b> painted default but self-host footage on Cloudflare &nbsp; <b>c)</b> footage-first, painted only as fallback</span></p></div>
-    <div class="mq-item"><span class="fno">Q5</span><p><b>The Composer's authority</b> (Plate 09): may it auto-apply tab plans to DRAFTS before graduation, with live guides always proposal-only?<span class="opts"><b>a)</b> yes — drafts auto, live proposal-only (rec) &nbsp; <b>b)</b> proposals everywhere, even drafts &nbsp; <b>c)</b> also let it auto-apply to live guides with a changelog</span></p></div>
-    <div class="mq-item"><span class="fno">Q6</span><p><b>How far may Opus run unattended?</b> Phases gate themselves and stop on red either way.<span class="opts"><b>a)</b> R1 only, then report &nbsp; <b>b)</b> R1 → R3 (type, mobile, desktop nav), then report &nbsp; <b>c)</b> the full arc R1 → R6, reporting per phase</span></p></div>
+    <span class="fh">Good morning — one answer starts the build</span>
+    <h3>The last question, and what I decided while you slept</h3>
+    <div class="mq-item"><span class="fno">Q</span><p><b>Which motion language?</b> Plate 10, playing live above — the site's pulse, and the one aesthetic call I won't make twice-burned.<span class="opts"><b>A)</b> Still waters — covers only, absolute calm &nbsp; <b>B)</b> The journey breathes — meaning-bearing objects get a heartbeat <b>(my recommendation)</b> &nbsp; <b>C)</b> Cinema — a full entrance scene per view</span></p></div>
+    <div class="mq-item"><span class="fno">✓</span><p><b>Delegated and decided (2026-07-28), each reversible on your word:</b><span class="opts"><b>Type</b> — Quiet Edition locked: Literata (optical sizes) + Source Sans 3 &nbsp;·&nbsp; <b>Descriptors</b> — staged set ships as working copy; your edits welcome any time before graduation &nbsp;·&nbsp; <b>Bottom bar</b> — Journey · Today · Map · Kit (Search in the sheet, Trip Split in Kit) &nbsp;·&nbsp; <b>Cover stack</b> — Painted Atlas default, footage upgrades, hot-link first &nbsp;·&nbsp; <b>Composer</b> — drafts auto, live proposal-only &nbsp;·&nbsp; <b>Range</b> — full arc R1→R6 on Fable, one report per phase, every phase gated</span></p></div>
+    <div class="mq-item"><span class="fno">▶</span><p><b>So the morning message is one letter.</b> Reply "A", "B", or "C" — the R1 session starts inside that language the same day.</p></div>
   </div>
 </section>
 

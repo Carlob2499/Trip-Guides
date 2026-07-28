@@ -273,8 +273,32 @@ unanswered.
 - R5: "Execute R5: section anchors + interior atlas per the plan."
 - R6: "Execute R6: the Composer per Move F. Authority: [Q5]."
 
-Model routing: R1–R6 are Opus design/build sessions; composer unit-tagging rides the
-existing (Sonnet) research pass.
+Model routing (revised 2026-07-28, creator's ask): **R1–R6 execute on Fable
+(`claude-fable-5`)** — the model that authored every study and this protocol. Opus is the
+fallback executor if Fable is unavailable; composer unit-tagging rides the existing
+(Sonnet) research pass. HANDOFF's model-economy note should be updated when R1 lands.
+
+## Delegated decisions (2026-07-28 — creator: "you determine the best outcome")
+
+All reversible on the creator's word, recorded so no session re-litigates them:
+type = Quiet Edition locked · descriptors = staged set ships as working copy (creator may
+edit before graduation) · bottom bar = Journey · Today · Map · Kit (Search in the sheet,
+Trip Split inside Kit) · cover stack = Painted Atlas default + footage upgrades +
+hot-link-first · Composer authority = drafts auto, live proposal-only · unattended range =
+full arc R1→R6, one report per phase.
+
+## The last fork — the motion language (creator's choice, staged as live mock-ups, Plate 10)
+
+Motion is the creator's stated key, and taste forks have been missed twice — so this one is
+theirs, from three complete languages demoed live: **A · Still waters** (motion in covers
+only; figures draw once; today's doctrine polished) · **B · The journey breathes**
+(RECOMMENDED — continuous motion reserved for objects that encode live meaning: the
+read-fill creeps, its tip glows, today's dot breathes; chrome still) · **C · Cinema** (a
+full entrance scene per view — title rise, horizon draw, stations landing, day-dot travel —
+then stillness; highest risk to the visuals-never-outrank-scrolling law). The winning
+language becomes a MOTION.md chapter and parameterizes every R-phase. If B: add the rule
+"continuous motion only on meaning-bearing objects; decoration gets one entrance, then
+stillness."
 
 ## The morning questions (2026-07-27 — the six answers that unlock unattended execution)
 
