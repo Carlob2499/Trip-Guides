@@ -90,9 +90,12 @@ type Baseline = { max: number; why: string };
 const PSEUDO_CONTENT_WHY =
   "Real, sizeable ancestor pseudo-elements axe's ancestor+size heuristic flags conservatively " +
   "without testing real geometric overlap: ol.steps li::before (a real ~23px numbered-step badge, " +
-  "positioned in the li's left gutter, not over the flagged inline text) and .overture::after (the " +
-  "hub hero's 22vh gradient fade at the very bottom). Verified live: the flagged <b>/checklist/link " +
-  "text and .overture's wordmark/eyebrow/etc. do not sit inside either pseudo's actual painted area.";
+  "positioned in the li's left gutter, not over the flagged inline text), .overture::after (the " +
+  "hub hero's 22vh gradient fade at the very bottom), and — desktop only, since R3's horizon — " +
+  ".gtab:not(.gtab-tool)::after, the 11px journey-line station dot centred in each tab's bottom " +
+  "padding band (bottom:9px), below the label's text box. Verified live: the flagged " +
+  "<b>/checklist/link text, .overture's wordmark, and the tab labels do not sit inside any of " +
+  "these pseudos' actual painted areas.";
 const bgOverlapWhy = (fixedCaptionBugs: string) =>
   `Two real bugs already found and fixed here this way: ${fixedCaptionBugs}. What remains is (a) ` +
   ".cat-num, a decorative aria-hidden watermark numeral behind a heading — by design, not a gap, " +
@@ -113,10 +116,12 @@ const SHORT_TEXT_CONTENT_WHY =
   "itinerary separator, single-digit stat counters). Verified via the same --muted/--ink tokens " +
   "already proven safe on their real surfaces elsewhere in this repo's own token tests.";
 const NON_BMP_WHY =
-  "Decorative aria-hidden glyphs (arrows, chevrons, the pencil icon) plus two real dismiss buttons " +
-  "(.cold-open-x, .nav-hint-x) that are already named via aria-label, so a screen reader is " +
-  "unaffected regardless of this rule. Verified live: both real buttons use var(--muted) on " +
-  "var(--card)/transparent, the same pair already proven >=4.5:1 on every surface it paints.";
+  "Decorative aria-hidden glyphs (arrows, chevrons — including R5's .day-leg-arrow '→', which " +
+  "uses var(--accent-ink), the >=4.5:1-by-construction token, one per day card with a computed " +
+  "leg) plus two real dismiss buttons (.cold-open-x, .nav-hint-x) that are already named via " +
+  "aria-label, so a screen reader is unaffected regardless of this rule. Verified live: both real " +
+  "buttons use var(--muted) on var(--card)/transparent, the same pair already proven >=4.5:1 on " +
+  "every surface it paints.";
 const IMG_NODE_WHY =
   ".hubcard-featured-tag sits over a photo. Computed its own worst case by hand: a 72%-opacity " +
   "near-black pill is dark enough to clear 4.5:1 against a pure-white photo pixel (5.47:1), so it " +
@@ -127,6 +132,28 @@ const ELM_PARTIALLY_OBSCURED_WHY =
   "load-bearing rule preventing an accidental horizontal scrollbar elsewhere on the page), not by " +
   "anything specific to this element. Verified by scrolling it into view and measuring its real " +
   "computed contrast once visible: 5.90:1, comfortably passing.";
+const JLINE_CLIPPED_WHY =
+  "R5's Days journey-line timeline lives in .anch-scroll{overflow-x:auto} at mobile widths (a " +
+  "real, load-bearing rule — the figure is wider than a 375px column and must pan, not squash; " +
+  "desktop sets overflow:visible and reports zero nodes of this key). Stops at the panned-out " +
+  "edge are genuinely part-clipped at scan time, so axe declines to rate them — the same " +
+  "clipped-by-a-real-overflow mechanism as the korea tool-tab entry above. The text itself uses " +
+  "only the proven tokens: .jl-word var(--ink), .jl-date var(--muted), .jl-now var(--accent-ink) " +
+  "— each already >=4.5:1 on this surface everywhere else it paints.";
+const MAST_BG_GRADIENT_WHY =
+  "The masthead h1 gained a CSS gradient in its background chain when R4 layered the living cover " +
+  "(Painted Atlas sky + .pa-shade scrim — byte-identical to the photo scrim — under every hero); " +
+  "axe declines to resolve text over any gradient. Measured the real composited contrast instead " +
+  "(pixel-sampled the h1's box with its ink hidden; worst pixel vs the text colour): the worst " +
+  "case in the whole surface family is the Painted Atlas's LIGHTEST sky, daytime — 4.64:1 " +
+  "(denmark, identical in both schemes) against the 3:1 required at 76.8px/620; korea's variants " +
+  "measure >=15:1. The scrim pins the h1's zone dark by design on every variant, photo or painted.";
+const MAST_DEK_OBSCURING_WHY =
+  "The masthead .dek sits above R4's stacked media layers (photo/video/Painted Atlas), and axe's " +
+  "elmPartiallyObscuring is its conservative 'an overlapping sibling might change the background' " +
+  "case — the same stacking-order reimplementation family as bgOverlap above. Measured the real " +
+  "composited worst case the same pixel-sampled way: 5.91:1 (denmark, daytime sky, both schemes) " +
+  "against the 4.5:1 required at 17.92px/400; korea measures >=14:1.";
 const FRAME_TESTED_WHY =
   "axe-core hardcodes `isViolation:false` for this check (confirmed in the installed package's own " +
   "source) — it can never resolve pass/fail for a cross-origin OpenStreetMap iframe it has no way to " +
@@ -174,10 +201,20 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
           ".media-ok/.media-fail split) and the masthead's broken-cover-photo fallback (masthead.css)",
       ),
     },
-    "color-contrast/pseudoContent": { max: 28, why: PSEUDO_CONTENT_WHY },
+    // 28 -> 32: R3's station dot puts every one of korea's 11 non-tool tabs into this key at
+    // desktop (#gtab-0..10 counted in the observed list) while 7 old prose-reflow nodes left;
+    // net +4, identified node-by-node, not absorbed as jitter. Mobile renders 20 (no station
+    // pseudo below the horizon breakpoint), so desktop is the ceiling.
+    "color-contrast/pseudoContent": { max: 32, why: PSEUDO_CONTENT_WHY },
     "color-contrast/shortTextContent": { max: 16, why: SHORT_TEXT_CONTENT_WHY },
-    "color-contrast/nonBmp": { max: 15, why: NON_BMP_WHY },
+    // 15 -> 19: R5's .day-leg-arrow '→' on each of korea's 8 day cards, minus 4 glyphs the arc
+    // converted to real SVG (Icon.astro). Counted: 19 on desktop AND mobile.
+    "color-contrast/nonBmp": { max: 19, why: NON_BMP_WHY },
     "color-contrast/elmPartiallyObscured": { max: 1, why: ELM_PARTIALLY_OBSCURED_WHY },
+    // 1 = the masthead h1 / the masthead .dek, counted per page on both schemes (desktop; mobile
+    // renders the same masthead so the same max covers it).
+    "color-contrast/bgGradient": { max: 1, why: MAST_BG_GRADIENT_WHY },
+    "color-contrast/elmPartiallyObscuring": { max: 1, why: MAST_DEK_OBSCURING_WHY },
     "frame-tested/default": { max: 3, why: FRAME_TESTED_WHY },
   },
   "denmark guide": {
@@ -191,9 +228,20 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
           ".media-ok/.media-fail split) and the masthead's broken-cover-photo fallback (masthead.css)",
       ),
     },
-    "color-contrast/pseudoContent": { max: 19, why: PSEUDO_CONTENT_WHY },
+    // 19 -> 26: the same R3 station-dot mechanism as korea — denmark's 8 non-tool tabs
+    // (#gtab-0..7 counted in the observed list) minus one departed prose node; desktop only.
+    "color-contrast/pseudoContent": { max: 26, why: PSEUDO_CONTENT_WHY },
     "color-contrast/shortTextContent": { max: 18, why: SHORT_TEXT_CONTENT_WHY },
-    "color-contrast/nonBmp": { max: 12, why: NON_BMP_WHY },
+    // 12 -> 10: SHRUNK (the rule these maxes live by) — the arc converted glyphs to real SVG;
+    // denmark's 2 day-leg arrows arrive but more left. Counted: 10 desktop.
+    "color-contrast/nonBmp": { max: 10, why: NON_BMP_WHY },
+    // Same two masthead nodes as korea's entries above — denmark is the measured worst case
+    // (Painted Atlas daytime sky: h1 4.64:1 vs 3:1 needed; .dek 5.91:1 vs 4.5:1 needed).
+    "color-contrast/bgGradient": { max: 1, why: MAST_BG_GRADIENT_WHY },
+    "color-contrast/elmPartiallyObscuring": { max: 1, why: MAST_DEK_OBSCURING_WHY },
+    // 4 = the timeline stops clipped at the .anch-scroll edge, mobile only (counted: 2 .jl-date +
+    // .jl-word/.jl-date of the Tue stop at 375px; desktop renders 0 of this key).
+    "color-contrast/elmPartiallyObscured": { max: 4, why: JLINE_CLIPPED_WHY },
     "frame-tested/default": { max: 1, why: FRAME_TESTED_WHY },
   },
 };

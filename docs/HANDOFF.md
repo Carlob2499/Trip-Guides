@@ -33,8 +33,20 @@ the trip" · "One traveler's solo Tokyo weekend" (each token-verified — the gr
 drafted "GO Fest Seoul" that the content calls GO Fest Global). The other eight groups fall
 back to the derived contents subtitle — real data, no invented copy. On the creator's explicit
 word, the whole Living Atlas branch (R1–R6 + pipeline congruence + this ruling) was then
-**merged to `main` and `claude/website-visual-redesign-upnl05` was deleted.** Watch the first
-main deploy + the Accessibility workflow (baselines re-record on CI per the #12 lesson).
+**merged to `main` and `claude/website-visual-redesign-upnl05` was deleted** (locally; the remote
+copy needs one UI click — the environment's git proxy 403s deletion pushes). First main deploy:
+green, live site verified serving the new content. The Accessibility gate then went red exactly
+as the #12 lesson predicted — and the autopsy earned its keep TWICE: (1) a REAL bug — R1's
+weight change (800→640) silently re-graded mobile `.day-num` from axe-bold-large (3:1) to small
+text (4.5:1), which the 80% mix can't meet; fixed with full `--accent-ink` at ≤520px, planner.css
+comment rewritten to the new grading truth. (2) Four incomplete-key changes, each identified
+node-by-node and MEASURED before baselining (pixel-sampled composited contrast, per fc81804's
+precedent): masthead h1-over-gradient + .dek-over-media (worst case = Painted Atlas daytime sky,
+4.64:1 vs 3:1 and 5.91:1 vs 4.5:1 — the scrim doing its job), R3's station-dot pseudo on every
+tab, R5's day-leg arrows, and denmark's mobile-clipped timeline stops. Denmark's nonBmp max
+SHRANK 12→10 and was recorded down. Note for future arcs: the spec's assertions abort in order
+(violations → novelty → grown), so CI's first red only showed the novelty layer — the grown
+failures beneath surfaced only after the first fix. All 14 combos green locally; pushed to main.
 
 ## Previous snapshot (2026-07-28, session close #14 — R1–R6 shipped + pipeline congruence: the factory now delivers the vision)
 

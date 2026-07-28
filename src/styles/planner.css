@@ -82,10 +82,15 @@
    text beside it stays full --accent-ink, so the hierarchy — numeral recedes behind the date —
    survives; what changes is that the numeral is muted rather than sub-legible. */
 .day-num{display:block;font-family:var(--font-display);font-weight:640;font-size:2rem;line-height:.95;letter-spacing:-.012em;color:color-mix(in srgb,var(--accent-ink) 80%,var(--bg2));margin:0 0 .3rem}
-/* 1.2rem is load-bearing, not taste: 19.2px bold = 14.4pt, just above axe's bold-large cutoff
-   (14pt = 18.667px). Below ~1.17rem the numeral re-grades as SMALL text, the bar jumps 3:1 -> 4.5:1,
-   and the mix above (3.6-4.4:1 at desktop size) can start failing at mobile widths only. */
-@media(max-width:520px){.day-num{display:inline-block;font-size:1.2rem;margin:0 .45rem 0 0;vertical-align:-2px}}
+/* CONTRAST GRADING CHANGED with the Quiet Edition's weight (800 -> 640): axe counts bold only at
+   >=700, so the bold-large cutoff (18.667px) no longer applies to this numeral anywhere. Desktop
+   2rem = 32px clears the NON-bold large-text line (24px) and keeps the 3:1 bar, so the recessive
+   80% mix above (~3.14:1 worst case) still passes there. Mobile 1.2rem = 19.2px is now SMALL text
+   (4.5:1 bar) — which the 80% mix cannot meet — so mobile takes full --accent-ink, whose >=4.5:1
+   contract is by construction. Hierarchy at mobile survives via family/size; the numeral only
+   recedes by mix on desktop. (This exact failure shipped once: the R1 weight change re-graded the
+   numeral and the a11y gate caught it on main — do not re-introduce a mix here at small size.) */
+@media(max-width:520px){.day-num{display:inline-block;font-size:1.2rem;margin:0 .45rem 0 0;vertical-align:-2px;color:var(--accent-ink)}}
 
 /* ── Numbered stop list (waypoints) — the on-the-go itinerary ladder ──────── */
 .stops{list-style:none;margin:.55rem 0 .35rem;padding:0;border-left:2px solid color-mix(in srgb,var(--accent) 45%,var(--rule));display:flex;flex-direction:column}

@@ -86,9 +86,11 @@
      FIVE sites are left hardcoded ON PURPOSE and must stay that way — each because its size is
      load-bearing for something OTHER than the type role:
        · two collapsible-card summary::before rules — font-size there sizes content:"▶", a glyph.
-       · .day-num, desktop AND mobile — planner.css documents it as contrast-gated at axe's
-         bold-large-text cutoff; its mobile 1.2rem is only 4.3% from --text-lead, so a looser
-         tolerance would have crossed the threshold and silently changed the contrast bar.
+       · .day-num, desktop AND mobile — planner.css documents its contrast grading: at the
+         Quiet Edition's weight 640 (axe counts bold only at >=700), desktop 2rem rides the
+         NON-bold large-text line (24px) and mobile 1.2rem is small text taking full
+         --accent-ink; its mobile size is only 4.3% from --text-lead, so a looser tolerance
+         would have crossed a grading threshold and silently changed the contrast bar.
        · .sos-num — the emergency phone number. Snapping its 1.7rem down to --text-h3 would
          trade real legibility for tidiness on the one number someone reads in an emergency. */
   --text-nano:.6rem;        /* fine print BELOW the label scale: photo/data credits (.mast-credit,
