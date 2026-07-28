@@ -1,0 +1,83 @@
+/* === THE PAINTED ATLAS ======================================================
+   The living cover every guide is born with (PLAN_VISUAL_REDESIGN.md Move A½ №4;
+   component: src/components/PaintedAtlas.astro). Terrain seeded from the guide's
+   slug, painted from the guide's own --accent (set on the guide <html> and on
+   each hub card alike), under a sky keyed to the destination's local clock.
+
+   Motion doctrine (docs/MOTION.md — "the overture, then the heartbeat"): the
+   drift is CONTINUOUS but it is not decoration — the scene shows the
+   destination's sky *right now* (same live fact as the local-time pill), so it
+   qualifies as a meaning-bearing object. It is also the slowest motion on the
+   site (26–46 s cycles): weather, not animation. Reduced-motion renders the
+   identical scene as a finished still frame — no JS involved, pure CSS gate.
+
+   Sky moods are set per-instance via data-sky (day at build; the component's
+   inline script re-keys to the destination hour before first paint):
+     night 21–05 · dawn 05–08 · day 08–17 · dusk 17–21 (destination local time).
+   This is a painter's sky, not astronomy — no sunrise tables, no invented
+   facts, just the hour the masthead already computes. */
+
+.paint-atlas{position:absolute;inset:0;overflow:hidden;z-index:-3}
+.pa-sky{position:absolute;inset:0;background:linear-gradient(180deg,var(--pa-sky1),var(--pa-sky2))}
+.pa-terrain{position:absolute;left:0;bottom:0;width:100%;height:74%}
+.pa-terrain [data-pa-layer="0"]{fill:color-mix(in srgb,var(--accent) 34%,var(--pa-sky1))}
+.pa-terrain [data-pa-layer="1"]{fill:color-mix(in srgb,var(--accent) 52%,var(--pa-ground))}
+.pa-terrain [data-pa-layer="2"]{fill:color-mix(in srgb,var(--accent) 22%,var(--pa-ground))}
+
+/* Mood palettes — fixed painterly bases, each pulled ~12–16% toward the guide's
+   accent so Korea's night and Sedona's night are siblings, not clones. */
+.paint-atlas[data-sky="day"]{
+  --pa-sky1:color-mix(in srgb,#96b4cb 86%,var(--accent));
+  --pa-sky2:color-mix(in srgb,#e9dfc5 84%,var(--accent));
+  --pa-ground:#23261a}
+.paint-atlas[data-sky="night"]{
+  --pa-sky1:color-mix(in srgb,#0c1420 88%,var(--accent));
+  --pa-sky2:color-mix(in srgb,#22302a 84%,var(--accent));
+  --pa-ground:#0a0e0b}
+.paint-atlas[data-sky="dawn"]{
+  --pa-sky1:color-mix(in srgb,#342640 86%,var(--accent));
+  --pa-sky2:color-mix(in srgb,#eec489 86%,var(--accent));
+  --pa-ground:#241a14}
+.paint-atlas[data-sky="dusk"]{
+  --pa-sky1:color-mix(in srgb,#2c2331 86%,var(--accent));
+  --pa-sky2:color-mix(in srgb,#d8935c 84%,var(--accent));
+  --pa-ground:#1e1512}
+
+/* The orb — sun by day, moon by night, a low warm disc at the edges of the day.
+   Positioned in the sky band (terrain tops out at 30% height). */
+.pa-orb{position:absolute;top:16%;right:13%;width:clamp(24px,3.4vw,42px);aspect-ratio:1;border-radius:50%;
+  background:#f6ebc8;box-shadow:0 0 34px 10px rgba(246,235,200,.45)}
+.paint-atlas[data-sky="night"] .pa-orb{background:#e8ecf2;box-shadow:0 0 26px 7px rgba(232,236,242,.30)}
+.paint-atlas[data-sky="dawn"] .pa-orb,
+.paint-atlas[data-sky="dusk"] .pa-orb{top:34%;background:#f4c88a;box-shadow:0 0 44px 16px rgba(244,200,138,.5)}
+
+/* A slow band of brightness across the lower scene — mist, not a spotlight. */
+.pa-mist{position:absolute;inset:auto 0 0 0;height:46%;pointer-events:none;
+  background:linear-gradient(105deg,transparent 22%,rgba(255,255,255,.09) 46%,transparent 72%);
+  mix-blend-mode:overlay}
+
+/* Legibility shade for text laid over the scene (masthead title/dek/eyebrow) —
+   byte-identical to .mast-photo's scrim gradient, so the contrast math measured
+   for photo heroes holds here without re-derivation. Hub minis skip it (the
+   card's own .hubcard-cover-grad owns that job there). */
+.pa-shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(12,15,18,.86) 0%,rgba(12,15,18,.42) 48%,rgba(12,15,18,.10) 100%)}
+
+/* The heartbeat: terrain layers drift at three speeds, mist crosses slower than
+   any of them. Transform/opacity only (compositor-friendly); the ±9px travel is
+   covered by the ridges' ±6% viewBox overshoot (src/lib/terrain.ts). */
+@media(prefers-reduced-motion:no-preference){
+  .pa-terrain [data-pa-layer="0"]{animation:paDrift 46s ease-in-out infinite alternate}
+  .pa-terrain [data-pa-layer="1"]{animation:paDrift 34s ease-in-out infinite alternate-reverse}
+  .pa-terrain [data-pa-layer="2"]{animation:paDrift 26s ease-in-out infinite alternate}
+  .pa-mist{animation:paMist 22s ease-in-out infinite alternate}
+}
+@keyframes paDrift{from{transform:translateX(-9px)}to{transform:translateX(9px)}}
+@keyframes paMist{from{transform:translateX(-6%);opacity:.75}to{transform:translateX(6%);opacity:1}}
+
+/* Hub-card mini: same scene at card scale. Positioned (z:0) so it paints above
+   the card background but below the DOM-later grad + the (position:relative)
+   initial letter. */
+.paint-atlas--mini{border-radius:inherit;z-index:0}
+.paint-atlas--mini .pa-orb{width:16px;box-shadow:0 0 18px 6px rgba(246,235,200,.4)}
+
+@media print{.paint-atlas{display:none}}

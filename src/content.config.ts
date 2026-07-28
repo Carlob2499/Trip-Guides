@@ -353,16 +353,54 @@ const guides = defineCollection({
         });
       }
     }).optional(),
-    // Optional per-trip COVER art (docs/MOTION.md) — the shared element that morphs from the
-    // hub card into the guide masthead. A Wikimedia Commons `File:` name (verifiable licensing, same
-    // as sights[].img). When absent, the hub card + masthead fall back to the guide's first sight
-    // photo, so no existing guide regresses. `focal` is an optional CSS object-position (e.g.
-    // "50% 30%") to keep the subject framed across the card ↔ hero size change.
+    // Optional per-trip COVER art (docs/MOTION.md; widened in R4, docs/PLAN_VISUAL_REDESIGN.md
+    // Move A½) — the shared element that morphs from the hub card into the guide masthead.
+    // The cover is the PATHOS register (creator-decided 2026-07-27): liberal in sourcing, but
+    // ALWAYS licensed and credited, and never carrying or implying a verification flag.
+    //   · `file` — a Wikimedia Commons `File:` name (verifiable licensing, same as sights[].img;
+    //     Commons IS the credit, so the chip links the File page automatically).
+    //   · `src`  — R4: a direct https URL into a royalty-free library's CDN (Pexels, Unsplash,
+    //     Pixabay …), widening the cover horizon beyond Commons. An optional `{w}` token marks
+    //     where a width goes (those CDNs all take one), giving the masthead its responsive
+    //     srcset; without the token the URL ships as-is, one size. Non-Commons licensing is not
+    //     machine-verifiable, so `credit` + `license` become REQUIRED with `src` (zod-enforced
+    //     below) — the honesty apparatus travels with the widened horizon.
+    //     (scripts/extract-palette.mjs currently reads `file` only; a `src`-only guide keeps
+    //     palette extraction from its first sight photo.)
+    //   · `video` — R4: the living-cover upgrade (masthead only; poster-first, lazily attached,
+    //     gated on reduced-motion/Save-Data/in-view by src/scripts/living-cover.js, visible
+    //     pause). Hot-linked from the library's CDN (~4 MB ceiling by curation — nothing heavy
+    //     enters the repo); `credit` + `license` required always, `poster` optional because the
+    //     photo cover is the natural poster. Footage is an upgrade over the Painted Atlas
+    //     default, never a requirement.
+    // When the whole object is absent, hub card + masthead fall back to the guide's first sight
+    // photo, then to the Painted Atlas — no guide regresses. `focal` is an optional CSS
+    // object-position (e.g. "50% 30%") to keep the subject framed across the card ↔ hero size change.
     cover: z.object({
-      file: z.string(),
+      file: z.string().optional(),
+      src: z.string().regex(/^https:\/\//, "cover.src must be an https URL").optional(),
       alt: z.string().optional(),
       credit: z.string().optional(),
+      creditUrl: z.string().regex(/^https:\/\//, "cover.creditUrl must be an https URL").optional(),
+      license: z.string().optional(),
       focal: z.string().optional(),
+      video: z.object({
+        src: z.string().regex(/^https:\/\//, "cover.video.src must be an https URL"),
+        poster: z.string().regex(/^https:\/\//, "cover.video.poster must be an https URL").optional(),
+        credit: z.string().min(1),
+        creditUrl: z.string().regex(/^https:\/\//, "cover.video.creditUrl must be an https URL").optional(),
+        license: z.string().min(1),
+      }).optional(),
+    }).superRefine((c, ctx) => {
+      if (!c.file && !c.src && !c.video) {
+        ctx.addIssue({ code: "custom", message: "cover needs at least one of `file` (Commons), `src` (royalty-free CDN), or `video` — an empty cover object is a mistake, not a fallback." });
+      }
+      if (c.file && c.src) {
+        ctx.addIssue({ code: "custom", path: ["src"], message: "cover.file and cover.src are two still sources for one slot — pick one (Commons `file` wins ties in consumers, so a stray `src` would silently do nothing)." });
+      }
+      if (c.src && (!c.credit || !c.license)) {
+        ctx.addIssue({ code: "custom", path: ["src"], message: "a non-Commons cover.src has no machine-verifiable licensing — `credit` and `license` are required alongside it (e.g. credit: \"Jane Doe · Pexels\", license: \"Pexels License\")." });
+      }
     }).optional(),
     // Optional situational phrase cards (docs/FEATURES.md #6) — a guide-level field, NOT a
     // section type: it's consumed by exactly one surface (the Trip kit tool tab), so it

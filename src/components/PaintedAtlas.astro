@@ -1,0 +1,75 @@
+---
+// The Painted Atlas — the living cover every guide is born with (docs/PLAN_VISUAL_REDESIGN.md,
+// Move A½ №4; docs/MOTION.md cover rules). CSS/SVG terrain seeded from the guide's own slug,
+// painted in the guide's own accent, under a sky keyed to the DESTINATION'S local clock.
+// Zero assets, zero sourcing, automatic for every current and future guide — footage, when a
+// guide earns it, is an upgrade layered on top, never a requirement.
+//
+// The sky is live meaning, not decoration: it shows the destination's time of day right now
+// (the same fact the masthead's local-time pill states in numbers), which is what licenses its
+// slow continuous drift under the motion doctrine — reduced-motion gets the same scene as a
+// finished still frame (CSS-gated; nothing here to short-circuit in JS).
+//
+// Rendered "day" at build time; the inline script (guarded to run once per page) re-keys every
+// instance to the destination's current hour before meaningful paint. No Intl/tz failure can
+// break the cover — it just stays daylight.
+import { generateTerrain, seedFromSlug } from "../lib/terrain";
+
+interface Props {
+  /** Stable identity (guide slug) — seeds this guide's own ridgeline. */
+  seed: string;
+  /** Destination IANA time zone for the local-clock sky; null → daylight. */
+  tz?: string | null;
+  /** Compact rendering (hub card fallback): no legibility shade of its own. */
+  mini?: boolean;
+}
+const { seed, tz = null, mini = false } = Astro.props;
+const terrain = generateTerrain({ seed: seedFromSlug(seed) });
+---
+
+<div
+  class:list={["paint-atlas", { "paint-atlas--mini": mini }]}
+  data-paint-tz={tz}
+  data-sky="day"
+  aria-hidden="true"
+>
+  <span class="pa-sky"></span>
+  <span class="pa-orb"></span>
+  <svg class="pa-terrain" viewBox={`0 0 ${terrain.width} ${terrain.height}`} preserveAspectRatio="none">
+    {terrain.layers.map((l) => (
+      <path d={l.d} data-pa-layer={l.depth} />
+    ))}
+  </svg>
+  <span class="pa-mist"></span>
+  {!mini && <span class="pa-shade"></span>}
+</div>
+
+{/* is:inline + window guard: executes during parse (before meaningful paint, so the sky never
+    visibly flips), exactly once even when several atlases share a page (hub fallbacks). */}
+<script is:inline>
+  if (!window.__paSky) {
+    window.__paSky = 1;
+    (function () {
+      var els = document.querySelectorAll("[data-paint-tz]");
+      for (var i = 0; i < els.length; i++) {
+        var h;
+        try {
+          h = parseInt(
+            new Intl.DateTimeFormat("en-US", {
+              hour: "numeric",
+              hourCycle: "h23",
+              timeZone: els[i].getAttribute("data-paint-tz") || undefined,
+            }).format(new Date()),
+            10
+          );
+        } catch (e) {
+          h = new Date().getHours();
+        }
+        els[i].setAttribute(
+          "data-sky",
+          h >= 21 || h < 5 ? "night" : h < 8 ? "dawn" : h < 17 ? "day" : "dusk"
+        );
+      }
+    })();
+  }
+</script>

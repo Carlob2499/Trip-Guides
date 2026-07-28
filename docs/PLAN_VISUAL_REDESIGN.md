@@ -244,9 +244,20 @@ ever freelances information architecture.
 | R1 | Quiet type (token-level: Literata `standard` opsz variant + Source Sans 3 in base.css) + literal labels & descriptors per guide (creator-signed; standard into guide-author skill) | zero-layout-shift check per surface (type metrics differ); grep dist/ for old family names; a11y contrast re-verify |
 | R2 | Mobile goes native: bottom bar (4 destinations), journey sheet, Today chip; mobile pill strip retires; SOS post kept | thumb-reach on real device; sheet = plain scroll, no scroll-jack; a11y (sheet as dialog/nav landmark); baselines re-recorded on CI |
 | R3 | Desktop horizon: line replaces pills (desktop only), absorbs reading progress, tablist semantics kept | a11y suite green; arrow-key ring intact |
-| R4 | Living covers (pathos, as decided): masthead first, then hub + hover previews | licensed-footage delivery smoke test from deployed site; Save-Data/reduced-motion forced once each; credit+license in schema; CLS re-measure |
+| R4 — **SHIPPED 2026-07-28** | Living covers: Painted Atlas universal default (masthead + hub-card fallback + photo-fail backstop; `src/lib/terrain.ts` seeded/tested, `PaintedAtlas.astro`, destination-local sky) · cover schema widened (`src` direct royalty-free CDN with `{w}` srcset token, `video {src,poster,credit,creditUrl,license}`; non-Commons ⇒ credit+license zod-REQUIRED) · masthead footage layer (poster-first, reduced-motion/Save-Data/in-view/visibility gates, visible pause, credit swap, error ⇒ still stands) · Korea flagship footage wired (Mixkit 20095, Gwanghwamun/Gyeongbokgung timelapse, 2.83 MB 720p, hot-link verified live). Creator widened sourcing to royalty-free libraries this session. Deferred: hub hover previews (revisit with R5); Denmark/Sedona footage — honest blanks (see note below the table). | licensed-footage delivery smoke test from deployed site; Save-Data/reduced-motion forced once each; credit+license in schema; CLS re-measure |
 | R5 | Interior atlas + section anchors: data-drawn figures for every section (+ photo bands where curated), leg headers from real pins, grid refs, editorial measure | reduced-motion path (figures render complete); pin-less fallback; print + OG parity; anchors derive from data only — never hand-drawn |
 | R6 | The Composer: unit facets in schema, `compose-guide.mjs` (pure + tested), scaffold/research-pass integration, `--check` proposals for live guides | composer output is byte-deterministic given the same units (test); force one failure (⚠-hiding merge must fail the build); live-guide check-mode NEVER writes; guide-shape test still green |
+
+**R4 footage ledger (2026-07-28).** Shipped: Korea — Mixkit `traditional-palace-in-korea-20095`
+(Gwanghwamun Gate at Gyeongbokgung, daytime timelapse; frame-verified against the guide's own
+Gyeonghoeru cover photo — same palace complex, honest continuity). Honest blanks, by rule not
+by laziness: **Denmark** — the only ≤4 MB Copenhagen clip found (Mixkit 22062, Little Mermaid)
+would switch the cover's identity away from its Nyhavn photo mid-fade; candidates for a future
+pass: Mixkit 22059 Opera House (8.5 MB, over ceiling), Coverr's genuine Nyhavn aerials (blocked:
+ephemeral `coverr-temp-…` URLs only, unusable without their API). **Sedona/US** — zero Sedona
+footage on any keyless-reachable library; Grand Canyon stand-ins declined ("footage of the
+actual place" rule). Both guides keep photo + Painted-Atlas backstop, which is a complete cover.
+Source-access notes live in docs/MOTION.md's R4 chapter.
 
 ## Execution protocol (unattended Opus sessions — read before running any phase)
 

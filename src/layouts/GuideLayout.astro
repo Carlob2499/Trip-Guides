@@ -14,6 +14,7 @@ import { currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
 import { paletteFor, accentForGuide } from "../lib/palettes";
 import { accentTokens, accentStyle } from "../lib/accent-tokens";
 import { generateContourLayer } from "../lib/contours";
+import PaintedAtlas from "../components/PaintedAtlas.astro";
 import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
 import { computeGuideStats, latestVerifiedOn } from "../lib/guide-stats";
 import { collectWaypoints, collectDayEvents, buildSummary } from "../features/exports/index";
@@ -28,6 +29,7 @@ import "../styles/guide.css";
 import "../styles/print.css";
 import "../styles/trip-split.css";
 import "../styles/masthead.css";
+import "../styles/painted-atlas.css";
 import "../styles/sights.css";
 import "../styles/map.css";
 import "../styles/planner.css";
@@ -144,22 +146,31 @@ const sightCount = _flat.filter((s: any) => s.type === "sights").reduce((n: numb
 
 // Masthead hero image = the guide's own COVER art when set, else its first sights photo
 // (docs/MOTION.md). This is the SAME image the hub card shows — the shared element
-// that morphs between them. Present → full-bleed photo hero; absent (scaffolds) → bold
-// typographic hero on the accent field. Same Commons Special:FilePath thumbnailing as SightsBlock.
+// that morphs between them. Present → full-bleed photo hero; absent (scaffolds) → the
+// Painted Atlas (R4), living from birth. Same Commons Special:FilePath thumbnailing as SightsBlock.
 const heroSight = _flat
   .filter((s: any) => s.type === "sights")
   .flatMap((s: any) => s.items || [])
   .find((it: any) => it?.img?.file);
-const coverFile  = (guide as any).cover?.file  ?? heroSight?.img?.file ?? null;
-const coverAlt   = (guide as any).cover?.alt   ?? heroSight?.img?.alt  ?? heroSight?.name ?? "";
-const coverFocal = (guide as any).cover?.focal ?? null;
+const cover = (guide as any).cover;
+// R4: a still cover may now be a direct royalty-free CDN URL (`cover.src`, credit+license
+// zod-required) as well as a Commons `file`. `src` wins when set (the schema rejects both
+// together); a cover with only `video` still takes the first sight photo as its poster base.
+const coverDirect = (cover?.src as string | undefined) ?? null;
+const coverFile  = cover?.file ?? (coverDirect ? null : heroSight?.img?.file ?? null);
+const coverAlt   = cover?.alt   ?? heroSight?.img?.alt  ?? heroSight?.name ?? "";
+const coverFocal = cover?.focal ?? null;
 const mastCommonsSrc = (w: number) =>
   coverFile ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(coverFile)}?width=${w}` : null;
-const heroSrc = mastCommonsSrc(1600);
+// One width-parameterized source fn for both paths: Commons thumbnails via Special:FilePath,
+// direct CDNs via their own `{w}` token (absent token → the URL is single-size, srcset off).
+const mastSrcAt = (w: number) =>
+  coverDirect ? coverDirect.replace("{w}", String(w)) : mastCommonsSrc(w);
+const heroSrc = mastSrcAt(1600);
 // M2: a 375px phone was downloading the full 1600px masthead hero — same responsive
 // treatment SightsBlock already gives every sight photo.
-const heroSrcset = coverFile
-  ? `${mastCommonsSrc(480)} 480w, ${mastCommonsSrc(800)} 800w, ${mastCommonsSrc(1200)} 1200w, ${mastCommonsSrc(1600)} 1600w`
+const heroSrcset = (coverFile || coverDirect?.includes("{w}"))
+  ? `${mastSrcAt(480)} 480w, ${mastSrcAt(800)} 800w, ${mastSrcAt(1200)} 1200w, ${mastSrcAt(1600)} 1600w`
   : null;
 // V4 (docs/archive/PLAN_VISUAL_OVERHAUL.md) — a faint topographic contour layer in the masthead's paper
 // zones, carrying the Overture's depth language into the guide's hero. STATIC on purpose: the
@@ -169,9 +180,16 @@ const mastContours = [
   generateContourLayer({ seed: 13, rings: 7, cx: 300, cy: 340 }),
   generateContourLayer({ seed: 29, rings: 6, cx: 720, cy: 560 }),
 ];
+// Credit chip: Commons files link their File page (Commons IS the credit); direct-URL
+// covers carry their own zod-required credit, linking creditUrl when given. The living
+// video swaps this chip to the footage credit while it plays (living-cover.js).
 const heroCredit = coverFile
-  ? `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(coverFile)}`
+  ? { href: `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(coverFile)}`, label: "Photo: Wikimedia Commons" }
+  : coverDirect && cover?.credit
+  ? { href: (cover.creditUrl as string | undefined) ?? null, label: `Photo: ${cover.credit}` }
   : null;
+// R4 living cover — the footage upgrade (schema-gated: credit+license required).
+const coverVideo = cover?.video ?? null;
 
 // For weather widget — pull lat/lng from first map section
 const mapSec    = _flat.find((s: any) => s.type === "map" && s.center?.lat);
@@ -442,7 +460,7 @@ const tripSummary = buildSummary(guide);
     <!-- ═══════════════════════════════════════════════════════════════════════
          MASTHEAD
          ═══════════════════════════════════════════════════════════════════ -->
-    <header class={`masthead mast-hero ${heroSrc ? "mast-photo" : "mast-typo"}`} id="top" data-hero>
+    <header class={`masthead mast-hero ${heroSrc ? "mast-photo" : "mast-painted"}`} id="top" data-hero>
       {/* First-open story rail — segments ARE the trip's days (structure is information).
           Shown only during the one-time story intro (story-open.js); inert otherwise. */}
       {heroSrc && dayCount > 0 && (
@@ -453,16 +471,36 @@ const tripSummary = buildSummary(guide);
         </div>
       )}
       <div class="mast-frame">
+        {/* R4 — the Painted Atlas (src/components/PaintedAtlas.astro): rendered under EVERY
+            hero. Coverless guides open on it (living from birth, replacing the old flat
+            accent field); photo guides keep it hidden UNDERNEATH as the fallback that shows
+            when the Commons photo fails to load (.mast-media-fail) — a painted scene instead
+            of a dead grey field. CSS owns the switching (painted-atlas.css / masthead.css). */}
+        <PaintedAtlas seed={guideSlug} tz={destTzIana} />
         {heroSrc && (
           <img class="mast-img" src={heroSrc} srcset={heroSrcset} sizes="100vw" alt={coverAlt}
                loading="eager" fetchpriority="high"
                onerror="this.closest('.mast-frame').classList.add('mast-media-fail')"
                style={`view-transition-name:cover-${ogSlug}${coverFocal ? `;object-position:${coverFocal}` : ""}`} />
         )}
+        {/* R4 living cover — the footage upgrade over the still. Poster-first delivery:
+            no `src` at all until living-cover.js decides the visitor gets motion (reduced-
+            motion, Save-Data, and autoplay-refusal all leave the still standing, which is a
+            complete cover, not a degraded one). DOM-after the img with the same z-index, so
+            it paints above the photo only once it actually plays (.mast-video-live fades it
+            in). muted+playsinline as attributes AND re-asserted in JS — the attribute alone
+            is what mobile autoplay policies inspect. */}
+        {coverVideo && (
+          <video class="mast-video" muted playsinline loop preload="none"
+                 data-src={coverVideo.src}
+                 poster={coverVideo.poster ?? undefined}
+                 aria-hidden="true" tabindex="-1"
+                 style={coverFocal ? `object-position:${coverFocal}` : undefined}></video>
+        )}
         <span class="mast-scrim" aria-hidden="true"></span>
         {/* V4 depth (option B) — a faint topographic overlay OVER the hero photo (above the scrim,
             below the title), carrying the Overture's map language into the guide's hero. Photo
-            guides only; .mast-typo scaffolds keep their own dot lattice. Light etched strokes,
+            guides only; .mast-painted heroes are the Painted Atlas, which is its own scene. Light etched strokes,
             tuned faint so the title stays fully legible. Static — a reading page, not a motion one. */}
         {heroSrc && (
           <div class="mast-contours" aria-hidden="true">
@@ -484,8 +522,26 @@ const tripSummary = buildSummary(guide);
           <h1 class="mast-title">{guide.title}</h1>
           {guide.dek && <p class="dek mast-dek">{guide.dek}</p>}
         </div>
-        {heroCredit && (
-          <a class="mast-credit" href={heroCredit} target="_blank" rel="noopener" aria-label="Photo: Wikimedia Commons — view source">Photo: Wikimedia Commons ↗</a>
+        {heroCredit && (heroCredit.href ? (
+          <a class="mast-credit" id="mastCredit" href={heroCredit.href} target="_blank" rel="noopener"
+             aria-label={`${heroCredit.label} — view source`}
+             data-video-credit={coverVideo ? `Video: ${coverVideo.credit}` : undefined}
+             data-video-credit-url={coverVideo?.creditUrl ?? undefined}>{heroCredit.label} ↗</a>
+        ) : (
+          <span class="mast-credit" id="mastCredit"
+                data-video-credit={coverVideo ? `Video: ${coverVideo.credit}` : undefined}>{heroCredit.label}</span>
+        ))}
+        {/* Visible pause for the living cover (doctrine: obvious clickability; WCAG 2.2.2).
+            NOT aria-hidden — it's a real control — but hidden until the video actually
+            plays, so a visitor who never gets motion never sees a dead button. */}
+        {coverVideo && (
+          <button class="mast-pause" id="mastPause" type="button" hidden
+                  aria-label="Pause background video" aria-pressed="false">
+            <svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor">
+              <g class="mp-pause"><rect x="3.2" y="2.6" width="3.4" height="10.8" rx="1"/><rect x="9.4" y="2.6" width="3.4" height="10.8" rx="1"/></g>
+              <path class="mp-play" d="M4.5 2.8v10.4c0 .8.9 1.3 1.6.9l8.2-5.2c.6-.4.6-1.4 0-1.8L6.1 1.9c-.7-.4-1.6.1-1.6.9z"/>
+            </svg>
+          </button>
         )}
       </div>
       {/* V5: shares a view-transition-name with the hub card's `.hubcard-bar` — the accent
@@ -815,6 +871,7 @@ const tripSummary = buildSummary(guide);
       import "../scripts/lightbox.js";
       import "../scripts/hero-parallax.js";
       import "../scripts/gsap-hero.js";
+      import "../scripts/living-cover.js";
       import "../features/palette/index.js";
       import "../features/trip-split/index.ts";
       import "../features/voting/index.js";

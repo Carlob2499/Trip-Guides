@@ -313,3 +313,66 @@ describe("content.config guides schema — archived guide state (D4)", () => {
     expect(result.success).toBe(false);
   });
 });
+
+describe("content.config guides schema — cover (R4: widened sources + living video)", () => {
+  it("accepts the classic Commons cover unchanged (no existing guide regresses)", () => {
+    const result = schema.safeParse(validGuide({ cover: { file: "Nyhavn-Copenhagen.JPG", alt: "Nyhavn" } }));
+    expect(result.success).toBe(true);
+  });
+
+  it("accepts a direct royalty-free src WITH credit + license", () => {
+    const result = schema.safeParse(validGuide({ cover: {
+      src: "https://images.pexels.com/photos/12345/seoul.jpg?w={w}",
+      credit: "Jane Doe · Pexels", license: "Pexels License",
+    } }));
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects a direct src without credit/license — the honesty apparatus travels with the widened horizon", () => {
+    const result = schema.safeParse(validGuide({ cover: { src: "https://images.pexels.com/photos/12345/seoul.jpg" } }));
+    expect(result.success).toBe(false);
+    expect(issuePaths(result)).toContain("cover.src");
+  });
+
+  it("rejects an http (non-https) src", () => {
+    const result = schema.safeParse(validGuide({ cover: {
+      src: "http://images.pexels.com/photos/1/x.jpg", credit: "X", license: "Y",
+    } }));
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects file + src together (two still sources, one slot)", () => {
+    const result = schema.safeParse(validGuide({ cover: {
+      file: "A.jpg", src: "https://images.pexels.com/photos/1/x.jpg", credit: "X", license: "Y",
+    } }));
+    expect(result.success).toBe(false);
+    expect(issuePaths(result)).toContain("cover.src");
+  });
+
+  it("rejects an empty cover object (needs file, src, or video)", () => {
+    const result = schema.safeParse(validGuide({ cover: {} }));
+    expect(result.success).toBe(false);
+  });
+
+  it("accepts video with required credit + license (poster optional — the photo cover is the poster)", () => {
+    const result = schema.safeParse(validGuide({ cover: {
+      file: "A.jpg",
+      video: { src: "https://videos.pexels.com/video-files/1/a.mp4", credit: "Jane Doe · Pexels", license: "Pexels License" },
+    } }));
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects video missing credit or license", () => {
+    const result = schema.safeParse(validGuide({ cover: {
+      file: "A.jpg", video: { src: "https://videos.pexels.com/video-files/1/a.mp4" },
+    } }));
+    expect(result.success).toBe(false);
+  });
+
+  it("accepts a video-only cover (poster falls back to the first sight photo downstream)", () => {
+    const result = schema.safeParse(validGuide({ cover: {
+      video: { src: "https://videos.pexels.com/video-files/1/a.mp4", credit: "J · Pexels", license: "Pexels License" },
+    } }));
+    expect(result.success).toBe(true);
+  });
+});

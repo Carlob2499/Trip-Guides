@@ -2,9 +2,10 @@
    Editorial-bold opener: every guide starts with a full-bleed rounded hero.
    · .mast-photo — a Commons cover photo with a legibility scrim and huge
      Literata display title laid over it (units.-style).
-   · .mast-typo  — scaffolds with no photo get a bold typographic hero on the
-     country accent field with a generated dot lattice, so they still open with
-     confidence and need no image.
+   · .mast-painted — guides with no photo open on the Painted Atlas (R4:
+     painted-atlas.css + src/components/PaintedAtlas.astro) — seeded terrain in
+     the guide's accent under a destination-local sky — so every guide is born
+     with a living cover and needs no image.
    Motion is an orchestrated page-load sequence (title rises, photo drifts);
    fully short-circuited under prefers-reduced-motion. */
 
@@ -16,8 +17,8 @@
    photo + scrim but below the title (which is .mast-inner, painting later in flow). Light etched
    strokes — the photo hero is always a dark scrim + light title in BOTH site themes, so fixed
    white lines read consistently and need no theme tokens. Tuned faint so the title stays fully
-   legible. Photo guides only (rendered under `heroSrc`); .mast-typo scaffolds keep their own dot
-   lattice. Static by design — the guide is a reading surface, not a motion one. Clipped by the
+   legible. Photo guides only (rendered under `heroSrc`); .mast-painted heroes are the Painted
+   Atlas, which is its own scene. Static by design — the guide is a reading surface, not a motion one. Clipped by the
    frame's border-radius + overflow. */
 .mast-contours{position:absolute;inset:0;overflow:hidden;pointer-events:none}
 .mast-contours svg{position:absolute;inset:0;width:100%;height:100%}
@@ -31,31 +32,47 @@
 
 /* Photo layer */
 .mast-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transform-origin:60% 40%}
+
+/* R4 living cover — the footage layer. Same slot as the photo (DOM-after at the same
+   z-index, so it stacks above it) but transparent until it actually PLAYS: living-cover.js
+   adds .mast-video-live on the `playing` event, and the fade-in means the poster→footage
+   handoff reads as the scene waking up, not a src swap. Belt+braces reduced-motion:
+   the JS gate never attaches a src, and this hides the element outright. */
+.mast-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:0;transition:opacity .9s ease}
+.mast-video-live .mast-video{opacity:1}
+@media(prefers-reduced-motion:reduce){.mast-video{display:none}}
+
+/* The visible pause chip — a real control (doctrine: obvious clickability), same
+   badge-on-photo surface treatment as .mast-credit below. Play glyph shows only in the
+   paused state. 40px hit target. */
+.mast-pause{position:absolute;right:.7rem;bottom:.7rem;z-index:2;width:40px;height:40px;border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;color:rgba(244,246,239,.92);background:rgba(12,15,18,.68);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.mast-pause:hover{color:#fff;background:rgba(12,15,18,.8)}
+.mast-pause svg{width:16px;height:16px}
+.mast-pause .mp-play{display:none}
+.mast-pause.is-paused .mp-play{display:block}
+.mast-pause.is-paused .mp-pause{display:none}
 .mast-scrim{position:absolute;inset:0;z-index:-1}
 .mast-photo .mast-scrim{background:linear-gradient(to top,rgba(12,15,18,.86) 0%,rgba(12,15,18,.42) 48%,rgba(12,15,18,.10) 100%)}
 /* Cover photo can fail (network blocked, offline, a renamed/broken Commons file); GuideLayout.astro's
-   onerror adds .mast-media-fail to .mast-frame. Without this the scrim/title/dek keep their
-   photo-tuned colours over nothing — measured live at their real on-screen scrim alpha: eyebrow
-   2.68:1, credit 3.22:1 (both fail 4.5:1); title/dek pass only because large text needs just 3:1.
-   Must hide .mast-img itself (not just the scrim) — otherwise the browser's native broken-image
-   glyph + coverAlt text render, uncontrolled, on top of the flattened surface underneath, since
-   .mast-frame's isolation:isolate makes its own background paint behind the img's negative z-index.
-   @media screen only: the existing @media print block below already unconditionally hides .mast-img
-   and forces #111 on the text — this override's higher specificity would otherwise win over that
-   forcing during print too (a media query doesn't change specificity), printing dark-theme --ink
-   onto white paper. */
+   onerror adds .mast-media-fail to .mast-frame. R4: the Painted Atlas now renders UNDER every
+   photo hero (hidden while the photo is healthy, below), so failure reveals a painted scene
+   instead of the old flattened grey field. Text keeps its photo styling untouched: the atlas's
+   own .pa-shade is byte-identical to .mast-photo's scrim gradient, so the measured contrast
+   holds. Must hide .mast-img itself (not just the scrim) — otherwise the browser's native
+   broken-image glyph + coverAlt text render, uncontrolled, on top of the painted scene, since
+   .mast-frame's isolation:isolate makes its own background paint behind the img's negative
+   z-index. @media screen only: the @media print block below already hides hero media and forces
+   #111 text — this override's higher specificity would otherwise win over that forcing during
+   print too (a media query doesn't change specificity). */
 @media screen{
-  .mast-frame.mast-media-fail{background:var(--bg2)}
   .mast-frame.mast-media-fail .mast-img,.mast-frame.mast-media-fail .mast-scrim,.mast-frame.mast-media-fail .mast-contours{display:none}
-  .mast-frame.mast-media-fail .mast-eyebrow,.mast-frame.mast-media-fail .mast-title,.mast-frame.mast-media-fail .mast-dek{color:var(--ink);text-shadow:none}
-  .mast-frame.mast-media-fail .mast-credit{color:var(--ink);background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
+  .mast-frame.mast-media-fail .paint-atlas{display:block}
+  /* The failed photo's credit would dangle over a scene it doesn't describe. */
+  .mast-frame.mast-media-fail .mast-credit{display:none}
 }
-
-/* Typographic hero (scaffolds): accent field + dot lattice */
-.mast-typo .mast-frame{background:var(--accent)}
-.mast-typo .mast-scrim{background:
-  radial-gradient(circle at 1px 1px,rgba(255,255,255,.16) 1.4px,transparent 1.6px) 0 0/22px 22px,
-  linear-gradient(120deg,color-mix(in srgb,var(--accent) 100%,#000 6%),color-mix(in srgb,var(--accent) 82%,#fff 12%))}
+/* While the photo is healthy the underlying atlas stays off entirely — no compositor
+   work spent animating a scene nobody can see. */
+.mast-photo .paint-atlas{display:none}
 
 .mast-inner{position:relative;align-self:flex-end;width:100%;padding:clamp(1.3rem,3.5vw,2.6rem) clamp(1.2rem,3.2vw,2.4rem);color:#f4f6ef}
 .mast-eyebrow{color:#e8ece1;letter-spacing:.28em;opacity:.92}
@@ -84,7 +101,7 @@
    sit on top of. */
 @media print{
   .mast-frame{min-height:0;border-radius:0}
-  .mast-img,.mast-scrim,.mast-credit,.mast-contours{display:none}
+  .mast-img,.mast-scrim,.mast-credit,.mast-contours,.mast-video,.mast-pause{display:none}
   .mast-inner{color:#111;padding:0}
   .mast-title,.mast-dek,.mast-eyebrow{color:#111;text-shadow:none}
 }

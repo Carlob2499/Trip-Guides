@@ -186,3 +186,36 @@ entrance + B's life.** Two rules govern every surface from R1 onward:
 Reduced-motion renders every finished frame with no entrance and no pulse. The existing
 inventory rules (single motion dependency, once-per-view flags, lazy modules) apply to
 every implementation of this language.
+
+## Living covers — the R4 rules (shipped 2026-07-28)
+
+The cover stack, from birth upward (PLAN_VISUAL_REDESIGN.md Move A½; creator-delegated №7):
+
+1. **The Painted Atlas is the universal default.** Every guide — current, scaffold, future —
+   is born with a living cover: ridgelines seeded from its own slug (`src/lib/terrain.ts`,
+   pure + tested), painted in its own accent, under a sky keyed to the destination's local
+   clock (night 21–05 · dawn 05–08 · day 08–17 · dusk 17–21, destination time — a painter's
+   sky, not astronomy). Its slow drift (26–46 s cycles) is licensed by rule 2 above: the
+   scene shows the destination's sky *right now*, the same live fact as the local-time pill.
+   It also backs every photo hero — a failed Commons image now reveals the painted scene
+   instead of a dead grey field.
+2. **A still photo is the identity layer.** Commons `file` (license machine-verifiable) or —
+   new in R4 — a direct royalty-free CDN `src` (Pexels/Unsplash/Pixabay-class; `{w}` width
+   token for srcset), where zod REQUIRES `credit` + `license` because the licensing isn't
+   machine-checkable. The pathos register is liberal in sourcing, never in honesty.
+3. **Footage is the curated upgrade, never a requirement.** `cover.video` hot-links a
+   library CDN (~4 MB ceiling by curation; nothing heavy enters the repo). Delivery is
+   poster-first: no `src` attaches until `living-cover.js` clears every gate —
+   reduced-motion, Save-Data, in-view, tab-visible — and autoplay refusal or a dead stream
+   leaves the still standing as a COMPLETE cover, not a degraded one. A visible pause chip
+   appears only once footage actually plays; while it plays, the credit chip swaps to the
+   footage's credit (one surface, always crediting what's on screen). Footage must show the
+   actual place — a near-miss stand-in (a Grand Canyon loop on a Sedona guide) is declined
+   as quietly lying, per the plan's "no invented geography".
+
+Sourcing note (creator-widened 2026-07-28): beyond Commons, royalty-free libraries are in
+bounds for cover art. Practical findings — Mixkit serves stable, hot-linkable per-clip asset
+URLs (the Korea palace cover is `assets.mixkit.co/videos/20095/…`, Mixkit Stock Video Free
+License, credited anyway); Pexels/Pixabay require their API for reliable URLs (keyless
+scraping is blocked); Coverr's grid exposes only ephemeral `coverr-temp-…` URLs — do not
+hot-link those.

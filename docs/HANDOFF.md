@@ -20,21 +20,27 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (updated 2026-07-28, session close #12 — Living Atlas programme underway; R1 SHIPPED on its branch)
+## Snapshot (updated 2026-07-28, session close #13 — Living Atlas R1–R4 SHIPPED on the branch)
 
 **The Living Atlas redesign is running on `claude/website-visual-redesign-upnl05`** (NOT yet
 merged to main). Full spec: `docs/PLAN_VISUAL_REDESIGN.md` (phases R1–R6, gates, delegated
-decisions, Fable executes) · mock-ups: `node docs/mockups/build-mockup.mjs` · creator-chosen
-motion language recorded in `docs/MOTION.md` ("the overture, then the heartbeat"). **R1 is
-COMPLETE on the branch:** Quiet Edition type (Literata standard opsz variant does display AND
-body; Source Sans 3 replaces Spline Mono for data; Bricolage retired; display weights/tracking
-retuned across 10 css files; OG parity switched to serif title + sans labels) + literal labels
-(Getting around→Transit, Itinerary→Days, References→Sources across all guides, scaffolder,
-template, guide-author skill — which also gained the voice standard). Gates green: build 0,
-876 tests, perf 125/200 KB, dist/ greps clean of old faces and old labels, preview verified
-375px+desktop+dark. NEXT: R2 (mobile bottom bar + journey sheet) per the plan's session
-prompt; descriptors render (R1's second half) rides with R5's section anchors. a11y baselines
-re-record on CI when the branch PRs — expected to shift only if contrast moved (colors didn't).
+decisions, Fable executes; R4's row records what shipped + the footage ledger) · mock-ups:
+`node docs/mockups/build-mockup.mjs` · motion doctrine incl. the new living-cover rules:
+`docs/MOTION.md`. **Shipped, in order, all gates green each phase:**
+- **R1** Quiet Edition type + literal labels (`9b16136`).
+- **R2** mobile goes native: journey bar (Journey·Today·Map·Kit), spine sheet (`c60742a`).
+- **R3** desktop horizon: stations on the journey line, reading progress absorbed (`227febb`).
+- **R4** living covers: Painted Atlas universal default (seeded `src/lib/terrain.ts` + tested;
+  `PaintedAtlas.astro`; destination-local sky; masthead coverless default + hub-card fallback +
+  photo-fail backstop) · cover schema widened — direct royalty-free CDN `src` with `{w}` srcset
+  token and `cover.video`, non-Commons sources REQUIRE credit+license (zod + 9 schema tests) ·
+  masthead footage layer (`living-cover.js`: poster-first, reduced-motion/Save-Data/in-view/
+  visibility gates, visible pause chip, credit swap, error ⇒ still stands) · **Korea flagship
+  living cover wired** (Mixkit palace timelapse — same Gyeongbokgung complex as its photo,
+  2.83 MB, hot-link verified). Creator widened cover sourcing to royalty-free libraries.
+  Denmark/Sedona footage = honest blanks (ledger in the plan). Tests now 892.
+NEXT: **R5** (interior atlas + section anchors + descriptor rendering + hub hover previews
+deferred from R4), then R6 (the Composer). a11y baselines re-record on CI when the branch PRs.
 
 ## Previous snapshot (2026-07-26, session close #11 — M1–M6 COMPLETE; only M0's E2E proof left)
 
@@ -222,12 +228,16 @@ showed it. The count check caught the symptom, the novelty check missed the caus
 contrast was then measured before any baseline moved (worst case 4.77:1 against 4.5:1 required),
 and the new numbers were deliberately failed at 43 before being trusted at 47. Fixed in `fc81804`.
 
-**Re-prompt the creator with (2026-07-28):** "R1 shipped on the redesign branch — open any
-guide from it and the site already reads like the study: one serif wearing display and body,
-quiet sans numbers, literal tabs on one row. Your motion choice (B+C, 'overture then
-heartbeat') is now MOTION.md doctrine. Next session executes R2: the mobile bottom bar +
-journey sheet. Also still standing from the M-programme: rotate `CLAUDE_CODE_OAUTH_TOKEN`
-to unlock the pipeline's first end-to-end proof."
+**Re-prompt the creator with (2026-07-28, session #13):** "R1–R4 are live on the redesign
+branch. Open Korea in a real browser: the palace photo wakes into licensed footage of the same
+palace (pause chip bottom-right; reduced-motion/Save-Data visitors keep the still). Every
+guide — including every future scaffold — is now BORN with a living cover: the Painted Atlas,
+its own seeded ridgelines under the destination's actual time-of-day sky, and it also backs
+every photo against load failure. Cover sourcing now spans royalty-free libraries (schema
+enforces credit+license on non-Commons). Denmark/Sedona footage stayed honest blanks — the
+ledger in PLAN_VISUAL_REDESIGN.md says exactly why and what the candidates are. Next session:
+R5, the interior atlas (section anchors, descriptors, leg headers). Also still standing:
+rotate `CLAUDE_CODE_OAUTH_TOKEN` to unlock the pipeline's first end-to-end proof."
 
 **Prior re-prompt (superseded):** "The whole M0–M6 programme is done except one thing, and that
 one thing needs you: `CLAUDE_CODE_OAUTH_TOKEN` is expired (confirmed from the real API response

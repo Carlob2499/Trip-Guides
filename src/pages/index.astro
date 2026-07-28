@@ -7,10 +7,12 @@ import Icon from "../components/Icon.astro";
 import { accentForGuide, paletteAccentsForGuide } from "../lib/palettes";
 import { accentTokens, accentStyle } from "../lib/accent-tokens";
 import { generateContourLayer } from "../lib/contours";
+import PaintedAtlas from "../components/PaintedAtlas.astro";
 import { computeGuideStats } from "../lib/guide-stats";
 import type { SectionOf, SightItem } from "../lib/guide-types";
 import { tripWindow, localISODate } from "../lib/trip-dates";
 import { continentFor, CONTINENT_ORDER } from "../data/countries.mjs";
+import { tzFor } from "../lib/themes";
 import { flattenSections } from "../features/exports/index";
 // Self-hosted variable fonts (bundled, base-path-safe, offline-correct) — no CDN.
 // Quiet Edition (R1): ONE serif — Literata with its optical-size axis (standard = wght+opsz,
@@ -21,6 +23,7 @@ import "@fontsource-variable/source-sans-3";
 import "../styles/base.css";
 import "../styles/hub.css";
 import "../styles/hub-cards.css";
+import "../styles/painted-atlas.css";
 import "../styles/wizard.css";
 import "../styles/transitions.css";
 import "../styles/scroll-motion.css";
@@ -70,8 +73,12 @@ const guideExtras = guides.map(g => {
   // The card/hero cover: the guide's own `cover` art when set, else its first sight photo
   // (docs/MOTION.md). Same image the guide masthead uses — that's what makes them morph.
   const cover = (g.data as any).cover;
-  const coverImg = cover?.file
-    ? { file: cover.file, alt: cover.alt || "", focal: cover.focal || null }
+  // R4: a still cover may be a direct royalty-free CDN URL (`src`, `{w}` width token) as
+  // well as a Commons `file` — same precedence as the guide masthead (uniform application).
+  const coverImg = cover?.src
+    ? { src: cover.src as string, alt: cover.alt || "", focal: cover.focal || null }
+    : cover?.file
+    ? { file: cover.file as string, alt: cover.alt || "", focal: cover.focal || null }
     : (sight ? { file: sight.img.file, alt: sight.img.alt || sight.name, focal: null } : null);
   return {
     dayCount, badge, firstDate, lastDate, month,
@@ -116,17 +123,23 @@ const heroWhen = heroIsPast && hero?.ex.lastDate
 // reads as the same trip, not a second one.
 const gridGuides = curated;
 const heroId = hero?.g.id ?? null;
-const heroCommonsSrc = (w: number) =>
-  hero?.ex.heroImg ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(hero.ex.heroImg.file)}?width=${w}` : null;
-const heroSrc = heroCommonsSrc(1400);
+// R4: one width-parameterized source fn for both still-cover paths — Commons thumbnails
+// via Special:FilePath, direct royalty-free CDNs via their own `{w}` token (absent token
+// → single-size URL, srcset off). Mirrors the guide masthead's mastSrcAt exactly.
+type StillImg = { file?: string; src?: string } | null;
+const stillSrcAt = (img: StillImg, w: number) =>
+  !img ? null
+  : img.src ? img.src.replace("{w}", String(w))
+  : `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(img.file!)}?width=${w}`;
+const heroImgOf = hero?.ex.heroImg ?? null;
+const heroSrc = stillSrcAt(heroImgOf, 1400);
 // M2: a 375px phone was downloading the full 1400px hero — same responsive treatment
 // SightsBlock already gives every sight photo.
-const heroSrcset = hero?.ex.heroImg
-  ? `${heroCommonsSrc(480)} 480w, ${heroCommonsSrc(800)} 800w, ${heroCommonsSrc(1400)} 1400w`
+const heroSrcset = heroImgOf && (heroImgOf.file || heroImgOf.src?.includes("{w}"))
+  ? `${stillSrcAt(heroImgOf, 480)} 480w, ${stillSrcAt(heroImgOf, 800)} 800w, ${stillSrcAt(heroImgOf, 1400)} 1400w`
   : null;
-// Card cover thumbnails — same Commons thumbnailing at grid width.
-const coverSrc = (img: { file: string } | null) =>
-  img ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(img.file)}?width=640` : null;
+// Card cover thumbnails — same source fn at grid width.
+const coverSrc = (img: StillImg) => stillSrcAt(img, 640);
 
 // Filter chips: by CONTINENT, not country. With a handful of guides a country chip just
 // restates the card beneath it; continent is the axis you actually browse by as the library
@@ -315,6 +328,10 @@ const contourLayers = [
               </span>
             ) : (
               <span class="hubcard-cover hubcard-cover--typo" aria-hidden="true">
+                {/* R4: coverless cards open on the Painted Atlas mini — the same living scene
+                    the guide's own masthead is born with (uniform application), under the same
+                    destination-local sky. The initial letter stays as the plate mark. */}
+                <PaintedAtlas seed={g.id} tz={g.data.tz ?? tzFor(g.data.country)} mini />
                 <span class="hubcard-cover-initial">{g.data.country.slice(0, 1)}</span>
               </span>
             )}
