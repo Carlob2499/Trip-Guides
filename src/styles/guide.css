@@ -146,6 +146,33 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 /* U3: .skip-link moved to base.css (shared by every page) — it lived only here, so the
    hub had no skip link at all despite its own V2 spec promising one. */
 @media(prefers-reduced-motion:reduce){.gtab{transition:none}.gtab:hover{transform:none}}
+
+/* R3 — DESKTOP WEARS THE HORIZON (≥900px). The pill strip becomes the journey line:
+   content tabs turn into STATIONS (label over a dot) on a track drawn across the nav;
+   the accent fill along it IS the reading progress (the fixed top bar retires here —
+   one object, two meanings). Tool tabs keep their pill look and dock ON the line,
+   visually distinct chrome exactly as before. Same tablist, same arrow-key ring.
+   Overture (once per arrival, per MOTION.md): the track draws in, stations settle. */
+@media(min-width:900px){
+  .read-prog{display:none}
+  .guide-tabs-nav{position:relative}
+  .guide-tabs-nav::before{content:"";position:absolute;left:1.1rem;right:1.1rem;bottom:calc(.5rem + 14px);height:2px;background:var(--rule2);transform-origin:left center}
+  .guide-tabs-nav::after{content:"";position:absolute;left:1.1rem;bottom:calc(.5rem + 13.5px);height:3px;width:calc((100% - 2.2rem)*var(--journey-read,0)/100);max-width:calc(100% - 2.2rem);background:var(--accent);border-radius:3px;pointer-events:none}
+  .guide-tabs{border-bottom:0;padding-bottom:.5rem}
+  .gtab:not(.gtab-tool){position:relative;background:none;border-radius:6px;padding:.3rem .7rem 1.55rem;min-height:0;z-index:1}
+  .gtab:not(.gtab-tool)::after{content:"";position:absolute;left:50%;transform:translateX(-50%);bottom:9px;width:11px;height:11px;border-radius:50%;background:var(--bg);border:2px solid var(--muted);transition:background .18s,border-color .18s,box-shadow .18s}
+  .gtab:not(.gtab-tool):hover{background:none;transform:none;color:var(--ink)}
+  .gtab:not(.gtab-tool):hover::after{border-color:var(--ink)}
+  .gtab.gtab-active:not(.gtab-tool){background:none;box-shadow:none;color:var(--accent-ink);font-weight:700}
+  .gtab.gtab-active:not(.gtab-tool)::after{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 22%,transparent)}
+  .gtab-tool{position:relative;z-index:1;background:var(--bg)}
+  @media(prefers-reduced-motion:no-preference){
+    .guide-tabs-nav::before{animation:horizonDraw .9s cubic-bezier(.2,.7,.2,1) .15s backwards}
+    .gtab:not(.gtab-tool)::after{animation:stationLand .5s ease .75s backwards}
+  }
+}
+@keyframes horizonDraw{from{transform:scaleX(0)}}
+@keyframes stationLand{from{opacity:0;transform:translateX(-50%) scale(.4)}}
 .gtab-split{font-family:var(--font-data);font-size:var(--text-control-sm);letter-spacing:.04em}
 @media(max-width:899px){.gtab{padding:.44rem .85rem;font-size:var(--text-caption);min-height:36px}}
 /* Tactile press feedback — guide action buttons compress on :active and spring

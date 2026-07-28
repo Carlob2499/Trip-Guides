@@ -490,9 +490,14 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           (function () {
             var bar = document.getElementById("readProg");
             if (!bar) return;
+            // R3: on desktop the fixed bar retires and this same percentage fills the
+            // horizon line instead (--journey-read on the tabs nav) — one object, two meanings.
+            var horizonNav = document.querySelector(".guide-tabs-nav");
             function updateBar() {
               var max = document.body.scrollHeight - window.innerHeight;
-              bar.style.width = (max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0) + "%";
+              var pct = max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0;
+              bar.style.width = pct + "%";
+              if (horizonNav) horizonNav.style.setProperty("--journey-read", String(pct));
             }
             window.addEventListener("scroll", updateBar, { passive: true });
             window.addEventListener("resize", updateBar);
