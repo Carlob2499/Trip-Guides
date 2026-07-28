@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { computeGuideStats } from "./guide-stats";
+import { computeGuideStats, latestVerifiedOn } from "./guide-stats";
 
 describe("computeGuideStats (pure)", () => {
   it("counts guides, source_url occurrences (at any depth), and distinct hostnames", () => {
@@ -62,5 +62,29 @@ describe("computeGuideStats (pure)", () => {
     expect(stats.guideCount).toBeGreaterThanOrEqual(3); // korea, denmark, us today — never fewer
     expect(stats.verifiedFactCount).toBeGreaterThan(0);
     expect(stats.sourceCount).toBeGreaterThan(0);
+  });
+});
+
+describe("latestVerifiedOn (pure)", () => {
+  it("finds the most recent verified_on at any depth", () => {
+    const guide = {
+      sections: [
+        { type: "panel", verified_on: "2026-06-28" },
+        { type: "sights", items: [{ name: "A", verified_on: "2026-07-07" },
+                                  { name: "B", verified_on: "2026-05-01" }] },
+      ],
+    };
+    expect(latestVerifiedOn([guide])).toBe("2026-07-07");
+  });
+  it("returns null when nothing carries a date — the honest blank, not a fabricated today", () => {
+    expect(latestVerifiedOn([{ sections: [{ type: "prose", body: "<p>x</p>" }] }])).toBeNull();
+    expect(latestVerifiedOn([])).toBeNull();
+  });
+  it("ignores non-ISO values rather than ranking them as dates", () => {
+    const guide = { sections: [{ verified_on: "Checked Jun 2026" }, { verified_on: "2026-01-09" }] };
+    expect(latestVerifiedOn([guide])).toBe("2026-01-09");
+  });
+  it("compares across guides, not just within one", () => {
+    expect(latestVerifiedOn([{ verified_on: "2025-12-31" }, { verified_on: "2026-02-02" }])).toBe("2026-02-02");
   });
 });

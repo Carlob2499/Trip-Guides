@@ -1,4 +1,4 @@
-/* Day-route optimizer — pure geometry, no DOM (docs/PLAN_FIELD_REPORT_FIXES.md E7).
+/* Day-route optimizer — pure geometry, no DOM (docs/archive/PLAN_FIELD_REPORT_FIXES.md E7).
    Advisory only: this never decides anything for the traveler, it just answers
    "would reordering this day's located stops meaningfully shorten the walk/drive?"
    Only waypoints with real lat/lng participate — a stop with no coords is neither

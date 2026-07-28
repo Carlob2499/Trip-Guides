@@ -134,3 +134,35 @@ describe("formatParsedNote", () => {
     expect(note).toContain("\n  Hotel Sunshine, check-in 3pm");
   });
 });
+
+/* MCP/workflow follow-up: the wizard's PDF upload extracted dates, flights and lodging lines
+   but not COUNTRY — the one field the form actually requires — so a traveller who dropped in a
+   booking still had to type it. Matched against the real country table, never guessed. */
+describe("parseBookingDocument — country detection", () => {
+  it("recognises a country named in the document", () => {
+    const doc = parseBookingDocument("Flight to Seoul, South Korea on 2026-07-08");
+    expect(doc.countries).toEqual(["South Korea"]);
+    expect(doc.summary).toContain("country: South Korea");
+  });
+  it("resolves an alias to the canonical name the pipeline accepts", () => {
+    expect(parseBookingDocument("Departing USA").countries).toEqual(["United States"]);
+    expect(parseBookingDocument("Arrival: Korea").countries).toEqual(["South Korea"]);
+  });
+  it("dedupes an alias and its canonical name into one entry", () => {
+    expect(parseBookingDocument("USA — United States of interest").countries).toEqual(["United States"]);
+  });
+  it("returns EVERY match so the caller can refuse to guess between them", () => {
+    const doc = parseBookingDocument("Denmark to Japan, connecting via Denmark");
+    expect(doc.countries).toHaveLength(2);
+    expect(doc.countries).toContain("Denmark");
+    expect(doc.countries).toContain("Japan");
+  });
+  it("does not match a country name embedded inside another word", () => {
+    expect(parseBookingDocument("Chinatown bus depot").countries).not.toContain("China");
+  });
+  it("is empty when no known country appears — an honest blank, not a guess", () => {
+    const doc = parseBookingDocument("Booking ref XY123 on 2026-07-08");
+    expect(doc.countries).toEqual([]);
+    expect(doc.summary).not.toContain("country:");
+  });
+});

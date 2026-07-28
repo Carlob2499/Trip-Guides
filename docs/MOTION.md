@@ -89,7 +89,7 @@ scroll-driven reveals (`reveal.js` fallback) · V3c story-mode itinerary (the on
 deck — the less-scroll/retention payoff) · V3d lead-first density polish · V4 per-country
 palette identity (above). **Dropped (V2): palette duotone graphic cards** — read as "graphic
 poster"; hub cards stay photo-forward. The hub Overture/Atlas work continues in
-`docs/PLAN_VISUAL_OVERHAUL.md`.
+`docs/archive/PLAN_VISUAL_OVERHAUL.md`.
 
 Information-delivery half of the brief (retention, not just motion): one idea per view
 (story mode), a consistent editorial measure with mono-face data on the right rail, and
@@ -118,7 +118,7 @@ all (`.11`/`.07` alpha on the masthead; ~10–16% tints on the hub). Raised once
 no-photo fallback) and of the hub's pre-auto-glide contour layer, and reviewed by the creator.
 **Kept as-is — no step-back.** The strokes render clearly and legibly in all four masthead
 states without competing with title legibility; the U9 values hold. This closes the last open
-item in `docs/PLAN_FIELD_REPORT_FIXES.md` (E8 item 5).
+item in `docs/archive/PLAN_FIELD_REPORT_FIXES.md` (E8 item 5).
 
 ## V6 — QA and the honest pass (2026-07-23)
 
@@ -163,5 +163,85 @@ genuine "did this cost anything" pass has to report:
   degrades to a flat, fully-readable single-scroll document with an explicit "This guide reads
   fine without JavaScript" note — by design, unaffected by this arc.
 
-This closes `docs/PLAN_VISUAL_OVERHAUL.md`. The doctrine above (signature, inventory, rules,
+This closes `docs/archive/PLAN_VISUAL_OVERHAUL.md`. The doctrine above (signature, inventory, rules,
 identity engine) reflects what's actually shipped as of this pass.
+
+## The motion language — "the overture, then the heartbeat" (decided 2026-07-28)
+
+Chosen by the creator from three staged languages (design study, Plate 10): **C's
+entrance + B's life.** Two rules govern every surface from R1 onward:
+
+1. **The overture plays once per arrival.** On first view of a surface, its entrance
+   choreography runs a single time — title settles, journey line draws, stations land in
+   sequence, the day-dot travels home — then finishes. It never loops, never replays on
+   scroll-back, and never runs two surfaces at once (one owner per property per element,
+   as ever).
+2. **Continuous motion is reserved for objects that encode live meaning.** After the
+   overture, the only things allowed to keep moving are the ones whose motion IS
+   information: the read-fill creeping along the journey line, its tip's soft glow,
+   today's breathing dot, a living cover. Decoration gets one entrance, then stillness.
+   Chrome never animates on its own, nothing moves between the reader and a tap, and
+   scrolling is always plain scrolling.
+
+Reduced-motion renders every finished frame with no entrance and no pulse. The existing
+inventory rules (single motion dependency, once-per-view flags, lazy modules) apply to
+every implementation of this language.
+
+## Living covers — the R4 rules (shipped 2026-07-28)
+
+The cover stack, from birth upward (PLAN_VISUAL_REDESIGN.md Move A½; creator-delegated №7):
+
+1. **The Painted Atlas is the universal default.** Every guide — current, scaffold, future —
+   is born with a living cover: ridgelines seeded from its own slug (`src/lib/terrain.ts`,
+   pure + tested), painted in its own accent, under a sky keyed to the destination's local
+   clock (night 21–05 · dawn 05–08 · day 08–17 · dusk 17–21, destination time — a painter's
+   sky, not astronomy). Its slow drift (26–46 s cycles) is licensed by rule 2 above: the
+   scene shows the destination's sky *right now*, the same live fact as the local-time pill.
+   It also backs every photo hero — a failed Commons image now reveals the painted scene
+   instead of a dead grey field.
+2. **A still photo is the identity layer.** Commons `file` (license machine-verifiable) or —
+   new in R4 — a direct royalty-free CDN `src` (Pexels/Unsplash/Pixabay-class; `{w}` width
+   token for srcset), where zod REQUIRES `credit` + `license` because the licensing isn't
+   machine-checkable. The pathos register is liberal in sourcing, never in honesty.
+3. **Footage is the curated upgrade, never a requirement.** `cover.video` hot-links a
+   library CDN (~4 MB ceiling by curation; nothing heavy enters the repo). Delivery is
+   poster-first: no `src` attaches until `living-cover.js` clears every gate —
+   reduced-motion, Save-Data, in-view, tab-visible — and autoplay refusal or a dead stream
+   leaves the still standing as a COMPLETE cover, not a degraded one. A visible pause chip
+   appears only once footage actually plays; while it plays, the credit chip swaps to the
+   footage's credit (one surface, always crediting what's on screen). Footage must show the
+   actual place — a near-miss stand-in (a Grand Canyon loop on a Sedona guide) is declined
+   as quietly lying, per the plan's "no invented geography".
+
+Sourcing note (creator-widened 2026-07-28): beyond Commons, royalty-free libraries are in
+bounds for cover art. Practical findings — Mixkit serves stable, hot-linkable per-clip asset
+URLs (the Korea palace cover is `assets.mixkit.co/videos/20095/…`, Mixkit Stock Video Free
+License, credited anyway); Pexels/Pixabay require their API for reliable URLs (keyless
+scraping is blocked); Coverr's grid exposes only ephemeral `coverr-temp-…` URLs — do not
+hot-link those.
+
+## Section anchors — the R5 rules (shipped 2026-07-28)
+
+Every anchor figure is DERIVED from the guide's own researched data (`src/lib/anchors.ts`,
+pure + tested) — never drawn or worded by hand, and a section whose data can't support a
+figure honestly gets none (the pin-less fallback is a blank, not a guess):
+
+- **Days timeline** — one station per day entry; dates from the entries, the two above-line
+  words from the first/last days' own titles, today ringed client-side by the same date
+  match the journey bar's Today uses.
+- **Transit journey-line** — one station per route step, labelled by the step's own bold
+  lead (the lead-first content standard doing double duty as structure).
+- **Booking rings** — checklists ≥4 items open with a progress ring: total counted at
+  build, fill counted live from the reader's own saved checkbox state (live meaning, so
+  its fill transition is allowed motion).
+- **Route-leg day headers** — "first stop → last stop · ≈N km"; km is summed ONLY when
+  every consecutive waypoint pair carries verified coordinates — a partial sum would
+  understate the day while reading as a fact, so any gap drops the number, never fudges it.
+
+Motion: one draw-in per figure on first view (~600 ms), then stillness — implemented with
+reveal.js's safety rail (markup renders COMPLETE; JS adds the pending state only when
+motion is welcome, and a timeout finishes every frame if the observer never delivers).
+Reduced-motion never sees an entrance. Descriptors ship alongside — creator-signed
+content, schema-guarded so a group rename errors instead of silently orphaning its line.
+(Voice standard revised 2026-07-28: rare + informational-only, block-types.md — the
+original "warmth in the descriptors" framing is superseded.)

@@ -36,7 +36,7 @@ const provenance = {
   shelf_life: z.enum(["fx", "transit", "hours", "venue", "default"]).optional(),
 };
 
-// F1 (docs/PLAN_TRAVELER_FEATURES.md): a checklist item stays a bare string for every guide
+// F1 (docs/archive/PLAN_TRAVELER_FEATURES.md): a checklist item stays a bare string for every guide
 // that has no book-by deadline for it (back-compat — every existing guide validates
 // unchanged) OR upgrades to an object carrying an optional `due` (ISO date) — the Trip Kit's
 // "Book by" card buckets these into overdue/soon/later. A `due` is a perishable fact (things
@@ -126,24 +126,44 @@ const collapse = {
   defaultOpen: z.boolean().optional(),
 };
 
+// M4: optional override for the "More detail" toggle's label (src/lib/lead-split.ts's density
+// pass) — e.g. "Ticketing fine print" tells the reader what's folded instead of a bare "More
+// detail". Unset falls back to an honest computed paragraph count.
+const moreDetail = { moreLabel: z.string().optional() };
+
+// R6 — Composer unit facets (docs/PLAN_VISUAL_REDESIGN.md Move F). Tagged during the
+// research pass, consumed ONLY by scripts/compose-guide.mjs (no renderer reads them):
+//   theme — the content theme this unit belongs to (compose defaults it to the unit's
+//           current group, so an untagged guide composes to exactly itself);
+//   phase — when the traveler needs it, driving reader-order and fold destinations;
+//   rank  — the theme's position in the intake's ranked priorities (1 = top), which is
+//           what lets a top-2 theme with real weight earn its own anchor tab.
+// Weight is deliberately NOT a field — it is DERIVED (item counts + prose length) so it
+// can never drift from the content it describes.
+const facets = {
+  theme: z.string().optional(),
+  phase: z.enum(["before", "arrival", "daily", "leaving"]).optional(),
+  rank: z.number().int().positive().optional(),
+};
+
 const section = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("panel"),  group: z.string(), title: z.string().optional(), body: z.string().optional(), checklist: z.array(checklistItem).optional(), ...collapse, ...provenance }),
-  z.object({ type: z.literal("prose"),  group: z.string(), title: z.string().optional(), body: z.string().optional(), ...collapse, ...provenance }),
-  z.object({ type: z.literal("list"),   group: z.string(), title: z.string().optional(), items: z.array(z.string()), ...collapse, ...provenance }),
-  z.object({ type: z.literal("routes"), group: z.string(), title: z.string().optional(), steps: z.array(z.string()), ...provenance }),
-  z.object({ type: z.literal("map"),    group: z.string(), title: z.string().optional(), center: coord, span: z.number().optional(), points: z.array(mapPoint).optional() }),
+  z.object({ type: z.literal("panel"),  group: z.string(), ...facets, title: z.string().optional(), body: z.string().optional(), checklist: z.array(checklistItem).optional(), ...collapse, ...moreDetail, ...provenance }),
+  z.object({ type: z.literal("prose"),  group: z.string(), ...facets, title: z.string().optional(), body: z.string().optional(), ...collapse, ...moreDetail, ...provenance }),
+  z.object({ type: z.literal("list"),   group: z.string(), ...facets, title: z.string().optional(), items: z.array(z.string()), ...collapse, ...provenance }),
+  z.object({ type: z.literal("routes"), group: z.string(), ...facets, title: z.string().optional(), steps: z.array(z.string()), ...provenance }),
+  z.object({ type: z.literal("map"),    group: z.string(), ...facets, title: z.string().optional(), center: coord, span: z.number().optional(), points: z.array(mapPoint).optional() }),
   // weather — live 7-day Open-Meteo strip. No coords here: reads lat/lng from the
   // guide's first `map` section at runtime (so it needs no per-guide config). If the
   // guide has no map section the block stays hidden. `note` is an optional caption.
-  z.object({ type: z.literal("weather"), group: z.string(), title: z.string().optional(), note: z.string().optional() }),
+  z.object({ type: z.literal("weather"), group: z.string(), ...facets, title: z.string().optional(), note: z.string().optional() }),
   // holidays — public holidays for the trip, fetched at BUILD time from Nager.Date
   // into src/data/holidays/{CC}-{year}.json (offline-safe, no client JS). The country
   // comes from themes.ts COUNTRY_CODES; the dates come from the guide's `days` section.
   // `year` is optional (defaults to the derived trip year). The block highlights any
   // holiday during the trip, notes ones just before/after, and hides if no data file
   // exists for the country/year.
-  z.object({ type: z.literal("holidays"), group: z.string(), title: z.string().optional(), note: z.string().optional(), year: z.number().int().optional() }),
-  z.object({ type: z.literal("days"),   group: z.string(), title: z.string().optional(), items: z.array(z.object({
+  z.object({ type: z.literal("holidays"), group: z.string(), ...facets, title: z.string().optional(), note: z.string().optional(), year: z.number().int().optional() }),
+  z.object({ type: z.literal("days"),   group: z.string(), ...facets, title: z.string().optional(), items: z.array(z.object({
     date: z.string(), title: z.string(),
     pace: z.string().optional(), note: z.string().optional(), body: z.string().optional(), fit: z.string().optional(),
     checklist: z.array(checklistItem).optional(),
@@ -180,13 +200,13 @@ const section = z.discriminatedUnion("type", [
     })).optional(),
     ...provenance,
   })) }),
-  z.object({ type: z.literal("sights"), group: z.string(), title: z.string().optional(), items: z.array(z.object({
+  z.object({ type: z.literal("sights"), group: z.string(), ...facets, title: z.string().optional(), items: z.array(z.object({
     name: z.string(), kicker: z.string().optional(), body: z.string().optional(),
     img: z.object({ file: z.string(), alt: z.string().optional() }).optional(),
     map: coord.optional(),
     ...provenance,
   })) }),
-  z.object({ type: z.literal("budget"), group: z.string(), title: z.string().optional(),
+  z.object({ type: z.literal("budget"), group: z.string(), ...facets, title: z.string().optional(),
     intro: z.string().optional(), currency: z.string().optional(), days: z.number().positive().optional(),
     // party must be a positive integer: BudgetBlock.astro divides trip totals by it
     // for the per-person view, so 0 or a negative value would render $Infinity/$NaN.
@@ -208,7 +228,7 @@ const section = z.discriminatedUnion("type", [
   // comma-lists that used to live in prose. Each window renders as one card (day + time +
   // type theme + spawn/raid chips + priority targets), so the data segments cleanly and
   // reflows from a multi-column grid on desktop to a single column on mobile.
-  z.object({ type: z.literal("habitats"), group: z.string(), title: z.string().optional(), note: z.string().optional(),
+  z.object({ type: z.literal("habitats"), group: z.string(), ...facets, title: z.string().optional(), note: z.string().optional(),
     windows: z.array(z.object({
       day:     z.string(),                        // "Sat Jul 11"
       time:    z.string(),                        // "10:00–13:00"
@@ -221,7 +241,7 @@ const section = z.discriminatedUnion("type", [
     })).min(1), ...collapse }),
   // infogrid — a grid of small icon-labeled fact cards; replaces dense bullet-list
   // "here's everything you need to know" prose with scannable, low-text-density tiles.
-  z.object({ type: z.literal("infogrid"), group: z.string(), title: z.string().optional(), note: z.string().optional(),
+  z.object({ type: z.literal("infogrid"), group: z.string(), ...facets, title: z.string().optional(), note: z.string().optional(),
     cards: z.array(z.object({
       icon:  z.string().optional(),   // single emoji/glyph, e.g. "🎟️"
       label: z.string(),              // short heading, e.g. "9 free raid passes/day"
@@ -229,7 +249,7 @@ const section = z.discriminatedUnion("type", [
     })).min(1), ...collapse }),
   // tierlist — ranked chip groups (S/A/B priority tiers, or "skip vs fresh" divergence
   // groups); replaces paragraph-of-prose priority rankings with scannable chip rows.
-  z.object({ type: z.literal("tierlist"), group: z.string(), title: z.string().optional(), note: z.string().optional(),
+  z.object({ type: z.literal("tierlist"), group: z.string(), ...facets, title: z.string().optional(), note: z.string().optional(),
     tiers: z.array(z.object({
       tier:  z.string(),                       // group label, e.g. "S — do these no matter what"
       icon:  z.string().optional(),            // single emoji/glyph shown before the label
@@ -240,7 +260,7 @@ const section = z.discriminatedUnion("type", [
   // raids — structured raid boss counter tables; replaces hand-written HTML in prose bodies.
   // Each boss renders as a collapsible <details> card with a typed counter table.
   // `strategy` may contain simple inline HTML (<b>, <a>); no block elements.
-  z.object({ type: z.literal("raids"),  group: z.string(), title: z.string().optional(), ...collapse,
+  z.object({ type: z.literal("raids"),  group: z.string(), ...facets, title: z.string().optional(), ...collapse,
     bosses: z.array(z.object({
       name:        z.string(),
       tier:        z.enum(["3-star", "5-star", "primal", "shadow", "super-mega"]),
@@ -348,16 +368,54 @@ const guides = defineCollection({
         });
       }
     }).optional(),
-    // Optional per-trip COVER art (docs/MOTION.md) — the shared element that morphs from the
-    // hub card into the guide masthead. A Wikimedia Commons `File:` name (verifiable licensing, same
-    // as sights[].img). When absent, the hub card + masthead fall back to the guide's first sight
-    // photo, so no existing guide regresses. `focal` is an optional CSS object-position (e.g.
-    // "50% 30%") to keep the subject framed across the card ↔ hero size change.
+    // Optional per-trip COVER art (docs/MOTION.md; widened in R4, docs/PLAN_VISUAL_REDESIGN.md
+    // Move A½) — the shared element that morphs from the hub card into the guide masthead.
+    // The cover is the PATHOS register (creator-decided 2026-07-27): liberal in sourcing, but
+    // ALWAYS licensed and credited, and never carrying or implying a verification flag.
+    //   · `file` — a Wikimedia Commons `File:` name (verifiable licensing, same as sights[].img;
+    //     Commons IS the credit, so the chip links the File page automatically).
+    //   · `src`  — R4: a direct https URL into a royalty-free library's CDN (Pexels, Unsplash,
+    //     Pixabay …), widening the cover horizon beyond Commons. An optional `{w}` token marks
+    //     where a width goes (those CDNs all take one), giving the masthead its responsive
+    //     srcset; without the token the URL ships as-is, one size. Non-Commons licensing is not
+    //     machine-verifiable, so `credit` + `license` become REQUIRED with `src` (zod-enforced
+    //     below) — the honesty apparatus travels with the widened horizon.
+    //     (scripts/extract-palette.mjs currently reads `file` only; a `src`-only guide keeps
+    //     palette extraction from its first sight photo.)
+    //   · `video` — R4: the living-cover upgrade (masthead only; poster-first, lazily attached,
+    //     gated on reduced-motion/Save-Data/in-view by src/scripts/living-cover.js, visible
+    //     pause). Hot-linked from the library's CDN (~4 MB ceiling by curation — nothing heavy
+    //     enters the repo); `credit` + `license` required always, `poster` optional because the
+    //     photo cover is the natural poster. Footage is an upgrade over the Painted Atlas
+    //     default, never a requirement.
+    // When the whole object is absent, hub card + masthead fall back to the guide's first sight
+    // photo, then to the Painted Atlas — no guide regresses. `focal` is an optional CSS
+    // object-position (e.g. "50% 30%") to keep the subject framed across the card ↔ hero size change.
     cover: z.object({
-      file: z.string(),
+      file: z.string().optional(),
+      src: z.string().regex(/^https:\/\//, "cover.src must be an https URL").optional(),
       alt: z.string().optional(),
       credit: z.string().optional(),
+      creditUrl: z.string().regex(/^https:\/\//, "cover.creditUrl must be an https URL").optional(),
+      license: z.string().optional(),
       focal: z.string().optional(),
+      video: z.object({
+        src: z.string().regex(/^https:\/\//, "cover.video.src must be an https URL"),
+        poster: z.string().regex(/^https:\/\//, "cover.video.poster must be an https URL").optional(),
+        credit: z.string().min(1),
+        creditUrl: z.string().regex(/^https:\/\//, "cover.video.creditUrl must be an https URL").optional(),
+        license: z.string().min(1),
+      }).optional(),
+    }).superRefine((c, ctx) => {
+      if (!c.file && !c.src && !c.video) {
+        ctx.addIssue({ code: "custom", message: "cover needs at least one of `file` (Commons), `src` (royalty-free CDN), or `video` — an empty cover object is a mistake, not a fallback." });
+      }
+      if (c.file && c.src) {
+        ctx.addIssue({ code: "custom", path: ["src"], message: "cover.file and cover.src are two still sources for one slot — pick one (Commons `file` wins ties in consumers, so a stray `src` would silently do nothing)." });
+      }
+      if (c.src && (!c.credit || !c.license)) {
+        ctx.addIssue({ code: "custom", path: ["src"], message: "a non-Commons cover.src has no machine-verifiable licensing — `credit` and `license` are required alongside it (e.g. credit: \"Jane Doe · Pexels\", license: \"Pexels License\")." });
+      }
     }).optional(),
     // Optional situational phrase cards (docs/FEATURES.md #6) — a guide-level field, NOT a
     // section type: it's consumed by exactly one surface (the Trip kit tool tab), so it
@@ -437,6 +495,13 @@ const guides = defineCollection({
     // each one still spends a slot of the reader's attention, which is why they're capped
     // separately in the layout rather than being free.
     tabBudget: z.number().int().positive().optional(),
+    // R5 — per-group voice descriptors (design decision №4: "labels literal, always;
+    // warmth demoted to the descriptors"). Keyed by EXACT group name (superRefine below
+    // rejects keys no section uses, so a group rename can't silently orphan its line).
+    // Rendered as the voice line under each tab panel's opener title, replacing the
+    // derived contents line. CREATOR-SIGNED CONTENT: written per guide, only asserting
+    // things the guide itself contains — never generated at scaffold time.
+    descriptors: z.record(z.string(), z.string()).optional(),
     // Salted, unguessable id for this guide's shared Trip-Split / feedback / reminders room
     // (16–40 lowercase alphanumerics, crypto-random, committed once by scripts/gen-room-id.mjs).
     // Absent = legacy: the room falls back to the short guide slug, which the RTDB rules freeze
@@ -450,6 +515,18 @@ const guides = defineCollection({
     // scripts/__tests__/guide-room-id.test.mjs — a silent switch points the guide at an empty
     // room while the old one keeps the data, and the reader just sees a confident empty budget.
     roomMigratedFrom: z.string().optional(),
+    // M5 — OPT-IN post-trip budget lock. When true, this guide's Trip Split becomes a read-only
+    // record once the trip is `POST_TRIP_GRACE_DAYS` past its last day (see
+    // features/firebase/model/room.ts): the figures keep rendering and keep feeding the recap,
+    // but no new edits are accepted from the client, and a room code committed to a public repo
+    // stops being a standing write invitation.
+    //
+    // DEFAULT OFF, deliberately. Locking is a real behaviour change on a surface people type
+    // into, and defaulting it on would have silently frozen Korea's live budget days after this
+    // shipped (its trip ended 15 Jul; a 14-day grace lands on 30 Jul) — exactly the kind of fork
+    // CLAUDE.md says not to pick on the creator's behalf. Set it per guide, when that trip is
+    // genuinely settled.
+    budgetLock: z.boolean().optional(),
     intro: z.string().optional(),
     // ADDITIVE + OPTIONAL — the curated post-mortem: what REALLY happened vs the plan.
     // Hand-authored by the maker from the raw trip feedback (never auto-generated, never
@@ -565,6 +642,22 @@ const guides = defineCollection({
         path: ["tabBudget"],
         message: `${groups.length} content groups exceeds this guide's tab budget of ${budget} — the nav bar also carries 4 tool tabs on top, so the reader would face ${groups.length + 4}. Merge two groups, or raise tabBudget deliberately if this guide has earned them. Groups: ${groups.join(" · ")}`,
       });
+    }
+
+    // 2b. Descriptors (R5) — every key must name a group some section actually uses.
+    // The failure this catches is the continuity one: a group gets renamed (R1 renamed
+    // three) and its descriptor silently stops rendering instead of erroring.
+    if (g.descriptors) {
+      const realGroups = new Set(g.sections.map((s: any) => s.group));
+      for (const key of Object.keys(g.descriptors)) {
+        if (!realGroups.has(key)) {
+          ctx.addIssue({
+            code: "custom",
+            path: ["descriptors", key],
+            message: `descriptor key "${key}" matches no section group — it would silently never render. Real groups: ${[...realGroups].join(" · ")}`,
+          });
+        }
+      }
     }
 
     // 3. Provenance gate — only for guides that opted in with `provenance: "strict"`.

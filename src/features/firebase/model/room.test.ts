@@ -5,7 +5,7 @@
    handler cannot fail a test that never calls it. The cases below are the real incident,
    pinned: a guide with no roomId, a slug-shaped room code, and a permission_denied rejection. */
 import { describe, expect, test } from "vitest";
-import { isPermanentWriteError, isValidRoomId, resolveRoomId, ROOM_ID_RE } from "./room";
+import { isPermanentWriteError, isPostTripLocked, isValidRoomId, parseRoomHash, POST_TRIP_GRACE_DAYS, resolveRoomId, ROOM_ID_RE } from "./room";
 
 describe("room id validity", () => {
   test("accepts the shape rules.json requires (16-40 lowercase alphanumerics)", () => {
@@ -80,5 +80,77 @@ describe("isPermanentWriteError", () => {
     expect(isPermanentWriteError(null)).toBe(false);
     expect(isPermanentWriteError(undefined)).toBe(false);
     expect(isPermanentWriteError({})).toBe(false);
+  });
+});
+
+/* M5 — the #room= override. The zero-setup default is settled and unchanged; this is the
+   opt-in private alternative, so what matters is "a valid override wins" and "nothing weaker
+   than a real room code ever gets through the URL either". */
+describe("parseRoomHash", () => {
+  const CODE = "a1b2c3d4e5f60718";
+  test("accepts a valid code from the fragment, with or without a leading #", () => {
+    expect(parseRoomHash("#room=" + CODE)).toBe(CODE);
+    expect(parseRoomHash("room=" + CODE)).toBe(CODE);
+  });
+  test("ignores an absent, empty or unrelated fragment", () => {
+    expect(parseRoomHash("")).toBe("");
+    expect(parseRoomHash("#")).toBe("");
+    expect(parseRoomHash("#section-3")).toBe("");
+    expect(parseRoomHash(undefined)).toBe("");
+    expect(parseRoomHash(null)).toBe("");
+  });
+  test("applies the SAME 16-40 char rule as any other room code", () => {
+    expect(parseRoomHash("#room=denmark")).toBe("");
+    expect(parseRoomHash("#room=" + "a".repeat(15))).toBe("");
+    expect(parseRoomHash("#room=" + "a".repeat(16))).toBe("a".repeat(16));
+    expect(parseRoomHash("#room=" + "a".repeat(41))).toBe("");
+    expect(parseRoomHash("#room=ABCDEF0123456789")).toBe("");
+  });
+  test("survives a malformed percent-escape instead of throwing", () => {
+    expect(parseRoomHash("#room=%E0%A4%A")).toBe("");
+  });
+});
+
+describe("resolveRoomId with a #room= override", () => {
+  const committed = "0123456789abcdef";
+  const priv = "fedcba9876543210";
+  test("a valid override beats the guide's committed roomId", () => {
+    expect(resolveRoomId({ roomId: committed }, "#room=" + priv)).toBe(priv);
+  });
+  test("an invalid override never overrides the committed room", () => {
+    expect(resolveRoomId({ roomId: committed }, "#room=nope")).toBe(committed);
+    expect(resolveRoomId({ roomId: committed }, "#section-2")).toBe(committed);
+  });
+  test("called with one argument it behaves exactly as before (no regression)", () => {
+    expect(resolveRoomId({ roomId: committed })).toBe(committed);
+    expect(resolveRoomId({ roomId: "denmark", storeKey: "denmark" })).toBe("");
+  });
+  test("an override still works when the guide declares no room at all", () => {
+    expect(resolveRoomId({}, "#room=" + priv)).toBe(priv);
+  });
+});
+
+/* M5 — the post-trip lock. A settled trip's room is its financial record; this stops it
+   drifting, and stops a publicly-committed code being a standing write invitation. */
+describe("isPostTripLocked", () => {
+  const end = new Date(2026, 6, 15); // 15 Jul 2026, local
+  test("unlocked during the trip and through the whole grace window", () => {
+    expect(isPostTripLocked(end, new Date(2026, 6, 10))).toBe(false);
+    expect(isPostTripLocked(end, new Date(2026, 6, 15))).toBe(false);
+    expect(isPostTripLocked(end, new Date(2026, 6, 29, 23, 0))).toBe(false);
+  });
+  test("locks once the grace window is fully past", () => {
+    expect(isPostTripLocked(end, new Date(2026, 6, 30, 0, 1))).toBe(true);
+    expect(isPostTripLocked(end, new Date(2027, 0, 1))).toBe(true);
+  });
+  test("an UNDATED trip is never locked — guessing about a live trip is the worse failure", () => {
+    expect(isPostTripLocked(null, new Date(2027, 0, 1))).toBe(false);
+    expect(isPostTripLocked(undefined, new Date(2027, 0, 1))).toBe(false);
+    expect(isPostTripLocked(new Date("nonsense"), new Date(2027, 0, 1))).toBe(false);
+  });
+  test("the grace window is honoured exactly, and is configurable", () => {
+    expect(POST_TRIP_GRACE_DAYS).toBe(14);
+    expect(isPostTripLocked(end, new Date(2026, 6, 17), 1)).toBe(true);
+    expect(isPostTripLocked(end, new Date(2026, 6, 16, 12), 1)).toBe(false);
   });
 });

@@ -77,6 +77,10 @@ jobs:
       fail-fast: false
       matrix:
         slug: ${{ fromJson(needs.detect.outputs.slugs) }}
+    # M0/B3: job-level so the agent action's own Bash tool (which inherits the job's
+    # environment) has a gh credential — the prompt below calls `gh pr view`/`gh pr create`.
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:

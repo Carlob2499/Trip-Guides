@@ -13,7 +13,7 @@
 .hub-hero-scrim{position:absolute;inset:0;z-index:-1;background:linear-gradient(to top,rgba(12,16,20,.82) 0%,rgba(12,16,20,.35) 55%,rgba(12,16,20,.12) 100%)}
 .hub-hero-body{display:flex;flex-direction:column;gap:.5rem;justify-content:flex-end;min-height:340px;padding:1.6rem 1.5rem 1.4rem}
 .hub-hero-eyebrow{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:#dfe4d8}
-.hub-hero-title{font-family:var(--font-display);font-weight:780;font-size:clamp(1.7rem,4.6vw,3rem);letter-spacing:-.03em;line-height:1.04;text-shadow:0 1px 12px rgba(0,0,0,.35)}
+.hub-hero-title{font-family:var(--font-display);font-weight:620;font-size:clamp(1.7rem,4.6vw,3rem);letter-spacing:-.012em;line-height:1.04;text-shadow:0 1px 12px rgba(0,0,0,.35)}
 .hub-hero-meta{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.15rem}
 .hub-hero-count,.hub-hero-wx,.hub-hero-days{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;padding:.28rem .6rem;border-radius:999px;background:rgba(20,24,28,.55);border:1px solid rgba(244,246,239,.25);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .hub-hero-count{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
@@ -65,11 +65,18 @@
 .hubcard-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.001);transition:transform .5s cubic-bezier(.2,.7,.2,1)}
 .hubcard:hover .hubcard-img{transform:scale(1.05)}
 .hubcard-cover-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,13,16,.28),rgba(10,13,16,0) 55%)}
+/* R5 hover preview — the living cover breathes on dwell (hub-live-cards.js inserts the
+   video below the grad; the photo is always the complete resting state). */
+.hubcard-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s ease}
+[data-live-cover].is-live .hubcard-video{opacity:1}
 .hubcard-cover--typo{background:
   radial-gradient(circle at 1px 1px,rgba(255,255,255,.14) 1.3px,transparent 1.5px) 0 0/20px 20px,
   linear-gradient(120deg,color-mix(in srgb,var(--accent) 100%,#000 6%),color-mix(in srgb,var(--accent) 82%,#fff 12%));
   display:flex;align-items:center;justify-content:center}
-.hubcard-cover-initial{font-family:var(--font-display);font-weight:800;font-size:4.6rem;line-height:1;color:rgba(255,255,255,.92);letter-spacing:-.04em;transform:translateY(2px);transition:transform .4s cubic-bezier(.2,.7,.2,1)}
+/* R4: the accent-gradient field above is now the FLOOR under the Painted Atlas mini
+   (painted-atlas.css) — still what paints if the atlas ever doesn't. position:relative
+   lifts the initial letter above the positioned atlas layers. */
+.hubcard-cover-initial{position:relative;font-family:var(--font-display);font-weight:640;font-size:4.6rem;line-height:1;color:rgba(255,255,255,.92);letter-spacing:-.015em;transform:translateY(2px);transition:transform .4s cubic-bezier(.2,.7,.2,1);text-shadow:0 2px 16px rgba(0,0,0,.35)}
 .hubcard:hover .hubcard-cover-initial{transform:translateY(-2px) scale(1.06)}
 @media(prefers-reduced-motion:reduce){
   .hubcard-img,.hubcard-cover-initial{transition:none}

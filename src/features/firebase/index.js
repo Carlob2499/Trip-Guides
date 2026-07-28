@@ -5,7 +5,7 @@
 
 export { hasFirebase } from "./client.js";
 export { joinTrip, generateTripCode, normalizeCode, reportError, bumpCounter } from "./sync.js";
-export { isValidRoomId, resolveRoomId, isPermanentWriteError, ROOM_ID_RE } from "./model/room";
+export { isValidRoomId, resolveRoomId, parseRoomHash, isPermanentWriteError, isPostTripLocked, POST_TRIP_GRACE_DAYS, ROOM_ID_RE } from "./model/room";
 
 import { resolveRoomId } from "./model/room";
 
@@ -19,7 +19,14 @@ import { resolveRoomId } from "./model/room";
 export function roomId() {
   try {
     var el = document.getElementById("tgConfig");
-    return resolveRoomId(el ? JSON.parse(el.textContent || "{}") : {});
+    // M5: a `#room=<code>` fragment overrides the committed roomId — the opt-in private
+    // alternative to the zero-setup default (see model/room.ts). The fragment is never sent
+    // to a server by the browser, which is exactly why it is the carrier for a code that
+    // must not live in a public repo.
+    return resolveRoomId(
+      el ? JSON.parse(el.textContent || "{}") : {},
+      typeof location !== "undefined" ? location.hash : "",
+    );
   } catch (e) {
     return "";
   }

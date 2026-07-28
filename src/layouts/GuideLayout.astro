@@ -1,5 +1,6 @@
 ﻿---
 import Block from "../components/Block.astro";
+import Icon from "../components/Icon.astro";
 import PwaHead from "../components/PwaHead.astro";
 import { jsonEmbed } from "../lib/json-embed";
 import TripSplit from "../components/TripSplit.astro";
@@ -13,17 +14,23 @@ import { currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
 import { paletteFor, accentForGuide } from "../lib/palettes";
 import { accentTokens, accentStyle } from "../lib/accent-tokens";
 import { generateContourLayer } from "../lib/contours";
+import PaintedAtlas from "../components/PaintedAtlas.astro";
 import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
+import { computeGuideStats, latestVerifiedOn } from "../lib/guide-stats";
 import { collectWaypoints, collectDayEvents, buildSummary } from "../features/exports/index";
 // Self-hosted variable fonts (bundled, base-path-safe, offline-correct) — no CDN.
-import "@fontsource-variable/bricolage-grotesque";
-import "@fontsource-variable/literata";
-import "@fontsource-variable/literata/wght-italic.css";
-import "@fontsource-variable/spline-sans-mono";
+// Quiet Edition (R1): ONE serif — Literata with its optical-size axis (standard = wght+opsz,
+// so browsers cut display vs text automatically) — and ONE quiet humanist sans for data/labels.
+import "@fontsource-variable/literata/standard.css";
+import "@fontsource-variable/literata/standard-italic.css";
+import "@fontsource-variable/source-sans-3";
 import "../styles/base.css";
 import "../styles/guide.css";
+import "../styles/print.css";
 import "../styles/trip-split.css";
 import "../styles/masthead.css";
+import "../styles/painted-atlas.css";
+import "../styles/anchors.css";
 import "../styles/sights.css";
 import "../styles/map.css";
 import "../styles/planner.css";
@@ -55,6 +62,13 @@ const REPO = "Carlob2499/Trip-Guides";
 
 const { guide } = Astro.props;
 const { order, byG } = bucket(guide.sections);
+
+// R2 (Living Atlas): the mobile bar's Map destination deep-links to the guide's first
+// map section — and simply doesn't render when a guide has none (honest blank).
+let navMapCat: number | null = null, navMapSec: number | null = null;
+order.forEach((g: string, ci: number) => (byG[g] || []).forEach((o: any) => {
+  if (navMapSec === null && o.s.type === "map") { navMapCat = ci; navMapSec = o.i; }
+}));
 
 // Tab-bar display shortening: long compound group names crowd the tab strip
 // (Korea has 13 tabs; names run to 20 chars). Display-only — the full name
@@ -133,19 +147,33 @@ const sightCount = _flat.filter((s: any) => s.type === "sights").reduce((n: numb
 
 // Masthead hero image = the guide's own COVER art when set, else its first sights photo
 // (docs/MOTION.md). This is the SAME image the hub card shows — the shared element
-// that morphs between them. Present → full-bleed photo hero; absent (scaffolds) → bold
-// typographic hero on the accent field. Same Commons Special:FilePath thumbnailing as SightsBlock.
+// that morphs between them. Present → full-bleed photo hero; absent (scaffolds) → the
+// Painted Atlas (R4), living from birth. Same Commons Special:FilePath thumbnailing as SightsBlock.
 const heroSight = _flat
   .filter((s: any) => s.type === "sights")
   .flatMap((s: any) => s.items || [])
   .find((it: any) => it?.img?.file);
-const coverFile  = (guide as any).cover?.file  ?? heroSight?.img?.file ?? null;
-const coverAlt   = (guide as any).cover?.alt   ?? heroSight?.img?.alt  ?? heroSight?.name ?? "";
-const coverFocal = (guide as any).cover?.focal ?? null;
-const heroSrc = coverFile
-  ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(coverFile)}?width=1600`
+const cover = (guide as any).cover;
+// R4: a still cover may now be a direct royalty-free CDN URL (`cover.src`, credit+license
+// zod-required) as well as a Commons `file`. `src` wins when set (the schema rejects both
+// together); a cover with only `video` still takes the first sight photo as its poster base.
+const coverDirect = (cover?.src as string | undefined) ?? null;
+const coverFile  = cover?.file ?? (coverDirect ? null : heroSight?.img?.file ?? null);
+const coverAlt   = cover?.alt   ?? heroSight?.img?.alt  ?? heroSight?.name ?? "";
+const coverFocal = cover?.focal ?? null;
+const mastCommonsSrc = (w: number) =>
+  coverFile ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(coverFile)}?width=${w}` : null;
+// One width-parameterized source fn for both paths: Commons thumbnails via Special:FilePath,
+// direct CDNs via their own `{w}` token (absent token → the URL is single-size, srcset off).
+const mastSrcAt = (w: number) =>
+  coverDirect ? coverDirect.replace("{w}", String(w)) : mastCommonsSrc(w);
+const heroSrc = mastSrcAt(1600);
+// M2: a 375px phone was downloading the full 1600px masthead hero — same responsive
+// treatment SightsBlock already gives every sight photo.
+const heroSrcset = (coverFile || coverDirect?.includes("{w}"))
+  ? `${mastSrcAt(480)} 480w, ${mastSrcAt(800)} 800w, ${mastSrcAt(1200)} 1200w, ${mastSrcAt(1600)} 1600w`
   : null;
-// V4 (docs/PLAN_VISUAL_OVERHAUL.md) — a faint topographic contour layer in the masthead's paper
+// V4 (docs/archive/PLAN_VISUAL_OVERHAUL.md) — a faint topographic contour layer in the masthead's paper
 // zones, carrying the Overture's depth language into the guide's hero. STATIC on purpose: the
 // guide body is a reading surface (CLAUDE.md "calm to read"), so depth stays in the hero zone and
 // never moves behind text. Deterministic seeds ⇒ identical every build; zero runtime cost.
@@ -153,9 +181,16 @@ const mastContours = [
   generateContourLayer({ seed: 13, rings: 7, cx: 300, cy: 340 }),
   generateContourLayer({ seed: 29, rings: 6, cx: 720, cy: 560 }),
 ];
+// Credit chip: Commons files link their File page (Commons IS the credit); direct-URL
+// covers carry their own zod-required credit, linking creditUrl when given. The living
+// video swaps this chip to the footage credit while it plays (living-cover.js).
 const heroCredit = coverFile
-  ? `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(coverFile)}`
+  ? { href: `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(coverFile)}`, label: "Photo: Wikimedia Commons" }
+  : coverDirect && cover?.credit
+  ? { href: (cover.creditUrl as string | undefined) ?? null, label: `Photo: ${cover.credit}` }
   : null;
+// R4 living cover — the footage upgrade (schema-gated: credit+license required).
+const coverVideo = cover?.video ?? null;
 
 // For weather widget — pull lat/lng from first map section
 const mapSec    = _flat.find((s: any) => s.type === "map" && s.center?.lat);
@@ -204,6 +239,18 @@ const verifiedWarning = guide.verified?.trimStart().startsWith("⚠") ? guide.ve
 // Freshness date for the masthead chip — the ISO date inside the verified
 // stamp when present (surfaced, never invented; no date → no chip).
 const verifiedDate = guide.verified?.match(/\d{4}-\d{2}-\d{2}/)?.[0] ?? null;
+
+// M4 item 5 — the colophon's numbers, counted from THIS guide's own data by the same walker the
+// hub's Overture uses (src/lib/guide-stats.ts: a "verified fact" is any node carrying a
+// source_url; sources are distinct hostnames). Counted, never typed — a footer that claims
+// "47 verified facts" has to mean exactly that on every rebuild. Zero counts render nothing:
+// an unresearched scaffold gets an honest blank, not a row of zeroes.
+const colophon = computeGuideStats([guide]);
+// The guide-level `verified` field is free prose ("Checked 28 Jun 2026 for the 8–15 Jul
+// trip; …"), so `verifiedDate` above is null on every real guide — the per-FACT provenance
+// dates are the machine-readable ones. Their maximum is a true, checkable statement, and
+// falls back to the guide-level ISO date if a guide ever carries one.
+const colophonChecked = verifiedDate ?? latestVerifiedOn([guide]);
 
 // Public holidays — if the guide has a `holidays` section, look up the build-time
 // data for this country + trip year and slice it around the trip dates. All
@@ -306,11 +353,13 @@ const tripSummary = buildSummary(guide);
              sos.js so they share the chrome-button styling. -->
         <button id="btnShare" class="topbar-btn" aria-label="Share this guide" title="Share this guide"><svg class="tb-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg> <span class="tb-label">Share</span></button>
         <!--
-          Dark-mode toggle — icon and aria-label are updated by JS.
-          ◑ = currently light → click to go dark
-          ☀ = currently dark  → click to go light
+          Dark-mode toggle — icon and aria-label are swapped by theme.js on load (moon =
+          currently light, click for dark; sun = currently dark, click for light). The moon
+          below is the SERVER-RENDERED first-paint state and must match theme.js's own MOON_SVG:
+          it used to be a bare text glyph, which flashed for one frame before JS replaced it
+          with the real icon (M4 item 1 — one icon language, no glyph fallbacks).
         -->
-        <button id="btnDark" class="topbar-btn" aria-label="Switch to dark mode" title="Switch to dark mode">◑</button>
+        <button id="btnDark" class="topbar-btn" aria-label="Switch to dark mode" title="Switch to dark mode"><Icon name="moon" class="tb-ico" /></button>
       </div>
     </nav>
 
@@ -341,7 +390,7 @@ const tripSummary = buildSummary(guide);
           Email
         </a>
       </div>
-      <p class="share-install">📲 <b>Save this guide to your phone:</b> open your browser menu and choose <i>Add to Home Screen</i> — it then works offline for the whole trip (maps and photos still need a connection).</p>
+      <p class="share-install"><Icon name="phone" size={15} /> <b>Save this guide to your phone:</b> open your browser menu and choose <i>Add to Home Screen</i> — it then works offline for the whole trip (maps and photos still need a connection).</p>
       {(hasWaypoints || hasDayEvents) && (
         <div class="share-downloads">
           <p class="share-dl-head">Take it with you</p>
@@ -366,23 +415,37 @@ const tripSummary = buildSummary(guide);
     <!-- ═══════════════════════════════════════════════════════════════════════
          GUIDE TAB BAR — one tab per section group + Budget Calculator + Vote tools
          ═══════════════════════════════════════════════════════════════════ -->
-    <nav class="guide-tabs-nav" aria-label="Guide sections">
+    <nav class="guide-tabs-nav" aria-label="Guide sections" data-hint-anchor>
     <div class="guide-tabs" id="guideTabs" role="tablist">
       {order.map((g, i) => (
         <button class="gtab" role="tab" type="button" id={`gtab-${i}`} data-tab={i} data-full={g}
                 aria-controls={`grp-${i}`}
                 aria-label={g} aria-selected={i === 0 ? "true" : "false"}>{shortLabel(g)}</button>
       ))}
-      <button class="gtab gtab-split" role="tab" type="button" id="gtab-split" data-tab="split"
-              aria-controls="tripSplit" aria-selected="false">$ Budget</button>
-      <button class="gtab gtab-vote" role="tab" type="button" id="gtab-vote" data-tab="vote"
-              aria-controls="tripVote" aria-selected="false">🗳 Vote</button>
-      <button class="gtab gtab-remind" role="tab" type="button" id="gtab-remind" data-tab="remind"
-              aria-controls="tripRemind" aria-selected="false">📌 Reminders</button>
-      <button class="gtab gtab-learn" role="tab" type="button" id="gtab-learn" data-tab="learn"
-              aria-controls="tripLearn" aria-selected="false" hidden>📓 Learnings</button>
-      <button class="gtab gtab-kit" role="tab" type="button" id="gtab-kit" data-tab="kit"
-              aria-controls="tripKit" aria-selected="false">🧳 Trip kit</button>
+      {/* M4 item 3 — the TOOL tabs are layout chrome by CLAUDE.md's own definition, not content
+          groups, and Korea's 13 content tabs + these 5 made the strip scroll even on a 1400px
+          desktop. They stay in the SAME tablist (one tab set, one arrow-key ring, aria-controls
+          untouched — collapsing them into a popover would have broken the tablist's ARIA
+          structure for a purely visual win). Instead `.gtab-tool` marks them: a separator rule
+          sets them off as chrome, and on desktop their labels go visually-hidden (clipped, NOT
+          display:none — clipped text stays in the accessibility tree) so the strip fits one row
+          while every accessible name survives verbatim. Mobile keeps the labels: the strip
+          scrolls there by design and the sheet below spells them out in full anyway. */}
+      <button class="gtab gtab-tool gtab-split" role="tab" type="button" id="gtab-split" data-tab="split"
+              aria-controls="tripSplit" aria-selected="false"
+              aria-label="Budget calculator" title="Budget calculator"><Icon name="budget" class="gtab-ico" /><span class="gtab-txt">Budget</span></button>
+      <button class="gtab gtab-tool gtab-vote" role="tab" type="button" id="gtab-vote" data-tab="vote"
+              aria-controls="tripVote" aria-selected="false"
+              aria-label="Group vote" title="Group vote"><Icon name="vote" class="gtab-ico" /><span class="gtab-txt">Vote</span></button>
+      <button class="gtab gtab-tool gtab-remind" role="tab" type="button" id="gtab-remind" data-tab="remind"
+              aria-controls="tripRemind" aria-selected="false"
+              aria-label="Reminders" title="Reminders"><Icon name="remind" class="gtab-ico" /><span class="gtab-txt">Reminders</span></button>
+      <button class="gtab gtab-tool gtab-learn" role="tab" type="button" id="gtab-learn" data-tab="learn"
+              aria-controls="tripLearn" aria-selected="false" hidden
+              aria-label="Trip learnings" title="Trip learnings"><Icon name="learn" class="gtab-ico" /><span class="gtab-txt">Learnings</span></button>
+      <button class="gtab gtab-tool gtab-kit" role="tab" type="button" id="gtab-kit" data-tab="kit"
+              aria-controls="tripKit" aria-selected="false"
+              aria-label="Trip kit" title="Trip kit"><Icon name="kit" class="gtab-ico" /><span class="gtab-txt">Trip kit</span></button>
     </div>
     </nav>
 
@@ -398,7 +461,7 @@ const tripSummary = buildSummary(guide);
     <!-- ═══════════════════════════════════════════════════════════════════════
          MASTHEAD
          ═══════════════════════════════════════════════════════════════════ -->
-    <header class={`masthead mast-hero ${heroSrc ? "mast-photo" : "mast-typo"}`} id="top" data-hero>
+    <header class={`masthead mast-hero ${heroSrc ? "mast-photo" : "mast-painted"}`} id="top" data-hero>
       {/* First-open story rail — segments ARE the trip's days (structure is information).
           Shown only during the one-time story intro (story-open.js); inert otherwise. */}
       {heroSrc && dayCount > 0 && (
@@ -409,16 +472,36 @@ const tripSummary = buildSummary(guide);
         </div>
       )}
       <div class="mast-frame">
+        {/* R4 — the Painted Atlas (src/components/PaintedAtlas.astro): rendered under EVERY
+            hero. Coverless guides open on it (living from birth, replacing the old flat
+            accent field); photo guides keep it hidden UNDERNEATH as the fallback that shows
+            when the Commons photo fails to load (.mast-media-fail) — a painted scene instead
+            of a dead grey field. CSS owns the switching (painted-atlas.css / masthead.css). */}
+        <PaintedAtlas seed={guideSlug} tz={destTzIana} />
         {heroSrc && (
-          <img class="mast-img" src={heroSrc} alt={coverAlt}
+          <img class="mast-img" src={heroSrc} srcset={heroSrcset} sizes="100vw" alt={coverAlt}
                loading="eager" fetchpriority="high"
                onerror="this.closest('.mast-frame').classList.add('mast-media-fail')"
                style={`view-transition-name:cover-${ogSlug}${coverFocal ? `;object-position:${coverFocal}` : ""}`} />
         )}
+        {/* R4 living cover — the footage upgrade over the still. Poster-first delivery:
+            no `src` at all until living-cover.js decides the visitor gets motion (reduced-
+            motion, Save-Data, and autoplay-refusal all leave the still standing, which is a
+            complete cover, not a degraded one). DOM-after the img with the same z-index, so
+            it paints above the photo only once it actually plays (.mast-video-live fades it
+            in). muted+playsinline as attributes AND re-asserted in JS — the attribute alone
+            is what mobile autoplay policies inspect. */}
+        {coverVideo && (
+          <video class="mast-video" muted playsinline loop preload="none"
+                 data-src={coverVideo.src}
+                 poster={coverVideo.poster ?? undefined}
+                 aria-hidden="true" tabindex="-1"
+                 style={coverFocal ? `object-position:${coverFocal}` : undefined}></video>
+        )}
         <span class="mast-scrim" aria-hidden="true"></span>
         {/* V4 depth (option B) — a faint topographic overlay OVER the hero photo (above the scrim,
             below the title), carrying the Overture's map language into the guide's hero. Photo
-            guides only; .mast-typo scaffolds keep their own dot lattice. Light etched strokes,
+            guides only; .mast-painted heroes are the Painted Atlas, which is its own scene. Light etched strokes,
             tuned faint so the title stays fully legible. Static — a reading page, not a motion one. */}
         {heroSrc && (
           <div class="mast-contours" aria-hidden="true">
@@ -440,8 +523,26 @@ const tripSummary = buildSummary(guide);
           <h1 class="mast-title">{guide.title}</h1>
           {guide.dek && <p class="dek mast-dek">{guide.dek}</p>}
         </div>
-        {heroCredit && (
-          <a class="mast-credit" href={heroCredit} target="_blank" rel="noopener" aria-label="Photo: Wikimedia Commons — view source">Photo: Wikimedia Commons ↗</a>
+        {heroCredit && (heroCredit.href ? (
+          <a class="mast-credit" id="mastCredit" href={heroCredit.href} target="_blank" rel="noopener"
+             aria-label={`${heroCredit.label} — view source`}
+             data-video-credit={coverVideo ? `Video: ${coverVideo.credit}` : undefined}
+             data-video-credit-url={coverVideo?.creditUrl ?? undefined}>{heroCredit.label} ↗</a>
+        ) : (
+          <span class="mast-credit" id="mastCredit"
+                data-video-credit={coverVideo ? `Video: ${coverVideo.credit}` : undefined}>{heroCredit.label}</span>
+        ))}
+        {/* Visible pause for the living cover (doctrine: obvious clickability; WCAG 2.2.2).
+            NOT aria-hidden — it's a real control — but hidden until the video actually
+            plays, so a visitor who never gets motion never sees a dead button. */}
+        {coverVideo && (
+          <button class="mast-pause" id="mastPause" type="button" hidden
+                  aria-label="Pause background video" aria-pressed="false">
+            <svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor">
+              <g class="mp-pause"><rect x="3.2" y="2.6" width="3.4" height="10.8" rx="1"/><rect x="9.4" y="2.6" width="3.4" height="10.8" rx="1"/></g>
+              <path class="mp-play" d="M4.5 2.8v10.4c0 .8.9 1.3 1.6.9l8.2-5.2c.6-.4.6-1.4 0-1.8L6.1 1.9c-.7-.4-1.6.1-1.6.9z"/>
+            </svg>
+          </button>
         )}
       </div>
       {/* V5: shares a view-transition-name with the hub card's `.hubcard-bar` — the accent
@@ -467,7 +568,11 @@ const tripSummary = buildSummary(guide);
       )}
 
       <!-- Stats bar — always rendered so JS can inject dynamic pills -->
-      <div class="guide-stats" id="guideStats">
+      {/* M2: nowrap+overflow-x (CLS fix, see overview.css) makes this a scrollable region —
+          tabindex so keyboard users can actually scroll it (axe scrollable-region-focusable).
+          No aria-label: a plain div's implicit role is "generic", which ARIA prohibits naming
+          (axe's aria-prohibited-attr correctly caught this on the first attempt). */}
+      <div class="guide-stats" id="guideStats" tabindex="0">
         {dayCount   > 0 && <span class="gstat">{dayCount} days</span>}
         {sightCount > 0 && <span class="gstat">{sightCount} sights</span>}
         {verifiedWarning && <span class="gstat gstat-warning">{verifiedWarning}</span>}
@@ -484,7 +589,7 @@ const tripSummary = buildSummary(guide);
                stop — it shows which of those two is actually true. -->
           <p class="draft-graduate">
             <a class="draft-graduate-link" href={`${base}/progress/?slug=${encodeURIComponent(ogSlug)}`}>
-              ⏱ Track live progress
+              <Icon name="clock" size={14} /> Track live progress
             </a>
           </p>
           <!-- Anyone can nominate; nothing here actually publishes anything — the linked issue
@@ -517,9 +622,9 @@ const tripSummary = buildSummary(guide);
         <div class="jl-wrap">
           <button class="jl-toggle" id="jlToggle" type="button"
                   aria-expanded="false" aria-controls="jlPanel">
-            <span class="jl-icon" aria-hidden="true">✈</span>
+            <Icon name="plane" size={15} class="jl-icon" />
             <span>Jet-lag calculator</span>
-            <span class="jl-chev" aria-hidden="true">▾</span>
+            <Icon name="chevron" size={13} class="jl-chev" />
           </button>
           <div id="jlPanel" hidden data-dest-tz={destTzIana}>
             <div class="jl-inner">
@@ -566,9 +671,12 @@ const tripSummary = buildSummary(guide);
         </noscript>
         {order.map((g, ci) => {
           const solo = byG[g].length === 1;
-          // Chapter-opener contents line: what's inside, derived from the
-          // section titles already in the data (no invented copy).
-          const subParts = solo ? [] : byG[g].map((o) => navLabel(o.s, g)).filter((t: string) => t && t !== g);
+          // R5: a creator-signed descriptor wins the line under the title (rare,
+          // informational-only — voice standard rev. 2026-07-28); without one, the
+          // chapter-opener falls back to the derived contents line — what's inside,
+          // from the section titles already in the data (no invented copy).
+          const descriptor = (guide as any).descriptors?.[g] ?? null;
+          const subParts = solo || descriptor ? [] : byG[g].map((o) => navLabel(o.s, g)).filter((t: string) => t && t !== g);
           const sub = subParts.slice(0, 4).join(" · ") + (subParts.length > 4 ? ` · +${subParts.length - 4} more` : "");
           return (
             <div class="catblock" id={`grp-${ci}`} data-ci={ci} role="tabpanel" aria-labelledby={`gtab-${ci}`} hidden={ci > 0}>
@@ -582,15 +690,16 @@ const tripSummary = buildSummary(guide);
                   </span>
                 )}
                 <h2 class="cat-title">{g}</h2>
+                {descriptor && <p class="cat-desc">{descriptor}</p>}
                 {sub && <p class="cat-sub">{sub}</p>}
               </header>
               {byG[g].map((o) => (
-                <Block sec={o.s} sid={`sec-${o.i}`} ci={ci} solo={solo} holidays={holidayInfo} learnings={guide.learnings ?? null} mapPins={pinMap.get(o.s) ?? null} country={guide.country} />
+                <Block sec={o.s} sid={`sec-${o.i}`} ci={ci} solo={solo} holidays={holidayInfo} learnings={guide.learnings ?? null} mapPins={o.s.type === "map" ? (pinMap.get(o.s) ?? null) : null} country={guide.country} />
               ))}
               {byG[g].some((o: any) => o.s.type === "days") && (
                 <div class="lnw-cta">
                   <button class="lnw-open" type="button" data-lnw-open hidden>
-                    <span class="lnw-open-ico" aria-hidden="true">✎</span>Trip Feedback
+                    <Icon name="edit" size={14} class="lnw-open-ico" />Trip Feedback
                   </button>
                   <span class="lnw-cta-note">Traveled this? Log what worked and what you’d change.</span>
                 </div>
@@ -613,24 +722,51 @@ const tripSummary = buildSummary(guide);
       </main>
     </div>
 
-    <footer>
-      {guide.footer}
-      <br />
-      <span class="offline-note">Add this to your home screen and it works offline once opened — only the embedded maps need a connection.</span>
-      <br />
-      <span class="foot-telemetry">This guide counts anonymous tab opens (no names, no personal data) to learn which sections travelers actually use.</span>
-      <br />
-      <!-- U11: renders on EVERY guide, draft or published — a wrong fact doesn't stop being
-           wrong once a guide graduates. Filing this issue auto-applies "modify-request" and
-           does nothing by itself; only the owner applying "modify-approved" (requires write
-           access) runs the edit, via .github/workflows/modify-guide.yml. Restyled as a small
-           pill (was a bare underlined text link mid-masthead) and moved here, out of the
-           traveler-facing hero. -->
-      <a
-        class="foot-modify-pill"
-        href={`https://github.com/${REPO}/issues/new?template=modify-guide.yml&labels=modify-request&slug=${encodeURIComponent(ogSlug)}&title=${encodeURIComponent(`Modify: ${ogSlug}`)}`}
-        target="_blank" rel="noopener"
-      >✎ Request a change</a>
+    <!-- M4 item 5 — COLOPHON. This was the weakest surface on an otherwise composed page:
+         `{guide.footer}` plus three <br>-separated muted spans. It is also the natural home for
+         the product's one real differentiator — that every perishable fact here was checked
+         against a primary source on a date — so it now signs the page instead of trailing off.
+         Every number is counted from this guide's own data at build time (see `colophon` above);
+         a stat with nothing to report renders nothing at all, per the honest-blank rule. -->
+    <footer class="colophon">
+      <div class="colo-sig">
+        <span class="colo-mark" aria-hidden="true"><Icon name="shield" size={18} /></span>
+        <div class="colo-sig-txt">
+          <p class="colo-claim">Every perishable fact on this page was checked against a primary source.</p>
+          {guide.footer && <p class="colo-footer-note">{guide.footer}</p>}
+        </div>
+      </div>
+
+      {(colophonChecked || colophon.verifiedFactCount > 0 || colophon.sourceCount > 0) && (
+        <dl class="colo-stats">
+          {colophonChecked && (
+            <div class="colo-stat"><dt>Last checked</dt><dd>{colophonChecked}</dd></div>
+          )}
+          {colophon.verifiedFactCount > 0 && (
+            <div class="colo-stat"><dt>Verified facts</dt><dd>{colophon.verifiedFactCount}</dd></div>
+          )}
+          {colophon.sourceCount > 0 && (
+            <div class="colo-stat"><dt>Primary sources</dt><dd>{colophon.sourceCount}</dd></div>
+          )}
+        </dl>
+      )}
+
+      <div class="colo-foot">
+        <p class="colo-notes">
+          <span class="offline-note">Add this to your home screen and it works offline once opened — only the embedded maps need a connection.</span>
+          {" "}
+          <span class="foot-telemetry">This guide counts anonymous tab opens (no names, no personal data) to learn which sections travelers actually use.</span>
+        </p>
+        <!-- U11: renders on EVERY guide, draft or published — a wrong fact doesn't stop being
+             wrong once a guide graduates. Filing this issue auto-applies "modify-request" and
+             does nothing by itself; only the owner applying "modify-approved" (requires write
+             access) runs the edit, via .github/workflows/modify-guide.yml. -->
+        <a
+          class="foot-modify-pill"
+          href={`https://github.com/${REPO}/issues/new?template=modify-guide.yml&labels=modify-request&slug=${encodeURIComponent(ogSlug)}&title=${encodeURIComponent(`Modify: ${ogSlug}`)}`}
+          target="_blank" rel="noopener"
+        ><Icon name="edit" size={14} /> Request a change</a>
+      </div>
     </footer>
 
     <!-- ═══════════════════════════════════════════════════════════════════════
@@ -644,22 +780,39 @@ const tripSummary = buildSummary(guide);
          plain div they sat OUTSIDE every landmark — so a screen-reader user navigating by
          landmark skipped the entire mobile navigation. Invisible to the a11y gate until it
          started auditing a narrow viewport, because .botbar is display:none on wide ones. -->
-    <nav class="botbar" aria-label="Guide shortcuts">
-      <a class="botHome" href={`${base}/`} aria-label="All guides" title="All guides">⌂</a>
+    <nav class="botbar" aria-label="Guide navigation">
+      {/* R2 — four honest destinations (decided): Journey · Today · Map · Kit.
+          Journey is the primary; it shows WHERE YOU ARE (curCat, fed by the scroll-spy)
+          and opens the journey sheet. Home lives in the topbar; SOS keeps its red post
+          top-right. Map renders only when the guide has a map section. */}
       <button class="botSections" id="sheetOpen" type="button"
               aria-haspopup="dialog" aria-expanded="false">
-        <span class="bs-label">Sections</span>
-        <span class="bs-cur" id="curCat"></span>
-        <span class="bs-chev" aria-hidden="true">▾</span>
+        <span class="bs-dot" aria-hidden="true"></span>
+        <span class="bs-stack"><span class="bs-label">Journey</span>
+        <span class="bs-cur" id="curCat"></span></span>
+        <Icon name="chevron" size={14} class="bs-chev" />
       </button>
-      <a class="botTop" href="#top" aria-label="Back to top">↑</a>
+      <button class="botmini" id="botToday" type="button" aria-label="Jump to today in the itinerary">
+        <svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="3"/><path d="M8 1.2v2M8 12.8v2M1.2 8h2M12.8 8h2M3.3 3.3l1.4 1.4M11.3 11.3l1.4 1.4M12.7 3.3l-1.4 1.4M4.7 11.3l-1.4 1.4"/></svg>
+        <span>Today</span>
+      </button>
+      {navMapSec !== null && (
+        <a class="botmini" href={`#sec-${navMapSec}`} data-tab={navMapCat} id="botMap" aria-label="Open the map">
+          <svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 14s4.5-4.2 4.5-7.5a4.5 4.5 0 1 0-9 0C3.5 9.8 8 14 8 14Z"/><circle cx="8" cy="6.5" r="1.6"/></svg>
+          <span>Map</span>
+        </a>
+      )}
+      <button class="botmini" id="botKit" type="button" aria-label="Open the Trip Kit">
+        <Icon name="kit" size={17} />
+        <span>Kit</span>
+      </button>
     </nav>
 
     <!-- Slide-up section sheet (mobile) -->
     <div class="sheet-backdrop"></div>
     <div class="sheet" role="dialog" aria-label="Sections" aria-modal="true">
       <div class="sheet-grip" aria-hidden="true"></div>
-      <div class="sheet-head">Jump to a section</div>
+      <div class="sheet-head">The journey</div>
       <div class="sheet-list">
         {order.map((g, ci) => (
           <>
@@ -674,11 +827,11 @@ const tripSummary = buildSummary(guide);
             Previously only split/vote had their own :not() exclusions — Reminders/
             Learnings/Trip Kit kept incrementing the counter as if they were real content
             chapters, so the sheet's numbering lied about how many sections a guide has. */}
-        <a class="sheet-cat sheet-tool sheet-split-link" data-tab="split" href="#">$ Budget Calculator</a>
-        <a class="sheet-cat sheet-tool sheet-vote-link" data-tab="vote" href="#">🗳 Group Vote</a>
-        <a class="sheet-cat sheet-tool sheet-remind-link" data-tab="remind" href="#">📌 Reminders</a>
-        <a class="sheet-cat sheet-tool sheet-learn-link" data-tab="learn" href="#" hidden>📓 Trip Learnings</a>
-        <a class="sheet-cat sheet-tool sheet-kit-link" data-tab="kit" href="#">🧳 Trip Kit</a>
+        <a class="sheet-cat sheet-tool sheet-split-link" data-tab="split" href="#"><Icon name="budget" class="sheet-ico" />Budget Calculator</a>
+        <a class="sheet-cat sheet-tool sheet-vote-link" data-tab="vote" href="#"><Icon name="vote" class="sheet-ico" />Group Vote</a>
+        <a class="sheet-cat sheet-tool sheet-remind-link" data-tab="remind" href="#"><Icon name="remind" class="sheet-ico" />Reminders</a>
+        <a class="sheet-cat sheet-tool sheet-learn-link" data-tab="learn" href="#" hidden><Icon name="learn" class="sheet-ico" />Trip Learnings</a>
+        <a class="sheet-cat sheet-tool sheet-kit-link" data-tab="kit" href="#"><Icon name="kit" class="sheet-ico" />Trip Kit</a>
       </div>
     </div>
 
@@ -693,7 +846,7 @@ const tripSummary = buildSummary(guide);
            6. Jet-lag calculator
          ═══════════════════════════════════════════════════════════════════ -->
     <!-- Config for the extracted guide UI module (formerly Astro define:vars). -->
-    <script type="application/json" is:inline id="tgConfig" set:html={jsonEmbed({ order, storeKey, legacyStoreKey, roomId: guide.roomId ?? null, mapCenter, firstDayDate, lastDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, daysForBanner, gmapsKey: import.meta.env.PUBLIC_GMAPS_KEY ?? null, gmapsMapId: import.meta.env.PUBLIC_GMAPS_MAP_ID ?? null, emergency: emergencyFor(guide.country), advisory: (guide as any).advisory ?? null, verifiedDate })}></script>
+    <script type="application/json" is:inline id="tgConfig" set:html={jsonEmbed({ order, storeKey, legacyStoreKey, roomId: guide.roomId ?? null, mapCenter, firstDayDate, lastDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, daysForBanner, gmapsKey: import.meta.env.PUBLIC_GMAPS_KEY ?? null, gmapsMapId: import.meta.env.PUBLIC_GMAPS_MAP_ID ?? null, emergency: emergencyFor(guide.country), advisory: (guide as any).advisory ?? null, verifiedDate, budgetLock: (guide as any).budgetLock ?? false })}></script>
     <script type="application/json" is:inline id="storyDays" set:html={jsonEmbed(storyDays)}></script>
     <!-- Interactive UI — bundled + hashed by Astro into one module shared across guides. -->
     <script>
@@ -706,8 +859,15 @@ const tripSummary = buildSummary(guide);
       import "../scripts/reveal.js";
       import "../scripts/section-flight.js";
       import "../scripts/micro.js";
-      import "../scripts/onboard.js";
+      // M4 item 4 — ORDER IS LOAD-BEARING for the onboarding choreography. ES modules evaluate
+      // in import order, so story-open must run FIRST to set window.__storyIntro; cold-open
+      // then stands down while the story plays and otherwise claims the view; onboard's
+      // nav-hint defers to both. story-open previously sat below these three, so its flag was
+      // always undefined when they read it and all three could fire into one viewport.
+      // It still runs before gsap-hero (below), which is its other ordering constraint.
+      import "../scripts/story-open.js";
       import "../scripts/cold-open.js";
+      import "../scripts/onboard.js";
       import "../scripts/scroll-memory.js";
       import "../scripts/offline-pill.js";
       import "../features/field-tools/index.js";
@@ -715,8 +875,9 @@ const tripSummary = buildSummary(guide);
       import "../features/sos/index.js";
       import "../scripts/lightbox.js";
       import "../scripts/hero-parallax.js";
-      import "../scripts/story-open.js";
       import "../scripts/gsap-hero.js";
+      import "../scripts/living-cover.js";
+      import "../scripts/anchors.js";
       import "../features/palette/index.js";
       import "../features/trip-split/index.ts";
       import "../features/voting/index.js";

@@ -1,4 +1,5 @@
 ---
+import Icon from "../Icon.astro";
 // Day-by-day itinerary — the heart of the Plan view. Renders:
 //   1. A numbered day-scrubber (color-block chips) — sticky, scroll-synced +
 //      click-to-jump via day-rail.js.
@@ -7,14 +8,36 @@
 //      on-the-go itinerary ladder (time in data face, name, note).
 import TransitLinks from "../TransitLinks.astro";
 import { checklistText } from "../../lib/checklist";
+// R5 section anchor: the trip's shape as a journey line, derived from the day
+// entries themselves (dates + the first/last days' own titles — anchors.ts).
+// Per-day route-leg headers derive from each day's verified waypoints.
+import { dayTimelineStops, dayLegSummary } from "../../lib/anchors";
 const { sec, keyPrefix = "dy", learnings = null, country } = Astro.props;
 const days: any[] = sec.items || [];
+const timeline = dayTimelineStops(days);
 const two = (n: number) => String(n + 1).padStart(2, "0");
 // Curated post-mortem for THIS day, matched by date. Only days the maker actually
 // reflected on get a Plan ⇄ Actual toggle — the rest render exactly as before.
 const actualFor = (date: string) =>
   (learnings?.days ?? []).find((d: any) => d.date === date) ?? null;
 ---
+{timeline.length > 0 && (
+  <div class="anch-fig" data-anch aria-hidden="true">
+    <span class="af-t">The shape of the trip — {timeline.length} days</span>
+    <div class="anch-scroll">
+      <div class="jline" data-n={timeline.length}>
+        <span class="jl-track"></span>
+        {timeline.map((s, si) => (
+          <span class={`jl-stop${si === 0 ? " jl-first" : si === timeline.length - 1 ? " jl-last" : ""}`} data-tl-date={s.date}>
+            {s.word && <i class="jl-word">{s.word}</i>}
+            <b class="jl-dot"></b>
+            <i class="jl-date">{s.dateShort}</i>
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
 {days.length > 0 && (
   <button class="story-play" type="button" data-story-open aria-haspopup="dialog">
     <span class="story-play-ico" aria-hidden="true">▶</span>
@@ -34,10 +57,18 @@ const actualFor = (date: string) =>
 <div class="planner">
   <div class="planner-days">
     {days.map((d: any, di: number) => (
-      <div class="day" data-day={di} id={`day-${di}`}>
+      <div class="day" data-day={di} data-date={d.date} id={`day-${di}`}>
         <div class="d"><span class="day-num">{two(di)}</span>{d.date}</div>
         <div class="b">
           <strong>{d.title}</strong>
+          {/* R5 route-leg header — first stop → last stop, straight-line km summed only
+              when every consecutive pair carries verified coords (anchors.ts). */}
+          {(() => { const leg = dayLegSummary(d.waypoints); return leg && (
+            <p class="day-leg">
+              <span>{leg.from}</span><span class="day-leg-arrow" aria-hidden="true">→</span><span>{leg.to}</span>
+              {leg.km !== null && leg.km > 0 && <span class="day-leg-km" title="Straight-line distance between stops">· ≈{leg.km} km</span>}
+            </p>
+          ); })()}
           {actualFor(d.date) && (
             <div class="day-flip" role="group" aria-label="Plan or what actually happened">
               <button class="day-flip-btn on" type="button" data-flip="plan" aria-pressed="true">Plan</button>
@@ -67,7 +98,7 @@ const actualFor = (date: string) =>
             <span class="day-kitcount" hidden aria-live="polite"></span>
           )}
           <span class="day-sun" role="group" hidden></span>
-          {d.pace && <div class="pace">⏱ {d.pace}</div>}
+          {d.pace && <div class="pace"><Icon name="clock" size={13} /> {d.pace}</div>}
           {d.waypoints && d.waypoints.length > 0 && (
             <ol class="stops" aria-label="Stops this day">
               {d.waypoints.map((w: any, wi: number) => (

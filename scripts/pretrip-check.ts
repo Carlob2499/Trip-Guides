@@ -1,4 +1,4 @@
-// Pre-trip auto-recert trigger (docs/PLAN_TRAVELER_FEATURES.md F6) — a daily check for
+// Pre-trip auto-recert trigger (docs/archive/PLAN_TRAVELER_FEATURES.md F6) — a daily check for
 // guides entering their T-7-before-departure window. recert.yml's own weekly schedule
 // only tracks each FACT's age against its shelf life; it has no concept of a guide's own
 // trip dates at all, so a guide could sail into departure with stale facts nobody was

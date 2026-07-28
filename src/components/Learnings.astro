@@ -5,6 +5,7 @@
    · the #tripLearn special-panel (the Learnings tab) — a sibling of #tripSplit / #tripVote,
      hidden until Firebase has ≥1 feedback record for this guide (tab.js reveals its gtab).
    Everything stays inert until Firebase is configured (the silo gates on hasFirebase()). */
+import Icon from "./Icon.astro";
 import "../features/learnings/styles.css";
 import { tallySkipsByGroup } from "../features/learnings/index.js";
 interface Props { storeKey: string; learnings?: any; slug: string; title?: string }
@@ -90,11 +91,11 @@ const recapUrl = `${base}/recap/${slug}.png`;
   </div>
   <div class="learn-foot">
     <button class="lnw-open lnw-open-inline" type="button" data-lnw-open>
-      <span class="lnw-open-ico" aria-hidden="true">✎</span>Add trip feedback
+      <Icon name="edit" size={14} class="lnw-open-ico" />Add trip feedback
     </button>
     {hasRecap && (
       <a class="lnw-open lnw-open-inline learn-recap-btn" href={recapUrl} target="_blank" rel="noopener" download={`${(title || "trip").replace(/\W+/g, "-").toLowerCase()}-recap.png`}>
-        <span class="lnw-open-ico" aria-hidden="true">🖼</span>Share your trip recap
+        <Icon name="image" size={14} class="lnw-open-ico" />Share your trip recap
       </a>
     )}
   </div>

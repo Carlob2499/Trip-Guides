@@ -1,4 +1,4 @@
-// Deterministic topographic contour lines for the Overture hero (docs/PLAN_VISUAL_OVERHAUL.md,
+// Deterministic topographic contour lines for the Overture hero (docs/archive/PLAN_VISUAL_OVERHAUL.md,
 // session V2) — hand-drawn-feeling map contours generated at BUILD TIME (called from the hub
 // page's Astro frontmatter, which runs in Node — no separate CLI script needed), never a stock
 // image. Pure and seeded: the same seed always produces the same rings, so a build is

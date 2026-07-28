@@ -19,14 +19,14 @@ name: Research pass
 # marginal against your plan. Prerequisites:
 #   - CLAUDE_CODE_OAUTH_TOKEN secret set in repo Settings → Secrets → Actions.
 #     Generate it once locally with `claude setup-token` (Pro/Max only) and paste the value.
-#   - The guide's scaffold exists at src/content/guides/<slug>.json
+#   - The guide's scaffold exists at src/content/guides/<slug>/ (_guide.json + NN-*.json)
 #
 # Usage: Actions → Research pass → Run workflow → enter slug (and optionally section)
 on:
   workflow_dispatch:
     inputs:
       slug:
-        description: "Guide slug (e.g. japan, sweden). Must match src/content/guides/<slug>.json"
+        description: "Guide slug (e.g. japan, sweden). Must match src/content/guides/<slug>/"
         required: true
         type: string
       section:
@@ -48,14 +48,24 @@ permissions:
   pull-requests: write
   issues: write
 
+# M0/B3: rapid re-dispatches (or two dispatches for the same slug) would otherwise race the
+# same research/<slug> branch — each bump-commit-push cycle able to collide with the other's.
+concurrency:
+  group: research-${{ inputs.slug }}
+  cancel-in-progress: false
+
 jobs:
   research:
     runs-on: ubuntu-latest
     # A4: job-level so it's in scope for every step INCLUDING the agent action below (whose
     # own bash tool calls inherit the job's environment) — was hardcoded identically here,
     # in graduate-guide.yml, new-guide.yml, astro.config.mjs, and verify-live.mjs.
+    # M0/B3: GH_TOKEN here too — land-branch.sh and the prompt's own `gh issue`/`gh pr` calls
+    # run inside the agent's Bash tool, which inherits this job's environment; unset, `gh`
+    # inside the agent has no credential and every gh call in the prompt would fail unproven.
     env:
       SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://carlob2499.github.io/Trip-Guides' }}
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -138,9 +148,12 @@ jobs:
             git push origin "HEAD:research/${SLUG}"
           fi
 
+          # M0/B9: trips the run AFTER the cap-th attempt (attempts > CAP), so the message names
+          # the actual triggering count, not CAP itself — "cap: 5" read as "stops after 5" when
+          # it stops after 6.
           CAP=5
           if [ "$ATTEMPTS" -gt "$CAP" ]; then
-            echo "[budget] $SLUG has been attempted $ATTEMPTS times without reaching verified (cap: $CAP) — flagging instead of continuing."
+            echo "[budget] $SLUG has been attempted $ATTEMPTS times without reaching verified (exceeds cap of $CAP) — flagging instead of continuing."
             TITLE="Research stuck: $SLUG"
             STATUS_TEXT=$(node scripts/pipeline.mjs --slug "$SLUG" --status)
             BODY=$(printf 'Automated research has run **%s** times for `%s` without reaching `verified`.\n\nCurrent status:\n```\n%s\n```\n\nThis destination may be genuinely hard to source (bot-blocked, sparse coverage) or stuck on one fact. Check `guides-intake/%s.md` and the `research/%s` branch, then either finish it by hand or re-run this workflow to keep trying — the attempt count only resets if `guides-intake/%s.state.json` is edited directly (git-tracked, so that is a deliberate act, not automatic).' "$ATTEMPTS" "$SLUG" "$STATUS_TEXT" "$SLUG" "$SLUG" "$SLUG")
@@ -164,6 +177,11 @@ jobs:
           # Auth via the Claude Max subscription (claude setup-token), not a paid API key.
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          # M0/B2: new-guide.yml auto-dispatches this workflow with `GH_TOKEN: github.token`,
+          # so the triggering actor is github-actions[bot] — the action verifies a HUMAN actor
+          # by default and would otherwise reject the zero-click auto-dispatch. This is the one
+          # workflow that legitimately runs unattended from a bot trigger.
+          allowed_bots: "github-actions[bot]"
           # v1.0 action: `allowed_tools`/`model` are deprecated top-level inputs — both now go
           # through claude_args (--allowedTools / --model). Model economy: research is Sonnet
           # work (research-efficiency.md).
@@ -186,7 +204,10 @@ jobs:
             404 can be a live page (retry once, judge by content); bot-blocked → mark and move on;
             aggregators are leads, never citations.
 
-            Target guide: src/content/guides/${{ inputs.slug }}.json
+            Target guide: the DIRECTORY src/content/guides/${{ inputs.slug }}/ — _guide.json (meta)
+            + one NN-<group>.json per tab group. Edit the group file a fact lives in; NEVER create a
+            flat src/content/guides/${{ inputs.slug }}.json (a flat file wins path resolution and
+            would silently shadow the directory — the build fails on one).
             ${{ inputs.section != '' && format('Scope this pass to the "{0}" section only; leave all other sections as-is.', inputs.section) || '' }}
 
             RESUMABLE — START BY CHECKING WHERE YOU ARE. This run may be a fresh start OR a resume of
@@ -227,6 +248,39 @@ jobs:
                 → then: npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint reconcile
                   && git add -A && git commit -m "research(${{ inputs.slug }}): reconcile" && git push
 
+            THE LIVING ATLAS PASS — right after reconcile, before the verify loop. Every guide is
+            born with the full visual system, and these four duties are how research feeds it
+            (prompt-only, no new checkpoint — commit as part of your next stage commit). The
+            mechanics live in block-types.md ("Group labels & the voice standard", "Composer
+            facets", "Cover art"); follow them exactly:
+              1. FACETS — tag every section you authored: `theme` (what it's about; defaults to
+                 the current group, tag only when they differ), `phase` (before|arrival|daily|
+                 leaving — when the traveler NEEDS it; this routes the unit if its group ever
+                 folds), `rank` (the theme's position in the intake's ranked priorities — top-2
+                 with real weight earns an anchor tab). The scaffold seeded `phase` on its
+                 backbone shells; keep those honest as you rewrite, and rank the intake's actual
+                 priorities — an untagged priority theme can be budget-merged away.
+              2. DESCRIPTORS — RARE and informational-only (creator's ruling; the banned slop
+                 patterns are named in block-types.md's voice standard). Write one ONLY where
+                 the literal label cannot carry the meaning — trip-specific groups a stranger
+                 wouldn't parse. Standard groups (Plan/Transit/Days/Sights/Food/Sources) get
+                 NONE: the derived subtitle from the group's real section titles is the better
+                 line. When you do write one: a flat statement of fact ("would Wikivoyage
+                 write this sentence?"), and grep the group file for every claim word FIRST.
+              3. COVER — if a signature Commons photo of the destination exists, set `cover`
+                 (file + credit + license + focal) — validate the filename via
+                 search-commons.mjs, never from memory. The Painted Atlas is the honest
+                 default, not a failure state: skip the photo rather than force a mediocre or
+                 wrong-place one. A real photo also feeds extract-palette in step (d).
+              4. FOOTAGE SCOUT — candidates only, NEVER set `cover.video` yourself: publishing
+                 footage is a creator sign-off, because the clip must be frame-verified to show
+                 the actual place (no invented geography) and you cannot watch video here.
+                 Record 0-2 licensed, hot-linkable clips in guides-intake/${{ inputs.slug }}.md
+                 under "## Cover art — footage candidates": stable-URL libraries only (e.g.
+                 Mixkit's assets.mixkit.co asset URLs; Coverr temp-URLs are forbidden), with
+                 license, what the clip claims to show, and whether that matches the cover
+                 photo's actual location. An empty table is a fine outcome.
+
             NOTE — a full dual pass is long. Committing after each stage IS the safety net: if you
             run low on wall-clock or usage, stop at a clean checkpoint (commit + push) rather than
             leaving a half-done uncommitted stage — a re-run resumes from the last checkpoint.
@@ -256,7 +310,7 @@ jobs:
                    a human sees why this run stopped short of a verdict, not a false PASS), and let
                    landing take the NEEDS-WORK/draft-PR path below.
                  Only a full networked PASS from this step licenses step (d).
-              c3. THE CRITIC — the bar test (F7·C1, docs/PLAN_TRAVELER_FEATURES.md). A prompt-only
+              c3. THE CRITIC — the bar test (F7·C1, docs/archive/PLAN_TRAVELER_FEATURES.md). A prompt-only
                  lens on this SAME loop, not a new stage — nothing here touches STAGE_ORDER, the
                  schema, or a checkpoint. Before step (d) is licensed, read the WHOLE merged guide
                  (not just what this pass touched) and ask ONE question per load-bearing item — an
@@ -281,7 +335,14 @@ jobs:
                  generate the guide's identity palette from its new cover/
                  sight photos: `npm run extract-palette -- --slug ${{ inputs.slug }}` (writes
                  src/data/palettes/${{ inputs.slug }}.json — commit it; skips harmlessly if no
-                 photo). Then AUTO-GRADUATE — the verify PASS you just confirmed IS the evidence
+                 photo). Then COMPOSE THE TABS while the guide is STILL a draft — this is the ONE
+                 moment composition auto-applies (graduation makes it live, and live guides only
+                 ever get proposals): `node scripts/compose-guide.mjs --slug ${{ inputs.slug }} --write`.
+                 A compose ERROR (the ⚠-relocation guard, unit loss) is a real finding, not a
+                 formality: fix the cause — usually a ⚠-flagged unit stranded in a thin group
+                 (source it or move it deliberately), or raise `tabBudget` in _guide.json with a
+                 one-line justification — then re-run verify + compose before continuing.
+                 Then AUTO-GRADUATE — the verify PASS you just confirmed IS the evidence
                  gate (the same one a human approver would have re-run by hand), so this is where
                  the guide goes live, no separate approval step:
                  node scripts/graduate-guide.mjs --slug ${{ inputs.slug }}
@@ -336,7 +397,7 @@ jobs:
               yourself.
 
             Never touch any guide other than
-            src/content/guides/${{ inputs.slug }}.json (or its split-directory equivalent) and its
+            src/content/guides/${{ inputs.slug }}/ and its
             guides-intake/${{ inputs.slug }}.md + .state.json + src/data/palettes/${{ inputs.slug }}.json.
 
             FINALLY, write a short run report to `run-report.md` (repo root, gitignored — do NOT
@@ -348,6 +409,35 @@ jobs:
       # W3: deposit a run report on the pipeline ledger issue regardless of how the agent finished,
       # so the skill-retro proposer has evidence to reason over. `|| true` — the ledger never fails
       # the run.
+      # R6 — the Composer rides every research pass: research emits tagged units,
+      # deterministic code assembles the tabs (scripts/compose-guide.mjs; rules + tests
+      # there). The auto-APPLY lives inside the agent's step (d), after the networked
+      # verify PASS and BEFORE graduation — the one moment the guide is both complete and
+      # still a draft. This step deliberately never writes: on the PASS path the guide has
+      # already graduated + merged (a --write here would land on a spent branch and read
+      # the guide as live anyway), and on a cut-off run the draft is half-researched — a
+      # --write would fold empty scaffolding into Plan/Days and mangle the shape the
+      # resume expects. So: exit 0 = composed (the normal PASS outcome, since step (d)
+      # just ran); exit 2 = a standing proposal, surfaced in the job summary for the
+      # creator (--write --creator-signed) or for the next resumed pass to absorb; any
+      # other nonzero (the ⚠-relocation guard, unit loss) fails this run loudly.
+      - name: Compose check — verify composed, surface proposals, guard errors
+        if: steps.budget.outputs.should_run == 'true'
+        env:
+          SLUG: ${{ inputs.slug }}
+        run: |
+          set +e
+          OUT=$(node scripts/compose-guide.mjs --slug "$SLUG" --check 2>&1)
+          CODE=$?
+          set -e
+          echo "$OUT"
+          { echo "### Composer"; echo '```'; echo "$OUT"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$CODE" -eq 2 ]; then
+            echo "Standing proposal — composition applies inside the next research pass (drafts) or via --write --creator-signed (live)." >> "$GITHUB_STEP_SUMMARY"
+          elif [ "$CODE" -ne 0 ]; then
+            exit "$CODE"
+          fi
+
       - name: Append run report to the ledger
         if: always()
         env:

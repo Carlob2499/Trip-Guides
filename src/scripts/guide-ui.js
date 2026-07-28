@@ -239,6 +239,32 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             }, { passive: true });
           }
 
+          /* ── 2b. JOURNEY BAR DESTINATIONS (R2) ───────────────────────── */
+          // Today: open the Days group and land on today's card when the trip is live
+          // (data-date matches the visitor's local "Www Mmm D"), else the group's top.
+          var botToday = document.getElementById("botToday");
+          if (botToday) botToday.addEventListener("click", function () {
+            var dayEl = document.querySelector(".day");
+            if (!dayEl) return;
+            var grp = dayEl.closest('[id^="grp-"]');
+            var cat = grp ? parseInt(grp.id.slice(4), 10) : 0;
+            showTab(cat);
+            var d = new Date();
+            var DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"], MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+            var todayStr = DOW[d.getDay()] + " " + MON[d.getMonth()] + " " + d.getDate();
+            var hit = document.querySelector('.day[data-date="' + todayStr + '"]');
+            (hit || grp || dayEl).scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+          // Kit: same panel the sheet's Trip Kit link opens.
+          var botKit = document.getElementById("botKit");
+          if (botKit) botKit.addEventListener("click", function () { if (hasPanel("kit")) showTab("kit"); });
+          // Map: an anchor into the map's section — just activate its tab first.
+          var botMap = document.getElementById("botMap");
+          if (botMap) botMap.addEventListener("click", function () {
+            var t = parseInt(this.dataset.tab, 10);
+            if (!isNaN(t)) showTab(t);
+          });
+
           /* ── 3. SCROLL-SPY ───────────────────────────────────────────── */
           function setActive(secId, cat) {
             var cur = document.getElementById("curCat"); if (cur) cur.textContent = order[cat] || "";
@@ -464,9 +490,14 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           (function () {
             var bar = document.getElementById("readProg");
             if (!bar) return;
+            // R3: on desktop the fixed bar retires and this same percentage fills the
+            // horizon line instead (--journey-read on the tabs nav) — one object, two meanings.
+            var horizonNav = document.querySelector(".guide-tabs-nav");
             function updateBar() {
               var max = document.body.scrollHeight - window.innerHeight;
-              bar.style.width = (max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0) + "%";
+              var pct = max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0;
+              bar.style.width = pct + "%";
+              if (horizonNav) horizonNav.style.setProperty("--journey-read", String(pct));
             }
             window.addEventListener("scroll", updateBar, { passive: true });
             window.addEventListener("resize", updateBar);

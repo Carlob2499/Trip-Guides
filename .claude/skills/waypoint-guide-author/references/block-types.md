@@ -18,8 +18,8 @@ carries `type`, `group` (the nav-tab category label), and usually `title`.
 `Essentials` holds money/health/etiquette-type sections; same-audience
 event content shares one group. A group name is a nav label (short, no
 " & " chains where avoidable); the section `title` carries the identity.
-New guides start from: Plan · Essentials · Getting around · Itinerary ·
-Sights · Food & shopping · References, adding at most 3 trip-specific
+New guides start from: Plan · Essentials · Transit · Days ·
+Sights · Food & shopping · Sources, adding at most 3 trip-specific
 groups.
 
 **Budget `est` values power plan-vs-logged.** The Budget calculator compares
@@ -128,11 +128,93 @@ conventions, render behavior, and the verification rules attached to a field.
 ## Placement conventions
 
 - `group` values become the guide's nav tabs — reuse the established ones where they
-  fit (Plan · Money & budget · Health & safety · Etiquette & language · Getting
-  around · Itinerary · Sights · Food & shopping · References) plus trip-specific
+  fit (Plan · Money & budget · Health & safety · Etiquette & language · Transit
+  · Days · Sights · Food & shopping · Sources) plus trip-specific
   groups (e.g. an event tab). Keep a new group only if the content genuinely doesn't
   belong in an existing tab.
 - The canonical closing section is a `prose` titled "Sources & further reading" in
-  group `References`.
+  group `Sources`.
 - Leave `map` / `weather` / `holidays` sections intact when editing — they're wired
   to live data, and the weather block depends on the first `map`'s coords.
+
+
+## Group labels & the voice standard (Quiet Edition, decided 2026-07-28)
+
+The label a traveler navigates by is LITERAL, always — one plain word that names the
+bucket at a glance: `Plan · Essentials · Transit · Days · Sights · Food · Sources`
+(plus trip-specific anchors like `Daejeon & MSI`). Never re-spend wayfinding on
+cleverness ("Pocket", "Receipts" were tried and withdrawn).
+
+**Descriptors are RARE and informational-only (creator's ruling, 2026-07-28 — this
+supersedes the original "warmth lives one level down" doctrine).** The first shipped
+set (Korea, eleven lines) was rejected by the creator as AI-sounding, and the autopsy
+is worth keeping: eight of eleven shared one machine rhythm — a short list, an em-dash
+pivot, a quip tail ("cash, data, etiquette — and 112/119 one tap away" · "every fact,
+traced and dated — the receipts") — and the quips praised the guide instead of
+informing the reader. The root cause was structural: a slot whose only job is
+personality produces fake personality, on schedule. So the slot's job changed:
+
+- **Write a descriptor ONLY where the literal label cannot carry the meaning** — in
+  practice, trip-specific groups a stranger wouldn't parse ("Daejeon & MSI" → "The MSI
+  weekend in Daejeon"). Standard groups (Plan, Transit, Days, Sights, Food, Sources,
+  Essentials) get NONE: without a descriptor the chapter opener derives its subtitle
+  from the group's real section titles — actual data, no invented copy, and already
+  the register real travel sites use.
+- **Flat statement of fact, in words a stranger would use.** The test: *would
+  Wikivoyage write this sentence?* Banned by name: the em-dash quip pivot, the
+  triplet-list-plus-tail rhythm, self-referential praise ("the receipts", "kept in
+  sync", "without friction"), and any line that would work as ad copy.
+- **If the derived subtitle already says it, write nothing.** An absent descriptor is
+  the honest-blank rule working, not a gap.
+
+**Mechanics (R5, shipped 2026-07-28):** descriptors live in `_guide.json` as a
+`descriptors` record keyed by EXACT group name — the schema rejects a key no section
+uses, so renaming a group without moving its descriptor fails the build instead of
+silently dropping the line. And a descriptor may only assert what the guide actually
+contains — grep the group file for every claim word BEFORE writing it. Two real
+catches prove the rule earns its keep: "the rain plan" was cut because no rain plan
+existed in that group, and a drafted "GO Fest Seoul" was corrected to the "GO Fest
+Global" the content actually names.
+
+## Composer facets (R6, shipped 2026-07-28)
+
+Research passes may tag any section with three optional facets — they feed
+`scripts/compose-guide.mjs` (which assembles tabs deterministically) and are read by
+NO renderer:
+
+- `theme` — the content theme this unit belongs to (defaults to its current group, so
+  untagged content composes to itself). Tag it when a unit's true theme differs from
+  the group it happens to sit in.
+- `phase` — `before | arrival | daily | leaving`: when the traveler needs it. This is
+  what routes a unit when its group folds (before/arrival/leaving → Plan, daily → Days),
+  so tagging phase on thin groups is how you steer a future fold honestly.
+- `rank` — the theme's position in the intake's ranked priorities (1 = top). A top-2
+  theme with real weight earns an anchor tab and budget immunity.
+
+Weight is never written — it is derived from item counts + prose length, so it cannot
+drift from the content. Composition auto-applies to a draft exactly ONCE per pass — after
+the networked verify PASS, before graduation (the done gate's `compose-guide.mjs --write`
+moment); LIVE guides only ever receive a printed proposal for the creator to sign
+(`--write --creator-signed`). Tag facets during research; never retro-tag a live guide
+just to force a recomposition without the creator asking.
+
+## Cover art (R4, shipped 2026-07-28) — photo is earned, footage is signed
+
+Every guide is born covered: the **Painted Atlas** (seeded terrain in the guide's accent
+under a destination-local-time sky) renders automatically whenever no photo is set. It is
+the honest default, not a failure state — never force a mediocre or wrong-place photo
+just to replace it.
+
+- **Photo** (`cover.file` + credit + license + focal): set it when a signature Commons
+  shot of the destination exists — filename validated via `search-commons.mjs`, never
+  recalled. Direct royalty-free `cover.src` URLs are allowed (schema-enforced credit +
+  license). A real photo also feeds `extract-palette` (the guide's identity accent).
+- **Footage** (`cover.video`) — research NEVER sets this field. The rule is geography:
+  a clip must be frame-verified to show the actual place (the Korea clip was frame-checked
+  as the same Gyeongbokgung complex as its photo cover), and a research agent cannot watch
+  video. Research runs the **footage scout** instead: 0–2 candidates recorded in the
+  intake doc's `## Cover art — footage candidates` table — stable-URL libraries only
+  (Mixkit `assets.mixkit.co/videos/{id}/{id}-720.mp4` hot-links cleanly; Coverr exposes
+  only ephemeral temp-URLs, forbidden), each with license, what it claims to show, and
+  whether that matches the cover photo's location. The creator frame-verifies and signs
+  before `cover.video` ever lands. An empty table is a fine outcome.

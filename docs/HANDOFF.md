@@ -20,58 +20,193 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (updated 2026-07-25, session close #7)
+## Snapshot (updated 2026-07-28, session close #15 — descriptor ruling + THE ARC IS ON MAIN; redesign branch deleted)
 
-**The catalog now has exactly one shape, and three gates hold it there.** Build clean, 832 unit
-tests, `astro check` 0 errors, e2e **55/55**.
+**Session #15 (same day):** the creator rejected Korea's eleven descriptors as AI-sounding —
+and ruled. The autopsy (eight of eleven shared one list–em-dash–quip rhythm; the quips praised
+the guide instead of informing) is now doctrine: **descriptors are RARE + informational-only**
+— written only where the literal label can't carry the meaning, as flat facts a stranger would
+use ("would Wikivoyage write this?"), with the slop patterns banned by name in block-types.md's
+voice standard (the single home; SKILL.md duty #2 + the research-pass prompt point there).
+Korea kept three, rewritten flat: "The MSI weekend in Daejeon" · "GO Fest Global runs during
+the trip" · "One traveler's solo Tokyo weekend" (each token-verified — the grep rule caught a
+drafted "GO Fest Seoul" that the content calls GO Fest Global). The other eight groups fall
+back to the derived contents subtitle — real data, no invented copy. On the creator's explicit
+word, the whole Living Atlas branch (R1–R6 + pipeline congruence + this ruling) was then
+**merged to `main` and `claude/website-visual-redesign-upnl05` was deleted.** Watch the first
+main deploy + the Accessibility workflow (baselines re-record on CI per the #12 lesson).
 
-- **Every guide is a directory.** Three of five were still flat `<slug>.json` and nothing said so —
-  both shapes build, and the flat file *wins* in `resolveGuidePath`, so a stray one silently
-  shadows the directory beside it. Split via the existing tested `split-guide.mjs`;
-  `scaffold-guide.mjs` now writes the flat file only as that splitter's input, so a new guide never
-  persists in the legacy shape, and `uniqueSlug()` checks directory collisions too.
-  `scripts/__tests__/guide-shape-uniform.test.mjs` fails the suite on any flat guide.
-- **Mexico and Portugal are out.** Their guide directories and intake `.md` files were MOVED, not
-  deleted — see Owner tasks. Deliberately kept: `src/data/countries.mjs` holds verified, dated
-  emergency-number data for both, which serves the SOS sheet and any future guide there; deleting
-  it would destroy research, not remove a relic. Two form placeholders naming Mexico City are now
-  generic. `dist/` greps clean.
-- **`tests/visual/exports.spec.ts` is new** — it holds the SERVED `.gpx`/`.ics` for every guide to
-  GPX 1.1 and RFC 5545 (CRLF, ≤75 **octets** per folded line, VEVENT completeness, unique UIDs,
-  escaped `,`/`;`). The unit tests only ever saw strings their author typed; real guide prose is
-  what breaks folding. Slugs come from disk, so a new guide is covered the moment it exists.
-- **ESLint went 277 → 0 and is now a CI gate** (a `npm run lint` step in `test.yml`, wired only
-  once it was at zero so red always means a new regression). Three quarters of the 277 was the
-  config describing the wrong world: `public/sw.js` and `worker/index.mjs` are service workers
-  linted as Node, and 81 more were this repo's deliberate `catch { }` idiom.
-- **Its first pass found a live crash nothing else could see.** `scripts/graduate-guide.mjs` called
-  an `isValidSlug` it only ever RE-exported — `export { x } from "…"` gives importers the symbol but
-  creates no local binding — so the CLI threw `ReferenceError`. 832 unit tests, `astro check` and
-  55 e2e were all green over it, because every one of them exercises the module from outside, where
-  forwarding works. Fixed and verified by running the CLI.
-- **`no-explicit-any` is OFF, as a recorded debt.** All 154 are one shape: functions walking the
-  guide JSON, plus `.astro` props Astro hands over untyped. The real type already exists —
-  `CollectionEntry<"guides">["data"]`, inferred from the Zod schema — and threading it through the
-  section discriminated union is a project, not a lint fix. `astro check` remains the type gate at
-  0 errors.
-- **`fast-uri` pinned to 3.1.4** via `overrides`, clearing the one high Dependabot alert. Dev-only,
-  four levels deep under `@astrojs/check`; it never reached the shipped bundle.
-- **CodeQL: 4 of 8 alerts were real.** The worst was `exports.ts` double-unescaping — `htmlToText`
-  decoded `&amp;` FIRST, so an author writing `&amp;lt;b&amp;gt;` (meaning the literal text
-  `&lt;b&gt;`) had it decoded twice into `<b>`, which the next line stripped as a tag. The word did
-  not come out wrong, **it came out missing**, in every shipped `.ics`/`.gpx`. Also: `staleness-ui`
-  assigned `data-source-url` straight to `href` (the schema's `z.url()` accepts `javascript:`),
-  `progress.js` took `?slug=` unvalidated into an href, `field-tools` interpolated an unowned
-  currency code into `innerHTML`. The other 4 are documented false positives — dismiss in the
-  Security tab.
-- **Trip Split's "+ Add person" was writing to a room the rules always denied.** Denmark and Korea
-  had no `roomId`, so `GuideLayout`'s `guide.roomId ?? storeKey` fallback handed Firebase the slug
-  — `"denmark"`, 7 chars, against a rule requiring 16–40. Invisible because `trip-split.js:121`
-  routes to the room and never touches local state, and `sync.js` ended the write with
-  `.catch(function () {})`. RTDB applies writes locally first, so a row appeared, the server
-  rejected it, the row vanished, silently. Both guides now carry real 16-char codes and `sync.js`
-  surfaces failures, distinguishing PERMANENT rejections from offline queuing. Confirmed working
-  live by the creator.
+## Previous snapshot (2026-07-28, session close #14 — R1–R6 shipped + pipeline congruence: the factory now delivers the vision)
+
+**Session #14 (same day, after the arc):** the creator asked what to expand next and for the
+GENERATION flow to deliver the Living Atlas automatically. Audit found the R1–R6 surfaces all
+existed but the pipeline didn't feed three of them — and the Composer's draft auto-apply was
+wired after the agent step, where the PASS path had already graduated + merged (proposal-only
+forever, i.e. NEW GUIDES NEVER AUTO-COMPOSED) and the cut-off path would fold half-researched
+scaffolding. Shipped fixes ("Pipeline congruence" ledger in the plan doc): compose `--write`
+moved inside the agent's done gate (post-verify-PASS, pre-graduation; post-agent step is now
+check/propose/guard-only) · THE LIVING ATLAS PASS added to the research prompt + SKILL.md
+(facets → grep-verified descriptors → Commons cover + focal → footage scout recording 0–2
+stable-URL candidates in the intake doc; `cover.video` stays creator-signed, frame-verification
+is the gate) · scaffold seeds `phase` on every foldable-group section + intake template carries
+the footage-candidates ledger · new scaffold↔schema contract test · cover-art mechanics joined
+descriptors/facets in block-types.md. Every future guide is now BORN into the full system with
+zero manual steps except the two that are deliberately human: footage sign-off and live-guide
+recomposition.
+
+## Previous snapshot (2026-07-28, session close #13 — Living Atlas R1–R6 ALL SHIPPED: the arc is complete)
+
+**The Living Atlas redesign is running on `claude/website-visual-redesign-upnl05`** (NOT yet
+merged to main). Full spec: `docs/PLAN_VISUAL_REDESIGN.md` (phases R1–R6, gates, delegated
+decisions, Fable executes; R4's row records what shipped + the footage ledger) · mock-ups:
+`node docs/mockups/build-mockup.mjs` · motion doctrine incl. the new living-cover rules:
+`docs/MOTION.md`. **Shipped, in order, all gates green each phase:**
+- **R1** Quiet Edition type + literal labels (`9b16136`).
+- **R2** mobile goes native: journey bar (Journey·Today·Map·Kit), spine sheet (`c60742a`).
+- **R3** desktop horizon: stations on the journey line, reading progress absorbed (`227febb`).
+- **R4** living covers: Painted Atlas universal default (seeded `src/lib/terrain.ts` + tested;
+  `PaintedAtlas.astro`; destination-local sky; masthead coverless default + hub-card fallback +
+  photo-fail backstop) · cover schema widened — direct royalty-free CDN `src` with `{w}` srcset
+  token and `cover.video`, non-Commons sources REQUIRE credit+license (zod + 9 schema tests) ·
+  masthead footage layer (`living-cover.js`: poster-first, reduced-motion/Save-Data/in-view/
+  visibility gates, visible pause chip, credit swap, error ⇒ still stands) · **Korea flagship
+  living cover wired** (Mixkit palace timelapse — same Gyeongbokgung complex as its photo,
+  2.83 MB, hot-link verified). Creator widened cover sourcing to royalty-free libraries.
+  Denmark/Sedona footage = honest blanks (ledger in the plan).
+- **R5** interior atlas: section anchors derived from the guide's own data
+  (`src/lib/anchors.ts` — Days journey-line timeline with today ringed; Transit line from
+  route-step leads; live booking rings over checklist state) · per-day route-leg headers
+  (≈km only over fully-coordinated legs) · voice descriptors (`descriptors` schema record,
+  group-key-guarded; Korea's staged set shipped, every phrase content-verified) ·
+  cartographic neatline under group titles · hub hover previews of living covers.
+  Draw-in once per figure (reveal.js safety pattern); reduced-motion = complete frames.
+- **R6** the Composer: facets (`theme`/`phase`/`rank`) on all section types; weight derived,
+  never stored · `scripts/compose-guide.mjs` (pure core, SPINE→ANCHOR→MERGE→ORDER→BUDGET,
+  17 tests: determinism, idempotence, dense-guide identity, ⚠-relocation guard, real-CLI
+  check-never-writes) · research-pass workflow composes every pass (drafts apply on the
+  research branch; live guides get the proposal in the job summary) · `--write` refuses
+  live guides without `--creator-signed`. **The Composer's first real proposal is STANDING
+  on `us`** (fold two one-card tabs — see the R6 ledger in the plan; creator applies,
+  re-tags phases, or leaves it). Tests now 925, lint 0.
+THE ARC IS COMPLETE (R1–R6). NEXT: creator reviews the branch → PR to main (a11y baselines
+re-record on CI there) → the standing `us` composition proposal and Korea's descriptor set
+are the two open creator sign-offs.
+
+## Previous snapshot (2026-07-26, session close #11 — M1–M6 COMPLETE; only M0's E2E proof left)
+
+> **Merged to `main` 2026-07-26 (`834b741`, fast-forward), then `fc81804`.** `origin` is
+> `main`-only again apart from the merged `claude/waypoint-audit-modernize-tne4ce`, which is now
+> redundant and safe to delete. All gates green on `main`: lint 0, `astro check` 0 errors, **876**
+> unit, Accessibility green after the tab-icon baseline fix (see Where we left off), Pages +
+> intake-worker deployed. `claude/test-coverage-analysis-siftjs` was already fully contained in
+> `main` — a stale local ref, nothing to merge.
+
+**M1 through M6 are all COMPLETE. The ONLY thing left in the whole programme is M0's
+end-to-end pipeline proof, which is blocked on ONE owner action: rotate the OAuth token.** Branch `claude/waypoint-audit-modernize-tne4ce`. Full audit + executor
+program in `docs/PLAN_MODERNIZE.md` — read that file for the complete record; this is a summary.
+Build clean, **870** tests, lint 0 (`no-explicit-any` now ON as a ratchet), `astro check` 0
+errors, perf budget green (worst first-paint page 125 KB / 200 KB).
+
+- **M0 (blocked on the creator): `CLAUDE_CODE_OAUTH_TOKEN` is expired/revoked** — confirmed via a
+  live dispatch: `401 OAuth access token is invalid`, not the "cosmetic" misdiagnosis from July
+  20. **Owner action next session:** `claude setup-token` locally → repo secret → re-run Token
+  canary (closes issue #22) → then the W6 end-to-end proof (a real `zz-` throwaway guide through
+  the whole chain) runs for the first time ever, same session. Independent-of-token M0 fixes
+  already shipped: `allowed_bots` on research-pass's agent step, `GH_TOKEN` job-level env on
+  three agent workflows, new-guide's concurrency race fixed, circuit-breaker message fixed.
+- **M1 (CI efficiency) shipped:** paths-ignore + concurrency + Playwright browser cache on
+  test.yml/a11y.yml, cache:npm on the two workflows that needed it, a stale-fixture bug fixed in
+  the skill-evals script.
+- **M2 (CLS) shipped:** nav-hint now overlays instead of pushing content (the CLS 0.244's most
+  reliable contributor), `.guide-stats` changed from wrap to scroll (pill-append could no longer
+  shift height), hero srcset/sizes on both heroes, and `check-perf-budget.mjs` now derives a real
+  per-page first-paint budget from the built artifact's actual script/import graph (measured:
+  worst page 124 KB / 200 KB) instead of one 900 KB total that was ~78% lazy chunks.
+- **M3 (design tokens) shipped, scoped to zero-visual-change + two real bugs:** z-index scale
+  named in base.css; fixed the confirmed bug (skip-link painted UNDER story-mode, now explicitly
+  above it) and a 9000-vs-everything-else-900s outlier; `--text-h1` token added at `.cat-title`'s
+  EXACT existing size (caught and corrected a draft that would have silently enlarged it — verify
+  the px math before landing a "zero visual change" claim, don't just assert it); a dead duplicate
+  `font-weight` declaration removed; two stale hub-motion.css comments fixed. Spacing-scale sweep
+  and `.day`'s two-file styling are real but deferred — 15+ files, needs its own pass.
+- **M4 is now COMPLETE (items 1–5 shipped this session, Opus).** Full detail in the plan.
+  **Icons:** `src/components/Icon.astro` is the single home for 19 stroke paths; every emoji and
+  text glyph is gone from the chrome — tool tabs, mobile sheet, bottom bar, dark toggle (its `◑`
+  used to flash for a frame before JS swapped it), Trip Kit eyebrows, jet-lag, day-pace, footer.
+  `dist/` greps clean. Accessible names preserved (icons `aria-hidden`, controls keep real text),
+  so screen readers stop announcing emoji names. Left deliberately: `reminders.js`'s KIND_ICON
+  map — JS-rendered content-type markers in a silo, not chrome.
+  **Hub:** `data-count` drives a 2-up editorial layout with bigger covers at ≤4 guides (3 closes
+  as 2 + 1, last card full-bleed); the original auto-fill returns at 5+, untouched.
+  **Tabs:** tool tabs stay in the same tablist (ARIA and arrow-key ring intact) but get a divider
+  and, at ≥900px, CLIPPED labels — clipped text stays in the a11y tree, so the strip fits one row
+  on desktop with every accessible name intact.
+  **Choreography:** story intro → cold-open → nav-hint, one per view, none burning its flag while
+  standing down. This exposed a real latent bug: `story-open.js` was imported BELOW the two
+  scripts that needed its `window.__storyIntro` flag, so it was always `undefined` when they read
+  it. Fixed by reordering (still above `gsap-hero.js`, its other constraint).
+  **Colophon:** the footer is now a signature — claim, this guide's own counted numbers, small
+  print, request-a-change pill. Korea shows 45 verified facts / 23 primary sources, Denmark
+  21/16, Sedona 11/7. The "Checked" stamp needed real work to be honest: the guide-level
+  `verified` field is free prose, so the ISO-matching `verifiedDate` was null on every guide and
+  the row would have silently never rendered — added `latestVerifiedOn()` (4 tests) over the
+  per-fact provenance dates, which are machine-readable. All three guides now show a true
+  "Last checked 2026-07-23".
+- **M4 item 6 (More detail v2) shipped last session — creator's explicit priority.** `.card-more-sum` is now a
+  real chip (fill/border/hover/focus-visible/chevron); `moreLabel` is a real schema field with an
+  honest computed-count fallback; the split refuses to fold a `⚠` or `<ul>/<ol>` remainder (shows
+  everything rather than hide a warning); a masked fade-out preview renders above the closed chip;
+  the open animates via `@supports`-gated CSS (`::details-content`/`interpolate-size`), snap
+  fallback everywhere unsupported. Verified live in `dist/`. **A11y investigation note:** manually
+  ran the full a11y gate (this sandbox has no `playwright install` path, so via a temp local
+  config against the pre-installed Chromium); found and fixed one real issue from the M2
+  `.guide-stats` change (`tabindex="0"`, scrollable-region-focusable), and bisected a 4-test
+  `bgOverlap` failure all the way to the pre-session commit — it reproduces on fully-stashed code,
+  so it's environment/font-stack drift the test's own comments already document, not a
+  regression.
+- **M5 (dynamic runtime / room codes) DONE.** Surveyed first: View Transitions and the
+  connection state machine were ALREADY shipped in earlier sessions (transitions.css,
+  offline-pill.js) — recorded so nobody rebuilds them. The real work was the room-code options:
+  a `#room=` fragment override (private code, never enters the repo, never sent to a server;
+  same 16–40 char rule; wired at the one chokepoint) and a post-trip read-only lock that turns a
+  settled trip's budget into its financial record. **Opt-in, default off** (`budgetLock`): a
+  14-day grace would have silently frozen Korea's LIVE budget on 30 Jul, four days after
+  shipping, and that is not a fork to pick for the creator. Client-side only — no DB or rules
+  change. Verified in dist/: every guide ships `"budgetLock":false`.
+- **M6 (type safety) DONE — the rule is ON as a ratchet.** `src/lib/guide-types.ts` derives
+  `GuideData`/`Section`/`SectionOf<T>` from the Zod schema (never hand-written). Converted the
+  core walkers (map-pins, buckets, exports, hub derivation): **150 → 118** `any`s, with the
+  build output **byte-identical** before/after (same SW content hash — proof it was purely
+  type-level). The types surfaced 3 real defects no test could see, incl. `PlannerDay.energy`
+  typed `string` against a 3-value schema enum. `no-explicit-any` is now `"error"` with a
+  33-path exception list in eslint.config.mjs — a shrinking TODO in the config instead of a
+  rule switched off. Forced the failure once to prove it bites. Also learned the hard way:
+  `[slug]` in an ESLint `files` path is a glob CHARACTER CLASS, so those four endpoints matched
+  nothing until rewritten with `*`. guide.css split at its threshold (print block → print.css,
+  790 → 696 lines).
+- **Tooling follow-ups (2026-07-26, Part 5 of the plan):** `playwright.config.ts` now resolves
+  Chromium adaptively — the managed browser wins when installed (CI unchanged), a pre-installed
+  one is used only when it is genuinely absent, `PW_CHROMIUM_PATH` overrides. **Visual
+  verification works again from a plain `npx playwright test`**, which un-blocks the deferred
+  `--space-*` sweep. The token canary now @-mentions AND assigns the repo owner, routing the
+  alert through GitHub's own email/mobile-push path (a Claude routine was built and deleted —
+  routine sessions can't be granted the github connector here, and this environment's proxy
+  intercepts api.github.com either way, so it could not see what it was checking). The wizard's
+  PDF upload now derives COUNTRY — the one required field — from the real country table,
+  prefilling only on exactly one match. **a11y baselines deliberately NOT re-recorded** from
+  this sandbox: they are calibrated to CI's font stack, and rewriting them here would turn CI
+  red. That belongs on CI's runner.
+- **Connector hygiene (owner action):** this session ran with Dropbox, Gmail, Calendar, Drive,
+  PubMed, Spotify and Vercel attached — zero call sites, ~45k tokens of dead schema per session.
+  `CLAUDE.md`'s policy (github + Claude Code Remote only) is correct and is not being followed.
+- **Session #8 also fixed:** a live Trip Split desktop misalignment, dead `.se-drag`/`.imgfail`
+  CSS, stray `mexico.json` + root `wrangler.jsonc`, stale flat-`<slug>.json` references.
+
+Standing context from session #7 (detail in git history / `git show 3dc5349:docs/HANDOFF.md`):
+every guide is a directory and a test enforces it · Mexico/Portugal retired (their researched
+`countries.mjs` rows deliberately kept) · served `.gpx`/`.ics` spec-tested · ESLint 277→0 and a
+CI gate · CodeQL's 4 real alerts fixed · Trip Split room codes real + sync failures surfaced,
+confirmed live by the creator.
 
 ## Left to do
 
@@ -96,9 +231,8 @@ tests, `astro check` 0 errors, e2e **55/55**.
 4. **Dead-file audit: mechanical half done, judgment half open.** All 289 source files under
    `src/ scripts/ worker/` were scanned — **zero dead modules**; the only unreferenced files are
    tests (nothing imports a test) and `src/env.d.ts` (ambient). What remains is a call only the
-   creator can make: six docs read as completed-work records — `PLAN_FIELD_REPORT_FIXES.md` (22KB),
-   `PLAN_TRAVELER_FEATURES.md`, `PLAN_VISUAL_OVERHAUL.md`, `FIELD_REPORT_2026-07-22.md`,
-   `DENMARK_UPLIFT.md`, `TEST_COVERAGE_ANALYSIS.md`. Record or relic is not a mechanical question.
+   creator can make: ~~six completed-work docs~~ — RESOLVED 2026-07-26: archived to
+   `docs/archive/`, references repointed.
 5. Not built: the PostToolUse typecheck hook in `.claude/settings.json`, and trimming `CLAUDE.md`
    toward 200 lines (it grew this session).
 6. **Unverified:** `scaffold-guide.mjs`'s new end-to-end directory path. Creating a throwaway guide
@@ -106,42 +240,86 @@ tests, `astro check` 0 errors, e2e **55/55**.
 
 ## Owner tasks (need the creator, not the agent)
 
-1. **Re-enable the `config-protection` hook** if it is still off. It was disabled at
-   `~/.claude/settings.json` line 53 to let the ESLint config be fixed; that work is done. The
-   agent cannot restore it — the permission classifier refuses edits to `~/.claude/`.
-2. Commit `eae5573`'s subject line is a literal `@` (PowerShell here-string leaked into Bash); the
+1. **Rotate `CLAUDE_CODE_OAUTH_TOKEN` — blocks M0 from finishing.** `claude setup-token` locally →
+   repo secret → re-run Token canary. See Snapshot above; this is the only thing standing between
+   here and the pipeline's first-ever real end-to-end run.
+2. **Re-enable the `config-protection` hook** if it is still off (`~/.claude/settings.json` line
+   53) — the agent cannot; the permission classifier refuses edits to `~/.claude/`.
+3. Commit `eae5573`'s subject line is a literal `@` (PowerShell here-string leaked into Bash); the
    body is intact. The Fact-Forcing Gate blocks `--amend`.
-3. **Shell reminder:** commands in this repo's docs are Git Bash. Running `rm -rf` or
-   `git show … > file` in PowerShell fails or writes UTF-16 — both happened this session.
+4. **Shell reminder:** commands in this repo's docs are Git Bash — `rm -rf` / `git show … > file`
+   in PowerShell fails or writes UTF-16.
 
-**Closed this session:** GROQ key revoked · `FIREBASE_SERVICE_ACCOUNT` minted · merged remote
-branches deleted (`origin` is `main`-only) · **W5 label-free test RUN and CONFIRMED**, so the
-zero-click intake path is proven end to end for the first time · retired guides permanently deleted.
-
-**W6 (real end-to-end pipeline proof) stays deferred, gated on an actual trip** — creator's choice.
-The W0–W5 arc is complete and live; detail in `docs/PIPELINE.md` and the git log.
+**W6 (real end-to-end pipeline proof)** is no longer deferred — it's the next concrete step, once
+the token is rotated. Detail in `docs/PIPELINE.md` and `docs/PLAN_MODERNIZE.md`'s M0.
 
 ## Where we left off
 
-Two lessons, and they are the same lesson from opposite ends.
+Two sessions ago the audit's lesson was: every green gate here measures the artifact, not the
+factory. This session answered *why* the factory never ran — not a guess, a 401 read straight off
+a live dispatch — then spent the wait on everything else the plan could reach without the token:
+CI efficiency, the CLS root causes, the type-scale/z-index foundation, and the creator's specific
+priority (More detail v2). One real a11y bug was caught and fixed along the way (a scrollable
+region needed `tabindex`).
 
-**Two shapes that both build is not a tolerated variation, it is an undetected one.** The flat guide
-won path resolution, so the shape meant to be legacy was the shape that would have silently won.
-Uniformity had to become a test before it could become a fact.
+**Correction, on merging this branch to `main`: the second a11y finding was NOT environment
+drift.** It was recorded as baselines "calibrated to a different machine" and left. Merging turned
+the Accessibility workflow red on all eight guide combinations — the branch had never run that
+workflow, so nothing surfaced it until then. CI and the sandbox in fact report *identical* counts
+(denmark 47, korea 65); the cause was this branch's own tab icons. An inline `<svg class="gtab-ico">`
+inside each `.gtab` defeats axe's stacking-order reimplementation once per tab, so each guide grew
+by exactly its tab count: +8 denmark, +11 korea.
 
-**Every gate this repo owned tested the code from OUTSIDE, so none of them could see a module whose
-own scope was broken.** `graduate-guide.mjs` re-exported `isValidSlug` without importing it: fine
-for every importer, `ReferenceError` for the module itself. 832 unit tests, `astro check` and 55 e2e
-were green over a crash. ESLint found it on its first run, which is the whole argument for adding a
-tool that reads the file rather than calling it.
+The part worth carrying forward is *why the gate could not say so itself*. `unrecognised` — the
+zero-tolerance novelty check the file calls "the mechanism that surfaces a real bug" — keys on
+rule + messageKey, never on the element. So a wholly new element family inherited a justification
+written about sight-card photo captions and passed silently; only dumping the node selectors
+showed it. The count check caught the symptom, the novelty check missed the cause. Real composited
+contrast was then measured before any baseline moved (worst case 4.77:1 against 4.5:1 required),
+and the new numbers were deliberately failed at 43 before being trusted at 47. Fixed in `fc81804`.
 
-**Re-prompt the creator with:** "Everything from last session is closed. Every trip is a directory
-now, the scaffold emits that shape, and a test fails the build on a flat one — it mattered because a
-flat guide *wins* path resolution, so the legacy shape would have quietly shadowed the new one.
-Mexico and Portugal are gone. There's a new gate on the built `.gpx`/`.ics` files, because the unit
-tests only ever saw strings we typed and real guide prose is what breaks iCalendar folding. ESLint
-went 277 to 0 and is wired into CI — and on its first run it found a live `ReferenceError` in
-graduate-guide that 832 green tests, astro check and 55 e2e all missed, because every one of them
-tests from outside the module. Two things are open: 154 `any`s in the guide-JSON walkers, which
-wants the Zod-inferred type threaded through the section union, and six completed-plan docs that
-need you to say whether they're records or relics. Which one?"
+**Re-prompt the creator with (2026-07-28, session #15):** "The Living Atlas is LIVE on main —
+R1–R6, the pipeline congruence, and your descriptor ruling, merged on your word; the redesign
+branch is deleted. Check the live site: Korea's chapter openers now carry three flat facts and
+otherwise the derived subtitles. Watch the Accessibility workflow's first main run — baselines
+re-record on CI there, and the #12 lesson says the first red may just be that re-record. Still
+standing: the `us` composition proposal (R6 ledger has the exact command), and rotating
+`CLAUDE_CODE_OAUTH_TOKEN` for the pipeline's first end-to-end proof — the cheapest full test
+of everything shipped today is one throwaway New Guide issue after that rotation."
+
+**Prior re-prompt (superseded, session #14):** "The pipeline now delivers the Living
+Atlas unattended: file a New Guide issue and the guide that auto-publishes arrives composed
+(tabs assembled inside the draft window — a wiring flaw that silently disabled this for new
+guides is fixed), descriptor-voiced, facet-tagged, covered (photo when a signature Commons shot
+exists, Painted Atlas otherwise), with 0–2 frame-checkable footage candidates waiting in its
+intake doc for your sign-off. The cheapest proof is one real run: file a test New Guide issue
+end-to-end (needs the rotated `CLAUDE_CODE_OAUTH_TOKEN`). Still standing from #13: the `us`
+composition proposal, Korea's descriptor working copy, and the word to PR the branch to main."
+
+**Prior re-prompt (superseded, session #13):** "The Living Atlas arc is COMPLETE —
+R1 through R6, every phase gated, on the redesign branch. Open Korea in a real browser: the
+palace photo wakes into licensed footage of the same palace; Days opens on the trip's shape
+with today ringed; Transit draws its legs from the routes; checklists carry live rings; your
+voice sits under every literal label; every future guide is born with a Painted Atlas cover;
+and tabs now assemble themselves — the Composer runs in every research pass, drafts auto,
+live guides proposal-only. Three sign-offs are yours, none urgent: (1) the Composer's first
+standing proposal — `us` has two one-card tabs it wants to fold (R6 ledger in the plan has
+the exact command and alternatives); (2) Korea's descriptor set is working copy — edit any
+line; (3) when you're happy with the branch, say the word and it PRs to main (a11y baselines
+re-record on CI there). Also still standing: rotate `CLAUDE_CODE_OAUTH_TOKEN` for the
+pipeline's first end-to-end proof."
+
+**Prior re-prompt (superseded):** "The whole M0–M6 programme is done except one thing, and that
+one thing needs you: `CLAUDE_CODE_OAUTH_TOKEN` is expired (confirmed from the real API response
+— 401 OAuth access token is invalid). Rotate it (`claude setup-token` → repo secret → re-run
+Token canary) and I'll run the pipeline's first-ever real end-to-end proof: a throwaway guide
+through scaffold → research → verify → auto-graduate → land → live. Everything else shipped:
+CI efficiency, the CLS root causes, the design-token foundation, the full visual pass (one icon
+language, editorial hub, one-row tab strip, sequenced onboarding, a colophon footer that signs
+each guide with its own counted verification numbers, and the More-detail redesign you asked
+for), room-code options (`#room=` override + an OPT-IN post-trip lock — default off, because
+turning it on by default would have frozen Korea's live budget on 30 Jul), and the type-safety
+debt (150→118 `any`s, `no-explicit-any` now ON as a ratchet with a shrinking exception list).
+870 tests green. Three things I deliberately did NOT do, each with a reason in the plan:
+modulepreload/font-preload hints, the `--space-*` spacing sweep, and typing the `.astro` block
+props — all real, all wanting their own pass rather than a rushed one."

@@ -1,6 +1,6 @@
 # Competitive Landscape — full sweep (researched 2026-07-20)
 
-Feature-parity analysis for `docs/PLAN_TRAVELER_FEATURES.md`. Method: July 2026 market research
+Feature-parity analysis for `docs/archive/PLAN_TRAVELER_FEATURES.md`. Method: July 2026 market research
 (sources at bottom) plus direct inspection of competitors' served code (curl → route/framework
 analysis; the sandbox can't run live DevTools against external hosts, so this is served-HTML
 depth, stated honestly). **The goal is not parity for its own sake — it's parity where a feature

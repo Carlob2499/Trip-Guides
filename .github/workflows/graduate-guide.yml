@@ -116,5 +116,5 @@ jobs:
           git pull --rebase origin main
           git push origin HEAD:main
           GUIDE_URL="${SITE_BASE_URL}/guides/${SLUG}/"
-          gh issue comment "${ISSUE_NUM}" --body "Graduated ✅ (evidence gate passed) — \`draft\` removed from \`src/content/guides/${SLUG}.json\`. It'll appear in the curated grid on the next deploy: ${GUIDE_URL}. Reminder: the \`verified\` freshness stamp wasn't touched — update it separately if it still reads as an unverified draft."
+          gh issue comment "${ISSUE_NUM}" --body "Graduated ✅ (evidence gate passed) — \`draft\` removed from \`src/content/guides/${SLUG}/_guide.json\`. It'll appear in the curated grid on the next deploy: ${GUIDE_URL}. Reminder: the \`verified\` freshness stamp wasn't touched — update it separately if it still reads as an unverified draft."
           gh issue close "${ISSUE_NUM}"

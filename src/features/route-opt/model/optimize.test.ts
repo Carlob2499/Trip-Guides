@@ -63,7 +63,7 @@ describe("optimizeDayRoute", () => {
 
   it("real guide data: Korea's Tue Jul 14 shopping day fires, every other day of the trip stays silent", () => {
     // Actual coordinates from src/content/guides/korea/04-itinerary.json — this
-    // is the exit criterion from docs/PLAN_FIELD_REPORT_FIXES.md E7: the
+    // is the exit criterion from docs/archive/PLAN_FIELD_REPORT_FIXES.md E7: the
     // advisory must fire on a REAL day where it genuinely helps, not a fixture
     // invented to make the feature look good.
     const jul14 = [

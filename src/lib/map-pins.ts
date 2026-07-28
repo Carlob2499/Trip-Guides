@@ -6,6 +6,7 @@
 // center + named points. Nothing is invented — pins exist only where the
 // content already carries verified coordinates.
 import { flattenSections } from "../features/exports/index";
+import type { DayItem, Section, SectionOf } from "./guide-types";
 
 export type Pin = {
   id: string;
@@ -24,25 +25,31 @@ export function pinSlug(name: string): string {
     .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "pin";
 }
 
-const hasCoords = (o: any) =>
-  o && Number.isFinite(o.lat) && Number.isFinite(o.lng);
+type MaybeCoords = { lat?: unknown; lng?: unknown } | null | undefined;
+const hasCoords = (o: MaybeCoords): o is { lat: number; lng: number } =>
+  !!o && Number.isFinite(o.lat) && Number.isFinite(o.lng);
 
 // Planner data for the day-synced Plan view: per-day stop lists + a day-indexed
 // pin set for the planner map. When no day has coords, `hasCoords` is false and
 // the planner map falls back to the guide-level pins (or renders nothing on
 // scaffolds) — waypoint adoption is purely incremental content work.
 export type PlannerStop = { name: string; time: string | null; note: string | null; lat: number | null; lng: number | null };
-export type PlannerDay = { idx: number; date: string; title: string; energy: string; stops: PlannerStop[] };
+/* M6: `energy` was typed `string` here while the schema has always been a three-value enum, and
+   the stop coords were typed `number | null` while the mapping could yield `undefined`. Both
+   were invisible until the derived types were threaded through — exactly the class of drift a
+   hand-written type accumulates against the schema it is supposed to mirror. */
+export type PlannerDay = { idx: number; date: string; title: string; energy: DayItem["energy"]; stops: PlannerStop[] };
 export type PlannerPin = Pin & { dayIdx: number; time: string | null };
 
-export function derivePlannerData(sections: any[]): { days: PlannerDay[]; pins: PlannerPin[]; hasCoords: boolean } {
+export function derivePlannerData(sections: Section[]): { days: PlannerDay[]; pins: PlannerPin[]; hasCoords: boolean } {
   const flat = flattenSections(sections || []);
-  const daysSec = flat.find((s: any) => s.type === "days" && s.items?.length);
-  const days: PlannerDay[] = (daysSec?.items || []).map((d: any, idx: number) => ({
+  const daysSec = flat.find((s): s is SectionOf<"days"> => s.type === "days" && !!s.items?.length);
+  const days: PlannerDay[] = (daysSec?.items || []).map((d, idx: number) => ({
     idx, date: d.date, title: d.title, energy: d.energy || "balanced",
-    stops: (d.waypoints || []).map((w: any) => ({
+    stops: (d.waypoints || []).map((w) => ({
       name: w.name, time: w.time ?? null, note: w.note ?? null,
-      lat: Number.isFinite(w.lat) ? w.lat : null, lng: Number.isFinite(w.lng) ? w.lng : null,
+      lat: Number.isFinite(w.lat) ? (w.lat as number) : null,
+      lng: Number.isFinite(w.lng) ? (w.lng as number) : null,
     })),
   }));
   const pins: PlannerPin[] = [];
@@ -59,20 +66,20 @@ export function derivePlannerData(sections: any[]): { days: PlannerDay[]; pins: 
   return { days, pins, hasCoords: pins.length > 0 };
 }
 
-export function derivePins(sections: any[]): Map<any, Pin[]> {
+export function derivePins(sections: Section[]): Map<SectionOf<"map">, Pin[]> {
   const flat = flattenSections(sections || []);
-  const maps = flat.filter((s: any) => s.type === "map" && hasCoords(s.center));
+  const maps = flat.filter((s): s is SectionOf<"map"> => s.type === "map" && hasCoords(s.center));
   const sightPins: Pin[] = flat
-    .filter((s: any) => s.type === "sights")
-    .flatMap((s: any) => s.items || [])
-    .filter((it: any) => hasCoords(it.map))
-    .map((it: any) => ({
+    .filter((s): s is SectionOf<"sights"> => s.type === "sights")
+    .flatMap((s) => s.items || [])
+    .filter((it) => hasCoords(it.map))
+    .map((it) => ({
       id: pinSlug(it.name), name: it.name,
-      lat: it.map.lat, lng: it.map.lng, local: null, kind: "sight" as const,
+      lat: it.map!.lat, lng: it.map!.lng, local: null, kind: "sight" as const,
     }));
 
-  const out = new Map<any, Pin[]>();
-  maps.forEach((sec: any, i: number) => {
+  const out = new Map<SectionOf<"map">, Pin[]>();
+  maps.forEach((sec, i: number) => {
     const pins: Pin[] = [{
       id: `center-${i}`, name: sec.title || "Map area",
       lat: sec.center.lat, lng: sec.center.lng, local: null, kind: "center",

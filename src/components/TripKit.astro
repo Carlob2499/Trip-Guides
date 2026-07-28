@@ -1,4 +1,5 @@
 ---
+import Icon from "./Icon.astro";
 // Trip kit — a tool tab (like Budget/Vote/Reminders) housing focused, on-the-ground
 // helpers (docs/FEATURES.md #5 arrival autopilot, #6 phrase cards, #7 entry requirements,
 // F1 prep timeline, F4 packing strip). Server-rendered from data the guide already carries;
@@ -39,7 +40,7 @@ const BUCKET_LABEL: Record<string, string> = { overdue: "Overdue", soon: "Next 2
 
   {hasEntry && (
     <section class="tk-card" aria-labelledby="tk-entry-h">
-      <p class="tk-card-eyebrow">🛂 Entry requirements</p>
+      <p class="tk-card-eyebrow"><Icon name="shield" size={14} /> Entry requirements</p>
       <h3 class="tk-card-title" id="tk-entry-h">Before you book</h3>
       {entry!.length > 1 && (
         <label class="tk-entry-picker">
@@ -69,7 +70,7 @@ const BUCKET_LABEL: Record<string, string> = { overdue: "Overdue", soon: "Next 2
 
   {hasBookBy && (
     <section class="tk-card" aria-labelledby="tk-bookby-h">
-      <p class="tk-card-eyebrow">🗓 Book by</p>
+      <p class="tk-card-eyebrow"><Icon name="calendar" size={14} /> Book by</p>
       <h3 class="tk-card-title" id="tk-bookby-h">Things with a deadline</h3>
       {(["overdue", "soon", "later"] as const).map((bucket) => {
         const bucketItems = bookBy.filter((i) => i.bucket === bucket);
@@ -96,7 +97,7 @@ const BUCKET_LABEL: Record<string, string> = { overdue: "Overdue", soon: "Next 2
 
   {hasWeatherSection && (
     <section class="tk-card" id="tkPackingCard" aria-labelledby="tk-packing-h" hidden>
-      <p class="tk-card-eyebrow">🎒 Packing</p>
+      <p class="tk-card-eyebrow"><Icon name="kit" size={14} /> Packing</p>
       <h3 class="tk-card-title" id="tk-packing-h">What to bring</h3>
       <ul class="tk-packing-list" id="tkPackingList"></ul>
     </section>
@@ -104,7 +105,7 @@ const BUCKET_LABEL: Record<string, string> = { overdue: "Overdue", soon: "Next 2
 
   {arrival && (
     <section class="tk-card" aria-labelledby="tk-arrival-h">
-      <p class="tk-card-eyebrow">✈ Arrival autopilot · {arrival.date}</p>
+      <p class="tk-card-eyebrow"><Icon name="plane" size={14} /> Arrival autopilot · {arrival.date}</p>
       <h3 class="tk-card-title" id="tk-arrival-h">{arrival.title}</h3>
       {arrival.tldr && <p class="tk-card-tldr">{arrival.tldr}</p>}
 
@@ -135,13 +136,13 @@ const BUCKET_LABEL: Record<string, string> = { overdue: "Overdue", soon: "Next 2
         </div>
       )}
 
-      {arrival.fit && <p class="tk-fit">🧳 {arrival.fit}</p>}
+      {arrival.fit && <p class="tk-fit"><Icon name="kit" size={14} /> {arrival.fit}</p>}
     </section>
   )}
 
   {hasPhrases && (
     <section class="tk-card" aria-labelledby="tk-phrases-h">
-      <p class="tk-card-eyebrow">💬 Phrase cards</p>
+      <p class="tk-card-eyebrow"><Icon name="chat" size={14} /> Phrase cards</p>
       <h3 class="tk-card-title" id="tk-phrases-h">Show this to someone</h3>
       <p class="tk-card-tldr">Verified phrases in big, native-script type — point + show the screen, or tap to hear it spoken aloud.</p>
       <div class="tk-phrases">

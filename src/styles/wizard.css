@@ -6,7 +6,7 @@
 .ngw-deck{position:relative;min-height:14rem}
 .ngw-step{display:none}
 .ngw-step.ngw-on{display:block}
-.ngw-head{display:flex;align-items:baseline;gap:.6rem;margin:.2rem 0 .9rem;font-family:var(--font-display);font-weight:720;font-size:var(--text-lead);letter-spacing:-.015em}
+.ngw-head{display:flex;align-items:baseline;gap:.6rem;margin:.2rem 0 .9rem;font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);letter-spacing:-.015em}
 .ngw-num{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:.08em;color:var(--accent-ink)}
 
 .ngw-nav{display:flex;align-items:center;gap:.8rem;margin:1rem 0 .4rem}

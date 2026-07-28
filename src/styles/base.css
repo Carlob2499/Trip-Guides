@@ -28,9 +28,13 @@
      them — they are exactly what accentTokens("#9c4421") returns, and a test pins that. */
   --accent-ink-light:#893b1d;--accent-ink-dark:#c2866e;--accent-ink:var(--accent-ink-light);
   --on-accent:#f0d2c7;
-  /* Type system — three roles, all self-hosted variable fonts (@fontsource):
-     display = signage (headings, tabs, wayfinding), body = long-form reference
-     reading (the researched content), data = times/prices/coords/stamps. */
+  /* Type system — the Quiet Edition (R1, 2026-07-28): THREE ROLES, TWO FACES.
+     display + body are BOTH Literata — one serif wearing both hats through its real
+     optical-size axis (the `standard` fontsource variant carries wght+opsz, and
+     font-optical-sizing:auto means big headings get the display cut, prose the text cut,
+     with zero per-rule settings). data = Source Sans 3, one quiet humanist sans for
+     times/prices/coords/stamps/labels. Bricolage Grotesque and Spline Sans Mono retired
+     here — grep for their names should find only this comment. */
   /* CJK fallback: Korea guide content renders real Hangul through all three roles (.addr-card-big
      via --font-display, inline prose glosses + .tk-phrase-native via --font-body, .tag/kicker labels
      + hardcoded UI strings via --font-data) and none of the three webfonts or their Latin fallbacks
@@ -38,15 +42,17 @@
      Chrome's font resolver). Fallback picked per role's design intent, not just "any CJK font": a
      serif for --font-body (AppleMyungjo — macOS, confirmed via Apple's own bundled-fonts page;
      Batang — Windows, confirmed via Microsoft Learn's typeface list; Noto Serif CJK KR — Android,
-     confirmed via AOSP's fonts.xml lang="ko" fallbackFor="serif" mapping), a sans for --font-display/
+     confirmed via AOSP's fonts.xml lang="ko" fallbackFor="serif" mapping), a sans for
      --font-data (Apple SD Gothic Neo — macOS/iOS; Malgun Gothic — Windows; Noto Sans CJK KR —
-     Android, same AOSP source). Zero byte cost: these are OS-installed system fonts, never fetched.
-     iOS has no verified bundled serif Korean face, so --font-body's Hangul falls through past this
-     list to the bare `serif` keyword there — Safari's own CJK substitution resolves it (in practice
-     the same sans face iOS already uses), an accepted platform gap rather than an invented font name. */
-  --font-display:'Bricolage Grotesque Variable','Apple SD Gothic Neo','Malgun Gothic','Noto Sans CJK KR',-apple-system,system-ui,sans-serif;
+     Android, same AOSP source). --font-display moved to the SERIF chain with the Quiet Edition,
+     since display is now Literata too. Zero byte cost: these are OS-installed system fonts, never
+     fetched. iOS has no verified bundled serif Korean face, so the serif roles' Hangul falls
+     through past this list to the bare `serif` keyword there — Safari's own CJK substitution
+     resolves it (in practice the same sans face iOS already uses), an accepted platform gap
+     rather than an invented font name. */
+  --font-display:'Literata Variable',Georgia,'Times New Roman',AppleMyungjo,Batang,'Noto Serif CJK KR',serif;
   --font-body:'Literata Variable',Georgia,'Times New Roman',AppleMyungjo,Batang,'Noto Serif CJK KR',serif;
-  --font-data:'Spline Sans Mono Variable',ui-monospace,'Courier New','Apple SD Gothic Neo','Malgun Gothic','Noto Sans CJK KR',monospace;
+  --font-data:'Source Sans 3 Variable',-apple-system,system-ui,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans CJK KR',sans-serif;
   /* Type SCALE — semantic size steps. Anchored to two values that were ALREADY load-bearing
      before this scale existed, not invented fresh: --text-body matches body's own font-size
      (which now READS the token, below, so the anchor is stated once instead of duplicated),
@@ -127,8 +133,27 @@
      this stays a constant instead of pretending. */
   --text-h3:1.6rem;                                /* 25.6px, fixed — see above */
   --text-h2:clamp(1.75rem,1.5rem + 1.2vw,2rem);    /* 28px   -> 32px   */
+  /* M3: the missing mid-band step between h2 (32px max) and display (76.8px max) — .cat-title's
+     own bespoke clamp() existed because this step was undeclared. NAMED at .cat-title's exact
+     existing value (24px->35.2px) — this is an architecture fix (one governed token instead of
+     an undeclared one-off), deliberately not a size change; a larger step is a design decision
+     for a future session to make visually, not something to slip in unreviewed here. */
+  --text-h1:clamp(1.5rem,4vw,2.2rem);
   --text-display:clamp(2.8rem,8vw,4.8rem); /* MATCHES .masthead h1's clamp in guide.css, not new */
   --r-sm:6px;--r-md:10px;--r-lg:16px; /* radius scale — rounded-container language */
+  /* M3: z-index scale — was 20+ ad-hoc values (0 to an outlier 9000) with no documented tiers,
+     and one real bug: .skip-link (999) painted UNDER story-mode's overlay (1000), so a keyboard
+     user tabbing while story mode was open focused an invisible link. Named here as the single
+     source of truth for NEW stacking decisions; existing declarations are not retrofitted in
+     this pass (40+ call sites across 15 files — a full sweep is real work, tracked separately),
+     but every value below reflects where those existing declarations already cluster, so a
+     future retrofit is a rename, not a redesign. */
+  --z-raised:120;   /* floating buttons/popovers above page content: SOS button, currency popover */
+  --z-sticky:310;   /* full-screen sheets/panels: Focus Today, SOS sheet, address card */
+  --z-toast:940;    /* toasts/pills: save confirmations, offline badge */
+  --z-modal:960;    /* backdrop+dialog modals: share, new-guide, survey — all sit in one tier */
+  --z-story:1000;   /* the story-mode full-screen overlay — the highest CONTENT layer */
+  --z-skip-link:1100; /* ABOVE story-mode, always — a skip link that can be hidden by other UI defeats its purpose */
   /* Motion tokens — the single timing vocabulary for CSS + GSAP alike (adopted from
      the WayPoint-V2 design manifesto). Rules of use: entries/reveals ride
      --ease-out-expo (fast start, long settle); touch feedback rides --ease-spring;
@@ -179,5 +204,8 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opa
 /* Skip link — visually hidden until focused, then a clear chip at top-left. Shared by
    EVERY page (U3): it used to live only in guide.css, so the hub had no skip link at all
    despite its own V2 spec promising one. */
-.skip-link{position:fixed;left:.7rem;top:.7rem;z-index:999;padding:.55rem 1rem;background:var(--ink);color:var(--bg);border-radius:999px;font-family:var(--font-data);font-size:var(--text-caption);text-decoration:none;transform:translateY(-300%);transition:transform .15s}
+/* M3: was z-index:999 — painted UNDER story-mode's z-index:1000 overlay, so a keyboard user
+   tabbing while story mode played focused an invisible skip link. --z-skip-link is defined
+   above story-mode specifically so this can never regress silently again. */
+.skip-link{position:fixed;left:.7rem;top:.7rem;z-index:var(--z-skip-link);padding:.55rem 1rem;background:var(--ink);color:var(--bg);border-radius:999px;font-family:var(--font-data);font-size:var(--text-caption);text-decoration:none;transform:translateY(-300%);transition:transform .15s}
 .skip-link:focus-visible{transform:none;outline:3px solid var(--accent);outline-offset:2px}

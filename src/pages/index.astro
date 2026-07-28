@@ -1,23 +1,29 @@
 ---
 import { getCollection } from "astro:content";
 import PwaHead from "../components/PwaHead.astro";
+import Icon from "../components/Icon.astro";
 // Same accent resolution as the guide pages + OG (uniform across surfaces):
 // explicit theme > extracted cover palette > country accent (src/lib/palettes.ts).
 import { accentForGuide, paletteAccentsForGuide } from "../lib/palettes";
 import { accentTokens, accentStyle } from "../lib/accent-tokens";
 import { generateContourLayer } from "../lib/contours";
+import PaintedAtlas from "../components/PaintedAtlas.astro";
 import { computeGuideStats } from "../lib/guide-stats";
+import type { SectionOf, SightItem } from "../lib/guide-types";
 import { tripWindow, localISODate } from "../lib/trip-dates";
 import { continentFor, CONTINENT_ORDER } from "../data/countries.mjs";
+import { tzFor } from "../lib/themes";
 import { flattenSections } from "../features/exports/index";
 // Self-hosted variable fonts (bundled, base-path-safe, offline-correct) — no CDN.
-import "@fontsource-variable/bricolage-grotesque";
-import "@fontsource-variable/literata";
-import "@fontsource-variable/literata/wght-italic.css";
-import "@fontsource-variable/spline-sans-mono";
+// Quiet Edition (R1): ONE serif — Literata with its optical-size axis (standard = wght+opsz,
+// so browsers cut display vs text automatically) — and ONE quiet humanist sans for data/labels.
+import "@fontsource-variable/literata/standard.css";
+import "@fontsource-variable/literata/standard-italic.css";
+import "@fontsource-variable/source-sans-3";
 import "../styles/base.css";
 import "../styles/hub.css";
 import "../styles/hub-cards.css";
+import "../styles/painted-atlas.css";
 import "../styles/wizard.css";
 import "../styles/transitions.css";
 import "../styles/scroll-motion.css";
@@ -57,14 +63,22 @@ const guideExtras = guides.map(g => {
     // else: trip is past — no badge (a finished trip gets the static heroWhen treatment below)
   }
   // Hero/filter extras — all derivable at build from data the guide already has.
-  const mapSec  = flat.find((s: any) => s.type === "map" && typeof s.center?.lat === "number");
-  const sight   = flat.filter((s: any) => s.type === "sights").flatMap((s: any) => s.items || []).find((it: any) => it?.img?.file);
+  const mapSec  = flat.find((s): s is SectionOf<"map"> => s.type === "map" && typeof s.center?.lat === "number");
+  // The predicate narrows `img` for the consumer below, which the plain `!!it?.img?.file`
+  // form did not — that is why `sight.img.file` was flagged as possibly-undefined.
+  const sight = flat.filter((s): s is SectionOf<"sights"> => s.type === "sights")
+    .flatMap((s) => s.items || [])
+    .find((it): it is SightItem & { img: NonNullable<SightItem["img"]> } => !!it?.img?.file);
   const month   = firstDateStr?.split(/\s+/)[1] || "";
   // The card/hero cover: the guide's own `cover` art when set, else its first sight photo
   // (docs/MOTION.md). Same image the guide masthead uses — that's what makes them morph.
   const cover = (g.data as any).cover;
-  const coverImg = cover?.file
-    ? { file: cover.file, alt: cover.alt || "", focal: cover.focal || null }
+  // R4: a still cover may be a direct royalty-free CDN URL (`src`, `{w}` width token) as
+  // well as a Commons `file` — same precedence as the guide masthead (uniform application).
+  const coverImg = cover?.src
+    ? { src: cover.src as string, alt: cover.alt || "", focal: cover.focal || null }
+    : cover?.file
+    ? { file: cover.file as string, alt: cover.alt || "", focal: cover.focal || null }
     : (sight ? { file: sight.img.file, alt: sight.img.alt || sight.name, focal: null } : null);
   return {
     dayCount, badge, firstDate, lastDate, month,
@@ -109,12 +123,23 @@ const heroWhen = heroIsPast && hero?.ex.lastDate
 // reads as the same trip, not a second one.
 const gridGuides = curated;
 const heroId = hero?.g.id ?? null;
-const heroSrc = hero?.ex.heroImg
-  ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(hero.ex.heroImg.file)}?width=1400`
+// R4: one width-parameterized source fn for both still-cover paths — Commons thumbnails
+// via Special:FilePath, direct royalty-free CDNs via their own `{w}` token (absent token
+// → single-size URL, srcset off). Mirrors the guide masthead's mastSrcAt exactly.
+type StillImg = { file?: string; src?: string } | null;
+const stillSrcAt = (img: StillImg, w: number) =>
+  !img ? null
+  : img.src ? img.src.replace("{w}", String(w))
+  : `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(img.file!)}?width=${w}`;
+const heroImgOf = hero?.ex.heroImg ?? null;
+const heroSrc = stillSrcAt(heroImgOf, 1400);
+// M2: a 375px phone was downloading the full 1400px hero — same responsive treatment
+// SightsBlock already gives every sight photo.
+const heroSrcset = heroImgOf && (heroImgOf.file || heroImgOf.src?.includes("{w}"))
+  ? `${stillSrcAt(heroImgOf, 480)} 480w, ${stillSrcAt(heroImgOf, 800)} 800w, ${stillSrcAt(heroImgOf, 1400)} 1400w`
   : null;
-// Card cover thumbnails — same Commons thumbnailing at grid width.
-const coverSrc = (img: { file: string } | null) =>
-  img ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(img.file)}?width=640` : null;
+// Card cover thumbnails — same source fn at grid width.
+const coverSrc = (img: StillImg) => stillSrcAt(img, 640);
 
 // Filter chips: by CONTINENT, not country. With a handful of guides a country chip just
 // restates the card beneath it; continent is the axis you actually browse by as the library
@@ -125,7 +150,7 @@ const gridContinents = new Set(
 );
 const continents = CONTINENT_ORDER.filter(c => gridContinents.has(c));
 
-// Overture (V2, docs/PLAN_VISUAL_OVERHAUL.md) — real, build-time-counted stats for the intro's
+// Overture (V2, docs/archive/PLAN_VISUAL_OVERHAUL.md) — real, build-time-counted stats for the intro's
 // stats beat (never hand-typed numbers; recomputed every build) + three deterministic contour
 // layers for its parallax backdrop. Fixed seeds ⇒ identical rings every build.
 const stats = computeGuideStats(guides.map((g) => g.data));
@@ -185,7 +210,7 @@ const contourLayers = [
         <span class="ov-wordmark">Waypoint</span>
         <div class="ov-bar-actions">
           <button id="btnNewGuide" class="ov-pill ov-pill-solid" type="button">＋ New guide</button>
-          <button id="btnDark" class="ov-pill ov-pill-icon" aria-label="Switch to dark mode" title="Switch to dark mode">◑</button>
+          <button id="btnDark" class="ov-pill ov-pill-icon" aria-label="Switch to dark mode" title="Switch to dark mode"><Icon name="moon" class="tb-ico" /></button>
         </div>
       </div>
 
@@ -233,12 +258,14 @@ const contourLayers = [
           class="hub-hero"
           href={`${base}/guides/${hero.g.id}/`}
           style={accentStyle(accentTokens(accentForGuide(hero.g.id, hero.g.data.theme, hero.g.data.country)))}
+          data-live-cover={(hero.g.data as any).cover?.video?.src ?? undefined}
           data-hero-start={heroIsPast ? undefined : hero.ex.startISO}
           data-hero-lat={heroIsPast ? undefined : hero.ex.mapCenter?.lat}
           data-hero-lng={heroIsPast ? undefined : hero.ex.mapCenter?.lng}
         >
           {heroSrc && (
-            <img class="hub-hero-img" src={heroSrc} alt={hero.ex.heroImg!.alt} loading="eager" fetchpriority="high"
+            <img class="hub-hero-img" src={heroSrc} srcset={heroSrcset} sizes="100vw"
+                 alt={hero.ex.heroImg!.alt} loading="eager" fetchpriority="high"
                  style={`view-transition-name:cover-${hero.g.id}`} />
           )}
           <span class="hub-hero-scrim" aria-hidden="true"></span>
@@ -269,10 +296,15 @@ const contourLayers = [
         </div>
       </div>
 
-      <div class="hub-grid" id="hubGrid">
+      {/* M4 item 2 — the grid's `auto-fill, minmax(270px)` is a MANY-items pattern; against a
+          curated catalog of three it rendered three modest cards under a full-viewport hero,
+          making the weakest beat on the page the one that lists the product. `data-count` lets
+          CSS switch to a 2-up editorial layout with larger covers while the catalog is small,
+          and fall back to the original auto-fill at 5+ with no markup change. */}
+      <div class="hub-grid" id="hubGrid" data-count={gridGuides.length}>
         {gridGuides.map(({ g, ex }) => {
           // The full 3-stop palette, not just --accent — unused until V3 (Atlas card tinting,
-          // docs/PLAN_VISUAL_OVERHAUL.md) wires --accent2/--accent-raw into real CSS. Set here
+          // docs/archive/PLAN_VISUAL_OVERHAUL.md) wires --accent2/--accent-raw into real CSS. Set here
           // now so V3 is a pure-CSS session, no markup change required.
           const pal = paletteAccentsForGuide(g.id, g.data.theme, g.data.country);
           return (
@@ -287,7 +319,7 @@ const contourLayers = [
           >
             {g.id === heroId && <span class="hubcard-featured-tag">Featured above</span>}
             {ex.heroImg ? (
-              <span class="hubcard-cover">
+              <span class="hubcard-cover" data-live-cover={(g.data as any).cover?.video?.src ?? undefined}>
                 {/* The cover is the shared element that morphs into the guide masthead. The FEATURED
                     guide already carries `cover-<slug>` on the hero above, so its card omits the name
                     to keep it unique per page (a duplicate name disables the transition). */}
@@ -297,6 +329,10 @@ const contourLayers = [
               </span>
             ) : (
               <span class="hubcard-cover hubcard-cover--typo" aria-hidden="true">
+                {/* R4: coverless cards open on the Painted Atlas mini — the same living scene
+                    the guide's own masthead is born with (uniform application), under the same
+                    destination-local sky. The initial letter stays as the plate mark. */}
+                <PaintedAtlas seed={g.id} tz={g.data.tz ?? tzFor(g.data.country)} mini />
                 <span class="hubcard-cover-initial">{g.data.country.slice(0, 1)}</span>
               </span>
             )}
@@ -431,6 +467,7 @@ const contourLayers = [
     <script>
       import "../features/hub/index.js";
       import "../scripts/micro.js";
+      import "../scripts/hub-live-cards.js";
       import { initOverture } from "../scripts/overture.js";
       initOverture();
     </script>

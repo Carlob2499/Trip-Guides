@@ -1,4 +1,4 @@
-/* Behavioral coverage for the day-route optimizer (docs/PLAN_FIELD_REPORT_FIXES.md E7).
+/* Behavioral coverage for the day-route optimizer (docs/archive/PLAN_FIELD_REPORT_FIXES.md E7).
    Exercises it against Korea's REAL Jul 14 shopping day (not a synthetic fixture) —
    the model/optimize.test.ts unit suite already proves the model fires there and
    stays silent everywhere else in this guide; this suite proves the DOM half:

@@ -67,12 +67,15 @@ function guideTexts(slug) {
 // { id, pass, detail }. The fuzzy assertions in evals.json (depth, ledger) are the Haiku judge's.
 const CHECKS = {
   1: () => {
-    const p = path.join(GUIDES, "germany.json");
-    if (!existsSync(p)) return [{ id: "germany-exists", pass: false, detail: "germany.json missing (scaffold it first)" }];
-    const t = readFileSync(p, "utf8");
+    // M1: resolve germany via guideTexts() (directory-or-flat), not a hardcoded flat path — a
+    // guide scaffolded through the normal path never persists in the flat shape (M0-era fix),
+    // so a literal germany.json check would report "missing" against a real directory guide.
+    const texts = guideTexts("germany");
+    if (!texts.length) return [{ id: "germany-exists", pass: false, detail: "germany guide not found (scaffold it first)" }];
+    const joined = texts.join("\n");
     return [
-      { id: "draft-flag-preserved", pass: assertDraftPreserved(t), detail: "germany.json keeps draft:true" },
-      { id: "money-section-filled", pass: /money|currency/i.test(t) && t.length > 500, detail: "Money & currency content present and substantive" },
+      { id: "draft-flag-preserved", pass: texts.some(assertDraftPreserved), detail: "germany guide keeps draft:true" },
+      { id: "money-section-filled", pass: /money|currency/i.test(joined) && joined.length > 500, detail: "Money & currency content present and substantive" },
     ];
   },
   2: () => {

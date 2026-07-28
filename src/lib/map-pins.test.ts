@@ -1,7 +1,13 @@
 import { describe, it, expect } from "vitest";
 import { derivePins, derivePlannerData, pinSlug } from "./map-pins";
+import type { Section, SectionOf } from "./guide-types";
 
-const guide = (sections: any[]) => sections;
+/* M6: these fixtures are DELIBERATELY partial — several cases exist precisely to prove these
+   walkers survive imperfect data (a map with a non-numeric lat, a section with no items). The
+   casts below say that out loud, rather than padding every fixture with fields the assertion
+   does not care about and thereby hiding what each case is actually testing. */
+const guide = (sections: unknown[]) => sections as Section[];
+const asMap = (s: unknown) => s as SectionOf<"map">;
 
 describe("pinSlug", () => {
   it("slugifies display names stably", () => {
@@ -23,20 +29,20 @@ describe("derivePins", () => {
   ]};
 
   it("first map gets center + own points + all guide sights", () => {
-    const pins = derivePins(guide([mapA, sights, mapB])).get(mapA)!;
+    const pins = derivePins(guide([mapA, sights, mapB])).get(asMap(mapA))!;
     expect(pins.map(p => p.kind)).toEqual(["center", "point", "sight"]);
     expect(pins[1]).toMatchObject({ id: "melody-house", local: "멜로디" });
     expect(pins[2]).toMatchObject({ id: "gyeongbokgung", lat: 37.5796 });
   });
 
   it("later maps get only their own center/points — no sights", () => {
-    const pins = derivePins(guide([mapA, sights, mapB])).get(mapB)!;
+    const pins = derivePins(guide([mapA, sights, mapB])).get(asMap(mapB))!;
     expect(pins).toHaveLength(1);
     expect(pins[0].kind).toBe("center");
   });
 
   it("guide with sights but map listed after them still binds sights to first map", () => {
-    const pins = derivePins(guide([sights, mapA])).get(mapA)!;
+    const pins = derivePins(guide([sights, mapA])).get(asMap(mapA))!;
     expect(pins.some(p => p.kind === "sight")).toBe(true);
   });
 
@@ -46,7 +52,7 @@ describe("derivePins", () => {
   });
 
   it("scaffold guide (no sights, no points) → single center pin", () => {
-    const pins = derivePins(guide([mapB])).get(mapB)!;
+    const pins = derivePins(guide([mapB])).get(asMap(mapB))!;
     expect(pins).toHaveLength(1);
   });
 });
@@ -67,7 +73,7 @@ describe("derivePlannerData", () => {
   };
 
   it("maps each itinerary day to a PlannerDay with its stops", () => {
-    const { days } = derivePlannerData([daysSection]);
+    const { days } = derivePlannerData(guide([daysSection]));
     expect(days).toHaveLength(2);
     expect(days[0]).toMatchObject({ idx: 0, date: "Mon Jul 13", title: "Arrival", energy: "packed" });
     expect(days[0].stops).toHaveLength(2);
@@ -75,33 +81,33 @@ describe("derivePlannerData", () => {
   });
 
   it("defaults a day's energy to \"balanced\" when absent", () => {
-    const { days } = derivePlannerData([daysSection]);
+    const { days } = derivePlannerData(guide([daysSection]));
     expect(days[1].energy).toBe("balanced");
   });
 
   it("only emits pins for stops with valid coordinates", () => {
-    const { pins } = derivePlannerData([daysSection]);
+    const { pins } = derivePlannerData(guide([daysSection]));
     expect(pins).toHaveLength(1);
     expect(pins[0]).toMatchObject({ name: "Airport", lat: 37.46, lng: 126.44, dayIdx: 0, time: "09:00", kind: "point" });
   });
 
   it("ids each pin with its day index + slug + stop index (stable, collision-safe)", () => {
-    const { pins } = derivePlannerData([daysSection]);
+    const { pins } = derivePlannerData(guide([daysSection]));
     expect(pins[0].id).toBe("d0-airport-0");
   });
 
   it("reports hasCoords: false when no waypoint anywhere has valid coordinates", () => {
     const noCoords = { type: "days", items: [{ date: "Wed Jul 15", title: "Free day", waypoints: [{ name: "Somewhere" }] }] };
-    const { hasCoords, pins } = derivePlannerData([noCoords]);
+    const { hasCoords, pins } = derivePlannerData(guide([noCoords]));
     expect(hasCoords).toBe(false);
     expect(pins).toEqual([]);
   });
 
   it("returns empty days/pins for a guide with no days section", () => {
-    expect(derivePlannerData([{ type: "prose" }])).toEqual({ days: [], pins: [], hasCoords: false });
+    expect(derivePlannerData(guide([{ type: "prose" }]))).toEqual({ days: [], pins: [], hasCoords: false });
   });
 
   it("treats a days section with an empty items array as having no days", () => {
-    expect(derivePlannerData([{ type: "days", items: [] }])).toEqual({ days: [], pins: [], hasCoords: false });
+    expect(derivePlannerData(guide([{ type: "days", items: [] }]))).toEqual({ days: [], pins: [], hasCoords: false });
   });
 });

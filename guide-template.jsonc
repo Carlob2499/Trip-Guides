@@ -104,10 +104,10 @@
     { "type": "panel", "group": "Etiquette & language", "title": "Etiquette & language", "body": "<how widely English is spoken, tipping norms, key do's/don'ts, a couple of phrases>" },
 
     // ---- the rest ----
-    { "type": "routes", "group": "Getting around", "title": "Key transit routes", "steps": ["<step>", "<step>"] },
-    { "type": "map",    "group": "Getting around", "title": "Orientation map", "center": { "lat": 0, "lng": 0 }, "span": 0.06 },
+    { "type": "routes", "group": "Transit", "title": "Key transit routes", "steps": ["<step>", "<step>"] },
+    { "type": "map",    "group": "Transit", "title": "Orientation map", "center": { "lat": 0, "lng": 0 }, "span": 0.06 },
 
-    { "type": "days",   "group": "Itinerary", "title": "Day by day", "items": [
+    { "type": "days",   "group": "Days", "title": "Day by day", "items": [
       { "date": "<Mon D, e.g. Wed Sep 2>", "title": "<day title>",
         "pace": "<one-line pace description, e.g. 'Slow — travel day'>",
         // ADDITIVE one-sentence glanceable summary — rendered huge in Focus Today and as

@@ -5,10 +5,11 @@
 // GitHub's own workflow status badges (public SVGs, no backend, no secrets); the honest role +
 // caveat text beside each one is authored here so a green badge is never mistaken for "did its job".
 import PwaHead from "../../components/PwaHead.astro";
-import "@fontsource-variable/bricolage-grotesque";
-import "@fontsource-variable/literata";
-import "@fontsource-variable/literata/wght-italic.css";
-import "@fontsource-variable/spline-sans-mono";
+// Quiet Edition (R1): ONE serif — Literata with its optical-size axis (standard = wght+opsz,
+// so browsers cut display vs text automatically) — and ONE quiet humanist sans for data/labels.
+import "@fontsource-variable/literata/standard.css";
+import "@fontsource-variable/literata/standard-italic.css";
+import "@fontsource-variable/source-sans-3";
 import "../../styles/base.css";
 import "../../styles/health.css";
 

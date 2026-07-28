@@ -129,6 +129,14 @@ import { WIZARD_STEPS, validateStepTransition, parseBookingDocument, formatParse
       if (sEl && !sEl.value) sEl.value = doc.isoDates[0];
       if (eEl && !eEl.value) eEl.value = doc.isoDates[doc.isoDates.length - 1];
     }
+    // Country is the ONE field this form requires, so a booking that names it should fill it.
+    // Exactly one match only: two means the document also mentions a transit hub or a billing
+    // address, and a coin-flip prefill into the required field is worse than leaving it blank.
+    // Never overwrites something already typed.
+    if (doc.countries.length === 1) {
+      var cEl = document.getElementById("ngCountry");
+      if (cEl && !cEl.value) cEl.value = doc.countries[0];
+    }
     parsedNotes.push(formatParsedNote(name, doc));
     if (out) {
       out.hidden = false;

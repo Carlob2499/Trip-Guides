@@ -130,6 +130,22 @@ describe("buildGuideObject", () => {
     const g = buildGuideObject({ country: "Denmark", dayLabels: ["Mon Jul 13", "Tue Jul 14", "Wed Jul 15"] });
     expect(g.sections.find((s) => s.type === "budget").days).toBe(3);
   });
+
+  // R6 fold-target seeds: every foldable-group section is born with a phase (so a
+  // Composer fold routes it honestly), and never-fold groups carry none (a tag there
+  // would be dead weight pretending to be a decision).
+  it("seeds a valid Composer phase on every foldable-group section, and none on Plan/Days/Sources", () => {
+    const g = buildGuideObject({ country: "South Korea", niche: "vintage vinyl shops" });
+    const NEVER_FOLD = new Set(["Plan", "Days", "Sources"]);
+    const PHASES = new Set(["before", "arrival", "daily", "leaving"]);
+    for (const s of g.sections) {
+      if (NEVER_FOLD.has(s.group)) {
+        expect(s.phase, `${s.group} / ${s.title} must not carry a phase`).toBeUndefined();
+      } else {
+        expect(PHASES.has(s.phase), `${s.group} / ${s.title} needs a valid phase, got ${s.phase}`).toBe(true);
+      }
+    }
+  });
 });
 
 describe("buildIntakeMd", () => {
@@ -147,6 +163,10 @@ describe("buildIntakeMd", () => {
     expect(md).toContain("1. Food");
     expect(md).toContain("2. Design");
     expect(md).toContain("3. Nature");
+    // The footage scout's ledger (R4): the section must exist in every intake doc so the
+    // research pass has a home to record candidates into — and the creator-sign rule rides it.
+    expect(md).toContain("## Cover art — footage candidates");
+    expect(md).toContain("no invented geography");
     expect(md).toContain("Niche interest: record shops");
     expect(md).toContain("Per-day target (from form): $150/day");
   });

@@ -35,10 +35,12 @@
 .lnw-cta-note { color: var(--muted); font-size:var(--text-small); }
 
 /* ── Modal overlay ────────────────────────────────────────────────────────── */
+/* M3: was z-index:9000 — 9x every other layer on the site with no documented reason found.
+   The survey modal is a modal like share/new-guide; it belongs in the same tier. */
 .lnw-modal {
   position: fixed;
   inset: 0;
-  z-index: 9000;
+  z-index: var(--z-modal);
   display: grid;
   place-items: end center;
 }

@@ -54,3 +54,35 @@ export function computeGuideStats(guidesData: unknown[]): GuideStats {
   for (const guide of guidesData) verifiedFactCount += walk(guide, hosts);
   return { guideCount: guidesData.length, verifiedFactCount, sourceCount: hosts.size };
 }
+
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+function walkLatest(node: unknown, best: { v: string | null }): void {
+  if (Array.isArray(node)) {
+    for (const item of node) walkLatest(item, best);
+    return;
+  }
+  if (node && typeof node === "object") {
+    for (const [key, value] of Object.entries(node as Record<string, unknown>)) {
+      if (key === "verified_on" && typeof value === "string" && ISO_DATE.test(value)) {
+        // ISO-8601 dates sort correctly as plain strings — no Date parsing (and no timezone
+        // shifting a date backwards a day) needed to find the most recent one.
+        if (!best.v || value > best.v) best.v = value;
+      } else {
+        walkLatest(value, best);
+      }
+    }
+  }
+}
+
+/** The most recent `verified_on` anywhere in the given guides, or null if none carry one.
+ *  The guide-level `verified` field is free prose ("Checked 28 Jun 2026 for the…"), so it
+ *  cannot be shown as a date; the per-fact provenance dates ARE machine-readable, and their
+ *  maximum is a true statement — "nothing here was last confirmed later than this". Same
+ *  shape-agnostic walk as computeGuideStats, for the same reason: it must survive both guide
+ *  shapes and future schema growth without edits here. */
+export function latestVerifiedOn(guidesData: unknown[]): string | null {
+  const best: { v: string | null } = { v: null };
+  for (const guide of guidesData) walkLatest(guide, best);
+  return best.v;
+}

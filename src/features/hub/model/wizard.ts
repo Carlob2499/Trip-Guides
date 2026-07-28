@@ -8,6 +8,7 @@
  * A7 / TEST_COVERAGE_ANALYSIS.md §P6: wizard.js was named the top untested-risk-surface
  * candidate — none of this had a single test before this extraction.
  */
+import { COUNTRIES, ALIASES } from "../../../data/countries.mjs";
 import { z } from "zod";
 
 /* ── Step layout ──────────────────────────────────────────────────────────────────
@@ -69,6 +70,12 @@ const ParsedDocumentSchema = z.object({
   flights: z.array(z.string()),
   /** Lines that look like lodging info (hotel/hostel/airbnb/check-in/reservation), capped at 4. */
   hotelLines: z.array(z.string()),
+  /** Country names RECOGNIZED in the text — matched against src/data/countries.mjs, never
+   *  guessed. Order of first appearance, deduped. The wizard prefills its one required field
+   *  only when exactly one is found (see ui/wizard.js): two candidates means the document
+   *  mentions a transit hub or a billing address, and a coin-flip prefill would be worse than
+   *  leaving the field for the human. */
+  countries: z.array(z.string()),
   /** One human-readable summary line for the ngDocOut UI, e.g. "2 dates (... → ...) · flights: ...". */
   summary: z.string(),
 });
@@ -90,17 +97,35 @@ export function parseBookingDocument(text: string): ParsedDocument {
     .filter((l) => /hotel|hostel|airbnb|check-?in|reservation/i.test(l) && l.trim().length < 120)
     .slice(0, 4);
 
+  // Country detection. Matched against the SAME country table the scaffolder validates
+  // against (src/data/countries.mjs) plus its alias map, so a hit is always a name the rest of
+  // the pipeline already accepts — no new vocabulary, nothing invented. Word-boundary matched
+  // and longest-name-first, so "United States" never half-matches inside another name.
+  const names = [...Object.keys(COUNTRIES), ...Object.keys(ALIASES)].sort((a, b) => b.length - a.length);
+  const seenCountry = new Set<string>();
+  const countries: string[] = [];
+  for (const name of names) {
+    const re = new RegExp(`(?:^|[^A-Za-z])${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?:[^A-Za-z]|$)`, "i");
+    if (!re.test(text)) continue;
+    const canonical = (ALIASES as Record<string, string>)[name] || name;
+    if (seenCountry.has(canonical)) continue;
+    seenCountry.add(canonical);
+    countries.push(canonical);
+  }
+
   const found: string[] = [];
   if (isoDates.length) {
     found.push(`${isoDates.length} date${isoDates.length > 1 ? "s" : ""} (${isoDates[0]} → ${isoDates[isoDates.length - 1]})`);
   }
   if (flights.length) found.push(`flights: ${flights.join(", ")}`);
   if (hotelLines.length) found.push(`lodging lines: ${hotelLines.length}`);
+  if (countries.length) found.push(`country: ${countries.join(" / ")}`);
 
   const result = {
     isoDates,
     flights,
     hotelLines: hotelLines.map((l) => l.trim()),
+    countries,
     summary: found.join(" · ") || "no structured data found",
   };
   return ParsedDocumentSchema.parse(result);

@@ -1,16 +1,54 @@
 // Progressive-disclosure split for prose/panel bodies (the density pass).
 // A card shows its FIRST paragraph as the lead; everything after folds behind
-// a native <details> "More detail" toggle. Content is never altered or
-// dropped — only deferred. Split only when the remainder is substantial
-// (folding one short sentence is worse than showing it).
-export function splitLead(body: string | undefined | null): { lead: string; more: string | null } {
+// a "More detail" toggle. Content is never altered or dropped — only deferred.
+// Split only when the remainder is substantial (folding one short sentence is
+// worse than showing it).
+//
+// M4/creator priority: v2 adds a content-aware refusal — a fold that hides an
+// unconfirmed-fact warning or a numbered/bulleted procedure defeats the site's
+// own Honest property (CLAUDE.md: "gaps are stated, not filled" extends to "warnings
+// are not hidden behind a tap"). If the WOULD-BE-FOLDED remainder contains a ⚠ flag
+// or a <ul>/<ol>, the card shows everything instead of folding — never a partial
+// move of the cut point (which risks splitting a warning's own sentence in half).
+const OPERATIONAL_CONTENT = /⚠|<ul[\s>]|<ol[\s>]/;
+
+export interface SplitLead {
+  lead: string;
+  more: string | null;
+  /** Paragraph count inside `more`, for the caller to build an honest label
+   *  ("More detail · 3 more paragraphs") when no custom moreLabel is set. 0 when
+   *  `more` isn't paragraph-per-tag (a bare list, say) — callers should omit the
+   *  count rather than show a misleading "0 more". */
+  moreParagraphCount: number;
+  /** A short plain-text (tags stripped) preview of `more`'s opening, for the
+   *  fade-out preview line. Empty when there's nothing folded. */
+  morePreview: string;
+}
+
+export function splitLead(body: string | undefined | null): SplitLead {
   const html = String(body || "");
   const cut = html.indexOf("</p>");
-  if (cut === -1) return { lead: html, more: null };
+  if (cut === -1) return { lead: html, more: null, moreParagraphCount: 0, morePreview: "" };
   const lead = html.slice(0, cut + 4);
   const more = html.slice(cut + 4).trim();
+
   // Substance check on the remainder's TEXT (tags stripped) — short tails stay inline.
   const moreText = more.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
-  if (moreText.length < 260) return { lead: html, more: null };
-  return { lead, more };
+  if (moreText.length < 260) return { lead: html, more: null, moreParagraphCount: 0, morePreview: "" };
+
+  if (OPERATIONAL_CONTENT.test(more)) return { lead: html, more: null, moreParagraphCount: 0, morePreview: "" };
+
+  const moreParagraphCount = (more.match(/<p[\s>]/g) || []).length;
+  const morePreview = moreText.length > 100 ? moreText.slice(0, 100).trimEnd() + "…" : moreText;
+  return { lead, more, moreParagraphCount, morePreview };
+}
+
+/** The toggle's visible label: a custom moreLabel wins outright (a maker-chosen label
+ *  already tells the reader more than a count would); otherwise "More detail" plus an
+ *  honest, computed count when one exists. */
+export function moreDetailLabel(moreLabel: string | undefined | null, paragraphCount: number): string {
+  if (moreLabel) return moreLabel;
+  return paragraphCount > 0
+    ? `More detail · ${paragraphCount} more paragraph${paragraphCount === 1 ? "" : "s"}`
+    : "More detail";
 }
