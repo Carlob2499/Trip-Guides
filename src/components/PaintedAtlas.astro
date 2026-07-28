@@ -50,9 +50,9 @@ const terrain = generateTerrain({ seed: seedFromSlug(seed) });
   if (!window.__paSky) {
     window.__paSky = 1;
     (function () {
-      var els = document.querySelectorAll("[data-paint-tz]");
-      for (var i = 0; i < els.length; i++) {
-        var h;
+      const els = document.querySelectorAll("[data-paint-tz]");
+      for (let i = 0; i < els.length; i++) {
+        let h;
         try {
           h = parseInt(
             new Intl.DateTimeFormat("en-US", {

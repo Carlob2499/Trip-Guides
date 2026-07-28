@@ -20,7 +20,7 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (updated 2026-07-28, session close #13 — Living Atlas R1–R5 SHIPPED on the branch)
+## Snapshot (updated 2026-07-28, session close #13 — Living Atlas R1–R6 ALL SHIPPED: the arc is complete)
 
 **The Living Atlas redesign is running on `claude/website-visual-redesign-upnl05`** (NOT yet
 merged to main). Full spec: `docs/PLAN_VISUAL_REDESIGN.md` (phases R1–R6, gates, delegated
@@ -46,10 +46,17 @@ decisions, Fable executes; R4's row records what shipped + the footage ledger) �
   group-key-guarded; Korea's staged set shipped, every phrase content-verified) ·
   cartographic neatline under group titles · hub hover previews of living covers.
   Draw-in once per figure (reveal.js safety pattern); reduced-motion = complete frames.
-  Tests now 908.
-NEXT: **R6** (the Composer — unit facets in schema, compose-guide.mjs pure+tested,
-scaffold/research-pass integration, proposal-only for live guides), the arc's final phase.
-a11y baselines re-record on CI when the branch PRs.
+- **R6** the Composer: facets (`theme`/`phase`/`rank`) on all section types; weight derived,
+  never stored · `scripts/compose-guide.mjs` (pure core, SPINE→ANCHOR→MERGE→ORDER→BUDGET,
+  17 tests: determinism, idempotence, dense-guide identity, ⚠-relocation guard, real-CLI
+  check-never-writes) · research-pass workflow composes every pass (drafts apply on the
+  research branch; live guides get the proposal in the job summary) · `--write` refuses
+  live guides without `--creator-signed`. **The Composer's first real proposal is STANDING
+  on `us`** (fold two one-card tabs — see the R6 ledger in the plan; creator applies,
+  re-tags phases, or leaves it). Tests now 925, lint 0.
+THE ARC IS COMPLETE (R1–R6). NEXT: creator reviews the branch → PR to main (a11y baselines
+re-record on CI there) → the standing `us` composition proposal and Korea's descriptor set
+are the two open creator sign-offs.
 
 ## Previous snapshot (2026-07-26, session close #11 — M1–M6 COMPLETE; only M0's E2E proof left)
 
@@ -237,17 +244,18 @@ showed it. The count check caught the symptom, the novelty check missed the caus
 contrast was then measured before any baseline moved (worst case 4.77:1 against 4.5:1 required),
 and the new numbers were deliberately failed at 43 before being trusted at 47. Fixed in `fc81804`.
 
-**Re-prompt the creator with (2026-07-28, session #13):** "R1–R5 are live on the redesign
-branch — the whole visual arc except the Composer. Open Korea in a real browser: the palace
-photo wakes into licensed footage of the same palace; the Days tab opens on the trip's shape
-(eight stations, today ringed, your first/last days' own words at the edges); Transit draws
-its legs from the routes themselves; big checklists carry live progress rings; every group
-head speaks in your voice line under a literal label. Every future guide is born with the
-Painted Atlas cover. Two things are yours to review at leisure: Korea's descriptor set
-(working copy, edit any line) and the footage ledger (Denmark/Sedona stayed honest blanks).
-Next session: R6, the Composer — tabs assemble themselves from tagged research, drafts auto,
-live guides proposal-only. Also still standing: rotate `CLAUDE_CODE_OAUTH_TOKEN` to unlock
-the pipeline's first end-to-end proof."
+**Re-prompt the creator with (2026-07-28, session #13):** "The Living Atlas arc is COMPLETE —
+R1 through R6, every phase gated, on the redesign branch. Open Korea in a real browser: the
+palace photo wakes into licensed footage of the same palace; Days opens on the trip's shape
+with today ringed; Transit draws its legs from the routes; checklists carry live rings; your
+voice sits under every literal label; every future guide is born with a Painted Atlas cover;
+and tabs now assemble themselves — the Composer runs in every research pass, drafts auto,
+live guides proposal-only. Three sign-offs are yours, none urgent: (1) the Composer's first
+standing proposal — `us` has two one-card tabs it wants to fold (R6 ledger in the plan has
+the exact command and alternatives); (2) Korea's descriptor set is working copy — edit any
+line; (3) when you're happy with the branch, say the word and it PRs to main (a11y baselines
+re-record on CI there). Also still standing: rotate `CLAUDE_CODE_OAUTH_TOKEN` for the
+pipeline's first end-to-end proof."
 
 **Prior re-prompt (superseded):** "The whole M0–M6 programme is done except one thing, and that
 one thing needs you: `CLAUDE_CODE_OAUTH_TOKEN` is expired (confirmed from the real API response

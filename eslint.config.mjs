@@ -34,8 +34,9 @@ export default tseslint.config(
   },
 
   {
-    /* Node-side: build scripts, the pipeline spine, and everything running under Vitest. */
-    files: ["scripts/**/*.{mjs,ts}", "**/*.test.{ts,mjs}", "*.config.{ts,mjs}"],
+    /* Node-side: build scripts, the pipeline spine, the design-study builder, and
+       everything running under Vitest. */
+    files: ["scripts/**/*.{mjs,ts}", "docs/mockups/*.mjs", "**/*.test.{ts,mjs}", "*.config.{ts,mjs}"],
     languageOptions: { globals: { ...globals.node } },
   },
 

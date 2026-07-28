@@ -155,3 +155,24 @@ silently dropping the line. The hard rule when writing one: a descriptor may onl
 assert what the guide actually contains (grep before you charm — "the rain plan" was
 cut from Korea's GO descriptor because no rain plan exists in that group; every other
 phrase was token-verified against the group files first).
+
+## Composer facets (R6, shipped 2026-07-28)
+
+Research passes may tag any section with three optional facets — they feed
+`scripts/compose-guide.mjs` (which assembles tabs deterministically) and are read by
+NO renderer:
+
+- `theme` — the content theme this unit belongs to (defaults to its current group, so
+  untagged content composes to itself). Tag it when a unit's true theme differs from
+  the group it happens to sit in.
+- `phase` — `before | arrival | daily | leaving`: when the traveler needs it. This is
+  what routes a unit when its group folds (before/arrival/leaving → Plan, daily → Days),
+  so tagging phase on thin groups is how you steer a future fold honestly.
+- `rank` — the theme's position in the intake's ranked priorities (1 = top). A top-2
+  theme with real weight earns an anchor tab and budget immunity.
+
+Weight is never written — it is derived from item counts + prose length, so it cannot
+drift from the content. The Composer auto-applies on DRAFTS during research passes;
+LIVE guides only ever receive a printed proposal for the creator to sign
+(`--write --creator-signed`). Tag facets during research; never retro-tag a live guide
+just to force a recomposition without the creator asking.

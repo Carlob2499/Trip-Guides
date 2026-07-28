@@ -369,6 +369,37 @@ jobs:
       # W3: deposit a run report on the pipeline ledger issue regardless of how the agent finished,
       # so the skill-retro proposer has evidence to reason over. `|| true` — the ledger never fails
       # the run.
+      # R6 — the Composer rides every research pass: research emits tagged units,
+      # deterministic code assembles the tabs (scripts/compose-guide.mjs; rules + tests
+      # there). DRAFTS recompose automatically here, on the research branch, where the
+      # graduation review already reads everything. LIVE guides only ever get the printed
+      # proposal (exit 2), surfaced in the job summary for the creator to apply with
+      # --write --creator-signed — the continuity doctrine, mechanized. A real compose
+      # ERROR (the ⚠-relocation guard, unit loss) fails this run loudly.
+      - name: Compose check — drafts apply, live guides propose
+        if: steps.budget.outputs.should_run == 'true'
+        env:
+          SLUG: ${{ inputs.slug }}
+        run: |
+          set +e
+          OUT=$(node scripts/compose-guide.mjs --slug "$SLUG" --check 2>&1)
+          CODE=$?
+          set -e
+          echo "$OUT"
+          { echo "### Composer"; echo '```'; echo "$OUT"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$CODE" -eq 2 ]; then
+            if node -e "process.exit(JSON.parse(require('fs').readFileSync('src/content/guides/' + process.env.SLUG + '/_guide.json','utf8')).draft ? 0 : 1)"; then
+              node scripts/compose-guide.mjs --slug "$SLUG" --write
+              git add -A
+              git commit -m "compose(${SLUG}): apply composition to draft"
+              git push origin "HEAD:research/${SLUG}"
+            else
+              echo "Live guide — proposal recorded above; awaiting creator sign-off." >> "$GITHUB_STEP_SUMMARY"
+            fi
+          elif [ "$CODE" -ne 0 ]; then
+            exit "$CODE"
+          fi
+
       - name: Append run report to the ledger
         if: always()
         env:
