@@ -20,7 +20,25 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (updated 2026-07-28, session close #13 — Living Atlas R1–R6 ALL SHIPPED: the arc is complete)
+## Snapshot (updated 2026-07-28, session close #14 — R1–R6 shipped + pipeline congruence: the factory now delivers the vision)
+
+**Session #14 (same day, after the arc):** the creator asked what to expand next and for the
+GENERATION flow to deliver the Living Atlas automatically. Audit found the R1–R6 surfaces all
+existed but the pipeline didn't feed three of them — and the Composer's draft auto-apply was
+wired after the agent step, where the PASS path had already graduated + merged (proposal-only
+forever, i.e. NEW GUIDES NEVER AUTO-COMPOSED) and the cut-off path would fold half-researched
+scaffolding. Shipped fixes ("Pipeline congruence" ledger in the plan doc): compose `--write`
+moved inside the agent's done gate (post-verify-PASS, pre-graduation; post-agent step is now
+check/propose/guard-only) · THE LIVING ATLAS PASS added to the research prompt + SKILL.md
+(facets → grep-verified descriptors → Commons cover + focal → footage scout recording 0–2
+stable-URL candidates in the intake doc; `cover.video` stays creator-signed, frame-verification
+is the gate) · scaffold seeds `phase` on every foldable-group section + intake template carries
+the footage-candidates ledger · new scaffold↔schema contract test · cover-art mechanics joined
+descriptors/facets in block-types.md. Every future guide is now BORN into the full system with
+zero manual steps except the two that are deliberately human: footage sign-off and live-guide
+recomposition.
+
+## Previous snapshot (2026-07-28, session close #13 — Living Atlas R1–R6 ALL SHIPPED: the arc is complete)
 
 **The Living Atlas redesign is running on `claude/website-visual-redesign-upnl05`** (NOT yet
 merged to main). Full spec: `docs/PLAN_VISUAL_REDESIGN.md` (phases R1–R6, gates, delegated
@@ -244,7 +262,16 @@ showed it. The count check caught the symptom, the novelty check missed the caus
 contrast was then measured before any baseline moved (worst case 4.77:1 against 4.5:1 required),
 and the new numbers were deliberately failed at 43 before being trusted at 47. Fixed in `fc81804`.
 
-**Re-prompt the creator with (2026-07-28, session #13):** "The Living Atlas arc is COMPLETE —
+**Re-prompt the creator with (2026-07-28, session #14):** "The pipeline now delivers the Living
+Atlas unattended: file a New Guide issue and the guide that auto-publishes arrives composed
+(tabs assembled inside the draft window — a wiring flaw that silently disabled this for new
+guides is fixed), descriptor-voiced, facet-tagged, covered (photo when a signature Commons shot
+exists, Painted Atlas otherwise), with 0–2 frame-checkable footage candidates waiting in its
+intake doc for your sign-off. The cheapest proof is one real run: file a test New Guide issue
+end-to-end (needs the rotated `CLAUDE_CODE_OAUTH_TOKEN`). Still standing from #13: the `us`
+composition proposal, Korea's descriptor working copy, and the word to PR the branch to main."
+
+**Prior re-prompt (superseded, session #13):** "The Living Atlas arc is COMPLETE —
 R1 through R6, every phase gated, on the redesign branch. Open Korea in a real browser: the
 palace photo wakes into licensed footage of the same palace; Days opens on the trip's shape
 with today ringed; Transit draws its legs from the routes; checklists carry live rings; your

@@ -232,6 +232,33 @@ crowd-awareness)** plus #9 (party fit) and the bar test — not a hard auto-gate
 - **grounding text** → `node scripts/fetch-wikivoyage.mjs "<City, Country>"`
   (treat its output as T2 leads to verify, not citable fact).
 
+## The Living Atlas pass — after reconcile, before the verify loop
+
+Every guide is born with the full visual system (Painted Atlas, section figures, the
+Composer), and research FEEDS it — these four duties run right after reconcile, on every
+pass, headless or interactive (mechanics: `block-types.md` "Group labels & the voice
+standard" · "Composer facets" · "Cover art"):
+
+1. **Facets** — tag every section you authored: `theme` (only when it differs from the
+   group), `phase` (before|arrival|daily|leaving — routes the unit if its group ever
+   folds; the scaffold seeded these on its shells, keep them honest as you rewrite), and
+   `rank` on the intake's ranked priority themes — an untagged priority theme can be
+   budget-merged away; a ranked one earns its anchor tab.
+2. **Descriptors** — the `descriptors` record in `_guide.json`: one short voice line per
+   major group. A descriptor may only assert what its group verifiably contains — grep
+   the group file for every claim word before writing it. Skip a group rather than pad.
+3. **Cover** — if a signature Commons photo exists, set `cover` (file + credit + license
+   + focal), filename validated via `search-commons.mjs`. The Painted Atlas is the honest
+   default, not a failure: skip rather than force a mediocre or wrong-place photo.
+4. **Footage scout** — candidates ONLY, never set `cover.video` yourself: record 0–2
+   licensed, stable-URL clips (Mixkit `assets.mixkit.co`; never Coverr temp-URLs) in the
+   intake doc's `## Cover art — footage candidates` table. Publishing is the creator's
+   sign-off — the clip must be frame-verified to show the actual place first.
+
+Composition itself then auto-applies exactly once, in the done gate below — after the
+networked verify PASS, while the guide is still a draft (`compose-guide.mjs --write`);
+after graduation it is proposal-only, forever.
+
 ## Done gate — all of it, before calling anything finished
 
 **The bar is `docs/GUIDE_RUBRIC.md`** — the 13-dimension standard every guide is judged against
@@ -266,7 +293,9 @@ Then these guide-content gates, on top of it:
    ledger (source + date, continuity sweep) as everything else — it is never exempt.
    Log the outcome always, even "none" — see `verification-rules.md` §8 item 1.
    When verify PASSes AND the bar test is recorded: `npm run extract-palette -- --slug <slug>`
-   (commit the generated palette; harmless no-op without photos), then
+   (commit the generated palette; harmless no-op without photos), then — while the guide is
+   still a draft — `node scripts/compose-guide.mjs --slug <slug> --write` (the one moment
+   composition auto-applies; a compose ERROR is a real finding, fix its cause), then
    `npm run pipeline -- --slug <slug> --checkpoint verified`.
 2. The **`verification-rules.md` §8 self-check**, line by line.
 3. **`verified` stamp** — `Checked [date] for [trip] · re-check before travel:

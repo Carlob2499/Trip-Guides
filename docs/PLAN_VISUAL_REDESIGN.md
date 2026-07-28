@@ -246,7 +246,7 @@ ever freelances information architecture.
 | R3 | Desktop horizon: line replaces pills (desktop only), absorbs reading progress, tablist semantics kept | a11y suite green; arrow-key ring intact |
 | R4 — **SHIPPED 2026-07-28** | Living covers: Painted Atlas universal default (masthead + hub-card fallback + photo-fail backstop; `src/lib/terrain.ts` seeded/tested, `PaintedAtlas.astro`, destination-local sky) · cover schema widened (`src` direct royalty-free CDN with `{w}` srcset token, `video {src,poster,credit,creditUrl,license}`; non-Commons ⇒ credit+license zod-REQUIRED) · masthead footage layer (poster-first, reduced-motion/Save-Data/in-view/visibility gates, visible pause, credit swap, error ⇒ still stands) · Korea flagship footage wired (Mixkit 20095, Gwanghwamun/Gyeongbokgung timelapse, 2.83 MB 720p, hot-link verified live). Creator widened sourcing to royalty-free libraries this session. Deferred: hub hover previews (revisit with R5); Denmark/Sedona footage — honest blanks (see note below the table). | licensed-footage delivery smoke test from deployed site; Save-Data/reduced-motion forced once each; credit+license in schema; CLS re-measure |
 | R5 — **SHIPPED 2026-07-28** | Interior atlas + section anchors: journey-line figures derived from the guide's own data (`src/lib/anchors.ts`, pure + 14 tests — Days timeline from day entries with today ringed client-side; Transit line from route steps' own bold leads; booking rings live over checklist state ≥4 items) · per-day route-leg headers (first stop → last stop · ≈km, summed ONLY over fully-coordinated legs) · voice descriptors (`descriptors` record, zod rejects keys no group uses; Korea's staged set shipped, every phrase verified against in-guide content — "the rain plan" was cut as invention) · cartographic neatline under group titles · hub hover previews (living cover plays on dwell, R4 gates apply). Draw-in once per figure via reveal.js's safety pattern; reduced-motion = complete frames, verified. Photo bands: the existing cat-opener photo fan already serves this; full bands deferred to content curation. | reduced-motion path (figures render complete); pin-less fallback; print + OG parity; anchors derive from data only — never hand-drawn |
-| R6 — **SHIPPED 2026-07-28** | The Composer: facets in schema (`theme`/`phase`/`rank` optional on all 14 section types; weight DERIVED, never stored) · `scripts/compose-guide.mjs` — pure core (no fs/Date/random), rules SPINE → ANCHOR → MERGE → ORDER → BUDGET, 17 tests incl. determinism, idempotence, catalog no-unit-loss, dense-guide identity (korea+denmark compose to exactly themselves), phase-host folds, anchor immunity, both budget paths, and a real-CLI `--check`-never-writes proof · research-pass workflow runs the check every pass: DRAFTS auto-apply on the research branch, LIVE guides get the printed proposal in the job summary · `--write` refuses live guides without `--creator-signed` (assertWritable, tested) · writing reuses split-guide.mjs so shape/naming decisions stay in one home. | composer output is byte-deterministic given the same units (test); force one failure (⚠-hiding merge must fail the build); live-guide check-mode NEVER writes; guide-shape test still green |
+| R6 — **SHIPPED 2026-07-28** | The Composer: facets in schema (`theme`/`phase`/`rank` optional on all 14 section types; weight DERIVED, never stored) · `scripts/compose-guide.mjs` — pure core (no fs/Date/random), rules SPINE → ANCHOR → MERGE → ORDER → BUDGET, 17 tests incl. determinism, idempotence, catalog no-unit-loss, dense-guide identity (korea+denmark compose to exactly themselves), phase-host folds, anchor immunity, both budget paths, and a real-CLI `--check`-never-writes proof · composition auto-applies inside the research agent's done gate — after the networked verify PASS, while still a draft (congruence fix, same day: the original post-agent auto-write fired too late on the PASS path and too early on cut-offs); the post-agent step is check-only and surfaces proposals in the job summary · `--write` refuses live guides without `--creator-signed` (assertWritable, tested) · writing reuses split-guide.mjs so shape/naming decisions stay in one home. | composer output is byte-deterministic given the same units (test); force one failure (⚠-hiding merge must fail the build); live-guide check-mode NEVER writes; guide-shape test still green |
 
 **R6 ledger (2026-07-28).** Two deliberate divergences from the original sketch: (1) *scaffold
 does NOT compose* — a fresh scaffold's spine placeholders are near-empty by definition and would
@@ -269,6 +269,24 @@ ephemeral `coverr-temp-…` URLs only, unusable without their API). **Sedona/US*
 footage on any keyless-reachable library; Grand Canyon stand-ins declined ("footage of the
 actual place" rule). Both guides keep photo + Painted-Atlas backstop, which is a complete cover.
 Source-access notes live in docs/MOTION.md's R4 chapter.
+
+**Pipeline congruence (2026-07-28, post-R6).** The arc's final move: making the GENERATION flow
+deliver the vision unattended, per "new guides inherit everything". Audit finding — the R1–R6
+surfaces all existed, but the research pass never fed three of them (no facet-tagging duty, no
+descriptors, no cover/footage duty in the prompt), and the Composer's draft auto-apply was wired
+after the agent step, where the PASS path had already graduated + merged (proposal-only forever)
+and the cut-off path was still half-researched (premature folds). Fixes, all shipped: (1) compose
+`--write` moved INSIDE the agent's done gate — post-verify-PASS, pre-graduation, the one moment a
+guide is complete AND a draft; the post-agent step is now check/propose/guard-only. (2) THE LIVING
+ATLAS PASS added to the research prompt + SKILL.md (headless and interactive stay congruent):
+facets → descriptors (grep-verified) → cover photo (Commons-validated, Painted Atlas an honest
+default) → footage scout (0–2 stable-URL candidates recorded in the intake doc; `cover.video` is
+NEVER set by research — frame-verification is the creator's sign-off). (3) The scaffold seeds
+`phase` on every foldable-group backbone section (fold-targets honest from birth; Plan/Days/Sources
+stay untagged — they never fold) and the intake template carries the `## Cover art — footage
+candidates` ledger. (4) New scaffold↔schema contract test (content.config.test.ts) — the seam
+where scaffold output meets the build schema had no gate. Cover-art mechanics joined descriptors +
+facets in block-types.md as their single home.
 
 ## Execution protocol (unattended Opus sessions — read before running any phase)
 

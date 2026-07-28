@@ -248,6 +248,37 @@ jobs:
                 → then: npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint reconcile
                   && git add -A && git commit -m "research(${{ inputs.slug }}): reconcile" && git push
 
+            THE LIVING ATLAS PASS — right after reconcile, before the verify loop. Every guide is
+            born with the full visual system, and these four duties are how research feeds it
+            (prompt-only, no new checkpoint — commit as part of your next stage commit). The
+            mechanics live in block-types.md ("Group labels & the voice standard", "Composer
+            facets", "Cover art"); follow them exactly:
+              1. FACETS — tag every section you authored: `theme` (what it's about; defaults to
+                 the current group, tag only when they differ), `phase` (before|arrival|daily|
+                 leaving — when the traveler NEEDS it; this routes the unit if its group ever
+                 folds), `rank` (the theme's position in the intake's ranked priorities — top-2
+                 with real weight earns an anchor tab). The scaffold seeded `phase` on its
+                 backbone shells; keep those honest as you rewrite, and rank the intake's actual
+                 priorities — an untagged priority theme can be budget-merged away.
+              2. DESCRIPTORS — write the `descriptors` record in _guide.json: one short voice
+                 line per major group (the warmth lives here, labels stay literal). HARD RULE:
+                 a descriptor may only assert what its group verifiably contains — grep the
+                 group file for every claim word BEFORE writing it (the "rain plan" lesson).
+                 Skip a group rather than pad one; a missing line renders the derived label.
+              3. COVER — if a signature Commons photo of the destination exists, set `cover`
+                 (file + credit + license + focal) — validate the filename via
+                 search-commons.mjs, never from memory. The Painted Atlas is the honest
+                 default, not a failure state: skip the photo rather than force a mediocre or
+                 wrong-place one. A real photo also feeds extract-palette in step (d).
+              4. FOOTAGE SCOUT — candidates only, NEVER set `cover.video` yourself: publishing
+                 footage is a creator sign-off, because the clip must be frame-verified to show
+                 the actual place (no invented geography) and you cannot watch video here.
+                 Record 0-2 licensed, hot-linkable clips in guides-intake/${{ inputs.slug }}.md
+                 under "## Cover art — footage candidates": stable-URL libraries only (e.g.
+                 Mixkit's assets.mixkit.co asset URLs; Coverr temp-URLs are forbidden), with
+                 license, what the clip claims to show, and whether that matches the cover
+                 photo's actual location. An empty table is a fine outcome.
+
             NOTE — a full dual pass is long. Committing after each stage IS the safety net: if you
             run low on wall-clock or usage, stop at a clean checkpoint (commit + push) rather than
             leaving a half-done uncommitted stage — a re-run resumes from the last checkpoint.
@@ -302,7 +333,14 @@ jobs:
                  generate the guide's identity palette from its new cover/
                  sight photos: `npm run extract-palette -- --slug ${{ inputs.slug }}` (writes
                  src/data/palettes/${{ inputs.slug }}.json — commit it; skips harmlessly if no
-                 photo). Then AUTO-GRADUATE — the verify PASS you just confirmed IS the evidence
+                 photo). Then COMPOSE THE TABS while the guide is STILL a draft — this is the ONE
+                 moment composition auto-applies (graduation makes it live, and live guides only
+                 ever get proposals): `node scripts/compose-guide.mjs --slug ${{ inputs.slug }} --write`.
+                 A compose ERROR (the ⚠-relocation guard, unit loss) is a real finding, not a
+                 formality: fix the cause — usually a ⚠-flagged unit stranded in a thin group
+                 (source it or move it deliberately), or raise `tabBudget` in _guide.json with a
+                 one-line justification — then re-run verify + compose before continuing.
+                 Then AUTO-GRADUATE — the verify PASS you just confirmed IS the evidence
                  gate (the same one a human approver would have re-run by hand), so this is where
                  the guide goes live, no separate approval step:
                  node scripts/graduate-guide.mjs --slug ${{ inputs.slug }}
@@ -371,12 +409,17 @@ jobs:
       # the run.
       # R6 — the Composer rides every research pass: research emits tagged units,
       # deterministic code assembles the tabs (scripts/compose-guide.mjs; rules + tests
-      # there). DRAFTS recompose automatically here, on the research branch, where the
-      # graduation review already reads everything. LIVE guides only ever get the printed
-      # proposal (exit 2), surfaced in the job summary for the creator to apply with
-      # --write --creator-signed — the continuity doctrine, mechanized. A real compose
-      # ERROR (the ⚠-relocation guard, unit loss) fails this run loudly.
-      - name: Compose check — drafts apply, live guides propose
+      # there). The auto-APPLY lives inside the agent's step (d), after the networked
+      # verify PASS and BEFORE graduation — the one moment the guide is both complete and
+      # still a draft. This step deliberately never writes: on the PASS path the guide has
+      # already graduated + merged (a --write here would land on a spent branch and read
+      # the guide as live anyway), and on a cut-off run the draft is half-researched — a
+      # --write would fold empty scaffolding into Plan/Days and mangle the shape the
+      # resume expects. So: exit 0 = composed (the normal PASS outcome, since step (d)
+      # just ran); exit 2 = a standing proposal, surfaced in the job summary for the
+      # creator (--write --creator-signed) or for the next resumed pass to absorb; any
+      # other nonzero (the ⚠-relocation guard, unit loss) fails this run loudly.
+      - name: Compose check — verify composed, surface proposals, guard errors
         if: steps.budget.outputs.should_run == 'true'
         env:
           SLUG: ${{ inputs.slug }}
@@ -388,14 +431,7 @@ jobs:
           echo "$OUT"
           { echo "### Composer"; echo '```'; echo "$OUT"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
           if [ "$CODE" -eq 2 ]; then
-            if node -e "process.exit(JSON.parse(require('fs').readFileSync('src/content/guides/' + process.env.SLUG + '/_guide.json','utf8')).draft ? 0 : 1)"; then
-              node scripts/compose-guide.mjs --slug "$SLUG" --write
-              git add -A
-              git commit -m "compose(${SLUG}): apply composition to draft"
-              git push origin "HEAD:research/${SLUG}"
-            else
-              echo "Live guide — proposal recorded above; awaiting creator sign-off." >> "$GITHUB_STEP_SUMMARY"
-            fi
+            echo "Standing proposal — composition applies inside the next research pass (drafts) or via --write --creator-signed (live)." >> "$GITHUB_STEP_SUMMARY"
           elif [ "$CODE" -ne 0 ]; then
             exit "$CODE"
           fi

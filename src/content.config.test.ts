@@ -38,6 +38,21 @@ function issuePaths(result: any) {
   return result.error.issues.map((i: any) => i.path.join("."));
 }
 
+// The scaffolder↔schema seam: scaffold-guide.mjs emits a guide the BUILD must accept, but
+// nothing ever asserted that contract — a scaffold field the schema rejects would surface
+// as a red new-guide Action, not a red local test. Born after the R6 phase seeds landed in
+// the scaffold; parses the real scaffold output (map/weather/holidays wired, niche section,
+// facet tags) against the real collection schema.
+describe("content.config guides schema — scaffold contract", () => {
+  it("accepts a freshly scaffolded guide, facet seeds included", async () => {
+    const { buildGuideObject } = await import("../scripts/scaffold-guide.mjs");
+    const g = buildGuideObject({ country: "South Korea", niche: "vintage vinyl shops" });
+    const result = schema.safeParse(g);
+    expect(issuePaths(result)).toEqual([]);
+    expect(result.success).toBe(true);
+  });
+});
+
 describe("content.config guides schema — tab budget", () => {
   it("passes at exactly the default budget (10 groups)", () => {
     const sections = Array.from({ length: 10 }, (_, i) => ({ type: "prose", group: `Group ${i}`, body: "x" }));

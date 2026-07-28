@@ -82,10 +82,18 @@ export function buildGuideObject(answers = {}) {
   if (coords) sections.push({ type: "weather", group: "Plan", title: "Weather for your dates" });
   if (iso)    sections.push({ type: "holidays", group: "Plan", title: "Public holidays & closures" });
 
+  // Composer fold-target seeds (R6, scripts/compose-guide.mjs): every section in a
+  // FOLDABLE group carries a `phase` from birth — before|arrival|daily|leaving, the
+  // moment the traveler needs it — so if research leaves a group thin and the Composer
+  // folds it, each unit routes to the host its own phase names (before/arrival/leaving
+  // → Plan, daily → Days) instead of all defaulting to Plan. These are knowable a
+  // priori from the backbone titles; research keeps them honest as it rewrites.
+  // Plan / Days / Sources sections stay untagged — those groups never fold.
+
   // Money & budget
-  sections.push(P("Money & budget", "Money & currency"));
+  sections.push(P("Money & budget", "Money & currency", { phase: "arrival" }));
   sections.push({
-    type: "budget", group: "Money & budget", title: "Budget & daily costs",
+    type: "budget", group: "Money & budget", title: "Budget & daily costs", phase: "before",
     intro: "Rough per-person estimates — replace the zeros with researched figures.",
     currency: sym, days: dayLabels.length,
     items: [
@@ -98,15 +106,15 @@ export function buildGuideObject(answers = {}) {
   });
 
   // Health & safety
-  sections.push(P("Health & safety", "Health & pharmacy"));
+  sections.push(P("Health & safety", "Health & pharmacy", { phase: "daily" }));
   // Etiquette & language
-  sections.push(P("Etiquette & language", "Etiquette & language"));
+  sections.push(P("Etiquette & language", "Etiquette & language", { phase: "daily" }));
 
   // Transit
-  sections.push({ type: "routes", group: "Transit", title: "Key transit routes", steps: [] });
+  sections.push({ type: "routes", group: "Transit", title: "Key transit routes", phase: "daily", steps: [] });
   if (coords) {
     sections.push({
-      type: "map", group: "Transit", title: "Orientation map",
+      type: "map", group: "Transit", title: "Orientation map", phase: "daily",
       center: { lat: coords.lat, lng: coords.lng }, span: 0.08,
     });
   }
@@ -118,8 +126,8 @@ export function buildGuideObject(answers = {}) {
   });
 
   // Sights + Food (content shells; filled during research)
-  sections.push({ type: "sights", group: "Sights", title: "Top sights", items: [] });
-  sections.push({ type: "prose", group: "Food & shopping", title: "What to eat", body: "" });
+  sections.push({ type: "sights", group: "Sights", title: "Top sights", phase: "daily", items: [] });
+  sections.push({ type: "prose", group: "Food & shopping", title: "What to eat", phase: "daily", body: "" });
 
   // Traveler's specific niche interest (free-text) → one dedicated shell, if given.
   // This is the only priority materialized as a scaffold section: it has no home in
@@ -128,7 +136,7 @@ export function buildGuideObject(answers = {}) {
   // (CLAUDE.md order-of-operations), which keeps the backbone predictable and avoids
   // seeding empty generic priority tabs on a viewable draft.
   const niche = (answers.niche || "").trim();
-  if (niche) sections.push(P("Highlights", niche));
+  if (niche) sections.push(P("Highlights", niche, { phase: "daily" }));
 
   // Sources — canonical closing section; the research pass fills the sources.
   sections.push({ type: "prose", group: "Sources", title: "Sources & further reading", body: "" });
@@ -209,6 +217,17 @@ Top 3, in order:
 - The 2–3 priorities driving depth:
 - Hard filters applied to every entry:
 - Verification focus (most perishable / most important to get right):
+
+## Cover art — footage candidates (research fills the shortlist; the CREATOR signs)
+> The research pass's footage scout records 0–2 licensed, hot-linkable clips here — stable-URL
+> libraries only (e.g. Mixkit \`assets.mixkit.co\` asset URLs; Coverr temp-URLs are forbidden).
+> Publishing is the creator's call alone: a clip must be FRAME-VERIFIED to show the actual place
+> (no invented geography) before \`cover.video\` is set in \`_guide.json\`. Until then the photo
+> cover / Painted Atlas stands — an empty table is a fine outcome, not a gap.
+
+| Clip URL | License | Claims to show | Matches cover geography? | Frame-verified by |
+|----------|---------|----------------|--------------------------|-------------------|
+|          |         |                |                          |                   |
 
 ## Research reconciliation (fill during the dual-pass — see the guide-author skill)
 > Pass A = canonical/verified (official, anchors, logistics). Pass B = local/authentic/crowd-aware

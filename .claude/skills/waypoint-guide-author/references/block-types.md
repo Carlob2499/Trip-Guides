@@ -172,7 +172,29 @@ NO renderer:
   theme with real weight earns an anchor tab and budget immunity.
 
 Weight is never written — it is derived from item counts + prose length, so it cannot
-drift from the content. The Composer auto-applies on DRAFTS during research passes;
-LIVE guides only ever receive a printed proposal for the creator to sign
+drift from the content. Composition auto-applies to a draft exactly ONCE per pass — after
+the networked verify PASS, before graduation (the done gate's `compose-guide.mjs --write`
+moment); LIVE guides only ever receive a printed proposal for the creator to sign
 (`--write --creator-signed`). Tag facets during research; never retro-tag a live guide
 just to force a recomposition without the creator asking.
+
+## Cover art (R4, shipped 2026-07-28) — photo is earned, footage is signed
+
+Every guide is born covered: the **Painted Atlas** (seeded terrain in the guide's accent
+under a destination-local-time sky) renders automatically whenever no photo is set. It is
+the honest default, not a failure state — never force a mediocre or wrong-place photo
+just to replace it.
+
+- **Photo** (`cover.file` + credit + license + focal): set it when a signature Commons
+  shot of the destination exists — filename validated via `search-commons.mjs`, never
+  recalled. Direct royalty-free `cover.src` URLs are allowed (schema-enforced credit +
+  license). A real photo also feeds `extract-palette` (the guide's identity accent).
+- **Footage** (`cover.video`) — research NEVER sets this field. The rule is geography:
+  a clip must be frame-verified to show the actual place (the Korea clip was frame-checked
+  as the same Gyeongbokgung complex as its photo cover), and a research agent cannot watch
+  video. Research runs the **footage scout** instead: 0–2 candidates recorded in the
+  intake doc's `## Cover art — footage candidates` table — stable-URL libraries only
+  (Mixkit `assets.mixkit.co/videos/{id}/{id}-720.mp4` hot-links cleanly; Coverr exposes
+  only ephemeral temp-URLs, forbidden), each with license, what it claims to show, and
+  whether that matches the cover photo's location. The creator frame-verifies and signs
+  before `cover.video` ever lands. An empty table is a fine outcome.
