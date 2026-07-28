@@ -376,3 +376,16 @@ describe("content.config guides schema — cover (R4: widened sources + living v
     expect(result.success).toBe(true);
   });
 });
+
+describe("content.config guides schema — descriptors (R5 group-key guard)", () => {
+  it("accepts descriptors whose keys are real section groups", () => {
+    const result = schema.safeParse(validGuide({ descriptors: { Overview: "the lay of the land" } }));
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects a descriptor key no section uses (a group rename must error, not silently orphan the line)", () => {
+    const result = schema.safeParse(validGuide({ descriptors: { "Getting around": "stale key from before the R1 rename" } }));
+    expect(result.success).toBe(false);
+    expect(issuePaths(result)).toContain("descriptors.Getting around");
+  });
+});

@@ -210,6 +210,19 @@
     ]
   },
   "tabBudget": 11,
+  "descriptors": {
+    "Plan": "bookings, jet lag, and the groundwork before you fly",
+    "Essentials": "cash, data, etiquette — and 112/119 one tap away",
+    "Transit": "T-money, KTX, taxis — moving through Seoul without friction",
+    "Days": "all eight days, mapped stop by stop",
+    "Sights": "palaces, markets, lookouts — and when each is worth it",
+    "Daejeon & MSI": "the finals weekend — two nights in Daejeon",
+    "Gaming & anime": "PC bangs, Hongdae, and where Seoul plays at night",
+    "Food & shopping": "street stalls to charcoal BBQ — and the shopping game plan",
+    "Pokémon GO": "GO Fest week — raids, habitats, and the caught trackers",
+    "Tokyo": "the third traveler's detour, kept in sync",
+    "Sources": "every fact, traced and dated — the receipts"
+  },
   "archived": true,
   "provenance": "strict"
 }

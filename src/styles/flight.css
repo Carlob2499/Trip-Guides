@@ -15,6 +15,10 @@
 .cat-num{position:absolute;right:-.05em;top:-.35rem;z-index:0;font-family:var(--font-display);font-weight:640;font-size:clamp(4.6rem,9vw,7.5rem);line-height:1;letter-spacing:-.012em;color:color-mix(in srgb,var(--accent) 14%,transparent);-webkit-text-stroke:1.5px color-mix(in srgb,var(--accent) 34%,transparent);user-select:none;pointer-events:none}
 .cat-opener .cat-title{position:relative;z-index:1;margin:0}
 .cat-sub{position:relative;z-index:1;margin:.3rem 0 0;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
+/* R5 voice descriptor — "labels literal, always; warmth in the descriptors". The serif
+   italic voice line under the literal title; when present it replaces .cat-sub (the
+   derived contents fallback), never stacks with it (GuideLayout renders one or the other). */
+.cat-desc{position:relative;z-index:1;margin:.35rem 0 0;font-family:var(--font-body);font-style:italic;font-size:var(--text-body);color:var(--muted);max-width:52ch}
 
 /* ── Opener photo fan — a group's own verified photos, fanned like a hand of
       postcards beside the numeral (static). ────────────────────────────────── */

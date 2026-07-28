@@ -20,7 +20,7 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (updated 2026-07-28, session close #13 — Living Atlas R1–R4 SHIPPED on the branch)
+## Snapshot (updated 2026-07-28, session close #13 — Living Atlas R1–R5 SHIPPED on the branch)
 
 **The Living Atlas redesign is running on `claude/website-visual-redesign-upnl05`** (NOT yet
 merged to main). Full spec: `docs/PLAN_VISUAL_REDESIGN.md` (phases R1–R6, gates, delegated
@@ -38,9 +38,18 @@ decisions, Fable executes; R4's row records what shipped + the footage ledger) �
   visibility gates, visible pause chip, credit swap, error ⇒ still stands) · **Korea flagship
   living cover wired** (Mixkit palace timelapse — same Gyeongbokgung complex as its photo,
   2.83 MB, hot-link verified). Creator widened cover sourcing to royalty-free libraries.
-  Denmark/Sedona footage = honest blanks (ledger in the plan). Tests now 892.
-NEXT: **R5** (interior atlas + section anchors + descriptor rendering + hub hover previews
-deferred from R4), then R6 (the Composer). a11y baselines re-record on CI when the branch PRs.
+  Denmark/Sedona footage = honest blanks (ledger in the plan).
+- **R5** interior atlas: section anchors derived from the guide's own data
+  (`src/lib/anchors.ts` — Days journey-line timeline with today ringed; Transit line from
+  route-step leads; live booking rings over checklist state) · per-day route-leg headers
+  (≈km only over fully-coordinated legs) · voice descriptors (`descriptors` schema record,
+  group-key-guarded; Korea's staged set shipped, every phrase content-verified) ·
+  cartographic neatline under group titles · hub hover previews of living covers.
+  Draw-in once per figure (reveal.js safety pattern); reduced-motion = complete frames.
+  Tests now 908.
+NEXT: **R6** (the Composer — unit facets in schema, compose-guide.mjs pure+tested,
+scaffold/research-pass integration, proposal-only for live guides), the arc's final phase.
+a11y baselines re-record on CI when the branch PRs.
 
 ## Previous snapshot (2026-07-26, session close #11 — M1–M6 COMPLETE; only M0's E2E proof left)
 
@@ -228,16 +237,17 @@ showed it. The count check caught the symptom, the novelty check missed the caus
 contrast was then measured before any baseline moved (worst case 4.77:1 against 4.5:1 required),
 and the new numbers were deliberately failed at 43 before being trusted at 47. Fixed in `fc81804`.
 
-**Re-prompt the creator with (2026-07-28, session #13):** "R1–R4 are live on the redesign
-branch. Open Korea in a real browser: the palace photo wakes into licensed footage of the same
-palace (pause chip bottom-right; reduced-motion/Save-Data visitors keep the still). Every
-guide — including every future scaffold — is now BORN with a living cover: the Painted Atlas,
-its own seeded ridgelines under the destination's actual time-of-day sky, and it also backs
-every photo against load failure. Cover sourcing now spans royalty-free libraries (schema
-enforces credit+license on non-Commons). Denmark/Sedona footage stayed honest blanks — the
-ledger in PLAN_VISUAL_REDESIGN.md says exactly why and what the candidates are. Next session:
-R5, the interior atlas (section anchors, descriptors, leg headers). Also still standing:
-rotate `CLAUDE_CODE_OAUTH_TOKEN` to unlock the pipeline's first end-to-end proof."
+**Re-prompt the creator with (2026-07-28, session #13):** "R1–R5 are live on the redesign
+branch — the whole visual arc except the Composer. Open Korea in a real browser: the palace
+photo wakes into licensed footage of the same palace; the Days tab opens on the trip's shape
+(eight stations, today ringed, your first/last days' own words at the edges); Transit draws
+its legs from the routes themselves; big checklists carry live progress rings; every group
+head speaks in your voice line under a literal label. Every future guide is born with the
+Painted Atlas cover. Two things are yours to review at leisure: Korea's descriptor set
+(working copy, edit any line) and the footage ledger (Denmark/Sedona stayed honest blanks).
+Next session: R6, the Composer — tabs assemble themselves from tagged research, drafts auto,
+live guides proposal-only. Also still standing: rotate `CLAUDE_CODE_OAUTH_TOKEN` to unlock
+the pipeline's first end-to-end proof."
 
 **Prior re-prompt (superseded):** "The whole M0–M6 programme is done except one thing, and that
 one thing needs you: `CLAUDE_CODE_OAUTH_TOKEN` is expired (confirmed from the real API response

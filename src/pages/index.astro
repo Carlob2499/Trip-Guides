@@ -258,6 +258,7 @@ const contourLayers = [
           class="hub-hero"
           href={`${base}/guides/${hero.g.id}/`}
           style={accentStyle(accentTokens(accentForGuide(hero.g.id, hero.g.data.theme, hero.g.data.country)))}
+          data-live-cover={(hero.g.data as any).cover?.video?.src ?? undefined}
           data-hero-start={heroIsPast ? undefined : hero.ex.startISO}
           data-hero-lat={heroIsPast ? undefined : hero.ex.mapCenter?.lat}
           data-hero-lng={heroIsPast ? undefined : hero.ex.mapCenter?.lng}
@@ -318,7 +319,7 @@ const contourLayers = [
           >
             {g.id === heroId && <span class="hubcard-featured-tag">Featured above</span>}
             {ex.heroImg ? (
-              <span class="hubcard-cover">
+              <span class="hubcard-cover" data-live-cover={(g.data as any).cover?.video?.src ?? undefined}>
                 {/* The cover is the shared element that morphs into the guide masthead. The FEATURED
                     guide already carries `cover-<slug>` on the hero above, so its card omits the name
                     to keep it unique per page (a duplicate name disables the transition). */}
@@ -466,6 +467,7 @@ const contourLayers = [
     <script>
       import "../features/hub/index.js";
       import "../scripts/micro.js";
+      import "../scripts/hub-live-cards.js";
       import { initOverture } from "../scripts/overture.js";
       initOverture();
     </script>

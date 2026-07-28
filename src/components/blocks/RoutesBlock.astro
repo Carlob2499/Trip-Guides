@@ -1,6 +1,27 @@
 ---
+// R5 section anchor: the transit legs as a journey line, each station labelled by a
+// route step's OWN bold lead (the lead-first content standard — anchors.ts extracts,
+// never invents; a guide whose steps carry no leads simply gets no figure).
+import { routeLegLabels } from "../../lib/anchors";
 const { sec, keyPrefix = "rt" } = Astro.props;
+const legs = routeLegLabels(sec.steps);
 ---
+{legs.length > 0 && (
+  <div class="anch-fig" data-anch aria-hidden="true">
+    <span class="af-t">The legs of this trip — {legs.length} routes</span>
+    <div class="anch-scroll">
+      <div class="jline jline--legs" data-n={legs.length}>
+        <span class="jl-track"></span>
+        {legs.map((label, li) => (
+          <span class={`jl-stop${li === 0 ? " jl-first" : li === legs.length - 1 ? " jl-last" : ""}`}>
+            <b class="jl-dot"></b>
+            <i class="jl-label">{label}</i>
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
 <ol class="steps">
   {(sec.steps || []).map((s: string, j: number) => (
     <li>

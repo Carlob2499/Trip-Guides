@@ -30,6 +30,7 @@ import "../styles/print.css";
 import "../styles/trip-split.css";
 import "../styles/masthead.css";
 import "../styles/painted-atlas.css";
+import "../styles/anchors.css";
 import "../styles/sights.css";
 import "../styles/map.css";
 import "../styles/planner.css";
@@ -670,9 +671,12 @@ const tripSummary = buildSummary(guide);
         </noscript>
         {order.map((g, ci) => {
           const solo = byG[g].length === 1;
-          // Chapter-opener contents line: what's inside, derived from the
-          // section titles already in the data (no invented copy).
-          const subParts = solo ? [] : byG[g].map((o) => navLabel(o.s, g)).filter((t: string) => t && t !== g);
+          // R5: a creator-signed voice descriptor wins the line under the title
+          // ("labels literal, always; warmth in the descriptors"); without one, the
+          // chapter-opener falls back to the derived contents line — what's inside,
+          // from the section titles already in the data (no invented copy).
+          const descriptor = (guide as any).descriptors?.[g] ?? null;
+          const subParts = solo || descriptor ? [] : byG[g].map((o) => navLabel(o.s, g)).filter((t: string) => t && t !== g);
           const sub = subParts.slice(0, 4).join(" · ") + (subParts.length > 4 ? ` · +${subParts.length - 4} more` : "");
           return (
             <div class="catblock" id={`grp-${ci}`} data-ci={ci} role="tabpanel" aria-labelledby={`gtab-${ci}`} hidden={ci > 0}>
@@ -686,6 +690,7 @@ const tripSummary = buildSummary(guide);
                   </span>
                 )}
                 <h2 class="cat-title">{g}</h2>
+                {descriptor && <p class="cat-desc">{descriptor}</p>}
                 {sub && <p class="cat-sub">{sub}</p>}
               </header>
               {byG[g].map((o) => (
@@ -872,6 +877,7 @@ const tripSummary = buildSummary(guide);
       import "../scripts/hero-parallax.js";
       import "../scripts/gsap-hero.js";
       import "../scripts/living-cover.js";
+      import "../scripts/anchors.js";
       import "../features/palette/index.js";
       import "../features/trip-split/index.ts";
       import "../features/voting/index.js";

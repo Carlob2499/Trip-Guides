@@ -202,7 +202,9 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 .catblock{scroll-margin-top:var(--chrome-h)}
 /* M3: was its own bespoke clamp(1.5rem,4vw,2.2rem) — --text-h1 is that exact missing step,
    named in base.css so the type scale's "no undeclared roles" claim is true again. */
-.cat-title{font-family:var(--font-display);font-size:var(--text-h1);margin:2.4rem 0 1rem;padding-bottom:.45rem;border-bottom:2px solid var(--ink);display:flex;align-items:baseline;gap:.6rem}
+/* R5 cartographic DNA: the group title's rule becomes a map NEATLINE — the classic
+   double border of a chart plate (one strong line, one faint echo beneath). */
+.cat-title{font-family:var(--font-display);font-size:var(--text-h1);margin:2.4rem 0 1rem;padding-bottom:.45rem;border-bottom:2px solid var(--ink);box-shadow:0 6px 0 -4px color-mix(in srgb,var(--ink) 26%,transparent);display:flex;align-items:baseline;gap:.6rem}
 .catblock:first-child .cat-title{margin-top:.3rem}
 .cat-title::before{content:"";flex:none;width:.5rem;height:.5rem;background:var(--accent)}
 .block{scroll-margin-top:var(--chrome-h);margin-bottom:1rem}

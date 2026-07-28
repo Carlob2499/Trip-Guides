@@ -480,6 +480,13 @@ const guides = defineCollection({
     // each one still spends a slot of the reader's attention, which is why they're capped
     // separately in the layout rather than being free.
     tabBudget: z.number().int().positive().optional(),
+    // R5 — per-group voice descriptors (design decision №4: "labels literal, always;
+    // warmth demoted to the descriptors"). Keyed by EXACT group name (superRefine below
+    // rejects keys no section uses, so a group rename can't silently orphan its line).
+    // Rendered as the voice line under each tab panel's opener title, replacing the
+    // derived contents line. CREATOR-SIGNED CONTENT: written per guide, only asserting
+    // things the guide itself contains — never generated at scaffold time.
+    descriptors: z.record(z.string(), z.string()).optional(),
     // Salted, unguessable id for this guide's shared Trip-Split / feedback / reminders room
     // (16–40 lowercase alphanumerics, crypto-random, committed once by scripts/gen-room-id.mjs).
     // Absent = legacy: the room falls back to the short guide slug, which the RTDB rules freeze
@@ -620,6 +627,22 @@ const guides = defineCollection({
         path: ["tabBudget"],
         message: `${groups.length} content groups exceeds this guide's tab budget of ${budget} — the nav bar also carries 4 tool tabs on top, so the reader would face ${groups.length + 4}. Merge two groups, or raise tabBudget deliberately if this guide has earned them. Groups: ${groups.join(" · ")}`,
       });
+    }
+
+    // 2b. Descriptors (R5) — every key must name a group some section actually uses.
+    // The failure this catches is the continuity one: a group gets renamed (R1 renamed
+    // three) and its descriptor silently stops rendering instead of erroring.
+    if (g.descriptors) {
+      const realGroups = new Set(g.sections.map((s: any) => s.group));
+      for (const key of Object.keys(g.descriptors)) {
+        if (!realGroups.has(key)) {
+          ctx.addIssue({
+            code: "custom",
+            path: ["descriptors", key],
+            message: `descriptor key "${key}" matches no section group — it would silently never render. Real groups: ${[...realGroups].join(" · ")}`,
+          });
+        }
+      }
     }
 
     // 3. Provenance gate — only for guides that opted in with `provenance: "strict"`.

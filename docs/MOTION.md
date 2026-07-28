@@ -219,3 +219,28 @@ URLs (the Korea palace cover is `assets.mixkit.co/videos/20095/…`, Mixkit Stoc
 License, credited anyway); Pexels/Pixabay require their API for reliable URLs (keyless
 scraping is blocked); Coverr's grid exposes only ephemeral `coverr-temp-…` URLs — do not
 hot-link those.
+
+## Section anchors — the R5 rules (shipped 2026-07-28)
+
+Every anchor figure is DERIVED from the guide's own researched data (`src/lib/anchors.ts`,
+pure + tested) — never drawn or worded by hand, and a section whose data can't support a
+figure honestly gets none (the pin-less fallback is a blank, not a guess):
+
+- **Days timeline** — one station per day entry; dates from the entries, the two above-line
+  words from the first/last days' own titles, today ringed client-side by the same date
+  match the journey bar's Today uses.
+- **Transit journey-line** — one station per route step, labelled by the step's own bold
+  lead (the lead-first content standard doing double duty as structure).
+- **Booking rings** — checklists ≥4 items open with a progress ring: total counted at
+  build, fill counted live from the reader's own saved checkbox state (live meaning, so
+  its fill transition is allowed motion).
+- **Route-leg day headers** — "first stop → last stop · ≈N km"; km is summed ONLY when
+  every consecutive waypoint pair carries verified coordinates — a partial sum would
+  understate the day while reading as a fact, so any gap drops the number, never fudges it.
+
+Motion: one draw-in per figure on first view (~600 ms), then stillness — implemented with
+reveal.js's safety rail (markup renders COMPLETE; JS adds the pending state only when
+motion is welcome, and a timeout finishes every frame if the observer never delivers).
+Reduced-motion never sees an entrance. Descriptors ship alongside as the voice layer
+("labels literal, always; warmth in the descriptors") — creator-signed content, schema-
+guarded so a group rename errors instead of silently orphaning its line.

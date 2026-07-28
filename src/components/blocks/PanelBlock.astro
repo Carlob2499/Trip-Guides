@@ -12,6 +12,22 @@ const { lead, more, moreParagraphCount, morePreview } = sec.collapsible
   : splitLead(sec.body);
 const label = moreDetailLabel(sec.moreLabel, moreParagraphCount);
 ---
+{/* R5 section anchor: substantial checklists (≥4 items) open with a live progress
+    ring — total counted at build from the card's own list, fill counted client-side
+    from the reader's saved checkbox state (scripts/anchors.js). Small checklists
+    don't need a figure. */}
+{(sec.checklist?.length ?? 0) >= 4 && (
+  <div class="anch-ring" data-ring>
+    <svg viewBox="0 0 84 84" aria-hidden="true">
+      <circle class="ring-bg" cx="42" cy="42" r="34" />
+      <circle class="ring-fill" cx="42" cy="42" r="34" />
+    </svg>
+    <div class="ring-txt" aria-live="polite">
+      <b><span data-ring-done>0</span><span>/{sec.checklist.length}</span></b>
+      <i>checked off</i>
+    </div>
+  </div>
+)}
 {lead && <div class="card-lead" set:html={lead} />}
 {more && (
   <div class="card-more-wrap">

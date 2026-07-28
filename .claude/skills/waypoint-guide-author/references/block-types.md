@@ -147,3 +147,11 @@ cleverness ("Pocket", "Receipts" were tried and withdrawn). The warmth lives ONE
 down, in the section-head descriptor line — a short phrase under the heading where a
 wink is welcome ("every fact, traced and dated — the receipts"). Descriptors are
 content: proposed by the author, signed by the creator per guide.
+
+**Mechanics (R5, shipped 2026-07-28):** descriptors live in `_guide.json` as a
+`descriptors` record keyed by EXACT group name — the schema rejects a key no section
+uses, so renaming a group without moving its descriptor fails the build instead of
+silently dropping the line. The hard rule when writing one: a descriptor may only
+assert what the guide actually contains (grep before you charm — "the rain plan" was
+cut from Korea's GO descriptor because no rain plan exists in that group; every other
+phrase was token-verified against the group files first).
