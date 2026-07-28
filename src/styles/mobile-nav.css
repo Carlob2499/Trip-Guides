@@ -6,13 +6,19 @@
    transitions re-run on every open). Swipe-nav.js adds the flight gesture. */
 
 @media(max-width:899px){
-  /* Bearing numbers via CSS counters — only real section groups count. */
-  .sheet-list{counter-reset:bearing}
-  .sheet-cat{display:flex;align-items:baseline;gap:.65rem;font-family:var(--font-display);font-size:var(--text-lead);font-weight:640;letter-spacing:-.015em;text-transform:none;color:var(--ink);padding:.6rem 1.2rem .35rem;min-height:46px}
+  /* R2 — the journey spine: the same object as desktop's line, turned vertical. A rail
+     runs the left edge; every group is a STATION on it (dot), the current one filled in
+     the guide's accent. Replaces the bearing numbers — position on the journey now says
+     what a counter used to. Tools sit below, un-stationed. */
+  .sheet-list{position:relative}
+  .sheet-list::before{content:"";position:absolute;left:1.53rem;top:1.1rem;bottom:1rem;width:2px;background:var(--rule2)}
+  .sheet-cat{position:relative;display:flex;align-items:baseline;gap:.65rem;font-family:var(--font-display);font-size:var(--text-lead);font-weight:640;letter-spacing:-.015em;text-transform:none;color:var(--ink);padding:.6rem 1.2rem .35rem 2.7rem;min-height:46px}
   /* U2: exclude every tool link (layout chrome — Budget/Vote/Reminders/Learnings/Trip Kit,
      .sheet-tool) from the bearing-number counter in one rule, not per-tool :not()s that
      silently miss any tool link added later. */
-  .sheet-cat:not(.sheet-tool)::before{counter-increment:bearing;content:counter(bearing,decimal-leading-zero);font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:.08em;color:var(--accent-ink)}
+  .sheet-cat:not(.sheet-tool)::before{content:"";position:absolute;left:1.16rem;top:1.05rem;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--muted);z-index:1}
+  .sheet-cat.active:not(.sheet-tool)::before{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent)}
+  .sheet-cat.sheet-tool{padding-left:1.2rem}
   /* M4 item 1 — a tool row now leads with its real stroke icon instead of the "·" placeholder
      bullet plus a platform emoji. The icon replaces the ::before marker entirely (the bullet
      only ever existed to fill the slot the bearing number occupies on content rows). */
