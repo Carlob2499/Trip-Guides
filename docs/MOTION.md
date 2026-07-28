@@ -165,3 +165,24 @@ genuine "did this cost anything" pass has to report:
 
 This closes `docs/archive/PLAN_VISUAL_OVERHAUL.md`. The doctrine above (signature, inventory, rules,
 identity engine) reflects what's actually shipped as of this pass.
+
+## The motion language — "the overture, then the heartbeat" (decided 2026-07-28)
+
+Chosen by the creator from three staged languages (design study, Plate 10): **C's
+entrance + B's life.** Two rules govern every surface from R1 onward:
+
+1. **The overture plays once per arrival.** On first view of a surface, its entrance
+   choreography runs a single time — title settles, journey line draws, stations land in
+   sequence, the day-dot travels home — then finishes. It never loops, never replays on
+   scroll-back, and never runs two surfaces at once (one owner per property per element,
+   as ever).
+2. **Continuous motion is reserved for objects that encode live meaning.** After the
+   overture, the only things allowed to keep moving are the ones whose motion IS
+   information: the read-fill creeping along the journey line, its tip's soft glow,
+   today's breathing dot, a living cover. Decoration gets one entrance, then stillness.
+   Chrome never animates on its own, nothing moves between the reader and a tap, and
+   scrolling is always plain scrolling.
+
+Reduced-motion renders every finished frame with no entrance and no pulse. The existing
+inventory rules (single motion dependency, once-per-view flags, lazy modules) apply to
+every implementation of this language.

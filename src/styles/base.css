@@ -28,9 +28,13 @@
      them — they are exactly what accentTokens("#9c4421") returns, and a test pins that. */
   --accent-ink-light:#893b1d;--accent-ink-dark:#c2866e;--accent-ink:var(--accent-ink-light);
   --on-accent:#f0d2c7;
-  /* Type system — three roles, all self-hosted variable fonts (@fontsource):
-     display = signage (headings, tabs, wayfinding), body = long-form reference
-     reading (the researched content), data = times/prices/coords/stamps. */
+  /* Type system — the Quiet Edition (R1, 2026-07-28): THREE ROLES, TWO FACES.
+     display + body are BOTH Literata — one serif wearing both hats through its real
+     optical-size axis (the `standard` fontsource variant carries wght+opsz, and
+     font-optical-sizing:auto means big headings get the display cut, prose the text cut,
+     with zero per-rule settings). data = Source Sans 3, one quiet humanist sans for
+     times/prices/coords/stamps/labels. Bricolage Grotesque and Spline Sans Mono retired
+     here — grep for their names should find only this comment. */
   /* CJK fallback: Korea guide content renders real Hangul through all three roles (.addr-card-big
      via --font-display, inline prose glosses + .tk-phrase-native via --font-body, .tag/kicker labels
      + hardcoded UI strings via --font-data) and none of the three webfonts or their Latin fallbacks
@@ -38,15 +42,17 @@
      Chrome's font resolver). Fallback picked per role's design intent, not just "any CJK font": a
      serif for --font-body (AppleMyungjo — macOS, confirmed via Apple's own bundled-fonts page;
      Batang — Windows, confirmed via Microsoft Learn's typeface list; Noto Serif CJK KR — Android,
-     confirmed via AOSP's fonts.xml lang="ko" fallbackFor="serif" mapping), a sans for --font-display/
+     confirmed via AOSP's fonts.xml lang="ko" fallbackFor="serif" mapping), a sans for
      --font-data (Apple SD Gothic Neo — macOS/iOS; Malgun Gothic — Windows; Noto Sans CJK KR —
-     Android, same AOSP source). Zero byte cost: these are OS-installed system fonts, never fetched.
-     iOS has no verified bundled serif Korean face, so --font-body's Hangul falls through past this
-     list to the bare `serif` keyword there — Safari's own CJK substitution resolves it (in practice
-     the same sans face iOS already uses), an accepted platform gap rather than an invented font name. */
-  --font-display:'Bricolage Grotesque Variable','Apple SD Gothic Neo','Malgun Gothic','Noto Sans CJK KR',-apple-system,system-ui,sans-serif;
+     Android, same AOSP source). --font-display moved to the SERIF chain with the Quiet Edition,
+     since display is now Literata too. Zero byte cost: these are OS-installed system fonts, never
+     fetched. iOS has no verified bundled serif Korean face, so the serif roles' Hangul falls
+     through past this list to the bare `serif` keyword there — Safari's own CJK substitution
+     resolves it (in practice the same sans face iOS already uses), an accepted platform gap
+     rather than an invented font name. */
+  --font-display:'Literata Variable',Georgia,'Times New Roman',AppleMyungjo,Batang,'Noto Serif CJK KR',serif;
   --font-body:'Literata Variable',Georgia,'Times New Roman',AppleMyungjo,Batang,'Noto Serif CJK KR',serif;
-  --font-data:'Spline Sans Mono Variable',ui-monospace,'Courier New','Apple SD Gothic Neo','Malgun Gothic','Noto Sans CJK KR',monospace;
+  --font-data:'Source Sans 3 Variable',-apple-system,system-ui,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans CJK KR',sans-serif;
   /* Type SCALE — semantic size steps. Anchored to two values that were ALREADY load-bearing
      before this scale existed, not invented fresh: --text-body matches body's own font-size
      (which now READS the token, below, so the anchor is stated once instead of duplicated),

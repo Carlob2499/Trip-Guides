@@ -8,7 +8,7 @@
 
 .split-wrap{padding:1.4rem 0 3rem;max-width:680px}
 .split-toolbar{margin-bottom:1.2rem}
-.split-title{font-family:var(--font-display);font-weight:760;letter-spacing:-.03em;font-size:clamp(1.8rem,5vw,2.4rem);line-height:1.05;margin-bottom:.3rem}
+.split-title{font-family:var(--font-display);font-weight:640;letter-spacing:-.012em;font-size:clamp(1.8rem,5vw,2.4rem);line-height:1.05;margin-bottom:.3rem}
 .split-desc{color:var(--muted);font-size:var(--text-small);line-height:1.6}
 .split-save-actions{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.7rem}
 /* cards */

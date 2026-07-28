@@ -18,8 +18,8 @@ carries `type`, `group` (the nav-tab category label), and usually `title`.
 `Essentials` holds money/health/etiquette-type sections; same-audience
 event content shares one group. A group name is a nav label (short, no
 " & " chains where avoidable); the section `title` carries the identity.
-New guides start from: Plan · Essentials · Getting around · Itinerary ·
-Sights · Food & shopping · References, adding at most 3 trip-specific
+New guides start from: Plan · Essentials · Transit · Days ·
+Sights · Food & shopping · Sources, adding at most 3 trip-specific
 groups.
 
 **Budget `est` values power plan-vs-logged.** The Budget calculator compares
@@ -128,11 +128,22 @@ conventions, render behavior, and the verification rules attached to a field.
 ## Placement conventions
 
 - `group` values become the guide's nav tabs — reuse the established ones where they
-  fit (Plan · Money & budget · Health & safety · Etiquette & language · Getting
-  around · Itinerary · Sights · Food & shopping · References) plus trip-specific
+  fit (Plan · Money & budget · Health & safety · Etiquette & language · Transit
+  · Days · Sights · Food & shopping · Sources) plus trip-specific
   groups (e.g. an event tab). Keep a new group only if the content genuinely doesn't
   belong in an existing tab.
 - The canonical closing section is a `prose` titled "Sources & further reading" in
-  group `References`.
+  group `Sources`.
 - Leave `map` / `weather` / `holidays` sections intact when editing — they're wired
   to live data, and the weather block depends on the first `map`'s coords.
+
+
+## Group labels & the voice standard (Quiet Edition, decided 2026-07-28)
+
+The label a traveler navigates by is LITERAL, always — one plain word that names the
+bucket at a glance: `Plan · Essentials · Transit · Days · Sights · Food · Sources`
+(plus trip-specific anchors like `Daejeon & MSI`). Never re-spend wayfinding on
+cleverness ("Pocket", "Receipts" were tried and withdrawn). The warmth lives ONE level
+down, in the section-head descriptor line — a short phrase under the heading where a
+wink is welcome ("every fact, traced and dated — the receipts"). Descriptors are
+content: proposed by the author, signed by the creator per guide.

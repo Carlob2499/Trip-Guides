@@ -1,7 +1,7 @@
 /* === GUIDE MASTHEAD HERO ====================================================
    Editorial-bold opener: every guide starts with a full-bleed rounded hero.
    · .mast-photo — a Commons cover photo with a legibility scrim and huge
-     Bricolage title laid over it (units.-style).
+     Literata display title laid over it (units.-style).
    · .mast-typo  — scaffolds with no photo get a bold typographic hero on the
      country accent field with a generated dot lattice, so they still open with
      confidence and need no image.
@@ -59,7 +59,7 @@
 
 .mast-inner{position:relative;align-self:flex-end;width:100%;padding:clamp(1.3rem,3.5vw,2.6rem) clamp(1.2rem,3.2vw,2.4rem);color:#f4f6ef}
 .mast-eyebrow{color:#e8ece1;letter-spacing:.28em;opacity:.92}
-.mast-title{font-family:var(--font-display);font-weight:800;font-size:clamp(2.4rem,7.2vw,5.4rem);line-height:.98;letter-spacing:-.035em;margin:.35rem 0 0;color:#fff;text-shadow:0 2px 24px rgba(0,0,0,.32)}
+.mast-title{font-family:var(--font-display);font-weight:620;font-size:clamp(2.4rem,7.2vw,5.4rem);line-height:1;letter-spacing:-.012em;margin:.35rem 0 0;color:#fff;text-shadow:0 2px 24px rgba(0,0,0,.32)}
 .mast-dek{color:#eef1e9;max-width:54ch;margin:.75rem 0 0;font-size:clamp(1rem,1.4vw,1.14rem);line-height:1.55;text-shadow:0 1px 10px rgba(0,0,0,.28)}
 
 /* Same badge-on-photo pattern as sights.css's .imgcredit--onphoto, same fix: .42 alpha composited

@@ -2,9 +2,9 @@
 /* scroll-padding keeps hash-linked sections clear of the sticky chrome. */
 html{scroll-behavior:smooth;scroll-padding-top:var(--chrome-h)}
 .topbar,header,.shell,footer{position:relative;z-index:1}
-/* Display h1 uses Bricolage Grotesque (characterful display face).
-   All headings share the display face; body text is Literata. */
-h1{font-family:var(--font-display);font-weight:780;letter-spacing:-.035em;line-height:1.02;text-wrap:balance}
+/* Quiet Edition (R1): display and body are BOTH Literata — headings are simply more of
+   the reading face, cut for display by the optical-size axis. */
+h1{font-family:var(--font-display);font-weight:620;letter-spacing:-.012em;line-height:1.02;text-wrap:balance}
 /* M3: font-weight lives ONLY in the combined heading-role rule below (line ~350) — this rule
    used to also declare font-weight:400 here, which the later, equal-specificity rule always
    overrode (640 is what has ever rendered). Removing the dead declaration, not changing output. */
@@ -18,7 +18,7 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 .topbar-home svg{flex:none;transition:transform .15s}
 .topbar-home:hover svg{transform:translateX(-3px)}
 /* Wordmark — display face for brand identity */
-.topbar-wordmark{font-family:var(--font-display);font-weight:750;font-size:var(--text-body);letter-spacing:-.02em;line-height:1}
+.topbar-wordmark{font-family:var(--font-display);font-weight:640;font-size:var(--text-body);letter-spacing:-.008em;line-height:1}
 .topbar-right{display:flex;align-items:center;gap:.4rem}
 /* Dark-mode toggle — labelled via aria-label + title; icon swaps in JS */
 /* Consistent chrome buttons: data face, uniform sizing so SOS/Share/dark
@@ -51,14 +51,12 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
    tracking, not a generic UI label. Only the size migrates (11px was already ~= --text-micro). */
 .eyebrow{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:.32em;text-transform:uppercase;color:var(--accent-ink)}
 /* Display face at masthead scale — publication, not dashboard */
-/* font-optical-sizing:auto used to sit here — dead. --font-display's loaded entrypoint
-   (@fontsource-variable/bricolage-grotesque, imported without a subpath) only registers a
-   font-weight 200-800 axis; the opsz axis lives in a physically separate, ~1.76x larger file set
-   (opsz.css) that isn't imported. Switching every import site to that entrypoint would pay that
-   cost site-wide (--font-display renders every heading/tab/.addr-card-big) for a barely-perceptible
-   nicety on a handful of large headlines — not worth it. letter-spacing:-.02em was tuned by eye
-   against this exact (non-opsz) rendering and is unaffected by removing an inert sibling property. */
-.masthead h1{font-size:var(--text-display);margin:.4rem 0 0;letter-spacing:-.02em}
+/* R1 reverses the old “opsz isn't worth it” call, deliberately: with ONE serif carrying both
+   display and body, the optical axis is what differentiates the roles, so the standard.css
+   entrypoint (wght+opsz) is now imported at every font import site and font-optical-sizing's
+   default `auto` does the cutting per size — no per-rule settings. The old Bricolage-era
+   tracking is relaxed accordingly. */
+.masthead h1{font-size:var(--text-display);margin:.4rem 0 0;letter-spacing:-.008em}
 .dek{color:var(--muted);max-width:58ch;margin:.8rem auto 0;font-size:var(--text-body);line-height:1.65}
 /* Stats bar: days · sights · live rate — at-a-glance guide summary. A guide may also
    carry a ⚠ warning pill (e.g. an unconfirmed draft); routine "verified" stamps are
@@ -684,7 +682,7 @@ details table{margin:.3rem 0 .4rem}
 .tl-note{font-size:var(--text-small);color:var(--muted);margin:.1rem 0 .8rem;line-height:1.5}
 .tl-list{display:flex;flex-direction:column;gap:.8rem}
 .tl-tier{border-left:3px solid var(--rule2);padding-left:.75rem}
-.tl-tier-head{display:flex;align-items:center;gap:.4rem;font-family:var(--font-display);font-weight:700;font-size:var(--text-control);margin-bottom:.4rem}
+.tl-tier-head{display:flex;align-items:center;gap:.4rem;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);margin-bottom:.4rem}
 .tl-tier-label{color:var(--ink)}
 .tl-chips{display:flex;flex-wrap:wrap;gap:.32rem}
 .tl-chip{font-size:var(--text-control);line-height:1.4;background:var(--card);border:1px solid var(--rule);border-radius:5px;padding:.14rem .5rem}

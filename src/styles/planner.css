@@ -81,7 +81,7 @@
    first step with real headroom (worst case ~3.14:1 across a full accent-gamut sweep). The date
    text beside it stays full --accent-ink, so the hierarchy — numeral recedes behind the date —
    survives; what changes is that the numeral is muted rather than sub-legible. */
-.day-num{display:block;font-family:var(--font-display);font-weight:800;font-size:2rem;line-height:.95;letter-spacing:-.04em;color:color-mix(in srgb,var(--accent-ink) 80%,var(--bg2));margin:0 0 .3rem}
+.day-num{display:block;font-family:var(--font-display);font-weight:640;font-size:2rem;line-height:.95;letter-spacing:-.012em;color:color-mix(in srgb,var(--accent-ink) 80%,var(--bg2));margin:0 0 .3rem}
 /* 1.2rem is load-bearing, not taste: 19.2px bold = 14.4pt, just above axe's bold-large cutoff
    (14pt = 18.667px). Below ~1.17rem the numeral re-grades as SMALL text, the bar jumps 3:1 -> 4.5:1,
    and the mix above (3.6-4.4:1 at desktop size) can start failing at mobile widths only. */

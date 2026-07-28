@@ -1,7 +1,7 @@
 [
   {
     "type": "routes",
-    "group": "Getting around",
+    "group": "Transit",
     "title": "Key transit routes",
     "steps": [
       "PHX Airport → Sedona: rental car, ≈2 hours via I-17/AZ-179 (add ≈30 min on weekends). This is the recommended default for the whole trip — see below.",
@@ -17,7 +17,7 @@
   },
   {
     "type": "map",
-    "group": "Getting around",
+    "group": "Transit",
     "title": "Orientation map",
     "center": {
       "lat": 34.8688613,

@@ -33,7 +33,7 @@
           {
             "stop": "ICN T1 — shower, then bus 6002",
             "reason": "Skipped the shower; took the 6002 Limousine bus straight in as the simplest, fastest direct route.",
-            "group": "Getting around"
+            "group": "Transit"
           },
           {
             "stop": "Cheonggyecheon / Jongno light walk",
@@ -75,7 +75,7 @@
           {
             "stop": "Daejeon Station → Kakao T to I-Hotel",
             "reason": "Used Uber instead — Kakao T registration fights a foreign number, and traffic plus heat made it unbearable. Get a Korean e-SIM; little translation available.",
-            "group": "Getting around"
+            "group": "Transit"
           },
           {
             "stop": "EXPO Science Park — GO Fest Day 1",
@@ -112,7 +112,7 @@
           {
             "stop": "Busan Station → subway to Haeundae",
             "reason": "Took a taxi — very cheap and direct.",
-            "group": "Getting around"
+            "group": "Transit"
           },
           {
             "stop": "Lunch on Gunam-ro, Haeundae",

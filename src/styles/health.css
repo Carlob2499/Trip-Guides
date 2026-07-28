@@ -6,7 +6,7 @@
 
 .hl-wrap{max-width:46rem;margin:0 auto;padding:2.4rem 1.2rem 5rem}
 .hl-kicker{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin:0 0 .3rem}
-.hl-head{font-family:var(--font-display);font-weight:760;font-size:var(--text-h2);letter-spacing:-.02em;margin:0 0 .55rem;line-height:1.1}
+.hl-head{font-family:var(--font-display);font-weight:640;font-size:var(--text-h2);letter-spacing:-.012em;margin:0 0 .55rem;line-height:1.1}
 .hl-intro{color:var(--muted);font-size:var(--text-body);line-height:1.55;margin:0 0 1.2rem;max-width:40rem}
 .hl-intro a{color:var(--accent-ink)}
 
@@ -17,7 +17,7 @@
 /* The headline live-site card */
 .hl-hero{background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--green);border-radius:var(--r-lg);padding:1.2rem 1.3rem;margin:0 0 2rem}
 .hl-hero-row{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:.5rem}
-.hl-hero-title{font-family:var(--font-display);font-weight:720;font-size:var(--text-lead);margin:0}
+.hl-hero-title{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);margin:0}
 .hl-hero p{margin:.2rem 0 0;color:var(--muted);font-size:var(--text-small);line-height:1.55}
 .hl-hero p b{color:var(--ink)}
 .hl-badge{height:20px;display:inline-block;vertical-align:middle}

@@ -20,7 +20,23 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (updated 2026-07-26, session close #11 — M1–M6 COMPLETE; only M0's E2E proof left)
+## Snapshot (updated 2026-07-28, session close #12 — Living Atlas programme underway; R1 SHIPPED on its branch)
+
+**The Living Atlas redesign is running on `claude/website-visual-redesign-upnl05`** (NOT yet
+merged to main). Full spec: `docs/PLAN_VISUAL_REDESIGN.md` (phases R1–R6, gates, delegated
+decisions, Fable executes) · mock-ups: `node docs/mockups/build-mockup.mjs` · creator-chosen
+motion language recorded in `docs/MOTION.md` ("the overture, then the heartbeat"). **R1 is
+COMPLETE on the branch:** Quiet Edition type (Literata standard opsz variant does display AND
+body; Source Sans 3 replaces Spline Mono for data; Bricolage retired; display weights/tracking
+retuned across 10 css files; OG parity switched to serif title + sans labels) + literal labels
+(Getting around→Transit, Itinerary→Days, References→Sources across all guides, scaffolder,
+template, guide-author skill — which also gained the voice standard). Gates green: build 0,
+876 tests, perf 125/200 KB, dist/ greps clean of old faces and old labels, preview verified
+375px+desktop+dark. NEXT: R2 (mobile bottom bar + journey sheet) per the plan's session
+prompt; descriptors render (R1's second half) rides with R5's section anchors. a11y baselines
+re-record on CI when the branch PRs — expected to shift only if contrast moved (colors didn't).
+
+## Previous snapshot (2026-07-26, session close #11 — M1–M6 COMPLETE; only M0's E2E proof left)
 
 > **Merged to `main` 2026-07-26 (`834b741`, fast-forward), then `fc81804`.** `origin` is
 > `main`-only again apart from the merged `claude/waypoint-audit-modernize-tne4ce`, which is now
@@ -206,7 +222,14 @@ showed it. The count check caught the symptom, the novelty check missed the caus
 contrast was then measured before any baseline moved (worst case 4.77:1 against 4.5:1 required),
 and the new numbers were deliberately failed at 43 before being trusted at 47. Fixed in `fc81804`.
 
-**Re-prompt the creator with:** "The whole M0–M6 programme is done except one thing, and that
+**Re-prompt the creator with (2026-07-28):** "R1 shipped on the redesign branch — open any
+guide from it and the site already reads like the study: one serif wearing display and body,
+quiet sans numbers, literal tabs on one row. Your motion choice (B+C, 'overture then
+heartbeat') is now MOTION.md doctrine. Next session executes R2: the mobile bottom bar +
+journey sheet. Also still standing from the M-programme: rotate `CLAUDE_CODE_OAUTH_TOKEN`
+to unlock the pipeline's first end-to-end proof."
+
+**Prior re-prompt (superseded):** "The whole M0–M6 programme is done except one thing, and that
 one thing needs you: `CLAUDE_CODE_OAUTH_TOKEN` is expired (confirmed from the real API response
 — 401 OAuth access token is invalid). Rotate it (`claude setup-token` → repo secret → re-run
 Token canary) and I'll run the pipeline's first-ever real end-to-end proof: a throwaway guide

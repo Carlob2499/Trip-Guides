@@ -5,7 +5,7 @@
 
 .pg-wrap{max-width:34rem;margin:0 auto;padding:2.4rem 1.2rem 4rem}
 .pg-kicker{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin:0 0 .3rem}
-.pg-head{font-family:var(--font-display);font-weight:760;font-size:var(--text-h3);letter-spacing:-.02em;margin:0 0 .5rem}
+.pg-head{font-family:var(--font-display);font-weight:640;font-size:var(--text-h3);letter-spacing:-.012em;margin:0 0 .5rem}
 .pg-slug{font-family:var(--font-data);color:var(--accent-ink)}
 .pg-intro{color:var(--muted);font-size:var(--text-small);line-height:1.5;margin:0 0 1.6rem}
 
@@ -32,7 +32,7 @@
 
 .pg-done{margin-top:1.4rem;text-align:center}
 .pg-done[hidden]{display:none}
-.pg-done-head{font-family:var(--font-display);font-weight:720;font-size:var(--text-lead);margin:0 0 .8rem}
+.pg-done-head{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);margin:0 0 .8rem}
 .pg-done-link{display:inline-block;padding:.75rem 1.5rem;border-radius:999px;background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);text-decoration:none;transition:background .18s}
 .pg-done-link:hover{background:var(--accent)}
 

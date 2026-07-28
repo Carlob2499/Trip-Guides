@@ -65,7 +65,7 @@ export function checkResearchGuide(guide, slug) {
 
   // 5. Completeness — a "filled" typed section left effectively empty is not researched.
   //    BLOCKING (rubric #4): a guide of empty scaffolded bodies must not read as ready. A
-  //    checklist-only panel is fine; References may be filled by a human later.
+  //    checklist-only panel is fine; Sources may be filled by a human later.
   for (const s of sections) {
     if ((s.type === "prose" || s.type === "panel") && s.title && s.body !== undefined) {
       if (String(s.group).toLowerCase() !== "references" && strip(s.body).length < 3 && !(s.checklist?.length)) {

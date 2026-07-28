@@ -5,10 +5,11 @@
 // the whole point is tracking a guide that didn't exist at build time.
 import PwaHead from "../../components/PwaHead.astro";
 import { jsonEmbed } from "../../lib/json-embed";
-import "@fontsource-variable/bricolage-grotesque";
-import "@fontsource-variable/literata";
-import "@fontsource-variable/literata/wght-italic.css";
-import "@fontsource-variable/spline-sans-mono";
+// Quiet Edition (R1): ONE serif — Literata with its optical-size axis (standard = wght+opsz,
+// so browsers cut display vs text automatically) — and ONE quiet humanist sans for data/labels.
+import "@fontsource-variable/literata/standard.css";
+import "@fontsource-variable/literata/standard-italic.css";
+import "@fontsource-variable/source-sans-3";
 import "../../styles/base.css";
 import "../../styles/progress.css";
 

@@ -102,18 +102,18 @@ export function buildGuideObject(answers = {}) {
   // Etiquette & language
   sections.push(P("Etiquette & language", "Etiquette & language"));
 
-  // Getting around
-  sections.push({ type: "routes", group: "Getting around", title: "Key transit routes", steps: [] });
+  // Transit
+  sections.push({ type: "routes", group: "Transit", title: "Key transit routes", steps: [] });
   if (coords) {
     sections.push({
-      type: "map", group: "Getting around", title: "Orientation map",
+      type: "map", group: "Transit", title: "Orientation map",
       center: { lat: coords.lat, lng: coords.lng }, span: 0.08,
     });
   }
 
-  // Itinerary
+  // Days
   sections.push({
-    type: "days", group: "Itinerary", title: "Day by day",
+    type: "days", group: "Days", title: "Day by day",
     items: dayLabels.map((d) => ({ date: d, title: "", pace: "", body: "" })),
   });
 
@@ -130,8 +130,8 @@ export function buildGuideObject(answers = {}) {
   const niche = (answers.niche || "").trim();
   if (niche) sections.push(P("Highlights", niche));
 
-  // References — canonical closing section; the research pass fills the sources.
-  sections.push({ type: "prose", group: "References", title: "Sources & further reading", body: "" });
+  // Sources — canonical closing section; the research pass fills the sources.
+  sections.push({ type: "prose", group: "Sources", title: "Sources & further reading", body: "" });
 
   const cityLabel = (answers.cities || "").trim();
   return {
