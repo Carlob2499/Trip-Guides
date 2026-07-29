@@ -9,7 +9,9 @@
 /* M2/CLS: nowrap + horizontal scroll, not wrap — JS appends pills after paint (countdown,
    local-time, offline badge); wrapping to a second row shifts every element below it. A
    row that can only ever scroll, never grow taller, cannot contribute to CLS. */
-.guide-stats{display:flex;flex-wrap:nowrap;overflow-x:auto;justify-content:center;gap:.55rem;margin:1.05rem auto .2rem;scrollbar-width:none}
+/* `safe center` — plain `center` clips the FIRST pill unreachably once the row
+   overflows (centered overflow hangs off both edges; you can only scroll to one). */
+.guide-stats{display:flex;flex-wrap:nowrap;overflow-x:auto;justify-content:safe center;gap:.55rem;margin:1.05rem auto .2rem;padding-inline:.75rem;scrollbar-width:none}
 .guide-stats::-webkit-scrollbar{display:none}
 .guide-stats .gstat{display:flex;flex-direction:column;justify-content:center;gap:.1rem;min-height:58px;padding:.55rem .95rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md);font-family:var(--font-data);font-size:var(--text-control);font-weight:600;letter-spacing:.02em;color:var(--ink)}
 .guide-stats .gstat-countdown,.guide-stats .gstat-active{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:700}
