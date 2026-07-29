@@ -295,9 +295,11 @@ R1–R6, the pipeline congruence, and your descriptor ruling, merged on your wor
 branch is deleted. Check the live site: Korea's chapter openers now carry three flat facts and
 otherwise the derived subtitles. Watch the Accessibility workflow's first main run — baselines
 re-record on CI there, and the #12 lesson says the first red may just be that re-record. Still
-standing: the `us` composition proposal (R6 ledger has the exact command), and rotating
-`CLAUDE_CODE_OAUTH_TOKEN` for the pipeline's first end-to-end proof — the cheapest full test
-of everything shipped today is one throwaway New Guide issue after that rotation."
+standing: rotating `CLAUDE_CODE_OAUTH_TOKEN` for the pipeline's first end-to-end proof — the
+cheapest full test of everything shipped today is one throwaway New Guide issue after that
+rotation. (The `us` composition proposal is RESOLVED — creator signed 2026-07-29, both
+one-card tabs folded into Days, 9→7; the fold surfaced + fixed the Composer's
+host-slot-hoisting ORDER defect, now regression-tested.)"
 
 **Prior re-prompt (superseded, session #14):** "The pipeline now delivers the Living
 Atlas unattended: file a New Guide issue and the guide that auto-publishes arrives composed

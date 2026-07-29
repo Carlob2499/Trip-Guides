@@ -109,6 +109,22 @@ describe("composeSections — the rules", () => {
     expect(r.sections.find((s) => s.title === "One small note").group).toBe("Days");
   });
 
+  it("ORDER: a folded arrival never hoists its host's tab slot (the us fold's lesson)", () => {
+    // Etiquette sits EARLY in the document and folds daily → Days, which sits LATE
+    // (after Transit). Its arrival must not pull Days ahead of Transit — the creator
+    // signs a fold, not a reorder. The host's slot comes from its native units.
+    const input = [
+      heavy("Plan", "Groundwork"),
+      prose("Etiquette", "Manners", 8, { phase: "daily" }),
+      heavy("Transit", "Getting around"),
+      heavy("Days", "Day by day"),
+      heavy("Sources", "References"),
+    ];
+    const r = composeSections(input);
+    expect(r.order).toEqual(["Plan", "Transit", "Days", "Sources"]);
+    expect(r.sections.find((s) => s.title === "Manners").group).toBe("Days");
+  });
+
   it("ANCHOR: a top-2-ranked theme with real weight keeps its tab and is immune to budget merges", () => {
     const anchorUnits = [
       prose("MSI weekend", "Tickets", 600, { rank: 1, theme: "MSI weekend" }),

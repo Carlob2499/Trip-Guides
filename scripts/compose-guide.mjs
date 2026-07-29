@@ -145,7 +145,16 @@ export function composeSections(sections, { tabBudget = 10 } = {}) {
 
   // ORDER — reader-order, identity-preserving: groups keep their first-appearance slots;
   // within the non-spine block (Sources excluded), rank sorts stably; Sources goes last.
+  // A group's slot comes from its NATIVE units (whose surviving theme IS the group) — a
+  // folded ARRIVAL must never hoist its host earlier in the strip. Caught live on the us
+  // fold: an early-document Etiquette unit folding into Days pulled Days ahead of Transit,
+  // turning a signed two-section fold into an unsigned tab reorder. Targets with no natives
+  // (a phase host materializing on a guide that lacked the group) still get a slot, at
+  // their first arrival's position — the second pass below.
   const firstAppearance = [];
+  for (const u of units) {
+    if (themeLabelOfUnit(u, themes) === u.target && !firstAppearance.includes(u.target)) firstAppearance.push(u.target);
+  }
   for (const u of units) if (!firstAppearance.includes(u.target)) firstAppearance.push(u.target);
   const rankOf = (g) => {
     const t = [...themes.values()].find((t) => !t.folded && t.label === g);

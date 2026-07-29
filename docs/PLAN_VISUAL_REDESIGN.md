@@ -258,10 +258,14 @@ fold before research fills them; composition rides the research pass instead, wh
 for new guides" because every new guide is a draft moving through that pass. (2) *The identity
 invariant is scoped to dense guides* — the Composer's first real act was a standing proposal on the
 live **us** guide (fold "Etiquette & language" w2 and "Food & shopping" w2 — genuine one-card tabs,
-exactly the "no one-paragraph tabs" rule). That proposal AWAITS THE CREATOR: apply with
-`npm run compose-guide -- --slug us --write --creator-signed`, tune the fold targets first by
-tagging those sections' `phase` (untagged folds default to Plan), or dismiss by leaving it — the
-check exits 2 informatively and never writes.
+exactly the "no one-paragraph tabs" rule). **RESOLVED 2026-07-29 — the creator signed ("Fold
+them"): both sections tagged `phase: "daily"` and folded into Days (9 tabs → 7), applied via
+`--write --creator-signed`. Applying it surfaced and fixed a real ORDER defect: a folded
+arrival used to claim its host's first-appearance slot, so early-document Etiquette folding
+into Days HOISTED Days ahead of Transit — a signed fold silently becoming an unsigned tab
+reorder. A group's slot now comes from its native units only (folded-arrival fallback for
+hosts with no natives); regression test "a folded arrival never hoists its host's tab slot"
+pins it.**
 
 **R4 footage ledger (2026-07-28).** Shipped: Korea — Mixkit `traditional-palace-in-korea-20095`
 (Gwanghwamun Gate at Gyeongbokgung, daytime timelapse; frame-verified against the guide's own
