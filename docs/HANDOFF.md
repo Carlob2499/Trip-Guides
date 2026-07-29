@@ -294,15 +294,25 @@ Sendai venue, two seasonal-train/ropeway dates, the koyo forecast, two blocked g
 pages) and are due for a live re-check closer to travel — that's the guide doing its job, not
 a defect to fix now.
 
-**Re-prompt the creator with (2026-07-29, session #16):** "Japan's research trial passed clean
-end-to-end — scaffold → research → critic (caught and swapped a generic Dazaifu pick) →
-compose → networked verify PASS → auto-graduated to live, PR #26 merged. It's the first
-full unattended pipeline run since the M0 token fix. Six facts are flagged ⚠ for a re-check
-closer to Oct: trip start date, Wild Area Sendai's venue/tickets, the Yukemuri train and Zao
-Ropeway 2026 dates, JMC's foliage forecast, and the MOFA/State-Dept pages that blocked
-automated fetch. Nothing else outstanding from this run. Still standing from #15: rotating
-`CLAUDE_CODE_OAUTH_TOKEN` was already resolved by this same pipeline succeeding, so W6's
-real end-to-end proof is DONE — Japan was the proof."
+**Session #16 continued (same day): the QA + Factory v2 arc.** The creator commissioned an
+adversarial QA of the Japan trial → `docs/QA_RESEARCH_TRIAL_JAPAN.md` (findings F1–F14,
+UI audit U1–U7, recommendations R1–R20; evidence-cited). Four small UI fixes already shipped
+on this branch (stats-row `safe center` unclip — "78 days" was rendering as "8 days" at
+375px — kicker date wrap, Japan food moreLabels). Then the creator approved the big arc:
+**`docs/PLAN_FACTORY_V2.md`** — P1 reliability floor (harness-enforced checkpoints,
+zero-output assertion) · P2 Pass-B independence + reserved search budgets · P3
+intake-coverage matrix + fresh-context critic + budget closure · P4 traveler-facing
+progress page (non-blocking question cards, Firebase, date-lock absorb trigger) · P5
+`venues` block + ALL-four-guide migration + fold/subtitle fixes · P6 voice gate + Japan
+remediation (koyo-forward cover per Q4; Filipino-culture ruled NOT RELEVANT — no mention,
+ruling recorded in the plan). P7 (differentiation surfaces) deferred on the creator's word.
+All four clarifying questions are ANSWERED IN THE PLAN — do not re-ask them.
+
+**Re-prompt the creator with (2026-07-29, session #16):** "Factory v2 is planned and
+approved — `docs/PLAN_FACTORY_V2.md`, phases P1–P6, your four decisions woven in. You asked
+for Opus 5 on High to execute: switch with `/model claude-opus-5` (effort High), then say
+'execute PLAN_FACTORY_V2 phase P1' and I'll run the phases gate by gate on
+`claude/research-trial-results-h32hlk`, Ship Loop after each."
 
 Two sessions ago the audit's lesson was: every green gate here measures the artifact, not the
 factory. This session answered *why* the factory never ran — not a guess, a 401 read straight off
