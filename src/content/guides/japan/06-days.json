@@ -13,7 +13,9 @@
         "energy": "slow",
         "env": "indoor",
         "body": "<p>⚠ Exact start date still unconfirmed between Oct 15 and Oct 22 — everything below shifts by a week if it lands on the later date. Board the transpacific flight into Tokyo (HND or NRT, whichever has the better fare/schedule); a ~13-hour crossing lands the next afternoon or evening local time.</p>",
-        "checklist": ["Confirm trip start date (Oct 15 vs Oct 22) before booking flights"]
+        "checklist": [
+          "Confirm trip start date (Oct 15 vs Oct 22) before booking flights"
+        ]
       },
       {
         "date": "Fri Oct 16",
@@ -98,7 +100,9 @@
         "energy": "balanced",
         "env": "mixed",
         "body": "<p><i>A birthday that actually lands during the trip — make today the good day the intake asked for.</i></p><ul><li><b>Late morning:</b> Odori Park and the Sapporo TV Tower — an easy, unhurried city walk.</li><li><b>Afternoon:</b> Tanukikoji for the C-pla gacha stop and a browse through Mandarake/Animate Sapporo — pick up a birthday souvenir if something jumps out.</li><li><b>Evening — the birthday dinner:</b> <b>Jingisukan Daruma Honten</b>, Susukino — Sapporo's charcoal-grilled-lamb specialty, a shared, celebratory format that suits the occasion better than a solo ramen counter. <b>⚠ Call ahead to book for two</b> — address/hours are well-corroborated but not fetched from an official page this pass.</li></ul>",
-        "checklist": ["Book Jingisukan Daruma for two ahead of time"]
+        "checklist": [
+          "Book Jingisukan Daruma for two ahead of time"
+        ]
       },
       {
         "date": "Sun Oct 25",
@@ -135,7 +139,9 @@
         "energy": "packed",
         "env": "outdoor",
         "body": "<p>Jozankei's official autumn trail list has 8 graded routes. <b>Asahi-dake</b> (598m, 3.3km, ≈3 hrs round trip) is the best-documented option — officially \"moderate,\" though recent hiker reports describe rope sections and exposure, so treat the grading as optimistic if you're not confident on technical ground. If that's more than the day calls for, the easier <b>Mt. Yuhi</b> trail is the gentler alternative. Skip the harder routes (Mt. Sapporo, Mt. Muine) this late in October — they sit right at the elevation where early snow can already be an issue.</p>",
-        "constraints": ["Higashione Course on Mt. Jozankei Tengu is officially closed"]
+        "constraints": [
+          "Higashione Course on Mt. Jozankei Tengu is officially closed"
+        ]
       },
       {
         "date": "Thu Oct 29",
@@ -163,7 +169,9 @@
         "energy": "balanced",
         "env": "outdoor",
         "body": "<p>Sapporo's official koyo average (JMC: Oct 28–Nov 5) puts today near the peak — spend it wherever the color looks best; Nakajima Park and the grounds around Hokkaido Shrine are the classic in-city spots, though this pass didn't individually verify their current status. <b>⚠ Every koyo date in this guide is a multi-year average, not a locked 2026 forecast</b> — Japan's meteorological service doesn't publish its first 2026 release until ~mid-September, so confirm closer to travel.</p><p><b>Practical note:</b> today is the last day Japan's simple instant-discount tax-free system applies (it switches to a pay-then-claim-at-departure model tomorrow) — if there's a big gaming/anime purchase on the list, today's the easier day to make it.</p>",
-        "checklist": ["Make any big tax-free purchases today, before tomorrow's system change"]
+        "checklist": [
+          "Make any big tax-free purchases today, before tomorrow's system change"
+        ]
       },
       {
         "date": "Sun Nov 1",
@@ -191,7 +199,9 @@
         "energy": "balanced",
         "env": "outdoor",
         "body": "<p>JR Senseki Line to <b>Matsushimakaigan Station</b> (not \"Matsushima Station\") for the bay — one of Japan's official Three Scenic Views. Quick stop at Godaido for the classic shot, then out to Fukuura Island's pine-forest trails or up to Saigyo Modoshi no Matsu Park for a quieter, elevated view away from the waterfront crowd. <b>Note:</b> today is Culture Day (a national holiday), which likely means a busier bay than a normal weekday — budget extra patience at Godaido.</p>",
-        "constraints": ["Nov 3 is Culture Day — a public holiday, likely busier than a normal weekday"]
+        "constraints": [
+          "Nov 3 is Culture Day — a public holiday, likely busier than a normal weekday"
+        ]
       },
       {
         "date": "Wed Nov 4",
@@ -210,7 +220,10 @@
         "energy": "slow",
         "env": "mixed",
         "body": "<p><i>The trip's one deliberate splurge, and the belated celebration for the birthday that fell before the trip started.</i></p><ul><li><b>Getting there:</b> JR Senzan Line to Yamagata (≈70–90 min) then a local bus (≈35–40 min) to Zao Onsen — or a direct highway bus from Sendai Station if it's running outside peak ski season (⚠ confirm current schedule; frequency drops off-season).</li><li><b>Miyamaso Takamiya</b> — Zao Onsen's most historic ryokan (founded 1716), three private hot-spring sources, nine baths, Yamagata-cuisine kaiseki dinner + breakfast. Book direct at reserve.489ban.net. <b>⚠ Old building</b> — lots of stairs, no elevator; request a non-top-floor room with a view when booking.</li><li><b>Okama Crater, if it's still open:</b> the Zao Ropeway + hike to the crater rim typically closes for the season in early November — this visit sits right at that edge. Treat seeing it as a bonus, not a plan; the onsen itself is unaffected either way.</li></ul>",
-        "checklist": ["Confirm Miyamaso Takamiya reservation and room request", "Check whether Zao Ropeway/Okama access is still open before setting expectations"]
+        "checklist": [
+          "Confirm Miyamaso Takamiya reservation and room request",
+          "Check whether Zao Ropeway/Okama access is still open before setting expectations"
+        ]
       },
       {
         "date": "Fri Nov 6",
@@ -220,7 +233,10 @@
         "energy": "packed",
         "env": "outdoor",
         "body": "<p>Senzan Line back to Sendai, then into the first day of <b>Pokémon GO Wild Area — Sendai</b> (Nov 6–8, 2026, officially confirmed by pokemongo.com; exact venue and ticket sales were still unannounced as of this guide's last check). <b>Set expectations from how the past two editions actually played out</b>, not the marketing description: Nagasaki 2025's own network provider reported crowds gathering in rapid, unpredictable bursts even in a nominally \"citywide\" format, with real Wi-Fi/cellular congestion on-site — Niantic's own support account asked attendees to spread out during the event. Plan accordingly: have an offline map as backup, don't count on live data at peak hours in the single most-hyped spot, and expect the first 1–2 hours of the day (people arriving at open) to be the worst crush.</p>",
-        "checklist": ["Wild Area tickets bought the moment sales open", "Offline map downloaded as a data-congestion backup"]
+        "checklist": [
+          "Wild Area tickets bought the moment sales open",
+          "Offline map downloaded as a data-congestion backup"
+        ]
       },
       {
         "date": "Sat Nov 7",
@@ -248,7 +264,9 @@
         "energy": "slow",
         "env": "mixed",
         "body": "<p>An easy recovery day after three event days. Lunch at <b>Date no Gyutan Honpo, Aobajo</b> (lunch-only, 11:00–15:00, on the former Date-clan castle grounds) — the local-favorite alternative to the big station-area gyutan chains. In the evening, <b>Kokubuncho</b> and the <b>Bunka-yokocho/Iroha-yokocho</b> back-alley izakaya lanes — retro Shōwa-era 8–10-seat bars most visitors miss entirely; <b>Genji Izakaya</b> is one specific standout. Use today to send anything bulky ahead via Yamato Ta-Q-Bin to the Tokyo hotel before tomorrow's travel day.</p>",
-        "checklist": ["Ship any bulky luggage/purchases ahead via Ta-Q-Bin to the Tokyo hotel"]
+        "checklist": [
+          "Ship any bulky luggage/purchases ahead via Ta-Q-Bin to the Tokyo hotel"
+        ]
       },
       {
         "date": "Tue Nov 10",
@@ -258,7 +276,9 @@
         "energy": "slow",
         "env": "indoor",
         "body": "<p>Tohoku Shinkansen \"Hayabusa\" to Tokyo (≈90 min, all-reserved, ≈¥11,410). Connect to the international flight home from HND/NRT. If any purchases since Nov 1 need the new tax-free refund process, build in extra time at the departure kiosk before check-in.</p>",
-        "checklist": ["Extra time at the airport for the tax-free refund kiosk if anything was bought Nov 1 onward"],
+        "checklist": [
+          "Extra time at the airport for the tax-free refund kiosk if anything was bought Nov 1 onward"
+        ],
         "verified_on": "2026-07-29",
         "shelf_life": "transit",
         "source_url": "https://www.jreast.co.jp/e/"
