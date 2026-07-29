@@ -1,12 +1,14 @@
 name: Research pass
 
-# Autonomous research pass: THREE Claude Code agents research one guide via the dual-pass
+# Autonomous research pass: FOUR Claude Code agents research one guide via the dual-pass
 # procedure (Agent 1: Pass A canonical/verified → Agent 2: Pass B local/authentic/crowd-aware,
-# STRUCTURALLY BLIND to Pass A → Agent 3: reconcile + verify loop + auto-graduate). Each agent
-# is a separate invocation — Pass B cannot read Pass A's guide output, only the intake spec +
-# scaffold, enforcing independence at the infrastructure level (P2/F3: Japan proved prompt-only
-# independence is not a guarantee). Pass B always runs Sonnet; the model input governs A and
-# reconcile only.
+# STRUCTURALLY BLIND to Pass A → Agent 3: reconcile + verify loop → Agent 4: fresh-context
+# critic + auto-graduate). Each agent is a separate invocation — Pass B cannot read Pass A's
+# guide output, and the Critic cannot see the research process, only the finished product +
+# intake spec. This enforces independence at the infrastructure level (P2/F3: Japan proved
+# prompt-only independence is not a guarantee; P3/R8: the critic catches what researchers
+# can't see from inside the process). Pass B always runs Sonnet; the model input governs
+# A, reconcile, and critic.
 #
 # Auto-graduation: the verify PASS is the evidence gate (see scripts/graduate-guide.mjs --slug);
 # a guide that passes goes live on the next Pages deploy with ZERO further action. Only a guide
@@ -430,7 +432,7 @@ jobs:
           echo "next=$NEXT" >> "$GITHUB_OUTPUT"
           echo "[route] after Pass B, next stage: $NEXT"
 
-      # ── AGENT 3: Reconcile + Verify + Graduate ──────────────────────────────
+      # ── AGENT 3: Reconcile + Verify (stops before graduation) ────────────────
       - name: Run research agent — Reconcile & verify
         if: >-
           steps.budget.outputs.should_run == 'true' &&
@@ -509,44 +511,12 @@ jobs:
                    a human sees why this run stopped short of a verdict, not a false PASS), and let
                    landing take the NEEDS-WORK/draft-PR path below.
                  Only a full networked PASS from this step licenses step (d).
-              c3. THE CRITIC — the bar test (F7·C1, docs/archive/PLAN_TRAVELER_FEATURES.md). A prompt-only
-                 lens on this SAME loop, not a new stage — nothing here touches STAGE_ORDER, the
-                 schema, or a checkpoint. Before step (d) is licensed, read the WHOLE merged guide
-                 (not just what this pass touched) and ask ONE question per load-bearing item — an
-                 anchor rec, a marquee sight/food pick, a claim about party fit or authenticity
-                 (docs/GUIDE_RUBRIC.md rows #6/#9/#12): "Would this appear in ANY generic AI guide,
-                 unresearched, without knowing this traveler?" If yes: either REPLACE it with
-                 something this traveler's OWN ranked priorities justify, or write an explicit
-                 justification against those priorities into the finish summary — never let a
-                 bland-but-not-wrong item pass unflagged. Guardrails, binding:
-                   - Critic ≠ editor. Any replacement re-enters the SAME verification ledger as
-                     every other fact (source_url + verified_on) and the SAME continuity sweep
-                     (CLAUDE.md) for anything it ripples into. A rewrite that orphans a citation
-                     or breaks continuity is a defect, full stop — it does not get graduated on
-                     the strength of "at least it's not generic now".
-                   - Honest-blank survives critique. Never fill a genuine gap just to feel
-                     complete — an admitted blank was already a feature before this step existed.
-                   - Findings are logged ALWAYS, even zero. Write a `## Critic findings` section
-                     into the scorecard every run: either the specific items replaced/justified,
-                     or the explicit line "none — the guide passed the bar test". Silence must
-                     never be mistaken for "this step didn't run".
-              d. Once step (c2)'s networked verify PASSes AND step (c3)'s findings are written,
-                 generate the guide's identity palette from its new cover/
-                 sight photos: `npm run extract-palette -- --slug ${{ inputs.slug }}` (writes
-                 src/data/palettes/${{ inputs.slug }}.json — commit it; skips harmlessly if no
-                 photo). Then COMPOSE THE TABS while the guide is STILL a draft — this is the ONE
-                 moment composition auto-applies (graduation makes it live, and live guides only
-                 ever get proposals): `node scripts/compose-guide.mjs --slug ${{ inputs.slug }} --write`.
-                 A compose ERROR (the ⚠-relocation guard, unit loss) is a real finding, not a
-                 formality: fix the cause — usually a ⚠-flagged unit stranded in a thin group
-                 (source it or move it deliberately), or raise `tabBudget` in _guide.json with a
-                 one-line justification — then re-run verify + compose before continuing.
-                 Then AUTO-GRADUATE — the verify PASS you just confirmed IS the evidence
-                 gate (the same one a human approver would have re-run by hand), so this is where
-                 the guide goes live, no separate approval step:
-                 node scripts/graduate-guide.mjs --slug ${{ inputs.slug }}
-                 && npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint verified
-                 && git add -A && git commit -m "research(${{ inputs.slug }}): verify PASS — auto-graduated" && git push
+              STOP after step (c2). Do NOT graduate yet — a separate CRITIC agent (Agent 4,
+                 P3/R8) runs next in a fresh context. If the critic finds nothing, Agent 4 handles
+                 graduation; if it finds issues, it resolves them and THEN graduates.
+
+                 Once step (c2)'s networked verify PASSes, commit your work and stop:
+                 git add -A && git commit -m "research(${{ inputs.slug }}): verify PASS — awaiting critic" && git push
 
             If you hit the 4-round cap still NEEDS WORK (verify never PASSed), commit and push
             whatever fix attempts you made anyway, so the branch on the remote reflects your
@@ -554,46 +524,142 @@ jobs:
               git add -A && git commit -m "research(${{ inputs.slug }}): NEEDS WORK after 4 rounds" && git push
             (skip this if there's nothing to commit — `git status --short` first).
 
-            LANDING THE BRANCH — this replaces "open a draft PR and wait for review". However the
-            self-correction loop above ended, write your finish summary (what you researched, what
-            you filled, what remains ⚠ unconfirmed, the verification ledger, the `## Research
-            reconciliation` summary, step (c3)'s `## Critic findings` — always present, even a
-            single "none" line — and, if you stopped early, exactly which stages remain) into
-            the scorecard file, then hand landing to the shared script rather than deciding by hand:
+            Never touch any guide other than
+            src/content/guides/${{ inputs.slug }}/ and its
+            guides-intake/${{ inputs.slug }}.md + .state.json.
 
-              # P3: --network is required or the dead-link/photo gate never runs at all — an
-              # auto-published guide could otherwise carry dead citations and still show PASS.
-              # The verify EXIT CODE is captured (not just its markdown text) because PASSED must
-              # gate on both signals: `nextStage=null` alone doesn't prove this LAST networked run
-              # was clean — content could be unverifiable/failing on this specific invocation.
+      # ── Route after Reconcile & Verify ─────────────────────────────────────
+      - name: Route after Reconcile
+        id: route4
+        if: steps.budget.outputs.should_run == 'true'
+        env:
+          SLUG: ${{ inputs.slug }}
+        run: |
+          NEXT=$(node scripts/pipeline.mjs --slug "$SLUG" --status --json | jq -r '.nextStage')
+          # The critic runs when the guide passes mechanical verification. We check the exit
+          # code of verify (0 = PASS) rather than parsing JSON, which is more robust.
+          set +e
+          node scripts/verify-guide.mjs --slug "$SLUG" > /dev/null 2>&1
+          VERIFY_EXIT=$?
+          set -e
+          VERIFIED=false; [ "$VERIFY_EXIT" -eq 0 ] && VERIFIED=true
+          echo "next=$NEXT" >> "$GITHUB_OUTPUT"
+          echo "verified=$VERIFIED" >> "$GITHUB_OUTPUT"
+          echo "[route] after Reconcile, next=$NEXT, verified=$VERIFIED"
+
+      # ── AGENT 4: Fresh-context Critic + Graduate ─────────────────────────────
+      # P3/R8/R9: a SEPARATE agent invocation with fresh context — it sees ONLY the intake
+      # spec and the finished guide, not the research process or intermediate findings. This
+      # is the bar test: "Could a generic AI have written this from training data alone,
+      # without research and without knowing this traveler?" Runs on the session's strong
+      # model (the model input, not forced-Sonnet like Pass B).
+      - name: Run research agent — Critic & graduate
+        if: >-
+          steps.budget.outputs.should_run == 'true' &&
+          steps.route4.outputs.verified == 'true'
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          allowed_bots: "github-actions[bot]"
+          show_full_output: true
+          claude_args: |
+            --model ${{ inputs.model || 'claude-sonnet-5' }}
+            --effort ${{ inputs.effort || 'xhigh' }}
+            --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
+          prompt: |
+            Guide slug: ${{ inputs.slug }}
+
+            YOU ARE THE CRITIC AGENT — a fresh-context quality gate that runs AFTER the guide has
+            passed all mechanical verification. You have NO knowledge of how the research was done;
+            you see only the finished product and the original spec. This is deliberate — your job
+            is to catch what the researchers couldn't see because they were inside the process.
+
+            Read THESE INPUTS (and ONLY these):
+              1. guides-intake/${{ inputs.slug }}.md (the intake spec — priorities, party, anchor, dates)
+              2. src/content/guides/${{ inputs.slug }}/ (the finished guide — _guide.json + NN-*.json)
+              3. docs/GUIDE_RUBRIC.md (the graduation rubric — the rows you score against)
+              4. .claude/skills/waypoint-guide-author/SKILL.md and references/ (verification rules,
+                 block-types) — for the standards you enforce, not for research process context
+
+            Do NOT read: guides-intake/${{ inputs.slug }}.passB.json, .state.json, or any git log /
+            commit history. You are deliberately blind to the research process.
+
+            YOUR TASK — the bar test + rubric scoring:
+
+            (1) INTAKE FIT — for each intake priority (ranked), check:
+                - Does the guide give the top 2–3 priorities REAL DEPTH (multiple verified picks,
+                  woven into the day plan, not just a mention)?
+                - Are low-ranked priorities appropriately light or cut (not given equal weight)?
+                - Is the anchor event verified against a T0 source with dates + venue?
+
+            (2) GENERIC-PROBABILITY SCAN — for every marquee recommendation (the top sight, the
+                top food pick, the featured experience per priority):
+                - Would this appear in a generic "things to do in [destination]" AI response?
+                - If YES: does the guide add SPECIFIC value a generic response wouldn't have?
+                  (crowd timing, off-peak window, neighborhood context, booking reality, the
+                  local alternative). If it's just the obvious pick with no added depth, FLAG IT.
+
+            (3) PARTY FIT — read the intake's party description and traveler count:
+                - Does the guide feel written FOR this party, or for a generic tourist?
+                - Check: budget splits match party size, pace matches party type, recommendations
+                  suit the party (e.g. a couple doesn't need "kid-friendly" picks; 3 friends
+                  don't need romantic restaurants).
+
+            (4) AUTHENTICITY — for the guide's marquee food/experience picks:
+                - Do they carry crowd/off-peak notes (when to actually go)?
+                - Is there at least one novel local pick that isn't in the TripAdvisor top 10?
+
+            RECORDING FINDINGS — write your findings to guides-intake/${{ inputs.slug }}.md under
+            a new `## Critic findings` section:
+              - For each finding: what's wrong, which rubric row it violates, and your REPLACEMENT.
+              - A finding REQUIRES a researched replacement — "consider adding" or "make it optional"
+                is NOT sufficient (R9). Research a specific alternative using WebSearch, verify it
+                against a primary source, and write the replacement content with source + date.
+              - If the guide passes cleanly: write `## Critic findings\n\nNone — guide passes the
+                bar test.` (the section must always exist, even empty).
+
+            RESOLVING FINDINGS — after recording, fix each finding IN THE GUIDE:
+              - Edit the relevant NN-*.json group file with the researched replacement.
+              - Add the new source to the verification ledger in guides-intake/${{ inputs.slug }}.md.
+              - After all fixes: re-run `npm run verify -- --slug ${{ inputs.slug }}` and
+                `npm run build` to confirm you didn't break anything. If verify or build fails,
+                fix and re-run (up to 3 rounds).
+
+            GRADUATION — once findings are resolved (or if there were none):
+              a. Extract the identity palette:
+                 npm run extract-palette -- --slug ${{ inputs.slug }}
+                 (writes src/data/palettes/${{ inputs.slug }}.json — commit it; skips harmlessly
+                 if no photo)
+              b. Compose tabs while the guide is STILL a draft:
+                 node scripts/compose-guide.mjs --slug ${{ inputs.slug }} --write
+                 A compose ERROR is a real finding: fix the cause (usually a ⚠-flagged unit
+                 stranded in a thin group — source it or move it deliberately, or raise tabBudget
+                 in _guide.json with a one-line justification), then re-run verify + compose.
+              c. Auto-graduate:
+                 node scripts/graduate-guide.mjs --slug ${{ inputs.slug }}
+                 && npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint verified
+                 && git add -A && git commit -m "research(${{ inputs.slug }}): critic clear — auto-graduated" && git push
+
+            LANDING THE BRANCH — however the above ended, hand landing to the shared script:
+
               set +e
               npm run verify -- --slug ${{ inputs.slug }} --markdown --network > /tmp/scorecard.md
               VERIFY_EXIT=$?
               set -e
-              # your finish summary goes ABOVE the scorecard in the same file, not a separate one
               NEXT=$(node scripts/pipeline.mjs --slug ${{ inputs.slug }} --status --json | jq -r '.nextStage')
-              PASSED=false; [ "$NEXT" = "null" ] && [ "$VERIFY_EXIT" -eq 0 ] && PASSED=true   # true only if step (d) graduated AND this networked verify run itself PASSed
+              PASSED=false; [ "$NEXT" = "null" ] && [ "$VERIFY_EXIT" -eq 0 ] && PASSED=true
               bash scripts/land-branch.sh "research/${{ inputs.slug }}" main \
                 "Research pass: ${{ inputs.slug }}${{ inputs.section != '' && format(' ({0})', inputs.section) || '' }}" \
                 /tmp/scorecard.md "$PASSED" \
                 "$SITE_BASE_URL/guides/${{ inputs.slug }}/"
 
             It prints exactly one line — read it, don't guess what happened:
-
-            - **`merged:<n>`** — the guide landed on `main` ALREADY graduated (step (d) removed
-              `draft: true` before you ever reached here). It goes live on the very next Pages
-              deploy — nothing further for you to do. land-branch.sh auto-files a "🚀 Auto-published"
-              heads-up issue (the probation notice: a human can eyeball it and veto/roll back, since
-              nobody approved it before it went live), and the deploy workflow's `verify-live` job
-              then confirms it's actually reachable and linked on the live site. Both are automatic.
-            - **`draft:<n>`** — one of two things happened, and the guide content itself tells you
-              which: if `draft: true` is STILL present in the file on this branch, step (d) never
-              ran — verify didn't reach PASS, and a human needs to fix the guide, not just approve
-              it. If `draft` is already gone but you're still seeing `draft:<n>`, verify passed
-              fine and step (d) already graduated it — the auto-merge simply hit a conflict, so a
-              human only needs to resolve that conflict and merge; nothing to re-research.
-              Either way, PR #<n> is where a human triages it — do not try to force a merge
-              yourself.
+            - **`merged:<n>`** — the guide landed on `main` ALREADY graduated. It goes live on
+              the next Pages deploy. land-branch.sh auto-files a "🚀 Auto-published" heads-up
+              issue; the deploy workflow's `verify-live` job confirms it's reachable.
+            - **`draft:<n>`** — verify didn't reach PASS or auto-merge hit a conflict. PR #<n>
+              is where a human triages it.
 
             Never touch any guide other than
             src/content/guides/${{ inputs.slug }}/ and its
@@ -601,9 +667,8 @@ jobs:
 
             FINALLY, write a short run report to `run-report.md` (repo root, gitignored — do NOT
             commit it): a `## Run report` heading then 3-5 bullets — outcome (published / draft /
-            stuck), roughly how many searches you ran, anything the critic/bar-test caught, and any
-            place the skill or its references slowed you down or were unclear. This feeds the
-            monthly skill-retro; be concrete.
+            stuck), critic findings count and what was caught, and any place the skill or its
+            references were unclear. This feeds the monthly skill-retro; be concrete.
 
       # P1 — RUN INTEGRITY (QA findings F1/F2). Two things the old workflow could not see:
       #   · a VOID run — the agent burned a full session, exited `success`, and left NOTHING

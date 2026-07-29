@@ -18,7 +18,7 @@ vi.mock("../audit/check-staleness.mjs", () => ({ checkStaleness: (...args) => ch
 vi.mock("../audit/check-links.mjs", () => ({ checkLinks: (...args) => checkLinksMock(...args) }));
 vi.mock("../audit/check-photos.mjs", () => ({ checkPhotos: (...args) => checkPhotosMock(...args) }));
 
-const { evaluateGuide, renderMarkdown, report, verify } = await import("../verify-guide.mjs");
+const { evaluateGuide, renderMarkdown, report, verify, checkCoverage } = await import("../verify-guide.mjs");
 
 const CLEAN_STALENESS = { stale: [], sections: [], noDate: [], drafts: [] };
 
@@ -110,6 +110,7 @@ describe("renderMarkdown", () => {
     readiness: { pass: true, warns: [], infos: [], coverage: {} },
     recency: { status: "current", staleSections: [] },
     content: { status: "skipped" },
+    coverage: { status: "n/a", uncovered: [] },
     noVerifiedDate: false,
   };
 
@@ -162,6 +163,7 @@ describe("report (plain-text CLI renderer)", () => {
     readiness: { pass: true, warns: [], infos: [], coverage: {} },
     recency: { status: "current", staleSections: [] },
     content: { status: "skipped" },
+    coverage: { status: "n/a", uncovered: [] },
     noVerifiedDate: false,
   };
 
@@ -304,5 +306,23 @@ describe("verify() orchestrator", () => {
     await verify({});
     expect(checkLinksMock).not.toHaveBeenCalled();
     expect(checkPhotosMock).not.toHaveBeenCalled();
+  });
+});
+
+describe("checkCoverage (P3/R15)", () => {
+  it("returns n/a for a slug without coverage.json (pre-P3 guide)", () => {
+    const r = checkCoverage("nonexistent-slug-xyz");
+    expect(r.status).toBe("n/a");
+    expect(r.uncovered).toEqual([]);
+  });
+});
+
+describe("evaluateGuide coverage gate (P3/R15)", () => {
+  it("pre-P3 guides without coverage.json get coverage n/a and still PASS", () => {
+    const guide = { verified: "Checked Jun 2026", sections: [{ type: "prose", group: "Overview", title: "About", body: "Lots to see." }] };
+    const r = evaluateGuide(guide, "no-coverage-slug-xyz", CLEAN_STALENESS, null);
+    expect(r.coverage.status).toBe("n/a");
+    expect(r.pass).toBe(true);
+    expect(r.blockers).not.toContain("coverage");
   });
 });

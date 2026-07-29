@@ -29,9 +29,25 @@
 //         npm run verify -- --slug korea --network   adds link/photo checks (slow, network)
 //         npm run verify -- --slug korea --json      machine JSON (for the PR-comment step)
 
+import { readFileSync, existsSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { readGuides, isMain } from "./audit/lib.mjs";
 import { evaluateReadiness } from "./guide-readiness.mjs";
 import { checkStaleness } from "./audit/check-staleness.mjs";
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+
+// P3/R15: coverage gate — every intake ask must map to guide content or a logged skip/amendment.
+// Pre-P3 guides without coverage.json pass trivially (the gate only bites guides scaffolded after P3).
+export function checkCoverage(slug) {
+  const p = path.join(ROOT, "guides-intake", `${slug}.coverage.json`);
+  if (!existsSync(p)) return { status: "n/a", uncovered: [] };
+  let cov;
+  try { cov = JSON.parse(readFileSync(p, "utf8")); } catch { return { status: "n/a", uncovered: [] }; }
+  const uncovered = (cov.asks || []).filter((a) => !a.coveredBy);
+  return { status: uncovered.length ? "fail" : "pass", uncovered };
+}
 
 // The rubric rows the machine can only defer to a human. Kept here as the graduation checklist the
 // scorecard prints — mirrors docs/GUIDE_RUBRIC.md so the two stay legible together.
@@ -76,14 +92,18 @@ export function evaluateGuide(guide, slug, staleness, net) {
     }
   }
 
+  // P3/R15: coverage — every intake ask addressed or explicitly skipped.
+  const coverage = checkCoverage(slug);
+
   // Blocking gates → the exit-code verdict. Recency is intentionally NOT blocking.
   const blockers = [];
   if (!readiness.pass) blockers.push("research");
   if (content.status === "fail") blockers.push("content");
   if (content.status === "unverifiable") blockers.push("content-unverifiable");
+  if (coverage.status === "fail") blockers.push("coverage");
   const pass = blockers.length === 0;
 
-  return { slug, draft, pass, blockers, readiness, recency, content, noVerifiedDate };
+  return { slug, draft, pass, blockers, readiness, recency, content, coverage, noVerifiedDate };
 }
 
 export async function verify({ slug = null, network = false } = {}) {
@@ -145,6 +165,16 @@ export function report(r) {
   }
   if (r.noVerifiedDate) L.push(`  P1 recency    · note — has a \`verified\` field but no parseable "Mon YYYY" date`);
 
+  // P3/R15: coverage
+  if (r.coverage.status === "n/a") {
+    L.push(`  P0 coverage   · n/a — pre-P3 guide (no coverage.json)`);
+  } else if (r.coverage.status === "pass") {
+    L.push(`  P0 coverage   · PASS — every intake ask addressed`);
+  } else {
+    L.push(`  P0 coverage   · FAIL — ${r.coverage.uncovered.length} intake ask(s) not addressed:`);
+    for (const a of r.coverage.uncovered) L.push(`      ⚠ ${a.id}: "${a.label}" = "${a.value}" — set coveredBy in coverage.json or log a skip`);
+  }
+
   L.push(`  #1 schema     · not checked here — run \`npm run build\` (the content-collection gate)`);
 
   // Human checklist
@@ -182,6 +212,11 @@ export function renderMarkdown(r) {
   else if (r.recency.status === "current") recency = "✅ current";
   else recency = `⚠ ${r.recency.staleSections.length} past shelf life (advisory)`;
   L.push(`| Recency — facts within shelf life | P1 | ${recency} |`);
+  let coverageCell;
+  if (r.coverage.status === "n/a") coverageCell = "— n/a (pre-P3)";
+  else if (r.coverage.status === "pass") coverageCell = "✅ PASS — every ask addressed";
+  else coverageCell = `❌ FAIL — ${r.coverage.uncovered.length} ask(s) uncovered`;
+  L.push(`| Coverage — intake asks addressed | P0 | ${coverageCell} |`);
   L.push(`| Schema | P0 | ▶ \`npm run build\` |`);
   L.push("");
   if (rd.warns.length) {
@@ -193,6 +228,11 @@ export function renderMarkdown(r) {
     L.push(`<details><summary>Broken content</summary>`, "");
     for (const l of r.content.deadLinks) L.push(`- dead link: ${l.url}`);
     for (const p of r.content.missingPhotos) L.push(`- missing photo: ${p.file}`);
+    L.push("", `</details>`, "");
+  }
+  if (r.coverage.status === "fail") {
+    L.push(`<details><summary>⚠ ${r.coverage.uncovered.length} uncovered intake ask(s)</summary>`, "");
+    for (const a of r.coverage.uncovered) L.push(`- **${a.label}**: "${a.value}" — set \`coveredBy\` in \`coverage.json\` or log a skip/amendment`);
     L.push("", `</details>`, "");
   }
   L.push(`### Human judgment — graduation checklist (the machine can't score these)`);

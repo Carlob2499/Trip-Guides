@@ -208,6 +208,7 @@ const section = z.discriminatedUnion("type", [
   })) }),
   z.object({ type: z.literal("budget"), group: z.string(), ...facets, title: z.string().optional(),
     intro: z.string().optional(), currency: z.string().optional(), days: z.number().positive().optional(),
+    budgetTarget: z.string().optional(),
     // party must be a positive integer: BudgetBlock.astro divides trip totals by it
     // for the per-person view, so 0 or a negative value would render $Infinity/$NaN.
     party: z.number().int().positive().optional(),

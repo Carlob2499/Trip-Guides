@@ -112,7 +112,35 @@ integration tests), lint 0, build clean. No site surface changed (scaffold + wor
 Gate: a dry-run research pass on a throwaway scaffold shows two independent agent
 sessions in the Action log; facet test green.
 
-### P3 — Coverage & critic gates (F4/F5/F8 · R8/R9/R15/R17)
+### P3 — Coverage & critic gates (F4/F5/F8 · R8/R9/R15/R17) — ✅ SHIPPED 2026-07-29
+
+**What landed.** Three gates that close the loop between intake and finished guide:
+
+1. **Intake-coverage matrix** (R15) — `scaffold-guide.mjs` now exports `buildCoverageMatrix()`
+   which extracts every non-empty intake answer (anchor, cities, dates, each priority, niche,
+   pace, travel style, budget, party, passport countries, comments) into
+   `guides-intake/<slug>.coverage.json` with `coveredBy: null`. `verify-guide.mjs` gains
+   `checkCoverage(slug)` that fails any ask not covered. Pre-P3 guides without coverage.json
+   pass trivially. Coverage is a P0 blocker in the verdict.
+
+2. **Fresh-context critic** (R8/R9) — Agent 4 in `research-pass.yml`, a FOURTH agent invocation
+   running AFTER the reconcile agent's verify PASS. It receives ONLY the intake spec + finished
+   guide (deliberately blind to passB.json, state.json, and git history). Scores the guide
+   against four lenses: intake fit (priority depth), generic-probability scan (bar test),
+   party fit, and authenticity. Findings require a RESEARCHED replacement — "consider adding"
+   is insufficient (R9). After resolving findings, Agent 4 handles palette extraction, tab
+   composition, graduation, landing, and the run report.
+
+3. **Budget closure** (R17) — `budgetTarget` field added to the budget section schema
+   (`content.config.ts`). Scaffold passes the intake's budget answer through. `BudgetBlock.astro`
+   parses the target (supports "$75-150/day", "$150/day", range formats), computes
+   `estTotal / party / days`, and renders a verdict pill ("within target" / "over target")
+   with green/amber styling.
+
+**Gates:** 969 tests green (7 new — 2 budgetTarget scaffold tests, 5 prior coverage/rank tests),
+lint 0, build clean.
+
+### P3 — original specification
 1. **Intake-coverage matrix** (R15): scaffold extracts every intake ask into
    `guides-intake/<slug>.coverage.json`; `npm run verify` fails any ask mapping to
    neither guide content nor a logged Amendment/skip. (Would have caught F4, F5, F8.)

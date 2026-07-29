@@ -5,7 +5,7 @@
 // scope here — this covers the logic a bug would corrupt silently.
 
 import { describe, it, expect } from "vitest";
-import { slugify, dayLabelsFromRange, buildGuideObject, buildIntakeMd, parseArgs, deriveRanks, PRIORITY_GROUP_MAP } from "../scaffold-guide.mjs";
+import { slugify, dayLabelsFromRange, buildGuideObject, buildIntakeMd, parseArgs, deriveRanks, PRIORITY_GROUP_MAP, buildCoverageMatrix } from "../scaffold-guide.mjs";
 
 describe("slugify", () => {
   it("lowercases and hyphenates", () => {
@@ -131,6 +131,16 @@ describe("buildGuideObject", () => {
     expect(g.sections.find((s) => s.type === "budget").days).toBe(3);
   });
 
+  it("passes the intake budget target through to the budget section", () => {
+    const g = buildGuideObject({ country: "Denmark", budget: "Mid-range ($75-150/day)" });
+    expect(g.sections.find((s) => s.type === "budget").budgetTarget).toBe("Mid-range ($75-150/day)");
+  });
+
+  it("omits budgetTarget when no budget answer is given", () => {
+    const g = buildGuideObject({ country: "Denmark" });
+    expect(g.sections.find((s) => s.type === "budget").budgetTarget).toBeUndefined();
+  });
+
   // R6 fold-target seeds: every foldable-group section is born with a phase (so a
   // Composer fold routes it honestly), and never-fold groups carry none (a tag there
   // would be dead weight pretending to be a decision).
@@ -225,6 +235,35 @@ describe("buildGuideObject rank facets (P2/R16)", () => {
   it("no priorities means no ranks anywhere", () => {
     const g = buildGuideObject({ country: "Denmark" });
     for (const s of g.sections) expect(s.rank).toBeUndefined();
+  });
+});
+
+describe("buildCoverageMatrix (P3/R15 — intake asks for verify coverage gate)", () => {
+  it("extracts non-empty asks from answers", () => {
+    const m = buildCoverageMatrix({
+      country: "Japan", anchor: "Koyo viewing", cities: "Sendai",
+      start: "2026-10-15", end: "2026-10-22",
+      priorities: ["Food & dining", "Nature / outdoors"], niche: "onsen",
+      budget: "Mid-range ($75–150/day)", party: "3 friends",
+    }, "japan");
+    expect(m.slug).toBe("japan");
+    expect(m.asks.length).toBeGreaterThanOrEqual(7);
+    expect(m.asks.every((a) => a.coveredBy === null)).toBe(true);
+    expect(m.asks.find((a) => a.id === "anchor").value).toBe("Koyo viewing");
+    expect(m.asks.find((a) => a.id === "priority-1").value).toBe("Food & dining");
+    expect(m.asks.find((a) => a.id === "dates").value).toBe("2026-10-15 – 2026-10-22");
+  });
+
+  it("omits empty/missing answers", () => {
+    const m = buildCoverageMatrix({ country: "Denmark" }, "denmark");
+    expect(m.asks.length).toBe(0); // country is not tracked as an ask (it's the destination, not a requirement)
+  });
+
+  it("includes niche only when provided", () => {
+    const withNiche = buildCoverageMatrix({ country: "X", niche: "diving" }, "x");
+    const without = buildCoverageMatrix({ country: "X" }, "x");
+    expect(withNiche.asks.some((a) => a.id === "niche")).toBe(true);
+    expect(without.asks.some((a) => a.id === "niche")).toBe(false);
   });
 });
 

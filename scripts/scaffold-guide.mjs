@@ -121,6 +121,7 @@ export function buildGuideObject(answers = {}) {
     type: "budget", group: "Money & budget", title: "Budget & daily costs", phase: "before",
     intro: "Rough per-person estimates — replace the zeros with researched figures.",
     currency: sym, days: dayLabels.length,
+    ...(answers.budget ? { budgetTarget: answers.budget } : {}),
     items: [
       { label: "Lodging, per night", basis: "day", est: 0 },
       { label: "Food & drink, per day", basis: "day", est: 0 },
@@ -278,6 +279,32 @@ Top 3, in order:
 `;
 }
 
+// P3/R15: every non-empty intake ask as a checklist that verify gates against.
+// Each ask starts with coveredBy: null; the research agent sets it to the section title/group
+// that addresses it, or "skip:<reason>" for a deliberate omission. Verify fails any null entry
+// that also has no matching Amendment in the intake doc.
+export function buildCoverageMatrix(answers, slug) {
+  const asks = [];
+  const add = (id, label, value) => {
+    if (value && String(value).trim()) {
+      asks.push({ id, label, value: String(value).trim(), coveredBy: null });
+    }
+  };
+  add("anchor", "Anchor event", answers.anchor);
+  add("cities", "Cities", answers.cities);
+  add("dates", "Trip dates", [answers.start, answers.end].filter(Boolean).join(" – "));
+  const prio = answers.priorities || [];
+  prio.forEach((p, i) => add(`priority-${i + 1}`, `Priority #${i + 1}`, p));
+  add("niche", "Niche interest", answers.niche);
+  add("pace", "Pace", answers.pace);
+  add("travel-style", "Travel style", answers.travelStyle);
+  add("budget", "Budget target", answers.budget);
+  add("party", "Party description", answers.party);
+  add("passport-countries", "Passport countries", answers.passportCountries);
+  add("comments", "Comments / constraints", answers.comments);
+  return { slug, generatedAt: new Date().toISOString(), asks };
+}
+
 // Pick a slug not already used by a guide, in EITHER shape. The directory is the only shape this
 // scaffolder emits now, but a legacy flat <slug>.json must still block the slug: resolveGuidePath
 // (scripts/lib/guide-shape.mjs) lets the flat file WIN, so colliding with one would silently
@@ -315,9 +342,12 @@ export async function writeScaffold(answers) {
   await writeFile(flatSeed, JSON.stringify(guide, null, 2) + "\n");
   await splitGuide(slug, { guidesDir: GUIDES_DIR });
   const guidePath = path.join(GUIDES_DIR, slug);
+  // P3/R15: coverage matrix — every non-empty intake ask, so verify can fail uncovered ones.
+  const coveragePath = path.join(INTAKE_DIR, `${slug}.coverage.json`);
+  await writeFile(coveragePath, JSON.stringify(buildCoverageMatrix(a, slug), null, 2) + "\n");
   // Initialize the pipeline checkpoint (scaffold cleared) so the research pass is resumable.
   await initState(slug);
-  return { slug, guidePath, intakePath, statePath: path.join(INTAKE_DIR, `${slug}.state.json`) };
+  return { slug, guidePath, intakePath, coveragePath, statePath: path.join(INTAKE_DIR, `${slug}.state.json`) };
 }
 
 // ── CLI ──────────────────────────────────────────────────────────────────────

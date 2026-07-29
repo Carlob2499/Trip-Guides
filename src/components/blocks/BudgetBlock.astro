@@ -37,6 +37,25 @@ const estTotal  = budgetTripTotal(sec);
 const lowTotal  = items.reduce((t, it) => { const l = tripLow(it);  return t + (l != null ? l : tripLine(it)); }, 0);
 const highTotal = items.reduce((t, it) => { const h = tripHigh(it); return t + (h != null ? h : tripLine(it)); }, 0);
 const hasRange  = Math.round(lowTotal) !== Math.round(estTotal) || Math.round(highTotal) !== Math.round(estTotal);
+
+// P3/R17: budget closure — compare computed daily per-person against the intake target.
+const budgetTarget = (sec as any).budgetTarget as string | undefined;
+function parseDailyTarget(raw: string | undefined): { low: number; high: number } | null {
+  if (!raw) return null;
+  // Match patterns like "$75-150/day", "$150/day", "75–150", "¥15000/day"
+  const m = raw.match(/[\$€£¥₩₹]?\s*([\d,]+)\s*[-–—]\s*[\$€£¥₩₹]?\s*([\d,]+)/);
+  if (m) return { low: Number(m[1].replace(/,/g, "")), high: Number(m[2].replace(/,/g, "")) };
+  const s = raw.match(/[\$€£¥₩₹]?\s*([\d,]+)\s*\/\s*day/i);
+  if (s) { const v = Number(s[1].replace(/,/g, "")); return { low: v, high: v }; }
+  return null;
+}
+const target = parseDailyTarget(budgetTarget);
+const dailyPP = days > 0 ? Math.round(estTotal / party / days) : 0;
+const verdictText = target && dailyPP > 0
+  ? dailyPP <= target.high
+    ? `${cur}${dailyPP.toLocaleString("en-US")}/day pp — within target`
+    : `${cur}${dailyPP.toLocaleString("en-US")}/day pp — over target (${budgetTarget})`
+  : null;
 ---
 
 <div class="budget" data-cur={cur} data-party={party} data-days={days}>
@@ -144,6 +163,12 @@ const hasRange  = Math.round(lowTotal) !== Math.round(estTotal) || Math.round(hi
       <span class="bcol bact-total">&mdash;</span>
     </div>
   </div>
+
+  {verdictText && (
+    <p class={`budget-verdict ${target && dailyPP > target.high ? "over" : "within"}`}>
+      {verdictText}
+    </p>
+  )}
 
   <p class="budget-foot">
     {party > 1
