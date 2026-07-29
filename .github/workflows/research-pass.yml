@@ -40,8 +40,24 @@ on:
         type: choice
         options:
           - claude-sonnet-5
-          - claude-opus-4-8
+          - claude-opus-5
         default: claude-sonnet-5
+      # Boundary check #4 (CLAUDE.md): explicit over ambient. Effort used to be
+      # whatever the runner defaulted to — an unnamed knob that silently changes
+      # search depth when the environment changes. Sonnet 5's docs name xhigh as
+      # the setting for the hardest agentic work, and specifically as what raises
+      # tool usage in agentic search; low/medium make it scope work DOWN to the
+      # literal ask, which is wrong for a pass that must be exhaustive.
+      effort:
+        description: "Reasoning effort. xhigh is the researched default for a full pass (deepest search, most tool use); drop to high for a narrow single-section re-run."
+        required: false
+        type: choice
+        options:
+          - xhigh
+          - high
+          - medium
+          - max
+        default: xhigh
 
 permissions:
   contents: write
@@ -187,6 +203,7 @@ jobs:
           # work (research-efficiency.md).
           claude_args: |
             --model ${{ inputs.model || 'claude-sonnet-5' }}
+            --effort ${{ inputs.effort || 'xhigh' }}
             --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
           prompt: |
             Guide slug: ${{ inputs.slug }}
