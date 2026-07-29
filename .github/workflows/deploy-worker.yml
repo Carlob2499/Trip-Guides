@@ -46,7 +46,7 @@ jobs:
       # The Worker's `import "../scripts/intake-proxy.mjs"` bundles fine — esbuild follows it out of
       # worker/ into the repo (that's why npm ci above installs zod for the bundle).
       - if: steps.cfg.outputs.go == 'true'
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           # Optional but recommended: with an account id, wrangler skips its /memberships lookup
@@ -54,8 +54,8 @@ jobs:
           # Workers" token template does NOT grant, and it's a common source of confusing auth
           # failures. Unset → wrangler falls back to the lookup (previous behavior).
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          # The action defaults to wrangler 3.90.0, which warns it is out of date and asks to be
-          # updated "to prevent critical errors". Pin the current major instead.
+          # wrangler-action v4 defaults to wrangler v4 already; the pin stays explicit so the CLI major
+          # can never drift with an action bump (CLAUDE.md: explicit over ambient).
           wranglerVersion: "4"
           workingDirectory: worker
           # `--config` stays explicit even though the vestigial root `wrangler.jsonc` (an earlier
