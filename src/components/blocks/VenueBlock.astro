@@ -1,0 +1,41 @@
+---
+import { pinSlug } from "../../lib/map-pins";
+import TransitLinks from "../TransitLinks.astro";
+const { sec, country } = Astro.props;
+
+const bookLabel = (b: string | undefined) =>
+  b === "url" ? "Book online" : b === "call" ? "Call to book" : b === "walk-in" ? "Walk-in" : null;
+---
+{sec.intro && (
+  <div class="venue-intro card"><p><Fragment set:html={sec.intro} /></p></div>
+)}
+{(sec.items || []).map((it: any) => (
+  <article class="card venue" id={it.map ? `venue-${pinSlug(it.name)}` : undefined}>
+    <div class="venue-head">
+      <h4 class="venue-name">{it.name}</h4>
+      {it.area && <span class="venue-area">{it.area}</span>}
+    </div>
+    <div class="venue-meta">
+      {it.price && <span class="venue-pill">{it.price}</span>}
+      {bookLabel(it.book) && (
+        it.book === "url" && it.book_url
+          ? <a class="venue-pill venue-pill--action" href={it.book_url} target="_blank" rel="noopener">{bookLabel(it.book)} ↗</a>
+          : <span class="venue-pill">{bookLabel(it.book)}</span>
+      )}
+    </div>
+    <div class="venue-body">
+      {it.why && <p class="venue-why">{it.why}</p>}
+      {it.crowd_tip && <p class="venue-crowd"><Fragment set:html={it.crowd_tip} /></p>}
+      <dl class="venue-details">
+        {it.hours && <><dt>Hours</dt><dd>{it.hours}</dd></>}
+        {it.closed && <><dt>Closed</dt><dd>{it.closed}</dd></>}
+        {it.address && <><dt>Address</dt><dd>{it.address}</dd></>}
+        {it.phone && <><dt>Phone</dt><dd>{it.phone}</dd></>}
+        {it.how && <><dt>Getting there</dt><dd><Fragment set:html={it.how} /></dd></>}
+      </dl>
+      {it.map && (
+        <TransitLinks lat={it.map.lat} lng={it.map.lng} name={it.name} country={country} />
+      )}
+    </div>
+  </article>
+))}

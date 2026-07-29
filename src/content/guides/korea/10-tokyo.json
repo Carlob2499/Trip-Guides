@@ -45,33 +45,129 @@
     "source_url": "https://www.gotokyo.org/en/"
   },
   {
-    "type": "list",
+    "type": "venues",
     "group": "Tokyo",
     "title": "Must-hit Tokyo",
     "items": [
-      "<b>Shibuya Crossing</b> — the world's busiest scramble; free, 24/7. Best at street level after dark, plus an aerial look from Shibuya Sky or the 2nd-floor Starbucks. <i>Shibuya Station.</i>",
-      "<b>Shibuya Sky</b> — open-air rooftop over the crossing. <b>10:00–22:30</b> (last entry 21:20), <b>≈¥2,500 online / ¥3,000 at the door</b>; book a sunset slot early. <i>Atop Shibuya Scramble Square.</i> <a href='https://www.gotokyo.org/en/spot/1749/index.html' target='_blank' rel='noopener noreferrer'>Official info</a>.",
-      "<b>Senso-ji</b> — Tokyo's oldest temple; free, grounds open late. Walk <b>Nakamise</b> street for street snacks and souvenirs. <i>Asakusa Station.</i>",
-      "<b>Meiji Jingu</b> — a forest shrine in the middle of the city; free, dawn–dusk. Pair with <b>Harajuku</b> (Takeshita St) and <b>Omotesando</b>. <i>Harajuku Station.</i>",
-      "<b>teamLab Planets</b> — barefoot, immersive digital-art rooms in Toyosu. <b>~9:00–22:00</b> (last entry 21:00), timed 15-min slots, ≈90–150 min inside; book ahead. ⚠ Confirm the 2026 ticket price online. <a href='https://www.teamlab.art/e/planets/' target='_blank' rel='noopener noreferrer'>Official site</a>. <i>Shin-Toyosu (Yurikamome).</i>",
-      "<b>Shinjuku after dark</b> — <b>Omoide Yokocho</b> (yakitori alley) and <b>Golden Gai</b> (tiny bars); free skyline view from the <b>Tokyo Metropolitan Government Building</b> observation deck. <i>Shinjuku Station.</i>",
-      "<b>Akihabara</b> (optional) — anime, games, retro arcades and electronics; a natural fit for your GO/esports crew. <i>Akihabara Station.</i>"
+      {
+        "name": "Shibuya Crossing",
+        "area": "Shibuya",
+        "hours": "Free, 24/7",
+        "book": "walk-in",
+        "how": "Shibuya Station.",
+        "why": "The world's busiest scramble.",
+        "crowd_tip": "Best at street level after dark, plus an aerial look from Shibuya Sky or the 2nd-floor Starbucks."
+      },
+      {
+        "name": "Shibuya Sky",
+        "area": "Shibuya",
+        "hours": "10:00–22:30 (last entry 21:20)",
+        "price": "≈¥2,500 online / ¥3,000 at the door",
+        "book": "url",
+        "book_url": "https://www.gotokyo.org/en/spot/1749/index.html",
+        "how": "Atop Shibuya Scramble Square. <a href='https://www.gotokyo.org/en/spot/1749/index.html' target='_blank' rel='noopener noreferrer'>Official info</a>.",
+        "why": "Open-air rooftop over the crossing.",
+        "crowd_tip": "Book a sunset slot early."
+      },
+      {
+        "name": "Senso-ji",
+        "area": "Asakusa",
+        "hours": "Free, grounds open late",
+        "book": "walk-in",
+        "how": "Asakusa Station.",
+        "why": "Tokyo's oldest temple.",
+        "crowd_tip": "Walk Nakamise street for street snacks and souvenirs."
+      },
+      {
+        "name": "Meiji Jingu",
+        "area": "Harajuku",
+        "hours": "Free, dawn–dusk",
+        "book": "walk-in",
+        "how": "Harajuku Station.",
+        "why": "A forest shrine in the middle of the city.",
+        "crowd_tip": "Pair with Harajuku (Takeshita St) and Omotesando."
+      },
+      {
+        "name": "teamLab Planets",
+        "area": "Toyosu",
+        "hours": "~9:00–22:00 (last entry 21:00), timed 15-min slots, ≈90–150 min inside",
+        "book": "url",
+        "book_url": "https://www.teamlab.art/e/planets/",
+        "how": "Shin-Toyosu (Yurikamome). <a href='https://www.teamlab.art/e/planets/' target='_blank' rel='noopener noreferrer'>Official site</a>.",
+        "why": "Barefoot, immersive digital-art rooms.",
+        "crowd_tip": "Book ahead. ⚠ Confirm the 2026 ticket price online."
+      },
+      {
+        "name": "Shinjuku after dark",
+        "area": "Shinjuku",
+        "book": "walk-in",
+        "how": "Shinjuku Station.",
+        "why": "Omoide Yokocho (yakitori alley) and Golden Gai (tiny bars); free skyline view from the Tokyo Metropolitan Government Building observation deck."
+      },
+      {
+        "name": "Akihabara (optional)",
+        "area": "Akihabara",
+        "book": "walk-in",
+        "how": "Akihabara Station.",
+        "why": "Anime, games, retro arcades and electronics — a natural fit for your GO/esports crew."
+      }
     ],
     "verified_on": "2026-07-10",
     "shelf_life": "venue",
     "source_url": "https://www.gotokyo.org/en/"
   },
   {
-    "type": "list",
+    "type": "venues",
     "group": "Tokyo",
     "title": "Where to eat — fast, cheap, good",
     "items": [
-      "<b>Uobei (Shibuya, Dogenzaka)</b> — sushi fired to your seat on high-speed lanes, plates from ≈¥120, open till ~midnight. Cheap, fast, fun, solo-friendly. (Skip 'Genki Sushi Shibuya' — that original closed in 2020.)",
-      "<b>Ichiran</b> — solo ramen booths, order by ticket machine; a Shibuya branch keeps late hours. ⚠ Check the exact branch hours on the day.",
-      "<b>Tsukiji Outer Market</b> — sushi & street-food breakfast, <b>5:00–14:00</b>. <b>Closed Sundays</b> — so this only works if you land early <b>Saturday</b>; otherwise skip it this trip. <i>Tsukiji Station.</i>",
-      "<b>Gyudon chains</b> (Yoshinoya, Sukiya, Matsuya) — beef-bowl, often 24 hr, ≈¥500. The reliable cheap-and-fast fallback anywhere.",
-      "<b>Konbini</b> (7-Eleven, Lawson, FamilyMart) — genuinely good onigiri, sandos, fried chicken and coffee for a few hundred yen; open 24/7. Don't sleep on it.",
-      "<b>Omoide Yokocho</b> (Shinjuku) — smoky yakitori and beer under the tracks; atmospheric and cash-friendly."
+      {
+        "name": "Uobei",
+        "area": "Shibuya, Dogenzaka",
+        "hours": "Open till ~midnight",
+        "price": "Plates from ≈¥120",
+        "book": "walk-in",
+        "why": "Sushi fired to your seat on high-speed lanes — cheap, fast, fun, solo-friendly.",
+        "crowd_tip": "Skip 'Genki Sushi Shibuya' — that original closed in 2020."
+      },
+      {
+        "name": "Ichiran",
+        "area": "Shibuya",
+        "hours": "⚠ Check the exact branch hours on the day",
+        "book": "walk-in",
+        "why": "Solo ramen booths, order by ticket machine; a Shibuya branch keeps late hours."
+      },
+      {
+        "name": "Tsukiji Outer Market",
+        "area": "Tsukiji",
+        "hours": "5:00–14:00. Closed Sundays",
+        "closed": "Sundays",
+        "book": "walk-in",
+        "how": "Tsukiji Station.",
+        "why": "Sushi & street-food breakfast.",
+        "crowd_tip": "This only works if you land early Saturday; otherwise skip it this trip."
+      },
+      {
+        "name": "Gyudon chains (Yoshinoya, Sukiya, Matsuya)",
+        "area": "Anywhere",
+        "hours": "Often 24 hr",
+        "price": "≈¥500",
+        "book": "walk-in",
+        "why": "Beef-bowl — the reliable cheap-and-fast fallback anywhere."
+      },
+      {
+        "name": "Konbini (7-Eleven, Lawson, FamilyMart)",
+        "area": "Anywhere",
+        "hours": "Open 24/7",
+        "book": "walk-in",
+        "why": "Genuinely good onigiri, sandos, fried chicken and coffee for a few hundred yen. Don't sleep on it."
+      },
+      {
+        "name": "Omoide Yokocho",
+        "area": "Shinjuku",
+        "book": "walk-in",
+        "why": "Smoky yakitori and beer under the tracks; atmospheric and cash-friendly."
+      }
     ],
     "verified_on": "2026-07-10",
     "shelf_life": "venue",

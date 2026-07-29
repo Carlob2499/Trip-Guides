@@ -1,36 +1,136 @@
 [
   {
-    "type": "prose",
+    "type": "venues",
     "group": "Gaming & anime",
     "title": "Fukuoka",
     "phase": "daily",
     "rank": 3,
-    "body": "<p>This trip explicitly skips Tokyo/Akihabara and Osaka/Den Den Town, so here's the regional answer instead. <b>Animate Fukuoka PARCO</b> (8F, Fukuoka PARCO Main Bldg, 2-11-1 Tenjin — 092-732-8070, 10:00–20:30) and <b>Mandarake Fukuoka</b> (Grand Bldg, 2-9-5 Daimyo — 092-716-7774, 12:00–20:00 daily, two floors of games/toys/cards/vintage on 1F and cosplay/dolls/doujinshi on 2F, duty-free over ¥5,000) are both real, non-token branches — set expectations as \"solid regional branch,\" not Tokyo/Osaka flagship depth on any one hot category (Pokémon cards, current-season figures) specifically. <b>Gashapon Department Store</b> inside Canal City Hakata (opened 2020, ~2,200 capsule-toy machines) is Fukuoka's dedicated gacha landmark. <b>Culture Arts</b>, an independent retro-game shop on the 3rd floor of an apartment building near Tenjin, comes up repeatedly as the locals'/enthusiasts' non-chain alternative. For arcade time, <b>Taito Station Fukuoka Tenjin</b> (Southern Cross Bldg, 2-6-35 Tenjin — 092-737-5500, 10:00–24:00 year-round) anchors a reported cluster with nearby GiGO and Round1 locations (unconfirmed beyond blog mentions — worth a look on the ground).</p>",
+    "intro": "<p>This trip explicitly skips Tokyo/Akihabara and Osaka/Den Den Town, so here's the regional answer instead — set expectations as \"solid regional branch,\" not Tokyo/Osaka flagship depth on any one hot category (Pokémon cards, current-season figures) specifically.</p>",
     "verified_on": "2026-07-29",
     "shelf_life": "venue",
-    "source_url": "https://www.animate.co.jp/en/shop/fukuokatenjin/"
+    "source_url": "https://www.animate.co.jp/en/shop/fukuokatenjin/",
+    "items": [
+      {
+        "name": "Animate Fukuoka PARCO",
+        "area": "Tenjin",
+        "address": "8F, Fukuoka PARCO Main Bldg, 2-11-1 Tenjin",
+        "phone": "092-732-8070",
+        "hours": "10:00–20:30",
+        "book": "walk-in",
+        "why": "A real, non-token branch of the national anime-goods chain."
+      },
+      {
+        "name": "Mandarake Fukuoka",
+        "area": "Daimyo",
+        "address": "Grand Bldg, 2-9-5 Daimyo",
+        "phone": "092-716-7774",
+        "hours": "12:00–20:00 daily",
+        "book": "walk-in",
+        "why": "Two floors of games/toys/cards/vintage on 1F and cosplay/dolls/doujinshi on 2F, duty-free over ¥5,000."
+      },
+      {
+        "name": "Gashapon Department Store",
+        "how": "Inside Canal City Hakata.",
+        "book": "walk-in",
+        "why": "Opened 2020, ~2,200 capsule-toy machines — Fukuoka's dedicated gacha landmark."
+      },
+      {
+        "name": "Culture Arts",
+        "area": "Tenjin",
+        "how": "3rd floor of an apartment building near Tenjin.",
+        "book": "walk-in",
+        "why": "An independent retro-game shop that comes up repeatedly as the locals'/enthusiasts' non-chain alternative."
+      },
+      {
+        "name": "Taito Station Fukuoka Tenjin",
+        "area": "Tenjin",
+        "address": "Southern Cross Bldg, 2-6-35 Tenjin",
+        "phone": "092-737-5500",
+        "hours": "10:00–24:00 year-round",
+        "book": "walk-in",
+        "why": "Anchors a reported cluster with nearby GiGO and Round1 locations.",
+        "crowd_tip": "The cluster is unconfirmed beyond blog mentions — worth a look on the ground."
+      }
+    ]
   },
   {
-    "type": "prose",
+    "type": "venues",
     "group": "Gaming & anime",
     "title": "Sapporo",
     "phase": "daily",
     "rank": 3,
-    "body": "<p><b>Animate Sapporo</b> (2F Marudai Bldg, 1-5 Minami 2-jo Nishi, Chuo-ku — 011-219-1223, 11:00–20:00) and <b>Mandarake Sapporo</b> (NORBESA Bldg 2F, Minamisanjo Nishi 5-1-1 — 011-207-7773, 12:00–20:00 daily, comics/toys/CDs/games/cosplay/dolls, duty-free over ¥5,000) sit near Susukino. Reviews call Mandarake Sapporo genuinely good — one describes the whole NORBESA floor as \"a whole floor of nerd shit\" — with the honest caveat that specific trending categories (current Pokémon cards, hot anime figures) run shallower than a flagship store; go for breadth, not depth on any one franchise. <b>C-pla</b>, inside the Tanukikoji covered shopping arcade (opened Oct 2023, one of Hokkaido's largest capsule-toy shops, open to 22:00), is Sapporo's gacha landmark — new enough that it's easy for older sources to miss. Tanukikoji itself is worth a browse beyond C-pla — the city's own tourism board confirms game centers and anime-goods shops scattered through the arcade, though as a district to wander rather than one pinned address.</p>",
+    "intro": "<p>Tanukikoji itself is worth a browse beyond C-pla — the city's own tourism board confirms game centers and anime-goods shops scattered through the arcade, though as a district to wander rather than one pinned address.</p>",
     "verified_on": "2026-07-29",
     "shelf_life": "venue",
-    "source_url": "https://www.animate.co.jp/en/shop/sapporo/"
+    "source_url": "https://www.animate.co.jp/en/shop/sapporo/",
+    "items": [
+      {
+        "name": "Animate Sapporo",
+        "area": "Susukino",
+        "address": "2F Marudai Bldg, 1-5 Minami 2-jo Nishi, Chuo-ku",
+        "phone": "011-219-1223",
+        "hours": "11:00–20:00",
+        "book": "walk-in",
+        "why": "Sits near Susukino."
+      },
+      {
+        "name": "Mandarake Sapporo",
+        "area": "Susukino",
+        "address": "NORBESA Bldg 2F, Minamisanjo Nishi 5-1-1",
+        "phone": "011-207-7773",
+        "hours": "12:00–20:00 daily",
+        "book": "walk-in",
+        "why": "Comics/toys/CDs/games/cosplay/dolls, duty-free over ¥5,000. Reviews call it genuinely good — one describes the whole NORBESA floor as \"a whole floor of nerd shit.\"",
+        "crowd_tip": "Honest caveat: specific trending categories (current Pokémon cards, hot anime figures) run shallower than a flagship store; go for breadth, not depth on any one franchise."
+      },
+      {
+        "name": "C-pla",
+        "how": "Inside the Tanukikoji covered shopping arcade.",
+        "hours": "Open to 22:00",
+        "book": "walk-in",
+        "why": "Opened Oct 2023, one of Hokkaido's largest capsule-toy shops — Sapporo's gacha landmark, new enough that it's easy for older sources to miss."
+      }
+    ]
   },
   {
-    "type": "prose",
+    "type": "venues",
     "group": "Gaming & anime",
     "title": "Sendai",
     "phase": "daily",
     "rank": 3,
-    "body": "<p><b>Animate Sendai</b> (Sendaiekimae EBeanS 7F, 4-1-1 Chuo, Aoba-ku — 022-264-0437, store 10:00–20:00, attached Animate Cafe Gratte, 3 min from Sendai Station West Exit) is the chain-store anchor — one lead describes it as \"actually small considering it's the city's only shop\" and notes weekend crowding, useful for setting realistic expectations. <b>Honest gap, confirmed rather than assumed:</b> Mandarake has no branch anywhere in Sendai or Tohoku — checked directly against Mandarake's own store list, which runs Tokyo (×4), Utsunomiya, Nagoya, Osaka, Kyoto, Fukuoka, Kokura, and Sapporo, with nothing in between. The recommended alternative: <b>e-Beans</b>, the same multi-floor building housing Animate — described by one enthusiast source as \"Sendai's version of Nakano Broadway,\" with bookstores and dedicated anime-goods specialty shops beyond just the Animate tenant. For used games specifically, <b>Seagull</b> (Yamato-cho branch), a Tohoku-regional used-game chain, gets a reasonable notice (\"pretty good selection of retro games, systems, accessories\") with the caveat that stock varies day to day. <b>Kikuya</b>, a manga bookstore with DVD/CD/merch and manga-artist memorabilia, is a further option beyond Animate.</p>",
+    "intro": "<p><b>Honest gap, confirmed rather than assumed:</b> Mandarake has no branch anywhere in Sendai or Tohoku — checked directly against Mandarake's own store list, which runs Tokyo (×4), Utsunomiya, Nagoya, Osaka, Kyoto, Fukuoka, Kokura, and Sapporo, with nothing in between.</p>",
     "verified_on": "2026-07-29",
     "shelf_life": "venue",
-    "source_url": "https://www.animate.co.jp/en/shop/sendai/"
+    "source_url": "https://www.animate.co.jp/en/shop/sendai/",
+    "items": [
+      {
+        "name": "Animate Sendai",
+        "address": "Sendaiekimae EBeanS 7F, 4-1-1 Chuo, Aoba-ku",
+        "phone": "022-264-0437",
+        "hours": "Store 10:00–20:00; attached Animate Cafe Gratte",
+        "how": "3 min from Sendai Station West Exit.",
+        "book": "walk-in",
+        "why": "The chain-store anchor.",
+        "crowd_tip": "One lead describes it as \"actually small considering it's the city's only shop\" and notes weekend crowding — useful for setting realistic expectations."
+      },
+      {
+        "name": "e-Beans",
+        "book": "walk-in",
+        "why": "The same multi-floor building housing Animate — described by one enthusiast source as \"Sendai's version of Nakano Broadway,\" with bookstores and dedicated anime-goods specialty shops beyond just the Animate tenant."
+      },
+      {
+        "name": "Seagull, Yamato-cho branch",
+        "area": "Yamato-cho",
+        "book": "walk-in",
+        "why": "A Tohoku-regional used-game chain that gets a reasonable notice (\"pretty good selection of retro games, systems, accessories\") for used games specifically.",
+        "crowd_tip": "Stock varies day to day."
+      },
+      {
+        "name": "Kikuya",
+        "book": "walk-in",
+        "why": "A manga bookstore with DVD/CD/merch and manga-artist memorabilia — a further option beyond Animate."
+      }
+    ]
   },
   {
     "type": "prose",

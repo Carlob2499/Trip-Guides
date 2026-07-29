@@ -153,7 +153,7 @@ export function buildGuideObject(answers = {}) {
 
   // Sights + Food (content shells; filled during research)
   sections.push({ type: "sights", group: "Sights", title: "Top sights", phase: "daily", items: [] });
-  sections.push({ type: "prose", group: "Food & shopping", title: "What to eat", phase: "daily", body: "" });
+  sections.push({ type: "venues", group: "Food & shopping", title: "What to eat", phase: "daily", items: [] });
 
   // Traveler's specific niche interest (free-text) → one dedicated shell, if given.
   // This is the only priority materialized as a scaffold section: it has no home in

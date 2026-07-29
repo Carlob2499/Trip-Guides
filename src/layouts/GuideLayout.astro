@@ -32,6 +32,7 @@ import "../styles/masthead.css";
 import "../styles/painted-atlas.css";
 import "../styles/anchors.css";
 import "../styles/sights.css";
+import "../styles/venues.css";
 import "../styles/map.css";
 import "../styles/planner.css";
 import "../styles/overview.css";
@@ -117,6 +118,15 @@ const themeAccent    = guide.theme?.accent    ?? extracted?.accent    ?? accent;
 const storeKey = (guideSlug || "guide").replace(/\W+/g, "").toLowerCase();
 const legacyStoreKey = (guide.title || "guide").replace(/\W+/g, "").toLowerCase();
 const navLabel = (s: any, g: string) => s.title || s.name || g;
+function collapseSubPrefixes(parts: string[]): string[] {
+  if (parts.length < 2) return parts;
+  const sep = / — | – /;
+  const splits = parts.map(p => p.split(sep, 2));
+  if (!splits.every(s => s.length === 2)) return parts;
+  const prefix = splits[0][0];
+  if (!splits.every(s => s[0] === prefix)) return parts;
+  return [prefix + " — " + splits.map(s => s[1]).join(", ")];
+}
 const localCur = currencyFor(guide.country);
 
 // Destination IANA time zone (e.g. "Asia/Seoul"). A guide-level `tz` (resolved from the
@@ -677,7 +687,7 @@ const tripSummary = buildSummary(guide);
           // from the section titles already in the data (no invented copy).
           const descriptor = (guide as any).descriptors?.[g] ?? null;
           const subParts = solo || descriptor ? [] : byG[g].map((o) => navLabel(o.s, g)).filter((t: string) => t && t !== g);
-          const sub = subParts.slice(0, 4).join(" · ") + (subParts.length > 4 ? ` · +${subParts.length - 4} more` : "");
+          const sub = collapseSubPrefixes(subParts.slice(0, 4)).join(" · ") + (subParts.length > 4 ? ` · +${subParts.length - 4} more` : "");
           return (
             <div class="catblock" id={`grp-${ci}`} data-ci={ci} role="tabpanel" aria-labelledby={`gtab-${ci}`} hidden={ci > 0}>
               <header class="cat-opener">

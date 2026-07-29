@@ -57,13 +57,14 @@ and `raids` accept optional `collapsible: true` (renders the card as a native
 | You have… | Use | Why |
 |---|---|---|
 | Reference info + a to-do list (bookings, packing, when-you-land steps) | `panel` | body + `checklist[]` — checklist items render as persisted checkboxes |
-| Narrative/explanatory writing (what to eat, etiquette, neighborhood character) | `prose` | plain body, allowlist tags only |
+| Narrative/explanatory writing (etiquette, neighborhood character, cultural context) | `prose` | plain body, allowlist tags only |
 | A pure check-off list, no narrative (caught-tracker, to-confirm list) | `list` | `items[]` of strings, each a persisted checkbox |
 | Step-by-step transit/route directions | `routes` | ordered `steps[]`, numbered, each checkable |
 | A location to show on a map (+ named points for taxis) | `map` | OSM embed from `center`/`span`; `points[]` for named places |
 | Live weather for the trip | `weather` | no config — reads coords from the guide's FIRST `map` section at runtime; hides if none |
 | Public holidays / closure risk | `holidays` | build-time Nager.Date data by country + trip year; hides if no data file |
 | The day-by-day itinerary | `days` | one item per day: date, title, pace, body, checklist, energy |
+| Food, shopping, or activity venue picks | `venues` | structured cards: name/area/hours/price/why/book + provenance per item |
 | Photo-worthy attractions | `sights` | photo cards — `img.file` MUST be a Commons-confirmed filename |
 | Cost estimates / a budget calculator | `budget` | typed line items with basis day/trip, low/high, per person/group |
 | A time-windowed rotation (event habitats, raid hours) | `habitats` | one card per window: day, time, name, type chips, target chips, tip |
@@ -111,6 +112,14 @@ conventions, render behavior, and the verification rules attached to a field.
   narrative (NOT a strenuousness rating); `energy` (`packed | balanced | slow`,
   default `balanced`) drives the Low-Energy toggle — only tag `packed` when the day
   genuinely is. `constraints` are strings like "Closed Mondays".
+- **`venues`** — scannable cards for food, shopping, and activity picks. Each item
+  has structured fields (name, area, address, phone, hours, closed, book, price,
+  crowd_tip, why, how, map) — `why` is ONE compelling line, not a paragraph.
+  `book` is one of `"url"` / `"walk-in"` / `"call"` (with `book_url` for the URL
+  case). Section-level `intro` holds editorial context that isn't about a single
+  venue (area overviews, disproved claims, comparisons). Each item carries its own
+  provenance fields. Use this instead of `prose` for any section that's essentially
+  a list of named places with details.
 - **`sights`** — `img.file` is an exact Wikimedia Commons `File:` page filename
   confirmed to exist (use `scripts/search-commons.mjs`); if unsure, omit the image
   entirely.

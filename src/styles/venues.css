@@ -1,0 +1,30 @@
+/* === VENUE CARDS — scannable food/shopping/activity picks ====================
+   Clean typographic cards (no photos): name + area header, price/book pills,
+   one-line "why", crowd tip, then a compact details list. Mobile: single column;
+   desktop: 2-up grid (inherits the .block grid from guide.css). */
+
+.venue-intro{padding:1rem 1.3rem;font-size:var(--text-small);color:var(--muted)}
+.venue-intro p{margin:0}
+
+.venue{padding:1rem 1.3rem 1.15rem}
+
+.venue-head{margin-bottom:.3rem}
+.venue-name{margin:0;font-size:var(--text-h4);line-height:1.15}
+.venue-area{display:block;font-family:var(--font-data);font-size:var(--text-small);color:var(--muted);margin-top:.1rem}
+
+.venue-meta{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.55rem}
+.venue-pill{display:inline-flex;align-items:center;padding:.15rem .55rem;font-family:var(--font-data);font-size:var(--text-control-sm);border-radius:999px;background:var(--bg2);color:var(--ink);white-space:nowrap}
+.venue-pill--action{background:var(--accent);color:#fff;text-decoration:none;border-bottom:0}
+.venue-pill--action:hover{filter:brightness(1.1)}
+
+.venue-body p{margin:0 0 .3rem}
+.venue-why{font-style:italic;color:var(--muted)}
+.venue-crowd{font-size:var(--text-small);color:var(--muted)}
+
+.venue-details{display:grid;grid-template-columns:auto 1fr;gap:.15rem .6rem;margin:.45rem 0 0;font-size:var(--text-small)}
+.venue-details dt{font-family:var(--font-data);color:var(--muted);white-space:nowrap}
+.venue-details dd{margin:0}
+
+@media print{
+  .venue-pill--action{background:#333;color:#fff}
+}

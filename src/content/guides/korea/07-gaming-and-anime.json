@@ -24,9 +24,54 @@
     "source_url": "https://map.naver.com"
   },
   {
-    "type": "prose",
+    "type": "venues",
     "group": "Gaming & anime",
     "title": "Anime & game shopping",
-    "body": "<p><b>Animate Seoul</b> (5F, AK&amp; Mall, 188 Yanghwa-ro, Mapo-gu — Hongdae Station Exit 9; open ~11:00–22:00) is the largest anime specialist in the Hongdae area: figures, manga, Blu-ray, merchandise, and rotating pop-ups for seasonal titles. <b>Yongsan i'Park Mall</b> electronics floors carry games, trading cards, and figures — verify the current tenant mix at the mall, as renovations have shifted some vendors. <b>KWANGYA@Seoul</b> (SM's official store — B1, D-Tower, Seongsu; Ttukseom Station Exit 5, Line 2; ~10:30–20:00) has SM artists' albums, photocards, and a media zone. <i>(The old SMTOWN COEX Artium closed in 2020.)</i> <b>Myeongdong K-pop street</b> around Myeongdong Station has comprehensive stock across all agencies; go early or skip if the weekend crowds are too much.</p><p><b>HYBE</b> — the Yongsan <b>HYBE Insight</b> museum has <b>closed</b>; HYBE now runs artist merch as rotating pop-ups (often AK Plaza Hongdae or near the Yongsan HQ). Check the <a href='https://weverse.io'>Weverse Shop</a> and HYBE socials the week before for what's live. <b>LoL Park</b> (3F Gran Seoul Building, 33 Jong-ro, Jongno-gu; open 11:00–20:00; Jonggak Station Exit 1) is the LCK's home venue with a free-to-browse exhibition floor, Riot merch store, and PC café. LCK Summer split resumes after MSI — check the schedule for a live match while you're there.</p>"
+    "intro": "<p><i>The old SMTOWN COEX Artium closed in 2020.</i> <b>HYBE Insight</b> (the Yongsan museum) has <b>closed</b>; HYBE now runs artist merch as rotating pop-ups (often AK Plaza Hongdae or near the Yongsan HQ). Check the <a href='https://weverse.io'>Weverse Shop</a> and HYBE socials the week before for what's live.</p>",
+    "items": [
+      {
+        "name": "Animate Seoul",
+        "area": "Hongdae",
+        "address": "5F, AK& Mall, 188 Yanghwa-ro, Mapo-gu",
+        "hours": "~11:00–22:00",
+        "book": "walk-in",
+        "how": "Hongdae Station Exit 9.",
+        "why": "The largest anime specialist in the Hongdae area — figures, manga, Blu-ray, merchandise, and rotating pop-ups for seasonal titles."
+      },
+      {
+        "name": "Yongsan i'Park Mall",
+        "area": "Yongsan",
+        "book": "walk-in",
+        "why": "Electronics floors carry games, trading cards, and figures.",
+        "crowd_tip": "Verify the current tenant mix at the mall, as renovations have shifted some vendors."
+      },
+      {
+        "name": "KWANGYA@Seoul (SM's official store)",
+        "area": "Seongsu",
+        "address": "B1, D-Tower, Seongsu",
+        "hours": "~10:30–20:00",
+        "book": "walk-in",
+        "how": "Ttukseom Station Exit 5, Line 2.",
+        "why": "SM artists' albums, photocards, and a media zone."
+      },
+      {
+        "name": "Myeongdong K-pop street",
+        "area": "Myeongdong",
+        "book": "walk-in",
+        "how": "Around Myeongdong Station.",
+        "why": "Comprehensive K-pop merch stock across all agencies.",
+        "crowd_tip": "Go early or skip if the weekend crowds are too much."
+      },
+      {
+        "name": "LoL Park",
+        "area": "Jongno",
+        "address": "3F Gran Seoul Building, 33 Jong-ro, Jongno-gu",
+        "hours": "11:00–20:00",
+        "book": "walk-in",
+        "how": "Jonggak Station Exit 1.",
+        "why": "The LCK's home venue — free-to-browse exhibition floor, Riot merch store, and PC café.",
+        "crowd_tip": "LCK Summer split resumes after MSI — check the schedule for a live match while you're there."
+      }
+    ]
   }
 ]

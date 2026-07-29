@@ -144,10 +144,34 @@
     "body": "<p>Sedona's red rocks — including the sites marketed as “vortexes” — were sacred to the Yavapai and Hopi long before the New Age movement arrived. Treat them accordingly, whether or not you personally engage with the energy-site framing.</p><ul><li><b>Stay on marked trails</b> — off-trail travel damages fragile high-desert soil crust that takes decades to recover.</li><li><b>Don't build rock cairns or stack rocks</b> for photos — existing rock features may carry cultural or wayfinding significance, and moving them disrupts both.</li><li><b>Leave no trace</b> — carry out all trash, including fruit peels and anything else that feels “natural.”</li><li><b>Keep voices low at vortex/viewpoint sites</b> — you'll likely see people meditating, doing yoga, or holding quiet ceremony; treat it the way you'd treat any place of quiet reflection.</li><li><b>Don't leave offerings, ribbons, or crystals</b> at sites — well-intentioned but treated as littering and cultural appropriation by both land managers and Native communities.</li><li><b>Support local, Native-owned businesses where you can</b> — several galleries and shops in the area are Native-owned; ask, and prefer them over generic souvenir shops.</li></ul>"
   },
   {
-    "type": "prose",
+    "type": "venues",
     "group": "Days",
     "title": "What to eat",
     "phase": "daily",
-    "body": "<p><b>Wildcraft Cafe</b> — health-conscious, organic, vegan/paleo/gluten-free options (⚠ hours vary by day of week, confirm before you go) — is the pick for an easy local breakfast or lunch that isn't a hotel buffet.</p><p><b>Elote Cafe</b> is Sedona's most in-demand table: bold, elevated Southwestern and Mexican cooking. Reserve ahead, especially on a weekend — it's not a reliable walk-in.</p><p><b>El Rincon</b> and <b>Tamaliza</b> both do traditional Mexican food without the elevated price or the wait — good backups if Elote is booked out.</p><p><b>Coffee Pot Restaurant</b> has been a west-side local institution for 30+ years — a straightforward, unpretentious breakfast spot.</p><p>A note on tourist-trap avoidance: the generic “best restaurants in Sedona” lists skew toward the Uptown strip closest to hotels — this guide deliberately routes through spots local guides actually name as where residents eat.</p>"
+    "intro": "<p>A note on tourist-trap avoidance: the generic “best restaurants in Sedona” lists skew toward the Uptown strip closest to hotels — this guide deliberately routes through spots local guides actually name as where residents eat.</p>",
+    "items": [
+      {
+        "name": "Wildcraft Cafe",
+        "hours": "⚠ Varies by day of week — confirm before you go",
+        "why": "Health-conscious, organic, vegan/paleo/gluten-free options — an easy local breakfast or lunch that isn't a hotel buffet."
+      },
+      {
+        "name": "Elote Cafe",
+        "why": "Sedona's most in-demand table — bold, elevated Southwestern and Mexican cooking.",
+        "crowd_tip": "Reserve ahead, especially on a weekend — it's not a reliable walk-in."
+      },
+      {
+        "name": "El Rincon",
+        "why": "Traditional Mexican food without the elevated price or the wait — a good backup if Elote is booked out."
+      },
+      {
+        "name": "Tamaliza",
+        "why": "Traditional Mexican food without the elevated price or the wait — a good backup if Elote is booked out."
+      },
+      {
+        "name": "Coffee Pot Restaurant",
+        "why": "A west-side local institution for 30+ years — a straightforward, unpretentious breakfast spot."
+      }
+    ]
   }
 ]

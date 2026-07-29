@@ -25,6 +25,19 @@ export interface SplitLead {
   morePreview: string;
 }
 
+function truncateAtSentence(text: string, max: number): string {
+  if (text.length <= max) return text;
+  const sentenceEnd = /[.!?]\s/g;
+  let last = -1;
+  let m: RegExpExecArray | null;
+  while ((m = sentenceEnd.exec(text)) !== null) {
+    if (m.index + 1 > max) break;
+    last = m.index + 1;
+  }
+  if (last > max * 0.4) return text.slice(0, last);
+  return text.slice(0, max).trimEnd() + "…";
+}
+
 export function splitLead(body: string | undefined | null): SplitLead {
   const html = String(body || "");
   const cut = html.indexOf("</p>");
@@ -39,7 +52,7 @@ export function splitLead(body: string | undefined | null): SplitLead {
   if (OPERATIONAL_CONTENT.test(more)) return { lead: html, more: null, moreParagraphCount: 0, morePreview: "" };
 
   const moreParagraphCount = (more.match(/<p[\s>]/g) || []).length;
-  const morePreview = moreText.length > 100 ? moreText.slice(0, 100).trimEnd() + "…" : moreText;
+  const morePreview = truncateAtSentence(moreText, 120);
   return { lead, more, moreParagraphCount, morePreview };
 }
 
