@@ -252,3 +252,44 @@ fresh-eyes critic.
    agent session per guide — worth it on every guide, or flagship guides only?
 8. **Cover (F10/R18):** keep Okama as the hero with an honesty caption, or swap to a
    sight the itinerary guarantees (Naruko Gorge / Zao Onsen townscape)?
+
+---
+
+## Addendum — Readability & UI audit (2026-07-29, session #16, creator-commissioned)
+
+Verified in `astro preview` :4322 with Playwright screenshots at 375px and 1280px.
+
+### Root cause of "hard to read": the schema has no venue block
+
+The repo has already cured dense prose four times — `habitats`, `infogrid`, `tierlist`,
+and `raids` each exist, per their own schema comments, to "replace dense prose." But there
+is **no structured block for restaurants/shops/venues**, so every food and shopping fact
+lands in `prose`: one paragraph per venue carrying address, phone, seat count, hours,
+closed-day dispute, booking method, provenance narration, and transit — inline, bolded,
+unscannable. On mobile, ONE venue ≈ 1.5 screens of solid text. 53 prose blocks across the
+four guides carry this pattern. **Recommendation R20 — a `venues` block type** (name /
+area / address / hours / book / how / price / crowd-tip / one-line "why this one" as
+fields), rendered as scannable cards; migrate the food + gaming tabs; teach the research
+pass to emit it. This is the single highest-leverage readability change available, and it
+also fixes F9 structurally: fielded facts leave no room for process-narration prose.
+
+### Defects found (and status)
+
+| # | Finding | Status |
+|---|---|---|
+| U1 | `.guide-stats` used `justify-content:center` on an overflowing scroll row — the first pill was clipped *unreachably*: "78 days to go" rendered as "**8 days to go**" at 375px (misinformation, not just cosmetics) | **Fixed** (`safe center` + edge padding) |
+| U2 | Masthead kicker wrapped mid-date ("OCT 15–NOV / 10, 2026") | **Fixed** (`text-wrap:balance` + narrow no-break spaces in the date) |
+| U3 | "More detail · 2 more paragraphs" chips hid *primary picks* (Maedaya — the motsunabe pick — was behind one) with zero information scent | **Fixed for Japan's food tab** via `moreLabel`; other tabs/guides still show count-fallback chips |
+| U4 | The fold's fade-out preview cuts text mid-address ("Ganso Nagahamaya — 2-5-25 Nagahama, Chuo-ku, Trust Par…") — reads as a rendering bug, not a teaser | Open — fade should end at a paragraph/sentence boundary, or the split should not open mid-venue |
+| U5 | Derived group subtitles are an ALL-CAPS run-on with repeated prefixes ("FUKUOKA — RAMEN · FUKUOKA — YATAI, MOTSUNABE & MENTAIKO · FUKUOKA — …") — doctrine says dedup derived labels at the layout level | Open — collapse shared "City —" prefixes in the derivation |
+| U6 | Right-edge pill clipping ("LOCAL 04:1…") has no scroll affordance — nothing signals the row scrolls | Open — edge fade mask on `.guide-stats` |
+| U7 | Lead-first violated at the content level: sections bundle 2–3 topics (yatai + motsunabe + mentaiko) so the fold necessarily buries topic 2 and 3 | Open — one-topic-per-section rule for food content; largely superseded by R20 |
+
+### R20 impact estimate
+
+Venue block + subtitle dedup + fold-boundary fix together address the creator's exact
+complaint ("information mixed inside lots of prose... should look polished"). Estimated
+effect: food/gaming tabs go from ~6 screens of prose to ~2 screens of scannable cards at
+375px; every guide benefits at once (shared component); the research pass emits structure
+instead of paragraphs going forward. This is a schema + component + migration pass — it
+wants its own session, not a small-touches commit.
