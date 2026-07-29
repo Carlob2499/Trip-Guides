@@ -8,7 +8,7 @@ import { execFileSync } from "node:child_process";
 import path from "node:path";
 import {
   STAGE_ORDER, initState, checkpoint, readState, nextStage, statusLines, statePath,
-  bumpAttempt, statusJson,
+  bumpAttempt, statusJson, uncommittedPredecessor,
 } from "../pipeline.mjs";
 
 const ROOT = path.resolve(import.meta.dirname, "../..");
@@ -122,6 +122,34 @@ describe("CLI slug guard (S4 — path traversal)", () => {
       });
     }).toThrow();
     expect(existsSync(traversalTarget)).toBe(false);
+  });
+});
+
+describe("uncommittedPredecessor (P1 — the preventive checkpoint guard)", () => {
+  const committed = (...cleared) => ({ stages: Object.fromEntries(STAGE_ORDER.map((s) => [s, cleared.includes(s) ? "2026-01-01T00:00:00Z" : null])) });
+
+  it("scaffold has no predecessor — never blocked", () => {
+    expect(uncommittedPredecessor("scaffold", null)).toBe(null);
+  });
+
+  it("allows a stage whose predecessor is committed", () => {
+    expect(uncommittedPredecessor("passA", committed("scaffold"))).toBe(null);
+    expect(uncommittedPredecessor("verified", committed("scaffold", "passA", "passB", "reconcile"))).toBe(null);
+  });
+
+  it("REGRESSION (F1 · Japan): blocks passB while passA lives only in the working tree", () => {
+    // The exact moment the contract broke: passA had been checkpointed 35ms earlier but was not
+    // committed for another 7 seconds. HEAD still knew only about scaffold.
+    expect(uncommittedPredecessor("passB", committed("scaffold"))).toBe("passA");
+  });
+
+  it("blocks every later stage the same way", () => {
+    expect(uncommittedPredecessor("reconcile", committed("scaffold", "passA"))).toBe("passB");
+    expect(uncommittedPredecessor("verified", committed("scaffold", "passA", "passB"))).toBe("reconcile");
+  });
+
+  it("no committed state at all → the predecessor is missing, not silently allowed", () => {
+    expect(uncommittedPredecessor("passA", null)).toBe("scaffold");
   });
 });
 

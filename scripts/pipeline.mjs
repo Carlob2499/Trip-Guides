@@ -107,6 +107,24 @@ export async function checkpoint(slug, stage, { note = null, now = new Date().to
   return saveState(state);
 }
 
+// PREVENTIVE half of the checkpoint contract (PLAN_FACTORY_V2 P1; QA finding F1). The prompt
+// tells the agent to commit after each stage; this makes skipping that mechanically impossible.
+// A stage may only be checkpointed once its PREDECESSOR is durable — i.e. present in the
+// COMMITTED state at HEAD, not merely sitting in the working tree.
+//
+// Japan is the worked example: passA/passB/reconcile were all checkpointed within 35ms (10:32:26)
+// and only committed 7 seconds later (10:32:33). At the moment `--checkpoint passB` ran, passA
+// existed nowhere but the working tree — so this guard would have refused it, at the exact moment
+// the contract broke, instead of the defect surviving to a post-mortem.
+//
+// Pure: takes the committed state as data. Returns the blocking predecessor stage, or null.
+export function uncommittedPredecessor(stage, committedState) {
+  const i = STAGE_ORDER.indexOf(stage);
+  if (i <= 0) return null; // scaffold has no predecessor; unknown stages are rejected elsewhere
+  const prev = STAGE_ORDER[i - 1];
+  return committedState?.stages?.[prev] ? null : prev;
+}
+
 // First un-cleared stage in order, or null when every stage is done.
 export function nextStage(state) {
   if (!state) return STAGE_ORDER[0];
@@ -168,6 +186,33 @@ if (isMain(import.meta.url)) {
     console.log(statusLines(slug, state).join("\n"));
   } else if (argv.includes("--checkpoint")) {
     const stage = get("--checkpoint");
+    // Enforce the commit-after-each-stage contract at the CLI boundary — the one place the
+    // research agent actually touches the spine. Skipped only when there is no git repo at all
+    // (a tool-environment fact, not a discipline failure); a repo where the predecessor simply
+    // isn't committed yet is exactly the case this exists to catch.
+    if (STAGE_ORDER.includes(stage)) {
+      const { execFileSync } = await import("node:child_process");
+      const inRepo = (() => {
+        try { execFileSync("git", ["rev-parse", "--git-dir"], { cwd: ROOT, stdio: "pipe" }); return true; }
+        catch { return false; }
+      })();
+      if (inRepo) {
+        let committed;
+        try {
+          committed = JSON.parse(execFileSync("git", ["show", `HEAD:guides-intake/${slug}.state.json`], { cwd: ROOT, encoding: "utf8", stdio: ["pipe", "pipe", "pipe"] }));
+        } catch { committed = null; }
+        const blocker = uncommittedPredecessor(stage, committed);
+        if (blocker) {
+          console.error(`[pipeline] REFUSING to checkpoint "${stage}" — its predecessor "${blocker}" is not committed at HEAD.`);
+          console.error(`  The contract is checkpoint AND COMMIT after EACH stage, so a cut-off run resumes at the next`);
+          console.error(`  un-done stage instead of restarting. Batching stages into one commit at the end is not resumable.`);
+          console.error(`  Fix: commit "${blocker}" first —`);
+          console.error(`    git add -A && git commit -m "research(${slug}): ${blocker}" && git push`);
+          console.error(`  then re-run this checkpoint.`);
+          process.exit(4);
+        }
+      }
+    }
     const state = await checkpoint(slug, stage, { note: get("--note") });
     console.log(`[pipeline] ${slug} — checkpoint "${stage}" recorded.`);
     console.log(statusLines(slug, state).join("\n"));

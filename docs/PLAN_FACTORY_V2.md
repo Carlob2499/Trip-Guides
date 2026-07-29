@@ -25,7 +25,37 @@
 
 ## Phases
 
-### P1 — Reliability floor (F1/F2 · R1/R2)
+### P1 — Reliability floor (F1/F2 · R1/R2) — ✅ SHIPPED 2026-07-29
+
+**What landed.** Two halves, because a prompt mandate is not a guarantee:
+- **Preventive** — `pipeline.mjs --checkpoint` now REFUSES a stage whose predecessor is not
+  committed at HEAD (exit 4, with the exact `git commit` to run). This fires at the moment the
+  contract breaks. Verified against Japan's own timeline: when `--checkpoint passB` ran, passA
+  existed only in the working tree, so the guard would have stopped it there.
+- **Detective** — `scripts/check-run-integrity.mjs`: `--snapshot` before the agent step,
+  audit after. Reports VOID (no commit AND no stage advance — F2) and three discipline kinds
+  (BATCHED_COMMIT / BURST_COMMIT / BURST_CHECKPOINT). Only judges stages THIS run introduced.
+- **Workflow** — `Pre-agent snapshot` → agent → `Run-integrity gate` (`--report-only`, stays
+  green) → `Auto-retry once after a void run` (re-dispatches with `void_retry=true`, so the
+  200-line prompt is never duplicated and the existing circuit breaker still caps attempts) →
+  `File a stuck issue after a second void run` → `Enforce run integrity` (the actual red).
+
+**Forced-failure proof (Boundary check #2 — all three bite):**
+| Path | Command | Result |
+|---|---|---|
+| Discipline, real history | `--slug japan --pre-head 2aae207 --head 00fd967` | exit 3, 2 × BATCHED_COMMIT |
+| Void run | `--slug japan --pre-head HEAD --pre-stages 5` | exit 3, VOID RUN |
+| Preventive guard | `--checkpoint passA` with scaffold uncommitted | exit 4, REFUSING |
+| Positive control | `--checkpoint verified` on japan (predecessors committed) | exit 0, recorded |
+
+**What the gate found while being built: QA finding F1a** — Japan's commit *labelled* "Pass A"
+already carried all three checkpoints; the "Pass B" and "reconcile" commits introduced nothing.
+The commit log narrated staging that the data disproves. Pinned as the `JAPAN_ACTUAL` fixture.
+
+**Gates:** 954 tests green (46 in the two touched suites, 29 new), lint 0, build clean.
+No site surface changed, so the Ship Loop's preview/`dist`-grep legs do not apply to this phase.
+
+### P1 — original specification
 1. **Harness-enforced checkpoints.** research-pass.yml gains a per-stage gate: after the
    agent step, a script asserts each claimed stage has a distinct commit on the remote
    branch whose timestamp postdates the previous stage's (no more single-burst theater).

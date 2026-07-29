@@ -15,6 +15,12 @@ name: Research pass
 # EACH stage, and this job resumes the research/<slug> branch — so a re-run picks up at the next
 # un-done stage (`npm run pipeline -- --slug <slug> --status`) instead of restarting.
 #
+# ENFORCED, not merely asked (P1 — the first real run proved a prompt mandate is not a guarantee):
+#   · pipeline.mjs's --checkpoint REFUSES a stage whose predecessor is not committed at HEAD, so
+#     batching stages fails at the moment it is attempted, not in a post-mortem.
+#   · the "Run-integrity gate" step below audits what this run actually did — no durable output at
+#     all (VOID), or stages recorded in one burst — and fails the workflow either way.
+#
 # Runs on your Claude MAX subscription (not a pay-per-use API key), so a headless run costs ~$0
 # marginal against your plan. Prerequisites:
 #   - CLAUDE_CODE_OAUTH_TOKEN secret set in repo Settings → Secrets → Actions.
@@ -58,6 +64,15 @@ on:
           - medium
           - max
         default: xhigh
+      # P1/F2: set ONLY by this workflow's own auto-retry dispatch after a VOID run (an agent
+      # session that produced no durable output at all). It exists to make the retry strictly
+      # once — a second void run with this already true files the stuck issue instead of
+      # re-dispatching forever. Humans should never set it.
+      void_retry:
+        description: "Internal — set by the auto-retry after a void run. Leave false."
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -185,6 +200,15 @@ jobs:
 
           echo "[budget] $SLUG — attempt $ATTEMPTS of $CAP, proceeding."
           echo "should_run=true" >> "$GITHUB_OUTPUT"
+
+      # P1 (F1/F2): the "before" half of the run-integrity gate. Captured AFTER the attempt-budget
+      # step's own commit, so the agent's own output is the only thing that can move these numbers.
+      - name: Pre-agent snapshot
+        id: pre
+        if: steps.budget.outputs.should_run == 'true'
+        env:
+          SLUG: ${{ inputs.slug }}
+        run: node scripts/check-run-integrity.mjs --slug "$SLUG" --snapshot
 
       - name: Run research agent
         if: steps.budget.outputs.should_run == 'true'
@@ -430,6 +454,59 @@ jobs:
             place the skill or its references slowed you down or were unclear. This feeds the
             monthly skill-retro; be concrete.
 
+      # P1 — RUN INTEGRITY (QA findings F1/F2). Two things the old workflow could not see:
+      #   · a VOID run — the agent burned a full session, exited `success`, and left NOTHING
+      #     durable behind (no commit, no checkpoint). This happened on attempt 1 of the very
+      #     first real run and cost $11+ with no way to tell after the fact.
+      #   · a run that CLAIMED staged progress it never made. Japan's commit labelled "Pass A"
+      #     already contained passA, passB and reconcile — the two commits after it introduced no
+      #     stage state at all, so `git log` narrated a resumable run that never existed.
+      # --report-only keeps this step green so the remediation steps below still run; the final
+      # "Enforce run integrity" step is what actually fails the workflow.
+      - name: Run-integrity gate
+        id: integrity
+        if: steps.budget.outputs.should_run == 'true'
+        env:
+          SLUG: ${{ inputs.slug }}
+        run: |
+          node scripts/check-run-integrity.mjs --slug "$SLUG" \
+            --pre-head "${{ steps.pre.outputs.head }}" \
+            --pre-stages "${{ steps.pre.outputs.stages }}" \
+            --report-only
+
+      # F2 remediation: a void run gets exactly ONE automatic retry. Re-dispatching the workflow
+      # (rather than duplicating the agent step) keeps the 200-line research prompt in ONE place —
+      # two copies would drift — and reuses the existing attempt budget, so the circuit breaker
+      # still caps the total. `void_retry: true` is what makes it once-only.
+      - name: Auto-retry once after a void run
+        if: steps.integrity.outputs.void == 'true' && format('{0}', inputs.void_retry) != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SLUG: ${{ inputs.slug }}
+        run: |
+          echo "[run-integrity] VOID run — re-dispatching once with void_retry=true." >> "$GITHUB_STEP_SUMMARY"
+          gh workflow run research-pass.yml \
+            -f slug="$SLUG" \
+            -f section="${{ inputs.section }}" \
+            -f model="${{ inputs.model || 'claude-sonnet-5' }}" \
+            -f effort="${{ inputs.effort || 'xhigh' }}" \
+            -f void_retry=true
+
+      # A second void in a row is not a flake — the run is stuck in a way retrying cannot fix.
+      - name: File a stuck issue after a second void run
+        if: steps.integrity.outputs.void == 'true' && format('{0}', inputs.void_retry) == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SLUG: ${{ inputs.slug }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          TITLE="Research stuck: $SLUG"
+          BODY=$(printf 'Two consecutive research runs for `%s` produced **no durable output** — no commit, no checkpoint advance — while reporting success. The auto-retry has been spent.\n\nThis is QA finding F2: a green agent step is not evidence of work. Check the run log (`show_full_output` is on) before dispatching again.\n\nLatest run: %s\n' "$SLUG" "$RUN_URL")
+          EXISTING=$(gh issue list --search "\"$TITLE\" in:title" --state open --json number -q '.[0].number' 2>/dev/null || true)
+          if [ -n "$EXISTING" ]; then gh issue comment "$EXISTING" --body "$BODY";
+          else gh issue create --title "$TITLE" --body "$BODY" --label "stuck"; fi
+
       # W3: deposit a run report on the pipeline ledger issue regardless of how the agent finished,
       # so the skill-retro proposer has evidence to reason over. `|| true` — the ledger never fails
       # the run.
@@ -461,6 +538,24 @@ jobs:
           elif [ "$CODE" -ne 0 ]; then
             exit "$CODE"
           fi
+
+      # The actual verdict. Runs after remediation so a void run still gets its retry dispatched
+      # and a stuck issue filed before the workflow goes red — but it DOES go red: a run that
+      # produced nothing, or that faked its staging, is a failed run no matter what merged.
+      - name: Enforce run integrity
+        if: always() && steps.budget.outputs.should_run == 'true'
+        run: |
+          VOID="${{ steps.integrity.outputs.void }}"
+          VIOLATIONS="${{ steps.integrity.outputs.violations }}"
+          if [ "$VOID" = "true" ]; then
+            echo "::error::Void run — the agent produced no durable output (QA finding F2). Remediation dispatched above."
+            exit 1
+          fi
+          if [ -n "$VIOLATIONS" ] && [ "$VIOLATIONS" != "0" ]; then
+            echo "::error::Checkpoint discipline violated — $VIOLATIONS finding(s), kinds: ${{ steps.integrity.outputs.kinds }}. The stages this run cleared are not resumable (QA finding F1)."
+            exit 1
+          fi
+          echo "[run-integrity] clean."
 
       - name: Append run report to the ledger
         if: always()

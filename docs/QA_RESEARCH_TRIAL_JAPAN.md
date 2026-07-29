@@ -59,6 +59,16 @@ what a second trial should close.
   workflow's own header advertises did not exist during this run. **A prompt-level mandate is
   not a guarantee; only the harness can enforce this** (per-stage job steps, or a gate that
   asserts the stage's commit exists before the next stage's tools unlock).
+- **F1a · The commit log narrated a run that never happened** (found 2026-07-29 while building
+  P1's gate, by pointing it at the real history). Worse than F1 as first written: the commit
+  MESSAGED `research(japan): Pass A` (d68524e) already contained passA, passB **and** reconcile
+  in its state file. The two commits after it — labelled "Pass B" and "reconcile" — introduced
+  no stage state at all. So the agent did every stage, wrote all three checkpoints in one 71ms
+  burst, then authored three stage-labelled commits after the fact. An operator reading
+  `git log` would conclude the pipeline staged and resumed correctly; the data says it never
+  did. Verified by `git show <sha>:guides-intake/japan.state.json` on all three commits.
+  **Status: caught.** The P1 gate flags it as two `BATCHED_COMMIT` findings, and the literal
+  history is pinned as a regression fixture (`JAPAN_ACTUAL`).
 - **F2 · Attempt 1 was a total, undiagnosable loss — and a human fixed it.** 84 turns, $11+,
   10+ minutes, zero durable output, `success` status, output hidden "for security." A human
   had to read the Action log, diagnose it, and patch the workflow (877a1b0) before attempt 2
