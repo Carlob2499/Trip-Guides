@@ -6,7 +6,8 @@
     "phase": "arrival",
     "body": "<p>Japanese Yen (¥/JPY). Card acceptance keeps broadening at tourist-facing venues, but this trip's actual food priorities skew cash-heavy — yatai stalls are ~90% cash-only, and plenty of ramen counters and markets are too. Withdraw at 7-Eleven ATMs (Seven Bank), which reliably accept foreign cards 24/7. <a href='https://www.google.com/search?q=JPY+USD+exchange+rate' target='_blank' rel='noopener noreferrer'>Check the current JPY/USD rate</a> before you go — the figures below assume a rough ≈¥150/$1, unconfirmed against a live rate this pass.</p>",
     "verified_on": "2026-07-29",
-    "shelf_life": "fx"
+    "shelf_life": "fx",
+    "source_url": "https://www.sevenbank.co.jp/intlcard/index2.html"
   },
   {
     "type": "budget",
@@ -36,7 +37,8 @@
         "category": "Accommodation",
         "note": "Miyamaso Takamiya, per person, kaiseki dinner + breakfast included — Japanese ryokan pricing is per-person, not per-room. Aggregator-sourced (≈$250/person); the ryokan's own site pushes to its booking system rather than posting a rate, so get the real quote when you book. This is the trip's one explicit splurge — the belated-birthday night.",
         "verified_on": "2026-07-29",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "source_url": "https://zao.co.jp/takamiya/"
       },
       {
         "label": "Food & drink, per day",
@@ -65,7 +67,8 @@
         "category": "Transport",
         "note": "Three domestic legs, aggregator fare ranges (≈$90 + ≈$60 + ≈$80, one-way each) plus the Sendai→Tokyo Hayabusa Shinkansen (≈¥11,410 ≈$75) at the end. None of these are airline-quoted — re-check nearer to booking.",
         "verified_on": "2026-07-29",
-        "shelf_life": "transit"
+        "shelf_life": "transit",
+        "source_url": "https://www.ana.co.jp/en/us/"
       },
       {
         "label": "Regional rail passes (JR Kyushu + JR East–South Hokkaido, if worth it)",
@@ -107,7 +110,10 @@
         "low": 15,
         "high": 60,
         "category": "Transport",
-        "note": "≈$11–25 per suitcase per shipment — budget two shipments (e.g. sending bags ahead of the Zao Onsen overnight, and again before the final Tokyo departure)."
+        "note": "≈$11–25 per suitcase per shipment — budget two shipments (e.g. sending bags ahead of the Zao Onsen overnight, and again before the final Tokyo departure).",
+        "verified_on": "2026-07-29",
+        "shelf_life": "transit",
+        "source_url": "https://www.kuronekoyamato.co.jp/en/"
       },
       {
         "label": "Gaming/anime shopping",

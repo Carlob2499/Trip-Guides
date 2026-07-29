@@ -4,6 +4,7 @@
     "group": "Sights",
     "title": "Top sights",
     "phase": "daily",
+    "rank": 2,
     "items": [
       {
         "name": "Matsushima Bay",
@@ -52,7 +53,8 @@
         "img": { "file": "Otaru Canal03bs3.jpg", "alt": "Otaru Canal lined with historic warehouses" },
         "map": { "lat": 43.2020231, "lng": 141.0006005 },
         "verified_on": "2026-07-29",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "source_url": "https://otaru.gr.jp/"
       },
       {
         "name": "Mt. Moiwa",
@@ -61,16 +63,15 @@
         "img": { "file": "Cable Car (Ropeway) to Mount Moiwayama - Sapporo - Hokkaido - Japan (47977611532).jpg", "alt": "Ropeway cable car ascending Mt. Moiwa above Sapporo" },
         "map": { "lat": 43.0223946, "lng": 141.3223386 },
         "verified_on": "2026-07-29",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "source_url": "https://mt-moiwa.jp/"
       },
       {
         "name": "Dazaifu Tenmangu",
         "kicker": "Japan's head shrine to the god of scholarship — easy half-day from Fukuoka",
         "body": "<p>Japan's principal shrine dedicated to Sugawara no Michizane, deified as the god of scholarship — a genuinely major Shinto site, not a minor stop, with a famous approach street of grilled-mochi (umegae mochi) stalls. A direct ≈30-min Nishitetsu train from Tenjin makes it an easy half-day rather than a full-day commitment, leaving room the same day for Fukuoka food plans.</p>",
         "img": { "file": "Dazaifu Tenmangu-40.jpg", "alt": "Dazaifu Tenmangu shrine grounds" },
-        "map": { "lat": 33.5194494, "lng": 130.5344619 },
-        "verified_on": "2026-07-29",
-        "shelf_life": "venue"
+        "map": { "lat": 33.5194494, "lng": 130.5344619 }
       },
       {
         "name": "Nakasu yatai (evening food stalls)",
@@ -87,18 +88,14 @@
         "kicker": "Sapporo's central green spine — the natural birthday-day base",
         "body": "<p>A 1.5km park running through the center of Sapporo, anchored by the Sapporo TV Tower at its east end — the city's obvious gathering space and a good low-key base for a relaxed day (this guide uses it for the Oct 24 birthday day). Steps from Tanukikoji's covered shopping arcade and the Susukino entertainment district.</p>",
         "img": { "file": "Odori park at Sapporo TV tower.jpg", "alt": "Odori Park with the Sapporo TV Tower" },
-        "map": { "lat": 43.0599018, "lng": 141.3475101 },
-        "verified_on": "2026-07-29",
-        "shelf_life": "venue"
+        "map": { "lat": 43.0599018, "lng": 141.3475101 }
       },
       {
         "name": "Canal City Hakata",
         "kicker": "Shopping/entertainment complex — also home to the Gashapon Department Store",
         "body": "<p>A large canal-through-the-middle shopping and entertainment complex in Hakata, with a dancing fountain show and dozens of shops — the specific draw for this trip is the <b>Gashapon Department Store</b> inside it (~2,200 capsule-toy machines, opened 2020), one of the concentrated gacha spots called out in the Gaming &amp; anime tab.</p>",
         "img": { "file": "Dancing fountains, Canal City, Fukuoka, Japan.jpg", "alt": "Dancing fountains inside Canal City Hakata" },
-        "map": { "lat": 33.5896715, "lng": 130.411141 },
-        "verified_on": "2026-07-29",
-        "shelf_life": "venue"
+        "map": { "lat": 33.5896715, "lng": 130.411141 }
       }
     ]
   }
