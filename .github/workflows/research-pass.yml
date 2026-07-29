@@ -198,6 +198,13 @@ jobs:
           # by default and would otherwise reject the zero-click auto-dispatch. This is the one
           # workflow that legitimately runs unattended from a bot trigger.
           allowed_bots: "github-actions[bot]"
+          # W6 finding (first real end-to-end run, 2026-07-29): without this, a run can burn a
+          # full agent session — 84 turns, $11+, 10+ minutes — and report `success` with ZERO
+          # durable output (no checkpoint commit, no PR, no run-report), and there is no way to
+          # tell why: the action's own log says so verbatim ("full output hidden for security...
+          # enable show_full_output: true ... for full output"). A silent-success/zero-output run
+          # is otherwise undiagnosable after the fact.
+          show_full_output: true
           # v1.0 action: `allowed_tools`/`model` are deprecated top-level inputs — both now go
           # through claude_args (--allowedTools / --model). Model economy: research is Sonnet
           # work (research-efficiency.md).
