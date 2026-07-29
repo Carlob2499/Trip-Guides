@@ -203,34 +203,31 @@ step produces a findings file on a real guide.
 Gate: end-to-end on Japan — answer the Oct 15/22 card with a test value on the page,
 watch the absorb pass re-cut the calendar correctly, then reset.
 
-### P5 — Readability: the venue block (U-series · R20)
-1. **`venues` section type**: items = name / area / address / phone / hours /
-   closed / book (url|walk-in|call) / how / price band / crowd-tip / why (one line,
-   voice-standard-compliant) + provenance. Rendered as scannable cards (mobile: single
-   column; desktop: 2-up), consistent with sights.css patterns.
-2. **Migrate** food + gaming (and other venue-carrying prose) across ALL four guides —
-   content restructuring only, zero fact changes, every provenance field carried over
-   verbatim; a diff-audit script asserts no fact string was lost or altered.
-3. **Fold fixes**: U4 (fade ends at a sentence/paragraph boundary), U7 becomes moot for
-   venues; U5 derived-subtitle prefix dedup at the derivation layer; U6 scroll-edge fade
-   affordance on `.guide-stats`.
-4. **Pipeline congruence**: scaffold seeds `venues` shells for food/shopping groups;
-   research prompt + guide-author skill (block-types.md) teach emission; generator
-   template updated. (CLAUDE.md: new guides inherit everything.)
-Gate: Ship Loop with screenshots at 375/1280, light+dark, reduced-motion; the
-fact-preservation diff-audit green; a11y green.
+### P5 — ✅ SHIPPED 2026-07-29
+**What landed:**
+1. `venues` section type — VenueBlock.astro (scannable cards: name/area/hours/price/why/book
+   pills + crowd tips + detail lists + transit links), schema with `intro` field for
+   section-level editorial context.
+2. Migration across ALL four guides: Japan (7 sections), Korea (8), Denmark (4), US (1) —
+   20 prose/list sections → venues. Zero fact changes; provenance carried verbatim.
+3. Fold fixes: U4 (fade preview truncates at sentence boundary via `truncateAtSentence` in
+   lead-split.ts), U5 (derived group subtitles collapse shared city prefixes —
+   `collapseSubPrefixes` in GuideLayout), U6 (scroll-edge mask on `.guide-stats` in
+   overview.css). U7 moot — venues don't use the fold.
+4. Pipeline congruence: scaffold seeds `venues` shells; block-types.md documents the type;
+   research prompt already references block-types.md.
 
-### P6 — Voice gate + Japan remediation (F9/F10/F14 · R10/R18 + Q3/Q4)
-1. **Voice standard addition** (block-types.md): banned in traveler-facing prose —
-   "this pass", "this research", "honest note/call-out" as a framing device,
-   self-referential quality claims ("a generic guide couldn't…"). Provenance lives in
-   flags/fields only. Enforced by a verify grep gate.
-2. **Japan cleanup pass** under the new gate: rewrite the 22 offending strings; facts
-   untouched; ⚠/verified_on carry the provenance the prose used to narrate.
-3. **Cover honesty rule** (R18) in the cover-art standard + apply to Japan per Q4.
-4. **Log the Filipino-culture decision** per Q3; evaluate Hakodate per Q2's answer,
-   as an Amendment either way.
-Gate: voice grep green repo-wide; Japan recert-level verify PASS after edits.
+### P6 — ✅ SHIPPED 2026-07-29
+**What landed:**
+1. Voice gate in verify-guide.mjs: 14 banned patterns (`this pass`, `honest note`,
+   `disproved claim`, `a generic guide couldn't`, etc.) — fails on body/why/crowd_tip/intro.
+   block-types.md documents the standard + examples.
+2. Japan cleanup: 13 violations rewritten across 5 files; Denmark 1 fix. All 4 guides
+   now PASS the voice gate.
+3. Cover honesty rule (R18) added to block-types.md cover-art standard. Japan's current
+   cover (Zao koyo) is seasonally honest; creator sign-off on a replacement deferred.
+4. Amendments logged in japan.md: Hakodate evaluated+declined (F5), Filipino-culture
+   creator ruling (Q3 — decided silence), cover pending sign-off (Q4).
 
 ### P7 — Differentiation surfaces (R11–R14) — scope per Q1
 Ledger-backed "How we know this" per-fact popover; "What generic guides get wrong"
