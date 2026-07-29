@@ -1,0 +1,138 @@
+[
+  {
+    "type": "panel",
+    "group": "Money & budget",
+    "title": "Money & currency",
+    "phase": "arrival",
+    "body": "<p>Japanese Yen (¥/JPY). Card acceptance keeps broadening at tourist-facing venues, but this trip's actual food priorities skew cash-heavy — yatai stalls are ~90% cash-only, and plenty of ramen counters and markets are too. Withdraw at 7-Eleven ATMs (Seven Bank), which reliably accept foreign cards 24/7. <a href='https://www.google.com/search?q=JPY+USD+exchange+rate' target='_blank' rel='noopener noreferrer'>Check the current JPY/USD rate</a> before you go — the figures below assume a rough ≈¥150/$1, unconfirmed against a live rate this pass.</p>",
+    "verified_on": "2026-07-29",
+    "shelf_life": "fx",
+    "source_url": "https://www.sevenbank.co.jp/intlcard/index2.html"
+  },
+  {
+    "type": "budget",
+    "group": "Money & budget",
+    "title": "Budget & daily costs",
+    "phase": "before",
+    "intro": "Rough <b>per-person USD</b> estimates for a mid-to-high, comfortable ($150–300/day target) trip — toggle for trip-total or per-person. The Zao Onsen ryokan night is the one deliberate splurge; lodging otherwise is business-hotel-level to keep the daily average sane. Gaming/anime shopping is wide open by nature — treat that line as a floor, not a ceiling. All figures are ≈ estimates, not fixed quotes — confirm as you book.",
+    "currency": "$",
+    "days": 27,
+    "party": 2,
+    "items": [
+      {
+        "label": "Lodging, per night",
+        "basis": "day",
+        "est": 100,
+        "low": 70,
+        "high": 160,
+        "category": "Accommodation",
+        "note": "Business-hotel-level in Fukuoka/Sapporo/Sendai — twin rooms near the station or entertainment district run roughly this range. (⚠ a general estimate, not a specific booked rate.)"
+      },
+      {
+        "label": "Zao Onsen ryokan — 1 night, 2 meals incl.",
+        "basis": "trip",
+        "est": 250,
+        "low": 180,
+        "high": 350,
+        "category": "Accommodation",
+        "note": "Miyamaso Takamiya, per person, kaiseki dinner + breakfast included — Japanese ryokan pricing is per-person, not per-room. Aggregator-sourced (≈$250/person); the ryokan's own site pushes to its booking system rather than posting a rate, so get the real quote when you book. This is the trip's one explicit splurge — the belated-birthday night.",
+        "verified_on": "2026-07-29",
+        "shelf_life": "venue",
+        "source_url": "https://zao.co.jp/takamiya/"
+      },
+      {
+        "label": "Food & drink, per day",
+        "basis": "day",
+        "est": 45,
+        "low": 20,
+        "high": 90,
+        "category": "Food & drink",
+        "note": "Ramen ≈$8–12/bowl, yatai ≈$20–30/evening for a few stalls, motsunabe/mentaiko sit-down dinners and the birthday jingisukan dinner push individual days well past the average. (⚠ a general estimate, not a single sourced figure.)"
+      },
+      {
+        "label": "Local transport, per day",
+        "basis": "day",
+        "est": 12,
+        "low": 5,
+        "high": 25,
+        "category": "Transport",
+        "note": "City subway/bus fares most days; occasional taxi for late nights or awkward connections (e.g. Zao Onsen, Jozankei)."
+      },
+      {
+        "label": "Domestic flights (Tokyo→Fukuoka→Sapporo→Sendai)",
+        "basis": "trip",
+        "est": 380,
+        "low": 280,
+        "high": 500,
+        "category": "Transport",
+        "note": "Three domestic legs, aggregator fare ranges (≈$90 + ≈$60 + ≈$80, one-way each) plus the Sendai→Tokyo Hayabusa Shinkansen (≈¥11,410 ≈$75) at the end. None of these are airline-quoted — re-check nearer to booking.",
+        "verified_on": "2026-07-29",
+        "shelf_life": "transit",
+        "source_url": "https://www.ana.co.jp/en/us/"
+      },
+      {
+        "label": "Regional rail passes (JR Kyushu + JR East–South Hokkaido, if worth it)",
+        "basis": "trip",
+        "est": 130,
+        "low": 100,
+        "high": 270,
+        "category": "Transport",
+        "note": "JR Kyushu Northern Pass (5-day, ¥17,000 ≈$113) and/or JR East–South Hokkaido Rail Pass (6-day, ¥40,000 ≈$266) — compare against point-to-point tickets for the actual planned routes before buying; regional passes pay off on genuinely regional itineraries like this one, per repeated traveler reports, but only if the specific days used justify the price.",
+        "verified_on": "2026-07-29",
+        "shelf_life": "transit",
+        "source_url": "https://www.jrkyushu.co.jp/english/railpass/railpass.html"
+      },
+      {
+        "label": "Sights & activities, per day",
+        "basis": "day",
+        "est": 15,
+        "low": 0,
+        "high": 40,
+        "category": "Activities",
+        "note": "Ropeway fares (Mt. Moiwa, Zao), the Matsushima boat cruise, and similar — many days (Naruko Gorge, Jigokudani, yatai-hopping) cost nothing to just walk through."
+      },
+      {
+        "label": "eSIM / data",
+        "basis": "trip",
+        "est": 65,
+        "low": 19,
+        "high": 130,
+        "category": "Phone & data",
+        "note": "Ubigi unlimited/30-day ≈$65 (two 30-day cycles needed to cover ~26 days); the 20GB/30-day tier is ≈$19 if data use is lighter than expected.",
+        "verified_on": "2026-07-29",
+        "shelf_life": "fx",
+        "source_url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/"
+      },
+      {
+        "label": "Luggage forwarding (Yamato Ta-Q-Bin)",
+        "basis": "trip",
+        "est": 30,
+        "low": 15,
+        "high": 60,
+        "category": "Transport",
+        "note": "≈$11–25 per suitcase per shipment — budget two shipments (e.g. sending bags ahead of the Zao Onsen overnight, and again before the final Tokyo departure).",
+        "verified_on": "2026-07-29",
+        "shelf_life": "transit",
+        "source_url": "https://www.kuronekoyamato.co.jp/en/"
+      },
+      {
+        "label": "Gaming/anime shopping",
+        "basis": "trip",
+        "est": 300,
+        "low": 100,
+        "high": 800,
+        "category": "Shopping",
+        "note": "Wide open by design — this is the discretionary line for Mandarake/Animate/gacha runs across Fukuoka, Sapporo and Sendai. Anything bought Nov 1 onward uses the new refund-at-departure tax-free process (see Plan tab) rather than the instant discount."
+      },
+      {
+        "label": "Flights — international round trip",
+        "basis": "trip",
+        "est": 1000,
+        "low": 700,
+        "high": 1400,
+        "category": "Flights",
+        "note": "Rough transpacific range into/out of Tokyo (HND/NRT) — swings hugely on carrier, dates, and how far ahead you book. Check ANA Mileage Club / United MileagePlus (Star Alliance) or American AAdvantage on JAL (oneworld) if using miles."
+      }
+    ]
+  }
+]
