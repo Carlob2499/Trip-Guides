@@ -5,7 +5,7 @@
 // scope here — this covers the logic a bug would corrupt silently.
 
 import { describe, it, expect } from "vitest";
-import { slugify, dayLabelsFromRange, buildGuideObject, buildIntakeMd, parseArgs } from "../scaffold-guide.mjs";
+import { slugify, dayLabelsFromRange, buildGuideObject, buildIntakeMd, parseArgs, deriveRanks, PRIORITY_GROUP_MAP } from "../scaffold-guide.mjs";
 
 describe("slugify", () => {
   it("lowercases and hyphenates", () => {
@@ -176,6 +176,55 @@ describe("buildIntakeMd", () => {
     expect(md).toContain("# New Guide Intake — [Destination]");
     expect(md).toContain("Who is this for / party:**   *(→ pick");
     expect(md).toContain("1. \n2. \n3. ");
+  });
+});
+
+describe("deriveRanks (P2/R16 — deterministic intake→facet rank mapping)", () => {
+  it("maps each priority to its group with 1-indexed rank", () => {
+    expect(deriveRanks(["Food & dining", "Culture / history", "Nature / outdoors"])).toEqual({
+      "Food & shopping": 1,
+      "Sights": 2, // Culture claims it first; Nature shares the group but doesn't overwrite
+    });
+  });
+
+  it("first priority to claim a group wins (Food before Shopping)", () => {
+    const r = deriveRanks(["Food & dining", "Shopping"]);
+    expect(r["Food & shopping"]).toBe(1); // Food at rank 1, Shopping doesn't overwrite
+  });
+
+  it("returns empty for no priorities", () => {
+    expect(deriveRanks([])).toEqual({});
+  });
+
+  it("maps niche interest to Highlights", () => {
+    expect(deriveRanks(["Niche interest (specify below)"])).toEqual({ Highlights: 1 });
+  });
+
+  it("maps every known priority label to a group", () => {
+    for (const label of Object.keys(PRIORITY_GROUP_MAP)) {
+      expect(PRIORITY_GROUP_MAP[label], `${label} should map to a group`).toBeTruthy();
+    }
+  });
+});
+
+describe("buildGuideObject rank facets (P2/R16)", () => {
+  it("applies rank to sections whose group matches a priority", () => {
+    const g = buildGuideObject({ country: "Denmark", priorities: ["Food & dining", "Culture / history"] });
+    const food = g.sections.find((s) => s.group === "Food & shopping");
+    const sights = g.sections.find((s) => s.group === "Sights");
+    expect(food.rank).toBe(1);
+    expect(sights.rank).toBe(2);
+  });
+
+  it("does not add rank to groups with no matching priority", () => {
+    const g = buildGuideObject({ country: "Denmark", priorities: ["Food & dining"] });
+    const transit = g.sections.filter((s) => s.group === "Transit");
+    for (const s of transit) expect(s.rank).toBeUndefined();
+  });
+
+  it("no priorities means no ranks anywhere", () => {
+    const g = buildGuideObject({ country: "Denmark" });
+    for (const s of g.sections) expect(s.rank).toBeUndefined();
   });
 });
 

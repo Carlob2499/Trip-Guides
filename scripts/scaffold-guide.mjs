@@ -27,6 +27,31 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const GUIDES_DIR = path.join(ROOT, "src", "content", "guides");
 const INTAKE_DIR = path.join(ROOT, "guides-intake");
 
+// P2/R16: deterministic mapping from intake priority dropdown labels to scaffold section
+// groups. When a priority maps to a group, every section in that group gets `rank: <position>`
+// (1-indexed from the intake's ranked order). The Composer uses rank to protect high-priority
+// themes from budget-merging — an unranked group is merge-eligible, a rank-1 group is not.
+export const PRIORITY_GROUP_MAP = {
+  "Food & dining": "Food & shopping",
+  "Culture / history": "Sights",
+  "Nature / outdoors": "Sights",
+  "Nightlife": "Food & shopping",
+  "Shopping": "Food & shopping",
+  "Wellness / relaxation": "Health & safety",
+  "Niche interest (specify below)": "Highlights",
+};
+
+// Returns { groupName: rank } — first priority to claim a group wins; later priorities
+// sharing the same group don't overwrite (the higher-ranked one keeps the slot).
+export function deriveRanks(priorities) {
+  const ranks = {};
+  for (let i = 0; i < priorities.length; i++) {
+    const group = PRIORITY_GROUP_MAP[priorities[i]];
+    if (group && !(group in ranks)) ranks[group] = i + 1;
+  }
+  return ranks;
+}
+
 const WD = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const DEFAULT_DAYS = 7;
@@ -140,6 +165,12 @@ export function buildGuideObject(answers = {}) {
 
   // Sources — canonical closing section; the research pass fills the sources.
   sections.push({ type: "prose", group: "Sources", title: "Sources & further reading", body: "" });
+
+  // P2/R16: apply intake-derived ranks so the Composer knows which groups are anchor tabs.
+  const ranks = deriveRanks(answers.priorities || []);
+  for (const s of sections) {
+    if (ranks[s.group]) s.rank = ranks[s.group];
+  }
 
   const cityLabel = (answers.cities || "").trim();
   return {

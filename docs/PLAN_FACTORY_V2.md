@@ -70,7 +70,36 @@ No site surface changed, so the Ship Loop's preview/`dist`-grep legs do not appl
    and a zero-output run; watch both gates actually trip; revert.
 Gate: both forced failures caught; a normal re-run of the `us` compose check still green.
 
-### P2 — Structural research integrity (F3 · R5/R6/R16)
+### P2 — Structural research integrity (F3 · R5/R6/R16) — ✅ SHIPPED 2026-07-29
+
+**What landed.** Three changes that make the dual-pass research structurally honest:
+
+1. **Pass B as its own agent invocation** — `research-pass.yml` now has THREE agent steps
+   (Pass A → Pass B → Reconcile & Verify) instead of one. Pass B is a separate
+   `anthropics/claude-code-action@v1` invocation that receives ONLY `guides-intake/<slug>.md`
+   (the intake) and the skill references — it is told NOT to read `src/content/guides/<slug>/`
+   and writes its findings to `guides-intake/<slug>.passB.json` (structured: item, category,
+   finding, source_url, verified_on, replaces). The reconcile agent then reads BOTH the guide
+   (Pass A) and the passB.json (Pass B) and merges them into one guide with the reconciliation
+   ledger. Pass B always runs Sonnet regardless of the `model` input. Route steps between agents
+   check `--status --json` and skip agents whose stage is already cleared (resume-safe).
+
+2. **Reserved search sub-budgets** (R5) — Pass A's prompt reserves ≥3 searches for the
+   phrases/language card and ≥2 for the footage scout, with explicit instructions to do these
+   duties DURING the pass (not as an afterthought). Pass B's prompt reserves ≥2 searches for
+   phrases/language. The run report must state per-duty spend.
+
+3. **Deterministic intake→facet `rank` mapping** (R16) — `scaffold-guide.mjs` now exports
+   `PRIORITY_GROUP_MAP` (the mapping from each intake priority dropdown label to its scaffold
+   section group) and `deriveRanks(priorities)` (returns `{ groupName: rank }`, 1-indexed,
+   first-priority-wins). `buildGuideObject` applies ranks to all sections whose group matches
+   a priority. The Pass A prompt references this: "the scaffold already seeded rank from the
+   intake's priorities via PRIORITY_GROUP_MAP — keep those honest as you rewrite."
+
+**Gates:** 962 tests green (8 new — deriveRanks unit tests + buildGuideObject rank-facet
+integration tests), lint 0, build clean. No site surface changed (scaffold + workflow only).
+
+### P2 — original specification
 1. **Pass B as its own agent invocation**, blind to Pass A's findings: second agent step
    (or second job) receiving ONLY the intake + scaffold, never the Pass A diff. Reconcile
    remains with the primary agent, which now genuinely reconciles two independent sources.
