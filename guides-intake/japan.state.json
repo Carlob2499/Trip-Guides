@@ -1,13 +1,13 @@
 {
   "slug": "japan",
   "createdAt": "2026-07-29T09:12:03.464Z",
-  "updatedAt": "2026-07-29T10:32:26.711Z",
+  "updatedAt": "2026-07-29T10:45:40.438Z",
   "stages": {
     "scaffold": "2026-07-29T09:12:03.464Z",
     "passA": "2026-07-29T10:32:26.640Z",
     "passB": "2026-07-29T10:32:26.675Z",
     "reconcile": "2026-07-29T10:32:26.711Z",
-    "verified": null
+    "verified": "2026-07-29T10:45:40.438Z"
   },
   "attempts": 2,
   "notes": [
@@ -25,6 +25,11 @@
       "stage": "reconcile",
       "note": "Reconciled A+B into guide files; ledger + amendments written to guides-intake/japan.md; routing reordered Fukuoka->Hokkaido->Tohoku",
       "at": "2026-07-29T10:32:26.711Z"
+    },
+    {
+      "stage": "verified",
+      "note": "verify PASS (offline + network), build clean, critic pass done, graduated via graduate-guide.mjs",
+      "at": "2026-07-29T10:45:40.438Z"
     }
   ]
 }
