@@ -67,11 +67,11 @@ jobs:
       SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://carlob2499.github.io/Trip-Guides' }}
       GH_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
