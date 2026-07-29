@@ -20,7 +20,27 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (updated 2026-07-28, session close #15 — descriptor ruling + THE ARC IS ON MAIN; redesign branch deleted)
+## Snapshot (updated 2026-07-29, session close #16 — Japan research trial: full pipeline PASS, auto-graduated live)
+
+**Session #16:** the Japan guide (intake issue #24) ran the complete generation pipeline
+end-to-end on `research/japan` and merged clean (PR #26, `e1529ed`) — the first real proof
+of the factory since M0's token blocker, and no creator intervention was needed to land it.
+Scaffold → two pipeline attempts (first fixed a research-agent output-visibility bug,
+`877a1b0`) → Pass A → Pass B → reconcile → a provenance-gate fix (offline verify PASS,
+build+tests clean) → **critic pass caught a real weak pick** — flagged Dazaifu as the
+generic sights choice and offered an alternative, the bar-test doctrine actually firing
+mid-pipeline, not just at hand-authored review → extract-palette + compose-guide (tab
+order) → **networked verify PASS (0 dead links, 0 missing photos)** → `graduate-guide.mjs`
+auto-dropped `draft:true` and rewrote the verified stamp. Guide: Japan, Fukuoka → Sapporo →
+Sendai, Oct 15–Nov 10 2026, koyo-chasing itinerary anchored on the Pokémon GO Wild Area
+Sendai weekend (Nov 6–8). Honestly flagged open items (Honest property, not hidden):
+trip start date unsettled (Oct 15 vs 22), Wild Area Sendai venue/tickets unannounced,
+Yukemuri train's 2026 dates + Zao Ropeway autumn closure date + JMC's first foliage
+forecast all not yet published, and MOFA/US State Dept advisory pages blocked automated
+fetch (need a live manual check). This session ran on branch
+`claude/research-trial-results-h32hlk`, separate from the redesign work below.
+
+## Previous snapshot (2026-07-28, session close #15 — descriptor ruling + THE ARC IS ON MAIN; redesign branch deleted)
 
 **Session #15 (same day):** the creator rejected Korea's eleven descriptors as AI-sounding —
 and ruled. The autopsy (eight of eleven shared one list–em-dash–quip rhythm; the quips praised
@@ -266,6 +286,23 @@ confirmed live by the creator.
 the token is rotated. Detail in `docs/PIPELINE.md` and `docs/PLAN_MODERNIZE.md`'s M0.
 
 ## Where we left off
+
+**Session #16 (2026-07-29):** the creator asked how the Japan research trial went. It's a clean
+win — verified above, no rework needed. The one loose end is honesty-driven, not a bug: six
+facts in Japan's `verified` blurb are explicitly time-sensitive (trip start date, Wild Area
+Sendai venue, two seasonal-train/ropeway dates, the koyo forecast, two blocked government
+pages) and are due for a live re-check closer to travel — that's the guide doing its job, not
+a defect to fix now.
+
+**Re-prompt the creator with (2026-07-29, session #16):** "Japan's research trial passed clean
+end-to-end — scaffold → research → critic (caught and swapped a generic Dazaifu pick) →
+compose → networked verify PASS → auto-graduated to live, PR #26 merged. It's the first
+full unattended pipeline run since the M0 token fix. Six facts are flagged ⚠ for a re-check
+closer to Oct: trip start date, Wild Area Sendai's venue/tickets, the Yukemuri train and Zao
+Ropeway 2026 dates, JMC's foliage forecast, and the MOFA/State-Dept pages that blocked
+automated fetch. Nothing else outstanding from this run. Still standing from #15: rotating
+`CLAUDE_CODE_OAUTH_TOKEN` was already resolved by this same pipeline succeeding, so W6's
+real end-to-end proof is DONE — Japan was the proof."
 
 Two sessions ago the audit's lesson was: every green gate here measures the artifact, not the
 factory. This session answered *why* the factory never ran — not a guess, a 401 read straight off
