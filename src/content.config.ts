@@ -34,6 +34,9 @@ const provenance = {
   // still good at four months. The categories existed in staleness.ts from the start
   // and nothing ever passed one — this is the field that makes them real.
   shelf_life: z.enum(["fx", "transit", "hours", "venue", "default"]).optional(),
+  // P4/R14: when this ⚠-flagged fact's publish window opens (YYYY-MM-DD) — the pretrip-check
+  // workflow uses this to schedule re-verification. Only meaningful on ⚠ items.
+  expected: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
 };
 
 // F1 (docs/archive/PLAN_TRAVELER_FEATURES.md): a checklist item stays a bare string for every guide

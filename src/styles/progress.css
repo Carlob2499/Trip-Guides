@@ -44,6 +44,17 @@
 .pg-correction-form button{padding:.6rem 1.1rem;border-radius:var(--r-md);border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);cursor:pointer}
 .pg-correction-form button:hover{background:var(--accent);border-color:var(--accent)}
 
+/* Question cards (P4) */
+.pg-questions{margin-top:1.4rem}
+.pg-questions[hidden]{display:none}
+.pg-q-head{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);margin:0 0 .3rem}
+.pg-q-intro{font-size:var(--text-small);color:var(--muted);line-height:1.45;margin:0 0 .8rem}
+.pg-q-card{background:var(--bg2);border:1px solid var(--rule);border-radius:var(--r-md);padding:.9rem 1rem;margin-bottom:.6rem}
+.pg-q-text{font-family:var(--font-display);font-weight:560;font-size:var(--text-body);margin:0 0 .4rem;line-height:1.4}
+.pg-q-assumed{font-size:var(--text-small);color:var(--muted);margin:0 0 .25rem;line-height:1.4}
+.pg-q-assumed-label{font-weight:600;color:var(--ink)}
+.pg-q-context{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);margin:0}
+
 .pg-waiting[hidden]{display:none}
 .pg-home-link{display:inline-block;margin-top:1.6rem;font-family:var(--font-data);font-size:var(--text-control);color:var(--muted);text-decoration:none}
 .pg-home-link:hover{color:var(--accent-ink)}

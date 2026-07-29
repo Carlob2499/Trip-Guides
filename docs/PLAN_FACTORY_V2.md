@@ -155,7 +155,36 @@ lint 0, build clean.
 Gate: coverage matrix red on a deliberately-dropped ask, green after logging; critic
 step produces a findings file on a real guide.
 
-### P4 — Traveler progress page (F6/F7 · R3/R4)
+### P4 — Traveler progress page (F6/F7 · R3/R4) — ✅ SHIPPED 2026-07-29
+
+**What landed.** Four pieces that close the traveler-facing loop:
+
+1. **Question cards on the progress page** — `src/features/intake-questions/` sealed silo
+   (model, mocks, tests) with `IntakeQuestion` type, `BANNED_TERMS` enforcement (pipeline
+   vocabulary never reaches a traveler), `parseQuestionsFromIntake` / `formatQuestionBlock`
+   round-trip serialization. The progress page (`src/pages/progress/index.astro`) gains a
+   "Questions for you" section that renders open question cards with the assumption shown,
+   polled from the research branch's intake doc via the existing GitHub raw gateway.
+
+2. **Question emitter in the research workflow** — Pass A and Reconcile agents in
+   `research-pass.yml` gain a QUESTION EMITTER instruction: when research hits a real fork
+   (dates, lodging style, tradeoffs only the traveler can decide), emit a structured question
+   block to `## Questions for the traveler` in the intake doc, then proceed on the assumption.
+   The intake template (`buildIntakeMd`) pre-seeds this section.
+
+3. **Answer absorption + date-lock trigger** — `modify-guide.yml` gains a `workflow_dispatch`
+   trigger with `absorb-answers` and `date-lock` modes. `absorb-answers` reads answered
+   questions from the intake doc, applies each to the guide with a continuity sweep, and marks
+   them absorbed. `date-lock` (R4) re-cuts the day plan when trip dates confirm: day-of-week
+   labels, weekend/weekday hours, holiday warnings, kicker.
+
+4. **⚠-recheck scheduling wiring** (R14) — provenance gains an `expected` field (YYYY-MM-DD)
+   for ⚠-flagged items whose publish window is known. The pretrip-check workflow can use this
+   to schedule re-verification when the window opens.
+
+**Gates:** 980 tests green (11 new — intake-questions model tests), lint 0, build clean.
+
+### P4 — original specification
 1. **Progress page** at the guide URL pre-graduation: stage progress in traveler
    language (from `state.json` notes via a translation table), question cards, and the
    ⚠-assumption list. Data: Firebase under the existing `trips/<storeKey>` silo pattern

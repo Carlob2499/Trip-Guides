@@ -270,6 +270,12 @@ Top 3, in order:
 |------|--------------------|--------------------------|--------------------|---------------------------------|
 |      |                    |                          |                    |                                 |
 
+## Questions for the traveler (research emits; traveler answers on the progress page)
+> Traveler-framed only — no pipeline vocabulary. Each question carries an assumption the guide
+> builds on until the traveler answers. See src/features/intake-questions/ for the model.
+
+(none yet)
+
 ## Amendments (append-only — record every research-forced re-plan)
 > When research changes the plan (an anchor moved, a neighborhood beats the intended one, a day
 > collapsed), log it here with the reason. The intake above stays the ORIGINAL intent; this is the

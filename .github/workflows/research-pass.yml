@@ -323,6 +323,17 @@ jobs:
                  license, what the clip claims to show, and whether that matches the cover
                  photo's actual location. An empty table is a fine outcome.
 
+            QUESTION EMITTER (P4): when research hits a REAL fork (dates, lodging style,
+            splurge vs save tradeoff — a decision only the traveler can make), emit a structured
+            question to guides-intake/${{ inputs.slug }}.md under `## Questions for the traveler`:
+              ### q-${{ inputs.slug }}-<n>
+              - **Q:** <traveler-framed question — NO pipeline vocabulary>
+              - **Assumed:** <what you'll build if they don't answer>
+              - **Context:** <which section/day this affects>
+              - **Status:** open
+            Then PROCEED on the assumption — research never blocks on an answer. Emit questions
+            only for genuine forks, not for facts you can research yourself.
+
             After finishing Pass A + Living Atlas duties, checkpoint and commit:
               npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint passA
               && git add -A && git commit -m "research(${{ inputs.slug }}): Pass A" && git push
@@ -483,6 +494,12 @@ jobs:
             Log any research-forced re-plan in that doc's `## Amendments` section. Every marquee
             sight/food rec carries a crowd + best-time note, woven into the existing sights/days
             bodies (no new sections, no tab-budget cost).
+
+            QUESTION EMITTER (P4): when reconciliation reveals a REAL traveler fork (a conflict
+            only they can resolve, a tradeoff between their ranked priorities), emit a question
+            to `## Questions for the traveler` in the intake doc — same format as Pass A's
+            emitter. Proceed on the assumption; research never blocks.
+
               → then: npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint reconcile
                 && git add -A && git commit -m "research(${{ inputs.slug }}): reconcile" && git push
 

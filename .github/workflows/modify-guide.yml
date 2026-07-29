@@ -16,6 +16,20 @@ name: Modify guide
 on:
   issues:
     types: [labeled]
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "Guide slug for answer absorption (e.g. japan)"
+        required: true
+        type: string
+      mode:
+        description: "What kind of modification to run"
+        required: true
+        type: choice
+        options:
+          - absorb-answers
+          - date-lock
+        default: absorb-answers
 
 permissions:
   contents: write
@@ -25,6 +39,7 @@ permissions:
 jobs:
   modify:
     if: >
+      github.event_name == 'issues' &&
       github.event.label.name == 'modify-approved' &&
       contains(github.event.issue.labels.*.name, 'modify-request')
     runs-on: ubuntu-latest
@@ -168,3 +183,97 @@ jobs:
 
             Never touch any guide other than ${{ steps.req.outputs.slug }} (or its split-directory
             equivalent). Never touch guides-intake/ state files — this mode doesn't use them.
+
+  # P4: absorb traveler answers from the intake doc's question cards, or re-cut the
+  # calendar when dates lock in (date-lock trigger, R4).
+  absorb:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate slug input
+        env:
+          SLUG: ${{ inputs.slug }}
+        run: |
+          node --input-type=module -e "
+            import { isValidSlug } from './scripts/lib/slug.mjs';
+            if (!isValidSlug(process.env.SLUG)) { console.error('Invalid slug:', process.env.SLUG); process.exit(1); }
+          "
+
+      - name: Configure git identity
+        run: |
+          git config user.name  "waypoint-modify[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Start the absorb branch
+        env:
+          SLUG: ${{ inputs.slug }}
+        run: git checkout -b "absorb/${SLUG}"
+
+      - name: Run absorb agent
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          claude_args: |
+            --model claude-sonnet-5
+            --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
+          prompt: |
+            Guide slug: ${{ inputs.slug }}
+            Mode: ${{ inputs.mode }}
+
+            Use the waypoint-guide-author skill: read .claude/skills/waypoint-guide-author/SKILL.md
+            and references/verification-rules.md. This is the "Edit an existing guide" mode.
+
+            TARGET: src/content/guides/${{ inputs.slug }}/ (directory — _guide.json + NN-*.json)
+            INTAKE: guides-intake/${{ inputs.slug }}.md
+
+            MODE: ${{ inputs.mode }}
+
+            IF absorb-answers:
+              1. Read `## Questions for the traveler` from the intake doc.
+              2. For each question with status "answered":
+                 - Read the answer and the original assumption.
+                 - Find the guide section(s) the `Context` field names.
+                 - Update the guide content to reflect the answer instead of the assumption.
+                 - Run the mandatory continuity sweep (CLAUDE.md) — the answer may ripple into
+                   days, budget, transit, booking windows.
+                 - Update the question's status to "absorbed" in the intake doc.
+              3. Verify: `npm run verify -- --slug ${{ inputs.slug }}` + `npm run build`.
+                 Fix any blocking findings. Repeat up to 4 rounds.
+              4. Commit + push:
+                 git add -A && git commit -m "absorb(${{ inputs.slug }}): apply traveler answers" && git push -u origin HEAD
+
+            IF date-lock:
+              The trip dates have been confirmed. This is R4 — the date-lock trigger.
+              1. Read the intake doc for the confirmed start/end dates.
+              2. Re-cut the day plan: update day-of-week labels, recalculate which days land on
+                 weekends vs weekdays (hours/closures differ), re-check holiday warnings against
+                 the exact dates, update the kicker if it references dates.
+              3. Any ⚠ assumption about dates → resolve it now (the dates are confirmed).
+              4. Continuity sweep: budget days count, itinerary day labels, transit timing.
+              5. Verify + build, fix findings, up to 4 rounds.
+              6. Commit + push:
+                 git add -A && git commit -m "date-lock(${{ inputs.slug }}): re-cut calendar for confirmed dates" && git push -u origin HEAD
+
+            LANDING:
+              npm run verify -- --slug ${{ inputs.slug }} --markdown > /tmp/scorecard.md
+              PASSED=true  # set false if verify/build still failing
+              bash scripts/land-branch.sh "absorb/${{ inputs.slug }}" main \
+                "Absorb: ${{ inputs.slug }} (${{ inputs.mode }})" \
+                /tmp/scorecard.md "$PASSED"
+
+            Never touch any guide other than ${{ inputs.slug }}.

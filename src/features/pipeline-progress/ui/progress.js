@@ -38,6 +38,8 @@ export function initProgress() {
     done: document.getElementById("pgDone"),
     doneLink: document.getElementById("pgDoneLink"),
     correction: document.getElementById("pgCorrection"),
+    questions: document.getElementById("pgQuestions"),
+    qList: document.getElementById("pgQList"),
   };
 
   const gateway = createGithubGateway({ owner: OWNER, repo: NAME });
@@ -96,9 +98,28 @@ export function initProgress() {
     }
   }
 
+  function renderQuestions(questions) {
+    if (!els.qList || !els.questions) return;
+    const open = questions.filter(function (q) { return q.status === "open"; });
+    if (!open.length) { els.questions.hidden = true; return; }
+    els.questions.hidden = false;
+    els.qList.innerHTML = "";
+    open.forEach(function (q) {
+      var card = document.createElement("div");
+      card.className = "pg-q-card";
+      card.innerHTML =
+        '<p class="pg-q-text">' + q.text + "</p>" +
+        '<p class="pg-q-assumed"><span class="pg-q-assumed-label">If you don\'t answer:</span> ' + q.assumption + "</p>" +
+        '<p class="pg-q-context">' + q.context + "</p>";
+      els.qList.appendChild(card);
+    });
+  }
+
   async function poll() {
     if (stopped) return;
-    const [state, published] = await Promise.all([gateway.fetchState(slug), gateway.isPublished(slug)]);
+    const [state, published, questions] = await Promise.all([
+      gateway.fetchState(slug), gateway.isPublished(slug), gateway.fetchQuestions(slug),
+    ]);
 
     if (state) {
       if (!lastState) startedAt = new Date(state.createdAt).getTime();
@@ -114,6 +135,7 @@ export function initProgress() {
     // cleared yet" view, so the checklist shows what's COMING immediately, not a blank panel
     // while waiting for the very first successful fetch.
     render(deriveProgress(state, { now: new Date(), published }));
+    renderQuestions(questions);
   }
 
   function start() {

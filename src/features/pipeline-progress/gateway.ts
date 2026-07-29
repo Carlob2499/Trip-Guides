@@ -2,6 +2,7 @@
  *  backs. Deliberately no new backend, no Firebase, no secrets: raw.githubusercontent.com and
  *  the guide's own committed JSON are both public, unauthenticated, static reads. */
 import type { PipelineState } from "./model/progress";
+import type { IntakeQuestion } from "../intake-questions/index";
 
 export interface ProgressGateway {
   /** The most-current pipeline state for `slug`, or null if none exists (yet, or never will —
@@ -11,6 +12,8 @@ export interface ProgressGateway {
   /** True once the guide's own committed JSON on `main` has no `draft: true` — the moment
    *  research-pass.yml's auto-graduate step (scripts/graduate-guide.mjs --slug) has landed. */
   isPublished(slug: string): Promise<boolean>;
+  /** Intake questions from the research branch's intake doc, or empty if none. */
+  fetchQuestions(slug: string): Promise<IntakeQuestion[]>;
 }
 
 export interface GithubGatewayOptions {
@@ -63,6 +66,22 @@ export function createGithubGateway(opts: GithubGatewayOptions): ProgressGateway
       const guide = await fetchJsonOrNull(raw(baseBranch, `src/content/guides/${slug}.json`));
       if (!guide) return false;
       return !(guide as { draft?: boolean }).draft;
+    },
+    async fetchQuestions(slug) {
+      const url = raw(`research/${slug}`, `guides-intake/${slug}.md`);
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), FETCH_TIMEOUT_MS);
+      try {
+        const res = await fetch(url, { cache: "no-store", signal: ctrl.signal });
+        if (!res.ok) return [];
+        const md = await res.text();
+        const { parseQuestionsFromIntake } = await import("../intake-questions/index");
+        return parseQuestionsFromIntake(md);
+      } catch {
+        return [];
+      } finally {
+        clearTimeout(timer);
+      }
     },
   };
 }

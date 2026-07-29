@@ -52,6 +52,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
           </p>
         </div>
 
+        <div class="pg-questions" id="pgQuestions" hidden>
+          <h2 class="pg-q-head">Questions for you</h2>
+          <p class="pg-q-intro">
+            The research found a fork in the plan. Your answer shapes the guide; if you
+            don't answer, the assumption below is what gets built.
+          </p>
+          <div class="pg-q-list" id="pgQList"></div>
+        </div>
+
         <div class="pg-done" id="pgDone" hidden>
           <p class="pg-done-head">Your guide is ready.</p>
           <a class="pg-done-link" id="pgDoneLink" href="#">View the guide →</a>
