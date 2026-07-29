@@ -151,3 +151,21 @@ No candidates found this pass — the research agents' web-search budget was exh
   than ship an unconfirmed level with a fabricated `verified_on`, the optional `advisory` field
   was left unset; Health & safety notes the widely-reported (but unconfirmed) Level 1 in prose
   instead, with an explicit instruction to check the live page before travel.
+- **Hokkaido narrowing stands (F5 — Hakodate evaluated and declined).** The QA review
+  flagged that Hakodate (prime late-October koyo at Onuma, and the Shinkansen gateway
+  toward Sendai) was never evaluated. Evaluation: Hakodate adds a minimum 2 days to the
+  Hokkaido block (4h each way from Sapporo by rail, or a domestic flight), which would
+  either compress Fukuoka below its anchor-city minimum or push past the Nov 10 end date.
+  The Sapporo-hub shape (Sapporo + Otaru day trip + Noboribetsu day trip + Jozankei)
+  fills the Hokkaido block fully at the trip's slow pace. Logged as a deliberate scope
+  decision, not an oversight.
+- **Filipino-culture content: creator ruling — not relevant to this trip (Q3).** The QA
+  report flagged that one traveler has Filipino heritage and no guide content addresses
+  it. Creator's ruling: this trip is not about that heritage, and adding content about it
+  would be forced rather than helpful. The silence is now a decided one, not an undecided
+  one. No guide content added, no intake edited.
+- **Cover photo: pending creator sign-off (Q4).** The current cover (Okama Crater Lake,
+  Mt. Zao, autumn) is seasonally honest (R18) — it shows real koyo at a destination on
+  the itinerary. The creator requested a cover that "captures koyo with foliage better"
+  or a two-half north/south split. This requires Commons candidate research + creator
+  sign-off; deferred to the next interactive session.

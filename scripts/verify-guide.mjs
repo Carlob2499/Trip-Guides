@@ -49,6 +49,39 @@ export function checkCoverage(slug) {
   return { status: uncovered.length ? "fail" : "pass", uncovered };
 }
 
+// P6: voice gate — process language / self-referential framing must not leak into
+// traveler-facing prose. Scans body, why, crowd_tip, intro fields.
+const VOICE_BANNED = [
+  /\bthis\s+pass\b/i, /\bthis\s+research\b/i, /\bthis\s+review\b/i,
+  /\bour\s+research\b/i, /\bour\s+pass\b/i, /\bduring\s+research\b/i,
+  /\bhonest\s+note\b/i, /\bhonest\s+call-?out\b/i,
+  /\bworth\s+flagging\b/i, /\bworth\s+noting\s+that\b/i,
+  /\bdisproved\s+claim\b/i,
+  /\ba\s+generic\s+guide\s+couldn/i, /\ba\s+generic\s+AI\b/i,
+  /\bno\s+generic\s+guide\b/i, /\bonly\s+a\s+local\s+would\s+know\b/i,
+];
+
+export function checkVoice(guide) {
+  const hits = [];
+  const sections = Array.isArray(guide.sections) ? guide.sections : (guide.sections || []).flat();
+  for (const sec of sections) {
+    const texts = [sec.body, sec.intro, sec.why, sec.crowd_tip].filter(Boolean);
+    if (Array.isArray(sec.items)) {
+      for (const it of sec.items) {
+        if (it.why) texts.push(it.why);
+        if (it.crowd_tip) texts.push(it.crowd_tip);
+      }
+    }
+    for (const t of texts) {
+      for (const rx of VOICE_BANNED) {
+        const m = rx.exec(t);
+        if (m) hits.push({ section: sec.title || sec.group || "(untitled)", match: m[0] });
+      }
+    }
+  }
+  return { status: hits.length ? "fail" : "pass", hits };
+}
+
 // The rubric rows the machine can only defer to a human. Kept here as the graduation checklist the
 // scorecard prints — mirrors docs/GUIDE_RUBRIC.md so the two stay legible together.
 const HUMAN_ROWS = [
@@ -95,15 +128,19 @@ export function evaluateGuide(guide, slug, staleness, net) {
   // P3/R15: coverage — every intake ask addressed or explicitly skipped.
   const coverage = checkCoverage(slug);
 
+  // P6: voice gate — process language must not leak into traveler-facing prose.
+  const voice = checkVoice(guide);
+
   // Blocking gates → the exit-code verdict. Recency is intentionally NOT blocking.
   const blockers = [];
   if (!readiness.pass) blockers.push("research");
   if (content.status === "fail") blockers.push("content");
   if (content.status === "unverifiable") blockers.push("content-unverifiable");
   if (coverage.status === "fail") blockers.push("coverage");
+  if (voice.status === "fail") blockers.push("voice");
   const pass = blockers.length === 0;
 
-  return { slug, draft, pass, blockers, readiness, recency, content, coverage, noVerifiedDate };
+  return { slug, draft, pass, blockers, readiness, recency, content, coverage, voice, noVerifiedDate };
 }
 
 export async function verify({ slug = null, network = false } = {}) {
@@ -173,6 +210,16 @@ export function report(r) {
   } else {
     L.push(`  P0 coverage   · FAIL — ${r.coverage.uncovered.length} intake ask(s) not addressed:`);
     for (const a of r.coverage.uncovered) L.push(`      ⚠ ${a.id}: "${a.label}" = "${a.value}" — set coveredBy in coverage.json or log a skip`);
+  }
+
+  // P6: voice gate
+  if (r.voice) {
+    if (r.voice.status === "pass") {
+      L.push(`  P6 voice      · PASS — no process language in traveler-facing prose`);
+    } else {
+      L.push(`  P6 voice      · FAIL — ${r.voice.hits.length} process-language leak(s):`);
+      for (const h of r.voice.hits) L.push(`      ⚠ "${h.match}" in §"${h.section}"`);
+    }
   }
 
   L.push(`  #1 schema     · not checked here — run \`npm run build\` (the content-collection gate)`);

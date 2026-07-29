@@ -185,6 +185,30 @@ catches prove the rule earns its keep: "the rain plan" was cut because no rain p
 existed in that group, and a drafted "GO Fest Seoul" was corrected to the "GO Fest
 Global" the content actually names.
 
+### Voice gate — banned in traveler-facing prose (P6, shipped 2026-07-29)
+
+Provenance belongs in `verified_on`, `source_url`, `⚠` flags, and the
+`intro` field — never narrated into the prose a traveler reads. The verify
+grep gate (`scripts/verify-guide.mjs`) fails on any of these in a `body`,
+`why`, `crowd_tip`, or `intro` field:
+
+- **Process language**: "this pass", "this research", "this review",
+  "our research", "our pass", "during research"
+- **Self-referential framing**: "honest note", "honest call-out",
+  "worth flagging", "worth noting that", "disproved claim"
+- **Quality claims**: "a generic guide couldn't", "a generic AI",
+  "no generic guide", "only a local would know"
+
+These phrases are the research log leaking into the product. The fix is
+always the same: delete the frame, keep the fact, let `⚠` / `verified_on`
+carry the provenance silently. Example:
+
+  ✗ "Honest note: Ichiran is overpriced by local reckoning."
+  ✓ "Ichiran is overpriced by local reckoning."
+
+  ✗ "This research confirmed Daruma is the top pick."
+  ✓ (just state the recommendation; verified_on carries the date)
+
 ## Composer facets (R6, shipped 2026-07-28)
 
 Research passes may tag any section with three optional facets — they feed
@@ -218,6 +242,12 @@ just to replace it.
   shot of the destination exists — filename validated via `search-commons.mjs`, never
   recalled. Direct royalty-free `cover.src` URLs are allowed (schema-enforced credit +
   license). A real photo also feeds `extract-palette` (the guide's identity accent).
+- **Honesty rule (R18):** a cover photo must honestly represent what the traveler
+  will see — right destination, right season, right visual identity. A cherry-blossom
+  cover on an autumn trip, a summer beach on a winter itinerary, or a landmark the
+  trip doesn't visit is dishonest framing, even if it's a beautiful shot. When no
+  seasonally-honest Commons photo exists, the Painted Atlas is the right cover —
+  it's abstract, not misleading.
 - **Footage** (`cover.video`) — research NEVER sets this field. The rule is geography:
   a clip must be frame-verified to show the actual place (the Korea clip was frame-checked
   as the same Gyeongbokgung complex as its photo cover), and a research agent cannot watch
