@@ -1,14 +1,30 @@
 {
   "slug": "japan",
   "createdAt": "2026-07-29T09:12:03.464Z",
-  "updatedAt": "2026-07-29T09:36:41.122Z",
+  "updatedAt": "2026-07-29T10:32:26.711Z",
   "stages": {
     "scaffold": "2026-07-29T09:12:03.464Z",
-    "passA": null,
-    "passB": null,
-    "reconcile": null,
+    "passA": "2026-07-29T10:32:26.640Z",
+    "passB": "2026-07-29T10:32:26.675Z",
+    "reconcile": "2026-07-29T10:32:26.711Z",
     "verified": null
   },
   "attempts": 2,
-  "notes": []
+  "notes": [
+    {
+      "stage": "passA",
+      "note": "Anchor verified T0 (pokemongo.com, Sendai Nov 6-8 2026); canonical research done: entry/visa, tax-free cutover, JR passes, domestic routing, koyo timing, Fukuoka food, Hokkaido/Tohoku nature+ryokan, gaming/anime shops",
+      "at": "2026-07-29T10:32:26.640Z"
+    },
+    {
+      "stage": "passB",
+      "note": "Independent local/crowd-aware research done: Fukuoka food crowd reality, Hokkaido crowd/local tips, Tohoku+Wild Area attendee reports, gaming/anime + logistics forum leads",
+      "at": "2026-07-29T10:32:26.675Z"
+    },
+    {
+      "stage": "reconcile",
+      "note": "Reconciled A+B into guide files; ledger + amendments written to guides-intake/japan.md; routing reordered Fukuoka->Hokkaido->Tohoku",
+      "at": "2026-07-29T10:32:26.711Z"
+    }
+  ]
 }

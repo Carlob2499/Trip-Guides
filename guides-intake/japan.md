@@ -16,9 +16,10 @@ Budget is mid-to-high but the travelers want to save where sensibly possible —
 His birthday is Sept 25 — before the trip, not during it. He does want a belated celebration built into the itinerary rather than the date just being skipped; a specific dinner or the ryokan/onsen night is the natural anchor for it, at the guide's discretion. It should read as a deliberate belated celebration, not as if the date itself were wrong.
 
 Regions: not the golden-trio (Tokyo/Kyoto/Osaka) trip — Fukuoka's food scene and a real tour through Hokkaido and Tohoku are the explicit anchors, with Sendai as the Wild Area base. Entry/exit city TBD by research (likely Fukuoka or Tokyo as the practical gateway, whichever makes the Hokkaido–Tohoku–Fukuoka routing sane over 2–3 weeks).
-- First time or returning:
-- Languages spoken:
-- **Traveler passport countries (drives visa & entry research):**   *(a party can mix — each named country gets its own researched entry row, schema-required source+date; the Trip Kit shows a dropdown so each traveler picks their own)*
+- First time or returning: Returning — prior Japan trip together in 2024.
+- Languages spoken: not stated.
+- **Traveler passport countries (drives visa & entry research):** Not stated by either traveler. Assumed **United States** for research purposes (the guide's `entry` card is written and sourced against a US passport, with an explicit note to check on another passport) — confirm with both travelers before relying on it, especially if either holds a non-US passport.
+- **TRAVELER_PATTERNS party check (done before research, per the skill's read-first #6):** this is **neither Party A (the Korea three) nor Party B (the Denmark five)** — a new, third party (2 people, gaming/anime/food priorities, no prior Waypoint guide or Trip Feedback on record for them). Only the **Cross-party** section applies: fixed anchor events hold (confirmed — Wild Area Sendai anchors this trip exactly like GO Fest/MSI anchored Korea and GO Fest/the Oslo cruise anchored Denmark); "cheap direct taxi beats clever transit" is noted but this trip's own stated preference for scenic-over-fastest routing where the schedule allows is a real, deliberate difference from that pattern, not an oversight — don't force Party A/B assumptions (AC-as-hard-filter, heat/rain fallbacks) onto an autumn Japan trip where they don't apply.
 
 ## 2. Trip Shape
 - Exact dates (start–end): 2026-10-15 – 2026-11-10
@@ -52,10 +53,13 @@ Top 3, in order:
 ---
 
 ## Spec Summary (fill after intake, before research)
-- Section types to include / exclude (and why):
-- The 2–3 priorities driving depth:
-- Hard filters applied to every entry:
-- Verification focus (most perishable / most important to get right):
+- **Section types to include / exclude (and why):** Standard 10-group spine (Plan · Money & budget · Health & safety · Etiquette & language · Transit · Days · Sights · Food & shopping · Sources) plus one trip-specific group, **Gaming & anime**, for the ranked niche interest — kept at the default `tabBudget: 10` rather than adding an 11th Wild-Area-only tab; the anchor event gets full depth as prose + `days` entries inside the existing Days/Transit groups instead; no separate group earned its keep on top of that.
+- **The 2–3 priorities driving depth:** Food & dining (Fukuoka ramen/yatai/motsunabe/mentaiko, Sapporo jingisukan/miso ramen, Sendai gyutan/hiyashi chūka) and Nature/outdoors (koyo timing per region, Naruko/Zao/Matsushima/Jigokudani/Moiwa/Jozankei, the Zao Onsen ryokan splurge) got the deepest research; Gaming & anime (rank 3, niche) got real venue-level depth but lighter than the top two, matching "depth on top 2–3, light touch elsewhere."
+- **Hard filters applied to every entry:** every restaurant/shop answers where/how/when/book; every perishable fact carries a source tier + date or an explicit ≈/⚠; no Tokyo/Kyoto/Osaka golden-triangle content (explicitly out of scope per intake) except the unavoidable Tokyo international-gateway connection.
+- **Verification focus:** the anchor event date/venue (done first, T0), the tax-free system's Nov 1, 2026 cutover (directly affects the gaming/anime shopping days), the Fukuoka→Hokkaido→Tohoku routing logic (flights + koyo timing both had to agree), and the Zao Okama Crater's early-November seasonal-closure risk (a real honesty flag, not just a nice-to-know).
+
+## TRAVELER_PATTERNS follow-up
+This trip's post-mortem (once it happens) should add a **Party C** section to `docs/TRAVELER_PATTERNS.md` — there's no existing entry for this pair. Nothing written back yet since the trip hasn't happened.
 
 ## Cover art — footage candidates (research fills the shortlist; the CREATOR signs)
 > The research pass's footage scout records 0–2 licensed, hot-linkable clips here — stable-URL
@@ -66,7 +70,9 @@ Top 3, in order:
 
 | Clip URL | License | Claims to show | Matches cover geography? | Frame-verified by |
 |----------|---------|----------------|--------------------------|-------------------|
-|          |         |                |                          |                   |
+| — | — | — | — | — |
+
+No candidates found this pass — the research agents' web-search budget was exhausted before a dedicated Mixkit/stable-URL footage search could run. Empty table stands; the photo cover (Okama Crater, Mt. Zao) is the honest default. A follow-up pass could search Mixkit for Japan autumn-foliage/onsen-town footage if the creator wants to pursue a living cover later.
 
 ## Research reconciliation (fill during the dual-pass — see the guide-author skill)
 > Pass A = canonical/verified (official, anchors, logistics). Pass B = local/authentic/crowd-aware
@@ -75,11 +81,73 @@ Top 3, in order:
 
 | Item | Pass A (canonical) | Pass B (local/authentic) | Reconciled → guide | Note (conflict / crowd / novel) |
 |------|--------------------|--------------------------|--------------------|---------------------------------|
-|      |                    |                          |                    |                                 |
+| Anchor event | Wild Area Sendai, Nov 6–8 2026, T0 pokemongo.com | Nagasaki 2025 attendee reality: real network congestion, localized crush points (SoftBank engineering post-mortem) | Included both — dates from A, crowd-aware day plan from B | AGREE + B adds crowd realism A's official source doesn't carry |
+| Gateway/routing | Tokyo mandatory connection; FUK/CTS have no direct US service this window; direct FUK↔CTS flight exists | — (Pass B didn't research routing) | Fukuoka → Hokkaido → Tohoku order, reasoned from flight links + koyo timing together | A-only, but reordered from the intake's "Hokkaido/Tohoku...Fukuoka" phrasing — see Amendments |
+| Koyo timing | JMC/japan-guide.com: Sapporo/Otaru peak Oct 28–Nov 5; Naruko/Zao/Tohoku peak late Oct–early Nov; Fukuoka/Kyushu peak mid-Nov–early Dec (none of this trip) | — | Hokkaido block runs Oct 23–Nov 2 (catches the tail of Sapporo's peak); Fukuoka framed honestly as a non-koyo leg | A-only; every date flagged ⚠ since JMC's 2026 forecast isn't published yet (~Sept 2026) |
+| Tax-free system | Nov 1, 2026 cutover to refund-at-departure, T0 MLIT + Japan Customs | Real traveler friction/confusion with the current system; Bic Camera/Yodobashi color | AGREE — cutover date drives the Oct 31/Nov 1 day-split in Days | AGREE, both passes converge on "confusing but not adversarial" |
+| Entry/visa | US visa-exempt 90 days, mofa.go.jp (fetch blocked, search-index confirmed) | — | Included with ≈ flag, note to re-check | A-only, honestly flagged as not directly fetched |
+| JR passes | JR Kyushu Northern (¥15–17k) + JR East–South Hokkaido (¥40k), T0 jrkyushu.co.jp | Real user reports: regional passes pay off for regional-only trips (unlike the national pass); reservation/foreign-card gotchas | AGREE — included with the reservation-gotcha caveat from B | AGREE |
+| Fukuoka ramen | Shin Shin, Ganso Nagahamaya, Ippudo Daimyo (historic) all researched as solid | Ichiran/Ippudo brand seen as touristy/overpriced by locals; Shin Shin independently #1 in a local ranking | Kept Shin Shin + Ganso Nagahamaya as the two picks; Ippudo Daimyo downgraded to an optional historic detour, framed honestly | CONFLICT resolved — B's local sentiment won on Ippudo's framing |
+| Fukuoka yatai | Tenjin + Nakasu both licensed, official hours/cash-heavy confirmed | Tenjin is the locals' pick (cheaper, less touristy); Nakasu is the tourist-facing but more atmospheric scene | Both included, roles distinguished — eat in Tenjin, walk Nakasu for atmosphere | AGREE, B adds the crowd/authenticity distinction |
+| Fukuoka motsunabe | Rakutenchi (Tenjin Honten), bookable, official | Maedaya — strongest B lead, 3 independent sources | Maedaya as primary pick, Rakutenchi kept as the easy-to-book alternative | A-only pick (Rakutenchi) swapped to B's local favorite (Maedaya) as primary |
+| Fukuoka non-obvious pick | — | Yanagibashi Rengo Ichiba ("Fukuoka's Kitchen"), 3 independent Fukuoka Now mentions | Included, with an hours-check flag | B-only, verified via a semi-primary resident magazine |
+| Mentaiko | Fukuya Nakasu Honten (buy), Kisuimaru (eat), both T0; "Mentai Park Fukuoka" claim disproved | — | Included as researched; disproved claim explicitly flagged in the guide so it doesn't creep back in | A-only, clean |
+| Sapporo birthday dinner | — (not researched in A) | Jingisukan Daruma Honten — 3 independent write-ups converge | Included as the Oct 24 birthday dinner, ⚠ not directly fetched | B-only, verified by multi-source convergence, flagged for a direct re-check |
+| Otaru | Access/time researched (35 min JR rapid) | Canal genuinely tour-bus-crowded even on weekdays per multiple independent review platforms; weekday-morning + walk-north fix | AGREE — day trip scheduled on a Monday specifically | AGREE, B's crowd tip shaped the day-of-week choice |
+| Noboribetsu / Jigokudani | Dai-ichi Takimotokan ryokan researched; Jigokudani free/T0 | Takimotokan's "big tour-group hotel" feel suggested but not conclusively confirmed; Jigokudani before-10am tip | Dropped Takimotokan as an overnight (kept the trip to ONE ryokan splurge, at Zao, to keep the belated-birthday narrative singular); kept Jigokudani as a day trip with the before-10am tip | CONFLICT/simplification — resolved by cutting scope rather than carrying two competing ryokan nights; see Amendments |
+| Jozankei hiking | 8 official graded trails, Asahi-dake documented | — | Included, with the "official grading is optimistic" caveat | A-only |
+| Zao Onsen / Okama | Miyamaso Takamiya ryokan (T1 official); Okama access via ropeway or Echo Line; autumn closure risk | Miyamaso Takamiya independently well-reviewed (historic, 1716, private springs) with a stairs/no-elevator caveat; Okama fog ~50% of the time; ropeway crowds by 9am | AGREE on the ryokan — kept as the sole splurge/belated-birthday anchor with the stairs caveat added; Okama flagged as a bonus given closure-timing risk | AGREE, B adds livable detail (fog, stairs) A's official sources didn't carry |
+| Naruko Gorge | Free, T1 visitmiyagi.com; trail shortened since 2011; peak late-Oct–early-Nov | Crush peaks 11:00–15:00, arrive-early tip; trail-routing lead too thin to verify (single source) | AGREE — arrival-time tip included; the unverified routing shortcut omitted | AGREE + one B lead dropped for lack of corroboration |
+| Matsushima | Official Three Views designation, T0 JNTO; access via Matsushimakaigan Station | Godaido crowded/quick; Fukuura Island + Saigyo Modoshi no Matsu Park as quieter alternatives (guide-style sources, weaker corroboration) | AGREE — both alternatives included as options | AGREE, weakest-sourced of the Tohoku sights but still included since it's low-stakes (a viewpoint suggestion, not a fact claim) |
+| Sendai food | Gyutan generically known; no specific pick from A | Ryūtei (hiyashi chūka origin, 1937) — 2 independent sources; Date no Gyutan Honpo (named local-expert pick) vs. Rikyu | B-only picks adopted — Ryūtei included (⚠ hours unconfirmed), Date no Gyutan Honpo chosen over Rikyu as the more concretely-sourced of the two | B-only, verified via origin-story cross-check (Wikipedia + blog) |
+| Sendai nightlife | — | Kokubuncho/Bunka-yokocho/Iroha-yokocho, Genji Izakaya — multiple independent sources | Included | B-only |
+| Wild Area crowd reality | Past events format: citywide, ¥3,600/day ticket, sold out, first-come-first-served (T0 pokemongo.com event pages) | Nagasaki 2025 network-congestion post-mortem (semi-primary, SoftBank's own report); Fukuoka 2024 attendee reports not found (gap) | AGREE + B's congestion finding drove the explicit "offline map, avoid the single hyped hub" advice in the Nov 6 day entry | AGREE, B fills in the lived-experience gap A's marketing-facing sources don't cover |
+| Gaming/anime shops | Animate/Mandarake/Taito Station/Yodobashi across all 3 cities, mostly T0 chain pages | Mandarake Fukuoka/Sapporo genuinely good, not "picked over"; Culture Arts, Gashapon Dept Store, C-pla, e-Beans, Seagull as non-chain/newer alternatives | AGREE + B's non-chain finds added alongside the chain stores | AGREE, B adds real depth beyond the obvious chain answer |
+| Luggage forwarding | Yamato Ta-Q-Bin mechanics/pricing, T2-sourced (official site not directly fetched) | Strong convergence on reliability; next-day (not same-day) transit; hotel-acceptance edge case | AGREE — B's next-day timing detail corrected A's vaguer framing | AGREE, B sharpens A's timing claim |
+| eSIM vs pocket wifi | Ubigi/Airalo pricing, T1 official rate pages | Real complaint pattern: "unlimited" throttling unresolved across providers; pocket-wifi doesn't help if the pair splits up | AGREE — B's throttling/splitting-up caveats both included | AGREE, B adds practical caveats A's pricing pages don't mention |
+| Phrases card | — | — | Omitted this pass (honest gap) | Neither pass — search budget ran out before a rigorous bilingual verification could be done; flagged in Etiquette & language rather than guessed |
+| Travel advisory | Level 1 widely reported but travel.state.gov blocked all direct fetches | — | Omitted from `_guide.json` (schema-optional); noted in Health & safety as unconfirmed | Neither pass could get a live fetch — this needs a browser-based check, per the skill's own documented limitation for this exact page |
 
 ## Amendments (append-only — record every research-forced re-plan)
 > When research changes the plan (an anchor moved, a neighborhood beats the intended one, a day
 > collapsed), log it here with the reason. The intake above stays the ORIGINAL intent; this is the
 > diff. (Korea/Denmark were "corrected three times by running it" — that history now has a home.)
 
-- (none yet)
+- **Regional order reshuffled to Fukuoka → Hokkaido → Tohoku** (the intake's own phrasing listed
+  "Hokkaido and Tohoku... with Sendai as the Wild Area base" ahead of Fukuoka, and cities were
+  listed as "Sendai, Fukuoka, Sapporo..."). Research forced this: flying Fukuoka↔Sapporo directly
+  works either order, but Fukuoka needs real standalone time (it's an explicit anchor) and the
+  Sendai anchor is fixed near the end of the trip (Nov 6–8, with Nov 10 as the trip's last day) —
+  doing Hokkaido then Tohoku then Fukuoka would strand Fukuoka with only ~2 days after the anchor.
+  Reordering to Fukuoka first also happens to help the koyo-chasing priority: it lets the Hokkaido
+  block land later in the trip (Oct 23–Nov 2), closer to Sapporo/Otaru's actual foliage peak
+  (JMC average Oct 28–Nov 5), instead of starting too early on Oct 15.
+- **Trip start date treated as unconfirmed (Oct 15 vs Oct 22)** — the intake itself flagged this
+  as still being narrowed by the travelers. The full 27-day itinerary below is written against
+  Oct 15 (matching the scaffold), with an explicit ⚠ on Day 1 and in the guide-level `verified`
+  stamp; if the trip actually starts Oct 22, the whole itinerary shifts a week later and the
+  Fukuoka block would need to compress by about a week to still land the anchor on Nov 6–8.
+- **One ryokan splurge, not two.** Research turned up strong candidates in both Hokkaido
+  (Dai-ichi Takimotokan, Noboribetsu) and Tohoku (Miyamaso Takamiya, Zao Onsen) for the intake's
+  "ryokan/onsen at least once" ask. Booking an overnight at both risked diluting the intake's own
+  instruction that the belated-birthday (Sept 25) celebration be ONE deliberate moment, "the
+  ryokan/onsen night... at the guide's discretion" (singular). Resolved by keeping Noboribetsu as
+  a day trip (Jigokudani + footbath, both free) and reserving the one overnight ryokan stay for
+  Zao Onsen, tied explicitly to the belated birthday and positioned right before the anchor event
+  for a natural narrative build.
+- **No dedicated "Wild Area" or "Pokémon GO" tab.** Korea's guide gave its dual anchor events
+  (GO Fest + MSI) their own tabs; this trip has one anchor, not two, and doesn't have Korea's
+  solo-fork complication either. The anchor gets full depth as `days` entries (Nov 6–8) plus a
+  Transit-tab note, staying inside the default `tabBudget: 10` rather than manufacturing an 11th
+  tab to match Korea's shape by default.
+- **Phrases card omitted, not guessed.** The research session's web-search budget (200/200) was
+  exhausted before a rigorous bilingual-source verification of situational phrases could be done.
+  Given a wrong safety-relevant native-script phrase is worse than none, this was left as an
+  honest gap (flagged in Etiquette & language) rather than transliterated from training-data
+  memory, which the skill explicitly forbids for this field.
+- **Travel advisory field omitted, not fabricated.** travel.state.gov is bot-gated against every
+  fetch attempt this pass made (this matches the skill's own documented note that the page "only
+  resolves through an actual browser tool," which wasn't available in this environment). Rather
+  than ship an unconfirmed level with a fabricated `verified_on`, the optional `advisory` field
+  was left unset; Health & safety notes the widely-reported (but unconfirmed) Level 1 in prose
+  instead, with an explicit instruction to check the live page before travel.

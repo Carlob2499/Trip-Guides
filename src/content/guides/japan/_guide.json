@@ -1,11 +1,27 @@
 {
-  "kicker": "Field guide",
-  "title": "Sendai, Fukuoka, Sapporo, Hokkaido region, Tohoku region & Japan",
-  "dek": "",
+  "kicker": "Fukuoka · Sapporo · Sendai — Oct 15–Nov 10, 2026",
+  "title": "Japan",
+  "dek": "Three and a half weeks chasing koyo from Kyushu to Hokkaido to Tohoku — Fukuoka's food scene, a real Hokkaido tour, and the Pokémon GO Wild Area weekend in Sendai.",
   "country": "Japan",
+  "tz": "Asia/Tokyo",
   "draft": true,
-  "verified": "⚠ Draft scaffold — nothing here is researched or verified yet. This is a starting skeleton; every price, hour, address and fact must be added and checked against a primary source before use (see the intake spec + CLAUDE.md).",
+  "cover": {
+    "file": "Fall at Okama Crater Lake, Mt. Zao, Tohoku region, Japan.jpg",
+    "alt": "Okama crater lake on Mt. Zao ringed by autumn color",
+    "focal": "50% 55%"
+  },
+  "verified": "⚠ Checked 29 Jul 2026 for the Oct 15–Nov 10 trip — draft, not yet human-graduated. Confirmed against primary sources: Pokémon GO Wild Area Sendai (Nov 6–8, 2026 — pokemongo.com), US visa-free entry (90 days), Japan Customs tax-free rules (¥5,000/store/day threshold; the refund-at-departure system replaces the instant discount from Nov 1, 2026 — this trip straddles that cutover), JR Kyushu rail-pass pricing, Yamato Ta-Q-Bin luggage forwarding, and every restaurant/shop/trail address in the Food & shopping, Gaming & anime, and Sights tabs. Re-check before travel: the exact trip start date (Oct 15 vs Oct 22 — still being narrowed between the travelers), Wild Area Sendai's ticket sales and exact venue (unannounced as of this check), the Yukemuri autumn scenic-train's 2026 run dates (JR East Tohoku typically announces in Aug/Sept), the Zao Ropeway/Echo Line autumn closure date (historically early November — may already be closed by the Nov 5 visit below), JMC's first 2026 koyo forecast (publishes ~mid-September 2026 — every foliage date in this guide is a multi-year average, not a locked prediction), and the US State Department advisory level (its page blocked bot-protected fetches this pass — needs a live browser check before publishing that field).",
   "provenance": "strict",
+  "entry": [
+    {
+      "homeCountry": "United States",
+      "visa": "Visa-free for tourism, stays up to 90 days. Japan's planned digital pre-arrival system (\"JESTA\") isn't targeted to launch until FY2028, so nothing new applies for this trip; the optional Visit Japan Web pre-registration remains optional, not mandatory.",
+      "passportValidity": "Japan's own rule only requires validity through your date of departure; the conventional 6-months-remaining buffer is still what most airlines check at boarding, so plan to that stricter standard.",
+      "note": "Assumes a US passport — on another passport, check your own country's requirement. mofa.go.jp blocked direct automated fetches in this research pass (bot-protection); this entry is corroborated via search-indexed content from the same official URL plus independent secondary agreement, not a live fetch — worth a quick manual re-check before booking.",
+      "source_url": "https://www.mofa.go.jp/j_info/visit/visa/short/novisa.html",
+      "verified_on": "2026-07-29"
+    }
+  ],
   "roomId": "4je90uxg2olh6joj",
-  "footer": ""
+  "footer": "Location photos via Wikimedia Commons — tap any credit for its source, author and license."
 }
