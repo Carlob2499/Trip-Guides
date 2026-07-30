@@ -1,0 +1,21 @@
+.divergence-intro { margin-block-end: var(--space-s); }
+.divergence { display: grid; gap: var(--space-xs); }
+.divergence-head { display: flex; gap: var(--space-xs); align-items: center; }
+.divergence-cat {
+  font-size: var(--text-caption); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
+  padding: 0.15em 0.5em; border-radius: 999px;
+  background: var(--accent, #b07a1f); color: var(--bg, #e9ebe3);
+}
+.divergence-label {
+  display: block; font-size: var(--text-control-sm); font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--muted, #6b6b6b); margin-block-end: 0.15em;
+}
+.divergence-claim p {
+  margin: 0; padding: 0.5em 0.75em; border-inline-start: 3px solid var(--muted, #999);
+  color: var(--muted, #6b6b6b); font-style: italic;
+}
+.divergence-correction p { margin: 0; }
+.divergence-source {
+  font-size: var(--text-caption); color: var(--accent, #b07a1f); text-decoration: none;
+}
+.divergence-source:hover { text-decoration: underline; }

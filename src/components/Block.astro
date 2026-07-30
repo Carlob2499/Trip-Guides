@@ -20,6 +20,7 @@ import TierListBlock from "./blocks/TierListBlock.astro";
 import WeatherBlock from "./blocks/WeatherBlock.astro";
 import HolidaysBlock from "./blocks/HolidaysBlock.astro";
 import VenueBlock from "./blocks/VenueBlock.astro";
+import DivergencesBlock from "./blocks/DivergencesBlock.astro";
 
 // `holidays` is the server-computed holiday info (or null), threaded down from
 // GuideLayout; only the `holidays` section type uses it. `learnings` is the guide's
@@ -118,6 +119,7 @@ const TitleTag = isCollapsible ? "summary" : "div";
       {sec.type === "days"   && <DaysBlock   sec={sec} keyPrefix={keyPrefix} learnings={learnings} country={country} />}
       {sec.type === "sights" && <SightsBlock sec={sec} country={country} />}
       {sec.type === "venues" && <VenueBlock sec={sec} country={country} />}
+      {sec.type === "divergences" && <DivergencesBlock sec={sec} />}
     </>
   )}
 </section>

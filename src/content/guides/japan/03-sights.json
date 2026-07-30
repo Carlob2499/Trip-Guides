@@ -36,7 +36,9 @@
         },
         "verified_on": "2026-07-29",
         "shelf_life": "venue",
-        "source_url": "https://www.visitmiyagi.com/contents/naruko-gorge-autumn-colors/"
+        "source_url": "https://www.visitmiyagi.com/contents/naruko-gorge-autumn-colors/",
+        "tier": "corroborated",
+        "agreement": "A+B converged"
       },
       {
         "name": "Zao Okama Crater",
@@ -52,7 +54,9 @@
         },
         "verified_on": "2026-07-29",
         "shelf_life": "venue",
-        "source_url": "https://www.zao-machi.com/"
+        "source_url": "https://www.zao-machi.com/",
+        "tier": "corroborated",
+        "agreement": "A+B converged"
       },
       {
         "name": "Jigokudani (Hell Valley), Noboribetsu",
@@ -84,7 +88,9 @@
         },
         "verified_on": "2026-07-29",
         "shelf_life": "venue",
-        "source_url": "https://otaru.gr.jp/"
+        "source_url": "https://otaru.gr.jp/",
+        "tier": "corroborated",
+        "agreement": "A+B converged"
       },
       {
         "name": "Mt. Moiwa",
@@ -156,6 +162,48 @@
           "lat": 33.5896715,
           "lng": 130.411141
         }
+      }
+    ]
+  },
+  {
+    "type": "divergences",
+    "group": "Sights",
+    "title": "What generic guides get wrong",
+    "intro": "Every item below is something a first-visit-focused guide would recommend by default — and that would cost you time, money, or authenticity on <i>this</i> trip. We researched each one and built a better option into the itinerary. If you do want the generic version (first-time visitors sometimes do), each entry explains how.",
+    "items": [
+      {
+        "claim": "\"Ippudo is the essential Fukuoka ramen stop.\"",
+        "correction": "Ippudo is a global chain that started in Fukuoka — the Daimyo flagship is genuinely historic (est. 1985), but locals independently rank Shin Shin and Ganso Nagahamaya above it for a more authentic, less tourist-priced bowl. This guide uses Shin Shin as the primary pick. <b>If you still want it:</b> Ippudo Daimyo Honten (the original, not a franchise) is a 5-min walk from Tenjin Station and worth a detour for the history alone — just know it's the polished, export-ready version of tonkotsu.",
+        "category": "tourist-trap",
+        "verified_on": "2026-07-29",
+        "source_url": "https://www.shinshin.co.jp/"
+      },
+      {
+        "claim": "\"Otaru Canal is a relaxed, scenic day trip from Sapporo.\"",
+        "correction": "The main canal stretch runs genuinely crowded with tour-bus groups even on weekdays — independent reviews across multiple platforms converge on this. This guide schedules Otaru on a <b>Monday morning</b> specifically to mitigate it, and routes you north past the main photo-spot stretch, which is reported almost empty by comparison. <b>If you're going anyway:</b> arriving before 10:00 on a weekday gets you a different experience from the afternoon crush. Sushi-dori has a wide price spread between tourist counters and locals' picks — ask at your accommodation before choosing one.",
+        "category": "overcrowded",
+        "verified_on": "2026-07-29",
+        "source_url": "https://otaru.gr.jp/"
+      },
+      {
+        "claim": "\"Stay at Dai-ichi Takimotokan for the full Noboribetsu onsen experience.\"",
+        "correction": "Takimotokan is a large resort hotel whose \"big tour-group\" feel was flagged in local reviews. This guide drops it as an overnight entirely — one ryokan splurge night (Zao Onsen's Miyamaso Takamiya, a 1716-era inn with private springs) keeps the experience singular and meaningful instead of splitting the budget across two competing hotel-style onsen nights. <b>If you want Noboribetsu overnight anyway:</b> Takimotokan's 31 bath types are undeniably comprehensive; book a weekday in shoulder season to avoid the tour-group peak, and treat it as a different kind of stay from the intimate Zao ryokan.",
+        "category": "overcrowded",
+        "verified_on": "2026-07-29",
+        "source_url": "https://takimotokan.co.jp/"
+      },
+      {
+        "claim": "\"Dazaifu Tenmangu is the must-do Fukuoka day trip.\"",
+        "correction": "It <i>is</i> genuinely significant — Japan's head shrine to the god of scholarship — but it's also the default answer every generic guide gives, and as repeat 2024 visitors you've likely already seen it. This guide marks it optional and offers a food-focused alternative day instead. <b>If you haven't been:</b> the approach street's umegae mochi and the new Starbucks by Kengo Kuma are worth the ≈30-min Nishitetsu ride from Tenjin, especially on a weekday when it's less school-group-heavy.",
+        "category": "outdated",
+        "verified_on": "2026-07-29"
+      },
+      {
+        "claim": "\"Naruko Gorge is an easy afternoon side trip.\"",
+        "correction": "On peak-color weekends, tour buses fill the parking by 9:00 and the crush peaks 11:00–15:00 — an afternoon arrival lands you in the worst of it. This guide routes you there at opening (≈8:30) for a genuinely different experience: better light, fewer people, the gorge to yourselves. Also note: the full historic walking trail was permanently shortened after 2011 earthquake damage. <b>If afternoons are all you have:</b> arriving after 14:00 as the buses leave is the second-best window.",
+        "category": "missing-context",
+        "verified_on": "2026-07-29",
+        "source_url": "https://www.visitmiyagi.com/contents/naruko-gorge-autumn-colors/"
       }
     ]
   }

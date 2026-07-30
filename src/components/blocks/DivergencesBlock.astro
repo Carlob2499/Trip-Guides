@@ -1,0 +1,34 @@
+---
+const { sec } = Astro.props;
+const catLabel = (c: string | undefined) => {
+  const map: Record<string, string> = {
+    "overcrowded": "Overcrowded",
+    "tourist-trap": "Tourist trap",
+    "outdated": "Outdated advice",
+    "misleading": "Misleading",
+    "missing-context": "Missing context",
+  };
+  return c ? map[c] || c : null;
+};
+---
+{sec.intro && (
+  <div class="divergence-intro card"><p><Fragment set:html={sec.intro} /></p></div>
+)}
+{(sec.items || []).map((it: any) => (
+  <article class="card divergence">
+    <div class="divergence-head">
+      {catLabel(it.category) && <span class="divergence-cat">{catLabel(it.category)}</span>}
+    </div>
+    <div class="divergence-claim">
+      <span class="divergence-label">Generic guides say</span>
+      <p><Fragment set:html={it.claim} /></p>
+    </div>
+    <div class="divergence-correction">
+      <span class="divergence-label">What we found</span>
+      <p><Fragment set:html={it.correction} /></p>
+    </div>
+    {it.source_url && (
+      <a class="divergence-source" href={it.source_url} target="_blank" rel="noopener noreferrer">Source ↗</a>
+    )}
+  </article>
+))}

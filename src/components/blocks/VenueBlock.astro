@@ -12,7 +12,20 @@ const bookLabel = (b: string | undefined) =>
 {(sec.items || []).map((it: any) => (
   <article class="card venue" id={it.map ? `venue-${pinSlug(it.name)}` : undefined}>
     <div class="venue-head">
-      <h4 class="venue-name">{it.name}</h4>
+      <h4 class="venue-name">
+        {it.name}
+        {it.verified_on && (
+          <>
+            <button class="prov-dot" type="button" aria-label={`Source info for ${it.name}`}>●</button>
+            <dl class="prov-popover">
+              <dt>Checked</dt><dd>{it.verified_on}</dd>
+              {it.source_url && <><dt>Source</dt><dd><a href={it.source_url} target="_blank" rel="noopener">{new URL(it.source_url).hostname}</a></dd></>}
+              {it.tier && <><dt>Evidence</dt><dd>{it.tier}</dd></>}
+              {it.agreement && <><dt>Research</dt><dd>{it.agreement}</dd></>}
+            </dl>
+          </>
+        )}
+      </h4>
       {it.area && <span class="venue-area">{it.area}</span>}
     </div>
     <div class="venue-meta">

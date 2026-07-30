@@ -153,6 +153,7 @@ export function buildGuideObject(answers = {}) {
 
   // Sights + Food (content shells; filled during research)
   sections.push({ type: "sights", group: "Sights", title: "Top sights", phase: "daily", items: [] });
+  sections.push({ type: "divergences", group: "Sights", title: "What generic guides get wrong", phase: "daily", items: [{ claim: "", correction: "" }] });
   sections.push({ type: "venues", group: "Food & shopping", title: "What to eat", phase: "daily", items: [] });
 
   // Traveler's specific niche interest (free-text) → one dedicated shell, if given.

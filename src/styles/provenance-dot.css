@@ -1,0 +1,34 @@
+.prov-dot {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1em; height: 1em; border-radius: 50%; cursor: pointer; border: none;
+  background: transparent; color: var(--muted, #999); font-size: var(--text-micro);
+  vertical-align: middle; margin-inline-start: 0.25em; padding: 0;
+  transition: color 0.15s ease;
+}
+.prov-dot:hover, .prov-dot:focus-visible { color: var(--accent, #b07a1f); }
+.prov-dot:focus-visible { outline: 2px solid var(--accent, #b07a1f); outline-offset: 2px; }
+
+.prov-popover {
+  display: none; position: absolute; z-index: 100;
+  background: var(--card-bg, #fff); border: 1px solid var(--border, #ddd);
+  border-radius: 8px; padding: 0.75em 1em; min-width: 200px; max-width: 300px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12); font-size: var(--text-control); line-height: 1.4;
+}
+.prov-popover[data-open] { display: block; }
+.prov-popover dt { font-weight: 600; color: var(--muted, #6b6b6b); font-size: var(--text-control-sm); text-transform: uppercase; letter-spacing: 0.04em; }
+.prov-popover dd { margin: 0 0 0.5em; }
+.prov-popover dd:last-child { margin-block-end: 0; }
+.prov-popover a { color: var(--accent, #b07a1f); word-break: break-all; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .prov-popover { background: var(--card-bg, #1e2228); border-color: var(--border, #333); }
+}
+:root[data-theme="dark"] .prov-popover { background: var(--card-bg, #1e2228); border-color: var(--border, #333); }
+
+.cal-badge {
+  display: inline-block; font-size: var(--text-micro); font-weight: 600;
+  padding: 0.1em 0.4em; border-radius: 4px; vertical-align: middle;
+  margin-inline-start: 0.3em;
+  background: var(--accent, #b07a1f); color: var(--bg, #e9ebe3);
+  opacity: 0.85;
+}

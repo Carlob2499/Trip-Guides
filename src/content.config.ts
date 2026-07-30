@@ -37,6 +37,12 @@ const provenance = {
   // P4/R14: when this ⚠-flagged fact's publish window opens (YYYY-MM-DD) — the pretrip-check
   // workflow uses this to schedule re-verification. Only meaningful on ⚠ items.
   expected: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  // P7/R14: human-readable override for the recheck note ("publishes ~mid-Sept" vs a hard date).
+  recheckNote: z.string().optional(),
+  // P7/R11: source quality tier — how strong the backing evidence is.
+  tier: z.enum(["primary", "corroborated", "secondary"]).optional(),
+  // P7/R11: dual-pass agreement — whether Pass A and Pass B independently converged on this fact.
+  agreement: z.enum(["A+B converged", "A only", "B only"]).optional(),
 };
 
 // F1 (docs/archive/PLAN_TRAVELER_FEATURES.md): a checklist item stays a bare string for every guide
@@ -226,6 +232,19 @@ const section = z.discriminatedUnion("type", [
     map: coord.optional(),
     ...provenance,
   })) }),
+  // P7/R12: "What generic guides get wrong" — structured claim/correction pairs showcasing
+  // where this guide's researched findings diverge from generic advice. Each item names the
+  // common claim, the researched correction, and carries its own provenance so the correction
+  // is verifiable. Renders as a standalone section (earns its own group or sits in an existing
+  // one). Designed for first-time visitors: highlights overcrowded spots, tourist traps, and
+  // outdated advice that generic guides repeat unchecked.
+  z.object({ type: z.literal("divergences"), group: z.string(), ...facets, title: z.string().optional(), intro: z.string().optional(),
+    items: z.array(z.object({
+      claim: z.string(),
+      correction: z.string(),
+      category: z.enum(["overcrowded", "tourist-trap", "outdated", "misleading", "missing-context"]).optional(),
+      ...provenance,
+    })).min(1), ...collapse }),
   z.object({ type: z.literal("budget"), group: z.string(), ...facets, title: z.string().optional(),
     intro: z.string().optional(), currency: z.string().optional(), days: z.number().positive().optional(),
     budgetTarget: z.string().optional(),

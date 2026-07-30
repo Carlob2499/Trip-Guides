@@ -9,6 +9,8 @@
     "verified_on": "2026-07-29",
     "shelf_life": "venue",
     "source_url": "https://www.hakata-shinshin.com/tenpo_tenjin",
+    "tier": "corroborated",
+    "agreement": "A+B converged",
     "moreLabel": "Ganso Nagahamaya + the Ichiran/Ippudo verdict",
     "items": [
       {
@@ -49,6 +51,8 @@
     "verified_on": "2026-07-29",
     "shelf_life": "venue",
     "source_url": "https://www.fukuya.com/shop/nakasu/",
+    "tier": "primary",
+    "agreement": "A+B converged",
     "moreLabel": "Motsunabe pick (Maedaya) & where to buy mentaiko",
     "items": [
       {

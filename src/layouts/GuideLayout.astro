@@ -33,6 +33,8 @@ import "../styles/painted-atlas.css";
 import "../styles/anchors.css";
 import "../styles/sights.css";
 import "../styles/venues.css";
+import "../styles/divergences.css";
+import "../styles/provenance-dot.css";
 import "../styles/map.css";
 import "../styles/planner.css";
 import "../styles/overview.css";
@@ -261,6 +263,19 @@ const colophon = computeGuideStats([guide]);
 // dates are the machine-readable ones. Their maximum is a true, checkable statement, and
 // falls back to the guide-level ISO date if a guide ever carries one.
 const colophonChecked = verifiedDate ?? latestVerifiedOn([guide]);
+
+// P7/R14: earliest upcoming recheck date across all ⚠-flagged facts with an `expected` field.
+const nextRecheck = (() => {
+  const dates: string[] = [];
+  const walk = (obj: any) => {
+    if (!obj || typeof obj !== "object") return;
+    if (obj.expected && typeof obj.expected === "string") dates.push(obj.expected);
+    if (Array.isArray(obj)) obj.forEach(walk);
+    else Object.values(obj).forEach(walk);
+  };
+  walk(guide.sections);
+  return dates.sort()[0] ?? null;
+})();
 
 // Public holidays — if the guide has a `holidays` section, look up the build-time
 // data for this country + trip year and slice it around the trip dates. All
@@ -758,6 +773,9 @@ const tripSummary = buildSummary(guide);
           {colophon.sourceCount > 0 && (
             <div class="colo-stat"><dt>Primary sources</dt><dd>{colophon.sourceCount}</dd></div>
           )}
+          {nextRecheck && (
+            <div class="colo-stat"><dt>Next self-check</dt><dd>{nextRecheck}</dd></div>
+          )}
         </dl>
       )}
 
@@ -869,6 +887,7 @@ const tripSummary = buildSummary(guide);
       import "../scripts/reveal.js";
       import "../scripts/section-flight.js";
       import "../scripts/micro.js";
+      import "../scripts/provenance-dot.js";
       // M4 item 4 — ORDER IS LOAD-BEARING for the onboarding choreography. ES modules evaluate
       // in import order, so story-open must run FIRST to set window.__storyIntro; cold-open
       // then stands down while the story plays and otherwise claims the view; onboard's
