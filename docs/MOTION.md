@@ -9,8 +9,12 @@ record (it absorbed `VISUAL_COVERS.md`).
 The ONE device this site is remembered by: **a segmented rail whose segments are the trip's
 days**. It appears exactly three ways, and they are the same object:
 
-1. **First-open story intro** — the rail ticks through the days over the cover, once per guide
-   (`story-open.js` + `story.css`).
+1. **Title-card story intro** (2026-07-30) — the guide opens as a full-bleed title card
+   (cover + country name + day rail + accent gloss sweep + optional seasonal particle motif,
+   schema `introMotif`, honesty rule R18), holds ~2.4s, then pans up into the guide. Full
+   sequence once per guide per SESSION; skips jump to the pan; reduced-motion gets the
+   normal arrival (`story-open.js` + `story-petals.js` + `story.css`; pre-paint state
+   stamped by GuideLayout's inline script).
 2. **Story-mode itinerary** — the rail becomes navigation in the full-screen one-day-per-view
    deck (`story-mode.js` + `story-mode.css`).
 3. **The card→hero morph** — the guide "opens" from its hub card via cross-document View
