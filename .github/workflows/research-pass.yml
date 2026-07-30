@@ -68,20 +68,21 @@ on:
         default: claude-sonnet-5
       # Boundary check #4 (CLAUDE.md): explicit over ambient. Effort used to be
       # whatever the runner defaulted to — an unnamed knob that silently changes
-      # search depth when the environment changes. Sonnet 5's docs name xhigh as
-      # the setting for the hardest agentic work, and specifically as what raises
-      # tool usage in agentic search; low/medium make it scope work DOWN to the
-      # literal ask, which is wrong for a pass that must be exhaustive.
+      # search depth when the environment changes. Default is HIGH for every agent
+      # (creator's ruling, 2026-07-30: high, not xhigh — the QA trial showed xhigh's
+      # extra depth wasn't buying verification quality, just tokens); xhigh stays a
+      # dispatchable option for a deliberately exhaustive one-off. low/medium make
+      # the model scope work DOWN to the literal ask — wrong for a full pass.
       effort:
-        description: "Reasoning effort. xhigh is the researched default for a full pass (deepest search, most tool use); drop to high for a narrow single-section re-run."
+        description: "Reasoning effort. high is the default for every agent; xhigh only for a deliberately exhaustive one-off pass."
         required: false
         type: choice
         options:
-          - xhigh
           - high
+          - xhigh
           - medium
           - max
-        default: xhigh
+        default: high
       # Judgment work is Opus work (research-efficiency.md model economy; HANDOFF operating
       # rules) — so the rubric critic gets its own knob instead of riding the research
       # model. Research stays Sonnet-cheap while the final gate thinks harder.
@@ -289,7 +290,7 @@ jobs:
           show_full_output: true
           claude_args: |
             --model ${{ inputs.model || 'claude-sonnet-5' }}
-            --effort ${{ inputs.effort || 'xhigh' }}
+            --effort ${{ inputs.effort || 'high' }}
             --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
           prompt: |
             Guide slug: ${{ inputs.slug }}
@@ -365,7 +366,7 @@ jobs:
           # the model input — the model input governs Pass A and Reconcile only.
           claude_args: |
             --model claude-sonnet-5
-            --effort ${{ inputs.effort || 'xhigh' }}
+            --effort ${{ inputs.effort || 'high' }}
             --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
           prompt: |
             Guide slug: ${{ inputs.slug }}
@@ -439,7 +440,7 @@ jobs:
           show_full_output: true
           claude_args: |
             --model ${{ inputs.model || 'claude-sonnet-5' }}
-            --effort ${{ inputs.effort || 'xhigh' }}
+            --effort ${{ inputs.effort || 'high' }}
             --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
           prompt: |
             Guide slug: ${{ inputs.slug }}
@@ -623,7 +624,7 @@ jobs:
           show_full_output: true
           claude_args: |
             --model claude-opus-5
-            --effort ${{ inputs.effort || 'xhigh' }}
+            --effort ${{ inputs.effort || 'high' }}
             --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
           prompt: |
             Guide slug: ${{ inputs.slug }}
@@ -667,7 +668,7 @@ jobs:
           show_full_output: true
           claude_args: |
             --model ${{ inputs.critic_model || 'claude-opus-5' }}
-            --effort ${{ inputs.effort || 'xhigh' }}
+            --effort ${{ inputs.effort || 'high' }}
             --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
           prompt: |
             Guide slug: ${{ inputs.slug }}
@@ -796,7 +797,7 @@ jobs:
             -f slug="$SLUG" \
             -f section="${{ inputs.section }}" \
             -f model="${{ inputs.model || 'claude-sonnet-5' }}" \
-            -f effort="${{ inputs.effort || 'xhigh' }}" \
+            -f effort="${{ inputs.effort || 'high' }}" \
             -f void_retry=true
 
       # A second void in a row is not a flake — the run is stuck in a way retrying cannot fix.
