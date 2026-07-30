@@ -205,7 +205,12 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     // desktop (#gtab-0..10 counted in the observed list) while 7 old prose-reflow nodes left;
     // net +4, identified node-by-node, not absorbed as jitter. Mobile renders 20 (no station
     // pseudo below the horizon breakpoint), so desktop is the ceiling.
-    "color-contrast/pseudoContent": { max: 32, why: PSEUDO_CONTENT_WHY },
+    // 32 -> 36: revision #27 (revise-guide smoke) lengthened Sights/itinerary prose and added
+    // <b> tokens inside day-checklist text — the observed list is still only the two recorded
+    // kinds (#gtab-0..10 station-dot tabs + li > .check > .check-txt > b prose nodes under the
+    // checkbox pseudo), verified node-by-node with an instrumented local run; CI's Linux font
+    // metrics counted 36 on desktop (both schemes), mobile fewer, so desktop is the ceiling.
+    "color-contrast/pseudoContent": { max: 36, why: PSEUDO_CONTENT_WHY },
     "color-contrast/shortTextContent": { max: 16, why: SHORT_TEXT_CONTENT_WHY },
     // 15 -> 19: R5's .day-leg-arrow '→' on each of korea's 8 day cards, minus 4 glyphs the arc
     // converted to real SVG (Icon.astro). Counted: 19 on desktop AND mobile.
