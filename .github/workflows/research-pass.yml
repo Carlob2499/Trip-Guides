@@ -649,6 +649,21 @@ jobs:
             - Do NOT graduate and do NOT land the branch — the rubric critic runs next with
               fresh eyes, audits your work, and owns graduation.
 
+      # HARD GATE (continuity doctrine → gate, creator's ruling 2026-07-30): if the vibe
+      # executor edited the guide, its edits must carry a recorded continuity sweep
+      # (pipeline-roles.md, "The vibe executor"). Fails BEFORE the rubric critic — an edit
+      # with no recorded sweep must not reach graduation. A barrier by design.
+      - name: Continuity artifact gate — executor sweep record
+        if: steps.vibe.outputs.has_findings == 'true'
+        env:
+          SLUG: ${{ inputs.slug }}
+        run: |
+          if ! grep -q "^#### Continuity sweep — vibe execution" "guides-intake/${SLUG}.md"; then
+            echo "::error::Vibe executor ran but left no '#### Continuity sweep — vibe execution' record in guides-intake/${SLUG}.md — the continuity doctrine requires the artifact."
+            exit 1
+          fi
+          echo "[gate] executor continuity sweep record present"
+
       # ── AGENT 6: Fresh-context rubric Critic + Graduate ──────────────────────
       # P3/R8/R9: a SEPARATE agent invocation with fresh context — it sees ONLY the intake
       # spec and the finished guide, not the research process or intermediate findings. This

@@ -177,7 +177,10 @@ jobs:
                (splits, counts, day plans, other stamps, cross-references), not just the section
                you edited. Fix everything clearly in scope. If the change forks the plan (opens a
                real decision only a human can make), stop and say so in your finish summary
-               instead of guessing.
+               instead of guessing. Your finish summary MUST contain a `## Continuity sweep`
+               section (greps run · ripples found & fixed · deferred to human — "none" is a
+               valid entry but must be stated); the workflow HARD-GATES on that heading in the
+               landing scorecard after you finish.
             4. Self-correct: run `npm run verify -- --slug ${{ steps.req.outputs.slug }}` and
                `npm run build`. Fix each blocking finding against a primary source. Repeat until
                verify PASSes and build is clean, or until 4 rounds — whichever comes first. Never
@@ -212,6 +215,18 @@ jobs:
 
             Never touch any guide other than ${{ steps.req.outputs.slug }} (or its split-directory
             equivalent). Never touch guides-intake/ state files — this mode doesn't use them.
+
+      # HARD GATE (continuity doctrine → gate, creator's ruling 2026-07-30): an edit that landed
+      # without a written sweep record is the silent-skip failure mode the doctrine exists to
+      # prevent. Runs after landing by necessity (the agent lands inside its own step), so it is
+      # an alarm that turns the run red for human triage, not a barrier.
+      - name: Continuity artifact gate — sweep record is REQUIRED
+        run: |
+          if ! grep -q "^## Continuity sweep" /tmp/scorecard.md 2>/dev/null; then
+            echo "::error::Edit run ended without a '## Continuity sweep' record in the landing scorecard — CLAUDE.md's continuity doctrine requires the artifact."
+            exit 1
+          fi
+          echo "[gate] continuity sweep record present"
 
   # P4: absorb traveler answers from the intake doc's question cards, or re-cut the
   # calendar when dates lock in (date-lock trigger, R4).

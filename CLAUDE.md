@@ -47,6 +47,12 @@ scope; don't report-and-wait. **When a change forks the plan** (opens a real dec
 the user hasn't made), stop and ask before propagating — silently guessing and silently
 ignoring are both wrong.
 
+**Hard-gated in CI (2026-07-30):** every headless edit surface leaves a written sweep
+record (greps run · ripples fixed · "none" stated) or its run fails — modify-guide's
+scorecard `## Continuity sweep`, revise-guide's `#### Continuity sweep — #<issue>`,
+research-pass's `#### Continuity sweep — vibe execution`. Doctrine that proves sore in
+practice becomes a gate, not a reminder (creator's standing ruling).
+
 ---
 
 ## The Learnings Loop

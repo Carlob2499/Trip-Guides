@@ -71,7 +71,10 @@ these files edits the pipeline; there is no second copy to keep in sync.
   (update its verification date as written), then run the continuity sweep from
   CLAUDE.md's **"Editing a Guide — Continuity Is Mandatory"**: grep the whole
   guide for every touchpoint the change ripples into, fix what's in scope,
-  stop-and-ask when it forks the plan. This mode is what `modify-guide.yml` runs headlessly for
+  stop-and-ask when it forks the plan. **Record the sweep** (greps run · ripples
+  found & fixed · "none" stated explicitly) in your completion report — every
+  headless edit surface hard-gates on this record; interactively it belongs in
+  the completion report the same way. This mode is what `modify-guide.yml` runs headlessly for
   a scoped "Request a change" issue (any guide page's **✎ Request a change** button) — same
   discipline, just triggered by the owner's `modify-approved` label instead of an interactive
   session, and landed via `scripts/land-branch.sh` instead of a hand-merged PR.

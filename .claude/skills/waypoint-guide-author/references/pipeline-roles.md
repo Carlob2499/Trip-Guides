@@ -62,7 +62,19 @@ sweep. Vibe never lowers the bar:
   intake doc instead of an edit. **Disagreement is allowed; silence is not.**
 Then the continuity sweep for everything the edits ripple into, and re-run
 `npm run verify -- --slug <slug>` + `npm run build` until both are clean (≤3 rounds).
-The executor never graduates — the rubric critic runs next with fresh eyes.
+**Record the sweep (required artifact):** append beneath the `## Vibe findings` section in
+the intake doc:
+
+```
+#### Continuity sweep — vibe execution
+- greps run: <what you actually grepped>
+- ripples found & fixed: <list, or "none — no stale touchpoints">
+- deferred to human: <list, or "none">
+```
+
+The workflow hard-gates on this block whenever the executor ran — edits with no recorded
+sweep fail the run before graduation. The executor never graduates — the rubric critic runs
+next with fresh eyes.
 
 ## The fresh-context critic — bar test, rubric scoring, citation audit
 

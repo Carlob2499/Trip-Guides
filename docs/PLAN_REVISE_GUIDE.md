@@ -81,7 +81,7 @@ Mechanism: `--fallback-model` in `claude_args` if the pinned action version supp
 otherwise a 5-line preflight step (1-token probe call, `MODEL` output, fed to `--model`).
 This is the arc's one genuinely net-new bit of infrastructure — smallest possible version,
 and its failure path is forced once in V3 (Boundary checks, below). `workflow_dispatch`
-exposes `slug`, `plan_model`, and `effort` (default `xhigh`) for reruns/rescue, mirroring
+exposes `slug`, `plan_model`, and `effort` (default `high`, creator 2026-07-30) for reruns/rescue, mirroring
 research-pass.yml.
 
 ## Phases
@@ -187,7 +187,7 @@ fork on a test issue stops the run and the relabel resume routes past the planne
 ### V4 — Execution agents + landing (draft-only first)
 
 **What.** Two more agent invocations, routed by `jq .status` on the plan file:
-1. **Agent R** (Opus→Sonnet, effort input default `xhigh`, tools incl. WebSearch/WebFetch) —
+1. **Agent R** (Opus→Sonnet, effort input default `high`, tools incl. WebSearch/WebFetch) —
    for each `reResearch` entry, a compressed scoped dual-pass: Pass-A-style primary-source
    verification per research-pass Agent 1's rules with its existing section-scoping sentence
    ("Scope this pass to the '<section>' section only; leave all other sections as-is"), then

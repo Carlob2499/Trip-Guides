@@ -47,15 +47,15 @@ on:
         type: string
         default: claude-fable-5
       effort:
-        description: "Reasoning effort for the research agent (xhigh = deepest search, per research-pass.yml's researched default)."
+        description: "Reasoning effort for the research agent. high is the default (creator's ruling 2026-07-30, matching research-pass.yml); xhigh only for a deliberately exhaustive one-off."
         required: false
         type: choice
         options:
-          - xhigh
           - high
+          - xhigh
           - medium
           - max
-        default: xhigh
+        default: high
       land:
         description: "How the critic lands the branch. 'draft' forces a draft PR (the V4 smoke default); flip to 'auto' after the first live run reads clean (V5 gate)."
         required: false
@@ -435,7 +435,7 @@ jobs:
           claude_args: |
             --model claude-opus-5
             --fallback-model claude-sonnet-5
-            --effort ${{ inputs.effort || 'xhigh' }}
+            --effort ${{ inputs.effort || 'high' }}
             --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
           prompt: |
             Guide slug: ${{ needs.resolve.outputs.slug }}
@@ -539,6 +539,15 @@ jobs:
                (on conflict, resolve keeping this branch's revision content; if a conflict is
                genuinely ambiguous, stop and say so in your summary).
 
+            4. RECORD THE SWEEP (required artifact — the workflow HARD-GATES on it before the
+               critic runs). Append to guides-intake/${{ needs.resolve.outputs.slug }}.md:
+                 #### Continuity sweep — #${{ needs.resolve.outputs.issue }}
+                 - greps run: <the tokens/greps you actually ran>
+                 - ripples found & fixed: <list, or "none — no stale touchpoints">
+                 - deferred to human: <list, or "none">
+               "No ripples" is a valid outcome but MUST be stated; a swept status with no
+               record fails the run.
+
             FINISH: set the plan file's status to "swept", then:
               git add -A && git commit -m "revise(${{ needs.resolve.outputs.slug }}): continuity sweep for #${{ needs.resolve.outputs.issue }}" && git push -u origin HEAD --force-with-lease
             STOP after pushing — the critic is a separate agent.
@@ -556,6 +565,18 @@ jobs:
           echo "status=$STATUS" >> "$GITHUB_OUTPUT"
           echo "verified=$VERIFIED" >> "$GITHUB_OUTPUT"
           echo "[route] after sweep: status=$STATUS verified=$VERIFIED"
+
+      # HARD GATE (continuity doctrine → gate, creator's ruling 2026-07-30): a "swept" status
+      # with no written record of WHAT was swept is exactly the silent skip the doctrine exists
+      # to prevent. Fails BEFORE the critic spends tokens — this one is a barrier by design.
+      - name: Continuity artifact gate — sweep record is REQUIRED
+        if: steps.forkgate.outputs.gated != 'true' && steps.route4.outputs.status == 'swept'
+        run: |
+          if ! grep -q "^#### Continuity sweep — #${ISSUE_NUM}" "guides-intake/${SLUG}.md"; then
+            echo "::error::Sweep agent set status=swept but left no '#### Continuity sweep — #${ISSUE_NUM}' record in guides-intake/${SLUG}.md — the continuity doctrine requires the artifact."
+            exit 1
+          fi
+          echo "[gate] continuity sweep record present"
 
       # ── AGENT C: fresh-context critic on the DIFF + land (Fable → Opus) ───────
       # Runs whenever the sweep finished; verified=false doesn't skip the critic — it means the
@@ -652,7 +673,7 @@ jobs:
           gh workflow run revise-guide.yml \
             -f slug="$SLUG" -f issue="$ISSUE_NUM" \
             -f plan_model="${{ inputs.plan_model || 'claude-fable-5' }}" \
-            -f effort="${{ inputs.effort || 'xhigh' }}" \
+            -f effort="${{ inputs.effort || 'high' }}" \
             -f land="${{ inputs.land || 'draft' }}" \
             -f void_retry=true
 
