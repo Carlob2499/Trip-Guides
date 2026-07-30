@@ -1,0 +1,49 @@
+name: Request a major revision
+description: For changes big enough to need real re-research — dates shifted, priorities changed, a whole leg rerouted. For a single fact fix, use "Request a change" instead.
+title: "Revise: "
+labels: ["revision-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Anyone can file this — filing it does **not** change anything. Nothing runs
+        until the owner applies the `revision-approved` label (write access required),
+        at which point the revise pipeline plans the revision, re-researches the
+        affected sections, sweeps the whole guide for continuity, and lands the result
+        the same way a research pass does.
+
+        Most requests don't need this form — the "Request a change" button on the
+        guide covers single fact fixes. This one exists for feedback-driven auto-filed
+        requests and for revisions the requester already knows need re-research.
+  - type: input
+    id: slug
+    attributes:
+      label: Guide slug
+      description: The guide's slug — its URL segment (e.g. "korea" for /guides/korea/).
+      placeholder: e.g. korea
+    validations:
+      required: true
+  - type: textarea
+    id: what-changed
+    attributes:
+      label: What changed and why this needs re-research
+      description: What about the trip, the destination, or the feedback makes parts of this guide wrong enough to re-research — not just re-word.
+      placeholder: e.g. "The trip dates moved from October to April — every seasonal recommendation (foliage, closures, festival timing) needs re-research, and the day plan needs re-cutting."
+    validations:
+      required: true
+  - type: input
+    id: sections
+    attributes:
+      label: Sections
+      description: Optional — comma-separated tab/group hints if you know which parts are affected (e.g. "Sights, Days"). Leave blank to let the planner scope it.
+      placeholder: e.g. Sights, Days
+    validations:
+      required: false
+  - type: input
+    id: deadline
+    attributes:
+      label: Deadline
+      description: Optional — a date this revision must land by (e.g. new trip dates).
+      placeholder: e.g. 2026-09-01
+    validations:
+      required: false

@@ -20,7 +20,28 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (updated 2026-07-30, session #18 — P7 shipped on branch)
+## Snapshot (updated 2026-07-30, session #18b — P7 merged; revise pipeline V1-V6 built)
+
+**Revise pipeline shipped** (spec: `docs/PLAN_REVISE_GUIDE.md`) — the major-revision workflow
+between modify-guide's scoped edit and a full research pass:
+
+- **V1** labels: `revision-request/approved/auto-filed`, `needs-decision` in ensure-labels.yml.
+- **V2** pure logic (unit-gated): revise issue template, `parse-revise-issue.mjs` (modify-shape
+  fallback for escalated issues), `validate-revision-plan.mjs` (exit 0/1/3 routing; nonexistent
+  sections + over-cap + blocking forks caught deterministically).
+- **V3-V5** `revise-guide.yml`: 4 routed agents — P plan (Fable→Opus fallback), R research
+  (Opus→Sonnet), M sweep (Sonnet), C diff-critic + land (Fable→Opus). Fork gate pauses on
+  `needs-decision`; plan file is the resume artifact (attempts cap 3); void detection + 1 retry;
+  `guide-<slug>` concurrency retro-fitted onto modify-guide too. **Lands DRAFT-only by default**
+  (`land` input) until the first live run reads clean.
+- **V6** feedback auto-file: `feedback-signals.mjs` (deterministic thresholds: overall ≤3,
+  pacing ≤2, ≥3 skips/submission — Q4 pending creator sign-off) → synthesis agent files INERT
+  deduped revision-request issues; owner label stays the only gate.
+- **Boundary checks still owed** (per plan doc): force the Fable→Opus fallback once (misspell
+  the model), trip a test fork gate, race a modify+revise on one slug, hand-plant a signals file.
+- **1009 tests green** (29 new), build clean.
+
+## Prior snapshot (session #18 — P7 shipped)
 
 **P7 differentiation surfaces (R11-R14) shipped** on `claude/research-trial-results-h32hlk`:
 
@@ -57,13 +78,13 @@
 
 ## Where we left off
 
-**Session #18 (2026-07-30):** Built and shipped P7 differentiation surfaces. Fixed CSS
-type-scale violations (replaced `--text-muted` with `--muted` to avoid the `--text-*`
-font-size token namespace). Added divergences scaffold entry with phase + seed item to
-pass scaffold contract tests. All 980 tests green, build clean. Pushed to
-`claude/research-trial-results-h32hlk`.
+**Session #18b (2026-07-30):** P7 merged to main. Then planned (orchestrated 6-agent
+workflow: 3 context readers → 2 design lenses → synthesis) and BUILT the revise pipeline
+V1-V6 per `docs/PLAN_REVISE_GUIDE.md`. 1009 tests green.
 
-**Re-prompt the creator with:** "P7 is done — provenance popovers on venues, divergences
-block with 5 Japan-specific corrections, calendar badges on constrained days, and the
-self-check date in the colophon. Branch pushed, 980 tests green. Ready to merge to main
-and do a visual check in `astro preview`."
+**Re-prompt the creator with:** "The revise pipeline is built and pushed. Before first real
+use: (1) ensure-labels runs on this push — confirm the 4 new labels exist; (2) confirm the Q4
+auto-file thresholds (overall ≤3, pacing ≤2, ≥3 skips/submission); (3) pick the smoke target
+(Q6 — recommend a toy dates-shift revision on korea or denmark, filed via the new template)
+and run the boundary checks: force the Fable→Opus fallback once, trip a test fork gate. The
+`land` input stays 'draft' until that smoke run reads clean — then flip its default to 'auto'."

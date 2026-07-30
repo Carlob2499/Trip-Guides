@@ -14,5 +14,12 @@ coverage/
 feedback-export.working.json
 # W3 run ledger: the agent's per-run report is posted to an issue, never committed to the guide PR.
 run-report.md
+# V6 revise pipeline: CI-run working files — signals feed an issue, context/changes feed agents.
+revision-signals.json
+revision-context/
+revision-changes.txt
+change.txt
+forks.json
+validate-errors.txt
 docs/mockups/living-atlas.html
 docs/mockups/.cache/

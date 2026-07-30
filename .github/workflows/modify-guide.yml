@@ -37,11 +37,40 @@ permissions:
   issues: write
 
 jobs:
-  modify:
+  # Concurrency-group keys can't read same-job step outputs, so a tiny first job resolves the
+  # slug for the guide-<slug> group below (retro-fit from the revise pipeline, PLAN_REVISE_GUIDE
+  # ruling #8): a modify and a revise fired on the same guide must queue, never interleave.
+  resolve:
     if: >
       github.event_name == 'issues' &&
       github.event.label.name == 'modify-approved' &&
       contains(github.event.issue.labels.*.name, 'modify-request')
+    runs-on: ubuntu-latest
+    outputs:
+      slug: ${{ steps.get.outputs.slug }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Resolve slug
+        id: get
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          set -euo pipefail
+          SLUG=$(node --input-type=module -e "
+            const m = (process.env.ISSUE_BODY || '').match(/### Guide slug\s+([^\n]+)/);
+            process.stdout.write(m ? m[1].trim().toLowerCase() : '');
+          ")
+          S="$SLUG" node --input-type=module -e "
+            import { isValidSlug } from './scripts/lib/slug.mjs';
+            if (!isValidSlug(process.env.S)) { console.error('Invalid slug:', process.env.S); process.exit(1); }
+          "
+          echo "slug=$SLUG" >> "$GITHUB_OUTPUT"
+
+  modify:
+    needs: resolve
+    concurrency:
+      group: guide-${{ needs.resolve.outputs.slug }}
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     # M0/B3: job-level so the agent action's own Bash tool (which inherits the job's
     # environment) has a gh credential — the prompt below calls `gh issue comment`/`gh
@@ -188,6 +217,9 @@ jobs:
   # calendar when dates lock in (date-lock trigger, R4).
   absorb:
     if: github.event_name == 'workflow_dispatch'
+    concurrency:
+      group: guide-${{ inputs.slug }}
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}

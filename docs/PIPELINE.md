@@ -109,9 +109,25 @@ diamond that is *always* human — nothing in the pipeline ever decides to un-pu
    draft/published status). Same public-repo safety shape as graduation: filing does nothing;
    only the owner's approval runs it.
 
+5b. **REVISE — a major revision, between EDIT and a full re-research.** `revise-guide.yml`
+   (spec: `docs/PLAN_REVISE_GUIDE.md`) handles changes big enough to need real content
+   re-research with whole-guide continuity — dates shifted, priorities changed, a leg rerouted,
+   feedback-driven divergence. Same single intake surface as EDIT: the owner triages weight at
+   approval time (`modify-approved` = scoped edit, `revision-approved` = this pipeline — an
+   escalated modify issue runs here unchanged). Four routed agents — Fable plans (a validated
+   revision-plan JSON that doubles as the resume artifact), Opus re-researches the plan's named
+   groups (scoped dual-pass + reconciliation-ledger appends), Sonnet sweeps continuity against
+   the emitted old→new token list, Fable critiques the DIFF fresh-context — then lands via the
+   shared `land-branch.sh`. A plan carrying blocking forks pauses the run on the issue
+   (`needs-decision`) until the owner answers — the Clarifying-Questions Doctrine, enforced in CI.
+
 6. **LEARN — the loop closes on the next intake.** Trip feedback → `learnings/<slug>.md` +
    `TRAVELER_PATTERNS.md` (shipped). Target: the post-mortem's party-pattern deltas are what the
    next intake's party selection reads, so each guide starts more personalized than the last.
+   Plus (V6): when the export's deterministic divergence signals trip (`feedback-signals.mjs` —
+   avg overall ≤ 3, pacing ≤ 2, or ≥ 3 skips/submission), the synthesis pass auto-files an
+   INERT `revision-request` issue (deduped, aggregates only, zero verbatim freeform) — the
+   owner's `revision-approved` remains the only execution gate.
 
 7. **REFRESH — the maintenance department. Shipped (P3).** `recert.yml` runs on a weekly schedule
    (and on demand): a detect job lists EVERY currently-stale guide (`npm run recert --json`, built on

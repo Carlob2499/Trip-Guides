@@ -15,10 +15,12 @@ on:
       - .github/ISSUE_TEMPLATE/new-guide.yml
       - .github/ISSUE_TEMPLATE/graduate-guide.yml
       - .github/ISSUE_TEMPLATE/modify-guide.yml
+      - .github/ISSUE_TEMPLATE/revise-guide.yml
       - .github/workflows/content-audit.yml
       - .github/workflows/graduate-guide.yml
       - .github/workflows/research-pass.yml
       - .github/workflows/modify-guide.yml
+      - .github/workflows/revise-guide.yml
       - .github/workflows/deploy.yml
       - .github/workflows/token-canary.yml
       - .github/workflows/pretrip-check.yml
@@ -60,6 +62,22 @@ jobs:
           gh label create modify-approved \
             --color 5319E7 \
             --description "Owner-only: applying this label actually runs the edit pass. Requires write access." \
+            --force
+          gh label create revision-request \
+            --color 0E8A16 \
+            --description "Requests a MAJOR revision (re-research, not a scoped edit) on a guide — anyone can open one" \
+            --force
+          gh label create revision-approved \
+            --color 5319E7 \
+            --description "Owner-only: applying this label runs the heavy revise pipeline (plan → scoped re-research → sweep → critic). Requires write access." \
+            --force
+          gh label create revision-auto-filed \
+            --color C5DEF5 \
+            --description "This revision request was auto-filed by the feedback-synthesis pass — inert until revision-approved" \
+            --force
+          gh label create needs-decision \
+            --color D93F0B \
+            --description "A revise run hit a genuine fork only the owner can decide — answer in a comment, then re-apply revision-approved" \
             --force
           gh label create stuck \
             --color D93F0B \

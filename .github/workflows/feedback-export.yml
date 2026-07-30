@@ -22,10 +22,18 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  # V6 (PLAN_REVISE_GUIDE): the synthesis agent may auto-file an inert revision-request issue
+  # when the deterministic divergence signals trip. Nothing executes off those issues until the
+  # owner applies revision-approved.
+  issues: write
 
 jobs:
   export:
     runs-on: ubuntu-latest
+    # GH_TOKEN job-level so the synthesis agent's own Bash tool can run the V6 auto-file's
+    # `gh issue list`/`gh issue create` calls (same M0/B3 pattern as modify/research/revise).
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -49,6 +57,26 @@ jobs:
           echo "count=$COUNT" >> "$GITHUB_OUTPUT"
           echo "New feedback submissions: $COUNT"
 
+      # V6: deterministic divergence signals (scripts/feedback-signals.mjs — pure logic, unit-
+      # gated thresholds). The agent below only DRAFTS and FILES for slugs this step names; it
+      # never decides thresholds itself (synthesis ruling #7).
+      - name: Compute divergence signals
+        id: signals
+        if: steps.export.outputs.count != '0'
+        run: |
+          set -euo pipefail
+          node --input-type=module -e "
+            import { readFileSync, writeFileSync } from 'node:fs';
+            import { divergenceSignals } from './scripts/feedback-signals.mjs';
+            const wf = JSON.parse(readFileSync('feedback-export.working.json', 'utf8'));
+            const sig = divergenceSignals(wf.summaries || []);
+            writeFileSync('revision-signals.json', JSON.stringify(sig, null, 2));
+            console.log(JSON.stringify(sig));
+          "
+          COUNT=$(jq 'length' revision-signals.json)
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+          { echo "### Divergence signals"; echo '```'; cat revision-signals.json; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Configure git identity
         if: steps.export.outputs.count != '0'
         run: |
@@ -70,6 +98,7 @@ jobs:
           claude_args: |
             --model claude-sonnet-5
             --allowedTools Bash,Read,Write,Edit,Glob,Grep
+          # GH_TOKEN for the V6 auto-file's gh calls inside the agent's Bash tool.
           prompt: |
             Draft the LEARN-loop synthesis for new traveler feedback, as a PR for the maker to review.
 
@@ -107,6 +136,25 @@ jobs:
 
             5. Self-check: `npm run build` must stay clean (the `learnings` block is schema-gated).
                Fix any schema error before landing.
+
+            6. AUTO-FILE revision requests (V6, PLAN_REVISE_GUIDE.md) — ONLY for slugs listed in
+               `revision-signals.json` (repo root, written by a deterministic step — if the file
+               is empty `[]`, skip this step entirely; you never decide thresholds yourself).
+               For EACH listed slug:
+                 a. DEDUP first: `gh issue list --label revision-request --state open --search "in:title <slug>"`
+                    — any hit means a request is already open; skip that slug.
+                 b. File: `gh issue create --title "Revise: <slug> (feedback-driven)" --label "revision-request,revision-auto-filed" --body "<body>"`
+                    The body must use the revise template's exact field headings so the parser
+                    reads it identically:
+                      ### Guide slug
+                      <slug>
+                      ### What changed and why this needs re-research
+                      <the tripped signals from revision-signals.json, plus a 2-3 line PATTERN
+                       summary of what the feedback suggests diverged — aggregates and patterns
+                       ONLY, ZERO verbatim freeform (the privacy rule extends to issue bodies)>
+                      ### Sections
+                      <comma list of group hints IF the patterns clearly point somewhere, else blank>
+               Do NOT apply revision-approved — auto-filed issues stay inert until the owner acts.
 
             LAND AS A REVIEW PR — never auto-merge:
               git add -A   # the working file is gitignored and won't be staged
