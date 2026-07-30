@@ -171,5 +171,6 @@
   "budget": {
     "maxSelfCorrectRounds": 3,
     "expectedGroupsTouched": 5
-  }
+  },
+  "attempts": 1
 }
