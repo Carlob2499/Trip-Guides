@@ -34,7 +34,7 @@
 Video/social **lead sourcing** for Pass B — YouTube transcripts via `yt-dlp` (never media),
 TikTok/IG signal via web-indexed roundups only, everything leads-only against the same T0 bar:
 
-- `.claude/skills/waypoint-guide-author/references/social-leads.md` (the binding rules)
+- `.claude/skills/waypoint-guide-author/references/research-efficiency.md` — "Social & video lead sourcing" (the binding rules; originally a separate social-leads.md, merged 2026-07-30)
 - Pass B pointers in `SKILL.md` + `research-efficiency.md`
 - Best-effort `yt-dlp` install step + Pass B prompt line in `research-pass.yml`
 

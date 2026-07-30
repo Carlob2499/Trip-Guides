@@ -14,30 +14,37 @@ description: >-
 
 # Waypoint Guide Author
 
-The research/authoring layer for Waypoint guides — and the **operational home**
-for the guide-content standards. `CLAUDE.md` auto-loads and is binding for the
-universal principles (the four properties Verified/Personal/Actionable/Honest;
-**"The bar"**; **"Editing a Guide — Continuity Is Mandatory"**) plus the
+The research/authoring layer for Waypoint guides — and the **single source of
+truth** for the guide-content standards. `CLAUDE.md` auto-loads and is binding
+for the universal principles (the four properties Verified/Personal/Actionable/
+Honest; **"The bar"**; **"Editing a Guide — Continuity Is Mandatory"**) plus the
 code-layer guardrails — don't re-Read it; it points *here* for guide-content
-detail. This
-skill and its references carry that detail: source-tiering a fact, the `≈`/`⚠`
-states, verification stamps, the 4-question venue rule, photo/section rules, the
-helper scripts, and the done gate.
+detail.
+
+**The headless pipeline runs THIS file.** `research-pass.yml`'s agents (Pass A ·
+Pass B · Reconcile · Vibe critic → executor · Rubric critic) are instructed to
+read this skill and execute their stage from it — the workflow carries only each
+stage's I/O contract (paths, checkpoints, forbidden dirs), never a restatement
+of the standards. Editing this file edits the pipeline; there is no second copy
+to keep in sync.
 
 ## Read first
 1. **`references/verification-rules.md`** — the binding fact decision layer
    (perishable-vs-durable, source tiers, ship/flag/omit, stopping conditions,
    the §8 self-check). Read before writing any fact.
-2. **`references/research-efficiency.md`** — the binding model-economy + search-budget
-   rules (research runs on **Sonnet**, light Opus only for contested judgment; scripts
-   before web; two search rounds then ship/flag/omit; checkpoint often — the backbone
-   must be sustainable on Claude Pro). Follow it instead of rediscovering it.
+2. **`references/research-efficiency.md`** — the binding model-economy +
+   search-budget rules (Sonnet-first, scripts before web, two rounds then
+   ship/flag/omit, checkpoints), plus the **social/video lead rules** (yt-dlp
+   transcripts, TikTok/IG indirect) and the **Research-skill discovery layer**
+   (interactive sessions only). Follow it instead of rediscovering it.
 3. The **target guide** — `src/content/guides/<slug>/`; read only the group file
    the fact lives in, per CLAUDE.md's Operational Habits. Also read its
    **intake** `guides-intake/<slug>.md` if it exists (ranked priorities decide
    which sections get depth); else infer general scope and say so.
    `docs/NEW_GUIDE_INTAKE.md` explains intake → spec.
-4. **`references/block-types.md`** — when choosing or creating a section type.
+4. **`references/block-types.md`** — section types, the enforced tab budget,
+   guide-level typed features (phrases/entry/advisory), voice standard, facets,
+   covers. Read when choosing or creating any section.
 5. **The `denmark/` and `korea/` guide dirs** — the gold standard to match or beat.
 6. **`docs/TRAVELER_PATTERNS.md`** — how these travelers *actually* travel, plus
    `learnings/<slug>.md` for any prior trip with the same travelers. **Consult during intake
@@ -81,19 +88,6 @@ helper scripts, and the done gate.
   section-ranking table in `TRAVELER_PATTERNS.md`. An ungrouped stop sits the tally out;
   a guessed group teaches the next guide something false.
 
-## Tab budget — enforced, not advisory
-`_guide.json`'s `tabBudget` (default 10) caps distinct content `group`s; the build fails
-past it and lists the groups. Don't raise it to make a build pass — that inverts the point.
-Raise it only when the guide has genuinely earned the tab (Korea's 11 exist because two
-anchor events and a solo fork demand them), and prefer merging two thin groups first. Note
-the reader also sees 4 tool tabs on top of whatever you declare.
-
-**Cite evidence, not just doctrine.** `docs/telemetry/summary.md` (auto-generated weekly from
-anonymous tab-open counts, PII-free) ranks which tabs travelers actually opened on past guides.
-Consult it when deciding a new guide's groups and their order: a tab nobody opened is a merge
-candidate; a consistently top-ranked one earns prominence. Absent or thin data (a new deployment,
-a just-published guide) means no signal yet — fall back to the ranking rules above, don't invent one.
-
 ## Research workflow — TWO passes, then reconcile
 
 **Model economy first:** the budgets and model assignments in
@@ -106,6 +100,11 @@ the first; without it, a shallow or biased single pass ships unchallenged (the r
 only fixes detectable errors — it can't tell you a well-formed guide is thin or generic). Both
 passes obey the same fact discipline (ledger, legal states, provenance) further down; they
 differ only in **what they go looking for**.
+
+**Independence is structural, not stylistic.** In CI, Pass B runs as a separate agent that
+never reads Pass A's output. Interactively, honor the same wall: produce Pass B without
+consulting Pass A's draft — spawn it as an isolated subagent where the harness allows;
+otherwise research it from the intake alone and merge only at reconcile.
 
 ### Pass A — canonical & verified
 Primary/official sources first. The **anchor event — verify its date + venue against a T0 source
@@ -124,8 +123,14 @@ the authentic version of the experience the guidebooks flatten? **Pass B's finds
 each must be verified against a primary source before it enters the guide.** Authenticity never
 smuggles in an unverified fact; it changes *what* you research, not the bar it clears.
 Video/social sourcing is part of this pass's toolkit — YouTube transcripts via `yt-dlp`
-(never media) and web-indexed TikTok/IG roundups: **`references/social-leads.md`** (binding:
-leads-only, same T0 bar, viral = crowd warning, failures never block the pass).
+(never media) and web-indexed TikTok/IG roundups: `research-efficiency.md` "Social & video
+lead sourcing" (binding: leads-only, same T0 bar, viral = crowd warning, failures never block).
+
+### Discovery before either pass — interactive sessions only
+Each pass may open with ONE Standard-mode call to the global `Research` skill as a discovery
+accelerant (backbone landscape for A; community leads for B). Rules, limits, and the
+never-in-CI constraint: `research-efficiency.md` "Discovery layer". Its output is T2 leads —
+the bar never moves.
 
 ### Reconcile → ONE guide, with a ledger
 Merge the two passes item by item into the single guide, and record the merge in the
@@ -155,13 +160,11 @@ work is the resume point. (The scaffolder clears `scaffold`; you clear `verified
 Every marquee sight / food recommendation carries a **crowd reality + best-time (off-peak) note**,
 and where the obvious pick is a tourist trap, a **novel local alternative**. Write these into the
 existing `sights` / `days` bodies — no new section type, no tab-budget cost. This is the antidote
-to "reads AI-generated": a guide that knows *when* the famous canal is a wall of selfie sticks and
-where locals actually go is one a generic model couldn't have written. The **Travel style** intake
-field sets how hard Pass B leans here (off-the-beaten-path → aggressive; bucket-list → the must-see
-stays, but with the timing that makes it bearable). Judged by rubric row **#12 (authenticity &
-crowd-awareness)** plus #9 (party fit) and the bar test — not a hard auto-gate.
+to "reads AI-generated". The **Travel style** intake field sets how hard Pass B leans here
+(off-the-beaten-path → aggressive; bucket-list → the must-see stays, but with the timing that
+makes it bearable). Judged by rubric row **#12** plus #9 (party fit) and the bar test.
 
-### Fact discipline — applies to BOTH passes
+## Fact discipline — applies to BOTH passes
 - Keep a **verification ledger while researching** — one row per perishable
   fact, captured as you go, not reconstructed after:
 
@@ -178,11 +181,10 @@ crowd-awareness)** plus #9 (party fit) and the bar test — not a hard auto-gate
   (`fx` 7d · `transit` 90d · `hours` 90d · `venue` 180d · `default` 90d, from
   `src/lib/staleness.ts`). Set **all three** on every new/edited perishable fact whose
   block supports them. They are not decoration: `verified_on` + `shelf_life` drive the
-  ⚠ re-check pill travelers actually see (client clock, so it can't freeze "fresh"),
-  and `source_url` is what the pill links to and the weekly recert re-checks. Pick the
-  `shelf_life` that matches the fact, not the section's title — a currency figure is
-  `fx` even inside a general "Money" panel. Inline `<a href>` citations stay valid;
-  `verified_on` without `source_url` is lint-flagged.
+  ⚠ re-check pill travelers actually see, and `source_url` is what the pill links to and
+  the weekly recert re-checks. Pick the `shelf_life` that matches the fact, not the
+  section's title — a currency figure is `fx` even inside a general "Money" panel.
+  Inline `<a href>` citations stay valid; `verified_on` without `source_url` is lint-flagged.
 - **New guides are born `provenance: "strict"`** (guide-level field). Under strict the
   build REJECTS any `panel`/`prose`/`list`/`routes` section that uses `≈` without a
   `verified_on` — because `≈` asserts *sourced-and-approximate*, and a claim to have
@@ -190,37 +192,10 @@ crowd-awareness)** plus #9 (party fit) and the bar test — not a hard auto-gate
   figure was never confirmed: downgrade it to `⚠` or omit it. Do not add `strict` to an
   existing guide without doing the backfill first — a half-dated guide flipped to strict
   just fails the build.
-
-- **Structured day tags** — when writing `days` items, set `energy`
-  (packed/balanced/slow → the Low-Energy toggle) and `env` (outdoor/indoor/mixed →
-  the weather day-swap advisory: rain on an `outdoor` day + a dry `indoor` day
-  nearby suggests the swap). Explicit tags only — the features stay silent on
-  untagged days rather than guessing from prose.
-- **Phrase cards** (guide-level `phrases: {lang, items[]}`, docs/FEATURES.md #6) —
-  optional; when the trip warrants it, research 15–20 situational phrases
-  (allergy, taxi, help, directions) with the SAME rigor as any other fact: a
-  native-script phrase is safety-adjacent (a traveler may show it to a stranger
-  mid-crisis), so ship/flag/omit applies per-phrase — verify against a reliable
-  bilingual source, never transliterate from memory. `lang` is the BCP-47 tag
-  (e.g. `"ko-KR"`) that drives the Trip kit tab's speak button.
-- **Entry requirements** (guide-level `entry: [{homeCountry, visa, ...}]`,
-  docs/FEATURES.md #7) — one row per traveler home country (a party can mix
-  passports; ask during intake if unclear, never assume). `source_url` +
-  `verified_on` are SCHEMA-REQUIRED here (not optional like most provenance) —
-  research from each destination country's OFFICIAL immigration/entry page only,
-  never a paid visa API or an aggregator. A wrong visa claim can mean a denied
-  boarding, so omit the whole guide's entry card before shipping an unverified
-  one. Recert re-checks this on its normal shelf-life cadence like any other fact.
-- **Travel advisory** (guide-level `advisory: {level, title, summary?, source_url,
-  verified_on}`, docs/FEATURES.md #9) — the destination's CURRENT US State
-  Department advisory (`travel.state.gov/.../ <country-slug>-travel-advisory.html`),
-  `source_url` + `verified_on` SCHEMA-REQUIRED. **The page is Cloudflare-gated
-  against plain `fetch()`/`curl`/WebFetch (403)** — it only resolves through an
-  actual browser tool (navigate, wait out the challenge, read the "Level N:
-  <title>" line near the top); never a build-time fetch. Record the level ALWAYS,
-  even a normal Level 1 — an omitted field reads as "never checked," a worse claim
-  than "checked, nothing elevated." The pill only renders at level ≥ 2
-  (honest-blank); Level 1 stays silent by design, not by omission.
+- **Typed guide-level features carry their own rules** — day `energy`/`env` tags, phrase
+  cards, entry requirements (schema-required provenance; official immigration pages only),
+  travel advisory (browser-only fetch; record even Level 1): `block-types.md`
+  "Guide-level typed features" + the `days` per-type note. Research them like any fact.
 
 ## Never guess what a script can verify
 - **coords / place_id** → `node scripts/lookup-place.mjs "<place>" --cc XX`
@@ -236,34 +211,19 @@ crowd-awareness)** plus #9 (party fit) and the bar test — not a hard auto-gate
   (treat its output as T2 leads to verify, not citable fact).
 
 ## The Living Atlas pass — after reconcile, before the verify loop
+Research FEEDS the visual system. Four duties on every pass, headless or interactive
+(full mechanics: `block-types.md` "Composer facets" · "Group labels & the voice
+standard" · "Cover art"):
+1. **Facets** — tag every authored section: `theme` (only when it differs from the group),
+   `phase`, and `rank` on the intake's ranked priority themes.
+2. **Descriptors** — RARE and informational-only; standard groups get NONE.
+3. **Cover** — set a Commons photo only if a signature, seasonally-honest one exists;
+   the Painted Atlas is the honest default.
+4. **Footage scout** — candidates ONLY in the intake doc's table; never set `cover.video`.
 
-Every guide is born with the full visual system (Painted Atlas, section figures, the
-Composer), and research FEEDS it — these four duties run right after reconcile, on every
-pass, headless or interactive (mechanics: `block-types.md` "Group labels & the voice
-standard" · "Composer facets" · "Cover art"):
-
-1. **Facets** — tag every section you authored: `theme` (only when it differs from the
-   group), `phase` (before|arrival|daily|leaving — routes the unit if its group ever
-   folds; the scaffold seeded these on its shells, keep them honest as you rewrite), and
-   `rank` on the intake's ranked priority themes — an untagged priority theme can be
-   budget-merged away; a ranked one earns its anchor tab.
-2. **Descriptors** — RARE and informational-only (creator's ruling; full rules + the
-   banned slop patterns: `block-types.md` voice standard). Write one ONLY where the
-   literal label can't carry the meaning (trip-specific groups like "Daejeon & MSI");
-   standard groups get NONE — the derived subtitle from real section titles is the
-   better line. Flat statement of fact a stranger would understand ("would Wikivoyage
-   write this?"); grep the group file for every claim word before writing it.
-3. **Cover** — if a signature Commons photo exists, set `cover` (file + credit + license
-   + focal), filename validated via `search-commons.mjs`. The Painted Atlas is the honest
-   default, not a failure: skip rather than force a mediocre or wrong-place photo.
-4. **Footage scout** — candidates ONLY, never set `cover.video` yourself: record 0–2
-   licensed, stable-URL clips (Mixkit `assets.mixkit.co`; never Coverr temp-URLs) in the
-   intake doc's `## Cover art — footage candidates` table. Publishing is the creator's
-   sign-off — the clip must be frame-verified to show the actual place first.
-
-Composition itself then auto-applies exactly once, in the done gate below — after the
-networked verify PASS, while the guide is still a draft (`compose-guide.mjs --write`);
-after graduation it is proposal-only, forever.
+Composition auto-applies exactly once, in the done gate — after the networked verify PASS,
+while the guide is still a draft (`compose-guide.mjs --write`); after graduation it is
+proposal-only, forever.
 
 ## Done gate — all of it, before calling anything finished
 
@@ -286,40 +246,48 @@ Then these guide-content gates, on top of it:
    do NOT explain-and-move-on: fix each blocking (⚠) finding *by re-researching that fact
    against a primary (T0) source* — never silence a flag you can't source; downgrade to `⚠`
    or omit. **Re-run verify until it PASSes** (or every remaining item is a
-   deliberately-explained `⚠` gap). Recency is advisory (a concluded trip's facts are stale
-   by nature; recert acts on live ones); the `citations` line is context, not a target.
-   `npm run build` is the separate schema gate — both must be clean. Run `--network` before
-   graduating.
-   **Before treating a PASS as license to proceed** (F7·C1, the Critic lens — prompt-only,
-   no new stage): read the whole merged guide against the bar — "would this appear in ANY
-   generic AI guide, unresearched, without knowing this traveler?" (rubric rows #6/#9/#12:
-   anchor quality, party fit, authenticity). Replace what fails it, or justify it explicitly
-   against this traveler's ranked priorities; never leave a bland-but-technically-correct
-   item unflagged just because `verify` didn't catch it. A replacement re-enters the SAME
-   ledger (source + date, continuity sweep) as everything else — it is never exempt.
-   Log the outcome always, even "none" — see `verification-rules.md` §8 item 1.
-   When verify PASSes AND the bar test is recorded: `npm run extract-palette -- --slug <slug>`
-   (commit the generated palette; harmless no-op without photos), then — while the guide is
-   still a draft — `node scripts/compose-guide.mjs --slug <slug> --write` (the one moment
-   composition auto-applies; a compose ERROR is a real finding, fix its cause), then
+   deliberately-explained `⚠` gap). Recency is advisory; the `citations` line is context,
+   not a target. `npm run build` is the separate schema gate — both must be clean. Run
+   `--network` before graduating.
+2. **The bar test — recorded, never silent.** Read the whole merged guide against the bar:
+   "would this appear in ANY generic AI guide, unresearched, without knowing this
+   traveler?" (rubric rows #6/#9/#12). Replace what fails it or justify it explicitly;
+   a replacement re-enters the SAME ledger + continuity sweep. Log the outcome always,
+   even "none" — see `verification-rules.md` §8 item 1. In CI this judgment belongs to
+   the critic agents (vibe + rubric); interactively it is yours.
+3. **Citation audit — the fidelity spot-check (REQUIRED artifact).** Sample **≥5
+   verified perishable facts** (or all of them if fewer), weighted toward prices, hours,
+   and the anchor event. Fetch each fact's own `source_url` and confirm the page still
+   supports the stated value. Write the result as a **`## Citation audit`** table in the
+   intake doc — one row per sampled fact: claim · value · source fetched (y/n) ·
+   verdict (`supports` / `drifted → fixed` / `unreachable → flagged`). A drifted value
+   is corrected and re-dated on the spot; an unreachable source downgrades the fact per
+   ship/flag/omit. **A pass that ends without this table is not done** — the pipeline
+   greps for it before graduation, and "sampled 5, all support" is the normal, short
+   outcome. This catches the failure `verify` structurally can't: a live link whose page
+   no longer says what the guide says.
+4. When verify PASSes AND the bar test + citation audit are recorded:
+   `npm run extract-palette -- --slug <slug>` (commit the generated palette; harmless
+   no-op without photos), then — while the guide is still a draft —
+   `node scripts/compose-guide.mjs --slug <slug> --write` (the one moment composition
+   auto-applies; a compose ERROR is a real finding, fix its cause), then
    `npm run pipeline -- --slug <slug> --checkpoint verified`.
-2. The **`verification-rules.md` §8 self-check**, line by line.
-3. **`verified` stamp** — `Checked [date] for [trip] · re-check before travel:
+5. The **`verification-rules.md` §8 self-check**, line by line.
+6. **`verified` stamp** — `Checked [date] for [trip] · re-check before travel:
    [most perishable items]`; keep it `⚠`-prefixed on drafts and keep
    `draft: true` — graduating a guide is a human decision, never yours.
-4. **Recert pass** — any fact you touched that sits past its shelf life
+7. **Recert pass** — any fact you touched that sits past its shelf life
    (`src/lib/staleness.ts` categories) is re-sourced from a primary source and
    re-dated, or visibly downgraded to `⚠` — never silently left presenting as
    verified.
 
 ## Completion report
 End every pass with: `built ✓ (N sections, build + linter clean) · flagged ⚠
-for re-check: […] · omitted for lack of source: […] · conflicts recorded: […]`
-plus the ledger. This makes the Honest gate auditable and tells the next pass
-what to close.
+for re-check: […] · omitted for lack of source: […] · conflicts recorded: […] ·
+citation audit: [N sampled / N support / drift fixed]` plus the ledger. This
+makes the Honest gate auditable and tells the next pass what to close.
 
 ## Scope
 Edit **only** the target guide (+ its intake notes) — never other guides; leave
 `map`/`weather`/`holidays` sections intact (live data). Every field validates
-against `src/content.config.ts`. An honest "couldn't confirm — check before you
-go" is a passing outcome; a smooth, confident, unverified paragraph is not.
+against `src/content.config.ts`.

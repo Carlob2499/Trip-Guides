@@ -14,13 +14,24 @@ carries `type`, `group` (the nav-tab category label), and usually `title`.
 - Same principle everywhere: no surface may present the same datum twice
   side-by-side (see CLAUDE.md "Uniform application across surfaces").
 
-**Group (tab) budget — ≤10 groups per guide.** Merge before adding:
-`Essentials` holds money/health/etiquette-type sections; same-audience
-event content shares one group. A group name is a nav label (short, no
-" & " chains where avoidable); the section `title` carries the identity.
-New guides start from: Plan · Essentials · Transit · Days ·
-Sights · Food & shopping · Sources, adding at most 3 trip-specific
-groups.
+**Group (tab) budget — ENFORCED, not advisory.** `_guide.json`'s `tabBudget`
+(default 10) caps distinct content `group`s; the build fails past it and lists
+the groups. Don't raise it to make a build pass — that inverts the point. Raise
+it only when the guide has genuinely earned the tab (Korea's 11 exist because
+two anchor events and a solo fork demand them), and prefer merging two thin
+groups first. The reader also sees 4 tool tabs on top of whatever you declare.
+Merge before adding: `Essentials` holds money/health/etiquette-type sections;
+same-audience event content shares one group. A group name is a nav label
+(short, no " & " chains where avoidable); the section `title` carries the
+identity. New guides start from: Plan · Essentials · Transit · Days ·
+Sights · Food & shopping · Sources, adding at most 3 trip-specific groups.
+
+**Cite evidence, not just doctrine.** `docs/telemetry/summary.md` (auto-generated
+weekly from anonymous tab-open counts, PII-free) ranks which tabs travelers
+actually opened on past guides. Consult it when deciding a new guide's groups and
+their order: a tab nobody opened is a merge candidate; a consistently top-ranked
+one earns prominence. Absent or thin data means no signal yet — fall back to the
+ranking rules, don't invent one.
 
 **Budget `est` values power plan-vs-logged.** The Budget calculator compares
 its logged spend against the guide's own `budget` section (USD sections
@@ -111,7 +122,10 @@ conventions, render behavior, and the verification rules attached to a field.
 - **`days`** — `date` is a label like `"Wed Jul 8"`; `pace` is a free-text schedule
   narrative (NOT a strenuousness rating); `energy` (`packed | balanced | slow`,
   default `balanced`) drives the Low-Energy toggle — only tag `packed` when the day
-  genuinely is. `constraints` are strings like "Closed Mondays".
+  genuinely is. `env` (`outdoor | indoor | mixed`) drives the weather day-swap
+  advisory (rain on an `outdoor` day + a dry `indoor` day nearby suggests the swap).
+  Explicit tags only — both features stay silent on untagged days rather than
+  guessing from prose. `constraints` are strings like "Closed Mondays".
 - **`venues`** — scannable cards for food, shopping, and activity picks. Each item
   has structured fields (name, area, address, phone, hours, closed, book, price,
   crowd_tip, why, how, map) — `why` is ONE compelling line, not a paragraph.
@@ -133,6 +147,34 @@ conventions, render behavior, and the verification rules attached to a field.
 - **`tierlist`** — `hot` lists chip texts to render highlighted; `✨` prefix marks
   shiny-eligible; `body` is a 1–2 line elaboration.
 - **`raids`** — `strategy` allows inline `<b>`, `<a>` only.
+
+## Guide-level typed features (research these like any fact)
+
+- **Phrase cards** (guide-level `phrases: {lang, items[]}`, docs/FEATURES.md #6) —
+  optional; when the trip warrants it, research 15–20 situational phrases
+  (allergy, taxi, help, directions) with the SAME rigor as any other fact: a
+  native-script phrase is safety-adjacent (a traveler may show it to a stranger
+  mid-crisis), so ship/flag/omit applies per-phrase — verify against a reliable
+  bilingual source, never transliterate from memory. `lang` is the BCP-47 tag
+  (e.g. `"ko-KR"`) that drives the Trip kit tab's speak button.
+- **Entry requirements** (guide-level `entry: [{homeCountry, visa, ...}]`,
+  docs/FEATURES.md #7) — one row per traveler home country (a party can mix
+  passports; ask during intake if unclear, never assume). `source_url` +
+  `verified_on` are SCHEMA-REQUIRED here (not optional like most provenance) —
+  research from each destination country's OFFICIAL immigration/entry page only,
+  never a paid visa API or an aggregator. A wrong visa claim can mean a denied
+  boarding, so omit the whole guide's entry card before shipping an unverified
+  one. Recert re-checks this on its normal shelf-life cadence like any other fact.
+- **Travel advisory** (guide-level `advisory: {level, title, summary?, source_url,
+  verified_on}`, docs/FEATURES.md #9) — the destination's CURRENT US State
+  Department advisory (`travel.state.gov/.../ <country-slug>-travel-advisory.html`),
+  `source_url` + `verified_on` SCHEMA-REQUIRED. **The page is Cloudflare-gated
+  against plain `fetch()`/`curl`/WebFetch (403)** — it only resolves through an
+  actual browser tool (navigate, wait out the challenge, read the "Level N:
+  <title>" line near the top); never a build-time fetch. Record the level ALWAYS,
+  even a normal Level 1 — an omitted field reads as "never checked," a worse claim
+  than "checked, nothing elevated." The pill only renders at level ≥ 2
+  (honest-blank); Level 1 stays silent by design, not by omission.
 
 ## Placement conventions
 

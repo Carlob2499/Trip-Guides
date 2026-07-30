@@ -1,4 +1,4 @@
-# Research Efficiency — model economy + judicious searching
+# Research Efficiency — model economy, judicious searching, social/video leads
 
 Binding operational rules for every research/recert pass. The backbone must be sustainable on a
 **Claude Pro** plan: research is executed by **Sonnet** (default) or **light Opus** (reconciliation
@@ -53,8 +53,88 @@ execute the plan, don't wander.
   (the local-language official page is often the true T0 — fetch it and translate, don't keep
   searching English).
 - **Video transcripts are cheap Pass B leads.** `yt-dlp` pulls a YouTube transcript with zero
-  media download (rules + the ~4-per-pass cap: `social-leads.md`). A failed pull is bot-blocked:
-  mark and move on — transcripts are an aide, never a dependency.
+  media download (rules + the ~4-per-pass cap: "Social & video lead sourcing" below). A failed
+  pull is bot-blocked: mark and move on — transcripts are an aide, never a dependency.
+
+## Discovery layer — the Research skill (interactive sessions ONLY)
+
+When a pass runs interactively on the creator's machine, the global `Research` skill
+(`~/.claude/skills/Research/`) may open each pass as a **discovery** accelerant — one
+Standard-mode call per pass, at the start, never per-fact:
+
+- **Pass A** — one call to map the backbone landscape (must-dos, transit structure, entry-rule
+  shape) before climbing to T0 sources fact by fact.
+- **Pass B** — one call for community leads; its source-routing (Reddit/YouTube/X before web
+  search) is exactly Pass B's resident angle.
+
+**The bar does not move.** Everything the Research skill returns is a **T2 lead** — verified
+against a T0 primary source before it enters the guide, recorded in the ledger like any other
+lead. Never cite its output, never let it substitute for the per-fact fetch discipline above.
+Discovery ≠ verification: the skill finds *what to check*; the native fetch confirms *what is true*.
+
+**Never in CI.** The headless pipeline (`research-pass.yml`) has no API keys and no local
+services; its agents use native web search/fetch + the aides below. A pass without the Research
+skill is a normal pass, not a degraded one.
+
+## Social & video lead sourcing — Pass B aides
+
+Video and social platforms hold real local knowledge (what residents actually eat, when the
+famous spot is empty, which "must-see" is a queue) — but they are **T2 leads, never citations**.
+Everything here obeys the same bar as the rest of Pass B: verified against a T0 primary source
+before it enters the guide, or it doesn't enter.
+
+### Binding rules
+
+- **Leads-only.** No fact sourced from a video, post, or social roundup ships on that
+  source's authority. The citation is always the official page; the social source is the
+  *trail*, recorded in the reconciliation ledger's B-only rows.
+- **"Viral" is a lead signal AND a crowd warning — never a quality signal.** A viral spot
+  is a crowd forecast: pair any viral find with the crowd-reality + off-peak note, and
+  check whether it's exactly the tourist trap Pass B exists to route around.
+- **Corroborate before "locals" phrasing.** A "locals go here" / "local favorite" claim
+  needs ≥2 independent social/resident sources (e.g. a transcript AND a resident forum
+  thread) — one creator's opinion gets neutral phrasing, not a local's endorsement.
+- **Inside the existing budget, not on top of it.** This is part of Pass B's search
+  budget above. Max ~4 transcripts per full pass; skip transcripts entirely on narrow
+  single-section re-runs unless the section is food/sights.
+- **Failure never blocks the pass.** Every mechanism below is an aide. If a tool is
+  missing or a platform blocks, apply the bot-blocked doctrine — mark it in the ledger,
+  move on, ≤2 attempts. A pass with zero transcripts is a normal pass, not a degraded one.
+
+### YouTube — transcripts via yt-dlp (never media)
+
+The one platform with a clean keyless path: `yt-dlp` pulls a video's subtitles/transcript
+without downloading any media. CI installs it best-effort (research-pass.yml); locally,
+check `yt-dlp --version` first — if absent, skip to the indirect route below.
+
+1. **Find candidates by web search**, not by browsing: `"<city> travel vlog"`,
+   `"<city> what locals eat"`, `"living in <city>"`. Prefer recent uploads (≤18 months —
+   perishable facts age) and resident/long-stay creators over drive-by tour compilations.
+2. **Pull the transcript only:**
+
+   ```
+   yt-dlp --skip-download --write-auto-subs --write-subs \
+     --sub-langs "en.*" --sub-format vtt -o "/tmp/yt-%(id)s" "<url>"
+   ```
+
+   Then read the `.vtt` and extract venue names, claims, and timing tips into the ledger
+   as T2 leads. Add the destination's language to `--sub-langs` when the best creators
+   are local (translate, don't skip).
+3. **Failure = bot-blocked doctrine.** yt-dlp missing, a 403/429, or a video with no
+   subs: mark and move on. Never retry-loop; never treat a failed pull as a finding.
+
+### TikTok / Instagram — indirect only
+
+No sanctioned programmatic access exists for this repo's use (TikTok's Research API is
+gated to vetted academic institutions; Instagram's Graph API is business-gated with
+capped hashtag search — both verified 2026-07-30, re-check terms before ever revisiting),
+and scraping either platform is forbidden here. The signal still arrives: viral spots get
+written up within days by web-indexed blogs, local news, and roundup sites.
+
+- Search `"<city> tiktok famous <food|spot|cafe>"`, `"<venue> instagram crowds"`.
+- The roundup is an aggregator: leads only, per the search-budget rules above.
+- A spot's viral status is itself a datum — it predicts queues. Fold it into the
+  crowd-reality note once the venue itself is T0-verified.
 
 ## Fetch discipline — learned from this repo's own audits
 
