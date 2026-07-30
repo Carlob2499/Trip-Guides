@@ -42,23 +42,34 @@ import { lastAboveFold, nearestToCenter } from "../model/scroll-spy";
     }
   }
 
+  /* Go to a day. `instant` skips the smooth scroll — required by the mobile-nav day
+     scrubber (src/features/mobile-nav/ui/day-scrub.js), which can ask for several days
+     in one sweep: the deck delta below is measured from the CURRENT position, so a
+     second request landing mid-animation measures a moving target and the deck drifts
+     to the wrong card. Published on the rail element so the scrubber drives days
+     through this one implementation instead of standing up a second one. */
+  function goTo(idx, instant) {
+    var el = dayEls[idx];
+    if (!el) return;
+    var how = (reduced || instant) ? "auto" : "smooth";
+    if (horizontal()) {
+      // Center the card in the deck without moving the page vertically.
+      var trackRect = track.getBoundingClientRect();
+      var elRect = el.getBoundingClientRect();
+      var delta = (elRect.left - trackRect.left) - (track.clientWidth - elRect.width) / 2;
+      track.scrollBy({ left: delta, behavior: how });
+    } else {
+      var y = el.getBoundingClientRect().top + window.scrollY - chromeH;
+      window.scrollTo({ top: y, behavior: how });
+    }
+    setActive(idx);
+  }
+  scrub.__dayRail = { goTo: goTo };
+
   // Click a chip → page/scroll to that day.
   chips.forEach(function (chip) {
     chip.addEventListener("click", function () {
-      var idx = parseInt(chip.getAttribute("data-day-jump"), 10);
-      var el = dayEls[idx];
-      if (!el) return;
-      if (horizontal()) {
-        // Center the card in the deck without moving the page vertically.
-        var trackRect = track.getBoundingClientRect();
-        var elRect = el.getBoundingClientRect();
-        var delta = (elRect.left - trackRect.left) - (track.clientWidth - elRect.width) / 2;
-        track.scrollBy({ left: delta, behavior: reduced ? "auto" : "smooth" });
-      } else {
-        var y = el.getBoundingClientRect().top + window.scrollY - chromeH;
-        window.scrollTo({ top: y, behavior: reduced ? "auto" : "smooth" });
-      }
-      setActive(idx);
+      goTo(parseInt(chip.getAttribute("data-day-jump"), 10), false);
     });
   });
 

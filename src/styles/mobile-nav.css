@@ -98,6 +98,44 @@
   #content{transition:transform .34s var(--ease-out-expo),opacity .34s ease}
   #content.mn-swiping{transition:none;will-change:transform}
 
+  /* ── Sheet physics (src/scripts/sheet-drag.js) ───────────────────────────
+     The transform is written per-frame from the thumb, so the sheet must not carry a
+     transition while dragging; it gets one back for the spring-back and the close.
+     `overscroll-behavior:contain` stops a fling that runs off the end of the sheet's
+     own list from scrolling the page behind it — the "why is the page moving under
+     this sheet" bug every bottom sheet has until someone sets it. */
+  .sheet.sheet-dragging{transition:none;will-change:transform}
+  .sheet-list{overscroll-behavior:contain}
+
+  /* ── Day scrubber (ui/day-scrub.js) ──────────────────────────────────────
+     `.scrub-fit` turns the scrolling chip rail into a rail that FITS: every day is
+     on screen, so a drag across it reaches all of them and the rail no longer has a
+     horizontal scroll of its own to fight the gesture. Only applied when the days
+     actually fit (4–12, ../model/scrub.ts) — above that the rail scrolls as before.
+     The trade is the per-chip date, which the day card immediately below states in
+     full, the drag bubble shows under the thumb, and each chip keeps in its
+     aria-label ("Jump to Wed Jul 8"). */
+  /* overflow:VISIBLE, not overflow-x:hidden — a hidden value on one axis forces the
+     other to `auto`, which clipped the drag bubble to a sliver above the rail. Nothing
+     overflows horizontally in fit mode anyway; that is what fit means. */
+  .day-scrub.scrub-fit{overflow:visible;touch-action:pan-y;position:sticky}
+  .scrub-fit .dchip{flex:1 1 0;min-width:0;align-items:center;padding:.4rem .15rem;gap:0}
+  .scrub-fit .dchip-date{display:none}
+  .scrub-fit .dchip-num{font-size:var(--text-control-sm)}
+  .day-scrub.scrubbing{cursor:grabbing;user-select:none}
+  .day-scrub.scrubbing .dchip{transition:none}
+  .scrub-bubble{
+    position:absolute;left:var(--scrub-x,50%);bottom:calc(100% - .2rem);
+    transform:translateX(-50%) translateY(4px);
+    padding:.25rem .55rem;border-radius:var(--r-sm);
+    background:var(--ink);color:var(--bg);
+    font-family:var(--font-data);font-size:var(--text-control-sm);white-space:nowrap;
+    opacity:0;pointer-events:none;transition:opacity .14s ease,transform .14s ease;
+    z-index:2;
+  }
+  .day-scrub.scrubbing .scrub-bubble{opacity:1;transform:translateX(-50%) translateY(0)}
+  @media(prefers-reduced-motion:reduce){.scrub-bubble{transition:opacity .14s ease}}
+
   /* ── Small phones (≤359px: iPhone SE 1st gen, Galaxy A-series compacts) ──
      Five slots at 320px leaves ~60px each. Buy the room from the gutters, the
      tracking and the icon — never from the type step (--text-nano is already the

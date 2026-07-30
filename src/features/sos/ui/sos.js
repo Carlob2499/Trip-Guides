@@ -14,6 +14,7 @@
    the page behind it. Now uses src/scripts/util.js's shared trapFocus. */
 
 import { trapFocus } from "../../../scripts/util.js";
+import { attachSheetDrag } from "../../../scripts/sheet-drag.js";
 
 (function () {
   var cfgEl = document.getElementById("tgConfig");
@@ -90,6 +91,10 @@ import { trapFocus } from "../../../scripts/util.js";
   }
   btn.addEventListener("click", open);
   sheet.querySelector(".sos-x").addEventListener("click", close);
+  // Drag the panel down to dismiss, same physics as the groups sheet. Attached to
+  // .sos-inner, not the backdrop: dragging the dimmed area is not a sheet gesture.
+  var inner = sheet.querySelector(".sos-inner");
+  if (inner) attachSheetDrag(inner, close);
   sheet.addEventListener("click", function (e) { if (e.target === sheet) close(); });
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && !sheet.hidden) close();

@@ -19,6 +19,7 @@ import { initBotBar } from "./ui/botbar.js";
 import { initResume, initSectionMemory } from "./ui/resume.js";
 import { initSwipeTabs } from "./ui/swipe-tabs.js";
 import { initYieldChrome } from "./ui/yield-chrome.js";
+import { initDayScrub } from "./ui/day-scrub.js";
 
 export {
   parseCounts, recordOpen, rankOrder, promoted, seat, slotLabel, resumeLine,
@@ -60,6 +61,8 @@ export function initMobileNav(cfg, store) {
   initSwipeTabs(ctx);
   // Chrome only yields where it is in the way — the bar's own breakpoint.
   if (bar && window.matchMedia("(max-width: 899px)").matches) initYieldChrome(ctx);
+  // After day-rail has wired the chips, which the scrubber drives through their clicks.
+  initDayScrub();
 }
 
 // Self-boot on a guide page (the import-to-boot convention the other silos use).

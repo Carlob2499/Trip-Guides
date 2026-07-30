@@ -2,7 +2,8 @@
 // single hashed module cached across every guide page (was ~950 lines inline per
 // page). Config that used to come from Astro define:vars is now read from the
 // #tgConfig JSON script tag emitted by the layout.
-import { todayInTz, trapFocus, migrateStorageKey } from "./util.js";
+import { todayInTz, trapFocus, migrateStorageKey, tapHaptic } from "./util.js";
+import { attachSheetDrag } from "./sheet-drag.js";
 import { initDarkToggle } from "./theme.js";
 import { resolveTripDate, tripWindow } from "../lib/trip-dates";
 import { initRate, initWeather, initDaySwap, initSun } from "../features/live-data/index.js";
@@ -231,12 +232,11 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             // modal can all share the same, single-tested implementation instead of each
             // claiming aria-modal without backing it.
             trapFocus(sheet, function () { return sheet.classList.contains("open"); });
-            // Swipe down to close on mobile
-            var _swipeY = 0;
-            sheet.addEventListener("touchstart", function (e) { _swipeY = e.touches[0].clientY; }, { passive: true });
-            sheet.addEventListener("touchend", function (e) {
-              if (e.changedTouches[0].clientY - _swipeY > 60) closeSheet();
-            }, { passive: true });
+            // Drag down to dismiss — shared with the SOS sheet (src/scripts/sheet-drag.js).
+            // Replaces a bare 60px touchend check that moved nothing while the thumb was
+            // down: the sheet now follows the finger and either falls away or springs back,
+            // and it stands down when the list underneath is mid-scroll.
+            attachSheetDrag(sheet, closeSheet);
           }
 
           /* ── 2b. JOURNEY BAR DESTINATIONS (R2) ───────────────────────── */
@@ -430,7 +430,13 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           boxes.forEach(function (b) { if (saved[b.dataset.pkey]) b.checked = true; });
           updateDayCounts();
           boxes.forEach(function (b) {
-            b.addEventListener("change", function () { saveState(currentState()); updateDayCounts(); });
+            b.addEventListener("change", function () {
+              // A tick is a commitment ("packed", "booked") made without looking up from
+              // the bag — the buzz is the confirmation. Silent no-op off Android.
+              tapHaptic();
+              saveState(currentState());
+              updateDayCounts();
+            });
           });
 
           /* ── 5. BUDGET CALCULATORS ───────────────────────────────────── */
