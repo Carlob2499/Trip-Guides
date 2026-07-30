@@ -69,15 +69,15 @@ jobs:
             --force
           gh label create revision-approved \
             --color 5319E7 \
-            --description "Owner-only: applying this label runs the heavy revise pipeline (plan → scoped re-research → sweep → critic). Requires write access." \
+            --description "Owner-only: runs the heavy revise pipeline (plan, re-research, sweep, critic). Needs write access." \
             --force
           gh label create revision-auto-filed \
             --color C5DEF5 \
-            --description "This revision request was auto-filed by the feedback-synthesis pass — inert until revision-approved" \
+            --description "Auto-filed by the feedback-synthesis pass — inert until revision-approved" \
             --force
           gh label create needs-decision \
             --color D93F0B \
-            --description "A revise run hit a genuine fork only the owner can decide — answer in a comment, then re-apply revision-approved" \
+            --description "A revise run hit a fork only the owner can decide — answer, then re-apply revision-approved" \
             --force
           gh label create stuck \
             --color D93F0B \
