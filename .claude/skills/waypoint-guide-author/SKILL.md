@@ -25,8 +25,9 @@ detail.
 Pass B · Reconcile · Vibe critic → executor · Rubric critic) are instructed to
 read this skill and execute their stage from it — the workflow carries only each
 stage's I/O contract (paths, checkpoints, forbidden dirs), never a restatement
-of the standards. Editing this file edits the pipeline; there is no second copy
-to keep in sync.
+of the standards. The stage-role law (vibe lens, critic protocol, the
+traveler-question emitter) lives in **`references/pipeline-roles.md`**. Editing
+these files edits the pipeline; there is no second copy to keep in sync.
 
 ## Read first
 1. **`references/verification-rules.md`** — the binding fact decision layer

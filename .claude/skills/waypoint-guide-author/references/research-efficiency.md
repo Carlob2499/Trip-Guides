@@ -46,6 +46,11 @@ execute the plan, don't wander.
 - **Go direct-to-primary.** Guess the official domain and fetch it (`WebFetch`) before searching.
   One venue's official page usually answers all four questions (where / how / when / book) in ONE
   fetch — batch by *venue*, not by *fact*.
+- **Reserve budget for the standing duties — do them DURING the pass, not as an
+  afterthought.** Pass A: ≥3 searches for the phrases/language card and ≥2 for the footage
+  scout. Pass B: ≥2 searches for resident phrases/slang. Duties starve when the main
+  sights spend the whole budget first; the run report states how many searches each duty
+  actually used.
 - **Two rounds, then decide.** Max ~2 searches + 1–2 fetches per fact. If no T0/T1 source
   surfaces, apply the stopping conditions (verification-rules §5): flag `⚠` or omit. More
   searching past that point produces confidence, not verification.

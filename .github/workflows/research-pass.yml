@@ -17,6 +17,13 @@ name: Research pass
 # if it fails, an IDENTICAL Opus 5 vibe critic runs as the fallback (creator's call,
 # 2026-07-30: degrade the model, never the pass). Only a double failure skips the vibe pass.
 #
+# SINGLE SOURCE OF TRUTH (2026-07-30): agent prompts here are POINTERS — each carries only its
+# stage's I/O contract (paths, checkpoints, forbidden reads, stop conditions) and instructs the
+# agent to read .claude/skills/waypoint-guide-author/ (SKILL.md + references/, incl.
+# pipeline-roles.md for the vibe lens / critic protocol / question emitter). Editing the skill
+# edits the pipeline; never restate skill doctrine in a prompt. The "Critic artifact gate" step
+# hard-fails any run whose critic ended without `## Critic findings` + `## Citation audit`.
+#
 # Auto-graduation: the verify PASS is the evidence gate (see scripts/graduate-guide.mjs --slug);
 # a guide that passes goes live on the next Pages deploy with ZERO further action. Only a guide
 # that DIDN'T reach verify PASS lands as a draft PR for human triage. Trigger via workflow_dispatch.
@@ -232,7 +239,8 @@ jobs:
           echo "[budget] $SLUG — attempt $ATTEMPTS of $CAP, proceeding."
           echo "should_run=true" >> "$GITHUB_OUTPUT"
 
-      # Social-leads aide (skill references/social-leads.md): yt-dlp lets Pass B pull YouTube
+      # Social-leads aide (skill references/research-efficiency.md, "Social & video lead
+      # sourcing"): yt-dlp lets Pass B pull YouTube
       # TRANSCRIPTS (never media) as T2 leads. Best-effort BY DESIGN — transcripts are an aide,
       # not a dependency: if this install fails, or YouTube blocks the runner's IP at pull time,
       # the pass runs identically without them (the skill's bot-blocked doctrine). That is why
@@ -287,100 +295,45 @@ jobs:
             Guide slug: ${{ inputs.slug }}
             Section focus: ${{ inputs.section || 'full pass — all sections' }}
 
-            YOU ARE THE PASS A AGENT — canonical & verified research from primary/official sources.
-            This is ONE of three agent steps (A → B → Reconcile); you handle scaffold + passA ONLY.
-            After you finish, a SEPARATE agent handles Pass B (it cannot see your work), and a third
-            agent reconciles both into the final guide.
+            YOU ARE THE PASS A AGENT — the skill's "Pass A — canonical & verified". This is ONE
+            of the pipeline's agent steps (A → B → Reconcile → critics); you handle scaffold +
+            passA ONLY. A SEPARATE agent handles Pass B (it cannot see your work), and a third
+            reconciles both into the final guide.
 
-            Use the waypoint-guide-author skill: read .claude/skills/waypoint-guide-author/SKILL.md
-            and its references/ (verification-rules.md, research-efficiency.md, block-types.md) and
-            follow them exactly — the source-tier ladder, the verification ledger, the ≈/⚠ fact
-            states, the deterministic lookup scripts, the done gate, and the completion report. The
-            CLAUDE.md accuracy standard (auto-loaded) is also binding.
+            THE LAW — the skill is the single source of truth; this prompt carries only your
+            stage contract. Read and follow EXACTLY:
+              .claude/skills/waypoint-guide-author/SKILL.md — the spine: Pass A (anchor event
+                against a T0 source FIRST, then the backbone; ledger as you go; lookup-tz.mjs in
+                the SAME step as coords, tz set explicitly on EVERY guide), fact discipline, the
+                Living Atlas duties, the deterministic lookup scripts.
+              references/verification-rules.md — source tiers, ≈/⚠ legal states, ship/flag/omit.
+              references/research-efficiency.md — the BINDING search budget, fetch discipline,
+                and the reserved duty budgets (phrases card ≥3, footage scout ≥2 — the run
+                report states what each duty actually used).
+              references/block-types.md — section types, tab budget, guide-level typed features,
+                voice standard, facets, cover rules.
+              references/pipeline-roles.md — "Traveler questions": the emitter you use when
+                research hits a real fork (then proceed on the assumption; never block).
+            The CLAUDE.md accuracy standard (auto-loaded) is also binding.
 
-            RESEARCH EFFICIENCY IS BINDING (references/research-efficiency.md): scripts before web;
-            reuse the ledger before re-searching; go direct-to-primary and batch by VENUE (one fetch
-            answers where/how/when/book); max ~2 search rounds per fact then ship/flag/omit; a first
-            404 can be a live page (retry once, judge by content); bot-blocked → mark and move on;
-            aggregators are leads, never citations.
-
-            Target guide: the DIRECTORY src/content/guides/${{ inputs.slug }}/ — _guide.json (meta)
-            + one NN-<group>.json per tab group. Edit the group file a fact lives in; NEVER create a
-            flat src/content/guides/${{ inputs.slug }}.json (a flat file wins path resolution and
-            would silently shadow the directory — the build fails on one).
-            ${{ inputs.section != '' && format('Scope this pass to the "{0}" section only; leave all other sections as-is.', inputs.section) || '' }}
-
-            RESUMABLE — check where you are first:
-              npm run pipeline -- --slug ${{ inputs.slug }} --status
-            Do ONLY the un-done stages up to and including passA. Never redo a cleared stage.
-
-            PASS A — canonical & verified: primary/official sources. Verify the ANCHOR event's
-              date + venue against a T0 source FIRST, then the must-dos, entry/visa, transit,
-              hours, prices. Keep the verification ledger as you go. As soon as the guide's real
-              destination coordinates are set (map center / lookup-place.mjs), resolve its time
-              zone in the SAME step — `node scripts/lookup-tz.mjs <lat> <lng>` (offline, no
-              search) — and set the result explicitly in the guide's `tz` field. Do this for
-              every guide, not just ones that look unusual: a country's "typical" zone is a
-              fallback default, not a researched fact, and it has already shipped wrong (by
-              hours) for real trips before this script existed.
-
-            RESERVED SEARCH BUDGET (R5): before spending your search budget on the main sights
-            and logistics, RESERVE at least 3 searches for the PHRASES / LANGUAGE card and at
-            least 2 searches for the FOOTAGE SCOUT. Do those duties DURING the pass (not as an
-            afterthought); the run report must state how many searches each duty actually used.
-
-            THE LIVING ATLAS PASS — part of Pass A's commit. Every guide is born with the full
-            visual system, and these four duties are how research feeds it (prompt-only, no new
-            checkpoint — commit as part of your passA commit). The mechanics live in block-types.md
-            ("Group labels & the voice standard", "Composer facets", "Cover art"); follow exactly:
-              1. FACETS — tag every section you authored: `theme` (what it's about; defaults to
-                 the current group, tag only when they differ), `phase` (before|arrival|daily|
-                 leaving — when the traveler NEEDS it; this routes the unit if its group ever
-                 folds), `rank` (the scaffold already seeded rank from the intake's priorities
-                 via PRIORITY_GROUP_MAP — keep those honest as you rewrite, and ensure every
-                 intake priority's mapped group carries its rank).
-              2. DESCRIPTORS — RARE and informational-only (creator's ruling; the banned slop
-                 patterns are named in block-types.md's voice standard). Write one ONLY where
-                 the literal label cannot carry the meaning — trip-specific groups a stranger
-                 wouldn't parse. Standard groups (Plan/Transit/Days/Sights/Food/Sources) get
-                 NONE: the derived subtitle from the group's real section titles is the better
-                 line. When you do write one: a flat statement of fact ("would Wikivoyage
-                 write this sentence?"), and grep the group file for every claim word FIRST.
-              3. COVER — if a signature Commons photo of the destination exists, set `cover`
-                 (file + credit + license + focal) — validate the filename via
-                 search-commons.mjs, never from memory. The Painted Atlas is the honest
-                 default, not a failure state: skip the photo rather than force a mediocre or
-                 wrong-place one. A real photo also feeds extract-palette in step (d).
-              4. FOOTAGE SCOUT — candidates only, NEVER set `cover.video` yourself: publishing
-                 footage is a creator sign-off, because the clip must be frame-verified to show
-                 the actual place (no invented geography) and you cannot watch video here.
-                 Record 0-2 licensed, hot-linkable clips in guides-intake/${{ inputs.slug }}.md
-                 under "## Cover art — footage candidates": stable-URL libraries only (e.g.
-                 Mixkit's assets.mixkit.co asset URLs; Coverr temp-URLs are forbidden), with
-                 license, what the clip claims to show, and whether that matches the cover
-                 photo's actual location. An empty table is a fine outcome.
-
-            QUESTION EMITTER (P4): when research hits a REAL fork (dates, lodging style,
-            splurge vs save tradeoff — a decision only the traveler can make), emit a structured
-            question to guides-intake/${{ inputs.slug }}.md under `## Questions for the traveler`:
-              ### q-${{ inputs.slug }}-<n>
-              - **Q:** <traveler-framed question — NO pipeline vocabulary>
-              - **Assumed:** <what you'll build if they don't answer>
-              - **Context:** <which section/day this affects>
-              - **Status:** open
-            Then PROCEED on the assumption — research never blocks on an answer. Emit questions
-            only for genuine forks, not for facts you can research yourself.
-
-            After finishing Pass A + Living Atlas duties, checkpoint and commit:
-              npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint passA
-              && git add -A && git commit -m "research(${{ inputs.slug }}): Pass A" && git push
-
-            STOP HERE. Do NOT proceed to Pass B or reconcile — those are handled by separate
-            agents. If you run low on wall-clock or usage, stop at a clean checkpoint (commit +
-            push) rather than leaving a half-done uncommitted stage.
-
-            Never touch any guide other than src/content/guides/${{ inputs.slug }}/ and its
-            guides-intake/${{ inputs.slug }}.md + .state.json.
+            STAGE CONTRACT:
+            - Target: the DIRECTORY src/content/guides/${{ inputs.slug }}/ — _guide.json + one
+              NN-<group>.json per tab group. NEVER create a flat
+              src/content/guides/${{ inputs.slug }}.json (it silently shadows the directory).
+            ${{ inputs.section != '' && format('- Scope this pass to the "{0}" section only; leave all other sections as-is.', inputs.section) || '' }}
+            - RESUMABLE: start with `npm run pipeline -- --slug ${{ inputs.slug }} --status`;
+              do ONLY the un-done stages up to and including passA. Never redo a cleared stage.
+            - The Living Atlas duties (SKILL.md's four — facets, descriptors, cover, footage
+              scout; mechanics in block-types.md) are part of your passA commit — no separate
+              checkpoint.
+            - When done, checkpoint and commit:
+                npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint passA
+                && git add -A && git commit -m "research(${{ inputs.slug }}): Pass A" && git push
+            - STOP after passA — Pass B and reconcile belong to separate agents. If you run low
+              on wall-clock or usage, stop at a clean committed checkpoint rather than leaving a
+              half-done uncommitted stage.
+            - Never touch any guide other than src/content/guides/${{ inputs.slug }}/ and its
+              guides-intake/${{ inputs.slug }}.md + .state.json.
 
       # ── Route after Pass A ───────────────────────────────────────────────────
       - name: Route after Pass A
@@ -417,64 +370,48 @@ jobs:
           prompt: |
             Guide slug: ${{ inputs.slug }}
 
-            YOU ARE THE PASS B AGENT — local, authentic, crowd-aware research. You are
-            STRUCTURALLY INDEPENDENT of Pass A: you must NOT read, open, or reference any
-            file under src/content/guides/${{ inputs.slug }}/. Your findings go to a SEPARATE
-            file that the reconcile agent (a third agent) will merge with Pass A's guide.
+            YOU ARE THE PASS B AGENT — the skill's "Pass B — local, authentic, crowd-aware".
+            You are STRUCTURALLY INDEPENDENT of Pass A: you must NOT read, open, or reference
+            ANY file under src/content/guides/${{ inputs.slug }}/. Your findings go to a
+            separate file that the reconcile agent (a third agent) merges with Pass A's guide.
 
-            Read ONLY these inputs:
-              - guides-intake/${{ inputs.slug }}.md (the intake spec — priorities, dates, anchor)
-              - .claude/skills/waypoint-guide-author/SKILL.md and references/ (verification rules,
-                research efficiency, block-types) — follow the source-tier ladder and efficiency
-                rules exactly
+            THE LAW — the skill is the single source of truth; this prompt carries only your
+            stage contract. Read and follow EXACTLY:
+              .claude/skills/waypoint-guide-author/SKILL.md — Pass B: the resident/blog/forum/
+                reddit angle, the different questions you ask (off-peak reality, tourist-trap
+                alternatives, the non-obvious neighborhood, authentic local dining), and the
+                rule that every find is a T2 LEAD verified against a primary source (T0/T1)
+                before recording — no primary source, stays out.
+              references/verification-rules.md — the tier ladder your leads must climb.
+              references/research-efficiency.md — the BINDING search budget + reserved duty
+                budget (resident phrases/slang ≥2 searches), and "Social & video lead
+                sourcing": yt-dlp is installed best-effort on this runner (transcripts only,
+                ~4 max, a failed install or pull is bot-blocked — mark and move on, never
+                retry-loop); TikTok/IG via web-indexed roundups ONLY; viral = a crowd warning,
+                never a citation; "locals" phrasing needs ≥2 independent sources.
+            The CLAUDE.md accuracy standard (auto-loaded) is also binding.
 
-            YOUR TASK: research from the RESIDENT / BLOG / FORUM / REDDIT angle. For every
-            marquee sight, food pick, and activity implied by the intake's priorities:
-              - Off-peak timing + crowd reality (when is it actually enjoyable vs. packed?)
-              - Novel local alternatives where the obvious pick is a tourist trap
-              - The non-obvious neighborhood or experience that fits THIS traveler's ranked
-                priorities better than the default tourist version
-              - Authentic local dining — the places residents actually go, not the TripAdvisor
-                top-10 tourist restaurants
-              - Practical local knowledge: transit shortcuts, neighborhood character, timing tricks
-
-            VERIFICATION: Pass B's finds are T2 LEADS — verify EACH against a primary source
-            (T0/T1) before recording. A claim with no primary source stays out.
-
-            RESEARCH EFFICIENCY IS BINDING (references/research-efficiency.md): scripts before web;
-            go direct-to-primary and batch by VENUE; max ~2 search rounds per fact then flag/omit;
-            bot-blocked → mark and move on; aggregators are leads, never citations.
-
-            VIDEO/SOCIAL LEADS (references/social-leads.md, binding): yt-dlp is installed
-            best-effort on this runner — pull YouTube TRANSCRIPTS only (--skip-download, max ~4
-            per pass) as T2 leads for the resident/vlog angle; a failed install or pull is
-            bot-blocked (mark and move on, never retry-loop). TikTok/Instagram: web-indexed
-            roundups ONLY (no scraping, no APIs); viral status = a crowd warning to verify,
-            never a citation, and never "locals" phrasing without ≥2 independent sources.
-
-            RESERVED SEARCH BUDGET (R5): spend at least 2 searches on PHRASES / LANGUAGE useful
-            for this destination (local slang, ordering food, transit terminology — the kind of
-            thing a resident would tell a friend visiting). Record these alongside your other finds.
-
-            Write your findings to guides-intake/${{ inputs.slug }}.passB.json as a JSON array:
-            [
-              {
-                "item": "Sight / restaurant / tip name",
-                "category": "crowd | alternative | timing | novel | food | transit | language",
-                "finding": "What you found (the traveler-facing insight)",
-                "source_url": "https://...",
-                "verified_on": "YYYY-MM-DD",
-                "replaces": "optional — name of the obvious/generic pick this replaces, if any"
-              }
-            ]
-            Each entry MUST have a source_url and verified_on. Omit entries you could not verify.
-
-            After writing, checkpoint and commit:
-              npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint passB
-              && git add -A && git commit -m "research(${{ inputs.slug }}): Pass B" && git push
-
-            STOP HERE. Do NOT attempt to edit the guide, reconcile, or verify — a separate
-            agent handles that. If you run low on wall-clock, commit what you have.
+            STAGE CONTRACT:
+            - Read ONLY: guides-intake/${{ inputs.slug }}.md (the intake spec — priorities,
+              dates, anchor) + the skill files above. Never the guide directory, never Pass A's
+              work.
+            - Write findings to guides-intake/${{ inputs.slug }}.passB.json as a JSON array:
+              [
+                {
+                  "item": "Sight / restaurant / tip name",
+                  "category": "crowd | alternative | timing | novel | food | transit | language",
+                  "finding": "What you found (the traveler-facing insight)",
+                  "source_url": "https://...",
+                  "verified_on": "YYYY-MM-DD",
+                  "replaces": "optional — name of the obvious/generic pick this replaces, if any"
+                }
+              ]
+              Each entry MUST have a source_url and verified_on. Omit entries you could not verify.
+            - Checkpoint and commit:
+                npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint passB
+                && git add -A && git commit -m "research(${{ inputs.slug }}): Pass B" && git push
+            - STOP there. Do NOT edit the guide, reconcile, or verify — a separate agent handles
+              that. If you run low on wall-clock, commit what you have.
 
       # ── Route after Pass B ───────────────────────────────────────────────────
       - name: Route after Pass B
@@ -508,86 +445,55 @@ jobs:
             Guide slug: ${{ inputs.slug }}
             Section focus: ${{ inputs.section || 'full pass — all sections' }}
 
-            YOU ARE THE RECONCILE & VERIFY AGENT — you merge two independent research passes
-            into one guide, then drive it through the verification loop to graduation.
+            YOU ARE THE RECONCILE & VERIFY AGENT — the skill's "Reconcile → ONE guide, with a
+            ledger" plus the self-correction loop. You merge two independent research passes
+            into one guide, then drive it through verification. You do NOT graduate.
 
-            Use the waypoint-guide-author skill: read .claude/skills/waypoint-guide-author/SKILL.md
-            and its references/ (verification-rules.md, research-efficiency.md, block-types.md) and
-            follow them exactly. The CLAUDE.md accuracy standard (auto-loaded) is also binding.
+            THE LAW — the skill is the single source of truth; this prompt carries only your
+            stage contract. Read and follow EXACTLY:
+              .claude/skills/waypoint-guide-author/SKILL.md — Reconcile (AGREE / A-only /
+                B-only / CONFLICT + the `## Research reconciliation` ledger + `## Amendments`),
+                authenticity woven into existing bodies (crowd + best-time notes, no new tabs),
+                fact discipline, and done-gate step 1 (the self-correction loop).
+              references/verification-rules.md, references/research-efficiency.md,
+                references/block-types.md — binding as everywhere.
+              references/pipeline-roles.md — "Traveler questions" for any real fork
+                reconciliation reveals (proceed on the assumption; never block).
+            The CLAUDE.md accuracy standard (auto-loaded) is also binding.
 
-            Target guide: the DIRECTORY src/content/guides/${{ inputs.slug }}/ — _guide.json (meta)
-            + one NN-<group>.json per tab group. Edit the group file a fact lives in; NEVER create a
-            flat src/content/guides/${{ inputs.slug }}.json.
-
-            RESUMABLE — check where you are first:
-              npm run pipeline -- --slug ${{ inputs.slug }} --status
-            Do ONLY the un-done stages (reconcile and/or verified). Never redo a cleared stage.
-
-            TWO SOURCES TO RECONCILE:
-              1. Pass A's guide — already in src/content/guides/${{ inputs.slug }}/ (canonical,
-                 verified, primary-source research with the verification ledger)
-              2. Pass B's findings — in guides-intake/${{ inputs.slug }}.passB.json (independent
-                 local/authentic/crowd-aware research, each entry verified against a primary source)
-
-            RECONCILE into ONE guide and record the reconciliation in the `## Research reconciliation`
-            ledger of guides-intake/${{ inputs.slug }}.md:
-              AGREE → include as-is (both passes found the same thing)
-              A-only → add a crowd + best-time note from B if available, or keep A's version
-              B-only → verify against T0 then include if confirmed; the guide gains this local insight
-              CONFLICT → resolve to the truth, note which source won and why
-            Log any research-forced re-plan in that doc's `## Amendments` section. Every marquee
-            sight/food rec carries a crowd + best-time note, woven into the existing sights/days
-            bodies (no new sections, no tab-budget cost).
-
-            QUESTION EMITTER (P4): when reconciliation reveals a REAL traveler fork (a conflict
-            only they can resolve, a tradeoff between their ranked priorities), emit a question
-            to `## Questions for the traveler` in the intake doc — same format as Pass A's
-            emitter. Proceed on the assumption; research never blocks.
-
-              → then: npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint reconcile
+            STAGE CONTRACT:
+            - Target: the DIRECTORY src/content/guides/${{ inputs.slug }}/ — never a flat
+              src/content/guides/${{ inputs.slug }}.json.
+            - RESUMABLE: `npm run pipeline -- --slug ${{ inputs.slug }} --status` first; do ONLY
+              the un-done stages (reconcile and/or verified). Never redo a cleared stage.
+            - TWO SOURCES TO RECONCILE: Pass A's guide (already in the guide directory, with its
+              verification ledger) and Pass B's findings
+              (guides-intake/${{ inputs.slug }}.passB.json — independent, each entry
+              primary-source verified).
+            - After reconciling, checkpoint and commit:
+                npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint reconcile
                 && git add -A && git commit -m "research(${{ inputs.slug }}): reconcile" && git push
-
-            SELF-CORRECTION LOOP (the `verified` stage) — do not one-shot this:
-              a. Run `npm run verify -- --slug ${{ inputs.slug }}` (the rolled-up gate: research +
-                 recency + rubric scorecard) and `npm run build` (schema).
-              b. For each BLOCKING (⚠) verify finding and every schema error, FIX IT by
-                 re-researching that fact against a primary (T0) source — resolve the place_id
-                 with lookup-place.mjs, add the missing source_url, fill the empty section,
-                 correct the itinerary date. Never silence a flag you cannot source: downgrade
-                 it to ⚠ or omit it. Do not explain-and-move-on.
-              c. Re-run verify + build. Repeat until verify PASSes and build is clean — up to 4
-                 rounds. If something genuinely cannot be sourced after that, leave it as a
-                 deliberately-explained ⚠ gap (an admitted blank is a feature).
-              c2. FINAL NETWORK GATE — the offline rounds above never checked links or Commons
-                 photos; this is the ONLY gate that does, and it must PASS before anything
-                 graduates. Run `npm run verify -- --slug ${{ inputs.slug }} --network`.
-                 - If it reports content FAIL, fix each finding (dead link → re-source the fact
-                   from a live primary; missing photo → correct the Commons filename via
-                   search-commons.mjs or omit the image) and re-run this same networked verify —
-                   do not fall back to the offline round (a) command from here on.
-                 - If it reports UNVERIFIABLE (a Commons API outage or every link probe failing —
-                   this run's checker couldn't do its job, which is not the same as "checked,
-                   found nothing wrong"), wait 60s and retry ONCE. If it's still UNVERIFIABLE, do
-                   NOT graduate — commit your work as-is, write the outage into the scorecard (so
-                   a human sees why this run stopped short of a verdict, not a false PASS), and let
-                   landing take the NEEDS-WORK/draft-PR path below.
-                 Only a full networked PASS from this step licenses step (d).
-              STOP after step (c2). Do NOT graduate yet — a separate CRITIC agent (Agent 4,
-                 P3/R8) runs next in a fresh context. If the critic finds nothing, Agent 4 handles
-                 graduation; if it finds issues, it resolves them and THEN graduates.
-
-                 Once step (c2)'s networked verify PASSes, commit your work and stop:
-                 git add -A && git commit -m "research(${{ inputs.slug }}): verify PASS — awaiting critic" && git push
-
-            If you hit the 4-round cap still NEEDS WORK (verify never PASSed), commit and push
-            whatever fix attempts you made anyway, so the branch on the remote reflects your
-            actual last state, not just the last checkpoint:
-              git add -A && git commit -m "research(${{ inputs.slug }}): NEEDS WORK after 4 rounds" && git push
-            (skip this if there's nothing to commit — `git status --short` first).
-
-            Never touch any guide other than
-            src/content/guides/${{ inputs.slug }}/ and its
-            guides-intake/${{ inputs.slug }}.md + .state.json.
+            - SELF-CORRECTION LOOP (the `verified` stage) — the skill's done-gate step 1,
+              iterate, never one-shot: offline rounds first (`npm run verify -- --slug
+              ${{ inputs.slug }}` + `npm run build`; fix each blocking ⚠ by re-researching that
+              fact against a T0 source — never silence a flag you cannot source; up to 4
+              rounds), THEN the FINAL NETWORK GATE, the only gate that checks links + Commons
+              photos: `npm run verify -- --slug ${{ inputs.slug }} --network`.
+              · content FAIL → fix each finding (dead link → re-source the fact from a live
+                primary; missing photo → correct via search-commons.mjs or omit) and re-run the
+                SAME networked verify — never fall back to the offline command from here on.
+              · UNVERIFIABLE (a checker outage — NOT the same as "checked, found nothing") →
+                wait 60s, retry ONCE; still UNVERIFIABLE → do NOT proceed: commit as-is, write
+                the outage into the scorecard, and let landing take the draft-PR path.
+            - STOP once the networked verify PASSes — commit and push, then hand off:
+                git add -A && git commit -m "research(${{ inputs.slug }}): verify PASS — awaiting critic" && git push
+              Separate critic agents run next in fresh contexts and own graduation.
+            - If the 4-round cap ends still NEEDS WORK: commit and push whatever fix attempts
+              you made (check `git status --short` first; skip if nothing), so the remote
+              reflects your actual last state:
+                git add -A && git commit -m "research(${{ inputs.slug }}): NEEDS WORK after 4 rounds" && git push
+            - Never touch any guide other than src/content/guides/${{ inputs.slug }}/ and its
+              guides-intake/${{ inputs.slug }}.md + .state.json.
 
       # ── Route after Reconcile & Verify ─────────────────────────────────────
       - name: Route after Reconcile
@@ -637,45 +543,26 @@ jobs:
           prompt: |
             Guide slug: ${{ inputs.slug }}
 
-            YOU ARE THE VIBE CRITIC — an experimental, judgment-only pass that runs AFTER
-            mechanical verification and BEFORE the rubric critic. Read the guide the way a
-            well-travelled friend would: not for facts (verify handled those), but for how
-            the trip FEELS. You never edit the guide. You write findings; a separate
-            executor agent implements them under full verification discipline.
+            YOU ARE THE VIBE CRITIC. THE LAW — read and execute EXACTLY:
+              .claude/skills/waypoint-guide-author/references/pipeline-roles.md — "The vibe
+              lens": your inputs (and what you are forbidden to read), the five judgments,
+              the `## Vibe findings` output format, and the exact clean-pass sentinel.
 
-            Read ONLY: guides-intake/${{ inputs.slug }}.md (the spec) and
-            src/content/guides/${{ inputs.slug }}/ (the finished guide). Do NOT read
-            passB.json, .state.json, or git history — you judge the product, not the process.
-
-            Judge flow and common sense:
-              - PACING ARC — does the trip breathe? A packed jet-lagged arrival day? Three
-                museum days in a row? A "slow" day listing six stops?
-              - GEOGRAPHY — does any day zigzag across the city when reordering stops would
-                halve the transit?
-              - MEALS & ENERGY — are food picks where the day actually puts the traveler at
-                mealtimes? A late night followed by a dawn start?
-              - TONE — does any copy read like a brochure or a model? Flat, useful, human.
-              - COMMON SENSE — whatever a friend would catch: thin buffers, a "backup"
-                worse than nothing, a plan that ignores the party's stated pace.
-
-            Write findings to guides-intake/${{ inputs.slug }}.md under `## Vibe findings`:
-              - Each finding: WHAT feels wrong, WHERE (group file + item), and a CONCRETE
-                suggested change. Suggest swaps and reorders freely, but never invent a
-                fact — anything new you propose, the executor must verify before it ships.
-              - If the trip reads well, write exactly: None — the trip reads well.
-            Then commit and push:
-              git add guides-intake/${{ inputs.slug }}.md
-              git commit -m "research(${{ inputs.slug }}): vibe findings" && git push
-            Touch NOTHING else. Do not edit guide files. Do not graduate.
+            STAGE CONTRACT:
+            - Findings go in guides-intake/${{ inputs.slug }}.md ONLY. Commit and push exactly
+              that file:
+                git add guides-intake/${{ inputs.slug }}.md
+                git commit -m "research(${{ inputs.slug }}): vibe findings" && git push
+            - Touch NOTHING else. Do not edit guide files. Do not graduate.
 
       # ── Vibe critic FALLBACK (Opus 5) — runs ONLY if the Fable step failed ─────
       # Degrade the model, never the pass (creator's ruling). With continue-on-error,
       # `outcome` records the real failure while `conclusion` stays green — so this
       # triggers on outcome. continue-on-error here too: a double failure skips the
       # vibe pass (the findings gate then finds nothing) instead of blocking graduation.
-      # ⚠ PROMPT SYNC: the prompt below must stay IDENTICAL to the Fable step's above —
-      # GitHub Actions offers no clean way to share a step prompt, so this duplication
-      # is accepted and marked. Edit BOTH or neither.
+      # Both vibe steps share ONE prompt that is a thin pointer to pipeline-roles.md "The
+      # vibe lens" — the lens itself lives in the skill, so the two copies below stay
+      # trivially identical and carry no content that can drift.
       - name: Run research agent — Vibe critic fallback (Opus)
         if: >-
           steps.budget.outputs.should_run == 'true' &&
@@ -696,36 +583,17 @@ jobs:
           prompt: |
             Guide slug: ${{ inputs.slug }}
 
-            YOU ARE THE VIBE CRITIC — an experimental, judgment-only pass that runs AFTER
-            mechanical verification and BEFORE the rubric critic. Read the guide the way a
-            well-travelled friend would: not for facts (verify handled those), but for how
-            the trip FEELS. You never edit the guide. You write findings; a separate
-            executor agent implements them under full verification discipline.
+            YOU ARE THE VIBE CRITIC. THE LAW — read and execute EXACTLY:
+              .claude/skills/waypoint-guide-author/references/pipeline-roles.md — "The vibe
+              lens": your inputs (and what you are forbidden to read), the five judgments,
+              the `## Vibe findings` output format, and the exact clean-pass sentinel.
 
-            Read ONLY: guides-intake/${{ inputs.slug }}.md (the spec) and
-            src/content/guides/${{ inputs.slug }}/ (the finished guide). Do NOT read
-            passB.json, .state.json, or git history — you judge the product, not the process.
-
-            Judge flow and common sense:
-              - PACING ARC — does the trip breathe? A packed jet-lagged arrival day? Three
-                museum days in a row? A "slow" day listing six stops?
-              - GEOGRAPHY — does any day zigzag across the city when reordering stops would
-                halve the transit?
-              - MEALS & ENERGY — are food picks where the day actually puts the traveler at
-                mealtimes? A late night followed by a dawn start?
-              - TONE — does any copy read like a brochure or a model? Flat, useful, human.
-              - COMMON SENSE — whatever a friend would catch: thin buffers, a "backup"
-                worse than nothing, a plan that ignores the party's stated pace.
-
-            Write findings to guides-intake/${{ inputs.slug }}.md under `## Vibe findings`:
-              - Each finding: WHAT feels wrong, WHERE (group file + item), and a CONCRETE
-                suggested change. Suggest swaps and reorders freely, but never invent a
-                fact — anything new you propose, the executor must verify before it ships.
-              - If the trip reads well, write exactly: None — the trip reads well.
-            Then commit and push:
-              git add guides-intake/${{ inputs.slug }}.md
-              git commit -m "research(${{ inputs.slug }}): vibe findings" && git push
-            Touch NOTHING else. Do not edit guide files. Do not graduate.
+            STAGE CONTRACT:
+            - Findings go in guides-intake/${{ inputs.slug }}.md ONLY. Commit and push exactly
+              that file:
+                git add guides-intake/${{ inputs.slug }}.md
+                git commit -m "research(${{ inputs.slug }}): vibe findings" && git push
+            - Touch NOTHING else. Do not edit guide files. Do not graduate.
 
       # Findings gate — spawn the Opus executor only when there is real work for it.
       - name: Route after vibe critic
@@ -760,25 +628,25 @@ jobs:
           prompt: |
             Guide slug: ${{ inputs.slug }}
 
-            YOU ARE THE VIBE EXECUTOR — implement the `## Vibe findings` recorded in
-            guides-intake/${{ inputs.slug }}.md by the vibe critic, under the FULL
-            waypoint-guide-author discipline: read .claude/skills/waypoint-guide-author/
-            SKILL.md and its references/ first — the verification ledger, provenance
-            (source_url + verified_on + shelf_life), ≈/⚠ legal states, and the continuity
-            sweep are all binding. Vibe never lowers the bar.
+            YOU ARE THE VIBE EXECUTOR. THE LAW — read and execute EXACTLY:
+              .claude/skills/waypoint-guide-author/references/pipeline-roles.md — "The vibe
+                executor": implement the `## Vibe findings` recorded in
+                guides-intake/${{ inputs.slug }}.md under full discipline; anything NEW is
+                verified against a primary (T0) source before it ships; a finding you judge
+                wrong gets a one-line rebuttal in the intake doc instead of an edit —
+                disagreement is allowed, silence is not.
+              .claude/skills/waypoint-guide-author/SKILL.md + references/ — the full fact
+                discipline your edits run under (ledger, provenance, ≈/⚠ states, continuity
+                sweep). Vibe never lowers the bar.
 
-            For each finding, in the guide DIRECTORY src/content/guides/${{ inputs.slug }}/:
-              - A reorder or swap keeps every fact's provenance intact.
-              - Anything NEW (a venue, a time, a claim) is researched and verified against
-                a primary (T0) source before it ships — or it doesn't ship.
-              - A finding you judge WRONG gets a one-line rebuttal appended beneath it in
-                the intake doc instead of an edit. Disagreement is allowed; silence is not.
-            Then run the continuity sweep for everything your edits ripple into, and re-run
-              npm run verify -- --slug ${{ inputs.slug }}   and   npm run build
-            until both are clean (≤3 rounds). Commit and push:
-              git add -A && git commit -m "research(${{ inputs.slug }}): vibe findings executed" && git push
-            Do NOT graduate and do NOT land the branch — the rubric critic runs next with
-            fresh eyes, audits your work, and owns graduation.
+            STAGE CONTRACT:
+            - Edit only the guide DIRECTORY src/content/guides/${{ inputs.slug }}/ and the
+              intake doc guides-intake/${{ inputs.slug }}.md.
+            - Re-run `npm run verify -- --slug ${{ inputs.slug }}` and `npm run build` until
+              both are clean (≤3 rounds), then commit and push:
+                git add -A && git commit -m "research(${{ inputs.slug }}): vibe findings executed" && git push
+            - Do NOT graduate and do NOT land the branch — the rubric critic runs next with
+              fresh eyes, audits your work, and owns graduation.
 
       # ── AGENT 6: Fresh-context rubric Critic + Graduate ──────────────────────
       # P3/R8/R9: a SEPARATE agent invocation with fresh context — it sees ONLY the intake
@@ -804,63 +672,28 @@ jobs:
           prompt: |
             Guide slug: ${{ inputs.slug }}
 
-            YOU ARE THE CRITIC AGENT — a fresh-context quality gate that runs AFTER the guide has
-            passed all mechanical verification. You have NO knowledge of how the research was done;
-            you see only the finished product and the original spec. This is deliberate — your job
-            is to catch what the researchers couldn't see because they were inside the process.
+            YOU ARE THE CRITIC AGENT — the fresh-context quality gate, run AFTER all mechanical
+            verification. You have NO knowledge of how the research was done; you see only the
+            finished product and the original spec, and you own graduation.
 
-            Read THESE INPUTS (and ONLY these):
-              1. guides-intake/${{ inputs.slug }}.md (the intake spec — priorities, party, anchor, dates)
-              2. src/content/guides/${{ inputs.slug }}/ (the finished guide — _guide.json + NN-*.json)
-              3. docs/GUIDE_RUBRIC.md (the graduation rubric — the rows you score against)
-              4. .claude/skills/waypoint-guide-author/SKILL.md and references/ (verification rules,
-                 block-types) — for the standards you enforce, not for research process context
+            THE LAW — the skill is the single source of truth; this prompt carries only your
+            stage contract. Read and execute EXACTLY:
+              .claude/skills/waypoint-guide-author/references/pipeline-roles.md — "The
+                fresh-context critic": your inputs (and the files you are FORBIDDEN to read),
+                the four scans, the `## Critic findings` format (researched replacements
+                REQUIRED — "consider adding" is never sufficient; exact clean-pass sentinel),
+                and the CITATION AUDIT (`## Citation audit` table) you MUST record — the
+                workflow hard-gates on both artifacts after you finish.
+              .claude/skills/waypoint-guide-author/SKILL.md + references/verification-rules.md
+                + references/block-types.md — the standards you enforce and edit under.
+              docs/GUIDE_RUBRIC.md — the rows you score against.
+            The CLAUDE.md accuracy standard (auto-loaded) is also binding.
 
-            Do NOT read: guides-intake/${{ inputs.slug }}.passB.json, .state.json, or any git log /
-            commit history. You are deliberately blind to the research process.
+            STAGE CONTRACT — after findings are recorded AND resolved in the guide (edit the
+            group files, extend the ledger, re-run `npm run verify -- --slug ${{ inputs.slug }}`
+            + `npm run build` until clean, ≤3 rounds), and the `## Citation audit` is written:
 
-            YOUR TASK — the bar test + rubric scoring:
-
-            (1) INTAKE FIT — for each intake priority (ranked), check:
-                - Does the guide give the top 2–3 priorities REAL DEPTH (multiple verified picks,
-                  woven into the day plan, not just a mention)?
-                - Are low-ranked priorities appropriately light or cut (not given equal weight)?
-                - Is the anchor event verified against a T0 source with dates + venue?
-
-            (2) GENERIC-PROBABILITY SCAN — for every marquee recommendation (the top sight, the
-                top food pick, the featured experience per priority):
-                - Would this appear in a generic "things to do in [destination]" AI response?
-                - If YES: does the guide add SPECIFIC value a generic response wouldn't have?
-                  (crowd timing, off-peak window, neighborhood context, booking reality, the
-                  local alternative). If it's just the obvious pick with no added depth, FLAG IT.
-
-            (3) PARTY FIT — read the intake's party description and traveler count:
-                - Does the guide feel written FOR this party, or for a generic tourist?
-                - Check: budget splits match party size, pace matches party type, recommendations
-                  suit the party (e.g. a couple doesn't need "kid-friendly" picks; 3 friends
-                  don't need romantic restaurants).
-
-            (4) AUTHENTICITY — for the guide's marquee food/experience picks:
-                - Do they carry crowd/off-peak notes (when to actually go)?
-                - Is there at least one novel local pick that isn't in the TripAdvisor top 10?
-
-            RECORDING FINDINGS — write your findings to guides-intake/${{ inputs.slug }}.md under
-            a new `## Critic findings` section:
-              - For each finding: what's wrong, which rubric row it violates, and your REPLACEMENT.
-              - A finding REQUIRES a researched replacement — "consider adding" or "make it optional"
-                is NOT sufficient (R9). Research a specific alternative using WebSearch, verify it
-                against a primary source, and write the replacement content with source + date.
-              - If the guide passes cleanly: write `## Critic findings\n\nNone — guide passes the
-                bar test.` (the section must always exist, even empty).
-
-            RESOLVING FINDINGS — after recording, fix each finding IN THE GUIDE:
-              - Edit the relevant NN-*.json group file with the researched replacement.
-              - Add the new source to the verification ledger in guides-intake/${{ inputs.slug }}.md.
-              - After all fixes: re-run `npm run verify -- --slug ${{ inputs.slug }}` and
-                `npm run build` to confirm you didn't break anything. If verify or build fails,
-                fix and re-run (up to 3 rounds).
-
-            GRADUATION — once findings are resolved (or if there were none):
+            GRADUATION:
               a. Extract the identity palette:
                  npm run extract-palette -- --slug ${{ inputs.slug }}
                  (writes src/data/palettes/${{ inputs.slug }}.json — commit it; skips harmlessly
@@ -901,8 +734,32 @@ jobs:
 
             FINALLY, write a short run report to `run-report.md` (repo root, gitignored — do NOT
             commit it): a `## Run report` heading then 3-5 bullets — outcome (published / draft /
-            stuck), critic findings count and what was caught, and any place the skill or its
-            references were unclear. This feeds the monthly skill-retro; be concrete.
+            stuck), critic findings count and what was caught, the citation-audit result, and any
+            place the skill or its references were unclear. This feeds the monthly skill-retro;
+            be concrete.
+
+      # HARD GATE (creator's ruling, 2026-07-30): the critic's two required artifacts are not
+      # advisory. A critic run that ended without recording `## Critic findings` AND the
+      # `## Citation audit` table did not do its job, even if everything else looks green —
+      # fail the run loudly so it can never read as a clean pass. This runs after landing by
+      # necessity (the critic itself writes the artifacts), so it is an alarm, not a barrier:
+      # a missing artifact means a human looks at the run, not that a good guide is blocked.
+      - name: Critic artifact gate — findings + citation audit are REQUIRED
+        if: >-
+          steps.budget.outputs.should_run == 'true' &&
+          steps.route4.outputs.verified == 'true'
+        env:
+          SLUG: ${{ inputs.slug }}
+        run: |
+          F="guides-intake/${SLUG}.md"
+          MISSING=""
+          grep -q "^## Critic findings" "$F" || MISSING="$MISSING '## Critic findings'"
+          grep -q "^## Citation audit" "$F" || MISSING="$MISSING '## Citation audit'"
+          if [ -n "$MISSING" ]; then
+            echo "::error::Critic run ended without required artifact(s):$MISSING in $F — pipeline-roles.md's critic protocol / the skill's done-gate citation audit was not completed."
+            exit 1
+          fi
+          echo "[gate] critic artifacts present: findings + citation audit"
 
       # P1 — RUN INTEGRITY (QA findings F1/F2). Two things the old workflow could not see:
       #   · a VOID run — the agent burned a full session, exited `success`, and left NOTHING
