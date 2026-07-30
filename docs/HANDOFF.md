@@ -14,8 +14,12 @@
   its own model — remind the creator to `/model`-switch at session start.
 - **Never number guides as milestones** — the product is the backbone; a new guide is the
   backbone exercising.
-- Ship loop on every change: build → test → `astro preview` :4322 (never `astro dev`) →
-  grep `dist/` → commit → push to `main` (the only branch — `verify-live` guards every deploy).
+- Ship loop on every change: build → **lint** → **typecheck** → test → `astro preview` :4322
+  (never `astro dev`) → grep `dist/` → commit → push to `main` (the only branch —
+  `verify-live` guards every deploy). **Lint and typecheck are not optional** — CI's Tests
+  workflow runs `npm run lint`, `npm run typecheck` AND `vitest`, and session #20 pushed red
+  twice by treating build+test as the whole gate. Use `npx eslint src worker scripts tests`,
+  not `npm run lint`, until the stale-worktree issue below is resolved.
 - North stars: `docs/PIPELINE.md` (generation/maintenance) · `docs/MOTION.md`
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
