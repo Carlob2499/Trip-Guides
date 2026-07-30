@@ -45,7 +45,15 @@ graduation). Fable's headless availability is STILL UNPROVEN — first real disp
 stats; hub footer links it) · dead deps removed (dotenv, 2 retired mockup fonts, redundant
 astro-eslint-parser) · consultant plan rejected (`docs/archive/CONSULTANT_PLAN_REJECTION.md`).
 
-**1009 tests green, build + YAML clean, all pushed to main.**
+**Late-session additions (all pushed):** default effort **high** (not xhigh) across
+research-pass AND revise-guide · **continuity doctrine hard-gated** on all three headless
+edit surfaces (required sweep records; modify=alarm, revise+executor=barrier) ·
+**Pass B coverage gate** (`check-passb-coverage.mjs` — every B-find needs a reconciliation
+verdict; deterministic, 9 tests) · **docs/PIPELINE_PATTERNS.md** virtuous loop (critic/vibe
+findings compound as process patterns, promotion rule ≥2 runs → skill rule/gate; NEVER into
+the learnings silo — process evidence ≠ lived experience).
+
+**1018 tests green, build + YAML clean (all 3 workflows), all pushed to main.**
 
 ## Pending from session #18b (revise pipeline — still open)
 
