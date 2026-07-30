@@ -1,0 +1,90 @@
+[
+  {
+    "item": "Bukchon Hanok Village — enforced tourist curfew on Bukchon-ro 11-gil",
+    "category": "access-restriction",
+    "finding": "Bukchon is no longer merely an etiquette-sensitive neighbourhood: Jongno-gu's Bukchon Special Management Area designates Bukchon-ro 11-gil (≈34,000 m²) a 'red zone' closed to tourist visits from 17:00 until 10:00 the following morning, with a ₩100,000 fine. A guidance period ran Nov 1 2024–Feb 28 2025; enforcement with fines began Mar 1 2025. The adjacent orange and yellow zones carry no visiting-hour restriction but remain monitored. This is a hard rule a reader could be fined under, and the guide asserted nothing about it.",
+    "source_url": "https://english.seoul.go.kr/notice-on-restrictions-for-tourist-visits-to-bukchon-special-management-area-effective-from-november-2024/",
+    "verified_on": "2026-07-30",
+    "replaces": "05-sights.json Bukchon body: \"It's a living neighbourhood — keep noise down and don't peer into homes.\" (no visiting-hour restriction, no penalty) and Visiting tips: \"Bukchon is residential, so it's best early and quiet.\""
+  },
+  {
+    "item": "Bukchon — the quiet slot is the 10:00 opening, not 'early'",
+    "category": "crowd-timing",
+    "finding": "Because the red zone opens to tourists at 10:00 and closes at 17:00, the earliest legal visit IS the quietest one — arriving at 10:00 gets both compliance and empty lanes. The guide's 'best early' advice, written before the curfew, now points a reader at hours in which visiting is finable. The 10:00–17:00 window is the primary-sourced fact; the crowd conclusion follows from it rather than from an unsourced crowd claim.",
+    "source_url": "https://english.seoul.go.kr/notice-on-restrictions-for-tourist-visits-to-bukchon-special-management-area-effective-from-november-2024/",
+    "verified_on": "2026-07-30",
+    "replaces": "05-sights.json Visiting tips: \"Bukchon is residential, so it's best early and quiet.\""
+  },
+  {
+    "item": "N Seoul Tower — ₩23,000 is the child/senior rate, not an adult online discount",
+    "category": "pricing-trap",
+    "finding": "The tower's official price table lists adult (13+) observatory admission at ₩29,000 and ₩23,000 for children (3–12) and seniors (65+). No discounted advance or online ADULT ticket is published anywhere on the official site. The guide's '≈₩18,000–23,000 online' range therefore rests on third-party reseller listings, and its top figure is coincidentally the official child/senior price — exactly the kind of number that reads as sourced but isn't. Group bookings get 30% off; individuals do not.",
+    "source_url": "https://www.nseoultower.co.kr/eng/visit/use2.asp",
+    "verified_on": "2026-07-30",
+    "replaces": "02-essentials.json N Seoul Tower item: \"treat ≈₩18,000–23,000 online as a range, not a fixed number\" and the unsourced \"₩29,000 at the gate (confirmed current)\""
+  },
+  {
+    "item": "Namsan shuttle bus 03 no longer exists — it is 01A/01B at ₩1,500",
+    "category": "transit-correction",
+    "finding": "N Seoul Tower's official 'Getting Here > By Bus' page names exactly two Namsan Sunhwan shuttle routes: 01A (every 9 min) and 01B (every 14 min), both 06:30–23:00, both from Chungmuro Station (Lines 3/4) and Dongguk Univ. Station (Line 3), at ₩1,500 and transportation-card only (no cash). No route numbered 03 is listed. The guide's cheap alternative to the cable car — 'Bus 03 from Chungmuro Station (₩1,350)' — is wrong on the route number, the fare, and the cash option a reader might assume.",
+    "source_url": "https://www.nseoultower.co.kr/eng/visit/traffic.asp",
+    "verified_on": "2026-07-30",
+    "replaces": "02-essentials.json Namsan cable car item: \"Low = Bus 03 from Chungmuro Station (₩1,350) if you want to save.\""
+  },
+  {
+    "item": "Huwon — 50 tickets per session are sold on the day, so a missed booking is not a missed tour",
+    "category": "booking-reality",
+    "finding": "Each Huwon (Secret Garden) session admits a maximum of 100 people: 50 via online reservation and 50 sold on-site at the ticket office. The guide states only '50 slots' / '50 online slots', which reads as a hard cap and implies that failing to book online means missing the garden entirely. The on-the-day half is first-come, but it exists — materially different advice for a traveler whose booking falls through.",
+    "source_url": "https://english.visitseoul.net/area/2024-cdggarden/ENPl8f5md",
+    "verified_on": "2026-07-30",
+    "replaces": "02-essentials.json: \"book online in advance (50 slots)\"; 01-plan.json and 04-itinerary.json: \"50 online slots, sells out\" framed as the only route in"
+  },
+  {
+    "item": "Huwon online release window — 'sells out weeks ahead' is not supported; CONFLICT unresolved",
+    "category": "booking-window",
+    "finding": "⚠ Sources conflict and the T0 could not be reached. Visit Seoul's official Secret Garden page states reservations open on the 15th of each month for the following month; multiple independent sources describing the Korea Heritage Service portal state online tickets release at 10:00 KST exactly six days before the visit date (bookable until one day before, max 10 people, once per day). The official portal royal.khs.go.kr returned HTTP 500 on every attempt, so neither could be confirmed as current. Either way, the guide's instruction to book 'weeks ahead' / 'sells out weeks ahead' is actionably wrong under the six-day rule — a reader following it would find no calendar to book. Recorded as a conflict, not resolved.",
+    "source_url": "https://english.visitseoul.net/area/2024-cdggarden/ENPl8f5md",
+    "verified_on": "2026-07-30",
+    "replaces": "01-plan.json: \"sells out weeks ahead\"; and the unqualified \"book online in advance\" in 02-essentials.json"
+  },
+  {
+    "item": "Gyeongbokgung guard ceremony — confirmed times, plus the 30°C+ July policy",
+    "category": "seasonal-reality",
+    "finding": "The changing of the royal guard runs twice daily at 10:00 and 14:00 in front of Gwanghwamun, closed Tuesdays, with additional gate-duty ceremonies at 11:00 and 13:00. Summer policy (July–August): on days of 30°C or higher the ceremony is still performed at full scale, but the number of guards on watch duty may be reduced. Heavy rain or snow can cancel it, with duty continuing at an alternate gate. The guide carried the right times but flagged them '⚠ verify' — they are now confirmed, and the heat clause is a July-specific expectation-setter this trip's guide never had.",
+    "source_url": "https://english.visitseoul.net/events/Changing-of-the-Royal-Guard-at-Gyeongbokgung-Palace-en/ENP008256",
+    "verified_on": "2026-07-30",
+    "replaces": "04-itinerary.json Fri Jul 10: \"Guard ceremony ≈10:00 and 14:00 (⚠ verify current schedule)\" and waypoint note \"Guard ceremony ≈10:00 (⚠ verify)\""
+  },
+  {
+    "item": "Cheonggyecheon — lower walkways can close in heavy rain",
+    "category": "seasonal-reality",
+    "finding": "The promenade is free and open 24/7, but the official page carries a caveat the guide omitted: in rain, access may be restricted for safety reasons. On a July monsoon trip that turns Cheonggyecheon from a reliable flat-break option into a fair-weather one — relevant because the guide leans on it as the low-effort filler between sights and as a rest-day option.",
+    "source_url": "https://english.visitseoul.net/attractions/Cheonggyecheon-Stream/ENP000034",
+    "verified_on": "2026-07-30",
+    "replaces": "05-sights.json Cheonggyecheon body: \"a cool, easy stroll and a good flat break between sights\" with no weather caveat"
+  },
+  {
+    "item": "Insadong — Ssamziegil's 10:30 open sets the real window",
+    "category": "hours-actionability",
+    "finding": "Insadong-gil itself is free and open-access, but the shops define when the visit works: Ssamziegil, the spiral craft mall at 44 Insadong-gil, runs 10:30–20:30 year-round with no regular holiday and free entry. The guide named Insadong as a natural pairing with a Gyeongbokgung morning without an hour anywhere on it — a traveler arriving from a 09:00 palace opening can reach shuttered crafts.",
+    "source_url": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=44678",
+    "verified_on": "2026-07-30",
+    "replaces": "05-sights.json Insadong body — previously carried no hours at all"
+  },
+  {
+    "item": "DDP — the LED-rose field is not documented on DDP's own site",
+    "category": "unconfirmable-claim",
+    "finding": "⚠ DDP's official site gives hours of 10:00–20:00 and does not mention the LED rose garden anywhere on its main or programme pages. Only secondary travel sources (2026-dated) assert the ≈25,550-rose installation is permanent and still lighting at nightfall. The guide builds its DDP recommendation on the rose field being on — 'best after dark when it's lit and the LED-rose field is on' — which cannot be confirmed from a primary source and must not be presented as certain.",
+    "source_url": "https://www.ddp.or.kr/",
+    "verified_on": "2026-07-30",
+    "replaces": "05-sights.json DDP body: \"best after dark when it's lit and the LED-rose field is on\" stated as fact"
+  },
+  {
+    "item": "Two cited official domains are broken — cdg.go.kr and cablecar.co.kr",
+    "category": "dead-citation",
+    "finding": "11-references.json cites https://www.cdg.go.kr/eng for Changdeokgung and https://www.cablecar.co.kr for the Namsan cable car. Neither is usable: cdg.go.kr (with and without www) fails DNS resolution entirely, and cablecar.co.kr serves a certificate valid only for namsancablecar.com — a TLS mismatch a reader's browser will block. 02-essentials.json also carries https://www.cdg.go.kr as the Changdeokgung source_url, and 01-plan.json links cdg.go.kr twice in the booking checklist, including a deep link (cdg.go.kr/tour/english/reserve.htm) at the exact point a reader would act. This is the MangoPlate failure mode again: a citation that decorates rather than resolves.",
+    "source_url": "https://www.namsancablecar.com/",
+    "verified_on": "2026-07-30",
+    "replaces": "11-references.json cdg.go.kr/eng + cablecar.co.kr; 02-essentials.json source_url https://www.cdg.go.kr; 01-plan.json cdg.go.kr links"
+  }
+]

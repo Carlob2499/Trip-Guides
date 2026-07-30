@@ -1,0 +1,171 @@
+{
+  "slug": "korea",
+  "issue": 27,
+  "status": "swept",
+  "summary": "The Jul 8-15 2026 Korea trip has concluded and the requester wants the Sights group's perishable facts (admission prices, opening hours, booking requirements) re-sourced against current primary sources rather than re-worded. Scoping the change against the actual files moves it in one important way: 05-sights.json holds NO prices and NO provenance at all — zero verified_on, zero source_url on any of its six items — so the real admission figures for these sights (Gyeongbokgung 3,000 KRW; Changdeokgung + Huwon 8,000 KRW; N Seoul Tower 29,000 KRW; Namsan cable car 15,000 KRW) live in 02-essentials.json's budget block, and the same hours/tour-times are restated inline in 04-itinerary.json's day plans. A Sights fact refresh therefore cannot be done inside 05-sights.json alone; it is a three-group re-research (05-sights, 02-essentials, 04-itinerary) plus a ripple sweep over 01-plan, 03-getting-around and 11-references, and a new dated clause on the guide-level verified stamp in _guide.json. That is still comfortably a revision, not a research pass. One decision is reserved for the creator and blocks the run: whether this guide stays a historical record of the completed trip or is re-dated as the base for a possible 2027 revisit — see forks. Note the guide is already archived:true and carries a published learnings block with per-day Plan-vs-Actual reality, which is the state option B would contradict.",
+  "reResearch": [
+    {
+      "group": "05-sights.json",
+      "why": "The named target. Its six items state hours, closed days and booking rules in prose (Gyeongbokgung summer close ~18:30 / last entry 17:30 / closed Tuesdays / free in hanbok; Changdeokgung closed Mondays; Secret Garden timed guided walks only) and the Visiting tips prose restates them — but the file carries zero verified_on, zero source_url and zero shelf_life on every item and both sections. These facts are not stale-stamped, they are unstamped, so re-research must both re-source the values and add the three provenance fields the skill makes mandatory, not merely re-date anything.",
+      "questions": [
+        "Gyeongbokgung (royalpalace.go.kr / english.visitseoul.net, T0): current adult admission; current summer opening and closing time and the last-entry cutoff; is the weekly closed day still Tuesday; is free entry for hanbok wearers still in force and on what terms?",
+        "Changdeokgung (cdg.go.kr, T0): current palace-only adult admission; is the weekly closed day still Monday; is the palace ticket still required separately in addition to the Huwon tour ticket?",
+        "Huwon / Secret Garden (cdg.go.kr, T0): current English-language tour departure times (guide currently says 10:30, 11:30, 14:30, 15:30); current per-tour capacity (guide says 50 slots); current Huwon tour price; how far in advance online slots release and whether on-the-day tickets exist?",
+        "N Seoul Tower (nseoultower.co.kr/visit/use2.asp, T0): current observatory gate price for an adult; the official direct-online price; current opening and closing hours including any summer variation?",
+        "Namsan cable car (cablecar.co.kr, T0): current round-trip adult fare and current operating hours; is Bus 03 from Chungmuro still the cheap alternative and at what fare?",
+        "Dongdaemun Design Plaza (ddp.or.kr, T0): current opening hours; is the LED-rose field still installed and running, or has it been removed or relocated; are the exhibitions ticketed separately and at what price?",
+        "Bukchon Hanok Village (Jongno-gu district / Visit Seoul, T0): are there official visiting-hour restrictions or a resident-protection curfew on the Bukchon-ro 11-gil lanes, and are penalties attached? The guide currently gives only an informal 'keep noise down' etiquette note and would be materially wrong if an enforced restriction now exists. Do not assert either way without a primary source.",
+        "Cheonggyecheon and Insadong (Visit Seoul, T0): confirm both remain free and open-access; any current construction, closure or altered access on the Cheonggyecheon walkways; current Ssamziegil / Insadong-gil hours if the group is to keep an actionable time claim?"
+      ],
+      "passB": true,
+      "priority": 1
+    },
+    {
+      "group": "02-essentials.json",
+      "why": "This is where the Sights admission prices actually live — the 'Budget & daily costs' block's Activities & entries items carry the real figures, USD equivalents and est/low/high numbers for Gyeongbokgung, Changdeokgung + Huwon, N Seoul Tower and the Namsan cable car. Re-researching Sights prices without touching this file would leave the guide asserting two different prices for the same ticket. It also holds a provenance defect: the N Seoul Tower item claims '29,000 KRW at the gate (confirmed current)' while carrying no verified_on, no source_url and no shelf_life — the only Activities & entries item missing all three while its siblings (stamped 2026-07-23, shelf_life venue) have them.",
+      "questions": [
+        "For each Activities & entries budget item (Gyeongbokgung palace; Changdeokgung + Huwon; N Seoul Tower observatory; Namsan cable car): does the re-sourced current price match the stated KRW figure, and if not, what are the corrected est / low / high USD values?",
+        "What is the current KRW/USD rate? The block's intro cites 'as of Jun 2026 approximately 1,535 KRW to the dollar' — an fx-class fact on a 7-day shelf life, now roughly seven weeks past it — and every USD conversion on the sight lines is derived from it.",
+        "Can the N Seoul Tower item's 'confirmed current' claim be backed by a T0 source and dated, or must the figure be downgraded to a flagged approximation? Never leave an unsourced 'confirmed' assertion standing.",
+        "Is the online-vs-gate price spread for N Seoul Tower still a genuine range across vendors, or does the official site now quote one fixed online price that would let the flagged range be replaced by a clean figure?",
+        "Is hanbok rental near the Gyeongbokgung north gate still roughly 15,000-25,000 KRW/hour, and is it still correct to flag this as a personal-vendor estimate rather than a fixed official rate?"
+      ],
+      "passB": false,
+      "priority": 2
+    },
+    {
+      "group": "04-itinerary.json",
+      "why": "The day plans restate the same perishable Sights facts inline, so any corrected value has to land here too or the itinerary and the Sights tab will disagree. Confirmed touchpoints: the Fri Jul 10 palace morning ('Guard ceremony approximately 10:00', 'hanbok rental at gate', 'Last entry 17:30') and the Tue Jul 14 Changdeokgung morning ('the pre-booked 10:30 English Huwon tour', '70-90 min guided walk', 'the palace itself requires a separate 3,000 KRW admission ticket at the gate', with the 5,000 KRW Huwon fee on top).",
+      "questions": [
+        "Do the corrected admission figures and tour times from the 05-sights and 02-essentials passes require edits to the Fri Jul 10 and Tue Jul 14 day bodies, and are the guard-ceremony time and the 70-90 minute Huwon tour duration still accurate against the same T0 sources?",
+        "Does the 10:30 English Huwon tour still exist as a departure? If that slot has been dropped or moved, the Tue Jul 14 morning's timing and its downstream Apgujeong connection have to be re-plotted, not just re-priced.",
+        "Are the sights' own opening times still compatible with the arrival times the day plans assume, or does a changed opening hour break a day's sequence?"
+      ],
+      "passB": false,
+      "priority": 3
+    }
+  ],
+  "rippleCheck": [
+    {
+      "group": "02-essentials.json",
+      "greps": [
+        "₩3,000",
+        "₩8,000",
+        "₩5,000 Huwon",
+        "₩29,000",
+        "₩18,000–23,000",
+        "₩15,000",
+        "₩15,000–25,000",
+        "₩1,350",
+        "₩1,535",
+        "confirmed current",
+        "10:30, 11:30, 14:30, 15:30",
+        "50 slots",
+        "2026-07-23"
+      ],
+      "why": "Every sight admission figure and its USD conversion sits in the budget block. A price change moves the note text AND the est/low/high numbers AND the Activities & entries category subtotal AND the per-person split maths (the block is party:3 with a two-of-three Daejeon fork, so a per-person figure is not simply the trip figure divided by three). Re-date verified_on on every item touched; add the missing trio to the N Seoul Tower item."
+    },
+    {
+      "group": "04-itinerary.json",
+      "greps": [
+        "₩3,000 admission",
+        "₩5,000",
+        "Last entry 17:30",
+        "10:30 English Huwon tour",
+        "Guard ceremony ≈10:00",
+        "hanbok rental at gate",
+        "70–90 min"
+      ],
+      "why": "Day-plan bodies duplicate the Sights hours, prices and tour times. Leaving these while correcting the Sights tab is exactly the stale-leftover failure the continuity rule exists to prevent."
+    },
+    {
+      "group": "01-plan.json",
+      "greps": [
+        "Changdeokgung Secret Garden (Huwon)",
+        "10:30 English tour for Tue Jul 14",
+        "cdg.go.kr",
+        "Book the"
+      ],
+      "why": "The pre-trip booking checklist names the specific Huwon tour time and links the official site. If the tour times or the booking mechanism changed, this instruction is now wrong at the point the reader would act on it."
+    },
+    {
+      "group": "11-references.json",
+      "greps": [
+        "nseoultower.co.kr/visit/use2.asp",
+        "cablecar.co.kr",
+        "cdg.go.kr/eng",
+        "english.visitseoul.net",
+        "N Seoul Tower — admission prices (official)",
+        "Namsan Cable Car — fares & hours (official)"
+      ],
+      "why": "These are the T0 citations the re-research will lean on and that the recert re-checks. Confirm each still resolves and still carries the cited fact; a citation that 404s or no longer shows the price must be replaced with the live official page, not left as decoration. The file already records one precedent for this — MangoPlate was removed post-trip because the service had been dead since 2020."
+    },
+    {
+      "group": "03-getting-around.json",
+      "greps": [
+        "Gyeongbokgung & the palaces",
+        "Insadong / Bukchon",
+        "12–15 min walk",
+        "5–12"
+      ],
+      "why": "Low perishability — these are walk-time hops from the Jonggak base, not prices — but sweep to confirm no hours or admission claim rides along with the directions, and that no sight named here has changed access."
+    }
+  ],
+  "reconcile": [
+    {
+      "item": "Provenance state of the Sights group",
+      "current": "05-sights.json carries zero verified_on, zero source_url and zero shelf_life across all six sight items and both sections. Nothing in the file is stamped at all.",
+      "signal": "The request says the Sights facts 'were last verified pre-trip (June)' and that 'several stamps are now stale'. There are no stamps in this file to be stale. The June/July dates the requester is likely recalling are the guide-level verified string (citations recertified 17 Jul 2026) and 02-essentials' budget items (verified_on 2026-07-23). Resolution: the executor must ADD the mandatory provenance trio to Sights, not merely re-date it — and should not report the work as a re-dating."
+    },
+    {
+      "item": "N Seoul Tower admission — unsourced 'confirmed current'",
+      "current": "The 02-essentials budget item asserts '29,000 KRW at the gate (confirmed current)' with no verified_on, no source_url and no shelf_life, while every sibling Activities & entries item is stamped 2026-07-23 with shelf_life venue.",
+      "signal": "The skill makes all three mandatory on any perishable fact whose block supports them, and forbids an unverified figure presenting as confirmed. Either source and date it, or downgrade the claim."
+    },
+    {
+      "item": "Guide-level verified stamp (_guide.json — not a group file, so it is named here rather than in rippleCheck)",
+      "current": "The verified string currently ends with the 17 Jul 2026 citation recert and the Seoul orientation-map pins added the same day. It carries no clause for a Sights fact refresh.",
+      "signal": "Every pass owes a new dated clause naming what was re-verified and what remains flagged. Append; do not rewrite the existing history, which is a deliberate audit trail of the trip's mid-flight rebuilds."
+    },
+    {
+      "item": "Trip status already encoded in the data",
+      "current": "_guide.json sets archived:true and carries a published learnings block with verified_on 2026-07-16 and per-day Plan-vs-Actual reality for Jul 9-14. learnings.md records the trip as REFLECTED, and TRAVELER_PATTERNS.md lists Korea as concluded and reflected.",
+      "signal": "Fork 1's option B (re-date for a 2027 revisit) would contradict all of this at once. This is context for the creator's decision, not a decision the executor may make."
+    },
+    {
+      "item": "Gyeongbokgung hanbok free entry and rental pricing",
+      "current": "Both 05-sights and 02-essentials state free entry in hanbok; the budget note honestly flags rental at approximately 15,000-25,000 KRW/hour as a personal-vendor estimate, not a fixed official rate.",
+      "signal": "Re-research should confirm the free-entry policy against a T0 source and either keep the estimate flagged as-is or improve it — it must not be silently hardened into a fixed price just because a single vendor quotes one."
+    }
+  ],
+  "forks": [],
+  "outOfScope": [
+    "Restructuring the Sights group into fewer, fallback-aware entries. TRAVELER_PATTERNS.md's 'write fewer, cut Sights' finding is design guidance aimed at the NEXT guide (guide #3), not a retrofit of Korea, and it is a content redesign rather than a fact refresh.",
+    "Adding the rain-footwear and heat-fallback advice the learnings ask for. Real and worth doing, but it is a separate content revision — this issue is scoped to perishable Sights facts.",
+    "Any edit to the learnings block, its days[].actually narratives, or the skipped[] entries and their reasons — including the four Sights stops recorded as skipped. The post-mortem is a record of what happened and does not change because a ticket price did.",
+    "The other content groups: 06-daejeon-and-msi.json, 07-gaming-and-anime.json, 08-food-and-shopping.json, 09-pok-mon-go.json, 10-tokyo.json. Restaurant, event, gaming and Tokyo facts are not Sights, however stale they may also be.",
+    "Non-sight budget lines in 02-essentials.json — Airbnb, I-Hotel, KTX, meals, drinks, MSI tickets. Touch only the Activities & entries sight lines and the fx rate their USD conversions depend on.",
+    "The product feedback in learnings.md (Trip Split subset-expense handling, the requested Reminders/Notable Items tab) — site features, not guide content.",
+    "Changing archived, draft status, tabBudget (11), provenance:strict, the cover video, the advisory block, the entry block, or the phrases block.",
+    "Re-verifying the Seoul orientation-map pins added 17 Jul 2026 — map/weather/holidays sections are live data and the skill says leave them intact."
+  ],
+  "budget": {
+    "maxSelfCorrectRounds": 3,
+    "expectedGroupsTouched": 5
+  },
+  "attempts": 1,
+  "forkDecisions": [
+    {
+      "question": "Historical record vs re-date as 2027 base",
+      "answer": "A — Historical record: keep the Jul 8-15 2026 framing, archived:true and the learnings block exactly as they are; correct only the perishable facts per the plan.",
+      "answeredBy": "Carlob2499 (owner) on issue #27",
+      "answeredOn": "2026-07-30"
+    },
+    {
+      "question": "Current values with fresh stamps vs trip-time values labelled historical",
+      "answer": "Current values with fresh verified_on stamps (the plan's stated non-blocking default; owner did not override).",
+      "answeredBy": "default applied — non-blocking fork",
+      "answeredOn": "2026-07-30"
+    }
+  ]
+}
