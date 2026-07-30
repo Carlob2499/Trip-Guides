@@ -4,8 +4,10 @@
 //
 //   node docs/mockups/build-mockup.mjs   →  docs/mockups/living-atlas.html (gitignored)
 //
-// Fonts come from the repo's own @fontsource packages; photos are the guides' real
-// Commons covers at width=900, fetched at build time (same hot-link source the site uses).
+// Fonts come from @fontsource packages; photos are the guides' real Commons covers at
+// width=900, fetched at build time (same hot-link source the site uses). Bricolage and
+// Spline Sans Mono retired from the site's deps (2026-07-30) — to rebuild this study,
+// first: npm i -D @fontsource-variable/bricolage-grotesque @fontsource-variable/spline-sans-mono
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
