@@ -183,7 +183,7 @@ const contourLayers = [
         // Same breath as the theme (see GuideLayout): theme.js re-syncs this from the
         // computed --bg, but only after first paint, so an installed dark-mode app
         // flashed the light default in its status bar.
-        var tc = document.querySelector('meta[name="theme-color"]');
+        const tc = document.querySelector('meta[name="theme-color"]');
         if (tc) tc.setAttribute("content", document.documentElement.getAttribute("data-theme") === "dark" ? "#14181c" : "#e9ebe3");
       })();
     </script>

@@ -119,6 +119,24 @@ the learnings silo — process evidence ≠ lived experience).
 - ⚠ Cloudflare dashboard Git integration builds "tripguides" on every push and fails in 0s —
   external config noise; consider disabling (deploy-worker.yml owns the real Worker deploy).
 
+## ⚠ Local lint is broken by a stale agent worktree (not a code problem)
+
+`npm run lint` (`eslint .`) reports **630 phantom parse errors** on this machine, because
+`.claude/worktrees/agent-a7dc7eeb397c6a368/` is a full repo checkout — registered as a real
+git worktree since Jul 29 — and eslint finds two candidate `tsconfigRootDir`s. **CI is
+unaffected** (clean checkout), which is why the divergence went unnoticed: exactly CLAUDE.md
+boundary check #1. Lint every real tree with `npx eslint src worker scripts tests` until it
+is resolved — that passes clean.
+
+Two ways out, both the creator's call:
+1. Add `.claude/**` to `eslint.config.mjs`'s ignores. **A hook blocks agents from editing
+   that file** ("fix the source, don't weaken the config"), so this needs a human or a
+   temporary hook disable. It is not a weakening — `.claude/` holds no source.
+2. Remove the worktree: `git worktree remove .claude/worktrees/agent-a7dc7eeb397c6a368`.
+   **It has UNCOMMITTED untracked work** (`docs/mockups/*progress-study.mjs`,
+   `src/pages/progress-preview/`) and 0 commits ahead of main — rescue or discard that
+   first. Left in place this session for exactly that reason.
+
 ## Owner tasks (need the creator, not the agent)
 
 1. **Enable Settings → Actions → General → "Allow GitHub Actions to create and approve pull

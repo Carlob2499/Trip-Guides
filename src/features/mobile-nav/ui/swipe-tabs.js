@@ -62,7 +62,10 @@ export function initSwipeTabs(ctx) {
       document.querySelector(".pal-backdrop.pal-open");
   }
 
-  var sx = 0, sy = 0, st = 0, lx = 0, lt = 0, vx = 0;
+  // No gesture-start timestamp: commit is decided by distance and INSTANTANEOUS velocity
+  // (the old discrete swipe used total elapsed time; a finger-tracked one must not care
+  // how long you spent aiming).
+  var sx = 0, sy = 0, lx = 0, lt = 0, vx = 0;
   var tracking = false, locked = false;
 
   function paint(dx) {
@@ -109,7 +112,7 @@ export function initSwipeTabs(ctx) {
     if (!tracking) return;
     sx = lx = e.touches[0].clientX;
     sy = e.touches[0].clientY;
-    st = lt = Date.now();
+    lt = Date.now();
     vx = 0;
   }, { passive: true });
 

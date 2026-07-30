@@ -367,7 +367,7 @@ const tripSummary = buildSummary(guide);
         // Tint the browser/PWA chrome in the SAME breath. theme.js re-syncs this from the
         // computed --bg later, but "later" is after first paint: installed to the home
         // screen on a dark phone, the status bar flashed the light default first.
-        var tc = document.querySelector('meta[name="theme-color"]');
+        const tc = document.querySelector('meta[name="theme-color"]');
         if (tc) tc.setAttribute("content", document.documentElement.getAttribute("data-theme") === "dark" ? "#14181c" : "#e9ebe3");
       })();
     </script>
@@ -387,7 +387,7 @@ const tripSummary = buildSummary(guide);
           try {
             if (location.hash) return;
             if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-            var k = "tg-story-s-" + document.body.getAttribute("data-storekey");
+            const k = "tg-story-s-" + document.body.getAttribute("data-storekey");
             if (sessionStorage.getItem(k)) return;
             document.body.classList.add("story-full");
             window.__storyIntro = true;
