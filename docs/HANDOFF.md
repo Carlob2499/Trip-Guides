@@ -56,6 +56,13 @@ the learnings silo — process evidence ≠ lived experience).
 
 **1018 tests green, build + YAML clean (all 3 workflows), all pushed to main.**
 
+## Queued plan
+
+- **`docs/PLAN_MOBILE_NAV.md`** (2026-07-30, creator-approved architecture): mobile bottom
+  tab bar + groups sheet (with scroll-memory resume lines), swipe-between-tabs, yielding
+  chrome, day scrubber, sheet physics + haptics. Executing session: answer the plan's 4
+  clarifying questions first, then Phase A before B. Model: Opus (build), not Fable.
+
 ## Pending from session #18b (revise pipeline — still open)
 
 - Review/merge **draft PR #28** (korea smoke revision); then flip `revise-guide.yml` `land`
