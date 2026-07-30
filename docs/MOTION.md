@@ -11,7 +11,8 @@ days**. It appears exactly three ways, and they are the same object:
 
 1. **Title-card story intro** (2026-07-30) — the guide opens as a full-bleed title card
    (cover + country name + day rail + accent gloss sweep + optional seasonal particle motif,
-   schema `introMotif`, honesty rule R18), holds ~2.4s, then pans up into the guide. Full
+   schema `introMotif`, honesty rule R18 — koyo-leaves/japan, summer-rain/korea jangma,
+   poplar-fluff/denmark June, desert-dust/us Sedona), holds ~2.4s, then pans up into the guide. Full
    sequence once per guide per SESSION; skips jump to the pan; reduced-motion gets the
    normal arrival (`story-open.js` + `story-petals.js` + `story.css`; pre-paint state
    stamped by GuideLayout's inline script).

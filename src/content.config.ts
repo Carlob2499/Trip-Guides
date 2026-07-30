@@ -465,7 +465,12 @@ const guides = defineCollection({
     // a spring cherry-blossom motif on that same trip would be dishonest framing). Guides
     // without a motif get the cartographic default (contour drift + accent gloss) — a complete
     // intro, not a degraded one.
-    introMotif: z.enum(["koyo-leaves"]).optional(),
+    // Registered motifs (each seasonally honest for the trip that declares it):
+    //   koyo-leaves — autumn maple drift (japan, Oct–Nov koyo chase)
+    //   summer-rain — soft jangma drizzle (korea, Jul 8–15: monsoon season)
+    //   poplar-fluff — June seed-fluff drift (denmark, Jun 8–16: "poppelfnug" season)
+    //   desert-dust — golden dust motes (us/Sedona, high desert — honest year-round)
+    introMotif: z.enum(["koyo-leaves", "summer-rain", "poplar-fluff", "desert-dust"]).optional(),
     // Optional situational phrase cards (docs/FEATURES.md #6) — a guide-level field, NOT a
     // section type: it's consumed by exactly one surface (the Trip kit tool tab), so it
     // deliberately sits outside the sections/bucket()/tabBudget system entirely — a "phrases"

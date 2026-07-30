@@ -29,11 +29,13 @@ import { reducedMotion } from "./util.js";
 
   var rail = mast.querySelector(".mast-story-rail");
   var segs = rail ? rail.children.length : 0;
-  // Pace the day-segments to a ~2.4s hold, clamped so a 3-day trip isn't glacial
-  // and a 14-day one isn't a blur. No rail (no days) → a short text-only hold.
-  var TOTAL = 2400;
-  var segDur = segs ? Math.max(170, Math.min(430, Math.round(TOTAL / segs))) : 0;
-  var HOLD = segs ? segDur * segs : 1500;
+  // Pace the day-segments to a ~3s hold, clamped so a 3-day trip isn't glacial and a
+  // 14-day one isn't a blur. (Creator's tuning 2026-07-30: a smidge slower than the
+  // first cut — it plays once per session, it's allowed to breathe.) No rail → a
+  // shorter text-only hold.
+  var TOTAL = 3000;
+  var segDur = segs ? Math.max(210, Math.min(520, Math.round(TOTAL / segs))) : 0;
+  var HOLD = segs ? segDur * segs : 1900;
   if (rail && segDur) rail.style.setProperty("--seg-dur", segDur + "ms");
 
   var done = false, panned = false;
@@ -52,7 +54,7 @@ import { reducedMotion } from "./util.js";
     if (panned || done) return; panned = true;
     body.classList.add("story-pan");     // arms the transition rules (story.css)
     body.classList.remove("story-full"); // masthead collapses to hero; chrome returns
-    setTimeout(finish, 950);             // pan duration (.8s) + a beat
+    setTimeout(finish, 1250);            // pan duration (1.05s) + a beat
   }
   function finish() {
     if (done) return; done = true;
@@ -70,7 +72,7 @@ import { reducedMotion } from "./util.js";
   }
 
   body.classList.add("story-playing");
-  setTimeout(pan, HOLD + 320); // hold the card, then pan into the guide
+  setTimeout(pan, HOLD + 420); // hold the card, then pan into the guide
   // Skip → jump to the pan. Short grace so a stray pointer doesn't insta-dismiss.
   setTimeout(function () {
     if (done || panned) return;
