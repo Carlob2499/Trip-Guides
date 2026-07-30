@@ -3,10 +3,10 @@
     "type": "panel",
     "group": "Essentials",
     "title": "Money & currency",
-    "body": "<p>Korea uses the <b>won (₩)</b>. The won is weak right now, which helps your spending power — roughly (approximate, <a href=\"https://www.google.com/search?q=KRW+USD+exchange+rate\" target=\"_blank\" rel=\"noopener noreferrer\">check before you go</a>): <b>₩1,000 ≈ $0.67</b> and <b>₩10,000 ≈ $6.70</b>, at about ₩1,535 to the dollar.</p><p>Cards and contactless work almost everywhere. For cash, the most reliable option is an <b>ATM inside a GS25 or CU convenience store</b> — both accept most foreign cards and charge modest fees. <b>Global ATM Alliance banks</b> (KEB Hana is the Korean partner) have lower or zero foreign withdrawal fees if your home bank is in the network — check before you leave. Avoid airport exchange booths; the rates are poor. Keep ≈₩30,000–50,000 cash for markets and small eateries. A <b>T-money</b> card covers all subway and buses. Tipping isn't expected anywhere.</p>",
-    "verified_on": "2026-06-28",
+    "body": "<p>Korea uses the <b>won (₩)</b>. The won still favours your spending power, though it has strengthened since this guide was first costed — roughly (approximate, <a href=\"https://www.google.com/search?q=KRW+USD+exchange+rate\" target=\"_blank\" rel=\"noopener noreferrer\">check before you go</a>): <b>₩1,000 ≈ $0.68</b> and <b>₩10,000 ≈ $6.85</b>, at about <b>₩1,461 to the dollar</b> (24 Jul 2026, re-checked 30 Jul 2026 — it was ₩1,535 in Jun 2026). A spot rate moves daily, so treat every $ figure in this guide as ≈.</p><p>Cards and contactless work almost everywhere. For cash, the most reliable option is an <b>ATM inside a GS25 or CU convenience store</b> — both accept most foreign cards and charge modest fees. <b>Global ATM Alliance banks</b> (KEB Hana is the Korean partner) have lower or zero foreign withdrawal fees if your home bank is in the network — check before you leave. Avoid airport exchange booths; the rates are poor. Keep ≈₩30,000–50,000 cash for markets and small eateries. A <b>T-money</b> card covers all subway and buses. Tipping isn't expected anywhere.</p>",
+    "verified_on": "2026-07-30",
     "shelf_life": "fx",
-    "source_url": "https://www.frankfurter.app/"
+    "source_url": "https://www.federalreserve.gov/releases/h10/current/"
   },
   {
     "type": "budget",
@@ -15,7 +15,7 @@
     "currency": "$",
     "days": 7,
     "party": 3,
-    "intro": "Estimates in <b>USD per person</b> — toggle to see trip-total or per-person view. <b>Two of you do the full Korea plan; the third swaps the Daejeon/MSI/KTX weekend for a Tokyo trip (Jul 11–13) — his own ~$450–650 all-in Tokyo budget (rough; flights swing it most) sits outside the figures below.</b> Items marked <b>group</b> are shared: Seoul Airbnb ÷3 (all three are on the booking); the Daejeon I-Hotel is now split ÷2 between the two who stay (the per-person toggle still divides by 3, so read that one line as ÷2). Log what you actually spend; your running total saves on this device. Treat all figures as ≈ and confirm as you book. Rate check: <a href='https://www.google.com/search?q=KRW+USD+exchange+rate' target='_blank' rel='noopener noreferrer'>verify before you go</a> — as of Jun 2026 ≈₩1,535 to the dollar.",
+    "intro": "Estimates in <b>USD per person</b> — toggle to see trip-total or per-person view. <b>Two of you do the full Korea plan; the third swaps the Daejeon/MSI/KTX weekend for a Tokyo trip (Jul 11–13) — his own ~$450–650 all-in Tokyo budget (rough; flights swing it most) sits outside the figures below.</b> Items marked <b>group</b> are shared: Seoul Airbnb ÷3 (all three are on the booking); the Daejeon I-Hotel is now split ÷2 between the two who stay (the per-person toggle still divides by 3, so read that one line as ÷2). Log what you actually spend; your running total saves on this device. Treat all figures as ≈ and confirm as you book. Rate check: <a href='https://www.google.com/search?q=KRW+USD+exchange+rate' target='_blank' rel='noopener noreferrer'>verify before you go</a> — <b>≈₩1,461 to the dollar as of Jul 24 2026</b> (<a href='https://www.federalreserve.gov/releases/h10/current/' target='_blank' rel='noopener noreferrer'>US Federal Reserve H.10</a>, re-checked 2026-07-30; the won has strengthened from the ≈₩1,535 this guide was originally costed at, so the USD figures below were recomputed). A spot rate moves daily — treat every $ figure as ≈.",
     "items": [
       {
         "label": "Seoul Airbnb — Jongno, 7 nights",
@@ -104,8 +104,8 @@
         "low": 0,
         "high": 3,
         "category": "Activities & entries",
-        "note": "₩3,000 adult (≈$2, confirmed current). Free if you arrive wearing a hanbok — hanbok rental ≈₩15,000–25,000/hour near the north gate (personal-vendor estimate, not a fixed official rate).",
-        "verified_on": "2026-07-23",
+        "note": "₩3,000 adult (≈$2). June–August hours 09:00–18:30, last entry 17:30; closed Tuesdays. Free if you arrive wearing full traditional hanbok — rental near the north gate runs ≈₩15,000–25,000 for a standard 2–4 hour set (⚠ a personal-vendor estimate drawn from shop listings, not a fixed official rate; 1-hour deals start lower and designer sets run far higher).",
+        "verified_on": "2026-07-30",
         "shelf_life": "venue",
         "source_url": "https://english.visitseoul.net/attractions/Gyeongbokgung/ENP000072"
       },
@@ -116,31 +116,34 @@
         "low": 6,
         "high": 6,
         "category": "Activities & entries",
-        "note": "₩3,000 palace + ₩5,000 Huwon tour = ₩8,000/person (≈$5.40, confirmed current). English Huwon tours at 10:30, 11:30, 14:30, 15:30 — book online in advance (50 slots).",
-        "verified_on": "2026-07-23",
+        "note": "₩3,000 palace + ₩5,000 Huwon tour = ₩8,000/person (≈$5.50) — the palace ticket is required in addition to the Huwon ticket, not instead of it. English Huwon tours at 10:30, 11:30, 14:30, 15:30 (the Mar–Nov schedule; winter drops 15:30). Each session takes 100 people — <b>50 online and 50 sold on the day at the ticket office</b>, so a failed booking isn't a missed garden. ⚠ Online release timing is disputed (six days ahead at 10:00 KST per portal guides, vs a monthly window per Visit Seoul) and the official portal was erroring when checked — confirm on <a href='https://royal.khs.go.kr' target='_blank' rel='noopener noreferrer'>royal.khs.go.kr</a> before relying on a date.",
+        "verified_on": "2026-07-30",
         "shelf_life": "venue",
-        "source_url": "https://www.cdg.go.kr"
+        "source_url": "https://english.visitseoul.net/area/2024-cdggarden/ENPl8f5md"
       },
       {
         "label": "N Seoul Tower observatory",
         "basis": "trip",
-        "est": 17,
-        "low": 17,
-        "high": 22,
+        "est": 20,
+        "low": 20,
+        "high": 20,
         "category": "Activities & entries",
-        "note": "₩29,000 at the gate (confirmed current). The online-discount figure varies by vendor — nseoultower.co.kr's own direct discount and third-party resellers (Klook etc.) don't always quote the same price, so treat ≈₩18,000–23,000 online as a range, not a fixed number (⚠ confirm the actual online price at checkout). Namsan cable car ≈₩15,000 round-trip if you don't walk up (very hot in July)."
+        "note": "₩29,000 adult at the gate (≈$20) — open 10:00–22:30 weekdays, 10:00–23:00 weekends and holidays, last admission 30 min before close. ⚠ There is no adult online discount to bank on: the ₩23,000 on the tower's own price table is the child/senior rate, and the official site publishes no cheaper advance adult ticket, so the ≈₩18,000–23,000 'online' figures this guide once carried came from resellers, not the venue. If you buy through Klook or similar, confirm the price at checkout and treat any saving as a bonus. Namsan cable car ₩15,000 round-trip if you don't walk up (very hot in July).",
+        "verified_on": "2026-07-30",
+        "shelf_life": "venue",
+        "source_url": "https://www.nseoultower.co.kr/eng/visit/use2.asp"
       },
       {
         "label": "Namsan cable car (round-trip)",
         "basis": "trip",
-        "est": 11,
+        "est": 10,
         "low": 1,
-        "high": 11,
+        "high": 10,
         "category": "Activities & entries",
-        "note": "₩15,000 RT per person (≈$11, roughly consistent with current listings). Low = Bus 03 from Chungmuro Station (₩1,350) if you want to save. In July heat, the cable car is worth it for the descent.",
-        "verified_on": "2026-07-23",
+        "note": "₩15,000 round-trip per person (≈$10); ₩12,000 one-way if you ride up and walk down. Cable car runs 10:00–23:00 daily. Low = the Namsan shuttle bus instead: <b>routes 01A and 01B</b> from Chungmuro Station (Lines 3/4) Exit 2, ₩1,500 and <b>transportation card only — no cash</b>, every 9–14 min, 06:30–23:00 (<a href='https://www.nseoultower.co.kr/eng/visit/traffic.asp' target='_blank' rel='noopener noreferrer'>official route page</a> — the 'Bus 03' this guide previously named is no longer a route). In July heat, the cable car is worth it for the descent.",
+        "verified_on": "2026-07-30",
         "shelf_life": "venue",
-        "source_url": "https://www.nseoultower.co.kr"
+        "source_url": "https://english.visitseoul.net/area/Namsan-Cable-Car/ENP035015"
       },
       {
         "label": "SPAREX Dongdaemun jimjilbang",

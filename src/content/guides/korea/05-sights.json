@@ -7,7 +7,7 @@
       {
         "name": "Gyeongbokgung",
         "kicker": "The grand palace",
-        "body": "The largest of the Joseon palaces, with the changing-of-the-guard ceremony and the banquet hall over a lotus pond. Summer hours run to about 18:30 (last entry 17:30); closed Tuesdays, and free if you're wearing a hanbok.",
+        "body": "The largest of the Joseon palaces, with the changing-of-the-guard ceremony and the banquet hall over a lotus pond. ₩3,000 adult; June–August hours are 09:00–18:30 with last entry one hour before closing (17:30); closed Tuesdays, and free if you're wearing full traditional hanbok. The guard ceremony runs twice a day at 10:00 and 14:00 in front of Gwanghwamun (never Tuesdays) — in July, on days of 30°C or above it still runs at full scale, but with fewer guards on watch duty.",
         "img": {
           "file": "Gyeonghoeru (Royal Banquet Hall) at Gyeongbokgung Palace, Seoul.jpg",
           "alt": "Gyeonghoeru hall at Gyeongbokgung"
@@ -15,12 +15,15 @@
         "map": {
           "lat": 37.5796,
           "lng": 126.977
-        }
+        },
+        "verified_on": "2026-07-30",
+        "shelf_life": "venue",
+        "source_url": "https://english.visitseoul.net/attractions/Gyeongbokgung/ENP000072"
       },
       {
         "name": "Bukchon Hanok Village",
         "kicker": "Traditional houses",
-        "body": "Lanes of restored hanok houses on the hillside between the palaces, framed against the modern skyline. It's a living neighbourhood — keep noise down and don't peer into homes.",
+        "body": "Lanes of restored hanok houses on the hillside between the palaces, framed against the modern skyline. It is a living neighbourhood and now an enforced one: the Bukchon-ro 11-gil 'red zone' (≈34,000 m²) is closed to tourist visits from 17:00 until 10:00 the next morning, with a ₩100,000 fine — a guidance period ran Nov 1 2024–Feb 28 2025 and enforcement began Mar 1 2025. So your visiting window is 10:00–17:00: come at the 10:00 opening for the quietest lanes, be out of the red zone before 17:00, keep voices down and don't peer into homes. The neighbouring orange and yellow zones carry no visiting-hour restriction.",
         "img": {
           "file": "Bukchon-ro 11-gil street with hanok houses and blue sky in Bukchon Hanok Village Seoul.jpg",
           "alt": "Bukchon Hanok Village street"
@@ -28,12 +31,15 @@
         "map": {
           "lat": 37.5826,
           "lng": 126.983
-        }
+        },
+        "verified_on": "2026-07-30",
+        "shelf_life": "venue",
+        "source_url": "https://english.seoul.go.kr/notice-on-restrictions-for-tourist-visits-to-bukchon-special-management-area-effective-from-november-2024/"
       },
       {
         "name": "N Seoul Tower (Namsan)",
         "kicker": "The city view",
-        "body": "On the wooded peak of Namsan, with the best wraparound view of the city. Ride the cable car or a bus up rather than hiking in the heat; the observation deck is worth timing for sunset.",
+        "body": "On the wooded peak of Namsan, with the best wraparound view of the city. Observatory ₩29,000 adult at the gate; open 10:00–22:30 weekdays and 10:00–23:00 weekends and holidays, 365 days a year, with the deck closed to new visitors 30 minutes before closing. ⚠ The ₩23,000 on the official price table is the child/senior rate, not an adult online discount — the tower's own site publishes no cheaper advance adult ticket, so treat any reseller 'online deal' as unverified until you see it at checkout. Ride the cable car or the 01A/01B shuttle bus up rather than hiking in the July heat; the deck is worth timing for sunset, though that is also when the cable-car queue is at its worst.",
         "img": {
           "file": "Namsan Tower.jpg",
           "alt": "N Seoul Tower on Namsan"
@@ -41,12 +47,15 @@
         "map": {
           "lat": 37.5512,
           "lng": 126.9882
-        }
+        },
+        "verified_on": "2026-07-30",
+        "shelf_life": "venue",
+        "source_url": "https://www.nseoultower.co.kr/eng/visit/use2.asp"
       },
       {
         "name": "Dongdaemun Design Plaza",
         "kicker": "Modern architecture",
-        "body": "Zaha Hadid's vast silver, curving 'spaceship', best after dark when it's lit and the LED-rose field is on. Design shops, exhibitions and the surrounding night markets make it an easy evening.",
+        "body": "Zaha Hadid's vast silver, curving 'spaceship', best after dark when it's lit. Open 10:00–20:00. Walking the plaza and grounds is free; the exhibitions inside the halls are ticketed separately and the price changes with whatever show is running, so check the current exhibition before you commit an afternoon to it. ⚠ The LED-rose field is a long-running installation that lights at nightfall, but it isn't listed on DDP's own site — confirm it's running on the night you go rather than planning around it. Design shops and the surrounding night markets make it an easy evening either way.",
         "img": {
           "file": "Dongdaemun Design Plaza at night, Seoul, Korea.jpg",
           "alt": "Dongdaemun Design Plaza at night"
@@ -54,12 +63,15 @@
         "map": {
           "lat": 37.5669,
           "lng": 127.0094
-        }
+        },
+        "verified_on": "2026-07-30",
+        "shelf_life": "hours",
+        "source_url": "https://www.ddp.or.kr/"
       },
       {
         "name": "Cheonggyecheon",
         "kicker": "The downtown stream",
-        "body": "A restored stream cutting through the centre with walkways below street level — a cool, easy stroll and a good flat break between sights.",
+        "body": "A restored stream cutting through the centre with walkways below street level — a cool, easy stroll and a good flat break between sights. Free, and the promenade is open 24/7. One July caveat: access to the lower walkways can be restricted for safety in heavy rain, so keep it as a fair-weather filler rather than a monsoon-day plan.",
         "img": {
           "file": "Cheonggyecheon evening 2.jpg",
           "alt": "Cheonggyecheon stream and stepped weir at Cheonggye Plaza, Seoul"
@@ -67,12 +79,15 @@
         "map": {
           "lat": 37.5696,
           "lng": 126.9784
-        }
+        },
+        "verified_on": "2026-07-30",
+        "shelf_life": "venue",
+        "source_url": "https://english.visitseoul.net/attractions/Cheonggyecheon-Stream/ENP000034"
       },
       {
         "name": "Insadong",
         "kicker": "Crafts & tea",
-        "body": "A walkable lane of galleries, traditional craft shops and tea houses, a short hop from the palaces — a natural pairing with a Gyeongbokgung morning.",
+        "body": "A walkable lane of galleries, traditional craft shops and tea houses, a short hop from the palaces — a natural pairing with a Gyeongbokgung morning. The street itself is free and open-access; the practical window is set by the shops, and Ssamziegil — the spiral craft mall at 44 Insadong-gil — runs 10:30–20:30 year-round with no regular closing day and free entry.",
         "img": {
           "file": "Seoul-Insadong-Street-01.jpg",
           "alt": "Traditional restaurant alley in Insadong, Seoul"
@@ -80,7 +95,10 @@
         "map": {
           "lat": 37.574,
           "lng": 126.985
-        }
+        },
+        "verified_on": "2026-07-30",
+        "shelf_life": "hours",
+        "source_url": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=44678"
       }
     ]
   },
@@ -88,6 +106,9 @@
     "type": "prose",
     "group": "Sights",
     "title": "Visiting tips",
-    "body": "<p>Time the palaces around their closed days — <b>Gyeongbokgung is shut Tuesdays, Changdeokgung Mondays</b> — and pre-book the Changdeokgung <b>Secret Garden</b>, which only enters on timed guided walks. Bukchon is residential, so it's best early and quiet. And don't fight the July heat: treat the air-conditioned stops (DDP, COEX, museums) as the spine of the hottest afternoons.</p>"
+    "body": "<p>Time the palaces around their closed days — <b>Gyeongbokgung is shut Tuesdays, Changdeokgung Mondays</b> — and pre-book the Changdeokgung <b>Secret Garden</b>, which only enters on timed guided walks. Each Huwon session takes <b>100 people: 50 online and 50 sold on the day at the ticket office</b>, so a missed booking is not automatically a missed tour — but the on-the-day half is first-come. ⚠ Online slots reportedly open at 10:00 KST <i>six days</i> before the visit date, not weeks ahead; the official reservation portal (<a href='https://royal.khs.go.kr'>royal.khs.go.kr</a>) was returning a server error when this was checked, and Visit Seoul still describes a monthly release window, so confirm the mechanism on the portal itself before you count on a date.</p><p><b>Bukchon is now a timed visit, not just a quiet one.</b> The Bukchon-ro 11-gil red zone is closed to tourists 17:00–10:00 with a <b>₩100,000 fine</b>, enforced since Mar 2025 — so the old advice to go early no longer means before 10:00. Arrive at 10:00 and you get both the rule and the empty lanes.</p><p>The <b>changing of the guard</b> at Gyeongbokgung is at <a href='https://english.visitseoul.net/events/Changing-of-the-Royal-Guard-at-Gyeongbokgung-Palace-en/ENP008256'>10:00 and 14:00, closed Tuesdays</a>, with gate-duty ceremonies at 11:00 and 13:00 — in a 30°C+ July it still runs, with fewer guards. And don't fight the heat: treat the air-conditioned stops (DDP, COEX, museums) as the spine of the hottest afternoons.</p>",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue",
+    "source_url": "https://english.visitseoul.net/area/2024-cdggarden/ENPl8f5md"
   }
 ]
