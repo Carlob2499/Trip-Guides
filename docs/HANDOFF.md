@@ -20,60 +20,50 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (updated 2026-07-30, session #17 — everything on main, branches cleared)
+## Snapshot (updated 2026-07-30, session #18 — P7 shipped on branch)
 
-**Main is fully current.** Two feature branches merged and marked for deletion:
+**P7 differentiation surfaces (R11-R14) shipped** on `claude/research-trial-results-h32hlk`:
 
-- **`claude/website-visual-redesign-upnl05`** (merged session #15) — Living Atlas R1–R6:
-  Quiet Edition type, mobile journey bar, desktop horizon, Painted Atlas + living covers,
-  interior atlas (anchors, descriptors, facets, cartographic neatline), Composer. Icon.astro
-  replaced all emoji chrome. Hub editorial layout. Pipeline congruence (compose inside the
-  done gate, Living Atlas pass in research prompt + scaffold). 925 tests at merge.
-- **`claude/research-trial-results-h32hlk`** (merged session #17) — Japan research trial
-  (PR #26, full pipeline PASS, auto-graduated) + adversarial QA (`docs/QA_RESEARCH_TRIAL_JAPAN.md`,
-  F1–F14/U1–U7/R1–R20) + Factory v2 (`docs/PLAN_FACTORY_V2.md`, P1–P6 all shipped):
-  harness-enforced checkpoints, A-blind Pass B, intake-coverage matrix, fresh-context critic,
-  traveler progress page with question cards, `venues` block (all 4 guides migrated),
-  voice gate (14 banned patterns), budget closure, fold fixes (U4/U5/U6). 980 tests at merge.
+- **Schema:** `tier` (primary/corroborated/secondary), `agreement` (A+B converged/A only/B only),
+  `recheckNote` added to provenance. New `divergences` section type with category enum.
+- **Components:** DivergencesBlock.astro (claim/correction cards with category badges),
+  provenance dot+popover on VenueBlock (shows checked date, source, evidence tier, research
+  agreement), calendar badge on DaysBlock (constraint-driven), "Next self-check" in colophon.
+- **Japan data:** 5 divergences (Ippudo tourist-trap, Otaru overcrowded, Takimotokan, Dazaifu
+  default-answer, Naruko missing-context), tier/agreement backfilled on ramen, yatai, key sights.
+- **Japan cover:** updated to Naruko Gorge koyo (CC BY 4.0, Oct 24 capture, right season).
+- **Congruence:** scaffold-guide emits divergences shell, guide-readiness knows the type.
+- **980 tests green, build clean.**
 
-**Test count on main: 980.** Lint 0, build clean. Four guides live: Korea, Denmark, US, Japan.
+**Test count: 980.** Lint 0, build clean. Four guides live: Korea, Denmark, US, Japan.
 
 ## Left to do
 
-1. **Delete remote branches** — creator must do this from GitHub UI (git proxy blocks
-   deletion pushes): `claude/research-trial-results-h32hlk` and
-   `claude/website-visual-redesign-upnl05`. Both fully merged, zero unmerged commits.
-2. **Japan cover (Q4):** present 2–3 validated Commons koyo candidates (Naruko Gorge, Zao,
-   Jozankei, Hokkaido color) + the optional two-half north/south split-cover variant (needs
-   a small cover-schema + masthead change). Creator signs the final choice.
-3. **Rotate `CLAUDE_CODE_OAUTH_TOKEN`** — still blocks the pipeline's first end-to-end proof
-   (M0). `claude setup-token` → repo secret → re-run Token canary → throwaway guide test.
-4. **P7 (differentiation surfaces)** — deferred to its own product-focused session. Spec in
-   `docs/PLAN_FACTORY_V2.md`: ledger-backed "How we know this" popover, "What generic guides
-   get wrong" block, calendar-truth badge, self-updating-guide framing.
-5. **A11y baselines** will re-record on CI's first main run — watch for green. If red, likely
-   the tab-icon pattern (inline SVG defeats axe's stacking-order check, per session #15 lesson).
-6. **`no-explicit-any` debt** — 118 remaining `any`s behind a 33-path exception list. Biggest
-   files: `GuideLayout.astro` (28), `exports.ts` (14), `map-pins.ts` (14), `content.config.ts` (12).
-7. **Room codes** committed to a public repo (all guides). `#room=` fragment override exists
-   as the private alternative. `budgetLock` defaults off.
+1. **Merge `claude/research-trial-results-h32hlk` to main** — P7 commit ready, tests green.
+2. **Delete remote branches** — creator must do from GitHub UI:
+   `claude/website-visual-redesign-upnl05` (fully merged since session #15).
+3. **`astro preview` visual check** — P7 components (provenance dot popover, divergences
+   cards, calendar badges) need a mobile 375px + desktop + dark-mode visual pass.
+4. **A11y baselines** will re-record on CI's first main run — watch for green.
+5. **`no-explicit-any` debt** — 118 remaining `any`s behind a 33-path exception list.
+6. **Room codes** committed to a public repo. `#room=` fragment override exists.
 
 ## Owner tasks (need the creator, not the agent)
 
-1. **Delete the two remote branches** from GitHub (see Left to do #1).
-2. **Sign the Japan cover** — Commons candidates will be presented next session.
-3. **Rotate `CLAUDE_CODE_OAUTH_TOKEN`** — `claude setup-token` → repo secret → re-run canary.
+1. **Merge P7 branch to main** (or approve a PR).
+2. **Delete `claude/website-visual-redesign-upnl05`** from GitHub (fully merged).
+3. **Visual sign-off** on P7 surfaces in `astro preview` — provenance dots, divergences
+   block, calendar badges, colophon self-check date.
 
 ## Where we left off
 
-**Session #17 (2026-07-30):** Merged `claude/research-trial-results-h32hlk` to main
-(fast-forward, 185 files). Deleted the local branch. Remote deletion blocked by the git
-proxy — both stale remote branches (`research-trial-results` + `website-visual-redesign`)
-are fully merged and flagged for creator deletion from GitHub UI. Main pushed and current.
+**Session #18 (2026-07-30):** Built and shipped P7 differentiation surfaces. Fixed CSS
+type-scale violations (replaced `--text-muted` with `--muted` to avoid the `--text-*`
+font-size token namespace). Added divergences scaffold entry with phase + seed item to
+pass scaffold contract tests. All 980 tests green, build clean. Pushed to
+`claude/research-trial-results-h32hlk`.
 
-**Re-prompt the creator with:** "Everything is on main — both feature branches merged, 980
-tests green. Two remote branches need you to delete from GitHub UI (both fully merged, zero
-risk): `claude/research-trial-results-h32hlk` and `claude/website-visual-redesign-upnl05`.
-Next session options: (1) Japan cover sign-off — I'll research Commons koyo candidates +
-the split-cover variant, (2) rotate the OAuth token for the pipeline's first real end-to-end
-proof, or (3) P7 differentiation surfaces if you want to push the product layer forward."
+**Re-prompt the creator with:** "P7 is done — provenance popovers on venues, divergences
+block with 5 Japan-specific corrections, calendar badges on constrained days, and the
+self-check date in the colophon. Branch pushed, 980 tests green. Ready to merge to main
+and do a visual check in `astro preview`."
