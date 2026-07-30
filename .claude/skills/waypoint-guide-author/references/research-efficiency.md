@@ -52,6 +52,9 @@ execute the plan, don't wander.
 - **Search precisely.** `site:` queries on the official domain; the venue's native-language name
   (the local-language official page is often the true T0 — fetch it and translate, don't keep
   searching English).
+- **Video transcripts are cheap Pass B leads.** `yt-dlp` pulls a YouTube transcript with zero
+  media download (rules + the ~4-per-pass cap: `social-leads.md`). A failed pull is bot-blocked:
+  mark and move on — transcripts are an aide, never a dependency.
 
 ## Fetch discipline — learned from this repo's own audits
 

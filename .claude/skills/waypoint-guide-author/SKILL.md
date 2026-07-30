@@ -123,6 +123,9 @@ obvious pick a tourist trap, and what do locals do instead? What's the non-obvio
 the authentic version of the experience the guidebooks flatten? **Pass B's finds are T2 leads —
 each must be verified against a primary source before it enters the guide.** Authenticity never
 smuggles in an unverified fact; it changes *what* you research, not the bar it clears.
+Video/social sourcing is part of this pass's toolkit — YouTube transcripts via `yt-dlp`
+(never media) and web-indexed TikTok/IG roundups: **`references/social-leads.md`** (binding:
+leads-only, same T0 bar, viral = crowd warning, failures never block the pass).
 
 ### Reconcile → ONE guide, with a ledger
 Merge the two passes item by item into the single guide, and record the merge in the

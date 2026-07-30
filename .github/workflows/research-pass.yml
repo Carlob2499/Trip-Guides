@@ -205,6 +205,16 @@ jobs:
           echo "[budget] $SLUG — attempt $ATTEMPTS of $CAP, proceeding."
           echo "should_run=true" >> "$GITHUB_OUTPUT"
 
+      # Social-leads aide (skill references/social-leads.md): yt-dlp lets Pass B pull YouTube
+      # TRANSCRIPTS (never media) as T2 leads. Best-effort BY DESIGN — transcripts are an aide,
+      # not a dependency: if this install fails, or YouTube blocks the runner's IP at pull time,
+      # the pass runs identically without them (the skill's bot-blocked doctrine). That is why
+      # continue-on-error is correct here and nothing downstream checks this step's outcome.
+      - name: Install yt-dlp (transcript lead sourcing — best-effort)
+        if: steps.budget.outputs.should_run == 'true'
+        continue-on-error: true
+        run: python3 -m pip install --upgrade yt-dlp
+
       # P1 (F1/F2): the "before" half of the run-integrity gate. Captured AFTER the attempt-budget
       # step's own commit, so the agent's own output is the only thing that can move these numbers.
       - name: Pre-agent snapshot
@@ -407,6 +417,13 @@ jobs:
             RESEARCH EFFICIENCY IS BINDING (references/research-efficiency.md): scripts before web;
             go direct-to-primary and batch by VENUE; max ~2 search rounds per fact then flag/omit;
             bot-blocked → mark and move on; aggregators are leads, never citations.
+
+            VIDEO/SOCIAL LEADS (references/social-leads.md, binding): yt-dlp is installed
+            best-effort on this runner — pull YouTube TRANSCRIPTS only (--skip-download, max ~4
+            per pass) as T2 leads for the resident/vlog angle; a failed install or pull is
+            bot-blocked (mark and move on, never retry-loop). TikTok/Instagram: web-indexed
+            roundups ONLY (no scraping, no APIs); viral status = a crowd warning to verify,
+            never a citation, and never "locals" phrasing without ≥2 independent sources.
 
             RESERVED SEARCH BUDGET (R5): spend at least 2 searches on PHRASES / LANGUAGE useful
             for this destination (local slang, ordering food, transit terminology — the kind of
