@@ -622,25 +622,11 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           })();
 
         } catch (e) { fail("local time", e); }
-        try {
-          /* ── 10. OFFLINE-READY BADGE ────────────────────────────────── */
-          (function () {
-            if (!("caches" in window)) return;
-            // Match any "tripguides-*" cache so a version bump in sw.js (v3→v4)
-            // never silently breaks this badge.
-            caches.keys().then(function (keys) {
-              if (!keys.some(function (k) { return k.indexOf("tripguides-") === 0; })) return;
-              var statsEl = document.getElementById("guideStats");
-              if (!statsEl) return;
-              var pill = document.createElement("span");
-              pill.className = "gstat gstat-offline";
-              pill.title = "This guide is cached and readable without a connection";
-              pill.textContent = "✓ Works offline";
-              statsEl.appendChild(pill);
-            }).catch(function () {});
-          })();
-
-        } catch (e) { fail("offline badge", e); }
+        /* ── 10. OFFLINE-READY BADGE — RETIRED 2026-07-30 ─────────────────
+           It read "✓ Works offline" identically on every guide, and it only ever proved
+           that SOME tripguides-* cache existed — not that THIS page was in it. The
+           honest version now lives in the colophon (offline-pill.js), where it matches
+           this page against the cache and appears only when the answer is yes. */
         try {
           /* ── 11+12. LIVE DATA (exchange rate + weather strip) ───────────
              Both moved to src/features/live-data/ — ~285 lines of fetch/validate/

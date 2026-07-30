@@ -24,4 +24,19 @@
   window.addEventListener("online", sync);
   window.addEventListener("offline", sync);
   sync();
+
+  /* Colophon confirmation — "this page is saved on your phone", written only when the
+     service worker's cache ACTUALLY holds it. The colophon already promises offline
+     works once opened; this reports whether it has happened yet, which is the fact a
+     traveller about to lose signal wants. An unverifiable claim stays unwritten. */
+  var savedEl = document.getElementById("offlineSaved");
+  if (savedEl && window.caches && navigator.serviceWorker) {
+    caches.match(location.pathname, { ignoreSearch: true })
+      .then(function (hit) {
+        if (!hit) return;
+        savedEl.textContent = "✓ Saved on this device — this page opens without a connection.";
+        savedEl.classList.add("on");
+      })
+      .catch(function () { /* no cache API access — the promise line above still stands */ });
+  }
 })();

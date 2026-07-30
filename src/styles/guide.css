@@ -489,7 +489,8 @@ body{overflow-x:clip}
 /* past trip — muted, unobtrusive */
 .gstat-past{color:var(--muted);border-color:var(--rule)}
 /* offline ready — green = good-to-go */
-.gstat-offline{color:var(--green);border-color:var(--green)}
+/* .gstat-offline retired 2026-07-30 with the "✓ Works offline" pill — the colophon's
+   .offline-saved line (touch.css) is its honest, per-page replacement. */
 /* local time — muted, always visible */
 .gstat-time{color:var(--muted)}
 /* live currency rate — muted, fades in on fetch */

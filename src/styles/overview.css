@@ -7,15 +7,19 @@
 /* Tile row — centered under the hero (the meta band reads as an intentional
    Explora-style stat row, not a left-hugging fragment). */
 /* M2/CLS: nowrap + horizontal scroll, not wrap — JS appends pills after paint (countdown,
-   local-time, offline badge); wrapping to a second row shifts every element below it. A
-   row that can only ever scroll, never grow taller, cannot contribute to CLS. */
+   local-time); wrapping to a second row shifts every element below it. A row that can
+   only ever scroll, never grow taller, cannot contribute to CLS. */
 /* `safe center` — plain `center` clips the FIRST pill unreachably once the row
    overflows (centered overflow hangs off both edges; you can only scroll to one). */
-.guide-stats{display:flex;flex-wrap:nowrap;overflow-x:auto;justify-content:safe center;gap:.55rem;margin:1.05rem auto .2rem;padding-inline:.75rem;scrollbar-width:none;
+.guide-stats{display:flex;flex-wrap:nowrap;overflow-x:auto;justify-content:safe center;gap:.4rem;margin:.9rem auto .2rem;padding-inline:.75rem;scrollbar-width:none;
   -webkit-mask-image:linear-gradient(to right,transparent 0,#000 12px,#000 calc(100% - 12px),transparent);
   mask-image:linear-gradient(to right,transparent 0,#000 12px,#000 calc(100% - 12px),transparent)}
 .guide-stats::-webkit-scrollbar{display:none}
-.guide-stats .gstat{display:flex;flex-direction:column;justify-content:center;gap:.1rem;min-height:58px;padding:.55rem .95rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md);font-family:var(--font-data);font-size:var(--text-control);font-weight:600;letter-spacing:.02em;color:var(--ink)}
+/* Sized down 2026-07-30 with the cut from six pills to three. At 58px tall and .95rem of
+   side padding, six chunky blocks scrolled sideways on a phone and pushed the first real
+   content below the fold; three live facts at 36px sit on one line at 320px and read as a
+   meta line rather than a second navigation bar. */
+.guide-stats .gstat{display:flex;flex-direction:column;justify-content:center;gap:.1rem;min-height:36px;padding:.35rem .7rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md);font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.02em;color:var(--ink)}
 .guide-stats .gstat-countdown,.guide-stats .gstat-active{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:700}
 .guide-stats .gstat-warning{border-color:var(--accent);color:var(--accent-ink)}
 .guide-stats .gstat-past{color:var(--muted)}

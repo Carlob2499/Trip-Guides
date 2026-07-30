@@ -28,6 +28,9 @@ import "../styles/wizard.css";
 import "../styles/transitions.css";
 import "../styles/scroll-motion.css";
 import "../styles/hub-motion.css";
+// touch.css LAST: its @media(hover:none) block overrides hover rules from every
+// stylesheet above, and equal-specificity rules are decided by source order.
+import "../styles/touch.css";
 
 const guides = (await getCollection("guides")).sort((a, b) =>
   a.data.title.localeCompare(b.data.title)
@@ -177,6 +180,11 @@ const contourLayers = [
         } else if (s === "light") {
           document.documentElement.setAttribute("data-theme", "light");
         }
+        // Same breath as the theme (see GuideLayout): theme.js re-syncs this from the
+        // computed --bg, but only after first paint, so an installed dark-mode app
+        // flashed the light default in its status bar.
+        var tc = document.querySelector('meta[name="theme-color"]');
+        if (tc) tc.setAttribute("content", document.documentElement.getAttribute("data-theme") === "dark" ? "#14181c" : "#e9ebe3");
       })();
     </script>
     <!-- Overture state — set before paint so a return visitor never flashes the full intro

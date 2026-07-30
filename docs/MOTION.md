@@ -252,3 +252,38 @@ Reduced-motion never sees an entrance. Descriptors ship alongside — creator-si
 content, schema-guarded so a group rename errors instead of silently orphaning its line.
 (Voice standard revised 2026-07-28: rare + informational-only, block-types.md — the
 original "warmth in the descriptors" framing is superseded.)
+
+## Mobile navigation — the gestures (shipped 2026-07-30, `docs/PLAN_MOBILE_NAV.md`)
+
+Below 900px the top chip strip is hidden, so the bottom bar IS the guide's navigation.
+Everything here is gesture motion, which follows a different rule from the entrance motion
+above: an entrance plays once and is decoration, while a gesture is a *conversation* — it
+has to answer continuously, be interruptible, and be reversible. Hence "tracks the finger"
+appears four times below and "animates" appears none.
+
+- **Swipe between groups** (`features/mobile-nav/ui/swipe-tabs.js`) — content translates
+  under the thumb at ~0.9:1, damped to a 56px rubber-band at the first/last group; the
+  bar's indicator drifts off its slot and fades, because the destination usually is not
+  one of the two promoted slots and sliding it *toward* one would point at the wrong
+  group. Release commits past 30% of the width or a 0.5px/ms flick, else springs back.
+  Axis-locked at |dx| > |dy| && 24px, and a touch that commits to vertical is dropped for
+  the rest of that gesture rather than re-armed mid-fling. Reduced motion: commits
+  instantly, tracks nothing.
+- **Yielding chrome** (`ui/yield-chrome.js`) — reading down slides the bar away and
+  squeezes the topbar to a strip carrying the current group + destination local time; the
+  buttons never leave. Thresholds live in `model/yield.ts` because the naive version was
+  wrong: page jitter (scroll anchoring rebounds ~2px after every settled scroll) reset the
+  accumulator, so intent has to clear a threshold in both directions.
+- **Day scrubber** (`ui/day-scrub.js`) — the existing `#dayScrub` rail compacts to fit
+  (4–12 days) and takes a drag along its own axis, the date riding a bubble under the
+  thumb. Deliberately NOT the vertical edge rail the plan drew: the phone itinerary is a
+  horizontal deck, and a vertical rail would ask for a downward drag to move right.
+- **Sheet physics** (`src/scripts/sheet-drag.js`) — the groups and SOS sheets follow the
+  thumb down and dismiss past 25% of their own height or a 0.6px/ms flick. A drag starting
+  inside a scrolled list belongs to that list.
+- **Resume chip** (`ui/resume.js`) — on a fresh arrival only, an offer (not a redirect)
+  back to where the reader stopped. Nothing remembered, nothing rendered.
+
+Haptics ride the one existing `tapHaptic()` util (`src/scripts/util.js`) — swipe commit,
+bar tap, scrub step, sheet dismiss, checklist tick. Android vibrates ~9ms; iOS Safari has
+no Vibration API and silently no-ops. One grep to remove.

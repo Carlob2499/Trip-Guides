@@ -1,0 +1,68 @@
+/* === TOUCH + STANDALONE ======================================================
+   Imported LAST on every page. Both blocks below are overrides that have to beat
+   rules spread across a dozen earlier stylesheets, and equal-specificity rules are
+   decided by source order — putting these anywhere else would silently lose. */
+
+/* ── Latched hover ──────────────────────────────────────────────────────────
+   On a touch device there is no pointer to leave an element, so :hover sticks after
+   a tap and stays until something else is tapped. A card left translated up reads as
+   SELECTED — the page appears to have remembered a choice nobody made. The colour
+   half of a hover is harmless (it reads as a press); the TRANSFORM half is what lies,
+   so only that is cancelled, and only where a pointer can't actually hover. */
+@media (hover: none) {
+  .ab-cta-btn:hover,
+  .next-cta:hover,
+  .next-cta:hover .next-cta-arrow,
+  .topbar-home:hover svg,
+  .gtab:hover,
+  .card:hover,
+  .hubcard:hover,
+  .hubcard:hover .hubcard-img,
+  .hubcard:hover .hubcard-cover-initial,
+  .hub-hero:hover .hub-hero-cta,
+  .dchip:hover,
+  .botslot:hover,
+  .foot-modify-pill:hover,
+  .share-dl:hover { transform: none; }
+}
+
+/* ── Installed to the home screen ───────────────────────────────────────────
+   A standalone window has no address bar to pull down, so the elastic overscroll at
+   the top of the page is pure noise — and at the bottom it fights the sheet gestures.
+   Scoped to display-mode:standalone so the browser tab keeps its native rubber-band. */
+@media (display-mode: standalone) {
+  html { overscroll-behavior-y: none; }
+}
+
+/* ── Resume chip (src/features/mobile-nav/ui/resume.js) ─────────────────────
+   Sits between the cover and the content on a fresh arrival, offering the way back to
+   where the reader stopped. It is an OFFER, not a redirect — the cover still opens the
+   guide, and the chip removes itself once it's used or scrolled past. Full-width and
+   pill-shaped so it reads as a control, not a notice (clickability must be obvious). */
+.resume-chip{
+  display:flex;flex-direction:column;align-items:flex-start;gap:.1rem;
+  width:calc(100% - 2rem);max-width:44rem;margin:.9rem auto -.2rem;
+  min-height:48px;padding:.55rem .95rem;text-align:left;
+  background:color-mix(in srgb,var(--accent) 12%,var(--card));
+  border:1px solid var(--accent);border-radius:999px;cursor:pointer;
+  transition:transform .16s var(--ease-out-expo),background .16s ease;
+}
+.resume-chip:active{transform:scale(.98)}
+.resume-chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.resume-chip-lead{
+  font-family:var(--font-data);font-size:var(--text-micro);text-transform:uppercase;
+  letter-spacing:var(--tracking-micro);color:var(--muted);
+}
+.resume-chip-dest{
+  font-family:var(--font-display);font-weight:640;font-size:var(--text-control);
+  color:var(--accent-ink);max-width:100%;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+@media (prefers-reduced-motion: reduce){.resume-chip{transition:none}.resume-chip:active{transform:none}}
+@media print{.resume-chip{display:none}}
+
+/* The colophon's offline confirmation — written only when this page is genuinely in
+   the service worker's cache (src/scripts/offline-pill.js). It is a STATE, not a
+   promise: no cache entry, no line. */
+.offline-saved { display: none; color: var(--green); font-weight: 600; }
+.offline-saved.on { display: inline; }

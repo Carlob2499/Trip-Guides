@@ -53,16 +53,20 @@ test.describe("offline confidence", () => {
     await context.setOffline(false);
   });
 
-  test('the "Works offline" badge (guide-ui.js §10) reflects REAL Cache Storage state, not navigator.onLine', async ({ page }) => {
+  test("the colophon's offline confirmation reflects REAL Cache Storage state, not navigator.onLine", async ({ page }) => {
+    // Replaces the "✓ Works offline" masthead pill, retired 2026-07-30: it read
+    // identically on every guide and only ever proved that SOME tripguides-* cache
+    // existed — not that THIS page was in it. The colophon line matches this page's own
+    // path against the cache, so the claim is about the page making it.
     // First visit, before anything is cached: honestly absent — no cache exists yet.
     await page.goto(BASE + "/guides/korea/", { waitUntil: "networkidle" });
-    await expect(page.locator(".gstat-offline")).toHaveCount(0);
-    // Once the worker has installed and this load is a controlled reload, the badge
-    // reads Cache Storage directly (not the network-status heuristic offline-pill.js
-    // uses) and shows up while still fully online.
+    await expect(page.locator(".offline-saved.on")).toHaveCount(0);
+    // Once the worker has installed and this load is a controlled reload, the line reads
+    // Cache Storage directly (not the network-status heuristic offline-pill.js uses for
+    // the pill) and shows up while still fully online.
     await page.evaluate(() => navigator.serviceWorker.ready);
     await page.reload({ waitUntil: "networkidle" });
-    await expect(page.locator(".gstat-offline")).toContainText("Works offline");
+    await expect(page.locator(".offline-saved.on")).toContainText("Saved on this device");
   });
 
   for (const slug of SLUGS) {

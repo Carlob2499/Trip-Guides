@@ -16,7 +16,7 @@
     a test or a future backend swaps the sink without touching ui/. */
 
 import { initBotBar } from "./ui/botbar.js";
-import { initResume, initSectionMemory } from "./ui/resume.js";
+import { initResume, initSectionMemory, initResumeChip } from "./ui/resume.js";
 import { initSwipeTabs } from "./ui/swipe-tabs.js";
 import { initYieldChrome } from "./ui/yield-chrome.js";
 import { initDayScrub } from "./ui/day-scrub.js";
@@ -56,6 +56,7 @@ export function initMobileNav(cfg, store) {
   // doesn't (a desktop session still records where you were, for the next phone one).
   initSectionMemory(ctx);
   initResume(ctx);
+  initResumeChip(ctx);
   if (bar) initBotBar(ctx);
   // After the bar, which publishes the indicator the gesture drives.
   initSwipeTabs(ctx);

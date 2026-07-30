@@ -53,6 +53,9 @@ import "../styles/scroll-motion.css";
 import "../features/firebase/styles.css";
 import "../features/route-opt/styles.css";
 import "../features/budget-pact/styles.css";
+// touch.css LAST: its @media(hover:none) block overrides hover rules from every
+// stylesheet above, and equal-specificity rules are decided by source order.
+import "../styles/touch.css";
 import { derivePins } from "../lib/map-pins";
 
 // Build-time public-holiday data (Nager.Date), written by scripts/fetch-holidays.mjs
@@ -157,8 +160,10 @@ function flatSections(secs: any[]): any[] {
   return secs.flatMap((s: any) => s.sections ? flatSections(s.sections) : [s]);
 }
 const _flat = flatSections(guide.sections || []);
+// dayCount drives the story rail's day segments. `sightCount` went with the "{n} sights"
+// pill on 2026-07-30 — it had no other consumer, and an inventory count is not a fact a
+// traveller can act on.
 const dayCount   = _flat.filter((s: any) => s.type === "days"  ).reduce((n: number, s: any) => n + (s.items?.length || 0), 0);
-const sightCount = _flat.filter((s: any) => s.type === "sights").reduce((n: number, s: any) => n + (s.items?.length || 0), 0);
 
 // Masthead hero image = the guide's own COVER art when set, else its first sights photo
 // (docs/MOTION.md). This is the SAME image the hub card shows — the shared element
@@ -346,6 +351,11 @@ const tripSummary = buildSummary(guide);
         } else if (s === "light") {
           document.documentElement.setAttribute("data-theme", "light");
         }
+        // Tint the browser/PWA chrome in the SAME breath. theme.js re-syncs this from the
+        // computed --bg later, but "later" is after first paint: installed to the home
+        // screen on a dark phone, the status bar flashed the light default first.
+        var tc = document.querySelector('meta[name="theme-color"]');
+        if (tc) tc.setAttribute("content", document.documentElement.getAttribute("data-theme") === "dark" ? "#14181c" : "#e9ebe3");
       })();
     </script>
   </head>
@@ -637,9 +647,23 @@ const tripSummary = buildSummary(guide);
           tabindex so keyboard users can actually scroll it (axe scrollable-region-focusable).
           No aria-label: a plain div's implicit role is "generic", which ARIA prohibits naming
           (axe's aria-prohibited-attr correctly caught this on the first attempt). */}
+      {/* LIVE FACTS ONLY (2026-07-30). A JSX comment, not an HTML one — Astro ships
+          `<!-- -->` to every guide page, and this note is for readers of the source.
+
+          The row used to carry six pills and scrolled sideways on a phone, so half of it
+          was information the reader never saw. Three were cut for saying nothing this
+          guide doesn't already say better:
+            · "{n} days"       — the eyebrow above reads "Jul 8–15, 2026" and the dek
+                                 opens "Eight days based in Seoul". A third telling.
+            · "{n} sights"     — an inventory count; nothing a traveller can act on.
+            · "Works offline"  — identical on every guide and a promise about the site,
+                                 not a fact about this page. Its honest per-page form
+                                 ("Saved on this device") now sits in the colophon,
+                                 beside the instruction that earns it.
+          What's left all changes on its own and differs per guide: the countdown (daily),
+          the exchange rate (live), and the destination clock (per minute). Both remaining
+          pills are injected by guide-ui.js. */}
       <div class="guide-stats" id="guideStats" tabindex="0">
-        {dayCount   > 0 && <span class="gstat">{dayCount} days</span>}
-        {sightCount > 0 && <span class="gstat">{sightCount} sights</span>}
         {verifiedWarning && <span class="gstat gstat-warning">{verifiedWarning}</span>}
         <!-- Live currency rate injected by JS when fetch succeeds -->
         <span class="gstat gstat-rate" id="liveRatePill" hidden></span>
@@ -821,6 +845,9 @@ const tripSummary = buildSummary(guide);
 
       <div class="colo-foot">
         <p class="colo-notes">
+          {/* offline-pill.js writes the ✓ ONLY once this page is genuinely in the service
+              worker's cache — a state, not a promise. No cache entry, no line. */}
+          <span class="offline-saved" id="offlineSaved"></span>
           <span class="offline-note">Add this to your home screen and it works offline once opened — only the embedded maps need a connection.</span>
           {" "}
           <span class="foot-telemetry">This guide counts anonymous tab opens (no names, no personal data) to learn which sections travelers actually use.</span>

@@ -20,7 +20,37 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (updated 2026-07-30, session #19 — skill = single source of truth; vibe chain; About page)
+## Snapshot (updated 2026-07-30, session #20 — mobile nav shipped end to end)
+
+**`docs/PLAN_MOBILE_NAV.md` executed in full (A + B + C).** Below 900px the guide is now
+navigated from the thumb, not the top of the screen:
+- **New sealed silo `src/features/mobile-nav/`** — `model/` (rank · gesture · yield · scrub,
+  all pure + tested), `ui/` (botbar · resume · swipe-tabs · yield-chrome · day-scrub),
+  `index.js` with an injectable store gateway.
+- **Bottom TAB bar**: current group · most-used other group · Groups (sheet) · Today · Map.
+  Ranking is **per-device localStorage**, not telemetry (that silo is write-only on the
+  client and is a cross-visitor aggregate). The bar never switches tabs itself — it clicks
+  the real `.gtab`, so scroll-memory / scroll-spy / telemetry / saved-tab all run through
+  one path. Responsive 320 → tablet (floating pill ≥600px).
+- **Groups sheet** rows carry a resume line ("you were at ⟨section⟩") for groups actually
+  read; nothing remembered renders nothing.
+- **Gestures**: finger-tracked swipe between groups (rewritten from itinerary's discrete
+  72px version and MOVED into this silo), yielding chrome, day-rail drag-scrub, shared
+  sheet drag-to-dismiss (`src/scripts/sheet-drag.js`), haptics on the existing `tapHaptic`.
+- **Masthead pill row cut 6 → 3** (creator, mid-session): only live per-guide facts survive
+  (countdown · exchange rate · destination clock); 58px → 36px, no sideways scroll at 320px.
+  `✓ Works offline` was replaced by an honest per-page `✓ Saved on this device` in the
+  colophon, matched against the real cache.
+
+**Two bugs only running it could find** (boundary check #2 — both now regression-tested):
+scroll-anchor jitter (~2px rebound after every settled scroll) stopped the chrome from ever
+yielding; and the day scrub landed on the wrong card because day-rail measured its deck
+delta mid-animation (it now exposes `goTo(idx, instant)`).
+
+**1088 tests green** (was 1018), build clean, verified in `astro preview` at 320 / 375 /
+768 / desktop, dark + light, across all four guides. `dist/` swept for every retired token.
+
+## Snapshot (2026-07-30, session #19 — skill = single source of truth; vibe chain; About page)
 
 **Skill modernization SHIPPED (creator GO on all 4 parts):**
 - `waypoint-guide-author` is now the **single source of truth**: all six `research-pass.yml`
@@ -58,10 +88,8 @@ the learnings silo — process evidence ≠ lived experience).
 
 ## Queued plan
 
-- **`docs/PLAN_MOBILE_NAV.md`** (2026-07-30, creator-approved architecture): mobile bottom
-  tab bar + groups sheet (with scroll-memory resume lines), swipe-between-tabs, yielding
-  chrome, day scrubber, sheet physics + haptics. Executing session: answer the plan's 4
-  clarifying questions first, then Phase A before B. Model: Opus (build), not Fable.
+- *(none — `PLAN_MOBILE_NAV.md` shipped in session #20; its "As built" section records the
+  three places the plan was wrong and why, which is the part worth reading.)*
 
 ## Pending from session #18b (revise pipeline — still open)
 
@@ -80,12 +108,16 @@ the learnings silo — process evidence ≠ lived experience).
 
 ## Where we left off
 
-**Session #19 (2026-07-30):** adversarial critique of the guide-author skill → creator GO →
-shipped all four modernization parts (commits `8ddfd14`, `6729d61`). The skill now IS the
-pipeline's law; prompts can't rot; judgment leaves required artifacts or the run fails.
+**Session #20 (2026-07-30):** executed `PLAN_MOBILE_NAV.md` end to end — four commits, a new
+sealed silo, 70 new tests, and a masthead pill cut the creator asked for mid-session. Every
+piece was verified by driving it in `astro preview` (synthetic pointer/touch events), which
+is how both real bugs surfaced; neither would have failed a unit test.
 
-**Re-prompt the creator with:** "Fable headless is PROVEN (model-smoke run 30533886628);
-japan is fully verified so a japan dispatch NO-OPS at the budget step — the full live proof
-of the modernized chain (pointer prompts, high effort, vibe chain, all five gate families)
-waits for the next guide you actually want. When one exists: dispatch Actions → Research
-pass → <slug>, watch the run, triage from the run report on Opus."
+**Re-prompt the creator with:** "Mobile nav is fully shipped and live — the one thing no
+tooling here can check is how the four gestures FEEL on your actual phone (swipe weight,
+whether the chrome yields too eagerly at 80px, whether the day-scrub bubble is readable
+mid-drag, haptic strength on Android). Open a guide on your phone and tell me what feels
+off; the thresholds are all named constants in `src/features/mobile-nav/model/`, so tuning
+is a one-line change each. Separately still open: the research pipeline's full live proof
+waits for the next guide you actually want (japan NO-OPS at the budget step), and draft
+PR #28 needs review/merge."
