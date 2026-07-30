@@ -2,6 +2,10 @@
  * Real-shaped seeds for the itinerary model tests — representative touch
  * gestures and a day-card layout, so the numbers under test read like the
  * ones the UI actually measures.
+ *
+ * The swipe seeds now serve STORY MODE's day deck only. The guide's tab swipe left
+ * this silo on 2026-07-30 for src/features/mobile-nav, where it was rewritten to track
+ * the finger and carries its own thresholds.
  */
 
 /* Committing swipes (|dx|≥72, |dy|<46, dt<650). dx<0 = leftward = next. */

@@ -17,10 +17,13 @@
 
 import { initBotBar } from "./ui/botbar.js";
 import { initResume, initSectionMemory } from "./ui/resume.js";
+import { initSwipeTabs } from "./ui/swipe-tabs.js";
+import { initYieldChrome } from "./ui/yield-chrome.js";
 
 export {
   parseCounts, recordOpen, rankOrder, promoted, seat, slotLabel, resumeLine,
 } from "./model/rank";
+export { axisLocked, resolveCommit, damp, atEdge } from "./model/gesture";
 
 /** The default gateway — plain localStorage, every access already fail-safe. */
 export const localStore = {
@@ -43,12 +46,20 @@ export function initMobileNav(cfg, store) {
   var tabs = document.getElementById("guideTabs");
   var bar = document.querySelector(".botbar");
   if (!tabs || !order.length) return;
-  var ctx = { order: order, storeKey: storeKey, tabs: tabs, bar: bar, store: store || localStore };
+  var ctx = {
+    order: order, storeKey: storeKey, tabs: tabs, bar: bar,
+    destTz: (cfg && cfg.destTzIana) || null,
+    store: store || localStore,
+  };
   // Section memory feeds the sheet's resume lines and must run even where the bar
   // doesn't (a desktop session still records where you were, for the next phone one).
   initSectionMemory(ctx);
   initResume(ctx);
   if (bar) initBotBar(ctx);
+  // After the bar, which publishes the indicator the gesture drives.
+  initSwipeTabs(ctx);
+  // Chrome only yields where it is in the way — the bar's own breakpoint.
+  if (bar && window.matchMedia("(max-width: 899px)").matches) initYieldChrome(ctx);
 }
 
 // Self-boot on a guide page (the import-to-boot convention the other silos use).

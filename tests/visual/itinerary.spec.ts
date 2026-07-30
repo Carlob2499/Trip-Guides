@@ -7,7 +7,11 @@
      · spine                     — a reading-rail tick drives the real tab (≥1100px)
      · day-rail                  — a day chip activates + is the day nav
      · print-day                 — per-day + full-pack print buttons exist
-     · swipe-nav                 — a touch swipe on #content pages the tab (mobile)
+     · swipe-tabs                — a touch swipe on #content pages the tab (mobile).
+       That gesture moved to src/features/mobile-nav on 2026-07-30 and was rewritten
+       to track the finger; the test stays HERE because what it guards is the listener
+       collision on #content between the swipe and this cluster, which is unchanged by
+       the move — and it must keep passing across it.
    Deterministic clock + no network (mirrors the visual/a11y suites). */
 import { test, expect, type Page } from "@playwright/test";
 
@@ -90,11 +94,11 @@ test.describe("desktop", () => {
   });
 });
 
-// ── Mobile (swipe-nav arms on coarse-pointer / ≤899px) ────────────────────────
+// ── Mobile (swipe-tabs arms on coarse-pointer / ≤899px) ──────────────────────
 test.describe("mobile", () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
 
-  test("swipe-nav: a leftward touch swipe on #content advances one tab", async ({ page }) => {
+  test("swipe-tabs: a leftward touch swipe on #content advances one tab", async ({ page }) => {
     await open(page, "#grp-1"); // Essentials — no horizontal day deck to own the gesture
     expect(await activeTab(page)).toBe("1");
     await page.evaluate(() => {

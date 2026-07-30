@@ -68,6 +68,36 @@
   /* Phase B drives this from a finger; a transition would fight the drag. */
   .botbar-dragging .botbar-ind{transition:none}
 
+  /* ── Yielding chrome (ui/yield-chrome.js) ────────────────────────────────
+     Reading down slides the bar away and squeezes the topbar to a strip; any upward
+     intent, or simply stopping, brings both back. The topbar CONDENSES rather than
+     leaving — SOS and search must be reachable at every scroll position — and trades
+     the wordmark for the two facts that scrolled out of reach: which group you're in,
+     and the time where you're going. */
+  .botbar{transition:transform .34s var(--ease-out-expo)}
+  body.chrome-yield .botbar{transform:translateY(130%)}
+  @media(min-width:600px){body.chrome-yield .botbar{transform:translateX(-50%) translateY(160%)}}
+  .topbar{transition:padding .28s var(--ease-out-expo)}
+  .topbar-ctx{display:none;align-items:baseline;gap:.45rem;min-width:0;flex:1;margin-left:.55rem}
+  .topbar-ctx b{font-family:var(--font-display);font-weight:640;font-size:var(--text-control);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .topbar-ctx-time{font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);flex:none;font-variant-numeric:tabular-nums}
+  body.chrome-yield .topbar{padding-top:.18rem;padding-bottom:.18rem}
+  body.chrome-yield .topbar-wordmark{display:none}
+  body.chrome-yield .topbar-ctx{display:flex}
+  @media(prefers-reduced-motion:reduce){
+    /* Reduced motion still wants the space back — it just doesn't want the slide. */
+    .botbar,.topbar{transition:none}
+  }
+
+  /* ── Swipe between groups (ui/swipe-tabs.js) ─────────────────────────────
+     The transform is written per-frame from the finger, so the element must NOT
+     carry a transition while dragging — `.mn-swiping` removes it — and gets one
+     back for the spring-back and the direction-aware arrival. will-change is set
+     only while a gesture is live: leaving it on would keep every guide's content
+     in its own compositor layer for the whole session. */
+  #content{transition:transform .34s var(--ease-out-expo),opacity .34s ease}
+  #content.mn-swiping{transition:none;will-change:transform}
+
   /* ── Small phones (≤359px: iPhone SE 1st gen, Galaxy A-series compacts) ──
      Five slots at 320px leaves ~60px each. Buy the room from the gutters, the
      tracking and the icon — never from the type step (--text-nano is already the
