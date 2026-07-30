@@ -47,6 +47,26 @@ scroll-anchor jitter (~2px rebound after every settled scroll) stopped the chrom
 yielding; and the day scrub landed on the wrong card because day-rail measured its deck
 delta mid-animation (it now exposes `goTo(idx, instant)`).
 
+**Creator follow-ups, same session (all shipped):**
+- **Tools got their own bar slot.** Slot 2 was a second content group — which the Groups
+  sheet already reaches in one tap, while a tool panel took three. It now shows the tool
+  THIS device opens most, defaulting to **Split**: the budget calculator is one tap from
+  anywhere. Bar reads `Days · $ Split · Groups · Today · Map`.
+- **The journey line's labels were drawn ON the rail.** `.jl-word` used
+  `bottom:calc(100% - 1.05rem)`, which measures DOWN from the stop's top — measured word
+  26–38px against a track at 27px. Now `bottom:calc(100% + 3px)`, and the track's offset
+  derives from the same `--jl-pad` variable so widening the label room can never leave the
+  rail behind. Affects every guide and every journey figure.
+- **The Days timeline no longer scrolls sideways on a phone** (it was 448px of track in a
+  350px column, with its own scrollbar and clipped `nowrap` labels): edge labels wrap,
+  stops shrink, alternate middle dates hide at 7+ days.
+- **The day rail's active chip keeps its date** ("01 Wed Jul 8"), so the compacted rail
+  still says which day you're on.
+- **Jet-lag calculator is no longer on every screen.** It's an arrival tool: it now renders
+  only on the group whose own content covers jet lag / landing (`data-jl-group`, derived at
+  build from section titles) and not at all once the trip `isPast`. Verified: japan (77
+  days out) shows it on group 0 only; korea (22 days past) shows it nowhere.
+
 **1088 tests green** (was 1018), build clean, verified in `astro preview` at 320 / 375 /
 768 / desktop, dark + light, across all four guides. `dist/` swept for every retired token.
 

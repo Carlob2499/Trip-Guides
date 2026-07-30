@@ -45,6 +45,15 @@
   }
   /* Active group: filled, accent-bordered, ink-weight label. A tinted fill (not a bare
      colour change) keeps "which one am I on" legible in both themes and at 320px. */
+  /* The tool slot carries an icon instead of a station dot — it is not a stop on the
+     journey, and dotting it would put it on a rail it isn't on. All five icons ship and
+     the swap is a `hidden` toggle, so changing tool costs nothing at runtime. */
+  /* Explicit display, NOT the `hidden` attribute: the UA's `[hidden]{display:none}` does
+     not reach SVG elements inside an HTML document, so all five icons rendered stacked
+     and the bar grew to fit them. */
+  .botslot-tool .bslot-ico{display:none;color:var(--muted)}
+  .botslot-tool .bslot-ico.bsi-on{display:block}
+  .botslot-tool.botslot-on .bslot-ico{color:var(--accent-ink)}
   .botslot-on{background:color-mix(in srgb,var(--accent) 14%,var(--card));border-color:var(--accent)}
   .botslot-on .bslot-txt{color:var(--accent-ink);font-weight:700}
   .botslot-on .bslot-mark{background:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent)}
@@ -119,9 +128,16 @@
      other to `auto`, which clipped the drag bubble to a sliver above the rail. Nothing
      overflows horizontally in fit mode anyway; that is what fit means. */
   .day-scrub.scrub-fit{overflow:visible;touch-action:pan-y;position:sticky}
-  .scrub-fit .dchip{flex:1 1 0;min-width:0;align-items:center;padding:.4rem .15rem;gap:0}
-  .scrub-fit .dchip-date{display:none}
+  .scrub-fit .dchip{flex:1 1 0;min-width:0;align-items:center;padding:.4rem .15rem;gap:0;transition:flex-grow .28s var(--ease-out-expo)}
   .scrub-fit .dchip-num{font-size:var(--text-control-sm)}
+  /* The ACTIVE chip expands and keeps its date; the rest are numerals. Dropping the date
+     from every chip was what made the rail fit, but it also meant the compacted rail
+     never said WHICH day you were on — and the timeline above it had to stay just to
+     answer that. One rail, still fitting, still dated. */
+  .scrub-fit .dchip-date{display:none;white-space:nowrap;font-size:var(--text-control-sm)}
+  .scrub-fit .dchip-active{flex-grow:2.4;flex-direction:row;align-items:baseline;gap:.35rem;padding-inline:.5rem}
+  .scrub-fit .dchip-active .dchip-date{display:inline}
+  @media(prefers-reduced-motion:reduce){.scrub-fit .dchip{transition:none}}
   .day-scrub.scrubbing{cursor:grabbing;user-select:none}
   .day-scrub.scrubbing .dchip{transition:none}
   .scrub-bubble{

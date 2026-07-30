@@ -79,6 +79,19 @@ order.forEach((g: string, ci: number) => (byG[g] || []).forEach((o: any) => {
   if (navMapSec === null && o.s.type === "map") { navMapCat = ci; navMapSec = o.i; }
 }));
 
+// The jet-lag calculator is an ARRIVAL tool, and it used to sit above EVERY tab of every
+// guide (creator, 2026-07-30: "quite useless and doesn't need to be there on every screen,
+// especially on the Days tab"). It now shows on ONE group — the one whose own content
+// already covers jet lag or arrival — and guide-ui hides it entirely once the trip is over.
+// Derived from the guide's own section titles; no new field, and a guide with no such
+// section keeps it on the first group, where planning lives.
+let jlGroup: number | null = null;
+order.forEach((g: string, ci: number) => (byG[g] || []).forEach((o: any) => {
+  const t = String(o.s.title ?? o.s.name ?? "");
+  if (jlGroup === null && /jet[\s-]?lag|arriv|when you land/i.test(t)) jlGroup = ci;
+}));
+const jlGroupIdx = jlGroup ?? 0;
+
 // Tab-bar display shortening: long compound group names crowd the tab strip
 // (Korea has 13 tabs; names run to 20 chars). Display-only — the full name
 // stays in aria-label, the sheet, the dial, and the chapter opener. Data is
@@ -708,7 +721,7 @@ const tripSummary = buildSummary(guide);
         estimate, and direction-specific tips.
       -->
       {destTzIana !== null && (
-        <div class="jl-wrap">
+        <div class="jl-wrap" data-jl-group={jlGroupIdx}>
           <button class="jl-toggle" id="jlToggle" type="button"
                   aria-expanded="false" aria-controls="jlPanel">
             <Icon name="plane" size={15} class="jl-icon" />
@@ -892,12 +905,25 @@ const tripSummary = buildSummary(guide);
           in Phase B it tracks a swiping finger — one element that moves, rather than a
           per-slot state that pops. */}
       <span class="botbar-ind" aria-hidden="true"></span>
-      {order.slice(0, 2).map((g, k) => (
-        <button class="botslot" type="button" data-slot={k} data-tab={k} aria-label={g}>
-          <span class="bslot-mark" aria-hidden="true"></span>
-          <span class="bslot-txt">{slotLabel(g)}</span>
-        </button>
-      ))}
+      {/* Slot 1 — the current content group (mobile-nav rewrites the label). */}
+      <button class="botslot" type="button" data-slot="0" data-tab="0" aria-label={order[0]}>
+        <span class="bslot-mark" aria-hidden="true"></span>
+        <span class="bslot-txt">{slotLabel(order[0])}</span>
+      </button>
+      {/* Slot 2 — the TOOLS slot (creator, 2026-07-30: "the tools should be their own tab
+          ... the Trip Split calculator is by far the most useful to have handy"). It was a
+          second content group, which the Groups sheet already reaches in one tap; a tool
+          panel was three. It shows whichever tool THIS device opens most, defaulting to the
+          budget split, and every icon ships so the swap is a class toggle, not a fetch. */}
+      <button class="botslot botslot-tool" type="button" data-slot="tool" data-tab="split"
+              aria-label="Budget calculator">
+        <Icon name="budget" size={17} class="bslot-ico bsi-split" />
+        <Icon name="vote"   size={17} class="bslot-ico bsi-vote" />
+        <Icon name="remind" size={17} class="bslot-ico bsi-remind" />
+        <Icon name="kit"    size={17} class="bslot-ico bsi-kit" />
+        <Icon name="learn"  size={17} class="bslot-ico bsi-learn" />
+        <span class="bslot-txt">Split</span>
+      </button>
       <button class="botmini botmini-groups" id="sheetOpen" type="button"
               aria-haspopup="dialog" aria-expanded="false">
         <Icon name="groups" size={17} />

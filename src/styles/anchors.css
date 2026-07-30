@@ -20,13 +20,21 @@
 .anch-scroll{overflow-x:auto;scrollbar-width:thin;padding-bottom:.2rem}
 
 /* The journey line — flex stations over an absolutely-positioned track. */
-.jline{display:flex;position:relative;min-width:min(100%, 520px);padding:1.35rem 0 1.5rem}
+/* --jl-pad is the room reserved ABOVE the track for the edge labels. The track's own
+   offset derives from it, so widening the label room can never leave the rail behind
+   (which is exactly what happened when the phone override raised the padding alone). */
+.jline{--jl-pad:1.35rem;display:flex;position:relative;min-width:min(100%, 520px);padding:var(--jl-pad) 0 1.5rem}
 .jline[data-n="2"],.jline[data-n="3"]{max-width:30rem}
-.jl-track{position:absolute;left:.4rem;right:.4rem;top:calc(1.35rem + 5px);height:2px;background:var(--rule2);transform-origin:left center}
+.jl-track{position:absolute;left:.4rem;right:.4rem;top:calc(var(--jl-pad) + 5px);height:2px;background:var(--rule2);transform-origin:left center}
 .jl-stop{position:relative;flex:1;min-width:56px;display:flex;flex-direction:column;align-items:center;gap:0}
 .jl-dot{width:11px;height:11px;border-radius:50%;background:var(--bg);border:2px solid var(--accent);box-sizing:border-box;z-index:1}
 .jl-word,.jl-date{font-family:var(--font-data);font-style:normal;text-align:center;line-height:1.25}
-.jl-word{position:absolute;bottom:calc(100% - 1.05rem);font-size:var(--text-nano);font-weight:600;color:var(--ink);white-space:nowrap}
+/* `bottom:100%` puts the word's BOTTOM edge on the stop's top edge, which is where the
+   dot starts — plus 3px of air. The old `calc(100% - 1.05rem)` measured 1.05rem DOWN from
+   the top instead, so the label rendered across the track and the dot it belongs to
+   (measured: word 26–38px, track 27px). The .jline's 1.35rem top padding is the room this
+   reserves; it was always there, the word just wasn't sitting in it. */
+.jl-word{position:absolute;bottom:calc(100% + 3px);font-size:var(--text-nano);font-weight:600;color:var(--ink);white-space:nowrap}
 .jl-date{margin-top:.45rem;font-size:var(--text-nano);color:var(--muted);font-variant-numeric:tabular-nums}
 /* Edge stops carry explicit .jl-first/.jl-last classes (the track span is the flex
    container's literal :first-child, so structural pseudo-classes can't reach them).
@@ -70,6 +78,29 @@
 .anch-in .jl-track{transition:transform .55s cubic-bezier(.2,.7,.2,1)}
 .anch-in .jl-dot{transition:opacity .3s ease,transform .3s cubic-bezier(.2,.7,.2,1);transition-delay:.3s}
 .anch-in .jl-word,.anch-in .jl-date,.anch-in .jl-label{transition:opacity .35s ease .45s}
+
+/* ── Phones: the journey line stops fighting the viewport ──────────────────
+   `min-width:min(100%,520px)` plus a 56px floor per stop meant an 8-day timeline was
+   448px of track inside a 350px column — so the figure grew its own horizontal
+   scrollbar (that grey bar under the dates), and the edge labels, being `nowrap`, were
+   clipped mid-word against it. A figure whose whole job is "the shape of the trip at a
+   glance" cannot require scrolling to glance at.
+   Below 640px the stops shrink to fit and the two edge labels wrap inside their own
+   half instead of running off the end. */
+@media(max-width:639px){
+  /* Bottom padding was reserved for labels that only ever sit ABOVE the track — on a
+     phone that is 24px of nothing between the dates and whatever follows. */
+  .jline{--jl-pad:2.5rem;min-width:0;padding-bottom:.4rem}
+  .anch-fig{margin-bottom:.55rem}
+  .jl-stop{min-width:0}
+  .jl-word{white-space:normal;max-width:15ch;line-height:1.2}
+  .anch-scroll{overflow-x:visible}
+  /* Middle dates crowd at 8+ stops; the edges anchor the range and the day rail below
+     carries every date in full. */
+  .jline[data-n="7"] .jl-stop:not(.jl-first):not(.jl-last):nth-child(even) .jl-date,
+  .jline[data-n="8"] .jl-stop:not(.jl-first):not(.jl-last):nth-child(even) .jl-date,
+  .jline[data-n="9"] .jl-stop:not(.jl-first):not(.jl-last):nth-child(even) .jl-date{visibility:hidden}
+}
 
 @media print{
   /* Figures print as finished frames; the ring is live device state and prints

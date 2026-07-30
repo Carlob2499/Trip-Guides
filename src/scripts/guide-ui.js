@@ -109,6 +109,22 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             }
             try { sessionStorage.setItem(TAB_KEY, isSpecial ? idx : String(idx)); } catch (_) {}
             syncTabIndex();
+            syncJetLag(isSpecial ? null : idx);
+          }
+
+          /* The jet-lag calculator is an ARRIVAL tool. It used to sit above every tab of
+             every guide; it now appears only on the group whose own content covers jet lag
+             or landing (data-jl-group, derived in GuideLayout from the section titles), and
+             not at all once the trip has ended — after the last day there is nothing left
+             to adapt to, so the control is pure chrome. */
+          var jlWrap = document.querySelector(".jl-wrap");
+          var jlDead = false;
+          if (jlWrap) {
+            jlDead = tripWindow(firstDayDate, lastDayDate, new Date()).isPast;
+          }
+          function syncJetLag(idx) {
+            if (!jlWrap) return;
+            jlWrap.hidden = jlDead || String(idx) !== jlWrap.getAttribute("data-jl-group");
           }
 
           function syncTabIndex() {
