@@ -39,7 +39,8 @@
 (pinned Sonnet, A-blind) → Reconcile (stops pre-graduation) → Vibe critic (pinned **Fable**,
 continue-on-error; **Opus 5 fallback on failure** — degrade the model, never the pass) →
 Vibe executor (Opus, only if findings) → Rubric critic (`critic_model`, default Opus, owns
-graduation). Fable's headless availability is STILL UNPROVEN — first real dispatch answers it.
+graduation). Fable headless: **PROVEN 2026-07-30** via `model-smoke.yml` (run 30533886628,
+API metadata confirms `claude-fable-5`) — the smoke workflow stays for vetting future model ids.
 
 **Also this session:** `/about` page shipped (token-styled, journey-line, real build-counted
 stats; hub footer links it) · dead deps removed (dotenv, 2 retired mockup fonts, redundant
@@ -76,8 +77,8 @@ the learnings silo — process evidence ≠ lived experience).
 shipped all four modernization parts (commits `8ddfd14`, `6729d61`). The skill now IS the
 pipeline's law; prompts can't rot; judgment leaves required artifacts or the run fails.
 
-**Re-prompt the creator with:** "The modernized six-agent chain has never run end-to-end.
-Dispatch Actions → Research pass → japan (or a fresh slug) as the live proof: it answers
-whether `claude-fable-5` works headless (vibe step's first 30s), exercises the skill-pointer
-prompts for real, and trips the new critic artifact gate if any judgment step skips its
-artifacts. Watch the run; triage from the run report."
+**Re-prompt the creator with:** "Fable headless is PROVEN (model-smoke run 30533886628);
+japan is fully verified so a japan dispatch NO-OPS at the budget step — the full live proof
+of the modernized chain (pointer prompts, high effort, vibe chain, all five gate families)
+waits for the next guide you actually want. When one exists: dispatch Actions → Research
+pass → <slug>, watch the run, triage from the run report on Opus."
