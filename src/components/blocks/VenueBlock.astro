@@ -3,13 +3,33 @@ import { pinSlug } from "../../lib/map-pins";
 import TransitLinks from "../TransitLinks.astro";
 const { sec, country } = Astro.props;
 
+type VenueItem = {
+  name: string;
+  area?: string;
+  price?: string;
+  book?: string;
+  book_url?: string;
+  why?: string;
+  crowd_tip?: string;
+  hours?: string;
+  closed?: string;
+  address?: string;
+  phone?: string;
+  how?: string;
+  verified_on?: string;
+  source_url?: string;
+  tier?: string;
+  agreement?: string;
+  map?: { lat: number; lng: number };
+};
+
 const bookLabel = (b: string | undefined) =>
   b === "url" ? "Book online" : b === "call" ? "Call to book" : b === "walk-in" ? "Walk-in" : null;
 ---
 {sec.intro && (
   <div class="venue-intro card"><p><Fragment set:html={sec.intro} /></p></div>
 )}
-{(sec.items || []).map((it: any) => (
+{(sec.items || []).map((it: VenueItem) => (
   <article class="card venue" id={it.map ? `venue-${pinSlug(it.name)}` : undefined}>
     <div class="venue-head">
       <h4 class="venue-name">

@@ -39,13 +39,13 @@ const highTotal = items.reduce((t, it) => { const h = tripHigh(it); return t + (
 const hasRange  = Math.round(lowTotal) !== Math.round(estTotal) || Math.round(highTotal) !== Math.round(estTotal);
 
 // P3/R17: budget closure — compare computed daily per-person against the intake target.
-const budgetTarget = (sec as any).budgetTarget as string | undefined;
+const budgetTarget = (sec as { budgetTarget?: string }).budgetTarget;
 function parseDailyTarget(raw: string | undefined): { low: number; high: number } | null {
   if (!raw) return null;
   // Match patterns like "$75-150/day", "$150/day", "75–150", "¥15000/day"
-  const m = raw.match(/[\$€£¥₩₹]?\s*([\d,]+)\s*[-–—]\s*[\$€£¥₩₹]?\s*([\d,]+)/);
+  const m = raw.match(/[$€£¥₩₹]?\s*([\d,]+)\s*[-–—]\s*[$€£¥₩₹]?\s*([\d,]+)/);
   if (m) return { low: Number(m[1].replace(/,/g, "")), high: Number(m[2].replace(/,/g, "")) };
-  const s = raw.match(/[\$€£¥₩₹]?\s*([\d,]+)\s*\/\s*day/i);
+  const s = raw.match(/[$€£¥₩₹]?\s*([\d,]+)\s*\/\s*day/i);
   if (s) { const v = Number(s[1].replace(/,/g, "")); return { low: v, high: v }; }
   return null;
 }

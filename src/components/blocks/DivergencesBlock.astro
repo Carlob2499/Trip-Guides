@@ -1,5 +1,11 @@
 ---
 const { sec } = Astro.props;
+type DivergenceItem = {
+  category?: string;
+  claim?: string;
+  correction?: string;
+  source_url?: string;
+};
 const catLabel = (c: string | undefined) => {
   const map: Record<string, string> = {
     "overcrowded": "Overcrowded",
@@ -14,7 +20,7 @@ const catLabel = (c: string | undefined) => {
 {sec.intro && (
   <div class="divergence-intro card"><p><Fragment set:html={sec.intro} /></p></div>
 )}
-{(sec.items || []).map((it: any) => (
+{(sec.items || []).map((it: DivergenceItem) => (
   <article class="card divergence">
     <div class="divergence-head">
       {catLabel(it.category) && <span class="divergence-cat">{catLabel(it.category)}</span>}
