@@ -389,18 +389,10 @@ footer{border-top:1px solid var(--ink);text-align:center;padding:1.7rem 1.1rem;c
      and the sticky chrome shrinks to the topbar alone. */
   .guide-tabs-nav{display:none}
   html{--chrome-h:54px}
-  /* R2 — the journey bar: Journey (primary, shows where you are) · Today · Map · Kit */
-  .botbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:40;gap:.5rem;padding:.55rem .7rem;padding-bottom:calc(.55rem + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--rule2)}
-  .botSections{flex:1;display:flex;align-items:center;gap:.6rem;min-height:50px;background:var(--ink);color:var(--bg);border:0;border-radius:10px;padding:.45rem .8rem;font-family:var(--font-data);cursor:pointer;text-align:left;min-width:0}
-  .bs-dot{flex:none;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 30%,transparent)}
-  .bs-stack{display:flex;flex-direction:column;min-width:0;line-height:1.25}
-  .bs-label{text-transform:uppercase;letter-spacing:var(--tracking-micro);font-size:var(--text-micro);opacity:.65}
-  .bs-cur{font-size:var(--text-control);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .bs-chev{margin-left:auto;flex:none}
-  .botmini{flex:0 0 auto;min-width:52px;min-height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:var(--card);border:1px solid var(--rule2);border-radius:10px;color:var(--ink);text-decoration:none;cursor:pointer;font-family:var(--font-data);padding:.3rem .45rem}
-  .botmini span{font-size:var(--text-nano);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
-  .botmini:active{background:var(--bg2)}
-  .botmini:focus-visible,.botSections:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  /* The bottom TAB BAR — plumbing only (position/stacking). Every dimension, every
+     slot's look and all the phone/tablet scaling live in mobile-nav.css, which is the
+     single owner of the mobile navigation's appearance. */
+  .botbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:40;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--rule2)}
   /* Slide-up sheet backdrop */
   .sheet-backdrop{display:block;position:fixed;inset:0;z-index:45;background:rgba(16,20,24,0);pointer-events:none;transition:background .25s}
   .sheet-backdrop.open{background:rgba(16,20,24,.45);pointer-events:auto}

@@ -395,7 +395,11 @@ import { trapFocus, migrateStorageKey } from "../../../scripts/util.js";
     }
   })();
 
-  /* ── 4b. Section position in the mobile bottom bar ("3/13") ────────────── */
+  /* ── 4b. Section position ("3/13") ─────────────────────────────────────── */
+  /* Two homes since the bottom bar became a five-slot tab bar: `.bs-pos` stays beside
+     #curCat inside the Groups button — now visually hidden, so it reads as part of that
+     button's accessible name — and #sheetPos shows it visibly in the sheet head, where
+     there is room for it. One computation, both surfaces. */
   var bsCur = document.getElementById("curCat");
   var tabsEl = document.getElementById("guideTabs");
   if (bsCur && tabsEl) {
@@ -404,14 +408,19 @@ import { trapFocus, migrateStorageKey } from "../../../scripts/util.js";
       return /^\d+$/.test(t.getAttribute("data-tab"));
     }).length;
     var posEl = document.createElement("span");
-    posEl.className = "bs-pos";
+    posEl.className = "bs-pos mn-sr";
     bsCur.insertAdjacentElement("afterend", posEl);
+    var sheetPos = document.getElementById("sheetPos");
     function syncPos() {
       var a = tabsEl.querySelector(".gtab-active");
       var v = a ? parseInt(a.getAttribute("data-tab"), 10) : NaN;
       posEl.textContent = isNaN(v) ? "" : (v + 1) + "/" + totalSections;
+      if (sheetPos) sheetPos.textContent = isNaN(v) ? "" : (v + 1) + " of " + totalSections;
     }
-    tabsEl.addEventListener("click", function () { setTimeout(syncPos, 50); });
+    // Every switch route ends in a class change on the strip — a click listener missed
+    // swipes, the bottom bar, keyboard arrows and deep links, so the position silently
+    // went stale on all four. Observe the state instead of one of the ways to reach it.
+    new MutationObserver(syncPos).observe(tabsEl, { subtree: true, attributes: true, attributeFilter: ["class"] });
     syncPos();
   }
 })();

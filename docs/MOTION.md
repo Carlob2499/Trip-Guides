@@ -145,7 +145,9 @@ genuine "did this cost anything" pass has to report:
   measured 2.87:1 against it (needs 4.5:1). Fixed theme-independently by blending toward
   `var(--bg)` (the button's own established contrast partner) instead of a theme-conditional
   override — verified back over 4.5:1 in both themes by hand and confirmed 100 a11y score via
-  Lighthouse afterward.
+  Lighthouse afterward. *(Historical: `.botSections` was retired 2026-07-30 when the bottom bar
+  became a five-slot tab bar. `.bs-pos` is now screen-reader-only inside the Groups button and
+  the visible position lives in the sheet head, so this contrast pairing no longer exists.)*
 - **Two label/name-mismatch findings** (WCAG 2.5.3): the hub-link `aria-label="All guides"` and
   the photo-credit `aria-label="Photo source on Wikimedia Commons"` both discarded their own
   visible text. Reworded to include it (`"Waypoint — all guides"` /

@@ -136,13 +136,13 @@ html[data-swipe-hint="back"]::after{left:0;background:linear-gradient(to right,c
 .gstat-burn{cursor:pointer;border-color:var(--accent);color:var(--accent-ink)}
 .gstat-burn:hover{background:color-mix(in srgb,var(--accent) 12%,transparent)}
 
-/* ── Bottom-bar section position ─────────────────────────────────────────── */
-/* V6: raw --accent text failed WCAG contrast (2.87:1, needs 4.5:1) against
-   .botSections's background — that button is ALWAYS inverted (background:var(--ink),
-   color:var(--bg)) relative to the page theme, in both light AND dark mode, so the
-   fix can't be theme-conditional either — blend toward --bg (the button's own,
-   theme-correct foreground) instead of the raw per-guide accent hue. */
-.bs-pos{font-family:var(--font-data);font-size:var(--text-nano);font-weight:700;color:color-mix(in srgb,var(--accent) 55%,var(--bg) 45%);margin-left:.35rem}
+/* ── Section position ("3/13") ───────────────────────────────────────────── */
+/* No visual styling left to give: since the bottom bar became a five-slot tab bar
+   (2026-07-30) this element carries `.mn-sr` and lives inside the Groups button purely
+   as part of its accessible name — the visible copy is `#sheetPos` in the sheet head
+   (mobile-nav.css). The old contrast fix here (blending --accent toward --bg against
+   the inverted .botSections button) died with that button; a rule styling clipped text
+   would only be a trap for the next reader. */
 
 @media(prefers-reduced-motion:reduce){.spine-fill,.spine-tip{transition:none}.day-kitcount.done{animation:none}.today-chip{animation:none}}
 @media print{.spine,.today-chip,.ft-toast,.cur-pop,.lb-backdrop,.sos-btn,.sos-sheet,.addr-card,.focus-today{display:none!important}}

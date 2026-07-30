@@ -255,9 +255,8 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             var hit = document.querySelector('.day[data-date="' + todayStr + '"]');
             (hit || grp || dayEl).scrollIntoView({ behavior: "smooth", block: "start" });
           });
-          // Kit: same panel the sheet's Trip Kit link opens.
-          var botKit = document.getElementById("botKit");
-          if (botKit) botKit.addEventListener("click", function () { if (hasPanel("kit")) showTab("kit"); });
+          // Kit left the bottom bar in the tab-bar rebuild (2026-07-30) — the sheet's
+          // Trip Kit link, wired by the sheet handler above, is now its only entry.
           // Map: an anchor into the map's section — just activate its tab first.
           var botMap = document.getElementById("botMap");
           if (botMap) botMap.addEventListener("click", function () {
@@ -277,6 +276,12 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             document.querySelectorAll(".sheet-cat").forEach(function (a) {
               a.classList.toggle("active", a.dataset.cat === String(cat));
             });
+            // One spy, many listeners: the mobile-nav silo records "where you were"
+            // per group from this verdict rather than running a second spy of its own.
+            // Fire-and-forget — no listener is required for anything here to work.
+            try {
+              document.dispatchEvent(new CustomEvent("tg:section", { detail: { secId: secId, cat: cat } }));
+            } catch (_) { /* very old browsers: the resume lines simply stay blank */ }
           }
           var blocks = Array.prototype.slice.call(document.querySelectorAll(".block"));
           function spy() {
