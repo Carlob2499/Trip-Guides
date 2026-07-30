@@ -37,9 +37,32 @@ between modify-guide's scoped edit and a full research pass:
 - **V6** feedback auto-file: `feedback-signals.mjs` (deterministic thresholds: overall ≤3,
   pacing ≤2, ≥3 skips/submission — Q4 pending creator sign-off) → synthesis agent files INERT
   deduped revision-request issues; owner label stays the only gate.
-- **Boundary checks still owed** (per plan doc): force the Fable→Opus fallback once (misspell
-  the model), trip a test fork gate, race a modify+revise on one slug, hand-plant a signals file.
 - **1009 tests green** (29 new), build clean.
+
+**Smoke run DONE (issue #27, korea, 2026-07-30) — full pipeline green, draft PR #28 open.**
+Boundary-check scorecard:
+- ✅ **Labels**: ensure-labels 422'd twice (descriptions > GitHub's 100-char cap) — the gate
+  labels silently didn't exist until fixed. V1's reason to exist, proven on day one.
+- ✅ **Forced model fallback**: dispatched with `plan_model=claude-fable-5x`; log telemetry
+  confirmed `model_fallback / model_not_found → claude-opus-5`. (plan_model input is now a
+  string, not a choice, so this check stays dispatchable.)
+- ✅ **Fork gate**: planner emitted the real blocking fork (historical record vs 2027 re-date),
+  paused green, commented with recommendation; owner answered A; relabel resumed past the
+  planner; Agent R folded the answer, emptied forks, removed needs-decision.
+- ✅ **Concurrency**: absorb dispatched mid-revise sat `pending` behind guide-korea; cancelled
+  before token spend.
+- ❌→fixed by hand: **land-branch PR creation** — repo setting "Allow GitHub Actions to create
+  and approve pull requests" is OFF; land-branch.sh couldn't open the draft PR (the arc's 4th
+  boundary failure). PR #28 opened manually. **Owner: enable Settings → Actions → General →
+  "Allow GitHub Actions to create and approve pull requests" before the next revise run.**
+- ⚠ noise: Cloudflare's dashboard Git integration builds service "tripguides" on every branch
+  push and fails in 0s (external config, not repo code; diff touches no worker/ files).
+  Consider disabling that integration — deploy-worker.yml owns the real Worker deploy.
+- ⏸ deferred: V6 auto-file check (needs real feedback to plant signals from).
+
+Remaining before regular use: review/merge draft PR #28; flip revise-guide.yml's `land` input
+default `draft` → `auto` once satisfied; sign off Q4 thresholds; critic flagged the swapped
+명동 label on 03's Gyeongbokgung map point as deserving its own issue.
 
 ## Prior snapshot (session #18 — P7 shipped)
 

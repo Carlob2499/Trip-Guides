@@ -14,7 +14,7 @@
 
 .venue-meta{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.55rem}
 .venue-pill{display:inline-flex;align-items:center;padding:.15rem .55rem;font-family:var(--font-data);font-size:var(--text-control-sm);border-radius:999px;background:var(--bg2);color:var(--ink);white-space:nowrap}
-.venue-pill--action{background:var(--accent);color:#fff;text-decoration:none;border-bottom:0}
+.venue-pill--action{background:var(--accent);color:var(--on-accent);text-decoration:none;border-bottom:0}
 .venue-pill--action:hover{filter:brightness(1.1)}
 
 .venue-body p{margin:0 0 .3rem}
