@@ -20,94 +20,56 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (updated 2026-07-30, session #18b — P7 merged; revise pipeline V1-V6 built)
+## Snapshot (updated 2026-07-30, session #19 — skill = single source of truth; vibe chain; About page)
 
-**Revise pipeline shipped** (spec: `docs/PLAN_REVISE_GUIDE.md`) — the major-revision workflow
-between modify-guide's scoped edit and a full research pass:
+**Skill modernization SHIPPED (creator GO on all 4 parts):**
+- `waypoint-guide-author` is now the **single source of truth**: all six `research-pass.yml`
+  agent prompts are POINTERS (stage I/O contract only; ~150 duplicated lines deleted; the vibe
+  pair's "PROMPT SYNC" burden is gone). New `references/pipeline-roles.md` = stage-role law
+  (traveler-question emitter, vibe lens + exact sentinel, executor rules, critic protocol).
+- **Hard gates:** new done-gate #3 **citation audit** (sample ≥5 perishable facts, fetch each
+  `source_url`, confirm the page still supports the value → `## Citation audit` table) and a
+  workflow **"Critic artifact gate"** that FAILS any run whose critic ends without
+  `## Critic findings` + `## Citation audit` (alarm after landing, never a barrier).
+- `social-leads.md` merged into `research-efficiency.md`; SKILL.md slimmed (schema-detail →
+  block-types.md). **Research-skill discovery layer**: interactive sessions may open each pass
+  with ONE Standard-mode `Research` call (leads only, T0 bar unchanged, NEVER in CI).
 
-- **V1** labels: `revision-request/approved/auto-filed`, `needs-decision` in ensure-labels.yml.
-- **V2** pure logic (unit-gated): revise issue template, `parse-revise-issue.mjs` (modify-shape
-  fallback for escalated issues), `validate-revision-plan.mjs` (exit 0/1/3 routing; nonexistent
-  sections + over-cap + blocking forks caught deterministically).
-- **V3-V5** `revise-guide.yml`: 4 routed agents — P plan (Fable→Opus fallback), R research
-  (Opus→Sonnet), M sweep (Sonnet), C diff-critic + land (Fable→Opus). Fork gate pauses on
-  `needs-decision`; plan file is the resume artifact (attempts cap 3); void detection + 1 retry;
-  `guide-<slug>` concurrency retro-fitted onto modify-guide too. **Lands DRAFT-only by default**
-  (`land` input) until the first live run reads clean.
-- **V6** feedback auto-file: `feedback-signals.mjs` (deterministic thresholds: overall ≤3,
-  pacing ≤2, ≥3 skips/submission — Q4 pending creator sign-off) → synthesis agent files INERT
-  deduped revision-request issues; owner label stays the only gate.
-- **1009 tests green** (29 new), build clean.
+**Six-agent research pipeline** (this session + parallel #18b work): A (model input) → B
+(pinned Sonnet, A-blind) → Reconcile (stops pre-graduation) → Vibe critic (pinned **Fable**,
+continue-on-error; **Opus 5 fallback on failure** — degrade the model, never the pass) →
+Vibe executor (Opus, only if findings) → Rubric critic (`critic_model`, default Opus, owns
+graduation). Fable's headless availability is STILL UNPROVEN — first real dispatch answers it.
 
-**Smoke run DONE (issue #27, korea, 2026-07-30) — full pipeline green, draft PR #28 open.**
-Boundary-check scorecard:
-- ✅ **Labels**: ensure-labels 422'd twice (descriptions > GitHub's 100-char cap) — the gate
-  labels silently didn't exist until fixed. V1's reason to exist, proven on day one.
-- ✅ **Forced model fallback**: dispatched with `plan_model=claude-fable-5x`; log telemetry
-  confirmed `model_fallback / model_not_found → claude-opus-5`. (plan_model input is now a
-  string, not a choice, so this check stays dispatchable.)
-- ✅ **Fork gate**: planner emitted the real blocking fork (historical record vs 2027 re-date),
-  paused green, commented with recommendation; owner answered A; relabel resumed past the
-  planner; Agent R folded the answer, emptied forks, removed needs-decision.
-- ✅ **Concurrency**: absorb dispatched mid-revise sat `pending` behind guide-korea; cancelled
-  before token spend.
-- ❌→fixed by hand: **land-branch PR creation** — repo setting "Allow GitHub Actions to create
-  and approve pull requests" is OFF; land-branch.sh couldn't open the draft PR (the arc's 4th
-  boundary failure). PR #28 opened manually. **Owner: enable Settings → Actions → General →
-  "Allow GitHub Actions to create and approve pull requests" before the next revise run.**
-- ⚠ noise: Cloudflare's dashboard Git integration builds service "tripguides" on every branch
-  push and fails in 0s (external config, not repo code; diff touches no worker/ files).
-  Consider disabling that integration — deploy-worker.yml owns the real Worker deploy.
-- ⏸ deferred: V6 auto-file check (needs real feedback to plant signals from).
+**Also this session:** `/about` page shipped (token-styled, journey-line, real build-counted
+stats; hub footer links it) · dead deps removed (dotenv, 2 retired mockup fonts, redundant
+astro-eslint-parser) · consultant plan rejected (`docs/archive/CONSULTANT_PLAN_REJECTION.md`).
 
-Remaining before regular use: review/merge draft PR #28; flip revise-guide.yml's `land` input
-default `draft` → `auto` once satisfied; sign off Q4 thresholds; critic flagged the swapped
-명동 label on 03's Gyeongbokgung map point as deserving its own issue.
+**1009 tests green, build + YAML clean, all pushed to main.**
 
-## Prior snapshot (session #18 — P7 shipped)
+## Pending from session #18b (revise pipeline — still open)
 
-**P7 differentiation surfaces (R11-R14) shipped** on `claude/research-trial-results-h32hlk`:
-
-- **Schema:** `tier` (primary/corroborated/secondary), `agreement` (A+B converged/A only/B only),
-  `recheckNote` added to provenance. New `divergences` section type with category enum.
-- **Components:** DivergencesBlock.astro (claim/correction cards with category badges),
-  provenance dot+popover on VenueBlock (shows checked date, source, evidence tier, research
-  agreement), calendar badge on DaysBlock (constraint-driven), "Next self-check" in colophon.
-- **Japan data:** 5 divergences (Ippudo tourist-trap, Otaru overcrowded, Takimotokan, Dazaifu
-  default-answer, Naruko missing-context), tier/agreement backfilled on ramen, yatai, key sights.
-- **Japan cover:** updated to Naruko Gorge koyo (CC BY 4.0, Oct 24 capture, right season).
-- **Congruence:** scaffold-guide emits divergences shell, guide-readiness knows the type.
-- **980 tests green, build clean.**
-
-**Test count: 980.** Lint 0, build clean. Four guides live: Korea, Denmark, US, Japan.
-
-## Left to do
-
-1. **Merge `claude/research-trial-results-h32hlk` to main** — P7 commit ready, tests green.
-2. **Delete remote branches** — creator must do from GitHub UI:
-   `claude/website-visual-redesign-upnl05` (fully merged since session #15).
-3. **`astro preview` visual check** — P7 components (provenance dot popover, divergences
-   cards, calendar badges) need a mobile 375px + desktop + dark-mode visual pass.
-4. **A11y baselines** will re-record on CI's first main run — watch for green.
-5. **`no-explicit-any` debt** — 118 remaining `any`s behind a 33-path exception list.
-6. **Room codes** committed to a public repo. `#room=` fragment override exists.
+- Review/merge **draft PR #28** (korea smoke revision); then flip `revise-guide.yml` `land`
+  default `draft` → `auto`; sign off V6 Q4 thresholds (overall ≤3, pacing ≤2, ≥3 skips).
+- Critic flagged the swapped 명동 label on korea 03's Gyeongbokgung map point → own issue.
+- ⚠ Cloudflare dashboard Git integration builds "tripguides" on every push and fails in 0s —
+  external config noise; consider disabling (deploy-worker.yml owns the real Worker deploy).
 
 ## Owner tasks (need the creator, not the agent)
 
-1. **Merge P7 branch to main** (or approve a PR).
-2. **Delete `claude/website-visual-redesign-upnl05`** from GitHub (fully merged).
-3. **Visual sign-off** on P7 surfaces in `astro preview` — provenance dots, divergences
-   block, calendar badges, colophon self-check date.
+1. **Enable Settings → Actions → General → "Allow GitHub Actions to create and approve pull
+   requests"** — land-branch.sh cannot open draft PRs without it (proven in the #18b smoke).
+2. Review/merge draft PR #28.
+3. Delete merged remote branch `claude/website-visual-redesign-upnl05`.
 
 ## Where we left off
 
-**Session #18b (2026-07-30):** P7 merged to main. Then planned (orchestrated 6-agent
-workflow: 3 context readers → 2 design lenses → synthesis) and BUILT the revise pipeline
-V1-V6 per `docs/PLAN_REVISE_GUIDE.md`. 1009 tests green.
+**Session #19 (2026-07-30):** adversarial critique of the guide-author skill → creator GO →
+shipped all four modernization parts (commits `8ddfd14`, `6729d61`). The skill now IS the
+pipeline's law; prompts can't rot; judgment leaves required artifacts or the run fails.
 
-**Re-prompt the creator with:** "The revise pipeline is built and pushed. Before first real
-use: (1) ensure-labels runs on this push — confirm the 4 new labels exist; (2) confirm the Q4
-auto-file thresholds (overall ≤3, pacing ≤2, ≥3 skips/submission); (3) pick the smoke target
-(Q6 — recommend a toy dates-shift revision on korea or denmark, filed via the new template)
-and run the boundary checks: force the Fable→Opus fallback once, trip a test fork gate. The
-`land` input stays 'draft' until that smoke run reads clean — then flip its default to 'auto'."
+**Re-prompt the creator with:** "The modernized six-agent chain has never run end-to-end.
+Dispatch Actions → Research pass → japan (or a fresh slug) as the live proof: it answers
+whether `claude-fable-5` works headless (vibe step's first 30s), exercises the skill-pointer
+prompts for real, and trips the new critic artifact gate if any judgment step skips its
+artifacts. Watch the run; triage from the run report."
