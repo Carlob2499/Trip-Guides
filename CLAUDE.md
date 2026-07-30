@@ -69,6 +69,12 @@ are summarized into patterns. And the reality layer only appears when there IS r
 show — no feedback and no post-mortem means nothing renders. Never invent a learning to fill
 the surface; an honest blank is the feature.
 
+A **parallel process rail** (2026-07-30): pipeline critic/vibe findings compound in
+`docs/PIPELINE_PATTERNS.md` (distilled, appended every research run, promotion rule: a
+pattern recurring ≥2 runs becomes a skill rule or gate). They are process evidence and
+**never** enter the learnings silo or `TRAVELER_PATTERNS.md` — those assert lived
+experience; a critic finding happened before anyone traveled.
+
 ---
 
 ## Content Standards

@@ -103,6 +103,17 @@ write the replacement with source + date. A clean pass writes exactly:
 `None — guide passes the bar test.` Then resolve each finding IN the guide (edit the group
 file, extend the ledger), and re-run verify + build until clean (≤3 rounds).
 
+**Feed the loop — `docs/PIPELINE_PATTERNS.md` (required, every run).** Before landing,
+distill this run's findings — the critic's own AND the `## Vibe findings` it read — into
+the Finding ledger: one row per finding-CLASS with `[critic]`/`[vibe]`, slug, date, and
+the rubric row or lens violated. A clean run appends its honest-blank row ("clean run —
+no findings"). Never paste raw finding text; never let these rows touch `learnings/` or
+`TRAVELER_PATTERNS.md` — critic findings are process evidence, not lived experience.
+Commit the append with the run. If an OPEN pattern in that ledger already covers what you
+just caught again, note the recurrence in your row — recurrence ≥2 is the promotion
+trigger (a human or a design session moves the rule into the skill and marks the row
+promoted).
+
 **Citation audit — the critic owns done-gate #3 in CI.** Sample ≥5 verified perishable
 facts (weighted toward prices, hours, the anchor event), fetch each fact's own
 `source_url`, and confirm the page still supports the stated value. Record the

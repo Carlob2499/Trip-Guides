@@ -47,7 +47,11 @@ these files edits the pipeline; there is no second copy to keep in sync.
    guide-level typed features (phrases/entry/advisory), voice standard, facets,
    covers. Read when choosing or creating any section.
 5. **The `denmark/` and `korea/` guide dirs** — the gold standard to match or beat.
-6. **`docs/TRAVELER_PATTERNS.md`** — how these travelers *actually* travel, plus
+6. **`docs/PIPELINE_PATTERNS.md`** — what the critics keep catching, distilled. Read the
+   OPEN rows before researching so a known miss-class is avoided upstream instead of
+   caught downstream again. (Process evidence only — its rows never enter learnings or
+   traveler patterns.)
+7. **`docs/TRAVELER_PATTERNS.md`** — how these travelers *actually* travel, plus
    `learnings/<slug>.md` for any prior trip with the same travelers. **Consult during intake
    and research** so a new guide starts personalized, and **establish WHICH PARTY the guide
    is for FIRST** — use only that party's section plus Cross-party (the file's header
@@ -59,7 +63,7 @@ these files edits the pipeline; there is no second copy to keep in sync.
 
 ## Modes
 - **New guide** — intake first (establish the **party** and the **anchor event** before
-  anything — see Read-first #6), then scaffold (`node scripts/scaffold-guide.mjs
+  anything — see Read-first #7), then scaffold (`node scripts/scaffold-guide.mjs
   --country "..." --dates "YYYY-MM-DD to YYYY-MM-DD"`, or the "New guide" issue form which
   scaffolds automatically) — the scaffold pre-wires the map/weather/holidays live sections and
   an empty backbone, every fact still unverified. Then research it via the **two-pass procedure**
