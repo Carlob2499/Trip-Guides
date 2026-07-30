@@ -65,6 +65,8 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .hubcard-advisory{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--warn);border:1px solid var(--warn);border-radius:99px;padding:.1rem .5rem;line-height:1.5;white-space:nowrap}
 
 .hub-foot{border-top:1px solid var(--ink);text-align:center;padding:1.6rem 1.2rem;color:var(--muted);font-size:var(--text-control);max-width:1340px;margin:0 auto;width:100%;font-family:var(--font-data);letter-spacing:.04em}
+.hub-foot a{color:var(--accent-ink);text-decoration:underline;text-underline-offset:3px}
+.hub-foot a:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 
 /* ── New-guide modal ────────────────────────────────────────────────────── */
 .ng-backdrop{position:fixed;inset:0;z-index:900;background:rgba(20,16,12,.5);opacity:0;pointer-events:none;transition:opacity .15s}

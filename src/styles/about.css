@@ -1,0 +1,95 @@
+/* === ABOUT PAGE ============================================================
+   The site explained in its own visual language: cartographic paper, Literata
+   display type, and the route/station motif the hub + guides already speak.
+   Tokens only — every colour, size, radius and easing resolves through base.css,
+   so theme (incl. dark) and any future token change carry through for free. */
+
+.ab-bar{display:flex;align-items:center;justify-content:space-between;max-width:1080px;margin:0 auto;padding:1.1rem 1.2rem}
+.ab-wordmark{font-family:var(--font-data);font-size:var(--text-control);letter-spacing:.14em;text-transform:uppercase;color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;padding:.5rem .9rem;border:1px solid var(--rule2);border-radius:999px;background:var(--card)}
+.ab-wordmark:hover{border-color:var(--accent-ink)}
+.ab-wordmark:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+
+.about{position:relative;max-width:1080px;margin:0 auto;padding:0 1.2rem 4rem}
+
+/* Faint contour backdrop behind the hero — the overture's cartography, quieter. */
+.ab-contours{position:absolute;inset:0 0 auto 0;height:520px;overflow:hidden;pointer-events:none;z-index:0}
+.ab-contours svg{position:absolute;width:130%;left:-15%;top:-10%;opacity:.35}
+.ab-contours polyline{fill:none;stroke:var(--rule);stroke-width:1}
+
+.ab-hero{position:relative;z-index:1;padding:3.5rem 0 2.6rem;max-width:46rem}
+.ab-eyebrow{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink);margin-bottom:1rem}
+.ab-hero h1{font-family:var(--font-display);font-weight:420;font-size:var(--text-h1);line-height:1.15;text-wrap:balance;letter-spacing:-.01em}
+.ab-dek{margin-top:1.1rem;font-size:var(--text-lead);line-height:1.6;color:var(--muted);text-wrap:pretty;max-width:40rem}
+.ab-dek b{color:var(--ink)}
+
+/* Real, build-counted numbers — the same stats the hub shows, same honesty rule. */
+.ab-stats{position:relative;z-index:1;display:flex;gap:2.4rem;flex-wrap:wrap;padding:1.4rem 0 0;border-top:1px solid var(--rule)}
+.ab-stat-n{font-family:var(--font-display);font-size:var(--text-h2);font-variant-numeric:tabular-nums;color:var(--accent-ink)}
+.ab-stat-l{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);letter-spacing:.04em}
+.ab-stats-note{flex-basis:100%;font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);margin-top:.2rem}
+
+.ab-sec{position:relative;z-index:1;margin-top:4rem}
+.ab-sec-head{font-family:var(--font-display);font-weight:400;font-size:var(--text-h2);letter-spacing:-.01em;text-wrap:balance}
+/* Cartographic neatline under section titles — same idiom the guides use. */
+.ab-sec-head::after{content:"";display:block;width:64px;height:3px;margin-top:.65rem;background:linear-gradient(to right,var(--accent) 0 40%,transparent 40% 50%,var(--accent) 50% 100%)}
+.ab-sec-sub{margin-top:.8rem;color:var(--muted);max-width:44rem;text-wrap:pretty}
+
+/* --- The four promises ---------------------------------------------------- */
+.ab-values{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:1.8rem}
+@media(max-width:720px){.ab-values{grid-template-columns:1fr}}
+.ab-value{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-lg);padding:1.4rem 1.5rem 1.5rem;position:relative}
+.ab-value-mark{font-family:var(--font-display);font-size:var(--text-h3);color:var(--accent-ink);line-height:1}
+.ab-value h3{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--ink);margin:.7rem 0 .45rem}
+.ab-value p{font-size:var(--text-small);line-height:1.65;color:var(--muted);text-wrap:pretty}
+
+/* --- Read the marks (provenance legend) ----------------------------------- */
+.ab-legend{display:grid;gap:.8rem;margin-top:1.8rem;max-width:46rem}
+.ab-legend-row{display:flex;align-items:baseline;gap:1rem;padding:.85rem 1rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md)}
+.ab-legend-chip{flex:0 0 auto;font-family:var(--font-data);font-size:var(--text-control-sm);padding:.3rem .7rem;border-radius:999px;border:1px solid var(--rule2);background:var(--bg);color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+.ab-legend-chip.is-warn{color:var(--warn);border-color:currentColor}
+.ab-legend-chip.is-ok{color:var(--green);border-color:currentColor}
+.ab-legend-row p{font-size:var(--text-small);color:var(--muted);line-height:1.6;text-wrap:pretty}
+
+/* --- The route: how a guide is made ---------------------------------------
+   A vertical journey line with stations — the same metaphor the guides use to
+   navigate a trip, here narrating the factory. Dashed rail = the route; each
+   station dot is a stop; the last runs on the live accent (the guide is live). */
+.ab-route{margin-top:2.2rem;position:relative;max-width:46rem}
+.ab-stop{position:relative;padding:0 0 2.2rem 3rem}
+.ab-stop:last-child{padding-bottom:.4rem}
+/* the rail */
+.ab-stop::before{content:"";position:absolute;left:13px;top:26px;bottom:-4px;border-left:2px dashed var(--rule2)}
+.ab-stop:last-child::before{display:none}
+/* the station dot */
+.ab-stop::after{content:"";position:absolute;left:6px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:3px solid var(--accent);box-sizing:content-box}
+.ab-stop.is-live::after{background:var(--accent)}
+.ab-stop-kicker{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink)}
+.ab-stop h3{font-family:var(--font-display);font-weight:400;font-size:var(--text-h4);margin:.2rem 0 .45rem;text-wrap:balance}
+.ab-stop p{font-size:var(--text-small);line-height:1.68;color:var(--muted);max-width:42rem;text-wrap:pretty}
+.ab-stop p b{color:var(--ink);font-weight:600}
+
+/* --- CTA ------------------------------------------------------------------ */
+.ab-cta{margin-top:4rem;padding:2.2rem 1.6rem;text-align:center;border:1px solid var(--rule);border-radius:var(--r-lg);background:var(--card)}
+.ab-cta p{color:var(--muted);max-width:34rem;margin:0 auto;text-wrap:pretty}
+.ab-cta-btn{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.2rem;padding:.8rem 1.5rem;min-height:44px;border-radius:999px;background:var(--accent);color:var(--on-accent);font-family:var(--font-data);font-size:var(--text-control);letter-spacing:.04em;text-decoration:none;transition:transform var(--dur-tap) var(--ease-spring)}
+.ab-cta-btn:hover{transform:translateY(-1px)}
+.ab-cta-btn:active{transform:scale(.97)}
+.ab-cta-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:3px}
+
+.ab-foot{border-top:1px solid var(--ink);text-align:center;padding:1.6rem 1.2rem;color:var(--muted);font-size:var(--text-control);max-width:1080px;margin:3rem auto 0;font-family:var(--font-data);letter-spacing:.04em}
+
+/* --- Motion: rise-on-scroll, same native pattern as scroll-motion.css.
+   Progressive enhancement only; reduced-motion never opts in. ---------------- */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .ab-value, .ab-legend-row, .ab-stop {
+      animation: abRise linear both;
+      animation-timeline: view();
+      animation-range: entry 4% cover 22%;
+    }
+    @keyframes abRise {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: none; }
+    }
+  }
+}
