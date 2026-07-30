@@ -146,6 +146,11 @@ Merge the two passes item by item into the single guide, and record the merge in
 - **CONFLICT** (hours differ, "best X" differs) → resolve to the truth; record which source won
   and why.
 
+**Coverage is machine-checked** (`scripts/check-passb-coverage.mjs`, hard-gated in CI):
+every `passB.json` entry must have a written verdict in this table — including a **rejected**
+row when a B lead is disproved; a silently dropped find fails the run. Name each B item in
+the table as `passB.json` spells it (the matcher forgives phrasing, not absence).
+
 The ledger is the durable proof the itinerary was corroborated, not single-sourced — it sits
 beside the plan like the Amendments log. When reconciliation forces a re-plan (an anchor moved, a
 neighborhood beats the intended one), also append it to the intake's **`## Amendments`** section.

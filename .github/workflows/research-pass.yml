@@ -515,6 +515,20 @@ jobs:
           echo "verified=$VERIFIED" >> "$GITHUB_OUTPUT"
           echo "[route] after Reconcile, next=$NEXT, verified=$VERIFIED"
 
+      # HARD GATE (reconcile blind spot, creator's ruling 2026-07-30): Pass A and B are
+      # independent, but ONE agent merges them and no later critic can see what the merge
+      # silently dropped — they judge the product, not what's missing from it. Deterministic,
+      # agent-free: every passB.json entry must have a written verdict in the intake doc's
+      # `## Research reconciliation` (AGREE / B-only / CONFLICT / explicit rejection).
+      # Fails BEFORE the critics spend tokens — a barrier by design.
+      - name: Pass B coverage gate — every B-find gets a reconciliation verdict
+        if: >-
+          steps.budget.outputs.should_run == 'true' &&
+          steps.route4.outputs.verified == 'true'
+        env:
+          SLUG: ${{ inputs.slug }}
+        run: node scripts/check-passb-coverage.mjs --slug "$SLUG"
+
       # ── AGENT 4 (vibe_pass): Fable vibe critic — judgment only, edits nothing ──
       # EXPERIMENTAL: reads the finished guide as a well-travelled friend would — pacing,
       # geography, meals, tone, plain common sense — and records findings for a separate
