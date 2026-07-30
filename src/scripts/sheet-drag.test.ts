@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-// @ts-expect-error — plain-JS module, no type declarations by design
+// Plain-JS module — allowJs infers the exported constants, so no directive is needed.
 import { sheetDismiss, DRAG_LOCK, DISMISS_VELOCITY } from "./sheet-drag.js";
 
 const H = 480; // a sheet 480px tall dismisses at 120px
