@@ -457,6 +457,15 @@ const guides = defineCollection({
         ctx.addIssue({ code: "custom", path: ["src"], message: "a non-Commons cover.src has no machine-verifiable licensing — `credit` and `license` are required alongside it (e.g. credit: \"Jane Doe · Pexels\", license: \"Pexels License\")." });
       }
     }).optional(),
+    // Title-card intro motif (story-open.js) — an optional PARTICLE layer over the first-open
+    // title card. (`introMotif`, flat — `intro` is already the guide-level intro TEXT field
+    // below.) Registered motifs only (each is a hand-tuned canvas system), and the honesty
+    // rule R18 applies to motion exactly as it does to cover photos: declare a motif ONLY when
+    // it is seasonally true for the trip (japan's Oct–Nov koyo trip earns falling maple leaves;
+    // a spring cherry-blossom motif on that same trip would be dishonest framing). Guides
+    // without a motif get the cartographic default (contour drift + accent gloss) — a complete
+    // intro, not a degraded one.
+    introMotif: z.enum(["koyo-leaves"]).optional(),
     // Optional situational phrase cards (docs/FEATURES.md #6) — a guide-level field, NOT a
     // section type: it's consumed by exactly one surface (the Trip kit tool tab), so it
     // deliberately sits outside the sections/bucket()/tabBudget system entirely — a "phrases"

@@ -203,6 +203,8 @@ const heroCredit = coverFile
   : null;
 // R4 living cover — the footage upgrade (schema-gated: credit+license required).
 const coverVideo = cover?.video ?? null;
+// Title-card intro particle motif (schema `introMotif` — honesty-gated, see content.config.ts).
+const introMotif = (guide as any).introMotif ?? null;
 
 // For weather widget — pull lat/lng from first map section
 const mapSec    = _flat.find((s: any) => s.type === "map" && s.center?.lat);
@@ -346,6 +348,30 @@ const tripSummary = buildSummary(guide);
   </head>
 
   <body data-storekey={storeKey} data-legacy-storekey={legacyStoreKey}>
+
+    {/* Title-card intro — the PRE-PAINT half of story-open.js. Runs before the masthead
+        renders so the full-bleed title-card state exists from the first frame (no flash of
+        the normal hero, and the hub→guide cover morph lands INTO the full-bleed card).
+        Full sequence plays once per guide per SESSION (creator's ruling 2026-07-30);
+        deep links (hash) and reduced-motion get the normal arrival. story-open.js owns
+        the timing, pan, and cleanup — this only decides and stamps the starting state. */}
+    {heroSrc && (
+      <script is:inline>
+        (function () {
+          try {
+            if (location.hash) return;
+            if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+            var k = "tg-story-s-" + document.body.getAttribute("data-storekey");
+            if (sessionStorage.getItem(k)) return;
+            document.body.classList.add("story-full");
+            window.__storyIntro = true;
+            // Fault-safety: if story-open.js never runs (load error), release the
+            // title card anyway — content is never left locked behind an intro.
+            setTimeout(function () { document.body.classList.remove("story-full"); }, 9000);
+          } catch (e) { /* storage blocked → normal arrival */ }
+        })();
+      </script>
+    )}
 
     <!-- Skip link — first focusable element; jumps keyboard/AT users past the
          chrome straight to the content. -->
@@ -536,6 +562,17 @@ const tripSummary = buildSummary(guide);
               </svg>
             ))}
           </div>
+        )}
+        {/* Title-card gloss — an accent-tinted light sweep that crosses the card once
+            during the story intro (story.css keys it to body.story-playing; inert and
+            invisible otherwise). Cartographic default for every photo guide. */}
+        {heroSrc && <div class="mast-gloss" aria-hidden="true"></div>}
+        {/* Optional intro particle motif (schema `intro.motif`, honesty rule R18: only
+            where seasonally true — japan's koyo leaves). Canvas is drawn by
+            story-petals.js only while the story plays; pointer-events none, above the
+            title so the drift reads as weather crossing the whole card. */}
+        {heroSrc && introMotif && (
+          <canvas class="mast-petals" data-motif={introMotif} aria-hidden="true"></canvas>
         )}
         <div class="mast-inner">
           {/* Dedup guard: never render the eyebrow if it would repeat the

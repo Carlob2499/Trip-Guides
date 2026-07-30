@@ -58,6 +58,13 @@ import { reducedMotion, migrateStorageKey } from "./util.js";
   // time this module's top-level code executes (see GuideLayout.astro's fixed import
   // order), so `.gtab-active` already reflects the tab the reader is about to see.
   (function restoreOnLoad() {
+    // A FRESH navigation (hub click, external link) opens on the intro masthead at the
+    // top — never a restored mid-scroll position (that restore was the "lopsided
+    // landing", 2026-07-30). Reload and back/forward keep the full restore: mid-trip,
+    // reopening the tab you were in at the spot you left IS the feature. A hash deep
+    // link also restores (the anchor's own targeted scroll wins over it by design).
+    var nav = (performance.getEntriesByType && performance.getEntriesByType("navigation")[0]) || null;
+    if (nav && nav.type === "navigate" && !location.hash) return;
     var t = activeTab();
     if (t == null) return;
     var mem = load();
