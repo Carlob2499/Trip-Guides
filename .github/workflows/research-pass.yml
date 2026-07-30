@@ -14,7 +14,8 @@ name: Research pass
 # vibe critic is pinned Fable and its executor pinned Opus (critique high, execute strong).
 # The vibe pair is EXPERIMENTAL and gated by `vibe_pass`; the Fable model id has not yet been
 # proven available to this action headless, so that step is continue-on-error by design —
-# an unavailable model skips the vibe pass rather than blocking a verified guide.
+# if it fails, an IDENTICAL Opus 5 vibe critic runs as the fallback (creator's call,
+# 2026-07-30: degrade the model, never the pass). Only a double failure skips the vibe pass.
 #
 # Auto-graduation: the verify PASS is the evidence gate (see scripts/graduate-guide.mjs --slug);
 # a guide that passes goes live on the next Pages deploy with ZERO further action. Only a guide
@@ -612,9 +613,11 @@ jobs:
       # geography, meals, tone, plain common sense — and records findings for a separate
       # executor. It never edits the guide, so its judgment can be bold without its context
       # carrying execution discipline. continue-on-error is DELIBERATE: the Fable model id
-      # is unproven on this action headless, and an unavailable vibe critic must skip, not
-      # block a verified guide's graduation. The rubric critic still audits everything last.
+      # is unproven on this action headless — on failure the Opus fallback step below runs
+      # the SAME critique, so the pass degrades in model, never in coverage. The rubric
+      # critic still audits everything last.
       - name: Run research agent — Vibe critic (Fable)
+        id: vibefable
         if: >-
           steps.budget.outputs.should_run == 'true' &&
           steps.route4.outputs.verified == 'true' &&
@@ -629,6 +632,65 @@ jobs:
           # Read-and-judge, not exhaustive search — high, never xhigh.
           claude_args: |
             --model claude-fable-5
+            --effort high
+            --allowedTools Bash,Read,Write,Edit,Glob,Grep
+          prompt: |
+            Guide slug: ${{ inputs.slug }}
+
+            YOU ARE THE VIBE CRITIC — an experimental, judgment-only pass that runs AFTER
+            mechanical verification and BEFORE the rubric critic. Read the guide the way a
+            well-travelled friend would: not for facts (verify handled those), but for how
+            the trip FEELS. You never edit the guide. You write findings; a separate
+            executor agent implements them under full verification discipline.
+
+            Read ONLY: guides-intake/${{ inputs.slug }}.md (the spec) and
+            src/content/guides/${{ inputs.slug }}/ (the finished guide). Do NOT read
+            passB.json, .state.json, or git history — you judge the product, not the process.
+
+            Judge flow and common sense:
+              - PACING ARC — does the trip breathe? A packed jet-lagged arrival day? Three
+                museum days in a row? A "slow" day listing six stops?
+              - GEOGRAPHY — does any day zigzag across the city when reordering stops would
+                halve the transit?
+              - MEALS & ENERGY — are food picks where the day actually puts the traveler at
+                mealtimes? A late night followed by a dawn start?
+              - TONE — does any copy read like a brochure or a model? Flat, useful, human.
+              - COMMON SENSE — whatever a friend would catch: thin buffers, a "backup"
+                worse than nothing, a plan that ignores the party's stated pace.
+
+            Write findings to guides-intake/${{ inputs.slug }}.md under `## Vibe findings`:
+              - Each finding: WHAT feels wrong, WHERE (group file + item), and a CONCRETE
+                suggested change. Suggest swaps and reorders freely, but never invent a
+                fact — anything new you propose, the executor must verify before it ships.
+              - If the trip reads well, write exactly: None — the trip reads well.
+            Then commit and push:
+              git add guides-intake/${{ inputs.slug }}.md
+              git commit -m "research(${{ inputs.slug }}): vibe findings" && git push
+            Touch NOTHING else. Do not edit guide files. Do not graduate.
+
+      # ── Vibe critic FALLBACK (Opus 5) — runs ONLY if the Fable step failed ─────
+      # Degrade the model, never the pass (creator's ruling). With continue-on-error,
+      # `outcome` records the real failure while `conclusion` stays green — so this
+      # triggers on outcome. continue-on-error here too: a double failure skips the
+      # vibe pass (the findings gate then finds nothing) instead of blocking graduation.
+      # ⚠ PROMPT SYNC: the prompt below must stay IDENTICAL to the Fable step's above —
+      # GitHub Actions offers no clean way to share a step prompt, so this duplication
+      # is accepted and marked. Edit BOTH or neither.
+      - name: Run research agent — Vibe critic fallback (Opus)
+        if: >-
+          steps.budget.outputs.should_run == 'true' &&
+          steps.route4.outputs.verified == 'true' &&
+          format('{0}', inputs.vibe_pass) != 'false' &&
+          steps.vibefable.outcome == 'failure'
+        continue-on-error: true
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          allowed_bots: "github-actions[bot]"
+          show_full_output: true
+          claude_args: |
+            --model claude-opus-5
             --effort high
             --allowedTools Bash,Read,Write,Edit,Glob,Grep
           prompt: |
