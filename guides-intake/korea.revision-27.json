@@ -1,7 +1,7 @@
 {
   "slug": "korea",
   "issue": 27,
-  "status": "researched",
+  "status": "swept",
   "summary": "The Jul 8-15 2026 Korea trip has concluded and the requester wants the Sights group's perishable facts (admission prices, opening hours, booking requirements) re-sourced against current primary sources rather than re-worded. Scoping the change against the actual files moves it in one important way: 05-sights.json holds NO prices and NO provenance at all — zero verified_on, zero source_url on any of its six items — so the real admission figures for these sights (Gyeongbokgung 3,000 KRW; Changdeokgung + Huwon 8,000 KRW; N Seoul Tower 29,000 KRW; Namsan cable car 15,000 KRW) live in 02-essentials.json's budget block, and the same hours/tour-times are restated inline in 04-itinerary.json's day plans. A Sights fact refresh therefore cannot be done inside 05-sights.json alone; it is a three-group re-research (05-sights, 02-essentials, 04-itinerary) plus a ripple sweep over 01-plan, 03-getting-around and 11-references, and a new dated clause on the guide-level verified stamp in _guide.json. That is still comfortably a revision, not a research pass. One decision is reserved for the creator and blocks the run: whether this guide stays a historical record of the completed trip or is re-dated as the base for a possible 2027 revisit — see forks. Note the guide is already archived:true and carries a published learnings block with per-day Plan-vs-Actual reality, which is the state option B would contradict.",
   "reResearch": [
     {
