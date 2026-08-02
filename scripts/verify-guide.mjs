@@ -92,7 +92,7 @@ const HUMAN_ROWS = [
 ];
 
 // Roll the three sources up for one guide into a verdict + structured scorecard.
-export function evaluateGuide(guide, slug, staleness, net, facts = null, unused = [], candidates = null) {
+export function evaluateGuide(guide, slug, staleness, net, facts = null, unused = [], candidates = null, sources = null) {
   const draft = !!guide.draft;
   const readiness = evaluateReadiness(guide, slug); // { pass, warns, infos, coverage }
 
@@ -146,6 +146,7 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
   if (content.status === "unverifiable") blockers.push("content-unverifiable");
   if (venueStatus.status === "fail") blockers.push("venues");
   if (candidatesRow.status === "fail") blockers.push("candidates");
+  if (sources?.status === "fail") blockers.push("sources");
   if (coverage.status === "fail") blockers.push("coverage");
   if (voice.status === "fail") blockers.push("voice");
   const pass = blockers.length === 0;
@@ -154,7 +155,7 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
   // and a guide with one should show at a glance how much of it is sourced data rather than prose.
   const registry = facts ? { count: Object.keys(facts).length, unused } : null;
 
-  return { slug, draft, pass, blockers, readiness, recency, content, venueStatus, candidates: candidatesRow, coverage, voice, noVerifiedDate, registry };
+  return { slug, draft, pass, blockers, readiness, recency, content, venueStatus, candidates: candidatesRow, sources, coverage, voice, noVerifiedDate, registry };
 }
 
 export async function verify({ slug = null, network = false } = {}) {
@@ -188,8 +189,11 @@ export async function verify({ slug = null, network = false } = {}) {
     candidatesBySlug[t.slug] = await checkCandidates(t.slug, { researchFloors: t.guide.researchFloors ?? null });
   }
 
-  const results = targets.map(({ guide, slug: s, facts, unusedFacts }) =>
-    evaluateGuide(guide, s, staleness, net, facts, unusedFacts, candidatesBySlug[s]));
+  // S5: source-mix measurement — pure text analysis over the same raw the link sweep scans.
+  const { sourceMix } = await import("./audit/check-source-mix.mjs");
+
+  const results = targets.map(({ guide, slug: s, raw, facts, unusedFacts }) =>
+    evaluateGuide(guide, s, staleness, net, facts, unusedFacts, candidatesBySlug[s], sourceMix(raw, guide.country)));
   return { results, error: null, network };
 }
 
@@ -252,6 +256,14 @@ export function report(r) {
       L.push(`  P1 candidates · FAIL — the consideration set is thin or unverifiable`);
       for (const f of c.findings ?? []) L.push(`      ✗ ${f}`);
     }
+  }
+
+  // S5: source mix. Advisory report every run; blocks only past the monoculture ceiling.
+  if (r.sources) {
+    const s = r.sources;
+    const cc = s.ccTld ? (s.hasDestinationTld ? `${s.ccTld} sources present` : `⚠ no ${s.ccTld} source cited — was a native-language T0 consulted?`) : "ccTLD n/a";
+    const head = s.status === "fail" ? "FAIL (monoculture)" : "report";
+    L.push(`  P1 sources    · ${head} — ${s.domains} domains / ${s.citations} citations · top ${s.top?.domain ?? "—"} ${(100 * (s.top?.share ?? 0)).toFixed(0)}% · ${cc}`);
   }
 
   // Perishable-fact registry (informational — not a gate)
