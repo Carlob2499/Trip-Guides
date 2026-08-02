@@ -50,7 +50,7 @@ ignoring are both wrong.
 **Hard-gated in CI (2026-07-30):** every headless edit surface leaves a written sweep
 record (greps run · ripples fixed · "none" stated) or its run fails — modify-guide's
 scorecard `## Continuity sweep`, revise-guide's `#### Continuity sweep — #<issue>`,
-research-pass's `#### Continuity sweep — vibe execution`. Doctrine that proves sore in
+research-pass's `#### Continuity sweep — critic execution`. Doctrine that proves sore in
 practice becomes a gate, not a reminder (creator's standing ruling).
 
 ---
@@ -69,7 +69,7 @@ are summarized into patterns. And the reality layer only appears when there IS r
 show — no feedback and no post-mortem means nothing renders. Never invent a learning to fill
 the surface; an honest blank is the feature.
 
-A **parallel process rail** (2026-07-30): pipeline critic/vibe findings compound in
+A **parallel process rail** (2026-07-30): pipeline critic findings compound in
 `docs/PIPELINE_PATTERNS.md` (distilled, appended every research run, promotion rule: a
 pattern recurring ≥2 runs becomes a skill rule or gate). They are process evidence and
 **never** enter the learnings silo or `TRAVELER_PATTERNS.md` — those assert lived

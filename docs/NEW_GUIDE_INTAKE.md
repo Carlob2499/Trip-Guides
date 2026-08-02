@@ -135,7 +135,8 @@ generated more than once and cross-checked, not written once and only error-corr
 |      |                    |                          |                    |                                          |
 
 *Reconciliation rules: **AGREE** → high confidence. **A-only** → is it a trap B routed around? add a
-crowd + best-time note, or swap to the authentic version. **B-only** → verify T0, then include.
+crowd + best-time note, or swap to the authentic version. **B-only** → arrives already T0-verified
+(that is Pass B's own contract, above); carry its citation across rather than re-fetching it.
 **CONFLICT** (hours, "best" pick) → resolve to the truth, record which source won and why.*
 
 ## Amendments (append-only — every research-forced re-plan)

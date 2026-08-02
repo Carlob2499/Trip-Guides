@@ -5,6 +5,12 @@ skill. `research-pass.yml`'s prompts point HERE instead of restating any of this
 this file edits every agent that plays the role, and there is no second copy to drift.
 Interactive sessions playing one of these roles follow the same law.
 
+The chain is four agents: **Pass A → Pass B → Reconcile & verify → Critic**. The critic is
+ONE agent carrying every judgment lens (2026-08-02: the separate Fable vibe critic and its
+Opus executor were merged in — three sessions of context-rebuilding and two extra verify
+loops bought no findings the merged critic can't reach, and splitting "judge" from "fix"
+meant the judge never had to live with its own suggestion).
+
 ## Traveler questions — research never blocks on a fork
 
 When research or reconciliation hits a REAL fork (dates, lodging style, splurge-vs-save —
@@ -23,66 +29,24 @@ Then PROCEED on the assumption — research never blocks on an answer. Emit ques
 for genuine forks, not for facts you can research yourself. (Interactive sessions ask the
 creator directly instead — `AskUserQuestion` — same bar for what counts as a fork.)
 
-## The vibe lens — judging how a finished trip FEELS
+**The workflow surfaces these to the traveler** (2026-08-02): when the run was dispatched
+with the originating intake issue number, a deterministic step posts every `open` question
+as a comment on that issue after research and again after the critic. It is a NOTIFICATION,
+never a gate — no label swap, no pause, no failed step (creator's ruling: surface questions,
+never hard-stop a run). An answer becomes a `modify-guide` / `revise-guide` issue later; the
+guide ships on the stated assumption meanwhile. So `**Assumed:**` is load-bearing: it is what
+actually gets built, and it is what the traveler is being asked to confirm or correct.
 
-Runs AFTER mechanical verification, BEFORE the rubric critic. Read the guide the way a
-well-travelled friend would: not for facts (verify handled those), but for flow.
+## The fresh-context critic — five scans, then execution under full discipline
 
-**Inputs (and ONLY these):** the intake spec (`guides-intake/<slug>.md`) and the finished
-guide (`src/content/guides/<slug>/`). Never passB.json, .state.json, or git history — the
-vibe critic judges the product, not the process.
+A deliberately blind quality gate, run AFTER all mechanical verification: it sees ONLY the
+intake spec, the finished guide, `docs/GUIDE_RUBRIC.md`, and this skill — **never
+`passB.json`, `.state.json`, or git history.** Its job is to catch what the researchers
+couldn't see because they were inside the process. It judges the PRODUCT, not the process,
+and it owns graduation.
 
-**Judge:**
-- **PACING ARC** — does the trip breathe? A packed jet-lagged arrival day? Three museum
-  days in a row? A "slow" day listing six stops?
-- **GEOGRAPHY** — does any day zigzag across the city when reordering stops would halve
-  the transit?
-- **MEALS & ENERGY** — are food picks where the day actually puts the traveler at
-  mealtimes? A late night followed by a dawn start?
-- **TONE** — does any copy read like a brochure or a model? Flat, useful, human.
-- **COMMON SENSE** — whatever a friend would catch: thin buffers, a "backup" worse than
-  nothing, a plan that ignores the party's stated pace.
+### The five scans
 
-**Output — findings only, never edits.** Write to the intake doc under `## Vibe findings`:
-each finding states WHAT feels wrong, WHERE (group file + item), and a CONCRETE suggested
-change. Suggest swaps and reorders freely, but never invent a fact — anything new proposed
-here must be verified by the executor before it ships. If the trip reads well, write
-exactly: `None — the trip reads well.` (the findings gate greps for this sentinel — keep
-the wording exact). The vibe critic touches nothing but the intake doc and never graduates.
-
-## The vibe executor — implementing findings under full discipline
-
-Implements `## Vibe findings` in the guide directory under the FULL skill discipline —
-ledger, provenance (source_url + verified_on + shelf_life), ≈/⚠ legal states, continuity
-sweep. Vibe never lowers the bar:
-- A reorder or swap keeps every fact's provenance intact.
-- Anything NEW (a venue, a time, a claim) is researched and verified against a primary
-  (T0) source before it ships — or it doesn't ship.
-- A finding the executor judges WRONG gets a one-line rebuttal appended beneath it in the
-  intake doc instead of an edit. **Disagreement is allowed; silence is not.**
-Then the continuity sweep for everything the edits ripple into, and re-run
-`npm run verify -- --slug <slug>` + `npm run build` until both are clean (≤3 rounds).
-**Record the sweep (required artifact):** append beneath the `## Vibe findings` section in
-the intake doc:
-
-```
-#### Continuity sweep — vibe execution
-- greps run: <what you actually grepped>
-- ripples found & fixed: <list, or "none — no stale touchpoints">
-- deferred to human: <list, or "none">
-```
-
-The workflow hard-gates on this block whenever the executor ran — edits with no recorded
-sweep fail the run before graduation. The executor never graduates — the rubric critic runs
-next with fresh eyes.
-
-## The fresh-context critic — bar test, rubric scoring, citation audit
-
-A deliberately blind quality gate: it sees ONLY the intake spec, the finished guide,
-`docs/GUIDE_RUBRIC.md`, and this skill — never passB.json, .state.json, or git history.
-Its job is to catch what the researchers couldn't see because they were inside the process.
-
-**The four scans:**
 1. **INTAKE FIT** — do the top 2–3 ranked priorities get REAL depth (multiple verified
    picks woven into the day plan)? Are low-ranked priorities appropriately light? Is the
    anchor event verified against a T0 source with dates + venue?
@@ -95,29 +59,73 @@ Its job is to catch what the researchers couldn't see because they were inside t
    size, pace matches party type, recommendations suit the party.
 4. **AUTHENTICITY** — marquee food/experience picks carry crowd/off-peak notes; at least
    one novel local pick that isn't in the TripAdvisor top 10.
+5. **THE VIBE LENS — how the finished trip FEELS.** Read it the way a well-travelled friend
+   would: not for facts (verify handled those), but for flow. This scan is judged on the
+   same inputs as the rest — the product, never the process.
+   - **PACING ARC** — does the trip breathe? A packed jet-lagged arrival day? Three museum
+     days in a row? A "slow" day listing six stops?
+   - **GEOGRAPHY** — does any day zigzag across the city when reordering stops would halve
+     the transit?
+   - **MEALS & ENERGY** — are food picks where the day actually puts the traveler at
+     mealtimes? A late night followed by a dawn start?
+   - **TONE** — does any copy read like a brochure or a model? Flat, useful, human.
+   - **COMMON SENSE** — whatever a friend would catch: thin buffers, a "backup" worse than
+     nothing, a plan that ignores the party's stated pace.
 
-**Findings — `## Critic findings` in the intake doc, ALWAYS present.** Each finding: what's
-wrong, which rubric row it violates, and a **researched replacement** — "consider adding"
-is not sufficient; research a specific alternative, verify it against a primary source,
-write the replacement with source + date. A clean pass writes exactly:
-`None — guide passes the bar test.` Then resolve each finding IN the guide (edit the group
-file, extend the ledger), and re-run verify + build until clean (≤3 rounds).
+Scans 1–4 cite a `docs/GUIDE_RUBRIC.md` row; scan 5 cites its lens (pacing arc / geography /
+meals & energy / tone / common sense). Judge boldly — a reorder or a swap you can justify is
+worth proposing even when nothing is factually wrong.
 
-**Feed the loop — `docs/PIPELINE_PATTERNS.md` (required, every run).** Before landing,
-distill this run's findings — the critic's own AND the `## Vibe findings` it read — into
-the Finding ledger: one row per finding-CLASS with `[critic]`/`[vibe]`, slug, date, and
-the rubric row or lens violated. A clean run appends its honest-blank row ("clean run —
-no findings"). Never paste raw finding text; never let these rows touch `learnings/` or
-`TRAVELER_PATTERNS.md` — critic findings are process evidence, not lived experience.
-Commit the append with the run. If an OPEN pattern in that ledger already covers what you
-just caught again, note the recurrence in your row — recurrence ≥2 is the promotion
-trigger (a human or a design session moves the rule into the skill and marks the row
-promoted).
+### Findings — `## Critic findings` in the intake doc, ALWAYS present
 
-**Citation audit — the critic owns done-gate #3 in CI.** Sample ≥5 verified perishable
-facts (weighted toward prices, hours, the anchor event), fetch each fact's own
-`source_url`, and confirm the page still supports the stated value. Record the
-`## Citation audit` table in the intake doc (claim · value · fetched y/n · verdict
-`supports` / `drifted → fixed` / `unreachable → flagged`), fixing drift and downgrading
-unreachables on the spot. **The workflow hard-gates on both artifacts** (`## Critic
-findings` + `## Citation audit`) — a critic run that ends without them fails the run.
+Each finding states: what's wrong, WHERE (group file + item), which **rubric row or lens**
+it violates, and a **researched replacement** — "consider adding" is not sufficient; research
+a specific alternative, verify it against a primary source, write the replacement with source
++ date. A clean pass writes exactly: `None — guide passes the bar test.`
+
+### Execution — implementing your own findings, discipline intact
+
+Then resolve each finding IN the guide (edit the group file, extend the ledger) under the
+FULL skill discipline — ledger, provenance (`source_url` + `verified_on` + `shelf_life`),
+≈/⚠ legal states, continuity sweep. **Judgment never lowers the bar:**
+
+- A reorder or swap keeps every fact's provenance intact.
+- Anything NEW (a venue, a time, a claim) is researched and verified against a primary
+  (T0) source before it ships — or it doesn't ship.
+- A finding you judge WRONG on second look gets a one-line rebuttal appended beneath it in
+  the intake doc instead of an edit. **Disagreement is allowed; silence is not.**
+
+Then the continuity sweep for everything the edits ripple into, and re-run
+`npm run verify -- --slug <slug>` + `npm run build` until both are clean (≤3 rounds).
+**Record the sweep (required artifact)** — append beneath `## Critic findings`:
+
+```
+#### Continuity sweep — critic execution
+- greps run: <what you actually grepped>
+- ripples found & fixed: <list, or "none — no stale touchpoints">
+- deferred to human: <list, or "none">
+```
+
+The workflow hard-gates on this block whenever the critic edited the guide — edits with no
+recorded sweep fail the run.
+
+### Citation audit — the critic owns done-gate #3 in CI
+
+Sample ≥5 verified perishable facts (weighted toward prices, hours, the anchor event),
+fetch each fact's own `source_url`, and confirm the page still supports the stated value.
+Record the `## Citation audit` table in the intake doc (claim · value · fetched y/n ·
+verdict `supports` / `drifted → fixed` / `unreachable → flagged`), fixing drift and
+downgrading unreachables on the spot. **The workflow hard-gates on all three artifacts**
+(`## Critic findings` + `## Citation audit` + the sweep record when edits were made) — a
+critic run that ends without them fails the run.
+
+### Feed the loop — `docs/PIPELINE_PATTERNS.md` (required, every run)
+
+Before landing, distill this run's findings into the Finding ledger: one row per
+finding-CLASS, tagged `[critic]`, with the slug, the date, and the rubric row or lens
+violated. A clean run appends its honest-blank row ("clean run — no findings"). Never paste
+raw finding text; never let these rows touch `learnings/` or `TRAVELER_PATTERNS.md` — critic
+findings are process evidence, not lived experience. Commit the append with the run. If an
+OPEN pattern in that ledger already covers what you just caught again, note the recurrence in
+your row — recurrence ≥2 is the promotion trigger (a human or a design session moves the rule
+into the skill and marks the row promoted).

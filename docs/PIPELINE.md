@@ -215,8 +215,16 @@ repo must sustain — indefinitely, on a **Claude Pro** plan — is:
 |---|---|---|
 | Research passes (A + B), recert | **Sonnet** (workflow default, pinned via `claude_args`) | Verification is procedure-driven — the skill + gates carry the judgment |
 | Contested reconcile / anchor calls | light **Opus** (explicit dispatch choice) | Rare, bounded judgment moments |
+| The fresh-context critic (one per run) | **Opus** (`critic_model` default) | The only judgment agent left, and the last gate before a guide auto-publishes — the one place in the chain worth paying for |
 | Mechanical sweeps, formatting | Haiku / stay in Sonnet | — |
 | Pipeline/skill/design changes | Fable/Opus, **separate sessions** | Design is one-time; operation is forever |
+
+**Critic merge (2026-08-02).** The chain is four agents — Pass A · Pass B · Reconcile · Critic.
+The experimental Fable vibe critic, its Opus fallback, and its Opus vibe executor were folded
+into the single critic, which runs the vibe lens as its fifth scan and implements its own
+findings under full verification discipline (`references/pipeline-roles.md`). Three extra agent
+sessions and two extra verify loops per run bought no findings the merged critic can't reach,
+and splitting "judge" from "fix" meant the judge never had to live with its own suggestion.
 
 Guides are not numbered milestones — each is just the backbone exercising. What makes Pro
 sufficient: **plan-mode first** (plan cheap, execute the plan), **checkpoint-often** (the P2 spine —

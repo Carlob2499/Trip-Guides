@@ -1,8 +1,8 @@
-# Pipeline Patterns — what the critics keep catching
+# Pipeline Patterns — what the critic keeps catching
 
 **What this is.** The process analog of `TRAVELER_PATTERNS.md`: a cross-run memory of what
-the vibe critic and rubric critic actually found, distilled into patterns so the NEXT
-research pass starts smarter. TRAVELER_PATTERNS teaches the pipeline about the travelers;
+the fresh-context critic actually found across all five of its scans, distilled into
+patterns so the NEXT research pass starts smarter. TRAVELER_PATTERNS teaches the pipeline about the travelers;
 this file teaches the pipeline about itself. Together they close the virtuous loop the
 creator ruled on 2026-07-30: whatever a critic catches must compound, not evaporate.
 
@@ -17,11 +17,14 @@ rendered on the site.
 1. **Distill, never paste.** One row per finding-CLASS, not per finding — the same
    summarize-into-patterns rule that governs freeform trip critiques. Raw finding text
    stays in the run's intake doc where it was recorded.
-2. **Every research-pass run appends** — the rubric critic writes its rows (covering its
-   own findings AND the vibe findings it read in the intake doc) before landing, including
-   the honest-blank row when a run was clean. Interactive full passes follow the same rule.
-3. **Provenance per row:** `[critic]` or `[vibe]`, the slug, the date, and the rubric row
-   or lens it violated. A row missing these is noise, not signal.
+2. **Every research-pass run appends** — the critic writes its rows before landing,
+   including the honest-blank row when a run was clean. Interactive full passes follow the
+   same rule.
+3. **Provenance per row:** `[critic]`, the slug, the date, and the rubric row **or lens**
+   it violated (the vibe lens is scan 5 of the critic's protocol, so a pacing/geography/
+   tone finding is still a `[critic]` row — name the lens in the row's own column). A row
+   missing these is noise, not signal. Rows tagged `[vibe]` predate the 2026-08-02 critic
+   merge; they stay as history and no new ones are written.
 4. **The promotion rule (the loop's whole point).** A pattern recurring across **≥2 runs**
    is no longer a pattern — it is a defect in the pipeline's law. Promote it: write the
    rule into the skill file or reference it indicts (or a deterministic gate where one is
@@ -36,8 +39,8 @@ rendered on the site.
 
 | Date | Slug | Source | Rubric row / lens | Pattern (distilled) | Status |
 |------|------|--------|-------------------|---------------------|--------|
-<!-- The rubric critic appends rows here each run. A clean run appends:
+<!-- The critic appends rows here each run. A clean run appends:
      | YYYY-MM-DD | slug | [critic] | — | clean run — no findings | open |
-     Example of a real row:
-     | 2026-08-02 | japan | [vibe] | pacing arc | arrival days keep getting packed despite jet lag — Pass A should default arrival day to `energy: slow` | open |
+     Example of a real row (the lens column names which of the five scans caught it):
+     | 2026-08-02 | japan | [critic] | pacing arc | arrival days keep getting packed despite jet lag — Pass A should default arrival day to `energy: slow` | open |
 -->

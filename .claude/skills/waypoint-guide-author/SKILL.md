@@ -21,13 +21,13 @@ Honest; **"The bar"**; **"Editing a Guide — Continuity Is Mandatory"**) plus t
 code-layer guardrails — don't re-Read it; it points *here* for guide-content
 detail.
 
-**The headless pipeline runs THIS file.** `research-pass.yml`'s agents (Pass A ·
-Pass B · Reconcile · Vibe critic → executor · Rubric critic) are instructed to
-read this skill and execute their stage from it — the workflow carries only each
-stage's I/O contract (paths, checkpoints, forbidden dirs), never a restatement
-of the standards. The stage-role law (vibe lens, critic protocol, the
-traveler-question emitter) lives in **`references/pipeline-roles.md`**. Editing
-these files edits the pipeline; there is no second copy to keep in sync.
+**The headless pipeline runs THIS file.** `research-pass.yml`'s four agents (Pass A ·
+Pass B · Reconcile · Critic) are instructed to read this skill and execute their stage
+from it — the workflow carries only each stage's I/O contract (paths, checkpoints,
+forbidden dirs), never a restatement of the standards. The stage-role law (the critic's
+five scans incl. the vibe lens, its execution discipline, the traveler-question emitter)
+lives in **`references/pipeline-roles.md`**. Editing these files edits the pipeline; there
+is no second copy to keep in sync.
 
 ## Read first
 1. **`references/verification-rules.md`** — the binding fact decision layer
@@ -146,7 +146,11 @@ Merge the two passes item by item into the single guide, and record the merge in
 - **AGREE** (both passes land on it) → high confidence; include.
 - **A-only** → is it a trap Pass B routed around? Add a crowd + best-time note, or swap to the
   authentic version B found.
-- **B-only** → verify against a T0 source, *then* include.
+- **B-only** → already T0-verified on arrival (Pass B's contract: every entry carries
+  `source_url` + `verified_on`, and anything it couldn't verify was omitted, not passed on).
+  Carry the citation across as-is — do NOT re-fetch what B already sourced. Re-verify only
+  when you have a reason to doubt it: the value is implausible, the source is an aggregator
+  rather than the venue's own page, or `verified_on` is older than this pass.
 - **CONFLICT** (hours differ, "best X" differs) → resolve to the truth; record which source won
   and why.
 
@@ -267,7 +271,7 @@ Then these guide-content gates, on top of it:
    traveler?" (rubric rows #6/#9/#12). Replace what fails it or justify it explicitly;
    a replacement re-enters the SAME ledger + continuity sweep. Log the outcome always,
    even "none" — see `verification-rules.md` §8 item 1. In CI this judgment belongs to
-   the critic agents (vibe + rubric); interactively it is yours.
+   the critic agent; interactively it is yours.
 3. **Citation audit — the fidelity spot-check (REQUIRED artifact).** Sample **≥5
    verified perishable facts** (or all of them if fewer), weighted toward prices, hours,
    and the anchor event. Fetch each fact's own `source_url` and confirm the page still

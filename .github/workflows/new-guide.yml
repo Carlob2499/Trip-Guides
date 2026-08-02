@@ -93,8 +93,13 @@ jobs:
           \`\`\`"
           gh issue close "${ISSUE_NUM}"
 
+      # `issue` threads this intake issue through to the research pass so it can surface any
+      # `## Questions for the traveler` (genuine forks it had to assume its way past) back to
+      # the person who filed the intake. Purely a notification channel — research never waits
+      # on an answer, and a pass dispatched without it just skips that step.
       - name: Auto-start the research pass
         env:
           GH_TOKEN: ${{ github.token }}
           SLUG: ${{ steps.gen.outputs.slug }}
-        run: gh workflow run research-pass.yml -f slug="${SLUG}"
+          ISSUE_NUM: ${{ github.event.issue.number }}
+        run: gh workflow run research-pass.yml -f slug="${SLUG}" -f issue="${ISSUE_NUM}"

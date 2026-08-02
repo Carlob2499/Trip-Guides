@@ -1,28 +1,29 @@
 name: Research pass
 
-# Autonomous research pass: up to SIX Claude Code agents research one guide via the dual-pass
+# Autonomous research pass: FOUR Claude Code agents research one guide via the dual-pass
 # procedure (Agent 1: Pass A canonical/verified → Agent 2: Pass B local/authentic/crowd-aware,
-# STRUCTURALLY BLIND to Pass A → Agent 3: reconcile + verify loop → Agent 4 [vibe_pass]:
-# Fable vibe critic, judgment-only findings → Agent 5 [if findings]: Opus vibe executor →
-# Agent 6: fresh-context rubric critic + auto-graduate). Each agent is a separate invocation —
-# Pass B cannot read Pass A's guide output, and the critics cannot see the research process,
-# only the finished product + intake spec. This enforces independence at the infrastructure
-# level (P2/F3: Japan proved prompt-only independence is not a guarantee; P3/R8: the critic
-# catches what researchers can't see from inside the process).
+# STRUCTURALLY BLIND to Pass A → Agent 3: reconcile + verify loop → Agent 4: fresh-context
+# critic + auto-graduate). Each agent is a separate invocation — Pass B cannot read Pass A's
+# guide output, and the critic cannot see the research process, only the finished product +
+# intake spec. This enforces independence at the infrastructure level (P2/F3: Japan proved
+# prompt-only independence is not a guarantee; P3/R8: the critic catches what researchers
+# can't see from inside the process).
 # MODEL MAP: Pass B is always Sonnet; the `model` input governs A + reconcile; `critic_model`
-# (default Opus — judgment work per research-efficiency.md) governs the rubric critic; the
-# vibe critic is pinned Fable and its executor pinned Opus (critique high, execute strong).
-# The vibe pair is EXPERIMENTAL and gated by `vibe_pass`; the Fable model id has not yet been
-# proven available to this action headless, so that step is continue-on-error by design —
-# if it fails, an IDENTICAL Opus 5 vibe critic runs as the fallback (creator's call,
-# 2026-07-30: degrade the model, never the pass). Only a double failure skips the vibe pass.
+# (default Opus — judgment work per research-efficiency.md) governs the critic.
+#
+# CRITIC MERGE (2026-08-02): the experimental Fable vibe critic, its Opus fallback, and its
+# Opus executor were folded into the single critic agent, which now runs the vibe lens as its
+# fifth scan (pipeline-roles.md, "The fresh-context critic"). Three extra agent sessions and
+# two extra verify loops per run bought no findings the merged critic can't reach, and
+# splitting "judge" from "fix" meant the judge never had to live with its own suggestion.
 #
 # SINGLE SOURCE OF TRUTH (2026-07-30): agent prompts here are POINTERS — each carries only its
 # stage's I/O contract (paths, checkpoints, forbidden reads, stop conditions) and instructs the
 # agent to read .claude/skills/waypoint-guide-author/ (SKILL.md + references/, incl.
-# pipeline-roles.md for the vibe lens / critic protocol / question emitter). Editing the skill
-# edits the pipeline; never restate skill doctrine in a prompt. The "Critic artifact gate" step
-# hard-fails any run whose critic ended without `## Critic findings` + `## Citation audit`.
+# pipeline-roles.md for the critic protocol / question emitter). Editing the skill edits the
+# pipeline; never restate skill doctrine in a prompt. The "Critic artifact gate" step
+# hard-fails any run whose critic ended without `## Critic findings` + `## Citation audit`
+# (+ the continuity-sweep record whenever the critic edited the guide).
 #
 # Auto-graduation: the verify PASS is the evidence gate (see scripts/graduate-guide.mjs --slug);
 # a guide that passes goes live on the next Pages deploy with ZERO further action. Only a guide
@@ -95,14 +96,15 @@ on:
           - claude-sonnet-5
           - claude-fable-5
         default: claude-opus-5
-      # EXPERIMENTAL (creator, 2026-07-30): a Fable "vibe" critic — common-sense/flow
-      # judgment only, no edits — whose findings a pinned-Opus executor implements under
-      # full verification discipline. Off = the proven 4-agent chain, untouched.
-      vibe_pass:
-        description: "Run the experimental Fable vibe critic + Opus executor between verify and the rubric critic."
+      # The originating intake issue, when this run was auto-dispatched by new-guide.yml.
+      # Used ONLY to surface `## Questions for the traveler` back to the person who filed the
+      # intake (see the "Surface traveler questions" steps). Never a gate: a run without it
+      # simply skips those steps. Blank on a manual dispatch is normal.
+      issue:
+        description: "Intake issue number to post traveler questions to (optional; set automatically by new-guide.yml)."
         required: false
-        type: boolean
-        default: true
+        type: string
+        default: ""
       # P1/F2: set ONLY by this workflow's own auto-retry dispatch after a VOID run (an agent
       # session that produced no durable output at all). It exists to make the retry strictly
       # once — a second void run with this already true files the stuck issue instead of
@@ -529,162 +531,15 @@ jobs:
           SLUG: ${{ inputs.slug }}
         run: node scripts/check-passb-coverage.mjs --slug "$SLUG"
 
-      # ── AGENT 4 (vibe_pass): Fable vibe critic — judgment only, edits nothing ──
-      # EXPERIMENTAL: reads the finished guide as a well-travelled friend would — pacing,
-      # geography, meals, tone, plain common sense — and records findings for a separate
-      # executor. It never edits the guide, so its judgment can be bold without its context
-      # carrying execution discipline. continue-on-error is DELIBERATE: the Fable model id
-      # is unproven on this action headless — on failure the Opus fallback step below runs
-      # the SAME critique, so the pass degrades in model, never in coverage. The rubric
-      # critic still audits everything last.
-      - name: Run research agent — Vibe critic (Fable)
-        id: vibefable
-        if: >-
-          steps.budget.outputs.should_run == 'true' &&
-          steps.route4.outputs.verified == 'true' &&
-          format('{0}', inputs.vibe_pass) != 'false'
-        continue-on-error: true
-        uses: anthropics/claude-code-action@v1
-        with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          allowed_bots: "github-actions[bot]"
-          show_full_output: true
-          # Read-and-judge, not exhaustive search — high, never xhigh.
-          claude_args: |
-            --model claude-fable-5
-            --effort high
-            --allowedTools Bash,Read,Write,Edit,Glob,Grep
-          prompt: |
-            Guide slug: ${{ inputs.slug }}
-
-            YOU ARE THE VIBE CRITIC. THE LAW — read and execute EXACTLY:
-              .claude/skills/waypoint-guide-author/references/pipeline-roles.md — "The vibe
-              lens": your inputs (and what you are forbidden to read), the five judgments,
-              the `## Vibe findings` output format, and the exact clean-pass sentinel.
-
-            STAGE CONTRACT:
-            - Findings go in guides-intake/${{ inputs.slug }}.md ONLY. Commit and push exactly
-              that file:
-                git add guides-intake/${{ inputs.slug }}.md
-                git commit -m "research(${{ inputs.slug }}): vibe findings" && git push
-            - Touch NOTHING else. Do not edit guide files. Do not graduate.
-
-      # ── Vibe critic FALLBACK (Opus 5) — runs ONLY if the Fable step failed ─────
-      # Degrade the model, never the pass (creator's ruling). With continue-on-error,
-      # `outcome` records the real failure while `conclusion` stays green — so this
-      # triggers on outcome. continue-on-error here too: a double failure skips the
-      # vibe pass (the findings gate then finds nothing) instead of blocking graduation.
-      # Both vibe steps share ONE prompt that is a thin pointer to pipeline-roles.md "The
-      # vibe lens" — the lens itself lives in the skill, so the two copies below stay
-      # trivially identical and carry no content that can drift.
-      - name: Run research agent — Vibe critic fallback (Opus)
-        if: >-
-          steps.budget.outputs.should_run == 'true' &&
-          steps.route4.outputs.verified == 'true' &&
-          format('{0}', inputs.vibe_pass) != 'false' &&
-          steps.vibefable.outcome == 'failure'
-        continue-on-error: true
-        uses: anthropics/claude-code-action@v1
-        with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          allowed_bots: "github-actions[bot]"
-          show_full_output: true
-          claude_args: |
-            --model claude-opus-5
-            --effort high
-            --allowedTools Bash,Read,Write,Edit,Glob,Grep
-          prompt: |
-            Guide slug: ${{ inputs.slug }}
-
-            YOU ARE THE VIBE CRITIC. THE LAW — read and execute EXACTLY:
-              .claude/skills/waypoint-guide-author/references/pipeline-roles.md — "The vibe
-              lens": your inputs (and what you are forbidden to read), the five judgments,
-              the `## Vibe findings` output format, and the exact clean-pass sentinel.
-
-            STAGE CONTRACT:
-            - Findings go in guides-intake/${{ inputs.slug }}.md ONLY. Commit and push exactly
-              that file:
-                git add guides-intake/${{ inputs.slug }}.md
-                git commit -m "research(${{ inputs.slug }}): vibe findings" && git push
-            - Touch NOTHING else. Do not edit guide files. Do not graduate.
-
-      # Findings gate — spawn the Opus executor only when there is real work for it.
-      - name: Route after vibe critic
-        id: vibe
-        if: >-
-          steps.budget.outputs.should_run == 'true' &&
-          steps.route4.outputs.verified == 'true' &&
-          format('{0}', inputs.vibe_pass) != 'false'
-        env:
-          SLUG: ${{ inputs.slug }}
-        run: |
-          F="guides-intake/${SLUG}.md"
-          HAS=false
-          if grep -q "^## Vibe findings" "$F" && \
-             ! grep -A2 "^## Vibe findings" "$F" | grep -qi "^None"; then HAS=true; fi
-          echo "has_findings=$HAS" >> "$GITHUB_OUTPUT"
-          echo "[route] vibe findings present: $HAS"
-
-      # ── AGENT 5 (if findings): Opus vibe executor — implements, never graduates ──
-      - name: Run research agent — Vibe executor (Opus)
-        if: steps.vibe.outputs.has_findings == 'true'
-        uses: anthropics/claude-code-action@v1
-        with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          allowed_bots: "github-actions[bot]"
-          show_full_output: true
-          claude_args: |
-            --model claude-opus-5
-            --effort ${{ inputs.effort || 'high' }}
-            --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
-          prompt: |
-            Guide slug: ${{ inputs.slug }}
-
-            YOU ARE THE VIBE EXECUTOR. THE LAW — read and execute EXACTLY:
-              .claude/skills/waypoint-guide-author/references/pipeline-roles.md — "The vibe
-                executor": implement the `## Vibe findings` recorded in
-                guides-intake/${{ inputs.slug }}.md under full discipline; anything NEW is
-                verified against a primary (T0) source before it ships; a finding you judge
-                wrong gets a one-line rebuttal in the intake doc instead of an edit —
-                disagreement is allowed, silence is not.
-              .claude/skills/waypoint-guide-author/SKILL.md + references/ — the full fact
-                discipline your edits run under (ledger, provenance, ≈/⚠ states, continuity
-                sweep). Vibe never lowers the bar.
-
-            STAGE CONTRACT:
-            - Edit only the guide DIRECTORY src/content/guides/${{ inputs.slug }}/ and the
-              intake doc guides-intake/${{ inputs.slug }}.md.
-            - Re-run `npm run verify -- --slug ${{ inputs.slug }}` and `npm run build` until
-              both are clean (≤3 rounds), then commit and push:
-                git add -A && git commit -m "research(${{ inputs.slug }}): vibe findings executed" && git push
-            - Do NOT graduate and do NOT land the branch — the rubric critic runs next with
-              fresh eyes, audits your work, and owns graduation.
-
-      # HARD GATE (continuity doctrine → gate, creator's ruling 2026-07-30): if the vibe
-      # executor edited the guide, its edits must carry a recorded continuity sweep
-      # (pipeline-roles.md, "The vibe executor"). Fails BEFORE the rubric critic — an edit
-      # with no recorded sweep must not reach graduation. A barrier by design.
-      - name: Continuity artifact gate — executor sweep record
-        if: steps.vibe.outputs.has_findings == 'true'
-        env:
-          SLUG: ${{ inputs.slug }}
-        run: |
-          if ! grep -q "^#### Continuity sweep — vibe execution" "guides-intake/${SLUG}.md"; then
-            echo "::error::Vibe executor ran but left no '#### Continuity sweep — vibe execution' record in guides-intake/${SLUG}.md — the continuity doctrine requires the artifact."
-            exit 1
-          fi
-          echo "[gate] executor continuity sweep record present"
-
-      # ── AGENT 6: Fresh-context rubric Critic + Graduate ──────────────────────
+      # ── AGENT 4: Fresh-context Critic + Graduate ─────────────────────────────
       # P3/R8/R9: a SEPARATE agent invocation with fresh context — it sees ONLY the intake
       # spec and the finished guide, not the research process or intermediate findings. This
       # is the bar test: "Could a generic AI have written this from training data alone,
       # without research and without knowing this traveler?" Runs on `critic_model`
-      # (default Opus — judgment is Opus work), independent of the research model, and
-      # deliberately LAST: when the vibe pair ran, their edits get audited here too.
+      # (default Opus — judgment is Opus work), independent of the research model.
+      # It carries EVERY judgment lens — the four rubric scans plus the vibe lens (pacing,
+      # geography, meals, tone, common sense) as its fifth — then implements its own findings
+      # under full verification discipline (pipeline-roles.md is the single source for both).
       - name: Run research agent — Critic & graduate
         if: >-
           steps.budget.outputs.should_run == 'true' &&
@@ -704,16 +559,22 @@ jobs:
 
             YOU ARE THE CRITIC AGENT — the fresh-context quality gate, run AFTER all mechanical
             verification. You have NO knowledge of how the research was done; you see only the
-            finished product and the original spec, and you own graduation.
+            finished product and the original spec, and you own graduation. You are the ONLY
+            judgment agent in this pipeline: nothing downstream reviews your work, so scan
+            with that in mind.
 
             THE LAW — the skill is the single source of truth; this prompt carries only your
             stage contract. Read and execute EXACTLY:
               .claude/skills/waypoint-guide-author/references/pipeline-roles.md — "The
                 fresh-context critic": your inputs (and the files you are FORBIDDEN to read),
-                the four scans, the `## Critic findings` format (researched replacements
-                REQUIRED — "consider adding" is never sufficient; exact clean-pass sentinel),
-                and the CITATION AUDIT (`## Citation audit` table) you MUST record — the
-                workflow hard-gates on both artifacts after you finish.
+                the FIVE scans (intake fit · generic-probability · party fit · authenticity ·
+                the VIBE LENS — pacing arc, geography, meals & energy, tone, common sense),
+                the `## Critic findings` format (researched replacements REQUIRED — "consider
+                adding" is never sufficient; exact clean-pass sentinel), the EXECUTION
+                discipline for implementing your own findings, the `#### Continuity sweep —
+                critic execution` record you MUST leave whenever you edit the guide, and the
+                CITATION AUDIT (`## Citation audit` table). The workflow hard-gates on those
+                artifacts after you finish.
               .claude/skills/waypoint-guide-author/SKILL.md + references/verification-rules.md
                 + references/block-types.md — the standards you enforce and edit under.
               docs/GUIDE_RUBRIC.md — the rows you score against.
@@ -721,7 +582,8 @@ jobs:
 
             STAGE CONTRACT — after findings are recorded AND resolved in the guide (edit the
             group files, extend the ledger, re-run `npm run verify -- --slug ${{ inputs.slug }}`
-            + `npm run build` until clean, ≤3 rounds), and the `## Citation audit` is written:
+            + `npm run build` until clean, ≤3 rounds), the continuity sweep is recorded if you
+            edited anything, and the `## Citation audit` is written:
 
             GRADUATION:
               a. Extract the identity palette:
@@ -768,13 +630,17 @@ jobs:
             place the skill or its references were unclear. This feeds the monthly skill-retro;
             be concrete.
 
-      # HARD GATE (creator's ruling, 2026-07-30): the critic's two required artifacts are not
-      # advisory. A critic run that ended without recording `## Critic findings` AND the
-      # `## Citation audit` table did not do its job, even if everything else looks green —
-      # fail the run loudly so it can never read as a clean pass. This runs after landing by
-      # necessity (the critic itself writes the artifacts), so it is an alarm, not a barrier:
-      # a missing artifact means a human looks at the run, not that a good guide is blocked.
-      - name: Critic artifact gate — findings + citation audit are REQUIRED
+      # HARD GATE (creator's ruling, 2026-07-30; extended 2026-08-02 for the merged critic):
+      # the critic's required artifacts are not advisory. A critic run that ended without
+      # recording `## Critic findings` AND the `## Citation audit` table did not do its job,
+      # even if everything else looks green — fail the run loudly so it can never read as a
+      # clean pass. Since the merged critic now IMPLEMENTS its own findings (the retired vibe
+      # executor's job), the continuity-sweep record is required too — but only when it had
+      # findings to implement: a clean pass edits nothing and owes no sweep. This runs after
+      # landing by necessity (the critic itself writes the artifacts), so it is an alarm, not
+      # a barrier: a missing artifact means a human looks at the run, not that a good guide
+      # is blocked.
+      - name: Critic artifact gate — findings + citation audit + sweep are REQUIRED
         if: >-
           steps.budget.outputs.should_run == 'true' &&
           steps.route4.outputs.verified == 'true'
@@ -785,11 +651,20 @@ jobs:
           MISSING=""
           grep -q "^## Critic findings" "$F" || MISSING="$MISSING '## Critic findings'"
           grep -q "^## Citation audit" "$F" || MISSING="$MISSING '## Citation audit'"
+          # Findings present and NOT the clean-pass sentinel ⇒ the critic edited the guide
+          # ⇒ it owes a continuity sweep record (same detection the vibe route step used).
+          HAS_FINDINGS=false
+          if grep -q "^## Critic findings" "$F" && \
+             ! grep -A2 "^## Critic findings" "$F" | grep -qi "^None"; then HAS_FINDINGS=true; fi
+          if [ "$HAS_FINDINGS" = "true" ] && \
+             ! grep -q "^#### Continuity sweep — critic execution" "$F"; then
+            MISSING="$MISSING '#### Continuity sweep — critic execution'"
+          fi
           if [ -n "$MISSING" ]; then
             echo "::error::Critic run ended without required artifact(s):$MISSING in $F — pipeline-roles.md's critic protocol / the skill's done-gate citation audit was not completed."
             exit 1
           fi
-          echo "[gate] critic artifacts present: findings + citation audit"
+          echo "[gate] critic artifacts present (findings + citation audit; sweep required: $HAS_FINDINGS)"
 
       # P1 — RUN INTEGRITY (QA findings F1/F2). Two things the old workflow could not see:
       #   · a VOID run — the agent burned a full session, exited `success`, and left NOTHING
@@ -827,6 +702,7 @@ jobs:
             -f section="${{ inputs.section }}" \
             -f model="${{ inputs.model || 'claude-sonnet-5' }}" \
             -f effort="${{ inputs.effort || 'high' }}" \
+            -f issue="${{ inputs.issue }}" \
             -f void_retry=true
 
       # A second void in a row is not a flake — the run is stuck in a way retrying cannot fix.
@@ -893,6 +769,70 @@ jobs:
             exit 1
           fi
           echo "[run-integrity] clean."
+
+      # TRAVELER QUESTIONS (2026-08-02) — surface, never gate.
+      # The agents emit genuine forks (dates, lodging style, splurge-vs-save) into the intake
+      # doc under `## Questions for the traveler` and PROCEED on a stated assumption, because
+      # research must never block on a human. Until now those questions died in a file nobody
+      # reads — which is exactly how the Japan run shipped two silently-assumed forks (QA
+      # F4/F6/F7). This posts every OPEN question as a comment on the originating intake issue
+      # so the traveler sees what was assumed on their behalf.
+      # NOT A GATE (creator's ruling): no label swap, no pause, no failed step, no wait. The
+      # guide ships on the assumption; a correction arrives later as a modify/revise issue.
+      # always() so a cut-off or failed run still surfaces what it managed to ask; skipped
+      # silently on a manual dispatch (no issue number). Deduped by question id against the
+      # issue's existing comments, so a resumed run never re-asks the same fork.
+      - name: Surface traveler questions on the intake issue
+        if: always() && inputs.issue != ''
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SLUG: ${{ inputs.slug }}
+          ISSUE_NUM: ${{ inputs.issue }}
+        run: |
+          set -euo pipefail
+          F="guides-intake/${SLUG}.md"
+          if [ ! -f "$F" ]; then echo "[questions] no intake doc yet — nothing to surface."; exit 0; fi
+          gh issue view "$ISSUE_NUM" --json comments -q '[.comments[].body] | join("\n")' > /tmp/asked.txt 2>/dev/null || : > /tmp/asked.txt
+          BODY=$(node --input-type=module -e "
+            import { readFileSync } from 'node:fs';
+            const md = readFileSync('guides-intake/' + process.env.SLUG + '.md', 'utf8');
+            const asked = readFileSync('/tmp/asked.txt', 'utf8');
+            const after = md.split(/^## Questions for the traveler/m)[1];
+            if (!after) process.exit(0);
+            const blocks = after.split(/^## /m)[0].split(/^### /m).slice(1);
+            const open = [];
+            for (const b of blocks) {
+              const id = b.split(/\r?\n/)[0].trim();
+              if (!id || asked.includes(id)) continue;
+              if (!/Status:..\s*open/i.test(b)) continue;
+              const field = (label) => {
+                const marker = '**' + label + ':**';
+                const line = b.split(/\r?\n/).find((l) => l.includes(marker));
+                return line ? line.slice(line.indexOf(marker) + marker.length).trim() : '';
+              };
+              open.push({ id, q: field('Q'), assumed: field('Assumed'), context: field('Context') });
+            }
+            if (!open.length) process.exit(0);
+            const lines = [
+              open.length === 1
+                ? '**One decision came up while building your guide.**'
+                : '**' + open.length + ' decisions came up while building your guide.**',
+              '',
+              'Research never waits on an answer, so each was built on the assumption below — your guide is complete either way. If an assumption is wrong, use the **✎ Request a change** button on the guide (or reply here) and it gets fixed without rebuilding anything.',
+              '',
+            ];
+            open.forEach((o, i) => {
+              lines.push((i + 1) + '. **' + (o.q || o.id) + '**');
+              if (o.assumed) lines.push('   - Built on: ' + o.assumed);
+              if (o.context) lines.push('   - Affects: ' + o.context);
+              lines.push('   - <sub>' + o.id + '</sub>');
+            });
+            process.stdout.write(lines.join('\n'));
+          ")
+          if [ -z "$BODY" ]; then echo "[questions] none open, or all already asked."; exit 0; fi
+          gh issue comment "$ISSUE_NUM" --body "$BODY"
+          echo "[questions] surfaced on #${ISSUE_NUM}"
 
       - name: Append run report to the ledger
         if: always()
