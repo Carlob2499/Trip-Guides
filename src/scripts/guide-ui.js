@@ -9,6 +9,7 @@ import { resolveTripDate, tripWindow } from "../lib/trip-dates";
 import { initRate, initWeather, initDaySwap, initSun } from "../features/live-data/index.js";
 import { initJetLag } from "./jetlag-ui.js";
 import { initSharePanel } from "../features/share/index.js";
+import { initChangeRequest } from "../features/change-request/index.js";
 import { reportError } from "../features/firebase/index.js";
 import { initBudgetPact } from "../features/budget-pact/index.js";
 import { initPacking } from "../features/trip-kit/index.js";
@@ -686,6 +687,9 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
          used. lockScroll/unlockScroll are still shared with the mobile sheet below —
          passed in rather than duplicated, so the two keep coordinating one counter. */
       try { initSharePanel(_lockScroll, _unlockScroll); } catch (e) { fail("share panel", e); }
+      // Guided change request. _cfg carries navSections (the guide's own tabs) so the
+      // wizard can offer a real section hint instead of asking a reader to name one.
+      try { initChangeRequest(_cfg, _lockScroll, _unlockScroll); } catch (e) { fail("change request", e); }
 
       /* ── BUDGET PER-PERSON TOGGLE ─────────────────────────────────────── */
       document.querySelectorAll(".budget-toggle").forEach(function (tog) {

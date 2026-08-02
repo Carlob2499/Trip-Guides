@@ -1,0 +1,89 @@
+/* Change-request wizard. Deliberately reuses the share modal's shell metrics (guide.css
+   .share-backdrop/.share-modal) so a guide page has ONE modal language rather than two;
+   only the wizard-specific chrome lives here. Tokens only — dark mode is token remapping,
+   so nothing here may hardcode a colour. */
+
+.cr-backdrop { position: fixed; inset: 0; z-index: 900; background: rgba(0, 0, 0, .45); display: none; }
+.cr-backdrop.open { display: block; }
+
+.cr-modal {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 910;
+  width: min(420px, calc(100vw - 2rem)); max-height: calc(100dvh - 1.5rem); overflow-y: auto;
+  background: var(--card); border: 1px solid var(--rule2); border-radius: var(--r-lg);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, .35); padding: 1.4rem 1.6rem;
+}
+
+.cr-head {
+  font-family: var(--font-display); font-size: var(--text-body); font-weight: 600;
+  margin-bottom: .35rem; display: flex; align-items: center; justify-content: space-between; gap: .5rem;
+}
+.cr-close {
+  background: none; border: none; cursor: pointer; font-size: var(--text-lead); color: var(--muted);
+  padding: .1rem .3rem; line-height: 1; border-radius: 3px; transition: color .14s;
+}
+.cr-close:hover { color: var(--ink); }
+.cr-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.cr-step-of {
+  font-family: var(--font-data); font-size: var(--text-micro); letter-spacing: var(--tracking-micro);
+  text-transform: uppercase; color: var(--muted); margin-bottom: .9rem;
+}
+.cr-intro { font-size: var(--text-body); color: var(--muted); margin-bottom: .9rem; line-height: 1.45; }
+
+/* Tab picker — chips, because "clickability must be obvious" (CLAUDE.md design doctrine). */
+.cr-options { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .5rem; }
+.cr-chip {
+  font-family: var(--font-data); font-size: var(--text-control-sm); letter-spacing: .02em;
+  min-height: 36px; padding: .4rem .8rem; border-radius: 999px;
+  background: var(--card); color: var(--ink); border: 1px solid var(--rule2);
+  cursor: pointer; transition: background .14s, border-color .14s, color .14s;
+}
+.cr-chip:hover { border-color: var(--ink); }
+.cr-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.cr-chip[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+
+.cr-hint { font-size: var(--text-micro); color: var(--muted); min-height: 1.2em; margin-bottom: .9rem; }
+
+.cr-label {
+  display: block; font-family: var(--font-data); font-size: var(--text-micro);
+  letter-spacing: var(--tracking-micro); text-transform: uppercase; color: var(--muted); margin-bottom: .35rem;
+}
+/* 16px floor is enforced by tests/visual/a11y.spec.ts — anything smaller makes iOS zoom on focus. */
+.cr-textarea {
+  width: 100%; box-sizing: border-box; min-height: 116px; resize: vertical;
+  font: inherit; font-size: var(--text-body); color: var(--ink);
+  background: var(--bg2); border: 1px solid var(--rule2); border-radius: 6px; padding: .55rem .65rem;
+}
+.cr-textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+.cr-count { font-family: var(--font-data); font-size: var(--text-micro); color: var(--muted); text-align: right; margin-top: .25rem; }
+.cr-count.cr-count-low { color: var(--accent); }
+
+.cr-err { font-size: var(--text-micro); color: var(--accent); min-height: 1.2em; margin-top: .35rem; }
+
+.cr-review { background: var(--bg2); border: 1px solid var(--rule2); border-radius: 6px; padding: .7rem .8rem; margin-bottom: .9rem; }
+.cr-review dt {
+  font-family: var(--font-data); font-size: var(--text-micro); letter-spacing: var(--tracking-micro);
+  text-transform: uppercase; color: var(--muted);
+}
+.cr-review dd { margin: .15rem 0 .6rem; font-size: var(--text-body); color: var(--ink); overflow-wrap: anywhere; }
+.cr-review dd:last-child { margin-bottom: 0; }
+
+.cr-nav { display: flex; gap: .5rem; align-items: center; justify-content: space-between; margin-top: 1rem; }
+.cr-btn {
+  font-family: var(--font-data); font-size: var(--text-control-sm); letter-spacing: .02em;
+  min-height: 40px; padding: .45rem 1rem; border-radius: 999px; cursor: pointer;
+  background: var(--card); color: var(--ink); border: 1px solid var(--rule2);
+  transition: background .14s, border-color .14s, color .14s;
+}
+.cr-btn:hover { border-color: var(--ink); }
+.cr-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.cr-btn-primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.cr-btn-primary:hover { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.cr-btn[hidden] { display: none; }
+
+.cr-foot { font-size: var(--text-micro); color: var(--muted); margin-top: .8rem; line-height: 1.45; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cr-chip, .cr-btn, .cr-close { transition: none; }
+}

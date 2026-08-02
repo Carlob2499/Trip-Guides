@@ -10,11 +10,13 @@ import Reminders from "../components/Reminders.astro";
 import TripKit from "../components/TripKit.astro";
 import { bucket } from "../lib/buckets";
 import { emergencyFor, FALLBACK_RATES_AS_OF } from "../data/countries.mjs";
+import { buildModifyIssueUrl } from "../lib/modify-schema.mjs";
 import { currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
 import { paletteFor, accentForGuide } from "../lib/palettes";
 import { accentTokens, accentStyle } from "../lib/accent-tokens";
 import { generateContourLayer } from "../lib/contours";
 import PaintedAtlas from "../components/PaintedAtlas.astro";
+import ChangeRequest from "../components/ChangeRequest.astro";
 import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
 import { computeGuideStats, latestVerifiedOn } from "../lib/guide-stats";
 import { collectWaypoints, collectDayEvents, buildSummary } from "../features/exports/index";
@@ -439,6 +441,11 @@ const tripSummary = buildSummary(guide);
         <button id="btnDark" class="topbar-btn" aria-label="Switch to dark mode" title="Switch to dark mode"><Icon name="moon" class="tb-ico" /></button>
       </div>
     </nav>
+
+    <!-- Guided "Request a change" wizard — hidden until the footer pill is clicked. Both it
+         and the share modal are reparented to <body> on init (the .sticky-chrome
+         backdrop-filter containing-block trap). -->
+    <ChangeRequest repo={REPO} slug={ogSlug} />
 
     <!-- Share modal — hidden until btnShare is clicked; skipped by Web Share API on mobile -->
     <div class="share-backdrop" id="shareBackdrop" aria-hidden="true"></div>
@@ -869,9 +876,14 @@ const tripSummary = buildSummary(guide);
              wrong once a guide graduates. Filing this issue auto-applies "modify-request" and
              does nothing by itself; only the owner applying "modify-approved" (requires write
              access) runs the edit, via .github/workflows/modify-guide.yml. -->
+        <!-- A REAL link, on purpose: with JS off (or before hydration) this still reaches the
+             same prefilled issue. The change-request feature intercepts the click and offers
+             the guided 3-step version instead — progressive enhancement, not a JS-only button. -->
         <a
           class="foot-modify-pill"
-          href={`https://github.com/${REPO}/issues/new?template=modify-guide.yml&labels=modify-request&slug=${encodeURIComponent(ogSlug)}&title=${encodeURIComponent(`Modify: ${ogSlug}`)}`}
+          id="btnChangeRequest"
+          aria-expanded="false"
+          href={buildModifyIssueUrl(REPO, { slug: ogSlug })}
           target="_blank" rel="noopener"
         ><Icon name="edit" size={14} /> Request a change</a>
       </div>
@@ -987,7 +999,7 @@ const tripSummary = buildSummary(guide);
            6. Jet-lag calculator
          ═══════════════════════════════════════════════════════════════════ -->
     <!-- Config for the extracted guide UI module (formerly Astro define:vars). -->
-    <script type="application/json" is:inline id="tgConfig" set:html={jsonEmbed({ order, storeKey, legacyStoreKey, roomId: guide.roomId ?? null, mapCenter, firstDayDate, lastDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, curFallbackAsOf: FALLBACK_RATES_AS_OF, daysForBanner, gmapsKey: import.meta.env.PUBLIC_GMAPS_KEY ?? null, gmapsMapId: import.meta.env.PUBLIC_GMAPS_MAP_ID ?? null, emergency: emergencyFor(guide.country), advisory: (guide as any).advisory ?? null, verifiedDate, budgetLock: (guide as any).budgetLock ?? false })}></script>
+    <script type="application/json" is:inline id="tgConfig" set:html={jsonEmbed({ order, storeKey, legacyStoreKey, roomId: guide.roomId ?? null, mapCenter, firstDayDate, lastDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, curFallbackAsOf: FALLBACK_RATES_AS_OF, navSections: order.map((g: string) => ({ group: g, titles: (byG[g] || []).map((o: any) => navLabel(o.s, g)) })), daysForBanner, gmapsKey: import.meta.env.PUBLIC_GMAPS_KEY ?? null, gmapsMapId: import.meta.env.PUBLIC_GMAPS_MAP_ID ?? null, emergency: emergencyFor(guide.country), advisory: (guide as any).advisory ?? null, verifiedDate, budgetLock: (guide as any).budgetLock ?? false })}></script>
     <script type="application/json" is:inline id="storyDays" set:html={jsonEmbed(storyDays)}></script>
     <!-- Interactive UI — bundled + hashed by Astro into one module shared across guides. -->
     <script>
