@@ -24,6 +24,48 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
+## Snapshot (2026-08-02, session #21 — V2 plan adopted; critic merged; questions surfaced)
+
+**A V2 redesign plan was adopted after an adversarial review of the whole research pipeline**
+(plan file: `~/.claude/plans/orchestrate-this-plan-for-hazy-gadget.md` — 5 sessions, each with
+a scope fence, file:line dossier, and a binding verify list; **executed on Opus 5 / high**).
+Goals ranked: no hallucinated facts → lower token cost → easier edits → **zero visual change**.
+Creator decisions locked: perishables-only fact registry · one merged critic · auto-graduation
+stays · questions surfaced but NEVER blocking · Places API yes (if free tier covers it) ·
+change-wizard on guide pages only, **no Worker route** · parallel Pass A/B **cut** (the
+checkpoint spine enforces a total stage order; `pipeline.mjs` hard-refuses `passB` before
+`passA` is committed, and the integrity gate's 120s burst detector would flag concurrent
+commits — real cost, wall-clock-only benefit).
+
+**Session 1 of 5 SHIPPED (this session).** The research chain is now **four agents**: Pass A ·
+Pass B · Reconcile · Critic.
+- **Judgment stack merged.** The Fable vibe critic, its Opus fallback, and the Opus vibe
+  executor are gone (−149 lines of workflow); the fresh-context critic runs the **vibe lens as
+  its fifth scan** and implements its own findings under full discipline. Saves up to 3 agent
+  sessions + 2 verify loops per run. Rationale kept in the workflow header and `PIPELINE.md`.
+- **Artifact gate extended**: `## Critic findings` + `## Citation audit` + `#### Continuity
+  sweep — critic execution` (the sweep required only when findings were non-sentinel, i.e. the
+  critic actually edited).
+- **Traveler questions now reach the traveler** (QA F4/F6/F7's root cause). `new-guide.yml`
+  threads the intake issue number through a new `issue` input; a deterministic step posts every
+  `Status: open` question as an issue comment — deduped by question id, `always()` so a
+  cut-off run still surfaces what it assumed. **Not a gate**: no label swap, no pause, no
+  failure. The `**Assumed:**` line is what shipped and what the traveler is asked to correct.
+- **Doctrine contradiction fixed**: Pass B already verifies every find to T0, so reconcile no
+  longer re-verifies B-only rows — it carries the citation across and re-checks only on cause.
+
+**Verified:** 1088 tests green · build clean · lint (worktree workaround) exit 0 · typecheck 0
+errors · both workflows parse · question parser exercised against open/answered/deduped/absent
+fixtures · **live smoke on GitHub** (run 30733903544, slug=japan): budget step short-circuited
+`already reached verified`, every agent step skipped, **zero agent tokens**, run green — the
+edited YAML proven against the deployed thing (boundary check #3). Zero build inputs touched,
+so rendered output is unchanged by construction.
+
+**Next: Session 2** (acquisition — `lookup-venue.mjs` on Places behind a verified-free-tier
+gate; FX fallback coverage for every guide currency + `refresh-fx.mjs`; Jina Reader in the
+fetch doctrine if its terms allow). Then 3 (registry core), 4 (registry + denmark pilot),
+5 (change wizard).
+
 ## Snapshot (updated 2026-07-30, session #20 — mobile nav shipped end to end)
 
 **`docs/PLAN_MOBILE_NAV.md` executed in full (A + B + C).** Below 900px the guide is now
@@ -89,12 +131,11 @@ delta mid-animation (it now exposes `goTo(idx, instant)`).
   block-types.md). **Research-skill discovery layer**: interactive sessions may open each pass
   with ONE Standard-mode `Research` call (leads only, T0 bar unchanged, NEVER in CI).
 
-**Six-agent research pipeline** (this session + parallel #18b work): A (model input) → B
-(pinned Sonnet, A-blind) → Reconcile (stops pre-graduation) → Vibe critic (pinned **Fable**,
-continue-on-error; **Opus 5 fallback on failure** — degrade the model, never the pass) →
-Vibe executor (Opus, only if findings) → Rubric critic (`critic_model`, default Opus, owns
-graduation). Fable headless: **PROVEN 2026-07-30** via `model-smoke.yml` (run 30533886628,
-API metadata confirms `claude-fable-5`) — the smoke workflow stays for vetting future model ids.
+**Six-agent research pipeline** — ⚠ **superseded by session #21's four-agent chain** (the vibe
+critic / fallback / executor were merged into the single critic; see the #21 snapshot). Still
+true from this session: Fable headless was **PROVEN 2026-07-30** via `model-smoke.yml` (run
+30533886628, API metadata confirms `claude-fable-5`), and that smoke workflow stays for vetting
+future model ids.
 
 **Also this session:** `/about` page shipped (token-styled, journey-line, real build-counted
 stats; hub footer links it) · dead deps removed (dotenv, 2 retired mockup fonts, redundant
@@ -150,16 +191,17 @@ Two ways out, both the creator's call:
 
 ## Where we left off
 
-**Session #20 (2026-07-30):** executed `PLAN_MOBILE_NAV.md` end to end — four commits, a new
-sealed silo, 70 new tests, and a masthead pill cut the creator asked for mid-session. Every
-piece was verified by driving it in `astro preview` (synthetic pointer/touch events), which
-is how both real bugs surfaced; neither would have failed a unit test.
+**Session #21 (2026-08-02):** adversarially reviewed the whole pipeline, adopted a 5-session V2
+plan, and shipped Session 1 — the judgment stack merged into one critic and traveler questions
+finally reaching the traveler. One commit, pushed, live-smoked on GitHub for zero agent tokens.
 
-**Re-prompt the creator with:** "Mobile nav is fully shipped and live — the one thing no
-tooling here can check is how the four gestures FEEL on your actual phone (swipe weight,
-whether the chrome yields too eagerly at 80px, whether the day-scrub bubble is readable
-mid-drag, haptic strength on Android). Open a guide on your phone and tell me what feels
-off; the thresholds are all named constants in `src/features/mobile-nav/model/`, so tuning
-is a one-line change each. Separately still open: the research pipeline's full live proof
-waits for the next guide you actually want (japan NO-OPS at the budget step), and draft
-PR #28 needs review/merge."
+**Re-prompt the creator with:** "Session 1 of the V2 plan is live: four agents instead of six,
+and questions the pipeline had to assume its way past now land as a comment on your intake
+issue instead of dying in a file. Session 2 is next — the acquisition layer — and it opens with
+a decision only you can make: it needs a **Google Places API key** as a repo Actions secret
+(`PLACES_API_KEY`), and I'll verify the free tier actually covers guide-scale usage at \$0
+BEFORE wiring anything; if it doesn't, I stop and ask rather than spend. Say go and I'll run
+the free-tier check first, then build `lookup-venue.mjs` behind it. Separately still open from
+earlier sessions: draft PR #28 needs review/merge, the Actions 'allow PRs' setting is still
+off, and local `npm run lint` stays broken until the stale worktree is dealt with (use
+`npx eslint src worker scripts tests`)."
