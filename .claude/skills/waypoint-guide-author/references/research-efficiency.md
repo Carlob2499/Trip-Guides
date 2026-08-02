@@ -72,13 +72,13 @@ execute the plan, don't wander.
 ## Discovery layer — the Research skill (interactive sessions ONLY)
 
 When a pass runs interactively on the creator's machine, the global `Research` skill
-(`~/.claude/skills/Research/`) may open each pass as a **discovery** accelerant — one
-Standard-mode call per pass, at the start, never per-fact:
+(`~/.claude/skills/Research/`) may open each pass as a **discovery** accelerant:
 
-- **Pass A** — one call to map the backbone landscape (must-dos, transit structure, entry-rule
-  shape) before climbing to T0 sources fact by fact.
-- **Pass B** — one call for community leads; its source-routing (Reddit/YouTube/X before web
-  search) is exactly Pass B's resident angle.
+- **Pass A** — ONE Standard-mode call to map the backbone landscape (must-dos, transit
+  structure, entry-rule shape) before climbing to T0 sources fact by fact. Pass A gets no
+  more than this: its sources are official pages that native search reaches fine.
+- **Pass B** — the one place a FULL deep-research sweep is sanctioned (creator's ruling,
+  2026-08-02). See "Pass B deep discovery" below.
 
 **The bar does not move.** Everything the Research skill returns is a **T2 lead** — verified
 against a T0 primary source before it enters the guide, recorded in the ledger like any other
@@ -88,6 +88,35 @@ Discovery ≠ verification: the skill finds *what to check*; the native fetch co
 **Never in CI.** The headless pipeline (`research-pass.yml`) has no API keys and no local
 services; its agents use native web search/fetch + the aides below. A pass without the Research
 skill is a normal pass, not a degraded one.
+
+### Pass B deep discovery — native-first, anti-default (interactive; feeds the headless pass)
+
+Pass B's charter is the resident angle, and residents do not write in English — an
+English-prompted search under-samples the exact layer B exists to find (Naver blogs, Tabelog,
+local news, hobbyist forums, the destination-language subreddit equivalents). A deep-research
+sweep scoped to Pass B closes that, under three binding rules:
+
+1. **Native-first, by construction.** Queries go out in the destination's language (the
+   English ones are a supplement, not the base). Prioritize sources ON the destination's own
+   web — the ccTLD, the local platforms — and translate what comes back; never skip a source
+   for being non-English. Every lead records its source language. (This is also why the S5
+   sources row measures ccTLD presence: the dossier is how a guide earns that mark honestly.)
+2. **Anti-default filter, stated in the sweep's own prompt.** EXCLUDE anything appearing in
+   the destination's English-language top-10/"must-see" lists — Pass A already has those, and
+   re-discovering them burns the sweep on what a generic guide knows. On a heavily touristed
+   destination this filter matters MORE, not less: the English layer is at its most polluted
+   exactly where the crowds are. Viral status is a crowd warning to note, never a lead's merit.
+3. **Dossier out, leads only.** Findings land in the intake doc's
+   `## Discovery leads (Pass B — native-first)` table — lead · source + language · why it
+   isn't the tourist default · status. They are T2 LEADS: the headless (or interactive)
+   Pass B verifies each to T0 before anything enters passB.json, marks the table row
+   `verified` / `rejected: <reason>`, and the rejected ones still feed the candidates table —
+   a disproved native lead is a good rejection row.
+
+**Cost posture:** one sweep per NEW guide, run interactively where the keys live, before (or
+alongside) dispatching the pipeline. An empty/absent dossier changes nothing — the headless
+Pass B runs on its native aides exactly as before. The S4 floors measure whether B was deep
+enough either way; the dossier is an accelerant toward them, not a second gate.
 
 ## Social & video lead sourcing — Pass B aides
 

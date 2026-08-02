@@ -271,6 +271,18 @@ Top 3, in order:
 |------|--------------------|--------------------------|--------------------|---------------------------------|
 |      |                    |                          |                    |                                 |
 
+## Discovery leads (Pass B — native-first)
+> OPTIONAL accelerant, filled by an interactive deep-research sweep BEFORE the pipeline runs
+> (never in CI — see research-efficiency.md "Pass B deep discovery"). Native-language sources
+> first; the English top-10 is excluded by design (Pass A has those). Every row is a T2 LEAD:
+> Pass B verifies it to T0 before it enters the guide and sets Status to \`verified\` or
+> \`rejected: <reason>\` — rejected rows still belong in the candidates tables below. An empty
+> table changes nothing; Pass B runs on its native aides as normal.
+
+| Lead | Source (language) | Why it isn't the tourist default | Status |
+|------|-------------------|----------------------------------|--------|
+|      |                   |                                  |        |
+
 ## Candidates considered (fill DURING research — one table per ranked priority)
 > Standard S2/S3 (2026-08-02): real research quality is how many options you REJECTED and
 > why — a thin pass and a deep pass are indistinguishable if only survivors are recorded.

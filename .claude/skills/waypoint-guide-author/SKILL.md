@@ -135,10 +135,14 @@ Video/social sourcing is part of this pass's toolkit — YouTube transcripts via
 lead sourcing" (binding: leads-only, same T0 bar, viral = crowd warning, failures never block).
 
 ### Discovery before either pass — interactive sessions only
-Each pass may open with ONE Standard-mode call to the global `Research` skill as a discovery
-accelerant (backbone landscape for A; community leads for B). Rules, limits, and the
-never-in-CI constraint: `research-efficiency.md` "Discovery layer". Its output is T2 leads —
-the bar never moves.
+Pass A may open with ONE Standard-mode call to the global `Research` skill (backbone
+landscape). **Pass B is the one place a full deep-research sweep is sanctioned** —
+native-first (queries in the destination's language; local platforms over the English web),
+anti-default (the English top-10 is excluded by the sweep's own prompt — Pass A has those),
+dossier out (`## Discovery leads (Pass B — native-first)` in the intake doc; the headless
+Pass B consumes it as T2 leads when present, and runs unchanged when it isn't). Rules,
+limits, and the never-in-CI constraint: `research-efficiency.md` "Discovery layer" +
+"Pass B deep discovery". Output is T2 leads either way — the bar never moves.
 
 ### Reconcile → ONE guide, with a ledger
 Merge the two passes item by item into the single guide, and record the merge in the

@@ -406,6 +406,12 @@ jobs:
             - Read ONLY: guides-intake/${{ inputs.slug }}.md (the intake spec — priorities,
               dates, anchor) + the skill files above. Never the guide directory, never Pass A's
               work.
+            - DISCOVERY DOSSIER: if the intake doc carries a non-empty
+              `## Discovery leads (Pass B — native-first)` table, those rows are your starting
+              map — T2 leads from an interactive native-language sweep. Verify each to T0 like
+              any other lead, set its Status cell to `verified` or `rejected: <reason>`, and
+              carry rejected rows into `## Candidates considered` too. An empty/absent table
+              means nothing: proceed on your native aides exactly as the skill describes.
             - Write findings to guides-intake/${{ inputs.slug }}.passB.json as a JSON array:
               [
                 {
