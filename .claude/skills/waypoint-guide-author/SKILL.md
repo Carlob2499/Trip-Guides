@@ -216,6 +216,14 @@ makes it bearable). Judged by rubric row **#12** plus #9 (party fit) and the bar
 
 ## Never guess what a script can verify
 - **coords / place_id** → `node scripts/lookup-place.mjs "<place>" --cc XX`
+- **"is this venue still open?" / its hours / its address** →
+  `node scripts/lookup-venue.mjs "<venue>, <city>" --cc XX [--check hours]` — Google Places,
+  authoritative. `--check status` (default) answers *does it still exist* and is the cheap
+  call; add `--check hours` ONLY when you need posted hours, because that tier has 5× less
+  monthly headroom (the script's header explains the SKU math). This is the MangoPlate guard:
+  a venue that closed years ago reads perfectly plausible from training data. Returns
+  `still_operating`, and on an hours check the venue's own site as a `source_url` candidate —
+  still verify the fact itself against that page. No key configured → clean error, skip it.
 - **time zone** → in the SAME step the coords are established (not a separate round),
   `node scripts/lookup-tz.mjs <lat> <lng>` — offline, boundary-accurate. Set the guide's
   `tz` field explicitly, **for every guide, not just odd-looking ones**: the country-table

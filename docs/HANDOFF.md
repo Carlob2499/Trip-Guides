@@ -24,6 +24,50 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
+## Snapshot (2026-08-02, session #22 — V2 Session 2: acquisition layer)
+
+**`scripts/lookup-venue.mjs` (Google Places) — "is it still open?" leaves the model's hands.**
+Follows lookup-place.mjs exactly (named export + CLI, never throws, inert without a key).
+**The field mask is the bill**, and that shaped the API: Google's per-SKU free caps put
+`businessStatus` in Pro (5,000/mo) and `regularOpeningHours` in Enterprise (1,000/mo), so the
+script splits `--check status` (cheap, does it exist) from `--check hours` (5× less headroom).
+Tiers verified against Google's data-fields page, pinned by tests so a field can't drift
+between tiers unnoticed. Wired into the weekly API canary (`check-apis.mjs`), which skips
+cleanly without the secret.
+
+**⚠ BLOCKED ON ONE OWNER ACTION:** the live smoke against the real key returned
+`403 API_KEY_HTTP_REFERRER_BLOCKED` — the key carries an **HTTP-referrer restriction**, which
+server-side callers (Actions sends no referer) can never satisfy. Fix in Google Cloud →
+Credentials → the key → **Application restrictions = None** (keep *API restrictions* = Places
+API, and keep the daily quota cap — that is the real guard for a server key). Re-verify with
+`gh workflow run content-audit.yml`, then read the canary line on issue #23. Until then the
+script is correct but unusable, and every unit test still passes — which is exactly why the
+live smoke exists (boundary check #3).
+
+**FX: the exchange rate was Korea's, on every guide.** Three defects, one root cause —
+Korea's numbers hardcoded into shared components. BudgetBlock shipped a literal
+`≈₩1,535 = $1 · Jun 2026` + a KRW search link on ANY USD-denominated budget (Denmark quoted
+kroner under a won sign; Sedona offered to convert dollars to dollars); `FALLBACK_RATES` held
+4 of 40 currencies and **rate.js returns early without a seed rate**, so the other 36 had no
+rate feature at all, not a degraded one; and those 4 were 6-7% stale. Now the markup carries
+no rate — it ships hidden and empty, and rate.js reveals it with the guide's own currency
+(live / locked-stale / dated seed), showing nothing for a currency with no seed and nothing
+for a USD destination. `npm run refresh-fx` regenerates the table from the same ECB feed the
+runtime uses (29 covered, 11 honestly reported as unpublished, never invented). Sanity bands
+now derive from the seed (÷3…×3) for the 25 currencies that previously accepted any value.
+
+**Also:** reader-mirror (`r.jina.ai`, keyless 20 rpm) added to the fetch doctrine as a SECOND
+attempt inside the same budget — with the guard that it never becomes the citation.
+
+**Verified:** 1121 tests (+33 this session), typecheck 0 errors, lint clean, a11y 14/14 with
+no cap raised, exports + field-tools green, CI green on all four workflows, and driven in
+`astro preview` at 375px dark — Denmark reads `6.51 DKK = $1 · Live · ECB · 2026-07-31 —
+check live rate`, Sedona renders nothing (both confirmed by client-rect, not innerText).
+
+**Next: V2 Session 3** — the perishables-only fact registry (`facts.json` + `{{fact:id}}`
+interpolated in `guideLoader.load()` before `parseData`; five directory readers need an
+explicit skip or they break; unresolved token must fail the build loudly).
+
 ## Snapshot (2026-08-02, session #21 — V2 plan adopted; critic merged; questions surfaced)
 
 **A V2 redesign plan was adopted after an adversarial review of the whole research pipeline**
@@ -191,17 +235,18 @@ Two ways out, both the creator's call:
 
 ## Where we left off
 
-**Session #21 (2026-08-02):** adversarially reviewed the whole pipeline, adopted a 5-session V2
-plan, and shipped Session 1 — the judgment stack merged into one critic and traveler questions
-finally reaching the traveler. One commit, pushed, live-smoked on GitHub for zero agent tokens.
+**Session #22 (2026-08-02):** shipped V2 Session 2 — the acquisition layer. Venue verification
+via Places (blocked on one key-restriction fix), and an FX bug hunt that found Korea's currency
+hardcoded into every guide's budget footer.
 
-**Re-prompt the creator with:** "Session 1 of the V2 plan is live: four agents instead of six,
-and questions the pipeline had to assume its way past now land as a comment on your intake
-issue instead of dying in a file. Session 2 is next — the acquisition layer — and it opens with
-a decision only you can make: it needs a **Google Places API key** as a repo Actions secret
-(`PLACES_API_KEY`), and I'll verify the free tier actually covers guide-scale usage at \$0
-BEFORE wiring anything; if it doesn't, I stop and ask rather than spend. Say go and I'll run
-the free-tier check first, then build `lookup-venue.mjs` behind it. Separately still open from
-earlier sessions: draft PR #28 needs review/merge, the Actions 'allow PRs' setting is still
-off, and local `npm run lint` stays broken until the stale worktree is dealt with (use
-`npx eslint src worker scripts tests`)."
+**Re-prompt the creator with:** "Session 2 shipped, and it found more than it set out to: the
+budget footer on every guide was quoting Korean won — Denmark showed kroner under a won sign,
+Sedona offered to convert dollars to dollars — and 36 of 40 currencies had no exchange-rate
+display at all because a missing seed rate silently disables the feature rather than degrading
+it. All fixed and verified in preview. **One thing needs you (2 minutes):** the Places API key
+is referrer-restricted, so the server-side call gets a 403 — in Google Cloud → Credentials →
+that key → set **Application restrictions = None** (keep the API restriction to Places and the
+daily quota cap; those are the real guards for a server key). Then I re-run the canary to
+confirm. After that, Session 3 is the fact registry — the big one, where prices and hours
+become data instead of prose. Still open from earlier: draft PR #28, the Actions 'allow PRs'
+setting, and local `npm run lint` (use `npx eslint src worker scripts tests`)."

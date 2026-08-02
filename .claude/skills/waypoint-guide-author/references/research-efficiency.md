@@ -22,7 +22,8 @@ execute the plan, don't wander.
 
 ## Search budget (per fact / per venue)
 
-- **Scripts before web, always.** `lookup-place.mjs` (coords/place_id), `lookup-tz.mjs`
+- **Scripts before web, always.** `lookup-venue.mjs` (does a venue still exist · hours ·
+  address — never ask the model, never infer from a blog), `lookup-place.mjs` (coords/place_id), `lookup-tz.mjs`
   (time zone — offline, resolves from the coords `lookup-place.mjs` just gave you, so do
   it in the SAME step, not a separate search round), `search-commons.mjs` (photos),
   `fetch-wikivoyage.mjs` (grounding leads) answer for free — never web-search what a
@@ -147,6 +148,13 @@ written up within days by web-indexed blogs, local news, and roundup sites.
   URL). If a fetch fails oddly, retry the plain page once; judge by content, not status.
 - **Bot-blocked (403/429/Cloudflare) → don't burn retries.** Mark it blocked in the ledger and
   find a different primary. Two attempts max.
+- **Reader mirror as a SECOND attempt, not a first.** When a primary page returns bloated HTML
+  or blocks a plain fetch, `https://r.jina.ai/<url>` returns the same page as clean markdown —
+  keyless at 20 req/min (verified 2026-08-02), so no config and no secret. It counts inside the
+  same two-attempt budget, never on top of it. **The citation NEVER changes:** `source_url` is
+  always the venue's/operator's own URL — the mirror is how you READ the page, not where the
+  fact came from. A `r.jina.ai/...` URL in a guide is a defect. If the mirror is down or also
+  blocked, that is the second attempt spent: apply the stopping conditions and flag or omit.
 - **Aggregators die; officials persist** (the MangoPlate lesson — a dead-since-2020 aggregator
   shipped from training data). Aggregators are *leads only*; the citation is always the official
   page. Never cite what you didn't fetch.
