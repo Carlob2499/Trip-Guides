@@ -20,7 +20,7 @@
         "est": 173,
         "low": 143,
         "high": 231,
-        "note": "≈$173/night for a 3★ property; 2★ runs ≈$143, the town-wide all-hotel average is ≈$231 (pulled up by luxury resorts at $300–700+). Sedona is meaningfully pricier than a typical US leisure destination — shop early.",
+        "note": "{{fact:budget-daily-costs-173}}/night for a 3★ property; 2★ runs {{fact:budget-daily-costs-143}} the town-wide all-hotel average is {{fact:budget-daily-costs-231}} (pulled up by luxury resorts at {{fact:budget-daily-costs-300}}–700+). Sedona is meaningfully pricier than a typical US leisure destination — shop early.",
         "source_url": "https://www.budgetyourtrip.com/hotels/united-states-of-america/sedona-5313667",
         "verified_on": "2026-07-19",
         "shelf_life": "venue"
@@ -31,7 +31,7 @@
         "est": 50,
         "low": 39,
         "high": 57,
-        "note": "≈$39–44/day for economy/compact, ≈$57/day for a mid-size — recommended over rideshare for this trip (see Transit).",
+        "note": "{{fact:budget-daily-costs-39}}–44/day for economy/compact, {{fact:budget-daily-costs-57}}/day for a mid-size — recommended over rideshare for this trip (see Transit).",
         "source_url": "https://www.kayak.com/Phoenix-Sky-Harbor-Intl-Airport-Car-Rentals.PHX.cap.ksp",
         "verified_on": "2026-07-19",
         "shelf_life": "transit"
@@ -46,7 +46,7 @@
         "label": "Red Rock Pass (7-day)",
         "basis": "trip",
         "est": 15,
-        "note": "Covers parking at Coconino National Forest fee sites (Bell Rock, Cathedral Rock trailhead, and others) for the whole week — cheaper than the $5/day rate past 3 uses.",
+        "note": "Covers parking at Coconino National Forest fee sites (Bell Rock, Cathedral Rock trailhead, and others) for the whole week — cheaper than the {{fact:budget-daily-costs-5}}/day rate past 3 uses.",
         "source_url": "https://www.fs.usda.gov/r03/coconino/passes/red-rock-coconino-passes-program",
         "verified_on": "2026-07-19",
         "shelf_life": "venue"

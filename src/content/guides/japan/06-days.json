@@ -33,7 +33,7 @@
         "pace": "Half travel, half arrival — ≈2 hr flight, then settle in before an evening yatai walk",
         "energy": "balanced",
         "env": "mixed",
-        "body": "<p>Fly Tokyo → Fukuoka (≈2 hrs), settle into a base near Tenjin or Hakata Station, and ease into the trip with Tenjin's yatai stalls for dinner — the locals' pick over Nakasu's livelier but pricier scene (see Food &amp; shopping). Cash-heavy, ¥1,000 notes, arrive ≈18:00–19:00 or after ≈21:00 for the calmer window.</p>",
+        "body": "<p>Fly Tokyo → Fukuoka (≈2 hrs), settle into a base near Tenjin or Hakata Station, and ease into the trip with Tenjin's yatai stalls for dinner — the locals' pick over Nakasu's livelier but pricier scene (see Food &amp; shopping). Cash-heavy, {{fact:day-by-day-1-000}} notes, arrive ≈18:00–19:00 or after ≈21:00 for the calmer window.</p>",
         "verified_on": "2026-07-29",
         "shelf_life": "transit",
         "source_url": "https://www.ana.co.jp/en/us/"
@@ -275,7 +275,7 @@
         "pace": "Travel day — ≈90 min Shinkansen, then the international departure",
         "energy": "slow",
         "env": "indoor",
-        "body": "<p>Tohoku Shinkansen \"Hayabusa\" to Tokyo (≈90 min, all-reserved, ≈¥11,410). Connect to the international flight home from HND/NRT. If any purchases since Nov 1 need the new tax-free refund process, build in extra time at the departure kiosk before check-in.</p>",
+        "body": "<p>Tohoku Shinkansen \"Hayabusa\" to Tokyo (≈90 min, all-reserved, {{fact:day-by-day-11-410}}). Connect to the international flight home from HND/NRT. If any purchases since Nov 1 need the new tax-free refund process, build in extra time at the departure kiosk before check-in.</p>",
         "checklist": [
           "Extra time at the airport for the tax-free refund kiosk if anything was bought Nov 1 onward"
         ],

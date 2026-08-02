@@ -3,7 +3,7 @@
     "type": "panel",
     "group": "Plan",
     "title": "When you land",
-    "body": "<p>The realistic gateway is <b>Phoenix Sky Harbor (PHX)</b> — Sedona has no meaningful commercial airport of its own. From PHX it's <b>≈116 miles / about 2 hours</b> by car via I-17 and AZ-179 (add 30 minutes for weekend/holiday traffic). Pick up a rental car at PHX rather than relying on rideshare once you're in Sedona (see Transit). If you'd rather not drive the mountain road yourself, a door-to-door airport shuttle (Groome Transportation and others) runs <b>≈$55–100</b> per person, taking ≈2h45m. Flagstaff Pulliam is a smaller, closer alternative (≈30 min to Sedona) if it happens to serve your home airport — check before assuming PHX is your only option.</p><p>Budget this whole first day as travel — arriving in Sedona tired from a flight-plus-drive is normal, not a sign anything went wrong.</p>",
+    "body": "<p>The realistic gateway is <b>Phoenix Sky Harbor (PHX)</b> — Sedona has no meaningful commercial airport of its own. From PHX it's <b>≈116 miles / about 2 hours</b> by car via I-17 and AZ-179 (add 30 minutes for weekend/holiday traffic). Pick up a rental car at PHX rather than relying on rideshare once you're in Sedona (see Transit). If you'd rather not drive the mountain road yourself, a door-to-door airport shuttle (Groome Transportation and others) runs <b>{{fact:when-you-land-55}}–100</b> per person, taking ≈2h45m. Flagstaff Pulliam is a smaller, closer alternative (≈30 min to Sedona) if it happens to serve your home airport — check before assuming PHX is your only option.</p><p>Budget this whole first day as travel — arriving in Sedona tired from a flight-plus-drive is normal, not a sign anything went wrong.</p>",
     "source_url": "https://www.uber.com/global/en/r/routes/phx-to-sedona-az/",
     "verified_on": "2026-07-19",
     "shelf_life": "transit"
@@ -18,7 +18,7 @@
     "type": "panel",
     "group": "Plan",
     "title": "Entry & documents",
-    "body": "<p>This is a <b>domestic US destination</b> — Arizona is a US state, so a US citizen needs no passport or visa. At the TSA checkpoint for the flight itself: a <b>REAL ID–compliant driver's license</b> or another TSA-accepted photo ID (a US passport always works as a substitute). Without an acceptable ID, TSA's ConfirmID process costs <b>$45</b> as of 1 Feb 2026. ⚠ If flying in from outside the US, entry rules depend on your own passport's visa status for the United States generally — this guide's intake left home country blank, so that check wasn't done here.</p>",
+    "body": "<p>This is a <b>domestic US destination</b> — Arizona is a US state, so a US citizen needs no passport or visa. At the TSA checkpoint for the flight itself: a <b>REAL ID–compliant driver's license</b> or another TSA-accepted photo ID (a US passport always works as a substitute). Without an acceptable ID, TSA's ConfirmID process costs <b>{{fact:entry-documents-45}}</b> as of 1 Feb 2026. ⚠ If flying in from outside the US, entry rules depend on your own passport's visa status for the United States generally — this guide's intake left home country blank, so that check wasn't done here.</p>",
     "source_url": "https://www.tsa.gov/realid",
     "verified_on": "2026-07-19",
     "shelf_life": "default"

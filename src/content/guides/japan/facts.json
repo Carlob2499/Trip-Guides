@@ -1,0 +1,187 @@
+{
+  "local-essentials-1-000": {
+    "claim": "Local essentials — ¥1,000",
+    "value": "¥1,000",
+    "source_url": "https://www.sevenbank.co.jp/intlcard/index2.html",
+    "verified_on": "2026-07-29",
+    "shelf_life": "default"
+  },
+  "local-essentials-10-000": {
+    "claim": "Local essentials — ¥10,000",
+    "value": "¥10,000",
+    "source_url": "https://www.sevenbank.co.jp/intlcard/index2.html",
+    "verified_on": "2026-07-29",
+    "shelf_life": "default"
+  },
+  "entry-documents-5-000": {
+    "claim": "Entry & documents — ¥5,000",
+    "value": "¥5,000",
+    "source_url": "https://www.mlit.go.jp/kankocho/tax-free/page01_000001_00028.html",
+    "verified_on": "2026-07-29",
+    "shelf_life": "default"
+  },
+  "phone-data-19": {
+    "claim": "Phone & data — $19,",
+    "value": "$19,",
+    "source_url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/",
+    "verified_on": "2026-07-29",
+    "shelf_life": "default",
+    "state": "approx"
+  },
+  "phone-data-65": {
+    "claim": "Phone & data — $65",
+    "value": "$65",
+    "source_url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/",
+    "verified_on": "2026-07-29",
+    "shelf_life": "default",
+    "state": "approx"
+  },
+  "phone-data-18": {
+    "claim": "Phone & data — $18",
+    "value": "$18",
+    "source_url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/",
+    "verified_on": "2026-07-29",
+    "shelf_life": "default",
+    "state": "approx"
+  },
+  "top-sights-zao-3-000": {
+    "claim": "Top sights → Zao Okama Crater — ¥3,000",
+    "value": "¥3,000",
+    "source_url": "https://www.zao-machi.com/",
+    "verified_on": "2026-07-29",
+    "shelf_life": "venue",
+    "state": "approx"
+  },
+  "scenic-rail-the-530": {
+    "claim": "Scenic rail — the honest picture — ¥530",
+    "value": "¥530",
+    "source_url": "https://www.jrhokkaido.co.jp/global/english/travel/tour-train/tour-train04.html",
+    "verified_on": "2026-07-29",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "day-by-day-1-000": {
+    "claim": "Day by day → Fly to Fukuoka — settle in, first yatai evening — ¥1,000",
+    "value": "¥1,000",
+    "source_url": "https://www.ana.co.jp/en/us/",
+    "verified_on": "2026-07-29",
+    "shelf_life": "transit"
+  },
+  "day-by-day-11-410": {
+    "claim": "Day by day → Sendai → Tokyo → home — ¥11,410",
+    "value": "¥11,410",
+    "source_url": "https://www.jreast.co.jp/e/",
+    "verified_on": "2026-07-29",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "money-currency-150": {
+    "claim": "Money & currency — ¥150",
+    "value": "¥150",
+    "source_url": "https://www.sevenbank.co.jp/intlcard/index2.html",
+    "verified_on": "2026-07-29",
+    "shelf_life": "fx",
+    "state": "approx"
+  },
+  "money-currency-1": {
+    "claim": "Money & currency — $1,",
+    "value": "$1,",
+    "source_url": "https://www.sevenbank.co.jp/intlcard/index2.html",
+    "verified_on": "2026-07-29",
+    "shelf_life": "fx"
+  },
+  "budget-daily-costs-250": {
+    "claim": "Budget & daily costs → Zao Onsen ryokan — 1 night, 2 meals incl. — $250",
+    "value": "$250",
+    "source_url": "https://zao.co.jp/takamiya/",
+    "verified_on": "2026-07-29",
+    "shelf_life": "venue",
+    "state": "approx"
+  },
+  "budget-daily-costs-90": {
+    "claim": "Budget & daily costs → Domestic flights (Tokyo→Fukuoka→Sapporo→Sendai) — $90",
+    "value": "$90",
+    "source_url": "https://www.ana.co.jp/en/us/",
+    "verified_on": "2026-07-29",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "budget-daily-costs-60": {
+    "claim": "Budget & daily costs → Domestic flights (Tokyo→Fukuoka→Sapporo→Sendai) — $60",
+    "value": "$60",
+    "source_url": "https://www.ana.co.jp/en/us/",
+    "verified_on": "2026-07-29",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "budget-daily-costs-80": {
+    "claim": "Budget & daily costs → Domestic flights (Tokyo→Fukuoka→Sapporo→Sendai) — $80,",
+    "value": "$80,",
+    "source_url": "https://www.ana.co.jp/en/us/",
+    "verified_on": "2026-07-29",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "budget-daily-costs-11-410": {
+    "claim": "Budget & daily costs → Domestic flights (Tokyo→Fukuoka→Sapporo→Sendai) — ¥11,410",
+    "value": "¥11,410",
+    "source_url": "https://www.ana.co.jp/en/us/",
+    "verified_on": "2026-07-29",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "budget-daily-costs-75": {
+    "claim": "Budget & daily costs → Domestic flights (Tokyo→Fukuoka→Sapporo→Sendai) — $75",
+    "value": "$75",
+    "source_url": "https://www.ana.co.jp/en/us/",
+    "verified_on": "2026-07-29",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "budget-daily-costs-17-000": {
+    "claim": "Budget & daily costs → Regional rail passes (JR Kyushu + JR East–South Hokkaido, if worth it) — ¥17,000",
+    "value": "¥17,000",
+    "source_url": "https://www.jrkyushu.co.jp/english/railpass/railpass.html",
+    "verified_on": "2026-07-29",
+    "shelf_life": "transit"
+  },
+  "budget-daily-costs-113": {
+    "claim": "Budget & daily costs → Regional rail passes (JR Kyushu + JR East–South Hokkaido, if worth it) — $113",
+    "value": "$113",
+    "source_url": "https://www.jrkyushu.co.jp/english/railpass/railpass.html",
+    "verified_on": "2026-07-29",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "budget-daily-costs-40-000": {
+    "claim": "Budget & daily costs → Regional rail passes (JR Kyushu + JR East–South Hokkaido, if worth it) — ¥40,000",
+    "value": "¥40,000",
+    "source_url": "https://www.jrkyushu.co.jp/english/railpass/railpass.html",
+    "verified_on": "2026-07-29",
+    "shelf_life": "transit"
+  },
+  "budget-daily-costs-266": {
+    "claim": "Budget & daily costs → Regional rail passes (JR Kyushu + JR East–South Hokkaido, if worth it) — $266",
+    "value": "$266",
+    "source_url": "https://www.jrkyushu.co.jp/english/railpass/railpass.html",
+    "verified_on": "2026-07-29",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "budget-daily-costs-19": {
+    "claim": "Budget & daily costs → eSIM / data — $19",
+    "value": "$19",
+    "source_url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/",
+    "verified_on": "2026-07-29",
+    "shelf_life": "fx",
+    "state": "approx"
+  },
+  "budget-daily-costs-11": {
+    "claim": "Budget & daily costs → Luggage forwarding (Yamato Ta-Q-Bin) — $11",
+    "value": "$11",
+    "source_url": "https://www.kuronekoyamato.co.jp/en/",
+    "verified_on": "2026-07-29",
+    "shelf_life": "transit",
+    "state": "approx"
+  }
+}
