@@ -41,6 +41,21 @@ function json(data, status, headers) {
   });
 }
 
+// The two protections below are fully implemented and BOTH fail OPEN when unconfigured —
+// `verifyTurnstile` returns true with no secret, and the rate counter reads 0 with no KV
+// binding, so `intakeRateDecision` always accepts. That is the correct default (a half-
+// deployed Worker must not lock out the owner's own intake), but until 2026-08-02 it was
+// also SILENT: a deployed Worker reported nothing about being wide open, and there is no
+// request whose response differs. Log it on every unprotected request instead — a protection
+// you cannot observe is an assumption, not a feature.
+function warnUnprotected(env) {
+  const off = [];
+  if (!env.TURNSTILE_SECRET) off.push("TURNSTILE_SECRET unset (no bot check)");
+  if (!env.RATE) off.push("RATE KV unbound (per-IP limit never counts)");
+  if (off.length) console.warn(`[intake] UNPROTECTED public endpoint — ${off.join(" · ")}`);
+  return off;
+}
+
 async function verifyTurnstile(secret, token, ip) {
   if (!secret) return true; // not configured — the owner hasn't enabled bot protection yet
   const form = new URLSearchParams({ secret, response: token || "" });
@@ -61,7 +76,21 @@ export default {
   async fetch(request, env) {
     const cors = corsHeaders(env);
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
+
+    // GET /health — is this Worker actually protected? Answerable without filing an issue,
+    // so the posture can be checked from a browser or a smoke step instead of inferred.
+    // Reports only whether each guard is CONFIGURED; never echoes a secret.
+    if (request.method === "GET" && new URL(request.url).pathname === "/health") {
+      return json({
+        ok: true,
+        repo: env.REPO ?? null,
+        turnstile: env.TURNSTILE_SECRET ? "configured" : "OFF",
+        rateLimit: env.RATE ? "configured" : "OFF",
+      }, 200, cors);
+    }
+
     if (request.method !== "POST") return json({ error: "POST only" }, 405, cors);
+    warnUnprotected(env);
 
     let raw;
     try {
