@@ -138,6 +138,9 @@ jobs:
     env:
       SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://carlob2499.github.io/Trip-Guides' }}
       GH_TOKEN: ${{ github.token }}
+      # S1: verify --network runs the Places venue-status gate; the agents' own lookup-venue
+      # calls use it too. Absent secret → the check reports n/a and everything else proceeds.
+      PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
     steps:
       - uses: actions/checkout@v7
         with:

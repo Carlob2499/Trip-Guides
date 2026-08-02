@@ -81,6 +81,8 @@ jobs:
     # environment) has a gh credential — the prompt below calls `gh pr view`/`gh pr create`.
     env:
       GH_TOKEN: ${{ github.token }}
+      # S1: the recert agent re-verifies venues; lookup-venue + verify --network use this.
+      PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
     steps:
       - uses: actions/checkout@v7
         with:

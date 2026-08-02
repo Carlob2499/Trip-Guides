@@ -96,6 +96,8 @@ jobs:
           # astro.config.mjs, and verify-live.mjs (6 copies). SITE_BASE_URL lets any of
           # them swap targets without editing source; this is the shared default.
           SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://carlob2499.github.io/Trip-Guides' }}
+          # S1: verify --network includes the Places venue-status gate; n/a without the secret.
+          PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
         run: |
           set -euo pipefail
           git config user.name  "waypoint-scaffold[bot]"

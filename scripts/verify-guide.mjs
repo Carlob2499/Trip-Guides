@@ -125,6 +125,10 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
     }
   }
 
+  // S1: venue operating status (network only). CLOSED_PERMANENTLY blocks — a recommended
+  // venue that no longer exists is concrete breakage, same class as a dead link.
+  const venueStatus = net?.venuesBySlug?.[slug] ?? { status: "skipped" };
+
   // P3/R15: coverage — every intake ask addressed or explicitly skipped.
   const coverage = checkCoverage(slug);
 
@@ -136,6 +140,7 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
   if (!readiness.pass) blockers.push("research");
   if (content.status === "fail") blockers.push("content");
   if (content.status === "unverifiable") blockers.push("content-unverifiable");
+  if (venueStatus.status === "fail") blockers.push("venues");
   if (coverage.status === "fail") blockers.push("coverage");
   if (voice.status === "fail") blockers.push("voice");
   const pass = blockers.length === 0;
@@ -144,7 +149,7 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
   // and a guide with one should show at a glance how much of it is sourced data rather than prose.
   const registry = facts ? { count: Object.keys(facts).length, unused } : null;
 
-  return { slug, draft, pass, blockers, readiness, recency, content, coverage, voice, noVerifiedDate, registry };
+  return { slug, draft, pass, blockers, readiness, recency, content, venueStatus, coverage, voice, noVerifiedDate, registry };
 }
 
 export async function verify({ slug = null, network = false } = {}) {
@@ -164,6 +169,11 @@ export async function verify({ slug = null, network = false } = {}) {
     ]);
     const [links, photos] = await Promise.all([checkLinks(), checkPhotos()]);
     net = { links, photos };
+    // S1 (2026-08-02): structural venue verification. Per-guide (unlike links/photos, which
+    // scan globally) because each call costs Places quota — only the target slugs pay.
+    const { checkVenueStatus } = await import("./audit/check-venue-status.mjs");
+    net.venuesBySlug = {};
+    for (const t of targets) net.venuesBySlug[t.slug] = await checkVenueStatus(t.guide);
   }
 
   const results = targets.map(({ guide, slug: s, facts, unusedFacts }) => evaluateGuide(guide, s, staleness, net, facts, unusedFacts));
@@ -205,6 +215,17 @@ export function report(r) {
     for (const s of r.recency.staleSections) L.push(`      ⚠ §${s.index} "${s.title}" — ${s.category} fact ${s.date}, ${s.ageDays}d vs ${s.life}d${s.source ? ` · re-check: ${s.source}` : ""}`);
   }
   if (r.noVerifiedDate) L.push(`  P1 recency    · note — has a \`verified\` field but no parseable "Mon YYYY" date`);
+
+  // S1: venue operating status (network only). Optional-chained: a result object built
+  // before this field existed (older JSON, hand-built test fixtures) must render, not throw.
+  if (r.venueStatus?.status === "n/a") {
+    L.push(`  P0 venues     · n/a — ${r.venueStatus.reason}`);
+  } else if (r.venueStatus && r.venueStatus.status !== "skipped") {
+    const v = r.venueStatus;
+    L.push(`  P0 venues     · ${v.status === "pass" ? "PASS" : "FAIL"} — ${v.checked} status-checked, ${v.closed.length} closed, ${v.flagged.length} flagged`);
+    for (const c of v.closed) L.push(`      ✗ ${c.name} (${c.section}) — ${c.why}`);
+    for (const f of v.flagged) L.push(`      ⚠ ${f.name} (${f.section}) — ${f.why}`);
+  }
 
   // Perishable-fact registry (informational — not a gate)
   if (r.registry) {
