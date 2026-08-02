@@ -24,6 +24,56 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
+## Snapshot (2026-08-02, session #25 — V2 Session 5: the change-request wizard. **V2 COMPLETE**)
+
+**The "Request a change" pill now opens a guided 3-step wizard** instead of dropping a reader
+onto a GitHub form that asks for a "Guide slug" and a "Section" — repo vocabulary, put to
+someone who just noticed a price was wrong. Steps: pick the tab (from the guide's OWN nav, its
+section titles shown as a hint), describe the change, review what will be sent. The slug comes
+from the page.
+
+**Progressive enhancement, not a JS-only button.** The pill is still a real `<a>` to the same
+prefilled issue, so with JS off — or before hydration — the flow degrades to exactly what
+shipped before. **No Worker route, by choice:** the wizard files NOTHING itself, it hands the
+reporter to GitHub with the payload prefilled and they press submit. That keeps a public write
+endpoint, its token and its rate-limit surface off the board entirely; filing still does
+nothing until the owner applies `modify-approved`.
+
+**`src/lib/modify-schema.mjs` is the modify-side twin of `intake-schema.mjs`** — the three
+fields used to be duplicated between the issue form and the parser, joined by two matching
+string literals (rename a label → the parser silently stops finding the field). A contract test
+pins the form against it, and a **round-trip test proves what the wizard sends is what the
+pipeline parses**. `sanitizeSection` moved there too, so the wizard sanitises what it SENDS with
+the identical rule the parser applies to what it RECEIVES.
+
+**Two defects only the browser could find:** rebuilding the chip list on each pick destroyed the
+element the user had just activated (keyboard focus dropped to `<body>` mid-flow — now built
+once, only pressed state changes); and the hint printed every section title, so Denmark's
+eight-section Sights tab became a wall (capped at 3 + "+N more"). Also: nothing pre-selected
+(`null` ≠ the explicit "I'm not sure"), and the final navigation is synchronous inside the click
+— an `await` there would put it outside the user gesture for popup blockers (boundary check #2).
+
+**Verified: 1168 unit tests (+27), 66 Playwright (8 new wizard specs), a11y gate green with NO
+node-count cap raised, typecheck 0, lint clean, CI green ×5.** Driven at 375px dark: modal
+escapes the `.sticky-chrome` backdrop-filter containing block and stays on-screen when scrolled,
+textarea computes 16.32px (iOS zoom floor), Escape returns focus to the trigger.
+
+**⚠ One honest gap:** GitHub needs a signed-in session to render the new-issue form, so textarea
+prefill is confirmed from GitHub's docs ("the `id` is the canonical identifier for the field in
+URL query parameter prefills") and by the round-trip test, but **not observed live**. Worst case
+is a reporter retyping their sentence on a form that still has slug/section/title filled. Worth
+one manual click to confirm next time you're signed in.
+
+---
+
+### V2 arc complete — all five sessions shipped
+1. Critic merge (6 agents → 4) + traveler questions surfaced on the intake issue.
+2. Acquisition: `lookup-venue.mjs` (Places) + the FX bug hunt that found Korea's currency
+   hardcoded into every guide's budget footer. **Places still blocked on the key restriction.**
+3. Fact registry — landed dormant, proven byte-identical.
+4. Denmark + Korea migrated (108 facts), byte-identical.
+5. Change-request wizard.
+
 ## Snapshot (2026-08-02, session #24 — V2 Session 4: denmark + korea migrated, 108 facts)
 
 **Both guides now keep their prices as sourced ROWS, and the built site did not change by one
@@ -326,10 +376,28 @@ Two ways out, both the creator's call:
 
 ## Where we left off
 
+**Session #25 (2026-08-02):** shipped V2 Session 5 — the guided change-request wizard. **The
+five-session V2 arc is complete.**
+
+**Re-prompt the creator with:** "V2 is done — all five sessions shipped. The change-request
+button now walks a reader through three steps in-page instead of asking them what a 'slug' is,
+and it still degrades to the plain GitHub link with JS off. **Two things are on you:** (1) the
+Places API key is still referrer-restricted, so venue verification 403s — Google Cloud →
+Credentials → that key → **Application restrictions = None** (keep the Places API restriction
+and the daily quota cap); (2) next time you're signed into GitHub, click the change-request
+button once and confirm the description box arrives prefilled — GitHub's docs say it should and
+the round-trip test agrees, but a signed-out browser can't render that form so I couldn't watch
+it happen. Worth deciding next: migrate japan + us onto the fact registry (same one-command
+pass), or let the remaining V2 ideas I cut — the destination dossier, parallel Pass A/B — stay
+cut. Also still open: draft PR #28, the Actions 'allow PRs' setting, and local `npm run lint`
+(use `npx eslint src worker scripts tests`)."
+
+---
+
 **Session #24 (2026-08-02):** shipped V2 Session 4 — denmark AND korea migrated onto the fact
 registry, 108 facts total, both byte-identical.
 
-**Re-prompt the creator with:** "Denmark and Korea now keep their prices as sourced rows —
+*(prior re-prompt, superseded)* "Denmark and Korea now keep their prices as sourced rows —
 108 facts — and both built pages are byte-identical, so nothing a traveler sees moved. Proved
 the payoff on a real fact: one edit updated all three of its references. Worth knowing the
 limit — two other mentions of that figure didn't update, because they live in prose with no
