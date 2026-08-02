@@ -32,4 +32,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
+          # The Places canary (scripts/audit/check-apis.mjs) verifies the venue verifier is
+          # still wired — key valid, SKU access intact, businessStatus still returned. It
+          # SKIPS cleanly when this is unset, so a fork without the secret stays green.
+          PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
         run: node scripts/audit/run-audit.mjs

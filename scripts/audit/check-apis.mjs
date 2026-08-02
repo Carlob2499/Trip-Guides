@@ -45,11 +45,31 @@ async function checkNager() {
   return { ok: true, detail: `${data.length} holidays returned` };
 }
 
+// Google Places — the venue verifier behind scripts/lookup-venue.mjs (business_status +
+// hours, so research never asks the model whether a restaurant still exists). SKIPS when
+// PLACES_API_KEY is absent: the repo is inert-until-configured, and a dry run or a fork
+// without the secret must not report a red canary for a feature it isn't using.
+// Deliberately the CHEAP check: `status` bills Essentials+Pro (5,000/mo free each), never
+// the Enterprise SKU (1,000/mo) that posted hours would touch. Weekly, that is ~4 calls.
+async function checkPlaces() {
+  if (!process.env.PLACES_API_KEY) return { ok: true, skipped: true, detail: "no PLACES_API_KEY — skipped" };
+  const { lookupVenue } = await import("../lookup-venue.mjs");
+  // A permanent, unambiguous landmark that also appears in a live guide.
+  const r = await lookupVenue("Gyeongbokgung Palace, Seoul", { cc: "KR", check: "status" });
+  if (r.error) return { ok: false, detail: r.error };
+  if (r.notFound) return { ok: false, detail: "known-good landmark returned no match" };
+  if (typeof r.still_operating !== "boolean") {
+    return { ok: false, detail: "businessStatus missing — field mask or SKU access changed" };
+  }
+  return { ok: true, detail: `${r.name} — ${r.business_status}` };
+}
+
 export async function checkApis() {
   const checks = [
     { name: "Frankfurter (currency)", fn: checkFrankfurter },
     { name: "Open-Meteo (weather)", fn: checkOpenMeteo },
     { name: "Nager.Date (holidays)", fn: checkNager },
+    { name: "Google Places (venues)", fn: checkPlaces },
   ];
   const results = [];
   for (const { name, fn } of checks) {
