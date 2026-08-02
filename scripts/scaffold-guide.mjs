@@ -349,6 +349,10 @@ export async function writeScaffold(answers) {
   await writeFile(flatSeed, JSON.stringify(guide, null, 2) + "\n");
   await splitGuide(slug, { guidesDir: GUIDES_DIR });
   const guidePath = path.join(GUIDES_DIR, slug);
+  // Perishable-fact registry, born empty. Present from the start so a research pass records
+  // prices and hours as sourced ROWS while it works, instead of burying them in prose and
+  // leaving a later migration to dig them back out. An empty object is valid and inert.
+  await writeFile(path.join(guidePath, "facts.json"), "{}\n");
   // P3/R15: coverage matrix — every non-empty intake ask, so verify can fail uncovered ones.
   const coveragePath = path.join(INTAKE_DIR, `${slug}.coverage.json`);
   await writeFile(coveragePath, JSON.stringify(buildCoverageMatrix(a, slug), null, 2) + "\n");

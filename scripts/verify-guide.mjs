@@ -92,7 +92,7 @@ const HUMAN_ROWS = [
 ];
 
 // Roll the three sources up for one guide into a verdict + structured scorecard.
-export function evaluateGuide(guide, slug, staleness, net) {
+export function evaluateGuide(guide, slug, staleness, net, facts = null) {
   const draft = !!guide.draft;
   const readiness = evaluateReadiness(guide, slug); // { pass, warns, infos, coverage }
 
@@ -140,7 +140,11 @@ export function evaluateGuide(guide, slug, staleness, net) {
   if (voice.status === "fail") blockers.push("voice");
   const pass = blockers.length === 0;
 
-  return { slug, draft, pass, blockers, readiness, recency, content, coverage, voice, noVerifiedDate };
+  // Registry visibility (informational, never a gate): a guide with no facts.json is normal,
+  // and a guide with one should show at a glance how much of it is sourced data rather than prose.
+  const registry = facts ? { count: Object.keys(facts).length } : null;
+
+  return { slug, draft, pass, blockers, readiness, recency, content, coverage, voice, noVerifiedDate, registry };
 }
 
 export async function verify({ slug = null, network = false } = {}) {
@@ -162,7 +166,7 @@ export async function verify({ slug = null, network = false } = {}) {
     net = { links, photos };
   }
 
-  const results = targets.map(({ guide, slug: s }) => evaluateGuide(guide, s, staleness, net));
+  const results = targets.map(({ guide, slug: s, facts }) => evaluateGuide(guide, s, staleness, net, facts));
   return { results, error: null, network };
 }
 
@@ -201,6 +205,11 @@ export function report(r) {
     for (const s of r.recency.staleSections) L.push(`      ⚠ §${s.index} "${s.title}" — ${s.category} fact ${s.date}, ${s.ageDays}d vs ${s.life}d${s.source ? ` · re-check: ${s.source}` : ""}`);
   }
   if (r.noVerifiedDate) L.push(`  P1 recency    · note — has a \`verified\` field but no parseable "Mon YYYY" date`);
+
+  // Perishable-fact registry (informational — not a gate)
+  if (r.registry) {
+    L.push(`  -- registry   · ${r.registry.count} perishable fact(s) in facts.json — sourced, dated, edited in one place`);
+  }
 
   // P3/R15: coverage
   if (r.coverage.status === "n/a") {

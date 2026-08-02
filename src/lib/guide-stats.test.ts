@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { computeGuideStats, latestVerifiedOn } from "./guide-stats";
+import { isSectionFile } from "./facts.mjs";
 
 describe("computeGuideStats (pure)", () => {
   it("counts guides, source_url occurrences (at any depth), and distinct hostnames", () => {
@@ -52,7 +53,9 @@ describe("computeGuideStats (pure)", () => {
         if (!files.includes("_guide.json")) continue;
         const meta = JSON.parse(await readFile(path.join(DIR, e.name, "_guide.json"), "utf8"));
         const sections: unknown[] = [];
-        for (const f of files.filter((f) => f !== "_guide.json").sort()) {
+        // isSectionFile, not a local `!== "_guide.json"`: a guide directory may also hold
+        // facts.json (the perishable-fact registry), which is an object, not a sections array.
+        for (const f of files.filter(isSectionFile).sort()) {
           sections.push(...JSON.parse(await readFile(path.join(DIR, e.name, f), "utf8")));
         }
         guidesData.push({ ...meta, sections });

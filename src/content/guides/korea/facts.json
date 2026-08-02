@@ -1,0 +1,622 @@
+{
+  "phone-data-12": {
+    "claim": "Phone & data — $12",
+    "value": "$12",
+    "source_url": "https://roaming.kt.com/esim/eng/main.asp",
+    "verified_on": "2026-06-28",
+    "shelf_life": "default"
+  },
+  "phone-data-26-000": {
+    "claim": "Phone & data — ₩26,000",
+    "value": "₩26,000",
+    "source_url": "https://roaming.kt.com/esim/eng/main.asp",
+    "verified_on": "2026-06-28",
+    "shelf_life": "default"
+  },
+  "phone-data-17": {
+    "claim": "Phone & data — $17",
+    "value": "$17",
+    "source_url": "https://roaming.kt.com/esim/eng/main.asp",
+    "verified_on": "2026-06-28",
+    "shelf_life": "default"
+  },
+  "rainy-day-fallback-33-000": {
+    "claim": "Rainy day fallback — when the monsoon hits — ₩33,000",
+    "value": "₩33,000",
+    "source_url": "https://www.visitsealife.com/coex-seoul/en/tickets-passes/",
+    "verified_on": "2026-07-23",
+    "shelf_life": "venue",
+    "state": "approx"
+  },
+  "rainy-day-fallback-35-000": {
+    "claim": "Rainy day fallback — when the monsoon hits — ₩35,000",
+    "value": "₩35,000",
+    "source_url": "https://www.visitsealife.com/coex-seoul/en/tickets-passes/",
+    "verified_on": "2026-07-23",
+    "shelf_life": "venue"
+  },
+  "rainy-day-fallback-28-000": {
+    "claim": "Rainy day fallback — when the monsoon hits — ₩28,000",
+    "value": "₩28,000",
+    "source_url": "https://www.visitsealife.com/coex-seoul/en/tickets-passes/",
+    "verified_on": "2026-07-23",
+    "shelf_life": "venue"
+  },
+  "rainy-day-fallback-1-500": {
+    "claim": "Rainy day fallback — when the monsoon hits — ₩1,500",
+    "value": "₩1,500",
+    "source_url": "https://www.visitsealife.com/coex-seoul/en/tickets-passes/",
+    "verified_on": "2026-07-23",
+    "shelf_life": "venue",
+    "state": "approx"
+  },
+  "rainy-day-fallback-12-000": {
+    "claim": "Rainy day fallback — when the monsoon hits — ₩12,000",
+    "value": "₩12,000",
+    "source_url": "https://www.visitsealife.com/coex-seoul/en/tickets-passes/",
+    "verified_on": "2026-07-23",
+    "shelf_life": "venue",
+    "state": "approx"
+  },
+  "money-currency-1-000": {
+    "claim": "Money & currency — ₩1,000",
+    "value": "₩1,000",
+    "source_url": "https://www.federalreserve.gov/releases/h10/current/",
+    "verified_on": "2026-07-30",
+    "shelf_life": "fx"
+  },
+  "money-currency-10-000": {
+    "claim": "Money & currency — ₩10,000",
+    "value": "₩10,000",
+    "source_url": "https://www.federalreserve.gov/releases/h10/current/",
+    "verified_on": "2026-07-30",
+    "shelf_life": "fx"
+  },
+  "money-currency-1-461": {
+    "claim": "Money & currency — ₩1,461",
+    "value": "₩1,461",
+    "source_url": "https://www.federalreserve.gov/releases/h10/current/",
+    "verified_on": "2026-07-30",
+    "shelf_life": "fx"
+  },
+  "money-currency-1-535": {
+    "claim": "Money & currency — ₩1,535",
+    "value": "₩1,535",
+    "source_url": "https://www.federalreserve.gov/releases/h10/current/",
+    "verified_on": "2026-07-30",
+    "shelf_life": "fx"
+  },
+  "money-currency-30-000": {
+    "claim": "Money & currency — ₩30,000",
+    "value": "₩30,000",
+    "source_url": "https://www.federalreserve.gov/releases/h10/current/",
+    "verified_on": "2026-07-30",
+    "shelf_life": "fx",
+    "state": "approx"
+  },
+  "budget-daily-costs-4-800": {
+    "claim": "Budget & daily costs → Taxis (whole trip total) — ₩4,800",
+    "value": "₩4,800",
+    "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=140661",
+    "verified_on": "2026-07-23",
+    "shelf_life": "transit"
+  },
+  "budget-daily-costs-11-000": {
+    "claim": "Budget & daily costs → Taxis (whole trip total) — ₩11,000",
+    "value": "₩11,000",
+    "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=140661",
+    "verified_on": "2026-07-23",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "budget-daily-costs-5-500": {
+    "claim": "Budget & daily costs → Taxis (whole trip total) — ₩5,500",
+    "value": "₩5,500",
+    "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=140661",
+    "verified_on": "2026-07-23",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "budget-daily-costs-17-000": {
+    "claim": "Budget & daily costs → Airport Limousine 6002 — inbound + outbound — ₩17,000",
+    "value": "₩17,000",
+    "source_url": "https://mileasia.com/korea/incheon-airport-limousine-bus/",
+    "verified_on": "2026-07-23",
+    "shelf_life": "transit"
+  },
+  "budget-daily-costs-34-000": {
+    "claim": "Budget & daily costs → Airport Limousine 6002 — inbound + outbound — ₩34,000",
+    "value": "₩34,000",
+    "source_url": "https://mileasia.com/korea/incheon-airport-limousine-bus/",
+    "verified_on": "2026-07-23",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "budget-daily-costs-4-050": {
+    "claim": "Budget & daily costs → Airport Limousine 6002 — inbound + outbound — ₩4,050",
+    "value": "₩4,050",
+    "source_url": "https://mileasia.com/korea/incheon-airport-limousine-bus/",
+    "verified_on": "2026-07-23",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "budget-daily-costs-6": {
+    "claim": "Budget & daily costs → Airport Limousine 6002 — inbound + outbound — $6",
+    "value": "$6",
+    "source_url": "https://mileasia.com/korea/incheon-airport-limousine-bus/",
+    "verified_on": "2026-07-23",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "budget-daily-costs-3-000": {
+    "claim": "Budget & daily costs → Gyeongbokgung palace — ₩3,000",
+    "value": "₩3,000",
+    "source_url": "https://english.visitseoul.net/attractions/Gyeongbokgung/ENP000072",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue"
+  },
+  "budget-daily-costs-2": {
+    "claim": "Budget & daily costs → Gyeongbokgung palace — $2",
+    "value": "$2",
+    "source_url": "https://english.visitseoul.net/attractions/Gyeongbokgung/ENP000072",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue",
+    "state": "approx"
+  },
+  "budget-daily-costs-15-000": {
+    "claim": "Budget & daily costs → Gyeongbokgung palace — ₩15,000",
+    "value": "₩15,000",
+    "source_url": "https://english.visitseoul.net/attractions/Gyeongbokgung/ENP000072",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue",
+    "state": "approx"
+  },
+  "budget-daily-costs-3-000-2": {
+    "claim": "Budget & daily costs → Changdeokgung + Huwon (Secret Garden) — ₩3,000",
+    "value": "₩3,000",
+    "source_url": "https://english.visitseoul.net/area/2024-cdggarden/ENPl8f5md",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue"
+  },
+  "budget-daily-costs-5-000": {
+    "claim": "Budget & daily costs → Changdeokgung + Huwon (Secret Garden) — ₩5,000",
+    "value": "₩5,000",
+    "source_url": "https://english.visitseoul.net/area/2024-cdggarden/ENPl8f5md",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue"
+  },
+  "budget-daily-costs-8-000": {
+    "claim": "Budget & daily costs → Changdeokgung + Huwon (Secret Garden) — ₩8,000",
+    "value": "₩8,000",
+    "source_url": "https://english.visitseoul.net/area/2024-cdggarden/ENPl8f5md",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue"
+  },
+  "budget-daily-costs-5-50": {
+    "claim": "Budget & daily costs → Changdeokgung + Huwon (Secret Garden) — $5.50",
+    "value": "$5.50",
+    "source_url": "https://english.visitseoul.net/area/2024-cdggarden/ENPl8f5md",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue",
+    "state": "approx"
+  },
+  "budget-daily-costs-29-000": {
+    "claim": "Budget & daily costs → N Seoul Tower observatory — ₩29,000",
+    "value": "₩29,000",
+    "source_url": "https://www.nseoultower.co.kr/eng/visit/use2.asp",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue"
+  },
+  "budget-daily-costs-20": {
+    "claim": "Budget & daily costs → N Seoul Tower observatory — $20",
+    "value": "$20",
+    "source_url": "https://www.nseoultower.co.kr/eng/visit/use2.asp",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue",
+    "state": "approx"
+  },
+  "budget-daily-costs-23-000": {
+    "claim": "Budget & daily costs → N Seoul Tower observatory — ₩23,000",
+    "value": "₩23,000",
+    "source_url": "https://www.nseoultower.co.kr/eng/visit/use2.asp",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue"
+  },
+  "budget-daily-costs-18-000": {
+    "claim": "Budget & daily costs → N Seoul Tower observatory — ₩18,000",
+    "value": "₩18,000",
+    "source_url": "https://www.nseoultower.co.kr/eng/visit/use2.asp",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue",
+    "state": "approx"
+  },
+  "budget-daily-costs-15-000-2": {
+    "claim": "Budget & daily costs → N Seoul Tower observatory — ₩15,000",
+    "value": "₩15,000",
+    "source_url": "https://www.nseoultower.co.kr/eng/visit/use2.asp",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue"
+  },
+  "budget-daily-costs-15-000-3": {
+    "claim": "Budget & daily costs → Namsan cable car (round-trip) — ₩15,000",
+    "value": "₩15,000",
+    "source_url": "https://english.visitseoul.net/area/Namsan-Cable-Car/ENP035015",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue"
+  },
+  "budget-daily-costs-10": {
+    "claim": "Budget & daily costs → Namsan cable car (round-trip) — $10",
+    "value": "$10",
+    "source_url": "https://english.visitseoul.net/area/Namsan-Cable-Car/ENP035015",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue",
+    "state": "approx"
+  },
+  "budget-daily-costs-12-000": {
+    "claim": "Budget & daily costs → Namsan cable car (round-trip) — ₩12,000",
+    "value": "₩12,000",
+    "source_url": "https://english.visitseoul.net/area/Namsan-Cable-Car/ENP035015",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue"
+  },
+  "budget-daily-costs-1-500": {
+    "claim": "Budget & daily costs → Namsan cable car (round-trip) — ₩1,500",
+    "value": "₩1,500",
+    "source_url": "https://english.visitseoul.net/area/Namsan-Cable-Car/ENP035015",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue"
+  },
+  "getting-to-from-17-000": {
+    "claim": "Getting to/from Incheon Airport — options compared — ₩17,000",
+    "value": "₩17,000",
+    "source_url": "https://www.airport.kr/ap/en/index.do",
+    "verified_on": "2026-07-07",
+    "shelf_life": "transit"
+  },
+  "getting-to-from-4-050": {
+    "claim": "Getting to/from Incheon Airport — options compared — ₩4,050",
+    "value": "₩4,050",
+    "source_url": "https://www.airport.kr/ap/en/index.do",
+    "verified_on": "2026-07-07",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "getting-to-from-11-000": {
+    "claim": "Getting to/from Incheon Airport — options compared — ₩11,000",
+    "value": "₩11,000",
+    "source_url": "https://www.airport.kr/ap/en/index.do",
+    "verified_on": "2026-07-07",
+    "shelf_life": "transit"
+  },
+  "getting-to-from-55-000": {
+    "claim": "Getting to/from Incheon Airport — options compared — ₩55,000",
+    "value": "₩55,000",
+    "source_url": "https://www.airport.kr/ap/en/index.do",
+    "verified_on": "2026-07-07",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "getting-to-from-18-000": {
+    "claim": "Getting to/from Incheon Airport — options compared — ₩18,000",
+    "value": "₩18,000",
+    "source_url": "https://www.airport.kr/ap/en/index.do",
+    "verified_on": "2026-07-07",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "getting-to-from-2-000": {
+    "claim": "Getting to/from Incheon Airport — options compared — ₩2,000",
+    "value": "₩2,000",
+    "source_url": "https://www.airport.kr/ap/en/index.do",
+    "verified_on": "2026-07-07",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "day-by-day-4-050": {
+    "claim": "Day by day → Flight — depart Newark (EWR) at ≈01:00 EDT — ₩4,050",
+    "value": "₩4,050",
+    "source_url": "https://www.airpremia.com/a/en/customer/notice/686",
+    "verified_on": "2026-06-28",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "day-by-day-10-000": {
+    "claim": "Day by day → Arrive Seoul — light, bathhouse, early night — ₩10,000",
+    "value": "₩10,000",
+    "source_url": "https://www.airport.kr/ap/en/index.do",
+    "verified_on": "2026-06-28",
+    "shelf_life": "default",
+    "state": "approx"
+  },
+  "day-by-day-12-000": {
+    "claim": "Day by day → Arrive Seoul — light, bathhouse, early night — ₩12,000",
+    "value": "₩12,000",
+    "source_url": "https://www.airport.kr/ap/en/index.do",
+    "verified_on": "2026-06-28",
+    "shelf_life": "default"
+  },
+  "day-by-day-7-000": {
+    "claim": "Day by day → Arrive Seoul — light, bathhouse, early night — ₩7,000",
+    "value": "₩7,000",
+    "source_url": "https://www.airport.kr/ap/en/index.do",
+    "verified_on": "2026-06-28",
+    "shelf_life": "default",
+    "state": "approx"
+  },
+  "day-by-day-6-000": {
+    "claim": "Day by day → Palaces & old Seoul — ₩6,000.",
+    "value": "₩6,000.",
+    "source_url": "https://english.visitseoul.net/attractions/Gyeongbokgung/ENP000072",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue",
+    "state": "approx"
+  },
+  "day-by-day-100-000": {
+    "claim": "Day by day → Palaces & old Seoul — ₩100,000",
+    "value": "₩100,000",
+    "source_url": "https://english.visitseoul.net/attractions/Gyeongbokgung/ENP000072",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue"
+  },
+  "day-by-day-1-400": {
+    "claim": "Day by day → GO Fest Day 1 in Daejeon (all day) → MSI Lower Bracket Final — ₩1,400",
+    "value": "₩1,400",
+    "source_url": "https://www.letskorail.com",
+    "verified_on": "2026-06-28",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "day-by-day-6-000-2": {
+    "claim": "Day by day → GO Fest Day 1 in Daejeon (all day) → MSI Lower Bracket Final — ₩6,000",
+    "value": "₩6,000",
+    "source_url": "https://www.letskorail.com",
+    "verified_on": "2026-06-28",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "day-by-day-11-000": {
+    "claim": "Day by day → GO Fest Day 1 in Daejeon (all day) → MSI Lower Bracket Final — ₩11,000",
+    "value": "₩11,000",
+    "source_url": "https://www.letskorail.com",
+    "verified_on": "2026-06-28",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "day-by-day-5-500": {
+    "claim": "Day by day → GO Fest Day 1 in Daejeon (all day) → MSI Lower Bracket Final — ₩5,500",
+    "value": "₩5,500",
+    "source_url": "https://www.letskorail.com",
+    "verified_on": "2026-06-28",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "day-by-day-11-000-2": {
+    "claim": "Day by day → Post-MSI: Daejeon → Busan day trip → back to Seoul — ₩11,000",
+    "value": "₩11,000",
+    "source_url": "https://www.humetro.busan.kr",
+    "verified_on": "2026-07-13",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "day-by-day-5-500-2": {
+    "claim": "Day by day → Post-MSI: Daejeon → Busan day trip → back to Seoul — ₩5,500",
+    "value": "₩5,500",
+    "source_url": "https://www.humetro.busan.kr",
+    "verified_on": "2026-07-13",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "day-by-day-6-000-3": {
+    "claim": "Day by day → Post-MSI: Daejeon → Busan day trip → back to Seoul — ₩6,000",
+    "value": "₩6,000",
+    "source_url": "https://www.humetro.busan.kr",
+    "verified_on": "2026-07-13",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "day-by-day-10-000-2": {
+    "claim": "Day by day → Post-MSI: Daejeon → Busan day trip → back to Seoul — ₩10,000",
+    "value": "₩10,000",
+    "source_url": "https://www.humetro.busan.kr",
+    "verified_on": "2026-07-13",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "day-by-day-22-000": {
+    "claim": "Day by day → Post-MSI: Daejeon → Busan day trip → back to Seoul — ₩22,000",
+    "value": "₩22,000",
+    "source_url": "https://www.humetro.busan.kr",
+    "verified_on": "2026-07-13",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "day-by-day-18-000": {
+    "claim": "Day by day → Post-MSI: Daejeon → Busan day trip → back to Seoul — ₩18,000",
+    "value": "₩18,000",
+    "source_url": "https://www.humetro.busan.kr",
+    "verified_on": "2026-07-13",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "day-by-day-22-000-2": {
+    "claim": "Day by day → Post-MSI: Daejeon → Busan day trip → back to Seoul — ₩22,000,",
+    "value": "₩22,000,",
+    "source_url": "https://www.humetro.busan.kr",
+    "verified_on": "2026-07-13",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "day-by-day-6-000-4": {
+    "claim": "Day by day → The Secret Garden, the big shopping day & a send-off dinner — ₩6,000",
+    "value": "₩6,000",
+    "source_url": "https://english.visitseoul.net/area/2024-cdggarden/ENPl8f5md",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue",
+    "state": "approx"
+  },
+  "day-by-day-40-000": {
+    "claim": "Day by day → The Secret Garden, the big shopping day & a send-off dinner — ₩40,000",
+    "value": "₩40,000",
+    "source_url": "https://english.visitseoul.net/area/2024-cdggarden/ENPl8f5md",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue",
+    "state": "approx"
+  },
+  "day-by-day-130-000": {
+    "claim": "Day by day → The Secret Garden, the big shopping day & a send-off dinner — ₩130,000",
+    "value": "₩130,000",
+    "source_url": "https://english.visitseoul.net/area/2024-cdggarden/ENPl8f5md",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue",
+    "state": "approx"
+  },
+  "day-by-day-100-000-2": {
+    "claim": "Day by day → The Secret Garden, the big shopping day & a send-off dinner — ₩100,000",
+    "value": "₩100,000",
+    "source_url": "https://english.visitseoul.net/area/2024-cdggarden/ENPl8f5md",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue",
+    "state": "approx"
+  },
+  "day-by-day-17-000": {
+    "claim": "Day by day → Easy departure — slow Jongno morning → limousine bus home — ₩17,000",
+    "value": "₩17,000",
+    "source_url": "https://www.airpremia.com/a/en/customer/notice/686",
+    "verified_on": "2026-07-07",
+    "shelf_life": "transit"
+  },
+  "solo-in-seoul-4-000": {
+    "claim": "Solo in Seoul — a menu for whenever someone splits off — ₩4,000",
+    "value": "₩4,000",
+    "source_url": "https://english.visitseoul.net/attractions/Leeum-Samsung-Museum-of-Art/ENP001232",
+    "verified_on": "2026-07-23",
+    "shelf_life": "venue"
+  },
+  "solo-in-seoul-18-000": {
+    "claim": "Solo in Seoul — a menu for whenever someone splits off — ₩18,000",
+    "value": "₩18,000",
+    "source_url": "https://english.visitseoul.net/attractions/Leeum-Samsung-Museum-of-Art/ENP001232",
+    "verified_on": "2026-07-23",
+    "shelf_life": "venue"
+  },
+  "solo-in-seoul-5-000": {
+    "claim": "Solo in Seoul — a menu for whenever someone splits off — ₩5,000",
+    "value": "₩5,000",
+    "source_url": "https://english.visitseoul.net/attractions/Leeum-Samsung-Museum-of-Art/ENP001232",
+    "verified_on": "2026-07-23",
+    "shelf_life": "venue",
+    "state": "approx"
+  },
+  "top-sights-in-100-000": {
+    "claim": "Top sights in Seoul → Bukchon Hanok Village — ₩100,000",
+    "value": "₩100,000",
+    "source_url": "https://english.seoul.go.kr/notice-on-restrictions-for-tourist-visits-to-bukchon-special-management-area-effective-from-november-2024/",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue"
+  },
+  "visiting-tips-100-000": {
+    "claim": "Visiting tips — ₩100,000",
+    "value": "₩100,000",
+    "source_url": "https://english.visitseoul.net/area/2024-cdggarden/ENPl8f5md",
+    "verified_on": "2026-07-30",
+    "shelf_life": "venue"
+  },
+  "hongdae-after-dark-10-000": {
+    "claim": "Hongdae after dark — ₩10,000",
+    "value": "₩10,000",
+    "source_url": "https://www.klook.com/en-US/activity/77939-hongdae-dokkaebi-pub-and-club/",
+    "verified_on": "2026-06-28",
+    "shelf_life": "venue",
+    "state": "approx"
+  },
+  "norebang-han-river-15-000": {
+    "claim": "Norebang, Han River & the ones Americans miss — ₩15,000",
+    "value": "₩15,000",
+    "source_url": "https://map.naver.com",
+    "verified_on": "2026-06-28",
+    "shelf_life": "venue",
+    "state": "approx"
+  },
+  "norebang-han-river-8-000": {
+    "claim": "Norebang, Han River & the ones Americans miss — ₩8,000",
+    "value": "₩8,000",
+    "source_url": "https://map.naver.com",
+    "verified_on": "2026-06-28",
+    "shelf_life": "venue",
+    "state": "approx"
+  },
+  "norebang-han-river-2-500": {
+    "claim": "Norebang, Han River & the ones Americans miss — ₩2,500",
+    "value": "₩2,500",
+    "source_url": "https://map.naver.com",
+    "verified_on": "2026-06-28",
+    "shelf_life": "venue",
+    "state": "approx"
+  },
+  "norebang-han-river-1-000": {
+    "claim": "Norebang, Han River & the ones Americans miss — ₩1,000",
+    "value": "₩1,000",
+    "source_url": "https://map.naver.com",
+    "verified_on": "2026-06-28",
+    "shelf_life": "venue"
+  },
+  "ordering-in-korean-12-000": {
+    "claim": "Ordering in Korean restaurants — the mechanics — ₩12,000",
+    "value": "₩12,000",
+    "source_url": "https://map.naver.com",
+    "verified_on": "2026-06-28",
+    "shelf_life": "default",
+    "state": "approx"
+  },
+  "how-to-book-10-000": {
+    "claim": "How to book restaurants in Korea — ₩10,000",
+    "value": "₩10,000",
+    "source_url": "https://www.catchtable.net",
+    "verified_on": "2026-07-07",
+    "shelf_life": "default"
+  },
+  "where-to-eat-2-000": {
+    "claim": "Where to eat — picks near your route — ₩2,000",
+    "value": "₩2,000",
+    "source_url": "https://map.naver.com",
+    "verified_on": "2026-07-07",
+    "shelf_life": "venue",
+    "state": "approx"
+  },
+  "where-to-eat-1-500": {
+    "claim": "Where to eat — picks near your route — ₩1,500,",
+    "value": "₩1,500,",
+    "source_url": "https://map.naver.com",
+    "verified_on": "2026-07-07",
+    "shelf_life": "venue"
+  },
+  "where-to-eat-2-500": {
+    "claim": "Where to eat — picks near your route — ₩2,500,",
+    "value": "₩2,500,",
+    "source_url": "https://map.naver.com",
+    "verified_on": "2026-07-07",
+    "shelf_life": "venue"
+  },
+  "shopping-game-plan-15-000": {
+    "claim": "Shopping game plan — low-hassle route — ₩15,000",
+    "value": "₩15,000",
+    "source_url": "https://english.visitseoul.net/taxrefund",
+    "verified_on": "2026-07-30",
+    "shelf_life": "default"
+  },
+  "shopping-in-seoul-15-000": {
+    "claim": "Shopping in Seoul — ₩15,000",
+    "value": "₩15,000",
+    "source_url": "https://english.visitseoul.net",
+    "verified_on": "2026-07-07",
+    "shelf_life": "venue"
+  },
+  "quick-reference-when-1-500": {
+    "claim": "Quick reference — when you're unsure what to do — ₩1,500",
+    "value": "₩1,500",
+    "source_url": "https://map.naver.com",
+    "verified_on": "2026-07-07",
+    "shelf_life": "venue",
+    "state": "approx"
+  }
+}

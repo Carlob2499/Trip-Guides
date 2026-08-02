@@ -193,6 +193,20 @@ makes it bearable). Judged by rubric row **#12** plus #9 (party fit) and the bar
   `⚠` known-gap · omitted · `__VERIFICATION_REQUIRED__` (unverified map
   place_id). **Zero bare perishable facts.** Full rules — including what each
   state does and doesn't license: `verification-rules.md` §4.
+- **Perishable MONEY facts go in the registry, not in prose.** A guide directory carries
+  `facts.json`: one record per perishable figure — `claim` · `value` · `source_url` ·
+  `verified_on` · `shelf_life` · `state` (`clean` | `approx`) — and prose references it as
+  `{{fact:<id>}}`. Write the row as you verify the figure, then reference it; don't type the
+  number into three places and leave the next pass to reconcile them. What this buys: one edit
+  updates every mention (the numeric half of the continuity sweep stops being a grep hunt), the
+  citation audit walks ALL facts instead of sampling, and recert lists the stale one by id.
+  Rules: **`≈` is DERIVED from `state: "approx"`** — never type it into `value`; `value` is
+  inline text only (markup would bypass the prose tag allowlist); provenance is REQUIRED (a
+  fact earns a row *because* it is perishable); an unresolved token FAILS the build. Ids are
+  kebab and should carry the figure (`transit-passes-589-dkk`, not `transit-7`). Clock times
+  inside a day plan are itinerary structure, not registry facts — leave them in prose. An
+  existing guide is migrated with `node scripts/migrate-facts.mjs --slug <slug>` (propose) then
+  `--write`; it lifts values VERBATIM and the built site must stay byte-identical.
 - **Structured provenance — MANDATORY on anything you write or edit.** Sections and
   items accept `source_url` + `verified_on` (YYYY-MM-DD) + `shelf_life`
   (`fx` 7d · `transit` 90d · `hours` 90d · `venue` 180d · `default` 90d, from
