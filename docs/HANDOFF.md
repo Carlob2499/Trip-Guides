@@ -24,6 +24,59 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
+## Snapshot (2026-08-02, session #26 — whole-repo fact registry + consistency pass)
+
+**All four guides are on the fact registry — 141 perishable facts.** japan 24, us 9, joining
+denmark 26 and korea 82. Same gate both times: built `index.html` + `.gpx` byte-identical,
+`.ics` identical modulo `DTSTAMP`. **`guide-shape-uniform.test.mjs` now REQUIRES `facts.json`
+on every guide directory** — the loader treats it as optional, and that tolerance is exactly
+how three of five guides once sat as flat `.json` files unnoticed (both shapes built, so
+nothing said so). An empty `{}` satisfies it; the scaffolder writes one, verified by actually
+scaffolding a throwaway guide.
+
+**Consistency audit — the CODE was clean, the DOCS had rotted.** A full export/import sweep
+over 623 exported symbols found exactly **2** unreferenced (`ANSWER_KEYS`, whose comment
+claimed a "doc-coverage test" that has never existed; `STALLED`, a bare unused alias). Both
+deleted. The real findings were documentation describing a repo that no longer exists:
+- `PLAN_VISUAL_REDESIGN.md` said *"nothing here is building yet"* while four of its moves are
+  live and live code cites it as their spec. The most misleading file in the tree.
+- **`CLAUDE.md` + `ARCHITECTURE.md` omitted `facts.json` from the guide-directory contract —
+  operationally dangerous, not cosmetic.** CLAUDE.md tells an agent to "Read ONLY the group
+  file the fact lives in", but a price may now be a `{{fact:id}}` row; following that literally
+  means editing prose that no longer holds the number. Both corrected, with the grep-first rule
+  spelled out.
+- `ARCHITECTURE.md` guide list omitted Japan and called two archived guides "live"; "all 8
+  features sealed" when there are 22 silos. `FEATURES.md` still listed two shipped features as
+  "Held" and the phrases/entry cards as "DORMANT". `PLAN_FACTORY_V2.md` P7 marked deferred
+  though two of its four surfaces shipped. `skill-retro.yml` told the agent to read
+  `docs/E2_FIELD_REPORT.md`, which has never existed.
+
+**`unusedFactIds` was built to catch registry rot and never called** — the one inert gap in the
+registry work. Now wired through `readGuides` into the verify scorecard: a row nothing
+references keeps its date, keeps reading as "verified", and keeps costing a recert check for a
+number no traveler can see. Advisory, not blocking. Forced an orphan row in to prove it fires.
+
+**`src/lib/issue-forms.mjs` closes the last label-drift hazard.** `parse-revise-issue.mjs` had
+SIX hand-typed label literals across two templates and `graduate-guide.mjs` a seventh, none
+contract-tested, while new-guide and modify both were. All three field sets now live in one
+module (they must — the revise parser falls back to modify's labels for an escalated issue),
+`Guide slug` is written once, and 15 tests cover contracts + round-trips. **Proved the gate
+bites:** renamed a label in `revise-guide.yml`, watched the test fail on it, reverted.
+
+**Deliberately NOT done:** the three shipped plan docs stay in `docs/` rather than moving to
+`archive/` — live workflows and scripts cite them BY PATH, so archiving means rewriting 12
+references to fix a filing problem. A shipped plan that code cites is documentation; a
+*misleading* one is the defect, and those are corrected in place.
+
+**Verified: 1184 tests, typecheck 0, lint clean, CI green ×4, all four guides byte-identical.**
+
+**Open, needs you:** ① Places API key is referrer-restricted (403) — Google Cloud →
+Credentials → **Application restrictions = None**. ② `verify --slug japan` fails its research
+gate on a `divergences` item with `verified_on` and no `source_url` — **pre-existing**
+(confirmed at HEAD before the migration), from the original Japan research run; the fix is the
+real disproof source or an honest removal of the orphan date, never an invented URL.
+③ One signed-in GitHub click to confirm the change-request textarea prefills.
+
 ## Snapshot (2026-08-02, session #25 — V2 Session 5: the change-request wizard. **V2 COMPLETE**)
 
 **The "Request a change" pill now opens a guided 3-step wizard** instead of dropping a reader
@@ -376,10 +429,30 @@ Two ways out, both the creator's call:
 
 ## Where we left off
 
+**Session #26 (2026-08-02):** finished the fact registry across all four guides (141 facts) and
+ran a whole-repo consistency audit — 2 dead exports removed, seven docs corrected, the last
+label-drift hazard closed with a shared schema + contract tests.
+
+**Re-prompt the creator with:** "Every guide is on the fact registry now — 141 prices and
+fares, each with its own source and date, each edited in one place — and all four built pages
+are byte-identical, so nothing a traveler sees moved. The consistency audit found the code
+almost spotless (2 dead exports out of 623) but several docs describing a repo that no longer
+exists; the one that mattered was CLAUDE.md still telling agents to edit prices in the group
+file, which since the migration would mean editing prose that no longer holds the number.
+**Three things are on you:** (1) the Places API key is referrer-restricted so venue
+verification 403s — Google Cloud → Credentials → that key → **Application restrictions =
+None**; (2) `verify --slug japan` fails on a disproof item that has a date but no source URL —
+it predates all this work, and the fix is the real source or removing the orphan date, never an
+invented one; (3) one signed-in GitHub click to confirm the change-request box prefills. Also
+still open: draft PR #28, the Actions 'allow PRs' setting, and local `npm run lint` (use
+`npx eslint src worker scripts tests`)."
+
+---
+
 **Session #25 (2026-08-02):** shipped V2 Session 5 — the guided change-request wizard. **The
 five-session V2 arc is complete.**
 
-**Re-prompt the creator with:** "V2 is done — all five sessions shipped. The change-request
+*(prior re-prompt, superseded)* "V2 is done — all five sessions shipped. The change-request
 button now walks a reader through three steps in-page instead of asking them what a 'slug' is,
 and it still degrades to the plain GitHub link with JS off. **Two things are on you:** (1) the
 Places API key is still referrer-restricted, so venue verification 403s — Google Cloud →
