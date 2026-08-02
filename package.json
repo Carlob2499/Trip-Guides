@@ -24,7 +24,8 @@
     "search-commons": "node scripts/search-commons.mjs",
     "fetch-wikivoyage": "node scripts/fetch-wikivoyage.mjs",
     "split-guide": "node scripts/split-guide.mjs",
-    "compose-guide": "node scripts/compose-guide.mjs"
+    "compose-guide": "node scripts/compose-guide.mjs",
+    "refresh-fx": "node scripts/refresh-fx.mjs"
   },
   "dependencies": {
     "@fontsource-variable/literata": "^5.2.8",

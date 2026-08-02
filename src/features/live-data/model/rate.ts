@@ -2,9 +2,11 @@
    Everything here used to be closure functions inside guide-ui.js's rate IIFE, untested,
    guarding a number the traveler budgets against. */
 
+import { FALLBACK_RATES } from "../../../data/countries.mjs";
+
 /** Plausible USD→X bands. A rate outside its band is bad data, not a market move —
-    the ECB does not wake up and reprice the won by 10×. Currencies with no band are
-    unconstrained (unknown is not the same as invalid). */
+    the ECB does not wake up and reprice the won by 10×. These four are hand-tuned; every
+    other currency falls back to a band DERIVED from its seed rate (see inBand). */
 export const SANITY: Record<string, [number, number]> = {
   KRW: [500, 3000],
   JPY: [80, 250],
@@ -12,11 +14,26 @@ export const SANITY: Record<string, [number, number]> = {
   EUR: [0.5, 1.5],
 };
 
-/** Is this rate plausible for this currency? Unknown currency → accepted. */
+/** How far a live rate may sit from its generated seed rate before it reads as bad data.
+    Deliberately loose: the seed is refreshed occasionally, so a genuinely volatile currency
+    (TRY, ARS) must never be rejected for having MOVED. What this catches is the failure
+    class the hand-tuned bands catch — a wrong base currency, a units error, a garbage
+    payload — which is always off by an order of magnitude, not by a factor of two. */
+export const DERIVED_BAND_FACTOR = 3;
+
+/** Is this rate plausible for this currency?
+    Explicit band → use it. No explicit band but a known seed rate → allow seed ÷3 … ×3.
+    Neither → accepted (unknown is not the same as invalid). */
 export function inBand(rate: number, code: string): boolean {
   const b = SANITY[code];
-  if (!b) return true;
-  return rate >= b[0] && rate <= b[1];
+  if (b) return rate >= b[0] && rate <= b[1];
+  // FALLBACK_RATES is generated, so TS infers a literal key union; it is genuinely a
+  // code → rate map and is indexed by an arbitrary currency code at runtime.
+  const seed = (FALLBACK_RATES as Record<string, number>)[code];
+  if (typeof seed === "number" && seed > 0) {
+    return rate >= seed / DERIVED_BAND_FACTOR && rate <= seed * DERIVED_BAND_FACTOR;
+  }
+  return true;
 }
 
 /**

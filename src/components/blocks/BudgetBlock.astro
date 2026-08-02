@@ -176,7 +176,14 @@ const verdictText = target && dailyPP > 0
       : <>Figures per person · </>}
     all estimates ≈ — confirm as you book
     {cur === "$" && (
-      <> · <span id="liveRateFoot">≈₩1,535 = $1 · Jun 2026</span> — <a class="brate-link" href="https://www.google.com/search?q=KRW+USD+exchange+rate" target="_blank" rel="noopener noreferrer">check live rate</a></>
+      /* Starts EMPTY and hidden on purpose. This used to ship a literal "≈₩1,535 = $1 ·
+         Jun 2026" and a KRW search link — Korea's numbers rendered on every USD-denominated
+         budget, so Denmark quoted kroner under a won sign and the US guide offered to
+         convert dollars to dollars. The rate is a runtime fact (features/live-data), so the
+         markup carries no rate at all: rate.js fills and reveals this once it has a real
+         one — live, locked-stale, or the dated seed — and a guide whose currency has none
+         shows nothing, which is the honest blank rather than a wrong number. */
+      <> · <span id="liveRateFoot" hidden></span><span id="liveRateSep" hidden> — </span><a id="liveRateCheck" class="brate-link" href="https://www.google.com/search?q=exchange+rate" target="_blank" rel="noopener noreferrer" hidden>check live rate</a></>
     )}
   </p>
 </div>

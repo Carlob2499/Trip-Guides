@@ -1,5 +1,37 @@
 import { describe, it, expect } from "vitest";
-import { inBand, fmtRate, isCacheFresh, parseRateResponse, SANITY } from "./rate";
+import { inBand, fmtRate, isCacheFresh, parseRateResponse, SANITY, DERIVED_BAND_FACTOR } from "./rate";
+import { FALLBACK_RATES } from "../../../data/countries.mjs";
+
+describe("inBand — derived guard for currencies with no hand-tuned band", () => {
+  // Before the seed table covered every currency, these were all "accept anything": a
+  // garbage rate for THB or SEK reached a traveler's budget unchallenged.
+  const seeded = (FALLBACK_RATES as Record<string, number>);
+
+  it("accepts a rate at the seed value for a currency with no explicit band", () => {
+    expect(SANITY.THB).toBeUndefined(); // guard: this test is about the derived path
+    expect(inBand(seeded.THB, "THB")).toBe(true);
+  });
+
+  it("rejects an order-of-magnitude error on a derived-band currency", () => {
+    expect(inBand(seeded.THB * 10, "THB")).toBe(false);
+    expect(inBand(seeded.THB / 10, "THB")).toBe(false);
+  });
+
+  it("still tolerates a genuinely large market move, so a volatile currency isn't rejected for moving", () => {
+    expect(inBand(seeded.THB * (DERIVED_BAND_FACTOR - 0.5), "THB")).toBe(true);
+    expect(inBand(seeded.THB / (DERIVED_BAND_FACTOR - 0.5), "THB")).toBe(true);
+  });
+
+  it("keeps the hand-tuned band where one exists, rather than deriving over it", () => {
+    // KRW's explicit band is tighter than seed÷3…×3 would be; the explicit one must win.
+    expect(inBand(SANITY.KRW[1] + 1, "KRW")).toBe(false);
+  });
+
+  it("still accepts anything for a currency with neither a band nor a seed rate", () => {
+    expect(seeded.XYZ).toBeUndefined();
+    expect(inBand(99999, "XYZ")).toBe(true);
+  });
+});
 
 describe("inBand", () => {
   it("accepts a real KRW rate and rejects an order-of-magnitude error", () => {

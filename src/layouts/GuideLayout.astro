@@ -9,7 +9,7 @@ import Learnings from "../components/Learnings.astro";
 import Reminders from "../components/Reminders.astro";
 import TripKit from "../components/TripKit.astro";
 import { bucket } from "../lib/buckets";
-import { emergencyFor } from "../data/countries.mjs";
+import { emergencyFor, FALLBACK_RATES_AS_OF } from "../data/countries.mjs";
 import { currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
 import { paletteFor, accentForGuide } from "../lib/palettes";
 import { accentTokens, accentStyle } from "../lib/accent-tokens";
@@ -987,7 +987,7 @@ const tripSummary = buildSummary(guide);
            6. Jet-lag calculator
          ═══════════════════════════════════════════════════════════════════ -->
     <!-- Config for the extracted guide UI module (formerly Astro define:vars). -->
-    <script type="application/json" is:inline id="tgConfig" set:html={jsonEmbed({ order, storeKey, legacyStoreKey, roomId: guide.roomId ?? null, mapCenter, firstDayDate, lastDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, daysForBanner, gmapsKey: import.meta.env.PUBLIC_GMAPS_KEY ?? null, gmapsMapId: import.meta.env.PUBLIC_GMAPS_MAP_ID ?? null, emergency: emergencyFor(guide.country), advisory: (guide as any).advisory ?? null, verifiedDate, budgetLock: (guide as any).budgetLock ?? false })}></script>
+    <script type="application/json" is:inline id="tgConfig" set:html={jsonEmbed({ order, storeKey, legacyStoreKey, roomId: guide.roomId ?? null, mapCenter, firstDayDate, lastDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, curFallbackAsOf: FALLBACK_RATES_AS_OF, daysForBanner, gmapsKey: import.meta.env.PUBLIC_GMAPS_KEY ?? null, gmapsMapId: import.meta.env.PUBLIC_GMAPS_MAP_ID ?? null, emergency: emergencyFor(guide.country), advisory: (guide as any).advisory ?? null, verifiedDate, budgetLock: (guide as any).budgetLock ?? false })}></script>
     <script type="application/json" is:inline id="storyDays" set:html={jsonEmbed(storyDays)}></script>
     <!-- Interactive UI — bundled + hashed by Astro into one module shared across guides. -->
     <script>

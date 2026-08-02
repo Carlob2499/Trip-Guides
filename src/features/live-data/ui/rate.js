@@ -30,11 +30,34 @@ export function getLastRate() {
 export function initRate(cfg) {
   var curCode = cfg && cfg.curCode;
   var curFallbackRate = cfg && cfg.curFallbackRate;
+  var curFallbackAsOf = cfg && cfg.curFallbackAsOf;
+  // NOTE: a currency with no seed rate disables this feature entirely rather than degrading
+  // it — which is why src/data/countries.mjs now carries every currency Frankfurter
+  // publishes instead of the four that were hardcoded first.
   if (!curCode || !curFallbackRate || !window.fetch) return;
+
+  // A USD destination has nothing to convert. Frankfurter can't quote USD→USD either, so
+  // without this the Sedona guide rendered "≈1.00 USD = $1 · live rate unavailable" — a
+  // meaningless conversion that also blamed the network for it. Show nothing instead.
+  if (curCode === "USD") return;
 
   function remember(detail) {
     _lastRate = detail;
     document.dispatchEvent(new CustomEvent("tg:rate", { detail: detail }));
+  }
+
+  // The manual-check escape hatch. Its href used to be hardcoded to KRW, so every guide
+  // offered to look up won; point it at THIS guide's currency and reveal it alongside
+  // whatever rate we managed to show.
+  function revealCheckLink() {
+    var link = document.getElementById("liveRateCheck");
+    if (!link) return;
+    link.href = "https://www.google.com/search?q=" + encodeURIComponent(curCode + " USD exchange rate");
+    link.removeAttribute("hidden");
+    // The " — " between the rate and the link ships hidden too, so a guide that never
+    // reveals a rate doesn't render a stray dangling separator.
+    var sep = document.getElementById("liveRateSep");
+    if (sep) sep.removeAttribute("hidden");
   }
 
   function applyLive(rate, date) {
@@ -47,6 +70,8 @@ export function initRate(cfg) {
     var foot = document.getElementById("liveRateFoot");
     if (foot) {
       foot.textContent = fmtRate(rate) + " " + curCode + " = $1 · Live · ECB · " + date;
+      foot.removeAttribute("hidden");
+      revealCheckLink();
     }
     remember({ rate: rate, date: date, code: curCode });
   }
@@ -55,7 +80,13 @@ export function initRate(cfg) {
     console.warn("[tg-rate] " + reason + " — using fallback " + curFallbackRate + " " + curCode);
     var foot = document.getElementById("liveRateFoot");
     if (foot) {
-      foot.textContent = "≈₩" + curFallbackRate.toLocaleString() + " = $1 · Jun 2026 · live rate unavailable";
+      // Was hardcoded "≈₩… · Jun 2026" — the won symbol and a fixed month rendered on EVERY
+      // guide, so a Denmark budget quoted kroner with a won sign against a stale date. Use
+      // the guide's own currency code and the seed table's real fetch date.
+      foot.textContent = "≈" + fmtRate(curFallbackRate) + " " + curCode + " = $1 · seed rate" +
+        (curFallbackAsOf ? " " + curFallbackAsOf : "") + " · live rate unavailable";
+      foot.removeAttribute("hidden");
+      revealCheckLink();
     }
   }
 
@@ -71,6 +102,8 @@ export function initRate(cfg) {
     var foot = document.getElementById("liveRateFoot");
     if (foot) {
       foot.textContent = fmtRate(c.rate) + " " + curCode + " = $1 · Rate locked " + c.date + " · offline";
+      foot.removeAttribute("hidden");
+      revealCheckLink();
     }
     remember({ rate: c.rate, date: c.date, code: curCode, locked: true });
   }
