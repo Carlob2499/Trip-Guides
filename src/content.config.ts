@@ -4,6 +4,7 @@
 import { defineCollection } from "astro:content";
 import { z } from "astro/zod";
 import { contrastRatio } from "./lib/contrast";
+import { isSectionFile, interpolateFacts, FACT_VALUE_FORBIDDEN_RE } from "./lib/facts.mjs";
 
 // Light page background (base.css `--bg`). A guide `theme.primary` becomes the
 // site `--accent`, painted as link/tab/label text on this surface — so it must
@@ -44,6 +45,35 @@ const provenance = {
   // P7/R11: dual-pass agreement — whether Pass A and Pass B independently converged on this fact.
   agreement: z.enum(["A+B converged", "A only", "B only"]).optional(),
 };
+
+// The perishable-fact registry (optional `<slug>/facts.json`). One record per perishable fact,
+// referenced from prose as `{{fact:<id>}}` and substituted by guideLoader before validation —
+// so one edit updates every mention, and the citation audit can walk ALL of them instead of
+// sampling five. Mechanics live in src/lib/facts.mjs; this is the shape.
+// Provenance is REQUIRED here, unlike the optional bag above: a fact only earns a registry row
+// because it is perishable, and a perishable fact with no source and no date is exactly what
+// the whole verification discipline exists to prevent.
+const factRecord = z.object({
+  // What is being claimed, in words — the ledger row a human reads when auditing.
+  claim: z.string().min(1),
+  // The value substituted into prose. INLINE TEXT ONLY: markup here would bypass the prose
+  // tag allowlist, and a stray `</p>` would relocate the lead-first fold.
+  value: z.string().min(1).refine((v) => !FACT_VALUE_FORBIDDEN_RE.test(v), {
+    message: "fact `value` must be inline text — no `<` or `>` (a typed section, not markup, carries structure)",
+  }),
+  source_url: z.url(),
+  verified_on: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  shelf_life: z.enum(["fx", "transit", "hours", "venue", "default"]),
+  // `clean` renders the value as-is; `approx` prefixes `≈` at render time. Deriving the marker
+  // from state (rather than letting it be typed into `value`) keeps one spelling of
+  // "sourced-but-approximate" and stops a bare ≈ appearing next to an unsourced number.
+  state: z.enum(["clean", "approx"]).default("clean"),
+  tier: z.enum(["primary", "corroborated", "secondary"]).optional(),
+});
+export const factsFile = z.record(
+  z.string().regex(/^[a-z0-9][a-z0-9-]*$/, "fact ids are kebab-case"),
+  factRecord,
+);
 
 // F1 (docs/archive/PLAN_TRAVELER_FEATURES.md): a checklist item stays a bare string for every guide
 // that has no book-by deadline for it (back-compat — every existing guide validates
@@ -344,12 +374,41 @@ const guideLoader = {
         id = e.name;
         const meta = JSON.parse(await readFile(path.join(DIR, e.name, "_guide.json"), "utf8"));
         const sections: unknown[] = [];
-        for (const f of files.filter((f) => f !== "_guide.json").sort()) {
+        // isSectionFile skips _guide.json AND facts.json — the registry is not sections, and
+        // without this the loader would throw "facts.json must be a JSON array of sections".
+        for (const f of files.filter(isSectionFile).sort()) {
           const part = JSON.parse(await readFile(path.join(DIR, e.name, f), "utf8"));
           if (!Array.isArray(part)) throw new Error(`${e.name}/${f} must be a JSON array of sections`);
           sections.push(...part);
         }
         raw = { ...meta, sections };
+        // Perishable-fact registry (optional). Interpolating HERE — the one choke point every
+        // consumer passes through (getCollection feeds the guide page, the hub, OG/recap
+        // images, and the .ics/.gpx exports) — means no renderer or exporter needs to know
+        // tokens exist. It also happens BEFORE parseData, so the HTML allowlist and the
+        // strict-mode ≈ gate below judge the FINAL text, not the token.
+        if (files.includes("facts.json")) {
+          const parsedFacts = factsFile.safeParse(
+            JSON.parse(await readFile(path.join(DIR, e.name, "facts.json"), "utf8")),
+          );
+          if (!parsedFacts.success) {
+            throw new Error(
+              `${e.name}/facts.json is invalid:\n` +
+                parsedFacts.error.issues.map((i) => `  · ${i.path.join(".") || "(root)"}: ${i.message}`).join("\n"),
+            );
+          }
+          const facts = parsedFacts.data;
+          const { data: filled, missing } = interpolateFacts(raw, facts);
+          if (missing.length) {
+            // Loud, never silent: an unresolved token would otherwise ship into dist/ as
+            // literal "{{fact:…}}" in the page AND in the calendar/GPX exports.
+            throw new Error(
+              `${e.name}: unresolved fact token(s) ${missing.map((m) => `{{fact:${m}}}`).join(", ")} — ` +
+                `add them to ${e.name}/facts.json or remove the reference.`,
+            );
+          }
+          raw = filled as Record<string, unknown>;
+        }
       } else continue;
       const data = await parseData({ id, data: raw });
       store.set({ id, data, digest: generateDigest(data) });

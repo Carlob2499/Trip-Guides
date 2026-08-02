@@ -20,6 +20,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 import { isMain } from "./audit/lib.mjs";
+import { isSectionFile } from "../src/lib/facts.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const GUIDES_DIR = path.join(ROOT, "src", "content", "guides");
@@ -143,7 +144,7 @@ async function readGuide(entryName) {
   if (!files.includes("_guide.json")) return null;
   const meta = JSON.parse(await readFile(path.join(p, "_guide.json"), "utf8"));
   const sections = [];
-  for (const f of files.filter((f) => f !== "_guide.json").sort()) {
+  for (const f of files.filter(isSectionFile).sort()) {
     sections.push(...JSON.parse(await readFile(path.join(p, f), "utf8")));
   }
   return { slug: entryName, guide: { ...meta, sections } };

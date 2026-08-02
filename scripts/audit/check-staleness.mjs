@@ -26,9 +26,29 @@ export async function checkStaleness({ thresholdDays = DEFAULT_THRESHOLD_DAYS, g
   const archived = [];
   const sections = []; // per-section findings, judged by each fact's own shelf life
 
-  for (const { slug, guide } of guides) {
+  for (const { slug, guide, facts } of guides) {
     if (guide.draft) { drafts.push(slug); continue; }
     if (guide.archived) { archived.push(slug); continue; }
+
+    // The perishable-fact registry (<slug>/facts.json). Its records carry provenance the
+    // INTERPOLATED guide no longer shows — substitution inlines the value and leaves the
+    // date behind — so without this loop, moving a price out of prose and into the registry
+    // would quietly remove it from the recert punch list. Reported by fact id, which is
+    // exactly what a human greps for.
+    for (const [id, f] of Object.entries(facts ?? {})) {
+      if (!f?.verified_on) continue;
+      const d = new Date(f.verified_on + "T00:00:00Z");
+      if (Number.isNaN(d.getTime())) continue;
+      const life = SHELF_LIFE_DAYS[f.shelf_life ?? "default"] ?? SHELF_LIFE_DAYS.default;
+      const age = daysSince(d);
+      if (age > life) {
+        sections.push({
+          slug, index: -1, title: `fact:${id} → ${f.claim ?? id}`,
+          date: f.verified_on, ageDays: age, category: f.shelf_life ?? "default",
+          life, source: f.source_url ?? null,
+        });
+      }
+    }
 
     // Per-section provenance. The guide-level stamp below can only ever say "this guide
     // is old"; these say WHICH fact is old and what to re-check it against — which is

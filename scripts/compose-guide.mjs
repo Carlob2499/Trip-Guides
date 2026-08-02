@@ -41,6 +41,7 @@ import path from "node:path";
 import { readFile, writeFile, readdir, rm } from "node:fs/promises";
 import { GUIDES_DIR, isMain } from "./audit/lib.mjs";
 import { splitGuide } from "./split-guide.mjs";
+import { isSectionFile } from "../src/lib/facts.mjs";
 
 /* ── the rule constants (one home, exported for the tests) ─────────────────── */
 export const SPINE = ["Plan", "Essentials", "Transit", "Days", "Sources"];
@@ -204,7 +205,7 @@ const withGroup = (s, g) => (s.group === g ? s : { ...s, group: g });
 export async function loadGuide(slug, guidesDir = GUIDES_DIR) {
   const dir = path.join(guidesDir, slug);
   const meta = JSON.parse(await readFile(path.join(dir, "_guide.json"), "utf8"));
-  const files = (await readdir(dir)).filter((f) => f !== "_guide.json" && f.endsWith(".json")).sort();
+  const files = (await readdir(dir)).filter(isSectionFile).sort();
   const sections = [];
   for (const f of files) sections.push(...JSON.parse(await readFile(path.join(dir, f), "utf8")));
   return { dir, meta, sections, files };
@@ -221,7 +222,9 @@ export async function applyComposition(slug, meta, sections, guidesDir = GUIDES_
   const dir = path.join(guidesDir, slug);
   // Remove the old group files FIRST: a renamed/folded group's NN-file would otherwise
   // linger beside the new split and shadow-feed the loader duplicate sections.
-  for (const f of (await readdir(dir)).filter((f) => f !== "_guide.json" && f.endsWith(".json"))) {
+  // isSectionFile is load-bearing here, not just tidy: this loop DELETES what it matches, and
+  // facts.json is the guide's citation registry, not a regenerable section file.
+  for (const f of (await readdir(dir)).filter(isSectionFile)) {
     await rm(path.join(dir, f));
   }
   const flatSeed = path.join(guidesDir, `${slug}.json`);

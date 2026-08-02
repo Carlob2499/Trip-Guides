@@ -49,6 +49,28 @@ beforeAll(async () => {
     sections: [{ type: "prose", group: "Overview", title: "Old fact", body: "x", verified_on: oldDate }],
   };
   await writeFile(path.join(dir, "archived-guide.json"), JSON.stringify(archivedGuide), "utf8");
+
+  // A DIRECTORY guide carrying a perishable-fact registry. Interpolation inlines a fact's
+  // VALUE into the prose but leaves its verified_on behind, so unless checkStaleness reads
+  // facts.json directly, moving a price out of prose and into the registry would silently
+  // remove it from the recert punch list while it kept aging.
+  const { mkdir } = await import("node:fs/promises");
+  const gdir = path.join(dir, "registry-guide");
+  await mkdir(gdir, { recursive: true });
+  await writeFile(path.join(gdir, "_guide.json"), JSON.stringify({ title: "Registry Guide", country: "Testland" }), "utf8");
+  await writeFile(
+    path.join(gdir, "01-plan.json"),
+    JSON.stringify([{ type: "prose", group: "Plan", title: "Costs", body: "<p>Entry {{fact:stale-price}}, bus {{fact:fresh-price}}.</p>" }]),
+    "utf8",
+  );
+  await writeFile(
+    path.join(gdir, "facts.json"),
+    JSON.stringify({
+      "stale-price": { claim: "Museum admission", value: "DKK 145", source_url: "https://example.com/p", verified_on: oldDate, shelf_life: "venue" },
+      "fresh-price": { claim: "Bus fare", value: "DKK 24", source_url: "https://example.com/b", verified_on: new Date().toISOString().slice(0, 10), shelf_life: "transit" },
+    }),
+    "utf8",
+  );
 });
 
 afterAll(async () => {
@@ -75,6 +97,30 @@ describe("checkStaleness — nested item-level provenance (P6)", () => {
     const { sections } = await checkStaleness({ guidesDir: dir });
     const hit = sections.find((s) => s.title.includes("Fresh Sight"));
     expect(hit).toBeFalsy();
+  });
+});
+
+describe("checkStaleness — the perishable-fact registry", () => {
+  it("flags a stale fact that lives in facts.json, not in a section", async () => {
+    const { sections } = await checkStaleness({ guidesDir: dir });
+    const hit = sections.find((s) => s.title.startsWith("fact:stale-price"));
+    expect(hit).toBeTruthy();
+    expect(hit.slug).toBe("registry-guide");
+    expect(hit.date).toBe("2020-01-01");
+    expect(hit.category).toBe("venue");
+    // The punch list must carry the source to re-check against, like any other finding.
+    expect(hit.source).toBe("https://example.com/p");
+  });
+
+  it("names the fact by id AND claim, so the punch list is greppable", async () => {
+    const { sections } = await checkStaleness({ guidesDir: dir });
+    const hit = sections.find((s) => s.title.startsWith("fact:stale-price"));
+    expect(hit.title).toBe("fact:stale-price → Museum admission");
+  });
+
+  it("leaves a fact inside its shelf life alone", async () => {
+    const { sections } = await checkStaleness({ guidesDir: dir });
+    expect(sections.find((s) => s.title.includes("fresh-price"))).toBeFalsy();
   });
 });
 
