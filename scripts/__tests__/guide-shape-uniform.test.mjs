@@ -41,4 +41,21 @@ describe("guide catalog shape", () => {
         "prefix is load-bearing: plain filename sort has to reproduce tab-group order",
     ).toEqual([]);
   });
+
+  test("every guide directory carries a facts.json — the perishable-fact registry", () => {
+    // Same argument as the flat-vs-directory rule above: two shapes means every consumer
+    // carries a branch. The registry is optional to the LOADER (a guide without one simply
+    // skips interpolation), and that tolerance is what would let the catalog drift back into
+    // "some guides have one, some don't". scaffold-guide.mjs emits an empty {} for every new
+    // guide precisely so it never has to be retrofitted; migrate an existing one with
+    // `node scripts/migrate-facts.mjs --slug <slug> --write`.
+    const missing = entries
+      .filter((e) => statSync(join(GUIDES_DIR, e)).isDirectory())
+      .filter((slug) => !existsSync(join(GUIDES_DIR, slug, "facts.json")));
+    expect(
+      missing,
+      "A guide has no facts.json. An EMPTY one ({}) is valid and is what the scaffolder writes — " +
+        "the point is that every guide has the same shape, so a price always has one place to live",
+    ).toEqual([]);
+  });
 });
