@@ -1,0 +1,225 @@
+/* === OPTION A — FIRST LIGHT (design study, /progress/) ======================
+   The guide's living cover, before the guide exists.
+
+   Premise: a Waypoint guide is BORN with a cover — the Painted Atlas needs only
+   a slug, which is the one thing this page always has (docs/MOTION.md, "Living
+   covers", rule 1). So the wait doesn't need a loading illustration invented for
+   it: the destination's own painted sky, at the destination's own local hour, is
+   already true and already the site's. When the guide lands, its masthead is the
+   SAME painting from the same seed — the wait is the first frame of the guide,
+   not a doorway to it.
+
+   Structure is the site's masthead, verbatim: scene → scrim → bottom-anchored
+   eyebrow / title / dek. Below the dek, the journey line from src/styles/
+   anchors.css at hero scale, one station per REAL pipeline stage.
+
+   Motion (docs/MOTION.md, "the overture, then the heartbeat"):
+   · Overture, once: title settles, the line draws, stations land in sequence.
+   · Heartbeat, continuous, only where motion IS information — the Atlas's own
+     licensed sky drift, and the glow at the fill's tip. When the pipeline stalls
+     the glow STOPS: nothing is moving, so nothing on screen moves. The stillness
+     is the message, and it arrives before the reader has read a word.
+   · Reduced-motion renders every finished frame, including the stalled one. */
+
+/* --- the scene ------------------------------------------------------------ */
+.fl-scene{position:fixed;inset:0;z-index:0;overflow:hidden;isolation:isolate}
+/* The Painted Atlas paints itself at z-index:-3 inside this stacking context. */
+.fl-scene .paint-atlas{z-index:0}
+/* Two overrides, both because a full VIEWPORT is a taller frame than the masthead
+   band the component was drawn for:
+   · the ridgeline sits at 58% instead of 74%, so the horizon — and the warm band of
+     sky the dusk/dawn palettes put just above it — lands ABOVE the text rather than
+     behind it. The silhouette is the picture; burying it in scrim wastes the cover.
+   · .pa-shade is dropped because this page brings its own scrim, tuned to where the
+     text actually is. Two stacked scrims read as mud. */
+.fl-scene .pa-terrain{height:58%}
+.fl-scene .pa-shade{display:none}
+/* One legibility floor, ramped so it is opaque only under the text and effectively
+   gone across the horizon band. Every text colour below was checked against the
+   darkest point of this ramp AND against the lightest sky mood (day). */
+.fl-scene::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to top,
+    rgba(9,12,15,.95) 0%,rgba(9,12,15,.90) 22%,rgba(9,12,15,.76) 38%,
+    rgba(9,12,15,.44) 50%,rgba(9,12,15,.12) 62%,transparent 74%)}
+
+/* --- the page ------------------------------------------------------------- */
+.fl-page{position:relative;z-index:2;min-height:100svh;display:flex;flex-direction:column;
+  padding:1.1rem 1.2rem 1.6rem;
+  padding-bottom:calc(1.6rem + env(safe-area-inset-bottom,0px));
+  --fl-fg:#f3f5f1;--fl-dim:rgba(243,245,241,.74);--fl-faint:rgba(243,245,241,.45);
+  --fl-rule:rgba(243,245,241,.26);
+  --fl-live:color-mix(in srgb,var(--accent) 34%,#fff);
+  color:var(--fl-fg)}
+.fl-top{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.fl-mark{font-family:var(--font-display);font-weight:640;font-size:var(--text-control);
+  letter-spacing:.02em;color:var(--fl-dim);text-decoration:none}
+.fl-mark:hover,.fl-mark:focus-visible{color:var(--fl-fg)}
+.fl-mark:focus-visible{outline:2px solid var(--fl-live);outline-offset:3px;border-radius:3px}
+
+/* Elapsed: a fact (time since the issue was filed), never an estimate. No ETA is
+   shown anywhere on this page because the pipeline has none to give. */
+.fl-elapsed{text-align:right;font-family:var(--font-data)}
+.fl-elapsed b{display:block;font-size:var(--text-h4);font-weight:700;font-variant-numeric:tabular-nums;
+  line-height:1.1;letter-spacing:-.01em}
+.fl-elapsed i{display:block;font-style:normal;font-size:var(--text-nano);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--fl-faint);margin-top:.15rem}
+
+.fl-main{margin-top:auto}
+.fl-stack{max-width:34rem}
+.fl-eyebrow{font-family:var(--font-data);font-size:var(--text-micro);font-weight:600;
+  letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--fl-dim);
+  margin:0 0 .5rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+/* The live dot is the destination's clock, not a spinner: it marks a real hour. */
+.fl-eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--fl-live);flex:none}
+.fl-title{font-family:var(--font-display);font-weight:600;font-size:var(--text-display);
+  line-height:.98;letter-spacing:-.022em;margin:0;text-wrap:balance}
+.fl-dek{font-family:var(--font-body);font-size:var(--text-lead);line-height:1.5;
+  color:var(--fl-dim);margin:.7rem 0 0;max-width:32ch;text-wrap:pretty}
+
+/* --- the journey line ----------------------------------------------------- */
+.fl-rail{margin:2rem 0 0}
+.fl-rail-head{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;
+  font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--fl-faint);margin-bottom:1.4rem}
+/* A fraction, not a percentage. Six discrete stages is a countable fact; a
+   percentage inside a stage would be synthesised, which is the genre's oldest
+   lie (GitHub Actions shows "7/8 jobs completed" for the same reason). */
+.fl-count{color:var(--fl-dim);font-variant-numeric:tabular-nums}
+.fl-count b{color:var(--fl-fg);font-weight:700}
+
+/* Geometry: stations sit at the CENTRE of their equal share of the line, and the track
+   runs from the first centre to the last — a journey line has to start and end at a
+   station, not overshoot both ends. --edge is half a segment (50%/n), set from the real
+   stage count when the rail is built. */
+.fl-line{position:relative;display:flex;padding-top:6px;--edge:8.333%}
+.fl-track{position:absolute;left:var(--edge);right:var(--edge);top:6px;height:2px;
+  background:var(--fl-rule);transform-origin:left center}
+.fl-fill{position:absolute;left:var(--edge);top:6px;height:2px;background:var(--fl-live);width:0;
+  transition:width .9s cubic-bezier(.2,.7,.2,1)}
+/* The tip glow is the one thing allowed to keep moving: it marks the stage that
+   is running RIGHT NOW. .is-stalled removes it — see the block at the bottom. */
+.fl-tip{position:absolute;top:7px;width:0;height:0;pointer-events:none;
+  transition:left .9s cubic-bezier(.2,.7,.2,1)}
+.fl-tip::before{content:"";position:absolute;left:-9px;top:-9px;width:18px;height:18px;
+  border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--fl-live) 70%,transparent) 0%,transparent 70%)}
+
+.fl-stop{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;
+  text-align:center;gap:0}
+.fl-dot{width:11px;height:11px;border-radius:50%;box-sizing:border-box;
+  border:2px solid var(--fl-rule);background:transparent;flex:none;margin-top:-4.5px}
+.fl-stop.is-done .fl-dot{background:var(--fl-live);border-color:var(--fl-live)}
+.fl-stop.is-now .fl-dot{border-color:var(--fl-live);background:rgba(9,12,15,.9);
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--fl-live) 22%,transparent)}
+.fl-name{font-family:var(--font-data);font-size:var(--text-nano);line-height:1.25;
+  color:var(--fl-faint);margin-top:.6rem;letter-spacing:.01em}
+.fl-stop.is-done .fl-name{color:var(--fl-dim)}
+.fl-stop.is-now .fl-name{color:var(--fl-fg);font-weight:700}
+/* A cleared stage's own duration — subtraction on two real timestamps, shown
+   only once both exist. Nothing is estimated forward. */
+.fl-took{display:block;font-family:var(--font-data);font-size:var(--text-nano);
+  color:var(--fl-faint);font-variant-numeric:tabular-nums;margin-top:.15rem;min-height:1em}
+
+/* --- the running line, the honest notes, the exit ------------------------- */
+.fl-now{display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap;margin:1.5rem 0 0;
+  font-family:var(--font-body);font-size:var(--text-small);color:var(--fl-dim);line-height:1.5}
+.fl-now-k{font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--fl-faint)}
+.fl-now-v{color:var(--fl-fg);font-weight:600}
+.fl-now-t{font-family:var(--font-data);font-variant-numeric:tabular-nums;color:var(--fl-faint)}
+
+.fl-note{margin:1rem 0 0;font-family:var(--font-body);font-size:var(--text-small);line-height:1.5;
+  color:var(--fl-dim);max-width:44ch;border-left:1px solid var(--fl-rule);padding-left:.9rem}
+.fl-note[hidden]{display:none}
+.fl-note--warn{border-left-color:var(--warn);color:var(--fl-fg)}
+.fl-note b{color:var(--fl-fg);font-weight:640}
+
+.fl-done{margin:1.6rem 0 0;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.fl-done[hidden]{display:none}
+.fl-cta{display:inline-flex;align-items:center;gap:.55rem;padding:.85rem 1.5rem;border-radius:999px;
+  background:var(--fl-fg);color:#0b0e11;font-family:var(--font-display);font-weight:640;
+  font-size:var(--text-small);text-decoration:none;
+  transition:background var(--dur-ui) ease,transform var(--dur-tap) var(--ease-spring)}
+.fl-cta:hover{background:#fff}
+.fl-cta:active{transform:scale(.97)}
+.fl-cta:focus-visible{outline:3px solid var(--fl-live);outline-offset:3px}
+.fl-cta-arrow{transition:transform var(--dur-ui) var(--ease-out-expo)}
+@media(hover:hover) and (pointer:fine){.fl-cta:hover .fl-cta-arrow{transform:translateX(3px)}}
+
+/* The slug-correction path, unchanged in substance from the shipping page. */
+.fl-fix{margin:1.3rem 0 0;max-width:34rem}
+.fl-fix[hidden]{display:none}
+.fl-fix p{font-size:var(--text-control);color:var(--fl-dim);margin:0 0 .6rem;line-height:1.5}
+.fl-fix form{display:flex;gap:.5rem}
+.fl-fix input{flex:1;min-width:0;padding:.62rem .8rem;border-radius:var(--r-md);
+  border:1px solid var(--fl-rule);background:rgba(9,12,15,.55);color:var(--fl-fg);
+  font-family:var(--font-data);font-size:var(--text-body)}
+.fl-fix input::placeholder{color:var(--fl-faint)}
+.fl-fix input:focus-visible{outline:2px solid var(--fl-live);outline-offset:1px;border-color:transparent}
+.fl-fix button{padding:.62rem 1.1rem;border-radius:var(--r-md);border:1px solid var(--fl-fg);
+  background:var(--fl-fg);color:#0b0e11;font-family:var(--font-display);font-weight:640;
+  font-size:var(--text-small);cursor:pointer}
+.fl-fix button:active{transform:scale(.97)}
+
+.fl-foot{margin-top:1.4rem;font-family:var(--font-data);font-size:var(--text-control-sm);
+  color:var(--fl-faint);text-decoration:none;display:inline-block}
+.fl-foot:hover{color:var(--fl-dim)}
+
+/* --- desktop -------------------------------------------------------------- */
+@media(min-width:800px){
+  .fl-page{padding:2rem 3rem 3rem}
+  .fl-stack{max-width:46rem}
+  .fl-dek{font-size:var(--text-h4);max-width:40ch}
+  .fl-rail{margin-top:3rem}
+  .fl-name{font-size:var(--text-control-sm)}
+  .fl-took{font-size:var(--text-micro)}
+  .fl-elapsed b{font-size:var(--text-h3)}
+  /* One row: what is happening on the left, the way out on the right, and the primary
+     action last so it is the rightmost thing on the page — never sandwiched between
+     the status line and a secondary link. */
+  .fl-below{display:flex;align-items:flex-end;gap:1.5rem;flex-wrap:wrap}
+  .fl-below .fl-now{margin-top:1.6rem;margin-right:auto}
+  .fl-below .fl-foot{margin-top:0;order:2}
+  .fl-fix{flex-basis:100%;order:4}
+  .fl-note{flex-basis:100%;order:5}
+  .fl-done{margin-top:0;order:3}
+}
+
+/* --- the overture: once, on arrival --------------------------------------- */
+/* Fault-safe per docs/MOTION.md rule 3 — every frame above is the FINISHED
+   frame. .fl-pending is added by script only when motion is welcome, and the
+   .fl-in transitions finish it. A wedged script leaves the page complete. */
+.fl-pending .fl-title,.fl-pending .fl-eyebrow,.fl-pending .fl-dek{opacity:0;transform:translateY(10px)}
+.fl-pending .fl-track{transform:scaleX(0)}
+.fl-pending .fl-dot{opacity:0;transform:scale(.4)}
+.fl-pending .fl-name,.fl-pending .fl-took,.fl-pending .fl-rail-head,.fl-pending .fl-now{opacity:0}
+.fl-in .fl-eyebrow{transition:opacity .4s ease,transform .5s var(--ease-out-expo)}
+.fl-in .fl-title{transition:opacity .45s ease .06s,transform .6s var(--ease-out-expo) .06s}
+.fl-in .fl-dek{transition:opacity .4s ease .16s,transform .5s var(--ease-out-expo) .16s}
+.fl-in .fl-track{transition:transform .6s cubic-bezier(.2,.7,.2,1) .24s}
+/* Stations land in sequence — --i is the stage's own index, set on the element
+   when it is built, so the stagger follows the data rather than DOM position. */
+.fl-in .fl-dot{transition:opacity .3s ease,transform .35s var(--ease-spring);
+  transition-delay:calc(.3s + var(--i,0) * .08s)}
+.fl-in .fl-name,.fl-in .fl-took{transition:opacity .4s ease .62s}
+.fl-in .fl-rail-head{transition:opacity .4s ease .3s}
+.fl-in .fl-now{transition:opacity .4s ease .8s}
+
+/* The heartbeat: the tip breathes only while a stage is actually running. */
+@media(prefers-reduced-motion:no-preference){
+  .fl-tip::before{animation:flPulse 2.6s ease-in-out infinite}
+  .fl-stop.is-now .fl-dot{animation:flDot 2.6s ease-in-out infinite}
+}
+@keyframes flPulse{0%,100%{opacity:.5;transform:scale(.82)}50%{opacity:1;transform:scale(1.14)}}
+@keyframes flDot{0%,100%{box-shadow:0 0 0 4px color-mix(in srgb,var(--fl-live) 18%,transparent)}
+  50%{box-shadow:0 0 0 7px color-mix(in srgb,var(--fl-live) 8%,transparent)}}
+
+/* Stalled: the pipeline has not checkpointed in 20+ minutes, so NOTHING on this
+   page may look like it is advancing. The glow is removed outright (not slowed),
+   the tip goes flat, and the warning note carries the words. */
+.fl-page.is-stalled .fl-tip::before{animation:none;opacity:.28;transform:none;
+  background:radial-gradient(circle,rgba(243,245,241,.4) 0%,transparent 70%)}
+.fl-page.is-stalled .fl-stop.is-now .fl-dot{animation:none;border-color:var(--warn);
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--warn) 20%,transparent)}
+.fl-page.is-stalled .fl-fill{background:color-mix(in srgb,var(--fl-fg) 55%,var(--warn))}
+
+@media print{.fl-scene{display:none}.fl-page{color:#000}}

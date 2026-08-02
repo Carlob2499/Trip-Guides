@@ -1,0 +1,98 @@
+---
+/* OPTION B — "Departures" · design study for /progress/ (PREVIEW ONLY).
+   Additive route; touches nothing under src/pages/progress/.
+
+   The pitch: six scheduled events in fixed order, each with a real clock time and a real
+   status, is precisely what a departure board carries — so borrow the board's grammar
+   (one line per item, hard column discipline) and let the split-flap render only the
+   status word, driven by real transitions. A drum turns forward or not at all. */
+import PwaHead from "../../components/PwaHead.astro";
+import PreviewBar from "./_lib/PreviewBar.astro";
+import "@fontsource-variable/literata/standard.css";
+import "@fontsource-variable/literata/standard-italic.css";
+import "@fontsource-variable/source-sans-3";
+import "../../styles/base.css";
+import "../../styles/progress-preview/preview-chrome.css";
+import "../../styles/progress-preview/departures.css";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Departures — progress design study</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <PwaHead />
+  </head>
+  <body>
+    <PreviewBar option="Departures" pitch="A schedule board: six ordered events, real times, forward-only flaps." />
+
+    <div class="dp-wrap">
+      <header class="dp-head">
+        <p class="dp-kicker">Guide in progress</p>
+        <h1 class="dp-title" id="dpTitle">Your guide</h1>
+        <p class="dp-sub">
+          Six stages, in order, each one committed to the repository as it clears. This board
+          reads that record — it never runs ahead of it.
+        </p>
+      </header>
+
+      <section class="dp-board" aria-labelledby="dpBoardName">
+        <div class="dp-board-top">
+          <span class="dp-board-name" id="dpBoardName">Research pipeline</span>
+          <div class="dp-board-clocks">
+            <span class="dp-clock"><b id="dpElapsed">—</b><i>Elapsed</i></span>
+            <span class="dp-clock" id="dpLocalWrap"><b id="dpLocal">—</b><i id="dpLocalLbl">Local</i></span>
+          </div>
+        </div>
+
+        <div class="dp-cols" aria-hidden="true">
+          <span>№</span>
+          <span>Stage</span>
+          <span class="dp-right">
+            <span class="dp-col-st">Status</span>
+            <span class="dp-col-t" id="dpTimeCol">Time</span>
+          </span>
+        </div>
+
+        <ol class="dp-rows" id="dpRows"></ol>
+
+        <div class="dp-board-foot">
+          <span class="dp-tally" id="dpTally"></span>
+          <span id="dpUpdated"></span>
+        </div>
+      </section>
+
+      <p class="dp-note" id="dpAttempts" hidden></p>
+      <p class="dp-note dp-note--warn" id="dpStuck" hidden></p>
+
+      <div class="dp-done" id="dpDone" hidden>
+        <a class="dp-cta" id="dpCta" href="#">Open the guide <span aria-hidden="true">→</span></a>
+      </div>
+
+      <div class="dp-fix" id="dpFix" hidden>
+        <p>
+          Not finding it yet — the web address depends on the destination name, and this page's
+          first guess may not match. Paste the slug from your issue's confirmation comment.
+        </p>
+        <form id="dpFixForm">
+          <label for="dpFixInput" hidden>Guide slug</label>
+          <input id="dpFixInput" type="text" placeholder="e.g. south-korea" autocomplete="off" />
+          <button type="submit">Track</button>
+        </form>
+      </div>
+
+      <a class="dp-foot" href={`${base}/`}>← All guides</a>
+    </div>
+
+    <p id="dpLive" role="status" aria-live="polite" style="position:absolute;left:-9999px;top:0"></p>
+
+    <script>
+      import { initDepartures } from "./_lib/departures.js";
+      initDepartures();
+    </script>
+  </body>
+</html>

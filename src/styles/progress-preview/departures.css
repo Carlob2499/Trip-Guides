@@ -1,0 +1,193 @@
+/* === OPTION B — DEPARTURES (design study, /progress/) =======================
+   A departure board, borrowed for its grammar first and its mechanism second.
+
+   Why a board and not a spinner: the pipeline is six scheduled events in fixed
+   order, each with a real clock time and a real status. That is exactly the
+   information a departure board was invented to carry, and it has had fifty
+   years to get the column discipline right — one line per item, status and time
+   in fixed columns, nothing else competing. (Flighty's designers make the same
+   argument for flight lists; Apple, "Behind the Design", 2024.)
+
+   Why the split-flap is allowed: a Solari drum can only turn FORWARD through a
+   fixed character sequence. It physically cannot show a status the mechanism has
+   not been driven to. Every flip on this board is caused by a real state
+   transition — arrival (blank → the true current state, once) and a genuine stage
+   change — so the motion is not decoration, it is the state change made visible.
+   A flap that ran on a timer would be the exact lie this project forbids.
+
+   The status vocabulary is four words, all seven characters, so the flap array is
+   uniform and no status is typographically louder than another:
+     CLEARED · RUNNING · WAITING · STALLED
+   STALLED is view.isStuck — the honest word the pipeline's own 20-minute
+   circuit-breaker judgment already computes.
+
+   The board is deliberately INVERTED relative to the page theme, the way
+   .botSections already is (see base.css): light mode gives a lit board at night,
+   dark mode a printed schedule. Both are real objects; neither is a gradient. */
+
+.dp-wrap{max-width:56rem;margin:0 auto;padding:1.6rem 1rem 3rem;min-height:100svh;
+  display:flex;flex-direction:column;justify-content:center}
+@media(min-width:720px){.dp-wrap{padding:2.6rem 1.6rem 4rem}}
+
+/* --- above the board ------------------------------------------------------ */
+.dp-head{margin:0 0 1.2rem}
+.dp-kicker{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;
+  letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin:0 0 .35rem}
+.dp-title{font-family:var(--font-display);font-weight:600;font-size:var(--text-h2);
+  letter-spacing:-.018em;line-height:1.05;margin:0;text-wrap:balance}
+.dp-sub{font-family:var(--font-body);color:var(--muted);font-size:var(--text-small);
+  line-height:1.5;margin:.5rem 0 0;max-width:52ch;text-wrap:pretty}
+
+/* --- the board ------------------------------------------------------------ */
+.dp-board{background:var(--ink);color:var(--bg);border-radius:var(--r-lg);overflow:hidden;
+  /* Layered, offset shadows — a board hangs off a wall. */
+  box-shadow:0 1px 2px rgba(0,0,0,.10),0 4px 10px rgba(0,0,0,.10),0 14px 30px rgba(0,0,0,.10);
+  /* Text on --ink follows the INK, not the page theme, so every colour below is
+     derived from --bg (the ink's own established contrast partner) rather than
+     hardcoded — the .bs-pos lesson in docs/MOTION.md's V6 notes. */
+  /* A three-step ramp, and the floor is NOT a taste call: 68% is the lowest mix that
+     still clears 4.5:1 in BOTH themes against the worst ground on the board — not the
+     board itself but the flap cell, which is tinted 9% lighter. Measured with axe over
+     every option × theme × breakpoint × state; the first draft sat at 44% and failed
+     20 nodes per view in both directions. */
+  --dp-fg:var(--bg);
+  --dp-dim:color-mix(in srgb,var(--bg) 82%,var(--ink));
+  --dp-faint:color-mix(in srgb,var(--bg) 68%,var(--ink));
+  --dp-rule:color-mix(in srgb,var(--bg) 26%,var(--ink))}
+
+.dp-board-top{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;
+  flex-wrap:wrap;padding:.9rem 1rem;border-bottom:1px solid var(--dp-rule)}
+.dp-board-name{font-family:var(--font-data);font-weight:700;font-size:var(--text-control);
+  letter-spacing:.16em;text-transform:uppercase;color:var(--dp-fg)}
+.dp-board-clocks{display:flex;gap:1.2rem;font-family:var(--font-data);
+  font-variant-numeric:tabular-nums;font-size:var(--text-control-sm)}
+.dp-clock b{display:block;font-size:var(--text-control);font-weight:700;color:var(--dp-fg);line-height:1.2}
+.dp-clock i{display:block;font-style:normal;font-size:var(--text-nano);letter-spacing:.12em;
+  text-transform:uppercase;color:var(--dp-faint)}
+
+/* Column heads — a real table header, tabular and quiet. */
+.dp-cols{display:grid;grid-template-columns:1.9rem 1fr auto;gap:.6rem;align-items:center;
+  padding:.55rem 1rem;font-family:var(--font-data);font-size:var(--text-nano);
+  letter-spacing:.14em;text-transform:uppercase;color:var(--dp-faint)}
+/* The head's right group mirrors .dp-right exactly, so "Status" and "Time" sit over
+   the columns they name instead of near them. */
+.dp-cols .dp-right{gap:.7rem}
+.dp-col-st{width:calc(7 * .62rem + 6px);text-align:center}
+.dp-col-t{min-width:5.6ch;text-align:right}
+
+.dp-rows{list-style:none;margin:0;padding:0 0 .3rem}
+.dp-row{display:grid;grid-template-columns:1.9rem 1fr auto;gap:.6rem;align-items:center;
+  padding:.62rem 1rem;border-top:1px solid color-mix(in srgb,var(--bg) 10%,var(--ink))}
+/* Row numbers earn their place: this is an ordered pipeline and the order is the
+   information — stage 4 cannot run before stage 3. */
+.dp-num{font-family:var(--font-data);font-variant-numeric:tabular-nums;font-size:var(--text-control-sm);
+  color:var(--dp-faint);font-weight:600}
+.dp-stage{min-width:0}
+/* Cleared vs waiting is carried by the fg/faint step, not by dim — 82% and 100% are
+   too close to read as a state difference at this size. */
+.dp-stage b{display:block;font-family:var(--font-data);font-weight:600;font-size:var(--text-small);
+  color:var(--dp-faint);line-height:1.3}
+.dp-stage i{display:block;font-style:normal;font-family:var(--font-data);font-size:var(--text-nano);
+  color:var(--dp-faint);line-height:1.35;margin-top:.1rem}
+.dp-row.is-done .dp-stage b{color:var(--dp-fg)}
+.dp-row.is-now .dp-stage b{color:var(--dp-fg);font-weight:700}
+
+.dp-right{display:flex;align-items:center;gap:.7rem;justify-self:end}
+.dp-time{font-family:var(--font-data);font-variant-numeric:tabular-nums;font-size:var(--text-control-sm);
+  color:var(--dp-dim);text-align:right;min-width:5.6ch;line-height:1.25}
+.dp-time i{display:block;font-style:normal;font-size:var(--text-nano);color:var(--dp-faint)}
+/* Em-dash until known — no duration is printed before both of its timestamps exist. */
+.dp-time.is-blank{color:var(--dp-faint)}
+
+/* --- the flap ------------------------------------------------------------- */
+.dp-status{display:inline-flex;gap:1px;flex:none}
+.dp-cell{position:relative;display:inline-block;width:1ch;min-width:.62rem;height:1.15rem;
+  line-height:1.15rem;text-align:center;font-family:var(--font-data);font-weight:700;
+  font-size:var(--text-control-sm);letter-spacing:0;
+  background:color-mix(in srgb,var(--bg) 9%,var(--ink));color:var(--dp-dim);border-radius:2px;
+  perspective:70px}
+/* The seam: the one detail that says "this is two hinged leaves", drawn once. */
+.dp-cell::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;
+  background:color-mix(in srgb,var(--ink) 55%,transparent);pointer-events:none}
+.dp-face{display:block;width:100%;height:100%;backface-visibility:hidden;transform-origin:center}
+.dp-status.st-cleared .dp-cell{color:var(--dp-fg)}
+.dp-status.st-running .dp-cell{background:var(--accent);color:var(--on-accent)}
+/* STALLED is ringed, not filled: --warn is one of the tokens base.css DOES remap per
+   theme, so a single "text on warn" colour would be wrong on one side (the .bs-pos
+   bug, again). Ringing it keeps the word at full board contrast in both themes and
+   uses the amber only as a graphical cue — where 3:1 is the bar, and the word itself
+   already carries the meaning without relying on colour at all. */
+.dp-status.st-stalled .dp-cell{color:var(--dp-fg);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--warn) 78%,var(--bg))}
+.dp-status.st-waiting .dp-cell{color:var(--dp-faint)}
+
+@media(prefers-reduced-motion:no-preference){
+  .dp-cell.is-flipping .dp-face{animation:dpFlap 130ms linear}
+}
+@keyframes dpFlap{
+  0%{transform:rotateX(0deg)}
+  48%{transform:rotateX(-88deg)}
+  52%{transform:rotateX(88deg)}
+  100%{transform:rotateX(0deg)}
+}
+
+/* --- below the board ------------------------------------------------------ */
+.dp-board-foot{display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  flex-wrap:wrap;padding:.7rem 1rem;border-top:1px solid var(--dp-rule);
+  font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:.12em;
+  text-transform:uppercase;color:var(--dp-faint)}
+.dp-tally b{color:var(--dp-fg);font-weight:700;font-variant-numeric:tabular-nums}
+
+.dp-note{margin:1.1rem 0 0;padding:.85rem 1rem;border-radius:var(--r-md);background:var(--card);
+  border:1px solid var(--rule);font-family:var(--font-body);font-size:var(--text-small);
+  line-height:1.55;color:var(--muted);max-width:60ch}
+.dp-note[hidden]{display:none}
+.dp-note b{color:var(--ink);font-weight:640}
+.dp-note--warn{background:color-mix(in srgb,var(--warn) 10%,var(--card));border-color:var(--warn)}
+
+.dp-done{margin:1.3rem 0 0}
+.dp-done[hidden]{display:none}
+.dp-cta{display:inline-flex;align-items:center;gap:.55rem;padding:.8rem 1.5rem;border-radius:999px;
+  background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;
+  font-size:var(--text-small);text-decoration:none;
+  transition:background var(--dur-ui) ease,transform var(--dur-tap) var(--ease-spring)}
+.dp-cta:hover{background:var(--accent);color:var(--on-accent)}
+.dp-cta:active{transform:scale(.97)}
+.dp-cta:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+
+.dp-fix{margin:1.2rem 0 0;padding-top:1rem;border-top:1px dashed var(--rule);max-width:44rem}
+.dp-fix[hidden]{display:none}
+.dp-fix p{font-size:var(--text-control);color:var(--muted);margin:0 0 .6rem;line-height:1.5}
+.dp-fix form{display:flex;gap:.5rem}
+.dp-fix input{flex:1;min-width:0;padding:.6rem .8rem;border-radius:var(--r-md);border:1px solid var(--rule);
+  background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
+.dp-fix input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.dp-fix button{padding:.6rem 1.1rem;border-radius:var(--r-md);border:1px solid var(--ink);
+  background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;
+  font-size:var(--text-small);cursor:pointer}
+.dp-fix button:active{transform:scale(.97)}
+
+.dp-foot{display:inline-block;margin-top:1.6rem;font-family:var(--font-data);
+  font-size:var(--text-control-sm);color:var(--muted);text-decoration:none}
+.dp-foot:hover{color:var(--accent-ink)}
+
+/* --- mobile: the same three columns, tightened ---------------------------- */
+/* The board's whole value is its column discipline, so mobile keeps all three
+   columns and shrinks the flap instead of stacking rows — a stacked board is a
+   list, and a list is what the shipping page already is. */
+@media(max-width:560px){
+  .dp-row,.dp-cols{grid-template-columns:1.5rem 1fr auto;gap:.45rem;padding:.62rem .8rem}
+  .dp-right{gap:.5rem}
+  .dp-cell{width:.55rem;min-width:.55rem;font-size:var(--text-nano);height:1rem;line-height:1rem}
+  .dp-col-st{width:calc(7 * .55rem + 6px)}
+  .dp-time{font-size:var(--text-nano);min-width:5ch}
+  .dp-time i{font-size:var(--text-nano)}
+  .dp-stage b{font-size:var(--text-control-sm)}
+  .dp-num{font-size:var(--text-nano)}
+  .dp-board-top{padding:.8rem .8rem}
+  .dp-board-foot{padding:.65rem .8rem;font-size:var(--text-nano)}
+  .dp-board-clocks{gap:.9rem}
+  .dp-title{font-size:var(--text-h3)}
+}
+
+@media print{.dp-board{box-shadow:none;border:1px solid #000}}

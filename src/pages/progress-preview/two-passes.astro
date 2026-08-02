@@ -1,0 +1,77 @@
+---
+/* OPTION D — "Two Passes" · design study for /progress/ (PREVIEW ONLY).
+   Additive route; touches nothing under src/pages/progress/.
+
+   The pitch: the pipeline isn't a queue, it's a fork and a merge — two independent
+   research passes reconciled into one guide, committed to a research branch and landed
+   on main. Drawn as the commit graph it literally is, so the wait explains the method. */
+import PwaHead from "../../components/PwaHead.astro";
+import PreviewBar from "./_lib/PreviewBar.astro";
+import "@fontsource-variable/literata/standard.css";
+import "@fontsource-variable/literata/standard-italic.css";
+import "@fontsource-variable/source-sans-3";
+import "../../styles/base.css";
+import "../../styles/progress-preview/preview-chrome.css";
+import "../../styles/progress-preview/two-passes.css";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Two Passes — progress design study</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <PwaHead />
+  </head>
+  <body>
+    <PreviewBar option="Two Passes" pitch="The pipeline's real shape: a fork, two passes, a merge." />
+
+    <div class="tp-wrap">
+      <header class="tp-top">
+        <div>
+          <p class="tp-kicker">Guide in progress</p>
+          <h1 class="tp-title" id="tpTitle">Your guide</h1>
+        </div>
+        <p class="tp-elapsed"><b id="tpElapsed">—</b><i>Elapsed</i></p>
+      </header>
+
+      <p class="tp-dek" id="tpDek"></p>
+
+      <ol class="tp-graph" id="tpGraph"></ol>
+
+      <p class="tp-note" id="tpAttempts" hidden></p>
+      <p class="tp-note tp-note--warn" id="tpStuck" hidden></p>
+
+      <div class="tp-done" id="tpDone" hidden>
+        <a class="tp-cta" id="tpCta" href="#">Open the guide <span aria-hidden="true">→</span></a>
+      </div>
+
+      <div class="tp-fix" id="tpFix" hidden>
+        <p>
+          Not finding it yet — the address depends on the destination name, and this page's
+          first guess may not match. Paste the slug from your issue's confirmation comment.
+        </p>
+        <form id="tpFixForm">
+          <label for="tpFixInput" hidden>Guide slug</label>
+          <input id="tpFixInput" type="text" placeholder="e.g. south-korea" autocomplete="off" />
+          <button type="submit">Track</button>
+        </form>
+      </div>
+
+      <div class="tp-foot">
+        <span id="tpTally"></span>
+        <a href={`${base}/`}>← All guides</a>
+      </div>
+    </div>
+
+    <p id="tpLive" role="status" aria-live="polite" style="position:absolute;left:-9999px;top:0"></p>
+
+    <script>
+      import { initTwoPasses } from "./_lib/two-passes.js";
+      initTwoPasses();
+    </script>
+  </body>
+</html>
