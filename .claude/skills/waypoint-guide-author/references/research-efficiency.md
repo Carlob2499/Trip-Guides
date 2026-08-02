@@ -55,6 +55,13 @@ execute the plan, don't wander.
 - **Two rounds, then decide.** Max ~2 searches + 1–2 fetches per fact. If no T0/T1 source
   surfaces, apply the stopping conditions (verification-rules §5): flag `⚠` or omit. More
   searching past that point produces confidence, not verification.
+- **Discovery gets its own floor now — the two-round rule is a VERIFICATION cap, not a
+  breadth cap (S2/S3, 2026-08-02).** The registry and `lookup-venue.mjs` made verification
+  much cheaper per fact; spend the freed budget on breadth, and the candidates floors
+  (16/10/6 considered per ranked priority) are the minimum that spend must produce. Sweeping
+  a "best <priority> in <city>" landscape to FILL the candidates table is discovery, not
+  per-fact verification — do it before climbing to T0 on the survivors, and record every
+  rejection with its one-line reason as you go.
 - **Search precisely.** `site:` queries on the official domain; the venue's native-language name
   (the local-language official page is often the true T0 — fetch it and translate, don't keep
   searching English).

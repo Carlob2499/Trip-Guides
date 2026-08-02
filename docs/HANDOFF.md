@@ -24,6 +24,46 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
+## Snapshot (2026-08-02, session #27 — the five research-quality standards land; Places live)
+
+**Places is LIVE end to end** — the creator fixed the key's application restriction and the
+canary returns `Gyeongbokgung Palace — OPERATIONAL`. The japan verify blocker (a divergences
+item whose `verified_on` had no source — a party-fit judgment wearing a verification date) was
+fixed by REMOVING the orphan date, not inventing a URL. **All four guides PASS verify.** The
+Worker's silent-fail-open posture is now observable: every unprotected POST logs which guards
+are off, and `GET /health` reports `{"turnstile":"OFF","rateLimit":"OFF"}` live. (Creator
+ruling: change requests STAY on the GitHub handoff — no second public write route.)
+
+**The five research-quality standards (creator: "implement all of these") — SHIPPED.** The
+old rubric measured whether what shipped was TRUE; these measure whether enough was GATHERED:
+- **S1 · venue status gate.** `verify --network` status-checks every `venues[]` item + named
+  map point via Places. `CLOSED_PERMANENTLY` BLOCKS (dead-link class); notFound/temporary
+  advise (fuzzy queries must not cry wolf); no key → n/a. Key threaded into research-pass,
+  graduate-guide, recert.
+- **S2/S3 · the candidates table + floors.** `## Candidates considered` in the intake doc —
+  one table per ranked priority, every candidate EVALUATED (shipped or `rejected: <reason>`).
+  Verify blocks on floors (16/8 · 10/5 · 6/3; `researchFloors` in `_guide.json` overrides) and
+  cross-checks shipped names against the guide. Pre-standard guides n/a; an EMPTY table on a
+  new guide FAILS — a scaffold cannot reach verify PASS until its consideration set is on
+  record. Full lifecycle forced with a throwaway scaffold.
+- **S4 · Pass B floors.** A full pass owes ≥8 finds, ≥3 crowd/timing, ≥2 novel/alternative
+  (`check-passb-coverage.mjs --floors`, CI-gated on full passes only).
+- **S5 · source mix.** Verify reports domains/top-share/ccTLD per guide; blocks only past 60%
+  top-share — measured the four real guides FIRST (12%/9%/17%/25%) and set the ceiling above
+  the worst, the repo's own ratchet doctrine.
+- Rubric rows #7/#8/#12 updated + new #14; SKILL.md and research-efficiency.md now say it
+  plainly: **the two-round rule is a verification cap, not a breadth cap** — registry+Places
+  made verification cheap; the freed budget buys discovery, and the floors are what it must
+  produce.
+
+**Verified: 1218 tests (+34 today), typecheck 0, lint clean, build clean, all four guides
+PASS, CI green.** One process slip worth recording: the S5 commit shipped with 2 lint errors
+because lint ran after commit — fixed in the next commit; lint now runs before.
+
+**Open, needs the creator:** ① one signed-in GitHub click to confirm the change-request
+textarea prefills; ② draft PR #28; ③ the Actions "allow PRs" setting; ④ local `npm run lint`
+(stale worktree; use `npx eslint src worker scripts tests`).
+
 ## Snapshot (2026-08-02, session #26 — whole-repo fact registry + consistency pass)
 
 **All four guides are on the fact registry — 141 perishable facts.** japan 24, us 9, joining

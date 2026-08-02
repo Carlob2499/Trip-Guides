@@ -181,6 +181,18 @@ to "reads AI-generated". The **Travel style** intake field sets how hard Pass B 
 (off-the-beaten-path → aggressive; bucket-list → the must-see stays, but with the timing that
 makes it bearable). Judged by rubric row **#12** plus #9 (party fit) and the bar test.
 
+### Candidates considered — the consideration set is evidence (S2/S3, 2026-08-02)
+Record every venue/experience you EVALUATE for a ranked priority in the intake doc's
+`## Candidates considered` tables, AS you research — verdict `shipped` or
+`rejected: <one-line reason>`. The rejections are the point: "rejected: tourist-priced
+chain, locals rank Shin Shin above it" is research evidence a survivors-only guide
+destroys. Verify gates on per-priority floors (defaults 16/8 · 10/5 · 6/3
+considered/shipped; a guide that legitimately can't owe that sets `researchFloors` in
+`_guide.json` — the tabBudget precedent) and cross-checks every `shipped` name against
+the guide, so padding the table is expensive and an honest
+`rejected: couldn't verify` row is a good row. Pass B's floors are separate and
+quantitative: a full pass owes ≥8 finds, ≥3 crowd/timing, ≥2 novel/alternative.
+
 ## Fact discipline — applies to BOTH passes
 - Keep a **verification ledger while researching** — one row per perishable
   fact, captured as you go, not reconstructed after:
@@ -238,6 +250,9 @@ makes it bearable). Judged by rubric row **#12** plus #9 (party fit) and the bar
   a venue that closed years ago reads perfectly plausible from training data. Returns
   `still_operating`, and on an hours check the venue's own site as a `source_url` candidate —
   still verify the fact itself against that page. No key configured → clean error, skip it.
+  **Not optional at the gate (S1):** `verify --network` status-checks every `venues[]` item
+  and named map point itself and BLOCKS on `CLOSED_PERMANENTLY` — so check status when you
+  ADD the venue, not at the gate where it costs a failed run.
 - **time zone** → in the SAME step the coords are established (not a separate round),
   `node scripts/lookup-tz.mjs <lat> <lng>` — offline, boundary-accurate. Set the guide's
   `tz` field explicitly, **for every guide, not just odd-looking ones**: the country-table
