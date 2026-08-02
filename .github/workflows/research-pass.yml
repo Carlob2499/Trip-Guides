@@ -332,6 +332,11 @@ jobs:
             - The Living Atlas duties (SKILL.md's four — facets, descriptors, cover, footage
               scout; mechanics in block-types.md) are part of your passA commit — no separate
               checkpoint.
+            - CANDIDATES TABLE (standard S2/S3 — SKILL.md "Fact discipline"): record every
+              venue/experience you EVALUATE for the ranked priorities in the intake doc's
+              `## Candidates considered` tables as you research — shipped or
+              `rejected: <one-line reason>`. Verify gates on the counts and cross-checks
+              shipped names against the guide, so a survivors-only table fails the run.
             - When done, checkpoint and commit:
                 npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint passA
                 && git add -A && git commit -m "research(${{ inputs.slug }}): Pass A" && git push
@@ -413,6 +418,10 @@ jobs:
                 }
               ]
               Each entry MUST have a source_url and verified_on. Omit entries you could not verify.
+            - Also append the candidates you evaluated (shipped AND rejected, with one-line
+              reasons) to the intake doc's `## Candidates considered` tables — your resident-
+              angle rejections ("tourist trap, locals go to X") are exactly the rows that make
+              the consideration set worth recording.
             - Checkpoint and commit:
                 npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint passB
                 && git add -A && git commit -m "research(${{ inputs.slug }}): Pass B" && git push

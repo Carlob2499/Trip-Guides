@@ -92,7 +92,7 @@ const HUMAN_ROWS = [
 ];
 
 // Roll the three sources up for one guide into a verdict + structured scorecard.
-export function evaluateGuide(guide, slug, staleness, net, facts = null, unused = []) {
+export function evaluateGuide(guide, slug, staleness, net, facts = null, unused = [], candidates = null) {
   const draft = !!guide.draft;
   const readiness = evaluateReadiness(guide, slug); // { pass, warns, infos, coverage }
 
@@ -129,6 +129,10 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
   // venue that no longer exists is concrete breakage, same class as a dead link.
   const venueStatus = net?.venuesBySlug?.[slug] ?? { status: "skipped" };
 
+  // S2/S3: the candidates table + coverage floors. Async (file reads), so verify() computes
+  // it and passes the result in — the same shape as the staleness scan.
+  const candidatesRow = candidates ?? { status: "n/a", reason: "not computed" };
+
   // P3/R15: coverage — every intake ask addressed or explicitly skipped.
   const coverage = checkCoverage(slug);
 
@@ -141,6 +145,7 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
   if (content.status === "fail") blockers.push("content");
   if (content.status === "unverifiable") blockers.push("content-unverifiable");
   if (venueStatus.status === "fail") blockers.push("venues");
+  if (candidatesRow.status === "fail") blockers.push("candidates");
   if (coverage.status === "fail") blockers.push("coverage");
   if (voice.status === "fail") blockers.push("voice");
   const pass = blockers.length === 0;
@@ -149,7 +154,7 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
   // and a guide with one should show at a glance how much of it is sourced data rather than prose.
   const registry = facts ? { count: Object.keys(facts).length, unused } : null;
 
-  return { slug, draft, pass, blockers, readiness, recency, content, venueStatus, coverage, voice, noVerifiedDate, registry };
+  return { slug, draft, pass, blockers, readiness, recency, content, venueStatus, candidates: candidatesRow, coverage, voice, noVerifiedDate, registry };
 }
 
 export async function verify({ slug = null, network = false } = {}) {
@@ -176,7 +181,15 @@ export async function verify({ slug = null, network = false } = {}) {
     for (const t of targets) net.venuesBySlug[t.slug] = await checkVenueStatus(t.guide);
   }
 
-  const results = targets.map(({ guide, slug: s, facts, unusedFacts }) => evaluateGuide(guide, s, staleness, net, facts, unusedFacts));
+  // S2/S3: candidates tables are read per-target (async), then threaded into the sync evaluator.
+  const { checkCandidates } = await import("./check-candidates.mjs");
+  const candidatesBySlug = {};
+  for (const t of targets) {
+    candidatesBySlug[t.slug] = await checkCandidates(t.slug, { researchFloors: t.guide.researchFloors ?? null });
+  }
+
+  const results = targets.map(({ guide, slug: s, facts, unusedFacts }) =>
+    evaluateGuide(guide, s, staleness, net, facts, unusedFacts, candidatesBySlug[s]));
   return { results, error: null, network };
 }
 
@@ -225,6 +238,20 @@ export function report(r) {
     L.push(`  P0 venues     · ${v.status === "pass" ? "PASS" : "FAIL"} — ${v.checked} status-checked, ${v.closed.length} closed, ${v.flagged.length} flagged`);
     for (const c of v.closed) L.push(`      ✗ ${c.name} (${c.section}) — ${c.why}`);
     for (const f of v.flagged) L.push(`      ⚠ ${f.name} (${f.section}) — ${f.why}`);
+  }
+
+  // S2/S3: candidates table + floors. Optional-chained for pre-standard result objects.
+  if (r.candidates?.status === "n/a") {
+    L.push(`  P1 candidates · n/a — ${r.candidates.reason}`);
+  } else if (r.candidates && r.candidates.status !== "skipped") {
+    const c = r.candidates;
+    if (c.status === "pass") {
+      const parts = (c.summary ?? []).map((s) => `P${s.rank} ${s.shipped}/${s.considered}`).join(" · ");
+      L.push(`  P1 candidates · PASS — consideration set on record (${parts || "no gated priorities"})`);
+    } else {
+      L.push(`  P1 candidates · FAIL — the consideration set is thin or unverifiable`);
+      for (const f of c.findings ?? []) L.push(`      ✗ ${f}`);
+    }
   }
 
   // Perishable-fact registry (informational — not a gate)

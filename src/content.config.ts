@@ -608,6 +608,15 @@ const guides = defineCollection({
     // each one still spends a slot of the reader's attention, which is why they're capped
     // separately in the layout rather than being free.
     tabBudget: z.number().int().positive().optional(),
+    // S3 (2026-08-02) — per-guide research-coverage floors, the tabBudget precedent applied
+    // to discovery: guides legitimately differ (a 3-day city break can't owe 16 food
+    // candidates), so the floors are per-guide data with defaults in check-candidates.mjs.
+    // Keys are priority ranks ("1", "2", "3"); values are the minimum candidates CONSIDERED
+    // and SHIPPED that priority's table must show. Checked by verify's `candidates` row.
+    researchFloors: z.record(
+      z.string().regex(/^[1-3]$/),
+      z.object({ considered: z.number().int().positive(), shipped: z.number().int().positive() }),
+    ).optional(),
     // R5 — per-group voice descriptors (design decision №4: "labels literal, always;
     // warmth demoted to the descriptors"). Keyed by EXACT group name (superRefine below
     // rejects keys no section uses, so a group rename can't silently orphan its line).

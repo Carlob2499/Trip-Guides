@@ -271,6 +271,34 @@ Top 3, in order:
 |------|--------------------|--------------------------|--------------------|---------------------------------|
 |      |                    |                          |                    |                                 |
 
+## Candidates considered (fill DURING research — one table per ranked priority)
+> Standard S2/S3 (2026-08-02): real research quality is how many options you REJECTED and
+> why — a thin pass and a deep pass are indistinguishable if only survivors are recorded.
+> One table per ranked priority, one row per candidate EVALUATED (not just shipped).
+> Verdict is \`shipped\` or \`rejected: <one-line reason>\`. The floors (verify's
+> \`candidates\` row; defaults top 8/16, second 5/10, third 3/6 shipped/considered,
+> overridable via \`researchFloors\` in \`_guide.json\`) gate on these counts, and every
+> \`shipped\` name must actually appear in the guide. An honest \`rejected: couldn't
+> verify\` row is a good row — it proves the option was seen.
+
+### Priority 1: (name it)
+
+| Candidate | Verdict |
+|-----------|---------|
+|           |         |
+
+### Priority 2: (name it)
+
+| Candidate | Verdict |
+|-----------|---------|
+|           |         |
+
+### Priority 3: (name it)
+
+| Candidate | Verdict |
+|-----------|---------|
+|           |         |
+
 ## Questions for the traveler (research emits; traveler answers on the progress page)
 > Traveler-framed only — no pipeline vocabulary. Each question carries an assumption the guide
 > builds on until the traveler answers. See src/features/intake-questions/ for the model.
