@@ -7,7 +7,7 @@ import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { resolveGuidePath } from "../lib/guide-shape.mjs";
-import { isSectionFile, interpolateFacts } from "../../src/lib/facts.mjs";
+import { isSectionFile, interpolateFacts, unusedFactIds } from "../../src/lib/facts.mjs";
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 export const GUIDES_DIR = path.join(ROOT, "src", "content", "guides");
@@ -66,19 +66,25 @@ export async function readGuides(guidesDir = GUIDES_DIR) {
         // those gates for any fact that moved into the registry: a body of pure tokens looks
         // "filled", and a registry price stops matching the undated-figure regex.
         let facts = null;
+        let unusedFacts = [];
         if (files.includes("facts.json")) {
           const factsTxt = await readFile(path.join(dir, "facts.json"), "utf8");
           // Kept in `raw` on purpose: `raw` is what extractLinks() scans, so every fact's
           // source_url joins the dead-link sweep for free.
           raw += "\n" + factsTxt;
           facts = JSON.parse(factsTxt);
-          guide = interpolateFacts(guide, facts).data;
+          const applied = interpolateFacts(guide, facts);
+          guide = applied.data;
+          // Which rows nothing references. A registry that only ever grows is how it rots:
+          // a fact whose prose was rewritten away keeps its date, keeps appearing "verified",
+          // and keeps costing a recert check for a number no traveler can see.
+          unusedFacts = unusedFactIds(facts, applied.used);
         }
         // `facts` is returned SEPARATELY as well as interpolated: interpolation inlines the
         // value but drops the record's verified_on/shelf_life, and the staleness sweep needs
         // those. Without this, moving a price into the registry would make the recert punch
         // list go quiet while the fact aged — the opposite of the point.
-        out.push({ file: e.name + "/", slug, raw, guide, facts });
+        out.push({ file: e.name + "/", slug, raw, guide, facts, unusedFacts });
       }
     } catch (err) {
       console.warn(`[audit] cannot parse ${e.name}: ${err.message} — skipped`);

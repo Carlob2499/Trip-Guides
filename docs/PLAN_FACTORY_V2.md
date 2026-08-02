@@ -229,10 +229,19 @@ watch the absorb pass re-cut the calendar correctly, then reset.
 4. Amendments logged in japan.md: Hakodate evaluated+declined (F5), Filipino-culture
    creator ruling (Q3 — decided silence), cover pending sign-off (Q4).
 
-### P7 — Differentiation surfaces (R11–R14) — scope per Q1
+### P7 — Differentiation surfaces (R11–R14) — **SHIPPED after all** (status corrected 2026-08-02)
 Ledger-backed "How we know this" per-fact popover; "What generic guides get wrong"
 block; calendar-truth badge; self-updating-guide framing of P4.4. Each is a shared-
-component change riding existing data. Executed only if Q1 confirms, as its own pass.
+component change riding existing data.
+
+Q1 deferred this to "its own product-focused session" — and that session happened. Two of
+the four landed and are live, so the deferral note below is history, not a to-do:
+- **R11 · "How we know this" popover** → `src/scripts/provenance-dot.js`,
+  `src/styles/provenance-dot.css`, rendered from `VenueBlock.astro` (`.prov-dot`).
+- **R12 · "What generic guides get wrong"** → the `divergences` block type
+  (`src/content.config.ts`, tagged `P7/R12`), `DivergencesBlock.astro`, with real content
+  on the Japan guide.
+R13 (calendar-truth badge) and R14 (self-updating framing) remain unbuilt.
 
 ## Clarifying questions — ANSWERED by the creator, 2026-07-29 (binding)
 

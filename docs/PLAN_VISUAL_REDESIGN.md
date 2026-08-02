@@ -1,10 +1,24 @@
 # PLAN — The Living Atlas (drastic visual redesign: video heroes + navigation end-goal)
 
-> Status: **VISION / UNAPPROVED.** Drafted 2026-07-27 from a real render review (Playwright
-> screenshots of the built site: hub + Korea guide, desktop/mobile, light/dark). Nothing here
-> is building yet — the Clarifying questions below gate every phase, per the
-> Clarifying-Questions Doctrine. This doc extends `docs/MOTION.md`'s doctrine; it does not
-> replace it.
+> Status: **PARTLY SHIPPED — this doc is now half spec, half history** (corrected 2026-08-02;
+> it previously read "VISION / UNAPPROVED · nothing here is building yet", which was badly
+> wrong: live code cites this doc as its own specification). Drafted 2026-07-27 from a real
+> render review (Playwright screenshots of the built site: hub + Korea guide, desktop/mobile,
+> light/dark). This doc extends `docs/MOTION.md`'s doctrine; it does not replace it.
+>
+> **Shipped since drafting — do NOT re-plan these:**
+> - **Move A · Living covers** → `src/scripts/living-cover.js`, `cover.video` in the schema
+>   (`src/content.config.ts`). Research never sets `cover.video`; the creator frame-verifies
+>   and signs each clip.
+> - **Move B · Navigation splits by device** → delivered by `docs/PLAN_MOBILE_NAV.md`
+>   (`src/features/mobile-nav/`), plus the masthead pill row cut 6 → 3.
+> - **Move C · One cartographic world** → `src/components/PaintedAtlas.astro`,
+>   `src/styles/painted-atlas.css` (the honest default cover when no photo is earned).
+> - **Move F · The Composer** → `scripts/compose-guide.mjs`, wired into `research-pass.yml`
+>   and `npm run compose-guide`.
+>
+> The remaining moves are still gated by the Clarifying questions below, per the
+> Clarifying-Questions Doctrine.
 >
 > **Mock-ups exist — Study Nº 2, Field Edition** (2026-07-27):
 > `node docs/mockups/build-mockup.mjs` renders the design study

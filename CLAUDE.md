@@ -228,14 +228,23 @@ and let it ride.
   git log/memory sprawl. **Session end: rewrite its Snapshot + Where-we-left-off sections**
   and commit. This replaces reading long conversation context between sessions.
 - **Every guide is a directory — no exceptions, drafts included** (`src/content/guides/<slug>/`
-  — `_guide.json` meta + `NN-<group>.json` per tab group). The catalog has exactly ONE shape:
-  `scaffold-guide.mjs` emits it for every new guide, and
-  `scripts/__tests__/guide-shape-uniform.test.mjs` fails the suite on a flat `<slug>.json`.
-  Both shapes still *build*, which is why the split went unnoticed for three guides — and the
-  flat file WINS in `resolveGuidePath`, so a stray one silently shadows the directory beside it.
-  Import an outside single-file guide with `npm run split-guide -- <slug>`, then delete the flat
-  file. For a targeted edit, Read ONLY the group file the fact lives in — never assemble the
-  whole guide; `ls` the dir to find the group.
+  — `_guide.json` meta + `NN-<group>.json` per tab group + `facts.json`). The catalog has
+  exactly ONE shape: `scaffold-guide.mjs` emits it for every new guide, and
+  `scripts/__tests__/guide-shape-uniform.test.mjs` fails the suite on a flat `<slug>.json` or a
+  guide dir missing `facts.json`. Both shapes still *build*, which is why the split went
+  unnoticed for three guides — and the flat file WINS in `resolveGuidePath`, so a stray one
+  silently shadows the directory beside it. Import an outside single-file guide with
+  `npm run split-guide -- <slug>`, then delete the flat file.
+- **A perishable fact may NOT be in the group file — check `facts.json` first.**
+  `facts.json` is the perishable-fact registry: one row per price/fare/dated figure (claim ·
+  value · `source_url` · `verified_on` · `shelf_life` · `state`), referenced from prose as
+  `{{fact:<id>}}` and substituted at build time, so one edit updates every mention. All four
+  guides are migrated. **So "Read ONLY the group file the fact lives in" now means: grep the
+  guide dir for the figure, and if it resolves to a token, edit the ROW — editing the prose
+  around a token changes nothing.** `≈` is derived from `state: "approx"`, never typed into
+  `value`; values are inline text only; an unresolved token fails the build. Migrate a guide
+  that predates this with `node scripts/migrate-facts.mjs --slug <slug>` (propose) then
+  `--write`. Never assemble the whole guide; `ls` the dir to find the group.
 - **New client behavior → its feature silo** (`src/features/<name>/`, see
   `docs/ARCHITECTURE.md`) or `src/scripts/` for page chrome — never inline back into
   `GuideLayout.astro`.

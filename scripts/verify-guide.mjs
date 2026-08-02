@@ -92,7 +92,7 @@ const HUMAN_ROWS = [
 ];
 
 // Roll the three sources up for one guide into a verdict + structured scorecard.
-export function evaluateGuide(guide, slug, staleness, net, facts = null) {
+export function evaluateGuide(guide, slug, staleness, net, facts = null, unused = []) {
   const draft = !!guide.draft;
   const readiness = evaluateReadiness(guide, slug); // { pass, warns, infos, coverage }
 
@@ -142,7 +142,7 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null) {
 
   // Registry visibility (informational, never a gate): a guide with no facts.json is normal,
   // and a guide with one should show at a glance how much of it is sourced data rather than prose.
-  const registry = facts ? { count: Object.keys(facts).length } : null;
+  const registry = facts ? { count: Object.keys(facts).length, unused } : null;
 
   return { slug, draft, pass, blockers, readiness, recency, content, coverage, voice, noVerifiedDate, registry };
 }
@@ -166,7 +166,7 @@ export async function verify({ slug = null, network = false } = {}) {
     net = { links, photos };
   }
 
-  const results = targets.map(({ guide, slug: s, facts }) => evaluateGuide(guide, s, staleness, net, facts));
+  const results = targets.map(({ guide, slug: s, facts, unusedFacts }) => evaluateGuide(guide, s, staleness, net, facts, unusedFacts));
   return { results, error: null, network };
 }
 
@@ -209,6 +209,13 @@ export function report(r) {
   // Perishable-fact registry (informational — not a gate)
   if (r.registry) {
     L.push(`  -- registry   · ${r.registry.count} perishable fact(s) in facts.json — sourced, dated, edited in one place`);
+    // Advisory, never blocking: a row can legitimately be registered ahead of the prose that
+    // will cite it. But an unreferenced row keeps its date, keeps reading as "verified", and
+    // keeps costing a recert check for a number no traveler can see — so say so out loud.
+    const unused = r.registry.unused ?? [];
+    if (unused.length) {
+      L.push(`  -- registry   · ${unused.length} row(s) referenced by nothing: ${unused.join(", ")} — cite them or drop them`);
+    }
   }
 
   // P3/R15: coverage

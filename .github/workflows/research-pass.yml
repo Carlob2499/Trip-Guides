@@ -88,7 +88,7 @@ on:
       # rules) — so the rubric critic gets its own knob instead of riding the research
       # model. Research stays Sonnet-cheap while the final gate thinks harder.
       critic_model:
-        description: "Model for the fresh-context rubric critic (Agent 6). Opus is the doctrine default for judgment work; Sonnet for a cheap re-run; Fable to experiment."
+        description: "Model for the fresh-context critic (Agent 4). Opus is the doctrine default for judgment work; Sonnet for a cheap re-run; Fable to experiment."
         required: false
         type: choice
         options:

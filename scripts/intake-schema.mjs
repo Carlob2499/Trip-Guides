@@ -94,17 +94,6 @@ export const FIELDS = [
     placeholder: "e.g. traveling with my parents, one vegetarian, celebrating an anniversary" },
 ];
 
-// Answer keys the intake produces (for the doc-coverage test + reference). Derived, never hand-listed.
-export const ANSWER_KEYS = (() => {
-  const keys = new Set();
-  for (const f of FIELDS) {
-    if (f.special === "dates") { keys.add("start"); keys.add("end"); }
-    else if (f.special === "priority") keys.add("priorities");
-    else if (f.answerKey) keys.add(f.answerKey);
-  }
-  return [...keys];
-})();
-
 // Issue Forms render each answered field as "### <Label>\n\n<value>"; an empty input renders the
 // literal "_No response_". Pull a field's value out of the body by its label.
 // A4: exported so graduate-guide.mjs (and anything importing `field` from there, e.g.

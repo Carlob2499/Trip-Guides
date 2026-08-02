@@ -1,5 +1,14 @@
 # PLAN — revise-guide: the MAJOR-revision pipeline
 
+> **SHIPPED — all six phases (V1–V6). This doc is now the pipeline's SPEC, not a plan.**
+> Kept in `docs/` rather than archived precisely because live code points at it:
+> `revise-guide.yml`, `modify-guide.yml`, `feedback-export.yml`, `docs/PIPELINE.md` (stage 5b)
+> and `scripts/feedback-signals.mjs` all cite it as the reference for behaviour they implement.
+> Verified present: the three labels (`ensure-labels.yml`), the issue form + parser +
+> plan validator, the four routed agents and the fork gate (`revise-guide.yml`), and the
+> deterministic feedback-signal auto-file (`feedback-signals.mjs`). Read it as documentation
+> of what runs today.
+>
 > Synthesizes two independent designs (a reuse-first lens and a failure-first lens) into one
 > executable arc. Drafted 2026-07-30, session on `main`. Extends the factory the same way
 > modify-guide did: verbatim reuse of `land-branch.sh`, `verify-guide.mjs`,

@@ -40,5 +40,3 @@ export const VERIFIED: PipelineState = {
   attempts: 1,
   notes: [],
 };
-
-export const STALLED = MID_RESEARCH;

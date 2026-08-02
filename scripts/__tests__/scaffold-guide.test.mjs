@@ -6,6 +6,9 @@
 
 import { describe, it, expect } from "vitest";
 import { slugify, dayLabelsFromRange, buildGuideObject, buildIntakeMd, parseArgs, deriveRanks, PRIORITY_GROUP_MAP, buildCoverageMatrix } from "../scaffold-guide.mjs";
+// The never-fold groups come from the Composer that owns the rule, not a local copy — a
+// re-declared literal here would keep passing after compose-guide.mjs changed its mind.
+import { NEVER_FOLD } from "../compose-guide.mjs";
 
 describe("slugify", () => {
   it("lowercases and hyphenates", () => {
@@ -146,7 +149,6 @@ describe("buildGuideObject", () => {
   // would be dead weight pretending to be a decision).
   it("seeds a valid Composer phase on every foldable-group section, and none on Plan/Days/Sources", () => {
     const g = buildGuideObject({ country: "South Korea", niche: "vintage vinyl shops" });
-    const NEVER_FOLD = new Set(["Plan", "Days", "Sources"]);
     const PHASES = new Set(["before", "arrival", "daily", "leaving"]);
     for (const s of g.sections) {
       if (NEVER_FOLD.has(s.group)) {
