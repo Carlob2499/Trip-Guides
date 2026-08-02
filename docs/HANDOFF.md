@@ -24,6 +24,54 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
+## Snapshot (2026-08-02, session #23 — V2 Session 3: the fact registry lands, dormant)
+
+**`<slug>/facts.json` exists and works — and changes nothing yet, by design.** One record per
+perishable fact (claim · value · source_url · verified_on · shelf_life · state), referenced from
+prose as `{{fact:<id>}}` and substituted in `guideLoader` **before `parseData`** — the one choke
+point every consumer passes through (guide pages, hub, OG/recap images, `.ics`/`.gpx`), so no
+renderer or exporter knows tokens exist, and the HTML allowlist + strict-≈ gate judge the FINAL
+text. Mechanics: `src/lib/facts.mjs` (shared by the Astro loader AND the node auditors, so the
+site and the gates can never disagree — the staleness table's twin declarations are the
+cautionary precedent). Shape: `factsFile` in `content.config.ts`, which stays the one schema home.
+
+**What it buys** (the reason Session 4 migrates denmark to it): one edit updates every mention,
+so the numeric half of the continuity sweep stops being a grep hunt; the citation audit can walk
+ALL facts instead of sampling five; recert updates propagate; and a bare invented number in prose
+becomes *detectable* rather than merely forbidden.
+
+**The five landmines, all closed.** Every directory reader treated any non-`_guide.json` file as
+an array of sections: `content.config.ts` (hard build failure), `audit/lib.mjs` (SILENT
+whole-guide skip — it swallows the TypeError and warns), `compose-guide.mjs` ×2 (one of which
+**deletes** what it matches, i.e. would have destroyed the registry), `extract-palette.mjs`. All
+five now share `isSectionFile()`. `audit/lib.mjs` also interpolates exactly as the loader does —
+otherwise a token-only body reads as "filled" to the completeness check and a registry price
+stops matching the undated-price advisory — and returns the raw registry separately, because
+interpolation drops the dates: `check-staleness` walks `facts.json`, so a migrated fact stays on
+the recert punch list instead of quietly aging out of view. Fact `source_url`s join the
+dead-link sweep for free.
+
+**Rules worth knowing before authoring one:** `≈` is DERIVED from `state: "approx"`, never typed
+into `value` (one spelling, and no bare ≈ beside an unsourced number); `value` is inline text
+only, schema-enforced (markup would bypass the prose tag allowlist and a stray `</p>` would move
+the lead-first fold); provenance is REQUIRED (a fact earns a row *because* it is perishable); an
+unresolved token FAILS the build.
+
+**Verified: 1141 tests (+20), typecheck 0, lint clean, CI green on all four workflows.
+NO-OP PROVEN three ways** — 77/81 dist files byte-identical (the 4 `.ics` differ only by
+`DTSTAMP`, which differs between any two builds — confirmed by double-building with no code
+change), the sw-precache hash returns to its exact prior value, and with zero `facts.json`
+present the new path never executes. **Both live paths forced** with a temporary guide:
+interpolation produced `DKK 145` and a derived `≈35-45 min` in `dist/`, a repeated fact
+substituted in both places, and every failure path names the exact guide/fact/fix — unresolved
+token, markup in a value, and a fact missing `source_url`.
+
+**Next: V2 Session 4** — scaffolder emits an empty `facts.json`; `migrate-facts.mjs` proposes
+rows + token replacements as a reviewable diff (values move by SCRIPT, never retyped); migrate
+**denmark** as the pilot; teach the skill to author rows during research; add fact counts to the
+verify scorecard. **The decisive gate:** denmark's built HTML + `.ics` + `.gpx` must diff to
+ZERO after migration.
+
 ## Snapshot (2026-08-02, session #22 — V2 Session 2: acquisition layer)
 
 **`scripts/lookup-venue.mjs` (Google Places) — "is it still open?" leaves the model's hands.**
@@ -235,11 +283,27 @@ Two ways out, both the creator's call:
 
 ## Where we left off
 
+**Session #23 (2026-08-02):** shipped V2 Session 3 — the perishable-fact registry, landed
+dormant and proven byte-identical. Facts can now be data instead of prose; nothing has moved
+into it yet (that is Session 4's denmark pilot).
+
+**Re-prompt the creator with:** "The fact registry is in and provably changes nothing yet — a
+guide can now keep prices and hours as one sourced record that prose points at, so one edit
+updates every mention and the citation audit can check all of them instead of five. Session 4
+migrates denmark to it as the pilot, with the gate being that its built pages diff to zero.
+**Still waiting on you (2 min):** the Places API key is referrer-restricted, so venue
+verification 403s — Google Cloud → Credentials → that key → **Application restrictions = None**
+(keep the Places API restriction and the daily quota cap). Also still open: draft PR #28, the
+Actions 'allow PRs' setting, and local `npm run lint` (use `npx eslint src worker scripts
+tests`)."
+
+---
+
 **Session #22 (2026-08-02):** shipped V2 Session 2 — the acquisition layer. Venue verification
 via Places (blocked on one key-restriction fix), and an FX bug hunt that found Korea's currency
 hardcoded into every guide's budget footer.
 
-**Re-prompt the creator with:** "Session 2 shipped, and it found more than it set out to: the
+*(prior re-prompt, superseded)* "Session 2 shipped, and it found more than it set out to: the
 budget footer on every guide was quoting Korean won — Denmark showed kroner under a won sign,
 Sedona offered to convert dollars to dollars — and 36 of 40 currencies had no exchange-rate
 display at all because a missing seed rate silently disables the feature rather than degrading
