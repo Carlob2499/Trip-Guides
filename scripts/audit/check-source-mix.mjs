@@ -21,8 +21,7 @@
 // threshold at 60% catches only a genuine monoculture, never a healthy guide leaning on its
 // destination's canon.
 
-import { extractLinks, flatten } from "./lib.mjs";
-import { isMain, readGuides } from "./lib.mjs";
+import { extractLinks, isMain, readGuides } from "./lib.mjs";
 import { COUNTRIES } from "../../src/data/countries.mjs";
 
 export const MAX_SHARE_BLOCK = 0.6;

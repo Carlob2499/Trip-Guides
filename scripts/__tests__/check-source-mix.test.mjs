@@ -7,7 +7,7 @@
 import { describe, it, expect } from "vitest";
 import { sourceMix, domainOf, MAX_SHARE_BLOCK } from "../audit/check-source-mix.mjs";
 
-const raw = (...urls) => urls.map((u, i) => `"source_url": "${u}"`).join("\n");
+const raw = (...urls) => urls.map((u) => `"source_url": "${u}"`).join("\n");
 
 describe("domainOf", () => {
   it("groups subdomains into their registrable domain", () => {
