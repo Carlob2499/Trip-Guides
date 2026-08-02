@@ -12,12 +12,12 @@
 
 /** Field order matches the issue form. `id` doubles as the URL query-parameter name —
     GitHub: "the `id` is the canonical identifier for the field in URL query parameter
-    prefills" (docs/communities/…/syntax-for-githubs-form-schema, checked 2026-08-02). */
-export const MODIFY_FIELDS = [
-  { id: "slug", label: "Guide slug", kind: "input", required: true },
-  { id: "change", label: "What needs to change", kind: "textarea", required: true },
-  { id: "section", label: "Section", kind: "input", required: false },
-];
+    prefills" (docs/communities/…/syntax-for-githubs-form-schema, checked 2026-08-02).
+    The array itself now lives in `issue-forms.mjs` alongside revise's and graduate's, because
+    the revise parser falls back to THESE labels when an issue is escalated from the modify
+    form — two sets that reference each other must not live in two files. Re-exported here so
+    this module stays the one import site for everything modify-shaped. */
+export { MODIFY_FIELDS } from "./issue-forms.mjs";
 
 export const MODIFY_TEMPLATE = "modify-guide.yml";
 export const MODIFY_LABEL = "modify-request";

@@ -12,6 +12,10 @@
 // into the same output shape with sections=[that one hint].
 
 import { field, isValidSlug } from "./graduate-guide.mjs";
+// Labels are DERIVED, never typed here: this parser matches on the exact heading strings the
+// YAML templates render, and it reads two different forms (revise, plus modify for an
+// escalated issue). A hand-typed literal that drifts from either template fails silently.
+import { REVISE_FIELDS, MODIFY_FIELDS, labelFor } from "../src/lib/issue-forms.mjs";
 import { sanitizeSection } from "./parse-modify-issue.mjs";
 import { isMain } from "./audit/lib.mjs";
 
@@ -38,24 +42,27 @@ export function parseDeadline(raw) {
   return m ? m[1] : "";
 }
 
+const R = (id) => labelFor(REVISE_FIELDS, id);
+const M = (id) => labelFor(MODIFY_FIELDS, id);
+
 // Pure parse: returns { slug, change, sections, deadline } or throws Error with a human reason.
 export function parseReviseIssue(body) {
-  const rawSlug = field(body, "Guide slug");
-  if (!rawSlug) throw new Error("no Guide slug field");
+  const rawSlug = field(body, R("slug"));
+  if (!rawSlug) throw new Error(`no ${R("slug")} field`);
   const slug = rawSlug.trim().toLowerCase();
   if (!isValidSlug(slug)) throw new Error(`"${rawSlug}" isn't a valid slug`);
 
   // Revise template shape first, then the modify template's (escalated-issue fallback).
-  const reviseChange = field(body, "What changed and why this needs re-research");
-  const modifyChange = reviseChange ? null : field(body, "What needs to change");
+  const reviseChange = field(body, R("what-changed"));
+  const modifyChange = reviseChange ? null : field(body, M("change"));
   const change = reviseChange || modifyChange;
   if (!change) throw new Error("no change description field (neither template shape matched)");
 
   const sections = reviseChange
-    ? parseSections(field(body, "Sections"))
-    : parseSections(field(body, "Section")); // modify's single hint → one-element list
+    ? parseSections(field(body, R("sections")))
+    : parseSections(field(body, M("section"))); // modify's single hint → one-element list
 
-  return { slug, change, sections, deadline: parseDeadline(field(body, "Deadline")) };
+  return { slug, change, sections, deadline: parseDeadline(field(body, R("deadline"))) };
 }
 
 if (isMain(import.meta.url)) {

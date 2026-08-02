@@ -26,13 +26,16 @@ import { resolveGuidePath as resolveGuidePathShared } from "./lib/guide-shape.mj
 // here) since parse-modify-issue.mjs and graduate-guide.test.mjs both import it from
 // this module by that name.
 import { matchField as field } from "./intake-schema.mjs";
+import { GRADUATE_FIELDS, labelFor } from "../src/lib/issue-forms.mjs";
 export { field };
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const GUIDES_DIR = path.join(ROOT, "src", "content", "guides");
 
 export function parseIssueBody(body) {
-  return { rawSlug: field(body, "Guide slug") };
+  // Derived, not typed: same reason as the modify and revise parsers — this matches on the
+  // exact heading graduate-guide.yml renders, and a literal here would drift from it silently.
+  return { rawSlug: field(body, labelFor(GRADUATE_FIELDS, "slug")) };
 }
 
 // Slug must match what slugify() in scaffold-guide.mjs can produce — lowercase, digits, single
