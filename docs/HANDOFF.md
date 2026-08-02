@@ -24,6 +24,46 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
+## Snapshot (2026-08-02, session #28 — Pass B deep discovery; every open item closed)
+
+**Pass B deep discovery — native-first, anti-default (creator's design).** Deep research now
+has exactly one sanctioned home in the pipeline: Pass B. It rides a **dossier contract**
+because the researcher keys live on the creator's machine and CI carries none — never-in-CI is
+physics, not a preference. The interactive sweep writes `## Discovery leads (Pass B —
+native-first)` into the intake doc (scaffold emits the empty table on every new guide); the
+headless Pass B verifies each row to T0, marks it `verified` / `rejected: <reason>`, and feeds
+rejections into the candidates tables where they count toward the S2/S3 floors. Empty or absent
+table → Pass B runs exactly as before; nothing blocks. Three binding rules in
+`research-efficiency.md`: queries in the destination's language with the source language
+recorded · exclude the English top-10 (Pass A already holds those; the filter matters MORE on a
+Kyoto-class destination, where the English layer is most polluted) · dossier carries leads only.
+Pass A stays capped at ONE Standard discovery call — official pages don't need a fleet.
+`8d5a995`, CI green.
+
+**The change-request wizard is verified end to end.** The one thing no unit test could prove —
+that GitHub honors a URL prefill for a **textarea** field — is now proven against the live form:
+issue #31 came back with all three fields populated, and `parse-modify-issue.mjs` read them back
+exactly (`{"slug":"denmark","change":"PREFILL TEST — do not submit.","section":"Getting
+Around"}`). The label gates held too: all four issue-triggered workflows fired and **skipped**,
+because `modify-request` alone runs nothing. Test issue closed.
+
+**Local lint is fixed — `npm run lint` exits 0.** The stale agent worktree is gone. Its 21 files
+of uncommitted progress-study work were preserved first as `5917f8f` on branch
+`worktree-agent-a7dc7eeb397c6a368` (2,684 lines: four preview pages, their CSS, the axe/smoke/
+shoot harness) — recover with `git checkout worktree-agent-a7dc7eeb397c6a368`. `git worktree
+remove` hit a OneDrive "Permission denied" after deleting every file and deregistering the
+worktree; the empty directories were cleared by hand. **Nothing was lost — the commit predates
+the removal.** No `eslint.config.mjs` edit was needed, so the config-protection hook stands.
+
+**Every V2-era open item is now closed.** The Actions "allow PRs" setting was already enabled
+(`can_approve_pull_request_reviews: true`); PR #28 is merged; the prefill click is done; lint is
+green.
+
+**Still unproven by design:** the S1–S5 standards and the dossier contract have never met a real
+research pass. The first one is the calibration test — expect the floors to need tuning on
+contact, and treat a floor that fires on a legitimately thin priority as data about the floor,
+not a failure of the guide.
+
 ## Snapshot (2026-08-02, session #27 — the five research-quality standards land; Places live)
 
 **Places is LIVE end to end** — the creator fixed the key's application restriction and the
@@ -442,32 +482,52 @@ the learnings silo — process evidence ≠ lived experience).
 - ⚠ Cloudflare dashboard Git integration builds "tripguides" on every push and fails in 0s —
   external config noise; consider disabling (deploy-worker.yml owns the real Worker deploy).
 
-## ⚠ Local lint is broken by a stale agent worktree (not a code problem)
+## ✔ Local lint — RESOLVED (session #28)
 
-`npm run lint` (`eslint .`) reports **630 phantom parse errors** on this machine, because
-`.claude/worktrees/agent-a7dc7eeb397c6a368/` is a full repo checkout — registered as a real
-git worktree since Jul 29 — and eslint finds two candidate `tsconfigRootDir`s. **CI is
-unaffected** (clean checkout), which is why the divergence went unnoticed: exactly CLAUDE.md
-boundary check #1. Lint every real tree with `npx eslint src worker scripts tests` until it
-is resolved — that passes clean.
+`npm run lint` exits 0. For ~4 sessions it reported 600+ phantom parse errors on this machine
+because `.claude/worktrees/agent-a7dc7eeb397c6a368/` was a full repo checkout, giving eslint two
+candidate `tsconfigRootDir`s. **CI was never affected** (clean checkout) — which is exactly why
+it went unnoticed for so long, and exactly CLAUDE.md boundary check #1.
 
-Two ways out, both the creator's call:
-1. Add `.claude/**` to `eslint.config.mjs`'s ignores. **A hook blocks agents from editing
-   that file** ("fix the source, don't weaken the config"), so this needs a human or a
-   temporary hook disable. It is not a weakening — `.claude/` holds no source.
-2. Remove the worktree: `git worktree remove .claude/worktrees/agent-a7dc7eeb397c6a368`.
-   **It has UNCOMMITTED untracked work** (`docs/mockups/*progress-study.mjs`,
-   `src/pages/progress-preview/`) and 0 commits ahead of main — rescue or discard that
-   first. Left in place this session for exactly that reason.
+Fixed by committing the worktree's uncommitted work (`5917f8f` on branch
+`worktree-agent-a7dc7eeb397c6a368`) and removing the worktree. **If an agent worktree is ever
+left behind again, this is the failure mode** — a second repo checkout inside the repo is a
+second tsconfig root, and the symptom looks like a code problem when it isn't.
 
 ## Owner tasks (need the creator, not the agent)
 
-1. **Enable Settings → Actions → General → "Allow GitHub Actions to create and approve pull
-   requests"** — land-branch.sh cannot open draft PRs without it (proven in the #18b smoke).
-2. Review/merge draft PR #28.
-3. Delete merged remote branch `claude/website-visual-redesign-upnl05`.
+1. Delete merged remote branch `claude/website-visual-redesign-upnl05`.
+2. Decide the fate of branch `worktree-agent-a7dc7eeb397c6a368` — it holds the progress-study
+   design work (`5917f8f`, 22 files) unreviewed and unmerged. Keep, develop, or delete.
+
+*(Closed in #28: the Actions "allow PRs" setting was already enabled; PR #28 merged; the
+change-request prefill click is done and proven.)*
 
 ## Where we left off
+
+**Session #28 (2026-08-02):** wired deep research into Pass B as a native-first, anti-default
+dossier contract; verified the change-request wizard end to end against the live GitHub form;
+cleared the stale worktree and with it the phantom-lint problem. **Every open item from the V2
+arc is closed.** The repo is at a clean stopping point — nothing is half-built and nothing is
+waiting on the creator except two housekeeping branches.
+
+**Re-prompt the creator with:** "Everything from the V2 arc is closed. Deep research now has one
+sanctioned home — Pass B — and it works as a handoff: you run the native-language sweep
+interactively, it writes a `## Discovery leads` table into the intake doc, and the headless pass
+verifies every lead to a primary source and records the rejections as evidence of what was
+considered. It excludes the English top-10 on purpose, because that's the layer Pass A already
+has and the layer that's most polluted on famous destinations. The change-request button is
+proven end to end — a real prefilled issue came back with all three fields and the parser read
+them back exactly, and the label gates correctly ran nothing. Local lint is fixed: the stale
+agent worktree was the cause, and its 21 files of progress-study work are safe on branch
+`worktree-agent-a7dc7eeb397c6a368`. **The honest gap:** none of the five research-quality
+standards has met a real research pass yet. The next new guide is the calibration test — if a
+floor fires on a priority that's legitimately thin, that's information about the floor, not a
+verdict on the guide. Two housekeeping items are yours: delete the merged
+`claude/website-visual-redesign-upnl05` branch, and decide whether the progress-study design
+work gets developed or dropped."
+
+---
 
 **Session #26 (2026-08-02):** finished the fact registry across all four guides (141 facts) and
 ran a whole-repo consistency audit — 2 dead exports removed, seven docs corrected, the last
