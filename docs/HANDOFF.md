@@ -24,6 +24,49 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
+## Snapshot (2026-08-02, session #24 — V2 Session 4: denmark + korea migrated, 108 facts)
+
+**Both guides now keep their prices as sourced ROWS, and the built site did not change by one
+byte.** Denmark 26 facts / 26 occurrences; Korea 82 / 97 (15 mentions share a row — the same
+price cited from the same page collapsed to ONE fact). `npm run verify` prints the count.
+
+**`scripts/migrate-facts.mjs`** — `--slug X` proposes, `--write` applies. Three properties make
+it safe against real content: values are lifted **verbatim** (never retyped); replacement is
+**positional** (one regex pass, offsets right-to-left) because `"40 DKK"` is a substring of
+`"340 DKK"` and naive string replacement silently corrupts the larger figure; and a value
+written `"≈ 120"` (marker, then space) is **skipped**, since re-rendering would emit `"≈120"`
+and lose the space.
+
+**Scope is deliberately narrow, and the limits are the interesting part:**
+- **Money only.** Clock times in a day plan are itinerary structure, not sourced facts; hoisting
+  them yields dozens of rows that bury the prices worth tracking.
+- **Only units already carrying `source_url` + `verified_on`.** A figure with no citation stays
+  in prose rather than silently inheriting a neighbour's.
+- **Sources/reference lists skipped** — they restate figures that live elsewhere; migrating them
+  would mint a second row for the same price cited from a different page.
+
+**Payoff demonstrated, and its honest limit.** Changing one registry row updated all THREE of
+its references on rebuild. Two further mentions of that same figure did NOT update — they sit in
+units with no provenance, so they were never migrated. **The continuity sweep still covers the
+unmigrated remainder**; the registry shrinks that job, it does not yet retire it.
+
+**A SIXTH directory reader surfaced** during migration — `src/lib/guide-stats.test.ts`
+re-implemented the `!== "_guide.json"` filter and choked on facts.json (the suite caught it).
+Repo swept again: `fetch-holidays` (uses the shared reader), `verify-live` (reads only
+`_guide.json`) and `split-guide` (write-only) are safe by construction.
+
+Also: new guides scaffold with an empty `facts.json` so a research pass records rows as it
+works instead of leaving a migration to dig them out later, and SKILL.md now teaches authoring
+rows during research (≈ derived from `state`, inline-text values, ids that carry the figure).
+
+**Verified: 1141 tests, typecheck 0, lint clean, CI green ×4, verify PASS on both guides, no
+`{{fact:` token anywhere in `dist/`. Gate met on both: `index.html` + `.gpx` byte-identical,
+`.ics` identical modulo `DTSTAMP`.**
+
+**Next: V2 Session 5** — the in-site Request-a-change wizard (guide pages only, no Worker
+route). Reuses the share-modal shell (incl. the `.sticky-chrome` backdrop-filter re-parent
+trap), needs `sections` added to the `#tgConfig` island and a `MODIFY_FIELDS` contract test.
+
 ## Snapshot (2026-08-02, session #23 — V2 Session 3: the fact registry lands, dormant)
 
 **`<slug>/facts.json` exists and works — and changes nothing yet, by design.** One record per
@@ -283,11 +326,26 @@ Two ways out, both the creator's call:
 
 ## Where we left off
 
-**Session #23 (2026-08-02):** shipped V2 Session 3 — the perishable-fact registry, landed
-dormant and proven byte-identical. Facts can now be data instead of prose; nothing has moved
-into it yet (that is Session 4's denmark pilot).
+**Session #24 (2026-08-02):** shipped V2 Session 4 — denmark AND korea migrated onto the fact
+registry, 108 facts total, both byte-identical.
 
-**Re-prompt the creator with:** "The fact registry is in and provably changes nothing yet — a
+**Re-prompt the creator with:** "Denmark and Korea now keep their prices as sourced rows —
+108 facts — and both built pages are byte-identical, so nothing a traveler sees moved. Proved
+the payoff on a real fact: one edit updated all three of its references. Worth knowing the
+limit — two other mentions of that figure didn't update, because they live in prose with no
+citation of its own and so were never migrated; the continuity sweep still covers that
+remainder. **Still waiting on you (2 min):** the Places API key is referrer-restricted, so
+venue verification 403s — Google Cloud → Credentials → that key → **Application restrictions =
+None** (keep the Places API restriction and the daily quota cap). Session 5 is the last one:
+the in-site Request-a-change wizard. Also still open: draft PR #28, the Actions 'allow PRs'
+setting, and local `npm run lint` (use `npx eslint src worker scripts tests`)."
+
+---
+
+**Session #23 (2026-08-02):** shipped V2 Session 3 — the perishable-fact registry, landed
+dormant and proven byte-identical.
+
+*(prior re-prompt, superseded)* "The fact registry is in and provably changes nothing yet — a
 guide can now keep prices and hours as one sourced record that prose points at, so one edit
 updates every mention and the citation audit can check all of them instead of five. Session 4
 migrates denmark to it as the pilot, with the gate being that its built pages diff to zero.
