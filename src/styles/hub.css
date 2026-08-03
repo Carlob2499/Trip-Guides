@@ -14,9 +14,15 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .hub,.hub-foot{position:relative;z-index:1}
 
 .hub{max-width:1340px;margin:0 auto;width:100%;padding:2rem 1.2rem 3rem;flex:1}
-.hub-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1.2rem}
+/* auto-fit (2026-08-02, same sweep as guide.css's grids): at 1–4 guides the data-count
+   editorial overrides below win, so this rule only governs 5+ — where auto-fill would leave a
+   partial last row hugging the left with reserved-but-empty tracks beside it. auto-fit
+   collapses the empties so the last row spreads; full rows lay out identically (column count
+   still derives from the 270px/1fr floor). Verified against the same 360–1800px × 1–8-item
+   matrix as the guide grids before flipping. */
+.hub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.2rem}
 /* M4 item 2 — EDITORIAL layout for a curated catalog (≤4 guides). Two up, larger covers, more
-   air; at 5+ guides the auto-fill rule above stands unchanged, so this needs no revisiting when
+   air; at 5+ guides the auto-fit rule above stands unchanged, so this needs no revisiting when
    the catalog grows. Desktop only — one column is already the right answer on a phone. */
 @media(min-width:900px){
   .hub-grid[data-count="1"],.hub-grid[data-count="2"],
