@@ -1,0 +1,184 @@
+[
+  {
+    "type": "venues",
+    "group": "Food & shopping",
+    "title": "Where to eat",
+    "intro": "<p>A note on tourist-trap avoidance: the generic “best restaurants in Sedona” lists skew toward the Uptown strip closest to hotels — this guide deliberately routes through spots local guides actually name as where residents eat.</p>",
+    "items": [
+      {
+        "name": "Wildcraft Cafe",
+        "hours": "⚠ Varies by day of week — confirm before you go",
+        "why": "Health-conscious, organic, vegan/paleo/gluten-free options — an easy local breakfast or lunch that isn't a hotel buffet."
+      },
+      {
+        "name": "Elote Cafe",
+        "why": "Sedona's most in-demand table — bold, elevated Southwestern and Mexican cooking.",
+        "crowd_tip": "Reserve ahead, especially on a weekend — it's not a reliable walk-in.",
+        "map": {
+          "lat": 34.8720417,
+          "lng": -111.7608733
+        },
+        "place_id": "ChIJOehzrXSjLYcREWbHQfAQhIU"
+      },
+      {
+        "name": "El Rincon",
+        "why": "Sedona's original Mexican restaurant (since 1976) — Arizona-style with Navajo/Hopi influence; the chimichanga (real sopapilla masa, fried, served enchilada-style) is the house specialty, and it sits right inside Tlaquepaque so it pairs naturally with that stop.",
+        "hours": "Daily 11am–8pm",
+        "map": {
+          "lat": 34.861773,
+          "lng": -111.762693
+        },
+        "source_url": "https://www.elrinconsedona.com/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "place_id": "ChIJh0onC1ahLYcR9m6GrpnHWHo"
+      },
+      {
+        "name": "Tamaliza",
+        "why": "Built around tamales specifically, not general Mexican — fresh-made daily with organic non-GMO masa, family recipes from Guerrero/Michoacán/Puebla/Oaxaca, vegan and vegetarian options included. A distinct specialty from El Rincon, not a second version of the same thing.",
+        "hours": "⚠ Closed Mondays; Tue–Sun 9am–4pm — confirm before you go",
+        "map": {
+          "lat": 34.8620308,
+          "lng": -111.78121499999999
+        },
+        "source_url": "http://www.sedonatamaliza.com/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "place_id": "ChIJXZ5TY0ihLYcRBC-fIHaUUJI"
+      },
+      {
+        "name": "Coffee Pot Restaurant",
+        "why": "A west-side local institution for 30+ years — a straightforward, unpretentious breakfast spot.",
+        "map": {
+          "lat": 34.8643193,
+          "lng": -111.79667119999999
+        },
+        "place_id": "ChIJGUonKTuhLYcRD5of0Attr3w"
+      },
+      {
+        "name": "Judi's Restaurant & Lounge",
+        "why": "A scratch-kitchen local institution since 1986 (same owners since 2013) — classic American with a warm, unhurried, slightly old-school dining-room feel rather than an Uptown tourist stop.",
+        "hours": "⚠ Closed Sundays; otherwise ≈11am–8:30pm — confirm before you go",
+        "map": {
+          "lat": 34.8634353,
+          "lng": -111.7828242
+        },
+        "source_url": "https://sedonarestaurants.com/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "place_id": "ChIJi5DFe0ihLYcRQlcsOV2pLJQ"
+      },
+      {
+        "name": "The Golden Goose",
+        "why": "West-side steak, seafood, and burger spot open from breakfast through dinner — a practical any-time option that isn't a Mexican restaurant, on a stretch locals actually use rather than the Uptown strip.",
+        "hours": "⚠ ≈7am–7:30/8pm daily — confirm before you go",
+        "map": {
+          "lat": 34.8625451,
+          "lng": -111.8046087
+        },
+        "source_url": "http://www.goldengoosegrill.com/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "place_id": "ChIJ91upYCahLYcRmVEiBqM4q-c"
+      },
+      {
+        "name": "Butterfly Burger",
+        "why": "Casual burgers and cocktails near the Village of Oak Creek, south of central Sedona — later hours than most picks here, useful if dinner plans slip.",
+        "hours": "⚠ ≈11:30am–9/10pm daily — confirm before you go",
+        "map": {
+          "lat": 34.7783235,
+          "lng": -111.7624442
+        },
+        "source_url": "https://butterflyburger.com/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "place_id": "ChIJkwxBwHqnLYcRaavOmR_Vcro"
+      },
+      {
+        "name": "The Hudson",
+        "why": "Chef Jeff Storcz's elevated comfort food (burgers, fish, ribs, steak) in an industrial-chic room with one of the better views in town — a step up for a night that isn't the Elote splurge.",
+        "hours": "⚠ ≈11:30am–9pm daily — confirm before you go",
+        "map": {
+          "lat": 34.8586807,
+          "lng": -111.7626571
+        },
+        "source_url": "https://www.thehudsonsedona.com/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "place_id": "ChIJNWdGnVWhLYcRKV6Fh4X9sLg"
+      }
+    ]
+  },
+  {
+    "type": "venues",
+    "group": "Food & shopping",
+    "title": "Shopping",
+    "intro": "<p>Tlaquepaque (see Sights) covers the courtyard-galleries side of Sedona shopping — these are genuinely different: a working trading post, a nonprofit arts-center gallery, a metaphysical/crystal specialist, a west-side crystal shop, and Gallery Row's small courtyard complex.</p>",
+    "items": [
+      {
+        "name": "Garland's Navajo Rugs",
+        "why": "A trading post built in traditional style, family-run since 1976 — one of the largest Navajo rug selections anywhere, plus Hopi kachina dolls, Pueblo pottery, sandpaintings, and handmade jewelry. A real specialist, not a souvenir-shop version of Native art.",
+        "hours": "Daily 10am–5pm",
+        "map": {
+          "lat": 34.8618593,
+          "lng": -111.7612343
+        },
+        "source_url": "https://www.garlands.com/collections/navajo-rugs",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "place_id": "ChIJ_zz2HP6jLYcRDECmg3p7FIQ"
+      },
+      {
+        "name": "Center for the New Age",
+        "why": "Sedona's best-known metaphysical shop — one of the largest crystal and gemstone-jewelry selections in town, alongside psychic readings and healings if that's of interest. Leans into the vortex/New-Age side of Sedona rather than avoiding it.",
+        "hours": "Daily 10am–7pm",
+        "map": {
+          "lat": 34.8629709,
+          "lng": -111.7625946
+        },
+        "source_url": "https://sedonanewagestore.com/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "place_id": "ChIJPw86_VWhLYcRO5oYWVlBsDM"
+      },
+      {
+        "name": "Sedona Arts Center",
+        "why": "A nonprofit gallery and working studio space (not a commercial gift shop) showing and selling local and regional artists' work, with classes and demonstrations running most weeks. A genuine arts-community stop rather than a retail one.",
+        "hours": "Mon–Sat 10am–5pm, Sun 12–5pm",
+        "map": {
+          "lat": 34.872416,
+          "lng": -111.7575871
+        },
+        "source_url": "http://www.sedonaartscenter.org/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "place_id": "ChIJD_V2vOOjLYcR4M-5Z6QwG-I"
+      },
+      {
+        "name": "Hozho Distinctive Shops & Galleries",
+        "why": "A small courtyard complex on Sedona's Gallery Row, Uptown — several independent galleries and boutiques under one roof, distinct from both Tlaquepaque's larger Spanish-colonial courtyards and the general Uptown strip. ⚠ Individual tenant galleries rotate — confirm which shops are currently open before making it the destination.",
+        "map": {
+          "lat": 34.8608049,
+          "lng": -111.7616057
+        },
+        "source_url": "https://hozhosedona.com/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "place_id": "ChIJ27asiVWhLYcRoGAauIH-f7U"
+      },
+      {
+        "name": "Crystal Magic",
+        "why": "A straightforward west-side crystal, mineral, and gift shop — a lower-key alternative to Center for the New Age's readings-and-healings focus if you just want stones and gifts.",
+        "hours": "Daily 10am–6pm",
+        "map": {
+          "lat": 34.8623871,
+          "lng": -111.8120484
+        },
+        "source_url": "http://www.crystalmagic.com/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "place_id": "ChIJmX3A39igLYcRGtWcm7U6Uvk"
+      }
+    ]
+  }
+]

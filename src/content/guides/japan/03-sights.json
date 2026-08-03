@@ -171,6 +171,110 @@
           "lng": 130.411141
         },
         "place_id": "ChIJYcOBiZWRQTUR0Rl0ehe67eA"
+      },
+      {
+        "name": "Sapporo Beer Museum",
+        "kicker": "Free, self-guided, and usually skipped in favor of the attached beer garden",
+        "body": "<p>Japan's only beer museum, housed in the actual red-brick brewery building that operated here 1876–1965 — designated a Hokkaido Heritage site in 2004. The self-guided exhibition floor is free (open 11:00–18:00, last entry 17:30, closed Mondays) and covers Sapporo Breweries' Meiji-era founding and Hokkaido's beer history. Most visitors only come for the attached Sapporo Beer Garden's jingisukan lunch (see Food &amp; shopping) and skip the museum itself, which keeps the exhibition floor genuinely uncrowded even at midday. Paid tastings and a shop are on-site if you want more than the free floor. A short walk from Higashi-Sapporo Station on the Tozai Line, or the museum's own shuttle bus from Sapporo Station.</p>",
+        "map": {
+          "lat": 43.0714671,
+          "lng": 141.3689124
+        },
+        "place_id": "ChIJ0fYsL4QpC18Ry-fF7_rGYBM",
+        "source_url": "https://www.sapporobeer.jp/english/brewery/s_museum/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Moerenuma Park",
+        "kicker": "Isamu Noguchi's last work — a genuine detour, not a city-center add-on",
+        "body": "<p>A reclaimed landfill turned into a single sculpture-scale artwork by Isamu Noguchi, who completed the master plan in November 1988 (he died the following month) — the park itself wasn't finished until 2005. Play equipment doubles as sculpture across the 189-hectare grounds, anchored by the glass pyramid <b>Hidamari</b> (info center/gallery) and the stepped <b>Play Mountain</b>. <b>Honest trade-off:</b> unlike this guide's other Sapporo picks, it's genuinely out of the center — ≈40 min via tram + bus, or a direct bus from Sapporo Station — so it rewards a half-day rather than a stopover; autumn foliage across the open grounds is the reason to make that trip in this window rather than winter.</p>",
+        "map": {
+          "lat": 43.1231335,
+          "lng": 141.42665359999998
+        },
+        "place_id": "ChIJo24_lq8vC18RcfiqGApcx1s",
+        "source_url": "https://www.sapporo.travel/en/spot/facility/moerenuma_park/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Former Hokkaido Government Office Building (Akarenga)",
+        "kicker": "Free, central, and a 10-minute add-on to any Sapporo Station walk",
+        "body": "<p>Sapporo's affectionately nicknamed \"Akarenga\" (Red Brick) — an 1888 neo-baroque brick building modeled on the Massachusetts State House, built as Hokkaido's government headquarters and now a free public history exhibit (open 8:45–18:00 daily). Two floors cover Hokkaido's pioneering era, and the former Governor's office, with its ornate arabesque ceiling, is open to walk through. An easy pairing with Odori Park or Sapporo Station — 8 min on foot from the station's west exit — with none of the queue either of those draws.</p>",
+        "map": {
+          "lat": 43.0643035,
+          "lng": 141.346868
+        },
+        "place_id": "ChIJrQd1AJ8pC18Rt53mDW5dIbs",
+        "source_url": "https://www.akarenga-h.jp/en/access/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Hokkaido Shrine (Hokkaido Jingu)",
+        "kicker": "A genuinely quiet shrine ground minutes from the city center",
+        "body": "<p>Founded by imperial decree in 1869 as Hokkaido's guardian shrine, set within Maruyama Park's ≈18 hectares of old-growth forest — despite sitting a 10-minute walk from a subway station, the grounds stay notably quiet compared to this guide's busier sights. Ginkgo and maple color peaks around mid-October, so a Sapporo visit through late October still catches the tail of it. Pair with a walk through Maruyama Park itself (primeval forest trails, the zoo) rather than treating the shrine as a standalone stop. Reached via the Tozai Line to Maruyama-koen Station, then ≈10 min on foot.</p>",
+        "map": {
+          "lat": 43.054333,
+          "lng": 141.3077928
+        },
+        "place_id": "ChIJk6jwxNwpC18RCNdmWzXijew",
+        "source_url": "https://visit.sapporo.travel/discover/art-culture/hokkaido-shrine/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Zuihoden (Date Masamune Mausoleum)",
+        "kicker": "Momoyama-style ornate rebuild — the original burned in a 1945 air raid",
+        "body": "<p>The mausoleum of Date Masamune, Sendai's founding feudal lord, in the elaborately carved Momoyama architectural style. <b>⚠ Honest structural note:</b> the original 1637 structure was destroyed in a 1945 air raid; the current building is a 1979 reconstruction based on the original's surviving records and fittings, not the historic original itself. Set in a quiet cedar grove a short walk from the Otamaya-bashi bridge. ¥570 adult admission; open 9:00–16:50 (Feb–Nov) / 9:00–16:20 (Dec–Jan), last entry 20 min before close. A November light-up event has run in past years — worth checking current dates against the trip window. Reached via the Sendai Loople sightseeing bus or a ≈20-min walk from Sendai Station.</p>",
+        "map": {
+          "lat": 38.2504479,
+          "lng": 140.8667079
+        },
+        "place_id": "ChIJ8y-8UGkoil8ROchbu7NB2iw",
+        "source_url": "https://www.zuihoden.com/en/info/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Yamadera (Risshaku-ji)",
+        "kicker": "1,015 stone steps up a sacred cliff — technically Yamagata, but the standard Sendai day trip",
+        "body": "<p>A temple complex founded in 860 CE, its halls built directly into a rock-face mountainside — the 1,015-step climb through cedar forest takes ≈30–60 min depending on pace, with the summit hall's panoramic gorge view the payoff. <b>Honest geography note:</b> it's just across the prefecture line in Yamagata, not Miyagi, but it's reached directly from Sendai via the JR Senzan Line (≈1 hr) and is the standard side trip from a Sendai base. <b>Crowd reality:</b> autumn foliage (Oct–Nov) is its most popular window and tour buses from Sendai arrive by mid-morning — go at opening to get the steps and the summit view without the crowd. Budget at least 2 hrs total including the climb.</p>",
+        "map": {
+          "lat": 38.3131193,
+          "lng": 140.4346099
+        },
+        "place_id": "ChIJeUV2g-_Oi18RwK-4JcNEe44",
+        "source_url": "https://www.japan.travel/en/spot/1796/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Akiu Great Falls (Akiu Otaki)",
+        "kicker": "A Top-100 Japan waterfall, ≈40 min from central Sendai",
+        "body": "<p>A 55m waterfall ranked among Japan's Top 100 and designated a National Place of Scenic Beauty, with an easy 5–10 min walk from the parking area to the Takimidai observation deck (an 800m promenade continues down to the waterfall basin for a closer view). Surrounding maples typically peak late October–early November, lining up well with this trip's dates. <b>⚠ Access note:</b> the public bus from Sendai Station's west-exit bus pool (bus 8, bound for Akiu Otaki) runs weekends and holidays only — confirm the current schedule before relying on it, since a weekday visit needs a taxi or rental car instead. Parking fills on autumn weekends.</p>",
+        "map": {
+          "lat": 38.2752025,
+          "lng": 140.6034944
+        },
+        "place_id": "ChIJebYZOFItil8RpAXgQehB3wI",
+        "source_url": "https://www.tohokukanko.jp/en/attractions/detail_1005046.html",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Aoba Castle Ruins (Sendai Castle)",
+        "kicker": "Free ruins + skyline view; the museum and Loople bus stop are extras",
+        "body": "<p>The hilltop ruins of Date Masamune's castle, in service as the Sendai domain's seat of government for ≈270 years until the Meiji Restoration — the honmaru (main keep) site is free to walk and gives a genuine panoramic view over central Sendai (the Pacific is visible on a clear day). The mounted Masamune statue (1964, 9m with base) beside it is the photo spot, lit sunset–23:00. The on-site Aoba Castle Museum (armor, letters, Date-family artifacts) is a separate ⚠ ≈¥700–770 ticket if you want more than the view — sources disagree on the exact price, confirm on arrival. Reached by the Loople Sendai sightseeing bus (¥260/ride, ¥630 day pass), which stops directly at the ruins.</p>",
+        "map": {
+          "lat": 38.2530776,
+          "lng": 140.8567093
+        },
+        "place_id": "ChIJcbTzagApil8RZYOPDwpQvTI",
+        "source_url": "https://visitmiyagi.com/contents/aoba-castle-honmaru-museum/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
       }
     ]
   },

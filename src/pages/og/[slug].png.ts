@@ -17,7 +17,10 @@ export async function GET({ props }: { props: { slug: string; data: any } }) {
   const title   = data.title  || "Guide";
   const country = data.country || "";
   const dek     = data.dek    || "";
+  // accent stays keyed on the real country (functional); the printed label prefers
+  // `region` when set, so a single-state US guide doesn't read as a whole-country one.
   const accent  = accentForGuide(slug, data.theme, country);
+  const regionLabel = data.region || country;
 
   function xmlEscape(s: string) {
     return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
@@ -27,7 +30,7 @@ export async function GET({ props }: { props: { slug: string; data: any } }) {
   }
 
   const titleSafe   = xmlEscape(truncate(title, 28));
-  const countrySafe = xmlEscape(country.toUpperCase());
+  const countrySafe = xmlEscape(regionLabel.toUpperCase());
   const dekSafe     = xmlEscape(truncate(dek, 76));
 
   // Scale display font to keep title on one line

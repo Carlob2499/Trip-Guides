@@ -371,6 +371,92 @@
   {
     "type": "venues",
     "group": "Food & shopping",
+    "title": "Where to eat — Busan day trip",
+    "intro": "<p>The Jul 13 day trip itinerary already covers lunch on Gunam-ro in Haeundae (Choryang Milmyeon / Obok Dwaeji Gukbap). These are further options on the Nampo-dong/Yeongdo side of the city — genuinely more of Busan, for a longer future visit or if you swap out part of the Haeundae plan.</p>",
+    "items": [
+      {
+        "name": "Gukje Market food alley (국제시장 먹자골목)",
+        "area": "Jung-gu — Nampo-dong",
+        "address": "55 Gukjesijang 2-gil, Jung-gu",
+        "hours": "Stalls generally run daytime into the evening — ⚠ individual hours vary, confirm same-day",
+        "price": "Chungmu gimbap, tteokbokki, mul-guksu, bibim-dangmyeon ≈₩3,000–6,000 per item ⚠",
+        "book": "walk-in",
+        "how": "~5 min walk from BIFF Square.",
+        "why": "A 60-plus-year outdoor food alley inside Korea's oldest post-war market — chungmu gimbap, bibim-dangmyeon (a Busan specialty), tteokbokki, mul-guksu and patbingsu at open-air stalls.",
+        "crowd_tip": "Pairs with a BIFF Square / Jagalchi day around Nampo-dong rather than the Haeundae day-trip plan.",
+        "map": {
+          "lat": 35.1013575,
+          "lng": 129.0281978
+        },
+        "place_id": "ChIJfYLMelSTaDURFlCRfk5W1PA",
+        "source_url": "https://www.google.com/maps/place/?q=place_id:ChIJfYLMelSTaDURFlCRfk5W1PA",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Anmok Seomyeon (안목 서면점)",
+        "area": "Busanjin-gu — Seomyeon",
+        "address": "10 Seomyeon-ro, Busanjin-gu",
+        "price": "⚠ Confirm at venue",
+        "book": "walk-in",
+        "how": "Right where the day trip changes subway lines at Seomyeon — a detour of a stop or two, not a special trip.",
+        "why": "Well-reviewed Busan-style dwaeji-gukbap (pork soup) made with 1+-grade domestic pork and a clean bone broth, no MSG.",
+        "crowd_tip": "A Seomyeon-transfer lunch or dinner alternative to the Gunam-ro spots if you're routing through anyway.",
+        "map": {
+          "lat": 35.1515526,
+          "lng": 129.0580477
+        },
+        "place_id": "ChIJ_XPxdgDraDURtTpdhgJ1vtw",
+        "source_url": "https://www.google.com/maps/place/?q=place_id:ChIJ_XPxdgDraDURtTpdhgJ1vtw",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Millak Raw Fish Town (민락회타운)",
+        "area": "Suyeong-gu — Gwangalli",
+        "address": "Millaksubyeon-ro, Suyeong-gu",
+        "price": "Live-fish/sashimi + prep fee — ⚠ varies widely by catch, confirm before ordering",
+        "book": "walk-in",
+        "how": "North end of Gwangalli Beach — ~10 min walk from Gwangan Station Exit 3.",
+        "why": "Busan's other big buy-then-eat live-fish market (alongside Jagalchi) — ground-floor tanks, upstairs sashimi halls looking straight out at Gwangalli Beach and the Gwangan Bridge.",
+        "crowd_tip": "Pairs with a Gwangalli Beach stop instead of, or in addition to, Haeundae.",
+        "map": {
+          "lat": 35.1555583,
+          "lng": 129.1238321
+        },
+        "place_id": "ChIJ2_3NejLtaDURFgqX7B_iqJ0",
+        "source_url": "https://www.google.com/maps/place/?q=place_id:ChIJ2_3NejLtaDURFgqX7B_iqJ0",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Samjin Eomuk Main Store (삼진어묵 본점)",
+        "area": "Yeongdo-gu",
+        "address": "36 Taejong-ro 99beon-gil, Yeongdo-gu",
+        "phone": "051-715-5865",
+        "hours": "09:00–19:00 daily",
+        "price": "Fish cakes ≈₩1,500–3,000 per piece ⚠",
+        "book": "walk-in",
+        "how": "Yeongdo island — a taxi or bus from Nampo-dong; a natural pairing with Taejongdae, both in Yeongdo-gu.",
+        "why": "Busan's best-known eomuk (fish cake) maker, running since 1953 — a bakery-style self-serve shop for fresh fish cakes, with a small eomuk museum upstairs. The definitive Busan food souvenir.",
+        "crowd_tip": "Grab a box to eat on the KTX home if you route through Yeongdo before heading back to Busan Station.",
+        "map": {
+          "lat": 35.0929647,
+          "lng": 129.042794
+        },
+        "place_id": "ChIJZX4drhPpaDURHtzv5OmjLuY",
+        "source_url": "https://www.google.com/maps/place/?q=place_id:ChIJZX4drhPpaDURHtzv5OmjLuY",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
+      }
+    ],
+    "verified_on": "2026-08-03",
+    "shelf_life": "venue",
+    "source_url": "https://map.naver.com"
+  },
+  {
+    "type": "venues",
+    "group": "Food & shopping",
     "title": "Breakfast near the base",
     "intro": "<p>Korea doesn't do big hotel-style breakfasts, but Jongno has good options from 07:00–07:30.</p>",
     "items": [

@@ -170,6 +170,57 @@
           "lng": 141.358446
         },
         "place_id": "ChIJCb2qW4IpC18R93EsGNFraJI"
+      },
+      {
+        "name": "Soup Curry GARAKU",
+        "area": "Susukino / Tanukikoji",
+        "address": "2-6-1 Minami 3-jo Higashi, Chuo-ku (Presento Minami 3 Higashi 2 bldg, B1F)",
+        "hours": "Lunch 11:30–15:30, dinner 17:30–23:30 (L.O. 23:00)",
+        "book": "walk-in",
+        "why": "Sapporo's most internationally known soup curry — a dashi-based broth built from ~30 ingredients and 21 spices, with a spice-level scale from 1 up to 40. The shop independent write-ups converge on as the essential bowl, and a genuinely different dish from the jingisukan/ramen already on this list.",
+        "crowd_tip": "⚠ No reservations — a ticket-number system kicks in when busy, and lines are reported long at both lunch and dinner. If you'd rather skip the wait, Suage+ (founded 2007, fried-chicken-forward) draws similar local loyalty with reportedly shorter lines — a real fallback, not a downgrade.",
+        "map": {
+          "lat": 43.058399699999995,
+          "lng": 141.3588997
+        },
+        "place_id": "ChIJQ21rhoMpC18RmzhfndITzug",
+        "source_url": "https://www.gltjp.com/en/directory/item/13955/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Ganso Sapporo Ramen Yokocho",
+        "area": "Susukino",
+        "address": "3-8 Minami 5-jo Nishi, Chuo-ku",
+        "hours": "Varies by shop — most open lunch through late night",
+        "book": "walk-in",
+        "why": "A 42m alley of ~17 independent miso-ramen counters, tracing back to a 1951 ramen row (Koraku Ramen Meitengai) that was demolished in 1969 for Olympic-era road expansion and revived at this location in 1971. A browse-many-shops pick that complements Menya Saimi (a single destination bowl, above) rather than replacing it.",
+        "crowd_tip": "Crowded with visitors through the day; locals mostly show up late at night after drinking in Susukino, so a post-yatai/post-bar stop here reads differently than a daytime visit.",
+        "map": {
+          "lat": 43.0547934,
+          "lng": 141.35429159999998
+        },
+        "place_id": "ChIJSyzMXY8pC18R-ecCwIykpC8",
+        "source_url": "https://www.sapporo.travel/en/gourmet/shop/ganso-ramen-yokocho/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Sapporo Central Wholesale Market Outer Market (Jogai Ichiba)",
+        "area": "Near Sapporo Station, Chuo-ku",
+        "hours": "Market ≈6:00–17:00 daily; restaurants generally open from 7:00",
+        "book": "walk-in",
+        "price": "Seafood-bowl set meals vary by shop, roughly ¥2,000–4,000",
+        "why": "A working, wholesale-adjacent market of ~60–80 stalls and eateries sourcing straight from the morning auctions next door — a larger-scale alternative to Nijo Market (above) for a seafood breakfast, at the cost of being further from Susukino/central Sapporo.",
+        "crowd_tip": "Less tourist-branded than Nijo Market day-to-day, but still a known name in guidebooks — not an undiscovered secret, just a genuine second option if Nijo's smaller footprint feels too tourist-groomed.",
+        "map": {
+          "lat": 43.073412399999995,
+          "lng": 141.3221065
+        },
+        "place_id": "ChIJ0SAA6q0pC18Ril72znQb3eE",
+        "source_url": "https://www.sapporo.travel/en/spot/facility/sapporo_central_wholesale_market/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
       }
     ]
   },
@@ -224,6 +275,57 @@
           "lng": 140.8733374
         },
         "place_id": "ChIJwaMrsD0oil8RWNWxZ7hs3sk"
+      },
+      {
+        "name": "Abe Kamaboko-ten, Main Store",
+        "area": "Chuo, Aoba-ku — ≈10 min walk from Sendai Station",
+        "address": "2-3-18 Chuo, Aoba-ku",
+        "hours": "⚠ Not independently confirmed against an official hours page — check current hours before going",
+        "book": "walk-in",
+        "price": "Retail sasakamaboko plus a no-reservation hand-grilling tasting, priced per piece",
+        "why": "The originator of sasakamaboko itself — the bamboo-leaf-shaped fish cake takes its name from the Date family's \"sasa ni suzume\" crest, and this is the founding shop, not a later imitator. Lets you hand-grill your own piece on-site, fresh, rather than just buying a packaged souvenir tin.",
+        "crowd_tip": "A good stop woven into a Kokubuncho evening or a daytime walk near Aoba Castle — not a destination meal on its own.",
+        "map": {
+          "lat": 38.2609529,
+          "lng": 140.8750043
+        },
+        "place_id": "ChIJUbl72jwoil8RMPSKrXMTD5g",
+        "source_url": "https://www.sentabi.jp/en/tours/930",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Zunda Saryo, Sendai Station",
+        "area": "Sendai Station 3F, Zunda Komichi",
+        "hours": "⚠ Not independently confirmed — station-floor hours generally track train hours, roughly 8:00–21:00; check on arrival",
+        "book": "walk-in",
+        "why": "Zunda (sweet edamame paste) is Sendai's other defining flavor beyond gyutan, and this is the specialty shop for it — zunda mochi, shakes and sweets, from the house behind the Haginotsuki confection. Right inside the station, so it slots into an arrival or departure day with zero extra transit.",
+        "crowd_tip": "Can queue at peak travel times given the station location — a between-train stop rather than a sit-down destination.",
+        "map": {
+          "lat": 38.2604316,
+          "lng": 140.8818661
+        },
+        "place_id": "ChIJIQAgjxgoil8RJlLtqWr8r-8",
+        "source_url": "https://en.hoshinoresorts.com/guide/area/hokkaidotohoku/miyagi/sendai/akiu_zunda/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Oyster Hut Matsu",
+        "area": "Matsushima, beside the Michinoku Date Masamune History Museum",
+        "hours": "≈10:00–15:00 (subject to the shop's own announcements — confirm locally)",
+        "book": "walk-in",
+        "price": "≈¥2,500 all-you-can-eat, 45-min time limit; +¥500 adds oyster fried rice and miso soup",
+        "why": "Miyagi's oyster season runs autumn through winter, and this hut lets you grill/steam your own at the table — a genuine seasonal pairing with the Matsushima Bay sight (above) rather than a generic seafood-restaurant add-on.",
+        "crowd_tip": "⚠ Hours are reported as subject to change — confirm same-day if possible.",
+        "map": {
+          "lat": 38.3714516,
+          "lng": 141.0655607
+        },
+        "place_id": "ChIJvXt_OZ-biV8Rw1x9nLk4KQ4",
+        "source_url": "https://discoversendai.travel/places/matsushima-tourism-association-oyster-shack/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
       }
     ]
   }

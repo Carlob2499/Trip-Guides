@@ -19,7 +19,10 @@ export async function GET({ props }: { props: { slug: string; data: any } }) {
   const { slug, data } = props;
   const title   = data.title  || "Guide";
   const country = data.country || "";
+  // accent stays keyed on the real country (functional); the printed label prefers
+  // `region` when set, so a single-state US guide doesn't read as a whole-country one.
   const accent  = accentForGuide(slug, data.theme, country);
+  const regionLabel = data.region || country;
   const stats   = tripRecapStats(data);
 
   function xmlEscape(s: string) {
@@ -30,7 +33,7 @@ export async function GET({ props }: { props: { slug: string; data: any } }) {
   }
 
   const titleSafe   = xmlEscape(truncate(title, 28));
-  const countrySafe = xmlEscape(country.toUpperCase());
+  const countrySafe = xmlEscape(regionLabel.toUpperCase());
   const tfs = title.length > 20 ? (title.length > 28 ? 44 : 56) : 68;
 
   const stops = stats.waypointsTotal > 0

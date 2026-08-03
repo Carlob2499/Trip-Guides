@@ -60,10 +60,11 @@ function htmlToText(s: string | undefined | null): string {
 // Every `map` section center, every `sights` item that carries a `map` coord,
 // and every day-item `waypoints` entry with coords (the Plan-view stops).
 // De-duped on the exact lat,lng,name triplet. Names: a map section's
-// `title`, or "<Country> map point" when untitled; a sight's `name`; a
-// waypoint's `name`.
+// `title`, or "<label> map point" when untitled; a sight's `name`; a
+// waypoint's `name`. `label` prefers `region` (a state, for a US-scoped guide)
+// over `country`, same display-only preference as the hub/masthead/OG.
 export function collectWaypoints(guide: GuideLike): Waypoint[] {
-  const country = guide?.country || "";
+  const country = guide?.region || guide?.country || "";
   const seen = new Set<string>();
   const out: Waypoint[] = [];
   const push = (lat: unknown, lng: unknown, name: string) => {

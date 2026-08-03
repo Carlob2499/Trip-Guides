@@ -48,6 +48,45 @@
           "lng": 12.9751
         },
         "place_id": "ChIJFfSGlRqkU0YR2r3aiDMawn4"
+      },
+      {
+        "name": "Slottsträdgården",
+        "kicker": "Free organic garden beside the castle moat — open all day",
+        "body": "An organic public garden right next to Malmöhus Castle: lawns, ponds, and sculpture-dotted corners, largely overlooked by day-trippers who stop at the moat and turn back. Free to enter, no set hours in summer. A quiet 15–20 minute add-on to the castle stop — good for a bench break or a packed lunch before continuing to the old town.",
+        "map": {
+          "lat": 55.6035512,
+          "lng": 12.9881232
+        },
+        "place_id": "ChIJKdO6hqqmU0YRJHb-9DdWhfA",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "source_url": "https://visitsweden.com/where-to-go/southern-sweden/malmo/week-long-city-break/"
+      },
+      {
+        "name": "S:t Petri Church",
+        "kicker": "Malmö's oldest building — 14th-century Baltic Brick Gothic · free, open daily 10:00–18:00",
+        "body": "A three-aisled brick basilica dating to the early 1300s, the oldest standing building in the city. The <b>Krämarekapellet</b> side chapel carries rare surviving medieval frescoes. Free entry for individual visitors, open daily 10:00–18:00 plus during services. About 5 minutes' walk from Lilla Torg — easy to fold into the old-town leg of the day.",
+        "map": {
+          "lat": 55.6069369,
+          "lng": 13.0033475
+        },
+        "place_id": "ChIJuSSfYfyjU0YRK-5BbDS1mzw",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "source_url": "https://www.svenskakyrkan.se/malmo/stpetrikyrka"
+      },
+      {
+        "name": "Malmö Konsthall",
+        "kicker": "Free contemporary art hall, one of Europe's largest exhibition spaces · closed Mondays",
+        "body": "A cavernous single-story exhibition hall near Triangeln station showing rotating contemporary art — free admission, no permanent collection so what's on changes trip to trip. Open Tue–Sun 11:00–17:00 (Wed until 19:00), closed Mondays. A good rainy-day fallback or a 20–30 minute detour if the itinerary's other stops run short — about a 10-minute walk south of the old town.",
+        "map": {
+          "lat": 55.5952974,
+          "lng": 12.998991
+        },
+        "place_id": "ChIJXZ4I8VChU0YRZQFeRRWZlmA",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "source_url": "https://malmokonsthall.se/en/opening-hours/"
       }
     ]
   },
@@ -185,6 +224,169 @@
         "verified_on": "2026-06-15",
         "shelf_life": "venue",
         "source_url": "https://www.visitoslo.com"
+      },
+      {
+        "name": "MUNCH (Munch Museum)",
+        "kicker": "13-story national art museum in Bjørvika · 5 min walk from the Opera House · adult 280 NOK",
+        "body": "Norway's museum for Edvard Munch — the world's largest single-artist collection, including versions of <i>The Scream</i>. Right next to the Opera House on the Bjørvika waterfront, so it pairs naturally with that stop if the free afternoon runs ahead of schedule. Open Wed–Sun 10:00–21:00, Mon–Tue 10:00–18:00. Adult ticket 280 NOK (200 NOK after 18:00); under 25 100 NOK; under 18 free. ⚠ Confirm current hours and price at the official site before going — this is a fast-changing ticket structure.",
+        "map": {
+          "lat": 59.9059037,
+          "lng": 10.7552605
+        },
+        "place_id": "ChIJJ0uE7VtuQUYRGxJdLJL1PmU",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "source_url": "https://www.munch.no/en/buy-tickets/"
+      },
+      {
+        "name": "Ekebergparken",
+        "kicker": "Free sculpture park with the city's best skyline view — open 24/7",
+        "body": "A wooded hillside sculpture park on the fjord's east side with sweeping views back over Oslo and the harbour — free entry, open around the clock, no ticket needed. About 50 sculptures (Dalí, Renoir, Vigeland among them) scattered along forest paths. Reach it by tram 19 toward Ljabru (get off at Ekebergparken stop, ~10 minutes from the city centre) — outside comfortable walking distance from the ferry dock, so it fits best as a deliberate detour rather than a stop folded into the free afternoon's walking loop. Museum pavilion and shop open Wed–Sun 11:00–16:00.",
+        "map": {
+          "lat": 59.8986784,
+          "lng": 10.7597663
+        },
+        "place_id": "ChIJEzh4nO1uQUYR_hSA-yH-wys",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "source_url": "https://ekebergparken.com/en/opening-hours"
+      },
+      {
+        "name": "Fram Museum",
+        "kicker": "Polar-exploration ship museum on Bygdøy · ⚠ needs more time than this layover allows",
+        "body": "Houses the original polar ship <i>Fram</i>, used on Amundsen's South Pole expedition — walk aboard the actual vessel, plus exhibits on Arctic and Antarctic exploration. Open 09:30–18:00 in June. ⚠ Getting to Bygdøy (ferry from Aker Brygge or bus 30) and back eats most of the 2.5-hour free window on its own, so this is realistically a stop for a longer Oslo visit, not this layover — logged here as a repository entry for a future trip rather than something to attempt on Jun 15. Adult ticket ⚠ ≈180 NOK, confirm before going.",
+        "map": {
+          "lat": 59.9033813,
+          "lng": 10.699729
+        },
+        "place_id": "ChIJMcBwszpsQUYReqPeWg4Oe4A",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "source_url": "https://frammuseum.no/the-museum/the_museum-opening_hours___prices/"
+      }
+    ]
+  },
+  {
+    "type": "venues",
+    "group": "Day trips",
+    "title": "Food & shopping in Oslo",
+    "intro": "<p>The ferry layover's free afternoon (~13:00–15:20) leaves time for one real meal plus a short shop, not this whole list — treat it as the repository for return visits and for swapping in if the itinerary above runs ahead of schedule.</p>",
+    "items": [
+      {
+        "name": "Mathallen Oslo",
+        "address": "Vulkan 5",
+        "hours": "Tue–Sat 10:00–20:00, Sun 11:00–18:00, closed Mon",
+        "why": "Oslo's original indoor food hall in a former iron foundry on the Akerselva river — ~30 vendors: fishmongers, cheesemongers, a coffee roaster, hot-food stalls. Arrive before 14:00 for the widest hot-food selection.",
+        "how": "About 20 min walk or a short tram/bus from the city centre — outside the ferry-dock free-afternoon loop, best as a return-visit stop.",
+        "map": {
+          "lat": 59.9222297,
+          "lng": 10.7520516
+        },
+        "place_id": "ChIJLSeTf2VuQUYRw9V12gQwpqU",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "source_url": "https://mathallenoslo.no/en/apningstider/"
+      },
+      {
+        "name": "Vippa",
+        "address": "Akershusstranda 25",
+        "hours": "Tue–Sat 12:00–23:00, Sun 12:00–20:00, closed Mon",
+        "why": "A converted harbourside warehouse right by the fjord with international food stalls (Norwegian seafood, Ethiopian, tacos) — order by QR code, eat at long communal tables with cruise-ship views.",
+        "how": "On the waterfront about 10 minutes' walk from Akershus Fortress — the closest venue on this list to the ferry dock and the free-afternoon walking loop.",
+        "map": {
+          "lat": 59.9019096,
+          "lng": 10.7413824
+        },
+        "place_id": "ChIJG7VUzI9uQUYRWbezdRNgXZg",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "source_url": "https://www.vippa.no/"
+      },
+      {
+        "name": "Fiskeriet Youngstorget",
+        "address": "Youngstorget 2b",
+        "price": "⚠ Fish soup ≈165–298 NOK depending on source and year — confirm before going",
+        "why": "A well-regarded fish counter and casual sit-down spot on Youngstorget — fish and chips, fish soup, and a case of fresh catch to take away.",
+        "map": {
+          "lat": 59.9145153,
+          "lng": 10.7496987
+        },
+        "place_id": "ChIJcyZ0NmJuQUYRwFeRww7iAxs",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "source_url": "https://www.fiskeriet.net/meny-youngstorget"
+      },
+      {
+        "name": "Illegal Burger",
+        "address": "Møllergata 23",
+        "hours": "Mon–Thu 16:00–21:00, Fri 16:00–23:00, Sat 14:00–23:00, Sun 14:00–21:00",
+        "why": "A cult-favourite charcoal-grilled burger joint, one of the places credited with starting Oslo's gourmet burger wave — a fast, reliable option near Youngstorget if time is short.",
+        "book": "walk-in",
+        "map": {
+          "lat": 59.9157181,
+          "lng": 10.7486653
+        },
+        "place_id": "ChIJ9Zy9G2ZuQUYRbid6pMmGDUo",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "source_url": "https://www.tripadvisor.com/Restaurant_Review-g190479-d2056861-Reviews-Illegal_Burger-Oslo_Eastern_Norway.html"
+      },
+      {
+        "name": "Paleet",
+        "address": "Karl Johans gate 37–43",
+        "hours": "Mon–Fri 10:00–20:00, Sat 10:00–18:00, closed Sun",
+        "why": "A compact upscale shopping mall directly on Karl Johans gate, midway between the Royal Palace and Central Station — around 40 fashion, jewelry, and specialty stores plus cafés.",
+        "map": {
+          "lat": 59.914252,
+          "lng": 10.7376318
+        },
+        "place_id": "ChIJA8iwdX1uQUYRMaNNoMjAFBc",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "source_url": "http://www.paleet.no/"
+      },
+      {
+        "name": "Heimen Husfliden",
+        "address": "Arbeidergata 1 (Rosenkrantz' gate)",
+        "hours": "Mon–Fri 10:00–18:00, Sat 10:00–17:00, closed Sun",
+        "why": "Traditional Norwegian handicrafts and knitwear since 1892 — genuine Norwegian wool sweaters, bunad accessories, and folk-craft souvenirs, a more traditional counterpoint to the design shops on Karl Johans gate.",
+        "map": {
+          "lat": 59.9146097,
+          "lng": 10.7405708
+        },
+        "place_id": "ChIJmWXVFX1uQUYRSuAzOBOhwXg",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "source_url": "https://heimenhusfliden.no/"
+      },
+      {
+        "name": "Norway Designs",
+        "address": "Lille Grensen 7",
+        "hours": "Mon–Fri 10:00–19:00, Sat 10:00–18:00, closed Sun",
+        "why": "A long-standing Scandinavian design shop — glassware, ceramics, jewelry, and textiles from Norwegian and Nordic makers, a step up from tourist-shop souvenirs.",
+        "map": {
+          "lat": 59.9137755,
+          "lng": 10.7410498
+        },
+        "place_id": "ChIJzRhSCX5uQUYRw-ihyeFyiLQ",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "source_url": "http://www.norwaydesigns.no/"
+      },
+      {
+        "name": "Fenaknoken",
+        "address": "Akershusstranda 23",
+        "hours": "Mon–Sat ≈10:30–18:00, closed Sun",
+        "why": "A specialty Norwegian food shop near the harbour, open since 1996 — cured meats, brown cheese (brunost), and other traditional Norwegian pantry goods, good for a compact edible souvenir.",
+        "how": "About 5 minutes from Vippa and Akershus Fortress — easy to fold into the free-afternoon waterfront walk.",
+        "map": {
+          "lat": 59.9027259,
+          "lng": 10.7411623
+        },
+        "place_id": "ChIJOzDxEoduQUYRwTo7RCUZ8sM",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "source_url": "http://www.fenaknoken.no/"
       }
     ]
   },

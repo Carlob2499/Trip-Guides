@@ -280,7 +280,7 @@ const contourLayers = [
           )}
           <span class="hub-hero-scrim" aria-hidden="true"></span>
           <span class="hub-hero-body">
-            <span class="hub-hero-eyebrow">{heroIsPast ? "Last trip" : "Next trip"}{hero.g.data.country !== hero.g.data.title ? ` · ${hero.g.data.country}` : ""}</span>
+            <span class="hub-hero-eyebrow">{heroIsPast ? "Last trip" : "Next trip"}{(hero.g.data.region || hero.g.data.country) !== hero.g.data.title ? ` · ${hero.g.data.region || hero.g.data.country}` : ""}</span>
             <span class="hub-hero-title">{hero.g.data.title}</span>
             <span class="hub-hero-meta">
               {heroIsPast
@@ -325,7 +325,7 @@ const contourLayers = [
             data-country={g.data.country}
             data-continent={continentFor(g.data.country)}
             data-start={ex.startISO}
-            data-search={`${g.data.country} ${g.data.title} ${g.data.dek || ""} ${continentFor(g.data.country) || ""}`.toLowerCase()}
+            data-search={`${g.data.country} ${g.data.region || ""} ${g.data.title} ${g.data.dek || ""} ${continentFor(g.data.country) || ""}`.toLowerCase()}
           >
             {g.id === heroId && <span class="hubcard-featured-tag">Featured above</span>}
             {ex.heroImg ? (
@@ -343,7 +343,7 @@ const contourLayers = [
                     the guide's own masthead is born with (uniform application), under the same
                     destination-local sky. The initial letter stays as the plate mark. */}
                 <PaintedAtlas seed={g.id} tz={g.data.tz ?? tzFor(g.data.country)} mini />
-                <span class="hubcard-cover-initial">{g.data.country.slice(0, 1)}</span>
+                <span class="hubcard-cover-initial">{(g.data.region || g.data.country).slice(0, 1)}</span>
               </span>
             )}
             {/* V5: the accent bar morphs into the guide masthead's own accent rule
@@ -354,7 +354,7 @@ const contourLayers = [
             <span class="hubcard-bar" aria-hidden="true" style={g.id === heroId ? undefined : `view-transition-name:accent-${g.id}`}></span>
             <span class="hubcard-body">
               <span class="hubcard-top">
-                <span class="hubcard-country">{g.data.country}</span>
+                <span class="hubcard-country">{g.data.region || g.data.country}</span>
                 {ex.badge && <span class="hubcard-badge">{ex.badge}</span>}
               </span>
               <span class="hubcard-title">{g.data.title}</span>

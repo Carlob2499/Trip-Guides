@@ -259,6 +259,35 @@ describe("content.config guides schema — other field-level gates", () => {
   });
 });
 
+// `region` (session #30) — a display-only state/multi-state override for a country large
+// enough that naming it alone reads broader than the trip is (the US-guide "Sedona" ⇒
+// "United States" mislabel that forced this). `country` must always stay parseable as a
+// real country string (every currency/timezone-fallback/emergency-number/continent lookup
+// keys on it), so this only asserts `region` doesn't loosen or replace that requirement.
+describe("content.config guides schema — region (state/multi-state display override)", () => {
+  it("accepts a guide with no region set (every pre-existing guide)", () => {
+    const result = schema.safeParse(validGuide());
+    expect(result.success).toBe(true);
+  });
+
+  it("accepts a single-state region alongside a real country", () => {
+    const result = schema.safeParse(validGuide({ country: "United States", region: "Arizona" }));
+    expect(result.success).toBe(true);
+  });
+
+  it("accepts a multi-state region string", () => {
+    const result = schema.safeParse(validGuide({ country: "United States", region: "Arizona & Utah" }));
+    expect(result.success).toBe(true);
+  });
+
+  it("still requires country even when region is set", () => {
+    const g: Record<string, unknown> = validGuide({ region: "Arizona" });
+    delete g.country;
+    const result = schema.safeParse(g);
+    expect(result.success).toBe(false);
+  });
+});
+
 describe("content.config guides schema — prose tag allowlist (S2)", () => {
   it("passes clean allowlisted HTML", () => {
     const result = schema.safeParse(
