@@ -61,6 +61,84 @@
           "lng": -111.7791227
         },
         "place_id": "ChIJtaLHeUuhLYcR2ucHxm7xLPQ"
+      },
+      {
+        "name": "Chapel of the Holy Cross",
+        "kicker": "Free, quiet, and open every day",
+        "body": "<p>A modernist chapel built directly into the red rock in 1956, its cross-shaped facade rising above the valley south of town. Free to enter, no reservation needed — open daily 9am–5pm (last entry 4:45pm); the small gift shop keeps slightly shorter hours. South of Sedona proper, well outside the Oak Creek Canyon fire-closure area, so it works as a calm any-time-of-day stop rather than a sunset-only one.</p>",
+        "map": {
+          "lat": 34.8320032,
+          "lng": -111.7667545
+        },
+        "source_url": "https://chapeloftheholycross.com/hours",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "place_id": "ChIJNUDIRJimLYcROwYdn_dH7Mk"
+      },
+      {
+        "name": "Red Rock State Park",
+        "kicker": "A creekside nature preserve, not another formation to climb",
+        "body": "<p>A 286-acre preserve along Oak Creek, ≈10 miles southwest of the \"Y\" — trails loop along the water and up to the House of Apache Fire overlook. A slower, greener counterpoint to the bare-rock stops closer to town, and a genuinely different kind of morning. Open daily 8am–5pm (later in summer); ⚠ ≈$10/adult entrance fee — confirm current rate. It's a state park, not national forest, so the Red Rock Pass doesn't cover it.</p>",
+        "map": {
+          "lat": 34.8129229,
+          "lng": -111.8305634
+        },
+        "source_url": "https://azstateparks.com/red-rock/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "place_id": "ChIJBYUX3zDDJIcR7QsK0gH2_08"
+      },
+      {
+        "name": "Slide Rock State Park",
+        "kicker": "The swim spot — check the closure first",
+        "body": "<p>A natural sandstone water slide into Oak Creek, plus a preserved 1910s apple-orchard homestead. <b>⚠ The Oak Creek swim area itself is closed</b> following Pocket Fire ash and flood debris — sources disagree on the exact reopening date (some cite through Sep 30, one cites early August), so treat swimming as unconfirmed for this trip's dates rather than assuming it's back. The park itself remains open for hiking, picnicking, and the Clifftop Nature Trail regardless. Open daily 8am–5pm; ⚠ ≈$30/car entrance fee (May–Sep rate) — confirm current rate before you go.</p>",
+        "map": {
+          "lat": 34.9435811,
+          "lng": -111.7529307
+        },
+        "source_url": "https://azstateparks.com/slide-rock/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "place_id": "ChIJx6gv-EWiLYcRGwtdgA-Cpt4"
+      },
+      {
+        "name": "Sedona Heritage Museum",
+        "kicker": "Ranching and film history in one short stop",
+        "body": "<p>Housed in the Jordan family's original homestead in Jordan Historical Park, Uptown — orchard equipment and Sedona's decades as a Western-movie filming location, told in a compact, unhurried space. Open daily 11am–3pm; ⚠ ≈$10 adult admission (children under 13 free) — confirm current rate.</p>",
+        "map": {
+          "lat": 34.8782048,
+          "lng": -111.7625374
+        },
+        "source_url": "http://www.sedonamuseum.org/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "place_id": "ChIJFeZEA-CjLYcRSwXCyzCtalM"
+      },
+      {
+        "name": "Amitabha Stupa & Peace Park",
+        "kicker": "Free hilltop quiet, no photo-op crowd",
+        "body": "<p>Two Buddhist stupas, a Shakyamuni Buddha statue, and a Native American medicine wheel on a red-rock ridge in west Sedona — a short uphill walk to a genuinely quiet spot rather than a staged one. Free to visit; ⚠ on-site parking hours vary by season (≈8:30am–5:30/6pm) — confirm before a very early or late visit.</p>",
+        "map": {
+          "lat": 34.8754993,
+          "lng": -111.8084021
+        },
+        "source_url": "https://www.tara.org/amitabha-stupa/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "place_id": "ChIJ__jUZx6hLYcReAZ0dYPRgzM"
+      },
+      {
+        "name": "Red Rock Crossing / Crescent Moon Picnic Site",
+        "kicker": "The classic Cathedral Rock reflection shot",
+        "body": "<p>Cathedral Rock mirrored in Oak Creek, from a Forest Service picnic site ≈7 miles southwest of town — a calmer, different vantage than hiking the formation itself. South of the fire-closure area, unaffected by it. Open 7am–7pm through September; requires the Red Rock Pass or a separate day-use fee (⚠ ≈$15/vehicle — confirm current rate).</p>",
+        "map": {
+          "lat": 34.826592,
+          "lng": -111.8070889
+        },
+        "source_url": "http://www.fs.usda.gov/recarea/coconino/recarea/?recid=55286",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "place_id": "ChIJ_1QxaOCmLYcRCrgQAjVzbXQ"
       }
     ]
   }
