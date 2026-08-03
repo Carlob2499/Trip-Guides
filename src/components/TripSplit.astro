@@ -7,7 +7,13 @@ const { storeKey } = Astro.props;
 
 <!-- Behavior lives in the src/features/trip-split silo (imported in the GuideLayout
      bundle via its index.ts) — the id-keyed calculator + settlement + minor-unit split
-     engine, plus (when Firebase is configured) the shared live room. Markup only. -->
+     engine, plus (when Firebase is configured) the shared live room. Markup only.
+
+     ORDER IS THE DESIGN (2026-08-02): people → what you spent → what it means. The panel
+     used to read People → Total → Results → Expenses, which put the entry form at the very
+     bottom and the answer ~500px above it: you typed an expense and the number it changed
+     was off-screen behind you. Cause now precedes effect, so the results card is always the
+     thing below the row you just filled in. -->
 <div class="split-wrap" id="tripSplit" role="tabpanel" aria-labelledby="gtab-split" hidden data-sk={storeKey}>
 
   <div class="split-toolbar">
@@ -38,7 +44,7 @@ const { storeKey } = Astro.props;
     Anyone with this guide’s link can see the names and payment handles you add here — don’t add anything you wouldn’t share with the group.
   </p>
 
-  <!-- People -->
+  <!-- 1 · People -->
   <div class="split-card">
     <div class="sc-head">
       <span class="sc-label">People on this trip</span>
@@ -49,31 +55,13 @@ const { storeKey } = Astro.props;
     </div>
   </div>
 
-  <!-- Summary bar -->
-  <div class="split-summary" id="sSummary" hidden>
-    <span class="split-summary-lbl">Total spend</span>
-    <span class="split-summary-val" id="sTotalUSD">$0.00</span>
-  </div>
-
-  <!-- Results -->
-  <div class="split-card split-results-card" id="sResults" hidden>
-    <div class="sc-head"><span class="sc-label">Balances</span></div>
-    <div id="sBalances"></div>
-    <div class="split-settle-head">
-      <span class="sc-label">Who pays who</span>
-      <span class="split-settle-count" id="sSettleCount"></span>
-      <button class="sc-add-btn" id="sCopySettle" type="button">⧉ Copy</button>
-    </div>
-    <div id="sSettlements"></div>
-  </div>
-
-  <!-- Expenses -->
+  <!-- 2 · Expenses -->
   <div class="split-card">
     <div class="sc-head">
       <span class="sc-label">Expenses</span>
-      <div class="sc-mode-toggle">
+      <div class="sc-mode-toggle" role="group" aria-label="How to split each expense">
         <button class="scm-btn scm-active" id="sModeEven" type="button">÷ Even</button>
-        <button class="scm-btn" id="sModeCustom" type="button">Custom amounts</button>
+        <button class="scm-btn" id="sModeCustom" type="button">Custom</button>
       </div>
     </div>
     <!-- Add-expense box — boxed off so it never reads as a blank/broken row. -->
@@ -83,21 +71,46 @@ const { storeKey } = Astro.props;
         <button class="sc-add-expense-btn" id="sAddExpense" type="button">+ Add expense</button>
       </div>
       <div class="se-new-row">
-        <select class="split-in se-payer" id="sNewPayer"></select>
-        <input class="split-in se-desc" type="text" placeholder="What for?" id="sNewDesc" />
+        <input class="split-in se-desc" type="text" placeholder="What for?" id="sNewDesc" aria-label="What the expense was for" />
+        <select class="split-in se-payer" id="sNewPayer" aria-label="Who paid"></select>
         <div class="se-amt-wrap"><span class="se-cur">$</span>
-          <input class="split-in se-amt" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" id="sNewAmt" />
+          <input class="split-in se-amt" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" id="sNewAmt" aria-label="Amount" />
         </div>
       </div>
     </div>
 
+    <!-- Column labels belong to the DESKTOP row grid; on phones the rows restack and the
+         header would be labelling columns that no longer exist, so CSS hides it there. -->
     <div class="se-header">
-      <span class="se-h-payer">Paid by</span>
       <span class="se-h-desc">What for</span>
+      <span class="se-h-payer">Paid by</span>
       <span class="se-h-amt">Amount</span>
     </div>
     <div class="sc-body" id="sExpenseList">
       <p class="split-empty">Add people first, then record who paid what.</p>
+    </div>
+  </div>
+
+  <!-- 3 · What it means. The total used to float between cards as a lone bar; it is the
+       headline of this card, not a fifth sibling. -->
+  <div class="split-card split-results-card" id="sResults" hidden>
+    <div class="sr-total">
+      <span class="sr-total-lbl">Total spend</span>
+      <span class="sr-total-val" id="sTotalUSD">$0.00</span>
+    </div>
+
+    <div class="sr-sec">
+      <span class="sc-label">Balances</span>
+      <div id="sBalances"></div>
+    </div>
+
+    <div class="sr-sec">
+      <div class="split-settle-head">
+        <span class="sc-label">Who pays who</span>
+        <span class="split-settle-count" id="sSettleCount"></span>
+        <button class="sc-add-btn" id="sCopySettle" type="button">⧉ Copy</button>
+      </div>
+      <div id="sSettlements"></div>
     </div>
   </div>
 

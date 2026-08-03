@@ -229,8 +229,8 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
       var mid = esc(m.id);
       return "<div class='sm-row'>" +
         "<span class='sm-idx'>" + (i + 1) + "</span>" +
-        "<input class='split-in sm-name' type='text' placeholder='Name' value='" + esc(m.name) + "' data-mid='" + mid + "' data-field='name' />" +
-        "<input class='split-in sm-pay' type='text' placeholder='Venmo / Zelle / Kakao Pay…' value='" + esc(m.payment || "") + "' data-mid='" + mid + "' data-field='payment' />" +
+        "<input class='split-in sm-name' type='text' placeholder='Name' value='" + esc(m.name) + "' data-mid='" + mid + "' data-field='name' aria-label='Name of person " + (i + 1) + "' />" +
+        "<input class='split-in sm-pay' type='text' placeholder='Venmo / Zelle / Kakao Pay…' value='" + esc(m.payment || "") + "' data-mid='" + mid + "' data-field='payment' aria-label='Payment handle for " + esc(m.name || "person " + (i + 1)) + "' />" +
         "<button class='split-del' type='button' data-del-m='" + mid + "' aria-label='Remove " + esc(m.name || "person") + "'>×</button>" +
         "</div>";
     }).join("");
@@ -299,11 +299,14 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
           }).join("") +
           (diff > 0.015 ? "<span class='se-warn'>Shares sum " + fmtUSD(sumCA) + " — total is " + fmtUSD(total) + "</span>" : "") + "</div>";
       }
+      // Description FIRST — it is the row's identity, and source order is what places the
+      // desktop grid (mobile re-places these by grid-area). Keep this in step with
+      // .se-header / .se-new-row in trip-split.css: what for · paid by · amount · delete.
       return "<div class='se-row' data-eid='" + eid + "'><div class='se-main'>" +
-        "<select class='split-in se-payer' data-eid='" + eid + "'>" + memberOptions(exp.paidBy) + "</select>" +
-        "<input class='split-in se-desc' type='text' placeholder='What for?' value='" + esc(exp.desc || "") + "' data-eid='" + eid + "' data-field='desc' />" +
+        "<input class='split-in se-desc' type='text' placeholder='What for?' value='" + esc(exp.desc || "") + "' data-eid='" + eid + "' data-field='desc' aria-label='What the expense was for' />" +
+        "<select class='split-in se-payer' data-eid='" + eid + "' aria-label='Who paid'>" + memberOptions(exp.paidBy) + "</select>" +
         "<div class='se-amt-wrap'><span class='se-cur'>$</span>" +
-        "<input class='split-in se-amt' type='number' min='0' step='0.01' inputmode='decimal' placeholder='0.00' value='" + (exp.amount != null ? String(exp.amount) : "") + "' data-eid='" + eid + "' data-field='amount' /></div>" +
+        "<input class='split-in se-amt' type='number' min='0' step='0.01' inputmode='decimal' placeholder='0.00' value='" + (exp.amount != null ? String(exp.amount) : "") + "' data-eid='" + eid + "' data-field='amount' aria-label='Amount' /></div>" +
         "<button class='split-del' type='button' data-del-e='" + eid + "' aria-label='Remove expense'>×</button>" +
         "</div>" + partBlock + customBlock + "</div>";
     }).join("");
