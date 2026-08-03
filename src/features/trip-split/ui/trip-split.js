@@ -30,6 +30,7 @@ import { buildBudgetSummary } from "../model/summary";
 import { printBudgetSummary } from "./budget-sheet.js";
 import { formatMinor, toBaseMinor, BASE_CURRENCY, CURRENCY_EXPONENT } from "../model/money";
 import { normalizeExpense, normalizeMember, normalizePayment } from "../model/records";
+import { planMemberRemoval, applyExpensePatch } from "../model/undo";
 import { hasFirebase, joinTrip, roomId as guideRoomId, isPostTripLocked } from "../../firebase/index.js";
 import { getLastRate } from "../../live-data/index.js";
 import { tripWindow } from "../../../lib/trip-dates";
@@ -84,6 +85,14 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
   var filter = { q: "", who: "", cat: "" };
   /* Below this many expenses, scanning beats searching and a filter bar is just chrome. */
   var FILTER_FROM = 6;
+  /* One slot, holding the last deletion. Deleting is the only action here that destroys
+     something nobody can reconstruct — the × sits 32px from an amount field on a phone, the
+     room is editable by anyone with the guide link, and until now a mistap was final.
+     ONE slot, not a stack: a second delete supersedes the first, which is the standard and
+     keeps the reversal a single unambiguous "put that back". No timer — a wrong deletion is
+     often noticed a minute later, and a window that closes on its own would be a window
+     that closes exactly when it is needed. It clears when undone, dismissed, or superseded. */
+  var undoSlot = null;
 
   function newId() { return "i" + Math.random().toString(36).slice(2, 9); }
   function nextOrder() { return Date.now(); }
@@ -231,32 +240,39 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
     if (room) { var p = {}; p[field] = value; room.collection("members").update(id, p); }
     else { var m = memberById(id); if (m) { m[field] = value; persist(); if (field === "name") renderNewRowOptions(); renderResults(); } }
   }
+  /** Strip a patch's `id` — it addresses the record, it is not a field of it. */
+  function patchBody(p) {
+    var out = {};
+    Object.keys(p).forEach(function (k) { if (k !== "id") out[k] = p[k]; });
+    return out;
+  }
+  /* Removing a person REWRITES other records — who paid, split weights, participant
+     snapshots. Both modes now apply one plan computed by model/undo.js, which also hands
+     back the exact before-state, so the reversal is the plan run backwards rather than a
+     second guess at what the removal did. */
   function opMemberDel(id) {
     if (LOCKED) return;
+    var pos = memberPos(id); if (pos === -1) return;
+    var member = state.members[pos];
+    var plan = planMemberRemoval(state.members, state.expenses, id);
+    setUndo({
+      kind: "member",
+      label: member.name || "that person",
+      id: id,
+      index: pos,
+      record: (roomRawMembers && roomRawMembers[id]) || null,
+      member: Object.assign({}, member),
+      restore: plan.restore,
+    });
     if (room) {
       room.collection("members").remove(id);
-      var fallback = (state.members.filter(function (x) { return x.id !== id; })[0] || {}).id || "";
-      state.expenses.forEach(function (e) {
-        if (e.paidBy === id) room.collection("expenses").update(e.id, { paidBy: fallback });
-        if (e.weights && (id in e.weights)) { var w = Object.assign({}, e.weights); delete w[id]; room.collection("expenses").update(e.id, { weights: w }); }
-        // Drop the departed member from any expense that named them. If they were the ONLY
-        // sharer, clear the list — that reverts the expense to the whole group rather than
-        // leaving it shared by nobody.
-        if (e.participants && e.participants.indexOf(id) !== -1) {
-          var pruned = e.participants.filter(function (x) { return x !== id; });
-          room.collection("expenses").update(e.id, { participants: pruned.length ? pruned : null });
-        }
-      });
+      plan.patches.forEach(function (p) { room.collection("expenses").update(p.id, patchBody(p)); });
     } else {
-      var pos = memberPos(id); if (pos === -1) return;
       state.members.splice(pos, 1);
-      state.expenses.forEach(function (e) {
-        if (e.paidBy === id) e.paidBy = state.members.length ? state.members[0].id : "";
-        if (e.weights) delete e.weights[id];
-        if (e.participants) { var pr = e.participants.filter(function (x) { return x !== id; }); e.participants = pr.length ? pr : null; }
-      });
+      plan.patches.forEach(function (p) { var e = expenseById(p.id); if (e) applyExpensePatch(e, p); });
       persist(); render();
     }
+    renderUndo();
   }
   function opAddExpense(data) {
     if (LOCKED) return;
@@ -317,8 +333,67 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
   }
   function opExpenseDel(id) {
     if (LOCKED) return;
+    var pos = -1;
+    for (var i = 0; i < state.expenses.length; i++) if (state.expenses[i].id === id) { pos = i; break; }
+    if (pos === -1) return;
+    setUndo({
+      kind: "expense",
+      label: state.expenses[pos].desc || "that expense",
+      id: id,
+      index: pos,
+      // The room's RAW record, when there is one: it carries createdBy/createdAt, which are
+      // what a legacy record with no `order` is sorted by. Restoring from the normalized
+      // copy would drop them and float the row to the top of the list.
+      record: (roomRawExpenses && roomRawExpenses[id]) || null,
+      expense: Object.assign({}, state.expenses[pos]),
+    });
     if (room) { room.collection("expenses").remove(id); }
-    else { for (var i = 0; i < state.expenses.length; i++) if (state.expenses[i].id === id) { state.expenses.splice(i, 1); break; } persist(); renderExpenses(); renderResults(); }
+    else { state.expenses.splice(pos, 1); persist(); renderExpenses(); renderResults(); }
+    renderUndo();
+  }
+
+  /* ── undo ────────────────────────────────────────────────────────────────── */
+  function setUndo(entry) { undoSlot = entry; }
+  /** Everything the record shape defines, minus the id (which is the key, not a field). */
+  function recordBody(obj) {
+    var out = {};
+    Object.keys(obj).forEach(function (k) { if (k !== "id" && obj[k] !== undefined) out[k] = obj[k]; });
+    return out;
+  }
+  function undoLast() {
+    var u = undoSlot;
+    if (!u || LOCKED) return;
+    undoSlot = null;
+    if (u.kind === "expense") {
+      // set(), not add(): the ORIGINAL id comes back, so nothing that referenced it dangles
+      // and the row lands in its old place rather than at the end.
+      if (room) room.collection("expenses").set(u.id, u.record || recordBody(u.expense));
+      else { state.expenses.splice(Math.min(u.index, state.expenses.length), 0, u.expense); persist(); }
+    } else {
+      if (room) {
+        room.collection("members").set(u.id, u.record || recordBody(u.member));
+        u.restore.forEach(function (p) { room.collection("expenses").update(p.id, patchBody(p)); });
+      } else {
+        state.members.splice(Math.min(u.index, state.members.length), 0, u.member);
+        u.restore.forEach(function (p) { var e = expenseById(p.id); if (e) applyExpensePatch(e, p); });
+        persist();
+      }
+    }
+    // In synced mode the room's own echo re-renders; render() here anyway so the on-device
+    // path updates and the undo bar clears the moment it is used, in both modes.
+    render();
+    renderUndo();
+  }
+  function renderUndo() {
+    var bar = document.getElementById("sUndo");
+    if (!bar) return;
+    bar.hidden = !undoSlot;
+    if (!undoSlot) return;
+    var txt = document.getElementById("sUndoText");
+    if (txt) {
+      txt.textContent = "Removed " + (undoSlot.kind === "member" ? "" : "“") + undoSlot.label +
+        (undoSlot.kind === "member" ? " from the trip" : "”");
+    }
   }
   // Toggle one person in/out of an expense. Excluding the last sharer is refused — an
   // expense nobody shares has no meaning.
@@ -782,6 +857,9 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
      someone edits that expense and gives it a rule of its own. Rooms are never rewritten by
      this — the server's records are left exactly as they are. */
   var roomRawExpenses = null;
+  // The raw member map too — undo restores a deleted record verbatim (see opMemberDel), and
+  // the normalized copy has already dropped createdBy/createdAt.
+  var roomRawMembers = null;
   var roomLegacyCustom = false;
 
   function applyRoomExpenses() {
@@ -803,6 +881,7 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
     offFns.push(members.onChange(function (map) {
       // Was a hand-copied field list — the same shape of code that dropped `participants`
       // from expenses. Both echoes now go through the one normalizer.
+      roomRawMembers = map;
       state.members = orderedFrom(map).map(normalizeMember);
       applyRoomExpenses(); // snapshots for legacy records follow the current roster
       renderRemote();
@@ -941,6 +1020,11 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
       if (filterQ) filterQ.focus();
     });
   }
+
+  var undoBtn = document.getElementById("sUndoBtn");
+  if (undoBtn) undoBtn.addEventListener("click", undoLast);
+  var undoDismiss = document.getElementById("sUndoDismiss");
+  if (undoDismiss) undoDismiss.addEventListener("click", function () { undoSlot = null; renderUndo(); });
 
   var copySettleBtn = document.getElementById("sCopySettle");
   if (copySettleBtn) {

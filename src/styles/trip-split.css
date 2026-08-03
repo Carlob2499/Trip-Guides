@@ -278,3 +278,49 @@ select.split-in{cursor:pointer}
 #tripSplit[data-locked] .split-in:disabled,#tripSplit[data-locked] button:disabled{opacity:.72;cursor:default}
 #tripSplit[data-locked] .sc-add-btn,#tripSplit[data-locked] .sc-add-expense-btn,
 #tripSplit[data-locked] .se-new-card,#tripSplit[data-locked] .split-del{display:none}
+
+/* UNDO BAR. Deleting is the only action in this panel that destroys something nobody can
+   reconstruct, and the × sits ~32px from an amount field on a phone. Anchored to the bottom
+   of the VIEWPORT rather than to the top of the panel: the row you just deleted can be forty
+   rows down, and an undo you have to scroll to find is not an undo. Same ink-on-bg treatment
+   as .toast, which already clears contrast in both themes. */
+.split-undo{
+  position:fixed;left:50%;bottom:1.1rem;transform:translateX(-50%);z-index:var(--z-toast);
+  display:flex;align-items:center;gap:.5rem;
+  max-width:calc(100vw - 1.6rem);
+  padding:.4rem .4rem .4rem 1rem;
+  background:var(--ink);color:var(--bg);
+  border-radius:999px;box-shadow:0 6px 24px rgba(10,14,18,.32)
+}
+/* --text-small, not the --text-control-sm the other pills use: this is a SENTENCE about
+   something that just disappeared, read once under mild alarm, not a badge being glanced at. */
+.su-text{
+  font-family:var(--font-data);font-size:var(--text-small);letter-spacing:.02em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+.su-btn{
+  flex:none;min-height:34px;padding:.3rem .95rem;
+  font-family:var(--font-display);font-size:var(--text-control);font-weight:640;
+  color:var(--ink);background:var(--bg);border:none;border-radius:999px;cursor:pointer
+}
+.su-btn:hover{background:var(--accent);color:var(--on-accent)}
+.su-x{
+  flex:none;width:30px;height:30px;padding:0;line-height:1;
+  font-size:var(--text-control);color:var(--bg);background:none;border:none;
+  border-radius:50%;cursor:pointer;opacity:.7
+}
+.su-x:hover{opacity:1}
+.su-btn:focus-visible,.su-x:focus-visible{outline:2px solid var(--bg);outline-offset:2px}
+/* Both controls read smaller than they are hit — expand the target to 44px without
+   inflating the pill, the same trick .split-del uses. */
+.su-btn,.su-x{position:relative}
+.su-btn::after,.su-x::after{content:"";position:absolute;inset:-7px}
+@media(prefers-reduced-motion:no-preference){
+  .split-undo{animation:su-rise .18s var(--ease-out-expo,ease-out)}
+  @keyframes su-rise{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+}
+/* On phones the bottom tab bar owns the bottom edge — sit above it, matching the offset the
+   field tools already use. */
+@media(max-width:899px){
+  .split-undo{bottom:5.2rem}
+}

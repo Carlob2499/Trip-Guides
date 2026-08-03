@@ -153,4 +153,15 @@ const { storeKey } = Astro.props;
     </div>
   </div>
 
+  <!-- Undo for the one action here that destroys something nobody can reconstruct. Fixed to
+       the bottom of the viewport on purpose: the × that deletes an expense can be forty rows
+       down, so an undo anchored to the top of the panel would appear off-screen — exactly
+       where it is not. It lives INSIDE the tabpanel so leaving the Budget tab takes it with
+       it (the panel's `hidden` removes its descendants from layout). -->
+  <div class="split-undo" id="sUndo" role="status" aria-live="polite" hidden>
+    <span class="su-text" id="sUndoText"></span>
+    <button class="su-btn" id="sUndoBtn" type="button">Undo</button>
+    <button class="su-x" id="sUndoDismiss" type="button" aria-label="Dismiss">×</button>
+  </div>
+
 </div>

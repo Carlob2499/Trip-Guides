@@ -205,3 +205,71 @@ test("categories drive a spend breakdown, and stay hidden until one exists", asy
   await expect(page.locator("#sCategories")).toBeVisible();
   await expect(page.locator(".sc-cat").filter({ hasText: "Transport" })).toHaveCount(1);
 });
+
+/* UNDO. The assertions that matter are not "a row came back" but "the trip is byte-identical
+   to what it was" — deleting a PERSON rewrites who paid, split weights and participant
+   snapshots across other expenses, and a reversal that restores the row while leaving those
+   rewritten would be the worse bug: quiet, and wrong in the numbers. */
+test("deleting an expense is reversible, and the balances come back exactly", async ({ page }) => {
+  await openWith(page, PRE_V2);
+  await expect(page.locator("#sUndo")).toBeHidden();
+  const before = await saved(page);
+  const balances = await page.locator(".sb-row").allTextContents();
+
+  const bbq = page.locator(".se-row").filter({ has: page.locator(".se-desc[value*='BBQ']") });
+  await bbq.locator("[data-del-e]").click();
+
+  await expect(page.locator(".se-row")).toHaveCount(3);
+  await expect(page.locator("#sUndoText")).toHaveText(/Korean BBQ dinner night 1/);
+  await expect(page.locator("#sTotalUSD")).toHaveText("$105.00");
+
+  await page.locator("#sUndoBtn").click();
+  await expect(page.locator(".se-row")).toHaveCount(4);
+  await expect(page.locator("#sUndo")).toBeHidden();
+  await expect(page.locator("#sTotalUSD")).toHaveText("$201.40");
+  expect(await page.locator(".sb-row").allTextContents()).toEqual(balances);
+  expect(await saved(page)).toEqual(before);
+});
+
+test("undoing a person's removal also un-does the rewrites it caused", async ({ page }) => {
+  await openWith(page, PRE_V2);
+  const before = await saved(page);
+
+  // 김민준 paid the BBQ dinner AND is one of the two sharers of the jimjilbang, so removing
+  // them touches a payer, a participant snapshot, and the balances all at once.
+  const row = page.locator(".sm-row").filter({ has: page.locator(".sm-name[value='김민준']") });
+  await row.locator("[data-del-m]").click();
+
+  await expect(page.locator(".sm-row")).toHaveCount(2);
+  await expect(page.locator("#sUndoText")).toHaveText(/김민준/);
+  const stripped = await saved(page);
+  expect(stripped.expenses[1].paidBy).toBe(before.members[0].id);        // reassigned to Carlo
+  expect(stripped.expenses[2].participants).toEqual([before.members[0].id]);
+
+  await page.locator("#sUndoBtn").click();
+  await expect(page.locator(".sm-row")).toHaveCount(3);
+  // Not just "the person is back" — every field their removal rewrote is back too.
+  expect(await saved(page)).toEqual(before);
+});
+
+test("the undo bar can be dismissed, and a second deletion supersedes the first", async ({ page }) => {
+  await openWith(page, PRE_V2);
+
+  await page.locator(".se-row").first().locator("[data-del-e]").click();
+  await expect(page.locator("#sUndo")).toBeVisible();
+  await page.locator("#sUndoDismiss").click();
+  await expect(page.locator("#sUndo")).toBeHidden();
+  await expect(page.locator(".se-row")).toHaveCount(3);   // dismissing is not undoing
+
+  // The list runs newest-first, so .first() takes the top of what remains each time:
+  // Jimjilbang, then the BBQ dinner.
+  await page.locator(".se-row").first().locator("[data-del-e]").click();
+  await page.locator(".se-row").first().locator("[data-del-e]").click();
+  await expect(page.locator(".se-row")).toHaveCount(1);
+  // One slot: the bar names the LAST deletion, and undo returns exactly that one — the
+  // two before it stay gone.
+  await expect(page.locator("#sUndoText")).toHaveText(/Korean BBQ dinner night 1/);
+  await page.locator("#sUndoBtn").click();
+  await expect(page.locator(".se-row")).toHaveCount(2);
+  await expect(page.locator(".se-row").first().locator(".se-desc")).toHaveValue("Korean BBQ dinner night 1");
+});
