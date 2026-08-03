@@ -91,6 +91,19 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
 
           var TAB_KEY = "tg-tab-" + STORE_KEY;
 
+          /* R3 — the journey line's stations. A section you have moved on from stays solid;
+             the one you are in fills as you scroll it (the progress-bar block below). Kept in
+             sessionStorage so a reload inside one visit doesn't wipe the route walked, and NOT
+             in localStorage — next week's visit is a new journey. */
+          var SEEN_KEY = "tg-seen-" + STORE_KEY;
+          var seen = {};
+          try { seen = JSON.parse(sessionStorage.getItem(SEEN_KEY) || "{}") || {}; } catch (_) { seen = {}; }
+          function markSeen(key) {
+            if (key == null || seen[key]) return;
+            seen[key] = 1;
+            try { sessionStorage.setItem(SEEN_KEY, JSON.stringify(seen)); } catch (_) {}
+          }
+
           function showTab(idx) {
             var isSpecial = typeof idx === "string" && hasPanel(idx);
             catblocks.forEach(function (b, i) { b.hidden = isSpecial || i !== idx; });
@@ -99,10 +112,16 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
               if (panel) panel.hidden = !(isSpecial && idx === key);
             });
             if (guideTabs) {
+              // Leaving a section counts as having been through it.
+              var leaving = guideTabs.querySelector(".gtab-active:not(.gtab-tool)");
+              if (leaving && leaving.dataset.tab !== (isSpecial ? idx : String(idx))) markSeen(leaving.dataset.tab);
               guideTabs.querySelectorAll(".gtab").forEach(function (btn) {
                 var match = btn.dataset.tab === (isSpecial ? idx : String(idx));
                 btn.setAttribute("aria-selected", match ? "true" : "false");
                 btn.classList.toggle("gtab-active", match);
+                if (Object.prototype.hasOwnProperty.call(seen, btn.dataset.tab)) btn.dataset.visited = "";
+                // A section not yet walked starts empty; the scroll handler fills it.
+                if (match && !(btn.dataset.tab in seen)) btn.style.setProperty("--st-fill", "0");
               });
               // Scroll active tab into view
               var active = guideTabs.querySelector(".gtab-active");
@@ -518,14 +537,21 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           (function () {
             var bar = document.getElementById("readProg");
             if (!bar) return;
-            // R3: on desktop the fixed bar retires and this same percentage fills the
-            // horizon line instead (--journey-read on the tabs nav) — one object, two meanings.
+            /* R3: on desktop the fixed bar retires and the journey line carries the same
+               percentage. It used to be a second accent bar sliding along the track, over the
+               circles — which read as a separate object crossing them, and never lined up with
+               either. The percentage now fills the ACTIVE STATION itself, and a station you
+               have finished with stays solid (data-visited, set in showTab). One thing filling,
+               instead of three things at three offsets. */
             var horizonNav = document.querySelector(".guide-tabs-nav");
             function updateBar() {
               var max = document.body.scrollHeight - window.innerHeight;
               var pct = max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0;
               bar.style.width = pct + "%";
-              if (horizonNav) horizonNav.style.setProperty("--journey-read", String(pct));
+              if (!horizonNav) return;
+              horizonNav.style.setProperty("--journey-read", String(pct));
+              var active = horizonNav.querySelector(".gtab-active:not(.gtab-tool)");
+              if (active) active.style.setProperty("--st-fill", String(Math.round(pct)));
             }
             window.addEventListener("scroll", updateBar, { passive: true });
             window.addEventListener("resize", updateBar);

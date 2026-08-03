@@ -155,16 +155,48 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
    Overture (once per arrival, per MOTION.md): the track draws in, stations settle. */
 @media(min-width:900px){
   .read-prog{display:none}
-  .guide-tabs-nav{position:relative}
-  .guide-tabs-nav::before{content:"";position:absolute;left:1.1rem;right:1.1rem;bottom:calc(.5rem + 14px);height:2px;background:var(--rule2);transform-origin:left center}
-  .guide-tabs-nav::after{content:"";position:absolute;left:1.1rem;bottom:calc(.5rem + 13.5px);height:3px;width:calc((100% - 2.2rem)*var(--journey-read,0)/100);max-width:calc(100% - 2.2rem);background:var(--accent);border-radius:3px;pointer-events:none}
+  /* ONE geometry, declared once. The line and the stations used to be positioned by two
+     unrelated hand-tuned offsets, and they disagreed: the rail's centre sat 6.5px above the
+     stations', so the track ran through the TOP EDGE of every circle instead of its middle,
+     and the accent fill was a third thickness at a fourth offset. Derive both from the dot
+     so they cannot drift apart again. */
+  .guide-tabs-nav{
+    position:relative;
+    --st-d:15px;      /* station diameter, ring included (border-box) */
+    --st-ring:2px;
+    --st-bottom:9px;  /* station's bottom edge, from the nav's bottom */
+    --rail-h:2px
+  }
+  .guide-tabs-nav::before{
+    content:"";position:absolute;left:1.1rem;right:1.1rem;
+    /* dead centre of the stations: their bottom, plus half of what is left over */
+    bottom:calc(var(--st-bottom) + (var(--st-d) - var(--rail-h))/2);
+    height:var(--rail-h);background:var(--rule2);transform-origin:left center
+  }
   .guide-tabs{border-bottom:0;padding-bottom:.5rem}
   .gtab:not(.gtab-tool){position:relative;background:none;border-radius:6px;padding:.3rem .7rem 1.55rem;min-height:0;z-index:1}
-  .gtab:not(.gtab-tool)::after{content:"";position:absolute;left:50%;transform:translateX(-50%);bottom:9px;width:11px;height:11px;border-radius:50%;background:var(--bg);border:2px solid var(--muted);transition:background .18s,border-color .18s,box-shadow .18s}
+  /* The station fills from the bottom as the reader moves through the guide (--st-fill,
+     0–100, set by guide-ui.js). The sweeping accent bar along the track is gone: a bar that
+     slid over the circles read as a separate object crossing them. The circles ARE the
+     progress now — one thing, filling. */
+  .gtab:not(.gtab-tool)::after{
+    content:"";position:absolute;left:50%;transform:translateX(-50%);
+    bottom:var(--st-bottom);width:var(--st-d);height:var(--st-d);box-sizing:border-box;
+    border-radius:50%;border:var(--st-ring) solid var(--muted);
+    background:linear-gradient(to top,
+      var(--accent) calc(var(--st-fill,0)*1%), var(--bg) calc(var(--st-fill,0)*1%));
+    transition:border-color .18s,box-shadow .18s
+  }
   .gtab:not(.gtab-tool):hover{background:none;transform:none;color:var(--ink)}
   .gtab:not(.gtab-tool):hover::after{border-color:var(--ink)}
+  /* Somewhere you have already been stays solid — the line reads as a route walked, not a
+     bar that happens to be partly coloured. */
+  .gtab:not(.gtab-tool)[data-visited]::after{--st-fill:100;border-color:var(--accent)}
   .gtab.gtab-active:not(.gtab-tool){background:none;box-shadow:none;color:var(--accent-ink);font-weight:700}
-  .gtab.gtab-active:not(.gtab-tool)::after{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 22%,transparent)}
+  .gtab.gtab-active:not(.gtab-tool)::after{border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 22%,transparent)}
+  @media(prefers-reduced-motion:no-preference){
+    .gtab:not(.gtab-tool)::after{transition:border-color .18s,box-shadow .18s,background .12s linear}
+  }
   .gtab-tool{position:relative;z-index:1;background:var(--bg)}
   @media(prefers-reduced-motion:no-preference){
     .guide-tabs-nav::before{animation:horizonDraw .9s cubic-bezier(.2,.7,.2,1) .15s backwards}
