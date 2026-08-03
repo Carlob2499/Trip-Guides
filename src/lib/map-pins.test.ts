@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { derivePins, derivePlannerData, pinSlug } from "./map-pins";
+import { derivePins, derivePlannerData, pinCategories, pinSlug } from "./map-pins";
 import type { Section, SectionOf } from "./guide-types";
 
 /* M6: these fixtures are DELIBERATELY partial — several cases exist precisely to prove these
@@ -109,5 +109,62 @@ describe("derivePlannerData", () => {
 
   it("treats a days section with an empty items array as having no days", () => {
     expect(derivePlannerData(guide([{ type: "days", items: [] }]))).toEqual({ days: [], pins: [], hasCoords: false });
+  });
+});
+
+/* The repository turn (2026-08-03): a guide is browsed on the street, not only followed, so
+   its restaurants and shops have to exist on its own map. They could not: derivePins read
+   `sights` sections and nothing else, while the schema had always allowed `map` on a venue —
+   so the omission read as "no venue has coordinates" instead of "a venue can never be pinned".
+   Measured across the four shipped guides at the time: 32 of 159 sights+venues items were
+   mappable, and all 32 were sights. */
+describe("derivePins — venues", () => {
+  const mapA = { type: "map", title: "Seoul", center: { lat: 37.5, lng: 127.0 } };
+  const sights = { type: "sights", group: "Sights", items: [
+    { name: "Gyeongbokgung", map: { lat: 37.5796, lng: 126.977 }, place_id: "ChIJ_palace" },
+  ]};
+  const food = { type: "venues", group: "Food & shopping", items: [
+    { name: "Tosokchon Samgyetang", map: { lat: 37.5779, lng: 126.9718 } },
+    { name: "Un-geocoded stall" },                      // skipped, not invented
+  ]};
+
+  it("pins venues alongside sights on the primary map", () => {
+    const pins = derivePins(guide([mapA, sights, food])).get(asMap(mapA))!;
+    expect(pins.map((p) => p.kind)).toEqual(["center", "sight", "venue"]);
+    expect(pins[2]).toMatchObject({ name: "Tosokchon Samgyetang", cat: "Food & shopping" });
+  });
+
+  it("tags each pin with its section group, so the map can filter by it", () => {
+    const pins = derivePins(guide([mapA, sights, food])).get(asMap(mapA))!;
+    expect(pins[1].cat).toBe("Sights");
+    expect(pins[0].cat).toBeNull();                     // the centre belongs to no category
+  });
+
+  it("carries place_id through when the content has one, null when it doesn't", () => {
+    const pins = derivePins(guide([mapA, sights, food])).get(asMap(mapA))!;
+    expect(pins[1].placeId).toBe("ChIJ_palace");
+    expect(pins[2].placeId).toBeNull();
+  });
+
+  it("still skips anything without coordinates rather than guessing a location", () => {
+    const pins = derivePins(guide([mapA, food])).get(asMap(mapA))!;
+    expect(pins.some((p) => p.name === "Un-geocoded stall")).toBe(false);
+  });
+});
+
+describe("pinCategories", () => {
+  const pins = [
+    { id: "c", name: "c", lat: 0, lng: 0, local: null, kind: "center" as const, cat: null, placeId: null },
+    { id: "a", name: "a", lat: 0, lng: 0, local: null, kind: "sight" as const, cat: "Sights", placeId: null },
+    { id: "b", name: "b", lat: 0, lng: 0, local: null, kind: "venue" as const, cat: "Food & shopping", placeId: null },
+    { id: "d", name: "d", lat: 0, lng: 0, local: null, kind: "venue" as const, cat: "Sights", placeId: null },
+  ];
+
+  it("lists each category once, in first-seen order, ignoring the centre", () => {
+    expect(pinCategories(pins)).toEqual(["Sights", "Food & shopping"]);
+  });
+
+  it("returns nothing when there is nothing to filter", () => {
+    expect(pinCategories([pins[0]])).toEqual([]);
   });
 });

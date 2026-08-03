@@ -86,6 +86,24 @@ richer → a typed section), lead-first bodies, day `tldr`s, the ≤10-group tab
 defined and enforced by the **`waypoint-guide-author` skill** (`references/`). That skill
 is their single home; this file names the principle without repeating detail.
 
+**Sights and Food are REPOSITORIES, not itinerary echoes (creator ruling 2026-08-03).** A
+guide is browsed on the street, not only followed: a traveller who exhausts the plan must
+still have somewhere to go and something to eat. So these sections carry MORE than the days
+use — options the itinerary never schedules, across neighbourhoods, price points and times of
+day. The measurement that forced this: Japan shipped 27 day-entries against 10 sights, Korea 8
+against 6. A guide whose sights run out mid-trip is not Actionable, whatever else it is.
+The floor is a research-time judgement, not a number to pad toward — and padding it from
+training data fails the bar test outright. Breadth comes from research passes with primary
+sources, or it does not come.
+
+**Every visitable thing earns coordinates.** `sights` and `venues` items share the `visitable`
+fields (`place_id` · `dwell_min` · `closed_days`) and a `map` coord. Without coords an item is
+invisible on the guide's own map, which is where a repository becomes usable ("what is near me
+that I haven't eaten at"). Backfill with `node scripts/geocode-venues.mjs --slug <guide>`
+(propose) then `--write` — it refuses any name-mismatched result rather than guessing, and an
+unresolved venue stays blank. `place_id` is the ONE Google field cacheable indefinitely under
+Places' policy; everything else Places returns is re-fetched, never stored.
+
 ---
 
 ## Architectural Guardrails

@@ -7,6 +7,8 @@
    Key safety: the key is a PUBLIC browser key by design — restrict it to this
    site's HTTP referrers and to the Maps JavaScript API in Google Cloud Console. */
 
+import { clusterPins } from "../model/cluster";
+
 /* global google */ // injected on window by the Maps JS SDK once its loader script resolves
 export function boot(cfg) {
   var mounts = Array.prototype.slice.call(document.querySelectorAll("[data-itin-map]"));
@@ -104,19 +106,93 @@ export function boot(cfg) {
     return m;
   }
 
+  /* A cluster of several pins draws as one count bubble; clicking it zooms in rather than
+     opening a popup, because at that zoom the question is "what's in there", not "which one". */
+  function addCluster(api, map, cluster) {
+    var el = document.createElement("div");
+    el.className = "map-cluster";
+    el.textContent = String(cluster.pins.length);
+    var m = new api.marker.AdvancedMarkerElement({
+      map: map, position: { lat: cluster.lat, lng: cluster.lng }, content: el,
+      title: cluster.pins.map(function (p) { return p.name; }).slice(0, 6).join("\n"),
+    });
+    m.addListener("click", function () {
+      var b = new google.maps.LatLngBounds();
+      cluster.pins.forEach(function (p) { b.extend({ lat: p.lat, lng: p.lng }); });
+      map.fitBounds(b, 60);
+    });
+    return m;
+  }
+
   function initMap(api, mount, data) {
     var map = makeMap(api, mount, data);
-    var coords = [];
-    (data.pins || []).forEach(function (pin) {
-      if (typeof pin.lat !== "number" || typeof pin.lng !== "number") return;
-      addMarker(api, map, pin);
-      coords.push([pin.lat, pin.lng]);
+    var all = (data.pins || []).filter(function (p) {
+      return typeof p.lat === "number" && typeof p.lng === "number";
     });
-    if (coords.length > 1) {
+    if (!all.length) return;
+
+    /* Which categories are switched on. Starts as everything — a map that hides content until
+       you opt in would be a map that looks empty. */
+    var cats = [];
+    all.forEach(function (p) {
+      if (p.cat && p.kind !== "center" && cats.indexOf(p.cat) === -1) cats.push(p.cat);
+    });
+    var off = {};
+    var markers = [];
+
+    function visible() {
+      return all.filter(function (p) { return p.kind === "center" || !p.cat || !off[p.cat]; });
+    }
+
+    function draw() {
+      markers.forEach(function (m) { m.map = null; });
+      markers = [];
+      var pins = visible();
+      // The centre is chrome, not content — it never clusters and never counts.
+      var centre = pins.filter(function (p) { return p.kind === "center"; });
+      var rest = pins.filter(function (p) { return p.kind !== "center"; });
+      centre.forEach(function (p) { markers.push(addMarker(api, map, p)); });
+      clusterPins(rest, map.getZoom() || 13).forEach(function (c) {
+        markers.push(c.pins.length === 1 ? addMarker(api, map, c.pins[0]) : addCluster(api, map, c));
+      });
+    }
+
+    draw();
+    // Re-cluster on zoom: the grouping is a function of zoom, so it has to follow it.
+    map.addListener("zoom_changed", function () { draw(); });
+
+    if (cats.length > 1) buildChips(mount, cats, off, function () { draw(); });
+
+    if (all.length > 1) {
       var b = new google.maps.LatLngBounds();
-      coords.forEach(function (c) { b.extend({ lat: c[0], lng: c[1] }); });
+      all.forEach(function (p) { b.extend({ lat: p.lat, lng: p.lng }); });
       map.fitBounds(b, 40);
     }
+  }
+
+  /* Filter chips, built from the categories the guide actually has (map-pins.ts derives them
+     from section groups). Only rendered when there is more than one — a single chip is chrome
+     that filters nothing. */
+  function buildChips(mount, cats, off, onChange) {
+    var bar = document.createElement("div");
+    bar.className = "map-chips";
+    bar.setAttribute("role", "group");
+    bar.setAttribute("aria-label", "Filter map by category");
+    cats.forEach(function (cat) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "map-chip map-chip-on";
+      b.textContent = cat;
+      b.setAttribute("aria-pressed", "true");
+      b.addEventListener("click", function () {
+        off[cat] = !off[cat];
+        b.classList.toggle("map-chip-on", !off[cat]);
+        b.setAttribute("aria-pressed", off[cat] ? "false" : "true");
+        onChange();
+      });
+      bar.appendChild(b);
+    });
+    mount.insertBefore(bar, mount.firstChild);
   }
 
   function init(mount) {

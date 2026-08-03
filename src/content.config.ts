@@ -143,6 +143,28 @@ const mapPoint = z.object({
   local_script_name: z.string().optional(), // native-script name for taxi/local display
 });
 
+/* Fields a VISITABLE thing carries — shared by `sights` and `venues`, because a palace and a
+   ramen counter answer the same three questions once a guide stops being a bare itinerary and
+   starts being a repository you browse on the street.
+
+   · place_id — the Google Place ID. Deliberately the ONE Google field stored permanently:
+     Places' own policy forbids caching Place content but names the ID as its sole exception
+     (developers.google.com/maps/documentation/places/web-service/policies). It upgrades every
+     Directions deep-link from a bare coordinate to THE business, which is the difference
+     between "navigate to this point" and "navigate to this restaurant". Same
+     verified-or-flagged convention as mapPoint above — never guessed.
+   · dwell_min — how long the visit actually takes. Without it a day plan cannot be checked for
+     being over-packed, which is the single most common way a researched itinerary fails in
+     practice: every entry is true, and the day is still impossible.
+   · closed_days — the weekdays it is shut, as DATA. Guides already state this in prose
+     ("closed Tuesdays" on Gyeongbokgung), where nothing can verify it against the day the
+     traveller is actually there. Structured, a build can refuse to ship a Tuesday visit. */
+const visitable = {
+  place_id: z.string().optional(),
+  dwell_min: z.number().int().positive().optional(),
+  closed_days: z.array(z.enum(["mon", "tue", "wed", "thu", "fri", "sat", "sun"])).optional(),
+};
+
 // The kinds of section a guide can contain. Each one lists the fields it
 // needs; if a content file gets one wrong, the build fails with a clear message.
 // NOTE: when adding a new type here, also add it to Block.astro and CLAUDE.md.
@@ -260,6 +282,7 @@ const section = z.discriminatedUnion("type", [
     name: z.string(), kicker: z.string().optional(), body: z.string().optional(),
     img: z.object({ file: z.string(), alt: z.string().optional() }).optional(),
     map: coord.optional(),
+    ...visitable,
     ...provenance,
   })) }),
   // P5: scannable venue cards — structured food/shopping/activity picks replacing prose blocks.
@@ -277,6 +300,7 @@ const section = z.discriminatedUnion("type", [
     crowd_tip: z.string().optional(),
     why: z.string().optional(),
     map: coord.optional(),
+    ...visitable,
     ...provenance,
     // Section-level provenance too, same as panel/prose/list. Its absence was silent until the
     // union went strict: three denmark venues sections carried a real verified_on that zod

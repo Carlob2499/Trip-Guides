@@ -14,7 +14,15 @@ export type Pin = {
   lat: number;
   lng: number;
   local: string | null;   // native-script name (taxi display), when present
-  kind: "center" | "point" | "sight";
+  kind: "center" | "point" | "sight" | "venue";
+  /** The section GROUP this pin came from ("Sights", "Food & shopping", "Day trips"…), used
+      as the map's filter category. Deliberately the group rather than a fixed enum: groups are
+      what the guide itself decided its content is, and they differ per guide by design —
+      Korea has "Pokémon GO", Denmark does not. null for the map's own centre. */
+  cat: string | null;
+  /** Google Place ID when the content carries one — lets a Directions link name THE business
+      rather than a coordinate. */
+  placeId: string | null;
 };
 
 // Stable, human-readable pin id from a display name; shared with SightsBlock so
@@ -69,13 +77,23 @@ export function derivePlannerData(sections: Section[]): { days: PlannerDay[]; pi
 export function derivePins(sections: Section[]): Map<SectionOf<"map">, Pin[]> {
   const flat = flattenSections(sections || []);
   const maps = flat.filter((s): s is SectionOf<"map"> => s.type === "map" && hasCoords(s.center));
-  const sightPins: Pin[] = flat
-    .filter((s): s is SectionOf<"sights"> => s.type === "sights")
-    .flatMap((s) => s.items || [])
-    .filter((it) => hasCoords(it.map))
-    .map((it) => ({
+  /* Every VISITABLE thing the guide carries coordinates for — sights AND venues.
+     `venues` was excluded here for as long as this file existed, which made the exclusion
+     invisible: the schema has always allowed `map` on a venue, so the omission read as "no
+     venue has coordinates" rather than "venues can never be pinned". Measured before this
+     change: 32 of 159 sights+venues items were mappable, and every one of the 32 was a sight.
+     A guide meant to be browsed on the street — "what is near me that I haven't eaten at" —
+     cannot answer that while its restaurants are structurally absent from its own map. */
+  const placePins: Pin[] = flat
+    .filter((s): s is SectionOf<"sights"> | SectionOf<"venues"> => s.type === "sights" || s.type === "venues")
+    .flatMap((s) => (s.items || []).map((it) => ({ it, sec: s })))
+    .filter(({ it }) => hasCoords(it.map))
+    .map(({ it, sec }) => ({
       id: pinSlug(it.name), name: it.name,
-      lat: it.map!.lat, lng: it.map!.lng, local: null, kind: "sight" as const,
+      lat: it.map!.lat, lng: it.map!.lng, local: null,
+      kind: (sec.type === "sights" ? "sight" : "venue") as "sight" | "venue",
+      cat: sec.group || null,
+      placeId: it.place_id || null,
     }));
 
   const out = new Map<SectionOf<"map">, Pin[]>();
@@ -83,16 +101,32 @@ export function derivePins(sections: Section[]): Map<SectionOf<"map">, Pin[]> {
     const pins: Pin[] = [{
       id: `center-${i}`, name: sec.title || "Map area",
       lat: sec.center.lat, lng: sec.center.lng, local: null, kind: "center",
+      cat: null, placeId: null,
     }];
     for (const p of sec.points || []) {
       if (!hasCoords(p)) continue;
       pins.push({
         id: pinSlug(p.name), name: p.name, lat: p.lat, lng: p.lng,
         local: p.local_script_name || null, kind: "point",
+        cat: sec.group || null, placeId: p.place_id || null,
       });
     }
-    if (i === 0) pins.push(...sightPins);
+    if (i === 0) pins.push(...placePins);
     out.set(sec, pins);
   });
+  return out;
+}
+
+/** The distinct categories present in a pin set, in first-seen order — the filter chips the
+    map should offer. Derived rather than configured so a guide that invents a new group gets
+    a chip for free, and a guide with one group gets no chrome it doesn't need. */
+export function pinCategories(pins: Pin[]): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const p of pins) {
+    if (!p.cat || p.kind === "center" || seen.has(p.cat)) continue;
+    seen.add(p.cat);
+    out.push(p.cat);
+  }
   return out;
 }
