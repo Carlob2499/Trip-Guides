@@ -111,7 +111,13 @@
         "pace": "Balanced day — market in the morning, Mt. Moiwa in the afternoon",
         "energy": "balanced",
         "env": "outdoor",
-        "body": "<p>Start at <b>Nijo Market</b> for a crab/uni breakfast, then head to <b>Mt. Moiwa</b> — ropeway + cable car to the 531m summit (open through mid-November), or one of five marked hiking trails (2.4–4.5km, ≈1–1.5 hr) if you'd rather earn the view. Low elevation keeps snow risk minimal this early.</p>"
+        "body": "<p>Start at <b>Nijo Market</b> for a crab/uni breakfast, then head to <b>Mt. Moiwa</b> — ropeway + cable car to the 531m summit (open through mid-November), or one of five marked hiking trails (2.4–4.5km, ≈1–1.5 hr) if you'd rather earn the view. Low elevation keeps snow risk minimal this early.</p>",
+        "plan_b": {
+          "trigger": "closure",
+          "body": "Mt. Moiwa's ropeway suspends for wind without notice (the operator's own page warns of this). If it's down, or the trails are too slick to hike, swap the summit for the <b>Sapporo Beer Museum</b> — free entry, self-guided, inside the original 1890 brick brewery, a ≈20 min tram + walk from Nijo Market. Nijo Market's stalls stay open regardless of weather.",
+          "source_url": "https://www.sapporobeer.jp/english/brewery/s_museum/",
+          "verified_on": "2026-08-03"
+        }
       },
       {
         "date": "Mon Oct 26",
@@ -120,7 +126,13 @@
         "pace": "Day trip — ≈35 min each way by JR rapid train",
         "energy": "balanced",
         "env": "outdoor",
-        "body": "<p>Otaru's canal district is a genuinely popular day trip, and independent reviews agree the main stretch runs tour-bus-crowded even on weekdays — today being a Monday is deliberate, the quietest weekday option in this block. Walk the canal in the morning, then continue north past the main photo-spot stretch for a calmer, less-crowded angle. Sushi-dori has a wide price spread between tourist-priced and local-priced counters — ask around rather than walking into the first storefront.</p>"
+        "body": "<p>Otaru's canal district is a genuinely popular day trip, and independent reviews agree the main stretch runs tour-bus-crowded even on weekdays — today being a Monday is deliberate, the quietest weekday option in this block. Walk the canal in the morning, then continue north past the main photo-spot stretch for a calmer, less-crowded angle. Sushi-dori has a wide price spread between tourist-priced and local-priced counters — ask around rather than walking into the first storefront.</p>",
+        "plan_b": {
+          "trigger": "rain",
+          "body": "Heavy rain trades the canal walk for the <b>Otaru Music Box Museum</b> — free entry, three floors inside an 1912 building, 2 min from the canal's north end, open daily 9:00–18:00. Sushi-dori's counters are indoors too, so lunch plans don't change.",
+          "source_url": "https://www.otaru-orgel.co.jp/",
+          "verified_on": "2026-08-03"
+        }
       },
       {
         "date": "Tue Oct 27",
@@ -129,7 +141,13 @@
         "pace": "Day trip — ≈1h15 each way by JR Limited Express, aim to arrive by 9:15",
         "energy": "balanced",
         "env": "outdoor",
-        "body": "<p>JR Limited Express Hokuto to Noboribetsu (≈1h15), then a short bus to <b>Jigokudani</b> (Hell Valley) — a free, 24hr geothermal valley. Leave Sapporo early enough to arrive before ≈10:00, when tour buses reliably start filling the area. Continue to <b>Oyunuma</b>'s crater lake and natural footbath for a longer loop (90 min–2 hrs total) if energy allows, then back to Sapporo by evening.</p>"
+        "body": "<p>JR Limited Express Hokuto to Noboribetsu (≈1h15), then a short bus to <b>Jigokudani</b> (Hell Valley) — a free, 24hr geothermal valley. Leave Sapporo early enough to arrive before ≈10:00, when tour buses reliably start filling the area. Continue to <b>Oyunuma</b>'s crater lake and natural footbath for a longer loop (90 min–2 hrs total) if energy allows, then back to Sapporo by evening.</p>",
+        "plan_b": {
+          "trigger": "rain",
+          "body": "Jigokudani's boardwalk is exposed with nowhere to shelter, so a real downpour is worth skipping rather than enduring. <b>Yumoto Sagiriyu</b>, Noboribetsu's public bathhouse — five indoor baths plus a sauna, ⚠ ≈¥500 adult — is a 5-min walk from the valley entrance and open 9:00–21:00 daily. Trade the view for a soak, then the JR Limited Express back to Sapporo whenever you're ready.",
+          "source_url": "http://sagiriyu-noboribetsu.com/",
+          "verified_on": "2026-08-03"
+        }
       },
       {
         "date": "Wed Oct 28",
@@ -141,7 +159,13 @@
         "body": "<p>Jozankei's official autumn trail list has 8 graded routes. <b>Asahi-dake</b> (598m, 3.3km, ≈3 hrs round trip) is the best-documented option — officially \"moderate,\" though recent hiker reports describe rope sections and exposure, so treat the grading as optimistic if you're not confident on technical ground. If that's more than the day calls for, the easier <b>Mt. Yuhi</b> trail is the gentler alternative. Skip the harder routes (Mt. Sapporo, Mt. Muine) this late in October — they sit right at the elevation where early snow can already be an issue.</p>",
         "constraints": [
           "Higashione Course on Mt. Jozankei Tengu is officially closed"
-        ]
+        ],
+        "plan_b": {
+          "trigger": "rain",
+          "body": "Rope sections on Asahi-dake get slick and exposed in rain — not worth the risk for the view. Jozankei is itself a hot-spring town: <b>SHIKAnoYU</b> offers day-use bathing (⚠ ≈¥1,000–1,500 depending on time of day), a straightforward swap from trail to soak with nothing to rebook.",
+          "source_url": "https://shikanoyu.co.jp/en/shikanoyu/spa/day",
+          "verified_on": "2026-08-03"
+        }
       },
       {
         "date": "Thu Oct 29",
@@ -201,7 +225,13 @@
         "body": "<p>JR Senseki Line to <b>Matsushimakaigan Station</b> (not \"Matsushima Station\") for the bay — one of Japan's official Three Scenic Views. Quick stop at Godaido for the classic shot, then out to Fukuura Island's pine-forest trails or up to Saigyo Modoshi no Matsu Park for a quieter, elevated view away from the waterfront crowd. <b>Note:</b> today is Culture Day (a national holiday), which likely means a busier bay than a normal weekday — budget extra patience at Godaido.</p>",
         "constraints": [
           "Nov 3 is Culture Day — a public holiday, likely busier than a normal weekday"
-        ]
+        ],
+        "plan_b": {
+          "trigger": "rain",
+          "body": "Rain flattens the bay view and empties Fukuura Island's outdoor pine trails. <b>Zuiganji Temple</b> — one of Tōhoku's most important Zen temples, a 5-min walk from Matsushimakaigan Station — keeps you under cover in its historic halls and rock-cut caves, open 8:30–15:30 daily. ⚠ Admission reported anywhere from ¥700–1,000 adult depending on source — confirm at the gate.",
+          "source_url": "https://www.japan-guide.com/e/e5102.html",
+          "verified_on": "2026-08-03"
+        }
       },
       {
         "date": "Wed Nov 4",
@@ -210,7 +240,13 @@
         "pace": "Day trip — ≈90 min–2 hrs each way via the Rikuu East Line",
         "energy": "balanced",
         "env": "outdoor",
-        "body": "<p>The regular (non-special) JR Rikuu East Line local to Naruko-Onsen Station — the scenic \"Yukemuri\" observation train's autumn special only runs weekends/holidays, and today's a Wednesday, so this uses the ordinary service instead (same route, same views). At the gorge: arrive at opening (≈8:30) or after ≈14:00 to avoid the 11:00–15:00 tour-bus crush. <b>Honest note:</b> the full historic trail was permanently shortened after 2011 earthquake damage — expect a partial trail plus the resthouse observation bridge, not a complete historic hike.</p>"
+        "body": "<p>The regular (non-special) JR Rikuu East Line local to Naruko-Onsen Station — the scenic \"Yukemuri\" observation train's autumn special only runs weekends/holidays, and today's a Wednesday, so this uses the ordinary service instead (same route, same views). At the gorge: arrive at opening (≈8:30) or after ≈14:00 to avoid the 11:00–15:00 tour-bus crush. <b>Honest note:</b> the full historic trail was permanently shortened after 2011 earthquake damage — expect a partial trail plus the resthouse observation bridge, not a complete historic hike.</p>",
+        "plan_b": {
+          "trigger": "rain",
+          "body": "Heavy rain (or an early-season closure of the gorge's already-shortened post-2011 trail) still leaves Naruko itself, one of Tōhoku's oldest hot-spring towns. <b>Takinoyu</b>, a public bath fed straight from the town's original thousand-year-old source, is a 5-min walk from Naruko-Onsen Station, open 7:30–21:00 daily. ⚠ Admission reported ¥150–300 depending on source — small enough not to plan around.",
+          "source_url": "https://en.japantravel.com/miyagi/taki-no-yu-hot-spring-in-naruko/15284",
+          "verified_on": "2026-08-03"
+        }
       },
       {
         "date": "Thu Nov 5",

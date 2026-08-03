@@ -88,6 +88,47 @@ describe("check-research — widened provenance advisory (D2)", () => {
     const msgs = infos(guide).map((f) => f.msg);
     expect(msgs.some((m) => m.includes("Tipping"))).toBe(false);
   });
+
+  // A days[] item's plan_b (the researched inclement-day alternate, 2026-08-02) is
+  // schema-REQUIRED to carry its own source_url + verified_on. The first Japan pass to use it
+  // tripped this exact advisory on every one of its six plan_b entries — the day item itself
+  // has no verified_on, and the hard-fact scan doesn't look inside plan_b, so a price hedged
+  // with ⚠ right next to a real date still read as "undated".
+  it("does not flag a day whose only hard fact lives in an already-dated plan_b", () => {
+    const guide = {
+      verified: "⚠ draft",
+      sections: [{
+        type: "days", group: "Days", title: "Days",
+        items: [{
+          date: "Jan 1", title: "Otaru day trip", body: "Walk the canal in the morning.",
+          plan_b: {
+            trigger: "rain", body: "Trade the canal for the museum, ⚠ ≈¥500 admission.",
+            source_url: "https://example.com", verified_on: "2026-08-03",
+          },
+        }],
+      }],
+    };
+    const msgs = infos(guide).map((f) => f.msg);
+    expect(msgs.some((m) => m.includes("Otaru day trip"))).toBe(false);
+  });
+
+  it("still flags a day whose OWN body has an undated hard fact alongside a covered plan_b", () => {
+    const guide = {
+      verified: "⚠ draft",
+      sections: [{
+        type: "days", group: "Days", title: "Days",
+        items: [{
+          date: "Jan 1", title: "Otaru day trip", body: "Lunch runs ¥2,000 per person.",
+          plan_b: {
+            trigger: "rain", body: "Trade the canal for the museum.",
+            source_url: "https://example.com", verified_on: "2026-08-03",
+          },
+        }],
+      }],
+    };
+    const msgs = infos(guide).map((f) => f.msg);
+    expect(msgs.some((m) => m.includes("Otaru day trip"))).toBe(true);
+  });
 });
 
 describe("check-research — D2 promoted to blocking (E3) on provenance:\"strict\" guides", () => {

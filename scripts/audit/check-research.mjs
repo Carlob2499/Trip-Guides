@@ -154,6 +154,14 @@ export function checkResearchGuide(guide, slug) {
     if (s.type === "list") continue;
     for (const it of s.items || []) {
       if (it.verified_on) continue;
+      // A days[] item's plan_b is schema-REQUIRED to carry its own source_url + verified_on
+      // (the alternate names a venue, so it's perishable like any other claim). Its hard facts
+      // (the ⚠-hedged price/hours in plan_b.body) are already dated right there — checking only
+      // the outer item's verified_on flagged every plan_b as "undated" the moment it had a
+      // price in it, even though the one field that actually covers it was one level down.
+      const outerText = JSON.stringify({ ...it, plan_b: undefined });
+      const planBCovered = it.plan_b?.verified_on && hasHardFact(JSON.stringify(it.plan_b)) && !hasHardFact(outerText);
+      if (planBCovered) continue;
       const itemText = JSON.stringify(it);
       if (hasHardFact(itemText)) {
         const itemLabel = it.name || it.title || it.label || it.date || "?";
