@@ -108,6 +108,78 @@
     ]
   },
   {
+    "type": "sights",
+    "group": "Sights",
+    "title": "Busan (day trip)",
+    "items": [
+      {
+        "name": "Gamcheon Culture Village",
+        "kicker": "Colorful hillside village",
+        "body": "Pastel-painted houses stacked up a hillside above the harbor, laced with mural lanes, small galleries and cafés — Busan's most photographed neighbourhood. Free and open-air, so effectively 24/7, though the shops and the Tourist Information Center keep their own hours (09:00–18:00 Mar–Oct, 09:00–17:00 Nov–Feb). It's on the opposite (west) side of Busan from Haeundae, roughly 40–50 min by taxi or subway+bus — outside the Jul 13 day-trip's Haeundae-only plan, so treat it as the reason to come back to Busan for longer, not a same-day add-on.",
+        "map": {
+          "lat": 35.097393499999995,
+          "lng": 129.0105921
+        },
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "source_url": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=72894",
+        "place_id": "ChIJUToRo7fpaDURo_ZMItcBfpc"
+      },
+      {
+        "name": "Jagalchi Market",
+        "kicker": "Korea's largest fish market",
+        "body": "A sprawling harbourfront seafood market — tanks of live fish, octopus and shellfish on the ground floor, with upstairs halls that will clean, cook and serve whatever you just bought for a small prep fee. Open 05:00–22:00 daily, closed the 1st and 3rd Tuesday of each month. Jagalchi Station (Line 1), Exit 10, ~5 min walk. On the Nampo-dong/BIFF side of the city — pair it with BIFF Square and Gukje Market if you're spending a day on that side rather than Haeundae.",
+        "map": {
+          "lat": 35.0966339,
+          "lng": 129.0307965
+        },
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "source_url": "https://creatrip.com/en/blog/10912",
+        "place_id": "ChIJudkrFArpaDURbbCzajeQs0c"
+      },
+      {
+        "name": "BIFF Square",
+        "kicker": "Film-festival street & street food",
+        "body": "The original home of the Busan International Film Festival before it moved to Centum City — handprints of Korean and international stars set into the pavement, plus a dense street-food strip (look for ssiat hotteok, the seed-stuffed Busan-style sweet pancake). Free, open-air and effectively 24/7, though individual stalls run roughly 11:00–22:00 and vary by vendor. In Jung-gu, on the same side of town as Jagalchi and Gukje Market.",
+        "map": {
+          "lat": 35.098243,
+          "lng": 129.029212
+        },
+        "verified_on": "2026-08-03",
+        "shelf_life": "hours",
+        "source_url": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=95411",
+        "place_id": "ChIJL1scg6DpaDURxXQZg1kWGZ4"
+      },
+      {
+        "name": "Gwangalli Beach",
+        "kicker": "Busan's other beach, minus the crowds",
+        "body": "A long sand beach with the Gwangan Bridge lit up across the bay at night and a strip of cafés and bars behind it (Millak-dong) — a quieter, less touristy alternative to Haeundae, one subway stop further on Line 2 (via Gwangan Station). Free, open 24/7. Worth swapping in for part of the Jul 13 afternoon if Haeundae feels too packed, or saving for a future trip with more Busan time.",
+        "map": {
+          "lat": 35.1531696,
+          "lng": 129.118666
+        },
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "source_url": "https://en.wikipedia.org/wiki/Gwangalli_Beach",
+        "place_id": "ChIJxw7HJy_taDUR-xaSTeHwbf8"
+      },
+      {
+        "name": "Taejongdae",
+        "kicker": "Cliffside park at Busan's southern tip",
+        "body": "A coastal park on Yeongdo island with sea cliffs, a lighthouse and the Sinseonbawi rock formation, reached on foot or by the small Danubi shuttle train (⚠ confirm current fare). Park grounds run roughly 04:00–24:00; the shuttle/ticket office keeps shorter hours (09:00–18:00 Mar–Oct, 09:00–17:00 Nov–Feb). On the Nampo/Yeongdo side of the city, a taxi or bus ride from Haeundae — pairs naturally with Samjin Eomuk (Food & shopping) since both sit in Yeongdo-gu.",
+        "map": {
+          "lat": 35.05307,
+          "lng": 129.0872
+        },
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "source_url": "https://www.busan.go.kr/eng/bsnews01/835148",
+        "place_id": "ChIJOfX1e0zpaDURWq5Hp5x4-SM"
+      }
+    ]
+  },
+  {
     "type": "prose",
     "group": "Sights",
     "title": "Visiting tips",

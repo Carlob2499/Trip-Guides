@@ -33,5 +33,161 @@
       "lng": 127.388
     },
     "span": 0.05
+  },
+  {
+    "type": "sights",
+    "group": "Daejeon & MSI",
+    "title": "Beyond the arena — Daejeon sights",
+    "items": [
+      {
+        "name": "Hanbat Arboretum",
+        "kicker": "Free green break near the base",
+        "body": "A big public arboretum split into East and West Gardens plus an indoor Tropical Garden — one of Korea's largest urban botanical parks, ~1.5 km from DCC II (an easy taxi, or a walkable 20 min). East and Tropical Gardens run 09:00–18:00 (outdoor hours extend to 06:00–21:00 Apr–Sep) and close Mondays; the West Garden closes Tuesdays instead, so at least one half is open any day you go. Free entry, wide shaded paths, good PokéStop density — a solid sun-break between GO Fest raiding sessions. ⚠ Confirm same-day hours; seasonal closing times shift.",
+        "map": {
+          "lat": 36.3688766,
+          "lng": 127.38936100000001
+        },
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "source_url": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=82059",
+        "place_id": "ChIJGeYDXX9JZTURsFJQxqnBPws"
+      },
+      {
+        "name": "Yuseong Hot Springs Public Foot Bath (유성 온천 족욕체험장)",
+        "kicker": "Free hot-spring foot bath",
+        "body": "An open-air public foot bath using natural 40°C hot-spring water — four connected pools that hold ~200 people at once, free to use, open 08:00–22:00 daily. It sits in the Yuseong Hot Springs district (Bongmyeong-dong), a taxi ride from the EXPO/DCC area rather than a walk — worth it as a change of pace between matches, not a quick stroll. Bring a small towel; there's a wash station for your feet before you get in. ⚠ Confirm hours on the day.",
+        "map": {
+          "lat": 36.35476,
+          "lng": 127.347596
+        },
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=139940",
+        "place_id": "ChIJG4RWFx9LZTURX9vocDQZ0T8"
+      },
+      {
+        "name": "Ppuri Park (뿌리공원)",
+        "kicker": "Family-name sculpture park",
+        "body": "A themed park built around filial piety and Korean family/clan names — sculpture gardens, a waterfront stage, a grass square and an observation deck across a wooded hillside in Jung-gu. Free entry; open 06:00–22:00 Mar–Oct and 07:00–21:00 Nov–Feb. It's on the far side of the city from the arena (Jung-gu, ~25–30 min by taxi from DCC II), so it's realistically a 'have a spare afternoon' pick rather than a between-matches one — pairs naturally with Daejeon O-World next door.",
+        "map": {
+          "lat": 36.2854269,
+          "lng": 127.38808350000001
+        },
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue",
+        "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=82392",
+        "place_id": "ChIJ7SzjdmBJZTURYxAh0sZRiU8"
+      },
+      {
+        "name": "Daejeon O-World",
+        "kicker": "Zoo, rides & flower gardens",
+        "body": "A combined zoo, small amusement park (JoyLand) and flower garden on one site in Jung-gu, next to Ppuri Park. ⚠ Pricing runs by section — individual tickets ≈₩12,000 adult, or an all-inclusive day pass ≈₩29,000 adult (confirm current tiers before you go). Hours run roughly 10:30–18:00 (last admission 17:00), with later Saturday hours (to ≈22:00) May–October. Like Ppuri Park, it's a cross-town trip from the arena — a spare-afternoon option, not a between-matches one.",
+        "map": {
+          "lat": 36.2886167,
+          "lng": 127.39691239999998
+        },
+        "verified_on": "2026-08-03",
+        "shelf_life": "hours",
+        "source_url": "https://www.tripadvisor.com/Attraction_Review-g297887-d6904739-Reviews-Daejeon_O_World-Daejeon.html",
+        "place_id": "ChIJXWJF3WFOZTURTmrtYDD54Nk"
+      }
+    ]
+  },
+  {
+    "type": "venues",
+    "group": "Daejeon & MSI",
+    "title": "Beyond the arena — Daejeon food",
+    "intro": "<p>Sungsimdang and the near-base Yuseong-gu picks (Ossi Kalguksu, Cham-i-mat, Gobang Sikdang, Yakiniku Doryong) are covered in the Food & shopping tab. These are further-out, genuinely-different options if you have a gap between matches or want to see more of the city than the 130 m between the I-Hotel and DCC II.</p>",
+    "items": [
+      {
+        "name": "Daejeon Jungang Market (대전중앙시장)",
+        "area": "Dong-gu — near Daejeon Station",
+        "address": "783 Daejeon-ro, Dong-gu",
+        "hours": "General market ≈09:00–19:00; individual food stalls vary — ⚠ confirm same-day",
+        "price": "Street food ≈₩3,000–6,000 per item ⚠",
+        "book": "walk-in",
+        "how": "From Daejeon Station: ~15–20 min walk north on Daejeon-ro, or a short taxi. Jungangno Station (Line 1) is closer still.",
+        "why": "The region's biggest traditional market — 1,700+ stalls across dried-seafood, fish, herbal-medicine and 'delicacy' streets, plus an outdoor food alley (tteokbokki, hotteok, mung-bean pancakes, sundae).",
+        "crowd_tip": "Natural pairing with a Daejeon Station KTX arrival or departure, since it's right there.",
+        "map": {
+          "lat": 36.3295329,
+          "lng": 127.4331895
+        },
+        "place_id": "ChIJwSPdFdxIZTUR2mKqLneQ8cg",
+        "source_url": "https://www.google.com/maps/place/?q=place_id:ChIJwSPdFdxIZTUR2mKqLneQ8cg",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Poongnyeon Samgyetang (풍년삼계탕)",
+        "area": "Dong-gu",
+        "address": "407 Gyejok-ro, Dong-gu",
+        "phone": "042-632-5757",
+        "price": "Nurungji (scorched-rice) samgyetang ≈₩15,000 ⚠",
+        "book": "walk-in",
+        "how": "Near the Jungang Market side of town — a taxi from the I-Hotel/DCC area (~20–25 min).",
+        "why": "Ginseng chicken soup made with Geumsan ginseng, the ingredient Daejeon's own samgyetang is known for — a long-running local pick, not a tourist chain.",
+        "crowd_tip": "⚠ Individual hours unconfirmed — call ahead or check Naver Map same-day.",
+        "map": {
+          "lat": 36.3480598,
+          "lng": 127.43150279999998
+        },
+        "place_id": "ChIJ483dRvlIZTURl4QdXcKfhv0",
+        "source_url": "https://www.google.com/maps/place/?q=place_id:ChIJ483dRvlIZTURl4QdXcKfhv0",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Sutgol Won Naengmyeon (숯골원냉면)",
+        "area": "Yuseong-gu",
+        "address": "18 Sinseong-ro 84beon-gil, Yuseong-gu",
+        "phone": "042-861-3287",
+        "hours": "11:00–20:00 daily (break 15:30–16:30)",
+        "price": "≈₩6,000/bowl",
+        "book": "walk-in",
+        "how": "~15 min by taxi from the I-Hotel.",
+        "why": "A fourth-generation Pyongyang-style naengmyeon house — chicken-broth cold buckwheat noodles from a family that fled south in the Korean War; a cooling lunch alternative to the near-base BBQ-heavy options.",
+        "crowd_tip": "Closed on the 2nd and 4th Wednesdays of the month.",
+        "map": {
+          "lat": 36.390071299999995,
+          "lng": 127.35036249999999
+        },
+        "place_id": "ChIJ4xj3FkxKZTURGOgzIbqRP8w",
+        "source_url": "https://www.google.com/maps/place/?q=place_id:ChIJ4xj3FkxKZTURGOgzIbqRP8w",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Daeseon Kalguksu Main Branch (대선칼국수 본점)",
+        "area": "Seo-gu — Dunsan",
+        "address": "28 Dunsanjung-ro 40beon-gil (2F), Seo-gu",
+        "phone": "042-471-0316",
+        "hours": "11:30–22:00 (break 15:00–17:00; last order 14:30/21:30)",
+        "price": "≈₩9,000–13,000 pp ⚠",
+        "book": "walk-in",
+        "how": "Dunsan-dong, near Daejeon City Hall Station — a taxi from the arena (~15–20 min).",
+        "why": "A 70-plus-year knife-cut noodle institution in the Dunsan government-district area — a genuinely different neighbourhood from Yuseong if you want to see more of the city.",
+        "crowd_tip": "Pairs with a Dunsan-dong shopping detour if you have a free afternoon.",
+        "map": {
+          "lat": 36.3499681,
+          "lng": 127.3882744
+        },
+        "place_id": "ChIJ9ZlESmdJZTURbHRSfCB-38s",
+        "source_url": "https://www.google.com/maps/place/?q=place_id:ChIJ9ZlESmdJZTURbHRSfCB-38s",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Bongmyeong-dong eating street",
+        "area": "Yuseong-gu — by the hot springs",
+        "book": "walk-in",
+        "how": "~5 min walk from the Yuseong Hot Springs foot bath.",
+        "why": "A local eating street around the hot-springs district — seokgalbi (grilled short rib) and gukbap houses locals actually go to, well away from the arena's tourist gravity.",
+        "crowd_tip": "⚠ Specific restaurant names and hours weren't independently verified for this guide — treat this as 'walk the street and pick one,' not a booking, and check Naver Map for what's currently open."
+      }
+    ],
+    "verified_on": "2026-08-03",
+    "shelf_life": "venue",
+    "source_url": "https://map.naver.com"
   }
 ]
