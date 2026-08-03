@@ -1,0 +1,581 @@
+<title>Progress page — round 3, A+B merged</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+  :root{
+    --paper:#ece1c8; --ink:#28221a; --ink-soft:#5b5140;
+    --airmail-red:#b83a30; --airmail-blue:#2c4a72; --line:#c9b98e;
+    /* muted sunset -- toned down from round 2's vivid orange/red per feedback */
+    --sky-1:#d8bd93; --sky-2:#c39d84; --sky-3:#a97f78; --sky-4:#6d5259;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:2.5rem 1.5rem 5rem; background:#d8cba5;
+    background-image:radial-gradient(circle at 20% 15%, rgba(255,255,255,.35), transparent 60%),
+      radial-gradient(circle at 80% 85%, rgba(0,0,0,.08), transparent 55%);
+    font-family: Georgia, "Iowan Old Style", serif; color:var(--ink);
+  }
+  h1.top{font-style:italic; font-weight:700; font-size:clamp(1.5rem,4vw,2.1rem); text-align:center; margin:0 0 .3rem}
+  p.sub{text-align:center; max-width:44rem; margin:0 auto 2.4rem; font-family:"Courier New",monospace;
+    font-size:.85rem; color:var(--ink-soft); line-height:1.6}
+  .rack{display:flex; gap:2rem; flex-wrap:wrap; justify-content:center}
+  .card-slot{width:min(380px, 100%)}
+  .slot-label{font-family:"Courier New",monospace; font-size:.72rem; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--ink-soft); margin:0 0 .7rem; text-align:center}
+  .slot-label b{color:var(--ink)}
+
+  .card{
+    background:var(--paper); border-radius:3px; position:relative; overflow:hidden;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset, 0 16px 30px -14px rgba(40,34,26,.5), 0 2px 6px rgba(40,34,26,.28);
+    filter:url(#grain);
+  }
+
+  /* sky panel w/ ticket header overlaid.
+     aspect-ratio (not a fixed height) so the sky scales UNIFORMLY with the card -- the
+     route SVG stretches with its viewBox, but offset-path's coordinates are plain pixels
+     and do not, so a non-uniform box would walk the plane off its own route on mobile. */
+  .sky{aspect-ratio:380/230; position:relative}
+
+  /* The plane layer is authored at the route's native 380x230 and scaled as one piece,
+     which keeps offset-path's pixel coordinates valid at every width. */
+  .route-space{position:absolute; left:0; top:0; width:380px; height:230px;
+    transform-origin:0 0; transform:scale(var(--sc,1))}
+  .sky-grad{position:absolute; inset:0; background:linear-gradient(180deg,var(--sky-1) 0%,var(--sky-2) 34%,var(--sky-3) 62%,var(--sky-4) 100%)}
+  .sun{position:absolute; top:16%; right:14%; width:30px; height:30px; border-radius:50%;
+    background:radial-gradient(circle,#f4e9d2,#e0c79f 70%,transparent); box-shadow:0 0 18px 5px rgba(224,199,159,.55)}
+  .hill{position:absolute; left:0; right:0; bottom:0; fill:#43323a}
+  .hill.mid{fill:#2f2429; opacity:.92}
+  .route{position:absolute; inset:0}
+
+  /* The anchor rides the route curve itself (offset-path) -- so "move to next checkpoint"
+     is just a transition on offset-distance, always ON the line, never a straight cheat. */
+  /* offset-rotate:auto banks the whole rig to the path's own tangent, so the plane always
+     points where it is actually going -- climbing on the steep leg, levelling on the flat. */
+  /* offset-distance is driven frame-by-frame in JS: neither CSS transitions nor the Web
+     Animations API animate this property in every engine (verified failing here -- no
+     transitionstart fires at all), and a plane that silently refuses to fly is exactly the
+     kind of "looks fine in code" bug this whole page exists to avoid. */
+  .plane-anchor{
+    position:absolute; top:0; left:0; width:0; height:0;
+    offset-path: path('M34,210 C 100,155 78,100 155,105 C 220,109 208,66 285,40');
+    offset-distance: 40%;
+    offset-rotate: auto;
+  }
+  /* SVG, not the ✈ emoji: the glyph's orientation varies by font, and offset-rotate:auto
+     assumes artwork that points right at 0deg. */
+  .plane-icon{
+    position:absolute; left:0; top:0; width:28px; height:28px; margin:-14px 0 0 -14px;
+    filter:drop-shadow(0 2px 2px rgba(0,0,0,.45));
+  }
+  .plane-icon svg{display:block; width:100%; height:100%}
+  .contrail{position:absolute; left:0; top:0; width:30px; height:2px; transform:translate(-100%,-50%);
+    background:linear-gradient(90deg,transparent,rgba(251,243,226,.6)); border-radius:2px}
+  @media (prefers-reduced-motion: no-preference){
+    .plane-icon{animation:planeBob 2.6s ease-in-out infinite}
+    .contrail{animation:trailFade 2.6s ease-in-out infinite}
+  }
+  @media (prefers-reduced-motion: reduce){ .plane-anchor{transition:none} }
+  /* Idle life: a small bob perpendicular to travel + a touch of bank. Rotation stays small
+     so it reads as air, not as the plane disagreeing with its own heading. */
+  @keyframes planeBob{
+    0%,100%{transform:translateY(0) rotate(-2deg)}
+    50%{transform:translateY(-2.5px) rotate(2deg)}
+  }
+  @keyframes trailFade{0%,100%{opacity:.3; width:24px}50%{opacity:.7; width:34px}}
+
+  .cstamp{position:absolute; width:28px; height:28px; border-radius:50%; border:2px solid var(--airmail-blue);
+    display:flex; align-items:center; justify-content:center; transform:rotate(-14deg);
+    color:var(--airmail-blue); font-family:"Courier New",monospace; font-size:.42rem; font-weight:700;
+    background:rgba(255,255,255,.14); mix-blend-mode:multiply; text-align:center; line-height:1.1;
+    transition:left 1.7s cubic-bezier(.3,.68,.24,1), top 1.7s cubic-bezier(.3,.68,.24,1);
+  }
+  /* ---- the finale: stamp, then flip ---- */
+  .flip{perspective:1500px}
+  .flip-inner{position:relative; transform-style:preserve-3d;
+    transition:transform 1.15s cubic-bezier(.62,.03,.2,1)}
+  .flip.is-flipped .flip-inner{transform:rotateY(180deg)}
+  .face{backface-visibility:hidden; -webkit-backface-visibility:hidden}
+  .face.back{position:absolute; inset:0; transform:rotateY(180deg)}
+
+  .finale{position:absolute; inset:0; display:grid; place-items:center; pointer-events:none;
+    opacity:0; z-index:5}
+  .finale.show{animation:slam .52s cubic-bezier(.18,1.5,.36,1) forwards}
+  .mark{
+    width:132px; height:132px; border-radius:50%; display:grid; place-items:center; text-align:center;
+    border:3px solid var(--airmail-red); box-shadow:0 0 0 2.5px var(--airmail-red) inset;
+    color:var(--airmail-red); font-family:"Courier New",monospace; mix-blend-mode:multiply;
+    background:radial-gradient(circle, rgba(184,58,48,.07), transparent 70%);
+  }
+  .mark b{display:block; font-size:1.32rem; font-weight:700; letter-spacing:.1em; line-height:1}
+  .mark i{display:block; font-style:normal; font-size:.52rem; letter-spacing:.16em; margin-top:.3rem; opacity:.9}
+  .mark u{display:block; text-decoration:none; font-size:.5rem; letter-spacing:.1em; margin-top:.42rem;
+    padding-top:.3rem; border-top:1.5px solid currentColor; opacity:.85}
+  @keyframes slam{
+    0%{opacity:0; transform:scale(3.5) rotate(-28deg)}
+    58%{opacity:1; transform:scale(.93) rotate(-10deg)}
+    78%{transform:scale(1.03) rotate(-14deg)}
+    100%{opacity:1; transform:scale(1) rotate(-12.5deg)}
+  }
+  .checkin{
+    position:absolute; left:50%; bottom:14px; transform:translate(-50%,10px); z-index:6;
+    font-family:"Courier New",monospace; font-size:.76rem; font-weight:700; letter-spacing:.09em;
+    text-transform:uppercase; padding:.6rem 1.4rem; border:2px solid var(--ink); border-radius:3px;
+    background:var(--ink); color:var(--paper); cursor:pointer; opacity:0; pointer-events:none;
+    box-shadow:0 6px 16px -6px rgba(40,34,26,.7); transition:opacity .3s ease, transform .3s ease;
+  }
+  .checkin.show{opacity:1; transform:translate(-50%,0); pointer-events:auto}
+  .checkin:hover{background:var(--airmail-red); border-color:var(--airmail-red)}
+  .checkin:focus-visible{outline:3px solid var(--airmail-blue); outline-offset:3px}
+
+  .card.is-struck{animation:struck .3s ease-out}
+  @keyframes struck{0%,100%{transform:translateY(0)}22%{transform:translateY(2.5px)}55%{transform:translateY(-1px)}}
+
+  /* back face -- the guide that was being written, now real */
+  .guide{height:100%; display:flex; flex-direction:column; background:var(--paper)}
+  .guide-cover{height:210px; position:relative; display:flex; flex-direction:column; justify-content:flex-end;
+    padding:.9rem 1rem; color:#fbf3e2;
+    background:linear-gradient(180deg,var(--sky-1),var(--sky-2) 38%,var(--sky-3) 68%,var(--sky-4))}
+  .guide-cover svg{position:absolute; left:0; right:0; bottom:0; fill:#43323a}
+  .guide-kicker{position:relative; font-family:"Courier New",monospace; font-size:.55rem; letter-spacing:.14em;
+    text-transform:uppercase; opacity:.9; margin:0 0 .2rem}
+  .guide-title{position:relative; font-family:Georgia,serif; font-style:italic; font-weight:700;
+    font-size:1.75rem; margin:0; text-shadow:0 2px 8px rgba(0,0,0,.4)}
+  .guide-tabs{display:flex; gap:.35rem; flex-wrap:wrap; padding:.7rem 1rem .2rem}
+  .guide-tab{font-family:"Courier New",monospace; font-size:.6rem; letter-spacing:.05em; text-transform:uppercase;
+    border:1px solid var(--line); border-radius:999px; padding:.22rem .55rem; color:var(--ink-soft)}
+  .guide-tab.on{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+  .guide-body{padding:.5rem 1rem 0; font-size:.78rem; line-height:1.5; color:var(--ink-soft)}
+  .guide-open{margin:auto 1rem 1rem; text-align:center; font-family:"Courier New",monospace; font-size:.72rem;
+    letter-spacing:.06em; text-transform:uppercase; border:1.5px solid var(--ink); border-radius:3px;
+    padding:.5rem; color:var(--ink)}
+
+  @media (prefers-reduced-motion: reduce){
+    .flip-inner{transition:opacity .3s linear}
+    .flip.is-flipped .flip-inner{transform:none}
+    .flip.is-flipped .face.front{opacity:0}
+    .face.back{transform:none; opacity:0}
+    .flip.is-flipped .face.back{opacity:1}
+    .finale.show{animation:none; opacity:1; transform:rotate(-12.5deg)}
+    .card.is-struck{animation:none}
+  }
+
+  /* ---- the persistent "one guide is building" pill ---- */
+  .chrome{display:flex; flex-direction:column; gap:.5rem}
+  .chrome-cap{font-family:"Courier New",monospace; font-size:.62rem; letter-spacing:.05em; color:var(--ink-soft);
+    margin:.5rem 0 0}
+  .mock{background:var(--paper); border:1px solid var(--line); border-radius:3px; overflow:hidden;
+    box-shadow:0 8px 18px -12px rgba(40,34,26,.6)}
+  .mock-top{display:flex; align-items:center; gap:.7rem; padding:.55rem .7rem}
+  .wordmark{font-family:Georgia,serif; font-style:italic; font-weight:700; font-size:.95rem}
+  .bar-links{font-family:"Courier New",monospace; font-size:.66rem; color:var(--ink-soft); margin-left:auto}
+
+  /* The strip: full-width, above the tab row. Its own fill line IS the progress bar. */
+  .strip{position:relative; display:flex; align-items:center; gap:.5rem; padding:.5rem .7rem;
+    background:var(--airmail-blue); color:#f2ece0; font-family:"Courier New",monospace; font-size:.68rem}
+  .strip-plane{width:14px; height:14px; flex-shrink:0}
+  .strip-plane svg{width:100%; height:100%; display:block}
+  .strip-txt{letter-spacing:.02em}
+  .strip-txt b{font-weight:700}
+  .strip-go{margin-left:auto; font-weight:700; letter-spacing:.06em; text-transform:uppercase; font-size:.62rem;
+    border:1.5px solid rgba(242,236,224,.75); border-radius:999px; padding:.16rem .55rem; white-space:nowrap}
+  .strip-fill{position:absolute; left:0; bottom:0; height:2.5px; width:66.6%;
+    background:#f0d9a8; box-shadow:0 0 8px 1px rgba(240,217,168,.9)}
+
+  .tabrow{display:flex; gap:.35rem; padding:.6rem .7rem .5rem; border-bottom:1px solid var(--line)}
+  .tab{font-family:"Courier New",monospace; font-size:.62rem; letter-spacing:.04em; text-transform:uppercase;
+    padding:.24rem .6rem; border-radius:999px; border:1px solid var(--line); color:var(--ink-soft); position:relative}
+  .tab.on{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:.5rem; padding:.6rem .7rem .8rem}
+  .g-card{font-family:"Courier New",monospace; font-size:.62rem; color:var(--ink-soft)}
+  .g-img{display:block; height:44px; border-radius:2px; margin-bottom:.22rem;
+    background:linear-gradient(160deg,var(--sky-2),var(--sky-4))}
+
+  /* Something is being built -- the strip breathes and the plane taxis. This is the one
+     continuously-moving thing on the hub, and it is moving BECAUSE work is running: it
+     stops the moment the build does. */
+  @media (prefers-reduced-motion: no-preference){
+    .strip-plane{animation:pillTaxi 3.4s ease-in-out infinite}
+    .strip-fill{animation:fillGlow 2.1s ease-in-out infinite}
+    .tab.on{animation:tabGlow 2.1s ease-in-out infinite}
+  }
+  @keyframes pillTaxi{0%,100%{transform:translateX(-1px)}50%{transform:translateX(2px)}}
+  @keyframes fillGlow{
+    0%,100%{box-shadow:0 0 6px 1px rgba(240,217,168,.6); opacity:.85}
+    50%{box-shadow:0 0 13px 2px rgba(240,217,168,1); opacity:1}
+  }
+  @keyframes tabGlow{
+    0%,100%{box-shadow:0 0 0 0 rgba(44,74,114,0)}
+    50%{box-shadow:0 0 0 3px rgba(44,74,114,.28)}
+  }
+
+  /* ---- mobile ---- */
+  @media (max-width:520px){
+    body{padding:1.4rem .8rem 3rem}
+    .rack{gap:1.6rem}
+    .tix-route{font-size:1rem}
+    .tix-tag{font-size:.54rem}
+    .name{font-size:1.05rem}
+    .row{grid-template-columns:1.2rem 1fr auto; font-size:.66rem; padding:.42rem 0}
+    .stampword{font-size:.55rem; padding:.1rem .3rem}
+    .rows{padding:.2rem .75rem .3rem}
+    .stub{padding:.5rem .75rem .7rem; font-size:.58rem}
+    .mark{width:112px; height:112px}
+    .mark b{font-size:1.1rem}
+    /* the row is a touch target on a phone, so it gets a real one */
+    .row{min-height:38px}
+    .checkin{font-size:.72rem; padding:.62rem 1.2rem}
+    .strip{flex-wrap:wrap; gap:.35rem .5rem}
+    .strip-go{margin-left:auto}
+    .grid{grid-template-columns:1fr 1fr}
+  }
+  @media (max-width:380px){
+    .strip-txt{font-size:.62rem}
+    .tab{font-size:.58rem; padding:.22rem .45rem}
+  }
+
+  .stepper{display:flex; gap:.6rem; justify-content:center; margin-top:1rem}
+  .stepper button{font-family:"Courier New",monospace; font-size:.72rem; letter-spacing:.04em; text-transform:uppercase;
+    padding:.45rem .9rem; border:1.5px solid var(--ink); background:var(--paper); color:var(--ink); border-radius:3px;
+    cursor:pointer}
+  .stepper button:disabled{opacity:.4; cursor:default}
+  .stepper button:not(:disabled):hover{background:var(--ink); color:var(--paper)}
+
+  /* ticket header row sits ON the sky, top edge */
+  .tix-head{position:absolute; top:0; left:0; right:0; display:flex; justify-content:space-between; align-items:flex-start;
+    padding:.6rem .8rem; color:#fbf3e2; text-shadow:0 1px 3px rgba(0,0,0,.5)}
+  .tix-route{font-family:"Courier New",monospace; font-size:1.15rem; font-weight:700; letter-spacing:.05em}
+  .tix-route small{display:block; font-size:.55rem; font-weight:400; letter-spacing:.09em; opacity:.85; text-transform:uppercase}
+  .tix-tag{font-family:"Courier New",monospace; font-size:.6rem; letter-spacing:.08em; text-transform:uppercase; opacity:.9; text-align:right}
+
+  /* perforation between sky and rows */
+  .perf{height:14px; background:var(--paper); position:relative; margin-top:-1px}
+  .perf::before{content:""; position:absolute; inset:0; background-image:radial-gradient(circle,#d8cba5 5px,transparent 5.5px);
+    background-size:16px 16px; background-position:8px -3px}
+  .perf::after{content:""; position:absolute; left:0; right:0; top:7px; border-top:1px dashed var(--ink-soft); opacity:.5}
+
+  .rows{padding:.2rem 1rem .3rem}
+  .name{font-family:Georgia,serif; font-style:italic; font-weight:700; font-size:1.15rem; margin:.5rem 0 .5rem}
+  .row{display:grid; grid-template-columns:1.4rem 1fr auto; align-items:center; gap:.5rem;
+    padding:.36rem 0; border-bottom:1px solid var(--line); font-family:"Courier New",monospace; font-size:.7rem}
+  .row .n{color:var(--ink-soft)}
+  .stampword{font-weight:700; letter-spacing:.05em; padding:.1rem .38rem; border:2px solid var(--airmail-red);
+    color:var(--airmail-red); transform:rotate(-6deg); border-radius:2px; font-size:.6rem; mix-blend-mode:multiply}
+  .stampword.now{border-color:var(--airmail-blue); color:var(--airmail-blue)}
+  .stampword.wait{border-style:dashed; border-color:var(--line); color:var(--ink-soft); transform:none}
+
+  .stub{display:flex; justify-content:space-between; padding:.55rem 1rem .8rem; font-family:"Courier New",monospace;
+    font-size:.62rem; color:var(--ink-soft); border-top:1px dashed var(--line); margin-top:.3rem}
+
+  .keep-note{font-family:"Courier New",monospace; font-size:.72rem; color:var(--ink-soft); line-height:1.55;
+    background:rgba(255,255,255,.35); border:1px dashed var(--line); border-radius:3px; padding:.6rem .75rem; margin-top:.8rem}
+  .keep-note b{color:var(--ink)}
+</style>
+
+<svg width="0" height="0" style="position:absolute">
+  <filter id="grain">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="noise" seed="7"/>
+    <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .045 0"/>
+    <feComposite operator="over" in2="SourceGraphic"/>
+  </filter>
+</svg>
+
+<h1 class="top">A + B merged — the boarding pass over the living sky</h1>
+<p class="sub">Same Testland state (3 of 6 cleared, Reconcile running). Sunset toned down — less saturated than round 2, meant to sit easier in a dark room.</p>
+
+<div class="rack">
+  <div class="card-slot">
+    <p class="slot-label"><b>Merged</b> · living sky + honest fork (A) inside the boarding-pass frame (B)</p>
+    <div class="flip" id="flip"><div class="flip-inner"><div class="face front">
+    <div class="card" id="card">
+      <div class="sky">
+        <div class="sky-grad"></div>
+        <div class="tix-head">
+          <div class="tix-route">SCF &#9992; PUB<small>scaffold &rarr; published</small></div>
+          <div class="tix-tag">Testland<br/>4m 02s elapsed</div>
+        </div>
+        <div class="sun"></div>
+        <svg class="hill mid" viewBox="0 0 380 90" preserveAspectRatio="none"><path d="M0,90 L0,52 Q70,24 140,48 T280,38 T380,58 L380,90 Z"/></svg>
+        <svg class="hill" viewBox="0 0 380 60" preserveAspectRatio="none"><path d="M0,60 L0,36 Q90,12 190,34 T380,26 L380,60 Z"/></svg>
+        <!-- Checkpoint dots are DERIVED from the flight path itself (see the STOPS table in
+             the script) so the plane can never land beside its own checkpoint. -->
+        <svg class="route" viewBox="0 0 380 230" preserveAspectRatio="none">
+          <path id="routePath" d="M34,210 C 100,155 78,100 155,105 C 220,109 208,66 285,40" fill="none" stroke="#fbf3e2" stroke-width="1.6" stroke-dasharray="1 7" stroke-linecap="round" opacity=".85"/>
+          <g id="routeDots"></g>
+        </svg>
+        <div class="route-space" id="routeSpace">
+        <div class="plane-anchor" id="planeAnchor">
+          <div class="contrail"></div>
+          <!-- Top-down widebody twin (A350/787 planform: high wing sweep, raked curved tips,
+               two underwing nacelles, swept tailplane). Nose points +x so offset-rotate:auto
+               banks it correctly. Not a technical drawing -- a silhouette with the right
+               proportions, which is what reads at 26px. -->
+          <div class="plane-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <g fill="#fbf3e2" stroke="rgba(40,34,26,.4)" stroke-width=".45" stroke-linejoin="round">
+                <!-- main wings -->
+                <path d="M16.4,11.3 L9.6,2.2 C9.2,1.7 8.5,1.9 8.5,2.5 L8.9,4.2 L11.2,11.3 Z"/>
+                <path d="M16.4,12.7 L9.6,21.8 C9.2,22.3 8.5,22.1 8.5,21.5 L8.9,19.8 L11.2,12.7 Z"/>
+                <!-- tailplane -->
+                <path d="M4.6,11.4 L2.3,7.2 C2.05,6.8 1.55,6.95 1.6,7.4 L1.95,8.9 L3.3,11.4 Z"/>
+                <path d="M4.6,12.6 L2.3,16.8 C2.05,17.2 1.55,17.05 1.6,16.6 L1.95,15.1 L3.3,12.6 Z"/>
+                <!-- fuselage -->
+                <path d="M22.9,12 C21.4,10.85 18,10.5 13.8,10.45 L4.6,10.75 C2.9,10.9 1.5,11.3 1.1,12
+                         C1.5,12.7 2.9,13.1 4.6,13.25 L13.8,13.55 C18,13.5 21.4,13.15 22.9,12 Z"/>
+                <!-- engine nacelles -->
+                <path d="M11.4,5.9 L14.5,6.5 C15,6.6 15,7.5 14.5,7.6 L11.4,8.1 C11,8.15 11,5.85 11.4,5.9 Z"/>
+                <path d="M11.4,18.1 L14.5,17.5 C15,17.4 15,16.5 14.5,16.4 L11.4,15.9 C11,15.85 11,18.15 11.4,18.1 Z"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div class="cstamp" id="cstamp">CLR</div>
+        </div>
+      </div>
+
+      <div class="perf" aria-hidden="true"></div>
+
+      <div class="rows" id="rows">
+        <h2 class="name">Testland</h2>
+        <div class="row" data-row="0"><span class="n">01</span><span>Scaffold created</span><span class="stampword">CLEARED</span></div>
+        <div class="row" data-row="1"><span class="n">02</span><span>Pass A — canonical</span><span class="stampword">CLEARED</span></div>
+        <div class="row" data-row="2"><span class="n">03</span><span>Pass B — crowd-aware</span><span class="stampword">CLEARED</span></div>
+        <div class="row" data-row="3"><span class="n">04</span><span>Reconcile A+B</span><span class="stampword now">BOARDING</span></div>
+        <div class="row" data-row="4"><span class="n">05</span><span>Verify + build</span><span class="stampword wait">— — —</span></div>
+        <div class="row" data-row="5"><span class="n">06</span><span>Published</span><span class="stampword wait">— — —</span></div>
+        <div class="stub"><span id="stubCount">3 OF 6 CLEARED</span><span>LAST CHECKPOINT 4M AGO</span></div>
+      </div>
+
+      <!-- The pass is stamped only when all six stages have actually cleared. -->
+      <div class="finale" id="finale">
+        <div class="mark"><span><b>ARRIVED</b><i>GUIDE IS LIVE</i><u>03 AUG 2026</u></span></div>
+      </div>
+    </div>
+
+    <!-- The reader turns the pass over, not the page. -->
+    <button type="button" class="checkin" id="checkin">Check in &rarr;</button>
+
+    </div><div class="face back">
+      <div class="card guide">
+        <div class="guide-cover">
+          <svg viewBox="0 0 380 70" preserveAspectRatio="none"><path d="M0,70 L0,40 Q90,14 190,36 T380,28 L380,70 Z"/></svg>
+          <p class="guide-kicker">Verified · 6 of 6 · published today</p>
+          <h2 class="guide-title">Testland</h2>
+        </div>
+        <div class="guide-tabs">
+          <span class="guide-tab on">Overview</span><span class="guide-tab">Days</span>
+          <span class="guide-tab">Sights</span><span class="guide-tab">Food</span>
+          <span class="guide-tab">Transit</span><span class="guide-tab">Money</span>
+        </div>
+        <p class="guide-body">Eleven days, sourced against primary records and written for one traveller's ranked priorities. Every perishable fact carries its source and the date it was checked.</p>
+        <div class="guide-open">Open the guide &rarr;</div>
+      </div>
+    </div></div></div>
+
+    <div class="stepper">
+      <button type="button" id="btnPrev">&larr; Prev</button>
+      <button type="button" id="btnNext">Next &rarr;</button>
+    </div>
+
+    <div class="keep-note"><b>What moves:</b> the plane rides ON the honest fork/merge route (never floats off it), banking to the curve and drifting even while idle. Next/Prev flies it between checkpoints along that same curve. At six of six the pass is stamped — then it waits: <b>you</b> press Check in to turn it over.</div>
+  </div>
+
+  <!-- ===== the "get back to it" surface ===== -->
+  <div class="card-slot" style="width:380px">
+    <p class="slot-label"><b>Getting back to it</b> · one guide builds at a time, so one pill is enough</p>
+
+    <div class="chrome">
+      <p class="chrome-cap">A strip above the tabs — the guide list scrolls underneath, untouched</p>
+      <div class="mock">
+        <div class="mock-top"><span class="wordmark">Waypoint</span><span class="bar-links">Guides · About</span></div>
+
+        <!-- the strip: full-width, above the tab row, sticky -->
+        <div class="strip">
+          <span class="strip-plane"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="currentColor"><path d="M16.4,11.3 L9.6,2.2 C9.2,1.7 8.5,1.9 8.5,2.5 L8.9,4.2 L11.2,11.3 Z"/><path d="M16.4,12.7 L9.6,21.8 C9.2,22.3 8.5,22.1 8.5,21.5 L8.9,19.8 L11.2,12.7 Z"/><path d="M22.9,12 C21.4,10.85 18,10.5 13.8,10.45 L4.6,10.75 C2.9,10.9 1.5,11.3 1.1,12 C1.5,12.7 2.9,13.1 4.6,13.25 L13.8,13.55 C18,13.5 21.4,13.15 22.9,12 Z"/></g></svg></span>
+          <span class="strip-txt"><b>Testland</b> is being written — 4 of 6</span>
+          <span class="strip-go">Track &rarr;</span>
+          <span class="strip-fill"></span>
+        </div>
+
+        <div class="tabrow"><span class="tab on">All trips</span><span class="tab">Asia</span><span class="tab">Europe</span><span class="tab">Americas</span></div>
+
+        <div class="grid">
+          <div class="g-card"><span class="g-img"></span>Japan</div>
+          <div class="g-card"><span class="g-img"></span>South Korea</div>
+          <div class="g-card"><span class="g-img"></span>Denmark</div>
+          <div class="g-card"><span class="g-img"></span>United States</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="keep-note"><b>Why above the tabs:</b> it spans the full width instead of competing for a slot, so the tab row and the whole guide grid stay exactly as they are — you can browse every existing guide with the build still in sight. Sticky, so it survives the scroll. Its own thin fill line doubles as the progress bar (4 of 6), which is the only continuously-moving thing on the hub.
+    <br/><br/>One guide at a time means it never becomes a list. It hides when nothing is building, and once the guide lands it reads <b>Ready — open it &rarr;</b> until opened.
+    <br/><br/><b>Still open:</b> what carries it across devices — the URL alone (bookmark / the issue's confirmation comment), or per-browser storage. Worth deciding before this is built.</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var LABELS = ["SCAF","PASSA","PASSB","RECON","VERIF","PUB"];
+  var path = document.getElementById("routePath");
+  var L = path.getTotalLength();
+
+  // ONE source of truth: each stage's % along the flight path. The dot and the plane's
+  // landing point are both read from the path at this %, so they cannot drift apart.
+  var STOPS = LABELS.map(function(label, i){
+    var pct = i * (100 / (LABELS.length - 1));
+    var pt = path.getPointAtLength(L * pct / 100);
+    return { dist: pct, x: pt.x, y: pt.y, label: label };
+  });
+
+  // Draw the checkpoint dots from those same points.
+  var g = document.getElementById("routeDots");
+  STOPS.forEach(function(s){
+    var c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    c.setAttribute("cx", s.x); c.setAttribute("cy", s.y); c.setAttribute("r", 4);
+    g.appendChild(c);
+    s.el = c;
+  });
+
+  var cleared = 3; // 3 of 6 done to start, matching the fixture above
+  var anchor = document.getElementById("planeAnchor");
+  var stamp = document.getElementById("cstamp");
+  var stubCount = document.getElementById("stubCount");
+  var rows = document.querySelectorAll(".row");
+  var btnPrev = document.getElementById("btnPrev");
+  var btnNext = document.getElementById("btnNext");
+  var flip = document.getElementById("flip");
+  var card = document.getElementById("card");
+  var finaleEl = document.getElementById("finale");
+  var checkin = document.getElementById("checkin");
+
+  function render(){
+    var idx = Math.max(0, cleared - 1); // plane rides at the LAST CLEARED stage, not the running one
+    var stop = STOPS[idx];
+    if (!flying) place(stop.dist);   // correct frame even if rAF never runs (hidden tab)
+    stamp.style.left = stop.x + "px";
+    stamp.style.top = stop.y + "px";
+    stamp.innerHTML = stop.label + "<br/>CLR";
+    stamp.hidden = cleared === 0;
+
+    // A cleared checkpoint is a solid mark; one not yet reached is an open ring.
+    STOPS.forEach(function(s, i){
+      var done = i < cleared;
+      s.el.setAttribute("fill", done ? "#fbf3e2" : "none");
+      s.el.setAttribute("stroke", "#fbf3e2");
+      s.el.setAttribute("stroke-width", done ? "0" : "1.6");
+      s.el.setAttribute("opacity", done ? "1" : ".7");
+    });
+
+    rows.forEach(function(row){
+      var n = parseInt(row.getAttribute("data-row"), 10);
+      var sw = row.querySelector(".stampword");
+      sw.classList.remove("now","wait");
+      if (n < cleared) { sw.textContent = "CLEARED"; }
+      else if (n === cleared) { sw.textContent = "BOARDING"; sw.classList.add("now"); }
+      else { sw.textContent = "— — —"; sw.classList.add("wait"); }
+    });
+
+    stubCount.textContent = cleared + " OF 6 CLEARED";
+    btnPrev.disabled = cleared <= 0;
+    btnNext.disabled = cleared >= 6;
+  }
+
+  /* ---- the flight driver ----
+     One rAF loop owns offset-distance: a tween toward the current stop, plus a permanent
+     idle drift so the plane is alive even when the pipeline hasn't moved in twenty minutes.
+     The drift is +-0.7% of the route -- visible as air, far too small to read as progress. */
+  var FLIGHT_MS = 1700;
+  var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var from = STOPS[Math.max(0, cleared - 1)].dist, to = from, t0 = 0, flying = false;
+
+  function easeInOut(t){ return t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3)/2; }
+  function place(pct){
+    anchor.style.setProperty("offset-distance", Math.max(0, Math.min(100, pct)).toFixed(2) + "%");
+  }
+
+  function frame(now){
+    var base = to;
+    if (flying){
+      var p = Math.min(1, (now - t0) / FLIGHT_MS);
+      base = from + (to - from) * easeInOut(p);
+      if (p === 1) flying = false;
+    }
+    place(base + (reduced ? 0 : Math.sin(now / 1450) * 0.7));
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  /* No tween when nobody is watching. rAF is paused while the tab is hidden -- correct
+     browser behaviour, but it means a flight started in the background would never finish
+     and the plane would sit frozen mid-route when the reader came back. This page is one
+     people deliberately leave and return to, so a hidden update SNAPS to the truth instead
+     of queueing a flight that cannot run. */
+  function flyTo(pct){
+    if (reduced || document.hidden){ to = from = pct; flying = false; place(pct); return; }
+    from = parseFloat(anchor.style.offsetDistance) || to;
+    to = pct; t0 = performance.now(); flying = true;
+  }
+
+  /* Keep the plane layer's 380x230 authoring space locked to the sky's real width. */
+  var sky = document.querySelector(".sky");
+  var space = document.getElementById("routeSpace");
+  function rescale(){
+    var w = sky.getBoundingClientRect().width;
+    if (w > 0) space.style.setProperty("--sc", (w / 380).toFixed(4));
+  }
+  if (window.ResizeObserver) new ResizeObserver(rescale).observe(sky);
+  else window.addEventListener("resize", rescale);
+  rescale();
+
+  document.addEventListener("visibilitychange", function(){
+    if (document.hidden) return;
+    // ResizeObserver is delivered by the rendering pipeline, so a resize that happened while
+    // this tab was in the background (rotating a phone, resizing a window) never reached us
+    // and --sc is stale. Re-measure BEFORE repainting the plane, or it lands off its route.
+    rescale();
+    flying = false;      // any flight that was pending while hidden is already over
+    from = to;
+    place(to);
+  });
+
+  /* The finale fires ONLY on the real sixth clearance -- the guide is actually live.
+     Order: the plane finishes its run, THEN the pass is stamped, THEN a check-in button
+     appears. The turn to the guide is never automatic -- the reader may have walked away,
+     and a page that flips itself loses the moment it was built for. */
+  var STAMP_AFTER = FLIGHT_MS, BTN_AFTER = 900;
+  var timers = [];
+  function clearTimers(){ timers.forEach(clearTimeout); timers = []; }
+
+  function finale(){
+    timers.push(setTimeout(function(){
+      finaleEl.classList.add("show");
+      card.classList.add("is-struck");
+      timers.push(setTimeout(function(){ card.classList.remove("is-struck"); }, 320));
+      timers.push(setTimeout(function(){ checkin.classList.add("show"); }, BTN_AFTER));
+    }, reduced ? 0 : STAMP_AFTER));
+  }
+
+  function reset(){
+    clearTimers();
+    flip.classList.remove("is-flipped");
+    finaleEl.classList.remove("show");
+    checkin.classList.remove("show");
+    card.classList.remove("is-struck");
+  }
+
+  checkin.addEventListener("click", function(){ flip.classList.add("is-flipped"); });
+
+  btnNext.addEventListener("click", function(){
+    if (cleared >= 6) return;
+    cleared++; render(); flyTo(STOPS[cleared - 1].dist);
+    if (cleared === 6) finale();
+  });
+  btnPrev.addEventListener("click", function(){
+    if (cleared <= 0) return;
+    reset();
+    cleared--; render(); flyTo(STOPS[Math.max(0, cleared - 1)].dist);
+  });
+  render();
+})();
+</script>
