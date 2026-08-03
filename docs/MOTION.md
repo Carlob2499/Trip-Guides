@@ -194,6 +194,40 @@ Reduced-motion renders every finished frame with no entrance and no pulse. The e
 inventory rules (single motion dependency, once-per-view flags, lazy modules) apply to
 every implementation of this language.
 
+### Amendment — work-in-progress motion (creator ruling 2026-08-03)
+
+Rule 2 above bans chrome that animates on its own. One narrow exception is now carved out,
+because the ban was written for a site of *finished* guides and the pipeline gave us a
+surface about a guide that does not exist yet: **while a guide is actively being built,
+the surfaces reporting that build may animate continuously.** Specifically the `/progress/`
+page's flight (the plane's position IS the cleared-stage count; its drift says the run is
+alive) and the hub's build strip (its pulse says work is running right now).
+
+The exception is bounded by the thing that justifies it, and does not widen rule 2:
+
+- **It is licensed by live work, not by the surface.** The motion exists only while a build
+  is in flight. It STOPS when the build stops — a stalled run holds its frame rather than
+  animating reassuringly, because a pulse over a dead run is the page lying.
+- **It ends when the build does.** Graduated, finished, and checked into → the strip is
+  gone entirely, not idling. Nothing keeps moving after there is nothing to report.
+- **It never spreads to guide chrome.** Every other surface still gets one entrance and
+  then stillness. This is not a licence for ambient decoration anywhere else.
+- **Reduced-motion still gets the finished frame** — no flight, no drift, no pulse; the
+  plane is placed at its true stage and stays there.
+
+Two implementation facts worth keeping, both found by forcing the failure path rather than
+by reading the code (Boundary Check #2):
+
+1. `offset-distance` animates via **neither** CSS transitions **nor** the Web Animations
+   API in every engine — a `transitionstart` never fires and a WAAPI animation reports
+   `running` forever without moving. Motion along an `offset-path` must be driven frame by
+   frame, or the plane silently never flies.
+2. rAF and ResizeObserver are both paused while a tab is hidden — correct behaviour, but
+   `/progress/` is a page people deliberately leave and come back to. So every state change
+   also writes its exact frame synchronously, a hidden update snaps instead of queueing a
+   flight that cannot run, and the layout is re-measured on `visibilitychange` (a phone
+   rotated in the background never delivered its resize).
+
 ## Living covers — the R4 rules (shipped 2026-07-28)
 
 The cover stack, from birth upward (PLAN_VISUAL_REDESIGN.md Move A½; creator-delegated №7):
