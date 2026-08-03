@@ -24,6 +24,72 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
+## Snapshot (2026-08-03, session #30b — repository-breadth pass; a real "region" field; US restructured)
+
+**Continuing the same session.** Two more scoped pieces landed after the geocode/plan_b work
+below, both creator-directed:
+
+**A display-only `region` field, so a state trip stops reading as a whole country.** The US
+guide's hub card, hero eyebrow, and OG/recap images all showed "United States" for a
+Sedona-only trip — reading far broader than the guide is. `country` itself was never touched
+(every currency/timezone-fallback/emergency-number/continent lookup keys on it —
+`countries.mjs`'s own comment already documents this exact Hawaii/Arizona history and why
+`country` can never be a state). New optional `region` field sits on top, display-only: every
+surface that shows the location as TEXT now prefers it (hub grid card, hero eyebrow, masthead
+eyebrow, OG image, recap image, hub search string, coverless-card initial, GPX/export
+waypoint-name fallbacks). US now carries `region: "Arizona"` — **future US guides should set
+this** (a multi-state trip would read "Arizona & Utah"). 4 new schema-contract tests.
+
+**US restructured: Food & shopping is now its own tab.** It used to be a "What to eat" venues
+section bolted onto the Days file — the only one of the four guides without a dedicated Food
+tab. Moved verbatim into a new `07-food-and-shopping.json`, renamed `07-sources.json` →
+`08-sources.json` to keep tab order sensible. No content changed in that move.
+
+**The repository-breadth research pass — scoped to real gaps, not padding.** CLAUDE.md's own
+doctrine ("Sights and Food are REPOSITORIES, not itinerary echoes") measured against actual
+counts: US had 4 sights (all 4 already itinerary-scheduled — zero margin), Japan had only 3
+sights per city for week-plus stays in each of 3 cities, and two sub-regions inside otherwise
+"rich" guides had literally ZERO dedicated content — Denmark's Oslo overnight leg (3 sights,
+0 food) and Korea's Daejeon (2-day MSI base) and Busan (day trip), both 0/0. Seoul, Copenhagen,
+Malmö's food, and Fukuoka were already fine and were NOT touched.
+
+Four parallel research agents (one per guide, each scoped to specific files/sections) did a
+single real research pass — not the repo's full dual Pass-A/Pass-B/reconcile/critic ceremony,
+by explicit creator instruction, but every item still Places-verified `OPERATIONAL` before
+writing, never fabricated:
+- **Denmark**: Oslo 3→6 sights + a new 8-item food/shopping section (was 0); Malmö 3→6 sights.
+- **Japan**: Sapporo 3→7 sights, 3→6 food; Sendai/Tohoku 3-4→7 sights, 4→7 food. Fukuoka
+  untouched (already reasonable).
+- **Korea**: Daejeon 0→4 sights + 0→5 food (new sections inside the existing "Daejeon & MSI"
+  tab, not a new tab); Busan 0→5 sights + 0→4 food (new sections inside the existing
+  "Sights"/"Food & shopping" tabs, checked against the Jul 13 itinerary first so nothing
+  duplicates what's already scheduled that day).
+- **US**: sights 4→10, food 5→9, a brand-new Shopping section 0→5. Also fixed a real
+  pre-existing bug found along the way — El Rincon and Tamaliza carried IDENTICAL "why" text
+  (copy-paste error); each now has its own researched specialty. Respected the guide's own
+  active Pocket Fire/Oak Creek closure orders throughout — Devil's Bridge, West Fork Trail,
+  Soldier Pass Trail and Boynton Canyon Trail are all inside the closure zone and were
+  deliberately NOT added; several dead venues (Turquoise Tortoise, Colt Grill, Oak Creek
+  Factory Outlets) came back `CLOSED_PERMANENTLY`/defunct and were dropped rather than added.
+
+Final counts (sights / food+shopping venues): Denmark 18/40, Japan 18/33, Korea 23/64, US
+10/14 — every guide now has real repository margin beyond its own itinerary.
+
+**Verified twice, independently:** each agent ran its own build+verify before finishing, and a
+SEPARATE full integration pass afterward confirmed it — `npm run build` clean, 1344 tests
+green, lint 0, all four guides PASS verify, and (a second, independent check) `--network`
+shows **0 closed venues across all four guides** on every new item, plus dist/ grepped to
+confirm every new name compiled through. The typecheck error and the Commons-photo
+UNVERIFIABLE leg are both the same pre-existing, environmental issues noted below — neither
+touched by this pass.
+
+**Not done:** the formal S2/S3 "Candidates considered" ledger and the full dual-pass
+reconciliation table — by explicit creator instruction ("don't perform the entire research
+pass"), this was a single verified pass, not the repo's full pipeline ceremony. If any of
+these four guides heads toward graduation, that gap is worth knowing about.
+
+---
+
 ## Snapshot (2026-08-03, session #30 — geocode backfill finished; plan_b's first real content)
 
 **Denmark, Japan and US are now geocoded** (Korea shipped in session #29's last commit). 33
@@ -614,22 +680,30 @@ change-request prefill click is done and proven.)*
 
 ## Where we left off
 
-**Session #30 (2026-08-03):** finished the venue-geocode backfill (Denmark, Japan, US — Korea
-was already done) and shipped `plan_b`'s first real content, six entries on Japan.
+**Session #30 (2026-08-03, same session, two parts):** Part 1 — geocode backfill (Denmark,
+Japan, US; Korea already done) + `plan_b`'s first real content (six Japan entries). Part 2 —
+a display-only `region` field (US now shows "Arizona", not "United States"), US's Food &
+shopping restructured into its own tab, and a repository-breadth research pass across all
+four guides' Sights/Food sections (Denmark's Oslo, Japan's Sapporo/Sendai, Korea's Daejeon/
+Busan, and US guide-wide all went from thin-or-zero to real coverage). Both parts are merged
+to `main`.
 
-**Re-prompt the creator with:** "All four guides are geocoded now, and the run found real bugs
-on the way: Japan's itinerary files span several cities in one JSON file, which broke the
-outlier guard's file-median check for items that already had their own coordinates — fixed, and
-it caught a wrong Osaka coordinate that had slipped through before the fix. Running the network
-venue check on all four guides also found two closed restaurants (Denmark's Jabby's, Korea's
-Palsaik) — both replaced with a verified-open alternative, not silently dropped. Then `plan_b`
-(the rain/closure alternate field from two sessions ago) got used for the first time — six
-entries on Japan, scoped to days with real regional weather risk plus a single-venue anchor,
-each a Places-confirmed real place with its own source. Scope was deliberately Japan-only this
-pass — Denmark and Korea's trips already happened, so a forward-looking rain plan has less
-value there, and US wasn't asked for. **US (Sedona, September, real monsoon-tail flash-flood
-risk on its two outdoor days) is the natural next one if you want to keep going.** Everything's
-pushed to `claude/guides-geocodes-adaptations-404px1`, no PR opened yet."
+**Re-prompt the creator with:** "Two things landed this session. First: all four guides are
+geocoded, plan_b (the rain/closure alternate) shipped its first real content on Japan, and the
+run found real bugs along the way — a coordinate guard fix, a wrong coordinate it had let
+through before the fix, and two closed restaurants (Denmark's Jabby's, Korea's Palsaik) that
+got replaced with verified-open alternatives. Second: the guides' Sights/Food sections are a
+REPOSITORY by this repo's own doctrine — a traveler who exhausts the itinerary should still
+have somewhere to go — and we measured real gaps: the US guide had zero margin (4 sights, all
+4 already itinerary-scheduled), and Oslo/Daejeon/Busan had literally nothing. Four research
+agents closed those gaps in one pass — real, Places-verified venues, not padding — and along
+the way fixed a genuine US content bug (two restaurants sharing identical description text)
+and a mislabeling bug (the US guide showed 'United States' everywhere a Sedona-only trip
+should've said 'Arizona' — now fixed with a reusable `region` field for future US guides).
+**Not done, by your own instruction:** the full dual-pass research ceremony (Candidates
+considered tables, formal reconciliation) — this was a single verified pass, real but lighter,
+scoped to clear the gap, not a graduation-ready research pass. Everything is merged to `main`,
+no PR opened."
 
 ---
 
