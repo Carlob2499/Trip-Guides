@@ -4,53 +4,137 @@
     "tabs": [
       {
         "name": "essentials",
-        "count": 43
+        "count": 47
       },
       {
         "name": "itinerary",
-        "count": 7
+        "count": 8
       },
       {
         "name": "getting-around",
-        "count": 6
-      },
-      {
-        "name": "daejeon-msi",
-        "count": 2
-      },
-      {
-        "name": "food-shopping",
-        "count": 2
-      },
-      {
-        "name": "gaming-anime",
-        "count": 2
-      },
-      {
-        "name": "plan",
-        "count": 2
-      },
-      {
-        "name": "pokemon-go",
-        "count": 2
-      },
-      {
-        "name": "references",
-        "count": 2
-      },
-      {
-        "name": "sights",
-        "count": 2
+        "count": 7
       },
       {
         "name": "tokyo",
+        "count": 5
+      },
+      {
+        "name": "daejeon-msi",
+        "count": 4
+      },
+      {
+        "name": "food-shopping",
+        "count": 4
+      },
+      {
+        "name": "pokemon-go",
+        "count": 4
+      },
+      {
+        "name": "sights",
+        "count": 4
+      },
+      {
+        "name": "gaming-anime",
+        "count": 3
+      },
+      {
+        "name": "plan",
+        "count": 3
+      },
+      {
+        "name": "references",
+        "count": 3
+      },
+      {
+        "name": "days",
+        "count": 1
+      },
+      {
+        "name": "sources",
+        "count": 1
+      },
+      {
+        "name": "transit",
+        "count": 1
+      }
+    ],
+    "tools": [
+      {
+        "name": "split",
+        "count": 9
+      },
+      {
+        "name": "kit",
+        "count": 3
+      },
+      {
+        "name": "remind",
+        "count": 3
+      },
+      {
+        "name": "vote",
+        "count": 3
+      },
+      {
+        "name": "learn",
+        "count": 2
+      }
+    ],
+    "totalOpens": 115
+  },
+  {
+    "guide": "japan",
+    "tabs": [
+      {
+        "name": "sights",
+        "count": 10
+      },
+      {
+        "name": "days",
+        "count": 9
+      },
+      {
+        "name": "money-budget",
+        "count": 9
+      },
+      {
+        "name": "gaming-anime",
+        "count": 8
+      },
+      {
+        "name": "health-safety",
+        "count": 8
+      },
+      {
+        "name": "food-shopping",
+        "count": 7
+      },
+      {
+        "name": "etiquette-language",
+        "count": 6
+      },
+      {
+        "name": "sources",
+        "count": 6
+      },
+      {
+        "name": "transit",
+        "count": 6
+      },
+      {
+        "name": "plan",
         "count": 2
       }
     ],
     "tools": [
       {
         "name": "split",
-        "count": 7
+        "count": 3
+      },
+      {
+        "name": "vote",
+        "count": 2
       },
       {
         "name": "kit",
@@ -59,13 +143,9 @@
       {
         "name": "remind",
         "count": 1
-      },
-      {
-        "name": "vote",
-        "count": 1
       }
     ],
-    "totalOpens": 82
+    "totalOpens": 78
   },
   {
     "guide": "sedona",
@@ -200,7 +280,19 @@
       },
       {
         "name": "sights",
-        "count": 4
+        "count": 5
+      },
+      {
+        "name": "day-trips",
+        "count": 3
+      },
+      {
+        "name": "days",
+        "count": 3
+      },
+      {
+        "name": "food-shopping",
+        "count": 3
       },
       {
         "name": "getting-around",
@@ -215,15 +307,11 @@
         "count": 2
       },
       {
-        "name": "day-trips",
-        "count": 1
-      },
-      {
         "name": "essentials",
         "count": 1
       },
       {
-        "name": "food-shopping",
+        "name": "sources",
         "count": 1
       }
     ],
@@ -249,7 +337,7 @@
         "count": 1
       }
     ],
-    "totalOpens": 29
+    "totalOpens": 38
   },
   {
     "guide": "hawaii",
