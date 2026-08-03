@@ -177,6 +177,51 @@ describe("flagOutliers", () => {
   });
 });
 
+/* A guide file legitimately spans several cities — Japan's itinerary files run Sendai, Sapporo
+   and Fukuoka sections together — so an item that ALREADY carries verified coords (this pass is
+   only filling in its place_id) has no honest file-median to be judged against. The first real
+   Japan run rejected genuine matches for Otaru Canal, Mt. Moiwa and Dazaifu Tenmangu this way,
+   because the file's other sights sat in a different city entirely. */
+describe("flagOutliers — ground-truthed rows (already have their own map)", () => {
+  const anchored = (name, ownLat, ownLng, resLat, resLng) => ({
+    ok: true, needsCoords: false, item: { name, map: { lat: ownLat, lng: ownLng } },
+    res: { name, lat: resLat, lng: resLng },
+  });
+  // Three Sendai-area food items, still needing coords — a real cluster to compute a median from.
+  const sendai = [
+    { ok: true, needsCoords: true, item: { name: "Ryutei" }, res: { name: "Ryutei", lat: 38.267, lng: 140.877 } },
+    { ok: true, needsCoords: true, item: { name: "Genji Izakaya" }, res: { name: "Genji Izakaya", lat: 38.259, lng: 140.873 } },
+    { ok: true, needsCoords: true, item: { name: "Date Gyutan" }, res: { name: "Date Gyutan", lat: 38.252, lng: 140.856 } },
+  ];
+
+  it("judges an anchored row against its OWN coordinates, not the file median", () => {
+    // The Sendai median (~38.26) alongside a Hokkaido sight that already has its real
+    // coordinates and only needs a place_id — the median would wrongly flag it.
+    const out = flagOutliers([...sendai, anchored("Otaru Canal", 43.2020231, 141.0006005, 43.2020231, 141.0006005)]);
+    expect(out.find((r) => r.item.name === "Otaru Canal").ok).toBe(true);
+  });
+
+  it("still rejects an anchored row whose place_id result lands somewhere else entirely", () => {
+    const out = flagOutliers([...sendai, anchored("Otaru Canal", 43.2020231, 141.0006005, 34.6, 135.5)]);   // Osaka, not Otaru
+    const row = out.find((r) => r.item.name === "Otaru Canal");
+    expect(row.ok).toBe(false);
+    expect(row.why).toMatch(/own verified coordinates/);
+  });
+
+  it("excludes anchored rows from the median used to judge everyone else", () => {
+    // Three Hokkaido sights already anchored, plus the Sendai cluster still needing coords —
+    // an Osaka escapee among the Sendai items must be judged against Sendai, not Hokkaido.
+    const out = flagOutliers([
+      anchored("Otaru Canal", 43.2, 141.0, 43.2, 141.0),
+      anchored("Mt. Moiwa", 43.02, 141.32, 43.02, 141.32),
+      anchored("Odori Park", 43.06, 141.35, 43.06, 141.35),
+      ...sendai,
+      { ok: true, needsCoords: true, item: { name: "Osaka escapee" }, res: { name: "Osaka escapee", lat: 34.66, lng: 135.5 } },
+    ]);
+    expect(out.find((r) => r.item.name === "Osaka escapee").ok).toBe(false);
+  });
+});
+
 describe("haversineKm", () => {
   it("measures the Tokyo→Osaka gap that motivated the check", () => {
     const km = haversineKm({ lat: 35.66, lng: 139.70 }, { lat: 34.664, lng: 135.503 });

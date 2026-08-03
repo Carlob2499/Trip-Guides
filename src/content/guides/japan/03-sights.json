@@ -38,7 +38,8 @@
         "shelf_life": "venue",
         "source_url": "https://www.visitmiyagi.com/contents/naruko-gorge-autumn-colors/",
         "tier": "corroborated",
-        "agreement": "A+B converged"
+        "agreement": "A+B converged",
+        "place_id": "ChIJyck1-0c5iV8RdPFUniMCrfE"
       },
       {
         "name": "Zao Okama Crater",
@@ -56,7 +57,8 @@
         "shelf_life": "venue",
         "source_url": "https://www.zao-machi.com/",
         "tier": "corroborated",
-        "agreement": "A+B converged"
+        "agreement": "A+B converged",
+        "place_id": "ChIJBw47rGVJil8RAVotfpjDrR8"
       },
       {
         "name": "Jigokudani (Hell Valley), Noboribetsu",
@@ -72,7 +74,8 @@
         },
         "verified_on": "2026-07-29",
         "shelf_life": "venue",
-        "source_url": "https://www.japan.travel/en/spot/1908/"
+        "source_url": "https://www.japan.travel/en/spot/1908/",
+        "place_id": "ChIJ___jisJmdV8RzL7_3Cqwtcc"
       },
       {
         "name": "Otaru Canal",
@@ -90,7 +93,8 @@
         "shelf_life": "venue",
         "source_url": "https://otaru.gr.jp/",
         "tier": "corroborated",
-        "agreement": "A+B converged"
+        "agreement": "A+B converged",
+        "place_id": "ChIJ0UxVV2ThCl8RIZdpda0H7gQ"
       },
       {
         "name": "Mt. Moiwa",
@@ -106,7 +110,8 @@
         },
         "verified_on": "2026-07-29",
         "shelf_life": "venue",
-        "source_url": "https://mt-moiwa.jp/"
+        "source_url": "https://mt-moiwa.jp/",
+        "place_id": "ChIJ6WyfEO7VCl8RITH5sM3AG8M"
       },
       {
         "name": "Dazaifu Tenmangu",
@@ -119,7 +124,8 @@
         "map": {
           "lat": 33.5194494,
           "lng": 130.5344619
-        }
+        },
+        "place_id": "ChIJzfvrKp-bQTURl65fp6vRJLg"
       },
       {
         "name": "Nakasu yatai (evening food stalls)",
@@ -130,12 +136,13 @@
           "alt": "Yatai food stalls lit up at night along the river in Nakasu"
         },
         "map": {
-          "lat": 33.5934757,
-          "lng": 130.4056216
+          "lat": 33.5906696,
+          "lng": 130.4079063
         },
         "verified_on": "2026-07-29",
         "shelf_life": "venue",
-        "source_url": "https://www.japan.travel/en/spot/273/"
+        "source_url": "https://www.japan.travel/en/spot/273/",
+        "place_id": "ChIJu43ESZSRQTURr0huMxMFZDI"
       },
       {
         "name": "Odori Park & Sapporo TV Tower",
@@ -148,7 +155,8 @@
         "map": {
           "lat": 43.0599018,
           "lng": 141.3475101
-        }
+        },
+        "place_id": "ChIJjWSHX50pC18RMSAiw3gaBOI"
       },
       {
         "name": "Canal City Hakata",
@@ -161,7 +169,8 @@
         "map": {
           "lat": 33.5896715,
           "lng": 130.411141
-        }
+        },
+        "place_id": "ChIJYcOBiZWRQTUR0Rl0ehe67eA"
       }
     ]
   },

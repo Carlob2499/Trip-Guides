@@ -136,14 +136,36 @@ export function haversineKm(a, b) {
  * acceptMatch. A guide file describes one place on earth, so the file's own median location is
  * the honest reference: no configuration to maintain, and it adapts to a Tokyo section inside a
  * Korea guide, which a guide-level country hint gets wrong by construction.
+ *
+ * ONE EXCEPTION: a row that already carries its own verified `map` (this pass is only filling in
+ * its `place_id`) has better ground truth than any file median could offer, and judging it against
+ * the median is actively wrong for a file that legitimately spans several cities — Japan's
+ * itinerary files run Sendai, Sapporo and Fukuoka sections together, so the "centre" of the file
+ * is nowhere real, and multiple genuine matches were rejected as if they were the Konbini bug.
+ * Ground-truthed rows are checked against their OWN coordinates instead, and are excluded from the
+ * median used to judge everyone else — they'd only pull that median toward whichever city happens
+ * to have more already-pinned sights, not toward the truth for a still-uncoordinated row.
  */
+const GROUND_TRUTH_KM = 5;
 export function flagOutliers(results, maxKm = 150) {
-  const pts = results.filter((r) => r.ok).map((r) => r.res);
-  if (pts.length < 3) return results;             // too few to establish a centre honestly
+  const anchored = new Set();
+  const judged = results.map((r) => {
+    if (!r.ok || r.needsCoords !== false || !r.item?.map) return r;
+    anchored.add(r);
+    const km = haversineKm(r.item.map, r.res);
+    if (km <= GROUND_TRUTH_KM) return r;
+    return {
+      ...r, ok: false,
+      why: `place_id result is ${Math.round(km)} km from this item's own verified coordinates — Places resolved a same-named place elsewhere`,
+    };
+  });
+
+  const pts = judged.filter((r) => r.ok && !anchored.has(r)).map((r) => r.res);
+  if (pts.length < 3) return judged;               // too few to establish a centre honestly
   const mid = (xs) => { const s = [...xs].sort((a, b) => a - b); return s[Math.floor(s.length / 2)]; };
   const centre = { lat: mid(pts.map((p) => p.lat)), lng: mid(pts.map((p) => p.lng)) };
-  return results.map((r) => {
-    if (!r.ok) return r;
+  return judged.map((r) => {
+    if (!r.ok || anchored.has(r)) return r;
     const km = haversineKm(centre, r.res);
     if (km <= maxKm) return r;
     return { ...r, ok: false, why: `${Math.round(km)} km from the rest of this file — Places resolved a same-named place elsewhere` };

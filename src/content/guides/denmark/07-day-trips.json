@@ -13,9 +13,10 @@
           "alt": "Cobblestone café square at Lilla Torg in Malmö's old town"
         },
         "map": {
-          "lat": 55.6049,
-          "lng": 13.0038
-        }
+          "lat": 55.6051846,
+          "lng": 12.9988061
+        },
+        "place_id": "ChIJ9Vdc_rOjU0YRmlbdOkRH6Fo"
       },
       {
         "name": "Malmöhus Castle",
@@ -26,12 +27,13 @@
           "alt": "Malmöhus Castle's red round tower reflected in its moat"
         },
         "map": {
-          "lat": 55.6076,
-          "lng": 12.9968
+          "lat": 55.6049011,
+          "lng": 12.9875581
         },
         "verified_on": "2026-06-10",
         "shelf_life": "venue",
-        "source_url": "https://malmocity.se/en/museum/"
+        "source_url": "https://malmocity.se/en/museum/",
+        "place_id": "ChIJxT59GACkU0YRCeuggoqAYOA"
       },
       {
         "name": "Turning Torso & Västra Hamnen waterfront",
@@ -44,7 +46,8 @@
         "map": {
           "lat": 55.6213,
           "lng": 12.9751
-        }
+        },
+        "place_id": "ChIJFfSGlRqkU0YR2r3aiDMawn4"
       }
     ]
   },
@@ -62,27 +65,52 @@
         "address": "Lilla Torg",
         "price": "Free to browse",
         "source_url": "https://visitsweden.com/where-to-go/southern-sweden/malmo/slow-shopping-or-shop-till-you-drop-malmo/",
-        "why": "Ceramics, carved wood, suede leather bags from Swedish artisans — good portable gift buys."
+        "why": "Ceramics, carved wood, suede leather bags from Swedish artisans — good portable gift buys.",
+        "map": {
+          "lat": 55.60452720000001,
+          "lng": 12.9991635
+        },
+        "place_id": "ChIJW5Yf2_2jU0YRijpn4UdX3iI"
       },
       {
         "name": "Uma Bazaar",
         "address": "Lilla Torg 9",
-        "why": "Ethical fashion since 2005 — wood-fibre basics, eco-cotton dresses from Swedish and European indie brands not found in US chains."
+        "why": "Ethical fashion since 2005 — wood-fibre basics, eco-cotton dresses from Swedish and European indie brands not found in US chains.",
+        "map": {
+          "lat": 55.6046475,
+          "lng": 12.9992792
+        },
+        "place_id": "ChIJSbSi7_2jU0YRbFAGfFajlu4"
       },
       {
         "name": "Aplace",
         "area": "Davidshallstorg area (~10 min from old town)",
-        "why": "Curated Scandinavian fashion: Stine Goya, CDLP, By Malene Birger, Eytys."
+        "why": "Curated Scandinavian fashion: Stine Goya, CDLP, By Malene Birger, Eytys.",
+        "map": {
+          "lat": 55.5990128,
+          "lng": 13.000010600000001
+        },
+        "place_id": "ChIJVZSUHlehU0YRIzF27MndOI4"
       },
       {
         "name": "Liebling",
         "address": "Davidshallstorg 8",
-        "why": "Slow-fashion boutique — own Swedish label plus curated European pieces."
+        "why": "Slow-fashion boutique — own Swedish label plus curated European pieces.",
+        "map": {
+          "lat": 55.5990421,
+          "lng": 12.9988709
+        },
+        "place_id": "ChIJ0e42_1OhU0YR0v0pmdhAWXI"
       },
       {
         "name": "Filippa K",
         "area": "Södergatan (on the walk from Malmö C to old town)",
-        "why": "Major Swedish brand, significantly cheaper in Sweden than in the US — worth a VAT-refund purchase if you spend 300+ SEK."
+        "why": "Major Swedish brand, significantly cheaper in Sweden than in the US — worth a VAT-refund purchase if you spend 300+ SEK.",
+        "map": {
+          "lat": 55.6050105,
+          "lng": 13.0015933
+        },
+        "place_id": "ChIJ-1Rrnf2jU0YRuyPA6bXw2ig"
       },
       {
         "name": "Malmö Saluhall",
@@ -91,7 +119,12 @@
         "book": "url",
         "book_url": "https://www.malmosaluhall.se/en/welcome/",
         "how": "About 25 min walk or short bus from Gamla Staden.",
-        "why": "Food hall — fresh fish, ramen, Skåne ice cream, artisan bread, local cheese."
+        "why": "Food hall — fresh fish, ramen, Skåne ice cream, artisan bread, local cheese.",
+        "map": {
+          "lat": 55.6079296,
+          "lng": 12.9909635
+        },
+        "place_id": "ChIJQw0PnwCkU0YRaqX674kAif4"
       },
       {
         "name": "Falafel stand near Möllevångstorget",

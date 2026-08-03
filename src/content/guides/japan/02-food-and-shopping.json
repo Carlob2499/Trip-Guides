@@ -60,7 +60,12 @@
         "hours": "≈18:00 to the small hours",
         "why": "Officially licensed and location-assigned by Fukuoka City. Local sentiment (a Fukuoka-local blog explicitly asking \"is it true locals don't go to Fukuoka's yatai?\") is clear that Tenjin is where residents actually eat — cheaper (≈¥100–200 less per ramen bowl), more Hakata-ben than tourist chatter — while Nakasu is the livelier, more tourist-facing riverside scene, worth seeing for the atmosphere even if Tenjin is the better meal.",
         "crowd_tip": "Best windows are right at opening or ≈21:00 once the first dinner rush clears.",
-        "price": "Bring ¥1,000 notes — ~90% cash-only, and stalls often can't break a ¥10,000 bill."
+        "price": "Bring ¥1,000 notes — ~90% cash-only, and stalls often can't break a ¥10,000 bill.",
+        "map": {
+          "lat": 33.5906696,
+          "lng": 130.4079063
+        },
+        "place_id": "ChIJu43ESZSRQTURr0huMxMFZDI"
       },
       {
         "name": "Maedaya",
@@ -86,7 +91,12 @@
         "closed": "No closed days",
         "book": "walk-in",
         "why": "Fukuya is the brand that invented commercial mentaiko, and this location stocks a honten-exclusive tin not sold elsewhere.",
-        "price": "≈¥3,672 for the honten-exclusive tin"
+        "price": "≈¥3,672 for the honten-exclusive tin",
+        "map": {
+          "lat": 33.5920508,
+          "lng": 130.4080741
+        },
+        "place_id": "ChIJFZ4i_JSRQTURZXWTUqkSsrE"
       },
       {
         "name": "Kisuimaru",
@@ -113,7 +123,12 @@
         "name": "Yanagibashi Rengo Ichiba",
         "book": "walk-in",
         "why": "Nicknamed \"Fukuoka's Kitchen\" — a genuine working public fish/produce market with small sit-down counters, off the standard Hakata/Tenjin/Nakasu circuit that repeat visitors have likely already covered. Fukuoka Now, the city's long-running resident/expat magazine, has independently featured it across multiple years as one of the city's most distinctive spots for a visitor to see actual daily commerce rather than a tourist market.",
-        "crowd_tip": "⚠ Check current hours before going — traditional fish markets often skip Sundays."
+        "crowd_tip": "⚠ Check current hours before going — traditional fish markets often skip Sundays.",
+        "map": {
+          "lat": 33.5829794,
+          "lng": 130.4084273
+        },
+        "place_id": "ChIJcRcfs5mRQTUR5D_YhnCAeBQ"
       }
     ]
   },
@@ -129,17 +144,32 @@
         "area": "Susukino",
         "book": "call",
         "why": "Sapporo's signature charcoal-grilled lamb, done as a shared, drinking-friendly grill format that suits a celebration dinner better than a solo ramen counter. Founded 1954, its own sauce recipe, named as \"the place\" for jingisukan across multiple independent write-ups. Sapporo Beer Garden is the larger, more tour-group-scaled alternative if Daruma is full.",
-        "crowd_tip": "⚠ Address/hours not independently confirmed against an official page — call ahead to book for two and confirm current hours, especially if using it for the Oct 24 birthday dinner."
+        "crowd_tip": "⚠ Address/hours not independently confirmed against an official page — call ahead to book for two and confirm current hours, especially if using it for the Oct 24 birthday dinner.",
+        "map": {
+          "lat": 43.0538364,
+          "lng": 141.3524624
+        },
+        "place_id": "ChIJbQQV34UpC18RgzQI7TQon1g"
       },
       {
         "name": "Menya Saimi",
         "book": "walk-in",
-        "why": "Sapporo is the birthplace of miso ramen; this shop stands out for genuine local following (its recipe became a retail instant-ramen product) rather than just tourist-guide visibility — a single-source lead, worth a walk-by rather than a locked plan."
+        "why": "Sapporo is the birthplace of miso ramen; this shop stands out for genuine local following (its recipe became a retail instant-ramen product) rather than just tourist-guide visibility — a single-source lead, worth a walk-by rather than a locked plan.",
+        "map": {
+          "lat": 43.0352658,
+          "lng": 141.3819435
+        },
+        "place_id": "ChIJ8QvxwkgqC18RzLwtQHUynbc"
       },
       {
         "name": "Nijo Market",
         "book": "walk-in",
-        "why": "Sapporo's classic seafood market, good for a morning uni/crab breakfast; no strong \"locals go elsewhere instead\" alternative surfaced, so treat it as the standard, reasonably reliable pick rather than a discovered secret."
+        "why": "Sapporo's classic seafood market, good for a morning uni/crab breakfast; no strong \"locals go elsewhere instead\" alternative surfaced, so treat it as the standard, reasonably reliable pick rather than a discovered secret.",
+        "map": {
+          "lat": 43.058299,
+          "lng": 141.358446
+        },
+        "place_id": "ChIJCb2qW4IpC18R93EsGNFraJI"
       }
     ]
   },
@@ -154,7 +184,12 @@
         "name": "Ryūtei",
         "book": "walk-in",
         "why": "The actual restaurant where hiyashi chūka (cold ramen) was invented in 1937, adapting the Shanghainese dish liangbanmian; independently confirmed via its Wikipedia origin entry and a named local food blogger's own recommendation — a distinctive fact for Sendai's food identity, which is usually reduced to gyutan alone.",
-        "crowd_tip": "⚠ Confirm it's still open and check current hours locally."
+        "crowd_tip": "⚠ Confirm it's still open and check current hours locally.",
+        "map": {
+          "lat": 38.2674817,
+          "lng": 140.876861
+        },
+        "place_id": "ChIJz1STJCYoil8Re1n8XYd-3Ys"
       },
       {
         "name": "Date no Gyutan Honpo, Aobajo",
@@ -162,18 +197,33 @@
         "hours": "Lunch-only, 11:00–15:00",
         "book": "walk-in",
         "why": "On the former Date-clan castle grounds — a named local food blogger's own favorite gyutan (grilled beef tongue) pick, distinct from the big station-area chains most visitors default to.",
-        "price": "Set meals from ¥2,330"
+        "price": "Set meals from ¥2,330",
+        "map": {
+          "lat": 38.252218299999996,
+          "lng": 140.8562437
+        },
+        "place_id": "ChIJeRXL1EIoil8R7mPEpbXmLXc"
       },
       {
         "name": "Kokubuncho, Bunka-yokocho & Iroha-yokocho",
         "book": "walk-in",
-        "why": "Sendai's drinking district and its retro Shōwa-era back-alley izakaya lanes, repeatedly named across independent sources as the city's \"undiscovered by most visitors\" nightlife core: tiny 8–10-seat bars in former storage-warehouse buildings."
+        "why": "Sendai's drinking district and its retro Shōwa-era back-alley izakaya lanes, repeatedly named across independent sources as the city's \"undiscovered by most visitors\" nightlife core: tiny 8–10-seat bars in former storage-warehouse buildings.",
+        "map": {
+          "lat": 38.258959,
+          "lng": 140.8725576
+        },
+        "place_id": "ChIJB5rnyT0oil8RwyBRF6T7xZ0"
       },
       {
         "name": "Genji Izakaya",
         "area": "Bunka-yokocho",
         "book": "walk-in",
-        "why": "A 200-year-old former warehouse building with genuine local following — one specific standout inside Bunka-yokocho, a good fit for the Nov 9 wind-down evening."
+        "why": "A 200-year-old former warehouse building with genuine local following — one specific standout inside Bunka-yokocho, a good fit for the Nov 9 wind-down evening.",
+        "map": {
+          "lat": 38.2593046,
+          "lng": 140.8733374
+        },
+        "place_id": "ChIJwaMrsD0oil8RWNWxZ7hs3sk"
       }
     ]
   }

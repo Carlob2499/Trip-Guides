@@ -15,7 +15,8 @@
         "map": {
           "lat": 34.8200185,
           "lng": -111.7932108
-        }
+        },
+        "place_id": "ChIJ4Us_J-6mLYcROiSEl7pdwwQ"
       },
       {
         "name": "Bell Rock",
@@ -27,7 +28,8 @@
         },
         "source_url": "https://www.fs.usda.gov/r03/coconino/passes/red-rock-coconino-passes-program",
         "verified_on": "2026-07-19",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "place_id": "ChIJ2bLTinamLYcRCBTVl_6r3lc"
       },
       {
         "name": "Tlaquepaque Arts & Shopping Village",
@@ -43,7 +45,8 @@
         },
         "source_url": "https://www.yelp.com/biz/tlaquepaque-arts-and-shopping-village-sedona",
         "verified_on": "2026-07-19",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "place_id": "ChIJh0onC1ahLYcRs3bxybDuM8E"
       },
       {
         "name": "Airport Mesa Viewpoint",
@@ -56,7 +59,8 @@
         "map": {
           "lat": 34.8558039,
           "lng": -111.7791227
-        }
+        },
+        "place_id": "ChIJtaLHeUuhLYcR2ucHxm7xLPQ"
       }
     ]
   }

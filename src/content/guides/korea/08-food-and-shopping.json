@@ -11,7 +11,12 @@
         "img": {
           "file": "Korean.cuisine-Samgyeopsal-01.jpg",
           "alt": "Pork belly grilling on a tabletop grill with onion"
-        }
+        },
+        "map": {
+          "lat": 37.574062,
+          "lng": 126.99081129999999
+        },
+        "place_id": "ChIJ-WA7oBKjfDURexuwc2zq-1Q"
       },
       {
         "name": "Bibimbap · 비빔밥",
@@ -170,14 +175,24 @@
         "crowd_tip": "Good for a Jul 14 Hongdae send-off dinner or a late bite after MSI."
       },
       {
-        "name": "Palsaik Samgyupsal (팔색삼겹살)",
+        "name": "Yookji Hongdae (육지 홍대)",
         "area": "Hongdae",
-        "price": "≈₩13,000–16,000 pp ⚠ — confirm at venue",
-        "book": "url",
-        "book_url": "https://www.klook.com",
-        "how": "Multiple Hongdae branches. Bookable on <a href='https://www.klook.com' target='_blank' rel='noopener noreferrer'>Klook</a> if you want to pre-pay; walk-in usually possible early evening weekdays. <a href='https://map.naver.com/v5/search/%ED%8C%94%EC%83%89%EC%82%BC%EA%B2%B9%EC%82%B4%20%ED%99%8D%EB%8C%80'>Naver Map</a>.",
-        "why": "The 8-flavour pork belly concept — same cut marinated in eight sauces (garlic, herb, ginseng, curry, mushroom, red wine, soybean paste, original) served together.",
-        "crowd_tip": "KBBQ backup if Ungteori or MUSSO are full."
+        "price": "≈₩16,000 pp ⚠ — confirm at venue",
+        "book": "walk-in",
+        "how": "Hongdae/Mapo-gu, near Hongik Univ. Station. <a href=\"https://map.naver.com/v5/search/%EC%9C%A1%EC%A7%80%20%ED%99%8D%EB%8C%80\">Naver Map</a>.",
+        "why": "Hongdae's well-reviewed aged-pork-belly spot — thick-cut samgyeopsal, generous banchan, staff who grill it for you.",
+        "crowd_tip": "KBBQ backup if Ungteori or MUSSO are full.",
+        "address": "34 Dongmak-ro 3-gil, Mapo-gu",
+        "hours": "Mon–Thu, Sun 11:30–22:00; Fri–Sat 11:30–23:00",
+        "phone": "02-2088-3905",
+        "map": {
+          "lat": 37.5496875,
+          "lng": 126.9174558
+        },
+        "place_id": "ChIJFcMUhCaZfDURB2O4cNXyD4g",
+        "source_url": "https://www.google.com/maps/place/?q=place_id:ChIJFcMUhCaZfDURB2O4cNXyD4g",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
       },
       {
         "name": "Saemaul Sikdang (새마을식당 홍대점)",

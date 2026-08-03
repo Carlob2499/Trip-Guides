@@ -15,7 +15,8 @@
         "map": {
           "lat": 55.6798,
           "lng": 12.5912
-        }
+        },
+        "place_id": "ChIJr21nqiJTUkYR6-rlKAmgwpk"
       },
       {
         "name": "Reffen",
@@ -28,7 +29,8 @@
         "map": {
           "lat": 55.6906,
           "lng": 12.6007
-        }
+        },
+        "place_id": "ChIJJ9EDaddSUkYRoJpUuE6-59w"
       },
       {
         "name": "Kastellet",
@@ -41,7 +43,8 @@
         "map": {
           "lat": 55.6909,
           "lng": 12.5945
-        }
+        },
+        "place_id": "ChIJecok-N9SUkYRM2v7tTvxyPg"
       },
       {
         "name": "CopenHill (Amager Bakke)",
@@ -54,7 +57,8 @@
         "map": {
           "lat": 55.6916,
           "lng": 12.597
-        }
+        },
+        "place_id": "ChIJQ1wUoCtTUkYRivQIXIVAfcg"
       },
       {
         "name": "Superkilen",
@@ -67,7 +71,8 @@
         "map": {
           "lat": 55.6996,
           "lng": 12.5419
-        }
+        },
+        "place_id": "ChIJzRCsrE1SUkYRxGJPTwVjwO0"
       },
       {
         "name": "Grundtvig's Church",
@@ -78,9 +83,10 @@
           "alt": "Grundtvig's Church, Copenhagen"
         },
         "map": {
-          "lat": 55.7045,
-          "lng": 12.534
-        }
+          "lat": 55.7166277,
+          "lng": 12.534012
+        },
+        "place_id": "ChIJTYMCNVJSUkYRSfuN35R3Hcg"
       }
     ]
   },

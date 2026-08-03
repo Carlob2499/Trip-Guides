@@ -158,7 +158,12 @@
       {
         "name": "Elote Cafe",
         "why": "Sedona's most in-demand table — bold, elevated Southwestern and Mexican cooking.",
-        "crowd_tip": "Reserve ahead, especially on a weekend — it's not a reliable walk-in."
+        "crowd_tip": "Reserve ahead, especially on a weekend — it's not a reliable walk-in.",
+        "map": {
+          "lat": 34.8720417,
+          "lng": -111.7608733
+        },
+        "place_id": "ChIJOehzrXSjLYcREWbHQfAQhIU"
       },
       {
         "name": "El Rincon",
@@ -166,11 +171,21 @@
       },
       {
         "name": "Tamaliza",
-        "why": "Traditional Mexican food without the elevated price or the wait — a good backup if Elote is booked out."
+        "why": "Traditional Mexican food without the elevated price or the wait — a good backup if Elote is booked out.",
+        "map": {
+          "lat": 34.8620308,
+          "lng": -111.78121499999999
+        },
+        "place_id": "ChIJXZ5TY0ihLYcRBC-fIHaUUJI"
       },
       {
         "name": "Coffee Pot Restaurant",
-        "why": "A west-side local institution for 30+ years — a straightforward, unpretentious breakfast spot."
+        "why": "A west-side local institution for 30+ years — a straightforward, unpretentious breakfast spot.",
+        "map": {
+          "lat": 34.8643193,
+          "lng": -111.79667119999999
+        },
+        "place_id": "ChIJGUonKTuhLYcRD5of0Attr3w"
       }
     ]
   }

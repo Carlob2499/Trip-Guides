@@ -33,7 +33,12 @@
         "book_url": "https://torvehallernekbh.dk",
         "how": "Directly outside Nørreport station.",
         "crowd_tip": "Arrive by 17:30 — some stalls close early on Sundays.",
-        "why": "Copenhagen's best covered food market — 60+ stalls, all price points. Standouts: the fresh fish counter, smørrebrød stalls, The Coffee Collective, pastries. The single most convenient food stop on this entire itinerary."
+        "why": "Copenhagen's best covered food market — 60+ stalls, all price points. Standouts: the fresh fish counter, smørrebrød stalls, The Coffee Collective, pastries. The single most convenient food stop on this entire itinerary.",
+        "map": {
+          "lat": 55.6837848,
+          "lng": 12.568928
+        },
+        "place_id": "ChIJGzGFEgVTUkYRO2LpXOPtdHM"
       },
       {
         "name": "Selma",
@@ -42,26 +47,46 @@
         "price": "≈150–250 DKK per person for lunch",
         "book": "url",
         "book_url": "https://guide.michelin.com/dk/en/capital-region/copenhagen/restaurant/selma",
-        "why": "Michelin Bib Gourmand — modern smørrebrød at lunch, tasting menu in the evening. Herring with nettles, roast beef with pickled things."
+        "why": "Michelin Bib Gourmand — modern smørrebrød at lunch, tasting menu in the evening. Herring with nettles, roast beef with pickled things.",
+        "map": {
+          "lat": 55.684666,
+          "lng": 12.569838599999999
+        },
+        "place_id": "ChIJ4R8rop9TUkYRmvDmmb-gVOw"
       },
       {
         "name": "Conditori La Glace",
         "area": "just off Strøget",
         "address": "Skoubogade 3",
         "price": "≈40–90 DKK for a slice and coffee",
-        "why": "Denmark's oldest confectionery, founded 1870 — layer cakes and pastries genuinely hard to find elsewhere."
+        "why": "Denmark's oldest confectionery, founded 1870 — layer cakes and pastries genuinely hard to find elsewhere.",
+        "map": {
+          "lat": 55.6785921,
+          "lng": 12.5735765
+        },
+        "place_id": "ChIJWTHxrRFTUkYRUWrFJLIQ3XE"
       },
       {
         "name": "Hart Bageri",
         "area": "multiple: Gammel Kongevej, Refshaleøen/Reffen area",
         "price": "≈25–55 DKK",
-        "why": "Widely rated Copenhagen's best sourdough."
+        "why": "Widely rated Copenhagen's best sourdough.",
+        "map": {
+          "lat": 55.6753846,
+          "lng": 12.5455049
+        },
+        "place_id": "ChIJY76U8FJTUkYRHJPvLA_0K4U"
       },
       {
         "name": "Juno the Bakery",
         "address": "Elmegade 10 (near Fælledparken — good for a pastry before Friday's GO Fest walk)",
         "price": "≈30–50 DKK",
-        "why": "Famous cardamom buns. ⚠ Confirm address before going."
+        "why": "Famous cardamom buns. ⚠ Confirm address before going.",
+        "map": {
+          "lat": 55.7061815,
+          "lng": 12.5818152
+        },
+        "place_id": "ChIJF5yoNfBSUkYRFjOQZdocHAE"
       },
       {
         "name": "Lagkagehuset",
@@ -79,14 +104,24 @@
         "book_url": "https://absaloncph.dk/en/food/",
         "how": "Book a ticket online by 16:00 on the day, or try the door from 17:00.",
         "crowd_tip": "Door usually open to walk-ins from 17:00.",
-        "why": "Communal long-table Danish dinner — one of the city's best bargains and genuinely social, not a tourist trap."
+        "why": "Communal long-table Danish dinner — one of the city's best bargains and genuinely social, not a tourist trap.",
+        "map": {
+          "lat": 55.6653981,
+          "lng": 12.550297899999999
+        },
+        "place_id": "ChIJDVTyRHZTUkYR4DV6isOiwVI"
       },
       {
         "name": "Doomsday Deli",
         "area": "Nørrebro, ~20 min from CABINN",
         "address": "Gulbergsgade",
         "price": "≈80–120 DKK",
-        "why": "Thick, layered sandwiches with a strong local following."
+        "why": "Thick, layered sandwiches with a strong local following.",
+        "map": {
+          "lat": 55.691299099999995,
+          "lng": 12.5591081
+        },
+        "place_id": "ChIJW2caVctTUkYR0FxPpv2WnkM"
       },
       {
         "name": "KOBA Koreansk Barbeque",
@@ -96,7 +131,12 @@
         "book_url": "https://koba-bbq.dk",
         "how": "From hotel: Metro M1 from Nørreport → Kongens Nytorv → continue south → Islands Brygge, ≈25 min.",
         "crowd_tip": "Reservations strongly recommended — book online. Best on arrival evening Mon Jun 9 or a non-GO Fest slot.",
-        "why": "The flashier of the two AYCE Korean BBQ options — robot waiters deliver to the table, order on a tablet, 40+ dishes (bulgogi, pork belly, chicken, banchan, bibimbap, japchae), 2-hour sitting."
+        "why": "The flashier of the two AYCE Korean BBQ options — robot waiters deliver to the table, order on a tablet, 40+ dishes (bulgogi, pork belly, chicken, banchan, bibimbap, japchae), 2-hour sitting.",
+        "map": {
+          "lat": 55.6465871,
+          "lng": 12.6145462
+        },
+        "place_id": "ChIJF1qzChWtU0YRAyV8gfPPo1k"
       },
       {
         "name": "Seoul Koreansk BBQ — Nordhavn",
@@ -107,19 +147,32 @@
         "book_url": "https://www.koreanskbbq.dk",
         "how": "From hotel: Metro M4 from Nørreport → Nordhavn, ≈15 min — the easier logistics of the two.",
         "crowd_tip": "Walk-ins usually fine at lunch; dinner Fri–Sat benefits from a reservation.",
-        "why": "Same grill-at-the-table concept as KOBA, slightly more relaxed."
+        "why": "Same grill-at-the-table concept as KOBA, slightly more relaxed.",
+        "map": {
+          "lat": 55.7075452,
+          "lng": 12.5969659
+        },
+        "place_id": "ChIJP_STpStTUkYRf1qj7vcTv14"
       },
       {
-        "name": "Jabby's Filipino Cuisine",
-        "area": "Latin Quarter, ≈12 min walk northwest of the hotel",
-        "address": "Studiestræde 39, 1455 Copenhagen",
-        "phone": "+45 32 18 00 88",
-        "hours": "⚠ Verify opening hours before going — not widely published online.",
-        "price": "⚠ No confirmed DKK figure — check menu at jabbys.dk",
-        "book": "call",
-        "book_url": "https://www.jabbys.dk",
-        "how": "For groups of 4+, call ahead.",
-        "why": "Closest Filipino restaurant to the hotel. Menu staples: Chicken Adobo, Pork Humba, Kare Kare, Beef Caldereta, Sisig, Sinigang. Good portions; slightly higher prices than canteen-style. Rating 4.6 on Google."
+        "name": "TAMBAYAN CPH",
+        "area": "Amagerbro — ≈3km from the city centre; a metro or bike ride, not walking distance",
+        "address": "Amagerbrogade 102, 2300 København",
+        "phone": "50 27 61 89",
+        "hours": "Tue–Sat 16:00–21:00, Sun 12:00–19:30, closed Mon",
+        "price": "⚠ No confirmed DKK figure — check current menu at tambayan.mealo.dk",
+        "book": "url",
+        "book_url": "https://tambayan.mealo.dk/",
+        "how": "Metro to Amagerbro or Lergravsparken, then a short walk; or ≈15 min by bike from the city centre.",
+        "why": "Copenhagen's Filipino restaurant, run out of Amagerbro — kare-kare, pork barbecue, lumpia, turon and halo-halo. Further from the hotel than a city-centre pick, but the option that exists.",
+        "map": {
+          "lat": 55.6592611,
+          "lng": 12.6063277
+        },
+        "place_id": "ChIJPxPErVFTUkYRh6PYEFx_lII",
+        "source_url": "https://tambayan.mealo.dk/",
+        "verified_on": "2026-08-03",
+        "shelf_life": "venue"
       },
       {
         "name": "Manila Street BBQ n' Bao at Reffen",
@@ -128,14 +181,24 @@
         "price": "≈80–130 DKK for a plate",
         "book": "walk-in",
         "crowd_tip": "No reservation needed — queue at the stall.",
-        "why": "Filipino BBQ skewers and steamed bao buns, secret family recipe, cooked over an open grill. Already on the Thu Jun 12 route to Reffen."
+        "why": "Filipino BBQ skewers and steamed bao buns, secret family recipe, cooked over an open grill. Already on the Thu Jun 12 route to Reffen.",
+        "map": {
+          "lat": 55.6935988,
+          "lng": 12.6093871
+        },
+        "place_id": "ChIJAxWfst5TUkYRAOllhLyujDo"
       },
       {
         "name": "Vækst",
         "phone": "+45 38 41 27 27",
         "hours": "Sat Jun 13, 17:30 (reservation confirmed)",
         "book": "call",
-        "why": "Reservation confirmed for Sat Jun 13 at 17:30 — already part of the confirmed itinerary. Contact vaekst@cofoco.dk with any changes."
+        "why": "Reservation confirmed for Sat Jun 13 at 17:30 — already part of the confirmed itinerary. Contact vaekst@cofoco.dk with any changes.",
+        "map": {
+          "lat": 55.6788412,
+          "lng": 12.567143
+        },
+        "place_id": "ChIJvY9hWg5TUkYRZiYvRZFtDyU"
       }
     ]
   },
@@ -152,69 +215,129 @@
         "name": "Illum",
         "area": "Kongens Nytorv end of Strøget",
         "address": "Østergade 52",
-        "why": "Seven floors, designer-tier."
+        "why": "Seven floors, designer-tier.",
+        "map": {
+          "lat": 55.679474199999994,
+          "lng": 12.580637999999999
+        },
+        "place_id": "ChIJMxm_kUdTUkYRLg-q4dnzA5c"
       },
       {
         "name": "Magasin du Nord",
         "area": "Kongens Nytorv end of Strøget",
         "address": "Kongens Nytorv 13",
-        "why": "More accessible than Illum, with an excellent basement food hall."
+        "why": "More accessible than Illum, with an excellent basement food hall.",
+        "map": {
+          "lat": 55.6792501,
+          "lng": 12.584762399999999
+        },
+        "place_id": "ChIJX5RgohdTUkYRKjTdLS2jRLM"
       },
       {
         "name": "LEGO flagship store",
         "area": "Strøget",
         "address": "Vimmelskaftet 37",
-        "why": "Stocks store-exclusive sets."
+        "why": "Stocks store-exclusive sets.",
+        "map": {
+          "lat": 55.678546,
+          "lng": 12.575896
+        },
+        "place_id": "ChIJy84GHRFTUkYRY-FdhFM-nKI"
       },
       {
         "name": "Flying Tiger Copenhagen",
         "area": "on or near Strøget",
         "price": "Budget tier",
-        "why": "Danish original — cheap, fun, and genuinely worth a visit."
+        "why": "Danish original — cheap, fun, and genuinely worth a visit.",
+        "map": {
+          "lat": 55.682750899999995,
+          "lng": 12.5735186
+        },
+        "place_id": "ChIJPS8_uhpTUkYRUdcMfdd8pmk"
       },
       {
         "name": "Søstrene Grene",
         "area": "on or near Strøget",
         "price": "Budget tier",
-        "why": "Danish original — cheap, fun, and genuinely worth a visit."
+        "why": "Danish original — cheap, fun, and genuinely worth a visit.",
+        "map": {
+          "lat": 55.678715999999994,
+          "lng": 12.576205999999999
+        },
+        "place_id": "ChIJGUka4hBTUkYRU7Xdb_GD_t0"
       },
       {
         "name": "Rains",
         "price": "Mid-range tier; ≈$60–65 after VAT refund vs $90–100 in the US (⚠ approximate figures — verify at point of purchase)",
-        "why": "Rainwear — good VAT-refund item."
+        "why": "Rainwear — good VAT-refund item.",
+        "map": {
+          "lat": 55.6789391,
+          "lng": 12.5783731
+        },
+        "place_id": "ChIJGXuTuj9TUkYRJFVsf6lWBac"
       },
       {
         "name": "Samsøe Samsøe",
         "price": "Mid-range tier",
-        "why": "Danish fashion brand."
+        "why": "Danish fashion brand.",
+        "map": {
+          "lat": 55.6811176,
+          "lng": 12.576907499999999
+        },
+        "place_id": "ChIJ8YzcmxBTUkYRnp1lsDi7KLg"
       },
       {
         "name": "Ecco",
         "price": "Mid-range tier",
-        "why": "Danish footwear brand."
+        "why": "Danish footwear brand.",
+        "map": {
+          "lat": 55.679117899999994,
+          "lng": 12.5808935
+        },
+        "place_id": "ChIJ9ztmPBdTUkYRmr9t183srDU"
       },
       {
         "name": "Hay",
         "price": "Higher-end tier",
-        "why": "Design and homewares."
+        "why": "Design and homewares.",
+        "map": {
+          "lat": 55.6789792,
+          "lng": 12.580129
+        },
+        "place_id": "ChIJ4dNTLhdTUkYRShq3fLu3I14"
       },
       {
         "name": "Royal Copenhagen",
         "area": "Strøget",
         "address": "Amagertorv 6",
         "price": "Higher-end tier",
-        "why": "Porcelain."
+        "why": "Porcelain.",
+        "map": {
+          "lat": 55.678957999999994,
+          "lng": 12.579049999999999
+        },
+        "place_id": "ChIJW7zM0hBTUkYRyokHzNQYdo4"
       },
       {
         "name": "Georg Jensen",
         "area": "Amagertorv, same street as Royal Copenhagen",
         "price": "Higher-end tier",
-        "why": "Silver."
+        "why": "Silver.",
+        "map": {
+          "lat": 55.6789753,
+          "lng": 12.5793286
+        },
+        "place_id": "ChIJW7zM0hBTUkYRIqD7Zpz2dU4"
       },
       {
         "name": "Pandora",
         "price": "Higher-end tier",
-        "why": "Danish jewellery brand."
+        "why": "Danish jewellery brand.",
+        "map": {
+          "lat": 55.6784683,
+          "lng": 12.576106699999999
+        },
+        "place_id": "ChIJ2Tnu2RBTUkYRJzdA5o4m880"
       }
     ]
   },
