@@ -24,6 +24,57 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
+## Snapshot (2026-08-03, session #30 — geocode backfill finished; plan_b's first real content)
+
+**Denmark, Japan and US are now geocoded** (Korea shipped in session #29's last commit). 33
+Denmark venues, 33 Japan (across two runs), 7 US — every match checked to fall inside its own
+country before writing, per the propose-then-write discipline session #29 established.
+
+**The first Japan run caught a real gap in the outlier guard, same shape as session #29's
+Konbini bug.** Japan's itinerary files legitimately run several cities in one file (Sendai,
+Sapporo, Fukuoka sections back to back), so an item that already carries its OWN verified
+coordinates — only its `place_id` was missing — had no honest file-median to be judged
+against: Otaru Canal, Mt. Moiwa and six more genuine matches were rejected as if they were
+the Staten-Island bug. **Fixed:** an anchored row (already has `map`) is now judged against
+its OWN coordinates, not the file median, and excluded from the median used to judge everyone
+else. **Caught a real defect on the way:** one match accepted before this fix (`C-pla`) had
+silently written a wrong Osaka-area coordinate for a shop the guide describes as being inside
+Sapporo's Tanukikoji arcade — exactly the failure class the guard exists to catch, and it got
+through. Corrected by hand with a city-qualified query. Three new regression tests.
+
+**Running `--network` verify on all four guides surfaced two closed venues** — Denmark's
+Jabby's Filipino Cuisine (`jabbys.dk` no longer resolves) and Korea's Palsaik Samgyupsal (no
+operating location findable under any query). Both replaced with a verified-open alternative
+in the same city — Tambayan CPH and Yookji Hongdae — full provenance, not silently dropped.
+
+**`plan_b` (the inclement-day alternate field, shipped 2026-08-02) got its first real content**
+— six entries on Japan, the only guide in scope this pass (Denmark/Korea's trips already
+happened; US wasn't asked for). Scoped to days with REAL regional weather risk (checked
+Fukuoka/Sapporo/Sendai's actual Oct/Nov rain climatology first, not assumed) combined with a
+single-venue anchor: Mt. Moiwa (ropeway wind-closure, already documented in the guide's own
+text) → Sapporo Beer Museum; Otaru → its Music Box Museum; Noboribetsu/Jigokudani → Yumoto
+Sagiriyu bathhouse; Jozankei hiking day → SHIKAnoYU day-use onsen; Matsushima → Zuiganji
+Temple; Naruko Gorge → Takinoyu public bath. Every alternate Places-confirmed operating before
+writing; three of six happen to be onsen/bathhouses, matching the exact pattern the schema was
+built from (Korea's jjimjilbang refuge) without that being planned going in.
+
+**Fixed a real gap `check-research.mjs`'s D2 advisory exposed on contact:** it flagged every
+one of the six `plan_b` bodies as an undated price/hour figure because the hard-fact scanner
+checked only a day item's own `verified_on`, never looking inside `plan_b` even though the
+schema requires `plan_b` to carry its own `source_url` + `verified_on`. Fixed to recognize
+plan_b's own date; still flags a day whose OUTER body has its own undated figure. Two new tests.
+
+**Verified: 1340 tests (+30 total this session), build clean, lint 0, typecheck's one error
+confirmed pre-existing (reproduces before this session's changes, unrelated `map-pins.ts` type
+gap). All four guides PASS verify; `--network` shows 0 closed venues on all four (Jabby's/
+Palsaik fixed). Commons-photo leg reports UNVERIFIABLE — this sandbox cannot reach
+`commons.wikimedia.org` at all (confirmed via direct `curl`, connection failure not 403),
+environmental and pre-existing, not something this session touched.**
+
+**Not done, by explicit creator choice this session:** `plan_b` for Denmark, Korea, or US — the
+creator scoped this pass to Japan only. US (Sedona, Sep, real monsoon-tail flash-flood risk on
+its two outdoor days) is the natural next candidate if the creator wants to continue the arc.
+
 ## Snapshot (2026-08-02, session #29 — budget UI diagnosis + the sendable summary sheet)
 
 **The Budget calculator can now print a sendable summary.** "Save summary as PDF" sits in the
@@ -562,6 +613,25 @@ second tsconfig root, and the symptom looks like a code problem when it isn't.
 change-request prefill click is done and proven.)*
 
 ## Where we left off
+
+**Session #30 (2026-08-03):** finished the venue-geocode backfill (Denmark, Japan, US — Korea
+was already done) and shipped `plan_b`'s first real content, six entries on Japan.
+
+**Re-prompt the creator with:** "All four guides are geocoded now, and the run found real bugs
+on the way: Japan's itinerary files span several cities in one JSON file, which broke the
+outlier guard's file-median check for items that already had their own coordinates — fixed, and
+it caught a wrong Osaka coordinate that had slipped through before the fix. Running the network
+venue check on all four guides also found two closed restaurants (Denmark's Jabby's, Korea's
+Palsaik) — both replaced with a verified-open alternative, not silently dropped. Then `plan_b`
+(the rain/closure alternate field from two sessions ago) got used for the first time — six
+entries on Japan, scoped to days with real regional weather risk plus a single-venue anchor,
+each a Places-confirmed real place with its own source. Scope was deliberately Japan-only this
+pass — Denmark and Korea's trips already happened, so a forward-looking rain plan has less
+value there, and US wasn't asked for. **US (Sedona, September, real monsoon-tail flash-flood
+risk on its two outdoor days) is the natural next one if you want to keep going.** Everything's
+pushed to `claude/guides-geocodes-adaptations-404px1`, no PR opened yet."
+
+---
 
 **Session #29 (2026-08-02):** shipped the budget summary sheet — "Save summary as PDF" in the
 Budget calculator, two A4 pages, printed by the browser rather than generated by a JS library
