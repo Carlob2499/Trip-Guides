@@ -45,6 +45,13 @@ const chromiumPath = resolveChromium();
 
 export default defineConfig({
   testDir: "tests/visual",
+  // Playwright's 30s default is not enough for a full axe scan of the largest guide. Korea's
+  // four a11y runs measured 29.1–29.3s against that 30s ceiling — passing, but by fractions of
+  // a second, so any content added to that guide tipped all four into timeout while the
+  // assertions themselves still held (verified: same runs pass unchanged at a higher ceiling,
+  // with no baseline raised). A gate that fails on guide GROWTH rather than on a real
+  // violation reports the wrong thing, so give the scan room it will not exhaust soon.
+  timeout: 90_000,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,

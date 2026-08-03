@@ -4,7 +4,7 @@ import { splitLead, moreDetailLabel } from "../../lib/lead-split";
 const { sec } = Astro.props;
 const { lead, more, moreParagraphCount, morePreview } = sec.collapsible
   ? { lead: sec.body, more: null, moreParagraphCount: 0, morePreview: "" }
-  : splitLead(sec.body);
+  : splitLead(sec.body, sec.fold);
 const label = moreDetailLabel(sec.moreLabel, moreParagraphCount);
 ---
 {lead && <div class="card-lead" set:html={lead} />}

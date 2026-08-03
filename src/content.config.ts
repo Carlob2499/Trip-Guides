@@ -168,7 +168,10 @@ const collapse = {
 // M4: optional override for the "More detail" toggle's label (src/lib/lead-split.ts's density
 // pass) — e.g. "Ticketing fine print" tells the reader what's folded instead of a bare "More
 // detail". Unset falls back to an honest computed paragraph count.
-const moreDetail = { moreLabel: z.string().optional() };
+// `fold: false` vetoes the split entirely (see lead-split.ts) — for bodies whose remainder is
+// operational in a way no regex can see: emergency contacts, addresses, penalties, arrival
+// steps. There is no `fold: true`; folding stays automatic and length-gated.
+const moreDetail = { moreLabel: z.string().optional(), fold: z.literal(false).optional() };
 
 // R6 — Composer unit facets (docs/PLAN_VISUAL_REDESIGN.md Move F). Tagged during the
 // research pass, consumed ONLY by scripts/compose-guide.mjs (no renderer reads them):
@@ -186,23 +189,23 @@ const facets = {
 };
 
 const section = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("panel"),  group: z.string(), ...facets, title: z.string().optional(), body: z.string().optional(), checklist: z.array(checklistItem).optional(), ...collapse, ...moreDetail, ...provenance }),
-  z.object({ type: z.literal("prose"),  group: z.string(), ...facets, title: z.string().optional(), body: z.string().optional(), ...collapse, ...moreDetail, ...provenance }),
-  z.object({ type: z.literal("list"),   group: z.string(), ...facets, title: z.string().optional(), items: z.array(z.string()), ...collapse, ...provenance }),
-  z.object({ type: z.literal("routes"), group: z.string(), ...facets, title: z.string().optional(), steps: z.array(z.string()), ...provenance }),
-  z.object({ type: z.literal("map"),    group: z.string(), ...facets, title: z.string().optional(), center: coord, span: z.number().optional(), points: z.array(mapPoint).optional() }),
+  z.strictObject({ type: z.literal("panel"),  group: z.string(), ...facets, title: z.string().optional(), body: z.string().optional(), checklist: z.array(checklistItem).optional(), ...collapse, ...moreDetail, ...provenance }),
+  z.strictObject({ type: z.literal("prose"),  group: z.string(), ...facets, title: z.string().optional(), body: z.string().optional(), ...collapse, ...moreDetail, ...provenance }),
+  z.strictObject({ type: z.literal("list"),   group: z.string(), ...facets, title: z.string().optional(), items: z.array(z.string()), ...collapse, ...provenance }),
+  z.strictObject({ type: z.literal("routes"), group: z.string(), ...facets, title: z.string().optional(), steps: z.array(z.string()), ...provenance }),
+  z.strictObject({ type: z.literal("map"),    group: z.string(), ...facets, title: z.string().optional(), center: coord, span: z.number().optional(), points: z.array(mapPoint).optional() }),
   // weather — live 7-day Open-Meteo strip. No coords here: reads lat/lng from the
   // guide's first `map` section at runtime (so it needs no per-guide config). If the
   // guide has no map section the block stays hidden. `note` is an optional caption.
-  z.object({ type: z.literal("weather"), group: z.string(), ...facets, title: z.string().optional(), note: z.string().optional() }),
+  z.strictObject({ type: z.literal("weather"), group: z.string(), ...facets, title: z.string().optional(), note: z.string().optional() }),
   // holidays — public holidays for the trip, fetched at BUILD time from Nager.Date
   // into src/data/holidays/{CC}-{year}.json (offline-safe, no client JS). The country
   // comes from themes.ts COUNTRY_CODES; the dates come from the guide's `days` section.
   // `year` is optional (defaults to the derived trip year). The block highlights any
   // holiday during the trip, notes ones just before/after, and hides if no data file
   // exists for the country/year.
-  z.object({ type: z.literal("holidays"), group: z.string(), ...facets, title: z.string().optional(), note: z.string().optional(), year: z.number().int().optional() }),
-  z.object({ type: z.literal("days"),   group: z.string(), ...facets, title: z.string().optional(), items: z.array(z.object({
+  z.strictObject({ type: z.literal("holidays"), group: z.string(), ...facets, title: z.string().optional(), note: z.string().optional(), year: z.number().int().optional() }),
+  z.strictObject({ type: z.literal("days"),   group: z.string(), ...facets, title: z.string().optional(), items: z.array(z.object({
     date: z.string(), title: z.string(),
     pace: z.string().optional(), note: z.string().optional(), body: z.string().optional(), fit: z.string().optional(),
     checklist: z.array(checklistItem).optional(),
@@ -239,14 +242,14 @@ const section = z.discriminatedUnion("type", [
     })).optional(),
     ...provenance,
   })) }),
-  z.object({ type: z.literal("sights"), group: z.string(), ...facets, title: z.string().optional(), items: z.array(z.object({
+  z.strictObject({ type: z.literal("sights"), group: z.string(), ...facets, title: z.string().optional(), items: z.array(z.object({
     name: z.string(), kicker: z.string().optional(), body: z.string().optional(),
     img: z.object({ file: z.string(), alt: z.string().optional() }).optional(),
     map: coord.optional(),
     ...provenance,
   })) }),
   // P5: scannable venue cards — structured food/shopping/activity picks replacing prose blocks.
-  z.object({ type: z.literal("venues"), group: z.string(), ...facets, title: z.string().optional(), intro: z.string().optional(), items: z.array(z.object({
+  z.strictObject({ type: z.literal("venues"), group: z.string(), ...facets, title: z.string().optional(), intro: z.string().optional(), items: z.array(z.object({
     name: z.string(),
     area: z.string().optional(),
     address: z.string().optional(),
@@ -261,21 +264,25 @@ const section = z.discriminatedUnion("type", [
     why: z.string().optional(),
     map: coord.optional(),
     ...provenance,
-  })) }),
+    // Section-level provenance too, same as panel/prose/list. Its absence was silent until the
+    // union went strict: three denmark venues sections carried a real verified_on that zod
+    // stripped, so they rendered no "Checked" stamp and the staleness audit never counted them.
+    // A venues section is exactly the kind that earns one — its whole payload is perishable.
+  })), ...provenance }),
   // P7/R12: "What generic guides get wrong" — structured claim/correction pairs showcasing
   // where this guide's researched findings diverge from generic advice. Each item names the
   // common claim, the researched correction, and carries its own provenance so the correction
   // is verifiable. Renders as a standalone section (earns its own group or sits in an existing
   // one). Designed for first-time visitors: highlights overcrowded spots, tourist traps, and
   // outdated advice that generic guides repeat unchecked.
-  z.object({ type: z.literal("divergences"), group: z.string(), ...facets, title: z.string().optional(), intro: z.string().optional(),
+  z.strictObject({ type: z.literal("divergences"), group: z.string(), ...facets, title: z.string().optional(), intro: z.string().optional(),
     items: z.array(z.object({
       claim: z.string(),
       correction: z.string(),
       category: z.enum(["overcrowded", "tourist-trap", "outdated", "misleading", "missing-context"]).optional(),
       ...provenance,
     })).min(1), ...collapse }),
-  z.object({ type: z.literal("budget"), group: z.string(), ...facets, title: z.string().optional(),
+  z.strictObject({ type: z.literal("budget"), group: z.string(), ...facets, title: z.string().optional(),
     intro: z.string().optional(), currency: z.string().optional(), days: z.number().positive().optional(),
     budgetTarget: z.string().optional(),
     // party must be a positive integer: BudgetBlock.astro divides trip totals by it
@@ -298,7 +305,7 @@ const section = z.discriminatedUnion("type", [
   // comma-lists that used to live in prose. Each window renders as one card (day + time +
   // type theme + spawn/raid chips + priority targets), so the data segments cleanly and
   // reflows from a multi-column grid on desktop to a single column on mobile.
-  z.object({ type: z.literal("habitats"), group: z.string(), ...facets, title: z.string().optional(), note: z.string().optional(),
+  z.strictObject({ type: z.literal("habitats"), group: z.string(), ...facets, title: z.string().optional(), note: z.string().optional(),
     windows: z.array(z.object({
       day:     z.string(),                        // "Sat Jul 11"
       time:    z.string(),                        // "10:00–13:00"
@@ -311,7 +318,7 @@ const section = z.discriminatedUnion("type", [
     })).min(1), ...collapse }),
   // infogrid — a grid of small icon-labeled fact cards; replaces dense bullet-list
   // "here's everything you need to know" prose with scannable, low-text-density tiles.
-  z.object({ type: z.literal("infogrid"), group: z.string(), ...facets, title: z.string().optional(), note: z.string().optional(),
+  z.strictObject({ type: z.literal("infogrid"), group: z.string(), ...facets, title: z.string().optional(), note: z.string().optional(),
     cards: z.array(z.object({
       icon:  z.string().optional(),   // single emoji/glyph, e.g. "🎟️"
       label: z.string(),              // short heading, e.g. "9 free raid passes/day"
@@ -319,7 +326,7 @@ const section = z.discriminatedUnion("type", [
     })).min(1), ...collapse }),
   // tierlist — ranked chip groups (S/A/B priority tiers, or "skip vs fresh" divergence
   // groups); replaces paragraph-of-prose priority rankings with scannable chip rows.
-  z.object({ type: z.literal("tierlist"), group: z.string(), ...facets, title: z.string().optional(), note: z.string().optional(),
+  z.strictObject({ type: z.literal("tierlist"), group: z.string(), ...facets, title: z.string().optional(), note: z.string().optional(),
     tiers: z.array(z.object({
       tier:  z.string(),                       // group label, e.g. "S — do these no matter what"
       icon:  z.string().optional(),            // single emoji/glyph shown before the label
@@ -330,7 +337,7 @@ const section = z.discriminatedUnion("type", [
   // raids — structured raid boss counter tables; replaces hand-written HTML in prose bodies.
   // Each boss renders as a collapsible <details> card with a typed counter table.
   // `strategy` may contain simple inline HTML (<b>, <a>); no block elements.
-  z.object({ type: z.literal("raids"),  group: z.string(), ...facets, title: z.string().optional(), ...collapse,
+  z.strictObject({ type: z.literal("raids"),  group: z.string(), ...facets, title: z.string().optional(), ...collapse,
     bosses: z.array(z.object({
       name:        z.string(),
       tier:        z.enum(["3-star", "5-star", "primal", "shadow", "super-mega"]),

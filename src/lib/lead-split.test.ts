@@ -48,6 +48,29 @@ describe("splitLead", () => {
     const r = splitLead(body);
     expect(r.more).toBeNull();
   });
+
+  // `fold: false` — the maker's veto for remainders that are operational in a way no regex can
+  // see (an embassy's 24/7 line, a 24-hour pharmacy's night bell, a fine). Without it, those
+  // fold silently, which is how a guide hides its emergency numbers one tap deep.
+  it("fold:false vetoes a split that would otherwise happen", () => {
+    const body = "<p>Emergencies: dial 119.</p><p>" + "US Embassy Seoul, emergency line, open around the clock. ".repeat(8) + "</p>";
+    const folded = splitLead(body);
+    expect(folded.more).not.toBeNull(); // control: this body DOES fold by default
+
+    const r = splitLead(body, false);
+    expect(r.more).toBeNull();
+    expect(r.lead).toBe(body);
+    expect(r.morePreview).toBe("");
+    expect(r.moreParagraphCount).toBe(0);
+  });
+
+  it("leaves folding untouched when fold is undefined or true (veto only, never a force)", () => {
+    const body = "<p>Lead.</p><p>" + "Ordinary secondary prose that comfortably clears the threshold. ".repeat(6) + "</p>";
+    expect(splitLead(body, undefined).more).not.toBeNull();
+    expect(splitLead(body, true).more).not.toBeNull();
+    // …and a short body still never folds, flag or no flag.
+    expect(splitLead("<p>Lead.</p><p>Too short.</p>", true).more).toBeNull();
+  });
 });
 
 describe("moreDetailLabel", () => {

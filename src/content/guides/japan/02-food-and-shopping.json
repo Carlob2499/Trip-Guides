@@ -11,7 +11,6 @@
     "source_url": "https://www.hakata-shinshin.com/tenpo_tenjin",
     "tier": "corroborated",
     "agreement": "A+B converged",
-    "moreLabel": "Ganso Nagahamaya + the Ichiran/Ippudo verdict",
     "items": [
       {
         "name": "Shin Shin, Tenjin main store",
@@ -53,7 +52,6 @@
     "source_url": "https://www.fukuya.com/shop/nakasu/",
     "tier": "primary",
     "agreement": "A+B converged",
-    "moreLabel": "Motsunabe pick (Maedaya) & where to buy mentaiko",
     "items": [
       {
         "name": "Yatai — Tenjin & Nakasu",
@@ -110,7 +108,6 @@
     "verified_on": "2026-07-29",
     "shelf_life": "venue",
     "source_url": "https://www.ganso-nagahamaya.com/",
-    "moreLabel": "The Dazaifu-day ramen stop",
     "items": [
       {
         "name": "Yanagibashi Rengo Ichiba",
@@ -126,7 +123,6 @@
     "title": "Sapporo — jingisukan, miso ramen & Nijo Market",
     "phase": "daily",
     "rank": 1,
-    "moreLabel": "Miso ramen & Nijo Market",
     "items": [
       {
         "name": "Jingisukan Daruma Honten, Susukino",
@@ -153,7 +149,6 @@
     "title": "Sendai — gyutan, hiyashi chūka & the back-alley izakaya lanes",
     "phase": "daily",
     "rank": 1,
-    "moreLabel": "Gyutan pick & the izakaya lanes",
     "items": [
       {
         "name": "Ryūtei",

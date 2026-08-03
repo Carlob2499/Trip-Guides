@@ -3,6 +3,7 @@
     "type": "panel",
     "group": "Essentials",
     "title": "Money & currency",
+    "moreLabel": "Cards, ATMs & where to withdraw",
     "body": "<p>Korea uses the <b>won (₩)</b>. The won still favours your spending power, though it has strengthened since this guide was first costed — roughly (approximate, <a href=\"https://www.google.com/search?q=KRW+USD+exchange+rate\" target=\"_blank\" rel=\"noopener noreferrer\">check before you go</a>): <b>{{fact:money-currency-1-000}} ≈ $0.68</b> and <b>{{fact:money-currency-10-000}} ≈ $6.85</b>, at about <b>{{fact:money-currency-1-461}} to the dollar</b> (24 Jul 2026, re-checked 30 Jul 2026 — it was {{fact:money-currency-1-535}} in Jun 2026). A spot rate moves daily, so treat every $ figure in this guide as ≈.</p><p>Cards and contactless work almost everywhere. For cash, the most reliable option is an <b>ATM inside a GS25 or CU convenience store</b> — both accept most foreign cards and charge modest fees. <b>Global ATM Alliance banks</b> (KEB Hana is the Korean partner) have lower or zero foreign withdrawal fees if your home bank is in the network — check before you leave. Avoid airport exchange booths; the rates are poor. Keep {{fact:money-currency-30-000}}–50,000 cash for markets and small eateries. A <b>T-money</b> card covers all subway and buses. Tipping isn't expected anywhere.</p>",
     "verified_on": "2026-07-30",
     "shelf_life": "fx",
@@ -214,6 +215,7 @@
     "type": "panel",
     "group": "Essentials",
     "title": "Health & pharmacy",
+    "fold": false,
     "body": "<p><b>Emergencies:</b> dial <a href='tel:119'><b>119</b></a> for ambulance or fire (free) and <a href='tel:112'><b>112</b></a> for police. On a 119 call, say '<b>English, please</b>' to reach an interpreter — your location is auto-detected. Save <a href='tel:1330'><b>1330</b></a> first: the 24/7 Korea Travel Hotline, English-speaking, can interpret, give directions, and patch you through to 119 or 112. <a href='tel:1339'><b>1339</b></a> is a 24-hour medical line that locates the nearest ER.</p><p><b>US Embassy Seoul</b> — for lost passports, serious medical emergencies, or legal trouble: <b>188 Sejong-daero, Jongno-gu</b> (between Gyeongbokgung and City Hall). Emergency line: <a href='tel:+82-2-397-4114'><b>+82-2-397-4114</b></a> (24/7). Website: <a href='https://kr.usembassy.gov' target='_blank' rel='noopener noreferrer'>kr.usembassy.gov</a>. If you lose your passport in Daejeon, go to the Embassy in Seoul — there's no consulate in Daejeon.</p><p><b>Pharmacies (약국, <i>yakguk</i>)</b> show a '약' sign. Many close Sundays but major-station branches stay open; some run 24 hours. Convenience stores cover paracetamol and antacids after hours. Korea bills upfront — no insurance card means 100% out of pocket.</p>",
     "checklist": [
       "Save <a href='tel:119'><b>119</b></a> (ambulance/fire), <a href='tel:112'><b>112</b></a> (police), <a href='tel:1330'><b>1330</b></a> (24/7 English travel hotline), <a href='tel:1339'><b>1339</b></a> (24-hr medical ER finder)",

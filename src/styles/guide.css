@@ -288,8 +288,13 @@ a.stale-pill:hover{background:color-mix(in srgb,var(--warn) 12%,transparent)}
   .card-more[open]::details-content{height:auto}
   @media(prefers-reduced-motion:reduce){.card-more::details-content{transition:none}}
 }
-/* Sights: responsive image grid across the full shell width. */
-.block:has(.sight){max-width:100%;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem 1.1rem;align-items:start}
+/* Sights: responsive image grid across the full shell width.
+   auto-FIT, not auto-fill: auto-fill keeps empty tracks at full size, so a row holding fewer
+   items than columns leaves them hugging the left with a measured void to the right (korea's
+   2-of-5 fact row wasted 684px of 1184 on desktop — 58% of the row). auto-fit collapses the
+   empty tracks, so a short row spreads across the width instead. Full rows are unaffected:
+   the column count still comes from the 1fr minmax floor, so a full grid lays out identically. */
+.block:has(.sight){max-width:100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem 1.1rem;align-items:start}
 .block:has(.sight) .block-title-row{grid-column:1/-1;margin-bottom:0}
 .block:has(.sight) .card{margin-bottom:0}
 /* Embedded maps: let the section fill the shell so the map is generously sized. */
@@ -675,9 +680,11 @@ details table{margin:.3rem 0 .4rem}
 
 /* === HABITATS (GO Fest rotation card grid) ================================== */
 /* Responsive grid: multi-column on desktop, single column on mobile. minmax()
-   floor keeps chips readable; auto-fill packs as many columns as fit the width. */
+   floor keeps chips readable; auto-fit packs as many columns as fit the width AND collapses
+   the empty ones, so an under-filled last row spreads instead of hugging the left (see the
+   sights grid note above for the measurements that drove this). */
 .hab-note{font-size:var(--text-small);color:var(--muted);margin:.1rem 0 .8rem;line-height:1.5}
-.hab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.9rem;margin:.2rem 0 .3rem}
+.hab-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:.9rem;margin:.2rem 0 .3rem}
 .hab-card{background:var(--bg2);border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:7px;padding:.85rem .95rem;min-width:0}
 .hab-head{display:flex;align-items:baseline;justify-content:space-between;gap:.5rem}
 .hab-day{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;text-transform:uppercase;letter-spacing:var(--tracking-micro);color:var(--accent-ink)}
@@ -702,7 +709,9 @@ details table{margin:.3rem 0 .4rem}
 /* Replaces "here's everything you need to know" bullet-list prose with one short
    fact per tile — reduces read time in a sunlit/rushed on-the-move setting. */
 .ig-note{font-size:var(--text-small);color:var(--muted);margin:.1rem 0 .8rem;line-height:1.5}
-.ig-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.7rem;margin:.2rem 0 .3rem}
+/* auto-fit, not auto-fill — this grid is where the void was worst: "Your 6-team for the
+   debuts" put 2 cells in 5 reserved tracks. See the sights grid note for the full reasoning. */
+.ig-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.7rem;margin:.2rem 0 .3rem}
 .ig-card{display:flex;gap:.6rem;align-items:flex-start;background:var(--bg2);border:1px solid var(--rule);border-radius:7px;padding:.7rem .8rem;min-width:0}
 .ig-icon{flex:none;font-size:var(--text-h4);line-height:1;margin-top:.05rem}
 .ig-text{min-width:0}

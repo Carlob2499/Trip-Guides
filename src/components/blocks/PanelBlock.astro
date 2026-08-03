@@ -9,7 +9,7 @@ import { checklistText } from "../../lib/checklist";
 const { sec, keyPrefix = "p" } = Astro.props;
 const { lead, more, moreParagraphCount, morePreview } = sec.collapsible
   ? { lead: sec.body, more: null, moreParagraphCount: 0, morePreview: "" }
-  : splitLead(sec.body);
+  : splitLead(sec.body, sec.fold);
 const label = moreDetailLabel(sec.moreLabel, moreParagraphCount);
 ---
 {/* R5 section anchor: substantial checklists (≥4 items) open with a live progress

@@ -12,6 +12,18 @@
 // move of the cut point (which risks splitting a warning's own sentence in half).
 const OPERATIONAL_CONTENT = /⚠|<ul[\s>]|<ol[\s>]/;
 
+// The automatic refusal above catches content that LOOKS operational (a ⚠ flag, a procedure).
+// It cannot catch content that only a reader knows is operational: an embassy's 24/7 line, a
+// 24-hour pharmacy's address and night-bell instruction, a fine you incur by walking down the
+// wrong lane, or the two things you must do in the arrivals hall before leaving it. Those read
+// as ordinary prose and fold silently — which is how a guide ends up hiding its emergency
+// numbers one tap deep, against the site's own "surfacing beats sourcing" doctrine.
+//
+// So the maker gets an explicit veto: `fold: false` on a panel/prose section means this body
+// never folds, however long it runs. Deliberately a veto and not a force — there is no
+// `fold: true`, because a section short enough to stay inline should never be pushed behind a
+// tap just because someone set a flag.
+
 export interface SplitLead {
   lead: string;
   more: string | null;
@@ -38,8 +50,9 @@ function truncateAtSentence(text: string, max: number): string {
   return text.slice(0, max).trimEnd() + "…";
 }
 
-export function splitLead(body: string | undefined | null): SplitLead {
+export function splitLead(body: string | undefined | null, fold?: boolean): SplitLead {
   const html = String(body || "");
+  if (fold === false) return { lead: html, more: null, moreParagraphCount: 0, morePreview: "" };
   const cut = html.indexOf("</p>");
   if (cut === -1) return { lead: html, more: null, moreParagraphCount: 0, morePreview: "" };
   const lead = html.slice(0, cut + 4);

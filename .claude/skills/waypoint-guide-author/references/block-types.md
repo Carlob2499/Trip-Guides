@@ -63,6 +63,27 @@ and `raids` accept optional `collapsible: true` (renders the card as a native
 `defaultOpen: false` for deep-reference material the reader only sometimes needs
 (e.g. counter charts), keep primary content open.
 
+**The "More detail" fold (`panel`/`prose` only).** A body whose remainder after the first
+`</p>` runs ≥260 characters folds automatically behind a toggle. Two fields steer it:
+
+- **`moreLabel`** — name what is behind the tap. Without it the toggle falls back to a
+  computed count ("More detail · 3 more paragraphs"), which measures *volume, not value* and
+  reads as a chore. "Tax-free shopping — the Nov 1 system change" earns a tap; "8 more
+  paragraphs" warns the reader off. **Write one for every fold.** It is only read on `panel`
+  and `prose` — the section union is strict, so putting it on any other type now fails the
+  build rather than being silently dropped (it was silently dropped for five japan venues
+  sections until 2026-08-02).
+- **`fold: false`** — veto the fold entirely. The splitter already refuses to hide a `⚠` flag
+  or a `<ul>/<ol>` procedure, but it cannot see content that is operational only in context.
+  Set this when the remainder holds **emergency contacts** (embassy lines, 24-hour pharmacy
+  addresses, night-bell instructions), a **penalty** (a fine, an enforced closure), or
+  **arrival-critical steps** the reader acts on in the first hour. Burying those one tap deep
+  contradicts the site's own surfacing doctrine. There is no `fold: true` — folding stays
+  automatic and length-gated, so a short section can never be pushed behind a tap.
+
+Deciding between them: ask *"if the reader never taps this, have they lost something they
+needed?"* Yes → `fold: false`. No → keep the fold and give it a real `moreLabel`.
+
 ## Quick decision table
 
 | You have… | Use | Why |
