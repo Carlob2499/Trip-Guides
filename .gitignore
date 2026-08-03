@@ -23,3 +23,6 @@ forks.json
 validate-errors.txt
 docs/mockups/living-atlas.html
 docs/mockups/.cache/
+# Design-study screenshots (docs/mockups/shoot-progress-study.mjs) — regenerate on demand;
+# nothing heavy enters the repo, same rule the living-atlas mock-up follows.
+docs/mockups/shots/

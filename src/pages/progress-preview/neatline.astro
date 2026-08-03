@@ -1,0 +1,94 @@
+---
+/* OPTION C — "Neatline" · design study for /progress/ (PREVIEW ONLY).
+   Additive route; touches nothing under src/pages/progress/.
+
+   The pitch: the still one. A chart sheet built from two devices the site already
+   ships — the neatline (guide.css's double rule on every group title) and the colophon
+   stat pair — with the six stages set as a printed index with dotted leaders. One
+   entrance (the rules draw), one live thing (the running stage breathes), nothing else. */
+import PwaHead from "../../components/PwaHead.astro";
+import PreviewBar from "./_lib/PreviewBar.astro";
+import "@fontsource-variable/literata/standard.css";
+import "@fontsource-variable/literata/standard-italic.css";
+import "@fontsource-variable/source-sans-3";
+import "../../styles/base.css";
+import "../../styles/progress-preview/preview-chrome.css";
+import "../../styles/progress-preview/neatline.css";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Neatline — progress design study</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <PwaHead />
+  </head>
+  <body>
+    <PreviewBar option="Neatline" pitch="The sheet before it is drawn — printed index, dotted leaders, near-still." />
+
+    <div class="nl-sheet">
+      <span class="nl-tick nl-tick--tl" aria-hidden="true"></span>
+      <span class="nl-tick nl-tick--tr" aria-hidden="true"></span>
+      <span class="nl-tick nl-tick--bl" aria-hidden="true"></span>
+      <span class="nl-tick nl-tick--br" aria-hidden="true"></span>
+
+      <p class="nl-head">
+        <a href={`${base}/`}>Waypoint</a>
+        <span id="nlSheetNo">Sheet in progress</span>
+      </p>
+      <div class="nl-rule nl-rule--a" aria-hidden="true"></div>
+
+      <main class="nl-body">
+        <h1 class="nl-title" id="nlTitle">Your guide</h1>
+        <p class="nl-dek" id="nlDek"></p>
+
+        <p class="nl-index-t">Stages</p>
+        <ol class="nl-index" id="nlIndex"></ol>
+
+        <p class="nl-note" id="nlAttempts" hidden></p>
+        <p class="nl-note nl-note--warn" id="nlStuck" hidden></p>
+
+        <div class="nl-done" id="nlDone" hidden>
+          <a class="nl-cta" id="nlCta" href="#">Open the guide <span aria-hidden="true">→</span></a>
+        </div>
+
+        <div class="nl-fix" id="nlFix" hidden>
+          <p>
+            Not finding it yet — the address depends on the destination name, and this page's
+            first guess may not match. Paste the slug from your issue's confirmation comment.
+          </p>
+          <form id="nlFixForm">
+            <label for="nlFixInput" hidden>Guide slug</label>
+            <input id="nlFixInput" type="text" placeholder="e.g. south-korea" autocomplete="off" />
+            <button type="submit">Track</button>
+          </form>
+        </div>
+
+        <div class="nl-foot-rule">
+          <div class="nl-rule nl-rule--b" aria-hidden="true"></div>
+          <dl class="nl-stats">
+            <div class="nl-stat"><dt>Elapsed</dt><dd id="nlElapsed">—</dd></div>
+            <div class="nl-stat"><dt>Stages cleared</dt><dd id="nlCleared">—</dd></div>
+            <div class="nl-stat"><dt>Last checkpoint</dt><dd id="nlLast">—</dd></div>
+            <div class="nl-stat" id="nlLocalWrap"><dt id="nlLocalLbl">Local</dt><dd id="nlLocal">—</dd></div>
+          </dl>
+          <p class="nl-colo">
+            <span>This page reads the pipeline's own committed checkpoints and updates itself.</span>
+            {" "}<a href={`${base}/`}>All guides →</a>
+          </p>
+        </div>
+      </main>
+    </div>
+
+    <p id="nlLive" role="status" aria-live="polite" style="position:absolute;left:-9999px;top:0"></p>
+
+    <script>
+      import { initNeatline } from "./_lib/neatline.js";
+      initNeatline();
+    </script>
+  </body>
+</html>

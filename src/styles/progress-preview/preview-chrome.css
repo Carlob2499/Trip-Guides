@@ -1,0 +1,27 @@
+/* === PREVIEW CHROME (design study only) =====================================
+   Tool UI for src/pages/progress-preview/*. Deliberately plain and deliberately
+   NOT in the site's voice — it must read as scaffolding around the option, never
+   as part of it. `?bare=1` removes it for screenshots. Delete this whole folder
+   with the study. */
+
+.pv-bar{position:sticky;top:0;z-index:9000;background:#111;color:#e8e8e8;
+  font-family:var(--font-data);font-size:var(--text-control-sm);line-height:1.35;
+  padding:.5rem .7rem;display:flex;flex-direction:column;gap:.35rem;
+  border-bottom:1px solid #333}
+.pv-bar-row{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
+.pv-tag{background:#e8e8e8;color:#111;font-weight:700;text-transform:uppercase;
+  letter-spacing:.08em;font-size:var(--text-nano);padding:.1rem .35rem;border-radius:3px}
+.pv-opt{font-weight:700}
+.pv-pitch{color:#9a9a9a;flex:1;min-width:12rem}
+.pv-warn{color:#e0a44a}
+.pv-lbl{color:#8a8a8a;text-transform:uppercase;letter-spacing:.08em;font-size:var(--text-nano);width:3.2rem;flex:none}
+.pv-chip{appearance:none;background:#1e1e1e;color:#cfcfcf;border:1px solid #3a3a3a;
+  border-radius:999px;padding:.22rem .6rem;font-family:inherit;font-size:var(--text-micro);
+  cursor:pointer;text-decoration:none;line-height:1.4}
+.pv-chip:hover{background:#2a2a2a;color:#fff}
+.pv-chip[aria-current="true"],.pv-chip.is-here{background:#e8e8e8;color:#111;border-color:#e8e8e8;font-weight:700}
+.pv-chip:focus-visible{outline:2px solid #6cf;outline-offset:2px}
+.pv-note{color:#8f8f8f;margin:0;max-width:70ch;font-size:var(--text-micro)}
+
+[data-pv-bare="1"] .pv-bar{display:none}
+@media print{.pv-bar{display:none}}
