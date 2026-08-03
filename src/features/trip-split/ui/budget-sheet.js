@@ -19,17 +19,25 @@
    blocker silently swallow the change-request wizard. */
 
 import { esc } from "../../../scripts/util.js";
+import { formatMinor, BASE_CURRENCY } from "../model/money";
 
-function money(v) {
-  return "$" + (Math.round(Math.abs(v) * 100) / 100).toFixed(2);
+/** All summary figures arrive as integer minor units of the base currency. */
+function money(minor) {
+  return formatMinor(Math.abs(Math.round(minor || 0)), BASE_CURRENCY);
+}
+/** An amount in whatever currency it was actually paid in. */
+function native(minor, currency) {
+  try { return formatMinor(Math.round(minor || 0), currency); }
+  catch (e) { return String(minor); }
 }
 
 /* Local-currency line. Deliberately coarse — a to-the-cent conversion of a converted figure
    claims precision the rate doesn't have — and always carries where the rate came from, so a
    printed number can't outlive its provenance (the site's sourced-approximate discipline). */
-function localLine(total, cur) {
-  if (!cur || !cur.code || !cur.rate || cur.code === "USD" || !total) return null;
-  var converted = Math.round(total * cur.rate);
+function localLine(totalMinor, cur) {
+  if (!cur || !cur.code || !cur.rate || cur.code === BASE_CURRENCY || !totalMinor) return null;
+  // totalMinor is cents of the base currency; the rate is local units per 1 base unit.
+  var converted = Math.round((totalMinor / 100) * cur.rate);
   var rounded = converted >= 10000 ? Math.round(converted / 100) * 100 : converted;
   return {
     value: "≈ " + rounded.toLocaleString() + " " + cur.code,
@@ -67,9 +75,11 @@ function coverPage(s, meta) {
     ? "<ul class='bs-settle'>" + s.txns.map(function (t) {
         return "<li class='bs-settle-row'><span class='bs-settle-who'>" + esc(t.fromName) +
           " <span class='bs-arrow'>→</span> " + esc(t.toName) + "</span><span class='bs-settle-amt'>" +
-          money(t.amt) + "</span></li>";
+          money(t.amtMinor) + "</span></li>";
       }).join("") + "</ul>"
-    : "<p class='bs-square'>All square — no transfers needed.</p>";
+    : (s.settledCount
+        ? "<p class='bs-square'>All square — every transfer has been settled.</p>"
+        : "<p class='bs-square'>All square — no transfers needed.</p>");
 
   return "<section class='bs-page bs-cover'>" +
     "<header class='bs-brand'><span class='bs-mark'>Waypoint</span><span class='bs-kind'>Budget summary</span></header>" +
@@ -92,10 +102,11 @@ function statementPage(s, meta) {
     "<th>Traveller</th><th class='bs-num'>Paid</th><th class='bs-num'>Their share</th><th class='bs-num'>Net</th>" +
     "</tr></thead><tbody>" +
     s.people.map(function (p) {
-      var verb = p.net > 0.005 ? "is owed " + money(p.net)
-        : p.net < -0.005 ? "owes " + money(p.net)
+      // Integer minor units: a balance is either zero or it isn't — no tolerance band.
+      var verb = p.net > 0 ? "is owed " + money(p.net)
+        : p.net < 0 ? "owes " + money(p.net)
           : "settled";
-      var cls = p.net > 0.005 ? "bs-owed" : p.net < -0.005 ? "bs-owes" : "bs-even";
+      var cls = p.net > 0 ? "bs-owed" : p.net < 0 ? "bs-owes" : "bs-even";
       return "<tr><td>" + esc(p.name) + "</td><td class='bs-num'>" + money(p.paid) +
         "</td><td class='bs-num'>" + money(p.share) + "</td><td class='bs-num " + cls + "'>" + verb + "</td></tr>";
     }).join("") +
@@ -104,13 +115,31 @@ function statementPage(s, meta) {
   var itemised = s.items.length
     ? "<table class='bs-table'><thead><tr><th>What for</th><th>Paid by</th><th class='bs-num'>Shared</th><th class='bs-num'>Amount</th></tr></thead><tbody>" +
       s.items.map(function (it) {
-        return "<tr><td>" + esc(it.desc) + "</td><td>" + esc(it.payerName) + "</td><td class='bs-num'>" +
+        // A foreign expense prints what was actually handed over, with the converted figure
+        // beneath it — the receipt in your pocket says ₩45,000, not $31.16.
+        var amt = it.nativeMinor != null
+          ? native(it.nativeMinor, it.nativeCurrency) + "<span class='bs-conv'>" + money(it.baseMinor) + "</span>"
+          : money(it.baseMinor);
+        return "<tr><td>" + esc(it.desc) +
+          (it.category && it.category !== "Uncategorised" ? "<span class='bs-cat'>" + esc(it.category) + "</span>" : "") +
+          "</td><td>" + esc(it.payerName) + "</td><td class='bs-num'>" +
           it.sharerCount + (it.sharerCount === s.memberCount ? "" : " of " + s.memberCount) +
-          "</td><td class='bs-num'>" + money(it.amount) + "</td></tr>";
+          "</td><td class='bs-num'>" + amt + "</td></tr>";
       }).join("") +
       "<tr class='bs-total-row'><td>Total</td><td></td><td></td><td class='bs-num'>" + money(s.total) + "</td></tr>" +
       "</tbody></table>"
     : "<p class='bs-square'>No expenses recorded.</p>";
+
+  // Where it went — printed only when the trip actually categorised something.
+  var categorised = s.byCategory.filter(function (c) { return c.category !== "Uncategorised"; });
+  var byCat = categorised.length
+    ? "<h2 class='bs-h'>Where it went</h2><table class='bs-table'><thead><tr><th>Category</th><th class='bs-num'>Expenses</th><th class='bs-num'>Share</th><th class='bs-num'>Total</th></tr></thead><tbody>" +
+      s.byCategory.map(function (c) {
+        var pct = s.total ? Math.round((c.total / s.total) * 100) : 0;
+        return "<tr><td>" + esc(c.category) + "</td><td class='bs-num'>" + c.count +
+          "</td><td class='bs-num'>" + pct + "%</td><td class='bs-num'>" + money(c.total) + "</td></tr>";
+      }).join("") + "</tbody></table>"
+    : "";
 
   var perPerson = s.byPerson.filter(function (p) { return p.items.length; }).map(function (p) {
     return "<div class='bs-person'>" +
@@ -123,6 +152,9 @@ function statementPage(s, meta) {
 
   var footBits = [
     "Generated " + meta.generatedOn,
+    s.settledCount ? s.settledCount + " payment" + (s.settledCount === 1 ? "" : "s") + " already settled, totalling " + money(s.settledMinor) : null,
+    // An omission the reader would otherwise never know about.
+    s.unconvertedCount ? s.unconvertedCount + " expense" + (s.unconvertedCount === 1 ? " is" : "s are") + " not included — no exchange rate was captured for " + (s.unconvertedCount === 1 ? "it" : "them") : null,
     loc ? loc.note : null,
     meta.url,
   ].filter(Boolean);
@@ -130,6 +162,7 @@ function statementPage(s, meta) {
   return "<section class='bs-page'>" +
     "<header class='bs-runhead'><span>" + esc(meta.title) + " · budget summary</span><span>" + esc(meta.dateRange || "") + "</span></header>" +
     "<h2 class='bs-h'>Where it landed</h2>" + landed +
+    byCat +
     "<h2 class='bs-h'>Every expense</h2>" + itemised +
     (perPerson ? "<h2 class='bs-h'>Person by person</h2><div class='bs-people'>" + perPerson + "</div>" : "") +
     "<footer class='bs-foot'>" + footBits.map(function (b) { return "<span>" + esc(b) + "</span>"; }).join("") + "</footer>" +

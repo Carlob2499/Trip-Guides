@@ -1,5 +1,44 @@
 import { describe, expect, it } from 'vitest';
-import { computeSplits, formatMinor, SplitError, type SplitParticipant } from './money';
+import { computeSplits, formatMinor, SplitError, toBaseMinor, type SplitParticipant } from './money';
+
+describe('toBaseMinor', () => {
+  it('converts won to cents at the guide rate', () => {
+    // ₩45,000 at ₩1,444 = $1 → $31.16
+    expect(toBaseMinor(45_000, 'KRW', 1444)).toBe(3116);
+  });
+
+  it('handles a two-decimal foreign currency', () => {
+    // 625.50 DKK at 6.9 DKK = $1 → $90.65
+    expect(toBaseMinor(62_550, 'DKK', 6.9)).toBe(9065);
+  });
+
+  it('passes a base-currency amount straight through, rate or no rate', () => {
+    expect(toBaseMinor(9640, 'USD', null)).toBe(9640);
+    expect(toBaseMinor(9640, 'USD', 1444)).toBe(9640);
+  });
+
+  it('refuses to invent a number when the rate is missing or nonsense', () => {
+    expect(toBaseMinor(45_000, 'KRW', null)).toBeNull();
+    expect(toBaseMinor(45_000, 'KRW', 0)).toBeNull();
+    expect(toBaseMinor(45_000, 'KRW', -3)).toBeNull();
+    expect(toBaseMinor(45_000, 'KRW', Infinity)).toBeNull();
+  });
+
+  it('refuses an unknown currency rather than guessing its decimal places', () => {
+    expect(toBaseMinor(1000, 'XYZ', 2)).toBeNull();
+  });
+
+  it('rejects a non-integer amount — minor units are whole by definition', () => {
+    expect(toBaseMinor(1000.5, 'KRW', 1444)).toBeNull();
+  });
+
+  it('rounds to the nearest cent rather than truncating', () => {
+    // ₩1 at ₩1,444 = $1 is $0.000692… → rounds to 0 cents, not a fractional cent.
+    expect(toBaseMinor(1, 'KRW', 1444)).toBe(0);
+    // ₩8 → $0.00554 → 1 cent.
+    expect(toBaseMinor(8, 'KRW', 1444)).toBe(1);
+  });
+});
 
 describe('formatMinor', () => {
   it('respects zero-decimal currencies (KRW minor unit = won)', () => {

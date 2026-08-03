@@ -8,12 +8,28 @@
      · ON-DEVICE (only if Firebase isn't configured): state lives in localStorage, a
        private offline calculator exactly as before.
    Firebase itself lives in src/features/firebase (the silo); this file only imports its
-   public API. */
+   public API.
+
+   ─ V2 (2026-08-02) ────────────────────────────────────────────────────────────────────
+   Money is integer minor units end to end (model/records.ts explains the shape). Four
+   behaviour changes ride along:
+     · Split method is per EXPENSE, not per trip, so the old global ÷Even/Custom toggle is
+       gone and each row owns its own rule.
+     · Participants are SNAPSHOTTED when an expense is created, so a traveller who joins on
+       day 5 no longer retroactively owes for day 1.
+     · Amounts are entered in the currency actually paid, converted once at the guide's
+       live rate and stored with that rate.
+     · Settling is recorded. "Mark paid" writes a payment, so a discharged debt leaves the
+       screen instead of being suggested forever.
+   Each row's supporting controls (category, split rule, who shared, weights) live behind a
+   per-row disclosure. Collapsed is the default because a 40-expense trip was measured at
+   10.4 phone screens with the old always-open chips row. */
 
 import { settle } from "../model/settle";
 import { buildBudgetSummary } from "../model/summary";
 import { printBudgetSummary } from "./budget-sheet.js";
-import { normalizeExpense, normalizeMember } from "../model/records";
+import { formatMinor, toBaseMinor, BASE_CURRENCY, CURRENCY_EXPONENT } from "../model/money";
+import { normalizeExpense, normalizeMember, normalizePayment } from "../model/records";
 import { hasFirebase, joinTrip, roomId as guideRoomId, isPostTripLocked } from "../../firebase/index.js";
 import { getLastRate } from "../../live-data/index.js";
 import { tripWindow } from "../../../lib/trip-dates";
@@ -23,14 +39,8 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
   var wrap = document.getElementById("tripSplit");
   if (!wrap) return;
 
-  /* M5 — POST-TRIP LOCK. Two weeks after the last day, this guide's budget stops being a live
-     scratchpad and becomes the trip's financial record: the numbers keep rendering (and keep
-     feeding the recap + Plan⇄Actual), but nothing new can be typed into a settled trip, and a
-     room code committed to a public repo stops being a standing write invitation.
-     Client-side only — no database or rules change, so no existing figure can be altered or
-     lost by this. An undated guide is never locked (see model/room.ts). */
-  // The guide's own config island, read once — the lock below and the PDF summary's header
-  // (trip dates, day count, currency) both need it.
+  // The guide's own config island, read once — the lock below, the currency the traveller
+  // is actually spending, and the PDF summary's header all need it.
   var CFG = (function () {
     try {
       var el = document.getElementById("tgConfig");
@@ -38,6 +48,12 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
     } catch (e) { return {}; }
   })();
 
+  /* M5 — POST-TRIP LOCK. Two weeks after the last day, this guide's budget stops being a live
+     scratchpad and becomes the trip's financial record: the numbers keep rendering (and keep
+     feeding the recap + Plan⇄Actual), but nothing new can be typed into a settled trip, and a
+     room code committed to a public repo stops being a standing write invitation.
+     Client-side only — no database or rules change, so no existing figure can be altered or
+     lost by this. An undated guide is never locked (see model/room.ts). */
   var LOCKED = (function () {
     try {
       var cfg = CFG;
@@ -57,20 +73,87 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
   // mode reads from the room, keyed by roomId, which this does not touch).
   var legacyStoreKey = document.body.getAttribute("data-legacy-storekey") || null;
   migrateStorageKey(localStorage, SK, legacyStoreKey ? "tg-split-" + legacyStoreKey : null);
-  var state = { members: [], expenses: [], customSplit: false };
+
+  var state = { members: [], expenses: [], payments: [] };
   var room = null;      // Firebase room when synced, else null
   var offFns = [];      // room onChange unsubscribers
+  var open = {};        // per-row disclosure state, id -> true (view state, never persisted)
 
   function newId() { return "i" + Math.random().toString(36).slice(2, 9); }
   function nextOrder() { return Date.now(); }
+  function todayISO() { return new Date().toISOString().slice(0, 10); }
+
+  /* ── currency ─────────────────────────────────────────────────────────────
+     The traveller pays in the destination's money; the trip settles in one currency so
+     that a single set of transfers closes it. Each expense stores what was typed AND the
+     conversion captured at that moment (model/records.ts). */
+  var LOCAL_CUR = (CFG.curCode && CURRENCY_EXPONENT[CFG.curCode] !== undefined && CFG.curCode !== BASE_CURRENCY)
+    ? CFG.curCode : null;
+
+  function currentRate() {
+    var live = getLastRate();
+    if (live && live.rate && live.code === LOCAL_CUR) return { rate: live.rate, date: live.date || todayISO() };
+    if (CFG.curCode === LOCAL_CUR && CFG.curFallbackRate) {
+      return { rate: CFG.curFallbackRate, date: CFG.curFallbackAsOf || todayISO() };
+    }
+    return null;
+  }
+  function exponentOf(cur) {
+    var e = CURRENCY_EXPONENT[cur];
+    return e === undefined ? 2 : e;
+  }
+  /** Typed text -> integer minor units of `cur`. null for blank/unparseable. */
+  function toMinor(text, cur) {
+    if (text == null || String(text).trim() === "") return null;
+    var n = parseFloat(String(text).replace(/,/g, ""));
+    if (!isFinite(n) || n < 0) return null;
+    return Math.round(n * Math.pow(10, exponentOf(cur)));
+  }
+  /** Integer minor units -> a plain editable number string (no symbol, no grouping). */
+  function minorToInput(minor, cur) {
+    if (minor == null) return "";
+    var exp = exponentOf(cur);
+    return exp ? (minor / Math.pow(10, exp)).toFixed(exp) : String(minor);
+  }
+  function fmtBase(minor) { return formatMinor(Math.abs(Math.round(minor || 0)), BASE_CURRENCY); }
+  function fmtCur(minor, cur) {
+    try { return formatMinor(Math.round(minor || 0), cur); }
+    catch (e) { return String(minor); }
+  }
+  /** Everything an expense needs to know about money, derived once from what was typed. */
+  function moneyFields(text, cur) {
+    var amountMinor = toMinor(text, cur);
+    if (cur === BASE_CURRENCY) {
+      return { amountMinor: amountMinor, currency: cur, rate: null, rateDate: null, baseMinor: amountMinor };
+    }
+    var r = currentRate();
+    return {
+      amountMinor: amountMinor,
+      currency: cur,
+      rate: r ? r.rate : null,
+      rateDate: r ? r.date : null,
+      baseMinor: amountMinor == null ? null : toBaseMinor(amountMinor, cur, r && r.rate),
+    };
+  }
 
   /* ── local persistence (solo mode) ────────────────────────────────────────── */
   function load() {
+    var rawText;
+    try { rawText = localStorage.getItem(SK); } catch (_) { return; }
     var raw;
-    try { raw = JSON.parse(localStorage.getItem(SK) || "null"); } catch (_) { return; }
+    try { raw = JSON.parse(rawText || "null"); } catch (_) { return; }
     var migrated = migrate(raw);
     applyState(migrated);
-    if (raw && migrated !== raw) persist(); // upgrade an old index-based save on disk once
+    if (raw && migrated !== raw) {
+      // A trip's expense history is not reproducible — nobody remembers what the taxi cost
+      // three weeks later. Before the upgraded shape overwrites the old one, keep the
+      // pre-migration blob under its own key, once. It costs a few KB and it is the
+      // difference between "the upgrade had a bug" and "the records are gone".
+      try {
+        if (!localStorage.getItem(SK + "-pre-v2")) localStorage.setItem(SK + "-pre-v2", rawText);
+      } catch (_) {}
+      persist();
+    }
   }
   function persist() {
     if (room) return; // synced: the room is the source of truth, not localStorage
@@ -78,15 +161,22 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
   }
   function applyState(s) {
     if (!s || typeof s !== "object") return false;
-    if (Array.isArray(s.members))           state.members     = s.members;
-    if (Array.isArray(s.expenses))          state.expenses    = s.expenses;
-    if (typeof s.customSplit === "boolean") state.customSplit = s.customSplit;
+    if (Array.isArray(s.members))  state.members  = s.members.map(normalizeMember);
+    if (Array.isArray(s.expenses)) state.expenses = s.expenses.map(normalizeExpense);
+    if (Array.isArray(s.payments)) state.payments = s.payments.map(normalizePayment);
     return true;
   }
+  /** Bring a saved trip up to the current shape. Two eras are handled: pre-id records
+      (members keyed by array index), and pre-V2 records (float dollars + one trip-wide
+      custom-split flag). The flag is the reason this lives here rather than in
+      records.ts — it is trip meta, and this is the only place it is in scope. */
   function migrate(s) {
     if (!s || typeof s !== "object" || !Array.isArray(s.members)) return s;
-    var needs = s.members.some(function (m) { return m && !m.id; });
-    if (!needs) return s;
+    var needsIds = s.members.some(function (m) { return m && !m.id; });
+    var wasCustom = s.customSplit === true;
+    var preV2 = s.expenses && s.expenses.some(function (e) { return e && e.amountMinor === undefined; });
+    if (!needsIds && !wasCustom && !preV2) return s;
+
     var ids = s.members.map(function (m) { return (m && m.id) || newId(); });
     var members = s.members.map(function (m, i) { return normalizeMember(Object.assign({}, m, { id: ids[i] })); });
     var expenses = (Array.isArray(s.expenses) ? s.expenses : []).map(function (e) {
@@ -96,81 +186,56 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
         e.customAmts.forEach(function (amt, i) { if (ids[i] != null) split[ids[i]] = parseFloat(amt) || 0; });
       } else if (e && e.split && typeof e.split === "object") { split = e.split; }
       var payIdx = e ? parseInt(e.paidBy, 10) : 0;
-      var paidBy = ids[(isNaN(payIdx) || payIdx >= ids.length || payIdx < 0) ? 0 : payIdx] || (ids[0] || "");
-      return normalizeExpense({ id: (e && e.id) || newId(), paidBy: paidBy, desc: (e && e.desc) || "", amount: e && e.amount, split: split, participants: e && e.participants });
+      var paidBy = (e && ids.indexOf(e.paidBy) !== -1) ? e.paidBy
+        : ids[(isNaN(payIdx) || payIdx >= ids.length || payIdx < 0) ? 0 : payIdx] || (ids[0] || "");
+      var out = normalizeExpense(Object.assign({}, e, { id: (e && e.id) || newId(), paidBy: paidBy, split: split }));
+      // The trip-wide flag becomes each expense's own rule, which is the whole point of V2.
+      if (wasCustom && out.weights) out.method = "EXACT";
+      // Old records have no snapshot. Freeze one now from the members they were shared with,
+      // so the next person to join doesn't retroactively join every past expense.
+      if (!out.participants) out.participants = ids.slice();
+      return out;
     });
-    return { members: members, expenses: expenses, customSplit: !!s.customSplit };
+    return { members: members, expenses: expenses, payments: [] };
   }
 
   /* ── utilities ───────────────────────────── */
-  function fmtUSD(v) { return "$" + (Math.round(Math.abs(v) * 100) / 100).toFixed(2); }
   function memberPos(id) { for (var i = 0; i < state.members.length; i++) if (state.members[i].id === id) return i; return -1; }
   function memberById(id) { var p = memberPos(id); return p === -1 ? null : state.members[p]; }
   function memberName(id) { var p = memberPos(id); return p === -1 ? "?" : (state.members[p].name || ("Person " + (p + 1))); }
   function expenseById(id) { for (var i = 0; i < state.expenses.length; i++) if (state.expenses[i].id === id) return state.expenses[i]; return null; }
-  // Who shares an expense: its own participant list, or the whole group when it has none
-  // (which is every expense recorded before participants existed).
+  function allIds() { return state.members.map(function (m) { return m.id; }); }
+  // Who shares an expense: its own snapshot, or the whole group for a legacy record that
+  // never had one.
   function sharersOf(exp) {
     var named = (exp && exp.participants || []).filter(function (id) { return memberPos(id) !== -1; });
-    return named.length ? named : state.members.map(function (m) { return m.id; });
-  }
-  // normalizeExpense/normalizeMember now live in ../model/records.ts — the shape is the
-  // model's business, not the view's, and it needed tests more than anything else here.
-  // Even split across the given ids (defaults to everyone). Keyed by id, so the map itself
-  // never charges a non-participant.
-  function evenSplit(total, ids) {
-    var list = (ids && ids.length) ? ids : state.members.map(function (m) { return m.id; });
-    var even = total / (list.length || 1), map = {};
-    list.forEach(function (id) { map[id] = parseFloat(even.toFixed(2)); });
-    return map;
-  }
-  // Toggle one person in/out of an expense. Excluding the last sharer is refused — an
-  // expense nobody shares has no meaning and would divide by zero.
-  function opToggleSharer(eid, mid) {
-    if (LOCKED) return; // M5 post-trip lock — the record is settled
-    var e = expenseById(eid); if (!e) return;
-    var cur = sharersOf(e);
-    var next = cur.indexOf(mid) !== -1 ? cur.filter(function (x) { return x !== mid; }) : cur.concat([mid]);
-    if (!next.length) return;
-    var patch = { participants: next };
-    if (state.customSplit) {
-      // Reconcile the persisted custom amounts with the new sharer set: keep what's typed
-      // for everyone still sharing, start a newly added sharer at 0 (the sum-mismatch
-      // warning asks for their amount), and DROP entries for anyone excluded — a stale
-      // amount must never keep charging someone who wasn't part of the expense.
-      var split = {};
-      next.forEach(function (id) { split[id] = (e.split && parseFloat(e.split[id])) || 0; });
-      patch.split = split;
-    } else {
-      patch.split = evenSplit(parseFloat(e.amount) || 0, next);
-    }
-    opExpenseField(eid, patch);
+    return named.length ? named : allIds();
   }
 
   /* ── mutation ops — route to the room when synced, else mutate local state ─────
      In synced mode the mutation writes one record; the room's onChange echo (fired
      locally by Realtime Database, so it feels instant) rebuilds state and re-renders. */
   function opAddMember() {
-    if (LOCKED) return; // M5 post-trip lock — the record is settled
+    if (LOCKED) return;
     if (room) { room.collection("members").add({ name: "", payment: "", order: nextOrder() }); }
     else { state.members.push(normalizeMember({ id: newId() })); persist(); renderMembers(); renderNewRowOptions(); renderExpenses(); }
   }
   function opMemberField(id, field, value) {
-    if (LOCKED) return; // M5 post-trip lock — the record is settled
+    if (LOCKED) return;
     if (room) { var p = {}; p[field] = value; room.collection("members").update(id, p); }
     else { var m = memberById(id); if (m) { m[field] = value; persist(); if (field === "name") renderNewRowOptions(); renderResults(); } }
   }
   function opMemberDel(id) {
-    if (LOCKED) return; // M5 post-trip lock — the record is settled
+    if (LOCKED) return;
     if (room) {
       room.collection("members").remove(id);
       var fallback = (state.members.filter(function (x) { return x.id !== id; })[0] || {}).id || "";
       state.expenses.forEach(function (e) {
         if (e.paidBy === id) room.collection("expenses").update(e.id, { paidBy: fallback });
-        if (e.split && (id in e.split)) { var s = Object.assign({}, e.split); delete s[id]; room.collection("expenses").update(e.id, { split: s }); }
-        // Drop the departed member from any expense that named them, so no ghost id is left
-        // in the shared room. If they were the ONLY named sharer, clear the list entirely —
-        // that reverts the expense to the whole group rather than leaving it shared by nobody.
+        if (e.weights && (id in e.weights)) { var w = Object.assign({}, e.weights); delete w[id]; room.collection("expenses").update(e.id, { weights: w }); }
+        // Drop the departed member from any expense that named them. If they were the ONLY
+        // sharer, clear the list — that reverts the expense to the whole group rather than
+        // leaving it shared by nobody.
         if (e.participants && e.participants.indexOf(id) !== -1) {
           var pruned = e.participants.filter(function (x) { return x !== id; });
           room.collection("expenses").update(e.id, { participants: pruned.length ? pruned : null });
@@ -181,39 +246,102 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
       state.members.splice(pos, 1);
       state.expenses.forEach(function (e) {
         if (e.paidBy === id) e.paidBy = state.members.length ? state.members[0].id : "";
-        if (e.split) delete e.split[id];
+        if (e.weights) delete e.weights[id];
         if (e.participants) { var pr = e.participants.filter(function (x) { return x !== id; }); e.participants = pr.length ? pr : null; }
       });
       persist(); render();
     }
   }
   function opAddExpense(data) {
-    if (LOCKED) return; // M5 post-trip lock — the record is settled
+    if (LOCKED) return;
     if (room) { room.collection("expenses").add(Object.assign({ order: nextOrder() }, data)); }
-    else { state.expenses.push(Object.assign({ id: newId() }, data)); persist(); renderExpenses(); renderResults(); }
+    else { state.expenses.push(normalizeExpense(Object.assign({ id: newId() }, data))); persist(); renderExpenses(); renderResults(); }
   }
   function opExpenseField(id, patch) {
-    if (LOCKED) return; // M5 post-trip lock — the record is settled
+    if (LOCKED) return;
     if (room) { room.collection("expenses").update(id, patch); }
     else { var e = expenseById(id); if (e) { Object.assign(e, patch); persist(); renderResults(); } }
   }
-  function opExpenseSplit(id, mid, value) {
-    if (LOCKED) return; // M5 post-trip lock — the record is settled
+  function opExpenseWeight(id, mid, value) {
+    if (LOCKED) return;
     var e = expenseById(id);
-    var cur = e && e.split ? Object.assign({}, e.split) : {};
-    cur[mid] = parseFloat(value) || 0;
-    if (room) { room.collection("expenses").update(id, { split: cur }); }
-    else { if (e) { e.split = cur; persist(); renderResults(); } }
+    var next = e && e.weights ? Object.assign({}, e.weights) : {};
+    // Only EXACT weights are MONEY and belong in minor units. Shares ("2" vs "1") and
+    // percentages ("60") are plain numbers — running them through toMinor() stored 200 and
+    // 6000, which kept the ratio right but redisplayed the wrong figure and made the
+    // percentage total permanently fail its own "must make 100" check.
+    if (e && e.method === "EXACT") {
+      next[mid] = toMinor(value, e.currency || BASE_CURRENCY) || 0;
+    } else {
+      var n = parseFloat(String(value).replace(/,/g, ""));
+      next[mid] = isFinite(n) && n >= 0 ? n : 0;
+    }
+    opExpenseField(id, { weights: next });
+    refreshWeightWarning(id);
+  }
+
+  /* The "these don't add up" warning has to track what is being typed RIGHT NOW. A full
+     renderExpenses() would rebuild the input under the caret mid-keystroke, so the warning
+     is recomputed and swapped in place instead. */
+  function refreshWeightWarning(id) {
+    var row = wrap.querySelector('.se-row[data-eid="' + (window.CSS && CSS.escape ? CSS.escape(id) : id) + '"]');
+    var e = expenseById(id);
+    if (!row || !e || e.method === "EQUAL") return;
+    var box = row.querySelector(".se-custom");
+    if (!box) return;
+    var cur = e.currency || BASE_CURRENCY;
+    var typed = sharersOf(e).reduce(function (a, mid) { return a + (Number(e.weights && e.weights[mid]) || 0); }, 0);
+    var msg = null;
+    if (e.method === "EXACT" && typed !== (e.amountMinor || 0)) {
+      msg = "Shares add up to " + fmtCur(typed, cur) + " — the expense is " + fmtCur(e.amountMinor || 0, cur);
+    } else if (e.method === "PERCENTAGE" && typed !== 100) {
+      msg = "Percentages add up to " + typed + " — they need to make 100";
+    }
+    box.classList.toggle("se-custom--warn", !!msg);
+    var el = box.querySelector(".se-warn");
+    if (msg && !el) {
+      el = document.createElement("span");
+      el.className = "se-warn";
+      box.appendChild(el);
+    }
+    if (el) {
+      if (msg) el.textContent = msg;
+      else el.remove();
+    }
   }
   function opExpenseDel(id) {
-    if (LOCKED) return; // M5 post-trip lock — the record is settled
+    if (LOCKED) return;
     if (room) { room.collection("expenses").remove(id); }
     else { for (var i = 0; i < state.expenses.length; i++) if (state.expenses[i].id === id) { state.expenses.splice(i, 1); break; } persist(); renderExpenses(); renderResults(); }
   }
-  function opSetCustomSplit(v) {
-    if (LOCKED) return; // M5 post-trip lock — the record is settled
-    if (room) { room.doc("meta").update({ customSplit: v }); }
-    else { state.customSplit = v; persist(); syncModeUI(); renderExpenses(); renderResults(); }
+  // Toggle one person in/out of an expense. Excluding the last sharer is refused — an
+  // expense nobody shares has no meaning.
+  function opToggleSharer(eid, mid) {
+    if (LOCKED) return;
+    var e = expenseById(eid); if (!e) return;
+    var cur = sharersOf(e);
+    var next = cur.indexOf(mid) !== -1 ? cur.filter(function (x) { return x !== mid; }) : cur.concat([mid]);
+    if (!next.length) return;
+    var patch = { participants: next };
+    // Drop weights for anyone excluded: a stale amount must never keep charging someone who
+    // was not part of the expense.
+    if (e.weights) {
+      var w = {};
+      next.forEach(function (id) { if (e.weights[id] != null) w[id] = e.weights[id]; });
+      patch.weights = w;
+    }
+    opExpenseField(eid, patch);
+  }
+  function opAddPayment(from, to, baseMinor) {
+    if (LOCKED) return;
+    var rec = { from: from, to: to, baseMinor: Math.round(baseMinor), on: todayISO(), note: "" };
+    if (room) { room.collection("payments").add(Object.assign({ order: nextOrder() }, rec)); }
+    else { state.payments.push(normalizePayment(Object.assign({ id: newId() }, rec))); persist(); renderResults(); }
+  }
+  function opPaymentDel(id) {
+    if (LOCKED) return;
+    if (room) { room.collection("payments").remove(id); }
+    else { state.payments = state.payments.filter(function (p) { return p.id !== id; }); persist(); renderResults(); }
   }
 
   /* ── member rendering ────────────────────── */
@@ -224,8 +352,7 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
     list.innerHTML = state.members.map(function (m, i) {
       // esc() the record id too, not just display strings: ids are Firebase keys, and a
       // crafted key (via a direct REST write) could otherwise break out of the single-quoted
-      // attribute. Belt to the rules' key-charset braces. getAttribute decodes on read-back,
-      // so the id round-trips unchanged into ops.
+      // attribute. getAttribute decodes on read-back, so the id round-trips unchanged.
       var mid = esc(m.id);
       return "<div class='sm-row'>" +
         "<span class='sm-idx'>" + (i + 1) + "</span>" +
@@ -249,11 +376,34 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
       return "<option value='" + esc(m.id) + "'" + (m.id === chosen ? " selected" : "") + ">" + esc(m.name || ("Person " + (i + 1))) + "</option>";
     }).join("");
   }
+  function currencyOptions(sel) {
+    if (!LOCAL_CUR) return "";
+    return [LOCAL_CUR, BASE_CURRENCY].map(function (c) {
+      return "<option value='" + c + "'" + (c === sel ? " selected" : "") + ">" + c + "</option>";
+    }).join("");
+  }
+  var METHOD_LABEL = { EQUAL: "Split evenly", EXACT: "Exact amounts", SHARES: "Shares", PERCENTAGE: "Percentages" };
+  function methodOptions(sel) {
+    return Object.keys(METHOD_LABEL).map(function (k) {
+      return "<option value='" + k + "'" + (k === sel ? " selected" : "") + ">" + METHOD_LABEL[k] + "</option>";
+    }).join("");
+  }
   function renderNewRowOptions() {
     var sel = document.getElementById("sNewPayer");
-    if (!sel) return;
-    sel.innerHTML = memberOptions(sel.value);
+    if (sel) sel.innerHTML = memberOptions(sel.value);
+    var cur = document.getElementById("sNewCur");
+    if (cur) {
+      if (!LOCAL_CUR) { cur.hidden = true; }
+      else if (!cur.options.length) { cur.innerHTML = currencyOptions(LOCAL_CUR); cur.hidden = false; }
+    }
   }
+
+  function weightLabel(method, cur) {
+    if (method === "PERCENTAGE") return "%";
+    if (method === "SHARES") return "shares";
+    return cur;
+  }
+
   function renderExpenses() {
     var newCard = document.getElementById("sNewCard");
     var list = document.getElementById("sExpenseList");
@@ -264,122 +414,228 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
     if (!state.expenses.length) { list.innerHTML = "<p class='split-empty'>No expenses yet — fill in the row above and tap + Add expense.</p>"; return; }
 
     list.innerHTML = state.expenses.map(function (exp) {
-      var eid = esc(exp.id); // escaped Firebase key for every attribute below (see members note)
+      var eid = esc(exp.id); // escaped Firebase key for every attribute below
       var shareIds = sharersOf(exp);
-      // Only offer the who-shared-this row when there's actually a subset to pick — with
-      // one person it's noise.
-      var partBlock = state.members.length > 1
-        ? "<div class='se-parts'><span class='se-parts-lbl'>Split between</span>" +
-            state.members.map(function (m, mi) {
-              var on = shareIds.indexOf(m.id) !== -1;
-              return "<button type='button' class='se-part" + (on ? " se-part-on" : "") + "' data-eid='" + eid +
-                "' data-pid='" + esc(m.id) + "' aria-pressed='" + (on ? "true" : "false") + "'>" +
-                esc(m.name || ("P" + (mi + 1))) + "</button>";
-            }).join("") +
-            (shareIds.length < state.members.length
-              ? "<span class='se-parts-note'>÷ " + shareIds.length + "</span>" : "") +
-          "</div>"
-        : "";
+      var cur = exp.currency || BASE_CURRENCY;
+      var isOpen = !!open[exp.id];
+      var subsetted = shareIds.length < state.members.length;
 
-      var customBlock = "";
-      if (state.customSplit) {
-        var total = parseFloat(exp.amount) || 0;
-        // Custom amounts are only offered for the people actually sharing the expense.
-        // Render is read-only: no split exists yet → SHOW the even fallback (which is
-        // exactly what settle() computes for a missing/zero-sum split) without mutating
-        // or persisting state. Ops own reconciliation; render never edits the record.
-        var caMap = exp.split || evenSplit(total, shareIds);
-        var sumCA = shareIds.reduce(function (a, id) { return a + (parseFloat(caMap[id]) || 0); }, 0);
-        var diff = Math.abs(sumCA - total);
-        customBlock = "<div class='se-custom" + (diff > 0.015 ? " se-custom--warn" : "") + "'>" +
-          shareIds.map(function (id) {
-            var mi = memberPos(id), m = state.members[mi];
-            return "<label class='se-cl'><span class='se-cl-name'>" + esc(m.name || ("P" + (mi + 1))) + "</span>" +
-              "<input class='split-in se-ca' type='number' min='0' step='0.01' inputmode='decimal' value='" + (parseFloat(caMap[id]) || 0).toFixed(2) + "' data-eid='" + eid + "' data-mid='" + esc(id) + "' /></label>";
-          }).join("") +
-          (diff > 0.015 ? "<span class='se-warn'>Shares sum " + fmtUSD(sumCA) + " — total is " + fmtUSD(total) + "</span>" : "") + "</div>";
+      // Collapsed summary line: the supporting controls only cost height when asked for.
+      var meta = [];
+      if (exp.category) meta.push(esc(exp.category));
+      if (exp.method !== "EQUAL") meta.push(METHOD_LABEL[exp.method] || exp.method);
+      if (subsetted) meta.push("÷ " + shareIds.length);
+      if (cur !== BASE_CURRENCY && exp.baseMinor != null) meta.push("≈ " + fmtBase(exp.baseMinor));
+      if (cur !== BASE_CURRENCY && exp.baseMinor == null) meta.push("rate unavailable");
+
+      var details = "";
+      if (isOpen) {
+        var partChips = state.members.length > 1
+          ? "<div class='se-parts'><span class='se-parts-lbl'>Split between</span>" +
+              state.members.map(function (m, mi) {
+                var on = shareIds.indexOf(m.id) !== -1;
+                return "<button type='button' class='se-part" + (on ? " se-part-on" : "") + "' data-eid='" + eid +
+                  "' data-pid='" + esc(m.id) + "' aria-pressed='" + (on ? "true" : "false") + "'>" +
+                  esc(m.name || ("P" + (mi + 1))) + "</button>";
+              }).join("") + "</div>"
+          : "";
+
+        var weightBlock = "";
+        if (exp.method !== "EQUAL") {
+          var typed = shareIds.reduce(function (a, id) { return a + (Number(exp.weights && exp.weights[id]) || 0); }, 0);
+          var target = exp.method === "EXACT" ? (exp.amountMinor || 0) : (exp.method === "PERCENTAGE" ? 100 : 0);
+          var mismatch = exp.method === "EXACT" ? Math.abs(typed - target) > 0
+            : exp.method === "PERCENTAGE" ? Math.abs(typed - 100) > 0 : false;
+          weightBlock = "<div class='se-custom" + (mismatch ? " se-custom--warn" : "") + "'>" +
+            shareIds.map(function (id) {
+              var mi = memberPos(id), m = state.members[mi];
+              var raw = Number(exp.weights && exp.weights[id]) || 0;
+              var val = exp.method === "EXACT" ? minorToInput(raw, cur) : String(raw);
+              return "<label class='se-cl'><span class='se-cl-name'>" + esc(m.name || ("P" + (mi + 1))) + "</span>" +
+                "<input class='split-in se-ca' type='number' min='0' step='any' inputmode='decimal' value='" + esc(val) +
+                "' data-eid='" + eid + "' data-mid='" + esc(id) + "' aria-label='" + esc((m.name || "person") + " " + weightLabel(exp.method, cur)) + "' /></label>";
+            }).join("") +
+            (mismatch
+              ? "<span class='se-warn'>" + (exp.method === "EXACT"
+                  ? "Shares add up to " + fmtCur(typed, cur) + " — the expense is " + fmtCur(exp.amountMinor || 0, cur)
+                  : "Percentages add up to " + typed + " — they need to make 100") + "</span>"
+              : "") + "</div>";
+        }
+
+        details = "<div class='se-more'>" +
+          "<div class='se-more-row'>" +
+            "<label class='se-field'><span class='se-field-lbl'>Category</span>" +
+              "<input class='split-in se-cat' type='text' list='sCatList' placeholder='e.g. Food' value='" + esc(exp.category || "") + "' data-eid='" + eid + "' /></label>" +
+            "<label class='se-field'><span class='se-field-lbl'>How to split</span>" +
+              "<select class='split-in se-method' data-eid='" + eid + "'>" + methodOptions(exp.method) + "</select></label>" +
+          "</div>" + partChips + weightBlock + "</div>";
       }
-      // Description FIRST — it is the row's identity, and source order is what places the
-      // desktop grid (mobile re-places these by grid-area). Keep this in step with
-      // .se-header / .se-new-row in trip-split.css: what for · paid by · amount · delete.
-      return "<div class='se-row' data-eid='" + eid + "'><div class='se-main'>" +
+
+      return "<div class='se-row" + (isOpen ? " se-row-open" : "") + "' data-eid='" + eid + "'><div class='se-main'>" +
         "<input class='split-in se-desc' type='text' placeholder='What for?' value='" + esc(exp.desc || "") + "' data-eid='" + eid + "' data-field='desc' aria-label='What the expense was for' />" +
         "<select class='split-in se-payer' data-eid='" + eid + "' aria-label='Who paid'>" + memberOptions(exp.paidBy) + "</select>" +
-        "<div class='se-amt-wrap'><span class='se-cur'>$</span>" +
-        "<input class='split-in se-amt' type='number' min='0' step='0.01' inputmode='decimal' placeholder='0.00' value='" + (exp.amount != null ? String(exp.amount) : "") + "' data-eid='" + eid + "' data-field='amount' aria-label='Amount' /></div>" +
+        "<div class='se-amt-wrap'>" +
+          (LOCAL_CUR
+            ? "<select class='se-cur-sel' data-eid='" + eid + "' aria-label='Currency'>" + currencyOptions(cur) + "</select>"
+            : "<span class='se-cur'>$</span>") +
+          "<input class='split-in se-amt' type='number' min='0' step='any' inputmode='decimal' placeholder='0.00' value='" + esc(minorToInput(exp.amountMinor, cur)) + "' data-eid='" + eid + "' data-field='amount' aria-label='Amount' /></div>" +
         "<button class='split-del' type='button' data-del-e='" + eid + "' aria-label='Remove expense'>×</button>" +
-        "</div>" + partBlock + customBlock + "</div>";
+        "</div>" +
+        "<div class='se-sub'>" +
+          "<button class='se-toggle' type='button' data-open='" + eid + "' aria-expanded='" + (isOpen ? "true" : "false") + "'>" +
+            (isOpen ? "Hide details" : "Details") + "</button>" +
+          (meta.length ? "<span class='se-meta'>" + meta.map(esc).join(" · ") + "</span>" : "") +
+        "</div>" + details + "</div>";
     }).join("");
 
     list.querySelectorAll(".se-payer").forEach(function (sel) {
       sel.addEventListener("change", function () { opExpenseField(this.dataset.eid, { paidBy: this.value }); });
     });
-    list.querySelectorAll("[data-field]").forEach(function (inp) {
+    list.querySelectorAll(".se-desc").forEach(function (inp) {
+      inp.addEventListener("input", function () { opExpenseField(this.dataset.eid, { desc: this.value }); });
+    });
+    list.querySelectorAll(".se-amt").forEach(function (inp) {
       inp.addEventListener("input", function () {
-        var fld = this.dataset.field;
-        var patch = {};
-        patch[fld] = fld === "amount" ? (parseFloat(this.value) || null) : this.value;
-        // Re-even only across whoever actually shares this expense, not the whole group.
-        if (fld === "amount" && !state.customSplit) patch.split = evenSplit(parseFloat(this.value) || 0, sharersOf(expenseById(this.dataset.eid) || {}));
-        opExpenseField(this.dataset.eid, patch);
+        var e = expenseById(this.dataset.eid);
+        opExpenseField(this.dataset.eid, moneyFields(this.value, (e && e.currency) || BASE_CURRENCY));
+      });
+    });
+    list.querySelectorAll(".se-cur-sel").forEach(function (sel) {
+      sel.addEventListener("change", function () {
+        // Re-derive from what is currently typed, in the newly chosen currency: the digits
+        // on screen are what the traveller means, whatever label sits beside them.
+        var row = this.closest(".se-row");
+        var amt = row && row.querySelector(".se-amt");
+        opExpenseField(this.dataset.eid, moneyFields(amt ? amt.value : "", this.value));
+        renderExpenses(); renderResults();
+      });
+    });
+    list.querySelectorAll(".se-cat").forEach(function (inp) {
+      inp.addEventListener("input", function () { opExpenseField(this.dataset.eid, { category: this.value }); });
+    });
+    list.querySelectorAll(".se-method").forEach(function (sel) {
+      sel.addEventListener("change", function () {
+        opExpenseField(this.dataset.eid, { method: this.value });
+        renderExpenses(); renderResults();
       });
     });
     list.querySelectorAll(".se-part").forEach(function (btn) {
-      btn.addEventListener("click", function () { opToggleSharer(this.dataset.eid, this.dataset.pid); });
+      btn.addEventListener("click", function () { opToggleSharer(this.dataset.eid, this.dataset.pid); renderExpenses(); renderResults(); });
     });
     list.querySelectorAll(".se-ca").forEach(function (inp) {
-      inp.addEventListener("input", function () { opExpenseSplit(this.dataset.eid, this.dataset.mid, this.value); });
+      inp.addEventListener("input", function () { opExpenseWeight(this.dataset.eid, this.dataset.mid, this.value); });
     });
     list.querySelectorAll("[data-del-e]").forEach(function (btn) {
       btn.addEventListener("click", function () { opExpenseDel(this.dataset.delE); });
     });
+    list.querySelectorAll("[data-open]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var id = this.dataset.open;
+        open[id] = !open[id];
+        renderExpenses();
+      });
+    });
+    applyLock();
   }
 
   /* ── results (uses the tested pure settle()) ── */
   function computeSettle() {
-    var ids = state.members.map(function (m) { return m.id; });
-    return settle(ids, state.expenses.map(function (e) { return { paidBy: e.paidBy, amount: e.amount, split: e.split, participants: e.participants }; }), state.customSplit);
+    return settle(allIds(), state.expenses, state.payments);
   }
   function renderResults() {
-    var card = document.getElementById("sResults"), summary = document.getElementById("sSummary");
+    var card = document.getElementById("sResults");
     var bDiv = document.getElementById("sBalances"), sDiv = document.getElementById("sSettlements");
     var sCount = document.getElementById("sSettleCount"), totUSD = document.getElementById("sTotalUSD");
     var pdfBtn = document.getElementById("sSavePdf");
-    if (!state.members.length || !state.expenses.length) {
+    var catWrap = document.getElementById("sCategories"), catList = document.getElementById("sCatBreakdown");
+    var payWrap = document.getElementById("sPaid"), payList = document.getElementById("sPaidList");
+    var hasData = state.members.length && state.expenses.length;
+    if (!hasData) {
       if (card) card.hidden = true;
-      if (summary) summary.hidden = true;
       if (pdfBtn) pdfBtn.hidden = true;
       return;
     }
     if (card) card.hidden = false;
-    if (summary) summary.hidden = false;
     if (pdfBtn) pdfBtn.hidden = false;
-    var total = state.expenses.reduce(function (s, e) { return s + (parseFloat(e.amount) || 0); }, 0);
-    if (totUSD) totUSD.textContent = "$" + total.toFixed(2);
-    var calc = computeSettle();
+
+    var sum = buildBudgetSummary(state.members, state.expenses, state.payments, dayCount());
+    if (totUSD) totUSD.textContent = fmtBase(sum.total);
+    var calc = { balances: {}, txns: sum.txns };
+    sum.people.forEach(function (p) { calc.balances[p.id] = p.net; });
+
     if (bDiv) {
-      bDiv.innerHTML = state.members.map(function (m) {
-        var bal = calc.balances[m.id] || 0, abs = Math.abs(bal);
-        var cls = bal > 0.005 ? "sb-owed" : bal < -0.005 ? "sb-owes" : "sb-even";
-        var verb = bal > 0.005 ? "is owed" : bal < -0.005 ? "owes" : "settled ✓";
-        return "<div class='sb-row " + cls + "'><span class='sb-name'>" + esc(memberName(m.id)) + "</span><span class='sb-verb'>" + verb + "</span><span class='sb-amt'>" + (abs > 0.005 ? fmtUSD(abs) : "—") + "</span></div>";
+      bDiv.innerHTML = sum.people.map(function (p) {
+        var abs = Math.abs(p.net);
+        var cls = p.net > 0 ? "sb-owed" : p.net < 0 ? "sb-owes" : "sb-even";
+        var verb = p.net > 0 ? "is owed" : p.net < 0 ? "owes" : "settled ✓";
+        return "<div class='sb-row " + cls + "'><span class='sb-name'>" + esc(p.name) + "</span><span class='sb-verb'>" + verb + "</span><span class='sb-amt'>" + (abs ? fmtBase(abs) : "—") + "</span></div>";
       }).join("");
     }
+
     if (sDiv) {
-      if (!calc.txns.length) {
+      if (!sum.txns.length) {
         sDiv.innerHTML = "<p class='split-settle-ok'>All square — no transfers needed.</p>";
         if (sCount) sCount.textContent = "";
       } else {
-        if (sCount) sCount.textContent = calc.txns.length + " payment" + (calc.txns.length > 1 ? "s" : "");
-        sDiv.innerHTML = calc.txns.map(function (t) {
+        if (sCount) sCount.textContent = sum.txns.length + " payment" + (sum.txns.length > 1 ? "s" : "");
+        sDiv.innerHTML = sum.txns.map(function (t) {
           var payMethod = (memberById(t.to) || {}).payment || "";
-          return "<div class='st-row'><div class='st-parties'><span class='st-from'>" + esc(memberName(t.from)) + "</span><span class='st-arrow'>→</span><span class='st-to'>" + esc(memberName(t.to)) + "</span></div>" +
-            "<div class='st-amt-row'><span class='st-usd'>" + fmtUSD(t.amt) + "</span></div>" +
-            (payMethod ? "<div class='st-via'>via " + esc(payMethod) + "</div>" : "") + "</div>";
+          return "<div class='st-row'><div class='st-parties'><span class='st-from'>" + esc(t.fromName) + "</span><span class='st-arrow'>→</span><span class='st-to'>" + esc(t.toName) + "</span></div>" +
+            "<div class='st-amt-row'><span class='st-usd'>" + fmtBase(t.amtMinor) + "</span></div>" +
+            (payMethod ? "<div class='st-via'>via " + esc(payMethod) + "</div>" : "") +
+            "<button class='st-done' type='button' data-pay-from='" + esc(t.from) + "' data-pay-to='" + esc(t.to) + "' data-pay-amt='" + t.amtMinor + "'>Mark paid</button>" +
+            "</div>";
+        }).join("");
+        sDiv.querySelectorAll("[data-pay-from]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            opAddPayment(this.dataset.payFrom, this.dataset.payTo, parseInt(this.dataset.payAmt, 10) || 0);
+          });
+        });
+      }
+    }
+
+    // Where it went. Only worth a surface once something is categorised — an all-
+    // "Uncategorised" bar teaches nothing.
+    if (catWrap && catList) {
+      var real = sum.byCategory.filter(function (c) { return c.category !== "Uncategorised"; });
+      if (!real.length) { catWrap.hidden = true; }
+      else {
+        catWrap.hidden = false;
+        var top = sum.byCategory[0].total || 1;
+        catList.innerHTML = sum.byCategory.map(function (c) {
+          var pct = Math.round((c.total / (sum.total || 1)) * 100);
+          return "<div class='sc-cat'><span class='sc-cat-name'>" + esc(c.category) + "</span>" +
+            "<span class='sc-cat-bar'><span class='sc-cat-fill' style='width:" + Math.max(2, Math.round((c.total / top) * 100)) + "%'></span></span>" +
+            "<span class='sc-cat-amt'>" + fmtBase(c.total) + "</span>" +
+            "<span class='sc-cat-pct'>" + pct + "%</span></div>";
         }).join("");
       }
     }
+
+    // Settled payments, with an undo — the only destructive action here that is easy to
+    // mistap, and the record is the point.
+    if (payWrap && payList) {
+      if (!state.payments.length) { payWrap.hidden = true; }
+      else {
+        payWrap.hidden = false;
+        payList.innerHTML = state.payments.map(function (p) {
+          return "<div class='sp-row'><span class='sp-who'>" + esc(memberName(p.from)) + " → " + esc(memberName(p.to)) + "</span>" +
+            "<span class='sp-amt'>" + fmtBase(p.baseMinor) + "</span>" +
+            (p.on ? "<span class='sp-on'>" + esc(p.on) + "</span>" : "") +
+            "<button class='sp-undo' type='button' data-undo-p='" + esc(p.id) + "' aria-label='Undo this payment'>Undo</button></div>";
+        }).join("");
+        payList.querySelectorAll("[data-undo-p]").forEach(function (btn) {
+          btn.addEventListener("click", function () { opPaymentDel(this.dataset.undoP); });
+        });
+      }
+    }
+    applyLock();
   }
+
+  function dayCount() {
+    return Array.isArray(CFG.daysForBanner) && CFG.daysForBanner.length ? CFG.daysForBanner.length : null;
+  }
+
   function render() {
     renderMembers(); renderNewRowOptions(); renderExpenses(); renderResults();
     applyLock();
@@ -397,9 +653,9 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
     wrap.querySelectorAll("input, select, button").forEach(function (el) {
       if (el.closest("[data-split-lock-note]")) return;
       // The summary PDF is a READ of the record, not a write to it — a settled trip is
-      // precisely when someone wants to send round what it cost. Locking it would be the
-      // one control the lock has no business touching.
-      if (el.id === "sSavePdf") return;
+      // precisely when someone wants to send round what it cost. Same for the per-row
+      // disclosure, which only reveals what is already there.
+      if (el.id === "sSavePdf" || el.classList.contains("se-toggle")) return;
       el.disabled = true;
     });
     if (!wrap.querySelector("[data-split-lock-note]")) {
@@ -435,21 +691,53 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
     setTimeout(function () { if (pendingRemote && !isEditingList()) { pendingRemote = false; render(); } }, 60);
   });
 
+  /* A pre-V2 SHARED room keeps its split rule in `meta.customSplit` — trip-wide, exactly the
+     design V2 replaced. Reading those expenses without it would treat a room that had Custom
+     amounts switched on as an even split: same stored numbers, different balances, no
+     warning. So the flag is still read, and applied as each expense's own EXACT method until
+     someone edits that expense and gives it a rule of its own. Rooms are never rewritten by
+     this — the server's records are left exactly as they are. */
+  var roomRawExpenses = null;
+  var roomLegacyCustom = false;
+
+  function applyRoomExpenses() {
+    if (!roomRawExpenses) return;
+    state.expenses = orderedFrom(roomRawExpenses).map(function (raw) {
+      var e = normalizeExpense(raw);
+      if (roomLegacyCustom && raw.method === undefined && e.weights) e.method = "EXACT";
+      // Legacy room records carry no participant snapshot. Freeze the current group for
+      // display/settlement only; nothing is written back, so this stays a read.
+      if (!e.participants) e.participants = allIds();
+      return e;
+    });
+  }
+
   function bindRoom(r) {
     room = r;
-    var members = r.collection("members"), expenses = r.collection("expenses"), meta = r.doc("meta");
+    var members = r.collection("members"), expenses = r.collection("expenses"),
+        payments = r.collection("payments"), meta = r.doc("meta");
     offFns.push(members.onChange(function (map) {
       // Was a hand-copied field list — the same shape of code that dropped `participants`
-      // from expenses, sitting unexercised on the members side waiting for the first field
-      // anyone added. Both echoes now go through the one normalizer.
+      // from expenses. Both echoes now go through the one normalizer.
       state.members = orderedFrom(map).map(normalizeMember);
+      applyRoomExpenses(); // snapshots for legacy records follow the current roster
       renderRemote();
     }));
     offFns.push(expenses.onChange(function (map) {
-      state.expenses = orderedFrom(map).map(normalizeExpense);
+      roomRawExpenses = map;
+      applyRoomExpenses();
       renderRemote();
     }));
-    offFns.push(meta.onChange(function (v) { if (v && typeof v.customSplit === "boolean") { state.customSplit = v.customSplit; syncModeUI(); renderRemote(); } }));
+    offFns.push(payments.onChange(function (map) {
+      state.payments = orderedFrom(map).map(normalizePayment);
+      renderRemote();
+    }));
+    // meta may arrive before or after the expenses, so re-derive on either.
+    offFns.push(meta.onChange(function (v) {
+      roomLegacyCustom = !!(v && v.customSplit === true);
+      applyRoomExpenses();
+      renderRemote();
+    }));
     setLive("live", "Live · shared with everyone on this guide.");
   }
 
@@ -471,13 +759,12 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
   // room, so every device viewing the same guide edits the same budget automatically. The
   // room is the single source of truth (no local seed), so devices never inject stale copies.
   function autoConnect() {
-    var code = guideRoomId(); // salted room id from #tgConfig (legacy guides fall back to slug)
+    var code = guideRoomId();
     if (!code) { load(); render(); return; }
     setLive("connecting", "Connecting to your group’s live budget…");
     joinTrip(code).then(function (r) {
-      bindRoom(r); // room.onChange populates state + renders; flips the indicator to Live
+      bindRoom(r);
     }).catch(function () {
-      // Couldn't reach Firebase — fall back to this device's local copy so the tool still works.
       setLive("offline", "Offline — changes are saved on this device only.");
       load(); render();
     });
@@ -488,14 +775,25 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
   if (addPerson) addPerson.addEventListener("click", opAddMember);
 
   var addExpense = document.getElementById("sAddExpense");
-  var newPayerEl = document.getElementById("sNewPayer"), newDescEl = document.getElementById("sNewDesc"), newAmtEl = document.getElementById("sNewAmt");
+  var newPayerEl = document.getElementById("sNewPayer"), newDescEl = document.getElementById("sNewDesc"),
+      newAmtEl = document.getElementById("sNewAmt"), newCurEl = document.getElementById("sNewCur");
   if (addExpense) {
     addExpense.addEventListener("click", function () {
       if (!state.members.length) return;
-      var amt = parseFloat(newAmtEl.value);
-      if (!amt || amt <= 0) { newAmtEl.focus(); return; }
+      var cur = (newCurEl && newCurEl.value) || LOCAL_CUR || BASE_CURRENCY;
+      var money = moneyFields(newAmtEl.value, cur);
+      if (!money.amountMinor) { newAmtEl.focus(); return; }
       var payer = memberPos(newPayerEl.value) !== -1 ? newPayerEl.value : state.members[0].id;
-      opAddExpense({ paidBy: payer, desc: newDescEl.value || "", amount: amt, split: evenSplit(amt) });
+      opAddExpense(Object.assign({
+        paidBy: payer,
+        desc: newDescEl.value || "",
+        method: "EQUAL",
+        weights: null,
+        // SNAPSHOT. The whole group as it stands right now — not "whoever the group turns
+        // out to be later", which is what silently re-split day-1 dinners.
+        participants: allIds(),
+        category: "",
+      }, money));
       newDescEl.value = ""; newAmtEl.value = ""; newDescEl.focus();
     });
     [newPayerEl, newDescEl, newAmtEl].forEach(function (el) {
@@ -503,20 +801,10 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
     });
   }
 
-  var modeEven = document.getElementById("sModeEven"), modeCustom = document.getElementById("sModeCustom");
-  function syncModeUI() {
-    if (modeEven)   modeEven.classList.toggle("scm-active", !state.customSplit);
-    if (modeCustom) modeCustom.classList.toggle("scm-active", state.customSplit);
-  }
-  if (modeEven)   modeEven.addEventListener("click", function () { opSetCustomSplit(false); });
-  if (modeCustom) modeCustom.addEventListener("click", function () { opSetCustomSplit(true); });
-
   /* ── Save summary as PDF ──────────────────────────────────────────────────
      Everything here is synchronous: the sheet is built and window.print() is called
      inside the click gesture, never behind an await (CLAUDE.md boundary check #2 — the
-     popup-blocker trap). The rate is read from whatever the live-data feature has already
-     applied; when it has none, the guide's build-time seed rate is used and the sheet says
-     so rather than printing a bare figure. */
+     popup-blocker trap). */
   function currencyForSheet() {
     var live = getLastRate();
     if (live && live.rate) {
@@ -547,8 +835,7 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
   var savePdfBtn = document.getElementById("sSavePdf");
   if (savePdfBtn) {
     savePdfBtn.addEventListener("click", function () {
-      var days = Array.isArray(CFG.daysForBanner) ? CFG.daysForBanner.length : null;
-      var summaryData = buildBudgetSummary(state.members, state.expenses, state.customSplit, days);
+      var summaryData = buildBudgetSummary(state.members, state.expenses, state.payments, dayCount());
       printBudgetSummary(summaryData, sheetMeta());
     });
   }
@@ -560,7 +847,7 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
       var calc = computeSettle();
       var lines = calc.txns.map(function (t) {
         var via = (memberById(t.to) || {}).payment;
-        return memberName(t.from) + " → " + memberName(t.to) + ": " + fmtUSD(t.amt) + (via ? " (via " + via + ")" : "");
+        return memberName(t.from) + " → " + memberName(t.to) + ": " + fmtBase(t.amtMinor) + (via ? " (via " + via + ")" : "");
       });
       var text = lines.length ? "Settle-up:\n" + lines.join("\n") : "All square — no transfers needed.";
       function done(ok) { copySettleBtn.textContent = ok ? "✓ Copied" : "Copy failed"; setTimeout(function () { copySettleBtn.textContent = copyDefault; }, 1800); }
@@ -576,7 +863,6 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
   }, { passive: false });
 
   /* ── init ─────────────────────────────────── */
-  syncModeUI();
   if (hasFirebase()) {
     render();       // paint the empty shell immediately, then connect to the shared room
     autoConnect();

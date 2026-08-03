@@ -71,6 +71,9 @@
   .bs-table{width:100%;border-collapse:collapse;font-size:9.5pt}
   .bs-table th{text-align:left;font-size:8pt;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--bs-mute);padding:0 0 4pt;border-bottom:.75pt solid var(--bs-rule)}
   .bs-table td{padding:4.5pt 0;border-bottom:.5pt solid var(--bs-rule)}
+  /* A foreign expense prints what was handed over, with the converted figure beneath it. */
+  .bs-conv{display:block;font-size:8pt;color:var(--bs-mute)}
+  .bs-cat{display:block;font-size:8pt;color:var(--bs-mute)}
   .bs-table tr{break-inside:avoid}
   .bs-num{text-align:right;white-space:nowrap}
   .bs-table th.bs-num{text-align:right}

@@ -42,6 +42,29 @@ export function formatMinor(amountMinor: number, currency: string): string {
   }).format(amountMinor / 10 ** exponent);
 }
 
+/** The currency every balance and transfer is expressed in. Expenses may be entered in any
+    currency the traveller actually paid; each one carries the rate it was converted at, and
+    settlement happens here so that one trip nets to one set of transfers. */
+export const BASE_CURRENCY = "USD";
+
+/** Minor units of an amount converted into BASE_CURRENCY at `ratePerBase` (units of
+    `currency` per 1 USD — the same direction the guide displays: "₩1,444 = $1").
+    Converted ONCE, at entry, and stored: a rate that moves next week must never silently
+    rewrite what last week's dinner cost. Returns null when the rate can't be trusted. */
+export function toBaseMinor(
+  amountMinor: number,
+  currency: string,
+  ratePerBase: number | null | undefined,
+): number | null {
+  if (!Number.isSafeInteger(amountMinor)) return null;
+  if (currency === BASE_CURRENCY) return amountMinor;
+  const exponent = CURRENCY_EXPONENT[currency];
+  if (exponent === undefined) return null;
+  if (!ratePerBase || !Number.isFinite(ratePerBase) || ratePerBase <= 0) return null;
+  const major = amountMinor / 10 ** exponent;
+  return Math.round((major / ratePerBase) * 100);
+}
+
 export interface SplitParticipant {
   memberId: string;
   /**

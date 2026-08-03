@@ -55,14 +55,13 @@ const { storeKey } = Astro.props;
     </div>
   </div>
 
-  <!-- 2 · Expenses -->
+  <!-- 2 · Expenses.
+       The old trip-wide ÷Even/Custom toggle is gone: how an expense splits is a property of
+       THAT expense now (open a row's Details), because one flag for the whole trip could not
+       express dinner-split-evenly alongside a hotel split 70/30. -->
   <div class="split-card">
     <div class="sc-head">
       <span class="sc-label">Expenses</span>
-      <div class="sc-mode-toggle" role="group" aria-label="How to split each expense">
-        <button class="scm-btn scm-active" id="sModeEven" type="button">÷ Even</button>
-        <button class="scm-btn" id="sModeCustom" type="button">Custom</button>
-      </div>
     </div>
     <!-- Add-expense box — boxed off so it never reads as a blank/broken row. -->
     <div class="se-new-card" id="sNewCard">
@@ -73,11 +72,25 @@ const { storeKey } = Astro.props;
       <div class="se-new-row">
         <input class="split-in se-desc" type="text" placeholder="What for?" id="sNewDesc" aria-label="What the expense was for" />
         <select class="split-in se-payer" id="sNewPayer" aria-label="Who paid"></select>
-        <div class="se-amt-wrap"><span class="se-cur">$</span>
-          <input class="split-in se-amt" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" id="sNewAmt" aria-label="Amount" />
+        <div class="se-amt-wrap">
+          <!-- Populated by trip-split.js with [local currency, USD] on a guide that has one;
+               it stays hidden on a dollar destination, where the choice is not a choice. -->
+          <select class="se-cur-sel" id="sNewCur" aria-label="Currency" hidden></select>
+          <input class="split-in se-amt" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00" id="sNewAmt" aria-label="Amount" />
         </div>
       </div>
     </div>
+
+    <!-- Suggestions only — the field stays free text, so a trip can invent its own. -->
+    <datalist id="sCatList">
+      <option value="Food"></option>
+      <option value="Transport"></option>
+      <option value="Lodging"></option>
+      <option value="Activities"></option>
+      <option value="Shopping"></option>
+      <option value="Drinks"></option>
+      <option value="Fees"></option>
+    </datalist>
 
     <!-- Column labels belong to the DESKTOP row grid; on phones the rows restack and the
          header would be labelling columns that no longer exist, so CSS hides it there. -->
@@ -111,6 +124,20 @@ const { storeKey } = Astro.props;
         <button class="sc-add-btn" id="sCopySettle" type="button">⧉ Copy</button>
       </div>
       <div id="sSettlements"></div>
+    </div>
+
+    <!-- Settling is RECORDED, not just suggested. Without this the tool recomputes the same
+         transfer forever and can never say a trip is done. Revealed once a payment exists. -->
+    <div class="sr-sec" id="sPaid" hidden>
+      <span class="sc-label">Already settled</span>
+      <div id="sPaidList"></div>
+    </div>
+
+    <!-- Where it went. Hidden until at least one expense carries a category — an all-
+         "Uncategorised" chart teaches nothing. -->
+    <div class="sr-sec" id="sCategories" hidden>
+      <span class="sc-label">Where it went</span>
+      <div id="sCatBreakdown"></div>
     </div>
   </div>
 

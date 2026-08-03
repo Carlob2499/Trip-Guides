@@ -1,6 +1,14 @@
 # Trip Split — assessment and V2 proposal
 
-**Date:** 2026-08-02 · **Status:** proposal, nothing here is built
+> **Creator's ruling, 2026-08-02, after this was written:** the guide's estimated budget and
+> the calculator stay **unconnected**. "The budgets don't matter as much, only the splitting of
+> costs." Plan vs Actual — §5's original anchor — is therefore **dropped**, along with per-day
+> rollups and budget-target comparisons. Spend **categories survive** on their own merits as a
+> spend analysis ("categorising based on what we paid"), not as a bridge to the guide's budget
+> section. Tier 0 plus items 1, 4 and 5 of Tier 1 and item 8 of Tier 2 are **built and
+> shipped**; see the status marks in §5. Everything else stands as proposal.
+
+**Date:** 2026-08-02 · **Status:** partly shipped — see the ruling above
 **Scope:** `src/features/trip-split/` (the Budget tab), its relationship to the guide's own
 `budget` section, and the Group Vote panel it shares a stylesheet with.
 
@@ -176,7 +184,7 @@ in §5 follows exactly that — close the table-stakes gap, then spend everythin
 Ordering is deliberate: correctness first (it is wrong today), then the trip-native features
 that justify the tool's existence, then scale and trust.
 
-### Tier 0 — Fix what is wrong (no new surface)
+### Tier 0 — Fix what is wrong (no new surface) · ✅ SHIPPED
 
 | Change | Fixes | Justification |
 |---|---|---|
@@ -187,7 +195,18 @@ that justify the tool's existence, then scale and trust.
 Deleted by this tier: the global **÷ Even / Custom** toggle in the card header, and the
 `state.customSplit` flag.
 
-### Tier 1 — Become a *travel* splitter (the differentiators)
+**Migration, as built.** One shape change, so saved trips convert once. Per-record conversion
+(float dollars → minor units, method/currency defaults) lives in `normalizeExpense`; the
+trip-wide `customSplit` flag is converted where it is actually in scope — `migrate()` for a
+local save, and `bindRoom()` for a shared room, which still *reads* `meta.customSplit` so a
+room that used Custom amounts is not silently re-read as an even split. **Nothing is ever
+written back to Firebase by the migration** — the server's records are read through the
+normalizer and left as they are. On-device, the pre-migration blob is copied to
+`tg-split-<guide>-pre-v2` before the upgraded shape overwrites it, because a trip's expense
+history is not reproducible from memory three weeks later.
+
+### Tier 1 — Become a *travel* splitter
+*(items 1, 4 and 5 shipped; items 2 and 3 dropped by the creator's ruling above)*
 
 1. **Native currency entry.** Enter ₩45,000, not $31.16. Store `{ amountMinor, currency,
    rate, rateDate }` — the rate captured *at entry*, so a later rate move never rewrites
@@ -196,30 +215,40 @@ Deleted by this tier: the global **÷ Even / Custom** toggle in the card header,
    the single biggest daily friction. It also lands on the right side of §4's opening #2 —
    Splitwise refuses per-expense historical rates on principle and KittySplit charges for them,
    so pinning a rate per expense puts us in a field of two, using machinery we already own.
-2. **Dated expenses bound to the itinerary.** Default an expense's date to the guide day you are
-   currently on, and group the list by day. Justification: turns an undifferentiated list into
-   the trip's own shape, and it is the prerequisite for everything in item 3.
-3. **Plan vs Actual — the anchor feature.** The guide's `budget` section already carries
-   `currency`, `days`, `party`, `budgetTarget`, and categorised `items` with `basis: day|trip`,
-   `est/low/high`, and `per: person|group`. That is a complete *plan*. The calculator holds the
-   *actual*. They have never been connected. V2 renders them against each other — per category
-   and per day, "estimated ₩X, spent ₩Y". **No competitor can build this, because none of them
-   own the itinerary.** This is the reason the tool should exist.
-4. **Categories drawn from the guide's own budget items** rather than a generic taxonomy — so the
-   comparison in item 3 lines up by construction.
+2. ~~**Dated expenses bound to the itinerary.**~~ **DROPPED** (creator's ruling). Dates remain
+   worth revisiting purely as a way to *find* an expense in a long list — see Tier 2 item 7 —
+   but not as a feature in their own right.
+3. ~~**Plan vs Actual.**~~ **DROPPED** (creator's ruling): the guide's estimated budget and the
+   calculator stay separate. Recorded here rather than deleted, because the reasoning that made
+   it attractive — the guide's `budget` section is a complete structured plan — is still true,
+   and a future self should be able to see that it was considered and declined, not overlooked.
+4. **Spend categories** ✅ **SHIPPED** — free text with a suggestion list, rolled up biggest-first
+   into a "Where it went" breakdown in the results card and a table on the printed sheet.
+   Deliberately NOT drawn from the guide's budget items, per the ruling: this is an analysis of
+   what was actually paid, standing on its own. Hidden until at least one expense is
+   categorised, because an all-"Uncategorised" chart teaches nothing.
 5. **"I'm ___" device identity.** One tap, stored per device, no account. Unlocks "you owe",
    "your share", defaulting the payer to you, and sorting balances with you first — the whole
    second-person voice, without surrendering zero-setup.
 
 ### Tier 2 — Survive a real trip
 
-6. **Collapse rows to one line** (description · payer · amount), expanding on tap for
-   participants and custom amounts. Directly answers F9's 176px-per-row measurement.
-7. **Search and filter** by person, day, and category.
-8. **Mark-as-settled with a payments log.** Settlement becomes a recorded event, not a
-   perpetually recomputed suggestion — and the post-trip lock then freezes something true.
+6. **Collapse rows** ✅ **SHIPPED, partially effective — read the numbers.** Category, split
+   rule, sharers and weights now sit behind a per-row disclosure, with a summary line carrying
+   anything non-default. Desktop rows went **176px → 82px**. Mobile only went **176px → 157px**,
+   because 94px of a mobile row is two 44px touch targets stacked, and shrinking those would
+   trade an accessibility floor for scroll. A 40-expense trip is still **7,875px / 9.7 phone
+   screens**. Honest conclusion: the row is near its floor, and the remaining scale problem is
+   not row height — it is rendering forty editable rows at all. That is item 7's job.
+7. **Search and filter** by person and category, and/or a read-only compact list that expands
+   into an editable row. **This is now the highest-value unbuilt item**, on the measurement above.
+8. **Mark-as-settled with a payments log** ✅ **SHIPPED.** Settlement is a recorded event, not a
+   perpetually recomputed suggestion: "Mark paid" writes a payment, the transfer leaves the
+   list, the person shows as settled, and the log carries a dated Undo. The post-trip lock now
+   freezes something true.
 9. **Undo for delete** (and a lightweight activity strip: "Sam removed 'Taxi' · 2m ago"). The
-   cheapest possible answer to F10, matching what Splitwise found necessary.
+   cheapest possible answer to F10, matching what Splitwise found necessary. *Partially served:*
+   payments have an Undo; expense and member deletion still do not.
 
 ### Tier 3 — Trust and polish
 

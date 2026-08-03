@@ -60,21 +60,34 @@ select.split-in{cursor:pointer}
 .split-del:hover{color:var(--accent-ink);background:color-mix(in srgb,var(--accent) 10%,transparent);border-color:color-mix(in srgb,var(--accent) 30%,transparent)}
 .split-del:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 
-/* ── split-mode toggle ─────────────────────────────────────────────────────
-   A segmented control on a track, not two loose outlined boxes — the selected
-   state now reads as a position within a set. */
-.sc-mode-toggle{display:inline-flex;gap:2px;padding:3px;background:var(--bg2);border:1px solid var(--rule);border-radius:999px}
-.scm-btn{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.03em;background:none;border:none;border-radius:999px;padding:.34rem .75rem;min-height:30px;cursor:pointer;color:var(--muted);transition:background .16s,color .16s;white-space:nowrap}
-.scm-btn:hover{color:var(--ink)}
-.scm-btn.scm-active{background:var(--ink);color:var(--bg)}
-.scm-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* ── per-row disclosure ────────────────────────────────────────────────────
+   Category, split rule, who shared and any weights live behind this. Collapsed by
+   default: with the chips row always open, a 40-expense trip measured 8,426px —
+   10.4 phone screens — and the supporting controls are wanted on a minority of rows.
+   The summary line carries whatever is non-default so nothing hides silently. */
+.se-sub{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-top:.3rem}
+.se-toggle{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.03em;color:var(--muted);background:none;border:1px solid var(--rule2);border-radius:999px;padding:.18rem .6rem;min-height:28px;cursor:pointer;transition:color .14s,border-color .14s,background .14s}
+.se-toggle:hover{color:var(--ink);border-color:var(--ink)}
+.se-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.se-meta{font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);overflow-wrap:anywhere}
+.se-more{margin-top:.5rem;padding-top:.6rem;border-top:1px dashed var(--rule)}
+.se-more-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.2rem}
+.se-field{display:flex;flex-direction:column;gap:.22rem;flex:1 1 9rem;min-width:0}
+.se-field-lbl{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
+
+/* Currency picker sits inside the amount field's own box so the two read as one control.
+   font-size stays at --text-body: this is a text-entry control, and anything under 16px
+   makes iOS Safari zoom the page in on focus and never zoom back out (the a11y gate caught
+   it at 11.52px). The amount columns below are sized to fit it. */
+.se-cur-sel{font-family:var(--font-data);font-size:var(--text-body);font-weight:700;letter-spacing:.02em;color:var(--muted);background:var(--bg2);border:1px solid var(--rule2);border-radius:var(--r-sm);padding:.2rem .1rem;cursor:pointer;flex:none;min-height:38px}
+.se-cur-sel:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 
 /* ── expense rows ──────────────────────────────────────────────────────────
    Description FIRST: it is the row's identity, and it was the column being
    starved. Header and rows share one template so the labels sit over their
    columns; the trailing 2.2rem keeps the entry row's amount aligned with the
    committed rows' amount even though only they carry a delete button. */
-.se-header{display:grid;grid-template-columns:1fr 7rem 6rem 2.2rem;gap:.45rem;padding:.1rem 0 .45rem;border-bottom:1px solid var(--rule);margin-bottom:.4rem}
+.se-header{display:grid;grid-template-columns:1fr 6.5rem 8rem 2.2rem;gap:.45rem;padding:.1rem 0 .45rem;border-bottom:1px solid var(--rule);margin-bottom:.4rem}
 .se-h-desc,.se-h-payer,.se-h-amt{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
 .se-h-amt{text-align:right}
 
@@ -94,11 +107,11 @@ select.split-in{cursor:pointer}
    People card's "+ Add person"), so it's the first, always-in-place control — not
    hunted for below the inputs when tallying many expenses in a row. */
 .se-new-head{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.6rem}
-.se-new-row{display:grid;grid-template-columns:1fr 7rem 6rem 2.2rem;gap:.45rem;align-items:center}
+.se-new-row{display:grid;grid-template-columns:1fr 6.5rem 8rem 2.2rem;gap:.45rem;align-items:center}
 
 .se-row{padding:.15rem 0 .3rem}
 .se-row+.se-row{border-top:1px solid var(--rule)}
-.se-main{display:grid;grid-template-columns:1fr 7rem 6rem 2.2rem;gap:.45rem;align-items:center}
+.se-main{display:grid;grid-template-columns:1fr 6.5rem 8rem 2.2rem;gap:.45rem;align-items:center}
 .se-amt-wrap{display:flex;align-items:center;gap:.25rem;min-width:0}
 .se-cur{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);flex:none}
 .se-amt{text-align:right}
@@ -161,6 +174,31 @@ select.split-in{cursor:pointer}
 .st-via{grid-column:1/-1;font-size:var(--text-control);color:var(--muted);font-style:italic}
 .split-settle-ok{color:var(--green);font-size:var(--text-small);font-style:italic;padding:.3rem 0;margin:0}
 
+/* "Mark paid" — the control that turns a perpetual suggestion into a settled record. */
+.st-done{grid-column:1/-1;justify-self:start;margin-top:.35rem;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.03em;color:var(--accent-ink);background:color-mix(in srgb,var(--accent) 8%,transparent);border:1px solid color-mix(in srgb,var(--accent) 32%,transparent);border-radius:999px;padding:.28rem .8rem;min-height:32px;cursor:pointer;transition:background .16s,border-color .16s}
+.st-done:hover{background:color-mix(in srgb,var(--accent) 16%,transparent);border-color:color-mix(in srgb,var(--accent) 55%,transparent)}
+.st-done:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* Settled payments — a log with an undo, because this is the one easily-mistapped action
+   whose whole value is being an accurate record. */
+.sp-row{display:grid;grid-template-columns:1fr auto auto;gap:.3rem .7rem;align-items:baseline;padding:.4rem 0;border-bottom:1px solid var(--rule)}
+.sp-row:last-child{border-bottom:none}
+.sp-who{font-size:var(--text-small);font-weight:600}
+.sp-amt{font-family:var(--font-data);font-size:var(--text-small);font-weight:700;color:var(--green);white-space:nowrap}
+.sp-on{grid-column:1;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted)}
+.sp-undo{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;color:var(--muted);background:none;border:1px solid var(--rule2);border-radius:999px;padding:.15rem .6rem;min-height:28px;cursor:pointer;transition:color .14s,border-color .14s}
+.sp-undo:hover{color:var(--ink);border-color:var(--ink)}
+.sp-undo:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* Where it went — proportional bars, biggest first. Bars are a reading aid beside the real
+   figures, never a substitute for them. */
+.sc-cat{display:grid;grid-template-columns:minmax(4.5rem,1fr) 2.2fr auto 2.6rem;gap:.5rem;align-items:center;padding:.32rem 0}
+.sc-cat-name{font-size:var(--text-small);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sc-cat-bar{display:block;height:8px;background:var(--bg2);border-radius:999px;overflow:hidden}
+.sc-cat-fill{display:block;height:100%;background:var(--accent);border-radius:999px}
+.sc-cat-amt{font-family:var(--font-data);font-size:var(--text-small);font-weight:700;text-align:right;white-space:nowrap}
+.sc-cat-pct{font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);text-align:right}
+
 /* empty state */
 .split-empty{color:var(--muted);font-size:var(--text-small);font-style:italic;padding:.25rem 0;margin:0}
 
@@ -195,7 +233,9 @@ select.split-in{cursor:pointer}
   .se-header{display:none}
 
   .se-main,.se-new-row{
-    grid-template-columns:1fr 6rem 2.2rem;
+    /* The amount cell holds a currency picker as well as the figure on a guide with a
+       local currency, and that picker must stay at 16px or iOS zoom-traps on focus. */
+    grid-template-columns:1fr 9rem 2.2rem;
     grid-template-areas:"desc desc del" "payer amt amt";
     row-gap:.4rem
   }
@@ -204,7 +244,7 @@ select.split-in{cursor:pointer}
   .se-amt-wrap{grid-area:amt;justify-content:flex-end}
   .se-main .split-del{grid-area:del;justify-self:end}
   /* The entry box has no delete button, so its two rows are 2-up rather than 3-up. */
-  .se-new-row{grid-template-columns:1fr 6rem;grid-template-areas:"desc desc" "payer amt"}
+  .se-new-row{grid-template-columns:1fr 9rem;grid-template-areas:"desc desc" "payer amt"}
 
   .se-row+.se-row{margin-top:.5rem;padding-top:.55rem}
 

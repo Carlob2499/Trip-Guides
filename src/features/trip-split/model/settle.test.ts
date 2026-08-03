@@ -1,51 +1,52 @@
 import { describe, it, expect } from "vitest";
 import { settle, type SettleExpense } from "./settle";
 
+/* V2: amounts are integer minor units (cents of the base currency) and the split method is a
+   property of the expense. Every behavioural assertion from the float era is preserved below
+   — the numbers are the same money, expressed exactly. */
+
 describe("settle — participants (a subset of the group shares an expense)", () => {
   // The real case this came from: Phil + Carlo were in Daejeon, Gaby wasn't, so Daejeon
-  // expenses must not touch Gaby. Before participants existed, an even split silently
-  // charged all three and the payer had to hand-calculate in custom mode.
+  // expenses must not touch Gaby.
   it("divides evenly among ONLY the named participants", () => {
     const r = settle(
       ["phil", "carlo", "gaby"],
-      [{ paidBy: "phil", amount: 60, participants: ["phil", "carlo"] }],
-      false,
+      [{ paidBy: "phil", baseMinor: 6000, participants: ["phil", "carlo"] }],
     );
-    expect(r.balances.phil).toBeCloseTo(30);   // paid 60, owes 30
-    expect(r.balances.carlo).toBeCloseTo(-30);
-    expect(r.balances.gaby).toBeCloseTo(0);    // wasn't there — untouched
-    expect(r.txns).toEqual([{ from: "carlo", to: "phil", amt: 30 }]);
+    expect(r.balances.phil).toBe(3000);   // paid 60, owes 30
+    expect(r.balances.carlo).toBe(-3000);
+    expect(r.balances.gaby).toBe(0);      // wasn't there — untouched
+    expect(r.txns).toEqual([{ from: "carlo", to: "phil", amtMinor: 3000 }]);
   });
 
-  it("treats absent/empty participants as the whole group (every saved expense is unchanged)", () => {
-    const all = settle(["a", "b", "c"], [{ paidBy: "a", amount: 30 }], false);
-    const empty = settle(["a", "b", "c"], [{ paidBy: "a", amount: 30, participants: [] }], false);
-    const nulled = settle(["a", "b", "c"], [{ paidBy: "a", amount: 30, participants: null }], false);
+  it("treats absent/empty participants as the whole group (legacy records settle unchanged)", () => {
+    const all = settle(["a", "b", "c"], [{ paidBy: "a", baseMinor: 3000 }]);
+    const empty = settle(["a", "b", "c"], [{ paidBy: "a", baseMinor: 3000, participants: [] }]);
+    const nulled = settle(["a", "b", "c"], [{ paidBy: "a", baseMinor: 3000, participants: null }]);
     expect(empty).toEqual(all);
     expect(nulled).toEqual(all);
-    expect(all.balances.c).toBeCloseTo(-10);
+    expect(all.balances.c).toBe(-1000);
   });
 
   it("ignores participant ids that are no longer members (deleted mid-trip)", () => {
     const r = settle(
       ["a", "b"],
-      [{ paidBy: "a", amount: 40, participants: ["a", "b", "ghost"] }],
-      false,
+      [{ paidBy: "a", baseMinor: 4000, participants: ["a", "b", "ghost"] }],
     );
-    expect(r.balances.a).toBeCloseTo(20);
-    expect(r.balances.b).toBeCloseTo(-20);
+    expect(r.balances.a).toBe(2000);
+    expect(r.balances.b).toBe(-2000);
   });
 
   it("falls back to the whole group if every participant was deleted", () => {
-    const r = settle(["a", "b"], [{ paidBy: "a", amount: 40, participants: ["ghost"] }], false);
-    expect(r.balances.a).toBeCloseTo(20);
-    expect(r.balances.b).toBeCloseTo(-20);
+    const r = settle(["a", "b"], [{ paidBy: "a", baseMinor: 4000, participants: ["ghost"] }]);
+    expect(r.balances.a).toBe(2000);
+    expect(r.balances.b).toBe(-2000);
   });
 
   it("charges a solo participant their own expense entirely (nets to zero)", () => {
-    const r = settle(["a", "b"], [{ paidBy: "a", amount: 25, participants: ["a"] }], false);
-    expect(r.balances.a).toBeCloseTo(0);
-    expect(r.balances.b).toBeCloseTo(0);
+    const r = settle(["a", "b"], [{ paidBy: "a", baseMinor: 2500, participants: ["a"] }]);
+    expect(r.balances.a).toBe(0);
+    expect(r.balances.b).toBe(0);
     expect(r.txns).toEqual([]);
   });
 
@@ -53,131 +54,248 @@ describe("settle — participants (a subset of the group shares an expense)", ()
     const r = settle(
       ["a", "b", "c"],
       [
-        { paidBy: "a", amount: 30 },                              // all three: 10 each
-        { paidBy: "b", amount: 20, participants: ["b", "c"] },    // b+c only: 10 each
+        { paidBy: "a", baseMinor: 3000 },                              // all three: 10 each
+        { paidBy: "b", baseMinor: 2000, participants: ["b", "c"] },    // b+c only: 10 each
       ],
-      false,
     );
-    expect(r.balances.a).toBeCloseTo(20);   // +30 -10
-    expect(r.balances.b).toBeCloseTo(0);    // +20 -10 -10
-    expect(r.balances.c).toBeCloseTo(-20);  // -10 -10
+    expect(r.balances.a).toBe(2000);   // +30 -10
+    expect(r.balances.b).toBe(0);      // +20 -10 -10
+    expect(r.balances.c).toBe(-2000);  // -10 -10
   });
 
-  it("ignores a stale custom amount for someone excluded from the expense", () => {
-    // b was excluded AFTER amounts were typed — the leftover split entry must not charge b.
+  it("ignores a stale weight for someone excluded from the expense", () => {
+    // b was excluded AFTER amounts were typed — the leftover entry must not charge b.
     const r = settle(
       ["a", "b", "c"],
-      [{ paidBy: "a", amount: 100, participants: ["a", "c"], split: { a: 25, b: 75 } }],
-      true,
+      [{
+        paidBy: "a", baseMinor: 10000, participants: ["a", "c"],
+        method: "EXACT", weights: { a: 2500, b: 7500 },
+      }],
     );
-    expect(r.balances.b).toBeCloseTo(0);      // excluded — untouched despite the stale entry
-    expect(r.balances.a).toBeCloseTo(0);      // only sharer with an amount → owes all 100, paid 100
-    expect(r.balances.c).toBeCloseTo(0);      // sharer with no typed amount yet → 0 of a sum>0 split
+    expect(r.balances.b).toBe(0);      // excluded — untouched despite the stale entry
+    expect(r.balances.a).toBe(0);      // only sharer with a weight → owes all 100, paid 100
+    expect(r.balances.c).toBe(0);      // sharer with no weight typed yet
   });
 
-  it("zero-sum custom split falls back to even across the PARTICIPANTS, not the group", () => {
-    // Amounts cleared to 0 while deciding — the fallback must not resurrect excluded members.
+  it("zero-sum weights fall back to even across the PARTICIPANTS, not the group", () => {
     const r = settle(
       ["a", "b", "c"],
-      [{ paidBy: "a", amount: 90, participants: ["a", "b"], split: { a: 0, b: 0 } }],
-      true,
+      [{
+        paidBy: "a", baseMinor: 9000, participants: ["a", "b"],
+        method: "EXACT", weights: { a: 0, b: 0 },
+      }],
     );
-    expect(r.balances.a).toBeCloseTo(45);
-    expect(r.balances.b).toBeCloseTo(-45);
-    expect(r.balances.c).toBeCloseTo(0);
+    expect(r.balances.a).toBe(4500);
+    expect(r.balances.b).toBe(-4500);
+    expect(r.balances.c).toBe(0);
   });
 
-  it("custom amounts still win over participants (the split map is the source of truth)", () => {
+  it("weights still win over an even split among the participants", () => {
     const r = settle(
       ["a", "b", "c"],
-      [{ paidBy: "a", amount: 100, participants: ["a", "b"], split: { a: 25, b: 75 } }],
-      true,
+      [{
+        paidBy: "a", baseMinor: 10000, participants: ["a", "b"],
+        method: "EXACT", weights: { a: 2500, b: 7500 },
+      }],
     );
-    expect(r.balances.a).toBeCloseTo(75);
-    expect(r.balances.b).toBeCloseTo(-75);
-    expect(r.balances.c).toBeCloseTo(0);
+    expect(r.balances.a).toBe(7500);
+    expect(r.balances.b).toBe(-7500);
+    expect(r.balances.c).toBe(0);
+  });
+});
+
+describe("settle — the retroactive-participant bug (V2 regression)", () => {
+  // Before V2, `participants: null` meant "everyone AS THE GROUP STANDS NOW", so adding a
+  // fourth traveller on day 5 silently made them owe for a day-1 dinner. New records carry
+  // an explicit snapshot, and this is the test that keeps it that way.
+  const dinner: SettleExpense = {
+    paidBy: "a", baseMinor: 9000, participants: ["a", "b", "c"],
+  };
+
+  it("a snapshotted expense is untouched when a fourth person joins later", () => {
+    const before = settle(["a", "b", "c"], [dinner]);
+    const after = settle(["a", "b", "c", "d"], [dinner]);
+    expect(before.balances.b).toBe(-3000);
+    expect(after.balances.b).toBe(-3000);   // unchanged
+    expect(after.balances.d).toBe(0);       // the newcomer owes nothing for it
+  });
+
+  it("a LEGACY record with no snapshot still re-splits — documented, not fixed retroactively", () => {
+    const legacy: SettleExpense = { paidBy: "a", baseMinor: 9000 };
+    expect(settle(["a", "b", "c"], [legacy]).balances.b).toBe(-3000);
+    expect(settle(["a", "b", "c", "d"], [legacy]).balances.b).toBe(-2250);
+  });
+});
+
+describe("settle — exact money (V2 regression)", () => {
+  it("splitting 100 three ways loses nothing", () => {
+    const r = settle(["a", "b", "c"], [{ paidBy: "a", baseMinor: 10000, participants: ["a", "b", "c"] }]);
+    const owed = [r.balances.b, r.balances.c].map(Math.abs);
+    expect(owed[0] + owed[1] + (10000 - r.balances.a)).toBe(10000);
+    expect(Object.values(r.balances).reduce((x, y) => x + y, 0)).toBe(0);
+  });
+
+  it("distributes the odd minor unit rather than dropping it", () => {
+    // 10.00 three ways = 333/333/334 in cents; the total must survive exactly.
+    const r = settle(["a", "b", "c"], [{ paidBy: "a", baseMinor: 1000, participants: ["a", "b", "c"] }]);
+    const shares = [r.balances.b, r.balances.c].map((v) => -v);
+    expect(shares.reduce((x, y) => x + y, 0) + (1000 - r.balances.a)).toBe(1000);
+    expect(Object.values(r.balances).reduce((x, y) => x + y, 0)).toBe(0);
+  });
+
+  it("conserves the total across many awkward amounts", () => {
+    const exps: SettleExpense[] = [1, 7, 33, 101, 999, 1234, 5001].map((n, i) => ({
+      paidBy: ["a", "b", "c"][i % 3],
+      baseMinor: n,
+      participants: ["a", "b", "c"],
+    }));
+    const r = settle(["a", "b", "c"], exps);
+    expect(Object.values(r.balances).reduce((x, y) => x + y, 0)).toBe(0);
+  });
+});
+
+describe("settle — the split method belongs to the expense (V2 regression)", () => {
+  it("two expenses in one trip can split differently", () => {
+    const r = settle(
+      ["a", "b"],
+      [
+        { paidBy: "a", baseMinor: 6000, participants: ["a", "b"] },                                  // even
+        { paidBy: "a", baseMinor: 10000, participants: ["a", "b"], method: "SHARES", weights: { a: 3, b: 1 } },
+      ],
+    );
+    // Dinner: b owes 30. Hotel 3:1 → b owes 25. Total b owes 55.
+    expect(r.balances.b).toBe(-5500);
+    expect(r.balances.a).toBe(5500);
+  });
+
+  it("PERCENTAGE weights allocate proportionally and sum exactly", () => {
+    const r = settle(
+      ["a", "b"],
+      [{ paidBy: "a", baseMinor: 6255, participants: ["a", "b"], method: "PERCENTAGE", weights: { a: 60, b: 40 } }],
+    );
+    expect(r.balances.b).toBe(-2502);
+    expect(Object.values(r.balances).reduce((x, y) => x + y, 0)).toBe(0);
+  });
+
+  it("does not throw when typed EXACT shares fail to add up (the form warns; the engine copes)", () => {
+    const r = settle(
+      ["a", "b"],
+      [{ paidBy: "a", baseMinor: 10000, participants: ["a", "b"], method: "EXACT", weights: { a: 3000, b: 3000 } }],
+    );
+    // Treated proportionally — 50/50 of the real total — and still conserves.
+    expect(r.balances.b).toBe(-5000);
+    expect(Object.values(r.balances).reduce((x, y) => x + y, 0)).toBe(0);
+  });
+});
+
+describe("settle — recorded payments (V2)", () => {
+  const dinner: SettleExpense = { paidBy: "a", baseMinor: 9000, participants: ["a", "b", "c"] };
+
+  it("a payment discharges the payer's debt", () => {
+    const r = settle(["a", "b", "c"], [dinner], [{ from: "b", to: "a", baseMinor: 3000 }]);
+    expect(r.balances.b).toBe(0);
+    expect(r.balances.a).toBe(3000);          // still owed c's share
+    expect(r.txns).toEqual([{ from: "c", to: "a", amtMinor: 3000 }]);
+  });
+
+  it("settling everyone leaves no transfers at all", () => {
+    const r = settle(["a", "b", "c"], [dinner], [
+      { from: "b", to: "a", baseMinor: 3000 },
+      { from: "c", to: "a", baseMinor: 3000 },
+    ]);
+    expect(r.txns).toEqual([]);
+    expect(Object.values(r.balances)).toEqual([0, 0, 0]);
+  });
+
+  it("a partial payment leaves the remainder outstanding", () => {
+    const r = settle(["a", "b", "c"], [dinner], [{ from: "b", to: "a", baseMinor: 1000 }]);
+    expect(r.balances.b).toBe(-2000);
+  });
+
+  it("overpaying flips the balance rather than silently clamping", () => {
+    const r = settle(["a", "b", "c"], [dinner], [{ from: "b", to: "a", baseMinor: 5000 }]);
+    expect(r.balances.b).toBe(2000);          // b is now owed 20
+    expect(Object.values(r.balances).reduce((x, y) => x + y, 0)).toBe(0);
+  });
+
+  it("ignores payments naming someone who is no longer a member", () => {
+    const r = settle(["a", "b", "c"], [dinner], [{ from: "ghost", to: "a", baseMinor: 3000 }]);
+    expect(r.balances.a).toBe(6000);
+    expect(Object.values(r.balances).reduce((x, y) => x + y, 0)).toBe(0);
   });
 });
 
 describe("settle", () => {
   it("returns nothing for no members", () => {
-    expect(settle([], [], false)).toEqual({ balances: {}, txns: [] });
+    expect(settle([], [])).toEqual({ balances: {}, txns: [] });
   });
 
   it("zeroes out with members but no expenses", () => {
-    const r = settle(["a", "b"], [], false);
+    const r = settle(["a", "b"], []);
     expect(r.balances).toEqual({ a: 0, b: 0 });
     expect(r.txns).toEqual([]);
   });
 
   it("splits a single expense evenly (2 people)", () => {
-    // a pays $50; even split → b owes a $25.
-    const r = settle(["a", "b"], [{ paidBy: "a", amount: 50 }], false);
-    expect(r.balances.a).toBeCloseTo(25);
-    expect(r.balances.b).toBeCloseTo(-25);
-    expect(r.txns).toEqual([{ from: "b", to: "a", amt: 25 }]);
+    const r = settle(["a", "b"], [{ paidBy: "a", baseMinor: 5000 }]);
+    expect(r.balances.a).toBe(2500);
+    expect(r.balances.b).toBe(-2500);
+    expect(r.txns).toEqual([{ from: "b", to: "a", amtMinor: 2500 }]);
   });
 
   it("splits evenly 3 ways and minimizes transfers", () => {
-    // a pays 90 for three → each owes 30 → b→a 30, c→a 30.
-    const r = settle(["a", "b", "c"], [{ paidBy: "a", amount: 90 }], false);
+    const r = settle(["a", "b", "c"], [{ paidBy: "a", baseMinor: 9000 }]);
     expect(r.txns).toHaveLength(2);
-    expect(r.txns).toContainEqual({ from: "b", to: "a", amt: 30 });
-    expect(r.txns).toContainEqual({ from: "c", to: "a", amt: 30 });
+    expect(r.txns).toContainEqual({ from: "b", to: "a", amtMinor: 3000 });
+    expect(r.txns).toContainEqual({ from: "c", to: "a", amtMinor: 3000 });
   });
 
   it("nets out mutual expenses into the fewest transfers", () => {
-    // a pays 60 (each owes 20), b pays 30 (each owes 10). Net: a +25, b -5... check.
-    // a: +60 -20(own) -10(b's) = +30 ... balances: a 60-20=+40 from own; then b's 30 splits:
-    // a -10, b +30-10=+20-? let's just assert conservation + minimality.
     const exps: SettleExpense[] = [
-      { paidBy: "a", amount: 60 },
-      { paidBy: "b", amount: 30 },
+      { paidBy: "a", baseMinor: 6000 },
+      { paidBy: "b", baseMinor: 3000 },
     ];
-    const r = settle(["a", "b", "c"], exps, false);
-    const sum = Object.values(r.balances).reduce((x, y) => x + y, 0);
-    expect(sum).toBeCloseTo(0); // balances always conserve
-    // c paid nothing and owes its full share of 90/3 = 30.
-    expect(r.balances.c).toBeCloseTo(-30);
-    // Every transfer flows FROM a debtor TO a creditor, and total moved settles everyone.
+    const r = settle(["a", "b", "c"], exps);
+    expect(Object.values(r.balances).reduce((x, y) => x + y, 0)).toBe(0);
+    expect(r.balances.c).toBe(-3000);
     for (const t of r.txns) {
       expect(r.balances[t.from]).toBeLessThan(0);
       expect(r.balances[t.to]).toBeGreaterThan(0);
     }
   });
 
-  it("honors a custom split normalized to the total", () => {
-    // a pays 100; custom split a:0 b:100 → b owes a the whole 100.
+  it("honors weights normalized to the total", () => {
     const r = settle(
       ["a", "b"],
-      [{ paidBy: "a", amount: 100, split: { a: 0, b: 100 } }],
-      true,
+      [{ paidBy: "a", baseMinor: 10000, method: "EXACT", weights: { a: 0, b: 10000 } }],
     );
-    expect(r.balances.a).toBeCloseTo(100);
-    expect(r.balances.b).toBeCloseTo(-100);
-    expect(r.txns).toEqual([{ from: "b", to: "a", amt: 100 }]);
+    expect(r.balances.a).toBe(10000);
+    expect(r.balances.b).toBe(-10000);
+    expect(r.txns).toEqual([{ from: "b", to: "a", amtMinor: 10000 }]);
   });
 
-  it("custom split falls back to even when shares sum to zero", () => {
-    const r = settle(
-      ["a", "b"],
-      [{ paidBy: "a", amount: 40, split: { a: 0, b: 0 } }],
-      true,
-    );
-    expect(r.balances.a).toBeCloseTo(20);
-    expect(r.balances.b).toBeCloseTo(-20);
+  it("falls back to even when weights sum to zero", () => {
+    const r = settle(["a", "b"], [{ paidBy: "a", baseMinor: 4000, method: "EXACT", weights: { a: 0, b: 0 } }]);
+    expect(r.balances.a).toBe(2000);
+    expect(r.balances.b).toBe(-2000);
   });
 
-  it("ignores zero/blank amounts and unknown payers", () => {
+  it("ignores blank amounts and unknown payers", () => {
     const r = settle(
       ["a", "b"],
       [
-        { paidBy: "a", amount: null },
-        { paidBy: "ghost", amount: 20 }, // unknown payer → credited to first member (a)
+        { paidBy: "a", baseMinor: null },
+        { paidBy: "ghost", baseMinor: 2000 }, // unknown payer → credited to first member (a)
       ],
-      false,
     );
-    expect(r.balances.a).toBeCloseTo(10);
-    expect(r.balances.b).toBeCloseTo(-10);
+    expect(r.balances.a).toBe(1000);
+    expect(r.balances.b).toBe(-1000);
+  });
+
+  it("skips a foreign-currency expense whose conversion was never captured", () => {
+    // baseMinor null means "we do not know what this cost in the base currency" — settling
+    // it would require inventing a rate.
+    const r = settle(["a", "b"], [{ paidBy: "a", baseMinor: null }, { paidBy: "a", baseMinor: 2000 }]);
+    expect(r.balances.a).toBe(1000);
   });
 });
