@@ -96,6 +96,8 @@ export function initNewGuideModal() {
       anchor: val("ngAnchor"),
       travelers: val("ngTravelers"),
       party: val("ngParty"),
+      constraints: val("ngConstraints"),
+      "passport-countries": val("ngPassports"),
       pace: val("ngPace"),
       "travel-style": val("ngTravelStyle"),
       priority1: val("ngPriority1"),

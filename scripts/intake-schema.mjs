@@ -52,12 +52,16 @@ export const FIELDS = [
     placeholder: "e.g. Pokémon GO Wild Area — Mexico City, Nov 6–8 2026 (pokemongolive.com)" },
 
   { id: "travelers", label: "Number of travelers", kind: "input", required: false, answerKey: "travelers",
-    description: "Just the headcount. Anything more specific (solo/couple/family, ages, mobility needs) goes in Comments below.",
+    description: "Just the headcount. Mobility, dietary, and sensory needs go in Constraints below; anything else specific (solo/couple/family, ages) goes in Comments.",
     placeholder: "e.g. 3" },
 
   { id: "party", label: "Who's this for / party", kind: "input", required: false, answerKey: "party",
     description: "Who is actually going — the more concrete the better. This maps the guide onto how these specific travelers move (pace, walking tolerance, whether the group splits). Name a prior trip if the same people traveled before (\"the Korea group\"), or describe them.",
     placeholder: "e.g. the Korea group (3 mid-20s, gaming anchors, heavy walkers) / family of 5 with grandparents" },
+
+  { id: "constraints", label: "Constraints", kind: "textarea", required: false, answerKey: "constraints",
+    description: "Mobility, dietary, or sensory needs the guide must honor — a wheelchair or low-stairs requirement, a walking-distance ceiling, allergies or strict diets, sensory sensitivities. A stated constraint changes what the research OWES: related venue facts (step-free access, elevator, allergen handling) become mandatory, verified per venue — never assumed.",
+    placeholder: "e.g. one traveler can't do stairs — elevator or ground floor only / severe peanut allergy / max ~3 km walking per day" },
 
   { id: "passport-countries", label: "Traveler passport countries", kind: "input", required: false, answerKey: "passportCountries",
     description: "Every passport held on this trip, comma-separated (a party can mix). Drives which countries get an entry/visa row researched for the Trip Kit's entry-requirements card — travelers pick their own from a dropdown, so more here means more of the party is covered, not more clutter for anyone.",
@@ -90,8 +94,8 @@ export const FIELDS = [
     options: ["undecided", "Shoestring (<$75/day)", "Mid-range ($75–150/day)", "Comfortable ($150–300/day)", "Luxury ($300+/day)"], nullish: "undecided" },
 
   { id: "comments", label: "Comments", kind: "textarea", required: false, answerKey: "comments",
-    description: "Anything the fields above don't capture — group makeup, dietary needs, a fixed anchor event, dealbreakers, etc.",
-    placeholder: "e.g. traveling with my parents, one vegetarian, celebrating an anniversary" },
+    description: "Anything the fields above don't capture — group makeup, a fixed anchor event, dealbreakers, etc. (Mobility/dietary/sensory needs belong in Constraints above, where they bind the research.)",
+    placeholder: "e.g. traveling with my parents, celebrating an anniversary" },
 ];
 
 // Issue Forms render each answered field as "### <Label>\n\n<value>"; an empty input renders the
@@ -154,6 +158,7 @@ export const IntakeAnswers = z.object({
   anchor: z.string().optional(),
   travelers: z.string().optional(),
   party: z.string().optional(),
+  constraints: z.string().optional(),
   passportCountries: z.string().optional(),
   pace: z.string().optional(),
   travelStyle: z.string().optional(),

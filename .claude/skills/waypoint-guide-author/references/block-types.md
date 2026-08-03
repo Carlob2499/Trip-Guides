@@ -171,6 +171,13 @@ conventions, render behavior, and the verification rules attached to a field.
   venue (area overviews, disproved claims, comparisons). Each item carries its own
   provenance fields. Use this instead of `prose` for any section that's essentially
   a list of named places with details.
+  **Constraint-bound facts (2026-08-02):** when the intake states a mobility /
+  dietary / sensory constraint, the related fact becomes MANDATORY on every
+  venue item — step-free access or elevator presence for a no-stairs party,
+  allergen handling for an allergy — verified per venue (`how` or `why` carries
+  it, with provenance), never assumed from a rating or a photo. Can't verify it?
+  Flag `⚠` or drop the venue; an unverifiable pick under a stated constraint is
+  not a pick.
 - **`sights`** — `img.file` is an exact Wikimedia Commons `File:` page filename
   confirmed to exist (use `scripts/search-commons.mjs`); if unsure, omit the image
   entirely.

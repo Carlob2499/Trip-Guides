@@ -209,7 +209,8 @@ export function buildIntakeMd(answers = {}) {
 ## 1. The Traveler(s)
 - **Who is this for / party:** ${answers.party || ""}  *(→ pick the TRAVELER_PATTERNS party A/B/new before researching; do NOT infer from the last guide)*
 - Number of travelers: ${answers.travelers || ""}
-- Group makeup / ages / mobility / dietary (from Comments): ${answers.comments || ""}
+- **Constraints (mobility · dietary · sensory) — BINDING:** ${answers.constraints || ""}  *(a stated constraint makes the related venue facts MANDATORY per venue — step-free access, elevator, allergen handling — verified, never assumed; empty means none were stated, not none exist)*
+- Group makeup / ages (from Comments): ${answers.comments || ""}
 - First time or returning:
 - Languages spoken:
 - **Traveler passport countries (drives visa & entry research):** ${answers.passportCountries || ""}  *(a party can mix — each named country gets its own researched entry row, schema-required source+date; the Trip Kit shows a dropdown so each traveler picks their own)*

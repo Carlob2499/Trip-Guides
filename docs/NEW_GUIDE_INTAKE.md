@@ -83,6 +83,13 @@ budget calculator emphasizes saving or comfort.*
 every restaurant; mobility limits filter every route; safety priorities
 reshape nightlife and neighborhood picks.*
 
+**BINDING on research (2026-08-02):** a constraint stated here (or in the issue form's
+Constraints field) upgrades the related venue facts from optional to MANDATORY, verified
+per venue — a no-stairs constraint makes step-free access / elevator presence a required,
+sourced fact on every shipped venue; an allergy makes allergen handling one. Never assume,
+never soften to "should be accessible": verify it, flag it `⚠`, or drop the venue. An
+unverifiable venue under a stated constraint is not a pick, whatever its rating.
+
 - Dietary (allergies, halal, kosher, vegan, etc.):
 - Physical limits (no long hikes, no stairs, heat/cold sensitivity):
 - Hard avoids (crowds, tourist traps, anything specific):

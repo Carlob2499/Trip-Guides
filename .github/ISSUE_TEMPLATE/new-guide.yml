@@ -50,7 +50,7 @@ body:
     id: travelers
     attributes:
       label: Number of travelers
-      description: Just the headcount. Anything more specific (solo/couple/family, ages, mobility needs) goes in Comments below.
+      description: Just the headcount. Mobility, dietary, and sensory needs go in Constraints below; anything else specific (solo/couple/family, ages) goes in Comments.
       placeholder: e.g. 3
     validations:
       required: false
@@ -63,6 +63,18 @@ body:
         specific travelers move (pace, walking tolerance, whether the group splits). Name a prior
         trip if the same people traveled before ("the Korea group"), or describe them.
       placeholder: e.g. the Korea group (3 mid-20s, gaming anchors, heavy walkers) / family of 5 with grandparents
+    validations:
+      required: false
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints
+      description: >-
+        Mobility, dietary, or sensory needs the guide must honor — a wheelchair or low-stairs
+        requirement, a walking-distance ceiling, allergies or strict diets, sensory sensitivities.
+        A stated constraint changes what the research OWES: related venue facts (step-free access,
+        elevator, allergen handling) become mandatory, verified per venue — never assumed.
+      placeholder: e.g. one traveler can't do stairs — elevator or ground floor only / severe peanut allergy / max ~3 km walking per day
     validations:
       required: false
   - type: input
@@ -180,7 +192,7 @@ body:
     id: comments
     attributes:
       label: Comments
-      description: Anything the fields above don't capture — group makeup, dietary needs, a fixed anchor event, dealbreakers, etc.
-      placeholder: e.g. traveling with my parents, one vegetarian, celebrating an anniversary
+      description: Anything the fields above don't capture — group makeup, a fixed anchor event, dealbreakers, etc. (Mobility/dietary/sensory needs belong in Constraints above, where they bind the research.)
+      placeholder: e.g. traveling with my parents, celebrating an anniversary
     validations:
       required: false

@@ -23,7 +23,7 @@ export interface WizardStep {
 
 export const WIZARD_STEPS: WizardStep[] = [
   { title: "Where & when", ids: ["ngCountry", "ngCities", "ngStart", "ngAnchor"] },
-  { title: "Who & style", ids: ["ngTravelers", "ngParty", "ngPace", "ngTravelStyle", "ngBudget"] },
+  { title: "Who & style", ids: ["ngTravelers", "ngParty", "ngConstraints", "ngPassports", "ngPace", "ngTravelStyle", "ngBudget"] },
   { title: "What to research", ids: ["ngPriority1", "ngPriority2", "ngPriority3", "ngNiche", "ngComments"] },
 ];
 
