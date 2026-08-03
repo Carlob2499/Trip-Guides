@@ -318,6 +318,10 @@ jobs:
                 report states what each duty actually used).
               references/block-types.md — section types, tab budget, guide-level typed features,
                 voice standard, facets, cover rules.
+              references/image-sourcing.md — BINDING for any photo you set on a sight or the
+                cover: Commons `file` via search-commons.mjs (preferred, existence provable) vs
+                a royalty-free `src` (credit + license REQUIRED, build fails without them),
+                forbidden sources, the R18 honesty rule, the pre-ship checklist.
               references/pipeline-roles.md — "Traveler questions": the emitter you use when
                 research hits a real fork (then proceed on the assumption; never block).
             The CLAUDE.md accuracy standard (auto-loaded) is also binding.
@@ -478,6 +482,9 @@ jobs:
                 fact discipline, and done-gate step 1 (the self-correction loop).
               references/verification-rules.md, references/research-efficiency.md,
                 references/block-types.md — binding as everywhere.
+              references/image-sourcing.md — BINDING for the Living Atlas cover duty and any
+                sight photo: Commons `file` vs royalty-free `src` (credit + license REQUIRED),
+                forbidden sources, the R18 honesty rule.
               references/pipeline-roles.md — "Traveler questions" for any real fork
                 reconciliation reveals (proceed on the assumption; never block).
             The CLAUDE.md accuracy standard (auto-loaded) is also binding.

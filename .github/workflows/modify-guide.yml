@@ -159,7 +159,9 @@ jobs:
             plain description of what fact to check/change.
 
             Use the waypoint-guide-author skill: read .claude/skills/waypoint-guide-author/SKILL.md
-            and references/verification-rules.md + references/research-efficiency.md. This is the
+            and references/verification-rules.md + references/research-efficiency.md (plus
+            references/image-sourcing.md if the change touches any photo — a royalty-free `src`
+            needs credit + license or the build fails). This is the
             skill's **"Edit an existing guide"** mode, NOT the dual-pass new-guide procedure —
             do not scaffold, do not run Pass A/Pass B, do not touch guides-intake/ checkpoint state.
 
@@ -283,7 +285,8 @@ jobs:
             Mode: ${{ inputs.mode }}
 
             Use the waypoint-guide-author skill: read .claude/skills/waypoint-guide-author/SKILL.md
-            and references/verification-rules.md. This is the "Edit an existing guide" mode.
+            and references/verification-rules.md (plus references/image-sourcing.md if the change
+            touches any photo). This is the "Edit an existing guide" mode.
 
             TARGET: src/content/guides/${{ inputs.slug }}/ (directory — _guide.json + NN-*.json)
             INTAKE: guides-intake/${{ inputs.slug }}.md
