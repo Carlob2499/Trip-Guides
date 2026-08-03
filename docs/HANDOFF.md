@@ -52,14 +52,35 @@ preserving, proven by the untouched settle suite. 14 new model tests + 4 Playwri
 (button reveal, two-page build on body, printed figures equal on-screen figures, Hangul survives
 and handles don't). 1239 unit · 70 Playwright · lint 0.
 
-**Budget calculator UI — diagnosed, not yet fixed.** Measured at 375px with real seeded data,
-five grounded problems: every expense description clips (the "what for" column gets ~104px);
-the panel's vertical order is People → Total → Results → Expenses, so you type at the bottom
-and the answer updates 500px above; controls predate the site's own pill vocabulary (26px
-buttons, 36–39px inputs against the wizard pass's 44px floor); settlement rows spend 109px on
-one sentence; the Total-spend bar floats alone between cards. No horizontal overflow and input
-font is 16.3px, so no iOS focus-zoom. **This is the next piece of work** — presentation only,
-no model or sync changes.
+**Budget calculator UI — fixed, then rebuilt as V2.** The five measured problems are closed
+(descriptions 104px → 273px, order now People → Expenses → Results, controls on the site's 44px
+pill vocabulary, settle rows 109px → 74px, the floating total folded into the results card).
+Then the creator commissioned a full assessment (`docs/TRIP_SPLIT_V2.md`) and approved five
+fixes plus categories, all shipped:
+
+- **Three correctness defects**, each confirmed with a probe before being asserted: adding a
+  person retroactively re-split expenses they were never part of; the tested minor-unit engine
+  `computeSplits` was exported and never called while the shipped float path lost a cent on
+  100/3; and the split rule was one trip-wide boolean.
+- **Money is integer minor units end to end**, settlement included. Korea's seeded trip moves
+  $11.63 → $11.64 because that cent is now allocated rather than evaporating.
+- **Settling is recorded** ("Mark paid" → dated payments log with Undo), and **amounts are
+  entered in the currency actually paid**, with the ECB rate captured at entry and stored.
+- **Spend categories** with a "Where it went" breakdown — explicitly NOT wired to the guide's
+  budget section: *"the budgets don't matter as much, only the splitting of costs"* (creator,
+  2026-08-02). Plan vs Actual was proposed, rejected, and is recorded as declined in the doc.
+- **Newest-first list + search/filter** (by text, payer, category). Filtering never touches the
+  totals and says so on screen. "Paid by Sam" on a 40-expense trip: 9.8 phone screens → 4.6.
+
+**Data safety, since a trip's expense history is not reproducible:** Firebase rooms are only
+ever READ through the normalizer — the migration never writes a converted shape back. A pre-V2
+room still keeps its rule in `meta.customSplit`, so that flag is still read and applied
+per-expense; without it a room that used Custom amounts would have been silently re-read as an
+even split. On-device saves are copied to `tg-split-<guide>-pre-v2` before the new shape lands.
+
+**The honest remaining gap:** mobile rows are 157px (desktop 82px) because 94px of one is two
+44px touch targets, so a long trip is still ~9.8 screens unfiltered. Filtering is the answer
+that shipped; shrinking the row further would trade an accessibility floor for scroll.
 
 ## Snapshot (2026-08-02, session #28 — Pass B deep discovery; every open item closed)
 

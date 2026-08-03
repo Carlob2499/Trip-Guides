@@ -78,6 +78,12 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
   var room = null;      // Firebase room when synced, else null
   var offFns = [];      // room onChange unsubscribers
   var open = {};        // per-row disclosure state, id -> true (view state, never persisted)
+  // Find-one-among-many. View state only: filtering NEVER touches the balances, the total or
+  // the printed sheet — a filtered list that also filtered the maths would quietly answer a
+  // different question than the one on screen.
+  var filter = { q: "", who: "", cat: "" };
+  /* Below this many expenses, scanning beats searching and a filter bar is just chrome. */
+  var FILTER_FROM = 6;
 
   function newId() { return "i" + Math.random().toString(36).slice(2, 9); }
   function nextOrder() { return Date.now(); }
@@ -404,16 +410,92 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
     return cur;
   }
 
+  /* ── finding one expense among many ───────────────────────────────────────
+     A 40-expense trip measured 7,875px — 9.7 phone screens — and rows are already near
+     their floor (94px of a mobile row is two 44px touch targets). The remaining scale
+     problem is not row height, it is having to scroll past forty rows to reach one. */
+  function categoriesInUse() {
+    var seen = {}, out = [];
+    state.expenses.forEach(function (e) {
+      var c = (e.category || "").trim();
+      if (c && !seen[c]) { seen[c] = 1; out.push(c); }
+    });
+    return out.sort();
+  }
+  function filterActive() { return !!(filter.q || filter.who || filter.cat); }
+  function matchesFilter(e) {
+    if (filter.cat && (e.category || "").trim() !== filter.cat) return false;
+    // WHO PAID, not "who is involved". Tried the latter first: with even splits everyone
+    // shares everything, so filtering 40 expenses by a person returned all 40. The payer is
+    // the axis that actually discriminates, and it is the one the row already shows.
+    if (filter.who && e.paidBy !== filter.who) return false;
+    if (filter.q) {
+      var hay = ((e.desc || "") + " " + (e.category || "")).toLowerCase();
+      if (hay.indexOf(filter.q.toLowerCase()) === -1) return false;
+    }
+    return true;
+  }
+  function renderFilterBar(total, shown) {
+    var bar = document.getElementById("sFilter");
+    if (!bar) return;
+    bar.hidden = total < FILTER_FROM;
+    if (bar.hidden) return;
+
+    var who = document.getElementById("sFilterWho");
+    if (who) {
+      who.innerHTML = "<option value=''>Paid by anyone</option>" + state.members.map(function (m, i) {
+        return "<option value='" + esc(m.id) + "'" + (m.id === filter.who ? " selected" : "") + ">" +
+          esc(m.name || ("Person " + (i + 1))) + "</option>";
+      }).join("");
+    }
+    var cat = document.getElementById("sFilterCat");
+    if (cat) {
+      var cats = categoriesInUse();
+      cat.hidden = !cats.length; // nothing categorised yet → the control would offer nothing
+      cat.innerHTML = "<option value=''>All categories</option>" + cats.map(function (c) {
+        return "<option value='" + esc(c) + "'" + (c === filter.cat ? " selected" : "") + ">" + esc(c) + "</option>";
+      }).join("");
+    }
+    var clear = document.getElementById("sFilterClear");
+    if (clear) clear.hidden = !filterActive();
+
+    // The honesty line. A filtered list beside an unfiltered total invites exactly one wrong
+    // conclusion, so say plainly which is which.
+    var note = document.getElementById("sFilterNote");
+    if (note) {
+      if (!filterActive()) { note.hidden = true; note.textContent = ""; }
+      else {
+        note.hidden = false;
+        note.textContent = shown === 0
+          ? "Nothing matches."
+          : "Showing " + shown + " of " + total + " — the balances below still cover every expense.";
+      }
+    }
+  }
+
   function renderExpenses() {
     var newCard = document.getElementById("sNewCard");
     var list = document.getElementById("sExpenseList");
     if (!list) return;
     var hasMembers = state.members.length > 0;
     if (newCard) newCard.hidden = !hasMembers;
-    if (!hasMembers) { list.innerHTML = "<p class='split-empty'>Add people first, then record who paid what.</p>"; return; }
-    if (!state.expenses.length) { list.innerHTML = "<p class='split-empty'>No expenses yet — fill in the row above and tap + Add expense.</p>"; return; }
+    if (!hasMembers) { renderFilterBar(0, 0); list.innerHTML = "<p class='split-empty'>Add people first, then record who paid what.</p>"; return; }
+    if (!state.expenses.length) { renderFilterBar(0, 0); list.innerHTML = "<p class='split-empty'>No expenses yet — fill in the row above and tap + Add expense.</p>"; return; }
 
-    list.innerHTML = state.expenses.map(function (exp) {
+    // NEWEST FIRST. The entry form sits at the top of this card, so appending put every new
+    // expense off the bottom of the screen: you added one and then had to scroll to see that
+    // it had landed. Reversed here, in the view only — `state.expenses` stays chronological,
+    // which is the order the printed sheet reads in and the order settlement is computed from.
+    var ordered = state.expenses.slice().reverse();
+    var visible = ordered.filter(matchesFilter);
+    renderFilterBar(state.expenses.length, visible.length);
+    if (!visible.length) {
+      list.innerHTML = "<p class='split-empty'>No expenses match — clear the filter to see all " + state.expenses.length + ".</p>";
+      applyLock();
+      return;
+    }
+
+    list.innerHTML = visible.map(function (exp) {
       var eid = esc(exp.id); // escaped Firebase key for every attribute below
       var shareIds = sharersOf(exp);
       var cur = exp.currency || BASE_CURRENCY;
@@ -654,8 +736,10 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
       if (el.closest("[data-split-lock-note]")) return;
       // The summary PDF is a READ of the record, not a write to it — a settled trip is
       // precisely when someone wants to send round what it cost. Same for the per-row
-      // disclosure, which only reveals what is already there.
+      // disclosure and the filter controls: searching a finished trip for "what did the
+      // hotel come to" is the main thing anyone does with it afterwards.
       if (el.id === "sSavePdf" || el.classList.contains("se-toggle")) return;
+      if (el.closest("#sFilter")) return;
       el.disabled = true;
     });
     if (!wrap.querySelector("[data-split-lock-note]")) {
@@ -837,6 +921,24 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
     savePdfBtn.addEventListener("click", function () {
       var summaryData = buildBudgetSummary(state.members, state.expenses, state.payments, dayCount());
       printBudgetSummary(summaryData, sheetMeta());
+    });
+  }
+
+  /* Filter controls. These live outside #sExpenseList so that rebuilding the list on every
+     keystroke cannot destroy the input the traveller is typing into. */
+  var filterQ = document.getElementById("sFilterQ");
+  if (filterQ) filterQ.addEventListener("input", function () { filter.q = this.value.trim(); renderExpenses(); });
+  var filterWho = document.getElementById("sFilterWho");
+  if (filterWho) filterWho.addEventListener("change", function () { filter.who = this.value; renderExpenses(); });
+  var filterCat = document.getElementById("sFilterCat");
+  if (filterCat) filterCat.addEventListener("change", function () { filter.cat = this.value; renderExpenses(); });
+  var filterClear = document.getElementById("sFilterClear");
+  if (filterClear) {
+    filterClear.addEventListener("click", function () {
+      filter = { q: "", who: "", cat: "" };
+      if (filterQ) filterQ.value = "";
+      renderExpenses();
+      if (filterQ) filterQ.focus();
     });
   }
 

@@ -92,6 +92,18 @@ const { storeKey } = Astro.props;
       <option value="Fees"></option>
     </datalist>
 
+    <!-- Find one expense among many. Lives OUTSIDE the list container on purpose: the list
+         is rebuilt on every keystroke, and a search box inside it would lose focus after
+         each character. Revealed by trip-split.js only once the list is long enough to be
+         worth searching. -->
+    <div class="se-filter" id="sFilter" hidden>
+      <input class="split-in se-filter-q" type="search" id="sFilterQ" placeholder="Search expenses…" aria-label="Search expenses" />
+      <select class="split-in se-filter-sel" id="sFilterWho" aria-label="Filter by person"></select>
+      <select class="split-in se-filter-sel" id="sFilterCat" aria-label="Filter by category"></select>
+      <button class="se-filter-clear" id="sFilterClear" type="button" hidden>Clear</button>
+      <p class="se-filter-note" id="sFilterNote" role="status" hidden></p>
+    </div>
+
     <!-- Column labels belong to the DESKTOP row grid; on phones the rows restack and the
          header would be labelling columns that no longer exist, so CSS hides it there. -->
     <div class="se-header">

@@ -91,8 +91,9 @@ test("an amount typed in won stores the rate it was converted at", async ({ page
   expect(last.rate).toBeGreaterThan(0);          // a rate was captured, not assumed
   expect(last.rateDate).toBeTruthy();            // ...and dated
   expect(last.baseMinor).toBeGreaterThan(0);     // converted once, at entry
-  // The row states the conversion rather than hiding it behind a dollar figure.
-  await expect(page.locator(".se-row").last().locator(".se-meta")).toContainText("≈");
+  // The row states the conversion rather than hiding it behind a dollar figure. It is the
+  // FIRST row on screen because the list runs newest-first.
+  await expect(page.locator(".se-row").first().locator(".se-meta")).toContainText("≈");
 });
 
 test("Mark paid settles a debt, and Undo puts it back", async ({ page }) => {
@@ -116,14 +117,81 @@ test("Mark paid settles a debt, and Undo puts it back", async ({ page }) => {
 test("the split rule belongs to one expense, not to the whole trip", async ({ page }) => {
   await openWith(page, PRE_V2);
 
+  // The list runs newest-first, so the top row is the LAST expense on disk.
   const firstRow = page.locator(".se-row").first();
   await firstRow.locator(".se-toggle").click();
   await firstRow.locator(".se-method").selectOption("SHARES");
 
   const disk = await saved(page);
-  expect(disk.expenses[0].method).toBe("SHARES");
+  const changed = disk.expenses[disk.expenses.length - 1];
+  expect(changed.method).toBe("SHARES");
   // Every other expense is untouched — the old global flag could not do this.
-  expect(disk.expenses.slice(1).every((e: { method: string }) => e.method === "EQUAL")).toBe(true);
+  expect(disk.expenses.slice(0, -1).every((e: { method: string }) => e.method === "EQUAL")).toBe(true);
+});
+
+/* A trip long enough to need finding rather than scanning. */
+const LONG_TRIP = {
+  members: [{ id: "m1", name: "Carlo" }, { id: "m2", name: "Sam" }, { id: "m3", name: "Riley" }],
+  expenses: Array.from({ length: 12 }, (_, i) => ({
+    id: "e" + i,
+    paidBy: ["m1", "m2", "m3"][i % 3],
+    desc: ["Dinner", "Taxi", "Museum"][i % 3] + " #" + (i + 1),
+    amountMinor: 1000 + i * 100,
+    currency: "USD",
+    baseMinor: 1000 + i * 100,
+    method: "EQUAL",
+    weights: null,
+    participants: ["m1", "m2", "m3"],
+    category: ["Food", "Transport", "Activities"][i % 3],
+    order: i + 1,
+  })),
+  payments: [],
+};
+
+test("the newest expense sits at the top, next to the form that made it", async ({ page }) => {
+  await openWith(page, LONG_TRIP);
+  // The composer is above the list, so appending would push each new row off-screen.
+  const first = page.locator(".se-row").first().locator(".se-desc");
+  await expect(first).toHaveValue("Museum #12");
+
+  await page.locator("#sNewDesc").fill("Nightcap");
+  await page.locator("#sNewAmt").fill("12");
+  await page.locator("#sAddExpense").click();
+
+  await expect(page.locator(".se-row").first().locator(".se-desc")).toHaveValue("Nightcap");
+});
+
+test("search and filters narrow the list without touching the totals", async ({ page }) => {
+  await openWith(page, LONG_TRIP);
+  const rows = page.locator(".se-row");
+  await expect(rows).toHaveCount(12);
+  await expect(page.locator("#sFilter")).toBeVisible();
+  const total = await page.locator("#sTotalUSD").textContent();
+
+  await page.locator("#sFilterQ").fill("taxi");
+  await expect(rows).toHaveCount(4);
+  await expect(page.locator("#sFilterNote")).toContainText("Showing 4 of 12");
+  // The honesty requirement: a filtered list beside an unfiltered total.
+  await expect(page.locator("#sTotalUSD")).toHaveText(total!);
+
+  await page.locator("#sFilterClear").click();
+  await expect(rows).toHaveCount(12);
+
+  await page.locator("#sFilterWho").selectOption({ label: "Sam" });
+  await expect(rows).toHaveCount(4);
+
+  await page.locator("#sFilterCat").selectOption("Food");
+  await expect(rows).toHaveCount(0);          // Sam paid no Food expense in this seed
+  await expect(page.locator("#sExpenseList")).toContainText("clear the filter");
+
+  await page.locator("#sFilterClear").click();
+  await expect(rows).toHaveCount(12);
+  await expect(page.locator("#sTotalUSD")).toHaveText(total!);
+});
+
+test("the filter bar stays out of the way on a short trip", async ({ page }) => {
+  await openWith(page, PRE_V2); // four expenses
+  await expect(page.locator("#sFilter")).toBeHidden();
 });
 
 test("categories drive a spend breakdown, and stay hidden until one exists", async ({ page }) => {

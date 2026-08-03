@@ -82,6 +82,22 @@ select.split-in{cursor:pointer}
 .se-cur-sel{font-family:var(--font-data);font-size:var(--text-body);font-weight:700;letter-spacing:.02em;color:var(--muted);background:var(--bg2);border:1px solid var(--rule2);border-radius:var(--r-sm);padding:.2rem .1rem;cursor:pointer;flex:none;min-height:38px}
 .se-cur-sel:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 
+/* ── find one expense among many ───────────────────────────────────────────
+   Revealed only past a handful of expenses (trip-split.js's FILTER_FROM): below that,
+   scanning beats searching and this is just chrome. The controls are --text-body like
+   every other text-entry field here, because anything under 16px zoom-traps iOS. */
+.se-filter{display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;margin-bottom:.8rem}
+.se-filter-q{flex:2 1 11rem;min-width:0}
+.se-filter-sel{flex:1 1 7.5rem;min-width:0}
+.se-filter-clear{flex:none;min-height:40px;padding:.4rem .85rem;font-family:var(--font-data);font-size:var(--text-control);font-weight:600;color:var(--muted);background:none;border:1px solid var(--rule2);border-radius:999px;cursor:pointer;transition:color .14s,border-color .14s}
+.se-filter-clear:hover{color:var(--ink);border-color:var(--ink)}
+.se-filter-clear:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* The honesty line: a filtered list sits beside an UNfiltered total, and that has exactly
+   one wrong reading. It gets the full width so it is never mistaken for a control's label. */
+.se-filter-note{flex:1 0 100%;margin:.1rem 0 0;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--accent-ink)}
+/* Strip Safari/Chrome's own search decorations so the field matches every other input. */
+.se-filter-q::-webkit-search-decoration,.se-filter-q::-webkit-search-cancel-button{-webkit-appearance:none}
+
 /* ── expense rows ──────────────────────────────────────────────────────────
    Description FIRST: it is the row's identity, and it was the column being
    starved. Header and rows share one template so the labels sit over their
