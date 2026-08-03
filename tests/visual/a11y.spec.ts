@@ -214,7 +214,12 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     "color-contrast/shortTextContent": { max: 16, why: SHORT_TEXT_CONTENT_WHY },
     // 15 -> 19: R5's .day-leg-arrow '→' on each of korea's 8 day cards, minus 4 glyphs the arc
     // converted to real SVG (Icon.astro). Counted: 19 on desktop AND mobile.
-    "color-contrast/nonBmp": { max: 19, why: NON_BMP_WHY },
+    // 19 -> 28: +9, session #30b's repository-breadth venues each carry a .prov-dot '●'
+    // source-info button (Daejeon ×4, Busan/Gangneung ×4, Yookji Hongdae ×1 — identified
+    // node-by-node with an instrumented local run, not absorbed as jitter). Same mechanism the
+    // why already covers: a real button named via aria-label using var(--muted) on transparent,
+    // the pair proven >=4.5:1. CI counted 28 on all four scheme×viewport combos.
+    "color-contrast/nonBmp": { max: 28, why: NON_BMP_WHY },
     "color-contrast/elmPartiallyObscured": { max: 1, why: ELM_PARTIALLY_OBSCURED_WHY },
     // 1 = the masthead h1 / the masthead .dek, counted per page on both schemes (desktop; mobile
     // renders the same masthead so the same max covers it).
@@ -239,7 +244,11 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     "color-contrast/shortTextContent": { max: 18, why: SHORT_TEXT_CONTENT_WHY },
     // 12 -> 10: SHRUNK (the rule these maxes live by) — the arc converted glyphs to real SVG;
     // denmark's 2 day-leg arrows arrive but more left. Counted: 10 desktop.
-    "color-contrast/nonBmp": { max: 10, why: NON_BMP_WHY },
+    // 10 -> 19: +9, session #30b's repository-breadth venues each carry a .prov-dot '●'
+    // source-info button (Oslo food/shopping ×8, Tambayan CPH ×1 — identified node-by-node with
+    // an instrumented local run). Same aria-label'd var(--muted)-on-transparent mechanism the
+    // why documents. CI counted 19 desktop AND mobile.
+    "color-contrast/nonBmp": { max: 19, why: NON_BMP_WHY },
     // Same two masthead nodes as korea's entries above — denmark is the measured worst case
     // (Painted Atlas daytime sky: h1 4.64:1 vs 3:1 needed; .dek 5.91:1 vs 4.5:1 needed).
     "color-contrast/bgGradient": { max: 1, why: MAST_BG_GRADIENT_WHY },
