@@ -44,17 +44,24 @@ HANDOFF's 800 lines of history moved to `docs/archive/HANDOFF_ARCHIVE.md`;
 
 ## Open items
 
-- **Needs the creator:** ① delete merged remote branch `claude/website-visual-redesign-upnl05`;
-  ② decide the fate of branch `worktree-agent-a7dc7eeb397c6a368` (progress-study design work,
-  `5917f8f`, unreviewed); ③ sign off revise-guide `land` default `draft` → `auto` + V6 Q4
-  thresholds (overall ≤3, pacing ≤2, ≥3 skips); ④ Cloudflare dashboard Git integration builds
+- **Needs the creator:** ① decide the fate of LOCAL branch `worktree-agent-a7dc7eeb397c6a368`
+  (progress-study design work, `5917f8f`, unreviewed — exists nowhere else; deleting it loses
+  the work); ② sign off revise-guide `land` default `draft` → `auto` + V6 Q4 thresholds
+  (overall ≤3, pacing ≤2, ≥3 skips); ③ Cloudflare dashboard Git integration builds
   "tripguides" on every push and fails in 0s — external config noise, consider disabling
-  (deploy-worker.yml owns the real Worker deploy).
+  (deploy-worker.yml owns the real Worker deploy); ④ yes/no on giving skill-evals a
+  `push: main, paths: .claude/skills/**` trigger — as written (`pull_request` only) it has
+  fired 0 times ever because skills changes land by direct push.
 - Korea 03: critic flagged a swapped 명동 label on the Gyeongbokgung map point → file its issue.
 - The S1–S5 research standards + dossier contract have never met a real research pass; the next
   new guide is the calibration test (a floor firing on a legitimately thin priority is data
   about the floor, not the guide).
 - No guide uses a direct royalty-free `sights[].img.src` yet — capability live, unexercised.
+- feedback-export's Monday cron: proven working via dispatch (PR #32, merged — the LEARN loop's
+  first live cycle), but the 2026-08-03 08:13 scheduled fire never appeared. If next Monday's
+  is also absent, investigate the schedule registration.
+- Workflow audit (session #32): all 19 earn their place; consolidation considered and declined.
+  Remote branches pruned to `main` only.
 
 ## Where we left off
 
