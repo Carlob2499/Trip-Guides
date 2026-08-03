@@ -13,6 +13,13 @@ const { storeKey } = Astro.props;
   <div class="split-toolbar">
     <h2 class="split-title">Budget split</h2>
     <p class="split-desc">Add who paid what. See who owes who, with the fewest transfers.</p>
+    <!-- Revealed by trip-split.js only once there is spending to summarise — an empty
+         budget has no summary, and a button that prints a blank sheet is a broken promise. -->
+    <div class="split-save-actions">
+      <button class="split-pdf-btn" id="sSavePdf" type="button" hidden>
+        <span class="split-pdf-ico" aria-hidden="true">⎙</span>Save summary as PDF
+      </button>
+    </div>
   </div>
 
   <!-- Shared live budget: everyone viewing this guide edits ONE budget automatically —

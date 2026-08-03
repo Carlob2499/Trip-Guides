@@ -11,8 +11,11 @@
    public API. */
 
 import { settle } from "../model/settle";
+import { buildBudgetSummary } from "../model/summary";
+import { printBudgetSummary } from "./budget-sheet.js";
 import { normalizeExpense, normalizeMember } from "../model/records";
 import { hasFirebase, joinTrip, roomId as guideRoomId, isPostTripLocked } from "../../firebase/index.js";
+import { getLastRate } from "../../live-data/index.js";
 import { tripWindow } from "../../../lib/trip-dates";
 import { esc, migrateStorageKey } from "../../../scripts/util.js";
 
@@ -26,11 +29,18 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
      room code committed to a public repo stops being a standing write invitation.
      Client-side only — no database or rules change, so no existing figure can be altered or
      lost by this. An undated guide is never locked (see model/room.ts). */
-  var LOCKED = (function () {
+  // The guide's own config island, read once — the lock below and the PDF summary's header
+  // (trip dates, day count, currency) both need it.
+  var CFG = (function () {
     try {
       var el = document.getElementById("tgConfig");
-      if (!el) return false;
-      var cfg = JSON.parse(el.textContent || "{}");
+      return el ? JSON.parse(el.textContent || "{}") : {};
+    } catch (e) { return {}; }
+  })();
+
+  var LOCKED = (function () {
+    try {
+      var cfg = CFG;
       // OPT-IN per guide (content.config.ts `budgetLock`), default OFF. Freezing a surface
       // people type into is a real behaviour change: defaulting it on would have silently
       // locked Korea's live budget four days after this shipped. The creator turns it on for
@@ -331,13 +341,16 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
     var card = document.getElementById("sResults"), summary = document.getElementById("sSummary");
     var bDiv = document.getElementById("sBalances"), sDiv = document.getElementById("sSettlements");
     var sCount = document.getElementById("sSettleCount"), totUSD = document.getElementById("sTotalUSD");
+    var pdfBtn = document.getElementById("sSavePdf");
     if (!state.members.length || !state.expenses.length) {
       if (card) card.hidden = true;
       if (summary) summary.hidden = true;
+      if (pdfBtn) pdfBtn.hidden = true;
       return;
     }
     if (card) card.hidden = false;
     if (summary) summary.hidden = false;
+    if (pdfBtn) pdfBtn.hidden = false;
     var total = state.expenses.reduce(function (s, e) { return s + (parseFloat(e.amount) || 0); }, 0);
     if (totUSD) totUSD.textContent = "$" + total.toFixed(2);
     var calc = computeSettle();
@@ -380,6 +393,10 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
     wrap.setAttribute("data-locked", "1");
     wrap.querySelectorAll("input, select, button").forEach(function (el) {
       if (el.closest("[data-split-lock-note]")) return;
+      // The summary PDF is a READ of the record, not a write to it — a settled trip is
+      // precisely when someone wants to send round what it cost. Locking it would be the
+      // one control the lock has no business touching.
+      if (el.id === "sSavePdf") return;
       el.disabled = true;
     });
     if (!wrap.querySelector("[data-split-lock-note]")) {
@@ -490,6 +507,48 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
   }
   if (modeEven)   modeEven.addEventListener("click", function () { opSetCustomSplit(false); });
   if (modeCustom) modeCustom.addEventListener("click", function () { opSetCustomSplit(true); });
+
+  /* ── Save summary as PDF ──────────────────────────────────────────────────
+     Everything here is synchronous: the sheet is built and window.print() is called
+     inside the click gesture, never behind an await (CLAUDE.md boundary check #2 — the
+     popup-blocker trap). The rate is read from whatever the live-data feature has already
+     applied; when it has none, the guide's build-time seed rate is used and the sheet says
+     so rather than printing a bare figure. */
+  function currencyForSheet() {
+    var live = getLastRate();
+    if (live && live.rate) {
+      return { code: live.code, rate: live.rate, date: live.date, live: !live.locked, locked: !!live.locked };
+    }
+    if (CFG.curCode && CFG.curFallbackRate) {
+      return { code: CFG.curCode, rate: CFG.curFallbackRate, date: CFG.curFallbackAsOf || null, live: false, locked: false };
+    }
+    return null;
+  }
+
+  function sheetMeta() {
+    var titleEl = document.querySelector(".mast-title") || document.querySelector(".masthead h1");
+    var hero = document.querySelector(".mast-img");
+    var range = [CFG.firstDayDate, CFG.lastDayDate].filter(Boolean).join(" – ");
+    return {
+      title: (titleEl && titleEl.textContent.trim()) || document.title.replace(/\s+—\s+Waypoint$/, ""),
+      dateRange: range,
+      // currentSrc so the printed sheet uses the srcset candidate the browser actually
+      // fetched — it is already in cache, which a different URL would not be.
+      coverSrc: hero ? (hero.currentSrc || hero.getAttribute("src")) : null,
+      currency: currencyForSheet(),
+      generatedOn: new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }),
+      url: location.origin + location.pathname,
+    };
+  }
+
+  var savePdfBtn = document.getElementById("sSavePdf");
+  if (savePdfBtn) {
+    savePdfBtn.addEventListener("click", function () {
+      var days = Array.isArray(CFG.daysForBanner) ? CFG.daysForBanner.length : null;
+      var summaryData = buildBudgetSummary(state.members, state.expenses, state.customSplit, days);
+      printBudgetSummary(summaryData, sheetMeta());
+    });
+  }
 
   var copySettleBtn = document.getElementById("sCopySettle");
   if (copySettleBtn) {

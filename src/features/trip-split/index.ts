@@ -16,5 +16,7 @@ export type { SettleExpense, SettleResult, SettleTxn } from "./model/settle";
 export { normalizeMember, normalizeExpense } from "./model/records";
 export type { SplitMember, SplitExpense } from "./model/records";
 export { computeSplits, formatMinor, CURRENCY_EXPONENT, SplitError } from "./model/money";
+export { buildBudgetSummary } from "./model/summary";
+export type { BudgetSummary } from "./model/summary";
 export type { SplitMethod, SplitParticipant, SplitResult } from "./model/money";
 import "./ui/trip-split.js";

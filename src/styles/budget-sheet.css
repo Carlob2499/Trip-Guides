@@ -1,0 +1,91 @@
+/* === BUDGET SUMMARY SHEET ====================================================
+   The printable two-page record produced by the Budget calculator's "Save summary
+   as PDF" button (features/trip-split/ui/budget-sheet.js). Same scoping technique
+   as print-day.css: a body attribute suppresses the whole site and reveals one
+   node, so the browser's own Save-as-PDF writes a document instead of a webpage.
+
+   NOTE for print.css: that file hides .split-wrap outright, which is why the sheet
+   is appended to <body> rather than rendered inside the calculator panel. */
+
+/* ── The trigger, on screen ─────────────────────────────────────────────────── */
+.split-pdf-btn{display:inline-flex;align-items:center;gap:.4rem;min-height:38px;padding:.45rem 1rem;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);color:var(--bg);background:var(--ink);border:1px solid var(--ink);border-radius:999px;cursor:pointer;transition:background .18s,border-color .18s,color .18s}
+.split-pdf-btn:hover{background:var(--accent);border-color:var(--accent)}
+.split-pdf-btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.split-pdf-ico{font-size:1.05em;line-height:1}
+@media(max-width:599px){.split-pdf-btn{min-height:44px;width:100%;justify-content:center}}
+
+/* The sheet is print-only furniture: it exists in the DOM for a few seconds while the
+   dialog is open and must never paint on screen. */
+.bsheet{display:none}
+
+@media print{
+  .split-pdf-btn{display:none}
+
+  /* Suppress the entire site, reveal only the sheet. Every top-level child goes, so this
+     needs no maintenance as the page grows new chrome. */
+  body[data-print-budget] > *:not(.bsheet){display:none!important}
+  body[data-print-budget] .bsheet{display:block!important}
+
+  body[data-print-budget]{background:#fff!important}
+  @page{size:A4;margin:14mm}
+
+  /* Paper is white whatever theme the traveller is reading in — the same call print.css
+     already makes for the guide itself. These mirror the light-theme tokens so the sheet
+     still looks like Waypoint rather than a browser default. */
+  .bsheet{
+    --bs-ink:#14181c;--bs-mute:#5c6357;--bs-rule:#c9cfc0;--bs-rule2:#a9b2a0;
+    --bs-tint:#f2f4ec;--bs-accent:#9c4421;--bs-green:#2f5c3c;
+    color:var(--bs-ink);font-family:var(--font-data);font-size:9.5pt;line-height:1.5;
+    print-color-adjust:exact;-webkit-print-color-adjust:exact
+  }
+  .bsheet *{box-shadow:none!important}
+  .bs-page{break-after:page;break-inside:auto}
+  .bs-page:last-child{break-after:auto}
+
+  /* ── Cover ─────────────────────────────────────────────────────────────── */
+  .bs-brand{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:6pt;border-bottom:1.5pt solid var(--bs-ink)}
+  .bs-mark{font-family:var(--font-display);font-weight:640;font-size:11pt;letter-spacing:-.01em}
+  .bs-kind{font-size:8pt;letter-spacing:.14em;text-transform:uppercase;color:var(--bs-mute)}
+  .bs-cover-img{display:block;width:100%;height:52mm;object-fit:cover;margin:10pt 0 0;border-radius:3pt}
+  .bs-title{font-family:var(--font-display);font-weight:640;font-size:30pt;line-height:1.05;letter-spacing:-.02em;margin:14pt 0 0}
+  .bs-sub{font-size:9.5pt;color:var(--bs-mute);margin:3pt 0 0}
+  .bs-total-lbl{font-size:8pt;letter-spacing:.14em;text-transform:uppercase;color:var(--bs-mute);margin:20pt 0 0}
+  .bs-total{font-family:var(--font-display);font-weight:640;font-size:44pt;line-height:1;letter-spacing:-.025em;margin:4pt 0 0}
+  .bs-total-alt{font-size:11pt;color:var(--bs-mute);margin:4pt 0 0}
+  .bs-tiles{display:flex;gap:6pt;margin:16pt 0 0}
+  .bs-tile{flex:1;background:var(--bs-tint);border-radius:3pt;padding:8pt 10pt}
+  .bs-tile-lbl{display:block;font-size:8pt;letter-spacing:.1em;text-transform:uppercase;color:var(--bs-mute)}
+  .bs-tile-val{display:block;font-family:var(--font-display);font-weight:640;font-size:17pt;line-height:1.2;margin-top:2pt}
+  .bs-tile-note{display:block;font-size:8pt;color:var(--bs-mute)}
+
+  .bs-h{font-family:var(--font-display);font-weight:640;font-size:11pt;letter-spacing:-.01em;margin:20pt 0 6pt;padding-bottom:3pt;border-bottom:.75pt solid var(--bs-rule)}
+  .bs-settle{list-style:none;margin:0;padding:0}
+  .bs-settle-row{display:flex;justify-content:space-between;align-items:baseline;gap:8pt;padding:6pt 10pt;margin-bottom:4pt;background:var(--bs-tint);border-left:2.5pt solid var(--bs-accent);border-radius:0;break-inside:avoid}
+  .bs-settle-who{font-size:11pt}
+  .bs-arrow{color:var(--bs-accent)}
+  .bs-settle-amt{font-family:var(--font-display);font-weight:640;font-size:13pt;white-space:nowrap}
+  .bs-square{font-size:10pt;color:var(--bs-green);font-style:italic;margin:0}
+
+  /* ── Statement ─────────────────────────────────────────────────────────── */
+  .bs-runhead{display:flex;justify-content:space-between;font-size:8pt;letter-spacing:.08em;text-transform:uppercase;color:var(--bs-mute);padding-bottom:5pt;border-bottom:.75pt solid var(--bs-rule)}
+  .bs-table{width:100%;border-collapse:collapse;font-size:9.5pt}
+  .bs-table th{text-align:left;font-size:8pt;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--bs-mute);padding:0 0 4pt;border-bottom:.75pt solid var(--bs-rule)}
+  .bs-table td{padding:4.5pt 0;border-bottom:.5pt solid var(--bs-rule)}
+  .bs-table tr{break-inside:avoid}
+  .bs-num{text-align:right;white-space:nowrap}
+  .bs-table th.bs-num{text-align:right}
+  .bs-owed{color:var(--bs-green)}
+  .bs-owes{color:var(--bs-accent)}
+  .bs-even{color:var(--bs-mute)}
+  .bs-total-row td{font-family:var(--font-display);font-weight:640;border-bottom:none;border-top:1.25pt solid var(--bs-ink);padding-top:5pt}
+
+  .bs-people{display:flex;flex-wrap:wrap;gap:8pt}
+  .bs-person{flex:1 1 46%;min-width:46%;background:var(--bs-tint);border-radius:3pt;padding:8pt 10pt;break-inside:avoid}
+  .bs-person-head{display:flex;justify-content:space-between;align-items:baseline;gap:6pt;padding-bottom:4pt;margin-bottom:4pt;border-bottom:.5pt solid var(--bs-rule2)}
+  .bs-person-name{font-family:var(--font-display);font-weight:640;font-size:10.5pt}
+  .bs-person-total{font-weight:600;white-space:nowrap}
+  .bs-person-items{list-style:none;margin:0;padding:0;font-size:9pt}
+  .bs-person-items li{display:flex;justify-content:space-between;gap:8pt;padding:1.5pt 0;color:var(--bs-mute)}
+
+  .bs-foot{display:flex;flex-direction:column;gap:1.5pt;margin-top:16pt;padding-top:6pt;border-top:.75pt solid var(--bs-rule);font-size:7.5pt;color:var(--bs-mute)}
+}

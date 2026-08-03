@@ -20,6 +20,40 @@ export interface SettleExpense {
   participants?: string[] | null;
 }
 
+/** What ONE expense charges each member, id-keyed. Extracted from settle()'s inner loop
+    (which now calls it) so the budget summary sheet's per-person breakdown is computed by
+    the same code that settles — a second implementation would be free to drift, and a
+    printed record that disagrees with the on-screen balances is worse than no record.
+    Members who share nothing are absent from the map rather than present at 0. */
+export function expenseShares(
+  memberIds: string[],
+  exp: SettleExpense,
+  customSplit: boolean,
+): Record<string, number> {
+  const out: Record<string, number> = {};
+  const total = Number(exp.amount) || 0;
+  if (!total) return out;
+
+  const named = (exp.participants || []).filter((id) => memberIds.indexOf(id) !== -1);
+  const sharers = named.length ? named : memberIds;
+
+  if (customSplit && exp.split) {
+    const shares = memberIds.map((id) =>
+      sharers.indexOf(id) !== -1 ? Number(exp.split![id]) || 0 : 0,
+    );
+    const sum = shares.reduce((a, b) => a + b, 0);
+    memberIds.forEach((id, i) => {
+      const v = sum > 0 ? total * (shares[i] / sum)
+        : sharers.indexOf(id) !== -1 ? total / sharers.length : 0;
+      if (v) out[id] = v;
+    });
+  } else {
+    const share = total / sharers.length;
+    for (const id of sharers) out[id] = share;
+  }
+  return out;
+}
+
 export interface SettleTxn { from: string; to: string; amt: number }
 export interface SettleResult {
   balances: Record<string, number>; // member id -> net (>0 owed to them, <0 they owe)
@@ -43,28 +77,10 @@ export function settle(
     const payer = memberIds.indexOf(exp.paidBy) !== -1 ? exp.paidBy : memberIds[0];
     balances[payer] += total;
 
-    // Who actually shares this expense. Unknown ids are dropped (a member can be deleted
-    // after the expense was recorded); an empty/absent list means the whole group.
-    const named = (exp.participants || []).filter((id) => memberIds.indexOf(id) !== -1);
-    const sharers = named.length ? named : memberIds;
-
-    if (customSplit && exp.split) {
-      // Custom amounts are the source of truth — but only for the people actually sharing
-      // the expense. A stale split entry for someone excluded after amounts were typed
-      // (or for a deleted member) must never charge them.
-      const shares = memberIds.map((id) =>
-        sharers.indexOf(id) !== -1 ? Number(exp.split![id]) || 0 : 0,
-      );
-      const sum = shares.reduce((a, b) => a + b, 0);
-      memberIds.forEach((id, i) => {
-        // Zero-sum split (amounts not typed yet) → fall back to even, across sharers only.
-        balances[id] -= sum > 0 ? total * (shares[i] / sum)
-          : sharers.indexOf(id) !== -1 ? total / sharers.length : 0;
-      });
-    } else {
-      const share = total / sharers.length;
-      for (const id of sharers) balances[id] -= share;
-    }
+    // Who shares it, and for how much, is expenseShares()' business — including the
+    // custom-amount and zero-sum-fallback cases it documents.
+    const shares = expenseShares(memberIds, exp, customSplit);
+    for (const id of memberIds) balances[id] -= shares[id] || 0;
   }
 
   // Minimum-transfers greedy match: repeatedly settle the largest creditor against the
