@@ -471,6 +471,17 @@ const guides = defineCollection({
     dek: z.string().optional(),
     footer: z.string().optional(),
     country: z.string(),          // sets the default accent colour (see src/lib/themes.ts)
+    // Optional DISPLAY-ONLY override of the location label, for a country large enough that
+    // naming it alone reads broader than the trip actually is (a single-state US guide is the
+    // case that forced this — "United States" on the hub grid for a Sedona-only trip implies
+    // a whole-country guide). `country` itself must stay the REAL country: every currency/
+    // timezone-fallback/emergency-number/continent lookup is keyed on it (countries.mjs's own
+    // comment documents exactly this Hawaii/Arizona history and why `country` can never be a
+    // state). `region` is what a reader actually SEES wherever the location label renders —
+    // the state ("Arizona"), or a multi-state trip's own phrasing ("Arizona & Utah") — set on
+    // every US-scoped guide from now on. Absent = every surface falls back to `country`
+    // unchanged, so existing guides render identically.
+    region: z.string().optional(),
     // Optional IANA time zone override, e.g. "America/Phoenix". A country-level default
     // (src/lib/themes.ts's tzFor) is wrong the moment a destination's local time differs
     // from its country's "typical" zone — Hawaii and Arizona both proved this by hours,
