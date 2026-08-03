@@ -257,7 +257,7 @@ content, schema-guarded so a group rename errors instead of silently orphaning i
 (Voice standard revised 2026-07-28: rare + informational-only, block-types.md — the
 original "warmth in the descriptors" framing is superseded.)
 
-## Mobile navigation — the gestures (shipped 2026-07-30, `docs/PLAN_MOBILE_NAV.md`)
+## Mobile navigation — the gestures (shipped 2026-07-30, `docs/archive/PLAN_MOBILE_NAV.md`)
 
 Below 900px the top chip strip is hidden, so the bottom bar IS the guide's navigation.
 Everything here is gesture motion, which follows a different rule from the entrance motion

@@ -47,11 +47,10 @@ scope; don't report-and-wait. **When a change forks the plan** (opens a real dec
 the user hasn't made), stop and ask before propagating — silently guessing and silently
 ignoring are both wrong.
 
-**Hard-gated in CI (2026-07-30):** every headless edit surface leaves a written sweep
-record (greps run · ripples fixed · "none" stated) or its run fails — modify-guide's
-scorecard `## Continuity sweep`, revise-guide's `#### Continuity sweep — #<issue>`,
-research-pass's `#### Continuity sweep — critic execution`. Doctrine that proves sore in
-practice becomes a gate, not a reminder (creator's standing ruling).
+Headless edit surfaces are CI-gated on a written sweep record (greps run · ripples fixed ·
+"none" stated) — the workflows enforce it. This paragraph governs the interactive sessions no
+gate covers. Doctrine that proves sore in practice becomes a gate, not a reminder (creator's
+standing ruling).
 
 ---
 
@@ -91,8 +90,7 @@ is their single home; this file names the principle without repeating detail.
 guide is browsed on the street, not only followed: a traveller who exhausts the plan must
 still have somewhere to go and something to eat. So these sections carry MORE than the days
 use — options the itinerary never schedules, across neighbourhoods, price points and times of
-day. The measurement that forced this: Japan shipped 27 day-entries against 10 sights, Korea 8
-against 6. A guide whose sights run out mid-trip is not Actionable, whatever else it is.
+day. A guide whose sights run out mid-trip is not Actionable, whatever else it is.
 The floor is a research-time judgement, not a number to pad toward — and padding it from
 training data fails the bar test outright. Breadth comes from research passes with primary
 sources, or it does not come.
@@ -167,9 +165,14 @@ rule's "when a change forks the plan, stop and ask" to ALL work:
 - **Every plan document** carries a per-session **Clarifying questions** block naming the
   open decisions (scope forks, UX choices, data the creator must supply, anything
   destructive/public-facing).
-- **Every executing session** opens by putting that block to the creator via
+- **Every interactive executing session** opens by putting that block to the creator via
   `AskUserQuestion` (plus any newly-warranted questions) and waits for explicit go
   BEFORE building. Mid-session, a newly-discovered fork gets the same treatment.
+- **Headless surfaces never block on a chat prompt** — they use their built mechanisms:
+  revise-guide's fork gate pauses the run and asks via issue comment; new-guide posts
+  traveler questions as non-blocking issue comments with the `**Assumed:**` line stating
+  what shipped. A headless run that hits an unmediated fork stops and records it; it does
+  not guess.
 - **Drafting a new plan or prompt** = surfacing its open decisions as questions FIRST,
   answers woven in before the plan is finalized. A question with an obvious conventional
   default states the recommendation first and says why.
@@ -180,11 +183,12 @@ rule's "when a change forks the plan, stop and ask" to ALL work:
 
 ## The Ship Loop (every change ends this way)
 
-`npm run build` (zero schema errors) → `npm test` green → **verify in `astro preview`**
-(:4322 — OneDrive HMR serves STALE CSS, so never trust `astro dev`) at mobile 375px +
-desktop, dark, reduced-motion → **grep compiled `dist/`** to confirm no stale string
-survived and paths resolve → commit → push → confirm live. The deploy workflow
-auto-retries transient Pages failures; only investigate after three consecutive.
+`npm run build` (zero schema errors) → `npm run lint` → `npm run typecheck` → `npm test`
+green → **verify in `astro preview`** (:4322 — preview serves the real production build;
+`astro dev`'s HMR state is not what ships) at mobile 375px + desktop, dark, reduced-motion →
+**grep compiled `dist/`** to confirm no stale string survived and paths resolve → commit →
+push → confirm live. The deploy workflow auto-retries transient Pages failures; only
+investigate after three consecutive.
 
 ---
 
@@ -219,51 +223,32 @@ not control, and spending thirty seconds there.
 
 ## Session Setup — Connectors (save tokens)
 
-**Required, verified 2026-07-22** against this repo's actual workflows (static Astro site,
-GitHub Pages/Actions deploy, no email/calendar/Drive/research-paper/music/Vercel touchpoint
-anywhere in `.github/workflows/`, `scripts/`, or `docs/`):
-
-- **github** — the only connector this repo's work depends on: PR/issue/CI, watching Actions
-  runs, the pipeline's issue-ops (new-guide, modify-guide, graduate-guide, recert workflows
-  all live here). 63 tools, ~19.6k tokens — heavy, but every one has a real call site.
-- **Claude Code Remote** (routines/triggers) — small (~6.5k tokens), occasionally useful for
-  scheduled work (e.g. a recert trigger, a `send_later` reminder). Keep it; it's cheap and
-  earns its place the moment a scheduled session is wanted.
-
-**Do not enable for this repo — confirmed zero use, not just unlikely use:** Gmail, Google
-Calendar, Google Drive, PubMed, Spotify, Vercel. None has a call site anywhere in this repo;
-each adds ~4–15k tokens of dead tool schema to every session (≈45k combined). Re-evaluate a
-specific one only if a genuinely new workflow needs it (e.g. Vercel if hosting ever migrates
-off Pages) — don't re-enable the whole set speculatively.
-
-**When starting a session on this repo:** if the connector picker shows more than github +
-Claude Code Remote enabled, disable the rest before doing real work — don't just note it here
-and let it ride.
+Enable **github** + **Claude Code Remote** only (verified 2026-07-22: nothing else has a call
+site in this repo; the rest is ~45k tokens of dead schema per session). If the picker shows
+more enabled, disable them before doing real work. Re-evaluate a specific connector only when
+a genuinely new workflow needs it.
 
 ## Operational Habits (save tokens)
 
-- **Session start: Read `docs/HANDOFF.md` FIRST** — it is the warm-start context (state
-  snapshot + where-we-left-off + the re-prompt to open with). Do not re-derive history from
-  git log/memory sprawl. **Session end: rewrite its Snapshot + Where-we-left-off sections**
-  and commit. This replaces reading long conversation context between sessions.
+- **`docs/HANDOFF.md` auto-loads at session start** (SessionStart hook →
+  `scripts/handoff-head.mjs`) — do not Read it again, and do not re-derive history from
+  git log/memory sprawl. **Session end: rewrite its Snapshot + Where-we-left-off sections**,
+  move the previous snapshot to `docs/archive/HANDOFF_ARCHIVE.md`, and commit. Its ≤120-line
+  budget and the repo's doc-reference integrity are gated by
+  `scripts/__tests__/docs-integrity.test.mjs`.
 - **Every guide is a directory — no exceptions, drafts included** (`src/content/guides/<slug>/`
-  — `_guide.json` meta + `NN-<group>.json` per tab group + `facts.json`). The catalog has
-  exactly ONE shape: `scaffold-guide.mjs` emits it for every new guide, and
-  `scripts/__tests__/guide-shape-uniform.test.mjs` fails the suite on a flat `<slug>.json` or a
-  guide dir missing `facts.json`. Both shapes still *build*, which is why the split went
-  unnoticed for three guides — and the flat file WINS in `resolveGuidePath`, so a stray one
-  silently shadows the directory beside it. Import an outside single-file guide with
+  — `_guide.json` meta + `NN-<group>.json` per tab group + `facts.json`). One shape, gated by
+  `scripts/__tests__/guide-shape-uniform.test.mjs`. Import an outside single-file guide with
   `npm run split-guide -- <slug>`, then delete the flat file.
 - **A perishable fact may NOT be in the group file — check `facts.json` first.**
   `facts.json` is the perishable-fact registry: one row per price/fare/dated figure (claim ·
   value · `source_url` · `verified_on` · `shelf_life` · `state`), referenced from prose as
-  `{{fact:<id>}}` and substituted at build time, so one edit updates every mention. All four
-  guides are migrated. **So "Read ONLY the group file the fact lives in" now means: grep the
-  guide dir for the figure, and if it resolves to a token, edit the ROW — editing the prose
+  `{{fact:<id>}}` and substituted at build time, so one edit updates every mention. **Grep the
+  guide dir for the figure; if it resolves to a token, edit the ROW — editing the prose
   around a token changes nothing.** `≈` is derived from `state: "approx"`, never typed into
-  `value`; values are inline text only; an unresolved token fails the build. Migrate a guide
-  that predates this with `node scripts/migrate-facts.mjs --slug <slug>` (propose) then
-  `--write`. Never assemble the whole guide; `ls` the dir to find the group.
+  `value`; values are inline text only; an unresolved token fails the build. An imported
+  guide gets `node scripts/migrate-facts.mjs --slug <slug>` (propose) then `--write`. Never
+  assemble the whole guide; `ls` the dir to find the group.
 - **New client behavior → its feature silo** (`src/features/<name>/`, see
   `docs/ARCHITECTURE.md`) or `src/scripts/` for page chrome — never inline back into
   `GuideLayout.astro`.

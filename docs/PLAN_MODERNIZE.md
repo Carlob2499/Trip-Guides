@@ -185,7 +185,7 @@ run. 248 deploy runs to date multiply all of it.
 - Concurrency: `test-${{ github.ref }}` cancel-in-progress on test/a11y.
 - Cache `~/.cache/ms-playwright` keyed on the Playwright version.
 - Fix vestigial refs: `run-skill-evals.mjs` eval-1's `guides/germany.json` fixture → directory
-  shape; `skill-retro.yml:57`'s nonexistent `docs/E2_FIELD_REPORT.md`.
+  shape; `skill-retro.yml:57`'s pointer to a never-written field-report doc (fixed 2026-08-03).
 - **PR preview deployments (from Q2):** Cloudflare Pages free-tier project building `dist/` on
   every PR → a live preview URL in each recert freshness PR and draft-guide triage PR. Prod
   stays GitHub Pages. Mind `import.meta.env.BASE_URL` (previews serve at root, prod at

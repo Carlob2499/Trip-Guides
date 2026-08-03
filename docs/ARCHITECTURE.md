@@ -64,7 +64,7 @@ self-boots to upgrade it only when `PUBLIC_GMAPS_KEY` is set.
 - **New feature = its own folder** — `src/features/<name>/` with a single `index.ts`/`index.js`
   API; third-party SDKs behind a config gate + lazy import (Firebase / Google Maps are the
   pattern). **The silo contract** (the original migration is long complete; 22 silos today, and
-  this is the standing rule for new ones — formerly `docs/SILO_ROADMAP.md`): the index file is
+  this is the standing rule for new ones — formerly a standalone roadmap doc): the index file is
   the ONLY public surface (no deep cross-feature imports, ever) · `model/` = zod + pure tested
   logic · `ui/` · `mocks/`
   (real-shaped seeds; tests run zero-network) · `__tests__/`. Data access sits behind an

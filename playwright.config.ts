@@ -5,8 +5,8 @@
    specs (sos, offline, share-panel, itinerary, route-opt, overture, field-tools) run locally with
    `npm run test:e2e`. Deterministic by construction: fixed clock, external requests blocked (see
    each spec). Runs against `astro preview` on :4322 — the ONLY trusted preview per CLAUDE.md
-   (OneDrive HMR serves stale CSS on `astro dev`). CI builds first; locally run `npm run build`
-   before `npm run test:e2e`. */
+   (preview serves the real production build; dev HMR state is not what ships). CI builds
+   first; locally run `npm run build` before `npm run test:e2e`. */
 import { defineConfig, chromium } from "@playwright/test";
 import { existsSync } from "node:fs";
 

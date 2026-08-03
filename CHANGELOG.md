@@ -131,8 +131,8 @@ per-country.
 ## Conventions worth knowing
 
 - **Ship loop:** `npm run build` (zero schema errors) → `npm test` → verify in `astro preview`
-  on **:4322** (never `astro dev` — OneDrive serves stale CSS) at 375px + desktop, dark,
-  reduced-motion → grep `dist/` → push → confirm live.
+  on **:4322** (never `astro dev` — preview serves the real production build) at 375px +
+  desktop, dark, reduced-motion → grep `dist/` → push → confirm live.
 - **Service worker:** bump `CACHE` in `public/sw.js` on any shipped JS/CSS behavior change.
 - **Shared components are global; only JSON is per-country.** A component change hits every
   guide — that's the point.

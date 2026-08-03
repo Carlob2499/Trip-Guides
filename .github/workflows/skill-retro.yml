@@ -56,9 +56,9 @@ jobs:
                    --jq '.[0].number'
                then `gh issue view <n> --comments`, and skim learnings/*.md,
                docs/TRAVELER_PATTERNS.md and docs/PIPELINE_PATTERNS.md for recurring themes.
-               (A pointer to docs/E2_FIELD_REPORT.md lived here; that file was never written,
-               so the retro was being asked to look for something that has never existed.
-               PIPELINE_PATTERNS.md is the file that actually accumulates critic findings.)
+               (A pointer to a never-written field-report doc lived here — the retro was being
+               asked to look for something that has never existed. PIPELINE_PATTERNS.md is the
+               file that actually accumulates critic findings.)
 
             2. Look for PATTERNS across multiple runs, not one-offs: the same critic catch recurring,
                the same skill-friction note from several agents, guides repeatedly needing many
