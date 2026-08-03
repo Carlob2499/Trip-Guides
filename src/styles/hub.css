@@ -75,23 +75,46 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .hub-foot a:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 
 /* ── New-guide modal ────────────────────────────────────────────────────── */
-.ng-backdrop{position:fixed;inset:0;z-index:900;background:rgba(20,16,12,.5);opacity:0;pointer-events:none;transition:opacity .15s}
+/* Modernized 2026-08-02 (creator: "looks a bit outdated"): the modal predated the site's own
+   control vocabulary — a 6px-radius rectangle submit while every shipped control is a 999px
+   pill, a bare-text ✕ against the clickability doctrine, textareas silently missing the focus
+   rule, no entrance motion. Everything below is the incumbent language applied consistently:
+   pill controls, --r tokens, --ease-out-expo entries, reduced-motion honored. */
+.ng-backdrop{position:fixed;inset:0;z-index:900;background:rgba(20,16,12,.55);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .2s var(--ease-out-expo)}
 .ng-backdrop.open{opacity:1;pointer-events:auto}
-.ng-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:910;width:min(440px,calc(100vw - 2rem));max-height:calc(100vh - 2rem);overflow-y:auto;background:var(--card);border:1px solid var(--rule2);border-radius:12px;padding:1.5rem 1.6rem}
-.ng-head{font-family:var(--font-display);font-size:var(--text-lead);font-weight:600;display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.5rem}
-.ng-close{background:none;border:none;cursor:pointer;font-size:var(--text-lead);color:var(--muted);padding:.1rem .3rem;line-height:1;border-radius:3px;transition:color .14s}
-.ng-close:hover{color:var(--ink)}
+.ng-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:910;width:min(440px,calc(100vw - 2rem));max-height:calc(100vh - 2rem);overflow-y:auto;background:var(--card);border:1px solid var(--rule2);border-radius:var(--r-lg);padding:1.5rem 1.6rem;box-shadow:0 18px 50px rgba(16,20,24,.22)}
+/* Entrance: a short rise + fade, keyed off [hidden] flipping (the JS already toggles it).
+   @starting-style is ignored by browsers without it — they show the settled state, same
+   progressive-enhancement contract as .card-more's ::details-content animation. */
+.ng-modal{transition:opacity .22s var(--ease-out-expo),transform .22s var(--ease-out-expo)}
+@starting-style{.ng-modal:not([hidden]){opacity:0;transform:translate(-50%,calc(-50% + 10px))}}
+@media(prefers-reduced-motion:reduce){.ng-modal{transition:none}}
+.ng-head{font-family:var(--font-display);font-size:var(--text-lead);font-weight:640;display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.5rem}
+/* The close control is a real button, not floating glyph text — clickability doctrine. */
+.ng-close{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;flex:none;background:transparent;border:1px solid transparent;border-radius:999px;cursor:pointer;font-size:var(--text-control);color:var(--muted);line-height:1;transition:color .14s,background .14s,border-color .14s}
+.ng-close:hover{color:var(--ink);background:var(--bg2);border-color:var(--rule2)}
+.ng-close:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .ng-intro{color:var(--muted);font-size:var(--text-small);line-height:1.5;margin-bottom:1.1rem}
-.ng-form{display:flex;flex-direction:column;gap:.85rem}
-.ng-field{display:flex;flex-direction:column;gap:.3rem;border:none;padding:0;min-width:0}
+.ng-form{display:flex;flex-direction:column;gap:.95rem}
+.ng-field{display:flex;flex-direction:column;gap:.35rem;border:none;padding:0;min-width:0}
 .ng-field>span{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
 .ng-field em{font-style:normal;color:var(--rule2)}
-.ng-field input,.ng-field select,.ng-field textarea{font:inherit;font-size:var(--text-body);background:var(--bg2);color:var(--ink);border:1px solid var(--rule2);border-radius:6px;padding:.5rem .6rem;width:100%}
-.ng-field input:focus,.ng-field select:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+/* 44px control height (16px+ font already iOS-zoom-safe); textarea grows from the same base.
+   Hover tick on the border so fields read as touchable before focus. */
+.ng-field input,.ng-field select,.ng-field textarea{font:inherit;font-size:var(--text-body);background:var(--bg2);color:var(--ink);border:1px solid var(--rule2);border-radius:var(--r-md);padding:.55rem .75rem;width:100%;min-height:44px;transition:border-color .14s,background .14s}
+.ng-field textarea{min-height:66px}
+.ng-field input:hover,.ng-field select:hover,.ng-field textarea:hover{border-color:var(--muted)}
+.ng-field input:focus,.ng-field select:focus,.ng-field textarea:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
 .ng-row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
-.ng-err{color:var(--accent-ink);font-size:var(--text-control)}
-.ng-submit{margin-top:.4rem;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;background:var(--ink);color:var(--bg);border:none;border-radius:6px;padding:.62rem 1rem;cursor:pointer;transition:background .14s}
-.ng-submit:hover{background:var(--accent)}
+.ng-err{color:var(--accent-ink);font-size:var(--text-control);font-weight:600}
+/* Submit joins the site's pill vocabulary (gtab / ngw-next / card-more-sum) instead of the
+   legacy micro-caps rectangle. Press feedback on :active — --ease-spring, the token whose
+   own comment says "touch feedback rides --ease-spring". */
+.ng-submit{margin-top:.4rem;min-height:44px;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);background:var(--ink);color:var(--bg);border:1px solid var(--ink);border-radius:999px;padding:.6rem 1.3rem;cursor:pointer;transition:background .18s,border-color .18s,transform .18s var(--ease-spring)}
+.ng-submit:hover{background:var(--accent);border-color:var(--accent)}
+.ng-submit:active{transform:scale(.98)}
+.ng-submit:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.ng-submit{transition:background .18s,border-color .18s}.ng-submit:active{transform:none}}
 
 /* === PRINT (U7) ================================================================
    The hub previously had no print styles at all — printing it produced the full

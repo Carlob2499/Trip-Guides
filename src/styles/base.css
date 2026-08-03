@@ -199,6 +199,20 @@ html{-webkit-text-size-adjust:100%;overflow-x:clip;max-width:100%}
    instead. touch-action:manipulation removes the ~300ms tap delay some mobile
    browsers still apply and stops accidental double-tap-zoom on controls. */
 a,button,[role="button"],input,select,summary{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+/* The press cue the note above promises — it was never actually shipped, so controls killed
+   the native tap-flash and replaced it with NOTHING (the single biggest "buttons feel dead"
+   tell, found 2026-08-02). One unified rule: the independent `scale` property composes with
+   any per-class transform (a .gtab mid hover-lift still presses down; nothing centered with
+   translate() jumps), and browsers without it simply ignore it. Press is instant by design —
+   presses must feel immediate; release smoothness rides each control's own transition. Links
+   are NOT covered as a class — inline text links shouldn't shrink — only the named pill
+   anchors below join the buttons. */
+button:not(:disabled):active,[role="button"]:active,summary:active,
+a.foot-modify-pill:active,a.hub-hero-cta:active,a.pg-done-link:active,a.ab-cta-btn:active{scale:.98}
+@media(prefers-reduced-motion:reduce){
+  button:not(:disabled):active,[role="button"]:active,summary:active,
+  a.foot-modify-pill:active,a.hub-hero-cta:active,a.pg-done-link:active,a.ab-cta-btn:active{scale:none}
+}
 body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:var(--text-body);line-height:1.72;-webkit-font-smoothing:antialiased}
 /* Fine paper-grain noise overlay — fixed, non-interactive, behind everything. */
 body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}

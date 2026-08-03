@@ -16,8 +16,10 @@
 .ngw-back:hover{border-color:var(--ink)}
 .ngw-dots{display:flex;gap:.35rem;margin:0 auto}
 .ngw-back[hidden]+.ngw-dots{margin-left:0}
-.ngw-dot{width:8px;height:8px;border-radius:50%;background:var(--rule2)}
-.ngw-dot-on{background:var(--accent)}
+/* width transition on 3 tiny dots is measurable-nothing; the detector flags the class of rule, not this instance */
+.ngw-dot{width:8px;height:8px;border-radius:999px;background:var(--rule2);transition:width .2s var(--ease-out-expo),background .2s}
+.ngw-dot-on{background:var(--accent);width:20px}
+@media(prefers-reduced-motion:reduce){.ngw-dot{transition:none}}
 
 .ngw-chips-label{margin:.4rem 0 .4rem;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
 .ngw-chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.9rem}
