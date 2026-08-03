@@ -18,7 +18,7 @@ import { trapFocus } from "./util.js";
       '<figure class="lb-fig" role="dialog" aria-modal="true" aria-label="Photo viewer">' +
       '<button class="lb-x" type="button" aria-label="Close photo">✕</button>' +
       '<img class="lb-img" alt="" />' +
-      '<figcaption class="lb-cap"><span class="lb-alt"></span> <a class="lb-credit" target="_blank" rel="noopener">Wikimedia Commons ↗</a></figcaption>' +
+      '<figcaption class="lb-cap"><span class="lb-alt"></span> <a class="lb-credit" target="_blank" rel="noopener"></a><span class="lb-credit-text"></span></figcaption>' +
       "</figure>";
     document.body.appendChild(box);
     box.addEventListener("click", function (e) {
@@ -38,15 +38,26 @@ import { trapFocus } from "./util.js";
     build();
     lastFocus = document.activeElement;
     var full = img.currentSrc || img.src;
-    // Ask Commons for a bigger rendition than the card thumb.
+    // Ask for a bigger rendition than the card thumb. Commons' Special:FilePath and any
+    // direct CDN that happens to use the same `width=` param both upsize; a CDN using a
+    // different param simply keeps the card rendition rather than 404ing on a mangled URL.
     full = full.replace(/width=\d+/, "width=1600");
     box.querySelector(".lb-img").src = full;
     box.querySelector(".lb-img").alt = img.alt || "";
     box.querySelector(".lb-alt").textContent = img.alt || "";
-    var creditA = img.closest(".card, .sight, figure");
-    creditA = creditA && creditA.querySelector('a[href*="commons.wikimedia.org/wiki/File"]');
+    // Credit travels with the photo, whatever its source: Commons files link their File
+    // page, direct-CDN photos carry their own schema-required credit — linked when a
+    // creditUrl was given, plain text when it wasn't. Reading the rendered .imgcredit
+    // keeps one source of truth; the old Commons-only href selector dropped attribution
+    // for exactly the photos whose licence requires it.
+    var fig = img.closest(".card, .sight, figure");
+    var credit = fig && fig.querySelector(".imgcredit");
     var link = box.querySelector(".lb-credit");
-    if (creditA) { link.href = creditA.href; link.hidden = false; } else link.hidden = true;
+    var plain = box.querySelector(".lb-credit-text");
+    var label = credit ? credit.textContent.replace(/\s*↗\s*$/, "").trim() : "";
+    link.hidden = plain.hidden = true;
+    if (label && credit.href) { link.href = credit.href; link.textContent = label + " ↗"; link.hidden = false; }
+    else if (label) { plain.textContent = label; plain.hidden = false; }
     box.classList.add("lb-on");
     document.body.classList.add("sheet-lock");
     box.querySelector(".lb-x").focus();

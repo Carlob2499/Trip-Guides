@@ -328,6 +328,8 @@ just to replace it.
   shot of the destination exists — filename validated via `search-commons.mjs`, never
   recalled. Direct royalty-free `cover.src` URLs are allowed (schema-enforced credit +
   license). A real photo also feeds `extract-palette` (the guide's identity accent).
+  `sights[].img` now takes the SAME two sources on the same terms — see
+  `references/image-sourcing.md`, which governs both slots.
 - **Honesty rule (R18):** a cover photo must honestly represent what the traveler
   will see — right destination, right season, right visual identity. A cherry-blossom
   cover on an autumn trip, a summer beach on a winter itinerary, or a landmark the

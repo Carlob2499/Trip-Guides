@@ -120,9 +120,12 @@ guide-level stamp is older.
 **Entry / visa rules** — official government page only, and state the
 assumed passport ("assumes a US passport; on another, check your own").
 
-**Photos (`img.file`)** — must be an exact Wikimedia Commons `File:` page
-filename that you confirmed exists. If unsure, omit the image. Never guess a
-filename.
+**Photos** — two sources, never both on one item. `img.file` must be an exact
+Wikimedia Commons `File:` page filename confirmed via `search-commons.mjs`.
+`img.src` must be an https royalty-free URL you fetched and got a 200 from, and
+carries schema-required `credit` + `license` (nothing can machine-check its
+licence, so the attribution travels in the data). Never guess either one; if
+unsure, omit the image. Full rules: `references/image-sourcing.md`.
 
 **Prose HTML** — allowlist is `<p> <b> <i> <a> <ul> <li> <ol>` only. Reaching
 for anything else means the content wants a typed section, not richer prose.

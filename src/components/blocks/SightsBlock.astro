@@ -11,6 +11,21 @@ const commonsSrc  = (f: string, w = 800) =>
   `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(f)}?width=${w}`;
 const commonsPage = (f: string) =>
   `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(f)}`;
+// One width-parameterized source fn for both photo paths — mirrors the masthead's
+// mastSrcAt and the hub's stillSrcAt (uniform application across surfaces).
+const imgSrcAt = (img: any, w: number) =>
+  img.src ? img.src.replace("{w}", String(w)) : commonsSrc(img.file, w);
+// A direct URL without a `{w}` token is single-size — offering a srcset of three
+// identical URLs would just lie to the browser's selection algorithm.
+const imgSrcset = (img: any) =>
+  (img.file || img.src?.includes("{w}"))
+    ? `${imgSrcAt(img, 480)} 480w, ${imgSrcAt(img, 800)} 800w, ${imgSrcAt(img, 1200)} 1200w`
+    : undefined;
+// Commons IS the credit (the File page carries author + license); a direct CDN photo
+// carries its own zod-required credit, linking creditUrl when one is given.
+const creditOf = (img: any) =>
+  img.file ? { href: commonsPage(img.file), label: "Wikimedia Commons" }
+  : { href: img.creditUrl ?? null, label: img.credit };
 ---
 {(sec.items || []).map((it: any) => (
   <article class={`card sight ${it.img ? "sight--photo" : "sight--text"}`} id={it.map ? `sight-${pinSlug(it.name)}` : undefined}>
@@ -19,8 +34,8 @@ const commonsPage = (f: string) =>
          (kicker + name), a legibility gradient, and a hover zoom. */
       <figure class="sight-media">
         <img class="cardimg" loading="lazy" decoding="async" alt={it.img.alt || it.name || ""}
-          src={commonsSrc(it.img.file, 800)}
-          srcset={`${commonsSrc(it.img.file, 480)} 480w, ${commonsSrc(it.img.file, 800)} 800w, ${commonsSrc(it.img.file, 1200)} 1200w`}
+          src={imgSrcAt(it.img, 800)}
+          srcset={imgSrcset(it.img)}
           sizes="(max-width:899px) 100vw, 420px"
           onload="this.closest('.sight-media').classList.add('media-ok')"
           onerror="this.closest('.sight-media').classList.add('media-fail')" />
@@ -29,7 +44,11 @@ const commonsPage = (f: string) =>
           {it.kicker && <span class="tag tag--onphoto">{it.kicker}</span>}
           <h4 class="sight-name sight-name--onphoto">{it.name}</h4>
         </figcaption>
-        <a class="imgcredit imgcredit--onphoto" href={commonsPage(it.img.file)} target="_blank" rel="noopener" aria-label="Photo source on Wikimedia Commons">Wikimedia Commons ↗</a>
+        {(() => { const c = creditOf(it.img); return c.href ? (
+          <a class="imgcredit imgcredit--onphoto" href={c.href} target="_blank" rel="noopener" aria-label={`${c.label} — view source`}>{c.label} ↗</a>
+        ) : (
+          <span class="imgcredit imgcredit--onphoto">{c.label}</span>
+        ); })()}
       </figure>
     ) : (
       <div class="sight-head">

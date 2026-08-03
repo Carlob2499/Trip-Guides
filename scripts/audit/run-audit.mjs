@@ -69,6 +69,18 @@ function buildReport({ links, photos, apis, staleness }) {
   } else {
     lines.push(`- All ${photos.checked} photo files resolve.`);
   }
+  lines.push("");
+
+  // Direct (non-Commons) sight photos have no MediaWiki "missing" flag — they get a
+  // reachability check instead, reported separately so the two authorities stay legible.
+  lines.push("## Photos (direct royalty-free URLs)", "");
+  if (!photos.checkedUrls) {
+    lines.push("- None in use — every sight photo is a Commons file.");
+  } else if (photos.deadUrls.length) {
+    for (const d of photos.deadUrls) lines.push(`- ✗ ${d.url} — HTTP ${d.status ?? "—"}, cited by ${d.guides.join(", ")}`);
+  } else {
+    lines.push(`- All ${photos.checkedUrls} direct photo URL(s) reachable.`);
+  }
 
   return lines.join("\n");
 }

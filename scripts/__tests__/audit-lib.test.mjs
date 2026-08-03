@@ -8,7 +8,7 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { mkdtemp, mkdir, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { flatten, extractLinks, extractPhotos, parseVerifiedDate, daysSince, MONTHS, readGuides } from "../audit/lib.mjs";
+import { flatten, extractLinks, extractPhotos, extractPhotoUrls, parseVerifiedDate, daysSince, MONTHS, readGuides } from "../audit/lib.mjs";
 
 describe("flatten", () => {
   it("returns top-level sections unchanged when none nest", () => {
@@ -107,6 +107,43 @@ describe("extractPhotos", () => {
       sections: [{ sections: [{ type: "sights", items: [{ img: { file: "nested.jpg" } }] }] }],
     };
     expect(extractPhotos(guide)).toEqual(["nested.jpg"]);
+  });
+
+  it("ignores a direct src — the Commons API has no authority over it", () => {
+    const guide = { sections: [{ type: "sights", items: [{ img: { src: "https://cdn.example/a.jpg", credit: "X", license: "Y" } }] }] };
+    expect(extractPhotos(guide)).toEqual([]);
+  });
+});
+
+describe("extractPhotoUrls", () => {
+  it("collects direct img.src across sights items", () => {
+    const guide = {
+      sections: [{ type: "sights", items: [
+        { img: { src: "https://cdn.example/a.jpg", credit: "X", license: "Y" } },
+        { img: { src: "https://cdn.example/b.jpg", credit: "X", license: "Y" } },
+      ] }],
+    };
+    expect(extractPhotoUrls(guide)).toEqual(["https://cdn.example/a.jpg", "https://cdn.example/b.jpg"]);
+  });
+
+  it("resolves the {w} width token so the probe hits a real URL", () => {
+    const guide = { sections: [{ type: "sights", items: [{ img: { src: "https://cdn.example/a.jpg?w={w}", credit: "X", license: "Y" } }] }] };
+    expect(extractPhotoUrls(guide, 640)).toEqual(["https://cdn.example/a.jpg?w=640"]);
+  });
+
+  it("ignores Commons files — those carry an authoritative missing flag instead", () => {
+    const guide = { sections: [{ type: "sights", items: [{ img: { file: "A.jpg" } }] }] };
+    expect(extractPhotoUrls(guide)).toEqual([]);
+  });
+
+  it("dedupes and looks inside nested sections", () => {
+    const guide = {
+      sections: [{ sections: [{ type: "sights", items: [
+        { img: { src: "https://cdn.example/same.jpg", credit: "X", license: "Y" } },
+        { img: { src: "https://cdn.example/same.jpg", credit: "X", license: "Y" } },
+      ] }] }],
+    };
+    expect(extractPhotoUrls(guide)).toEqual(["https://cdn.example/same.jpg"]);
   });
 });
 

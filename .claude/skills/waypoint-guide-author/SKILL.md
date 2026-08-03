@@ -46,6 +46,9 @@ is no second copy to keep in sync.
 4. **`references/block-types.md`** — section types, the enforced tab budget,
    guide-level typed features (phrases/entry/advisory), voice standard, facets,
    covers. Read when choosing or creating any section.
+   **`references/image-sourcing.md`** — the binding photo layer (Commons vs
+   royalty-free `src`, required attribution, forbidden sources, the R18 honesty
+   rule, the pre-ship checklist). Read before sourcing any image.
 5. **The `denmark/` and `korea/` guide dirs** — the gold standard to match or beat.
 6. **`docs/PIPELINE_PATTERNS.md`** — what the critics keep catching, distilled. Read the
    OPEN rows before researching so a known miss-class is avoided upstream instead of
@@ -264,7 +267,9 @@ quantitative: a full pass owes ≥8 finds, ≥3 crowd/timing, ≥2 novel/alterna
   shipped wrong local times before this script). One zero-network call — there is no
   efficiency argument for skipping it.
 - **`sights` photos** → `node scripts/search-commons.mjs "<subject>"` — only a
-  Commons-confirmed filename in `img.file`; if none fits, omit the image.
+  Commons-confirmed filename in `img.file`; if none fits, either a royalty-free
+  `img.src` (https, `credit` + `license` schema-required) or no image at all.
+  **Binding detail: `references/image-sourcing.md`** — read it before sourcing any photo.
 - **grounding text** → `node scripts/fetch-wikivoyage.mjs "<City, Country>"`
   (treat its output as T2 leads to verify, not citable fact).
 

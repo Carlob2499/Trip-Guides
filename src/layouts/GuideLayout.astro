@@ -105,18 +105,19 @@ const shortLabel = (g: string) =>
 // Chapter-opener photo fans: a group whose sections already carry verified
 // Commons images (sights) gets up to three of its OWN photos fanned beside
 // the opener numeral. Pure derivation — no new sourcing, no invented files.
-const groupImgs: Record<string, { file: string; alt: string }[]> = {};
+const groupImgs: Record<string, { file?: string; src?: string; alt: string }[]> = {};
 for (const g of order) {
   const imgs = byG[g]
     .filter((o: any) => o.s.type === "sights")
     .flatMap((o: any) => o.s.items || [])
-    .filter((it: any) => it?.img?.file)
+    .filter((it: any) => it?.img?.file || it?.img?.src)
     .slice(0, 3)
-    .map((it: any) => ({ file: it.img.file, alt: it.img.alt || it.name || "" }));
+    .map((it: any) => ({ file: it.img.file, src: it.img.src, alt: it.img.alt || it.name || "" }));
   if (imgs.length) groupImgs[g] = imgs;
 }
-const thumbSrc = (f: string) =>
-  `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(f)}?width=320`;
+const thumbSrc = (im: { file?: string; src?: string }) =>
+  im.src ? im.src.replace("{w}", "320")
+  : `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(im.file!)}?width=320`;
 // Accent precedence (src/lib/palettes.ts — the SAME resolution the hub + OG use):
 // explicit `theme` (zod-gated) → palette extracted from this guide's own cover photo
 // (`npm run extract-palette`, gated at generation) → country accent. The V4 identity
@@ -188,13 +189,18 @@ const dayCount   = _flat.filter((s: any) => s.type === "days"  ).reduce((n: numb
 const heroSight = _flat
   .filter((s: any) => s.type === "sights")
   .flatMap((s: any) => s.items || [])
-  .find((it: any) => it?.img?.file);
+  .find((it: any) => it?.img?.file || it?.img?.src);
 const cover = (guide as any).cover;
 // R4: a still cover may now be a direct royalty-free CDN URL (`cover.src`, credit+license
 // zod-required) as well as a Commons `file`. `src` wins when set (the schema rejects both
 // together); a cover with only `video` still takes the first sight photo as its poster base.
-const coverDirect = (cover?.src as string | undefined) ?? null;
-const coverFile  = cover?.file ?? (coverDirect ? null : heroSight?.img?.file ?? null);
+// The sight-photo fallback carries whichever source THAT photo uses — a guide whose sights
+// are all direct-CDN would otherwise fall through to the Painted Atlas despite having art.
+const coverStill = (cover?.src || cover?.file)
+  ? { file: cover.file ?? null, src: cover.src ?? null, credit: cover.credit, creditUrl: cover.creditUrl }
+  : { file: heroSight?.img?.file ?? null, src: heroSight?.img?.src ?? null, credit: heroSight?.img?.credit, creditUrl: heroSight?.img?.creditUrl };
+const coverDirect = (coverStill.src as string | undefined) ?? null;
+const coverFile  = (coverStill.file as string | undefined) ?? null;
 const coverAlt   = cover?.alt   ?? heroSight?.img?.alt  ?? heroSight?.name ?? "";
 const coverFocal = cover?.focal ?? null;
 const mastCommonsSrc = (w: number) =>
@@ -222,8 +228,8 @@ const mastContours = [
 // video swaps this chip to the footage credit while it plays (living-cover.js).
 const heroCredit = coverFile
   ? { href: `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(coverFile)}`, label: "Photo: Wikimedia Commons" }
-  : coverDirect && cover?.credit
-  ? { href: (cover.creditUrl as string | undefined) ?? null, label: `Photo: ${cover.credit}` }
+  : coverDirect && coverStill.credit
+  ? { href: (coverStill.creditUrl as string | undefined) ?? null, label: `Photo: ${coverStill.credit}` }
   : null;
 // R4 living cover — the footage upgrade (schema-gated: credit+license required).
 const coverVideo = cover?.video ?? null;
@@ -795,7 +801,7 @@ const tripSummary = buildSummary(guide);
                 {groupImgs[g] && (
                   <span class="cat-fan" aria-hidden="true">
                     {groupImgs[g].map((im, fi) => (
-                      <img class={`cat-fan-img cat-fan-${fi}`} src={thumbSrc(im.file)} alt="" loading="lazy" decoding="async" />
+                      <img class={`cat-fan-img cat-fan-${fi}`} src={thumbSrc(im)} alt="" loading="lazy" decoding="async" />
                     ))}
                   </span>
                 )}

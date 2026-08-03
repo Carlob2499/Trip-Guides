@@ -128,6 +128,21 @@ export function extractPhotos(guide) {
   return [...files];
 }
 
+// Extract every direct (non-Commons) sights[].img.src. These get no MediaWiki
+// "missing" flag, so they are reachability-checked instead — otherwise a dead CC0
+// URL ships silently and the card renders its .media-fail plate to real readers.
+// The `{w}` width token is resolved to a real width so the probe hits a real URL.
+export function extractPhotoUrls(guide, width = 800) {
+  const urls = new Set();
+  for (const s of flatten(guide.sections)) {
+    if (s.type !== "sights") continue;
+    for (const item of s.items || []) {
+      if (item.img?.src) urls.add(item.img.src.replace("{w}", String(width)));
+    }
+  }
+  return [...urls];
+}
+
 // Loosely parse a "Mon YYYY" (or "D Mon YYYY") date out of a free-text `verified`
 // field (e.g. "Checked 28 Jun 2026 for the trip", "✓ Verified Jun 2026 — ..."). No
 // day component is required — month+year is enough for a staleness check. Returns

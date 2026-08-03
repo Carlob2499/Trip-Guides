@@ -19,7 +19,7 @@ Korea-tier quality bar (all P0 + all P1 = graduate-ready). **P2** is continuous 
 | # | Dimension | Property | Measurable criterion | Gate | Tier |
 |---|-----------|----------|----------------------|------|------|
 | 1 | Schema valid | — | `npm run build` clean (zero content-collection errors) | build | **P0** |
-| 2 | No fabrication | Verified | 0 `__VERIFICATION_REQUIRED__`; 0 guessed `img.file`; every named venue/event actually exists (spot-check) | readiness + human | **P0** |
+| 2 | No fabrication | Verified | 0 `__VERIFICATION_REQUIRED__`; 0 guessed `img.file`/`img.src` (Commons filename script-confirmed, direct URL fetch-confirmed); every named venue/event actually exists (spot-check) | readiness + human | **P0** |
 | 3 | Provenance on perishables | Verified | no `verified_on` without `source_url`; strict mode: no `≈` without a `verified_on` | readiness + build | **P0** |
 | 4 | Completeness | Actionable | no empty `panel`/`prose` bodies (checklist-only ok; References exempt); every day card has a real "Mon D" date + a real body | **readiness** | **P0** |
 | 5 | Itinerary integrity | Actionable | dates contiguous, no gap/duplicate; day count matches the intake's trip span (human confirms span) | readiness + human | **P0** |

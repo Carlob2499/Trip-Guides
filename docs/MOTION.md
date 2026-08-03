@@ -210,6 +210,10 @@ The cover stack, from birth upward (PLAN_VISUAL_REDESIGN.md Move A½; creator-de
    new in R4 — a direct royalty-free CDN `src` (Pexels/Unsplash/Pixabay-class; `{w}` width
    token for srcset), where zod REQUIRES `credit` + `license` because the licensing isn't
    machine-checkable. The pathos register is liberal in sourcing, never in honesty.
+   **`sights[].img` takes the same two sources on the same terms** (creator-widened
+   2026-08-03) — the identity layer is the guide's whole photography, not just its cover, and
+   a sight photo already feeds the masthead, hub card and chapter fans by fallback. Sourcing
+   law for both slots: the guide-author skill's `references/image-sourcing.md`.
 3. **Footage is the curated upgrade, never a requirement.** `cover.video` hot-links a
    library CDN (~4 MB ceiling by curation; nothing heavy enters the repo). Delivery is
    poster-first: no `src` attaches until `living-cover.js` clears every gate —

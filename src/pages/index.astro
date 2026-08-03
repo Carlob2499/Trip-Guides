@@ -71,7 +71,7 @@ const guideExtras = guides.map(g => {
   // form did not — that is why `sight.img.file` was flagged as possibly-undefined.
   const sight = flat.filter((s): s is SectionOf<"sights"> => s.type === "sights")
     .flatMap((s) => s.items || [])
-    .find((it): it is SightItem & { img: NonNullable<SightItem["img"]> } => !!it?.img?.file);
+    .find((it): it is SightItem & { img: NonNullable<SightItem["img"]> } => !!(it?.img?.file || it?.img?.src));
   const month   = firstDateStr?.split(/\s+/)[1] || "";
   // The card/hero cover: the guide's own `cover` art when set, else its first sight photo
   // (docs/MOTION.md). Same image the guide masthead uses — that's what makes them morph.
@@ -82,7 +82,9 @@ const guideExtras = guides.map(g => {
     ? { src: cover.src as string, alt: cover.alt || "", focal: cover.focal || null }
     : cover?.file
     ? { file: cover.file as string, alt: cover.alt || "", focal: cover.focal || null }
-    : (sight ? { file: sight.img.file, alt: sight.img.alt || sight.name, focal: null } : null);
+    // The sight-photo fallback carries whichever source THAT photo uses, so a guide whose
+    // sights are all direct-CDN still gets a card cover instead of the Painted Atlas.
+    : (sight ? { file: sight.img.file, src: sight.img.src, alt: sight.img.alt || sight.name, focal: null } : null);
   return {
     dayCount, badge, firstDate, lastDate, month,
     // R2: LOCAL calendar components, never `.toISOString()` (UTC conversion drifts the

@@ -80,8 +80,9 @@ experience; a critic finding happened before anyone traveled.
 ## Content Standards
 
 The operational standards — the 4-question venue rule, `≈` (sourced-approximate) and `⚠`
-(unconfirmed) flags, guide-level + per-section "Checked [date]" stamps, Wikimedia Commons
-`File:` photo validation, the prose tag allowlist (`<p> <b> <i> <a> <ul> <li> <ol>`;
+(unconfirmed) flags, guide-level + per-section "Checked [date]" stamps, photo sourcing and
+validation (Commons `File:` or an attributed royalty-free `src` — `references/image-sourcing.md`
+governs both, for `sights[].img` and `cover` alike), the prose tag allowlist (`<p> <b> <i> <a> <ul> <li> <ol>`;
 richer → a typed section), lead-first bodies, day `tldr`s, the ≤10-group tab budget — are
 defined and enforced by the **`waypoint-guide-author` skill** (`references/`). That skill
 is their single home; this file names the principle without repeating detail.

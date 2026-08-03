@@ -24,6 +24,44 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
+## Snapshot (2026-08-03, session #31 — sight photos gain a second source; image law folded into the skill)
+
+**`sights[].img` now takes the same two sources `cover` has taken since R4:** a Commons `file`
+(existence machine-verifiable) or a direct royalty-free `src` with zod-REQUIRED `credit` +
+`license` (its licence isn't machine-checkable, so the attribution travels in the data). Same
+`superRefine` shape as `cover` — needs one source, rejects both together, https-only. This was
+the answer to "why can't the site store non-Wikimedia images?": nothing structural, just a
+widening `cover` already had and `sights` never got.
+
+**The ripples were the work, not the schema.** A sight photo feeds five surfaces by fallback —
+the card, the masthead hero, the hub card/hero, the chapter-opener photo fans, and
+`extract-palette`'s identity accent — and every one of them tested `img.file` only, so a
+direct-`src` guide would have silently fallen through to the Painted Atlas and the generic
+country accent. All five now carry the source through. The lightbox was the sharpest: it read
+its credit via an `a[href*="commons.wikimedia.org"]` selector, which would have dropped
+attribution for exactly the photos whose licence requires it — now reads the rendered
+`.imgcredit`, one source of truth, link or plain text.
+
+**Audit gained a second authority.** Commons files keep the MediaWiki `missing` flag;
+direct URLs get a reachability probe (`extractPhotoUrls` + `checkUrl`), reported as its own
+section so a dead CC0 URL can't ship silently as a `.media-fail` plate. Both run independently —
+a Commons outage no longer suppresses the other half's findings.
+
+**Boundary check run, per doctrine:** the new render path had never executed, so it was forced
+once against real Korea data — all five widths resolved, credit chip linked, the no-`creditUrl`
+branch rendered as plain text, and a `src` missing `license` was confirmed to BLOCK the build
+with the intended message. Reverted after. (Sandbox still can't reach `commons.wikimedia.org`,
+so preview shows "Photo loads online" plates — environmental, not a regression.)
+
+**The `fetching-images` skill was folded IN, not installed alongside.** Creator's call: its
+content now lives as the guide-author skill's `references/image-sourcing.md` (source-selection
+table, both workflows, forbidden sources, the pre-ship checklist), with **fair use explicitly
+ruled out** — Waypoint is a published public site, so the four-factor test is a litigation
+defence, not a licence. Referenced from SKILL.md's read-list + photo step, verification-rules,
+block-types, CLAUDE.md, GUIDE_RUBRIC and MOTION. The marketplace itself
+(`warrenzhu050413/warren-claude-code-plugin-marketplace`) is registered in `~/.claude` user
+settings — container-local and ephemeral, so it does NOT survive; the repo copy is the durable one.
+
 ## Snapshot (2026-08-03, session #30 — geocode backfill finished; plan_b's first real content)
 
 **Denmark, Japan and US are now geocoded** (Korea shipped in session #29's last commit). 33
@@ -613,6 +651,29 @@ second tsconfig root, and the symptom looks like a code problem when it isn't.
 change-request prefill click is done and proven.)*
 
 ## Where we left off
+
+**Session #31 (2026-08-03):** widened `sights[].img` to accept royalty-free non-Commons photos
+(credit + license schema-required), propagated that through all five fallback surfaces, and
+folded the `fetching-images` skill into `waypoint-guide-author` as `references/image-sourcing.md`.
+
+**Re-prompt the creator with:** "You asked why the site couldn't store non-Wikimedia images —
+turned out to be nothing structural. `cover` has accepted royalty-free URLs since R4 with
+credit+license required; `sights[].img` just never got the same widening. It has it now, on
+identical terms. The schema was the easy half: a sight photo feeds the card, the masthead, the
+hub card, the chapter fans and the palette extractor by fallback, and all five tested `img.file`
+only — so a guide with direct-CDN photos would have silently shown the Painted Atlas and a
+generic country accent. The lightbox was worse: it found its credit by looking for a
+commons.wikimedia.org link, so it would have dropped attribution for precisely the photos whose
+licence demands it. All fixed, and the audit now probes direct URLs separately from the Commons
+API so a dead CC0 link can't ship quietly. Forced the new path once against real Korea data
+before trusting it — including confirming the build BLOCKS a `src` with no `license`. Per your
+call the fetching-images skill was folded into the guide-author skill rather than installed
+beside it, with fair use explicitly ruled out since the site is published. **No guide uses a
+direct `src` yet — the capability is live but unexercised; the natural next step is sourcing
+photos for whichever sights currently have none.** Pushed to
+`claude/install-image-fetching-skill-fbw43e`, no PR opened."
+
+---
 
 **Session #30 (2026-08-03):** finished the venue-geocode backfill (Denmark, Japan, US — Korea
 was already done) and shipped `plan_b`'s first real content, six entries on Japan.

@@ -280,7 +280,28 @@ const section = z.discriminatedUnion("type", [
   })) }),
   z.strictObject({ type: z.literal("sights"), group: z.string(), ...facets, title: z.string().optional(), items: z.array(z.object({
     name: z.string(), kicker: z.string().optional(), body: z.string().optional(),
-    img: z.object({ file: z.string(), alt: z.string().optional() }).optional(),
+    // A sight photo is either a Commons `file` (existence is machine-verifiable via the
+    // MediaWiki API — scripts/audit/check-photos.mjs) or a direct royalty-free CDN `src`
+    // carrying an optional `{w}` width token. Non-Commons licensing is NOT machine-verifiable,
+    // so `credit` + `license` become REQUIRED with `src` — the same trade `cover.src` makes.
+    img: z.object({
+      file: z.string().optional(),
+      src: z.string().regex(/^https:\/\//, "img.src must be an https URL").optional(),
+      alt: z.string().optional(),
+      credit: z.string().optional(),
+      creditUrl: z.string().regex(/^https:\/\//, "img.creditUrl must be an https URL").optional(),
+      license: z.string().optional(),
+    }).superRefine((im, ctx) => {
+      if (!im.file && !im.src) {
+        ctx.addIssue({ code: "custom", message: "img needs `file` (Commons) or `src` (royalty-free CDN) — an img object with neither renders nothing." });
+      }
+      if (im.file && im.src) {
+        ctx.addIssue({ code: "custom", path: ["src"], message: "img.file and img.src are two sources for one slot — pick one (Commons `file` wins ties in consumers, so a stray `src` would silently do nothing)." });
+      }
+      if (im.src && (!im.credit || !im.license)) {
+        ctx.addIssue({ code: "custom", path: ["src"], message: "a non-Commons img.src has no machine-verifiable licensing — `credit` and `license` are required alongside it (e.g. credit: \"Jane Doe · Pexels\", license: \"Pexels License\")." });
+      }
+    }).optional(),
     map: coord.optional(),
     ...visitable,
     ...provenance,

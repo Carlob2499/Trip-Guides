@@ -392,6 +392,59 @@ describe("content.config guides schema — cover (R4: widened sources + living v
   });
 });
 
+// The same widened-horizon trade cover.src makes, now applied to sight photos: a
+// repository of sights is only as broad as the sources it can draw on, but a source
+// whose licence is not machine-verifiable must carry its attribution in the data.
+describe("content.config guides schema — sights img (widened sources)", () => {
+  const sights = (img: unknown) => [{ type: "sights", group: "See", items: [{ name: "A spot", img }] }];
+
+  it("accepts the classic Commons file unchanged (no existing guide regresses)", () => {
+    const result = schema.safeParse(validGuide({ sections: sights({ file: "Nyhavn-Copenhagen.JPG", alt: "Nyhavn" }) }));
+    expect(result.success).toBe(true);
+  });
+
+  it("accepts a direct royalty-free src WITH credit + license", () => {
+    const result = schema.safeParse(validGuide({ sections: sights({
+      src: "https://images.pexels.com/photos/12345/seoul.jpg?w={w}",
+      credit: "Jane Doe · Pexels", license: "Pexels License", alt: "A street",
+    }) }));
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects a direct src without credit/license — attribution travels in the data or not at all", () => {
+    const result = schema.safeParse(validGuide({ sections: sights({ src: "https://images.pexels.com/photos/12345/seoul.jpg" }) }));
+    expect(result.success).toBe(false);
+    expect(issuePaths(result)).toContain("sections.0.items.0.img.src");
+  });
+
+  it("rejects an http (non-https) src", () => {
+    const result = schema.safeParse(validGuide({ sections: sights({
+      src: "http://images.pexels.com/photos/1/x.jpg", credit: "X", license: "Y",
+    }) }));
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects file + src together (two sources, one slot)", () => {
+    const result = schema.safeParse(validGuide({ sections: sights({
+      file: "A.jpg", src: "https://images.pexels.com/photos/1/x.jpg", credit: "X", license: "Y",
+    }) }));
+    expect(result.success).toBe(false);
+    expect(issuePaths(result)).toContain("sections.0.items.0.img.src");
+  });
+
+  it("rejects an img object with neither file nor src", () => {
+    const result = schema.safeParse(validGuide({ sections: sights({ alt: "orphaned alt text" }) }));
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects a non-https creditUrl", () => {
+    const result = schema.safeParse(validGuide({ sections: sights({
+      src: "https://images.pexels.com/photos/1/x.jpg", credit: "X", license: "Y", creditUrl: "http://pexels.com/x",
+    }) }));
+    expect(result.success).toBe(false);
+  });
+});
+
 describe("content.config guides schema — descriptors (R5 group-key guard)", () => {
   it("accepts descriptors whose keys are real section groups", () => {
     const result = schema.safeParse(validGuide({ descriptors: { Overview: "the lay of the land" } }));

@@ -126,14 +126,26 @@ export function dominantVibrant(pixels) {
   return [best.h, best.s, best.l];
 }
 
-// The same cover pick the hub + masthead make: guide.cover.file, else first sights img.
-function coverFileFor(guide) {
-  if (guide.cover?.file) return guide.cover.file;
+// The same cover pick the hub + masthead make: the guide's own cover (Commons `file` or a
+// direct royalty-free `src`), else its first sights photo — carrying whichever source THAT
+// photo uses. A guide whose art is all direct-CDN would otherwise extract nothing and fall
+// back to the generic country accent, silently losing the identity the photo was there to give.
+function coverPhotoFor(guide) {
+  if (guide.cover?.file) return { file: guide.cover.file };
+  if (guide.cover?.src) return { src: guide.cover.src };
   const flat = [];
   (function walk(secs) { for (const s of secs || []) { if (s?.sections) walk(s.sections); else if (s) flat.push(s); } })(guide.sections);
-  for (const s of flat) if (s.type === "sights") for (const it of s.items || []) if (it?.img?.file) return it.img.file;
+  for (const s of flat) if (s.type === "sights") for (const it of s.items || []) {
+    if (it?.img?.file) return { file: it.img.file };
+    if (it?.img?.src) return { src: it.img.src };
+  }
   return null;
 }
+
+const thumbUrlFor = (photo) =>
+  photo.src
+    ? photo.src.replace("{w}", "320")
+    : `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(photo.file)}?width=320`;
 
 async function readGuide(entryName) {
   const p = path.join(GUIDES_DIR, entryName);
@@ -151,9 +163,9 @@ async function readGuide(entryName) {
 }
 
 export async function extractFor(slug, guide) {
-  const file = coverFileFor(guide);
-  if (!file) return { slug, skip: "no cover/sight photo" };
-  const url = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(file)}?width=320`;
+  const photo = coverPhotoFor(guide);
+  if (!photo) return { slug, skip: "no cover/sight photo" };
+  const url = thumbUrlFor(photo);
   const res = await fetch(url, { headers: { "user-agent": "waypoint-palette/1.0 (+https://github.com/Carlob2499/Trip-Guides)" } });
   if (!res.ok) return { slug, skip: `thumb fetch ${res.status}` };
   const buf = Buffer.from(await res.arrayBuffer());
@@ -168,7 +180,7 @@ export async function extractFor(slug, guide) {
     primary,                                   // gated — becomes --accent everywhere
     secondary: hslToHex(ph, ps, Math.max(0.14, pl - 0.14)), // deeper companion (hover/rules)
     accent: hslToHex(h, Math.min(0.9, s), Math.min(0.8, Math.max(0.3, l))), // raw vibrant, decorative only
-    source_file: file,
+    source_file: photo.file ?? photo.src,
     extracted_on: new Date().toISOString().slice(0, 10),
   };
   await mkdir(OUT_DIR, { recursive: true });
