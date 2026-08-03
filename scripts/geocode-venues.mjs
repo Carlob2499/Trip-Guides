@@ -82,6 +82,7 @@ export function buildQuery(item, ctx = {}) {
  * Palace") pass; a substitution ("Melody House" → "Melody Cafe") does not.
  */
 export function acceptMatch(item, result) {
+  if (isCategoryName(item.name)) return { ok: false, why: "reads as a category, not a single place" };
   if (!result || result.error || result.notFound) return { ok: false, why: result?.error || "not found" };
   if (!Number.isFinite(result.lat) || !Number.isFinite(result.lng)) return { ok: false, why: "no coordinates returned" };
 
@@ -103,6 +104,52 @@ export function acceptMatch(item, result) {
   return { ok: false, why: `name mismatch — asked "${item.name}", Places returned "${result.name}"` };
 }
 
+/**
+ * Is this "venue" actually a CATEGORY rather than a place?
+ *
+ * Guides legitimately list a class of thing — "Konbini (7-Eleven, Lawson, FamilyMart)",
+ * "Paris Baguette / Tous les Jours", "Gyudon chains (…)". Places will happily resolve any of
+ * them to one arbitrary branch, and a pin saying "the convenience store is HERE" is a false
+ * claim about a category that is, by design, everywhere. These are left un-pinned.
+ */
+export function isCategoryName(name) {
+  const s = String(name || "");
+  return / \/ /.test(s)                         // slash-joined alternatives
+    || /\bchains?\b/i.test(s)                    // "…chains"
+    || /\([^)]*,[^)]*,[^)]*\)/.test(s);          // parenthetical brand list (2+ commas)
+}
+
+const EARTH_KM = 6371;
+export function haversineKm(a, b) {
+  const toRad = (d) => (d * Math.PI) / 180;
+  const dLat = toRad(b.lat - a.lat), dLng = toRad(b.lng - a.lng);
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLng / 2) ** 2;
+  return 2 * EARTH_KM * Math.asin(Math.min(1, Math.sqrt(h)));
+}
+
+/**
+ * Reject geographic outliers, judged against the OTHER results in the same file.
+ *
+ * The guard that name-matching cannot provide, and the reason this exists: on the first real
+ * Korea run, "Konbini (7-Eleven, Lawson, FamilyMart)" in the Tokyo section resolved to Staten
+ * Island, New York, and "Gyudon chains" to Osaka — both with names similar enough to pass
+ * acceptMatch. A guide file describes one place on earth, so the file's own median location is
+ * the honest reference: no configuration to maintain, and it adapts to a Tokyo section inside a
+ * Korea guide, which a guide-level country hint gets wrong by construction.
+ */
+export function flagOutliers(results, maxKm = 150) {
+  const pts = results.filter((r) => r.ok).map((r) => r.res);
+  if (pts.length < 3) return results;             // too few to establish a centre honestly
+  const mid = (xs) => { const s = [...xs].sort((a, b) => a - b); return s[Math.floor(s.length / 2)]; };
+  const centre = { lat: mid(pts.map((p) => p.lat)), lng: mid(pts.map((p) => p.lng)) };
+  return results.map((r) => {
+    if (!r.ok) return r;
+    const km = haversineKm(centre, r.res);
+    if (km <= maxKm) return r;
+    return { ...r, ok: false, why: `${Math.round(km)} km from the rest of this file — Places resolved a same-named place elsewhere` };
+  });
+}
+
 /** Every place item in a guide dir that still needs coordinates. */
 export function pendingItems(files) {
   const out = [];
@@ -121,12 +168,32 @@ export function pendingItems(files) {
 
 /* ── I/O ───────────────────────────────────────────────────────────────────────────── */
 
+/* Rewriting a content file must change ONLY the fields being added. The first run of this
+   script reformatted four Korea files end to end — 1,247 insertions for 43 field additions —
+   because it serialized at indent 1 with LF while the repo uses indent 2 with CRLF. A diff
+   nobody can read is a diff nobody can review, which defeats the whole propose-then-write
+   design. So both are detected from the file itself rather than assumed. */
+function detectFormat(raw) {
+  const eol = raw.includes("\r\n") ? "\r\n" : "\n";
+  const m = raw.split(/\r?\n/)[1]?.match(/^(\s+)/);
+  return { eol, indent: m ? m[1].length : 2, trailingNewline: /\r?\n$/.test(raw) };
+}
+
+function serialize(json, fmt) {
+  const body = JSON.stringify(json, null, fmt.indent).replace(/\n/g, fmt.eol);
+  return body + (fmt.trailingNewline ? fmt.eol : "");
+}
+
 function readGuideDir(slug) {
   const dir = path.join(GUIDES, slug);
   if (!fs.existsSync(dir)) throw new Error(`no guide directory: ${dir}`);
   return fs.readdirSync(dir)
     .filter((f) => f.endsWith(".json") && !f.startsWith("_") && f !== "facts.json")
-    .map((f) => ({ file: f, path: path.join(dir, f), json: JSON.parse(fs.readFileSync(path.join(dir, f), "utf8")) }));
+    .map((f) => {
+      const p = path.join(dir, f);
+      const raw = fs.readFileSync(p, "utf8");
+      return { file: f, path: p, json: JSON.parse(raw), fmt: detectFormat(raw) };
+    });
 }
 
 function guideMeta(slug) {
@@ -154,14 +221,26 @@ async function main(argv) {
   }
   console.log(`${slug}: ${pending.length} place(s) to resolve (country hint: ${ctx.country || "none"})\n`);
 
-  const accepted = [], rejected = [];
+  const graded = [];
   for (const row of pending) {
     const query = buildQuery(row.item, ctx);
     const res = await lookupVenue(query, { cc: ctx.country, check: "status" });
     const verdict = acceptMatch(row.item, res);
-    (verdict.ok ? accepted : rejected).push({ ...row, query, res, why: verdict.why });
+    graded.push({ ...row, query, res, ok: verdict.ok, why: verdict.why });
     await sleep(THROTTLE_MS);
   }
+
+  /* Outliers are judged PER FILE, not per guide: a guide file describes one place on earth,
+     but a guide can span several (Korea's own guide carries a Tokyo section). Judging against
+     the whole guide would reject every legitimate Tokyo pin. */
+  const byFile = new Map();
+  for (const g of graded) {
+    if (!byFile.has(g.file)) byFile.set(g.file, []);
+    byFile.get(g.file).push(g);
+  }
+  const checked = [...byFile.values()].flatMap((rows) => flagOutliers(rows));
+  const accepted = checked.filter((r) => r.ok);
+  const rejected = checked.filter((r) => !r.ok);
 
   for (const r of accepted) {
     const bits = [];
@@ -190,7 +269,7 @@ async function main(argv) {
     if (r.needsId && r.res.place_id) item.place_id = r.res.place_id;
     touched.add(target);
   }
-  for (const t of touched) fs.writeFileSync(t.path, JSON.stringify(t.json, null, 1) + "\n");
+  for (const t of touched) fs.writeFileSync(t.path, serialize(t.json, t.fmt));
   console.log(`\nWrote ${accepted.length} match(es) across ${touched.size} file(s).`);
 }
 

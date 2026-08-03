@@ -18,7 +18,8 @@
         },
         "verified_on": "2026-07-30",
         "shelf_life": "venue",
-        "source_url": "https://english.visitseoul.net/attractions/Gyeongbokgung/ENP000072"
+        "source_url": "https://english.visitseoul.net/attractions/Gyeongbokgung/ENP000072",
+        "place_id": "ChIJod7tSseifDUR9hXHLFNGMIs"
       },
       {
         "name": "Bukchon Hanok Village",
@@ -34,7 +35,8 @@
         },
         "verified_on": "2026-07-30",
         "shelf_life": "venue",
-        "source_url": "https://english.seoul.go.kr/notice-on-restrictions-for-tourist-visits-to-bukchon-special-management-area-effective-from-november-2024/"
+        "source_url": "https://english.seoul.go.kr/notice-on-restrictions-for-tourist-visits-to-bukchon-special-management-area-effective-from-november-2024/",
+        "place_id": "ChIJT8H4r9qifDURmuXJ_6m6vM0"
       },
       {
         "name": "N Seoul Tower (Namsan)",
@@ -50,7 +52,8 @@
         },
         "verified_on": "2026-07-30",
         "shelf_life": "venue",
-        "source_url": "https://www.nseoultower.co.kr/eng/visit/use2.asp"
+        "source_url": "https://www.nseoultower.co.kr/eng/visit/use2.asp",
+        "place_id": "ChIJqWqOqFeifDURpYJ5LnxX-Fw"
       },
       {
         "name": "Dongdaemun Design Plaza",
@@ -66,7 +69,8 @@
         },
         "verified_on": "2026-07-30",
         "shelf_life": "hours",
-        "source_url": "https://www.ddp.or.kr/"
+        "source_url": "https://www.ddp.or.kr/",
+        "place_id": "ChIJ8xRYr29FezUR3AtFqx2pIlw"
       },
       {
         "name": "Cheonggyecheon",
@@ -82,7 +86,8 @@
         },
         "verified_on": "2026-07-30",
         "shelf_life": "venue",
-        "source_url": "https://english.visitseoul.net/attractions/Cheonggyecheon-Stream/ENP000034"
+        "source_url": "https://english.visitseoul.net/attractions/Cheonggyecheon-Stream/ENP000034",
+        "place_id": "ChIJIwCT4-yifDUR1E63iG76hr0"
       },
       {
         "name": "Insadong",

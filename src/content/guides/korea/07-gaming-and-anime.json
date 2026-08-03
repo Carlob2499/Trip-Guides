@@ -43,7 +43,12 @@
         "area": "Yongsan",
         "book": "walk-in",
         "why": "Electronics floors carry games, trading cards, and figures.",
-        "crowd_tip": "Verify the current tenant mix at the mall, as renovations have shifted some vendors."
+        "crowd_tip": "Verify the current tenant mix at the mall, as renovations have shifted some vendors.",
+        "map": {
+          "lat": 37.52939,
+          "lng": 126.96509249999998
+        },
+        "place_id": "ChIJIyhMk2yjfDUR0NshJiURF5w"
       },
       {
         "name": "KWANGYA@Seoul (SM's official store)",
@@ -52,7 +57,12 @@
         "hours": "~10:30–20:00",
         "book": "walk-in",
         "how": "Ttukseom Station Exit 5, Line 2.",
-        "why": "SM artists' albums, photocards, and a media zone."
+        "why": "SM artists' albums, photocards, and a media zone.",
+        "map": {
+          "lat": 37.5448781,
+          "lng": 127.04371269999999
+        },
+        "place_id": "ChIJoz23m--lfDURUrMO6ZaR9FA"
       },
       {
         "name": "Myeongdong K-pop street",

@@ -7,7 +7,7 @@
    reading the guide. acceptMatch is what stands between the two, so it is tested harder than
    the rest of the script combined. */
 import { describe, it, expect } from "vitest";
-import { acceptMatch, buildQuery, normalizeName, pendingItems } from "../geocode-venues.mjs";
+import { acceptMatch, buildQuery, flagOutliers, haversineKm, isCategoryName, normalizeName, pendingItems } from "../geocode-venues.mjs";
 
 const ok = (name, lat = 37.5, lng = 127) => ({ name, lat, lng, place_id: "ChIJx" });
 
@@ -111,5 +111,76 @@ describe("normalizeName — non-decomposing letters", () => {
 
   it("lets a Danish venue match itself", () => {
     expect(acceptMatch({ name: "Kødbyens Fiskebar" }, ok("Kødbyens Fiskebar")).ok).toBe(true);
+  });
+});
+
+/* THE GUARD NAME-MATCHING CANNOT PROVIDE — found on the first real Korea run, not by reasoning.
+   "Konbini (7-Eleven, Lawson, FamilyMart)" in the Tokyo section resolved to Staten Island, New
+   York, and "Gyudon chains (…)" to Osaka. Both passed acceptMatch, because a brand name DOES
+   match a real store — somewhere on earth. Nothing had checked where. */
+describe("isCategoryName", () => {
+  it("refuses a class of thing that is, by design, everywhere", () => {
+    expect(isCategoryName("Konbini (7-Eleven, Lawson, FamilyMart)")).toBe(true);
+    expect(isCategoryName("Gyudon chains (Yoshinoya, Sukiya, Matsuya)")).toBe(true);
+    expect(isCategoryName("Paris Baguette / Tous les Jours")).toBe(true);
+    expect(isCategoryName("Convenience store (GS25 / CU)")).toBe(true);
+  });
+
+  it("leaves real venues alone, including parenthetical local-script names", () => {
+    expect(isCategoryName("Ossi Kalguksu Doryong (오씨칼국수 도룡점)")).toBe(false);
+    expect(isCategoryName("LoL Park (now CHZZK LoL Park)")).toBe(false);
+    expect(isCategoryName("Gyeongbokgung")).toBe(false);
+  });
+
+  it("is enforced by acceptMatch before any name comparison", () => {
+    const v = acceptMatch({ name: "Konbini (7-Eleven, Lawson, FamilyMart)" }, ok("Konbini", 40.6, -74.1));
+    expect(v).toMatchObject({ ok: false, why: "reads as a category, not a single place" });
+  });
+});
+
+describe("flagOutliers", () => {
+  const at = (name, lat, lng) => ({ ok: true, item: { name }, res: { name, lat, lng } });
+  // Nine real Tokyo results plus the two that escaped to Osaka and New York.
+  const tokyo = [
+    at("Shibuya Crossing", 35.65948, 139.70056), at("Shibuya Sky", 35.65867, 139.70198),
+    at("Senso-ji", 35.71477, 139.79666), at("Meiji Jingu", 35.6764, 139.69933),
+    at("teamLab", 35.64912, 139.78977), at("Uobei", 35.65943, 139.69792),
+    at("Ichiran", 35.66112, 139.70098), at("Tsukiji", 35.66477, 139.77025),
+    at("Omoide Yokocho", 35.6927, 139.69958),
+  ];
+
+  it("rejects a same-named place on another continent", () => {
+    const out = flagOutliers([...tokyo, at("Konbini", 40.61211, -74.13287)]);
+    const konbini = out.find((r) => r.item.name === "Konbini");
+    expect(konbini.ok).toBe(false);
+    expect(konbini.why).toMatch(/km from the rest of this file/);
+  });
+
+  it("rejects a same-named place in another city of the same country", () => {
+    const out = flagOutliers([...tokyo, at("Gyudon", 34.66441, 135.5033)]);   // Osaka
+    expect(out.find((r) => r.item.name === "Gyudon").ok).toBe(false);
+  });
+
+  it("keeps every genuine result in the file", () => {
+    const out = flagOutliers([...tokyo, at("Konbini", 40.61211, -74.13287)]);
+    expect(out.filter((r) => r.ok)).toHaveLength(tokyo.length);
+  });
+
+  it("declines to judge when there are too few results to establish a centre", () => {
+    const two = [at("A", 35.6, 139.7), at("B", 40.6, -74.1)];
+    expect(flagOutliers(two).every((r) => r.ok)).toBe(true);
+  });
+
+  it("leaves already-rejected rows untouched", () => {
+    const rows = [...tokyo, { ok: false, item: { name: "X" }, why: "not found" }];
+    expect(flagOutliers(rows).find((r) => r.item.name === "X").why).toBe("not found");
+  });
+});
+
+describe("haversineKm", () => {
+  it("measures the Tokyo→Osaka gap that motivated the check", () => {
+    const km = haversineKm({ lat: 35.66, lng: 139.70 }, { lat: 34.664, lng: 135.503 });
+    expect(km).toBeGreaterThan(380);
+    expect(km).toBeLessThan(420);
   });
 });

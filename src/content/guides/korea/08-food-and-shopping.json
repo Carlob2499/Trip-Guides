@@ -20,7 +20,12 @@
         "img": {
           "file": "Bibimbap 7.jpg",
           "alt": "Bibimbap with arranged vegetables and gochujang over rice"
-        }
+        },
+        "map": {
+          "lat": 37.552887999999996,
+          "lng": 126.92373500000001
+        },
+        "place_id": "ChIJabVo68OZfDUReP7-Ok07hyk"
       },
       {
         "name": "Tteokbokki · 떡볶이",
@@ -29,7 +34,12 @@
         "img": {
           "file": "Korean.snacks-Tteokbokki-08.jpg",
           "alt": "Tteokbokki rice cakes in red sauce with sesame seeds"
-        }
+        },
+        "map": {
+          "lat": 37.5632072,
+          "lng": 127.01509840000001
+        },
+        "place_id": "ChIJT9Fo5BWjfDUR8K7ErrUJuvQ"
       },
       {
         "name": "Chimaek · 치맥",
@@ -47,7 +57,12 @@
         "img": {
           "file": "KOCIS Mul-naengmyeon, Chilled Buckwheat Noodle Soup (4594756202).jpg",
           "alt": "Cold naengmyeon noodles in a metal bowl with ice, egg and beef"
-        }
+        },
+        "map": {
+          "lat": 37.5643077,
+          "lng": 126.99983470000001
+        },
+        "place_id": "ChIJb63Nih6jfDURs1emCe-s2EY"
       },
       {
         "name": "Gamjatang · 감자탕",
@@ -56,7 +71,12 @@
         "img": {
           "file": "Korean.food-Gamjatang-01.jpg",
           "alt": "Gamjatang pork spine stew with potato in red broth"
-        }
+        },
+        "map": {
+          "lat": 37.5428241,
+          "lng": 127.0543732
+        },
+        "place_id": "ChIJtftAMZGkfDUR-dM7GT6Vl3g"
       },
       {
         "name": "Hotteok · 호떡",
@@ -65,7 +85,12 @@
         "img": {
           "file": "Korean snack-Hotteok-01.jpg",
           "alt": "Hotteok sweet pancakes cooking on a street griddle"
-        }
+        },
+        "map": {
+          "lat": 37.5549511,
+          "lng": 126.93795430000002
+        },
+        "place_id": "ChIJZ4XfjJaYfDURNTyrgbQsBNw"
       },
       {
         "name": "Bingsu · 빙수",
@@ -74,7 +99,12 @@
         "img": {
           "file": "Bingsu 2.jpg",
           "alt": "Bowls of Korean bingsu shaved ice with red bean and fruit"
-        }
+        },
+        "map": {
+          "lat": 37.556478399999996,
+          "lng": 126.90519719999998
+        },
+        "place_id": "ChIJcVIL-iWZfDUR9YbWZUcmtx4"
       }
     ]
   },
@@ -166,7 +196,12 @@
         "book": "walk-in",
         "how": "On Jandari-ro 3an-gil (the indie bar and café alley running parallel to the main pedestrian zone). <a href='https://map.naver.com/v5/search/%EA%B9%83%EB%93%A4%20%ED%99%8D%EB%8C%80'>Naver Map</a>.",
         "why": "Small neighbourhood BBQ — authentic, locally-frequented, moderate prices, less tourist-facing than the main strip.",
-        "crowd_tip": "KBBQ backup if Ungteori or MUSSO are full."
+        "crowd_tip": "KBBQ backup if Ungteori or MUSSO are full.",
+        "map": {
+          "lat": 37.5503953,
+          "lng": 126.91980029999999
+        },
+        "place_id": "ChIJJ2fhXx6ZfDURAS3i9i8Wvho"
       },
       {
         "name": "Chicken Baengi (치킨뱅이 홍대점)",
@@ -177,7 +212,12 @@
         "book": "walk-in",
         "how": "From Hongik Univ. Station: ~10 min walk. <a href='https://map.naver.com/v5/search/%EC%B9%98%ED%82%A8%EB%B1%85%EC%9D%B4%20%ED%99%8D%EB%8C%80%EC%A0%90'>Naver Map</a>.",
         "why": "Chimaek (fried chicken + beer) — garlic chicken is the standout.",
-        "crowd_tip": "Busy Fri/Sat after 20:00 — arrive early. Best on Day 5 (Sun Jul 12) if the Daejeon pair returns early."
+        "crowd_tip": "Busy Fri/Sat after 20:00 — arrive early. Best on Day 5 (Sun Jul 12) if the Daejeon pair returns early.",
+        "map": {
+          "lat": 37.5558435,
+          "lng": 126.92398089999999
+        },
+        "place_id": "ChIJW4dsA8OYfDUR95as_oAgFhQ"
       },
       {
         "name": "Yookssam Naengmyeon (육쌈냉면 홍대2호점)",
@@ -199,7 +239,12 @@
         "book": "walk-in",
         "how": "From the Jongno base: Line 1 east 2 stops to Jongno 5-ga, Exit 7–8 (~5 min) — the market's on your doorstep now. <a href='https://map.naver.com/v5/search/%EA%B4%91%EC%9E%A5%EC%8B%9C%EC%9E%A5'>Naver Map</a>.",
         "why": "Market street food alleys — bindaetteok, mayak gimbap and more.",
-        "crowd_tip": "A weekday is emptier; it fits as the Monday fallback if you skip Busan (see the Monday contingencies), or as a lunch stop near Insadong on Tue Jul 14 after the Secret Garden."
+        "crowd_tip": "A weekday is emptier; it fits as the Monday fallback if you skip Busan (see the Monday contingencies), or as a lunch stop near Insadong on Tue Jul 14 after the Secret Garden.",
+        "map": {
+          "lat": 37.570039799999996,
+          "lng": 126.99960360000001
+        },
+        "place_id": "ChIJm3V0fu2ifDURRJ8IMUijVtY"
       },
       {
         "name": "Sulbing (설빙)",
@@ -209,7 +254,12 @@
         "book": "walk-in",
         "how": "<a href='https://map.naver.com/v5/search/%EC%84%A4%EB%B9%99%20%ED%99%8D%EB%8C%80'>find the nearest Hongdae branch</a>; confirm on <a href='https://www.sulbing.com'>sulbing.com</a>.",
         "why": "Bingsu — perfect mid-afternoon on any hot day.",
-        "crowd_tip": "No booking needed."
+        "crowd_tip": "No booking needed.",
+        "map": {
+          "lat": 37.555319399999995,
+          "lng": 126.92267860000001
+        },
+        "place_id": "ChIJI0qfR8OYfDUR2ZtOVHA-Wec"
       },
       {
         "name": "Sungsimdang DCC Branch (성심당 DCC점)",
@@ -219,7 +269,12 @@
         "book": "walk-in",
         "how": "Same street as DCC II, short walk. <a href='https://sungsimdang.co.kr/31/17'>sungsimdang.co.kr</a>. <a href='https://map.naver.com/v5/search/%EC%84%B1%EC%8B%AC%EB%8B%B9%20DCC%EC%A0%90'>Naver Map</a>.",
         "why": "Legendary Daejeon bakery — fried soboro and chive breads.",
-        "crowd_tip": "Grab breakfast before the arena on Sat Jul 11."
+        "crowd_tip": "Grab breakfast before the arena on Sat Jul 11.",
+        "map": {
+          "lat": 36.3753313,
+          "lng": 127.3924207
+        },
+        "place_id": "ChIJZQFX-I9JZTURVfN9ZAhw1Iw"
       },
       {
         "name": "Ossi Kalguksu Doryong (오씨칼국수 도룡점)",
@@ -275,7 +330,12 @@
         "book": "walk-in",
         "how": "From Gyeongbokgung main gate: ~10 min walk south toward Gwanghwamun Square. <a href='https://map.naver.com/v5/search/%EA%B4%91%ED%99%94%EB%AC%B8%EB%AF%B8%EC%A7%84%20%EB%B3%B8%EC%A0%90'>Naver Map</a>.",
         "why": "2026 Michelin Bib Gourmand. Cold buckwheat noodles (냉메밀) and warm versions.",
-        "crowd_tip": "Lunch queue 12:00–13:00 — arrive before noon or at 13:30. Best fit: right after Gyeongbokgung, before the Bukchon afternoon."
+        "crowd_tip": "Lunch queue 12:00–13:00 — arrive before noon or at 13:30. Best fit: right after Gyeongbokgung, before the Bukchon afternoon.",
+        "map": {
+          "lat": 37.570597299999996,
+          "lng": 126.9799047
+        },
+        "place_id": "ChIJUdO28-uifDURutXAwIaJQjw"
       },
       {
         "name": "Bukchon Sonmandu (북촌손만두)",
@@ -307,7 +367,12 @@
         "book": "walk-in",
         "how": "Branches around Jongno/Insadong — look for the yellow signs.",
         "why": "Quick, cheap, no language needed — point at the menu pictures. The best fast breakfast before an early palace day.",
-        "crowd_tip": "5–10 min queue on weekdays, longer on weekends."
+        "crowd_tip": "5–10 min queue on weekdays, longer on weekends.",
+        "map": {
+          "lat": 37.5701621,
+          "lng": 126.98952279999999
+        },
+        "place_id": "ChIJIaugMIujfDUR2sg9L75lNOU"
       },
       {
         "name": "Paris Baguette / Tous les Jours",
@@ -370,7 +435,12 @@
         "book": "walk-in",
         "how": "5-min walk from Euljiro 1-ga Station Exit 6.",
         "why": "The standby for post-midnight hangover soup (haejang-guk): pork rib soup, ramen, and white sliced pork.",
-        "crowd_tip": "Worth the ~30-min trip from Hongdae if you specifically want haejang-guk; otherwise the Hongdae strip has you covered."
+        "crowd_tip": "Worth the ~30-min trip from Hongdae if you specifically want haejang-guk; otherwise the Hongdae strip has you covered.",
+        "map": {
+          "lat": 37.564366299999996,
+          "lng": 126.98476419999999
+        },
+        "place_id": "ChIJpzCUGXujfDUR3lAdtfBgcGo"
       },
       {
         "name": "Convenience store (GS25 / CU)",
@@ -403,42 +473,77 @@
         "name": "Olive Young Myeongdong Town",
         "area": "Myeongdong",
         "hours": "~10:00–22:30; 2 floors",
-        "why": "In-store VAT refund, bag storage."
+        "why": "In-store VAT refund, bag storage.",
+        "map": {
+          "lat": 37.563946,
+          "lng": 126.98516239999998
+        },
+        "place_id": "ChIJ9XDV4O-ifDURKjI94KEc1h4"
       },
       {
         "name": "Olive Young Jonggak",
         "area": "Jongno",
-        "why": "Across from the base — the departure-morning haul."
+        "why": "Across from the base — the departure-morning haul.",
+        "map": {
+          "lat": 37.5704348,
+          "lng": 126.98429449999999
+        },
+        "place_id": "ChIJIdty5eiifDURCQbJ_AEGOhw"
       },
       {
         "name": "Stüssy Seoul Chapter",
         "area": "Gangnam — Apgujeong",
         "address": "42 Apgujeong-ro 46-gil, Gangnam",
         "hours": "11:00–20:00",
-        "why": "Kasina cafe upstairs."
+        "why": "Kasina cafe upstairs.",
+        "map": {
+          "lat": 37.5235531,
+          "lng": 127.0365977
+        },
+        "place_id": "ChIJ1XD5BwCjfDURG3a8wQAfvFg"
       },
       {
         "name": "LoL Park Riot store",
         "area": "Jongno",
         "hours": "~10:00–19:00",
-        "how": "Gran Seoul, Jonggak Exit 1."
+        "how": "Gran Seoul, Jonggak Exit 1.",
+        "map": {
+          "lat": 37.571224,
+          "lng": 126.98151670000001
+        },
+        "place_id": "ChIJny4XAzCjfDURddP-mnc3F5I"
       },
       {
         "name": "T1 Base Camp",
         "area": "Hongdae",
         "address": "147 Yanghwa-ro, Hongdae (B1)",
-        "hours": "Shop 10:30–22:00"
+        "hours": "Shop 10:30–22:00",
+        "map": {
+          "lat": 37.5560392,
+          "lng": 126.92229819999999
+        },
+        "place_id": "ChIJkbWl1GmZfDURkq7K2OatXSU"
       },
       {
         "name": "Line Friends Square",
         "area": "Myeongdong",
-        "hours": "~11:00–22:00"
+        "hours": "~11:00–22:00",
+        "map": {
+          "lat": 37.5638443,
+          "lng": 126.98459749999999
+        },
+        "place_id": "ChIJ15NKIfGjfDUR0-rdsKjd8o8"
       },
       {
         "name": "KWANGYA@Seoul (SM)",
         "area": "Seongsu",
         "hours": "~10:30–20:00",
-        "how": "Ttukseom Exit 5."
+        "how": "Ttukseom Exit 5.",
+        "map": {
+          "lat": 37.5448781,
+          "lng": 127.04371269999999
+        },
+        "place_id": "ChIJoz23m--lfDURUrMO6ZaR9FA"
       }
     ]
   },
@@ -455,7 +560,12 @@
         "hours": "11:00–21:00",
         "book": "walk-in",
         "how": "Near Exit 9.",
-        "why": "Flagship store — Korean casualwear at a wide price range."
+        "why": "Flagship store — Korean casualwear at a wide price range.",
+        "map": {
+          "lat": 37.5553946,
+          "lng": 126.92237430000002
+        },
+        "place_id": "ChIJz5aNU5iZfDURlDbbKwiBNwM"
       },
       {
         "name": "Gentle Monster Hongdae",
@@ -463,7 +573,12 @@
         "address": "54 Dokmak-ro 7-gil",
         "hours": "12:00–22:00",
         "book": "walk-in",
-        "why": "An art-installation eyewear store — free to walk through."
+        "why": "An art-installation eyewear store — free to walk through.",
+        "map": {
+          "lat": 37.5500531,
+          "lng": 126.92008349999998
+        },
+        "place_id": "ChIJwUyyb9CYfDURgnX32tMOh-c"
       },
       {
         "name": "Ader Error",
@@ -471,7 +586,12 @@
         "how": "Line 2, ~30 min from central Seoul.",
         "book": "walk-in",
         "why": "Design-forward Korean fashion — worth the trip if that's your thing.",
-        "crowd_tip": "Has moved to Seongsu."
+        "crowd_tip": "Has moved to Seongsu.",
+        "map": {
+          "lat": 37.5422211,
+          "lng": 127.0565311
+        },
+        "place_id": "ChIJsSbCO8ylfDURYEzcgSjCan0"
       },
       {
         "name": "LoL Park (now CHZZK LoL Park)",
@@ -480,7 +600,12 @@
         "hours": "Riot Store, café and exhibits ≈10:00–19:00 (arena seating needs an LCK match ticket); in-house PC bang runs 24 h",
         "book": "walk-in",
         "how": "Jonggak Station (Line 1) Exit 1. <a href='https://english.visitseoul.net/entertainment/LoL%20Park_/50659'>Visit Seoul listing</a>.",
-        "why": "The official LCK arena — Riot Store, café and exhibits open to walk-ins."
+        "why": "The official LCK arena — Riot Store, café and exhibits open to walk-ins.",
+        "map": {
+          "lat": 37.571224,
+          "lng": 126.98151670000001
+        },
+        "place_id": "ChIJny4XAzCjfDURddP-mnc3F5I"
       },
       {
         "name": "Animate Hongdae",
@@ -489,14 +614,24 @@
         "hours": "11:00–21:40",
         "book": "walk-in",
         "how": "Right at Hongik Univ. Station Exit 4.",
-        "why": "Japan's anime-goods chain — figures, manga, game and VTuber merch."
+        "why": "Japan's anime-goods chain — figures, manga, game and VTuber merch.",
+        "map": {
+          "lat": 37.558054299999995,
+          "lng": 126.92608209999999
+        },
+        "place_id": "ChIJIS5I20WZfDUR94oKsom82WA"
       },
       {
         "name": "Yongsan i'Park Mall",
         "area": "Yongsan",
         "how": "~10 min via Line 1 south from Yongsan Station.",
         "book": "walk-in",
-        "why": "Electronics, trading cards and figures across several floors."
+        "why": "Electronics, trading cards and figures across several floors.",
+        "map": {
+          "lat": 37.52939,
+          "lng": 126.96509249999998
+        },
+        "place_id": "ChIJIyhMk2yjfDUR0NshJiURF5w"
       }
     ],
     "verified_on": "2026-07-07",

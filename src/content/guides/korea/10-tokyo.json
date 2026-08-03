@@ -56,7 +56,12 @@
         "book": "walk-in",
         "how": "Shibuya Station.",
         "why": "The world's busiest scramble.",
-        "crowd_tip": "Best at street level after dark, plus an aerial look from Shibuya Sky or the 2nd-floor Starbucks."
+        "crowd_tip": "Best at street level after dark, plus an aerial look from Shibuya Sky or the 2nd-floor Starbucks.",
+        "map": {
+          "lat": 35.659482,
+          "lng": 139.7005596
+        },
+        "place_id": "ChIJK9EM68qLGGARacmu4KJj5SA"
       },
       {
         "name": "Shibuya Sky",
@@ -67,7 +72,12 @@
         "book_url": "https://www.gotokyo.org/en/spot/1749/index.html",
         "how": "Atop Shibuya Scramble Square. <a href='https://www.gotokyo.org/en/spot/1749/index.html' target='_blank' rel='noopener noreferrer'>Official info</a>.",
         "why": "Open-air rooftop over the crossing.",
-        "crowd_tip": "Book a sunset slot early."
+        "crowd_tip": "Book a sunset slot early.",
+        "map": {
+          "lat": 35.6586719,
+          "lng": 139.7019848
+        },
+        "place_id": "ChIJ4Rr2JWiLGGARcyRSHuZ-9G8"
       },
       {
         "name": "Senso-ji",
@@ -76,7 +86,12 @@
         "book": "walk-in",
         "how": "Asakusa Station.",
         "why": "Tokyo's oldest temple.",
-        "crowd_tip": "Walk Nakamise street for street snacks and souvenirs."
+        "crowd_tip": "Walk Nakamise street for street snacks and souvenirs.",
+        "map": {
+          "lat": 35.7147651,
+          "lng": 139.7966553
+        },
+        "place_id": "ChIJ8T1GpMGOGGARDYGSgpooDWw"
       },
       {
         "name": "Meiji Jingu",
@@ -85,7 +100,12 @@
         "book": "walk-in",
         "how": "Harajuku Station.",
         "why": "A forest shrine in the middle of the city.",
-        "crowd_tip": "Pair with Harajuku (Takeshita St) and Omotesando."
+        "crowd_tip": "Pair with Harajuku (Takeshita St) and Omotesando.",
+        "map": {
+          "lat": 35.6763976,
+          "lng": 139.6993259
+        },
+        "place_id": "ChIJ5SZMmreMGGARcz8QSTiJyo8"
       },
       {
         "name": "teamLab Planets",
@@ -95,7 +115,12 @@
         "book_url": "https://www.teamlab.art/e/planets/",
         "how": "Shin-Toyosu (Yurikamome). <a href='https://www.teamlab.art/e/planets/' target='_blank' rel='noopener noreferrer'>Official site</a>.",
         "why": "Barefoot, immersive digital-art rooms.",
-        "crowd_tip": "Book ahead. ⚠ Confirm the 2026 ticket price online."
+        "crowd_tip": "Book ahead. ⚠ Confirm the 2026 ticket price online.",
+        "map": {
+          "lat": 35.6491207,
+          "lng": 139.7897739
+        },
+        "place_id": "ChIJSeco5wiJGGARItbTS8lQ5G0"
       },
       {
         "name": "Shinjuku after dark",
@@ -128,14 +153,24 @@
         "price": "Plates from ≈¥120",
         "book": "walk-in",
         "why": "Sushi fired to your seat on high-speed lanes — cheap, fast, fun, solo-friendly.",
-        "crowd_tip": "Skip 'Genki Sushi Shibuya' — that original closed in 2020."
+        "crowd_tip": "Skip 'Genki Sushi Shibuya' — that original closed in 2020.",
+        "map": {
+          "lat": 35.6594349,
+          "lng": 139.6979207
+        },
+        "place_id": "ChIJaTXpw6mMGGARP-d-_tbssVE"
       },
       {
         "name": "Ichiran",
         "area": "Shibuya",
         "hours": "⚠ Check the exact branch hours on the day",
         "book": "walk-in",
-        "why": "Solo ramen booths, order by ticket machine; a Shibuya branch keeps late hours."
+        "why": "Solo ramen booths, order by ticket machine; a Shibuya branch keeps late hours.",
+        "map": {
+          "lat": 35.6611185,
+          "lng": 139.7009846
+        },
+        "place_id": "ChIJOWucdKiMGGARbppa4b4CKA8"
       },
       {
         "name": "Tsukiji Outer Market",
@@ -145,7 +180,12 @@
         "book": "walk-in",
         "how": "Tsukiji Station.",
         "why": "Sushi & street-food breakfast.",
-        "crowd_tip": "This only works if you land early Saturday; otherwise skip it this trip."
+        "crowd_tip": "This only works if you land early Saturday; otherwise skip it this trip.",
+        "map": {
+          "lat": 35.6647703,
+          "lng": 139.7702515
+        },
+        "place_id": "ChIJW2cLzSGLGGARXAKXv6EkbqI"
       },
       {
         "name": "Gyudon chains (Yoshinoya, Sukiya, Matsuya)",
@@ -166,7 +206,12 @@
         "name": "Omoide Yokocho",
         "area": "Shinjuku",
         "book": "walk-in",
-        "why": "Smoky yakitori and beer under the tracks; atmospheric and cash-friendly."
+        "why": "Smoky yakitori and beer under the tracks; atmospheric and cash-friendly.",
+        "map": {
+          "lat": 35.692703699999996,
+          "lng": 139.6995778
+        },
+        "place_id": "ChIJP9eKBdeMGGAR0zzBXJNVj5A"
       }
     ],
     "verified_on": "2026-07-10",
