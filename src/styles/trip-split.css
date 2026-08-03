@@ -6,7 +6,13 @@
    is the separate TripSplit group-expense-and-settle-up tool + the Group Vote
    panel, which reuses TripSplit's card/button styling — hence sharing one file). */
 
-.split-wrap{padding:1.4rem 0 3rem;max-width:680px}
+/* Centered, and wider on desktop (2026-08-02, creator: "not centered / could be more spread
+   out"). The panel used to pin hard left — max-width:680px with no auto margins left 582px of
+   dead space beside it at 1280px, measured. margin-inline centers it like every content column;
+   the desktop bump to 840px lets the expense/settle grids breathe (their 7rem/1fr/5.5rem rows
+   were designed tight for 680 — the extra width all flows to the 1fr name/label column). */
+.split-wrap{padding:1.4rem 0 3rem;max-width:680px;margin-inline:auto}
+@media(min-width:1000px){.split-wrap{max-width:840px}}
 .split-toolbar{margin-bottom:1.2rem}
 .split-title{font-family:var(--font-display);font-weight:640;letter-spacing:-.012em;font-size:clamp(1.8rem,5vw,2.4rem);line-height:1.05;margin-bottom:.3rem}
 .split-desc{color:var(--muted);font-size:var(--text-small);line-height:1.6}
