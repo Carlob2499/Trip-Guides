@@ -67,6 +67,11 @@ export function derivePlannerData(sections: Section[]): { days: PlannerDay[]; pi
       pins.push({
         id: `d${day.idx}-${pinSlug(s.name)}-${si}`, name: s.name,
         lat: s.lat, lng: s.lng, local: null, kind: "point",
+        // A day stop has no filter category (it is day-indexed, not group-indexed) and the
+        // waypoints schema carries no place_id — both null rather than absent, so PlannerPin
+        // actually satisfies Pin. They were simply missed when Pin gained these two fields,
+        // which is what has been failing `npm run typecheck` and blocking every deploy since.
+        cat: null, placeId: null,
         dayIdx: day.idx, time: s.time,
       });
     });
