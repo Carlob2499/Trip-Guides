@@ -352,6 +352,11 @@ a.stale-pill:hover{background:color-mix(in srgb,var(--warn) 12%,transparent)}
 .pace{font-size:var(--text-caption);color:var(--muted);font-family:var(--font-data);margin:.25rem 0 .6rem;line-height:1.55;padding-left:.7rem;border-left:2px solid var(--rule2);overflow-wrap:anywhere}
 .lsnote{display:block;font-size:var(--text-small);color:var(--green);margin:.5rem 0 .15rem;font-style:italic;line-height:1.55}
 .fit{font-size:var(--text-small);color:var(--muted);margin-top:.35rem}
+/* Plan B — the researched inclement-day alternate (days[].items[].plan_b). A quiet framed
+   aside, not a warning: the trip isn't broken, the day just has a second verified answer. */
+.day-planb{display:block;margin:.55rem 0 .2rem;padding:.5rem .7rem;background:color-mix(in srgb,var(--accent) 6%,transparent);border-left:2px solid var(--accent);border-radius:0 6px 6px 0;font-size:var(--text-small);line-height:1.6}
+.planb-label{display:block;font-family:var(--font-data);font-weight:700;font-size:var(--text-caption);letter-spacing:.02em;color:var(--accent-ink);margin-bottom:.15rem}
+.planb-body p{margin:.2rem 0 0}
 .daykit{margin-top:.6rem;padding:.6rem .8rem;background:var(--bg);border-radius:5px;border:1px solid var(--rule)}
 .kit-label{display:block;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin-bottom:.2rem}
 @media(max-width:520px){.day{grid-template-columns:1fr;gap:.3rem}.day .d{padding-top:0}}

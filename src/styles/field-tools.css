@@ -137,6 +137,9 @@
 
 /* ── Focus Today TL;DR ────────────────────────────────────────────────────── */
 .focus-tldr{margin:.45rem 0 0;font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);line-height:1.4;color:var(--accent-ink)}
+/* Plan B clone (guide.css .day-planb carries the base look) — bump the body type for the
+   held-at-arm's-length street reading this whole view is designed around. */
+.focus-planb{margin-top:.7rem;font-size:var(--text-body)}
 .focus-sun{margin:.5rem 0 0;font-family:var(--font-data);font-size:var(--text-control);color:var(--muted)}
 
 /* ── Budget burn pill ─────────────────────────────────────────────────────── */

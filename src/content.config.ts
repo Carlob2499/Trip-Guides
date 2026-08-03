@@ -228,6 +228,20 @@ const section = z.discriminatedUnion("type", [
     // researched content (never new facts). Rendered huge in Focus Today and as
     // the day card's lead line. Researched guides should always set it.
     tldr: z.string().optional(),
+    // ADDITIVE: the inclement-day alternate (creator ruling 2026-08-02, from a lived
+    // Korea moment: jangma rain on the arrival day → jjimjilbang until it passed →
+    // dinner — a refuge that doubled as post-flight recovery). Complements the
+    // day-swap advisory, which reorders WHOLE days and goes silent when no dry day
+    // exists to swap with — exactly the monsoon case where a refuge matters most.
+    // Research-time content, never runtime generation: the alternate is a venue
+    // claim like any other, so provenance is REQUIRED (same reasoning as entry[]).
+    // Absent = nothing renders — honest blank, the critic decides if that's a gap.
+    plan_b: z.object({
+      trigger: z.enum(["rain", "closure"]),
+      body: z.string().min(1),
+      source_url: z.url(),
+      verified_on: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    }).optional(),
     // ADDITIVE (Plan view): ordered stops for the day. Powers the day-synced
     // planner map (pins + route line per day), the day stop-list, and GPX export.
     // All optional — guides adopt incrementally; coords must come from a verified

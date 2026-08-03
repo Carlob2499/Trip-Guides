@@ -404,3 +404,47 @@ describe("content.config guides schema — descriptors (R5 group-key guard)", ()
     expect(issuePaths(result)).toContain("descriptors.Getting around");
   });
 });
+
+// Plan B — the inclement-day alternate (creator ruling 2026-08-02). The alternate names a
+// venue, which makes it a perishable claim: provenance is REQUIRED at the schema level, same
+// discipline as entry[], because "go to the jjimjilbang" with no source and no date is
+// exactly the unverified-recommendation class the whole pipeline exists to refuse.
+describe("content.config guides schema — plan_b (inclement-day alternate)", () => {
+  const day = (plan_b: unknown) => [{
+    type: "days", group: "Days",
+    items: [{ date: "Wed Jul 8", title: "Palaces", plan_b }],
+  }];
+
+  it("accepts a sourced rain alternate", () => {
+    const result = schema.safeParse(validGuide({ sections: day({
+      trigger: "rain",
+      body: "<p>Head to <b>Siloam Sauna</b> (jjimjilbang, 3 min from Seoul Station) and wait it out.</p>",
+      source_url: "https://www.siloamsauna.com/",
+      verified_on: "2026-08-02",
+    }) }));
+    expect(issuePaths(result)).toEqual([]);
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects an alternate with no source — a refuge claim is perishable like any other", () => {
+    const result = schema.safeParse(validGuide({ sections: day({
+      trigger: "rain", body: "<p>Find a jjimjilbang.</p>", verified_on: "2026-08-02",
+    }) }));
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects a trigger outside rain/closure", () => {
+    const result = schema.safeParse(validGuide({ sections: day({
+      trigger: "meteor", body: "<p>x</p>", source_url: "https://example.com/", verified_on: "2026-08-02",
+    }) }));
+    expect(result.success).toBe(false);
+  });
+
+  it("plan_b body rides the prose tag allowlist (a <script> there fails like anywhere else)", () => {
+    const result = schema.safeParse(validGuide({ sections: day({
+      trigger: "closure", body: "<p>ok</p><script>alert(1)</script>",
+      source_url: "https://example.com/", verified_on: "2026-08-02",
+    }) }));
+    expect(result.success).toBe(false);
+  });
+});

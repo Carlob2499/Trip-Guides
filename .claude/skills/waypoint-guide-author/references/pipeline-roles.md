@@ -69,11 +69,18 @@ and it owns graduation.
    - **MEALS & ENERGY** — are food picks where the day actually puts the traveler at
      mealtimes? A late night followed by a dawn start?
    - **TONE** — does any copy read like a brochure or a model? Flat, useful, human.
+   - **INCLEMENT COVER** — does every day inside a known weather window (jangma, monsoon,
+     rainy season) or anchored on a closable venue carry a researched `plan_b`, or an
+     explicit "no good alternate" note in the intake doc? A rain-window day with neither is
+     a finding: the traveler will stand in the rain with a guide that has no answer. (Born
+     from a real trip — the Korea party rode out a jangma downpour in a jjimjilbang, which
+     doubled as post-flight recovery; the guide hadn't told them to.) Do NOT resolve this
+     scan by inventing an alternate — an unverifiable one gets the honest note instead.
    - **COMMON SENSE** — whatever a friend would catch: thin buffers, a "backup" worse than
      nothing, a plan that ignores the party's stated pace.
 
 Scans 1–4 cite a `docs/GUIDE_RUBRIC.md` row; scan 5 cites its lens (pacing arc / geography /
-meals & energy / tone / common sense). Judge boldly — a reorder or a swap you can justify is
+meals & energy / tone / inclement cover / common sense). Judge boldly — a reorder or a swap you can justify is
 worth proposing even when nothing is factually wrong.
 
 ### Findings — `## Critic findings` in the intake doc, ALWAYS present

@@ -53,6 +53,15 @@ Honest property.
 
 ## Pace, heat and commuting
 
+- **When weather broke a day, the answer was a refuge, not a reshuffle.** During a jangma
+  downpour early in the Korea trip, the party went to a jjimjilbang and stayed until the
+  rain subsided, then went to dinner — and the maker singled it out as what let them "relax
+  and recalibrate for the start of our trip after the flight". The winning alternate did
+  double duty: rain shelter AND post-flight recovery, in one stop. **[reported]**
+  → *Design implication:* weather-window days owe a researched `plan_b` (the schema field
+  this pattern created, 2026-08-02) — and the best alternates are restorative places you
+  can stay for hours (bathhouse, market hall, arcade), not a second sightseeing venue.
+  A museum swap answers the rain; a jjimjilbang answers the rain *and* the fatigue.
 - **Low-commute clustering is an explicit priority**, especially in heat. The Monday Busan
   day was rebuilt to "combine whatever is possible for highest efficiency and lower
   stress/commute times in this heat". **[stated]**

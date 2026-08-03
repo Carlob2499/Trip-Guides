@@ -244,6 +244,15 @@ import { trapFocus, migrateStorageKey } from "../../../scripts/util.js";
         var tldrEl = head.querySelector(".focus-tldr");
         if (tldrSrc) tldrEl.textContent = tldrSrc.textContent;
         else tldrEl.remove();
+        /* Plan B rides along when today carries one — cloned from the card, same
+           single-source rule as everything else in this view. On a monsoon day the
+           refuge answer belongs on the street screen, not two taps back. */
+        var planbSrc = todayCard.querySelector(".day-planb");
+        if (planbSrc) {
+          var pb = planbSrc.cloneNode(true);
+          pb.classList.add("focus-planb");
+          head.appendChild(pb);
+        }
         focusSunEl = head.querySelector(".focus-sun");
         focusEl.appendChild(head);
         var list = document.createElement("ol");

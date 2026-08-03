@@ -147,6 +147,22 @@ conventions, render behavior, and the verification rules attached to a field.
   advisory (rain on an `outdoor` day + a dry `indoor` day nearby suggests the swap).
   Explicit tags only — both features stay silent on untagged days rather than
   guessing from prose. `constraints` are strings like "Closed Mondays".
+
+  **`plan_b` — the inclement-day alternate (research owes this, 2026-08-02).**
+  `{ trigger: "rain"|"closure", body, source_url, verified_on }` — a researched
+  answer to "this day just broke": a verified refuge for a rain-window day, or the
+  fallback when the day's anchor venue can close. Provenance is schema-REQUIRED —
+  an alternate names a venue, which makes it perishable like any other claim.
+  The obligation: **any day inside a known weather window** (monsoon/jangma/rainy
+  season — the Holidays & weather research already establishes these) **or anchored
+  on a closable venue owes either a `plan_b` or an explicit "no good alternate"
+  note in the intake doc.** The best alternates do double duty — the pattern that
+  created this field was a jjimjilbang on a jangma arrival day, refuge AND
+  post-flight recovery in one stop (see `docs/TRAVELER_PATTERNS.md`). Distinct
+  from `env`/day-swap: the swap reorders whole days and goes silent when no dry
+  day exists — `plan_b` is the answer for exactly that case. Never invent one:
+  a weather-window day with no researched alternate gets the honest note, not a
+  guessed venue.
 - **`venues`** — scannable cards for food, shopping, and activity picks. Each item
   has structured fields (name, area, address, phone, hours, closed, book, price,
   crowd_tip, why, how, map) — `why` is ONE compelling line, not a paragraph.

@@ -118,6 +118,16 @@ const actualFor = (date: string) =>
           )}
           {d.note && <span class="lsnote">🌿 <Fragment set:html={d.note} /></span>}
           {d.body && <div><Fragment set:html={d.body} /></div>}
+          {/* Plan B — the researched inclement-day alternate (schema: days[].items[].plan_b).
+              Rendered in the card so Focus Today can clone it (single source of truth,
+              same pattern as tldr/stops). Provenance is schema-required; the date renders
+              as the standard checked stamp so the alternate reads as verified, not vibes. */}
+          {d.plan_b && (
+            <div class={`day-planb planb-${d.plan_b.trigger}`}>
+              <span class="planb-label">{d.plan_b.trigger === "rain" ? "☂ Rain plan" : "⚑ If it's closed"}</span>
+              <span class="planb-body"><Fragment set:html={d.plan_b.body} /></span>
+            </div>
+          )}
           {d.fit  && <div class="fit">Fit: <Fragment set:html={d.fit} /></div>}
           {d.checklist && d.checklist.length > 0 && (
             <div class="daykit">
