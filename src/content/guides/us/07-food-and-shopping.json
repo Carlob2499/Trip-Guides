@@ -1,0 +1,47 @@
+[
+  {
+    "type": "venues",
+    "group": "Food & shopping",
+    "title": "Where to eat",
+    "intro": "<p>A note on tourist-trap avoidance: the generic “best restaurants in Sedona” lists skew toward the Uptown strip closest to hotels — this guide deliberately routes through spots local guides actually name as where residents eat.</p>",
+    "items": [
+      {
+        "name": "Wildcraft Cafe",
+        "hours": "⚠ Varies by day of week — confirm before you go",
+        "why": "Health-conscious, organic, vegan/paleo/gluten-free options — an easy local breakfast or lunch that isn't a hotel buffet."
+      },
+      {
+        "name": "Elote Cafe",
+        "why": "Sedona's most in-demand table — bold, elevated Southwestern and Mexican cooking.",
+        "crowd_tip": "Reserve ahead, especially on a weekend — it's not a reliable walk-in.",
+        "map": {
+          "lat": 34.8720417,
+          "lng": -111.7608733
+        },
+        "place_id": "ChIJOehzrXSjLYcREWbHQfAQhIU"
+      },
+      {
+        "name": "El Rincon",
+        "why": "Traditional Mexican food without the elevated price or the wait — a good backup if Elote is booked out."
+      },
+      {
+        "name": "Tamaliza",
+        "why": "Traditional Mexican food without the elevated price or the wait — a good backup if Elote is booked out.",
+        "map": {
+          "lat": 34.8620308,
+          "lng": -111.78121499999999
+        },
+        "place_id": "ChIJXZ5TY0ihLYcRBC-fIHaUUJI"
+      },
+      {
+        "name": "Coffee Pot Restaurant",
+        "why": "A west-side local institution for 30+ years — a straightforward, unpretentious breakfast spot.",
+        "map": {
+          "lat": 34.8643193,
+          "lng": -111.79667119999999
+        },
+        "place_id": "ChIJGUonKTuhLYcRD5of0Attr3w"
+      }
+    ]
+  }
+]
