@@ -1,0 +1,556 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-04T00:00:00.000Z",
+  "title": "Design System: Waypoint",
+  "extensions": {
+    "colorMeta": {
+      "surveyors-red-oxide": {
+        "role": "primary",
+        "displayName": "Surveyor's Red-Oxide",
+        "canonical": "#9c4421",
+        "tonalRamp": [
+          "#2c1309",
+          "#512311",
+          "#773419",
+          "#9c4421",
+          "#b26d52",
+          "#c99885",
+          "#ddbfb4",
+          "#f0e3de"
+        ]
+      },
+      "accent-ink": {
+        "role": "primary",
+        "displayName": "Accent Ink (light)",
+        "canonical": "#80371b",
+        "tonalRamp": [
+          "#240f08",
+          "#431d0e",
+          "#612a15",
+          "#80371b",
+          "#9c634d",
+          "#b99182",
+          "#d4bbb1",
+          "#ece1dd"
+        ]
+      },
+      "accent-ink-dark": {
+        "role": "primary",
+        "displayName": "Accent Ink (chart room)",
+        "canonical": "#c78f78",
+        "tonalRamp": [
+          "#382822",
+          "#674a3e",
+          "#976d5b",
+          "#c78f78",
+          "#d3a896",
+          "#e0c1b5",
+          "#ecd9d1",
+          "#f7eeeb"
+        ]
+      },
+      "on-accent": {
+        "role": "primary",
+        "displayName": "On-Accent",
+        "canonical": "#f0d2c7",
+        "tonalRamp": [
+          "#433b38",
+          "#7d6d67",
+          "#b6a097",
+          "#f0d2c7",
+          "#f3dcd3",
+          "#f7e6e0",
+          "#faf0ec",
+          "#fdf8f7"
+        ]
+      },
+      "survey-paper": {
+        "role": "neutral",
+        "displayName": "Survey Paper",
+        "canonical": "#dfe3d9",
+        "tonalRamp": [
+          "#3e403d",
+          "#747671",
+          "#a9ada5",
+          "#dfe3d9",
+          "#e6e9e1",
+          "#edf0ea",
+          "#f4f5f2",
+          "#fafbf9"
+        ]
+      },
+      "survey-paper-sunken": {
+        "role": "neutral",
+        "displayName": "Survey Paper Sunken",
+        "canonical": "#d2d7c8",
+        "tonalRamp": [
+          "#3b3c38",
+          "#6d7068",
+          "#a0a398",
+          "#d2d7c8",
+          "#dce0d4",
+          "#e6e9e1",
+          "#f0f1ec",
+          "#f8f9f7"
+        ]
+      },
+      "card-paper": {
+        "role": "neutral",
+        "displayName": "Card Paper",
+        "canonical": "#f8faf3",
+        "tonalRamp": [
+          "#454644",
+          "#81827e",
+          "#bcbeb9",
+          "#f8faf3",
+          "#fafbf6",
+          "#fbfcf8",
+          "#fdfdfb",
+          "#fefefd"
+        ]
+      },
+      "map-ink": {
+        "role": "neutral",
+        "displayName": "Map Ink",
+        "canonical": "#171d24",
+        "tonalRamp": [
+          "#06080a",
+          "#0c0f13",
+          "#11161b",
+          "#171d24",
+          "#4a4f54",
+          "#7f8387",
+          "#b0b2b5",
+          "#dcddde"
+        ]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Ink Muted",
+        "canonical": "#4e5747",
+        "tonalRamp": [
+          "#161814",
+          "#292d25",
+          "#3b4236",
+          "#4e5747",
+          "#757c6f",
+          "#9ea39a",
+          "#c3c6c0",
+          "#e4e6e3"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#bec6b2",
+        "tonalRamp": [
+          "#353732",
+          "#63675d",
+          "#909687",
+          "#bec6b2",
+          "#ccd3c3",
+          "#dbe0d5",
+          "#e9ece5",
+          "#f5f6f3"
+        ]
+      },
+      "hairline-strong": {
+        "role": "neutral",
+        "displayName": "Hairline Strong",
+        "canonical": "#a3ac98",
+        "tonalRamp": [
+          "#2e302b",
+          "#55594f",
+          "#7c8374",
+          "#a3ac98",
+          "#b7beaf",
+          "#ccd1c6",
+          "#e0e3dc",
+          "#f1f3f0"
+        ]
+      },
+      "chart-room-slate": {
+        "role": "neutral",
+        "displayName": "Chart Room Slate",
+        "canonical": "#0f1317",
+        "tonalRamp": [
+          "#040506",
+          "#080a0c",
+          "#0b0e11",
+          "#0f1317",
+          "#44474a",
+          "#7b7d7f",
+          "#adafb0",
+          "#dbdcdc"
+        ]
+      },
+      "chart-room-sunken": {
+        "role": "neutral",
+        "displayName": "Chart Room Sunken",
+        "canonical": "#1a2129",
+        "tonalRamp": [
+          "#07090b",
+          "#0e1115",
+          "#14191f",
+          "#1a2129",
+          "#4c5258",
+          "#818589",
+          "#b1b4b6",
+          "#dddedf"
+        ]
+      },
+      "chart-room-card": {
+        "role": "neutral",
+        "displayName": "Chart Room Card",
+        "canonical": "#242c34",
+        "tonalRamp": [
+          "#0a0c0f",
+          "#13171b",
+          "#1b2128",
+          "#242c34",
+          "#545a61",
+          "#878b8f",
+          "#b5b7ba",
+          "#dedfe1"
+        ]
+      },
+      "lamplit-paper": {
+        "role": "neutral",
+        "displayName": "Lamplit Paper",
+        "canonical": "#e8ece3",
+        "tonalRamp": [
+          "#414240",
+          "#797b76",
+          "#b0b3ad",
+          "#e8ece3",
+          "#edf0e9",
+          "#f2f5f0",
+          "#f7f9f5",
+          "#fcfcfb"
+        ]
+      },
+      "lamplit-muted": {
+        "role": "neutral",
+        "displayName": "Lamplit Muted",
+        "canonical": "#9aa392",
+        "tonalRamp": [
+          "#2b2e29",
+          "#50554c",
+          "#757c6f",
+          "#9aa392",
+          "#b0b7aa",
+          "#c7ccc3",
+          "#dde0da",
+          "#f0f1ef"
+        ]
+      },
+      "hairline-dark": {
+        "role": "neutral",
+        "displayName": "Hairline (chart room)",
+        "canonical": "#38414b",
+        "tonalRamp": [
+          "#101215",
+          "#1d2227",
+          "#2b3139",
+          "#38414b",
+          "#646b73",
+          "#92979c",
+          "#bbbec2",
+          "#e1e3e4"
+        ]
+      },
+      "hairline-strong-dark": {
+        "role": "neutral",
+        "displayName": "Hairline Strong (chart room)",
+        "canonical": "#4e5865",
+        "tonalRamp": [
+          "#16191c",
+          "#292e35",
+          "#3b434d",
+          "#4e5865",
+          "#757d87",
+          "#9ea3aa",
+          "#c3c6cb",
+          "#e4e6e8"
+        ]
+      },
+      "field-green": {
+        "role": "tertiary",
+        "displayName": "Field Green",
+        "canonical": "#396345",
+        "tonalRamp": [
+          "#101c13",
+          "#1e3324",
+          "#2b4b34",
+          "#396345",
+          "#65856e",
+          "#92a999",
+          "#bccac0",
+          "#e1e8e3"
+        ]
+      },
+      "caution-ochre": {
+        "role": "tertiary",
+        "displayName": "Caution Ochre",
+        "canonical": "#7f4a07",
+        "tonalRamp": [
+          "#241502",
+          "#422604",
+          "#613805",
+          "#7f4a07",
+          "#9b723e",
+          "#b99b77",
+          "#d3c1ab",
+          "#ece4da"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The masthead title. One per page, never repeated."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Category titles — the mid-band step between section heads and display."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Card, sheet and panel titles. Fixed at 1.6rem to stay above the 24px large-text grading line."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "All prose, capped at the 42rem reading measure. Never fluid."
+      },
+      "control": {
+        "displayName": "Control",
+        "purpose": "Tabs, buttons and action pills — a type role in its own right, not a shrunk body size."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Uppercase tracked micro-labels: kickers, credits, and 'Checked [date]' stamps."
+      }
+    },
+    "shadows": [
+      {
+        "name": "rest",
+        "value": "0 1px 3px rgba(16,20,24,.06)",
+        "purpose": "The barely-there seat under a resting card. Present, not visible."
+      },
+      {
+        "name": "hover-lift",
+        "value": "0 6px 24px rgba(16,20,24,.1)",
+        "purpose": "A card's response to a pointer, paired with translateY(-2px)."
+      },
+      {
+        "name": "hover-lift-hub",
+        "value": "0 8px 28px rgba(16,20,24,.12)",
+        "purpose": "The hub grid's larger cards, paired with translateY(-3px)."
+      },
+      {
+        "name": "accent-state-glow",
+        "value": "0 3px 14px color-mix(in srgb, var(--accent) 40%, transparent)",
+        "purpose": "Active tab and Today chip. A coloured shadow marks selection, never elevation."
+      },
+      {
+        "name": "overlay",
+        "value": "0 18px 50px rgba(16,20,24,.22)",
+        "purpose": "Modals and dialogs — the 'above everything' tier."
+      },
+      {
+        "name": "sheet",
+        "value": "0 -10px 34px rgba(16,20,24,.28)",
+        "purpose": "Bottom sheets, throwing upward from the screen edge."
+      },
+      {
+        "name": "focus-halo",
+        "value": "0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent)",
+        "purpose": "Inputs and live markers. Offsetless by intent — a ring, not a shadow."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(.16,1,.3,1)",
+        "purpose": "Entries, reveals, panel and tab transitions. Fast start, long settle."
+      },
+      {
+        "name": "ease-spring",
+        "value": "cubic-bezier(.34,1.56,.64,1)",
+        "purpose": "Gentle overshoot for press-release and hover-lift."
+      },
+      {
+        "name": "dur-tap",
+        "value": "120ms",
+        "purpose": "Touch feedback. Nothing eases in from stillness on user input."
+      },
+      {
+        "name": "dur-ui",
+        "value": "200ms",
+        "purpose": "Control state changes."
+      },
+      {
+        "name": "dur-reveal",
+        "value": "350ms",
+        "purpose": "Scroll reveals and panel transitions."
+      },
+      {
+        "name": "dur-hero",
+        "value": "600ms",
+        "purpose": "Masthead and hero choreography."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "599px"
+      },
+      {
+        "name": "md",
+        "value": "900px"
+      },
+      {
+        "name": "lg",
+        "value": "1100px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Guide tab (rest + active)",
+      "kind": "nav",
+      "refersTo": "tab-pill",
+      "description": "The guide's primary navigation. Quiet at rest, filled and glowing when selected.",
+      "html": "<nav class=\"ds-tabs\"><button class=\"ds-tab ds-tab-on\">Plan</button><button class=\"ds-tab\">Days</button><button class=\"ds-tab\">Eat</button><button class=\"ds-tab\">Sights</button></nav>",
+      "css": ".ds-tabs{display:flex;gap:.4rem}.ds-tab{flex:none;background:color-mix(in srgb,var(--ink,#171d24) 5%,transparent);border:1px solid transparent;border-radius:999px;padding:.5rem 1.05rem;min-height:38px;font-family:Georgia,serif;font-size:.82rem;font-weight:600;color:var(--muted,#4e5747);cursor:pointer;line-height:1.25;transition:background .18s,color .18s,box-shadow .2s,transform .2s cubic-bezier(.34,1.56,.64,1)}.ds-tab:hover{color:var(--ink,#171d24);background:color-mix(in srgb,var(--ink,#171d24) 10%,transparent);transform:translateY(-1px)}.ds-tab:focus-visible{outline:2px solid var(--accent,#9c4421);outline-offset:2px}.ds-tab:active{transform:scale(.94)}.ds-tab-on{background:color-mix(in srgb,var(--accent,#9c4421) 70%,var(--ink,#171d24) 30%);color:var(--bg,#dfe3d9);box-shadow:0 3px 14px color-mix(in srgb,var(--accent,#9c4421) 40%,transparent)}"
+    },
+    {
+      "name": "Control pill",
+      "kind": "button",
+      "refersTo": "control-pill",
+      "description": "Top-bar actions. Hairline border, no fill, label drops to an icon-only circle under 560px.",
+      "html": "<button class=\"ds-ctrl\"><svg class=\"ds-ctrl-ico\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><circle cx=\"11\" cy=\"11\" r=\"7\"/><path d=\"m20 20-3.5-3.5\"/></svg>Search</button>",
+      "css": ".ds-ctrl{display:inline-flex;align-items:center;justify-content:center;gap:.34rem;background:none;border:1px solid var(--rule2,#a3ac98);border-radius:999px;padding:.34rem .72rem;min-height:36px;cursor:pointer;color:var(--muted,#4e5747);font-family:system-ui,sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.02em;line-height:1;transition:color .15s,border-color .15s,background .15s,transform .2s cubic-bezier(.34,1.56,.64,1)}.ds-ctrl:hover{color:var(--ink,#171d24);border-color:var(--ink,#171d24)}.ds-ctrl:focus-visible{outline:2px solid var(--accent,#9c4421);outline-offset:2px}.ds-ctrl:active{scale:.98}.ds-ctrl-ico{width:17px;height:17px;flex:none}"
+    },
+    {
+      "name": "Accent pill (sourced value)",
+      "kind": "chip",
+      "refersTo": "accent-pill",
+      "description": "Carries a sourced-approximate figure. Its ground is tinted toward the accent, which is why its ink is derived against tinted surfaces.",
+      "html": "<span class=\"ds-pill\">&asymp; 120 kr</span>",
+      "css": ".ds-pill{display:inline-flex;align-items:center;gap:.2em;font-family:system-ui,sans-serif;font-size:.72rem;font-weight:700;color:var(--accent-ink,#80371b);background:color-mix(in srgb,var(--accent,#9c4421) 12%,var(--card,#f8faf3));border:1px solid color-mix(in srgb,var(--accent,#9c4421) 35%,var(--rule2,#a3ac98));border-radius:99px;padding:.08rem .5rem;white-space:nowrap}"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "The system's container. Flat at rest on a hairline; lifts only under a pointer.",
+      "html": "<article class=\"ds-card\"><p class=\"ds-kick\">Denmark &middot; 6 days</p><h3 class=\"ds-card-t\">Copenhagen</h3><p class=\"ds-card-d\">Harbour baths, cycling, and the coffee you actually asked for.</p></article>",
+      "css": ".ds-card{background:var(--card,#f8faf3);border:1px solid var(--rule,#bec6b2);border-radius:16px;padding:1.25rem 1.4rem;box-shadow:0 1px 3px rgba(16,20,24,.06);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}.ds-card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(16,20,24,.1);border-color:var(--rule2,#a3ac98)}.ds-kick{margin:0 0 .3rem;font-family:system-ui,sans-serif;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-ink,#80371b)}.ds-card-t{margin:0 0 .35rem;font-family:Georgia,serif;font-weight:400;font-size:1.6rem;line-height:1.2;color:var(--ink,#171d24)}.ds-card-d{margin:0;font-family:Georgia,serif;font-size:1.02rem;line-height:1.72;color:var(--muted,#4e5747)}"
+    },
+    {
+      "name": "Text input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Body-size by rule — a sub-16px input triggers zoom-on-focus on iOS. Focus is an accent halo, not the default outline.",
+      "html": "<input class=\"ds-input\" type=\"text\" value=\"Ne&aelig;rport st.\" aria-label=\"Expense name\">",
+      "css": ".ds-input{font:inherit;font-size:1.02rem;min-height:40px;border:1px solid var(--rule2,#a3ac98);border-radius:10px;padding:.4rem .6rem;background:var(--bg,#dfe3d9);color:var(--ink,#171d24);width:100%;transition:border-color .16s,background .16s,box-shadow .16s}.ds-input:focus{outline:none;border-color:var(--accent,#9c4421);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent,#9c4421) 22%,transparent)}"
+    },
+    {
+      "name": "Primary CTA",
+      "kind": "button",
+      "refersTo": "cta-primary",
+      "description": "The hub hero's single call to action. Ink-filled pill on paper — the only place a solid dark fill is spent.",
+      "html": "<a class=\"ds-cta\" href=\"#\">Open the guide</a>",
+      "css": ".ds-cta{display:inline-block;font-family:Georgia,serif;font-weight:640;font-size:.88rem;letter-spacing:-.01em;padding:.6rem 1.15rem;border-radius:999px;background:#0f1317;color:#f8faf3;border:1px solid rgba(248,250,243,.18);text-decoration:none;transition:transform .15s,background .15s}.ds-cta:hover{transform:translateY(-2px);background:#242c34}.ds-cta:focus-visible{outline:2px solid var(--accent,#9c4421);outline-offset:2px}.ds-cta:active{scale:.98}"
+    },
+    {
+      "name": "Verification stamp + provenance dot",
+      "kind": "custom",
+      "refersTo": "micro-label",
+      "description": "The signature mark of the product's promise: a dated stamp with an inline dot that opens the source. Sized to the text it annotates, so it reads as a notation rather than a control.",
+      "html": "<p class=\"ds-stamp\">Checked 4 Aug 2026<button class=\"ds-prov\" aria-label=\"Show source\">&#9679;</button></p>",
+      "css": ".ds-stamp{margin:0;font-family:system-ui,sans-serif;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#4e5747)}.ds-prov{display:inline-flex;align-items:center;justify-content:center;width:1em;height:1em;border-radius:50%;border:none;background:transparent;color:var(--muted,#4e5747);font-size:.68rem;vertical-align:middle;margin-inline-start:.25em;padding:0;cursor:pointer;transition:color .15s ease}.ds-prov:hover{color:var(--accent,#9c4421)}.ds-prov:focus-visible{color:var(--accent,#9c4421);outline:2px solid var(--accent,#9c4421);outline-offset:2px}"
+    },
+    {
+      "name": "Status pill (stale)",
+      "kind": "chip",
+      "refersTo": "accent-pill",
+      "description": "Caution ochre, outline-only. Appears solely when a fact has passed its shelf life — an honest mark, not a decoration.",
+      "html": "<a class=\"ds-stale\" href=\"#\">Recheck due</a>",
+      "css": ".ds-stale{display:inline-block;padding:.1rem .5rem;border:1px solid var(--warn,#7f4a07);border-radius:999px;font-family:system-ui,sans-serif;font-size:.68rem;letter-spacing:.03em;color:var(--warn,#7f4a07);text-decoration:none;white-space:nowrap}.ds-stale:hover{background:color-mix(in srgb,var(--warn,#7f4a07) 12%,transparent)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Surveyor's Sheet",
+    "overview": "Waypoint looks like something that was measured, not something that was described. The governing image is a survey sheet: paper that has been out in the field, carrying contour lines, coordinates, dated marks, and annotations in iron-oxide pigment. Everything that makes the product trustworthy — the source stamp, the verification date, the ≈ on a sourced approximation, the ⚠ on an unconfirmed one — is a survey notation, and the visual system treats those marks as first-class content rather than as fine print to be tucked away.\n\nThe system runs on two grounds and one instrument. In daylight it is cool sage survey paper under blue-black map ink. At night it becomes a chart room: a deep slate table under lamplit paper. Neither is a theme in the decorative sense; they are the same document under different light, which is why the guide's identity colour deliberately does not re-map between them. A country's accent is data, not decoration.\n\nDensity is deliberately low. A guide has to carry an entire trip while still feeling like something you can read on a phone with one hand. That tension is resolved by restraint rather than compression: surfaces are flat and quiet at rest, hairlines do the separating work, and the accent appears rarely enough that when it does appear, it means something.",
+    "keyCharacteristics": [
+      "Cartographic, not editorial: paper and ink, contour fields, coordinates, dated marks.",
+      "One serif doing two jobs through a real optical-size axis; one quiet sans for data.",
+      "Flat at rest, hairline-separated; shadow is reserved for state and for stacking order.",
+      "Per-country accent as identity data, never re-mapped by theme.",
+      "Provenance rendered, not hidden — the stamp is part of the design."
+    ],
+    "rules": [
+      {
+        "name": "The Three Jobs Rule",
+        "body": "An accent has three jobs and they are three different colours. Identity is --accent. Accent as text is --accent-ink. Text on an accent fill is --on-accent. Never hand-blend a fourth at the call site — a color-mix invented in a rule carries no contrast contract.",
+        "section": "colors"
+      },
+      {
+        "name": "The Identity Doesn't Theme Rule",
+        "body": "--accent is the same value in light and dark. Only its ink re-maps. A guide's colour is a fact about the guide, not about the reader's display.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tinted Ground Rule",
+        "body": "Accent text is rarely painted on a flat surface — chips and pills tint their ground toward the accent, the one direction that eats contrast. Never tint a background past 18%.",
+        "section": "colors"
+      },
+      {
+        "name": "The Fluid Headings, Fixed Text Rule",
+        "body": "The heading band clamps; body and UI text never do. A phone is held closer than a monitor, so reading text wants the same physical size on both.",
+        "section": "typography"
+      },
+      {
+        "name": "The Rem-In-The-Middle Rule",
+        "body": "Every clamp's middle term carries a rem component. A pure-vw middle locks size to the viewport and stops responding to the reader's own font-size setting — a WCAG 1.4.4 failure.",
+        "section": "typography"
+      },
+      {
+        "name": "The 24px Grading Rule",
+        "body": "Headings are weight 400, which puts their WCAG large-text line at 24px rather than 18.7px. Every heading step stays above it.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "Surfaces are flat at rest. A shadow appears only as a response to state (hover, focus, drag) or as a signal of stacking order (modal, sheet, popover).",
+        "section": "elevation"
+      },
+      {
+        "name": "The Heavy-Shadow-Means-On-Top Rule",
+        "body": "The 18px/50px class of shadow is reserved for things that are literally above everything else. Give a card that shadow at rest and modals stop reading as modal.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do derive accent text from --accent-ink and text-on-accent from --on-accent, always.",
+      "Do reach for a token from the type scale — including --text-control and --text-control-sm for anything that is a button, tab, pill, badge, or counter.",
+      "Do separate surfaces with a 1px hairline and the tonal ramp before considering a shadow.",
+      "Do keep prose inside --read (42rem) and let only maps, galleries, and tables break out.",
+      "Do state a verification date wherever a perishable fact appears, in the micro-label role.",
+      "Do re-run the axe gate after any change to a colour token — it covers hub and guides across light, dark, desktop, and 375px."
+    ],
+    "donts": [
+      "Don't invent an accent shade at a call site with color-mix. That is how a 4.45:1 text colour shipped.",
+      "Don't re-map --accent for dark mode. Only its ink re-maps.",
+      "Don't tint any background more than 18% toward the accent.",
+      "Don't give a resting surface an overlay-weight shadow; that shadow means 'above everything'.",
+      "Don't make heading type fluid below 24px, or body and UI type fluid at all.",
+      "Don't introduce a second sans, a monospace, or a display face. Three roles, two faces.",
+      "Don't use cream paper, full-bleed aspirational photography, or script display type.",
+      "Don't reach for the SaaS-dashboard defaults: a blue primary, a uniform card grid as page structure, one neutral sans everywhere, or a gradient CTA.",
+      "Don't hard-code --chrome-h, surface hexes, or the light/dark grounds outside base.css."
+    ]
+  }
+}
