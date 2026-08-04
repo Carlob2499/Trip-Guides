@@ -4,6 +4,30 @@
 > (the ~80-line budget its own header sets is now gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). Newest first, verbatim.
 
+## Snapshot (2026-08-03, session #32 — scar-tissue ablation; checks promoted to gates)
+
+**CLAUDE.md was ablated per the scaffolding-decay rule:** war-story prose whose rule is now
+enforced by a gate was trimmed to the rule (guide-shape history, continuity gate enumeration,
+connector rationale, stale sights/food counts). The Clarifying-Questions Doctrine was scoped:
+interactive sessions use `AskUserQuestion`; headless surfaces use their built mechanisms
+(revise-guide's fork gate pauses via issue comment; new-guide posts traveler questions
+non-blocking) — never a chat prompt in CI. The obsolete cloud-sync stale-CSS caveat was
+removed everywhere (the repo no longer lives under that sync folder); `astro preview` stays
+the verification surface because it serves the real production build.
+
+**Four checks became gates** (`scripts/__tests__/docs-integrity.test.mjs`): HANDOFF ≤120
+lines · every `docs/*.md` path cited from workflows/scripts/CLAUDE.md/docs exists (the
+`E2_FIELD_REPORT` failure class) · the obsolete cloud-sync caveat stays out (archive-only) ·
+internal `href="/…"` in `.astro` without `BASE_URL` fails. A SessionStart hook
+(`.claude/settings.json` → `scripts/handoff-head.mjs`) now injects this file automatically.
+HANDOFF's 800 lines of history moved to `docs/archive/HANDOFF_ARCHIVE.md`;
+`PLAN_MOBILE_NAV.md` and `TRIP_SPLIT_V2.md` (shipped, cited only by docs) moved to archive.
+
+**Where we left off:** separated scar tissue from doctrine across CLAUDE.md and the repo —
+trimmed what gates already enforce, promoted four ungated checks into a docs-integrity test,
+hooked HANDOFF auto-load, retired the cloud-sync caveat, archived shipped plan docs and 800
+lines of HANDOFF history.
+
 ## Snapshot (2026-08-03, session #30b — repository-breadth pass; a real "region" field; US restructured)
 
 **Continuing the same session.** Two more scoped pieces landed after the geocode/plan_b work

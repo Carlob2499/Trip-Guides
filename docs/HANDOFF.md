@@ -22,61 +22,78 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (2026-08-03, session #32 — scar-tissue ablation; checks promoted to gates)
+## Snapshot (2026-08-04, session #33 — the ground moved: palette R2, and the repo got a design record)
 
-**CLAUDE.md was ablated per the scaffolding-decay rule:** war-story prose whose rule is now
-enforced by a gate was trimmed to the rule (guide-shape history, continuity gate enumeration,
-connector rationale, stale sights/food counts). The Clarifying-Questions Doctrine was scoped:
-interactive sessions use `AskUserQuestion`; headless surfaces use their built mechanisms
-(revise-guide's fork gate pauses via issue comment; new-guide posts traveler questions
-non-blocking) — never a chat prompt in CI. The obsolete cloud-sync stale-CSS caveat was
-removed everywhere (the repo no longer lives under that sync folder); `astro preview` stays
-the verification surface because it serves the real production build.
+**The surface tonal ramp widened (`base.css` R2, live).** The three light surfaces sat within
+1.10:1 of each other, so a card barely separated from the page under it and `--bg2` read as the
+same surface as `--bg`. Same hues, same identity — the ground drops, the card lifts. Light:
+card/bg 1.104 → 1.238, bg/bg2 1.094 → 1.128. Dark: card/bg 1.140 → 1.319. Chosen by the creator
+from four rendered candidates, not from hex read in chat.
 
-**Four checks became gates** (`scripts/__tests__/docs-integrity.test.mjs`): HANDOFF ≤120
-lines · every `docs/*.md` path cited from workflows/scripts/CLAUDE.md/docs exists (the
-`E2_FIELD_REPORT` failure class) · the obsolete cloud-sync caveat stays out (archive-only) ·
-internal
-`href="/…"` in `.astro` without `BASE_URL` fails. A SessionStart hook
-(`.claude/settings.json` → `scripts/handoff-head.mjs`) now injects this file automatically.
-HANDOFF's 800 lines of history moved to `docs/archive/HANDOFF_ARCHIVE.md`;
-`PLAN_MOBILE_NAV.md` and `TRIP_SPLIT_V2.md` (shipped, cited only by docs) moved to archive.
+**What moved WITH the ground, none of it taste.** `--green`/`--warn` (on the darker `--bg2` the
+old values fell to 4.19:1 and 4.38:1, under the 4.5 floor they hold everywhere else) · country
+accent `#b07a1f → #a6721b` (Spain/Colombia/Indonesia/Egypt — it hit 2.85:1 and failed the ≥3.0
+build gate; **the gate is the invariant, the accent is the variable**) · `accent-tokens.ts`
+LIGHT/DARK_SURFACES are derivation *inputs*, so all 52 accent-inks re-derived and still clear
+4.5:1 on all six flat and tinted surfaces. **The method that made this safe: verify the palette
+against the repo's own `contrast.ts` BEFORE editing 24 files.** It predicted every consequence.
+
+**One real bug fell out.** `.topbar-search` improvised accent text with `color-mix` instead of
+`--accent-ink` — scraped 4.63:1 on the old ground, dropped to 4.45:1 on the new, axe caught it.
+Fixed at the cause. This is exactly the failure `accent-tokens.ts` was written to prevent; it
+had one survivor. `contrast.test.ts`'s `CARD2` (`#f2f4eb`) was a phantom testing nothing.
+
+**`PRODUCT.md` + `DESIGN.md` + `.impeccable/design.json` now exist** — the repo's first design
+record. North Star **"The Surveyor's Sheet"**; every value extracted from the code, every named
+rule traceable to a decision already made. PRODUCT.md fences the absences (no testimonials,
+users, traffic, revenue, press) so no future surface invents them.
+
+**Lint was dead repo-wide and nobody knew.** Two stale agent worktrees under
+`.claude/worktrees/` each carried a tsconfig; typescript-eslint saw two candidate roots and
+failed to PARSE all 740 files. Both pruned (verified merged into main + one dir literally
+empty); `npm run lint` is clean. `Trip-Guides-progress-preview` was deliberately NOT pruned.
 
 ## Open items
 
 - **Needs the creator:** ① decide the fate of LOCAL branch `worktree-agent-a7dc7eeb397c6a368`
   (progress-study design work, `5917f8f`, unreviewed — exists nowhere else; deleting it loses
-  the work); ② sign off revise-guide `land` default `draft` → `auto` + V6 Q4 thresholds
-  (overall ≤3, pacing ≤2, ≥3 skips); ③ Cloudflare dashboard Git integration builds
-  "tripguides" on every push and fails in 0s — external config noise, consider disabling
-  (deploy-worker.yml owns the real Worker deploy); ④ yes/no on giving skill-evals a
-  `push: main, paths: .claude/skills/**` trigger — as written (`pull_request` only) it has
-  fired 0 times ever because skills changes land by direct push.
+  the work). **Still the only unpruned worktree**, deliberately preserved in #33; ② sign off
+  revise-guide `land` default `draft` → `auto` + V6 Q4 thresholds (overall ≤3, pacing ≤2, ≥3
+  skips); ③ Cloudflare dashboard Git integration builds "tripguides" on every push and fails
+  in 0s — external config noise, consider disabling (deploy-worker.yml owns the real Worker
+  deploy); ④ yes/no on giving skill-evals a `push: main, paths: .claude/skills/**` trigger —
+  as written (`pull_request` only) it has fired 0 times ever because skills land by direct push;
+  ⑤ **NEW:** add `.claude/worktrees/**` to `eslint.config.mjs`'s `ignores` so a future agent
+  worktree cannot kill lint again (see snapshot). The `config-protection` hook blocks Claude
+  from editing that file — a deliberate guard, not worked around. One line, creator's hands.
 - Korea 03: critic flagged a swapped 명동 label on the Gyeongbokgung map point → file its issue.
 - The S1–S5 research standards + dossier contract have never met a real research pass; the next
   new guide is the calibration test (a floor firing on a legitimately thin priority is data
   about the floor, not the guide).
 - No guide uses a direct royalty-free `sights[].img.src` yet — capability live, unexercised.
-- feedback-export's Monday cron: proven working via dispatch (PR #32, merged — the LEARN loop's
-  first live cycle), but the 2026-08-03 08:13 scheduled fire never appeared. If next Monday's
-  is also absent, investigate the schedule registration.
-- Workflow audit (session #32): all 19 earn their place; consolidation considered and declined.
-  Remote branches pruned to `main` only.
+- feedback-export's Monday cron: proven working via dispatch (PR #32, merged), but the
+  2026-08-03 08:13 scheduled fire never appeared. If next Monday's is also absent, investigate
+  the schedule registration.
+- `.card:has(.brow)` carries a 3px coloured `border-left` (`guide.css`) — incumbent and
+  deliberate-looking, flagged in #33, not touched. Revisit if the card language is ever reworked.
 
 ## Where we left off
 
-**Session #32 (2026-08-03):** separated scar tissue from doctrine across CLAUDE.md and the
-repo — trimmed what gates already enforce, promoted four ungated checks into a docs-integrity
-test, hooked HANDOFF auto-load, retired the cloud-sync caveat, archived shipped plan docs and 800 lines of
-HANDOFF history.
+**Session #33 (2026-08-04):** moved the ground under every guide and gave the repo its first
+design record. Palette R2 shipped live (24 files, 2 commits, CI 4/4 green, live assets grepped
+clean of every old token string); `PRODUCT.md`, `DESIGN.md` and `.impeccable/design.json`
+written against the verified state; two stale worktrees pruned, restoring repo-wide lint.
 
-**Re-prompt the creator with:** "The scar-tissue audit is applied. The rule I used: if a gate
-or test now enforces it, the prose war-story went to the archive; if prose was the only
-enforcement, it stayed (boundary checks stayed whole — they're invoked by number in four
-recent sessions). Clarifying questions stay for interactive sessions but the doctrine now
-names the headless path explicitly — CI never blocks on a chat prompt; revise-guide's fork
-gate and new-guide's issue comments already do that job. The stale-CSS cloud-sync caveat is
-gone everywhere except the archive, and four things that were 'checks' are now tests that
-fail the suite: HANDOFF's line budget, doc-reference existence, the cloud-sync ban, and
-BASE_URL on internal hrefs.
-HANDOFF itself auto-loads via a SessionStart hook now, so sessions warm-start without a Read."
+**Re-prompt the creator with:** "The ground moved and it's live. The rule that made a 24-file
+palette change safe: verify the candidate against the repo's own `contrast.ts` BEFORE editing
+anything — it predicted every consequence in advance, including the two that mattered
+(`--green`/`--warn` falling under 4.5:1 on the darker `--bg2`, and `#b07a1f` failing the ≥3.0
+build gate). When a colour and a gate disagree, the gate is the invariant and the colour moves.
+The axe run then caught one thing static analysis couldn't: `.topbar-search` had improvised its
+own accent text with `color-mix` instead of `--accent-ink`, passing on the old ground and
+failing on the new — the exact failure `accent-tokens.ts` exists to prevent, with one survivor.
+The repo now carries `DESIGN.md` (North Star: The Surveyor's Sheet) so the next component
+doesn't re-derive the tokens from scratch. And lint had been dead repo-wide for as long as a
+stale agent worktree sat in `.claude/worktrees/` — 740 parse errors, none of them real. Pruned.
+Item ⑤ is one line in `eslint.config.mjs` that only you can add; the config-protection hook
+blocks me, and I left it blocked."
