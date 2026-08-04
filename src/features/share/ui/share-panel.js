@@ -66,7 +66,7 @@ export function initSharePanel(lockScroll, unlockScroll) {
       var QR = mod && (mod.default || mod);
       QR.toCanvas(canvas, url, {
         width: 148, margin: 1, errorCorrectionLevel: "M",
-        color: { dark: dark ? "#e5e9e0" : "#1a2028", light: dark ? "#27211a" : "#ffffff" },
+        color: { dark: dark ? "#e8ece3" : "#171d24", light: dark ? "#242c34" : "#ffffff" },
       }, function (err) { if (err) qrUnavailable(); });
     }).catch(qrUnavailable);
   }

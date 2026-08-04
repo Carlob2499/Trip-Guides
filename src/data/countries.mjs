@@ -124,7 +124,7 @@ export const COUNTRIES = {
   "United Kingdom": { iso2: "GB", accent: "#34507a", currency: { code: "GBP", symbol: "£",  name: "Pound Sterling" }, tz: "Europe/London",     capital: { lat: 51.5074, lng: -0.1278 } },
   "Ireland":        { iso2: "IE", accent: "#2f6f4f", currency: { code: "EUR", symbol: "€",  name: "Euro" },           tz: "Europe/Dublin",     capital: { lat: 53.3498, lng: -6.2603 } },
   "France":         { iso2: "FR", accent: "#33518a", currency: { code: "EUR", symbol: "€",  name: "Euro" },           tz: "Europe/Paris",      capital: { lat: 48.8566, lng: 2.3522 } },
-  "Spain":          { iso2: "ES", accent: "#b07a1f", currency: { code: "EUR", symbol: "€",  name: "Euro" },           tz: "Europe/Madrid",     capital: { lat: 40.4168, lng: -3.7038 } },
+  "Spain":          { iso2: "ES", accent: "#a6721b", currency: { code: "EUR", symbol: "€",  name: "Euro" },           tz: "Europe/Madrid",     capital: { lat: 40.4168, lng: -3.7038 } },
   "Italy":          { iso2: "IT", accent: "#2f6f4f", currency: { code: "EUR", symbol: "€",  name: "Euro" },           tz: "Europe/Rome",       capital: { lat: 41.9028, lng: 12.4964 } },
   "Netherlands":    { iso2: "NL", accent: "#b5651d", currency: { code: "EUR", symbol: "€",  name: "Euro" },           tz: "Europe/Amsterdam",  capital: { lat: 52.3676, lng: 4.9041 } },
   "Belgium":        { iso2: "BE", accent: "#7a3b2e", currency: { code: "EUR", symbol: "€",  name: "Euro" },           tz: "Europe/Brussels",   capital: { lat: 50.8503, lng: 4.3517 } },
@@ -156,7 +156,7 @@ export const COUNTRIES = {
   "Argentina":      { iso2: "AR", accent: "#3a6ea5", currency: { code: "ARS", symbol: "$",  name: "Argentine Peso" }, tz: "America/Argentina/Buenos_Aires", capital: { lat: -34.6037, lng: -58.3816 } },
   "Peru":           { iso2: "PE", accent: "#9c2f2a", currency: { code: "PEN", symbol: "S/", name: "Peruvian Sol" },   tz: "America/Lima",      capital: { lat: -12.0464, lng: -77.0428 } },
   "Chile":          { iso2: "CL", accent: "#7a3b2e", currency: { code: "CLP", symbol: "$",  name: "Chilean Peso" },   tz: "America/Santiago",  capital: { lat: -33.4489, lng: -70.6693 } },
-  "Colombia":       { iso2: "CO", accent: "#b07a1f", currency: { code: "COP", symbol: "$",  name: "Colombian Peso" }, tz: "America/Bogota",    capital: { lat: 4.7110, lng: -74.0721 } },
+  "Colombia":       { iso2: "CO", accent: "#a6721b", currency: { code: "COP", symbol: "$",  name: "Colombian Peso" }, tz: "America/Bogota",    capital: { lat: 4.7110, lng: -74.0721 } },
   "Costa Rica":     { iso2: "CR", accent: "#2f6f4f", currency: { code: "CRC", symbol: "₡",  name: "Costa Rican Colón" }, tz: "America/Costa_Rica", capital: { lat: 9.9281, lng: -84.0907 } },
 
   // ── Asia ──
@@ -167,7 +167,7 @@ export const COUNTRIES = {
   "Vietnam":        { iso2: "VN", accent: "#9c2f2a", currency: { code: "VND", symbol: "₫",  name: "Vietnamese Đồng" }, tz: "Asia/Ho_Chi_Minh", capital: { lat: 21.0278, lng: 105.8342 } },
   "Singapore":      { iso2: "SG", accent: "#b23a48", currency: { code: "SGD", symbol: "$",  name: "Singapore Dollar" }, tz: "Asia/Singapore",  capital: { lat: 1.3521, lng: 103.8198 } },
   "Malaysia":       { iso2: "MY", accent: "#2f6f4f", currency: { code: "MYR", symbol: "RM", name: "Malaysian Ringgit" }, tz: "Asia/Kuala_Lumpur", capital: { lat: 3.1390, lng: 101.6869 } },
-  "Indonesia":      { iso2: "ID", accent: "#b07a1f", currency: { code: "IDR", symbol: "Rp", name: "Indonesian Rupiah" }, tz: "Asia/Jakarta",   capital: { lat: -6.2088, lng: 106.8456 } },
+  "Indonesia":      { iso2: "ID", accent: "#a6721b", currency: { code: "IDR", symbol: "Rp", name: "Indonesian Rupiah" }, tz: "Asia/Jakarta",   capital: { lat: -6.2088, lng: 106.8456 } },
   "Philippines":    { iso2: "PH", accent: "#2b5d9e", currency: { code: "PHP", symbol: "₱",  name: "Philippine Peso" }, tz: "Asia/Manila",      capital: { lat: 14.5995, lng: 120.9842 } },
   "India":          { iso2: "IN", accent: "#b5651d", currency: { code: "INR", symbol: "₹",  name: "Indian Rupee" },   tz: "Asia/Kolkata",      capital: { lat: 28.6139, lng: 77.2090 } },
   "United Arab Emirates": { iso2: "AE", accent: "#7a3b2e", currency: { code: "AED", symbol: "د.إ", name: "UAE Dirham" }, tz: "Asia/Dubai",     capital: { lat: 24.4539, lng: 54.3773 } },
@@ -176,7 +176,7 @@ export const COUNTRIES = {
   // ── Oceania & Africa ──
   "Australia":      { iso2: "AU", accent: "#2f6f4f", currency: { code: "AUD", symbol: "$",  name: "Australian Dollar" }, tz: "Australia/Sydney", capital: { lat: -35.2809, lng: 149.1300 } },
   "New Zealand":    { iso2: "NZ", accent: "#2b5d86", currency: { code: "NZD", symbol: "$",  name: "New Zealand Dollar" }, tz: "Pacific/Auckland", capital: { lat: -41.2865, lng: 174.7762 } },
-  "Egypt":          { iso2: "EG", accent: "#b07a1f", currency: { code: "EGP", symbol: "£",  name: "Egyptian Pound" }, tz: "Africa/Cairo",      capital: { lat: 30.0444, lng: 31.2357 } },
+  "Egypt":          { iso2: "EG", accent: "#a6721b", currency: { code: "EGP", symbol: "£",  name: "Egyptian Pound" }, tz: "Africa/Cairo",      capital: { lat: 30.0444, lng: 31.2357 } },
   "Morocco":        { iso2: "MA", accent: "#9c2f2a", currency: { code: "MAD", symbol: "DH", name: "Moroccan Dirham" }, tz: "Africa/Casablanca", capital: { lat: 34.0209, lng: -6.8416 } },
   "South Africa":   { iso2: "ZA", accent: "#2e7d4f", currency: { code: "ZAR", symbol: "R",  name: "South African Rand" }, tz: "Africa/Johannesburg", capital: { lat: -25.7479, lng: 28.2293 } },
   "Kenya":          { iso2: "KE", accent: "#7a3b2e", currency: { code: "KES", symbol: "Sh", name: "Kenyan Shilling" }, tz: "Africa/Nairobi",   capital: { lat: -1.2921, lng: 36.8219 } },

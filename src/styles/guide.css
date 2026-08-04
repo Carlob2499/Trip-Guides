@@ -29,9 +29,10 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 .topbar-sos{color:#b3261e;border-color:color-mix(in srgb,#b3261e 55%,var(--rule2));font-weight:700}
 .topbar-sos:hover{color:#fff;background:#b3261e;border-color:#b3261e}
 /* SOS is an emergency affordance — its colour is semantic and must stay unmistakably red, so this
-   is a dark-mode remap, not a token derivation. #b3261e only reaches 2.72:1 on --bg(#14181c); the
+   is a dark-mode remap, not a token derivation. #b3261e only reaches 2.85:1 on --bg(#0f1317); the
    hover fill above already clears 6.54:1 and needs no change. #ef5350 (Material red 400) clears
-   5.12:1 on #14181c while staying recognisably the same hue family. */
+   5.35:1 on #0f1317 while staying recognisably the same hue family.
+   (Ratios re-measured 2026-08-04 against the R2 ground; both moved with it, neither crossed.) */
 @media(prefers-color-scheme:dark){html:not([data-theme="light"]) .topbar-sos{color:#ef5350}}
 [data-theme="dark"] .topbar-sos{color:#ef5350}
 /* Text role, not decoration — the raw per-guide accent is only contrast-gated to 3:1
@@ -39,7 +40,13 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
    enough for small body text at WCAG's 4.5:1. Blending 30% toward --ink pulls any
    3:1-gated accent comfortably past 4.5:1 in both themes (verified against Korea's and
    Denmark's actual extracted accents — this exact case is what axe caught on Denmark). */
-.topbar-search{color:color-mix(in srgb,var(--accent) 70%,var(--ink) 30%);border-color:color-mix(in srgb,var(--accent) 45%,var(--rule2))}
+/* R2 (2026-08-04): was `color-mix(in srgb,var(--accent) 70%,var(--ink) 30%)` — an accent text shade
+   improvised at the call site, which is precisely what --accent-ink exists to prevent
+   (src/lib/accent-tokens.ts spells out why: a hand-blended shade carries no contrast contract).
+   It scraped 4.63:1 on the old lighter ground and fell to 4.45:1 when --bg dropped, which the axe
+   gate caught on the Denmark guide. --accent-ink is derived per accent to clear 4.5:1 on every
+   surface this site paints, flat or accent-tinted, so it cannot drift out of contract again. */
+.topbar-search{color:var(--accent-ink);border-color:color-mix(in srgb,var(--accent) 45%,var(--rule2))}
 /* Mobile: collapse chrome buttons to icons so the cluster never crowds. */
 @media(max-width:560px){.topbar-right{gap:.3rem}.topbar-btn .tb-label{display:none}.topbar-btn{width:38px;height:38px;min-height:38px;padding:0;border-radius:50%}.tb-ico{width:19px;height:19px}}
 

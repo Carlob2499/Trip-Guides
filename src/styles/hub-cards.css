@@ -8,20 +8,20 @@
    light-on-photo, so before/without the photo (slow network, offline — the SW
    precaches pages, not Commons photos) it must sit on a dark ground in BOTH
    themes. The loaded photo covers this entirely. Found by the axe gate. */
-.hub-hero{position:relative;display:block;overflow:hidden;border-radius:var(--r-lg);margin:0 0 1.6rem;min-height:340px;background:#1a2028;border:1px solid var(--rule);color:#f4f6ef;text-decoration:none;isolation:isolate}
+.hub-hero{position:relative;display:block;overflow:hidden;border-radius:var(--r-lg);margin:0 0 1.6rem;min-height:340px;background:#171d24;border:1px solid var(--rule);color:#f8faf3;text-decoration:none;isolation:isolate}
 .hub-hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
 .hub-hero-scrim{position:absolute;inset:0;z-index:-1;background:linear-gradient(to top,rgba(12,16,20,.82) 0%,rgba(12,16,20,.35) 55%,rgba(12,16,20,.12) 100%)}
 .hub-hero-body{display:flex;flex-direction:column;gap:.5rem;justify-content:flex-end;min-height:340px;padding:1.6rem 1.5rem 1.4rem}
 .hub-hero-eyebrow{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:#dfe4d8}
 .hub-hero-title{font-family:var(--font-display);font-weight:620;font-size:clamp(1.7rem,4.6vw,3rem);letter-spacing:-.012em;line-height:1.04;text-shadow:0 1px 12px rgba(0,0,0,.35)}
 .hub-hero-meta{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.15rem}
-.hub-hero-count,.hub-hero-wx,.hub-hero-days{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;padding:.28rem .6rem;border-radius:999px;background:rgba(20,24,28,.55);border:1px solid rgba(244,246,239,.25);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.hub-hero-count,.hub-hero-wx,.hub-hero-days{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;padding:.28rem .6rem;border-radius:999px;background:rgba(15,19,23,.55);border:1px solid rgba(248,250,243,.25);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .hub-hero-count{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 /* A finished trip's date is a fact, not a countdown — drop the accent fill so it reads as
    a quiet timestamp beside the other meta pills instead of shouting urgency that's over. */
-.hub-hero-count.hub-hero-past{background:rgba(20,24,28,.55);border-color:rgba(244,246,239,.25);color:#dfe4d8}
-.hub-hero-cta{align-self:flex-start;margin-top:.55rem;font-family:var(--font-display);font-weight:640;font-size:var(--text-small);letter-spacing:-.01em;padding:.6rem 1.15rem;border-radius:999px;background:#14181c;color:#f4f6ef;border:1px solid rgba(244,246,239,.18);transition:transform .15s,background .15s}
-.hub-hero:hover .hub-hero-cta{transform:translateY(-2px);background:#1e242b}
+.hub-hero-count.hub-hero-past{background:rgba(15,19,23,.55);border-color:rgba(248,250,243,.25);color:#dfe4d8}
+.hub-hero-cta{align-self:flex-start;margin-top:.55rem;font-family:var(--font-display);font-weight:640;font-size:var(--text-small);letter-spacing:-.01em;padding:.6rem 1.15rem;border-radius:999px;background:#0f1317;color:#f8faf3;border:1px solid rgba(248,250,243,.18);transition:transform .15s,background .15s}
+.hub-hero:hover .hub-hero-cta{transform:translateY(-2px);background:#242c34}
 .hub-hero:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 @media(min-width:900px){.hub-hero{min-height:420px}.hub-hero-body{min-height:420px;padding:2rem 2rem 1.8rem}}
 @media(prefers-reduced-motion:reduce){.hub-hero-cta{transition:none}.hub-hero:hover .hub-hero-cta{transform:none}}
@@ -58,7 +58,7 @@
   position:absolute;top:.5rem;left:.5rem;z-index:2;
   font-family:var(--font-data);font-size:var(--text-nano);font-weight:700;letter-spacing:.1em;text-transform:uppercase;
   padding:.22rem .5rem;border-radius:999px;
-  background:rgba(20,24,28,.72);color:#dfe4d8;border:1px solid rgba(244,246,239,.28);
+  background:rgba(15,19,23,.72);color:#dfe4d8;border:1px solid rgba(248,250,243,.28);
   backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
 }
 .hubcard-cover{position:relative;display:block;aspect-ratio:16/9;overflow:hidden;background:var(--bg2)}

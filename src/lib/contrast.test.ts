@@ -1,11 +1,14 @@
 import { describe, it, expect } from "vitest";
 import { relativeLuminance, contrastRatio, readableOn } from "./contrast";
 
-/* The surfaces accent text actually lands on, sampled from the built site. Card and card2 are the
-   guide/hub card fills; sunken is the inset panel behind "more" summaries. */
-const CARD = "#f4f6ef";
-const CARD2 = "#f2f4eb";
-const SUNKEN = "#dee2d6";
+/* The surfaces accent text actually lands on, sampled from the built site. Card is the guide/hub
+   card fill; page is the sheet behind it; sunken is the inset panel behind "more" summaries.
+   R2 (2026-08-04): retargeted to the wider tonal spread in base.css. The old CARD2 (#f2f4eb) was
+   a phantom — no token or stylesheet has defined that fill for some time, so it tested nothing;
+   it is now the real page ground, which accent text genuinely lands on. */
+const CARD = "#f8faf3";
+const PAGE = "#dfe3d9";
+const SUNKEN = "#d2d7c8";
 
 describe("readableOn", () => {
   it("leaves a colour alone when it already passes", () => {
@@ -18,7 +21,7 @@ describe("readableOn", () => {
   it("rescues the exact colours that shipped unreadable to the live site", () => {
     // Denmark's gold rendered link text at 3.32-3.38:1 on every card surface. These are the real
     // measured failures from the a11y gate, not synthetic examples.
-    for (const bg of [CARD, CARD2, SUNKEN]) {
+    for (const bg of [CARD, PAGE, SUNKEN]) {
       expect(contrastRatio("#a77e3e", bg)).toBeLessThan(4.5);
       expect(contrastRatio(readableOn("#a77e3e", bg), bg)).toBeGreaterThanOrEqual(4.5);
     }
@@ -31,7 +34,7 @@ describe("readableOn", () => {
   it("holds for every accent in the shipped palette, on every surface", () => {
     const ACCENTS = ["#a77e3e", "#646b2e", "#9b592b", "#9c4421", "#b3261e", "#c7a269"];
     for (const fg of ACCENTS) {
-      for (const bg of [CARD, CARD2, SUNKEN]) {
+      for (const bg of [CARD, PAGE, SUNKEN]) {
         expect(contrastRatio(readableOn(fg, bg), bg)).toBeGreaterThanOrEqual(4.5);
       }
     }
@@ -59,7 +62,7 @@ describe("readableOn", () => {
     // The dark-mode card and page grounds, measured from the built site. Accent text sat at
     // 2.87:1 here — darkening it (the old fixed-shade approach) pushes it TOWARD the background
     // and makes it worse, so direction has to come from the surface.
-    for (const bg of ["#1e242b", "#14181c"]) {
+    for (const bg of ["#242c34", "#0f1317"]) {
       for (const fg of ["#a77e3e", "#646b2e", "#9b592b", "#9c4421"]) {
         const out = readableOn(fg, bg);
         expect(contrastRatio(out, bg)).toBeGreaterThanOrEqual(4.5);
@@ -69,8 +72,8 @@ describe("readableOn", () => {
     }
     // The specific measured failure: this pair rendered at 2.87:1 on the dark card, so it must
     // move, and strictly upward.
-    const rescued = readableOn("#9b592b", "#1e242b");
-    expect(contrastRatio("#9b592b", "#1e242b")).toBeLessThan(4.5);
+    const rescued = readableOn("#9b592b", "#242c34");
+    expect(contrastRatio("#9b592b", "#242c34")).toBeLessThan(4.5);
     expect(relativeLuminance(rescued)).toBeGreaterThan(relativeLuminance("#9b592b"));
   });
 
@@ -104,11 +107,11 @@ describe("contrastRatio", () => {
     );
   });
 
-  // Calibration guard: the tightest real country accent (#b07a1f) must stay
+  // Calibration guard: the tightest real country accent (#a6721b) must stay
   // above the 3.0 build gate, and an obvious disaster (near-cream) must fail it.
   // If this ever flips, the gate in content.config.ts needs re-review.
   it("passes the tightest shipping accent and fails a pale disaster on the light bg", () => {
-    expect(contrastRatio("#b07a1f", "#f3ecdf")).toBeGreaterThan(3);
-    expect(contrastRatio("#f5e6a0", "#f3ecdf")).toBeLessThan(3);
+    expect(contrastRatio("#a6721b", "#dfe3d9")).toBeGreaterThan(3);
+    expect(contrastRatio("#f5e6a0", "#dfe3d9")).toBeLessThan(3);
   });
 });

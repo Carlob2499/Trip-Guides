@@ -12,8 +12,16 @@
    --chrome-h = rendered height of the sticky top chrome; drives scroll-padding
    and section scroll-margins so they never drift out of sync (see guide.css). */
 :root{
-  --bg:#e9ebe3;--bg2:#dee2d6;--ink:#1a2028;--card:#f4f6ef;--rule:#c9cfc0;--rule2:#a9b2a0;
-  --muted:#565f4e;--accent:#9c4421;--green:#3f6b4a;--warn:#8a5108;--chrome-h:94px;
+  /* R2 (2026-08-04) — WIDER TONAL SPREAD. The three light surfaces used to sit within 1.10:1 of
+     each other (card #f4f6ef / bg #e9ebe3 / bg2 #dee2d6), so a card barely separated from the page
+     it sat on and --bg2 read as the same surface as --bg. Same hues, same identity; the ground
+     drops and the card lifts, which is the whole change. Measured, light: card/bg 1.104 -> 1.238,
+     bg/bg2 1.094 -> 1.128, card/bg2 1.208 -> 1.396. Dark: card/bg 1.140 -> 1.319, card/bg2
+     1.048 -> 1.148. --green and --warn moved WITH the ground, not for taste: on the darker --bg2
+     the old values fell to 4.19:1 and 4.38:1, under the 4.5 floor they hold on every other
+     surface. --accent is untouched — one variable at a time. */
+  --bg:#dfe3d9;--bg2:#d2d7c8;--ink:#171d24;--card:#f8faf3;--rule:#bec6b2;--rule2:#a3ac98;
+  --muted:#4e5747;--accent:#9c4421;--green:#396345;--warn:#7f4a07;--chrome-h:94px;
   /* Accent has THREE jobs and they need different colours, which is what --accent2 failed to say.
      --accent is identity: fills, borders, large display type — never contrast-gated.
      --accent-ink is accent as TEXT ON a page surface: >=4.5:1 on every surface, flat or
@@ -26,7 +34,7 @@
      Per-guide pages override all of these inline from src/lib/accent-tokens.ts; the values here are
      the derived defaults for pages with no guide (hub chrome, health, progress). Do not hand-edit
      them — they are exactly what accentTokens("#9c4421") returns, and a test pins that. */
-  --accent-ink-light:#893b1d;--accent-ink-dark:#c2866e;--accent-ink:var(--accent-ink-light);
+  --accent-ink-light:#80371b;--accent-ink-dark:#c78f78;--accent-ink:var(--accent-ink-light);
   --on-accent:#f0d2c7;
   /* Type system — the Quiet Edition (R1, 2026-07-28): THREE ROLES, TWO FACES.
      display + body are BOTH Literata — one serif wearing both hats through its real
@@ -172,10 +180,10 @@
    and Korea shipped 110 links at 2.20:1. --accent itself is deliberately NOT re-mapped — it is
    identity, used for fills and borders where the guide's real colour should show. */
 @media(prefers-color-scheme:dark){html:not([data-theme="light"]){
-  --bg:#14181c;--bg2:#1b2026;--ink:#e5e9e0;--card:#1e242b;--rule:#333b44;--rule2:#48525c;--muted:#97a08f;--green:#6aab76;--warn:#d9923f;
+  --bg:#0f1317;--bg2:#1a2129;--ink:#e8ece3;--card:#242c34;--rule:#38414b;--rule2:#4e5865;--muted:#9aa392;--green:#6aab76;--warn:#d9923f;
   --accent-ink:var(--accent-ink-dark)}
 }
-[data-theme="dark"]{--bg:#14181c;--bg2:#1b2026;--ink:#e5e9e0;--card:#1e242b;--rule:#333b44;--rule2:#48525c;--muted:#97a08f;--green:#6aab76;--warn:#d9923f;
+[data-theme="dark"]{--bg:#0f1317;--bg2:#1a2129;--ink:#e8ece3;--card:#242c34;--rule:#38414b;--rule2:#4e5865;--muted:#9aa392;--green:#6aab76;--warn:#d9923f;
   --accent-ink:var(--accent-ink-dark)}
 
 

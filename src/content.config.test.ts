@@ -21,8 +21,8 @@ vi.mock("astro:content", async () => {
 const { collections } = await import("./content.config");
 const schema = (collections.guides as any).schema;
 
-const LIGHT_BG = "#e9ebe3";
-const DARK_BG = "#14181c";
+const LIGHT_BG = "#dfe3d9";
+const DARK_BG = "#0f1317";
 
 function validGuide(overrides: Record<string, unknown> = {}) {
   return {
@@ -84,7 +84,7 @@ describe("content.config guides schema — tab budget", () => {
 describe("content.config guides schema — theme.primary contrast gate", () => {
   it("passes a mid-value colour legible on both grounds", () => {
     const result = schema.safeParse(
-      validGuide({ theme: { primary: "#b07a1f", secondary: "#b07a1f", accent: "#b07a1f" } }),
+      validGuide({ theme: { primary: "#a6721b", secondary: "#a6721b", accent: "#a6721b" } }),
     );
     expect(result.success).toBe(true);
   });
@@ -109,7 +109,7 @@ describe("content.config guides schema — theme.primary contrast gate", () => {
 
   it("rejects a theme colour not shaped like #RRGGBB", () => {
     const result = schema.safeParse(
-      validGuide({ theme: { primary: "orange", secondary: "#b07a1f", accent: "#b07a1f" } }),
+      validGuide({ theme: { primary: "orange", secondary: "#a6721b", accent: "#a6721b" } }),
     );
     expect(result.success).toBe(false);
   });

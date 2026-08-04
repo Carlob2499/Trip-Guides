@@ -33,7 +33,7 @@
      already makes for the guide itself. These mirror the light-theme tokens so the sheet
      still looks like Waypoint rather than a browser default. */
   .bsheet{
-    --bs-ink:#14181c;--bs-mute:#5c6357;--bs-rule:#c9cfc0;--bs-rule2:#a9b2a0;
+    --bs-ink:#171d24;--bs-mute:#5c6357;--bs-rule:#bec6b2;--bs-rule2:#a3ac98;
     --bs-tint:#f2f4ec;--bs-accent:#9c4421;--bs-green:#2f5c3c;
     color:var(--bs-ink);font-family:var(--font-data);font-size:9.5pt;line-height:1.5;
     print-color-adjust:exact;-webkit-print-color-adjust:exact

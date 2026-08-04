@@ -45,7 +45,7 @@
 /* The visible pause chip — a real control (doctrine: obvious clickability), same
    badge-on-photo surface treatment as .mast-credit below. Play glyph shows only in the
    paused state. 40px hit target. */
-.mast-pause{position:absolute;right:.7rem;bottom:.7rem;z-index:2;width:40px;height:40px;border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;color:rgba(244,246,239,.92);background:rgba(12,15,18,.68);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.mast-pause{position:absolute;right:.7rem;bottom:.7rem;z-index:2;width:40px;height:40px;border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;color:rgba(248,250,243,.92);background:rgba(12,15,18,.68);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .mast-pause:hover{color:#fff;background:rgba(12,15,18,.8)}
 .mast-pause svg{width:16px;height:16px}
 .mast-pause .mp-play{display:none}
@@ -74,14 +74,14 @@
    work spent animating a scene nobody can see. */
 .mast-photo .paint-atlas{display:none}
 
-.mast-inner{position:relative;align-self:flex-end;width:100%;padding:clamp(1.3rem,3.5vw,2.6rem) clamp(1.2rem,3.2vw,2.4rem);color:#f4f6ef}
+.mast-inner{position:relative;align-self:flex-end;width:100%;padding:clamp(1.3rem,3.5vw,2.6rem) clamp(1.2rem,3.2vw,2.4rem);color:#f8faf3}
 .mast-eyebrow{color:#e8ece1;letter-spacing:.28em;opacity:.92;text-wrap:balance}
 .mast-title{font-family:var(--font-display);font-weight:620;font-size:clamp(2.4rem,7.2vw,5.4rem);line-height:1;letter-spacing:-.012em;margin:.35rem 0 0;color:#fff;text-shadow:0 2px 24px rgba(0,0,0,.32)}
 .mast-dek{color:#eef1e9;max-width:54ch;margin:.75rem 0 0;font-size:clamp(1rem,1.4vw,1.14rem);line-height:1.55;text-shadow:0 1px 10px rgba(0,0,0,.28)}
 
 /* Same badge-on-photo pattern as sights.css's .imgcredit--onphoto, same fix: .42 alpha composited
    to 2.23:1 against a worst-case white photo pixel. .68 clears 4.79:1. */
-.mast-credit{position:absolute;right:.7rem;top:.7rem;z-index:1;font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:.02em;color:rgba(244,246,239,.82);background:rgba(12,15,18,.68);padding:.24rem .5rem;border-radius:999px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);text-decoration:none}
+.mast-credit{position:absolute;right:.7rem;top:.7rem;z-index:1;font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:.02em;color:rgba(248,250,243,.82);background:rgba(12,15,18,.68);padding:.24rem .5rem;border-radius:999px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);text-decoration:none}
 .mast-credit:hover{color:#fff;background:rgba(12,15,18,.62)}
 
 /* The accent rule centers over the meta band (which is centered below). */

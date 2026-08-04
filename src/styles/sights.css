@@ -28,7 +28,7 @@
 
 .sight-media-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,13,16,.82) 0%,rgba(10,13,16,.30) 42%,rgba(10,13,16,0) 68%)}
 
-.sight-media-cap{position:absolute;left:0;right:0;bottom:0;margin:0;padding:.9rem 1rem .85rem;color:#f4f6ef}
+.sight-media-cap{position:absolute;left:0;right:0;bottom:0;margin:0;padding:.9rem 1rem .85rem;color:#f8faf3}
 /* DEFAULT is the SAFE state, not the photo-tuned one — this used to be backwards. .cardimg is
    loading="lazy", so onload/onerror often haven't fired yet when this first paints (confirmed live:
    under a blocked/slow network the image sits in this exact default state indefinitely, never
@@ -53,7 +53,7 @@
    white while staying visually a translucent pill, not a solid one (verified: computed the actual
    composited RGB against white, not just eyeballed the alpha). Hover's .62 was already fine
    (5.51:1 with #fff text) and is untouched. */
-.imgcredit--onphoto{position:absolute;top:.55rem;right:.55rem;left:auto;margin:0;padding:.2rem .5rem;font-size:var(--text-nano);color:rgba(244,246,239,.85);background:rgba(10,13,16,.68);border-radius:999px;text-align:right;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.imgcredit--onphoto{position:absolute;top:.55rem;right:.55rem;left:auto;margin:0;padding:.2rem .5rem;font-size:var(--text-nano);color:rgba(248,250,243,.85);background:rgba(10,13,16,.68);border-radius:999px;text-align:right;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .imgcredit--onphoto a,.imgcredit--onphoto{border-bottom:0;text-decoration:none}
 .imgcredit--onphoto:hover{background:rgba(10,13,16,.62);color:#fff}
 
