@@ -168,6 +168,16 @@ const contourLayers = [
   generateContourLayer({ seed: 23, rings: 8, cx: 780, cy: 640 }),
   generateContourLayer({ seed: 41, rings: 5, cx: 540, cy: 180 }),
 ];
+// R3b (creator request 2026-08-05): the survey map no longer ends at the Overture's clipped
+// bottom edge — a PAGE-level contour ground runs under the whole sheet. It is position:fixed
+// (the map holds still; the page scrolls over it, like tracing paper over a survey sheet), so
+// two viewport-filling layers suffice regardless of page height. Quieter than the Overture's
+// own three parallax layers, which stay as the bold near-field on top. Different seeds — the
+// ground is its own terrain, not a copy of the header's.
+const pageContourLayers = [
+  generateContourLayer({ seed: 61, rings: 11, cx: 170, cy: 780 }),
+  generateContourLayer({ seed: 89, rings: 8, cx: 870, cy: 210 }),
+];
 ---
 <!doctype html>
 <html lang="en">
@@ -207,6 +217,15 @@ const contourLayers = [
     </script>
   </head>
   <body data-base={base}>
+    {/* R3b: the page-wide survey ground (see pageContourLayers above). Fixed, decorative,
+        behind every content layer — the Overture's own contours sit over it as the near-field. */}
+    <div class="page-contours" aria-hidden="true">
+      {pageContourLayers.map((layer, i) => (
+        <svg data-pg-contour={i} viewBox={`0 0 ${layer.viewBox} ${layer.viewBox}`} preserveAspectRatio="xMidYMid slice">
+          {layer.rings.map((points) => <polyline points={points} />)}
+        </svg>
+      ))}
+    </div>
     <a class="skip-link" href="#hubGrid">Skip to guides</a>
     <!-- THE OVERTURE (V2) — the hub masthead as a full-viewport intro that hands off to the
          guide grid via src/scripts/overture.js. Base markup is fully visible with no JS; the

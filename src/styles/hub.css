@@ -130,7 +130,7 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 @media print {
   .overture, .ov-contours, .ov-route, .ov-cue, .ov-bar-actions,
   .stats-beat, .hub-filter, .ng-backdrop, .ng-modal,
-  .hub-hero-cta { display: none !important; }
+  .page-contours, .hub-hero-cta { display: none !important; }
   * , *::before, *::after { box-shadow: none !important; text-shadow: none !important; animation: none !important; transition: none !important; }
   html, body { background: #fff !important; color: #111 !important; }
   body::before { display: none !important; }
