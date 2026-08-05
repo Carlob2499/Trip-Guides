@@ -24,7 +24,6 @@ import "../styles/base.css";
 import "../styles/hub.css";
 import "../styles/hub-cards.css";
 import "../styles/painted-atlas.css";
-import "../styles/wizard.css";
 import "../styles/transitions.css";
 import "../styles/scroll-motion.css";
 import "../styles/hub-motion.css";
@@ -37,8 +36,7 @@ const guides = (await getCollection("guides")).sort((a, b) =>
 );
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
-// Repo the "Make a new guide" button files its GitHub issue against.
-const REPO = "Carlob2499/Trip-Guides";
+// R4: REPO moved to new.astro with the intake form it belongs to.
 
 // Trip-date math below uses the SAME shared resolver as the guide page's own countdown
 // (src/lib/trip-dates.ts) — this badge is "N days away" relative to the visitor's own
@@ -242,7 +240,10 @@ const pageContourLayers = [
       <div class="ov-bar">
         <span class="ov-wordmark">Waypoint</span>
         <div class="ov-bar-actions">
-          <button id="btnNewGuide" class="ov-pill ov-pill-solid" type="button">＋ New guide</button>
+          {/* R4: the intake moved to its own page (/new) — the composed flow needs room a
+              440px modal can't give, and the hub (the recipients' surface) stops carrying
+              the maker's whole authoring tool. A link, not a modal trigger. */}
+          <a id="btnNewGuide" class="ov-pill ov-pill-solid" href={`${base}/new/`}>＋ New guide</a>
           <button id="btnDark" class="ov-pill ov-pill-icon" aria-label="Switch to dark mode" title="Switch to dark mode"><Icon name="moon" class="tb-ico" /></button>
         </div>
       </div>
@@ -408,108 +409,9 @@ const pageContourLayers = [
       <p class="hub-empty" id="hubEmpty" hidden>No guides match — clear the search or pick another country.</p>
     </main>
 
-    <!-- New-guide quick-start modal -->
-    <div class="ng-backdrop" id="ngBackdrop" aria-hidden="true"></div>
-    <div class="ng-modal" id="ngModal" role="dialog" aria-modal="true" aria-labelledby="ngHead" data-repo={REPO} hidden>
-      <p class="ng-head" id="ngHead">
-        Make a new guide
-        <button class="ng-close" id="ngClose" type="button" aria-label="Close">✕</button>
-      </p>
-      <p class="ng-intro">A few details scaffold a new guide — structure, checklists, and live weather/holiday/currency data wired in. It opens a GitHub issue; a research pass then fills the facts.</p>
-      <form id="ngForm" class="ng-form">
-        <label class="ng-field">
-          <span>Country <em>(required)</em></span>
-          <input type="text" id="ngCountry" required placeholder="e.g. Brazil" autocomplete="off" />
-        </label>
-        <label class="ng-field">
-          <span>City / cities</span>
-          <input type="text" id="ngCities" placeholder="e.g. Rio de Janeiro, São Paulo" autocomplete="off" />
-        </label>
-        <div class="ng-row">
-          <label class="ng-field">
-            <span>Start date</span>
-            <input type="date" id="ngStart" />
-          </label>
-          <label class="ng-field">
-            <span>End date</span>
-            <input type="date" id="ngEnd" />
-          </label>
-        </div>
-        <label class="ng-field">
-          <span>Anchor event</span>
-          <input type="text" id="ngAnchor" placeholder="e.g. the festival, concert or match the trip is built around" autocomplete="off" />
-        </label>
-        <label class="ng-field">
-          <span>Number of travelers</span>
-          <input type="number" id="ngTravelers" min="1" placeholder="e.g. 3" />
-        </label>
-        <label class="ng-field">
-          <span>Who's this for / party</span>
-          <input type="text" id="ngParty" placeholder="e.g. the Korea group (3 mid-20s, heavy walkers) / family of 5 with grandparents" autocomplete="off" />
-        </label>
-        <label class="ng-field">
-          <span>Constraints</span>
-          <textarea id="ngConstraints" rows="2" placeholder="mobility / dietary / sensory needs the guide must honor — e.g. no stairs, peanut allergy, max ~3 km walking per day"></textarea>
-        </label>
-        <label class="ng-field">
-          <span>Traveler passport countries</span>
-          <input type="text" id="ngPassports" placeholder="e.g. United States, United Kingdom — drives the visa & entry research" autocomplete="off" />
-        </label>
-        <label class="ng-field">
-          <span>Pace</span>
-          <select id="ngPace">
-            <option value="">undecided</option>
-            <option value="packed">packed</option>
-            <option value="balanced">balanced</option>
-            <option value="slow">slow</option>
-          </select>
-        </label>
-        <label class="ng-field">
-          <span>Travel style</span>
-          <select id="ngTravelStyle">
-            <option value="">undecided</option>
-            <option value="Bucket-list must-sees">Bucket-list must-sees</option>
-            <option value="Off-the-beaten-path">Off-the-beaten-path</option>
-            <option value="Balanced">Balanced</option>
-          </select>
-        </label>
-        {[1, 2, 3].map((n) => (
-          <label class="ng-field">
-            <span>Priority #{n}{n === 1 && <em> (most important)</em>}</span>
-            <select id={`ngPriority${n}`}>
-              <option value="">— none —</option>
-              <option value="Food & dining">Food & dining</option>
-              <option value="Culture / history">Culture / history</option>
-              <option value="Nature / outdoors">Nature / outdoors</option>
-              <option value="Nightlife">Nightlife</option>
-              <option value="Shopping">Shopping</option>
-              <option value="Wellness / relaxation">Wellness / relaxation</option>
-              <option value="Niche interest (specify below)">Niche interest (specify below)</option>
-            </select>
-          </label>
-        ))}
-        <label class="ng-field">
-          <span>Niche interest</span>
-          <input type="text" id="ngNiche" placeholder="only if a Priority above is Niche — e.g. live music" autocomplete="off" />
-        </label>
-        <label class="ng-field">
-          <span>Budget</span>
-          <select id="ngBudget">
-            <option value="">undecided</option>
-            <option value="Shoestring (<$75/day)">Shoestring (&lt;$75/day)</option>
-            <option value="Mid-range ($75–150/day)">Mid-range ($75–150/day)</option>
-            <option value="Comfortable ($150–300/day)">Comfortable ($150–300/day)</option>
-            <option value="Luxury ($300+/day)">Luxury ($300+/day)</option>
-          </select>
-        </label>
-        <label class="ng-field">
-          <span>Comments</span>
-          <textarea id="ngComments" rows="2" placeholder="group makeup, dietary needs, a fixed anchor event, dealbreakers, etc."></textarea>
-        </label>
-        <p class="ng-err" id="ngErr" hidden></p>
-        <button type="submit" class="ng-submit">Continue on GitHub →</button>
-      </form>
-    </div>
+    <!-- R4 (2026-08-05): the new-guide modal + its form moved to src/pages/new.astro (the
+         composed intake flow) — same field ids, same pipeline seam; ＋ New guide in the
+         Overture bar is now a link. -->
 
     <footer class="hub-foot">Waypoint — every fact checked, every route tested. <a href={`${base}/about/`}>How it's made →</a></footer>
 
@@ -521,13 +423,9 @@ const pageContourLayers = [
       initOverture();
     </script>
 
-    <!-- A2: the dark-toggle + new-guide-modal script that used to live here (an
-         `is:inline define:vars={{ base }}` block, ~95 lines, including a duplicate
-         dark-mode-toggle implementation) now boots from the hub silo as real modules —
-         see src/features/hub/index.js (initDarkToggle from scripts/theme.js,
-         initNewGuideModal from features/hub/ui/new-guide-modal.js), imported via the
-         "../features/hub/index.js" import already above. `base` is read there from
-         `data-base` on <body> instead of define:vars. -->
+    <!-- A2/R4: the dark-toggle script boots from the hub silo (initDarkToggle via
+         features/hub/index.js); the new-guide modal + wizard that also booted there
+         moved to /new (features/hub/ui/intake-flow.js) with the form itself. -->
 
   </body>
 </html>

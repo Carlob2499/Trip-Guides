@@ -1,0 +1,171 @@
+---
+import PwaHead from "../components/PwaHead.astro";
+import { generateContourLayer } from "../lib/contours";
+// Same self-hosted fonts + token base as the hub — one theme, every surface.
+import "@fontsource-variable/literata/standard.css";
+import "@fontsource-variable/literata/standard-italic.css";
+import "@fontsource-variable/source-sans-3";
+import "../styles/base.css";
+import "../styles/intake.css";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+// Repo the intake files its GitHub issue against (moved with the form from the hub modal).
+const REPO = "Carlob2499/Trip-Guides";
+
+// The survey ground, same cartography as everywhere else. Own seeds — own terrain.
+const contours = [
+  generateContourLayer({ seed: 47, rings: 9, cx: 220, cy: 700 }),
+  generateContourLayer({ seed: 73, rings: 7, cx: 830, cy: 260 }),
+];
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New guide — Waypoint</title>
+    <meta name="description" content="Ask Waypoint for a new verified travel guide: drop your bookings, rank what the trip is for, answer only what's still blank." />
+    <PwaHead />
+    <!-- Dark-mode init — runs before paint to avoid flash (same as the hub). -->
+    <script is:inline>
+      (function () {
+        const s = localStorage.getItem("tg-theme");
+        const preferDark = window.matchMedia && window.matchMedia("(prefers-color-scheme:dark)").matches;
+        if (s === "dark" || (s === null && preferDark)) {
+          document.documentElement.setAttribute("data-theme", "dark");
+        } else if (s === "light") {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      })();
+    </script>
+  </head>
+  <body data-base={base}>
+    <a class="skip-link" href="#intakeMain">Skip to the form</a>
+    <div class="itk-contours" aria-hidden="true">
+      {contours.map((layer, i) => (
+        <svg data-itk-contour={i} viewBox={`0 0 ${layer.viewBox} ${layer.viewBox}`} preserveAspectRatio="xMidYMid slice">
+          {layer.rings.map((points) => <polyline points={points} />)}
+        </svg>
+      ))}
+    </div>
+    <header class="itk-bar">
+      <a class="itk-wordmark" href={`${base}/`}>← Waypoint</a>
+    </header>
+
+    <main class="intake" id="intakeMain">
+      <header class="itk-hero">
+        <p class="itk-eyebrow">New guide</p>
+        <h1>Tell us the trip. Research does the rest.</h1>
+        <p class="itk-dek">
+          A few details scaffold a verified guide — structure, checklists, live weather /
+          holiday / currency data wired in. Drop your bookings and most of this fills itself.
+        </p>
+      </header>
+
+      {/* The flat form IS the no-JS base markup (same progressive-enhancement contract the
+          old wizard had): with scripts off you get every field in one column and honest
+          labels; intake-flow.js re-parents these same elements into the composed flow.
+          Field ids are the pipeline seam — see ui/intake-submit.js. */}
+      <form id="ngForm" class="ng-form" data-repo={REPO}>
+        <label class="ng-field">
+          <span>Country <em>(required)</em></span>
+          <input type="text" id="ngCountry" required placeholder="e.g. Brazil" autocomplete="off" />
+        </label>
+        <label class="ng-field">
+          <span>City / cities</span>
+          <input type="text" id="ngCities" placeholder="e.g. Rio de Janeiro, São Paulo" autocomplete="off" />
+        </label>
+        <div class="ng-row">
+          <label class="ng-field">
+            <span>Start date</span>
+            <input type="date" id="ngStart" />
+          </label>
+          <label class="ng-field">
+            <span>End date</span>
+            <input type="date" id="ngEnd" />
+          </label>
+        </div>
+        <label class="ng-field">
+          <span>Anchor event</span>
+          <input type="text" id="ngAnchor" placeholder="e.g. the festival, concert or match the trip is built around" autocomplete="off" />
+        </label>
+        <label class="ng-field">
+          <span>Number of travelers</span>
+          <input type="number" id="ngTravelers" min="1" placeholder="e.g. 3" />
+        </label>
+        <label class="ng-field">
+          <span>Who's this for / party</span>
+          <input type="text" id="ngParty" placeholder="e.g. the Korea group (3 mid-20s, heavy walkers) / family of 5 with grandparents" autocomplete="off" />
+        </label>
+        <label class="ng-field">
+          <span>Constraints</span>
+          <textarea id="ngConstraints" rows="2" placeholder="mobility / dietary / sensory needs the guide must honor — e.g. no stairs, peanut allergy, max ~3 km walking per day"></textarea>
+        </label>
+        <label class="ng-field">
+          <span>Traveler passport countries</span>
+          <input type="text" id="ngPassports" placeholder="e.g. United States, United Kingdom — drives the visa & entry research" autocomplete="off" />
+        </label>
+        <label class="ng-field">
+          <span>Pace</span>
+          <select id="ngPace">
+            <option value="">undecided</option>
+            <option value="packed">packed</option>
+            <option value="balanced">balanced</option>
+            <option value="slow">slow</option>
+          </select>
+        </label>
+        <label class="ng-field">
+          <span>Travel style</span>
+          <select id="ngTravelStyle">
+            <option value="">undecided</option>
+            <option value="Bucket-list must-sees">Bucket-list must-sees</option>
+            <option value="Off-the-beaten-path">Off-the-beaten-path</option>
+            <option value="Balanced">Balanced</option>
+          </select>
+        </label>
+        {[1, 2, 3].map((n) => (
+          <label class="ng-field">
+            <span>Priority #{n}{n === 1 && <em> (most important)</em>}</span>
+            <select id={`ngPriority${n}`}>
+              <option value="">— none —</option>
+              <option value="Food & dining">Food & dining</option>
+              <option value="Culture / history">Culture / history</option>
+              <option value="Nature / outdoors">Nature / outdoors</option>
+              <option value="Nightlife">Nightlife</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Wellness / relaxation">Wellness / relaxation</option>
+              <option value="Niche interest (specify below)">Niche interest (specify below)</option>
+            </select>
+          </label>
+        ))}
+        <label class="ng-field">
+          <span>Niche interest</span>
+          <input type="text" id="ngNiche" placeholder="only if a Priority above is Niche — e.g. live music" autocomplete="off" />
+        </label>
+        <label class="ng-field">
+          <span>Budget</span>
+          <select id="ngBudget">
+            <option value="">undecided</option>
+            <option value="Shoestring (<$75/day)">Shoestring (&lt;$75/day)</option>
+            <option value="Mid-range ($75–150/day)">Mid-range ($75–150/day)</option>
+            <option value="Comfortable ($150–300/day)">Comfortable ($150–300/day)</option>
+            <option value="Luxury ($300+/day)">Luxury ($300+/day)</option>
+          </select>
+        </label>
+        <label class="ng-field">
+          <span>Comments</span>
+          <textarea id="ngComments" rows="2" placeholder="group makeup, dietary needs, a fixed anchor event, dealbreakers, etc."></textarea>
+        </label>
+        <p class="ng-err" id="ngErr" hidden></p>
+        <button type="submit" class="ng-submit">Send it to research →</button>
+      </form>
+    </main>
+
+    <footer class="itk-foot">Waypoint — every fact checked, every route tested. <a href={`${base}/`}>Back to the guides →</a></footer>
+
+    <script>
+      import { initIntakeFlow } from "../features/hub/ui/intake-flow.js";
+      initIntakeFlow();
+    </script>
+  </body>
+</html>

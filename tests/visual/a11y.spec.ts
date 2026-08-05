@@ -64,7 +64,9 @@ async function assertContentVisible(page: Page, name: string) {
       return o;
     };
     // Sample real content, not chrome: headings, cards and links are what the audit is FOR.
-    const sample = [...document.querySelectorAll("main a, main h2, main .card, .hubcard")].slice(0, 40);
+    // R4: h1 + .itk-ask + .itk-card joined the sample for the /new intake page, whose main
+    // carries a flow of screens rather than cards/links — same vacuous-pass guard, new shape.
+    const sample = [...document.querySelectorAll("main a, main h2, main h1, main .card, main .itk-ask, main .itk-card, .hubcard")].slice(0, 40);
     return {
       sampled: sample.length,
       invisible: sample.filter((el) => cumulativeOpacity(el) === 0).length,
@@ -188,6 +190,27 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     // element — the featured guide now renders once, as the hero grid cell, so no tag
     // floats over a photo. The zero-tolerance novelty gate below still catches any new one.
   },
+  "new intake": {
+    // R4: /new sits on the fixed survey-contour ground (.itk-contours, an inline SVG behind
+    // z-index:1 content). Axe declines to rate any text with an image node in its background
+    // chain (imgNode: wordmark, eyebrow, h1, footer + its link) and its stacking-order
+    // reimplementation reads the fixed layer as partially obscuring two paragraphs
+    // (elmPartiallyObscuring: .itk-dek, .itk-sub) — the same two documented mechanisms as the
+    // hub/guide entries above. Measured the real composite instead (scratch run vs
+    // src/lib/contrast.ts, 2026-08-05): the ONLY stroke on this page is the far tint
+    // (--muted at 16% over --bg), giving a worst-case pixel of #c8cdc2 light / #252a2b dark;
+    // the weakest text/pixel pair is --muted ON a stroke pixel at 4.67:1 (light) and 5.56:1
+    // (dark) — every pair clears 4.5:1 even if a glyph sat entirely on a stroke, which a
+    // 1.1px contour line cannot make it do.
+    "color-contrast/imgNode": {
+      max: 5,
+      why: "Text over the decorative contour-SVG ground; composite measured, worst pair 4.67:1 — see block comment above.",
+    },
+    "color-contrast/elmPartiallyObscuring": {
+      max: 2,
+      why: "The fixed .itk-contours layer sits BEHIND content (z-index 0 vs 1) — real paint order is fine; measured composite as above.",
+    },
+  },
   "korea guide": {
     "color-contrast/bgOverlap": {
       // 54 -> 65: +11, korea's 11 tab buttons, per (c) in the why. Recorded from CI's own runner,
@@ -264,6 +287,25 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
    and only where mobile genuinely renders more. Where mobile renders FEWER, the desktop max
    stands as a (looser but safe) ceiling rather than being tracked twice. */
 const MOBILE_DELTA: Record<string, Record<string, Baseline>> = {
+  hub: {
+    // R3b (2026-08-05): the page-wide survey ground (.page-contours) put an inline SVG behind
+    // the WHOLE page; at 375px the stats beat's labels/counters land on contour rings, so axe
+    // declines them via the same two mechanisms documented on the "new intake" entry: imgNode
+    // (an image node in the background chain) and elmPartiallyObscuring (its stacking reimpl
+    // reads the fixed layer as covering content that z-index:1 actually paints over). Desktop
+    // renders the stats clear of the rings — mobile-only, hence a delta. Same measured
+    // composite as "new intake": far-tint stroke pixel #c8cdc2/#252a2b, weakest pair
+    // (--muted on a stroke pixel) 4.67:1 light / 5.56:1 dark — clears 4.5:1; .stat-n uses
+    // --ink/--accent-ink, higher still.
+    "color-contrast/imgNode": {
+      max: 5,
+      why: "Stats-beat text over the decorative contour ground; composite measured 4.67:1 worst — see block comment.",
+    },
+    "color-contrast/elmPartiallyObscuring": {
+      max: 3,
+      why: "Fixed .page-contours behind z-index:1 content — real paint order fine; measured as above.",
+    },
+  },
   "denmark guide": {
     // Measured 24 at 375px against 19 at 1280px — the same ol.steps li::before mechanism
     // already justified above, simply spread over more wrapped lines in a narrow column.
@@ -280,6 +322,7 @@ const MOBILE_DELTA: Record<string, Record<string, Baseline>> = {
 for (const [name, path] of [
   ["hub", "/Trip-Guides/"],
   ["korea guide", "/Trip-Guides/guides/korea/"],
+  ["new intake", "/Trip-Guides/new/"], // R4: THE form page — the zoom-trap test's whole reason
 ] as const) {
   test(`form controls are >=16px so iOS never zoom-traps — ${name}`, async ({ page }) => {
     await prep(page, path, "light", VIEWPORTS[1]);
@@ -315,6 +358,7 @@ for (const [name, path] of [
   ["hub", "/Trip-Guides/"],
   ["korea guide", "/Trip-Guides/guides/korea/"],
   ["denmark guide", "/Trip-Guides/guides/denmark/"],
+  ["new intake", "/Trip-Guides/new/"], // R4: the composed intake — gated from birth
 ] as const) {
   for (const { scheme, vp } of COMBOS) {
     test(`a11y — ${name} (${scheme}, ${vp.label})`, async ({ page }) => {
