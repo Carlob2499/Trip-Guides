@@ -75,7 +75,7 @@
 .ab-cta-btn:active{transform:scale(.97)}
 .ab-cta-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:3px}
 
-.ab-foot{border-top:1px solid var(--ink);text-align:center;padding:1.6rem 1.2rem;color:var(--muted);font-size:var(--text-control);max-width:1080px;margin:3rem auto 0;font-family:var(--font-data);letter-spacing:.04em}
+.ab-foot{border-top:1px solid var(--rule2);text-align:center;padding:1.6rem 1.2rem;color:var(--muted);font-size:var(--text-control);max-width:1080px;margin:3rem auto 0;font-family:var(--font-data);letter-spacing:.04em}
 
 /* --- Motion: rise-on-scroll, same native pattern as scroll-motion.css.
    Progressive enhancement only; reduced-motion never opts in. ---------------- */

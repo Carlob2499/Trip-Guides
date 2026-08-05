@@ -48,7 +48,18 @@
 .hub-chip-active{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 @media(prefers-reduced-motion:reduce){.hub-chip{transition:none}}
 
-.hub-empty{color:var(--muted);font-style:italic;padding:1.2rem 0}
+/* R5: the empty state is a way out, not a note. The message stays quiet; the reset is a
+   real, obviously-pressable control (clickability doctrine) sized to the 44px floor via the
+   same vertical-only ::after halo the chips use. */
+.hub-empty{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem;color:var(--muted);font-style:italic;padding:1.2rem 0}
+.hub-reset{position:relative;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.03em;font-style:normal;padding:.42rem .8rem;min-height:34px;background:var(--ink);color:var(--bg);border:1px solid var(--ink);border-radius:999px;cursor:pointer;transition:background .15s,border-color .15s}
+.hub-reset::after{content:"";position:absolute;top:-5px;bottom:-5px;left:0;right:0}
+.hub-reset:hover{background:var(--accent);border-color:var(--accent)}
+.hub-reset:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.hub-reset{transition:none}}
+
+/* The filter's live count — announced, never painted (the visible grid already shows it). */
+.hub-status{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
 
 /* ── Card covers — the hub grid speaks the same photo-forward language as the
       guide mastheads and sight cards. Photo guides get their cover image with

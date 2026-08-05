@@ -290,11 +290,15 @@ const pageContourLayers = [
       <div class="hub-filter" role="search">
         <input class="hub-search" id="hubSearch" type="search" placeholder="Search guides…" aria-label="Search guides" autocomplete="off" />
         <div class="hub-chips" id="hubChips" role="group" aria-label="Filter by continent">
-          <button class="hub-chip hub-chip-active" type="button" data-filter="">All trips</button>
+          <button class="hub-chip hub-chip-active" type="button" data-filter="" aria-pressed="true">All trips</button>
           {continents.map((c) => (
-            <button class="hub-chip" type="button" data-filter={c}>{c}</button>
+            <button class="hub-chip" type="button" data-filter={c} aria-pressed="false">{c}</button>
           ))}
         </div>
+        {/* R5: the grid used to mutate in total silence for assistive tech — the chips
+            carried their state as a class only, and nothing announced what filtering did.
+            One polite live region, always in the DOM, updated on every apply(). */}
+        <p class="hub-status" id="hubStatus" role="status" aria-live="polite"></p>
       </div>
 
       {/* M4 item 2 — the grid's `auto-fill, minmax(270px)` is a MANY-items pattern; against a
@@ -406,7 +410,13 @@ const pageContourLayers = [
           );
         })}
       </div>
-      <p class="hub-empty" id="hubEmpty" hidden>No guides match — clear the search or pick another country.</p>
+      {/* R5: the dead end. This was one italic sentence with no control, and it said
+          "country" while the chips above it filter by continent. The message is now written
+          by hub.js from what the visitor actually did, and the way out is a real button. */}
+      <p class="hub-empty" id="hubEmpty" hidden>
+        <span data-empty-msg>No guides match.</span>
+        <button class="hub-reset" type="button" data-hub-reset>Show all trips</button>
+      </p>
     </main>
 
     <!-- R4 (2026-08-05): the new-guide modal + its form moved to src/pages/new.astro (the

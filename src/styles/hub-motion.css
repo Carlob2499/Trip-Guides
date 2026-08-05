@@ -72,17 +72,23 @@
 .ov-wordmark { font-family: var(--font-display); font-weight: 720; font-size:var(--text-body); letter-spacing: -.01em; color: var(--ink); }
 .ov-bar-actions { display: flex; align-items: center; gap: .55rem; }
 .ov-pill {
+  position: relative;
   font-family: var(--font-data); font-size:var(--text-control-sm); font-weight: 700; letter-spacing: .02em;
   border: 1px solid var(--rule2); background: color-mix(in srgb, var(--card) 72%, transparent);
   color: var(--ink); padding: .45rem .85rem; border-radius: 999px; cursor: pointer;
   backdrop-filter: blur(6px); transition: background var(--dur-ui) var(--ease-out-expo), border-color var(--dur-ui);
 }
+/* R5: these two were the smallest targets on the page (34px icon, 36px pill) and they sit
+   in the hardest corner to reach one-handed — the scene PRODUCT.md says wins every tiebreak.
+   Same ::after expander the chips got in U11. Horizontal growth is held to 3px a side so it
+   stays well inside the .55rem row gap and the two hit regions can never overlap. */
+.ov-pill::after { content: ""; position: absolute; top: -6px; bottom: -6px; left: -3px; right: -3px; }
 .ov-pill:hover { border-color: var(--accent); }
 /* U6: no visible keyboard-focus state at all previously. */
 .ov-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .ov-pill-solid { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .ov-pill-solid:hover { background: var(--accent); border-color: var(--accent); }
-.ov-pill-icon { width: 2.1rem; height: 2.1rem; padding: 0; display: grid; place-items: center; border-radius: 50%; font-size:var(--text-body); }
+.ov-pill-icon { width: 2.4rem; height: 2.4rem; padding: 0; display: grid; place-items: center; border-radius: 50%; font-size:var(--text-body); }
 
 /* The hero content — the block that recedes (scale + fade, JS-owned) as you leave. */
 .ov-inner { position: relative; z-index: 2; text-align: center; padding: 2rem 1.3rem; max-width: 54rem; margin: 0 auto; }
@@ -170,7 +176,11 @@ body.ov-play .ov-cue { animation: ovCue 2.4s var(--ease-out-expo) 1.35s forwards
    JS change needed for that part). */
 :root[data-overture="compact"] .stats-beat { padding: 1.6vh 1.3rem 3vh; }
 :root[data-overture="compact"] .stat-n { font-size: clamp(1.5rem, 4vw, 2.1rem); }
-:root[data-overture="compact"] .stats-note { display: none; } /* the one-time framing line — the numbers alone carry it on repeat visits */
+/* R5: this line WAS hidden on repeat visits as "the numbers alone carry it". They don't —
+   "counted from the guides themselves" is the sentence that turns three figures into the
+   product's central claim, and a first-visit glide that flew past the stats beat meant a
+   bounce-and-return visitor could miss it in both states. It stays, at caption size. */
+:root[data-overture="compact"] .stats-note { margin-top: 1.4rem; font-size: var(--text-caption); }
 
 /* ============================================================================================
    THE ATLAS (session V3) — Option A: each guide card wears its own colour. The per-guide

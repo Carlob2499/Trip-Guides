@@ -175,8 +175,18 @@ export function initOverture() {
   }
 
   // Only glide if we're still at the top when the beat elapses and the user hasn't taken over.
+  //
+  // R5: the glide used to land on `hub` — which sits BELOW the stats beat, so the counters
+  // animated into view and the page flew straight past them in the same 1.5s. Those three
+  // build-counted numbers are the page's whole argument; the one beat engineered to convince
+  // was the one beat the page refused to sit in. It now lands ON the stats beat and stops
+  // there. The "Follow the route" cue still carries the reader down to the grid — by their
+  // own hand, which is the half of the journey that should never have been automated.
+  const statsBeat = document.querySelector(".stats-beat");
   window.setTimeout(() => {
-    if (!armed || window.scrollY > 8 || !hub) return;
-    glideTo(hub.offsetTop);
+    if (!armed || window.scrollY > 8) return;
+    const target = statsBeat ?? hub;
+    if (!target) return;
+    glideTo(target.offsetTop);
   }, HOLD_MS + 1600 /* ≈ kinetic-arrival duration, keep in step with hub-motion.css */);
 }

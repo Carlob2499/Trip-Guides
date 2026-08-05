@@ -58,6 +58,12 @@ import { localISODate } from "../../../lib/trip-dates";
   var grid = document.getElementById("hubGrid");
   if (grid) {
     var cards = Array.prototype.slice.call(grid.querySelectorAll(".hubcard"));
+    // R5: the hero carries `.hubcard` (R3 made it a grid entry so it filters), but it must
+    // NOT join the date sort — its `grid-column: 1/-1` spanning cell is the page's opening
+    // frame, and a FINISHED featured trip (`heroIsPast`, i.e. most of the year) carries a
+    // past `data-start` that sorted it into the past group, underneath ordinary cards.
+    // Filtering still sees every card; only the re-append order excludes the hero.
+    var sortable = cards.filter(function (c) { return !c.classList.contains("hub-hero"); });
     // R2: LOCAL calendar components (localISODate), NOT `.toISOString()` — that converts
     // to UTC first, so for any negative UTC offset "today" here could read as tomorrow's
     // date while `data-start` (built the same way, server-side, from index.astro) still
@@ -68,7 +74,7 @@ import { localISODate } from "../../../lib/trip-dates";
       var s = c.getAttribute("data-start") || "";
       return s >= todayISO ? "0" + s : "1" + (s || "~");
     };
-    cards
+    sortable
       .slice()
       .sort(function (a, b) { return keyOf(a) < keyOf(b) ? -1 : 1; })
       .forEach(function (c) { grid.appendChild(c); });
@@ -78,11 +84,21 @@ import { localISODate } from "../../../lib/trip-dates";
        data-search blob, which includes the country name — so typing "korea" finds it
        even though there's no country chip. */
     var search = document.getElementById("hubSearch");
+    // The reset control deliberately does NOT carry `.hub-chip` — it would otherwise join
+    // this list and be treated as a continent filter with an empty `data-filter`.
     var chips = Array.prototype.slice.call(document.querySelectorAll(".hub-chip"));
     var empty = document.getElementById("hubEmpty");
+    var emptyMsg = empty && empty.querySelector("[data-empty-msg]");
+    var reset = document.querySelector("[data-hub-reset]");
+    var status = document.getElementById("hubStatus");
     var activeContinent = "";
+    var total = cards.length;
+    var trips = total === 1 ? "trip" : "trips";
+    if (reset) reset.textContent = "Show all " + total + " " + trips;
+
     function apply() {
-      var q = (search && search.value || "").trim().toLowerCase();
+      var raw = (search && search.value || "").trim();
+      var q = raw.toLowerCase();
       var shown = 0;
       cards.forEach(function (c) {
         var ok =
@@ -92,14 +108,44 @@ import { localISODate } from "../../../lib/trip-dates";
         if (ok) shown++;
       });
       if (empty) empty.toggleAttribute("hidden", shown > 0);
+      // R5: the empty state names what the visitor actually did — both filters, in their
+      // own words — instead of a fixed sentence that guessed "country" while the chips
+      // above it say continent. With nothing to reset the sentence never renders.
+      if (emptyMsg && shown === 0) {
+        emptyMsg.textContent =
+          raw && activeContinent ? "No guides match “" + raw + "” in " + activeContinent + "."
+          : raw                  ? "No guides match “" + raw + "”."
+          : activeContinent      ? "No guides in " + activeContinent + " yet."
+          : "No guides match.";
+      }
+      // R5: the grid mutated silently for anyone not watching it. One polite live region
+      // carries the count, which covers the empty case too — so `#hubEmpty` stays a plain
+      // visual element rather than a live region that is `hidden` most of the time.
+      if (status) status.textContent = shown + " of " + total + " " + trips + " shown";
     }
-    chips.forEach(function (chip) {
-      chip.addEventListener("click", function () {
-        activeContinent = chip.getAttribute("data-filter") || "";
-        chips.forEach(function (c) { c.classList.toggle("hub-chip-active", c === chip); });
-        apply();
+
+    function setContinent(value) {
+      activeContinent = value || "";
+      chips.forEach(function (c) {
+        var on = (c.getAttribute("data-filter") || "") === activeContinent;
+        c.classList.toggle("hub-chip-active", on);
+        c.setAttribute("aria-pressed", String(on));
       });
+      apply();
+    }
+
+    chips.forEach(function (chip) {
+      chip.addEventListener("click", function () { setContinent(chip.getAttribute("data-filter")); });
     });
     if (search) search.addEventListener("input", apply);
+    if (reset) {
+      reset.addEventListener("click", function () {
+        if (search) search.value = "";
+        setContinent("");
+        // Focus lands on the search field, not on a button that just vanished with the
+        // empty state — otherwise the keyboard user is dropped back at `<body>`.
+        if (search) search.focus();
+      });
+    }
   }
 })();

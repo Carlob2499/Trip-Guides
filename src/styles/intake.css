@@ -20,7 +20,7 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .itk-eyebrow{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink)}
 .itk-hero h1{font-family:var(--font-display);font-weight:640;font-size:clamp(1.7rem,4.5vw,2.5rem);letter-spacing:-.012em;line-height:1.1;margin:.35rem 0 .5rem}
 .itk-dek{color:var(--muted);font-size:var(--text-lead);line-height:1.6;max-width:56ch;margin-bottom:1.8rem}
-.itk-foot{border-top:1px solid var(--ink);text-align:center;padding:1.6rem 1.2rem;color:var(--muted);font-size:var(--text-control);font-family:var(--font-data);letter-spacing:.04em}
+.itk-foot{border-top:1px solid var(--rule2);text-align:center;padding:1.6rem 1.2rem;color:var(--muted);font-size:var(--text-control);font-family:var(--font-data);letter-spacing:.04em}
 .itk-foot a{color:var(--accent-ink);text-decoration:underline;text-underline-offset:3px}
 .itk-foot a:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 
