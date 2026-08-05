@@ -103,15 +103,24 @@
          trade real legibility for tidiness on the one number someone reads in an emergency. */
   --text-nano:.6rem;        /* fine print BELOW the label scale: photo/data credits (.mast-credit,
                                 .imgcredit--onphoto, .wx-credit, .hol-credit), tiny badges
-                                (.hubcard-featured-tag, .bpill) and bare numerals (.stop-num,
+                                (.bpill; .hubcard-featured-tag until R3 retired it) and bare numerals (.stop-num,
                                 .dchip-num). 12 declarations sat under the old floor at .58-.62rem
                                 — the same "authors reaching past the scale" signal that produced
                                 the control steps, so it gets a step instead of being forced up
                                 13% into --text-micro. NOTE: everything here is small text for
                                 contrast purposes (well under the 18.7px large-text cutoff) and
                                 stays that way, so the credit badges' hard-won 4.5:1 is unaffected. */
-  --text-micro:.68rem;      /* uppercase tracked micro-labels — MIGRATED: 44 rules use --font-data
-                                already (the majority); 5 use --font-display for the same job */
+  --text-micro:.75rem;      /* uppercase tracked micro-labels — MIGRATED: 44 rules use --font-data
+                                already (the majority); 5 use --font-display for the same job.
+                                R3 (2026-08-05): raised .68rem -> .75rem (10.88px -> 12px). The 2026-08-05
+                                critique's detector flagged all 44 consumers at 10.88px, under the 11px
+                                functional-text floor — and on touch these labels ARE the affordance text
+                                ("Open guide →", badges, wizard labels); phone-in-sunlight is the product's
+                                stated tiebreak scene. 12px is the classic overline size. Raw px now sits
+                                above --text-control-sm (.72rem), which is fine optically: micro is
+                                uppercase+tracked, control-sm is mixed-case — uppercase reads smaller at
+                                equal size, so the APPARENT scale order holds. Contrast grading unaffected:
+                                still far under the 18.7px large-text cutoff, all pairs stay small-text. */
   --tracking-micro:.06em;   /* the modal value: 16 of ~50 existing rules already use this exact
                                 tracking; a few larger display-scale eyebrows (e.g. the masthead's
                                 own eyebrow) deliberately track wider and stay outside this token */

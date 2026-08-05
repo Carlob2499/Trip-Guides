@@ -446,7 +446,7 @@
       "refersTo": "card",
       "description": "The system's container. Flat at rest on a hairline; lifts only under a pointer.",
       "html": "<article class=\"ds-card\"><p class=\"ds-kick\">Denmark &middot; 6 days</p><h3 class=\"ds-card-t\">Copenhagen</h3><p class=\"ds-card-d\">Harbour baths, cycling, and the coffee you actually asked for.</p></article>",
-      "css": ".ds-card{background:var(--card,#f8faf3);border:1px solid var(--rule,#bec6b2);border-radius:16px;padding:1.25rem 1.4rem;box-shadow:0 1px 3px rgba(16,20,24,.06);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}.ds-card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(16,20,24,.1);border-color:var(--rule2,#a3ac98)}.ds-kick{margin:0 0 .3rem;font-family:system-ui,sans-serif;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-ink,#80371b)}.ds-card-t{margin:0 0 .35rem;font-family:Georgia,serif;font-weight:400;font-size:1.6rem;line-height:1.2;color:var(--ink,#171d24)}.ds-card-d{margin:0;font-family:Georgia,serif;font-size:1.02rem;line-height:1.72;color:var(--muted,#4e5747)}"
+      "css": ".ds-card{background:var(--card,#f8faf3);border:1px solid var(--rule,#bec6b2);border-radius:16px;padding:1.25rem 1.4rem;box-shadow:0 1px 3px rgba(16,20,24,.06);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}.ds-card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(16,20,24,.1);border-color:var(--rule2,#a3ac98)}.ds-kick{margin:0 0 .3rem;font-family:system-ui,sans-serif;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-ink,#80371b)}.ds-card-t{margin:0 0 .35rem;font-family:Georgia,serif;font-weight:400;font-size:1.6rem;line-height:1.2;color:var(--ink,#171d24)}.ds-card-d{margin:0;font-family:Georgia,serif;font-size:1.02rem;line-height:1.72;color:var(--muted,#4e5747)}"
     },
     {
       "name": "Text input",
@@ -470,7 +470,7 @@
       "refersTo": "micro-label",
       "description": "The signature mark of the product's promise: a dated stamp with an inline dot that opens the source. Sized to the text it annotates, so it reads as a notation rather than a control.",
       "html": "<p class=\"ds-stamp\">Checked 4 Aug 2026<button class=\"ds-prov\" aria-label=\"Show source\">&#9679;</button></p>",
-      "css": ".ds-stamp{margin:0;font-family:system-ui,sans-serif;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#4e5747)}.ds-prov{display:inline-flex;align-items:center;justify-content:center;width:1em;height:1em;border-radius:50%;border:none;background:transparent;color:var(--muted,#4e5747);font-size:.68rem;vertical-align:middle;margin-inline-start:.25em;padding:0;cursor:pointer;transition:color .15s ease}.ds-prov:hover{color:var(--accent,#9c4421)}.ds-prov:focus-visible{color:var(--accent,#9c4421);outline:2px solid var(--accent,#9c4421);outline-offset:2px}"
+      "css": ".ds-stamp{margin:0;font-family:system-ui,sans-serif;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#4e5747)}.ds-prov{display:inline-flex;align-items:center;justify-content:center;width:1em;height:1em;border-radius:50%;border:none;background:transparent;color:var(--muted,#4e5747);font-size:.75rem;vertical-align:middle;margin-inline-start:.25em;padding:0;cursor:pointer;transition:color .15s ease}.ds-prov:hover{color:var(--accent,#9c4421)}.ds-prov:focus-visible{color:var(--accent,#9c4421);outline:2px solid var(--accent,#9c4421);outline-offset:2px}"
     },
     {
       "name": "Status pill (stale)",
@@ -478,7 +478,7 @@
       "refersTo": "accent-pill",
       "description": "Caution ochre, outline-only. Appears solely when a fact has passed its shelf life — an honest mark, not a decoration.",
       "html": "<a class=\"ds-stale\" href=\"#\">Recheck due</a>",
-      "css": ".ds-stale{display:inline-block;padding:.1rem .5rem;border:1px solid var(--warn,#7f4a07);border-radius:999px;font-family:system-ui,sans-serif;font-size:.68rem;letter-spacing:.03em;color:var(--warn,#7f4a07);text-decoration:none;white-space:nowrap}.ds-stale:hover{background:color-mix(in srgb,var(--warn,#7f4a07) 12%,transparent)}"
+      "css": ".ds-stale{display:inline-block;padding:.1rem .5rem;border:1px solid var(--warn,#7f4a07);border-radius:999px;font-family:system-ui,sans-serif;font-size:.75rem;letter-spacing:.03em;color:var(--warn,#7f4a07);text-decoration:none;white-space:nowrap}.ds-stale:hover{background:color-mix(in srgb,var(--warn,#7f4a07) 12%,transparent)}"
     }
   ],
   "narrative": {

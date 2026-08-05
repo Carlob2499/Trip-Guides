@@ -51,7 +51,7 @@ typography:
     letterSpacing: "0.02em"
   label:
     fontFamily: "'Source Sans 3 Variable', -apple-system, system-ui, sans-serif"
-    fontSize: "0.68rem"
+    fontSize: "0.75rem"
     fontWeight: 400
     letterSpacing: "0.06em"
 rounded:
@@ -227,8 +227,11 @@ cost.
 - **Control** (600, `0.82rem`) and **Control Small** (`0.72rem`): tabs, buttons, pills,
   badges, counters. These exist because 47 rules had independently invented sizes in the gaps
   between prose steps — controls are a type role, not an afterthought.
-- **Label** (`0.68rem`, `0.06em` tracking, uppercase) and **Nano** (`0.6rem`): micro-labels,
-  credits, stamps, bare numerals.
+- **Label** (`0.75rem`, `0.06em` tracking, uppercase) and **Nano** (`0.6rem`): micro-labels,
+  credits, stamps, bare numerals. Label was raised from `0.68rem` (10.88px) in R3 (2026-08-05):
+  on touch these labels are the affordance text, and 10.88px sat under the 11px functional floor.
+  Raw px now exceeds Control Small; apparent size does not — uppercase reads smaller than
+  mixed-case at equal size.
 
 ### Named Rules
 
@@ -357,7 +360,7 @@ page its paper grain.
 
 ### Micro-labels and stamps
 
-- Uppercase, `0.68rem`, `0.06em` tracking, `--font-data`, accent-ink. This is the notation
+- Uppercase, `0.75rem`, `0.06em` tracking, `--font-data`, accent-ink. This is the notation
   layer — section kickers, credits, and the "Checked [date]" stamps. It is the smallest type in
   the system that carries meaning, and it is never used for prose.
 
