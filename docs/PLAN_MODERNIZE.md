@@ -332,7 +332,9 @@ The five moves from §1.4, as one coherent pass (uniform-across-surfaces rule ap
    screen-reader emoji-name noise.
 2. **Editorial hub for a curated catalog**: ≤4 guides → 2-up layout with large covers (~440px
    cards, `hubcard-cover` exists); auto-fill returns at ≥5. Build on the "Featured above" dedup
-   marker — never remove a guide from the grid (the index-never-lies rule).
+   marker — never remove a guide from the grid (the index-never-lies rule). *(Superseded
+   2026-08-05, R3: the hero now renders AS the featured guide's spanning grid cell, so the
+   dedup marker is gone — the index-never-lies rule stands, satisfied by one entry per guide.)*
 3. **Tab-bar strategy** before the next Korea-sized guide: content tabs left, tool tabs collapsed
    into one "Tools" pill on desktop (they are chrome by CLAUDE.md's own definition); the mobile
    sheet already proves the grouped model.

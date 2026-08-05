@@ -122,10 +122,6 @@ const NON_BMP_WHY =
   "aria-label, so a screen reader is unaffected regardless of this rule. Verified live: both real " +
   "buttons use var(--muted) on var(--card)/transparent, the same pair already proven >=4.5:1 on " +
   "every surface it paints.";
-const IMG_NODE_WHY =
-  ".hubcard-featured-tag sits over a photo. Computed its own worst case by hand: a 72%-opacity " +
-  "near-black pill is dark enough to clear 4.5:1 against a pure-white photo pixel (5.47:1), so it " +
-  "passes regardless of what the photo actually shows.";
 const ELM_PARTIALLY_OBSCURED_WHY =
   "A guide-tabs tool-tab whose real width exceeds this scan's 1280px viewport even once the tab " +
   "strip's own overflow is forced open above — clipped by the page's own overflow-x:clip (a real, " +
@@ -188,7 +184,9 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
       ),
     },
     "color-contrast/shortTextContent": { max: 1, why: SHORT_TEXT_CONTENT_WHY },
-    "color-contrast/imgNode": { max: 1, why: IMG_NODE_WHY },
+    // R3 (2026-08-05): the imgNode entry (max 1, .hubcard-featured-tag) is gone WITH its
+    // element — the featured guide now renders once, as the hero grid cell, so no tag
+    // floats over a photo. The zero-tolerance novelty gate below still catches any new one.
   },
   "korea guide": {
     "color-contrast/bgOverlap": {

@@ -21,6 +21,12 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
    still derives from the 270px/1fr floor). Verified against the same 360–1800px × 1–8-item
    matrix as the guide grids before flipping. */
 .hub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.2rem}
+/* R3: with the hero as a spanning cell, data-count (the ORDINARY cards) can be odd at any
+   width where auto-fit yields 2 columns (540–899px) — the ≥900px editorial block below no
+   longer covers the orphan. Span the odd last card at every width; a no-op in one column,
+   and the aspect-ratio treatment stays desktop-only where 21:9 has the room to read. */
+.hub-grid[data-count="1"]>.hubcard:last-child,
+.hub-grid[data-count="3"]>.hubcard:last-child{grid-column:1/-1}
 /* M4 item 2 — EDITORIAL layout for a curated catalog (≤4 guides). Two up, larger covers, more
    air; at 5+ guides the auto-fit rule above stands unchanged, so this needs no revisiting when
    the catalog grows. Desktop only — one column is already the right answer on a phone. */
@@ -130,7 +136,16 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
   body::before { display: none !important; }
   .hub-grid { display: block !important; }
   .hubcard { display: block !important; break-inside: avoid; border: none !important; border-bottom: 1px solid #ccc !important; border-radius: 0 !important; box-shadow: none !important; margin-bottom: .8rem; padding-bottom: .6rem; }
-  .hubcard-cover, .hubcard-bar, .hubcard-featured-tag { display: none !important; }
+  .hubcard-cover, .hubcard-bar { display: none !important; }
   .hubcard-title { color: #111 !important; }
   .hubcard-dek, .hubcard-country, .hubcard-days { color: #333 !important; }
+  /* R3: the hero is a grid cell now, so it prints as a list entry like every card —
+     photo/scrim off, dark ground off (light-on-dark text would vanish on white paper). */
+  .hub-hero { background: #fff !important; color: #111 !important; min-height: 0 !important; }
+  .hub-hero-img, .hub-hero-scrim { display: none !important; }
+  .hub-hero-body { min-height: 0 !important; padding: 0 !important; }
+  .hub-hero-title { color: #111 !important; }
+  .hub-hero-eyebrow, .hub-hero-count, .hub-hero-days, .hub-hero-wx {
+    color: #333 !important; background: none !important; border-color: #ccc !important;
+  }
 }

@@ -120,14 +120,18 @@ const heroIsPast = upcoming.length === 0 && finished.length > 0;
 const heroWhen = heroIsPast && hero?.ex.lastDate
   ? hero.ex.lastDate.toLocaleDateString("en-US", { month: "short", year: "numeric" })
   : "";
-// The hero IS that guide's entry on the hub — don't render it twice. The grid
-// The grid is the COMPLETE index — every curated guide, including the one featured in
-// the hero. Excluding the hero used to make "All" quietly mean "all but one", and left a
-// filtered view looking like a guide had vanished. The hero is an editorial band ABOVE the
-// filter; the grid below it is the list. The hero's own card is marked (not hidden) so it
-// reads as the same trip, not a second one.
+// R3 (2026-08-05 critique): the hero IS the featured guide's entry in the grid — a
+// full-width spanning cell INSIDE the complete, filterable index, not an editorial band
+// parked above it. This ends the two prior compromises at once: the same trip no longer
+// renders twice in one scroll (hero band + dimmed "Featured above" card), and the hero now
+// OBEYS the filter the visitor just expressed (filtering to Europe used to leave a giant
+// Arizona hero over the one Denmark card). "All trips" still means all: one entry per
+// guide, the featured one simply rendered at hero scale. Completeness beats tidiness —
+// and this is the one shape that needs neither a dim nor a tag to stay honest.
 const gridGuides = curated;
 const heroId = hero?.g.id ?? null;
+// The ordinary-card list excludes the hero (it renders as the spanning cell instead).
+const restGuides = curated.filter(x => x.g.id !== heroId);
 // R4: one width-parameterized source fn for both still-cover paths — Commons thumbnails
 // via Special:FilePath, direct royalty-free CDNs via their own `{w}` token (absent token
 // → single-size URL, srcset off). Mirrors the guide masthead's mastSrcAt exactly.
@@ -263,39 +267,6 @@ const contourLayers = [
     </section>
 
     <main class="hub" id="hubStart">
-      {hero && (
-        <a
-          class="hub-hero"
-          href={`${base}/guides/${hero.g.id}/`}
-          style={accentStyle(accentTokens(accentForGuide(hero.g.id, hero.g.data.theme, hero.g.data.country)))}
-          data-live-cover={(hero.g.data as any).cover?.video?.src ?? undefined}
-          data-hero-start={heroIsPast ? undefined : hero.ex.startISO}
-          data-hero-lat={heroIsPast ? undefined : hero.ex.mapCenter?.lat}
-          data-hero-lng={heroIsPast ? undefined : hero.ex.mapCenter?.lng}
-        >
-          {heroSrc && (
-            <img class="hub-hero-img" src={heroSrc} srcset={heroSrcset} sizes="100vw"
-                 alt={hero.ex.heroImg!.alt} loading="eager" fetchpriority="high"
-                 style={`view-transition-name:cover-${hero.g.id}`} />
-          )}
-          <span class="hub-hero-scrim" aria-hidden="true"></span>
-          <span class="hub-hero-body">
-            <span class="hub-hero-eyebrow">{heroIsPast ? "Last trip" : "Next trip"}{(hero.g.data.region || hero.g.data.country) !== hero.g.data.title ? ` · ${hero.g.data.region || hero.g.data.country}` : ""}</span>
-            <span class="hub-hero-title">{hero.g.data.title}</span>
-            <span class="hub-hero-meta">
-              {heroIsPast
-                ? <span class="hub-hero-count hub-hero-past">{heroWhen}</span>
-                : <span class="hub-hero-count" data-hero-countdown>{hero.ex.badge}</span>}
-              {/* Today's weather at the destination is only useful for a trip you're about
-                  to take — a finished one gets no pill. */}
-              {!heroIsPast && <span class="hub-hero-wx" data-hero-wx hidden></span>}
-              {hero.ex.dayCount > 0 && <span class="hub-hero-days">{hero.ex.dayCount} days {heroIsPast ? "travelled" : "planned"}</span>}
-            </span>
-            <span class="hub-hero-cta">{heroIsPast ? "See how it went →" : "Open the guide →"}</span>
-          </span>
-        </a>
-      )}
-
       <div class="hub-filter" role="search">
         <input class="hub-search" id="hubSearch" type="search" placeholder="Search guides…" aria-label="Search guides" autocomplete="off" />
         <div class="hub-chips" id="hubChips" role="group" aria-label="Filter by continent">
@@ -310,16 +281,58 @@ const contourLayers = [
           curated catalog of three it rendered three modest cards under a full-viewport hero,
           making the weakest beat on the page the one that lists the product. `data-count` lets
           CSS switch to a 2-up editorial layout with larger covers while the catalog is small,
-          and fall back to the original auto-fill at 5+ with no markup change. */}
-      <div class="hub-grid" id="hubGrid" data-count={gridGuides.length}>
-        {gridGuides.map(({ g, ex }) => {
+          and fall back to the original auto-fill at 5+ with no markup change.
+          R3: data-count counts the ORDINARY cards only — the hero cell always spans the full
+          row, so the editorial compositions (2-up, the 2+1 close) apply to what shares rows. */}
+      <div class="hub-grid" id="hubGrid" data-count={restGuides.length}>
+        {hero && (
+          <a
+            class="hub-hero hubcard"
+            href={`${base}/guides/${hero.g.id}/`}
+            style={accentStyle(accentTokens(accentForGuide(hero.g.id, hero.g.data.theme, hero.g.data.country)))}
+            data-live-cover={(hero.g.data as any).cover?.video?.src ?? undefined}
+            data-hero-start={heroIsPast ? undefined : hero.ex.startISO}
+            data-hero-lat={heroIsPast ? undefined : hero.ex.mapCenter?.lat}
+            data-hero-lng={heroIsPast ? undefined : hero.ex.mapCenter?.lng}
+            data-country={hero.g.data.country}
+            data-continent={continentFor(hero.g.data.country)}
+            data-start={hero.ex.startISO}
+            data-search={`${hero.g.data.country} ${hero.g.data.region || ""} ${hero.g.data.title} ${hero.g.data.dek || ""} ${continentFor(hero.g.data.country) || ""}`.toLowerCase()}
+          >
+            {/* R3: the hero carries `hubcard` too, so hub.js's one sort/filter/search pass
+                treats it as what it now is — a grid entry. Its data-* filter attributes are
+                built the same way as every card's; hiding it on a non-matching filter is the
+                POINT (the old band ignored the filter the visitor just expressed). */}
+            {heroSrc && (
+              <img class="hub-hero-img" src={heroSrc} srcset={heroSrcset} sizes="100vw"
+                   alt={hero.ex.heroImg!.alt} loading="eager" fetchpriority="high"
+                   style={`view-transition-name:cover-${hero.g.id}`} />
+            )}
+            <span class="hub-hero-scrim" aria-hidden="true"></span>
+            <span class="hub-hero-body">
+              <span class="hub-hero-eyebrow">{heroIsPast ? "Last trip" : "Next trip"}{(hero.g.data.region || hero.g.data.country) !== hero.g.data.title ? ` · ${hero.g.data.region || hero.g.data.country}` : ""}</span>
+              <span class="hub-hero-title">{hero.g.data.title}</span>
+              <span class="hub-hero-meta">
+                {heroIsPast
+                  ? <span class="hub-hero-count hub-hero-past">{heroWhen}</span>
+                  : <span class="hub-hero-count" data-hero-countdown>{hero.ex.badge}</span>}
+                {/* Today's weather at the destination is only useful for a trip you're about
+                    to take — a finished one gets no pill. */}
+                {!heroIsPast && <span class="hub-hero-wx" data-hero-wx hidden></span>}
+                {hero.ex.dayCount > 0 && <span class="hub-hero-days">{hero.ex.dayCount} days {heroIsPast ? "travelled" : "planned"}</span>}
+              </span>
+              <span class="hub-hero-cta">{heroIsPast ? "See how it went →" : "Open the guide →"}</span>
+            </span>
+          </a>
+        )}
+        {restGuides.map(({ g, ex }) => {
           // The full 3-stop palette, not just --accent — unused until V3 (Atlas card tinting,
           // docs/archive/PLAN_VISUAL_OVERHAUL.md) wires --accent2/--accent-raw into real CSS. Set here
           // now so V3 is a pure-CSS session, no markup change required.
           const pal = paletteAccentsForGuide(g.id, g.data.theme, g.data.country);
           return (
           <a
-            class:list={["hubcard", { "hubcard-featured": g.id === heroId }]}
+            class="hubcard"
             href={`${base}/guides/${g.id}/`}
             style={accentStyle(accentTokens(pal.primary, pal.raw))}
             data-country={g.data.country}
@@ -327,14 +340,14 @@ const contourLayers = [
             data-start={ex.startISO}
             data-search={`${g.data.country} ${g.data.region || ""} ${g.data.title} ${g.data.dek || ""} ${continentFor(g.data.country) || ""}`.toLowerCase()}
           >
-            {g.id === heroId && <span class="hubcard-featured-tag">Featured above</span>}
             {ex.heroImg ? (
               <span class="hubcard-cover" data-live-cover={(g.data as any).cover?.video?.src ?? undefined}>
-                {/* The cover is the shared element that morphs into the guide masthead. The FEATURED
-                    guide already carries `cover-<slug>` on the hero above, so its card omits the name
-                    to keep it unique per page (a duplicate name disables the transition). */}
+                {/* The cover is the shared element that morphs into the guide masthead. R3: the
+                    featured guide renders ONLY as the hero cell now (restGuides excludes it), so
+                    every card here carries its own view-transition name unconditionally — no
+                    duplicate-name guard needed when nothing is duplicated. */}
                 <img class="hubcard-img" src={coverSrc(ex.heroImg)} alt="" loading="lazy" decoding="async"
-                     style={g.id === heroId ? undefined : `view-transition-name:cover-${g.id}`} />
+                     style={`view-transition-name:cover-${g.id}`} />
                 <span class="hubcard-cover-grad" aria-hidden="true"></span>
               </span>
             ) : (
@@ -348,10 +361,9 @@ const contourLayers = [
             )}
             {/* V5: the accent bar morphs into the guide masthead's own accent rule
                 (`.masthead-rule`) on navigation — the palette literally carries across,
-                not just coincidentally matches. Same duplicate-name guard as the cover
-                photo above (the featured hero has no bar of its own to share the name with,
-                so only its grid-card twin gets one). */}
-            <span class="hubcard-bar" aria-hidden="true" style={g.id === heroId ? undefined : `view-transition-name:accent-${g.id}`}></span>
+                not just coincidentally matches. R3: unconditional name, same reason as the
+                cover above (the hero cell has no bar, and no card renders twice). */}
+            <span class="hubcard-bar" aria-hidden="true" style={`view-transition-name:accent-${g.id}`}></span>
             <span class="hubcard-body">
               <span class="hubcard-top">
                 <span class="hubcard-country">{g.data.region || g.data.country}</span>
