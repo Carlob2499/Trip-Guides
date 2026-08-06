@@ -36,6 +36,47 @@
      them — they are exactly what accentTokens("#9c4421") returns, and a test pins that. */
   --accent-ink-light:#80371b;--accent-ink-dark:#c78f78;--accent-ink:var(--accent-ink-light);
   --on-accent:#f0d2c7;
+  /* ATLAS TOKEN CONTRACT (Phase 1.1, 2026-08-06) — docs/design-handoff/DESIGN.md R4 names
+     several values this palette ALREADY ships. Declared here so any later Atlas ticket can
+     reference the names without defining them first. Nothing consumes them yet, and no call
+     site was renamed: that rename belongs to whichever phase actually touches each site, so
+     --bg2/--accent-ink/--on-accent/--warn keep working unchanged.
+     Every alias below is var(<the old token>), never a copied hex. A copy would be a second
+     source of truth for one colour — it would miss the dark-mode re-map, miss a guide's
+     per-page inline accent override, and drift the first time either moved. A var() alias
+     resolves against this same element, so it inherits both for free and cannot drift. */
+  --sunken:var(--bg2);        /* wells, inset panels, the bed a plate is mounted in */
+  --aink:var(--accent-ink);   /* accent doing the TEXT job — resolves exactly as --accent-ink does,
+                                 theme re-map included, and inherits its limits too: --accent-ink is
+                                 declared only here, so an element that merely carries the inline
+                                 --accent-ink-light/-dark candidates does not re-resolve either name */
+  --on-aink:var(--on-accent); /* text on an accent FILL — deliberately never re-maps (see above) */
+  --ochre:var(--warn);        /* stale, unconfirmed, advisory — the ⚠ pigment */
+  /* --cta/--cta-ink are the one genuinely NEW pair, and the only ones here that are not
+     aliases. DESIGN.md specs the primary button as chart-room-slate on card-paper and gives no
+     dark variant — but in dark mode chart-room-slate IS the page ground, so a fixed value
+     would paint a button that vanishes into the sheet behind it. The spec's intent is "the
+     maximum-separation object on its page", so the pair INVERTS with the theme (creator
+     decision, 2026-08-06). Both hexes are existing palette members, not new colours.
+     Pinned by src/styles/atlas-tokens.test.ts: >=4.5:1 ink-on-ground AND >=3:1 ground-on-page
+     (WCAG 1.4.11 — a button's own edge has to be findable), in both themes. */
+  --cta:#0f1317;--cta-ink:#f8faf3;
+  /* Display-cutout insets, spelled once at the root so no component has to remember env() or
+     its fallback. NOTHING consumes them in this phase — each fixed/sticky component wires
+     max(<its own reserve>,var(--safe-*)) as it migrates. The 0px fallback is load-bearing, not
+     decorative: env() with no fallback yields NOTHING on a browser without the inset, and a
+     calc() containing nothing is invalid at computed-value time — the whole declaration drops. */
+  --safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);
+  --safe-left:env(safe-area-inset-left,0px);--safe-right:env(safe-area-inset-right,0px);
+  /* Measured sticky-header height — STATIC FALLBACK ONLY in this phase (decision, 2026-08-06):
+     the JS writer ships with whichever phase first consumes the value, so this doesn't add a
+     resize observer nothing reads. 94px is --chrome-h's declared number, reused because it is
+     the existing best guess, NOT because it is right: .sticky-chrome actually renders 52px at
+     375px and 113px at 1130px (measured 2026-08-06), so no literal is correct at both ends.
+     That is the whole argument for the token being JS-written once something reads it, and the
+     reason a consumer must not treat this value as exact. Declared separately from --chrome-h
+     rather than aliased because --chrome-h keeps its own call sites. */
+  --hdr-h:94px;
   /* Type system — the Quiet Edition (R1, 2026-07-28): THREE ROLES, TWO FACES.
      display + body are BOTH Literata — one serif wearing both hats through its real
      optical-size axis (the `standard` fontsource variant carries wght+opsz, and
@@ -124,6 +165,23 @@
   --tracking-micro:.06em;   /* the modal value: 16 of ~50 existing rules already use this exact
                                 tracking; a few larger display-scale eyebrows (e.g. the masthead's
                                 own eyebrow) deliberately track wider and stay outside this token */
+  /* Panel-kicker — the Atlas Panel's type label, added with the R4 token contract. The FULL
+     role is: --text-panel-kicker size, --tracking-panel-kicker tracking, weight 640,
+     text-transform:uppercase, colour var(--aink). Only size and tracking get tokens, matching
+     --text-micro/--tracking-micro's existing shape exactly; weight, case and colour are one
+     literal each at the call site, and naming them here is what makes that reproducible
+     without a component to copy from.
+     10px is DELIBERATELY under the 11px functional-text floor that raised --text-micro in R3,
+     and the creator ruled to ship the handoff's size as specced (2026-08-06) rather than
+     pre-emptively widen it — the kicker is the only thing visible on a collapsed Panel, so it
+     is the one label worth judging on a real rendered Panel instead of in the abstract.
+     Legibility is held from the other side meanwhile: colour is var(--aink), whose >=4.5:1 on
+     every surface in both themes is pinned by atlas-tokens.test.ts. The identity colour
+     var(--accent) must NOT be used here — raw oxide measures 4.38:1 on the light sunken
+     surface and 2.20:1 on the dark card, and that test pins the failure so it can't be
+     "simplified" back to --accent later. */
+  --text-panel-kicker:.625rem;
+  --tracking-panel-kicker:.22em;
   --text-control-sm:.72rem; /* compact controls: pills, badges, counters, icon buttons */
   --text-caption:.78rem;    /* small captions, meta text */
   --text-control:.82rem;    /* standard controls: tabs, action buttons, and the notes beside them */
@@ -188,11 +246,17 @@
    re-mapped here; the accents were not, so accent TEXT kept its light-mode shade on a dark ground
    and Korea shipped 110 links at 2.20:1. --accent itself is deliberately NOT re-mapped — it is
    identity, used for fills and borders where the guide's real colour should show. */
+/* The Atlas aliases (--sunken/--aink/--on-aink/--ochre) are absent here ON PURPOSE: each is
+   var(<a token this block already re-maps>), resolved against this same element, so they follow
+   the swap automatically. Re-declaring them would create the second source of truth the alias
+   exists to prevent. --cta/--cta-ink are not aliases and DO invert — see :root. */
 @media(prefers-color-scheme:dark){html:not([data-theme="light"]){
   --bg:#0f1317;--bg2:#1a2129;--ink:#e8ece3;--card:#242c34;--rule:#38414b;--rule2:#4e5865;--muted:#9aa392;--green:#6aab76;--warn:#d9923f;
+  --cta:#e8ece3;--cta-ink:#0f1317;
   --accent-ink:var(--accent-ink-dark)}
 }
 [data-theme="dark"]{--bg:#0f1317;--bg2:#1a2129;--ink:#e8ece3;--card:#242c34;--rule:#38414b;--rule2:#4e5865;--muted:#9aa392;--green:#6aab76;--warn:#d9923f;
+  --cta:#e8ece3;--cta-ink:#0f1317;
   --accent-ink:var(--accent-ink-dark)}
 
 

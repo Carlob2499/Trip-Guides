@@ -54,6 +54,12 @@ typography:
     fontSize: "0.75rem"
     fontWeight: 400
     letterSpacing: "0.06em"
+  panel-kicker:
+    fontFamily: "'Source Sans 3 Variable', -apple-system, system-ui, sans-serif"
+    fontSize: "0.625rem"
+    fontWeight: 640
+    letterSpacing: "0.22em"
+    textTransform: "uppercase"
 rounded:
   sm: "6px"
   md: "10px"
@@ -182,6 +188,30 @@ guide layered on top.
   one is semantic and is never derived from a guide's accent — an emergency control must read
   as an emergency control on every guide.
 
+### Atlas names — declared, nothing consumes them yet
+
+The Waypoint Atlas redesign (`docs/design-handoff/DESIGN.md` R4) renames several of the values
+above. Phase 1.1 (2026-08-06) declared the new names in `base.css` **beside** the old ones and
+renamed no call site — every rule in `src/styles/` still reaches for the legacy name, and both
+resolve to the same colour, so nothing on the site changed appearance. The per-call-site rename
+belongs to whichever later phase actually touches that site.
+
+- `--sunken` = `--bg2` · `--aink` = `--accent-ink` · `--on-aink` = `--on-accent` ·
+  `--ochre` = `--warn`. Each is declared as `var(<old token>)`, never a copied hex, so it
+  inherits the dark-mode re-map and a guide's inline accent override rather than shadowing them.
+- `--cta` / `--cta-ink`: the primary button's ground and text — the one genuinely new pair.
+  `#0f1317` on `#f8faf3` in daylight, **inverting** to `#e8ece3` on `#0f1317` in the chart room.
+  The handoff gave no dark variant, but chart-room slate *is* the dark page, so a fixed value
+  paints a button that vanishes into its own sheet. Both hexes are existing palette members.
+- `--safe-top` / `--safe-bottom` / `--safe-left` / `--safe-right`: display-cutout insets from
+  `env(safe-area-inset-*, 0px)`, spelled once at the root. Each fixed or sticky component wires
+  `max(<its own reserve>, var(--safe-*))` as it migrates.
+- `--hdr-h`: the sticky header's measured height. A static `94px` fallback for now; the JS that
+  measures and writes it ships with whichever phase first reads it.
+
+`src/styles/atlas-tokens.test.ts` parses these out of `base.css` and pins both the alias
+property and the contrast of the two pairings the handoff had flagged unverified.
+
 ### Named Rules
 
 **The Three Jobs Rule.** An accent has three jobs and they are three different colours.
@@ -227,6 +257,13 @@ cost.
 - **Control** (600, `0.82rem`) and **Control Small** (`0.72rem`): tabs, buttons, pills,
   badges, counters. These exist because 47 rules had independently invented sizes in the gaps
   between prose steps — controls are a type role, not an afterthought.
+- **Panel Kicker** (640, `0.625rem`, `0.22em` tracking, uppercase, `--aink`): the type label at
+  the head of every Atlas Panel, and the only thing visible when one is collapsed — so it names
+  the *kind* of content, not a summary of it. Declared in Phase 1.1; no Panel renders yet. Its
+  10px sits deliberately under the 11px functional floor that raised Label in R3, shipped at the
+  handoff's size to be judged on a real Panel rather than in the abstract. Legibility is held
+  from the other side: the colour is `--aink`, gated at 4.5:1 on every surface in both themes,
+  and never the ungated identity `--accent` — which measures 4.38:1 on the light sunken well.
 - **Label** (`0.75rem`, `0.06em` tracking, uppercase) and **Nano** (`0.6rem`): micro-labels,
   credits, stamps, bare numerals. Label was raised from `0.68rem` (10.88px) in R3 (2026-08-05):
   on touch these labels are the affordance text, and 10.88px sat under the 11px functional floor.

@@ -329,6 +329,10 @@
       "label": {
         "displayName": "Label",
         "purpose": "Uppercase tracked micro-labels: kickers, credits, and 'Checked [date]' stamps."
+      },
+      "panel-kicker": {
+        "displayName": "Panel Kicker",
+        "purpose": "The type label at the head of an Atlas Panel, and the only thing visible when one is collapsed — so it names the kind of content, not a summary of it. Declared in Phase 1.1; no Panel renders yet."
       }
     },
     "shadows": [
@@ -413,7 +417,64 @@
         "name": "lg",
         "value": "1100px"
       }
-    ]
+    ],
+    "cssVariables": {
+      "--sunken": {
+        "value": "var(--bg2)",
+        "status": "alias, declared 2026-08-06, unconsumed",
+        "purpose": "wells, inset panels, and the bed a plate is mounted in"
+      },
+      "--aink": {
+        "value": "var(--accent-ink)",
+        "status": "alias, declared 2026-08-06, unconsumed",
+        "purpose": "accent doing the text job — re-maps by theme, follows the guide"
+      },
+      "--on-aink": {
+        "value": "var(--on-accent)",
+        "status": "alias, declared 2026-08-06, unconsumed",
+        "purpose": "text on an accent fill — never re-maps"
+      },
+      "--ochre": {
+        "value": "var(--warn)",
+        "status": "alias, declared 2026-08-06, unconsumed",
+        "purpose": "stale, unconfirmed, advisory"
+      },
+      "--cta": {
+        "value": "#0f1317 light / #e8ece3 dark",
+        "status": "new, declared 2026-08-06, unconsumed",
+        "purpose": "primary button ground — inverts by theme so it always separates from --bg"
+      },
+      "--cta-ink": {
+        "value": "#f8faf3 light / #0f1317 dark",
+        "status": "new, declared 2026-08-06, unconsumed",
+        "purpose": "primary button text"
+      },
+      "--safe-top": {
+        "value": "env(safe-area-inset-top,0px)",
+        "status": "new, declared 2026-08-06, unconsumed",
+        "purpose": "display-cutout inset; components wire max(reserve, var(--safe-*)) as they migrate"
+      },
+      "--safe-bottom": {
+        "value": "env(safe-area-inset-bottom,0px)",
+        "status": "new, declared 2026-08-06, unconsumed",
+        "purpose": "display-cutout inset"
+      },
+      "--safe-left": {
+        "value": "env(safe-area-inset-left,0px)",
+        "status": "new, declared 2026-08-06, unconsumed",
+        "purpose": "display-cutout inset"
+      },
+      "--safe-right": {
+        "value": "env(safe-area-inset-right,0px)",
+        "status": "new, declared 2026-08-06, unconsumed",
+        "purpose": "display-cutout inset"
+      },
+      "--hdr-h": {
+        "value": "94px",
+        "status": "new, static fallback, declared 2026-08-06, unconsumed",
+        "purpose": "sticky-header height; the JS writer ships with the first consumer"
+      }
+    }
   },
   "components": [
     {
@@ -438,7 +499,7 @@
       "refersTo": "accent-pill",
       "description": "Carries a sourced-approximate figure. Its ground is tinted toward the accent, which is why its ink is derived against tinted surfaces.",
       "html": "<span class=\"ds-pill\">&asymp; 120 kr</span>",
-      "css": ".ds-pill{display:inline-flex;align-items:center;gap:.2em;font-family:system-ui,sans-serif;font-size:.72rem;font-weight:700;color:var(--accent-ink,#80371b);background:color-mix(in srgb,var(--accent,#9c4421) 12%,var(--card,#f8faf3));border:1px solid color-mix(in srgb,var(--accent,#9c4421) 35%,var(--rule2,#a3ac98));border-radius:99px;padding:.08rem .5rem;white-space:nowrap}"
+      "css": ".ds-pill{display:inline-flex;align-items:center;gap:.2em;font-family:system-ui,sans-serif;font-size:.72rem;font-weight:700;color:var(--aink,#80371b);background:color-mix(in srgb,var(--accent,#9c4421) 12%,var(--card,#f8faf3));border:1px solid color-mix(in srgb,var(--accent,#9c4421) 35%,var(--rule2,#a3ac98));border-radius:99px;padding:.08rem .5rem;white-space:nowrap}"
     },
     {
       "name": "Card",
@@ -446,7 +507,7 @@
       "refersTo": "card",
       "description": "The system's container. Flat at rest on a hairline; lifts only under a pointer.",
       "html": "<article class=\"ds-card\"><p class=\"ds-kick\">Denmark &middot; 6 days</p><h3 class=\"ds-card-t\">Copenhagen</h3><p class=\"ds-card-d\">Harbour baths, cycling, and the coffee you actually asked for.</p></article>",
-      "css": ".ds-card{background:var(--card,#f8faf3);border:1px solid var(--rule,#bec6b2);border-radius:16px;padding:1.25rem 1.4rem;box-shadow:0 1px 3px rgba(16,20,24,.06);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}.ds-card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(16,20,24,.1);border-color:var(--rule2,#a3ac98)}.ds-kick{margin:0 0 .3rem;font-family:system-ui,sans-serif;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-ink,#80371b)}.ds-card-t{margin:0 0 .35rem;font-family:Georgia,serif;font-weight:400;font-size:1.6rem;line-height:1.2;color:var(--ink,#171d24)}.ds-card-d{margin:0;font-family:Georgia,serif;font-size:1.02rem;line-height:1.72;color:var(--muted,#4e5747)}"
+      "css": ".ds-card{background:var(--card,#f8faf3);border:1px solid var(--rule,#bec6b2);border-radius:16px;padding:1.25rem 1.4rem;box-shadow:0 1px 3px rgba(16,20,24,.06);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}.ds-card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(16,20,24,.1);border-color:var(--rule2,#a3ac98)}.ds-kick{margin:0 0 .3rem;font-family:system-ui,sans-serif;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--aink,#80371b)}.ds-card-t{margin:0 0 .35rem;font-family:Georgia,serif;font-weight:400;font-size:1.6rem;line-height:1.2;color:var(--ink,#171d24)}.ds-card-d{margin:0;font-family:Georgia,serif;font-size:1.02rem;line-height:1.72;color:var(--muted,#4e5747)}"
     },
     {
       "name": "Text input",
@@ -460,7 +521,7 @@
       "name": "Primary CTA",
       "kind": "button",
       "refersTo": "cta-primary",
-      "description": "The hub hero's single call to action. Ink-filled pill on paper — the only place a solid dark fill is spent.",
+      "description": "The hub hero's single call to action. Ink-filled pill on paper — the only place a solid dark fill is spent. Its ground and text are now named --cta/--cta-ink, which INVERT in the chart room; this call site has not migrated and still paints the fixed daylight hexes below.",
       "html": "<a class=\"ds-cta\" href=\"#\">Open the guide</a>",
       "css": ".ds-cta{display:inline-block;font-family:Georgia,serif;font-weight:640;font-size:.88rem;letter-spacing:-.01em;padding:.6rem 1.15rem;border-radius:999px;background:#0f1317;color:#f8faf3;border:1px solid rgba(248,250,243,.18);text-decoration:none;transition:transform .15s,background .15s}.ds-cta:hover{transform:translateY(-2px);background:#242c34}.ds-cta:focus-visible{outline:2px solid var(--accent,#9c4421);outline-offset:2px}.ds-cta:active{scale:.98}"
     },
@@ -478,7 +539,7 @@
       "refersTo": "accent-pill",
       "description": "Caution ochre, outline-only. Appears solely when a fact has passed its shelf life — an honest mark, not a decoration.",
       "html": "<a class=\"ds-stale\" href=\"#\">Recheck due</a>",
-      "css": ".ds-stale{display:inline-block;padding:.1rem .5rem;border:1px solid var(--warn,#7f4a07);border-radius:999px;font-family:system-ui,sans-serif;font-size:.75rem;letter-spacing:.03em;color:var(--warn,#7f4a07);text-decoration:none;white-space:nowrap}.ds-stale:hover{background:color-mix(in srgb,var(--warn,#7f4a07) 12%,transparent)}"
+      "css": ".ds-stale{display:inline-block;padding:.1rem .5rem;border:1px solid var(--ochre,#7f4a07);border-radius:999px;font-family:system-ui,sans-serif;font-size:.75rem;letter-spacing:.03em;color:var(--ochre,#7f4a07);text-decoration:none;white-space:nowrap}.ds-stale:hover{background:color-mix(in srgb,var(--ochre,#7f4a07) 12%,transparent)}"
     }
   ],
   "narrative": {
@@ -531,6 +592,11 @@
         "name": "The Heavy-Shadow-Means-On-Top Rule",
         "body": "The 18px/50px class of shadow is reserved for things that are literally above everything else. Give a card that shadow at rest and modals stop reading as modal.",
         "section": "elevation"
+      },
+      {
+        "name": "The Names Land Before The Rename Rule",
+        "body": "A new token vocabulary is declared BESIDE the old names, never as a sitewide rename. Each new name is var(<the old token>), so it inherits the dark-mode re-map and a guide's inline accent override instead of shadowing them, and no call site moves until the phase that actually touches it. What ships in src/styles/ still reads --bg2/--accent-ink/--on-accent/--warn; --sunken/--aink/--on-aink/--ochre resolve to exactly those values.",
+        "section": "colors"
       }
     ],
     "dos": [
