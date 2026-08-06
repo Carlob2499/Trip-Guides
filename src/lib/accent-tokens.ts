@@ -86,6 +86,10 @@ export function accentStyle(t: AccentTokens, extra: Record<string, string> = {})
     // every stylesheet rule, so writing --accent-ink here would shadow base.css's dark-mode
     // override and pin the light shade onto dark pages — which is exactly what happened: axe
     // measured the light ink (#5e642b) on a dark ground at 2.6:1. base.css picks between these.
+    // COUPLED NAME (#38): base.css's carrier rules select on [style*="--accent-ink-light"] —
+    // the literal property name in this serialized style IS the selector's hook. Renaming it
+    // means updating the carrier rules and both accent gates (tests/visual/a11y.spec.ts,
+    // scripts/__tests__/accent-ink-contract.test.mjs) in the same pass.
     "--accent-ink-light": t.ink,
     "--accent-ink-dark": t.inkDark,
     /* --on-accent IS emitted resolved, and that is not an inconsistency with the rule above. The

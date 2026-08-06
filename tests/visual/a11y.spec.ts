@@ -420,3 +420,44 @@ for (const [name, path] of [
     });
   }
 }
+
+/* ---- ACCENT-INK CARRIER RESOLUTION (issue #38) ------------------------------------
+   A custom property substitutes its var()s on the element that DECLARES it, so :root's
+   `--accent-ink:var(--accent-ink-light)` resolves once against :root's own candidates
+   and descendants inherit that RESOLVED value. Every hub card therefore carried its
+   per-guide ink candidates inline and painted the house ink — same rendered colour on
+   every card, which axe cannot flag because the house ink passes contrast too. The
+   carrier rules in base.css re-declare --accent-ink on any element with inline
+   candidates; this asserts, per carrier and in both themes, that the resolved ink IS
+   that element's own candidate. Sameness across cards was the symptom; per-element
+   equality is the contract. The source-side partner (accent text may only come from
+   --accent-ink/--aink) lives in scripts/__tests__/accent-ink-contract.test.mjs. */
+for (const [who, pagePath] of [
+  ["hub cards", "/Trip-Guides/"],
+  /* The guide page exercises the OTHER carrier shape: <html> itself holds the inline
+     candidates, where the :root-level swap (not the descendant partner) must resolve. */
+  ["guide page", "/Trip-Guides/guides/denmark/"],
+] as const)
+for (const scheme of ["light", "dark"] as const) {
+  test(`${who} resolve their OWN accent ink — ${scheme}`, async ({ page }) => {
+    await prep(page, pagePath, scheme, VIEWPORTS[0]);
+    const carriers = await page.evaluate((dark) => {
+      return Array.from(document.querySelectorAll('[style*="--accent-ink-light"]')).map((el) => {
+        const cs = getComputedStyle(el);
+        return {
+          who: (el.className && String(el.className).split(" ")[0]) || el.tagName,
+          candidate: cs.getPropertyValue(dark ? "--accent-ink-dark" : "--accent-ink-light").trim(),
+          resolved: cs.getPropertyValue("--accent-ink").trim(),
+        };
+      });
+    }, scheme === "dark");
+    const many = who === "hub cards"; // the guide page's one carrier is <html> itself
+    expect(carriers.length, `${who} stopped emitting inline accent candidates — update this gate`).toBeGreaterThanOrEqual(many ? 2 : 1);
+    for (const c of carriers) {
+      expect(c.resolved, `${c.who} (${scheme}): inherited an ink instead of resolving its own candidate`).toBe(c.candidate);
+    }
+    /* The original symptom, asserted directly: per-guide inks must actually differ.
+       Only meaningful where a page has several carriers. */
+    if (many) expect(new Set(carriers.map((c) => c.resolved)).size).toBeGreaterThan(1);
+  });
+}

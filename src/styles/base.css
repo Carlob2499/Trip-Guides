@@ -47,9 +47,8 @@
      resolves against this same element, so it inherits both for free and cannot drift. */
   --sunken:var(--bg2);        /* wells, inset panels, the bed a plate is mounted in */
   --aink:var(--accent-ink);   /* accent doing the TEXT job — resolves exactly as --accent-ink does,
-                                 theme re-map included, and inherits its limits too: --accent-ink is
-                                 declared only here, so an element that merely carries the inline
-                                 --accent-ink-light/-dark candidates does not re-resolve either name */
+                                 theme re-map included. Since the carrier rules below (#38), an
+                                 element carrying the inline candidates re-resolves both names. */
   --on-aink:var(--on-accent); /* text on an accent FILL — deliberately never re-maps (see above) */
   --ochre:var(--warn);        /* stale, unconfirmed, advisory — the ⚠ pigment */
   /* --cta/--cta-ink are the one genuinely NEW pair, and the only ones here that are not
@@ -241,6 +240,19 @@
   --ease-out-expo:cubic-bezier(.16,1,.3,1);   /* entries, reveals, panel/tab transitions */
   --dur-tap:120ms;--dur-ui:200ms;--dur-reveal:350ms;--dur-hero:600ms; /* duration scale: touch → control → scroll-reveal → hero */
 }
+/* CARRIER RE-RESOLUTION (#38). A custom property substitutes its var()s on the element
+   that DECLARES it, and descendants inherit the resolved value — so :root's
+   --accent-ink:var(--accent-ink-light) resolves once against :root's own candidates,
+   and an element that merely carries inline --accent-ink-light/-dark (a hub card,
+   accent-tokens.ts's accentStyle output) inherited the HOUSE ink while its own
+   candidates sat unread. Every hub card computed its per-guide ink and painted oxide.
+   These rules make any candidate CARRIER re-declare --accent-ink locally, so the
+   substitution happens where the candidates actually live. The dark partners sit in
+   both dark blocks below with higher specificity, mirroring the :root swap. Gated two
+   ways: a rendered per-card check in tests/visual/a11y.spec.ts, and the accent-as-text
+   source rule in scripts/__tests__/accent-ink-contract.test.mjs. */
+[style*="--accent-ink-light"]{--accent-ink:var(--accent-ink-light)}
+
 /* Dark-mode override — via data-theme="dark" on <html>, or auto via OS preference. */
 /* --accent-ink:var(--accent-ink-dark) is the line dark mode was missing. Every other token was
    re-mapped here; the accents were not, so accent TEXT kept its light-mode shade on a dark ground
@@ -254,10 +266,13 @@
   --bg:#0f1317;--bg2:#1a2129;--ink:#e8ece3;--card:#242c34;--rule:#38414b;--rule2:#4e5865;--muted:#9aa392;--green:#6aab76;--warn:#d9923f;
   --cta:#e8ece3;--cta-ink:#0f1317;
   --accent-ink:var(--accent-ink-dark)}
+  /* Carrier partner (#38): same swap, on the elements that carry their own candidates. */
+  html:not([data-theme="light"]) [style*="--accent-ink-light"]{--accent-ink:var(--accent-ink-dark)}
 }
 [data-theme="dark"]{--bg:#0f1317;--bg2:#1a2129;--ink:#e8ece3;--card:#242c34;--rule:#38414b;--rule2:#4e5865;--muted:#9aa392;--green:#6aab76;--warn:#d9923f;
   --cta:#e8ece3;--cta-ink:#0f1317;
   --accent-ink:var(--accent-ink-dark)}
+[data-theme="dark"] [style*="--accent-ink-light"]{--accent-ink:var(--accent-ink-dark)}
 
 
 /* --- CROSS-PAGE VIEW TRANSITIONS ------------------------------------------- */
