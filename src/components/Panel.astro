@@ -1,0 +1,64 @@
+---
+/* Panel — the Atlas container. Kicker, title, drag handle, collapse toggle, body.
+   A Panel is a CONTAINER, never a content type: from Phase 2 a Panel *section*
+   (content.config.ts's "type":"panel") renders INSIDE one of these. See CONTEXT.md
+   for why the two share the word.
+
+   Collapse is progressive, and the styles enforce it: every collapse rule is gated on
+   `[data-panel-ready]`, which only src/features/panel/ sets. Until it does — and forever,
+   with JS off — every Panel renders open and the toggle is not drawn, so a Panel that
+   ships collapsed is still readable and no control is offered that cannot work.
+
+   The drag handle is inert here — it is markup and a tap target only, wired in a
+   later ticket. It is rendered now so the Panel's chrome is judged whole. */
+interface Props {
+  /** Stable id — the key this Panel's collapsed state is stored under. */
+  id: string;
+  /** The type label. On a collapsed Panel this is the only body-level thing visible. */
+  kicker?: string;
+  title: string;
+  /** Start collapsed before the reader has any saved state for this Panel. */
+  collapsed?: boolean;
+}
+const { id, kicker, title, collapsed = false } = Astro.props;
+/* The derived DOM ids are IDREF TARGETS (aria-controls, aria-labelledby), and aria-controls
+   is a SPACE-SEPARATED list — so an id of "day 1" would silently point at two elements that
+   don't exist and kill the disclosure relationship for assistive tech with nothing visibly
+   wrong. Slugged here rather than trusted, because the caller's id is also a storage key and
+   is not otherwise constrained. */
+const slug = String(id).replace(/[^A-Za-z0-9_-]+/g, "-");
+const bodyId = `pnl-body-${slug}`;
+const titleId = `pnl-title-${slug}`;
+---
+
+<section class="pnl" data-panel={id} data-collapsed={collapsed ? "1" : null} aria-labelledby={titleId}>
+  <header class="pnl-head">
+    <span class="pnl-grip" data-panel-grip aria-hidden="true">
+      <svg viewBox="0 0 16 16" width="16" height="16" focusable="false"><g fill="currentColor">
+        <circle cx="6" cy="3.5" r="1.35" /><circle cx="10" cy="3.5" r="1.35" />
+        <circle cx="6" cy="8" r="1.35" /><circle cx="10" cy="8" r="1.35" />
+        <circle cx="6" cy="12.5" r="1.35" /><circle cx="10" cy="12.5" r="1.35" />
+      </g></svg>
+    </span>
+    <div class="pnl-headings">
+      {kicker && <p class="pnl-kicker">{kicker}</p>}
+      <h2 class="pnl-title" id={titleId}>{title}</h2>
+    </div>
+    <button
+      class="pnl-toggle"
+      type="button"
+      data-panel-toggle
+      aria-expanded={collapsed ? "false" : "true"}
+      aria-controls={bodyId}
+    >
+      <span class="pnl-toggle-lbl">{title}</span>
+      <svg class="pnl-chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+        <path d="M4 6.2 8 10.2l4-4" fill="none" stroke="currentColor" stroke-width="1.8"
+          stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+  </header>
+  <div class="pnl-body" id={bodyId} data-panel-body>
+    <div class="pnl-body-in"><slot /></div>
+  </div>
+</section>

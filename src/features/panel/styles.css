@@ -1,0 +1,167 @@
+/* Panel — the Atlas container's chrome. Styled entirely from the R4 token contract;
+   no literal colour, size or timing that a token already names.
+
+   Collapse animates grid-template-rows 1fr -> 0fr rather than a measured pixel height,
+   so the body's real height is never read or written by script and the transition
+   survives content changing size between collapses. */
+
+.pnl {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(16, 20, 24, .06);
+}
+
+.pnl-head {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .5rem .6rem .5rem .3rem;
+}
+
+/* Inert until the reorder ticket wires it: the glyph and its 44px target are reserved
+   now so the header's proportions are judged whole, but it deliberately does NOT take
+   `cursor:grab` — a grab cursor promises a drag that would not happen. */
+.pnl-grip {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* 44px at every viewport: the Panel header's two controls are the smallest things
+     on it, and a thumb does not get smaller on a phone. */
+  min-width: 44px;
+  min-height: 44px;
+  color: var(--muted);
+}
+
+.pnl-headings { flex: 1 1 auto; min-width: 0; }
+
+/* The one label visible on a collapsed Panel — the full role from base.css's
+   --text-panel-kicker comment: size + tracking tokens, weight 640, uppercase,
+   colour var(--aink) (never var(--accent), which fails contrast here). */
+.pnl-kicker {
+  margin: 0 0 .1rem;
+  font-family: var(--font-data);
+  font-size: var(--text-panel-kicker);
+  letter-spacing: var(--tracking-panel-kicker);
+  font-weight: 640;
+  text-transform: uppercase;
+  color: var(--aink);
+}
+
+.pnl-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-h4);
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/* Hidden until the silo has wired it: a toggle that cannot toggle is worse than no
+   toggle, and with JS off the `[data-panel-ready]` gate below also leaves every Panel
+   open, so a Panel that ships collapsed is still readable. */
+.pnl-toggle { display: none; }
+
+[data-panel-ready] .pnl-toggle {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: var(--r-sm);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.pnl-toggle:hover { background: var(--sunken); }
+.pnl-toggle:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* The button's accessible name is the Panel's title; aria-expanded carries the state,
+   so nothing about "collapse"/"expand" needs to be spoken or drawn. */
+.pnl-toggle-lbl {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+[data-panel-ready] .pnl[data-collapsed] .pnl-chev { transform: rotate(-90deg); }
+
+.pnl-body {
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+}
+
+.pnl-body-in {
+  overflow: hidden;
+  min-height: 0;
+  /* Horizontal padding only. The row's 0fr floor is the item's own padding, not its
+     content — a padding-bottom here would leave a collapsed Panel 20px tall — so the
+     bottom gap is carried by the last child's margin, which the clip removes with it. */
+  padding: 0 1.4rem;
+}
+
+/* Block rhythm belongs to the container, exactly as .card p+p does in guide.css —
+   otherwise every consumer has to re-supply it and they will not agree. */
+.pnl-body-in > * { margin: 0; }
+.pnl-body-in > * + * { margin-top: .85rem; }
+.pnl-body-in > :last-child { margin-bottom: 1.25rem; }
+
+[data-panel-ready] .pnl[data-collapsed] .pnl-body {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  /* visibility flips only once the body has finished shrinking, so a collapsed Panel's
+     content leaves the tab order and the a11y tree instead of hiding under a 0px row. */
+  visibility: hidden;
+}
+
+@media (max-width: 599px) { .pnl-body-in { padding: 0 1rem; } }
+
+/* TRANSITIONS ARE A SECOND, LATER GATE — and that is the whole point.
+   `[data-panel-ready]` is set synchronously as the silo restores each Panel, so a Panel
+   the reader collapsed on a previous visit is already shut at first paint. If the
+   transitions were live at that moment the restore would ANIMATE: the body would paint
+   open and then slide shut over 350ms on every load, shoving everything below it up the
+   page. `[data-panel-anim]` is therefore set a frame later, once that first state has
+   painted — after which every change is the reader's own and every change animates. */
+[data-panel-anim] .pnl-chev {
+  transition: transform var(--dur-reveal) var(--ease-out-expo);
+}
+
+/* --dur-reveal is the scale step for a reveal (350ms) — the Panel deliberately rides the
+   shared motion vocabulary rather than declaring its own near-identical literal. */
+[data-panel-anim] .pnl-body {
+  transition:
+    grid-template-rows var(--dur-reveal) var(--ease-out-expo),
+    opacity var(--dur-reveal) var(--ease-out-expo),
+    visibility 0s;
+}
+
+[data-panel-anim] .pnl[data-collapsed] .pnl-body {
+  transition:
+    grid-template-rows var(--dur-reveal) var(--ease-out-expo),
+    opacity var(--dur-reveal) var(--ease-out-expo),
+    visibility 0s linear var(--dur-reveal);
+}
+
+/* Reduced motion is OFF, not gentler: no transition at all, on any property. The state
+   still changes instantly and completely — visibility included, which is why the whole
+   declaration is dropped rather than shortened. */
+@media (prefers-reduced-motion: reduce) {
+  [data-panel-anim] .pnl-chev,
+  [data-panel-anim] .pnl-body,
+  [data-panel-anim] .pnl[data-collapsed] .pnl-body { transition: none; }
+}
