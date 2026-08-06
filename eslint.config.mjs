@@ -18,7 +18,7 @@ export default tseslint.config(
   {
     /* Build output, caches and vendored assets are not source. .astro/ in particular is a
        generated content cache — linting it reports on code nobody wrote. */
-    ignores: ["dist/**", ".astro/**", "node_modules/**", "coverage/**", "worker/dist/**", "**/*.min.js"],
+    ignores: ["dist/**", ".astro/**", "node_modules/**", "coverage/**", "worker/dist/**", "**/*.min.js", "docs/design-handoff/prototype/**", ".claude/worktrees/**"],
   },
 
   js.configs.recommended,
