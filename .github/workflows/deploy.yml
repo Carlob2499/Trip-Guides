@@ -55,31 +55,34 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      # A6: the environment URL previously only ever read the FIRST attempt's output — if
-      # that attempt failed (continue-on-error masks it, so the job stays green) and a
-      # retry succeeded instead, this URL stayed blank even though the deploy landed.
-      # Fall through the retry chain to whichever attempt actually produced a URL.
-      url: ${{ steps.deployment.outputs.page_url || steps.deployment-retry.outputs.page_url || steps.deployment-final.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      # deploy-pages intermittently fails with "Deployment failed, try again
-      # later" (Pages-side transient; observed repeatedly on this repo).
-      # Retry twice with a pause before failing for real.
+      # ONE attempt, with a timeout that outlasts the Pages queue.
+      #
+      # The retry chain that used to live here (2026-08-06) was written for a
+      # DIFFERENT failure — "Deployment failed, try again later", a genuine
+      # Pages-side transient. Against the failure this repo actually hits it was
+      # not just useless but harmful, because deploy-pages CANCELS the deployment
+      # it created when it times out, and the deployment ID *is* the commit SHA:
+      #
+      #   Timeout reached, aborting! / Canceling Pages deployment...
+      #   Canceled deployment with ID e0c787f…
+      #   (retry) Created deployment for e0c787f…, ID: e0c787f…
+      #   (retry) ##[error]Deployment cancelled.     ← 5 seconds later, always
+      #
+      # A retry re-submits the same ID and is handed back the record the previous
+      # attempt just cancelled, so it can never succeed. Worse, it left the
+      # deployment half-alive and the NEXT push failed on "due to in progress
+      # deployment. Please cancel <prev sha> first" — four consecutive red runs
+      # (43a05fa, f2f7fad, 5f3e52f, e0c787f) while the site itself was fine.
+      #
+      # The real failure was simply a slow Pages queue: deployments sat in
+      # `deployment_queued` for ~12.5 min against the action's 10-min default and
+      # landed a minute after the workflow gave up. So: wait longer, once.
       - uses: actions/deploy-pages@v5
         id: deployment
-        continue-on-error: true
-      - name: Wait before retry
-        if: steps.deployment.outcome == 'failure'
-        run: sleep 45
-      - uses: actions/deploy-pages@v5
-        id: deployment-retry
-        if: steps.deployment.outcome == 'failure'
-        continue-on-error: true
-      - name: Wait before final retry
-        if: steps.deployment.outcome == 'failure' && steps.deployment-retry.outcome == 'failure'
-        run: sleep 90
-      - uses: actions/deploy-pages@v5
-        id: deployment-final
-        if: steps.deployment.outcome == 'failure' && steps.deployment-retry.outcome == 'failure'
+        with:
+          timeout: 900000 # 15 min (ms) — default is 10, observed queue was ~12.5
 
   # "Did it actually land?" — the check whose absence let a finished guide sit invisible
   # for a day (every internal gate was green; nobody confirmed the live page). This runs
@@ -87,8 +90,16 @@ jobs:
   # published and confirms it's both reachable and linked from the homepage. verify-live.mjs
   # retries internally for CDN propagation lag, so a transient miss self-heals; a persistent
   # one turns this run red AND files an issue, so a missing guide can never go unnoticed again.
+  #
+  # It runs even when `deploy` reports failure. On 2026-08-06 the deploy job went red four
+  # times while the site was in fact live and correct — and because this job was gated on
+  # deploy succeeding, it SKIPPED on all four, so the one check that could have said "the
+  # site is fine" stayed silent exactly when it was needed. A red deploy is a claim about
+  # the deploy step; only this job is a claim about the site. Gated on `build` instead: no
+  # artifact means there was nothing to land and nothing to verify.
   verify-live:
-    needs: deploy
+    needs: [build, deploy]
+    if: ${{ !cancelled() && needs.build.result == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
