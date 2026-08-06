@@ -886,3 +886,36 @@ daily quota cap; those are the real guards for a server key). Then I re-run the 
 confirm. After that, Session 3 is the fact registry — the big one, where prices and hours
 become data instead of prose. Still open from earlier: draft PR #28, the Actions 'allow PRs'
 setting, and local `npm run lint` (use `npx eslint src worker scripts tests`)."
+
+## Snapshot (2026-08-06, session #34 — Atlas Phase 1.2: the Panel container exists and is live)
+
+**Issue #35 shipped (`2f6f626`, CI 4/4 green, live).** The Panel is the Atlas container —
+kicker, title, drag handle, collapse toggle, body — in `src/features/panel/` (sealed silo) +
+`src/components/Panel.astro`, verified on `src/pages/panel-preview/` (fixture content through
+the real silo, tool chrome, `?bare=1`, `?scope=` to prove isolation). Per CONTEXT.md it is a
+CONTAINER, never a content type: **no guide section moved onto it** — that is Phase 2.
+
+**The store records decisions BOTH ways, and that was a bug first.** v1 stored only collapsed
+ids, so a Panel that ships collapsed and is OPENED by the reader silently re-collapsed on every
+load. Absence now means "never touched" (markup default decides); `false` is a real recorded
+decision. `setCollapsed` also refuses exactly what `parseCollapsed` would drop (`MAX_ID_LEN`,
+`MAX_PANELS`) — **a decision that cannot survive the round trip must never be shown as taken.**
+
+**The HIGH the review caught: restore was ANIMATING.** Server HTML never carries
+`data-collapsed` for a storage-restored Panel, so it painted open, then the unconditional 350ms
+transition animated it shut on every load. Fixed with a two-stage gate — `[data-panel-ready]`
+set synchronously (shut at first paint), `[data-panel-anim]` a frame later (only the reader's
+own toggles animate). Gating collapse on `ready` also fixed no-JS for free: no JS → every Panel
+open, no toggle drawn. **Generalisable: any CSS-transitioned state restored by script needs the
+transition gated behind the first paint, or the restore is visible as motion.**
+
+**Three defects were found only by driving the real page, none by tests.** `?scope=` was read
+from `Astro.url` on a PRERENDERED route, so every URL got Scope A (query params must be
+resolved client-side); a collapsed Panel measured 20px, not 0, because `0fr` floors at the
+grid item's own PADDING (moved to the last child's margin); the "ships collapsed" fixture was
+missing its flag. The 805-green-test lesson from #33 held again.
+
+**Method note.** Both `_tmp-*` Playwright specs (no-animate-on-restore via `addInitScript` +
+`transitionstart`; no-JS via `javaScriptEnabled:false`) passed and were then DELETED — the study
+route is explicitly deletable-without-a-trace and a test bound to it is a trap. Those two
+invariants are verified but UNGATED; Phase 2 should re-assert them against a real guide page.

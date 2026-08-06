@@ -22,92 +22,84 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (2026-08-06, session #34 — Atlas Phase 1.2: the Panel container exists and is live)
+## Snapshot (2026-08-06, session #35 — Panel primitive COMPLETE + two platform gates)
 
-**Issue #35 shipped (`2f6f626`, CI 4/4 green, live).** The Panel is the Atlas container —
-kicker, title, drag handle, collapse toggle, body — in `src/features/panel/` (sealed silo) +
-`src/components/Panel.astro`, verified on `src/pages/panel-preview/` (fixture content through
-the real silo, tool chrome, `?bare=1`, `?scope=` to prove isolation). Per CONTEXT.md it is a
-CONTAINER, never a content type: **no guide section moved onto it** — that is Phase 2.
+**Four issues shipped, four commits, each reviewed (2-axis) then pushed:** #36 grid
+(`43a05fa`), #37 reorder (`f2f7fad`), #38 accent-ink (`ba50b3d`), #39 lint/CI scope
+(`5f3e52f`). All closed. Phase 2 onward is now "move this section onto a Panel", never
+"invent another container".
 
-**The store records decisions BOTH ways, and that was a bug first.** v1 stored only collapsed
-ids, so a Panel that ships collapsed and is OPENED by the reader silently re-collapsed on every
-load. Absence now means "never touched" (markup default decides); `false` is a real recorded
-decision. `setCollapsed` also refuses exactly what `parseCollapsed` would drop (`MAX_ID_LEN`,
-`MAX_PANELS`) — **a decision that cannot survive the round trip must never be shown as taken.**
+**#36 — the grid.** Pure sort model (`model/sort.ts`): full-width band first, open before
+collapsed, tie-break = declared order; rules COMPOSE (a collapsed full-width Panel stays in
+its band). ui/grid.js moves REAL DOM nodes so tab/reading order match the screen; resort
+waits for the collapse transition (immediate when transitions are off = reduced motion).
+Caught live, not by tests: `grid-column-end:-1` PINS the last Panel to the final column and
+strands the hole mid-row — the last-row fill is a measured span, recomputed on resort/resize.
 
-**The HIGH the review caught: restore was ANIMATING.** Server HTML never carries
-`data-collapsed` for a storage-restored Panel, so it painted open, then the unconditional 350ms
-transition animated it shut on every load. Fixed with a two-stage gate — `[data-panel-ready]`
-set synchronously (shut at first paint), `[data-panel-anim]` a frame later (only the reader's
-own toggles animate). Gating collapse on `ready` also fixed no-JS for free: no JS → every Panel
-open, no toggle drawn. **Generalisable: any CSS-transitioned state restored by script needs the
-transition gated behind the first paint, or the restore is visible as motion.**
+**#37 — reorder.** `model/order.ts` (move/clamp/no-op; saved order reconciled: stale ids
+drop, NEW ids append at the end, never shuffled into the reader's arrangement). Drag = live
+node moves, drop commits, cancel reverts, a drag that never moved records NOTHING; keyboard
+arrows/Home/End on the grip button; live region announces where the Panel actually LANDED —
+"stays at position N" when the bands refuse. Per-scope key `tg-panelorder-*`; reset via
+`[data-panel-order-reset]` (hidden until wired). Grip drawn only under `[data-panel-reorder]`.
 
-**Three defects were found only by driving the real page, none by tests.** `?scope=` was read
-from `Astro.url` on a PRERENDERED route, so every URL got Scope A (query params must be
-resolved client-side); a collapsed Panel measured 20px, not 0, because `0fr` floors at the
-grid item's own PADDING (moved to the last child's margin); the "ships collapsed" fixture was
-missing its flag. The 805-green-test lesson from #33 held again.
+**#38 — the cascade lesson.** A custom property substitutes its var()s on the element that
+DECLARES it — :root's `--accent-ink:var(--accent-ink-light)` resolved once at :root and every
+hub card inherited the HOUSE ink while its own inline candidates sat unread. Fix: carrier
+rules (`[style*="--accent-ink-light"]` re-declares locally + dark partners). Gates (both past
+occurrences covered): rendered per-carrier check hub+guide/both themes (forced-failure
+proven), and a source denylist (accent text never from --accent raw/color-mix/candidate).
+**The source gate's FIRST run found occurrences 3+4:** change-request micro text painted raw
+--accent (fixed), story-mode's fixed-dark overlay (allowlisted with reasoning + staleness
+check). Gates that fire on their first run are the ones earning their place.
 
-**Method note.** Both `_tmp-*` Playwright specs (no-animate-on-restore via `addInitScript` +
-`transitionstart`; no-JS via `javaScriptEnabled:false`) passed and were then DELETED — the study
-route is explicitly deletable-without-a-trace and a test bound to it is a trap. Those two
-invariants are verified but UNGATED; Phase 2 should re-assert them against a real guide page.
+**#39 — same lesson, meta.** The new divergence gate (lint scope ⊆ CI scope, read from
+test.yml itself) ALSO fired on first run: docs/mockups/*.mjs are deliberately linted but
+docs/** pushes skipped CI. CI now follows lint (docs/** out of paths-ignore; md-only commits
+still skip). The creator's 82ed519 had already applied the immediate unblock.
 
 ## Open items
 
-- **Needs the creator:** ① decide the fate of LOCAL branch `worktree-agent-a7dc7eeb397c6a368`
-  (progress-study design work, `5917f8f`, unreviewed — exists nowhere else; deleting it loses
-  the work). **Still the only unpruned worktree**, deliberately preserved in #33; ② sign off
-  revise-guide `land` default `draft` → `auto` + V6 Q4 thresholds (overall ≤3, pacing ≤2, ≥3
-  skips); ③ Cloudflare dashboard Git integration builds "tripguides" on every push and fails
-  in 0s — external config noise, consider disabling (deploy-worker.yml owns the real Worker
-  deploy); ④ yes/no on giving skill-evals a `push: main, paths: .claude/skills/**` trigger —
-  as written (`pull_request` only) it has fired 0 times ever because skills land by direct push;
-  ⑤ **NEW:** add `.claude/worktrees/**` to `eslint.config.mjs`'s `ignores` so a future agent
-  worktree cannot kill lint again (see snapshot). The `config-protection` hook blocks Claude
-  from editing that file — a deliberate guard, not worked around. One line, creator's hands.
+- **Needs the creator:** ① LOCAL branch `worktree-agent-a7dc7eeb397c6a368` (progress-study,
+  `5917f8f`, exists nowhere else) — keep or lose; ② sign off revise-guide `land` default
+  `draft` → `auto` + V6 Q4 thresholds; ③ Cloudflare dashboard Git integration still failing
+  0s builds on every push — consider disabling; ④ skill-evals `push` trigger yes/no (fired 0
+  times as `pull_request`-only). (Old ⑤ eslint worktrees ignore: DONE by creator in 82ed519.)
 - Korea 03: critic flagged a swapped 명동 label on the Gyeongbokgung map point → file its issue.
-- The S1–S5 research standards + dossier contract have never met a real research pass; the next
-  new guide is the calibration test (a floor firing on a legitimately thin priority is data
-  about the floor, not the guide).
+- S1–S5 research standards + dossier contract still await their first real research pass.
 - No guide uses a direct royalty-free `sights[].img.src` yet — capability live, unexercised.
-- feedback-export's Monday cron: proven working via dispatch (PR #32, merged), but the
-  2026-08-03 08:13 scheduled fire never appeared. If next Monday's is also absent, investigate
-  the schedule registration.
-- `.card:has(.brow)` carries a 3px coloured `border-left` (`guide.css`) — incumbent and
-  deliberate-looking, flagged in #33, not touched. Revisit if the card language is ever reworked.
-- **Panel, deferred by design (#35):** the drag handle is inert markup + a 44px target until the
-  reorder ticket; two tabs on one scope clobber each other's state (accepted, not accidental — a
-  `storage` listener closes it if it ever matters); Phase 2 must enforce the prose tag allowlist
-  when guide JSON renders inside a Panel, never raw `set:html` as the fixtures do.
+- feedback-export Monday cron: if 2026-08-10's scheduled fire is also absent, investigate.
+- `.card:has(.brow)` 3px `border-left` — incumbent, revisit only if card language reworked.
+- **Panel, deferred by design:** two tabs on one scope clobber each other's collapse state
+  (accepted); Phase 2 must enforce the prose tag allowlist inside Panels (fixtures use raw
+  `set:html`); Phase 2 should re-assert no-animate-on-restore + no-JS against a real guide
+  page (verified, deleted with the `_tmp-*` specs, still ungated); guide surfaces must render
+  their own reset-order control — the Panel component deliberately carries none; story-mode's
+  accent mixes ride a fixed dark ground with no contrast gate (recorded residual risk, #38).
 - Dependabot: 1 HIGH advisory open on `main` (alert 13), predates #35, untriaged.
+- `.claude/launch.json` gained `astro-preview-alt` (:4323) because another session held :4322
+  — remove if it reads as debris; :4322 stays the canonical ship-loop surface.
 
 ## Where we left off
 
-**Session #34 (2026-08-06):** built and shipped Atlas Phase 1.2 — the Panel container (issue
-#35) with per-scope persisted collapse, its sealed silo, and the `panel-preview` design study.
-One commit (`2f6f626`, 11 files), CI 4/4 green, route confirmed live at
-`/Trip-Guides/panel-preview/`. An independent review found 1 HIGH + 6 MEDIUM + 2 LOW; 1 HIGH
-and 5 MEDIUM fixed, 1 MEDIUM reframed, both LOWs closed with tests (32 model tests).
+**Session #35 (2026-08-06):** shipped issues #36+#37 (the Panel grid + reorder — the Panel
+primitive is COMPLETE) and #38+#39 (accent-ink carrier fix + lint/CI divergence gate). Four
+commits (`43a05fa`, `f2f7fad`, `ba50b3d`, `5f3e52f`), each two-axis reviewed before push;
+1447 tests green; all four issues closed. PC shut down on creator's request after the final
+push — CI for `5f3e52f` was in progress (Tests/A11y/Deploy) and unverified-live; check it
+first thing.
 
-**Recommended next step:** Phase 2 (migrate a real guide section onto a Panel) — or triage the
-Dependabot HIGH first, which is the only thing on `main` currently flagged.
+**Recommended next step:** confirm `5f3e52f`'s CI went green + site live, then Phase 2
+(migrate the first real guide section onto a Panel) — or triage the Dependabot HIGH.
 
-**Re-prompt the creator with:** "The Panel exists and it's live. Three of its bugs were
-invisible to the test suite and only fell out of driving the real page: `?scope=` was read from
-`Astro.url` on a PRERENDERED route so every URL got Scope A; a collapsed Panel measured 20px
-because `0fr` floors at the grid item's own padding, not its content; and the persistence model
-could only record 'collapsed', so a Panel that ships collapsed silently re-collapsed itself
-every time you opened it. That last one set the rule the store now follows: absence means never
-touched, `false` is a real decision, and `setCollapsed` refuses anything `parseCollapsed` would
-drop — a decision that can't survive the round trip must never be shown as taken. The review's
-HIGH was the one I'd have shipped blind: the restore ANIMATED, so every collapsed Panel painted
-open and slid shut over 350ms on every load. Two-stage gate fixes it — `[data-panel-ready]`
-synchronously, `[data-panel-anim]` a frame later — and gating collapse on `ready` gave no-JS
-readability for free. Generalise it: any script-restored CSS state needs its transition held
-until after the first paint. One thing I deliberately left ungated — the two Playwright specs
-proving no-animate-on-restore and the no-JS fallback passed, then I deleted them, because the
-study route is meant to be deletable and a test bound to it is a trap. Phase 2 should re-assert
-both against a real guide page."
+**Re-prompt the creator with:** "The Panel primitive is complete — grid, collapse, reorder,
+persistence — and the pattern that kept repeating this session is worth naming: three gates
+fired on their FIRST run. The accent gate found two more live accent-as-text improvisations
+the moment it existed; the lint-scope gate found docs/mockups already diverged; and the
+forced-failure pass proved the rendered gate actually fails when the fix is removed. The
+doctrine held: a gate that has never failed is an assumption, not a gate. Two cascade rules
+also joined the permanent lesson book: a custom property resolves its var()s on the element
+that DECLARES it (so inline candidates need carrier re-resolution rules), and
+`grid-column-end:-1` pins rather than spans (so the no-dead-space fill must be measured in
+JS). Phase 2's list is stacked in Open items — the tag allowlist inside Panels is the one
+with teeth."
