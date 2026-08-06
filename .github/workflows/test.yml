@@ -4,12 +4,19 @@ name: Tests
 # (and on pushes to main) so a broken test, a type error, OR a coverage regression
 # in the pure-logic core blocks the merge instead of only surfacing later in the
 # Pages deploy. Deploy.yml also runs `npm test`, but only after a push to main.
+#
+# paths-ignore may only skip paths `eslint .` does not lint (#39): docs/** left this
+# list because eslint DELIBERATELY lints docs/mockups/*.mjs, so a docs-only push could
+# turn main's lint red with every CI signal green — the failure then landed on the next
+# unrelated src/ commit. Md-only commits still skip via "**.md".
+# scripts/__tests__/lint-ci-scope.test.mjs asserts lint scope ⊆ CI scope and fails on
+# the commit that creates a divergence; change either list only in step with the other.
 on:
   pull_request:
-    paths-ignore: [docs/**, learnings/**, guides-intake/**, "**.md"]
+    paths-ignore: [learnings/**, guides-intake/**, "**.md"]
   push:
     branches: [main]
-    paths-ignore: [docs/**, learnings/**, guides-intake/**, "**.md"]
+    paths-ignore: [learnings/**, guides-intake/**, "**.md"]
 
 permissions:
   contents: read
