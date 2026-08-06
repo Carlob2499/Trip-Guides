@@ -22,36 +22,38 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (2026-08-04, session #33 — the ground moved: palette R2, and the repo got a design record)
+## Snapshot (2026-08-06, session #34 — Atlas Phase 1.2: the Panel container exists and is live)
 
-**The surface tonal ramp widened (`base.css` R2, live).** The three light surfaces sat within
-1.10:1 of each other, so a card barely separated from the page under it and `--bg2` read as the
-same surface as `--bg`. Same hues, same identity — the ground drops, the card lifts. Light:
-card/bg 1.104 → 1.238, bg/bg2 1.094 → 1.128. Dark: card/bg 1.140 → 1.319. Chosen by the creator
-from four rendered candidates, not from hex read in chat.
+**Issue #35 shipped (`2f6f626`, CI 4/4 green, live).** The Panel is the Atlas container —
+kicker, title, drag handle, collapse toggle, body — in `src/features/panel/` (sealed silo) +
+`src/components/Panel.astro`, verified on `src/pages/panel-preview/` (fixture content through
+the real silo, tool chrome, `?bare=1`, `?scope=` to prove isolation). Per CONTEXT.md it is a
+CONTAINER, never a content type: **no guide section moved onto it** — that is Phase 2.
 
-**What moved WITH the ground, none of it taste.** `--green`/`--warn` (on the darker `--bg2` the
-old values fell to 4.19:1 and 4.38:1, under the 4.5 floor they hold everywhere else) · country
-accent `#b07a1f → #a6721b` (Spain/Colombia/Indonesia/Egypt — it hit 2.85:1 and failed the ≥3.0
-build gate; **the gate is the invariant, the accent is the variable**) · `accent-tokens.ts`
-LIGHT/DARK_SURFACES are derivation *inputs*, so all 52 accent-inks re-derived and still clear
-4.5:1 on all six flat and tinted surfaces. **The method that made this safe: verify the palette
-against the repo's own `contrast.ts` BEFORE editing 24 files.** It predicted every consequence.
+**The store records decisions BOTH ways, and that was a bug first.** v1 stored only collapsed
+ids, so a Panel that ships collapsed and is OPENED by the reader silently re-collapsed on every
+load. Absence now means "never touched" (markup default decides); `false` is a real recorded
+decision. `setCollapsed` also refuses exactly what `parseCollapsed` would drop (`MAX_ID_LEN`,
+`MAX_PANELS`) — **a decision that cannot survive the round trip must never be shown as taken.**
 
-**One real bug fell out.** `.topbar-search` improvised accent text with `color-mix` instead of
-`--accent-ink` — scraped 4.63:1 on the old ground, dropped to 4.45:1 on the new, axe caught it.
-Fixed at the cause. This is exactly the failure `accent-tokens.ts` was written to prevent; it
-had one survivor. `contrast.test.ts`'s `CARD2` (`#f2f4eb`) was a phantom testing nothing.
+**The HIGH the review caught: restore was ANIMATING.** Server HTML never carries
+`data-collapsed` for a storage-restored Panel, so it painted open, then the unconditional 350ms
+transition animated it shut on every load. Fixed with a two-stage gate — `[data-panel-ready]`
+set synchronously (shut at first paint), `[data-panel-anim]` a frame later (only the reader's
+own toggles animate). Gating collapse on `ready` also fixed no-JS for free: no JS → every Panel
+open, no toggle drawn. **Generalisable: any CSS-transitioned state restored by script needs the
+transition gated behind the first paint, or the restore is visible as motion.**
 
-**`PRODUCT.md` + `DESIGN.md` + `.impeccable/design.json` now exist** — the repo's first design
-record. North Star **"The Surveyor's Sheet"**; every value extracted from the code, every named
-rule traceable to a decision already made. PRODUCT.md fences the absences (no testimonials,
-users, traffic, revenue, press) so no future surface invents them.
+**Three defects were found only by driving the real page, none by tests.** `?scope=` was read
+from `Astro.url` on a PRERENDERED route, so every URL got Scope A (query params must be
+resolved client-side); a collapsed Panel measured 20px, not 0, because `0fr` floors at the
+grid item's own PADDING (moved to the last child's margin); the "ships collapsed" fixture was
+missing its flag. The 805-green-test lesson from #33 held again.
 
-**Lint was dead repo-wide and nobody knew.** Two stale agent worktrees under
-`.claude/worktrees/` each carried a tsconfig; typescript-eslint saw two candidate roots and
-failed to PARSE all 740 files. Both pruned (verified merged into main + one dir literally
-empty); `npm run lint` is clean. `Trip-Guides-progress-preview` was deliberately NOT pruned.
+**Method note.** Both `_tmp-*` Playwright specs (no-animate-on-restore via `addInitScript` +
+`transitionstart`; no-JS via `javaScriptEnabled:false`) passed and were then DELETED — the study
+route is explicitly deletable-without-a-trace and a test bound to it is a trap. Those two
+invariants are verified but UNGATED; Phase 2 should re-assert them against a real guide page.
 
 ## Open items
 
@@ -76,24 +78,36 @@ empty); `npm run lint` is clean. `Trip-Guides-progress-preview` was deliberately
   the schedule registration.
 - `.card:has(.brow)` carries a 3px coloured `border-left` (`guide.css`) — incumbent and
   deliberate-looking, flagged in #33, not touched. Revisit if the card language is ever reworked.
+- **Panel, deferred by design (#35):** the drag handle is inert markup + a 44px target until the
+  reorder ticket; two tabs on one scope clobber each other's state (accepted, not accidental — a
+  `storage` listener closes it if it ever matters); Phase 2 must enforce the prose tag allowlist
+  when guide JSON renders inside a Panel, never raw `set:html` as the fixtures do.
+- Dependabot: 1 HIGH advisory open on `main` (alert 13), predates #35, untriaged.
 
 ## Where we left off
 
-**Session #33 (2026-08-04):** moved the ground under every guide and gave the repo its first
-design record. Palette R2 shipped live (24 files, 2 commits, CI 4/4 green, live assets grepped
-clean of every old token string); `PRODUCT.md`, `DESIGN.md` and `.impeccable/design.json`
-written against the verified state; two stale worktrees pruned, restoring repo-wide lint.
+**Session #34 (2026-08-06):** built and shipped Atlas Phase 1.2 — the Panel container (issue
+#35) with per-scope persisted collapse, its sealed silo, and the `panel-preview` design study.
+One commit (`2f6f626`, 11 files), CI 4/4 green, route confirmed live at
+`/Trip-Guides/panel-preview/`. An independent review found 1 HIGH + 6 MEDIUM + 2 LOW; 1 HIGH
+and 5 MEDIUM fixed, 1 MEDIUM reframed, both LOWs closed with tests (32 model tests).
 
-**Re-prompt the creator with:** "The ground moved and it's live. The rule that made a 24-file
-palette change safe: verify the candidate against the repo's own `contrast.ts` BEFORE editing
-anything — it predicted every consequence in advance, including the two that mattered
-(`--green`/`--warn` falling under 4.5:1 on the darker `--bg2`, and `#b07a1f` failing the ≥3.0
-build gate). When a colour and a gate disagree, the gate is the invariant and the colour moves.
-The axe run then caught one thing static analysis couldn't: `.topbar-search` had improvised its
-own accent text with `color-mix` instead of `--accent-ink`, passing on the old ground and
-failing on the new — the exact failure `accent-tokens.ts` exists to prevent, with one survivor.
-The repo now carries `DESIGN.md` (North Star: The Surveyor's Sheet) so the next component
-doesn't re-derive the tokens from scratch. And lint had been dead repo-wide for as long as a
-stale agent worktree sat in `.claude/worktrees/` — 740 parse errors, none of them real. Pruned.
-Item ⑤ is one line in `eslint.config.mjs` that only you can add; the config-protection hook
-blocks me, and I left it blocked."
+**Recommended next step:** Phase 2 (migrate a real guide section onto a Panel) — or triage the
+Dependabot HIGH first, which is the only thing on `main` currently flagged.
+
+**Re-prompt the creator with:** "The Panel exists and it's live. Three of its bugs were
+invisible to the test suite and only fell out of driving the real page: `?scope=` was read from
+`Astro.url` on a PRERENDERED route so every URL got Scope A; a collapsed Panel measured 20px
+because `0fr` floors at the grid item's own padding, not its content; and the persistence model
+could only record 'collapsed', so a Panel that ships collapsed silently re-collapsed itself
+every time you opened it. That last one set the rule the store now follows: absence means never
+touched, `false` is a real decision, and `setCollapsed` refuses anything `parseCollapsed` would
+drop — a decision that can't survive the round trip must never be shown as taken. The review's
+HIGH was the one I'd have shipped blind: the restore ANIMATED, so every collapsed Panel painted
+open and slid shut over 350ms on every load. Two-stage gate fixes it — `[data-panel-ready]`
+synchronously, `[data-panel-anim]` a frame later — and gating collapse on `ready` gave no-JS
+readability for free. Generalise it: any script-restored CSS state needs its transition held
+until after the first paint. One thing I deliberately left ungated — the two Playwright specs
+proving no-animate-on-restore and the no-JS fallback passed, then I deleted them, because the
+study route is meant to be deletable and a test bound to it is a trap. Phase 2 should re-assert
+both against a real guide page."

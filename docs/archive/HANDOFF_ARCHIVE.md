@@ -4,6 +4,51 @@
 > (the ~80-line budget its own header sets is now gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). Newest first, verbatim.
 
+## Snapshot (2026-08-04, session #33 — the ground moved: palette R2, and the repo got a design record)
+
+**The surface tonal ramp widened (`base.css` R2, live).** The three light surfaces sat within
+1.10:1 of each other, so a card barely separated from the page under it and `--bg2` read as the
+same surface as `--bg`. Same hues, same identity — the ground drops, the card lifts. Light:
+card/bg 1.104 → 1.238, bg/bg2 1.094 → 1.128. Dark: card/bg 1.140 → 1.319. Chosen by the creator
+from four rendered candidates, not from hex read in chat.
+
+**What moved WITH the ground, none of it taste.** `--green`/`--warn` (on the darker `--bg2` the
+old values fell to 4.19:1 and 4.38:1, under the 4.5 floor they hold everywhere else) · country
+accent `#b07a1f → #a6721b` (Spain/Colombia/Indonesia/Egypt — it hit 2.85:1 and failed the ≥3.0
+build gate; **the gate is the invariant, the accent is the variable**) · `accent-tokens.ts`
+LIGHT/DARK_SURFACES are derivation *inputs*, so all 52 accent-inks re-derived and still clear
+4.5:1 on all six flat and tinted surfaces. **The method that made this safe: verify the palette
+against the repo's own `contrast.ts` BEFORE editing 24 files.** It predicted every consequence.
+
+**One real bug fell out.** `.topbar-search` improvised accent text with `color-mix` instead of
+`--accent-ink` — scraped 4.63:1 on the old ground, dropped to 4.45:1 on the new, axe caught it.
+Fixed at the cause. This is exactly the failure `accent-tokens.ts` was written to prevent; it
+had one survivor. `contrast.test.ts`'s `CARD2` (`#f2f4eb`) was a phantom testing nothing.
+
+**`PRODUCT.md` + `DESIGN.md` + `.impeccable/design.json` now exist** — the repo's first design
+record. North Star **"The Surveyor's Sheet"**; every value extracted from the code, every named
+rule traceable to a decision already made. PRODUCT.md fences the absences (no testimonials,
+users, traffic, revenue, press) so no future surface invents them.
+
+**Lint was dead repo-wide and nobody knew.** Two stale agent worktrees under
+`.claude/worktrees/` each carried a tsconfig; typescript-eslint saw two candidate roots and
+failed to PARSE all 740 files. Both pruned (verified merged into main + one dir literally
+empty); `npm run lint` is clean. `Trip-Guides-progress-preview` was deliberately NOT pruned.
+
+**Re-prompt the creator with:** "The ground moved and it's live. The rule that made a 24-file
+palette change safe: verify the candidate against the repo's own `contrast.ts` BEFORE editing
+anything — it predicted every consequence in advance, including the two that mattered
+(`--green`/`--warn` falling under 4.5:1 on the darker `--bg2`, and `#b07a1f` failing the ≥3.0
+build gate). When a colour and a gate disagree, the gate is the invariant and the colour moves.
+The axe run then caught one thing static analysis couldn't: `.topbar-search` had improvised its
+own accent text with `color-mix` instead of `--accent-ink`, passing on the old ground and
+failing on the new — the exact failure `accent-tokens.ts` exists to prevent, with one survivor.
+The repo now carries `DESIGN.md` (North Star: The Surveyor's Sheet) so the next component
+doesn't re-derive the tokens from scratch. And lint had been dead repo-wide for as long as a
+stale agent worktree sat in `.claude/worktrees/` — 740 parse errors, none of them real. Pruned.
+Item ⑤ is one line in `eslint.config.mjs` that only you can add; the config-protection hook
+blocks me, and I left it blocked."
+
 ## Snapshot (2026-08-03, session #32 — scar-tissue ablation; checks promoted to gates)
 
 **CLAUDE.md was ablated per the scaffolding-decay rule:** war-story prose whose rule is now
