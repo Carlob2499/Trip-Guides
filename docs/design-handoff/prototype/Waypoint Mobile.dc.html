@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400..700&amp;family=Source+Sans+3:wght@400..700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#cfd4c6;color:#171d24;font-family:'Literata',Georgia,serif}
+a{color:#80371b}a:hover{color:#9c4421}
+.mv-turn{padding:36px 20px 30px;border-bottom:1px solid rgba(0,0,0,.08)}
+.mv-hd{display:flex;align-items:baseline;gap:10px;margin:0 0 6px}
+.mv-id{font:600 10px 'Source Sans 3',monospace;padding:3px 7px;background:#171d24;color:#f8faf3;border-radius:4px;text-decoration:none}
+.mv-name{font:600 13px/1.2 'Source Sans 3',sans-serif}
+.mv-sub{font:400 11.5px/1.5 'Source Sans 3',sans-serif;color:rgba(0,0,0,.55);margin:0 0 22px;max-width:70ch}
+.mv-row{display:flex;flex-wrap:wrap;gap:9px;align-items:flex-start}
+.mv-slot{display:flex;flex-direction:column;gap:9px}
+.mv-cap{display:flex;align-items:baseline;gap:8px;font:400 11px/1.3 'Source Sans 3',sans-serif;color:rgba(0,0,0,.55);max-width:392px}
+.mv-oid{font:600 10.5px 'Source Sans 3',monospace;padding:3px 7px;background:rgba(0,0,0,.1);border-radius:5px;text-decoration:none;color:#171d24}
+.mv-phone{box-sizing:border-box;position:relative;width:410px;height:882px;border-radius:38px;background:#171d24;padding:4px;box-shadow:0 18px 50px rgba(16,20,24,.22)}
+.mv-screen{position:relative;width:402px;height:874px;border-radius:34px;overflow:hidden;background:#dfe3d9}
+.mv-screen iframe{position:absolute;inset:0;width:402px;height:874px;border:0;display:block}
+.mv-notch{position:absolute;left:50%;top:11px;transform:translateX(-50%);width:112px;height:26px;background:#171d24;border-radius:0 0 16px 16px;z-index:3;pointer-events:none}
+.mv-bar{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);width:120px;height:4px;border-radius:99px;background:rgba(23,29,36,.35);z-index:3;pointer-events:none}
+.mv-note{margin:18px 0 0;font:12px/1.6 'Source Sans 3',sans-serif;color:rgba(0,0,0,.55);max-width:84ch}
+.mv-open{font:600 11px 'Source Sans 3',sans-serif;letter-spacing:.1em;color:#80371b;text-decoration:none;border-bottom:1px solid #80371b;padding-bottom:2px}
+.mv-cutout{position:absolute;left:0;right:0;top:0;height:59px;z-index:2;pointer-events:none}
+</style>
+<script>
+// A real phone reports safe-area insets; an iframe reports zero. Drive the app's
+// inset custom properties with iPhone 17 Pro values so the padding is exercised here.
+(function () {
+  const set = (fr) => {
+    try {
+      const d = fr.contentDocument;
+      if (!d || !d.documentElement) return;
+      d.documentElement.style.setProperty("--safe-top", "59px");
+      d.documentElement.style.setProperty("--safe-bottom", "34px");
+    } catch (err) {}
+  };
+  const wire = () => document.querySelectorAll("iframe").forEach(f => {
+    set(f);
+    f.addEventListener("load", () => set(f));
+    let n = 0;
+    const t = setInterval(() => { set(f); if (++n > 20) clearInterval(t); }, 300);
+  });
+  addEventListener("load", wire);
+  setTimeout(wire, 400);
+})();
+</script>
+</helmet>
+
+<section class="mv-turn" id="m1">
+  <div class="mv-hd"><a class="mv-id" href="#m1">M1</a><span class="mv-name">Mobile — live prototype in phone frames</span></div>
+  <p class="mv-sub">Each frame runs the real build at 402&nbsp;×&nbsp;874 (iPhone 17 Pro), so anything fixed here shows up immediately. Interact with them directly: the cover dismisses, the globe drags, the sheets open. Desktop version: <a class="mv-open" href="Waypoint Overdrive v2.dc.html">OPEN DESKTOP CANVAS →</a></p>
+  <div class="mv-row">
+    <div class="mv-slot" id="m1a">
+      <div class="mv-cap"><a class="mv-oid" href="#m1a">M1a</a>Cover → world view. Watch the iris hand off to the globe at phone width.</div>
+      <div class="mv-phone"><div class="mv-screen"><span class="mv-notch" data-sim-inset></span><iframe src="Waypoint Overdrive v2.dc.html" title="Waypoint mobile — world view" loading="lazy"></iframe><span class="mv-bar"></span></div></div>
+    </div>
+    <div class="mv-slot" id="m1b">
+      <div class="mv-cap"><a class="mv-oid" href="#m1b">M1b</a>Table view → a guide. Tap TABLE VIEW, then a row, to land in the sheet with the bottom field bar.</div>
+      <div class="mv-phone"><div class="mv-screen"><span class="mv-notch" data-sim-inset></span><iframe src="Waypoint Overdrive v2.dc.html" title="Waypoint mobile — table view" loading="lazy"></iframe><span class="mv-bar"></span></div></div>
+    </div>
+    <div class="mv-slot" id="m1c">
+      <div class="mv-cap"><a class="mv-oid" href="#m1c">M1c</a>New guide → progress. Tap ＋ New guide to check the form and the pipeline states one-handed.</div>
+      <div class="mv-phone"><div class="mv-screen"><span class="mv-notch" data-sim-inset></span><iframe src="Waypoint Overdrive v2.dc.html" title="Waypoint mobile — new guide" loading="lazy"></iframe><span class="mv-bar"></span></div></div>
+    </div>
+  </div>
+  <p class="mv-note">Mobile model: the globe shows bare tappable pings — no floating cards, no side rails, no coordinate readout. Tapping a ping raises a bottom sheet with the trip, a ZOOM control, and “Open the sheet”. The header collapses to brand + ＋ + theme; view switching moves to the 34px bottom strip (KR/US/JP/DK · FIT · TABLE). The motto is centred, shrunk, and fades out as you zoom in.</p>
+</section>
+</x-dc>
+</body>
+</html>
