@@ -10,9 +10,24 @@ up short, the guide says so instead of filling the hole.
 The single repeated container component — kicker, title, drag handle, collapse toggle,
 body — that every card in the product (guide sections, hub overlays, tools) is built
 from. Introduced by the Waypoint Atlas redesign (2026-08); replaces all bespoke
-per-feature card markup.
+per-feature card markup. A Panel is a container, never a content type: it holds a
+Panel section, a days list, a sights repository, a tool, whatever is put in it.
 _Avoid_: card, widget (when referring to the redesigned UI unit — "card" still names the
 old, pre-redesign pattern being replaced)
+
+**Panel section**:
+The guide content type `"type": "panel"` (schema in `src/content.config.ts`, rendered by
+`PanelBlock.astro`) — one of the ~sixteen section types a guide's JSON can declare,
+alongside `prose`, `list`, `days`, `sights`, `routes`. Carries a title, body, optional
+checklist and its own lead/more-detail fold.
+
+Deliberately shares the word "Panel" with the container above, decided 2026-08-06: from
+the Atlas redesign's Phase 2 onward a Panel section is rendered *inside* a Panel, so the
+two nest rather than compete, and "PanelBlock renders a Panel's body" is a true sentence.
+Renaming the section type was rejected because it would require editing `"type"` values
+in every guide's JSON, and the redesign is design-only with zero guide-data edits.
+Always qualify in writing when the surrounding text could mean either: "Panel section"
+for the content type, plain "Panel" for the container.
 
 **Guide base**:
 The trip's own city or location shown in a guide's masthead chip (e.g. "Seoul" for the
