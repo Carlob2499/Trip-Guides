@@ -47,6 +47,13 @@ export function initPanels(ctx) {
       state = setCollapsed(state, id, next);
       apply(panel, next);
       store.write(key, serializeCollapsed(state));
+      // The grid (and anything else layout-adjacent) reacts to toggles without the
+      // collapse wiring knowing it exists. Restores do NOT fire this — the grid
+      // sorts once after boot and only the reader's own toggles re-sort it.
+      panel.dispatchEvent(new CustomEvent("panel:toggle", {
+        bubbles: true,
+        detail: { id: id, collapsed: next },
+      }));
     });
   });
 

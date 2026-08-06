@@ -9,6 +9,7 @@
     test or a future backend swaps the sink without touching ui/. */
 
 import { initPanels } from "./ui/collapse.js";
+import { initGrid } from "./ui/grid.js";
 
 export {
   parseCollapsed, serializeCollapsed, setCollapsed, toggleCollapsed, isCollapsed, scopeKey,
@@ -32,4 +33,10 @@ export function initPanelCollapse(cfg, store) {
     root: (cfg && cfg.root) || document,
     store: store || localStore,
   });
+}
+
+/** Wire the Panel grid under `root` — call AFTER initPanelCollapse, so the initial
+    sort sees the restored collapse state. `cfg` = { root?: ParentNode }. */
+export function initPanelGrid(cfg) {
+  initGrid({ root: (cfg && cfg.root) || document });
 }

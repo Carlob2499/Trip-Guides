@@ -19,8 +19,12 @@ interface Props {
   title: string;
   /** Start collapsed before the reader has any saved state for this Panel. */
   collapsed?: boolean;
+  /** Span the entire grid row. A property of the Panel's TYPE — dense reference
+      material (a sights list, a day's itinerary, a budget table) declares it;
+      it is never inferred from how much content happens to be inside. */
+  fullWidth?: boolean;
 }
-const { id, kicker, title, collapsed = false } = Astro.props;
+const { id, kicker, title, collapsed = false, fullWidth = false } = Astro.props;
 /* The derived DOM ids are IDREF TARGETS (aria-controls, aria-labelledby), and aria-controls
    is a SPACE-SEPARATED list — so an id of "day 1" would silently point at two elements that
    don't exist and kill the disclosure relationship for assistive tech with nothing visibly
@@ -31,7 +35,13 @@ const bodyId = `pnl-body-${slug}`;
 const titleId = `pnl-title-${slug}`;
 ---
 
-<section class="pnl" data-panel={id} data-collapsed={collapsed ? "1" : null} aria-labelledby={titleId}>
+<section
+  class:list={["pnl", fullWidth && "pnl--full"]}
+  data-panel={id}
+  data-panel-full={fullWidth ? "1" : null}
+  data-collapsed={collapsed ? "1" : null}
+  aria-labelledby={titleId}
+>
   <header class="pnl-head">
     <span class="pnl-grip" data-panel-grip aria-hidden="true">
       <svg viewBox="0 0 16 16" width="16" height="16" focusable="false"><g fill="currentColor">

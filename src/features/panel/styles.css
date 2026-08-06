@@ -142,7 +142,10 @@
 }
 
 /* --dur-reveal is the scale step for a reveal (350ms) — the Panel deliberately rides the
-   shared motion vocabulary rather than declaring its own near-identical literal. */
+   shared motion vocabulary rather than declaring its own near-identical literal.
+   SEAM: ui/grid.js waits for `transitionend` on grid-template-rows specifically before
+   re-sorting — if the collapse mechanism ever animates a different property, update the
+   listener with it (the timeout fallback would still fire, but late). */
 [data-panel-anim] .pnl-body {
   transition:
     grid-template-rows var(--dur-reveal) var(--ease-out-expo),
@@ -165,3 +168,31 @@
   [data-panel-anim] .pnl-body,
   [data-panel-anim] .pnl[data-collapsed] .pnl-body { transition: none; }
 }
+
+/* ---- The grid ------------------------------------------------------------------- */
+/* Panels lay out in a responsive grid that never leaves dead space. The heavy lifting
+   is ORDER, done by moving DOM nodes (ui/grid.js + model/sort.ts) so tab order and
+   reading order match the screen; the CSS only has to make rows honest:
+   - `auto-fit` collapses tracks nothing occupies, so one Panel alone owns the row;
+   - `align-items: stretch` (the grid default, stated here on purpose) makes
+     neighbouring Panels in a row end level with each other instead of staggering;
+   - the last Panel extends to the row's end, so a final odd Panel never leaves an
+     empty hole beside it. That is a POSITION rule, not a content rule — a Panel's
+     declared span still only ever comes from its type (`.pnl--full`). */
+.pnl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+  gap: 1rem;
+  align-items: stretch;
+}
+
+/* Vertical rhythm belongs to the grid's gap; the Panel's own single-column margin
+   would double it. */
+.pnl-grid > .pnl { margin-bottom: 0; }
+
+/* Declared by the Panel's TYPE (the `fullWidth` prop), never inferred from content.
+   The other span in play — the LAST Panel stretching to the row's end so the final row
+   never strands a hole — is a position rule computed in ui/grid.js, because CSS alone
+   cannot say "span from wherever auto-placement put you to the end" (`grid-column-end:
+   -1` pins the item to the final column and leaves the hole in the MIDDLE instead). */
+.pnl-grid > .pnl--full { grid-column: 1 / -1; }

@@ -45,11 +45,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
         </p>
       </header>
 
-      {PANELS.map((p) => (
-        <Panel id={p.id} kicker={p.kicker} title={p.title} collapsed={p.collapsed}>
-          <Fragment set:html={p.body} />
-        </Panel>
-      ))}
+      <div class="pnl-grid" data-panel-grid>
+        {PANELS.map((p) => (
+          <Panel id={p.id} kicker={p.kicker} title={p.title} collapsed={p.collapsed} fullWidth={p.fullWidth}>
+            <Fragment set:html={p.body} />
+          </Panel>
+        ))}
+      </div>
 
       <a class="pp-foot" href={`${base}/`}>← All guides</a>
     </main>
@@ -60,7 +62,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
     </script>
 
     <style>
-      .pp-wrap{max-width:44rem;margin:0 auto;padding:2.4rem 1.2rem 5rem}
+      /* Wide enough for the grid to actually form rows on desktop; the ledes keep
+         their own 62ch measure so the prose does not sprawl with it. */
+      .pp-wrap{max-width:64rem;margin:0 auto;padding:2.4rem 1.2rem 5rem}
       .pp-head{margin-bottom:1.6rem}
       .pp-kicker{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;
         letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin:0 0 .3rem}

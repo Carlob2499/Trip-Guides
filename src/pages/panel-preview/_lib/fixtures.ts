@@ -12,6 +12,9 @@ export interface PanelFixture {
   body: string;
   /** Ships collapsed before the reader has any saved state for it. */
   collapsed?: boolean;
+  /** Spans the entire grid row — a property of the fixture's TYPE, mirroring how a
+      dense guide section (sights list, day itinerary, budget table) would declare it. */
+  fullWidth?: boolean;
 }
 
 export const PANELS: PanelFixture[] = [
@@ -29,6 +32,7 @@ export const PANELS: PanelFixture[] = [
     id: "long-body",
     kicker: "Repository",
     title: "A Panel with a long body",
+    fullWidth: true,
     body:
       "<p>Height is animated as a grid row rather than a measured pixel value, so a body that " +
       "grows or shrinks between collapses still animates correctly and no script ever reads a " +
@@ -51,6 +55,23 @@ export const PANELS: PanelFixture[] = [
     body:
       "<p>Markup can start a Panel collapsed. A reader's own saved state always wins over that " +
       "default — open this one, reload, and it stays open.</p>",
+  },
+  {
+    id: "medium-body",
+    kicker: "Companion",
+    title: "A medium neighbour",
+    body:
+      "<p>This Panel exists to share a row. Collapse the one beside it and the grid closes up " +
+      "immediately — no empty hole where the neighbour was, no row that looks broken.</p>" +
+      "<p>Its bottom edge ends level with the rest of its row, however tall the row runs.</p>",
+  },
+  {
+    id: "another-note",
+    kicker: "Note",
+    title: "Another short one",
+    body:
+      "<p>A second small Panel, so the grid always has an odd count to prove the last row " +
+      "never strands a hole beside the final Panel.</p>",
   },
 ];
 

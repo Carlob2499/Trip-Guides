@@ -12,6 +12,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "preview", "--", "--port", "4322"],
       "port": 4322
+    },
+    {
+      "name": "astro-preview-alt",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "preview", "--", "--port", "4323"],
+      "port": 4323
     }
   ]
 }
