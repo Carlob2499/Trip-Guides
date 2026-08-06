@@ -4,6 +4,99 @@
 > (the ~80-line budget its own header sets is now gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). Newest first, verbatim.
 
+## Snapshot (2026-08-06, session #35 — Panel primitive COMPLETE + two platform gates)
+
+**Four issues shipped, four commits, each reviewed (2-axis) then pushed:** #36 grid
+(`43a05fa`), #37 reorder (`f2f7fad`), #38 accent-ink (`ba50b3d`), #39 lint/CI scope
+(`5f3e52f`). All closed. Phase 2 onward is now "move this section onto a Panel", never
+"invent another container".
+
+**#36 — the grid.** Pure sort model (`model/sort.ts`): full-width band first, open before
+collapsed, tie-break = declared order; rules COMPOSE (a collapsed full-width Panel stays in
+its band). ui/grid.js moves REAL DOM nodes so tab/reading order match the screen; resort
+waits for the collapse transition (immediate when transitions are off = reduced motion).
+Caught live, not by tests: `grid-column-end:-1` PINS the last Panel to the final column and
+strands the hole mid-row — the last-row fill is a measured span, recomputed on resort/resize.
+
+**#37 — reorder.** `model/order.ts` (move/clamp/no-op; saved order reconciled: stale ids
+drop, NEW ids append at the end, never shuffled into the reader's arrangement). Drag = live
+node moves, drop commits, cancel reverts, a drag that never moved records NOTHING; keyboard
+arrows/Home/End on the grip button; live region announces where the Panel actually LANDED —
+"stays at position N" when the bands refuse. Per-scope key `tg-panelorder-*`; reset via
+`[data-panel-order-reset]` (hidden until wired). Grip drawn only under `[data-panel-reorder]`.
+
+**#38 — the cascade lesson.** A custom property substitutes its var()s on the element that
+DECLARES it — :root's `--accent-ink:var(--accent-ink-light)` resolved once at :root and every
+hub card inherited the HOUSE ink while its own inline candidates sat unread. Fix: carrier
+rules (`[style*="--accent-ink-light"]` re-declares locally + dark partners). Gates (both past
+occurrences covered): rendered per-carrier check hub+guide/both themes (forced-failure
+proven), and a source denylist (accent text never from --accent raw/color-mix/candidate).
+**The source gate's FIRST run found occurrences 3+4:** change-request micro text painted raw
+--accent (fixed), story-mode's fixed-dark overlay (allowlisted with reasoning + staleness
+check). Gates that fire on their first run are the ones earning their place.
+
+**#39 — same lesson, meta.** The new divergence gate (lint scope ⊆ CI scope, read from
+test.yml itself) ALSO fired on first run: docs/mockups/*.mjs are deliberately linted but
+docs/** pushes skipped CI. CI now follows lint (docs/** out of paths-ignore; md-only commits
+still skip). The creator's 82ed519 had already applied the immediate unblock.
+
+## Where we left off
+
+**Session #35 (2026-08-06):** shipped issues #36+#37 (the Panel grid + reorder — the Panel
+primitive is COMPLETE) and #38+#39 (accent-ink carrier fix + lint/CI divergence gate). Four
+commits (`43a05fa`, `f2f7fad`, `ba50b3d`, `5f3e52f`), each two-axis reviewed before push;
+1447 tests green; all four issues closed. PC shut down on creator's request after the final
+push — CI for `5f3e52f` was in progress (Tests/A11y/Deploy) and unverified-live; check it
+first thing.
+
+**Recommended next step:** confirm `5f3e52f`'s CI went green + site live, then Phase 2
+(migrate the first real guide section onto a Panel) — or triage the Dependabot HIGH.
+
+**Re-prompt the creator with:** "The Panel primitive is complete — grid, collapse, reorder,
+persistence — and the pattern that kept repeating this session is worth naming: three gates
+fired on their FIRST run. The accent gate found two more live accent-as-text improvisations
+the moment it existed; the lint-scope gate found docs/mockups already diverged; and the
+forced-failure pass proved the rendered gate actually fails when the fix is removed. The
+doctrine held: a gate that has never failed is an assumption, not a gate. Two cascade rules
+also joined the permanent lesson book: a custom property resolves its var()s on the element
+that DECLARES it (so inline candidates need carrier re-resolution rules), and
+`grid-column-end:-1` pins rather than spans (so the no-dead-space fill must be measured in
+JS). Phase 2's list is stacked in Open items — the tag allowlist inside Panels is the one
+with teeth."
+
+## Snapshot (2026-08-06, session #34 — Atlas Phase 1.2: the Panel container exists and is live)
+
+**Issue #35 shipped (`2f6f626`, CI 4/4 green, live).** The Panel is the Atlas container —
+kicker, title, drag handle, collapse toggle, body — in `src/features/panel/` (sealed silo) +
+`src/components/Panel.astro`, verified on `src/pages/panel-preview/` (fixture content through
+the real silo, tool chrome, `?bare=1`, `?scope=` to prove isolation). Per CONTEXT.md it is a
+CONTAINER, never a content type: **no guide section moved onto it** — that is Phase 2.
+
+**The store records decisions BOTH ways, and that was a bug first.** v1 stored only collapsed
+ids, so a Panel that ships collapsed and is OPENED by the reader silently re-collapsed on every
+load. Absence now means "never touched" (markup default decides); `false` is a real recorded
+decision. `setCollapsed` also refuses exactly what `parseCollapsed` would drop (`MAX_ID_LEN`,
+`MAX_PANELS`) — **a decision that cannot survive the round trip must never be shown as taken.**
+
+**The HIGH the review caught: restore was ANIMATING.** Server HTML never carries
+`data-collapsed` for a storage-restored Panel, so it painted open, then the unconditional 350ms
+transition animated it shut on every load. Fixed with a two-stage gate — `[data-panel-ready]`
+set synchronously (shut at first paint), `[data-panel-anim]` a frame later (only the reader's
+own toggles animate). Gating collapse on `ready` also fixed no-JS for free: no JS → every Panel
+open, no toggle drawn. **Generalisable: any CSS-transitioned state restored by script needs the
+transition gated behind the first paint, or the restore is visible as motion.**
+
+**Three defects were found only by driving the real page, none by tests.** `?scope=` was read
+from `Astro.url` on a PRERENDERED route, so every URL got Scope A (query params must be
+resolved client-side); a collapsed Panel measured 20px, not 0, because `0fr` floors at the
+grid item's own PADDING (moved to the last child's margin); the "ships collapsed" fixture was
+missing its flag. The 805-green-test lesson from #33 held again.
+
+**Method note.** Both `_tmp-*` Playwright specs (no-animate-on-restore via `addInitScript` +
+`transitionstart`; no-JS via `javaScriptEnabled:false`) passed and were then DELETED — the study
+route is explicitly deletable-without-a-trace and a test bound to it is a trap. Those two
+invariants are verified but UNGATED; Phase 2 should re-assert them against a real guide page.
+
 ## Snapshot (2026-08-04, session #33 — the ground moved: palette R2, and the repo got a design record)
 
 **The surface tonal ramp widened (`base.css` R2, live).** The three light surfaces sat within
@@ -886,36 +979,3 @@ daily quota cap; those are the real guards for a server key). Then I re-run the 
 confirm. After that, Session 3 is the fact registry — the big one, where prices and hours
 become data instead of prose. Still open from earlier: draft PR #28, the Actions 'allow PRs'
 setting, and local `npm run lint` (use `npx eslint src worker scripts tests`)."
-
-## Snapshot (2026-08-06, session #34 — Atlas Phase 1.2: the Panel container exists and is live)
-
-**Issue #35 shipped (`2f6f626`, CI 4/4 green, live).** The Panel is the Atlas container —
-kicker, title, drag handle, collapse toggle, body — in `src/features/panel/` (sealed silo) +
-`src/components/Panel.astro`, verified on `src/pages/panel-preview/` (fixture content through
-the real silo, tool chrome, `?bare=1`, `?scope=` to prove isolation). Per CONTEXT.md it is a
-CONTAINER, never a content type: **no guide section moved onto it** — that is Phase 2.
-
-**The store records decisions BOTH ways, and that was a bug first.** v1 stored only collapsed
-ids, so a Panel that ships collapsed and is OPENED by the reader silently re-collapsed on every
-load. Absence now means "never touched" (markup default decides); `false` is a real recorded
-decision. `setCollapsed` also refuses exactly what `parseCollapsed` would drop (`MAX_ID_LEN`,
-`MAX_PANELS`) — **a decision that cannot survive the round trip must never be shown as taken.**
-
-**The HIGH the review caught: restore was ANIMATING.** Server HTML never carries
-`data-collapsed` for a storage-restored Panel, so it painted open, then the unconditional 350ms
-transition animated it shut on every load. Fixed with a two-stage gate — `[data-panel-ready]`
-set synchronously (shut at first paint), `[data-panel-anim]` a frame later (only the reader's
-own toggles animate). Gating collapse on `ready` also fixed no-JS for free: no JS → every Panel
-open, no toggle drawn. **Generalisable: any CSS-transitioned state restored by script needs the
-transition gated behind the first paint, or the restore is visible as motion.**
-
-**Three defects were found only by driving the real page, none by tests.** `?scope=` was read
-from `Astro.url` on a PRERENDERED route, so every URL got Scope A (query params must be
-resolved client-side); a collapsed Panel measured 20px, not 0, because `0fr` floors at the
-grid item's own PADDING (moved to the last child's margin); the "ships collapsed" fixture was
-missing its flag. The 805-green-test lesson from #33 held again.
-
-**Method note.** Both `_tmp-*` Playwright specs (no-animate-on-restore via `addInitScript` +
-`transitionstart`; no-JS via `javaScriptEnabled:false`) passed and were then DELETED — the study
-route is explicitly deletable-without-a-trace and a test bound to it is a trap. Those two
-invariants are verified but UNGATED; Phase 2 should re-assert them against a real guide page.

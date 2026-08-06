@@ -22,84 +22,98 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (2026-08-06, session #35 — Panel primitive COMPLETE + two platform gates)
+## Snapshot (2026-08-06, session #36 — the deploy was never broken; our retry chain was)
 
-**Four issues shipped, four commits, each reviewed (2-axis) then pushed:** #36 grid
-(`43a05fa`), #37 reorder (`f2f7fad`), #38 accent-ink (`ba50b3d`), #39 lint/CI scope
-(`5f3e52f`). All closed. Phase 2 onward is now "move this section onto a Panel", never
-"invent another container".
+**One commit, `661b5a7`, merged to main (fast-forward).** Session #35's four pushes all went red on
+Deploy while the site was live and correct. The cause was not Pages — it was our own retry chain
+turning a slow queue into a guaranteed failure.
 
-**#36 — the grid.** Pure sort model (`model/sort.ts`): full-width band first, open before
-collapsed, tie-break = declared order; rules COMPOSE (a collapsed full-width Panel stays in
-its band). ui/grid.js moves REAL DOM nodes so tab/reading order match the screen; resort
-waits for the collapse transition (immediate when transitions are off = reduced motion).
-Caught live, not by tests: `grid-column-end:-1` PINS the last Panel to the final column and
-strands the hole mid-row — the last-row fill is a measured span, recomputed on resort/resize.
+**The mechanism.** `actions/deploy-pages` CANCELS the deployment it created when it times out, and the
+deployment ID *is* the commit SHA. So every retry re-submitted that same ID and was handed back the
+record the previous attempt had just cancelled — `Deployment cancelled.` five seconds in, every time,
+unconditionally. The retries could not succeed. Worse, they left the deployment half-alive, so the
+NEXT push died on `due to in progress deployment. Please cancel <prev sha> first` — which is how one
+slow queue became four consecutive red runs (`43a05fa`, `f2f7fad`, `5f3e52f`, `e0c787f`). The real
+failure was mundane: deployments sat in `deployment_queued` ~12.5 min against the action's 10-min
+default and landed about a minute AFTER the workflow gave up.
 
-**#37 — reorder.** `model/order.ts` (move/clamp/no-op; saved order reconciled: stale ids
-drop, NEW ids append at the end, never shuffled into the reader's arrangement). Drag = live
-node moves, drop commits, cancel reverts, a drag that never moved records NOTHING; keyboard
-arrows/Home/End on the grip button; live region announces where the Panel actually LANDED —
-"stays at position N" when the bands refuse. Per-scope key `tg-panelorder-*`; reset via
-`[data-panel-order-reset]` (hidden until wired). Grip drawn only under `[data-panel-reorder]`.
+**The fix.** One attempt, `timeout: 900000` (15 min); retry chain deleted; environment url reads the
+single attempt. Plus `verify-live` now runs even when deploy reports failure (`needs: [build, deploy]`,
+`if: !cancelled() && needs.build.result == 'success'` — gated on build, so nothing-to-deploy still
+skips). It had SKIPPED on all four red runs: the one check that speaks about the SITE rather than the
+deploy step stayed silent exactly when it was the only thing that could have said "the site is fine".
 
-**#38 — the cascade lesson.** A custom property substitutes its var()s on the element that
-DECLARES it — :root's `--accent-ink:var(--accent-ink-light)` resolved once at :root and every
-hub card inherited the HOUSE ink while its own inline candidates sat unread. Fix: carrier
-rules (`[style*="--accent-ink-light"]` re-declares locally + dark partners). Gates (both past
-occurrences covered): rendered per-carrier check hub+guide/both themes (forced-failure
-proven), and a source denylist (accent text never from --accent raw/color-mix/candidate).
-**The source gate's FIRST run found occurrences 3+4:** change-request micro text painted raw
---accent (fixed), story-mode's fixed-dark overlay (allowlisted with reasoning + staleness
-check). Gates that fire on their first run are the ones earning their place.
+**Two lessons for the permanent book.** (1) A retry is only a retry if the operation is IDEMPOTENT —
+keyed on a commit SHA, a re-submit is a re-read of a dead record, so the safety net was the bug. (2) A
+did-it-land check gated on the deploy step succeeding goes quiet in precisely the case it exists for.
 
-**#39 — same lesson, meta.** The new divergence gate (lint scope ⊆ CI scope, read from
-test.yml itself) ALSO fired on first run: docs/mockups/*.mjs are deliberately linted but
-docs/** pushes skipped CI. CI now follows lint (docs/** out of paths-ignore; md-only commits
-still skip). The creator's 82ed519 had already applied the immediate unblock.
+**NOT YET PROVEN — read this first.** No deploy has run since the merge: live `last-modified` is still
+13:15:35, the old `e0c787f` deploy. The change is workflow-only so the built site is byte-identical
+either way and nothing is missing. The next push carrying real content is the test: deploy green AND
+`verify-live` actually running. If it goes red again the failure now means something different — the
+queue genuinely exceeded 15 min, not that we cancelled ourselves.
+
+**Dependabot triaged, not fixed (creator's call).** `pdfjs-dist` 6.1.200 — GHSA-hq66-cqwq-w95j,
+arbitrary JS on opening a malicious PDF, fixed in 6.2.108 (patch bump, same major). Reachability is
+narrow: a traveler must obtain a hostile PDF and deliberately drop it into the New-Guide wizard's
+booking-doc upload (`src/features/hub/model/pdf-text.ts`), itself a lazy chunk — no drive-by, no
+server-side path, no login or session to steal, only same-origin localStorage. Not urgent; do it on a
+routine pass. **Unverified:** could NOT confirm it is literally alert 13 — the GitHub MCP set has no
+Dependabot endpoint and direct api.github.com is 403 in agent sessions. It is the only HIGH that is a
+direct, shipped, runtime dep; `js-yaml`/`brace-expansion`/`fast-uri`/`ajv` are dev-only, moderate is
+`postcss`.
+
+**Phase 2 answered (asked this session).** Per `docs/design-handoff/PROMPT.md` it is **the guide
+sheet**: move the sixteen section renderers onto Panels, masthead becomes a plate, graticule comes off
+guide photography, and the notation layer lands (provenance dot + staleness popover, flag chips,
+stamps, gap state). No spec issue exists yet — #33 deliberately left Phases 2–5 unspecced until the
+primitive shipped, and it now has.
 
 ## Open items
 
-- **Needs the creator:** ① LOCAL branch `worktree-agent-a7dc7eeb397c6a368` (progress-study,
-  `5917f8f`, exists nowhere else) — keep or lose; ② sign off revise-guide `land` default
-  `draft` → `auto` + V6 Q4 thresholds; ③ Cloudflare dashboard Git integration still failing
-  0s builds on every push — consider disabling; ④ skill-evals `push` trigger yes/no (fired 0
-  times as `pull_request`-only). (Old ⑤ eslint worktrees ignore: DONE by creator in 82ed519.)
+- **Needs the creator:** (1) LOCAL branch `worktree-agent-a7dc7eeb397c6a368` (progress-study,
+  `5917f8f`, exists nowhere else) — keep or lose; (2) sign off revise-guide `land` default `draft` →
+  `auto` + V6 Q4 thresholds; (3) Cloudflare dashboard Git integration still failing 0s builds on every
+  push — consider disabling; (4) skill-evals `push` trigger yes/no (fired 0 times as
+  `pull_request`-only).
+- **Deploy fix unproven** until the next real push — see the snapshot. Do not treat `661b5a7` as
+  verified; it is merged, not demonstrated.
+- Branch `claude/phase-2-design-implementation-2ydnnn` exists on the remote and carries only
+  `661b5a7`, now also on main. Delete it once the deploy fix proves out.
+- `pdfjs-dist` 6.1.200 → 6.2.108 pending (triaged above, not urgent).
 - Korea 03: critic flagged a swapped 명동 label on the Gyeongbokgung map point → file its issue.
 - S1–S5 research standards + dossier contract still await their first real research pass.
 - No guide uses a direct royalty-free `sights[].img.src` yet — capability live, unexercised.
 - feedback-export Monday cron: if 2026-08-10's scheduled fire is also absent, investigate.
 - `.card:has(.brow)` 3px `border-left` — incumbent, revisit only if card language reworked.
-- **Panel, deferred by design:** two tabs on one scope clobber each other's collapse state
-  (accepted); Phase 2 must enforce the prose tag allowlist inside Panels (fixtures use raw
-  `set:html`); Phase 2 should re-assert no-animate-on-restore + no-JS against a real guide
-  page (verified, deleted with the `_tmp-*` specs, still ungated); guide surfaces must render
-  their own reset-order control — the Panel component deliberately carries none; story-mode's
-  accent mixes ride a fixed dark ground with no contrast gate (recorded residual risk, #38).
-- Dependabot: 1 HIGH advisory open on `main` (alert 13), predates #35, untriaged.
-- `.claude/launch.json` gained `astro-preview-alt` (:4323) because another session held :4322
-  — remove if it reads as debris; :4322 stays the canonical ship-loop surface.
+- **Panel, deferred by design:** two tabs on one scope clobber each other's collapse state (accepted);
+  Phase 2 must enforce the prose tag allowlist inside Panels (fixtures use raw `set:html`); Phase 2
+  should re-assert no-animate-on-restore + no-JS against a real guide page (verified, deleted with the
+  `_tmp-*` specs, still ungated); guide surfaces must render their own reset-order control — the Panel
+  component deliberately carries none; story-mode's accent mixes ride a fixed dark ground with no
+  contrast gate (recorded residual risk, #38).
+- `.claude/launch.json` gained `astro-preview-alt` (:4323) because another session held :4322 — remove
+  if it reads as debris; :4322 stays the canonical ship-loop surface.
 
 ## Where we left off
 
-**Session #35 (2026-08-06):** shipped issues #36+#37 (the Panel grid + reorder — the Panel
-primitive is COMPLETE) and #38+#39 (accent-ink carrier fix + lint/CI divergence gate). Four
-commits (`43a05fa`, `f2f7fad`, `ba50b3d`, `5f3e52f`), each two-axis reviewed before push;
-1447 tests green; all four issues closed. PC shut down on creator's request after the final
-push — CI for `5f3e52f` was in progress (Tests/A11y/Deploy) and unverified-live; check it
-first thing.
+**Session #36 (2026-08-06):** short session, one commit. Diagnosed why session #35's four pushes went
+red on Deploy despite a healthy site, fixed it (`661b5a7` — 15-min single attempt, retries deleted,
+`verify-live` no longer gated on deploy succeeding), and merged to main by the creator's explicit ask.
+Also triaged the open Dependabot HIGH (`pdfjs-dist`, not urgent, deliberately left unfixed) and
+answered what Phase 2 is. Gates green before push: lint clean, typecheck 0 errors, 1447 tests, build
+clean. `astro preview` and a `dist/` grep were NOT run and were not applicable — the diff touches only
+`.github/workflows/deploy.yml` and produces no site output.
 
-**Recommended next step:** confirm `5f3e52f`'s CI went green + site live, then Phase 2
-(migrate the first real guide section onto a Panel) — or triage the Dependabot HIGH.
+**Recommended next step:** write the Phase 2 spec issue (the guide sheet) and let its first real push
+double as the deploy fix's proof — or bump `pdfjs-dist` if you want the security surface clean first.
 
-**Re-prompt the creator with:** "The Panel primitive is complete — grid, collapse, reorder,
-persistence — and the pattern that kept repeating this session is worth naming: three gates
-fired on their FIRST run. The accent gate found two more live accent-as-text improvisations
-the moment it existed; the lint-scope gate found docs/mockups already diverged; and the
-forced-failure pass proved the rendered gate actually fails when the fix is removed. The
-doctrine held: a gate that has never failed is an assumption, not a gate. Two cascade rules
-also joined the permanent lesson book: a custom property resolves its var()s on the element
-that DECLARES it (so inline candidates need carrier re-resolution rules), and
-`grid-column-end:-1` pins rather than spans (so the no-dead-space fill must be measured in
-JS). Phase 2's list is stacked in Open items — the tag allowlist inside Panels is the one
-with teeth."
+**Re-prompt the creator with:** "The deploy was never broken — our retry chain was. `deploy-pages`
+cancels the deployment it created when it times out, and the deployment ID is the commit SHA, so every
+retry re-submitted an ID that had just been cancelled and failed in five seconds, guaranteed. That is
+the whole four-red-run streak: a safety net that could only ever fail, plus a half-alive deployment
+blocking the next push. Two things worth keeping: a retry is only a retry if the operation is
+idempotent, and a did-it-land check gated on the deploy step succeeding goes quiet exactly when it is
+the only thing that could reassure you — `verify-live` skipped on all four runs while the site was
+perfectly fine. The fix is merged but NOT proven; no deploy has run since. Phase 2 is the guide sheet
+and its list is stacked in Open items — the tag allowlist inside Panels is the one with teeth."
