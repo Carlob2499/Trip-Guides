@@ -32,6 +32,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
   <div class="pv-bar-row pv-bar-row--links">
     <span class="pv-lbl">Store</span>
     <button class="pv-chip" type="button" id="pvReset">Forget this scope</button>
+    <button class="pv-chip" type="button" data-panel-order-reset>Reset order</button>
     <a class="pv-chip" id="pvBare" href={`${base}/panel-preview/?bare=1`}>Bare (screenshot)</a>
   </div>
   <p class="pv-note" id="pvNote"></p>

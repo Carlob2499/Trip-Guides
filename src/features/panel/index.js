@@ -10,11 +10,13 @@
 
 import { initPanels } from "./ui/collapse.js";
 import { initGrid } from "./ui/grid.js";
+import { initReorder } from "./ui/reorder.js";
 
 export {
   parseCollapsed, serializeCollapsed, setCollapsed, toggleCollapsed, isCollapsed, scopeKey,
   MAX_ID_LEN, MAX_PANELS,
 } from "./model/collapse";
+export { orderKey } from "./model/order";
 
 /** The default gateway — plain localStorage, every access already fail-safe. */
 export const localStore = {
@@ -35,8 +37,16 @@ export function initPanelCollapse(cfg, store) {
   });
 }
 
-/** Wire the Panel grid under `root` — call AFTER initPanelCollapse, so the initial
-    sort sees the restored collapse state. `cfg` = { root?: ParentNode }. */
-export function initPanelGrid(cfg) {
-  initGrid({ root: (cfg && cfg.root) || document });
+/** Wire the Panel grid AND the reader's reorder under `root` — call AFTER
+    initPanelCollapse, so the initial sort sees the restored collapse state.
+    `cfg` = { scope: string, root?: ParentNode }; the scope keys the persisted order
+    exactly as it keys collapse — one guide's layout never leaks into another's. */
+export function initPanelGrid(cfg, store) {
+  var root = (cfg && cfg.root) || document;
+  var ctl = initGrid({
+    scope: (cfg && cfg.scope) || "",
+    root: root,
+    store: store || localStore,
+  });
+  if (ctl) initReorder(ctl, { root: root });
 }

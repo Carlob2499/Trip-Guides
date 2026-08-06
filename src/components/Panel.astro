@@ -9,8 +9,9 @@
    with JS off — every Panel renders open and the toggle is not drawn, so a Panel that
    ships collapsed is still readable and no control is offered that cannot work.
 
-   The drag handle is inert here — it is markup and a tap target only, wired in a
-   later ticket. It is rendered now so the Panel's chrome is judged whole. */
+   The drag handle is a real control, wired by src/features/panel/ (ui/reorder.js):
+   drag to reorder, or arrow keys on the focused handle. Like the collapse toggle it
+   is only DRAWN once that wiring exists ([data-panel-reorder]) — no JS, no handle. */
 interface Props {
   /** Stable id — the key this Panel's collapsed state is stored under. */
   id: string;
@@ -43,13 +44,13 @@ const titleId = `pnl-title-${slug}`;
   aria-labelledby={titleId}
 >
   <header class="pnl-head">
-    <span class="pnl-grip" data-panel-grip aria-hidden="true">
-      <svg viewBox="0 0 16 16" width="16" height="16" focusable="false"><g fill="currentColor">
+    <button class="pnl-grip" type="button" data-panel-grip aria-label={`Move ${title}. Use arrow keys to reorder.`}>
+      <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><g fill="currentColor">
         <circle cx="6" cy="3.5" r="1.35" /><circle cx="10" cy="3.5" r="1.35" />
         <circle cx="6" cy="8" r="1.35" /><circle cx="10" cy="8" r="1.35" />
         <circle cx="6" cy="12.5" r="1.35" /><circle cx="10" cy="12.5" r="1.35" />
       </g></svg>
-    </span>
+    </button>
     <div class="pnl-headings">
       {kicker && <p class="pnl-kicker">{kicker}</p>}
       <h2 class="pnl-title" id={titleId}>{title}</h2>
@@ -61,7 +62,7 @@ const titleId = `pnl-title-${slug}`;
       aria-expanded={collapsed ? "false" : "true"}
       aria-controls={bodyId}
     >
-      <span class="pnl-toggle-lbl">{title}</span>
+      <span class="pnl-sr">{title}</span>
       <svg class="pnl-chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
         <path d="M4 6.2 8 10.2l4-4" fill="none" stroke="currentColor" stroke-width="1.8"
           stroke-linecap="round" stroke-linejoin="round" />

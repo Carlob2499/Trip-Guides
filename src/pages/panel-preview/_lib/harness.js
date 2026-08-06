@@ -3,7 +3,7 @@
    cannot be known at build time — then boots the REAL panel silo against it and wires
    the tool bar's own controls. Nothing here reimplements collapse: if this page behaves,
    src/features/panel/ behaves. */
-import { initPanelCollapse, initPanelGrid, localStore, scopeKey } from "../../../features/panel/index.js";
+import { initPanelCollapse, initPanelGrid, localStore, scopeKey, orderKey } from "../../../features/panel/index.js";
 
 function validScopes() {
   try {
@@ -21,7 +21,7 @@ export function initPanelPreview() {
 
   initPanelCollapse({ scope: scope });
   // After collapse restore, so the initial sort sees the restored state.
-  initPanelGrid({});
+  initPanelGrid({ scope: scope });
 
   var note = document.getElementById("pvNote");
   if (note) note.textContent = "Store key: " + scopeKey(scope);
@@ -35,7 +35,9 @@ export function initPanelPreview() {
   var reset = document.getElementById("pvReset");
   if (reset) {
     reset.addEventListener("click", function () {
+      // "Forget" means the whole scope: collapse decisions AND the reader's order.
       localStore.write(scopeKey(scope), "{}");
+      localStore.write(orderKey(scope), "[]");
       location.reload();
     });
   }
