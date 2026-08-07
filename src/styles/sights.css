@@ -46,6 +46,10 @@
 @media screen{
   .sight-media.media-ok .tag--onphoto{color:#e9ede2;text-shadow:0 1px 6px rgba(0,0,0,.4)}
   .sight-media.media-ok .sight-name--onphoto{color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.4)}
+  /* The provenance dot rides inline with the (now white) title, so it needs the same
+     on-photo treatment .tag--onphoto/.sight-name--onphoto get, gated the same way. */
+  .sight-media.media-ok .prov-dot--onphoto{color:rgba(255,255,255,.75);border-color:rgba(255,255,255,.75)}
+  .sight-media.media-ok .prov-dot--onphoto:hover,.sight-media.media-ok .prov-dot--onphoto:focus-visible{color:#fff;border-color:#fff}
 }
 
 /* Badge sits on real photo pixels, so its worst case is a pure-white area of the photo, not --card.

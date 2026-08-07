@@ -25,7 +25,11 @@
   .bactual, .budget-toggle, .share-backdrop, .share-modal,
   [id="btnShare"],
   .transit-links,
-  .cold-open, .whats-next, .draft-graduate, .next-cta, .lnw-cta { display: none !important; }
+  .cold-open, .whats-next, .draft-graduate, .next-cta, .lnw-cta,
+  /* The provenance dot's popover only ever opens via a JS click handler (data-open),
+     which paper can't trigger — leaving the dot renders a dead "●" glyph with no way
+     to reach the CHECKED date/source it names. */
+  .prov-dot, .prov-popover { display: none !important; }
 
   /* Reset body for print */
   *, *::before, *::after { box-shadow: none !important; text-shadow: none !important; }
