@@ -138,6 +138,22 @@ const JLINE_CLIPPED_WHY =
   "clipped-by-a-real-overflow mechanism as the korea tool-tab entry above. The text itself uses " +
   "only the proven tokens: .jl-word var(--ink), .jl-date var(--muted), .jl-now var(--accent-ink) " +
   "— each already >=4.5:1 on this surface everywhere else it paints.";
+const DAY_SWIPE_CLIPPED_WHY =
+  "The phone swipe-deck (planner.css, .planner-days{overflow-x:auto;scroll-snap-type:x mandatory} " +
+  "below 640px — a real, load-bearing rule, the same category as JLINE_CLIPPED_WHY above) leaves " +
+  "day-1's card straddling the viewport edge on load: day-0 sits fully in view, day-2+ are fully " +
+  "clipped (axe reports neither), and day-1 alone is genuinely PART-clipped. Its .d date label's " +
+  "midpoint then falls somewhere axe's internal rect-stack grid cannot index — not a colour " +
+  "judgement at all; axe throws 'Element midpoint exceeds the grid bounds' inside its own " +
+  "color-contrast#evaluate before it ever samples a pixel, hence messageKey 'default' rather than " +
+  "elmPartiallyObscured. Confirmed identical in both themes (rules out a colour cause) and at " +
+  "exactly day-1 on all four guides regardless of content (rules out a content cause) — a scan-time " +
+  "geometry artifact of the Panel migration's nesting (Atlas Phase 2 added a .pnl-body-in{overflow:" +
+  "hidden} ancestor the deck did not have before), not a rendering bug. The text itself uses " +
+  ".d{color:var(--accent-ink)} on .day{background:var(--bg2)} — accent-tokens.ts derives --accent-" +
+  "ink to be >=4.5:1 against --bg2 BY CONSTRUCTION (accent-tokens.test.ts), so the real colour pair " +
+  "is provably safe independent of what axe could or couldn't measure here. Desktop reports zero " +
+  "nodes of this key (no swipe-deck above 640px).";
 const MAST_BG_GRADIENT_WHY =
   "The masthead h1 gained a CSS gradient in its background chain when R4 layered the living cover " +
   "(Painted Atlas sky + .pa-shade scrim — byte-identical to the photo scrim — under every hero); " +
@@ -246,6 +262,9 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     // renders the same masthead so the same max covers it).
     "color-contrast/bgGradient": { max: 1, why: MAST_BG_GRADIENT_WHY },
     "color-contrast/elmPartiallyObscuring": { max: 1, why: MAST_DEK_OBSCURING_WHY },
+    // Atlas Phase 2 (own-cards-panels): day-1's date label in the phone swipe-deck, mobile only
+    // (desktop reports 0). See DAY_SWIPE_CLIPPED_WHY.
+    "color-contrast/default": { max: 1, why: DAY_SWIPE_CLIPPED_WHY },
     "frame-tested/default": { max: 3, why: FRAME_TESTED_WHY },
   },
   "denmark guide": {
@@ -261,7 +280,15 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     },
     // 19 -> 26: the same R3 station-dot mechanism as korea — denmark's 8 non-tool tabs
     // (#gtab-0..7 counted in the observed list) minus one departed prose node; desktop only.
-    "color-contrast/pseudoContent": { max: 26, why: PSEUDO_CONTENT_WHY },
+    // 26 -> 34: Atlas Phase 2 (own-cards-panels) moved Transit's checklist sections onto
+    // Panels, whose body column is narrower than the old full-width .catblock — the SAME
+    // ol.steps li::before mechanism now wraps the SAME checklist prose across more lines,
+    // putting more <b>/<a> tokens near the pseudo. Verified node-by-node: still exactly the
+    // 8 #gtab-N station-dot tabs + .steps > li > .check > .check-txt > b/a nodes inside
+    // #pnl-body-How-to-get-everywhere-on-this-trip and #pnl-body-Step-by-step-routes-... —
+    // no new kind of node, same two mechanisms PSEUDO_CONTENT_WHY already covers. Mobile
+    // renders fewer (its own max stands unchanged), so desktop is the ceiling.
+    "color-contrast/pseudoContent": { max: 34, why: PSEUDO_CONTENT_WHY },
     "color-contrast/shortTextContent": { max: 18, why: SHORT_TEXT_CONTENT_WHY },
     // 12 -> 10: SHRUNK (the rule these maxes live by) — the arc converted glyphs to real SVG;
     // denmark's 2 day-leg arrows arrive but more left. Counted: 10 desktop.
@@ -278,6 +305,9 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     // .jl-word/.jl-date of the Tue stop at 375px; desktop renders 0 of this key).
     "color-contrast/elmPartiallyObscured": { max: 4, why: JLINE_CLIPPED_WHY },
     "frame-tested/default": { max: 1, why: FRAME_TESTED_WHY },
+    // Atlas Phase 2 (own-cards-panels): day-1's date label in the phone swipe-deck, mobile only
+    // (desktop reports 0). See DAY_SWIPE_CLIPPED_WHY.
+    "color-contrast/default": { max: 1, why: DAY_SWIPE_CLIPPED_WHY },
   },
 };
 

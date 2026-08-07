@@ -88,13 +88,22 @@ export function initGrid(ctx) {
      a POSITION rule — a Panel's declared span still only ever comes from its type. */
   function fillLastRow() {
     var kids = Array.prototype.slice.call(grid.children);
+    // Clear every stretch BEFORE measuring cols, not after. A stale "span N" left over
+    // from a previous (possibly wrong) measurement forces the grid to keep resolving to
+    // N tracks — so measuring with it still applied reads back the very corruption it
+    // caused, and the wrong value perpetuates itself forever. Clearing first forces the
+    // browser to re-resolve the TRUE current column count on every call, which is what
+    // makes this self-correcting instead of self-reinforcing. Reproduced live: Korea's
+    // Gaming & anime group at 375px, one bad early measurement of cols=2 left a
+    // permanent inline "span 2" on its last Panel, squeezing it to ~29px wide — every
+    // later call kept reading 2 columns back because that span was still applied.
+    kids.forEach(function (el) { el.style.gridColumn = ""; });
     var cols = 1;
     try {
       cols = (getComputedStyle(grid).gridTemplateColumns || "")
         .split(" ").filter(Boolean).length || 1;
     } catch (e) { /* leave 1 — no stretch, never a wrong one */ }
     var pos = 0;
-    kids.forEach(function (el) { el.style.gridColumn = ""; });
     kids.forEach(function (el) {
       if (el.hasAttribute("data-panel-full")) { pos = 0; return; }
       pos += 1;
