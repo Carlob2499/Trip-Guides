@@ -27,7 +27,9 @@ import { reducedMotion } from "./util.js";
   var rings = Array.prototype.slice.call(document.querySelectorAll("[data-ring]"));
   function updateRings() {
     rings.forEach(function (ring) {
-      var card = ring.closest(".card");
+      // .pnl: a Panel-hosted section (Atlas Phase 2) has no .card wrapper — the Panel
+      // IS the card. Without this the ring ships live but never fills.
+      var card = ring.closest(".card, .pnl");
       if (!card) return;
       var boxes = card.querySelectorAll('.check input[type=checkbox]');
       if (!boxes.length) return;

@@ -53,6 +53,51 @@ describe("content.config guides schema — scaffold contract", () => {
   });
 });
 
+describe("content.config guides schema — panelGroups (Atlas Phase 2)", () => {
+  it("accepts a panelGroups entry naming an all-carded, all-titled group", () => {
+    const sections = [
+      { type: "prose", group: "Essentials", title: "A", body: "x" },
+      { type: "budget", group: "Essentials", title: "B", items: [] },
+    ];
+    const result = schema.safeParse(validGuide({ sections, panelGroups: ["Essentials"] }));
+    expect(issuePaths(result)).toEqual([]);
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects a panelGroups entry that names no real group (the typo failure mode)", () => {
+    const result = schema.safeParse(validGuide({ panelGroups: ["Essentails"] }));
+    expect(result.success).toBe(false);
+    expect(issuePaths(result)).toContain("panelGroups");
+  });
+
+  it("rejects a panel group containing a non-carded type (days render their own cards)", () => {
+    const sections = [
+      { type: "prose", group: "Plan", title: "A", body: "x" },
+      { type: "days", group: "Plan", title: "Itinerary", items: [{ date: "2026-01-01", d: "Day", title: "Day 1", body: "x" }] },
+    ];
+    const result = schema.safeParse(validGuide({ sections, panelGroups: ["Plan"] }));
+    expect(result.success).toBe(false);
+    expect(issuePaths(result)).toContain("panelGroups");
+  });
+
+  it("rejects a panel group containing an untitled section (the title is the Panel's id)", () => {
+    const sections = [{ type: "prose", group: "Overview", body: "x" }];
+    const result = schema.safeParse(validGuide({ sections, panelGroups: ["Overview"] }));
+    expect(result.success).toBe(false);
+    expect(issuePaths(result)).toContain("panelGroups");
+  });
+
+  it("rejects duplicate titles within a panel group (the title is the storage id)", () => {
+    const sections = [
+      { type: "prose", group: "Overview", title: "Same", body: "x" },
+      { type: "prose", group: "Overview", title: "Same", body: "y" },
+    ];
+    const result = schema.safeParse(validGuide({ sections, panelGroups: ["Overview"] }));
+    expect(result.success).toBe(false);
+    expect(issuePaths(result)).toContain("panelGroups");
+  });
+});
+
 describe("content.config guides schema — tab budget", () => {
   it("passes at exactly the default budget (10 groups)", () => {
     const sections = Array.from({ length: 10 }, (_, i) => ({ type: "prose", group: `Group ${i}`, body: "x" }));

@@ -26,7 +26,9 @@ import { staleness, SHELF_LIFE_DAYS } from "../lib/staleness";
     if (!cat || !Object.prototype.hasOwnProperty.call(SHELF_LIFE_DAYS, cat)) cat = "default";
     var s = staleness(date, cat, now);
     if (!s || !s.stale) return;
-    var row = el.querySelector(".block-title-row") || el.querySelector(".card") || el;
+    // .pnl-headings: a Panel-hosted section (Atlas Phase 2) has no .block-title-row —
+    // the pill lands under the Panel's title, which stays visible even collapsed.
+    var row = el.querySelector(".block-title-row") || el.querySelector(".pnl-headings") || el.querySelector(".card") || el;
     // http(s) only. The schema types source_url as z.url(), and "javascript:alert(1)" IS a
     // valid URL — so the only thing standing between guide data and a clickable script link
     // is this check. Anything else renders as a plain <span>, losing the link, not the fact.

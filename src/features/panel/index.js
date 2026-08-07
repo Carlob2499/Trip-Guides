@@ -50,3 +50,18 @@ export function initPanelGrid(cfg, store) {
   });
   if (ctl) initReorder(ctl, { root: root });
 }
+
+/** Boot every self-describing grid on the page: any `[data-panel-grid]` carrying a
+    `data-panel-scope` wires itself under that scope, rooted at its own enclosing
+    tab panel (so a reset control in the group's chrome is found, and two grids on
+    one page never cross-wire). Grids without the attribute — the design-study
+    route wires its own scope switcher — are untouched. */
+export function initDeclaredPanelGrids(root, store) {
+  var grids = ((root || document).querySelectorAll("[data-panel-grid][data-panel-scope]"));
+  Array.prototype.forEach.call(grids, function (grid) {
+    var scope = grid.getAttribute("data-panel-scope") || "";
+    var scopeRoot = (grid.closest && grid.closest(".catblock")) || grid.parentNode || document;
+    initPanelCollapse({ scope: scope, root: grid }, store);
+    initPanelGrid({ scope: scope, root: scopeRoot }, store);
+  });
+}

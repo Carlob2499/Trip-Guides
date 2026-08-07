@@ -6,6 +6,7 @@ import { z } from "astro/zod";
 import { contrastRatio } from "./lib/contrast";
 import { isSectionFile, interpolateFacts, FACT_VALUE_FORBIDDEN_RE } from "./lib/facts.mjs";
 import { findUnsafeHtml } from "./lib/prose-html";
+import { CARDED_TYPES } from "./lib/section-types";
 
 // Light page background (base.css `--bg`). A guide `theme.primary` becomes the
 // site `--accent`, painted as link/tab/label text on this surface — so it must
@@ -661,6 +662,12 @@ const guides = defineCollection({
     // each one still spends a slot of the reader's attention, which is why they're capped
     // separately in the layout rather than being free.
     tabBudget: z.number().int().positive().optional(),
+    // Atlas Phase 2 — groups whose sections render on the Panel grid (collapse +
+    // reorder, persisted per reader per scope) instead of the legacy .block/.card
+    // stack. Opt-in per group so the migration lands one verified group at a time.
+    // superRefine below holds every named group to the Panel contract: it must exist,
+    // and every section in it must be a Panel-hostable carded type with a title.
+    panelGroups: z.array(z.string()).optional(),
     // S3 (2026-08-02) — per-guide research-coverage floors, the tabBudget precedent applied
     // to discovery: guides legitimately differ (a 3-day city break can't owe 16 food
     // candidates), so the floors are per-guide data with defaults in check-candidates.mjs.
@@ -764,6 +771,50 @@ const guides = defineCollection({
       if (Array.isArray(s.checklist)) walkForUnsafeHtml(s.checklist, ["sections", i, "checklist"]);
     });
 
+    // 0b. Panel groups (Atlas Phase 2). A `panelGroups` entry that names no real group
+    // would silently migrate nothing (the typo failure mode the descriptors check
+    // already guards); a group holding a non-carded type (days/sights/venues render
+    // their own per-item cards) or an untitled section (the title IS the Panel's
+    // title and its storage id) would half-render. Fail loudly instead.
+    for (const pg of (g.panelGroups ?? []) as string[]) {
+      const inGroup = g.sections.filter((s: any) => s.group === pg);
+      if (!inGroup.length) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["panelGroups"],
+          message: `panelGroups names "${pg}" but no section carries that group — a typo here silently migrates nothing.`,
+        });
+        continue;
+      }
+      const seenTitles = new Set<string>();
+      for (const s of inGroup) {
+        if (!CARDED_TYPES.has(s.type)) {
+          ctx.addIssue({
+            code: "custom",
+            path: ["panelGroups"],
+            message: `panelGroups group "${pg}" contains a "${s.type}" section — only carded types (${[...CARDED_TYPES].join("/")}) can render on a Panel.`,
+          });
+        }
+        if (!s.title) {
+          ctx.addIssue({
+            code: "custom",
+            path: ["panelGroups"],
+            message: `panelGroups group "${pg}" contains an untitled ${s.type} section — the title is the Panel's heading and its storage id.`,
+          });
+        } else if (seenTitles.has(s.title)) {
+          // The title IS the Panel's storage id and its derived DOM ids: two Panels
+          // sharing one id share one store entry, the second is left inert with a
+          // toggle still drawn (the ready gate is global), and aria-controls collides.
+          ctx.addIssue({
+            code: "custom",
+            path: ["panelGroups"],
+            message: `panelGroups group "${pg}" has two sections titled "${s.title}" — the title is the Panel's storage id and must be unique within the group.`,
+          });
+        } else {
+          seenTitles.add(s.title);
+        }
+      }
+    }
     // 1. The Plan ⇄ Actual join key is the day's date STRING, so a reworded label would
     // silently drop that day's whole reality layer. Fail the build instead: every
     // learnings day must name a date that exists in some itinerary days block.

@@ -24,8 +24,30 @@ interface Props {
       material (a sights list, a day's itinerary, a budget table) declares it;
       it is never inferred from how much content happens to be inside. */
   fullWidth?: boolean;
+  /* ---- Guide-section identity (Phase 2). When a Panel hosts a guide section it IS
+     the section's block — a wrapper is impossible, because reorder.js moves the grid's
+     direct children. `anchorId` switches all of this on: the element carries the
+     `.block` class, the `sec-N` HTML id (deep links, scrollspy), `data-cat`, and the
+     provenance attrs staleness-ui.js reads. Absent, the Panel renders exactly as
+     before — the design-study route passes none of these. */
+  /** The section's HTML id (`sec-N`) — presence marks this Panel as a guide block. */
+  anchorId?: string;
+  /** Tab-group index for the scrollspy (`data-cat`). */
+  cat?: number;
+  /** Provenance trio for the staleness pill (schema's additive fields). */
+  verifiedOn?: string;
+  sourceUrl?: string;
+  shelfLife?: string;
+  /** Draw the `#` copy-link button (guide-ui.js wires every `.anchor-btn`). */
+  anchorBtn?: boolean;
+  /** Heading level for the title — 2 (default) standalone, 3 under a group's h2. */
+  level?: 2 | 3;
 }
-const { id, kicker, title, collapsed = false, fullWidth = false } = Astro.props;
+const {
+  id, kicker, title, collapsed = false, fullWidth = false,
+  anchorId, cat, verifiedOn, sourceUrl, shelfLife, anchorBtn = false, level = 2,
+} = Astro.props;
+const Heading = level === 3 ? "h3" : "h2";
 /* The derived DOM ids are IDREF TARGETS (aria-controls, aria-labelledby), and aria-controls
    is a SPACE-SEPARATED list — so an id of "day 1" would silently point at two elements that
    don't exist and kill the disclosure relationship for assistive tech with nothing visibly
@@ -37,7 +59,12 @@ const titleId = `pnl-title-${slug}`;
 ---
 
 <section
-  class:list={["pnl", fullWidth && "pnl--full"]}
+  class:list={["pnl", fullWidth && "pnl--full", anchorId && "block"]}
+  id={anchorId}
+  data-cat={anchorId != null ? cat : null}
+  data-verified-on={verifiedOn}
+  data-source-url={sourceUrl}
+  data-shelf-life={shelfLife}
   data-panel={id}
   data-panel-full={fullWidth ? "1" : null}
   data-collapsed={collapsed ? "1" : null}
@@ -53,8 +80,12 @@ const titleId = `pnl-title-${slug}`;
     </button>
     <div class="pnl-headings">
       {kicker && <p class="pnl-kicker">{kicker}</p>}
-      <h2 class="pnl-title" id={titleId}>{title}</h2>
+      <Heading class="pnl-title" id={titleId}>{title}</Heading>
     </div>
+    {anchorBtn && anchorId && (
+      <button class="anchor-btn" data-sid={anchorId} type="button"
+              title="Copy link to this section" aria-label="Copy link to this section">#</button>
+    )}
     <button
       class="pnl-toggle"
       type="button"

@@ -21,13 +21,18 @@ import WeatherBlock from "./blocks/WeatherBlock.astro";
 import HolidaysBlock from "./blocks/HolidaysBlock.astro";
 import VenueBlock from "./blocks/VenueBlock.astro";
 import DivergencesBlock from "./blocks/DivergencesBlock.astro";
+import Panel from "./Panel.astro";
+import { CARDED_TYPES, FULL_WIDTH_PANEL_TYPES } from "../lib/section-types";
 
 // `holidays` is the server-computed holiday info (or null), threaded down from
 // GuideLayout; only the `holidays` section type uses it. `learnings` is the guide's
 // optional curated post-mortem (or null), threaded the same way; only `days` uses it,
 // to grow a per-day Plan ⇄ Actual toggle on the days it has an entry for. `country`
 // drives TransitLinks' country-native app row (days/sights only).
-const { sec, sid, ci, solo, holidays, learnings, mapPins, country } = Astro.props;
+// `panelHost` (Atlas Phase 2): the section renders as a Panel — the grid's direct
+// child, absorbing the block identity — instead of the legacy .block/.card wrapper.
+// Only GuideLayout sets it, for groups the guide's `panelGroups` meta names.
+const { sec, sid, ci, solo, holidays, learnings, mapPins, country, panelHost = false } = Astro.props;
 
 // Stable key prefix for checklist items — based on section index, not content.
 // Changing item text does not change its saved state; adding/removing items at
@@ -38,7 +43,14 @@ const titleText = solo ? "" : (sec.title || "");
 
 // Types that render their content inside a shared .card wrapper.
 // days and sights render their own per-item .card elements instead.
-const carded = ["panel", "prose", "list", "routes", "map", "budget", "raids", "habitats", "infogrid", "tierlist"].includes(sec.type);
+// The set lives in lib/section-types.ts — the schema's panelGroups check reads the
+// same one, so "what a Panel can host" can't drift between renderer and gate.
+const carded = CARDED_TYPES.has(sec.type);
+
+// A Panel host needs a title (it IS the Panel's title) and a carded type; anything
+// else falls back to the legacy render rather than half-wrapping. The schema refuses
+// panelGroups that violate this, so the fallback is a belt, not a path.
+const asPanel = panelHost && carded && !!sec.title;
 
 // Opt-in per-section collapse/expand (content.config.ts `collapse` fields). Renders
 // the whole card as a native <details>/<summary> instead of a plain div — tap the
@@ -53,6 +65,38 @@ const TitleTag = isCollapsible ? "summary" : "div";
     staleness-ui.js judges shelf life client-side (live clock — a static build
     date would freeze "fresh" forever) and pins a warn pill on stale sections.
     Sections without verified_on render exactly as before. */}
+{/* Phase 2: when a Panel hosts the section it IS the block — one element carrying the
+    anchor id, data-cat, and provenance attrs, because reorder.js moves the grid's
+    DIRECT children and a wrapper would strand the identity outside the moved node. */}
+{asPanel ? (
+  <Panel
+    id={sec.title}
+    title={sec.title}
+    anchorId={sid}
+    cat={ci}
+    level={3}
+    verifiedOn={sec.verified_on}
+    sourceUrl={sec.source_url}
+    shelfLife={sec.shelf_life}
+    fullWidth={FULL_WIDTH_PANEL_TYPES.has(sec.type)}
+    collapsed={sec.collapsible === true && sec.defaultOpen === false}
+    anchorBtn={true}
+  >
+    {/* Bodies render WHOLE inside a Panel (`whole`): the Panel's collapse is the one
+        disclosure per card — stacking splitLead's "More detail" fold inside it would
+        be the nested-details pattern PanelBlock already refuses. */}
+    {sec.type === "panel"  && <PanelBlock  sec={sec} keyPrefix={keyPrefix} whole={true} />}
+    {sec.type === "prose"  && <ProseBlock  sec={sec} whole={true} />}
+    {sec.type === "list"   && <ListBlock   sec={sec} keyPrefix={keyPrefix} />}
+    {sec.type === "routes" && <RoutesBlock sec={sec} keyPrefix={keyPrefix} />}
+    {sec.type === "map"    && <MapBlock    sec={sec} pins={mapPins} />}
+    {sec.type === "budget" && <BudgetBlock sec={sec} />}
+    {sec.type === "raids"  && <RaidBlock   sec={sec} />}
+    {sec.type === "habitats" && <HabitatsBlock sec={sec} />}
+    {sec.type === "infogrid" && <InfoGridBlock sec={sec} />}
+    {sec.type === "tierlist" && <TierListBlock sec={sec} />}
+  </Panel>
+) : (
 <section class="block" id={sid} data-cat={ci}
          data-verified-on={sec.verified_on} data-source-url={sec.source_url}
          data-shelf-life={sec.shelf_life}>
@@ -123,3 +167,4 @@ const TitleTag = isCollapsible ? "summary" : "div";
     </>
   )}
 </section>
+)}

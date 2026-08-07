@@ -6,8 +6,10 @@
 // (no nested <details>).
 import { splitLead, moreDetailLabel } from "../../lib/lead-split";
 import { checklistText } from "../../lib/checklist";
-const { sec, keyPrefix = "p" } = Astro.props;
-const { lead, more, moreParagraphCount, morePreview } = sec.collapsible
+// `whole` (Phase 2): a Panel-hosted section's collapse is its one disclosure, so the
+// body renders whole — same rule as `collapsible`, arriving from the host, not the data.
+const { sec, keyPrefix = "p", whole = false } = Astro.props;
+const { lead, more, moreParagraphCount, morePreview } = (sec.collapsible || whole)
   ? { lead: sec.body, more: null, moreParagraphCount: 0, morePreview: "" }
   : splitLead(sec.body, sec.fold);
 const label = moreDetailLabel(sec.moreLabel, moreParagraphCount);

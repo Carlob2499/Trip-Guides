@@ -65,6 +65,7 @@ export function initReorder(ctl, cfg) {
     // A refused move (already at the end, or the bands put it straight back) still
     // answers — silence reads as broken to a reader who cannot see the grid.
     landed(panel, moved && ctl.positionOf(panel).pos !== at.pos ? "moved to" : "stays at");
+    syncReset();
   });
 
   // ---- Pointer drag: the dragged Panel ignores pointer events so elementFromPoint
@@ -120,6 +121,7 @@ export function initReorder(ctl, cfg) {
       // Same honesty as the keyboard path: a drop the bands snapped back says so,
       // it does not claim a move.
       landed(panel, ctl.positionOf(panel).pos !== fromPos ? "moved to" : "stays at");
+      syncReset();
     } else {
       // Cancelled — or a press-and-release that never moved the node. Nothing is
       // recorded: a decision the reader didn't take must not change future layout.
@@ -137,12 +139,19 @@ export function initReorder(ctl, cfg) {
 
   // ---- Reset: any control marked data-panel-order-reset returns the scope to its
   // declared order — a reader can never strand themselves in a layout they dislike.
+  // Shown only while a custom order actually EXISTS: a reset that would reset nothing
+  // is clutter, and its appearance is itself the honest signal "you changed this".
   var reset = root.querySelector("[data-panel-order-reset]");
+  function syncReset() {
+    if (reset && ctl.hasCustomOrder) reset.hidden = !ctl.hasCustomOrder();
+  }
   if (reset) {
     reset.addEventListener("click", function () {
       ctl.reset();
       announce("Panel order reset to default.");
+      syncReset();
     });
+    syncReset();
   }
 
   // The handle only becomes interactive once this wiring exists — the same rule as

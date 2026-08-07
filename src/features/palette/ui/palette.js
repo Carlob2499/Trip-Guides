@@ -79,6 +79,15 @@
         var tab = document.querySelector('.gtab[data-tab="' + cat.getAttribute("data-ci") + '"]');
         if (tab && tab.getAttribute("aria-selected") !== "true") tab.click();
       }
+      // A hit inside a reader-collapsed Panel must open it or the jump lands on a shut
+      // header with the matched text invisible. Setting the hash (when the target has
+      // an id) lets the panel silo's openForHash do the opening — one mechanism, not
+      // a second copy of it here. Cleared first so re-jumping to the same id fires.
+      var panel = el.closest && el.closest("[data-panel][data-collapsed]");
+      if (panel && el.id) {
+        if ("#" + el.id === location.hash) location.hash = "";
+        location.hash = el.id;
+      }
       setTimeout(function () {
         // Manual offset: block:start would park the target under the sticky chrome.
         window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 120);

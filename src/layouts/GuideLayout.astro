@@ -56,6 +56,7 @@ import "../styles/scroll-motion.css";
 import "../features/firebase/styles.css";
 import "../features/route-opt/styles.css";
 import "../features/budget-pact/styles.css";
+import "../features/panel/styles.css";
 // touch.css LAST: its @media(hover:none) block overrides hover rules from every
 // stylesheet above, and equal-specificity rules are decided by source order.
 import "../styles/touch.css";
@@ -810,9 +811,30 @@ const tripSummary = buildSummary(guide);
                 {descriptor && <p class="cat-desc">{descriptor}</p>}
                 {sub && <p class="cat-sub">{sub}</p>}
               </header>
-              {byG[g].map((o) => (
-                <Block sec={o.s} sid={`sec-${o.i}`} ci={ci} solo={solo} holidays={holidayInfo} learnings={guide.learnings ?? null} mapPins={o.s.type === "map" ? (pinMap.get(o.s) ?? null) : null} country={guide.country} />
-              ))}
+              {((guide as any).panelGroups ?? []).includes(g) ? (
+                <>
+                  {/* Atlas Phase 2: this group's sections are Panels on the grid —
+                      collapse + reorder, persisted per reader under this scope. The
+                      scope key is per GROUP, not per guide, so a later-phase grid in
+                      another tab never interleaves its order with this one. */}
+                  <div class="pnl-grid" data-panel-grid data-panel-scope={`${storeKey}:${g}`}>
+                    {byG[g].map((o) => (
+                      <Block sec={o.s} sid={`sec-${o.i}`} ci={ci} solo={solo} holidays={holidayInfo} learnings={guide.learnings ?? null} mapPins={o.s.type === "map" ? (pinMap.get(o.s) ?? null) : null} country={guide.country} panelHost={true} />
+                    ))}
+                  </div>
+                  {/* The guide surface's own reset control (the Panel deliberately
+                      carries none). Doubly gated: CSS hides it until the reorder
+                      wiring exists; reorder.js unhides it only while a custom order
+                      is actually saved. */}
+                  <p class="pnl-reset-row">
+                    <button class="pnl-reset" type="button" data-panel-order-reset hidden>Reset panel order</button>
+                  </p>
+                </>
+              ) : (
+                byG[g].map((o) => (
+                  <Block sec={o.s} sid={`sec-${o.i}`} ci={ci} solo={solo} holidays={holidayInfo} learnings={guide.learnings ?? null} mapPins={o.s.type === "map" ? (pinMap.get(o.s) ?? null) : null} country={guide.country} />
+                ))
+              )}
               {byG[g].some((o: any) => o.s.type === "days") && (
                 <div class="lnw-cta">
                   <button class="lnw-open" type="button" data-lnw-open hidden>
@@ -1049,6 +1071,10 @@ const tripSummary = buildSummary(guide);
       import "../features/voting/index.js";
       import "../scripts/staleness-ui.js";
       import "../features/telemetry/index.js";
+      // Atlas Phase 2 — boots any Panel grid a group declared (data-panel-scope).
+      // After guide-ui so tabs exist; a guide with no panelGroups wires nothing.
+      import { initDeclaredPanelGrids } from "../features/panel/index.js";
+      initDeclaredPanelGrids();
     </script>
 
   </body>

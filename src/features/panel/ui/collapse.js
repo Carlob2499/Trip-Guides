@@ -43,7 +43,10 @@ export function initPanels(ctx) {
     apply(panel, isCollapsed(state, id, dflt));
 
     btn.addEventListener("click", function () {
-      var next = !isCollapsed(state, id, dflt);
+      // Read the CURRENT state from the DOM, not the store's model: a deep link may
+      // have force-opened this Panel without persisting (below), and a toggle that
+      // consults stale state would then "close" an open Panel by re-opening it.
+      var next = !panel.hasAttribute("data-collapsed");
       state = setCollapsed(state, id, next);
       apply(panel, next);
       store.write(key, serializeCollapsed(state));
@@ -56,6 +59,39 @@ export function initPanels(ctx) {
       }));
     });
   });
+
+  // A deep link into a collapsed Panel must open it: `#sec-N` arrives from the anchor
+  // copy button, the palette, and mobile-nav resume, and scrolling to a shut header
+  // reads as a broken link. View-only — the store is NOT written, so the reader's
+  // saved preference survives the visit (the DOM-read in the toggle handler keeps the
+  // next click honest). The toggle event lets the grid re-sort the now-open Panel.
+  function openForHash(isNavigation) {
+    var h = location.hash && location.hash.slice(1);
+    if (!h) return;
+    var el;
+    try { el = document.getElementById(decodeURIComponent(h)); } catch (e) { el = null; }
+    var panel = el && el.closest && el.closest("[data-panel]");
+    if (!panel || !panel.hasAttribute("data-collapsed")) return;
+    apply(panel, false);
+    panel.dispatchEvent(new CustomEvent("panel:toggle", {
+      bubbles: true,
+      detail: { id: panel.getAttribute("data-panel"), collapsed: false },
+    }));
+    // Same-page navigation: the browser scrolled to where the COLLAPSED Panel sat —
+    // band 3, sunk below the open ones — and the grid is about to resort it up into
+    // the open band, leaving the viewport pointing at where it WAS. Re-scroll once
+    // the toggle transition (and therefore the resort) has settled. The boot path
+    // needs none of this: its resort runs before anything scrolls.
+    if (isNavigation) {
+      setTimeout(function () {
+        // The PANEL, not the inner target: its .block scroll-margin-top keeps the
+        // landing below the sticky chrome, which an inner element's box would not.
+        try { panel.scrollIntoView({ block: "start" }); } catch (e) { /* detached */ }
+      }, 520);
+    }
+  }
+  openForHash(false);
+  window.addEventListener("hashchange", function () { openForHash(true); });
 
   var html = document.documentElement;
   // Synchronous: this is what makes the collapse styles (and the toggle) live at all, so

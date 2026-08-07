@@ -58,6 +58,14 @@
   details, details > *:not(summary) { display: block !important; }
   details summary::before { content: none; }
 
+  /* Panels: same rule as <details> — print everything open, whatever the reader's
+     saved collapse state, and drop the interactive chrome (a grip and a chevron
+     print as mystery glyphs). Single column: paper has no reflowing grid. */
+  .pnl[data-collapsed] .pnl-body { grid-template-rows: 1fr !important; opacity: 1 !important; visibility: visible !important; }
+  .pnl-grip, .pnl-toggle, .pnl-reset-row { display: none !important; }
+  .pnl-grid { display: block !important; }
+  .pnl-grid > .pnl { margin-bottom: .6rem; break-inside: avoid; }
+
   /* Print external link URLs inline */
   a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 8pt; color: #555; word-break: break-all; }
   a.topbar-home::after, a.botHome::after, a.sheet-link::after, a.sheet-cat::after { content: none !important; }

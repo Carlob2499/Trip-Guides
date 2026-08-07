@@ -324,6 +324,10 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             // Only spy blocks inside the currently-visible catblock
             var visBlocks = blocks.filter(function (b) { return b.offsetParent !== null; });
             if (!visBlocks.length) return;
+            // VISUAL order, not capture order: Panel-hosted blocks (Atlas Phase 2) get
+            // reordered by the reader, and the early-break walk below assumes
+            // ascending tops — a stale document-order array names the wrong section.
+            visBlocks.sort(function (a, b) { return a.getBoundingClientRect().top - b.getBoundingClientRect().top; });
             var line = 120, idx = 0;
             if (window.innerHeight + window.pageYOffset >= document.body.scrollHeight - 4) {
               idx = visBlocks.length - 1;
