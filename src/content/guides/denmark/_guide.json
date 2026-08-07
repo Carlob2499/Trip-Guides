@@ -102,6 +102,7 @@
     ]
   },
   "tabBudget": 8,
+  "panelGroups": ["Plan"],
   "archived": true,
   "provenance": "strict"
 }
