@@ -1,10 +1,16 @@
 /* The notation layer's provenance dot (design-handoff README.md): "1em circle, 1px --rule2,
    oxide on hover/focus. Click opens a popover [with] the claim, CHECKED <date>, a staleness
-   reading, and the source link." */
+   reading, and the source link."
+
+   "1px --rule2" is the RING, not the glyph. Painting both in --rule2 (a hairline token)
+   measured 2.24:1 light / 1.96:1 dark against --card — under WCAG 1.4.11's 3:1 for a UI
+   component, on a control that is a real named button. The ● keeps --muted, the proven
+   body-text token, so the dot itself is what carries visibility; the ring stays the
+   specified hairline, decorative framing rather than the thing you have to see. */
 .prov-dot {
   display: inline-flex; align-items: center; justify-content: center;
   width: 1em; height: 1em; border-radius: 50%; cursor: pointer; padding: 0;
-  background: transparent; color: var(--rule2); border: 1px solid var(--rule2);
+  background: transparent; color: var(--muted); border: 1px solid var(--rule2);
   font-size: var(--text-micro); vertical-align: middle; margin-inline-start: 0.25em;
   transition: color 0.15s ease, border-color 0.15s ease;
 }

@@ -123,7 +123,12 @@ const NON_BMP_WHY =
   "leg) plus two real dismiss buttons (.cold-open-x, .nav-hint-x) that are already named via " +
   "aria-label, so a screen reader is unaffected regardless of this rule. Verified live: both real " +
   "buttons use var(--muted) on var(--card)/transparent, the same pair already proven >=4.5:1 on " +
-  "every surface it paints.";
+  "every surface it paints. The .prov-dot '●' source-info buttons are the same case and now sit " +
+  "on SIGHTS items as well as venues (the notation-layer pass), which is what grew this key. " +
+  "Their glyph is deliberately var(--muted), not the var(--rule2) the ring uses: painting the ● " +
+  "in the hairline token measured 2.24:1 light / 1.96:1 dark, under WCAG 1.4.11's 3:1 for a UI " +
+  "component, so the glyph carries the visibility (7.18:1 light / 5.41:1 dark, measured) and the " +
+  "ring stays decorative framing.";
 const ELM_PARTIALLY_OBSCURED_WHY =
   "A guide-tabs tool-tab whose real width exceeds this scan's 1280px viewport even once the tab " +
   "strip's own overflow is forced open above — clipped by the page's own overflow-x:clip (a real, " +
@@ -256,7 +261,11 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     // node-by-node with an instrumented local run, not absorbed as jitter). Same mechanism the
     // why already covers: a real button named via aria-label using var(--muted) on transparent,
     // the pair proven >=4.5:1. CI counted 28 on all four scheme×viewport combos.
-    "color-contrast/nonBmp": { max: 28, why: NON_BMP_WHY },
+    // 28 -> 43: the notation-layer pass put a .prov-dot on SIGHTS items too, not just
+    // venues. Counted node-by-node on an instrumented run rather than absorbed: 24
+    // prov-dots + 10 .next-cta-arrow + 8 .day-leg-arrow + 1 dismiss ✕ = 43, all four
+    // kinds already covered by the why above; no new kind of node appeared.
+    "color-contrast/nonBmp": { max: 43, why: NON_BMP_WHY },
     "color-contrast/elmPartiallyObscured": { max: 1, why: ELM_PARTIALLY_OBSCURED_WHY },
     // 1 = the masthead h1 / the masthead .dek, counted per page on both schemes (desktop; mobile
     // renders the same masthead so the same max covers it).
@@ -296,7 +305,11 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     // source-info button (Oslo food/shopping ×8, Tambayan CPH ×1 — identified node-by-node with
     // an instrumented local run). Same aria-label'd var(--muted)-on-transparent mechanism the
     // why documents. CI counted 19 desktop AND mobile.
-    "color-contrast/nonBmp": { max: 19, why: NON_BMP_WHY },
+    // 19 -> 27: same cause as korea's raise above — the notation-layer pass put a
+    // .prov-dot on SIGHTS items too. Counted node-by-node: 17 prov-dots +
+    // 7 .next-cta-arrow + 2 .day-leg-arrow + 1 dismiss ✕ = 27, every kind already
+    // documented in the why; no new kind appeared.
+    "color-contrast/nonBmp": { max: 27, why: NON_BMP_WHY },
     // Same two masthead nodes as korea's entries above — denmark is the measured worst case
     // (Painted Atlas daytime sky: h1 4.64:1 vs 3:1 needed; .dek 5.91:1 vs 4.5:1 needed).
     "color-contrast/bgGradient": { max: 1, why: MAST_BG_GRADIENT_WHY },
