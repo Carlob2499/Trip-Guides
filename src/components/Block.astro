@@ -22,7 +22,7 @@ import HolidaysBlock from "./blocks/HolidaysBlock.astro";
 import VenueBlock from "./blocks/VenueBlock.astro";
 import DivergencesBlock from "./blocks/DivergencesBlock.astro";
 import Panel from "./Panel.astro";
-import { CARDED_TYPES, PANEL_HOSTABLE_TYPES, FULL_WIDTH_PANEL_TYPES } from "../lib/section-types";
+import { CARDED_TYPES, PANEL_HOSTABLE_TYPES, FULL_WIDTH_PANEL_TYPES, KICKER_LABELS } from "../lib/section-types";
 
 // `holidays` is the server-computed holiday info (or null), threaded down from
 // GuideLayout; only the `holidays` section type uses it. `learnings` is the guide's
@@ -41,8 +41,9 @@ const keyPrefix = sid.replace(/^sec-/, "s");
 
 const titleText = solo ? "" : (sec.title || "");
 
-// Types that render their content inside a shared .card wrapper.
-// days and sights render their own per-item .card elements instead.
+// Types that render their content inside a shared .card wrapper. days/sights/venues/
+// divergences render their own per-item .card elements instead (OWN_CARDS_TYPES) —
+// a Panel hosts those too, it just supplies the title they never had.
 // The set lives in lib/section-types.ts — the schema's panelGroups check reads the
 // same one, so "what a Panel can host" can't drift between renderer and gate.
 const carded = CARDED_TYPES.has(sec.type);
@@ -71,17 +72,21 @@ const TitleTag = isCollapsible ? "summary" : "div";
 {/* Phase 2: when a Panel hosts the section it IS the block — one element carrying the
     anchor id, data-cat, and provenance attrs, because reorder.js moves the grid's
     DIRECT children and a wrapper would strand the identity outside the moved node. */}
+{/* `fullWidth` below takes the type set, plus the one design-sanctioned exception a type
+    set structurally cannot see: DESIGN.md gives "lists over five items" the full row too,
+    and item count is data, not type. */}
 {asPanel ? (
   <Panel
     id={sec.title}
     title={sec.title}
+    kicker={KICKER_LABELS[sec.type]}
     anchorId={sid}
     cat={ci}
     level={3}
     verifiedOn={sec.verified_on}
     sourceUrl={sec.source_url}
     shelfLife={sec.shelf_life}
-    fullWidth={FULL_WIDTH_PANEL_TYPES.has(sec.type)}
+    fullWidth={FULL_WIDTH_PANEL_TYPES.has(sec.type) || (sec.type === "list" && (sec.items?.length ?? 0) > 5)}
     collapsed={sec.collapsible === true && sec.defaultOpen === false}
     anchorBtn={true}
   >
@@ -100,6 +105,13 @@ const TitleTag = isCollapsible ? "summary" : "div";
     {sec.type === "tierlist" && <TierListBlock sec={sec} />}
     {sec.type === "weather" && <WeatherBlock sec={sec} bare={true} />}
     {sec.type === "holidays" && <HolidaysBlock sec={sec} info={holidays} bare={true} />}
+    {/* Own-cards types (OWN_CARDS_TYPES): each emits bare `.card` siblings and no title
+        of its own, so it needs no `bare` prop — the Panel's title IS the section's, and
+        the item grid comes from `.pnl-body-in`. Same props as the legacy path below. */}
+    {sec.type === "days"   && <DaysBlock   sec={sec} keyPrefix={keyPrefix} learnings={learnings} country={country} />}
+    {sec.type === "sights" && <SightsBlock sec={sec} country={country} />}
+    {sec.type === "venues" && <VenueBlock  sec={sec} country={country} />}
+    {sec.type === "divergences" && <DivergencesBlock sec={sec} />}
   </Panel>
 ) : (
 <section class="block" id={sid} data-cat={ci}
