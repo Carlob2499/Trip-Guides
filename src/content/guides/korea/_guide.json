@@ -211,7 +211,7 @@
     ]
   },
   "tabBudget": 11,
-  "panelGroups": ["Essentials"],
+  "panelGroups": ["Essentials", "Transit", "Pokémon GO", "Sources"],
   "descriptors": {
     "Daejeon & MSI": "The MSI weekend in Daejeon",
     "Pokémon GO": "GO Fest Global runs during the trip",

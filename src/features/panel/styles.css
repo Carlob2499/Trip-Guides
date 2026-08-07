@@ -25,6 +25,11 @@
    with JS off the Panel order is simply the markup order. */
 .pnl-grip { display: none; }
 
+/* A grid with one Panel has nothing to reorder against — the grip would be a dead
+   control (same rule as above: an affordance that does nothing is worse than none).
+   Keyed on :only-child, so a group growing a second section revives it untouched. */
+[data-panel-reorder] .pnl:only-child .pnl-grip { display: none; }
+
 [data-panel-reorder] .pnl-grip {
   flex: none;
   display: inline-flex;
