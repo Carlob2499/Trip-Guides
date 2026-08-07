@@ -22,44 +22,28 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (2026-08-06, session #37 — first real guide group on Panels; deploy fix PROVEN)
+## Snapshot (2026-08-07, session #38 — denmark/Plan on Panels; migration is now provably one line)
 
-**Two commits (`cb5f88d` #40, `f20dcda` #41), both issues closed, live-verified.** Design tree
-settled by a grilling round first (creator picked korea/02-essentials + persist-collapse; fold and
-fullWidth forks closed on recommendation), then full-authority execution: issues filed by a Haiku
-subagent, two-axis review before push.
+**One commit (`02ffb9e`), live-verified.** The korea template held exactly as promised: denmark's
+Plan group (9 homogeneous `panel` sections) migrated with ONE line of guide meta
+(`"panelGroups": ["Plan"]`); the schema superRefine carried the whole contract. Gates green
+(build · lint · typecheck · 1464 unit), dist + LIVE both serve `data-panel-scope="denmark:Plan"`,
+korea:Essentials regression-checked. Preview-verified at 375px dark + desktop: collapse persists
+across reload under `tg-panelcollapse-denmarkplan`; ready gate lands on `<html>`, not the grid
+(worth remembering when probing). Deploy run 31179859022: build/deploy/verify-live all success.
 
-**#40 — the allowlist has one home.** `findUnsafeHtml`/`ALLOWED_TAGS` extracted to
-`src/lib/prose-html.ts`; the schema imports it and `prose-html.test.ts` walks every panel-preview
-fixture body through the SAME check (the one HTML surface the collection schema never saw). Forced
-failure proven.
+**Panel-eligibility survey (full table in session transcript / scratchpad `classify.mjs`).**
+Every group in all four guides classified. Remaining ELIGIBLE: korea/Pokémon GO (15 sections,
+all carded — the big win), Transit in japan+korea+us, denmark/Essentials + japan/us Money & budget
+(each carries the fullWidth `budget`), and four 1-section Sources/Health/Etiquette groups (a
+1-panel grid may be design noise — creator call). No title blockers anywhere; EVERY blocked group
+fails purely on non-carded types: `sights`/`venues` (the dominant blocker, the per-item-card
+case), `days` (all four guides), `holidays` (all four Plan groups), `weather` (japan/us),
+`divergences` (japan). Blocked-group migration = Phase 2 renderer work, not meta edits.
 
-**#41 — korea/Essentials = 9 Panels.** The Panel ABSORBS the block identity (anchor id, data-cat,
-provenance attrs, # chip) — reorder moves grid.children, so a wrapper is structurally impossible.
-Bodies whole (`whole` prop skips splitLead; one disclosure per card). `panelGroups` is guide meta,
-schema-gated: group exists, all carded, all titled, titles unique (the title IS the storage id).
-budget is the one fullWidth type — `src/lib/section-types.ts` is shared by renderer + schema so they
-can't drift. Scope `korea:Essentials` per GROUP. Deep links force-open without persisting (toggle
-reads the DOM, not the store, so the next click stays honest). Reset control is the guide surface's,
-drawn only while a custom order exists. `.catblock:has(.pnl-grid)` opts out of desktop masonry.
-
-**The gates' honest finding.** Headless Chromium does not paint before the silo's boot task, so a
-boot-restored Panel can NEVER animate in the harness — the no-animate-on-restore outcome assertion
-was green even with the stagger deliberately collapsed. The gate now pins the MECHANISM
-(`data-panel-anim` must land a MutationObserver batch after `data-panel-ready`; same-task writes
-share a batch) and THAT failed correctly when forced. Lesson for the book: when the outcome is
-unobservable in your harness, gate the mechanism — and only a forced failure tells you which one
-you have.
-
-**Review earned its pass: 6 findings, all fixed.** HIGH: progress rings froze at 0/N inside Panels
-(`anchors.js` `.closest(".card")` → `.card, .pnl`). MED: palette jumps now set the hash so a hit
-inside a collapsed Panel opens it; hash navigation re-scrolls after the resort (the opened Panel
-moves up-band, stranding the viewport); schema rejects duplicate titles per group. LOW: scrollspy
-sorts by visual order after reorder; a vacuous spec assertion made real.
-
-**Deploy fix (#36) PROVEN.** `f20dcda` was the first real-content push since `661b5a7`:
-build/deploy/verify-live ALL green — verify-live actually ran, and the live korea page serves the
-Panel grid (curl-confirmed `data-panel-scope="korea:Essentials"`). All four workflows green.
+**Housekeeping:** stale `claude/phase-2-*` remote branch deleted (plus two orphaned git lock
+files it left). GitHub reported 4 Dependabot vulns (3 high) on push — likely overlaps the
+pending `pdfjs-dist` bump; untriaged.
 
 ## Open items
 
@@ -68,9 +52,8 @@ Panel grid (curl-confirmed `data-panel-scope="korea:Essentials"`). All four work
   `auto` + V6 Q4 thresholds; (3) Cloudflare dashboard Git integration still failing 0s builds on every
   push — consider disabling; (4) skill-evals `push` trigger yes/no (fired 0 times as
   `pull_request`-only).
-- Branch `claude/phase-2-design-implementation-2ydnnn` on the remote carries nothing main lacks;
-  deploy fix now proven — safe to delete.
 - `pdfjs-dist` 6.1.200 → 6.2.108 pending (triaged session #36, archive has detail; not urgent).
+  Cross-check against the 4 Dependabot vulns (3 high) GitHub flagged on the 2026-08-07 push.
 - Korea 03: critic flagged a swapped 명동 label on the Gyeongbokgung map point → file its issue.
 - S1–S5 research standards + dossier contract still await their first real research pass.
 - No guide uses a direct royalty-free `sights[].img.src` yet — capability live, unexercised.
@@ -92,23 +75,23 @@ Panel grid (curl-confirmed `data-panel-scope="korea:Essentials"`). All four work
 
 ## Where we left off
 
-**Session #37 (2026-08-06):** Phase 2 opened for real. A grilling round settled the design tree
-(korea/02-essentials first, persist-collapse accepted, bodies whole, budget-only fullWidth), then
-full authority: #40 (allowlist → `src/lib/prose-html.ts`, fixtures gated) and #41 (Essentials → 9
-Panels) shipped as `cb5f88d` + `f20dcda`, two-axis reviewed (6 findings, 1 HIGH, all fixed),
-full ship loop green (1464 unit · 99 e2e incl. 3 new Panel gates · axe 23 · live curl-confirmed).
-Both issues closed. The #36 deploy fix proved out on this push — verify-live ran and passed.
+**Session #38 (2026-08-07):** the sanctioned second migration executed autonomously —
+denmark/Plan onto Panels as `02ffb9e`, full ship loop green, live curl-confirmed, stale
+phase-2 branch deleted. Then a survey pass classified every remaining group: 8 eligible
+(meta-only migrations), the rest blocked solely on non-carded types. Mechanical work ran on
+Sonnet subagents (gates, deploy watch, survey); no forks were taken silently.
 
-**Recommended next step:** extend `panelGroups` to a second group/guide (denmark/01-plan is 9
-homogeneous panel sections — the low-risk second step), or start the guide-sheet remainder
-(masthead plate / notation layer). Delete the stale `claude/phase-2-*` remote branch.
+**Recommended next step (forks for the creator, in order):** (1) batch-migrate the eligible
+Transit + Money & budget groups (meta-only, korea pattern) — decide whether 1-section groups
+(Sources ×4, Health, Etiquette) belong on a grid at all; (2) korea/Pokémon GO — 15 sections,
+eligible but the tall-towers concern applies at that count; (3) start the blocked-type renderer
+work (`sights`/`venues` per-item cards are the Phase 2 hard case; `holidays`/`weather`/`days`
+next), or the masthead plate / notation layer per design-handoff PROMPT.md.
 
-**Re-prompt the creator with:** "The first real guide content is living on Panels — korea's
-Essentials: nine sections, collapse and order persisting per reader, budget spanning the row,
-deep links that open what they point at. The pattern that earned its keep this session: every
-gate was forced to fail before it counted, and one refused — headless Chromium cannot animate a
-boot restore at all, so the no-animate gate was quietly proving nothing. It now pins the
-mechanism (anim lands a task after ready) and THAT fails when broken. The review pass also paid
-for itself: the checklist progress ring on Panel-hosted cards shipped frozen at 0/N and no test
-or visual pass could see it — `.closest('.card')` simply missed `.pnl`. Migration for the next
-group is now one line of guide meta plus the schema holding the rest."
+**Re-prompt the creator with:** "Denmark's Plan group is on Panels and live — and it cost
+exactly what session #37 promised: one line of guide meta; the schema held everything else.
+The full eligibility map now exists: eight more groups are one-line migrations (Transit
+everywhere, the Money & budget pairs, Pokémon GO's fifteen), and everything else is blocked on
+precisely the renderer work Phase 2 always owed — sights and venues as per-item cards. The
+open forks are yours: whether one-section groups deserve a grid, whether Pokémon GO's tower
+height is acceptable, and which blocked renderer to take first."

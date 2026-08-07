@@ -4,6 +4,55 @@
 > (the ~80-line budget its own header sets is now gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). Newest first, verbatim.
 
+## Snapshot (2026-08-06, session #37 — first real guide group on Panels; deploy fix PROVEN)
+
+**Two commits (`cb5f88d` #40, `f20dcda` #41), both issues closed, live-verified.** Design tree
+settled by a grilling round first (creator picked korea/02-essentials + persist-collapse; fold and
+fullWidth forks closed on recommendation), then full-authority execution: issues filed by a Haiku
+subagent, two-axis review before push.
+
+**#40 — the allowlist has one home.** `findUnsafeHtml`/`ALLOWED_TAGS` extracted to
+`src/lib/prose-html.ts`; the schema imports it and `prose-html.test.ts` walks every panel-preview
+fixture body through the SAME check (the one HTML surface the collection schema never saw). Forced
+failure proven.
+
+**#41 — korea/Essentials = 9 Panels.** The Panel ABSORBS the block identity (anchor id, data-cat,
+provenance attrs, # chip) — reorder moves grid.children, so a wrapper is structurally impossible.
+Bodies whole (`whole` prop skips splitLead; one disclosure per card). `panelGroups` is guide meta,
+schema-gated: group exists, all carded, all titled, titles unique (the title IS the storage id).
+budget is the one fullWidth type — `src/lib/section-types.ts` is shared by renderer + schema so they
+can't drift. Scope `korea:Essentials` per GROUP. Deep links force-open without persisting (toggle
+reads the DOM, not the store, so the next click stays honest). Reset control is the guide surface's,
+drawn only while a custom order exists. `.catblock:has(.pnl-grid)` opts out of desktop masonry.
+
+**The gates' honest finding.** Headless Chromium does not paint before the silo's boot task, so a
+boot-restored Panel can NEVER animate in the harness — the no-animate-on-restore outcome assertion
+was green even with the stagger deliberately collapsed. The gate now pins the MECHANISM
+(`data-panel-anim` must land a MutationObserver batch after `data-panel-ready`; same-task writes
+share a batch) and THAT failed correctly when forced. Lesson for the book: when the outcome is
+unobservable in your harness, gate the mechanism — and only a forced failure tells you which one
+you have.
+
+**Review earned its pass: 6 findings, all fixed.** HIGH: progress rings froze at 0/N inside Panels
+(`anchors.js` `.closest(".card")` → `.card, .pnl`). MED: palette jumps now set the hash so a hit
+inside a collapsed Panel opens it; hash navigation re-scrolls after the resort (the opened Panel
+moves up-band, stranding the viewport); schema rejects duplicate titles per group. LOW: scrollspy
+sorts by visual order after reorder; a vacuous spec assertion made real.
+
+**Deploy fix (#36) PROVEN.** `f20dcda` was the first real-content push since `661b5a7`:
+build/deploy/verify-live ALL green — verify-live actually ran, and the live korea page serves the
+Panel grid (curl-confirmed `data-panel-scope="korea:Essentials"`). All four workflows green.
+
+**Re-prompt (superseded):** "The first real guide content is living on Panels — korea's
+Essentials: nine sections, collapse and order persisting per reader, budget spanning the row,
+deep links that open what they point at. The pattern that earned its keep this session: every
+gate was forced to fail before it counted, and one refused — headless Chromium cannot animate a
+boot restore at all, so the no-animate gate was quietly proving nothing. It now pins the
+mechanism (anim lands a task after ready) and THAT fails when broken. The review pass also paid
+for itself: the checklist progress ring on Panel-hosted cards shipped frozen at 0/N and no test
+or visual pass could see it — `.closest('.card')` simply missed `.pnl`. Migration for the next
+group is now one line of guide meta plus the schema holding the rest."
+
 ## Snapshot (2026-08-06, session #35 — Panel primitive COMPLETE + two platform gates)
 
 **Four issues shipped, four commits, each reviewed (2-axis) then pushed:** #36 grid
