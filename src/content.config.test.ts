@@ -96,6 +96,17 @@ describe("content.config guides schema — panelGroups (Atlas Phase 2)", () => {
     expect(result.success).toBe(false);
     expect(issuePaths(result)).toContain("panelGroups");
   });
+
+  it("accepts weather and holidays in a panel group (hostable-but-not-carded: the Panel hides with their empty wrapper)", () => {
+    const sections = [
+      { type: "panel", group: "Plan", title: "Checklist", body: "x" },
+      { type: "weather", group: "Plan", title: "Weather" },
+      { type: "holidays", group: "Plan", title: "Public holidays" },
+    ];
+    const result = schema.safeParse(validGuide({ sections, panelGroups: ["Plan"] }));
+    expect(issuePaths(result)).toEqual([]);
+    expect(result.success).toBe(true);
+  });
 });
 
 describe("content.config guides schema — tab budget", () => {

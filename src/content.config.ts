@@ -6,7 +6,7 @@ import { z } from "astro/zod";
 import { contrastRatio } from "./lib/contrast";
 import { isSectionFile, interpolateFacts, FACT_VALUE_FORBIDDEN_RE } from "./lib/facts.mjs";
 import { findUnsafeHtml } from "./lib/prose-html";
-import { CARDED_TYPES } from "./lib/section-types";
+import { PANEL_HOSTABLE_TYPES } from "./lib/section-types";
 
 // Light page background (base.css `--bg`). A guide `theme.primary` becomes the
 // site `--accent`, painted as link/tab/label text on this surface — so it must
@@ -773,7 +773,7 @@ const guides = defineCollection({
 
     // 0b. Panel groups (Atlas Phase 2). A `panelGroups` entry that names no real group
     // would silently migrate nothing (the typo failure mode the descriptors check
-    // already guards); a group holding a non-carded type (days/sights/venues render
+    // already guards); a group holding a non-hostable type (days/sights/venues render
     // their own per-item cards) or an untitled section (the title IS the Panel's
     // title and its storage id) would half-render. Fail loudly instead.
     for (const pg of (g.panelGroups ?? []) as string[]) {
@@ -788,11 +788,11 @@ const guides = defineCollection({
       }
       const seenTitles = new Set<string>();
       for (const s of inGroup) {
-        if (!CARDED_TYPES.has(s.type)) {
+        if (!PANEL_HOSTABLE_TYPES.has(s.type)) {
           ctx.addIssue({
             code: "custom",
             path: ["panelGroups"],
-            message: `panelGroups group "${pg}" contains a "${s.type}" section — only carded types (${[...CARDED_TYPES].join("/")}) can render on a Panel.`,
+            message: `panelGroups group "${pg}" contains a "${s.type}" section — only Panel-hostable types (${[...PANEL_HOSTABLE_TYPES].join("/")}) can render on a Panel.`,
           });
         }
         if (!s.title) {

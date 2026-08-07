@@ -10,8 +10,11 @@
 // renders the reassuring "no public holidays during your dates" state — that's
 // useful information, not a failure.
 import type { HolidayInfo } from "../../lib/holidays";
-const { sec, title, info } = Astro.props as { sec: any; title?: string; info: HolidayInfo | null };
-const heading = title || sec.title || "";
+// `bare` (Panel-hosted): the Panel draws the title, so the internal heading is
+// suppressed; the [hidden] wrapper below still governs emptiness — the panel silo's
+// CSS hides the whole hosting Panel while it is hidden.
+const { sec, title, info, bare = false } = Astro.props as { sec: any; title?: string; info: HolidayInfo | null; bare?: boolean };
+const heading = bare ? "" : (title || sec.title || "");
 const show = !!info;
 const during = info?.during ?? [];
 const near = show ? [...(info!.nearBefore ?? []), ...(info!.nearAfter ?? [])] : [];

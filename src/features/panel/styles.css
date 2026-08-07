@@ -13,6 +13,14 @@
   box-shadow: 0 1px 3px rgba(16, 20, 24, .06);
 }
 
+/* Hostable-but-not-carded blocks (weather, holidays) keep their hide-on-empty
+   wrapper; a Panel hosting one must vanish WITH it — chrome, title and all — or
+   no-data would leave an orphaned heading over an empty body (the exact failure
+   the legacy .block path avoids by keeping the title inside the wrapper). Weather
+   unhides client-side on fetch success, so this must be live CSS, not build logic. */
+.pnl:has(.wx-wrap[hidden]),
+.pnl:has(.hol-wrap[hidden]) { display: none; }
+
 .pnl-head {
   display: flex;
   align-items: center;

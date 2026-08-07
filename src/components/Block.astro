@@ -22,7 +22,7 @@ import HolidaysBlock from "./blocks/HolidaysBlock.astro";
 import VenueBlock from "./blocks/VenueBlock.astro";
 import DivergencesBlock from "./blocks/DivergencesBlock.astro";
 import Panel from "./Panel.astro";
-import { CARDED_TYPES, FULL_WIDTH_PANEL_TYPES } from "../lib/section-types";
+import { CARDED_TYPES, PANEL_HOSTABLE_TYPES, FULL_WIDTH_PANEL_TYPES } from "../lib/section-types";
 
 // `holidays` is the server-computed holiday info (or null), threaded down from
 // GuideLayout; only the `holidays` section type uses it. `learnings` is the guide's
@@ -47,10 +47,13 @@ const titleText = solo ? "" : (sec.title || "");
 // same one, so "what a Panel can host" can't drift between renderer and gate.
 const carded = CARDED_TYPES.has(sec.type);
 
-// A Panel host needs a title (it IS the Panel's title) and a carded type; anything
+// A Panel host needs a title (it IS the Panel's title) and a hostable type; anything
 // else falls back to the legacy render rather than half-wrapping. The schema refuses
-// panelGroups that violate this, so the fallback is a belt, not a path.
-const asPanel = panelHost && carded && !!sec.title;
+// panelGroups that violate this, so the fallback is a belt, not a path. weather and
+// holidays are hostable-but-not-carded: they render `bare` (the Panel owns the title)
+// and keep their hide-on-empty wrapper — the panel silo's CSS hides the whole Panel
+// around an empty one, so no-data still means nothing renders, title included.
+const asPanel = panelHost && PANEL_HOSTABLE_TYPES.has(sec.type) && !!sec.title;
 
 // Opt-in per-section collapse/expand (content.config.ts `collapse` fields). Renders
 // the whole card as a native <details>/<summary> instead of a plain div — tap the
@@ -95,6 +98,8 @@ const TitleTag = isCollapsible ? "summary" : "div";
     {sec.type === "habitats" && <HabitatsBlock sec={sec} />}
     {sec.type === "infogrid" && <InfoGridBlock sec={sec} />}
     {sec.type === "tierlist" && <TierListBlock sec={sec} />}
+    {sec.type === "weather" && <WeatherBlock sec={sec} bare={true} />}
+    {sec.type === "holidays" && <HolidaysBlock sec={sec} info={holidays} bare={true} />}
   </Panel>
 ) : (
 <section class="block" id={sid} data-cat={ci}

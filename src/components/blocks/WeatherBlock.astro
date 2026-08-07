@@ -6,8 +6,12 @@
 // The whole block starts hidden and the title lives INSIDE it, so if the fetch
 // fails the service leaves it hidden and nothing renders — no orphaned heading.
 // The service reuses this same #wxWrap/#wxMount shape for the masthead fallback.
-const { sec, title } = Astro.props;
-const heading = title || sec.title || "";
+//
+// `bare` (Panel-hosted): the Panel draws the title, so the internal heading is
+// suppressed — and the hide-on-empty contract moves up a level: the panel silo's
+// CSS hides the entire Panel while this wrapper is [hidden].
+const { sec, title, bare = false } = Astro.props;
+const heading = bare ? "" : (title || sec.title || "");
 ---
 <div class="wx-wrap wx-block" id="wxWrap" hidden>
   {heading && <h3 class="wx-title">{heading}</h3>}

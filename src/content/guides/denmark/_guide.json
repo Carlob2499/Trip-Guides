@@ -102,7 +102,7 @@
     ]
   },
   "tabBudget": 8,
-  "panelGroups": ["Plan", "Essentials", "Sources"],
+  "panelGroups": ["Plan", "Essentials", "Transit", "Sources"],
   "archived": true,
   "provenance": "strict"
 }
