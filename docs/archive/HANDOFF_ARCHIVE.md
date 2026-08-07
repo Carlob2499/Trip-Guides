@@ -979,3 +979,52 @@ daily quota cap; those are the real guards for a server key). Then I re-run the 
 confirm. After that, Session 3 is the fact registry — the big one, where prices and hours
 become data instead of prose. Still open from earlier: draft PR #28, the Actions 'allow PRs'
 setting, and local `npm run lint` (use `npx eslint src worker scripts tests`)."
+
+---
+
+## Snapshot (2026-08-06, session #36 — the deploy was never broken; our retry chain was)
+
+**One commit, `661b5a7`, merged to main (fast-forward).** Session #35's four pushes all went red on
+Deploy while the site was live and correct. The cause was not Pages — it was our own retry chain
+turning a slow queue into a guaranteed failure.
+
+**The mechanism.** `actions/deploy-pages` CANCELS the deployment it created when it times out, and the
+deployment ID *is* the commit SHA. So every retry re-submitted that same ID and was handed back the
+record the previous attempt had just cancelled — `Deployment cancelled.` five seconds in, every time,
+unconditionally. The retries could not succeed. Worse, they left the deployment half-alive, so the
+NEXT push died on `due to in progress deployment. Please cancel <prev sha> first` — which is how one
+slow queue became four consecutive red runs (`43a05fa`, `f2f7fad`, `5f3e52f`, `e0c787f`). The real
+failure was mundane: deployments sat in `deployment_queued` ~12.5 min against the action's 10-min
+default and landed about a minute AFTER the workflow gave up.
+
+**The fix.** One attempt, `timeout: 900000` (15 min); retry chain deleted; environment url reads the
+single attempt. Plus `verify-live` now runs even when deploy reports failure (`needs: [build, deploy]`,
+`if: !cancelled() && needs.build.result == 'success'` — gated on build, so nothing-to-deploy still
+skips). It had SKIPPED on all four red runs: the one check that speaks about the SITE rather than the
+deploy step stayed silent exactly when it was the only thing that could have said "the site is fine".
+
+**Two lessons for the permanent book.** (1) A retry is only a retry if the operation is IDEMPOTENT —
+keyed on a commit SHA, a re-submit is a re-read of a dead record, so the safety net was the bug. (2) A
+did-it-land check gated on the deploy step succeeding goes quiet in precisely the case it exists for.
+
+**NOT YET PROVEN — read this first.** No deploy has run since the merge: live `last-modified` is still
+13:15:35, the old `e0c787f` deploy. The change is workflow-only so the built site is byte-identical
+either way and nothing is missing. The next push carrying real content is the test: deploy green AND
+`verify-live` actually running. If it goes red again the failure now means something different — the
+queue genuinely exceeded 15 min, not that we cancelled ourselves.
+
+**Dependabot triaged, not fixed (creator's call).** `pdfjs-dist` 6.1.200 — GHSA-hq66-cqwq-w95j,
+arbitrary JS on opening a malicious PDF, fixed in 6.2.108 (patch bump, same major). Reachability is
+narrow: a traveler must obtain a hostile PDF and deliberately drop it into the New-Guide wizard's
+booking-doc upload (`src/features/hub/model/pdf-text.ts`), itself a lazy chunk — no drive-by, no
+server-side path, no login or session to steal, only same-origin localStorage. Not urgent; do it on a
+routine pass. **Unverified:** could NOT confirm it is literally alert 13 — the GitHub MCP set has no
+Dependabot endpoint and direct api.github.com is 403 in agent sessions. It is the only HIGH that is a
+direct, shipped, runtime dep; `js-yaml`/`brace-expansion`/`fast-uri`/`ajv` are dev-only, moderate is
+`postcss`.
+
+**Phase 2 answered (asked this session).** Per `docs/design-handoff/PROMPT.md` it is **the guide
+sheet**: move the sixteen section renderers onto Panels, masthead becomes a plate, graticule comes off
+guide photography, and the notation layer lands (provenance dot + staleness popover, flag chips,
+stamps, gap state). No spec issue exists yet — #33 deliberately left Phases 2–5 unspecced until the
+primitive shipped, and it now has.

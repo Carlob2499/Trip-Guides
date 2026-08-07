@@ -22,52 +22,44 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (2026-08-06, session #36 — the deploy was never broken; our retry chain was)
+## Snapshot (2026-08-06, session #37 — first real guide group on Panels; deploy fix PROVEN)
 
-**One commit, `661b5a7`, merged to main (fast-forward).** Session #35's four pushes all went red on
-Deploy while the site was live and correct. The cause was not Pages — it was our own retry chain
-turning a slow queue into a guaranteed failure.
+**Two commits (`cb5f88d` #40, `f20dcda` #41), both issues closed, live-verified.** Design tree
+settled by a grilling round first (creator picked korea/02-essentials + persist-collapse; fold and
+fullWidth forks closed on recommendation), then full-authority execution: issues filed by a Haiku
+subagent, two-axis review before push.
 
-**The mechanism.** `actions/deploy-pages` CANCELS the deployment it created when it times out, and the
-deployment ID *is* the commit SHA. So every retry re-submitted that same ID and was handed back the
-record the previous attempt had just cancelled — `Deployment cancelled.` five seconds in, every time,
-unconditionally. The retries could not succeed. Worse, they left the deployment half-alive, so the
-NEXT push died on `due to in progress deployment. Please cancel <prev sha> first` — which is how one
-slow queue became four consecutive red runs (`43a05fa`, `f2f7fad`, `5f3e52f`, `e0c787f`). The real
-failure was mundane: deployments sat in `deployment_queued` ~12.5 min against the action's 10-min
-default and landed about a minute AFTER the workflow gave up.
+**#40 — the allowlist has one home.** `findUnsafeHtml`/`ALLOWED_TAGS` extracted to
+`src/lib/prose-html.ts`; the schema imports it and `prose-html.test.ts` walks every panel-preview
+fixture body through the SAME check (the one HTML surface the collection schema never saw). Forced
+failure proven.
 
-**The fix.** One attempt, `timeout: 900000` (15 min); retry chain deleted; environment url reads the
-single attempt. Plus `verify-live` now runs even when deploy reports failure (`needs: [build, deploy]`,
-`if: !cancelled() && needs.build.result == 'success'` — gated on build, so nothing-to-deploy still
-skips). It had SKIPPED on all four red runs: the one check that speaks about the SITE rather than the
-deploy step stayed silent exactly when it was the only thing that could have said "the site is fine".
+**#41 — korea/Essentials = 9 Panels.** The Panel ABSORBS the block identity (anchor id, data-cat,
+provenance attrs, # chip) — reorder moves grid.children, so a wrapper is structurally impossible.
+Bodies whole (`whole` prop skips splitLead; one disclosure per card). `panelGroups` is guide meta,
+schema-gated: group exists, all carded, all titled, titles unique (the title IS the storage id).
+budget is the one fullWidth type — `src/lib/section-types.ts` is shared by renderer + schema so they
+can't drift. Scope `korea:Essentials` per GROUP. Deep links force-open without persisting (toggle
+reads the DOM, not the store, so the next click stays honest). Reset control is the guide surface's,
+drawn only while a custom order exists. `.catblock:has(.pnl-grid)` opts out of desktop masonry.
 
-**Two lessons for the permanent book.** (1) A retry is only a retry if the operation is IDEMPOTENT —
-keyed on a commit SHA, a re-submit is a re-read of a dead record, so the safety net was the bug. (2) A
-did-it-land check gated on the deploy step succeeding goes quiet in precisely the case it exists for.
+**The gates' honest finding.** Headless Chromium does not paint before the silo's boot task, so a
+boot-restored Panel can NEVER animate in the harness — the no-animate-on-restore outcome assertion
+was green even with the stagger deliberately collapsed. The gate now pins the MECHANISM
+(`data-panel-anim` must land a MutationObserver batch after `data-panel-ready`; same-task writes
+share a batch) and THAT failed correctly when forced. Lesson for the book: when the outcome is
+unobservable in your harness, gate the mechanism — and only a forced failure tells you which one
+you have.
 
-**NOT YET PROVEN — read this first.** No deploy has run since the merge: live `last-modified` is still
-13:15:35, the old `e0c787f` deploy. The change is workflow-only so the built site is byte-identical
-either way and nothing is missing. The next push carrying real content is the test: deploy green AND
-`verify-live` actually running. If it goes red again the failure now means something different — the
-queue genuinely exceeded 15 min, not that we cancelled ourselves.
+**Review earned its pass: 6 findings, all fixed.** HIGH: progress rings froze at 0/N inside Panels
+(`anchors.js` `.closest(".card")` → `.card, .pnl`). MED: palette jumps now set the hash so a hit
+inside a collapsed Panel opens it; hash navigation re-scrolls after the resort (the opened Panel
+moves up-band, stranding the viewport); schema rejects duplicate titles per group. LOW: scrollspy
+sorts by visual order after reorder; a vacuous spec assertion made real.
 
-**Dependabot triaged, not fixed (creator's call).** `pdfjs-dist` 6.1.200 — GHSA-hq66-cqwq-w95j,
-arbitrary JS on opening a malicious PDF, fixed in 6.2.108 (patch bump, same major). Reachability is
-narrow: a traveler must obtain a hostile PDF and deliberately drop it into the New-Guide wizard's
-booking-doc upload (`src/features/hub/model/pdf-text.ts`), itself a lazy chunk — no drive-by, no
-server-side path, no login or session to steal, only same-origin localStorage. Not urgent; do it on a
-routine pass. **Unverified:** could NOT confirm it is literally alert 13 — the GitHub MCP set has no
-Dependabot endpoint and direct api.github.com is 403 in agent sessions. It is the only HIGH that is a
-direct, shipped, runtime dep; `js-yaml`/`brace-expansion`/`fast-uri`/`ajv` are dev-only, moderate is
-`postcss`.
-
-**Phase 2 answered (asked this session).** Per `docs/design-handoff/PROMPT.md` it is **the guide
-sheet**: move the sixteen section renderers onto Panels, masthead becomes a plate, graticule comes off
-guide photography, and the notation layer lands (provenance dot + staleness popover, flag chips,
-stamps, gap state). No spec issue exists yet — #33 deliberately left Phases 2–5 unspecced until the
-primitive shipped, and it now has.
+**Deploy fix (#36) PROVEN.** `f20dcda` was the first real-content push since `661b5a7`:
+build/deploy/verify-live ALL green — verify-live actually ran, and the live korea page serves the
+Panel grid (curl-confirmed `data-panel-scope="korea:Essentials"`). All four workflows green.
 
 ## Open items
 
@@ -76,44 +68,47 @@ primitive shipped, and it now has.
   `auto` + V6 Q4 thresholds; (3) Cloudflare dashboard Git integration still failing 0s builds on every
   push — consider disabling; (4) skill-evals `push` trigger yes/no (fired 0 times as
   `pull_request`-only).
-- **Deploy fix unproven** until the next real push — see the snapshot. Do not treat `661b5a7` as
-  verified; it is merged, not demonstrated.
-- Branch `claude/phase-2-design-implementation-2ydnnn` exists on the remote and carries only
-  `661b5a7`, now also on main. Delete it once the deploy fix proves out.
-- `pdfjs-dist` 6.1.200 → 6.2.108 pending (triaged above, not urgent).
+- Branch `claude/phase-2-design-implementation-2ydnnn` on the remote carries nothing main lacks;
+  deploy fix now proven — safe to delete.
+- `pdfjs-dist` 6.1.200 → 6.2.108 pending (triaged session #36, archive has detail; not urgent).
 - Korea 03: critic flagged a swapped 명동 label on the Gyeongbokgung map point → file its issue.
 - S1–S5 research standards + dossier contract still await their first real research pass.
 - No guide uses a direct royalty-free `sights[].img.src` yet — capability live, unexercised.
 - feedback-export Monday cron: if 2026-08-10's scheduled fire is also absent, investigate.
 - `.card:has(.brow)` 3px `border-left` — incumbent, revisit only if card language reworked.
-- **Panel, deferred by design:** two tabs on one scope clobber each other's collapse state (accepted);
-  Phase 2 must enforce the prose tag allowlist inside Panels (fixtures use raw `set:html`); Phase 2
-  should re-assert no-animate-on-restore + no-JS against a real guide page (verified, deleted with the
-  `_tmp-*` specs, still ungated); guide surfaces must render their own reset-order control — the Panel
-  component deliberately carries none; story-mode's accent mixes ride a fixed dark ground with no
-  contrast gate (recorded residual risk, #38).
+- **Panel, still deferred by design:** two tabs on one scope clobber each other's collapse state
+  (accepted); story-mode's accent mixes ride a fixed dark ground with no contrast gate (residual
+  risk, #38). The #35-era items (allowlist gate, no-JS/no-animate gates, reset control) shipped
+  this session — #40/#41.
+- **Phase 2 remainder (the guide sheet, per design-handoff PROMPT.md):** the other 15 section
+  renderers across the other guides/groups (days/sights/venues are the hard per-item-card case),
+  masthead plate, graticule off photography, notation layer. korea/Essentials is the proven
+  template: declare `panelGroups` in guide meta, schema gates the rest.
+- Open Panels are TALL towers in narrow columns (~1.4–2k px; measured, accepted — collapse is the
+  mitigation). If reading pain shows up, the fallback options from the grilling were: keep the
+  inner lead/More-detail fold, or single-column panel groups.
 - `.claude/launch.json` gained `astro-preview-alt` (:4323) because another session held :4322 — remove
   if it reads as debris; :4322 stays the canonical ship-loop surface.
 
 ## Where we left off
 
-**Session #36 (2026-08-06):** short session, one commit. Diagnosed why session #35's four pushes went
-red on Deploy despite a healthy site, fixed it (`661b5a7` — 15-min single attempt, retries deleted,
-`verify-live` no longer gated on deploy succeeding), and merged to main by the creator's explicit ask.
-Also triaged the open Dependabot HIGH (`pdfjs-dist`, not urgent, deliberately left unfixed) and
-answered what Phase 2 is. Gates green before push: lint clean, typecheck 0 errors, 1447 tests, build
-clean. `astro preview` and a `dist/` grep were NOT run and were not applicable — the diff touches only
-`.github/workflows/deploy.yml` and produces no site output.
+**Session #37 (2026-08-06):** Phase 2 opened for real. A grilling round settled the design tree
+(korea/02-essentials first, persist-collapse accepted, bodies whole, budget-only fullWidth), then
+full authority: #40 (allowlist → `src/lib/prose-html.ts`, fixtures gated) and #41 (Essentials → 9
+Panels) shipped as `cb5f88d` + `f20dcda`, two-axis reviewed (6 findings, 1 HIGH, all fixed),
+full ship loop green (1464 unit · 99 e2e incl. 3 new Panel gates · axe 23 · live curl-confirmed).
+Both issues closed. The #36 deploy fix proved out on this push — verify-live ran and passed.
 
-**Recommended next step:** write the Phase 2 spec issue (the guide sheet) and let its first real push
-double as the deploy fix's proof — or bump `pdfjs-dist` if you want the security surface clean first.
+**Recommended next step:** extend `panelGroups` to a second group/guide (denmark/01-plan is 9
+homogeneous panel sections — the low-risk second step), or start the guide-sheet remainder
+(masthead plate / notation layer). Delete the stale `claude/phase-2-*` remote branch.
 
-**Re-prompt the creator with:** "The deploy was never broken — our retry chain was. `deploy-pages`
-cancels the deployment it created when it times out, and the deployment ID is the commit SHA, so every
-retry re-submitted an ID that had just been cancelled and failed in five seconds, guaranteed. That is
-the whole four-red-run streak: a safety net that could only ever fail, plus a half-alive deployment
-blocking the next push. Two things worth keeping: a retry is only a retry if the operation is
-idempotent, and a did-it-land check gated on the deploy step succeeding goes quiet exactly when it is
-the only thing that could reassure you — `verify-live` skipped on all four runs while the site was
-perfectly fine. The fix is merged but NOT proven; no deploy has run since. Phase 2 is the guide sheet
-and its list is stacked in Open items — the tag allowlist inside Panels is the one with teeth."
+**Re-prompt the creator with:** "The first real guide content is living on Panels — korea's
+Essentials: nine sections, collapse and order persisting per reader, budget spanning the row,
+deep links that open what they point at. The pattern that earned its keep this session: every
+gate was forced to fail before it counted, and one refused — headless Chromium cannot animate a
+boot restore at all, so the no-animate gate was quietly proving nothing. It now pins the
+mechanism (anim lands a task after ready) and THAT fails when broken. The review pass also paid
+for itself: the checklist progress ring on Panel-hosted cards shipped frozen at 0/N and no test
+or visual pass could see it — `.closest('.card')` simply missed `.pnl`. Migration for the next
+group is now one line of guide meta plus the schema holding the rest."
