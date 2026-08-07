@@ -14,7 +14,6 @@ import { buildModifyIssueUrl } from "../lib/modify-schema.mjs";
 import { currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
 import { paletteFor, accentForGuide } from "../lib/palettes";
 import { accentTokens, accentStyle } from "../lib/accent-tokens";
-import { generateContourLayer } from "../lib/contours";
 import PaintedAtlas from "../components/PaintedAtlas.astro";
 import ChangeRequest from "../components/ChangeRequest.astro";
 import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
@@ -50,7 +49,6 @@ import "../styles/palette.css";
 import "../styles/print-day.css";
 import "../styles/budget-sheet.css";
 import "../styles/transitions.css";
-import "../styles/story.css";
 import "../styles/story-mode.css";
 import "../styles/scroll-motion.css";
 import "../features/firebase/styles.css";
@@ -178,10 +176,6 @@ function flatSections(secs: any[]): any[] {
   return secs.flatMap((s: any) => s.sections ? flatSections(s.sections) : [s]);
 }
 const _flat = flatSections(guide.sections || []);
-// dayCount drives the story rail's day segments. `sightCount` went with the "{n} sights"
-// pill on 2026-07-30 — it had no other consumer, and an inventory count is not a fact a
-// traveller can act on.
-const dayCount   = _flat.filter((s: any) => s.type === "days"  ).reduce((n: number, s: any) => n + (s.items?.length || 0), 0);
 
 // Masthead hero image = the guide's own COVER art when set, else its first sights photo
 // (docs/MOTION.md). This is the SAME image the hub card shows — the shared element
@@ -216,14 +210,6 @@ const heroSrc = mastSrcAt(1600);
 const heroSrcset = (coverFile || coverDirect?.includes("{w}"))
   ? `${mastSrcAt(480)} 480w, ${mastSrcAt(800)} 800w, ${mastSrcAt(1200)} 1200w, ${mastSrcAt(1600)} 1600w`
   : null;
-// V4 (docs/archive/PLAN_VISUAL_OVERHAUL.md) — a faint topographic contour layer in the masthead's paper
-// zones, carrying the Overture's depth language into the guide's hero. STATIC on purpose: the
-// guide body is a reading surface (CLAUDE.md "calm to read"), so depth stays in the hero zone and
-// never moves behind text. Deterministic seeds ⇒ identical every build; zero runtime cost.
-const mastContours = [
-  generateContourLayer({ seed: 13, rings: 7, cx: 300, cy: 340 }),
-  generateContourLayer({ seed: 29, rings: 6, cx: 720, cy: 560 }),
-];
 // Credit chip: Commons files link their File page (Commons IS the credit); direct-URL
 // covers carry their own zod-required credit, linking creditUrl when given. The living
 // video swaps this chip to the footage credit while it plays (living-cover.js).
@@ -234,12 +220,19 @@ const heroCredit = coverFile
   : null;
 // R4 living cover — the footage upgrade (schema-gated: credit+license required).
 const coverVideo = cover?.video ?? null;
-// Title-card intro particle motif (schema `introMotif` — honesty-gated, see content.config.ts).
-const introMotif = (guide as any).introMotif ?? null;
 
 // For weather widget — pull lat/lng from first map section
 const mapSec    = _flat.find((s: any) => s.type === "map" && s.center?.lat);
 const mapCenter = mapSec ? { lat: mapSec.center.lat as number, lng: mapSec.center.lng as number } : null;
+// Plate-line coordinate readout (design-handoff README.md §4) — Reading-scale notation,
+// not a data lookup: reuses the same mapCenter the weather widget sources from, so a
+// guide with no map section gets no coordinate line rather than a guessed one.
+const platelineCoord = mapCenter
+  ? `${Math.abs(mapCenter.lat).toFixed(4)}° ${mapCenter.lat >= 0 ? "N" : "S"}, ${Math.abs(mapCenter.lng).toFixed(4)}° ${mapCenter.lng >= 0 ? "E" : "W"}`
+  : null;
+// Per-guide masthead chips (emergency, currency) — both already computed elsewhere on
+// this page (tgConfig, the budget/split tools); reused here rather than re-derived.
+const platelineEmergency = emergencyFor(guide.country);
 
 // When a guide has its own `weather` section, that section provides the #wxWrap
 // mount in-flow, so the masthead strip is suppressed (no double render). The flag
@@ -384,30 +377,6 @@ const tripSummary = buildSummary(guide);
   </head>
 
   <body data-storekey={storeKey} data-legacy-storekey={legacyStoreKey}>
-
-    {/* Title-card intro — the PRE-PAINT half of story-open.js. Runs before the masthead
-        renders so the full-bleed title-card state exists from the first frame (no flash of
-        the normal hero, and the hub→guide cover morph lands INTO the full-bleed card).
-        Full sequence plays once per guide per SESSION (creator's ruling 2026-07-30);
-        deep links (hash) and reduced-motion get the normal arrival. story-open.js owns
-        the timing, pan, and cleanup — this only decides and stamps the starting state. */}
-    {heroSrc && (
-      <script is:inline>
-        (function () {
-          try {
-            if (location.hash) return;
-            if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-            const k = "tg-story-s-" + document.body.getAttribute("data-storekey");
-            if (sessionStorage.getItem(k)) return;
-            document.body.classList.add("story-full");
-            window.__storyIntro = true;
-            // Fault-safety: if story-open.js never runs (load error), release the
-            // title card anyway — content is never left locked behind an intro.
-            setTimeout(function () { document.body.classList.remove("story-full"); }, 9000);
-          } catch (e) { /* storage blocked → normal arrival */ }
-        })();
-      </script>
-    )}
 
     <!-- Skip link — first focusable element; jumps keyboard/AT users past the
          chrome straight to the content. -->
@@ -554,67 +523,56 @@ const tripSummary = buildSummary(guide);
          MASTHEAD
          ═══════════════════════════════════════════════════════════════════ -->
     <header class={`masthead mast-hero ${heroSrc ? "mast-photo" : "mast-painted"}`} id="top" data-hero>
-      {/* First-open story rail — segments ARE the trip's days (structure is information).
-          Shown only during the one-time story intro (story-open.js); inert otherwise. */}
-      {heroSrc && dayCount > 0 && (
-        <div class="mast-story-rail" aria-hidden="true">
-          {Array.from({ length: Math.min(dayCount, 14) }).map((_, i) => (
-            <span class="mast-story-seg" style={`--seg:${i}`}></span>
+      <div class="mast-plate-row">
+        <div class="mast-frame">
+          {/* R4 — the Painted Atlas (src/components/PaintedAtlas.astro): rendered under EVERY
+              hero. Coverless guides open on it (living from birth, replacing the old flat
+              accent field); photo guides keep it hidden UNDERNEATH as the fallback that shows
+              when the Commons photo fails to load (.mast-media-fail) — a painted scene instead
+              of a dead grey field. CSS owns the switching (painted-atlas.css / masthead.css). */}
+          <PaintedAtlas seed={guideSlug} tz={destTzIana} />
+          {heroSrc && (
+            <img class="mast-img" src={heroSrc} srcset={heroSrcset} sizes="(min-width:900px) 560px, 100vw" alt={coverAlt}
+                 loading="eager" fetchpriority="high"
+                 onerror="this.closest('.mast-frame').classList.add('mast-media-fail')"
+                 style={`view-transition-name:cover-${ogSlug}${coverFocal ? `;object-position:${coverFocal}` : ""}`} />
+          )}
+          {/* R4 living cover — the footage upgrade over the still. Poster-first delivery:
+              no `src` at all until living-cover.js decides the visitor gets motion (reduced-
+              motion, Save-Data, and autoplay-refusal all leave the still standing, which is a
+              complete cover, not a degraded one). DOM-after the img with the same z-index, so
+              it paints above the photo only once it actually plays (.mast-video-live fades it
+              in). muted+playsinline as attributes AND re-asserted in JS — the attribute alone
+              is what mobile autoplay policies inspect. */}
+          {coverVideo && (
+            <video class="mast-video" muted playsinline loop preload="none"
+                   data-src={coverVideo.src}
+                   poster={coverVideo.poster ?? undefined}
+                   aria-hidden="true" tabindex="-1"
+                   style={coverFocal ? `object-position:${coverFocal}` : undefined}></video>
+          )}
+          {heroCredit && (heroCredit.href ? (
+            <a class="mast-credit" id="mastCredit" href={heroCredit.href} target="_blank" rel="noopener"
+               aria-label={`${heroCredit.label} — view source`}
+               data-video-credit={coverVideo ? `Video: ${coverVideo.credit}` : undefined}
+               data-video-credit-url={coverVideo?.creditUrl ?? undefined}>{heroCredit.label} ↗</a>
+          ) : (
+            <span class="mast-credit" id="mastCredit"
+                  data-video-credit={coverVideo ? `Video: ${coverVideo.credit}` : undefined}>{heroCredit.label}</span>
           ))}
-        </div>
-      )}
-      <div class="mast-frame">
-        {/* R4 — the Painted Atlas (src/components/PaintedAtlas.astro): rendered under EVERY
-            hero. Coverless guides open on it (living from birth, replacing the old flat
-            accent field); photo guides keep it hidden UNDERNEATH as the fallback that shows
-            when the Commons photo fails to load (.mast-media-fail) — a painted scene instead
-            of a dead grey field. CSS owns the switching (painted-atlas.css / masthead.css). */}
-        <PaintedAtlas seed={guideSlug} tz={destTzIana} />
-        {heroSrc && (
-          <img class="mast-img" src={heroSrc} srcset={heroSrcset} sizes="100vw" alt={coverAlt}
-               loading="eager" fetchpriority="high"
-               onerror="this.closest('.mast-frame').classList.add('mast-media-fail')"
-               style={`view-transition-name:cover-${ogSlug}${coverFocal ? `;object-position:${coverFocal}` : ""}`} />
-        )}
-        {/* R4 living cover — the footage upgrade over the still. Poster-first delivery:
-            no `src` at all until living-cover.js decides the visitor gets motion (reduced-
-            motion, Save-Data, and autoplay-refusal all leave the still standing, which is a
-            complete cover, not a degraded one). DOM-after the img with the same z-index, so
-            it paints above the photo only once it actually plays (.mast-video-live fades it
-            in). muted+playsinline as attributes AND re-asserted in JS — the attribute alone
-            is what mobile autoplay policies inspect. */}
-        {coverVideo && (
-          <video class="mast-video" muted playsinline loop preload="none"
-                 data-src={coverVideo.src}
-                 poster={coverVideo.poster ?? undefined}
-                 aria-hidden="true" tabindex="-1"
-                 style={coverFocal ? `object-position:${coverFocal}` : undefined}></video>
-        )}
-        <span class="mast-scrim" aria-hidden="true"></span>
-        {/* V4 depth (option B) — a faint topographic overlay OVER the hero photo (above the scrim,
-            below the title), carrying the Overture's map language into the guide's hero. Photo
-            guides only; .mast-painted heroes are the Painted Atlas, which is its own scene. Light etched strokes,
-            tuned faint so the title stays fully legible. Static — a reading page, not a motion one. */}
-        {heroSrc && (
-          <div class="mast-contours" aria-hidden="true">
-            {mastContours.map((layer, i) => (
-              <svg data-mast-contour={i} viewBox={`0 0 ${layer.viewBox} ${layer.viewBox}`} preserveAspectRatio="xMidYMid slice">
-                {layer.rings.map((points) => <polyline points={points} />)}
+          {/* Visible pause for the living cover (doctrine: obvious clickability; WCAG 2.2.2).
+              NOT aria-hidden — it's a real control — but hidden until the video actually
+              plays, so a visitor who never gets motion never sees a dead button. */}
+          {coverVideo && (
+            <button class="mast-pause" id="mastPause" type="button" hidden
+                    aria-label="Pause background video" aria-pressed="false">
+              <svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor">
+                <g class="mp-pause"><rect x="3.2" y="2.6" width="3.4" height="10.8" rx="1"/><rect x="9.4" y="2.6" width="3.4" height="10.8" rx="1"/></g>
+                <path class="mp-play" d="M4.5 2.8v10.4c0 .8.9 1.3 1.6.9l8.2-5.2c.6-.4.6-1.4 0-1.8L6.1 1.9c-.7-.4-1.6.1-1.6.9z"/>
               </svg>
-            ))}
-          </div>
-        )}
-        {/* Title-card gloss — an accent-tinted light sweep that crosses the card once
-            during the story intro (story.css keys it to body.story-playing; inert and
-            invisible otherwise). Cartographic default for every photo guide. */}
-        {heroSrc && <div class="mast-gloss" aria-hidden="true"></div>}
-        {/* Optional intro particle motif (schema `intro.motif`, honesty rule R18: only
-            where seasonally true — japan's koyo leaves). Canvas is drawn by
-            story-petals.js only while the story plays; pointer-events none, above the
-            title so the drift reads as weather crossing the whole card. */}
-        {heroSrc && introMotif && (
-          <canvas class="mast-petals" data-motif={introMotif} aria-hidden="true"></canvas>
-        )}
+            </button>
+          )}
+        </div>
         <div class="mast-inner">
           {/* Dedup guard: never render the eyebrow if it would repeat the
               title verbatim (e.g. title "South Korea", country "South Korea").
@@ -626,29 +584,38 @@ const tripSummary = buildSummary(guide);
           )}
           <h1 class="mast-title">{guide.title}</h1>
           {guide.dek && <p class="dek mast-dek">{guide.dek}</p>}
+          {/* Per-guide chips (design-handoff README.md §4): emergency numbers as tel: links,
+              currency. "base" (home city/accommodation) has no schema field on any guide —
+              omitted rather than invented, per the honesty doctrine. */}
+          {(platelineEmergency || localCur) && (
+            <div class="mast-chips">
+              {platelineEmergency && platelineEmergency.lines.map((l: any) => (
+                <a class="mast-chip mast-chip--sos" href={`tel:${l.num.replace(/[^0-9+]/g, "")}`}>{l.label}: {l.num}</a>
+              ))}
+              {localCur && <span class="mast-chip">{localCur.code} · {localCur.symbol}</span>}
+            </div>
+          )}
         </div>
-        {heroCredit && (heroCredit.href ? (
-          <a class="mast-credit" id="mastCredit" href={heroCredit.href} target="_blank" rel="noopener"
-             aria-label={`${heroCredit.label} — view source`}
-             data-video-credit={coverVideo ? `Video: ${coverVideo.credit}` : undefined}
-             data-video-credit-url={coverVideo?.creditUrl ?? undefined}>{heroCredit.label} ↗</a>
-        ) : (
-          <span class="mast-credit" id="mastCredit"
-                data-video-credit={coverVideo ? `Video: ${coverVideo.credit}` : undefined}>{heroCredit.label}</span>
-        ))}
-        {/* Visible pause for the living cover (doctrine: obvious clickability; WCAG 2.2.2).
-            NOT aria-hidden — it's a real control — but hidden until the video actually
-            plays, so a visitor who never gets motion never sees a dead button. */}
-        {coverVideo && (
-          <button class="mast-pause" id="mastPause" type="button" hidden
-                  aria-label="Pause background video" aria-pressed="false">
-            <svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor">
-              <g class="mp-pause"><rect x="3.2" y="2.6" width="3.4" height="10.8" rx="1"/><rect x="9.4" y="2.6" width="3.4" height="10.8" rx="1"/></g>
-              <path class="mp-play" d="M4.5 2.8v10.4c0 .8.9 1.3 1.6.9l8.2-5.2c.6-.4.6-1.4 0-1.8L6.1 1.9c-.7-.4-1.6.1-1.6.9z"/>
-            </svg>
-          </button>
-        )}
       </div>
+
+      {/* The plate line (DESIGN.md "The plate"): coordinates + the CHECKED stamp + this
+          guide's own fact/source counts (colophon — same counts the page-footer colophon
+          signs with, not re-derived) + a print control. Any row with nothing to show
+          renders nothing — an unresearched guide's plate line can be shorter, never padded. */}
+      {(platelineCoord || colophonChecked || colophon.verifiedFactCount > 0 || colophon.sourceCount > 0) && (
+        <div class="mast-plateline">
+          {platelineCoord && <span class="mast-coord">{platelineCoord}</span>}
+          {colophonChecked && <span class="mast-stamp">CHECKED {colophonChecked}</span>}
+          {colophon.verifiedFactCount > 0 && (
+            <span class="mast-plcount">{colophon.verifiedFactCount} verified facts</span>
+          )}
+          {colophon.sourceCount > 0 && (
+            <span class="mast-plcount">{colophon.sourceCount} primary sources</span>
+          )}
+          <button class="mast-print" type="button" data-print-sheet>Print sheet</button>
+        </div>
+      )}
+
       {/* V5: shares a view-transition-name with the hub card's `.hubcard-bar` — the accent
           literally morphs from the card into this rule on arrival, rather than merely
           coincidentally matching (both sides compute the same accent independently via
@@ -1048,12 +1015,12 @@ const tripSummary = buildSummary(guide);
       import "../scripts/micro.js";
       import "../scripts/provenance-dot.js";
       // M4 item 4 — ORDER IS LOAD-BEARING for the onboarding choreography. ES modules evaluate
-      // in import order, so story-open must run FIRST to set window.__storyIntro; cold-open
-      // then stands down while the story plays and otherwise claims the view; onboard's
-      // nav-hint defers to both. story-open previously sat below these three, so its flag was
-      // always undefined when they read it and all three could fire into one viewport.
-      // It still runs before gsap-hero (below), which is its other ordering constraint.
-      import "../scripts/story-open.js";
+      // in import order: cold-open claims the first eligible view; onboard's nav-hint defers
+      // to it via window.__onboardShown. (The masthead's day-segmented title-card intro that
+      // used to own visit 1 — story-open.js — was retired with the plate masthead rebuild:
+      // its full-bleed treatment assumed title text sat absolutely over the photo, which the
+      // plate layout no longer does. The Phase 3 hub→masthead FLIP transition in the redesign
+      // spec supersedes it rather than needing a rebuild here.)
       import "../scripts/cold-open.js";
       import "../scripts/onboard.js";
       import "../scripts/scroll-memory.js";

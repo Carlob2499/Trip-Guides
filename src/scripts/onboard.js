@@ -7,11 +7,11 @@
 (function () {
   var KEY = "tg-nav-hint-done";
   try { if (localStorage.getItem(KEY)) return; } catch (e) { return; }
-  // M4 item 4 — ONE onboarding device per view. The story intro owns visit 1 and the
-  // cold-open framing claims the next eligible view; the navigation lesson is the least
-  // urgent of the three and waits its turn. Crucially this does NOT mark the hint seen —
-  // it will show on a later visit, unburned. (MOTION.md: "one idea per view".)
-  if (window.__storyIntro || window.__onboardShown) return;
+  // M4 item 4 — ONE onboarding device per view. The cold-open framing claims the first
+  // eligible view; the navigation lesson is the less urgent of the two and waits its turn.
+  // Crucially this does NOT mark the hint seen — it will show on a later visit, unburned.
+  // (MOTION.md: "one idea per view".)
+  if (window.__onboardShown) return;
   var tabs = document.getElementById("guideTabs");
   if (!tabs) return;
   window.__onboardShown = true;

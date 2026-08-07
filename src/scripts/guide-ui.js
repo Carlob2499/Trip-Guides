@@ -721,6 +721,16 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
       // wizard can offer a real section hint instead of asking a reader to name one.
       try { initChangeRequest(_cfg, _lockScroll, _unlockScroll); } catch (e) { fail("change request", e); }
 
+      /* ── PLATE-LINE PRINT CONTROL ─────────────────────────────────────── */
+      // The masthead plate line's "Print sheet" button. All the actual work — hiding
+      // chrome, force-expanding collapsed Panels — is CSS-only (print.css's @media
+      // print), so this is just the trigger.
+      try {
+        document.querySelectorAll("[data-print-sheet]").forEach(function (btn) {
+          btn.addEventListener("click", function () { window.print(); });
+        });
+      } catch (e) { fail("print sheet", e); }
+
       /* ── BUDGET PER-PERSON TOGGLE ─────────────────────────────────────── */
       document.querySelectorAll(".budget-toggle").forEach(function (tog) {
         var bud = tog.closest(".budget");
