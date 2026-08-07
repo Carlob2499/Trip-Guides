@@ -18,6 +18,7 @@ type VenueItem = {
   how?: string;
   verified_on?: string;
   source_url?: string;
+  shelf_life?: string;
   tier?: string;
   agreement?: string;
   map?: { lat: number; lng: number };
@@ -37,7 +38,10 @@ const bookLabel = (b: string | undefined) =>
         {it.verified_on && (
           <>
             <button class="prov-dot" type="button" aria-label={`Source info for ${it.name}`}>●</button>
-            <dl class="prov-popover">
+            {/* data-verified-on/data-shelf-life: provenance-dot.js reads these to inject a
+                staleness reading on open — computed client-side (a build-time judgment would
+                freeze "N days left" at deploy), same contract as staleness-ui.js's section pill. */}
+            <dl class="prov-popover" data-verified-on={it.verified_on} data-shelf-life={it.shelf_life ?? "default"}>
               <dt>Checked</dt><dd>{it.verified_on}</dd>
               {it.source_url && <><dt>Source</dt><dd><a href={it.source_url} target="_blank" rel="noopener">{new URL(it.source_url).hostname}</a></dd></>}
               {it.tier && <><dt>Evidence</dt><dd>{it.tier}</dd></>}

@@ -42,7 +42,19 @@ const creditOf = (img: any) =>
         <span class="sight-media-grad" aria-hidden="true"></span>
         <figcaption class="sight-media-cap">
           {it.kicker && <span class="tag tag--onphoto">{it.kicker}</span>}
-          <h4 class="sight-name sight-name--onphoto">{it.name}</h4>
+          <h4 class="sight-name sight-name--onphoto">
+            {it.name}
+            {it.verified_on && (
+              <>
+                <button class="prov-dot prov-dot--onphoto" type="button" aria-label={`Source info for ${it.name}`}>●</button>
+                <dl class="prov-popover" data-verified-on={it.verified_on} data-shelf-life={it.shelf_life ?? "default"}>
+                  <dt>Checked</dt><dd>{it.verified_on}</dd>
+                  {it.source_url && <><dt>Source</dt><dd><a href={it.source_url} target="_blank" rel="noopener">{new URL(it.source_url).hostname}</a></dd></>}
+                  {it.tier && <><dt>Evidence</dt><dd>{it.tier}</dd></>}
+                </dl>
+              </>
+            )}
+          </h4>
         </figcaption>
         {(() => { const c = creditOf(it.img); return c.href ? (
           <a class="imgcredit imgcredit--onphoto" href={c.href} target="_blank" rel="noopener" aria-label={`${c.label} — view source`}>{c.label} ↗</a>
@@ -53,7 +65,19 @@ const creditOf = (img: any) =>
     ) : (
       <div class="sight-head">
         {it.kicker && <span class="tag">{it.kicker}</span>}
-        <h4 class="sight-name">{it.name}</h4>
+        <h4 class="sight-name">
+          {it.name}
+          {it.verified_on && (
+            <>
+              <button class="prov-dot" type="button" aria-label={`Source info for ${it.name}`}>●</button>
+              <dl class="prov-popover" data-verified-on={it.verified_on} data-shelf-life={it.shelf_life ?? "default"}>
+                <dt>Checked</dt><dd>{it.verified_on}</dd>
+                {it.source_url && <><dt>Source</dt><dd><a href={it.source_url} target="_blank" rel="noopener">{new URL(it.source_url).hostname}</a></dd></>}
+                {it.tier && <><dt>Evidence</dt><dd>{it.tier}</dd></>}
+              </dl>
+            </>
+          )}
+        </h4>
       </div>
     )}
     <div class="sight-body">

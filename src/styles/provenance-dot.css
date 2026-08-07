@@ -1,34 +1,41 @@
+/* The notation layer's provenance dot (design-handoff README.md): "1em circle, 1px --rule2,
+   oxide on hover/focus. Click opens a popover [with] the claim, CHECKED <date>, a staleness
+   reading, and the source link." */
 .prov-dot {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 1em; height: 1em; border-radius: 50%; cursor: pointer; border: none;
-  background: transparent; color: var(--muted, #999); font-size: var(--text-micro);
-  vertical-align: middle; margin-inline-start: 0.25em; padding: 0;
-  transition: color 0.15s ease;
+  width: 1em; height: 1em; border-radius: 50%; cursor: pointer; padding: 0;
+  background: transparent; color: var(--rule2); border: 1px solid var(--rule2);
+  font-size: var(--text-micro); vertical-align: middle; margin-inline-start: 0.25em;
+  transition: color 0.15s ease, border-color 0.15s ease;
 }
-.prov-dot:hover, .prov-dot:focus-visible { color: var(--accent, #a6721b); }
-.prov-dot:focus-visible { outline: 2px solid var(--accent, #a6721b); outline-offset: 2px; }
+.prov-dot:hover, .prov-dot:focus-visible { color: var(--accent-ink); border-color: var(--accent); }
+.prov-dot:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
+/* Fixed (not the earlier fallback-only --card-bg/--border, which named tokens this codebase
+   never defines — the popover has been silently rendering white-on-#ddd in dark mode). */
 .prov-popover {
   display: none; position: absolute; z-index: 100;
-  background: var(--card-bg, #fff); border: 1px solid var(--border, #ddd);
-  border-radius: 8px; padding: 0.75em 1em; min-width: 200px; max-width: 300px;
+  background: var(--card); border: 1px solid var(--rule);
+  border-radius: var(--r-md); padding: 0.75em 1em; min-width: 200px; max-width: 300px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.12); font-size: var(--text-control); line-height: 1.4;
+  color: var(--ink);
 }
 .prov-popover[data-open] { display: block; }
-.prov-popover dt { font-weight: 600; color: var(--muted, #6b6b6b); font-size: var(--text-control-sm); text-transform: uppercase; letter-spacing: 0.04em; }
+.prov-popover dt { font-weight: 600; color: var(--muted); font-size: var(--text-control-sm); text-transform: uppercase; letter-spacing: 0.04em; }
 .prov-popover dd { margin: 0 0 0.5em; }
 .prov-popover dd:last-child { margin-block-end: 0; }
-.prov-popover a { color: var(--accent, #a6721b); word-break: break-all; }
+.prov-popover a { color: var(--accent-ink); word-break: break-all; }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .prov-popover { background: var(--card-bg, #1e2228); border-color: var(--border, #333); }
-}
-:root[data-theme="dark"] .prov-popover { background: var(--card-bg, #1e2228); border-color: var(--border, #333); }
+/* The staleness reading (provenance-dot.js, computed on the client clock). Past shelf
+   life: ochre, matching the section-level .stale-pill's warn tone. Ageing (inside the
+   last third, not yet stale): muted — a heads-up, not a downgrade. */
+.prov-staleness { color: var(--muted); }
+.prov-staleness--warn { color: var(--ochre); font-weight: 600; }
 
 .cal-badge {
   display: inline-block; font-size: var(--text-micro); font-weight: 600;
   padding: 0.1em 0.4em; border-radius: 4px; vertical-align: middle;
   margin-inline-start: 0.3em;
-  background: var(--accent, #a6721b); color: var(--bg, #dfe3d9);
+  background: var(--accent); color: var(--on-accent);
   opacity: 0.85;
 }
