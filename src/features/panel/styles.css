@@ -162,6 +162,24 @@ html:not([data-panel-reorder]) [data-panel-order-reset] { display: none; }
 .pnl-body-in > * + * { margin-top: .85rem; }
 .pnl-body-in > :last-child { margin-bottom: 1.25rem; }
 
+/* Own-cards sections bring their own internal item grid (DESIGN.md: wide types "are
+   internally gridded already"). On the legacy path guide.css hangs that grid on the
+   `.block` wrapper — but a hosting Panel IS that wrapper, so the grid has to land on
+   the body here instead. Sights is the only multi-column case; venues, divergences and
+   days stack, and inherit the block rhythm above unchanged.
+
+   The stacking margin-top is zeroed because `gap` now owns the spacing — but the
+   last child's margin-bottom is deliberately LEFT ALONE: it is what carries the body's
+   bottom gap through a collapse, for the 0fr reason documented on .pnl-body-in. A
+   padding-bottom here would read as content and leave a collapsed Panel 20px tall. */
+.pnl-body-in:has(.sight) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem 1.1rem;
+  align-items: start;
+}
+.pnl-body-in:has(.sight) > * + * { margin-top: 0; }
+
 [data-panel-ready] .pnl[data-collapsed] .pnl-body {
   grid-template-rows: 0fr;
   opacity: 0;

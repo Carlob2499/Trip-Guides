@@ -332,10 +332,15 @@ a.stale-pill:hover{background:color-mix(in srgb,var(--warn) 12%,transparent)}
    items than columns leaves them hugging the left with a measured void to the right (korea's
    2-of-5 fact row wasted 684px of 1184 on desktop — 58% of the row). auto-fit collapses the
    empty tracks, so a short row spreads across the width instead. Full rows are unaffected:
-   the column count still comes from the 1fr minmax floor, so a full grid lays out identically. */
-.block:has(.sight){max-width:100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem 1.1rem;align-items:start}
-.block:has(.sight) .block-title-row{grid-column:1/-1;margin-bottom:0}
-.block:has(.sight) .card{margin-bottom:0}
+   the column count still comes from the 1fr minmax floor, so a full grid lays out identically.
+
+   :not(.pnl) because a Panel hosting a sights section IS the `.block` (Panel.astro puts
+   the class on the panel element itself), so an unguarded rule would make pnl-head and
+   pnl-body the grid items and tear the chrome apart. The panel path carries its own copy
+   of this grid on .pnl-body-in — see src/features/panel/styles.css. */
+.block:not(.pnl):has(.sight){max-width:100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem 1.1rem;align-items:start}
+.block:not(.pnl):has(.sight) .block-title-row{grid-column:1/-1;margin-bottom:0}
+.block:not(.pnl):has(.sight) .card{margin-bottom:0}
 /* Embedded maps: let the section fill the shell so the map is generously sized. */
 .block:has(.osmmap){max-width:100%}
 /* Prose reading improvements — paragraph rhythm and list breathing room */

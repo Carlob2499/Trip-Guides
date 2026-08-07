@@ -70,14 +70,20 @@ describe("content.config guides schema — panelGroups (Atlas Phase 2)", () => {
     expect(issuePaths(result)).toContain("panelGroups");
   });
 
-  it("rejects a panel group containing a non-carded type (days render their own cards)", () => {
+  it("accepts a panel group containing own-cards types (the SECTION is the Panel, not each item)", () => {
+    // DESIGN.md: wide types "are internally gridded already" — so sights/venues/days/
+    // divergences host as one full-width Panel whose body holds their per-item cards.
+    // This inverts the old gate, which refused them because they are not `carded`.
     const sections = [
       { type: "prose", group: "Plan", title: "A", body: "x" },
       { type: "days", group: "Plan", title: "Itinerary", items: [{ date: "2026-01-01", d: "Day", title: "Day 1", body: "x" }] },
+      { type: "sights", group: "Plan", title: "Sights", items: [{ name: "N", body: "x" }] },
+      { type: "venues", group: "Plan", title: "Food", items: [{ name: "V" }] },
+      { type: "divergences", group: "Plan", title: "Corrections", items: [{ claim: "a", correction: "b" }] },
     ];
     const result = schema.safeParse(validGuide({ sections, panelGroups: ["Plan"] }));
-    expect(result.success).toBe(false);
-    expect(issuePaths(result)).toContain("panelGroups");
+    expect(issuePaths(result)).toEqual([]);
+    expect(result.success).toBe(true);
   });
 
   it("rejects a panel group containing an untitled section (the title is the Panel's id)", () => {
