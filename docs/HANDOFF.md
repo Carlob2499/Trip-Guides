@@ -22,28 +22,34 @@
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference).
 
-## Snapshot (2026-08-07, session #38 — denmark/Plan on Panels; migration is now provably one line)
+## Snapshot (2026-08-07, session #38 — 2 → 22 groups on Panels; weather/holidays hostable)
 
-**One commit (`02ffb9e`), live-verified.** The korea template held exactly as promised: denmark's
-Plan group (9 homogeneous `panel` sections) migrated with ONE line of guide meta
-(`"panelGroups": ["Plan"]`); the schema superRefine carried the whole contract. Gates green
-(build · lint · typecheck · 1464 unit), dist + LIVE both serve `data-panel-scope="denmark:Plan"`,
-korea:Essentials regression-checked. Preview-verified at 375px dark + desktop: collapse persists
-across reload under `tg-panelcollapse-denmarkplan`; ready gate lands on `<html>`, not the grid
-(worth remembering when probing). Deploy run 31179859022: build/deploy/verify-live all success.
+**Three commits (`02ffb9e`, `a54f5e2`, `a13e76e`), each full-ship-loop green and live-verified.**
+Creator granted mid-session judgment authority ("pick, judge, iterate — migrate before deciding").
+Course: denmark/Plan first (the sanctioned step), then a survey classified every group, then ALL
+14 eligible groups migrated meta-only, then the first blocked-type renderer work landed.
 
-**Panel-eligibility survey (full table in session transcript / scratchpad `classify.mjs`).**
-Every group in all four guides classified. Remaining ELIGIBLE: korea/Pokémon GO (15 sections,
-all carded — the big win), Transit in japan+korea+us, denmark/Essentials + japan/us Money & budget
-(each carries the fullWidth `budget`), and four 1-section Sources/Health/Etiquette groups (a
-1-panel grid may be design noise — creator call). No title blockers anywhere; EVERY blocked group
-fails purely on non-carded types: `sights`/`venues` (the dominant blocker, the per-item-card
-case), `days` (all four guides), `holidays` (all four Plan groups), `weather` (japan/us),
-`divergences` (japan). Blocked-group migration = Phase 2 renderer work, not meta edits.
+**`a13e76e` — the pattern for hostable-but-not-carded types.** `PANEL_HOSTABLE_TYPES`
+(section-types.ts) = CARDED + `weather` + `holidays`. They render `bare` inside a Panel (the
+Panel draws the title) and KEEP their hide-on-empty wrapper; the silo hides the whole Panel
+around it (`.pnl:has(.wx-wrap[hidden])` — live CSS because weather unhides client-side on fetch
+success). Honest-blank preserved, no orphaned heading either way. Forced both directions in
+preview (unhide → Panel appears → re-hide). This unblocked Plan ×4 + denmark/Transit. NOTE:
+japan holidays data file absent at build → hidden Panel (pre-existing legacy behavior, now
+consistent); korea's renders the reassuring no-holiday state.
+
+**Polish found by preview judgment:** 1-panel grids drew a dead reorder grip — hidden via
+`:only-child` (self-revives when a group grows). Scope keys distinct incl. non-ASCII
+(`koreapokmongo`); ready gate lands on `<html>`, not the grid (remember when probing);
+Astro INLINES panel CSS per-page — grep dist HTML, not `_astro/*.css`.
+
+**Remaining blocked = the true renderer phases:** `sights`/`venues` (per-item-card hard case),
+`days` (all guides), `divergences` (japan, moot — its group also has sights). Plus masthead
+plate, graticule, notation layer per design-handoff PROMPT.md. No meta edits left to make.
 
 **Housekeeping:** stale `claude/phase-2-*` remote branch deleted (plus two orphaned git lock
-files it left). GitHub reported 4 Dependabot vulns (3 high) on push — likely overlaps the
-pending `pdfjs-dist` bump; untriaged.
+files). GitHub reports 4 Dependabot vulns (3 high) on every push — likely overlaps the pending
+`pdfjs-dist` bump; untriaged.
 
 ## Open items
 
@@ -63,10 +69,9 @@ pending `pdfjs-dist` bump; untriaged.
   (accepted); story-mode's accent mixes ride a fixed dark ground with no contrast gate (residual
   risk, #38). The #35-era items (allowlist gate, no-JS/no-animate gates, reset control) shipped
   this session — #40/#41.
-- **Phase 2 remainder (the guide sheet, per design-handoff PROMPT.md):** the other 15 section
-  renderers across the other guides/groups (days/sights/venues are the hard per-item-card case),
-  masthead plate, graticule off photography, notation layer. korea/Essentials is the proven
-  template: declare `panelGroups` in guide meta, schema gates the rest.
+- **Phase 2 remainder (the guide sheet, per design-handoff PROMPT.md):** only the hard
+  renderers remain — `sights`/`venues` per-item cards, `days`, plus masthead plate, graticule
+  off photography, notation layer. Every meta-only migration is done (22 groups live).
 - Open Panels are TALL towers in narrow columns (~1.4–2k px; measured, accepted — collapse is the
   mitigation). If reading pain shows up, the fallback options from the grilling were: keep the
   inner lead/More-detail fold, or single-column panel groups.
@@ -75,23 +80,26 @@ pending `pdfjs-dist` bump; untriaged.
 
 ## Where we left off
 
-**Session #38 (2026-08-07):** the sanctioned second migration executed autonomously —
-denmark/Plan onto Panels as `02ffb9e`, full ship loop green, live curl-confirmed, stale
-phase-2 branch deleted. Then a survey pass classified every remaining group: 8 eligible
-(meta-only migrations), the rest blocked solely on non-carded types. Mechanical work ran on
-Sonnet subagents (gates, deploy watch, survey); no forks were taken silently.
+**Session #38 (2026-08-07):** creator granted judgment authority mid-session; the whole
+migratable surface shipped in three live-verified commits — denmark/Plan (`02ffb9e`), all 14
+survey-eligible groups + dead-grip fix (`a54f5e2`), weather/holidays hostable + Plan ×4 +
+denmark/Transit (`a13e76e`). 22 groups on Panels, 1465 tests, every deploy verify-live green.
+Mechanical work ran on Sonnet subagents (4 gates runs, 3 deploy watches, survey); judgment
+calls (1-section groups migrate for uniformity, Pokémon GO ships at 15 with collapse as the
+mitigation, empty-Panel semantics) taken and documented, none silently.
 
-**Recommended next step (forks for the creator, in order):** (1) batch-migrate the eligible
-Transit + Money & budget groups (meta-only, korea pattern) — decide whether 1-section groups
-(Sources ×4, Health, Etiquette) belong on a grid at all; (2) korea/Pokémon GO — 15 sections,
-eligible but the tall-towers concern applies at that count; (3) start the blocked-type renderer
-work (`sights`/`venues` per-item cards are the Phase 2 hard case; `holidays`/`weather`/`days`
-next), or the masthead plate / notation layer per design-handoff PROMPT.md.
+**Recommended next step:** the `sights`/`venues` per-item-card renderer — the Phase 2 hard
+case, deliberately left for a fresh session. Open with the design questions: does each
+sight/venue item become its own Panel (title = storage id per item), or does the SECTION
+become one Panel hosting its item cards whole? How do per-item `map`/`place_id`/checklist
+interactions survive reorder? Alternatively: masthead plate / notation layer (independent,
+smaller). Also due: triage the 4 Dependabot vulns against the pdfjs-dist bump.
 
-**Re-prompt the creator with:** "Denmark's Plan group is on Panels and live — and it cost
-exactly what session #37 promised: one line of guide meta; the schema held everything else.
-The full eligibility map now exists: eight more groups are one-line migrations (Transit
-everywhere, the Money & budget pairs, Pokémon GO's fifteen), and everything else is blocked on
-precisely the renderer work Phase 2 always owed — sights and venues as per-item cards. The
-open forks are yours: whether one-section groups deserve a grid, whether Pokémon GO's tower
-height is acceptable, and which blocked renderer to take first."
+**Re-prompt the creator with:** "Everything migratable is on Panels — twenty-two groups
+across all four guides, up from two this morning. The day's pattern: your 'migrate first,
+decide later' was right — the one-panel-group question dissolved once a dead grip was the
+only real cost, and Pokémon GO's fifteen panels read fine with collapse doing its job.
+Weather and holidays crossed over too, with their honest-blank contract intact: an empty
+panel hides whole, title and all, live. What remains is the work that was always the hard
+part — sights and venues as per-item cards — and that starts with a design decision, not a
+meta line: is the ITEM the Panel, or the section?"
