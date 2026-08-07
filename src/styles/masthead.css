@@ -1,34 +1,54 @@
-/* === GUIDE MASTHEAD HERO ====================================================
-   Editorial-bold opener: every guide starts with a full-bleed rounded hero.
-   · .mast-photo — a Commons cover photo with a legibility scrim and huge
-     Literata display title laid over it (units.-style).
+/* === GUIDE MASTHEAD — THE PLATE ==============================================
+   docs/design-handoff/DESIGN.md "The plate": a guide's cover photo is mounted as
+   a numbered survey plate — square, sunken bed, hairline frame, oxide corner
+   ticks — beside a text column (kicker/title/dek/chips), with a plate line
+   beneath both carrying coordinates, the CHECKED stamp, this guide's own
+   fact/source counts, and a print control.
+
+   Type never sits on the photograph (DESIGN.md "The No Overlay On Photography
+   Rule") — the old full-bleed hero's scrim, topographic contours, gloss sweep,
+   particle motif, and story-segment rail all existed to keep type legible OVER
+   the photo. None of them apply once the photo and the text are beside each
+   other instead of stacked, so none of them exist here (2026-08 masthead
+   rebuild). What's kept: the photo/video plate itself, the Painted Atlas
+   fallback, the living-cover pause control, and the credit chip — all real
+   content or real functionality, none of it decorative.
+
+   · .mast-photo — a Commons cover photo mounted on the plate.
    · .mast-painted — guides with no photo open on the Painted Atlas (R4:
      painted-atlas.css + src/components/PaintedAtlas.astro) — seeded terrain in
      the guide's accent under a destination-local sky — so every guide is born
      with a living cover and needs no image.
-   Motion is an orchestrated page-load sequence (title rises, photo drifts);
-   fully short-circuited under prefers-reduced-motion. */
+   Motion: hero-parallax.js drifts the photo on scroll; gsap-hero.js runs the
+   text arrival sequence. Both are unchanged by this rebuild — they select by
+   class name (.mast-frame/.mast-img/.mast-eyebrow/.mast-title/.mast-dek/
+   .mast-credit), all of which still exist, just repositioned. Fully
+   short-circuited under prefers-reduced-motion. */
 
-/* Reset the old centered text masthead — the hero owns this region now. */
 .mast-hero{padding:0;border-bottom:0;text-align:left;position:relative}
 
-/* V4 depth (docs/archive/PLAN_VISUAL_OVERHAUL.md, option B) — a faint topographic overlay OVER the hero
-   photo: it lives INSIDE .mast-frame, after the scrim and before .mast-inner, so it sits above the
-   photo + scrim but below the title (which is .mast-inner, painting later in flow). Light etched
-   strokes — the photo hero is always a dark scrim + light title in BOTH site themes, so fixed
-   white lines read consistently and need no theme tokens. Tuned faint so the title stays fully
-   legible. Photo guides only (rendered under `heroSrc`); .mast-painted heroes are the Painted
-   Atlas, which is its own scene. Static by design — the guide is a reading surface, not a motion one. Clipped by the
-   frame's border-radius + overflow. */
-.mast-contours{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.mast-contours svg{position:absolute;inset:0;width:100%;height:100%}
-.mast-contours polyline{fill:none;stroke-width:1.4}
-/* U9: raised from .11/.07 — see hub-motion.css's matching comment + docs/MOTION.md. */
-[data-mast-contour="0"] polyline{stroke:rgba(255,255,255,.15)}
-[data-mast-contour="1"] polyline{stroke:rgba(255,255,255,.10)}
+.mast-plate-row{display:flex;flex-wrap:wrap;gap:clamp(1.2rem,3vw,2rem);max-width:1400px;margin:1.1rem auto 0;padding:0 clamp(1rem,3vw,1.5rem)}
 
-.mast-frame{position:relative;max-width:1400px;margin:1.1rem auto 0;border-radius:var(--r-lg);overflow:hidden;isolation:isolate;min-height:clamp(300px,52vw,460px);display:flex}
+/* The plate itself — sunken bed, hairline frame, oxide corner ticks (The Corner
+   Tick Rule: ticks mark evidence and nothing else). The four corner marks are
+   one pseudo-element with eight gradient layers (two per corner: a horizontal
+   arm + a vertical arm) rather than four extra DOM nodes, so hero-parallax.js
+   and gsap-hero.js need no changes — the element tree they select is untouched. */
+.mast-frame{position:relative;flex:1 1 560px;min-height:clamp(300px,50vh,540px);background:var(--sunken);border:1px solid var(--rule2);overflow:hidden;isolation:isolate}
 @media(min-width:900px){.mast-frame{min-height:clamp(380px,42vw,520px)}}
+.mast-frame::after{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  --tick-arm:20px;--tick-w:2px;
+  background:
+    linear-gradient(to right,var(--accent) var(--tick-w),transparent 0) 0 0/var(--tick-arm) var(--tick-w) no-repeat,
+    linear-gradient(to bottom,var(--accent) var(--tick-w),transparent 0) 0 0/var(--tick-w) var(--tick-arm) no-repeat,
+    linear-gradient(to left,var(--accent) var(--tick-w),transparent 0) 100% 0/var(--tick-arm) var(--tick-w) no-repeat,
+    linear-gradient(to bottom,var(--accent) var(--tick-w),transparent 0) 100% 0/var(--tick-w) var(--tick-arm) no-repeat,
+    linear-gradient(to right,var(--accent) var(--tick-w),transparent 0) 0 100%/var(--tick-arm) var(--tick-w) no-repeat,
+    linear-gradient(to top,var(--accent) var(--tick-w),transparent 0) 0 100%/var(--tick-w) var(--tick-arm) no-repeat,
+    linear-gradient(to left,var(--accent) var(--tick-w),transparent 0) 100% 100%/var(--tick-arm) var(--tick-w) no-repeat,
+    linear-gradient(to top,var(--accent) var(--tick-w),transparent 0) 100% 100%/var(--tick-w) var(--tick-arm) no-repeat;
+}
 
 /* Photo layer */
 .mast-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transform-origin:60% 40%}
@@ -44,28 +64,25 @@
 
 /* The visible pause chip — a real control (doctrine: obvious clickability), same
    badge-on-photo surface treatment as .mast-credit below. Play glyph shows only in the
-   paused state. 40px hit target. */
-.mast-pause{position:absolute;right:.7rem;bottom:.7rem;z-index:2;width:40px;height:40px;border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;color:rgba(248,250,243,.92);background:rgba(12,15,18,.68);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+   paused state. 40px hit target. Inset clears the corner tick's 20px arm. */
+.mast-pause{position:absolute;right:1.2rem;bottom:1.2rem;z-index:2;width:40px;height:40px;border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;color:rgba(248,250,243,.92);background:rgba(12,15,18,.68);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .mast-pause:hover{color:#fff;background:rgba(12,15,18,.8)}
 .mast-pause svg{width:16px;height:16px}
 .mast-pause .mp-play{display:none}
 .mast-pause.is-paused .mp-play{display:block}
 .mast-pause.is-paused .mp-pause{display:none}
-.mast-scrim{position:absolute;inset:0;z-index:-1}
-.mast-photo .mast-scrim{background:linear-gradient(to top,rgba(12,15,18,.86) 0%,rgba(12,15,18,.42) 48%,rgba(12,15,18,.10) 100%)}
+
 /* Cover photo can fail (network blocked, offline, a renamed/broken Commons file); GuideLayout.astro's
    onerror adds .mast-media-fail to .mast-frame. R4: the Painted Atlas now renders UNDER every
    photo hero (hidden while the photo is healthy, below), so failure reveals a painted scene
-   instead of the old flattened grey field. Text keeps its photo styling untouched: the atlas's
-   own .pa-shade is byte-identical to .mast-photo's scrim gradient, so the measured contrast
-   holds. Must hide .mast-img itself (not just the scrim) — otherwise the browser's native
-   broken-image glyph + coverAlt text render, uncontrolled, on top of the painted scene, since
-   .mast-frame's isolation:isolate makes its own background paint behind the img's negative
-   z-index. @media screen only: the @media print block below already hides hero media and forces
-   #111 text — this override's higher specificity would otherwise win over that forcing during
-   print too (a media query doesn't change specificity). */
+   instead of the old flattened grey field. Must hide .mast-img itself (not just its absence) —
+   otherwise the browser's native broken-image glyph + coverAlt text render, uncontrolled, on top
+   of the painted scene, since .mast-frame's isolation:isolate makes its own background paint
+   behind the img's negative z-index. @media screen only: the @media print block below already
+   hides hero media and forces #111 text — this override's higher specificity would otherwise win
+   over that forcing during print too (a media query doesn't change specificity). */
 @media screen{
-  .mast-frame.mast-media-fail .mast-img,.mast-frame.mast-media-fail .mast-scrim,.mast-frame.mast-media-fail .mast-contours{display:none}
+  .mast-frame.mast-media-fail .mast-img{display:none}
   .mast-frame.mast-media-fail .paint-atlas{display:block}
   /* The failed photo's credit would dangle over a scene it doesn't describe. */
   .mast-frame.mast-media-fail .mast-credit{display:none}
@@ -74,15 +91,35 @@
    work spent animating a scene nobody can see. */
 .mast-photo .paint-atlas{display:none}
 
-.mast-inner{position:relative;align-self:flex-end;width:100%;padding:clamp(1.3rem,3.5vw,2.6rem) clamp(1.2rem,3.2vw,2.4rem);color:#f8faf3}
-.mast-eyebrow{color:#e8ece1;letter-spacing:.28em;opacity:.92;text-wrap:balance}
-.mast-title{font-family:var(--font-display);font-weight:620;font-size:clamp(2.4rem,7.2vw,5.4rem);line-height:1;letter-spacing:-.012em;margin:.35rem 0 0;color:#fff;text-shadow:0 2px 24px rgba(0,0,0,.32)}
-.mast-dek{color:#eef1e9;max-width:54ch;margin:.75rem 0 0;font-size:clamp(1rem,1.4vw,1.14rem);line-height:1.55;text-shadow:0 1px 10px rgba(0,0,0,.28)}
-
 /* Same badge-on-photo pattern as sights.css's .imgcredit--onphoto, same fix: .42 alpha composited
-   to 2.23:1 against a worst-case white photo pixel. .68 clears 4.79:1. */
-.mast-credit{position:absolute;right:.7rem;top:.7rem;z-index:1;font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:.02em;color:rgba(248,250,243,.82);background:rgba(12,15,18,.68);padding:.24rem .5rem;border-radius:999px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);text-decoration:none}
+   to 2.23:1 against a worst-case white photo pixel. .68 clears 4.79:1. Inset clears the tick arm. */
+.mast-credit{position:absolute;right:1.2rem;top:1.2rem;z-index:2;font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:.02em;color:rgba(248,250,243,.82);background:rgba(12,15,18,.68);padding:.24rem .5rem;border-radius:999px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);text-decoration:none}
 .mast-credit:hover{color:#fff;background:rgba(12,15,18,.62)}
+
+/* The text column beside the plate — a grid so the content anchors to the BOTTOM of the
+   column (matching the plate's height) rather than sitting at the top with a gap below,
+   per DESIGN.md's align-content:end. Type lives on bare paper now, so it uses the same
+   .eyebrow/.dek base classes the rest of the guide reads with — no on-photo overrides
+   (white ink, text-shadow) left to carry. */
+.mast-inner{display:grid;align-content:end;gap:.35rem;flex:1 1 360px;min-width:min(100%,320px);padding-block:clamp(.4rem,2vw,1rem)}
+.mast-eyebrow{margin:0}
+.mast-title{font-family:var(--font-display);font-weight:620;font-size:clamp(2.5rem,6vw,4.8rem);line-height:.98;letter-spacing:-.012em;margin:.2rem 0 0;color:var(--ink)}
+.mast-dek{margin:.6rem 0 0}
+
+/* Per-guide chips — emergency (ochre, tel: links) + currency. Pills, never smaller than a
+   control (DESIGN.md's Flag chip spec: "control size, pill, 1px current-ink border"). */
+.mast-chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.9rem}
+.mast-chip{display:inline-flex;align-items:center;min-height:32px;padding:.3rem .7rem;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.02em;border:1px solid currentColor;border-radius:999px;color:var(--muted);text-decoration:none}
+.mast-chip--sos{color:var(--ochre);border-color:var(--ochre)}
+a.mast-chip:hover{background:color-mix(in srgb,currentColor 10%,transparent)}
+
+/* ── The plate line — coordinates, the CHECKED stamp, fact/source counts, print. ── */
+.mast-plateline{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem 1.2rem;max-width:1400px;margin:.9rem auto 0;padding:.7rem clamp(1rem,3vw,1.5rem) 0;border-top:2px solid var(--accent)}
+.mast-coord{font-family:var(--font-data);font-weight:640;font-variant-numeric:tabular-nums;font-size:clamp(1.3rem,3vw,2.2rem);color:var(--accent-ink)}
+.mast-stamp{font-family:var(--font-data);font-size:var(--text-control);font-weight:640;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--rule);padding:.15rem .5rem}
+.mast-plcount{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}
+.mast-print{margin-left:auto;min-height:36px;padding:.3rem .9rem;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);background:var(--card);border:1px solid var(--rule2);border-radius:999px;cursor:pointer}
+.mast-print:hover{border-color:var(--accent);color:var(--accent-ink)}
 
 /* The accent rule centers over the meta band (which is centered below). */
 .mast-hero .masthead-rule{margin:1.4rem auto 0;width:3.2rem}
@@ -92,16 +129,13 @@
 
 /* ── Orchestrated page-load motion ──────────────────────────────────────── */
 /* Motion ownership: the photo transform belongs to hero-parallax.js; the text
-   arrival sequence and opener sweeps belong to gsap-hero.js (single owner —
-   no CSS keyframes on these elements, so the two engines never fight). */
+   arrival sequence belongs to gsap-hero.js (single owner — no CSS keyframes on
+   these elements, so the two engines never fight). */
 
-/* Print: flatten to a plain heading. U7: .mast-contours (the V4 topographic overlay) was
-   missing from this list — its faint on-screen strokes print as visible clutter over the
-   flattened white heading instead of disappearing with the photo/scrim it was designed to
-   sit on top of. */
 @media print{
-  .mast-frame{min-height:0;border-radius:0}
-  .mast-img,.mast-scrim,.mast-credit,.mast-contours,.mast-video,.mast-pause{display:none}
-  .mast-inner{color:#111;padding:0}
+  .mast-frame{min-height:0;border:0}
+  .mast-frame::after{display:none}
+  .mast-img,.mast-credit,.mast-video,.mast-pause{display:none}
   .mast-title,.mast-dek,.mast-eyebrow{color:#111;text-shadow:none}
+  .mast-print{display:none}
 }

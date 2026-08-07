@@ -7,17 +7,22 @@ record (it absorbed `VISUAL_COVERS.md`).
 ## The signature: the trip unfolds, day by day
 
 The ONE device this site is remembered by: **a segmented rail whose segments are the trip's
-days**. It appears exactly three ways, and they are the same object:
+days**. It appeared three ways; the title-card intro is retired (below), leaving two:
 
-1. **Title-card story intro** (2026-07-30) — the guide opens as a full-bleed title card
-   (cover + country name + day rail + accent gloss sweep + optional seasonal particle motif,
-   schema `introMotif`, honesty rule R18 — koyo-leaves/japan, summer-rain/korea jangma,
-   poplar-fluff/denmark June, desert-dust/us Sedona), holds ~2.4s, then pans up into the guide. Full
-   sequence once per guide per SESSION; skips jump to the pan; reduced-motion gets the
-   normal arrival (`story-open.js` + `story-petals.js` + `story.css`; pre-paint state
-   stamped by GuideLayout's inline script).
+1. ~~**Title-card story intro**~~ (2026-07-30, retired 2026-08 with the masthead plate rebuild)
+   — the guide used to open as a full-bleed title card (cover + country name + day rail +
+   accent gloss sweep + optional seasonal particle motif, schema `introMotif`), holding ~2.4s
+   then panning into the guide. Its full-bleed CSS assumed the title sat absolutely OVER the
+   photo inside one frame; the plate masthead moved the title beside the photo instead (DESIGN.md
+   "Type never sits on the photograph"), which the intro's fullscreen/pan transitions can't
+   express without a rebuild. Retired rather than rebuilt because the redesign spec's own
+   "Hub card → guide masthead: FLIP the plate" transition (README.md §Interactions) supersedes
+   it — that's Phase 3 (the hub) work, not a patch here. `story-open.js`, `story-petals.js`,
+   `story.css`, and the `introMotif` schema field are all deleted; guides now take the normal
+   `gsap-hero.js` arrival on every visit, including the first.
 2. **Story-mode itinerary** — the rail becomes navigation in the full-screen one-day-per-view
-   deck (`story-mode.js` + `story-mode.css`).
+   deck (`story-mode.js` + `story-mode.css`). Unaffected — a different feature that happens to
+   share the word "story".
 3. **The card→hero morph** — the guide "opens" from its hub card via cross-document View
    Transitions (`transitions.css`). **V5:** the hub card's accent bar (`.hubcard-bar`) shares a
    `view-transition-name` with the masthead's own accent rule (`.masthead-rule`) — the trip's
@@ -34,8 +39,7 @@ Anything new that wants to be flashy must strengthen this signature, not compete
 |---|---|---|
 | Card → masthead morph | cross-doc View Transitions, `cover-<slug>` names | `transitions.css` |
 | Card accent bar → masthead rule morph | cross-doc View Transitions, `accent-<slug>` names | `index.astro` + `GuideLayout.astro` |
-| First-open day-story | CSS keyframes under `body.story-playing`; segment fill is the guide's own `--accent` (V5 — echoes the hub Overture route line's colour, since the route itself has scrolled off-screen by tap time and can't be a literal shared element) | `story.css` + `story-open.js` |
-| Masthead arrival (repeat visits) | GSAP timeline (lazy import) | `gsap-hero.js` |
+| Masthead arrival (every visit) | GSAP timeline (lazy import) | `gsap-hero.js` |
 | Hero parallax + Ken Burns | rAF transform (JS owns the transform) | `hero-parallax.js` |
 | Scroll reveals (cards/days/sights) | **native** `animation-timeline: view()`; IO fallback | `scroll-motion.css` / `reveal.js` |
 | Story-mode day slide/bounce | CSS keyframes toggled by class | `story-mode.css` |
@@ -58,11 +62,12 @@ Anything new that wants to be flashy must strengthen this signature, not compete
    JS-added class (or an `@supports` gate); the base state is always visible. A wedged script
    must never leave a blank page.
 4. **One owner per property per element.** Two systems never animate the same element at once —
-   e.g. `story-open` sets `window.__storyIntro` and `gsap-hero` stands down; `reveal.js` bails
-   when `animation-timeline` is supported. Preserve this handshake pattern when adding motion.
+   e.g. `cold-open` claims visit 1 and `onboard` stands down via `window.__onboardShown`;
+   `reveal.js` bails when `animation-timeline` is supported. Preserve this handshake pattern
+   when adding motion.
 5. **Timing vocabulary.** Micro-interactions ~150ms; content transitions 300–450ms
-   (`cubic-bezier(.2,.7,.2,1)` — the house ease); orchestrated arrivals ≤ ~1s; the first-open
-   story ~2.4s total (clamped per-day 170–430ms). Nothing loops forever.
+   (`cubic-bezier(.2,.7,.2,1)` — the house ease); orchestrated arrivals ≤ ~1s. Nothing loops
+   forever.
 6. **Motion encodes structure.** Animate to say something true about the content (days advance,
    a card becomes its guide, content enters as you reach it) — never decoration for its own sake.
    The generic-AI test applies to motion too.
@@ -115,8 +120,7 @@ all (`.11`/`.07` alpha on the masthead; ~10–16% tints on the hub). Raised once
 | Hub `--hub-contour-far` | `muted` @ 10% | `muted` @ 16% |
 | Hub `--hub-contour-mid` | `muted` @ 16% | `muted` @ 24% |
 | Hub `--hub-contour-near` | `accent2` @ 12% | `accent2` @ 18% |
-| Masthead `[data-mast-contour="0"]` | `rgba(255,255,255,.11)` | `rgba(255,255,255,.15)` |
-| Masthead `[data-mast-contour="1"]` | `rgba(255,255,255,.07)` | `rgba(255,255,255,.10)` |
+| ~~Masthead `[data-mast-contour="0"/"1"]`~~ | `rgba(255,255,255,.11/.07)` | retired 2026-08 — DESIGN.md removes graticules from guide photography entirely (clutter at plate scale); the hub contour rows above are unaffected and still live |
 
 **Settled (2026-07-23):** real Playwright screenshots were taken of the Korea guide masthead
 (desktop + mobile, light + dark, over its real loaded cover photo, plus over the dark

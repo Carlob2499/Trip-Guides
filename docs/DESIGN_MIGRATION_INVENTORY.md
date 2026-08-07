@@ -9,7 +9,7 @@ silently dropped when the design migrates. Walked from `src/layouts/GuideLayout.
 ## Layout (`src/layouts/GuideLayout.astro`)
 
 - **Pre-paint dark-mode init** (inline `<script>` in `<head>`) — reads `localStorage`/OS preference and stamps `data-theme` + `theme-color` meta before first paint, so there's no flash of the wrong theme.
-- **Title-card story-intro pre-paint stamp** (inline `<script>`) — stamps `body.story-full` + `window.__storyIntro` before paint so the hub→guide cover morph lands directly into the full-bleed title card.
+- ~~**Title-card story-intro pre-paint stamp**~~ — RETIRED 2026-08 (creator-approved, masthead plate rebuild): its full-bleed treatment assumed the title sat absolutely over the photo, which the plate layout no longer does; the redesign's own hub→masthead FLIP transition (README.md §Interactions) supersedes it as Phase 3 work rather than needing a rebuild here.
 - **Skip link** — "Skip to content", first focusable element, jumps keyboard/AT users past chrome.
 - **Reading progress bar** (`#readProg`) — fixed 3px line at top that fills as the user scrolls.
 - **Toast** (`#savedNote`) — transient save/copy confirmation region (`flash()`).
@@ -19,7 +19,7 @@ silently dropped when the design migrates. Walked from `src/layouts/GuideLayout.
 - **Share modal** — QR code, copy-link, "Share trip summary" button, WhatsApp/Email share links, "Add to Home Screen" install tip, GPX/ICS download links (each shown only when that export data exists).
 - **Guide tab bar** (`#guideTabs`, role=tablist) — one tab per section group, plus four tool tabs: Budget calculator, Group Vote, Reminders, Trip Kit (Learnings tab hidden until feedback exists).
 - **Cold-open framing strip** (`#coldOpen`) — one-time "what is Waypoint" explainer for shared-link recipients, dismissible.
-- **Masthead / hero** — full-bleed cover photo or Painted Atlas fallback, day-segment story rail (first-open only), topographic contour overlay, title-card gloss sweep, optional seasonal particle canvas (`introMotif`), living-cover video layer with visible pause button, photo/video credit chip.
+- **Masthead / hero** — REBUILT 2026-08 as DESIGN.md's "plate" (square, sunken bed, oxide corner ticks, beside a text column) + a new plate line (coordinates, CHECKED stamp, fact/source counts, print control). Carried over: cover photo or Painted Atlas fallback, living-cover video layer with visible pause button, photo/video credit chip. Retired (creator-approved, decorative-only, no spec counterpart): day-segment story rail, topographic contour overlay, title-card gloss sweep, optional seasonal particle canvas (`introMotif` — schema field removed).
 - **What's-Next banner** (`#whatsNext`) — client-populated "today" line matched against device date.
 - **Weather strip** (`#wxWrap`/`#wxMount`) — masthead weather widget (suppressed if the guide has its own `weather` section).
 - **Guide stats bar** (`#guideStats`) — verified-warning pill, live currency-rate pill (both injected/shown client-side).
@@ -77,8 +77,7 @@ silently dropped when the design migrates. Walked from `src/layouts/GuideLayout.
 - **section-flight.js** — wires the "Next: …" end-of-section CTA cards to click the real tab buttons.
 - **sheet-drag.js** — shared drag-to-dismiss gesture implementation for the mobile sheets (Groups sheet, SOS sheet).
 - **staleness-ui.js** — client-side ⚠ "verified <date> — re-check" pill on sections whose provenance has passed its shelf life.
-- **story-open.js** — the full-bleed title-card story intro: holds, then pans up into the guide as chrome returns; skippable via wheel/touch/key after a grace period; plays once per guide per session.
-- **story-petals.js** — canvas particle engine for the title-card's seasonal motifs (koyo leaves, summer rain, poplar fluff, desert dust).
+- ~~**story-open.js**~~ / ~~**story-petals.js**~~ — DELETED 2026-08 with the masthead plate rebuild (see the Masthead / hero entry above).
 - **theme.js** — shared dark/light toggle button wiring (icon swap, PWA theme-color sync, localStorage persistence) used by both the guide topbar and the hub.
 - **util.js** — shared helper library (HTML-escape, reduced-motion check, haptic tap, storage-key migration) — no direct UI, consumed by many of the above.
 
