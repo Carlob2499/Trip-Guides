@@ -22,7 +22,7 @@ import HolidaysBlock from "./blocks/HolidaysBlock.astro";
 import VenueBlock from "./blocks/VenueBlock.astro";
 import DivergencesBlock from "./blocks/DivergencesBlock.astro";
 import Panel from "./Panel.astro";
-import { CARDED_TYPES, PANEL_HOSTABLE_TYPES, FULL_WIDTH_PANEL_TYPES } from "../lib/section-types";
+import { CARDED_TYPES, PANEL_HOSTABLE_TYPES, FULL_WIDTH_PANEL_TYPES, KICKER_LABELS } from "../lib/section-types";
 
 // `holidays` is the server-computed holiday info (or null), threaded down from
 // GuideLayout; only the `holidays` section type uses it. `learnings` is the guide's
@@ -72,17 +72,21 @@ const TitleTag = isCollapsible ? "summary" : "div";
 {/* Phase 2: when a Panel hosts the section it IS the block — one element carrying the
     anchor id, data-cat, and provenance attrs, because reorder.js moves the grid's
     DIRECT children and a wrapper would strand the identity outside the moved node. */}
+{/* `fullWidth` below takes the type set, plus the one design-sanctioned exception a type
+    set structurally cannot see: DESIGN.md gives "lists over five items" the full row too,
+    and item count is data, not type. */}
 {asPanel ? (
   <Panel
     id={sec.title}
     title={sec.title}
+    kicker={KICKER_LABELS[sec.type]}
     anchorId={sid}
     cat={ci}
     level={3}
     verifiedOn={sec.verified_on}
     sourceUrl={sec.source_url}
     shelfLife={sec.shelf_life}
-    fullWidth={FULL_WIDTH_PANEL_TYPES.has(sec.type)}
+    fullWidth={FULL_WIDTH_PANEL_TYPES.has(sec.type) || (sec.type === "list" && (sec.items?.length ?? 0) > 5)}
     collapsed={sec.collapsible === true && sec.defaultOpen === false}
     anchorBtn={true}
   >

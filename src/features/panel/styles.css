@@ -21,6 +21,12 @@
 .pnl:has(.wx-wrap[hidden]),
 .pnl:has(.hol-wrap[hidden]) { display: none; }
 
+/* The weather strip's legacy geometry is for the masthead, where it is a lone band on a
+   full-width page: `margin: .9rem auto 0; max-width: 38rem` centres it in that space.
+   Inside a Panel body the body IS the measure, so those two carry over as a stray top
+   margin and a second, narrower centring inside an already-narrow column. */
+.pnl .wx-wrap { max-width: 100%; margin-top: 0; }
+
 .pnl-head {
   display: flex;
   align-items: center;

@@ -29,9 +29,39 @@ export const PANEL_HOSTABLE_TYPES = new Set([
 ]);
 
 /** Panel `fullWidth` is a property of a section's TYPE, never inferred from how much
-    content happens to be inside (Panel.astro's contract). budget is the one tabular
-    type in play — a cost table needs the row, a prose column does not. The own-cards
-    types join it because each is internally gridded: squeezing a sight grid or a day
-    rail into one column of the panel grid would nest a grid inside a column that is
-    already too narrow for its own minmax floor. */
-export const FULL_WIDTH_PANEL_TYPES = new Set(["budget", ...OWN_CARDS_TYPES]);
+    content happens to be inside (Panel.astro's contract) — with ONE design-sanctioned
+    exception, applied at Block.astro's call site because item count is data a type set
+    cannot see: a `list` over five items spans full width too.
+
+    This is DESIGN.md's wide set exactly ("Wide types claim the full row … they are
+    internally gridded already"): the tabular and internally-gridded types — a ledger,
+    a sights grid, a day rail, an infogrid — need the row; a prose column does not.
+    Squeezing one into a single panel-grid column nests a grid inside a column already
+    too narrow for its own minmax floor. */
+export const FULL_WIDTH_PANEL_TYPES = new Set([
+  "budget", "map", "infogrid", "habitats", "raids", "tierlist", ...OWN_CARDS_TYPES,
+]);
+
+/** The type kicker every hosted Panel leads with — the KIND of thing inside, and the
+    only body-level label still visible once a Panel is collapsed, so it must never
+    just restate the title. Rendered in var(--aink), never raw var(--accent): DESIGN.md
+    flagged "the 10px oxide panel kicker on --card" as an unverified pairing, and --aink
+    is the >=4.5:1-by-construction answer to it (src/lib/accent-tokens.ts). */
+export const KICKER_LABELS: Record<string, string> = {
+  panel: "FIELD NOTE",
+  prose: "FIELD NOTE",
+  list: "CHECKLIST",
+  routes: "ROUTES",
+  map: "MAP",
+  budget: "LEDGER",
+  days: "ITINERARY",
+  sights: "SIGHTS",
+  venues: "VENUES",
+  raids: "RAIDS",
+  habitats: "HABITATS",
+  infogrid: "AT A GLANCE",
+  tierlist: "PRIORITIES",
+  divergences: "WHAT WE FOUND",
+  weather: "WEATHER",
+  holidays: "HOLIDAYS",
+};

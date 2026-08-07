@@ -87,7 +87,11 @@ export function initGrid(ctx) {
      track the column each Panel lands in, and stretch only the true last one. This is
      a POSITION rule — a Panel's declared span still only ever comes from its type. */
   function fillLastRow() {
-    var kids = Array.prototype.slice.call(grid.children);
+    /* A veiled Panel (an empty weather/holidays one the silo hides whole) must not
+       advance the column walk or be stretched as "the last" — it occupies no track. */
+    var kids = Array.prototype.slice.call(grid.children).filter(function (el) {
+      try { return getComputedStyle(el).display !== "none"; } catch (e) { return true; }
+    });
     // Clear every stretch BEFORE measuring cols, not after. A stale "span N" left over
     // from a previous (possibly wrong) measurement forces the grid to keep resolving to
     // N tracks — so measuring with it still applied reads back the very corruption it
@@ -98,11 +102,22 @@ export function initGrid(ctx) {
     // permanent inline "span 2" on its last Panel, squeezing it to ~29px wide — every
     // later call kept reading 2 columns back because that span was still applied.
     kids.forEach(function (el) { el.style.gridColumn = ""; });
+    // ...and refuse to measure what cannot be measured, so no bogus span is written in
+    // the first place. Clearing above is the cure; these two guards are the prevention,
+    // and the bug needs BOTH — one alone still writes a wrong span on a hidden tab, the
+    // other alone still reads its own corruption back on the next resize.
+    // A display:none grid (a tab panel not yet shown) has no layout: getComputedStyle
+    // hands back the AUTHORED template instead of a resolved one.
+    if (!grid.clientWidth) return;
     var cols = 1;
     try {
-      cols = (getComputedStyle(grid).gridTemplateColumns || "")
-        .split(" ").filter(Boolean).length || 1;
-    } catch (e) { /* leave 1 — no stretch, never a wrong one */ }
+      var tpl = getComputedStyle(grid).gridTemplateColumns || "";
+      // A resolved template is a list of lengths ("349.4px" / "304px 304px"). One still
+      // carrying "(" is the authored `repeat(auto-fit, minmax(min(100%, 19rem), 1fr))`,
+      // whose space-split invents a column count out of its own punctuation (4, here).
+      if (tpl.indexOf("(") === -1) cols = tpl.split(" ").filter(Boolean).length || 1;
+      /* an unresolved template stays 1 — no stretch, never a wrong one */
+    } catch (e) { /* leave 1 */ }
     var pos = 0;
     kids.forEach(function (el) {
       if (el.hasAttribute("data-panel-full")) { pos = 0; return; }
@@ -171,7 +186,17 @@ export function initGrid(ctx) {
   // ResizeObserver fires on that reveal (0 → real width) with no coupling to whoever
   // does the revealing; the same debounce keeps it one measure per settled change.
   if (typeof ResizeObserver !== "undefined") {
+    var lastWidth = grid.clientWidth;
     new ResizeObserver(function () {
+      var w = grid.clientWidth;
+      // The 0 → real-width reveal corrects SYNCHRONOUSLY. The debounce below is a
+      // setTimeout, and an environment with a frozen clock (the a11y harness pins one)
+      // never fires it — so the boot-time no-measure state would survive the whole audit,
+      // which is exactly how the broken layout stayed visible long enough to be scanned.
+      // A reveal is one event, not a resize storm; it needs no debounce. Ordinary resizes
+      // keep it.
+      if (w && !lastWidth) { lastWidth = w; fillLastRow(); return; }
+      lastWidth = w;
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(fillLastRow, 120);
     }).observe(grid);
