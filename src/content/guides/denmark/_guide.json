@@ -102,7 +102,7 @@
     ]
   },
   "tabBudget": 8,
-  "panelGroups": ["Plan", "Essentials", "Transit", "Sources", "Day trips"],
+  "panelGroups": ["Plan", "Essentials", "Transit", "Sources", "Day trips", "Days", "Sights", "Food & shopping"],
   "archived": true,
   "provenance": "strict"
 }
