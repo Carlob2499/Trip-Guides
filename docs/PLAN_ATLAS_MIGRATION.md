@@ -253,8 +253,11 @@ tz ×2). Nothing visible changed — verify hub/guides render identically in pre
 > the cover and globe were outside any landmark (now named `<section>`s), and — a real
 > bug — "Skip to guides" targeted `#atlasTable` while the JS default WORLD mode hides it,
 > so the skip link did nothing; it now switches to table mode on activation (verified
-> end-to-end). Item 11's checkpoint was folded into the creator's own live review rather
-> than a formal screenshot round; the Sedona/Japan origin question (Clarifying #1) was
+> end-to-end). Item 11's checkpoint happened as the creator's own live review of the running
+> site rather than a formal screenshot round (screenshot tooling was unavailable). Its visual
+> sign-off was NOT obtained: the creator reported the hub still looks off in ways neither
+> side has enumerated, and no decision was made about when that gets fixed — it is an open
+> item, not a closed or deprioritised one. The Sedona/Japan origin question (Clarifying #1) was
 > put to the creator and CLOSED: those trips have no booked flights, so there is no
 > airport fact to record — revisit when scheduling happens (creator expects the NYC area).
 > The Tools-screen scope note was also settled: today's per-guide tools-tab shortcut

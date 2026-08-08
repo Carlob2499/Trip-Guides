@@ -61,16 +61,20 @@ a11y** · 3/3 new `atlas-hub.spec.ts` · perf budget OK (d3/topojson still lazy)
 creator expects the NYC area and will say when scheduling happens. Tools screen — today's
 per-guide tools-tab shortcut STAYS; no standalone README §5 screen this round.
 
-**Creator's standing verdict on hub visuals:** "so many things look off — but this isn't
-necessarily the fault of the screenshots. We can iterate later but we need to move on and
-integrate all the features." Visual polish is explicitly DEFERRED, not done. Do not reopen
-it unprompted; the next work is features (Stage D onward).
+**Hub visuals — UNRESOLVED.** What the creator actually said, verbatim: "so many things look
+off — but this isn't necessarily the fault of the screenshots. We can iterate later but we
+need to move on and integrate all the features." That is the whole of it. They did NOT rule
+that visual work is closed, deprioritised, or off-limits — an earlier draft of this file said
+they had, which was this assistant inventing a decision and attributing it to them. The
+specific gaps were never enumerated, so they are not written down anywhere yet; getting that
+list is the first step whenever this is picked up.
 
 ## Open items
 
-- **Hub visual polish — deferred by the creator, not finished.** The flip shipped with known
-  fidelity gaps against the design screenshots. Resume only when the creator asks, or after
-  Stage D. `docs/design-handoff/enforcement/` + CLAUDE.md's "Design Fidelity" section carry
+- **Hub visual fidelity — OPEN.** The flip shipped with gaps the creator can see and this
+  assistant has not enumerated. Not scheduled against Stage D either way; ask which to do
+  first rather than assuming. `docs/design-handoff/enforcement/` + CLAUDE.md's "Design
+  Fidelity" section carry
   the authority order and the kit's known false positives.
 - **Airports for Sedona/Japan** — record them WHEN flights get booked (creator expects the NYC
   area). Until then there is no fact; do not invent or re-ask.
@@ -86,9 +90,10 @@ it unprompted; the next work is features (Stage D onward).
 ## Where we left off
 
 **This session:** Stage C is DONE — Atlas is the live hub, all gates green, deploy confirmed.
-Visual fidelity is knowingly imperfect and deliberately deferred by the creator.
+Hub visual fidelity is still imperfect and still open (see Open items) — no decision has been
+made about when it gets done, so ask before assuming an order.
 
-**Recommended next step:** **Stage D — Mobile (Phase 4)**, per
+**One candidate next step:** **Stage D — Mobile (Phase 4)**, per
 `docs/PLAN_ATLAS_MIGRATION.md`. Note the scope boundary that has now bitten twice: the hub's
 OWN mobile surfaces (segmented switch, ping sheet, FAB menu) shipped in Stage C per D5 —
 Stage D is the GUIDE PAGES' mobile chrome, wired to the EXISTING `src/features/mobile-nav/`
