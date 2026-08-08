@@ -228,6 +228,44 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
       ),
     },
     "color-contrast/shortTextContent": { max: 1, why: SHORT_TEXT_CONTENT_WHY },
+    // Stage C flip: the mobile FAB's ☰/✕ glyph. Same decorative-glyph mechanism as the
+    // guide pages' NON_BMP_WHY entries, and the button carries an aria-label ("Map menu"),
+    // so a screen reader is unaffected by this rule either way. Its colours are
+    // var(--cta-ink) on var(--cta) — the ONE token pair in this system with a machine-
+    // enforced contrast floor: src/styles/atlas-tokens.test.ts asserts >=4.5:1 ink-on-
+    // ground in BOTH themes, so this pair cannot silently drift below the bar.
+    "color-contrast/nonBmp": { max: 1, why: NON_BMP_WHY },
+    // axe: "Skip link target should become visible on activation". It cannot see that
+    // activation DOES make it visible, because the mechanism is a JS click handler
+    // (index.astro) rather than static markup: the hub's JS default is world mode, which
+    // hides .atlas-table-wrap, so the handler switches to table mode before the jump.
+    // This was a REAL bug when the flip landed (the link jumped to a display:none element
+    // and did nothing) — it is baselined here only because the fix is verified, not because
+    // it was waved through. Verified end-to-end against the production preview: focus
+    // .skip-link, press Enter -> data-atlas-mode flips world->table, .atlas-table-wrap goes
+    // none->block, #atlasTable has real on-screen geometry, location.hash is "#atlasTable".
+    // No-JS visitors never hit this at all: table is the markup default (D4).
+    "skip-link/default": {
+      max: 1,
+      why: "Mode switch happens in a JS click handler axe can't see; activation verified to reveal #atlasTable — see block comment.",
+    },
+    /* Desktop only (pin cards don't render under 620px). Two grounds axe declines to rate
+       because an image node is in the background chain, both measured rather than assumed
+       (2026-08-08, values via src/lib/contrast.ts's formula):
+       (a) HEADER TEXT over the fixed .page-contours SVG ground — the same mechanism already
+           documented for /new's .itk-contours. The only stroke is --muted at 16% over the
+           page, worst-case pixel #c8cdc2 light / #252a2b dark. Against that worst pixel:
+           .atlas-brand-name 10.48 light / 12.14 dark; .atlas-brand-sub and
+           .atlas-header-btn--tools (both --muted) 4.67 light / 5.56 dark. All clear 4.5:1
+           even if a glyph sat entirely on a 1.1px contour line, which it cannot.
+       (b) PIN CARD TEXT, flagged because each card contains a cover photo. The photo is a
+           SIBLING above the text, not behind it: the text's own ground is .atlas-pincard's
+           solid var(--card). Measured on card: title 16.13 light / 13.56 dark; the --aink
+           cc + cta 8.05 light / 5.90 dark. */
+    "color-contrast/imgNode": {
+      max: 14,
+      why: "Header text over the decorative contour ground and pin-card text over its solid --card (photo is a sibling, not the backdrop); every pair measured >=4.67:1 — see block comment above.",
+    },
     // R3 (2026-08-05): the imgNode entry (max 1, .hubcard-featured-tag) is gone WITH its
     // element — the featured guide now renders once, as the hero grid cell, so no tag
     // floats over a photo. The zero-tolerance novelty gate below still catches any new one.

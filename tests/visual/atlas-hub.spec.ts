@@ -49,5 +49,7 @@ test("a second visit in the same session never shows the cover", async ({ page }
 
   // initCover() removes the element entirely on the seen path — not merely hides it.
   await expect(page.locator("[data-atlas-cover]")).toHaveCount(0);
-  await expect(page.locator(".atlas-sheets .atlas-sheet").first()).toBeVisible();
+  // Attached, not visible: with JS running the hub opens in WORLD mode, which hides the
+  // table view. The point here is that nothing blocks the hub, not which face is showing.
+  await expect(page.locator(".atlas-sheets .atlas-sheet").first()).toBeAttached();
 });

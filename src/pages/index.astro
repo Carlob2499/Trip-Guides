@@ -202,7 +202,11 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
         no-JS/SEO door) never sees it at all rather than seeing it stuck open with no way
         to dismiss it; a returning visitor within the same session never sees it flash
         before cover.js removes it. */}
-    <div class="atlas-cover" data-atlas-cover data-fly-slug={quick?.g.id}>
+    {/* A NAMED <section> (i.e. a region landmark), not a bare div: axe's `region` rule
+        requires all page content to live inside a landmark, and the cover sits outside
+        <main> by necessity — it's an overlay above the whole hub. A `section` only counts
+        as a landmark once it has an accessible name, hence aria-label. */}
+    <section class="atlas-cover" aria-label="Waypoint — verified field guides" data-atlas-cover data-fly-slug={quick?.g.id}>
       <div class="atlas-cover-col">
         <span class="atlas-cover-mark" data-cover-fade aria-hidden="true"></span>
         <span class="atlas-cover-word" data-ref-coverword>WAYPOINT</span>
@@ -213,9 +217,11 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
           <span class="atlas-cover-scroll-dot"></span>
         </span>
       </div>
-    </div>
+    </section>
 
-    <div class="atlas-globe-wrap">
+    {/* Named region for the same reason as the cover above — the globe is a second top-level
+        view alongside <main>'s table, so its canvas/overlays need a landmark of their own. */}
+    <section class="atlas-globe-wrap" aria-label="World view — the guide map">
       <div id="atlasGlobe" data-atlas-globe>
         <div data-atlas-map-slot></div>
         <div class="atlas-pins" data-atlas-pins></div>
@@ -287,7 +293,7 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
     <script type="application/json" is:inline data-atlas-guides-json set:html={JSON.stringify(guidesJson)} />
 
@@ -415,6 +421,14 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
       let initialMode = "world";
       try { initialMode = localStorage.getItem(MODE_KEY) || "world"; } catch { /* storage unavailable */ }
       setMode(initialMode);
+
+      // "Skip to guides" targets #atlasTable, which world mode hides — so in world mode
+      // (the JS default) the skip link jumped to a display:none element and did nothing,
+      // which is the whole failure mode skip links exist to prevent. Switching to the
+      // table first makes the promise true: the link always lands on the list of guides.
+      // Found by axe's own skip-link rule ("target should become visible on activation")
+      // when this page became the hub and entered the a11y gate's page list.
+      document.querySelector(".skip-link")?.addEventListener("click", () => setMode("table"));
     </script>
   </body>
 </html>
