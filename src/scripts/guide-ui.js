@@ -278,8 +278,12 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           /* ── 2b. JOURNEY BAR DESTINATIONS (R2) ───────────────────────── */
           // Today: open the Days group and land on today's card when the trip is live
           // (data-date matches the visitor's local "Www Mmm D"), else the group's top.
+          // It lives in the Groups sheet's tool row since the bar went to four slots
+          // (2026-08-08) — an <a href="#">, so the default jump-to-top has to be stopped
+          // or it fights the scrollIntoView below.
           var botToday = document.getElementById("botToday");
-          if (botToday) botToday.addEventListener("click", function () {
+          if (botToday) botToday.addEventListener("click", function (e) {
+            e.preventDefault();
             var dayEl = document.querySelector(".day");
             if (!dayEl) return;
             var grp = dayEl.closest('[id^="grp-"]');
@@ -291,14 +295,10 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             var hit = document.querySelector('.day[data-date="' + todayStr + '"]');
             (hit || grp || dayEl).scrollIntoView({ behavior: "smooth", block: "start" });
           });
-          // Kit left the bottom bar in the tab-bar rebuild (2026-07-30) — the sheet's
-          // Trip Kit link, wired by the sheet handler above, is now its only entry.
-          // Map: an anchor into the map's section — just activate its tab first.
-          var botMap = document.getElementById("botMap");
-          if (botMap) botMap.addEventListener("click", function () {
-            var t = parseInt(this.dataset.tab, 10);
-            if (!isNaN(t)) showTab(t);
-          });
+          // Kit left the bottom bar in the tab-bar rebuild (2026-07-30) and Map left it
+          // when the bar went to four slots (2026-08-08) — both are reached through the
+          // Groups sheet now (Trip Kit in its tool row, the map as a section link under
+          // its own group), wired by the generic sheet handler above.
 
           /* ── 3. SCROLL-SPY ───────────────────────────────────────────── */
           function setActive(secId, cat) {

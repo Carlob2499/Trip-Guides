@@ -29,15 +29,13 @@
      indicator the bar itself now sits above. */
   .colophon{padding-bottom:calc(6rem + var(--safe-bottom))}
 
-  /* Spec-mode bar (?bar=spec) — the design-handoff README's [group][group][ALL][TOOLS].
-     DOM order puts the tool slot before Groups (the shipped bar wants it there), so only
-     this mode reorders them; `order` on flex children costs nothing and keeps ONE markup
-     tree serving both layouts. Reordering visual position without reordering the DOM would
-     normally desync keyboard/AT order from what's on screen — here the two slots are
-     adjacent siblings with equivalent roles, so the swap is a presentational nicety rather
-     than a different navigation order. */
-  .botbar[data-bar-mode="spec"] .botmini-groups{order:3}
-  .botbar[data-bar-mode="spec"] .botslot-tool{order:4}
+  /* The design-handoff README's bar: [group][group][ALL][TOOLS]. DOM order puts the tool
+     slot before Groups, so `order` swaps the last two visually. Reordering visual position
+     without reordering the DOM would normally desync keyboard/AT order from what's on
+     screen — here the two slots are adjacent siblings with equivalent roles, so the swap is
+     a presentational nicety rather than a different navigation order. */
+  .botmini-groups{order:3}
+  .botslot-tool{order:4}
   /* Equal-width slots. min-width:0 is load-bearing — without it a long label sets the
      flex base and the last slot is pushed off the screen edge on a 320px phone. */
   .botslot,.botbar .botmini{

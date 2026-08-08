@@ -1,16 +1,20 @@
-/* The bottom tab bar's DOM glue. Five slots at phone width:
+/* The bottom tab bar's DOM glue. Four slots at phone width:
 
-     [ current group ] [ tool ] [ ☰ Groups ] [ ◎ Today ] [ ⚲ Map ]
+     [ current group ] [ next group ] [ ☰ Groups ] [ tool ]
+
+   The design-handoff README's layout, picked by the creator on 2026-08-08 after comparing
+   it on a phone against the five-slot bar that shipped in Stage D — that A/B (`?bar=`) and
+   its five-slot variant are gone; four fewer, larger targets won.
 
    Slot 1 is always the group you are reading, so the bar can never show a set that
-   excludes where you actually are. Slot 2 is the TOOL this device opens most, defaulting
-   to the budget split (creator, 2026-07-30: "the tools should be their own tab ... the
-   Trip Split calculator is by far the most useful to have handy"). It replaced a second
-   content group, which was the weaker of the two: the Groups sheet already reaches any
-   group in one tap, while a tool panel took three.
+   excludes where you actually are; slot 2 is the next-most-opened group on this device.
+   The tool slot shows the TOOL this device opens most, defaulting to the budget split
+   (creator, 2026-07-30: "the Trip Split calculator is by far the most useful to have
+   handy").
 
-   Groups opens the existing sheet — the FULL navigation, always one thumb away. Map only
-   renders when the guide has a map section; Trip Kit lives in the sheet's tool row too.
+   Groups opens the existing sheet — the FULL navigation, always one thumb away. The Today
+   jump, the map and Trip Kit live in that sheet's tool row, which is why the bar can
+   afford to carry none of them.
 
    Nothing here switches tabs itself — a slot clicks the real `.gtab`, so scroll memory,
    the scroll-spy, telemetry and the saved-tab key all run unchanged. State flows the other
@@ -24,38 +28,16 @@ import { tapHaptic } from "../../../scripts/util.js";
 var TOOL_KEYS = ["split", "vote", "remind", "kit", "learn"];
 var TOOL_LABEL = { split: "Split", vote: "Vote", remind: "Alerts", kit: "Kit", learn: "Learnings" };
 
-/** Which bar layout this device shows (Stage D, creator asked to compare both):
-    "app"  — the shipped five-slot bar: [group][tool][Groups][Today][Map] (2026-07-30 ruling).
-    "spec" — the design-handoff README's four: [group][group][ALL][TOOLS].
-    `?bar=spec` / `?bar=app` picks one and remembers it, so the creator can flip the running
-    site on a phone without a rebuild. Default stays the shipped bar: an A/B for a decision
-    that hasn't been made must not quietly change what everyone else sees. */
-function barMode(store) {
-  var q = null;
-  try { q = new URLSearchParams(location.search).get("bar"); } catch (e) { /* no URL API */ }
-  if (q === "spec" || q === "app") { store.write("tg-barmode", q); return q; }
-  return store.read("tg-barmode") === "spec" ? "spec" : "app";
-}
-
 export function initBotBar(ctx) {
   var bar = ctx.bar, tabs = ctx.tabs, order = ctx.order;
-  var mode = barMode(ctx.store);
-  bar.setAttribute("data-bar-mode", mode);
 
   var allGroupSlots = Array.prototype.slice.call(bar.querySelectorAll(".botslot:not(.botslot-tool)"));
   // A guide with only ONE group can't fill a second content slot — asking for two would
-  // seat a duplicate. Spec mode degrades to the slots the guide can actually fill.
-  var wantGroups = mode === "spec" ? Math.min(2, order.length) : 1;
+  // seat a duplicate. The bar degrades to the slots the guide can actually fill.
+  var wantGroups = Math.min(2, order.length);
   var groupSlots = allGroupSlots.slice(0, wantGroups);
-  // Park every slot this mode doesn't use, and keep renderGroups away from them.
+  // Park any slot this guide can't fill, and keep renderGroups away from it.
   allGroupSlots.slice(wantGroups).forEach(function (el) { el.hidden = true; });
-  if (mode === "spec") {
-    // The README's bar carries no Today/Map minis — ALL and TOOLS are the other two slots.
-    var today = bar.querySelector("#botToday");
-    var map = bar.querySelector("#botMap");
-    if (today) today.hidden = true;
-    if (map) map.hidden = true;
-  }
 
   var toolSlot = bar.querySelector(".botslot-tool");
   if (!groupSlots.length && !toolSlot) return;
