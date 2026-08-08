@@ -144,7 +144,9 @@ describe("collectWaypoints", () => {
 describe("collectDayEvents", () => {
   it("emits one event per day-card item with a parseable date", () => {
     const guide = { sections: [{ type: "days", items: [{ date: "Wed Jul 8", title: "Arrive" }] }] };
-    const events = collectDayEvents(asGuide(guide));
+    // Fixed clock: deriveTripYear rolls to next year once the first day is >31
+    // days past `now`, so a real clock makes this a time bomb (it fired 2026-08-08).
+    const events = collectDayEvents(asGuide(guide), new Date("2026-07-01T00:00:00Z"));
     expect(events).toHaveLength(1);
     expect(events[0].title).toBe("Arrive");
     expect(events[0].date.toISOString().slice(0, 10)).toBe("2026-07-08");
@@ -261,7 +263,8 @@ describe("buildGpx", () => {
 describe("buildIcs", () => {
   it("produces a VCALENDAR with one VEVENT per day event", () => {
     const guide = { title: "Trip", sections: [{ type: "days", items: [{ date: "Jul 8", title: "Arrive" }] }] };
-    const ics = buildIcs(asGuide(guide), "my-trip");
+    // Fixed clock — same 31-day-rollover time bomb as the collectDayEvents test.
+    const ics = buildIcs(asGuide(guide), "my-trip", new Date("2026-07-01T00:00:00Z"));
     expect(ics).toContain("BEGIN:VCALENDAR");
     expect(ics).toContain("BEGIN:VEVENT");
     expect(ics).toContain("UID:my-trip-20260708@waypoint");

@@ -102,9 +102,10 @@ function firstDayDate(guide: GuideLike): string | null {
 
 // One event per day card whose date string parses. Unparseable dates are
 // skipped (graceful — the file still emits). `desc` is the day's note (or, if
-// absent, its `fit`) stripped to plain text.
-export function collectDayEvents(guide: GuideLike): DayEvent[] {
-  const year = deriveTripYear(firstDayDate(guide));
+// absent, its `fit`) stripped to plain text. `now` is injectable so callers
+// (and tests) aren't at the mercy of deriveTripYear's 31-day rollover window.
+export function collectDayEvents(guide: GuideLike, now: Date = new Date()): DayEvent[] {
+  const year = deriveTripYear(firstDayDate(guide), now);
   const out: DayEvent[] = [];
   for (const s of flattenSections(guide?.sections)) {
     if (s.type !== "days" || !Array.isArray(s.items)) continue;
@@ -250,8 +251,8 @@ function fold(line: string): string {
   return segs.join("\r\n ");
 }
 
-export function buildIcs(guide: GuideLike, slug: string): string {
-  const dtstamp = stamp(new Date());
+export function buildIcs(guide: GuideLike, slug: string, now: Date = new Date()): string {
+  const dtstamp = stamp(now);
   const lines: string[] = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
@@ -260,7 +261,7 @@ export function buildIcs(guide: GuideLike, slug: string): string {
     "METHOD:PUBLISH",
     fold(`X-WR-CALNAME:${icsEscape(guide?.title || "Trip Guide")}`),
   ];
-  for (const ev of collectDayEvents(guide)) {
+  for (const ev of collectDayEvents(guide, now)) {
     const start = ymd(ev.date);
     const end = ymd(new Date(ev.date.getTime() + 864e5)); // all-day DTEND is exclusive
     lines.push("BEGIN:VEVENT");
