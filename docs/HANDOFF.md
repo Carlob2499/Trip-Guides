@@ -24,34 +24,40 @@
   **`docs/PLAN_ATLAS_MIGRATION.md`** (the current work order — its own Progress ledger is the
   source of truth for which stage is next; read that before re-deriving status from git log).
 
-## Snapshot (2026-08-08 — Atlas migration Stage C, items 1–6, 9 of 11 shipped)
+## Snapshot (2026-08-08 — Atlas migration Stage C, items 1–9 of 11 shipped)
 
 **Prior sessions shipped Stages A+B and Stage C items 1–6** (archive has full detail): feature
 silo, atlas-map port, server-rendered table view, world view + pin-card solver, cover + iris —
 all live-verified, `1e2c350`.
 
-**This session: Stage C item 9 — Chrome.** Grew the item-6 `.atlas-header` shell with an
-actions cluster: TOOLS (links into the quick-card guide's own tools tab, `#gtab-split` — no
-standalone Tools screen this stage, see scope note below), ＋ New guide (`/new/`), theme
-toggle (shared `initDarkToggle("btnDark")` from `src/scripts/theme.js`, same implementation
-every other page uses). Added OG/description meta the hub page never had (no `og:image` — no
-hub-level OG asset exists, omitted rather than fabricated). Relocated the old hub-foot's About
-link into a new `.atlas-foot` at the bottom of the table view. **Deliberately not done:**
-moving the WORLD|TABLE toggle bar into the header — the plan's item 9 line never asked for
-it, and moving it would touch the already-verified `--hdr-h`-minus-44px globe height math;
-that's item 8's (mobile) job to actually resolve. Ship loop green (build/lint/typecheck/1560
-tests, unchanged count — composes already-tested shared pieces). Live-verified in
-`astro preview`: correct TOOLS target (Sedona), theme toggle syncs `data-theme` +
-`theme-color`, footer renders only in table mode, header wraps with zero overflow at 375px
-(no screenshot — same frame-compositing tooling limit as item 6; confirmed via
-`getBoundingClientRect`/`scrollWidth`). Grepped compiled `dist/atlas/index.html` for all of
-the above.
+**This session: items 9 (Chrome), 7 (view transitions), 8 (mobile) — Stage C is now content-
+complete**, only the flip (10) and checkpoint (11) remain. `675fb67` → `84b1cde` →
+(item 8, uncommitted at summary time — commit next). Highlights:
+- **9 Chrome**: header actions cluster (TOOLS → quick-card's tools tab, ＋ New guide, theme
+  toggle via shared `initDarkToggle`), OG/description meta (no `og:image` — no hub-level OG
+  asset exists, honest omission), About link relocated to a `.atlas-foot` in the table view.
+- **7 View transitions (D22)**: imported `transitions.css` (supplies the calm 420ms named-group
+  morph timing — `navigation:auto` itself was already live site-wide via `base.css`). Pin-card
+  cover images now carry `view-transition-name:cover-<slug>`, matching the guide masthead.
+- **8 Mobile (<760px, D5)**: new `atlas-mobile.css` + `world-view.js` additions. Bare pings (no
+  floating pincard on mobile — `runSolve` gates on live `matchMedia`), a bottom ping sheet on
+  pin tap (mobile) vs direct navigate (desktop, unchanged), a 52px FAB ☰ menu carrying the
+  desktop rail's own actions (fly to a sheet, fit world, pause spin, tools, ＋ new guide), and
+  header collapse (TOOLS + "New guide" label hide under 759px). Corrected a phrasing bug from
+  an earlier HANDOFF draft along the way: Stage D's `mobile-nav` models are the GUIDE page's
+  mobile chrome, unrelated to this item.
+
+All three: ship loop green (build/lint/typecheck/1560 tests, unchanged count throughout — no
+new pure logic, only composition/DOM-wiring of already-tested pieces), live-verified in
+`astro preview` (desktop + 375px, dark theme), dist grepped for every new artifact. No
+screenshot capability this session (frame-compositing tooling limit) — verified via
+`getBoundingClientRect`/`getComputedStyle`/synthetic-event dispatch instead throughout.
 
 **Scope note flagged, not resolved:** README describes a standalone cross-trip "Tools" screen
-with its own trip picker (§5), but it is NOT one of Stage C's 11 numbered plan items — table
-view's TRIP TOOLS row and the header's new TOOLS button both link into the quick-card guide's
-own existing tools tab instead (`/guides/<slug>/#gtab-split`). Raise this explicitly at the
-item-11 checkpoint.
+with its own trip picker (§5), but it is NOT one of Stage C's 11 numbered plan items — every
+TOOLS entry point built this stage (table row, header button, mobile FAB menu) links into the
+quick-card guide's own existing tools tab instead (`/guides/<slug>/#gtab-split`). Raise this
+explicitly at the item-11 checkpoint.
 
 ## Open items
 

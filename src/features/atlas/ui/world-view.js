@@ -12,6 +12,10 @@ const CARD_FULL_H = 140;
 const CARD_COMPACT_H = 60;
 const DRIFT_THRESHOLD = 90;
 
+// Live-checked, not cached (D5): a phone rotated to landscape, or a resized preview window,
+// must not get stuck on whichever branch was true at page load.
+const isMobile = () => matchMedia("(max-width: 759px)").matches;
+
 function escapeHtml(s) {
   return String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
@@ -81,12 +85,74 @@ export function initAtlasWorld(root = document) {
     });
   }
 
-  // ── atlas-select: navigate, or toast for a no-guide country/ocean click ─────────────
+  // ── Mobile FAB map menu (README "Mobile", D5) — the same actions the desktop rail
+  // exposes (fly to a sheet, fit world, pause spin, tools, ＋ new guide), relocated into a
+  // ☰ button since there's no room for a side rail on a phone. Built unconditionally (cheap,
+  // static markup); CSS keeps it display:none above 759px so it's inert on desktop. ─────────
+  const fab = root.querySelector("[data-atlas-menufab]");
+  const menuScrim = root.querySelector("[data-atlas-menuscrim]");
+  const menuSheet = root.querySelector("[data-atlas-menusheet]");
+  const flySlot = root.querySelector("[data-atlas-menusheet-fly]");
+  if (flySlot) {
+    flySlot.innerHTML = guides
+      .map((g) => `<button type="button" data-fly="${g.slug}">${g.ordinal != null ? String(g.ordinal).padStart(2, "0") : "—"} · ${escapeHtml(g.name)}</button>`)
+      .join("");
+    flySlot.querySelectorAll("[data-fly]").forEach((btn) => {
+      btn.addEventListener("click", () => { map.flyTo(btn.dataset.fly, reduced ? 0 : 1100); closeMenu(); });
+    });
+  }
+  function setMenu(open) {
+    if (!fab || !menuScrim || !menuSheet) return;
+    fab.setAttribute("aria-expanded", String(open));
+    fab.textContent = open ? "✕" : "☰";
+    menuScrim.hidden = !open;
+    menuSheet.hidden = !open;
+  }
+  const closeMenu = () => setMenu(false);
+  fab?.addEventListener("click", () => setMenu(menuSheet?.hidden !== false));
+  menuScrim?.addEventListener("click", closeMenu);
+  root.querySelector("[data-atlas-menu-fit]")?.addEventListener("click", () => { map.resetView?.(); closeMenu(); });
+  const menuSpinBtn = root.querySelector("[data-atlas-menu-spin]");
+  menuSpinBtn?.addEventListener("click", () => {
+    const spinning = map.toggleSpin?.();
+    menuSpinBtn.textContent = spinning ? "Pause" : "Spin on";
+  });
+
+  // ── Ping sheet (README "Mobile", D5) — mobile's replacement for the desktop pincard: a
+  // bottom sheet with the trip, a ZOOM control, and "Open the sheet". ─────────────────────
+  const pingSheet = root.querySelector("[data-atlas-pingsheet]");
+  const pingKicker = root.querySelector("[data-atlas-pingsheet-kicker]");
+  const pingTitle = root.querySelector("[data-atlas-pingsheet-title]");
+  const pingMeta = root.querySelector("[data-atlas-pingsheet-meta]");
+  const pingOpen = root.querySelector("[data-atlas-pingsheet-open]");
+  const STATUS_LABEL_PING = { past: "SURVEYED", ongoing: "ON THIS TRIP NOW", upcoming: "FILED", undated: "" };
+  function showPingSheet(g) {
+    if (!pingSheet) { window.location.href = g.href; return; }
+    if (pingKicker) pingKicker.textContent = `${g.cc || ""} · ${g.ordinal != null ? String(g.ordinal).padStart(2, "0") : "—"}`;
+    if (pingTitle) pingTitle.textContent = g.name;
+    if (pingMeta) pingMeta.textContent = [STATUS_LABEL_PING[g.status], g.tz ? localClockLabel(g.tz, new Date()) : null].filter(Boolean).join(" · ");
+    if (pingOpen) pingOpen.href = g.href;
+    pingSheet.dataset.slug = g.slug;
+    pingSheet.hidden = false;
+  }
+  root.querySelector("[data-atlas-pingsheet-close]")?.addEventListener("click", () => { if (pingSheet) pingSheet.hidden = true; });
+  root.querySelector("[data-atlas-pingsheet-zoom]")?.addEventListener("click", () => {
+    const slug = pingSheet?.dataset.slug;
+    if (slug) map.flyTo(slug, reduced ? 0 : 1100);
+  });
+
+  // ── atlas-select: navigate (desktop) or raise the ping sheet (mobile) — README "Clicking a
+  // pin: desktop opens that guide directly; mobile raises a bottom sheet first" — or toast for
+  // a no-guide country/ocean click. ────────────────────────────────────────────────────────
   let toastTimer = null;
   map.addEventListener("atlas-select", (ev) => {
     const { slug } = ev.detail || {};
     const g = guides.find((x) => x.slug === slug);
-    if (g) { window.location.href = g.href; return; }
+    if (g) {
+      if (isMobile()) { showPingSheet(g); return; }
+      window.location.href = g.href;
+      return;
+    }
     if (!toast) return;
     toast.innerHTML = `No guide here yet. <a href="${base}/new/">Start one →</a>`;
     toast.toggleAttribute("data-open", true);
@@ -139,6 +205,16 @@ export function initAtlasWorld(root = document) {
   }
 
   function runSolve(pos) {
+    // No floating cards on mobile (README "Mobile": "no floating cards, no side rails" — no
+    // spatial budget for them). Bare pings only; a tap opens the bottom sheet instead.
+    if (isMobile()) {
+      for (const [, el] of cardEls) el.remove();
+      cardEls.clear();
+      lastVisible = guides.filter((g) => pos[g.slug]?.v).map((g) => g.slug).sort().join(",");
+      lastSolveAt = { x: pos.center[0], y: pos.center[1] };
+      solveQueued = false;
+      return;
+    }
     const visibleGuides = guides.filter((g) => pos[g.slug]?.v);
     const cards = visibleGuides.map((g) => ({
       code: g.slug, x: pos[g.slug].x, y: pos[g.slug].y, w: CARD_W, fullH: CARD_FULL_H, compactH: CARD_COMPACT_H,

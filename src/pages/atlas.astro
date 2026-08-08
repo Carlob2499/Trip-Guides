@@ -19,6 +19,7 @@ import "../styles/base.css";
 import "../styles/atlas.css";
 import "../styles/atlas-world.css";
 import "../styles/atlas-cover.css";
+import "../styles/atlas-mobile.css";
 import "../styles/transitions.css";
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
@@ -143,9 +144,9 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
       </a>
       <div class="atlas-header-actions">
         {quick && (
-          <a class="atlas-header-btn" href={`${base}/guides/${quick.g.id}/#gtab-split`}>Tools</a>
+          <a class="atlas-header-btn atlas-header-btn--tools" href={`${base}/guides/${quick.g.id}/#gtab-split`}>Tools</a>
         )}
-        <a class="atlas-header-btn atlas-header-btn--cta" href={`${base}/new/`}>＋ New guide</a>
+        <a class="atlas-header-btn atlas-header-btn--cta" href={`${base}/new/`}>＋<span class="atlas-header-btn-label"> New guide</span></a>
         <button type="button" id="btnDark" class="atlas-header-btn atlas-header-icon" aria-label="Switch to dark mode" title="Switch to dark mode">
           <Icon name="moon" size={16} />
         </button>
@@ -219,6 +220,37 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
         </div>
 
         <div class="atlas-toast" data-atlas-toast></div>
+
+        {/* Mobile-only (<760px, D5): the desktop rails/pincards/motto have no spatial budget
+            on a phone (README "Mobile"), so a bare-ping globe gets its own FAB menu (fly to
+            each sheet, fit world, pause spin, tools, ＋ new guide — the same actions the
+            desktop rail already exposes, just relocated) and a bottom sheet on pin tap instead
+            of the desktop pincard. Hidden by CSS above 759px; inert without JS either way
+            (world.js gates its own mobile branch, so a no-JS phone visitor still gets the
+            table view, D4's door). */}
+        <button type="button" class="atlas-menufab" data-atlas-menufab aria-label="Map menu" aria-expanded="false">☰</button>
+        <div class="atlas-menuscrim" data-atlas-menuscrim hidden></div>
+        <div class="atlas-menusheet" data-atlas-menusheet hidden>
+          <span class="atlas-menusheet-kicker">Fly to a sheet</span>
+          <div data-atlas-menusheet-fly></div>
+          <span class="atlas-menusheet-kicker">The map</span>
+          <button type="button" data-atlas-menu-fit>Fit world</button>
+          <button type="button" data-atlas-menu-spin>Pause</button>
+          {quick && <a href={`${base}/guides/${quick.g.id}/#gtab-split`}>Tools</a>}
+          <a class="atlas-menusheet-new" href={`${base}/new/`}>＋ New guide</a>
+        </div>
+
+        <div class="atlas-pingsheet" data-atlas-pingsheet hidden>
+          <span class="atlas-pingsheet-grip" aria-hidden="true"></span>
+          <span class="atlas-pingsheet-kicker" data-atlas-pingsheet-kicker></span>
+          <span class="atlas-pingsheet-title" data-atlas-pingsheet-title></span>
+          <span class="atlas-pingsheet-meta" data-atlas-pingsheet-meta></span>
+          <div class="atlas-pingsheet-actions">
+            <a class="atlas-pingsheet-open" data-atlas-pingsheet-open href="#">Open the sheet →</a>
+            <button type="button" data-atlas-pingsheet-zoom>Zoom</button>
+            <button type="button" data-atlas-pingsheet-close aria-label="Dismiss">✕</button>
+          </div>
+        </div>
       </div>
     </div>
 

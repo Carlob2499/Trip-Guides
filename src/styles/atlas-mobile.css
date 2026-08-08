@@ -1,0 +1,94 @@
+/* Atlas hub — mobile surfaces (<760px, D5, README "Mobile"). The globe has no spatial budget
+   for the desktop rails/pincards/motto on a phone screen, so mobile gets bare pings, a FAB
+   (☰) map menu carrying the same actions the desktop rail exposes (fly to a sheet, fit world,
+   pause spin, tools, ＋ new guide), and a bottom sheet on pin tap instead of the desktop
+   floating pincard. `world-view.js` gates the mobile branch itself (matchMedia, live-checked,
+   not cached) — this file only ever hides/shows; it never decides behaviour. */
+
+.atlas-menufab { display: none; }
+.atlas-menuscrim, .atlas-menusheet, .atlas-pingsheet { display: none; }
+/* `hidden` carries `!important` from base.css's reset — world-view.js toggles it as a real
+   DOM property (`el.hidden = …`), never fights it with a competing class. */
+.atlas-menuscrim:not([hidden]) { display: block; }
+.atlas-menusheet:not([hidden]) { display: grid; }
+.atlas-pingsheet:not([hidden]) { display: grid; }
+
+@media (max-width: 759px) {
+  /* Header collapses to brand + ＋ + theme (README "Mobile") — TOOLS moves into the FAB menu,
+     the same relocation the desktop record rail's own actions get. */
+  .atlas-header-btn--tools { display: none; }
+  .atlas-header-btn-label { display: none; }
+
+  /* No spatial budget for the desktop rails, floating pincards, or motto. */
+  .atlas-ov-index, .atlas-ov-key, .atlas-ov-record, .atlas-ov-controls, .atlas-ov-motto,
+  .atlas-pincard {
+    display: none !important;
+  }
+
+  .atlas-menufab { display: flex; }
+}
+
+.atlas-menufab {
+  position: absolute; right: calc(12px + var(--safe-right)); bottom: calc(12px + var(--safe-bottom));
+  z-index: 5; width: 52px; height: 52px; border-radius: 50%;
+  align-items: center; justify-content: center;
+  background: var(--cta); color: var(--cta-ink); border: 0; cursor: pointer;
+  font-family: var(--font-data); font-weight: 700; font-size: var(--text-body);
+  box-shadow: 0 8px 24px rgba(16, 20, 24, .28);
+}
+
+.atlas-menuscrim {
+  position: absolute; inset: 0; z-index: 4;
+  background: color-mix(in srgb, var(--ink) 32%, transparent);
+}
+
+.atlas-menusheet {
+  position: absolute; right: calc(12px + var(--safe-right)); bottom: calc(74px + var(--safe-bottom));
+  z-index: 5; width: min(240px, 72vw);
+  background: var(--card); border: 1px solid var(--rule2);
+  box-shadow: 0 14px 40px rgba(16, 20, 24, .3);
+}
+.atlas-menusheet-kicker {
+  font-family: var(--font-data); font-weight: 640; font-size: var(--text-nano); letter-spacing: .18em;
+  color: var(--muted); padding: 11px 14px 7px;
+}
+.atlas-menusheet-kicker:not(:first-child) { border-top: 1px solid var(--rule2); padding-top: 13px; }
+.atlas-menusheet button, .atlas-menusheet a {
+  display: block; text-align: left; padding: 11px 14px; min-height: 44px;
+  background: none; border: 0; border-top: 1px solid var(--rule);
+  font-family: var(--font-data); font-weight: 640; font-size: var(--text-micro); letter-spacing: .06em;
+  color: var(--ink); cursor: pointer; text-decoration: none;
+}
+.atlas-menusheet-new { color: var(--aink); padding-bottom: 13px; }
+
+.atlas-pingsheet {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 6;
+  background: var(--card); border-top: 2px solid var(--accent);
+  padding: 14px max(16px, var(--safe-right)) calc(14px + var(--safe-bottom)) max(16px, var(--safe-left));
+  gap: 9px;
+  box-shadow: 0 -12px 34px rgba(16, 20, 24, .24);
+}
+.atlas-pingsheet-grip { justify-self: center; width: 38px; height: 4px; border-radius: 99px; background: var(--rule2); }
+.atlas-pingsheet-kicker {
+  font-family: var(--font-data); font-weight: 640; font-size: var(--text-panel-kicker); letter-spacing: .14em;
+  color: var(--aink);
+}
+.atlas-pingsheet-title { font-family: var(--font-data); font-weight: 600; font-size: var(--text-h3); line-height: 1.1; }
+.atlas-pingsheet-meta {
+  font-family: var(--font-data); font-weight: 640; font-size: var(--text-control-sm); letter-spacing: .06em;
+  color: var(--muted); line-height: 1.4;
+}
+.atlas-pingsheet-actions { display: flex; gap: 8px; margin-top: 2px; }
+.atlas-pingsheet-open {
+  flex: 1; min-height: 46px; display: flex; align-items: center; justify-content: center;
+  background: var(--cta); color: var(--cta-ink); border: 0; border-radius: 999px;
+  font-family: var(--font-data); font-weight: 600; font-size: var(--text-small); letter-spacing: .03em;
+  text-decoration: none; cursor: pointer;
+}
+.atlas-pingsheet-actions button {
+  flex: none; min-height: 46px; padding: 0 15px;
+  background: none; border: 1px solid var(--rule2); color: var(--muted);
+  font-family: var(--font-data); font-weight: 640; font-size: var(--text-control-sm); letter-spacing: .1em;
+  cursor: pointer;
+}
+.atlas-pingsheet-actions button[data-atlas-pingsheet-close] { width: 46px; padding: 0; font-size: var(--text-small); }

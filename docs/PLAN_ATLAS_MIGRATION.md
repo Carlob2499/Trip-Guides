@@ -243,10 +243,11 @@ tz ×2). Nothing visible changed — verify hub/guides render identically in pre
 
 ## Stage C — The hub (Phase 3)
 
-> **RESUME (2026-08-08 session, mid-stage):** Items 1–7, 9 done and verified (ship loop
+> **RESUME (2026-08-08 session, mid-stage):** Items 1–9 done and verified (ship loop
 > green: build/lint/typecheck/1560 tests; content-preservation gate clean — zero
 > `src/content/guides/` diffs). Built aside at `src/pages/atlas.astro` (dev-only, not linked
-> from live nav) — `index.astro` untouched, D1 intact.
+> from live nav) — `index.astro` untouched, D1 intact. Only 10 (the flip) and 11 (the
+> checkpoint) remain.
 > - **1 Feature silo**: `src/features/atlas/model/{solver,relevance,local-time}.ts` +
 >   tests added alongside Stage B's model files.
 > - **2 atlas-map port (D19/D21)**: `src/features/atlas/ui/atlas-map.js`. Adaptations from
@@ -368,9 +369,39 @@ tz ×2). Nothing visible changed — verify hub/guides render identically in pre
 >   the right inline name after the solver places it, and both the 420ms group-timing rule and
 >   the reduced-motion override are present and matched in the live page's stylesheets. Ship
 >   loop green (1560 tests, unchanged — no new logic, only naming + one CSS import).
-> - **Still to build**: 8 (mobile <760px — wire to existing `mobile-nav` models), 10 (the flip
->   commit itself — NOT pushed until item 11's GO), 11 (screenshot checkpoint + Sedona/Japan
->   origin question, D14/Clarifying #1).
+> - **8 Mobile (<760px, D5)**: corrected a phrasing bug in this very RESUME block — Stage D's
+>   `mobile-nav` model files (rank/gesture/scrub/yield, botbar/swipe-tabs/day-scrub) are the
+>   GUIDE PAGE's mobile chrome (Stage D line 441: "the hub's own mobile surfaces shipped in
+>   Stage C — this stage is the guide pages"); item 8 has nothing to do with them. Built new:
+>   `src/styles/atlas-mobile.css` + additions to `src/features/atlas/ui/world-view.js` and
+>   `src/pages/atlas.astro`. **Bare pings**: `runSolve` now bails on `matchMedia("(max-width:
+>   759px)")` (live-checked, not cached — a rotated phone or resized window must not stick to
+>   the wrong branch) before ever calling `ensureCard`, so no floating pincard exists on mobile
+>   at all (README: "no floating cards, no side rails" — no spatial budget for them); the
+>   desktop rails/pincards/motto get `display:none!important` under the same breakpoint in CSS.
+>   **Ping sheet**: `atlas-select`'s handler now branches on the same mobile check — mobile
+>   raises a bottom sheet (kicker/title/status+local-clock meta, Open the sheet / Zoom /
+>   dismiss) instead of navigating immediately, matching README's "desktop opens the guide
+>   directly; mobile raises a bottom sheet first." **FAB (☰) map menu**: bottom-right 52px
+>   button opens a sheet with the same actions the desktop rail already exposes — fly to each
+>   sheet (built from the same `guides` feed the desktop index rail uses, content is king),
+>   fit world, pause/resume spin, Tools (guarded by `quick &&`, same non-decision as elsewhere),
+>   ＋ New guide — all rows real 44px+ targets, safe-area padded via the existing
+>   `--safe-*` tokens. **Header collapse**: TOOLS button and the "New guide" text label hide
+>   under 759px (a bare ＋ remains, matching README's "brand + ＋ + theme"); the WORLD|TABLE
+>   toggle needs no change, it was already a full-width bar at every size. Uses native `hidden`
+>   for JS-toggled elements (menu scrim/sheet, ping sheet) — safe here because base.css's
+>   `[hidden]{display:none!important}` reset only fights a COMPETING display rule, and nothing
+>   here tries to override `hidden` via CSS; toggling is a plain `el.hidden = …` DOM write.
+>   Ship loop green (1560 tests, unchanged — no new pure logic to unit-test, only DOM wiring).
+>   Live-verified in `astro preview` at 375px: FAB opens/closes the menu (glyph flips ☰⇄✕,
+>   correct 8 rows), Fit World closes the menu after firing, a synthetic `atlas-select` dispatch
+>   opens the ping sheet with correct kicker/title/meta/href and closes on dismiss, zero
+>   horizontal overflow. Re-checked desktop afterward: 3 pincards still render, FAB/collapsed
+>   header stay hidden, rails still show — the mobile gate didn't regress the desktop path.
+>   Grepped compiled `dist/` for the FAB/menu/pingsheet markup and the mobile CSS breakpoint.
+> - **Still to build**: 10 (the flip commit itself — NOT pushed until item 11's GO), 11
+>   (screenshot checkpoint + Sedona/Japan origin question, D14/Clarifying #1).
 
 Build aside (a dev-only route, e.g. `src/pages/atlas.astro`, or the new components mounted
 nowhere) and flip `index.astro` in one final commit. Read the handoff README §1–3 fully
