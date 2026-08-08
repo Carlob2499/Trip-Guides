@@ -39,9 +39,16 @@ import { staleness, SHELF_LIFE_DAYS } from "../lib/staleness";
     var dd = document.createElement("dd");
     dd.className = "prov-staleness" + (warn ? " prov-staleness--warn" : "");
     dd.textContent = text;
-    // Right after "Checked <date>" (the first dt/dd pair), before Source — the spec's order.
-    var firstDd = pop.querySelector("dd");
-    if (firstDd) { firstDd.insertAdjacentElement("afterend", dd); firstDd.insertAdjacentElement("afterend", dt); }
+    // SPEC-COMPONENTS §2's popover order, "no exceptions": the claim → ✓ CHECKED <date> →
+    // the staleness reading → the source link. Found by the "Checked" label, NOT by taking
+    // the first dd — the popover now leads with the kicker/claim pair (ProvenancePopover.astro,
+    // Stage A.6), so "first dd" is the claim and inserting there put staleness one row early.
+    var checkedDd = null;
+    var dts = pop.querySelectorAll("dt");
+    for (var i = 0; i < dts.length; i++) {
+      if (dts[i].textContent === "Checked") { checkedDd = dts[i].nextElementSibling; break; }
+    }
+    if (checkedDd) { checkedDd.insertAdjacentElement("afterend", dd); checkedDd.insertAdjacentElement("afterend", dt); }
     else { pop.prepend(dd); pop.prepend(dt); }
   }
 
@@ -50,7 +57,13 @@ import { staleness, SHELF_LIFE_DAYS } from "../lib/staleness";
     renderStaleness(pop);
     const rect = anchor.getBoundingClientRect();
     pop.style.top = `${rect.bottom + window.scrollY + 6}px`;
-    pop.style.left = `${Math.max(8, rect.left + window.scrollX - 80)}px`;
+    // SPEC-COMPONENTS §2's exact viewport clamp: left = max(12px, min(anchorX - 160,
+    // innerWidth - 340)). The right-edge term is what the old `max(8, x - 80)` lacked —
+    // without it a popover opened near the right edge overflowed the viewport on mobile.
+    // (340 = the popover's 300px max-width + margin, per the spec's own arithmetic.)
+    // Clamped in VIEWPORT coordinates (rect.left vs innerWidth — same space), then shifted
+    // by scrollX into the page coordinates position:absolute actually uses.
+    pop.style.left = `${Math.max(12, Math.min(rect.left - 160, window.innerWidth - 340)) + window.scrollX}px`;
     pop.setAttribute("data-open", "");
     open = pop;
   }
@@ -77,15 +90,15 @@ import { staleness, SHELF_LIFE_DAYS } from "../lib/staleness";
     }
     pair("Where this came from", "prov-kicker", chip.getAttribute("data-claim") || "", "prov-claim");
     pair("Checked", null, chip.getAttribute("data-verified-on") || "");
+    // Always present: a chip only exists for a fact-registry row, and factRecord REQUIRES
+    // source_url (content.config.ts) — so unlike ProvenancePopover.astro's server-rendered
+    // popover (whose sight/venue items CAN lack a source), there is no NO PUBLIC SOURCE
+    // branch here; one existed and was dead code, removed in the Stage A/B review pass.
     const src = chip.getAttribute("data-source-url");
-    if (src) {
-      const a = document.createElement("a");
-      a.href = src; a.target = "_blank"; a.rel = "noopener";
-      a.textContent = (() => { try { return new URL(src).hostname + " ↗"; } catch (e) { return src; } })();
-      pair("Source", null, a);
-    } else {
-      pair("Source", null, "NO PUBLIC SOURCE", "prov-nosource");
-    }
+    const a = document.createElement("a");
+    a.href = src; a.target = "_blank"; a.rel = "noopener";
+    a.textContent = (() => { try { return new URL(src).hostname + " ↗"; } catch (e) { return src; } })();
+    pair("Source", null, a);
     const tier = chip.getAttribute("data-tier");
     if (tier) pair("Evidence", null, tier);
     chip.insertAdjacentElement("afterend", dl);

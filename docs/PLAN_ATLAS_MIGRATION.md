@@ -76,7 +76,17 @@ history from git log.
 5. **Recorded deviations stand (creator-confirmed).** Do NOT "fix" these back to the
    prototype: sights image plates use `aspect-ratio: 3/2` (not fixed 170px); the panel
    grid's `minmax(min(100%,19rem))` (not 420px); the provenance dot's glyph colour
-   (WCAG 1.4.11). They are deliberate improvements.
+   (WCAG 1.4.11). They are deliberate improvements. **Stage A/B review pass added three
+   (creator-confirmed 2026-08-08):** (a) the ⚠ staleness pill keeps its DIRECT link to the
+   source rather than opening the provenance popover (Stage A item 7's wording) — one tap
+   lands the reader on the thing they need to re-check, and the pill's own text already
+   says everything the popover would; (b) the popover's WHERE THIS CAME FROM kicker reads
+   `--aink`, not raw oxide — raw oxide measures 2.20:1 on `--card` in dark mode (base.css's
+   own measurement), a predictable axe failure, and `--aink` is the repo's established
+   ≥4.5:1-by-construction answer for exactly this pairing (D8's hue family is preserved);
+   (c) flag chips DRAW at 32px — 44px-tall boxes inline in prose blow up line spacing —
+   and meet the binding 44px tap minimum through an invisible ::before hit zone, the same
+   effective-target-through-padding technique the spec prescribes for the provenance dot.
 
 ---
 

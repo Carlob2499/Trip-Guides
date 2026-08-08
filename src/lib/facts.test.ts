@@ -53,8 +53,9 @@ describe("renderFactValue — ≈ is derived, never authored", () => {
     expect(renderFactValue({ value: "€12" })).toBe("€12");
   });
 
-  // D10/Stage A.7: an approx value renders as the flag-chip <a>, allowlisted (prose-html.ts),
-  // carrying every field the popover needs — never a bare "≈…" string once state is approx.
+  // D10/Stage A.7 (creator-confirmed form, Stage A/B review): an approx value renders as the
+  // PLAIN value followed by a small "≈ approx." pill — the design-handoff's literal flag-chip
+  // label — never a bare "≈…" string and never the value swallowed into the pill.
   describe("an approx fact", () => {
     const fact = {
       claim: "Airport bus duration", value: "60–70 min", state: "approx",
@@ -63,16 +64,16 @@ describe("renderFactValue — ≈ is derived, never authored", () => {
     };
     const html = renderFactValue(fact);
 
-    it("is a real <a>, allowlisted by prose-html.ts", () => {
-      expect(html).toMatch(/^<a class="flag-chip flag-chip--approx" /);
-      expect(html).toContain(">≈60–70 min</a>");
+    it("renders the value plain, then the ≈ approx. pill as a real allowlisted <a>", () => {
+      expect(html).toMatch(/^60–70 min <a class="flag-chip flag-chip--approx" /);
+      expect(html).toContain(">≈ approx.</a>");
     });
     it("links straight at the source — works with zero JS", () => {
       expect(html).toContain('href="https://example.com/bus"');
       expect(html).toContain('target="_blank"');
       expect(html).toContain('rel="noopener"');
     });
-    it("carries every popover field as data-*, for flag-chip.js to build the same popover", () => {
+    it("carries every popover field as data-*, for provenance-dot.js to build the same popover", () => {
       expect(html).toContain('data-claim="Airport bus duration"');
       expect(html).toContain('data-verified-on="2026-07-01"');
       expect(html).toContain('data-shelf-life="transit"');
@@ -85,6 +86,9 @@ describe("renderFactValue — ≈ is derived, never authored", () => {
     it("HTML-escapes a claim carrying quotes or angle brackets", () => {
       const out = renderFactValue({ ...fact, claim: `A "quoted" <claim>` });
       expect(out).toContain('data-claim="A &quot;quoted&quot; &lt;claim&gt;"');
+    });
+    it("strips to honest plain text for the .ics/.gpx exports (tags dropped, inner text kept)", () => {
+      expect(html.replace(/<[^>]*>/g, "")).toBe("60–70 min ≈ approx.");
     });
   });
 });
@@ -130,10 +134,9 @@ describe("interpolateFacts", () => {
     expect(missing).toEqual([]);
   });
 
-  it("applies the ≈ marker (as the flag-chip <a>) from the record's state", () => {
+  it("applies the ≈ marker (value + the ≈ approx. pill) from the record's state", () => {
     const { data } = interpolateFacts({ b: "Takes {{fact:bus-ride-time}}." }, FACTS);
-    expect(data.b).toContain(">≈60–70 min</a>");
-    expect(data.b).toMatch(/^Takes <a class="flag-chip flag-chip--approx" .*>≈60–70 min<\/a>\.$/);
+    expect(data.b).toMatch(/^Takes 60–70 min <a class="flag-chip flag-chip--approx" .*>≈ approx\.<\/a>\.$/);
   });
 
   it("reports an unknown id instead of failing silently", () => {

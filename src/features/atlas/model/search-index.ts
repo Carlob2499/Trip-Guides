@@ -7,7 +7,7 @@
    `title` field, so this reads `title` instead; verified against all four real guides before
    relying on it, not assumed.
 
-   I/O (reading every guide, writing the built JSON) lives in scripts/build-search-index.mjs;
+   I/O (reading every guide, writing the built JSON) lives in scripts/build-search-index.ts;
    this file only shapes one guide's already-flattened sections into records. */
 
 const SNIPPET_LEN = 150;

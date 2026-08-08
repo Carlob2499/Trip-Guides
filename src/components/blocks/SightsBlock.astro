@@ -36,7 +36,7 @@ const creditOf = (img: any) =>
     // detail/transit-links a normal card would carry. The name still renders (the traveler
     // needs to know WHAT wasn't confirmed), but no provenance dot — there is nothing
     // confirmed yet for it to point at.
-    <article class="card sight sight--gap" id={it.map ? `sight-${pinSlug(it.name)}` : undefined}>
+    <article class="card sight" id={it.map ? `sight-${pinSlug(it.name)}` : undefined}>
       <div class="sight-head">
         {it.kicker && <span class="tag">{it.kicker}</span>}
         <h4 class="sight-name">{it.name}</h4>

@@ -5,7 +5,7 @@
    label (as already extracted via flattenSections + the `days` sections, the same way
    src/pages/index.astro derives its trip-date badge), never a hand-filled ordinal. */
 
-import { tripWindow } from "./trip-dates";
+import { tripWindow, tripWindowInYear } from "./trip-dates";
 
 export interface SheetOrderInput {
   slug: string;
@@ -13,6 +13,20 @@ export interface SheetOrderInput {
       with no calendar-dated days (e.g. "Day 1" style) — same shape tripWindow() takes. */
   firstDayDate: string | null | undefined;
   lastDayDate: string | null | undefined;
+  /** The guide's own kicker ("Seoul · Daejeon — Jul 8–15, 2026"). When it carries a year,
+      that year PINS the trip dates (tripWindowInYear) instead of the now-relative inference —
+      which is what keeps ordinals stable across build dates: without it, trip-dates' 180-day
+      rollover resolves a long-finished trip into NEXT year, and the first build more than
+      ~6 months after a trip ended would silently renumber every guide's plate. */
+  kicker?: string | null;
+}
+
+/** The first 4-digit year in a kicker, or null. Content is king: the kicker is guide
+    content that states the trip's year — the one place the year exists at all, since day
+    labels ("Wed Jul 8") deliberately carry none. */
+export function yearFromKicker(kicker: string | null | undefined): number | null {
+  const m = String(kicker ?? "").match(/\b(20\d{2})\b/);
+  return m ? parseInt(m[1], 10) : null;
 }
 
 export interface SheetOrderEntry {
@@ -30,10 +44,13 @@ export interface SheetOrderEntry {
  * date logic that reaches for the real clock can't be tested.
  */
 export function sheetOrder(guides: readonly SheetOrderInput[], now: Date): SheetOrderEntry[] {
-  const withStart = guides.map((g) => ({
-    slug: g.slug,
-    start: tripWindow(g.firstDayDate, g.lastDayDate, now).start,
-  }));
+  const withStart = guides.map((g) => {
+    const year = yearFromKicker(g.kicker);
+    const win = year != null
+      ? tripWindowInYear(g.firstDayDate, g.lastDayDate, year, now)
+      : tripWindow(g.firstDayDate, g.lastDayDate, now);
+    return { slug: g.slug, start: win.start };
+  });
   const dated = withStart
     .filter((g) => g.start !== null)
     .sort((a, b) => a.start!.getTime() - b.start!.getTime());

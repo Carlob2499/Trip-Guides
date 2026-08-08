@@ -1,9 +1,9 @@
 // Cross-guide search index (D20, PLAN_ATLAS_MIGRATION.md Stage B.6) — generated at build time
 // into dist/data/search-index.json, the static asset the Atlas hub's search box lazily fetches
 // on first focus/keystroke (Stage C). A .ts script (run via `tsx`, matching pretrip-check.ts's
-// precedent) rather than .mjs specifically so it can import
-// src/features/atlas/model/search-index.ts directly — the SAME record shape/builder a test
-// exercises, instead of a second hand-kept copy of that logic.
+// precedent) rather than .mjs specifically so it can import the atlas silo's builder — through
+// its index.ts public surface, the sealed-silo contract's one door — instead of keeping a
+// second hand-kept copy of that logic.
 //
 // Writes into dist/, not public/: fully derived from guide content, so — like
 // scripts/gen-sw-precache.mjs's CORE list — there is nothing to commit; every build produces
@@ -16,12 +16,12 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { readGuides, flatten, isMain } from "./audit/lib.mjs";
-import { buildGuideSearchIndex } from "../src/features/atlas/model/search-index";
+import { buildGuideSearchIndex } from "../src/features/atlas/index";
 
 const DIST_DATA = path.resolve("dist", "data");
 const OUT_FILE = path.join(DIST_DATA, "search-index.json");
 
-export async function buildIndex(guides: Awaited<ReturnType<typeof readGuides>>) {
+async function buildIndex(guides: Awaited<ReturnType<typeof readGuides>>) {
   const records = guides.flatMap(({ guide, slug }) =>
     buildGuideSearchIndex(slug, guide.title ?? slug, flatten(guide.sections)),
   );

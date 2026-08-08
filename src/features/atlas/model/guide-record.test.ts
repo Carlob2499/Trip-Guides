@@ -149,6 +149,15 @@ describe("deriveGuideRecord — the whole record, composed", () => {
     expect(rec.end).toBeInstanceOf(Date);
   });
 
+  it("status is pinned by the kicker's year — a finished trip never becomes 'upcoming' again on a later build", () => {
+    // Without the pinned year, trip-dates' 180-day rollover would resolve this July 2026
+    // trip into 2027 on any build after ~Jan 2027, flipping status past → upcoming and
+    // shifting start/end a full year (the same mechanism as the D6 plate-renumbering bug).
+    const rec = deriveGuideRecord(koreaLike, new Date(2027, 1, 15));
+    expect(rec.status).toBe("past");
+    expect(rec.start?.getFullYear()).toBe(2026);
+  });
+
   it("a scaffold guide with none of the optional content resolves every field to an honest null, never a crash", () => {
     const rec = deriveGuideRecord({ slug: "draft", title: "Draft Guide" }, NOW);
     expect(rec).toEqual({

@@ -10,6 +10,7 @@
 // human (or a Tier 2 research pass) acts on.
 
 import { readGuides, parseVerifiedDate, daysSince, isMain, flatten } from "./lib.mjs";
+import { RESERVED_FACT_IDS } from "../../src/lib/facts.mjs";
 
 export const DEFAULT_THRESHOLD_DAYS = 90;
 
@@ -36,6 +37,10 @@ export async function checkStaleness({ thresholdDays = DEFAULT_THRESHOLD_DAYS, g
     // would quietly remove it from the recert punch list. Reported by fact id, which is
     // exactly what a human greps for.
     for (const [id, f] of Object.entries(facts ?? {})) {
+      // Reserved rows (traveler-origin) are not perishable figures on a shelf-life clock —
+      // a booking-confirmed airport doesn't rot at 90 days; its recheck path is the Stage C
+      // creator confirmation (PLAN_ATLAS_MIGRATION.md Clarifying #1), not this punch list.
+      if (RESERVED_FACT_IDS.has(id)) continue;
       if (!f?.verified_on) continue;
       const d = new Date(f.verified_on + "T00:00:00Z");
       if (Number.isNaN(d.getTime())) continue;

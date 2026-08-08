@@ -25,14 +25,53 @@ const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
  * `now` is injected: date logic that reaches for the real clock can't be tested.
  */
 export function resolveTripDate(str: string | null | undefined, now: Date): Date | null {
+  const parsed = parseMonthDay(str);
+  if (!parsed) return null;
+  const d = new Date(now.getFullYear(), parsed.moIdx, parsed.day);
+  if (d < now && (now.getTime() - d.getTime()) > 180 * 86400000) d.setFullYear(now.getFullYear() + 1);
+  return d;
+}
+
+/** The label's month/day components, or null when it isn't a calendar date ("Day 1"). */
+function parseMonthDay(str: string | null | undefined): { moIdx: number; day: number } | null {
   if (!str) return null;
   const parts = String(str).split(/\s+/);
   const moIdx = MONTHS.indexOf(parts[1]);
   const day = parseInt(parts[2], 10);
   if (moIdx === -1 || isNaN(day)) return null;
-  const d = new Date(now.getFullYear(), moIdx, day);
-  if (d < now && (now.getTime() - d.getTime()) > 180 * 86400000) d.setFullYear(now.getFullYear() + 1);
-  return d;
+  return { moIdx, day };
+}
+
+/**
+ * Resolve a day label into a KNOWN year — no inference at all. The now-relative rule above
+ * exists for surfaces judged against the reader's clock (countdowns, weather windows), and
+ * its 180-day rollover deliberately moves a long-finished trip into next year. That is
+ * exactly wrong for anything that must stay STABLE across build dates — the sheet ordinal
+ * (D6) would silently renumber every masthead plate the first time a build ran more than
+ * 180 days after a trip ended. When the year is actually known (a guide's kicker states it:
+ * "Jul 8–15, 2026"), resolve against it and skip inference entirely.
+ */
+export function resolveTripDateInYear(str: string | null | undefined, year: number): Date | null {
+  const parsed = parseMonthDay(str);
+  if (!parsed) return null;
+  return new Date(year, parsed.moIdx, parsed.day);
+}
+
+/**
+ * tripWindow with the year pinned (see resolveTripDateInYear). A range that wraps the year
+ * boundary (Dec 28 – Jan 4) rolls its END into `year + 1` rather than clamping to start —
+ * the label year names the trip's START.
+ */
+export function tripWindowInYear(
+  firstDayDate: string | null | undefined,
+  lastDayDate: string | null | undefined,
+  year: number,
+  now: Date,
+): TripWindow {
+  const start = resolveTripDateInYear(firstDayDate, year);
+  let end = start ? (resolveTripDateInYear(lastDayDate, year) || start) : null;
+  if (start && end && end < start) end = new Date(year + 1, end.getMonth(), end.getDate());
+  return windowFrom(start, end, now);
 }
 
 /**
@@ -83,6 +122,11 @@ export function tripWindow(
   const start = resolveTripDate(firstDayDate, now);
   let end = start ? (resolveTripDate(lastDayDate, now) || start) : null;
   if (start && end && end < start) end = start; // defensive: malformed data
+  return windowFrom(start, end, now);
+}
+
+/** The window math both builders share — everything derived from an already-resolved pair. */
+function windowFrom(start: Date | null, end: Date | null, now: Date): TripWindow {
   const hasDates = !!start;
   const todayMid = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const lengthDays = hasDates && end ? Math.round((end.getTime() - start!.getTime()) / 86400000) + 1 : 0;

@@ -12,7 +12,7 @@
 // the file-reading + date-label-parsing glue around it.
 
 import { readGuides, flatten, isMain } from "./audit/lib.mjs";
-import { checkClosedDayConflicts } from "../src/lib/closed-days.mjs";
+import { checkClosedDayConflicts, weekdayOf } from "../src/lib/closed-days.mjs";
 
 // Mirrors src/lib/trip-dates.ts's resolveTripDate exactly (MONTHS list + the 180-day-past
 // rollover rule) — duplicated rather than imported because Node's plain `node` (this script
@@ -30,9 +30,7 @@ function resolveDayDate(label, now) {
   return d;
 }
 
-const WEEKDAY_BY_INDEX = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
-
-export function findClosedDayWarnings(guides, now = new Date()) {
+function findClosedDayWarnings(guides, now = new Date()) {
   const all = [];
   for (const { guide, slug } of guides) {
     const sections = flatten(guide.sections);
@@ -51,7 +49,7 @@ export function findClosedDayWarnings(guides, now = new Date()) {
       for (const day of s.items || []) {
         const resolved = resolveDayDate(day.date, now);
         if (!resolved) continue;
-        const weekday = WEEKDAY_BY_INDEX[resolved.getDay()];
+        const weekday = weekdayOf(resolved);
         for (const wp of day.waypoints || []) {
           if (wp.name) dayInputs.push({ guideSlug: slug, dayDate: day.date, weekday, waypointName: wp.name });
         }

@@ -38,7 +38,7 @@ const bookLabel = (b: string | undefined) =>
 {(sec.items || []).map((it: VenueItem) => (
   it.state === "unconfirmed" ? (
     // D9 (Stage A.8): research came up short — no price/hours/address/book link to guess at.
-    <article class="card venue venue--gap" id={it.map ? `venue-${pinSlug(it.name)}` : undefined}>
+    <article class="card venue" id={it.map ? `venue-${pinSlug(it.name)}` : undefined}>
       <div class="venue-head">
         <h4 class="venue-name">{it.name}</h4>
         {it.area && <span class="venue-area">{it.area}</span>}

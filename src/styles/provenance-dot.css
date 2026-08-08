@@ -64,8 +64,14 @@
    typed into prose by hand stays plain text — this class is never applied to that.
    "Control size, pill, 1px current-ink border" (design-handoff README's notation-layer table) —
    `currentColor` so the border always matches whichever ink the modifier class sets below,
-   the same technique the masthead's own .mast-chip already uses for the identical phrase. */
+   the same technique the masthead's own .mast-chip already uses for the identical phrase.
+   TAP TARGET (creator-confirmed, Stage A/B review): the pill DRAWS at 32px — a 44px-tall box
+   inline in prose would blow up line spacing — and meets the binding 44px minimum through an
+   invisible ::before hit zone extending 6px above and below, the same effective-target-through-
+   padding technique SPEC-COMPONENTS prescribes for the provenance dot. position:relative is
+   what anchors that zone; the pill's stacking context is otherwise unchanged. */
 .flag-chip {
+  position: relative;
   display: inline-flex; align-items: center;
   min-height: 32px; padding: .15rem .6rem; margin: 0 .1em;
   font-family: var(--font-data); font-weight: 640; font-size: var(--text-control);
@@ -74,6 +80,7 @@
   cursor: pointer; text-decoration: none; vertical-align: middle;
   transition: background .15s ease;
 }
+.flag-chip::before { content: ""; position: absolute; inset: -6px 0; }
 .flag-chip:hover { background: color-mix(in srgb, currentColor 10%, transparent); }
 .flag-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 /* ≈ approx.: neutral, --ink — a positive claim ("checked, found approximate"), not a warning. */

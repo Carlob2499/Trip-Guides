@@ -8,6 +8,8 @@ export {
   statusFor,
   originFor,
   coverImgFor,
+  firstDayDateOf,
+  lastDayDateOf,
 } from "./model/guide-record";
 export type {
   GuideAtlasRecord,

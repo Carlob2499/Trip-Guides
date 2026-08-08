@@ -311,7 +311,11 @@ describe("extractIataCode — Stage B.7 intake congruence (D14/ADR 0003)", () =>
 
   it("does not guess from a bare city name with no code at all", () => {
     expect(extractIataCode("Newark")).toBeNull();
-    expect(extractIataCode("somewhere near NYC, not sure which airport")).toBe("NYC"); // a real 3-letter token — see note below
+    // "NYC" matches the capitalized-3-letter pattern, so it IS extracted — and that's fine:
+    // it's a real IATA metropolitan-area code, the row it seeds is always unconfirmed, and an
+    // unresolvable code draws nothing downstream (originFor returns null for any code the
+    // gazetteer doesn't carry). Better an honest unconfirmed row than a discarded answer.
+    expect(extractIataCode("somewhere near NYC, not sure which airport")).toBe("NYC");
   });
 
   it("null for empty/absent input", () => {

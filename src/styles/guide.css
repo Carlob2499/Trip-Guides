@@ -250,9 +250,10 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 .block-title{font-family:var(--font-display);font-size:var(--text-h4);margin:.1rem 0 .5rem}
 /* Staleness downgrade pill (staleness-ui.js) — appears only on sections whose structured
    verified_on has outlived its shelf life. Warn tone, never red (red is reserved for
-   emergencies); links to the recorded source when present. Sizing/pill/border now come from
-   the shared .flag-chip class (provenance-dot.css, D10) — staleness-ui.js adds .stale-pill
-   only as an identity hook (nothing here still styles from it, kept for continuity/selectors). */
+   emergencies); links to the recorded source when present. Sizing/pill/border come from the
+   shared .flag-chip class (provenance-dot.css, D10); this rule carries only the pill's
+   PLACEMENT in a title row — the leading gap and the no-wrap that keeps "⚠ verified …"
+   on one line. */
 .stale-pill{margin-left:.55rem;white-space:nowrap}
 /* Below 900px the sticky chrome is shorter — retune --chrome-h once; scroll-padding
    and every scroll-margin above follow automatically. */

@@ -9,7 +9,8 @@
    computation through here would make this function no longer per-guide-pure. Callers derive
    ordinals once via sheetOrder() and pass this guide's own number in. */
 
-import { tripWindow } from "../../../lib/trip-dates";
+import { tripWindow, tripWindowInYear } from "../../../lib/trip-dates";
+import { yearFromKicker } from "../../../lib/sheet-order";
 import { isoNumericFor } from "../../../data/countries.mjs";
 import { airportFor } from "../../../data/airports.mjs";
 
@@ -94,8 +95,11 @@ export interface GuideRecordInput {
    src/features/exports/model/exports.ts, scripts/fetch-holidays.mjs, and
    GuideLayout.astro's local flatSections(): the schema has no nested-sections member today,
    but guide data isn't schema-checked at this layer, so this stays defensive. Kept local
-   rather than imported across the sealed-silo boundary (ARCHITECTURE.md: index.ts is the only
-   public door, and this is a few lines, not a shared dependency worth crossing for). */
+   because the nearest existing copy lives inside the EXPORTS feature silo — importing it
+   would couple atlas→exports across a feature boundary for six lines (shared `src/lib/`
+   imports like trip-dates are fine; another feature's internals are not, and even its
+   index.ts door isn't worth opening for this). If a sixth copy ever appears, promote ONE
+   into src/lib/ and migrate all of them in the same pass. */
 function flatten(sections: readonly SectionLike[] | null | undefined, out: SectionLike[] = []): SectionLike[] {
   for (const s of sections || []) {
     if (s && Array.isArray(s.sections)) flatten(s.sections, out);
@@ -162,11 +166,13 @@ export function coverImgFor(cover: CoverLike | null | undefined): string | null 
  * clock), everything else comes straight from `input`.
  */
 export function deriveGuideRecord(input: GuideRecordInput, now: Date): GuideAtlasRecord {
-  const win = tripWindow(
-    firstDayDateOf(input.sections),
-    lastDayDateOf(input.sections),
-    now,
-  );
+  // Year pinned from the kicker when it states one (yearFromKicker's doc explains why the
+  // now-relative inference is wrong here): a June 2026 trip must stay start=2026/status=past
+  // on every future build, not roll into "upcoming 2027" once it's 180 days behind us.
+  const first = firstDayDateOf(input.sections);
+  const last = lastDayDateOf(input.sections);
+  const year = yearFromKicker(input.kicker);
+  const win = year != null ? tripWindowInYear(first, last, year, now) : tripWindow(first, last, now);
   return {
     slug: input.slug,
     title: input.title,
@@ -185,17 +191,18 @@ export function deriveGuideRecord(input: GuideRecordInput, now: Date): GuideAtla
 }
 
 /* tripWindow() wants each end's raw day-label string ("Wed Jul 8"), the same shape
-   src/pages/index.astro already extracts from a guide's `days` section(s) — mirrored here
-   rather than imported, same reasoning as flatten() above. */
+   src/pages/index.astro already extracts from a guide's `days` section(s). EXPORTED (via
+   the silo's index.ts) so consumers that need a guide's trip-date labels — GuideLayout's
+   sheet-ordinal inputs — reuse this one extraction instead of keeping their own copy. */
 function daysItems(sections: readonly SectionLike[] | null | undefined): Array<{ date?: string }> {
   const flat = flatten(sections);
   const days = flat.find((s) => s.type === "days" && Array.isArray((s as { items?: unknown }).items));
   return ((days as { items?: Array<{ date?: string }> })?.items) ?? [];
 }
-function firstDayDateOf(sections: readonly SectionLike[] | null | undefined): string | null {
+export function firstDayDateOf(sections: readonly SectionLike[] | null | undefined): string | null {
   return daysItems(sections)[0]?.date ?? null;
 }
-function lastDayDateOf(sections: readonly SectionLike[] | null | undefined): string | null {
+export function lastDayDateOf(sections: readonly SectionLike[] | null | undefined): string | null {
   const items = daysItems(sections);
   return items[items.length - 1]?.date ?? firstDayDateOf(sections);
 }

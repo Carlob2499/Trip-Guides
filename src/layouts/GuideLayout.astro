@@ -20,6 +20,7 @@ import ChangeRequest from "../components/ChangeRequest.astro";
 import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
 import { computeGuideStats, latestVerifiedOn } from "../lib/guide-stats";
 import { sheetOrder, ordinalFor } from "../lib/sheet-order";
+import { firstDayDateOf, lastDayDateOf } from "../features/atlas/index";
 import { collectWaypoints, collectDayEvents, buildSummary } from "../features/exports/index";
 // slotLabel only — the silo's DOM boot is guarded by `typeof document`, so importing its
 // public surface at build time is inert (the sealed-silo contract: index is the only door).
@@ -242,15 +243,17 @@ const platelineEmergency = emergencyFor(guide.country);
 // CC from the guide's own `country` via the same COUNTRY_CODES map the holiday lookup
 // uses. Every guide's start date is needed to rank this one, so this reads the whole
 // collection — cheap at guide-count scale, and it's what keeps every guide's plate number
-// agreeing with every other's without a hand-filled ordinal anywhere.
+// agreeing with every other's without a hand-filled ordinal anywhere. Day-date extraction
+// comes from the atlas silo's own helpers (one copy, not a third re-implementation), and
+// `kicker` rides along so sheet-order can PIN each trip's year (its doc explains why —
+// without it, ordinals silently renumber on any build >180 days after a trip ends).
 const _allGuides = await getCollection("guides");
-const _sheetInputs = _allGuides.map((g) => {
-  const flat = flatSections(g.data.sections || []);
-  const ds = flat.find((s: any) => s.type === "days" && s.items?.length);
-  const fd = (ds?.items?.[0]?.date as string) ?? null;
-  const ld = (ds?.items?.[ds.items.length - 1]?.date as string) ?? fd;
-  return { slug: g.id, firstDayDate: fd, lastDayDate: ld };
-});
+const _sheetInputs = _allGuides.map((g) => ({
+  slug: g.id,
+  firstDayDate: firstDayDateOf(g.data.sections as any[]),
+  lastDayDate: lastDayDateOf(g.data.sections as any[]),
+  kicker: (g.data as any).kicker ?? null,
+}));
 const sheetOrdinal = ordinalFor(sheetOrder(_sheetInputs, new Date()), guideSlug);
 const guideCC = COUNTRY_CODES[guide.country] ?? null;
 const platelineNumber = sheetOrdinal != null && guideCC

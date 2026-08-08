@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { resolveTripDate, tripWindow, localISODate } from "./trip-dates";
+import { resolveTripDate, resolveTripDateInYear, tripWindow, tripWindowInYear, localISODate } from "./trip-dates";
 
 const iso = (d: Date | null) => (d ? `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}` : null);
 
@@ -112,5 +112,36 @@ describe("localISODate (R2)", () => {
     // with the calendar day the caller meant, regardless of the runtime's UTC offset.
     const d = new Date(2026, 6, 15); // local midnight, Jul 15
     expect(localISODate(d)).toBe(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`);
+  });
+});
+
+describe("resolveTripDateInYear — the pinned-year resolver (D6 stability)", () => {
+  it("resolves into the given year with no inference at all", () => {
+    // The 180-day rollover would move this June date to 2027 on any now after Dec 2026;
+    // a pinned year never moves, whatever the clock says.
+    expect(iso(resolveTripDateInYear("Mon Jun 8", 2026))).toBe("2026-06-08");
+  });
+
+  it("null for a non-calendar label, same contract as the inferring resolver", () => {
+    expect(resolveTripDateInYear("Day 1", 2026)).toBeNull();
+    expect(resolveTripDateInYear(null, 2026)).toBeNull();
+  });
+});
+
+describe("tripWindowInYear", () => {
+  it("windows are identical whatever `now` a build runs at — only the STATUS moves", () => {
+    const early = tripWindowInYear("Mon Jun 8", "Tue Jun 16", 2026, new Date(2026, 4, 1));
+    const late = tripWindowInYear("Mon Jun 8", "Tue Jun 16", 2026, new Date(2027, 1, 15));
+    expect(iso(early.start)).toBe("2026-06-08");
+    expect(iso(late.start)).toBe("2026-06-08"); // NOT rolled to 2027
+    expect(early.isPast).toBe(false);
+    expect(late.isPast).toBe(true); // status still judged against the real clock
+  });
+
+  it("a range wrapping the year boundary rolls its END forward, not clamped", () => {
+    const w = tripWindowInYear("Mon Dec 28", "Sun Jan 3", 2026, new Date(2026, 10, 1));
+    expect(iso(w.start)).toBe("2026-12-28");
+    expect(iso(w.end)).toBe("2027-01-03");
+    expect(w.lengthDays).toBe(7);
   });
 });
