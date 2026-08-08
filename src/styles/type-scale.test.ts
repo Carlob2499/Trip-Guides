@@ -76,11 +76,6 @@ const ALLOWED: Exception[] = [
     value: ".54rem",
     why: "8.64px, genuinely below the scale's floor (10% under --text-nano) — a deliberate outlier, not drift",
   },
-  {
-    marker: ".hubcard-cover-initial",
-    value: "4.6rem",
-    why: "a decorative cover letter, display-scale rather than a heading; --text-h2 is 130% away",
-  },
 ];
 
 /* Print is a different medium entirely — physical units, no viewport, no user font

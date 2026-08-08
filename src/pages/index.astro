@@ -1,441 +1,420 @@
 ---
+// Atlas hub — THE site's home page (PLAN_ATLAS_MIGRATION.md Stage C item 10, the flip:
+// built aside at /atlas/ through Stage C per D1, then moved here in one commit on the
+// creator's GO). Two doors (D4): the table view is server-rendered so the page works with
+// zero JS and stays indexable; the globe (world view) and the cover are progressive
+// enhancement that mount on top once their modules load.
 import { getCollection } from "astro:content";
 import PwaHead from "../components/PwaHead.astro";
 import Icon from "../components/Icon.astro";
-// Same accent resolution as the guide pages + OG (uniform across surfaces):
-// explicit theme > extracted cover palette > country accent (src/lib/palettes.ts).
-import { accentForGuide, paletteAccentsForGuide } from "../lib/palettes";
-import { accentTokens, accentStyle } from "../lib/accent-tokens";
 import { generateContourLayer } from "../lib/contours";
-import PaintedAtlas from "../components/PaintedAtlas.astro";
-import { computeGuideStats } from "../lib/guide-stats";
-import type { SectionOf, SightItem } from "../lib/guide-types";
-import { tripWindow, localISODate } from "../lib/trip-dates";
-import { continentFor, CONTINENT_ORDER } from "../data/countries.mjs";
-import { tzFor } from "../lib/themes";
+import {
+  deriveGuideRecord, relevanceOrder, quickCardKicker, firstDayDateOf, lastDayDateOf,
+} from "../features/atlas/index";
+import { sheetOrder, ordinalFor } from "../lib/sheet-order";
+import { countryData, emergencyFor, COUNTRY_CODES } from "../data/countries.mjs";
 import { flattenSections } from "../features/exports/index";
-// Self-hosted variable fonts (bundled, base-path-safe, offline-correct) — no CDN.
-// Quiet Edition (R1): ONE serif — Literata with its optical-size axis (standard = wght+opsz,
-// so browsers cut display vs text automatically) — and ONE quiet humanist sans for data/labels.
 import "@fontsource-variable/literata/standard.css";
 import "@fontsource-variable/literata/standard-italic.css";
 import "@fontsource-variable/source-sans-3";
 import "../styles/base.css";
-import "../styles/hub.css";
-import "../styles/hub-cards.css";
-import "../styles/painted-atlas.css";
+import "../styles/atlas.css";
+import "../styles/atlas-world.css";
+import "../styles/atlas-cover.css";
+import "../styles/atlas-mobile.css";
 import "../styles/transitions.css";
-import "../styles/scroll-motion.css";
-import "../styles/hub-motion.css";
-// touch.css LAST: its @media(hover:none) block overrides hover rules from every
-// stylesheet above, and equal-specificity rules are decided by source order.
-import "../styles/touch.css";
-
-const guides = (await getCollection("guides")).sort((a, b) =>
-  a.data.title.localeCompare(b.data.title)
-);
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
-// R4: REPO moved to new.astro with the intake form it belongs to.
-
-// Trip-date math below uses the SAME shared resolver as the guide page's own countdown
-// (src/lib/trip-dates.ts) — this badge is "N days away" relative to the visitor's own
-// clock, and must read the same on the hub as on GuideLayout.astro's countdown pill
-// (R1/R2): two hand-rolled copies of this logic previously drifted (time-of-day vs
-// midnight math), so there is now exactly one implementation, imported, not duplicated.
 const now = new Date();
-const guideExtras = guides.map(g => {
-  const flat = flattenSections(g.data.sections as any[] || []);
-  const allDays = flat.filter((s: any) => s.type === "days");
-  const allItems = allDays.flatMap((s: any) => s.items || []);
-  const firstDateStr = allItems[0]?.date;
-  const lastDateStr  = allItems[allItems.length - 1]?.date;
-  const win = tripWindow(firstDateStr, lastDateStr, now);
-  const firstDate = win.start;
-  const lastDate  = win.end;
-  const dayCount  = allItems.length;
-  let badge = "";
-  if (win.hasDates) {
-    const diff = win.daysUntilStart;
-    if (diff > 1)          badge = diff + " days away";
-    else if (diff === 1)   badge = "Tomorrow!";
-    else if (diff === 0)   badge = "Today!";
-    else if (win.isOngoing) badge = "Now!"; // today falls within [start, end] inclusive
-    // else: trip is past — no badge (a finished trip gets the static heroWhen treatment below)
-  }
-  // Hero/filter extras — all derivable at build from data the guide already has.
-  const mapSec  = flat.find((s): s is SectionOf<"map"> => s.type === "map" && typeof s.center?.lat === "number");
-  // The predicate narrows `img` for the consumer below, which the plain `!!it?.img?.file`
-  // form did not — that is why `sight.img.file` was flagged as possibly-undefined.
-  const sight = flat.filter((s): s is SectionOf<"sights"> => s.type === "sights")
-    .flatMap((s) => s.items || [])
-    .find((it): it is SightItem & { img: NonNullable<SightItem["img"]> } => !!(it?.img?.file || it?.img?.src));
-  const month   = firstDateStr?.split(/\s+/)[1] || "";
-  // The card/hero cover: the guide's own `cover` art when set, else its first sight photo
-  // (docs/MOTION.md). Same image the guide masthead uses — that's what makes them morph.
-  const cover = (g.data as any).cover;
-  // R4: a still cover may be a direct royalty-free CDN URL (`src`, `{w}` width token) as
-  // well as a Commons `file` — same precedence as the guide masthead (uniform application).
-  const coverImg = cover?.src
-    ? { src: cover.src as string, alt: cover.alt || "", focal: cover.focal || null }
-    : cover?.file
-    ? { file: cover.file as string, alt: cover.alt || "", focal: cover.focal || null }
-    // The sight-photo fallback carries whichever source THAT photo uses, so a guide whose
-    // sights are all direct-CDN still gets a card cover instead of the Painted Atlas.
-    : (sight ? { file: sight.img.file, src: sight.img.src, alt: sight.img.alt || sight.name, focal: null } : null);
-  return {
-    dayCount, badge, firstDate, lastDate, month,
-    // R2: LOCAL calendar components, never `.toISOString()` (UTC conversion drifts the
-    // calendar day for any negative UTC offset) — this string is compared against
-    // hub.js's own client-side "today" string, so both sides must build it the same way.
-    startISO: firstDate ? localISODate(firstDate) : "",
-    mapCenter: mapSec ? { lat: mapSec.center.lat, lng: mapSec.center.lng } : null,
-    heroImg: coverImg,
-  };
+const DESCRIPTION = "Verified, personalized travel guides — every price, hour, and door checked against a primary source, never autogenerated.";
+
+// A page-level survey ground (README/design-handoff screenshots — the hub's own visual
+// identity, ported from index.astro's R3b "page-contours" pattern: position:fixed, so the
+// terrain holds still while table/world content scrolls or toggles over it). Fixed seeds ⇒
+// identical rings every build. Own seeds, distinct from the old hub's — this is atlas's own
+// ground, not a copy. hub-motion.css (the old hub's copy of this) is deleted at the flip
+// (item 10); this page owns its copy independently rather than importing a file due for removal.
+const contourLayers = [
+  generateContourLayer({ seed: 211, rings: 11, cx: 180, cy: 760 }),
+  generateContourLayer({ seed: 307, rings: 8, cx: 860, cy: 200 }),
+];
+
+const allGuides = await getCollection("guides");
+const curated = allGuides.filter((g) => !g.data.draft);
+
+const sheetInputs = curated.map((g) => ({
+  slug: g.id,
+  firstDayDate: firstDayDateOf(g.data.sections),
+  lastDayDate: lastDayDateOf(g.data.sections),
+  kicker: g.data.kicker ?? null,
+}));
+const order = sheetOrder(sheetInputs, now);
+
+const rows = curated.map((g) => {
+  const flat = flattenSections(g.data.sections || []);
+  // coverImgFor (guide-record.ts) deliberately reads `guide.cover` alone — its own doc
+  // comment names the richer cover -> first-sight-photo chain as "Stage C's own job".
+  // GuideLayout.astro's masthead already runs that exact chain (heroSight fallback); a
+  // guide with no explicit `cover.file`/`src`/`video.poster` (Denmark, the US guide) was
+  // otherwise showing a picture on its own page but NO picture on the globe pincard —
+  // found 2026-08-08 comparing the live globe against guide pages directly.
+  const gCover = g.data.cover as { file?: string; src?: string; video?: { poster?: string } } | null | undefined;
+  const heroSight = gCover?.file || gCover?.src || gCover?.video?.poster
+    ? null
+    : flat.filter((s) => s.type === "sights")
+        .flatMap((s) => (s as { items?: unknown[] }).items || [])
+        .find((it) => (it as { img?: { file?: string; src?: string } })?.img?.file || (it as { img?: { file?: string; src?: string } })?.img?.src) as { img?: { file?: string; src?: string } } | undefined;
+  const effectiveCover = heroSight?.img
+    ? { file: heroSight.img.file ?? null, src: heroSight.img.src ?? null }
+    : (gCover ?? null);
+  const record = deriveGuideRecord(
+    {
+      slug: g.id,
+      title: g.data.title,
+      dek: g.data.dek ?? null,
+      kicker: g.data.kicker ?? null,
+      country: g.data.country,
+      tz: g.data.tz ?? null,
+      cover: effectiveCover,
+      sections: g.data.sections,
+      // factsFile validates each row's real shape at build (factRecord/originRecord,
+      // content.config.ts) but types it as Record<string, unknown> — z.record's value type
+      // can't express "one of two discriminated shapes" — so this narrows to the fields
+      // deriveGuideRecord actually reads, which every validated row already carries.
+      facts: (g.data.facts ?? null) as Record<string, { value?: string; state?: string }> | null,
+      ordinal: ordinalFor(order, g.id),
+    },
+    now,
+  );
+  const dayCount = flat.filter((s) => s.type === "days").flatMap((s) => (s as { items?: unknown[] }).items || []).length;
+  const cc = COUNTRY_CODES[g.data.country] ?? null;
+  const kicker = g.data.kicker;
+  const cities = kicker ? kicker.split("—")[0].trim() : (g.data.region || g.data.country);
+  const dates = kicker && kicker.includes("—") ? kicker.split("—").slice(1).join("—").trim() : null;
+  const emergency = emergencyFor(g.data.country);
+  const currency = countryData(g.data.country)?.currency ?? null;
+  const advisory = g.data.advisory && g.data.advisory.level >= 2 ? g.data.advisory : null;
+  return { g, record, dayCount, cc, cities, dates, emergency, currency, advisory };
 });
 
-// Only finished, verified guides appear on the hub. A generated draft lives at
-// its own URL until it graduates (draft:false) — the hub never shows scaffolds.
-const withExtras = guides.map((g, i) => ({ g, ex: guideExtras[i] }));
-const curated = withExtras.filter(x => !x.g.data.draft);
+// Relevance sort (README §3) — distinct from the D6 plate ordinal above: this one moves with
+// the clock (ongoing -> upcoming soonest-first -> past most-recent-first -> undated last).
+const relevant = relevanceOrder(rows.map((r) => r.record)).map((rec) => rows.find((r) => r.record.slug === rec.slug)!);
+const quick = relevant[0] ?? null;
+const quickKicker = quick ? quickCardKicker(quick.record.status) : null;
 
-// Next-trip hero: the curated guide whose trip starts soonest in the future
-// (or is in progress right now).
-const upcoming = curated
-  .filter(x => x.ex.firstDate && (x.ex.firstDate >= now || (x.ex.lastDate && x.ex.lastDate >= now)))
-  .sort((a, b) => a.ex.firstDate!.getTime() - b.ex.firstDate!.getTime());
-// Retrospective fallback: between trips there IS no next trip, and the hub used to drop the
-// hero entirely — losing its whole first impression (and the site's best photo) exactly when
-// the guides are at their most proven. So feature the most recently FINISHED trip instead,
-// labelled honestly as past. Every guide is eventually past; the hero shouldn't expire.
-const finished = curated
-  .filter(x => x.ex.lastDate && x.ex.lastDate < now)
-  .sort((a, b) => b.ex.lastDate!.getTime() - a.ex.lastDate!.getTime());
-const hero = upcoming[0] ?? finished[0] ?? null;
-const heroIsPast = upcoming.length === 0 && finished.length > 0;
-// A finished trip gets a static month/year, never the live countdown — hub.js would render
-// any past start date as "In progress", which would be a lie about a trip that's over.
-const heroWhen = heroIsPast && hero?.ex.lastDate
-  ? hero.ex.lastDate.toLocaleDateString("en-US", { month: "short", year: "numeric" })
-  : "";
-// R3 (2026-08-05 critique): the hero IS the featured guide's entry in the grid — a
-// full-width spanning cell INSIDE the complete, filterable index, not an editorial band
-// parked above it. This ends the two prior compromises at once: the same trip no longer
-// renders twice in one scroll (hero band + dimmed "Featured above" card), and the hero now
-// OBEYS the filter the visitor just expressed (filtering to Europe used to leave a giant
-// Arizona hero over the one Denmark card). "All trips" still means all: one entry per
-// guide, the featured one simply rendered at hero scale. Completeness beats tidiness —
-// and this is the one shape that needs neither a dim nor a tag to stay honest.
-const gridGuides = curated;
-const heroId = hero?.g.id ?? null;
-// The ordinary-card list excludes the hero (it renders as the spanning cell instead).
-const restGuides = curated.filter(x => x.g.id !== heroId);
-// R4: one width-parameterized source fn for both still-cover paths — Commons thumbnails
-// via Special:FilePath, direct royalty-free CDNs via their own `{w}` token (absent token
-// → single-size URL, srcset off). Mirrors the guide masthead's mastSrcAt exactly.
-type StillImg = { file?: string; src?: string } | null;
-const stillSrcAt = (img: StillImg, w: number) =>
-  !img ? null
-  : img.src ? img.src.replace("{w}", String(w))
-  : `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(img.file!)}?width=${w}`;
-const heroImgOf = hero?.ex.heroImg ?? null;
-const heroSrc = stillSrcAt(heroImgOf, 1400);
-// M2: a 375px phone was downloading the full 1400px hero — same responsive treatment
-// SightsBlock already gives every sight photo.
-const heroSrcset = heroImgOf && (heroImgOf.file || heroImgOf.src?.includes("{w}"))
-  ? `${stillSrcAt(heroImgOf, 480)} 480w, ${stillSrcAt(heroImgOf, 800)} 800w, ${stillSrcAt(heroImgOf, 1400)} 1400w`
-  : null;
-// Card cover thumbnails — same source fn at grid width.
-const coverSrc = (img: StillImg) => stillSrcAt(img, 640);
+const STAMP: Record<string, { label: string; cls: string } | null> = {
+  ongoing: { label: "IN PROGRESS", cls: "atlas-stamp--progress" },
+  upcoming: { label: "UPCOMING", cls: "atlas-stamp--upcoming" },
+  past: { label: "COMPLETE", cls: "atlas-stamp--complete" },
+  undated: null,
+};
 
-// Filter chips: by CONTINENT, not country. With a handful of guides a country chip just
-// restates the card beneath it; continent is the axis you actually browse by as the library
-// grows. Only continents that have a guide get a chip, in CONTINENT_ORDER (stable — chips
-// don't reshuffle alphabetically when a new trip lands).
-const gridContinents = new Set(
-  gridGuides.map(x => continentFor(x.g.data.country)).filter(Boolean) as string[]
-);
-const continents = CONTINENT_ORDER.filter(c => gridContinents.has(c));
-
-// Overture (V2, docs/archive/PLAN_VISUAL_OVERHAUL.md) — real, build-time-counted stats for the intro's
-// stats beat (never hand-typed numbers; recomputed every build) + three deterministic contour
-// layers for its parallax backdrop. Fixed seeds ⇒ identical rings every build.
-const stats = computeGuideStats(guides.map((g) => g.data));
-const contourLayers = [
-  generateContourLayer({ seed: 7, rings: 9, cx: 260, cy: 320 }),
-  generateContourLayer({ seed: 23, rings: 8, cx: 780, cy: 640 }),
-  generateContourLayer({ seed: 41, rings: 5, cx: 540, cy: 180 }),
-];
-// R3b (creator request 2026-08-05): the survey map no longer ends at the Overture's clipped
-// bottom edge — a PAGE-level contour ground runs under the whole sheet. It is position:fixed
-// (the map holds still; the page scrolls over it, like tracing paper over a survey sheet), so
-// two viewport-filling layers suffice regardless of page height. Quieter than the Overture's
-// own three parallax layers, which stay as the bold near-field on top. Different seeds — the
-// ground is its own terrain, not a copy of the header's.
-const pageContourLayers = [
-  generateContourLayer({ seed: 61, rings: 11, cx: 170, cy: 780 }),
-  generateContourLayer({ seed: 89, rings: 8, cx: 870, cy: 210 }),
-];
+// The globe's data feed (Stage C.2/5, D19) — every field traces to `rows` above (content is
+// king); nothing here is a parallel registry. `anchor`/`origin` flatten to [lng,lat] pairs
+// because that's the coordinate order geo libraries (and atlas-map's own port) expect.
+const guidesJson = rows.map(({ g, record, cc }) => ({
+  slug: g.id,
+  name: g.data.title,
+  href: `${base}/guides/${g.id}/`,
+  countryId: record.countryId,
+  anchor: record.anchor ? [record.anchor.lng, record.anchor.lat] : null,
+  origin: record.origin
+    ? { lng: record.origin.lng, lat: record.origin.lat, label: record.origin.iata, confirmed: record.origin.confirmed }
+    : null,
+  ordinal: record.ordinal,
+  status: record.status,
+  coverImg: record.coverImg,
+  tz: record.tz,
+  cc,
+}));
 ---
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Waypoint — Travel Guides</title>
+    <title>Waypoint — Atlas</title>
+    <meta name="description" content={DESCRIPTION} />
+    <meta property="og:type"        content="website" />
+    <meta property="og:title"       content="Waypoint — Atlas" />
+    <meta property="og:description" content={DESCRIPTION} />
+    <meta property="og:url"         content={Astro.url.href} />
+    <meta name="twitter:card"       content="summary" />
+    <meta name="twitter:title"      content="Waypoint — Atlas" />
+    <meta name="twitter:description" content={DESCRIPTION} />
     <PwaHead />
-    <!-- Dark-mode init — runs before paint to avoid flash -->
     <script is:inline>
       (function () {
         const s = localStorage.getItem("tg-theme");
         const preferDark = window.matchMedia && window.matchMedia("(prefers-color-scheme:dark)").matches;
-        if (s === "dark" || (s === null && preferDark)) {
-          document.documentElement.setAttribute("data-theme", "dark");
-        } else if (s === "light") {
-          document.documentElement.setAttribute("data-theme", "light");
-        }
-        // Same breath as the theme (see GuideLayout): theme.js re-syncs this from the
-        // computed --bg, but only after first paint, so an installed dark-mode app
-        // flashed the light default in its status bar.
-        const tc = document.querySelector('meta[name="theme-color"]');
-        if (tc) tc.setAttribute("content", document.documentElement.getAttribute("data-theme") === "dark" ? "#0f1317" : "#dfe3d9");
-      })();
-    </script>
-    <!-- Overture state — set before paint so a return visitor never flashes the full intro
-         before it collapses to the compact hero (mirrors the theme init above). -->
-    <script is:inline>
-      (function () {
-        try {
-          const seen = localStorage.getItem("tg-overture-seen");
-          document.documentElement.setAttribute("data-overture", seen ? "compact" : "full");
-        } catch (e) {
-          document.documentElement.setAttribute("data-overture", "full");
-        }
+        if (s === "dark" || (s === null && preferDark)) document.documentElement.setAttribute("data-theme", "dark");
+        else if (s === "light") document.documentElement.setAttribute("data-theme", "light");
       })();
     </script>
   </head>
   <body data-base={base}>
-    {/* R3b: the page-wide survey ground (see pageContourLayers above). Fixed, decorative,
-        behind every content layer — the Overture's own contours sit over it as the near-field. */}
+    {/* Page-level survey ground (design-handoff screenshots) — position:fixed, sits under
+        everything; see the frontmatter comment on `contourLayers` for why this page keeps
+        its own copy instead of importing the old hub's (deleted at the flip, item 10). */}
     <div class="page-contours" aria-hidden="true">
-      {pageContourLayers.map((layer, i) => (
+      {contourLayers.map((layer, i) => (
         <svg data-pg-contour={i} viewBox={`0 0 ${layer.viewBox} ${layer.viewBox}`} preserveAspectRatio="xMidYMid slice">
-          {layer.rings.map((points) => <polyline points={points} />)}
+          {layer.rings.map((pts) => <polyline points={pts} />)}
         </svg>
       ))}
     </div>
-    <a class="skip-link" href="#hubGrid">Skip to guides</a>
-    <!-- THE OVERTURE (V2) — the hub masthead as a full-viewport intro that hands off to the
-         guide grid via src/scripts/overture.js. Base markup is fully visible with no JS; the
-         script only adds motion. #btnDark / #btnNewGuide keep their IDs for the inline scripts. -->
-    <header class="overture" id="overture">
-      <div class="ov-contours" aria-hidden="true">
-        {contourLayers.map((layer, i) => (
-          <svg data-ov-contour={i} viewBox={`0 0 ${layer.viewBox} ${layer.viewBox}`} preserveAspectRatio="xMidYMid slice">
-            {layer.rings.map((points) => <polyline points={points} />)}
-          </svg>
-        ))}
-      </div>
 
-      <div class="ov-bar">
-        <span class="ov-wordmark">Waypoint</span>
-        <div class="ov-bar-actions">
-          {/* R4: the intake moved to its own page (/new) — the composed flow needs room a
-              440px modal can't give, and the hub (the recipients' surface) stops carrying
-              the maker's whole authoring tool. A link, not a modal trigger. */}
-          <a id="btnNewGuide" class="ov-pill ov-pill-solid" href={`${base}/new/`}>＋ New guide</a>
-          <button id="btnDark" class="ov-pill ov-pill-icon" aria-label="Switch to dark mode" title="Switch to dark mode"><Icon name="moon" class="tb-ico" /></button>
-        </div>
-      </div>
+    <a class="skip-link" href="#atlasTable">Skip to guides</a>
 
-      <div class="ov-inner">
-        {/* U10: the guide count used to render here too ("· N destinations") AND as its
-            own real number in the stats beat below ("Trips, fully planned") — the same
-            fact shown twice as if it were two different things. The stats beat is the
-            authoritative count now; the eyebrow states what the guides ARE, not how many. */}
-        <p class="ov-eyebrow">Verified travel guides</p>
-        <h1 class="ov-head">
-          <span class="ov-line">Every fact checked.</span>
-          <span class="ov-line ov-line-accent">Every trip yours.</span>
-        </h1>
-        <p class="ov-sub">
-          {/* The {" "} is load-bearing, not decoration: Astro 7 compiles templates with JSX
-              whitespace rules, which STRIP the newline between </b> and the next text node. Without
-              it this above-the-fold line renders "primary source— and stamped". */}
-          Never autogenerated. Every price, hour, and door checked against a <b>primary source</b>{" "}
-          — and stamped with the date we checked it.
-        </p>
-      </div>
-
-      <svg class="ov-route" viewBox="0 0 120 400" preserveAspectRatio="none" aria-hidden="true">
-        <path class="ov-route-path" d="M60 0 C 60 130, 24 210, 60 320 S 60 384 60 400" />
-        <circle class="ov-route-dot" r="5" cx="60" cy="0" />
-      </svg>
-
-      <a class="ov-cue" href="#hubStart">
-        <span class="ov-cue-pin" aria-hidden="true"></span>Follow the route
+    {/* Header (item 6 built the shell — brand mark + wordmark, the cover's FLIP target; item 9
+        added the actions cluster: TOOLS into the quick-card guide's own tools tab — README §5's
+        standalone Tools screen is flagged, not built, this stage — ＋ New guide, and the theme
+        toggle. The WORLD|TABLE toggle now lives here too (compact buttons, matching the design
+        screenshots) instead of the full-width bar it started as below — that bar read as
+        oversized/mobile-only-styled at desktop widths; the mobile-only full-bleed treatment
+        moved to a `max-width:759px` override in atlas-mobile.css instead. */}
+    <header class="atlas-header">
+      <a class="atlas-brand" href={`${base}/`} aria-label="Waypoint — the atlas">
+        <span class="atlas-brand-mark" aria-hidden="true"></span>
+        <span class="atlas-brand-word">
+          <span class="atlas-brand-name" data-ref-headword>WAYPOINT</span>
+          <span class="atlas-brand-sub">VERIFIED FIELD GUIDES</span>
+        </span>
       </a>
+      <div class="atlas-toggle" role="group" aria-label="Switch view">
+        <button type="button" class="atlas-toggle-btn" data-atlas-mode-btn="world" aria-pressed="false">World</button>
+        <button type="button" class="atlas-toggle-btn" data-atlas-mode-btn="table" aria-pressed="true">Table</button>
+      </div>
+      <div class="atlas-header-actions">
+        {quick && (
+          <a class="atlas-header-btn atlas-header-btn--tools" href={`${base}/guides/${quick.g.id}/#gtab-split`}>Tools</a>
+        )}
+        <a class="atlas-header-btn atlas-header-btn--cta" href={`${base}/new/`}>＋<span class="atlas-header-btn-label"> New guide</span></a>
+        <button type="button" id="btnDark" class="atlas-header-btn atlas-header-icon" aria-label="Switch to dark mode" title="Switch to dark mode">
+          <Icon name="moon" size={16} />
+        </button>
+      </div>
     </header>
 
-    <section class="stats-beat" aria-label="What's inside these guides">
-      <div class="stats-beat-in">
-        <div class="stat"><div class="stat-n" data-count={stats.guideCount}>{stats.guideCount}</div><div class="stat-l">Trips, fully planned</div></div>
-        <div class="stat"><div class="stat-n is-accent" data-count={stats.verifiedFactCount}>{stats.verifiedFactCount}</div><div class="stat-l">Facts traced to a source</div></div>
-        <div class="stat"><div class="stat-n" data-count={stats.sourceCount}>{stats.sourceCount}</div><div class="stat-l">Distinct primary sources</div></div>
+    {/* Cover (README §1, D21) — shown once per session. CSS hides it (`display:none`)
+        until cover.js explicitly opts it in with `data-open`, so a no-JS visitor (D4's
+        no-JS/SEO door) never sees it at all rather than seeing it stuck open with no way
+        to dismiss it; a returning visitor within the same session never sees it flash
+        before cover.js removes it. */}
+    <div class="atlas-cover" data-atlas-cover data-fly-slug={quick?.g.id}>
+      <div class="atlas-cover-col">
+        <span class="atlas-cover-mark" data-cover-fade aria-hidden="true"></span>
+        <span class="atlas-cover-word" data-ref-coverword>WAYPOINT</span>
+        <span class="atlas-cover-sub" data-cover-fade>VERIFIED FIELD GUIDES</span>
+        <button type="button" class="atlas-cover-cta" data-cover-fade data-cover-cta>Enter the atlas</button>
+        <span class="atlas-cover-scroll" data-cover-fade aria-hidden="true">
+          <span class="atlas-cover-scroll-line"></span>
+          <span class="atlas-cover-scroll-dot"></span>
+        </span>
       </div>
-      <p class="stats-note">Real numbers, counted from the guides themselves — the same honesty rule the guides live by.</p>
-    </section>
+    </div>
 
-    <main class="hub" id="hubStart">
-      <div class="hub-filter" role="search">
-        <input class="hub-search" id="hubSearch" type="search" placeholder="Search guides…" aria-label="Search guides" autocomplete="off" />
-        <div class="hub-chips" id="hubChips" role="group" aria-label="Filter by continent">
-          <button class="hub-chip hub-chip-active" type="button" data-filter="" aria-pressed="true">All trips</button>
-          {continents.map((c) => (
-            <button class="hub-chip" type="button" data-filter={c} aria-pressed="false">{c}</button>
+    <div class="atlas-globe-wrap">
+      <div id="atlasGlobe" data-atlas-globe>
+        <div data-atlas-map-slot></div>
+        <div class="atlas-pins" data-atlas-pins></div>
+
+        <div class="atlas-ov atlas-ov-index" data-ref-fadezoom>
+          <span class="atlas-ov-kicker">Index of sheets</span>
+          <span class="atlas-ov-coord" data-atlas-coord>—</span>
+          <ul data-atlas-index-list></ul>
+        </div>
+
+        <div class="atlas-ov atlas-ov-key" data-ref-fadezoom>
+          <span class="atlas-ov-kicker">Key to the marks</span>
+          <ul>
+            <li><span class="swatch swatch--surveyed"></span> Surveyed (trip complete)</li>
+            <li><span class="swatch swatch--filed"></span> Filed (upcoming)</li>
+            <li><span class="swatch swatch--route"></span> Route from origin</li>
+            <li><span class="swatch swatch--night"></span> Night now</li>
+          </ul>
+        </div>
+
+        <div class="atlas-ov atlas-ov-record" data-ref-fadezoom>
+          <span class="atlas-ov-kicker">The record</span>
+          <ul data-atlas-record-list></ul>
+        </div>
+
+        <div class="atlas-ov atlas-ov-controls" data-ref-fadezoom>
+          <button type="button" data-atlas-zoom-out aria-label="Zoom out">−</button>
+          <button type="button" data-atlas-fit>Fit world</button>
+          <button type="button" data-atlas-zoom-in aria-label="Zoom in">+</button>
+          <button type="button" data-atlas-spin>Pause</button>
+        </div>
+
+        <div class="atlas-ov atlas-ov-motto" data-ref-fadezoom data-atlas-motto>
+          <button type="button" class="atlas-ov-motto-close" data-atlas-motto-close aria-label="Dismiss">✕</button>
+          <span class="atlas-ov-kicker">The north star</span>
+          <p>Never autogenerated. Every price, hour, and door checked against a primary source.</p>
+        </div>
+
+        <div class="atlas-toast" data-atlas-toast></div>
+
+        {/* Mobile-only (<760px, D5): the desktop rails/pincards/motto have no spatial budget
+            on a phone (README "Mobile"), so a bare-ping globe gets its own FAB menu (fly to
+            each sheet, fit world, pause spin, tools, ＋ new guide — the same actions the
+            desktop rail already exposes, just relocated) and a bottom sheet on pin tap instead
+            of the desktop pincard. Hidden by CSS above 759px; inert without JS either way
+            (world.js gates its own mobile branch, so a no-JS phone visitor still gets the
+            table view, D4's door). */}
+        <button type="button" class="atlas-menufab" data-atlas-menufab aria-label="Map menu" aria-expanded="false">☰</button>
+        <div class="atlas-menuscrim" data-atlas-menuscrim hidden></div>
+        <div class="atlas-menusheet" data-atlas-menusheet hidden>
+          <span class="atlas-menusheet-kicker">Fly to a sheet</span>
+          <div data-atlas-menusheet-fly></div>
+          <span class="atlas-menusheet-kicker">The map</span>
+          <button type="button" data-atlas-menu-fit>Fit world</button>
+          <button type="button" data-atlas-menu-spin>Pause</button>
+          {quick && <a href={`${base}/guides/${quick.g.id}/#gtab-split`}>Tools</a>}
+          <a class="atlas-menusheet-new" href={`${base}/new/`}>＋ New guide</a>
+        </div>
+
+        <div class="atlas-pingsheet" data-atlas-pingsheet hidden>
+          <span class="atlas-pingsheet-grip" aria-hidden="true"></span>
+          <span class="atlas-pingsheet-kicker" data-atlas-pingsheet-kicker></span>
+          <span class="atlas-pingsheet-title" data-atlas-pingsheet-title></span>
+          <span class="atlas-pingsheet-meta" data-atlas-pingsheet-meta></span>
+          <div class="atlas-pingsheet-actions">
+            <a class="atlas-pingsheet-open" data-atlas-pingsheet-open href="#">Open the sheet →</a>
+            <button type="button" data-atlas-pingsheet-zoom>Zoom</button>
+            <button type="button" data-atlas-pingsheet-close aria-label="Dismiss">✕</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="application/json" is:inline data-atlas-guides-json set:html={JSON.stringify(guidesJson)} />
+
+    <div class="atlas-table-wrap">
+    <main class="atlas-table" id="atlasTable">
+      <div class="atlas-tablehead">
+        <div class="atlas-search-row" role="search">
+          <input
+            class="atlas-search"
+            data-atlas-search
+            type="search"
+            placeholder="Search every sheet — a place, a price, 119…"
+            aria-label="Search every guide"
+            autocomplete="off"
+          />
+          <button class="atlas-search-clear" data-atlas-search-clear type="button" aria-label="Clear search">✕</button>
+        </div>
+        <div class="atlas-chips" data-atlas-chips role="group" aria-label="Jump to a sheet">
+          {rows.map(({ g }) => (
+            <a class={`atlas-chip${g.id === quick?.g.id ? " atlas-chip--current" : ""}`} href={`#sheet-${g.id}`}>
+              {g.data.title}
+            </a>
           ))}
         </div>
-        {/* R5: the grid used to mutate in total silence for assistive tech — the chips
-            carried their state as a class only, and nothing announced what filtering did.
-            One polite live region, always in the DOM, updated on every apply(). */}
-        <p class="hub-status" id="hubStatus" role="status" aria-live="polite"></p>
+        <div class="atlas-results" data-atlas-results role="listbox" aria-label="Search results"></div>
       </div>
 
-      {/* M4 item 2 — the grid's `auto-fill, minmax(270px)` is a MANY-items pattern; against a
-          curated catalog of three it rendered three modest cards under a full-viewport hero,
-          making the weakest beat on the page the one that lists the product. `data-count` lets
-          CSS switch to a 2-up editorial layout with larger covers while the catalog is small,
-          and fall back to the original auto-fill at 5+ with no markup change.
-          R3: data-count counts the ORDINARY cards only — the hero cell always spans the full
-          row, so the editorial compositions (2-up, the 2+1 close) apply to what shares rows. */}
-      <div class="hub-grid" id="hubGrid" data-count={restGuides.length}>
-        {hero && (
-          <a
-            class="hub-hero hubcard"
-            href={`${base}/guides/${hero.g.id}/`}
-            style={accentStyle(accentTokens(accentForGuide(hero.g.id, hero.g.data.theme, hero.g.data.country)))}
-            data-live-cover={(hero.g.data as any).cover?.video?.src ?? undefined}
-            data-hero-start={heroIsPast ? undefined : hero.ex.startISO}
-            data-hero-lat={heroIsPast ? undefined : hero.ex.mapCenter?.lat}
-            data-hero-lng={heroIsPast ? undefined : hero.ex.mapCenter?.lng}
-            data-country={hero.g.data.country}
-            data-continent={continentFor(hero.g.data.country)}
-            data-start={hero.ex.startISO}
-            data-search={`${hero.g.data.country} ${hero.g.data.region || ""} ${hero.g.data.title} ${hero.g.data.dek || ""} ${continentFor(hero.g.data.country) || ""}`.toLowerCase()}
-          >
-            {/* R3: the hero carries `hubcard` too, so hub.js's one sort/filter/search pass
-                treats it as what it now is — a grid entry. Its data-* filter attributes are
-                built the same way as every card's; hiding it on a non-matching filter is the
-                POINT (the old band ignored the filter the visitor just expressed). */}
-            {heroSrc && (
-              <img class="hub-hero-img" src={heroSrc} srcset={heroSrcset} sizes="100vw"
-                   alt={hero.ex.heroImg!.alt} loading="eager" fetchpriority="high"
-                   style={`view-transition-name:cover-${hero.g.id}`} />
+      {quick && quickKicker && (
+        // A <div>, not an <a> — the tel: chips inside are real functional links (Gate 5:
+        // "Emergency numbers are live tel: links"), and nesting an <a> inside another <a> is
+        // invalid HTML that breaks click handling on whichever element the browser closes
+        // first. "Open this sheet →" is its own anchor instead, matching the spec's own
+        // wording (a CTA line, not "the whole card is a link").
+        <div class="atlas-quick">
+          <span class="atlas-quick-kicker">{quickKicker}</span>
+          <span class="atlas-quick-title">{quick.g.data.title}</span>
+          <span class="atlas-quick-chips">
+            {quick.emergency?.lines.map((line: { label: string; num: string }) => (
+              <a class="atlas-quick-tel" href={`tel:${line.num}`}>{line.label} · {line.num}</a>
+            ))}
+            {quick.currency && <span class="atlas-quick-meta">{quick.currency.code} {quick.currency.symbol}</span>}
+            {quick.record.tz && (
+              <span class="atlas-quick-meta atlas-quick-clock" data-tick data-tz={quick.record.tz}>—</span>
             )}
-            <span class="hub-hero-scrim" aria-hidden="true"></span>
-            <span class="hub-hero-body">
-              <span class="hub-hero-eyebrow">{heroIsPast ? "Last trip" : "Next trip"}{(hero.g.data.region || hero.g.data.country) !== hero.g.data.title ? ` · ${hero.g.data.region || hero.g.data.country}` : ""}</span>
-              <span class="hub-hero-title">{hero.g.data.title}</span>
-              <span class="hub-hero-meta">
-                {heroIsPast
-                  ? <span class="hub-hero-count hub-hero-past">{heroWhen}</span>
-                  : <span class="hub-hero-count" data-hero-countdown>{hero.ex.badge}</span>}
-                {/* Today's weather at the destination is only useful for a trip you're about
-                    to take — a finished one gets no pill. */}
-                {!heroIsPast && <span class="hub-hero-wx" data-hero-wx hidden></span>}
-                {hero.ex.dayCount > 0 && <span class="hub-hero-days">{hero.ex.dayCount} days {heroIsPast ? "travelled" : "planned"}</span>}
-              </span>
-              <span class="hub-hero-cta">{heroIsPast ? "See how it went →" : "Open the guide →"}</span>
-            </span>
-          </a>
-        )}
-        {restGuides.map(({ g, ex }) => {
-          // The full 3-stop palette, not just --accent — unused until V3 (Atlas card tinting,
-          // docs/archive/PLAN_VISUAL_OVERHAUL.md) wires --accent2/--accent-raw into real CSS. Set here
-          // now so V3 is a pure-CSS session, no markup change required.
-          const pal = paletteAccentsForGuide(g.id, g.data.theme, g.data.country);
-          return (
-          <a
-            class="hubcard"
-            href={`${base}/guides/${g.id}/`}
-            style={accentStyle(accentTokens(pal.primary, pal.raw))}
-            data-country={g.data.country}
-            data-continent={continentFor(g.data.country)}
-            data-start={ex.startISO}
-            data-search={`${g.data.country} ${g.data.region || ""} ${g.data.title} ${g.data.dek || ""} ${continentFor(g.data.country) || ""}`.toLowerCase()}
-          >
-            {ex.heroImg ? (
-              <span class="hubcard-cover" data-live-cover={(g.data as any).cover?.video?.src ?? undefined}>
-                {/* The cover is the shared element that morphs into the guide masthead. R3: the
-                    featured guide renders ONLY as the hero cell now (restGuides excludes it), so
-                    every card here carries its own view-transition name unconditionally — no
-                    duplicate-name guard needed when nothing is duplicated. */}
-                <img class="hubcard-img" src={coverSrc(ex.heroImg)} alt="" loading="lazy" decoding="async"
-                     style={`view-transition-name:cover-${g.id}`} />
-                <span class="hubcard-cover-grad" aria-hidden="true"></span>
-              </span>
-            ) : (
-              <span class="hubcard-cover hubcard-cover--typo" aria-hidden="true">
-                {/* R4: coverless cards open on the Painted Atlas mini — the same living scene
-                    the guide's own masthead is born with (uniform application), under the same
-                    destination-local sky. The initial letter stays as the plate mark. */}
-                <PaintedAtlas seed={g.id} tz={g.data.tz ?? tzFor(g.data.country)} mini />
-                <span class="hubcard-cover-initial">{(g.data.region || g.data.country).slice(0, 1)}</span>
-              </span>
+            {quick.advisory && (
+              <span class="atlas-quick-meta atlas-quick-advisory">⚠ Level {quick.advisory.level} advisory</span>
             )}
-            {/* V5: the accent bar morphs into the guide masthead's own accent rule
-                (`.masthead-rule`) on navigation — the palette literally carries across,
-                not just coincidentally matches. R3: unconditional name, same reason as the
-                cover above (the hero cell has no bar, and no card renders twice). */}
-            <span class="hubcard-bar" aria-hidden="true" style={`view-transition-name:accent-${g.id}`}></span>
-            <span class="hubcard-body">
-              <span class="hubcard-top">
-                <span class="hubcard-country">{g.data.region || g.data.country}</span>
-                {ex.badge && <span class="hubcard-badge">{ex.badge}</span>}
-              </span>
-              <span class="hubcard-title">{g.data.title}</span>
-              {g.data.dek && <span class="hubcard-dek">{g.data.dek}</span>}
-              <span class="hubcard-meta">
-                {ex.dayCount > 0 && <span class="hubcard-days">{ex.dayCount} days</span>}
-                {ex.month && <span class="hubcard-days">{ex.month}</span>}
-                {(g.data as any).advisory?.level >= 2 && (
-                  <span class="hubcard-advisory" title={(g.data as any).advisory.title}>
-                    ⚠ Level {(g.data as any).advisory.level} advisory
+          </span>
+          <a class="atlas-quick-cta" href={`${base}/guides/${quick.g.id}/`}>Open this sheet →</a>
+        </div>
+      )}
+
+      {rows.length === 0 ? (
+        <p class="atlas-empty">No guides yet.</p>
+      ) : (
+        <ul class="atlas-sheets">
+          {rows.map(({ g, record, cc, cities, dates, dayCount }) => {
+            const stamp = STAMP[record.status];
+            return (
+              <li>
+                <a class="atlas-sheet" id={`sheet-${g.id}`} href={`${base}/guides/${g.id}/`}>
+                  <span class="atlas-sheet-num">{record.ordinal != null ? String(record.ordinal).padStart(2, "0") : "—"}</span>
+                  <span class="atlas-sheet-body">
+                    <span class="atlas-sheet-title">{g.data.title}</span>
+                    <span class="atlas-sheet-cities">{cities}{dayCount > 0 ? ` · ${dayCount} days` : ""}</span>
+                    {dates && <span class="atlas-sheet-dates">{dates}</span>}
                   </span>
-                )}
-              </span>
-              <span class="hubcard-go">Open guide →</span>
-            </span>
-          </a>
-          );
-        })}
-      </div>
-      {/* R5: the dead end. This was one italic sentence with no control, and it said
-          "country" while the chips above it filter by continent. The message is now written
-          by hub.js from what the visitor actually did, and the way out is a real button. */}
-      <p class="hub-empty" id="hubEmpty" hidden>
-        <span data-empty-msg>No guides match.</span>
-        <button class="hub-reset" type="button" data-hub-reset>Show all trips</button>
-      </p>
+                  {stamp && <span class={`atlas-stamp ${stamp.cls}`}>{stamp.label}</span>}
+                  {cc && <span class="atlas-quick-meta" aria-hidden="true">{cc}</span>}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+
+      {/* One tap into the trip's own tools tab (README §5's "TRIP TOOLS row"). A standalone,
+          cross-trip Tools screen with its own trip selector is NOT built this stage — it is
+          not one of PLAN_ATLAS_MIGRATION.md's eleven Stage C items, and the plan's own Chrome
+          item only names a "TOOLS" entry point, not a new screen. Flagged as an open item at
+          the Stage C checkpoint rather than guessed either way. */}
+      {quick && (
+        <a class="atlas-toolsrow" href={`${base}/guides/${quick.g.id}/#gtab-split`}>
+          <span class="atlas-toolsrow-label">Trip tools</span>
+          <span>Budget, jetlag, closures, reminders for {quick.g.data.title} →</span>
+        </a>
+      )}
     </main>
-
-    <!-- R4 (2026-08-05): the new-guide modal + its form moved to src/pages/new.astro (the
-         composed intake flow) — same field ids, same pipeline seam; ＋ New guide in the
-         Overture bar is now a link. -->
-
-    <footer class="hub-foot">Waypoint — every fact checked, every route tested. <a href={`${base}/about/`}>How it's made →</a></footer>
+    <footer class="atlas-foot">Waypoint — every fact checked, every route tested. <a href={`${base}/about/`}>How it's made →</a></footer>
+    </div>
 
     <script>
-      import "../features/hub/index.js";
-      import "../scripts/micro.js";
-      import "../scripts/hub-live-cards.js";
-      import { initOverture } from "../scripts/overture.js";
-      initOverture();
+      import { initAtlasSearch, startLocalClocks, initCover } from "../features/atlas/index";
+      import { initAtlasWorld } from "../features/atlas/ui/world-view.js";
+      import { initDarkToggle } from "../scripts/theme.js";
+
+      // The header measures its own height into --hdr-h (DESIGN.md: "sticky offsets are
+      // never literals") — the globe wrap and the table's sticky search header both
+      // already consume it. Item 9 (Chrome) will grow this same header with more rows
+      // (theme toggle, ＋ New guide, TOOLS); this observer keeps working unchanged either way.
+      const header = document.querySelector<HTMLElement>(".atlas-header");
+      if (header) {
+        const setHdrH = () => document.documentElement.style.setProperty("--hdr-h", `${header.offsetHeight}px`);
+        setHdrH();
+        if ("ResizeObserver" in window) new ResizeObserver(setHdrH).observe(header);
+      }
+
+      initAtlasSearch(document);
+      startLocalClocks(document);
+      initAtlasWorld(document);
+      initCover(document);
+      initDarkToggle("btnDark");
+
+      // WORLD|TABLE toggle (README §"State" mode atlas/ledger) — table is the markup
+      // default (D4); switch to world once JS is confirmed running, remembering the
+      // visitor's own last choice.
+      const MODE_KEY = "tg-atlas-mode";
+      const modeBtns = document.querySelectorAll<HTMLElement>("[data-atlas-mode-btn]");
+      function setMode(mode: string) {
+        document.documentElement.setAttribute("data-atlas-mode", mode);
+        modeBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.atlasModeBtn === mode)));
+        try { localStorage.setItem(MODE_KEY, mode); } catch { /* storage unavailable */ }
+      }
+      modeBtns.forEach((b) => b.addEventListener("click", () => setMode(b.dataset.atlasModeBtn || "world")));
+      let initialMode = "world";
+      try { initialMode = localStorage.getItem(MODE_KEY) || "world"; } catch { /* storage unavailable */ }
+      setMode(initialMode);
     </script>
-
-    <!-- A2/R4: the dark-toggle script boots from the hub silo (initDarkToggle via
-         features/hub/index.js); the new-guide modal + wizard that also booted there
-         moved to /new (features/hub/ui/intake-flow.js) with the form itself. -->
-
   </body>
 </html>

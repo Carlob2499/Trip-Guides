@@ -9,8 +9,7 @@
   @media (prefers-reduced-motion: no-preference) {
     .catblock .card,
     .catblock .day,
-    .catblock .sight,
-    .hubcard {
+    .catblock .sight {
       animation: tgRise linear both;
       animation-timeline: view();
       /* Reveal as the item enters, finishing well before it's centred — so it's

@@ -66,7 +66,9 @@ async function assertContentVisible(page: Page, name: string) {
     // Sample real content, not chrome: headings, cards and links are what the audit is FOR.
     // R4: h1 + .itk-ask + .itk-card joined the sample for the /new intake page, whose main
     // carries a flow of screens rather than cards/links — same vacuous-pass guard, new shape.
-    const sample = [...document.querySelectorAll("main a, main h2, main h1, main .card, main .itk-ask, main .itk-card, .hubcard")].slice(0, 40);
+    // Stage C flip: `.hubcard` (the retired hub's grid card) gave way to `.atlas-sheet`,
+    // the Atlas hub's server-rendered sheet row — same job for this guard, new markup.
+    const sample = [...document.querySelectorAll("main a, main h2, main h1, main .card, main .itk-ask, main .itk-card, .atlas-sheet")].slice(0, 40);
     return {
       sampled: sample.length,
       invisible: sample.filter((el) => cumulativeOpacity(el) === 0).length,
@@ -92,11 +94,11 @@ type Baseline = { max: number; why: string };
 const PSEUDO_CONTENT_WHY =
   "Real, sizeable ancestor pseudo-elements axe's ancestor+size heuristic flags conservatively " +
   "without testing real geometric overlap: ol.steps li::before (a real ~23px numbered-step badge, " +
-  "positioned in the li's left gutter, not over the flagged inline text), .overture::after (the " +
-  "hub hero's 22vh gradient fade at the very bottom), and — desktop only, since R3's horizon — " +
+  "positioned in the li's left gutter, not over the flagged inline text) and — desktop only, " +
+  "since R3's horizon — " +
   ".gtab:not(.gtab-tool)::after, the 11px journey-line station dot centred in each tab's bottom " +
   "padding band (bottom:9px), below the label's text box. Verified live: the flagged " +
-  "<b>/checklist/link text, .overture's wordmark, and the tab labels do not sit inside any of " +
+  "<b>/checklist/link text and the tab labels do not sit inside any of " +
   "these pseudos' actual painted areas.";
 const bgOverlapWhy = (fixedCaptionBugs: string) =>
   `Two real bugs already found and fixed here this way: ${fixedCaptionBugs}. What remains is (a) ` +
@@ -497,11 +499,21 @@ for (const [name, path] of [
    that element's own candidate. Sameness across cards was the symptom; per-element
    equality is the contract. The source-side partner (accent text may only come from
    --accent-ink/--aink) lives in scripts/__tests__/accent-ink-contract.test.mjs. */
-for (const [who, pagePath] of [
-  ["hub cards", "/Trip-Guides/"],
-  /* The guide page exercises the OTHER carrier shape: <html> itself holds the inline
-     candidates, where the :root-level swap (not the descendant partner) must resolve. */
-  ["guide page", "/Trip-Guides/guides/denmark/"],
+/* The hub USED to be the descendant-carrier case (one inline candidate pair per guide card).
+   The Atlas migration's Stage C flip retired those cards along with the rest of the old hub:
+   Atlas paints one house accent (oxide) rather than per-guide card tints — D3 explicitly
+   retires the V3 per-guide tint — so the hub now emits zero inline candidates and there is
+   nothing on it for this gate to assert. Verified against built output, not assumed. The
+   guide page below still exercises the contract, and the source-side partner
+   (scripts/__tests__/accent-ink-contract.test.mjs) is unchanged. If a future surface
+   reintroduces per-element accent candidates, add it here — the `many` branch below still
+   carries the multi-carrier assertions for exactly that case. */
+for (const [who, pagePath, many] of [
+  /* The guide page's carrier shape: <html> itself holds the inline candidates, where the
+     :root-level swap (not the descendant partner) must resolve. `many` marks a page with
+     SEVERAL carriers, which additionally must resolve to DIFFERENT inks; a single-carrier
+     page can't say anything about per-element difference. */
+  ["guide page", "/Trip-Guides/guides/denmark/", false],
 ] as const)
 for (const scheme of ["light", "dark"] as const) {
   test(`${who} resolve their OWN accent ink — ${scheme}`, async ({ page }) => {
@@ -516,7 +528,6 @@ for (const scheme of ["light", "dark"] as const) {
         };
       });
     }, scheme === "dark");
-    const many = who === "hub cards"; // the guide page's one carrier is <html> itself
     expect(carriers.length, `${who} stopped emitting inline accent candidates — update this gate`).toBeGreaterThanOrEqual(many ? 2 : 1);
     for (const c of carriers) {
       expect(c.resolved, `${c.who} (${scheme}): inherited an ink instead of resolving its own candidate`).toBe(c.candidate);
