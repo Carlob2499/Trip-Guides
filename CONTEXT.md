@@ -35,13 +35,47 @@ Korea guide). A fact about the destination.
 _Avoid_: home base (a different concept — see Traveler origin)
 
 **Traveler origin**:
-The departure airport/city for one specific trip's globe route traverse. Recorded per
-guide (optional field), never a shared site-wide default — this repo's guides
-originate from whichever airport that traveler actually used for that trip, and the
-product's longer-term goal is portability to other travelers' own trips, so no single
-"home base" constant is assumed to hold across all guides.
+The departure airport for one specific trip's globe route traverse. Recorded once in
+that guide's own content as its departure-airport fact (with a confirmed/unconfirmed
+state), never in a separate registry and never as a shared site-wide default — every
+surface that needs the origin derives it from that one record. An absent or unconfirmed
+origin draws no traverse. This repo's guides originate from whichever airport that
+traveler actually used for that trip, and the product's longer-term goal is portability
+to other travelers' own trips, so no single "home base" constant is assumed to hold
+across all guides.
 _Avoid_: home base (implies one fixed value shared by every trip, which this explicitly
 is not)
+
+**Sheet**:
+A guide as the atlas hub indexes it — one numbered entry in the survey ("SHEET 02 ·
+KR"). The word for a guide spoken of from the hub's surveyor frame; the guide page
+itself is still "the guide".
+_Avoid_: card, page
+
+**Sheet number**:
+The single ordinal a guide carries on every surface that numbers it — the hub's index
+rail, table rows, the mobile ping sheet, and the masthead's plate line ("PLATE 02 —
+KR"). Assigned chronologically by trip start, derived in one place so the hub and the
+plate can never disagree.
+_Avoid_: plate number (same datum, not a second concept)
+
+**Cover**:
+The hub's full-viewport arrival moment — benchmark mark, wordmark, and the iris that
+opens onto the globe. Shown once per session; reduced motion replaces the whole
+sequence with a cut. Distinct from a guide's `cover` image (the masthead photograph).
+_Avoid_: splash screen, overture (the retired pre-Atlas hub intro)
+
+**Quick card**:
+Table view's focus-trip card — the current, next, or most recent trip's local time,
+dates, and sourced fact chips, shown whenever no search query is active. Its emergency
+chips project Emergency data (above); nothing on it is authored for the card itself.
+
+**The gap**:
+The signature honest-absence state — "⚠ NOT CONFIRMED" rendered at reading scale where
+a fact would otherwise go, with a what-to-do-instead line. A gap is produced by
+research coming up short and saying so; it is never generated to fill a surface, and
+filling one requires a sourced fact, not prose.
+_Avoid_: placeholder, empty state
 
 **Live rate**:
 A currency conversion fetched at render time via `src/features/live-data/model/rate.ts`
