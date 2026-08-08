@@ -31,8 +31,8 @@ silo, atlas-map port, server-rendered table view, world view + pin-card solver, 
 all live-verified, `1e2c350`.
 
 **This session: items 9 (Chrome), 7 (view transitions), 8 (mobile) — Stage C is now content-
-complete**, only the flip (10) and checkpoint (11) remain. `675fb67` → `84b1cde` →
-(item 8, uncommitted at summary time — commit next). Highlights:
+complete**, only the flip (10) and checkpoint (11) remain.
+`675fb67` (9) → `84b1cde` (7) → `ae26480` (8). Highlights:
 - **9 Chrome**: header actions cluster (TOOLS → quick-card's tools tab, ＋ New guide, theme
   toggle via shared `initDarkToggle`), OG/description meta (no `og:image` — no hub-level OG
   asset exists, honest omission), About link relocated to a `.atlas-foot` in the table view.
@@ -73,19 +73,21 @@ explicitly at the item-11 checkpoint.
 
 ## Where we left off
 
-**This session:** Stage C item 9 (Chrome) shipped and verified. Items 7, 8, 10, 11 remain:
-view transitions (D22), mobile <760px (wire to existing `mobile-nav` models, and actually
-give WORLD|TABLE a responsive treatment), the flip commit itself (not pushed until item 11's
-GO), and the item-11 creator checkpoint.
+**This session:** Stage C items 7, 8, 9 all shipped and verified — Stage C is now
+content-complete. Only 10 (the flip) and 11 (the checkpoint) remain, and 10 is explicitly
+gated on 11's creator GO.
 
-**Recommended next step:** continue Stage C at item 8 (mobile) — the one substantial item
-left before the flip. Item 7 (view transitions) is small and can slot in wherever convenient,
-before or after 8. Save the flip (10) and checkpoint (11) for last, once everything else is
-verified.
+**Recommended next step:** item 11, the end-of-stage checkpoint — screenshot desktop+mobile,
+light+dark to the creator; ask the Sedona/Japan departure-airport question (D14/Clarifying
+#1); surface the Tools-screen scope note (full README §5 screen later, or keep today's
+guide-tab-link shortcut); get explicit GO. This needs the creator directly — it's not
+something to keep pushing through solo. Once GO lands, item 10 (the flip) is comparatively
+mechanical: `index.astro` becomes the hub in one commit, delete the old hub code/CSS, update
+the tests that reference it.
 
-**Re-prompt the creator with:** "Stage C of the Atlas migration is under way — the globe, table
-view, pin-card solver, cover/iris intro, and now the full header chrome are built, tested, and
-live at `/atlas/` (not yet linked from the real nav). Remaining: mobile layout, view
-transitions, and then the flip itself — which needs your explicit go-ahead before it ships,
-plus your call on Sedona/Japan's departure airports and whether the Tools screen gets built
-this round or later."
+**Re-prompt the creator with:** "Stage C of the Atlas migration is content-complete — the
+globe, table view, cover/iris intro, full header chrome, view transitions, and mobile surfaces
+are all built, tested, and live at `/atlas/` (not yet linked from the real nav). Before I flip
+it to be the real hub: can you look at desktop + mobile screenshots, confirm Sedona/Japan's
+departure airports, and say whether the Tools screen should get its own full build this round
+or stay as today's shortcut into each guide's tools tab?"
