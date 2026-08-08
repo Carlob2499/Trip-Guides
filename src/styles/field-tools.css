@@ -9,7 +9,7 @@
 .addr-copy:hover,.addr-copy:focus-visible{background:color-mix(in srgb,var(--accent) 12%,transparent);outline:none}
 
 /* ── Mini toast ───────────────────────────────────────────────────────────── */
-.ft-toast{position:fixed;left:50%;bottom:5.4rem;transform:translate(-50%,8px);z-index:940;padding:.5rem .95rem;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:var(--text-control-sm);border-radius:999px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+.ft-toast{position:fixed;left:50%;bottom:calc(5.4rem + var(--safe-bottom));transform:translate(-50%,8px);z-index:940;padding:.5rem .95rem;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:var(--text-control-sm);border-radius:999px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
 .ft-toast-on{opacity:1;transform:translate(-50%,0)}
 @media(min-width:900px){.ft-toast{bottom:1.6rem}}
 
@@ -27,7 +27,7 @@
 .cur-out{margin-top:.5rem;font-family:var(--font-data);font-size:var(--text-control);line-height:1.7;color:var(--ink)}
 
 /* ── Jump-to-today chip ───────────────────────────────────────────────────── */
-.today-chip{position:fixed;left:50%;bottom:5.2rem;transform:translateX(-50%);z-index:70;padding:.6rem 1.1rem;background:var(--accent);color:var(--on-accent);border:none;border-radius:999px;font-family:var(--font-display);font-weight:640;font-size:var(--text-small);box-shadow:0 6px 22px color-mix(in srgb,var(--accent) 45%,transparent);cursor:pointer}
+.today-chip{position:fixed;left:50%;bottom:calc(5.2rem + var(--safe-bottom));transform:translateX(-50%);z-index:70;padding:.6rem 1.1rem;background:var(--accent);color:var(--on-accent);border:none;border-radius:999px;font-family:var(--font-display);font-weight:640;font-size:var(--text-small);box-shadow:0 6px 22px color-mix(in srgb,var(--accent) 45%,transparent);cursor:pointer}
 @media(min-width:900px){.today-chip{bottom:1.7rem;left:auto;right:6rem;transform:none}}
 @media(prefers-reduced-motion:no-preference){.today-chip{animation:chipIn .5s cubic-bezier(.2,1.2,.3,1) .8s both}}
 @keyframes chipIn{from{opacity:0;transform:translateX(-50%) translateY(16px)}to{opacity:1}}
@@ -58,7 +58,7 @@
 /* ── Reading spine (desktop ≥1100px) ─────────────────────────────────────── */
 .spine{display:none}
 @media(min-width:1100px){
-  .spine{display:flex;flex-direction:column;gap:.45rem;position:fixed;left:.9rem;top:50%;transform:translateY(-50%);z-index:55}
+  .spine{display:flex;flex-direction:column;gap:.45rem;position:fixed;left:max(.9rem,var(--safe-left));top:50%;transform:translateY(-50%);z-index:55}
   .spine-tick{position:relative;width:5px;height:30px;padding:0;background:color-mix(in srgb,var(--rule) 70%,transparent);border:none;border-radius:4px;cursor:pointer;overflow:visible}
   .spine-fill{position:absolute;left:0;right:0;top:0;height:0;background:var(--accent);border-radius:4px;transition:height .25s ease}
   .spine-seen .spine-fill{background:color-mix(in srgb,var(--accent) 55%,var(--rule))}
@@ -68,7 +68,7 @@
   .spine-tick:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 }
 /* ── SOS button + sheet ───────────────────────────────────────────────────── */
-.sos-btn{position:fixed;left:1rem;bottom:5.2rem;z-index:75;width:48px;height:48px;border-radius:50%;background:#b3261e;color:#fff;border:2px solid rgba(255,255,255,.35);font-family:var(--font-data);font-size:var(--text-micro);font-weight:800;letter-spacing:.05em;box-shadow:0 4px 16px rgba(179,38,30,.4);cursor:pointer}
+.sos-btn{position:fixed;left:max(1rem,var(--safe-left));bottom:calc(5.2rem + var(--safe-bottom));z-index:75;width:48px;height:48px;border-radius:50%;background:#b3261e;color:#fff;border:2px solid rgba(255,255,255,.35);font-family:var(--font-data);font-size:var(--text-micro);font-weight:800;letter-spacing:.05em;box-shadow:0 4px 16px rgba(179,38,30,.4);cursor:pointer}
 @media(min-width:900px){.sos-btn{bottom:1.6rem;left:5rem}}
 .sos-btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .sos-sheet{position:fixed;inset:0;z-index:320;display:flex;align-items:flex-end;justify-content:center;background:rgba(8,11,14,.6)}
@@ -76,7 +76,7 @@
 /* overscroll-behavior:contain — a fling that runs off the end of the sheet must not
    scroll the page behind it. sheet-dragging kills the transition while the thumb owns
    the transform (src/scripts/sheet-drag.js). */
-.sos-inner{width:100%;max-width:30rem;background:var(--card);border-radius:16px 16px 0 0;padding:1rem 1.2rem calc(1.2rem + env(safe-area-inset-bottom));overscroll-behavior:contain;transition:transform .26s cubic-bezier(.2,.8,.2,1)}
+.sos-inner{width:100%;max-width:30rem;background:var(--card);border-radius:16px 16px 0 0;padding:1rem 1.2rem max(1.2rem,var(--safe-bottom));overscroll-behavior:contain;transition:transform .26s cubic-bezier(.2,.8,.2,1)}
 .sos-inner.sheet-dragging{transition:none;will-change:transform}
 /* A sheet you can pull down should say so. */
 .sos-inner::before{content:"";display:block;width:38px;height:4px;border-radius:4px;background:var(--rule2);margin:-.35rem auto .6rem}
@@ -112,7 +112,7 @@
 .addr-card-x{padding:.65rem 1.2rem;background:transparent;color:var(--muted);border:1px solid var(--rule);border-radius:999px;font-size:var(--text-control);cursor:pointer}
 
 /* ── Focus Today overlay ──────────────────────────────────────────────────── */
-.focus-today{position:fixed;inset:0;z-index:310;display:none;flex-direction:column;background:var(--bg);padding:1rem 1.1rem calc(1.2rem + env(safe-area-inset-bottom));overflow-y:auto}
+.focus-today{position:fixed;inset:0;z-index:310;display:none;flex-direction:column;background:var(--bg);padding:max(1rem,var(--safe-top)) 1.1rem max(1.2rem,var(--safe-bottom));overflow-y:auto}
 .focus-today.focus-on{display:flex}
 .focus-head{position:relative;padding:0 3rem .8rem 0;border-bottom:2px solid var(--accent)}
 .focus-date{margin:0;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink)}

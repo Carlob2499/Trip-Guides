@@ -51,7 +51,12 @@ test.describe("Panel gates — korea/Essentials on the real guide page", () => {
     });
     await page.goto(KOREA, { waitUntil: "load" });
 
-    const panels = page.locator("[data-panel-grid] [data-panel]");
+    // Scoped to THIS guide's Essentials grid on purpose. The bare
+    // `[data-panel-grid] [data-panel]` this used to say counted every panel on the page,
+    // which was the same number back when Essentials was korea's only panel group — the
+    // guide now declares 11, so the old selector matched 78 and the gate broke on content
+    // growth rather than on any Panel regression. The count assertion is about ONE grid.
+    const panels = page.locator('[data-panel-scope="korea:Essentials"] [data-panel]');
     await expect(panels).toHaveCount(9);
 
     // The silo never ran: its ready gate must be absent from the document.

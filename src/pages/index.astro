@@ -133,7 +133,9 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {/* viewport-fit=cover — see GuideLayout.astro's note: without it every --safe-* token
+        resolves to 0 and this page's own FAB/menu/ping-sheet insets do nothing. */}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Waypoint — Atlas</title>
     <meta name="description" content={DESCRIPTION} />
     <meta property="og:type"        content="website" />

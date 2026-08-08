@@ -358,7 +358,11 @@ const tripSummary = buildSummary(guide);
 <html lang="en" style={accentStyle(tokens, { "--theme-primary": themePrimary, "--theme-secondary": themeSecondary, "--theme-accent": themeAccent })}>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {/* viewport-fit=cover is REQUIRED for env(safe-area-inset-*) to report anything but 0
+        (design-handoff README "Display cutouts"). Without it the --safe-* tokens base.css
+        declares are all zero and every notch/home-indicator guard in this stylesheet is
+        silently inert — which is exactly the state this page shipped in until Stage D. */}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>{guide.title} — Waypoint</title>
     <meta name="description" content={guide.dek || guide.title} />
     {/* Drafts stay fully viewable/linkable (the homepage's Guides-to-be tier links
@@ -966,6 +970,18 @@ const tripSummary = buildSummary(guide);
         <span class="bslot-mark" aria-hidden="true"></span>
         <span class="bslot-txt">{slotLabel(order[0])}</span>
       </button>
+      {/* Slot 1b — the SECOND content group the design-handoff README specs ("Four slots:
+          two content groups, then ALL, then TOOLS"). The shipped bar replaced it with the
+          tool slot below on the creator's 2026-07-30 ruling. Both layouts now ship so the
+          creator can compare them on a real phone before one becomes permanent (Stage D):
+          `?bar=spec` selects the README's four-slot bar, `?bar=app` the shipped five-slot
+          one, and the choice sticks per device. Hidden here by default — botbar.js decides,
+          and the model needs no change either way (`promoted()` already takes a slot count). */}
+      <button class="botslot botslot-alt" type="button" data-slot="1" data-tab="1" hidden
+              aria-label={order[1] ?? order[0]}>
+        <span class="bslot-mark" aria-hidden="true"></span>
+        <span class="bslot-txt">{slotLabel(order[1] ?? order[0])}</span>
+      </button>
       {/* Slot 2 — the TOOLS slot (creator, 2026-07-30: "the tools should be their own tab
           ... the Trip Split calculator is by far the most useful to have handy"). It was a
           second content group, which the Groups sheet already reaches in one tap; a tool
@@ -1013,7 +1029,16 @@ const tripSummary = buildSummary(guide);
       <div class="sheet-list">
         {order.map((g, ci) => (
           <>
-            <a class="sheet-cat" data-cat={ci} data-tab={ci} href={`#grp-${ci}`}>{g}</a>
+            {/* Card count (design-handoff README, "The Groups sheet"): every section listed
+                WITH how much is inside it, so the sheet says what a group costs to open
+                rather than just naming it. Derived from the guide's own bucketed sections —
+                counted, never authored. The numeral is aria-hidden with a spoken equivalent
+                beside it: a screen reader saying "Food & shopping 4" is a riddle. */}
+            <a class="sheet-cat" data-cat={ci} data-tab={ci} href={`#grp-${ci}`}>
+              <span class="sheet-cat-name">{g}</span>
+              <span class="sheet-count" aria-hidden="true">{byG[g].length}</span>
+              <span class="mn-sr">{byG[g].length === 1 ? " — 1 section" : ` — ${byG[g].length} sections`}</span>
+            </a>
             {byG[g].length > 1 && byG[g].map((o) => (
               <a class="sheet-link" data-tab={ci} href={`#sec-${o.i}`}>{navLabel(o.s, g)}</a>
             ))}

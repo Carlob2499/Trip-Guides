@@ -24,9 +24,39 @@ import { tapHaptic } from "../../../scripts/util.js";
 var TOOL_KEYS = ["split", "vote", "remind", "kit", "learn"];
 var TOOL_LABEL = { split: "Split", vote: "Vote", remind: "Alerts", kit: "Kit", learn: "Learnings" };
 
+/** Which bar layout this device shows (Stage D, creator asked to compare both):
+    "app"  — the shipped five-slot bar: [group][tool][Groups][Today][Map] (2026-07-30 ruling).
+    "spec" — the design-handoff README's four: [group][group][ALL][TOOLS].
+    `?bar=spec` / `?bar=app` picks one and remembers it, so the creator can flip the running
+    site on a phone without a rebuild. Default stays the shipped bar: an A/B for a decision
+    that hasn't been made must not quietly change what everyone else sees. */
+function barMode(store) {
+  var q = null;
+  try { q = new URLSearchParams(location.search).get("bar"); } catch (e) { /* no URL API */ }
+  if (q === "spec" || q === "app") { store.write("tg-barmode", q); return q; }
+  return store.read("tg-barmode") === "spec" ? "spec" : "app";
+}
+
 export function initBotBar(ctx) {
   var bar = ctx.bar, tabs = ctx.tabs, order = ctx.order;
-  var groupSlots = Array.prototype.slice.call(bar.querySelectorAll(".botslot:not(.botslot-tool)"));
+  var mode = barMode(ctx.store);
+  bar.setAttribute("data-bar-mode", mode);
+
+  var allGroupSlots = Array.prototype.slice.call(bar.querySelectorAll(".botslot:not(.botslot-tool)"));
+  // A guide with only ONE group can't fill a second content slot — asking for two would
+  // seat a duplicate. Spec mode degrades to the slots the guide can actually fill.
+  var wantGroups = mode === "spec" ? Math.min(2, order.length) : 1;
+  var groupSlots = allGroupSlots.slice(0, wantGroups);
+  // Park every slot this mode doesn't use, and keep renderGroups away from them.
+  allGroupSlots.slice(wantGroups).forEach(function (el) { el.hidden = true; });
+  if (mode === "spec") {
+    // The README's bar carries no Today/Map minis — ALL and TOOLS are the other two slots.
+    var today = bar.querySelector("#botToday");
+    var map = bar.querySelector("#botMap");
+    if (today) today.hidden = true;
+    if (map) map.hidden = true;
+  }
+
   var toolSlot = bar.querySelector(".botslot-tool");
   if (!groupSlots.length && !toolSlot) return;
 

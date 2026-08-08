@@ -19,10 +19,25 @@
   .botbar{
     gap:var(--mn-gap,.3rem);
     padding:.4rem var(--mn-pad,.5rem);
-    padding-bottom:calc(.4rem + env(safe-area-inset-bottom));
+    padding-bottom:max(.4rem,var(--safe-bottom));
     align-items:stretch;
   }
   .content{padding-bottom:6rem}
+  /* The colophon sits AFTER .content, so .content's clearance does nothing for it and
+     the fixed bar covered the footer's "Request a change" pill — the last control on
+     the page was unclickable at phone width. Clear the bar here too, plus the home
+     indicator the bar itself now sits above. */
+  .colophon{padding-bottom:calc(6rem + var(--safe-bottom))}
+
+  /* Spec-mode bar (?bar=spec) — the design-handoff README's [group][group][ALL][TOOLS].
+     DOM order puts the tool slot before Groups (the shipped bar wants it there), so only
+     this mode reorders them; `order` on flex children costs nothing and keeps ONE markup
+     tree serving both layouts. Reordering visual position without reordering the DOM would
+     normally desync keyboard/AT order from what's on screen — here the two slots are
+     adjacent siblings with equivalent roles, so the swap is a presentational nicety rather
+     than a different navigation order. */
+  .botbar[data-bar-mode="spec"] .botmini-groups{order:3}
+  .botbar[data-bar-mode="spec"] .botslot-tool{order:4}
   /* Equal-width slots. min-width:0 is load-bearing — without it a long label sets the
      flex base and the last slot is pushed off the screen edge on a 320px phone. */
   .botslot,.botbar .botmini{
@@ -90,7 +105,9 @@
   .topbar-ctx{display:none;align-items:baseline;gap:.45rem;min-width:0;flex:1;margin-left:.55rem}
   .topbar-ctx b{font-family:var(--font-display);font-weight:640;font-size:var(--text-control);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .topbar-ctx-time{font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);flex:none;font-variant-numeric:tabular-nums}
-  body.chrome-yield .topbar{padding-top:.18rem;padding-bottom:.18rem}
+  /* Keep the cutout inset while compacting: a flat padding-top here would slide the
+     yielded topbar back under the notch on a device that reports one. */
+  body.chrome-yield .topbar{padding-top:calc(.18rem + var(--safe-top));padding-bottom:.18rem}
   body.chrome-yield .topbar-wordmark{display:none}
   body.chrome-yield .topbar-ctx{display:flex}
   @media(prefers-reduced-motion:reduce){
@@ -174,7 +191,7 @@
   @media(min-width:600px){
     .botbar{
       left:50%;right:auto;transform:translateX(-50%);
-      width:min(560px,calc(100% - 2rem));bottom:calc(.75rem + env(safe-area-inset-bottom));
+      width:min(560px,calc(100% - 2rem));bottom:max(.75rem,var(--safe-bottom));
       padding-bottom:.4rem;border:1px solid var(--rule2);border-radius:var(--r-lg);
       box-shadow:0 6px 24px rgba(16,20,24,.18),0 2px 6px rgba(16,20,24,.08);
     }
