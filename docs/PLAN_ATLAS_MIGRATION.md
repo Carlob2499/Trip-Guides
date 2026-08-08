@@ -243,8 +243,8 @@ tz ×2). Nothing visible changed — verify hub/guides render identically in pre
 
 ## Stage C — The hub (Phase 3)
 
-> **RESUME (2026-08-08 session, mid-stage):** Items 1–6 done and verified (ship loop green:
-> build/lint/typecheck/1560 tests; content-preservation gate clean — zero
+> **RESUME (2026-08-08 session, mid-stage):** Items 1–6, 9 done and verified (ship loop
+> green: build/lint/typecheck/1560 tests; content-preservation gate clean — zero
 > `src/content/guides/` diffs). Built aside at `src/pages/atlas.astro` (dev-only, not linked
 > from live nav) — `index.astro` untouched, D1 intact.
 > - **1 Feature silo**: `src/features/atlas/model/{solver,relevance,local-time}.ts` +
@@ -326,10 +326,34 @@ tz ×2). Nothing visible changed — verify hub/guides render identically in pre
 >   one-off decorative sizes (14px/8.5px/10px) each land within ~1% of an existing token
 >   (`--text-small`/`--text-nano`/`--text-panel-kicker`) — used those instead of adding new
 >   literals to the closed allowlist.
+> - **9 Chrome**: header actions cluster added beside the item-6 shell — TOOLS (an `<a>` into
+>   the quick-card guide's own tools tab, `#gtab-split`, guarded by `quick &&`, same
+>   non-decision as the table view's own TRIP TOOLS row per the scope note above), New guide
+>   (`${base}/new/`), and the theme toggle wired to the SHARED `initDarkToggle("btnDark")`
+>   (`src/scripts/theme.js` — the same implementation index.astro/GuideLayout already use, not
+>   a third copy). PwaHead and the skip-link were already present from earlier items. Added
+>   OG/description meta (the hub page had none before, and neither does today's `index.astro`):
+>   description + og:title/og:description/og:url/og:type=website + matching twitter:*. No
+>   og:image — no hub-level OG image asset exists (guide pages have a per-slug generator at
+>   `pages/og/[slug].png.ts`; the hub has no counterpart) — omitted rather than fabricated.
+>   Footer/About link relocated: a small `.atlas-foot` at the bottom of the table view carries
+>   the old `index.astro` hub-foot's copy, pointed at `${base}/about/`. **Deliberately NOT
+>   done**: relocating the WORLD|TABLE toggle bar into the header — the plan's own item 9 line
+>   below never asked for it (that phrasing was this session's own earlier HANDOFF draft, not
+>   the plan), and moving it would touch the already-verified `--hdr-h`-minus-44px
+>   `#atlasGlobe` height math items 3–5 shipped; the toggle stays its own sticky bar, unchanged.
+>   Item 8 (mobile) is what actually owns giving WORLD|TABLE a real responsive treatment. Ship
+>   loop green (1560 tests, unchanged count — this composes already-tested shared pieces).
+>   Live-verified in `astro preview`: TOOLS points at `/guides/us/#gtab-split` (Sedona, the
+>   correct quick pick), theme toggle flips `data-theme` and re-syncs theme-color to the live
+>   `--bg`, footer renders only in table mode, header wraps cleanly at 375px with zero
+>   horizontal overflow (no screenshot — same frame-compositing tooling limit as item 6;
+>   confirmed via getBoundingClientRect/scrollWidth instead). Grepped compiled
+>   `dist/atlas/index.html` to confirm the OG tag, Tools/New-guide hrefs, footer markup, and
+>   `id="btnDark"` are genuinely present in production output.
 > - **Still to build**: 7 (view transitions), 8 (mobile <760px — wire to
->   existing `mobile-nav` models), 9 (chrome: hub header/OG/skip-link — decide the Tools
->   scope note above here), 10 (the flip commit itself — NOT pushed until item 11's GO), 11
->   (screenshot checkpoint + Sedona/Japan origin question, D14/Clarifying #1).
+>   existing `mobile-nav` models), 10 (the flip commit itself — NOT pushed until item 11's GO),
+>   11 (screenshot checkpoint + Sedona/Japan origin question, D14/Clarifying #1).
 
 Build aside (a dev-only route, e.g. `src/pages/atlas.astro`, or the new components mounted
 nowhere) and flip `index.astro` in one final commit. Read the handoff README §1–3 fully

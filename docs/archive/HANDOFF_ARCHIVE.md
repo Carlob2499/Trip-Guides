@@ -4,6 +4,29 @@
 > (the ~80-line budget its own header sets is now gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). Newest first, verbatim.
 
+## Snapshot (2026-08-08 — Atlas migration Stage C, items 1–6 of 11 shipped)
+
+**Prior sessions shipped Stages A+B and Stage C items 1–5** (archive has full detail):
+feature silo, atlas-map port, server-rendered table view, world view + pin-card solver, all
+live-verified, `65e2561`.
+
+**This session: Stage C item 6 — cover + iris (D21)**. `src/features/atlas/ui/cover.js`
+(`initCover`) + `src/styles/atlas-cover.css`: fade/FLIP/iris dismiss sequence ported from the
+prototype for timings, plus `reducedMotion()`-gated single-cut and real keyboard/focus support
+the prototype lacked. Discovered mid-item that the FLIP needs a header wordmark to FLIP into,
+and Stage C hadn't built one yet (that's item 9's job) — built the minimal `.atlas-header`
+shell (brand mark + wordmark only) as a genuine dependency, not scope creep; item 9 adds the
+rest of the row around it. Its height now feeds `--hdr-h` via a small `ResizeObserver`. No-JS
+safety (D4): `.atlas-cover` is `display:none` by default, `[data-open]` only after JS confirms
+`sessionStorage` hasn't seen it this session — confirmed in the compiled `dist/` CSS, not just
+source. `flyIn` targets the same relevance-ordered "quick" trip the table view's quick card
+already uses (content is king). Ship loop green (build/lint/typecheck/1560 tests); the closed
+type-scale test caught 4 literal font-sizes, fixed to existing tokens. Live-verified in
+`astro preview`: fade + FLIP transform (against real measured rects), dark theme, mobile
+375px, and the sessionStorage gate all correct. Not directly observed: the iris mask's own
+`requestAnimationFrame` loop — same frame-compositing tooling limit the prior session hit,
+verified by code review instead (unmodified port of the prototype's own formula).
+
 ## Snapshot (2026-08-08 — Atlas migration Stage C started, items 1–5 of 11 shipped)
 
 **Prior session shipped Stages A+B** (further archive detail below): Stage A closed all 11

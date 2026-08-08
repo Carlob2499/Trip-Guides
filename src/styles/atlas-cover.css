@@ -5,7 +5,7 @@
 
 .atlas-header {
   position: relative; z-index: 5;
-  display: flex; align-items: center; gap: 10px;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
   padding: max(14px, var(--safe-top)) max(clamp(18px, 4vw, 54px), var(--safe-right)) 12px
     max(clamp(18px, 4vw, 54px), var(--safe-left));
   border-bottom: 1px solid var(--rule2);
@@ -27,6 +27,30 @@
   font-family: var(--font-data); font-weight: 600; font-size: var(--text-nano); letter-spacing: .2em;
   color: var(--muted); white-space: nowrap;
 }
+
+.atlas-header-actions { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+.atlas-header-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-data); font-weight: 640; font-size: var(--text-control-sm); letter-spacing: .1em;
+  color: var(--muted); background: none; border: 1px solid var(--rule2);
+  padding: 0 14px; min-height: 38px; border-radius: 0;
+  text-decoration: none; cursor: pointer; white-space: nowrap;
+}
+.atlas-header-btn:hover { border-color: var(--ink); color: var(--ink); }
+.atlas-header-btn--cta {
+  font-size: var(--text-small); letter-spacing: .04em; color: var(--cta-ink);
+  background: var(--cta); border-color: var(--cta); border-radius: 999px; padding: 0 18px;
+}
+.atlas-header-btn--cta:hover { border-color: var(--cta); color: var(--cta-ink); opacity: .88; }
+.atlas-header-icon { padding: 0; width: 38px; justify-content: center; }
+.atlas-header-icon svg { width: 16px; height: 16px; flex: none; display: block; }
+
+.atlas-foot {
+  max-width: 1000px; margin: 0 auto; padding: 30px clamp(18px, 4vw, 54px) 60px;
+  font-family: var(--font-data); font-size: var(--text-control-sm); color: var(--muted);
+}
+.atlas-foot a { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+.atlas-foot a:hover { color: var(--ink); }
 
 /* ── Cover ────────────────────────────────────────────────────────────────────────────
    Hidden by default (D4's no-JS/SEO door): a visitor without JS must never see a
