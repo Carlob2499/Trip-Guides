@@ -4,8 +4,15 @@
 > with the creator on 2026-08-07 (four question rounds; every decision below is settled and
 > confirmed). CLAUDE.md auto-loads and governs everything here; nothing in this plan
 > overrides it. Read `docs/design-handoff/DESIGN.md` and `docs/design-handoff/README.md`
-> in full before Stage C. The creator has **no coding skills** — every question you ask
-> them must be plain language, brief, with a recommended option first.
+> in full before Stage C, plus the three anchor documents (creator-supplied 2026-08-07):
+> `docs/design-handoff/SPEC-COMPONENTS.md` (exact values — no number in it is a
+> suggestion), `docs/design-handoff/ANTIPATTERNS.md` (rejected alternatives — if you are
+> about to do one of these, the decision is already made), and
+> `docs/design-handoff/ACCEPTANCE.md` (mechanical per-gate checks; a failure is drift, not
+> taste). `docs/design-handoff/SCREENSHOT-INDEX.md` maps all 21 reference captures to spec
+> sections — consult the named capture before building each piece. The creator has **no
+> coding skills** — every question you ask them must be plain language, brief, with a
+> recommended option first.
 
 ---
 
@@ -99,6 +106,35 @@ history from git log.
 | D20 | Cross-guide search runs on a **build-time index** (one generated JSON, lazily fetched on first focus/keystroke), not the prototype's client crawl of every guide file. |
 | D21 | The cover gets its missing `sessionStorage` once-per-session gate. Reduced motion: single cut, no fade/FLIP/iris/flyIn (already correct in prototype page code — but fix `atlas-map.js`'s gaps: `flyTo`/`flyIn`/eased zoom must not animate under reduced motion, and listen for preference changes). |
 | D22 | Hub→guide morph rides **cross-document view transitions** (existing `cover-<slug>` / `accent-<slug>` names map onto the plate), not the prototype's manual FLIP. |
+
+---
+
+## Anchor-document adaptations (where ACCEPTANCE/SPEC text yields to settled reality)
+
+The anchor documents were written against the prototype. Six of their assertions meet
+decisions or shipped code that already rule; apply them ADAPTED as follows — everything
+else in ACCEPTANCE.md applies verbatim:
+
+1. **Panel collapse "340ms GSAP height tween"** → the repo's shipped mechanism stands:
+   CSS `grid-template-rows 1fr→0fr` at `var(--dur-reveal)` (350ms), no GSAP, no
+   re-measure needed (the concern the spec guards against is GSAP-specific). Check the
+   *behavioral* assertions (no one-frame jolt, sort order, per-scope persistence) as
+   written.
+2. **Panel grid `minmax(340px/460px)`** → the repo's `minmax(min(100%,19rem))` is a
+   recorded deviation (Binding principle 5), live-verified across 22 groups.
+3. **"atlas-map.js ships as-is" / 48-point routes / DPR 2** → D19 refactor rules (data-fed,
+   reduced-motion fixed, per-guide origins); where SPEC numbers disagree with the
+   prototype code, the prototype code wins (its 41 points, DPR 1.6 were the judged
+   artifact). Everything the SPEC marks "do not re-tune" (canvas layers, dirty-flag,
+   solver design, zoom clamp, fade-zoom law) applies.
+4. **Gate 5 "search indexes guides in the background"** → D20's build-time index replaces
+   the mechanism; the assertions that must still hold: matches on body text, capped
+   results, and a result opens its guide **on the right tab**.
+5. **Gate 3 "no number appears without a dot or flag chip"** → scoped to *governed
+   perishable figures* (facts.json tokens and provenance-carrying items, per
+   `provenance:"strict"`); prose numerals the author typed stay prose (D10).
+6. **Masthead chips "currency, base"** → the base chip stays omitted (no schema field on
+   any guide — honest absence over invention, recorded in `GuideLayout.astro`).
 
 ---
 
@@ -331,8 +367,19 @@ never detach.
 | perf budget (first-paint 200 KB) | — | — | ✓ | ✓ | ✓ | — | ✓ |
 | no-JS hub guarantee | — | — | ✓ | — | — | — | ✓ |
 | creator ❓ checkpoint | — | — | ✓ | ✓ | if forks | per feature | — |
+| ACCEPTANCE.md gates (adapted per the section above) | G2·G3 | — | G0(axe)·G4·G5·G8 | G7·G8 | G6 | G8 | ALL re-run |
+
+Gate 0's other two items are already satisfied: DESIGN.md was replaced in Phase 1
+(verify in Stage G), and the seven open questions are answered by this plan's Decision
+ledger.
 
 ## Known traps (all pre-litigated — do not rediscover these)
+
+- **`docs/design-handoff/ANTIPATTERNS.md` is binding.** Every entry there was built,
+  looked at, and removed — masonry, SVG globe, greedy solving, `left`/`top` animation,
+  hover-only dots, telemetry-driven ranking, invented rates/holidays, softened reduced
+  motion, mid-range border radii, oxide-for-emphasis, React. The bullets below are the
+  repo-specific additions.
 
 - **No masonry** for panel grids; **no `left`/`top`** per-frame positioning; **no
   first-render seeding** of the split tool (all three tried and undone in the prototype).
