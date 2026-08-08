@@ -310,7 +310,11 @@ never detach.
 3. Docs: update `docs/MOTION.md` (new hub motions, retired ones), `docs/FEATURES.md`,
    `docs/ARCHITECTURE.md` (atlas silo), rewrite HANDOFF.md snapshot, archive this plan's
    ledger state.
-4. Final full ship loop + axe on every changed surface + Playwright suite green +
+4. **Dependency hygiene**: `npm audit` must report 0 vulnerabilities. Baseline
+   established 2026-08-07 (pre-plan): pdfjs-dist → 6.2.108, fast-uri override → 3.1.5,
+   js-yaml/postcss/brace-expansion refreshed. If new advisories appear mid-migration,
+   fix them in their own commit — never bundled into a feature stage.
+5. Final full ship loop + axe on every changed surface + Playwright suite green +
    verify-live.
 
 ---
