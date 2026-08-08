@@ -24,76 +24,69 @@
   **`docs/PLAN_ATLAS_MIGRATION.md`** (the current work order — its own Progress ledger is the
   source of truth for which stage is next; read that before re-deriving status from git log).
 
-## Snapshot (2026-08-07 — Phase 2 completed; Atlas migration plan Stage A shipped)
+## Snapshot (2026-08-08 — Atlas migration Stage C started, items 1–5 of 11 shipped)
 
-**Session #38 ended mid-Phase-2** (archive has its detail); four more sessions/commits landed
-before this one picked up the Atlas migration plan: `f3734c0` finished Phase 2 (sights/venues/
-days/divergences all on Panels — the "remaining blocked" line in the old snapshot is resolved),
-`efaca03` rebuilt the masthead as **the plate** (square, sunken bed, oxide corner ticks — the
-plate NUMBER was deliberately omitted then for having no real data source), `edbd7b7` fixed
-notation-layer gaps (staleness reading, sights' own provenance dot, dead CSS tokens) and
-explicitly deferred the flag-chip and gap-state work as needing "a real architecture decision."
-`06da464` wrote `docs/PLAN_ATLAS_MIGRATION.md` itself (a Fable grilling session, D1–D22 settled);
-`b051389` cleared all 4 Dependabot alerts; `4e25569` integrated the creator's anchor bundle
-(SPEC-COMPONENTS.md, ACCEPTANCE.md, ANTIPATTERNS.md, screenshots 10–21) into the plan.
+**Prior session shipped Stages A+B** (archive has full detail): Stage A closed all 11
+guide-sheet gaps (flag chips, gap state, masthead plate number, popover conformance, day-scrub
+sticky fix, closed-days, venues grid, collapse-all, hash auto-expand). Stage B built the
+invisible data layer Stage C needed: airport gazetteer, the reserved `traveler-origin` fact row
+(D14/ADR 0003), tz backfill, per-guide atlas record derivation, vendored world TopoJSON, the
+search-index build step. A same-session Fable-5 review caught and fixed the D6 180-day
+plate-renumbering time bomb, a popover order regression, and a missing viewport clamp (`c872ec3`).
 
-**This session: Stage A — Guide-sheet completion, all 11 items.** Day-scrub `position:sticky`
-fixed (`.pnl-body-in` clips only while collapsing/collapsed, not in the open steady state — a
-`.pnl-clip` class carries the brief expand-transition case). `place_id` now reaches
-`<TransitLinks>` from sights/venues. `closed_days` renders a Closed row on sights and gets a
-new build-time (never-failing) cross-check against itinerary waypoints
-(`scripts/check-closed-days.mjs`). Venues now grid inside a Panel (D12). The plate NUMBER
-efaca03 omitted now ships — `src/lib/sheet-order.ts` (chronological-by-trip-start, pure+tested)
-feeds "PLATE NN — CC"; masthead conformance bundle (16px inner mat, corner ticks at ITS corners,
-title 640/-.014em, plate-line bottom hairline) done to the design-handoff prototype's exact
-markup. Provenance popover conformance (oxide square border, WHERE THIS CAME FROM kicker via
-`--aink` not raw oxide — D8's contrast trap avoided by construction, NO PUBLIC SOURCE fallback) —
-extracted into one shared `ProvenancePopover.astro` (was tripled across 3 call sites). Flag
-chips (D10) — edbd7b7's deferred item: `renderFactValue` now emits a real allowlisted `<a>` (no
-new `<span>` shape needed) for `state:"approx"`, works with zero JS, `flag-chip.js` logic in
-provenance-dot.js builds the same popover client-side from data-* attributes. Gap state (D9) —
-edbd7b7's other deferred item: `state:"unconfirmed"` + `instead` added to the shared provenance
-fields, `GapBlock.astro` built to the exact SPEC-COMPONENTS.md ASCII spec, wired into sights/
-venues; verified via a scratch-and-revert content test (renders nowhere in real guides yet, by
-design). COLLAPSE ALL/EXPAND ALL landed in each panel-group header. Hash auto-expand was already
-shipped (verified live, no change needed). A real new a11y baseline entry
-(`DAY_SCRUB_STICKY_RANGE_WHY`) was needed and added, verified/measured, not guessed — the day-
-scrub fix interacting with the a11y gate's own force-all-tabs-open harness technique.
+**This session: Stage C — the hub, items 1–5 of 11**, `65e2561`. Built ASIDE at
+`src/pages/atlas.astro` (dev-only, unlinked from live nav — `index.astro` untouched, D1 intact):
+pin-card collision solver (`src/features/atlas/model/solver.ts`, ported from the design-handoff
+prototype, 9 tests); `<atlas-map>` globe element ported with the required D19/D21 changes
+(guides/anchors/origins now arrive via a `.guides` property, never module constants; route arcs
+are per-guide from that guide's own confirmed origin — the prototype's single shared "home base"
+is gone; reduced-motion is live-listened; d3/topojson-client load via lazy `import()`); the
+server-rendered table view (D4 — search, quick card, sheet list, all live-verified in-browser);
+world-view assembly (globe mounts, pins solve with zero overlaps, zoom/fit/pause/toast/mode-toggle
+all verified via direct DOM/JS invocation — this session's browser pane couldn't composite frames
+for screenshots/rAF, a tooling limit, not a code defect). Found and fixed a real load-bearing gap
+along the way: `content.config.ts`'s guideLoader interpolated `facts.json` into prose but then
+DISCARDED the registry, so nothing downstream of `getCollection` could ever read a fact's own
+state — Stage B's `traveler-origin` arcs were unreachable until now. Also hardened
+`check-perf-budget.mjs`'s on-demand-chunk detection from a fragile `pdf`-only name regex to a
+structural "absent from every page's first-paint closure" check (d3's Rollup output has no
+stable name to match). Ship loop fully green (build/lint/typecheck/1560 tests/perf-budget);
+content-preservation gate clean (zero `src/content/guides/` diffs); CI confirms live
+(Tests/Deploy/Accessibility 23/23 all passed on `65e2561`).
+
+**Scope note flagged, not resolved:** README describes a standalone cross-trip "Tools" screen
+with its own trip picker (§5), but it is NOT one of Stage C's 11 numbered plan items — table
+view's TRIP TOOLS row links into the quick-card guide's own existing tools tab instead
+(`/guides/<slug>/#gtab-split`). Raise this explicitly at the item-11 checkpoint.
 
 ## Open items
 
-- **Needs the creator:** (1) LOCAL branch `worktree-agent-a7dc7eeb397c6a368` (progress-study,
-  `5917f8f`, exists nowhere else) — keep or lose; (2) sign off revise-guide `land` default `draft`
-  → `auto` + V6 Q4 thresholds; (3) Cloudflare dashboard Git integration still failing 0s builds on
-  every push — consider disabling; (4) skill-evals `push` trigger yes/no (fired 0 times as
-  `pull_request`-only); (5) Stage C checkpoint — Sedona/Japan departure-airport confirmation
-  (D14/Clarifying #1), asked once at end of Stage C, not before.
+- **Needs the creator, at Stage C's item-11 checkpoint (not before):** (1) screenshot sign-off
+  desktop+mobile, light+dark; (2) Sedona/Japan departure-airport confirmation (D14/Clarifying
+  #1); (3) the Tools-screen scope note above — build the full README §5 screen later, or keep
+  the guide-tab-tab-link shortcut; (4) explicit GO before the flip commit ships.
+- LOCAL branch `worktree-agent-a7dc7eeb397c6a368` (progress-study, `5917f8f`, exists nowhere
+  else) — keep or lose.
+- Cloudflare dashboard Git integration still failing 0s builds on every push — consider disabling.
 - Korea 03: critic flagged a swapped 명동 label on the Gyeongbokgung map point → file its issue.
-- S1–S5 research standards + dossier contract still await their first real research pass.
 - No guide uses a direct royalty-free `sights[].img.src` yet — capability live, unexercised.
-- feedback-export Monday cron: if 2026-08-10's scheduled fire is also absent, investigate.
-- `.card:has(.brow)` 3px `border-left` — incumbent, revisit only if card language reworked.
-- **Panel, still deferred by design:** two tabs on one scope clobber each other's collapse state
-  (accepted); story-mode's accent mixes ride a fixed dark ground with no contrast gate (residual
-  risk).
-- `.claude/launch.json`'s `astro-preview-alt` (:4323) — remove if it reads as debris; :4322 stays
-  the canonical ship-loop surface.
 
 ## Where we left off
 
-**This session:** executed `docs/PLAN_ATLAS_MIGRATION.md` Stage A end to end (all 11 items),
-full ship loop green, this HANDOFF rewrite is Stage A's own housekeeping item (A11).
+**This session:** Stage C items 1–5 (feature silo, atlas-map port, table view, world view +
+solver) shipped and verified, `65e2561`, live. Items 6–11 remain: cover + iris (D21), view
+transitions (D22), mobile <760px (wire to existing `mobile-nav` models), chrome (hub header/OG/
+skip-link — resolve the Tools-scope note here), the flip commit itself (not pushed until item
+11's GO), and the item-11 creator checkpoint.
 
-**Recommended next step:** Stage B — Atlas data layer (no visible UI change): airport
-gazetteer, the reserved `traveler-origin` fact-row contract, tz backfill (korea/denmark), the
-per-guide atlas record derivation, vendoring world TopoJSON, the search-index build step, and
-the intake congruence line. Stages A+B were scoped to fit one session by the plan itself — if
-context allows, continue straight into B rather than stopping.
+**Recommended next step:** continue Stage C at item 6 (cover + iris) — it's self-contained and
+doesn't depend on anything not yet built. Items 8 (mobile) and 9 (chrome) are the next-largest;
+save the flip (10) and checkpoint (11) for last, once everything else is verified.
 
-**Re-prompt the creator with:** "Stage A of the Atlas migration is done — all eleven
-guide-sheet items, full ship loop green. Two of them closed gaps a session in early August
-deliberately deferred for 'needing a real architecture decision': the approx-value flag chip
-and the not-confirmed gap block both now exist, wired, tested. The masthead also gained the
-plate number it was missing a real source for — it has one now, chronological by trip start.
-Next is Stage B, the invisible data-layer groundwork Stage C's hub needs before it can be
-built aside the live site."
+**Re-prompt the creator with:** "Stage C of the Atlas migration is under way — the globe, table
+view, and pin-card solver are built, tested, and live at `/atlas/` (not yet linked from the real
+nav). Found and fixed a real bug along the way: the traveler-origin data from Stage B couldn't
+actually reach anything downstream, so the globe's route arcs would have silently never drawn.
+Remaining: the cover/iris intro, mobile layout, the hub header, and then the flip itself — which
+needs your explicit go-ahead before it ships, plus your call on Sedona/Japan's departure
+airports and whether the Tools screen gets built this round or later."

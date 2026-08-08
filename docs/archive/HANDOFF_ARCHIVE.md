@@ -1159,3 +1159,51 @@ sheet**: move the sixteen section renderers onto Panels, masthead becomes a plat
 guide photography, and the notation layer lands (provenance dot + staleness popover, flag chips,
 stamps, gap state). No spec issue exists yet — #33 deliberately left Phases 2–5 unspecced until the
 primitive shipped, and it now has.
+
+---
+
+## Snapshot (2026-08-07 — Phase 2 completed; Atlas migration plan Stage A shipped)
+
+**Session #38 ended mid-Phase-2** (archive has its detail); four more sessions/commits landed
+before this one picked up the Atlas migration plan: `f3734c0` finished Phase 2 (sights/venues/
+days/divergences all on Panels — the "remaining blocked" line in the old snapshot is resolved),
+`efaca03` rebuilt the masthead as **the plate** (square, sunken bed, oxide corner ticks — the
+plate NUMBER was deliberately omitted then for having no real data source), `edbd7b7` fixed
+notation-layer gaps (staleness reading, sights' own provenance dot, dead CSS tokens) and
+explicitly deferred the flag-chip and gap-state work as needing "a real architecture decision."
+`06da464` wrote `docs/PLAN_ATLAS_MIGRATION.md` itself (a Fable grilling session, D1–D22 settled);
+`b051389` cleared all 4 Dependabot alerts; `4e25569` integrated the creator's anchor bundle
+(SPEC-COMPONENTS.md, ACCEPTANCE.md, ANTIPATTERNS.md, screenshots 10–21) into the plan.
+
+**Stage A — Guide-sheet completion, all 11 items.** Day-scrub `position:sticky`
+fixed (`.pnl-body-in` clips only while collapsing/collapsed, not in the open steady state — a
+`.pnl-clip` class carries the brief expand-transition case). `place_id` now reaches
+`<TransitLinks>` from sights/venues. `closed_days` renders a Closed row on sights and gets a
+new build-time (never-failing) cross-check against itinerary waypoints
+(`scripts/check-closed-days.mjs`). Venues now grid inside a Panel (D12). The plate NUMBER
+efaca03 omitted now ships — `src/lib/sheet-order.ts` (chronological-by-trip-start, pure+tested)
+feeds "PLATE NN — CC"; masthead conformance bundle (16px inner mat, corner ticks at ITS corners,
+title 640/-.014em, plate-line bottom hairline) done to the design-handoff prototype's exact
+markup. Provenance popover conformance (oxide square border, WHERE THIS CAME FROM kicker via
+`--aink` not raw oxide — D8's contrast trap avoided by construction, NO PUBLIC SOURCE fallback) —
+extracted into one shared `ProvenancePopover.astro` (was tripled across 3 call sites). Flag
+chips (D10) — edbd7b7's deferred item: `renderFactValue` now emits a real allowlisted `<a>` (no
+new `<span>` shape needed) for `state:"approx"`, works with zero JS, `flag-chip.js` logic in
+provenance-dot.js builds the same popover client-side from data-* attributes. Gap state (D9) —
+edbd7b7's other deferred item: `state:"unconfirmed"` + `instead` added to the shared provenance
+fields, `GapBlock.astro` built to the exact SPEC-COMPONENTS.md ASCII spec, wired into sights/
+venues; verified via a scratch-and-revert content test (renders nowhere in real guides yet, by
+design). COLLAPSE ALL/EXPAND ALL landed in each panel-group header. Hash auto-expand was already
+shipped (verified live, no change needed). A real new a11y baseline entry
+(`DAY_SCRUB_STICKY_RANGE_WHY`) was needed and added, verified/measured, not guessed — the day-
+scrub fix interacting with the a11y gate's own force-all-tabs-open harness technique.
+
+**Stage B — Atlas data layer**, same push as A per the plan's own one-session scoping: airport
+gazetteer (`src/data/airports.mjs`), the reserved `traveler-origin` fact row contract (D14/ADR
+0003 — confirmed/unconfirmed state, no route arc when unconfirmed), tz backfill (korea/denmark),
+per-guide atlas record derivation (`src/features/atlas/model/guide-record.ts`, pure+tested),
+world-atlas 2.0.2 TopoJSON vendored into `public/data/`, the search-index build step, intake
+congruence. A same-session Fable-5 code review (Standards + Spec axes) caught the D6 180-day
+plate-renumbering time bomb (fixed via pinning the ordinal year from each guide's own kicker),
+a staleness-popover order regression, a missing viewport clamp, and phantom `flag-chip.js`
+references — all fixed, `c872ec3`.
