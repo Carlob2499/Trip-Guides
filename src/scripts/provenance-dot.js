@@ -45,20 +45,73 @@ import { staleness, SHELF_LIFE_DAYS } from "../lib/staleness";
     else { pop.prepend(dd); pop.prepend(dt); }
   }
 
-  document.addEventListener("click", (e) => {
-    const dot = e.target.closest(".prov-dot");
-    if (!dot) { close(); return; }
-    e.stopPropagation();
-    const pop = dot.nextElementSibling;
-    if (!pop || !pop.classList.contains("prov-popover")) return;
-    if (pop === open) { close(); return; }
+  function openBelow(anchor, pop) {
     close();
     renderStaleness(pop);
-    const rect = dot.getBoundingClientRect();
+    const rect = anchor.getBoundingClientRect();
     pop.style.top = `${rect.bottom + window.scrollY + 6}px`;
     pop.style.left = `${Math.max(8, rect.left + window.scrollX - 80)}px`;
     pop.setAttribute("data-open", "");
     open = pop;
+  }
+
+  // D10/Stage A.7: renderFactValue (facts.mjs) can't emit a <dl> — prose only allows
+  // <p b i a ul li ol br> (prose-html.ts) — so the ≈ flag-chip ships as a real <a> straight to
+  // its source_url (works with zero JS) and this builds the SAME .prov-popover shape
+  // ProvenancePopover.astro renders server-side, from the chip's own data-* attributes. Every
+  // field is REQUIRED on a fact record (content.config.ts's factRecord schema), so nothing here
+  // needs an absence guard the way the server-rendered popover's NO PUBLIC SOURCE branch does.
+  function buildChipPopover(chip) {
+    const dl = document.createElement("dl");
+    dl.className = "prov-popover";
+    dl.setAttribute("data-verified-on", chip.getAttribute("data-verified-on") || "");
+    dl.setAttribute("data-shelf-life", chip.getAttribute("data-shelf-life") || "default");
+    function pair(dtText, dtClass, ddNode, ddClass) {
+      const dt = document.createElement("dt");
+      if (dtClass) dt.className = dtClass;
+      dt.textContent = dtText;
+      const dd = document.createElement("dd");
+      if (ddClass) dd.className = ddClass;
+      if (typeof ddNode === "string") dd.textContent = ddNode; else dd.appendChild(ddNode);
+      dl.append(dt, dd);
+    }
+    pair("Where this came from", "prov-kicker", chip.getAttribute("data-claim") || "", "prov-claim");
+    pair("Checked", null, chip.getAttribute("data-verified-on") || "");
+    const src = chip.getAttribute("data-source-url");
+    if (src) {
+      const a = document.createElement("a");
+      a.href = src; a.target = "_blank"; a.rel = "noopener";
+      a.textContent = (() => { try { return new URL(src).hostname + " ↗"; } catch (e) { return src; } })();
+      pair("Source", null, a);
+    } else {
+      pair("Source", null, "NO PUBLIC SOURCE", "prov-nosource");
+    }
+    const tier = chip.getAttribute("data-tier");
+    if (tier) pair("Evidence", null, tier);
+    chip.insertAdjacentElement("afterend", dl);
+    return dl;
+  }
+
+  document.addEventListener("click", (e) => {
+    const dot = e.target.closest(".prov-dot");
+    const chip = !dot ? e.target.closest("a.flag-chip[data-claim]") : null;
+    if (!dot && !chip) { close(); return; }
+    e.stopPropagation();
+
+    if (chip) {
+      // Never navigate once JS is live — the popover's own Source row carries the real link,
+      // one tap further in, exactly like .prov-dot's popover already works.
+      e.preventDefault();
+      if (chip._provPop === open) { close(); return; }
+      const pop = chip._provPop || (chip._provPop = buildChipPopover(chip));
+      openBelow(chip, pop);
+      return;
+    }
+
+    const pop = dot.nextElementSibling;
+    if (!pop || !pop.classList.contains("prov-popover")) return;
+    if (pop === open) { close(); return; }
+    openBelow(dot, pop);
   });
 
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });

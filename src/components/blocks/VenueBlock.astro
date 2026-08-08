@@ -1,6 +1,8 @@
 ---
 import { pinSlug } from "../../lib/map-pins";
 import TransitLinks from "../TransitLinks.astro";
+import ProvenancePopover from "../ProvenancePopover.astro";
+import GapBlock from "../GapBlock.astro";
 const { sec, country } = Astro.props;
 
 type VenueItem = {
@@ -22,6 +24,9 @@ type VenueItem = {
   tier?: string;
   agreement?: string;
   map?: { lat: number; lng: number };
+  place_id?: string;
+  state?: "unconfirmed";
+  instead?: string;
 };
 
 const bookLabel = (b: string | undefined) =>
@@ -31,24 +36,27 @@ const bookLabel = (b: string | undefined) =>
   <div class="venue-intro card"><p><Fragment set:html={sec.intro} /></p></div>
 )}
 {(sec.items || []).map((it: VenueItem) => (
+  it.state === "unconfirmed" ? (
+    // D9 (Stage A.8): research came up short — no price/hours/address/book link to guess at.
+    <article class="card venue venue--gap" id={it.map ? `venue-${pinSlug(it.name)}` : undefined}>
+      <div class="venue-head">
+        <h4 class="venue-name">{it.name}</h4>
+        {it.area && <span class="venue-area">{it.area}</span>}
+      </div>
+      <div class="venue-body">
+        <GapBlock body={it.why} instead={it.instead} />
+      </div>
+    </article>
+  ) : (
   <article class="card venue" id={it.map ? `venue-${pinSlug(it.name)}` : undefined}>
     <div class="venue-head">
       <h4 class="venue-name">
         {it.name}
-        {it.verified_on && (
-          <>
-            <button class="prov-dot" type="button" aria-label={`Source info for ${it.name}`}>●</button>
-            {/* data-verified-on/data-shelf-life: provenance-dot.js reads these to inject a
-                staleness reading on open — computed client-side (a build-time judgment would
-                freeze "N days left" at deploy), same contract as staleness-ui.js's section pill. */}
-            <dl class="prov-popover" data-verified-on={it.verified_on} data-shelf-life={it.shelf_life ?? "default"}>
-              <dt>Checked</dt><dd>{it.verified_on}</dd>
-              {it.source_url && <><dt>Source</dt><dd><a href={it.source_url} target="_blank" rel="noopener">{new URL(it.source_url).hostname}</a></dd></>}
-              {it.tier && <><dt>Evidence</dt><dd>{it.tier}</dd></>}
-              {it.agreement && <><dt>Research</dt><dd>{it.agreement}</dd></>}
-            </dl>
-          </>
-        )}
+        {/* data-verified-on/data-shelf-life: provenance-dot.js reads these to inject a
+            staleness reading on open — computed client-side (a build-time judgment would
+            freeze "N days left" at deploy), same contract as staleness-ui.js's section pill. */}
+        <ProvenancePopover claim={it.name} verifiedOn={it.verified_on} sourceUrl={it.source_url}
+                            shelfLife={it.shelf_life} tier={it.tier} agreement={it.agreement} />
       </h4>
       {it.area && <span class="venue-area">{it.area}</span>}
     </div>
@@ -71,8 +79,9 @@ const bookLabel = (b: string | undefined) =>
         {it.how && <><dt>Getting there</dt><dd><Fragment set:html={it.how} /></dd></>}
       </dl>
       {it.map && (
-        <TransitLinks lat={it.map.lat} lng={it.map.lng} name={it.name} country={country} />
+        <TransitLinks lat={it.map.lat} lng={it.map.lng} name={it.name} country={country} placeId={it.place_id} />
       )}
     </div>
   </article>
+  )
 ))}

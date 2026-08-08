@@ -1,0 +1,30 @@
+---
+// The gap block (D9, PLAN_ATLAS_MIGRATION.md Stage A.8) — honest absence, rendered LOUD, never
+// styled down: design-handoff SPEC-COMPONENTS.md "2. Notation — the gap block" +
+// README.md "The gap". Renders when an item/section's provenance carries `state:"unconfirmed"`
+// (content.config.ts's shared `provenance` fields) instead of the item's normal content.
+//
+//   ┌─ 2px solid var(--ochre) ─────────────────┐
+//   │ ⚠ NOT CONFIRMED         (Reading scale)  │
+//   │ ───────────────────────  1px rule        │
+//   │ what was looked for and what was found   │
+//   │ WHAT TO DO INSTEAD — …   (stamp scale)   │
+//   └──────────────────────────────────────────┘
+//
+// "The product's entire claim rests on this block being as loud as a fact" — never collapsed
+// by default, never softened. `body` is already-sanitized HTML (the item's own `body`/prose
+// field, same convention every other block renders it with); `instead` is plain text.
+interface Props {
+  body?: string | null;
+  instead?: string | null;
+}
+const { body, instead } = Astro.props;
+---
+<div class="gap-block">
+  <p class="gap-headline">⚠ NOT CONFIRMED</p>
+  <hr class="gap-rule" />
+  {body && <p class="gap-body" set:html={body} />}
+  {instead && (
+    <p class="gap-instead"><span class="gap-instead-label">What to do instead —</span> {instead}</p>
+  )}
+</div>

@@ -34,8 +34,12 @@ import { staleness, SHELF_LIFE_DAYS } from "../lib/staleness";
     // is this check. Anything else renders as a plain <span>, losing the link, not the fact.
     var src = el.getAttribute("data-source-url");
     if (src && !/^https?:\/\//i.test(src)) src = null;
+    // D10 (Stage A.7): the flag-chip visual language — control-size pill, 1px current-ink
+    // border, tappable — same class .prov-dot's popover-openers share. Behavior unchanged: a
+    // real <a> to the source when one exists (one tap to what the reader actually wants),
+    // never rewired into a popover-only control — see PLAN_ATLAS_MIGRATION.md Stage A.7.
     var pill = document.createElement(src ? "a" : "span");
-    pill.className = "stale-pill";
+    pill.className = "stale-pill flag-chip flag-chip--stale";
     pill.textContent = "⚠ verified " + date + " — re-check";
     if (src) {
       pill.href = src;

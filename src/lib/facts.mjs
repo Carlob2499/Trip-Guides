@@ -34,14 +34,43 @@ export const FACT_TOKEN_RE = /\{\{fact:([a-z0-9][a-z0-9-]*)\}\}/g;
     tag allowlist, and a `</p>` would move the lead-first fold. Enforced by the schema too. */
 export const FACT_VALUE_FORBIDDEN_RE = /[<>]/;
 
+/** Minimal HTML-attribute escaper — `claim` is free authored text (no FORBIDDEN_RE gate the
+    way `value` has), so it can carry `&`/`"`/`<`/`>` and must not break out of the attribute
+    it's embedded in below. Order matters: `&` first, or the later entities re-escape. */
+function escapeAttr(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
 /**
  * Render a fact for insertion.
  * `≈` is DERIVED from state, never authored into `value` — that keeps one spelling of
  * "sourced-but-approximate" and stops a bare `≈` from being typed next to an unsourced number.
- */
+ *
+ * D10/Stage A.7 (PLAN_ATLAS_MIGRATION.md): an approx value renders as a real, allowlisted `<a>`
+ * (docs' "prose tag allowlist" — `<b> <i> <a> <ul> <li> <ol>`, no bespoke `<span>` shape needed)
+ * pointing straight at the fact's own `source_url` — works with zero JS, same as any other
+ * inline citation link. `src/scripts/flag-chip.js` progressively enhances it client-side:
+ * intercepts the click and opens the SAME `.prov-popover` component `.prov-dot` uses (Claim/
+ * Checked/Source/Evidence), built from the `data-*` attributes carried here — every field a
+ * fact record has is REQUIRED by its schema (factRecord in content.config.ts), so there is no
+ * missing-data case to guard against. `value`'s own FORBIDDEN_RE already guarantees no `<`/`>`
+ * reaches this template unescaped; `claim` gets its own escape since it carries no such
+ * constraint. */
 export function renderFactValue(fact) {
   const v = String(fact.value);
-  return fact.state === "approx" ? `≈${v}` : v;
+  if (fact.state !== "approx") return v;
+  const attrs = [
+    `class="flag-chip flag-chip--approx"`,
+    `href="${escapeAttr(fact.source_url)}"`,
+    `target="_blank"`,
+    `rel="noopener"`,
+    `data-claim="${escapeAttr(fact.claim)}"`,
+    `data-verified-on="${escapeAttr(fact.verified_on)}"`,
+    `data-shelf-life="${escapeAttr(fact.shelf_life)}"`,
+    `data-source-url="${escapeAttr(fact.source_url)}"`,
+  ];
+  if (fact.tier) attrs.push(`data-tier="${escapeAttr(fact.tier)}"`);
+  return `<a ${attrs.join(" ")}>≈${v}</a>`;
 }
 
 /** Every fact id referenced anywhere in a value tree (deduped, in first-seen order). */

@@ -23,7 +23,7 @@ mid-stage, add a `RESUME:` line under the stage saying exactly where you stopped
 is half-done. A fresh session reads this section first and continues; it never re-derives
 history from git log.
 
-- [ ] Stage A — Guide-sheet completion (Phase-2 delta)
+- [x] Stage A — Guide-sheet completion (Phase-2 delta)
 - [ ] Stage B — Atlas data layer
 - [ ] Stage C — The hub (Phase 3) + flip
 - [ ] Stage D — Mobile (Phase 4)

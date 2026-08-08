@@ -1,0 +1,61 @@
+/* === GAP BLOCK — honest absence, rendered loud (D9) ===========================
+   design-handoff SPEC-COMPONENTS.md "2. Notation — the gap block" + README.md's
+   "The gap": research came up short, so the item says so — never a guessed detail
+   wearing a quiet caption. "Never styled down to look less alarming than it is,
+   and never collapsed by default" (SPEC-COMPONENTS.md) — no motion, no fold. */
+
+.gap-block {
+  border: 2px solid var(--ochre);
+  border-radius: 0;
+  padding: 1rem 1.2rem 1.1rem;
+  background: var(--card);
+}
+
+/* Reading scale (design-handoff's 4th notation size, alongside the dot/flag chip/stamp) —
+   the largest non-title type on the page elsewhere (the plate line's coordinates); the same
+   floor and fluid step apply here so a gap reads with the same weight as a confirmed fact. */
+.gap-headline {
+  margin: 0;
+  font-family: var(--font-data);
+  font-weight: 640;
+  font-size: clamp(1.5rem, 1.2rem + 2.4vw, 2.6rem);
+  font-variant-numeric: tabular-nums;
+  color: var(--ochre);
+}
+
+.gap-rule {
+  height: 1px;
+  margin: .7rem 0;
+  border: 0;
+  background: var(--rule);
+}
+
+.gap-body {
+  margin: 0 0 .8rem;
+  color: var(--ink);
+}
+.gap-body:last-child { margin-bottom: 0; }
+
+/* Stamp scale (0.82rem/640/.08em/uppercase, boxed in 1px of its own ink) — same family as
+   .mast-stamp's CHECKED chip, sized to fit a full sentence rather than one date. */
+.gap-instead {
+  display: inline-block;
+  margin: 0;
+  padding: .4rem .7rem;
+  font-family: var(--font-data);
+  font-weight: 640;
+  font-size: var(--text-control);
+  letter-spacing: .04em;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  border-radius: 0;
+}
+.gap-instead-label {
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-inline-end: .35em;
+}
+
+@media print {
+  .gap-block { break-inside: avoid; }
+}

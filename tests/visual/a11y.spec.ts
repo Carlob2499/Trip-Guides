@@ -173,6 +173,25 @@ const MAST_DEK_OBSCURING_WHY =
   "case — the same stacking-order reimplementation family as bgOverlap above. Measured the real " +
   "composited worst case the same pixel-sampled way: 5.91:1 (denmark, daytime sky, both schemes) " +
   "against the 4.5:1 required at 17.92px/400; korea measures >=14:1.";
+const DAY_SCRUB_STICKY_RANGE_WHY =
+  "PLAN_ATLAS_MIGRATION.md Stage A.1 fixed .day-scrub's position:sticky (planner.css), dead " +
+  "before because .pnl-body-in{overflow:hidden} (unconditional) neutralised it — the same " +
+  "ancestor DAY_SWIPE_CLIPPED_WHY already documents as changing axe's clipping geometry when " +
+  "its overflow value changes. Fixed, .pnl-body-in only stays overflow:hidden while a Panel is " +
+  "collapsed/collapsing (see styles.css); the day-scrub bar's sticky containing block now " +
+  "legitimately reaches the real scrolling ancestor, exactly as intended. This gate's own " +
+  "[role=tabpanel]{display:block!important} override (forcing every .catblock tab group open at " +
+  "once, so hidden tabs still get audited) puts MULTIPLE .day-scrub bars from DIFFERENT tab " +
+  "groups in the same forced-open page simultaneously — something a real visitor can never " +
+  "produce, since only one .catblock is ever un-hidden at a time. axe's sticky heuristic then " +
+  "conservatively flags distant unrelated content (verified: a GO Fest 2026 panel's .card-lead " +
+  "list, a different tab group entirely) as potentially under a sticky bar's reach. Confirmed via " +
+  "live geometry (not assumed): in the static unscrolled snapshot the flagged .day-scrub sits at " +
+  "y~21461-21522 while the flagged list sits at y~28821+, no real overlap. Measured the real " +
+  "composited contrast regardless: .card-lead text rgb(232,236,227) on the Panel's rgb(36,44,52) " +
+  "= 11.82:1, the same --ink-on---card pair proven safe everywhere else. Mobile-only because the " +
+  "single-column stack makes the forced-open page far taller than desktop's multi-column layout, " +
+  "giving the sticky bar's flagged reach more distant content to fall across.";
 const FRAME_TESTED_WHY =
   "axe-core hardcodes `isViolation:false` for this check (confirmed in the installed package's own " +
   "source) — it can never resolve pass/fail for a cross-origin OpenStreetMap iframe it has no way to " +
@@ -354,6 +373,9 @@ const MOBILE_DELTA: Record<string, Record<string, Baseline>> = {
     // already justified above, simply spread over more wrapped lines in a narrow column.
     // Korea needs no entry: its desktop max of 28 already covers what mobile renders.
     "color-contrast/pseudoContent": { max: 24, why: PSEUDO_CONTENT_WHY },
+    // Stage A.1's day-scrub sticky fix (see DAY_SCRUB_STICKY_RANGE_WHY) — mobile-only, measured
+    // 16 on both colour schemes; desktop's shorter forced-open page stays within the base max: 4.
+    "color-contrast/elmPartiallyObscured": { max: 16, why: DAY_SCRUB_STICKY_RANGE_WHY },
   },
 };
 

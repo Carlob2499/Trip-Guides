@@ -46,6 +46,17 @@ const provenance = {
   tier: z.enum(["primary", "corroborated", "secondary"]).optional(),
   // P7/R11: dual-pass agreement — whether Pass A and Pass B independently converged on this fact.
   agreement: z.enum(["A+B converged", "A only", "B only"]).optional(),
+  // D9 (PLAN_ATLAS_MIGRATION.md Stage A.8) — the gap state: research came up short, and the
+  // item renders the GapBlock (⚠ NOT CONFIRMED, ochre) instead of guessed detail. Absent (the
+  // default for every pre-existing item — this whole field is additive) means nothing changes;
+  // there is no "confirmed" value to set, since that IS absence. Distinct from factRecord's own
+  // `state` (facts.mjs, "clean"/"approx") — a fact-registry row always HAS a confirmed value to
+  // substitute, so "unconfirmed" only makes sense here, on a whole item/section.
+  state: z.literal("unconfirmed").optional(),
+  // What the traveler should do instead, given the gap — rendered as the GapBlock's WHAT TO DO
+  // INSTEAD stamp line. Optional (README's own spec: "optional `instead` text") — a gap can be
+  // stated with nothing to substitute for it yet.
+  instead: z.string().optional(),
 };
 
 // The perishable-fact registry (optional `<slug>/facts.json`). One record per perishable fact,

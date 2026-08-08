@@ -29,16 +29,22 @@
 
 .mast-plate-row{display:flex;flex-wrap:wrap;gap:clamp(1.2rem,3vw,2rem);max-width:1400px;margin:1.1rem auto 0;padding:0 clamp(1rem,3vw,1.5rem)}
 
-/* The plate itself — sunken bed, hairline frame, oxide corner ticks (The Corner
-   Tick Rule: ticks mark evidence and nothing else). The four corner marks are
-   one pseudo-element with eight gradient layers (two per corner: a horizontal
-   arm + a vertical arm) rather than four extra DOM nodes, so hero-parallax.js
-   and gsap-hero.js need no changes — the element tree they select is untouched. */
+/* The plate itself — sunken bed, hairline frame, a 16px inner mat (D13), oxide corner
+   ticks at the MAT's corners (The Corner Tick Rule: ticks mark evidence and nothing
+   else). The four corner marks are one pseudo-element with eight gradient layers (two
+   per corner: a horizontal arm + a vertical arm) rather than four extra DOM nodes, so
+   hero-parallax.js and gsap-hero.js need no changes — the element tree they select is
+   untouched. Values (16px inset, 16px tick arm, 2px oxide) match the design-handoff
+   prototype's own masthead markup exactly. */
 .mast-frame{position:relative;flex:1 1 560px;min-height:clamp(300px,50vh,540px);background:var(--sunken);border:1px solid var(--rule2);overflow:hidden;isolation:isolate}
 @media(min-width:900px){.mast-frame{min-height:clamp(380px,42vw,520px)}}
+/* The bordered bed the photo/painted scene sits inside — PaintedAtlas/.mast-img/
+   .mast-video all render as its children (see GuideLayout.astro), so `inset:0` on each
+   of them fills the MAT, not the outer frame. */
+.mast-mat{position:absolute;inset:16px;border:1px solid var(--rule2);overflow:hidden}
 .mast-frame::after{
-  content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
-  --tick-arm:20px;--tick-w:2px;
+  content:"";position:absolute;inset:16px;pointer-events:none;z-index:1;
+  --tick-arm:16px;--tick-w:2px;
   background:
     linear-gradient(to right,var(--accent) var(--tick-w),transparent 0) 0 0/var(--tick-arm) var(--tick-w) no-repeat,
     linear-gradient(to bottom,var(--accent) var(--tick-w),transparent 0) 0 0/var(--tick-w) var(--tick-arm) no-repeat,
@@ -103,7 +109,7 @@
    (white ink, text-shadow) left to carry. */
 .mast-inner{display:grid;align-content:end;gap:.35rem;flex:1 1 360px;min-width:min(100%,320px);padding-block:clamp(.4rem,2vw,1rem)}
 .mast-eyebrow{margin:0}
-.mast-title{font-family:var(--font-display);font-weight:620;font-size:clamp(2.5rem,6vw,4.8rem);line-height:.98;letter-spacing:-.012em;margin:.2rem 0 0;color:var(--ink)}
+.mast-title{font-family:var(--font-display);font-weight:640;font-size:clamp(2.5rem,6vw,4.8rem);line-height:.98;letter-spacing:-.014em;margin:.2rem 0 0;color:var(--ink)}
 .mast-dek{margin:.6rem 0 0}
 
 /* Per-guide chips — emergency (ochre, tel: links) + currency. Pills, never smaller than a
@@ -113,9 +119,15 @@
 .mast-chip--sos{color:var(--ochre);border-color:var(--ochre)}
 a.mast-chip:hover{background:color-mix(in srgb,currentColor 10%,transparent)}
 
-/* ── The plate line — coordinates, the CHECKED stamp, fact/source counts, print. ── */
-.mast-plateline{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem 1.2rem;max-width:1400px;margin:.9rem auto 0;padding:.7rem clamp(1rem,3vw,1.5rem) 0;border-top:2px solid var(--accent)}
+/* ── The plate line — coordinates, plate number, the CHECKED stamp, fact/source counts,
+   print. D13: a 1px hairline BENEATH the row, in addition to the existing 2px oxide top
+   rule — both borders together, per the design-handoff prototype's own plate-line markup
+   (border-top: 2px oxide + border-bottom: 1px var(--rule2)). ── */
+.mast-plateline{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem 1.2rem;max-width:1400px;margin:.9rem auto 0;padding:.7rem clamp(1rem,3vw,1.5rem) .8rem;border-top:2px solid var(--accent);border-bottom:1px solid var(--rule2)}
 .mast-coord{font-family:var(--font-data);font-weight:640;font-variant-numeric:tabular-nums;font-size:clamp(1.3rem,3vw,2.2rem);color:var(--accent-ink)}
+/* D6/D13: the plate number ("PLATE 02 — KR") — same weight/tracking/colour as the
+   design-handoff prototype's own {{gPlate}} span. */
+.mast-platenum{font-family:var(--font-data);font-weight:640;font-size:var(--text-control-sm);letter-spacing:.14em;color:var(--aink)}
 .mast-stamp{font-family:var(--font-data);font-size:var(--text-control);font-weight:640;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--rule);padding:.15rem .5rem}
 .mast-plcount{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}
 .mast-print{margin-left:auto;min-height:36px;padding:.3rem .9rem;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);background:var(--card);border:1px solid var(--rule2);border-radius:999px;cursor:pointer}
@@ -135,7 +147,9 @@ a.mast-chip:hover{background:color-mix(in srgb,currentColor 10%,transparent)}
 @media print{
   .mast-frame{min-height:0;border:0}
   .mast-frame::after{display:none}
+  .mast-mat{border:0}
   .mast-img,.mast-credit,.mast-video,.mast-pause{display:none}
   .mast-title,.mast-dek,.mast-eyebrow{color:#111;text-shadow:none}
+  .mast-platenum{color:#111}
   .mast-print{display:none}
 }

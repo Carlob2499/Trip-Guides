@@ -1,0 +1,40 @@
+---
+// The provenance dot + its popover (design-handoff README.md "The notation layer" /
+// docs/PLAN_ATLAS_MIGRATION.md Stage A.6) — ONE shared instance, since SightsBlock (both
+// its photo and text-only card variants) and VenueBlock each rendered this inline before,
+// meaning the popover conformance work would otherwise triple. Pure rendering; the client
+// staleness row is still injected by src/scripts/provenance-dot.js, unchanged.
+interface Props {
+  /** The claim being verified — this item's own name (a sight/venue IS the claim: "this
+      place, its facts as described, checked on this date"). Never invented text. */
+  claim: string;
+  verifiedOn?: string | null;
+  sourceUrl?: string | null;
+  shelfLife?: string | null;
+  tier?: string | null;
+  /** Venue-only field: how the venue was verified (e.g. a phone call), distinct from `tier`. */
+  agreement?: string | null;
+  /** Photo-card variant — suffixes .prov-dot with --onphoto for the on-image treatment. */
+  onPhoto?: boolean;
+}
+const { claim, verifiedOn, sourceUrl, shelfLife, tier, agreement, onPhoto = false } = Astro.props;
+const dotClass = onPhoto ? "prov-dot prov-dot--onphoto" : "prov-dot";
+const sourceHost = sourceUrl ? new URL(sourceUrl).hostname : null;
+---
+{verifiedOn && (
+  <>
+    <button class={dotClass} type="button" aria-label={`Source info for ${claim}`}>●</button>
+    <dl class="prov-popover" data-verified-on={verifiedOn} data-shelf-life={shelfLife ?? "default"}>
+      <dt class="prov-kicker">Where this came from</dt>
+      <dd class="prov-claim">{claim}</dd>
+      <dt>Checked</dt><dd>{verifiedOn}</dd>
+      {sourceUrl ? (
+        <><dt>Source</dt><dd><a href={sourceUrl} target="_blank" rel="noopener">{sourceHost} ↗</a></dd></>
+      ) : (
+        <><dt>Source</dt><dd class="prov-nosource">NO PUBLIC SOURCE</dd></>
+      )}
+      {tier && <><dt>Evidence</dt><dd>{tier}</dd></>}
+      {agreement && <><dt>Research</dt><dd>{agreement}</dd></>}
+    </dl>
+  </>
+)}

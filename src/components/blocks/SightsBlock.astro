@@ -1,6 +1,9 @@
 ---
 import { pinSlug } from "../../lib/map-pins";
+import { formatClosedDays } from "../../lib/closed-days.mjs";
 import TransitLinks from "../TransitLinks.astro";
+import ProvenancePopover from "../ProvenancePopover.astro";
+import GapBlock from "../GapBlock.astro";
 const { sec, country } = Astro.props;
 
 // Wikimedia's Special:FilePath already supports ?width= thumbnailing —
@@ -28,6 +31,21 @@ const creditOf = (img: any) =>
   : { href: img.creditUrl ?? null, label: img.credit };
 ---
 {(sec.items || []).map((it: any) => (
+  it.state === "unconfirmed" ? (
+    // D9 (Stage A.8): research came up short — the GapBlock replaces the guessed photo/
+    // detail/transit-links a normal card would carry. The name still renders (the traveler
+    // needs to know WHAT wasn't confirmed), but no provenance dot — there is nothing
+    // confirmed yet for it to point at.
+    <article class="card sight sight--gap" id={it.map ? `sight-${pinSlug(it.name)}` : undefined}>
+      <div class="sight-head">
+        {it.kicker && <span class="tag">{it.kicker}</span>}
+        <h4 class="sight-name">{it.name}</h4>
+      </div>
+      <div class="sight-body">
+        <GapBlock body={it.body} instead={it.instead} />
+      </div>
+    </article>
+  ) : (
   <article class={`card sight ${it.img ? "sight--photo" : "sight--text"}`} id={it.map ? `sight-${pinSlug(it.name)}` : undefined}>
     {it.img ? (
       /* Photo-forward: the image is the card hero with an overlaid caption
@@ -44,16 +62,8 @@ const creditOf = (img: any) =>
           {it.kicker && <span class="tag tag--onphoto">{it.kicker}</span>}
           <h4 class="sight-name sight-name--onphoto">
             {it.name}
-            {it.verified_on && (
-              <>
-                <button class="prov-dot prov-dot--onphoto" type="button" aria-label={`Source info for ${it.name}`}>●</button>
-                <dl class="prov-popover" data-verified-on={it.verified_on} data-shelf-life={it.shelf_life ?? "default"}>
-                  <dt>Checked</dt><dd>{it.verified_on}</dd>
-                  {it.source_url && <><dt>Source</dt><dd><a href={it.source_url} target="_blank" rel="noopener">{new URL(it.source_url).hostname}</a></dd></>}
-                  {it.tier && <><dt>Evidence</dt><dd>{it.tier}</dd></>}
-                </dl>
-              </>
-            )}
+            <ProvenancePopover claim={it.name} verifiedOn={it.verified_on} sourceUrl={it.source_url}
+                                shelfLife={it.shelf_life} tier={it.tier} onPhoto />
           </h4>
         </figcaption>
         {(() => { const c = creditOf(it.img); return c.href ? (
@@ -67,24 +77,18 @@ const creditOf = (img: any) =>
         {it.kicker && <span class="tag">{it.kicker}</span>}
         <h4 class="sight-name">
           {it.name}
-          {it.verified_on && (
-            <>
-              <button class="prov-dot" type="button" aria-label={`Source info for ${it.name}`}>●</button>
-              <dl class="prov-popover" data-verified-on={it.verified_on} data-shelf-life={it.shelf_life ?? "default"}>
-                <dt>Checked</dt><dd>{it.verified_on}</dd>
-                {it.source_url && <><dt>Source</dt><dd><a href={it.source_url} target="_blank" rel="noopener">{new URL(it.source_url).hostname}</a></dd></>}
-                {it.tier && <><dt>Evidence</dt><dd>{it.tier}</dd></>}
-              </dl>
-            </>
-          )}
+          <ProvenancePopover claim={it.name} verifiedOn={it.verified_on} sourceUrl={it.source_url}
+                              shelfLife={it.shelf_life} tier={it.tier} />
         </h4>
       </div>
     )}
     <div class="sight-body">
       <p><Fragment set:html={it.body || ""} /></p>
+      {formatClosedDays(it.closed_days) && <p class="sight-closed">{formatClosedDays(it.closed_days)}</p>}
       {it.map && (
-        <TransitLinks lat={it.map.lat} lng={it.map.lng} name={it.name} country={country} />
+        <TransitLinks lat={it.map.lat} lng={it.map.lng} name={it.name} country={country} placeId={it.place_id} />
       )}
     </div>
   </article>
+  )
 ))}

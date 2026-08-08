@@ -1,4 +1,5 @@
 ﻿---
+import { getCollection } from "astro:content";
 import Block from "../components/Block.astro";
 import Icon from "../components/Icon.astro";
 import PwaHead from "../components/PwaHead.astro";
@@ -18,6 +19,7 @@ import PaintedAtlas from "../components/PaintedAtlas.astro";
 import ChangeRequest from "../components/ChangeRequest.astro";
 import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
 import { computeGuideStats, latestVerifiedOn } from "../lib/guide-stats";
+import { sheetOrder, ordinalFor } from "../lib/sheet-order";
 import { collectWaypoints, collectDayEvents, buildSummary } from "../features/exports/index";
 // slotLabel only — the silo's DOM boot is guarded by `typeof document`, so importing its
 // public surface at build time is inert (the sealed-silo contract: index is the only door).
@@ -39,6 +41,7 @@ import "../styles/sights.css";
 import "../styles/venues.css";
 import "../styles/divergences.css";
 import "../styles/provenance-dot.css";
+import "../styles/gap-block.css";
 import "../styles/map.css";
 import "../styles/planner.css";
 import "../styles/overview.css";
@@ -233,6 +236,26 @@ const platelineCoord = mapCenter
 // Per-guide masthead chips (emergency, currency) — both already computed elsewhere on
 // this page (tgConfig, the budget/split tools); reused here rather than re-derived.
 const platelineEmergency = emergencyFor(guide.country);
+
+// Plate number (D6/D13): "PLATE NN — <CC>", NN from the ONE chronological-by-trip-start
+// derivation (src/lib/sheet-order.ts) shared with the future hub index/table/ping sheet,
+// CC from the guide's own `country` via the same COUNTRY_CODES map the holiday lookup
+// uses. Every guide's start date is needed to rank this one, so this reads the whole
+// collection — cheap at guide-count scale, and it's what keeps every guide's plate number
+// agreeing with every other's without a hand-filled ordinal anywhere.
+const _allGuides = await getCollection("guides");
+const _sheetInputs = _allGuides.map((g) => {
+  const flat = flatSections(g.data.sections || []);
+  const ds = flat.find((s: any) => s.type === "days" && s.items?.length);
+  const fd = (ds?.items?.[0]?.date as string) ?? null;
+  const ld = (ds?.items?.[ds.items.length - 1]?.date as string) ?? fd;
+  return { slug: g.id, firstDayDate: fd, lastDayDate: ld };
+});
+const sheetOrdinal = ordinalFor(sheetOrder(_sheetInputs, new Date()), guideSlug);
+const guideCC = COUNTRY_CODES[guide.country] ?? null;
+const platelineNumber = sheetOrdinal != null && guideCC
+  ? `PLATE ${String(sheetOrdinal).padStart(2, "0")} — ${guideCC}`
+  : null;
 
 // When a guide has its own `weather` section, that section provides the #wxWrap
 // mount in-flow, so the masthead strip is suppressed (no double render). The flag
@@ -525,32 +548,41 @@ const tripSummary = buildSummary(guide);
     <header class={`masthead mast-hero ${heroSrc ? "mast-photo" : "mast-painted"}`} id="top" data-hero>
       <div class="mast-plate-row">
         <div class="mast-frame">
-          {/* R4 — the Painted Atlas (src/components/PaintedAtlas.astro): rendered under EVERY
-              hero. Coverless guides open on it (living from birth, replacing the old flat
-              accent field); photo guides keep it hidden UNDERNEATH as the fallback that shows
-              when the Commons photo fails to load (.mast-media-fail) — a painted scene instead
-              of a dead grey field. CSS owns the switching (painted-atlas.css / masthead.css). */}
-          <PaintedAtlas seed={guideSlug} tz={destTzIana} />
-          {heroSrc && (
-            <img class="mast-img" src={heroSrc} srcset={heroSrcset} sizes="(min-width:900px) 560px, 100vw" alt={coverAlt}
-                 loading="eager" fetchpriority="high"
-                 onerror="this.closest('.mast-frame').classList.add('mast-media-fail')"
-                 style={`view-transition-name:cover-${ogSlug}${coverFocal ? `;object-position:${coverFocal}` : ""}`} />
-          )}
-          {/* R4 living cover — the footage upgrade over the still. Poster-first delivery:
-              no `src` at all until living-cover.js decides the visitor gets motion (reduced-
-              motion, Save-Data, and autoplay-refusal all leave the still standing, which is a
-              complete cover, not a degraded one). DOM-after the img with the same z-index, so
-              it paints above the photo only once it actually plays (.mast-video-live fades it
-              in). muted+playsinline as attributes AND re-asserted in JS — the attribute alone
-              is what mobile autoplay policies inspect. */}
-          {coverVideo && (
-            <video class="mast-video" muted playsinline loop preload="none"
-                   data-src={coverVideo.src}
-                   poster={coverVideo.poster ?? undefined}
-                   aria-hidden="true" tabindex="-1"
-                   style={coverFocal ? `object-position:${coverFocal}` : undefined}></video>
-          )}
+          {/* D13 (Stage A.5): the 16px inner mat — a bordered bed the photo/painted scene sits
+              inside, inset from the frame's own edge, per the design-handoff prototype's exact
+              markup (docs/design-handoff/prototype: inset:16px, 1px var(--rule2) border,
+              overflow:hidden). The corner ticks (masthead.css's .mast-frame::after) are inset
+              to match, so they mark the MAT's corners, not the frame's. hero-parallax.js and
+              gsap-hero.js select `.mast-img`/`.mast-frame` by class, not by direct-child
+              relationship, so this wrapper doesn't touch their wiring. */}
+          <div class="mast-mat">
+            {/* R4 — the Painted Atlas (src/components/PaintedAtlas.astro): rendered under EVERY
+                hero. Coverless guides open on it (living from birth, replacing the old flat
+                accent field); photo guides keep it hidden UNDERNEATH as the fallback that shows
+                when the Commons photo fails to load (.mast-media-fail) — a painted scene instead
+                of a dead grey field. CSS owns the switching (painted-atlas.css / masthead.css). */}
+            <PaintedAtlas seed={guideSlug} tz={destTzIana} />
+            {heroSrc && (
+              <img class="mast-img" src={heroSrc} srcset={heroSrcset} sizes="(min-width:900px) 560px, 100vw" alt={coverAlt}
+                   loading="eager" fetchpriority="high"
+                   onerror="this.closest('.mast-frame').classList.add('mast-media-fail')"
+                   style={`view-transition-name:cover-${ogSlug}${coverFocal ? `;object-position:${coverFocal}` : ""}`} />
+            )}
+            {/* R4 living cover — the footage upgrade over the still. Poster-first delivery:
+                no `src` at all until living-cover.js decides the visitor gets motion (reduced-
+                motion, Save-Data, and autoplay-refusal all leave the still standing, which is a
+                complete cover, not a degraded one). DOM-after the img with the same z-index, so
+                it paints above the photo only once it actually plays (.mast-video-live fades it
+                in). muted+playsinline as attributes AND re-asserted in JS — the attribute alone
+                is what mobile autoplay policies inspect. */}
+            {coverVideo && (
+              <video class="mast-video" muted playsinline loop preload="none"
+                     data-src={coverVideo.src}
+                     poster={coverVideo.poster ?? undefined}
+                     aria-hidden="true" tabindex="-1"
+                     style={coverFocal ? `object-position:${coverFocal}` : undefined}></video>
+            )}
+          </div>
           {heroCredit && (heroCredit.href ? (
             <a class="mast-credit" id="mastCredit" href={heroCredit.href} target="_blank" rel="noopener"
                aria-label={`${heroCredit.label} — view source`}
@@ -602,9 +634,12 @@ const tripSummary = buildSummary(guide);
           guide's own fact/source counts (colophon — same counts the page-footer colophon
           signs with, not re-derived) + a print control. Any row with nothing to show
           renders nothing — an unresearched guide's plate line can be shorter, never padded. */}
-      {(platelineCoord || colophonChecked || colophon.verifiedFactCount > 0 || colophon.sourceCount > 0) && (
+      {(platelineCoord || platelineNumber || colophonChecked || colophon.verifiedFactCount > 0 || colophon.sourceCount > 0) && (
         <div class="mast-plateline">
           {platelineCoord && <span class="mast-coord">{platelineCoord}</span>}
+          {/* D6/D13: the sheet ordinal, chronological by trip start — the same number the
+              future hub index/table/ping sheet will show for this guide. */}
+          {platelineNumber && <span class="mast-platenum">{platelineNumber}</span>}
           {colophonChecked && <span class="mast-stamp">CHECKED {colophonChecked}</span>}
           {colophon.verifiedFactCount > 0 && (
             <span class="mast-plcount">{colophon.verifiedFactCount} verified facts</span>
@@ -763,6 +798,7 @@ const tripSummary = buildSummary(guide);
           const descriptor = (guide as any).descriptors?.[g] ?? null;
           const subParts = solo || descriptor ? [] : byG[g].map((o) => navLabel(o.s, g)).filter((t: string) => t && t !== g);
           const sub = collapseSubPrefixes(subParts.slice(0, 4)).join(" · ") + (subParts.length > 4 ? ` · +${subParts.length - 4} more` : "");
+          const isPanelGroup = ((guide as any).panelGroups ?? []).includes(g);
           return (
             <div class="catblock" id={`grp-${ci}`} data-ci={ci} role="tabpanel" aria-labelledby={`gtab-${ci}`} hidden={ci > 0}>
               <header class="cat-opener">
@@ -777,8 +813,16 @@ const tripSummary = buildSummary(guide);
                 <h2 class="cat-title">{g}</h2>
                 {descriptor && <p class="cat-desc">{descriptor}</p>}
                 {sub && <p class="cat-sub">{sub}</p>}
+                {/* README:281 — "Each section group also gets a COLLAPSE ALL / EXPAND ALL
+                    control in its header." Only meaningful where this group IS Panels (the
+                    non-Panel path has nothing to collapse); no-JS-safe the same way the Panel
+                    toggle itself is — hidden until src/features/panel/ui/collapse.js confirms
+                    the grid exists and unhides + labels it. */}
+                {isPanelGroup && (
+                  <button class="cat-collapse-all" type="button" data-panel-collapse-all hidden>Collapse all</button>
+                )}
               </header>
-              {((guide as any).panelGroups ?? []).includes(g) ? (
+              {isPanelGroup ? (
                 <>
                   {/* Atlas Phase 2: this group's sections are Panels on the grid —
                       collapse + reorder, persisted per reader under this scope. The

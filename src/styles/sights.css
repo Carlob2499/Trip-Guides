@@ -65,6 +65,9 @@
 .sight--photo .sight-body{padding:1rem 1.3rem 1.15rem}
 .sight--text .sight-head{margin-bottom:.1rem}
 .sight-body p{margin:0}
+/* closed_days (D11) — mirrors venue-details dt's muted data-face treatment, since a sight
+   card has no dt/dd list of its own to hang this on. */
+.sight-body p.sight-closed{margin-top:.35rem;font-family:var(--font-data);font-size:var(--text-small);color:var(--muted)}
 
 /* Print: show the photo, drop the overlay chrome, name as heading below. */
 @media print{

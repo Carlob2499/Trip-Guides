@@ -2,11 +2,58 @@
     only reads the store, applies the attribute, and writes back. */
 import { parseCollapsed, serializeCollapsed, setCollapsed, isCollapsed, scopeKey } from "../model/collapse";
 
+/** Longest transition-duration on a Panel's body, in ms. 0 = no animation is live
+    (pre-[data-panel-anim], reduced motion, or no body at all) — mirrors ui/grid.js's
+    own reader, kept local since the two files must not import each other's DOM glue. */
+function bodyTransitionMs(body) {
+  try {
+    var durs = (getComputedStyle(body).transitionDuration || "0s").split(",");
+    var max = 0;
+    for (var i = 0; i < durs.length; i++) {
+      var n = parseFloat(durs[i]);
+      if (isNaN(n)) continue;
+      var ms = /ms\s*$/.test(durs[i]) ? n : n * 1000;
+      if (ms > max) max = ms;
+    }
+    return max;
+  } catch (e) {
+    return 0;
+  }
+}
+
+/* Expanding needs the clip held through the body's grid-template-rows transition —
+   removed once it ends, so the steady OPEN state restores sticky positioning inside
+   .pnl-body-in (see styles.css). Collapsing needs no equivalent call: [data-collapsed]
+   alone covers both that transition and the collapsed rest state, in CSS. */
+function clipThroughExpand(panel) {
+  var body = panel.querySelector("[data-panel-body]");
+  var inner = panel.querySelector(".pnl-body-in");
+  if (!body || !inner) return;
+  var wait = bodyTransitionMs(body);
+  if (!wait) return; // arrives instantly — nothing to clip through
+  inner.classList.add("pnl-clip");
+  var done = false;
+  function finish() {
+    if (done) return;
+    done = true;
+    inner.classList.remove("pnl-clip");
+    body.removeEventListener("transitionend", onEnd);
+  }
+  function onEnd(ev) {
+    if (ev.target !== body || ev.propertyName !== "grid-template-rows") return;
+    finish();
+  }
+  body.addEventListener("transitionend", onEnd);
+  // Fallback: transitionend is lost if the tab is hidden mid-animation.
+  setTimeout(finish, wait + 120);
+}
+
 function apply(panel, collapsed) {
   if (collapsed) panel.setAttribute("data-collapsed", "1");
   else panel.removeAttribute("data-collapsed");
   var btn = panel.querySelector("[data-panel-toggle]");
   if (btn) btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+  if (!collapsed) clipThroughExpand(panel);
 }
 
 /**
@@ -59,6 +106,55 @@ export function initPanels(ctx) {
       }));
     });
   });
+
+  // README:281 — "Each section group also gets a COLLAPSE ALL / EXPAND ALL control in its
+  // header." `root` here is the GRID (initDeclaredPanelGrids wires one scope per grid), and
+  // the control lives in the group's header, a sibling of the grid — so it's found via the
+  // nearest .catblock ancestor, not inside `root` itself. One button, label toggles with the
+  // group's own aggregate state (ANY panel open -> "Collapse all"; every panel already
+  // collapsed -> "Expand all"), same as any other disclosure-all control.
+  var headerRoot = (root.closest && root.closest(".catblock")) || root;
+  var allBtn = headerRoot.querySelector("[data-panel-collapse-all]");
+  if (allBtn) {
+    // Same inclusion rule as the wiring loop above (has a toggle, first-of-id only) — kept as
+    // a second pass rather than collected during that loop, so the two stay independently
+    // readable and neither has to know the other exists.
+    var uniqueIds = {};
+    var wiredPanels = Array.prototype.filter.call(panels, function (p) {
+      var pid = p.getAttribute("data-panel");
+      if (!pid || uniqueIds[pid] || !p.querySelector("[data-panel-toggle]")) return false;
+      uniqueIds[pid] = true;
+      return true;
+    });
+    function updateAllLabel() {
+      var allCollapsed = wiredPanels.length > 0 && wiredPanels.every(function (p) {
+        return p.hasAttribute("data-collapsed");
+      });
+      allBtn.textContent = allCollapsed ? "Expand all" : "Collapse all";
+      allBtn.setAttribute(
+        "aria-label",
+        allCollapsed ? "Expand every panel in this group" : "Collapse every panel in this group"
+      );
+    }
+    if (wiredPanels.length) {
+      allBtn.removeAttribute("hidden");
+      updateAllLabel();
+      allBtn.addEventListener("click", function () {
+        var collapseAll = allBtn.textContent === "Collapse all";
+        wiredPanels.forEach(function (p) {
+          var pid = p.getAttribute("data-panel");
+          state = setCollapsed(state, pid, collapseAll);
+          apply(p, collapseAll);
+          p.dispatchEvent(new CustomEvent("panel:toggle", {
+            bubbles: true,
+            detail: { id: pid, collapsed: collapseAll },
+          }));
+        });
+        store.write(key, serializeCollapsed(state));
+        updateAllLabel();
+      });
+    }
+  }
 
   // A deep link into a collapsed Panel must open it: `#sec-N` arrives from the anchor
   // copy button, the palette, and mobile-nav resume, and scrolling to a shut header

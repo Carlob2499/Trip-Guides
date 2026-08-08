@@ -154,12 +154,24 @@ html:not([data-panel-reorder]) [data-panel-order-reset] { display: none; }
 }
 
 .pnl-body-in {
-  overflow: hidden;
   min-height: 0;
   /* Horizontal padding only. The row's 0fr floor is the item's own padding, not its
      content — a padding-bottom here would leave a collapsed Panel 20px tall — so the
      bottom gap is carried by the last child's margin, which the clip removes with it. */
   padding: 0 1.4rem;
+}
+
+/* The clip is conditional, not permanent: an always-on `overflow: hidden` here kills
+   `position: sticky` on anything inside (e.g. DaysBlock's .day-scrub) even in the
+   ordinary open, unanimated steady state, where nothing needs clipping at all. It is
+   only needed (a) whenever the Panel is actually collapsed — CSS handles that for free
+   via the attribute, covering both the collapsing transition and the collapsed rest
+   state — and (b) for the brief EXPAND transition, when JS (ui/collapse.js) adds
+   `.pnl-clip` at the click and removes it once the body's `grid-template-rows`
+   transition ends, mirroring ui/grid.js's own transitionend+timeout pattern. */
+[data-panel-ready] .pnl[data-collapsed] .pnl-body-in,
+.pnl-body-in.pnl-clip {
+  overflow: hidden;
 }
 
 /* Block rhythm belongs to the container, exactly as .card p+p does in guide.css —
@@ -171,20 +183,28 @@ html:not([data-panel-reorder]) [data-panel-order-reset] { display: none; }
 /* Own-cards sections bring their own internal item grid (DESIGN.md: wide types "are
    internally gridded already"). On the legacy path guide.css hangs that grid on the
    `.block` wrapper — but a hosting Panel IS that wrapper, so the grid has to land on
-   the body here instead. Sights is the only multi-column case; venues, divergences and
-   days stack, and inherit the block rhythm above unchanged.
+   the body here instead. Sights and venues (D12) are the multi-column cases; divergences
+   and days stack, and inherit the block rhythm above unchanged. This is a Panel-only
+   fix — the legacy `.block:not(.pnl)` path (guide.css) still stacks venues; D12 scopes
+   the change to the Panel host.
 
    The stacking margin-top is zeroed because `gap` now owns the spacing — but the
    last child's margin-bottom is deliberately LEFT ALONE: it is what carries the body's
    bottom gap through a collapse, for the 0fr reason documented on .pnl-body-in. A
    padding-bottom here would read as content and leave a collapsed Panel 20px tall. */
-.pnl-body-in:has(.sight) {
+.pnl-body-in:has(.sight),
+.pnl-body-in:has(.venue) {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1rem 1.1rem;
   align-items: start;
 }
-.pnl-body-in:has(.sight) > * + * { margin-top: 0; }
+.pnl-body-in:has(.sight) { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.pnl-body-in:has(.venue) { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.pnl-body-in:has(.sight) > * + *,
+.pnl-body-in:has(.venue) > * + * { margin-top: 0; }
+/* The intro paragraph (sec.intro, VenueBlock.astro) reads above the card grid, full
+   width — never squeezed into one card's column. */
+.pnl-body-in:has(.venue) > .venue-intro { grid-column: 1 / -1; }
 
 [data-panel-ready] .pnl[data-collapsed] .pnl-body {
   grid-template-rows: 0fr;
