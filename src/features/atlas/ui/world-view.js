@@ -126,7 +126,7 @@ export function initAtlasWorld(root = document) {
     el.style.width = `${CARD_W}px`;
     el.innerHTML = `
       <span class="atlas-pincard-tail"></span>
-      ${g.coverImg ? `<img class="atlas-pincard-plate" src="${escapeHtml(g.coverImg)}" alt="" loading="lazy" />` : ""}
+      ${g.coverImg ? `<img class="atlas-pincard-plate" src="${escapeHtml(g.coverImg)}" alt="" loading="lazy" style="view-transition-name:cover-${escapeHtml(g.slug)}" />` : ""}
       <span class="atlas-pincard-body">
         <span class="atlas-pincard-cc">${escapeHtml(g.cc || "")} · ${g.ordinal != null ? String(g.ordinal).padStart(2, "0") : "—"}</span>
         <span class="atlas-pincard-title">${escapeHtml(g.name)}</span>

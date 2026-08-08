@@ -243,7 +243,7 @@ tz ×2). Nothing visible changed — verify hub/guides render identically in pre
 
 ## Stage C — The hub (Phase 3)
 
-> **RESUME (2026-08-08 session, mid-stage):** Items 1–6, 9 done and verified (ship loop
+> **RESUME (2026-08-08 session, mid-stage):** Items 1–7, 9 done and verified (ship loop
 > green: build/lint/typecheck/1560 tests; content-preservation gate clean — zero
 > `src/content/guides/` diffs). Built aside at `src/pages/atlas.astro` (dev-only, not linked
 > from live nav) — `index.astro` untouched, D1 intact.
@@ -351,9 +351,26 @@ tz ×2). Nothing visible changed — verify hub/guides render identically in pre
 >   confirmed via getBoundingClientRect/scrollWidth instead). Grepped compiled
 >   `dist/atlas/index.html` to confirm the OG tag, Tools/New-guide hrefs, footer markup, and
 >   `id="btnDark"` are genuinely present in production output.
-> - **Still to build**: 7 (view transitions), 8 (mobile <760px — wire to
->   existing `mobile-nav` models), 10 (the flip commit itself — NOT pushed until item 11's GO),
->   11 (screenshot checkpoint + Sedona/Japan origin question, D14/Clarifying #1).
+> - **7 View transitions (D22)**: `src/pages/atlas.astro` didn't import `transitions.css` —
+>   `@view-transition{navigation:auto}` was already live site-wide via `base.css` (every page
+>   imports it), so cross-document transitions were never actually OFF, but the calm 420ms
+>   `cubic-bezier(.4,0,.2,1)` NAMED-group morph timing plus the belt-and-suspenders
+>   reduced-motion animation-kill only exist in `transitions.css`, which the hub lacked. Added
+>   the import. Wired the one real gap: `world-view.js`'s pin-card `<img class="atlas-pincard-
+>   plate">` now carries `view-transition-name:cover-${slug}` inline (mirrors `index.astro`'s
+>   hub-card convention exactly; safe unconditionally since `ensureCard`'s slug-keyed Map
+>   guarantees at most one live element per name at a time). **Deliberately not done**: adding
+>   `cover-<slug>`/`accent-<slug>` to the table view's quick card or sheet-list rows — neither
+>   carries a photo or a guide-accent-coloured element in the current (photo-less, data-first)
+>   table-view design, so there's nothing real to name; inventing a colour swatch just to hang
+>   a transition name on would be new, undesigned surface. Those navigations still get the
+>   root cross-fade (unaffected). Live-verified in `astro preview`: the pin-card image carries
+>   the right inline name after the solver places it, and both the 420ms group-timing rule and
+>   the reduced-motion override are present and matched in the live page's stylesheets. Ship
+>   loop green (1560 tests, unchanged — no new logic, only naming + one CSS import).
+> - **Still to build**: 8 (mobile <760px — wire to existing `mobile-nav` models), 10 (the flip
+>   commit itself — NOT pushed until item 11's GO), 11 (screenshot checkpoint + Sedona/Japan
+>   origin question, D14/Clarifying #1).
 
 Build aside (a dev-only route, e.g. `src/pages/atlas.astro`, or the new components mounted
 nowhere) and flip `index.astro` in one final commit. Read the handoff README §1–3 fully
