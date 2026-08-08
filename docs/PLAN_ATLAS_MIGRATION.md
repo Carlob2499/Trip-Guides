@@ -24,7 +24,7 @@ is half-done. A fresh session reads this section first and continues; it never r
 history from git log.
 
 - [x] Stage A — Guide-sheet completion (Phase-2 delta)
-- [ ] Stage B — Atlas data layer
+- [x] Stage B — Atlas data layer
 - [ ] Stage C — The hub (Phase 3) + flip
 - [ ] Stage D — Mobile (Phase 4)
 - [ ] Stage E — Tools (Phase 5)

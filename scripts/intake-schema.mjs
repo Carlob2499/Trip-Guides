@@ -47,6 +47,10 @@ export const FIELDS = [
     description: "Optional. Format \"YYYY-MM-DD to YYYY-MM-DD\" — drives the day-by-day cards and the weather/holiday window.",
     placeholder: "2026-03-01 to 2026-03-08" },
 
+  { id: "departure-airport", label: "Departure airport", kind: "input", required: false, answerKey: "departureAirport",
+    description: "Which airport you'll fly out of, if you have a guess — an IATA code is best (EWR, JFK), but a plain city/airport name works too. Drives the Atlas globe's route line from home to this trip (D14/ADR 0003); recorded as UNCONFIRMED until a real booking confirms it, so a guess here draws no line by itself.",
+    placeholder: "e.g. EWR (Newark) — or \"probably JFK\" if you're not sure yet" },
+
   { id: "anchor", label: "Anchor event", kind: "input", required: false, answerKey: "anchor",
     description: "The one non-negotiable the trip is built around (a concert, a match, a festival, a wedding). This is the most perishable, most important fact on the trip — the research pass verifies its date + venue against an official source FIRST. Include a source URL if you have one.",
     placeholder: "e.g. Pokémon GO Wild Area — Mexico City, Nov 6–8 2026 (pokemongolive.com)" },
@@ -155,6 +159,7 @@ export const IntakeAnswers = z.object({
   cities: z.string().optional(),
   start: z.string().optional(),
   end: z.string().optional(),
+  departureAirport: z.string().optional(),
   anchor: z.string().optional(),
   travelers: z.string().optional(),
   party: z.string().optional(),

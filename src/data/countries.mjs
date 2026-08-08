@@ -257,3 +257,25 @@ export const COUNTRY_CODES = Object.fromEntries(
   [...Object.entries(COUNTRIES).map(([k, v]) => [k, v.iso2]),
    ...Object.entries(ALIASES).map(([k, canon]) => [k, COUNTRIES[canon]?.iso2]).filter(([, v]) => v)]
 );
+
+// ISO 3166-1 NUMERIC — a small, deliberately incomplete map (PLAN_ATLAS_MIGRATION.md Stage
+// B.4): the world-atlas TopoJSON vendored in Stage B.5 keys each country FEATURE by this
+// numeric id (not the alpha-2 above), so the Atlas globe needs it to match a guide's `country`
+// to a polygon. Only the countries a real guide currently uses get an entry — verified against
+// Wikipedia's ISO 3166-1 numeric list on 2026-08-08, the same "confirmed, not guessed"
+// discipline as EMERGENCY/AIRPORTS. Extend as new guides ship; a country with no entry here
+// simply doesn't light up on the globe (honest absence), same as an unmapped continent.
+export const COUNTRY_ISO_NUMERIC = {
+  "South Korea": 410,
+  "Denmark": 208,
+  "Japan": 392,
+  "United States": 840,
+};
+
+/** The numeric id for a guide's `country` (resolving aliases the same way continentFor does),
+    or null when this repo hasn't recorded one yet. */
+export function isoNumericFor(country) {
+  if (!country) return null;
+  const key = ALIASES[country] || country;
+  return COUNTRY_ISO_NUMERIC[key] ?? null;
+}

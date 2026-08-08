@@ -183,5 +183,10 @@
     "verified_on": "2026-07-29",
     "shelf_life": "transit",
     "state": "approx"
+  },
+  "traveler-origin": {
+    "claim": "Traveler origin — departure airport (D14/ADR 0003) — unconfirmed, possibly JFK",
+    "value": "JFK",
+    "state": "unconfirmed"
   }
 }

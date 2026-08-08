@@ -226,6 +226,18 @@ quantitative: a full pass owes ≥8 finds, ≥3 crowd/timing, ≥2 novel/alterna
   inside a day plan are itinerary structure, not registry facts — leave them in prose. An
   existing guide is migrated with `node scripts/migrate-facts.mjs --slug <slug>` (propose) then
   `--write`; it lifts values VERBATIM and the built site must stay byte-identical.
+- **`traveler-origin` is the ONE reserved id in the registry** (D14/ADR 0001+0003,
+  PLAN_ATLAS_MIGRATION.md Stage B) — a different shape from every other row: `value` is a
+  3-letter IATA code (not prose text), `state` is `confirmed` | `unconfirmed` (not
+  `clean`/`approx` — this is "do we know this yet", not a sourced-approximate figure), and
+  `source_url`/`verified_on` are optional UNLESS `state` is `confirmed` (a personal flight
+  booking has no public URL, so use `source` — free text — instead of `source_url` when there
+  isn't one; `confirmed` still owes `verified_on` + one of the two). Never reference it as
+  `{{fact:traveler-origin}}` in prose — nothing substitutes it; the Atlas hub's guide-record
+  derivation (`src/features/atlas/model/guide-record.ts`) reads it directly, resolves the code
+  through `src/data/airports.mjs`, and an `unconfirmed` row (or none at all) draws no globe
+  route — honest absence, never a guessed traverse. New guides: capture the departure airport
+  at intake (`docs/NEW_GUIDE_INTAKE.md`) so this row is born with the guide, not bolted on later.
 - **Structured provenance — MANDATORY on anything you write or edit.** Sections and
   items accept `source_url` + `verified_on` (YYYY-MM-DD) + `shelf_life`
   (`fx` 7d · `transit` 90d · `hours` 90d · `venue` 180d · `default` 90d, from

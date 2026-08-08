@@ -35,6 +35,18 @@ body:
     validations:
       required: false
   - type: input
+    id: departure-airport
+    attributes:
+      label: Departure airport
+      description: >-
+        Which airport you'll fly out of, if you have a guess — an IATA code is best (EWR,
+        JFK), but a plain city/airport name works too. Drives the Atlas globe's route line
+        from home to this trip (D14/ADR 0003); recorded as UNCONFIRMED until a real booking
+        confirms it, so a guess here draws no line by itself.
+      placeholder: e.g. EWR (Newark) — or "probably JFK" if you're not sure yet
+    validations:
+      required: false
+  - type: input
     id: anchor
     attributes:
       label: Anchor event

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { COUNTRIES, CONTINENTS, CONTINENT_ORDER, ALIASES, continentFor, emergencyFor } from "./countries.mjs";
+import { COUNTRIES, CONTINENTS, CONTINENT_ORDER, ALIASES, continentFor, emergencyFor, isoNumericFor, COUNTRY_ISO_NUMERIC } from "./countries.mjs";
 
 describe("continent data", () => {
   it("assigns a continent to EVERY country — a new country can't ship without one", () => {
@@ -69,5 +69,25 @@ describe("emergencyFor (E8·3: SOS coverage)", () => {
   it("returns null for a country with neither a verified entry nor EU-112 coverage", () => {
     expect(emergencyFor("Thailand")).toBeNull();
     expect(emergencyFor("Atlantis")).toBeNull();
+  });
+});
+
+describe("isoNumericFor", () => {
+  it("resolves every country a real guide currently uses", () => {
+    expect(isoNumericFor("South Korea")).toBe(410);
+    expect(isoNumericFor("Denmark")).toBe(208);
+    expect(isoNumericFor("Japan")).toBe(392);
+    expect(isoNumericFor("United States")).toBe(840);
+  });
+
+  it("resolves an alias the same way continentFor does", () => {
+    expect(isoNumericFor("Korea")).toBe(COUNTRY_ISO_NUMERIC["South Korea"]);
+    expect(isoNumericFor("USA")).toBe(COUNTRY_ISO_NUMERIC["United States"]);
+  });
+
+  it("returns null for a country with no recorded numeric id — honest absence, never guessed", () => {
+    expect(isoNumericFor("Thailand")).toBeNull();
+    expect(isoNumericFor(null)).toBeNull();
+    expect(isoNumericFor(undefined)).toBeNull();
   });
 });

@@ -183,5 +183,12 @@
     "source_url": "https://www.visitoslo.com",
     "verified_on": "2026-06-15",
     "shelf_life": "venue"
+  },
+  "traveler-origin": {
+    "claim": "Traveler origin — departure airport (D14/ADR 0003)",
+    "value": "JFK",
+    "source": "Creator confirmation (Atlas migration plan grilling session)",
+    "verified_on": "2026-08-07",
+    "state": "confirmed"
   }
 }

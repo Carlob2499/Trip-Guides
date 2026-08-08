@@ -618,5 +618,12 @@
     "verified_on": "2026-07-07",
     "shelf_life": "venue",
     "state": "approx"
+  },
+  "traveler-origin": {
+    "claim": "Traveler origin — departure airport (D14/ADR 0003)",
+    "value": "EWR",
+    "source": "Air Premia YP132/YP131 booking confirmation — Terminal B, per the Plan section's own \"Departure airport confirmed: Newark Liberty EWR — not JFK\"",
+    "verified_on": "2026-07-30",
+    "state": "confirmed"
   }
 }

@@ -83,10 +83,44 @@ const factRecord = z.object({
   state: z.enum(["clean", "approx"]).default("clean"),
   tier: z.enum(["primary", "corroborated", "secondary"]).optional(),
 });
+
+// D14/ADR 0001+0003 (PLAN_ATLAS_MIGRATION.md Stage B) — the ONE reserved id in the registry:
+// `traveler-origin`. Same registry (one home for a guide's perishable/reserved facts), a
+// DIFFERENT shape from factRecord above — `value` is an IATA code, not prose text; `state` is
+// confirmed/unconfirmed, not clean/approx (this isn't a sourced-approximate FIGURE, it's "do we
+// know this yet"); source_url/verified_on are OPTIONAL, because an unconfirmed origin has no
+// booking to cite yet, and that honest absence is the whole point (ADR 0003: "a guide with no
+// row, or an unconfirmed one, draws no traverse"). A CONFIRMED origin still owes its source —
+// it's asserting a real booking, not a guess — enforced below.
+const originRecord = z.object({
+  claim: z.string().min(1).optional(),
+  value: z.string().regex(/^[A-Z]{3}$/, "traveler-origin value must be a 3-letter IATA code (uppercase)"),
+  // ADR 0003: "source is the traveler's booking record" — a personal flight confirmation has
+  // no public URL, so `source` is free text describing where it lives (an airline
+  // confirmation, a creator statement); `source_url` stays available for the rare case a
+  // real link exists.
+  source: z.string().min(1).optional(),
+  source_url: z.url().optional(),
+  verified_on: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  state: z.enum(["confirmed", "unconfirmed"]),
+}).refine((v) => v.state !== "confirmed" || ((!!v.source || !!v.source_url) && !!v.verified_on), {
+  message: "a confirmed traveler-origin needs verified_on + a source (source_url or free-text source) — it's asserting a real booking, not a guess",
+});
+
 export const factsFile = z.record(
   z.string().regex(/^[a-z0-9][a-z0-9-]*$/, "fact ids are kebab-case"),
-  factRecord,
-);
+  z.unknown(),
+).superRefine((obj, ctx) => {
+  for (const [id, rec] of Object.entries(obj)) {
+    const schema = id === "traveler-origin" ? originRecord : factRecord;
+    const result = schema.safeParse(rec);
+    if (!result.success) {
+      for (const issue of result.error.issues) {
+        ctx.addIssue({ code: "custom", path: [id, ...issue.path], message: issue.message });
+      }
+    }
+  }
+});
 
 // F1 (docs/archive/PLAN_TRAVELER_FEATURES.md): a checklist item stays a bare string for every guide
 // that has no book-by deadline for it (back-compat — every existing guide validates

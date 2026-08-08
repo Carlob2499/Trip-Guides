@@ -18,7 +18,9 @@ const BEGIN = "/* CORE:BEGIN";
 const END = "/* CORE:END */";
 
 // Static shell entries beyond the guide pages (mirror public/ assets).
-const SHELL = ["/", "/manifest.webmanifest", "/icons/icon-192.png", "/icons/favicon.svg"];
+// D18 (PLAN_ATLAS_MIGRATION.md Stage B.5): the vendored world TopoJSON the Atlas globe fetches
+// client-side — precached so it works offline too, same as everything else in this list.
+const SHELL = ["/", "/manifest.webmanifest", "/icons/icon-192.png", "/icons/favicon.svg", "/data/countries-110m.json"];
 
 try { await access(SW); } catch {
   console.error("[sw-precache] dist/sw.js not found — run astro build first");

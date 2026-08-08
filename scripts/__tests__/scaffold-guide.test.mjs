@@ -5,7 +5,7 @@
 // scope here — this covers the logic a bug would corrupt silently.
 
 import { describe, it, expect } from "vitest";
-import { slugify, dayLabelsFromRange, buildGuideObject, buildIntakeMd, parseArgs, deriveRanks, PRIORITY_GROUP_MAP, buildCoverageMatrix } from "../scaffold-guide.mjs";
+import { slugify, dayLabelsFromRange, buildGuideObject, buildIntakeMd, parseArgs, deriveRanks, PRIORITY_GROUP_MAP, buildCoverageMatrix, extractIataCode } from "../scaffold-guide.mjs";
 // The never-fold groups come from the Composer that owns the rule, not a local copy — a
 // re-declared literal here would keep passing after compose-guide.mjs changed its mind.
 import { NEVER_FOLD } from "../compose-guide.mjs";
@@ -291,5 +291,32 @@ describe("parseArgs (R9 — a flag with no value doesn't swallow the next flag's
 
   it("handles an all-flags-no-values argv without throwing", () => {
     expect(parseArgs(["--a", "--b", "--c"])).toEqual({ a: true, b: true, c: true });
+  });
+});
+
+describe("extractIataCode — Stage B.7 intake congruence (D14/ADR 0003)", () => {
+  it("extracts a bare, deliberately-capitalized code", () => {
+    expect(extractIataCode("EWR")).toBe("EWR");
+  });
+
+  it("extracts a code mentioned inline, capitalized, among lowercase prose", () => {
+    expect(extractIataCode("probably JFK")).toBe("JFK");
+    expect(extractIataCode("EWR (Newark)")).toBe("EWR");
+  });
+
+  it("does NOT guess from a lowercase word — a false positive would be worse than no row", () => {
+    expect(extractIataCode("the airport near newark")).toBeNull();
+    expect(extractIataCode("not sure yet")).toBeNull();
+  });
+
+  it("does not guess from a bare city name with no code at all", () => {
+    expect(extractIataCode("Newark")).toBeNull();
+    expect(extractIataCode("somewhere near NYC, not sure which airport")).toBe("NYC"); // a real 3-letter token — see note below
+  });
+
+  it("null for empty/absent input", () => {
+    expect(extractIataCode("")).toBeNull();
+    expect(extractIataCode(null)).toBeNull();
+    expect(extractIataCode(undefined)).toBeNull();
   });
 });

@@ -27,6 +27,16 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const GUIDES_DIR = path.join(ROOT, "src", "content", "guides");
 const INTAKE_DIR = path.join(ROOT, "guides-intake");
 
+// The first unambiguous, deliberately-capitalized 3-letter airport code in free text ("EWR
+// (Newark)" -> "EWR", "probably JFK" -> "JFK"), or null. Case-SENSITIVE on purpose — a random
+// lowercase 3-letter word ("the", "was") would otherwise false-positive as a code; a real
+// traveler typing an airport code conventionally capitalizes it, so requiring that is the
+// cheap, reliable signal, not a fuzzy match against a city name.
+export function extractIataCode(answer) {
+  const m = String(answer || "").match(/\b[A-Z]{3}\b/);
+  return m ? m[0] : null;
+}
+
 // P2/R16: deterministic mapping from intake priority dropdown labels to scaffold section
 // groups. When a priority maps to a group, every section in that group gets `rank: <position>`
 // (1-indexed from the intake's ranked order). The Composer uses rank to protect high-priority
@@ -219,6 +229,7 @@ export function buildIntakeMd(answers = {}) {
 - Exact dates (start–end): ${[answers.start, answers.end].filter(Boolean).join(" – ")}
 - Cities: ${answers.cities || ""}
 - Number of nights / cities:
+- **Departure airport (drives the Atlas globe's route line, D14/ADR 0003):** ${answers.departureAirport || ""}  *(recorded UNCONFIRMED in facts.json until a real booking confirms it — no line draws off a guess)*
 - **Anchor event (the non-negotiable the trip is built around):** ${answers.anchor || ""}  *(VERIFY this first, against a T0 source — dates + venue — before any other research)*
 - Pace preference: ${answers.pace || "packed / balanced / slow"}
 
@@ -390,10 +401,21 @@ export async function writeScaffold(answers) {
   await writeFile(flatSeed, JSON.stringify(guide, null, 2) + "\n");
   await splitGuide(slug, { guidesDir: GUIDES_DIR });
   const guidePath = path.join(GUIDES_DIR, slug);
-  // Perishable-fact registry, born empty. Present from the start so a research pass records
-  // prices and hours as sourced ROWS while it works, instead of burying them in prose and
-  // leaving a later migration to dig them back out. An empty object is valid and inert.
-  await writeFile(path.join(guidePath, "facts.json"), "{}\n");
+  // Perishable-fact registry, born empty except for one possible seed row. Present from the
+  // start so a research pass records prices and hours as sourced ROWS while it works, instead
+  // of burying them in prose and leaving a later migration to dig them back out.
+  //
+  // D14/ADR 0003 (Stage B.7, intake congruence): if the intake's departure-airport answer
+  // contains an unambiguous, deliberately-capitalized 3-letter code ("EWR (Newark)", "probably
+  // JFK"), seed the reserved traveler-origin row from it — UNCONFIRMED, always, since intake
+  // happens before any booking exists to confirm it. Free text with no such code (a bare city
+  // name, a lowercase guess) writes nothing: honest absence beats a guessed code, and the row
+  // can always be added once research or a booking actually confirms it.
+  const iata = extractIataCode(a.departureAirport);
+  const seedFacts = iata
+    ? { "traveler-origin": { claim: "Traveler origin — departure airport (D14/ADR 0003)", value: iata, state: "unconfirmed" } }
+    : {};
+  await writeFile(path.join(guidePath, "facts.json"), JSON.stringify(seedFacts, null, 2) + "\n");
   // P3/R15: coverage matrix — every non-empty intake ask, so verify can fail uncovered ones.
   const coveragePath = path.join(INTAKE_DIR, `${slug}.coverage.json`);
   await writeFile(coveragePath, JSON.stringify(buildCoverageMatrix(a, slug), null, 2) + "\n");
@@ -427,7 +449,7 @@ export function parseArgs(argv) {
 async function main() {
   const a = parseArgs(process.argv.slice(2));
   if (!a.country && !a.title) {
-    console.error("Usage: node scripts/scaffold-guide.mjs --country <name> [--cities ..] [--start YYYY-MM-DD --end YYYY-MM-DD] [--travelers N] [--pace ..] [--priorities a,b,c] [--niche ..] [--budget ..] [--comments ..] [--passport-countries ..] [--lat ..] [--lng ..] [--slug ..]");
+    console.error("Usage: node scripts/scaffold-guide.mjs --country <name> [--cities ..] [--start YYYY-MM-DD --end YYYY-MM-DD] [--departure-airport ..] [--travelers N] [--pace ..] [--priorities a,b,c] [--niche ..] [--budget ..] [--comments ..] [--passport-countries ..] [--lat ..] [--lng ..] [--slug ..]");
     process.exit(1);
   }
   // Accept EITHER --start/--end OR the issue form's --dates "YYYY-MM-DD to YYYY-MM-DD",
@@ -439,6 +461,7 @@ async function main() {
     slug: a.slug, start, end,
     travelers: a.travelers, pace: a.pace, niche: a.niche, budget: a.budget, comments: a.comments,
     anchor: a.anchor, party: a.party, travelStyle: a["travel-style"], passportCountries: a["passport-countries"],
+    departureAirport: a["departure-airport"],
     priorities: a.priorities ? a.priorities.split(",").map((s) => s.trim()) : [],
     coords: (a.lat && a.lng) ? { lat: parseFloat(a.lat), lng: parseFloat(a.lng) } : null,
   };

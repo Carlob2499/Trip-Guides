@@ -41,6 +41,10 @@
 
 - Exact dates (start–end):
 - Number of nights / number of cities:
+- **Departure airport** — even a guess helps (IATA code if you know it, e.g. EWR, JFK).
+  *Drives the Atlas globe's route line from home to this trip (D14/ADR 0003) — recorded as
+  UNCONFIRMED in `facts.json`'s reserved `traveler-origin` row until a real booking confirms
+  it, so nothing draws off a guess.*
 - **Anchor event — the ONE non-negotiable the trip is built around** (a wedding, a concert,
   a conference, a match). *Drives everything: it is the most perishable, most important fact
   on the trip. **Pass A verifies its date + venue against a T0 (official) source FIRST**, before
