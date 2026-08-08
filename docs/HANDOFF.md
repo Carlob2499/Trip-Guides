@@ -24,64 +24,59 @@
   **`docs/PLAN_ATLAS_MIGRATION.md`** (the current work order — its own Progress ledger is the
   source of truth for which stage is next; read that before re-deriving status from git log).
 
-## Snapshot (2026-08-08 — Atlas migration Stage C, items 1–9 of 11 shipped)
+## Snapshot (2026-08-08 — Atlas migration **Stage C COMPLETE**; Atlas is the live hub)
 
-**Prior sessions shipped Stages A+B and Stage C items 1–6** (archive has full detail): feature
-silo, atlas-map port, server-rendered table view, world view + pin-card solver, cover + iris —
-all live-verified, `1e2c350`.
+**The flip shipped.** `src/pages/atlas.astro` became `src/pages/index.astro` (`cd94ab5`) —
+the Atlas hub (cover, globe/world view, server-rendered table view, mobile FAB + ping sheet)
+is now what `https://carlob2499.github.io/Trip-Guides/` serves, verified live. The `/atlas/`
+route is gone; the old hub is deleted (overture.js, hub-live-cards.js, hub.css, hub-cards.css,
+hub-motion.css, `features/hub`'s index.js + ui/hub.js), and dead `.hubcard` selectors were
+swept from touch.css / scroll-motion.css / reveal.js / type-scale's allowlist.
+**Kept deliberately, against the plan's own item-10 wording:** `gsap-hero.js` +
+`hero-parallax.js` — `GuideLayout.astro` imports both for the guide masthead; only the HUB's
+use of them died. PaintedAtlas kept per D3; `features/hub/ui/intake-flow.js` kept (/new uses it).
 
-**This session: items 9 (Chrome), 7 (view transitions), 8 (mobile) — Stage C is now content-
-complete**, only the flip (10) and checkpoint (11) remain.
-`675fb67` (9) → `84b1cde` (7) → `ae26480` (8). Highlights:
-- **9 Chrome**: header actions cluster (TOOLS → quick-card's tools tab, ＋ New guide, theme
-  toggle via shared `initDarkToggle`), OG/description meta (no `og:image` — no hub-level OG
-  asset exists, honest omission), About link relocated to a `.atlas-foot` in the table view.
-- **7 View transitions (D22)**: imported `transitions.css` (supplies the calm 420ms named-group
-  morph timing — `navigation:auto` itself was already live site-wide via `base.css`). Pin-card
-  cover images now carry `view-transition-name:cover-<slug>`, matching the guide masthead.
-- **8 Mobile (<760px, D5)**: new `atlas-mobile.css` + `world-view.js` additions. Bare pings (no
-  floating pincard on mobile — `runSolve` gates on live `matchMedia`), a bottom ping sheet on
-  pin tap (mobile) vs direct navigate (desktop, unchanged), a 52px FAB ☰ menu carrying the
-  desktop rail's own actions (fly to a sheet, fit world, pause spin, tools, ＋ new guide), and
-  header collapse (TOOLS + "New guide" label hide under 759px). Corrected a phrasing bug from
-  an earlier HANDOFF draft along the way: Stage D's `mobile-nav` models are the GUIDE page's
-  mobile chrome, unrelated to this item.
+**Earlier in the session** (before the flip): the guide-page button-chrome fix (`7ac154a` —
+`appearance:none` moved to base.css after finding an earlier hub-only fix had missed every
+guide page, incl. the mobile bottom nav bar), and three real globe pin-card bugs (`f80dcdb`):
+guides with no explicit `cover` showed NO photo (atlas.astro now runs the same
+cover→first-sight-photo fallback GuideLayout's masthead does), pin-card titles rendered in
+browser default link-blue, and the local-time clock sat on a placeholder dash for up to 30s.
 
-All three: ship loop green (build/lint/typecheck/1560 tests, unchanged count throughout — no
-new pure logic, only composition/DOM-wiring of already-tested pieces), live-verified in
-`astro preview` (desktop + 375px, dark theme), dist grepped for every new artifact. No
-screenshot capability this session (frame-compositing tooling limit) — verified via
-`getBoundingClientRect`/`getComputedStyle`/synthetic-event dispatch instead throughout.
+**`93e1657` — what the a11y gate caught the moment this page entered its scan list** (it was
+never scanned at `/atlas/`). Two REAL defects, fixed: (1) the cover and globe were bare
+`<div>`s outside any landmark → both are named `<section>`s now; (2) **"Skip to guides"
+pointed at `#atlasTable` while the JS default WORLD mode sets that wrapper to `display:none`
+— the skip link jumped to a hidden element and did nothing.** It now switches to table mode
+on activation (verified end-to-end: focus → Enter → mode flips, wrapper goes none→block,
+target has real geometry, hash lands). Three "couldn't resolve" cases were baselined only
+after measuring: worst pair 4.67:1, all ≥4.5 (numbers recorded in `a11y.spec.ts`).
 
-**Scope note flagged, not resolved:** README describes a standalone cross-trip "Tools" screen
-with its own trip picker (§5), but it is NOT one of Stage C's 11 numbered plan items — every
-TOOLS entry point built this stage (table row, header button, mobile FAB menu) links into the
-quick-card guide's own existing tools tab instead (`/guides/<slug>/#gtab-split`). Raise this
-explicitly at the item-11 checkpoint.
+Gates on both flip commits: build · lint · typecheck 0 errors · 1560 unit tests · **21/21
+a11y** · 3/3 new `atlas-hub.spec.ts` · perf budget OK (d3/topojson still lazy) · zero
+`src/content/guides/` diffs. All four CI workflows green; deploy confirmed live.
 
-**Post-checkpoint-preview fix round (`074c15e`):** creator looked at the live table view and
-called it flat/light-colored, missing contour lines, and said the WORLD|TABLE toggle "took
-over the entire bar." All three confirmed real against the design screenshots (not taste) and
-fixed: contour-line background ported per-page (`generateContourLayer`), toggle moved into the
-header as compact buttons on desktop (D5's full-bleed segmented bar now only applies <760px),
-filter chips show plain names with the current trip's chip filled oxide. Creator also supplied
-a machine-checkable design kit (`docs/design-handoff/enforcement/` — tokens.css, ANTIPATTERNS,
-ACCEPTANCE, SPEC-COMPONENTS, `check-drift.mjs`), now copied into the repo and pointed to from
-CLAUDE.md's new "Design Fidelity" section, which also records the kit's known false-positive
-classes (token-name mismatch, shadow rule vs. the prototype's own overlay styling, `--on-aink`
-value vs. `base.css`'s documented ATLAS TOKEN CONTRACT) so they don't get re-debugged.
-**Tooling note:** `astro dev`'s HMR served visibly stale CSS in this session's browser pane
-even after full server restarts and cache-busted URLs — confirmed via direct fetch that the
-dev server itself had fresh content, so this was browser-side. `astro preview` (production,
-content-hashed filenames) sidestepped it cleanly; prefer preview over dev for visual
-verification in this environment going forward.
+**Decisions CLOSED this session (do not re-ask):** Sedona/Japan departure airports —
+**no such fact exists**; neither trip has booked flights, so nothing gets recorded. The
+creator expects the NYC area and will say when scheduling happens. Tools screen — today's
+per-guide tools-tab shortcut STAYS; no standalone README §5 screen this round.
+
+**Creator's standing verdict on hub visuals:** "so many things look off — but this isn't
+necessarily the fault of the screenshots. We can iterate later but we need to move on and
+integrate all the features." Visual polish is explicitly DEFERRED, not done. Do not reopen
+it unprompted; the next work is features (Stage D onward).
 
 ## Open items
 
-- **Needs the creator, at Stage C's item-11 checkpoint (not before):** (1) screenshot sign-off
-  desktop+mobile, light+dark; (2) Sedona/Japan departure-airport confirmation (D14/Clarifying
-  #1); (3) the Tools-screen scope note above — build the full README §5 screen later, or keep
-  the guide-tab-tab-link shortcut; (4) explicit GO before the flip commit ships.
+- **Hub visual polish — deferred by the creator, not finished.** The flip shipped with known
+  fidelity gaps against the design screenshots. Resume only when the creator asks, or after
+  Stage D. `docs/design-handoff/enforcement/` + CLAUDE.md's "Design Fidelity" section carry
+  the authority order and the kit's known false positives.
+- **Airports for Sedona/Japan** — record them WHEN flights get booked (creator expects the NYC
+  area). Until then there is no fact; do not invent or re-ask.
+- Cover overlay does not trap focus: with the cover open, Tab moves into the page behind it
+  (found 2026-08-08 while probing the skip link; the cover still dismisses on any key, so it
+  is a papercut, not a trap). Worth a focus-trap pass whenever the cover is next touched.
 - LOCAL branch `worktree-agent-a7dc7eeb397c6a368` (progress-study, `5917f8f`, exists nowhere
   else) — keep or lose.
 - Cloudflare dashboard Git integration still failing 0s builds on every push — consider disabling.
@@ -90,21 +85,18 @@ verification in this environment going forward.
 
 ## Where we left off
 
-**This session:** Stage C items 7, 8, 9 all shipped and verified — Stage C is now
-content-complete. Only 10 (the flip) and 11 (the checkpoint) remain, and 10 is explicitly
-gated on 11's creator GO.
+**This session:** Stage C is DONE — Atlas is the live hub, all gates green, deploy confirmed.
+Visual fidelity is knowingly imperfect and deliberately deferred by the creator.
 
-**Recommended next step:** item 11, the end-of-stage checkpoint — screenshot desktop+mobile,
-light+dark to the creator; ask the Sedona/Japan departure-airport question (D14/Clarifying
-#1); surface the Tools-screen scope note (full README §5 screen later, or keep today's
-guide-tab-link shortcut); get explicit GO. This needs the creator directly — it's not
-something to keep pushing through solo. Once GO lands, item 10 (the flip) is comparatively
-mechanical: `index.astro` becomes the hub in one commit, delete the old hub code/CSS, update
-the tests that reference it.
+**Recommended next step:** **Stage D — Mobile (Phase 4)**, per
+`docs/PLAN_ATLAS_MIGRATION.md`. Note the scope boundary that has now bitten twice: the hub's
+OWN mobile surfaces (segmented switch, ping sheet, FAB menu) shipped in Stage C per D5 —
+Stage D is the GUIDE PAGES' mobile chrome, wired to the EXISTING `src/features/mobile-nav/`
+models (rank/gesture/scrub/yield; botbar, swipe-tabs, day-scrub), whose constants the
+creator's handoff prompt says to keep exactly. After D: Stage E (Tools) and Stage F (the
+twelve features).
 
-**Re-prompt the creator with:** "Stage C of the Atlas migration is content-complete — the
-globe, table view, cover/iris intro, full header chrome, view transitions, and mobile surfaces
-are all built, tested, and live at `/atlas/` (not yet linked from the real nav). Before I flip
-it to be the real hub: can you look at desktop + mobile screenshots, confirm Sedona/Japan's
-departure airports, and say whether the Tools screen should get its own full build this round
-or stay as today's shortcut into each guide's tools tab?"
+**Re-prompt the creator with:** "Atlas is live as the real hub and Stage C is closed. Next up
+is Stage D — the guide pages' mobile chrome (bottom bar, swipe between groups, day scrubber,
+yielding chrome), built on the mobile-nav models already in the repo. Want me to start there,
+or would you rather do a visual-polish pass on the hub first?"

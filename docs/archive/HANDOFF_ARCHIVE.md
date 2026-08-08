@@ -4,6 +4,58 @@
 > (the ~80-line budget its own header sets is now gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). Newest first, verbatim.
 
+## Snapshot (2026-08-08 — Atlas migration Stage C, items 1–9 of 11 shipped)
+
+**Prior sessions shipped Stages A+B and Stage C items 1–6** (archive has full detail): feature
+silo, atlas-map port, server-rendered table view, world view + pin-card solver, cover + iris —
+all live-verified, `1e2c350`.
+
+**This session: items 9 (Chrome), 7 (view transitions), 8 (mobile) — Stage C is now content-
+complete**, only the flip (10) and checkpoint (11) remain.
+`675fb67` (9) → `84b1cde` (7) → `ae26480` (8). Highlights:
+- **9 Chrome**: header actions cluster (TOOLS → quick-card's tools tab, ＋ New guide, theme
+  toggle via shared `initDarkToggle`), OG/description meta (no `og:image` — no hub-level OG
+  asset exists, honest omission), About link relocated to a `.atlas-foot` in the table view.
+- **7 View transitions (D22)**: imported `transitions.css` (supplies the calm 420ms named-group
+  morph timing — `navigation:auto` itself was already live site-wide via `base.css`). Pin-card
+  cover images now carry `view-transition-name:cover-<slug>`, matching the guide masthead.
+- **8 Mobile (<760px, D5)**: new `atlas-mobile.css` + `world-view.js` additions. Bare pings (no
+  floating pincard on mobile — `runSolve` gates on live `matchMedia`), a bottom ping sheet on
+  pin tap (mobile) vs direct navigate (desktop, unchanged), a 52px FAB ☰ menu carrying the
+  desktop rail's own actions (fly to a sheet, fit world, pause spin, tools, ＋ new guide), and
+  header collapse (TOOLS + "New guide" label hide under 759px). Corrected a phrasing bug from
+  an earlier HANDOFF draft along the way: Stage D's `mobile-nav` models are the GUIDE page's
+  mobile chrome, unrelated to this item.
+
+All three: ship loop green (build/lint/typecheck/1560 tests, unchanged count throughout — no
+new pure logic, only composition/DOM-wiring of already-tested pieces), live-verified in
+`astro preview` (desktop + 375px, dark theme), dist grepped for every new artifact. No
+screenshot capability this session (frame-compositing tooling limit) — verified via
+`getBoundingClientRect`/`getComputedStyle`/synthetic-event dispatch instead throughout.
+
+**Scope note flagged, not resolved:** README describes a standalone cross-trip "Tools" screen
+with its own trip picker (§5), but it is NOT one of Stage C's 11 numbered plan items — every
+TOOLS entry point built this stage (table row, header button, mobile FAB menu) links into the
+quick-card guide's own existing tools tab instead (`/guides/<slug>/#gtab-split`). Raise this
+explicitly at the item-11 checkpoint.
+
+**Post-checkpoint-preview fix round (`074c15e`):** creator looked at the live table view and
+called it flat/light-colored, missing contour lines, and said the WORLD|TABLE toggle "took
+over the entire bar." All three confirmed real against the design screenshots (not taste) and
+fixed: contour-line background ported per-page (`generateContourLayer`), toggle moved into the
+header as compact buttons on desktop (D5's full-bleed segmented bar now only applies <760px),
+filter chips show plain names with the current trip's chip filled oxide. Creator also supplied
+a machine-checkable design kit (`docs/design-handoff/enforcement/` — tokens.css, ANTIPATTERNS,
+ACCEPTANCE, SPEC-COMPONENTS, `check-drift.mjs`), now copied into the repo and pointed to from
+CLAUDE.md's new "Design Fidelity" section, which also records the kit's known false-positive
+classes (token-name mismatch, shadow rule vs. the prototype's own overlay styling, `--on-aink`
+value vs. `base.css`'s documented ATLAS TOKEN CONTRACT) so they don't get re-debugged.
+**Tooling note:** `astro dev`'s HMR served visibly stale CSS in this session's browser pane
+even after full server restarts and cache-busted URLs — confirmed via direct fetch that the
+dev server itself had fresh content, so this was browser-side. `astro preview` (production,
+content-hashed filenames) sidestepped it cleanly; prefer preview over dev for visual
+verification in this environment going forward.
+
 ## Snapshot (2026-08-08 — Atlas migration Stage C, items 1–6 of 11 shipped)
 
 **Prior sessions shipped Stages A+B and Stage C items 1–5** (archive has full detail):

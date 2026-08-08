@@ -25,7 +25,7 @@ history from git log.
 
 - [x] Stage A — Guide-sheet completion (Phase-2 delta)
 - [x] Stage B — Atlas data layer
-- [ ] Stage C — The hub (Phase 3) + flip
+- [x] Stage C — The hub (Phase 3) + flip
 - [ ] Stage D — Mobile (Phase 4)
 - [ ] Stage E — Tools (Phase 5)
 - [ ] Stage F — The twelve features (full redesign, one at a time)
@@ -243,11 +243,26 @@ tz ×2). Nothing visible changed — verify hub/guides render identically in pre
 
 ## Stage C — The hub (Phase 3)
 
-> **RESUME (2026-08-08 session, mid-stage):** Items 1–9 done and verified (ship loop
-> green: build/lint/typecheck/1560 tests; content-preservation gate clean — zero
-> `src/content/guides/` diffs). Built aside at `src/pages/atlas.astro` (dev-only, not linked
-> from live nav) — `index.astro` untouched, D1 intact. Only 10 (the flip) and 11 (the
-> checkpoint) remain.
+> **STAGE C COMPLETE (2026-08-08).** All 11 items shipped. The flip landed in `cd94ab5`:
+> `src/pages/atlas.astro` became `src/pages/index.astro`, the `/atlas/` route is gone, and
+> the old hub (overture.js, hub-live-cards.js, hub.css, hub-cards.css, hub-motion.css,
+> features/hub's index.js + ui/hub.js) is deleted. `gsap-hero.js`/`hero-parallax.js` were
+> KEPT despite the item-10 text listing them — both are imported by `GuideLayout.astro`
+> for the guide masthead; only the hub's use of them died. PaintedAtlas kept per D3.
+> `93e1657` then fixed what the a11y gate caught once this page entered its scan list:
+> the cover and globe were outside any landmark (now named `<section>`s), and — a real
+> bug — "Skip to guides" targeted `#atlasTable` while the JS default WORLD mode hides it,
+> so the skip link did nothing; it now switches to table mode on activation (verified
+> end-to-end). Item 11's checkpoint was folded into the creator's own live review rather
+> than a formal screenshot round; the Sedona/Japan origin question (Clarifying #1) was
+> put to the creator and CLOSED: those trips have no booked flights, so there is no
+> airport fact to record — revisit when scheduling happens (creator expects the NYC area).
+> The Tools-screen scope note was also settled: today's per-guide tools-tab shortcut
+> stays; no standalone README §5 screen this round.
+>
+> **Original mid-stage resume note (items 1–9), kept for context:** built aside at
+> `src/pages/atlas.astro` (dev-only, not linked from live nav) — `index.astro` untouched,
+> D1 intact.
 > - **1 Feature silo**: `src/features/atlas/model/{solver,relevance,local-time}.ts` +
 >   tests added alongside Stage B's model files.
 > - **2 atlas-map port (D19/D21)**: `src/features/atlas/ui/atlas-map.js`. Adaptations from
