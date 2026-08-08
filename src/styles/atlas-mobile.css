@@ -59,7 +59,7 @@
 }
 .atlas-menusheet-kicker:not(:first-child) { border-top: 1px solid var(--rule2); padding-top: 13px; }
 .atlas-menusheet button, .atlas-menusheet a {
-  display: block; text-align: left; padding: 11px 14px; min-height: 44px;
+  display: flex; align-items: center; text-align: left; padding: 11px 14px; min-height: 44px;
   background: none; border: 0; border-top: 1px solid var(--rule);
   font-family: var(--font-data); font-weight: 640; font-size: var(--text-micro); letter-spacing: .06em;
   color: var(--ink); cursor: pointer; text-decoration: none;
@@ -91,7 +91,8 @@
   text-decoration: none; cursor: pointer;
 }
 .atlas-pingsheet-actions button {
-  flex: none; min-height: 46px; padding: 0 15px;
+  flex: none; display: inline-flex; align-items: center; justify-content: center;
+  min-height: 46px; padding: 0 15px;
   background: none; border: 1px solid var(--rule2); color: var(--muted);
   font-family: var(--font-data); font-weight: 640; font-size: var(--text-control-sm); letter-spacing: .1em;
   cursor: pointer;

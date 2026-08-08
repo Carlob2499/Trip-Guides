@@ -8,6 +8,7 @@
    759px, where a permanent, prominent segmented switch is the actual mobile spec (D5). */
 .atlas-toggle { display: inline-flex; gap: 1px; border: 1px solid var(--rule2); background: var(--rule2); }
 .atlas-toggle-btn {
+  display: inline-flex; align-items: center; justify-content: center;
   min-height: 38px; padding: 0 16px; background: var(--card); border: none; cursor: pointer;
   font-family: var(--font-data); font-weight: 640; font-size: var(--text-control-sm);
   letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
@@ -96,7 +97,8 @@
 
 .atlas-ov-controls { left: 12px; bottom: 12px; display: flex; gap: 6px; padding: 6px; }
 .atlas-ov-controls button {
-  min-width: 44px; min-height: 44px; background: var(--card); border: 1px solid var(--rule2);
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 44px; min-height: 44px; padding: 0 10px; background: var(--card); border: 1px solid var(--rule2);
   color: var(--ink); cursor: pointer; font-family: var(--font-data); font-weight: 640;
   font-size: var(--text-control-sm); letter-spacing: .04em; text-transform: uppercase;
 }
@@ -105,8 +107,9 @@
 .atlas-ov-motto { right: 12px; bottom: 12px; }
 .atlas-ov-motto[hidden] { display: none; }
 .atlas-ov-motto-close {
+  display: inline-flex; align-items: center; justify-content: center;
   position: absolute; top: 4px; right: 4px; width: 28px; height: 28px; background: none; border: none;
-  color: var(--muted); cursor: pointer;
+  color: var(--muted); cursor: pointer; font-size: var(--text-control-sm);
 }
 
 .atlas-toast {
