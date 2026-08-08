@@ -50,6 +50,22 @@ const sheetInputs = curated.map((g) => ({
 const order = sheetOrder(sheetInputs, now);
 
 const rows = curated.map((g) => {
+  const flat = flattenSections(g.data.sections || []);
+  // coverImgFor (guide-record.ts) deliberately reads `guide.cover` alone — its own doc
+  // comment names the richer cover -> first-sight-photo chain as "Stage C's own job".
+  // GuideLayout.astro's masthead already runs that exact chain (heroSight fallback); a
+  // guide with no explicit `cover.file`/`src`/`video.poster` (Denmark, the US guide) was
+  // otherwise showing a picture on its own page but NO picture on the globe pincard —
+  // found 2026-08-08 comparing the live globe against guide pages directly.
+  const gCover = g.data.cover as { file?: string; src?: string; video?: { poster?: string } } | null | undefined;
+  const heroSight = gCover?.file || gCover?.src || gCover?.video?.poster
+    ? null
+    : flat.filter((s) => s.type === "sights")
+        .flatMap((s) => (s as { items?: unknown[] }).items || [])
+        .find((it) => (it as { img?: { file?: string; src?: string } })?.img?.file || (it as { img?: { file?: string; src?: string } })?.img?.src) as { img?: { file?: string; src?: string } } | undefined;
+  const effectiveCover = heroSight?.img
+    ? { file: heroSight.img.file ?? null, src: heroSight.img.src ?? null }
+    : (gCover ?? null);
   const record = deriveGuideRecord(
     {
       slug: g.id,
@@ -58,7 +74,7 @@ const rows = curated.map((g) => {
       kicker: g.data.kicker ?? null,
       country: g.data.country,
       tz: g.data.tz ?? null,
-      cover: g.data.cover ?? null,
+      cover: effectiveCover,
       sections: g.data.sections,
       // factsFile validates each row's real shape at build (factRecord/originRecord,
       // content.config.ts) but types it as Record<string, unknown> — z.record's value type
@@ -69,7 +85,6 @@ const rows = curated.map((g) => {
     },
     now,
   );
-  const flat = flattenSections(g.data.sections || []);
   const dayCount = flat.filter((s) => s.type === "days").flatMap((s) => (s as { items?: unknown[] }).items || []).length;
   const cc = COUNTRY_CODES[g.data.country] ?? null;
   const kicker = g.data.kicker;

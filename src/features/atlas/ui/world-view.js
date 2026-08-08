@@ -196,7 +196,7 @@ export function initAtlasWorld(root = document) {
       <span class="atlas-pincard-body">
         <span class="atlas-pincard-cc">${escapeHtml(g.cc || "")} · ${g.ordinal != null ? String(g.ordinal).padStart(2, "0") : "—"}</span>
         <span class="atlas-pincard-title">${escapeHtml(g.name)}</span>
-        ${g.tz ? `<span class="atlas-pincard-clock" data-tick data-tz="${escapeHtml(g.tz)}">—</span>` : ""}
+        ${g.tz ? `<span class="atlas-pincard-clock" data-tick data-tz="${escapeHtml(g.tz)}">${escapeHtml(localClockLabel(g.tz, new Date()) || "—")}</span>` : ""}
         <span class="atlas-pincard-cta">Open the guide →</span>
       </span>`;
     pinsLayer.appendChild(el);
