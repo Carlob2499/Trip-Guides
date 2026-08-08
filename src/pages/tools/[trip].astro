@@ -1,0 +1,14 @@
+---
+/* One Tools screen per trip. The README's `ensureGuide(slug)` guard becomes a build-time
+   fact here: the page IS the trip's data, so no entry point can arrive without it. */
+import ToolsLayout from "../../layouts/ToolsLayout.astro";
+import { loadTripTools } from "../../lib/tools-data";
+
+export async function getStaticPaths() {
+  const trips = await loadTripTools();
+  return trips.map((t) => ({ params: { trip: t.record.slug }, props: { trips, active: t } }));
+}
+
+const { trips, active } = Astro.props;
+---
+<ToolsLayout trips={trips} active={active} />

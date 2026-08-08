@@ -1,0 +1,223 @@
+---
+/* The standalone Tools screen (design-handoff README §5) — five tools behind one screen,
+   with a trip selector that switches which trip they run on.
+
+   WHY THE PICKER IS LINKS, NOT A CLIENT SWITCH. The README describes `ensureGuide(slug)`
+   loading a trip's data on demand and warns that whichever entry point forgets to load is
+   the one that ships. This site is statically built, so each trip gets its OWN rendered
+   Tools page and the picker is four ordinary <a>s. There is no unloaded state to guard
+   against, the screen works with JavaScript off, and every entry point — hub header, table
+   row, guide, mobile menu — lands on a page whose data is already there.
+
+   Trip Split is deliberately the guide's own calculator on the guide's own storeKey, not a
+   copy: the creator's ruling (2026-08-08) is that the split records what was ACTUALLY
+   spent, is unrelated to the budget a guide researched, and nothing may duplicate it. One
+   ledger, reachable from two places. */
+import Panel from "./Panel.astro";
+import Icon from "./Icon.astro";
+import TripSplit from "./TripSplit.astro";
+import JetLag from "./JetLag.astro";
+import ReminderRow from "./ReminderRow.astro";
+import { km } from "../features/trip-tools/index";
+import type { TripTools } from "../lib/tools-data";
+
+interface Props {
+  trips: TripTools[];
+  active: TripTools;
+  base: string;
+}
+const { trips, active, base } = Astro.props;
+const r = active.record;
+const hol = active.holidays;
+const during = hol?.during ?? [];
+const near = hol ? [...(hol.nearBefore ?? []), ...(hol.nearAfter ?? [])] : [];
+// buildReminders() already sorts booking-first; splitting on the flag preserves that order
+// within each half rather than re-sorting and risking a different answer.
+const bookAhead = r.reminders.filter((i) => i.book);
+const rest = r.reminders.filter((i) => !i.book);
+---
+<div class="tools" data-storekey={r.storeKey}>
+  <header class="tools-head">
+    <p class="tools-kicker">TRIP TOOLS</p>
+    <h1 class="tools-title">{r.title}</h1>
+    <p class="tools-dek">
+      Five tools running on this trip's own record. <a class="tools-guidelink" href={active.href}>Open the guide →</a>
+    </p>
+
+    {/* The trip selector the README puts "in the tool rail" — a real control, styled as
+        pills rather than bare text (CLAUDE.md: clickability must be obvious). The current
+        trip stays IN the list and is marked, never removed: a picker that hides where you
+        are makes the set look like it shrank. */}
+    <nav class="tools-picker" aria-label="Choose a trip">
+      {trips.map((t) => (
+        <a class:list={["tools-trip", t.record.slug === r.slug && "tools-trip--on"]}
+           href={`${base}/tools/${t.record.slug}/`}
+           aria-current={t.record.slug === r.slug ? "page" : undefined}>
+          {t.record.title}
+        </a>
+      ))}
+    </nav>
+  </header>
+
+  {/* The same self-describing grid the guides declare — one scope per trip, so collapse
+      state and panel order are remembered per trip rather than bleeding across the picker. */}
+  <div class="pnl-grid tools-grid" data-panel-grid data-panel-scope={`tools:${r.slug}`}>
+    {/* ── 1. TRIP SPLIT ─────────────────────────────────────────────────── */}
+    <Panel id={`tools-split-${r.slug}`} kicker="TRIP SPLIT" title="What everyone actually spent" fullWidth>
+      <p class="tools-note">
+        This ledger is shared with the same calculator inside the guide — one record, two doors.
+        It holds what was <b>really</b> spent, which is a different question from the budget the
+        guide researched, so nothing is copied between them.
+      </p>
+      <TripSplit storeKey={r.storeKey} standalone />
+    </Panel>
+
+    {/* ── 2. JETLAG ─────────────────────────────────────────────────────── */}
+    <Panel id={`tools-jetlag-${r.slug}`} kicker="JETLAG" title="Landing clock">
+      {r.tz ? (
+        <>
+          <JetLag destTz={r.tz} open />
+          <p class="tools-src">Destination zone {r.tz} — the offset is computed live, so it stays right across a DST change.</p>
+        </>
+      ) : (
+        <p class="tools-blank">This trip has no time zone on record yet, so there is nothing honest to calculate.</p>
+      )}
+    </Panel>
+
+    {/* ── 3. CLOSURES ───────────────────────────────────────────────────── */}
+    <Panel id={`tools-closures-${r.slug}`} kicker="CLOSURES" title="What's shut, and when">
+      {hol ? (
+        <>
+          {during.length > 0 ? (
+            <>
+              <p class="tools-sub">⚠ Public holidays during your trip ({hol.tripLabel})</p>
+              <ul class="tools-list">
+                {during.map((h) => (
+                  <li><b>{h.label}</b> — {h.name} <span class="tools-dim">· {h.localName}</span></li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <p class="tools-sub">No public holiday falls inside {hol.tripLabel}.</p>
+          )}
+          {near.length > 0 && (
+            <>
+              <p class="tools-sub">Just outside your dates</p>
+              <ul class="tools-list tools-list--quiet">
+                {near.map((h) => <li><b>{h.label}</b> — {h.name} <span class="tools-dim">({h.rel})</span></li>)}
+              </ul>
+            </>
+          )}
+          <p class="tools-src">
+            Public holidays {hol.year} · source <a href={hol.source.url} target="_blank" rel="noopener">{hol.source.label}</a>
+            {hol.source.verifiedOn && <> · checked {hol.source.verifiedOn}</>}
+          </p>
+        </>
+      ) : (
+        <p class="tools-blank">No public-holiday record for this country and year — so this says nothing rather than guessing.</p>
+      )}
+
+      {r.closures.length > 0 ? (
+        <>
+          <p class="tools-sub">Recurring closures — {r.closurePlaceCount} {r.closurePlaceCount === 1 ? "place" : "places"} in this guide</p>
+          <ul class="tools-list">
+            {r.closures.map((d) => (
+              <li>
+                <b>{d.label}</b> —
+                {d.places.map((p, i) => (
+                  <>{i > 0 && ", "} {p.name}{p.verifiedOn && <span class="tools-dim"> (checked {p.verifiedOn})</span>}</>
+                ))}
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p class="tools-blank">No entry in this guide declares a weekly closing day yet. Closures stated only in prose are not counted here — a scan of sentences would be a guess.</p>
+      )}
+    </Panel>
+
+    {/* ── 4. REMINDERS ──────────────────────────────────────────────────── */}
+    {/* Korea alone carries 140 checklist items. Printing all of them flat made a
+        12,000px panel — every line true, and the surface useless, which is the same
+        failure "open, not crowded" names. So the items with a closing DOOR are the panel,
+        and the rest sit behind one disclosure: still all here, still all tickable, not all
+        shouting. A <details> rather than JS, so the fold works before any script runs. */}
+    <Panel id={`tools-reminders-${r.slug}`} kicker="REMINDERS" title="Everything this trip asks you to do" fullWidth={bookAhead.length > 5}>
+      {r.reminders.length > 0 ? (
+        <>
+          <p class="tools-note">
+            {bookAhead.length > 0
+              ? <>{bookAhead.length} of this trip's {r.reminders.length} checklist items have <b>a door that closes</b>.</>
+              : <>{r.reminders.length} checklist items, none of them time-critical.</>}
+            {" "}Every line is one the guide already carries — nothing here was written by this screen. Ticks are saved on this device.
+          </p>
+          {/* The tick store wraps BOTH lists — an item does not stop being tickable for
+              sitting inside the disclosure. */}
+          <div data-tools-reminders={r.storeKey}>
+            <ul class="tools-rem">
+              {bookAhead.map((item) => <ReminderRow item={item} />)}
+            </ul>
+            {rest.length > 0 && (
+              <details class="tools-more">
+                <summary>The other {rest.length} — packing, logistics, on-the-day notes</summary>
+                <ul class="tools-rem">
+                  {rest.map((item) => <ReminderRow item={item} />)}
+                </ul>
+              </details>
+            )}
+          </div>
+        </>
+      ) : (
+        <p class="tools-blank">This guide carries no checklist items yet, so there is nothing to remind you of.</p>
+      )}
+    </Panel>
+
+    {/* ── 5. ROUTE ORDER ────────────────────────────────────────────────── */}
+    <Panel id={`tools-route-${r.slug}`} kicker="ROUTE ORDER" title="Walking the days in a sensible order" fullWidth>
+      {r.route.length > 0 ? (
+        <>
+          <p class="tools-note">
+            Straight-line distance between stops — <b>not</b> transit time. A 2 km hop across a river
+            with one bridge is not a 2 km walk. Use this to spot a day that doubles back, not to plan minutes.
+          </p>
+          <ul class="tools-route">
+            {r.route.map((d) => (
+              <li class="tools-route-day">
+                <p class="tools-route-head">
+                  <b>{d.date}</b> {d.title && <span class="tools-dim">— {d.title}</span>}
+                  <span class="tools-route-km">{km(d.currentKm)} as planned</span>
+                </p>
+                <ol class="tools-route-stops">
+                  {d.points.map((p) => <li>{p.name}</li>)}
+                </ol>
+                {d.suggestion ? (
+                  <p class="tools-route-sug">
+                    ↻ Visiting them <b>{d.suggestion.names.join(" → ")}</b> would be {km(d.suggestion.km)} — about {km(d.suggestion.savedKm)} less.
+                    Nothing is reordered for you; the guide's own order is what prints and exports.
+                  </p>
+                ) : (
+                  <p class="tools-route-ok">Already in a sensible order — no reordering would help.</p>
+                )}
+                {d.unlocatedCount > 0 && (
+                  <p class="tools-dim">{d.unlocatedCount} stop{d.unlocatedCount > 1 ? "s" : ""} on this day has no coordinates yet, so it is not in the figure above.</p>
+                )}
+              </li>
+            ))}
+          </ul>
+          {r.routeSkippedDays > 0 && (
+            <p class="tools-blank">{r.routeSkippedDays} other day{r.routeSkippedDays > 1 ? "s" : ""} carries stops but fewer than two of them are mapped, so there is no order to check.</p>
+          )}
+        </>
+      ) : (
+        <p class="tools-blank">
+          No day in this guide has two or more mapped stops yet. Coordinates come from a verified
+          lookup, never a guess — until they exist, there is no route to reason about.
+        </p>
+      )}
+    </Panel>
+  </div>
+
+  <p class="tools-foot">
+    <a href={`${base}/`}><Icon name="chevron" size={12} /> All trips</a>
+  </p>
+</div>

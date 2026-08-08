@@ -464,6 +464,7 @@ for (const [name, path] of [
   ["korea guide", "/Trip-Guides/guides/korea/"],
   ["denmark guide", "/Trip-Guides/guides/denmark/"],
   ["new intake", "/Trip-Guides/new/"], // R4: the composed intake — gated from birth
+  ["trip tools", "/Trip-Guides/tools/korea/"], // Stage E: the standalone Tools screen
 ] as const) {
   for (const { scheme, vp } of COMBOS) {
     test(`a11y — ${name} (${scheme}, ${vp.label})`, async ({ page }) => {

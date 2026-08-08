@@ -1,0 +1,24 @@
+---
+/* One reminder line on the Tools screen. Its own component because the panel prints the
+   same row twice — once for the items with a closing door, once inside the disclosure that
+   holds the rest — and two copies of this markup would be two places for the provenance
+   line to drift. */
+import type { ReminderItem } from "../features/trip-tools/index";
+const { item } = Astro.props as { item: ReminderItem };
+---
+<li class="tools-rem-row">
+  <label class="tools-rem-label">
+    <input class="tools-rem-box" type="checkbox" data-rem-id={item.id} />
+    <span class="tools-rem-text">
+      {item.book && <span class="tools-flag">BOOK AHEAD</span>}
+      {item.text}
+      {item.note && <span class="tools-dim"> — {item.note}</span>}
+    </span>
+  </label>
+  <p class="tools-rem-meta">
+    <span class="tools-dim">{item.from}</span>
+    {item.due && <> · <b>by {item.due}</b></>}
+    {item.sourceUrl && <> · <a href={item.sourceUrl} target="_blank" rel="noopener">source</a></>}
+    {item.verifiedOn && <span class="tools-dim"> · checked {item.verifiedOn}</span>}
+  </p>
+</li>

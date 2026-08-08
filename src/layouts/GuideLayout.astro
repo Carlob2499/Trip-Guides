@@ -9,6 +9,7 @@ import Voting from "../components/Voting.astro";
 import Learnings from "../components/Learnings.astro";
 import Reminders from "../components/Reminders.astro";
 import TripKit from "../components/TripKit.astro";
+import JetLag from "../components/JetLag.astro";
 import { bucket } from "../lib/buckets";
 import { emergencyFor, FALLBACK_RATES_AS_OF } from "../data/countries.mjs";
 import { buildModifyIssueUrl } from "../lib/modify-schema.mjs";
@@ -33,6 +34,7 @@ import "@fontsource-variable/literata/standard-italic.css";
 import "@fontsource-variable/source-sans-3";
 import "../styles/base.css";
 import "../styles/guide.css";
+import "../styles/jetlag.css";
 import "../styles/print.css";
 import "../styles/trip-split.css";
 import "../styles/masthead.css";
@@ -736,49 +738,10 @@ const tripSummary = buildSummary(guide);
         JET-LAG CALCULATOR
         Collapsible — shown only when the guide's country has a known UTC offset.
         User picks their origin timezone; output shows the time gap, recovery
-        estimate, and direction-specific tips.
+        estimate, and direction-specific tips. The markup moved to JetLag.astro when
+        the Tools screen needed the same calculator (Stage E) — one origin list, two hosts.
       -->
-      {destTzIana !== null && (
-        <div class="jl-wrap" data-jl-group={jlGroupIdx}>
-          <button class="jl-toggle" id="jlToggle" type="button"
-                  aria-expanded="false" aria-controls="jlPanel">
-            <Icon name="plane" size={15} class="jl-icon" />
-            <span>Jet-lag calculator</span>
-            <Icon name="chevron" size={13} class="jl-chev" />
-          </button>
-          <div id="jlPanel" hidden data-dest-tz={destTzIana}>
-            <div class="jl-inner">
-              <div class="jl-row">
-                <label class="jl-label" for="jlOrigin">Flying&nbsp;from</label>
-                <select class="jl-select" id="jlOrigin">
-                  <option value="">— pick your departure city —</option>
-                  <optgroup label="United States">
-                    <option value="-7">Los Angeles / Pacific (PDT, UTC−7)</option>
-                    <option value="-6">Denver / Mountain (MDT, UTC−6)</option>
-                    <option value="-5">Chicago / Central (CDT, UTC−5)</option>
-                    <option value="-4">New York / Eastern (EDT, UTC−4)</option>
-                  </optgroup>
-                  <optgroup label="Other cities">
-                    <option value="0">London (BST, UTC+0)</option>
-                    <option value="1">Lisbon (WEST, UTC+1)</option>
-                    <option value="2">Paris / Berlin / Madrid (CEST, UTC+2)</option>
-                    <option value="3">Helsinki / Athens / Nairobi (UTC+3)</option>
-                    <option value="4">Dubai (UTC+4)</option>
-                    <option value="5.5">Mumbai / Delhi (IST, UTC+5:30)</option>
-                    <option value="7">Bangkok (ICT, UTC+7)</option>
-                    <option value="8">Singapore / Hong Kong / Beijing (UTC+8)</option>
-                    <option value="9">Tokyo / Seoul (JST/KST, UTC+9)</option>
-                    <option value="10">Sydney (AEST, UTC+10)</option>
-                    <option value="12">Auckland (NZST, UTC+12)</option>
-                  </optgroup>
-                </select>
-              </div>
-              <!-- Output injected by JS -->
-              <div class="jl-output" id="jlOutput" hidden></div>
-            </div>
-          </div>
-        </div>
-      )}
+      {destTzIana !== null && <JetLag destTz={destTzIana} groupIdx={jlGroupIdx} />}
     </header>
 
     <!-- ═══════════════════════════════════════════════════════════════════════
@@ -1045,6 +1008,13 @@ const tripSummary = buildSummary(guide);
         <a class="sheet-cat sheet-tool sheet-remind-link" data-tab="remind" href="#"><Icon name="remind" class="sheet-ico" />Reminders</a>
         <a class="sheet-cat sheet-tool sheet-learn-link" data-tab="learn" href="#" hidden><Icon name="learn" class="sheet-ico" />Trip Learnings</a>
         <a class="sheet-cat sheet-tool sheet-kit-link" data-tab="kit" href="#"><Icon name="kit" class="sheet-ico" />Trip Kit</a>
+        {/* The guide's own tools tabs stay exactly where they are (creator, 2026-08-08:
+            build the standalone screen AND keep the tab). This is the fourth entry point
+            into that screen — the README's "the guide header, opens on that trip" — and it
+            leaves the page, so it carries no data-tab and needs the arrow to say so. */}
+        <a class="sheet-cat sheet-tool sheet-alltools-link" href={`${base}/tools/${guideSlug}/`}>
+          <Icon name="budget" class="sheet-ico" />All trip tools →
+        </a>
       </div>
     </div>
 

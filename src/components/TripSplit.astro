@@ -1,8 +1,13 @@
 ---
 interface Props {
   storeKey: string;
+  /* On the standalone Tools screen the calculator is not one of a guide's tab panels —
+     it IS the panel, already on screen. It therefore drops the tabpanel role (there is no
+     tab labelling it there; an orphaned aria-labelledby points at nothing) and is not
+     hidden, since nothing would ever unhide it. Same markup, same ids, same ledger. */
+  standalone?: boolean;
 }
-const { storeKey } = Astro.props;
+const { storeKey, standalone = false } = Astro.props;
 ---
 
 <!-- Behavior lives in the src/features/trip-split silo (imported in the GuideLayout
@@ -14,7 +19,8 @@ const { storeKey } = Astro.props;
      bottom and the answer ~500px above it: you typed an expense and the number it changed
      was off-screen behind you. Cause now precedes effect, so the results card is always the
      thing below the row you just filled in. -->
-<div class="split-wrap" id="tripSplit" role="tabpanel" aria-labelledby="gtab-split" hidden data-sk={storeKey}>
+<div class="split-wrap" id="tripSplit" role={standalone ? undefined : "tabpanel"}
+     aria-labelledby={standalone ? undefined : "gtab-split"} hidden={!standalone} data-sk={storeKey}>
 
   <div class="split-toolbar">
     <h2 class="split-title">Budget split</h2>

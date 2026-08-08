@@ -170,8 +170,8 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
     <a class="skip-link" href="#atlasTable">Skip to guides</a>
 
     {/* Header (item 6 built the shell — brand mark + wordmark, the cover's FLIP target; item 9
-        added the actions cluster: TOOLS into the quick-card guide's own tools tab — README §5's
-        standalone Tools screen is flagged, not built, this stage — ＋ New guide, and the theme
+        added the actions cluster: TOOLS — which now opens the standalone cross-trip Tools
+        screen built in Stage E, on the trip this hub is featuring — ＋ New guide, and the theme
         toggle. The WORLD|TABLE toggle now lives here too (compact buttons, matching the design
         screenshots) instead of the full-width bar it started as below — that bar read as
         oversized/mobile-only-styled at desktop widths; the mobile-only full-bleed treatment
@@ -189,9 +189,7 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
         <button type="button" class="atlas-toggle-btn" data-atlas-mode-btn="table" aria-pressed="true">Table</button>
       </div>
       <div class="atlas-header-actions">
-        {quick && (
-          <a class="atlas-header-btn atlas-header-btn--tools" href={`${base}/guides/${quick.g.id}/#gtab-split`}>Tools</a>
-        )}
+        <a class="atlas-header-btn atlas-header-btn--tools" href={`${base}/tools/`}>Tools</a>
         <a class="atlas-header-btn atlas-header-btn--cta" href={`${base}/new/`}>＋<span class="atlas-header-btn-label"> New guide</span></a>
         <button type="button" id="btnDark" class="atlas-header-btn atlas-header-icon" aria-label="Switch to dark mode" title="Switch to dark mode">
           <Icon name="moon" size={16} />
@@ -279,7 +277,10 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
           <span class="atlas-menusheet-kicker">The map</span>
           <button type="button" data-atlas-menu-fit>Fit world</button>
           <button type="button" data-atlas-menu-spin>Pause</button>
-          {quick && <a href={`${base}/guides/${quick.g.id}/#gtab-split`}>Tools</a>}
+          {/* The README warns that the mobile ☰ is the ONLY route into Tools on a phone, so
+              an omission here breaks the feature entirely there. It is unconditional for
+              exactly that reason — /tools/ picks its own trip and never needs `quick`. */}
+          <a href={`${base}/tools/`}>Tools</a>
           <a class="atlas-menusheet-new" href={`${base}/new/`}>＋ New guide</a>
         </div>
 
@@ -372,15 +373,12 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
         </ul>
       )}
 
-      {/* One tap into the trip's own tools tab (README §5's "TRIP TOOLS row"). A standalone,
-          cross-trip Tools screen with its own trip selector is NOT built this stage — it is
-          not one of PLAN_ATLAS_MIGRATION.md's eleven Stage C items, and the plan's own Chrome
-          item only names a "TOOLS" entry point, not a new screen. Flagged as an open item at
-          the Stage C checkpoint rather than guessed either way. */}
+      {/* README §5's "TRIP TOOLS row" — one tap into the standalone Tools screen, on the
+          trip this hub is featuring. The screen's own picker reaches the other three. */}
       {quick && (
-        <a class="atlas-toolsrow" href={`${base}/guides/${quick.g.id}/#gtab-split`}>
+        <a class="atlas-toolsrow" href={`${base}/tools/${quick.g.id}/`}>
           <span class="atlas-toolsrow-label">Trip tools</span>
-          <span>Budget, jetlag, closures, reminders for {quick.g.data.title} →</span>
+          <span>Split, jetlag, closures, reminders, route order for {quick.g.data.title} →</span>
         </a>
       )}
     </main>

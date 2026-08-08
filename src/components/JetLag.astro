@@ -1,0 +1,62 @@
+---
+/* Jet-lag calculator — the markup half. Every decision (direction, days to adapt, the
+   body-clock anchor, the melatonin threshold) lives in src/lib/jetlag.ts and the wiring in
+   src/scripts/jetlag-ui.js, which mounts on the ids below.
+
+   Extracted from GuideLayout when the standalone Tools screen was built (Stage E): the
+   screen needed the same calculator, and a second copy of this select would have been two
+   origin lists to keep in step. One component, two hosts, one list.
+
+   `open` is for the Tools screen, where the calculator IS the panel rather than an aside
+   inside a guide — it renders expanded instead of behind its own toggle. The toggle stays
+   in both cases because jetlag-ui.js mounts on it, and because a reader who has read the
+   answer should be able to fold it away. */
+import Icon from "./Icon.astro";
+interface Props {
+  /** The destination's IANA zone. The caller renders nothing when the guide has none. */
+  destTz: string;
+  /** Tab-group index the guide uses to show this only on the arrival-ish group. */
+  groupIdx?: number | null;
+  open?: boolean;
+}
+const { destTz, groupIdx = null, open = false } = Astro.props;
+---
+<div class="jl-wrap" data-jl-group={groupIdx}>
+  <button class="jl-toggle" id="jlToggle" type="button"
+          aria-expanded={open ? "true" : "false"} aria-controls="jlPanel">
+    <Icon name="plane" size={15} class="jl-icon" />
+    <span>Jet-lag calculator</span>
+    <Icon name="chevron" size={13} class="jl-chev" />
+  </button>
+  <div id="jlPanel" hidden={!open} data-dest-tz={destTz}>
+    <div class="jl-inner">
+      <div class="jl-row">
+        <label class="jl-label" for="jlOrigin">Flying&nbsp;from</label>
+        <select class="jl-select" id="jlOrigin">
+          <option value="">— pick your departure city —</option>
+          <optgroup label="United States">
+            <option value="-7">Los Angeles / Pacific (PDT, UTC−7)</option>
+            <option value="-6">Denver / Mountain (MDT, UTC−6)</option>
+            <option value="-5">Chicago / Central (CDT, UTC−5)</option>
+            <option value="-4">New York / Eastern (EDT, UTC−4)</option>
+          </optgroup>
+          <optgroup label="Other cities">
+            <option value="0">London (BST, UTC+0)</option>
+            <option value="1">Lisbon (WEST, UTC+1)</option>
+            <option value="2">Paris / Berlin / Madrid (CEST, UTC+2)</option>
+            <option value="3">Helsinki / Athens / Nairobi (UTC+3)</option>
+            <option value="4">Dubai (UTC+4)</option>
+            <option value="5.5">Mumbai / Delhi (IST, UTC+5:30)</option>
+            <option value="7">Bangkok (ICT, UTC+7)</option>
+            <option value="8">Singapore / Hong Kong / Beijing (UTC+8)</option>
+            <option value="9">Tokyo / Seoul (JST/KST, UTC+9)</option>
+            <option value="10">Sydney (AEST, UTC+10)</option>
+            <option value="12">Auckland (NZST, UTC+12)</option>
+          </optgroup>
+        </select>
+      </div>
+      <!-- Output injected by JS -->
+      <div class="jl-output" id="jlOutput" hidden></div>
+    </div>
+  </div>
+</div>

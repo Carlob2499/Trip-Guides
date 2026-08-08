@@ -18,6 +18,7 @@ const PAGES = [
   ["guide", "/Trip-Guides/guides/korea/"],
   ["about", "/Trip-Guides/about/"],
   ["new intake", "/Trip-Guides/new/"],
+  ["trip tools", "/Trip-Guides/tools/korea/"],
 ] as const;
 
 for (const [name, path] of PAGES) {
