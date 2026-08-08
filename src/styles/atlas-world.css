@@ -2,13 +2,14 @@
    §8-9). D4: the globe is progressive enhancement over the table view's server-rendered
    baseline — this screen only becomes the active face once JS has mounted <atlas-map>. */
 
-.atlas-toggle {
-  position: sticky; top: 0; z-index: 30; display: flex; gap: 1px;
-  background: var(--rule); border-bottom: 1px solid var(--rule);
-}
+/* Compact by default — a small bordered pair of buttons living inside .atlas-header, matching
+   the design screenshots (NOT the full-width segmented bar this started as, which read as
+   oversized at desktop widths). atlas-mobile.css widens it back to a full-bleed row under
+   759px, where a permanent, prominent segmented switch is the actual mobile spec (D5). */
+.atlas-toggle { display: inline-flex; gap: 1px; border: 1px solid var(--rule2); background: var(--rule2); }
 .atlas-toggle-btn {
-  flex: 1; min-height: 44px; background: var(--card); border: none; cursor: pointer;
-  font-family: var(--font-data); font-weight: 640; font-size: var(--text-control);
+  min-height: 38px; padding: 0 16px; background: var(--card); border: none; cursor: pointer;
+  font-family: var(--font-data); font-weight: 640; font-size: var(--text-control-sm);
   letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
 }
 .atlas-toggle-btn[aria-pressed="true"] { background: var(--accent); color: var(--on-aink); }
@@ -19,7 +20,7 @@
 
 #atlasGlobe {
   position: relative; overflow: hidden;
-  height: calc(100dvh - var(--hdr-h, 0px) - 44px);
+  height: calc(100dvh - var(--hdr-h, 0px));
   min-height: 320px;
   background: var(--bg);
 }

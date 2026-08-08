@@ -105,6 +105,42 @@ Places' policy; everything else Places returns is re-fetched, never stored.
 
 ---
 
+## Design Fidelity — the Atlas design system
+
+Porting a design-tool prototype (Atlas hub, and any future redesign pass) is a **faithful
+port, not an interpretation** — reproduce the prototype 1:1 before any "improvement." Two
+machine-checkable references live at `docs/design-handoff/enforcement/` (`tokens.css`,
+`ANTIPATTERNS.md`, `ACCEPTANCE.md`, `SPEC-COMPONENTS.md`, `check-drift.mjs`, `screenshots/`)
+and `docs/design-handoff/` (README, prototype HTML, `screenshots/`) — **read both before
+building or reviewing any hub/guide visual work**, not just the plan doc's prose summary.
+
+**Authority order:** the prototype/screenshots > `enforcement/SPEC-COMPONENTS.md` >
+`enforcement/ANTIPATTERNS.md` > your judgment. Run `node docs/design-handoff/enforcement/
+check-drift.mjs <path>` before calling visual work done — it mechanically catches
+border-radius drift (only `0` or `999px` exist in this system), stray hex literals outside
+`tokens.css`, unwrapped `env(safe-area-*)`, and non-transform/opacity animation.
+
+**Known false-positive classes in `check-drift.mjs`** (confirmed 2026-08-08 — don't rediscover
+these by hand): (1) it expects token names `--fd`/`--fs`; the shipped repo's actual names are
+`--font-data`/`--font-display`/`--font-body` — every "TYPE" hit against those is a naming
+mismatch, not a real third typeface. (2) It flags any `box-shadow` as "no elevation," but the
+approved prototype's own FAB/menu-sheet/ping-sheet markup uses real shadows — the prototype
+outranks the checker's blanket rule for those specific overlay elements. (3) Its color/token
+values (e.g. `--on-aink`) are a design-tool export and can be a step behind the shipped,
+contrast-tested `base.css` — **before "fixing" a token value to match the kit, grep `base.css`
+for that token's own comment** (search `ATLAS TOKEN CONTRACT`); if it documents a deliberate,
+tested decision, the shipped value wins, not the kit's.
+
+**Two live bugs the kit's own screenshots caught in the built Atlas hub** (item 6/9/8,
+2026-08-08): the WORLD|TABLE toggle was a full-width bar at every viewport (should be compact
+buttons in the header on desktop, full-bleed only under 760px) and the page had no contour-line
+background texture (`generateContourLayer`, `src/lib/contours.ts` — port it per-page, don't
+import the old hub's soon-to-be-deleted `hub-motion.css` copy). Both are fixed; the pattern —
+**compare the running build against the actual screenshots, not just against the prose spec**
+— is the reusable lesson.
+
+---
+
 ## Architectural Guardrails
 
 - **Shared components are global; only JSON data is per-country.** A change to any

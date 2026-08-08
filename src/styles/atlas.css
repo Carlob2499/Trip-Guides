@@ -3,6 +3,18 @@
    legible the instant it paints. World-view/globe chrome lives in atlas-world.css (Stage C
    items 2/4/5); this file is the server-rendered, works-with-zero-JS surface (D4). */
 
+/* Page-level survey ground (design-handoff screenshots) — position:fixed under everything;
+   see atlas.astro's `contourLayers` comment for why this doesn't import the old hub's copy. */
+.page-contours { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.page-contours svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.page-contours polyline { fill: none; stroke: color-mix(in srgb, var(--muted) 16%, transparent); stroke-width: 1.1; }
+
+/* A `position:fixed` ground paints ABOVE static content regardless of z-index:0 (positioned
+   always beats static at paint time) — .atlas-header already carries its own position:relative
+   (atlas-cover.css) so it's unaffected, but table/globe need the same treatment, matching the
+   old hub's own .stats-beat fix for this exact issue. */
+.atlas-table-wrap, .atlas-globe-wrap { position: relative; z-index: 1; }
+
 .atlas-table { max-width: 1000px; margin: 0 auto; padding: 0 16px 64px; }
 
 /* ── Sticky header: search + sheet chips ─────────────────────────────────────────────── */
@@ -37,6 +49,8 @@
   text-decoration: none; white-space: nowrap; scroll-snap-align: start;
 }
 .atlas-chip:hover, .atlas-chip:focus-visible { border-color: var(--accent); color: var(--aink); }
+.atlas-chip--current { background: var(--accent); border-color: var(--accent); color: var(--on-aink); }
+.atlas-chip--current:hover, .atlas-chip--current:focus-visible { color: var(--on-aink); }
 
 /* ── Search results (client-enhanced, D20) ───────────────────────────────────────────── */
 .atlas-results {

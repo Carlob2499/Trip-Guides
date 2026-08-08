@@ -19,6 +19,11 @@
   .atlas-header-btn--tools { display: none; }
   .atlas-header-btn-label { display: none; }
 
+  /* D5: "a permanent WORLD | TABLE segmented switch" — full-bleed and prominent on a phone,
+     unlike the compact desktop button pair it sits alongside in the header. */
+  .atlas-toggle { width: 100%; margin-top: 8px; }
+  .atlas-toggle-btn { flex: 1; min-height: 44px; padding: 0; }
+
   /* No spatial budget for the desktop rails, floating pincards, or motto. */
   .atlas-ov-index, .atlas-ov-key, .atlas-ov-record, .atlas-ov-controls, .atlas-ov-motto,
   .atlas-pincard {
