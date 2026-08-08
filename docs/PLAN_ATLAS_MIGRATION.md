@@ -26,7 +26,7 @@ history from git log.
 - [x] Stage A — Guide-sheet completion (Phase-2 delta)
 - [x] Stage B — Atlas data layer
 - [x] Stage C — The hub (Phase 3) + flip
-- [ ] Stage D — Mobile (Phase 4)
+- [x] Stage D — Mobile (Phase 4)
 - [ ] Stage E — Tools (Phase 5)
 - [ ] Stage F — The twelve features (full redesign, one at a time)
 - [ ] Stage G — Closeout
@@ -260,8 +260,10 @@ tz ×2). Nothing visible changed — verify hub/guides render identically in pre
 > item, not a closed or deprioritised one. The Sedona/Japan origin question (Clarifying #1) was
 > put to the creator and CLOSED: those trips have no booked flights, so there is no
 > airport fact to record — revisit when scheduling happens (creator expects the NYC area).
-> The Tools-screen scope note was also settled: today's per-guide tools-tab shortcut
-> stays; no standalone README §5 screen this round.
+> The Tools-screen scope note was NOT settled — an earlier version of this block wrongly
+> said it was. The question was put to the creator and DISMISSED without an answer (their
+> reply, "we don't need those", was about the airports). Today's per-guide tools-tab
+> shortcut is merely what exists; Stage E must ask before treating it as the decision.
 >
 > **Original mid-stage resume note (items 1–9), kept for context:** built aside at
 > `src/pages/atlas.astro` (dev-only, not linked from live nav) — `index.astro` untouched,
@@ -486,6 +488,26 @@ stated timings drift from code; the code's were the ones judged in the working p
 **Gate:** ship loop + content gate + axe + perf budget + the no-JS guarantee.
 
 ## Stage D — Mobile (Phase 4)
+
+> **STAGE D COMPLETE (2026-08-08, `60d9da2`).** Audited first (creator's call:
+> audit-then-rebuild). The models were already 100% on-spec — every constant matched, and
+> swipe/day-scrub/overlay stand-down/resume lines were correctly wired to them — so nothing
+> there was rebuilt. The real defect was elsewhere: **`viewport-fit=cover` was missing from
+> every page**, so `env(safe-area-inset-*)` always reported 0 and the entire cutout layer
+> (including Stage C's own hub FAB/menu/ping-sheet insets) had shipped inert. Fixed on all
+> four pages, 5 bare `env()` call sites converted to `max(reserved, var(--safe-*))`, and the
+> guard added where there was none (topbar, toast, field toast, Today chip, SOS button,
+> spine). Two PRE-EXISTING bugs fixed en route (both confirmed against a stashed build):
+> the colophon sat after `.content` so the fixed bar covered the footer's "Request a change"
+> pill — unclickable at phone width — and `panels.spec.ts` counted panels page-wide, which
+> only equalled 9 back when Essentials was korea's sole panel group (it now declares 11, so
+> the gate was failing on content growth). Groups sheet gained the README's per-section card
+> count. **The bottom-bar question is NOT decided:** the README's four-slot bar and the
+> shipped five-slot one (creator's 2026-07-30 ruling) BOTH ship, selectable live per device
+> via `?bar=spec` / `?bar=app`, default unchanged — the creator asked to compare them on a
+> phone before choosing. New gate `tests/visual/safe-area.spec.ts` was verified to fail when
+> viewport-fit is removed. Item-11-style screenshot checkpoint was replaced by
+> verify-by-measurement at the spec's 402x874 bench, per the creator's explicit choice.
 
 Per handoff README's mobile sections and `src/features/mobile-nav/model/*` — **keep the
 model's constants exactly** (creator's handoff prompt). Bottom bar wired to the existing

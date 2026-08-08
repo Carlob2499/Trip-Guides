@@ -24,58 +24,59 @@
   **`docs/PLAN_ATLAS_MIGRATION.md`** (the current work order — its own Progress ledger is the
   source of truth for which stage is next; read that before re-deriving status from git log).
 
-## Snapshot (2026-08-08 — Atlas migration **Stage C COMPLETE**; Atlas is the live hub)
+## Snapshot (2026-08-08 — Atlas migration **Stage D COMPLETE**; C+D both shipped)
 
-**The flip shipped.** `src/pages/atlas.astro` became `src/pages/index.astro` (`cd94ab5`) —
-the Atlas hub (cover, globe/world view, server-rendered table view, mobile FAB + ping sheet)
-is now what `https://carlob2499.github.io/Trip-Guides/` serves, verified live. The `/atlas/`
-route is gone; the old hub is deleted (overture.js, hub-live-cards.js, hub.css, hub-cards.css,
-hub-motion.css, `features/hub`'s index.js + ui/hub.js), and dead `.hubcard` selectors were
-swept from touch.css / scroll-motion.css / reveal.js / type-scale's allowlist.
-**Kept deliberately, against the plan's own item-10 wording:** `gsap-hero.js` +
-`hero-parallax.js` — `GuideLayout.astro` imports both for the guide masthead; only the HUB's
-use of them died. PaintedAtlas kept per D3; `features/hub/ui/intake-flow.js` kept (/new uses it).
+Two stages closed this session. **Stage C (the flip, `cd94ab5`+`93e1657`)**: `atlas.astro`
+became `index.astro`, so the Atlas hub (cover, globe, server-rendered table, mobile FAB +
+ping sheet) is what the live site now serves; `/atlas/` is gone and the old hub is deleted
+(overture.js, hub-live-cards.js, hub.css, hub-cards.css, hub-motion.css, `features/hub`'s
+index.js + ui/hub.js). `gsap-hero.js`/`hero-parallax.js` were KEPT against the plan's own
+item-10 wording — `GuideLayout.astro` imports both for the guide masthead; only the HUB's use
+of them died. Details in the archive.
 
-**Earlier in the session** (before the flip): the guide-page button-chrome fix (`7ac154a` —
-`appearance:none` moved to base.css after finding an earlier hub-only fix had missed every
-guide page, incl. the mobile bottom nav bar), and three real globe pin-card bugs (`f80dcdb`):
-guides with no explicit `cover` showed NO photo (atlas.astro now runs the same
-cover→first-sight-photo fallback GuideLayout's masthead does), pin-card titles rendered in
-browser default link-blue, and the local-time clock sat on a placeholder dash for up to 30s.
+**Stage D (`60d9da2`) — audited first, per the creator's audit-then-rebuild call.** The
+`src/features/mobile-nav/` models were already 100% on-spec (every constant matched: yield
+80/24/6/140, gesture 24/0.3/0.5, track 0.9, rubber-band 0.28 capped 56, slotLabel 9), with
+swipe, day-scrub, overlay stand-down and resume lines correctly wired to them — so **nothing
+there was rebuilt.** The defect was elsewhere:
 
-**`93e1657` — what the a11y gate caught the moment this page entered its scan list** (it was
-never scanned at `/atlas/`). Two REAL defects, fixed: (1) the cover and globe were bare
-`<div>`s outside any landmark → both are named `<section>`s now; (2) **"Skip to guides"
-pointed at `#atlasTable` while the JS default WORLD mode sets that wrapper to `display:none`
-— the skip link jumped to a hidden element and did nothing.** It now switches to table mode
-on activation (verified end-to-end: focus → Enter → mode flips, wrapper goes none→block,
-target has real geometry, hash lands). Three "couldn't resolve" cases were baselined only
-after measuring: worst pair 4.67:1, all ≥4.5 (numbers recorded in `a11y.spec.ts`).
+- **`viewport-fit=cover` was missing from every page**, so `env(safe-area-inset-*)` always
+  reported 0 and the ENTIRE cutout layer — including Stage C's own hub FAB/menu/ping-sheet
+  insets — had shipped inert, undetectably (a device with no notch and a page missing the
+  meta look identical). Added to all four pages; 5 bare `env()` sites converted to
+  `max(reserved, var(--safe-*))`; guard added where there was none (topbar incl. landscape
+  sides, toast, field toast, Today chip, SOS button, spine rail); `body.chrome-yield .topbar`
+  no longer drops the inset while compacting.
+- **Two PRE-EXISTING bugs** fixed en route, both confirmed pre-existing by re-running the
+  gates on a stashed build (I first misread one as my own regression): the colophon sits
+  AFTER `.content`, so that element's 6rem bar clearance never covered it and the fixed
+  bottom bar made the footer's "Request a change" pill unclickable at phone width; and
+  `panels.spec.ts` counted `[data-panel-grid] [data-panel]` page-wide against a hard 9 —
+  correct only when Essentials was korea's sole panel group, but korea now declares 11, so
+  the gate was failing on content growth rather than any Panel regression.
+- Groups sheet gained the README's per-section **card count** (derived from the guide's own
+  buckets; numeral aria-hidden with a spoken equivalent beside it).
+- **NEW GATE `tests/visual/safe-area.spec.ts`** — asserts every page carries
+  viewport-fit=cover AND that chrome actually moves under injected insets (a page could carry
+  the meta and still hard-code padding). Verified it FAILS when viewport-fit is removed.
 
-Gates on both flip commits: build · lint · typecheck 0 errors · 1560 unit tests · **21/21
-a11y** · 3/3 new `atlas-hub.spec.ts` · perf budget OK (d3/topojson still lazy) · zero
-`src/content/guides/` diffs. All four CI workflows green; deploy confirmed live.
+Gates on all three commits: build · lint · typecheck 0 errors · 1560 unit · 102/102 Playwright
+(incl. 21 a11y) · perf budget OK (d3/topojson still lazy) · zero `src/content/guides/` diffs.
+All CI workflows green, deploy confirmed live.
 
-**Decisions CLOSED this session (do not re-ask):** Sedona/Japan departure airports —
-**no such fact exists**; neither trip has booked flights, so nothing gets recorded. The
-creator expects the NYC area and will say when scheduling happens. Tools screen — today's
-per-guide tools-tab shortcut STAYS; no standalone README §5 screen this round.
-
-**Hub visuals — UNRESOLVED.** What the creator actually said, verbatim: "so many things look
-off — but this isn't necessarily the fault of the screenshots. We can iterate later but we
-need to move on and integrate all the features." That is the whole of it. They did NOT rule
-that visual work is closed, deprioritised, or off-limits — an earlier draft of this file said
-they had, which was this assistant inventing a decision and attributing it to them. The
-specific gaps were never enumerated, so they are not written down anywhere yet; getting that
-list is the first step whenever this is picked up.
+**Decision CLOSED (do not re-ask):** Sedona/Japan airports — no such fact exists; neither
+trip has booked flights. Creator expects the NYC area and will say when scheduling happens.
+**NOT closed, despite an earlier draft of this file claiming it was:** the Tools-screen
+question was PUT to the creator and DISMISSED, never answered — their "we don't need those"
+referred to the airports. Today's per-guide tools-tab shortcut is simply what happens to be
+built; treat it as an open question for Stage E, not a ruling.
 
 ## Open items
 
 - **Hub visual fidelity — OPEN.** The flip shipped with gaps the creator can see and this
   assistant has not enumerated. Not scheduled against Stage D either way; ask which to do
   first rather than assuming. `docs/design-handoff/enforcement/` + CLAUDE.md's "Design
-  Fidelity" section carry
-  the authority order and the kit's known false positives.
+  Fidelity" section carry the authority order and the kit's known false positives.
 - **Airports for Sedona/Japan** — record them WHEN flights get booked (creator expects the NYC
   area). Until then there is no fact; do not invent or re-ask.
 - Cover overlay does not trap focus: with the cover open, Tab moves into the page behind it
@@ -89,19 +90,26 @@ list is the first step whenever this is picked up.
 
 ## Where we left off
 
-**This session:** Stage C is DONE — Atlas is the live hub, all gates green, deploy confirmed.
-Hub visual fidelity is still imperfect and still open (see Open items) — no decision has been
-made about when it gets done, so ask before assuming an order.
+**This session:** Stages C and D both closed — Atlas is the live hub and the mobile cutout
+layer actually works now. All gates green, deploy live.
 
-**One candidate next step:** **Stage D — Mobile (Phase 4)**, per
-`docs/PLAN_ATLAS_MIGRATION.md`. Note the scope boundary that has now bitten twice: the hub's
-OWN mobile surfaces (segmented switch, ping sheet, FAB menu) shipped in Stage C per D5 —
-Stage D is the GUIDE PAGES' mobile chrome, wired to the EXISTING `src/features/mobile-nav/`
-models (rank/gesture/scrub/yield; botbar, swipe-tabs, day-scrub), whose constants the
-creator's handoff prompt says to keep exactly. After D: Stage E (Tools) and Stage F (the
-twelve features).
+**TWO THINGS WAITING ON THE CREATOR:**
+1. **The bottom bar is an unresolved A/B.** The design README specs four slots (two content
+   groups, ALL, TOOLS); the shipped bar has five and replaced the second group with the tool
+   slot on the creator's own 2026-07-30 ruling. Rebuilding to spec would have silently
+   reversed that, so BOTH ship: `?bar=spec` and `?bar=app` switch the running site per device,
+   default unchanged. The creator wants to compare on a phone. **Ask which wins, then delete
+   the loser** — an A/B left in place indefinitely is drift, not a feature.
+2. **Hub visual fidelity is still OPEN** (see Open items). Unenumerated; the creator can see
+   gaps this assistant has not catalogued.
 
-**Re-prompt the creator with:** "Atlas is live as the real hub and Stage C is closed. Next up
-is Stage D — the guide pages' mobile chrome (bottom bar, swipe between groups, day scrubber,
-yielding chrome), built on the mobile-nav models already in the repo. Want me to start there,
-or would you rather do a visual-polish pass on the hub first?"
+**Recommended next step:** **Stage E — Tools (Phase 5)**, per
+`docs/PLAN_ATLAS_MIGRATION.md`. The README's standalone cross-trip Tools screen was never
+built and its fate was never decided — every TOOLS entry point currently links into that
+guide's own tools tab. **Stage E must ASK first**, not inherit that as settled. After E: Stage F (the twelve features), then G (closeout).
+
+**Re-prompt the creator with:** "Stages C and D are done — Atlas is the live hub and the
+notch/home-indicator handling now actually works (it was silently dead before). Two things
+need you: which bottom bar wins (open your phone on any guide, compare `?bar=app` vs
+`?bar=spec`), and whether Stage E should build the standalone Tools screen or keep today's
+shortcut. Also still open whenever you want it: the hub visual gaps you spotted."

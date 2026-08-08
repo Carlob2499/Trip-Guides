@@ -4,6 +4,51 @@
 > (the ~80-line budget its own header sets is now gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). Newest first, verbatim.
 
+## Snapshot (2026-08-08 — Atlas migration **Stage C COMPLETE**; Atlas is the live hub)
+
+**The flip shipped.** `src/pages/atlas.astro` became `src/pages/index.astro` (`cd94ab5`) —
+the Atlas hub (cover, globe/world view, server-rendered table view, mobile FAB + ping sheet)
+is now what `https://carlob2499.github.io/Trip-Guides/` serves, verified live. The `/atlas/`
+route is gone; the old hub is deleted (overture.js, hub-live-cards.js, hub.css, hub-cards.css,
+hub-motion.css, `features/hub`'s index.js + ui/hub.js), and dead `.hubcard` selectors were
+swept from touch.css / scroll-motion.css / reveal.js / type-scale's allowlist.
+**Kept deliberately, against the plan's own item-10 wording:** `gsap-hero.js` +
+`hero-parallax.js` — `GuideLayout.astro` imports both for the guide masthead; only the HUB's
+use of them died. PaintedAtlas kept per D3; `features/hub/ui/intake-flow.js` kept (/new uses it).
+
+**Earlier in the session** (before the flip): the guide-page button-chrome fix (`7ac154a` —
+`appearance:none` moved to base.css after finding an earlier hub-only fix had missed every
+guide page, incl. the mobile bottom nav bar), and three real globe pin-card bugs (`f80dcdb`):
+guides with no explicit `cover` showed NO photo (atlas.astro now runs the same
+cover→first-sight-photo fallback GuideLayout's masthead does), pin-card titles rendered in
+browser default link-blue, and the local-time clock sat on a placeholder dash for up to 30s.
+
+**`93e1657` — what the a11y gate caught the moment this page entered its scan list** (it was
+never scanned at `/atlas/`). Two REAL defects, fixed: (1) the cover and globe were bare
+`<div>`s outside any landmark → both are named `<section>`s now; (2) **"Skip to guides"
+pointed at `#atlasTable` while the JS default WORLD mode sets that wrapper to `display:none`
+— the skip link jumped to a hidden element and did nothing.** It now switches to table mode
+on activation (verified end-to-end: focus → Enter → mode flips, wrapper goes none→block,
+target has real geometry, hash lands). Three "couldn't resolve" cases were baselined only
+after measuring: worst pair 4.67:1, all ≥4.5 (numbers recorded in `a11y.spec.ts`).
+
+Gates on both flip commits: build · lint · typecheck 0 errors · 1560 unit tests · **21/21
+a11y** · 3/3 new `atlas-hub.spec.ts` · perf budget OK (d3/topojson still lazy) · zero
+`src/content/guides/` diffs. All four CI workflows green; deploy confirmed live.
+
+**Decisions CLOSED this session (do not re-ask):** Sedona/Japan departure airports —
+**no such fact exists**; neither trip has booked flights, so nothing gets recorded. The
+creator expects the NYC area and will say when scheduling happens. Tools screen — today's
+per-guide tools-tab shortcut STAYS; no standalone README §5 screen this round.
+
+**Hub visuals — UNRESOLVED.** What the creator actually said, verbatim: "so many things look
+off — but this isn't necessarily the fault of the screenshots. We can iterate later but we
+need to move on and integrate all the features." That is the whole of it. They did NOT rule
+that visual work is closed, deprioritised, or off-limits — an earlier draft of this file said
+they had, which was this assistant inventing a decision and attributing it to them. The
+specific gaps were never enumerated, so they are not written down anywhere yet; getting that
+list is the first step whenever this is picked up.
+
 ## Snapshot (2026-08-08 — Atlas migration Stage C, items 1–9 of 11 shipped)
 
 **Prior sessions shipped Stages A+B and Stage C items 1–6** (archive has full detail): feature
