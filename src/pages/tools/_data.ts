@@ -1,30 +1,24 @@
-/* Build-time data for the Tools screen: one ToolsRecord per published trip, plus the
-   holiday reading each trip's Closures panel prints.
+/* Build-time data for the Tools screen: one TripTools per published trip.
+
+   It lives beside the routes rather than in src/lib/ because it is not pure logic — it
+   reaches for `astro:content` and the build's holiday files, so it can only ever run inside
+   a build. src/lib/ is the tested-logic shelf; a module no unit test can construct does not
+   belong on it. The shape it returns is the silo's (trip-tools' `TripTools`).
 
    Shared by `/tools/` and `/tools/<slug>/` so the two pages cannot disagree about what a
    trip's tools contain — the whole point of the README's one-data-load guard, made
    structural by computing it once here instead of once per page. */
 
 import { getCollection } from "astro:content";
-import { flattenSections } from "../features/exports/index";
-import { deriveToolsRecord, type ToolsRecord } from "../features/trip-tools/index";
-import { buildHolidayInfo, deriveTripYear, type HolidayInfo, type RawHoliday } from "./holidays";
-import { firstDayDateOf, lastDayDateOf, relevanceOrder, deriveGuideRecord } from "../features/atlas/index";
-import { countryData, COUNTRY_CODES } from "../data/countries.mjs";
-import { sheetOrder, ordinalFor } from "./sheet-order";
+import { flattenSections } from "../../features/exports/index";
+import { deriveToolsRecord, type TripTools } from "../../features/trip-tools/index";
+import { buildHolidayInfo, deriveTripYear, type RawHoliday } from "../../lib/holidays";
+import { firstDayDateOf, lastDayDateOf, relevanceOrder, deriveGuideRecord } from "../../features/atlas/index";
+import { countryData, COUNTRY_CODES } from "../../data/countries.mjs";
+import { sheetOrder, ordinalFor } from "../../lib/sheet-order";
 
 // Same build-time holiday source the guide pages read (scripts/fetch-holidays.mjs writes it).
-const holidayData = import.meta.glob("../data/holidays/*.json", { eager: true, import: "default" }) as Record<string, RawHoliday[]>;
-
-export interface TripTools {
-  record: ToolsRecord;
-  /** The trip's own page, for the "open the guide" link every panel group needs. */
-  href: string;
-  /** Public holidays around the trip dates; null when there is no data for that country-year. */
-  holidays: HolidayInfo | null;
-  /** Two-letter country code — null when the country is not in the gazetteer. */
-  cc: string | null;
-}
+const holidayData = import.meta.glob("../../data/holidays/*.json", { eager: true, import: "default" }) as Record<string, RawHoliday[]>;
 
 /** Every published trip's tools, in the hub's own relevance order (ongoing → upcoming → past). */
 export async function loadTripTools(now: Date = new Date()): Promise<TripTools[]> {
@@ -63,7 +57,7 @@ export async function loadTripTools(now: Date = new Date()): Promise<TripTools[]
     const cc = COUNTRY_CODES[g.data.country] ?? null;
     const holSec = flat.find((s: { type?: string }) => s.type === "holidays") as { year?: number } | undefined;
     const year = holSec?.year || deriveTripYear(firstDayDate, now);
-    const rows = cc ? holidayData[`../data/holidays/${cc}-${year}.json`] : null;
+    const rows = cc ? holidayData[`../../data/holidays/${cc}-${year}.json`] : null;
     const holidays = holSec ? buildHolidayInfo(rows, firstDayDate, lastDayDate, year) : null;
 
     // relevanceOrder() reads a GuideRecord, so build the same one the hub does rather than

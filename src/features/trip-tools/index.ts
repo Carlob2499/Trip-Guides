@@ -16,6 +16,7 @@
    Public surface — the ONLY sanctioned imports from outside this silo. */
 export { deriveToolsRecord } from "./model/tools-record";
 export type { ToolsRecord, ToolsRecordInput } from "./model/tools-record";
+export type { TripTools } from "./model/view";
 export { buildReminders, isBookingItem } from "./model/reminders";
 export type { ReminderItem, RawChecklistItem, ChecklistSource } from "./model/reminders";
 export { buildClosures, closureCount, weekdayOf, WEEKDAYS } from "./model/closures";

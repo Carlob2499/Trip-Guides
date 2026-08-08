@@ -5,7 +5,7 @@
    picker is right there for the other three, and every panel is already loaded for the one
    you land on. */
 import ToolsLayout from "../../layouts/ToolsLayout.astro";
-import { loadTripTools } from "../../lib/tools-data";
+import { loadTripTools } from "./_data";
 
 const trips = await loadTripTools();
 const active = trips[0];

@@ -27,7 +27,7 @@ history from git log.
 - [x] Stage B — Atlas data layer
 - [x] Stage C — The hub (Phase 3) + flip
 - [x] Stage D — Mobile (Phase 4)
-- [ ] Stage E — Tools (Phase 5)
+- [x] Stage E — Tools (Phase 5)
 - [ ] Stage F — The twelve features (full redesign, one at a time)
 - [ ] Stage G — Closeout
 
@@ -528,6 +528,44 @@ Specifics: JP-2026 holidays fetched per D15 (+ the PIPELINE_PATTERNS.md line); s
 names per D16; four entry points reachable (hub header TOOLS, table TRIP TOOLS row, guide,
 mobile menu). ❓ checkpoint per tool if any fork appears; otherwise one end-of-stage
 review.
+
+> **STAGE E COMPLETE (2026-08-08).** The standalone screen shipped at `/tools/` and
+> `/tools/<slug>/` (`d1eb7a0`), on the creator's answer to this stage's opening question:
+> build it AND keep the guides' own tools tabs. The README's `ensureGuide(slug)` guard is a
+> build-time fact here rather than runtime discipline — each trip has its own rendered page,
+> the picker is four `<a>`s, and the screen works with JS off (asserted). New silo
+> `src/features/trip-tools/` derives reminders/closures/route per trip; `src/lib/tools-data.ts`
+> composes one record so `/tools/` and `/tools/<slug>/` cannot disagree. Jetlag's markup moved
+> to `JetLag.astro` and its CSS to `jetlag.css` so one origin list serves both hosts.
+>
+> **D16 superseded by a stronger creator ruling (2026-08-08):** trip split records what was
+> ACTUALLY spent, is unrelated to the guide's researched budget, and nothing duplicates — so
+> there is NO seeding of any kind, not even into an empty ledger, and the screen mounts the
+> guide's own calculator on the guide's own storeKey rather than a second instance. Tests
+> assert both halves.
+>
+> **D15 done, and it caught a real error.** Japan shipped a `holidays` section with no
+> `JP-2026.json` behind it, so the block had been rendering empty. Filling it exposed that the
+> Nager.Date aggregator is wrong for JP-2026 — 16 rows against the Cabinet Office's 18,
+> missing Constitution Memorial Day (May 3, its name wrongly on the May 6 substitute) and the
+> Sep 22 bridge day. The committed file is hand-written from 内閣府's syukujitsu.csv with
+> `source_url` + `verified_on` per row and PINNED against refetch; `HolidayInfo` gained a
+> `source` derived from the rows so the credit line stops hard-coding "Nager.Date"
+> (`1661727`). Both PIPELINE_PATTERNS.md rows written.
+>
+> Two overflow bugs were caught by the a11y gate rather than by eye (unresolvable contrast,
+> not visible clipping): the jetlag `<select>`'s option labels set an intrinsic minimum width
+> that overflowed its panel by 66px, and reminder text with an unbreakable run overflowed its
+> row at 375px. The decorative contour layer was dropped from this screen for the same reason
+> — a full-bleed inline SVG made every heading's background unresolvable to axe.
+>
+> Korea's 140 checklist items made a 12,800px panel; the 42 with a closing door are the panel
+> now, the rest sit behind a `<details>`. Gates: build · lint · typecheck 0 · 1593 unit ·
+> 119 Playwright (Tools added to the a11y and safe-area gates) · zero guide-content diff.
+>
+> **Not done here, deliberately:** the Tools pages are not in the service worker's precache
+> shell — neither are `/about/` or `/new/`, so adding them is a decision for Stage G, not a
+> Stage E fix.
 
 ## Stage F — The twelve features (full redesign, D17)
 
