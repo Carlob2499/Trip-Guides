@@ -3,15 +3,6 @@
    legible the instant it paints. World-view/globe chrome lives in atlas-world.css (Stage C
    items 2/4/5); this file is the server-rendered, works-with-zero-JS surface (D4). */
 
-/* Native OS button chrome (rounded corners, platform theming — most visible on Safari's
-   default appearance:push-button) must never show through this design's own buttons. A bare
-   element selector on purpose — lowest possible specificity, so every class-based rule below
-   (border-radius, font-family, everything else) always wins regardless of source order. A
-   compound selector here would have been a real risk: it would have beaten .atlas-menufab's
-   own border-radius:50% and every button's own font-family, turning the FAB square and
-   dropping every label back to the page's serif body font. */
-button { appearance: none; -webkit-appearance: none; }
-
 /* Page-level survey ground (design-handoff screenshots) — position:fixed under everything;
    see atlas.astro's `contourLayers` comment for why this doesn't import the old hub's copy. */
 .page-contours { position: fixed; inset: 0; z-index: 0; pointer-events: none; }

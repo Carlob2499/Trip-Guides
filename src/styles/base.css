@@ -295,6 +295,17 @@ html{-webkit-text-size-adjust:100%;overflow-x:clip;max-width:100%}
    instead. touch-action:manipulation removes the ~300ms tap delay some mobile
    browsers still apply and stops accidental double-tap-zoom on controls. */
 a,button,[role="button"],input,select,summary{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+/* Native OS button chrome (rounded corners, gradient fill, platform theming — most visible
+   as Safari's default appearance:push-button, but every browser ships SOME default paint)
+   must never show through this design's own buttons. Every button on every page — hub and
+   guide alike — sets its own background/border/radius explicitly; none expect an OS skin
+   underneath. Found 2026-08-08: every guide-page button (share, dark-mode toggle, jet-lag,
+   print, the bottom mobile nav bar, tab strip) had appearance:auto — an Atlas hub session
+   had already hit and fixed this same bug scoped to atlas.css alone, missing every guide
+   page base.css actually serves. A bare element selector on purpose (lowest specificity),
+   so it can never outrank a class-based rule — a compound selector here once broke a
+   border-radius and a font-family by accidentally outranking their class rules. */
+button{appearance:none;-webkit-appearance:none}
 /* The press cue the note above promises — it was never actually shipped, so controls killed
    the native tap-flash and replaced it with NOTHING (the single biggest "buttons feel dead"
    tell, found 2026-08-02). One unified rule: the independent `scale` property composes with
