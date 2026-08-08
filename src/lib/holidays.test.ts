@@ -128,4 +128,31 @@ describe("buildHolidayInfo", () => {
     const dirty = [...holidays, null, {}, { date: 12345 }] as any;
     expect(() => buildHolidayInfo(dirty, "Jul 8", "Jul 15", 2026)).not.toThrow();
   });
+
+  // The credit line names a publisher. Hard-coding "Nager.Date" made it lie the moment
+  // JP-2026 was hand-written from Japan's Cabinet Office CSV.
+  describe("source attribution", () => {
+    it("credits the aggregator when the rows carry no provenance of their own", () => {
+      const info = buildHolidayInfo(holidays, "Jul 8", "Jul 15", 2026);
+      expect(info?.source).toEqual({ url: "https://date.nager.at", label: "Nager.Date", verifiedOn: null });
+    });
+
+    it("credits the publisher's own domain when a row is primary-sourced", () => {
+      const primary = holidays.map((h) => ({
+        ...h, source_url: "https://www8.cao.go.jp/chosei/shukujitsu/syukujitsu.csv", verified_on: "2026-08-08",
+      }));
+      const info = buildHolidayInfo(primary, "Jul 8", "Jul 15", 2026);
+      expect(info?.source.label).toBe("www8.cao.go.jp");
+      expect(info?.source.url).toBe("https://www8.cao.go.jp/chosei/shukujitsu/syukujitsu.csv");
+      expect(info?.source.verifiedOn).toBe("2026-08-08");
+    });
+
+    it("follows the data when only part of a file has been re-sourced", () => {
+      const mixed = [
+        { ...holidays[0] },
+        { ...holidays[1], source_url: "https://example.gov/holidays", verified_on: "2026-08-08" },
+      ];
+      expect(buildHolidayInfo(mixed, "Jul 8", "Jul 15", 2026)?.source.label).toBe("example.gov");
+    });
+  });
 });

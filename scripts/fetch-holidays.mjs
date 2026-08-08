@@ -30,6 +30,21 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUT_DIR = path.join(ROOT, "src", "data", "holidays");
 const MONTHS = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
 
+/* Country-years this script must NOT touch, because their committed file came from the
+   country's OWN primary source and the aggregator is measurably worse for them.
+
+   JP-2026 (2026-08-08): Nager.Date returns 16 rows where Japan's Cabinet Office
+   (内閣府, syukujitsu.csv — the statutory list) has 18. It omits 憲法記念日 on May 3
+   entirely and puts that name on May 6 (which is the substitute day, the CSV's 休日),
+   and it omits the 休日 on Sep 22 that bridges Sep 21 and Sep 23. A traveller planning
+   around Golden Week or the September run would have been told two closed days were
+   open. Global rule #3 — the aggregator finds the lead; the primary source is the fact.
+
+   Refresh a pinned year by re-reading that country's own publication, not by unpinning:
+     curl -s <primary csv/json> | (decode) → hand-write src/data/holidays/<CC>-<year>.json
+   with source_url + verified_on on every row. */
+const PINNED = new Set(["JP-2026"]);
+
 function firstDayDate(sections) {
   const d = flatten(sections).find((s) => s.type === "days" && s.items?.length);
   return d?.items?.[0]?.date ?? null;
@@ -75,6 +90,10 @@ async function main() {
   for (const { cc, year } of wanted.values()) {
     const url = `https://date.nager.at/api/v3/PublicHolidays/${year}/${cc}`;
     const out = path.join(OUT_DIR, `${cc}-${year}.json`);
+    if (PINNED.has(`${cc}-${year}`)) {
+      console.log(`[holidays] ${cc} ${year}: pinned to its primary source — not refetched`);
+      continue;
+    }
     try {
       const res = await fetch(url, { headers: { accept: "application/json" } });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);

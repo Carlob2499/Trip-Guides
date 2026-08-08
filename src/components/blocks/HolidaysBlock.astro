@@ -1,6 +1,9 @@
 ---
-// Public-holiday section. Pure server-rendered from build-time Nager.Date data,
-// which GuideLayout reads, slices around the trip dates, and passes in as `info`.
+// Public-holiday section. Pure server-rendered from build-time holiday data, which
+// GuideLayout reads, slices around the trip dates, and passes in as `info`. Most files
+// come from the Nager.Date aggregator; a pinned one comes from the country's own
+// publication (JP-2026 from Japan's Cabinet Office). The credit line reads whichever it
+// was off `info.source` rather than naming a publisher it cannot know.
 //
 // Like WeatherBlock, the title lives INSIDE the wrapper and the whole block is
 // hidden when there's no data for the country/year — so an unavailable holiday set
@@ -61,6 +64,8 @@ const near = show ? [...(info!.nearBefore ?? []), ...(info!.nearAfter ?? [])] : 
 
   {show && sec.note && <p class="hol-note" set:html={sec.note} />}
   {show && info && (
-    <p class="hol-credit">Public holidays {info.year} · source <a class="hol-src" href="https://date.nager.at" target="_blank" rel="noopener">Nager.Date</a></p>
+    <p class="hol-credit">
+      Public holidays {info.year} · source <a class="hol-src" href={info.source.url} target="_blank" rel="noopener">{info.source.label}</a>{info.source.verifiedOn && <> · checked {info.source.verifiedOn}</>}
+    </p>
   )}
 </div>

@@ -9,6 +9,11 @@ export interface RawHoliday {
   name: string;
   global?: boolean;    // true = nationwide
   counties?: string[] | null;
+  /* Present only on hand-written, primary-sourced files (the aggregator's rows carry no
+     provenance because the aggregator IS the provenance). JP-2026 is the first — see the
+     PINNED set in scripts/fetch-holidays.mjs for why it is not refetched. */
+  source_url?: string;
+  verified_on?: string;
 }
 
 export interface HolidayRow {
@@ -26,7 +31,15 @@ export interface HolidayInfo {
   during: HolidayRow[];    // holidays that fall within the trip
   nearBefore: HolidayRow[];// within 3 days before arrival
   nearAfter: HolidayRow[]; // within 3 days after departure
+  /* Where THIS country-year's rows actually came from. The credit line used to be the
+     string "Nager.Date" hard-coded in the block, which stopped being true the moment a
+     file was hand-written from a primary source — a citation naming the wrong publisher
+     is worse than none. Derived from the rows themselves, so it cannot drift from them. */
+  source: { url: string; label: string; verifiedOn: string | null };
 }
+
+/** The aggregator every un-pinned holiday file is fetched from (scripts/fetch-holidays.mjs). */
+const NAGER = { url: "https://date.nager.at", label: "Nager.Date" };
 
 const MONTHS: Record<string, number> = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
 const MON_ABBR = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -63,6 +76,13 @@ function row(h: RawHoliday): HolidayRow {
   const dt = new Date(h.date + "T00:00:00Z");
   const label = `${WD[dt.getUTCDay()]} ${MON_ABBR[dt.getUTCMonth()]} ${dt.getUTCDate()}`;
   return { date: h.date, label, name: h.name, localName: h.localName, national: h.global === true };
+}
+
+// The publisher's own domain is the honest label for a primary source — "www8.cao.go.jp"
+// tells a reader it came from the Japanese government, which "source" alone does not.
+function hostOf(url: string): string {
+  const m = /^https?:\/\/([^/?#]+)/i.exec(url);
+  return m ? m[1] : url;
 }
 
 // Partition holidays into during-trip / just-before / just-after (3-day shoulder).
@@ -111,5 +131,12 @@ export function buildHolidayInfo(
     ? `${sm} ${start.getUTCDate()}–${end.getUTCDate()}`
     : `${sm} ${start.getUTCDate()} – ${em} ${end.getUTCDate()}`;
 
-  return { tripLabel, year, during, nearBefore, nearAfter };
+  // A hand-written file stamps every row; take the first row that carries provenance so
+  // the credit follows the data even if only part of a file is ever re-sourced.
+  const sourced = all.find((h) => h && typeof h.source_url === "string" && h.source_url);
+  const source = sourced
+    ? { url: sourced.source_url!, label: hostOf(sourced.source_url!), verifiedOn: sourced.verified_on ?? null }
+    : { ...NAGER, verifiedOn: null };
+
+  return { tripLabel, year, during, nearBefore, nearAfter, source };
 }
