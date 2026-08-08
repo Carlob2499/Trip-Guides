@@ -59,6 +59,23 @@ TOOLS entry point built this stage (table row, header button, mobile FAB menu) l
 quick-card guide's own existing tools tab instead (`/guides/<slug>/#gtab-split`). Raise this
 explicitly at the item-11 checkpoint.
 
+**Post-checkpoint-preview fix round (`074c15e`):** creator looked at the live table view and
+called it flat/light-colored, missing contour lines, and said the WORLD|TABLE toggle "took
+over the entire bar." All three confirmed real against the design screenshots (not taste) and
+fixed: contour-line background ported per-page (`generateContourLayer`), toggle moved into the
+header as compact buttons on desktop (D5's full-bleed segmented bar now only applies <760px),
+filter chips show plain names with the current trip's chip filled oxide. Creator also supplied
+a machine-checkable design kit (`docs/design-handoff/enforcement/` — tokens.css, ANTIPATTERNS,
+ACCEPTANCE, SPEC-COMPONENTS, `check-drift.mjs`), now copied into the repo and pointed to from
+CLAUDE.md's new "Design Fidelity" section, which also records the kit's known false-positive
+classes (token-name mismatch, shadow rule vs. the prototype's own overlay styling, `--on-aink`
+value vs. `base.css`'s documented ATLAS TOKEN CONTRACT) so they don't get re-debugged.
+**Tooling note:** `astro dev`'s HMR served visibly stale CSS in this session's browser pane
+even after full server restarts and cache-busted URLs — confirmed via direct fetch that the
+dev server itself had fresh content, so this was browser-side. `astro preview` (production,
+content-hashed filenames) sidestepped it cleanly; prefer preview over dev for visual
+verification in this environment going forward.
+
 ## Open items
 
 - **Needs the creator, at Stage C's item-11 checkpoint (not before):** (1) screenshot sign-off
