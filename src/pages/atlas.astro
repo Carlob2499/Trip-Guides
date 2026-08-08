@@ -17,6 +17,7 @@ import "@fontsource-variable/source-sans-3";
 import "../styles/base.css";
 import "../styles/atlas.css";
 import "../styles/atlas-world.css";
+import "../styles/atlas-cover.css";
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 const now = new Date();
@@ -114,6 +115,37 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
   </head>
   <body data-base={base}>
     <a class="skip-link" href="#atlasTable">Skip to guides</a>
+
+    {/* Minimal header shell (item 6's own dependency: the cover's wordmark FLIPs into this
+        element's wordmark). Item 9 (Chrome) fills in the rest of the row — theme toggle,
+        ＋ New guide, TOOLS, and relocating the WORLD|TABLE toggle below into it. */}
+    <header class="atlas-header">
+      <a class="atlas-brand" href={`${base}/atlas/`} aria-label="Waypoint — the atlas">
+        <span class="atlas-brand-mark" aria-hidden="true"></span>
+        <span class="atlas-brand-word">
+          <span class="atlas-brand-name" data-ref-headword>WAYPOINT</span>
+          <span class="atlas-brand-sub">VERIFIED FIELD GUIDES</span>
+        </span>
+      </a>
+    </header>
+
+    {/* Cover (README §1, D21) — shown once per session. CSS hides it (`display:none`)
+        until cover.js explicitly opts it in with `data-open`, so a no-JS visitor (D4's
+        no-JS/SEO door) never sees it at all rather than seeing it stuck open with no way
+        to dismiss it; a returning visitor within the same session never sees it flash
+        before cover.js removes it. */}
+    <div class="atlas-cover" data-atlas-cover data-fly-slug={quick?.g.id}>
+      <div class="atlas-cover-col">
+        <span class="atlas-cover-mark" data-cover-fade aria-hidden="true"></span>
+        <span class="atlas-cover-word" data-ref-coverword>WAYPOINT</span>
+        <span class="atlas-cover-sub" data-cover-fade>VERIFIED FIELD GUIDES</span>
+        <button type="button" class="atlas-cover-cta" data-cover-fade data-cover-cta>Enter the atlas</button>
+        <span class="atlas-cover-scroll" data-cover-fade aria-hidden="true">
+          <span class="atlas-cover-scroll-line"></span>
+          <span class="atlas-cover-scroll-dot"></span>
+        </span>
+      </div>
+    </div>
 
     {/* WORLD|TABLE (README §"State": mode atlas/ledger). Table is the no-JS/SEO baseline
         (D4) and stays the default until world-view.js confirms the globe mounted; the
@@ -257,12 +289,24 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
     </div>
 
     <script>
-      import { initAtlasSearch, startLocalClocks } from "../features/atlas/index";
+      import { initAtlasSearch, startLocalClocks, initCover } from "../features/atlas/index";
       import { initAtlasWorld } from "../features/atlas/ui/world-view.js";
+
+      // The header measures its own height into --hdr-h (DESIGN.md: "sticky offsets are
+      // never literals") — the globe wrap and the table's sticky search header both
+      // already consume it. Item 9 (Chrome) will grow this same header with more rows
+      // (theme toggle, ＋ New guide, TOOLS); this observer keeps working unchanged either way.
+      const header = document.querySelector<HTMLElement>(".atlas-header");
+      if (header) {
+        const setHdrH = () => document.documentElement.style.setProperty("--hdr-h", `${header.offsetHeight}px`);
+        setHdrH();
+        if ("ResizeObserver" in window) new ResizeObserver(setHdrH).observe(header);
+      }
 
       initAtlasSearch(document);
       startLocalClocks(document);
       initAtlasWorld(document);
+      initCover(document);
 
       // WORLD|TABLE toggle (README §"State" mode atlas/ledger) — table is the markup
       // default (D4); switch to world once JS is confirmed running, remembering the

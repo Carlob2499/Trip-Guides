@@ -29,3 +29,4 @@ export type { RelevanceInput } from "./model/relevance";
 export { localClockLabel } from "./model/local-time";
 export { initAtlasSearch } from "./ui/search.js";
 export { startLocalClocks } from "./ui/local-clock.js";
+export { initCover } from "./ui/cover.js";

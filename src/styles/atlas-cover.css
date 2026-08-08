@@ -1,0 +1,97 @@
+/* Atlas hub — cover + minimal header shell (README §1, SPEC-COMPONENTS.md, D21).
+   The header here is deliberately minimal: item 6 (this file) only needs a wordmark to
+   exist as the cover's FLIP target. Item 9 (Chrome) adds the rest of the row — theme
+   toggle, ＋ New guide, TOOLS, and relocating the WORLD|TABLE toggle into it. */
+
+.atlas-header {
+  position: relative; z-index: 5;
+  display: flex; align-items: center; gap: 10px;
+  padding: max(14px, var(--safe-top)) max(clamp(18px, 4vw, 54px), var(--safe-right)) 12px
+    max(clamp(18px, 4vw, 54px), var(--safe-left));
+  border-bottom: 1px solid var(--rule2);
+}
+.atlas-brand { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; }
+.atlas-brand-mark { position: relative; width: 20px; height: 18px; display: inline-block; flex: none; }
+.atlas-brand-mark::before {
+  content: ""; position: absolute; inset: 0;
+  border-left: 10px solid transparent; border-right: 10px solid transparent;
+  border-bottom: 17px solid var(--accent); width: 0;
+}
+.atlas-brand-mark::after {
+  content: ""; position: absolute; left: 7.5px; top: 10px;
+  width: 5px; height: 5px; border-radius: 50%; background: var(--bg);
+}
+.atlas-brand-word { display: grid; }
+.atlas-brand-name { font-family: var(--font-data); font-weight: 700; font-size: var(--text-small); letter-spacing: .24em; }
+.atlas-brand-sub {
+  font-family: var(--font-data); font-weight: 600; font-size: var(--text-nano); letter-spacing: .2em;
+  color: var(--muted); white-space: nowrap;
+}
+
+/* ── Cover ────────────────────────────────────────────────────────────────────────────
+   Hidden by default (D4's no-JS/SEO door): a visitor without JS must never see a
+   full-viewport splash with no way past it. cover.js opts it in with `data-open` only
+   after confirming this is a first visit this session. */
+.atlas-cover {
+  display: none;
+  position: fixed; inset: 0; z-index: var(--z-modal);
+  background: var(--bg);
+  place-items: center;
+  cursor: pointer; overflow: hidden;
+  padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+  box-sizing: border-box;
+}
+.atlas-cover[data-open] { display: grid; }
+
+.atlas-cover-col { display: grid; justify-items: center; gap: 18px; text-align: center; padding: 24px; }
+
+.atlas-cover-mark { position: relative; width: 26px; height: 23px; display: inline-block; }
+.atlas-cover-mark::before {
+  content: ""; position: absolute; inset: 0;
+  border-left: 13px solid transparent; border-right: 13px solid transparent;
+  border-bottom: 22px solid var(--accent); width: 0;
+}
+.atlas-cover-mark::after {
+  content: ""; position: absolute; left: 10px; top: 13px;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--bg);
+}
+
+.atlas-cover-word {
+  font-family: var(--font-data); font-weight: 700;
+  font-size: clamp(2rem, 7vw, 4.4rem); line-height: 1; letter-spacing: .24em;
+  margin-right: -.24em; /* the wordmark's own trailing tracking, not visual balance */
+  color: var(--ink); will-change: transform;
+}
+
+.atlas-cover-sub { font-family: var(--font-data); font-weight: 600; font-size: var(--text-panel-kicker); letter-spacing: .3em; color: var(--muted); }
+
+.atlas-cover-cta {
+  display: inline-flex; align-items: center; gap: 10px; margin-top: 6px;
+  background: var(--cta); color: var(--cta-ink); border: 0; border-radius: 999px;
+  padding: 13px 26px; min-height: 46px;
+  font-family: var(--font-data); font-weight: 600; font-size: var(--text-small); letter-spacing: .04em;
+  cursor: pointer;
+}
+.atlas-cover-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.atlas-cover-scroll { display: grid; justify-items: center; gap: 0; margin-top: 2px; }
+.atlas-cover-scroll-line { width: 1px; height: 34px; background: linear-gradient(var(--rule2), var(--aink)); }
+.atlas-cover-scroll-dot { width: 9px; height: 9px; border-radius: 50%; border: 2px solid var(--accent); margin-top: -1px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .atlas-cover-cta { animation: atlas-cover-breathe 2.6s ease-in-out infinite; }
+  .atlas-cover-scroll-line { animation: atlas-cover-drop 1.8s ease-in-out infinite; }
+  .atlas-cover-scroll-dot { animation: atlas-cover-ping 1.8s ease-out infinite; }
+}
+@keyframes atlas-cover-breathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+@keyframes atlas-cover-drop {
+  0% { transform: scaleY(0); transform-origin: top; opacity: 0; }
+  35% { opacity: 1; }
+  70% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+  100% { transform: scaleY(1); transform-origin: top; opacity: .25; }
+}
+@keyframes atlas-cover-ping {
+  0%, 55% { transform: scale(.6); opacity: 0; }
+  75% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.5); opacity: 0; }
+}

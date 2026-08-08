@@ -243,8 +243,8 @@ tz ×2). Nothing visible changed — verify hub/guides render identically in pre
 
 ## Stage C — The hub (Phase 3)
 
-> **RESUME (2026-08-08 session, mid-stage):** Items 1–5 done and verified (ship loop green:
-> build/lint/typecheck/1560 tests/perf-budget; content-preservation gate clean — zero
+> **RESUME (2026-08-08 session, mid-stage):** Items 1–6 done and verified (ship loop green:
+> build/lint/typecheck/1560 tests; content-preservation gate clean — zero
 > `src/content/guides/` diffs). Built aside at `src/pages/atlas.astro` (dev-only, not linked
 > from live nav) — `index.astro` untouched, D1 intact.
 > - **1 Feature silo**: `src/features/atlas/model/{solver,relevance,local-time}.ts` +
@@ -294,7 +294,39 @@ tz ×2). Nothing visible changed — verify hub/guides render identically in pre
 >   the QUICK-CARD guide's own already-shipped tools tab instead
 >   (`/guides/<slug>/#gtab-split`) rather than guessing a large new screen into or out of
 >   scope. Flag this explicitly to the creator at the item-11 checkpoint.
-> - **Still to build**: 6 (cover + iris), 7 (view transitions), 8 (mobile <760px — wire to
+> - **6 Cover + iris (D21)**: `src/features/atlas/ui/cover.js` (`initCover`, exported
+>   through `index.ts`) + `src/styles/atlas-cover.css`. Ported the prototype's fade/FLIP/
+>   iris dismiss sequence verbatim for timings (per this plan's own trust rule); two
+>   additions D21 asked for and the prototype didn't have: `reducedMotion()` (shared
+>   `src/scripts/util.js` helper) gates the whole sequence to a single cut, and the CTA is a
+>   real `<button>` (native Enter/Space + an Escape handler + explicit `.focus()` on open —
+>   `autofocus` is a no-op on a `display:none` element) so a keyboard/screen-reader visitor
+>   isn't stuck behind it. **A real dependency, not scope creep**: the wordmark FLIP needs a
+>   header wordmark to FLIP into, and no hub header existed yet (item 9 owns the full
+>   Chrome). Built the minimal shell only — brand mark + wordmark — in `.atlas-header`;
+>   item 9 adds the rest of the row around it, not a new header. Its real height is now
+>   measured into `--hdr-h` via a small `ResizeObserver` in `atlas.astro`'s script (the
+>   "no JS writer yet" token test already anticipated this: the writer ships with whichever
+>   phase first has a real header to measure). **No-JS safety (D4)**: `.atlas-cover` is
+>   `display:none` by default in CSS; `initCover` only adds `[data-open]` after confirming
+>   `sessionStorage` hasn't already seen it — a no-JS visitor never sees a cover with no way
+>   past it, and the CSS rule is confirmed present in the compiled `dist/` chunk, not just
+>   the source. The globe's `flyIn` target is the same relevance-ordered "quick" trip the
+>   table view's quick card already uses (`data-fly-slug` on the cover, stamped
+>   server-side) — content is king, no second "home base" invented. Live-verified in
+>   `astro preview`: fade transitions and the wordmark FLIP transform (measured against the
+>   real header rect) both compute and apply correctly; dark theme and mobile (375px, 46px
+>   CTA, wordmark clamps to its 2rem floor) both correct; the sessionStorage gate correctly
+>   removes the cover with zero flash on a repeat visit. **Not directly observed**: the
+>   iris mask's own `requestAnimationFrame` loop — this session's browser pane still can't
+>   composite frames (same limit the prior session hit), so the last 780ms of the sequence
+>   is verified by code review (a direct, unmodified port of the prototype's own proven
+>   formula) rather than a live frame-by-frame check.
+> - **Type-scale gate caught 4 literals** (`src/styles/type-scale.test.ts`): the cover's
+>   one-off decorative sizes (14px/8.5px/10px) each land within ~1% of an existing token
+>   (`--text-small`/`--text-nano`/`--text-panel-kicker`) — used those instead of adding new
+>   literals to the closed allowlist.
+> - **Still to build**: 7 (view transitions), 8 (mobile <760px — wire to
 >   existing `mobile-nav` models), 9 (chrome: hub header/OG/skip-link — decide the Tools
 >   scope note above here), 10 (the flip commit itself — NOT pushed until item 11's GO), 11
 >   (screenshot checkpoint + Sedona/Japan origin question, D14/Clarifying #1).

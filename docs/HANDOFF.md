@@ -24,35 +24,28 @@
   **`docs/PLAN_ATLAS_MIGRATION.md`** (the current work order — its own Progress ledger is the
   source of truth for which stage is next; read that before re-deriving status from git log).
 
-## Snapshot (2026-08-08 — Atlas migration Stage C started, items 1–5 of 11 shipped)
+## Snapshot (2026-08-08 — Atlas migration Stage C, items 1–6 of 11 shipped)
 
-**Prior session shipped Stages A+B** (archive has full detail): Stage A closed all 11
-guide-sheet gaps (flag chips, gap state, masthead plate number, popover conformance, day-scrub
-sticky fix, closed-days, venues grid, collapse-all, hash auto-expand). Stage B built the
-invisible data layer Stage C needed: airport gazetteer, the reserved `traveler-origin` fact row
-(D14/ADR 0003), tz backfill, per-guide atlas record derivation, vendored world TopoJSON, the
-search-index build step. A same-session Fable-5 review caught and fixed the D6 180-day
-plate-renumbering time bomb, a popover order regression, and a missing viewport clamp (`c872ec3`).
+**Prior sessions shipped Stages A+B and Stage C items 1–5** (archive has full detail):
+feature silo, atlas-map port, server-rendered table view, world view + pin-card solver, all
+live-verified, `65e2561`.
 
-**This session: Stage C — the hub, items 1–5 of 11**, `65e2561`. Built ASIDE at
-`src/pages/atlas.astro` (dev-only, unlinked from live nav — `index.astro` untouched, D1 intact):
-pin-card collision solver (`src/features/atlas/model/solver.ts`, ported from the design-handoff
-prototype, 9 tests); `<atlas-map>` globe element ported with the required D19/D21 changes
-(guides/anchors/origins now arrive via a `.guides` property, never module constants; route arcs
-are per-guide from that guide's own confirmed origin — the prototype's single shared "home base"
-is gone; reduced-motion is live-listened; d3/topojson-client load via lazy `import()`); the
-server-rendered table view (D4 — search, quick card, sheet list, all live-verified in-browser);
-world-view assembly (globe mounts, pins solve with zero overlaps, zoom/fit/pause/toast/mode-toggle
-all verified via direct DOM/JS invocation — this session's browser pane couldn't composite frames
-for screenshots/rAF, a tooling limit, not a code defect). Found and fixed a real load-bearing gap
-along the way: `content.config.ts`'s guideLoader interpolated `facts.json` into prose but then
-DISCARDED the registry, so nothing downstream of `getCollection` could ever read a fact's own
-state — Stage B's `traveler-origin` arcs were unreachable until now. Also hardened
-`check-perf-budget.mjs`'s on-demand-chunk detection from a fragile `pdf`-only name regex to a
-structural "absent from every page's first-paint closure" check (d3's Rollup output has no
-stable name to match). Ship loop fully green (build/lint/typecheck/1560 tests/perf-budget);
-content-preservation gate clean (zero `src/content/guides/` diffs); CI confirms live
-(Tests/Deploy/Accessibility 23/23 all passed on `65e2561`).
+**This session: Stage C item 6 — cover + iris (D21)**. `src/features/atlas/ui/cover.js`
+(`initCover`) + `src/styles/atlas-cover.css`: fade/FLIP/iris dismiss sequence ported from the
+prototype for timings, plus `reducedMotion()`-gated single-cut and real keyboard/focus support
+the prototype lacked. Discovered mid-item that the FLIP needs a header wordmark to FLIP into,
+and Stage C hadn't built one yet (that's item 9's job) — built the minimal `.atlas-header`
+shell (brand mark + wordmark only) as a genuine dependency, not scope creep; item 9 adds the
+rest of the row around it. Its height now feeds `--hdr-h` via a small `ResizeObserver`. No-JS
+safety (D4): `.atlas-cover` is `display:none` by default, `[data-open]` only after JS confirms
+`sessionStorage` hasn't seen it this session — confirmed in the compiled `dist/` CSS, not just
+source. `flyIn` targets the same relevance-ordered "quick" trip the table view's quick card
+already uses (content is king). Ship loop green (build/lint/typecheck/1560 tests); the closed
+type-scale test caught 4 literal font-sizes, fixed to existing tokens. Live-verified in
+`astro preview`: fade + FLIP transform (against real measured rects), dark theme, mobile
+375px, and the sessionStorage gate all correct. Not directly observed: the iris mask's own
+`requestAnimationFrame` loop — same frame-compositing tooling limit the prior session hit,
+verified by code review instead (unmodified port of the prototype's own formula).
 
 **Scope note flagged, not resolved:** README describes a standalone cross-trip "Tools" screen
 with its own trip picker (§5), but it is NOT one of Stage C's 11 numbered plan items — table
@@ -73,20 +66,18 @@ view's TRIP TOOLS row links into the quick-card guide's own existing tools tab i
 
 ## Where we left off
 
-**This session:** Stage C items 1–5 (feature silo, atlas-map port, table view, world view +
-solver) shipped and verified, `65e2561`, live. Items 6–11 remain: cover + iris (D21), view
+**This session:** Stage C item 6 (cover + iris) shipped and verified. Items 7–11 remain: view
 transitions (D22), mobile <760px (wire to existing `mobile-nav` models), chrome (hub header/OG/
-skip-link — resolve the Tools-scope note here), the flip commit itself (not pushed until item
-11's GO), and the item-11 creator checkpoint.
+skip-link — grow the item-6 header shell into the full row here; resolve the Tools-scope note),
+the flip commit itself (not pushed until item 11's GO), and the item-11 creator checkpoint.
 
-**Recommended next step:** continue Stage C at item 6 (cover + iris) — it's self-contained and
-doesn't depend on anything not yet built. Items 8 (mobile) and 9 (chrome) are the next-largest;
-save the flip (10) and checkpoint (11) for last, once everything else is verified.
+**Recommended next step:** continue Stage C at item 8 (mobile) or item 9 (chrome) — either is
+self-contained; item 9 naturally extends the header shell item 6 already built. Item 7 (view
+transitions) is small and can slot in wherever convenient. Save the flip (10) and checkpoint
+(11) for last, once everything else is verified.
 
 **Re-prompt the creator with:** "Stage C of the Atlas migration is under way — the globe, table
-view, and pin-card solver are built, tested, and live at `/atlas/` (not yet linked from the real
-nav). Found and fixed a real bug along the way: the traveler-origin data from Stage B couldn't
-actually reach anything downstream, so the globe's route arcs would have silently never drawn.
-Remaining: the cover/iris intro, mobile layout, the hub header, and then the flip itself — which
-needs your explicit go-ahead before it ships, plus your call on Sedona/Japan's departure
-airports and whether the Tools screen gets built this round or later."
+view, pin-card solver, and now the cover/iris intro are built, tested, and live at `/atlas/`
+(not yet linked from the real nav). Remaining: mobile layout, the full hub header, and then the
+flip itself — which needs your explicit go-ahead before it ships, plus your call on Sedona/
+Japan's departure airports and whether the Tools screen gets built this round or later."

@@ -4,6 +4,41 @@
 > (the ~80-line budget its own header sets is now gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). Newest first, verbatim.
 
+## Snapshot (2026-08-08 — Atlas migration Stage C started, items 1–5 of 11 shipped)
+
+**Prior session shipped Stages A+B** (further archive detail below): Stage A closed all 11
+guide-sheet gaps (flag chips, gap state, masthead plate number, popover conformance, day-scrub
+sticky fix, closed-days, venues grid, collapse-all, hash auto-expand). Stage B built the
+invisible data layer Stage C needed: airport gazetteer, the reserved `traveler-origin` fact row
+(D14/ADR 0003), tz backfill, per-guide atlas record derivation, vendored world TopoJSON, the
+search-index build step. A same-session Fable-5 review caught and fixed the D6 180-day
+plate-renumbering time bomb, a popover order regression, and a missing viewport clamp (`c872ec3`).
+
+**This session: Stage C — the hub, items 1–5 of 11**, `65e2561`. Built ASIDE at
+`src/pages/atlas.astro` (dev-only, unlinked from live nav — `index.astro` untouched, D1 intact):
+pin-card collision solver (`src/features/atlas/model/solver.ts`, ported from the design-handoff
+prototype, 9 tests); `<atlas-map>` globe element ported with the required D19/D21 changes
+(guides/anchors/origins now arrive via a `.guides` property, never module constants; route arcs
+are per-guide from that guide's own confirmed origin — the prototype's single shared "home base"
+is gone; reduced-motion is live-listened; d3/topojson-client load via lazy `import()`); the
+server-rendered table view (D4 — search, quick card, sheet list, all live-verified in-browser);
+world-view assembly (globe mounts, pins solve with zero overlaps, zoom/fit/pause/toast/mode-toggle
+all verified via direct DOM/JS invocation — this session's browser pane couldn't composite frames
+for screenshots/rAF, a tooling limit, not a code defect). Found and fixed a real load-bearing gap
+along the way: `content.config.ts`'s guideLoader interpolated `facts.json` into prose but then
+DISCARDED the registry, so nothing downstream of `getCollection` could ever read a fact's own
+state — Stage B's `traveler-origin` arcs were unreachable until now. Also hardened
+`check-perf-budget.mjs`'s on-demand-chunk detection from a fragile `pdf`-only name regex to a
+structural "absent from every page's first-paint closure" check (d3's Rollup output has no
+stable name to match). Ship loop fully green (build/lint/typecheck/1560 tests/perf-budget);
+content-preservation gate clean (zero `src/content/guides/` diffs); CI confirms live
+(Tests/Deploy/Accessibility 23/23 all passed on `65e2561`).
+
+**Scope note flagged, not resolved:** README describes a standalone cross-trip "Tools" screen
+with its own trip picker (§5), but it is NOT one of Stage C's 11 numbered plan items — table
+view's TRIP TOOLS row links into the quick-card guide's own existing tools tab instead
+(`/guides/<slug>/#gtab-split`). Raise this explicitly at the item-11 checkpoint.
+
 ## Snapshot (2026-08-07, session #38 — 2 → 22 groups on Panels; weather/holidays hostable)
 
 **Three commits (`02ffb9e`, `a54f5e2`, `a13e76e`), each full-ship-loop green and live-verified.**
