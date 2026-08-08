@@ -4,6 +4,53 @@
 > (the ~80-line budget its own header sets is now gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). Newest first, verbatim.
 
+## Snapshot (2026-08-08 — Atlas migration **Stage D COMPLETE**; C+D both shipped)
+
+Two stages closed this session. **Stage C (the flip, `cd94ab5`+`93e1657`)**: `atlas.astro`
+became `index.astro`, so the Atlas hub (cover, globe, server-rendered table, mobile FAB +
+ping sheet) is what the live site now serves; `/atlas/` is gone and the old hub is deleted
+(overture.js, hub-live-cards.js, hub.css, hub-cards.css, hub-motion.css, `features/hub`'s
+index.js + ui/hub.js). `gsap-hero.js`/`hero-parallax.js` were KEPT against the plan's own
+item-10 wording — `GuideLayout.astro` imports both for the guide masthead; only the HUB's use
+of them died. Details in the archive.
+
+**Stage D (`60d9da2`) — audited first, per the creator's audit-then-rebuild call.** The
+`src/features/mobile-nav/` models were already 100% on-spec (every constant matched: yield
+80/24/6/140, gesture 24/0.3/0.5, track 0.9, rubber-band 0.28 capped 56, slotLabel 9), with
+swipe, day-scrub, overlay stand-down and resume lines correctly wired to them — so **nothing
+there was rebuilt.** The defect was elsewhere:
+
+- **`viewport-fit=cover` was missing from every page**, so `env(safe-area-inset-*)` always
+  reported 0 and the ENTIRE cutout layer — including Stage C's own hub FAB/menu/ping-sheet
+  insets — had shipped inert, undetectably (a device with no notch and a page missing the
+  meta look identical). Added to all four pages; 5 bare `env()` sites converted to
+  `max(reserved, var(--safe-*))`; guard added where there was none (topbar incl. landscape
+  sides, toast, field toast, Today chip, SOS button, spine rail); `body.chrome-yield .topbar`
+  no longer drops the inset while compacting.
+- **Two PRE-EXISTING bugs** fixed en route, both confirmed pre-existing by re-running the
+  gates on a stashed build (I first misread one as my own regression): the colophon sits
+  AFTER `.content`, so that element's 6rem bar clearance never covered it and the fixed
+  bottom bar made the footer's "Request a change" pill unclickable at phone width; and
+  `panels.spec.ts` counted `[data-panel-grid] [data-panel]` page-wide against a hard 9 —
+  correct only when Essentials was korea's sole panel group, but korea now declares 11, so
+  the gate was failing on content growth rather than any Panel regression.
+- Groups sheet gained the README's per-section **card count** (derived from the guide's own
+  buckets; numeral aria-hidden with a spoken equivalent beside it).
+- **NEW GATE `tests/visual/safe-area.spec.ts`** — asserts every page carries
+  viewport-fit=cover AND that chrome actually moves under injected insets (a page could carry
+  the meta and still hard-code padding). Verified it FAILS when viewport-fit is removed.
+
+Gates on all three commits: build · lint · typecheck 0 errors · 1560 unit · 102/102 Playwright
+(incl. 21 a11y) · perf budget OK (d3/topojson still lazy) · zero `src/content/guides/` diffs.
+All CI workflows green, deploy confirmed live.
+
+**Decision CLOSED (do not re-ask):** Sedona/Japan airports — no such fact exists; neither
+trip has booked flights. Creator expects the NYC area and will say when scheduling happens.
+**NOT closed, despite an earlier draft of this file claiming it was:** the Tools-screen
+question was PUT to the creator and DISMISSED, never answered — their "we don't need those"
+referred to the airports. Today's per-guide tools-tab shortcut is simply what happens to be
+built; treat it as an open question for Stage E, not a ruling.
+
 ## Snapshot (2026-08-08 — Atlas migration **Stage C COMPLETE**; Atlas is the live hub)
 
 **The flip shipped.** `src/pages/atlas.astro` became `src/pages/index.astro` (`cd94ab5`) —

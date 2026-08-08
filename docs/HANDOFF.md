@@ -24,61 +24,66 @@
   **`docs/PLAN_ATLAS_MIGRATION.md`** (the current work order — its own Progress ledger is the
   source of truth for which stage is next; read that before re-deriving status from git log).
 
-## Snapshot (2026-08-08 — Atlas migration **Stage D COMPLETE**; C+D both shipped)
+## Snapshot (2026-08-08 — Atlas migration **Stage E COMPLETE**; the Tools screen is live)
 
-Two stages closed this session. **Stage C (the flip, `cd94ab5`+`93e1657`)**: `atlas.astro`
-became `index.astro`, so the Atlas hub (cover, globe, server-rendered table, mobile FAB +
-ping sheet) is what the live site now serves; `/atlas/` is gone and the old hub is deleted
-(overture.js, hub-live-cards.js, hub.css, hub-cards.css, hub-motion.css, `features/hub`'s
-index.js + ui/hub.js). `gsap-hero.js`/`hero-parallax.js` were KEPT against the plan's own
-item-10 wording — `GuideLayout.astro` imports both for the guide masthead; only the HUB's use
-of them died. Details in the archive.
+Three things closed this session, all green and live.
 
-**Stage D (`60d9da2`) — audited first, per the creator's audit-then-rebuild call.** The
-`src/features/mobile-nav/` models were already 100% on-spec (every constant matched: yield
-80/24/6/140, gesture 24/0.3/0.5, track 0.9, rubber-band 0.28 capped 56, slotLabel 9), with
-swipe, day-scrub, overlay stand-down and resume lines correctly wired to them — so **nothing
-there was rebuilt.** The defect was elsewhere:
+**The bottom-bar A/B is resolved (`538ca6c`).** The creator compared both on a phone and chose
+the design-handoff README's FOUR slots — [group][group][ALL][TOOLS]. The `?bar=` switch and the
+five-slot variant are deleted. Today's jump moved into the Groups sheet's tool row (same
+handler, now with preventDefault so the `<a href="#">` can't fight its own scrollIntoView); the
+map was already reachable there as a section link, so `navMapCat`/`navMapSec` went with their
+only consumer.
 
-- **`viewport-fit=cover` was missing from every page**, so `env(safe-area-inset-*)` always
-  reported 0 and the ENTIRE cutout layer — including Stage C's own hub FAB/menu/ping-sheet
-  insets — had shipped inert, undetectably (a device with no notch and a page missing the
-  meta look identical). Added to all four pages; 5 bare `env()` sites converted to
-  `max(reserved, var(--safe-*))`; guard added where there was none (topbar incl. landscape
-  sides, toast, field toast, Today chip, SOS button, spine rail); `body.chrome-yield .topbar`
-  no longer drops the inset while compacting.
-- **Two PRE-EXISTING bugs** fixed en route, both confirmed pre-existing by re-running the
-  gates on a stashed build (I first misread one as my own regression): the colophon sits
-  AFTER `.content`, so that element's 6rem bar clearance never covered it and the fixed
-  bottom bar made the footer's "Request a change" pill unclickable at phone width; and
-  `panels.spec.ts` counted `[data-panel-grid] [data-panel]` page-wide against a hard 9 —
-  correct only when Essentials was korea's sole panel group, but korea now declares 11, so
-  the gate was failing on content growth rather than any Panel regression.
-- Groups sheet gained the README's per-section **card count** (derived from the guide's own
-  buckets; numeral aria-hidden with a spoken equivalent beside it).
-- **NEW GATE `tests/visual/safe-area.spec.ts`** — asserts every page carries
-  viewport-fit=cover AND that chrome actually moves under injected insets (a page could carry
-  the meta and still hard-code padding). Verified it FAILS when viewport-fit is removed.
+**Japan's holidays, and a source-hierarchy catch (`1661727`).** Japan had shipped a `holidays`
+section with NO `JP-2026.json` behind it — the block rendered empty and nobody noticed. Running
+the fetch script filled it; spot-checking against 内閣府's syukujitsu.csv showed the aggregator
+is measurably wrong for 2026: Nager.Date returns 16 rows to the Cabinet Office's 18, drops
+憲法記念日 (May 3) while putting that name on the May 6 substitute, and omits the Sep 22 bridge
+day. The committed file is hand-written from the CSV with `source_url` + `verified_on` per row;
+`PINNED` in `scripts/fetch-holidays.mjs` stops CI replacing it (verified: a rerun logs the skip,
+zero diff). `HolidayInfo` gained a `source` derived from the rows, so the credit line no longer
+hard-codes "Nager.Date" — Japan reads www8.cao.go.jp, the other three still read Nager.Date.
+Both PIPELINE_PATTERNS.md rows written.
 
-Gates on all three commits: build · lint · typecheck 0 errors · 1560 unit · 102/102 Playwright
-(incl. 21 a11y) · perf budget OK (d3/topojson still lazy) · zero `src/content/guides/` diffs.
-All CI workflows green, deploy confirmed live.
+**Stage E — the standalone Tools screen (`d1eb7a0` + `345451b`).** `/tools/` and
+`/tools/<slug>/`, five tools, a trip picker, all four README entry points wired and each one
+walked by a test. The creator's answer to this stage's opening question was BOTH: the screen
+ships and the guides keep their own tools tabs. The README's `ensureGuide(slug)` guard is a
+build-time fact here — one rendered page per trip, the picker is four `<a>`s, and it works with
+JS off. New silo `src/features/trip-tools/` (reminders · closures · route order, 30 tests);
+`src/pages/tools/_data.ts` composes one record per trip so both routes cannot disagree.
 
-**Decision CLOSED (do not re-ask):** Sedona/Japan airports — no such fact exists; neither
-trip has booked flights. Creator expects the NYC area and will say when scheduling happens.
-**NOT closed, despite an earlier draft of this file claiming it was:** the Tools-screen
-question was PUT to the creator and DISMISSED, never answered — their "we don't need those"
-referred to the airports. Today's per-guide tools-tab shortcut is simply what happens to be
-built; treat it as an open question for Stage E, not a ruling.
+**Creator ruling, binding (2026-08-08):** Trip Split records what was ACTUALLY spent, is
+unrelated to the budget a guide researched, and **nothing duplicates** — no seeding of any kind,
+not even into an empty ledger. The screen mounts the guide's OWN calculator on the guide's OWN
+storeKey. This supersedes D16. Two tests hold the line.
+
+Two overflow bugs were caught by the a11y gate rather than by eye — they surfaced as
+unresolvable contrast, not visible clipping: the jetlag `<select>`'s option labels set an
+intrinsic minimum width that overflowed its panel by 66px, and reminder text with an unbreakable
+run overflowed its row at 375px. The decorative contour layer was dropped from this screen for
+the same class of reason. Korea's 140 checklist items made a 12,800px panel; the 42 with a
+closing door are the panel now, the rest sit behind a `<details>`.
+
+CI's coverage gate then caught what local `npm test` does not run: `src/lib/**` needs 95%
+function coverage and the Tools loader cannot be unit-tested at all (it needs `astro:content`).
+Moved to `src/pages/tools/_data.ts` — wrong shelf, not a missing test.
+
+Gates on all three commits: build · lint · typecheck 0 · 1593 unit · 119 Playwright · coverage
+green · check-drift clean on tools.css · zero `src/content/guides/` diff. All CI green, deploy
+confirmed live (`/tools/japan/` smoked on the deployed site).
 
 ## Open items
 
-- **Hub visual fidelity — OPEN.** The flip shipped with gaps the creator can see and this
-  assistant has not enumerated. Not scheduled against Stage D either way; ask which to do
-  first rather than assuming. `docs/design-handoff/enforcement/` + CLAUDE.md's "Design
-  Fidelity" section carry the authority order and the kit's known false positives.
+- **Hub visual fidelity — OPEN, and now NEXT.** The flip shipped with gaps the creator can
+  see and this assistant has not enumerated. The creator chose (2026-08-08) to do it after
+  Stage E, so it is due. `docs/design-handoff/enforcement/` + CLAUDE.md's "Design Fidelity"
+  section carry the authority order and the kit's known false positives; compare the running
+  build against the actual screenshots, not just the prose spec.
 - **Airports for Sedona/Japan** — record them WHEN flights get booked (creator expects the NYC
   area). Until then there is no fact; do not invent or re-ask.
+- The Tools pages are NOT in the SW precache shell — nor are `/about/`//`new/`: a Stage G call.
 - Cover overlay does not trap focus: with the cover open, Tab moves into the page behind it
   (found 2026-08-08 while probing the skip link; the cover still dismisses on any key, so it
   is a papercut, not a trap). Worth a focus-trap pass whenever the cover is next touched.
@@ -90,26 +95,25 @@ built; treat it as an open question for Stage E, not a ruling.
 
 ## Where we left off
 
-**This session:** Stages C and D both closed — Atlas is the live hub and the mobile cutout
-layer actually works now. All gates green, deploy live.
+**This session:** the bottom-bar A/B resolved to the four-slot spec bar, Japan's holidays were
+sourced from the Cabinet Office (and the aggregator caught being wrong), and **Stage E shipped
+the standalone Tools screen**. All gates green, deploy live.
 
-**TWO THINGS WAITING ON THE CREATOR:**
-1. **The bottom bar is an unresolved A/B.** The design README specs four slots (two content
-   groups, ALL, TOOLS); the shipped bar has five and replaced the second group with the tool
-   slot on the creator's own 2026-07-30 ruling. Rebuilding to spec would have silently
-   reversed that, so BOTH ship: `?bar=spec` and `?bar=app` switch the running site per device,
-   default unchanged. The creator wants to compare on a phone. **Ask which wins, then delete
-   the loser** — an A/B left in place indefinitely is drift, not a feature.
-2. **Hub visual fidelity is still OPEN** (see Open items). Unenumerated; the creator can see
-   gaps this assistant has not catalogued.
+**Nothing is blocked on the creator.** Every question this session raised was put and answered:
+four-slot bar wins · build the Tools screen AND keep the guide tabs · hub fidelity after E ·
+trip split is real spend only, no seeding, no duplication.
 
-**Recommended next step:** **Stage E — Tools (Phase 5)**, per
-`docs/PLAN_ATLAS_MIGRATION.md`. The README's standalone cross-trip Tools screen was never
-built and its fate was never decided — every TOOLS entry point currently links into that
-guide's own tools tab. **Stage E must ASK first**, not inherit that as settled. After E: Stage F (the twelve features), then G (closeout).
+**Recommended next step:** the creator's own ordering says **the hub visual-fidelity pass** now
+— it was deferred until after Stage E and Stage E is done. It needs the creator in the loop:
+they can see gaps nobody has catalogued, so open by asking what looks wrong, and in parallel
+run `check-drift.mjs` and diff the running build against
+`docs/design-handoff/enforcement/screenshots/`. After that: **Stage F** (the twelve features,
+one per pass, visibility-first — SOS sheet first), then **G** (closeout).
 
-**Re-prompt the creator with:** "Stages C and D are done — Atlas is the live hub and the
-notch/home-indicator handling now actually works (it was silently dead before). Two things
-need you: which bottom bar wins (open your phone on any guide, compare `?bar=app` vs
-`?bar=spec`), and whether Stage E should build the standalone Tools screen or keep today's
-shortcut. Also still open whenever you want it: the hub visual gaps you spotted."
+**Re-prompt the creator with:** "Stage E is done — there's now a real Tools screen at
+/tools/ that works across all four trips (split, jetlag, closures, reminders, route order),
+reachable from the hub, the table, the mobile menu and any guide; your guides kept their own
+tools tabs too. The four-slot bottom bar is now the only one. Japan's holidays turned out to
+be missing entirely AND wrong in the source we'd been using — fixed from the Japanese
+government's own list. Next up is the hub visual pass you flagged: tell me what looks off, or
+just point at a screen and I'll compare it against the design kit myself."
