@@ -1,0 +1,283 @@
+---
+// Atlas hub — dev-only route (PLAN_ATLAS_MIGRATION.md Stage C, D1: built ASIDE the live
+// index.astro; the flip happens in one commit at the end of the stage, after the creator's
+// GO). This page currently ships the table view (Stage C.3, D4's server-rendered no-JS/SEO
+// door) end to end; the globe (Stage C.2/4/5) mounts into #atlasWorld once it lands.
+import { getCollection } from "astro:content";
+import PwaHead from "../components/PwaHead.astro";
+import {
+  deriveGuideRecord, relevanceOrder, quickCardKicker, firstDayDateOf, lastDayDateOf,
+} from "../features/atlas/index";
+import { sheetOrder, ordinalFor } from "../lib/sheet-order";
+import { countryData, emergencyFor, COUNTRY_CODES } from "../data/countries.mjs";
+import { flattenSections } from "../features/exports/index";
+import "@fontsource-variable/literata/standard.css";
+import "@fontsource-variable/literata/standard-italic.css";
+import "@fontsource-variable/source-sans-3";
+import "../styles/base.css";
+import "../styles/atlas.css";
+import "../styles/atlas-world.css";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const now = new Date();
+
+const allGuides = await getCollection("guides");
+const curated = allGuides.filter((g) => !g.data.draft);
+
+const sheetInputs = curated.map((g) => ({
+  slug: g.id,
+  firstDayDate: firstDayDateOf(g.data.sections),
+  lastDayDate: lastDayDateOf(g.data.sections),
+  kicker: g.data.kicker ?? null,
+}));
+const order = sheetOrder(sheetInputs, now);
+
+const rows = curated.map((g) => {
+  const record = deriveGuideRecord(
+    {
+      slug: g.id,
+      title: g.data.title,
+      dek: g.data.dek ?? null,
+      kicker: g.data.kicker ?? null,
+      country: g.data.country,
+      tz: g.data.tz ?? null,
+      cover: g.data.cover ?? null,
+      sections: g.data.sections,
+      // factsFile validates each row's real shape at build (factRecord/originRecord,
+      // content.config.ts) but types it as Record<string, unknown> — z.record's value type
+      // can't express "one of two discriminated shapes" — so this narrows to the fields
+      // deriveGuideRecord actually reads, which every validated row already carries.
+      facts: (g.data.facts ?? null) as Record<string, { value?: string; state?: string }> | null,
+      ordinal: ordinalFor(order, g.id),
+    },
+    now,
+  );
+  const flat = flattenSections(g.data.sections || []);
+  const dayCount = flat.filter((s) => s.type === "days").flatMap((s) => (s as { items?: unknown[] }).items || []).length;
+  const cc = COUNTRY_CODES[g.data.country] ?? null;
+  const kicker = g.data.kicker;
+  const cities = kicker ? kicker.split("—")[0].trim() : (g.data.region || g.data.country);
+  const dates = kicker && kicker.includes("—") ? kicker.split("—").slice(1).join("—").trim() : null;
+  const emergency = emergencyFor(g.data.country);
+  const currency = countryData(g.data.country)?.currency ?? null;
+  const advisory = g.data.advisory && g.data.advisory.level >= 2 ? g.data.advisory : null;
+  return { g, record, dayCount, cc, cities, dates, emergency, currency, advisory };
+});
+
+// Relevance sort (README §3) — distinct from the D6 plate ordinal above: this one moves with
+// the clock (ongoing -> upcoming soonest-first -> past most-recent-first -> undated last).
+const relevant = relevanceOrder(rows.map((r) => r.record)).map((rec) => rows.find((r) => r.record.slug === rec.slug)!);
+const quick = relevant[0] ?? null;
+const quickKicker = quick ? quickCardKicker(quick.record.status) : null;
+
+const STAMP: Record<string, { label: string; cls: string } | null> = {
+  ongoing: { label: "IN PROGRESS", cls: "atlas-stamp--progress" },
+  upcoming: { label: "UPCOMING", cls: "atlas-stamp--upcoming" },
+  past: { label: "COMPLETE", cls: "atlas-stamp--complete" },
+  undated: null,
+};
+
+// The globe's data feed (Stage C.2/5, D19) — every field traces to `rows` above (content is
+// king); nothing here is a parallel registry. `anchor`/`origin` flatten to [lng,lat] pairs
+// because that's the coordinate order geo libraries (and atlas-map's own port) expect.
+const guidesJson = rows.map(({ g, record, cc }) => ({
+  slug: g.id,
+  name: g.data.title,
+  href: `${base}/guides/${g.id}/`,
+  countryId: record.countryId,
+  anchor: record.anchor ? [record.anchor.lng, record.anchor.lat] : null,
+  origin: record.origin
+    ? { lng: record.origin.lng, lat: record.origin.lat, label: record.origin.iata, confirmed: record.origin.confirmed }
+    : null,
+  ordinal: record.ordinal,
+  status: record.status,
+  coverImg: record.coverImg,
+  tz: record.tz,
+  cc,
+}));
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Waypoint — Atlas</title>
+    <PwaHead />
+    <script is:inline>
+      (function () {
+        const s = localStorage.getItem("tg-theme");
+        const preferDark = window.matchMedia && window.matchMedia("(prefers-color-scheme:dark)").matches;
+        if (s === "dark" || (s === null && preferDark)) document.documentElement.setAttribute("data-theme", "dark");
+        else if (s === "light") document.documentElement.setAttribute("data-theme", "light");
+      })();
+    </script>
+  </head>
+  <body data-base={base}>
+    <a class="skip-link" href="#atlasTable">Skip to guides</a>
+
+    {/* WORLD|TABLE (README §"State": mode atlas/ledger). Table is the no-JS/SEO baseline
+        (D4) and stays the default until world-view.js confirms the globe mounted; the
+        toggle itself is real markup either way, so a visitor without JS can still see both
+        buttons even though only TABLE does anything for them. */}
+    <div class="atlas-toggle" role="group" aria-label="Switch view">
+      <button type="button" class="atlas-toggle-btn" data-atlas-mode-btn="world" aria-pressed="false">World</button>
+      <button type="button" class="atlas-toggle-btn" data-atlas-mode-btn="table" aria-pressed="true">Table</button>
+    </div>
+
+    <div class="atlas-globe-wrap">
+      <div id="atlasGlobe" data-atlas-globe>
+        <div data-atlas-map-slot></div>
+        <div class="atlas-pins" data-atlas-pins></div>
+
+        <div class="atlas-ov atlas-ov-index" data-ref-fadezoom>
+          <span class="atlas-ov-kicker">Index of sheets</span>
+          <span class="atlas-ov-coord" data-atlas-coord>—</span>
+          <ul data-atlas-index-list></ul>
+        </div>
+
+        <div class="atlas-ov atlas-ov-key" data-ref-fadezoom>
+          <span class="atlas-ov-kicker">Key to the marks</span>
+          <ul>
+            <li><span class="swatch swatch--surveyed"></span> Surveyed (trip complete)</li>
+            <li><span class="swatch swatch--filed"></span> Filed (upcoming)</li>
+            <li><span class="swatch swatch--route"></span> Route from origin</li>
+            <li><span class="swatch swatch--night"></span> Night now</li>
+          </ul>
+        </div>
+
+        <div class="atlas-ov atlas-ov-record" data-ref-fadezoom>
+          <span class="atlas-ov-kicker">The record</span>
+          <ul data-atlas-record-list></ul>
+        </div>
+
+        <div class="atlas-ov atlas-ov-controls" data-ref-fadezoom>
+          <button type="button" data-atlas-zoom-out aria-label="Zoom out">−</button>
+          <button type="button" data-atlas-fit>Fit world</button>
+          <button type="button" data-atlas-zoom-in aria-label="Zoom in">+</button>
+          <button type="button" data-atlas-spin>Pause</button>
+        </div>
+
+        <div class="atlas-ov atlas-ov-motto" data-ref-fadezoom data-atlas-motto>
+          <button type="button" class="atlas-ov-motto-close" data-atlas-motto-close aria-label="Dismiss">✕</button>
+          <span class="atlas-ov-kicker">The north star</span>
+          <p>Never autogenerated. Every price, hour, and door checked against a primary source.</p>
+        </div>
+
+        <div class="atlas-toast" data-atlas-toast></div>
+      </div>
+    </div>
+
+    <script type="application/json" is:inline data-atlas-guides-json set:html={JSON.stringify(guidesJson)} />
+
+    <div class="atlas-table-wrap">
+    <main class="atlas-table" id="atlasTable">
+      <div class="atlas-tablehead">
+        <div class="atlas-search-row" role="search">
+          <input
+            class="atlas-search"
+            data-atlas-search
+            type="search"
+            placeholder="Search every sheet — a place, a price, 119…"
+            aria-label="Search every guide"
+            autocomplete="off"
+          />
+          <button class="atlas-search-clear" data-atlas-search-clear type="button" aria-label="Clear search">✕</button>
+        </div>
+        <div class="atlas-chips" data-atlas-chips role="group" aria-label="Jump to a sheet">
+          {rows.map(({ g, record, cc }) => (
+            <a class="atlas-chip" href={`#sheet-${g.id}`}>
+              {record.ordinal != null && cc ? `${String(record.ordinal).padStart(2, "0")} · ${cc}` : g.data.title}
+            </a>
+          ))}
+        </div>
+        <div class="atlas-results" data-atlas-results role="listbox" aria-label="Search results"></div>
+      </div>
+
+      {quick && quickKicker && (
+        // A <div>, not an <a> — the tel: chips inside are real functional links (Gate 5:
+        // "Emergency numbers are live tel: links"), and nesting an <a> inside another <a> is
+        // invalid HTML that breaks click handling on whichever element the browser closes
+        // first. "Open this sheet →" is its own anchor instead, matching the spec's own
+        // wording (a CTA line, not "the whole card is a link").
+        <div class="atlas-quick">
+          <span class="atlas-quick-kicker">{quickKicker}</span>
+          <span class="atlas-quick-title">{quick.g.data.title}</span>
+          <span class="atlas-quick-chips">
+            {quick.emergency?.lines.map((line: { label: string; num: string }) => (
+              <a class="atlas-quick-tel" href={`tel:${line.num}`}>{line.label} · {line.num}</a>
+            ))}
+            {quick.currency && <span class="atlas-quick-meta">{quick.currency.code} {quick.currency.symbol}</span>}
+            {quick.record.tz && (
+              <span class="atlas-quick-meta atlas-quick-clock" data-tick data-tz={quick.record.tz}>—</span>
+            )}
+            {quick.advisory && (
+              <span class="atlas-quick-meta atlas-quick-advisory">⚠ Level {quick.advisory.level} advisory</span>
+            )}
+          </span>
+          <a class="atlas-quick-cta" href={`${base}/guides/${quick.g.id}/`}>Open this sheet →</a>
+        </div>
+      )}
+
+      {rows.length === 0 ? (
+        <p class="atlas-empty">No guides yet.</p>
+      ) : (
+        <ul class="atlas-sheets">
+          {rows.map(({ g, record, cc, cities, dates, dayCount }) => {
+            const stamp = STAMP[record.status];
+            return (
+              <li>
+                <a class="atlas-sheet" id={`sheet-${g.id}`} href={`${base}/guides/${g.id}/`}>
+                  <span class="atlas-sheet-num">{record.ordinal != null ? String(record.ordinal).padStart(2, "0") : "—"}</span>
+                  <span class="atlas-sheet-body">
+                    <span class="atlas-sheet-title">{g.data.title}</span>
+                    <span class="atlas-sheet-cities">{cities}{dayCount > 0 ? ` · ${dayCount} days` : ""}</span>
+                    {dates && <span class="atlas-sheet-dates">{dates}</span>}
+                  </span>
+                  {stamp && <span class={`atlas-stamp ${stamp.cls}`}>{stamp.label}</span>}
+                  {cc && <span class="atlas-quick-meta" aria-hidden="true">{cc}</span>}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+
+      {/* One tap into the trip's own tools tab (README §5's "TRIP TOOLS row"). A standalone,
+          cross-trip Tools screen with its own trip selector is NOT built this stage — it is
+          not one of PLAN_ATLAS_MIGRATION.md's eleven Stage C items, and the plan's own Chrome
+          item only names a "TOOLS" entry point, not a new screen. Flagged as an open item at
+          the Stage C checkpoint rather than guessed either way. */}
+      {quick && (
+        <a class="atlas-toolsrow" href={`${base}/guides/${quick.g.id}/#gtab-split`}>
+          <span class="atlas-toolsrow-label">Trip tools</span>
+          <span>Budget, jetlag, closures, reminders for {quick.g.data.title} →</span>
+        </a>
+      )}
+    </main>
+    </div>
+
+    <script>
+      import { initAtlasSearch, startLocalClocks } from "../features/atlas/index";
+      import { initAtlasWorld } from "../features/atlas/ui/world-view.js";
+
+      initAtlasSearch(document);
+      startLocalClocks(document);
+      initAtlasWorld(document);
+
+      // WORLD|TABLE toggle (README §"State" mode atlas/ledger) — table is the markup
+      // default (D4); switch to world once JS is confirmed running, remembering the
+      // visitor's own last choice.
+      const MODE_KEY = "tg-atlas-mode";
+      const modeBtns = document.querySelectorAll<HTMLElement>("[data-atlas-mode-btn]");
+      function setMode(mode: string) {
+        document.documentElement.setAttribute("data-atlas-mode", mode);
+        modeBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.atlasModeBtn === mode)));
+        try { localStorage.setItem(MODE_KEY, mode); } catch { /* storage unavailable */ }
+      }
+      modeBtns.forEach((b) => b.addEventListener("click", () => setMode(b.dataset.atlasModeBtn || "world")));
+      let initialMode = "world";
+      try { initialMode = localStorage.getItem(MODE_KEY) || "world"; } catch { /* storage unavailable */ }
+      setMode(initialMode);
+    </script>
+  </body>
+</html>

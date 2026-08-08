@@ -34,6 +34,12 @@ export interface SearchRecord {
   snippet: string;
   /** Lowercased title + group + body text — what the search box actually matches against. */
   hay: string;
+  /** This section's position in the guide's OWN flattened section list (GuideLayout's
+      `_flat`/`o.i`, the same order `#sec-<i>` anchors use) — NOT this record's position in
+      the output array, since empty sections are skipped and would desync the two. Lets a
+      search result link straight at `#sec-<index>` (A10's hash auto-expand opens the panel
+      and scrolls) rather than only "the right tab" (Stage C Gate 5's floor). */
+  index: number;
 }
 
 /** Strip HTML tags and collapse whitespace — same two-step the prototype used, not a real
@@ -58,7 +64,7 @@ function itemText(it: unknown): string {
 
 /** One section's search record, or null when it carries no searchable text at all (an empty
     scaffold section) — never an empty row a search can still "match" against nothing. */
-export function buildSectionRecord(slug: string, guideTitle: string, section: SearchableSection): SearchRecord | null {
+export function buildSectionRecord(slug: string, guideTitle: string, section: SearchableSection, index = 0): SearchRecord | null {
   const group = section.group ?? "";
   const bits: string[] = [];
   for (const f of [section.title, section.body, section.intro, section.note]) if (f) bits.push(f);
@@ -78,19 +84,22 @@ export function buildSectionRecord(slug: string, guideTitle: string, section: Se
     title,
     snippet,
     hay: `${title} ${group} ${text}`.toLowerCase(),
+    index,
   };
 }
 
-/** One guide's whole index — every section that has searchable text, in section order. */
+/** One guide's whole index — every section that has searchable text, in section order. Each
+    record's `index` is its position in `sections` itself (see SearchRecord's doc comment),
+    not its position in the filtered output. */
 export function buildGuideSearchIndex(
   slug: string,
   guideTitle: string,
   sections: readonly SearchableSection[],
 ): SearchRecord[] {
   const out: SearchRecord[] = [];
-  for (const s of sections) {
-    const rec = buildSectionRecord(slug, guideTitle, s);
+  sections.forEach((s, i) => {
+    const rec = buildSectionRecord(slug, guideTitle, s, i);
     if (rec) out.push(rec);
-  }
+  });
   return out;
 }

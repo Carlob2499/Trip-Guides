@@ -13,6 +13,7 @@ describe("buildSectionRecord", () => {
       title: "Local essentials",
       snippet: "Local essentials Plug type C/F, 220V.",
       hay: "local essentials plan local essentials plug type c/f, 220v.",
+      index: 0,
     });
   });
 
@@ -96,6 +97,17 @@ describe("buildGuideSearchIndex", () => {
     ]);
     expect(idx.map((r) => r.title)).toEqual(["A", "B"]);
     expect(idx.every((r) => r.slug === "korea")).toBe(true);
+  });
+
+  it("index tracks each record's ORIGINAL position, not its position after skipped sections are dropped", () => {
+    // Section 1 (the empty one) is skipped, so without index-passing the second record would
+    // wrongly claim index:1 (its output position) instead of index:2 (its real #sec-2 anchor).
+    const idx = buildGuideSearchIndex("korea", "South Korea", [
+      { group: "Plan", title: "A", body: "alpha" },
+      { group: "Plan" },
+      { group: "Sights", title: "B", body: "beta" },
+    ]);
+    expect(idx.map((r) => r.index)).toEqual([0, 2]);
   });
 
   it("empty array in, empty array out", () => {

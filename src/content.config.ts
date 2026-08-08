@@ -496,6 +496,10 @@ const guideLoader = {
             );
           }
           raw = filled as Record<string, unknown>;
+          // Attach the registry itself AFTER interpolation ran (not before) — walking `facts`
+          // through interpolateFacts too would be harmless in practice but pointless, since a
+          // fact record's own fields never carry `{{fact:…}}` tokens.
+          raw.facts = facts;
         }
       } else continue;
       const data = await parseData({ id, data: raw });
@@ -693,6 +697,15 @@ const guides = defineCollection({
     // each one still spends a slot of the reader's attention, which is why they're capped
     // separately in the layout rather than being free.
     tabBudget: z.number().int().positive().optional(),
+    // The interpolated perishable-fact registry itself (PLAN_ATLAS_MIGRATION.md Stage C) —
+    // guideLoader below substitutes `{{fact:<id>}}` tokens INTO prose using this same registry,
+    // but until now discarded the registry afterward, so nothing downstream of getCollection
+    // could read a fact's own fields (state, source_url, verified_on) directly. The Atlas hub's
+    // first real consumer is `traveler-origin` (D14): the globe needs a guide's origin airport
+    // + confirmed/unconfirmed state to draw (or withhold) its route arc, and that can only come
+    // from the registry itself, not from any interpolated prose string. Absent for single-file
+    // guides (no facts.json) and for a directory guide with no registry at all.
+    facts: factsFile.optional(),
     // Atlas Phase 2 — groups whose sections render on the Panel grid (collapse +
     // reorder, persisted per reader per scope) instead of the legacy .block/.card
     // stack. Opt-in per group so the migration lands one verified group at a time.

@@ -18,15 +18,20 @@ const DIST = "dist";
 const ASTRO_DIR = join(DIST, "_astro");
 const BUDGET = {
   firstPaintJs: 200 * 1024, // every page's entry graph — today's measured max is ~127 KB
-  js:  900 * 1024,  // total baseline JS across all pages (the lazy Firebase/gsap/pdf chunks dominate this)
+  js:  900 * 1024,  // total baseline JS across all pages (the lazy Firebase/gsap/pdf/d3 chunks dominate this)
   css: 300 * 1024,  // all CSS combined
   maxFile: 500 * 1024, // no single bundle larger than this
 };
 
 // On-demand chunks a visitor pulls ONLY via explicit interaction, so they aren't part of the
-// baseline page weight the js budget protects: pdf.js downloads only when someone drops a PDF
-// into the New-Guide wizard's booking upload (W4). Still subject to maxFile below.
-const ON_DEMAND = /^pdf[.-]/;
+// baseline page weight the `js` budget protects (pdf.js on a booking upload, d3/topojson-client
+// behind the Atlas globe's dynamic import() — PLAN_ATLAS_MIGRATION.md Stage C.2/D19). Derived
+// STRUCTURALLY (same "read dist/, don't memorize names" principle as gen-sw-precache.mjs) —
+// a chunk is on-demand precisely when it never appears in ANY page's first-paint closure, i.e.
+// Rollup only emitted it because something reached it via a dynamic import(). That replaces a
+// hand-maintained name pattern (fragile: d3's dependency graph splits into generically-named
+// index.esm.*.js chunks with no stable filename to match on) and generalizes to whatever the
+// next lazy-loaded feature turns out to be. Still subject to maxFile below.
 
 function findHtmlFiles(dir) {
   const out = [];
@@ -81,12 +86,21 @@ function firstPaintClosure(entries) {
   return seen;
 }
 
+// The union of every page's first-paint closure — a .js chunk absent from ALL of them was
+// only emitted because some dynamic import() reached it, i.e. it's on-demand by construction.
+const pageEntries = [...entryChunksByPage()];
+const firstPaintReachable = new Set();
+for (const [, entries] of pageEntries) {
+  for (const name of firstPaintClosure(entries)) firstPaintReachable.add(name);
+}
+const isOnDemand = (name) => !firstPaintReachable.has(name);
+
 let js = 0, onDemand = 0, css = 0, worst = { name: "", size: 0 };
 const astroFiles = readdirSync(ASTRO_DIR);
 for (const f of astroFiles) {
   const size = statSync(join(ASTRO_DIR, f)).size;
   if (f.endsWith(".js")) {
-    if (ON_DEMAND.test(f)) onDemand += size;
+    if (isOnDemand(f)) onDemand += size;
     else js += size;
   } else if (f.endsWith(".css")) css += size;
   else continue;
@@ -98,11 +112,11 @@ const kb = (n) => (n / 1024).toFixed(0) + " KB";
 // The metric that matters is the WORST single page's first-paint weight, not a sum across
 // pages that never load together.
 let worstPage = { file: "", size: 0, count: 0 };
-for (const [file, entries] of entryChunksByPage()) {
+for (const [file, entries] of pageEntries) {
   const closure = firstPaintClosure(entries);
   let size = 0;
   for (const name of closure) {
-    if (!name.endsWith(".js") || ON_DEMAND.test(name)) continue;
+    if (!name.endsWith(".js")) continue;
     try { size += statSync(join(ASTRO_DIR, name)).size; } catch { /* not an _astro chunk (e.g. inline) */ }
   }
   if (size > worstPage.size) worstPage = { file, size, count: closure.size };
@@ -111,7 +125,7 @@ for (const [file, entries] of entryChunksByPage()) {
 console.log(
   `[perf-budget] worst first-paint page ${worstPage.file} — ${kb(worstPage.size)} / ${kb(BUDGET.firstPaintJs)} (${worstPage.count} entry+static chunks) · ` +
   `total JS ${kb(js)} / ${kb(BUDGET.js)} · CSS ${kb(css)} / ${kb(BUDGET.css)} · largest ${worst.name} ${kb(worst.size)}` +
-  `${onDemand ? ` · (+${kb(onDemand)} on-demand pdf.js, not in either budget)` : ""}`
+  `${onDemand ? ` · (+${kb(onDemand)} on-demand — pdf.js, d3/topojson-client, etc. — not in either budget)` : ""}`
 );
 
 const fails = [];

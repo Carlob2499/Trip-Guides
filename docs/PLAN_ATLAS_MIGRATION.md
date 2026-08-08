@@ -243,6 +243,62 @@ tz ×2). Nothing visible changed — verify hub/guides render identically in pre
 
 ## Stage C — The hub (Phase 3)
 
+> **RESUME (2026-08-08 session, mid-stage):** Items 1–5 done and verified (ship loop green:
+> build/lint/typecheck/1560 tests/perf-budget; content-preservation gate clean — zero
+> `src/content/guides/` diffs). Built aside at `src/pages/atlas.astro` (dev-only, not linked
+> from live nav) — `index.astro` untouched, D1 intact.
+> - **1 Feature silo**: `src/features/atlas/model/{solver,relevance,local-time}.ts` +
+>   tests added alongside Stage B's model files.
+> - **2 atlas-map port (D19/D21)**: `src/features/atlas/ui/atlas-map.js`. Adaptations from
+>   the prototype: guides/anchors/origins arrive via the `.guides` property (never module
+>   constants); route arcs are PER-GUIDE from that guide's own confirmed origin to its own
+>   anchor (the prototype's single shared "home base" is gone — D14/ADR 0003 origins are
+>   per-trip); `prefers-reduced-motion` is live-listened (not read once) and flyTo/flyIn jump
+>   instantly under it; d3 + topojson-client load via lazy `import()`, never `window` globals;
+>   world geometry fetches the Stage-B-vendored `public/data/countries-110m.json`, base-path
+>   aware. Pin dot colour (oxide/grey) now encodes the Key legend's actual "surveyed vs
+>   filed" (trip status past/ongoing vs upcoming/undated) — the prototype's Korea-only
+>   dot-size distinction was actually about card PLATING, which Stage C.5 now gives all four
+>   guides per spec, so it no longer applies.
+> - **3 Table view (D4)**: `src/pages/atlas.astro`'s server-rendered body — sticky search
+>   header (client-enhanced via `features/atlas/ui/search.js`, lazy-fetches the Stage-B
+>   search index, links results at `#sec-<i>` for A10's hash auto-expand — more precise than
+>   "the right tab"), quick card (D7 chips: emergency tel: links, currency, live clock,
+>   advisory — no sourced-rate chip anywhere: no guide has a registered exchange-rate fact
+>   today, so this ships as honest absence rather than a guessed convention), sheet list
+>   (relevance-sorted via new `model/relevance.ts`, status stamps). Live-verified in-browser:
+>   search returns real snippets, quick card correctly picked Sedona as "NEXT TRIP".
+> - **4/5 World view + pin cards + solver**: `src/features/atlas/ui/world-view.js` mounts
+>   `<atlas-map>`, wires index rail/key/THE RECORD/zoom-fit-spin/motto/toast, and runs
+>   `model/solver.ts` (ported from the prototype's `solvePlacement`, 9 tests) via
+>   `requestIdleCallback` off the `atlas-pos` stream. Live-verified via direct DOM/JS
+>   invocation (this session's browser pane couldn't composite frames for
+>   screenshots/rAF — a tooling limit, not a code defect; manually invoking `_draw()`/
+>   `_emit()` and dispatching real events confirmed correct guide data, non-overlapping
+>   card placement, working zoom/fit/toast/mode-toggle/fly-to).
+> - **Load-bearing fix found and closed**: `content.config.ts`'s guideLoader interpolated
+>   `facts.json` into prose but then DISCARDED the registry — nothing downstream of
+>   `getCollection("guides")` could ever read a fact's own state/value (`originFor`'s D14
+>   traveler-origin arcs were unreachable). Added `facts: factsFile.optional()` to the guide
+>   schema and `raw.facts = facts` in the loader. This is infra (`content.config.ts`), not
+>   guide content — the content-preservation gate stayed clean.
+> - **`scripts/check-perf-budget.mjs` improved**: the `total JS` budget's on-demand
+>   exclusion was a hand-maintained `pdf` name regex; d3/topojson-client's Rollup output
+>   uses generic `index.esm.*.js` names that pattern can't match. Replaced with a structural
+>   check (a chunk absent from every page's first-paint closure is on-demand by
+>   construction) — generalizes to any future lazy dependency, not just this one.
+> - **Scope note for the checkpoint (item 11)**: README describes a standalone,
+>   cross-trip "Tools screen" (§5) with its own trip selector — but it is NOT one of this
+>   stage's 11 numbered items, and item 9's Chrome only names a "TOOLS" entry point, not a
+>   new screen. Table view's TRIP TOOLS row and (once built) the hub header both link into
+>   the QUICK-CARD guide's own already-shipped tools tab instead
+>   (`/guides/<slug>/#gtab-split`) rather than guessing a large new screen into or out of
+>   scope. Flag this explicitly to the creator at the item-11 checkpoint.
+> - **Still to build**: 6 (cover + iris), 7 (view transitions), 8 (mobile <760px — wire to
+>   existing `mobile-nav` models), 9 (chrome: hub header/OG/skip-link — decide the Tools
+>   scope note above here), 10 (the flip commit itself — NOT pushed until item 11's GO), 11
+>   (screenshot checkpoint + Sedona/Japan origin question, D14/Clarifying #1).
+
 Build aside (a dev-only route, e.g. `src/pages/atlas.astro`, or the new components mounted
 nowhere) and flip `index.astro` in one final commit. Read the handoff README §1–3 fully
 first. Key specs and the prototype's own bugs are catalogued below — trust the README

@@ -22,3 +22,10 @@ export type {
 } from "./model/guide-record";
 export { buildSectionRecord, buildGuideSearchIndex } from "./model/search-index";
 export type { SearchableSection, SearchRecord } from "./model/search-index";
+export { solvePlacement } from "./model/solver";
+export type { SolverCard, SeatPlacement, SolveResult, Obstacle } from "./model/solver";
+export { relevanceOrder, quickCardKicker } from "./model/relevance";
+export type { RelevanceInput } from "./model/relevance";
+export { localClockLabel } from "./model/local-time";
+export { initAtlasSearch } from "./ui/search.js";
+export { startLocalClocks } from "./ui/local-clock.js";
