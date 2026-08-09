@@ -425,3 +425,27 @@ test("tapping a pin shows the trip's cover, asked for at the size it is drawn", 
   expect(rowSrc, "the pin sheet and the table row disagree about this trip's cover")
     .toContain(src.split("?")[0]);
 });
+
+/* /new/ was reachable THREE ways on a phone: the header CTA, the FAB menu's own row, and the
+   toast for tapping a country with no guide (creator, 2026-08-09: "is there a need for the
+   + New Guide?"). The toast is the good one — it appears exactly when the intent has just been
+   expressed. The header button was the worst of the ambient pair, because
+   `.atlas-header-btn-label` is hidden at this width: what shipped was a bare ＋ glyph next to a
+   moon icon with nothing saying what it did. It follows TOOLS into the menu, where the label
+   renders. Desktop keeps it, since there it can say what it is. */
+test("mobile: ＋ New guide lives in the menu, not as a bare glyph in the header", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.addInitScript(() => sessionStorage.setItem("tg-atlas-cover-seen", "1"));
+  await page.goto(HUB, { waitUntil: "networkidle" });
+
+  await expect(page.locator(".atlas-header-btn--cta")).toBeHidden();
+  // Nothing is lost: the labelled route is one tap away, and it still says the words.
+  await page.locator('[data-atlas-mode-btn="world"]').click();
+  await page.locator("[data-atlas-menufab]").click();
+  const inMenu = page.locator(".atlas-menusheet-new");
+  await expect(inMenu).toBeVisible();
+  await expect(inMenu).toHaveText(/new guide/i);
+
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await expect(page.locator(".atlas-header-btn--cta")).toBeVisible();
+});

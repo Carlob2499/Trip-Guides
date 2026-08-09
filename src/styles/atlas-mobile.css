@@ -14,9 +14,22 @@
 .atlas-pingsheet:not([hidden]) { display: grid; }
 
 @media (max-width: 759px) {
-  /* Header collapses to brand + ＋ + theme (README "Mobile") — TOOLS moves into the FAB menu,
-     the same relocation the desktop record rail's own actions get. */
-  .atlas-header-btn--tools { display: none; }
+  /* Header collapses to brand + theme (README "Mobile") — TOOLS moves into the FAB menu, the
+     same relocation the desktop record rail's own actions get.
+
+     ＋ New guide now makes that same move, and it should have from the start (creator,
+     2026-08-09: "is there a need for the + New Guide?"). It was reaching /new/ THREE ways on a
+     phone: this header button, the FAB menu's own `＋ New guide` row, and the toast you get for
+     tapping a country with no guide. The toast is the good one — it appears exactly when you
+     have just expressed the intent. The other two are the same ambient link twice, and this was
+     the worse of the pair: `.atlas-header-btn-label` is hidden at this width, so what shipped
+     was a bare ＋ glyph beside a moon icon with nothing saying what it did.
+
+     The FAB menu keeps the labelled version, so nothing is lost and the header gets the room
+     back — which is the same complaint the WORLD|TABLE rule below is answering.
+     Desktop is untouched: there the label renders and the CTA can say what it is. */
+  .atlas-header-btn--tools,
+  .atlas-header-btn--cta { display: none; }
   .atlas-header-btn-label { display: none; }
 
   /* D5 asked for "a permanent WORLD | TABLE segmented switch" and this took that as full-bleed:
