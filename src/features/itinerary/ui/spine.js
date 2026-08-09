@@ -43,8 +43,11 @@
     ticks.forEach(function (tick, i) {
       tick.classList.toggle("spine-active", i === cur);
       tick.classList.toggle("spine-seen", !!seen[i] && i !== cur);
-      tick.querySelector(".spine-fill").style.height =
-        i === cur ? (p * 100).toFixed(1) + "%" : (seen[i] ? "100%" : "0%");
+      // A 0..1 scale factor, not a height: the fill is transform-driven so this can run on
+      // every scroll frame without touching layout (field-tools.css, .spine-fill).
+      tick.querySelector(".spine-fill").style.setProperty(
+        "--spine-fill", i === cur ? p.toFixed(3) : seen[i] ? "1" : "0",
+      );
     });
   }
   window.addEventListener("scroll", function () {

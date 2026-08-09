@@ -7,8 +7,8 @@
    number and, before that, the share panel.
 
    The contrast check here is pixel-sampled rather than token-asserted on purpose. The ground is
-   a radial gradient that mixes 26% of the guide's accent into --sm-ground near the top, so the
-   real background behind the title is NOT --sm-ground and asserting against that token would be
+   a radial gradient that mixes 26% of the guide's accent into --dark-ground near the top, so the
+   real background behind the title is NOT --dark-ground and asserting against that token would be
    measuring the wrong thing. The overlay is screenshotted with its own ink hidden, the lightest
    pixel is taken as the worst case, and every --sm-* ink is rated against that. */
 import { test, expect, type Page } from "@playwright/test";
@@ -85,7 +85,7 @@ test("every --sm-* ink clears 4.5:1 against the worst pixel of the real painted 
 
   const inks = await page.evaluate(() => {
     const cs = getComputedStyle(document.querySelector(".sm-overlay")!);
-    return ["--sm-ink", "--sm-ink-2", "--sm-ink-3", "--sm-ink-4"].map((n) => [n, cs.getPropertyValue(n).trim()]);
+    return ["--dark-ink", "--dark-ink-2", "--dark-ink-3", "--dark-ink-4"].map((n) => [n, cs.getPropertyValue(n).trim()]);
   });
 
   for (const [name, hex] of inks) {

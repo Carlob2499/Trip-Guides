@@ -85,6 +85,34 @@ test.describe("desktop", () => {
     await expect(ticks.nth(5)).toHaveClass(/spine-active/);
   });
 
+  /* The fill was animating `height` from a scroll handler until Stage F feature 7 — a per-frame
+     layout path, which this system does not do. It is a scaleY driven by --spine-fill now, so
+     this pins the thing that actually breaks if the property name or the origin drifts: the
+     read tick paints its full bar, the unread one paints nothing, and it is a TRANSFORM doing
+     it rather than a height. */
+  test("spine: read ticks fill by transform, not by animating height", async ({ page }) => {
+    await open(page, "#grp-3");
+    await page.locator(".spine .spine-tick").nth(5).click();
+    await page.waitForTimeout(400);
+
+    const read = await page.locator(".spine-tick.spine-seen .spine-fill").first().evaluate((el) => {
+      const cs = getComputedStyle(el);
+      return { h: cs.height, t: cs.transform, origin: cs.transformOrigin, box: el.getBoundingClientRect().height };
+    });
+    // Full height in the box model; the scale is what varies.
+    expect(read.h).not.toBe("0px");
+    expect(read.t).not.toBe("none");
+    // `transform-origin: top` computes to "<half the width> 0px" — the Y is what matters:
+    // scaling from the middle would grow the bar in both directions.
+    expect(read.origin.split(" ")[1]).toBe("0px");
+    expect(read.box).toBeGreaterThan(0);
+
+    const unread = await page.locator(".spine-tick:not(.spine-seen):not(.spine-active) .spine-fill").first()
+      .evaluate((el) => ({ h: getComputedStyle(el).height, box: el.getBoundingClientRect().height }));
+    expect(unread.h).toBe(read.h); // same height — only the scale differs
+    expect(unread.box).toBeLessThan(1); // scaled to nothing
+  });
+
   test("print-day: every day card has a print button + full-pack button exists", async ({ page }) => {
     await open(page, "#grp-3");
     const dayBtns = page.locator(".day-print-btn");

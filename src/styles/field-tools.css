@@ -18,16 +18,18 @@
 .stop-num:hover,.stop-num:focus-visible{background:color-mix(in srgb,var(--accent) 16%,transparent);outline:none}
 .stop-done .stop-name{text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--accent) 60%,transparent);opacity:.6}
 .stop-done .stop-note{opacity:.5}
-.stop-done .stop-num{color:var(--green,#2e7d4f)}
+.stop-done .stop-num{color:var(--green)}
 .stop-done .stop-num::after{content:" ✓"}
 
 /* ── Currency converter popover ───────────────────────────────────────────── */
-.cur-pop{position:absolute;z-index:120;width:240px;padding:.75rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md);box-shadow:0 10px 32px rgba(10,14,18,.3)}
-.cur-in{width:100%;padding:.45rem .6rem;font:inherit;font-size:var(--text-body);color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:var(--r-sm)}
+/* Atlas re-expression (Stage F, feature 7). Square on everything holding content, 999px on
+   everything pressed, and the drop shadows deleted — an edge does that job here. */
+.cur-pop{position:absolute;z-index:120;width:240px;padding:.75rem;background:var(--card);border:1px solid var(--rule);border-radius:0}
+.cur-in{width:100%;padding:.45rem .6rem;font:inherit;font-size:var(--text-body);color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:0}
 .cur-out{margin-top:.5rem;font-family:var(--font-data);font-size:var(--text-control);line-height:1.7;color:var(--ink)}
 
 /* ── Jump-to-today chip ───────────────────────────────────────────────────── */
-.today-chip{position:fixed;left:50%;bottom:calc(5.2rem + var(--safe-bottom));transform:translateX(-50%);z-index:70;padding:.6rem 1.1rem;background:var(--accent);color:var(--on-accent);border:none;border-radius:999px;font-family:var(--font-display);font-weight:640;font-size:var(--text-small);box-shadow:0 6px 22px color-mix(in srgb,var(--accent) 45%,transparent);cursor:pointer}
+.today-chip{position:fixed;left:50%;bottom:calc(5.2rem + var(--safe-bottom));transform:translateX(-50%);z-index:70;padding:.6rem 1.1rem;background:var(--accent);color:var(--on-accent);border:none;border-radius:999px;font-family:var(--font-display);font-weight:640;font-size:var(--text-small);cursor:pointer}
 @media(min-width:900px){.today-chip{bottom:1.7rem;left:auto;right:6rem;transform:none}}
 @media(prefers-reduced-motion:no-preference){.today-chip{animation:chipIn .5s cubic-bezier(.2,1.2,.3,1) .8s both}}
 @keyframes chipIn{from{opacity:0;transform:translateX(-50%) translateY(16px)}to{opacity:1}}
@@ -38,10 +40,12 @@
 .lb-backdrop{position:fixed;inset:0;z-index:300;display:none;background:rgba(8,11,14,.92);align-items:center;justify-content:center;padding:1rem}
 .lb-backdrop.lb-on{display:flex}
 .lb-fig{position:relative;margin:0;max-width:min(1200px,96vw);max-height:92vh;display:flex;flex-direction:column}
-.lb-img{max-width:100%;max-height:82vh;object-fit:contain;border-radius:var(--r-md)}
-.lb-cap{margin-top:.6rem;color:#dfe4d8;font-size:var(--text-small);display:flex;gap:.8rem;align-items:baseline;flex-wrap:wrap}
-.lb-credit{color:#aeb8a6;font-family:var(--font-data);font-size:var(--text-control-sm)}
-.lb-x{position:absolute;top:-.4rem;right:-.4rem;z-index:2;width:40px;height:40px;background:var(--ink);color:var(--bg);border:1px solid rgba(248,250,243,.25);border-radius:50%;cursor:pointer;font-size:var(--text-small)}
+.lb-img{max-width:100%;max-height:82vh;object-fit:contain;border-radius:0}
+/* The lightbox is the second fixed-dark overlay in the product, so it reads the same
+   --dark-* contract story mode does rather than carrying its own two hex literals. */
+.lb-cap{margin-top:.6rem;color:var(--dark-ink-2);font-size:var(--text-small);display:flex;gap:.8rem;align-items:baseline;flex-wrap:wrap}
+.lb-credit{color:var(--dark-ink-4);font-family:var(--font-data);font-size:var(--text-control-sm)}
+.lb-x{position:absolute;top:-.4rem;right:-.4rem;z-index:2;width:40px;height:40px;background:var(--ink);color:var(--bg);border:1px solid var(--dark-rule);border-radius:999px;cursor:pointer;font-size:var(--text-small)}
 .lb-x:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 
 /* The swipe edge glow (`html[data-swipe-hint]`) retired 2026-07-30 with the rewrite to a
@@ -59,16 +63,22 @@
 .spine{display:none}
 @media(min-width:1100px){
   .spine{display:flex;flex-direction:column;gap:.45rem;position:fixed;left:max(.9rem,var(--safe-left));top:50%;transform:translateY(-50%);z-index:55}
-  .spine-tick{position:relative;width:5px;height:30px;padding:0;background:color-mix(in srgb,var(--rule) 70%,transparent);border:none;border-radius:4px;cursor:pointer;overflow:visible}
-  .spine-fill{position:absolute;left:0;right:0;top:0;height:0;background:var(--accent);border-radius:4px;transition:height .25s ease}
+  .spine-tick{position:relative;width:5px;height:30px;padding:0;background:color-mix(in srgb,var(--rule) 70%,transparent);border:none;border-radius:999px;cursor:pointer;overflow:visible}
+  /* The fill used to animate `height` — on a scroll handler, i.e. a per-frame layout path, which
+     this system does not do (transform and opacity only). Same look, driven by --spine-fill
+     (0..1, written by itinerary/ui/spine.js) through a scale instead. */
+  .spine-fill{position:absolute;left:0;right:0;top:0;height:100%;transform-origin:top;transform:scaleY(var(--spine-fill,0));background:var(--accent);border-radius:999px;transition:transform .25s ease}
   .spine-seen .spine-fill{background:color-mix(in srgb,var(--accent) 55%,var(--rule))}
   .spine-active{width:7px}
-  .spine-tip{position:absolute;left:14px;top:50%;transform:translateY(-50%) translateX(-4px);white-space:nowrap;padding:.25rem .6rem;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:var(--text-micro);border-radius:6px;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s}
+  .spine-tip{position:absolute;left:14px;top:50%;transform:translateY(-50%) translateX(-4px);white-space:nowrap;padding:.25rem .6rem;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:var(--text-micro);border-radius:0;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s}
   .spine-tick:hover .spine-tip,.spine-tick:focus-visible .spine-tip{opacity:1;transform:translateY(-50%) translateX(0)}
   .spine-tick:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 }
 /* ── SOS button + sheet ───────────────────────────────────────────────────── */
-.sos-btn{position:fixed;left:max(1rem,var(--safe-left));bottom:calc(5.2rem + var(--safe-bottom));z-index:75;width:48px;height:48px;border-radius:50%;background:#b3261e;color:#fff;border:2px solid rgba(255,255,255,.35);font-family:var(--font-data);font-size:var(--text-micro);font-weight:800;letter-spacing:.05em;box-shadow:0 4px 16px rgba(179,38,30,.4);cursor:pointer}
+/* The SOS button now reads the same --crit-fill/--on-crit pair the sheet and the topbar
+   button do; it was the last place the emergency red was a hex literal. Its glow went with the
+   other shadows — the 2px ring is the edge. */
+.sos-btn{position:fixed;left:max(1rem,var(--safe-left));bottom:calc(5.2rem + var(--safe-bottom));z-index:75;width:48px;height:48px;border-radius:999px;background:var(--crit-fill);color:var(--on-crit);border:2px solid color-mix(in srgb,var(--on-crit) 35%,transparent);font-family:var(--font-data);font-size:var(--text-micro);font-weight:800;letter-spacing:.05em;cursor:pointer}
 @media(min-width:900px){.sos-btn{bottom:1.6rem;left:5rem}}
 .sos-btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .sos-sheet{position:fixed;inset:0;z-index:320;display:flex;align-items:flex-end;justify-content:center;background:rgba(8,11,14,.6)}
@@ -109,7 +119,7 @@
 /* ── Show-the-driver address card ─────────────────────────────────────────── */
 .addr-card{position:fixed;inset:0;z-index:320;display:flex;align-items:center;justify-content:center;background:rgba(8,11,14,.75);padding:1rem}
 .addr-card[hidden]{display:none}
-.addr-card-inner{width:100%;max-width:34rem;background:var(--card);border-radius:var(--r-lg);padding:1.4rem;text-align:center}
+.addr-card-inner{width:100%;max-width:34rem;background:var(--card);border:1px solid var(--rule2);border-radius:0;padding:1.4rem;text-align:center}
 .addr-card-hint{margin:0 0 .8rem;font-family:var(--font-data);font-size:var(--text-control-sm);letter-spacing:.06em;color:var(--muted)}
 .addr-card-big{margin:0;font-family:var(--font-display);font-weight:640;font-size:clamp(1.7rem,7vw,2.6rem);line-height:1.35;color:var(--ink);word-break:keep-all}
 .addr-card-row{display:flex;gap:.6rem;justify-content:center;margin-top:1.2rem;flex-wrap:wrap}
@@ -124,14 +134,14 @@
 .focus-title{margin:.2rem 0 0;font-family:var(--font-display);font-weight:640;font-size:clamp(1.5rem,6vw,2.2rem);line-height:1.08;letter-spacing:-.012em}
 .focus-x{position:absolute;right:0;top:0;width:42px;height:42px;background:var(--card);border:1px solid var(--rule);border-radius:999px;color:var(--ink);cursor:pointer}
 .focus-stops{list-style:none;margin:1rem 0;padding:0;display:flex;flex-direction:column;gap:.55rem;flex:1}
-.focus-stop{display:grid;grid-template-columns:5.2rem 1fr;gap:.15rem .8rem;padding:.85rem .9rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md);cursor:pointer}
+.focus-stop{display:grid;grid-template-columns:5.2rem 1fr;gap:.15rem .8rem;padding:.85rem .9rem;background:var(--card);border:1px solid var(--rule);border-radius:0;cursor:pointer}
 .focus-time{grid-row:span 2;align-self:center;font-family:var(--font-data);font-size:var(--text-small);font-weight:700;color:var(--accent-ink);font-variant-numeric:tabular-nums}
 .focus-name{font-family:var(--font-display);font-weight:680;font-size:var(--text-lead);line-height:1.25}
 .focus-note{font-size:var(--text-small);color:var(--muted);line-height:1.45}
 .focus-done{opacity:.45}
 .focus-done .focus-name{text-decoration:line-through}
 .focus-stop:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-.focus-full{margin-top:.4rem;padding:.8rem 1.1rem;background:transparent;color:var(--ink);border:1px dashed var(--rule2);border-radius:var(--r-md);font-family:var(--font-display);font-weight:640;font-size:var(--text-body);cursor:pointer}
+.focus-full{margin-top:.4rem;padding:.8rem 1.1rem;background:transparent;color:var(--ink);border:1px dashed var(--rule2);border-radius:0;font-family:var(--font-display);font-weight:640;font-size:var(--text-body);cursor:pointer}
 
 /* ── Share-modal install note ─────────────────────────────────────────────── */
 .share-install{margin:.9rem 0 0;padding:.6rem .8rem;background:color-mix(in srgb,var(--accent) 8%,var(--card));border:1px solid var(--rule);border-radius:0;font-size:var(--text-control);line-height:1.55;color:var(--ink)}
