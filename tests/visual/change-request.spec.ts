@@ -122,3 +122,38 @@ test("the wizard fits the viewport at 375px and its textarea clears the iOS zoom
   );
   expect(fontPx).toBeGreaterThanOrEqual(16);
 });
+
+/* The submit button's hover state used --accent-ink on an --accent fill until Stage F feature
+   11. Both are oxide — 1.32:1 — so the wizard's one irreversible control lost its own label the
+   moment a pointer touched it, and only on hover, which is why no static scan and no screenshot
+   of the resting state would ever have said so. */
+test("the submit button keeps its label on hover", async ({ page }) => {
+  /* Reduced motion is load-bearing here, not politeness. .cr-btn carries a .14s colour
+     transition, and getComputedStyle mid-transition returns the CURRENT interpolated value —
+     i.e. the RESTING colours, if you read it the instant after hovering. Written without this
+     line the test passed against the broken 1.32:1 pair, because it was measuring the state
+     before the hover had gone anywhere. This file's own reduced-motion block sets
+     transition:none, so the hover state is whole the moment it applies. */
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(DENMARK, { waitUntil: "networkidle" });
+  await page.locator("#btnChangeRequest").click();
+
+  const btn = page.locator(".cr-btn-primary").first();
+  await expect(btn).toBeVisible();
+  await btn.hover();
+
+  const ratio = await btn.evaluate((el) => {
+    const lum = (c: string) =>
+      (c.match(/[\d.]+/g) || [])
+        .slice(0, 3)
+        .map(Number)
+        .map((v) => v / 255)
+        .map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4))
+        .reduce((a, v, i) => a + v * [0.2126, 0.7152, 0.0722][i], 0);
+    const cs = getComputedStyle(el);
+    const a = lum(cs.color);
+    const b = lum(cs.backgroundColor);
+    return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+  });
+  expect(ratio).toBeGreaterThanOrEqual(4.5);
+});
