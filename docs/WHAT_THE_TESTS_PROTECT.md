@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1707 checks · 1707 carry a stated promise · 146 files
+1712 checks · 1712 carry a stated promise · 147 files
 
 ## Can everyone read it
 
@@ -2121,6 +2121,14 @@ nothing ships.
 - fails when the crowd/timing angle is missing — even with plenty of entries  <sub>scripts/__tests__/check-passb-coverage.test.mjs:99</sub>
 - counts `timing` toward crowd and `alternative` toward novel  <sub>scripts/__tests__/check-passb-coverage.test.mjs:106</sub>
 - documented floors: 8 total, 3 crowd/timing, 2 novel/alternative  <sub>scripts/__tests__/check-passb-coverage.test.mjs:115</sub>
+
+**The site keeps looking like one designed thing — no new stray corner, colour or shadow.**
+
+- actually reaches the checker instead of scoring an empty run  <sub>scripts/__tests__/drift-real.test.mjs:12</sub>
+- introduces no new drift and makes no existing file worse  <sub>scripts/__tests__/drift-real.test.mjs:19</sub>
+- the recorded drift debt only ever shrinks  <sub>scripts/__tests__/drift-real.test.mjs:32</sub>
+- every exemption is a named class carrying its own justification  <sub>scripts/__tests__/drift-real.test.mjs:40</sub>
+- classifies against the real source line, not the checker's truncated echo  <sub>scripts/__tests__/drift-real.test.mjs:49</sub>
 
 **Trip feedback exports carry the survey answers and nothing personal.**
 
