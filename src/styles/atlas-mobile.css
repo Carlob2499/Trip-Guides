@@ -31,7 +31,52 @@
   }
 
   .atlas-menufab { display: flex; }
+
+  /* ── Pin chips: the pincard at phone scale (creator, 2026-08-08) ──────────────────────
+     The globe used to be anonymous dots on mobile — nothing said a country had a guide
+     until you tapped it. A chip is a status dot plus the trip's name, nothing else: no
+     photo, no clock, no CTA, because the ping sheet a tap raises already carries those.
+
+     Positioned by world-view.js on every atlas-pos frame with a translate3d, so it moves
+     with its pin rather than being re-laid-out. */
+  .atlas-pinchip {
+    position: absolute; top: 0; left: 0; z-index: 6;
+    display: inline-flex; align-items: center; gap: 5px;
+    /* The lift clear of the pin's dot. Centring is applied by world-view.js inside the
+       same `transform` it rewrites each frame — see the note there. */
+    margin: -12px 0 0 0; padding: 3px 8px;
+    /* Opaque, not translucent: this sits over a canvas whose colour changes as the globe
+       turns, so a see-through ground meant the label's contrast depended on which ocean
+       was behind it — unverifiable to the a11y gate and genuinely harder to read. */
+    background: var(--card);
+    border: 1px solid var(--rule2); border-radius: 999px;
+    color: var(--ink); font-family: var(--font-data); font-size: var(--text-micro);
+    letter-spacing: .06em; text-transform: uppercase; white-space: nowrap;
+    cursor: pointer; opacity: 0; pointer-events: none;
+    /* The layer is pointer-events:none so the globe stays draggable through it; each chip
+       opts itself back in only once it is actually shown. */
+  }
+  .atlas-pinchip[data-on] { pointer-events: auto; }
+  .atlas-pinchip:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+  .atlas-pinchip-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--rule2); flex: 0 0 auto; }
+  .atlas-pinchip[data-status="ongoing"] .atlas-pinchip-dot { background: var(--accent); }
+  .atlas-pinchip[data-status="upcoming"] .atlas-pinchip-dot { background: var(--aink); }
+  .atlas-pinchip[data-status="past"] .atlas-pinchip-dot { background: var(--green); }
+  .atlas-pinchip[data-status="ongoing"] { border-color: var(--accent); }
+  /* The name is the point; keep it from ever growing wider than a phone's half-width. */
+  .atlas-pinchip-name { max-width: 42vw; overflow: hidden; text-overflow: ellipsis; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Opacity only — the transform is the live position and must never be transitioned,
+       or every chip would lag its own pin by the transition's duration. */
+    .atlas-pinchip { transition: opacity .22s linear; }
+    .atlas-pinchip[data-status="ongoing"] .atlas-pinchip-dot { animation: atlas-chip-pulse 2.4s ease-in-out infinite; }
+    @keyframes atlas-chip-pulse { 0%,100% { opacity: 1 } 50% { opacity: .45 } }
+  }
 }
+
+/* Desktop keeps its full pincards; the chips are a mobile-only surface. */
+@media (min-width: 760px) { .atlas-pinchip { display: none; } }
 
 .atlas-menufab {
   position: absolute; right: calc(12px + var(--safe-right)); bottom: calc(12px + var(--safe-bottom));

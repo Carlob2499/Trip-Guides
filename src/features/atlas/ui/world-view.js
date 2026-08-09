@@ -204,9 +204,90 @@ export function initAtlasWorld(root = document) {
     return el;
   }
 
+  /* ── Mobile pin chips (creator, 2026-08-08) ─────────────────────────────────────────
+     The README's "no floating cards, no side rails" on mobile was read as "no labels at
+     all", and the result was a globe of anonymous dots: nothing said a country HAD a guide
+     until you tapped it. These are the desktop pincard scaled to a phone's budget — a
+     status dot and the trip's name, no photo, no clock, no CTA — so which countries are
+     surveyed is apparent at a glance, which is what the pins were for.
+
+     They are positioned in the atlas-pos handler on every frame rather than in the solver,
+     which is throttled by a drift threshold: a label that updates only every 90px would
+     visibly swim behind its own pin while the globe spins. Positioning is one transform
+     write per guide, which is cheap enough to do per frame.
+
+     No collision solving. Four guides on a phone-sized globe rarely collide, and a solver
+     that reflowed labels mid-spin would be more distracting than the overlap it prevents. */
+  const CHIP_FADE_FROM = 0.68; // fraction of the globe's radius where a chip starts fading
+  const CHIP_LIFT = 12;        // px the chip sits above its pin — matches the CSS margin
+  const chipEls = new Map();
+  const STATUS_DOT = { ongoing: "now", upcoming: "soon", past: "done", undated: "" };
+
+  function ensureChip(slug) {
+    if (chipEls.has(slug)) return chipEls.get(slug);
+    const g = byIndex.get(slug);
+    if (!g) return null;
+    // A button, not a link: on mobile a pin raises the ping sheet first (README "Clicking a
+    // pin"), so the chip must do exactly what tapping its own pin does, not jump the queue.
+    const el = document.createElement("button");
+    el.type = "button";
+    el.className = "atlas-pinchip";
+    el.setAttribute("data-status", g.status || "undated");
+    el.innerHTML = `<span class="atlas-pinchip-dot" aria-hidden="true"></span><span class="atlas-pinchip-name">${escapeHtml(g.name)}</span>`;
+    el.setAttribute("aria-label", `${g.name} — ${STATUS_DOT[g.status] === "now" ? "on this trip now" : "guide filed"}. Open details.`);
+    el.addEventListener("click", () => showPingSheet(g));
+    pinsLayer.appendChild(el);
+    chipEls.set(slug, el);
+    return el;
+  }
+
+  function clearChips() {
+    for (const [, el] of chipEls) el.remove();
+    chipEls.clear();
+  }
+
+  function placeChips(pos) {
+    if (!isMobile()) { if (chipEls.size) clearChips(); return; }
+    const R = Math.min(pos.w, pos.h) / 2 || 1;
+
+    // Frontmost first, so when two labels want the same patch of sky the one nearer the
+    // middle of the globe keeps it. Two overlapping labels are unreadable AND make the rear
+    // one's contrast unverifiable — the a11y gate caught that before any eye did.
+    const wanted = [];
+    for (const g of guides) {
+      const p = pos[g.slug];
+      const el = ensureChip(g.slug);
+      if (!el) continue;
+      if (!p || !p.v) { el.removeAttribute("data-on"); el.style.opacity = "0"; continue; }
+      // Fade toward the limb, so a label never floats over the globe's own edge with
+      // nothing under it.
+      const d = Math.hypot(p.x - pos.w / 2, p.y - pos.h / 2) / R;
+      const o = d <= CHIP_FADE_FROM ? 1 : Math.max(0, 1 - (d - CHIP_FADE_FROM) / (1 - CHIP_FADE_FROM));
+      // The centring lives HERE, not in the stylesheet: this line rewrites `transform`
+      // every frame, so a `translate(-50%,-100%)` written in CSS would be erased on the
+      // first pos event. Anchor = the pin's own point; the chip sits centred just above it.
+      el.style.transform = `translate3d(${p.x}px, ${p.y}px, 0) translate(-50%, -100%)`;
+      wanted.push({ el, x: p.x, y: p.y, o, d });
+    }
+    wanted.sort((a, b) => a.d - b.d);
+
+    const placed = [];
+    for (const c of wanted) {
+      // offsetWidth, not getBoundingClientRect: the element carries a live transform, and
+      // the layout box is what collides here, not the painted one.
+      const w = c.el.offsetWidth || 90, h = c.el.offsetHeight || 22;
+      const box = { l: c.x - w / 2, r: c.x + w / 2, t: c.y - h - CHIP_LIFT, b: c.y - CHIP_LIFT };
+      const clash = placed.some((q) => box.l < q.r && box.r > q.l && box.t < q.b && box.b > q.t);
+      const o = clash ? 0 : c.o;
+      c.el.style.opacity = String(o);
+      c.el.toggleAttribute("data-on", o > 0.06);
+      if (!clash) placed.push(box);
+    }
+  }
+
   function runSolve(pos) {
-    // No floating cards on mobile (README "Mobile": "no floating cards, no side rails" — no
-    // spatial budget for them). Bare pings only; a tap opens the bottom sheet instead.
+    // No floating CARDS on mobile (README "Mobile": no spatial budget for them) — the chips
+    // above carry the name instead, and a tap still opens the bottom sheet.
     if (isMobile()) {
       for (const [, el] of cardEls) el.remove();
       cardEls.clear();
@@ -264,6 +345,7 @@ export function initAtlasWorld(root = document) {
       coordEl.textContent = `${Math.abs(lat).toFixed(2)}° ${lat >= 0 ? "N" : "S"}, ${Math.abs(lng).toFixed(2)}° ${lng >= 0 ? "E" : "W"}`;
     }
     applyFadeZoom(pos.zoom);
+    placeChips(pos);
     maybeSolve(pos);
   });
 

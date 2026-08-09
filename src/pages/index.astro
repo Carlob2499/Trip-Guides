@@ -12,6 +12,9 @@ import {
   deriveGuideRecord, relevanceOrder, quickCardKicker, firstDayDateOf, lastDayDateOf,
 } from "../features/atlas/index";
 import { sheetOrder, ordinalFor } from "../lib/sheet-order";
+// A 56px plate does not need a 258 KB original — Commons serves a 14.5 KB thumbnail for
+// the same picture if you ask it for a width (verified against the live endpoint).
+import { atWidth, srcsetFor } from "../lib/img-width";
 import { countryData, emergencyFor, COUNTRY_CODES } from "../data/countries.mjs";
 import { flattenSections } from "../features/exports/index";
 import "@fontsource-variable/literata/standard.css";
@@ -302,8 +305,23 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
 
     <div class="atlas-table-wrap">
     <main class="atlas-table" id="atlasTable">
-      <div class="atlas-tablehead">
+      {/* The sticky header used to carry the search FIELD plus the jump chips at full size,
+          so ~110px of chrome followed you down a list of four trips (creator, 2026-08-08:
+          "way too persistent"). It is now a slim bar whose only resident is the search
+          TOGGLE; the field expands over it on demand and collapses again on Escape or when
+          it is left empty. The chips moved out of the sticky region entirely — they scroll
+          away with the page like any other content.
+
+          No-JS baseline is unchanged and deliberately the opposite default: the markup
+          ships EXPANDED, and search.js collapses it once it can actually wire the toggle.
+          A reader without JS therefore still gets the plain field, never a button that
+          does nothing. */}
+      <div class="atlas-tablehead" data-atlas-searchhead>
         <div class="atlas-search-row" role="search">
+          <button class="atlas-search-toggle" data-atlas-search-toggle type="button"
+                  aria-expanded="true" aria-label="Search every guide" hidden>
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.4 10.4 14 14"/></svg>
+          </button>
           <input
             class="atlas-search"
             data-atlas-search
@@ -314,14 +332,15 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
           />
           <button class="atlas-search-clear" data-atlas-search-clear type="button" aria-label="Clear search">✕</button>
         </div>
-        <div class="atlas-chips" data-atlas-chips role="group" aria-label="Jump to a sheet">
-          {rows.map(({ g }) => (
-            <a class={`atlas-chip${g.id === quick?.g.id ? " atlas-chip--current" : ""}`} href={`#sheet-${g.id}`}>
-              {g.data.title}
-            </a>
-          ))}
-        </div>
         <div class="atlas-results" data-atlas-results role="listbox" aria-label="Search results"></div>
+      </div>
+
+      <div class="atlas-chips" data-atlas-chips role="group" aria-label="Jump to a sheet">
+        {rows.map(({ g }) => (
+          <a class={`atlas-chip${g.id === quick?.g.id ? " atlas-chip--current" : ""}`} href={`#sheet-${g.id}`}>
+            {g.data.title}
+          </a>
+        ))}
       </div>
 
       {quick && quickKicker && (
@@ -358,7 +377,20 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
             return (
               <li>
                 <a class="atlas-sheet" id={`sheet-${g.id}`} href={`${base}/guides/${g.id}/`}>
-                  <span class="atlas-sheet-num">{record.ordinal != null ? String(record.ordinal).padStart(2, "0") : "—"}</span>
+                  {/* The plate: the trip's own cover photo with its survey number stamped on
+                      it (creator, 2026-08-08 — the list read "clean but bland"). The image is
+                      the SAME `record.coverImg` the globe's pincards use, so this adds a
+                      surface, not a second source of truth. A guide with no cover keeps the
+                      number alone on a plain plate — an honest blank, not a grey placeholder
+                      pretending to be a photo. */}
+                  <span class="atlas-sheet-plate">
+                    {record.coverImg && (
+                      <img class="atlas-sheet-thumb" src={atWidth(record.coverImg, 56)!}
+                           srcset={srcsetFor(record.coverImg, 56) ?? undefined}
+                           alt="" loading="lazy" decoding="async" width="56" height="56" />
+                    )}
+                    <span class="atlas-sheet-num">{record.ordinal != null ? String(record.ordinal).padStart(2, "0") : "—"}</span>
+                  </span>
                   <span class="atlas-sheet-body">
                     <span class="atlas-sheet-title">{g.data.title}</span>
                     <span class="atlas-sheet-cities">{cities}{dayCount > 0 ? ` · ${dayCount} days` : ""}</span>

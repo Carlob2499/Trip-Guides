@@ -71,4 +71,47 @@ export function initAtlasSearch(root) {
     input.focus();
     runQuery();
   });
+
+  /* ── Collapse to an icon (creator, 2026-08-08) ────────────────────────────────────
+     The sticky header followed the reader down a list of four trips at ~110px tall. It is
+     a 44px toggle now, and the field opens over it.
+
+     The default is set HERE rather than in the markup on purpose: the server ships the
+     field expanded and the toggle hidden, so a reader whose JS never arrives gets a plain
+     working search box instead of a button wired to nothing. The moment this module runs,
+     the toggle appears and the field folds away.
+
+     It re-opens itself whenever there is a query to show — a collapse that could hide live
+     results would be a search box that eats what you typed. */
+  const head = root.querySelector("[data-atlas-searchhead]") || input.closest(".atlas-tablehead");
+  const toggle = root.querySelector("[data-atlas-search-toggle]");
+  if (head && toggle) {
+    const setOpen = (open, focus) => {
+      head.toggleAttribute("data-collapsed", !open);
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      if (open && focus) input.focus();
+    };
+    toggle.hidden = false;
+    setOpen(false, false);
+
+    toggle.addEventListener("click", () => {
+      setOpen(head.hasAttribute("data-collapsed"), true);
+    });
+    input.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape") return;
+      // Escape on a non-empty field clears first, the way a browser's own search input
+      // behaves; a second Escape folds it away. Collapsing on the first press would throw
+      // away a query the reader may have meant to edit.
+      if (input.value) { input.value = ""; runQuery(); return; }
+      setOpen(false, false);
+      toggle.focus();
+    });
+    input.addEventListener("blur", () => {
+      // Give a click on a result time to land before folding.
+      setTimeout(() => {
+        if (input.value || head.contains(document.activeElement)) return;
+        setOpen(false, false);
+      }, 160);
+    });
+  }
 }
