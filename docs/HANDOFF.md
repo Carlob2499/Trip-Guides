@@ -24,69 +24,61 @@
   **`docs/PLAN_ATLAS_MIGRATION.md`** (the current work order — its own Progress ledger is the
   source of truth for which stage is next; read that before re-deriving status from git log).
 
-## Snapshot (2026-08-09 — the Atlas migration is **DONE**: Stages F and G both closed)
+## Snapshot (2026-08-09 — the creator's 11-point list, nine fixed in nine commits)
 
-Thirteen commits, one per feature plus the closeout. The headline is not the restyling.
+The creator opened with "you broke quite a few features" and eleven numbered complaints. Two
+were not breakage at all and one was not mine, which matters more than the count.
 
-**Six of the twelve features hid a real defect, and every one needed measuring to see.** White
-on the dark green at 2.73:1 (learnings). The over-budget verdict at 3.57:1, with a dark palette
-behind a bare `prefers-color-scheme` query so the theme TOGGLE never reached it. The
-change-request submit button at 1.45–2.30:1 on hover — on every guide, both themes. The About
-page's contour ground at 3.84:1 in dark, because overlapping polyline strokes compound. Two
-`.pal-hint` rules sharing one class, so the palette footer's border drew across every result
-row. And `var(--line)` / `var(--space-*)` reads that nothing declares, which CSS does not error
-on: the declaration is simply invalid and falls back, silently.
+**The worst one was reported as cosmetic and was destroying text.** "The Day by Day activity
+card section is broken and looks janky, goes out-of-space." `.pnl-body` is a grid that exists
+only to animate rows 1fr→0fr on collapse, and its COLUMN was never declared — an `auto` track
+whose floor is its content's min-content width. Measured on korea/Transit at 375px: the body
+box 347px, its own column 529px. And `body` is `overflow-x: clip`, so the 182px hanging off was
+not scrollable, it was CUT. Every paragraph in the panel had already wrapped to the wider
+measure, so each line lost its ending with no gesture that could reveal it — "fly into and out
+of T". A figure at the top of a card was deleting prose three elements below it. Three
+contributing causes, all the same shape (route rail, `.venue-pill`, `.hint-bubble`), and no
+gate could see any of it: the unit suites lay nothing out and axe does not measure geometry.
+`tests/visual/no-h-overflow.spec.ts` is that gate now, and it names the offending selector.
 
-**Two MOTION.md rule-7 violations went with them.** The reading spine set `style.height` from
-the scroll listener; `/progress/` set `style.width` from its poll tick. Both are transforms
-driven by a custom property now (`--spine-fill`, `--pg-progress`).
+**Two bugs turned out to be bigger underneath than on the surface**, both found by writing the
+test rather than by reading the code. `resetView()` had no caller when a pin sheet closed — and
+also did not work AT ALL during a flight, because flyTo's rAF step rewrote `_targetK` every
+frame, which is exactly the 1100ms window in which someone opens a sheet and closes it. And the
+bottom sheets never declared `touch-action`, so one downward swipe had three claimants (sheet
+drag, page scroll, pull-to-refresh) and which won depended on where the thumb landed.
 
-**The recurring finding, worth carrying:** every surface that opens on a GESTURE had never been
-scanned by the a11y gate, because axe skips hidden nodes. Share panel, story mode, palette —
-and the SOS sheet before them. Four for four. Each got a scoped axe test in its own spec file,
-which is the right shape: folding them into the whole-page gate does not work, because a panel
-that ships its own scrim makes every other element's background unresolvable.
+**The Korea budget was not lost.** A guide that gains a `roomId` switches source of truth:
+autoConnect() joins the room and never calls load(). Korea gained one in f50ca17, so a ledger
+typed during the trip is still in localStorage on whichever device typed it, unread, behind an
+empty room. persist() refuses to write while `room` is set, so it was never at risk — only
+invisible. It is now offered back, and only into an EMPTY room, because merging two solo
+ledgers silently picks a winner. The identity remap is the real risk and is pure and tested
+(`rekeyForRoom`, 6 cases): a room mints its own ids, and a missed reference leaves every amount
+intact, every total correct, and only the BALANCES quietly wrong.
 
-**Two gates were written this arc and both earned it.** `src/styles/var-defined.test.ts` fails
-any `var()` nothing declares — it found the `--space-*` reads immediately, then caught Stage G's
-own token deletion breaking the preview pages. `atlas-tokens.test.ts` gained the `--on-green`
-contract, including an assertion that plain `#fff` would fail.
+**The prose complaint got a gate, not an opinion.** Thresholds are measured from the corpus —
+1087 shipped paragraphs, median 28 words, p75 48, p95 104 — so the ceiling is the distribution's
+own tail, not my taste. Existing debt (43 offences) is a recorded baseline that can only shrink,
+because reshaping a verified guide's prose is a content edit under the continuity discipline,
+not something a lint script does to four trips behind anyone's back. Craft rules the gate cannot
+check live beside it in the skill.
 
-**Stage G deleted the `--r-*` ladder** rather than deprecating it — nine stylesheets and
-twenty-six sites the feature stage never touched, including `guide.css`'s own `.card`.
-Containers to 0, controls to 999px. `src/styles/progress-preview/` keeps the ladder, declared
-locally: those are unshipped design studies drawn in the pre-Atlas language.
-
-Also closed: DESIGN.md reconciled against what `check-drift` actually enforces; the masthead's
-`view-transition-name:accent-<slug>` removed (its partner was the retired hub card, so it was
-animating alone); MOTION.md rule 7 and ARCHITECTURE.md updated; `npm audit` 0.
-
-**Then a three-agent code review over the whole arc found the worst defect of the session**,
-and it predated the arc: the **What's-Next banner was shipping at 1.09:1** — near-white ink on
-near-white ground. `guide.css` declared it as an accent fill with `color:var(--bg)`;
-`overview.css`, imported after, replaced the fill with a tint and had no `.wn-text` rule. The
-banner only unhides inside the trip's own date range, so it was unreadable exactly while
-someone was travelling. Also found: `#fff` on the extracted accent (3.69:1, denmark only); a
-search collapse that left visible-but-untappable results; a ping sheet that trailed the thumb;
-and the Panel hint sitting INSIDE its heading, so every hinted panel announced the whole
-tooltip paragraph as its name. Four tests passed for the wrong reason and are repaired, each
-verified by reverting the source and watching it fail.
-
-`src/styles/on-fill.test.ts` is the new gate: ink on a token-driven fill may never be a
-literal. Third instance of that one mistake, so it got a gate rather than a third patch.
-
-Gates on every commit: build · lint 0 · typecheck 0 · 1610 unit · 170 Playwright · zero
-`src/content/guides/` diff. All CI green.
+Nine commits, `069011d..795b835`, all CI green. Every new gate verified non-vacuous by reverting
+the source and watching it fail. Zero `src/content/guides/` diff throughout — no guide content
+was touched.
 
 ## Open items
 
-- **A visual call for the creator.** SPEC-COMPONENTS rule 1 ("999px on anything you press")
-  decided two ambiguous cases the kit's screenshots could not settle, because its mobile frames
-  render empty: the mobile bottom-bar slots and the day chips are **full pills** now. Look at
-  them on a phone; if the kit meant rounded tiles, this is the one place to correct.
-- **Hub visual fidelity — still open.** Deferred twice now. The creator flagged gaps nobody has
-  catalogued; issue #46 (globe pin auto-zoom + cover-hero popup) is filed for Claude Design and
-  is not this assistant's to build.
+- **Two of the eleven are NOT done, and neither is quietly dropped.**
+  · **Print preview** (part of #8). The page-print buttons hand off to the browser's own dialog,
+    which HAS a preview; the budget sheet builds a document and prints it without ever showing
+    it. That is the real gap and it wants a preview-then-print shell — its own change, and the
+    synchronous-gesture constraint (`window.print()` must not sit behind an await) shapes it.
+  · **"Is there a need for the Next Guide?"** (#11). There is no "Next Guide" anywhere in this
+    codebase. Rather than delete something I have misidentified — ask what it is.
+- **A visual call for the creator.** SPEC-COMPONENTS rule 1 decided two ambiguous cases the
+  kit's mobile screenshots could not settle: the bottom-bar slots and day chips are full pills.
 - **Airports for Sedona/Japan** — record them WHEN flights get booked. No fact yet; don't invent.
 - Tools, `/about/` and `/new/` are not in the SW precache shell. Cover overlay does not trap
   focus. LOCAL branch `worktree-agent-a7dc7eeb397c6a368` (`5917f8f`) — keep or lose.
@@ -96,24 +88,24 @@ Gates on every commit: build · lint 0 · typecheck 0 · 1610 unit · 170 Playwr
 
 ## Where we left off
 
-**The Atlas migration is complete.** Stages A through G are all closed in
-`docs/PLAN_ATLAS_MIGRATION.md`'s ledger; that plan is now history rather than a work order.
+Nine of the creator's eleven points are fixed, verified and live. The two that are not are named
+above with the reason, not buried.
 
-**Nothing is blocked on the creator**, but one thing wants their eyes: the bottom-bar slots and
-day chips became full pills under the spec's own rule, and only they can say whether that reads
-right on the phone they actually use.
+The reusable lesson is about which complaints deserve escalation. "Looks janky" was a
+text-destroying layout bug; "the globe doesn't re-orient" was an API whose own escape hatch lost
+a race with its animation; "the split lost my data" was data that had never been lost, only
+orphaned by a source-of-truth switch. In each case the reported symptom was a smaller thing than
+the defect, and measuring — not reading the code — is what found the gap.
 
-The reviewed arc is closed: three agents over `71bb29b..HEAD`, every finding fixed.
+**Recommended next step:** ask the creator what "Next Guide" refers to, then build the
+print-preview shell for the budget sheet. After that the hub visual-fidelity pass is still the
+oldest open item.
 
-**Recommended next step:** the hub visual-fidelity pass, which is now the oldest open item —
-open by asking what looks wrong, and in parallel diff the running build against
-`docs/design-handoff/enforcement/screenshots/`. After that the backlog is ordinary product work
-again rather than migration work.
-
-**Re-prompt the creator with:** "The Atlas migration is done — all twelve features redesigned
-and the closeout landed. The interesting part wasn't the restyling: six of the twelve were
-hiding real bugs, mostly text that measured under the contrast floor in one theme only, plus two
-things animating layout on every scroll frame. Everything that opens on a gesture — share, story
-mode, the palette, SOS — turned out to have never been accessibility-scanned at all, and now is.
-One thing for you to eyeball: the mobile bottom-bar slots are full pills now. Next up is the hub
-visual pass you flagged twice."
+**Re-prompt the creator with:** "Nine of your eleven are fixed and live. The Day-by-Day one was
+worse than it looked — a panel grid column was never declared, so cards grew wider than the
+phone and `overflow-x: clip` was cutting the end off every line of prose in them; that's why
+sentences just stopped. Your Korea budget isn't gone either: it's still on the device that typed
+it, orphaned when the guide gained a shared room, and the panel now offers it back. The prose
+complaint got a real gate, with thresholds measured off your own 1087 paragraphs rather than my
+taste. Two I did NOT do: the budget sheet still prints with no preview, and I couldn't find a
+'Next Guide' anywhere in the code — what is it?"
