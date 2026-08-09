@@ -120,3 +120,9 @@
 .tools .jl-wrap{max-width:100%;margin-left:0;margin-right:0}
 .tools .jl-select{width:100%;max-width:100%}
 .tools-src{overflow-wrap:anywhere}
+
+/* A count, not a paragraph. The sentence that used to sit here moved behind the panel's
+   `?` (creator, 2026-08-08) — what stays is the one number a reader actually scans for. */
+.tools-count{font-family:var(--font-data);font-size:var(--text-caption);letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:.9rem}
+.tools-count b{color:var(--ink)}

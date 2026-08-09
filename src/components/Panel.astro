@@ -12,6 +12,7 @@
    The drag handle is a real control, wired by src/features/panel/ (ui/reorder.js):
    drag to reorder, or arrow keys on the focused handle. Like the collapse toggle it
    is only DRAWN once that wiring exists ([data-panel-reorder]) — no JS, no handle. */
+import Hint from "./Hint.astro";
 interface Props {
   /** Stable id — the key this Panel's collapsed state is stored under. */
   id: string;
@@ -42,10 +43,14 @@ interface Props {
   anchorBtn?: boolean;
   /** Heading level for the title — 2 (default) standalone, 3 under a group's h2. */
   level?: 2 | 3;
+  /* Creator ruling (2026-08-08): an explanation belongs behind a `?`, not under the title
+     taking up space. A Panel that wants to say what it IS passes that sentence here and it
+     becomes a hint beside the heading — see src/components/Hint.astro. */
+  hint?: string;
 }
 const {
   id, kicker, title, collapsed = false, fullWidth = false,
-  anchorId, cat, verifiedOn, sourceUrl, shelfLife, anchorBtn = false, level = 2,
+  anchorId, cat, verifiedOn, sourceUrl, shelfLife, anchorBtn = false, level = 2, hint,
 } = Astro.props;
 const Heading = level === 3 ? "h3" : "h2";
 /* The derived DOM ids are IDREF TARGETS (aria-controls, aria-labelledby), and aria-controls
@@ -80,7 +85,7 @@ const titleId = `pnl-title-${slug}`;
     </button>
     <div class="pnl-headings">
       {kicker && <p class="pnl-kicker">{kicker}</p>}
-      <Heading class="pnl-title" id={titleId}>{title}</Heading>
+      <Heading class="pnl-title" id={titleId}>{title}{hint && <Hint text={hint} label={title} />}</Heading>
     </div>
     {anchorBtn && anchorId && (
       <button class="anchor-btn" data-sid={anchorId} type="button"

@@ -410,7 +410,7 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
       {quick && (
         <a class="atlas-toolsrow" href={`${base}/tools/${quick.g.id}/`}>
           <span class="atlas-toolsrow-label">Trip tools</span>
-          <span>Split, jetlag, closures, reminders, route order for {quick.g.data.title} →</span>
+          <span>{quick.g.data.title} →</span>
         </a>
       )}
     </main>

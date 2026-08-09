@@ -1,0 +1,35 @@
+---
+/* A `?` that holds an explanation until it is asked for.
+
+   Creator ruling (2026-08-08): "there's WAY too much explanation on tabs — the names of
+   each tab should not warrant this much fluff text unless HOVERED OVER for an explanation
+   (maybe a ? icon) that way explanations are there but not taking up space." Applied
+   site-wide, so this component is the one place that behaviour lives.
+
+   Three ways in, because the three input methods are genuinely different:
+   · pointer  — hover the `?` (CSS only, works before any script runs);
+   · keyboard — focus it (`:focus-within`, also CSS only);
+   · touch    — tap it, which has no hover state at all, so src/scripts/hint.js toggles
+                `data-open`. That script is the ONLY part that needs JS, and without it a
+                phone reader still gets the text by focusing the button.
+
+   The text is a real `role="tooltip"` referenced by `aria-describedby`, so a screen reader
+   announces it with the control rather than needing the reader to go find it. Nothing is
+   hidden from assistive tech — this moves prose off the screen, not out of the page. */
+interface Props {
+  /** The explanation. Plain text — a hint that needs markup is a paragraph, not a hint. */
+  text: string;
+  /** Names what is being explained, for the button's accessible name. */
+  label: string;
+  /** Pin the bubble's right edge instead of its left, for a `?` near the viewport edge. */
+  align?: "start" | "end";
+}
+const { text, label, align = "start" } = Astro.props;
+// Deterministic per render, and unique enough that two hints on one line cannot collide.
+const id = `hint-${Math.abs([...(label + text)].reduce((a, c) => (a * 31 + c.charCodeAt(0)) | 0, 7)).toString(36)}`;
+---
+<span class="hint" data-hint data-align={align}>
+  <button class="hint-btn" type="button" data-hint-btn
+          aria-describedby={id} aria-expanded="false" aria-label={`What is ${label}?`}>?</button>
+  <span class="hint-bubble" id={id} role="tooltip">{text}</span>
+</span>

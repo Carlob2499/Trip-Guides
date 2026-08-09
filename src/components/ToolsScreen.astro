@@ -41,7 +41,7 @@ const rest = r.reminders.filter((i) => !i.book);
     <p class="tools-kicker">TRIP TOOLS</p>
     <h1 class="tools-title">{r.title}</h1>
     <p class="tools-dek">
-      Five tools running on this trip's own record. <a class="tools-guidelink" href={active.href}>Open the guide →</a>
+      <a class="tools-guidelink" href={active.href}>Open the guide →</a>
     </p>
 
     {/* The trip selector the README puts "in the tool rail" — a real control, styled as
@@ -63,29 +63,24 @@ const rest = r.reminders.filter((i) => !i.book);
       state and panel order are remembered per trip rather than bleeding across the picker. */}
   <div class="pnl-grid tools-grid" data-panel-grid data-panel-scope={`tools:${r.slug}`}>
     {/* ── 1. TRIP SPLIT ─────────────────────────────────────────────────── */}
-    <Panel id={`tools-split-${r.slug}`} kicker="TRIP SPLIT" title="What everyone actually spent" fullWidth>
-      <p class="tools-note">
-        This ledger is shared with the same calculator inside the guide — one record, two doors.
-        It holds what was <b>really</b> spent, which is a different question from the budget the
-        guide researched, so nothing is copied between them.
-      </p>
+    <Panel id={`tools-split-${r.slug}`} kicker="TRIP SPLIT" title="What everyone actually spent" fullWidth
+           hint="The same ledger as the calculator inside the guide — one record, two doors. It holds what was really spent, which is a different question from the budget the guide researched, so nothing is copied between them.">
       <TripSplit storeKey={r.storeKey} standalone />
     </Panel>
 
     {/* ── 2. JETLAG ─────────────────────────────────────────────────────── */}
-    <Panel id={`tools-jetlag-${r.slug}`} kicker="JETLAG" title="Landing clock">
+    <Panel id={`tools-jetlag-${r.slug}`} kicker="JETLAG" title="Landing clock"
+           hint={r.tz ? `Destination zone ${r.tz}. The offset is computed live, so it stays right across a daylight-saving change.` : "How far your body clock has to move, and how long that takes."}>
       {r.tz ? (
-        <>
-          <JetLag destTz={r.tz} open />
-          <p class="tools-src">Destination zone {r.tz} — the offset is computed live, so it stays right across a DST change.</p>
-        </>
+        <JetLag destTz={r.tz} open />
       ) : (
         <p class="tools-blank">This trip has no time zone on record yet, so there is nothing honest to calculate.</p>
       )}
     </Panel>
 
     {/* ── 3. CLOSURES ───────────────────────────────────────────────────── */}
-    <Panel id={`tools-closures-${r.slug}`} kicker="CLOSURES" title="What's shut, and when">
+    <Panel id={`tools-closures-${r.slug}`} kicker="CLOSURES" title="What's shut, and when"
+           hint="Public holidays around your dates, plus the weekly closing days this guide's own entries declare. A closure stated only in prose is not counted — reading it out of a sentence would be a guess.">
       {hol ? (
         <>
           {during.length > 0 ? (
@@ -142,14 +137,14 @@ const rest = r.reminders.filter((i) => !i.book);
         failure "open, not crowded" names. So the items with a closing DOOR are the panel,
         and the rest sit behind one disclosure: still all here, still all tickable, not all
         shouting. A <details> rather than JS, so the fold works before any script runs. */}
-    <Panel id={`tools-reminders-${r.slug}`} kicker="REMINDERS" title="Everything this trip asks you to do" fullWidth={bookAhead.length > 5}>
+    <Panel id={`tools-reminders-${r.slug}`} kicker="REMINDERS" title="Everything this trip asks you to do" fullWidth={bookAhead.length > 5}
+           hint="Every line is a checklist item the guide already carries — nothing here was written by this screen. Items with a booking deadline come first. Ticks are saved on this device.">
       {r.reminders.length > 0 ? (
         <>
-          <p class="tools-note">
+          <p class="tools-count">
             {bookAhead.length > 0
-              ? <>{bookAhead.length} of this trip's {r.reminders.length} checklist items have <b>a door that closes</b>.</>
-              : <>{r.reminders.length} checklist items, none of them time-critical.</>}
-            {" "}Every line is one the guide already carries — nothing here was written by this screen. Ticks are saved on this device.
+              ? <><b>{bookAhead.length}</b> of {r.reminders.length} have a door that closes</>
+              : <><b>{r.reminders.length}</b> items, none time-critical</>}
           </p>
           {/* The tick store wraps BOTH lists — an item does not stop being tickable for
               sitting inside the disclosure. */}
@@ -173,13 +168,11 @@ const rest = r.reminders.filter((i) => !i.book);
     </Panel>
 
     {/* ── 5. ROUTE ORDER ────────────────────────────────────────────────── */}
-    <Panel id={`tools-route-${r.slug}`} kicker="ROUTE ORDER" title="Walking the days in a sensible order" fullWidth>
+    <Panel id={`tools-route-${r.slug}`} kicker="ROUTE ORDER" title="Walking the days in a sensible order" fullWidth
+           hint="Straight-line distance between stops, not transit time — a 2 km hop across a river with one bridge is not a 2 km walk. Use it to spot a day that doubles back, not to plan minutes. Nothing is ever reordered for you.">
       {r.route.length > 0 ? (
         <>
-          <p class="tools-note">
-            Straight-line distance between stops — <b>not</b> transit time. A 2 km hop across a river
-            with one bridge is not a 2 km walk. Use this to spot a day that doubles back, not to plan minutes.
-          </p>
+          <p class="tools-count">Distances are <b>straight-line</b>, not walking time</p>
           <ul class="tools-route">
             {r.route.map((d) => (
               <li class="tools-route-day">
@@ -192,8 +185,7 @@ const rest = r.reminders.filter((i) => !i.book);
                 </ol>
                 {d.suggestion ? (
                   <p class="tools-route-sug">
-                    ↻ Visiting them <b>{d.suggestion.names.join(" → ")}</b> would be {km(d.suggestion.km)} — about {km(d.suggestion.savedKm)} less.
-                    Nothing is reordered for you; the guide's own order is what prints and exports.
+                    ↻ <b>{d.suggestion.names.join(" → ")}</b> — {km(d.suggestion.km)}, about {km(d.suggestion.savedKm)} less.
                   </p>
                 ) : (
                   <p class="tools-route-ok">Already in a sensible order — no reordering would help.</p>

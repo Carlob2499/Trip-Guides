@@ -1,0 +1,43 @@
+/* === HINT ===================================================================
+   The `?` affordance (src/components/Hint.astro). Hover and focus are pure CSS so the
+   explanation is reachable before any script runs; src/scripts/hint.js adds only the tap
+   case, which has no hover state to borrow. */
+
+.hint { position: relative; display: inline-flex; vertical-align: baseline; }
+
+.hint-btn {
+  width: 18px; height: 18px; flex: 0 0 auto;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent; border: 1px solid var(--rule2); border-radius: 999px;
+  color: var(--muted); cursor: help;
+  font-family: var(--font-data); font-size: var(--text-micro); line-height: 1;
+  padding: 0;
+}
+.hint-btn:hover { border-color: var(--accent-ink); color: var(--accent-ink); }
+.hint-btn:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+
+.hint-bubble {
+  position: absolute; z-index: 60; bottom: calc(100% + 8px); left: 0;
+  width: max-content; max-width: min(30ch, 78vw);
+  padding: 8px 10px;
+  background: var(--ink); color: var(--bg);
+  font-family: var(--font-body); font-size: var(--text-caption); line-height: 1.45;
+  letter-spacing: 0; text-transform: none; text-align: left; white-space: normal;
+  opacity: 0; pointer-events: none;
+}
+.hint[data-align="end"] .hint-bubble { left: auto; right: 0; }
+
+/* Three reveals, one rule each. `[data-open]` is the tap case (hint.js). */
+.hint:hover .hint-bubble,
+.hint:focus-within .hint-bubble,
+.hint[data-open] .hint-bubble { opacity: 1; }
+.hint[data-open] .hint-bubble { pointer-events: auto; }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Opacity only — the bubble is absolutely positioned and must not slide, or it would
+     move out from under a pointer that is already on its way to it. */
+  .hint-bubble { transition: opacity .16s linear; }
+}
+
+/* A hint inside a Panel header must not stretch the header or steal the title's baseline. */
+.pnl-headings .hint { margin-left: .45em; align-self: center; }
