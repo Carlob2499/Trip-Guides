@@ -111,3 +111,32 @@ for (const scheme of ["light", "dark"] as const) {
     expect(ratio).toBeGreaterThanOrEqual(4.5);
   });
 }
+
+/* The QR held four hex literals chosen on data-theme. They were hand-copies of --ink/--card
+   and one had drifted — the light paper was pure #ffffff, a colour this product does not use
+   (--card is #f8faf3) — so every QR was a slightly-too-white block inside its own panel. A QR
+   still scans that way, which is exactly why nothing noticed. Read live now, both themes. */
+for (const scheme of ["light", "dark"] as const) {
+  test(`the QR paints in the live theme tokens (${scheme})`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme: scheme, reducedMotion: "reduce" });
+    await page.goto(KOREA, { waitUntil: "networkidle" });
+    await page.locator("#btnShare").click();
+    const canvas = page.locator("#shareQr canvas");
+    await expect(canvas).toBeVisible();
+
+    const paper = await canvas.evaluate((el: HTMLCanvasElement) => {
+      // margin is 1 module wide, so the top-left pixel is always background ("light").
+      const d = el.getContext("2d")!.getImageData(1, 1, 1, 1).data;
+      return `rgb(${d[0]}, ${d[1]}, ${d[2]})`;
+    });
+    const card = await page.evaluate(() => {
+      const el = document.createElement("div");
+      el.style.color = getComputedStyle(document.documentElement).getPropertyValue("--card").trim();
+      document.body.appendChild(el);
+      const c = getComputedStyle(el).color;
+      el.remove();
+      return c;
+    });
+    expect(paper).toBe(card);
+  });
+}

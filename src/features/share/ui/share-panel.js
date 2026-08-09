@@ -11,6 +11,7 @@
    already used (`dataset.url || currentPageUrl()`) — every consumer of the current
    share URL now computes it fresh, none of them borrow another function's local. */
 
+import { qrColors } from "../../../scripts/util.js";
 import { buildPageUrl, buildWhatsAppShareUrl, buildMailtoUrl, buildSummaryShareText } from "../model/share-links";
 
 export function initSharePanel(lockScroll, unlockScroll) {
@@ -54,19 +55,19 @@ export function initSharePanel(lockScroll, unlockScroll) {
 
   // Render the QR for `url` into #shareQr. The generator is VENDORED (npm `qrcode`, lazy-
   // import()ed into its own chunk) — no runtime CDN, so it works offline too, unlike the old
-  // jsdelivr <script>. Draws to a canvas with the current theme's ink/paper.
+  // jsdelivr <script>. Draws to a canvas with the current theme's ink/paper, read live from the tokens
+  // (util.js's qrColors — see the note there for the bug the old literals carried).
   function renderQR(url) {
     if (!shareQrEl) return;
     shareQrEl.style.cssText = "";
     shareQrEl.innerHTML = ""; // regenerate — the section may have changed
     var canvas = document.createElement("canvas");
     shareQrEl.appendChild(canvas);
-    var dark = document.documentElement.getAttribute("data-theme") === "dark";
     import("qrcode").then(function (mod) {
       var QR = mod && (mod.default || mod);
       QR.toCanvas(canvas, url, {
         width: 148, margin: 1, errorCorrectionLevel: "M",
-        color: { dark: dark ? "#e8ece3" : "#171d24", light: dark ? "#242c34" : "#ffffff" },
+        color: qrColors(),
       }, function (err) { if (err) qrUnavailable(); });
     }).catch(qrUnavailable);
   }

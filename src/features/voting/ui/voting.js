@@ -2,7 +2,7 @@
    "Copy vote link" / QR share and the ?vote= hydrate use the tested base64url codec in
    ../model/vote-link.ts. Reuses the Budget Calculator's split / sc / se-new-card CSS. */
 
-import { esc } from "../../../scripts/util.js";
+import { esc, qrColors } from "../../../scripts/util.js";
 import { decodeVote, encodeVote, isVoteState } from "../model/vote-link";
 
 (function () {
@@ -129,12 +129,11 @@ import { decodeVote, encodeVote, isVoteState } from "../model/vote-link";
       qrEl.innerHTML = "";
       var canvas = document.createElement("canvas");
       qrEl.appendChild(canvas);
-      var dark = document.documentElement.getAttribute("data-theme") === "dark";
       import("qrcode").then(function (mod) {
         var QR = mod && (mod.default || mod);
         QR.toCanvas(canvas, voteLinkUrl(), {
           width: 148, margin: 1, errorCorrectionLevel: "M",
-          color: { dark: dark ? "#e8ece3" : "#171d24", light: dark ? "#242c34" : "#ffffff" },
+          color: qrColors(),
         }, function (err) { if (err) qrUnavailable(); });
       }).catch(qrUnavailable);
     });

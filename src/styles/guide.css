@@ -638,7 +638,7 @@ body{overflow-x:clip}
 /* Share-summary button — full-width action under the URL row */
 .share-summary-btn{width:100%;margin-bottom:.85rem;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;background:none;color:var(--muted);border:1px solid var(--rule2);border-radius:999px;padding:.5rem .6rem;cursor:pointer;transition:color .14s,border-color .14s}
 .share-summary-btn:hover{color:var(--ink);border-color:var(--ink)}
-/* QR colors are set explicitly in JS based on data-theme — no CSS inversion needed */
+/* QR colours are read live from the tokens in JS (util.js qrColors) — no CSS inversion needed */
 
 /* === SECTION DEEP LINK ======================================================= */
 /* A small # button that appears on hover next to each section title.

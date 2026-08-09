@@ -84,3 +84,23 @@ export function todayInTz(tz, now) {
     return y && m && d ? { y: y, m: m, d: d } : null;
   } catch (e) { return null; }
 }
+
+/* The ink/paper pair a QR code should be drawn in, read from the LIVE tokens.
+
+   Both QR call sites (the share panel and the voting sheet) held four hex literals and picked
+   between them on document.documentElement's data-theme. Those literals were hand-copies of
+   --ink and --card, and one had already drifted: the light-mode paper was pure #ffffff, which
+   is not a colour this product uses anywhere — --card is #f8faf3 — so every QR sat as a
+   slightly-too-white block inside its own panel. Copies of tokens rot exactly this way, and
+   nothing notices, because a QR still scans.
+
+   getComputedStyle reads the token itself, so there is one source of truth and the code no
+   longer has to know how the theme was decided. */
+export function qrColors() {
+  var cs = getComputedStyle(document.documentElement);
+  var read = function (name, fallback) {
+    var v = cs.getPropertyValue(name).trim();
+    return v || fallback;
+  };
+  return { dark: read("--ink", "#171d24"), light: read("--card", "#f8faf3") };
+}
