@@ -423,13 +423,20 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
                       surface, not a second source of truth. A guide with no cover keeps the
                       number alone on a plain plate — an honest blank, not a grey placeholder
                       pretending to be a photo. */}
+                  {/* The plate is the PHOTO now, nothing else (creator, 2026-08-09: "the guide
+                      table view has the cover hero but it's covered by the guide number — is
+                      there really a need?"). It is 56px square; a stamped badge with its own
+                      opaque ground was taking a corner out of an already tiny image, and the
+                      survey number does not need to sit on the plate to be a survey number.
+                      A guide with no cover still gets an empty plate rather than a grey
+                      placeholder — the honest blank the original note asked for, which reads
+                      as an unfilled slot in an archive rather than a photo that failed. */}
                   <span class="atlas-sheet-plate">
                     {record.coverImg && (
                       <img class="atlas-sheet-thumb" src={atWidth(record.coverImg, 56)!}
                            srcset={srcsetFor(record.coverImg, 56) ?? undefined}
                            alt="" loading="lazy" decoding="async" width="56" height="56" />
                     )}
-                    <span class="atlas-sheet-num">{record.ordinal != null ? String(record.ordinal).padStart(2, "0") : "—"}</span>
                   </span>
                   <span class="atlas-sheet-body">
                     <span class="atlas-sheet-title">{g.data.title}</span>
@@ -438,6 +445,10 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
                   </span>
                   {stamp && <span class={`atlas-stamp ${stamp.cls}`}>{stamp.label}</span>}
                   {cc && <span class="atlas-quick-meta" aria-hidden="true">{cc}</span>}
+                  {/* Moved off the plate to here, beside the other row data. Same position on
+                      every row whether or not that guide has a cover, which the on-plate
+                      version could not manage. */}
+                  <span class="atlas-sheet-num">{record.ordinal != null ? String(record.ordinal).padStart(2, "0") : "—"}</span>
                 </a>
               </li>
             );

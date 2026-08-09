@@ -19,10 +19,21 @@
   .atlas-header-btn--tools { display: none; }
   .atlas-header-btn-label { display: none; }
 
-  /* D5: "a permanent WORLD | TABLE segmented switch" — full-bleed and prominent on a phone,
-     unlike the compact desktop button pair it sits alongside in the header. */
-  .atlas-toggle { width: 100%; margin-top: 8px; }
-  .atlas-toggle-btn { flex: 1; min-height: 44px; padding: 0; }
+  /* D5 asked for "a permanent WORLD | TABLE segmented switch" and this took that as full-bleed:
+     `width:100%` pushed it onto a row of its own, so the phone header spent THREE rows before
+     the globe got a pixel — brand, then a full-width bar, then nothing else on that line
+     (creator, 2026-08-09: "the World/Table view is too big and should fill up the space ...
+     give more space to the globe").
+
+     Permanent is about presence, not size. The brand takes the full width it was already
+     using, and the switch shares the second row with the two buttons that were sitting on it
+     alone — one row recovered, straight into the globe, and the header reads as one block
+     across the screen instead of a stack of three unequal ones. Each button keeps its 44px
+     touch height; only the wasted horizontal run is given back. */
+  .atlas-brand { flex: 1 1 100%; }
+  .atlas-toggle { flex: 1 1 auto; margin-top: 8px; }
+  .atlas-toggle-btn { flex: 1; min-height: 44px; padding: 0 14px; }
+  .atlas-header-actions { margin-top: 8px; }
 
   /* No spatial budget for the desktop rails, floating pincards, or motto. */
   .atlas-ov-index, .atlas-ov-key, .atlas-ov-record, .atlas-ov-controls, .atlas-ov-motto,
@@ -160,9 +171,18 @@
   .atlas-dock {
     position: absolute; z-index: 5;
     left: max(12px, var(--safe-left)); right: max(12px, var(--safe-right));
-    bottom: calc(12px + var(--safe-bottom));
-    /* Clear of the FAB, which owns the bottom-right corner. */
-    margin-right: 64px;
+    /* The dock used to clear the FAB SIDEWAYS (`margin-right: 64px`), which left a
+       full-width-looking card with a 64px bite taken out of one corner and a circle floating in
+       the gap — read as broken symmetry rather than as two controls (creator, 2026-08-09: "the
+       header for the guide is right next to a teensy round menu button ... that looks worse
+       symmetrically. The header should encompass the entire width of the screen").
+
+       Stacking instead of abutting gives both of them what they want: the dock spans the screen
+       edge to edge, and the FAB keeps the bottom-right corner, which is the best place on a
+       phone for a thumb and not worth trading away for symmetry. The dock simply sits above it.
+       Kept as one expression so the two cannot drift apart — the FAB is 52px and owns the 12px
+       gutter below it. */
+    bottom: calc(12px + var(--safe-bottom) + 52px + 10px);
     background: var(--card); border: 1px solid var(--rule2);
   }
   .atlas-dock[hidden] { display: none; }

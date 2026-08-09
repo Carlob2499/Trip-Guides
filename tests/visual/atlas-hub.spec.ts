@@ -108,6 +108,11 @@ test("every trip row carries its own cover plate, asked for at plate size", asyn
     await expect(rows.nth(i).locator(".atlas-sheet-plate")).toBeAttached();
     // The survey number survives the photo — it is the guide's D6 ordinal, not decoration.
     await expect(rows.nth(i).locator(".atlas-sheet-num")).toBeAttached();
+    /* ...but not ON it. The plate is 56px square and the number used to be stamped into a
+       corner of it with its own opaque ground, eating part of the one image in the row
+       (creator, 2026-08-09). Asserting the containment, not the pixels: "is it inside the
+       plate" is the thing that was wrong and it cannot drift back silently. */
+    await expect(rows.nth(i).locator(".atlas-sheet-plate .atlas-sheet-num")).toHaveCount(0);
   }
   // A 56px plate must not be pulling full-size originals (Nyhavn is 258 KB unresized).
   const srcs = await page.locator(".atlas-sheet-thumb").evaluateAll((els) =>
@@ -335,4 +340,54 @@ test("closing the ping sheet returns the globe to the world and lets it spin aga
   expect(after.targetK, "the globe is still zoomed into a guide nobody has selected").toBe(after.R);
   expect(after.target, "the dismissed guide is still the map's target").toBeFalsy();
   expect(after.hold, "the spin is still held after the selection cleared").toBeFalsy();
+});
+
+/* The phone header spent three rows before the globe got a pixel: brand, then a full-bleed
+   WORLD|TABLE bar on a line of its own, then the two buttons on another (creator, 2026-08-09:
+   "the World/Table view is too big and should fill up the space ... give more space to the
+   globe"). D5's "permanent" switch is about presence, not width.
+
+   Asserted as a ROW SHARE rather than a pixel height: heights drift with fonts and safe-area
+   insets, but "these two are on the same line" is exactly the thing that was wrong. */
+test("mobile: the view switch shares its row with the header buttons", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.addInitScript(() => sessionStorage.setItem("tg-atlas-cover-seen", "1"));
+  await page.goto(HUB, { waitUntil: "networkidle" });
+
+  const box = async (sel: string) => (await page.locator(sel).boundingBox())!;
+  const [brand, toggle, actions, header] = await Promise.all([
+    box(".atlas-brand"), box(".atlas-toggle"), box(".atlas-header-actions"), box(".atlas-header"),
+  ]);
+
+  // Same line: their vertical spans overlap. Not equal tops — the buttons are shorter than the
+  // 44px switch and sit centred against it.
+  expect(toggle.y < actions.y + actions.height && actions.y < toggle.y + toggle.height).toBe(true);
+  // ...and the switch is no longer full-bleed, which is what forced the extra row.
+  expect(toggle.width).toBeLessThan(header.width * 0.8);
+  // The brand still gets the full width, so the header reads as one block, not a ragged stack.
+  expect(brand.y + brand.height).toBeLessThanOrEqual(toggle.y);
+});
+
+/* The globe dock cleared the FAB SIDEWAYS with `margin-right: 64px`, so a card that looked
+   full-width had a bite out of one corner with a circle floating in it — the asymmetry the
+   creator flagged. Stacking gives the dock the whole width and leaves the FAB the bottom-right
+   corner, which is the best place on a phone for a thumb. */
+test("mobile: the globe dock spans the screen and clears the FAB by stacking, not by inset", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.addInitScript(() => sessionStorage.setItem("tg-atlas-cover-seen", "1"));
+  await page.goto(HUB, { waitUntil: "networkidle" });
+  await page.locator('[data-atlas-mode-btn="world"]').click();
+
+  const dock = page.locator("[data-atlas-dock]");
+  await expect(dock).toBeVisible();
+  const d = (await dock.boundingBox())!;
+  const f = (await page.locator(".atlas-menufab").boundingBox())!;
+
+  // Symmetric: equal gutters either side, rather than 12px one side and 76px the other.
+  expect(Math.round(d.x)).toBeCloseTo(Math.round(375 - (d.x + d.width)), -1);
+  expect(d.width).toBeGreaterThan(375 * 0.9);
+  // Stacked, not overlapping — the dock ends above the FAB.
+  expect(d.y + d.height).toBeLessThanOrEqual(f.y);
+  // The FAB kept the corner.
+  expect(f.x + f.width).toBeGreaterThan(375 * 0.8);
 });
