@@ -206,6 +206,12 @@ const DAY_SCRUB_STICKY_RANGE_WHY =
   "= 11.82:1, the same --ink-on---card pair proven safe everywhere else. Mobile-only because the " +
   "single-column stack makes the forced-open page far taller than desktop's multi-column layout, " +
   "giving the sticky bar's flagged reach more distant content to fall across.";
+const AB_CONTOUR_WHY =
+  "/about/'s decorative .ab-contours layer in the background chain — the same mechanism already " +
+  "documented for the hub and /new. Composite measured by sampling the layer with all other " +
+  "content hidden: worst real pixel #2b3130 dark / #dfe4d8 light, weakest text pair --accent-ink " +
+  "at 4.81:1 dark and 6.54:1 light. That measurement is what caught the layer being too bright " +
+  "in dark mode (3.84:1) and is why about.css halves its opacity.";
 const FRAME_TESTED_WHY =
   "axe-core hardcodes `isViolation:false` for this check (confirmed in the installed package's own " +
   "source) — it can never resolve pass/fail for a cross-origin OpenStreetMap iframe it has no way to " +
@@ -347,6 +353,24 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     "color-contrast/default": { max: 1, why: DAY_SWIPE_CLIPPED_WHY },
     "frame-tested/default": { max: 3, why: FRAME_TESTED_WHY },
   },
+  /* Stage F feature 5 — /about/'s first audit. Every one of these is the decorative
+     .ab-contours layer in the background chain: axe declines to rate text with an image node
+     behind it (imgNode), reads the absolutely-positioned layer as an overlapping sibling
+     (bgOverlap on the wordmark pill, elmPartiallyObscuring on the hero prose), and won't rate
+     a single tabular digit's ink coverage (shortTextContent on the stat numerals).
+
+     Measured rather than assumed, and the measurement CHANGED THE CODE: sampling the contour
+     layer with everything else hidden showed the overlapping polyline sets compound to a
+     worst-case dark pixel of #3b403d, where --accent-ink sat at 3.84:1 and --muted at 4.04:1
+     — under 4.5, invisibly. The layer now runs the hub's recipe at half opacity (see
+     about.css), worst real pixel #2b3130 dark / #dfe4d8 light, and the weakest pair on the
+     page is --accent-ink at 4.81:1 dark, 6.54:1 light. Everything else clears 5.8:1 or better. */
+  about: {
+    "color-contrast/imgNode": { max: 11, why: AB_CONTOUR_WHY },
+    "color-contrast/bgOverlap": { max: 1, why: AB_CONTOUR_WHY },
+    "color-contrast/elmPartiallyObscuring": { max: 3, why: AB_CONTOUR_WHY },
+    "color-contrast/shortTextContent": { max: 3, why: AB_CONTOUR_WHY },
+  },
   "denmark guide": {
     "color-contrast/bgOverlap": {
       // 39 -> 47: +8, denmark's 8 tab buttons, per (c) in the why. CI reported 47 desktop / 43
@@ -477,6 +501,11 @@ for (const [name, path] of [
   ["denmark guide", "/Trip-Guides/guides/denmark/"],
   ["new intake", "/Trip-Guides/new/"], // R4: the composed intake — gated from birth
   ["trip tools", "/Trip-Guides/tools/korea/"], // Stage E: the standalone Tools screen
+  // Stage F feature 5. Two whole pages this gate had simply never visited — /about/ is the
+  // page the product explains itself on, /health/ is the one that tells the maker what is
+  // and isn't working, and neither had been audited once.
+  ["about", "/Trip-Guides/about/"],
+  ["health", "/Trip-Guides/health/"],
 ] as const) {
   for (const { scheme, vp } of COMBOS) {
     test(`a11y — ${name} (${scheme}, ${vp.label})`, async ({ page }) => {

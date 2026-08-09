@@ -11,11 +11,18 @@
 .hl-intro a{color:var(--accent-ink)}
 
 /* Legend + "what green means" caveat */
-.hl-note{background:var(--bg2);border:1px solid var(--rule);border-radius:var(--r-md);padding:.85rem 1rem;font-size:var(--text-small);line-height:1.5;color:var(--muted);margin:0 0 2rem}
+.hl-note{background:var(--bg2);border:1px solid var(--rule);border-radius:0;padding:.85rem 1rem;font-size:var(--text-small);line-height:1.5;color:var(--muted);margin:0 0 2rem}
 .hl-note b{color:var(--ink)}
 
-/* The headline live-site card */
-.hl-hero{background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--green);border-radius:var(--r-lg);padding:1.2rem 1.3rem;margin:0 0 2rem}
+/* Atlas re-expression (Stage F, feature 5). Status used to be a 4px coloured stripe down the
+   left edge of every row — a third border weight, which this system does not have (hairline
+   1px, or 2px oxide on exactly four structural things), and a colour-only carrier besides.
+   SPEC-COMPONENTS §6 is explicit: never a coloured dot without the word, the word IS the
+   accessible carrier. So the stripe and the dot are both gone and the status is a stamp —
+   square, 1px of its own ink, Source Sans 640 at .08em. The verdict paragraph lost its bold
+   lead-in with them: the stamp says "PROVEN" once, and a sentence repeating it underneath is
+   the same datum rendered twice as if it were two things. */
+.hl-hero{background:var(--card);border:1px solid var(--rule);border-radius:0;padding:1.2rem 1.3rem;margin:0 0 2rem}
 .hl-hero-row{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:.5rem}
 .hl-hero-title{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);margin:0}
 .hl-hero p{margin:.2rem 0 0;color:var(--muted);font-size:var(--text-small);line-height:1.55}
@@ -29,23 +36,24 @@
 
 /* Each automation row */
 .hl-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.7rem}
-.hl-item{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md);padding:1rem 1.1rem;border-left:4px solid var(--rule2)}
-.hl-item.is-proven{border-left-color:var(--green)}
-.hl-item.is-unproven{border-left-color:var(--warn)}
-.hl-item.is-support{border-left-color:var(--rule2)}
+.hl-item{background:var(--card);border:1px solid var(--rule);border-radius:0;padding:1rem 1.1rem}
+
+/* The stamp (SPEC-COMPONENTS §6 typography: Source Sans 3, .82rem, .08em, 640, 1px of its
+   own ink, square). The spec writes the size as .82rem; --text-control renders that exact value,
+   so the token carries it rather than a literal the type-scale gate would have to except.
+   --green and --warn are already contrast-tested on --card; support has no
+   colour of its own because "support" is not a health verdict, it is a category. */
+.hl-stamp{flex:none;font-family:var(--font-data);font-size:var(--text-control);letter-spacing:.08em;font-weight:640;text-transform:uppercase;padding:.2rem .5rem;border:1px solid currentColor;border-radius:0;white-space:nowrap}
+.hl-stamp.s-proven{color:var(--green)}
+.hl-stamp.s-unproven{color:var(--warn)}
+.hl-stamp.s-support{color:var(--muted)}
 
 .hl-item-top{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap}
 .hl-item-name{font-family:var(--font-data);font-size:var(--text-small);font-weight:700;color:var(--ink)}
 .hl-item-name a{color:inherit;text-decoration:none;border-bottom:1px dotted var(--rule2)}
 .hl-item-name a:hover{color:var(--accent-ink);border-bottom-color:var(--accent)}
 .hl-item-desc{color:var(--muted);font-size:var(--text-small);line-height:1.5;margin:.5rem 0 0}
-.hl-verdict{margin:.6rem 0 0;font-size:var(--text-control);line-height:1.5;display:flex;gap:.5rem;align-items:baseline}
-.hl-verdict .dot{flex:none;width:.55rem;height:.55rem;border-radius:50%;margin-top:.35rem}
-.hl-verdict.v-proven .dot{background:var(--green)}
-.hl-verdict.v-unproven .dot{background:var(--warn)}
-.hl-verdict.v-support .dot{background:var(--rule2)}
-.hl-verdict b{color:var(--ink);font-weight:700}
-.hl-verdict span{color:var(--muted)}
+.hl-verdict{margin:.6rem 0 0;font-size:var(--text-control);line-height:1.5;color:var(--muted)}
 
 .hl-home-link{display:inline-block;margin-top:2.4rem;font-family:var(--font-data);font-size:var(--text-control);color:var(--muted);text-decoration:none}
 .hl-home-link:hover{color:var(--accent-ink)}

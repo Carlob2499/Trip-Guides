@@ -13,8 +13,17 @@
 
 /* Faint contour backdrop behind the hero — the overture's cartography, quieter. */
 .ab-contours{position:absolute;inset:0 0 auto 0;height:520px;overflow:hidden;pointer-events:none;z-index:0}
-.ab-contours svg{position:absolute;width:130%;left:-15%;top:-10%;opacity:.35}
-.ab-contours polyline{fill:none;stroke:var(--rule);stroke-width:1}
+.ab-contours svg{position:absolute;width:130%;left:-15%;top:-10%;opacity:.5}
+/* The contour ground, measured rather than eyeballed (2026-08-09, once the a11y gate started
+   visiting this page). Nothing here rendered visibly wrong; it only shows up in the composite.
+   The layer is several overlapping polyline sets, so the strokes COMPOUND — a pixel where three
+   contours cross is far brighter than one stroke's alpha suggests, and in dark mode that pixel
+   reached #3b403d, where --accent-ink measured 3.84:1 and --muted 4.04:1. Both under 4.5.
+   Now the hub's own recipe (--muted at 16%, 1.1px) at half layer opacity: the worst real pixel
+   is #2b3130 dark / #dfe4d8 light, and the weakest pair on the page is --accent-ink at 4.81:1
+   dark, 6.54:1 light. Verified by sampling the layer with everything else hidden — sampling it
+   with the content merely made transparent measures the CARDS, not the ground. */
+.ab-contours polyline{fill:none;stroke:color-mix(in srgb,var(--muted) 16%,transparent);stroke-width:1.1}
 
 .ab-hero{position:relative;z-index:1;padding:3.5rem 0 2.6rem;max-width:46rem}
 .ab-eyebrow{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink);margin-bottom:1rem}
@@ -34,16 +43,20 @@
 .ab-sec-head::after{content:"";display:block;width:64px;height:3px;margin-top:.65rem;background:linear-gradient(to right,var(--accent) 0 40%,transparent 40% 50%,var(--accent) 50% 100%)}
 .ab-sec-sub{margin-top:.8rem;color:var(--muted);max-width:44rem;text-wrap:pretty}
 
+/* Atlas re-expression (Stage F, feature 5): the value cards, legend rows and CTA go square.
+   Everything else on this page was already token-clean — the contour backdrop, the neatline
+   under section titles and the vertical route are the system's own idioms, not drift. */
+
 /* --- The four promises ---------------------------------------------------- */
 .ab-values{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:1.8rem}
 @media(max-width:720px){.ab-values{grid-template-columns:1fr}}
-.ab-value{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-lg);padding:1.4rem 1.5rem 1.5rem;position:relative}
+.ab-value{background:var(--card);border:1px solid var(--rule);border-radius:0;padding:1.4rem 1.5rem 1.5rem;position:relative}
 .ab-value-mark{font-family:var(--font-display);font-size:var(--text-h3);font-weight:420;color:var(--accent-ink);line-height:1.15;text-wrap:balance;letter-spacing:-.01em;margin-bottom:.6rem}
 .ab-value p{font-size:var(--text-small);line-height:1.65;color:var(--muted);text-wrap:pretty}
 
 /* --- Read the marks (provenance legend) ----------------------------------- */
 .ab-legend{display:grid;gap:.8rem;margin-top:1.8rem;max-width:46rem}
-.ab-legend-row{display:flex;align-items:baseline;gap:1rem;padding:.85rem 1rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md)}
+.ab-legend-row{display:flex;align-items:baseline;gap:1rem;padding:.85rem 1rem;background:var(--card);border:1px solid var(--rule);border-radius:0}
 .ab-legend-chip{flex:0 0 auto;font-family:var(--font-data);font-size:var(--text-control-sm);padding:.3rem .7rem;border-radius:999px;border:1px solid var(--rule2);background:var(--bg);color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
 .ab-legend-chip.is-warn{color:var(--warn);border-color:currentColor}
 .ab-legend-chip.is-ok{color:var(--green);border-color:currentColor}
@@ -68,7 +81,7 @@
 .ab-stop p b{color:var(--ink);font-weight:600}
 
 /* --- CTA ------------------------------------------------------------------ */
-.ab-cta{margin-top:4rem;padding:2.2rem 1.6rem;text-align:center;border:1px solid var(--rule);border-radius:var(--r-lg);background:var(--card)}
+.ab-cta{margin-top:4rem;padding:2.2rem 1.6rem;text-align:center;border:1px solid var(--rule);border-radius:0;background:var(--card)}
 .ab-cta p{color:var(--muted);max-width:34rem;margin:0 auto;text-wrap:pretty}
 .ab-cta-btn{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.2rem;padding:.8rem 1.5rem;min-height:44px;border-radius:999px;background:var(--accent);color:var(--on-accent);font-family:var(--font-data);font-size:var(--text-control);letter-spacing:.04em;text-decoration:none;transition:transform var(--dur-tap) var(--ease-spring)}
 .ab-cta-btn:hover{transform:translateY(-1px)}

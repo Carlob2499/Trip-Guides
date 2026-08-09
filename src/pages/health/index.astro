@@ -111,8 +111,12 @@ const support: Flow[] = [
   },
 ];
 
-const verdictClass: Record<State, string> = { proven: "v-proven", unproven: "v-unproven", support: "v-support" };
-const verdictLabel: Record<State, string> = { proven: "Proven", unproven: "Not proven yet", support: "Support" };
+/* The status stamp (SPEC-COMPONENTS §6). The WORD is the accessible carrier — this page used
+   to lean on a coloured left stripe and a coloured dot, which say nothing to a reader who
+   cannot see the colour. The stamp replaces both, and the verdict sentence below no longer
+   repeats the label it already shows. */
+const stampClass: Record<State, string> = { proven: "s-proven", unproven: "s-unproven", support: "s-support" };
+const stampLabel: Record<State, string> = { proven: "Proven", unproven: "Not proven yet", support: "Support" };
 ---
 
 <!doctype html>
@@ -126,7 +130,10 @@ const verdictLabel: Record<State, string> = { proven: "Proven", unproven: "Not p
     <PwaHead />
   </head>
   <body>
-    <div class="hl-wrap">
+    <!-- Was a bare <div>. Every other page on the site puts its content in a landmark; this one
+         did not, so a screen-reader user had no way to skip the chrome and the a11y gate's own
+         vacuity guard (which samples `main a, main h2, …`) found nothing here to audit at all. -->
+    <main class="hl-wrap">
       <p class="hl-kicker">Behind the scenes</p>
       <h1 class="hl-head">Pipeline health</h1>
       <p class="hl-intro">
@@ -163,15 +170,13 @@ const verdictLabel: Record<State, string> = { proven: "Proven", unproven: "Not p
           <li class={`hl-item is-${f.state}`}>
             <div class="hl-item-top">
               <span class="hl-item-name"><a href={runsUrl(f.file)} target="_blank" rel="noopener">{f.name}</a></span>
+              <span class={`hl-stamp ${stampClass[f.state]}`}>{stampLabel[f.state]}</span>
               <a class="hl-badge" href={runsUrl(f.file)} target="_blank" rel="noopener">
                 <img src={badge(f.file)} alt={`${f.name} workflow status`} width="120" height="20" loading="lazy" />
               </a>
             </div>
             <p class="hl-item-desc">{f.desc}</p>
-            <p class={`hl-verdict ${verdictClass[f.state]}`}>
-              <span class="dot"></span>
-              <span><b>{verdictLabel[f.state]}.</b> {f.verdict}</span>
-            </p>
+            <p class="hl-verdict">{f.verdict}</p>
           </li>
         ))}
       </ul>
@@ -183,15 +188,13 @@ const verdictLabel: Record<State, string> = { proven: "Proven", unproven: "Not p
           <li class={`hl-item is-${f.state}`}>
             <div class="hl-item-top">
               <span class="hl-item-name"><a href={runsUrl(f.file)} target="_blank" rel="noopener">{f.name}</a></span>
+              <span class={`hl-stamp ${stampClass[f.state]}`}>{stampLabel[f.state]}</span>
               <a class="hl-badge" href={runsUrl(f.file)} target="_blank" rel="noopener">
                 <img src={badge(f.file)} alt={`${f.name} workflow status`} width="120" height="20" loading="lazy" />
               </a>
             </div>
             <p class="hl-item-desc">{f.desc}</p>
-            <p class={`hl-verdict ${verdictClass[f.state]}`}>
-              <span class="dot"></span>
-              <span><b>{verdictLabel[f.state]}.</b> {f.verdict}</span>
-            </p>
+            <p class="hl-verdict">{f.verdict}</p>
           </li>
         ))}
       </ul>
@@ -199,6 +202,6 @@ const verdictLabel: Record<State, string> = { proven: "Proven", unproven: "Not p
       <p class="hl-asof">Status badges are live from GitHub · role &amp; verdict notes last reviewed 2026-07-20</p>
       <br />
       <a class="hl-home-link" href={`${base}/`}>← Back to all guides</a>
-    </div>
+    </main>
   </body>
 </html>
