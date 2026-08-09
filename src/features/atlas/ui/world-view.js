@@ -7,6 +7,7 @@ import "./atlas-map.js";
 import { solvePlacement } from "../model/solver";
 import { localClockLabel } from "../model/local-time";
 import { attachSheetDrag } from "../../../scripts/sheet-drag.js";
+import { atWidth, srcsetFor } from "../../../lib/img-width";
 
 const CARD_W = 220;
 const CARD_FULL_H = 140;
@@ -163,6 +164,7 @@ export function initAtlasWorld(root = document) {
   const pingTitle = root.querySelector("[data-atlas-pingsheet-title]");
   const pingMeta = root.querySelector("[data-atlas-pingsheet-meta]");
   const pingOpen = root.querySelector("[data-atlas-pingsheet-open]");
+  const pingThumb = root.querySelector("[data-atlas-pingsheet-thumb]");
   const STATUS_LABEL_PING = { past: "SURVEYED", ongoing: "ON THIS TRIP NOW", upcoming: "FILED", undated: "" };
   function showPingSheet(g) {
     if (!pingSheet) { window.location.href = g.href; return; }
@@ -170,6 +172,19 @@ export function initAtlasWorld(root = document) {
     if (pingTitle) pingTitle.textContent = g.name;
     if (pingMeta) pingMeta.textContent = [STATUS_LABEL_PING[g.status], g.tz ? localClockLabel(g.tz, new Date()) : null].filter(Boolean).join(" · ");
     if (pingOpen) pingOpen.href = g.href;
+    /* The cover, at the size it is actually drawn. atWidth/srcsetFor are the same helpers the
+       table rows use, so a Commons file is requested resized rather than pulled full-size — a
+       64px thumbnail must not fetch a 258 KB original. No cover means no frame at all: an
+       honest blank beats a grey placeholder pretending to be a photo. */
+    if (pingThumb) {
+      const src = atWidth(g.coverImg, 64);
+      pingThumb.hidden = !src;
+      if (src) {
+        pingThumb.src = src;
+        const ss = srcsetFor(g.coverImg, 64);
+        if (ss) pingThumb.srcset = ss; else pingThumb.removeAttribute("srcset");
+      }
+    }
     pingSheet.dataset.slug = g.slug;
     pingSheet.hidden = false;
     // A pin chip is painted above the menu scrim (.atlas-pins z-index 5 vs 4), so it stays

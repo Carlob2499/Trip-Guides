@@ -391,3 +391,37 @@ test("mobile: the globe dock spans the screen and clears the FAB by stacking, no
   // The FAB kept the corner.
   expect(f.x + f.width).toBeGreaterThan(375 * 0.8);
 });
+
+/* The pin sheet was a country code, a title and a clock — accurate and anonymous (creator,
+   2026-08-09: "the globe boxes are quite sterile", "where is the picture cover?"). It shows the
+   trip's own cover now, the same `record.coverImg` already in the payload this sheet reads and
+   already on the table rows — a new surface, not a second source of truth, and no new image
+   sourcing (which would need Commons provenance under references/image-sourcing.md). */
+test("tapping a pin shows the trip's cover, asked for at the size it is drawn", async ({ page }) => {
+  await page.setViewportSize({ width: 402, height: 874 });
+  await page.addInitScript(() => sessionStorage.setItem("tg-atlas-cover-seen", "1"));
+  await page.goto(HUB, { waitUntil: "networkidle" });
+  await page.locator('[data-atlas-mode-btn="world"]').click();
+
+  const chip = page.locator(".atlas-pinchip[data-on]").first();
+  await chip.waitFor({ state: "attached", timeout: 15000 });
+  await chip.evaluate((el) => (el as HTMLElement).click());
+  await expect(page.locator("[data-atlas-pingsheet]")).toBeVisible();
+
+  const thumb = page.locator("[data-atlas-pingsheet-thumb]");
+  await expect(thumb).toBeVisible();
+  const src = (await thumb.getAttribute("src")) || "";
+  expect(src).toBeTruthy();
+  // A 64px thumbnail must not pull a full-size original (Nyhavn is 258 KB unresized) — the
+  // same rule the table plates already follow, via the same helper.
+  if (src.includes("Special:FilePath")) expect(src).toContain("width=");
+  /* Deliberately NOT asserting the pixels decoded. The covers are remote Commons files, so
+     that check measures the test runner's network rather than this code — the table-plate test
+     above makes the same call for the same reason. What is ours to guarantee is that the sheet
+     asks for the right URL at the right size, and that it points at the SAME image the table
+     row for that trip uses; a decode failure past that is Commons being down. */
+  const slug = await page.locator("[data-atlas-pingsheet]").getAttribute("data-slug");
+  const rowSrc = await page.locator(`#sheet-${slug} .atlas-sheet-thumb`).getAttribute("src");
+  expect(rowSrc, "the pin sheet and the table row disagree about this trip's cover")
+    .toContain(src.split("?")[0]);
+});
