@@ -62,6 +62,11 @@
      Light value is unchanged so light mode does not shift; the dark value is measured,
      not picked: #ef8a83 on --card #242c34 = 5.81:1. */
   --crit:#b3261e;
+  /* The emergency FILL (the SOS button's hover state), with white on it. Deliberately does
+     NOT re-map with the theme — same reasoning as --on-aink above: a fill is an object, not
+     ink on a ground, and #fff on #b3261e is 6.54:1 in either theme. Re-mapping it would
+     paint a pale-red button that reads as disabled. */
+  --crit-fill:#b3261e;
   /* --cta/--cta-ink are the one genuinely NEW pair, and the only ones here that are not
      aliases. DESIGN.md specs the primary button as chart-room-slate on card-paper and gives no
      dark variant — but in dark mode chart-room-slate IS the page ground, so a fixed value

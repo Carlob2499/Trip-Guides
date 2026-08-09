@@ -134,7 +134,7 @@
 .focus-full{margin-top:.4rem;padding:.8rem 1.1rem;background:transparent;color:var(--ink);border:1px dashed var(--rule2);border-radius:var(--r-md);font-family:var(--font-display);font-weight:640;font-size:var(--text-body);cursor:pointer}
 
 /* ── Share-modal install note ─────────────────────────────────────────────── */
-.share-install{margin:.9rem 0 0;padding:.6rem .8rem;background:color-mix(in srgb,var(--accent) 8%,var(--card));border:1px solid var(--rule);border-radius:var(--r-sm);font-size:var(--text-control);line-height:1.55;color:var(--ink)}
+.share-install{margin:.9rem 0 0;padding:.6rem .8rem;background:color-mix(in srgb,var(--accent) 8%,var(--card));border:1px solid var(--rule);border-radius:0;font-size:var(--text-control);line-height:1.55;color:var(--ink)}
 
 /* ── Driver card English subtitle ─────────────────────────────────────────── */
 .addr-card-en{margin:.55rem 0 0;font-size:var(--text-body);color:var(--muted);line-height:1.45}

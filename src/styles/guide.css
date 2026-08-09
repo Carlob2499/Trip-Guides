@@ -26,15 +26,16 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 .topbar-btn{display:inline-flex;align-items:center;justify-content:center;gap:.34rem;background:none;border:1px solid var(--rule2);border-radius:999px;padding:.34rem .72rem;min-height:36px;cursor:pointer;color:var(--muted);font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.02em;line-height:1;transition:color .15s,border-color .15s,background .15s,transform .2s var(--ease-spring)}
 .topbar-btn:hover{color:var(--ink);border-color:var(--ink);background:color-mix(in srgb,var(--ink) 6%,transparent)}
 .tb-ico{width:17px;height:17px;flex:none;display:block}
-.topbar-sos{color:#b3261e;border-color:color-mix(in srgb,#b3261e 55%,var(--rule2));font-weight:700}
-.topbar-sos:hover{color:#fff;background:#b3261e;border-color:#b3261e}
-/* SOS is an emergency affordance — its colour is semantic and must stay unmistakably red, so this
-   is a dark-mode remap, not a token derivation. #b3261e only reaches 2.85:1 on --bg(#0f1317); the
-   hover fill above already clears 6.54:1 and needs no change. #ef5350 (Material red 400) clears
-   5.35:1 on #0f1317 while staying recognisably the same hue family.
-   (Ratios re-measured 2026-08-04 against the R2 ground; both moved with it, neither crossed.) */
-@media(prefers-color-scheme:dark){html:not([data-theme="light"]) .topbar-sos{color:#ef5350}}
-[data-theme="dark"] .topbar-sos{color:#ef5350}
+/* Emergency red now has ONE definition (--crit, base.css), not two. This button carried its
+   own dark-mode remap to #ef5350 while the SOS sheet's number carried a raw #b3261e that had
+   never been audited at all — the same semantic colour, solved twice, with only one of the
+   two solved correctly. #ef5350 also only worked on THIS ground: it is 5.35:1 on --bg but
+   4.06:1 on --card, so it could not have been reused by the sheet even deliberately.
+   --crit's dark value clears every dark ground the product has (--bg 7.67, --card 5.81,
+   --bg2 6.67), which is why one token can now serve both. The hover FILL keeps its own
+   non-remapping token; see --crit-fill. */
+.topbar-sos{color:var(--crit);border-color:color-mix(in srgb,var(--crit) 55%,var(--rule2));font-weight:700}
+.topbar-sos:hover{color:#fff;background:var(--crit-fill);border-color:var(--crit-fill)}
 /* Text role, not decoration — the raw per-guide accent is only contrast-gated to 3:1
    (src/lib/contrast.ts's MIN_ACCENT_CONTRAST, sized for large/decorative UI), which isn't
    enough for small body text at WCAG's 4.5:1. Blending 30% toward --ink pulls any
@@ -605,31 +606,37 @@ body{overflow-x:clip}
 .osmmap:fullscreen,.osmmap:-webkit-full-screen{width:100%;height:100%;border-radius:0}
 
 /* Share modal */
+/* Atlas re-expression (Stage F, feature 2 — the share panel). Behaviour, markup and data
+   flow untouched: square corners on every container, 999px on everything that behaves like
+   a button, a 1px rule where a radius used to do the separating, and the head as a
+   data-face kicker. The modal's drop shadow went with them — it sits over its own backdrop
+   scrim, which already separates it from the page, and this system's rule is edges rather
+   than elevation. */
 .share-backdrop{position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.45);display:none}
 .share-backdrop.open{display:block}
-.share-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:910;width:min(360px,calc(100vw - 2rem));max-height:calc(100dvh - 1.5rem);overflow-y:auto;background:var(--card);border:1px solid var(--rule2);border-radius:var(--r-lg);box-shadow:0 18px 60px rgba(0,0,0,.35);padding:1.4rem 1.6rem}
-.share-head{font-family:var(--font-display);font-size:var(--text-body);font-weight:600;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem}
-.share-close{background:none;border:none;cursor:pointer;font-size:var(--text-lead);color:var(--muted);padding:.1rem .3rem;line-height:1;border-radius:3px;transition:color .14s}
+.share-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:910;width:min(360px,calc(100vw - 2rem));max-height:calc(100dvh - 1.5rem);overflow-y:auto;background:var(--card);border:1px solid var(--rule2);border-radius:0;padding:1.4rem 1.6rem}
+.share-head{font-family:var(--font-data);font-size:var(--text-control);font-weight:640;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+.share-close{background:none;border:none;cursor:pointer;font-size:var(--text-lead);color:var(--muted);padding:.1rem .3rem;line-height:1;border-radius:999px;transition:color .14s}
 .share-close:hover{color:var(--ink)}
-.share-qr-wrap{display:flex;justify-content:center;background:var(--bg2);border-radius:6px;padding:.85rem;margin-bottom:1rem}
-.share-qr-wrap canvas,.share-qr-wrap img{display:block;border-radius:4px}
+.share-qr-wrap{display:flex;justify-content:center;background:var(--sunken);border:1px solid var(--rule);border-radius:0;padding:.85rem;margin-bottom:1rem}
+.share-qr-wrap canvas,.share-qr-wrap img{display:block;border-radius:0}
 .share-url-row{display:flex;gap:.45rem;align-items:center;margin-bottom:.85rem}
-.share-url-txt{flex:1;min-width:0;border:1px solid var(--rule2);border-radius:4px;padding:.36rem .52rem;font:inherit;font-size:var(--text-body);background:var(--bg2);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:text;user-select:all}
-.share-copy-btn{white-space:nowrap;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;background:var(--ink);color:var(--bg);border:none;border-radius:4px;padding:.36rem .72rem;cursor:pointer;transition:background .14s;flex-shrink:0}
+.share-url-txt{flex:1;min-width:0;border:1px solid var(--rule2);border-radius:0;padding:.36rem .52rem;font:inherit;font-size:var(--text-body);background:var(--bg2);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:text;user-select:all}
+.share-copy-btn{white-space:nowrap;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;background:var(--ink);color:var(--bg);border:none;border-radius:999px;padding:.36rem .8rem;cursor:pointer;transition:background .14s;flex-shrink:0}
 .share-copy-btn:hover{background:var(--accent)}
 .share-socials{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
-.share-soc{display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.45rem .4rem;border:1px solid var(--rule2);border-radius:5px;text-decoration:none;font-size:var(--text-small);color:var(--muted);transition:color .14s,border-color .14s}
+.share-soc{display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.45rem .4rem;border:1px solid var(--rule2);border-radius:999px;text-decoration:none;font-size:var(--text-small);color:var(--muted);transition:color .14s,border-color .14s}
 .share-soc:hover{color:var(--ink);border-color:var(--ink)}
 /* Downloads row — build-time GPX/iCal exports; each link shown only when its file exists */
 .share-downloads{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--rule2)}
 .share-dl-head{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin:0 0 .55rem}
 .share-dl-row{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
-.share-dl{display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.45rem .4rem;border:1px solid var(--rule2);border-radius:5px;text-decoration:none;font-size:var(--text-small);color:var(--muted);transition:color .14s,border-color .14s}
+.share-dl{display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.45rem .4rem;border:1px solid var(--rule2);border-radius:999px;text-decoration:none;font-size:var(--text-small);color:var(--muted);transition:color .14s,border-color .14s}
 .share-dl:hover{color:var(--ink);border-color:var(--ink)}
 .share-dl:only-child{grid-column:1 / -1}
 .share-dl-ext{font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:.05em;color:var(--accent-ink)}
 /* Share-summary button — full-width action under the URL row */
-.share-summary-btn{width:100%;margin-bottom:.85rem;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;background:none;color:var(--muted);border:1px solid var(--rule2);border-radius:5px;padding:.5rem .6rem;cursor:pointer;transition:color .14s,border-color .14s}
+.share-summary-btn{width:100%;margin-bottom:.85rem;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;background:none;color:var(--muted);border:1px solid var(--rule2);border-radius:999px;padding:.5rem .6rem;cursor:pointer;transition:color .14s,border-color .14s}
 .share-summary-btn:hover{color:var(--ink);border-color:var(--ink)}
 /* QR colors are set explicitly in JS based on data-theme — no CSS inversion needed */
 
