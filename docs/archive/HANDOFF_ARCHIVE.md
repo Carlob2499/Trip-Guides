@@ -1559,3 +1559,47 @@ literal. Third instance of that one mistake, so it got a gate rather than a thir
 
 Gates on every commit: build · lint 0 · typecheck 0 · 1610 unit · 170 Playwright · zero
 `src/content/guides/` diff. All CI green.
+
+## Snapshot (2026-08-09 — the creator's 11-point list, nine fixed in nine commits)
+
+The creator opened with "you broke quite a few features" and eleven numbered complaints. Two
+were not breakage at all and one was not mine, which matters more than the count.
+
+**The worst one was reported as cosmetic and was destroying text.** "The Day by Day activity
+card section is broken and looks janky, goes out-of-space." `.pnl-body` is a grid that exists
+only to animate rows 1fr→0fr on collapse, and its COLUMN was never declared — an `auto` track
+whose floor is its content's min-content width. Measured on korea/Transit at 375px: the body
+box 347px, its own column 529px. And `body` is `overflow-x: clip`, so the 182px hanging off was
+not scrollable, it was CUT. Every paragraph in the panel had already wrapped to the wider
+measure, so each line lost its ending with no gesture that could reveal it — "fly into and out
+of T". A figure at the top of a card was deleting prose three elements below it. Three
+contributing causes, all the same shape (route rail, `.venue-pill`, `.hint-bubble`), and no
+gate could see any of it: the unit suites lay nothing out and axe does not measure geometry.
+`tests/visual/no-h-overflow.spec.ts` is that gate now, and it names the offending selector.
+
+**Two bugs turned out to be bigger underneath than on the surface**, both found by writing the
+test rather than by reading the code. `resetView()` had no caller when a pin sheet closed — and
+also did not work AT ALL during a flight, because flyTo's rAF step rewrote `_targetK` every
+frame, which is exactly the 1100ms window in which someone opens a sheet and closes it. And the
+bottom sheets never declared `touch-action`, so one downward swipe had three claimants (sheet
+drag, page scroll, pull-to-refresh) and which won depended on where the thumb landed.
+
+**The Korea budget was not lost.** A guide that gains a `roomId` switches source of truth:
+autoConnect() joins the room and never calls load(). Korea gained one in f50ca17, so a ledger
+typed during the trip is still in localStorage on whichever device typed it, unread, behind an
+empty room. persist() refuses to write while `room` is set, so it was never at risk — only
+invisible. It is now offered back, and only into an EMPTY room, because merging two solo
+ledgers silently picks a winner. The identity remap is the real risk and is pure and tested
+(`rekeyForRoom`, 6 cases): a room mints its own ids, and a missed reference leaves every amount
+intact, every total correct, and only the BALANCES quietly wrong.
+
+**The prose complaint got a gate, not an opinion.** Thresholds are measured from the corpus —
+1087 shipped paragraphs, median 28 words, p75 48, p95 104 — so the ceiling is the distribution's
+own tail, not my taste. Existing debt (43 offences) is a recorded baseline that can only shrink,
+because reshaping a verified guide's prose is a content edit under the continuity discipline,
+not something a lint script does to four trips behind anyone's back. Craft rules the gate cannot
+check live beside it in the skill.
+
+Nine commits, `069011d..795b835`, all CI green. Every new gate verified non-vacuous by reverting
+the source and watching it fail. Zero `src/content/guides/` diff throughout — no guide content
+was touched.

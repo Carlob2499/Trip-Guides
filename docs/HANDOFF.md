@@ -24,52 +24,48 @@
   **`docs/PLAN_ATLAS_MIGRATION.md`** (the current work order — its own Progress ledger is the
   source of truth for which stage is next; read that before re-deriving status from git log).
 
-## Snapshot (2026-08-09 — the creator's 11-point list, nine fixed in nine commits)
+## Snapshot (2026-08-09b — making the tests readable, and proving they catch anything)
 
-The creator opened with "you broke quite a few features" and eleven numbered complaints. Two
-were not breakage at all and one was not mine, which matters more than the count.
+Two asks, both about trusting the suite rather than adding to it: make the tests legible to a
+non-coder, and make sure each one tests something real.
 
-**The worst one was reported as cosmetic and was destroying text.** "The Day by Day activity
-card section is broken and looks janky, goes out-of-space." `.pnl-body` is a grid that exists
-only to animate rows 1fr→0fr on collapse, and its COLUMN was never declared — an `auto` track
-whose floor is its content's min-content width. Measured on korea/Transit at 375px: the body
-box 347px, its own column 529px. And `body` is `overflow-x: clip`, so the 182px hanging off was
-not scrollable, it was CUT. Every paragraph in the panel had already wrapped to the wider
-measure, so each line lost its ending with no gesture that could reveal it — "fly into and out
-of T". A figure at the top of a card was deleting prose three elements below it. Three
-contributing causes, all the same shape (route rail, `.venue-pill`, `.hint-bubble`), and no
-gate could see any of it: the unit suites lay nothing out and axe does not measure geometry.
-`tests/visual/no-h-overflow.spec.ts` is that gate now, and it names the offending selector.
+**Legibility became two generated documents.** `docs/WHAT_THE_TESTS_PROTECT.md` groups all 1715
+checks under the promise each keeps, sourced from a `// @protects-file` line now carried by every
+one of the 145 test files; CI fails if it goes stale. Its sibling `docs/WHERE_THE_TESTS_ARE_BLIND.md`
+is the honest half. The comment-density cap (22%, baseline of 16 files) came straight from the
+creator's "slim down the slop" — measured, not asserted: repo average 10.8%, my own new files
+30–44%.
 
-**Two bugs turned out to be bigger underneath than on the surface**, both found by writing the
-test rather than by reading the code. `resetView()` had no caller when a pin sheet closed — and
-also did not work AT ALL during a flight, because flyTo's rAF step rewrote `_targetK` every
-frame, which is exactly the 1100ms window in which someone opens a sheet and closes it. And the
-bottom sheets never declared `touch-action`, so one downward swipe had three claimants (sheet
-drag, page scroll, pull-to-refresh) and which won depended on where the thumb landed.
+**"Testing something real" needed evidence, not assurance, so the repo now has mutation testing.**
+Stryker breaks the source on purpose — 5974 small sabotages across `src/features/*/model` and
+`src/lib` — and records which ones no test noticed. 76% caught. It runs WEEKLY and does not gate:
+a mutation score is a map of thin ice, not a grade, and enforcing it breeds tests that satisfy the
+metric. It immediately found real gaps in the money model: the largest-remainder tie-break decides
+which person pays the leftover cent and reversing it broke nothing; undo's three
+member-reference branches were only ever covered as a set, so an expense mentioning the departing
+person exactly once could stop generating a patch silently; and `participants.slice()` could lose
+its copy, which makes undo restore an edited history while looking like it worked. Six tests,
+`undo.ts` 93→98%.
 
-**The Korea budget was not lost.** A guide that gains a `roomId` switches source of truth:
-autoConnect() joins the room and never calls load(). Korea gained one in f50ca17, so a ledger
-typed during the trip is still in localStorage on whichever device typed it, unread, behind an
-empty room. persist() refuses to write while `room` is set, so it was never at risk — only
-invisible. It is now offered back, and only into an EMPTY room, because merging two solo
-ledgers silently picks a winner. The identity remap is the real risk and is pure and tested
-(`rekeyForRoom`, 6 cases): a room mints its own ids, and a missed reference leaves every amount
-intact, every total correct, and only the BALANCES quietly wrong.
+**The vendored drift checker got a classifier instead of continued neglect.** `check-drift.mjs`
+emits 788 hits of which 635 are documented false positives, and that ratio is exactly why two real
+MOTION violations survived a whole closeout stage. `scripts/drift-real.mjs` sorts them into eight
+NAMED, justified exemption classes — never a mute — leaving **153 genuine violations** now
+baselined and gated against growth. Writing it produced its own lesson: check-drift truncates its
+echoed source line at 100 characters, and this repo writes one-line CSS blocks, so classifying off
+that echo scored ~60 compliant rules as drift. Read the file, not the report about the file.
 
-**The prose complaint got a gate, not an opinion.** Thresholds are measured from the corpus —
-1087 shipped paragraphs, median 28 words, p75 48, p95 104 — so the ceiling is the distribution's
-own tail, not my taste. Existing debt (43 offences) is a recorded baseline that can only shrink,
-because reshaping a verified guide's prose is a content edit under the continuity discipline,
-not something a lint script does to four trips behind anyone's back. Craft rules the gate cannot
-check live beside it in the skill.
-
-Nine commits, `069011d..795b835`, all CI green. Every new gate verified non-vacuous by reverting
-the source and watching it fail. Zero `src/content/guides/` diff throughout — no guide content
-was touched.
+**Two boundary checks earned their keep in one session.** The weekly workflow failed in 24
+seconds on its first smoke run: `stryker run` takes its config file POSITIONALLY and exits 1 on
+`--config`, which I had written from memory. And `actions/upload-artifact@v4` was two majors
+stale. Both were caught only by running the deployed thing once.
 
 ## Open items
 
+- **Three paydown lists, all recorded as baselines that can only shrink** — 153 design-drift
+  violations (`scripts/drift-baseline.json`), 43 prose-shape offences, 16 over-commented test
+  files (`a11y.spec.ts` at 37% is the worst). Plus 1280 surviving mutants; read
+  `docs/WHERE_THE_TESTS_ARE_BLIND.md` top-down, the table is sorted by where it hurts.
 - **Two of the eleven are NOT done, and neither is quietly dropped.**
   · **Print preview** (part of #8). The page-print buttons hand off to the browser's own dialog,
     which HAS a preview; the budget sheet builds a document and prints it without ever showing
@@ -88,24 +84,25 @@ was touched.
 
 ## Where we left off
 
-Nine of the creator's eleven points are fixed, verified and live. The two that are not are named
-above with the reason, not buried.
+The suite is now readable by someone who does not read code, and — more importantly — it can be
+checked rather than trusted. Two documents say what it protects and where it is blind, and both
+are generated, so neither can quietly go out of date.
 
-The reusable lesson is about which complaints deserve escalation. "Looks janky" was a
-text-destroying layout bug; "the globe doesn't re-orient" was an API whose own escape hatch lost
-a race with its animation; "the split lost my data" was data that had never been lost, only
-orphaned by a source-of-truth switch. In each case the reported symptom was a smaller thing than
-the defect, and measuring — not reading the code — is what found the gap.
+The reusable lesson is that a gate nobody reads is not a gate. `check-drift.mjs` was running the
+whole time and its 90% false-positive rate is precisely why two real violations lived in its
+output for a stage. The fix was not a better checker; it was naming and justifying every class of
+noise so what remains is short enough to read. Same shape as the mutation report: the value is
+not the 76%, it is the twelve specific lines it points at.
 
-**Recommended next step:** ask the creator what "Next Guide" refers to, then build the
-print-preview shell for the budget sheet. After that the hub visual-fidelity pass is still the
-oldest open item.
+**Recommended next step:** pay down mutation gaps in the money model first — it is the one place
+in this product where a silently wrong answer costs a real person real money, and
+`WHERE_THE_TESTS_ARE_BLIND.md` names 154 of them. Then the two still-open items from the eleven:
+ask what "Next Guide" refers to, and build the print-preview shell for the budget sheet.
 
-**Re-prompt the creator with:** "Nine of your eleven are fixed and live. The Day-by-Day one was
-worse than it looked — a panel grid column was never declared, so cards grew wider than the
-phone and `overflow-x: clip` was cutting the end off every line of prose in them; that's why
-sentences just stopped. Your Korea budget isn't gone either: it's still on the device that typed
-it, orphaned when the guide gained a shared room, and the panel now offers it back. The prose
-complaint got a real gate, with thresholds measured off your own 1087 paragraphs rather than my
-taste. Two I did NOT do: the budget sheet still prints with no preview, and I couldn't find a
-'Next Guide' anywhere in the code — what is it?"
+**Re-prompt the creator with:** "Your tests can now be read like a table of contents — 1715
+checks, each with one plain sentence saying what breaks for a traveller if it goes red. And
+there's a second document that's more useful: the repo now deliberately sabotages its own code
+6000 ways a week and records which sabotages no test noticed. 76% get caught. The 24% that don't
+are a map of the thin ice, and it immediately found three real holes in the shared budget —
+including one where undo would happily restore a version of history that had been edited
+underneath it, while looking like it worked."
