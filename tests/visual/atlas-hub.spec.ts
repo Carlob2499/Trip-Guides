@@ -67,8 +67,18 @@ test("the table header collapses to a search button instead of following you dow
   const toggle = page.locator("[data-atlas-search-toggle]");
   await expect(toggle).toBeVisible();
   await expect(head).toHaveAttribute("data-collapsed", "");
-  // The sticky region has to be genuinely small, not merely collapsed in name.
+  // The sticky region has to be genuinely small, not merely collapsed in name...
   expect((await head.boundingBox())!.height).toBeLessThan(72);
+  // ...and it must stop LOOKING like chrome: no ground, no rule, and no tap target beyond
+  // the button itself, so what rides down the page is a button and not a bar.
+  const shed = await head.evaluate((el) => {
+    const cs = getComputedStyle(el);
+    return { bg: cs.backgroundColor, border: cs.borderBottomWidth, pe: cs.pointerEvents };
+  });
+  expect(shed.bg).toMatch(/rgba\(0, 0, 0, 0\)|transparent/);
+  expect(shed.border).toBe("0px");
+  expect(shed.pe).toBe("none");
+  await expect(toggle).toHaveCSS("pointer-events", "auto");
 
   await toggle.click();
   await expect(head).not.toHaveAttribute("data-collapsed", "");
@@ -196,4 +206,44 @@ test("the dock is a globe surface only — no JS, and no phone dock on desktop",
   await page.addInitScript(() => sessionStorage.setItem("tg-atlas-cover-seen", "1"));
   await page.goto(HUB, { waitUntil: "networkidle" });
   await expect(page.locator("[data-atlas-dock]")).toBeHidden();
+});
+
+
+test("the ping sheet's grip is a real handle — dragging it down dismisses the sheet", async ({ page }) => {
+  // It drew a drag affordance and listened to nothing (creator, 2026-08-09). A control that
+  // looks draggable and is not is worse than no control at all.
+  await page.setViewportSize({ width: 402, height: 874 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(() => sessionStorage.setItem("tg-atlas-cover-seen", "1"));
+  await page.goto(HUB, { waitUntil: "networkidle" });
+  await page.locator('[data-atlas-mode-btn="world"]').click();
+
+  const chip = page.locator(".atlas-pinchip[data-on]").first();
+  await chip.waitFor({ state: "visible", timeout: 15000 });
+  await chip.click();
+  const sheet = page.locator("[data-atlas-pingsheet]");
+  await expect(sheet).toBeVisible();
+
+  // A TOUCH drag, not a mouse one: sheet-drag.js ignores `pointerType === "mouse"` on
+  // purpose (a mouse has the close button and the backdrop), so driving this with
+  // page.mouse would test nothing and pass for the wrong reason.
+  await page.locator(".atlas-pingsheet-grip").evaluate((grip) => {
+    const panel = grip.closest("[data-atlas-pingsheet]")!;
+    const r = grip.getBoundingClientRect();
+    const x = r.x + r.width / 2;
+    const fire = (type: string, clientY: number) =>
+      panel.dispatchEvent(new PointerEvent(type, {
+        bubbles: true, pointerId: 1, pointerType: "touch", clientX: x, clientY,
+      }));
+    fire("pointerdown", r.y);
+    // Past DISMISS_FRACTION of the sheet's own height, in steps, so the handler sees real
+    // travel rather than one jump.
+    const h = panel.getBoundingClientRect().height;
+    for (let i = 1; i <= 6; i++) fire("pointermove", r.y + (h * 0.6 * i) / 6);
+    fire("pointerup", r.y + h * 0.6);
+  });
+
+  await expect(sheet).toBeHidden();
+  // Dismissing the sheet must hand the screen back to the dock, not leave both gone.
+  await expect(page.locator("[data-atlas-dock]")).toBeVisible();
 });

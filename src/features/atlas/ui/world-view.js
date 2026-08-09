@@ -6,6 +6,7 @@
 import "./atlas-map.js";
 import { solvePlacement } from "../model/solver";
 import { localClockLabel } from "../model/local-time";
+import { attachSheetDrag } from "../../../scripts/sheet-drag.js";
 
 const CARD_W = 220;
 const CARD_FULL_H = 140;
@@ -168,10 +169,16 @@ export function initAtlasWorld(root = document) {
     pingSheet.hidden = false;
     standDownDock(true);
   }
-  root.querySelector("[data-atlas-pingsheet-close]")?.addEventListener("click", () => {
+  function closePingSheet() {
     if (pingSheet) pingSheet.hidden = true;
     standDownDock(false);
-  });
+  }
+  root.querySelector("[data-atlas-pingsheet-close]")?.addEventListener("click", closePingSheet);
+  // The grip drew a drag handle and nothing listened to it (creator, 2026-08-09: "there's a
+  // visual cue to swipe downwards ... this does nothing"). A control that looks draggable
+  // and is not is worse than no control. Same shared implementation the guide's groups
+  // sheet and the SOS sheet already use, so all three dismiss with the same thresholds.
+  if (pingSheet) attachSheetDrag(pingSheet, closePingSheet);
   root.querySelector("[data-atlas-pingsheet-zoom]")?.addEventListener("click", () => {
     const slug = pingSheet?.dataset.slug;
     if (slug) map.flyTo(slug, reduced ? 0 : 1100);
