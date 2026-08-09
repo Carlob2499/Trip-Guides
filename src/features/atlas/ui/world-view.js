@@ -101,12 +101,44 @@ export function initAtlasWorld(root = document) {
       btn.addEventListener("click", () => { map.flyTo(btn.dataset.fly, reduced ? 0 : 1100); closeMenu(); });
     });
   }
+  /* ── The dock (creator, 2026-08-08) ─────────────────────────────────────────────────
+     The globe's own readout: the featured trip's status, live local time, emergency
+     numbers, currency and two actions — all server-rendered from the same `quick` row the
+     table view uses, so nothing here is a second source of truth.
+
+     It ships `hidden` and is unhidden here rather than by CSS, because without JS there is
+     no globe to dock to: a no-JS phone gets the table view, where this data already lives.
+
+     Collapsed/expanded persists per device. It stands DOWN whenever the menu or the ping
+     sheet is up — three surfaces stacked on one thumb's worth of screen is the crowding
+     the design doctrine names, not the information it asks for. */
+  const dock = root.querySelector("[data-atlas-dock]");
+  const dockToggle = root.querySelector("[data-atlas-dock-toggle]");
+  const DOCK_KEY = "tg-atlas-dock";
+  if (dock) {
+    dock.hidden = false;
+    let open = false;
+    try { open = localStorage.getItem(DOCK_KEY) === "open"; } catch { /* private mode */ }
+    const setDock = (o) => {
+      dock.toggleAttribute("data-open", o);
+      dockToggle?.setAttribute("aria-expanded", o ? "true" : "false");
+      try { localStorage.setItem(DOCK_KEY, o ? "open" : "shut"); } catch { /* private mode */ }
+    };
+    setDock(open);
+    dockToggle?.addEventListener("click", () => setDock(!dock.hasAttribute("data-open")));
+  }
+  /** Fold the dock away while another bottom surface owns the screen. */
+  function standDownDock(down) {
+    dock?.toggleAttribute("data-stood-down", down);
+  }
+
   function setMenu(open) {
     if (!fab || !menuScrim || !menuSheet) return;
     fab.setAttribute("aria-expanded", String(open));
     fab.textContent = open ? "✕" : "☰";
     menuScrim.hidden = !open;
     menuSheet.hidden = !open;
+    standDownDock(open);
   }
   const closeMenu = () => setMenu(false);
   fab?.addEventListener("click", () => setMenu(menuSheet?.hidden !== false));
@@ -134,8 +166,12 @@ export function initAtlasWorld(root = document) {
     if (pingOpen) pingOpen.href = g.href;
     pingSheet.dataset.slug = g.slug;
     pingSheet.hidden = false;
+    standDownDock(true);
   }
-  root.querySelector("[data-atlas-pingsheet-close]")?.addEventListener("click", () => { if (pingSheet) pingSheet.hidden = true; });
+  root.querySelector("[data-atlas-pingsheet-close]")?.addEventListener("click", () => {
+    if (pingSheet) pingSheet.hidden = true;
+    standDownDock(false);
+  });
   root.querySelector("[data-atlas-pingsheet-zoom]")?.addEventListener("click", () => {
     const slug = pingSheet?.dataset.slug;
     if (slug) map.flyTo(slug, reduced ? 0 : 1100);

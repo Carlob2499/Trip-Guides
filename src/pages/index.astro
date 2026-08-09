@@ -272,6 +272,46 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
             of the desktop pincard. Hidden by CSS above 759px; inert without JS either way
             (world.js gates its own mobile branch, so a no-JS phone visitor still gets the
             table view, D4's door). */}
+        {/* ── The dock (creator, 2026-08-08: "the globe page needs more useful information
+             or buttons, preferably hideable") ─────────────────────────────────────────────
+             A phone looking at the globe used to have NOTHING but dots and a ☰. This is the
+             table view's quick card relocated: the same emergency numbers, currency, live
+             local clock and status the table already shows for the trip the hub is
+             featuring — no new data, no parallel registry (CONTENT IS KING).
+
+             Hideable, and it remembers: collapsed it is a single pill (trip · clock ·
+             status dot); expanded it adds the numbers you would want at 2am in that country.
+             Server-rendered, so it is there before any script runs; the clock ticks through
+             the same [data-tick] hook the table's card uses. */}
+        {quick && (
+          <div class="atlas-dock" data-atlas-dock hidden>
+            <button class="atlas-dock-head" type="button" data-atlas-dock-toggle
+                    aria-expanded="false" aria-controls="atlasDockBody">
+              <span class={`atlas-dock-dot atlas-dock-dot--${quick.record.status}`} aria-hidden="true"></span>
+              <span class="atlas-dock-name">{quick.g.data.title}</span>
+              {quick.record.tz && (
+                <span class="atlas-dock-clock" data-tick data-tz={quick.record.tz}>—</span>
+              )}
+              <svg class="atlas-dock-chev" width="14" height="14" viewBox="0 0 16 16" fill="none"
+                   stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 6.2 8 10.2l4-4"/></svg>
+            </button>
+            <div class="atlas-dock-body" id="atlasDockBody">
+              {quickKicker && <span class="atlas-dock-kicker">{quickKicker}</span>}
+              <div class="atlas-dock-facts">
+                {quick.emergency?.lines.map((line: { label: string; num: string }) => (
+                  <a class="atlas-dock-tel" href={`tel:${line.num}`}>{line.label} · {line.num}</a>
+                ))}
+                {quick.currency && <span class="atlas-dock-meta">{quick.currency.code} {quick.currency.symbol}</span>}
+                {quick.advisory && <span class="atlas-dock-meta atlas-dock-warn">⚠ Level {quick.advisory.level}</span>}
+              </div>
+              <div class="atlas-dock-actions">
+                <a class="atlas-dock-cta" href={`${base}/guides/${quick.g.id}/`}>Open the sheet →</a>
+                <a class="atlas-dock-alt" href={`${base}/tools/${quick.g.id}/`}>Tools</a>
+              </div>
+            </div>
+          </div>
+        )}
+
         <button type="button" class="atlas-menufab" data-atlas-menufab aria-label="Map menu" aria-expanded="false">☰</button>
         <div class="atlas-menuscrim" data-atlas-menuscrim hidden></div>
         <div class="atlas-menusheet" data-atlas-menusheet hidden>

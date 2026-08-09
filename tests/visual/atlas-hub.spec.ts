@@ -143,3 +143,57 @@ test("desktop keeps its full pincards and shows no phone chips", async ({ page }
   await expect(page.locator(".atlas-pincard").first()).toBeAttached({ timeout: 15000 });
   await expect(page.locator(".atlas-pinchip")).toHaveCount(0);
 });
+
+test("the globe carries a hideable readout for the featured trip, and remembers the choice", async ({ page }) => {
+  await page.setViewportSize({ width: 402, height: 874 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(() => sessionStorage.setItem("tg-atlas-cover-seen", "1"));
+  await page.goto(HUB, { waitUntil: "networkidle" });
+  await page.locator('[data-atlas-mode-btn="world"]').click();
+
+  const dock = page.locator("[data-atlas-dock]");
+  await expect(dock).toBeVisible();
+  // Collapsed by default: the pill says which trip and what time it is there.
+  await expect(dock.locator(".atlas-dock-name")).not.toBeEmpty();
+  await expect(dock.locator(".atlas-dock-body")).toBeHidden();
+
+  await dock.locator("[data-atlas-dock-toggle]").click();
+  await expect(dock.locator(".atlas-dock-body")).toBeVisible();
+  // The expanded state is the point — real, dialable numbers, not a description of them.
+  const tel = dock.locator(".atlas-dock-tel").first();
+  await expect(tel).toHaveAttribute("href", /^tel:/);
+
+  await page.reload({ waitUntil: "networkidle" });
+  await page.locator('[data-atlas-mode-btn="world"]').click();
+  await expect(page.locator("[data-atlas-dock] .atlas-dock-body")).toBeVisible();
+});
+
+test("the dock stands down while another bottom surface owns the screen", async ({ page }) => {
+  await page.setViewportSize({ width: 402, height: 874 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(() => sessionStorage.setItem("tg-atlas-cover-seen", "1"));
+  await page.goto(HUB, { waitUntil: "networkidle" });
+  await page.locator('[data-atlas-mode-btn="world"]').click();
+
+  const dock = page.locator("[data-atlas-dock]");
+  await expect(dock).toBeVisible();
+  await page.locator("[data-atlas-menufab]").click();
+  await expect(dock).toBeHidden();
+  await page.locator("[data-atlas-menufab]").click();
+  await expect(dock).toBeVisible();
+});
+
+test("the dock is a globe surface only — no JS, and no phone dock on desktop", async ({ browser, page }) => {
+  const ctx = await browser.newContext({ javaScriptEnabled: false });
+  const noJs = await ctx.newPage();
+  await noJs.goto(HUB, { waitUntil: "domcontentloaded" });
+  // Ships hidden: without JS the reader is on the table view, which already carries this
+  // data in its quick card.
+  await expect(noJs.locator("[data-atlas-dock]")).toBeHidden();
+  await ctx.close();
+
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.addInitScript(() => sessionStorage.setItem("tg-atlas-cover-seen", "1"));
+  await page.goto(HUB, { waitUntil: "networkidle" });
+  await expect(page.locator("[data-atlas-dock]")).toBeHidden();
+});
