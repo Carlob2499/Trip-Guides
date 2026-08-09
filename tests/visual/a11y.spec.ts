@@ -48,6 +48,18 @@ async function prep(page: Page, path: string, scheme: "light" | "dark", vp: View
   await page.addStyleTag({
     content: `[role=tabpanel]{display:block !important}.guide-tabs{overflow:visible !important}`,
   });
+
+  /* Open the SOS sheet if this page has one (Stage F, 2026-08-09). It is `hidden` until
+     tapped and axe does not scan hidden nodes, so the most important number in the product
+     had never been audited once — and was sitting at 2.16:1 in dark mode, under even the
+     3:1 large-text floor, behind a hardcoded #b3261e. A surface that only exists after a
+     gesture still has to pass; the gate has to make the gesture. */
+  const sos = page.locator(".topbar-sos, .sos-btn");
+  if (await sos.count()) {
+    await sos.first().click();
+    await expect(page.locator(".sos-sheet")).toBeVisible();
+  }
+
   await page.waitForTimeout(400);
 }
 

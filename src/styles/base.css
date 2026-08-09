@@ -51,6 +51,17 @@
                                  element carrying the inline candidates re-resolves both names. */
   --on-aink:var(--on-accent); /* text on an accent FILL — deliberately never re-maps (see above) */
   --ochre:var(--warn);        /* stale, unconfirmed, advisory — the ⚠ pigment */
+  /* ATLAS TOKEN CONTRACT — --crit: the one pigment reserved for a number someone dials in
+     an emergency (.sos-num). NOT --accent and NOT --warn: the accent is the guide's own
+     colour and the ochre means "unconfirmed", which is the opposite of what a verified
+     emergency number is. It was the hex literal #b3261e until 2026-08-09, and that is the
+     bug this token exists to fix: #b3261e sits at 6.21:1 on light card paper but only
+     2.16:1 on the dark one — under even the 3:1 large-text floor, on the single most
+     important number in the product. Nothing caught it because the SOS sheet is `hidden`
+     until it is opened and axe does not scan hidden nodes (the gate now opens it).
+     Light value is unchanged so light mode does not shift; the dark value is measured,
+     not picked: #ef8a83 on --card #242c34 = 5.81:1. */
+  --crit:#b3261e;
   /* --cta/--cta-ink are the one genuinely NEW pair, and the only ones here that are not
      aliases. DESIGN.md specs the primary button as chart-room-slate on card-paper and gives no
      dark variant — but in dark mode chart-room-slate IS the page ground, so a fixed value
@@ -263,13 +274,13 @@
    the swap automatically. Re-declaring them would create the second source of truth the alias
    exists to prevent. --cta/--cta-ink are not aliases and DO invert — see :root. */
 @media(prefers-color-scheme:dark){html:not([data-theme="light"]){
-  --bg:#0f1317;--bg2:#1a2129;--ink:#e8ece3;--card:#242c34;--rule:#38414b;--rule2:#4e5865;--muted:#9aa392;--green:#6aab76;--warn:#d9923f;
+  --bg:#0f1317;--bg2:#1a2129;--ink:#e8ece3;--card:#242c34;--rule:#38414b;--rule2:#4e5865;--muted:#9aa392;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;
   --cta:#e8ece3;--cta-ink:#0f1317;
   --accent-ink:var(--accent-ink-dark)}
   /* Carrier partner (#38): same swap, on the elements that carry their own candidates. */
   html:not([data-theme="light"]) [style*="--accent-ink-light"]{--accent-ink:var(--accent-ink-dark)}
 }
-[data-theme="dark"]{--bg:#0f1317;--bg2:#1a2129;--ink:#e8ece3;--card:#242c34;--rule:#38414b;--rule2:#4e5865;--muted:#9aa392;--green:#6aab76;--warn:#d9923f;
+[data-theme="dark"]{--bg:#0f1317;--bg2:#1a2129;--ink:#e8ece3;--card:#242c34;--rule:#38414b;--rule2:#4e5865;--muted:#9aa392;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;
   --cta:#e8ece3;--cta-ink:#0f1317;
   --accent-ink:var(--accent-ink-dark)}
 [data-theme="dark"] [style*="--accent-ink-light"]{--accent-ink:var(--accent-ink-dark)}

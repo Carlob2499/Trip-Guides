@@ -76,22 +76,27 @@
 /* overscroll-behavior:contain — a fling that runs off the end of the sheet must not
    scroll the page behind it. sheet-dragging kills the transition while the thumb owns
    the transform (src/scripts/sheet-drag.js). */
-.sos-inner{width:100%;max-width:30rem;background:var(--card);border-radius:16px 16px 0 0;padding:1rem 1.2rem max(1.2rem,var(--safe-bottom));overscroll-behavior:contain;transition:transform .26s cubic-bezier(.2,.8,.2,1)}
+/* Atlas re-expression (Stage F, feature 1): square corners — this system has only 0 and
+   999px — and a 1px rule for the edge instead of a radius doing the separating. Behaviour,
+   markup and data flow are untouched; this is the same sheet in the system's own hand. */
+.sos-inner{width:100%;max-width:30rem;background:var(--card);border-radius:0;border-top:1px solid var(--rule2);padding:1rem 1.2rem max(1.2rem,var(--safe-bottom));overscroll-behavior:contain;transition:transform .26s cubic-bezier(.2,.8,.2,1)}
 .sos-inner.sheet-dragging{transition:none;will-change:transform}
 /* A sheet you can pull down should say so. */
-.sos-inner::before{content:"";display:block;width:38px;height:4px;border-radius:4px;background:var(--rule2);margin:-.35rem auto .6rem}
+.sos-inner::before{content:"";display:block;width:38px;height:4px;border-radius:999px;background:var(--rule2);margin:-.35rem auto .6rem}
 @media(min-width:900px){.sos-inner::before{display:none}}
-@media(min-width:900px){.sos-sheet{align-items:center}.sos-inner{border-radius:var(--r-lg)}}
-.sos-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 .6rem;font-family:var(--font-display);font-weight:640;font-size:var(--text-h4)}
+@media(min-width:900px){.sos-sheet{align-items:center}.sos-inner{border-radius:0;border:1px solid var(--rule2)}}
+/* The notation layer: a data-face kicker, the way every Atlas container announces what it
+   is before it says anything else. */
+.sos-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 .6rem;font-family:var(--font-data);font-weight:640;font-size:var(--text-control);letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
 .sos-x{width:36px;height:36px;background:transparent;border:1px solid var(--rule);border-radius:999px;color:var(--muted);cursor:pointer}
 .sos-row{display:flex;align-items:center;gap:.9rem;padding:.7rem .2rem;border-top:1px solid var(--rule);text-decoration:none;color:var(--ink)}
-.sos-num{flex:none;min-width:4.2rem;font-family:var(--font-display);font-weight:640;font-size:1.7rem;letter-spacing:-.012em;color:#b3261e}
+.sos-num{flex:none;min-width:4.2rem;font-family:var(--font-display);font-weight:640;font-size:1.7rem;letter-spacing:-.012em;color:var(--crit)}
 .sos-label{font-size:var(--text-small);line-height:1.4;color:var(--ink)}
 .sos-note{margin:.7rem 0 0;font-size:var(--text-caption);color:var(--muted)}
 /* Official travel-advisory notice (docs/FEATURES.md #9) — only present when elevated;
    sits above the emergency numbers since "know the current advisory" outranks
    "have the number ready" the moment a traveler opens this sheet. */
-.sos-advisory{display:flex;flex-direction:column;gap:.15rem;padding:.7rem .8rem;margin-bottom:.4rem;border:1px solid var(--warn);border-radius:var(--r-md,8px);text-decoration:none;background:color-mix(in srgb,var(--warn) 8%,transparent)}
+.sos-advisory{display:flex;flex-direction:column;gap:.15rem;padding:.7rem .8rem;margin-bottom:.4rem;border:1px solid var(--warn);border-radius:0;text-decoration:none;background:color-mix(in srgb,var(--warn) 8%,transparent)}
 .sos-advisory-level{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--warn)}
 .sos-advisory-title{font-weight:700;color:var(--ink);font-size:var(--text-body)}
 .sos-advisory-summary{font-size:var(--text-control);color:var(--muted);line-height:1.4}
