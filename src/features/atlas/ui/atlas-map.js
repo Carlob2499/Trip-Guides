@@ -628,7 +628,13 @@ class AtlasMap extends HTMLElement {
     const t0 = performance.now(), d2 = dur || 1100;
     const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
     this._flying = true;
+    /* A flight in progress OWNS the projection: its step writes `_targetK` every frame. So any
+       view change made while it is still running was silently reverted on the next frame —
+       resetView() in particular, which is what "dismiss the sheet and get the world back" calls.
+       The seq token lets a later intent cancel an earlier flight instead of racing it. */
+    const seq = (this._flySeq = (this._flySeq || 0) + 1);
     const step = (now) => {
+      if (seq !== this._flySeq) return; // superseded by another flight, or by resetView
       const p = Math.min(1, (now - t0) / d2), e = ease(p);
       this._rot = [startRot[0] + (endLon - startRot[0]) * e, startRot[1] + (-lat - startRot[1]) * e];
       this._k = startK + (endK - startK) * e; this._targetK = this._k;
@@ -648,7 +654,16 @@ class AtlasMap extends HTMLElement {
     this._hold = true; clearTimeout(this._resume);
     this._resume = setTimeout(() => { this._hold = false; }, 1400);
   }
-  resetView() { this._targetK = this._R; this._hold = false; this._target = null; this._furnDirty = true; this._dirty = true; }
+  /* Cancels any flight first — see the seq note in flyTo. Without that, calling this during the
+     1100ms fly (which is exactly when a reader dismisses the sheet they just opened) was a
+     no-op: the next animation frame wrote `_targetK` straight back to the zoomed value. */
+  resetView() {
+    this._flySeq = (this._flySeq || 0) + 1;
+    this._flying = false;
+    clearTimeout(this._flyEnd);
+    clearTimeout(this._resume);
+    this._targetK = this._R; this._hold = false; this._target = null; this._furnDirty = true; this._dirty = true;
+  }
   toggleSpin() { this._paused = !this._paused; this._dirty = true; return !this._paused; }
   flyIn(slug, dur) {
     const anchor = this._anchorOf?.[slug];

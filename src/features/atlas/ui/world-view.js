@@ -181,6 +181,15 @@ export function initAtlasWorld(root = document) {
   function closePingSheet() {
     if (pingSheet) pingSheet.hidden = true;
     standDownDock(false, "ping");
+    /* Give the world back. `flyTo` leaves the globe zoomed to 2.1R with `_target` still set on
+       the guide it flew to, and its 2600ms hold only releases the SPIN — so dismissing the
+       sheet left a globe rotating in close-up around a country nobody had selected any more,
+       with no way back except finding the FIT control (creator, 2026-08-09: "the globe doesn't
+       re-orient itself and continue spinning").
+       `resetView()` is the existing, correct answer — it restores the scale, clears the target
+       and drops the hold — it simply had no caller on this path. Selection sets the view, so
+       clearing the selection clears it. */
+    map.resetView?.();
   }
   root.querySelector("[data-atlas-pingsheet-close]")?.addEventListener("click", closePingSheet);
   // The grip drew a drag handle and nothing listened to it (creator, 2026-08-09: "there's a

@@ -290,3 +290,49 @@ test("the ping sheet stops transitioning while a thumb owns its transform", asyn
   expect(during).toBe("none");
   await expect(sheet).toBeVisible();
 });
+
+/* Dismissing a pin sheet must give the world back.
+
+   `flyTo` leaves the globe at 2.1R with `_target` still pointed at the guide it flew to, and
+   the 2600ms hold it sets releases only the SPIN. So closing the sheet left a globe rotating in
+   close-up around a country nobody had selected any more (creator, 2026-08-09: "the globe
+   doesn't re-orient itself and continue spinning"), and the only way back was finding the FIT
+   control — which on mobile lives inside the menu sheet.
+
+   `resetView()` was already the right answer and simply had no caller here. Asserted through
+   the component's own state rather than by screenshotting a moving globe: the scale target is
+   the thing that was stuck, and it is exact. */
+test("closing the ping sheet returns the globe to the world and lets it spin again", async ({ page }) => {
+  await page.setViewportSize({ width: 402, height: 874 });
+  await page.addInitScript(() => sessionStorage.setItem("tg-atlas-cover-seen", "1"));
+  await page.goto(HUB, { waitUntil: "networkidle" });
+  await page.locator('[data-atlas-mode-btn="world"]').click();
+
+  const map = page.locator("atlas-map");
+  const state = () =>
+    map.evaluate((el) => {
+      // The component's own internals — the scale target is the thing that was stuck, and it is
+      // exact, where a screenshot of a spinning globe would not be.
+      const m = el as unknown as { _targetK: number; _R: number; _target: string | null; _hold: boolean };
+      return { targetK: m._targetK, R: m._R, target: m._target, hold: m._hold };
+    });
+
+  const chip = page.locator(".atlas-pinchip[data-on]").first();
+  await chip.waitFor({ state: "attached", timeout: 15000 });
+  await chip.evaluate((el) => (el as HTMLElement).click());
+  await expect(page.locator("[data-atlas-pingsheet]")).toBeVisible();
+
+  // Zoom in on it, which is what selecting a guide is for.
+  await page.locator("[data-atlas-pingsheet-zoom]").click();
+  await expect
+    .poll(async () => (await state()).targetK > (await state()).R * 1.5, { timeout: 5000 })
+    .toBe(true);
+
+  await page.locator("[data-atlas-pingsheet-close]").click();
+  await expect(page.locator("[data-atlas-pingsheet]")).toBeHidden();
+
+  const after = await state();
+  expect(after.targetK, "the globe is still zoomed into a guide nobody has selected").toBe(after.R);
+  expect(after.target, "the dismissed guide is still the map's target").toBeFalsy();
+  expect(after.hold, "the spin is still held after the selection cleared").toBeFalsy();
+});
