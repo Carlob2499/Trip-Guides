@@ -51,6 +51,38 @@ pass — content deferred, never dropped). So the first paragraph must stand
 alone as the card's summary: the one thing the traveler needs, in one or
 two sentences. Depth, caveats, and reference detail go in later paragraphs.
 
+**Prose SHAPE is a standard, not a preference — and it is gated.** Verification asks
+where a fact came from; nothing asked what shape the sentence carrying it was in, so
+research notes have shipped as cards. The Entry Documents item the creator flagged
+(2026-08-09) is 90 words, one bolded lead, four independent claims welded into a single
+paragraph — every fact in it sourced and correct, and unreadable on the phone it is read
+on. Correct-but-unreadable is still a defect.
+
+Write to the corpus's own measured shape (1087 shipped paragraphs): **median 28 words,
+p75 48.** Short is the house style; the long ones are outliers.
+
+- **Aim ≤ 60 words per paragraph. Past 80, split it.** Two ideas in one paragraph is two
+  paragraphs — or a list, or a typed section.
+- **One claim per sentence.** If a sentence contains "and ... and", or a dash carrying a
+  second thought, it is two sentences.
+- **The lead is a summary, not an abstract.** It answers the traveler's question in one or
+  two sentences. Everything conditional, historical, or comparative goes below it.
+- **Cut the reasoning that got you to the fact.** "Neither Fukuoka nor Sapporo has
+  scheduled nonstop US service in this trip's window — Fukuoka's international terminal
+  skews toward Seoul/Asia (~182 weekly FUK↔ICN flights across 8 carriers)" is a research
+  note. The traveler needs "Fly into Tokyo (HND/NRT) and connect." The evidence belongs in
+  the source, not the card.
+- **A `price` is a value, never a sentence** (≤60 chars, gated). It renders as a pill;
+  caveats go in the venue's own note where they can wrap. An unbreakable pill wider than
+  the phone once widened the page until `overflow-x: clip` cut the end off every line of
+  prose beside it.
+
+`node scripts/prose-shape.mjs` reports the current offenders; the gate
+(`scripts/__tests__/prose-shape.test.mjs`) fails any NEW one against a recorded baseline.
+The baseline exists because existing guides are verified historical records whose prose is
+a content edit under the continuity discipline, not something a lint script rewrites — it
+is meant to shrink, never grow.
+
 **The governing rule:** prose bodies allow only `<p> <b> <i> <a> <ul> <li> <ol>`.
 The moment content wants a table, a grid, cards, collapsibles, or any richer
 structure, that is the signal to reach for a **typed section** below — never richer

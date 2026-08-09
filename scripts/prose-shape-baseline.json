@@ -1,0 +1,86 @@
+{
+  "denmark/06-food-and-shopping.json::price-is-a-sentence": {
+    "count": 3,
+    "worst": 115
+  },
+  "denmark/07-day-trips.json::paragraph-too-long": {
+    "count": 2,
+    "worst": 167
+  },
+  "denmark/07-day-trips.json::price-is-a-sentence": {
+    "count": 1,
+    "worst": 76
+  },
+  "japan/01-plan.json::paragraph-too-long": {
+    "count": 2,
+    "worst": 144
+  },
+  "japan/02-food-and-shopping.json::price-is-a-sentence": {
+    "count": 4,
+    "worst": 86
+  },
+  "japan/03-sights.json::paragraph-too-long": {
+    "count": 2,
+    "worst": 155
+  },
+  "japan/05-transit.json::paragraph-too-long": {
+    "count": 1,
+    "worst": 181
+  },
+  "japan/06-days.json::paragraph-too-long": {
+    "count": 1,
+    "worst": 129
+  },
+  "japan/10-sources.json::paragraph-too-long": {
+    "count": 1,
+    "worst": 176
+  },
+  "korea/01-plan.json::paragraph-too-long": {
+    "count": 3,
+    "worst": 205
+  },
+  "korea/02-essentials.json::paragraph-too-long": {
+    "count": 1,
+    "worst": 168
+  },
+  "korea/03-getting-around.json::paragraph-too-long": {
+    "count": 3,
+    "worst": 168
+  },
+  "korea/04-itinerary.json::paragraph-too-long": {
+    "count": 3,
+    "worst": 134
+  },
+  "korea/05-sights.json::paragraph-too-long": {
+    "count": 2,
+    "worst": 121
+  },
+  "korea/07-gaming-and-anime.json::paragraph-too-long": {
+    "count": 2,
+    "worst": 146
+  },
+  "korea/08-food-and-shopping.json::paragraph-too-long": {
+    "count": 1,
+    "worst": 186
+  },
+  "korea/08-food-and-shopping.json::price-is-a-sentence": {
+    "count": 6,
+    "worst": 92
+  },
+  "korea/11-references.json::paragraph-too-long": {
+    "count": 1,
+    "worst": 329
+  },
+  "us/03-health-and-safety.json::paragraph-too-long": {
+    "count": 1,
+    "worst": 179
+  },
+  "us/05-days.json::paragraph-too-long": {
+    "count": 2,
+    "worst": 187
+  },
+  "us/_guide.json::paragraph-too-long": {
+    "count": 1,
+    "worst": 123
+  }
+}
