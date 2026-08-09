@@ -88,9 +88,8 @@ Gates on every commit: build · lint 0 · typecheck 0 · 1610 unit · 170 Playwr
   catalogued; issue #46 (globe pin auto-zoom + cover-hero popup) is filed for Claude Design and
   is not this assistant's to build.
 - **Airports for Sedona/Japan** — record them WHEN flights get booked. No fact yet; don't invent.
-- Tools pages and `/about/`, `/new/` are not in the SW precache shell.
-- Cover overlay does not trap focus (papercut — it dismisses on any key). LOCAL branch
-  `worktree-agent-a7dc7eeb397c6a368` (progress-study, `5917f8f`) — keep or lose.
+- Tools, `/about/` and `/new/` are not in the SW precache shell. Cover overlay does not trap
+  focus. LOCAL branch `worktree-agent-a7dc7eeb397c6a368` (`5917f8f`) — keep or lose.
 - Cloudflare dashboard Git integration still failing 0s builds on every push.
 - Korea 03: critic flagged a swapped 명동 label on the Gyeongbokgung map point → file its issue.
 - No guide uses a direct royalty-free `sights[].img.src` yet — capability live, unexercised.
