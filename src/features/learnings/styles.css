@@ -27,12 +27,16 @@
   color: var(--on-accent);
   font: 600 0.95rem/1 var(--font-body, inherit);
   cursor: pointer;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12);
 }
 .lnw-open:hover { filter: brightness(1.06); }
 .lnw-open:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 3px; }
 .lnw-open-ico { font-size:var(--text-body); }
 .lnw-cta-note { color: var(--muted); font-size:var(--text-small); }
+
+/* Atlas re-expression (Stage F, feature 6). Radii go binary — 0 on everything that holds
+   content (the dialog, the inputs, the aggregate and day cards, the tally rows), 999px on
+   everything pressed (the rating pills, both close buttons). The dialog's two drop shadows
+   go with them: it sits on its own backdrop, which already separates it from the page. */
 
 /* ── Modal overlay ────────────────────────────────────────────────────────── */
 /* M3: was z-index:9000 — 9x every other layer on the site with no documented reason found.
@@ -60,11 +64,9 @@
   background: var(--card);
   color: var(--ink);
   border: 1px solid var(--rule);
-  border-radius: 18px 18px 0 0;
+  border-radius: 0;
   padding: 22px 20px 20px;
-  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.3);
 }
-@media (min-width: 620px) { .lnw-dialog { border-radius: 18px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); } }
 .lnw-dialog:focus { outline: none; }
 .lnw-x {
   position: absolute;
@@ -73,7 +75,7 @@
   width: 34px;
   height: 34px;
   border: 0;
-  border-radius: 50%;
+  border-radius: 999px;
   background: transparent;
   color: var(--muted);
   font-size:var(--text-h4);
@@ -108,7 +110,7 @@
   width: 40px;
   height: 40px;
   border: 1px solid var(--rule2);
-  border-radius: 10px;
+  border-radius: 999px;
   background: var(--bg);
   color: var(--ink);
   font-weight: 600;
@@ -145,14 +147,14 @@
   font-weight: 600;
   cursor: pointer;
 }
-.lnw-tg-on { background: var(--green); color: #fff; }
+.lnw-tg-on { background: var(--green); color: var(--on-green); }
 .lnw-tg-off { background: var(--accent); color: var(--on-accent); }
 .lnw-reason {
   grid-column: 1 / -1;
   width: 100%;
   padding: 8px 10px;
   border: 1px solid var(--rule2);
-  border-radius: 8px;
+  border-radius: 0;
   background: var(--bg);
   color: var(--ink);
   font: inherit;
@@ -164,7 +166,7 @@
   width: 100%;
   padding: 12px;
   border: 1px solid var(--rule2);
-  border-radius: 10px;
+  border-radius: 0;
   background: var(--bg);
   color: var(--ink);
   font: inherit;
@@ -222,7 +224,7 @@
   width: 34px;
   height: 34px;
   border: 1px solid var(--rule2);
-  border-radius: 50%;
+  border-radius: 999px;
   background: var(--bg);
   color: var(--muted);
   font-size:var(--text-h4);
@@ -233,7 +235,7 @@
 .learn-agg {
   padding: 16px 18px;
   border: 1px solid var(--rule);
-  border-radius: 14px;
+  border-radius: 0;
   background: var(--card);
 }
 .learn-empty { margin: 0; color: var(--muted); }
@@ -243,7 +245,7 @@
   padding: 2px 8px;
   border-radius: 999px;
   background: var(--green);
-  color: #fff;
+  color: var(--on-green);
   font-size:var(--text-control);
   font-weight: 700;
 }
@@ -273,7 +275,7 @@
   padding: 14px 16px;
   margin-top: 12px;
   border: 1px solid var(--rule);
-  border-radius: 14px;
+  border-radius: 0;
   background: var(--card);
 }
 .learn-day-date {
@@ -329,8 +331,11 @@
   align-items: center;
   gap: 10px;
   padding: 6px 10px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
+  /* Was var(--line), which is not a token this product has ever defined — so the declaration
+     was invalid at computed-value time and the border fell back to currentColor, drawing each
+     row's frame in its own text colour. --rule is the hairline every other row here uses. */
+  border: 1px solid var(--rule);
+  border-radius: 0;
   background: var(--card);
 }
 .learn-tally-group { font-size:var(--text-small); font-weight: 600; }

@@ -67,6 +67,12 @@
      ink on a ground, and #fff on #b3261e is 6.54:1 in either theme. Re-mapping it would
      paint a pale-red button that reads as disabled. */
   --crit-fill:#b3261e;
+  /* ATLAS TOKEN CONTRACT — ink on a --green FILL. Unlike --on-accent and --crit-fill this one
+     DOES re-map, because --green itself re-maps: #fff measures 6.90:1 on the light green but
+     only 2.73:1 on the dark one, under even the 3:1 large-text floor. The learnings survey's
+     "went" toggle and its percentage chip were both painting #fff on it. Dark takes the page's
+     own near-black instead, 6.84:1. */
+  --on-green:#ffffff;
   /* ATLAS TOKEN CONTRACT — the --sm-* ground (Stage F feature 3). Story mode is a takeover,
      not a page: it is dark in BOTH themes, so it cannot read --ink/--bg without inverting
      itself for every light-theme reader. Like --on-aink and --crit-fill above, these are
@@ -294,13 +300,13 @@
    the swap automatically. Re-declaring them would create the second source of truth the alias
    exists to prevent. --cta/--cta-ink are not aliases and DO invert — see :root. */
 @media(prefers-color-scheme:dark){html:not([data-theme="light"]){
-  --bg:#0f1317;--bg2:#1a2129;--ink:#e8ece3;--card:#242c34;--rule:#38414b;--rule2:#4e5865;--muted:#9aa392;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;
+  --bg:#0f1317;--bg2:#1a2129;--ink:#e8ece3;--card:#242c34;--rule:#38414b;--rule2:#4e5865;--muted:#9aa392;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#0f1317;
   --cta:#e8ece3;--cta-ink:#0f1317;
   --accent-ink:var(--accent-ink-dark)}
   /* Carrier partner (#38): same swap, on the elements that carry their own candidates. */
   html:not([data-theme="light"]) [style*="--accent-ink-light"]{--accent-ink:var(--accent-ink-dark)}
 }
-[data-theme="dark"]{--bg:#0f1317;--bg2:#1a2129;--ink:#e8ece3;--card:#242c34;--rule:#38414b;--rule2:#4e5865;--muted:#9aa392;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;
+[data-theme="dark"]{--bg:#0f1317;--bg2:#1a2129;--ink:#e8ece3;--card:#242c34;--rule:#38414b;--rule2:#4e5865;--muted:#9aa392;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#0f1317;
   --cta:#e8ece3;--cta-ink:#0f1317;
   --accent-ink:var(--accent-ink-dark)}
 [data-theme="dark"] [style*="--accent-ink-light"]{--accent-ink:var(--accent-ink-dark)}

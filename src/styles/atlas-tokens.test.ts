@@ -190,6 +190,26 @@ describe("Atlas token contract — the primary CTA pair", () => {
   });
 });
 
+describe("Atlas token contract — ink on a --green fill", () => {
+  /* Stage F feature 6 found the learnings survey painting #fff on --green in two places (the
+     "went" toggle and the percentage chip). That is 6.90:1 on the light green and 2.73:1 on
+     the dark one — under even the 3:1 large-text floor, and invisible unless someone measures
+     it, because both themes look fine at a glance. --on-green exists so there is one answer
+     instead of a literal at each call site, and it has to RE-MAP, unlike --on-accent and
+     --crit-fill: those sit on a fill that holds one value across themes, and --green does not. */
+  it.each([
+    ["light", () => LIGHT],
+    ["dark", () => DARK],
+  ])("clears 4.5:1 on the %s theme's green", (_theme, scope) => {
+    expect(contrastRatio(hex(scope(), "--on-green"), hex(scope(), "--green"))).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it("re-maps between themes — a fixed #fff is exactly the bug this replaced", () => {
+    expect(hex(LIGHT, "--on-green")).not.toBe(hex(DARK, "--on-green"));
+    expect(contrastRatio("#ffffff", hex(DARK, "--green"))).toBeLessThan(3);
+  });
+});
+
 describe("Atlas token contract — declared-but-unconsumed tokens", () => {
   it("declares the four safe-area insets with a 0px fallback", () => {
     /* The fallback is not decoration. env() with no fallback resolves to nothing on a browser
