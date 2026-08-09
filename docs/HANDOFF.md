@@ -55,10 +55,15 @@ baselined and gated against growth. Writing it produced its own lesson: check-dr
 echoed source line at 100 characters, and this repo writes one-line CSS blocks, so classifying off
 that echo scored ~60 compliant rules as drift. Read the file, not the report about the file.
 
-**Two boundary checks earned their keep in one session.** The weekly workflow failed in 24
-seconds on its first smoke run: `stryker run` takes its config file POSITIONALLY and exits 1 on
-`--config`, which I had written from memory. And `actions/upload-artifact@v4` was two majors
-stale. Both were caught only by running the deployed thing once.
+**The boundary checks earned their keep three times in one session.** The weekly workflow failed
+in 24 seconds on its first smoke run: `stryker run` takes its config file POSITIONALLY and exits 1
+on `--config`, which I had written from memory (`actions/upload-artifact@v4` was two majors stale
+for the same reason). Then the drift gate passed locally and failed on CI seeing 465 of 788
+violations — because check-drift calls `process.exit(1)` straight after `console.error`, and a
+pipe write from Node is ASYNCHRONOUS on Linux and synchronous on Windows, so exit discarded the
+tail of the biggest root. It now writes to a file descriptor. Worth remembering: any tool whose
+output you capture through a pipe and which exits immediately can hand you a partial answer on
+Linux only, and a partial answer from a checker reads exactly like a clean result.
 
 ## Open items
 
