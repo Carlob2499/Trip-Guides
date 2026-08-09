@@ -1,0 +1,54 @@
+name: Mutation testing
+
+# Deliberately break the source, one small change at a time, and check whether any test notices.
+# A green suite proves the tests RAN; this proves they would CATCH something — the difference
+# between a test that guards behaviour and one that merely asserts a shape.
+#
+# WEEKLY, not per-push, and NON-BLOCKING on purpose. It takes ~3 minutes locally over 6000
+# mutants and the number is meant to be read, not enforced: a mutation score is a map of the thin
+# ice, not a grade, and gating on it would push people to write tests that satisfy the metric.
+# The output is docs/WHERE_THE_TESTS_ARE_BLIND.md, which is the thing worth reading.
+#
+# Scope is stryker.config.json: the pure model logic (src/features/*/model, src/lib) where a
+# silently wrong answer is possible and expensive. UI and build scripts are excluded — their real
+# failures are geometry and integration, which the visual specs and the CLAUDE.md boundary checks
+# cover instead.
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Mondays, 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mutation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  mutate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # --config is explicit rather than left to discovery: the repo already lost a deploy to a
+      # stray config file winning a resolution race (CLAUDE.md boundary check 4).
+      - run: npx stryker run --config stryker.config.json
+      - run: node scripts/mutation-report.mjs
+      - name: Commit the report if it moved
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/WHERE_THE_TESTS_ARE_BLIND.md
+          git diff --staged --quiet || git commit -m "chore(tests): refresh the mutation-testing report"
+          git push
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mutation-report
+          path: reports/mutation/
+          retention-days: 14

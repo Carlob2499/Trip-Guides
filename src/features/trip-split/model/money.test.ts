@@ -184,6 +184,26 @@ describe('computeSplits — input validation', () => {
   });
 });
 
+describe('computeSplits — who gets the leftover cent', () => {
+  /* Mutation testing found the tie-break untested: reversing the sort, or dropping the
+     index tie-break entirely, changed nobody's total and broke no test. It decides which
+     real person is charged the extra cent, and it must be the same person every time —
+     otherwise a re-render silently moves a penny between two people's balances. */
+  it('hands the leftover to the largest remainder, not to whoever happens to be first', () => {
+    // weights 1:2:3 of 10 → raw 1.667 / 3.333 / 5.0, floors 1/3/5 = 9, one cent spare.
+    // The biggest fraction is 'a' at .667, so 'a' takes it.
+    expect(computeSplits(10, 'SHARES', [p('a', 1), p('b', 2), p('c', 3)]).map((s) => s.amountMinor))
+      .toEqual([2, 3, 5]);
+  });
+
+  it('breaks an exact tie by input order, so the same person pays it every time', () => {
+    // Two equal shares of 3 → both remainders are exactly .5. Nothing distinguishes them
+    // but position, and position must win consistently rather than by sort stability.
+    expect(computeSplits(3, 'EQUAL', [p('a'), p('b')]).map((s) => s.amountMinor)).toEqual([2, 1]);
+    expect(computeSplits(5, 'EQUAL', [p('a'), p('b'), p('c')]).map((s) => s.amountMinor)).toEqual([2, 2, 1]);
+  });
+});
+
 describe('computeSplits — determinism', () => {
   it('returns identical output for identical input', () => {
     const participants = [p('a', 3), p('b', 3), p('c', 3)];

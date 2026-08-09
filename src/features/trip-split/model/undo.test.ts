@@ -78,6 +78,32 @@ describe("planMemberRemoval", () => {
     planMemberRemoval(members, [e], "b");
     expect(JSON.parse(JSON.stringify(e))).toEqual(snapshot);
   });
+
+  /* Each of the three ways an expense can reference a person is tracked by the same flag, and
+     mutation testing showed the round-trip test above covers them only as a set: an expense
+     that mentions the departing member EXACTLY ONCE, in one of the three places, could stop
+     producing a patch and nothing went red. That is a person who leaves the trip and stays on
+     an expense — money still owed to someone no longer in the list. */
+  it.each([
+    ["only as the payer", { paidBy: "b", weights: null, participants: ["a", "c"] }],
+    ["only in the weights", { paidBy: "a", method: "SHARES", weights: { a: 1, b: 2 }, participants: null }],
+    ["only as a sharer", { paidBy: "a", weights: null, participants: ["a", "b"] }],
+  ])("still plans a patch when they appear %s", (_where, over) => {
+    const plan = planMemberRemoval(members, [exp(over)], "b");
+    expect(plan.patches).toHaveLength(1);
+    expect(plan.restore).toHaveLength(1);
+  });
+
+  it("snapshots the sharer list by copy, so undo cannot be edited out from under itself", () => {
+    // Without the copy, the restore record points at the SAME array the expense holds. Any
+    // later edit to that list rewrites history, and undo puts back the edited version — which
+    // looks exactly like undo working.
+    const e = exp({ paidBy: "a", participants: ["a", "b", "c"] });
+    const original = e.participants;
+    const { restore } = planMemberRemoval(members, [e], "b");
+    expect(restore[0].participants).toEqual(["a", "b", "c"]);
+    expect(restore[0].participants).not.toBe(original);
+  });
 });
 
 describe("applyExpensePatch", () => {

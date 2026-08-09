@@ -1,0 +1,18 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/api/dist/schema/stryker-core.json",
+  "_comment": "Mutation testing: deliberately break the source and check the tests notice. A green suite proves the tests RUN; this proves they would CATCH something. Scoped to the pure logic where a silent wrong answer is possible and expensive — money, dates, geography, colour contrast. UI and build scripts are excluded: their real failures are geometry and integration, which the visual specs and the boundary checks cover instead.",
+  "packageManager": "npm",
+  "testRunner": "vitest",
+  "reporters": ["progress", "clear-text", "json"],
+  "jsonReporter": { "fileName": "reports/mutation/mutation.json" },
+  "coverageAnalysis": "perTest",
+  "timeoutMS": 20000,
+  "mutate": [
+    "src/features/*/model/**/*.ts",
+    "src/lib/**/*.ts",
+    "!**/*.test.ts",
+    "!**/*.spec.ts",
+    "!**/mocks/**"
+  ],
+  "thresholds": { "high": 85, "low": 70, "break": null }
+}

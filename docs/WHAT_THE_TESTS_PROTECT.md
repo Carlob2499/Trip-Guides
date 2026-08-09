@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1712 checks · 1712 carry a stated promise · 147 files
+1715 checks · 1715 carry a stated promise · 147 files
 
 ## Can everyone read it
 
@@ -1081,7 +1081,9 @@ nothing ships.
 - rejects missing weights for weighted methods  <sub>src/features/trip-split/model/money.test.ts:166</sub>
 - rejects all-zero weights  <sub>src/features/trip-split/model/money.test.ts:170</sub>
 - exposes a machine-readable error code  <sub>src/features/trip-split/model/money.test.ts:176</sub>
-- returns identical output for identical input  <sub>src/features/trip-split/model/money.test.ts:188</sub>
+- hands the leftover to the largest remainder, not to whoever happens to be first  <sub>src/features/trip-split/model/money.test.ts:192</sub>
+- breaks an exact tie by input order, so the same person pays it every time  <sub>src/features/trip-split/model/money.test.ts:199</sub>
+- returns identical output for identical input  <sub>src/features/trip-split/model/money.test.ts:208</sub>
 
 **On-the-ground sums — currency, spend so far — are arithmetically right.**
 
@@ -1472,8 +1474,9 @@ nothing ships.
 - restores every touched field exactly — the removal is fully reversible  <sub>src/features/trip-split/model/undo.test.ts:59</sub>
 - empties the payer field when the last person leaves  <sub>src/features/trip-split/model/undo.test.ts:69</sub>
 - does not mutate the records it plans over  <sub>src/features/trip-split/model/undo.test.ts:75</sub>
-- touches only the keys the patch carries  <sub>src/features/trip-split/model/undo.test.ts:84</sub>
-- writes an explicit null — restoring 'the whole group' is a real value, not a skip  <sub>src/features/trip-split/model/undo.test.ts:92</sub>
+- snapshots the sharer list by copy, so undo cannot be edited out from under itself  <sub>src/features/trip-split/model/undo.test.ts:97</sub>
+- touches only the keys the patch carries  <sub>src/features/trip-split/model/undo.test.ts:110</sub>
+- writes an explicit null — restoring 'the whole group' is a real value, not a skip  <sub>src/features/trip-split/model/undo.test.ts:118</sub>
 
 **Usage counting carries no personal information of any kind.**
 
