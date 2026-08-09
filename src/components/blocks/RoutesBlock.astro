@@ -9,7 +9,12 @@ const legs = routeLegLabels(sec.steps);
 {legs.length > 0 && (
   <div class="anch-fig" data-anch aria-hidden="true">
     <span class="af-t">The legs of this trip — {legs.length} routes</span>
-    <div class="anch-scroll">
+    {/* --legs marks this scroller as the ROUTE rail, not the date rail. The two have opposite
+        needs on a phone: dates are short and shrink to fit, route names are long and must
+        scroll. The mobile rule that made the date rail shrink used to apply to both, which is
+        how nine 14ch labels ended up overlapping AND widening the whole card past the
+        viewport — clipping every step's prose at the right edge. */}
+    <div class="anch-scroll anch-scroll--legs">
       <div class="jline jline--legs" data-n={legs.length}>
         <span class="jl-track"></span>
         {legs.map((label, li) => (

@@ -67,3 +67,34 @@ test("only one hint is open at a time", async ({ page }) => {
   await hints.nth(1).locator(".hint-btn").click();
   await expect(page.locator("[data-hint][data-open]")).toHaveCount(1);
 });
+
+/* An explanation that opens past the right edge of the screen is not merely awkward: `body` is
+   `overflow-x: clip`, so the overflowing half is not scrollable, it is gone. No scrollbar
+   appears to suggest it exists and no gesture reveals it — the sentence just stops. The tools
+   screen had four bubbles in that state at 375px.
+
+   Every hint is checked rather than a sample, because the collision depends on where a
+   particular `?` happens to sit; testing the first one proves nothing about the last. */
+test("every hint bubble stays on screen when opened at 375px", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto(TOOLS, { waitUntil: "networkidle" });
+
+  const buttons = page.locator("[data-hint-btn]");
+  const n = await buttons.count();
+  expect(n, "no hints on the tools page — this test would pass vacuously").toBeGreaterThan(3);
+
+  const offenders: string[] = [];
+  for (let i = 0; i < n; i++) {
+    const btn = buttons.nth(i);
+    await btn.click();
+    const box = await btn.evaluate((el) => {
+      const hint = (el as HTMLElement).closest("[data-hint]")!;
+      const b = hint.querySelector(".hint-bubble")!.getBoundingClientRect();
+      return { left: b.left, right: b.right, vw: document.documentElement.clientWidth, text: (hint.textContent || "").slice(0, 40) };
+    });
+    if (box.right > box.vw || box.left < 0) {
+      offenders.push(`hint ${i} ("${box.text.trim()}") spans ${Math.round(box.left)}–${Math.round(box.right)} in a ${box.vw}px viewport`);
+    }
+  }
+  expect(offenders, "a hint opens outside the viewport; overflow-x:clip destroys the part that hangs over").toEqual([]);
+});

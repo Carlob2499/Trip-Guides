@@ -27,6 +27,15 @@
 }
 .hint[data-align="end"] .hint-bubble { left: auto; right: 0; }
 
+/* A bubble anchored `left: 0` to a `?` that sits near the right edge opens PAST that edge, and
+   `body` is `overflow-x: clip` — so the far end of the explanation is not scrolled to, it is
+   cut off. The tools screen had four at once. `data-align="end"` already existed as the manual
+   escape hatch, which meant every author had to notice the problem per-hint; nobody can.
+   hint.js measures on reveal and writes the correction here. Transform rather than `left` on
+   purpose: it is the one horizontal property MOTION.md rule 7 allows to move, and it does not
+   re-run layout on a surface that is mid-fade. No JS, no shift, same behaviour as before. */
+.hint-bubble { transform: translateX(var(--hint-shift, 0px)); }
+
 /* Three reveals, one rule each. `[data-open]` is the tap case (hint.js). */
 .hint:hover .hint-bubble,
 .hint:focus-within .hint-bubble,

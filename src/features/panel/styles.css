@@ -149,6 +149,21 @@ html:not([data-panel-reorder]) [data-panel-order-reset] { display: none; }
 .pnl-body {
   display: grid;
   grid-template-rows: 1fr;
+  /* The grid exists ONLY to animate rows 1fr→0fr on collapse; the column was never declared,
+     so it defaulted to `auto` — and an auto track's floor is its content's MIN-CONTENT width.
+     Any child that cannot break below the viewport (a wide figure, a long unbroken token) then
+     sizes the whole track, and the panel body silently became wider than the phone.
+     Measured on korea/Transit at 375px: the body box was 347px while its own column was 529px.
+
+     What made that expensive rather than ugly: `body` is `overflow-x: clip`, so the excess is
+     not scrolled to, it is CUT OFF. Every paragraph in that panel wrapped to a 529px measure
+     and lost the end of each line against the screen edge, with no gesture that could reveal
+     it. The figure was the cause; destroyed prose three elements away was the symptom.
+
+     minmax(0, 1fr) removes the min-content floor, which is the whole fix — children now wrap
+     to the panel instead of the panel stretching to the children. Anything genuinely wider
+     than a phone (the route rail) carries its own overflow-x scroller and says so. */
+  grid-template-columns: minmax(0, 1fr);
   opacity: 1;
   visibility: visible;
 }

@@ -95,6 +95,19 @@
   .jl-stop{min-width:0}
   .jl-word{white-space:normal;max-width:15ch;line-height:1.2}
   .anch-scroll{overflow-x:visible}
+  /* ...EXCEPT the legs rail. Everything above is tuned for the DATE rail, whose labels are a
+     weekday and a number — they shrink to fit and the figure stays glanceable. Route names do
+     not shrink: `.jline--legs .jl-label` is 14ch, and nine of those inside a flex row that has
+     been told `min-width:0` with no scroller do not compress, they OVERFLOW. Two failures
+     followed, and the second is the expensive one:
+       1. the labels overlapped each other ("INTERNATIONAL" printed over "TOKYO →");
+       2. the row widened its card past the viewport, so every step's prose below wrapped to a
+          width the screen could not show and lost the end of every line.
+     A route rail that scrolls is honest about being longer than a phone. Restoring the
+     scroller fixes the reading surface, not just the figure. */
+  .anch-scroll--legs{overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;touch-action:pan-x}
+  .anch-scroll--legs .jline{min-width:max-content}
+  .anch-scroll--legs .jl-stop{flex:0 0 auto;min-width:8ch;padding:0 .5rem}
   /* Middle dates crowd at 8+ stops; the edges anchor the range and the day rail below
      carries every date in full. */
   .jline[data-n="7"] .jl-stop:not(.jl-first):not(.jl-last):nth-child(even) .jl-date,

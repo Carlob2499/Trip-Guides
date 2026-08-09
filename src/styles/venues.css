@@ -13,7 +13,21 @@
 .venue-area{display:block;font-family:var(--font-data);font-size:var(--text-small);color:var(--muted);margin-top:.1rem}
 
 .venue-meta{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.55rem}
-.venue-pill{display:inline-flex;align-items:center;padding:.15rem .55rem;font-family:var(--font-data);font-size:var(--text-control-sm);border-radius:999px;background:var(--bg2);color:var(--ink);white-space:nowrap}
+/* `white-space:nowrap` was right for what a pill is FOR — "≈₩3,000" must not break after the
+   ≈ — and wrong about what the data actually holds. 26 `price` fields across the shipped guides
+   carry a whole sentence ("≈249 DKK food-only / ≈399 DKK food+drinks per person — confirm at
+   koba-bbq.dk before booking, prices change"), and an unbreakable 568px pill on a 375px phone
+   does not merely look wrong: `body` is `overflow-x: clip`, so it widened the page and cut the
+   end off every line of prose beside it.
+
+   So the pill wraps now. Short values — the overwhelming majority, and the only thing this
+   field is meant to hold — still sit on one line because they fit; nothing about them changes.
+   `max-width:100%` is the belt to that braces: it keeps a single unbreakable token (a long URL,
+   a hashtag) inside the card too.
+
+   The sentence-shaped prices are a CONTENT defect, not a styling one, and this does not pretend
+   to fix them — a `price` should be a value. That is the guide-author prose-shape rule's job. */
+.venue-pill{display:inline-flex;align-items:center;padding:.15rem .55rem;font-family:var(--font-data);font-size:var(--text-control-sm);border-radius:999px;background:var(--bg2);color:var(--ink);white-space:normal;max-width:100%;overflow-wrap:anywhere}
 .venue-pill--action{background:var(--accent);color:var(--on-accent);text-decoration:none;border-bottom:0}
 .venue-pill--action:hover{filter:brightness(1.1)}
 
