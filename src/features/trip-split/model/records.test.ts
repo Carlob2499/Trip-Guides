@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { normalizeExpense, normalizeMember, normalizePayment } from "./records";
+import { normalizeExpense, normalizeMember, normalizePayment, rekeyForRoom } from "./records";
 
 /* These tests exist because of a shipped bug: the Firebase sync echo rebuilt each expense
    with a hand-copied field list that omitted `participants`, so every subset split silently
@@ -172,5 +172,71 @@ describe("normalizePayment", () => {
     expect(out.from).toBe("");
     expect(out.note).toBe("");
     expect(out.on).toBe("");
+  });
+});
+
+/* rekeyForRoom — restoring a stranded solo-mode ledger into a shared room.
+
+   Tested here rather than trusted inline because its failure mode does not look like a
+   failure: a room mints its own record ids, so if a reference to a person is not moved with
+   them, every amount still arrives, every total still adds up, and only the BALANCES are
+   wrong. Nobody reads a restored ledger closely enough to catch that by eye. */
+describe("rekeyForRoom", () => {
+  const ledger = {
+    members: [
+      { id: "old-a", name: "Ana", payment: "Revolut" },
+      { id: "old-b", name: "Ben", payment: "" },
+    ],
+    expenses: [
+      {
+        id: "e1", desc: "KTX", amountMinor: 5900, currency: "KRW", paidBy: "old-a",
+        participants: ["old-a", "old-b"], method: "EXACT", weights: { "old-a": 3000, "old-b": 2900 },
+      },
+    ],
+    payments: [{ id: "p1", from: "old-b", to: "old-a", baseMinor: 2900 }],
+  };
+  const mint = (_m: unknown, i: number) => `new-${i}`;
+
+  it("gives every member the room's own id and rewrites every reference to them", () => {
+    const out = rekeyForRoom(ledger, mint);
+    expect(out.members.map((m) => m.id)).toEqual(["new-0", "new-1"]);
+    expect(out.members.map((m) => m.name)).toEqual(["Ana", "Ben"]);
+
+    const e = out.expenses[0];
+    expect(e.paidBy).toBe("new-0");
+    expect(e.participants).toEqual(["new-0", "new-1"]);
+    // The weights MAP is keyed by member id — the reference most easily missed, and the one
+    // that changes what each person owes rather than what anything cost.
+    expect(e.weights).toEqual({ "new-0": 3000, "new-1": 2900 });
+    expect(out.payments[0]).toMatchObject({ from: "new-1", to: "new-0" });
+  });
+
+  it("keeps the money and the shape untouched — this remaps identity, nothing else", () => {
+    const e = rekeyForRoom(ledger, mint).expenses[0];
+    expect(e.amountMinor).toBe(5900);
+    expect(e.currency).toBe("KRW");
+    expect(e.method).toBe("EXACT");
+    expect(e.desc).toBe("KTX");
+  });
+
+  it("drops the old record id so the room assigns its own, and reorders from zero", () => {
+    const out = rekeyForRoom(ledger, mint);
+    expect(out.expenses[0].id).toBeUndefined();
+    expect(out.payments[0].id).toBeUndefined();
+    expect(out.expenses[0].order).toBe(0);
+    expect(out.members[1].order).toBe(1);
+  });
+
+  it("passes an unmapped reference through instead of emptying it", () => {
+    // A dangling id is visible and fixable; a silently blanked `paidBy` reads as an expense
+    // nobody paid for, which is indistinguishable from real data.
+    const orphan = { members: [], expenses: [{ paidBy: "ghost", participants: ["ghost"] }], payments: [] };
+    const out = rekeyForRoom(orphan, mint);
+    expect(out.expenses[0].paidBy).toBe("ghost");
+  });
+
+  it("survives an empty or malformed ledger rather than throwing into the UI", () => {
+    expect(rekeyForRoom(null, mint)).toEqual({ members: [], expenses: [], payments: [] });
+    expect(rekeyForRoom({}, mint)).toEqual({ members: [], expenses: [], payments: [] });
   });
 });

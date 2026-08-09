@@ -29,7 +29,7 @@ import { settle } from "../model/settle";
 import { buildBudgetSummary } from "../model/summary";
 import { printBudgetSummary } from "./budget-sheet.js";
 import { formatMinor, toBaseMinor, BASE_CURRENCY, CURRENCY_EXPONENT } from "../model/money";
-import { normalizeExpense, normalizeMember, normalizePayment } from "../model/records";
+import { normalizeExpense, normalizeMember, normalizePayment, rekeyForRoom } from "../model/records";
 import { planMemberRemoval, applyExpensePatch } from "../model/undo";
 import { hasFirebase, joinTrip, roomId as guideRoomId, isPostTripLocked } from "../../firebase/index.js";
 import { getLastRate } from "../../live-data/index.js";
@@ -902,6 +902,84 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
       renderRemote();
     }));
     setLive("live", "Live · shared with everyone on this guide.");
+    offerStrandedRescue();
+  }
+
+  /* ── stranded solo-mode data ──────────────────────────────────────────────────
+     A guide that gains a `roomId` switches source of truth: autoConnect() joins the room and
+     never calls load(), by design ("the room is the single source of truth, so devices never
+     inject stale copies"). Correct for a room that has data. Wrong for the case nobody
+     designed for — a trip that was ALREADY entered in solo mode before the roomId existed.
+     Korea is the live instance: it gained one in f50ca17, and the ledger typed during the trip
+     is still sitting in this device's localStorage, unread, while the panel shows an empty room.
+
+     persist() refuses to write while `room` is set, so that data has never been at risk of
+     being overwritten — it is only invisible. This makes it visible again.
+
+     Deliberately an OFFER, never automatic. Pushing one device's copy into a room every other
+     device also reads is a genuine fork: if two people both kept a solo ledger, silently
+     merging picks a winner and nobody is told. The reader knows which device was the real one;
+     this asks them. It also only appears when the room is EMPTY, so it can never compete with
+     a shared ledger that is already in use. */
+  function strandedLocal() {
+    var keys = [SK, SK + "-pre-v2"];
+    if (legacyStoreKey) keys.push("tg-split-" + legacyStoreKey);
+    for (var i = 0; i < keys.length; i++) {
+      var raw;
+      try { raw = localStorage.getItem(keys[i]); } catch (_) { continue; }
+      if (!raw) continue;
+      var parsed;
+      try { parsed = JSON.parse(raw); } catch (_) { continue; }
+      var m = parsed && Array.isArray(parsed.members) ? parsed.members.length : 0;
+      var e = parsed && Array.isArray(parsed.expenses) ? parsed.expenses.length : 0;
+      if (m || e) return { key: keys[i], data: parsed, members: m, expenses: e };
+    }
+    return null;
+  }
+
+  function offerStrandedRescue() {
+    if (!room) return;
+    // Only into an EMPTY room. A room with anything in it is the group's real ledger.
+    if (state.members.length || state.expenses.length) return;
+    var found = strandedLocal();
+    if (!found) return;
+    var host = document.getElementById("sLive");
+    if (!host || document.getElementById("sRescue")) return;
+
+    var box = document.createElement("div");
+    box.id = "sRescue";
+    box.className = "s-rescue";
+    var msg = document.createElement("p");
+    msg.className = "s-rescue-msg";
+    msg.textContent =
+      "This device has a saved budget for this trip — " + found.members + " " +
+      (found.members === 1 ? "person" : "people") + " and " + found.expenses + " " +
+      (found.expenses === 1 ? "expense" : "expenses") + " — from before this guide had a shared room. " +
+      "The shared room is empty. Restoring copies it in for everyone on this guide.";
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "s-rescue-go";
+    btn.textContent = "Restore this device's budget";
+    btn.addEventListener("click", function () {
+      btn.disabled = true;
+      /* The identity remap is the whole risk here and it lives in model/records.ts, tested:
+         a room mints its own ids, so every reference to a person (paidBy, participants, the
+         weights map, both ends of a payment) has to move with them. Get it wrong and the
+         amounts all arrive intact, the totals still add up, and the BALANCES are quietly
+         wrong — the failure mode that does not look like one. `mint` is the room's own add(),
+         which returns the new id synchronously. */
+      var rekeyed = rekeyForRoom(migrate(found.data), function (m, i) {
+        return room.collection("members").add({
+          name: (m && m.name) || "", payment: (m && m.payment) || "", order: i,
+        });
+      });
+      rekeyed.expenses.forEach(function (e) { room.collection("expenses").add(e); });
+      rekeyed.payments.forEach(function (p) { room.collection("payments").add(p); });
+      box.remove();
+    });
+    box.appendChild(msg);
+    box.appendChild(btn);
+    host.parentNode.insertBefore(box, host.nextSibling);
   }
 
   // Passive status line (no buttons). state = "connecting" | "live" | "offline".

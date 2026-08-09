@@ -190,3 +190,61 @@ export function normalizePayment(p: any): SplitPayment {
     order: p.order,
   };
 }
+
+/* ── Restoring a solo-mode ledger into a shared room ──────────────────────────────────────
+   A guide that gains a `roomId` switches source of truth, and a trip already entered in solo
+   mode is left stranded in localStorage (see offerStrandedRescue in ui/trip-split.js). Copying
+   it in is not a straight write: a room keys every record by a SERVER-generated push id, so
+   each restored person arrives with a new identity, and everything that points AT a person —
+   `paidBy`, `participants`, the `weights` map, both ends of a payment — has to be remapped in
+   the same pass.
+
+   Getting that wrong is the quiet kind of wrong: the amounts all arrive intact and the totals
+   still add up, but they are attached to nobody, so the BALANCES are silently different from
+   the ledger the reader is looking at. That is why this is pure and tested here rather than
+   inline in the UI closure where it began.
+
+   `mint` supplies each member's new id (the room's `add()` returns one synchronously). Records
+   keep their own field shapes untouched apart from identity — this remaps, it does not
+   normalize; the room's own echo does that on the way back in. */
+export function rekeyForRoom(
+  state: { members?: any[]; expenses?: any[]; payments?: any[] } | null | undefined,
+  mint: (member: any, index: number) => string,
+): { members: any[]; expenses: any[]; payments: any[] } {
+  const members = Array.isArray(state?.members) ? state!.members : [];
+  const expenses = Array.isArray(state?.expenses) ? state!.expenses : [];
+  const payments = Array.isArray(state?.payments) ? state!.payments : [];
+
+  const idMap = new Map<string, string>();
+  const outMembers = members.map((m, i) => {
+    const id = mint(m, i);
+    if (m && m.id) idMap.set(m.id, id);
+    return { id, name: (m && m.name) || "", payment: (m && m.payment) || "", order: i };
+  });
+  // An id with no mapping is passed through rather than dropped: a dangling reference is
+  // visible and fixable, where a silently emptied `paidBy` looks like a record nobody paid for.
+  const remap = (id: string) => idMap.get(id) || id;
+
+  const outExpenses = expenses.map((e, i) => {
+    const out: any = { ...e, order: i };
+    delete out.id;
+    if (out.paidBy) out.paidBy = remap(out.paidBy);
+    if (Array.isArray(out.participants)) out.participants = out.participants.map(remap);
+    if (out.weights && typeof out.weights === "object") {
+      const w: Record<string, unknown> = {};
+      for (const k of Object.keys(out.weights)) w[remap(k)] = out.weights[k];
+      out.weights = w;
+    }
+    return out;
+  });
+
+  const outPayments = payments.map((p, i) => {
+    const out: any = { ...p, order: i };
+    delete out.id;
+    if (out.from) out.from = remap(out.from);
+    if (out.to) out.to = remap(out.to);
+    return out;
+  });
+
+  return { members: outMembers, expenses: outExpenses, payments: outPayments };
+}

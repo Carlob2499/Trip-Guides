@@ -340,3 +340,25 @@ select.split-in{cursor:pointer}
 @media(max-width:899px){
   .split-undo{bottom:5.2rem}
 }
+
+/* ── Stranded solo-mode ledger (ui/trip-split.js offerStrandedRescue) ──────────────────────
+   Shown only when this device holds a budget saved BEFORE the guide had a shared room, and
+   that room is still empty. It is an offer, not a notice, so it is built like a control: the
+   accent marks it as actionable without the alarm colouring a warning would carry — nothing
+   has gone wrong here, there is simply data the panel cannot reach on its own.
+   Square because it holds content; the button inside is a pill because it is pressed. */
+.s-rescue{
+  display:flex;flex-wrap:wrap;align-items:center;gap:.6rem .9rem;
+  margin:.6rem 0 0;padding:.7rem .85rem;
+  background:var(--card);border:1px solid color-mix(in srgb,var(--accent) 45%,var(--rule));
+  border-radius:0;
+}
+.s-rescue-msg{margin:0;flex:1 1 16rem;min-width:0;font-size:var(--text-small);color:var(--ink);overflow-wrap:anywhere}
+.s-rescue-go{
+  flex:none;padding:.5rem 1rem;border:0;border-radius:999px;
+  background:var(--accent);color:var(--on-accent);
+  font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;cursor:pointer;
+}
+.s-rescue-go:hover{filter:brightness(1.06)}
+.s-rescue-go:disabled{opacity:.6;cursor:default}
+.s-rescue-go:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
