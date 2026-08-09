@@ -82,9 +82,16 @@
      open — no content group is current then, and pointing at one would be a lie. */
   .botbar-ind{
     position:absolute;top:0;height:2.5px;border-radius:0 0 3px 3px;background:var(--accent);
-    left:0;width:0;opacity:0;pointer-events:none;
-    transform:translateX(var(--mn-ind-x,0px));
-    transition:width .3s var(--ease-out-expo),opacity .2s ease,transform .3s var(--ease-out-expo);
+    /* Full-bleed and SCALED to the live slot rather than resized to it. The X was already a
+       transform (the finger drives it per-frame), but the width was a real `style.width` with a
+       .3s `width` transition behind it — so every frame of every tab change ran layout on the
+       bottom bar. Same MOTION rule-7 shape as .read-prog and for the same reason: nothing was
+       measuring it.
+       translateX before scaleX on purpose — the translate is in px, so the scale that follows
+       does not distort it. */
+    left:0;width:100%;opacity:0;pointer-events:none;transform-origin:left center;
+    transform:translateX(var(--mn-ind-x,0px)) scaleX(var(--mn-ind-w,0));
+    transition:opacity .2s ease,transform .3s var(--ease-out-expo);
   }
   .botbar-ind.on{opacity:1}
   /* Phase B drives this from a finger; a transition would fight the drag. */

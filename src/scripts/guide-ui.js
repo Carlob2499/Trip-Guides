@@ -551,7 +551,9 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             function updateBar() {
               var max = document.body.scrollHeight - window.innerHeight;
               var pct = max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0;
-              bar.style.width = pct + "%";
+              // A custom property, not style.width — see the .read-prog note in guide.css.
+              // This runs on every scroll frame, so it must not be able to trigger layout.
+              bar.style.setProperty("--read-prog", (pct / 100).toFixed(4));
               if (!horizonNav) return;
               horizonNav.style.setProperty("--journey-read", String(pct));
               var active = horizonNav.querySelector(".gtab-active:not(.gtab-tool)");

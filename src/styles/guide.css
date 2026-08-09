@@ -537,7 +537,14 @@ body{overflow-x:clip}
 
 /* === READING PROGRESS BAR =================================================== */
 /* 3px accent line fixed at the very top — fills as user scrolls through content */
-.read-prog{position:fixed;top:0;left:0;height:3px;width:0%;background:var(--accent);z-index:300;pointer-events:none;transition:width .08s linear}
+/* MOTION.md rule 7: per-frame paths move with transform/opacity only. This bar wrote
+   `style.width` from the scroll listener, so every scroll frame on every guide ran layout for a
+   3px strip — the same violation the reading spine and /progress/ had, found and fixed in
+   Stage F, and missed here because nothing was measuring guide.css. Third instance of one
+   mistake.
+   Full width, scaled from the left by --read-prog (0–1). The transition still smooths the same
+   .08s, it just smooths a composited property now. */
+.read-prog{position:fixed;top:0;left:0;height:3px;width:100%;transform-origin:left center;transform:scaleX(var(--read-prog,0));background:var(--accent);z-index:300;pointer-events:none;transition:transform .08s linear}
 
 /* === STATS BAR PILL VARIANTS ================================================ */
 /* countdown — accent-coloured, draws the eye */

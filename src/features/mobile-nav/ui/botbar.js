@@ -63,7 +63,10 @@ export function initBotBar(ctx) {
     var on = bar.querySelector(".botslot-on");
     if (!on || on.hidden) { ind.classList.remove("on"); return; }
     ind.classList.add("on");
-    ind.style.width = on.offsetWidth + "px";
+    // A scale factor, not a width — see the .botbar-ind note in mobile-nav.css. The element is
+    // the full width of the bar, so the fraction IS slot width over bar width.
+    var barW = bar.getBoundingClientRect().width || 1;
+    ind.style.setProperty("--mn-ind-w", (on.offsetWidth / barW).toFixed(5));
     ind.style.setProperty("--mn-ind-x", on.offsetLeft + "px");
   }
   // Exposed so the swipe gesture can drive the same element from a finger instead of
