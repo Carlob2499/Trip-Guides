@@ -128,9 +128,14 @@ export function initAtlasWorld(root = document) {
     setDock(open);
     dockToggle?.addEventListener("click", () => setDock(!dock.hasAttribute("data-open")));
   }
-  /** Fold the dock away while another bottom surface owns the screen. */
-  function standDownDock(down) {
-    dock?.toggleAttribute("data-stood-down", down);
+  /* Fold the dock away while another bottom surface owns the screen. Two independent owners
+     (the menu and the ping sheet) share this, so it counts them rather than holding a boolean:
+     with a boolean, closing the ping sheet while the menu was still open put the dock back
+     underneath the menu. */
+  const dockOwners = new Set();
+  function standDownDock(down, owner) {
+    if (down) dockOwners.add(owner); else dockOwners.delete(owner);
+    dock?.toggleAttribute("data-stood-down", dockOwners.size > 0);
   }
 
   function setMenu(open) {
@@ -139,7 +144,7 @@ export function initAtlasWorld(root = document) {
     fab.textContent = open ? "✕" : "☰";
     menuScrim.hidden = !open;
     menuSheet.hidden = !open;
-    standDownDock(open);
+    standDownDock(open, "menu");
   }
   const closeMenu = () => setMenu(false);
   fab?.addEventListener("click", () => setMenu(menuSheet?.hidden !== false));
@@ -167,11 +172,15 @@ export function initAtlasWorld(root = document) {
     if (pingOpen) pingOpen.href = g.href;
     pingSheet.dataset.slug = g.slug;
     pingSheet.hidden = false;
-    standDownDock(true);
+    // A pin chip is painted above the menu scrim (.atlas-pins z-index 5 vs 4), so it stays
+    // tappable with the menu open and could raise this sheet on top of it. One bottom surface
+    // at a time.
+    if (menuSheet && menuSheet.hidden === false) setMenu(false);
+    standDownDock(true, "ping");
   }
   function closePingSheet() {
     if (pingSheet) pingSheet.hidden = true;
-    standDownDock(false);
+    standDownDock(false, "ping");
   }
   root.querySelector("[data-atlas-pingsheet-close]")?.addEventListener("click", closePingSheet);
   // The grip drew a drag handle and nothing listened to it (creator, 2026-08-09: "there's a
@@ -264,7 +273,7 @@ export function initAtlasWorld(root = document) {
   const CHIP_FADE_FROM = 0.68; // fraction of the globe's radius where a chip starts fading
   const CHIP_LIFT = 12;        // px the chip sits above its pin — matches the CSS margin
   const chipEls = new Map();
-  const STATUS_DOT = { ongoing: "now", upcoming: "soon", past: "done", undated: "" };
+  const CHIP_STATUS = { ongoing: "on this trip now", upcoming: "filed, not travelled yet", past: "surveyed", undated: "guide filed" };
 
   function ensureChip(slug) {
     if (chipEls.has(slug)) return chipEls.get(slug);
@@ -277,7 +286,10 @@ export function initAtlasWorld(root = document) {
     el.className = "atlas-pinchip";
     el.setAttribute("data-status", g.status || "undated");
     el.innerHTML = `<span class="atlas-pinchip-dot" aria-hidden="true"></span><span class="atlas-pinchip-name">${escapeHtml(g.name)}</span>`;
-    el.setAttribute("aria-label", `${g.name} — ${STATUS_DOT[g.status] === "now" ? "on this trip now" : "guide filed"}. Open details.`);
+    // Every status has its own word. This used to test only for "now", so a past trip and an
+    // upcoming one both announced "guide filed" while the ping sheet called the same trip
+    // SURVEYED — two surfaces describing one fact differently.
+    el.setAttribute("aria-label", `${g.name} — ${CHIP_STATUS[g.status] || CHIP_STATUS.undated}. Open details.`);
     el.addEventListener("click", () => showPingSheet(g));
     pinsLayer.appendChild(el);
     chipEls.set(slug, el);

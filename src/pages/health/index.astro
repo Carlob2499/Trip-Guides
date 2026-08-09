@@ -167,7 +167,7 @@ const stampLabel: Record<State, string> = { proven: "Proven", unproven: "Not pro
       <p class="hl-group-sub">The automations that research, edit, publish, and re-check guides — the core promise.</p>
       <ul class="hl-list">
         {lifecycle.map((f) => (
-          <li class={`hl-item is-${f.state}`}>
+          <li class="hl-item">
             <div class="hl-item-top">
               <span class="hl-item-name"><a href={runsUrl(f.file)} target="_blank" rel="noopener">{f.name}</a></span>
               <span class={`hl-stamp ${stampClass[f.state]}`}>{stampLabel[f.state]}</span>
@@ -185,7 +185,7 @@ const stampLabel: Record<State, string> = { proven: "Proven", unproven: "Not pro
       <p class="hl-group-sub">Build, test, and housekeeping — less glamorous, more reliable.</p>
       <ul class="hl-list">
         {support.map((f) => (
-          <li class={`hl-item is-${f.state}`}>
+          <li class="hl-item">
             <div class="hl-item-top">
               <span class="hl-item-name"><a href={runsUrl(f.file)} target="_blank" rel="noopener">{f.name}</a></span>
               <span class={`hl-stamp ${stampClass[f.state]}`}>{stampLabel[f.state]}</span>

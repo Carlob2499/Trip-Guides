@@ -142,7 +142,7 @@ test("the submit button keeps its label on hover", async ({ page }) => {
   await expect(btn).toBeVisible();
   await btn.hover();
 
-  const ratio = await btn.evaluate((el) => {
+  const { ratio, hovered } = await btn.evaluate((el) => {
     const lum = (c: string) =>
       (c.match(/[\d.]+/g) || [])
         .slice(0, 3)
@@ -153,7 +153,17 @@ test("the submit button keeps its label on hover", async ({ page }) => {
     const cs = getComputedStyle(el);
     const a = lum(cs.color);
     const b = lum(cs.backgroundColor);
-    return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+    /* Report whether the hover fill actually took. Without this the test measures whatever pair
+       is live, and the RESTING pair (--bg on --ink) is ~13:1 — so a pointer that failed to land,
+       or a future :hover media guard, would score green on a state the test never entered. */
+    const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim();
+    const probe = document.createElement("div");
+    probe.style.color = accent;
+    document.body.appendChild(probe);
+    const accentRgb = getComputedStyle(probe).color;
+    probe.remove();
+    return { ratio: (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05), hovered: cs.backgroundColor === accentRgb };
   });
+  expect(hovered, "the :hover fill never applied — the ratio below is the resting pair").toBe(true);
   expect(ratio).toBeGreaterThanOrEqual(4.5);
 });

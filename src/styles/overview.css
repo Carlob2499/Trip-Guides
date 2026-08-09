@@ -31,8 +31,14 @@
 .wx-swap{margin:.45rem .1rem .1rem;padding:.45rem .6rem;border-radius:0;background:color-mix(in srgb,var(--accent) 10%,transparent);border:1px solid color-mix(in srgb,var(--accent) 35%,var(--rule));font-family:var(--font-data);font-size:var(--text-caption);line-height:1.45;color:var(--ink)}
 
 /* What's-Next as the accent tile of the row — centered to match. */
-.whats-next{display:flex;align-items:baseline;justify-content:center;gap:.6rem;background:color-mix(in srgb,var(--accent) 12%,var(--card));border:1px solid color-mix(in srgb,var(--accent) 45%,var(--rule));border-radius:0;padding:.65rem .95rem;margin:.6rem auto 0;max-width:52rem}
+/* The ground is plain --card, not an accent tint. accent-tokens.ts guarantees --accent-ink
+   clears 4.5:1 against --card/--bg/--bg2 BY CONSTRUCTION, and against nothing else — the 12%
+   tint it used to carry pushed the label to 2.70:1 on denmark's lighter accent, which no test
+   could have predicted from the token contract. The accent still marks the banner, in the
+   border, where its contrast requirement is 3:1 against the page rather than 4.5:1 behind text. */
+.whats-next{display:flex;align-items:baseline;justify-content:center;gap:.6rem;background:var(--card);border:1px solid color-mix(in srgb,var(--accent) 45%,var(--rule));border-radius:0;padding:.65rem .95rem;margin:.6rem auto 0;max-width:52rem}
 .whats-next .wn-label{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink)}
+.whats-next .wn-text{font-size:var(--text-small);font-weight:600;color:var(--ink);overflow-wrap:anywhere}
 
 /* ── Reveal-on-scroll (opacity/transform only; short-circuited under
       reduced-motion; reveal.js guarantees content is never left hidden) ───── */

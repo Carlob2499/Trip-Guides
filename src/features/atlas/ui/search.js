@@ -95,7 +95,13 @@ export function initAtlasSearch(root) {
     setOpen(false, false);
 
     toggle.addEventListener("click", () => {
-      setOpen(head.hasAttribute("data-collapsed"), true);
+      const collapsed = head.hasAttribute("data-collapsed");
+      // Collapsing on a live query used to hide the FIELD and leave the results panel behind
+      // it — and the collapsed header sets pointer-events:none, so those results were on
+      // screen and untappable. The comment above promised this never happened; now it is
+      // code. Clearing first is the honest read of "fold the search away".
+      if (!collapsed && input.value) { input.value = ""; runQuery(); }
+      setOpen(collapsed, true);
     });
     input.addEventListener("keydown", (e) => {
       if (e.key !== "Escape") return;

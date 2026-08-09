@@ -7,10 +7,19 @@
    be. It renders. It just renders wrong, in a way no unit test of any module could see and no
    screenshot obviously flags.
 
-   So this reads every stylesheet the product ships, collects what each one DECLARES, and
-   asserts that every name any of them READS resolves. A var() carrying a FALLBACK is exempt by
-   construction — an undeclared name there resolves to the fallback, which is the documented way
-   to read something optional. Only the bare form can silently invalidate its own declaration. */
+   So this reads every stylesheet the product ships — .css files AND the <style> blocks inside
+   .astro components — collects what each one DECLARES, and asserts that every name any of them
+   READS resolves. A var() carrying a FALLBACK is exempt by construction: an undeclared name
+   there resolves to the fallback, which is the documented way to read something optional. Only
+   the bare form can silently invalidate its own declaration.
+
+   KNOWN LIMIT, stated rather than hidden: `declared` is one repo-wide set, so this proves a
+   name EXISTS somewhere, not that it is in scope where it is read. A token declared only on a
+   component (--bs-ink on .bsheet, --fl-fg on .fl-page) would satisfy a bare read in an
+   unrelated file — the very --line bug this exists to catch, wearing a name that happens to be
+   declared elsewhere. Scope-accurate checking needs a cascade, which is a browser, not a regex;
+   the runtime gates in tests/visual are where that is caught. This catches the common case
+   cheaply and says so. */
 import { describe, expect, it } from "vitest";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
@@ -18,25 +27,48 @@ import { fileURLToPath } from "node:url";
 
 const SRC = fileURLToPath(new URL("..", import.meta.url));
 
-function cssFiles(dir: string, out: string[] = []): string[] {
+/* .astro files carry <style> blocks, and those are stylesheets the product ships too. Leaving
+   them out was a real hole: the two preview pages alone hold ~55 bare var() reads this gate
+   could not see. */
+function styleSources(dir: string, out: string[] = []): string[] {
   for (const name of readdirSync(dir)) {
     if (name === "node_modules") continue;
     const p = join(dir, name);
-    if (statSync(p).isDirectory()) cssFiles(p, out);
-    else if (name.endsWith(".css")) out.push(p);
+    if (statSync(p).isDirectory()) styleSources(p, out);
+    else if (name.endsWith(".css") || name.endsWith(".astro")) out.push(p);
   }
   return out;
 }
 
+/** An .astro file's CSS is only what is inside its <style> blocks; the rest is markup and TS. */
+function cssOf(file: string): string {
+  const raw = readFileSync(file, "utf8");
+  if (!file.endsWith(".astro")) return raw;
+  let css = "";
+  const blank = (s: string) => s.replace(/[^\n]/g, " ");
+  for (const m of raw.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)) {
+    // Keep the offsets honest so reported line numbers still point into the real file.
+    css += blank(raw.slice(css.length, m.index)) + m[1];
+  }
+  return css + blank(raw.slice(css.length));
+}
+
 /* Properties written from JS or an inline style attribute, which a static scan cannot see.
    EMPTY today, and that is the finding rather than an oversight: every runtime-written property
-   in this codebase — --ring-frac, --mn-ind-x, --scrub-x, --i, --tp-past — is already read
-   through a fallback, so none of them needs an exemption. An entry here should be a deliberate
+   in this codebase — --ring-frac, --mn-ind-x, --scrub-x, --i, --tp-past, and the two added this
+   arc, --spine-fill and --pg-progress — is already read through a fallback, so none needs an
+   exemption. An entry here should be a deliberate
    statement that something at runtime writes a property read bare, not a way to quiet this. */
 const RUNTIME_SET = new Map<string, string>([]);
 
-const FILES = [...cssFiles(join(SRC, "styles")), ...cssFiles(join(SRC, "features"))];
-const ALL = FILES.map((f) => ({ file: f.slice(SRC.length).replace(/\\/g, "/"), css: readFileSync(f, "utf8") }));
+const FILES = [
+  ...styleSources(join(SRC, "styles")),
+  ...styleSources(join(SRC, "features")),
+  ...styleSources(join(SRC, "pages")),
+  ...styleSources(join(SRC, "layouts")),
+  ...styleSources(join(SRC, "components")),
+];
+const ALL = FILES.map((f) => ({ file: f.slice(SRC.length).replace(/\\/g, "/"), css: cssOf(f) }));
 
 /* Blank out comments before scanning — the long explanatory comments throughout these
    stylesheets name tokens in prose. Replaced with same-length whitespace (newlines kept) so

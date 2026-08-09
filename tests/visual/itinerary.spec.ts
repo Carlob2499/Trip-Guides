@@ -99,9 +99,12 @@ test.describe("desktop", () => {
       const cs = getComputedStyle(el);
       return { h: cs.height, t: cs.transform, origin: cs.transformOrigin, box: el.getBoundingClientRect().height };
     });
-    // Full height in the box model; the scale is what varies.
+    /* Assert the SCALE, not side effects of it. `height` is 100% from CSS unconditionally and
+       `transform` is a matrix even at scaleY(0), so neither of those could fail on a revert —
+       only the scale factor names what the change actually did. */
+    const scaleY = Number(read.t.match(/matrix\(([^)]+)\)/)?.[1].split(",")[3] ?? NaN);
+    expect(scaleY).toBeCloseTo(1, 2);
     expect(read.h).not.toBe("0px");
-    expect(read.t).not.toBe("none");
     // `transform-origin: top` computes to "<half the width> 0px" — the Y is what matters:
     // scaling from the middle would grow the bar in both directions.
     expect(read.origin.split(" ")[1]).toBe("0px");

@@ -34,6 +34,10 @@
 .atlas-search-toggle:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
 .atlas-tablehead[data-collapsed] .atlas-search { display: none; }
 .atlas-tablehead[data-collapsed] .atlas-search-clear { display: none; }
+/* The results list lives inside this header, so a collapse has to take it too — otherwise it
+   stays painted under a header that is now pointer-events:none. search.js clears the query
+   before collapsing; this is the belt to that braces. */
+.atlas-tablehead[data-collapsed] .atlas-results { display: none; }
 /* Collapsed, the header stops BEING a header (creator, 2026-08-09: "still persistent on
    scroll"). Shrinking the field to a button still left a full-width bar with a background
    and a rule under it riding down the page — which reads as persistent chrome whatever its

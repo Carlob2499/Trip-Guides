@@ -617,3 +617,48 @@ for (const scheme of ["light", "dark"] as const) {
     if (many) expect(new Set(carriers.map((c) => c.resolved)).size).toBeGreaterThan(1);
   });
 }
+
+/* The What's-Next banner, on every guide, in both themes.
+
+   It is `hidden` in the markup and only unhidden by guide-ui.js inside the trip's own date
+   range, so the whole-page gate has never scanned it once — the same blind spot as the SOS
+   sheet and the share panel, but on a surface that appears exactly when the traveller is
+   actually travelling. It was shipping at 1.09:1 (light) and 1.53:1 (dark): the text was
+   there, in near-white on near-white, and nobody could have seen it to report it.
+
+   Scanned per guide because --accent and --accent-ink are extracted PER GUIDE, and the bug it
+   replaces was one that only denmark's lighter accent exposed. */
+for (const guide of ["denmark", "korea", "japan", "us"] as const) {
+  for (const scheme of ["light", "dark"] as const) {
+    test(`what's-next banner is legible — ${guide} (${scheme})`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme: scheme, reducedMotion: "reduce" });
+      await page.goto(`/Trip-Guides/guides/${guide}/`, { waitUntil: "networkidle" });
+
+      const pairs = await page.evaluate(() => {
+        const banner = document.getElementById("whatsNext");
+        if (!banner) return null;
+        banner.removeAttribute("hidden");
+        const text = document.getElementById("wnText")!;
+        text.textContent = "Gyeongbokgung Palace, 14:00";
+        const srgb = (v: string) => {
+          const n = (v.match(/[\d.]+/g) || []).map(Number);
+          // getComputedStyle may answer in rgb(0-255) or color(srgb 0-1) once color-mix is involved.
+          return v.startsWith("color(") ? n.slice(0, 3) : n.slice(0, 3).map((c) => c / 255);
+        };
+        const lum = (v: string) =>
+          srgb(v).map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4))
+            .reduce((a, c, i) => a + c * [0.2126, 0.7152, 0.0722][i], 0);
+        const ground = lum(getComputedStyle(banner).backgroundColor);
+        const ratio = (el: Element) => {
+          const l = lum(getComputedStyle(el).color);
+          return (Math.max(l, ground) + 0.05) / (Math.min(l, ground) + 0.05);
+        };
+        return { text: ratio(text), label: ratio(banner.querySelector(".wn-label")!) };
+      });
+
+      expect(pairs, "no #whatsNext banner in this guide's markup").not.toBeNull();
+      expect(pairs!.text, "wn-text on the banner ground").toBeGreaterThanOrEqual(4.5);
+      expect(pairs!.label, "wn-label on the banner ground").toBeGreaterThanOrEqual(4.5);
+    });
+  }
+}

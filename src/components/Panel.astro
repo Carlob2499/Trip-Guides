@@ -85,7 +85,15 @@ const titleId = `pnl-title-${slug}`;
     </button>
     <div class="pnl-headings">
       {kicker && <p class="pnl-kicker">{kicker}</p>}
-      <Heading class="pnl-title" id={titleId}>{title}{hint && <Hint text={hint} label={title} />}</Heading>
+      {/* The hint sits BESIDE the heading, never inside it. The section is
+          aria-labelledby={titleId}, and accessible-name computation walks that element's whole
+          subtree — with the Hint inside, every hinted panel announced its title plus the "?"
+          plus the entire tooltip paragraph as its name ("What everyone actually spent?The same
+          ledger as the calculator…"). Found in review, 2026-08-09. */}
+      <div class="pnl-title-row">
+        <Heading class="pnl-title" id={titleId}>{title}</Heading>
+        {hint && <Hint text={hint} label={title} />}
+      </div>
     </div>
     {anchorBtn && anchorId && (
       <button class="anchor-btn" data-sid={anchorId} type="button"

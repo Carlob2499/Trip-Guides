@@ -282,3 +282,9 @@ html:not([data-panel-reorder]) [data-panel-order-reset] { display: none; }
    cannot say "span from wherever auto-placement put you to the end" (`grid-column-end:
    -1` pins the item to the final column and leaves the hole in the MIDDLE instead). */
 .pnl-grid > .pnl--full { grid-column: 1 / -1; }
+
+/* The title and its `?` on one baseline. The hint used to live inside the heading element; it
+   was moved out so it stops appearing in the panel's accessible name (see Panel.astro), and
+   this keeps the visual result identical. */
+.pnl-title-row { display: flex; align-items: baseline; gap: .45em; min-width: 0; }
+.pnl-title-row .pnl-title { min-width: 0; }

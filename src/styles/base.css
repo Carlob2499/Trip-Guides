@@ -76,7 +76,8 @@
      "went" toggle and its percentage chip were both painting #fff on it. Dark takes the page's
      own near-black instead, 6.84:1. */
   --on-green:#ffffff;
-  /* ATLAS TOKEN CONTRACT — the --sm-* ground (Stage F feature 3). Story mode is a takeover,
+  /* ATLAS TOKEN CONTRACT — the --dark-* ground (Stage F feature 3; named --sm-* until feature 7
+     took the lightbox onto it too). Story mode is a takeover,
      not a page: it is dark in BOTH themes, so it cannot read --ink/--bg without inverting
      itself for every light-theme reader. Like --on-aink and --crit-fill above, these are
      deliberately NOT re-mapped per theme — a fixed ground is an object, not ink on the page.

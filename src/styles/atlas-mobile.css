@@ -66,6 +66,12 @@
   /* The name is the point; keep it from ever growing wider than a phone's half-width. */
   .atlas-pinchip-name { max-width: 42vw; overflow: hidden; text-overflow: ellipsis; }
 
+  /* A chip for a guide on the far side of the globe is faded out, and opacity alone leaves it
+     focusable and announced — Tab on a Bluetooth keyboard landed on a button with no visible
+     focus ring anywhere on screen, and a screen reader read out guides that were not drawn.
+     visibility takes it out of both trees; `data-on` is set per frame in placeChips. */
+  .atlas-pinchip:not([data-on]) { visibility: hidden; }
+
   @media (prefers-reduced-motion: no-preference) {
     /* Opacity only — the transform is the live position and must never be transitioned,
        or every chip would lag its own pin by the transition's duration. */
@@ -227,6 +233,10 @@
   }
   .atlas-menusheet { transform: translateY(0) scale(1); transform-origin: 100% 100%; }
   .atlas-pingsheet { transform: translateY(0); }
+  /* sheet-drag.js writes transform on every pointermove, so the sheet has to stop
+     transitioning while a thumb owns it — otherwise each move starts a fresh 240ms tween and
+     the sheet trails the finger. Same rule .sos-inner and .sheet already carry. */
+  .atlas-pingsheet.sheet-dragging { transition: none; will-change: transform; }
 
   @starting-style {
     .atlas-menusheet:not([hidden]) { opacity: 0; transform: translateY(8px) scale(.96); }

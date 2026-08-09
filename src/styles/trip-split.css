@@ -14,7 +14,7 @@
    2026-08-02 — MODERNISATION PASS. Measured at 375px with a real 3-person /
    4-expense budget, this panel was the oldest-feeling surface on the site:
    26px buttons and 36px inputs against the 44px floor the wizard pass set, 4px
-   radii against the --r-md/--r-lg container language, every expense description
+   radii against the container language of the day, every expense description
    clipped in a ~104px column, and settlement rows spending 109px to say one
    sentence. The controls below are now the same vocabulary as the rest of the
    site: pill actions with a visible fill, a real segmented toggle, 44px touch
@@ -51,13 +51,17 @@
 .sm-idx{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;color:var(--muted);text-align:center;line-height:1}
 
 /* ── shared input ──────────────────────────────────────────────────────────
-   40px desktop / 44px touch, on the --r-md container radius. The old 4px-radius,
-   36px field is the single strongest "this is from an older site" signal here. */
-.split-in{font:inherit;font-size:var(--text-body);min-height:40px;border:1px solid var(--rule2);border-radius:0;padding:.4rem .6rem;background:var(--bg);color:var(--ink);width:100%;min-width:0;transition:border-color .16s,background .16s,box-shadow .16s}
+   40px desktop / 44px touch, square. The height is the point — the old 36px field was the
+   single strongest "this is from an older site" signal here. The radius is no longer a
+   judgement call at all: Stage G deleted the --r-* ladder, so a container is 0. */
+.split-in{font:inherit;font-size:var(--text-body);min-height:40px;border:1px solid var(--rule2);border-radius:0;padding:.4rem .6rem;background:var(--bg);color:var(--ink);width:100%;min-width:0;transition:border-color .16s,background .16s}
 .split-in:hover{border-color:var(--muted)}
 /* Was a 3px box-shadow standing in for a focus ring. An outline IS the focus ring, it follows
    the element's own shape, and it is not elevation. */
-.split-in:focus{outline:none;border-color:var(--accent);outline:3px solid color-mix(in srgb,var(--accent) 55%,transparent);outline-offset:0}
+/* One outline, not an `outline:none` immediately overridden by an `outline` shorthand two
+   declarations later. Raised from a 55% mix to solid --accent: composited on --card the mix
+   measured 1.71-2.35:1 across the four guides, under WCAG 1.4.11's 3:1 for a focus indicator. */
+.split-in:focus{border-color:var(--accent);outline:3px solid var(--accent);outline-offset:0}
 .split-in::placeholder{color:var(--muted);opacity:.75}
 select.split-in{cursor:pointer}
 
@@ -150,8 +154,13 @@ select.split-in{cursor:pointer}
 .se-parts-lbl{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin-right:.15rem}
 .se-part{min-height:30px;padding:.25rem .7rem;border:1px solid var(--rule2);border-radius:999px;background:var(--bg);color:var(--muted);font-size:var(--text-caption);font-weight:600;cursor:pointer;text-decoration:line-through;text-decoration-color:var(--rule2);transition:background .14s,border-color .14s,color .14s}
 .se-part:hover{border-color:var(--muted);color:var(--ink)}
-.se-part-on{background:var(--accent);border-color:var(--accent);color:#fff;text-decoration:none}
-.se-part-on:hover{color:#fff}
+/* --on-accent, not #fff. accent-tokens.ts derives --on-accent as readableOn(accent, 4.5), so
+   it clears the floor for whatever palette a guide extracts; a literal white only clears it for
+   guides whose accent happens to be dark enough. Denmark's is not — white measured 3.69:1 here
+   at .78rem/600, which is normal text. The other three passed by luck, and the next extracted
+   palette gets no such luck. */
+.se-part-on{background:var(--accent);border-color:var(--accent);color:var(--on-accent);text-decoration:none}
+.se-part-on:hover{color:var(--on-accent)}
 .se-part:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 .se-parts-note{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;color:var(--accent-ink);margin-left:.1rem}
 .se-custom{display:flex;flex-wrap:wrap;gap:.45rem .6rem;margin-top:.45rem;padding:.6rem .65rem;background:var(--bg2);border-radius:0;border-left:3px solid var(--rule2)}

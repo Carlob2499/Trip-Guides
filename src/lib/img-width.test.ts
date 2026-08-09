@@ -41,6 +41,10 @@ describe("srcsetFor", () => {
     expect(srcsetFor(COMMONS, 56)).toBe(`${COMMONS}?width=56 1x, ${COMMONS}?width=112 2x`);
   });
 
+  it("returns null when the URL already pins a width — both entries would be the same file", () => {
+    expect(srcsetFor(`${COMMONS}?width=800`, 56)).toBeNull();
+  });
+
   it("returns null for a single-size URL — a srcset of one size is a lie about choice", () => {
     expect(srcsetFor("https://cdn.example/pic.jpg", 56)).toBeNull();
     expect(srcsetFor(null, 56)).toBeNull();

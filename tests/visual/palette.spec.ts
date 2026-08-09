@@ -39,10 +39,15 @@ test("typing filters the list, and Escape closes and returns focus", async ({ pa
   await page.locator(".pal-input").fill("zzzzznotathing");
   await expect(page.locator(".pal-empty")).toBeVisible();
 
+  /* render() caps results at 12, so comparing counts proves nothing — before and after are
+     both 12, and `after <= before + 12` reads 12 <= 24, which no revert could ever break.
+     Assert what filtering actually means instead: every row shown matches the query, in its
+     label or in the body text the row was matched on. */
   await page.locator(".pal-input").fill("day");
-  const after = await page.locator(".pal-item").count();
-  expect(after).toBeGreaterThan(0);
-  expect(after).toBeLessThanOrEqual(before + 12);
+  const rows = await page.locator(".pal-item").allTextContents();
+  expect(rows.length).toBeGreaterThan(0);
+  expect(rows.every((r) => r.toLowerCase().includes("day"))).toBe(true);
+  expect(before).toBeGreaterThan(0);
 
   await page.keyboard.press("Escape");
   await expect(page.locator(".pal-backdrop")).not.toHaveClass(/pal-open/);
@@ -64,7 +69,9 @@ test("a result row's hint is a plain secondary line, not the footer's rule", asy
   await openPalette(page, "button");
   // "In text" results are the ones that carry a hint (the preview of the matched card).
   await page.locator(".pal-input").fill("KTX");
-  const hint = page.locator(".pal-item .pal-hint").first();
+  // :not(:empty) — the hint span is only filled when the query does NOT appear in the label
+  // (palette.js), so `.first()` alone would break the day a Korea heading contains "KTX".
+  const hint = page.locator(".pal-item .pal-hint:not(:empty)").first();
   await expect(hint).toBeVisible();
 
   const style = await hint.evaluate((el) => {

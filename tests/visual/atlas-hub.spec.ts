@@ -213,14 +213,22 @@ test("the ping sheet's grip is a real handle — dragging it down dismisses the 
   // It drew a drag affordance and listened to nothing (creator, 2026-08-09). A control that
   // looks draggable and is not is worse than no control at all.
   await page.setViewportSize({ width: 402, height: 874 });
-  await page.emulateMedia({ reducedMotion: "reduce" });
+  /* NOT reduced motion, deliberately. sheet-drag.js skips writing the transform entirely when
+     motion is reduced (`if (!reduced)`), so a reduced-motion run never exercises the dragged
+     path at all — it was passing without ever moving the sheet. The real path also needs
+     .atlas-pingsheet.sheet-dragging{transition:none}, or each pointermove restarts a 240ms
+     tween and the sheet trails the thumb. Both are now under test. */
   await page.addInitScript(() => sessionStorage.setItem("tg-atlas-cover-seen", "1"));
   await page.goto(HUB, { waitUntil: "networkidle" });
   await page.locator('[data-atlas-mode-btn="world"]').click();
 
+  /* The chip is clicked through the DOM, not the pointer. This test cannot run under reduced
+     motion (see above), so the globe is spinning and the chip moves between Playwright's
+     actionability check and its click — which is what the earlier reduced-motion run was
+     quietly working around. Dispatching the click directly tests the same handler. */
   const chip = page.locator(".atlas-pinchip[data-on]").first();
-  await chip.waitFor({ state: "visible", timeout: 15000 });
-  await chip.click();
+  await chip.waitFor({ state: "attached", timeout: 15000 });
+  await chip.evaluate((el) => (el as HTMLElement).click());
   const sheet = page.locator("[data-atlas-pingsheet]");
   await expect(sheet).toBeVisible();
 
@@ -231,8 +239,11 @@ test("the ping sheet's grip is a real handle — dragging it down dismisses the 
     const panel = grip.closest("[data-atlas-pingsheet]")!;
     const r = grip.getBoundingClientRect();
     const x = r.x + r.width / 2;
+    // Dispatched ON THE GRIP, not on the panel. Events bubble to the panel's listener either
+    // way, but firing on the panel would pass identically if the grip were a decorative span
+    // anywhere in the sheet — which is the exact regression this test exists to catch.
     const fire = (type: string, clientY: number) =>
-      panel.dispatchEvent(new PointerEvent(type, {
+      grip.dispatchEvent(new PointerEvent(type, {
         bubbles: true, pointerId: 1, pointerType: "touch", clientX: x, clientY,
       }));
     fire("pointerdown", r.y);
@@ -246,4 +257,36 @@ test("the ping sheet's grip is a real handle — dragging it down dismisses the 
   await expect(sheet).toBeHidden();
   // Dismissing the sheet must hand the screen back to the dock, not leave both gone.
   await expect(page.locator("[data-atlas-dock]")).toBeVisible();
+});
+
+test("the ping sheet stops transitioning while a thumb owns its transform", async ({ page }) => {
+  /* The sheet gained a .24s transform transition for its entrance. sheet-drag.js writes
+     transform on every pointermove, so without a dragging opt-out each move restarts that
+     tween and the sheet lags the finger by a quarter second — invisible to every other test,
+     because the only drag test used to run under reduced motion. */
+  await page.setViewportSize({ width: 402, height: 874 });
+  await page.addInitScript(() => sessionStorage.setItem("tg-atlas-cover-seen", "1"));
+  await page.goto(HUB, { waitUntil: "networkidle" });
+  await page.locator('[data-atlas-mode-btn="world"]').click();
+
+  const chip = page.locator(".atlas-pinchip[data-on]").first();
+  await chip.waitFor({ state: "attached", timeout: 15000 });
+  await chip.evaluate((el) => (el as HTMLElement).click());
+  const sheet = page.locator("[data-atlas-pingsheet]");
+  await expect(sheet).toBeVisible();
+
+  const during = await sheet.evaluate((panel) => {
+    const r = panel.getBoundingClientRect();
+    const fire = (type: string, clientY: number) =>
+      panel.dispatchEvent(new PointerEvent(type, {
+        bubbles: true, pointerId: 1, pointerType: "touch", clientX: r.x + r.width / 2, clientY,
+      }));
+    fire("pointerdown", r.y + 6);
+    fire("pointermove", r.y + 30);
+    const t = getComputedStyle(panel).transitionProperty;
+    fire("pointerup", r.y + 30); // below the dismiss threshold — the sheet springs back
+    return t;
+  });
+  expect(during).toBe("none");
+  await expect(sheet).toBeVisible();
 });

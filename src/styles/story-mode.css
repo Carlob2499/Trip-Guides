@@ -5,7 +5,7 @@
 
 body.sm-lock{overflow:hidden}
 
-/* Story mode's ground is the --sm-* contract declared in base.css beside --crit-fill: the one
+/* Story mode's ground is the --dark-* contract declared in base.css beside --crit-fill: the one
    surface in the product that is dark in BOTH themes, so it cannot read --ink/--bg without
    inverting itself for half the audience. Ten hex literals used to be scattered down this
    file; they are one documented block in the token file now. */

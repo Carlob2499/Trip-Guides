@@ -39,5 +39,7 @@
   .hint-bubble { transition: opacity .16s linear; }
 }
 
-/* A hint inside a Panel header must not stretch the header or steal the title's baseline. */
-.pnl-headings .hint { margin-left: .45em; align-self: center; }
+/* A hint in a Panel header must not stretch the header or steal the title's baseline. The
+   margin moved into .pnl-title-row's own `gap` when the hint was lifted out of the heading
+   element (Panel.astro) — keeping it here too would double the space. */
+.pnl-headings .hint { align-self: center; }

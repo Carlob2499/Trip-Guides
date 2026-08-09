@@ -35,7 +35,7 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
    --bg2 6.67), which is why one token can now serve both. The hover FILL keeps its own
    non-remapping token; see --crit-fill. */
 .topbar-sos{color:var(--crit);border-color:color-mix(in srgb,var(--crit) 55%,var(--rule2));font-weight:700}
-.topbar-sos:hover{color:#fff;background:var(--crit-fill);border-color:var(--crit-fill)}
+.topbar-sos:hover{color:var(--on-crit);background:var(--crit-fill);border-color:var(--crit-fill)}
 /* Text role, not decoration — the raw per-guide accent is only contrast-gated to 3:1
    (src/lib/contrast.ts's MIN_ACCENT_CONTRAST, sized for large/decorative UI), which isn't
    enough for small body text at WCAG's 4.5:1. Blending 30% toward --ink pulls any
@@ -81,12 +81,11 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 .draft-graduate-link:hover{color:var(--accent-ink)}
 
 /* === WHAT'S NEXT BANNER ======================================================= */
-/* Populated client-side against the device clock; only shown during the trip's
-   own date range (guide-ui.js "WHATS NEXT"). High-contrast — this is meant to
-   be glanceable, not just another muted stat pill. */
-.whats-next{display:flex;align-items:baseline;gap:.55rem;flex-wrap:wrap;justify-content:center;margin:.75rem auto 0;max-width:36rem;padding:.6rem 1rem;background:var(--accent);border-radius:6px}
-.wn-label{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--bg);opacity:.85;flex:none}
-.wn-text{font-size:var(--text-small);font-weight:600;color:var(--bg);overflow-wrap:anywhere}
+/* The What's-Next banner lives entirely in overview.css. It used to be declared HERE too —
+   an accent FILL with `color:var(--bg)` ink — and overview.css, imported after this file,
+   replaced the fill with a 12% tint but had no .wn-text rule of its own. So the ink stayed
+   near-white on a near-white ground: 1.09:1 light, 1.53:1 dark, measured on the built site.
+   The banner only unhides inside the trip's own date range, which is why nobody saw it. */
 
 /* === TOAST ==================================================================== */
 /* Transient feedback (save/copy confirmations) — destination for flash().

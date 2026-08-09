@@ -31,5 +31,11 @@ export function srcsetFor(url: string | null | undefined, w: number): string | n
   if (!url) return null;
   const resizable = url.includes("{w}") || url.includes(COMMONS_FILEPATH);
   if (!resizable) return null;
-  return `${atWidth(url, w)} 1x, ${atWidth(url, w * 2)} 2x`;
+  const one = atWidth(url, w);
+  const two = atWidth(url, w * 2);
+  // A Commons URL that already carries its own ?width= is left alone by atWidth, so both
+  // entries would be the same file — a srcset that promises a 2x asset and serves the 1x one.
+  // Saying nothing is honest; saying "2x" about a 1x image is not.
+  if (!one || !two || one === two) return null;
+  return `${one} 1x, ${two} 2x`;
 }

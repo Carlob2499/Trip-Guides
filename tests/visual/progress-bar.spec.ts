@@ -15,7 +15,7 @@ test("the progress bar fills by transform, anchored to the left edge", async ({ 
 
   const shape = await fill.evaluate((el) => {
     const cs = getComputedStyle(el);
-    return { width: cs.width, origin: cs.transformOrigin, transform: cs.transform };
+    return { width: cs.width, origin: cs.transformOrigin };
   });
   // Full width in the box model; the scale is what varies, so a poll tick costs a composite.
   const track = await page.locator(".pg-bar-track").evaluate((el) => getComputedStyle(el).width);

@@ -10,7 +10,7 @@
    a radial gradient that mixes 26% of the guide's accent into --dark-ground near the top, so the
    real background behind the title is NOT --dark-ground and asserting against that token would be
    measuring the wrong thing. The overlay is screenshotted with its own ink hidden, the lightest
-   pixel is taken as the worst case, and every --sm-* ink is rated against that. */
+   pixel is taken as the worst case, and every --dark-* ink is rated against that. */
 import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import sharp from "sharp";
@@ -59,10 +59,10 @@ for (const scheme of ["light", "dark"] as const) {
   });
 }
 
-/* The takeover does not re-map with the theme, by design (base.css's --sm-* contract), so one
+/* The takeover does not re-map with the theme, by design (base.css's --dark-* contract), so one
    sampling run covers both. Run in light mode precisely because that is the case a themed
    token WOULD have inverted for. */
-test("every --sm-* ink clears 4.5:1 against the worst pixel of the real painted ground", async ({ page }) => {
+test("every --dark-* ink clears 4.5:1 against the worst pixel of the real painted ground", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "light", reducedMotion: "reduce" });
   const overlay = await openStory(page);
 
