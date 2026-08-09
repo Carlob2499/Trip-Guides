@@ -305,7 +305,10 @@ offsets drift apart.
 Rhythm is set by the body line-height of 1.72 and a card padding of `1.25rem 1.4rem`. There is
 deliberately no abstract spacing scale — spacing is set per component against the reading
 measure, and inventing a `--space-*` ladder now would be a second source of truth for values
-that already agree.
+that already agree. That is now enforced rather than merely stated: `src/styles/var-defined.test.ts`
+fails any stylesheet that reads a custom property nothing declares, which is how two dead
+`var(--space-s)`/`var(--space-xs)` reads were found still sitting in `divergences.css`,
+silently resolving to zero.
 
 Stacking is a named ladder, not ad-hoc integers: raised (120) for floating buttons and
 popovers, sticky (310) for full-screen sheets, toast (940), modal (960), story overlay (1000),
@@ -346,12 +349,16 @@ reading as modal — the reader loses a stacking cue they were processing withou
 
 ## Shapes
 
-Two families and nothing between them. **Controls are pills** — every tab, button, badge, chip,
+Two values and nothing between them. **Controls are pills** — every tab, button, badge, chip,
 and status pill is `999px`, so anything tappable is legible as tappable at a glance, including
-in peripheral vision on a moving phone. **Containers are panels** — `6px` (`--r-sm`) for tight
-inline marks like toasts and the "what's next" strip, `10px` (`--r-md`) for popovers, inputs,
-and inline notes, `16px` (`--r-lg`) for cards, modals, hero surfaces, and sheets (sheets round
-their top corners only, since they rise from the edge).
+in peripheral vision on a moving phone. **Containers are square** — `0` on anything that holds
+content or evidence: cards, modals, sheets, popovers, inputs, notes, toasts.
+
+This replaced a three-step radius ladder (`--r-sm` 6px / `--r-md` 10px / `--r-lg` 16px) during
+the Atlas migration, and the ladder is gone rather than deprecated — `enforcement/check-drift.mjs`
+fails any value that is not `0` or `999px`, because a rounded card is the single fastest way to
+make this design stop looking like itself. Where a radius used to do the separating, a `1px`
+rule does it now.
 
 Borders are `1px` and do real work; the palette carries two hairline weights so a border can be
 quiet (`--rule`) or assertive (`--rule2`) without inventing a third colour. Icons are drawn SVG

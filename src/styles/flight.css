@@ -49,7 +49,7 @@
    down after paint. It has its own background + shadow so it reads as a floating strip, not
    a layout row. */
 [data-hint-anchor]{position:relative}
-.nav-hint{position:absolute;top:100%;left:0;right:0;display:flex;align-items:center;gap:.7rem;max-width:var(--read);margin:.5rem auto 0;padding:.55rem .9rem;background:color-mix(in srgb,var(--accent) 10%,var(--card));border:1px dashed color-mix(in srgb,var(--accent) 45%,var(--rule));border-radius:var(--r-md);box-shadow:0 6px 16px rgba(0,0,0,.12);font-size:var(--text-small);color:var(--ink);transition:opacity .35s,transform .35s}
+.nav-hint{position:absolute;top:100%;left:0;right:0;display:flex;align-items:center;gap:.7rem;max-width:var(--read);margin:.5rem auto 0;padding:.55rem .9rem;background:color-mix(in srgb,var(--accent) 10%,var(--card));border:1px dashed color-mix(in srgb,var(--accent) 45%,var(--rule));border-radius:0;box-shadow:0 6px 16px rgba(0,0,0,.12);font-size:var(--text-small);color:var(--ink);transition:opacity .35s,transform .35s}
 .nav-hint-txt{flex:1;line-height:1.5}
 .nav-hint-x{flex:none;width:30px;height:30px;background:transparent;border:1px solid var(--rule);border-radius:999px;color:var(--muted);cursor:pointer;font-size:var(--text-control-sm)}
 .nav-hint-x:hover{color:var(--ink);border-color:var(--ink)}
@@ -57,7 +57,7 @@
 @media(max-width:899px){.nav-hint{margin-left:1rem;margin-right:1rem}}
 
 /* ── Next-section CTA — the guided reading chain ─────────────────────────── */
-.next-cta{display:flex;align-items:center;gap:1rem;width:100%;max-width:var(--read);margin:2.2rem auto .4rem;padding:1.15rem 1.4rem;background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:var(--r-lg);cursor:pointer;text-align:left;transition:background .22s,color .22s,border-color .22s,transform .2s var(--ease-spring)}
+.next-cta{display:flex;align-items:center;gap:1rem;width:100%;max-width:var(--read);margin:2.2rem auto .4rem;padding:1.15rem 1.4rem;background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:0;cursor:pointer;text-align:left;transition:background .22s,color .22s,border-color .22s,transform .2s var(--ease-spring)}
 .next-cta-label{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);transition:color .22s}
 .next-cta-title{flex:1;font-family:var(--font-display);font-weight:640;font-size:var(--text-h4);letter-spacing:-.012em;line-height:1.1}
 .next-cta-arrow{font-size:var(--text-h3);line-height:1;transition:transform .22s cubic-bezier(.2,.7,.2,1)}

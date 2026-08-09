@@ -96,6 +96,14 @@ self-boots to upgrade it only when `PUBLIC_GMAPS_KEY` is set.
   `docs/NEW_GUIDE_INTAKE.md`).
 - **New section type:** add a Zod member to `src/content.config.ts`, a renderer in
   `src/components/blocks/`, and wire it in `Block.astro`.
+- **New styling:** three gates run on every stylesheet and each catches a class of bug the
+  others cannot. `src/styles/var-defined.test.ts` fails a `var()` that nothing declares (CSS
+  does not error on those — the declaration is invalid at computed-value time and silently
+  falls back). `src/styles/type-scale.test.ts` fails a raw `font-size` outside the scale.
+  `src/styles/atlas-tokens.test.ts` pins the contrast contracts, including the four ink-on-fill
+  tokens that must NOT re-map (`--on-aink`, `--on-accent`, `--crit-fill`, `--on-crit`) and the
+  two that MUST (`--on-green`, `--cta`/`--cta-ink`). Reach for a token before a literal: ink on
+  a coloured FILL is never `--accent-ink`/`--ink`, it is the `--on-*` of that fill.
 
 ## Backlog (each gets its own planning session)
 

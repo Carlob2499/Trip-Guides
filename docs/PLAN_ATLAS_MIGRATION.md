@@ -28,8 +28,22 @@ history from git log.
 - [x] Stage C — The hub (Phase 3) + flip
 - [x] Stage D — Mobile (Phase 4)
 - [x] Stage E — Tools (Phase 5)
-- [ ] Stage F — The twelve features (full redesign, one at a time)
-- [ ] Stage G — Closeout
+- [x] Stage F — The twelve features (full redesign, one at a time) — 2026-08-09, one commit each
+- [x] Stage G — Closeout — 2026-08-09
+
+**Stage F result.** Six of the twelve turned up a real defect rather than drift, and every one
+of them was invisible without measuring: white on the dark green at 2.73:1; the over-budget
+verdict at 3.57:1 with a dark set that never applied to the theme toggle; the change-request
+submit button at 1.45–2.30:1 on hover, on every guide; the About contour ground at 3.84:1 in
+dark; `.pal-hint` declared twice so the footer's rule drew across every result row; and
+`var(--line)`/`var(--space-*)` reads that nothing declared, silently resolving to nothing.
+Two perf violations of MOTION.md rule 7 (spine height, progress width) went with them.
+
+The recurring one is worth carrying forward: **every surface that opens on a gesture had never
+been scanned by the a11y gate**, because axe skips hidden nodes — share panel, story mode,
+palette, and (before this arc) the SOS sheet. Four for four. A new gesture-revealed surface
+needs its own scoped axe test in its own spec file; folding it into the whole-page gate does
+not work when the surface ships a scrim.
 
 ---
 

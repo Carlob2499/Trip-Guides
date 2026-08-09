@@ -4,9 +4,9 @@
    on wide desktop the day cards sit beside a sticky, day-synced planner map. */
 
 /* ── Day scrubber — sticky numbered chips ─────────────────────────────────── */
-.day-scrub{position:sticky;top:var(--chrome-h);z-index:30;display:flex;gap:.45rem;overflow-x:auto;scrollbar-width:none;padding:.55rem .15rem;margin:0 0 .9rem;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:var(--r-md)}
+.day-scrub{position:sticky;top:var(--chrome-h);z-index:30;display:flex;gap:.45rem;overflow-x:auto;scrollbar-width:none;padding:.55rem .15rem;margin:0 0 .9rem;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:0}
 .day-scrub::-webkit-scrollbar{display:none}
-.dchip{flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:.15rem;min-width:4.6rem;min-height:44px;padding:.45rem .6rem .4rem;background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:var(--r-md);cursor:pointer;transition:background .15s,border-color .15s,transform .2s var(--ease-spring);text-align:left}
+.dchip{flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:.15rem;min-width:4.6rem;min-height:44px;padding:.45rem .6rem .4rem;background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:999px;cursor:pointer;transition:background .15s,border-color .15s,transform .2s var(--ease-spring);text-align:left}
 .dchip:hover{border-color:var(--accent);transform:translateY(-1px)}
 .dchip:active{transform:scale(.94)}
 .dchip-num{font-family:var(--font-data);font-size:var(--text-nano);font-weight:700;letter-spacing:.06em;color:var(--accent-ink);line-height:1}
@@ -48,7 +48,7 @@
     grid-template-columns:1fr;              /* single-column card */
     max-height:calc(100svh - var(--chrome-h) - 8.5rem);
     overflow-y:auto;-webkit-overflow-scrolling:touch;
-    margin:0;border-radius:var(--r-lg);
+    margin:0;border-radius:0;
   }
   .planner-days .day::-webkit-scrollbar{width:0}
   .planner-days .day .d{padding-top:0}
@@ -101,7 +101,7 @@
 /* ── Now-line: live stop states on today's card (now-line.js) ─────────────── */
 .stop-past{opacity:.5}
 .stop-past .stop-num{color:var(--muted)}
-.stop-next{background:color-mix(in srgb,var(--accent) 10%,transparent);border-radius:var(--r-sm);margin-left:-.65rem;padding-left:1.3rem;position:relative}
+.stop-next{background:color-mix(in srgb,var(--accent) 10%,transparent);border-radius:0;margin-left:-.65rem;padding-left:1.3rem;position:relative}
 .stop-next::before{content:"";position:absolute;left:.45rem;top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:var(--accent)}
 @media(prefers-reduced-motion:no-preference){
   .stop-next::before{animation:nowPulse 2s ease-in-out infinite}

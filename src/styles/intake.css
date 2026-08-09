@@ -25,12 +25,12 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .itk-foot a:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 
 /* ── The flat form (no-JS base markup; fields re-parent into the flow) ────── */
-.ng-form{display:flex;flex-direction:column;gap:.95rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-lg);padding:1.5rem 1.6rem 1.7rem;box-shadow:0 1px 3px rgba(16,20,24,.06)}
+.ng-form{display:flex;flex-direction:column;gap:.95rem;background:var(--card);border:1px solid var(--rule);border-radius:0;padding:1.5rem 1.6rem 1.7rem;box-shadow:0 1px 3px rgba(16,20,24,.06)}
 .ng-field{display:flex;flex-direction:column;gap:.35rem;border:none;padding:0;min-width:0}
 .ng-field>span{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
 .ng-field em{font-style:normal;color:var(--rule2)}
 /* 44px control height (16px+ font already iOS-zoom-safe); textarea grows from the same base. */
-.ng-field input,.ng-field select,.ng-field textarea{font:inherit;font-size:var(--text-body);background:var(--bg2);color:var(--ink);border:1px solid var(--rule2);border-radius:var(--r-md);padding:.55rem .75rem;width:100%;min-height:44px;transition:border-color .14s,background .14s}
+.ng-field input,.ng-field select,.ng-field textarea{font:inherit;font-size:var(--text-body);background:var(--bg2);color:var(--ink);border:1px solid var(--rule2);border-radius:0;padding:.55rem .75rem;width:100%;min-height:44px;transition:border-color .14s,background .14s}
 .ng-field textarea{min-height:66px}
 .ng-field input:hover,.ng-field select:hover,.ng-field textarea:hover{border-color:var(--muted)}
 .ng-field input:focus,.ng-field select:focus,.ng-field textarea:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
@@ -56,7 +56,7 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .itk-back:focus-visible,.itk-next:focus-visible,.itk-send:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 /* A · drop zone */
-.itk-dz{display:block;padding:2rem 1rem;border:2px dashed var(--rule2);border-radius:var(--r-lg);text-align:center;cursor:pointer;transition:border-color .2s,background .2s}
+.itk-dz{display:block;padding:2rem 1rem;border:2px dashed var(--rule2);border-radius:0;text-align:center;cursor:pointer;transition:border-color .2s,background .2s}
 .itk-dz:hover,.itk-dz-hot{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 6%,transparent)}
 .itk-dz-big{display:block;font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);letter-spacing:-.01em}
 .itk-dz-sub{display:block;margin-top:.3rem;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted)}
@@ -66,7 +66,7 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 
 /* B · ranked board */
 .itk-slots{display:flex;gap:.6rem;margin:.4rem 0 .8rem;flex-wrap:wrap}
-.itk-slot{flex:1;min-width:8.5rem;border:2px dashed var(--rule2);border-radius:var(--r-md);min-height:50px;display:flex;align-items:center;justify-content:center;gap:.35em;font-family:var(--font-data);font-size:var(--text-control);color:var(--muted);transition:border-color .2s,background .2s}
+.itk-slot{flex:1;min-width:8.5rem;border:2px dashed var(--rule2);border-radius:0;min-height:50px;display:flex;align-items:center;justify-content:center;gap:.35em;font-family:var(--font-data);font-size:var(--text-control);color:var(--muted);transition:border-color .2s,background .2s}
 .itk-slot-on{border-style:solid;border-color:var(--accent);color:var(--ink);background:color-mix(in srgb,var(--accent) 8%,transparent);font-weight:700}
 .itk-slot em{font-style:normal;color:var(--accent-ink)}
 .itk-board,.itk-topics{display:flex;flex-wrap:wrap;gap:.45rem;margin:.2rem 0 .6rem}
@@ -84,7 +84,7 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .itk-blank:hover{background:color-mix(in srgb,var(--accent) 10%,transparent)}
 .itk-blank:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .itk-blank-ghost{color:var(--muted);border-bottom-color:var(--rule2);font-style:italic}
-.itk-drawer{margin:.6rem 0 .2rem;padding:.9rem 1rem;background:var(--bg2);border:1px solid var(--rule);border-radius:var(--r-md)}
+.itk-drawer{margin:.6rem 0 .2rem;padding:.9rem 1rem;background:var(--bg2);border:1px solid var(--rule);border-radius:0}
 .itk-send{min-height:44px;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);background:var(--accent);color:var(--on-accent);border:1px solid var(--accent);border-radius:999px;padding:.6rem 1.4rem;cursor:pointer;margin-left:auto;transition:background .18s,transform .18s var(--ease-spring)}
 .itk-send:hover{background:var(--ink);border-color:var(--ink)}
 .itk-send:active{transform:scale(.98)}

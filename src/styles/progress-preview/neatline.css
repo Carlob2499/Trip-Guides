@@ -1,3 +1,10 @@
+/* This page is an unshipped design EXPLORATION, not a product surface, and it was written in
+   the pre-Atlas rounded-container language. The --r-* ladder was deleted from base.css in the
+   Atlas migration's Stage G closeout (the shipped system has only 0 and 999px), so the three
+   values it still uses are declared here, scoped to this preview, rather than the exploration
+   being quietly restyled into a system it was never drawn in. */
+:root{--r-sm:6px;--r-md:10px;--r-lg:16px}
+
 /* === OPTION C — NEATLINE (design study, /progress/) =========================
    The sheet before it is drawn.
 

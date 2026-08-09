@@ -654,11 +654,14 @@ const tripSummary = buildSummary(guide);
         </div>
       )}
 
-      {/* V5: shares a view-transition-name with the hub card's `.hubcard-bar` — the accent
-          literally morphs from the card into this rule on arrival, rather than merely
-          coincidentally matching (both sides compute the same accent independently via
-          accentForGuide(), but only this shared name makes the transition itself carry it). */}
-      <div class="masthead-rule" aria-hidden="true" style={`view-transition-name:accent-${ogSlug}`}></div>
+      {/* This rule used to share a view-transition-name with the old hub card's `.hubcard-bar`,
+          so the accent morphed from card to masthead on arrival. The Atlas hub retired that
+          card, and nothing on the new hub — static or runtime — claims `accent-<slug>` any
+          more, which leaves the name unpaired: the browser then treats this element as its own
+          transition group and animates it alone. Removed with its partner (Stage G sweep).
+          `cover-<slug>` is the pairing that survives; world-view.js sets it on the pin card's
+          plate at runtime, which is why it does not appear in the hub's static HTML. */}
+      <div class="masthead-rule" aria-hidden="true"></div>
 
       <!-- What's-Next banner — populated client-side against the device clock;
            FIRST in the masthead flow because it's the most actionable element

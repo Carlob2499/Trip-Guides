@@ -13,7 +13,7 @@
   margin: 0 0 1rem;
   padding: .5rem .7rem;
   border: 1px solid var(--rule);
-  border-radius: var(--r-md);
+  border-radius: 0;
   background: color-mix(in srgb, var(--accent) 5%, transparent);
   font-family: var(--font-data);
   font-size:var(--text-caption);
@@ -48,7 +48,7 @@
   padding: .5rem .7rem;
   border: 1px solid color-mix(in srgb, #d98a00 40%, var(--rule));
   border-left-width: 3px;
-  border-radius: var(--r-md);
+  border-radius: 0;
   background: color-mix(in srgb, #d98a00 7%, transparent);
   font-size:var(--text-control);
   line-height: 1.5;

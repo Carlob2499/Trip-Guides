@@ -256,7 +256,13 @@
      for a future session to make visually, not something to slip in unreviewed here. */
   --text-h1:clamp(1.5rem,4vw,2.2rem);
   --text-display:clamp(2.8rem,8vw,4.8rem); /* MATCHES .masthead h1's clamp in guide.css, not new */
-  --r-sm:6px;--r-md:10px;--r-lg:16px; /* radius scale — rounded-container language */
+  /* The --r-sm/--r-md/--r-lg ladder was DELETED in the Atlas migration's Stage G closeout, not
+     deprecated. This system has two radii — 0 on anything holding content or evidence, 999px on
+     anything you press — and check-drift.mjs fails any third value. Leaving the tokens declared
+     would leave the old language reachable, and every stylesheet that still read them (nine
+     files, twenty-six sites outside the twelve features) has been swept. The one place a
+     rounded container survives on purpose is src/styles/progress-preview/, which holds
+     unshipped design explorations rather than product surfaces. */
   /* M3: z-index scale — was 20+ ad-hoc values (0 to an outlier 9000) with no documented tiers,
      and one real bug: .skip-link (999) painted UNDER story-mode's overlay (1000), so a keyboard
      user tabbing while story mode was open focused an invisible link. Named here as the single

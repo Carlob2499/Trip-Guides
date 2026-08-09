@@ -75,6 +75,15 @@ Anything new that wants to be flashy must strengthen this signature, not compete
    JS-motion dep, lazy-loaded). Prefer `transform`/`opacity`; never animate layout properties on
    scroll.
 
+   Rule 7 had two live violations until the Atlas migration's Stage F, and both were of the
+   shape that hides: a length animated from a handler that fires constantly. The reading spine's
+   fill set `style.height` from the scroll listener, and the `/progress/` bar set `style.width`
+   from its poll tick. Both are `transform: scale*()` driven by a custom property now
+   (`--spine-fill`, `--pg-progress`), and both are pinned by a test that reads the computed
+   transform rather than the rendered size — a screenshot cannot tell a width from a scale.
+   When adding a bar, a fill, or a rail: the element spans its track in the box model and the
+   script writes a 0..1 factor. Never a percentage width.
+
 ## Verifying motion (added to the ship loop, not instead of it)
 
 `astro preview` at mobile 375px + desktop · dark + light · **reduced-motion on** (everything
