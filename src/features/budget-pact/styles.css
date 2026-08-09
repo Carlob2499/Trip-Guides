@@ -1,4 +1,7 @@
 /* Budget pact (docs/archive/PLAN_TRAVELER_FEATURES.md F2) — one honest line under the Budget tab's
    plan/actual grid; absent until a traveler has entered at least one real spend figure. */
-.budget-pact { margin: .7rem 0 0; padding: .55rem .7rem; border-radius: var(--r-sm, 6px); background: color-mix(in srgb, var(--accent) 10%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--rule)); font-family: var(--font-data); font-size:var(--text-control); line-height: 1.5; color: var(--ink); }
-.budget-pact-over { background: color-mix(in srgb, #b23a48 12%, transparent); border-color: color-mix(in srgb, #b23a48 40%, var(--rule)); }
+.budget-pact { margin: .7rem 0 0; padding: .55rem .7rem; border-radius: 0; background: color-mix(in srgb, var(--accent) 10%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--rule)); font-family: var(--font-data); font-size:var(--text-control); line-height: 1.5; color: var(--ink); }
+/* Over-budget reads --warn, not a bespoke red. The product already says "over" in ochre on the
+   budget verdict chip, and --crit is reserved for the one number someone dials in an emergency
+   — spending more than planned is an advisory, not that. */
+.budget-pact-over { background: color-mix(in srgb, var(--warn) 12%, transparent); border-color: color-mix(in srgb, var(--warn) 40%, var(--rule)); }
