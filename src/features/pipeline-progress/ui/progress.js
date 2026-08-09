@@ -84,7 +84,9 @@ export function initProgress() {
   }
 
   function render(view) {
-    els.bar.style.width = view.percent + "%";
+    // A 0..1 scale factor, not a width — the bar is transform-driven (progress.css) so a
+    // poll tick costs a composite rather than a layout pass.
+    els.bar.style.setProperty("--pg-progress", (view.percent / 100).toFixed(4));
     els.percent.textContent = view.percent + "%";
     renderSteps(view);
     els.stuckNote.hidden = !view.isStuck;
