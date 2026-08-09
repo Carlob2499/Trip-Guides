@@ -1,3 +1,5 @@
+// @protects-file Answers given when requesting a guide survive intact to the person building it.
+
 import { describe, it, expect } from "vitest";
 import {
   RANK_CARDS, NICHE_VALUE, TOPIC_CHIPS,

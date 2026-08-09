@@ -1,3 +1,5 @@
+// @protects-file Guide prose can only use the small set of safe tags, and bad markup fails the build.
+
 import { describe, it, expect } from "vitest";
 import { findUnsafeHtml, ALLOWED_TAGS } from "./prose-html";
 import { PANELS } from "../pages/panel-preview/_lib/fixtures";

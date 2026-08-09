@@ -1,3 +1,5 @@
+// @protects-file Map pins group and split apart at sensible zoom levels instead of piling up.
+
 import { describe, it, expect } from "vitest";
 import { clusterPins, worldPixel } from "./cluster";
 import type { Pin } from "../../../lib/map-pins";

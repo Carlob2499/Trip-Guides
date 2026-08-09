@@ -4,6 +4,8 @@
 //              themselves, zero-network);
 //   ⚠ GUARD  — a budget-forced merge that would relocate a flagged unit fails loudly
 //              (the plan's "merging may never hide a ⚠" rule, exercised, not asserted).
+// @protects-file Assembling a guide from its parts loses nothing and reorders nothing.
+
 import { describe, it, expect } from "vitest";
 import {
   composeSections, unitWeight, hasWarning, assertWritable, ANCHOR_WEIGHT,

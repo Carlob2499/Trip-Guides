@@ -1,3 +1,5 @@
+// @protects-file Time-zone offsets are correct across daylight-saving changes.
+
 import { describe, it, expect } from "vitest";
 import { tzOffsetHours } from "./tz-offset";
 

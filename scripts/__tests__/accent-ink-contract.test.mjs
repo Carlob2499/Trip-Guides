@@ -16,6 +16,8 @@
    shadows may use --accent freely — identity is its job; only TEXT is contrast-gated.
    Together the two gates cover both past occurrences. */
 
+// @protects-file Every guide's accent colour keeps its text readable.
+
 import { describe, it, expect } from "vitest";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative, extname } from "node:path";

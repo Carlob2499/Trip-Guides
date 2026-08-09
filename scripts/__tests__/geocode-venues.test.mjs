@@ -6,6 +6,8 @@
    discipline exists to prevent — plausible, internally consistent, and undetectable by
    reading the guide. acceptMatch is what stands between the two, so it is tested harder than
    the rest of the script combined. */
+// @protects-file A looked-up location must match the venue's name, or it is left blank.
+
 import { describe, it, expect } from "vitest";
 import { acceptMatch, buildQuery, flagOutliers, haversineKm, isCategoryName, normalizeName, pendingItems } from "../geocode-venues.mjs";
 

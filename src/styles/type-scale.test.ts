@@ -16,6 +16,8 @@
    Mirrors the allowlist shape of tests/visual/a11y.spec.ts on purpose: a closed list, every
    entry carrying its own WHY, and anything unrecognised failing loudly rather than being
    silently absorbed. */
+// @protects-file Every text size comes from the type scale, so nothing is arbitrarily sized.
+
 import { describe, expect, test } from "vitest";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";

@@ -1,3 +1,5 @@
+// @protects-file The arrival plan follows the flight and the destination's real first-day logistics.
+
 import { describe, it, expect } from "vitest";
 import { deriveArrivalPlan } from "./arrival";
 

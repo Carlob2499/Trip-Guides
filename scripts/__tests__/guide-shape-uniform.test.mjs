@@ -5,6 +5,8 @@
    loader, graduate-guide, the audit suite, any future catalog view) carries a branch, and the
    flat file WINS in resolveGuidePath, so a stray one silently shadows the directory beside it.
    This fails the build on a flat guide instead of quietly serving it. */
+// @protects-file Every guide is stored in the same shape, with no exceptions.
+
 import { describe, expect, test } from "vitest";
 import { readdirSync, statSync, existsSync } from "node:fs";
 import { join } from "node:path";

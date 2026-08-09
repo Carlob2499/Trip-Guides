@@ -6,6 +6,8 @@
    element (the accent progress bar) sat at a fourth offset with a different thickness. A
    test that only asked "is the line present?" would have passed throughout. So this measures
    centres, and it measures them at the width the line actually exists at. */
+// @protects-file The progress figure at the top of a section tells the truth about where you are in it.
+
 import { test, expect, type Page } from "@playwright/test";
 
 const KOREA = "/Trip-Guides/guides/korea/";

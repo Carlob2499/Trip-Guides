@@ -1,3 +1,5 @@
+// @protects-file The clock shown for a destination is that destination's real local time.
+
 import { describe, it, expect } from "vitest";
 import { localClockLabel } from "./local-time";
 

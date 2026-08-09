@@ -3,6 +3,8 @@
 // so a currency dropped here silently removes the exchange-rate feature from that guide.
 // Zero network — the Frankfurter call is injected.
 
+// @protects-file Exchange rates are refreshed from the published source with the date recorded.
+
 import { describe, it, expect } from "vitest";
 import { roundRate, renderBlock, spliceIntoSource, fetchRates, neededCurrencies } from "../refresh-fx.mjs";
 

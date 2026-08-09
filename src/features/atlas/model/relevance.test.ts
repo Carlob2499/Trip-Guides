@@ -1,3 +1,5 @@
+// @protects-file The trip that matters right now is the one shown first.
+
 import { describe, it, expect } from "vitest";
 import { relevanceOrder, quickCardKicker } from "./relevance";
 

@@ -11,6 +11,8 @@
 // re-exports (this repo has a single hoisted zod install, so this IS the same zod
 // instance astro would hand back), so mocking the two is a faithful stand-in without
 // needing Astro's build pipeline in a unit test.
+// @protects-file A guide cannot ship in a broken shape — the build refuses malformed or incomplete content.
+
 import { describe, it, expect, vi } from "vitest";
 
 vi.mock("astro:content", async () => {

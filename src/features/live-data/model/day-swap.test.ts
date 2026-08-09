@@ -1,5 +1,7 @@
 // Weather day-swap advisory — the honesty rules are the spec: explicit env tags only,
 // future days only, silent (null) whenever the data doesn't clearly support a swap.
+// @protects-file A weather-driven suggestion to swap two days only fires when it genuinely helps.
+
 import { describe, it, expect } from "vitest";
 import { isWetCode, matchForecastIndex, daySwapAdvice } from "./day-swap";
 

@@ -1,3 +1,5 @@
+// @protects-file A shared vote link carries the options intact and rejects a tampered one.
+
 import { describe, expect, it } from "vitest";
 import { decodeVote, encodeVote, isVoteState } from "./vote-link";
 

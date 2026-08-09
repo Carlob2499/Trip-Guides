@@ -1,3 +1,5 @@
+// @protects-file A traveller's own reordering of sections survives a reload.
+
 import { describe, it, expect } from "vitest";
 import { parseOrder, serializeOrder, effectiveOrder, movePanel, orderKey } from "./order";
 import { MAX_ID_LEN, MAX_PANELS } from "./collapse";

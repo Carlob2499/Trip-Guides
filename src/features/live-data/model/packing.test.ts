@@ -1,3 +1,5 @@
+// @protects-file Packing advice follows the real forecast for the real dates.
+
 import { describe, it, expect } from "vitest";
 import { derivePackingList } from "./packing";
 import type { Daily } from "./weather";

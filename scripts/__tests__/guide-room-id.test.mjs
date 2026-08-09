@@ -14,6 +14,8 @@
    WORKING TREE against HEAD — which is precisely the moment the mistake was made, editing then
    committing — and is a no-op once committed and running in CI. The two checks that ARE
    unconditional (valid, and unique) are the ones that make the original bug impossible. */
+// @protects-file Every guide has its own shared-budget room, and a swap leaves a trail.
+
 import { describe, expect, test } from "vitest";
 import { execFileSync } from "node:child_process";
 import { readdirSync, readFileSync, statSync } from "node:fs";

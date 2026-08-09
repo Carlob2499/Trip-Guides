@@ -2,6 +2,8 @@
    TEST_COVERAGE_ANALYSIS.md §P6 names this an untested risk surface. Korea has real
    emergency data (src/data/countries.mjs), so its SOS button renders. Mirrors
    field-tools.spec.ts's network-blocking pattern; no fixed clock needed here. */
+// @protects-file Emergency numbers are two taps away and readable in a hurry.
+
 import { test, expect } from "@playwright/test";
 
 const KOREA = "/Trip-Guides/guides/korea/";

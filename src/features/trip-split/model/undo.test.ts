@@ -1,3 +1,5 @@
+// @protects-file Undo puts the budget back exactly as it was, including what a deletion rewrote.
+
 import { describe, it, expect } from "vitest";
 import { planMemberRemoval, applyExpensePatch, type ExpensePatch } from "./undo";
 import { normalizeExpense, normalizeMember, type SplitExpense } from "./records";

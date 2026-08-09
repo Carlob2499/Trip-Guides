@@ -1,3 +1,5 @@
+// @protects-file A sheet dismisses on a real drag and springs back on a stray touch.
+
 import { describe, it, expect } from "vitest";
 // Plain-JS module — allowJs infers the exported constants, so no directive is needed.
 import { sheetDismiss, DRAG_LOCK, DISMISS_VELOCITY } from "./sheet-drag.js";

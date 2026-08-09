@@ -3,6 +3,8 @@
 // the same sanitizeSection() injection guard PER TOKEN, and the modify-template fallback
 // (synthesis ruling #1 — an escalated modify issue must parse without edits).
 
+// @protects-file A revision request is read exactly as written, and a malformed one is refused.
+
 import { describe, it, expect } from "vitest";
 import { parseReviseIssue, parseSections, parseDeadline } from "../parse-revise-issue.mjs";
 

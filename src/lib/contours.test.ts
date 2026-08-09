@@ -1,3 +1,5 @@
+// @protects-file The map-contour background draws without distorting or overflowing.
+
 import { describe, it, expect } from "vitest";
 import { generateContourLayer } from "./contours";
 

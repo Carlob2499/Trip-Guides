@@ -1,6 +1,8 @@
 // The accent precedence is load-bearing on every surface (guide page, hub, OG):
 // explicit theme > extracted cover palette > country accent. Korea/Denmark have
 // committed extracted palettes, so they double as fixtures.
+// @protects-file A guide's colours come from its own cover image.
+
 import { describe, it, expect } from "vitest";
 import { paletteFor, accentForGuide, paletteAccentsForGuide } from "./palettes";
 import { accentFor } from "./themes";

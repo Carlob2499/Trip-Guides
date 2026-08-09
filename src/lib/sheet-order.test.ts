@@ -1,3 +1,5 @@
+// @protects-file Trips are numbered and ordered consistently everywhere they appear.
+
 import { describe, it, expect } from "vitest";
 import { sheetOrder, ordinalFor, yearFromKicker } from "./sheet-order";
 

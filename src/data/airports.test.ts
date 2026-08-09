@@ -1,3 +1,5 @@
+// @protects-file Airport codes and names resolve to the real airport, never a guess.
+
 import { describe, it, expect } from "vitest";
 import { AIRPORTS, airportFor } from "./airports.mjs";
 

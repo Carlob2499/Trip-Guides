@@ -1,3 +1,5 @@
+// @protects-file Follow-up questions asked during intake are the ones the answers actually warrant.
+
 import { describe, it, expect } from "vitest";
 import {
   validateQuestion,

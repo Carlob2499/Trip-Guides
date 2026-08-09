@@ -12,6 +12,8 @@
 //
 // Zero network: the fetch seam is injected, exactly as verify-live.test.mjs does.
 
+// @protects-file Venue details are taken from the source, never filled in from memory.
+
 import { describe, it, expect } from "vitest";
 import { lookupVenue, fieldMaskFor, skusFor, normalizePlace, CHECKS } from "../lookup-venue.mjs";
 

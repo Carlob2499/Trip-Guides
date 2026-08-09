@@ -3,6 +3,8 @@
    tested next to it; this suite pins the wiring the units can't reach: the rate-pill
    converter's render() branching, the masthead burn tile, and the ?stops= share-link
    decode+merge+URL-scrub. Deterministic clock + no network (mirrors itinerary.spec.ts). */
+// @protects-file The on-the-road tools run on live data, never a stale copy.
+
 import { test, expect, type Page } from "@playwright/test";
 
 const FIXED_TIME = new Date("2026-09-01T10:00:00+09:00"); // UTC date 2026-09-01

@@ -1,3 +1,5 @@
+// @protects-file Shared helpers used across the whole site behave the same everywhere.
+
 import { describe, it, expect } from "vitest";
 import { todayInTz, esc, migrateStorageKey } from "./util.js";
 

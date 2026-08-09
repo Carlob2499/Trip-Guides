@@ -1,3 +1,5 @@
+// @protects-file Each trip's summary on the home page is derived from its own guide, not restated by hand.
+
 import { describe, it, expect } from "vitest";
 import {
   deriveGuideRecord, firstMapCenter, anchorLabelFromKicker, statusFor, originFor, coverImgFor,

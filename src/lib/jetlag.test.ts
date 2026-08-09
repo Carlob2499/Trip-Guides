@@ -1,3 +1,5 @@
+// @protects-file Jet-lag advice is based on the real time difference, including daylight saving.
+
 import { describe, it, expect } from "vitest";
 import { computeJetLag } from "./jetlag";
 

@@ -1,3 +1,5 @@
+// @protects-file Book-by dates are counted back from the real trip dates.
+
 import { describe, it, expect } from "vitest";
 import { deriveBookByTimeline } from "./book-by";
 

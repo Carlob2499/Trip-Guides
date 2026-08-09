@@ -1,18 +1,8 @@
-/* Ink on a coloured FILL must come from that fill's own token, never a literal.
+/* Judges PROVENANCE, not contrast — a static scan cannot measure a ratio. `--accent` is
+   extracted per guide and `--green`/`--warn`/`--crit` remap per theme, so a literal text
+   colour on any of them only contrasts by luck. Runtime ratios live in the Playwright gates. */
+// @protects-file Text on a coloured background gets its colour from that background, never a guess.
 
-   Three separate call sites shipped this bug and each was found by hand, one at a time:
-   `#fff` on `--green` (2.73:1 in dark), `--accent-ink` on `--accent` (1.45–2.30:1, every
-   guide), and `#fff` on `--accent` (3.69:1 on denmark, which only that guide's lighter
-   extracted palette exposed). They are the same mistake, so this is the gate for the mistake
-   rather than a fourth patch for a fourth instance.
-
-   Why a literal is specifically wrong here: `--accent` and `--accent-ink` are EXTRACTED PER
-   GUIDE (src/lib/accent-tokens.ts), and `--green`/`--warn`/`--crit` re-map per theme. A literal
-   is a bet that every present and future palette happens to contrast with it. `--on-accent` is
-   `readableOn(accent, 4.5)` — correct by construction rather than by luck.
-
-   This is a static scan, so it cannot judge contrast; it judges PROVENANCE, which is the part
-   that generalises. Runtime ratios are measured in the Playwright gates. */
 import { describe, expect, it } from "vitest";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";

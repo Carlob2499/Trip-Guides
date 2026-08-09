@@ -1,3 +1,5 @@
+// @protects-file A place shown as open on a given day really is open that day.
+
 import { describe, it, expect } from "vitest";
 import { weekdayOf, formatClosedDays, fallsOnClosedDay, checkClosedDayConflicts } from "./closed-days.mjs";
 

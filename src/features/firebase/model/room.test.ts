@@ -4,6 +4,8 @@
    rejected-write path — the code that handled it was `.catch(function () {})`, and an empty
    handler cannot fail a test that never calls it. The cases below are the real incident,
    pinned: a guide with no roomId, a slug-shaped room code, and a permission_denied rejection. */
+// @protects-file A shared trip room cannot be guessed into, and a settled trip stops accepting edits.
+
 import { describe, expect, test } from "vitest";
 import { isPermanentWriteError, isPostTripLocked, isValidRoomId, parseRoomHash, POST_TRIP_GRACE_DAYS, resolveRoomId, ROOM_ID_RE } from "./room";
 

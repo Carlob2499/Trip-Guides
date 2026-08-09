@@ -1,3 +1,5 @@
+// @protects-file Money is stored and split in whole minor units, so nothing is lost to rounding.
+
 import { describe, expect, it } from 'vitest';
 import { computeSplits, formatMinor, SplitError, toBaseMinor, type SplitParticipant } from './money';
 

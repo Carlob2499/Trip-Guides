@@ -1,3 +1,5 @@
+// @protects-file Country facts — emergency numbers, currency, time zone — are looked up, never invented.
+
 import { describe, it, expect } from "vitest";
 import { COUNTRIES, CONTINENTS, CONTINENT_ORDER, ALIASES, continentFor, emergencyFor, isoNumericFor, COUNTRY_ISO_NUMERIC } from "./countries.mjs";
 

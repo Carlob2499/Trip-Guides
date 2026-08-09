@@ -1,3 +1,5 @@
+// @protects-file The day rail fits every day on screen when it can, and scrolls when it cannot.
+
 import { describe, it, expect } from "vitest";
 import { canScrub, dayFromX, SCRUB_MAX_DAYS } from "./scrub";
 

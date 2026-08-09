@@ -15,6 +15,8 @@
    the kind that fail SILENTLY: a calendar with a mis-folded DESCRIPTION imports with a truncated
    body, a GPX with an unescaped & is rejected by the app at the trailhead, and in both cases the
    build is green and the traveler is the one who finds out. */
+// @protects-file The map and calendar files a guide hands out are valid, and open in real apps.
+
 import { test, expect } from "@playwright/test";
 import { readdirSync, statSync } from "node:fs";
 import { join } from "node:path";

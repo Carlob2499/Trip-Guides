@@ -9,6 +9,8 @@
    row's secondary line were BOTH class .pal-hint, so the footer's rule — border-top, data face,
    label size — won the cascade over every row in the list. Nothing about the markup says that;
    only the rendered result does. */
+// @protects-file Search reaches anything in a guide, from anywhere in it.
+
 import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 

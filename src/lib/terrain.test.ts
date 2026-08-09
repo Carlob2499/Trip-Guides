@@ -1,3 +1,5 @@
+// @protects-file Terrain shading on the globe is drawn from real elevation data.
+
 import { describe, it, expect } from "vitest";
 import { generateTerrain, seedFromSlug } from "./terrain";
 

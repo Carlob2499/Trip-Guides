@@ -5,6 +5,8 @@
    chip appears, sheet shows the real suggested order, apply reorders the visible
    stop list, restore undoes it, and the choice survives a reload (localStorage,
    per-device — never the guide JSON). Deterministic clock, no network. */
+// @protects-file A suggested walking order is only offered on days where it genuinely saves you distance.
+
 import { test, expect, type Page } from "@playwright/test";
 
 const FIXED_TIME = new Date("2026-09-01T10:00:00+09:00"); // stable post-trip date

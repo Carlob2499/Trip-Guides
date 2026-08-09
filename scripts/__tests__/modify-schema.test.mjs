@@ -8,6 +8,8 @@
 // perfectly well-formed issue. Three surfaces derive from the array now (form, parser,
 // in-page wizard), so this test is what keeps them honest.
 
+// @protects-file An automated guide edit must state exactly what it is changing.
+
 import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";

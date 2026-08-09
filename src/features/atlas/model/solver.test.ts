@@ -1,3 +1,5 @@
+// @protects-file Labels on the globe never sit on top of each other.
+
 import { describe, it, expect } from "vitest";
 import { solvePlacement, type SolverCard, type Obstacle } from "./solver";
 

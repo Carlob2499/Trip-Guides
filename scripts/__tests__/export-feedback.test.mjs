@@ -3,6 +3,8 @@
 // logic (which feedback is NEW) and the summary shaping — the parts that decide what reaches the
 // agent and whether the same feedback gets re-processed forever.
 
+// @protects-file Trip feedback exports carry the survey answers and nothing personal.
+
 import { describe, it, expect } from "vitest";
 import {
   buildRoomIndex, flattenFeedback, filterNew, nextMarker, summarize,

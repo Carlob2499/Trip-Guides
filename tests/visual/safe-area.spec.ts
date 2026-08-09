@@ -11,6 +11,8 @@
       which no headless browser reports), the chrome that must move actually moves. A page
       could carry the meta tag and still hard-code its padding; this is what proves it does
       not. */
+// @protects-file Nothing hides under a phone's notch or home bar.
+
 import { test, expect } from "@playwright/test";
 
 const PAGES = [

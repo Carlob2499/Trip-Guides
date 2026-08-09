@@ -3,6 +3,8 @@
 // human-submitted issue takes — otherwise a Worker-filed guide would scaffold differently from a
 // hand-filed one. Plus the rate thresholds that protect the maker's Claude quota.
 
+// @protects-file A guide request submitted from the site reaches the maker intact.
+
 import { describe, it, expect } from "vitest";
 import { renderIssueBody, intakeRateDecision, rateThresholds, guessSlug } from "../intake-proxy.mjs";
 import { parseIssueBody, answersFromForm } from "../intake-schema.mjs";

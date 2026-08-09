@@ -1,3 +1,5 @@
+// @protects-file Currency conversions use a dated, sourced rate — never a remembered one.
+
 import { describe, it, expect } from "vitest";
 import { inBand, fmtRate, isCacheFresh, parseRateResponse, SANITY, DERIVED_BAND_FACTOR } from "./rate";
 import { FALLBACK_RATES } from "../../../data/countries.mjs";

@@ -1,3 +1,5 @@
+// @protects-file Photos are requested at the size they are shown, not full size.
+
 import { describe, it, expect } from "vitest";
 import { atWidth, srcsetFor } from "./img-width";
 

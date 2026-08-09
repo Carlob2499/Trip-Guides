@@ -1,3 +1,5 @@
+// @protects-file A swipe between sections is distinguished from a scroll or a tap.
+
 import { describe, expect, it } from "vitest";
 import { axisLocked, resolveCommit, damp, atEdge, AXIS_LOCK_PX } from "./gesture";
 

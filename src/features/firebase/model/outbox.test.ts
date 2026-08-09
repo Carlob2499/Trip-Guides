@@ -1,3 +1,5 @@
+// @protects-file An edit made with no signal is not lost; it is sent when the signal returns.
+
 import { describe, expect, it } from "vitest";
 import { addEntry, entriesForRoom, removeEntry, type Outbox } from "./outbox";
 

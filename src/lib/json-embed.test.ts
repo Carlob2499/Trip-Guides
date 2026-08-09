@@ -1,3 +1,5 @@
+// @protects-file Data embedded in a page cannot break out of it or be tampered with.
+
 import { describe, it, expect } from "vitest";
 import { jsonEmbed } from "./json-embed";
 

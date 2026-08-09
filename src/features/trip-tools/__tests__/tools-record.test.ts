@@ -1,3 +1,5 @@
+// @protects-file Every tool runs on the selected trip's own record.
+
 import { describe, it, expect } from "vitest";
 import { deriveToolsRecord } from "../model/tools-record";
 import { KOREA_LIKE } from "../mocks/guide";

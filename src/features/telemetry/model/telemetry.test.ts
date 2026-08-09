@@ -1,3 +1,5 @@
+// @protects-file Usage counting carries no personal information of any kind.
+
 import { describe, expect, it } from "vitest";
 import { counterPath, sanitizeName, summarize } from "./telemetry";
 import { RAW_TELEMETRY } from "../mocks/seeds";

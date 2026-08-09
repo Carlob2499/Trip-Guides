@@ -1,3 +1,5 @@
+// @protects-file Forecasts are read correctly and say plainly when there is no data.
+
 import { describe, it, expect } from "vitest";
 import { wxIcon, wxDayOk, wxValidate, weatherWindow, type Daily } from "./weather";
 import { tripWindow } from "../../../lib/trip-dates";

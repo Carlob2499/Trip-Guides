@@ -1,3 +1,5 @@
+// @protects-file The calendar and map files a guide produces contain the guide's real days and places.
+
 import { describe, it, expect } from "vitest";
 import {
   flattenSections,

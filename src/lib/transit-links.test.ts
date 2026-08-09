@@ -1,3 +1,5 @@
+// @protects-file A transit link opens the right route in a real transit app.
+
 import { describe, it, expect } from "vitest";
 import { universalTransitLinks, nativeTransitLinks, transitLinks } from "./transit-links";
 

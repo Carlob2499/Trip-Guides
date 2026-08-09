@@ -2,6 +2,8 @@
 // (flat <slug>.json and split <slug>/_guide.json), which the original single-file-only version
 // silently didn't (docs/HANDOFF.md / pipeline-audit finding, this session).
 
+// @protects-file A draft only becomes a published guide once it meets every requirement.
+
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { mkdtemp, mkdir, writeFile, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";

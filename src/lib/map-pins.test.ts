@@ -1,3 +1,5 @@
+// @protects-file A pin is only placed where there are verified coordinates.
+
 import { describe, it, expect } from "vitest";
 import { derivePins, derivePlannerData, pinCategories, pinSlug } from "./map-pins";
 import type { Section, SectionOf } from "./guide-types";

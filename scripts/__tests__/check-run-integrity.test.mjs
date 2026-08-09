@@ -8,6 +8,8 @@
 // resumability. If this test ever goes green with an empty findings list, the gate has stopped
 // catching the defect it was built for.
 
+// @protects-file A research run's own record cannot contradict itself.
+
 import { describe, it, expect } from "vitest";
 import {
   MIN_GAP_SECONDS, countCleared, stageIntroducingCommits, disciplineFindings, voidVerdict,

@@ -3,6 +3,8 @@
 // matters is the PURE decision — dispatch only an in-window guide that has stale facts and no
 // recert already in flight — which is exactly what gates whether agent tokens get spent.
 
+// @protects-file The pre-departure check reaches every item that asked to be re-verified.
+
 import { describe, it, expect } from "vitest";
 import { shouldDispatch, staleItemCount } from "../pretrip-check.ts";
 

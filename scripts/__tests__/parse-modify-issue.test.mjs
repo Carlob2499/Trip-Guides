@@ -3,6 +3,8 @@
 // so sanitizeSection() must neutralize prompt-injection-shaped values. None of this had a test
 // before (the whole parser was an inline script with no exports).
 
+// @protects-file An edit request is read exactly as written, and a malformed one is refused.
+
 import { describe, it, expect } from "vitest";
 import { sanitizeSection, parseModifyIssue } from "../parse-modify-issue.mjs";
 

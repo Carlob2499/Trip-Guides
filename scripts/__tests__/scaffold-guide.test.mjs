@@ -4,6 +4,8 @@
 // exercised end-to-end by the new-guide.yml workflow, so they're intentionally out of
 // scope here — this covers the logic a bug would corrupt silently.
 
+// @protects-file A new guide starts from a valid, complete skeleton every time.
+
 import { describe, it, expect } from "vitest";
 import { slugify, dayLabelsFromRange, buildGuideObject, buildIntakeMd, parseArgs, deriveRanks, PRIORITY_GROUP_MAP, buildCoverageMatrix, extractIataCode } from "../scaffold-guide.mjs";
 // The never-fold groups come from the Composer that owns the rule, not a local copy — a

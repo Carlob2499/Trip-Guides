@@ -13,6 +13,8 @@
        collision on #content between the swipe and this cluster, which is unchanged by
        the move — and it must keep passing across it.
    Deterministic clock + no network (mirrors the visual/a11y suites). */
+// @protects-file Moving between the days and sections of a guide always lands where you meant to go.
+
 import { test, expect, type Page } from "@playwright/test";
 
 const FIXED_TIME = new Date("2026-09-01T10:00:00+09:00"); // stable post-trip date

@@ -4,6 +4,8 @@
 // platform exists to enforce, so these are worth pinning down independent of any real
 // guide content or network access.
 
+// @protects-file The content auditor judges a guide against its own rules, consistently.
+
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { mkdtemp, mkdir, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";

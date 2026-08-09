@@ -1,3 +1,5 @@
+// @protects-file Trip feedback becomes patterns — a raw private critique is never shown to anyone.
+
 import { describe, it, expect } from "vitest";
 import { buildFeedbackRecord, aggregateVisited, tallySkipsByGroup } from "./feedback";
 

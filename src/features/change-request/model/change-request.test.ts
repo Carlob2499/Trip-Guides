@@ -1,3 +1,5 @@
+// @protects-file A reported problem reaches the maker with enough detail to act on.
+
 import { describe, it, expect } from "vitest";
 import {
   sectionOptions,

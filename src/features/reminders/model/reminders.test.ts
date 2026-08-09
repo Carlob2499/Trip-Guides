@@ -1,3 +1,5 @@
+// @protects-file Everything a trip asks you to book ahead is surfaced before it is too late.
+
 import { describe, it, expect } from "vitest";
 import { buildReminder, inferKind, sortReminders } from "./reminders";
 

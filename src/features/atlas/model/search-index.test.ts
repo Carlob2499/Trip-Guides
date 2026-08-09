@@ -1,3 +1,5 @@
+// @protects-file Search can find anything that is actually in a guide.
+
 import { describe, it, expect } from "vitest";
 import { buildSectionRecord, buildGuideSearchIndex } from "./search-index";
 

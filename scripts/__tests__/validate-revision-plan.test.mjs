@@ -3,6 +3,8 @@
 // that doesn't exist in the guide (the silent-void seam), and (2) a blocking fork routing to
 // exit-3 semantics (the Clarifying-Questions Doctrine gate).
 
+// @protects-file A revision plan is checked before anything is changed.
+
 import { describe, it, expect } from "vitest";
 import { validateRevisionPlan, MAX_RERESEARCH } from "../validate-revision-plan.mjs";
 

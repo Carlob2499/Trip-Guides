@@ -3,6 +3,8 @@
 // propagated price change passes; a sabotaged one (a touchpoint left stale) fails. That is the
 // mechanical half of "a deliberate skill regression must fail the evals."
 
+// @protects-file The guide-writing instructions are themselves tested against known cases.
+
 import { describe, it, expect } from "vitest";
 import { segmentsNear, assertScopedPropagation, assertDraftPreserved } from "../run-skill-evals.mjs";
 

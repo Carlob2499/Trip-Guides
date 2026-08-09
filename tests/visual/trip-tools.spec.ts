@@ -7,6 +7,8 @@
    other side, rather than trusting that they would. Second, the creator's 2026-08-08 ruling
    that the split ledger holds real spend only: the guide's budget figures must not have
    leaked into it. */
+// @protects-file Every route into the Tools screen arrives carrying that trip's own data.
+
 import { test, expect, type Page } from "@playwright/test";
 
 const TOOLS = "/Trip-Guides/tools/korea/";

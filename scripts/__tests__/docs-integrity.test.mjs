@@ -3,6 +3,8 @@
    the failure classes gated here: a workflow pointing at a doc that never existed, HANDOFF
    growing 10× past its own stated budget, and environment facts (OneDrive) outliving the
    environment. Each check is deterministic; judgment stays doctrine in CLAUDE.md. */
+// @protects-file Project docs stay within budget and every file they reference exists.
+
 import { describe, expect, test } from "vitest";
 import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
 import { join, relative } from "node:path";

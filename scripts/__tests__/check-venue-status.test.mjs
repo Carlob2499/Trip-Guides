@@ -3,6 +3,8 @@
 // fuzzy misses and temporary closures advise; a missing key or a full outage is n/a, never
 // a silent pass or a spurious fail.
 
+// @protects-file A venue that has closed down cannot stay in a guide.
+
 import { describe, it, expect } from "vitest";
 import { checkVenueStatus, collectVenues, queryFor } from "../audit/check-venue-status.mjs";
 

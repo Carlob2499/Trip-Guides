@@ -4,6 +4,8 @@
 // snapshots. checkLive()'s retry loop is exercised with an injected fake fetch so the
 // propagation-lag behavior is covered without a real deploy or a real clock.
 
+// @protects-file What is live on the site is what was meant to ship.
+
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { mkdtemp, mkdir, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";

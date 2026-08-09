@@ -1,3 +1,5 @@
+// @protects-file A suggested stop order is genuinely shorter than the planned one, or is not offered.
+
 import { describe, it, expect } from "vitest";
 import { optimizeDayRoute, nearestNeighborOrder, twoOpt, routeDistance } from "./optimize";
 

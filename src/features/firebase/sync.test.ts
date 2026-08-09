@@ -2,6 +2,8 @@
 // (a security invariant — the code itself is the unguessable "lock"), code normalization,
 // and the never-throw / rate-limited / no-op-without-config posture of the telemetry
 // beacons. `./client.js` is mocked so these run with no real Firebase SDK and no network.
+// @protects-file Two phones editing the same trip end up agreeing, not overwriting each other.
+
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 const readyMock = vi.fn();

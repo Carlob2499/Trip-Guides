@@ -1,3 +1,5 @@
+// @protects-file On-the-ground sums — currency, spend so far — are arithmetically right.
+
 import { describe, expect, it } from "vitest";
 import { burnTotal, convertRate, decodeStops, encodeStops } from "./field-math";
 import { SPLIT_STATE, STOP_STATE } from "../mocks/seeds";

@@ -1,3 +1,5 @@
+// @protects-file Reading down hides the chrome; any intent to go back brings it straight back.
+
 import { describe, it, expect } from "vitest";
 import { nextYield, initialYield, YIELD_AT, RETURN_AT, TOP_ZONE } from "./yield";
 

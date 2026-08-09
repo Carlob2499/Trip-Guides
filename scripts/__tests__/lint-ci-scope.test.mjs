@@ -15,6 +15,8 @@
    paths-ignore (CI follows lint) — pick one, never let the two lists disagree
    silently. The eslint config is hook-protected; its edits are the creator's. */
 
+// @protects-file Code checks run over the whole repository, with nothing quietly excluded.
+
 import { describe, it, expect } from "vitest";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";

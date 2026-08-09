@@ -3,6 +3,8 @@
 // CLI renderer, and the verify() orchestrator (readGuides/checkStaleness/network audits mocked out —
 // this is a rollup gate, not the place to re-test the audit scripts it calls).
 
+// @protects-file A guide cannot publish with unsourced facts or broken references.
+
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 const readGuidesMock = vi.fn();

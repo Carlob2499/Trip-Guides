@@ -8,6 +8,8 @@
    are read from the built `dist/guides/` directory rather than hardcoded, mirroring
    scripts/gen-sw-precache.mjs's own dynamic enumeration — a new guide should not need this
    suite edited to stay covered. */
+// @protects-file A saved guide opens with no signal at all.
+
 import { test, expect, type Page } from "@playwright/test";
 import { readdirSync, existsSync } from "node:fs";
 import path from "node:path";

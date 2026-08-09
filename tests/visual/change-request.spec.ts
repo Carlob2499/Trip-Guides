@@ -9,6 +9,8 @@
    · the tab chips come from the guide's OWN nav, and picking one does not destroy the element
      the user just activated (which would drop keyboard focus mid-flow),
    · Escape closes and returns focus to the trigger. */
+// @protects-file You can report a problem with a guide without leaving the page or losing what you typed.
+
 import { test, expect } from "@playwright/test";
 
 const DENMARK = "/Trip-Guides/guides/denmark/";

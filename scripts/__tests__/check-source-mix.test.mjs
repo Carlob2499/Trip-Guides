@@ -4,6 +4,8 @@
 // (60%, above the measured worst of 25%), and the ccTLD heuristic staying honest — n/a for
 // the US rather than a fake miss.
 
+// @protects-file A guide's sources are primary ones, not a pile of aggregators.
+
 import { describe, it, expect } from "vitest";
 import { sourceMix, domainOf, MAX_SHARE_BLOCK } from "../audit/check-source-mix.mjs";
 

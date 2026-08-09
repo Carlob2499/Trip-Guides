@@ -1,3 +1,5 @@
+// @protects-file Opening and closing a section is remembered, per guide, per device.
+
 import { describe, it, expect } from "vitest";
 import {
   MAX_ID_LEN, MAX_PANELS, parseCollapsed, serializeCollapsed, setCollapsed, toggleCollapsed,

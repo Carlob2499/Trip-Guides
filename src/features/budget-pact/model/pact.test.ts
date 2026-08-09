@@ -1,3 +1,5 @@
+// @protects-file A group's agreed spending limit is tracked honestly against what was actually spent.
+
 import { describe, it, expect } from "vitest";
 import { computeBudgetPact } from "./pact";
 

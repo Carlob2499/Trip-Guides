@@ -1,3 +1,5 @@
+// @protects-file A guide's headline counts match what is actually in it.
+
 import { describe, it, expect } from "vitest";
 import { computeGuideStats, latestVerifiedOn } from "./guide-stats";
 import { isSectionFile } from "./facts.mjs";

@@ -1,6 +1,8 @@
 // Tests for the recert work-list transform (scripts/recert.mjs). Pure logic tested against a mock
 // staleness result, so it's independent of today's date and needs no network / real guides.
 
+// @protects-file Re-checking a fact updates its date only when it was genuinely re-checked.
+
 import { describe, it, expect } from "vitest";
 import { toWorklist, formatGuide } from "../recert.mjs";
 

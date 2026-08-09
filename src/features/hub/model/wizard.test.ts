@@ -1,3 +1,5 @@
+// @protects-file The new-guide questionnaire cannot be completed with missing or contradictory answers.
+
 import { describe, it, expect } from "vitest";
 import { WIZARD_STEPS, validateStepTransition, parseBookingDocument, formatParsedNote } from "./wizard";
 

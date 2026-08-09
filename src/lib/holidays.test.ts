@@ -1,3 +1,5 @@
+// @protects-file Public holidays around a trip come from real published data for that country and year.
+
 import { describe, it, expect } from "vitest";
 import { parseGuideDate, deriveTripYear, buildHolidayInfo, type RawHoliday } from "./holidays";
 

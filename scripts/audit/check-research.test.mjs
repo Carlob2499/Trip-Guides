@@ -3,6 +3,8 @@
 // verified_on for panel/prose/list/routes — this covers the wider surface (precise-looking
 // undated hours/prices, and days/sights/budget item-level provenance) as ADVISORY findings
 // (severity "info"), never blocking, so shipped guides don't retroactively fail verify.
+// @protects-file A research run cannot be marked done while sources are missing.
+
 import { describe, it, expect } from "vitest";
 import { checkResearchGuide } from "./check-research.mjs";
 

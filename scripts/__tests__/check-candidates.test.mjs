@@ -4,6 +4,8 @@
 // whose name appears nowhere in the guide is a finding — that cross-check is what makes
 // padding the table to hit a floor expensive.
 
+// @protects-file Proposed venues are checked before they can enter a guide.
+
 import { describe, it, expect } from "vitest";
 import { parseCandidates, judgeCandidates, DEFAULT_FLOORS } from "../check-candidates.mjs";
 

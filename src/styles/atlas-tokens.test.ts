@@ -17,6 +17,8 @@
    Everything is PARSED out of base.css, never mirrored. A hand-copied palette in a test looks
    harmless and rots silently — it would keep reporting green about values the stylesheet no
    longer holds. Same rule type-scale.test.ts follows for the type scale. */
+// @protects-file The design system's colours stay above the readability floor in both themes.
+
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";

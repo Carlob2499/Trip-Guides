@@ -1,17 +1,8 @@
-/* The prose-SHAPE gate (scripts/prose-shape.mjs).
- *
- * The guide-author skill governs where a fact came from and when it was checked; it had no rule
- * about the shape of the sentence carrying it. So research notes shipped as cards — the Entry
- * Documents item the creator flagged is 90 words, one bolded lead, four independent claims
- * welded together, every fact in it correct and sourced. Verification cannot catch that,
- * because nothing is wrong with the facts.
- *
- * Why a BASELINE rather than a bulk rewrite: every guide in the repo is a verified historical
- * record. Reshaping its prose is a content edit under the guide-author discipline with its own
- * continuity sweep — not something a lint script should do to four trips behind everyone's
- * back. So the existing 43 offences are recorded, visible and countable, and this fails on new
- * ones. The number can only go down.
- */
+/* A BASELINE, not a bulk rewrite: shipped guides are verified historical records, and
+   reshaping their prose is a content edit under the continuity discipline. The recorded
+   offences can only shrink. */
+// @protects-file Guide writing stays readable — no new wall-of-text paragraphs, no sentence-shaped prices.
+
 import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { findOffenders, summarize, regressions, MAX_WORDS, MAX_PRICE_CHARS } from "../prose-shape.mjs";

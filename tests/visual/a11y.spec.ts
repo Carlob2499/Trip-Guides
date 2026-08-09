@@ -3,6 +3,8 @@
    plus a closed allowlist for `results.incomplete` — axe's "couldn't prove it" bucket, which is
    unproven, not passing. An unallowlisted incomplete node fails the gate; that is exactly how two
    real contrast bugs (broken-photo fallback captions) hid here undetected before this file existed. */
+// @protects-file Anyone can read every screen — text stays legible and controls stay usable, in both light and dark.
+
 import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
@@ -508,7 +510,7 @@ for (const [name, path] of [
   ["health", "/Trip-Guides/health/"],
 ] as const) {
   for (const { scheme, vp } of COMBOS) {
-    test(`a11y — ${name} (${scheme}, ${vp.label})`, async ({ page }) => {
+    test(`every page passes an automated accessibility scan — ${name} (${scheme}, ${vp.label})`, async ({ page }) => {
       await prep(page, path, scheme, vp);
       await assertContentVisible(page, name);
       const results = await new AxeBuilder({ page }).analyze();
@@ -596,7 +598,7 @@ for (const [who, pagePath, many] of [
   ["guide page", "/Trip-Guides/guides/denmark/", false],
 ] as const)
 for (const scheme of ["light", "dark"] as const) {
-  test(`${who} resolve their OWN accent ink — ${scheme}`, async ({ page }) => {
+  test(`each guide uses its own readable accent colour, not another guide's — ${who} (${scheme})`, async ({ page }) => {
     await prep(page, pagePath, scheme, VIEWPORTS[0]);
     const carriers = await page.evaluate((dark) => {
       return Array.from(document.querySelectorAll('[style*="--accent-ink-light"]')).map((el) => {

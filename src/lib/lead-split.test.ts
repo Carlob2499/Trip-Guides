@@ -1,3 +1,5 @@
+// @protects-file A card's summary line is the guide's own first sentence, never a generated one.
+
 import { describe, it, expect } from "vitest";
 import { splitLead, moreDetailLabel } from "./lead-split";
 

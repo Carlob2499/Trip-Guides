@@ -7,6 +7,8 @@
 //  2. `≈` is derived from state, never authored into a value. That keeps one spelling of
 //     "sourced-but-approximate" and stops a bare ≈ from being typed beside an unsourced number.
 
+// @protects-file Every price and figure in a guide traces to one sourced, dated entry.
+
 import { describe, it, expect } from "vitest";
 import {
   RESERVED_GUIDE_FILES,

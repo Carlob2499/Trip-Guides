@@ -1,6 +1,8 @@
 // Test for the pure size guard in pdf-text.ts (W4). The extraction itself (extractPdfText) is
 // browser-only pdf.js glue verified in the preview, not unit-tested here — but the byte cap that
 // decides whether we even try is pure and cheap to lock down.
+// @protects-file Text pulled out of an uploaded booking PDF is the text that was in it.
+
 import { describe, it, expect } from "vitest";
 import { isTooBig } from "./pdf-text";
 

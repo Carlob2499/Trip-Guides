@@ -1,25 +1,9 @@
-/* Every var() a stylesheet reads must resolve to something.
+/* A var() with no fallback that names nothing is invalid at computed-value time: the whole
+   declaration is dropped and the property silently falls back to its initial value. CSS does
+   not warn. KNOWN LIMIT: `declared` is one repo-wide set, so this proves a name EXISTS, not
+   that it is in scope where it is read — scope needs a cascade, which is a browser. */
+// @protects-file No stylesheet reads a design value that does not exist.
 
-   Written because of a real one. `.learn-tally-row` in the learnings silo asked for
-   `1px solid var(--line)` — a token this product has never defined. CSS does not warn about
-   that: the declaration is invalid at computed-value time, `border-color` falls back to its
-   initial value, and the row quietly drew its frame in whatever colour its text happened to
-   be. It renders. It just renders wrong, in a way no unit test of any module could see and no
-   screenshot obviously flags.
-
-   So this reads every stylesheet the product ships — .css files AND the <style> blocks inside
-   .astro components — collects what each one DECLARES, and asserts that every name any of them
-   READS resolves. A var() carrying a FALLBACK is exempt by construction: an undeclared name
-   there resolves to the fallback, which is the documented way to read something optional. Only
-   the bare form can silently invalidate its own declaration.
-
-   KNOWN LIMIT, stated rather than hidden: `declared` is one repo-wide set, so this proves a
-   name EXISTS somewhere, not that it is in scope where it is read. A token declared only on a
-   component (--bs-ink on .bsheet, --fl-fg on .fl-page) would satisfy a bare read in an
-   unrelated file — the very --line bug this exists to catch, wearing a name that happens to be
-   declared elsewhere. Scope-accurate checking needs a cascade, which is a browser, not a regex;
-   the runtime gates in tests/visual are where that is caught. This catches the common case
-   cheaply and says so. */
 import { describe, expect, it } from "vitest";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";

@@ -1,3 +1,5 @@
+// @protects-file Sunrise and sunset times are computed for the destination, not the reader's location.
+
 import { describe, it, expect } from "vitest";
 import { solarTimesFor, daylightLeftLabel, fmtClock } from "./sun";
 

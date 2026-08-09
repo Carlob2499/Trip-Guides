@@ -1,3 +1,5 @@
+// @protects-file Everything flagged verify-before-you-go is re-checked before departure.
+
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { mkdtemp, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";

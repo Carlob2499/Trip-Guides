@@ -1,3 +1,5 @@
+// @protects-file What is shut on a given day is read from real holiday and opening-hours data.
+
 import { describe, it, expect } from "vitest";
 import { buildClosures, closureCount, weekdayOf } from "../model/closures";
 

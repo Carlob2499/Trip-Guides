@@ -11,6 +11,8 @@
    real background behind the title is NOT --dark-ground and asserting against that token would be
    measuring the wrong thing. The overlay is screenshotted with its own ink hidden, the lightest
    pixel is taken as the worst case, and every --dark-* ink is rated against that. */
+// @protects-file The full-screen day view is readable, and you can always get out of it.
+
 import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import sharp from "sharp";

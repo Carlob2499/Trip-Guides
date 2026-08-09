@@ -8,6 +8,8 @@
      · the split rule belongs to one expense, not to the trip
    Seeded through localStorage because that is the on-device path a real returning traveller
    takes; the shared-room path shares the same normalizers by construction. */
+// @protects-file The shared trip budget never quietly changes what anyone owes.
+
 import { test, expect, type Page } from "@playwright/test";
 
 const KOREA = "/Trip-Guides/guides/korea/";

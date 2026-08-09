@@ -7,6 +7,8 @@
 // and modify got one with the change-request wizard; revise and graduate had NONE until now,
 // despite revise carrying six hand-typed literals across two different templates.
 
+// @protects-file The forms used to file work match what the automation expects to read.
+
 import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";

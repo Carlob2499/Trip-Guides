@@ -1,3 +1,5 @@
+// @protects-file A shared link points at the exact section being shared, correctly encoded.
+
 import { describe, it, expect } from "vitest";
 import { buildPageUrl, buildWhatsAppShareUrl, buildMailtoUrl, buildSummaryShareText } from "./share-links";
 

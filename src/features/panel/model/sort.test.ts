@@ -1,3 +1,5 @@
+// @protects-file Sections have a stable default order rather than an accidental one.
+
 import { describe, it, expect } from "vitest";
 import { sortPanels, panelRank, type PanelOrderItem } from "./sort";
 

@@ -1,3 +1,5 @@
+// @protects-file A fact past its shelf life is flagged as needing a re-check.
+
 import { describe, it, expect } from "vitest";
 import { staleness, SHELF_LIFE_DAYS } from "./staleness";
 

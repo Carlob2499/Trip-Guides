@@ -3,6 +3,8 @@
 // FIXTURE IMAGES synthesized with sharp itself (the same library the real extraction pipeline
 // uses) rather than a checked-in binary PNG — same raw-pixel-buffer shape sharp hands the real
 // code, generated on the fly so there's no binary fixture to keep in sync.
+// @protects-file Colours pulled from a cover image are real colours from that image.
+
 import { describe, it, expect } from "vitest";
 import sharp from "sharp";
 import { dominantVibrant, rgbToHsl, gate } from "../extract-palette.mjs";

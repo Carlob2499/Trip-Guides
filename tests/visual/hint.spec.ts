@@ -1,6 +1,8 @@
 /* The `?` affordance (creator, 2026-08-08: explanations should be there but not take up
    space). Gates the three ways in and the one thing that must never happen — a hint that
    activates the control it sits inside. */
+// @protects-file The '?' explains a control without covering the page or losing half its own sentence.
+
 import { test, expect } from "@playwright/test";
 
 const TOOLS = "/Trip-Guides/tools/korea/";

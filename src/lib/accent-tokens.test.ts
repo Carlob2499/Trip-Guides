@@ -1,3 +1,5 @@
+// @protects-file Every guide's colour scheme keeps its text readable against its own background.
+
 import { readFileSync, readdirSync } from "node:fs";
 import { describe, it, expect } from "vitest";
 import { accentTokens, accentStyle, TINT_MAX } from "./accent-tokens";

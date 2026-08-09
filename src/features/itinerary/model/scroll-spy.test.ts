@@ -1,3 +1,5 @@
+// @protects-file The section highlighted as where-you-are is the one actually on screen.
+
 import { describe, expect, it } from "vitest";
 import { lastAboveFold, nearestToCenter } from "./scroll-spy";
 import { DECK_CENTERS, DECK_VIEWPORT_CENTER, LIST_FOLD, LIST_TOPS } from "../mocks/seeds";

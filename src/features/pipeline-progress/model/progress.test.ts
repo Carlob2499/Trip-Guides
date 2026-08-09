@@ -1,3 +1,5 @@
+// @protects-file The research progress page reports the real state of a run, including when it fails.
+
 import { describe, it, expect } from "vitest";
 import { deriveProgress, formatElapsed, predictSlug, STAGE_ORDER, STUCK_THRESHOLD_MS } from "./progress";
 import { FRESH_SCAFFOLD, MID_RESEARCH, VERIFIED } from "../mocks/seeds";

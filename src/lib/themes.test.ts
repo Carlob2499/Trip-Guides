@@ -1,3 +1,5 @@
+// @protects-file Light and dark themes both resolve to a complete, readable set of colours.
+
 import { describe, it, expect } from "vitest";
 import { currencyFor, accentFor, tzFor, darken, COUNTRY_CODES } from "./themes";
 

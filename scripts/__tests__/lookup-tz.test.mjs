@@ -5,6 +5,8 @@
 // Fully offline (bundled boundary data), so unlike lookup-place.mjs this is unit-testable
 // without a network call.
 
+// @protects-file A destination's time zone is looked up from its verified coordinates.
+
 import { describe, it, expect } from "vitest";
 import { lookupTz } from "../lookup-tz.mjs";
 

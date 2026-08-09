@@ -2,6 +2,8 @@
 // LEARN loop's auto-filed revision requests (PLAN_REVISE_GUIDE V6). These numbers file issues
 // in the creator's tracker, so the logic that trips them is unit-gated, not agent judgment.
 
+// @protects-file Patterns drawn from feedback reflect what people actually reported.
+
 import { describe, it, expect } from "vitest";
 import { divergenceSignals, THRESHOLDS } from "../feedback-signals.mjs";
 

@@ -1,3 +1,5 @@
+// @protects-file Route order on the Tools screen is computed from mapped stops only, and says so.
+
 import { describe, it, expect } from "vitest";
 import { buildRoutePlan, km } from "../model/route-plan";
 

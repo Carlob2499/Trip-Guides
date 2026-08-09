@@ -1,3 +1,5 @@
+// @protects-file The second research pass really covered what the first pass left open.
+
 import { describe, it, expect } from "vitest";
 import { checkCoverage, isCovered, normalize } from "../check-passb-coverage.mjs";
 

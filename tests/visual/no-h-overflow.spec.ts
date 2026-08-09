@@ -1,22 +1,8 @@
-/* Nothing may push a page wider than the phone it is read on.
+/* A page wider than the phone does not just look wrong: `body` is overflow-x:clip, so the
+   overhang is cut off, and every paragraph beside it has already wrapped to the wider
+   measure and lost the end of each line. Reported failures name the widest offender. */
+// @protects-file Nothing runs off the side of a phone screen, so no sentence ever loses its ending.
 
-   Written because of a shipped one, and the shape of that bug is the reason this is a gate
-   rather than a fix. `anchors.css`'s mobile block set `.anch-scroll{overflow-x:visible}` and
-   `.jline{min-width:0}` — correct for the DATE rail it was written for, whose labels are a
-   weekday and a number. The ROUTE rail inherited it, and route names are 14ch and do not
-   compress. Nine of them widened their card past the viewport.
-
-   The figure looking wrong was the cheap half. The expensive half is that EVERY step's prose in
-   that card then wrapped to the card's new too-wide measure, so each line lost its ending
-   against the right edge of the screen — "fly into and out of T", "a ~13-hr flight is possible
-   but". Text was being destroyed by a layout bug three elements away, and no test in this repo
-   could see it: the unit suites do not lay anything out, and axe does not measure geometry.
-
-   So this asserts the property directly, at the width it matters, and NAMES the widest culprit
-   rather than just failing — a bare "1206 > 375" sends you hunting through a whole page.
-
-   375px is the floor the ship loop already checks by hand (iPhone SE / mini). A page that fits
-   there fits everything above it. */
 import { test, expect } from "@playwright/test";
 
 const GUIDES = ["korea", "japan", "denmark", "us"] as const;

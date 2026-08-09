@@ -1,3 +1,5 @@
+// @protects-file Who owes whom is settled in the fewest transfers, and the totals always balance.
+
 import { describe, it, expect } from "vitest";
 import { settle, type SettleExpense } from "./settle";
 

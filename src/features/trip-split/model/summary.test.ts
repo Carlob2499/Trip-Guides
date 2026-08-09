@@ -1,3 +1,5 @@
+// @protects-file The budget summary's figures are the ledger's figures.
+
 import { describe, it, expect } from "vitest";
 import { buildBudgetSummary } from "./summary";
 import { settle } from "./settle";

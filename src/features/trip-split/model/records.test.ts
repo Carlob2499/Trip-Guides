@@ -1,3 +1,5 @@
+// @protects-file A budget upgraded to a newer format still says what everyone owed before.
+
 import { describe, it, expect } from "vitest";
 import { normalizeExpense, normalizeMember, normalizePayment, rekeyForRoom } from "./records";
 

@@ -6,6 +6,8 @@
       "no-JS/SEO door", and the globe/cover are progressive enhancement on top of it.
    2. prefers-reduced-motion → the cover's iris/FLIP sequence is skipped, content reachable.
    3. A second visit in the same session (tg-atlas-cover-seen set) never shows the cover. */
+// @protects-file The home page works: the globe, the trip list, and every route from there into a guide.
+
 import { test, expect } from "@playwright/test";
 
 const HUB = "/Trip-Guides/";

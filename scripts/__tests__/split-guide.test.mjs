@@ -3,6 +3,8 @@
 // disk I/O — this script's whole job IS moving guide content between files, so a fake
 // filesystem would test nothing that matters).
 
+// @protects-file Splitting an imported guide into the standard shape loses nothing.
+
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { mkdtemp, writeFile, readFile, readdir, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";

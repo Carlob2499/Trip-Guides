@@ -13,6 +13,8 @@
 // stayed compatible across these particular minor versions in practice), not something this
 // test can retroactively "fix" — but it must not be allowed to silently WIDEN further without
 // someone noticing.
+// @protects-file Build tool versions stay pinned, so a build is reproducible.
+
 import { describe, it, expect } from "vitest";
 import semver from "semver";
 import astroPkg from "../../node_modules/astro/package.json" with { type: "json" };

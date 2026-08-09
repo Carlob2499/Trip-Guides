@@ -1,3 +1,5 @@
+// @protects-file A swipe through a day is read as the traveller meant it, not as an accidental tap.
+
 import { describe, expect, it } from "vitest";
 import { resolveSwipe } from "./gesture";
 import { SWIPE_NEXT, SWIPE_PREV } from "../mocks/seeds";

@@ -2,6 +2,8 @@
 // Pure helpers (nextStage/statusLines) are tested without the filesystem; the stateful helpers
 // (initState/checkpoint/readState) use a throwaway slug and clean it up.
 
+// @protects-file The guide-building pipeline runs its stages in order and stops when one fails.
+
 import { describe, it, expect, afterAll } from "vitest";
 import { existsSync, rmSync } from "node:fs";
 import { execFileSync } from "node:child_process";

@@ -1,3 +1,5 @@
+// @protects-file Today, days-to-go and this-trip-is-over are correct on every day of a trip.
+
 import { describe, it, expect } from "vitest";
 import { resolveTripDate, resolveTripDateInYear, tripWindow, tripWindowInYear, localISODate } from "./trip-dates";
 

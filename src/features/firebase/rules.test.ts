@@ -12,6 +12,8 @@
 
    What it cannot check: whether the rules currently PUBLISHED in the console match this
    file. Publishing stays a human step (README.md step 5). */
+// @protects-file The database refuses writes the app should never make.
+
 import { describe, it, expect } from "vitest";
 import rules from "./rules.json";
 import { normalizeExpense, normalizeMember, normalizePayment } from "../trip-split/model/records";

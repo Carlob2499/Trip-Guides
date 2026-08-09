@@ -1,3 +1,5 @@
+// @protects-file Section figures are built from the guide's own content and never invent a label.
+
 import { describe, it, expect } from "vitest";
 import { dayTimelineStops, dayLegSummary, haversineKm, routeLegLabels, clampWord } from "./anchors";
 

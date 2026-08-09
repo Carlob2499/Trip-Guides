@@ -1,3 +1,5 @@
+// @protects-file Grouped figures put each item in the right band.
+
 import { describe, it, expect } from "vitest";
 import { bucket } from "./buckets";
 import type { Section } from "./guide-types";

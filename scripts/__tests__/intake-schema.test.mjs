@@ -6,6 +6,8 @@
 // so the two machine surfaces cannot silently drift. The parser + doc-coverage tests lock the
 // behaviour the scaffold pipeline depends on.
 
+// @protects-file A guide request cannot arrive missing the answers it needs.
+
 import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";

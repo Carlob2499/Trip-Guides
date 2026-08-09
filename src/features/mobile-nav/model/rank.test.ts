@@ -1,3 +1,5 @@
+// @protects-file The bottom bar shows the sections this traveller actually uses.
+
 import { describe, it, expect } from "vitest";
 import { parseCounts, recordOpen, rankOrder, promoted, seat, slotLabel, resumeLine } from "./rank";
 

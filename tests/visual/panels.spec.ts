@@ -13,6 +13,8 @@
       later); the proof is a transitionstart listener installed before any page script
       runs, which must stay silent through a restore. Motion is deliberately ENABLED
       here — under reduced motion the invariant would pass vacuously. */
+// @protects-file Sections open, close, and stay how you left them — even with JavaScript switched off.
+
 import { test, expect } from "@playwright/test";
 
 /* Test-only globals the init scripts hang on window — typed here so the page

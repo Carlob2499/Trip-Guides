@@ -11,6 +11,8 @@
        generating a PDF with a WinAnsi-only library
      · the sheet is removed again, so it never paints on screen
    window.print is stubbed: a real dialog would hang the run. */
+// @protects-file The printed budget sheet says exactly what the calculator on screen says.
+
 import { test, expect, type Page } from "@playwright/test";
 
 const KOREA = "/Trip-Guides/guides/korea/";

@@ -1,3 +1,5 @@
+// @protects-file The Tools screen's reminders are that trip's own, not another trip's.
+
 import { describe, it, expect } from "vitest";
 import { buildReminders, isBookingItem } from "../model/reminders";
 

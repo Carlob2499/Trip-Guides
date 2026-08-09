@@ -1,3 +1,5 @@
+// @protects-file Contrast is measured to the published standard, not estimated.
+
 import { describe, it, expect } from "vitest";
 import { relativeLuminance, contrastRatio, readableOn } from "./contrast";
 

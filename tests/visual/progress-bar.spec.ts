@@ -1,10 +1,7 @@
-/* The /progress/ bar — the surface a traveller watches while their guide is being built.
+/* Driven through a detached probe element, not the live bar: progress.js polls and would
+   overwrite the property mid-assertion. */
+// @protects-file The research progress page animates smoothly instead of stuttering.
 
-   Untested before Stage F feature 12, and worth one test now for a specific reason: the fill
-   used to animate `width` on every poll tick, i.e. a layout pass per update, and it is a
-   scaleX off --pg-progress instead. Nothing about that is visible in a screenshot, so this
-   pins the mechanism — the bar is a transform that grows from the left edge, and the track
-   still clips it. */
 import { test, expect } from "@playwright/test";
 
 test("the progress bar fills by transform, anchored to the left edge", async ({ page }) => {

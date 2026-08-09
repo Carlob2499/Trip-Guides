@@ -2,6 +2,8 @@
 // posting + file reads are impure; buildComment is the part that decides what evidence the
 // skill-retro proposer later reads.
 
+// @protects-file A research run's record is appended, never overwritten.
+
 import { describe, it, expect } from "vitest";
 import { buildComment } from "../append-run-report.mjs";
 
