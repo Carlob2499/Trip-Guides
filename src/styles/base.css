@@ -67,6 +67,21 @@
      ink on a ground, and #fff on #b3261e is 6.54:1 in either theme. Re-mapping it would
      paint a pale-red button that reads as disabled. */
   --crit-fill:#b3261e;
+  /* ATLAS TOKEN CONTRACT — the --sm-* ground (Stage F feature 3). Story mode is a takeover,
+     not a page: it is dark in BOTH themes, so it cannot read --ink/--bg without inverting
+     itself for every light-theme reader. Like --on-aink and --crit-fill above, these are
+     deliberately NOT re-mapped per theme — a fixed ground is an object, not ink on the page.
+     They live here rather than in story-mode.css so the product's hex literals stay in one
+     file. Measured against --sm-ground: ink 17.61:1, ink-2 14.86:1, ink-3 11.81:1, ink-4 10.20:1. The
+     real painted ground is a radial gradient that mixes 26% of the guide's accent into that
+     value near the top, so story-mode.spec.ts samples the composited pixels rather than
+     trusting these four. */
+  --sm-ground:#0b0e12;
+  --sm-ink:#f3f5ef;
+  --sm-ink-2:#dfe3da;
+  --sm-ink-3:#c7ccc0;
+  --sm-ink-4:#b9beb2;
+  --sm-rule:rgba(255,255,255,.14);
   /* --cta/--cta-ink are the one genuinely NEW pair, and the only ones here that are not
      aliases. DESIGN.md specs the primary button as chart-room-slate on card-paper and gives no
      dark variant — but in dark mode chart-room-slate IS the page ground, so a fixed value
