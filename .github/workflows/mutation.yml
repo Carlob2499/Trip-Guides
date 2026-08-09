@@ -35,9 +35,10 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      # --config is explicit rather than left to discovery: the repo already lost a deploy to a
-      # stray config file winning a resolution race (CLAUDE.md boundary check 4).
-      - run: npx stryker run --config stryker.config.json
+      # The config file is named rather than left to discovery (CLAUDE.md boundary check 4: the
+      # repo already lost a deploy to a stray config winning a resolution race). Stryker takes it
+      # as a POSITIONAL argument — there is no --config flag, and passing one exits 1 in a second.
+      - run: npx stryker run stryker.config.json
       - run: node scripts/mutation-report.mjs
       - name: Commit the report if it moved
         run: |
