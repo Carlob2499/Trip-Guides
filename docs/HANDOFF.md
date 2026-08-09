@@ -61,7 +61,21 @@ Also closed: DESIGN.md reconciled against what `check-drift` actually enforces; 
 `view-transition-name:accent-<slug>` removed (its partner was the retired hub card, so it was
 animating alone); MOTION.md rule 7 and ARCHITECTURE.md updated; `npm audit` 0.
 
-Gates on every commit: build · lint 0 · typecheck 0 · 1607 unit · 161 Playwright · zero
+**Then a three-agent code review over the whole arc found the worst defect of the session**,
+and it predated the arc: the **What's-Next banner was shipping at 1.09:1** — near-white ink on
+near-white ground. `guide.css` declared it as an accent fill with `color:var(--bg)`;
+`overview.css`, imported after, replaced the fill with a tint and had no `.wn-text` rule. The
+banner only unhides inside the trip's own date range, so it was unreadable exactly while
+someone was travelling. Also found: `#fff` on the extracted accent (3.69:1, denmark only); a
+search collapse that left visible-but-untappable results; a ping sheet that trailed the thumb;
+and the Panel hint sitting INSIDE its heading, so every hinted panel announced the whole
+tooltip paragraph as its name. Four tests passed for the wrong reason and are repaired, each
+verified by reverting the source and watching it fail.
+
+`src/styles/on-fill.test.ts` is the new gate: ink on a token-driven fill may never be a
+literal. Third instance of that one mistake, so it got a gate rather than a third patch.
+
+Gates on every commit: build · lint 0 · typecheck 0 · 1610 unit · 170 Playwright · zero
 `src/content/guides/` diff. All CI green.
 
 ## Open items
@@ -75,8 +89,8 @@ Gates on every commit: build · lint 0 · typecheck 0 · 1607 unit · 161 Playwr
   is not this assistant's to build.
 - **Airports for Sedona/Japan** — record them WHEN flights get booked. No fact yet; don't invent.
 - Tools pages and `/about/`, `/new/` are not in the SW precache shell.
-- Cover overlay does not trap focus (papercut — the cover dismisses on any key).
-- LOCAL branch `worktree-agent-a7dc7eeb397c6a368` (progress-study, `5917f8f`) — keep or lose.
+- Cover overlay does not trap focus (papercut — it dismisses on any key). LOCAL branch
+  `worktree-agent-a7dc7eeb397c6a368` (progress-study, `5917f8f`) — keep or lose.
 - Cloudflare dashboard Git integration still failing 0s builds on every push.
 - Korea 03: critic flagged a swapped 명동 label on the Gyeongbokgung map point → file its issue.
 - No guide uses a direct royalty-free `sights[].img.src` yet — capability live, unexercised.
@@ -89,6 +103,8 @@ Gates on every commit: build · lint 0 · typecheck 0 · 1607 unit · 161 Playwr
 **Nothing is blocked on the creator**, but one thing wants their eyes: the bottom-bar slots and
 day chips became full pills under the spec's own rule, and only they can say whether that reads
 right on the phone they actually use.
+
+The reviewed arc is closed: three agents over `71bb29b..HEAD`, every finding fixed.
 
 **Recommended next step:** the hub visual-fidelity pass, which is now the oldest open item —
 open by asking what looks wrong, and in parallel diff the running build against
