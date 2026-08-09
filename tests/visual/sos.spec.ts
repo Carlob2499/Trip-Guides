@@ -74,3 +74,47 @@ test("clicking the backdrop closes the sheet and returns focus to the trigger", 
   await expect(sheet).toHaveAttribute("hidden", "");
   await expect(trigger).toBeFocused();
 });
+
+/* One downward swipe, three claimants.
+
+   Both bottom sheets read the thumb themselves (src/scripts/sheet-drag.js), but neither set
+   `touch-action`, so it defaulted to `auto` and the browser kept claiming the same gesture:
+   the sheet followed the finger while the page scrolled behind it and Chrome's pull-to-refresh
+   armed on top of both. Which one won depended on where the thumb landed — the reported symptom
+   was a sheet that sometimes dismissed and sometimes reloaded the whole guide.
+
+   These assert the SPLIT rather than the outcome, because the outcome is a real touchscreen and
+   a real browser gesture, neither of which a headless run has. What is checkable is who is
+   declared to own what — and that is exactly the thing that was wrong. */
+test("the SOS sheet owns its drag gesture outright", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto(KOREA, { waitUntil: "networkidle" });
+  await page.locator("button[aria-label='Emergency numbers']").click();
+  await expect(page.locator(".sos-sheet")).not.toHaveAttribute("hidden", "");
+  // `none`: it has no scrolling content, so there is nothing to give the browser.
+  await expect(page.locator(".sos-inner")).toHaveCSS("touch-action", "none");
+});
+
+test("the groups sheet splits the gesture: shell drags, list scrolls", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto(KOREA, { waitUntil: "networkidle" });
+  await page.locator("#sheetOpen").click();
+  const sheet = page.locator(".sheet");
+  await expect(sheet).toHaveClass(/open/);
+
+  await expect(sheet).toHaveCSS("touch-action", "none");
+  // pan-y, not none: the list is genuinely scrollable and must stay that way. sheet-drag only
+  // arms when it is at scrollTop 0, so the two never contend for the same swipe.
+  const list = page.locator(".sheet-list");
+  await expect(list).toHaveCSS("touch-action", "pan-y");
+  expect(await list.evaluate((el) => el.scrollHeight > el.clientHeight + 2)).toBe(true);
+
+  // Pull-to-refresh is the third claimant. Not disabled site-wide — a browser tab should keep
+  // it — but contained while the page underneath is locked and a reload would be destructive.
+  await expect(page.locator("body")).toHaveClass(/sheet-lock/);
+  await expect(page.locator("body")).toHaveCSS("overscroll-behavior-y", "contain");
+
+  // The rounded top edge WAS the drag cue, and it was also Atlas drift (0 or 999px only).
+  // The container is square now; the handle that replaced it is the pill.
+  await expect(sheet).toHaveCSS("border-radius", "0px");
+});

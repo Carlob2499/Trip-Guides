@@ -90,6 +90,11 @@
    999px — and a 1px rule for the edge instead of a radius doing the separating. Behaviour,
    markup and data flow are untouched; this is the same sheet in the system's own hand. */
 .sos-inner{width:100%;max-width:30rem;background:var(--card);border-radius:0;border-top:1px solid var(--rule2);padding:1rem 1.2rem max(1.2rem,var(--safe-bottom));overscroll-behavior:contain;transition:transform .26s cubic-bezier(.2,.8,.2,1)}
+/* Same gesture split as the groups sheet (mobile-nav.css): this element IS the drag surface,
+   so it must own the swipe outright. Left at `auto` the browser read the same downward thumb
+   as a page scroll and armed pull-to-refresh under an emergency sheet. It has no scrolling
+   content of its own, so nothing is given up by claiming the whole gesture here. */
+.sos-inner{touch-action:none}
 .sos-inner.sheet-dragging{transition:none;will-change:transform}
 /* A sheet you can pull down should say so. */
 .sos-inner::before{content:"";display:block;width:38px;height:4px;border-radius:999px;background:var(--rule2);margin:-.35rem auto .6rem}

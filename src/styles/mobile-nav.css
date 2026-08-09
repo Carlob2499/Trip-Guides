@@ -131,6 +131,28 @@
   .sheet.sheet-dragging{transition:none;will-change:transform}
   .sheet-list{overscroll-behavior:contain}
 
+  /* The sheet ADVERTISED a drag it did not own. `touch-action` was never set, so it defaulted
+     to `auto` and the browser claimed the same downward swipe the drag handler was reading:
+     the sheet followed the thumb while the page tried to scroll behind it and Chrome's
+     pull-to-refresh armed on top of both. Three interpretations of one gesture, and which one
+     won came down to where the thumb happened to land.
+
+     Splitting it by surface is the whole fix, and it matches what sheet-drag.js already
+     believes about itself:
+       · the sheet shell is the DRAG surface — `none`, so nothing else gets a say;
+       · the list inside is the SCROLL surface — `pan-y`, so it still scrolls normally, and
+         `overscroll-behavior:contain` above already stops a fling at its end from reaching the
+         page. sheet-drag only arms when that list is at scrollTop 0, so the two never overlap. */
+  .sheet{touch-action:none}
+  .sheet-list{touch-action:pan-y}
+
+  /* Pull-to-refresh is the third claimant and it is not ours to disable outright — a browser
+     tab should keep it. But while a sheet is open the page underneath is locked
+     (`body.sheet-lock`), so there is nothing a refresh gesture could usefully act on, and
+     reloading the guide mid-gesture is the most destructive outcome of the three. Contain it
+     for exactly as long as the sheet is up. */
+  body.sheet-lock{overscroll-behavior-y:contain}
+
   /* ── Day scrubber (ui/day-scrub.js) ──────────────────────────────────────
      `.scrub-fit` turns the scrolling chip rail into a rail that FITS: every day is
      on screen, so a drag across it reaches all of them and the rail no longer has a
