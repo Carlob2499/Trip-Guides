@@ -126,3 +126,19 @@
 .tools-count{font-family:var(--font-data);font-size:var(--text-caption);letter-spacing:.06em;
   text-transform:uppercase;color:var(--muted);margin-bottom:.9rem}
 .tools-count b{color:var(--ink)}
+
+/* "Take it with you" — the .gpx / .ics downloads, moved here from the guide's Share panel.
+   Pills because they are pressed; the row collapses to one column on a phone so a two-word
+   label never has to wrap inside a 999px shape. */
+.tools-dl-row{display:grid;grid-template-columns:1fr;gap:.5rem}
+@media(min-width:520px){.tools-dl-row{grid-template-columns:1fr 1fr}}
+.tools-dl{
+  display:flex;align-items:center;justify-content:center;gap:.45rem;
+  min-height:44px;padding:.5rem .9rem;
+  border:1px solid var(--rule2);border-radius:999px;text-decoration:none;
+  font-size:var(--text-small);color:var(--ink);
+  transition:color .14s,border-color .14s;
+}
+.tools-dl:hover{border-color:var(--ink)}
+.tools-dl:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.tools-dl-ext{font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted)}

@@ -11,11 +11,18 @@ import { test, expect, type Page } from "@playwright/test";
 
 const TOOLS = "/Trip-Guides/tools/korea/";
 
+/* Five tools plus "Take it with you", which arrived 2026-08-09 when the .gpx/.ics downloads
+   moved off the guide's Share panel — sharing is giving the guide to someone else, and an
+   offline map file is the opposite errand. Korea has both coordinates and dated days, so it
+   renders. A trip with neither would show five, which is why the entry-point tests below all
+   name Korea specifically rather than whichever trip is most relevant today. */
+const PANEL_COUNT = 6;
+
 async function panelTitles(page: Page): Promise<string[]> {
   return page.locator(".tools-grid .pnl-title").allInnerTexts();
 }
 
-test("the screen renders all five tools for the named trip", async ({ page }) => {
+test("the screen renders every tool for the named trip", async ({ page }) => {
   await page.goto(TOOLS, { waitUntil: "domcontentloaded" });
   const titles = (await panelTitles(page)).join(" | ");
   expect(titles).toContain("What everyone actually spent"); // trip split
@@ -46,7 +53,7 @@ test("entry point: the hub header's TOOLS button lands on a loaded screen", asyn
   await page.goto("/Trip-Guides/", { waitUntil: "domcontentloaded" });
   await page.locator(".atlas-header-btn--tools").click();
   await page.waitForURL(/\/tools\//);
-  expect((await panelTitles(page)).length).toBe(5);
+  expect((await panelTitles(page)).length).toBe(PANEL_COUNT);
 });
 
 test("entry point: the table's TRIP TOOLS row lands on a loaded screen", async ({ page }) => {
@@ -56,7 +63,7 @@ test("entry point: the table's TRIP TOOLS row lands on a loaded screen", async (
   await page.locator('[data-atlas-mode-btn="table"]').click();
   await page.locator(".atlas-toolsrow").click();
   await page.waitForURL(/\/tools\//);
-  expect((await panelTitles(page)).length).toBe(5);
+  expect((await panelTitles(page)).length).toBe(PANEL_COUNT);
 });
 
 test("entry point: the guide's Groups sheet reaches the screen for that trip", async ({ page }) => {
@@ -65,7 +72,7 @@ test("entry point: the guide's Groups sheet reaches the screen for that trip", a
   await page.locator("#sheetOpen").click();
   await page.locator(".sheet-alltools-link").click();
   await page.waitForURL(/\/tools\/korea\//);
-  expect((await panelTitles(page)).length).toBe(5);
+  expect((await panelTitles(page)).length).toBe(PANEL_COUNT);
 });
 
 test("entry point: the hub's mobile map menu reaches the screen", async ({ page }) => {
@@ -117,7 +124,7 @@ test("the screen works with JavaScript disabled", async ({ browser }) => {
   const ctx = await browser.newContext({ javaScriptEnabled: false });
   const page = await ctx.newPage();
   await page.goto(TOOLS, { waitUntil: "domcontentloaded" });
-  expect((await panelTitles(page)).length).toBe(5);
+  expect((await panelTitles(page)).length).toBe(PANEL_COUNT);
   await page.locator(".tools-trip", { hasText: "Denmark" }).click();
   await page.waitForURL(/\/tools\/denmark\//);
   await expect(page.locator(".tools-title")).toHaveText("Denmark");

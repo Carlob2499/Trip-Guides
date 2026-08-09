@@ -12,6 +12,7 @@
 import { getCollection } from "astro:content";
 import { flattenSections } from "../../features/exports/index";
 import { deriveToolsRecord, type TripTools } from "../../features/trip-tools/index";
+import { collectWaypoints, collectDayEvents } from "../../features/exports/index";
 import { buildHolidayInfo, deriveTripYear, type RawHoliday } from "../../lib/holidays";
 import { firstDayDateOf, lastDayDateOf, relevanceOrder, deriveGuideRecord } from "../../features/atlas/index";
 import { countryData, COUNTRY_CODES } from "../../data/countries.mjs";
@@ -72,7 +73,10 @@ export async function loadTripTools(now: Date = new Date()): Promise<TripTools[]
       now,
     );
 
-    return { tools: { record, href: `${base}/guides/${g.id}/`, holidays, cc } as TripTools, guideRecord };
+    // Same collectors the endpoints use, so the link and the file can never disagree.
+    const exports = { gpx: collectWaypoints(g.data).length > 0, ics: collectDayEvents(g.data).length > 0 };
+
+    return { tools: { record, href: `${base}/guides/${g.id}/`, holidays, cc, exports } as TripTools, guideRecord };
   });
 
   return relevanceOrder(built.map((b) => b.guideRecord))

@@ -18,4 +18,9 @@ export interface TripTools {
   holidays: HolidayInfo | null;
   /** Two-letter country code — null when the country is not in the gazetteer. */
   cc: string | null;
+  /** Which portable exports this trip actually has a file for. Computed with the SAME
+      collectors the .gpx/.ics endpoints use, so a link is never offered for a file that does
+      not exist — the "Take it with you" row moved here from the guide's Share panel, where
+      downloading a calendar had nothing to do with sharing anything with anyone. */
+  exports: { gpx: boolean; ics: boolean };
 }

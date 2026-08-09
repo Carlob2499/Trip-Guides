@@ -641,11 +641,11 @@ body{overflow-x:clip}
 .share-soc{display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.45rem .4rem;border:1px solid var(--rule2);border-radius:999px;text-decoration:none;font-size:var(--text-small);color:var(--muted);transition:color .14s,border-color .14s}
 .share-soc:hover{color:var(--ink);border-color:var(--ink)}
 /* Downloads row — build-time GPX/iCal exports; each link shown only when its file exists */
-.share-downloads{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--rule2)}
-.share-dl-head{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin:0 0 .55rem}
-.share-dl-row{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
-.share-dl{display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.45rem .4rem;border:1px solid var(--rule2);border-radius:999px;text-decoration:none;font-size:var(--text-small);color:var(--muted);transition:color .14s,border-color .14s}
-.share-dl:hover{color:var(--ink);border-color:var(--ink)}
+/* The .gpx/.ics downloads moved to the Tools screen (GuideLayout's own note explains why).
+   What is left here is the POINTER to them — a quiet line, not a control, because the thing it
+   points at is one tap away and this panel is for sharing. */
+.share-elsewhere{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--rule2);font-size:var(--text-small);color:var(--muted)}
+.share-elsewhere a{color:var(--accent-ink)}
 .share-dl:only-child{grid-column:1 / -1}
 .share-dl-ext{font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:.05em;color:var(--accent-ink)}
 /* Share-summary button — full-width action under the URL row */

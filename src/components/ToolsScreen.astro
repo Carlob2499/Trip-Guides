@@ -207,6 +207,37 @@ const rest = r.reminders.filter((i) => !i.book);
         </p>
       )}
     </Panel>
+
+    {/* ── 6. TAKE IT WITH YOU ───────────────────────────────────────────────
+        Moved off the guide's Share panel (creator, 2026-08-09: "the Share button has too many
+        irrelevant buttons like map and trip calendar"). Sharing is giving the guide to someone
+        else; a .gpx you load into a handheld and a .ics you drop in your own calendar are the
+        opposite errand — you, later, offline. They were only in that modal because it was the
+        one drawer the guide had, and they made the actual share actions harder to find.
+        This screen is where a trip's tools live, so this is where they belong.
+
+        Each link appears only when its file exists, computed with the same collectors the
+        endpoints use — a guide with no coordinates is not offered an empty map file. */}
+    {(active.exports.gpx || active.exports.ics) && (
+      <Panel id={`tools-exports-${r.slug}`} kicker="TAKE IT WITH YOU" title="Files for the trip itself"
+             hint="Downloads, not links — they keep working with no signal. The .gpx opens in a handheld GPS or any offline map app; the .ics drops this trip's days into your own calendar.">
+        <div class="tools-dl-row">
+          {active.exports.gpx && (
+            <a class="tools-dl" href={`${base}/guides/${r.slug}.gpx`} download={`${r.slug}.gpx`}>
+              {/* Inline rather than an <Icon>: the set has no map pin, and the share panel
+                  this moved from drew the same one inline for the same reason. */}
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              Map points <span class="tools-dl-ext">.gpx</span>
+            </a>
+          )}
+          {active.exports.ics && (
+            <a class="tools-dl" href={`${base}/guides/${r.slug}.ics`} download={`${r.slug}.ics`}>
+              <Icon name="calendar" size={15} /> Trip calendar <span class="tools-dl-ext">.ics</span>
+            </a>
+          )}
+        </div>
+      </Panel>
+    )}
   </div>
 
   <p class="tools-foot">
