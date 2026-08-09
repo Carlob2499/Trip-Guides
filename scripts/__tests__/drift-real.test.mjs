@@ -11,8 +11,10 @@ const current = summarize(real);
 describe("design drift", () => {
   it("actually reaches the checker instead of scoring an empty run", () => {
     // A subprocess that fails to start returns no output, and no output classifies as no drift.
-    // The corpus has known debt; a zero here means the scan broke, not that the repo got clean.
-    expect(real.length + exempt.length).toBeGreaterThan(500);
+    // The corpus has known debt; a low number here means the scan broke, not that the repo got
+    // clean. This caught a real one: piped, the checker's own process.exit(1) truncated its
+    // report on Linux and CI classified 465 of 788 hits while Windows saw them all.
+    expect(real.length + exempt.length).toBeGreaterThan(700);
     expect(Object.keys(baseline).length).toBeGreaterThan(0);
   });
 

@@ -14,7 +14,9 @@
  *      node scripts/drift-real.mjs --update    rewrite the baseline
  */
 import { execFileSync } from "node:child_process";
-import { readFileSync, writeFileSync } from "node:fs";
+import { closeSync, openSync, readFileSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
 const CHECKER = "docs/design-handoff/enforcement/check-drift.mjs";
 const ROOTS = ["src/styles", "src/features", "src/components", "src/layouts", "src/pages", "src/scripts", "src/lib"];
@@ -166,15 +168,25 @@ export function regressions(current, baseline) {
   return bad;
 }
 
+/* The checker's stderr goes to a FILE, not a pipe, and this is not a style choice.
+   check-drift calls process.exit(1) immediately after console.error-ing its report. On Linux a
+   pipe write from Node is asynchronous, so exit() discards whatever has not flushed; on Windows
+   it is synchronous and everything lands. Piped, CI therefore saw 465 of the 788 violations
+   this machine saw — the biggest root, src/styles at 592 hits and 105 KB, was the one cut off.
+   A file descriptor is written synchronously on both. */
 export function run() {
+  const out = join(tmpdir(), "waypoint-drift.txt");
   let text = "";
   for (const root of ROOTS) {
+    const fd = openSync(out, "w");
     try {
-      execFileSync("node", [CHECKER, root], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
-    } catch (err) {
-      // Exit 1 with the report on stderr is its success path when drift exists.
-      text += (err.stderr || "") + (err.stdout || "");
+      execFileSync("node", [CHECKER, root], { stdio: ["ignore", fd, fd] });
+    } catch {
+      // Exit 1 with the report is its success path when drift exists; the report is in the file.
+    } finally {
+      closeSync(fd);
     }
+    text += readFileSync(out, "utf8");
   }
   return classify(parseOutput(text));
 }

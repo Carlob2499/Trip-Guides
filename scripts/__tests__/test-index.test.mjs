@@ -38,8 +38,12 @@ describe("the readable test index", () => {
   });
 
   it("the committed document matches what the generator produces", () => {
+    // Line endings are normalised out: git hands this file back as CRLF on a Windows checkout
+    // while the generator always writes LF, so an exact compare failed after any rebase and
+    // passed on CI — a gate that goes red for a reason that is not the thing it guards.
+    const eol = (s) => s.replace(/\r\n/g, "\n");
     const doc = readFileSync("docs/WHAT_THE_TESTS_PROTECT.md", "utf8");
-    expect(doc, "stale — run: node scripts/test-index.mjs").toBe(render(files));
+    expect(eol(doc), "stale — run: node scripts/test-index.mjs").toBe(eol(render(files)));
   });
 
   it("reads a template-literal name and an apostrophe without truncating either", () => {

@@ -2095,9 +2095,9 @@ nothing ships.
 - every test states, in one plain line, what it protects  <sub>scripts/__tests__/test-index.test.mjs:17</sub>
 - the promises are sentences a non-coder can read, not identifiers  <sub>scripts/__tests__/test-index.test.mjs:27</sub>
 - the committed document matches what the generator produces  <sub>scripts/__tests__/test-index.test.mjs:40</sub>
-- reads a template-literal name and an apostrophe without truncating either  <sub>scripts/__tests__/test-index.test.mjs:45</sub>
-- no NEW test file is mostly explanation, and no old one gets worse  <sub>scripts/__tests__/test-index.test.mjs:115</sub>
-- the recorded density debt only ever shrinks  <sub>scripts/__tests__/test-index.test.mjs:132</sub>
+- reads a template-literal name and an apostrophe without truncating either  <sub>scripts/__tests__/test-index.test.mjs:49</sub>
+- no NEW test file is mostly explanation, and no old one gets worse  <sub>scripts/__tests__/test-index.test.mjs:119</sub>
+- the recorded density debt only ever shrinks  <sub>scripts/__tests__/test-index.test.mjs:136</sub>
 
 **The pre-departure check reaches every item that asked to be re-verified.**
 
@@ -2128,10 +2128,10 @@ nothing ships.
 **The site keeps looking like one designed thing — no new stray corner, colour or shadow.**
 
 - actually reaches the checker instead of scoring an empty run  <sub>scripts/__tests__/drift-real.test.mjs:12</sub>
-- introduces no new drift and makes no existing file worse  <sub>scripts/__tests__/drift-real.test.mjs:19</sub>
-- the recorded drift debt only ever shrinks  <sub>scripts/__tests__/drift-real.test.mjs:32</sub>
-- every exemption is a named class carrying its own justification  <sub>scripts/__tests__/drift-real.test.mjs:40</sub>
-- classifies against the real source line, not the checker's truncated echo  <sub>scripts/__tests__/drift-real.test.mjs:49</sub>
+- introduces no new drift and makes no existing file worse  <sub>scripts/__tests__/drift-real.test.mjs:21</sub>
+- the recorded drift debt only ever shrinks  <sub>scripts/__tests__/drift-real.test.mjs:34</sub>
+- every exemption is a named class carrying its own justification  <sub>scripts/__tests__/drift-real.test.mjs:42</sub>
+- classifies against the real source line, not the checker's truncated echo  <sub>scripts/__tests__/drift-real.test.mjs:51</sub>
 
 **Trip feedback exports carry the survey answers and nothing personal.**
 
