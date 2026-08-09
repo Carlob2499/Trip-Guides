@@ -19,7 +19,7 @@
       '<input class="pal-input" type="text" role="combobox" aria-expanded="true" ' +
       'aria-controls="palList" aria-autocomplete="list" placeholder="Search this guide — sections, days, food, any keyword…" />' +
       '<ul class="pal-list" id="palList" role="listbox"></ul>' +
-      '<p class="pal-hint">↑↓ navigate · Enter jump · Esc close</p></div>';
+      '<p class="pal-foot">↑↓ navigate · Enter jump · Esc close</p></div>';
     document.body.appendChild(overlay);
     input = overlay.querySelector(".pal-input");
     list = overlay.querySelector(".pal-list");
