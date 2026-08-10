@@ -1,4 +1,4 @@
-/* Build docs/WHAT_THE_TESTS_PROTECT.md — the test suite, readable by someone who does not
+/* Build docs/generated/what-the-tests-protect.md — the test suite, readable by someone who does not
    read code.
 
    The suite already has a plain-English layer: test names. What it lacks is the reason any of
@@ -144,7 +144,7 @@ export function render(files) {
   return out.join("\n") + "\n";
 }
 
-const DOC = "docs/WHAT_THE_TESTS_PROTECT.md";
+const DOC = "docs/generated/what-the-tests-protect.md";
 
 if (process.argv[1]?.endsWith("test-index.mjs")) {
   const doc = render(collect());

@@ -1,4 +1,4 @@
-// The Composer (R6 — docs/VISUAL_REDESIGN.md Move F): research emits tagged units
+// The Composer (R6 — docs/reference/visual-redesign.md Move F): research emits tagged units
 // (content.config.ts facets: theme · phase · rank), THIS deterministic code assembles each
 // guide's tabs, and the creator signs. No model ever freelances information architecture.
 //

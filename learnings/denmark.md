@@ -100,7 +100,7 @@ its traveller, and one of them still hasn't shipped to anyone.
 
 - Wrote the public `learnings` block (per-day Plan⇄Actual on the four days there's reality
   for: Jun 10, 12, 13, 15).
-- **Split `docs/TRAVELER_PATTERNS.md` by travel party.** It was written as "how *this group*
+- **Split `docs/evidence/traveler-patterns.md` by travel party.** It was written as "how *this group*
   travels" — singular — describing Korea's three mid-20s friends. Denmark was five people
   with mobility constraints those patterns say nothing about. Left merged, the next guide
   would inherit advice drawn from the wrong travellers. This is the biggest structural

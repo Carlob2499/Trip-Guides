@@ -1954,10 +1954,10 @@ nothing ships.
 
 **Project docs stay within budget and every file they reference exists.**
 
-- docs/HANDOFF.md is within its line budget (move old snapshots to docs/archive/)  <sub>scripts/__tests__/docs-integrity.test.mjs:30</sub>
-- no reference points at a doc that does not exist  <sub>scripts/__tests__/docs-integrity.test.mjs:51</sub>
-- src, scripts, docs (minus archive), workflows, and root files are clean  <sub>scripts/__tests__/docs-integrity.test.mjs:74</sub>
-- no .astro template hardcodes a root-absolute href  <sub>scripts/__tests__/docs-integrity.test.mjs:98</sub>
+- docs/handoff.md is within its line budget (move old snapshots to docs/archive/)  <sub>scripts/__tests__/docs-integrity.test.mjs:44</sub>
+- no reference points at a doc that does not exist  <sub>scripts/__tests__/docs-integrity.test.mjs:68</sub>
+- src, scripts, docs (minus archive), workflows, and root files are clean  <sub>scripts/__tests__/docs-integrity.test.mjs:91</sub>
+- no .astro template hardcodes a root-absolute href  <sub>scripts/__tests__/docs-integrity.test.mjs:113</sub>
 
 **Proposed venues are checked before they can enter a guide.**
 

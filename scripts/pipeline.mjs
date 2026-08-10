@@ -146,7 +146,7 @@ export function statusLines(slug, state) {
   }
   const next = nextStage(state);
   if (next) lines.push(`  → NEXT (${next}): ${stageHint(slug, next)}`);
-  else lines.push(`  → All stages cleared. Human graduates via the rubric (docs/GUIDE_RUBRIC.md) + \`npm run verify -- --slug ${slug} --network\`.`);
+  else lines.push(`  → All stages cleared. Human graduates via the rubric (docs/standards/guide-rubric.md) + \`npm run verify -- --slug ${slug} --network\`.`);
   return lines;
 }
 

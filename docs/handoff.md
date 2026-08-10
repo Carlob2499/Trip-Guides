@@ -18,9 +18,9 @@
   grep `dist/` → commit → push to `main` (the only branch — `verify-live` guards every deploy).
   Lint and typecheck are not optional: CI runs all three and session #20 pushed red twice by
   treating build+test as the whole gate.
-- North stars: `docs/PIPELINE.md` (generation/maintenance) · `docs/MOTION.md`
-  (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
-  `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference) ·
+- North stars: `docs/reference/pipeline.md` (generation/maintenance) · `docs/reference/motion.md`
+  (presentation/motion) · `docs/standards/guide-rubric.md` (quality bar) ·
+  `docs/evidence/competitive-landscape.md` (market parity reference) ·
   **`docs/archive/PLAN_ATLAS_MIGRATION.md`** (the current work order — its own Progress ledger is the
   source of truth for which stage is next; read that before re-deriving status from git log).
 
@@ -29,9 +29,9 @@
 Two asks, both about trusting the suite rather than adding to it: make the tests legible to a
 non-coder, and make sure each one tests something real.
 
-**Legibility became two generated documents.** `docs/WHAT_THE_TESTS_PROTECT.md` groups all 1715
+**Legibility became two generated documents.** `docs/generated/what-the-tests-protect.md` groups all 1715
 checks under the promise each keeps, sourced from a `// @protects-file` line now carried by every
-one of the 145 test files; CI fails if it goes stale. Its sibling `docs/WHERE_THE_TESTS_ARE_BLIND.md`
+one of the 145 test files; CI fails if it goes stale. Its sibling `docs/generated/where-the-tests-are-blind.md`
 is the honest half. The comment-density cap (22%, baseline of 16 files) came straight from the
 creator's "slim down the slop" — measured, not asserted: repo average 10.8%, my own new files
 30–44%.
@@ -70,7 +70,7 @@ Linux only, and a partial answer from a checker reads exactly like a clean resul
 - **Three paydown lists, all recorded as baselines that can only shrink** — 153 design-drift
   violations (`scripts/drift-baseline.json`), 43 prose-shape offences, 16 over-commented test
   files (`a11y.spec.ts` at 37% is the worst). Plus 1280 surviving mutants; read
-  `docs/WHERE_THE_TESTS_ARE_BLIND.md` top-down, the table is sorted by where it hurts.
+  `docs/generated/where-the-tests-are-blind.md` top-down, the table is sorted by where it hurts.
 - **Two of the eleven are NOT done, and neither is quietly dropped.**
   · **Print preview** (part of #8). The page-print buttons hand off to the browser's own dialog,
     which HAS a preview; the budget sheet builds a document and prints it without ever showing

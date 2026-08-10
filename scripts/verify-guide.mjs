@@ -2,9 +2,9 @@
 //
 // The per-guide mechanical checks used to be scattered across `readiness`, `check-staleness`, and
 // the audit suite, each run separately. This rolls them into ONE verdict + a rubric-shaped
-// scorecard (docs/GUIDE_RUBRIC.md), so a draft graduates against evidence instead of a patchwork
+// scorecard (docs/standards/guide-rubric.md), so a draft graduates against evidence instead of a patchwork
 // of hand-run scripts. It is the gate the later pipeline stages (recert, graduate-on-evidence)
-// reuse — see docs/PIPELINE.md, VERIFY stage.
+// reuse — see docs/reference/pipeline.md, VERIFY stage.
 //
 // What it rolls up:
 //   • RESEARCH quality   → guide-readiness (wraps check-research): fabrication, provenance
@@ -83,7 +83,7 @@ export function checkVoice(guide) {
 }
 
 // The rubric rows the machine can only defer to a human. Kept here as the graduation checklist the
-// scorecard prints — mirrors docs/GUIDE_RUBRIC.md so the two stay legible together.
+// scorecard prints — mirrors docs/standards/guide-rubric.md so the two stay legible together.
 const HUMAN_ROWS = [
   ["#6", "Anchor verified against a T0 source (dates + venue), trip built around it — anchor trips"],
   ["#8", "Top-2–3 ranked priorities got real depth; low-ranked ones are light or cut"],

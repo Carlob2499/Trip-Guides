@@ -1,7 +1,7 @@
 # Waypoint Travel Guides — Project Instructions
 
 Stacks on the global `~/.claude/CLAUDE.md` (universal accuracy rules — auto-loads
-separately). Architecture/stack detail: `docs/ARCHITECTURE.md` (read on demand).
+separately). Architecture/stack detail: `docs/reference/architecture.md` (read on demand).
 
 ---
 
@@ -23,7 +23,7 @@ research and without knowing this traveler?" If yes, verify it or personalize it
 
 ## Building a New Guide
 
-Never start by writing content. Fixed order: **(1)** intake (`docs/NEW_GUIDE_INTAKE.md`
+Never start by writing content. Fixed order: **(1)** intake (`docs/standards/new-guide-intake.md`
 — priorities ranked, dates set) → **(2)** spec section types from the ranking →
 **(3)** research (primary sources; depth on the top 2–3 priorities) → **(4)** write
 with each perishable fact's source + date attached → **(5)** run the bar test above →
@@ -60,7 +60,7 @@ Guides are the *ideal*; real trips diverge. Each guide carries a **Trip Feedback
 survey → Firebase (`trips/<storeKey>/feedback`, the `src/features/learnings/` silo). Those
 critiques become: the guide's optional `learnings` block (the **curated, public** post-mortem
 the Learnings tab + per-day Plan⇄Actual toggle render), `learnings/<slug>.md` (the maker's
-private synthesis), and `docs/TRAVELER_PATTERNS.md` (cross-trip patterns the
+private synthesis), and `docs/evidence/traveler-patterns.md` (cross-trip patterns the
 `waypoint-guide-author` skill consults so the *next* guide starts personalized).
 
 Two rules: raw `freeform` critiques are **never rendered and never pasted verbatim** — they
@@ -69,9 +69,9 @@ show — no feedback and no post-mortem means nothing renders. Never invent a le
 the surface; an honest blank is the feature.
 
 A **parallel process rail** (2026-07-30): pipeline critic findings compound in
-`docs/PIPELINE_PATTERNS.md` (distilled, appended every research run, promotion rule: a
+`docs/evidence/pipeline-patterns.md` (distilled, appended every research run, promotion rule: a
 pattern recurring ≥2 runs becomes a skill rule or gate). They are process evidence and
-**never** enter the learnings silo or `TRAVELER_PATTERNS.md` — those assert lived
+**never** enter the learnings silo or `docs/evidence/traveler-patterns.md` — those assert lived
 experience; a critic finding happened before anyone traveled.
 
 ---
@@ -164,7 +164,7 @@ import the old hub's soon-to-be-deleted `hub-motion.css` copy). Both are fixed; 
   pure tested logic), `ui/`, `mocks/` (real-shaped seeds; tests run zero-network), and
   `__tests__/`. Data access sits behind an injectable gateway in `index.ts` (backend-ready:
   a source swap never touches `ui/`). `src/features/firebase/` is the reference; full
-  contract: `docs/ARCHITECTURE.md`. A small single-module client behavior
+  contract: `docs/reference/architecture.md`. A small single-module client behavior
   still just goes in `src/scripts/`; no speculative silos.
 - **Third-party SDKs stay behind a config gate + lazy import** — commit an empty/public config so the
   build is inert until configured (Vite tree-shakes the whole path when the config is empty), and
@@ -266,7 +266,7 @@ a genuinely new workflow needs it.
 
 ## Operational Habits (save tokens)
 
-- **`docs/HANDOFF.md` and `CONTEXT.md` both auto-load at session start** (SessionStart hook →
+- **`docs/handoff.md` and `CONTEXT.md` both auto-load at session start** (SessionStart hook →
   `scripts/handoff-head.mjs`) — do not Read either again, and do not re-derive history from
   git log/memory sprawl. They split cleanly: HANDOFF is what just happened, CONTEXT is what
   the words mean and which forks are already settled. **Session end: rewrite HANDOFF's
@@ -289,7 +289,7 @@ a genuinely new workflow needs it.
   guide gets `node scripts/migrate-facts.mjs --slug <slug>` (propose) then `--write`. Never
   assemble the whole guide; `ls` the dir to find the group.
 - **New client behavior → its feature silo** (`src/features/<name>/`, see
-  `docs/ARCHITECTURE.md`) or `src/scripts/` for page chrome — never inline back into
+  `docs/reference/architecture.md`) or `src/scripts/` for page chrome — never inline back into
   `GuideLayout.astro`.
 - **`guide.css` past ~800 lines → split by feature** (as `base.css` was). Not before.
 - **Greppable questions** (dead selectors, dup props, fact diffs) → a local grep/script,
@@ -302,7 +302,7 @@ a genuinely new workflow needs it.
 ### Issue tracker
 
 Issues and specs live as GitHub issues on `Carlob2499/Trip-Guides`, via the `gh` CLI.
-See `docs/agents/issue-tracker.md`.
+See `docs/reference/issue-tracker.md`.
 
 ### Domain docs
 

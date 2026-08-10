@@ -217,7 +217,7 @@ const collapse = {
 // steps. There is no `fold: true`; folding stays automatic and length-gated.
 const moreDetail = { moreLabel: z.string().optional(), fold: z.literal(false).optional() };
 
-// R6 — Composer unit facets (docs/VISUAL_REDESIGN.md Move F). Tagged during the
+// R6 — Composer unit facets (docs/reference/visual-redesign.md Move F). Tagged during the
 // research pass, consumed ONLY by scripts/compose-guide.mjs (no renderer reads them):
 //   theme — the content theme this unit belongs to (compose defaults it to the unit's
 //           current group, so an untagged guide composes to exactly itself);
@@ -570,7 +570,7 @@ const guides = defineCollection({
         });
       }
     }).optional(),
-    // Optional per-trip COVER art (docs/MOTION.md; widened in R4, docs/VISUAL_REDESIGN.md
+    // Optional per-trip COVER art (docs/reference/motion.md; widened in R4, docs/reference/visual-redesign.md
     // Move A½) — the shared element that morphs from the hub card into the guide masthead.
     // The cover is the PATHOS register (creator-decided 2026-07-27): liberal in sourcing, but
     // ALWAYS licensed and credited, and never carrying or implying a verification flag.

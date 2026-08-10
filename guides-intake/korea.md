@@ -9,7 +9,7 @@
 > back-filling a traveler intake from the finished guide would invent the very thing the
 > intake exists to record. The trip's actual traveler evidence lives in
 > `learnings/korea.md` (the maker's private post-mortem), the published `learnings` block in
-> `src/content/guides/korea/_guide.json`, and `docs/TRAVELER_PATTERNS.md`.
+> `src/content/guides/korea/_guide.json`, and `docs/evidence/traveler-patterns.md`.
 
 ## 1–7. Intake questionnaire
 

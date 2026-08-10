@@ -140,11 +140,11 @@ the shipped Atlas build) is its single authority, with the mechanical gates besi
 - **Counted proof, generated at build:** guide count, verified-fact count, and distinct
   primary-source count, rendered on the hub and About (`src/lib/guide-stats.ts`).
 - **Real post-trip feedback** from at least one completed trip, feeding
-  `docs/TRAVELER_PATTERNS.md` and a guide-level learnings block.
+  `docs/evidence/traveler-patterns.md` and a guide-level learnings block.
 - **Market research** behind the shipped feature set, with sources, in `docs/archive/FEATURES.md`;
-  category comparison in `docs/COMPETITIVE_LANDSCAPE.md`.
-- **Quality bar and process** are written down: `docs/GUIDE_RUBRIC.md`, `docs/PIPELINE.md`,
-  `docs/MOTION.md`, `docs/ARCHITECTURE.md`.
+  category comparison in `docs/evidence/competitive-landscape.md`.
+- **Quality bar and process** are written down: `docs/standards/guide-rubric.md`, `docs/reference/pipeline.md`,
+  `docs/reference/motion.md`, `docs/reference/architecture.md`.
 
 **Absences future work must not fabricate:** there are no testimonials, no users, no traffic
 or engagement numbers, no revenue, no pricing, no team, and no press. Waypoint has never been

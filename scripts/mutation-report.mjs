@@ -14,7 +14,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 
 const REPORT = "reports/mutation/mutation.json";
-const DOC = "docs/WHERE_THE_TESTS_ARE_BLIND.md";
+const DOC = "docs/generated/where-the-tests-are-blind.md";
 
 /** Same plain-English areas the readable test index uses, so the two documents line up. */
 const AREAS = [

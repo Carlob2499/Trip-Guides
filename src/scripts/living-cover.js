@@ -1,4 +1,4 @@
-// R4 living cover (docs/VISUAL_REDESIGN.md Move A½; docs/MOTION.md cover rules) —
+// R4 living cover (docs/reference/visual-redesign.md Move A½; docs/reference/motion.md cover rules) —
 // drives the masthead's optional footage layer. The contract is poster-first: the still
 // cover is COMPLETE, and this module only ever adds motion on top for visitors whose
 // context welcomes it. Every gate fails toward the still, silently:

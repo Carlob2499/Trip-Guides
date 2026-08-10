@@ -1,7 +1,7 @@
 name: Accessibility
 
 # The axe-core accessibility gate — hub + both guides, zero moderate/serious/critical violations
-# (tests/visual/a11y.spec.ts). This is GUIDE_RUBRIC row 13 and the design doctrine's a11y floor,
+# (tests/visual/a11y.spec.ts). This is docs/standards/guide-rubric.md row 13 and the design doctrine's a11y floor,
 # so it stays a hard, blocking gate.
 #
 # It used to ride inside visual.yml alongside the screenshot-diff suite. That pixel-diff gate was

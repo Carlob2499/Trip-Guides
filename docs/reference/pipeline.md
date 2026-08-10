@@ -7,7 +7,7 @@ nearly toil-free, and human effort is spent only where judgment genuinely lives.
 This doc is the durable plan future sessions execute against (it superseded the Jul-2026
 adversarial-review roadmap, now removed — git history has it). It states the target, the gaps,
 and the sequenced program
-with model/effort per phase. Read it with `docs/GUIDE_RUBRIC.md` (the quality bar) and the
+with model/effort per phase. Read it with `docs/standards/guide-rubric.md` (the quality bar) and the
 `waypoint-guide-author` skill (the research discipline).
 
 ---
@@ -95,7 +95,7 @@ diamond that is *always* human — nothing in the pipeline ever decides to un-pu
    that passes every automated gate goes live even if a human never glanced at those rows. This is
    a deliberate policy choice (the pipeline previously kept a human gate specifically so a wrong
    anchor date or a generic-AI-shaped guide got caught before featuring it), traded off in favor of
-   the explicit "no other input" requirement. The mitigation: `docs/TRAVELER_PATTERNS.md` +
+   the explicit "no other input" requirement. The mitigation: `docs/evidence/traveler-patterns.md` +
    the Learnings loop still catch a bad party-fit call after the fact, and `modify-guide.yml` fixes
    it without re-running the whole pipeline. A run that can't reach PASS (or hits a merge conflict
    after graduating) falls back to a draft PR for human triage instead of losing the work.
@@ -110,7 +110,7 @@ diamond that is *always* human — nothing in the pipeline ever decides to un-pu
    only the owner's approval runs it.
 
 5b. **REVISE — a major revision, between EDIT and a full re-research.** `revise-guide.yml`
-   (spec: `docs/REVISE_GUIDE.md`) handles changes big enough to need real content
+   (spec: `docs/reference/revise-guide.md`) handles changes big enough to need real content
    re-research with whole-guide continuity — dates shifted, priorities changed, a leg rerouted,
    feedback-driven divergence. Same single intake surface as EDIT: the owner triages weight at
    approval time (`modify-approved` = scoped edit, `revision-approved` = this pipeline — an

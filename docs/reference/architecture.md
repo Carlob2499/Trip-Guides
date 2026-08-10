@@ -93,7 +93,7 @@ self-boots to upgrade it only when `PUBLIC_GMAPS_KEY` is set.
 - **Content change:** edit the guide JSON, then run the continuity sweep + ship loop from
   `CLAUDE.md`. Fact edits follow the `waypoint-guide-author` skill.
 - **New country:** add a row to `src/data/countries.mjs`, then scaffold/author (intake:
-  `docs/NEW_GUIDE_INTAKE.md`).
+  `docs/standards/new-guide-intake.md`).
 - **New section type:** add a Zod member to `src/content.config.ts`, a renderer in
   `src/components/blocks/`, and wire it in `Block.astro`.
 - **New styling:** three gates run on every stylesheet and each catches a class of bug the

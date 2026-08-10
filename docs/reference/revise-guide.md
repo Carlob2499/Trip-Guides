@@ -4,7 +4,7 @@
 > Renamed from `PLAN_REVISE_GUIDE.md` on 2026-08-10 to match: `PLAN_` now means "not built
 > yet" throughout `docs/`. Kept in `docs/` rather than archived precisely because live code
 > points at it:
-> `revise-guide.yml`, `modify-guide.yml`, `feedback-export.yml`, `docs/PIPELINE.md` (stage 5b)
+> `revise-guide.yml`, `modify-guide.yml`, `feedback-export.yml`, `docs/reference/pipeline.md` (stage 5b)
 > and `scripts/feedback-signals.mjs` all cite it as the reference for behaviour they implement.
 > Verified present: the three labels (`ensure-labels.yml`), the issue form + parser +
 > plan validator, the four routed agents and the fork gate (`revise-guide.yml`), and the
@@ -156,7 +156,7 @@ modify-guide.yml. Steps:
    committed, privacy-safe synthesis artifacts, never `feedback-export.working.json`.
 5. **Agent P — planner** (Fable→Opus). Reads from disk with Read/Grep, never gets the guide
    pasted; ordered: `_guide.json` + `sections.json` + `change.txt` + learnings synthesis +
-   `docs/TRAVELER_PATTERNS.md` + `SKILL.md` first, individual `NN-<group>.json` files ONLY
+   `docs/evidence/traveler-patterns.md` + `SKILL.md` first, individual `NN-<group>.json` files ONLY
    for groups plausibly touched (directory-per-group exists precisely so this stays bounded).
    Forbidden: any other guide, working exports, git history. Writes
    `guides-intake/<slug>.revision-<issue#>.json`, commits it, stops:
@@ -237,7 +237,7 @@ within a minute show the second run queued in the Actions UI.
 **What.** **Agent C** (Fable→Opus, fresh context per P5), gated by a non-agent route:
 `verify-guide.mjs` exit 0 AND attempt budget ok (research-pass "Route after Reconcile"
 verbatim). May read: `git diff main...HEAD` (the primary review object), the finished guide
-dir, the revision plan JSON, `guides-intake/<slug>.md`, `docs/GUIDE_RUBRIC.md`, the skill.
+dir, the revision plan JSON, `guides-intake/<slug>.md`, `docs/standards/guide-rubric.md`, the skill.
 Forbidden: `change.txt`, the revision passB.json, agent transcripts, commit messages, git
 history beyond the diff — fresh eyes on the result. Tasks: (a) plan conformance — every
 `reResearch`/`rippleCheck`/`reconcile` item changed or explicitly declared no-change-needed;
@@ -272,11 +272,11 @@ matching the revise template's field headings so `parse-revise-issue.mjs` parses
 identically. Body contains ONLY aggregates and pattern summaries — **zero verbatim
 freeform**; the privacy rule extends to issue bodies. No `revision-approved` is ever applied:
 auto-filed issues sit inert until the owner acts. Docs: one "major revision" stage in
-`docs/PIPELINE.md`, a line in `docs/HANDOFF.md`.
+`docs/reference/pipeline.md`, a line in `docs/handoff.md`.
 **Why.** Last because it's optional sugar on a working pipeline, needs the template's field
 headings frozen (V2), and its smoke test is meaningless before V3–V5 exist.
 **Files.** `.github/workflows/feedback-export.yml`, one new pure-logic signals module + test,
-`docs/PIPELINE.md`, `docs/HANDOFF.md`.
+`docs/reference/pipeline.md`, `docs/handoff.md`.
 **Gate:** the auto-file boundary check below passes — exactly one issue filed, dedup proven,
 issue closed after inspection.
 

@@ -1,4 +1,4 @@
-// R5 section-anchor client behavior (docs/MOTION.md — "one draw-in per figure on first
+// R5 section-anchor client behavior (docs/reference/motion.md — "one draw-in per figure on first
 // view, then stillness"). Three jobs, all progressive enhancement over figures that are
 // already COMPLETE in the server-rendered markup:
 //

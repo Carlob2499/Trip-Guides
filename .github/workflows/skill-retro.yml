@@ -55,9 +55,9 @@ jobs:
                  gh issue list --search '"📒 Pipeline run ledger" in:title' --state open --json number \
                    --jq '.[0].number'
                then `gh issue view <n> --comments`, and skim learnings/*.md,
-               docs/TRAVELER_PATTERNS.md and docs/PIPELINE_PATTERNS.md for recurring themes.
+               docs/evidence/traveler-patterns.md and docs/evidence/pipeline-patterns.md for recurring themes.
                (A pointer to a never-written field-report doc lived here — the retro was being
-               asked to look for something that has never existed. PIPELINE_PATTERNS.md is the
+               asked to look for something that has never existed. docs/evidence/pipeline-patterns.md is the
                file that actually accumulates critic findings.)
 
             2. Look for PATTERNS across multiple runs, not one-offs: the same critic catch recurring,

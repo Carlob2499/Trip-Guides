@@ -1,6 +1,6 @@
 // Tests for scripts/graduate-guide.mjs — specifically that it handles BOTH guide shapes
 // (flat <slug>.json and split <slug>/_guide.json), which the original single-file-only version
-// silently didn't (docs/HANDOFF.md / pipeline-audit finding, this session).
+// silently didn't (docs/handoff.md / pipeline-audit finding, this session).
 
 // @protects-file A draft only becomes a published guide once it meets every requirement.
 

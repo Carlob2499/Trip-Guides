@@ -1,6 +1,6 @@
 name: Revise guide
 
-# The MAJOR-revision pipeline (docs/REVISE_GUIDE.md) — sits between modify-guide's scoped
+# The MAJOR-revision pipeline (docs/reference/revise-guide.md) — sits between modify-guide's scoped
 # edit and the full new-guide research pass. For changes big enough to need real content
 # re-research with strong continuity: dates shifted, priorities changed, a leg rerouted,
 # feedback-driven divergence. Fires only when the repo owner applies `revision-approved` to an
@@ -294,7 +294,7 @@ jobs:
                  group files. Every group you name MUST come from this list, verbatim.
               2. revision-context/_guide.json + guides-intake/${{ needs.resolve.outputs.slug }}.md
                  (intake: priorities, party, anchor, dates) + revision-context/learnings.md if
-                 present + docs/TRAVELER_PATTERNS.md.
+                 present + docs/evidence/traveler-patterns.md.
               3. .claude/skills/waypoint-guide-author/SKILL.md (the standard the executors follow).
               4. Individual src/content/guides/${{ needs.resolve.outputs.slug }}/NN-*.json files
                  ONLY for groups plausibly touched by the change — the directory-per-group shape
@@ -606,7 +606,7 @@ jobs:
             guide dir src/content/guides/${{ needs.resolve.outputs.slug }}/, the plan file
             guides-intake/${{ needs.resolve.outputs.slug }}.revision-${{ needs.resolve.outputs.issue }}.json,
             guides-intake/${{ needs.resolve.outputs.slug }}.md, revision-changes.txt,
-            docs/GUIDE_RUBRIC.md, and the waypoint-guide-author skill.
+            docs/standards/guide-rubric.md, and the waypoint-guide-author skill.
             FORBIDDEN: change.txt, the revision passB.json, commit messages, git history beyond
             the diff — fresh eyes on the result, not the process.
 

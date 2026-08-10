@@ -11,7 +11,7 @@
 > it previously read "VISION / UNAPPROVED · nothing here is building yet", which was badly
 > wrong: live code cites this doc as its own specification). Drafted 2026-07-27 from a real
 > render review (Playwright screenshots of the built site: hub + Korea guide, desktop/mobile,
-> light/dark). This doc extends `docs/MOTION.md`'s doctrine; it does not replace it.
+> light/dark). This doc extends `docs/reference/motion.md`'s doctrine; it does not replace it.
 >
 > **Shipped since drafting — do NOT re-plan these:**
 > - **Move A · Living covers** → `src/scripts/living-cover.js`, `cover.video` in the schema
@@ -297,7 +297,7 @@ pass: Mixkit 22059 Opera House (8.5 MB, over ceiling), Coverr's genuine Nyhavn a
 ephemeral `coverr-temp-…` URLs only, unusable without their API). **Sedona/US** — zero Sedona
 footage on any keyless-reachable library; Grand Canyon stand-ins declined ("footage of the
 actual place" rule). Both guides keep photo + Painted-Atlas backstop, which is a complete cover.
-Source-access notes live in docs/MOTION.md's R4 chapter.
+Source-access notes live in docs/reference/motion.md's R4 chapter.
 
 **Pipeline congruence (2026-07-28, post-R6).** The arc's final move: making the GENERATION flow
 deliver the vision unattended, per "new guides inherit everything". Audit finding — the R1–R6
@@ -334,12 +334,7 @@ covers and the Painted Atlas default** (`src/scripts/living-cover.js`,
 `src/components/PaintedAtlas.astro`) · **section anchors** (`src/lib/anchors.ts`) · **the
 Composer** (`scripts/compose-guide.mjs`).
 
-**One fork is genuinely still open** and is kept for that reason: the **motion language**.
-Three complete languages were staged as live mock-ups for the creator to choose between — *A ·
-Still waters* (motion in covers only), *B · The journey breathes* (recommended: continuous
-motion reserved for objects that encode live meaning — the read-fill creeps, its tip glows,
-today's dot breathes; chrome stays still), *C · Cinema* (a full entrance scene per view, then
-stillness — the highest risk to the visuals-never-outrank-scrolling law). The winner was to
-become a `docs/MOTION.md` chapter. It never landed there, and the Atlas migration shipped its
-own motion rules without settling it. Choosing B would add the rule: *continuous motion only
-on meaning-bearing objects; decoration gets one entrance, then stillness.*
+**The motion language is settled too.** Three languages were staged as live mock-ups; the
+creator chose **C's entrance + B's life** on 2026-07-28, and it landed exactly where it was
+meant to — `docs/reference/motion.md`, "the overture, then the heartbeat", with a 2026-08-03 amendment
+for work-in-progress motion. Read it there; nothing about it lives here any more.

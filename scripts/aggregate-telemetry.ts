@@ -4,8 +4,8 @@
  * Reads the RTDB `telemetry` subtree over the REST API — KEYLESS, because that node is
  * `.read: true` (aggregate counts, no PII), so no service account is needed (the reason the
  * whole thing is public-read). Runs the tested `summarize()` and writes:
- *   · docs/telemetry/summary.json — machine-readable, for the guide-author skill
- *   · docs/telemetry/summary.md   — human-readable ranking
+ *   · docs/generated/telemetry-summary.json — machine-readable, for the guide-author skill
+ *   · docs/generated/telemetry-summary.md   — human-readable ranking
  *
  * Invoked weekly by .github/workflows/telemetry-aggregate.yml (which commits any change) and
  * on demand via `npm run aggregate-telemetry`. No-ops cleanly if telemetry is empty or the
@@ -31,9 +31,9 @@ const raw = await res.json();
 const summary = summarize(raw);
 
 mkdirSync("docs/telemetry", { recursive: true });
-writeFileSync("docs/telemetry/summary.json", JSON.stringify(summary, null, 2) + "\n");
-writeFileSync("docs/telemetry/summary.md", renderMd(summary));
-console.log(`[telemetry] summarized ${summary.length} guide(s) → docs/telemetry/`);
+writeFileSync("docs/generated/telemetry-summary.json", JSON.stringify(summary, null, 2) + "\n");
+writeFileSync("docs/generated/telemetry-summary.md", renderMd(summary));
+console.log(`[telemetry] summarized ${summary.length} guide(s) → docs/generated/`);
 
 function renderMd(guides: GuideSummary[]): string {
   const lines: string[] = [

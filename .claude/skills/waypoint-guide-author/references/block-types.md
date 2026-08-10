@@ -26,7 +26,7 @@ same-audience event content shares one group. A group name is a nav label
 identity. New guides start from: Plan · Essentials · Transit · Days ·
 Sights · Food & shopping · Sources, adding at most 3 trip-specific groups.
 
-**Cite evidence, not just doctrine.** `docs/telemetry/summary.md` (auto-generated
+**Cite evidence, not just doctrine.** `docs/generated/telemetry-summary.md` (auto-generated
 weekly from anonymous tab-open counts, PII-free) ranks which tabs travelers
 actually opened on past guides. Consult it when deciding a new guide's groups and
 their order: a tab nobody opened is a merge candidate; a consistently top-ranked
@@ -190,7 +190,7 @@ conventions, render behavior, and the verification rules attached to a field.
   on a closable venue owes either a `plan_b` or an explicit "no good alternate"
   note in the intake doc.** The best alternates do double duty — the pattern that
   created this field was a jjimjilbang on a jangma arrival day, refuge AND
-  post-flight recovery in one stop (see `docs/TRAVELER_PATTERNS.md`). Distinct
+  post-flight recovery in one stop (see `docs/evidence/traveler-patterns.md`). Distinct
   from `env`/day-swap: the swap reorders whole days and goes silent when no dry
   day exists — `plan_b` is the answer for exactly that case. Never invent one:
   a weather-window day with no researched alternate gets the honest note, not a

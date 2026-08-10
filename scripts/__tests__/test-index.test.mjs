@@ -19,7 +19,7 @@ describe("the readable test index", () => {
     expect(
       naked.slice(0, 20),
       "A test with no `// @protects <sentence>` (or a file-level `// @protects-file`) cannot " +
-        "appear in docs/WHAT_THE_TESTS_PROTECT.md as anything a non-coder can judge. Add one " +
+        "appear in docs/generated/what-the-tests-protect.md as anything a non-coder can judge. Add one " +
         "line saying what breaks for a traveller if this check goes red.",
     ).toEqual([]);
   });
@@ -42,7 +42,7 @@ describe("the readable test index", () => {
     // while the generator always writes LF, so an exact compare failed after any rebase and
     // passed on CI — a gate that goes red for a reason that is not the thing it guards.
     const eol = (s) => s.replace(/\r\n/g, "\n");
-    const doc = readFileSync("docs/WHAT_THE_TESTS_PROTECT.md", "utf8");
+    const doc = readFileSync("docs/generated/what-the-tests-protect.md", "utf8");
     expect(eol(doc), "stale — run: node scripts/test-index.mjs").toBe(eol(render(files)));
   });
 

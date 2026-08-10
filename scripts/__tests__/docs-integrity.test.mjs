@@ -1,5 +1,5 @@
 /* Docs are load-bearing in this repo — CLAUDE.md routes agents by path, workflows tell agents
-   which docs to read, and HANDOFF.md is injected into every session. Session #26's audit found
+   which docs to read, and docs/handoff.md is injected into every session. Session #26's audit found
    the failure classes gated here: a workflow pointing at a doc that never existed, HANDOFF
    growing 10× past its own stated budget, and environment facts (OneDrive) outliving the
    environment. Each check is deterministic; judgment stays doctrine in CLAUDE.md. */
@@ -26,12 +26,26 @@ function walk(dir, exts, out = []) {
   return out;
 }
 
+/* Every .md under docs/ that someone still maintains — all folders, minus the two that are
+   deliberately frozen. Returns absolute paths. */
+function liveDocs() {
+  const FROZEN = new Set(["archive", "design-handoff"]);
+  const docs = join(ROOT, "docs");
+  return readdirSync(docs)
+    .filter((entry) => !FROZEN.has(entry))
+    .flatMap((entry) => {
+      const full = join(docs, entry);
+      if (statSync(full).isDirectory()) return walk(full, [".md"]);
+      return entry.endsWith(".md") ? [full] : [];
+    });
+}
+
 describe("HANDOFF stays a handoff, not a chronicle", () => {
-  test("docs/HANDOFF.md is within its line budget (move old snapshots to docs/archive/)", () => {
-    const lines = readFileSync(join(ROOT, "docs/HANDOFF.md"), "utf8").split("\n").length;
+  test("docs/handoff.md is within its line budget (move old snapshots to docs/archive/)", () => {
+    const lines = readFileSync(join(ROOT, "docs/handoff.md"), "utf8").split("\n").length;
     expect(
       lines,
-      "HANDOFF.md is over budget. Its header sets ~80 lines; the gate allows 120. " +
+      "docs/handoff.md is over budget. Its header sets ~80 lines; the gate allows 120. " +
         "Move superseded snapshots and re-prompts to docs/archive/HANDOFF_ARCHIVE.md."
     ).toBeLessThanOrEqual(120);
   });
@@ -42,10 +56,13 @@ describe("every cited docs/*.md exists (the E2_FIELD_REPORT failure class)", () 
     ...walk(join(ROOT, ".github/workflows"), [".yml"]),
     ...walk(join(ROOT, "scripts"), [".mjs"]),
     join(ROOT, "CLAUDE.md"),
-    // top-level docs only — the archive is a historical record and may cite old paths
-    ...readdirSync(join(ROOT, "docs"))
-      .filter((f) => f.endsWith(".md"))
-      .map((f) => join(ROOT, "docs", f)),
+    join(ROOT, "CONTEXT.md"),
+    // Live docs, whatever folder they sit in. Deliberately NOT a plain readdir of docs/:
+    // the 2026-08-10 rename moved 13 of the 14 into reference/, standards/, evidence/ and
+    // generated/, and a top-level-only readdir would have kept passing while checking one
+    // file. Excluded on purpose: archive/ is a historical record and may cite paths that no
+    // longer resolve, and design-handoff/ is a design-tool export nobody here maintains.
+    ...liveDocs(),
   ];
 
   test("no reference points at a doc that does not exist", () => {
@@ -76,9 +93,7 @@ describe("no OneDrive reference outside the archive", () => {
       ...walk(join(ROOT, "src"), [".ts", ".mjs", ".js", ".astro", ".css"]),
       ...walk(join(ROOT, "scripts"), [".mjs", ".ts"]),
       ...walk(join(ROOT, ".github"), [".yml", ".md"]),
-      ...readdirSync(join(ROOT, "docs"))
-        .filter((f) => f.endsWith(".md"))
-        .map((f) => join(ROOT, "docs", f)),
+      ...liveDocs(),
       ...readdirSync(ROOT)
         .filter((f) => f.endsWith(".md") || f.endsWith(".ts") || f.endsWith(".mjs"))
         .map((f) => join(ROOT, f)),

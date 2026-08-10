@@ -1,5 +1,5 @@
 // Tests for scripts/lookup-tz.mjs — the coordinate → IANA time zone resolver that
-// replaces the country-name-table approach to `tz` (see docs/HANDOFF.md and
+// replaces the country-name-table approach to `tz` (see docs/handoff.md and
 // content.config.ts's `tz` field: a country this large has no single "typical" zone,
 // and Hawaii/Arizona both proved the old approach wrong by hours before this existed).
 // Fully offline (bundled boundary data), so unlike lookup-place.mjs this is unit-testable

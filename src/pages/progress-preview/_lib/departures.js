@@ -30,7 +30,7 @@ export function initDepartures() {
      display a character it was not driven to, which is the property that makes
      this motion trustworthy rather than decorative.
 
-     The one concession to docs/MOTION.md's timing vocabulary (orchestrated
+     The one concession to docs/reference/motion.md's timing vocabulary (orchestrated
      arrivals <= ~1s): a real drum may spin through 30+ characters, which would
      run past 4 seconds. The travel is capped at 7 steps, so the mechanism reads
      without the page holding the reader for a full board cycle. */

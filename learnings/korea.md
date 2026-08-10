@@ -83,6 +83,6 @@ beef correction, or the overall route shape — silence there is signal too.
 
 ## Next step
 
-Promote the durable, cross-trip-worthy patterns to `docs/TRAVELER_PATTERNS.md` (done in the
+Promote the durable, cross-trip-worthy patterns to `docs/evidence/traveler-patterns.md` (done in the
 same pass as this file). Draft the guide's public `learnings` block from this — STOP before
 publishing, since it summarizes this traveler's critiques outward-facing.

@@ -190,7 +190,7 @@ jobs:
             echo "Started $BR"
           fi
 
-      # Circuit breaker (docs/PIPELINE.md P2 spine): a headless run that keeps getting cut off
+      # Circuit breaker (docs/reference/pipeline.md P2 spine): a headless run that keeps getting cut off
       # before reaching `verified` should eventually stop and ask a human instead of silently
       # resuming forever. Runs BEFORE the agent so a stuck guide never spends agent tokens.
       # P2: attempts are read/bumped and COMMITTED on THIS branch (research/<slug>), not on
@@ -605,7 +605,7 @@ jobs:
                 artifacts after you finish.
               .claude/skills/waypoint-guide-author/SKILL.md + references/verification-rules.md
                 + references/block-types.md — the standards you enforce and edit under.
-              docs/GUIDE_RUBRIC.md — the rows you score against.
+              docs/standards/guide-rubric.md — the rows you score against.
             The CLAUDE.md accuracy standard (auto-loaded) is also binding.
 
             STAGE CONTRACT — after findings are recorded AND resolved in the guide (edit the

@@ -5,7 +5,7 @@ perishable fact traces to a primary source and a verification date; where resear
 up short, the guide says so instead of filling the hole.
 
 > **What this file is.** The durable-memory file, auto-loaded at session start beside
-> `docs/HANDOFF.md`. Two things live here and nothing else: **Language** (what a word means
+> `docs/handoff.md`. Two things live here and nothing else: **Language** (what a word means
 > in this repo) and **Decisions** (a choice already made, and why the obvious alternative
 > was rejected). It carries no doctrine — how to work is `CLAUDE.md`'s job, and duplicating
 > it here would create the second source of truth this file exists to prevent. Add a

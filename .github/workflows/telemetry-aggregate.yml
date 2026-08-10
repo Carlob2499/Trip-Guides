@@ -1,6 +1,6 @@
 name: Telemetry aggregate
 
-# Weekly roll-up of anonymous tab-open counts into docs/telemetry/ (committed), so the
+# Weekly roll-up of anonymous tab-open counts into docs/generated/ (committed), so the
 # waypoint-guide-author skill starts the next guide from evidence of what travelers actually
 # use (goal 6) rather than doctrine. Reads the RTDB `telemetry` node KEYLESS (it's .read: true
 # — aggregate counts, no PII), so no secret is needed. Only commits when the summary changed.

@@ -9,7 +9,7 @@
    · .anch-ring — live progress ring over a card's own checklist state (the
      reader's device state, counted client-side by scripts/anchors.js).
 
-   Motion (docs/MOTION.md): ONE draw-in per figure on first view (~600 ms), then
+   Motion (docs/reference/motion.md): ONE draw-in per figure on first view (~600 ms), then
    stillness. The safety rail is reveal.js's: figures render COMPLETE by default;
    scripts/anchors.js adds .anch-pending only when motion is welcome, and the
    .anch-in transition finishes the frame. Reduced-motion never sees a pending

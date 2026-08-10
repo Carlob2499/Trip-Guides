@@ -42,7 +42,7 @@ is no second copy to keep in sync.
    the fact lives in, per CLAUDE.md's Operational Habits. Also read its
    **intake** `guides-intake/<slug>.md` if it exists (ranked priorities decide
    which sections get depth); else infer general scope and say so.
-   `docs/NEW_GUIDE_INTAKE.md` explains intake → spec.
+   `docs/standards/new-guide-intake.md` explains intake → spec.
 4. **`references/block-types.md`** — section types, the enforced tab budget,
    guide-level typed features (phrases/entry/advisory), voice standard, facets,
    covers. Read when choosing or creating any section.
@@ -50,11 +50,11 @@ is no second copy to keep in sync.
    royalty-free `src`, required attribution, forbidden sources, the R18 honesty
    rule, the pre-ship checklist). Read before sourcing any image.
 5. **The `denmark/` and `korea/` guide dirs** — the gold standard to match or beat.
-6. **`docs/PIPELINE_PATTERNS.md`** — what the critics keep catching, distilled. Read the
+6. **`docs/evidence/pipeline-patterns.md`** — what the critics keep catching, distilled. Read the
    OPEN rows before researching so a known miss-class is avoided upstream instead of
    caught downstream again. (Process evidence only — its rows never enter learnings or
    traveler patterns.)
-7. **`docs/TRAVELER_PATTERNS.md`** — how these travelers *actually* travel, plus
+7. **`docs/evidence/traveler-patterns.md`** — how these travelers *actually* travel, plus
    `learnings/<slug>.md` for any prior trip with the same travelers. **Consult during intake
    and research** so a new guide starts personalized, and **establish WHICH PARTY the guide
    is for FIRST** — use only that party's section plus Cross-party (the file's header
@@ -96,7 +96,7 @@ is no second copy to keep in sync.
 - **Reflect on a trip** — when writing a `learnings` block, tag each `skipped[]` stop with
   the content `group` it belonged to where that's unambiguous, and **leave `group` off when
   it isn't**. It powers the Learnings tab's "what didn't survive contact" tally and the
-  section-ranking table in `TRAVELER_PATTERNS.md`. An ungrouped stop sits the tally out;
+  section-ranking table in `docs/evidence/traveler-patterns.md`. An ungrouped stop sits the tally out;
   a guessed group teaches the next guide something false.
 
 ## Research workflow — TWO passes, then reconcile
@@ -237,7 +237,7 @@ quantitative: a full pass owes ≥8 finds, ≥3 crowd/timing, ≥2 novel/alterna
   derivation (`src/features/atlas/model/guide-record.ts`) reads it directly, resolves the code
   through `src/data/airports.mjs`, and an `unconfirmed` row (or none at all) draws no globe
   route — honest absence, never a guessed traverse. New guides: capture the departure airport
-  at intake (`docs/NEW_GUIDE_INTAKE.md`) so this row is born with the guide, not bolted on later.
+  at intake (`docs/standards/new-guide-intake.md`) so this row is born with the guide, not bolted on later.
 - **Structured provenance — MANDATORY on anything you write or edit.** Sections and
   items accept `source_url` + `verified_on` (YYYY-MM-DD) + `shelf_life`
   (`fx` 7d · `transit` 90d · `hours` 90d · `venue` 180d · `default` 90d, from
@@ -302,7 +302,7 @@ proposal-only, forever.
 
 ## Done gate — all of it, before calling anything finished
 
-**The bar is `docs/GUIDE_RUBRIC.md`** — the 13-dimension standard every guide is judged against
+**The bar is `docs/standards/guide-rubric.md`** — the 13-dimension standard every guide is judged against
 (P0 blocks graduation; P0+P1 = Korea-tier). `readiness` + `build` auto-enforce the P0 mechanical
 half; the P1 rows (venue completeness, priority depth, party fit, honest gaps) are your judgment
 via the §8 self-check below. A `readiness` PASS means "no detectable errors," **not** "good."
@@ -314,10 +314,10 @@ for the **stale** string to prove none survived.
 
 Then these guide-content gates, on top of it:
 1. **The self-correction loop — iterate, don't one-shot.** Run
-   `npm run verify -- --slug <slug>` — the rolled-up gate (docs/PIPELINE.md, VERIFY stage):
+   `npm run verify -- --slug <slug>` — the rolled-up gate (docs/reference/pipeline.md, VERIFY stage):
    readiness (fabrication · provenance · completeness · itinerary) + a **recency** row +
    (with `--network`) a **content** row (dead links · missing Commons photos), printed as a
-   `GUIDE_RUBRIC` scorecard with a `PASS`/`NEEDS WORK` verdict (exit 0/1). On `NEEDS WORK`,
+   `docs/standards/guide-rubric.md` scorecard with a `PASS`/`NEEDS WORK` verdict (exit 0/1). On `NEEDS WORK`,
    do NOT explain-and-move-on: fix each blocking (⚠) finding *by re-researching that fact
    against a primary (T0) source* — never silence a flag you can't source; downgrade to `⚠`
    or omit. **Re-run verify until it PASSes** (or every remaining item is a

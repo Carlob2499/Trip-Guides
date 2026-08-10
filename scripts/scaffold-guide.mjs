@@ -4,7 +4,7 @@
 //      backbone (the universal section groups + empty activity cards/checklists),
 //      with the API-driven sections (map + weather + holidays) PRE-WIRED so live
 //      weather / holidays / currency light up immediately, before any research.
-//   2. guides-intake/<slug>.md          — NEW_GUIDE_INTAKE filled with the answers,
+//   2. guides-intake/<slug>.md          — docs/standards/new-guide-intake.md filled with the answers,
 //      the spec a later Claude Code research pass builds against.
 //
 // Used by: the local CLI (below), the GitHub Action (.github/workflows/new-guide.yml),
@@ -207,7 +207,7 @@ export function buildGuideObject(answers = {}) {
   };
 }
 
-// Fill NEW_GUIDE_INTAKE with what the quick-start collected; leave the rest blank.
+// Fill docs/standards/new-guide-intake.md with what the quick-start collected; leave the rest blank.
 export function buildIntakeMd(answers = {}) {
   const prio = (answers.priorities || []).filter(Boolean);
   return `# New Guide Intake — ${answers.country || "[Destination]"}
@@ -217,7 +217,7 @@ export function buildIntakeMd(answers = {}) {
 > Operations". Keep this file next to the guide so future updates know the priorities.
 
 ## 1. The Traveler(s)
-- **Who is this for / party:** ${answers.party || ""}  *(→ pick the TRAVELER_PATTERNS party A/B/new before researching; do NOT infer from the last guide)*
+- **Who is this for / party:** ${answers.party || ""}  *(→ pick the docs/evidence/traveler-patterns.md party A/B/new before researching; do NOT infer from the last guide)*
 - Number of travelers: ${answers.travelers || ""}
 - **Constraints (mobility · dietary · sensory) — BINDING:** ${answers.constraints || ""}  *(a stated constraint makes the related venue facts MANDATORY per venue — step-free access, elevator, allergen handling — verified, never assumed; empty means none were stated, not none exist)*
 - Group makeup / ages (from Comments): ${answers.comments || ""}

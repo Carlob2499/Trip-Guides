@@ -51,7 +51,7 @@
   box-shadow:0 1px 2px rgba(0,0,0,.10),0 4px 10px rgba(0,0,0,.10),0 14px 30px rgba(0,0,0,.10);
   /* Text on --ink follows the INK, not the page theme, so every colour below is
      derived from --bg (the ink's own established contrast partner) rather than
-     hardcoded — the .bs-pos lesson in docs/MOTION.md's V6 notes. */
+     hardcoded — the .bs-pos lesson in docs/reference/motion.md's V6 notes. */
   /* A three-step ramp, and the floor is NOT a taste call: 68% is the lowest mix that
      still clears 4.5:1 in BOTH themes against the worst ground on the board — not the
      board itself but the flap cell, which is tinted 9% lighter. Measured with axe over

@@ -544,6 +544,6 @@ instead. None of these is still open.
    Fetched at build time from Nager.Date, offline-safe, no client JS.
 6. **Contrast gate.** Ran, and it caught real failures rather than confirming the spec — six of
    the twelve Stage-F features turned up a measured contrast defect. The recurring lesson is
-   recorded in `docs/HANDOFF.md`: axe skips hidden nodes, so every gesture-revealed surface
+   recorded in `docs/handoff.md`: axe skips hidden nodes, so every gesture-revealed surface
    needs its own scoped test in its own spec file.
 7. **Not yet designed.** All twelve went through the Stage-F redesign, one commit each.

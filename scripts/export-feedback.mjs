@@ -2,7 +2,7 @@
 // .github/workflows/feedback-export.yml: this script reads trips/<roomId>/feedback via a
 // READ-ONLY service account, keeps only submissions newer than the last sync, and writes a
 // runner-only working file the synthesis agent then turns into a review PR (learnings/<slug>.md
-// + the guide's public `learnings` block + docs/TRAVELER_PATTERNS.md deltas).
+// + the guide's public `learnings` block + docs/evidence/traveler-patterns.md deltas).
 //
 // PRIVACY (binding — "The Learnings Loop" in CLAUDE.md):
 //   · trips/* stays auth-gated in rules.json; this reads it with an Admin-scoped credential in CI,

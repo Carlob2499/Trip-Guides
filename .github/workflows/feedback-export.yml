@@ -1,9 +1,9 @@
 name: Feedback export (LEARN loop)
 
-# Closes the LEARN loop (docs/PIPELINE.md stage 6). Traveler survey feedback lands in Firebase
+# Closes the LEARN loop (docs/reference/pipeline.md stage 6). Traveler survey feedback lands in Firebase
 # (trips/<roomId>/feedback), but everything after that was manual: the maker had to open Firebase,
 # read submissions, hand-write learnings/<slug>.md, update the guide's public `learnings` block, and
-# promote patterns into docs/TRAVELER_PATTERNS.md. If the maker didn't, real trip reality never
+# promote patterns into docs/evidence/traveler-patterns.md. If the maker didn't, real trip reality never
 # reached the next guide. This runs that first draft automatically — the maker stays the EDITOR
 # (reviews a PR), not the typist.
 #
@@ -125,7 +125,7 @@ jobs:
                `src/content/guides/<slug>/_guide.json` (or `<slug>.json` if flat) IF the feedback
                genuinely changes the post-mortem — otherwise leave it and say why. Keep the schema
                valid (see content.config.ts). Set `learnings.verified_on` to today.
-            3. Propose party-scoped deltas to `docs/TRAVELER_PATTERNS.md` — tag each new claim with
+            3. Propose party-scoped deltas to `docs/evidence/traveler-patterns.md` — tag each new claim with
                its provenance ([reported] for survey-derived) and put it under the correct party
                section (Party A / Party B / Cross-party). Never merge parties; never invent data.
 
@@ -164,4 +164,4 @@ jobs:
             PR body: per-slug counts and a 1-2 line SUMMARY of what changed and why (rating trends,
             recurring skips, pattern deltas). Counts and summaries ONLY — zero verbatim freeform.
             Do not merge. Do not touch any file other than learnings/*.md, learnings/.sync.json, the
-            named guides' JSON, and docs/TRAVELER_PATTERNS.md. Never commit feedback-export.working.json.
+            named guides' JSON, and docs/evidence/traveler-patterns.md. Never commit feedback-export.working.json.

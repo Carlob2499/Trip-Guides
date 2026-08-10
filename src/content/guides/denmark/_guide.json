@@ -24,7 +24,7 @@
     ],
     "changed": [
       "Recorded what actually happened on the days below, so the plan and the reality sit side by side rather than the guide implying it went to script.",
-      "Split <code>docs/TRAVELER_PATTERNS.md</code> by travel party. It described a single group — Korea’s three mid-20s friends — but Denmark was a five-person family trip with mobility constraints the Korea patterns say nothing about. Merging them would have handed the next guide advice drawn from the wrong travellers.",
+      "Split <code>docs/evidence/traveler-patterns.md</code> by travel party. It described a single group — Korea’s three mid-20s friends — but Denmark was a five-person family trip with mobility constraints the Korea patterns say nothing about. Merging them would have handed the next guide advice drawn from the wrong travellers.",
       "Promoted the durable lessons (step-free routing, plan-for-the-slowest-walker, AC as a hard filter, cheap-taxi-beats-transit, port-stop timing) into the traveler-patterns file the guide author consults, so the next guide starts from them."
     ],
     "days": [

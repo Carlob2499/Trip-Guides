@@ -40,7 +40,7 @@ actually gets built, and it is what the traveler is being asked to confirm or co
 ## The fresh-context critic — five scans, then execution under full discipline
 
 A deliberately blind quality gate, run AFTER all mechanical verification: it sees ONLY the
-intake spec, the finished guide, `docs/GUIDE_RUBRIC.md`, and this skill — **never
+intake spec, the finished guide, `docs/standards/guide-rubric.md`, and this skill — **never
 `passB.json`, `.state.json`, or git history.** Its job is to catch what the researchers
 couldn't see because they were inside the process. It judges the PRODUCT, not the process,
 and it owns graduation.
@@ -79,7 +79,7 @@ and it owns graduation.
    - **COMMON SENSE** — whatever a friend would catch: thin buffers, a "backup" worse than
      nothing, a plan that ignores the party's stated pace.
 
-Scans 1–4 cite a `docs/GUIDE_RUBRIC.md` row; scan 5 cites its lens (pacing arc / geography /
+Scans 1–4 cite a `docs/standards/guide-rubric.md` row; scan 5 cites its lens (pacing arc / geography /
 meals & energy / tone / inclement cover / common sense). Judge boldly — a reorder or a swap you can justify is
 worth proposing even when nothing is factually wrong.
 
@@ -126,12 +126,12 @@ downgrading unreachables on the spot. **The workflow hard-gates on all three art
 (`## Critic findings` + `## Citation audit` + the sweep record when edits were made) — a
 critic run that ends without them fails the run.
 
-### Feed the loop — `docs/PIPELINE_PATTERNS.md` (required, every run)
+### Feed the loop — `docs/evidence/pipeline-patterns.md` (required, every run)
 
 Before landing, distill this run's findings into the Finding ledger: one row per
 finding-CLASS, tagged `[critic]`, with the slug, the date, and the rubric row or lens
 violated. A clean run appends its honest-blank row ("clean run — no findings"). Never paste
-raw finding text; never let these rows touch `learnings/` or `TRAVELER_PATTERNS.md` — critic
+raw finding text; never let these rows touch `learnings/` or `docs/evidence/traveler-patterns.md` — critic
 findings are process evidence, not lived experience. Commit the append with the run. If an
 OPEN pattern in that ledger already covers what you just caught again, note the recurrence in
 your row — recurrence ≥2 is the promotion trigger (a human or a design session moves the rule

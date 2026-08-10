@@ -51,7 +51,7 @@ Real trips diverge from the plan, and nothing was capturing that. Added the
   (X/Y stops done + skips with reasons). Hidden until there is reality to show.
 - **P3 — the curated post-mortem.** An optional `learnings` block in the guide schema plus a
   per-day **Plan ⇄ Actual** toggle, so a day can show what was planned *or* what happened.
-- **P4 — the loop.** `docs/TRAVELER_PATTERNS.md` (how this group actually travels) and
+- **P4 — the loop.** `docs/evidence/traveler-patterns.md` (how this group actually travels) and
   `learnings/<slug>.md` (private synthesis) now feed the `waypoint-guide-author` skill, so
   each trip makes the *next* guide better.
 

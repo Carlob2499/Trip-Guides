@@ -176,7 +176,7 @@ smooth, confident, unverified paragraph is a failing one.
 ## 8. Self-check before declaring done
 
 1. **The bar** applied to the whole draft, item by item — for each load-bearing pick (an
-   anchor rec, a marquee sight/food choice, a party-fit claim; `docs/GUIDE_RUBRIC.md` rows
+   anchor rec, a marquee sight/food choice, a party-fit claim; `docs/standards/guide-rubric.md` rows
    #6/#9/#12), ask: *"Would this appear in ANY generic AI guide, unresearched, without
    knowing this traveler?"* If yes: **replace** it with something this traveler's own
    ranked priorities actually justify, or **write the justification down** — don't just cut

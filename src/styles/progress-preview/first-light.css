@@ -9,7 +9,7 @@
    The guide's living cover, before the guide exists.
 
    Premise: a Waypoint guide is BORN with a cover — the Painted Atlas needs only
-   a slug, which is the one thing this page always has (docs/MOTION.md, "Living
+   a slug, which is the one thing this page always has (docs/reference/motion.md, "Living
    covers", rule 1). So the wait doesn't need a loading illustration invented for
    it: the destination's own painted sky, at the destination's own local hour, is
    already true and already the site's. When the guide lands, its masthead is the
@@ -20,7 +20,7 @@
    eyebrow / title / dek. Below the dek, the journey line from src/styles/
    anchors.css at hero scale, one station per REAL pipeline stage.
 
-   Motion (docs/MOTION.md, "the overture, then the heartbeat"):
+   Motion (docs/reference/motion.md, "the overture, then the heartbeat"):
    · Overture, once: title settles, the line draws, stations land in sequence.
    · Heartbeat, continuous, only where motion IS information — the Atlas's own
      licensed sky drift, and the glow at the fill's tip. When the pipeline stalls
@@ -192,7 +192,7 @@
 }
 
 /* --- the overture: once, on arrival --------------------------------------- */
-/* Fault-safe per docs/MOTION.md rule 3 — every frame above is the FINISHED
+/* Fault-safe per docs/reference/motion.md rule 3 — every frame above is the FINISHED
    frame. .fl-pending is added by script only when motion is welcome, and the
    .fl-in transitions finish it. A wedged script leaves the page complete. */
 .fl-pending .fl-title,.fl-pending .fl-eyebrow,.fl-pending .fl-dek{opacity:0;transform:translateY(10px)}

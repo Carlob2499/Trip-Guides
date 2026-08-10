@@ -59,7 +59,7 @@ Top 3, in order:
 - **Verification focus:** the anchor event date/venue (done first, T0), the tax-free system's Nov 1, 2026 cutover (directly affects the gaming/anime shopping days), the Fukuoka→Hokkaido→Tohoku routing logic (flights + koyo timing both had to agree), and the Zao Okama Crater's early-November seasonal-closure risk (a real honesty flag, not just a nice-to-know).
 
 ## TRAVELER_PATTERNS follow-up
-This trip's post-mortem (once it happens) should add a **Party C** section to `docs/TRAVELER_PATTERNS.md` — there's no existing entry for this pair. Nothing written back yet since the trip hasn't happened.
+This trip's post-mortem (once it happens) should add a **Party C** section to `docs/evidence/traveler-patterns.md` — there's no existing entry for this pair. Nothing written back yet since the trip hasn't happened.
 
 ## Cover art — footage candidates (research fills the shortlist; the CREATOR signs)
 > The research pass's footage scout records 0–2 licensed, hot-linkable clips here — stable-URL

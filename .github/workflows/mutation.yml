@@ -7,7 +7,7 @@ name: Mutation testing
 # WEEKLY, not per-push, and NON-BLOCKING on purpose. It takes ~3 minutes locally over 6000
 # mutants and the number is meant to be read, not enforced: a mutation score is a map of the thin
 # ice, not a grade, and gating on it would push people to write tests that satisfy the metric.
-# The output is docs/WHERE_THE_TESTS_ARE_BLIND.md, which is the thing worth reading.
+# The output is docs/generated/where-the-tests-are-blind.md, which is the thing worth reading.
 #
 # Scope is stryker.config.json: the pure model logic (src/features/*/model, src/lib) where a
 # silently wrong answer is possible and expensive. UI and build scripts are excluded — their real
@@ -44,7 +44,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/WHERE_THE_TESTS_ARE_BLIND.md
+          git add docs/generated/where-the-tests-are-blind.md
           git diff --staged --quiet && exit 0
           git commit -m "chore(tests): refresh the mutation-testing report"
           # A weekly job can land on a main that moved since checkout; rebase rather than fail
