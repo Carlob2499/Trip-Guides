@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1722 checks · 1722 carry a stated promise · 147 files
+1724 checks · 1724 carry a stated promise · 147 files
 
 ## Can everyone read it
 
@@ -51,6 +51,8 @@ nothing ships.
 - mobile: picking a pin haloes it, marks its row, and pauses the spin  <sub>tests/visual/atlas-hub.spec.ts:457</sub>
 - mobile: leaving for a guide and coming back keeps the sheet selected  <sub>tests/visual/atlas-hub.spec.ts:481</sub>
 - a pick on open water clears the selection instead of stranding a halo  <sub>tests/visual/atlas-hub.spec.ts:494</sub>
+- desktop: a pin card reads as a card, not as a raw browser link  <sub>tests/visual/atlas-hub.spec.ts:511</sub>
+- desktop: a pin card's cover is asked for at the size it is drawn  <sub>tests/visual/atlas-hub.spec.ts:526</sub>
 
 ## Money, tools and taking it with you
 

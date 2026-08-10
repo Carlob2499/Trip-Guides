@@ -505,3 +505,36 @@ test("a pick on open water clears the selection instead of stranding a halo", as
   await expect(page.locator("g[data-focus]")).toHaveCount(0);
   await expect(page.locator(".atlas-sheet[data-selected]")).toHaveCount(0);
 });
+
+/* Two defects the card carried in plain sight until a desktop screenshot was compared against
+   the computed styles: it painted as a raw browser link, and it pulled full-size originals.
+   Reasoning for both: atlas-world.css `.atlas-pincard` and world-view.js `PLATE_W`. */
+test("desktop: a pin card reads as a card, not as a raw browser link", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.addInitScript(() => sessionStorage.setItem("tg-atlas-cover-seen", "1"));
+  await page.goto(HUB, { waitUntil: "networkidle" });
+  await page.locator('[data-atlas-mode-btn="world"]').click();
+
+  const card = page.locator(".atlas-pincard").first();
+  await card.waitFor({ state: "attached", timeout: 20000 });
+  // On the ANCHOR, not on the title: text-decoration propagates to descendants and they
+  // cannot switch it off, which is exactly how the earlier title-only fix missed.
+  await expect(card).toHaveCSS("text-decoration-line", "none");
+  const colour = await card.evaluate((el) => getComputedStyle(el).color);
+  expect(colour, "the card is painting in browser link-blue").not.toBe("rgb(0, 0, 238)");
+});
+
+test("desktop: a pin card's cover is asked for at the size it is drawn", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.addInitScript(() => sessionStorage.setItem("tg-atlas-cover-seen", "1"));
+  await page.goto(HUB, { waitUntil: "networkidle" });
+  await page.locator('[data-atlas-mode-btn="world"]').click();
+  await page.locator(".atlas-pincard").first().waitFor({ state: "attached", timeout: 20000 });
+
+  const plates = await page.locator(".atlas-pincard-plate").evaluateAll((els) =>
+    els.map((e) => (e as HTMLImageElement).getAttribute("src") || ""));
+  expect(plates.length).toBeGreaterThan(0);
+  for (const src of plates) {
+    if (src.includes("Special:FilePath")) expect(src, "the card is pulling the original").toContain("width=");
+  }
+});

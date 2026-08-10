@@ -28,9 +28,18 @@
 #atlasGlobe atlas-map { position: absolute; inset: 0; }
 
 .atlas-pins { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
+/* The card is an <a> (world-view.js builds it), so it needs its own colour and decoration —
+   see the note on .atlas-pincard-title below, which is where this was FIRST attempted and
+   could not work. `text-decoration` set on an ancestor is propagated to its descendants and a
+   descendant cannot switch it off; only the anchor itself can. So the title rule turned the
+   title's own colour to ink and left the underline the anchor was drawing straight through it,
+   and every other line in the card — kicker, clock, CTA — stayed underlined and, where it had
+   no colour of its own, browser link-blue. Measured 2026-08-10: `color: rgb(0, 0, 238)`,
+   `text-decoration-line: underline` on the card itself. */
 .atlas-pincard {
   position: absolute; top: 0; left: 0; width: 220px;
   background: var(--card); border: 1px solid var(--rule2);
+  color: var(--ink); text-decoration: none;
   pointer-events: auto; will-change: transform; opacity: 0; transition: opacity .2s ease;
 }
 .atlas-pincard[data-ready] { opacity: 1; }

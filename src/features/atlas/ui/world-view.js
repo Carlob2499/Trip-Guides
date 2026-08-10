@@ -10,6 +10,12 @@ import { attachSheetDrag } from "../../../scripts/sheet-drag.js";
 import { atWidth, srcsetFor } from "../../../lib/img-width";
 
 const CARD_W = 220;
+/* The plate is 3:2 inside a 220px card — 220x146 — and `object-fit: cover` fills the SHORT
+   axis. A cover wider than 3:2 (Nyhavn is 2.21:1) asked for at 220px comes back 220x100 and
+   gets scaled UP to cover 146px of height, which is how a correctly-thumbnailed image still
+   lands on screen soft. Asking at twice the card width clears the height for any cover this
+   product is likely to carry, and is still an order of magnitude off the 258 KB original. */
+const PLATE_W = CARD_W * 2;
 const CARD_FULL_H = 140;
 const CARD_COMPACT_H = 60;
 const DRIFT_THRESHOLD = 90;
@@ -337,13 +343,17 @@ export function initAtlasWorld(root = document) {
     if (cardEls.has(slug)) return cardEls.get(slug);
     const g = byIndex.get(slug);
     if (!g) return null;
+    /* The plate is 220px wide and was being handed the ORIGINAL — Nyhavn is 1600x724 and 258 KB
+       for a 218x145 box, measured 2026-08-10. The table rows and the ping sheet both already
+       ask Commons for a thumbnail at the size they draw; this is the third surface using the
+       same cover and the only one that never did. */
     const el = document.createElement("a");
     el.className = "atlas-pincard";
     el.href = g.href;
     el.style.width = `${CARD_W}px`;
     el.innerHTML = `
       <span class="atlas-pincard-tail"></span>
-      ${g.coverImg ? `<img class="atlas-pincard-plate" src="${escapeHtml(g.coverImg)}" alt="" loading="lazy" style="view-transition-name:cover-${escapeHtml(g.slug)}" />` : ""}
+      ${g.coverImg ? `<img class="atlas-pincard-plate" src="${escapeHtml(atWidth(g.coverImg, PLATE_W))}"${srcsetFor(g.coverImg, PLATE_W) ? ` srcset="${escapeHtml(srcsetFor(g.coverImg, PLATE_W))}"` : ""} alt="" loading="lazy" style="view-transition-name:cover-${escapeHtml(g.slug)}" />` : ""}
       <span class="atlas-pincard-body">
         <span class="atlas-pincard-cc">${escapeHtml(g.cc || "")} · ${g.ordinal != null ? String(g.ordinal).padStart(2, "0") : "—"}</span>
         <span class="atlas-pincard-title">${escapeHtml(g.name)}</span>
