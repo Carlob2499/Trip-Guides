@@ -453,3 +453,55 @@ test("mobile: ＋ New guide lives in the menu, not as a bare glyph in the header
   await page.setViewportSize({ width: 1280, height: 800 });
   await expect(page.locator(".atlas-header-btn--cta")).toBeVisible();
 });
+
+/* Reasoning for all three: atlas-map.js `focus()` and world-view.js's home-state block. */
+test("mobile: picking a pin haloes it, marks its row, and pauses the spin", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.addInitScript(() => sessionStorage.setItem("tg-atlas-cover-seen", "1"));
+  await page.goto(HUB, { waitUntil: "networkidle" });
+  await page.locator('[data-atlas-mode-btn="world"]').click();
+
+  const chip = page.locator(".atlas-pinchip[data-on]").first();
+  await chip.waitFor({ state: "attached", timeout: 15000 });
+  const slug = await chip.evaluate((el) => {
+    (el as HTMLElement).click();
+    return (el as HTMLElement).dataset.slug!;
+  });
+
+  await expect(page.locator("atlas-map")).toHaveJSProperty("focused", slug);
+  await expect(page.locator(`g[data-focus]`)).toHaveCount(1);
+  await expect(page.locator(`.atlas-sheet[data-selected]`)).toHaveAttribute("data-sheet-slug", slug);
+  // The spin is held so the pin cannot walk off the edge while its sheet is being read...
+  expect(await page.locator("atlas-map").evaluate((el) => (el as unknown as { _hold: boolean })._hold)).toBe(true);
+  // ...and it restores itself, which is what makes it a pause and not a mode.
+  await expect
+    .poll(async () => page.locator("atlas-map").evaluate((el) => (el as unknown as { _hold: boolean })._hold), { timeout: 8000 })
+    .toBe(false);
+});
+
+test("mobile: leaving for a guide and coming back keeps the sheet selected", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.addInitScript(() => sessionStorage.setItem("tg-atlas-cover-seen", "1"));
+  await page.goto(HUB, { waitUntil: "networkidle" });
+
+  await page.locator('.atlas-sheet[data-sheet-slug="korea"]').click();
+  await expect(page).toHaveURL(/guides\/korea/);
+  await page.goBack({ waitUntil: "networkidle" });
+
+  await expect(page.locator(".atlas-sheet[data-selected]")).toHaveAttribute("data-sheet-slug", "korea");
+  await expect(page.locator("atlas-map")).toHaveJSProperty("focused", "korea");
+});
+
+test("a pick on open water clears the selection instead of stranding a halo", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.addInitScript(() => sessionStorage.setItem("tg-atlas-cover-seen", "1"));
+  await page.goto(HUB, { waitUntil: "networkidle" });
+  await page.locator('[data-atlas-mode-btn="world"]').click();
+
+  const map = page.locator("atlas-map");
+  await map.evaluate((el) => (el as unknown as { focus(s: string | null): void }).focus("korea"));
+  await expect(page.locator("g[data-focus]")).toHaveCount(1);
+  await map.evaluate((el) => (el as unknown as { focus(s: string | null): void }).focus(null));
+  await expect(page.locator("g[data-focus]")).toHaveCount(0);
+  await expect(page.locator(".atlas-sheet[data-selected]")).toHaveCount(0);
+});

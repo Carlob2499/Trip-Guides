@@ -44,6 +44,77 @@ export function initAtlasWorld(root = document) {
   const coordEl = root.querySelector("[data-atlas-coord]");
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* ── Selection, and coming back to it ────────────────────────────────────────────────
+     The atlas-mobile-home bundle asks for two things the hub had no notion of: picking a pin
+     marks its row in the list (§1 "Selected row border"), and leaving for a guide and pressing
+     Back returns "with scroll position AND selection state intact" (§2).
+
+     Back is normally the browser's job, and where the browser does it — bfcache restores the
+     whole page, DOM and scroll together — this code deliberately does nothing. It exists for
+     the other path: a real reload, where scroll restoration brings the offset back but the
+     selection, which only ever lived in JS, is gone. sessionStorage, so it is per-tab and
+     never outlives the visit. */
+  const HOME_STATE = "tg-atlas-home";
+  const rowOf = (slug) => (slug ? root.querySelector(`.atlas-sheet[data-sheet-slug="${slug}"]`) : null);
+
+  function markSelected(slug) {
+    root.querySelectorAll(".atlas-sheet[data-selected]").forEach((el) => el.removeAttribute("data-selected"));
+    rowOf(slug)?.setAttribute("data-selected", "");
+    saveHomeState(slug);
+  }
+
+  /* Row top minus 90px (the bundle's own offset) — enough that the row clears the sticky
+     header and the list's section label instead of hiding behind them. */
+  function scrollToRow(slug) {
+    const row = rowOf(slug);
+    if (!row) return;
+    const top = row.getBoundingClientRect().top + window.scrollY - 90;
+    window.scrollTo({ top: Math.max(0, top), behavior: reduced ? "auto" : "smooth" });
+  }
+
+  let savedSlug = null;
+  function saveHomeState(slug) {
+    savedSlug = slug || null;
+    try {
+      sessionStorage.setItem(HOME_STATE, JSON.stringify({ slug: savedSlug, y: Math.round(window.scrollY) }));
+    } catch { /* private mode or quota — the visit simply doesn't remember */ }
+  }
+  // The offset that matters is the one at the moment of LEAVING, not the one when the pin was
+  // tapped; a reader picks a sheet and then keeps scrolling before opening it.
+  window.addEventListener("pagehide", () => saveHomeState(savedSlug));
+
+  function restoreHomeState() {
+    let s = null;
+    try { s = JSON.parse(sessionStorage.getItem(HOME_STATE) || "null"); } catch { return; }
+    if (!s) return;
+    if (s.slug && guides.some((g) => g.slug === s.slug)) {
+      savedSlug = s.slug;
+      rowOf(s.slug)?.setAttribute("data-selected", "");
+      map.focus(s.slug);
+    }
+    // Only when the browser has NOT already restored it. Its own restoration wins — writing a
+    // second offset on top produces the visible double-jump this is supposed to prevent.
+    if (s.y > 0 && window.scrollY < 4) window.scrollTo(0, s.y);
+  }
+  window.addEventListener("pageshow", (ev) => { if (!ev.persisted) restoreHomeState(); });
+
+  /* One pick, four consequences — the halo on the globe, the mark on the row, the sheet, and
+     the list scrolling to where the row is. Every mobile entry point (the pin, its chip, the
+     canvas hit test) goes through here so none of them can drift into doing three of the four.
+     `map.focus` is what holds the spin; see its own note. */
+  function pickGuide(g) {
+    map.focus(g.slug);
+    markSelected(g.slug);
+    showPingSheet(g);
+    scrollToRow(g.slug);
+  }
+
+  /* Tapping a ROW is the ordinary way into a guide — the globe is the scenic one — so it has to
+     record the selection too, or Back from the most common exit is the one that forgets. */
+  root.querySelectorAll(".atlas-sheet[data-sheet-slug]").forEach((row) => {
+    row.addEventListener("click", () => saveHomeState(row.dataset.sheetSlug));
+  });
+
   // ── Index rail + THE RECORD (README §2) ─────────────────────────────────────────────
   const indexList = root.querySelector("[data-atlas-index-list]");
   if (indexList) {
@@ -225,10 +296,14 @@ export function initAtlasWorld(root = document) {
     const { slug } = ev.detail || {};
     const g = guides.find((x) => x.slug === slug);
     if (g) {
-      if (isMobile()) { showPingSheet(g); return; }
+      if (isMobile()) { pickGuide(g); return; }
+      // Desktop opens the guide directly (README "Clicking a pin"), so the selection it
+      // records is the one Back will restore.
+      markSelected(slug);
       window.location.href = g.href;
       return;
     }
+    markSelected(null);
     if (!toast) return;
     toast.innerHTML = `No guide here yet. <a href="${base}/new/">Start one →</a>`;
     toast.toggleAttribute("data-open", true);
@@ -314,7 +389,11 @@ export function initAtlasWorld(root = document) {
     // upcoming one both announced "guide filed" while the ping sheet called the same trip
     // SURVEYED — two surfaces describing one fact differently.
     el.setAttribute("aria-label", `${g.name} — ${CHIP_STATUS[g.status] || CHIP_STATUS.undated}. Open details.`);
-    el.addEventListener("click", () => showPingSheet(g));
+    el.setAttribute("data-slug", slug);
+    // Through the same function the pin itself uses, not straight to the sheet: the comment
+    // above says the chip must do exactly what tapping its pin does, and once a pick also
+    // haloes the pin, marks the row and holds the spin, "exactly" has four parts to it.
+    el.addEventListener("click", () => pickGuide(g));
     pinsLayer.appendChild(el);
     chipEls.set(slug, el);
     return el;

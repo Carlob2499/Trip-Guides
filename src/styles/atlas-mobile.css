@@ -493,6 +493,12 @@
   :root[data-atlas-mode="table"] .atlas-sheet--next .atlas-sheet-wx,
   :root[data-atlas-mode="table"] .atlas-sheet--next .atlas-sheet-num { margin: 0; align-self: center; }
   :root[data-atlas-mode="table"] .atlas-newcard { min-height: 56px; }
+  /* Dense rows gave their borders away, so the selection needs its own mark here — and it has
+     to differ from the up-next row's 3px left bar, or "the one you just tapped" and "your next
+     trip" would look like the same claim. */
+  :root[data-atlas-mode="table"] .atlas-sheet[data-selected] {
+    outline: 1px solid var(--accent); outline-offset: -1px;
+  }
 }
 
 /* All four are mobile-home surfaces. The create card in particular would be a THIRD route to
@@ -504,6 +510,12 @@
   .atlas-globe-caption, .atlas-horizon, .atlas-horizon-btn,
   .atlas-sheets-new, .atlas-listhead { display: none; }
 }
+
+/* The picked sheet's row (bundle §1 "Selected row border"). Not mobile-only for the same
+   reason the weather is not: a pin pick marks its row wherever that row is drawn. It is a
+   border colour and nothing else — a background would compete with the up-next card, which is
+   a different claim ("this is your next trip", not "this is the one you just tapped"). */
+.atlas-sheet[data-selected] { border-color: var(--accent); }
 
 /* Not mobile-only: the same datum on every surface that shows a sheet. A row is a row at any
    width, and a temperature that appears on a phone and vanishes on a laptop reads as a bug in

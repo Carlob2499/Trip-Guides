@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1719 checks · 1719 carry a stated promise · 147 files
+1722 checks · 1722 carry a stated promise · 147 files
 
 ## Can everyone read it
 
@@ -48,6 +48,9 @@ nothing ships.
 - mobile: the globe dock spans the screen and clears the FAB by stacking, not by inset  <sub>tests/visual/atlas-hub.spec.ts:378</sub>
 - tapping a pin shows the trip's cover, asked for at the size it is drawn  <sub>tests/visual/atlas-hub.spec.ts:403</sub>
 - mobile: ＋ New guide lives in the menu, not as a bare glyph in the header  <sub>tests/visual/atlas-hub.spec.ts:439</sub>
+- mobile: picking a pin haloes it, marks its row, and pauses the spin  <sub>tests/visual/atlas-hub.spec.ts:457</sub>
+- mobile: leaving for a guide and coming back keeps the sheet selected  <sub>tests/visual/atlas-hub.spec.ts:481</sub>
+- a pick on open water clears the selection instead of stranding a halo  <sub>tests/visual/atlas-hub.spec.ts:494</sub>
 
 ## Money, tools and taking it with you
 

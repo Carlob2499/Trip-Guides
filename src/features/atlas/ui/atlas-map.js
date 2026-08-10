@@ -88,6 +88,18 @@ class AtlasMap extends HTMLElement {
       "@keyframes am-pulse{0%{r:10;opacity:.55}70%{r:24;opacity:0}100%{r:24;opacity:0}}",
       ".am-pulse{fill:none;stroke:#9c4421;stroke-width:2;animation:am-pulse 2.4s ease-out infinite}",
       "@media (prefers-reduced-motion: reduce){.am-pulse{animation:none;opacity:0}}",
+      /* The focus halo (atlas-mobile-home bundle §1): two rings on the picked pin, so a tap
+         has a visible result on the globe itself and not only in the list beneath it. Drawn
+         for every pin and revealed by [data-focus] on the group — toggling an attribute costs
+         nothing per frame, where appending and removing SVG nodes on each pick would run
+         inside the same loop that has a dirty-flag specifically to avoid work. */
+      ".am-halo{fill:none;stroke:#9c4421;stroke-width:2;opacity:0}",
+      "g[data-focus] .am-halo{opacity:1}",
+      "g[data-focus] .am-halo--faint{opacity:.42}",
+      /* The pulse is an idle attractor — "there is something here". Once a pin is picked it has
+         been found, and two concentric animations on one dot read as a fault. */
+      "g[data-focus] .am-pulse{opacity:0;animation:none}",
+      "@media (prefers-reduced-motion: no-preference){.am-halo{transition:opacity .18s linear}}",
     ].join("\n");
     this.appendChild(style);
     this._rot = [-127, -26];
@@ -294,9 +306,12 @@ class AtlasMap extends HTMLElement {
           if (this._dragged) return;
           ev.stopPropagation();
           this._target = code; this._furnDirty = true;
+          this.focus(code);
           this.dispatchEvent(new CustomEvent("atlas-select", { bubbles: true, detail: { slug: code, name: this._nameOf[code] } }));
         });
       if (!this._reduced) el.append("circle").attr("class", "am-pulse").attr("r", 10);
+      el.append("circle").attr("class", "am-halo am-halo--faint").attr("r", 17);
+      el.append("circle").attr("class", "am-halo").attr("r", 12);
       el.append("circle").attr("r", 22).attr("fill", "transparent");
       // Key legend (README §2, "Key to the marks"): oxide = surveyed (the trip already
       // happened, so the guide reflects lived reality, not just a plan), grey = filed (still
@@ -305,6 +320,8 @@ class AtlasMap extends HTMLElement {
       el.append("circle").attr("r", 8)
         .style("fill", g.surveyed ? "#9c4421" : "var(--muted)").style("stroke", "var(--bg)").attr("stroke-width", 2.5);
       this._pins[code] = el.node();
+      // A focus set before the world loaded (state restored after a Back) lands here.
+      if (this._focus === code) this._pins[code].toggleAttribute("data-focus", true);
     }
 
     d3.select(this._canvas).call(d3.drag()
@@ -336,6 +353,9 @@ class AtlasMap extends HTMLElement {
       for (const f of this._geom.feats) { if (d3.geoContains(f, p)) { hit = f; break; } }
       const slug = hit ? (this._idToSlug[+hit.id] || null) : null;
       if (slug) { this._target = slug; this._furnDirty = true; }
+      // A tap on open ocean or an unsurveyed country clears the focus rather than leaving a
+      // halo on a pin nobody is looking at any more.
+      this.focus(slug);
       this.dispatchEvent(new CustomEvent("atlas-select", { bubbles: true,
         detail: { slug, name: slug ? this._nameOf[slug] : (hit && hit.properties && hit.properties.name) || "" } }));
     });
@@ -648,6 +668,33 @@ class AtlasMap extends HTMLElement {
     requestAnimationFrame(step);
     return true;
   }
+  /**
+   * Put the focus halo on one pin — or clear it with a falsy slug — and hold the spin for four
+   * seconds (atlas-mobile-home bundle §1: "spin pauses 4s, spin restore").
+   *
+   * The pause is the point, not decoration: picking a pin on a globe that keeps turning means
+   * the thing you just picked walks off the edge while you are reading the sheet it raised.
+   * Four seconds is the bundle's number. It rides `_hold`/`_resume`, the same pair drag, wheel
+   * and flyTo already use, so a later gesture supersedes this one instead of racing it — and
+   * the spin resumes on its own, which is what makes it a pause rather than a mode.
+   */
+  focus(slug) {
+    if (this._focus === slug) return;
+    this._focus = slug || null;
+    // A caller restoring state after a navigation reaches this before the world has loaded and
+    // the pins exist. The value is kept either way; _build re-applies it when it draws them.
+    for (const code in (this._pins || {})) {
+      this._pins[code].toggleAttribute("data-focus", code === this._focus);
+    }
+    if (!this._focus) return;
+    this._hold = true;
+    clearTimeout(this._resume);
+    this._resume = setTimeout(() => { this._hold = false; }, 4000);
+    this._dirty = true;
+  }
+  /** The current focus, for a caller restoring state after a navigation. */
+  get focused() { return this._focus || null; }
+
   zoomBy(f) {
     if (!this._R) return;
     this._targetK = Math.max(this._R * 0.9, Math.min(this._R * 5, (this._targetK || this._k) * f));
@@ -663,6 +710,8 @@ class AtlasMap extends HTMLElement {
     clearTimeout(this._flyEnd);
     clearTimeout(this._resume);
     this._targetK = this._R; this._hold = false; this._target = null; this._furnDirty = true; this._dirty = true;
+    // "Back to the world" means nothing is selected any more — the halo goes with the zoom.
+    this.focus(null);
   }
   toggleSpin() { this._paused = !this._paused; this._dirty = true; return !this._paused; }
   flyIn(slug, dur) {
