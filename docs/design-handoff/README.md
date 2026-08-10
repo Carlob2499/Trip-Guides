@@ -519,6 +519,7 @@ colour only.
 | `prototype/guides.json` | Manifest the prototype builds from |
 | `prototype/holidays.json` | Your holiday data, bundled |
 | `prototype/support.js`, `image-slot.js` | Design-tool runtime. **Not part of the design** |
+| `prototype/atlas-mobile-home/` | **Next bundle up: the mobile Atlas home (option 4a — globe front door).** Committed 2026-08-10, not yet built. Its own README diffs the design against what already ships and marks the genuinely-new column: tap-to-pick via inverse orthographic projection, focus halo, spin pause-on-select, and the 3b home layout. Everything else reuses the repo implementation as-is |
 
 To run the prototype: serve the folder and open `Waypoint Overdrive v2.dc.html`. It needs
 network access for fonts, the globe geometry, and the photos.
