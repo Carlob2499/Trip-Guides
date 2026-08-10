@@ -1,7 +1,7 @@
 // @protects-file Forecasts are read correctly and say plainly when there is no data.
 
 import { describe, it, expect } from "vitest";
-import { wxIcon, wxDayOk, wxValidate, weatherWindow, type Daily } from "./weather";
+import { wxIcon, wxDayOk, wxValidate, weatherWindow, currentWxOf, type Daily } from "./weather";
 import { tripWindow } from "../../../lib/trip-dates";
 import SAMPLE from "../mocks/open-meteo.sample.json";
 
@@ -129,5 +129,30 @@ describe("weatherWindow", () => {
     const trip = tripWindow("Wed Jul 8", "Wed Jul 15", new Date(2026, 6, 8));
     const w = weatherWindow(short, trip)!;
     expect(w.count).toBeLessThanOrEqual(short.time.length);
+  });
+});
+
+describe("currentWxOf", () => {
+  it("reads a location's current temperature and code", () => {
+    expect(currentWxOf({ current: { temperature_2m: 21.4, weather_code: 3 } }))
+      .toEqual({ tempC: 21.4, code: 3 });
+  });
+
+  it("returns null rather than a row that shows nothing useful", () => {
+    expect(currentWxOf(null)).toBeNull();
+    expect(currentWxOf({})).toBeNull();
+    expect(currentWxOf({ current: {} })).toBeNull();
+    expect(currentWxOf({ current: { temperature_2m: 21 } })).toBeNull();
+    expect(currentWxOf({ current: { temperature_2m: null, weather_code: 0 } })).toBeNull();
+  });
+
+  it("rejects out-of-band readings — a Fahrenheit payload must not render as °C", () => {
+    expect(currentWxOf({ current: { temperature_2m: 98.6, weather_code: 0 } })).toBeNull();
+    expect(currentWxOf({ current: { temperature_2m: -273, weather_code: 0 } })).toBeNull();
+  });
+
+  it("keeps 0 °C and code 0, which a truthiness check would drop", () => {
+    expect(currentWxOf({ current: { temperature_2m: 0, weather_code: 0 } }))
+      .toEqual({ tempC: 0, code: 0 });
   });
 });

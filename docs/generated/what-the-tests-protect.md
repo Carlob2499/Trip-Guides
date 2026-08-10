@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1715 checks · 1715 carry a stated promise · 147 files
+1719 checks · 1719 carry a stated promise · 147 files
 
 ## Can everyone read it
 
@@ -44,10 +44,10 @@ nothing ships.
 - the ping sheet's grip is a real handle — dragging it down dismisses the sheet  <sub>tests/visual/atlas-hub.spec.ts:218</sub>
 - the ping sheet stops transitioning while a thumb owns its transform  <sub>tests/visual/atlas-hub.spec.ts:268</sub>
 - closing the ping sheet returns the globe to the world and lets it spin again  <sub>tests/visual/atlas-hub.spec.ts:311</sub>
-- mobile: the view switch shares its row with the header buttons  <sub>tests/visual/atlas-hub.spec.ts:353</sub>
-- mobile: the globe dock spans the screen and clears the FAB by stacking, not by inset  <sub>tests/visual/atlas-hub.spec.ts:376</sub>
-- tapping a pin shows the trip's cover, asked for at the size it is drawn  <sub>tests/visual/atlas-hub.spec.ts:401</sub>
-- mobile: ＋ New guide lives in the menu, not as a bare glyph in the header  <sub>tests/visual/atlas-hub.spec.ts:437</sub>
+- mobile: the brand, the view switch and the header buttons share one row  <sub>tests/visual/atlas-hub.spec.ts:353</sub>
+- mobile: the globe dock spans the screen and clears the FAB by stacking, not by inset  <sub>tests/visual/atlas-hub.spec.ts:378</sub>
+- tapping a pin shows the trip's cover, asked for at the size it is drawn  <sub>tests/visual/atlas-hub.spec.ts:403</sub>
+- mobile: ＋ New guide lives in the menu, not as a bare glyph in the header  <sub>tests/visual/atlas-hub.spec.ts:439</sub>
 
 ## Money, tools and taking it with you
 
@@ -1025,6 +1025,10 @@ nothing ships.
 - trip beyond the forecast horizon → null, NOT a misleading nearby forecast  <sub>src/features/live-data/model/weather.test.ts:117</sub>
 - no trip dates → generic next-7 from today  <sub>src/features/live-data/model/weather.test.ts:122</sub>
 - never asks for more days than the forecast holds  <sub>src/features/live-data/model/weather.test.ts:127</sub>
+- reads a location's current temperature and code  <sub>src/features/live-data/model/weather.test.ts:136</sub>
+- returns null rather than a row that shows nothing useful  <sub>src/features/live-data/model/weather.test.ts:141</sub>
+- rejects out-of-band readings — a Fahrenheit payload must not render as °C  <sub>src/features/live-data/model/weather.test.ts:149</sub>
+- keeps 0 °C and code 0, which a truthiness check would drop  <sub>src/features/live-data/model/weather.test.ts:154</sub>
 
 **Labels on the globe never sit on top of each other.**
 

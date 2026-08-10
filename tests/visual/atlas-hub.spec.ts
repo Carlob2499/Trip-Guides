@@ -349,9 +349,9 @@ test("closing the ping sheet returns the globe to the world and lets it spin aga
    "the World/Table view is too big and should fill up the space ... give more space to the
    globe"). D5's "permanent" switch is about presence, not width.
 
-   Asserted as a ROW SHARE rather than a pixel height: heights drift with fonts and safe-area
-   insets, but "these two are on the same line" is exactly the thing that was wrong. */
-test("mobile: the view switch shares its row with the header buttons", async ({ page }) => {
+   The globe front door (2026-08-10) made the header sticky, so the two rows that fix left
+   became permanent chrome; all three now share one. Reasoning: atlas-mobile.css. */
+test("mobile: the brand, the view switch and the header buttons share one row", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.addInitScript(() => sessionStorage.setItem("tg-atlas-cover-seen", "1"));
   await page.goto(HUB, { waitUntil: "networkidle" });
@@ -361,13 +361,15 @@ test("mobile: the view switch shares its row with the header buttons", async ({ 
     box(".atlas-brand"), box(".atlas-toggle"), box(".atlas-header-actions"), box(".atlas-header"),
   ]);
 
-  // Same line: their vertical spans overlap. Not equal tops — the buttons are shorter than the
-  // 44px switch and sit centred against it.
-  expect(toggle.y < actions.y + actions.height && actions.y < toggle.y + toggle.height).toBe(true);
-  // ...and the switch is no longer full-bleed, which is what forced the extra row.
+  // One line: every pair of vertical spans overlaps. Not equal tops — the brand and the buttons
+  // are shorter than the 44px switch and sit centred against it.
+  const sameRow = (a: typeof brand, b: typeof brand) => a.y < b.y + b.height && b.y < a.y + a.height;
+  expect(sameRow(brand, toggle), "the brand dropped to its own row again").toBe(true);
+  expect(sameRow(toggle, actions), "the switch and the buttons split rows again").toBe(true);
+  // ...and the switch is still not full-bleed, which is what forced the extra row originally.
   expect(toggle.width).toBeLessThan(header.width * 0.8);
-  // The brand still gets the full width, so the header reads as one block, not a ragged stack.
-  expect(brand.y + brand.height).toBeLessThanOrEqual(toggle.y);
+  // The whole sticky bar stays out of the globe's way — one row, not two.
+  expect(header.height, "the sticky header grew back into a stack").toBeLessThan(90);
 });
 
 /* The globe dock cleared the FAB SIDEWAYS with `margin-right: 64px`, so a card that looked

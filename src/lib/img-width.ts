@@ -26,6 +26,29 @@ export function atWidth(url: string | null | undefined, w: number): string | nul
   return url;
 }
 
+/**
+ * Width-descriptor srcset (`… 56w, … 448w`) for a resizable URL; null when single-size.
+ *
+ * The 1x/2x form below cannot serve the hub's up-next card, where the SAME <img> is a 56px
+ * plate on desktop and a full-bleed 96px-tall cover on a phone — a pixel-descriptor srcset
+ * has no way to say "the layout width itself changes". Pair this with a `sizes` attribute.
+ */
+export function srcsetWidths(url: string | null | undefined, widths: number[]): string | null {
+  if (!url) return null;
+  if (!url.includes("{w}") && !url.includes(COMMONS_FILEPATH)) return null;
+  const seen = new Set<string>();
+  const parts: string[] = [];
+  for (const w of widths) {
+    const u = atWidth(url, w);
+    // A Commons URL carrying its own ?width= comes back unchanged at every size, which would
+    // promise the browser four assets that are one file. Same honesty rule as srcsetFor.
+    if (!u || seen.has(u)) return null;
+    seen.add(u);
+    parts.push(`${u} ${Math.round(w)}w`);
+  }
+  return parts.join(", ");
+}
+
 /** `1x, 2x` srcset for a resizable URL; null when the URL is single-size (no srcset). */
 export function srcsetFor(url: string | null | undefined, w: number): string | null {
   if (!url) return null;

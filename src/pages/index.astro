@@ -14,7 +14,7 @@ import {
 import { sheetOrder, ordinalFor } from "../lib/sheet-order";
 // A 56px plate does not need a 258 KB original — Commons serves a 14.5 KB thumbnail for
 // the same picture if you ask it for a width (verified against the live endpoint).
-import { atWidth, srcsetFor } from "../lib/img-width";
+import { atWidth, srcsetFor, srcsetWidths } from "../lib/img-width";
 import { countryData, emergencyFor, COUNTRY_CODES } from "../data/countries.mjs";
 import { flattenSections } from "../features/exports/index";
 import "@fontsource-variable/literata/standard.css";
@@ -149,6 +149,18 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
     <meta name="twitter:title"      content="Waypoint — Atlas" />
     <meta name="twitter:description" content={DESCRIPTION} />
     <PwaHead />
+    {/* Mode before first paint (bundle §1b "apply before first paint to avoid a globe flash
+        for table users"). The module script below owns the toggle, but it runs after the
+        bundle loads — long enough for a table-view visitor on a phone to watch a 400px globe
+        paint and then vanish. Same shape, and the same reason, as the theme script beside it.
+        Markup default stays `table` (D4's no-JS door); this only ever writes an attribute. */}
+    <script is:inline>
+      (function () {
+        let m = null;
+        try { m = localStorage.getItem("tg-atlas-mode"); } catch (e) { /* storage unavailable */ }
+        document.documentElement.setAttribute("data-atlas-mode", m === "table" ? "table" : "world");
+      })();
+    </script>
     <script is:inline>
       (function () {
         const s = localStorage.getItem("tg-theme");
@@ -264,6 +276,20 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
         </div>
 
         <div class="atlas-toast" data-atlas-toast></div>
+
+        {/* Globe caption (bundle §1 "Globe hero"). Mobile-only, and it describes what this
+            globe ACTUALLY does today: tapping a pin raises the ping sheet, tapping anywhere
+            else raises the "No guide here yet — start one" toast (world-view.js's
+            atlas-select handler). The bundle's own wording promises a country-polygon hit
+            test that is not built; a caption is a claim like any other. */}
+        <p class="atlas-globe-caption">Tap a pin for its sheet — anywhere else to start one.</p>
+
+        {/* The horizon strip's fade and its tap target (bundle §1b). Both are inert until
+            `data-atlas-mode="table"` at phone width; the globe underneath is the same
+            instance either way — the strip crops it, it never unmounts. */}
+        <div class="atlas-horizon" aria-hidden="true"></div>
+        <button type="button" class="atlas-horizon-btn" data-atlas-horizon
+                aria-label="Back to the world view"></button>
 
         {/* Mobile-only (<760px, D5): the desktop rails/pincards/motto have no spatial budget
             on a phone (README "Mobile"), so a bare-ping globe gets its own FAB menu (fly to
@@ -418,15 +444,33 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
         </div>
       )}
 
+      {/* The list's own section header (atlas-mobile-home bundle §1 "List section header").
+          Mobile-only: on a phone the globe hero scrolls away above this list, so without a
+          label the rows arrive with nothing saying what they are or why they are in this
+          order. Desktop has the whole page in view at once and does not need it — and adding
+          a second sticky bar under the search bar there would be the crowding the design
+          doctrine forbids. `aria-hidden` because <ul> already carries the semantics; this is
+          a visual label for a sighted reader mid-scroll, not a second announcement. */}
+      {rows.length > 0 && (
+        <div class="atlas-listhead" aria-hidden="true">Your sheets — up next first</div>
+      )}
+
       {rows.length === 0 ? (
         <p class="atlas-empty">No guides yet.</p>
       ) : (
         <ul class="atlas-sheets">
           {rows.map(({ g, record, cc, cities, dates, dayCount }) => {
             const stamp = STAMP[record.status];
+            // The up-next sheet is the mobile list's big card (bundle §1 "Up-next card").
+            // It stays in DOM order — the `#sheet-<id>` anchors, the chip row and desktop's
+            // own ordering all read this list positionally — and CSS `order` alone floats it
+            // to the top under 760px. Reordering the markup would have moved it on desktop
+            // too, which the design never asked for.
+            const isNext = quick != null && g.id === quick.g.id;
             return (
-              <li>
-                <a class="atlas-sheet" id={`sheet-${g.id}`} href={`${base}/guides/${g.id}/`}>
+              <li class={isNext ? "atlas-sheets-next" : undefined}>
+                <a class={`atlas-sheet${isNext ? " atlas-sheet--next" : ""}`} id={`sheet-${g.id}`}
+                   href={`${base}/guides/${g.id}/`} data-sheet-slug={g.id}>
                   {/* The plate: the trip's own cover photo with its survey number stamped on
                       it (creator, 2026-08-08 — the list read "clean but bland"). The image is
                       the SAME `record.coverImg` the globe's pincards use, so this adds a
@@ -441,11 +485,21 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
                       A guide with no cover still gets an empty plate rather than a grey
                       placeholder — the honest blank the original note asked for, which reads
                       as an unfilled slot in an archive rather than a photo that failed. */}
+                  {/* The up-next plate is the same <img> at two very different sizes: a 56px
+                      square on desktop, a full-bleed 96px-tall cover at the top of the phone
+                      list. Width descriptors + `sizes` are the only srcset form that can say
+                      that; every other row keeps the 1x/2x pair, which is all a fixed 56px
+                      plate can use. Eager, because on a phone it is the first thing under the
+                      globe rather than something below the fold. */}
                   <span class="atlas-sheet-plate">
                     {record.coverImg && (
                       <img class="atlas-sheet-thumb" src={atWidth(record.coverImg, 56)!}
-                           srcset={srcsetFor(record.coverImg, 56) ?? undefined}
-                           alt="" loading="lazy" decoding="async" width="56" height="56" />
+                           srcset={(isNext
+                             ? srcsetWidths(record.coverImg, [56, 112, 448, 896])
+                             : srcsetFor(record.coverImg, 56)) ?? undefined}
+                           sizes={isNext ? "(max-width: 759px) 100vw, 56px" : undefined}
+                           alt="" loading={isNext ? "eager" : "lazy"} decoding="async"
+                           width="56" height="56" />
                     )}
                   </span>
                   <span class="atlas-sheet-body">
@@ -455,6 +509,15 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
                   </span>
                   {stamp && <span class={`atlas-stamp ${stamp.cls}`}>{stamp.label}</span>}
                   {cc && <span class="atlas-quick-meta" aria-hidden="true">{cc}</span>}
+                  {/* Current conditions at the trip's own anchor (bundle §1 "…33° clear").
+                      Ships EMPTY and hidden: the value is live, so a server-rendered number
+                      would be a stale fact with no verification date — exactly what this
+                      product refuses. home-weather.js fills it or it never appears. Only
+                      guides with an anchor get a slot; there is nowhere to ask about a guide
+                      with no coordinates. */}
+                  {record.anchor && (
+                    <span class="atlas-sheet-wx" data-atlas-wx={g.id} hidden></span>
+                  )}
                   {/* Moved off the plate to here, beside the other row data. Same position on
                       every row whether or not that guide has a cover, which the on-plate
                       version could not manage. */}
@@ -463,6 +526,16 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
               </li>
             );
           })}
+          {/* The create card closes the list (bundle §1 "Create card"). On a phone the header's
+              ＋ CTA is hidden (atlas-mobile.css explains why), so before this the only route to
+              /new/ from the list was the FAB menu — and the moment a reader reaches the end of
+              four sheets is exactly when "start one" is the next thing they want. */}
+          <li class="atlas-sheets-new">
+            <a class="atlas-newcard" href={`${base}/new/`}>
+              <span class="atlas-newcard-plus" aria-hidden="true">＋</span>
+              <span class="atlas-newcard-label">Start a sheet</span>
+            </a>
+          </li>
         </ul>
       )}
 
@@ -482,6 +555,7 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
       import { initAtlasSearch, startLocalClocks, initCover } from "../features/atlas/index";
       import { initAtlasWorld } from "../features/atlas/ui/world-view.js";
       import { initDarkToggle } from "../scripts/theme.js";
+      import { initHomeWeather } from "../features/live-data/index.js";
 
       // The header measures its own height into --hdr-h (docs/design-handoff/DESIGN.md: "sticky offsets are
       // never literals") — the globe wrap and the table's sticky search header both
@@ -514,6 +588,18 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
       let initialMode = "world";
       try { initialMode = localStorage.getItem(MODE_KEY) || "world"; } catch { /* storage unavailable */ }
       setMode(initialMode);
+
+      // The horizon strip is the way back to WORLD on a phone (bundle §1b). It is the same
+      // globe either way — this switches a state, it never remounts anything.
+      document.querySelector("[data-atlas-horizon]")?.addEventListener("click", () => setMode("world"));
+
+      // Current conditions on the sheet rows. Reads the SAME guides payload the globe reads —
+      // one source for the coordinates, not a second registry (CONTENT IS KING).
+      const wxJson = document.querySelector("[data-atlas-guides-json]")?.textContent;
+      if (wxJson) {
+        try { initHomeWeather(document, JSON.parse(wxJson)); }
+        catch { /* malformed payload — rows simply carry no temperature */ }
+      }
 
       // "Skip to guides" targets #atlasTable, which world mode hides — so in world mode
       // (the JS default) the skip link jumped to a display:none element and did nothing,

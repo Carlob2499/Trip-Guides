@@ -18,6 +18,33 @@ export function wxIcon(code: number): string {
   return "⛅︎";
 }
 
+export interface CurrentWx {
+  tempC: number;
+  code: number;
+}
+
+/**
+ * One location's CURRENT conditions out of an Open-Meteo `&current=temperature_2m,weather_code`
+ * response, or null when the payload is missing or out of band.
+ *
+ * A separate entry point from wxValidate because it validates a different claim: that is a
+ * 16-day daily block for a guide's own trip window, this is a single reading for the atlas
+ * hub's list rows. Same −90..60 °C sanity band, and the same rule behind it — a hub row
+ * showing "200°" beside a trip name is worse than a row showing no temperature at all.
+ *
+ * The multi-coordinate form of the API returns a LIST of these structures, one per
+ * lat/lng pair, in request order (verified against open-meteo.com/en/docs, 2026-08-10);
+ * the caller indexes it, this function judges one element.
+ */
+export function currentWxOf(entry: any): CurrentWx | null {
+  const c = entry && entry.current;
+  if (!c) return null;
+  const t = c.temperature_2m, w = c.weather_code;
+  if (typeof t !== "number" || t < -90 || t > 60) return null;
+  if (typeof w !== "number") return null;
+  return { tempC: t, code: w };
+}
+
 export interface Daily {
   time: string[];
   temperature_2m_max: number[];
