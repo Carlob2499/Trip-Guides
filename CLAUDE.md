@@ -266,11 +266,14 @@ a genuinely new workflow needs it.
 
 ## Operational Habits (save tokens)
 
-- **`docs/HANDOFF.md` auto-loads at session start** (SessionStart hook →
-  `scripts/handoff-head.mjs`) — do not Read it again, and do not re-derive history from
-  git log/memory sprawl. **Session end: rewrite its Snapshot + Where-we-left-off sections**,
-  move the previous snapshot to `docs/archive/HANDOFF_ARCHIVE.md`, and commit. Its ≤120-line
-  budget and the repo's doc-reference integrity are gated by
+- **`docs/HANDOFF.md` and `CONTEXT.md` both auto-load at session start** (SessionStart hook →
+  `scripts/handoff-head.mjs`) — do not Read either again, and do not re-derive history from
+  git log/memory sprawl. They split cleanly: HANDOFF is what just happened, CONTEXT is what
+  the words mean and which forks are already settled. **Session end: rewrite HANDOFF's
+  Snapshot + Where-we-left-off sections**, move the previous snapshot to
+  `docs/archive/HANDOFF_ARCHIVE.md`, and commit — and add a CONTEXT Decision whenever the
+  session settled a fork a later session could plausibly re-open. HANDOFF's ≤120-line budget
+  and the repo's doc-reference integrity are gated by
   `scripts/__tests__/docs-integrity.test.mjs`.
 - **Every guide is a directory — no exceptions, drafts included** (`src/content/guides/<slug>/`
   — `_guide.json` meta + `NN-<group>.json` per tab group + `facts.json`). One shape, gated by
@@ -303,5 +306,10 @@ See `docs/agents/issue-tracker.md`.
 
 ### Domain docs
 
-Single-context layout — `CONTEXT.md` + `docs/adr/` at the repo root (created lazily by
-`/domain-modeling` when terms/decisions resolve). See `docs/agents/domain.md`.
+**`CONTEXT.md` auto-loads at session start** (SessionStart hook) and is the durable-memory
+file: the glossary, the standing creator rulings, and the architecture decisions that used to
+live as separate ADRs. Name a domain concept with the term `CONTEXT.md` defines — don't drift
+to a synonym it explicitly avoids. If your output contradicts a decision recorded there, say
+so out loud rather than silently overriding it. A concept missing from the glossary is a
+signal: either you are inventing language the project doesn't use, or there's a real gap to
+record.

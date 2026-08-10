@@ -359,7 +359,7 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 .cardimg{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:5px;margin:.1rem 0 .2rem;background:var(--bg2)}
 .imgcredit{display:block;font-size:var(--text-control-sm);color:var(--muted);margin:0 0 .85rem;text-align:right;font-family:var(--font-data)}
 .imgcredit a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--rule2)}
-/* "Get me there" transit deep-links (docs/FEATURES.md #1) — a small pill-button row on
+/* "Get me there" transit deep-links (docs/archive/FEATURES.md #1) — a small pill-button row on
    sight cards + day-waypoint stops. Buttons, not bare text links, per the clickability
    doctrine: this can be 2-3 links in a row and must read as tappable at a glance. */
 .transit-links{display:inline-flex;flex-wrap:wrap;gap:.35rem;margin:.3rem 0 0}

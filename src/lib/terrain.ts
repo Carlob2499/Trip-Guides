@@ -1,4 +1,4 @@
-// Deterministic painted-terrain ridgelines for the Painted Atlas cover (docs/PLAN_VISUAL_REDESIGN.md,
+// Deterministic painted-terrain ridgelines for the Painted Atlas cover (docs/VISUAL_REDESIGN.md,
 // Move A½ №4 — the universal default cover every guide is born with). Same contract as
 // contours.ts: pure and seeded at BUILD TIME, so a build is reproducible and the shape is
 // unit-testable without SVG/DOM. Each guide seeds from its own slug, so every destination

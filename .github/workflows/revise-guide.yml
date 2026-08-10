@@ -1,6 +1,6 @@
 name: Revise guide
 
-# The MAJOR-revision pipeline (docs/PLAN_REVISE_GUIDE.md) — sits between modify-guide's scoped
+# The MAJOR-revision pipeline (docs/REVISE_GUIDE.md) — sits between modify-guide's scoped
 # edit and the full new-guide research pass. For changes big enough to need real content
 # re-research with strong continuity: dates shifted, priorities changed, a leg rerouted,
 # feedback-driven divergence. Fires only when the repo owner applies `revision-approved` to an

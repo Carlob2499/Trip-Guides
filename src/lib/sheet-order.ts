@@ -1,4 +1,4 @@
-/* Sheet ordinal (D6, PLAN_ATLAS_MIGRATION.md) — ONE derivation, chronological by trip
+/* Sheet ordinal (D6, docs/archive/PLAN_ATLAS_MIGRATION.md) — ONE derivation, chronological by trip
    start date, feeding the hub index, table rows, the ping sheet, AND the masthead plate
    number ("PLATE NN — <CC>", Stage A.5/D13) — so none of them can ever disagree about
    which guide is "01". Content is king: the input is each guide's OWN first/last day date

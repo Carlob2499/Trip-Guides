@@ -46,7 +46,7 @@ const provenance = {
   tier: z.enum(["primary", "corroborated", "secondary"]).optional(),
   // P7/R11: dual-pass agreement — whether Pass A and Pass B independently converged on this fact.
   agreement: z.enum(["A+B converged", "A only", "B only"]).optional(),
-  // D9 (PLAN_ATLAS_MIGRATION.md Stage A.8) — the gap state: research came up short, and the
+  // D9 (docs/archive/PLAN_ATLAS_MIGRATION.md Stage A.8) — the gap state: research came up short, and the
   // item renders the GapBlock (⚠ NOT CONFIRMED, ochre) instead of guessed detail. Absent (the
   // default for every pre-existing item — this whole field is additive) means nothing changes;
   // there is no "confirmed" value to set, since that IS absence. Distinct from factRecord's own
@@ -84,7 +84,7 @@ const factRecord = z.object({
   tier: z.enum(["primary", "corroborated", "secondary"]).optional(),
 });
 
-// D14/ADR 0001+0003 (PLAN_ATLAS_MIGRATION.md Stage B) — the ONE reserved id in the registry:
+// D14/ADR 0001+0003 (docs/archive/PLAN_ATLAS_MIGRATION.md Stage B) — the ONE reserved id in the registry:
 // `traveler-origin`. Same registry (one home for a guide's perishable/reserved facts), a
 // DIFFERENT shape from factRecord above — `value` is an IATA code, not prose text; `state` is
 // confirmed/unconfirmed, not clean/approx (this isn't a sourced-approximate FIGURE, it's "do we
@@ -217,7 +217,7 @@ const collapse = {
 // steps. There is no `fold: true`; folding stays automatic and length-gated.
 const moreDetail = { moreLabel: z.string().optional(), fold: z.literal(false).optional() };
 
-// R6 — Composer unit facets (docs/PLAN_VISUAL_REDESIGN.md Move F). Tagged during the
+// R6 — Composer unit facets (docs/VISUAL_REDESIGN.md Move F). Tagged during the
 // research pass, consumed ONLY by scripts/compose-guide.mjs (no renderer reads them):
 //   theme — the content theme this unit belongs to (compose defaults it to the unit's
 //           current group, so an untagged guide composes to exactly itself);
@@ -570,7 +570,7 @@ const guides = defineCollection({
         });
       }
     }).optional(),
-    // Optional per-trip COVER art (docs/MOTION.md; widened in R4, docs/PLAN_VISUAL_REDESIGN.md
+    // Optional per-trip COVER art (docs/MOTION.md; widened in R4, docs/VISUAL_REDESIGN.md
     // Move A½) — the shared element that morphs from the hub card into the guide masthead.
     // The cover is the PATHOS register (creator-decided 2026-07-27): liberal in sourcing, but
     // ALWAYS licensed and credited, and never carrying or implying a verification flag.
@@ -619,7 +619,7 @@ const guides = defineCollection({
         ctx.addIssue({ code: "custom", path: ["src"], message: "a non-Commons cover.src has no machine-verifiable licensing — `credit` and `license` are required alongside it (e.g. credit: \"Jane Doe · Pexels\", license: \"Pexels License\")." });
       }
     }).optional(),
-    // Optional situational phrase cards (docs/FEATURES.md #6) — a guide-level field, NOT a
+    // Optional situational phrase cards (docs/archive/FEATURES.md #6) — a guide-level field, NOT a
     // section type: it's consumed by exactly one surface (the Trip kit tool tab), so it
     // deliberately sits outside the sections/bucket()/tabBudget system entirely — a "phrases"
     // section type routed through the normal per-group tabs would risk an empty/broken tab
@@ -639,13 +639,13 @@ const guides = defineCollection({
         ...provenance,
       })),
     }).optional(),
-    // Optional entry-requirements card (docs/FEATURES.md #7) — one row per traveler home
+    // Optional entry-requirements card (docs/archive/FEATURES.md #7) — one row per traveler home
     // country (a party can mix passports), guide-level for the SAME reason as `phrases`
     // (one consumer: Trip kit; sidesteps the bucket()/tabBudget system). Deliberately
     // stricter than `phrases`: `source_url` + `verified_on` are REQUIRED here, not the
     // general-purpose optional `...provenance` — a bare, undated visa/entry claim is not
     // a lesser version of this fact, it is a DIFFERENT (dangerous) claim, so the schema
-    // itself refuses to let one ship. Never a paid visa API (see docs/FEATURES.md's own
+    // itself refuses to let one ship. Never a paid visa API (see docs/archive/FEATURES.md's own
     // cost screen) — this is pipeline-researched from each country's official entry page.
     entry: z.array(z.object({
       homeCountry: z.string(),        // the traveler's passport country, e.g. "United States"
@@ -655,7 +655,7 @@ const guides = defineCollection({
       source_url: z.url(),
       verified_on: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
     })).optional(),
-    // Optional travel-advisory pill (docs/FEATURES.md #9) — the destination's current
+    // Optional travel-advisory pill (docs/archive/FEATURES.md #9) — the destination's current
     // official advisory level, guide-level (one destination country per guide, same
     // simplification `map`/`weather` already make). Always RECORD what was checked
     // (even a normal Level 1), so a re-check never reads as "never verified" — but the
@@ -697,7 +697,7 @@ const guides = defineCollection({
     // each one still spends a slot of the reader's attention, which is why they're capped
     // separately in the layout rather than being free.
     tabBudget: z.number().int().positive().optional(),
-    // The interpolated perishable-fact registry itself (PLAN_ATLAS_MIGRATION.md Stage C) —
+    // The interpolated perishable-fact registry itself (docs/archive/PLAN_ATLAS_MIGRATION.md Stage C) —
     // guideLoader below substitutes `{{fact:<id>}}` tokens INTO prose using this same registry,
     // but until now discarded the registry afterward, so nothing downstream of getCollection
     // could read a fact's own fields (state, source_url, verified_on) directly. The Atlas hub's

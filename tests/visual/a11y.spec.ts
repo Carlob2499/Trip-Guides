@@ -190,7 +190,7 @@ const MAST_DEK_OBSCURING_WHY =
   "composited worst case the same pixel-sampled way: 5.91:1 (denmark, daytime sky, both schemes) " +
   "against the 4.5:1 required at 17.92px/400; korea measures >=14:1.";
 const DAY_SCRUB_STICKY_RANGE_WHY =
-  "PLAN_ATLAS_MIGRATION.md Stage A.1 fixed .day-scrub's position:sticky (planner.css), dead " +
+  "docs/archive/PLAN_ATLAS_MIGRATION.md Stage A.1 fixed .day-scrub's position:sticky (planner.css), dead " +
   "before because .pnl-body-in{overflow:hidden} (unconditional) neutralised it — the same " +
   "ancestor DAY_SWIPE_CLIPPED_WHY already documents as changing axe's clipping geometry when " +
   "its overflow value changes. Fixed, .pnl-body-in only stays overflow:hidden while a Panel is " +
@@ -377,7 +377,7 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     "color-contrast/bgOverlap": {
       // 39 -> 47: +8, denmark's 8 tab buttons, per (c) in the why. CI reported 47 desktop / 43
       // mobile; this machine reported 47 too, which is what rules OUT the "baselines calibrated to
-      // a different machine" theory recorded in PLAN_MODERNIZE.md — the two agree exactly.
+      // a different machine" theory recorded in docs/archive/PLAN_MODERNIZE.md — the two agree exactly.
       max: 47,
       why: bgOverlapWhy(
         "sight-card captions/credit under a still-loading OR explicitly-failed photo (sights.css's " +

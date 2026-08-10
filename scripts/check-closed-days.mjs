@@ -1,4 +1,4 @@
-// closed_days (D11, PLAN_ATLAS_MIGRATION.md Stage A.3) — build-time cross-check: does any
+// closed_days (D11, docs/archive/PLAN_ATLAS_MIGRATION.md Stage A.3) — build-time cross-check: does any
 // itinerary day schedule a waypoint on the very day the sight/venue it names is closed?
 // A WARNING, never a build failure (the plan's own wording) — closed_days is too new and
 // too incompletely populated to gate on yet; this just makes a real conflict visible instead

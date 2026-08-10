@@ -110,7 +110,7 @@ diamond that is *always* human — nothing in the pipeline ever decides to un-pu
    only the owner's approval runs it.
 
 5b. **REVISE — a major revision, between EDIT and a full re-research.** `revise-guide.yml`
-   (spec: `docs/PLAN_REVISE_GUIDE.md`) handles changes big enough to need real content
+   (spec: `docs/REVISE_GUIDE.md`) handles changes big enough to need real content
    re-research with whole-guide continuity — dates shifted, priorities changed, a leg rerouted,
    feedback-driven divergence. Same single intake surface as EDIT: the owner triages weight at
    approval time (`modify-approved` = scoped edit, `revision-approved` = this pipeline — an

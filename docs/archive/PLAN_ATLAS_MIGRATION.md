@@ -5,11 +5,11 @@
 > confirmed). CLAUDE.md auto-loads and governs everything here; nothing in this plan
 > overrides it. Read `docs/design-handoff/DESIGN.md` and `docs/design-handoff/README.md`
 > in full before Stage C, plus the three anchor documents (creator-supplied 2026-08-07):
-> `docs/design-handoff/SPEC-COMPONENTS.md` (exact values — no number in it is a
-> suggestion), `docs/design-handoff/ANTIPATTERNS.md` (rejected alternatives — if you are
+> `docs/design-handoff/enforcement/SPEC-COMPONENTS.md` (exact values — no number in it is a
+> suggestion), `docs/design-handoff/enforcement/ANTIPATTERNS.md` (rejected alternatives — if you are
 > about to do one of these, the decision is already made), and
-> `docs/design-handoff/ACCEPTANCE.md` (mechanical per-gate checks; a failure is drift, not
-> taste). `docs/design-handoff/SCREENSHOT-INDEX.md` maps all 21 reference captures to spec
+> `docs/design-handoff/enforcement/ACCEPTANCE.md` (mechanical per-gate checks; a failure is drift, not
+> taste). `docs/design-handoff/enforcement/SCREENSHOT-INDEX.md` maps all 21 reference captures to spec
 > sections — consult the named capture before building each piece. The creator has **no
 > coding skills** — every question you ask them must be plain language, brief, with a
 > recommended option first.
@@ -637,7 +637,7 @@ ledger.
 
 ## Known traps (all pre-litigated — do not rediscover these)
 
-- **`docs/design-handoff/ANTIPATTERNS.md` is binding.** Every entry there was built,
+- **`docs/design-handoff/enforcement/ANTIPATTERNS.md` is binding.** Every entry there was built,
   looked at, and removed — masonry, SVG globe, greedy solving, `left`/`top` animation,
   hover-only dots, telemetry-driven ranking, invented rates/holidays, softened reduced
   motion, mid-range border radii, oxide-for-emphasis, React. The bullets below are the

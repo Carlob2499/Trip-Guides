@@ -126,10 +126,11 @@ circle, and what would change if it did. Nothing in the current design assumes i
   rule the guides live by, applied to the site's own claims about itself.
 - **No CDN.** Fonts and assets are self-hosted and offline-correct.
 
-An incumbent visual system exists in code (tokens, base and per-surface stylesheets,
-self-hosted variable typography, per-country accent resolution shared across hub, guide,
-masthead, OG, and print). It is undocumented — there is no DESIGN.md. That is a documentation
-gap, not an absence of visual authority.
+The visual system exists in code (tokens, base and per-surface stylesheets, self-hosted
+variable typography, per-country accent resolution shared across hub, guide, masthead, OG,
+and print) **and** in writing: `docs/design-handoff/DESIGN.md` (revision R4, codified from
+the shipped Atlas build) is its single authority, with the mechanical gates beside it in
+`docs/design-handoff/enforcement/`.
 
 ## Evidence on Hand
 
@@ -140,7 +141,7 @@ gap, not an absence of visual authority.
   primary-source count, rendered on the hub and About (`src/lib/guide-stats.ts`).
 - **Real post-trip feedback** from at least one completed trip, feeding
   `docs/TRAVELER_PATTERNS.md` and a guide-level learnings block.
-- **Market research** behind the shipped feature set, with sources, in `docs/FEATURES.md`;
+- **Market research** behind the shipped feature set, with sources, in `docs/archive/FEATURES.md`;
   category comparison in `docs/COMPETITIVE_LANDSCAPE.md`.
 - **Quality bar and process** are written down: `docs/GUIDE_RUBRIC.md`, `docs/PIPELINE.md`,
   `docs/MOTION.md`, `docs/ARCHITECTURE.md`.

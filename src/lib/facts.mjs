@@ -53,7 +53,7 @@ function escapeAttr(s) {
  * `≈` is DERIVED from state, never authored into `value` — that keeps one spelling of
  * "sourced-but-approximate" and stops a bare `≈` from being typed next to an unsourced number.
  *
- * D10/Stage A.7 (PLAN_ATLAS_MIGRATION.md): an approx value renders as the plain value followed
+ * D10/Stage A.7 (docs/archive/PLAN_ATLAS_MIGRATION.md): an approx value renders as the plain value followed
  * by a small `≈ approx.` pill — the design-handoff's literal flag-chip form ("≈ approx.",
  * README's notation table), creator-confirmed in the Stage A/B review pass over the
  * value-inside-the-pill alternative. The pill is a real, allowlisted `<a>` (prose tag

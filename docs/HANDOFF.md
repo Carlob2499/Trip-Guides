@@ -21,7 +21,7 @@
 - North stars: `docs/PIPELINE.md` (generation/maintenance) · `docs/MOTION.md`
   (presentation/motion) · `docs/GUIDE_RUBRIC.md` (quality bar) ·
   `docs/COMPETITIVE_LANDSCAPE.md` (market parity reference) ·
-  **`docs/PLAN_ATLAS_MIGRATION.md`** (the current work order — its own Progress ledger is the
+  **`docs/archive/PLAN_ATLAS_MIGRATION.md`** (the current work order — its own Progress ledger is the
   source of truth for which stage is next; read that before re-deriving status from git log).
 
 ## Snapshot (2026-08-09b — making the tests readable, and proving they catch anything)

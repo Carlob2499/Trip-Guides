@@ -1,5 +1,12 @@
-# PLAN — The Living Atlas (drastic visual redesign: video heroes + navigation end-goal)
+# The Living Atlas — living covers, device-split navigation, the Composer
 
+> **What this is: the SPEC for shipped behaviour, not a plan.** Renamed from
+> `PLAN_VISUAL_REDESIGN.md` on 2026-08-10, when `PLAN_` was made to mean "not built yet" —
+> live code cites this file as its own specification (`living-cover.js`, `PaintedAtlas.astro`,
+> `anchors.ts`, `terrain.ts`, `compose-guide.mjs`, `painted-atlas.css`, `content.config.ts`).
+> The dead process scaffolding was cut the same day; see the Execution record at the foot,
+> which also names the one fork still genuinely open. Historical status note follows.
+>
 > Status: **PARTLY SHIPPED — this doc is now half spec, half history** (corrected 2026-08-02;
 > it previously read "VISION / UNAPPROVED · nothing here is building yet", which was badly
 > wrong: live code cites this doc as its own specification). Drafted 2026-07-27 from a real
@@ -310,90 +317,29 @@ candidates` ledger. (4) New scaffold↔schema contract test (content.config.test
 where scaffold output meets the build schema had no gate. Cover-art mechanics joined descriptors +
 facets in block-types.md as their single home.
 
-## Execution protocol (unattended Opus sessions — read before running any phase)
+## Execution record (closed 2026-08-10)
 
-**Session contract, every phase:** (1) ENTRY — on branch, previous phase merged, all gates
-green, HANDOFF read. (2) WORK — this phase's scope and nothing else; a discovered fork
-outside scope is recorded in the plan, not improvised. (3) EXIT — the full ship loop
-(`npm run build` 0 errors · `npm test` green · `astro preview` at 375px + desktop, dark,
-reduced-motion · grep `dist/`) + boundary checks where a phase touches a seam + commit +
-push + HANDOFF Snapshot/Where-we-left-off rewritten. A phase that cannot pass its gates
-STOPS AND REPORTS; it never pushes past a red gate.
+The R1–R6 arc ran and landed; the Atlas migration then rebuilt on top of it. What used to sit
+here — the per-phase session contract, the six paste-one-per-session prompts, the "morning
+questions", the delegated-decisions list and the clarifying-question gate record — was ~90
+lines of scaffolding for sessions that have already happened, and it was the largest single
+block of dead text in `docs/`. Cut, not archived: the ship loop it restated lives in
+`CLAUDE.md`, and every decision it recorded is either visible in the shipped code or has moved
+to `CONTEXT.md`.
 
-**Hard boundaries (no phase may cross without the creator):** title/descriptor text on
-live guides · live-guide recomposition (proposal-only, always) · footage selection ·
-re-recording a11y baselines anywhere but CI · anything the morning answers below left
-unanswered.
+Verified shipped while cutting, so no session re-opens them: **Quiet Edition type** (Literata
+across display and body via its optical-size axis, Source Sans 3 for data — `src/styles/
+base.css`) · **the mobile bottom bar** (`src/features/mobile-nav/ui/botbar.js`) · **living
+covers and the Painted Atlas default** (`src/scripts/living-cover.js`,
+`src/components/PaintedAtlas.astro`) · **section anchors** (`src/lib/anchors.ts`) · **the
+Composer** (`scripts/compose-guide.mjs`).
 
-**Per-phase session prompts (paste one per session):**
-- R1: "Execute R1 of docs/PLAN_VISUAL_REDESIGN.md: Quiet type + literal labels. Creator
-  answers: [Q1/Q2]. Ship loop + zero-layout-shift gate."
-- R2: "Execute R2: mobile bottom bar + journey sheet + Today chip per the plan. Bar
-  destinations: [Q3]. Ship loop + a11y gates."
-- R3: "Execute R3: desktop horizon line replacing pills, absorbing reading progress."
-- R4: "Execute R4: living covers — Painted Atlas default + footage upgrades per [Q4]."
-- R5: "Execute R5: section anchors + interior atlas per the plan."
-- R6: "Execute R6: the Composer per Move F. Authority: [Q5]."
-
-Model routing (revised 2026-07-28, creator's ask): **R1–R6 execute on Fable
-(`claude-fable-5`)** — the model that authored every study and this protocol. Opus is the
-fallback executor if Fable is unavailable; composer unit-tagging rides the existing
-(Sonnet) research pass. HANDOFF's model-economy note should be updated when R1 lands.
-
-## Delegated decisions (2026-07-28 — creator: "you determine the best outcome")
-
-All reversible on the creator's word, recorded so no session re-litigates them:
-type = Quiet Edition locked · descriptors = staged set ships as working copy (creator may
-edit before graduation) · bottom bar = Journey · Today · Map · Kit (Search in the sheet,
-Trip Split inside Kit) · cover stack = Painted Atlas default + footage upgrades +
-hot-link-first · Composer authority = drafts auto, live proposal-only · unattended range =
-full arc R1→R6, one report per phase.
-
-## The last fork — the motion language (creator's choice, staged as live mock-ups, Plate 10)
-
-Motion is the creator's stated key, and taste forks have been missed twice — so this one is
-theirs, from three complete languages demoed live: **A · Still waters** (motion in covers
-only; figures draw once; today's doctrine polished) · **B · The journey breathes**
-(RECOMMENDED — continuous motion reserved for objects that encode live meaning: the
-read-fill creeps, its tip glows, today's dot breathes; chrome still) · **C · Cinema** (a
-full entrance scene per view — title rise, horizon draw, stations landing, day-dot travel —
-then stillness; highest risk to the visuals-never-outrank-scrolling law). The winning
-language becomes a MOTION.md chapter and parameterizes every R-phase. If B: add the rule
-"continuous motion only on meaning-bearing objects; decoration gets one entrance, then
-stillness."
-
-## The morning questions (2026-07-27 — the six answers that unlock unattended execution)
-
-Q1 Quiet Edition type: lock / adjust / restage? · Q2 Korea descriptors: approve / edit /
-rewrite? · Q3 Bottom-bar four: Journey·Today·Map·Kit or swaps? · Q4 Cover stack: painted
-default + hot-link confirmed? · Q5 Composer authority: drafts auto + live proposal-only?
-· Q6 Unattended range: R1 only / R1–R3 / full R1–R6? (Full text + options: the design
-study's "Morning questions" section.)
-
-## Clarifying questions (historical gate record — superseded where marked decided)
-
-1. ~~**Video sourcing policy.**~~ **DECIDED 2026-07-27 (creator):** covers are the pathos
-   layer — liberal sourcing from any well-licensed library, chosen for feeling, credited,
-   accent-graded. The verification apparatus applies to content only. See "The two registers"
-   above.
-2. ~~**Expedition Line: replace or augment?**~~ **DECIDED 2026-07-27 (creator):** pills
-   retire on both devices; navigation splits by device (desktop horizon, mobile bar + sheet).
-   See Move B.
-3. **The four bottom-bar destinations.** Proposed: Journey · Today · Map · Kit. Swap one for
-   Trip Split? For Search? Four is the budget; the names are the creator's call.
-4. ~~**The re-titles.**~~ **DECIDED 2026-07-27 (creator):** labels literal always; warmth in
-   descriptors only; Days/Transit/Sources are the surviving label upgrades. Descriptor text
-   still gets per-guide sign-off (it's content). **REVISED 2026-07-28 (creator): the warmth
-   slot is withdrawn — descriptors are rare + informational-only (see Move D).**
-5. **The faces, round three.** Quiet Edition staged: Literata alone (display via optical
-   sizes) + Source Sans 3. Awaiting the creator's eye on the three-generation specimen.
-   *Rec: this one — one family can't clash with itself.*
-5b. **DECIDED 2026-07-27 (creator):** covers are CLEAN (no route overlay — "flies on the
-   wall"), and every section gets an anchor (figure + photo — "both").
-6. **Hero video weight ceiling** (~4 MB, masthead-only first — rec) and **pin-less
-   route-draw** (contours until real pins exist — rec): both carried from Study Nº 1,
-   defaults recommended.
-7. **The cover stack** (Move A½): Painted Atlas as the automatic default for every guide,
-   footage as a curated per-guide upgrade, own footage after trips? And hosting: hot-link
-   library CDNs vs. self-host on the existing Cloudflare account?
-   *Rec: painted default + hot-link first.*
+**One fork is genuinely still open** and is kept for that reason: the **motion language**.
+Three complete languages were staged as live mock-ups for the creator to choose between — *A ·
+Still waters* (motion in covers only), *B · The journey breathes* (recommended: continuous
+motion reserved for objects that encode live meaning — the read-fill creeps, its tip glows,
+today's dot breathes; chrome stays still), *C · Cinema* (a full entrance scene per view, then
+stillness — the highest risk to the visuals-never-outrank-scrolling law). The winner was to
+become a `docs/MOTION.md` chapter. It never landed there, and the Atlas migration shipped its
+own motion rules without settling it. Choosing B would add the rule: *continuous motion only
+on meaning-bearing objects; decoration gets one entrance, then stillness.*

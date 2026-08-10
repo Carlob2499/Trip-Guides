@@ -9,7 +9,7 @@ export const CARDED_TYPES = new Set([
 
 /** Types that emit their own per-item `.card` siblings instead of one shared card.
     The design settles what this means for Panels: wide types "are internally gridded
-    already" (DESIGN.md, Wide types claim the full row) — so the SECTION is the Panel
+    already" (docs/design-handoff/DESIGN.md, Wide types claim the full row) — so the SECTION is the Panel
     and its items are plain cards in the body, never Panels themselves. They are not
     carded and they render no title of their own, so the Panel supplies it with no
     `bare` prop needed. The item grid lives on `.pnl-body-in`, not on the Panel: a
@@ -33,7 +33,7 @@ export const PANEL_HOSTABLE_TYPES = new Set([
     exception, applied at Block.astro's call site because item count is data a type set
     cannot see: a `list` over five items spans full width too.
 
-    This is DESIGN.md's wide set exactly ("Wide types claim the full row … they are
+    This is docs/design-handoff/DESIGN.md's wide set exactly ("Wide types claim the full row … they are
     internally gridded already"): the tabular and internally-gridded types — a ledger,
     a sights grid, a day rail, an infogrid — need the row; a prose column does not.
     Squeezing one into a single panel-grid column nests a grid inside a column already
@@ -44,7 +44,7 @@ export const FULL_WIDTH_PANEL_TYPES = new Set([
 
 /** The type kicker every hosted Panel leads with — the KIND of thing inside, and the
     only body-level label still visible once a Panel is collapsed, so it must never
-    just restate the title. Rendered in var(--aink), never raw var(--accent): DESIGN.md
+    just restate the title. Rendered in var(--aink), never raw var(--accent): docs/design-handoff/DESIGN.md
     flagged "the 10px oxide panel kicker on --card" as an unverified pairing, and --aink
     is the >=4.5:1-by-construction answer to it (src/lib/accent-tokens.ts). */
 export const KICKER_LABELS: Record<string, string> = {

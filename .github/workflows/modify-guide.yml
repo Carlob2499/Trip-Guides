@@ -38,7 +38,7 @@ permissions:
 
 jobs:
   # Concurrency-group keys can't read same-job step outputs, so a tiny first job resolves the
-  # slug for the guide-<slug> group below (retro-fit from the revise pipeline, PLAN_REVISE_GUIDE
+  # slug for the guide-<slug> group below (retro-fit from the revise pipeline, REVISE_GUIDE
   # ruling #8): a modify and a revise fired on the same guide must queue, never interleave.
   resolve:
     if: >

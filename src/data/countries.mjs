@@ -258,7 +258,7 @@ export const COUNTRY_CODES = Object.fromEntries(
    ...Object.entries(ALIASES).map(([k, canon]) => [k, COUNTRIES[canon]?.iso2]).filter(([, v]) => v)]
 );
 
-// ISO 3166-1 NUMERIC — a small, deliberately incomplete map (PLAN_ATLAS_MIGRATION.md Stage
+// ISO 3166-1 NUMERIC — a small, deliberately incomplete map (docs/archive/PLAN_ATLAS_MIGRATION.md Stage
 // B.4): the world-atlas TopoJSON vendored in Stage B.5 keys each country FEATURE by this
 // numeric id (not the alpha-2 above), so the Atlas globe needs it to match a guide's `country`
 // to a polygon. Only the countries a real guide currently uses get an entry — verified against

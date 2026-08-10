@@ -1,11 +1,11 @@
-// RUN-INTEGRITY GATE — the harness half of the checkpoint contract (PLAN_FACTORY_V2 P1).
+// RUN-INTEGRITY GATE — the harness half of the checkpoint contract (docs/archive/PLAN_FACTORY_V2 P1).
 //
 // research-pass.yml's prompt MANDATES commit+push after every research stage, so a cut-off run
 // resumes instead of restarting. The first real end-to-end run (Japan, 2026-07-29) proved a prompt
 // mandate is not a guarantee: passA/passB/reconcile were checkpointed 35 MILLISECONDS apart and
 // committed in one burst at the end (d68524e/a3bc3a7/12c6939, all 10:32:33). Three distinct
 // commits — so "did each stage get its own commit?" passes — but zero resumability: a crash at
-// minute 50 would have lost all three stages. See docs/QA_RESEARCH_TRIAL_JAPAN.md F1.
+// minute 50 would have lost all three stages. See docs/archive/QA_RESEARCH_TRIAL_JAPAN.md F1.
 //
 // The same run also exposed F2: an agent step can burn a full session, exit `success`, and leave
 // NOTHING behind — no commit, no checkpoint, no PR. Nothing in the workflow noticed.

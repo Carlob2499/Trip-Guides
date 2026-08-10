@@ -510,7 +510,8 @@ colour only.
 
 | File | What it is |
 | --- | --- |
-| `DESIGN.md` | **The design system.** Authoritative. Supersedes the repo's current revision |
+| `DESIGN.md` | **The design system, revision R4 — the repo's single visual authority.** It no longer "supersedes" anything: the pre-Atlas root `DESIGN.md` was retired 2026-08-10 |
+| `enforcement/` | The machine-checkable half — `tokens.css`, `SPEC-COMPONENTS.md`, `ANTIPATTERNS.md`, `ACCEPTANCE.md`, `check-drift.mjs`, reference screenshots. Duplicate copies of the four docs sat beside this README until 2026-08-10; `enforcement/` is the only home |
 | `prototype/Waypoint Overdrive v2.dc.html` | The full prototype — every screen, all logic |
 | `prototype/Waypoint Mobile.dc.html` | Mobile review canvas: the real build in phone frames |
 | `prototype/atlas-map.js` | `<atlas-map>` custom element — **usable as-is** |
@@ -524,19 +525,24 @@ network access for fonts, the globe geometry, and the photos.
 
 ---
 
-## Open questions the developer should raise before building
+## Open questions — all seven answered by the build (closed 2026-08-10)
 
-1. **Home base.** The globe's route traverses currently originate at LAX — a guess. Confirm.
-2. **Exchange rates.** Only Korea has a sourced rate (₩1,461/$1, Fed H.10, 24 Jul 2026). The
-   other three guides show "no local rate captured" rather than inventing one. Wire your
-   `live-data/model/rate.ts` in, or leave the honest absence.
-3. **Denmark's party size** is absent from its budget section; the split defaults to 2.
-4. **Traveller names** default to "You", "Traveller 2"… — presumably the Firebase room supplies
-   real ones.
-5. **Japan holiday data** is not in the repo. Fetch `JP-2026`, or the tool keeps saying so.
-6. **Contrast gate.** Two pairings are new and have not been through your axe run: the 10px
-   oxide panel kicker on `--card`, and ochre at 9.5–10.5px. Verify before shipping.
-7. **Not yet designed** — these shipped features have no counterpart in this redesign:
-   budget-pact, trip-kit, change-request, voting, share panel, story mode, learnings survey,
-   field-tools, palette, SOS, telemetry, and the About / health pages. Decide whether they are
-   in scope; each needs a design pass.
+Kept as a record of what the handoff could not decide on its own, and what the repo decided
+instead. None of these is still open.
+
+1. **Home base.** The prototype's global `home-base` attribute was rejected. Each guide draws
+   its traverse from its own Traveler origin, derived from a reserved row in that guide's fact
+   registry — see the two Traveler-origin decisions in `CONTEXT.md`.
+2. **Exchange rates.** `live-data/model/rate.ts` is wired for all four guides. A Live rate and
+   a guide's own Sourced rate are separate claims with separate shelf lives and are never
+   conflated in one line of UI (`CONTEXT.md`, Language).
+3. **Denmark's party size.** Answered by content, not config — Denmark is a five-person family
+   trip, and its own learnings block records the mobility constraints that followed from it.
+4. **Traveller names.** Supplied by the Firebase room, as assumed.
+5. **Japan holiday data.** Present: `src/data/holidays/JP-2026.json`, alongside DK/KR/US.
+   Fetched at build time from Nager.Date, offline-safe, no client JS.
+6. **Contrast gate.** Ran, and it caught real failures rather than confirming the spec — six of
+   the twelve Stage-F features turned up a measured contrast defect. The recurring lesson is
+   recorded in `docs/HANDOFF.md`: axe skips hidden nodes, so every gesture-revealed surface
+   needs its own scoped test in its own spec file.
+7. **Not yet designed.** All twelve went through the Stage-F redesign, one commit each.

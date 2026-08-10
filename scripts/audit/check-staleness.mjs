@@ -39,7 +39,7 @@ export async function checkStaleness({ thresholdDays = DEFAULT_THRESHOLD_DAYS, g
     for (const [id, f] of Object.entries(facts ?? {})) {
       // Reserved rows (traveler-origin) are not perishable figures on a shelf-life clock —
       // a booking-confirmed airport doesn't rot at 90 days; its recheck path is the Stage C
-      // creator confirmation (PLAN_ATLAS_MIGRATION.md Clarifying #1), not this punch list.
+      // creator confirmation (docs/archive/PLAN_ATLAS_MIGRATION.md Clarifying #1), not this punch list.
       if (RESERVED_FACT_IDS.has(id)) continue;
       if (!f?.verified_on) continue;
       const d = new Date(f.verified_on + "T00:00:00Z");

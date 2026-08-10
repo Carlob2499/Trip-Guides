@@ -1,4 +1,4 @@
-/* Cross-guide search index (D20, PLAN_ATLAS_MIGRATION.md Stage B.6) — pure record shape and
+/* Cross-guide search index (D20, docs/archive/PLAN_ATLAS_MIGRATION.md Stage B.6) — pure record shape and
    per-section builder, ported from the design-handoff prototype's own `buildSearchIndex`
    (the prototype code is the tie-break authority for exact shapes, per the plan's own rule).
    One deliberate departure: the prototype's `crumb` used a hardcoded slug -> display-name

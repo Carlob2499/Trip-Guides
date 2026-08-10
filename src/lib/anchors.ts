@@ -1,4 +1,4 @@
-// Section-anchor derivations (R5, docs/PLAN_VISUAL_REDESIGN.md Move C) — the pure data
+// Section-anchor derivations (R5, docs/VISUAL_REDESIGN.md Move C) — the pure data
 // behind the figures that open Days / Transit / checklist sections. The rule that governs
 // every function here: a figure is DERIVED from the guide's own researched content, never
 // drawn or worded by hand. Where the data can't support a figure honestly (one waypoint,

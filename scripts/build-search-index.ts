@@ -1,4 +1,4 @@
-// Cross-guide search index (D20, PLAN_ATLAS_MIGRATION.md Stage B.6) — generated at build time
+// Cross-guide search index (D20, docs/archive/PLAN_ATLAS_MIGRATION.md Stage B.6) — generated at build time
 // into dist/data/search-index.json, the static asset the Atlas hub's search box lazily fetches
 // on first focus/keystroke (Stage C). A .ts script (run via `tsx`, matching pretrip-check.ts's
 // precedent) rather than .mjs specifically so it can import the atlas silo's builder — through

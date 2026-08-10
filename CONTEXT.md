@@ -4,6 +4,13 @@ Verified, personalized travel guides — a field instrument, not a brochure. Eve
 perishable fact traces to a primary source and a verification date; where research came
 up short, the guide says so instead of filling the hole.
 
+> **What this file is.** The durable-memory file, auto-loaded at session start beside
+> `docs/HANDOFF.md`. Two things live here and nothing else: **Language** (what a word means
+> in this repo) and **Decisions** (a choice already made, and why the obvious alternative
+> was rejected). It carries no doctrine — how to work is `CLAUDE.md`'s job, and duplicating
+> it here would create the second source of truth this file exists to prevent. Add a
+> Decision when a fork is settled in a way a future session could plausibly re-open.
+
 ## Language
 
 **Panel**:
@@ -21,13 +28,10 @@ The guide content type `"type": "panel"` (schema in `src/content.config.ts`, ren
 alongside `prose`, `list`, `days`, `sights`, `routes`. Carries a title, body, optional
 checklist and its own lead/more-detail fold.
 
-Deliberately shares the word "Panel" with the container above, decided 2026-08-06: from
-the Atlas redesign's Phase 2 onward a Panel section is rendered *inside* a Panel, so the
-two nest rather than compete, and "PanelBlock renders a Panel's body" is a true sentence.
-Renaming the section type was rejected because it would require editing `"type"` values
-in every guide's JSON, and the redesign is design-only with zero guide-data edits.
-Always qualify in writing when the surrounding text could mean either: "Panel section"
-for the content type, plain "Panel" for the container.
+Deliberately shares the word "Panel" with the container above — a Panel section renders
+*inside* a Panel, so the two nest rather than compete (see Decisions). Always qualify when
+the surrounding text could mean either: "Panel section" for the content type, plain "Panel"
+for the container.
 
 **Guide base**:
 The trip's own city or location shown in a guide's masthead chip (e.g. "Seoul" for the
@@ -95,3 +99,39 @@ A guide's verified emergency phone numbers, sourced from `emergencyFor()`
 (`src/data/countries.mjs`). One data source and one rendering component, exposed at two
 entry points — the guide's own SOS sheet, and the atlas hub's Table-view quick card.
 Never re-implemented per surface.
+
+## Decisions
+
+Each entry states what was decided, and the alternative that was rejected — the rejection is
+the load-bearing half. Contradicting one of these is allowed; doing it silently is not.
+
+**Globe traverses use a per-guide Traveler origin, not a shared home-base constant**
+(2026-08-06). The design handoff's `atlas-map.js` prototype took a single global
+`home-base="lon,lat,LABEL"` — one departure point for every pin, guessed as LAX. Rejected:
+this repo has no recorded home base (the only concrete signal is Korea's EWR note, and most
+but not all trips start from NYC-area airports), and the product's stated goal is portability
+to other travelers' trips. A global constant would have to be undone the moment the repo
+serves a second traveler. Each guide draws its traverse from its own origin; no default.
+
+**Traveler origin derives from the guide's own departure fact, never a hand-filled meta
+field** (creator ruling, 2026-08-07). Follows from the decision above. Rejected: a new
+`_guide.json` meta field — Korea already stated its departure airport in prose ("confirmed:
+Newark Liberty EWR — not JFK"), so a meta field beside it would have been a second source of
+truth on day one. The airport is one reserved row in the guide's fact registry (IATA value,
+confirmed/unconfirmed state, booking record as source); every surface derives from that row
+through a shared IATA→coordinates gazetteer. No row, or an unconfirmed one, draws no
+traverse — an honest blank until the booking confirms it.
+
+**The SOS sheet and Table view's quick card share one Emergency data source** (2026-08-06).
+The handoff spec for the quick card's `tel:` chips never mentions the existing
+`src/features/sos/`, so building it from the spec alone would have produced a second
+implementation of the same claim. Rejected: a bespoke quick-card renderer. Emergency numbers
+are safety data, and two independently-maintained copies is exactly how one goes stale
+without anyone noticing. The quick card is a compact projection of the SOS feature.
+
+**"Panel" deliberately names two nested things** (2026-08-06). The container component and
+the `"type": "panel"` content type share the word. Rejected: renaming the section type —
+it would mean editing `"type"` values in every guide's JSON, and the Atlas redesign was
+design-only with zero guide-data edits. From Phase 2 onward a Panel section renders *inside*
+a Panel, so the two nest rather than compete. Qualify in writing whenever the surrounding
+text could mean either.

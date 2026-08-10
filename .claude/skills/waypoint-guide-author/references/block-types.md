@@ -226,7 +226,7 @@ conventions, render behavior, and the verification rules attached to a field.
 
 ## Guide-level typed features (research these like any fact)
 
-- **Phrase cards** (guide-level `phrases: {lang, items[]}`, docs/FEATURES.md #6) —
+- **Phrase cards** (guide-level `phrases: {lang, items[]}`, docs/archive/FEATURES.md #6) —
   optional; when the trip warrants it, research 15–20 situational phrases
   (allergy, taxi, help, directions) with the SAME rigor as any other fact: a
   native-script phrase is safety-adjacent (a traveler may show it to a stranger
@@ -234,7 +234,7 @@ conventions, render behavior, and the verification rules attached to a field.
   bilingual source, never transliterate from memory. `lang` is the BCP-47 tag
   (e.g. `"ko-KR"`) that drives the Trip kit tab's speak button.
 - **Entry requirements** (guide-level `entry: [{homeCountry, visa, ...}]`,
-  docs/FEATURES.md #7) — one row per traveler home country (a party can mix
+  docs/archive/FEATURES.md #7) — one row per traveler home country (a party can mix
   passports; ask during intake if unclear, never assume). `source_url` +
   `verified_on` are SCHEMA-REQUIRED here (not optional like most provenance) —
   research from each destination country's OFFICIAL immigration/entry page only,
@@ -242,7 +242,7 @@ conventions, render behavior, and the verification rules attached to a field.
   boarding, so omit the whole guide's entry card before shipping an unverified
   one. Recert re-checks this on its normal shelf-life cadence like any other fact.
 - **Travel advisory** (guide-level `advisory: {level, title, summary?, source_url,
-  verified_on}`, docs/FEATURES.md #9) — the destination's CURRENT US State
+  verified_on}`, docs/archive/FEATURES.md #9) — the destination's CURRENT US State
   Department advisory (`travel.state.gov/.../ <country-slug>-travel-advisory.html`),
   `source_url` + `verified_on` SCHEMA-REQUIRED. **The page is Cloudflare-gated
   against plain `fetch()`/`curl`/WebFetch (403)** — it only resolves through an

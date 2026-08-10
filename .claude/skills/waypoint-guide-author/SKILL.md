@@ -227,7 +227,7 @@ quantitative: a full pass owes ≥8 finds, ≥3 crowd/timing, ≥2 novel/alterna
   existing guide is migrated with `node scripts/migrate-facts.mjs --slug <slug>` (propose) then
   `--write`; it lifts values VERBATIM and the built site must stay byte-identical.
 - **`traveler-origin` is the ONE reserved id in the registry** (D14/ADR 0001+0003,
-  PLAN_ATLAS_MIGRATION.md Stage B) — a different shape from every other row: `value` is a
+  docs/archive/PLAN_ATLAS_MIGRATION.md Stage B) — a different shape from every other row: `value` is a
   3-letter IATA code (not prose text), `state` is `confirmed` | `unconfirmed` (not
   `clean`/`approx` — this is "do we know this yet", not a sourced-approximate figure), and
   `source_url`/`verified_on` are optional UNLESS `state` is `confirmed` (a personal flight

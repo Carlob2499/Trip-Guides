@@ -1,4 +1,4 @@
-// Build the Living Atlas design-study page (docs/PLAN_VISUAL_REDESIGN.md's mock-ups).
+// Build the Living Atlas design-study page (docs/VISUAL_REDESIGN.md's mock-ups).
 // The rendered file embeds ~1.2 MB of fonts + photos as data URIs, so it is NOT committed
 // (repo doctrine: nothing heavy enters the repo) — rebuild it on demand:
 //

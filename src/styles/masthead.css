@@ -5,7 +5,7 @@
    beneath both carrying coordinates, the CHECKED stamp, this guide's own
    fact/source counts, and a print control.
 
-   Type never sits on the photograph (DESIGN.md "The No Overlay On Photography
+   Type never sits on the photograph (docs/design-handoff/DESIGN.md "The No Overlay On Photography
    Rule") — the old full-bleed hero's scrim, topographic contours, gloss sweep,
    particle motif, and story-segment rail all existed to keep type legible OVER
    the photo. None of them apply once the photo and the text are beside each
@@ -104,7 +104,7 @@
 
 /* The text column beside the plate — a grid so the content anchors to the BOTTOM of the
    column (matching the plate's height) rather than sitting at the top with a gap below,
-   per DESIGN.md's align-content:end. Type lives on bare paper now, so it uses the same
+   per docs/design-handoff/DESIGN.md's align-content:end. Type lives on bare paper now, so it uses the same
    .eyebrow/.dek base classes the rest of the guide reads with — no on-photo overrides
    (white ink, text-shadow) left to carry. */
 .mast-inner{display:grid;align-content:end;gap:.35rem;flex:1 1 360px;min-width:min(100%,320px);padding-block:clamp(.4rem,2vw,1rem)}
@@ -113,7 +113,7 @@
 .mast-dek{margin:.6rem 0 0}
 
 /* Per-guide chips — emergency (ochre, tel: links) + currency. Pills, never smaller than a
-   control (DESIGN.md's Flag chip spec: "control size, pill, 1px current-ink border"). */
+   control (docs/design-handoff/DESIGN.md's Flag chip spec: "control size, pill, 1px current-ink border"). */
 .mast-chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.9rem}
 .mast-chip{display:inline-flex;align-items:center;min-height:32px;padding:.3rem .7rem;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.02em;border:1px solid currentColor;border-radius:999px;color:var(--muted);text-decoration:none}
 .mast-chip--sos{color:var(--ochre);border-color:var(--ochre)}

@@ -195,7 +195,7 @@ html:not([data-panel-reorder]) [data-panel-order-reset] { display: none; }
 .pnl-body-in > * + * { margin-top: .85rem; }
 .pnl-body-in > :last-child { margin-bottom: 1.25rem; }
 
-/* Own-cards sections bring their own internal item grid (DESIGN.md: wide types "are
+/* Own-cards sections bring their own internal item grid (docs/design-handoff/DESIGN.md: wide types "are
    internally gridded already"). On the legacy path guide.css hangs that grid on the
    `.block` wrapper — but a hosting Panel IS that wrapper, so the grid has to land on
    the body here instead. Sights and venues (D12) are the multi-column cases; divergences

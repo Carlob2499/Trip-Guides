@@ -13,7 +13,7 @@ days**. It appeared three ways; the title-card intro is retired (below), leaving
    — the guide used to open as a full-bleed title card (cover + country name + day rail +
    accent gloss sweep + optional seasonal particle motif, schema `introMotif`), holding ~2.4s
    then panning into the guide. Its full-bleed CSS assumed the title sat absolutely OVER the
-   photo inside one frame; the plate masthead moved the title beside the photo instead (DESIGN.md
+   photo inside one frame; the plate masthead moved the title beside the photo instead (docs/design-handoff/DESIGN.md
    "Type never sits on the photograph"), which the intro's fullscreen/pan transitions can't
    express without a rebuild. Retired rather than rebuilt because the redesign spec's own
    "Hub card → guide masthead: FLIP the plate" transition (README.md §Interactions) supersedes
@@ -129,7 +129,7 @@ all (`.11`/`.07` alpha on the masthead; ~10–16% tints on the hub). Raised once
 | Hub `--hub-contour-far` | `muted` @ 10% | `muted` @ 16% |
 | Hub `--hub-contour-mid` | `muted` @ 16% | `muted` @ 24% |
 | Hub `--hub-contour-near` | `accent2` @ 12% | `accent2` @ 18% |
-| ~~Masthead `[data-mast-contour="0"/"1"]`~~ | `rgba(255,255,255,.11/.07)` | retired 2026-08 — DESIGN.md removes graticules from guide photography entirely (clutter at plate scale); the hub contour rows above are unaffected and still live |
+| ~~Masthead `[data-mast-contour="0"/"1"]`~~ | `rgba(255,255,255,.11/.07)` | retired 2026-08 — docs/design-handoff/DESIGN.md removes graticules from guide photography entirely (clutter at plate scale); the hub contour rows above are unaffected and still live |
 
 **Settled (2026-07-23):** real Playwright screenshots were taken of the Korea guide masthead
 (desktop + mobile, light + dark, over its real loaded cover photo, plus over the dark
@@ -243,7 +243,7 @@ by reading the code (Boundary Check #2):
 
 ## Living covers — the R4 rules (shipped 2026-07-28)
 
-The cover stack, from birth upward (PLAN_VISUAL_REDESIGN.md Move A½; creator-delegated №7):
+The cover stack, from birth upward (VISUAL_REDESIGN.md Move A½; creator-delegated №7):
 
 1. **The Painted Atlas is the universal default.** Every guide — current, scaffold, future —
    is born with a living cover: ridgelines seeded from its own slug (`src/lib/terrain.ts`,

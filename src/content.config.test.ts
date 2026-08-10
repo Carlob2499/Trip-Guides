@@ -73,7 +73,7 @@ describe("content.config guides schema — panelGroups (Atlas Phase 2)", () => {
   });
 
   it("accepts a panel group containing own-cards types (the SECTION is the Panel, not each item)", () => {
-    // DESIGN.md: wide types "are internally gridded already" — so sights/venues/days/
+    // docs/design-handoff/DESIGN.md: wide types "are internally gridded already" — so sights/venues/days/
     // divergences host as one full-width Panel whose body holds their per-item cards.
     // This inverts the old gate, which refused them because they are not `carded`.
     const sections = [

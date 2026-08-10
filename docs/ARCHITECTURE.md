@@ -105,10 +105,10 @@ self-boots to upgrade it only when `PUBLIC_GMAPS_KEY` is set.
   two that MUST (`--on-green`, `--cta`/`--cta-ink`). Reach for a token before a literal: ink on
   a coloured FILL is never `--accent-ink`/`--ink`, it is the `--on-*` of that fill.
 
-## Backlog (each gets its own planning session)
+## Backlog
 
-- ~~Convergence with WayPoint-V2 / WayFinder~~ — **done** (silos, per-section guide files,
-  recert CI + provenance all shipped; see `CHANGELOG.md` 2026-07-16).
-- **Decap CMS** — form-based editor over the JSON, no backend.
-- **Template extraction** — split personal data from destination data; publish as a GitHub
-  template repo.
+Lives as GitHub issues (`gh issue list`), not here — a backlog in a doc goes stale the moment
+one lands, and this one had been carrying a struck-through entry since July. Two standing
+ideas that have never been filed and are recorded only so they aren't re-invented: a Decap CMS
+form-editor over the JSON (no backend), and template extraction — splitting personal data from
+destination data to publish as a GitHub template repo.

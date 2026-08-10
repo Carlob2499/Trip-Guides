@@ -107,7 +107,7 @@ export async function checkpoint(slug, stage, { note = null, now = new Date().to
   return saveState(state);
 }
 
-// PREVENTIVE half of the checkpoint contract (PLAN_FACTORY_V2 P1; QA finding F1). The prompt
+// PREVENTIVE half of the checkpoint contract (docs/archive/PLAN_FACTORY_V2 P1; QA finding F1). The prompt
 // tells the agent to commit after each stage; this makes skipping that mechanically impossible.
 // A stage may only be checkpointed once its PREDECESSOR is durable — i.e. present in the
 // COMMITTED state at HEAD, not merely sitting in the working tree.

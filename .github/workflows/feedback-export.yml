@@ -22,7 +22,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
-  # V6 (PLAN_REVISE_GUIDE): the synthesis agent may auto-file an inert revision-request issue
+  # V6 (REVISE_GUIDE): the synthesis agent may auto-file an inert revision-request issue
   # when the deterministic divergence signals trip. Nothing executes off those issues until the
   # owner applies revision-approved.
   issues: write
@@ -137,7 +137,7 @@ jobs:
             5. Self-check: `npm run build` must stay clean (the `learnings` block is schema-gated).
                Fix any schema error before landing.
 
-            6. AUTO-FILE revision requests (V6, PLAN_REVISE_GUIDE.md) — ONLY for slugs listed in
+            6. AUTO-FILE revision requests (V6, REVISE_GUIDE.md) — ONLY for slugs listed in
                `revision-signals.json` (repo root, written by a deterministic step — if the file
                is empty `[]`, skip this step entirely; you never decide thresholds yourself).
                For EACH listed slug:

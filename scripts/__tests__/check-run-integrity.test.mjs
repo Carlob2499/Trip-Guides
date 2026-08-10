@@ -1,6 +1,6 @@
 // Tests for the run-integrity gate (scripts/check-run-integrity.mjs) — the harness half of the
 // checkpoint contract. Pure core only: git adapters are exercised for real in the workflow and by
-// the forced-failure runs recorded in docs/PLAN_FACTORY_V2.md P1.
+// the forced-failure runs recorded in docs/archive/PLAN_FACTORY_V2.md P1.
 //
 // The load-bearing fixture is JAPAN_BURST: the exact timestamp shape of the first real end-to-end
 // run (QA finding F1). Three DISTINCT commits — so a naive "one commit per stage" check passes —

@@ -93,7 +93,7 @@
   --dark-ink-4:#b9beb2;
   --dark-rule:rgba(255,255,255,.14);
   /* --cta/--cta-ink are the one genuinely NEW pair, and the only ones here that are not
-     aliases. DESIGN.md specs the primary button as chart-room-slate on card-paper and gives no
+     aliases. docs/design-handoff/DESIGN.md specs the primary button as chart-room-slate on card-paper and gives no
      dark variant — but in dark mode chart-room-slate IS the page ground, so a fixed value
      would paint a button that vanishes into the sheet behind it. The spec's intent is "the
      maximum-separation object on its page", so the pair INVERTS with the theme (creator

@@ -150,7 +150,7 @@ export function buildSummary(guide: GuideLike): string {
   return out.join("\n");
 }
 
-// ── Trip recap (docs/FEATURES.md #10) ───────────────────────────────────────
+// ── Trip recap (docs/archive/FEATURES.md #10) ───────────────────────────────────────
 
 export interface BudgetItem {
   label: string; basis: "day" | "trip"; est: number;

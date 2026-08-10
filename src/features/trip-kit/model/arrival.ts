@@ -1,4 +1,4 @@
-// Arrival autopilot (docs/FEATURES.md #5) — derives a focused arrival view from the
+// Arrival autopilot (docs/archive/FEATURES.md #5) — derives a focused arrival view from the
 // guide's OWN Day 1 data. No new schema, no fabricated content: Day 1 is already the
 // convention this codebase uses for "arrival day" (the jet-lag calculator and trip
 // countdown both key off it the same way). This just re-plates its existing

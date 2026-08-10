@@ -29,3 +29,6 @@ docs/mockups/shots/
 
 reports/
 .stryker-tmp/
+
+# impeccable skill scratch output — tool artifacts, not project docs
+.impeccable/

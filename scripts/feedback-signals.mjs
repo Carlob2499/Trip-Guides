@@ -1,4 +1,4 @@
-// Deterministic divergence signals for the LEARN loop's auto-file step (PLAN_REVISE_GUIDE V6,
+// Deterministic divergence signals for the LEARN loop's auto-file step (REVISE_GUIDE V6,
 // synthesis ruling #7: thresholds are pure logic, unit-testable — the agent only drafts and
 // files). Takes the export step's per-slug summaries (export-feedback.mjs summarize() shape)
 // and returns, per slug, the list of tripped signals. A slug with ANY signal is a candidate

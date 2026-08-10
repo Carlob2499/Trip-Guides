@@ -1,5 +1,5 @@
 // Tests for scripts/feedback-signals.mjs — the deterministic divergence thresholds behind the
-// LEARN loop's auto-filed revision requests (PLAN_REVISE_GUIDE V6). These numbers file issues
+// LEARN loop's auto-filed revision requests (REVISE_GUIDE V6). These numbers file issues
 // in the creator's tracker, so the logic that trips them is unit-gated, not agent judgment.
 
 // @protects-file Patterns drawn from feedback reflect what people actually reported.

@@ -4,7 +4,7 @@
 
 World country geometry — [world-atlas](https://github.com/topojson/world-atlas) v2.0.2's
 `countries-110m.json` (110m-resolution TopoJSON, Natural Earth-derived), vendored here on
-2026-08-08 rather than fetched from a CDN at runtime (D18, `docs/PLAN_ATLAS_MIGRATION.md` —
+2026-08-08 rather than fetched from a CDN at runtime (D18, `docs/archive/PLAN_ATLAS_MIGRATION.md` —
 the offline rule forbids a live CDN dependency for something this static). Confirmed the exact
 pinned version via jsDelivr's own `package.json` for that tag before downloading the data file
 itself: `https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/package.json`.

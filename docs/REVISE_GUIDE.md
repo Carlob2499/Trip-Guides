@@ -1,7 +1,9 @@
 # PLAN — revise-guide: the MAJOR-revision pipeline
 
 > **SHIPPED — all six phases (V1–V6). This doc is now the pipeline's SPEC, not a plan.**
-> Kept in `docs/` rather than archived precisely because live code points at it:
+> Renamed from `PLAN_REVISE_GUIDE.md` on 2026-08-10 to match: `PLAN_` now means "not built
+> yet" throughout `docs/`. Kept in `docs/` rather than archived precisely because live code
+> points at it:
 > `revise-guide.yml`, `modify-guide.yml`, `feedback-export.yml`, `docs/PIPELINE.md` (stage 5b)
 > and `scripts/feedback-signals.mjs` all cite it as the reference for behaviour they implement.
 > Verified present: the three labels (`ensure-labels.yml`), the issue form + parser +

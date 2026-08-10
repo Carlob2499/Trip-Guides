@@ -1,5 +1,5 @@
 ---
-// Atlas hub — THE site's home page (PLAN_ATLAS_MIGRATION.md Stage C item 10, the flip:
+// Atlas hub — THE site's home page (docs/archive/PLAN_ATLAS_MIGRATION.md Stage C item 10, the flip:
 // built aside at /atlas/ through Stage C per D1, then moved here in one commit on the
 // creator's GO). Two doors (D4): the table view is server-rendered so the page works with
 // zero JS and stays indexable; the globe (world view) and the cover are progressive
@@ -483,7 +483,7 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
       import { initAtlasWorld } from "../features/atlas/ui/world-view.js";
       import { initDarkToggle } from "../scripts/theme.js";
 
-      // The header measures its own height into --hdr-h (DESIGN.md: "sticky offsets are
+      // The header measures its own height into --hdr-h (docs/design-handoff/DESIGN.md: "sticky offsets are
       // never literals") — the globe wrap and the table's sticky search header both
       // already consume it. Item 9 (Chrome) will grow this same header with more rows
       // (theme toggle, ＋ New guide, TOOLS); this observer keeps working unchanged either way.
