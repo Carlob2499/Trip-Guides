@@ -7,8 +7,8 @@ So this breaks the code on purpose — thousands of small sabotages, one at a ti
 records which ones no test noticed. Every line below is a change someone could make to this
 product tomorrow without a single test going red.
 
-**76% of 5974 deliberate breakages were caught.**
-1276 slipped past the tests. 150 were in code no test touches at all.
+**76% of 6019 deliberate breakages were caught.**
+1278 slipped past the tests. 168 were in code no test touches at all.
 
 This number is never 100% and is not meant to be — some sabotages produce code that behaves
 identically, and some are in places not worth the cost of a test. It is a map of the thin ice,
@@ -20,8 +20,8 @@ not a grade.
 | Money — the shared trip budget | 666 | 149 | 22 |
 | Reminders, feedback and the pipeline | 598 | 144 | 16 |
 | Dates, time zones and freshness | 514 | 139 | 4 |
-| Live conditions — weather, daylight, closures | 448 | 116 | 7 |
-| Guide content and how it renders | 226 | 101 | 9 |
+| Live conditions — weather, daylight, closures | 473 | 118 | 7 |
+| Guide content and how it renders | 226 | 101 | 27 |
 | Taking a guide with you — exports and sharing | 251 | 97 | 6 |
 | Using a guide on the road | 408 | 75 | 15 |
 | Navigation, panels and gestures | 418 | 46 | 0 |
@@ -99,9 +99,9 @@ Up to ten per area — the rest are in the full report.
   `change: (state.change ?? "").trim(),`
 - Someone blanked out a piece of text and nothing failed.  <sub>src/features/change-request/model/change-request.ts:12</sub>
   `export const NOT_SURE = "";`
-- Someone removed a guard against missing data and nothing failed.  <sub>src/features/intake-questions/model/question.ts:45</sub>
-  `if (!q.text?.trim()) errs.push("missing text");`
 - Someone removed a call, such as the copy that keeps data from being shared and nothing failed.  <sub>src/features/intake-questions/model/question.ts:45</sub>
+  `if (!q.text?.trim()) errs.push("missing text");`
+- Someone removed a guard against missing data and nothing failed.  <sub>src/features/intake-questions/model/question.ts:45</sub>
   `if (!q.text?.trim()) errs.push("missing text");`
 - …and 134 more.
 
@@ -109,9 +109,9 @@ Up to ten per area — the rest are in the full report.
 
 - Someone forced a decision to always go one way and nothing failed.  <sub>src/features/live-data/model/day-swap.ts:20</sub>
   `if (typeof w !== "number" || !isFinite(w)) return false;`
-- Someone changed an and to an or and nothing failed.  <sub>src/features/live-data/model/day-swap.ts:20</sub>
-  `if (typeof w !== "number" || !isFinite(w)) return false;`
 - Someone forced a decision to always go one way and nothing failed.  <sub>src/features/live-data/model/day-swap.ts:20</sub>
+  `if (typeof w !== "number" || !isFinite(w)) return false;`
+- Someone changed an and to an or and nothing failed.  <sub>src/features/live-data/model/day-swap.ts:20</sub>
   `if (typeof w !== "number" || !isFinite(w)) return false;`
 - Someone forced a decision to always go one way and nothing failed.  <sub>src/features/live-data/model/day-swap.ts:21</sub>
   `return (w >= 51 && w <= 67) || (w >= 71 && w <= 77) || (w >= 80 && w <= 86) || (w >= 95 && w <= 99);`
@@ -125,19 +125,19 @@ Up to ten per area — the rest are in the full report.
   `return (w >= 51 && w <= 67) || (w >= 71 && w <= 77) || (w >= 80 && w <= 86) || (w >= 95 && w <= 99);`
 - Someone changed a pattern-match rule and nothing failed.  <sub>src/features/live-data/model/day-swap.ts:29</sub>
   `const m = /([A-Z][a-z]{2})\s+(\d{1,2})/.exec(String(dayDate || ""));`
-- Someone forced a decision to always go one way and nothing failed.  <sub>src/features/live-data/model/day-swap.ts:30</sub>
+- Someone changed an and to an or and nothing failed.  <sub>src/features/live-data/model/day-swap.ts:30</sub>
   `if (!m || MONTHS[m[1]] === undefined) return -1;`
 - …and 129 more.
 
 ### Live conditions — weather, daylight, closures
 
-- Someone changed a comparison, so a boundary shifted by one and nothing failed.  <sub>src/features/live-data/model/packing.ts:29</sub>
-  `if (!daily || !slice || slice.count <= 0) return null;`
 - Someone forced a decision to always go one way and nothing failed.  <sub>src/features/live-data/model/packing.ts:29</sub>
   `if (!daily || !slice || slice.count <= 0) return null;`
-- Someone changed an and to an or and nothing failed.  <sub>src/features/live-data/model/packing.ts:31</sub>
-  `for (let i = slice.startI; i < slice.startI + slice.count && i < daily.time.length; i++) idx.push(i);`
+- Someone changed a comparison, so a boundary shifted by one and nothing failed.  <sub>src/features/live-data/model/packing.ts:29</sub>
+  `if (!daily || !slice || slice.count <= 0) return null;`
 - Someone forced a decision to always go one way and nothing failed.  <sub>src/features/live-data/model/packing.ts:31</sub>
+  `for (let i = slice.startI; i < slice.startI + slice.count && i < daily.time.length; i++) idx.push(i);`
+- Someone changed an and to an or and nothing failed.  <sub>src/features/live-data/model/packing.ts:31</sub>
   `for (let i = slice.startI; i < slice.startI + slice.count && i < daily.time.length; i++) idx.push(i);`
 - Someone changed a comparison, so a boundary shifted by one and nothing failed.  <sub>src/features/live-data/model/packing.ts:31</sub>
   `for (let i = slice.startI; i < slice.startI + slice.count && i < daily.time.length; i++) idx.push(i);`
@@ -151,10 +151,20 @@ Up to ten per area — the rest are in the full report.
   `const tempMaxC = Math.max(...highs);`
 - Someone removed a call, such as the copy that keeps data from being shared and nothing failed.  <sub>src/features/live-data/model/packing.ts:37</sub>
   `const tempMinC = Math.min(...lows);`
-- …and 106 more.
+- …and 108 more.
 
 ### Guide content and how it renders
 
+- Someone forced a decision to always go one way and nothing failed.  <sub>src/lib/img-width.ts:55</sub>
+  `const resizable = url.includes("{w}") || url.includes(COMMONS_FILEPATH);`
+- Someone blanked out a piece of text and nothing failed.  <sub>src/lib/img-width.ts:55</sub>
+  `const resizable = url.includes("{w}") || url.includes(COMMONS_FILEPATH);`
+- Someone forced a decision to always go one way and nothing failed.  <sub>src/lib/img-width.ts:56</sub>
+  `if (!resizable) return null;`
+- Someone forced a decision to always go one way and nothing failed.  <sub>src/lib/img-width.ts:62</sub>
+  `if (!one || !two || one === two) return null;`
+- Someone changed an and to an or and nothing failed.  <sub>src/lib/img-width.ts:62</sub>
+  `if (!one || !two || one === two) return null;`
 - Someone forced a decision to always go one way and nothing failed.  <sub>src/lib/lead-split.ts:41</sub>
   `if (text.length <= max) return text;`
 - Someone forced a decision to always go one way and nothing failed.  <sub>src/lib/lead-split.ts:41</sub>
@@ -165,16 +175,6 @@ Up to ten per area — the rest are in the full report.
   `if (text.length <= max) return text;`
 - Someone changed a pattern-match rule and nothing failed.  <sub>src/lib/lead-split.ts:42</sub>
   `const sentenceEnd = /[.!?]\s/g;`
-- Someone changed a pattern-match rule and nothing failed.  <sub>src/lib/lead-split.ts:42</sub>
-  `const sentenceEnd = /[.!?]\s/g;`
-- Someone flipped a sign and nothing failed.  <sub>src/lib/lead-split.ts:43</sub>
-  `let last = -1;`
-- Someone forced a decision to always go one way and nothing failed.  <sub>src/lib/lead-split.ts:45</sub>
-  `while ((m = sentenceEnd.exec(text)) !== null) {`
-- Someone changed a comparison, so a boundary shifted by one and nothing failed.  <sub>src/lib/lead-split.ts:45</sub>
-  `while ((m = sentenceEnd.exec(text)) !== null) {`
-- Someone deleted the body of a block entirely and nothing failed.  <sub>src/lib/lead-split.ts:45</sub>
-  `while ((m = sentenceEnd.exec(text)) !== null) {`
 - …and 91 more.
 
 ### Taking a guide with you — exports and sharing
