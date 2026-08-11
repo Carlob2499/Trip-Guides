@@ -6,6 +6,7 @@ import { todayInTz, trapFocus, migrateStorageKey, tapHaptic } from "./util.js";
 import { attachSheetDrag } from "./sheet-drag.js";
 import { initDarkToggle } from "./theme.js";
 import { resolveTripDate, tripWindow, dayState } from "../lib/trip-dates";
+import { nextLeg } from "../lib/plate-line";
 import { initRate, initWeather, initDaySwap, initSun } from "../features/live-data/index.js";
 import { initJetLag } from "./jetlag-ui.js";
 import { initSharePanel } from "../features/share/index.js";
@@ -79,14 +80,11 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           var catblocks  = Array.prototype.slice.call(document.querySelectorAll(".catblock"));
           // Non-numeric tabs (each a standalone panel, not a section group).
           // Add a new one here + its DOM id — everything else generalizes.
-          /* R5 left ONE special panel. Budget and Reminders moved inside the Tools station
-             (a real numbered station, routed like any other), Vote and Trip kit are retired,
-             and Learnings becomes the Field log station. The map stays rather than being
-             deleted: the router's string-vs-index branch is what lets a station be addressed
-             by name, and Field log will use it. */
           /* R5 left NO special panels: every destination is a numbered station now, including
-             Field log and Tools. The map and the router's string-vs-index branch stay because
-             they cost nothing and a future station addressed by name would need them again. */
+             Field log and Tools. Budget and Reminders moved inside the Tools station, Vote and
+             Trip kit are retired, and Learnings became Field log. The map and the router's
+             string-vs-index branch stay because they cost nothing and a future station
+             addressed by name would need them again. */
           var specialPanels = {};
           // Via Object.prototype, not specialPanels.hasOwnProperty: the keys come from a URL
           // hash and localStorage, so a tab named "hasOwnProperty" or "__proto__" would
@@ -688,6 +686,35 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             box.hidden = false;
           })();
 
+          /* ── 8b. THE PLATE LINE'S NEXT LEG (R5 SCREENS §1) ────────────
+             The one row of the plate line that depends on when the page is READ, so it is
+             filled here rather than baked at build time — a static "next" is wrong the day
+             after any deploy. The derivation is pure and tested (src/lib/plate-line.ts);
+             this block only supplies the destination's calendar day and the DOM. Outside
+             the trip window nextLeg() returns null and the row stays hidden, which is the
+             FALLBACKS §1 rule for a trip not started or already finished. */
+          (function () {
+            var slot = document.getElementById("mastNextLeg");
+            if (!slot) return;
+            /* The timed stops live in #storyDays, not in tgConfig's daysForBanner — that one
+               carries date/title/fit only. Read from where the data already is rather than
+               growing tgConfig with a second copy of every waypoint on every guide. */
+            var storyEl = document.getElementById("storyDays");
+            var story;
+            try { story = JSON.parse((storyEl && storyEl.textContent) || "[]") || []; } catch (_) { return; }
+            if (!story.length) return;
+            var _d = todayInTz(destTzIana);
+            var when = _d ? new Date(_d.y, _d.m - 1, _d.d) : new Date();
+            var leg = nextLeg(
+              story.map(function (d) { return { date: d.date, waypoints: d.stops }; }),
+              resolveTripDate,
+              when,
+            );
+            if (!leg) return;
+            slot.textContent = "Next · " + leg;
+            slot.hidden = false;
+          })();
+
         } catch (e) { fail("countdown", e); }
         try {
           /* ── 9. LOCAL TIME AT DESTINATION ───────────────────────────── */
@@ -713,6 +740,65 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           })();
 
         } catch (e) { fail("local time", e); }
+        try {
+          /* ── 9b. THE MASTHEAD'S LIVE-STATE COLUMN (R5 SUPERSEDES §3) ──
+             The stamp and the day/clock row. Both are answers to "when is it", so both are
+             filled here rather than baked into the page: a build-time stamp would say
+             UPCOMING for as long as the deploy lasted. The third row (stops · to book) is
+             counted from the guide's own data and is already in the HTML.
+
+             dayState() is the shared derivation the day station uses, so the stamp and the
+             day card can never disagree about which day it is or whether the trip is on. */
+          (function () {
+            var stampEl = document.getElementById("mastState");
+            var whenEl  = document.getElementById("mastWhen");
+            if (!stampEl && !whenEl) return;
+
+            var _d = todayInTz(destTzIana);
+            var when = _d ? new Date(_d.y, _d.m - 1, _d.d) : new Date();
+            var win = tripWindow(firstDayDate, lastDayDate, when);
+
+            if (stampEl) {
+              // Three states, and no fourth for "we are not sure": a guide with no dated days
+              // has no window to be inside, so the stamp stays absent rather than guessing.
+              var label = win.isOngoing ? "On this trip now" : win.isPast ? "Complete" : firstDayDate ? "Upcoming" : null;
+              if (label) {
+                stampEl.textContent = label;
+                stampEl.dataset.state = win.isOngoing ? "now" : win.isPast ? "done" : "next";
+                stampEl.hidden = false;
+              }
+            }
+
+            /* The day and the local clock, together, and ONLY while the trip is running. Off
+               the trip they are two true facts that mean nothing here — a day number for a
+               trip nobody is on, and a clock for a city nobody is in. */
+            if (whenEl && win.isOngoing && daysForBanner.length) {
+              /* Which day is "now" comes from dayState itself rather than a second date
+                 comparison here — one derivation, so the stamp and the day card cannot
+                 disagree. It answers per-index, so the index is the one it calls "now". */
+              var dates = daysForBanner.map(function (d) { return d.date; });
+              var current = -1;
+              for (var di = 0; di < dates.length; di++) {
+                if (dayState(dates, di, when) === "now") { current = di; break; }
+              }
+              var parts = [];
+              if (current >= 0) parts.push("Day " + (current + 1) + " of " + dates.length);
+              if (destTzIana) {
+                try {
+                  var fmt2 = new Intl.DateTimeFormat("en-GB", { timeZone: destTzIana, hour: "2-digit", minute: "2-digit", hour12: false });
+                  parts.push(fmt2.format(new Date()));
+                  setInterval(function () {
+                    var p = whenEl.textContent.split(" · ");
+                    p[p.length - 1] = fmt2.format(new Date());
+                    whenEl.textContent = p.join(" · ");
+                  }, 60000);
+                } catch (_) { /* an invalid zone drops the clock, not the day */ }
+              }
+              if (parts.length) { whenEl.textContent = parts.join(" · "); whenEl.hidden = false; }
+            }
+          })();
+
+        } catch (e) { fail("live state", e); }
         /* ── 10. OFFLINE-READY BADGE — RETIRED 2026-07-30 ─────────────────
            It read "✓ Works offline" identically on every guide, and it only ever proved
            that SOME tripguides-* cache existed — not that THIS page was in it. The

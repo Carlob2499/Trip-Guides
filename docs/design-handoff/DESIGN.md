@@ -1,7 +1,7 @@
 ---
 name: Waypoint
 description: Verified, personalized travel guides that show their work — a field instrument, not a brochure.
-revision: R4 — codified from the shipped Overdrive build, 2026-08-06
+revision: R5 — the guide-UI revision, 2026-08-11 (see the R5 section at the foot of this file; R4 front-matter values below are superseded where it says so)
 colors:
   survey-paper: "#dfe3d9"
   survey-paper-sunken: "#d2d7c8"
@@ -535,3 +535,72 @@ What this revision codifies that the previous document did not.
 - Sticky offsets currently written as literals need the measured-variable treatment.
 - Fixed-edge components need the `max(reserved, env())` inset pass.
 - Photography components still emitting a graticule overlay need it removed.
+
+---
+
+## R5 — the guide-UI revision (2026-08-11)
+
+`docs/design-handoff/design_handoff_guide_ui/SUPERSEDES.md` is the authority for everything in
+this section; what follows records each of its rows here so this file is not read as current
+where R5 has overtaken it. The front-matter above still carries R4's colour values — those are
+superseded by row 2 below, and the shipped values live in `src/styles/base.css`, which is the
+one place a token value is ever true.
+
+### 1. Navigation
+
+| R4 | R5 |
+| --- | --- |
+| Tab rail of scrollable pills, active pill filled oxide | **Spine rail** — every group is a station on one 2px line, the current station a filled oxide dot with a halo, a context line beneath carrying the active group's descriptor and the resume line |
+| One rail at every viewport | Spine on **tablet and desktop**; a swipeable **pill row with a 2px progress line** on the **phone** |
+| Tools reachable from four entry points | **One** — Tools is the **last station on the rail**. The standalone `/tools/<trip>/` screen is deleted |
+| Field log inline at the bottom of the guide body | Field log is **its own station**, after Sources |
+| Breakpoints 760 / 900 / 620 | **Container queries at 744 and 1180** for the guide body; viewport media queries for page chrome only |
+
+### 2. Palette
+
+Day lightened and its ink darkened: `--bg #e3e7dc` · `--card #fbfcf6` · `--sunken #ced5c4` ·
+`--ink #0f141a` · `--muted #3c4534` · `--rule #a9b39b` · `--rule2 #8a9480`. The palette people
+read on is the one that has to hold up in direct sun. Everything else is unchanged, including
+the oxide accent, which does not re-map between themes.
+
+**There is no third palette.** A "Glare" theme was built during review and **deleted, not
+hidden** — a third contrast surface is one more thing to police and one nobody switches into.
+
+### 3. The masthead and the plate line
+
+| R4 | R5 |
+| --- | --- |
+| Plate line leads with **coordinates** at display scale, plus a `PLATE NN — CC` stamp | Plate line leads with the trip's **cities** at reading scale, then its **next leg** |
+| Guide numbering on every guide surface | **None.** `sheetOrdinal` and `src/lib/sheet-order.ts` stay — the hub indexes by number, and an index is a legitimate use of one |
+| The right column ends after the chips | It carries the **live trip state**: the status stamp, the day and local time, and what there is to get through |
+
+**Coordinates survive on the globe**, where they *are* the map. They are not on the guide page.
+
+### 4. Trip Split
+
+**It never seeds.** R4 filled the ledger from the guide's `budget` section and stamped those
+rows `✓ FROM THE GUIDE`. An estimate is not a debt: seeding "meals per day, $32" produces a
+settle-up demanding transfers for money nobody spent. It now ships empty and says so. The
+forecast is real and belongs in the guide's own Budget panel, labelled a forecast.
+
+### 5. Tools
+
+Four, not five — the **jet-lag** panel moved into the **Plan** group, where a fact about the
+flight is read before departure rather than after landing. `src/lib/jetlag.ts` and
+`src/lib/tz-offset.ts` are untouched and keep their tests; only the placement changed. Route
+order **hands off**: every leg carries a maps link built from the guide's own coordinates, plus
+one whole-day multi-stop link.
+
+### 6. Prose
+
+**Every long explanation folds the same way** — two lines always visible, the rest opening in
+place, hover *and* click on a fine pointer, tap on touch — **at unchanged type size**. An
+explanation that shrinks when it opens is a punishment for opening it.
+
+### 7. The Red Ink Rule — extended, not replaced
+
+R4 spent one red-ink moment per viewport in four places: a plate line, a gap, a stale warning,
+SOS. R5 allows **one second moment: the present** — the live band on the day being read may take
+reading-scale accent alongside one of the four. Nothing else qualifies, and where a screen has
+to choose, the present wins. The rule governs reading-scale accent only; it does not govern the
+10px panel kicker, which is notation.

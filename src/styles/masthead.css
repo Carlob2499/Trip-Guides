@@ -119,15 +119,22 @@
 .mast-chip--sos{color:var(--ochre);border-color:var(--ochre)}
 a.mast-chip:hover{background:color-mix(in srgb,currentColor 10%,transparent)}
 
-/* ── The plate line — coordinates, plate number, the CHECKED stamp, fact/source counts,
-   print. D13: a 1px hairline BENEATH the row, in addition to the existing 2px oxide top
-   rule — both borders together, per the design-handoff prototype's own plate-line markup
-   (border-top: 2px oxide + border-bottom: 1px var(--rule2)). ── */
+/* ── The plate line — cities, the next leg, the CHECKED stamp, fact/source counts, print.
+   D13: a 1px hairline BENEATH the row, in addition to the existing 2px oxide top rule —
+   both borders together, per the design-handoff prototype's own plate-line markup
+   (border-top: 2px oxide + border-bottom: 1px var(--rule2)).
+
+   R5 SUPERSEDES §3 replaced this row's two loudest items. The coordinate readout ran at
+   clamp(1.3rem, 3vw, 2.2rem) — display scale, the largest thing on the line — for a decimal
+   pair nobody standing in Seoul uses. The cities take that slot at READING scale instead:
+   the row now leads with the loudest thing that is also the most useful, which is the whole
+   argument of the change. ── */
 .mast-plateline{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem 1.2rem;max-width:1400px;margin:.9rem auto 0;padding:.7rem clamp(1rem,3vw,1.5rem) .8rem;border-top:2px solid var(--accent);border-bottom:1px solid var(--rule2)}
-.mast-coord{font-family:var(--font-data);font-weight:640;font-variant-numeric:tabular-nums;font-size:clamp(1.3rem,3vw,2.2rem);color:var(--accent-ink)}
-/* D6/D13: the plate number ("PLATE 02 — KR") — same weight/tracking/colour as the
-   design-handoff prototype's own {{gPlate}} span. */
-.mast-platenum{font-family:var(--font-data);font-weight:640;font-size:var(--text-control-sm);letter-spacing:.14em;color:var(--aink)}
+.mast-cities{font-family:var(--font-data);font-weight:640;font-size:var(--text-lead);color:var(--accent-ink)}
+/* The next leg: 700/11px/.14em in --aink, per SCREENS §1. Filled by guide-ui.js against the
+   destination's calendar, so it ships hidden and stays hidden outside the trip window —
+   [hidden] needs no help here because nothing in this row sets display. */
+.mast-nextleg{font-family:var(--font-data);font-weight:700;font-size:var(--text-control-sm);letter-spacing:.14em;text-transform:uppercase;color:var(--aink)}
 .mast-stamp{font-family:var(--font-data);font-size:var(--text-control);font-weight:640;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--rule);padding:.15rem .5rem}
 .mast-plcount{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}
 .mast-print{margin-left:auto;min-height:36px;padding:.3rem .9rem;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);background:var(--card);border:1px solid var(--rule2);border-radius:999px;cursor:pointer}
@@ -150,6 +157,36 @@ a.mast-chip:hover{background:color-mix(in srgb,currentColor 10%,transparent)}
   .mast-mat{border:0}
   .mast-img,.mast-credit,.mast-video,.mast-pause{display:none}
   .mast-title,.mast-dek,.mast-eyebrow{color:#111;text-shadow:none}
-  .mast-platenum{color:#111}
+  .mast-cities,.mast-nextleg{color:#111}
   .mast-print{display:none}
+}
+
+/* ── The live-state column (R5 SUPERSEDES §3) ───────────────────────────────
+   R4's masthead ended after the chips, leaving this space empty at desktop width. It now
+   carries the state of the trip: a status stamp, the day and the destination's clock, and
+   what there is to get through.
+
+   `flex: none` and it sits LAST in .mast-plate-row, so at phone width it wraps under the
+   text column instead of squeezing it — the plate and the title keep their space, and the
+   state follows them rather than competing. Two of the three rows are filled by guide-ui.js
+   and ship hidden, so on a guide whose trip is over the column is the progress line alone. */
+.mast-live{flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:.4rem;align-self:flex-end}
+.mast-live-stamp{
+  font-family:var(--font-data);font-size:var(--text-control);font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:.2rem .55rem;border:1px solid var(--rule2);color:var(--muted);
+}
+/* The present is the R5 red-ink rule's ONE additional moment (SUPERSEDES §7). It is spent
+   here and on the day band, never on both at once — a stamp reading "on this trip now" is
+   the same claim the band makes, so only the stamp takes the accent at masthead scale. */
+.mast-live-stamp[data-state="now"]{color:var(--accent-ink);border-color:var(--accent)}
+.mast-live-stamp[data-state="done"]{color:var(--muted);border-color:var(--rule)}
+.mast-live-when{font-family:var(--font-data);font-size:var(--text-lead);color:var(--ink);font-variant-numeric:tabular-nums}
+.mast-live-prog{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}
+
+@media print{
+  /* On paper the stamp is a fact about the day it was printed, which is exactly the kind of
+     claim that goes stale in a bag. The counted progress line survives — it is not dated. */
+  .mast-live-stamp,.mast-live-when{display:none}
+  .mast-live-prog{color:#111}
 }

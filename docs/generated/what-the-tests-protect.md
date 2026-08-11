@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1769 checks · 1769 carry a stated promise · 150 files
+1798 checks · 1798 carry a stated promise · 152 files
 
 ## Can everyone read it
 
@@ -217,6 +217,21 @@ nothing ships.
 - the station you are in fills as you scroll it  <sub>tests/visual/journey-line.spec.ts:64</sub>
 - a section you have moved on from stays solid, and one you have not is empty  <sub>tests/visual/journey-line.spec.ts:81</sub>
 - the route walked survives a reload within the same visit  <sub>tests/visual/journey-line.spec.ts:93</sub>
+
+## Other browser checks
+
+**The masthead says where the trip goes and what is next, each exactly once.**
+
+- the cities lead the plate line, at reading scale  <sub>tests/visual/plate-line.spec.ts:14</sub>
+- ⌁ the coordinate pair and the plate number are gone from the guide  <sub>tests/visual/plate-line.spec.ts:24</sub>
+- ⌁ the eyebrow and the plate line never say the same thing  <sub>tests/visual/plate-line.spec.ts:34</sub>
+- the next leg appears mid-trip, naming a real stop from the day cards  <sub>tests/visual/plate-line.spec.ts:46</sub>
+- ⌁ the next leg is absent before the trip and after it  <sub>tests/visual/plate-line.spec.ts:60</sub>
+- the live-state column stamps the trip's state, and the stamp follows the clock  <sub>tests/visual/plate-line.spec.ts:69</sub>
+- ⌁ the counted progress row agrees with the checklist it counts  <sub>tests/visual/plate-line.spec.ts:90</sub>
+- ⌁ a guide with nothing to count renders no progress row  <sub>tests/visual/plate-line.spec.ts:103</sub>
+- ⌁ a plate line with nothing to say is shorter, never padded  <sub>tests/visual/plate-line.spec.ts:114</sub>
+- ⌁ the resume line is absent from the DOM until there IS one  <sub>tests/visual/plate-line.spec.ts:129</sub>
 
 ## Content rules
 
@@ -673,6 +688,28 @@ nothing ships.
 - later rings are farther from center on average than earlier ones (they nest outward)  <sub>src/lib/contours.test.ts:28</sub>
 - returns an empty ring list for 0 rings, without throwing  <sub>src/lib/contours.test.ts:39</sub>
 - respects a custom viewBox  <sub>src/lib/contours.test.ts:43</sub>
+
+**The plate line says where this trip goes and what is next, or says nothing.**
+
+- takes the cities and leaves the dates to the eyebrow  <sub>src/lib/plate-line.test.ts:10</sub>
+- accepts an en dash as well as an em dash  <sub>src/lib/plate-line.test.ts:14</sub>
+- ⌁ renders nothing for a kicker with no city half  <sub>src/lib/plate-line.test.ts:18</sub>
+- ⌁ never guesses which half of an unpunctuated kicker is a place  <sub>src/lib/plate-line.test.ts:27</sub>
+- ⌁ declines a single-city kicker rather than trusting the dash alone  <sub>src/lib/plate-line.test.ts:33</sub>
+- takes what cityLine leaves  <sub>src/lib/plate-line.test.ts:44</sub>
+- ⌁ keeps a kicker with no city half whole rather than halving it  <sub>src/lib/plate-line.test.ts:48</sub>
+- ⌁ never renders the same words as cityLine — the halves cannot overlap  <sub>src/lib/plate-line.test.ts:54</sub>
+- returns null for no kicker at all  <sub>src/lib/plate-line.test.ts:67</sub>
+- names the next timed stop from today's own day  <sub>src/lib/plate-line.test.ts:87</sub>
+- skips a stop with no time rather than printing a leg with no departure  <sub>src/lib/plate-line.test.ts:91</sub>
+- moves to the next day once today's stops are behind it  <sub>src/lib/plate-line.test.ts:95</sub>
+- counts the whole of today as ahead, not the hours left in it  <sub>src/lib/plate-line.test.ts:99</sub>
+- ⌁ says nothing once the trip is over  <sub>src/lib/plate-line.test.ts:106</sub>
+- ⌁ says nothing BEFORE the trip either, however real the first departure is  <sub>src/lib/plate-line.test.ts:111</sub>
+- ⌁ says nothing when no stop anywhere carries a time  <sub>src/lib/plate-line.test.ts:120</sub>
+- ⌁ says nothing for a guide whose days are not calendar dates  <sub>src/lib/plate-line.test.ts:125</sub>
+- ⌁ says nothing for a guide with no days at all  <sub>src/lib/plate-line.test.ts:132</sub>
+- reads the days in date order, not the order the file happens to list them in  <sub>src/lib/plate-line.test.ts:138</sub>
 
 **Time-zone offsets are correct across daylight-saving changes.**
 

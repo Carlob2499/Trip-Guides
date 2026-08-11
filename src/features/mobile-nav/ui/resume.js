@@ -83,6 +83,46 @@ export function initResume(ctx) {
 }
 
 /**
+ * The same line, on the rail's context line, for the station the reader is standing in
+ * (R5 SCREENS §2).
+ *
+ * Painted from here rather than from the guide-rail silo because THIS file owns the section
+ * memory — one reader of the store, so the rail and the sheet can never disagree about where
+ * someone left off. The rail owns the DOM; it declares no element for this, and the line is
+ * created and REMOVED here as the memory comes and goes.
+ *
+ * That removal is the point. ACCEPTANCE requires no resume line in the DOM *at all* when
+ * nothing is remembered, and the first build shipped an empty `<p class="grail-resume" hidden>`
+ * that nothing ever filled — a fabricated "start here" is the loud version of this failure and
+ * an empty element reserving space for one is the quiet version.
+ */
+export function initRailResume(ctx) {
+  var rail = document.querySelector(".grail-ctx");
+  var track = document.getElementById("guideTabs");
+  if (!rail || !track) return;
+
+  function paint() {
+    var active = track.querySelector('.grail-stop[aria-current="true"]') || track.querySelector(".grail-stop.gtab-active");
+    var line = active ? resumeLine(readMap(ctx)[active.dataset.full]) : null;
+    var el = rail.querySelector(".grail-resume");
+    if (!line) { if (el) el.remove(); return; }
+    if (!el) {
+      el = document.createElement("p");
+      el.className = "grail-resume";
+      rail.appendChild(el);
+    }
+    el.textContent = line;
+  }
+
+  // The active station changes without a page load, so repaint when it does — the same
+  // MutationObserver contract the rail itself uses to follow aria-current.
+  new MutationObserver(paint).observe(track, {
+    subtree: true, attributes: true, attributeFilter: ["aria-current", "class"],
+  });
+  paint();
+}
+
+/**
  * The resume chip — offered on a FRESH arrival only.
  *
  * scroll-memory deliberately does NOT restore a mid-scroll position on a fresh

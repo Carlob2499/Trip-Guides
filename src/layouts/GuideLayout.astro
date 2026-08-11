@@ -1,5 +1,4 @@
 ﻿---
-import { getCollection } from "astro:content";
 import Block from "../components/Block.astro";
 import Icon from "../components/Icon.astro";
 import PwaHead from "../components/PwaHead.astro";
@@ -22,8 +21,7 @@ import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
 import ToolsScreen from "../components/ToolsScreen.astro";
 import { deriveToolsRecord } from "../features/trip-tools/index";
 import { computeGuideStats, latestVerifiedOn } from "../lib/guide-stats";
-import { sheetOrder, ordinalFor } from "../lib/sheet-order";
-import { firstDayDateOf, lastDayDateOf } from "../features/atlas/index";
+import { cityLine, dateLine } from "../lib/plate-line";
 import { collectWaypoints, collectDayEvents, buildSummary } from "../features/exports/index";
 // slotLabel only — the silo's DOM boot is guarded by `typeof document`, so importing its
 // public surface at build time is inert (the sealed-silo contract: index is the only door).
@@ -239,37 +237,24 @@ const coverVideo = cover?.video ?? null;
 // For weather widget — pull lat/lng from first map section
 const mapSec    = _flat.find((s: any) => s.type === "map" && s.center?.lat);
 const mapCenter = mapSec ? { lat: mapSec.center.lat as number, lng: mapSec.center.lng as number } : null;
-// Plate-line coordinate readout (design-handoff README.md §4) — Reading-scale notation,
-// not a data lookup: reuses the same mapCenter the weather widget sources from, so a
-// guide with no map section gets no coordinate line rather than a guessed one.
-const platelineCoord = mapCenter
-  ? `${Math.abs(mapCenter.lat).toFixed(4)}° ${mapCenter.lat >= 0 ? "N" : "S"}, ${Math.abs(mapCenter.lng).toFixed(4)}° ${mapCenter.lng >= 0 ? "E" : "W"}`
-  : null;
+/* R5 SUPERSEDES §3 replaced BOTH of the plate line's own rows.
+
+   The coordinate readout is gone: a decimal pair at display scale is not information a
+   traveller standing in Seoul uses. Coordinates survive where they ARE the map — the atlas
+   hub's live sheet-centre readout, compass and scale bar are untouched.
+
+   Guide numbering is gone from this surface too ("PLATE 02 — KR"), and `sheet-order.ts` is
+   deliberately NOT deleted with it: the hub still indexes by number, and an index is a
+   legitimate use of one. What was wrong was numbering the guide AT the guide, where it
+   carried nothing a reader uses.
+
+   What replaces them is derived in src/lib/plate-line.ts from data the guides already carry —
+   no new content field, so no guide had to be edited to gain a plate line. */
+const platelineCities = cityLine(guide.kicker as string | null);
+const platelineDates  = dateLine(guide.kicker as string | null);
 // Per-guide masthead chips (emergency, currency) — both already computed elsewhere on
 // this page (tgConfig, the budget/split tools); reused here rather than re-derived.
 const platelineEmergency = emergencyFor(guide.country);
-
-// Plate number (D6/D13): "PLATE NN — <CC>", NN from the ONE chronological-by-trip-start
-// derivation (src/lib/sheet-order.ts) shared with the future hub index/table/ping sheet,
-// CC from the guide's own `country` via the same COUNTRY_CODES map the holiday lookup
-// uses. Every guide's start date is needed to rank this one, so this reads the whole
-// collection — cheap at guide-count scale, and it's what keeps every guide's plate number
-// agreeing with every other's without a hand-filled ordinal anywhere. Day-date extraction
-// comes from the atlas silo's own helpers (one copy, not a third re-implementation), and
-// `kicker` rides along so sheet-order can PIN each trip's year (its doc explains why —
-// without it, ordinals silently renumber on any build >180 days after a trip ends).
-const _allGuides = await getCollection("guides");
-const _sheetInputs = _allGuides.map((g) => ({
-  slug: g.id,
-  firstDayDate: firstDayDateOf(g.data.sections as any[]),
-  lastDayDate: lastDayDateOf(g.data.sections as any[]),
-  kicker: (g.data as any).kicker ?? null,
-}));
-const sheetOrdinal = ordinalFor(sheetOrder(_sheetInputs, new Date()), guideSlug);
-const guideCC = COUNTRY_CODES[guide.country] ?? null;
-const platelineNumber = sheetOrdinal != null && guideCC
-  ? `PLATE ${String(sheetOrdinal).padStart(2, "0")} — ${guideCC}`
-  : null;
 
 // When a guide has its own `weather` section, that section provides the #wxWrap
 // mount in-flow, so the masthead strip is suppressed (no double render). The flag
@@ -321,6 +306,21 @@ const toolsTrip = {
   // offered for a file that does not exist.
   exports: { gpx: collectWaypoints(guide).length > 0, ics: collectDayEvents(guide).length > 0 },
 };
+/* The live-state column's third row — `37 stops · 4 to book` — counted from this guide's own
+   data at build time, not typed. Stops are the day cards' waypoints (the same collection the
+   day station and the whole-day maps link walk); the booking count is the reminders record's
+   own `book` flag, so it can never disagree with the checklist in the Tools station.
+
+   Each half is independently conditional and the whole row is absent when both are zero. A
+   guide with no dated days and nothing to book renders no progress line rather than "0 stops",
+   which would read as a researched answer of zero. */
+const _stopCount = (daysSec?.items ?? []).reduce((n: number, d: any) => n + (d.waypoints?.length ?? 0), 0);
+const _bookCount = toolsTrip.record.reminders.filter((r: { book: boolean }) => r.book).length;
+const liveProgress = [
+  _stopCount > 0 ? `${_stopCount} stop${_stopCount === 1 ? "" : "s"}` : null,
+  _bookCount > 0 ? `${_bookCount} to book` : null,
+].filter(Boolean).join(" · ") || null;
+
 const toolsStationIndex = stations.find((s) => s.kind === "tools")!.index;
 /* null for a guide with no learnings record — the station is not in the rail either, so the
    two cannot disagree about whether this guide has a Field log. */
@@ -624,8 +624,14 @@ const tripSummary = buildSummary(guide);
               A kicker always wins; otherwise `region` (a state, for a US-scoped guide)
               shows in place of `country` when set — country stays the real nation for
               every functional lookup, region is what a reader actually sees here. */}
-          {(guide.kicker || (guide.region || guide.country) !== guide.title) && (
-            <p class="eyebrow mast-eyebrow">{guide.kicker || guide.region || guide.country}</p>
+          {/* SCREENS §1 gives the kicker's two halves separate homes — the DATES here, the
+              cities on the plate line below. Rendering the whole kicker in both would be the
+              same datum shown twice as if it were two different things, which is the one thing
+              the uniform-surfaces rule forbids outright. `dateLine` is the inverse of the split
+              `cityLine` makes, so the two can never disagree about where the seam is; a kicker
+              with no city half stays whole and stays here. */}
+          {(platelineDates || (guide.region || guide.country) !== guide.title) && (
+            <p class="eyebrow mast-eyebrow">{platelineDates || guide.region || guide.country}</p>
           )}
           <h1 class="mast-title">{guide.title}</h1>
           {guide.dek && <p class="dek mast-dek">{guide.dek}</p>}
@@ -641,18 +647,36 @@ const tripSummary = buildSummary(guide);
             </div>
           )}
         </div>
+
+        {/* THE LIVE-STATE COLUMN (R5 SUPERSEDES §3). R4's masthead ended after the chips and
+            left this space empty at desktop width; the state of the trip is the most useful
+            thing to put in it.
+
+            Two of its three rows depend on WHEN the page is read — the stamp and the day/clock
+            — so they ship empty and hidden and guide-ui.js fills them, the same arrangement the
+            next leg uses. The third is counted from this guide's own data at build time, and a
+            guide with nothing to count renders nothing rather than "0 of 0". */}
+        {(liveProgress || firstDayDate) && (
+          <div class="mast-live">
+            <span class="mast-live-stamp" id="mastState" hidden></span>
+            <span class="mast-live-when" id="mastWhen" hidden></span>
+            {liveProgress && <span class="mast-live-prog">{liveProgress}</span>}
+          </div>
+        )}
       </div>
 
-      {/* The plate line (docs/design-handoff/DESIGN.md "The plate"): coordinates + the CHECKED stamp + this
-          guide's own fact/source counts (colophon — same counts the page-footer colophon
-          signs with, not re-derived) + a print control. Any row with nothing to show
-          renders nothing — an unresearched guide's plate line can be shorter, never padded. */}
-      {(platelineCoord || platelineNumber || colophonChecked || colophon.verifiedFactCount > 0 || colophon.sourceCount > 0) && (
+      {/* The plate line (R5 SCREENS §1): the trip's cities, its next leg, the CHECKED stamp,
+          this guide's own fact/source counts (colophon — the same counts the page-footer
+          colophon signs with, not re-derived) and a print control. Any row with nothing to
+          show renders nothing — an unresearched guide's plate line is shorter, never padded. */}
+      {(platelineCities || colophonChecked || colophon.verifiedFactCount > 0 || colophon.sourceCount > 0) && (
         <div class="mast-plateline">
-          {platelineCoord && <span class="mast-coord">{platelineCoord}</span>}
-          {/* D6/D13: the sheet ordinal, chronological by trip start — the same number the
-              future hub index/table/ping sheet will show for this guide. */}
-          {platelineNumber && <span class="mast-platenum">{platelineNumber}</span>}
+          {platelineCities && <span class="mast-cities">{platelineCities}</span>}
+          {/* The next leg is the one row here that depends on WHEN the page is read, so it is
+              filled by guide-ui.js against the destination's calendar rather than baked at
+              build time — a static "next" would be wrong the day after any deploy. Ships empty
+              and hidden, and stays that way outside the trip window. */}
+          <span class="mast-nextleg" id="mastNextLeg" hidden></span>
           {colophonChecked && <span class="mast-stamp">CHECKED {colophonChecked}</span>}
           {colophon.verifiedFactCount > 0 && (
             <span class="mast-plcount">{colophon.verifiedFactCount} verified facts</span>
@@ -795,9 +819,10 @@ const tripSummary = buildSummary(guide);
         <div class="grail-ctx">
           <p class="grail-kicker" data-rail-kicker>{stations[0]?.full}</p>
           {stationDesc(stations[0]) && <p class="grail-desc" data-rail-desc>{stationDesc(stations[0])}</p>}
-          {/* The resume line is written by mobile-nav's section memory when there IS one.
-              Rendered empty here and never with a fabricated "start here". */}
-          <p class="grail-resume" data-rail-resume hidden></p>
+          {/* No resume line here. mobile-nav's section memory CREATES one when there is
+              something to resume and removes it when there is not — an empty <p> reserving
+              space for a memory nobody has is the quiet version of a fabricated "start here",
+              and ACCEPTANCE asks for it to be absent from the DOM entirely. */}
         </div>
       </nav>
 
