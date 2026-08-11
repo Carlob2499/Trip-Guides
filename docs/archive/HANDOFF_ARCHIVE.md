@@ -1644,3 +1644,36 @@ pipe write from Node is ASYNCHRONOUS on Linux and synchronous on Windows, so exi
 tail of the biggest root. It now writes to a file descriptor. Worth remembering: any tool whose
 output you capture through a pipe and which exits immediately can hand you a partial answer on
 Linux only, and a partial answer from a checker reads exactly like a clean result.
+
+---
+
+## Snapshot (2026-08-11 — the R5 guide-UI handoff, steps 1-3 of 6)
+
+`docs/design-handoff/design_handoff_guide_ui/` (13 specs + prototypes + a design-system export)
+is now IN the repo and half implemented. It is calibrated to this repo exactly: Korea's 11
+groups + Field log + Tools is the 13 stations it names, and `us` — 8 groups, no learnings, no
+cover — is its day-zero fixture.
+
+**Shipped and live: BUILD_ORDER steps 1, 2, 3.**
+· The lifted Day palette, swept across every surface that carried a copy of it (manifest,
+  theme-color, atlas map fallbacks, OG image, QR pair, budget print sheet, both contrast
+  fixtures). `--accent-ink-light` moved #80371b → #783319 as a *consequence* — accentTokens()
+  derives it against the sunken surface, which got darker. Recomputed, never hand-picked.
+· `.shell` is the container-query context at 744/1180, with `--gutter` as the one spacing step.
+· `src/features/guide-rail/` — stations derived from the guide, one DOM, three models. The rail
+  moved out of the sticky chrome to under the masthead; `#guideTabs` moved with it so all nine
+  silos that query `.gtab` still resolve. ARIA is now buttons + aria-current in a nav.
+· The fold (`src/components/Fold.astro` + fold.css + fold.js), `dayRouteLink()`, and day state
+  resolved against the READER's clock — Korea correctly shows eight `done` days and no present.
+
+**Creator rulings this session:** Vote is deleted outright; Trip kit's tool goes but its content
+(phrases, entry) moves into Plan; Tools becomes a per-guide station and the generic `/tools/`
+screen retires; LIGHT_BG syncs with the palette.
+
+**The lesson worth keeping: vitest was green for every defect that mattered.** All four real
+bugs lived where code met a system it did not control — axe caught a dangling `aria-controls` on
+the two stations that have no panel yet; Playwright caught that `display:none` on the legacy tool
+tabs made Budget and Trip Split unreachable *by a person* while JS `.click()` still fired; a
+deleted CSS block took `.read-prog`'s media query with it; and my own active-dot rule painted over
+the `--st-fill` gradient I had just ported forward. The suite ran 1693 green through all of it.
+Run Playwright before pushing, not after CI says so.

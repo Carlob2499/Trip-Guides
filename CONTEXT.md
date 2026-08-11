@@ -135,3 +135,29 @@ it would mean editing `"type"` values in every guide's JSON, and the Atlas redes
 design-only with zero guide-data edits. From Phase 2 onward a Panel section renders *inside*
 a Panel, so the two nest rather than compete. Qualify in writing whenever the surrounding
 text could mean either.
+
+**Guide numbering is dead on guide surfaces; the hub index is not** (2026-08-11, R5
+SUPERSEDES §3). `SHEET 02` / `PLATE 02 — KR` / `GUIDE 02` are gone from every guide surface —
+they carried nothing a traveller uses. `src/lib/sheet-order.ts` and `sheetOrdinal` **stay
+alive and are not dead code**: the atlas hub indexes trips by number and an index is the one
+legitimate use of one. If a future session finds sheet-order.ts with no guide-side caller, that
+is the intended state, not a leftover to delete. The plate line carries the trip's cities and
+its next leg instead (`src/lib/plate-line.ts`).
+
+**Coordinates belong to the globe, not the guide** (2026-08-11). The atlas hub's live
+sheet-centre readout, compass rose and scale bar are unchanged and stay — there, coordinates
+*are* the map. A decimal pair on the guide masthead was a different thing wearing the same
+clothes: notation a reader standing in Seoul cannot act on. Do not re-add it to a guide surface.
+
+**A kicker is two facts and each is rendered once** (2026-08-11). Guides write
+`Seoul · Daejeon · Busan — Jul 8–15, 2026`. The dates go to the masthead eyebrow, the cities to
+the plate line, split by `cityLine`/`dateLine` — one seam, so the two can never disagree. The
+split is deliberately STRICT: it requires a `·` list, so a single-city kicker (Sedona) gets no
+cities row and keeps its whole kicker in the eyebrow. Being cautious costs one shorter plate
+line; being wrong would put a fabricated place name on the masthead's loudest row.
+
+**"Absent" means not in the DOM, not present-and-empty** (2026-08-11). The rail's resume line
+shipped as an empty `<p class="grail-resume" hidden>` that nothing filled. A fabricated "start
+here" is the loud version of that failure; an element reserving space for a memory nobody has is
+the quiet one, and ACCEPTANCE forbids both. Client-filled honest blanks are created and REMOVED
+by whoever owns the datum — never rendered empty and left for later.
