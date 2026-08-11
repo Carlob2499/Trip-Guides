@@ -1603,3 +1603,44 @@ check live beside it in the skill.
 Nine commits, `069011d..795b835`, all CI green. Every new gate verified non-vacuous by reverting
 the source and watching it fail. Zero `src/content/guides/` diff throughout — no guide content
 was touched.
+
+## Snapshot (2026-08-09b — making the tests readable, and proving they catch anything)
+
+Two asks, both about trusting the suite rather than adding to it: make the tests legible to a
+non-coder, and make sure each one tests something real.
+
+**Legibility became two generated documents.** `docs/generated/what-the-tests-protect.md` groups all 1715
+checks under the promise each keeps, sourced from a `// @protects-file` line now carried by every
+one of the 145 test files; CI fails if it goes stale. Its sibling `docs/generated/where-the-tests-are-blind.md`
+is the honest half. The comment-density cap (22%, baseline of 16 files) came straight from the
+creator's "slim down the slop" — measured, not asserted: repo average 10.8%, my own new files
+30–44%.
+
+**"Testing something real" needed evidence, not assurance, so the repo now has mutation testing.**
+Stryker breaks the source on purpose — 5974 small sabotages across `src/features/*/model` and
+`src/lib` — and records which ones no test noticed. 76% caught. It runs WEEKLY and does not gate:
+a mutation score is a map of thin ice, not a grade, and enforcing it breeds tests that satisfy the
+metric. It immediately found real gaps in the money model: the largest-remainder tie-break decides
+which person pays the leftover cent and reversing it broke nothing; undo's three
+member-reference branches were only ever covered as a set, so an expense mentioning the departing
+person exactly once could stop generating a patch silently; and `participants.slice()` could lose
+its copy, which makes undo restore an edited history while looking like it worked. Six tests,
+`undo.ts` 93→98%.
+
+**The vendored drift checker got a classifier instead of continued neglect.** `check-drift.mjs`
+emits 788 hits of which 635 are documented false positives, and that ratio is exactly why two real
+MOTION violations survived a whole closeout stage. `scripts/drift-real.mjs` sorts them into eight
+NAMED, justified exemption classes — never a mute — leaving **153 genuine violations** now
+baselined and gated against growth. Writing it produced its own lesson: check-drift truncates its
+echoed source line at 100 characters, and this repo writes one-line CSS blocks, so classifying off
+that echo scored ~60 compliant rules as drift. Read the file, not the report about the file.
+
+**The boundary checks earned their keep three times in one session.** The weekly workflow failed
+in 24 seconds on its first smoke run: `stryker run` takes its config file POSITIONALLY and exits 1
+on `--config`, which I had written from memory (`actions/upload-artifact@v4` was two majors stale
+for the same reason). Then the drift gate passed locally and failed on CI seeing 465 of 788
+violations — because check-drift calls `process.exit(1)` straight after `console.error`, and a
+pipe write from Node is ASYNCHRONOUS on Linux and synchronous on Windows, so exit discarded the
+tail of the biggest root. It now writes to a file descriptor. Worth remembering: any tool whose
+output you capture through a pipe and which exits immediately can hand you a partial answer on
+Linux only, and a partial answer from a checker reads exactly like a clean result.

@@ -24,46 +24,36 @@
   **`docs/archive/PLAN_ATLAS_MIGRATION.md`** (the current work order — its own Progress ledger is the
   source of truth for which stage is next; read that before re-deriving status from git log).
 
-## Snapshot (2026-08-09b — making the tests readable, and proving they catch anything)
+## Snapshot (2026-08-11 — the R5 guide-UI handoff, steps 1-3 of 6)
 
-Two asks, both about trusting the suite rather than adding to it: make the tests legible to a
-non-coder, and make sure each one tests something real.
+`docs/design-handoff/design_handoff_guide_ui/` (13 specs + prototypes + a design-system export)
+is now IN the repo and half implemented. It is calibrated to this repo exactly: Korea's 11
+groups + Field log + Tools is the 13 stations it names, and `us` — 8 groups, no learnings, no
+cover — is its day-zero fixture.
 
-**Legibility became two generated documents.** `docs/generated/what-the-tests-protect.md` groups all 1715
-checks under the promise each keeps, sourced from a `// @protects-file` line now carried by every
-one of the 145 test files; CI fails if it goes stale. Its sibling `docs/generated/where-the-tests-are-blind.md`
-is the honest half. The comment-density cap (22%, baseline of 16 files) came straight from the
-creator's "slim down the slop" — measured, not asserted: repo average 10.8%, my own new files
-30–44%.
+**Shipped and live: BUILD_ORDER steps 1, 2, 3.**
+· The lifted Day palette, swept across every surface that carried a copy of it (manifest,
+  theme-color, atlas map fallbacks, OG image, QR pair, budget print sheet, both contrast
+  fixtures). `--accent-ink-light` moved #80371b → #783319 as a *consequence* — accentTokens()
+  derives it against the sunken surface, which got darker. Recomputed, never hand-picked.
+· `.shell` is the container-query context at 744/1180, with `--gutter` as the one spacing step.
+· `src/features/guide-rail/` — stations derived from the guide, one DOM, three models. The rail
+  moved out of the sticky chrome to under the masthead; `#guideTabs` moved with it so all nine
+  silos that query `.gtab` still resolve. ARIA is now buttons + aria-current in a nav.
+· The fold (`src/components/Fold.astro` + fold.css + fold.js), `dayRouteLink()`, and day state
+  resolved against the READER's clock — Korea correctly shows eight `done` days and no present.
 
-**"Testing something real" needed evidence, not assurance, so the repo now has mutation testing.**
-Stryker breaks the source on purpose — 5974 small sabotages across `src/features/*/model` and
-`src/lib` — and records which ones no test noticed. 76% caught. It runs WEEKLY and does not gate:
-a mutation score is a map of thin ice, not a grade, and enforcing it breeds tests that satisfy the
-metric. It immediately found real gaps in the money model: the largest-remainder tie-break decides
-which person pays the leftover cent and reversing it broke nothing; undo's three
-member-reference branches were only ever covered as a set, so an expense mentioning the departing
-person exactly once could stop generating a patch silently; and `participants.slice()` could lose
-its copy, which makes undo restore an edited history while looking like it worked. Six tests,
-`undo.ts` 93→98%.
+**Creator rulings this session:** Vote is deleted outright; Trip kit's tool goes but its content
+(phrases, entry) moves into Plan; Tools becomes a per-guide station and the generic `/tools/`
+screen retires; LIGHT_BG syncs with the palette.
 
-**The vendored drift checker got a classifier instead of continued neglect.** `check-drift.mjs`
-emits 788 hits of which 635 are documented false positives, and that ratio is exactly why two real
-MOTION violations survived a whole closeout stage. `scripts/drift-real.mjs` sorts them into eight
-NAMED, justified exemption classes — never a mute — leaving **153 genuine violations** now
-baselined and gated against growth. Writing it produced its own lesson: check-drift truncates its
-echoed source line at 100 characters, and this repo writes one-line CSS blocks, so classifying off
-that echo scored ~60 compliant rules as drift. Read the file, not the report about the file.
-
-**The boundary checks earned their keep three times in one session.** The weekly workflow failed
-in 24 seconds on its first smoke run: `stryker run` takes its config file POSITIONALLY and exits 1
-on `--config`, which I had written from memory (`actions/upload-artifact@v4` was two majors stale
-for the same reason). Then the drift gate passed locally and failed on CI seeing 465 of 788
-violations — because check-drift calls `process.exit(1)` straight after `console.error`, and a
-pipe write from Node is ASYNCHRONOUS on Linux and synchronous on Windows, so exit discarded the
-tail of the biggest root. It now writes to a file descriptor. Worth remembering: any tool whose
-output you capture through a pipe and which exits immediately can hand you a partial answer on
-Linux only, and a partial answer from a checker reads exactly like a clean result.
+**The lesson worth keeping: vitest was green for every defect that mattered.** All four real
+bugs lived where code met a system it did not control — axe caught a dangling `aria-controls` on
+the two stations that have no panel yet; Playwright caught that `display:none` on the legacy tool
+tabs made Budget and Trip Split unreachable *by a person* while JS `.click()` still fired; a
+deleted CSS block took `.read-prog`'s media query with it; and my own active-dot rule painted over
+the `--st-fill` gradient I had just ported forward. The suite ran 1693 green through all of it.
+Run Playwright before pushing, not after CI says so.
 
 ## Open items
 
@@ -89,25 +79,27 @@ Linux only, and a partial answer from a checker reads exactly like a clean resul
 
 ## Where we left off
 
-The suite is now readable by someone who does not read code, and — more importantly — it can be
-checked rather than trusted. Two documents say what it protects and where it is blind, and both
-are generated, so neither can quietly go out of date.
+Steps 1-3 are live and all three workflows are green. **Steps 4, 5 and 6 remain** and they are
+the restructuring half:
 
-The reusable lesson is that a gate nobody reads is not a gate. `check-drift.mjs` was running the
-whole time and its 90% false-positive rate is precisely why two real violations lived in its
-output for a stage. The fix was not a better checker; it was naming and justifying every class of
-noise so what remains is short enough to read. Same shape as the mutation report: the value is
-not the 76%, it is the twelve specific lines it points at.
+- **Step 4 — Tools as the last station.** Build the per-guide Tools station (four tools: Split,
+  Closures, Reminders, Route); retire `/tools/[trip].astro` and rehome the share modal's
+  offline-files link; move jetlag's reading into Plan and drop the tool; DELETE Vote (surface +
+  `src/features/voting/` + styles); remove the Trip kit tool and render its phrases/entry/book-by
+  content inside Plan. Then delete `.grail-track > .gtab-tool` from guide-rail/styles.css and the
+  legacy tool buttons from GuideLayout — they are visible chrome today ONLY because hiding them
+  made real tools unreachable.
+- **Step 5 — Field log as a station**, from `_guide.json → learnings`, after Sources, not drawn
+  at all for `us`/`japan`. Its station already exists in the rail and currently has no panel.
+- **Step 6 — the masthead and the absent states.** The plate line still shows coordinates and
+  `PLATE 02 — KR`; SUPERSEDES §3 replaces both with the trip's cities and its next leg, plus a
+  live-state column. Then FALLBACKS §1 against `us`, the copy-honesty and pins tests, and
+  `docs/design-handoff/DESIGN.md` amended with every SUPERSEDES row.
 
-**Recommended next step:** pay down mutation gaps in the money model first — it is the one place
-in this product where a silently wrong answer costs a real person real money, and
-`WHERE_THE_TESTS_ARE_BLIND.md` names 154 of them. Then the two still-open items from the eleven:
-ask what "Next Guide" refers to, and build the print-preview shell for the budget sheet.
+**One thing needs you:** `eslint.config.mjs` is hook-protected, so I could not add the R5 bundle
+to its ignore list (you approved it). I fixed the source instead — `prototypes/support.js` carries
+an `eslint-disable` header naming it a vendored design artefact — so nothing is blocked. Swap it
+for the config line if you prefer the R4 precedent.
 
-**Re-prompt the creator with:** "Your tests can now be read like a table of contents — 1715
-checks, each with one plain sentence saying what breaks for a traveller if it goes red. And
-there's a second document that's more useful: the repo now deliberately sabotages its own code
-6000 ways a week and records which sabotages no test noticed. 76% get caught. The 24% that don't
-are a map of the thin ice, and it immediately found three real holes in the shared budget —
-including one where undo would happily restore a version of history that had been edited
-underneath it, while looking like it worked."
+**Recommended next step:** step 4. It is the largest remaining piece, it is what makes the rail's
+last station real, and it is the one that lets the legacy tool tabs finally go.
