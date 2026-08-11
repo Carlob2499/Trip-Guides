@@ -2,7 +2,7 @@
 interface Props {
   storeKey: string;
   /* On the standalone Tools screen the calculator is not one of a guide's tab panels —
-     it IS the panel, already on screen. It therefore drops the tabpanel role (there is no
+     it IS the panel, already on screen. It therefore drops the region role (there is no
      tab labelling it there; an orphaned aria-labelledby points at nothing) and is not
      hidden, since nothing would ever unhide it. Same markup, same ids, same ledger. */
   standalone?: boolean;
@@ -19,7 +19,7 @@ const { storeKey, standalone = false } = Astro.props;
      bottom and the answer ~500px above it: you typed an expense and the number it changed
      was off-screen behind you. Cause now precedes effect, so the results card is always the
      thing below the row you just filled in. -->
-<div class="split-wrap" id="tripSplit" role={standalone ? undefined : "tabpanel"}
+<div class="split-wrap" id="tripSplit" role={standalone ? undefined : "region"}
      aria-labelledby={standalone ? undefined : "gtab-split"} hidden={!standalone} data-sk={storeKey}>
 
   <div class="split-toolbar">
@@ -162,7 +162,7 @@ const { storeKey, standalone = false } = Astro.props;
   <!-- Undo for the one action here that destroys something nobody can reconstruct. Fixed to
        the bottom of the viewport on purpose: the × that deletes an expense can be forty rows
        down, so an undo anchored to the top of the panel would appear off-screen — exactly
-       where it is not. It lives INSIDE the tabpanel so leaving the Budget tab takes it with
+       where it is not. It lives INSIDE the panel so leaving the Budget station takes it with
        it (the panel's `hidden` removes its descendants from layout). -->
   <div class="split-undo" id="sUndo" role="status" aria-live="polite" hidden>
     <span class="su-text" id="sUndoText"></span>
