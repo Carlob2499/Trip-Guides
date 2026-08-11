@@ -7,9 +7,19 @@ import { test, expect, type Page } from "@playwright/test";
 
 const KOREA = "/Trip-Guides/guides/korea/";
 
-/** Freeze the page clock before any script runs, so `Date` is the trip's own week. */
+/* Freeze the page clock before any script runs, so `Date` is the trip's own week.
+   install() is a once-per-page operation; the tests below move the clock three times in one
+   test, so every call after the first sets the time instead. Calling install() repeatedly
+   worked most of the time and lost a race under full-suite load, which is the worst way for a
+   test helper to be wrong. */
+const installed = new WeakSet<Page>();
 async function atDate(page: Page, iso: string) {
+  if (installed.has(page)) {
+    await page.clock.setFixedTime(new Date(iso));
+    return;
+  }
   await page.clock.install({ time: new Date(iso) });
+  installed.add(page);
 }
 
 test("the cities lead the plate line, at reading scale", async ({ page }) => {

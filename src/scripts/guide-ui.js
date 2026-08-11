@@ -274,14 +274,32 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           var sheet    = document.querySelector(".sheet");
           var backdrop = document.querySelector(".sheet-backdrop");
           var sheetBtn = document.getElementById("sheetOpen");
+          /* ⌁ `inert`, not just the transform. The sheet ANIMATES out — translateY(100%) —
+             which moves it off the screen and leaves all ~90 of its links in the tab order and
+             in the accessibility tree. A keyboard or switch user tabbing the page walked
+             through ninety invisible controls before reaching anything they could see, and
+             axe cannot flag it: every one of those links is perfectly accessible, it is just
+             somewhere nobody can look. The share modal and the SOS sheet were never affected
+             because they use `hidden`; this one could not, because `display:none` cannot
+             transition. `inert` is the tool that does both — it removes the subtree from
+             focus and from AT entirely while leaving the element paintable and animatable.
+
+             ACCEPTANCE §6.1 and regression pin 9.3 are the same sentence: sheets animate AND
+             leave the tab order when closed. Both, not one. */
           function openSheet() {
             sheet.classList.add("open"); backdrop.classList.add("open");
+            sheet.removeAttribute("inert");
             _lockScroll();
             sheetBtn.setAttribute("aria-expanded", "true");
             var f = sheet.querySelector("a"); if (f) f.focus();
           }
           function closeSheet() {
             sheet.classList.remove("open"); backdrop.classList.remove("open");
+            /* Set immediately, not after the 280ms slide. A control you cannot see is already
+               unreachable to the reader; keeping it focusable for the length of an animation
+               only preserves the bug for a fifth of a second. The slide is unaffected —
+               `inert` does not change how an element paints. */
+            sheet.setAttribute("inert", "");
             _unlockScroll();
             sheetBtn.setAttribute("aria-expanded", "false"); sheetBtn.focus();
           }

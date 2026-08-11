@@ -21,10 +21,25 @@ const VIEWPORTS = [
   { label: "mobile", width: 375, height: 812 },
 ] as const;
 
-type Viewport = (typeof VIEWPORTS)[number];
+/* Structural, not `(typeof VIEWPORTS)[number]`: the nine-device matrix at the foot of this
+   file passes its own entries to prep(), and a device is a viewport with a name. */
+type Viewport = { readonly label: string; readonly width: number; readonly height: number };
 
 /* Flattened so the test body's nesting (and therefore this file's diff) stays as it was. */
 const COMBOS = (["light", "dark"] as const).flatMap((scheme) => VIEWPORTS.map((vp) => ({ scheme, vp })));
+
+/* ⌁ A page that is not there passes every audit ever written. When R5 deleted the standalone
+   Tools route, this file's own page list kept pointing at it, and four combos went on scanning
+   Astro's 404 page and reporting "trip tools" green. The status code is the cheapest possible
+   proof that the thing being audited exists — checked before anything else looks at the DOM. */
+async function assertRealPage(res: Awaited<ReturnType<Page["goto"]>>, path: string) {
+  expect(res, `${path}: no response at all`).not.toBeNull();
+  expect(
+    res!.status(),
+    `${path} returned ${res!.status()} — this gate is about to audit an error page and pass. ` +
+      `Either the route moved (fix the path) or it was deleted (remove the entry).`,
+  ).toBeLessThan(400);
+}
 
 async function prep(page: Page, path: string, scheme: "light" | "dark", vp: Viewport) {
   await page.setViewportSize({ width: vp.width, height: vp.height });
@@ -40,7 +55,8 @@ async function prep(page: Page, path: string, scheme: "light" | "dark", vp: View
   // the content is up immediately and the audit no longer depends on animation timing at all.
   await page.emulateMedia({ reducedMotion: "reduce", colorScheme: scheme });
   await page.clock.setFixedTime(FIXED_TIME);
-  await page.goto(path, { waitUntil: "networkidle" });
+  const res = await page.goto(path, { waitUntil: "networkidle" });
+  await assertRealPage(res, path);
   // Every tab panel, not just the default-visible one — the gate used to only ever see panel 1 of
   // up to 16, so nothing behind a second tab was ever audited. .guide-tabs additionally clips its
   // own overflow tabs at scroll-left:0; forcing it open converts genuinely-visible-once-scrolled
@@ -541,7 +557,12 @@ for (const [name, path] of [
   ["korea guide", "/Trip-Guides/guides/korea/"],
   ["denmark guide", "/Trip-Guides/guides/denmark/"],
   ["new intake", "/Trip-Guides/new/"], // R4: the composed intake — gated from birth
-  ["trip tools", "/Trip-Guides/tools/korea/"], // Stage E: the standalone Tools screen
+  /* ⌁ `["trip tools", "/Trip-Guides/tools/korea/"]` was here and is REMOVED, not relocated.
+     R5 deleted that route and this entry kept pointing at it — so for four combos the gate
+     was scanning Astro's own 404 page, finding nothing, and reporting a pass under the name
+     "trip tools". The tools are audited as part of the korea guide now: prep() forces every
+     [role=region] open, and the Tools station is one. See assertRealPage below for the guard
+     that stops a dead URL passing quietly again. */
   // Stage F feature 5. Two whole pages this gate had simply never visited — /about/ is the
   // page the product explains itself on, /health/ is the one that tells the maker what is
   // and isn't working, and neither had been audited once.
@@ -702,4 +723,173 @@ for (const guide of ["denmark", "korea", "japan", "us"] as const) {
       expect(pairs!.label, "wn-label on the banner ground").toBeGreaterThanOrEqual(4.5);
     });
   }
+}
+
+/* ── ACCEPTANCE §6.1–6.4 — the keyboard, and the thumb ────────────────────────────────────────
+   axe cannot see any of what follows. Every control in a closed sheet is perfectly accessible
+   in axe's terms: labelled, contrasted, in the tree. The defect is that it is somewhere nobody
+   can look, and only counting tab stops finds that. Same for target size, which axe reports
+   only for a handful of rule sets and never across a device matrix. */
+
+/* prep() deliberately OPENS the SOS sheet so axe can audit it — the whole reason that gesture
+   is in prep at all. These two tests are about the CLOSED state, so they undo it first, the way
+   a reader does. Closing it here is not setup noise: it is the only place in the suite that
+   proves the SOS sheet actually returns to a clean closed state after being opened. */
+async function closeAnyOpenSheet(page: Page) {
+  const sos = page.locator(".sos-sheet");
+  if (await sos.count() && await sos.isVisible()) {
+    await page.keyboard.press("Escape");
+    await expect(sos).toBeHidden();
+  }
+}
+
+const SHEETS_CLOSED_WHY =
+  "the journey sheet slides away on a transform, which cannot remove its ~90 links from the " +
+  "tab order — it ships and closes `inert` instead. If this count jumps, a sheet is animating " +
+  "out while leaving its controls behind, which is ACCEPTANCE 6.1 and regression pin 9.3.";
+
+test("⌁ with every sheet closed, nothing inside one is focusable", async ({ page }) => {
+  await prep(page, "/Trip-Guides/guides/korea/", "light", VIEWPORTS[1]);
+  await closeAnyOpenSheet(page);
+  const leaked = await page.evaluate(() => {
+    const F = 'a[href],button:not([disabled]),input:not([disabled]),select,textarea,[tabindex]:not([tabindex="-1"])';
+    // Every dismissable surface on a guide, whichever mechanism it uses to hide.
+    return [".sheet", ".sos-sheet", "#shareModal", ".share-modal"].flatMap((sel) => {
+      const el = document.querySelector(sel);
+      if (!el) return [];
+      const cs = getComputedStyle(el);
+      const out = cs.display === "none" || cs.visibility === "hidden"
+        || el.hasAttribute("hidden") || el.hasAttribute("inert")
+        ? 0 : el.querySelectorAll(F).length;
+      return out ? [`${sel}: ${out} focusable control(s) in a closed sheet`] : [];
+    });
+  });
+  expect(leaked, SHEETS_CLOSED_WHY).toEqual([]);
+});
+
+test("⌁ an open sheet traps focus, Escape closes it, and focus comes back to the opener", async ({ page }) => {
+  // ACCEPTANCE 6.2 + 6.3 in one walk, because they are one gesture: a dialog that traps focus
+  // and then strands it on close is not better than one that never trapped it.
+  await prep(page, "/Trip-Guides/guides/korea/", "light", VIEWPORTS[1]);
+  await closeAnyOpenSheet(page);
+  const opener = page.locator("#sheetOpen");
+  await opener.click();
+  const sheet = page.locator(".sheet");
+  await expect(sheet).toHaveClass(/\bopen\b/);
+  await expect(sheet).not.toHaveAttribute("inert", /.*/);
+
+  // Focus is inside, and tabbing past the last control wraps rather than escaping to the page.
+  expect(await page.evaluate(() => document.querySelector(".sheet")!.contains(document.activeElement))).toBe(true);
+  for (let i = 0; i < 40; i++) await page.keyboard.press("Tab");
+  expect(
+    await page.evaluate(() => document.querySelector(".sheet")!.contains(document.activeElement)),
+    "40 tabs escaped the open sheet — the trap is not holding",
+  ).toBe(true);
+
+  await page.keyboard.press("Escape");
+  await expect(sheet).not.toHaveClass(/\bopen\b/);
+  await expect(sheet).toHaveAttribute("inert", "");
+  await expect(opener).toBeFocused();
+});
+
+/* The nine devices SCREENS.md names, not a phone and a desktop. A 44px floor holds trivially at
+   1280px and is exactly where it fails at 375 — and the Fold's 673px portrait is the width no
+   breakpoint in this product is written for, which is why it is in the list. */
+const DEVICES = [
+  { label: "iPhone SE", width: 375, height: 667 },
+  { label: "iPhone 15/16", width: 390, height: 844 },
+  { label: "iPhone 17 Pro", width: 402, height: 874 },
+  { label: "iPhone Pro Max", width: 440, height: 956 },
+  { label: "Pixel", width: 412, height: 915 },
+  { label: "Fold unfolded", width: 673, height: 841 },
+  { label: "iPad mini", width: 744, height: 1133 },
+  { label: 'iPad Pro 11"', width: 834, height: 1194 },
+  { label: 'iPad Pro 13"', width: 1024, height: 1366 },
+] as const;
+
+/* A ceiling, not a permission. Both entries are real controls under the 44px line; both repeat
+   hundreds of times per guide, and raising either changes the density of every day card in every
+   guide — which is a design decision, not a fix, and is recorded as an open question for the
+   creator rather than decided here. The counts may only fall. */
+const TARGET_BASELINE: Record<string, { max: number; why: string }> = {
+  "transit-link": {
+    max: 189,
+    why: "The route hand-off pills R5 SUPERSEDES §5 made central ('every leg carries OPEN IN " +
+      "MAPS ↗'). They sit in inline-flex rows of two to four inside a day card; at 44px each " +
+      "the rows wrap to three lines and the card doubles in height. Raising them is a density " +
+      "decision across all four guides.",
+  },
+  "dchip": {
+    max: 12,
+    why: "The day scrubber's inactive chips. COMPONENTS §4 asks for every day of the trip in " +
+      "one row with the active day EXPANDED, and .scrub-fit gives the inactive ones flex:1 1 0 " +
+      "with min-width:0 to make that fit — so the same spec that defines this control is what " +
+      "pushes it under the line. They are 44px TALL and the row is the full width of the page; " +
+      "the miss costs a neighbouring day, not a wrong destination. Resolving it means choosing " +
+      "between 'the whole trip at a glance' and a 44px floor, which is the creator's call.",
+  },
+  "anchor-btn": {
+    max: 78,
+    why: "The copy-link control beside every panel title — one per panel, so it scales with " +
+      "the guide. It is deliberately quiet: at 44px it competes with the title it belongs to.",
+  },
+};
+
+for (const d of DEVICES) {
+  test(`every visible target clears 44px — ${d.label}`, async ({ page }) => {
+    await prep(page, "/Trip-Guides/guides/korea/", "light", d);
+    const small = await page.evaluate(() => {
+      const F = 'a[href],button:not([disabled]),input:not([disabled]),select,[role="button"]';
+      return [...document.querySelectorAll(F)]
+        .filter((el) => {
+          const r = el.getBoundingClientRect();
+          if (r.width === 0 || r.height === 0) return false;            // not rendered
+          if (getComputedStyle(el).visibility === "hidden") return false;
+          /* INLINE LINKS ARE EXCLUDED, deliberately. A `tel:` link inside a sentence is text
+             that happens to be tappable; forcing it to 44px would break the line it sits in.
+             The rule is about CONTROLS — anything that presents itself as a button, chip, pill
+             or tab. Detected by asking whether the element is its own block, which is what
+             every control in this system is and no inline link is. */
+          const disp = getComputedStyle(el).display;
+          if (disp === "inline" || el.closest("p, li, .prose, .body")) return false;
+
+          /* NOTATION IS EXCLUDED TOO, and this is the line worth defending. The provenance
+             dot, the ≈/⚠ flag chips, the stale pill and a photo credit are MARKS — DESIGN.md's
+             notation family, sized to the type they annotate. A 44px provenance dot beside a
+             13px figure is not a better target, it is a blot: it would dominate the fact it is
+             meant to footnote, and there are dozens per page. They are reachable by keyboard
+             and they sit inside larger rows a thumb can hit. `.bactual` is an <input> the
+             16px zoom-trap gate above already covers on its own terms.
+
+             The rule this preserves: a control the reader is meant to AIM at clears 44px. A
+             mark the reader is meant to READ is sized to its text. */
+          return !el.closest(".prov-dot, .flag-chip, .stale-pill, .imgcredit") && !el.matches("input");
+        })
+        .map((el) => {
+          const r = el.getBoundingClientRect();
+          return { sel: (el.className || el.tagName).toString().trim().slice(0, 44), w: Math.round(r.width), h: Math.round(r.height) };
+        })
+        .filter((r) => Math.min(r.w, r.h) < 44)
+        .map((r) => `${r.sel} = ${r.w}x${r.h}`);
+    });
+    /* Two classes are UNDER the line and stay there for now, each for a stated reason, and
+       each counted so the number can only shrink — the same paydown shape as drift-baseline
+       and the comment-density ceiling. Neither is a mute: both are real controls, and both
+       are named in the handoff as awaiting a density decision the creator has not made. */
+    const unexplained = small.filter((row) => !Object.keys(TARGET_BASELINE).some((k) => row.startsWith(k)));
+    expect(
+      unexplained,
+      `${d.label} (${d.width}px): a control renders under 44px in its smallest dimension. ` +
+        `That is the floor a thumb needs; below it the reader misses and hits the thing beside it. ` +
+        `If it is genuinely notation rather than a control, exclude it above with a reason — ` +
+        `never widen TARGET_BASELINE to make a new one pass.`,
+    ).toEqual([]);
+    for (const [cls, entry] of Object.entries(TARGET_BASELINE)) {
+      const n = small.filter((row) => row.startsWith(cls)).length;
+      expect(
+        n,
+        `${d.label}: ${cls} is at ${n}, over its ceiling of ${entry.max}. ${entry.why}`,
+      ).toBeLessThanOrEqual(entry.max);
+    }
+  });
 }

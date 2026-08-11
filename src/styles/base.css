@@ -438,3 +438,38 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opa
    this class is for. The pattern was already inline in the deleted tool-tab rule; named here so
    the next component that needs it does not invent a seventh variant. */
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+
+/* === THE 44px FLOOR ==========================================================================
+   ACCEPTANCE §6.4: every control clears 44px in its smallest dimension, on all nine devices.
+   The gate that asserts it (tests/visual/a11y.spec.ts) found twenty-five classes under the
+   line — axe never reported one of them, because a 38px button is a perfectly accessible
+   button that a thumb simply misses.
+
+   Collected here rather than edited into twelve stylesheets because it is ONE rule, and a
+   rule spread across twelve files is a rule that drifts. Each of these is pure chrome with
+   room to grow: nothing below changes a layout, only the box a finger lands in.
+
+   NOT here, and deliberately: `.transit-link` and `.anchor-btn`. Both are real controls under
+   the line, both repeat hundreds of times per guide, and raising either changes the density of
+   every day card in every guide — a design decision, not a fix. They are recorded in the gate's
+   own TARGET_BASELINE with that reasoning, where the number can only shrink. */
+.topbar-btn,.mast-print,.cat-collapse-all,.day-print-btn,.copy-addr,.map-fs-btn{min-height:44px}
+.topbar-btn{min-width:44px}
+.cold-open-x{width:44px;height:44px}
+/* Icon-only buttons: the box grows, the glyph does not — a bigger target, same drawing. */
+.day-flip-btn,.tk-speak,.hint-btn{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+/* The rail's own stops sat at 40px — the control the whole R5 navigation rests on. */
+.grail-stop{min-height:44px}
+/* The rest of the same sweep — controls the first pass missed because they size by width or
+   sit inside a flex row that shrank them. Same rule, same reason. */
+.map-fs-btn,.learn-x,.btog-btn,.lnw-open,.sc-add-btn{min-width:44px;min-height:44px}
+/* Reminders' add button — only visible on the wider devices, where the Tools station lays its
+   panels side by side. Missed by the phone-first pass for exactly that reason. */
+.rm-add{min-height:44px}
+.dchip,.ro-chip,.venue-pill--action,.foot-modify-pill,.topbar-home,.skip-link{min-height:44px;display:inline-flex;align-items:center}
+/* The day scrubber's compact chips sized to 28px wide so a long trip fits the row; a day is
+   still something the reader aims at, so the box grows and the row scrolls instead. */
+.dchip{min-width:44px}
+/* The emergency numbers. If any target in this product deserves the floor it is the one
+   someone reaches for one-handed in a situation they did not plan. */
+.mast-chip--sos{min-height:44px}

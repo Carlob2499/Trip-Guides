@@ -7,16 +7,19 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1798 checks · 1798 carry a stated promise · 152 files
+1811 checks · 1811 carry a stated promise · 154 files
 
 ## Can everyone read it
 
 **Anyone can read every screen — text stays legible and controls stay usable, in both light and dark.**
 
-- form controls are >=16px so iOS never zoom-traps  <sub>tests/visual/a11y.spec.ts:509</sub>
-- every page passes an automated accessibility scan  <sub>tests/visual/a11y.spec.ts:552</sub>
-- each guide uses its own readable accent colour, not another guide's  <sub>tests/visual/a11y.spec.ts:640</sub>
-- what's-next banner is legible  <sub>tests/visual/a11y.spec.ts:674</sub>
+- form controls are >=16px so iOS never zoom-traps  <sub>tests/visual/a11y.spec.ts:525</sub>
+- every page passes an automated accessibility scan  <sub>tests/visual/a11y.spec.ts:573</sub>
+- each guide uses its own readable accent colour, not another guide's  <sub>tests/visual/a11y.spec.ts:661</sub>
+- what's-next banner is legible  <sub>tests/visual/a11y.spec.ts:695</sub>
+- ⌁ with every sheet closed, nothing inside one is focusable  <sub>tests/visual/a11y.spec.ts:750</sub>
+- ⌁ an open sheet traps focus, Escape closes it, and focus comes back to the opener  <sub>tests/visual/a11y.spec.ts:769</sub>
+- every visible target clears 44px  <sub>tests/visual/a11y.spec.ts:839</sub>
 
 **Search reaches anything in a guide, from anywhere in it.**
 
@@ -162,6 +165,37 @@ nothing ships.
 - the wizard fits the viewport at 375px and its textarea clears the iOS zoom floor  <sub>tests/visual/change-request.spec.ts:111</sub>
 - the submit button keeps its label on hover  <sub>tests/visual/change-request.spec.ts:131</sub>
 
+## Other browser checks
+
+**Defects fixed in the R5 cycle stay fixed.**
+
+- ⌁ 9.1 every station has its panel and every panel its station  <sub>tests/visual/pins.spec.ts:11</sub>
+- ⌁ 9.3 the sheet both animates and leaves the tab order  <sub>tests/visual/pins.spec.ts:34</sub>
+- ⌁ 9.4 no money surface renders a tone name where a figure belongs  <sub>tests/visual/pins.spec.ts:52</sub>
+- ⌁ 9.5 the same trip data renders at phone and desktop width  <sub>tests/visual/pins.spec.ts:78</sub>
+- ⌁ 9.6 the tools run on the guide they are in, with no slug to forget  <sub>tests/visual/pins.spec.ts:99</sub>
+- the pins delegated above still have somewhere to live  <sub>tests/visual/pins.spec.ts:120</sub>
+
+**No number on a guide contradicts the thing it is counting.**
+
+- ⌁ no stated station or group count disagrees with the rail  <sub>tests/visual/copy-honesty.spec.ts:20</sub>
+- ⌁ any stated expense or transfer count equals the rows beneath it  <sub>tests/visual/copy-honesty.spec.ts:39</sub>
+- ⌁ no placeholder copy survives onto the page  <sub>tests/visual/copy-honesty.spec.ts:81</sub>
+- ⌁ no guide hardcodes a count its own data could produce  <sub>tests/visual/copy-honesty.spec.ts:96</sub>
+
+**The masthead says where the trip goes and what is next, each exactly once.**
+
+- the cities lead the plate line, at reading scale  <sub>tests/visual/plate-line.spec.ts:24</sub>
+- ⌁ the coordinate pair and the plate number are gone from the guide  <sub>tests/visual/plate-line.spec.ts:34</sub>
+- ⌁ the eyebrow and the plate line never say the same thing  <sub>tests/visual/plate-line.spec.ts:44</sub>
+- the next leg appears mid-trip, naming a real stop from the day cards  <sub>tests/visual/plate-line.spec.ts:56</sub>
+- ⌁ the next leg is absent before the trip and after it  <sub>tests/visual/plate-line.spec.ts:70</sub>
+- the live-state column stamps the trip's state, and the stamp follows the clock  <sub>tests/visual/plate-line.spec.ts:79</sub>
+- ⌁ the counted progress row agrees with the checklist it counts  <sub>tests/visual/plate-line.spec.ts:100</sub>
+- ⌁ a guide with nothing to count renders no progress row  <sub>tests/visual/plate-line.spec.ts:113</sub>
+- ⌁ a plate line with nothing to say is shorter, never padded  <sub>tests/visual/plate-line.spec.ts:124</sub>
+- ⌁ the resume line is absent from the DOM until there IS one  <sub>tests/visual/plate-line.spec.ts:139</sub>
+
 ## Using a guide on the road
 
 **A suggested walking order is only offered on days where it genuinely saves you distance.**
@@ -217,21 +251,6 @@ nothing ships.
 - the station you are in fills as you scroll it  <sub>tests/visual/journey-line.spec.ts:64</sub>
 - a section you have moved on from stays solid, and one you have not is empty  <sub>tests/visual/journey-line.spec.ts:81</sub>
 - the route walked survives a reload within the same visit  <sub>tests/visual/journey-line.spec.ts:93</sub>
-
-## Other browser checks
-
-**The masthead says where the trip goes and what is next, each exactly once.**
-
-- the cities lead the plate line, at reading scale  <sub>tests/visual/plate-line.spec.ts:14</sub>
-- ⌁ the coordinate pair and the plate number are gone from the guide  <sub>tests/visual/plate-line.spec.ts:24</sub>
-- ⌁ the eyebrow and the plate line never say the same thing  <sub>tests/visual/plate-line.spec.ts:34</sub>
-- the next leg appears mid-trip, naming a real stop from the day cards  <sub>tests/visual/plate-line.spec.ts:46</sub>
-- ⌁ the next leg is absent before the trip and after it  <sub>tests/visual/plate-line.spec.ts:60</sub>
-- the live-state column stamps the trip's state, and the stamp follows the clock  <sub>tests/visual/plate-line.spec.ts:69</sub>
-- ⌁ the counted progress row agrees with the checklist it counts  <sub>tests/visual/plate-line.spec.ts:90</sub>
-- ⌁ a guide with nothing to count renders no progress row  <sub>tests/visual/plate-line.spec.ts:103</sub>
-- ⌁ a plate line with nothing to say is shorter, never padded  <sub>tests/visual/plate-line.spec.ts:114</sub>
-- ⌁ the resume line is absent from the DOM until there IS one  <sub>tests/visual/plate-line.spec.ts:129</sub>
 
 ## Content rules
 

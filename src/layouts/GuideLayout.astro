@@ -1084,7 +1084,11 @@ const tripSummary = buildSummary(guide);
 
     <!-- Slide-up section sheet (mobile) -->
     <div class="sheet-backdrop"></div>
-    <div class="sheet" role="dialog" aria-label="Sections" aria-modal="true">
+    {/* Ships INERT because it ships closed. The transform that slides it away cannot remove
+        its ~90 links from the tab order, and a reader whose script never ran would otherwise
+        tab through every one of them before reaching the page. guide-ui.js clears it on open
+        and restores it on close. */}
+    <div class="sheet" role="dialog" aria-label="Sections" aria-modal="true" inert>
       <div class="sheet-grip" aria-hidden="true"></div>
       {/* The "3 of 13" position moved here from the bottom bar when that bar became a
           five-slot tab bar (no room for a second label). field-tools.js writes it. */}
