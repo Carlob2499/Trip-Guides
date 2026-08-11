@@ -41,8 +41,14 @@ export function initLearningsTab() {
   if (!panel) return;
 
   var storeKey = panel.getAttribute("data-sk") || "guide";
-  var gtab = document.querySelector(".gtab-learn");
-  var sheetLink = document.querySelector(".sheet-learn-link");
+  /* R5: Field log is a STATION, and whether it exists at all is decided at build time by
+     whether the guide carries a learnings record — not at runtime by this script. So there is
+     nothing left to reveal: the station and its panel are either both there or both absent.
+     What survives is the live-feedback rendering below, which fills the station's aggregate
+     block when Firebase has records. reveal() is kept as a no-op rather than deleted so the
+     dismiss path below keeps its shape; the elements it used to toggle no longer exist. */
+  var gtab = null;
+  var sheetLink = null;
   var aggEl = panel.querySelector("#learnAgg");
   var curatedEl = panel.querySelector("#learnCurated");
   if (!aggEl) return;

@@ -125,6 +125,14 @@ for (const scheme of ["light", "dark"] as const) {
     await page.locator("#btnShare").click();
     const canvas = page.locator("#shareQr canvas");
     await expect(canvas).toBeVisible();
+    /* The canvas element exists the moment the modal opens; the qrcode generator is a lazy
+       import() and paints a frame or two later. Visible-but-unpainted reads as fully
+       transparent, which getImageData reports as rgb(0,0,0) — a plausible-looking "the QR is
+       black" failure that is really a race. Wait for real ink before sampling. */
+    await expect
+      .poll(() => canvas.evaluate((el: HTMLCanvasElement) =>
+        el.getContext("2d")!.getImageData(1, 1, 1, 1).data[3]))
+      .toBe(255);
 
     const paper = await canvas.evaluate((el: HTMLCanvasElement) => {
       // margin is 1 module wide, so the top-left pixel is always background ("light").

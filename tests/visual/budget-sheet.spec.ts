@@ -41,7 +41,7 @@ async function openBudgetWithData(page: Page) {
     localStorage.setItem("tg-split-" + (wrap.dataset.sk || "guide"), JSON.stringify(seed));
   }, SEED);
   await page.reload({ waitUntil: "networkidle" });
-  await page.locator("#gtab-split").click();
+  await page.locator('.grail-stop[data-kind="tools"]').click();
 }
 
 /** Click the button with print stubbed, and report how many times it fired. */
@@ -63,7 +63,7 @@ test("the PDF button stays hidden until there is spending, then appears", async 
     localStorage.removeItem("tg-split-" + (wrap.dataset.sk || "guide"));
   });
   await page.reload({ waitUntil: "networkidle" });
-  await page.locator("#gtab-split").click();
+  await page.locator('.grail-stop[data-kind="tools"]').click();
   await expect(page.locator("#sSavePdf")).toBeHidden();
 
   await openBudgetWithData(page);

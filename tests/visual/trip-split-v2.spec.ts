@@ -38,7 +38,7 @@ async function openWith(page: Page, seed: unknown) {
     localStorage.setItem("tg-split-" + (wrap.dataset.sk || "guide"), JSON.stringify(s));
   }, seed);
   await page.reload({ waitUntil: "networkidle" });
-  await page.locator("#gtab-split").click();
+  await page.locator('.grail-stop[data-kind="tools"]').click();
 }
 
 function saved(page: Page) {

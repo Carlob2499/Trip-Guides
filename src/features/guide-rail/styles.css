@@ -66,25 +66,6 @@ body.chrome-yield .grail{transform:translateY(calc(-1 * var(--hdr-h)))}
 /* The dot belongs to the spine models; a pill marks itself by its fill. */
 .grail-dot{display:none}
 
-/* The R4 tool tabs, still inside #guideTabs so every silo that queries `.gtab[data-tab="split"]`
-   keeps resolving through one element. They are VISIBLE and reachable, set off as chrome after
-   a separator rule — exactly R4's treatment — until step 4 rehomes them into the Tools station.
-   They were briefly display:none here so the rail would show only the guide's own 13 stops, and
-   that was a real regression rather than a tidy intermediate: Playwright caught Budget, Trip
-   Split and the budget sheet becoming unreachable by actual interaction, because a display:none
-   button cannot be clicked by a person even though .click() from JS still fires on it. A step
-   that leaves a shipped tool unreachable is not "independently shippable".
-   They are .gtab-tool, never .grail-stop, so the station count stays the guide's own. */
-.grail-track > .gtab-tool{
-  flex:none;display:inline-flex;align-items:center;gap:.4rem;
-  min-height:40px;padding:0 12px;border:var(--rw) solid var(--rule2);border-radius:999px;
-  background:var(--card);color:var(--muted);
-  font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;cursor:pointer;
-  white-space:nowrap;
-}
-.grail-track > .gtab-tool:first-of-type{margin-left:.6rem;border-left-width:2px;border-left-color:var(--rule2)}
-.grail-track > .gtab-tool.gtab-active{background:var(--accent);color:var(--on-aink);border-color:var(--accent)}
-.grail-track > .gtab-tool:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 /* The progress line — the phone's replacement for a rail whose ends it cannot see.
    `left` and `width` transition here and nowhere else: one 280ms move on a discrete state

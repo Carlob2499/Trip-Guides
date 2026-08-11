@@ -16,17 +16,23 @@
 import Panel from "./Panel.astro";
 import Icon from "./Icon.astro";
 import TripSplit from "./TripSplit.astro";
-import JetLag from "./JetLag.astro";
 import ReminderRow from "./ReminderRow.astro";
 import { km } from "../features/trip-tools/index";
 import type { TripTools } from "../features/trip-tools/index";
 
 interface Props {
-  trips: TripTools[];
+  /* Absent when this renders as the guide's own Tools STATION, which after R5 is the only way
+     a reader reaches Tools (SUPERSEDES §1 retired the other three entry points). Present only
+     for a cross-trip surface that wants the picker. Optional rather than a second component:
+     two implementations of four tools is exactly how the guide's ledger and the screen's
+     ledger drift into disagreeing about what anyone owes. */
+  trips?: TripTools[];
   active: TripTools;
   base: string;
+  /** In-guide: the station is already inside the page, so it draws no masthead of its own. */
+  inGuide?: boolean;
 }
-const { trips, active, base } = Astro.props;
+const { trips, active, base, inGuide = false } = Astro.props;
 const r = active.record;
 const hol = active.holidays;
 const during = hol?.during ?? [];
@@ -36,28 +42,37 @@ const near = hol ? [...(hol.nearBefore ?? []), ...(hol.nearAfter ?? [])] : [];
 const bookAhead = r.reminders.filter((i) => i.book);
 const rest = r.reminders.filter((i) => !i.book);
 ---
-<div class="tools" data-storekey={r.storeKey}>
-  <header class="tools-head">
-    <p class="tools-kicker">TRIP TOOLS</p>
-    <h1 class="tools-title">{r.title}</h1>
-    <p class="tools-dek">
-      <a class="tools-guidelink" href={active.href}>Open the guide →</a>
-    </p>
+{/* `#tools` is the STABLE deep link into the station. The catblock around it is `#grp-12` on
+    Korea and `#grp-8` on the US — a guide-specific ordinal no outside surface can hardcode —
+    and guide-ui.js resolves any hash to its enclosing .catblock, so an id on this div is all
+    the hub needs to send a reader to the right station of the right guide. */}
+<div class="tools" id={inGuide ? "tools" : undefined} data-storekey={r.storeKey}>
+  {/* In-guide, the station is already inside a page that says whose trip this is, and the rail's
+      context line above it already reads "Tools" — a second title and a link back to the guide
+      you are standing in would be the same datum rendered as two different things. */}
+  {!inGuide && (
+    <header class="tools-head">
+      <p class="tools-kicker">TRIP TOOLS</p>
+      <h1 class="tools-title">{r.title}</h1>
+      <p class="tools-dek">
+        <a class="tools-guidelink" href={active.href}>Open the guide →</a>
+      </p>
 
-    {/* The trip selector the README puts "in the tool rail" — a real control, styled as
-        pills rather than bare text (CLAUDE.md: clickability must be obvious). The current
-        trip stays IN the list and is marked, never removed: a picker that hides where you
-        are makes the set look like it shrank. */}
-    <nav class="tools-picker" aria-label="Choose a trip">
-      {trips.map((t) => (
-        <a class:list={["tools-trip", t.record.slug === r.slug && "tools-trip--on"]}
-           href={`${base}/tools/${t.record.slug}/`}
-           aria-current={t.record.slug === r.slug ? "page" : undefined}>
-          {t.record.title}
-        </a>
-      ))}
-    </nav>
-  </header>
+      {trips && trips.length > 1 && (
+        /* The current trip stays IN the list and is marked, never removed: a picker that hides
+           where you are makes the set look like it shrank. */
+        <nav class="tools-picker" aria-label="Choose a trip">
+          {trips.map((t) => (
+            <a class:list={["tools-trip", t.record.slug === r.slug && "tools-trip--on"]}
+               href={`${base}/tools/${t.record.slug}/`}
+               aria-current={t.record.slug === r.slug ? "page" : undefined}>
+              {t.record.title}
+            </a>
+          ))}
+        </nav>
+      )}
+    </header>
+  )}
 
   {/* The same self-describing grid the guides declare — one scope per trip, so collapse
       state and panel order are remembered per trip rather than bleeding across the picker. */}
@@ -69,14 +84,11 @@ const rest = r.reminders.filter((i) => !i.book);
     </Panel>
 
     {/* ── 2. JETLAG ─────────────────────────────────────────────────────── */}
-    <Panel id={`tools-jetlag-${r.slug}`} kicker="JETLAG" title="Landing clock"
-           hint={r.tz ? `Destination zone ${r.tz}. The offset is computed live, so it stays right across a daylight-saving change.` : "How far your body clock has to move, and how long that takes."}>
-      {r.tz ? (
-        <JetLag destTz={r.tz} open />
-      ) : (
-        <p class="tools-blank">This trip has no time zone on record yet, so there is nothing honest to calculate.</p>
-      )}
-    </Panel>
+    {/* Jetlag was the fifth tool and is not one any more (SUPERSEDES.md §5): its single useful
+        output is the body-clock reading at 11pm local on arrival night — a fact about the
+        FLIGHT, read once before departure, not an instrument you return to mid-trip. It renders
+        in the guide's Plan group instead (JetLag.astro, mounted by GuideLayout). src/lib/jetlag.ts
+        and src/lib/tz-offset.ts are untouched and keep their tests; only the placement changed. */}
 
     {/* ── 3. CLOSURES ───────────────────────────────────────────────────── */}
     <Panel id={`tools-closures-${r.slug}`} kicker="CLOSURES" title="What's shut, and when"
@@ -238,9 +250,19 @@ const rest = r.reminders.filter((i) => !i.book);
         </div>
       </Panel>
     )}
+
+    {/* Panels the GUIDE owns rather than this screen — Reminders is the group's shared
+        scratchpad and is Firebase-backed per storeKey, which this screen has no business
+        knowing about. It lands inside the grid so it sits with the other tool panels rather
+        than below them; a guide that passes nothing leaves the grid exactly as it was. */}
+    <slot />
   </div>
 
-  <p class="tools-foot">
-    <a href={`${base}/`}><Icon name="chevron" size={12} /> All trips</a>
-  </p>
+  {/* Screen chrome, not station chrome: inside a guide the masthead is already the way back to
+      the hub, and a second one at the foot of a tool panel reads as a different destination. */}
+  {!inGuide && (
+    <p class="tools-foot">
+      <a href={`${base}/`}><Icon name="chevron" size={12} /> All trips</a>
+    </p>
+  )}
 </div>

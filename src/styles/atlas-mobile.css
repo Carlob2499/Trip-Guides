@@ -28,7 +28,8 @@
      The FAB menu keeps the labelled version, so nothing is lost and the header gets the room
      back — which is the same complaint the WORLD|TABLE rule below is answering.
      Desktop is untouched: there the label renders and the CTA can say what it is. */
-  .atlas-header-btn--tools,
+  /* --tools is gone entirely now (R5 retired the standalone screen); the selector went with it
+     rather than lingering as a rule for an element that cannot exist. */
   .atlas-header-btn--cta { display: none; }
   .atlas-header-btn-label { display: none; }
 

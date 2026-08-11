@@ -5,12 +5,10 @@
    AND on a page missing `viewport-fit=cover`. The two states look identical in a desktop
    browser, so the whole notch/home-indicator layer shipped inert and nothing failed.
 
-   Two assertions, deliberately split:
-   1. STATIC — every page carries viewport-fit=cover. Without it the insets never report.
-   2. BEHAVIOURAL — with non-zero insets injected at :root (standing in for a real cutout,
-      which no headless browser reports), the chrome that must move actually moves. A page
-      could carry the meta tag and still hard-code its padding; this is what proves it does
-      not. */
+   Two assertions, split: STATIC — every page carries viewport-fit=cover, without which the
+   insets never report. BEHAVIOURAL — with non-zero insets injected at :root (standing in for a
+   cutout no headless browser reports), the chrome that must move actually moves; a page could
+   carry the meta tag and still hard-code its padding. */
 // @protects-file Nothing hides under a phone's notch or home bar.
 
 import { test, expect } from "@playwright/test";
@@ -20,7 +18,6 @@ const PAGES = [
   ["guide", "/Trip-Guides/guides/korea/"],
   ["about", "/Trip-Guides/about/"],
   ["new intake", "/Trip-Guides/new/"],
-  ["trip tools", "/Trip-Guides/tools/korea/"],
 ] as const;
 
 for (const [name, path] of PAGES) {

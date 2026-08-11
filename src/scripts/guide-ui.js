@@ -79,13 +79,15 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           var catblocks  = Array.prototype.slice.call(document.querySelectorAll(".catblock"));
           // Non-numeric tabs (each a standalone panel, not a section group).
           // Add a new one here + its DOM id — everything else generalizes.
-          var specialPanels = {
-            split:  document.getElementById("tripSplit"),
-            vote:   document.getElementById("tripVote"),
-            learn:  document.getElementById("tripLearn"),
-            remind: document.getElementById("tripRemind"),
-            kit:    document.getElementById("tripKit"),
-          };
+          /* R5 left ONE special panel. Budget and Reminders moved inside the Tools station
+             (a real numbered station, routed like any other), Vote and Trip kit are retired,
+             and Learnings becomes the Field log station. The map stays rather than being
+             deleted: the router's string-vs-index branch is what lets a station be addressed
+             by name, and Field log will use it. */
+          /* R5 left NO special panels: every destination is a numbered station now, including
+             Field log and Tools. The map and the router's string-vs-index branch stay because
+             they cost nothing and a future station addressed by name would need them again. */
+          var specialPanels = {};
           // Via Object.prototype, not specialPanels.hasOwnProperty: the keys come from a URL
           // hash and localStorage, so a tab named "hasOwnProperty" or "__proto__" would
           // otherwise call something that isn't the check we meant.

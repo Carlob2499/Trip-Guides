@@ -204,7 +204,6 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
         <button type="button" class="atlas-toggle-btn" data-atlas-mode-btn="table" aria-pressed="true">Table</button>
       </div>
       <div class="atlas-header-actions">
-        <a class="atlas-header-btn atlas-header-btn--tools" href={`${base}/tools/`}>Tools</a>
         <a class="atlas-header-btn atlas-header-btn--cta" href={`${base}/new/`}>＋<span class="atlas-header-btn-label"> New guide</span></a>
         <button type="button" id="btnDark" class="atlas-header-btn atlas-header-icon" aria-label="Switch to dark mode" title="Switch to dark mode">
           <Icon name="moon" size={16} />
@@ -332,7 +331,6 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
               </div>
               <div class="atlas-dock-actions">
                 <a class="atlas-dock-cta" href={`${base}/guides/${quick.g.id}/`}>Open the sheet →</a>
-                <a class="atlas-dock-alt" href={`${base}/tools/${quick.g.id}/`}>Tools</a>
               </div>
             </div>
           </div>
@@ -346,10 +344,14 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
           <span class="atlas-menusheet-kicker">The map</span>
           <button type="button" data-atlas-menu-fit>Fit world</button>
           <button type="button" data-atlas-menu-spin>Pause</button>
-          {/* The README warns that the mobile ☰ is the ONLY route into Tools on a phone, so
-              an omission here breaks the feature entirely there. It is unconditional for
-              exactly that reason — /tools/ picks its own trip and never needs `quick`. */}
-          <a href={`${base}/tools/`}>Tools</a>
+          {/* The README's warning stands — on a phone the ☰ is the only route in — but the
+              destination moved: R5 retired the standalone screen, so tools belong to a trip
+              and there is no generic /tools/ to send anyone to. The link now needs `quick`,
+              and when the hub is featuring nothing it renders NOTHING rather than a door onto
+              a deleted route. */}
+          {quick && (
+            <a href={`${base}/guides/${quick.g.id}/#tools`}>{quick.g.data.title} tools</a>
+          )}
           <a class="atlas-menusheet-new" href={`${base}/new/`}>＋ New guide</a>
         </div>
 
@@ -539,10 +541,11 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
         </ul>
       )}
 
-      {/* README §5's "TRIP TOOLS row" — one tap into the standalone Tools screen, on the
-          trip this hub is featuring. The screen's own picker reaches the other three. */}
+      {/* README §5's "TRIP TOOLS row", re-aimed: the tools are a station of the featured
+          trip's own guide now, not a screen with a picker. The other three trips are reached
+          the way everything else about them is — by opening that guide. */}
       {quick && (
-        <a class="atlas-toolsrow" href={`${base}/tools/${quick.g.id}/`}>
+        <a class="atlas-toolsrow" href={`${base}/guides/${quick.g.id}/#tools`}>
           <span class="atlas-toolsrow-label">Trip tools</span>
           <span>{quick.g.data.title} →</span>
         </a>

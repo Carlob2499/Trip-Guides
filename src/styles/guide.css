@@ -124,9 +124,9 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
    back on release (var(--ease-spring) overshoot on the transform channel) for a
    physical, app-like "pressed" feel. Interactive controls only — not cards or
    inputs, and suppressed for users who ask to reduce motion. */
-.gtab:active,.sc-add-btn:active,.sc-add-expense-btn:active,.scm-btn:active,.vo-btn:active,.split-del:active,.jl-toggle:active,.anchor-btn:active,.topbar-btn:active{transform:scale(.94)}
+.gtab:active,.sc-add-btn:active,.sc-add-expense-btn:active,.scm-btn:active,.split-del:active,.jl-toggle:active,.anchor-btn:active,.topbar-btn:active{transform:scale(.94)}
 @media(prefers-reduced-motion:reduce){
-  .gtab:active,.sc-add-btn:active,.sc-add-expense-btn:active,.scm-btn:active,.vo-btn:active,.split-del:active,.jl-toggle:active,.anchor-btn:active,.topbar-btn:active{transform:none}
+  .gtab:active,.sc-add-btn:active,.sc-add-expense-btn:active,.scm-btn:active,.split-del:active,.jl-toggle:active,.anchor-btn:active,.topbar-btn:active{transform:none}
 }
 
 /* === LAYOUT SHELL ============================================================ */

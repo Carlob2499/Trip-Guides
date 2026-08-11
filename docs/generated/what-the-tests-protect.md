@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1763 checks · 1763 carry a stated promise · 150 files
+1769 checks · 1769 carry a stated promise · 150 files
 
 ## Can everyone read it
 
@@ -56,20 +56,19 @@ nothing ships.
 
 ## Money, tools and taking it with you
 
-**Every route into the Tools screen arrives carrying that trip's own data.**
+**A guide's tools run on that guide's own data, and no door leads to the deleted screen.**
 
-- the screen renders every tool for the named trip  <sub>tests/visual/trip-tools.spec.ts:26</sub>
-- the calculator is on the guide's own ledger key, not a second one  <sub>tests/visual/trip-tools.spec.ts:36</sub>
-- no budget figure from the guide has leaked into the split panel  <sub>tests/visual/trip-tools.spec.ts:44</sub>
-- entry point: the hub header's TOOLS button lands on a loaded screen  <sub>tests/visual/trip-tools.spec.ts:53</sub>
-- entry point: the table's TRIP TOOLS row lands on a loaded screen  <sub>tests/visual/trip-tools.spec.ts:60</sub>
-- entry point: the guide's Groups sheet reaches the screen for that trip  <sub>tests/visual/trip-tools.spec.ts:70</sub>
-- entry point: the hub's mobile map menu reaches the screen  <sub>tests/visual/trip-tools.spec.ts:79</sub>
-- the trip picker keeps the current trip in the list and marks it  <sub>tests/visual/trip-tools.spec.ts:88</sub>
-- switching trips switches what the tools run on  <sub>tests/visual/trip-tools.spec.ts:95</sub>
-- reminder ticks persist per trip, including the ones behind the disclosure  <sub>tests/visual/trip-tools.spec.ts:104</sub>
-- route order says straight-line, so nobody reads it as walking time  <sub>tests/visual/trip-tools.spec.ts:118</sub>
-- the screen works with JavaScript disabled  <sub>tests/visual/trip-tools.spec.ts:123</sub>
+- the station renders every tool for the guide it lives in  <sub>tests/visual/trip-tools.spec.ts:25</sub>
+- the jet-lag panel is NOT here — it moved to Plan, and did not get left in both  <sub>tests/visual/trip-tools.spec.ts:35</sub>
+- Reminders kept its panel when its tool tab was retired  <sub>tests/visual/trip-tools.spec.ts:46</sub>
+- the calculator is on the guide's own ledger key  <sub>tests/visual/trip-tools.spec.ts:57</sub>
+- no budget figure from the guide has leaked into the split panel  <sub>tests/visual/trip-tools.spec.ts:66</sub>
+- reminder ticks persist per guide, including the ones behind the disclosure  <sub>tests/visual/trip-tools.spec.ts:73</sub>
+- route order says straight-line, so nobody reads it as walking time  <sub>tests/visual/trip-tools.spec.ts:86</sub>
+- no surface still links to the retired /tools/ screen  <sub>tests/visual/trip-tools.spec.ts:93</sub>
+- the hub's TRIP TOOLS row lands on the featured guide's own station  <sub>tests/visual/trip-tools.spec.ts:103</sub>
+- the phone's ☰ menu still reaches tools — the only route in at that width  <sub>tests/visual/trip-tools.spec.ts:113</sub>
+- the station's content is in the page without JavaScript  <sub>tests/visual/trip-tools.spec.ts:120</sub>
 
 **The map and calendar files a guide hands out are valid, and open in real apps.**
 
@@ -114,8 +113,8 @@ nothing ships.
 
 **Nothing hides under a phone's notch or home bar.**
 
-- …: declares viewport-fit=cover, or every safe-area inset is dead  <sub>tests/visual/safe-area.spec.ts:27</sub>
-- guide chrome pads for a cutout instead of hard-coding its offsets  <sub>tests/visual/safe-area.spec.ts:34</sub>
+- …: declares viewport-fit=cover, or every safe-area inset is dead  <sub>tests/visual/safe-area.spec.ts:24</sub>
+- guide chrome pads for a cutout instead of hard-coding its offsets  <sub>tests/visual/safe-area.spec.ts:31</sub>
 
 **Nothing runs off the side of a phone screen, so no sentence ever loses its ending.**
 
@@ -139,12 +138,13 @@ nothing ships.
 
 **The '?' explains a control without covering the page or losing half its own sentence.**
 
-- a panel's explanation is off the screen but in the page  <sub>tests/visual/hint.spec.ts:9</sub>
-- hovering reveals it, and so does keyboard focus — both without JavaScript  <sub>tests/visual/hint.spec.ts:23</sub>
-- tapping opens it — the case hover cannot serve — and Escape closes it  <sub>tests/visual/hint.spec.ts:39</sub>
-- asking what a panel is does not collapse the panel  <sub>tests/visual/hint.spec.ts:53</sub>
-- only one hint is open at a time  <sub>tests/visual/hint.spec.ts:64</sub>
-- every hint bubble stays on screen when opened at 375px  <sub>tests/visual/hint.spec.ts:79</sub>
+- a panel's explanation is off the screen but in the page  <sub>tests/visual/hint.spec.ts:35</sub>
+- hovering reveals it, and so does keyboard focus — on CSS alone  <sub>tests/visual/hint.spec.ts:49</sub>
+- with no script at all, the explanation is still IN the document  <sub>tests/visual/hint.spec.ts:65</sub>
+- tapping opens it — the case hover cannot serve — and Escape closes it  <sub>tests/visual/hint.spec.ts:80</sub>
+- asking what a panel is does not collapse the panel  <sub>tests/visual/hint.spec.ts:94</sub>
+- only one hint is open at a time  <sub>tests/visual/hint.spec.ts:105</sub>
+- every hint bubble stays on screen when opened at 375px  <sub>tests/visual/hint.spec.ts:120</sub>
 
 **The research progress page animates smoothly instead of stuttering.**
 
@@ -788,6 +788,20 @@ nothing ships.
 - drops an injection-shaped section rather than forwarding it  <sub>src/features/change-request/model/change-request.test.ts:109</sub>
 - caps an over-long description so it can't be silently truncated by the URL  <sub>src/features/change-request/model/change-request.test.ts:115</sub>
 
+**A shared budget with nothing in it says so, instead of inventing a debt.**
+
+- ⌁ reports zero, not a guess  <sub>src/features/trip-split/__tests__/empty.test.ts:15</sub>
+- ⌁ leaves every net at zero so the UI can render an em dash, never +0.00  <sub>src/features/trip-split/__tests__/empty.test.ts:19</sub>
+- ⌁ produces no transfers, so settle-up has nothing to offer  <sub>src/features/trip-split/__tests__/empty.test.ts:31</sub>
+- found the silo's real source files  <sub>src/features/trip-split/__tests__/empty.test.ts:52</sub>
+- defines no seeding function anywhere in the silo  <sub>src/features/trip-split/__tests__/empty.test.ts:56</sub>
+- never reads a guide's budget section — the one import that would make seeding possible  <sub>src/features/trip-split/__tests__/empty.test.ts:62</sub>
+- ⌁ takes the guide's day count as a divisor and never as a row  <sub>src/features/trip-split/__tests__/empty.test.ts:70</sub>
+- splits one expense equally across three, and the nets sum to zero  <sub>src/features/trip-split/__tests__/empty.test.ts:88</sub>
+- bills an UNKNOWN payer to the first member rather than dropping the expense  <sub>src/features/trip-split/__tests__/empty.test.ts:95</sub>
+- takes a two-person split from the PARTICIPANT SET, never an invented per value  <sub>src/features/trip-split/__tests__/empty.test.ts:107</sub>
+- sums paid to the total for a random 20-expense set (property)  <sub>src/features/trip-split/__tests__/empty.test.ts:117</sub>
+
 **A shared link points at the exact section being shared, correctly encoded.**
 
 - adds a #grp-N deep link for a numbered active tab  <sub>src/features/share/model/share-links.test.ts:9</sub>
@@ -826,14 +840,6 @@ nothing ships.
 - locks once the grace window is fully past  <sub>src/features/firebase/model/room.test.ts:144</sub>
 - an UNDATED trip is never locked — guessing about a live trip is the worse failure  <sub>src/features/firebase/model/room.test.ts:148</sub>
 - the grace window is honoured exactly, and is configurable  <sub>src/features/firebase/model/room.test.ts:153</sub>
-
-**A shared vote link carries the options intact and rejects a tampered one.**
-
-- round-trips a vote state through the URL-safe payload  <sub>src/features/voting/model/vote-link.test.ts:9</sub>
-- produces a URL-safe payload (no + / = that a query string would mangle)  <sub>src/features/voting/model/vote-link.test.ts:13</sub>
-- round-trips non-ASCII option text (Hangul survives the utf-8 base64)  <sub>src/features/voting/model/vote-link.test.ts:18</sub>
-- returns null for garbage or a non-vote payload instead of throwing  <sub>src/features/voting/model/vote-link.test.ts:23</sub>
-- accepts only objects carrying an options array  <sub>src/features/voting/model/vote-link.test.ts:32</sub>
 
 **A suggested stop order is genuinely shorter than the planned one, or is not offered.**
 
