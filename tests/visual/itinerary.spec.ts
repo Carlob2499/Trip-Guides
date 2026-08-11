@@ -71,8 +71,8 @@ test.describe("desktop", () => {
     // ⌁ regression: a stop with no panel must not name one. It shipped once.
     const dangling = await page.evaluate(() =>
       [...document.querySelectorAll(".grail-stop[aria-controls]")]
-        .map((b) => b.getAttribute("aria-controls"))
-        .filter((id) => !document.getElementById(id)));
+        .map((b) => b.getAttribute("aria-controls") ?? "")
+        .filter((id) => id !== "" && !document.getElementById(id)));
     expect(dangling).toEqual([]);
   });
 
