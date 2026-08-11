@@ -48,7 +48,7 @@ async function prep(page: Page, path: string, scheme: "light" | "dark", vp: View
   // tool-tabs resolve this way — the 4th still clips against the page's own overflow-x:clip at this
   // viewport width and is accounted for in the incomplete allowlist below, not silently dropped).
   await page.addStyleTag({
-    content: `[role=tabpanel]{display:block !important}.guide-tabs{overflow:visible !important}`,
+    content: `[role=region]{display:block !important}.guide-tabs{overflow:visible !important}`,
   });
 
   /* Open the SOS sheet if this page has one (Stage F, 2026-08-09). It is `hidden` until
@@ -196,7 +196,7 @@ const DAY_SCRUB_STICKY_RANGE_WHY =
   "its overflow value changes. Fixed, .pnl-body-in only stays overflow:hidden while a Panel is " +
   "collapsed/collapsing (see styles.css); the day-scrub bar's sticky containing block now " +
   "legitimately reaches the real scrolling ancestor, exactly as intended. This gate's own " +
-  "[role=tabpanel]{display:block!important} override (forcing every .catblock tab group open at " +
+  "[role=region]{display:block!important} override (forcing every .catblock tab group open at " +
   "once, so hidden tabs still get audited) puts MULTIPLE .day-scrub bars from DIFFERENT tab " +
   "groups in the same forced-open page simultaneously — something a real visitor can never " +
   "produce, since only one .catblock is ever un-hidden at a time. axe's sticky heuristic then " +
@@ -331,7 +331,13 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     // kinds (#gtab-0..10 station-dot tabs + li > .check > .check-txt > b prose nodes under the
     // checkbox pseudo), verified node-by-node with an instrumented local run; CI's Linux font
     // metrics counted 36 on desktop (both schemes), mobile fewer, so desktop is the ceiling.
-    "color-contrast/pseudoContent": { max: 36, why: PSEUDO_CONTENT_WHY },
+// 36 -> 45: +9 net. R5's spine rail clamps each station label to two lines
+    // (-webkit-line-clamp, COMPONENTS.md §2), and axe reports a clamped box as pseudo content.
+    // Counted node-by-node: 13 .grail-label (korea's own station count) + 5 .gtab-txt +
+    // 24 <b> + 2 span[lang="ko"] + 1 #mastCredit = 45; the 13 are new and the four labels the
+    // retired tab strip contributed are gone, hence +9 rather than +13. Same mechanism, and the
+    // colour is .grail-stop{color:var(--muted)} on var(--bg) — pinned by atlas-tokens.test.ts.
+    "color-contrast/pseudoContent": { max: 45, why: PSEUDO_CONTENT_WHY },
     "color-contrast/shortTextContent": { max: 16, why: SHORT_TEXT_CONTENT_WHY },
     // 15 -> 19: R5's .day-leg-arrow '→' on each of korea's 8 day cards, minus 4 glyphs the arc
     // converted to real SVG (Icon.astro). Counted: 19 on desktop AND mobile.
@@ -344,7 +350,13 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     // venues. Counted node-by-node on an instrumented run rather than absorbed: 24
     // prov-dots + 10 .next-cta-arrow + 8 .day-leg-arrow + 1 dismiss ✕ = 43, all four
     // kinds already covered by the why above; no new kind of node appeared.
-    "color-contrast/nonBmp": { max: 43, why: NON_BMP_WHY },
+    // 43 -> 51: +8, R5's fold marks — one .fold-mark '▾' per day card on korea's 8 days
+    // (COMPONENTS.md §5). Counted node-by-node on an instrumented run, not absorbed as jitter:
+    // the tally is 10 .next-cta-arrow + 8 .day-leg-arrow + 8 .fold-mark + 20 .prov-dot +
+    // 4 photo-prov-dot + 1 .cold-open-x = 51, and only the .fold-mark group is new. Same
+    // mechanism the why already covers: an aria-hidden decorative glyph in a span that takes
+    // colour from var(--aink), a pair proven >=4.5:1 by atlas-tokens.test.ts.
+    "color-contrast/nonBmp": { max: 51, why: NON_BMP_WHY },
     "color-contrast/elmPartiallyObscured": { max: 1, why: ELM_PARTIALLY_OBSCURED_WHY },
     // 1 = the masthead h1 / the masthead .dek, counted per page on both schemes (desktop; mobile
     // renders the same masthead so the same max covers it).
@@ -394,7 +406,8 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     // #pnl-body-How-to-get-everywhere-on-this-trip and #pnl-body-Step-by-step-routes-... —
     // no new kind of node, same two mechanisms PSEUDO_CONTENT_WHY already covers. Mobile
     // renders fewer (its own max stands unchanged), so desktop is the ceiling.
-    "color-contrast/pseudoContent": { max: 34, why: PSEUDO_CONTENT_WHY },
+    // 34 -> 41: denmark's 10 clamped .grail-label station labels, same mechanism as korea.
+    "color-contrast/pseudoContent": { max: 41, why: PSEUDO_CONTENT_WHY },
     "color-contrast/shortTextContent": { max: 18, why: SHORT_TEXT_CONTENT_WHY },
     // 12 -> 10: SHRUNK (the rule these maxes live by) — the arc converted glyphs to real SVG;
     // denmark's 2 day-leg arrows arrive but more left. Counted: 10 desktop.
@@ -406,7 +419,9 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     // .prov-dot on SIGHTS items too. Counted node-by-node: 17 prov-dots +
     // 7 .next-cta-arrow + 2 .day-leg-arrow + 1 dismiss ✕ = 27, every kind already
     // documented in the why; no new kind appeared.
-    "color-contrast/nonBmp": { max: 27, why: NON_BMP_WHY },
+    // 27 -> 37: the same two R5 mechanisms as korea above, at DENMARK's own counts — its fold
+    // marks and arrows, not a shared constant. Measured 37; the guide has its own day count.
+    "color-contrast/nonBmp": { max: 37, why: NON_BMP_WHY },
     // Same two masthead nodes as korea's entries above — denmark is the measured worst case
     // (Painted Atlas daytime sky: h1 4.64:1 vs 3:1 needed; .dek 5.91:1 vs 4.5:1 needed).
     "color-contrast/bgGradient": { max: 1, why: MAST_BG_GRADIENT_WHY },
@@ -426,6 +441,24 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
    These are raises over the desktop numbers above, seeded from measurement rather than guessed,
    and only where mobile genuinely renders more. Where mobile renders FEWER, the desktop max
    stands as a (looser but safe) ceiling rather than being tracked twice. */
+const PILL_ROW_CLIPPED_WHY =
+  "R5 gave the PHONE a rail. The spine's phone model is a horizontally scrolling pill row " +
+  "(guide-rail/styles.css, .grail-track{overflow-x:auto} — a real, load-bearing rule, the same " +
+  "category as JLINE_CLIPPED_WHY and DAY_SWIPE_CLIPPED_WHY above), so on a 390px screen only the " +
+  "first few stops are in view and the rest sit past the scroller's right edge. axe declines a " +
+  "partially-clipped element's contrast because it cannot sample a midpoint that falls outside " +
+  "the visible box — a geometry artifact, not a colour judgement. Identified NODE BY NODE on an " +
+  "instrumented local run rather than absorbed as jitter: exactly #gtab-4 through #gtab-12's " +
+  ".grail-label (Sights, Daejeon & MSI, Gaming & anime, Food & shopping, Pokemon GO, Tokyo, " +
+  "Sources, Field log, Tools) — the nine of korea's thirteen stops that do not fit 390px. Stops " +
+  "0-3 are fully visible and axe measures them normally. The count is therefore a function of the " +
+  "guide's own station count, which is why it is korea (13 stops) that needs the entry. " +
+  "The real colour pair is provably safe independent of what axe could measure: an inactive pill " +
+  "is .grail-stop{color:var(--ink)} on the rail's .grail{background:var(--bg)}, and the active " +
+  "one is var(--on-aink) on var(--accent) — both pinned by src/styles/atlas-tokens.test.ts, the " +
+  "first at 15.60:1 in the R5 lifted Day palette. Desktop reports zero nodes of this key: the " +
+  "spine lays all thirteen stops out at once, so nothing is clipped.";
+
 const MOBILE_DELTA: Record<string, Record<string, Baseline>> = {
   hub: {
     // R3b (2026-08-05): the page-wide survey ground (.page-contours) put an inline SVG behind
@@ -445,6 +478,12 @@ const MOBILE_DELTA: Record<string, Record<string, Baseline>> = {
       max: 3,
       why: "Fixed .page-contours behind z-index:1 content — real paint order fine; measured as above.",
     },
+  },
+  "korea guide": {
+    // Measured 9 at 390px against 0 at 1280px — every stop past the pill row's right edge.
+    // Nine is korea's own overflow at this width (13 stops), not a shared constant; a guide with
+    // fewer stops clips fewer. Node-by-node identification is in PILL_ROW_CLIPPED_WHY.
+    "color-contrast/elmPartiallyObscured": { max: 9, why: PILL_ROW_CLIPPED_WHY },
   },
   "denmark guide": {
     // Measured 24 at 375px against 19 at 1280px — the same ol.steps li::before mechanism

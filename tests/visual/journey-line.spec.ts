@@ -1,4 +1,7 @@
-/* The desktop journey line (R3) — the track behind the guide tabs and its stations.
+/* The spine rail's line and its stations (R5; was R3's desktop journey line).
+
+   RETARGETED to the R5 rail, not rewritten: every property below survived the move, so deleting
+   this file with the R4 CSS would have retired the only gate holding them.
 
    Both defects this covers were GEOMETRY, invisible to every other gate: the rail and the
    stations were positioned by two unrelated hand-tuned offsets that disagreed by 6.5px, so
@@ -23,11 +26,13 @@ async function open(page: Page) {
     rail and the stations are positioned on. */
 async function centres(page: Page) {
   return page.evaluate(() => {
-    const nav = document.querySelector(".guide-tabs-nav")!;
-    const rail = getComputedStyle(nav, "::before");
-    const dot = getComputedStyle(document.querySelector(".gtab:not(.gtab-tool)")!, "::after");
-    const mid = (s: CSSStyleDeclaration) => parseFloat(s.bottom) + parseFloat(s.height) / 2;
-    return { rail: mid(rail), dot: mid(dot), overlay: getComputedStyle(nav, "::after").content };
+    const track = document.querySelector(".grail-track")!;
+    // Real boxes, not parsed offsets: ::before and a real element compute in different spaces.
+    const line = getComputedStyle(track, "::before");
+    const trackTop = track.getBoundingClientRect().top;
+    const lineMid = trackTop + parseFloat(line.top) + parseFloat(line.height) / 2;
+    const d = document.querySelector(".grail-stop .grail-dot")!.getBoundingClientRect();
+    return { rail: lineMid, dot: d.top + d.height / 2, overlay: getComputedStyle(track, "::after").content };
   });
 }
 
@@ -45,9 +50,15 @@ test("no second bar slides along the track over the circles", async ({ page }) =
 
 function fillOf(page: Page, nth: number) {
   return page.evaluate((i) => {
-    const t = document.querySelectorAll(".gtab:not(.gtab-tool)")[i];
-    const m = getComputedStyle(t, "::after").backgroundImage.match(/([\d.]+)%/);
-    return m ? parseFloat(m[1]) : -1;
+    const stop = document.querySelectorAll(".grail-stop")[i] as HTMLElement;
+    const dot = stop.querySelector(".grail-dot")!;
+    // Value from --st-fill (Chrome resolves the gradient's calc() stops to px), consumption
+    // asserted separately — a variable updating forever behind an unpainted dot is a silent pass.
+    const painted = getComputedStyle(dot).backgroundImage;
+    if (!painted.includes("gradient") && !stop.hasAttribute("data-visited")) return -1;
+    if (stop.hasAttribute("data-visited")) return 100;
+    const raw = getComputedStyle(stop).getPropertyValue("--st-fill").trim();
+    return raw === "" ? 0 : parseFloat(raw);
   }, nth);
 }
 
@@ -70,7 +81,7 @@ test("the station you are in fills as you scroll it", async ({ page }) => {
 
 test("a section you have moved on from stays solid, and one you have not is empty", async ({ page }) => {
   await open(page);
-  const tabs = page.locator(".gtab:not(.gtab-tool)");
+  const tabs = page.locator(".grail-stop");
   await tabs.nth(2).click();
 
   await expect(tabs.nth(0)).toHaveAttribute("data-visited", "");
@@ -82,8 +93,8 @@ test("a section you have moved on from stays solid, and one you have not is empt
 
 test("the route walked survives a reload within the same visit", async ({ page }) => {
   await open(page);
-  await page.locator(".gtab:not(.gtab-tool)").nth(1).click();
+  await page.locator(".grail-stop").nth(1).click();
   await page.reload({ waitUntil: "networkidle" });
   // sessionStorage, not localStorage — next week's visit is a new journey.
-  await expect(page.locator(".gtab:not(.gtab-tool)").nth(0)).toHaveAttribute("data-visited", "");
+  await expect(page.locator(".grail-stop").nth(0)).toHaveAttribute("data-visited", "");
 });

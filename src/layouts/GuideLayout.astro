@@ -737,9 +737,15 @@ const tripSummary = buildSummary(guide);
       <nav class="grail" aria-label="Guide sections" data-hint-anchor>
         <div class="grail-track" id="guideTabs">
           {stations.map((s) => (
+            /* aria-controls ONLY where the panel it names actually exists. Field log and Tools
+               are stations before they are panels (steps 5 and 4 build those), and an
+               aria-controls pointing at a missing id is a critical aria-valid-attr-value
+               violation — axe caught exactly this on Korea's #gtab-11/#gtab-12 and Denmark's
+               #gtab-8/#gtab-9. Naming a control that is not there is worse than naming
+               nothing: it promises a screen-reader user a region they can never reach. */
             <button class="gtab grail-stop" type="button" id={`gtab-${s.index}`}
                     data-tab={s.index} data-full={s.full} data-kind={s.kind}
-                    aria-controls={`grp-${s.index}`}
+                    aria-controls={s.kind === "group" ? `grp-${s.index}` : undefined}
                     aria-current={s.index === 0 ? "true" : undefined}>
               <span class="grail-dot" aria-hidden="true"></span>
               <span class="grail-label">{s.full}</span>
@@ -750,15 +756,15 @@ const tripSummary = buildSummary(guide);
               rail so the stop count stays the guide's own — 13 for Korea, not 18. Step 4
               rehomes them into the Tools station and deletes this block. */}
           <button class="gtab gtab-tool gtab-split" type="button" id="gtab-split" data-tab="split"
-                  aria-controls="tripSplit" aria-label="Budget calculator" title="Budget calculator" hidden><Icon name="budget" class="gtab-ico" /><span class="gtab-txt">Budget</span></button>
+                  aria-controls="tripSplit" aria-label="Budget calculator" title="Budget calculator"><Icon name="budget" class="gtab-ico" /><span class="gtab-txt">Budget</span></button>
           <button class="gtab gtab-tool gtab-vote" type="button" id="gtab-vote" data-tab="vote"
-                  aria-controls="tripVote" aria-label="Group vote" title="Group vote" hidden><Icon name="vote" class="gtab-ico" /><span class="gtab-txt">Vote</span></button>
+                  aria-controls="tripVote" aria-label="Group vote" title="Group vote"><Icon name="vote" class="gtab-ico" /><span class="gtab-txt">Vote</span></button>
           <button class="gtab gtab-tool gtab-remind" type="button" id="gtab-remind" data-tab="remind"
-                  aria-controls="tripRemind" aria-label="Reminders" title="Reminders" hidden><Icon name="remind" class="gtab-ico" /><span class="gtab-txt">Reminders</span></button>
+                  aria-controls="tripRemind" aria-label="Reminders" title="Reminders"><Icon name="remind" class="gtab-ico" /><span class="gtab-txt">Reminders</span></button>
           <button class="gtab gtab-tool gtab-learn" type="button" id="gtab-learn" data-tab="learn"
                   aria-controls="tripLearn" aria-label="Trip learnings" title="Trip learnings" hidden><Icon name="learn" class="gtab-ico" /><span class="gtab-txt">Learnings</span></button>
           <button class="gtab gtab-tool gtab-kit" type="button" id="gtab-kit" data-tab="kit"
-                  aria-controls="tripKit" aria-label="Trip kit" title="Trip kit" hidden><Icon name="kit" class="gtab-ico" /><span class="gtab-txt">Trip kit</span></button>
+                  aria-controls="tripKit" aria-label="Trip kit" title="Trip kit"><Icon name="kit" class="gtab-ico" /><span class="gtab-txt">Trip kit</span></button>
         </div>
         {/* Phone only: the ordinal position a rail with unreachable ends cannot give. */}
         <div class="grail-prog" aria-hidden="true"><span class="grail-fill"></span></div>

@@ -111,7 +111,15 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
    INTO each station dot. Nothing in R5 specifies it and nothing in R5 forbids it; guide-ui.js
    still writes the value, and a station that fills as you read it is the one part of the old
    horizon that told the reader something the new one otherwise would not. */
-.read-prog{display:none}
+
+/* The fixed reading-progress bar is the PHONE's percentage readout and retires above 900px,
+   where the rail's own station fill carries the same number — one object, one meaning, per
+   viewport. The media query is load-bearing and was briefly lost when the R4 block around it
+   was deleted: without it .read-prog is display:none at EVERY width and the phone loses its
+   progress bar entirely. A viewport query rather than a container one on purpose — .read-prog
+   is fixed page chrome, positioned against the viewport, which is the one thing chrome may
+   legitimately ask about. */
+@media(min-width:900px){.read-prog{display:none}}
 /* Tactile press feedback — guide action buttons compress on :active and spring
    back on release (var(--ease-spring) overshoot on the transform channel) for a
    physical, app-like "pressed" feel. Interactive controls only — not cards or

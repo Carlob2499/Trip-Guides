@@ -23,7 +23,7 @@ async function openStory(page: Page) {
   await page.goto(KOREA, { waitUntil: "networkidle" });
   // The launcher lives inside DaysBlock, which sits in a tab panel that is `hidden` unless its
   // tab is the active one. Same override the whole-page a11y gate uses to reach non-default tabs.
-  await page.addStyleTag({ content: `[role=tabpanel]{display:block !important}` });
+  await page.addStyleTag({ content: `[role=region]{display:block !important}` });
   await page.locator("[data-story-open]").first().click();
   const overlay = page.locator(".sm-overlay");
   await expect(overlay).toBeVisible();

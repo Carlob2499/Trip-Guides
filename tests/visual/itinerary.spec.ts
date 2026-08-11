@@ -52,20 +52,28 @@ test.describe("desktop", () => {
     await expect(page.locator("#grp-3")).toBeHidden();
   });
 
-  test("tablist ARIA: ArrowRight roves focus + activates the next tab, panels are labelled tabpanels", async ({ page }) => {
+  test("rail ARIA: ArrowRight roves focus + activates the next station, panels are labelled regions", async ({ page }) => {
+    // R5: a <nav> of buttons, not a tablist — see BEHAVIOR.md §4 and the rail's own markup.
     await open(page);
     await page.locator('.gtab[data-tab="0"]').focus();
     await page.keyboard.press("ArrowRight");
     // Automatic activation: focus follows AND the panel switches (roving tabindex + APG keys).
     expect(await activeTab(page)).toBe("1");
     expect(await page.evaluate(() => document.activeElement?.getAttribute("data-tab"))).toBe("1");
-    // Only the active tab is in the tab order (roving tabindex).
+    // Only the active station is in the tab order (roving tabindex).
     expect(await page.locator('.gtab[data-tab="0"]').getAttribute("tabindex")).toBe("-1");
     expect(await page.locator('.gtab[data-tab="1"]').getAttribute("tabindex")).toBe("0");
-    // The tab points at its panel, and the panel is a labelled tabpanel.
     expect(await page.locator('.gtab[data-tab="1"]').getAttribute("aria-controls")).toBe("grp-1");
-    await expect(page.locator("#grp-1")).toHaveAttribute("role", "tabpanel");
+    await expect(page.locator("#grp-1")).toHaveAttribute("role", "region");
     await expect(page.locator("#grp-1")).toHaveAttribute("aria-labelledby", "gtab-1");
+    // The active stop is marked with aria-current, and it is the ONLY one.
+    await expect(page.locator('.grail-stop[aria-current="true"]')).toHaveCount(1);
+    // ⌁ regression: a stop with no panel must not name one. It shipped once.
+    const dangling = await page.evaluate(() =>
+      [...document.querySelectorAll(".grail-stop[aria-controls]")]
+        .map((b) => b.getAttribute("aria-controls"))
+        .filter((id) => !document.getElementById(id)));
+    expect(dangling).toEqual([]);
   });
 
   test("day-rail: a day chip becomes active; one chip per day", async ({ page }) => {

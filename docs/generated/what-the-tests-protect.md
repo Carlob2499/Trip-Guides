@@ -13,10 +13,10 @@ nothing ships.
 
 **Anyone can read every screen — text stays legible and controls stay usable, in both light and dark.**
 
-- form controls are >=16px so iOS never zoom-traps  <sub>tests/visual/a11y.spec.ts:470</sub>
-- every page passes an automated accessibility scan  <sub>tests/visual/a11y.spec.ts:513</sub>
-- each guide uses its own readable accent colour, not another guide's  <sub>tests/visual/a11y.spec.ts:601</sub>
-- what's-next banner is legible  <sub>tests/visual/a11y.spec.ts:635</sub>
+- form controls are >=16px so iOS never zoom-traps  <sub>tests/visual/a11y.spec.ts:509</sub>
+- every page passes an automated accessibility scan  <sub>tests/visual/a11y.spec.ts:552</sub>
+- each guide uses its own readable accent colour, not another guide's  <sub>tests/visual/a11y.spec.ts:640</sub>
+- what's-next banner is legible  <sub>tests/visual/a11y.spec.ts:674</sub>
 
 **Search reaches anything in a guide, from anywhere in it.**
 
@@ -187,15 +187,15 @@ nothing ships.
 - desktop  <sub>tests/visual/itinerary.spec.ts:34</sub>
 - deep-link #grp-3 lands on Itinerary (guide-ui hash routing beats jump-to-today)  <sub>tests/visual/itinerary.spec.ts:38</sub>
 - clicking a numbered tab switches the visible panel (guide-ui + scroll-memory)  <sub>tests/visual/itinerary.spec.ts:45</sub>
-- tablist ARIA: ArrowRight roves focus + activates the next tab, panels are labelled tabpanels  <sub>tests/visual/itinerary.spec.ts:55</sub>
-- day-rail: a day chip becomes active; one chip per day  <sub>tests/visual/itinerary.spec.ts:71</sub>
-- spine: a reading-rail tick drives the real guide tab  <sub>tests/visual/itinerary.spec.ts:81</sub>
-- spine: read ticks fill by transform, not by animating height  <sub>tests/visual/itinerary.spec.ts:95</sub>
-- print-day: every day card has a print button + full-pack button exists  <sub>tests/visual/itinerary.spec.ts:121</sub>
-- mobile  <sub>tests/visual/itinerary.spec.ts:130</sub>
-- swipe-tabs: a leftward touch swipe on #content advances one tab  <sub>tests/visual/itinerary.spec.ts:134</sub>
-- the reading progress bar fills by transform, never by width  <sub>tests/visual/itinerary.spec.ts:163</sub>
-- mobile: the bottom-bar indicator is scaled to its slot, not resized to it  <sub>tests/visual/itinerary.spec.ts:191</sub>
+- rail ARIA: ArrowRight roves focus + activates the next station, panels are labelled regions  <sub>tests/visual/itinerary.spec.ts:55</sub>
+- day-rail: a day chip becomes active; one chip per day  <sub>tests/visual/itinerary.spec.ts:79</sub>
+- spine: a reading-rail tick drives the real guide tab  <sub>tests/visual/itinerary.spec.ts:89</sub>
+- spine: read ticks fill by transform, not by animating height  <sub>tests/visual/itinerary.spec.ts:103</sub>
+- print-day: every day card has a print button + full-pack button exists  <sub>tests/visual/itinerary.spec.ts:129</sub>
+- mobile  <sub>tests/visual/itinerary.spec.ts:138</sub>
+- swipe-tabs: a leftward touch swipe on #content advances one tab  <sub>tests/visual/itinerary.spec.ts:142</sub>
+- the reading progress bar fills by transform, never by width  <sub>tests/visual/itinerary.spec.ts:171</sub>
+- mobile: the bottom-bar indicator is scaled to its slot, not resized to it  <sub>tests/visual/itinerary.spec.ts:199</sub>
 
 **The full-screen day view is readable, and you can always get out of it.**
 
@@ -212,11 +212,11 @@ nothing ships.
 
 **The progress figure at the top of a section tells the truth about where you are in it.**
 
-- the track runs through the exact centre of the stations  <sub>tests/visual/journey-line.spec.ts:33</sub>
-- no second bar slides along the track over the circles  <sub>tests/visual/journey-line.spec.ts:39</sub>
-- the station you are in fills as you scroll it  <sub>tests/visual/journey-line.spec.ts:53</sub>
-- a section you have moved on from stays solid, and one you have not is empty  <sub>tests/visual/journey-line.spec.ts:70</sub>
-- the route walked survives a reload within the same visit  <sub>tests/visual/journey-line.spec.ts:82</sub>
+- the track runs through the exact centre of the stations  <sub>tests/visual/journey-line.spec.ts:38</sub>
+- no second bar slides along the track over the circles  <sub>tests/visual/journey-line.spec.ts:44</sub>
+- the station you are in fills as you scroll it  <sub>tests/visual/journey-line.spec.ts:64</sub>
+- a section you have moved on from stays solid, and one you have not is empty  <sub>tests/visual/journey-line.spec.ts:81</sub>
+- the route walked survives a reload within the same visit  <sub>tests/visual/journey-line.spec.ts:93</sub>
 
 ## Content rules
 

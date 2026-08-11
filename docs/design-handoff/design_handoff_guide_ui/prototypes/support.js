@@ -1,3 +1,10 @@
+/* eslint-disable -- VENDORED DESIGN ARTEFACT, NOT PRODUCTION CODE.
+   This file is the runtime the R5 handoff's prototypes are rendered in, exported verbatim by
+   the design tool. 00-START-HERE.md §4 states the prototypes "are not production code"; the
+   repo's own precedent is eslint.config.mjs already ignoring docs/design-handoff/prototype/**
+   for the R4 prototype. Linting it produces 88 problems nobody can act on without editing an
+   artefact we do not own and must not diverge from — and a lint run whose output is all noise
+   is a gate nobody reads. Disabled at the source so the shared config stays untouched. */
 // GENERATED from dc-runtime/src/*.ts — do not edit. Rebuild with `cd dc-runtime && bun run build`.
 "use strict";
 (() => {

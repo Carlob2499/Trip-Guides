@@ -60,7 +60,7 @@ for (const [name, path] of PAGES) {
     // invisible to a single page load — which is exactly where the shipped one lived (Transit).
     // Revealing them all stacks panels VERTICALLY, so it cannot manufacture a horizontal
     // failure; it only exposes ones that were already there. Same override the a11y gate uses.
-    await page.addStyleTag({ content: `[role=tabpanel]{display:block !important}` });
+    await page.addStyleTag({ content: `[role=region]{display:block !important}` });
     await page.waitForTimeout(150); // let the reveal settle before measuring geometry
 
     const offenders = await overflowingElements(page);
