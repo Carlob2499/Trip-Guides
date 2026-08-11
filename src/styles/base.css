@@ -20,8 +20,26 @@
      1.048 -> 1.148. --green and --warn moved WITH the ground, not for taste: on the darker --bg2
      the old values fell to 4.19:1 and 4.38:1, under the 4.5 floor they hold on every other
      surface. --accent is untouched — one variable at a time. */
-  --bg:#dfe3d9;--bg2:#d2d7c8;--ink:#171d24;--card:#f8faf3;--rule:#bec6b2;--rule2:#a3ac98;
-  --muted:#4e5747;--accent:#9c4421;--green:#396345;--warn:#7f4a07;--chrome-h:94px;
+  /* R5 (2026-08-11) — THE DAY PALETTE, LIFTED. design_handoff_guide_ui/TOKENS.md §1 and
+     SUPERSEDES.md §2. Seven values move together and none is a taste change: lighter paper,
+     darker ink, darker rules, because the palette people actually read on is the one that has
+     to hold up in direct sun, and R2's spread was tuned on a monitor. bg #dfe3d9 -> #e3e7dc,
+     card #f8faf3 -> #fbfcf6, bg2 (--sunken) #d2d7c8 -> #ced5c4, ink #171d24 -> #0f141a, muted
+     #4e5747 -> #3c4534, rule #bec6b2 -> #a9b39b, rule2 #a3ac98 -> #8a9480. --accent is again
+     untouched: a guide's colour is a fact about the guide, not about the reader's display.
+     Measured after the lift, light: ink/card 17.29:1 (was 14.42), ink/bg 15.60:1, muted/card
+     9.14:1, card/bg 1.196, bg/bg2 1.128 — the R2 spread survives the move.
+     LIGHT_BG in src/content.config.ts is kept in sync with --bg by the note below; the accent
+     contrast gate reads it, and a gate measuring a retired colour measures nothing.
+     There is NO third palette. [data-field="glare"] was built in review and DELETED, not
+     hidden — atlas-tokens.test.ts asserts its absence so it cannot creep back. */
+  --bg:#e3e7dc;--bg2:#ced5c4;--ink:#0f141a;--card:#fbfcf6;--rule:#a9b39b;--rule2:#8a9480;
+  --muted:#3c4534;--accent:#9c4421;--green:#396345;--warn:#7f4a07;--chrome-h:94px;
+  /* R5 TOKENS.md §1 — the two "a theme could change this" knobs, declared in BOTH themes so
+     neither is a bare fallback. --rw is the hairline width every 1px border reads, so a theme
+     could thicken every rule in one line; --photo is photography opacity, so a theme could
+     suppress imagery without touching a single <img>. Both ship at their identity values. */
+  --rw:1px;--photo:1;
   /* Accent has THREE jobs and they need different colours, which is what --accent2 failed to say.
      --accent is identity: fills, borders, large display type — never contrast-gated.
      --accent-ink is accent as TEXT ON a page surface: >=4.5:1 on every surface, flat or
@@ -34,7 +52,14 @@
      Per-guide pages override all of these inline from src/lib/accent-tokens.ts; the values here are
      the derived defaults for pages with no guide (hub chrome, health, progress). Do not hand-edit
      them — they are exactly what accentTokens("#9c4421") returns, and a test pins that. */
-  --accent-ink-light:#80371b;--accent-ink-dark:#c78f78;--accent-ink:var(--accent-ink-light);
+  /* R5: --accent-ink-light moved #80371b -> #783319 as a CONSEQUENCE of the palette lift, not as
+     a choice. accentTokens() derives the ink against all three light surfaces, and the binding
+     one is --bg2: the sunken bed got darker (#d2d7c8 -> #ced5c4), so accent text standing on it
+     has to go darker to hold 4.5:1. Recomputed by running the function, never hand-picked, and
+     accent-tokens.test.ts pins this file's literals to its live output. --accent-ink-dark and
+     --on-accent are unchanged: neither reads a light surface. No guide declares its own
+     theme.primary today, so all four inherit this derivation and none needed re-deriving. */
+  --accent-ink-light:#783319;--accent-ink-dark:#c78f78;--accent-ink:var(--accent-ink-light);
   --on-accent:#f0d2c7;
   /* ATLAS TOKEN CONTRACT (Phase 1.1, 2026-08-06) — docs/design-handoff/DESIGN.md R4 names
      several values this palette ALREADY ships. Declared here so any later Atlas ticket can
@@ -106,6 +131,12 @@
      max(<its own reserve>,var(--safe-*)) as it migrates. The 0px fallback is load-bearing, not
      decorative: env() with no fallback yields NOTHING on a browser without the inset, and a
      calc() containing nothing is invalid at computed-value time — the whole declaration drops. */
+  /* R5 TOKENS.md §5 — ONE gutter, both directions, everywhere: 16px phone, 18px tablet, 20px
+     desktop. R4's mix of 16 and 18 for row-gap versus column-gap is folded into this single
+     step, because two gutters is a rhythm nobody can see and everybody has to remember. The
+     phone value lives here; the two container models raise it in guide.css, so the value
+     follows the CONTAINER rather than the viewport like everything else in R5. */
+  --gutter:16px;
   --safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);
   --safe-left:env(safe-area-inset-left,0px);--safe-right:env(safe-area-inset-right,0px);
   /* Measured sticky-header height — STATIC FALLBACK ONLY in this phase (decision, 2026-08-06):
@@ -222,6 +253,20 @@
      "simplified" back to --accent later. */
   --text-panel-kicker:.625rem;
   --tracking-panel-kicker:.22em;
+  /* R5 (2026-08-11) — the sentence-case functional-label step, 11px. Added DELIBERATELY rather
+     than exempting the rail from type-scale.test.ts, which is what FALLBACKS.md §3 asks for
+     when a design needs a size the scale does not carry.
+     Why a new step and not --text-micro (.75rem/12px): micro is the UPPERCASE TRACKED label
+     role, and uppercase reads smaller than sentence case at equal size — that is exactly why R3
+     raised micro to 12px. A sentence-case label carries more x-height per pixel, so it holds
+     legibility one step lower. The spine rail's station labels are the case that needs it:
+     thirteen of them share one line, and 12px sentence case wraps "Etiquette & language" to
+     three lines where 11px takes two (COMPONENTS.md §2 budgets exactly two).
+     11px is the FLOOR, not a licence to go lower — it is the functional-text minimum R3 named
+     when it raised micro off 10.88px, and this step sits exactly on it. Contrast grading is
+     unaffected: far under the 18.7px large-text cutoff, so every pairing stays small text at
+     4.5:1, which is where the rail's --muted labels were measured. */
+  --text-label:.6875rem;
   --text-control-sm:.72rem; /* compact controls: pills, badges, counters, icon buttons */
   --text-caption:.78rem;    /* small captions, meta text */
   --text-control:.82rem;    /* standard controls: tabs, action buttons, and the notes beside them */
@@ -311,12 +356,20 @@
    exists to prevent. --cta/--cta-ink are not aliases and DO invert — see :root. */
 @media(prefers-color-scheme:dark){html:not([data-theme="light"]){
   --bg:#0f1317;--bg2:#1a2129;--ink:#e8ece3;--card:#242c34;--rule:#38414b;--rule2:#4e5865;--muted:#9aa392;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#0f1317;
+  /* --rw/--photo are re-declared here at the SAME values on purpose (R5 TOKENS.md §1 lists both
+     in both theme tables). Unlike the aliases above, these are theme KNOBS: the whole reason
+     they are tokens is that a theme could thicken every hairline or suppress photography in one
+     line, and a knob you can only turn globally is not a per-theme knob. Both scopes therefore
+     carry their own declaration. If one moves, move the other deliberately — they are two
+     decisions that currently agree, not one value written twice. */
+  --rw:1px;--photo:1;
   --cta:#e8ece3;--cta-ink:#0f1317;
   --accent-ink:var(--accent-ink-dark)}
   /* Carrier partner (#38): same swap, on the elements that carry their own candidates. */
   html:not([data-theme="light"]) [style*="--accent-ink-light"]{--accent-ink:var(--accent-ink-dark)}
 }
 [data-theme="dark"]{--bg:#0f1317;--bg2:#1a2129;--ink:#e8ece3;--card:#242c34;--rule:#38414b;--rule2:#4e5865;--muted:#9aa392;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#0f1317;
+  --rw:1px;--photo:1;   /* theme knobs — see the media-query block above for why both scopes declare them */
   --cta:#e8ece3;--cta-ink:#0f1317;
   --accent-ink:var(--accent-ink-dark)}
 [data-theme="dark"] [style*="--accent-ink-light"]{--accent-ink:var(--accent-ink-dark)}

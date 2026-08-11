@@ -77,7 +77,8 @@
       var cat = el.closest(".catblock");
       if (cat) {
         var tab = document.querySelector('.gtab[data-tab="' + cat.getAttribute("data-ci") + '"]');
-        if (tab && tab.getAttribute("aria-selected") !== "true") tab.click();
+        // R5: stations carry aria-current, not aria-selected — they are buttons in a nav, not tabs.
+        if (tab && tab.getAttribute("aria-current") !== "true") tab.click();
       }
       // A hit inside a reader-collapsed Panel must open it or the jump lands on a shut
       // header with the matched text invisible. Setting the hash (when the target has

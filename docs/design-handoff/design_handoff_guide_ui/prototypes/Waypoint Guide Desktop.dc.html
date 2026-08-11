@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600;7..72,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+body{background:#c9cec2;font-family:'Source Sans 3',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#80371b;text-decoration:none}
+a:hover{color:#9c4421}
+::-webkit-scrollbar{width:0;height:0;display:none}
+*{scrollbar-width:none;-ms-overflow-style:none}
+[data-field="day"]{--bg:#e3e7dc;--card:#fbfcf6;--sunken:#ced5c4;--ink:#0f141a;--muted:#3c4534;--rule:#a9b39b;--rule2:#8a9480;--accent:#9c4421;--aink:#80371b;--on-aink:#f0d2c7;--green:#396345;--on-green:#ffffff;--ochre:#7f4a07;--crit:#b3261e;--rw:1px;--boost:0rem;--photo:1}
+[data-field="night"]{--bg:#0f1317;--card:#242c34;--sunken:#1a2129;--ink:#e8ece3;--muted:#9aa392;--rule:#38414b;--rule2:#4e5865;--accent:#9c4421;--aink:#c78f78;--on-aink:#f0d2c7;--green:#6aab76;--on-green:#0f1317;--ochre:#d9923f;--crit:#ef8a83;--rw:1px;--boost:0rem;--photo:1}
+@keyframes nowPulse{0%,100%{box-shadow:0 0 0 0 rgba(156,68,33,.5)}50%{box-shadow:0 0 0 8px rgba(156,68,33,0)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+
+<section style="padding:{{ pagePad }};background:{{ pageBg }};min-height:{{ pageMinH }}">
+
+  <sc-if value="{{ showChrome }}" hint-placeholder-val="{{ true }}">
+  <div style="max-width:1440px;margin:0 auto 22px">
+    <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:5px">
+      <span style="font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.24em;text-transform:uppercase;color:#9c4421">Waypoint · guide</span>
+      <span style="font:600 10px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:rgba(23,29,36,.5)">desktop · 1440 · south korea, the whole trip</span>
+    </div>
+    <h1 style="font:500 29px/1.05 Literata,Georgia,serif;letter-spacing:-.015em;color:#171d24;margin:0 0 13px">The spine rail — one journey, eight days, no empty column</h1>
+    <div style="display:flex;flex-wrap:wrap;gap:20px 32px;align-items:flex-start;padding:13px 16px;background:#f8faf3;border:1px solid #a3ac98">
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <span style="font:700 9px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#80371b">Theme</span>
+        <div style="display:flex;border:1px solid #a3ac98">
+          <sc-for list="{{ fieldOptions }}" as="opt" hint-placeholder-count="4">
+            <button type="button" onClick="{{ opt.pick }}" style="min-height:34px;padding:0 14px;border:0;border-right:1px solid #cfd5c6;background:{{ opt.bg }};color:{{ opt.fg }};font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.1em;text-transform:uppercase;cursor:pointer">{{ opt.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <p style="flex:1 1 280px;margin:0;font:400 12px/1.55 'Source Sans 3',sans-serif;color:rgba(23,29,36,.62);text-wrap:pretty">Click any station on the rail to change group; any day chip to change day. Tools are the last station on the rail. Every station and all eight days carry the guide's own verified content — including the four places research came up short and says so.</p>
+    </div>
+  </div>
+  </sc-if>
+
+  <div data-field="{{ field }}" style="max-width:1440px;margin:0 auto;background:var(--bg,#dfe3d9);color:var(--ink,#171d24);border:1px solid var(--rule2,#a3ac98);box-shadow:0 18px 48px rgba(16,20,24,.18)">
+
+    <div style="display:flex;align-items:center;gap:14px;padding:12px 28px;border-bottom:1px solid var(--rule,#bec6b2)">
+      <span style="font:600 17px/1 Literata,Georgia,serif;letter-spacing:-.008em;color:var(--ink,#171d24)">Waypoint</span>
+      <span style="font:600 10px/1 'Source Sans 3',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--muted,#4e5747);white-space:nowrap">south korea · jul 8–15</span>
+      <span style="margin-left:auto;display:flex;gap:8px">
+        <span style="min-height:34px;display:flex;align-items:center;padding:0 14px;border-radius:999px;border:1px solid var(--rule2,#a3ac98);font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted,#4e5747);white-space:nowrap">search</span>
+        <span style="min-height:34px;display:flex;align-items:center;padding:0 14px;border-radius:999px;border:1px solid var(--rule2,#a3ac98);font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted,#4e5747);white-space:nowrap">print</span>
+        <span style="min-height:34px;display:flex;align-items:center;padding:0 14px;border-radius:999px;border:1px solid var(--crit,#b3261e);font:700 11px/1 'Source Sans 3',sans-serif;letter-spacing:.08em;color:var(--crit,#b3261e)">SOS</span>
+      </span>
+    </div>
+
+    <!-- masthead -->
+    <div style="display:flex;flex-wrap:wrap;gap:32px;padding:26px 28px 0">
+      <div style="position:relative;flex:1 1 540px;min-height:400px;background:var(--sunken,#d2d7c8);border:1px solid var(--rule2,#a3ac98)">
+        <div style="position:absolute;inset:0;opacity:var(--photo,1);background:repeating-linear-gradient(58deg,#b9bfae 0 4px,#c6ccbc 4px 9px)"></div>
+        <div style="position:absolute;inset:16px;border:1px solid rgba(163,172,152,.9)"></div>
+        <div style="position:absolute;top:16px;left:16px;width:22px;height:2px;background:var(--accent,#9c4421)"></div>
+        <div style="position:absolute;top:16px;left:16px;width:2px;height:22px;background:var(--accent,#9c4421)"></div>
+        <div style="position:absolute;top:16px;right:16px;width:22px;height:2px;background:var(--accent,#9c4421)"></div>
+        <div style="position:absolute;top:16px;right:16px;width:2px;height:22px;background:var(--accent,#9c4421)"></div>
+        <div style="position:absolute;bottom:16px;left:16px;width:22px;height:2px;background:var(--accent,#9c4421)"></div>
+        <div style="position:absolute;bottom:16px;left:16px;width:2px;height:22px;background:var(--accent,#9c4421)"></div>
+        <div style="position:absolute;bottom:16px;right:16px;width:22px;height:2px;background:var(--accent,#9c4421)"></div>
+        <div style="position:absolute;bottom:16px;right:16px;width:2px;height:22px;background:var(--accent,#9c4421)"></div>
+        <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;font:600 11px/1.6 'Source Sans 3',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:rgba(23,29,36,.4)">Cover photograph<br>gyeongbokgung, seoul</span>
+      </div>
+      <div style="flex:1 1 380px;min-width:330px;display:grid;align-content:space-between;gap:2px;padding-bottom:6px">
+        <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 18px;padding-bottom:14px;border-bottom:1px solid var(--rule,#bec6b2)">
+          <span style="font:600 clamp(1.5rem,2.1vw,2rem)/1 'Source Sans 3',sans-serif;font-variant-numeric:tabular-nums;color:var(--accent,#9c4421);white-space:nowrap">Day 4 of 8</span>
+          <span style="font:700 11px/1.4 'Source Sans 3',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--muted,#4e5747);white-space:nowrap">Sat 11 Jul · 14:12 KST</span>
+          <span style="margin-left:auto;display:inline-flex;align-items:center;gap:7px;font:700 11px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--on-aink,#f0d2c7);background:var(--accent,#9c4421);padding:7px 11px;white-space:nowrap"><span style="display:block;width:7px;height:7px;border-radius:50%;background:var(--on-aink,#f0d2c7)"></span>On this trip now</span>
+          <span style="flex:1 1 100%;font:400 13px/1.5 'Source Sans 3',sans-serif;color:var(--muted,#4e5747)">21 of 37 planned stops hit · 4 book-ahead items still outstanding</span>
+        </div>
+        <span style="font:700 11px/1.4 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b);margin-top:24px">Seoul · Daejeon · Busan — Jul 8–15, 2026</span>
+        <h2 style="margin:8px 0 0;font:600 clamp(3rem,4.6vw,4.4rem)/.96 Literata,Georgia,serif;letter-spacing:-.018em;color:var(--ink,#171d24)">South Korea</h2>
+        <p style="margin:14px 0 0;max-width:38rem;font:400 calc(1.08rem + var(--boost,0rem))/1.62 Literata,Georgia,serif;color:var(--ink,#171d24);text-wrap:pretty">Eight days based in Seoul — palaces, markets, gaming districts and street food — with a weekend in Daejeon for MSI 2026. Everything below is checked; tick items off as you go and your progress saves.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px">
+          <sc-for list="{{ chips }}" as="c" hint-placeholder-count="4">
+            <span style="display:inline-flex;align-items:center;min-height:34px;padding:0 13px;border-radius:999px;border:1px solid {{ c.fg }};color:{{ c.fg }};font:600 12px/1 'Source Sans 3',sans-serif;letter-spacing:.04em;white-space:nowrap">{{ c.label }}</span>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <!-- plate line -->
+    <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 24px;margin:22px 28px 0;padding:12px 0 13px;border-top:2px solid var(--accent,#9c4421);border-bottom:1px solid var(--rule2,#a3ac98)">
+      <span style="font:600 clamp(1.4rem,2vw,2rem)/1 'Source Sans 3',sans-serif;font-variant-numeric:tabular-nums;color:var(--aink,#80371b);white-space:nowrap">Seoul · Daejeon · Busan</span>
+      <span style="font:700 12px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;color:var(--aink,#80371b);white-space:nowrap">Next: KTX 08:30 → Daejeon</span>
+      <span style="font:600 12px/1 'Source Sans 3',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted,#4e5747);border:1px solid var(--rule,#bec6b2);padding:4px 8px;white-space:nowrap">✓ checked 30 jul 2026</span>
+      <span style="font:400 12px/1 'Source Sans 3',sans-serif;color:var(--muted,#4e5747);white-space:nowrap">118 verified facts · 74 sources</span>
+    </div>
+
+    <!-- ═ THE SPINE RAIL — the journey, laid horizontally so it claims no column ═ -->
+    <div style="padding:20px 28px 0">
+      <span style="display:block;font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b)">The journey</span>
+      <div style="position:relative;display:flex;align-items:flex-start;margin-top:14px;overflow-x:auto">
+        <span style="position:absolute;left:0;right:0;top:5px;height:2px;background:var(--rule2,#a3ac98)"></span>
+        <sc-for list="{{ groups }}" as="g" hint-placeholder-count="11">
+          <button type="button" onClick="{{ g.pick }}" style="position:relative;flex:1 1 0;min-width:98px;display:flex;flex-direction:column;align-items:center;gap:9px;min-height:54px;padding:0 6px;border:0;background:transparent;cursor:pointer">
+            <span style="position:relative;z-index:1;display:block;width:12px;height:12px;border-radius:50%;background:{{ g.stationBg }};border:2px solid {{ g.stationBorder }};box-shadow:{{ g.stationRing }}"></span>
+            <span style="font:{{ g.weight }} 13px/1.25 Literata,Georgia,serif;letter-spacing:-.01em;color:{{ g.fg }};text-align:center;text-wrap:pretty">{{ g.name }}</span>
+          </button>
+        </sc-for>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 18px;margin-top:14px;padding:10px 14px;background:var(--sunken,#d2d7c8);border:1px solid var(--rule2,#a3ac98)">
+        <span style="font:700 10px/1.4 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b);white-space:nowrap">{{ activeName }}</span>
+        <span style="font:400 13px/1.4 'Source Sans 3',sans-serif;color:var(--ink,#171d24)">{{ activeSub }}</span>
+        <span style="margin-left:auto;font:400 13px/1.4 'Source Sans 3',sans-serif;color:var(--muted,#4e5747)">{{ activeResume }}</span>
+      </div>
+    </div>
+    </sc-if>
+
+    <div style="padding:22px 28px 34px">
+
+      <!-- ═ DAYS — the whole trip ═ -->
+      <sc-if value="{{ isDays }}" hint-placeholder-val="{{ true }}">
+
+        <div style="display:flex;align-items:center;gap:12px;padding:11px 16px;margin-bottom:20px;background:var(--card,#f8faf3);border:var(--rw,1px) solid var(--accent,#9c4421)">
+          <span style="flex:none;display:block;width:10px;height:10px;border-radius:50%;background:var(--accent,#9c4421);animation:nowPulse 2s ease-in-out infinite"></span>
+          <span style="font:700 12px/1.4 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--aink,#80371b)">Now · 14:12 KST, Sat 11 Jul · GO Fest habitat 2, Astral Tides</span>
+          <span style="margin-left:auto;flex:none;display:inline-flex;align-items:baseline;gap:9px;font:700 15px/1.3 'Source Sans 3',sans-serif;letter-spacing:.02em;font-variant-numeric:tabular-nums;color:var(--crit,#b3261e);border:1px solid var(--crit,#b3261e);padding:5px 10px;white-space:nowrap">ends 16:00 · arena in 2 h 48 m</span>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-bottom:22px;overflow-x:auto">
+          <sc-for list="{{ dayChips }}" as="d" hint-placeholder-count="8">
+            <button type="button" onClick="{{ d.pick }}" style="flex:1 1 0;min-width:112px;display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-height:56px;padding:9px 14px;border-radius:999px;border:1px solid {{ d.border }};background:{{ d.bg }};cursor:pointer;text-align:left">
+              <span style="font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:{{ d.numFg }};white-space:nowrap">day {{ d.n }} · {{ d.state }}</span>
+              <span style="font:600 15px/1.15 Literata,Georgia,serif;letter-spacing:-.01em;color:{{ d.fg }};white-space:nowrap">{{ d.label }}</span>
+            </button>
+          </sc-for>
+        </div>
+
+        <article style="background:var(--card,#f8faf3);border:var(--rw,1px) solid var(--rule,#bec6b2);padding:26px 30px 28px">
+          <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+            <span style="font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b)">Day {{ day.n }}</span>
+            <span style="font:600 12px/1 'Source Sans 3',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted,#4e5747)">{{ day.longDate }}</span>
+            <span style="margin-left:auto;font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:{{ day.stampFg }};background:{{ day.stampBg }};border:1px solid {{ day.stampBorder }};padding:5px 10px;white-space:nowrap">{{ day.stamp }}</span>
+          </div>
+          <h3 style="margin:8px 0 0;font:500 clamp(1.7rem,2.4vw,2.3rem)/1.14 Literata,Georgia,serif;letter-spacing:-.012em;color:var(--ink,#171d24);text-wrap:pretty">{{ day.title }}</h3>
+          <p style="margin:12px 0 0;max-width:40rem;font:600 calc(1.14rem + var(--boost,0rem))/1.45 Literata,Georgia,serif;letter-spacing:-.01em;color:var(--aink,#80371b);text-wrap:pretty">{{ day.tldr }}</p>
+          <p style="margin:10px 0 0;font:400 calc(.88rem + var(--boost,0rem))/1.5 'Source Sans 3',sans-serif;color:var(--muted,#4e5747);text-wrap:pretty">{{ day.pace }}</p>
+
+          <div style="height:1px;background:var(--rule,#bec6b2);margin:20px 0 16px"></div>
+
+          <sc-if value="{{ day.hasGap }}" hint-placeholder-val="{{ true }}">
+            <div style="margin:4px 0 22px;padding:18px 20px;border:2px solid var(--ochre,#7f4a07)">
+              <span style="display:block;font:600 clamp(1.6rem,2vw,2.1rem)/1.1 'Source Sans 3',sans-serif;color:var(--ochre,#7f4a07)">⚠ NOT CONFIRMED</span>
+              <div style="height:1px;background:var(--ochre,#7f4a07);opacity:.4;margin:12px 0"></div>
+              <p style="margin:0;max-width:46rem;font:400 calc(1rem + var(--boost,0rem))/1.6 Literata,Georgia,serif;color:var(--ink,#171d24);text-wrap:pretty">{{ day.gapBody }}</p>
+              <span style="display:block;width:fit-content;max-width:100%;margin-top:11px;font:600 13px/1.45 'Source Sans 3',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--ochre,#7f4a07);border:1px solid var(--ochre,#7f4a07);padding:5px 9px">{{ day.gapDo }}</span>
+            </div>
+          </sc-if>
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,236px);column-gap:28px;margin-bottom:6px">
+            <span style="font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b)">The line</span>
+            <span style="font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b)">In the margin — hover a mark</span>
+          </div>
+          <sc-for list="{{ stops }}" as="s" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,236px);column-gap:28px;align-items:start;border-top:{{ s.rule }}">
+              <div style="display:flex;align-items:baseline;gap:12px;padding:13px 0 13px 16px;border-left:2px solid var(--accent,#9c4421);background:{{ s.bg }};opacity:{{ s.opacity }};min-height:48px">
+                <span style="flex:none;width:18px;font:700 11px/1.7 'Source Sans 3',sans-serif;color:{{ s.numFg }};font-variant-numeric:tabular-nums">{{ s.n }}</span>
+                <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+                  <span style="font:600 calc(1.06rem + var(--boost,0rem))/1.3 Literata,Georgia,serif;letter-spacing:-.01em;color:var(--ink,#171d24);text-wrap:pretty">{{ s.name }}</span>
+                  <span style="font:400 calc(.86rem + var(--boost,0rem))/1.5 'Source Sans 3',sans-serif;color:var(--muted,#4e5747);text-wrap:pretty">{{ s.note }}</span>
+                </span>
+                <span style="flex:none;font:600 14px/1.4 'Source Sans 3',sans-serif;font-variant-numeric:tabular-nums;color:{{ s.timeFg }};white-space:nowrap">{{ s.time }}</span>
+              </div>
+              <sc-if value="{{ s.hasNote }}" hint-placeholder-val="{{ true }}">
+                <div style="position:relative;height:48px">
+                  <div style="position:absolute;top:9px;left:0;right:0;z-index:2;max-height:30px;overflow:hidden;padding:6px 11px 9px;background:var(--sunken,#d2d7c8);border:1px solid var(--rule2,#a3ac98);transition:max-height .34s cubic-bezier(.22,1,.36,1),box-shadow .2s ease,background .2s ease" style-hover="z-index:9;max-height:22em;background:var(--card,#f8faf3);border-color:var(--accent,#9c4421);box-shadow:0 14px 40px rgba(16,20,24,.2)">
+                    <span style="display:flex;align-items:center;gap:7px;font:600 11px/1.4 'Source Sans 3',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:{{ s.mFg }};white-space:nowrap">
+                      <span style="flex:none;display:block;width:9px;height:9px;border-radius:50%;border:1px solid {{ s.mFg }}"></span>{{ s.mKicker }}
+                    </span>
+                    <p style="margin:6px 0 0;font:400 calc(.86rem + var(--boost,0rem))/1.5 Literata,Georgia,serif;color:var(--ink,#171d24);text-wrap:pretty">{{ s.mBody }}</p>
+                    <span style="display:inline-block;margin-top:7px;white-space:nowrap;font:600 10px/1.2 'Source Sans 3',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#4e5747);border:1px solid var(--rule,#bec6b2);padding:4px 6px">{{ s.mStamp }}</span>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+
+          <div style="margin-top:22px;padding-top:18px;border-top:1px solid var(--rule,#bec6b2)">
+            <span style="display:block;font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b);margin-bottom:10px">The detail</span>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));column-gap:32px;row-gap:14px;align-items:start">
+              <sc-for list="{{ day.detail }}" as="p" hint-placeholder-count="2">
+                <p style="margin:0;font:400 calc(1.06rem + var(--boost,0rem))/1.68 Literata,Georgia,serif;color:var(--ink,#171d24);text-wrap:pretty">{{ p }}</p>
+              </sc-for>
+            </div>
+          </div>
+
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:22px;margin-top:22px;padding-top:18px;border-top:1px solid var(--rule,#bec6b2);align-items:start">
+            <sc-if value="{{ day.hasChecks }}" hint-placeholder-val="{{ true }}">
+              <div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:6px">
+                  <span style="font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b)">Today's checks</span>
+                  <span style="flex:none;font:600 11px/1.2 'Source Sans 3',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--green,#396345);border:1px solid var(--green,#396345);padding:4px 8px;white-space:nowrap">{{ day.checkCount }}</span>
+                </div>
+                <sc-for list="{{ checks }}" as="c" hint-placeholder-count="5">
+                  <button type="button" onClick="{{ c.toggle }}" style="display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;min-height:46px;padding:10px 2px;border:0;border-top:1px solid var(--rule,#bec6b2);background:transparent;cursor:pointer">
+                    <span style="flex:none;width:22px;height:22px;margin-top:1px;border:2px solid {{ c.boxBorder }};background:{{ c.boxBg }};color:var(--on-green);display:flex;align-items:center;justify-content:center;font:700 13px/1 'Source Sans 3',sans-serif">{{ c.tick }}</span>
+                    <span style="flex:1;font:400 calc(.98rem + var(--boost,0rem))/1.5 Literata,Georgia,serif;color:{{ c.fg }};text-decoration:{{ c.deco }};text-wrap:pretty">{{ c.text }}</span>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </article>
+      </sc-if>
+
+      <!-- ═ EVERY OTHER GROUP — the panel grid ═ -->
+      <sc-if value="{{ isPanels }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:18px;align-items:stretch">
+          <sc-for list="{{ panels }}" as="p" hint-placeholder-count="4">
+            <div style="grid-column:{{ p.span }};display:flex;flex-direction:column;height:100%;padding:{{ p.pad }};background:{{ p.ground }};border:{{ p.border }}">
+              <span style="font:700 10px/1.3 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:{{ p.kickerFg }}">{{ p.kicker }}</span>
+              <h4 style="margin:5px 0 0;font:{{ p.titleFont }};color:{{ p.titleFg }};text-wrap:pretty">{{ p.title }}</h4>
+              <div style="height:1px;background:{{ p.ruleColor }};margin:12px 0 13px"></div>
+              <sc-for list="{{ p.body }}" as="b" hint-placeholder-count="1">
+                <p style="margin:0 0 10px;max-width:44rem;font:400 calc(1rem + var(--boost,0rem))/1.62 Literata,Georgia,serif;color:var(--ink,#171d24);text-wrap:pretty">{{ b }}</p>
+              </sc-for>
+              <sc-if value="{{ p.hasRows }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;flex-direction:column;gap:0">
+                  <sc-for list="{{ p.rows }}" as="r" hint-placeholder-count="4">
+                    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:9px 0;border-top:1px dashed var(--rule,#bec6b2)">
+                      <span style="font:400 calc(.98rem + var(--boost,0rem))/1.4 Literata,Georgia,serif;color:var(--ink,#171d24);text-wrap:pretty">{{ r.label }}</span>
+                      <span style="flex:none;font:600 calc(1.02rem + var(--boost,0rem))/1.3 'Source Sans 3',sans-serif;font-variant-numeric:tabular-nums;color:{{ r.fg }};text-align:right">{{ r.value }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ p.hasItems }}" hint-placeholder-val="{{ true }}">
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:10px 22px">
+                  <sc-for list="{{ p.items }}" as="it" hint-placeholder-count="3">
+                    <div style="padding-left:12px;border-left:2px solid var(--accent,#9c4421)">
+                      <span style="display:block;font:600 calc(1rem + var(--boost,0rem))/1.35 Literata,Georgia,serif;color:var(--ink,#171d24);text-wrap:pretty">{{ it.head }}</span>
+                      <span style="display:block;margin-top:2px;font:400 calc(.86rem + var(--boost,0rem))/1.5 'Source Sans 3',sans-serif;color:var(--muted,#4e5747);text-wrap:pretty">{{ it.sub }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ p.hasFlag }}" hint-placeholder-val="{{ true }}">
+                <span style="display:block;width:fit-content;max-width:100%;margin-top:13px;font:600 12px/1.45 'Source Sans 3',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--ochre,#7f4a07);border:1px solid var(--ochre,#7f4a07);border-radius:999px;padding:5px 11px">{{ p.flag }}</span>
+              </sc-if>
+              <sc-if value="{{ p.hasStamp }}" hint-placeholder-val="{{ true }}">
+                <div style="margin-top:auto;padding-top:15px">
+                  <span style="display:inline-block;white-space:nowrap;font:600 11px/1.2 'Source Sans 3',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:{{ p.stampFg }};border:1px solid {{ p.stampFg }};padding:5px 8px">{{ p.stamp }}</span>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- ═ TOOLS ═ -->
+      <sc-if value="{{ toolsVisible }}" hint-placeholder-val="{{ true }}">
+      <div style="margin-top:{{ toolsMargin }};padding-top:{{ toolsPadTop }};border-top:{{ toolsRule }}">
+        <sc-if value="{{ showToolsHeading }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:13px">
+            <span style="font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b);white-space:nowrap">{{ toolsHeading }}</span>
+            <span style="font:400 12px/1.45 'Source Sans 3',sans-serif;color:var(--muted,#4e5747);text-wrap:pretty">{{ toolsNote }}</span>
+          </div>
+        </sc-if>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+          <sc-for list="{{ tools }}" as="t" hint-placeholder-count="5">
+            <button type="button" onClick="{{ t.pick }}" style="min-height:38px;padding:0 15px;border-radius:999px;border:1px solid {{ t.border }};background:{{ t.bg }};color:{{ t.fg }};font:600 12px/1 'Source Sans 3',sans-serif;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">{{ t.label }}</button>
+          </sc-for>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:18px;align-items:stretch">
+          <div style="background:var(--card,#f8faf3);border:var(--rw,1px) solid var(--rule,#bec6b2);padding:18px 20px 20px;display:flex;flex-direction:column">
+            <span style="font:700 10px/1.3 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b)">{{ toolKicker }}</span>
+            <h4 style="margin:5px 0 0;font:500 1.45rem/1.2 Literata,Georgia,serif;color:var(--ink,#171d24)">{{ toolTitle }}</h4>
+            <div style="height:1px;background:var(--rule,#bec6b2);margin:12px 0 4px"></div>
+            <sc-for list="{{ toolRows }}" as="r" hint-placeholder-count="4">
+              <div style="display:flex;align-items:baseline;gap:16px;padding:11px 0;border-top:1px dashed var(--rule,#bec6b2)">
+                <span style="flex:1;min-width:0;font:400 calc(1rem + var(--boost,0rem))/1.4 Literata,Georgia,serif;color:var(--ink,#171d24);text-wrap:pretty">{{ r.label }}</span>
+                <sc-if value="{{ r.hasLink }}" hint-placeholder-val="{{ true }}">
+                  <a href="{{ r.href }}" target="_blank" rel="noopener noreferrer" style="flex:none;min-height:36px;display:inline-flex;align-items:center;padding:0 13px;border-radius:999px;border:1px solid var(--rule2,#a3ac98);color:var(--aink,#80371b);font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;text-decoration:none" style-hover="border-color:var(--accent,#9c4421);background:color-mix(in srgb,var(--accent,#9c4421) 8%,transparent)">open in maps ↗</a>
+                </sc-if>
+                <span style="flex:none;font:600 calc(1.24rem + var(--boost,0rem))/1.2 'Source Sans 3',sans-serif;font-variant-numeric:tabular-nums;color:{{ r.fg }};white-space:nowrap">{{ r.value }}</span>
+              </div>
+            </sc-for>
+            <sc-if value="{{ toolHasAll }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:15px;padding-top:14px;border-top:1px solid var(--rule,#bec6b2)">
+                <a href="{{ toolAllHref }}" target="_blank" rel="noopener noreferrer" style="min-height:40px;display:inline-flex;align-items:center;padding:0 16px;border-radius:999px;background:var(--accent,#9c4421);color:var(--on-aink,#f0d2c7);font:700 12px/1 'Source Sans 3',sans-serif;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;white-space:nowrap">the whole day in maps ↗</a>
+                <span style="min-height:40px;display:inline-flex;align-items:center;font:400 12px/1.4 'Source Sans 3',sans-serif;color:var(--muted,#4e5747);text-wrap:pretty">Four legs as one transit route. Google Maps first — the field log records Naver and Kakao underperforming it here.</span>
+              </div>
+            </sc-if>
+            <sc-if value="{{ isSplit }}" hint-placeholder-val="{{ true }}">
+                <div style="display:{{ catsShow }};margin-top:18px;padding-top:14px;border-top:1px solid var(--rule,#bec6b2)">
+                  <span style="display:block;font:700 10px/1.3 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b);margin-bottom:10px">Where it went</span>
+                  <sc-for list="{{ cats }}" as="c" hint-placeholder-count="5">
+                    <div style="display:flex;flex-direction:column;gap:5px;padding:7px 0">
+                      <div style="display:flex;align-items:baseline;gap:10px">
+                        <span style="flex:1;min-width:0;font:400 calc(.95rem + var(--boost,0rem))/1.3 Literata,Georgia,serif;color:var(--ink,#171d24)">{{ c.name }}</span>
+                        <span style="flex:none;font:400 .78rem/1.2 'Source Sans 3',sans-serif;letter-spacing:.08em;color:var(--muted,#4e5747);font-variant-numeric:tabular-nums">{{ c.pct }}</span>
+                        <span style="flex:none;font:600 calc(.98rem + var(--boost,0rem))/1.2 'Source Sans 3',sans-serif;font-variant-numeric:tabular-nums;color:var(--aink,#80371b);white-space:nowrap">{{ c.amount }}</span>
+                      </div>
+                      <div style="height:6px;background:var(--sunken,#d2d7c8);border:1px solid var(--rule2,#a3ac98)">
+                        <div style="height:100%;width:{{ c.width }};background:var(--accent,#9c4421)"></div>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+            </sc-if>
+            <div style="margin-top:auto;padding-top:15px">
+              <span style="display:inline-block;white-space:nowrap;font:600 12px/1.2 'Source Sans 3',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--green,#396345);border:1px solid var(--green,#396345);padding:5px 8px">{{ toolStamp }}</span>
+            </div>
+          </div>
+
+
+          <!-- ═ SPLIT ONLY — travellers and settle-up ═ -->
+          <sc-if value="{{ isSplit }}" hint-placeholder-val="{{ true }}">
+            <div style="background:var(--card,#f8faf3);border:var(--rw,1px) solid var(--rule,#bec6b2);padding:18px 20px 20px;display:flex;flex-direction:column">
+              <span style="font:700 10px/1.3 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b)">Travellers · running net</span>
+              <h4 style="margin:5px 0 0;font:500 1.45rem/1.2 Literata,Georgia,serif;color:var(--ink,#171d24)">Who is up, who is down</h4>
+              <div style="height:1px;background:var(--rule,#bec6b2);margin:12px 0 4px"></div>
+              <sc-for list="{{ travellers }}" as="tr" hint-placeholder-count="3">
+                <div style="display:flex;align-items:baseline;gap:14px;padding:11px 0;border-top:1px dashed var(--rule,#bec6b2)">
+                  <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+                    <span style="font:600 calc(1.02rem + var(--boost,0rem))/1.3 Literata,Georgia,serif;color:var(--ink,#171d24)">{{ tr.name }}</span>
+                    <span style="font:400 calc(.82rem + var(--boost,0rem))/1.45 'Source Sans 3',sans-serif;color:var(--muted,#4e5747);text-wrap:pretty">paid {{ tr.paid }} · owes {{ tr.share }}</span>
+                  </span>
+                  <span style="flex:none;font:600 calc(1.24rem + var(--boost,0rem))/1.2 'Source Sans 3',sans-serif;font-variant-numeric:tabular-nums;color:{{ tr.fg }};white-space:nowrap">{{ tr.net }}</span>
+                </div>
+              </sc-for>
+              <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--rule,#bec6b2)">
+                <span style="display:block;font:700 10px/1.3 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b);margin-bottom:8px">{{ settleHeading }}</span>
+                <sc-for list="{{ settle }}" as="st" hint-placeholder-count="2">
+                  <div style="display:flex;align-items:center;gap:14px;padding:10px 0;border-top:1px dashed var(--rule,#bec6b2)">
+                    <span style="flex:1;min-width:0;font:400 calc(.98rem + var(--boost,0rem))/1.4 Literata,Georgia,serif;color:var(--ink,#171d24);text-wrap:pretty">{{ st.line }}</span>
+                    <span style="flex:none;font:600 calc(1.1rem + var(--boost,0rem))/1.2 'Source Sans 3',sans-serif;font-variant-numeric:tabular-nums;color:var(--ink,#171d24);white-space:nowrap">{{ st.amount }}</span>
+                    <span style="flex:none;min-height:34px;display:inline-flex;align-items:center;padding:0 12px;border-radius:999px;border:1px solid var(--rule2,#a3ac98);font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#4e5747);white-space:nowrap;display:{{ settleShowPaid }}">mark paid</span>
+                  </div>
+                </sc-for>
+              </div>
+
+              <div style="margin-top:auto;padding-top:15px">
+                <span style="display:inline-block;white-space:nowrap;font:600 12px/1.2 'Source Sans 3',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted,#4e5747);border:1px solid var(--rule,#bec6b2);padding:5px 8px">{{ settleStamp }}</span>
+              </div>
+            </div>
+          </sc-if>
+          <!-- ═ SPLIT ONLY — add expense, the desktop idiom: an inline panel ═ -->
+          <sc-if value="{{ isSplit }}" hint-placeholder-val="{{ true }}">
+            <div style="grid-column:1 / -1;background:var(--card,#f8faf3);border:var(--rw,1px) solid var(--rule,#bec6b2);padding:18px 20px 20px;display:flex;flex-direction:column">
+              <span style="font:700 10px/1.3 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b)">Add expense</span>
+              <h4 style="margin:5px 0 0;font:500 1.45rem/1.2 Literata,Georgia,serif;color:var(--ink,#171d24)">Record what someone paid</h4>
+              <div style="height:1px;background:var(--rule,#bec6b2);margin:12px 0 14px"></div>
+
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px 18px;align-items:end">
+                <label style="display:flex;flex-direction:column;gap:6px">
+                  <span style="font:700 9px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--muted,#4e5747)">Description</span>
+                  <input type="text" placeholder="What for?" style="min-height:46px;padding:0 12px;background:var(--bg,#dfe3d9);border:1px solid var(--rule2,#a3ac98);border-radius:0;color:var(--ink,#171d24);font:400 1rem/1.4 Literata,Georgia,serif" />
+                </label>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <span style="font:700 9px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--muted,#4e5747)">Amount</span>
+                  <div style="display:flex;gap:8px">
+                    <div style="flex:none;display:flex;border:1px solid var(--rule2,#a3ac98)">
+                      <sc-for list="{{ addCur }}" as="c" hint-placeholder-count="2">
+                        <button type="button" onClick="{{ c.pick }}" style="min-width:42px;min-height:46px;border:0;border-right:1px solid var(--rule,#bec6b2);background:{{ c.bg }};color:{{ c.fg }};font:700 14px/1 'Source Sans 3',sans-serif;cursor:pointer">{{ c.label }}</button>
+                      </sc-for>
+                    </div>
+                    <input type="text" inputmode="decimal" value="{{ addAmount }}" onChange="{{ setAmount }}" style="flex:1;min-width:0;min-height:46px;padding:0 12px;background:var(--bg,#dfe3d9);border:1px solid var(--rule2,#a3ac98);border-radius:0;color:var(--ink,#171d24);font:600 1.2rem/1 'Source Sans 3',sans-serif;font-variant-numeric:tabular-nums" />
+                  </div>
+                </div>
+                <label style="display:flex;flex-direction:column;gap:6px">
+                  <span style="font:700 9px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--muted,#4e5747)">Category</span>
+                  <input type="text" placeholder="e.g. Food" style="min-height:46px;padding:0 12px;background:var(--bg,#dfe3d9);border:1px solid var(--rule2,#a3ac98);border-radius:0;color:var(--ink,#171d24);font:400 1rem/1.4 Literata,Georgia,serif" />
+                </label>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <span style="font:700 9px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--muted,#4e5747)">Paid by · one person</span>
+                  <div style="display:flex;gap:6px">
+                    <sc-for list="{{ addPayers }}" as="p" hint-placeholder-count="3">
+                      <button type="button" onClick="{{ p.pick }}" style="flex:1;min-width:0;min-height:46px;border-radius:999px;border:1px solid {{ p.border }};background:{{ p.bg }};color:{{ p.fg }};font:600 12px/1.2 'Source Sans 3',sans-serif;cursor:pointer;padding:0 6px">{{ p.label }}</button>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+
+              <span style="display:block;margin-top:10px;font:400 .84rem/1.4 'Source Sans 3',sans-serif;color:var(--aink,#80371b)">{{ addConv }}</span>
+
+              <div style="display:flex;flex-direction:column;gap:6px;margin-top:16px">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+                  <span style="font:700 9px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--muted,#4e5747)">Who shares it · any number</span>
+                  <span style="flex:none;font:600 .88rem/1.2 'Source Sans 3',sans-serif;font-variant-numeric:tabular-nums;color:var(--aink,#80371b);white-space:nowrap">{{ addEach }}</span>
+                </div>
+                <div style="display:flex;gap:7px">
+                  <sc-for list="{{ addWho }}" as="w" hint-placeholder-count="3">
+                    <button type="button" onClick="{{ w.pick }}" style="flex:1;min-width:0;min-height:46px;display:flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;border:1px solid {{ w.border }};background:{{ w.bg }};color:{{ w.fg }};font:600 12px/1.2 'Source Sans 3',sans-serif;cursor:pointer;padding:0 8px">
+                      <span style="flex:none;width:14px;height:14px;border:2px solid {{ w.boxBorder }};background:{{ w.boxBg }};color:var(--on-green);display:flex;align-items:center;justify-content:center;font:700 9px/1 'Source Sans 3',sans-serif">{{ w.tick }}</span>{{ w.label }}
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+
+              <div style="margin-top:14px">
+                <button type="button" onClick="{{ toggleMethod }}" style="display:flex;align-items:center;gap:8px;min-height:40px;padding:0;border:0;background:transparent;cursor:pointer">
+                  <span style="font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--aink,#80371b)">{{ methodLabel }}</span>
+                  <span style="font:600 11px/1 'Source Sans 3',sans-serif;color:var(--muted,#4e5747)">{{ methodChevron }}</span>
+                </button>
+                <div style="display:{{ methodShow }};gap:8px;flex-wrap:wrap;padding-top:4px">
+                  <sc-for list="{{ addMethods }}" as="m" hint-placeholder-count="4">
+                    <button type="button" onClick="{{ m.pick }}" style="display:flex;align-items:center;gap:9px;min-height:44px;padding:0 13px;border:1px solid {{ m.border }};background:{{ m.bg }};cursor:pointer">
+                      <span style="flex:none;width:13px;height:13px;border-radius:50%;border:2px solid {{ m.ring }};background:{{ m.dot }}"></span>
+                      <span style="font:600 12px/1.3 'Source Sans 3',sans-serif;letter-spacing:.06em;color:var(--ink,#171d24)">{{ m.label }}</span>
+                      <span style="font:400 .78rem/1.35 'Source Sans 3',sans-serif;color:var(--muted,#4e5747);white-space:nowrap">{{ m.sub }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+
+              <div style="margin-top:16px;padding:11px 13px;background:var(--sunken,#d2d7c8);border:1px solid var(--rule2,#a3ac98)">
+                <span style="font:400 calc(.88rem + var(--boost,0rem))/1.45 'Source Sans 3',sans-serif;color:var(--ink,#171d24);text-wrap:pretty">{{ addPreview }}</span>
+              </div>
+
+              <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:auto;padding-top:16px">
+                <button type="button" style="min-height:46px;padding:0 20px;border-radius:999px;border:0;background:var(--accent,#9c4421);color:var(--on-aink,#f0d2c7);font:700 12px/1 'Source Sans 3',sans-serif;letter-spacing:.1em;text-transform:uppercase;cursor:pointer">add expense</button>
+                <span style="flex:1;min-width:180px;font:400 .82rem/1.45 'Source Sans 3',sans-serif;color:var(--muted,#4e5747);text-wrap:pretty">Nothing here is seeded — every line was entered by one of you. Totals, nets and the settle-up transfers recompute from the settle model on save. </span>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+
+        <!-- ═ SPLIT ONLY — the full ledger ═ -->
+        <sc-if value="{{ isSplit }}" hint-placeholder-val="{{ true }}">
+          <div style="margin-top:18px;background:var(--card,#f8faf3);border:var(--rw,1px) solid var(--rule,#bec6b2);padding:18px 20px 20px">
+            <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+              <span style="font:700 10px/1.3 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b);white-space:nowrap">The ledger · what has been paid</span>
+              <span style="font:400 12px/1.45 'Source Sans 3',sans-serif;color:var(--muted,#4e5747);text-wrap:pretty">Every line is money that changed hands — who paid it, who it is shared between, converted once at the sourced ₩1,461/$1. The guide's budget block is an estimate and is deliberately not seeded in: an estimate is not a debt.</span>
+            </div>
+            <div style="height:1px;background:var(--rule,#bec6b2);margin:13px 0 0"></div>
+            <div style="display:grid;grid-template-columns:minmax(0,2.3fr) minmax(0,.85fr) minmax(0,.9fr) minmax(0,1.15fr) auto;gap:0 16px;align-items:baseline">
+              <span style="padding:9px 0 8px;font:700 9px/1.3 'Source Sans 3',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--muted,#4e5747)">Item</span>
+              <span style="padding:9px 0 8px;font:700 9px/1.3 'Source Sans 3',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--muted,#4e5747)">Group</span>
+              <span style="padding:9px 0 8px;font:700 9px/1.3 'Source Sans 3',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--muted,#4e5747)">Paid by · one person</span>
+              <span style="padding:9px 0 8px;font:700 9px/1.3 'Source Sans 3',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--muted,#4e5747)">Basis</span>
+              <span style="padding:9px 0 8px;font:700 9px/1.3 'Source Sans 3',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--muted,#4e5747);text-align:right">USD</span>
+              <sc-for list="{{ ledger }}" as="e" hint-placeholder-count="12">
+                <span style="padding:10px 0;border-top:1px dashed var(--rule,#bec6b2);font:400 calc(.98rem + var(--boost,0rem))/1.4 Literata,Georgia,serif;color:var(--ink,#171d24);text-wrap:pretty">{{ e.item }}</span>
+                <span style="padding:10px 0;border-top:1px dashed var(--rule,#bec6b2);font:600 11px/1.35 'Source Sans 3',sans-serif;letter-spacing:.04em;color:var(--aink,#80371b)">{{ e.group }}</span>
+                <span style="padding:10px 0;border-top:1px dashed var(--rule,#bec6b2);font:400 12px/1.35 'Source Sans 3',sans-serif;color:var(--muted,#4e5747)">{{ e.payer }}</span>
+                <span style="padding:10px 0;border-top:1px dashed var(--rule,#bec6b2);font:400 12px/1.35 'Source Sans 3',sans-serif;color:var(--muted,#4e5747);text-wrap:pretty">{{ e.basis }}</span>
+                <span style="padding:10px 0;border-top:1px dashed var(--rule,#bec6b2);font:600 calc(1.02rem + var(--boost,0rem))/1.3 'Source Sans 3',sans-serif;font-variant-numeric:tabular-nums;color:var(--ink,#171d24);text-align:right;white-space:nowrap">{{ e.usd }}</span>
+              </sc-for>
+              <span style="padding:12px 0 0;border-top:2px solid var(--accent,#9c4421);font:600 calc(1.02rem + var(--boost,0rem))/1.3 Literata,Georgia,serif;color:var(--ink,#171d24)">Paid so far</span>
+              <span style="border-top:2px solid var(--accent,#9c4421)"></span>
+              <span style="border-top:2px solid var(--accent,#9c4421)"></span>
+              <span style="border-top:2px solid var(--accent,#9c4421)"></span>
+              <span style="padding:12px 0 0;border-top:2px solid var(--accent,#9c4421);font:600 calc(1.3rem + var(--boost,0rem))/1.2 'Source Sans 3',sans-serif;font-variant-numeric:tabular-nums;color:var(--aink,#80371b);text-align:right;white-space:nowrap">{{ ledgerTotal }}</span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px">
+              <span style="display:inline-block;white-space:nowrap;font:600 11px/1.2 'Source Sans 3',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#4e5747);border:1px solid var(--rule,#bec6b2);padding:5px 8px">{{ ledgerStamp }}</span>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+      </sc-if>
+
+      <div style="margin-top:24px;padding:18px 20px;background:var(--sunken,#d2d7c8);border:1px solid var(--rule2,#a3ac98)">
+        <span style="display:block;font:700 10px/1.3 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b);margin-bottom:11px">Also in this shell — reachable from the chrome, the rail, or a station</span>
+        <div style="display:flex;flex-wrap:wrap;gap:7px">
+          <sc-for list="{{ inventory }}" as="f" hint-placeholder-count="18">
+            <span style="font:600 12px/1 'Source Sans 3',sans-serif;letter-spacing:.04em;color:var(--muted,#4e5747);border:1px solid var(--rule2,#a3ac98);border-radius:999px;padding:7px 12px;white-space:nowrap">{{ f }}</span>
+          </sc-for>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <p style="max-width:1440px;margin:20px auto 0;font:400 13px/1.6 'Source Sans 3',sans-serif;color:rgba(23,29,36,.6);text-wrap:pretty"><b style="color:#171d24">Motion, later:</b> the rail's station ring scales and its label weights up on change, 340 ms; the day card enters direction-aware from the side you moved; margin marks unfold on hover over 340 ms cubic-bezier(.22,1,.36,1); section reveals rise 22 px once on intersect, 700 ms; the now-dot pulses on a 2 s cycle; the plate morphs from its hub card over 850 ms. Reduced motion cuts every one of them — press states stay.</p>
+
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1504,&quot;height&quot;:1400}}">
+const OX = "#9c4421", INK = "#171d24", PAPER = "#f8faf3";
+
+const GROUPS = [
+  ["Plan", "Jet lag, budget, advisory"],
+  ["Essentials", "Money, entry, phrases, emergency"],
+  ["Transit", "T-money, KTX, buses, taxis"],
+  ["Days", "Eight day cards, Jul 8–15"],
+  ["Sights", "Six sights, all sourced"],
+  ["Daejeon & MSI", "The MSI weekend in Daejeon"],
+  ["Food & shopping", "Markets, KBBQ, gifts"],
+  ["Pokémon GO", "GO Fest Global runs during the trip"],
+  ["Gaming & anime", "LoL Park, T1, arcades"],
+  ["Tokyo", "One traveller's solo weekend"],
+  ["Sources", "Citations and check dates"],
+  // Retrospective, so it sits at the far end of the journey — after the trip, not in it.
+  ["Field log", "Recorded after the trip — not a mid-trip surface"]
+];
+
+// ── The whole trip. Every figure, address and time below is the guide's own. ──
+// stop: [n, name, note, time, state, marginKey]
+// margin: [kicker, body, stamp, tone]
+const DAYS = [
+  {
+    n: "1", label: "Wed 8", state: "done", longDate: "wednesday 8 july 2026",
+    title: "Flight — depart Newark (EWR) at ≈01:00 EDT",
+    tldr: "Overnight flight to Seoul — follow the jet-lag protocol on board.",
+    pace: "Travel day · depart EWR ≈01:00 EDT · ~15 hrs in the air · land ICN Terminal 1 ≈04:55 KST Jul 9",
+    stops: [
+      ["01", "Depart EWR Terminal B — Air Premia YP132", "⚠ Confirm the time against your booking", "01:00 EDT", "past", "protocol"],
+      ["02", "Land ICN Terminal 1", "e-Arrival QR → T-money at arrivals", "04:55 KST", "past", "premia"]
+    ],
+    margins: {
+      protocol: ["Protocol", "Eye mask and earplugs immediately. No alcohol. Water every hour, about 250 ml. Melatonin 0.5–1 mg at ~02:00 EDT.", "checked 28 jun 2026", "aink"],
+      premia: ["Baggage", "Air Premia baggage was re-verified for this booking on 7 July.", "checked 7 jul 2026", "aink"]
+    },
+    detail: [
+      "A night flight across the Pacific — the trip starts in the dark and ends with a Korean sunrise. Air Premia YP132, ≈14–15 hrs, landing ICN Terminal 1 around 04:55 KST on Thursday.",
+      "Window shade closed; the polar route has near-continuous daylight. Eat the breakfast service near landing. On the ground: e-Arrival Card QR at immigration, T-money card at arrivals, then AREX All-Stop to Hongik University — about 49 minutes, no transfer."
+    ],
+    checks: [
+      ["e-Arrival Card QR downloaded and saved offline", true],
+      ["Melatonin packed in carry-on, 0.5–1 mg for ~02:00 EDT", true],
+      ["Battery pack and all devices fully charged", true],
+      ["Eye mask and earplugs in carry-on", true],
+      ["Depart EWR — not JFK", true]
+    ]
+  },
+  {
+    n: "2", label: "Thu 9", state: "done", longDate: "thursday 9 july 2026",
+    title: "Arrive Seoul — light, bathhouse, early night",
+    tldr: "Shower at ICN, bus to Jongno, drop bags, stay awake in daylight, jimjilbang, bed by 22:30.",
+    pace: "Arrival day · shower at ICN · 6002 to Jongno ~75 min · outdoor light by 09:00 · jimjilbang 17:00–21:00 · bed by 22:30",
+    stops: [
+      ["01", "ICN T1 — shower, then bus 6002", "Spa on Air, B1 · then the 6002 counter, ₩17,000 pp", "06:30", "past", "spa"],
+      ["02", "Jongno base — drop bags, 19 Jong-ro", "Across from Olive Young Jonggak · do not sleep", "08:15", "past", "base"],
+      ["03", "Cheonggyecheon / Jongno light walk", "20 min outdoor light — the strongest clock anchor", "09:00", "past", ""],
+      ["04", "SPAREX Dongdaemun jimjilbang", "Jongno 3-ga → Line 5 to DDP H&C Park, Exit 14, B3F", "17:00", "past", "sparex"],
+      ["05", "Dinner near the base — Jongno BBQ", "Walk-in samgyeopsal on Jongno / Insadong", "21:00", "past", ""]
+    ],
+    margins: {
+      spa: ["Spa on Air", "B1 by arrivals Door 3, ₩10,000 for two hours, towel and toiletries included. ⚠ Confirm the name and price.", "checked 28 jun 2026", "ochre"],
+      base: ["The base", "19 Jong-ro, Jongno-gu — 서울 종로구 종로 19. Address and the $2,007.90 booking total both confirmed.", "confirmed 8 jul 2026", "aink"],
+      sparex: ["Entry", "₩12,000 if you enter by 20:00, ₩7,000 late-night after. Pay on site; open 24 h. ⚠ Verify the tattoo policy.", "checked 28 jun 2026", "ochre"]
+    },
+    detail: [
+      "After fifteen hours in the air, Seoul delivers exactly what exhausted travellers need: a city that works perfectly at 6 a.m. Clear immigration, grab a T-money card, then reset at Spa on Air before the 6002 out of Terminal 1.",
+      "The 6002 Limousine drops at Gwanghwamun or Jongno 3-ga in about 75 minutes at dawn, luggage under the bus, first service 05:35. Drop bags and do not sleep. Melatonin 0.5–1 mg at 21:00, in bed by 22:30 — the most important sleep of the trip."
+    ],
+    checks: [
+      ["T-money card bought and loaded at ICN arrivals", true],
+      ["TravelPass switched on — text TRAVEL to 4004", true],
+      ["Do NOT nap over 30 min — jet lag protocol", true],
+      ["Outdoor light before 10:00 KST", true],
+      ["SPAREX Dongdaemun: arrive ≈17:00, exit by 21:00, Exit 14", true],
+      ["Melatonin 0.5–1 mg at 21:00 KST", true],
+      ["In bed by 22:30 KST", true]
+    ],
+    lived: "Landed and went straight in on the 6002 Limousine bus — by the group's account the simplest, fastest way in. An intense downpour reshaped the evening: the Jongno walk became shelter and chimaek at a Korean fried-chicken place, then SPAREX earlier than planned.",
+    skipped: [
+      ["ICN T1 — shower, then bus 6002", "Skipped the shower; took the 6002 straight in as the simplest, fastest direct route."],
+      ["Cheonggyecheon / Jongno light walk", "Intense downpour and no rain-ready clothing or shoes — sheltered for chimaek instead."],
+      ["Dinner near the base — Jongno BBQ", "Walked the Jonggak list: many touristy, many closed by 10. Ended up at a slightly overpriced izakaya — but it was good."]
+    ]
+  },
+  {
+    n: "3", label: "Fri 10", state: "done", longDate: "friday 10 july 2026",
+    title: "Palaces & old Seoul",
+    tldr: "Palaces and old Seoul by day; Road of Legends raid night in Hongdae.",
+    pace: "Full day · Gyeongbokgung ~2 hr · Bukchon ~1.5 hr · Insadong ~1.5 hr · lots of walking",
+    stops: [
+      ["01", "Gyeongbokgung", "Open 09:00–18:30 · last entry 17:30 · closed Tuesdays", "morning", "past", "guard"],
+      ["02", "Bukchon Hanok Village", "Red zone 10:00–17:00 only · keep voices low, it is residential", "midday", "past", "redzone"],
+      ["03", "Insadong", "Tea houses and craft galleries · Ssamziegil 10:30–20:30", "14:00", "past", ""],
+      ["04", "LoL Park — Gran Seoul, 33 Jong-ro", "Jonggak Exit 1 · exhibits free · 45–60 min", "15:30", "past", "lolpark"],
+      ["05", "Hongdae raid hours — Dialga / Palkia → Primals", "Road of Legends finale · 5+ trainers for the Primals", "18:00", "past", "raids"],
+      ["06", "T1 Basecamp — 147 Yanghwa-ro, B1", "Merch shop open until 22:00", "21:00", "past", ""]
+    ],
+    margins: {
+      guard: ["Guard ceremony", "Confirmed at 10:00 and 14:00 at Gwanghwamun, with shorter gate-duty ceremonies at 11:00 and 13:00. On a 30 °C+ day it still runs at full scale, with fewer guards on watch.", "re-verified 30 jul 2026", "aink"],
+      redzone: ["Enforced", "Bukchon-ro 11-gil is closed to tourists 17:00–10:00 with a ₩100,000 fine, enforced since 1 March 2025. This reverses the guide's old 'best early' advice.", "corrected 30 jul 2026", "ochre"],
+      lolpark: ["LoL Park", "Gran Seoul Building, 33 Jong-ro — right by the base. Open 10:00–19:00, exhibits free, MSI tie-in merch before Daejeon.", "checked 28 jun 2026", "aink"],
+      raids: ["Raid hours", "18:00–19:00 Origin Forme Dialga and Palkia, shiny-eligible, 2–4 trainers. 19:00–20:00 Primal Kyogre and Groudon, 5+ trainers — coordinate ahead.", "checked 28 jun 2026", "aink"]
+    },
+    detail: [
+      "Grand palaces and stone lanes a few minutes from your door, the home of the LCK one stop away, and a Hongdae raid night to close it out. Gyeongbokgung is ₩3,000 for an adult, and free if you are in a full traditional hanbok — rental at the gate.",
+      "Heat and humidity are the real workload: water, shade breaks, an iced-coffee stop. Your body clock is one to two days adjusted at this point. Road of Legends ends 23:59 KST, and dinner in Hongdae after 20:00 has dozens of walk-in options right there."
+    ],
+    checks: [
+      ["Gyeongbokgung open today — closed Tue — 09:00–18:30, last entry 17:30", true],
+      ["Guard ceremony 10:00 and 14:00 at Gwanghwamun", true],
+      ["Free entry if you rent a hanbok — full traditional set required", false],
+      ["Bukchon red zone is 10:00–17:00 only — ₩100,000 fine outside it", true],
+      ["18:00–19:00 Raid Hour — Origin Dialga + Palkia, 4–5 passes", false],
+      ["19:00–20:00 Primal Raid Hour — 5+ trainers, priority Groudon", false],
+      ["Coordinate the Primal group beforehand — Campfire or GO chat", false]
+    ],
+    lived: "The palace day lost to weather and heat. Hongdae still happened, but for T1 Base Camp and KBBQ rather than raid hours.",
+    skipped: [
+      ["Gyeongbokgung", "Weather."],
+      ["Bukchon Hanok Village", "Too hot, too historical, and no time."],
+      ["Hongdae raid hours", "Went to Hongdae anyway — for T1 Base Camp and KBBQ instead of raids."]
+    ]
+  },
+  {
+    n: "4", label: "Sat 11", state: "now", longDate: "saturday 11 july 2026",
+    title: "GO Fest Day 1 in Daejeon → MSI Lower Bracket Final",
+    tldr: "Morning KTX to Daejeon — GO Fest all day, MSI Lower Bracket Final at 17:00.",
+    pace: "Both of you in Daejeon · morning KTX ≈08:30 → GO Fest 10:00–16:30 EXPO Science Park · LBF 17:00 KST · your third is in Tokyo this weekend",
+    stops: [
+      ["01", "Jonggak Station — Line 1", "2 stops to Seoul Station, ~5 min, ≈₩1,400", "08:00", "past", ""],
+      ["02", "Seoul Station — KTX south", "Main Seoul Station only — not Suseo/SRT", "08:30", "past", "third"],
+      ["03", "Daejeon Station → Kakao T to I-Hotel", "~20 min taxi, ≈₩5,500 each split 2", "09:30", "past", "rate"],
+      ["04", "EXPO Science Park — GO Fest Day 1", "Priority: Mega Mewtwo X, Saturday-only global debut", "10:00", "now", "heat"],
+      ["05", "DCC II — MSI Lower Bracket Final", "NOL World mobile ticket + passport · arena AC layer", "17:00", "next", "tickets"]
+    ],
+    margins: {
+      third: ["Third traveller", "In Tokyo this weekend, Jul 11–13. His plan is its own station; he rejoins in Seoul on Monday around 20:30.", "checked 10 jul 2026", "aink"],
+      rate: ["Sourced rate", "≈₩1,461 to the dollar. Every won figure in this guide was recomputed against it.", "Fed H.10 · 24 jul 2026", "aink"],
+      heat: ["Heat", "Mid-30s °C at EXPO. The field log records both GO Fest days abandoned for remote raids from the hotel.", "learned 16 jul 2026", "ochre"],
+      tickets: ["Ticketing", "Name-tied and mobile-only through the NOL World app. No screenshots, prints or transfers. Bag limit 45.7 × 57 × 19 cm.", "checked 28 jun 2026", "aink"]
+    },
+    detail: [
+      "Both of you head south — GO Fest in the morning, then into the arena at 17:00. Line 1 from Jonggak, two stops to Seoul Station; the central base puts you one short hop from the KTX. Fifty-minute ride, arriving Daejeon ≈09:20–09:50.",
+      "All three Saturday habitats run without a transit cutoff: Stormfire Peaks 10:00–13:00, Astral Tides 13:00–16:00, Dragonflight Summit 16:00–19:00. Raid from EXPO Science Park until 16:30, then walk the 130 m to DCC II — the merch queue is shorter before 16:45."
+    ],
+    hasGap: true,
+    gapBody: "A Bo5 can end anywhere from 20:00 to 22:00, and several Daejeon kitchens close by 23:00. Post-match dinner times could not be pinned.",
+    gapDo: "What to do instead — call Gobang, 042-863-2104, before you go in",
+    checks: [
+      ["Leave the base by 08:00 — Jonggak → Seoul Station, ≈₩1,400", true],
+      ["KTX ≈08:30 Seoul Station → Daejeon — 2 tickets, check platform day-of", true],
+      ["Kakao T from Daejeon Station to I-Hotel, ~20 min, ≈₩5,500 each", true],
+      ["Drop bags at the I-Hotel desk; walk to EXPO Science Park by 10:00", true],
+      ["9 free Raid Passes — Mega Mewtwo X first, then Rayquaza / Groudon / Kyogre", false],
+      ["Wrap raiding by 16:30 — 130 m walk to DCC II for the 17:00 LBF", false],
+      ["NOL World app ticket open and tested; passport on you", false],
+      ["Battery packs fully charged; arena layer packed", false],
+      ["Post-LBF beef: Yakiniku Doryong, Mon–Sat to 23:00 — hold a table", false],
+      ["Your third friend is in Tokyo Jul 11–13; he rejoins Monday ~20:30", false]
+    ],
+    lived: "GO Fest Day 1 never happened outdoors. The heat made in-person raiding untenable, so it became remote raids and a direct run to DCC II for MSI at 3pm plus the pre-MSI events.",
+    skipped: [
+      ["Daejeon Station → Kakao T to I-Hotel", "Used Uber instead — Kakao T registration fights a foreign number, and traffic plus heat made it unbearable. Get a Korean e-SIM."],
+      ["EXPO Science Park — GO Fest Day 1", "Went straight to DCC II for MSI at 3 and did remote raids instead — too hot, few raids in person, and the pre-MSI events were on."]
+    ]
+  },
+  {
+    n: "5", label: "Sun 12", state: "next", longDate: "sunday 12 july 2026",
+    title: "GO Fest Day 2 in Daejeon → MSI Grand Final",
+    tldr: "GO Fest Day 2, Grand Final at 15:00 — second Daejeon night, no train to catch.",
+    pace: "GO Fest 10:00–19:00 Daejeon · Grand Final 15:00 KST · second night in Daejeon, no train to catch",
+    stops: [
+      ["01", "EXPO Science Park — GO Fest Day 2", "Mega Mewtwo Y first, then Xurkitree before 15:00", "10:00", "next", "xurkitree"],
+      ["02", "DCC II — MSI Grand Final", "Head over by 14:15 — a 2-min walk from the I-Hotel", "15:00", "next", "gf"],
+      ["03", "Gobang Sikdang Expo Branch — celebration grill", "2F, 엑스포로151번길 19 · Sat–Sun 12:00–23:00 · 042-863-2104", "evening", "next", "sunday"]
+    ],
+    margins: {
+      xurkitree: ["Regional", "Xurkitree is the Asia-Pacific regional Ultra Beast — only catchable on this continent. Verdant Anomaly 13:00–16:00, so raid it before the 15:00 final.", "checked 28 jun 2026", "aink"],
+      gf: ["Grand Final", "Best-of-5, likely ending 18:00–20:30. NOL World mobile ticket, passport on you.", "checked 28 jun 2026", "aink"],
+      sunday: ["Closed Sundays", "Yakiniku Doryong, the hanwoo spot on the 1F, is closed Sundays. For Sunday beef: Hanmaeum Jeongyuk Sikdang, or Saebyeok-so in Dunsan.", "checked 12 jul 2026", "ochre"]
+    },
+    detail: [
+      "The day the season ends — and with a second Daejeon night, you get to enjoy all of it. You are in the Expo/Yuseong district all day: EXPO Science Park's plazas are the densest PokéStop and gym cluster, and Hanbat Arboretum about 1.5 km away is the backup.",
+      "Earthforged Domain runs 10:00–13:00, Verdant Anomaly 13:00–16:00, Twilight Battlefield 16:00–19:00. Twilight overlaps the Grand Final — raid on arena breaks and finish the window after the match, because you are staying the night."
+    ],
+    checks: [
+      ["Stay relaxed — second night in Daejeon, no Sunday-night train", false],
+      ["GO Fest priority: Mega Mewtwo Y first, then Xurkitree", false],
+      ["Raid Verdant Anomaly until ~14:15, then arena by 14:15", false],
+      ["Twilight Battlefield 16:00–19:00 — raid around the match", false],
+      ["Phones and battery packs charged the night before", false]
+    ],
+    lived: "The same call as Saturday, made again: stayed in the hotel for remote raids, ate at a burger chain before MSI. The celebration grill lost to distance and to how early Daejeon closes.",
+    skipped: [
+      ["EXPO Science Park — GO Fest Day 2", "Stayed in the hotel for remote raids — unbearable heat. Burger chain before MSI."],
+      ["Gobang Sikdang Expo Branch", "Too far. Went to a KBBQ strip near I-Hotel that barely had room, since most places close by 11."]
+    ]
+  },
+  {
+    n: "6", label: "Mon 13", state: "plan", longDate: "monday 13 july 2026",
+    title: "Post-MSI: Daejeon → Busan day trip → back to Seoul",
+    tldr: "Sungsimdang, KTX 10:44 to Busan → Haeundae for a Gunam-ro lunch, T1 Base Camp, the beach → KTX 18:00, Jongno-3-ga reunion KBBQ.",
+    pace: "Sungsimdang + KTX 10:44→12:53 · subway Line 1→2 to Haeundae, Exit 5 · Gunam-ro lunch 14:15 · T1 Base Camp · Haeundae Beach · KTX 18:00→20:52 · reunion KBBQ ~21:30",
+    stops: [
+      ["01", "Sungsimdang DCC — 107 Expo-ro", "Fried soboro + chive bread for the train · then check out", "08:15", "plan", ""],
+      ["02", "Daejeon Station — KTX 10:44 to Busan", "Daejeon Station only — not Daejeon West · arrive 12:53", "10:44", "plan", "booked"],
+      ["03", "Busan Station → subway to Haeundae", "Line 1 to Seomyeon → Line 2 to Haeundae, Exit 5 · ~55 min", "12:53", "plan", "taxi"],
+      ["04", "Lunch on Gunam-ro, Haeundae", "Choryang Milmyeon, 20 Gunam-ro · or Obok dwaeji gukbap, 15 Gunam-ro", "14:15", "plan", "lunch"],
+      ["05", "T1 Base Camp Busan — 37 Gunam-ro", "Merch shop 11:00–22:00 + photos, 30–40 min", "15:30", "plan", "t1"],
+      ["06", "Haeundae Beach", "Walk down Gunam-ro from T1, ~2 min · shaded promenade", "16:15", "plan", ""],
+      ["07", "Busan Station — KTX 18:00 to Seoul", "Busan Station only — not Gupo/Singyeongju · arrive 20:52", "18:00", "plan", "reunion"]
+    ],
+    margins: {
+      booked: ["Booked", "KTX 10:44 → Busan 12:53 and Busan 18:00 → Seoul 20:52 are both booked. Premium seats are cheap but sell out days ahead.", "checked 13 jul 2026", "aink"],
+      taxi: ["Learned", "The group skipped this subway plan for a taxi they found cheap and direct enough to settle it on the spot. A cheap, direct taxi beats a clever transit route.", "learned 16 jul 2026", "ochre"],
+      lunch: ["Prices", "Milmyeon ₩6,000–7,000, mandu ₩6,000; Obok dwaeji gukbap from ₩10,000 and open 24 h. ⚠ Confirm same-day hours on Naver or CatchTable.", "checked 13 jul 2026", "ochre"],
+      t1: ["Two base camps", "This is the Busan T1 Base Camp — 2F, 37 Gunam-ro, opened Dec 2025. Distinct from the Seoul one in Hongdae. ⚠ Confirm hours on the day.", "checked 13 jul 2026", "ochre"],
+      reunion: ["Reunion", "Your third friend is back from Tokyo around 20:30, so all three regroup in Jongno-3-ga that night.", "checked 12 jul 2026", "aink"]
+    },
+    detail: [
+      "Daejeon delivered. One clean run east to Busan — the KTX in, the subway straight out to Haeundae for a Gunam-ro lunch, the T1 pilgrimage, and the sea — then the 18:00 train home for the three-way reunion in Seoul's Jongno-3-ga. Tight but low-stress if you keep everything on the Gunam-ro strip.",
+      "Contingencies: wiped after MSI, skip Busan and ride Daejeon → Seoul direct in about fifty minutes. Running behind, drop the beach and keep T1 and lunch — the subway back needs about fifty minutes, so leave Gunam-ro by 17:00. Rain or too hot, Shinsegae Spa Land at Centum City sits on the Line 2 route, open 06:00–24:00."
+    ],
+    checks: [
+      ["Sungsimdang DCC by ~08:30 — soboro + chive bread; check out of I-Hotel", false],
+      ["Kakao T to Daejeon Station by ~10:20 — KTX 10:44 → Busan 12:53, booked", false],
+      ["Busan Station → Haeundae by subway 13:15–14:10; bags in a station locker", false],
+      ["Lunch 14:15–15:30 on Gunam-ro — ⚠ confirm hours", false],
+      ["T1 Base Camp, 37 Gunam-ro, then Haeundae Beach ~16:15", false],
+      ["Back to Busan Station by ~17:50; KTX 18:00 → Seoul 20:52, booked", false],
+      ["Seoul 20:52 → Line 1 to Jongno 3-ga; reunion KBBQ ~21:30 — call ahead", false],
+      ["Pojangmacha tents from ~23:30 outside Jongno-3-ga Exits 3–8", false]
+    ],
+    lived: "Busan worked. The taxi, not the subway, is what made it work — cheaper and more direct than the clever transit route. Lunch got skipped for time rather than because the plan was wrong.",
+    skipped: [
+      ["Sungsimdang DCC", "Went straight by taxi instead."],
+      ["Busan Station → subway to Haeundae", "Took a taxi — very cheap and direct."],
+      ["Lunch on Gunam-ro, Haeundae", "Not hungry, and little time to sit down."]
+    ]
+  },
+  {
+    n: "7", label: "Tue 14", state: "plan", longDate: "tuesday 14 july 2026",
+    title: "The Secret Garden, the big shopping day & a send-off dinner",
+    tldr: "Secret Garden 10:30, a noon Apgujeong dash, central K-beauty and K-pop gifts, then the confirmed Flower Blossom send-off.",
+    pace: "Full day · Huwon 10:30 · noon Apgujeong dash · back central for Myeongdong · A Flower Blossom on the Rice 18:30, booked · final wander",
+    stops: [
+      ["01", "Changdeokgung — Huwon (Secret Garden) tour", "Arrive 30 min early · pre-booked English tour", "10:30", "plan", "huwon"],
+      ["02", "Apgujeong — Stüssy + Gentle Monster", "Line 3 from Anguk · Stüssy 11:00–20:00 · Kasina cafe lunch", "12:30", "plan", ""],
+      ["03", "HYBE HQ, Yongsan — photo + pop-up shop", "42 Hangang-daero · exterior/lobby photo · 1F pop-up", "14:30", "plan", "hybe"],
+      ["04", "Myeongdong — Olive Young flagship + K-pop", "Tax refund at the register and bag storage · Line Friends", "15:30", "plan", "vat"],
+      ["05", "A Flower Blossom on the Rice — send-off dinner", "3-6 Insadong 16-gil · reservation confirmed · budget ~2 hrs", "18:30", "plan", "booked7"]
+    ],
+    margins: {
+      huwon: ["Places", "Each session holds 100 places — 50 online and 50 sold on the day at the ticket office — so a failed booking is not a missed garden. Palace ₩3,000, Huwon ₩5,000 on top.", "re-verified 30 jul 2026", "aink"],
+      hybe: ["Reserve first", "The 1F shop is a Weverse-reservation pop-up that rotates by artist. Without an active pop-up and a slot it is exterior photos only.", "checked 8 jul 2026", "ochre"],
+      vat: ["Tax refund", "Olive Young Myeongdong Town does the refund at the register and stores your bags, so the gifts ride out with the VAT already knocked off. Keep every receipt.", "checked 7 jul 2026", "aink"],
+      booked7: ["Booked", "Michelin Green Star organic Korean; the Bojagi Bibimbap is the signature. Manage the booking via Catch Table Global or +82-2-732-0276.", "confirmed 8 jul 2026", "aink"]
+    },
+    detail: [
+      "The palace garden you saved for last, a streetwear run to Apgujeong, K-beauty and K-pop gifts, and the send-off dinner you have already booked. Changdeokgung opens 09:00, last admission 17:00, closed Mondays — Tuesday is fine. Allow 60–90 minutes for the guided walk.",
+      "If plans change, all four alternates are reservable: Samwon Garden in Apgujeong (hanwoo galbi over charcoal, ₩40,000–50,000+ pp, dinner from 17:00), Hanilkwan Apgujeong (11:30–21:30 daily), Mishmash by the Secret Garden (₩130,000 pp, closed Mon), and Bloom in the Palace Seolleung (₩100,000+ pp)."
+    ],
+    checks: [
+      ["Secret Garden 10:30 English tour booked — 50 more places sell on the day", false],
+      ["Today is the main shopping day — Insadong, Kyobo, Myeongdong Olive Young", false],
+      ["HYBE HQ: ⚠ check Weverse / @HYBEMERCH and reserve BEFORE going", false],
+      ["A Flower Blossom on the Rice pre-booked — Catch Table or +82-2-732-0276", true],
+      ["Keep all VAT-refund receipts; passport on you for the in-store refund", false],
+      ["Start packing tonight — tomorrow's departure is deliberately light", false]
+    ],
+    lived: "The big shopping day collapsed toward whatever was closest. Rain plus a group vote sent the morning to shops, and Myeongdong absorbed the day on proximity alone.",
+    skipped: [
+      ["Changdeokgung — Huwon (Secret Garden) tour", "Group vote went to shopping instead — rain as well."],
+      ["Apgujeong — Stüssy + Gentle Monster", "Too far — did more shopping in Myeongdong for proximity and convenience, plus lunch."],
+      ["HYBE HQ, Yongsan", "Never made it — too far."]
+    ]
+  },
+  {
+    n: "8", label: "Wed 15", state: "plan", longDate: "wednesday 15 july 2026",
+    title: "Easy departure — slow Jongno morning → limousine bus home",
+    tldr: "Slow Jongno morning, bus 6002 ≈14:30, YP131 home at 21:30.",
+    pace: "Deliberately light final morning · bags sorted early · Airport Limousine 6002 from Gwanghwamun / Jongno 3-ga ≈14:30 · 3+ hr airport buffer · flight YP131 21:30",
+    stops: [
+      ["01", "Check out the Jongno base — 19 Jong-ro", "Bags: courier to ICN, or under the 6002", "09:30", "plan", "bags"],
+      ["02", "Slow Jongno loop — Olive Young Jonggak, Insadong, snacks", "All walkable, no transit", "morning", "plan", ""],
+      ["03", "Bus 6002 stop — Gwanghwamun / Jongno 3-ga", "₩17,000 pp at the kiosk · ~75 min", "14:30", "plan", ""],
+      ["04", "ICN T1 — check-in, VAT refund, YP131", "4+ hr cushion · tax-refund kiosk in departures", "16:00", "plan", "flight"]
+    ],
+    margins: {
+      bags: ["Two options", "Hand them to a same-day airport luggage courier in the morning and wander hands-free — book a day ahead, ⚠ confirm operator, cutoff and price — or keep them, since the 6002 stows luggage under the bus.", "checked 7 jul 2026", "ochre"],
+      flight: ["Flight", "Air Premia YP131, departing 21:30. Yesterday was the big shopping day, so today stays easy.", "checked 7 jul 2026", "aink"]
+    },
+    detail: [
+      "Coffee, one last wander, then a comfortable ride to the airport. Bags packed last night; check out around 09:30. No cross-town dashes and no hard stops — everything on this morning is within walking distance of the base.",
+      "The 6002 from Gwanghwamun or Jongno 3-ga takes about 75 minutes, which lands you at ICN with a three-hour-plus cushion before the 21:30 flight. Use it: the tax-refund kiosk is in departures, and the queue is the only unpredictable part of the day."
+    ]
+  }
+];
+
+// ── Panels for every non-Days station. Every figure is the guide's own. ──
+const P = (kicker, title, o) => Object.assign({ kicker, title, body: [], rows: [], items: [], flag: "", stamp: "", gap: false, span: false }, o);
+
+const PANELS = {
+  "Plan": [
+    P("PROTOCOL", "Jet lag, EWR → ICN", {
+      body: ["Eye mask and earplugs immediately. No alcohol. Water every hour, about 250 ml. Window shade closed — the polar route has near-continuous daylight. Eat the breakfast service near landing."],
+      rows: [["Shift, eastward", "+13 h"], ["Body clock at 23:00 KST, night 1", "10:00 EDT"], ["Outdoor light anchor", "before 10:00"], ["Melatonin, night 1", "0.5–1 mg at 21:00"], ["Bedtime, night 1", "22:30 KST"]],
+      stamp: "✓ checked 28 jun 2026"
+    }),
+    P("AT A GLANCE", "The trip", {
+      rows: [["Days", "8"], ["Travellers", "3"], ["Base", "19 Jong-ro, Jongno-gu"], ["Booking total", "$2,007.90"], ["Timezone", "Asia/Seoul"]],
+      stamp: "✓ confirmed 8 jul 2026"
+    }),
+    P("ADVISORY", "Level 1 — Exercise Normal Precautions", {
+      body: ["The lowest of the four State Department levels. No area-specific warning applies to Seoul, Daejeon or Busan for these dates."],
+      stamp: "US State Dept · checked 18 jul 2026"
+    }),
+    P("BUDGET", "Daily costs, recomputed at ₩1,461/$1", {
+      rows: [["Gyeongbokgung, adult", "₩3,000"], ["Changdeokgung palace", "₩3,000"], ["Huwon tour, on top", "₩5,000"], ["Namsan cable car, round trip", "₩15,000"], ["N Seoul Tower, at the gate", "₩29,000"], ["Namsan buses 01A / 01B", "₩1,500"]],
+      flag: "≈ hanbok rental ₩15,000–25,000 stays a vendor estimate",
+      stamp: "✓ re-verified 30 jul 2026"
+    })
+  ],
+  "Essentials": [
+    P("ENTRY", "United States passport", {
+      body: ["Visa-free for tourism, stays up to 90 days. K-ETA is temporarily waived for US citizens through 31 December 2026 — without it, complete the digital e-Arrival Card within 72 hours of arrival instead.", "Valid through your date of entry is Korea's actual rule; six months remaining is the safe international standard regardless. The waiver is an annual extension, not permanent."],
+      stamp: "MOFA · checked 23 jul 2026"
+    }),
+    P("EMERGENCY", "One source, two doors", {
+      rows: [["Police", "112"], ["Fire & ambulance", "119"], ["Tourist hotline", "1330"]],
+      body: ["The same record feeds this panel and the SOS sheet — never re-entered per surface."],
+      stamp: "✓ checked 18 jul 2026"
+    }),
+    P("MONEY", "Rates and cards", {
+      rows: [["Sourced rate", "≈₩1,461/$1"], ["Previously recorded", "≈₩1,535/$1"], ["Transit card", "T-money, at ICN arrivals"], ["Tax refund", "at the register, Olive Young"]],
+      body: ["The rate moved between revisions and every USD conversion in the guide was recomputed. A live rate and a sourced rate are different claims with different shelf lives and never share a line."],
+      stamp: "Fed H.10 · 24 jul 2026"
+    }),
+    P("PHRASES", "Point at the screen", {
+      span: true,
+      items: [
+        { head: "영어 하세요?", sub: "Do you speak English? · yeongeo haseyo?" },
+        { head: "화장실이 어디예요?", sub: "Where is the bathroom? · hwajangsiri eodiyeyo?" },
+        { head: "이거 얼마예요?", sub: "How much is this? · igeo eolmayeyo? — point at the item" },
+        { head: "도와주세요", sub: "Please help me · dowajuseyo" },
+        { head: "저는 채식주의자예요", sub: "I'm vegetarian · jeoneun chaesikjuuijayeyo" }
+      ],
+      stamp: "✓ checked 23 jul 2026"
+    })
+  ],
+  "Transit": [
+    P("FROM THE AIRPORT", "Two ways in", {
+      rows: [["AREX All-Stop → Hongik Univ.", "≈49 min, no transfer"], ["Limousine 6002 → Jongno", "₩17,000 pp, ~75 min"], ["First 6002", "05:35"], ["Spa on Air, ICN B1", "₩10,000 / 2 hr"]],
+      body: ["Luggage rides under the 6002. From the Gwanghwamun or Jongno 3-ga stop it is a seven-minute walk to the base."],
+      stamp: "✓ checked 28 jun 2026"
+    }),
+    P("KTX", "The three bookings", {
+      rows: [["Seoul → Daejeon", "≈50 min"], ["Daejeon → Busan", "10:44 → 12:53"], ["Busan → Seoul", "18:00 → 20:52"]],
+      body: ["Main Seoul Station only, not Suseo/SRT. Daejeon Station, not Daejeon West. Busan Station, not Gupo or Singyeongju. Premium seats are cheap but sell out days ahead; standing-room tickets are uncomfortable and not guaranteed."],
+      stamp: "Korail · checked 13 jul 2026"
+    }),
+    P("LEARNED", "Taxis beat the clever route", {
+      body: ["Kakao T fights a foreign phone number — bring a Korean e-SIM. Uber was the fallback, and it was worse: registration, traffic, heat. A cheap, direct taxi beat the planned Busan subway route on the spot.", "Naver and Kakao Maps underperformed Google Maps and word-of-mouth for navigation and translation. Do not lean on any one app to find or reach a place."],
+      stamp: "recorded 16 jul 2026"
+    })
+  ],
+  "Sights": [
+    P("SIGHT 01", "Gyeongbokgung", {
+      rows: [["Admission, adult", "₩3,000"], ["June–August", "09:00–18:30"], ["Last entry", "17:30"], ["Closed", "Tuesdays"], ["Guard ceremony", "10:00 & 14:00"], ["In full hanbok", "free"]],
+      body: ["On a 30 °C+ July day the ceremony still runs at full scale, with fewer guards on watch."],
+      stamp: "✓ re-verified 30 jul 2026"
+    }),
+    P("SIGHT 02", "Changdeokgung & the Huwon", {
+      rows: [["Palace", "₩3,000"], ["Huwon, on top", "₩5,000"], ["Closed", "Mondays"], ["English departures", "10:30 · 11:30 · 14:30 · 15:30"], ["Places per session", "100 — 50 online, 50 on the day"]],
+      stamp: "✓ re-verified 30 jul 2026"
+    }),
+    P("SIGHT 03 · CORRECTED", "Bukchon Hanok Village", {
+      body: ["The Bukchon-ro 11-gil red zone is closed to tourists 17:00–10:00 with a ₩100,000 fine, enforced since 1 March 2025. The guide did not mention this at all, and it reverses its old 'best early' advice — a midday stop now sits safely inside the window."],
+      flag: "⚠ residential — keep voices low",
+      stamp: "✓ corrected 30 jul 2026"
+    }),
+    P("SIGHT 04 · CORRECTED", "Namsan & N Seoul Tower", {
+      rows: [["Cable car, round trip", "₩15,000"], ["Tower, at the gate", "₩29,000"], ["Buses 01A / 01B", "₩1,500"]],
+      body: ["Buses are transport-card only. The old budget alternative 'Bus 03, ₩1,350' does not exist. ₩23,000 is the child and senior rate, not an adult online discount, so the ≈₩18,000–23,000 'online' range was reseller-sourced and has been withdrawn."],
+      stamp: "✓ corrected 30 jul 2026"
+    }),
+    P("SIGHT 05", "Dongdaemun Design Plaza", {
+      gap: true, span: true,
+      body: ["The LED-rose field is absent from DDP's own site and carried by secondary sources only. Exhibition prices are set per show and are not published centrally, so no admission figure can be quoted for these dates."],
+      flag: "What to do instead — check DDP's own site for the show running while you are there"
+    })
+  ],
+  "Daejeon & MSI": [
+    P("THE WEEKEND", "Two matches, one hotel", {
+      rows: [["Lower Bracket Final", "Sat 17:00 KST"], ["Grand Final", "Sun 15:00 KST"], ["Venue", "DCC II"], ["From the I-Hotel", "130 m"], ["Format", "best-of-5, 3–5 hrs"]],
+      stamp: "✓ checked 28 jun 2026"
+    }),
+    P("TICKETS", "Name-tied, mobile-only", {
+      body: ["Tickets are issued through the NOL World app and tied to your name. No screenshots, no prints, no transfers. Passport on you. Bag limit 45.7 × 57 × 19 cm — anything larger goes back to the hotel first.", "The arena runs aggressive air conditioning. Bring a layer, and a quick-dry shirt for the outdoor EXPO raiding in the mid-30s."],
+      stamp: "✓ checked 28 jun 2026"
+    }),
+    P("AFTER THE MATCH", "Beef, and the fallbacks", {
+      rows: [["Yakiniku Doryong, 1F", "Mon–Sat 17:00–23:00"], ["Gobang Sikdang, 2F", "weekdays to 24:00"], ["Gobang, to hold a table", "042-863-2104"], ["Cham-i-mat, gamjatang", "last order 21:30"], ["Dunsan-dong strip", "latest in the city"]],
+      flag: "⚠ Yakiniku Doryong is closed Sundays",
+      stamp: "✓ checked 12 jul 2026"
+    })
+  ],
+  "Food & shopping": [
+    P("SEND-OFF · BOOKED", "A Flower Blossom on the Rice", {
+      body: ["꽃,밥에피다 — 3-6 Insadong 16-gil, a quiet alley off the main Insadong strip, about ten minutes from the base. Michelin Green Star organic Korean. The signature is the Bojagi Bibimbap: five-coloured vegetables in a thin egg omelet, tied with seaweed. Unhurried, no dress code. Budget two hours."],
+      stamp: "✓ confirmed 8 jul 2026"
+    }),
+    P("JONGNO-3-GA", "The beef lanes", {
+      items: [
+        { head: "Ikseon-dong Ranch", sub: "Korean beef and Iberico pork, in the Ikseon-dong hanok lanes" },
+        { head: "Jongsam Yuk", sub: "8-1 Donhwamun-ro 11-gil — charcoal-grilled aged meat in front of Exit 6" },
+        { head: "Mido Galbi", sub: "25 Samil-daero 15-gil — wagyu and beef galbi. ⚠ closes ~22:30" },
+        { head: "Gwangju House", sub: "3 Donhwamun-ro 11na-gil — old-school Jongno galbi" }
+      ],
+      flag: "⚠ several hanwoo houses close 22:30–23:00 — call ahead",
+      stamp: "✓ checked 13 jul 2026"
+    }),
+    P("BUSAN", "Gunam-ro, Haeundae", {
+      rows: [["Choryang Milmyeon, 20 Gunam-ro", "₩6,000–7,000"], ["Their mandu", "₩6,000"], ["Obok dwaeji gukbap, 15 Gunam-ro", "from ₩10,000"], ["Obok hours", "open 24 h"]],
+      body: ["Both are a one-minute walk from Haeundae Station. Exits 3 and 5 put you straight onto Gunam-ro, where the lunch spots, T1 and the beach all line one street."],
+      flag: "⚠ confirm same-day hours on Naver or CatchTable",
+      stamp: "✓ checked 13 jul 2026"
+    }),
+    P("GIFTS", "The for-others run", {
+      body: ["Olive Young Myeongdong Town is two floors and — crucially — does the tax refund at the register and stores your bags, so the K-beauty gifts ride out with the VAT already knocked off. Line Friends Square and the Myeongdong K-pop street cover albums and photocards. Keep every receipt, and save bulk K-beauty for the departure-morning run near the base."],
+      stamp: "✓ checked 7 jul 2026"
+    })
+  ],
+  "Pokémon GO": [
+    P("SATURDAY", "GO Fest Day 1 habitats", {
+      span: true,
+      items: [
+        { head: "Stormfire Peaks · 10:00–13:00", sub: "Ice / Electric / Fire — Lugia, Ho-Oh, the legendary birds, Raikou, Entei, Suicune. Mega Blaziken, Ampharos, Abomasnow" },
+        { head: "Astral Tides · 13:00–16:00", sub: "Psychic / Ghost / Water — Dialga, Palkia, Giratina both formes, Xerneas, Yveltal, the lake trio, Solgaleo, Lunala" },
+        { head: "Dragonflight Summit · 16:00–19:00", sub: "Flying / Rock / Dragon — Kyogre, Groudon, Rayquaza, Reshiram, Zekrom, Kyurem. Raid until 16:30, then walk to the arena" }
+      ],
+      stamp: "✓ checked 28 jun 2026"
+    }),
+    P("SUNDAY", "GO Fest Day 2 habitats", {
+      span: true,
+      items: [
+        { head: "Earthforged Domain · 10:00–13:00", sub: "Ground / Steel / Normal — the Regi line, Regigigas, Heatran, Origin Dialga and Palkia, all Forces of Nature formes" },
+        { head: "Verdant Anomaly · 13:00–16:00", sub: "Poison / Bug / Grass — Deoxys all four formes, Genesect all five drives, Necrozma, Stakataka, the Tapu quartet. Xurkitree here" },
+        { head: "Twilight Battlefield · 16:00–19:00", sub: "Dark / Fairy / Fighting — Latias, Latios, Cresselia, Darkrai, the swords trio, Zacian, Zamazenta. Overlaps the Grand Final" }
+      ],
+      stamp: "✓ checked 28 jun 2026"
+    }),
+    P("PRIORITIES", "Nine free passes", {
+      rows: [["Mega Mewtwo X", "Saturday only, 3–5 passes"], ["Mega Mewtwo Y", "Sunday only, 3–5 passes"], ["Xurkitree", "Asia-Pacific only, 2–3 passes"], ["Free raid passes", "9"]],
+      body: ["Both Super Megas are global debuts and appear in every habitat. Xurkitree is only catchable on this continent, and its window closes before the Grand Final."],
+      stamp: "✓ checked 28 jun 2026"
+    }),
+    P("FRIDAY", "Road of Legends finale", {
+      rows: [["Raid Hour", "18:00–19:00"], ["Then Primal Raid Hour", "19:00–20:00"], ["Primals need", "5+ trainers"], ["Event ends", "23:59 KST"]],
+      body: ["Origin Forme Dialga and Palkia are the best Master League forms and shiny-eligible at 1/20. Primal Groudon has a quadruple Water weakness and is the priority for XL Candy."],
+      stamp: "✓ checked 28 jun 2026"
+    })
+  ],
+  "Gaming & anime": [
+    P("SEOUL", "LoL Park", {
+      rows: [["Address", "Gran Seoul, 33 Jong-ro"], ["Station", "Jonggak, Exit 1"], ["Open", "10:00–19:00"], ["Exhibits", "free"], ["Budget", "45–60 min"]],
+      body: ["Exhibits trace LCK history from Season 1. The Riot store kiosk and LCK shop carry the MSI tie-in merch you want before Daejeon, and Cafe Bilgewater is inside."],
+      stamp: "✓ checked 28 jun 2026"
+    }),
+    P("HONGDAE", "T1 Basecamp", {
+      rows: [["Address", "147 Yanghwa-ro, B1"], ["Merch shop", "to 22:00"]],
+      body: ["Half gaming museum, half esports cafe — pro-level setups you can sit at, themed drinks, and the merch shop. Right by the Hongdae gyms, so it caps a raid night."],
+      stamp: "✓ checked 28 jun 2026"
+    }),
+    P("BUSAN", "T1 Base Camp", {
+      rows: [["Address", "37 Gunam-ro, 2F"], ["Merch shop", "11:00–22:00"], ["Opened", "Dec 2025"]],
+      body: ["The Worlds champions' second home base: official merch, the T1 PUB, and a 24-hour PC café. Distinct from the Seoul Base Camp in Hongdae."],
+      flag: "⚠ confirm hours on the day — Naver or @t1basecamp",
+      stamp: "✓ checked 13 jul 2026"
+    })
+  ],
+  "Tokyo": [
+    P("ONE TRAVELLER", "A solo Tokyo weekend, Jul 11–13", {
+      body: ["The third traveller is in Tokyo for the MSI weekend rather than at GO Fest. He flies back on Monday and rejoins the group in Seoul that night, around 20:30, for the Jongno-3-ga reunion."],
+      stamp: "✓ checked 10 jul 2026"
+    }),
+    P("STILL OPEN", "Tickets and rosters", {
+      gap: true, span: true,
+      body: ["Shibuya Sky and teamLab tickets, and the GO Fest roster for the Tokyo side of the weekend, were flagged for same-day re-verification before departure and were never resolved. No times or prices are quoted here rather than carrying stale ones."],
+      flag: "What to do instead — re-verify all three the morning of, before committing the day"
+    })
+  ],
+  "Sources": [
+    P("RECERTIFIED", "Dead citations removed", {
+      span: true,
+      items: [
+        { head: "MangoPlate — removed", sub: "The service shut down in 2020, so it was never live for this trip. Its write-up came from training data, not a check, and should not have shipped" },
+        { head: "Kakao T — citation moved", sub: "t.kakao.com is gone; the citation now points at Kakao's official service page" },
+        { head: "cdg.go.kr — removed", sub: "No longer resolves (DNS)" },
+        { head: "cablecar.co.kr — removed", sub: "Serves a certificate for namsancablecar.com only" }
+      ],
+      stamp: "✓ recertified 17 jul 2026"
+    }),
+    P("REVISION 27", "What changed in the facts", {
+      span: true,
+      items: [
+        { head: "The rate", sub: "≈₩1,535 → ≈₩1,461 per dollar, Fed H.10, 24 Jul 2026 — every USD conversion recomputed" },
+        { head: "Bukchon", sub: "The red zone's 17:00–10:00 closure and ₩100,000 fine were absent from the guide entirely" },
+        { head: "Namsan", sub: "The ₩1,350 'Bus 03' does not exist; the official routes are 01A/01B at ₩1,500" },
+        { head: "N Seoul Tower", sub: "₩23,000 is the child and senior rate; the 'online' range was reseller-sourced and is withdrawn" },
+        { head: "The Huwon", sub: "Each session holds 100 places, not the 50-only cap the guide implied" },
+        { head: "Sights provenance", sub: "The group previously carried none at all — all six items now have source, date and shelf life" }
+      ],
+      stamp: "✓ 30 jul 2026"
+    }),
+    P("STILL OPEN", "The Huwon release window", {
+      gap: true, span: true,
+      body: ["Portal guides say six days ahead at 10:00 KST; Visit Seoul describes a monthly window. The official royal.khs.go.kr portal returned HTTP 500 on every attempt, so the two cannot be reconciled and 'book weeks ahead' has been withdrawn as advice. The tour's duration is also unpublished."],
+      flag: "What to do instead — 50 places per session sell at the ticket office on the day"
+    })
+  ],
+  "Field log": [
+    P("SUMMARY", "21 of 37 planned stops were hit", {
+      span: true,
+      body: ["The plan held where it was clustered and broke where it was exposed. Heat and rain — not fatigue — did the damage: both GO Fest park days were abandoned for remote raids from the hotel, and a downpour took out the Secret Garden and the Cheonggyecheon walk. Whenever a stop was merely far rather than blocked, proximity won every single time. Pace was the weakest part of the guide."],
+      stamp: "✓ recorded 16 jul 2026"
+    }),
+    P("WHAT IT TAUGHT", "The durable lessons", {
+      span: true,
+      items: [
+        { head: "Plan the fallback as a branch", sub: "A full-day outdoor commitment in July needs its indoor or remote option planned as a real branch, not a footnote. The group took the remote option two days running without hesitating." },
+        { head: "Talk about footwear", sub: "Umbrellas were not enough — the group ended up soaked, shoes included, day after day. A monsoon-season guide has to cover footwear, not just rain cover." },
+        { head: "Distance beat intent, three times", sub: "Apgujeong lost to Myeongdong, HYBE HQ was dropped, and the Daejeon celebration grill lost to a closer strip. If it is not near the day's anchor, assume it will not happen." },
+        { head: "A cheap taxi beats a clever route", sub: "The Busan subway plan was skipped for a taxi the group found cheap and direct enough to settle it on the spot." },
+        { head: "Bring a Korean e-SIM", sub: "Kakao T fights a foreign phone number. Uber was the fallback and it was worse — registration, traffic, heat." },
+        { head: "Book KTX the moment times are fixed", sub: "Premium seats are cheap but sell out days ahead; standing-room tickets are uncomfortable and not guaranteed." },
+        { head: "Do not lean on one app", sub: "Naver and Kakao Maps underperformed Google Maps and word-of-mouth for navigation and translation, and CatchTable missed many real venues." },
+        { head: "Air conditioning is a hard filter", sub: "Summer accommodation without AC is a real problem, not a minor comfort trade — verify it explicitly before booking." }
+      ],
+      stamp: "✓ recorded 16 jul 2026"
+    }),
+    P("DAY BY DAY", "As lived", {
+      span: true,
+      items: [
+        { head: "Day 2 · Thu Jul 9", sub: "Landed and went straight in on the 6002 Limousine bus. An intense downpour reshaped the evening: the Jongno walk became shelter and chimaek at a Korean fried-chicken place, then SPAREX earlier than planned." },
+        { head: "Day 3 · Fri Jul 10", sub: "The palace day lost to weather and heat. Hongdae still happened, but for T1 Base Camp and KBBQ rather than raid hours." },
+        { head: "Day 4 · Sat Jul 11", sub: "GO Fest Day 1 never happened outdoors. The heat made in-person raiding untenable, so it became remote raids and a direct run to DCC II for MSI at 3pm plus the pre-MSI events." },
+        { head: "Day 5 · Sun Jul 12", sub: "The same call as Saturday, made again: stayed in the hotel for remote raids, ate at a burger chain before MSI. The celebration grill lost to distance and to how early Daejeon closes." },
+        { head: "Day 6 · Mon Jul 13", sub: "Busan worked. The taxi, not the subway, is what made it work. Lunch got skipped for time rather than because the plan was wrong." },
+        { head: "Day 7 · Tue Jul 14", sub: "The big shopping day collapsed toward whatever was closest. Rain plus a group vote sent the morning to shops, and Myeongdong absorbed the day on proximity alone." }
+      ],
+      stamp: "✓ recorded 16 jul 2026"
+    }),
+    P("SINCE THE TRIP", "What changed in the guide", {
+      span: true,
+      items: [
+        { head: "The record sits beside the plan", sub: "What actually happened is recorded on every day, so the plan and the reality sit side by side rather than the guide pretending it went to script." },
+        { head: "Lessons promoted upstream", sub: "Heat fallbacks, rain gear, clustering, cheap-taxi-beats-transit, e-SIM for Kakao T, and AC as a hard filter went into the traveler-patterns file the guide author consults, so the next guide starts from them." }
+      ],
+      stamp: "✓ recorded 16 jul 2026"
+    })
+  ]
+};
+
+// Jetlag was cut as a standalone tool — its one useful output (the body-clock
+// reading on arrival night) is a fact about the flight and already sits in the
+// Plan station, where it is read once before departure rather than mid-trip.
+// Route now hands each leg to a real mapping app, because a distance the reader
+// cannot act on is a number, not a tool. Coordinates are the guide's own.
+const gmaps = (o, d) => "https://www.google.com/maps/dir/?api=1&origin=" + o + "&destination=" + d + "&travelmode=transit";
+
+// ── The guide's OWN budget section, verbatim: src/content/guides/korea/
+// 02-essentials.json → the "budget" block. party 3, days 7, currency $.
+// [label, category, basis, per, est]
+const BUDGET_PARTY = 3;
+const BUDGET_UNUSED = [
+  ["Seoul Airbnb — Jongno, 7 nights", "Accommodation", "trip", "group", 2008],
+  ["Daejeon I-Hotel — 2 nights (Jul 11–12)", "Accommodation", "trip", "group", 160],
+  ["Meals per day", "Food & drinks", "day", "", 32],
+  ["Drinks & alcohol per day", "Food & drinks", "day", "", 10],
+  ["Seoul subway (T-money) per day", "Transport", "day", "", 5],
+  ["Taxis (whole trip total)", "Transport", "trip", "", 12],
+  ["Airport Limousine 6002 — inbound + outbound", "Transport", "trip", "", 25],
+  ["KTX — Seoul→Daejeon + Busan day-trip legs", "Transport", "trip", "", 85],
+  ["Gyeongbokgung palace", "Activities & entries", "trip", "", 2],
+  ["Changdeokgung + Huwon (Secret Garden)", "Activities & entries", "trip", "", 6],
+  ["N Seoul Tower observatory", "Activities & entries", "trip", "", 20],
+  ["Namsan cable car (round-trip)", "Activities & entries", "trip", "", 10],
+  ["SPAREX Dongdaemun jimjilbang", "Activities & entries", "trip", "", 11],
+  ["Flights — round trip (your fare)", "Flights & events", "trip", "", 1200],
+  ["MSI tickets (LBF + Grand Final)", "Flights & events", "trip", "", 0],
+  ["PC bang sessions (whole trip)", "Experiences", "trip", "", 5],
+  ["Norebang — 1 session", "Experiences", "trip", "", 8],
+  ["Pokémon GO in-app items", "Experiences", "trip", "", 10],
+  ["Souvenirs, K-beauty & shopping", "Shopping", "trip", "", 60]
+];
+
+// The shipped seeding rule, applied rather than restated: basis "day" rows multiply
+// by days, per "group" rows stay one shared bill, everything else by party.
+const money = (n) => "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+// Trip Split holds ONLY money that has actually changed hands — the bookings and the
+// bills, each with the person who paid it and the people it is shared between. The
+// guide's budget block is an ESTIMATE and is deliberately not seeded in: an estimate
+// is not a debt, and settling one produces transfers nobody owes.
+// [what, category, payer, who shares it, USD at the sourced ₩1,461/$1]
+const PEOPLE = ["You", "Traveller 2", "Traveller 3"];
+const PAID = [];
+// R5: the ledger ships EMPTY. The six reconstructed rows that used to sit here
+// were plausible, not sourced — and a plausible number in a product whose claim
+// is that facts trace to a check is worse than no number. This is also the real
+// first-run state: a traveller opens Split before anyone has paid anything.
+
+const PAID_TOTAL = PAID.reduce((a, r) => a + r[4], 0);
+const LEDGER_EMPTY = PAID.length === 0;
+const LEDGER_ROWS = PAID.map(([item, cat, payer, who, usd]) => [
+  item, cat, "paid by " + payer,
+  who.length === PEOPLE.length ? "shared 3 ways" : "shared " + who.length + " ways",
+  money(usd)
+]);
+// A ledger with nothing in it says so at row scale, rather than showing a bare
+// header. This is the first-run state, not an error.
+const LEDGER = LEDGER_ROWS.length ? LEDGER_ROWS
+  : [["Nothing recorded yet — add what you paid", "", "", "", "—"]];
+
+// Nets and transfers come out of the same arithmetic the ledger does, so the two can
+// never disagree: paid − owed per person, then the smallest set of transfers.
+const NET = {}; PEOPLE.forEach(p => NET[p] = 0);
+PAID.forEach(([, , payer, who, usd]) => {
+  NET[payer] += usd;
+  who.forEach(p => NET[p] -= usd / who.length);
+});
+const TRAVELLERS = PEOPLE.map(p => {
+  const paid = PAID.filter(r => r[2] === p).reduce((a, r) => a + r[4], 0);
+  const owed = paid - NET[p];
+  return [p, money(paid), money(owed), (Math.abs(NET[p]) < 0.01 ? "—" : (NET[p] >= 0 ? "+" : "−") + money(Math.abs(NET[p])).slice(1)),
+    Math.abs(NET[p]) < 0.01 ? "muted" : NET[p] > 0 ? "green" : "aink"];
+});
+const SETTLE = (() => {
+  const owe = PEOPLE.map(p => [p, NET[p]]).filter(r => r[1] < -0.01).sort((a, b) => a[1] - b[1]);
+  const get = PEOPLE.map(p => [p, NET[p]]).filter(r => r[1] > 0.01).sort((a, b) => b[1] - a[1]);
+  const out = [];
+  let i = 0, j = 0;
+  while (i < owe.length && j < get.length) {
+    const amt = Math.min(-owe[i][1], get[j][1]);
+    out.push([owe[i][0] + " → " + get[j][0], money(amt)]);
+    owe[i][1] += amt; get[j][1] -= amt;
+    if (-owe[i][1] < 0.01) i++;
+    if (get[j][1] < 0.01) j++;
+  }
+  return out.length ? out : [["Nothing to settle — everyone is square", "—"]];
+})();
+// One flag both files read, so the empty state can never disagree with the data.
+const HAS_TRANSFERS = SETTLE.length > 0 && SETTLE[0][1] !== "—";
+
+
+// Ported from src/features/mobile-nav/model/rank.ts — honest blank when nothing is
+// remembered, never a fabricated "start here".
+function resumeLine(section) {
+  if (typeof section !== "string") return null;
+  const s = section.replace(/\s+/g, " ").trim();
+  if (!s) return null;
+  return "you were at " + (s.length > 42 ? s.slice(0, 41).trim() + "…" : s);
+}
+
+const TOOLS = [
+  // USD only — the cards are charged in dollars, so the won line was a conversion
+  // nobody acts on. The sourced rate still lives in Essentials, where it is a fact
+  // about the trip rather than a number in the middle of a ledger.
+  ["Split", "TRIP SPLIT · WHAT HAS ACTUALLY BEEN PAID", "Where the money went", [
+    ["Paid so far", money(PAID_TOTAL), LEDGER_EMPTY ? "muted" : "aink"],
+    ["Per person, party 3", money(PAID_TOTAL / BUDGET_PARTY), "ink"],
+    ["Largest single line", LEDGER_EMPTY ? "—" : "Seoul Airbnb", LEDGER_EMPTY ? "muted" : "ink"],
+    ["Expenses entered", String(PAID.length), LEDGER_EMPTY ? "muted" : "green"]
+  ], LEDGER_EMPTY ? "nothing recorded yet — add what you paid" : "✓ " + PAID.length + " expenses · entered by the three of you"],
+  ["Closures", "CLOSURES · KR-2026 HOLIDAY RECORD", "What is shut, and when", [["Holidays during Jul 8–15", "none", "green"], ["Three-day shoulder either side", "none", "green"], ["Gyeongbokgung", "closed Tue", "ochre"], ["Changdeokgung", "closed Mon", "ochre"], ["Yakiniku Doryong", "closed Sun", "ochre"]], "✓ scanned from the guide's sights"],
+  ["Reminders", "REMINDERS · THE GUIDE'S OWN CHECKLISTS", "Book ahead first", [["Book-ahead items outstanding", "4", "ochre"], ["Huwon 10:30 English tour", "book ahead", "ochre"], ["A Flower Blossom on the Rice", "confirmed", "green"], ["Total checklist items, all groups", "68", "ink"]], "✓ nothing authored by the interface"],
+  ["Route", "ROUTE ORDER · EVERY LEG HANDS OFF TO A MAP", "Day 4, five mapped points", [
+    ["Jonggak → Seoul Station", "1.4 km", "ink", gmaps("37.5701,126.9832", "37.55542,126.97259")],
+    ["Seoul Station → Daejeon Station", "140 km", "ink", gmaps("37.55542,126.97259", "36.33135,127.43336")],
+    ["Daejeon Station → EXPO Science Park", "5.1 km", "ink", gmaps("36.33135,127.43336", "36.37601,127.38769")],
+    ["EXPO Science Park → DCC II", "0.13 km", "aink", gmaps("36.37601,127.38769", "36.37499,127.39178")]
+  ], "✓ straight-line ordering, transit directions"]
+];
+
+const LEARNINGS = [
+  "A full-day outdoor commitment in July needs its indoor or remote fallback planned as a real branch, not a footnote.",
+  "Umbrellas were not enough — the group ended up soaked, shoes included, day after day. A monsoon-season guide has to talk about footwear.",
+  "Distance beat intent three separate times. If it is not near the day's anchor, assume it will not happen.",
+  "Summer accommodation without air conditioning is a real problem, not a minor comfort trade — verify it before booking."
+];
+
+const INVENTORY = ["Orientation map", "Weather", "Holidays", "Trip kit", "Story mode", "Share", "Vote", "Change request", "Print", "Offline", "Search all guides", "Provenance popover", "Learnings survey", "Palette", "Progress", "Lightbox", "Budget pact", "Recert log"];
+
+class Component extends DCLogic {
+  state = {
+    field: "day", group: "Days", day: 4, tool: 0, ticked: {},
+    cur: "KRW", amount: "42000", payer: "You",
+    who: ["You", "Traveller 2", "Traveller 3"], method: "EQUAL", methodOpen: false
+  };
+
+  seg(list, current, key) {
+    return list.map(([val, label]) => ({
+      label,
+      bg: current === val ? INK : "transparent",
+      fg: current === val ? PAPER : "rgba(23,29,36,.66)",
+      pick: () => this.setState({ [key]: val })
+    }));
+  }
+
+  renderVals() {
+    const s = this.state;
+    const d = DAYS[s.day - 1];
+    const t = TOOLS[s.tool];
+    // Settled: Tools is the last STATION on the rail. Picking it swaps the body like
+    // any other station, so there is no takeover and nothing to return from.
+    const toolsVisible = s.group === "Tools";
+    const isDays = s.group === "Days" && !toolsVisible;
+    const raw = parseFloat(s.amount) || 0;
+    const usd = s.cur === "KRW" ? raw / 1461 : raw;
+    const shareCount = s.who.length;
+    const checkKey = (i) => s.day + ":" + i;
+    const checks = (d.checks || []).map(([text, seeded], i) => {
+      const on = checkKey(i) in s.ticked ? s.ticked[checkKey(i)] : seeded;
+      return {
+        text, tick: on ? "✓" : "",
+        boxBorder: on ? "var(--green,#396345)" : "var(--rule2,#a3ac98)",
+        boxBg: on ? "var(--green,#396345)" : "transparent",
+        fg: on ? "var(--muted,#4e5747)" : "var(--ink,#171d24)",
+        deco: on ? "line-through" : "none",
+        toggle: () => this.setState(p => ({ ticked: Object.assign({}, p.ticked, { [checkKey(i)]: !on }) }))
+      };
+    });
+    const doneCount = checks.filter(c => c.tick).length;
+
+    const stampFor = (st) => st === "done"
+      ? { stamp: "complete", stampFg: "var(--green,#396345)", stampBg: "transparent", stampBorder: "var(--green,#396345)" }
+      : st === "now"
+        ? { stamp: "in progress", stampFg: "var(--on-aink,#f0d2c7)", stampBg: OX, stampBorder: OX }
+        : st === "next"
+          ? { stamp: "tomorrow", stampFg: "var(--aink,#80371b)", stampBg: "transparent", stampBorder: "var(--aink,#80371b)" }
+          : { stamp: "upcoming", stampFg: "var(--muted,#4e5747)", stampBg: "transparent", stampBorder: "var(--rule2,#a3ac98)" };
+
+    const panels = (PANELS[s.group] || []).map(p => ({
+      kicker: p.kicker,
+      title: p.title,
+      body: p.body,
+      rows: p.rows.map(([label, value]) => ({ label, value, fg: p.gap ? "var(--ochre,#7f4a07)" : "var(--ink,#171d24)" })),
+      hasRows: p.rows.length > 0,
+      items: p.items,
+      hasItems: p.items.length > 0,
+      flag: p.flag, hasFlag: !!p.flag,
+      stamp: p.stamp, hasStamp: !!p.stamp,
+      stampFg: p.stamp.indexOf("corrected") > -1 ? "var(--ochre,#7f4a07)" : "var(--muted,#4e5747)",
+      span: p.span ? "1 / -1" : "auto",
+      pad: p.gap ? "18px 20px" : "18px 20px 20px",
+      ground: p.gap ? "transparent" : "var(--card,#f8faf3)",
+      border: p.gap ? "2px solid var(--ochre,#7f4a07)" : "var(--rw,1px) solid var(--rule,#bec6b2)",
+      ruleColor: p.gap ? "var(--ochre,#7f4a07)" : "var(--rule,#bec6b2)",
+      kickerFg: p.gap ? "var(--ochre,#7f4a07)" : "var(--aink,#80371b)",
+      titleFont: p.gap
+        ? "600 clamp(1.5rem,1.9vw,2rem)/1.12 'Source Sans 3',sans-serif"
+        : "500 1.45rem/1.2 Literata,Georgia,serif",
+      titleFg: p.gap ? "var(--ochre,#7f4a07)" : "var(--ink,#171d24)"
+    }));
+
+    const bare = this.props.chrome === false;
+
+    return {
+      showChrome: !bare,
+      pagePad: bare ? "0" : "26px 30px 44px",
+      pageBg: bare ? "transparent" : "#c9cec2",
+      pageMinH: bare ? "0" : "100vh",
+      field: this.props.field ?? s.field,
+      // Two themes. Glare treatments were built and cut: a third palette is a third
+      // contrast surface for the gates to police, and one nobody remembers to switch
+      // into. Day's own contrast was lifted instead — lighter paper, darker ink and
+      // rules — so the palette people actually read on is the one that holds up in sun.
+      fieldOptions: this.seg([["day", "Day"], ["night", "Night"]], s.field, "field"),
+      toolsVisible,
+      addAmount: s.amount,
+      setAmount: (e) => this.setState({ amount: e.target.value.replace(/[^0-9.]/g, "") }),
+      addConv: s.cur === "KRW"
+        ? "≈ $" + usd.toFixed(2) + " · sourced rate ₩1,461/$1, Fed H.10, 24 jul 2026"
+        : "entered in USD · no conversion applied",
+      addCur: [["KRW", "₩"], ["USD", "$"]].map(([v, label]) => ({
+        label,
+        bg: s.cur === v ? OX : "transparent",
+        fg: s.cur === v ? "var(--on-aink,#f0d2c7)" : "var(--muted,#4e5747)",
+        pick: () => this.setState({ cur: v })
+      })),
+      addPayers: ["You", "Traveller 2", "Traveller 3"].map(name => {
+        const on = s.payer === name;
+        return {
+          label: name === "You" ? "You" : name.replace("Traveller ", "T"),
+          bg: on ? OX : "transparent",
+          border: on ? OX : "var(--rule2,#a3ac98)",
+          fg: on ? "var(--on-aink,#f0d2c7)" : "var(--muted,#4e5747)",
+          pick: () => this.setState({ payer: name })
+        };
+      }),
+      // `participants` — WHO shares it. A two-person split is a subset here, not a
+      // new `per` value: settle.ts apportions over the participant set, and an
+      // absent/empty set is the legacy reading, "the whole group as it stands".
+      addEach: shareCount ? "$" + (usd / shareCount).toFixed(2) + " each" : "nobody shares this",
+      addWho: PEOPLE.map(name => {
+        const on = s.who.indexOf(name) > -1;
+        return {
+          label: name === "You" ? "You" : name.replace("Traveller ", "T"),
+          tick: on ? "✓" : "",
+          boxBorder: on ? "var(--green,#396345)" : "var(--rule2,#a3ac98)",
+          boxBg: on ? "var(--green,#396345)" : "transparent",
+          bg: on ? "color-mix(in srgb,var(--accent,#9c4421) 9%,transparent)" : "transparent",
+          border: on ? OX : "var(--rule2,#a3ac98)",
+          fg: on ? "var(--aink,#80371b)" : "var(--muted,#4e5747)",
+          pick: () => this.setState(p => ({
+            who: p.who.indexOf(name) > -1 ? p.who.filter(x => x !== name) : p.who.concat([name])
+          }))
+        };
+      }),
+      // EQUAL is the default and covers the ordinary case; the other three methods
+      // stay folded away. These are money.ts's four SplitMethod values, verbatim.
+      toggleMethod: () => this.setState({ methodOpen: !s.methodOpen }),
+      methodOpen: s.methodOpen,
+      methodShow: s.methodOpen ? "flex" : "none",
+      methodChevron: s.methodOpen ? "−" : "+",
+      methodLabel: s.methodOpen ? "Split method" : "Split method · " + s.method,
+      addMethods: [
+        ["EQUAL", "in even shares"],
+        ["EXACT", "type each amount"],
+        ["PERCENTAGE", "0–100 each"],
+        ["SHARES", "weights, e.g. 2 vs 1"]
+      ].map(([v, sub]) => {
+        const on = s.method === v;
+        return {
+          label: v, sub,
+          border: on ? OX : "var(--rule2,#a3ac98)",
+          bg: on ? "color-mix(in srgb,var(--accent,#9c4421) 9%,transparent)" : "transparent",
+          ring: on ? OX : "var(--rule2,#a3ac98)",
+          dot: on ? OX : "transparent",
+          pick: () => this.setState({ method: v })
+        };
+      }),
+      addPreview: "$" + usd.toFixed(2) + " · paid by " + s.payer
+        + " · " + s.method + " over " + shareCount + " of 3"
+        + " · ledger total " + money(PAID_TOTAL + usd),
+      groups: GROUPS.map(([name, sub], i) => {
+        const on = name === s.group;
+        const line = name === "Days" ? resumeLine("day 4 — GO Fest, EXPO Science Park") : null;
+        return {
+          name, sub,
+          weight: on ? "600" : "400",
+          sheetBg: on ? "var(--sunken,#d2d7c8)" : "transparent",
+          sheetFg: on ? "var(--aink,#80371b)" : "var(--ink,#171d24)",
+          stationBg: on ? OX : "var(--card,#f8faf3)",
+          stationBorder: on ? OX : "var(--rule2,#a3ac98)",
+          stationRing: on ? "0 0 0 4px color-mix(in srgb,var(--accent,#9c4421) 22%,transparent)" : "none",
+          resumeShow: line ? "block" : "none",
+          resume: line || "",
+          delay: s.journeyOpen ? (0.04 + Math.min(i, 10) * 0.028).toFixed(3) + "s" : "0s",
+          rowOpacity: s.journeyOpen ? "1" : "0",
+          rowShift: s.journeyOpen ? "translateY(0)" : "translateY(14px)",
+          pick: () => this.openGroup(name)
+        };
+      }),
+      dayChips: DAYS.map(x => {
+        const on = x.n === String(s.day);
+        return {
+          n: x.n, label: x.label,
+          flex: on ? "2.6" : "1",
+          dateShow: on ? "inline" : "none",
+          bg: on ? "var(--sunken,#d2d7c8)" : "transparent",
+          rule: on ? OX : "var(--rule,#bec6b2)",
+          fg: on ? "var(--aink,#80371b)" : (x.state === "done" ? "var(--green,#396345)" : "var(--muted,#4e5747)"),
+          pick: () => this.setState({ day: Number(x.n) })
+        };
+      }),
+      day: Object.assign({}, stampFor(d.state), {
+        n: d.n, longDate: d.longDate, title: d.title, tldr: d.tldr, pace: d.pace,
+        detail: d.detail,
+        hasGap: !!d.hasGap, gapBody: d.gapBody || "", gapDo: d.gapDo || "",
+        hasChecks: !!(d.checks && d.checks.length),
+        checkCount: doneCount + " of " + (d.checks ? d.checks.length : 0) + " done",
+        hasLived: false, lived: ""
+      }),
+      // Desktop keeps marginalia in the margin and unfolds it on hover, so it needs
+      // no per-stop open state — the phone taps, the desktop hovers.
+      stops: d.stops.map(([n, name, note, time, st, mk]) => {
+        const m = mk ? d.margins[mk] : null;
+        return {
+          n, name, note, time,
+          opacity: st === "past" ? ".5" : "1",
+          bg: st === "now" ? "color-mix(in srgb,var(--accent,#9c4421) 10%,transparent)" : "transparent",
+          rule: n === "01" ? "0" : "1px dashed var(--rule,#bec6b2)",
+          numFg: st === "past" ? "var(--muted,#4e5747)" : "var(--aink,#80371b)",
+          timeFg: st === "now" ? "var(--aink,#80371b)" : "var(--muted,#4e5747)",
+          hasNote: !!m,
+          mKicker: m ? m[0] : "", mBody: m ? m[1] : "", mStamp: m ? m[2] : "",
+          mFg: m && m[3] === "ochre" ? "var(--ochre,#7f4a07)" : "var(--aink,#80371b)"
+        };
+      }),
+      checks,
+      panels: (PANELS[s.group] || []).map(p => ({
+        kicker: p.kicker, title: p.title, body: p.body,
+        rows: p.rows.map(([label, value]) => ({ label, value, fg: p.gap ? "var(--ochre,#7f4a07)" : "var(--ink,#171d24)" })),
+        hasRows: p.rows.length > 0,
+        items: p.items, hasItems: p.items.length > 0,
+        flag: p.flag, hasFlag: !!p.flag,
+        stamp: p.stamp, hasStamp: !!p.stamp,
+        stampFg: p.stamp.indexOf("corrected") > -1 ? "var(--ochre,#7f4a07)" : "var(--muted,#4e5747)",
+        ground: p.gap ? "transparent" : "var(--card,#f8faf3)",
+        border: p.gap ? "2px solid var(--ochre,#7f4a07)" : "1px solid var(--rule,#bec6b2)",
+        ruleColor: p.gap ? "var(--ochre,#7f4a07)" : "var(--rule,#bec6b2)",
+        kickerFg: p.gap ? "var(--ochre,#7f4a07)" : "var(--aink,#80371b)",
+        titleFont: p.gap ? "600 1.4rem/1.12 'Source Sans 3',sans-serif" : "500 1.24rem/1.2 Literata,Georgia,serif",
+        titleFg: p.gap ? "var(--ochre,#7f4a07)" : "var(--ink,#171d24)"
+      })),
+      tools: TOOLS.map(([label], i) => {
+        const on = i === s.tool;
+        return {
+          label,
+          bg: on ? OX : "transparent",
+          fg: on ? "var(--on-aink,#f0d2c7)" : "var(--muted,#4e5747)",
+          border: on ? OX : "var(--rule2,#a3ac98)",
+          pick: () => this.setState({ tool: i })
+        };
+      }),
+      toolKicker: t[1], toolTitle: t[2], toolStamp: t[4],
+      toolRows: t[3].map(([label, value, tone, href]) => ({
+        label, value, hasLink: !!href, href: href || "",
+        fg: tone === "aink" ? "var(--aink,#80371b)" : tone === "ochre" ? "var(--ochre,#7f4a07)" : tone === "green" ? "var(--green,#396345)" : "var(--ink,#171d24)"
+      })),
+      toolHasAll: t[0] === "Route",
+      toolAllHref: "https://www.google.com/maps/dir/?api=1&origin=37.5701,126.9832&destination=36.37499,127.39178&waypoints=37.55542,126.97259%7C36.33135,127.43336%7C36.37601,127.38769&travelmode=transit",
+      isSplit: t[0] === "Split",
+      ledger: LEDGER.map(([item, group, payer, basis, usd]) => ({ item, group, payer, basis, usd })),
+      travellers: TRAVELLERS.map(([name, paid, share, net, tone]) => ({
+        name, paid, share, net, note: "",
+        fg: tone === "green" ? "var(--green,#396345)" : tone === "muted" ? "var(--muted,#4e5747)" : "var(--ochre,#7f4a07)"
+      })),
+      settle: SETTLE.map(([line, amount]) => ({ line, amount })),
+      ledgerTotal: money(PAID_TOTAL),
+      // Where it went — grouped from the guide's own rows, so the bars and the ledger
+      // are the same arithmetic seen twice.
+      cats: (() => {
+        const by = {};
+        PAID.forEach(([, cat, , , usd]) => { by[cat] = (by[cat] || 0) + usd; });
+        const rows = Object.keys(by).map(k => [k, by[k]]).sort((a, b) => b[1] - a[1]);
+        const top = rows.length ? rows[0][1] : 1;
+        return rows.map(([name, v]) => ({
+          name, amount: money(v),
+          pct: Math.round((v / PAID_TOTAL) * 100) + "%",
+          width: Math.max(2, (v / top) * 100) + "%"
+        }));
+      })(),
+      catsShow: LEDGER_EMPTY ? "none" : "block",
+      settleHeading: HAS_TRANSFERS ? "Settle up · " + SETTLE.length + " transfers" : "Settle up · nothing to settle yet",
+      settleShowPaid: HAS_TRANSFERS ? "inline-flex" : "none",
+      settleStamp: HAS_TRANSFERS ? "minimum transfers · your settle model" : "nothing paid yet — add an expense to start",
+      ledgerCount: String(PAID.length),
+      ledgerStamp: LEDGER_EMPTY
+        ? "the ledger starts empty · nothing here is seeded from the guide"
+        : "every line is money that changed hands · converted once at ₩1,461/$1",
+      showToolsHeading: true,
+      toolsHeading: "Tools · the last station on the rail",
+      toolsMargin: "0",
+      toolsPadTop: "0",
+      toolsRule: "0",
+      toolsNote: "A station like any other — the rail carries it, and picking it never takes the trip away.",
+      isDays, isPanels: !isDays && !toolsVisible,
+      panels,
+      chips: [
+        { label: "Police 112", fg: "var(--ochre,#7f4a07)" },
+        { label: "Fire & ambulance 119", fg: "var(--ochre,#7f4a07)" },
+        { label: "KRW · ≈₩1,461/$1", fg: "var(--muted,#4e5747)" },
+        { label: "Base — Seoul", fg: "var(--muted,#4e5747)" }
+      ],
+      groups: GROUPS.concat([["Tools", "Split, closures, reminders, route"]]).map(([name, sub]) => {
+        const on = name === s.group;
+        return {
+          name, sub,
+          fg: on ? "var(--aink,#80371b)" : "var(--muted,#4e5747)",
+          weight: on ? "600" : "400",
+          stationBg: on ? OX : "var(--bg,#dfe3d9)",
+          stationBorder: on ? OX : "var(--rule2,#a3ac98)",
+          stationRing: on ? "0 0 0 4px color-mix(in srgb,var(--accent,#9c4421) 24%,transparent)" : "none",
+          pick: () => this.setState({ group: name })
+        };
+      }),
+      activeName: s.group,
+      activeSub: s.group === "Tools" ? "Split, closures, reminders, route" : (GROUPS.find(g => g[0] === s.group) || ["", ""])[1],
+      activeResume: isDays
+        ? "You were at day 4 — GO Fest, EXPO Science Park"
+        : toolsVisible
+          ? "Running on South Korea · switch trips from the tool rail"
+          : "Nothing remembered in this group yet",
+      dayChips: DAYS.map(x => {
+        const on = x.n === String(s.day);
+        return {
+          n: x.n, label: x.label,
+          state: x.state === "now" ? "now" : x.state === "done" ? "done" : x.state === "next" ? "next" : "planned",
+          bg: on ? OX : "var(--card,#f8faf3)",
+          border: on ? OX : "var(--rule,#bec6b2)",
+          fg: on ? "var(--on-aink,#f0d2c7)" : "var(--ink,#171d24)",
+          numFg: on ? "var(--on-aink,#f0d2c7)" : (x.state === "done" ? "var(--green,#396345)" : x.state === "now" ? "var(--aink,#80371b)" : "var(--muted,#4e5747)"),
+          pick: () => this.setState({ day: Number(x.n) })
+        };
+      }),
+      day: Object.assign({}, stampFor(d.state), {
+        n: d.n, longDate: d.longDate, title: d.title, tldr: d.tldr, pace: d.pace,
+        detail: d.detail,
+        hasGap: !!d.hasGap, gapBody: d.gapBody || "", gapDo: d.gapDo || "",
+        hasChecks: !!(d.checks && d.checks.length),
+        checkCount: doneCount + " of " + (d.checks ? d.checks.length : 0) + " done",
+        hasLived: !!d.lived, lived: d.lived || ""
+      }),
+      stops: d.stops.map(([n, name, note, time, st, key]) => {
+        const m = key ? d.margins[key] : null;
+        return {
+          n, name, note, time,
+          opacity: st === "past" ? ".5" : "1",
+          bg: st === "now" ? "color-mix(in srgb,var(--accent,#9c4421) 10%,transparent)" : "transparent",
+          rule: n === "01" ? "0" : "1px dashed var(--rule,#bec6b2)",
+          numFg: st === "past" ? "var(--muted,#4e5747)" : "var(--aink,#80371b)",
+          timeFg: st === "now" ? "var(--aink,#80371b)" : "var(--muted,#4e5747)",
+          hasNote: !!m,
+          mKicker: m ? m[0] : "", mBody: m ? m[1] : "", mStamp: m ? m[2] : "",
+          mFg: m && m[3] === "ochre" ? "var(--ochre,#7f4a07)" : "var(--aink,#80371b)"
+        };
+      }),
+      checks,
+      skipped: (d.skipped || []).map(([stop, reason]) => ({ stop, reason })),
+      learnings: LEARNINGS,
+      tools: TOOLS.map(([label], i) => {
+        const on = i === s.tool;
+        return {
+          label,
+          bg: on ? OX : "transparent",
+          fg: on ? "var(--on-aink,#f0d2c7)" : "var(--muted,#4e5747)",
+          border: on ? OX : "var(--rule2,#a3ac98)",
+          pick: () => this.setState({ tool: i })
+        };
+      }),
+      toolKicker: t[1], toolTitle: t[2], toolStamp: t[4],
+      toolRows: t[3].map(([label, value, tone, href]) => ({
+        label, value,
+        hasLink: !!href, href: href || "",
+        fg: tone === "aink" ? "var(--aink,#80371b)" : tone === "ochre" ? "var(--ochre,#7f4a07)" : tone === "green" ? "var(--green,#396345)" : "var(--ink,#171d24)"
+      })),
+      toolHasAll: t[0] === "Route",
+      toolAllHref: "https://www.google.com/maps/dir/?api=1&origin=37.5701,126.9832&destination=36.37499,127.39178&waypoints=37.55542,126.97259%7C36.33135,127.43336%7C36.37601,127.38769&travelmode=transit",
+      inventory: INVENTORY
+    };
+  }
+}
+</script>
+</body>
+</html>

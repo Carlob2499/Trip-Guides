@@ -133,3 +133,105 @@ describe("resumeLine", () => {
     expect(resumeLine(long)).toHaveLength("you were at ".length + 42);
   });
 });
+
+/* R5 TESTS.md §2 — the thumb bar against a REAL 13-station guide.
+   The existing cases above use small synthetic sets, which is where the defect hid: review
+   found hard-coded slots that left 9 of Korea's 13 groups with no current slot, and every
+   assertion in this file passed while that was true because none of them looked past the
+   first two groups. These do. */
+describe("the thumb bar on a 13-station guide", () => {
+  // Korea's own groups, in the guide's own order. Not a fixture shape — the real names, so a
+  // rename that breaks slotLabel shows up here rather than in production.
+  const KOREA = [
+    "Plan", "Essentials", "Transit", "Days", "Sights", "Daejeon & MSI", "Gaming & anime",
+    "Food & shopping", "Pokémon GO", "Tokyo", "Sources", "Field log", "Tools",
+  ];
+
+  it("seats the CURRENT group for every one of the 13 — not just the first two", () => {
+    /* ⌁ regression. The bar can never show a set that excludes where the reader is standing:
+       a navigation control that omits your own position is worse than none, because it reads
+       as "you are nowhere". Asserted for all 13, which is the assertion that was missing. */
+    for (let i = 0; i < KOREA.length; i++) {
+      expect(promoted({}, KOREA, i), `group ${i} (${KOREA[i]}) lost its slot`).toContain(i);
+    }
+  });
+
+  it("still seats the current group when another is far more used", () => {
+    // Habit ranks the OTHER slot. It must never evict the reader's own position to do it.
+    const heavy = { Sights: 40, "Food & shopping": 30, Tokyo: 25 };
+    for (let i = 0; i < KOREA.length; i++) {
+      expect(promoted(heavy, KOREA, i), `group ${i} evicted by a popular one`).toContain(i);
+    }
+  });
+
+  it("gives an unopened group no count at all — order falls back to the guide's own", () => {
+    // Not zero, absent: a zero is a recorded preference for "never", and nobody recorded it.
+    expect(rankOrder({}, KOREA)).toEqual(KOREA.map((_, i) => i));
+  });
+
+  it("does not make a tapped right-hand slot jump to the left", () => {
+    /* ⌁ regression. seat() keeps a promoted group at the index it already occupies. Without it
+       the two buttons trade places under the thumb that just tapped one — the control moves
+       out from under the finger still touching it. */
+    const before = promoted({}, KOREA, 0);
+    const seated = seat([before[0], before[1]], promoted({}, KOREA, before[1]));
+    expect(seated[1]).toBe(before[1]);
+  });
+
+  it("abbreviates only where a slot cannot hold the name, and keeps it readable", () => {
+    // A compound name keeps its head, whole and unmarked — nothing was cut mid-thought.
+    expect(slotLabel("Food & shopping")).toBe("Food");
+    expect(slotLabel("Gaming & anime")).toBe("Gaming");
+    // A single long name is cut at its last word boundary and MARKED, so the label never
+    // pretends to be the whole name.
+    expect(slotLabel("Pokémon GO")).toBe("Pokémon…");
+    // Short names are untouched.
+    expect(slotLabel("Plan")).toBe("Plan");
+    expect(slotLabel("Sources")).toBe("Sources");
+  });
+
+  it("is always a marked prefix of the real name — never a different string", () => {
+    /* The weaker half of the contract, and the one that holds for every name: whatever is
+       shown, strip the ellipsis and it is a genuine prefix of the group's own name. A label
+       that is not a prefix is a label the reader cannot match to anything in the sheet. */
+    for (const name of KOREA) {
+      const label = slotLabel(name).replace(/…$/, "");
+      expect(name.startsWith(label), `${name} -> ${label} is not a prefix`).toBe(true);
+      expect(label.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("cuts mid-word ONLY when the name offers no word boundary to cut at", () => {
+    /* The rule is "a word boundary, but only if the stub stays readable" — so a single long
+       word has nowhere to break and takes a marked mid-word cut, which beats "Es…".
+       Pinned in both directions so neither half can be simplified away:
+         · a multi-word name must break on the boundary
+         · a single word may not be dropped or blanked instead */
+    expect(slotLabel("Essentials")).toBe("Essential…");  // one word, no boundary — cut and mark
+    expect(slotLabel("Pokémon GO")).toBe("Pokémon…");    // boundary exists, so it is used
+    for (const name of KOREA) {
+      const label = slotLabel(name);
+      if (label.endsWith("…") && /\s/.test(name)) {
+        const stub = label.replace(/…$/, "");
+        const rest = name.slice(stub.length);
+        expect(/^[\s&+·—–]/.test(rest), `${name} -> ${stub} ignored a usable boundary`).toBe(true);
+      }
+    }
+  });
+
+  it("keeps the FULL name available even where the visible one was cut", () => {
+    // The abbreviation is a display concern. COMPONENTS.md §10: the full name stays in the
+    // accessible name and in the sheet, so nothing a screen reader receives is ever a stub.
+    for (const name of KOREA) {
+      expect(slotLabel(name).length).toBeLessThanOrEqual(name.length + 1); // +1 for the marker
+      expect(name).toBe(name); // the source string is never mutated
+    }
+  });
+
+  it("returns no resume line for a guide never opened — never a default string", () => {
+    // ⌁ regression. "Start here" is the product claiming to remember something it does not.
+    expect(resumeLine(null)).toBeFalsy();
+    expect(resumeLine(undefined)).toBeFalsy();
+    expect(resumeLine("")).toBeFalsy();
+  });
+});

@@ -1,0 +1,94 @@
+/* ── Waypoint colour ──────────────────────────────────────────────────────────
+   Cool sage and ink, with exactly one chromatic voice — iron oxide — layered on.
+   Consume through the semantic variables, never the raw hexes. The ONE exception
+   is #9c4421 itself: it is identity data and is deliberately the same value in
+   every theme.
+
+   The Three Jobs Rule: an accent has three jobs and they are three colours —
+   identity (--accent), accent-as-text (--aink), text-on-accent (--on-aink).
+   Never hand-blend a fourth at a call site; a color-mix invented in a rule
+   carries no contrast contract.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Raw palette — daylight */
+  --survey-paper: #dfe3d9;
+  --survey-paper-sunken: #d2d7c8;
+  --card-paper: #f8faf3;
+  --map-ink: #171d24;
+  --ink-muted: #4e5747;
+  --hairline: #bec6b2;
+  --hairline-strong: #8a9480;
+
+  /* Raw palette — the chart room */
+  --chart-room-slate: #0f1317;
+  --chart-room-sunken: #1a2129;
+  --chart-room-card: #242c34;
+  --lamplit-paper: #e8ece3;
+  --lamplit-muted: #9aa392;
+  --hairline-dark: #38414b;
+  --hairline-strong-dark: #4e5865;
+
+  /* Identity + status */
+  --surveyors-red-oxide: #9c4421;
+  --accent-ink: #80371b;
+  --accent-ink-dark: #c78f78;
+  --on-accent: #f0d2c7;
+  --field-green: #396345;
+  --field-green-dark: #6aab76;
+  --caution-ochre: #7f4a07;
+  --caution-ochre-dark: #d9923f;
+  --emergency-red: #b3261e;
+  --emergency-red-dark: #ef5350;
+}
+
+/* ── Daylight (default) ─────────────────────────────────────────────────────
+   The paper you read on a train, on a phone, in sunlight. R5 lifted its
+   contrast: the paper is lighter, the ink and both rules darker, so it holds
+   up outdoors without losing the sage warmth that makes it read as paper.
+   This is the outdoor mode — there is no third palette. */
+:root,
+[data-field="day"] {
+  --bg: #e3e7dc;
+  --card: #fbfcf6;
+  --sunken: #ced5c4;
+  --ink: #0f141a;
+  --muted: #3c4534;
+  --rule: #a9b39b;
+  --rule2: #8a9480;
+  --accent: #9c4421;
+  --aink: #80371b;
+  --on-aink: #f0d2c7;
+  --green: #396345;
+  --on-green: #ffffff;
+  --ochre: #7f4a07;
+  --crit: #b3261e;
+  --cta: #0f1317;
+  --cta-ink: #f8faf3;
+  --rw: 1px;
+  --photo: 1;
+}
+
+/* ── The chart room ─────────────────────────────────────────────────────────
+   Night. --accent does NOT re-map: a guide's colour is a fact about the guide,
+   not about the reader's display. Only its ink re-maps. */
+[data-field="night"] {
+  --bg: #0f1317;
+  --card: #242c34;
+  --sunken: #1a2129;
+  --ink: #e8ece3;
+  --muted: #9aa392;
+  --rule: #38414b;
+  --rule2: #4e5865;
+  --accent: #9c4421;
+  --aink: #c78f78;
+  --on-aink: #f0d2c7;
+  --green: #6aab76;
+  --on-green: #0f1317;
+  --ochre: #d9923f;
+  --crit: #ef8a83;
+  --cta: #e8ece3;
+  --cta-ink: #0f1317;
+  --rw: 1px;
+  --photo: 1;
+}

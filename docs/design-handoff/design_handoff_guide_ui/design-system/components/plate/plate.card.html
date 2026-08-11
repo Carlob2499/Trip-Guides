@@ -1,0 +1,25 @@
+<!-- @dsCard group="Components" viewport="700x340" subtitle="Mounted photography and the line beneath it" name="Plate" -->
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<style>html,body{margin:0}body{background:var(--bg);color:var(--ink);font-family:var(--fs);padding:18px 20px}*{box-sizing:border-box}</style>
+</head><body>
+<div id="root"></div>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<script type="text/babel" data-presets="react">
+const W = window.Waypoint || {};
+function Demo() {
+  if (!W.Plate) return <p style={{font:"400 12px/1.5 var(--fs)",color:"var(--muted)"}}>Bundle not built yet.</p>;
+  const { Plate, PlateLine } = W;
+  return (
+    <div>
+      <Plate caption="plate · gyeongbokgung, commons" minHeight="190px" />
+      <PlateLine reading="Seoul · Daejeon · Busan" note="Next: KTX 08:30 → Daejeon" stamp="✓ 30 jul" meta="21/37 stops · 4 to book" />
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo />);
+</script>
+</body></html>

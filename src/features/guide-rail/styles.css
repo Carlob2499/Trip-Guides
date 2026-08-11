@@ -1,0 +1,208 @@
+/* === THE SPINE RAIL ==========================================================================
+   ONE DOM, three models, switched entirely by @container (TOKENS.md §7). Nothing here reads the
+   viewport and nothing branches on a device: the base rules ARE the phone model, and the two
+   container queries layer the tablet and desktop models on top. A browser without container
+   queries matches neither and keeps the phone model, which is the intended degradation.
+
+     < 744px      pill row + progress line   — the line's ends are unreachable at this width, so
+                                               the ordinal position moves into a progress fill
+     744-1179px   vertical spine, left column — 13 stops do not fit a 744px horizontal line
+     >= 1180px    horizontal spine
+
+   A pill rail said "these are categories". A spine says "this is one journey and you are here",
+   and every rule below serves that second sentence: equal-width stops (a rail is a scale, and
+   unequal stops read as unequal importance), one continuous 2px line, and a single filled dot
+   with a halo for the reader's own position. */
+
+/* --- The rail's own box ---------------------------------------------------------------------
+   Sticky beneath the top chrome. --hdr-h is MEASURED and republished by ui/rail.js on every
+   resize; the static fallback in base.css is only ever the first frame's guess, because the
+   header's height moves with the theme toggle's label, the trip chip and the cold-open strip. */
+.grail{
+  position:sticky;top:var(--hdr-h);z-index:40;
+  background:var(--bg);
+  /* max() rather than bare env(): an environment reporting no inset must still leave the
+     reserved gutter, or the rail sits flush against the page edge on every desktop. */
+  padding-inline:max(0px,var(--safe-left)) max(0px,var(--safe-right));
+  border-bottom:var(--rw) solid var(--rule);
+}
+/* Chrome yield slides the rail away with the header it hangs from — one movement, not two.
+   Transform only, per the motion table; nothing on this path animates a layout property. */
+body.chrome-yield .grail{transform:translateY(calc(-1 * var(--hdr-h)))}
+.grail{transition:transform 280ms cubic-bezier(.22,1,.36,1)}
+
+/* --- PHONE (base): the pill row ------------------------------------------------------------- */
+.grail-track{
+  /* ONE geometry, declared once, for the line and the dots alike. R4's strip had these as two
+     unrelated hand-tuned offsets and they disagreed — the track ran through the TOP EDGE of
+     every circle instead of its middle. Both now derive from --gr-dot, so they cannot drift:
+     the line's centre is always the dot's centre, whichever way the spine is turned. */
+  --gr-dot:11px;
+  --gr-pad:14px;          /* the stop column's leading inset, both models */
+  display:flex;gap:7px;overflow-x:auto;overflow-y:hidden;
+  padding:0 12px 7px;
+  touch-action:pan-x;overscroll-behavior-x:contain;
+  scrollbar-width:none;-ms-overflow-style:none;
+  position:relative;
+}
+.grail-track::-webkit-scrollbar{display:none}
+
+.grail-stop{
+  flex:none;
+  display:flex;align-items:center;justify-content:center;
+  min-height:40px;padding:0 14px;
+  border:var(--rw) solid var(--rule2);border-radius:999px;
+  background:transparent;color:var(--ink);
+  font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;line-height:1;
+  letter-spacing:.05em;white-space:nowrap;cursor:pointer;
+}
+/* The active pill takes the oxide FILL, so its ink is --on-aink and not --ink or --bg. Ink on a
+   coloured fill is the fill's own --on-* token — the fill does not re-map with the theme, so
+   ink that followed the page theme would be wrong on exactly one side of it. */
+.grail-stop[aria-current="true"],.grail-stop.gtab-active{
+  background:var(--accent);color:var(--on-aink);border-color:var(--accent);
+}
+.grail-stop:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* The dot belongs to the spine models; a pill marks itself by its fill. */
+.grail-dot{display:none}
+
+/* The R4 tool tabs still live inside #guideTabs so every silo that queries
+   `.gtab[data-tab="split"]` keeps resolving through one element — but they must never paint in
+   the rail, or Korea would show 18 stops where the guide has 13. display:none rather than the
+   `hidden` attribute alone, because learnings/ui/tab.js un-hides its own button the moment
+   Firebase reports feedback, and it did exactly that: a "Learnings" pill appeared between
+   Field log and Tools. Step 4 rehomes these into the Tools station and deletes this rule. */
+.grail-track > .gtab-tool{display:none}
+
+/* The progress line — the phone's replacement for a rail whose ends it cannot see.
+   `left` and `width` transition here and nowhere else: one 280ms move on a discrete state
+   change, never a per-frame path. The fill's width is (100 / stationCount)% and is written by
+   ui/rail.js from the guide's own count — Korea 7.69%, Sedona 11.1%, never a constant. */
+.grail-prog{position:relative;height:2px;background:var(--rule);margin:0 12px}
+.grail-fill{
+  position:absolute;top:0;bottom:0;left:0;width:0;
+  background:var(--accent);
+  transition:left 280ms cubic-bezier(.22,1,.36,1),width 280ms cubic-bezier(.22,1,.36,1);
+}
+
+/* --- The context line — on every model ------------------------------------------------------
+   The active group's kicker and descriptor, and the resume line when one exists. The resume
+   line is ABSENT when nothing is remembered: a fabricated "start here" would be the product
+   telling a reader it knows something about them that it does not. */
+.grail-ctx{
+  display:flex;flex-wrap:wrap;align-items:baseline;gap:.35rem .9rem;
+  padding:9px 12px 14px;border-top:var(--rw) solid var(--rule);
+}
+.grail-kicker{
+  font-family:var(--font-data);font-size:var(--text-panel-kicker);font-weight:700;line-height:1;
+  letter-spacing:var(--tracking-panel-kicker);text-transform:uppercase;color:var(--aink);
+}
+.grail-desc{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);margin:0}
+.grail-resume{
+  margin-left:auto;font-family:var(--font-data);font-size:var(--text-caption);color:var(--aink);
+}
+
+/* --- TABLET (744-1179): the vertical spine --------------------------------------------------
+   Thirteen stops do not fit a 744px horizontal line, and a tablet has vertical room to spare —
+   so the spine turns rather than shrinking its stops or scrolling out of sight. */
+@container guide (min-width: 744px){
+  .grail{
+    /* Beside the reading column, not above it. .shell's grid places this in column one. */
+    border-bottom:0;border-inline-end:var(--rw) solid var(--rule);
+    padding-block:1rem;
+    align-self:start;
+  }
+  .grail-track{
+    --gr-pad:.9rem;
+    flex-direction:column;gap:0;overflow:visible;padding:0 var(--gr-pad);
+  }
+  /* THE LINE. It runs the height of the stop column, inset 9px at each end so it begins and
+     ends at the first and last dot rather than running past them, and its 2px sits centred on
+     the dots' own axis: pad + half a dot, less half the line. */
+  .grail-track::before{
+    content:"";position:absolute;width:2px;top:9px;bottom:9px;
+    left:calc(var(--gr-pad) + (var(--gr-dot) - 2px) / 2);
+    background:var(--rule);
+  }
+  .grail-stop{
+    flex:1 1 auto;justify-content:flex-start;gap:.6rem;
+    min-height:44px;padding:.35rem 0 .35rem 0;
+    border:0;border-radius:0;background:transparent;color:var(--muted);
+    font-size:var(--text-label);font-weight:400;line-height:1.25;
+    letter-spacing:0;white-space:normal;text-align:start;
+    position:relative;z-index:1;
+  }
+  .grail-stop[aria-current="true"],.grail-stop.gtab-active{
+    background:transparent;color:var(--ink);font-weight:700;border-color:transparent;
+  }
+  /* The dot punches THROUGH the line: an 11px circle with a 2px ring in the page ground, so the
+     line appears to pass behind it rather than stopping at it. */
+  /* The dot carries R4's reading progress, ported forward: --st-fill (0-100, written by
+     guide-ui.js on scroll) paints the dot from the bottom up as the reader moves through the
+     station they are in, and a station already walked stays solid via [data-visited]. R5 does
+     not specify this and does not forbid it; it is the one thing the retired horizon told a
+     reader that the spine otherwise would not, and the writer was still running. */
+  .grail-dot{
+    display:block;flex:none;width:11px;height:11px;border-radius:999px;
+    background:linear-gradient(to top,
+      var(--accent) calc(var(--st-fill,0) * 1%), var(--rule2) calc(var(--st-fill,0) * 1%));
+    box-shadow:0 0 0 2px var(--bg);
+  }
+  .grail-stop[data-visited] .grail-dot{background:var(--accent)}
+  .grail-stop[aria-current="true"] .grail-dot,.grail-stop.gtab-active .grail-dot{
+    background:var(--accent);
+    /* The halo. The flat rgba is declared FIRST as the fallback and color-mix second: a browser
+       that cannot parse color-mix drops that declaration and keeps the rgba, and one that can
+       overrides it (FALLBACKS.md §2). Order is the whole mechanism — reversed, the fallback
+       would win everywhere. */
+    box-shadow:0 0 0 2px var(--bg),0 0 0 6px rgba(156,68,33,.22);
+    box-shadow:0 0 0 2px var(--bg),0 0 0 6px color-mix(in srgb,var(--accent) 22%,transparent);
+  }
+  /* The phone's ordinal report is redundant once the whole line is visible. */
+  .grail-prog{display:none}
+  .grail-ctx{flex-direction:column;align-items:flex-start;padding:14px .9rem 0;margin-top:.6rem}
+  .grail-resume{margin-left:0}
+}
+
+/* --- DESKTOP (>=1180): the horizontal spine -------------------------------------------------- */
+@container guide (min-width: 1180px){
+  .grail{border-inline-end:0;border-bottom:var(--rw) solid var(--rule);padding-block:0}
+  .grail-track{
+    --gr-pad:14px;
+    flex-direction:row;gap:0;padding:var(--gr-pad) 0 0;
+  }
+  /* Equal widths, not content widths. The rail is a scale: a stop sized to its own label would
+     say that "Plan" is a smaller part of the trip than "Etiquette & language". */
+  .grail-stop{
+    flex:1 1 0;min-width:0;
+    flex-direction:column;justify-content:flex-start;gap:.45rem;
+    padding:0 .25rem;text-align:center;
+  }
+  /* The same geometry, turned: the line's centre is still the dot's centre, now measured down
+     from the track's top padding instead of in from its left. */
+  .grail-track::before{
+    left:9px;right:9px;bottom:auto;width:auto;height:2px;
+    top:calc(var(--gr-pad) + (var(--gr-dot) - 2px) / 2);
+  }
+  /* Two lines, and the label is never abbreviated to fit — COMPONENTS.md §2 budgets exactly
+     this much room, which is why the model hands over full group names rather than stubs. */
+  .grail-label{
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  .grail-ctx{flex-direction:row;align-items:baseline;padding:9px 0 14px}
+}
+
+/* --- Reduced motion: cut, do not soften ------------------------------------------------------
+   The progress fill jumps to its new position, the rail snaps in and out of yield. Press states
+   are deliberately NOT covered here — they are state, not motion. */
+@media (prefers-reduced-motion: reduce){
+  .grail,.grail-fill{transition:none}
+}
+
+/* --- Print: the rail becomes a plain list ---------------------------------------------------- */
+@media print{
+  .grail{position:static;border:0}
+  .grail-track{flex-direction:column;overflow:visible}
+  .grail-prog{display:none}
+  .grail-stop{border:0;background:transparent;color:#000}
+}

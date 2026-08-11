@@ -232,3 +232,80 @@ describe("Atlas token contract — declared-but-unconsumed tokens", () => {
        static fallback being present is the part that stays true either way. */
   });
 });
+
+/* R5 lifted Day palette — the reasoning lives in base.css's own R5 block. Pinned as EXACT
+   values because these were chosen against a scene CI cannot re-measure. */
+describe("R5 — the lifted Day palette", () => {
+  it.each([
+    ["--bg", "#e3e7dc"],
+    ["--card", "#fbfcf6"],
+    ["--bg2", "#ced5c4"], // the token --sunken points at
+    ["--ink", "#0f141a"],
+    ["--muted", "#3c4534"],
+    ["--rule", "#a9b39b"],
+    ["--rule2", "#8a9480"],
+  ])("Day %s holds its lifted value %s", (token, value) => {
+    expect(hex(LIGHT, token)).toBe(value);
+  });
+
+  it("keeps R2's tonal spread after the lift — the card still separates from the page", () => {
+    // Floors are R2's own measured "before" values: the lift moves both surfaces, so it must not
+    // return them to the flatness R2 diagnosed.
+    const s = surfaces(LIGHT);
+    expect(contrastRatio(s.card, s.page), "card/bg").toBeGreaterThan(1.104);
+    expect(contrastRatio(s.page, s.sunken), "bg/bg2").toBeGreaterThan(1.094);
+    expect(contrastRatio(s.card, s.sunken), "card/bg2").toBeGreaterThan(1.208);
+  });
+
+  it("darkens the ink and lightens the paper — the direction of the whole change", () => {
+    // The intent, not just the values, so swapping two hexes inside the table above cannot pass.
+    const s = surfaces(LIGHT);
+    expect(contrastRatio(hex(LIGHT, "--ink"), s.card), "ink on card").toBeGreaterThan(14.42);
+    expect(contrastRatio(hex(LIGHT, "--muted"), s.card), "muted on card").toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(hex(LIGHT, "--muted"), s.page), "muted on bg").toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(hex(LIGHT, "--muted"), s.sunken), "muted on sunken").toBeGreaterThanOrEqual(4.5);
+  });
+
+  it("keeps the rules visible against every surface they draw on", () => {
+    // A hairline is a boundary, not text — and --rule2 must stay the stronger of the two.
+    const s = surfaces(LIGHT);
+    for (const [name, bg] of Object.entries(s)) {
+      expect(contrastRatio(hex(LIGHT, "--rule2"), bg), `rule2 on ${name}`).toBeGreaterThanOrEqual(1.5);
+    }
+    expect(contrastRatio(hex(LIGHT, "--rule2"), s.card)).toBeGreaterThan(contrastRatio(hex(LIGHT, "--rule"), s.card));
+  });
+
+  it("leaves --accent untouched — a guide's colour is a fact about the guide", () => {
+    // Identity, not ink: every other pigment here follows the ground, and this one may not.
+    expect(hex(LIGHT, "--accent")).toBe("#9c4421");
+    expect(DARK).not.toContain("--accent:");
+  });
+});
+
+describe("R5 — there is no third palette", () => {
+  // Comments stripped: base.css records the deleted theme BY NAME on purpose, and a raw
+  // substring check cannot tell that record apart from the thing it decided against.
+  const SHIPPED = BASE.replace(/\/\*[\s\S]*?\*\//g, "");
+
+  it("declares no glare theme in the shipped CSS", () => {
+    expect(SHIPPED).not.toContain("glare");
+  });
+
+  it("ships exactly two theme scopes", () => {
+    // [data-field] is barred whole, not just its glare value: it was the handoff's theme
+    // selector and this repo's is [data-theme]. Shipping both would mean two theme systems.
+    expect(SHIPPED.match(/\[data-theme="dark"\]\{/g) ?? []).toHaveLength(1);
+    expect(SHIPPED.match(/\[data-field=/g) ?? []).toHaveLength(0);
+  });
+});
+
+describe("R5 — the two theme knobs", () => {
+  it.each([
+    ["--rw", "1px"],
+    ["--photo", "1"],
+  ])("declares %s in BOTH theme scopes", (token, value) => {
+    // Knobs, not aliases — a knob declared once globally is not a per-theme knob. See base.css.
+    expect(decl(LIGHT, token), `${token} missing from the light scope`).toBe(value);
+    expect(decl(DARK, token), `${token} missing from the dark scope`).toBe(value);
+  });
+});

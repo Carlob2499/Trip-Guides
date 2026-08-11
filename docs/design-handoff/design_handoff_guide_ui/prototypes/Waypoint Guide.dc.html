@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600;7..72,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+body{background:#c9cec2;font-family:'Source Sans 3',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#80371b}
+a:hover{color:#9c4421}
+</style>
+</helmet>
+
+<section style="padding:30px 34px 60px;background:#c9cec2">
+
+  <div style="margin:0 auto 26px;max-width:1500px">
+    <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px">
+      <span style="font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.24em;text-transform:uppercase;color:#9c4421">Waypoint &middot; the guide view</span>
+      <span style="font:600 10px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:rgba(23,29,36,.5)">South Korea &middot; day 4 of 8</span>
+    </div>
+    <h1 style="font:500 34px/1.04 Literata,Georgia,serif;letter-spacing:-.016em;color:#171d24;margin:0 0 12px;max-width:22ch">One journey, three layouts, no device-specific code</h1>
+    <div style="display:flex;flex-wrap:wrap;gap:20px 30px;align-items:flex-start;padding:14px 18px;background:#f8faf3;border:1px solid #a3ac98">
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <span style="font:700 9px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#80371b">Theme &mdash; drives every panel</span>
+        <div style="display:flex;border:1px solid #a3ac98;width:max-content">
+          <sc-for list="{{ fieldOptions }}" as="o" hint-placeholder-count="2">
+            <button type="button" onClick="{{ o.pick }}" style="min-height:36px;padding:0 17px;border:0;border-right:1px solid #cfd5c6;background:{{ o.bg }};color:{{ o.fg }};font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.1em;text-transform:uppercase;cursor:pointer">{{ o.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <p style="flex:1 1 420px;margin:0;font:400 12.5px/1.6 'Source Sans 3',sans-serif;color:rgba(23,29,36,.62);text-wrap:pretty">The spec is <strong>HANDOFF.md</strong> at the project root &mdash; that is the file to hand to Claude Code. Everything on this canvas outside the frames is review scaffolding and is not part of the product.</p>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:34px;align-items:flex-start;margin:0 auto;max-width:2100px">
+
+    <!-- ═ DESKTOP ═ -->
+    <div style="flex:0 0 auto;display:flex;flex-direction:column;gap:11px">
+      <div style="display:flex;align-items:baseline;gap:11px">
+        <span style="font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#fff;background:#171d24;padding:5px 9px">Desktop</span>
+        <span style="font:400 12px/1.4 'Source Sans 3',sans-serif;color:#4e5747">spine rail horizontal, marginalia on hover</span>
+      </div>
+      <div style="border:1px solid #a3ac98;background:#dfe3d9;overflow:hidden">
+        <dc-import name="Waypoint Guide Desktop" chrome="{{ no }}" field="{{ field }}" hint-size="1504px,1400px"></dc-import>
+      </div>
+    </div>
+
+    <!-- ═ CONTACT SHEET + OPENED DEVICE ═ -->
+    <div style="flex:0 0 auto;display:flex;flex-direction:column;gap:26px;width:{{ deviceColW }}">
+
+      <div style="display:flex;flex-direction:column;gap:11px">
+        <div style="display:flex;align-items:baseline;gap:11px;flex-wrap:wrap">
+          <span style="font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#fff;background:#171d24;padding:5px 9px">Devices</span>
+          <span style="font:400 12px/1.4 'Source Sans 3',sans-serif;color:#4e5747">Nine sizes, three models, one build. Click a cell to run it.</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px">
+          <sc-for list="{{ devices }}" as="d" hint-placeholder-count="9">
+            <button type="button" onClick="{{ d.pick }}" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 8px 10px;border:1px solid {{ d.border }};background:{{ d.bg }};cursor:pointer;text-align:center">
+              <span style="display:block;width:{{ d.thumbW }};height:{{ d.thumbH }};background:{{ d.thumbBg }};border:1px solid {{ d.thumbBorder }};border-radius:{{ d.thumbR }}"></span>
+              <span style="display:block;font:700 10px/1.25 'Source Sans 3',sans-serif;letter-spacing:.06em;color:{{ d.fg }}">{{ d.name }}</span>
+              <span style="display:block;font:400 10px/1.2 'Source Sans 3',sans-serif;font-variant-numeric:tabular-nums;color:{{ d.sub }}">{{ d.size }} &middot; {{ d.model }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:11px">
+        <div style="display:flex;align-items:baseline;gap:11px;flex-wrap:wrap">
+          <span style="font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#f0d2c7;background:#9c4421;padding:5px 9px">Running</span>
+          <span style="font:400 12px/1.4 'Source Sans 3',sans-serif;color:#4e5747">{{ openName }} &mdash; {{ openSize }} &middot; {{ openModelNote }}</span>
+        </div>
+        <sc-if value="{{ openIsPhone }}" hint-placeholder-val="{{ true }}">
+          <dc-import name="Waypoint Guide Mobile" chrome="{{ no }}" field="{{ field }}" screen-w="{{ openW }}" screen-h="{{ openH }}" hint-size="470px,910px"></dc-import>
+        </sc-if>
+        <sc-if value="{{ openIsTablet }}" hint-placeholder-val="{{ false }}">
+          <dc-import name="Waypoint Guide Tablet" chrome="{{ no }}" field="{{ field }}" screen-w="{{ openW }}" screen-h="{{ openH }}" hint-size="880px,1240px"></dc-import>
+        </sc-if>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+// The device matrix is PROOF, not configuration: the same two builds reflow across all
+// nine, and adding a tenth requires no code. The model each device gets falls out of its
+// width against the two container breaks in HANDOFF.md §7 — 744 and 1180.
+const DEVICES = [
+  ["iPhone SE", 375, 667],
+  ["iPhone 15/16", 390, 844],
+  ["iPhone 17 Pro", 402, 874],
+  ["Pixel", 412, 915],
+  ["iPhone Pro Max", 440, 956],
+  ["Fold, unfolded", 673, 841],
+  ["iPad mini", 744, 1133],
+  ['iPad Pro 11"', 834, 1194],
+  ['iPad Pro 13"', 1024, 1366]
+];
+const modelFor = (w) => w >= 744 ? "tablet" : "phone";
+
+class Component extends DCLogic {
+  state = { field: "day", open: 2 };
+
+  renderVals() {
+    const s = this.state;
+    const [name, w, h] = DEVICES[s.open];
+    const model = modelFor(w);
+    // Thumbnails are drawn to true aspect so the sheet reads as a size comparison,
+    // not a row of identical icons. Tallest device sets the scale.
+    const MAXH = 46;
+
+    return {
+      no: false,
+      field: s.field,
+      fieldOptions: [["day", "Day"], ["night", "Night"]].map(([v, label]) => ({
+        label, bg: s.field === v ? "#171d24" : "#f8faf3", fg: s.field === v ? "#fff" : "#4e5747",
+        pick: () => this.setState({ field: v })
+      })),
+      devices: DEVICES.map(([n, dw, dh], i) => {
+        const on = i === s.open, m = modelFor(dw);
+        const th = MAXH * (dh / 1366), tw = th * (dw / dh);
+        return {
+          name: n, size: dw + "×" + dh, model: m,
+          thumbW: Math.round(tw) + "px", thumbH: Math.round(th) + "px",
+          thumbR: dw >= 744 ? "3px" : "5px",
+          thumbBg: on ? "#9c4421" : "#dfe3d9",
+          thumbBorder: on ? "#9c4421" : "#a3ac98",
+          border: on ? "#9c4421" : "#a3ac98",
+          bg: on ? "#f8faf3" : "rgba(248,250,243,.55)",
+          fg: on ? "#80371b" : "#171d24",
+          sub: on ? "rgba(128,55,27,.75)" : "rgba(23,29,36,.5)",
+          pick: () => this.setState({ open: i })
+        };
+      }),
+      openName: name, openSize: w + " × " + h,
+      openW: w, openH: h,
+      openIsPhone: model === "phone",
+      openIsTablet: model === "tablet",
+      openModelNote: model === "phone"
+        ? "phone model: one pinned strip, thumb bar, journey sheet"
+        : "tablet model: vertical spine rail, reading column, thumb bar retained",
+      deviceColW: model === "phone" ? "470px" : (w + 60) + "px"
+    };
+  }
+}
+</script>
+</body>
+</html>

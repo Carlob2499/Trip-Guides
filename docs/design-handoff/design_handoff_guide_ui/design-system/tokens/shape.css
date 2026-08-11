@@ -1,0 +1,26 @@
+/* ── Shape ───────────────────────────────────────────────────────────────────
+   Three families and nothing between them.
+
+   Controls are PILLS (999px) — anything tappable is legible as tappable in
+   peripheral vision. Containers are SQUARE — the sheet is made of rectangles.
+   Evidence is square too, distinguished by its furniture: a 1px --rule2 frame
+   and 2px oxide corner ticks.
+
+   The Corner Tick Rule: oxide corner ticks mark evidence and nothing else. A
+   photograph without them has not been placed yet; a UI panel with them is
+   lying about what it contains.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  --r-none: 0px;
+  --r-pill: 999px;
+
+  /* Present for legacy surfaces only. R4 retired the radius ladder; do not
+     reach for these in new work. */
+  --r-sm-legacy: 6px;
+  --r-md-legacy: 10px;
+  --r-lg-legacy: 16px;
+
+  --tick-arm: 16px;
+  --tick-weight: 2px;
+}

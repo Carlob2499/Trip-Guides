@@ -1,0 +1,72 @@
+/* ── Waypoint type ────────────────────────────────────────────────────────────
+   Two faces doing two jobs. Uppercase + tracking = data. Sentence case = prose.
+   A label in Literata or a paragraph in Source Sans is a category error, not a
+   style choice.
+
+   The Fluid Headings, Fixed Text Rule: the heading band clamps; body and UI text
+   never do. Every clamp's middle term carries a rem component so the reader's own
+   font-size setting still moves the type (WCAG 1.4.4).
+
+   The 24px Grading Rule: headings are weight 400-500, which puts their WCAG
+   large-text line at 24px rather than 18.7px. Every heading step stays above it —
+   which is why the panel title is a fixed 1.45rem and not fluid.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Display — the masthead title. One per page. */
+  --t-display-size: clamp(2.5rem, 6vw, 4.8rem);
+  --t-display-weight: 640;
+  --t-display-lh: 0.98;
+  --t-display-ls: -0.014em;
+
+  /* Reading — coordinates, dates, totals, gaps. Tabular. Floors at 24px. */
+  --t-reading-size: clamp(1.5rem, 1.2rem + 2.4vw, 2.6rem);
+  --t-reading-weight: 640;
+  --t-reading-ls: 0.01em;
+
+  /* Headline — category titles */
+  --t-headline-size: clamp(1.5rem, 4vw, 2.2rem);
+  --t-headline-weight: 400;
+  --t-headline-lh: 1.15;
+
+  /* Title — panel and card titles. FIXED, per the 24px grading rule. */
+  --t-title-size: 1.45rem;
+  --t-title-weight: 500;
+  --t-title-lh: 1.15;
+
+  /* Body — all prose */
+  --t-body-size: 1.02rem;
+  --t-body-weight: 400;
+  --t-body-lh: 1.72;
+
+  /* Stamp — the workhorse of the notation layer */
+  --t-stamp-size: 0.82rem;
+  --t-stamp-weight: 640;
+  --t-stamp-ls: 0.08em;
+
+  /* Control — tabs, buttons, pills, badges */
+  --t-control-size: 0.75rem;
+  --t-control-weight: 640;
+  --t-control-ls: 0.08em;
+
+  /* Panel kicker — the label that makes a wall of panels legible at a glance */
+  --t-kicker-size: 0.625rem;
+  --t-kicker-weight: 640;
+  --t-kicker-ls: 0.22em;
+
+  /* Label / nano — chrome only. Verification marks never live here. */
+  --t-label-size: 0.66rem;
+  --t-label-weight: 640;
+  --t-label-ls: 0.16em;
+}
+
+/* Ready-made roles. Reach for these before writing a font shorthand. */
+.wp-display { font: var(--t-display-weight) var(--t-display-size)/var(--t-display-lh) var(--fd); letter-spacing: var(--t-display-ls); color: var(--ink); }
+.wp-reading { font: var(--t-reading-weight) var(--t-reading-size)/1.1 var(--fs); letter-spacing: var(--t-reading-ls); font-variant-numeric: tabular-nums; color: var(--aink); }
+.wp-headline { font: var(--t-headline-weight) var(--t-headline-size)/var(--t-headline-lh) var(--fd); color: var(--ink); }
+.wp-title { font: var(--t-title-weight) var(--t-title-size)/var(--t-title-lh) var(--fd); color: var(--ink); }
+.wp-body { font: var(--t-body-weight) var(--t-body-size)/var(--t-body-lh) var(--fd); color: var(--muted); text-wrap: pretty; }
+.wp-stamp { font: var(--t-stamp-weight) var(--t-stamp-size)/1 var(--fs); letter-spacing: var(--t-stamp-ls); text-transform: uppercase; }
+.wp-control { font: var(--t-control-weight) var(--t-control-size)/1 var(--fs); letter-spacing: var(--t-control-ls); text-transform: uppercase; }
+.wp-kicker { font: var(--t-kicker-weight) var(--t-kicker-size)/1 var(--fs); letter-spacing: var(--t-kicker-ls); text-transform: uppercase; color: var(--accent); }
+.wp-label { font: var(--t-label-weight) var(--t-label-size)/1 var(--fs); letter-spacing: var(--t-label-ls); text-transform: uppercase; color: var(--muted); }

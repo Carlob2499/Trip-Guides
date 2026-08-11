@@ -11,7 +11,11 @@ import { PANEL_HOSTABLE_TYPES } from "./lib/section-types";
 // Light page background (base.css `--bg`). A guide `theme.primary` becomes the
 // site `--accent`, painted as link/tab/label text on this surface — so it must
 // stay legible against it. Keep in sync with base.css if that token changes.
-const LIGHT_BG = "#dfe3d9";
+// R5 (2026-08-11): lifted #dfe3d9 -> #e3e7dc with the Day palette. A lighter ground RAISES
+// contrast for every dark accent, so no guide's theme.primary newly fails — but a gate
+// measuring a background the product no longer paints measures nothing, which is the only
+// reason this literal is touched at all. No schema field changed.
+const LIGHT_BG = "#e3e7dc";
 // Dark page background (base.css dark-mode `--bg`). The accent is NOT re-mapped in
 // dark mode, so a theme.primary must stay legible on BOTH grounds — a light-only
 // gate shipped a 2.33:1 dark-mode bug in WayPoint-V2; gate both, always.

@@ -101,103 +101,17 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 .sticky-chrome{position:sticky;top:0;z-index:50;background:var(--bg)}
 
 /* === GUIDE TAB BAR ========================================================== */
-/* Pill segmented control — replaces the old text+underline strip (poor
-   clickability affordance; hard to tell what's a button). Every tab is an
-   obvious pill with a generous hit area; the active pill fills solid with
-   the accent. Edge fades signal horizontal scrollability; scroll-snap keeps
-   pills landing cleanly. */
-.guide-tabs{display:flex;gap:.4rem;align-items:center;overflow-x:auto;overflow-y:hidden;touch-action:pan-x;overscroll-behavior-x:contain;max-width:100%;scrollbar-width:none;background:var(--bg);border-bottom:1px solid var(--rule);padding:.5rem .9rem;scroll-snap-type:x proximity;
-  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 16px,#000 calc(100% - 16px),transparent);
-  mask-image:linear-gradient(to right,transparent 0,#000 16px,#000 calc(100% - 16px),transparent)}
-.guide-tabs::-webkit-scrollbar{display:none}
-.gtab{flex:none;scroll-snap-align:center;background:color-mix(in srgb,var(--ink) 5%,transparent);border:1px solid transparent;border-radius:999px;padding:.5rem 1.05rem;min-height:38px;font-family:var(--font-display);font-size:var(--text-control);font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;line-height:1.25;user-select:none;transition:background .18s,color .18s,box-shadow .2s,transform .2s var(--ease-spring)}
-.gtab:hover{color:var(--ink);background:color-mix(in srgb,var(--ink) 10%,transparent);transform:translateY(-1px)}
-/* Background blended 30% toward --ink for the same reason as .topbar-search above: the raw
-   accent is only gated to 3:1 against --bg (src/lib/contrast.ts), not the 4.5:1 the --bg-
-   coloured label text drawn on top of it needs — axe caught this on Denmark's guide. */
-.gtab.gtab-active{background:color-mix(in srgb,var(--accent) 70%,var(--ink) 30%);color:var(--bg);box-shadow:0 3px 14px color-mix(in srgb,var(--accent) 40%,transparent)}
-.gtab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-
-/* M4 items 1+3 — TOOL tabs (Budget/Vote/Reminders/Learnings/Trip kit) are chrome, not content
-   groups. Icon + label, laid out inline; a left rule sets the group off from the content tabs
-   so the strip reads as "sections … then tools" rather than one undifferentiated run. */
-.gtab-tool{display:inline-flex;align-items:center;gap:.4rem}
-.gtab-tool:first-of-type{margin-left:.5rem;padding-left:.95rem;border-left:1px solid var(--rule2);border-top-left-radius:0;border-bottom-left-radius:0}
-.gtab-ico{flex:none}
-@media(min-width:900px){
-  /* Desktop: the labels are CLIPPED, never display:none — clipped text stays in the
-     accessibility tree, so each tab's accessible name survives intact while the strip
-     collapses to one row (Korea: 13 content tabs + 5 tools no longer overflow 1400px).
-     Phones keep the labels: the strip is scroll-by-design there, and the mobile sheet
-     spells every tool out in full regardless. */
-  .gtab-tool .gtab-txt{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
-  .gtab-tool{padding-left:.7rem;padding-right:.7rem;gap:0}
-  .gtab-tool:first-of-type{padding-left:.9rem}
-}
-/* U3: .skip-link moved to base.css (shared by every page) — it lived only here, so the
-   hub had no skip link at all despite its own V2 spec promising one. */
-@media(prefers-reduced-motion:reduce){.gtab{transition:none}.gtab:hover{transform:none}}
-
-/* R3 — DESKTOP WEARS THE HORIZON (≥900px). The pill strip becomes the journey line:
-   content tabs turn into STATIONS (label over a dot) on a track drawn across the nav;
-   the accent fill along it IS the reading progress (the fixed top bar retires here —
-   one object, two meanings). Tool tabs keep their pill look and dock ON the line,
-   visually distinct chrome exactly as before. Same tablist, same arrow-key ring.
-   Overture (once per arrival, per MOTION.md): the track draws in, stations settle. */
-@media(min-width:900px){
-  .read-prog{display:none}
-  /* ONE geometry, declared once. The line and the stations used to be positioned by two
-     unrelated hand-tuned offsets, and they disagreed: the rail's centre sat 6.5px above the
-     stations', so the track ran through the TOP EDGE of every circle instead of its middle,
-     and the accent fill was a third thickness at a fourth offset. Derive both from the dot
-     so they cannot drift apart again. */
-  .guide-tabs-nav{
-    position:relative;
-    --st-d:15px;      /* station diameter, ring included (border-box) */
-    --st-ring:2px;
-    --st-bottom:9px;  /* station's bottom edge, from the nav's bottom */
-    --rail-h:2px
-  }
-  .guide-tabs-nav::before{
-    content:"";position:absolute;left:1.1rem;right:1.1rem;
-    /* dead centre of the stations: their bottom, plus half of what is left over */
-    bottom:calc(var(--st-bottom) + (var(--st-d) - var(--rail-h))/2);
-    height:var(--rail-h);background:var(--rule2);transform-origin:left center
-  }
-  .guide-tabs{border-bottom:0;padding-bottom:.5rem}
-  .gtab:not(.gtab-tool){position:relative;background:none;border-radius:6px;padding:.3rem .7rem 1.55rem;min-height:0;z-index:1}
-  /* The station fills from the bottom as the reader moves through the guide (--st-fill,
-     0–100, set by guide-ui.js). The sweeping accent bar along the track is gone: a bar that
-     slid over the circles read as a separate object crossing them. The circles ARE the
-     progress now — one thing, filling. */
-  .gtab:not(.gtab-tool)::after{
-    content:"";position:absolute;left:50%;transform:translateX(-50%);
-    bottom:var(--st-bottom);width:var(--st-d);height:var(--st-d);box-sizing:border-box;
-    border-radius:50%;border:var(--st-ring) solid var(--muted);
-    background:linear-gradient(to top,
-      var(--accent) calc(var(--st-fill,0)*1%), var(--bg) calc(var(--st-fill,0)*1%));
-    transition:border-color .18s,box-shadow .18s
-  }
-  .gtab:not(.gtab-tool):hover{background:none;transform:none;color:var(--ink)}
-  .gtab:not(.gtab-tool):hover::after{border-color:var(--ink)}
-  /* Somewhere you have already been stays solid — the line reads as a route walked, not a
-     bar that happens to be partly coloured. */
-  .gtab:not(.gtab-tool)[data-visited]::after{--st-fill:100;border-color:var(--accent)}
-  .gtab.gtab-active:not(.gtab-tool){background:none;box-shadow:none;color:var(--accent-ink);font-weight:700}
-  .gtab.gtab-active:not(.gtab-tool)::after{border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 22%,transparent)}
-  @media(prefers-reduced-motion:no-preference){
-    .gtab:not(.gtab-tool)::after{transition:border-color .18s,box-shadow .18s,background .12s linear}
-  }
-  .gtab-tool{position:relative;z-index:1;background:var(--bg)}
-  @media(prefers-reduced-motion:no-preference){
-    .guide-tabs-nav::before{animation:horizonDraw .9s cubic-bezier(.2,.7,.2,1) .15s backwards}
-    .gtab:not(.gtab-tool)::after{animation:stationLand .5s ease .75s backwards}
-  }
-}
-@keyframes horizonDraw{from{transform:scaleX(0)}}
-@keyframes stationLand{from{opacity:0;transform:translateX(-50%) scale(.4)}}
-.gtab-split{font-family:var(--font-data);font-size:var(--text-control-sm);letter-spacing:.04em}
-@media(max-width:899px){.gtab{padding:.44rem .85rem;font-size:var(--text-caption);min-height:36px}}
+/* R5 — THE PILL STRIP AND THE R4 HORIZON ARE GONE. Both are superseded by the spine rail
+   (src/features/guide-rail/styles.css), which is the same idea carried further: R4's ≥900px
+   "desktop wears the horizon" already turned the tabs into stations on a line, but it did so
+   through a viewport media query and only above 900px, so the phone and the tablet kept a pill
+   strip that said "these are categories". R5 makes the spine the whole rail at every width, via
+   container queries, and moves it out of the sticky chrome to sit under the masthead.
+   Deliberately kept from R4 and ported into the rail: --st-fill, the reading progress painted
+   INTO each station dot. Nothing in R5 specifies it and nothing in R5 forbids it; guide-ui.js
+   still writes the value, and a station that fills as you read it is the one part of the old
+   horizon that told the reader something the new one otherwise would not. */
+.read-prog{display:none}
 /* Tactile press feedback — guide action buttons compress on :active and spring
    back on release (var(--ease-spring) overshoot on the transform channel) for a
    physical, app-like "pressed" feel. Interactive controls only — not cards or
@@ -212,7 +126,26 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
    column (--read) for legibility; sights (image grid) and maps break out to fill
    the shell — see READING COLUMN below. */
 :root{--read:42rem}
-.shell{max-width:1400px;margin:0 auto;padding:0 1.1rem}
+/* R5 — .shell is THE query container, and it is deliberately the shell rather than the content
+   column (TOKENS.md §7 calls it "the guide body"; here that body is a rail plus a reading
+   column, and both have to agree on which model they are in).
+   Naming .content instead was tried and is wrong: on a 744px tablet the rail takes a 200-240px
+   column, so .content measures ~544px — the rail would render its tablet model while the body
+   beside it rendered its phone model, at the same instant, on the same screen. One container
+   above both makes that state unrepresentable.
+   inline-size, never `size`: `size` contains the block axis too, and this element's height is
+   content-driven — it would collapse. */
+.shell{max-width:1400px;margin:0 auto;padding:0 1.1rem;container-type:inline-size;container-name:guide}
+
+/* The rail sits BESIDE the reading column only on the tablet model; above it on the other two.
+   One grid, three shapes, no repositioning in JS. */
+@container guide (min-width: 744px){
+  .shell{--gutter:18px;display:grid;grid-template-columns:minmax(200px,240px) minmax(0,1fr);gap:var(--gutter);align-items:start}
+}
+@container guide (min-width: 1180px){
+  /* Horizontal spine again — the rail spans the full width above the reading column. */
+  .shell{--gutter:20px;grid-template-columns:minmax(0,1fr);gap:0}
+}
 
 /* Cold-visitor framing strip (cold-open.js — first visit only, dismissible). */
 .cold-open{display:flex;align-items:center;gap:.7rem;justify-content:center;padding:.5rem 1rem;background:color-mix(in srgb,var(--accent) 10%,var(--card));border-bottom:1px solid var(--rule)}
@@ -221,7 +154,25 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 .cold-open-x:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 
 /* === CONTENT ================================================================= */
+/* R5 CONTAINER SCAFFOLD (design_handoff_guide_ui/TOKENS.md §7). The guide body is a QUERY
+   CONTAINER, and every responsive decision inside it switches on the container's own inline
+   size — never on the viewport, never on a device check, never on window.innerWidth. Three
+   models, two thresholds: <744 phone · 744-1179 tablet · >=1180 desktop.
+   Why this and not media queries: one build has to serve phone, tablet and desktop with no
+   user-agent branch, and a folding phone that measures 673px unfolded gets the phone model in
+   portrait and the tablet model in landscape with ZERO code — it falls straight out of the
+   query. A media query cannot do that, because the viewport is the same object in both.
+   container-type:inline-size establishes an inline-axis containment context. That is deliberate
+   and not `size`: `size` would also contain the BLOCK axis, which means the element stops
+   sizing to its own content and collapses — the guide body's height is content-driven, so
+   inline-size is the only correct value here.
+   Viewport media queries stay for PAGE CHROME only (the sticky header, print). Chrome is
+   positioned against the viewport, so it is the one thing that legitimately asks about it. */
 .content{min-width:0;padding:1.2rem 0 3rem}
+/* FALLBACKS.md §2 — where container queries are unsupported, no @container rule matches and
+   every model-specific declaration simply never applies, so the base (phone) styles stand.
+   That is the intended degradation: the phone model is the narrowest and loses nothing
+   structural. Nothing here needs a @supports guard; the absence of a match IS the fallback. */
 .catblock{scroll-margin-top:var(--chrome-h)}
 /* M3: was its own bespoke clamp(1.5rem,4vw,2.2rem) — --text-h1 is that exact missing step,
    named in base.css so the type scale's "no undeclared roles" claim is true again. */
@@ -424,10 +375,10 @@ footer{border-top:1px solid var(--rule2);text-align:center;padding:1.7rem 1.1rem
 .sheet,.sheet-backdrop{display:none}
 @media(max-width:899px){
   .content{padding-bottom:5.5rem}
-  /* R2 — mobile stops pretending to be a strip: the tab bar retires below 900px
-     (the journey sheet is the sole section switcher; the strip stays desktop-only),
-     and the sticky chrome shrinks to the topbar alone. */
-  .guide-tabs-nav{display:none}
+  /* R2 hid the tab strip entirely below 900px and made the journey sheet the sole section
+     switcher. R5 reverses that: the phone gets the PILL ROW, which is the phone's model of the
+     rail rather than the absence of one — a reader on a phone can now see where they are
+     without opening a sheet. The sticky chrome still shrinks to the topbar alone. */
   html{--chrome-h:54px}
   /* The bottom TAB BAR — plumbing only (position/stacking). Every dimension, every
      slot's look and all the phone/tablet scaling live in mobile-nav.css, which is the

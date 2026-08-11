@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1724 checks · 1724 carry a stated promise · 147 files
+1751 checks · 1751 carry a stated promise · 148 files
 
 ## Can everyone read it
 
@@ -640,6 +640,12 @@ nothing ships.
 - re-maps between themes — a fixed #fff is exactly the bug this replaced  <sub>src/styles/atlas-tokens.test.ts:209</sub>
 - declares the four safe-area insets with a 0px fallback  <sub>src/styles/atlas-tokens.test.ts:216</sub>
 - declares --hdr-h with a static fallback and no JS writer yet  <sub>src/styles/atlas-tokens.test.ts:226</sub>
+- keeps R2's tonal spread after the lift — the card still separates from the page  <sub>src/styles/atlas-tokens.test.ts:251</sub>
+- darkens the ink and lightens the paper — the direction of the whole change  <sub>src/styles/atlas-tokens.test.ts:260</sub>
+- keeps the rules visible against every surface they draw on  <sub>src/styles/atlas-tokens.test.ts:269</sub>
+- leaves --accent untouched — a guide's colour is a fact about the guide  <sub>src/styles/atlas-tokens.test.ts:278</sub>
+- declares no glare theme in the shipped CSS  <sub>src/styles/atlas-tokens.test.ts:290</sub>
+- ships exactly two theme scopes  <sub>src/styles/atlas-tokens.test.ts:294</sub>
 
 **The map-contour background draws without distorting or overflowing.**
 
@@ -1266,6 +1272,15 @@ nothing ships.
 - collapses whitespace from DOM text  <sub>src/features/mobile-nav/model/rank.test.ts:122</sub>
 - returns null when there is nothing remembered — an honest blank  <sub>src/features/mobile-nav/model/rank.test.ts:125</sub>
 - truncates a very long section title  <sub>src/features/mobile-nav/model/rank.test.ts:131</sub>
+- seats the CURRENT group for every one of the 13 — not just the first two  <sub>src/features/mobile-nav/model/rank.test.ts:150</sub>
+- still seats the current group when another is far more used  <sub>src/features/mobile-nav/model/rank.test.ts:159</sub>
+- gives an unopened group no count at all — order falls back to the guide's own  <sub>src/features/mobile-nav/model/rank.test.ts:167</sub>
+- does not make a tapped right-hand slot jump to the left  <sub>src/features/mobile-nav/model/rank.test.ts:172</sub>
+- abbreviates only where a slot cannot hold the name, and keeps it readable  <sub>src/features/mobile-nav/model/rank.test.ts:181</sub>
+- is always a marked prefix of the real name — never a different string  <sub>src/features/mobile-nav/model/rank.test.ts:193</sub>
+- cuts mid-word ONLY when the name offers no word boundary to cut at  <sub>src/features/mobile-nav/model/rank.test.ts:204</sub>
+- keeps the FULL name available even where the visible one was cut  <sub>src/features/mobile-nav/model/rank.test.ts:222</sub>
+- returns no resume line for a guide never opened — never a default string  <sub>src/features/mobile-nav/model/rank.test.ts:231</sub>
 
 **The budget summary's figures are the ledger's figures.**
 
@@ -1387,6 +1402,21 @@ nothing ships.
 - returns EVERY match so the caller can refuse to guess between them  <sub>src/features/hub/model/wizard.test.ts:156</sub>
 - does not match a country name embedded inside another word  <sub>src/features/hub/model/wizard.test.ts:162</sub>
 - is empty when no known country appears — an honest blank, not a guess  <sub>src/features/hub/model/wizard.test.ts:165</sub>
+
+**The rail always shows this guide's own stops — never a list someone forgot to update.**
+
+- ends … Sources, Field log, Tools when the guide has a learnings record  <sub>src/features/guide-rail/__tests__/stations.test.ts:26</sub>
+- ends … Sources, Tools when it does not — Field log is ABSENT, not empty  <sub>src/features/guide-rail/__tests__/stations.test.ts:31</sub>
+- derives the count from the guide — Korea 13, Sedona 9  <sub>src/features/guide-rail/__tests__/stations.test.ts:46</sub>
+- numbers stations contiguously from zero, whatever the guide  <sub>src/features/guide-rail/__tests__/stations.test.ts:53</sub>
+- gives every station a unique key  <sub>src/features/guide-rail/__tests__/stations.test.ts:60</sub>
+- survives a name with an ampersand or a non-ASCII character, unescaped  <sub>src/features/guide-rail/__tests__/stations.test.ts:68</sub>
+- renders every real group name in full — nothing is truncated on the way to the rail  <sub>src/features/guide-rail/__tests__/stations.test.ts:79</sub>
+- is one station's share of the rail — never a shared constant  <sub>src/features/guide-rail/__tests__/stations.test.ts:90</sub>
+- places the fill at index / count  <sub>src/features/guide-rail/__tests__/stations.test.ts:98</sub>
+- never divides by zero — a one-station rail owns the whole line  <sub>src/features/guide-rail/__tests__/stations.test.ts:106</sub>
+- clamps an out-of-range index rather than running off the rail  <sub>src/features/guide-rail/__tests__/stations.test.ts:117</sub>
+- produces a valid geometry for every station of every real guide  <sub>src/features/guide-rail/__tests__/stations.test.ts:122</sub>
 
 **The research progress page reports the real state of a run, including when it fails.**
 

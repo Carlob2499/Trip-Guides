@@ -70,6 +70,19 @@ function blockOf(v) {
  * markup; none of them is "this was noisy". */
 export const EXEMPTIONS = [
   {
+    id: "progress-line-is-a-sanctioned-motion-exception",
+    why: "R5 BEHAVIOR.md §2 names exactly two departures from transform/opacity and this is one: the phone progress line's left+width. It is not a per-frame path — it is ONE 280ms transition fired on a discrete station change, and the fill has to be positioned in the flow rather than transformed because its width is (100/stationCount)% of a container whose width the container query changes. A transform-based fill would need that percentage recomputed in JS on every resize, which is more moving parts for the same pixels.",
+    test: (v) => v.category === "MOTION" && /(^|\/)guide-rail\/styles\.css$/.test(v.file) && /grail-fill/.test(blockOf(v)),
+  },
+  {
+    id: "station-dot-ring-is-not-elevation",
+    why: "The kit reads every box-shadow as elevation. These three are geometry: the station dot's 2px ring in the page ground (which makes the spine line appear to pass BEHIND the dot rather than stop at it) and the active dot's halo, specified as a flat spread in COMPONENTS.md §2. No blur, no offset — a shadow with neither is a ring, and there is no other way to draw one outside an element's border box.",
+    test: (v) =>
+      v.category === "ELEVATION" &&
+      /(^|\/)guide-rail\/styles\.css$/.test(v.file) &&
+      /grail-dot/.test(blockOf(v)),
+  },
+  {
     id: "type-token-naming",
     why: "The kit expects the token names --fd/--fs. This repo shipped --font-data/--font-display/--font-body. Every TYPE hit against those is a naming mismatch, not a third typeface.",
     test: (v) => v.category === "TYPE" && /var\(--font-(data|display|body)\)/.test(v.text),

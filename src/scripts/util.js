@@ -90,7 +90,7 @@ export function todayInTz(tz, now) {
    Both QR call sites (the share panel and the voting sheet) held four hex literals and picked
    between them on document.documentElement's data-theme. Those literals were hand-copies of
    --ink and --card, and one had already drifted: the light-mode paper was pure #ffffff, which
-   is not a colour this product uses anywhere — --card is #f8faf3 — so every QR sat as a
+   is not a colour this product uses anywhere — --card is #fbfcf6 — so every QR sat as a
    slightly-too-white block inside its own panel. Copies of tokens rot exactly this way, and
    nothing notices, because a QR still scans.
 
@@ -102,5 +102,5 @@ export function qrColors() {
     var v = cs.getPropertyValue(name).trim();
     return v || fallback;
   };
-  return { dark: read("--ink", "#171d24"), light: read("--card", "#f8faf3") };
+  return { dark: read("--ink", "#0f141a"), light: read("--card", "#fbfcf6") };
 }

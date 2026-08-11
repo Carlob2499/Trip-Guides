@@ -1,0 +1,36 @@
+/* ── Motion ──────────────────────────────────────────────────────────────────
+   An instrument settling, not an interface performing.
+
+   The Composited Motion Rule: anything that moves every frame moves by transform,
+   with will-change. Layout-triggering properties are never animated, and per-frame
+   solvers run in idle time, not in the event handler.
+
+   The Reduced-Motion Is Off, Not Softer Rule: prefers-reduced-motion DISABLES
+   animation. The morph becomes a cut, the iris an instant swap, reveals paint
+   immediately. Press states stay — they are state, not motion.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  --ease-enter: cubic-bezier(.22, 1, .36, 1);
+  /* GSAP curves, named here so the vocabulary is in one place */
+  --ease-inout: power2.inOut;
+  --ease-arrive: back.out(1.6);
+
+  --d-scrim: 220ms;
+  --d-fade: 260ms;
+  --d-yield: 280ms;
+  --d-menu: 320ms;
+  --d-collapse: 340ms;
+  --d-sheet: 360ms;
+  --d-reveal: 700ms;
+  --d-wordmark: 620ms;
+  --d-iris: 780ms;
+  --d-morph: 850ms;
+  --d-globe-fly: 1100ms;
+
+  --stagger-row: 28ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

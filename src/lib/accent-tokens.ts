@@ -14,7 +14,7 @@
 import { mix, readableOn, readableOnAll } from "./contrast";
 
 /* The real surfaces accent text lands on, read from base.css: --card, --bg2, --bg per mode. */
-const LIGHT_SURFACES = ["#f8faf3", "#d2d7c8", "#dfe3d9"] as const;
+const LIGHT_SURFACES = ["#fbfcf6", "#ced5c4", "#e3e7dc"] as const;
 const DARK_SURFACES = ["#242c34", "#1a2129", "#0f1317"] as const;
 
 /* Those flat surfaces are not the whole story: chips and pills sit on ACCENT-TINTED grounds

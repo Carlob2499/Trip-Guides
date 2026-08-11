@@ -12,6 +12,7 @@ import { initSharePanel } from "../features/share/index.js";
 import { initChangeRequest } from "../features/change-request/index.js";
 import { reportError } from "../features/firebase/index.js";
 import { initBudgetPact } from "../features/budget-pact/index.js";
+import { initGuideRail } from "../features/guide-rail/index.ts";
 import { initPacking } from "../features/trip-kit/index.js";
 
 const _cfgEl = document.getElementById("tgConfig");
@@ -117,19 +118,56 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
               if (leaving && leaving.dataset.tab !== (isSpecial ? idx : String(idx))) markSeen(leaving.dataset.tab);
               guideTabs.querySelectorAll(".gtab").forEach(function (btn) {
                 var match = btn.dataset.tab === (isSpecial ? idx : String(idx));
-                btn.setAttribute("aria-selected", match ? "true" : "false");
+                /* R5: aria-current, not aria-selected. The rail is a <nav> of plain buttons
+                   rather than a tablist (BEHAVIOR.md §4), and aria-selected on a button with
+                   no tab role is invalid ARIA that axe reports. Removed rather than set to
+                   "false": "current: false" is the default and stating it adds noise to every
+                   screen-reader pass over thirteen stops. */
+                if (match) btn.setAttribute("aria-current", "true");
+                else btn.removeAttribute("aria-current");
                 btn.classList.toggle("gtab-active", match);
                 if (Object.prototype.hasOwnProperty.call(seen, btn.dataset.tab)) btn.dataset.visited = "";
                 // A section not yet walked starts empty; the scroll handler fills it.
                 if (match && !(btn.dataset.tab in seen)) btn.style.setProperty("--st-fill", "0");
               });
-              // Scroll active tab into view
+              /* Keep the active stop in view WITHIN THE RAIL'S OWN SCROLLER.
+                 scrollIntoView() was here and is banned by ACCEPTANCE: it walks the ancestor
+                 chain and scrolls every scrollable box it finds, the document included — so
+                 switching station also threw away the reader's page position. Setting
+                 scrollLeft on the one element that should move cannot do that. */
               var active = guideTabs.querySelector(".gtab-active");
-              if (active) active.scrollIntoView({ block: "nearest", inline: "nearest" });
+              if (active && guideTabs.scrollWidth > guideTabs.clientWidth) {
+                var want = active.offsetLeft - (guideTabs.clientWidth - active.offsetWidth) / 2;
+                var max = guideTabs.scrollWidth - guideTabs.clientWidth;
+                guideTabs.scrollLeft = Math.min(Math.max(want, 0), max);
+              }
             }
             try { sessionStorage.setItem(TAB_KEY, isSpecial ? idx : String(idx)); } catch (_) {}
             syncTabIndex();
             syncJetLag(isSpecial ? null : idx);
+            syncRailContext();
+          }
+
+          /* The rail's context line — the active station's name and its descriptor. Both are
+             read off the station button and the panel that is now visible, never restated: a
+             hand-maintained label here is precisely the copy that drifts the moment a group is
+             renamed, and TESTS.md §5 exists because that already happened once.
+             The descriptor lives on the visible .catblock as data-desc; a group without one
+             renders no descriptor line at all rather than an empty element. */
+          var railKicker = document.querySelector("[data-rail-kicker]");
+          var railDesc   = document.querySelector("[data-rail-desc]");
+          function syncRailContext() {
+            if (!guideTabs || !railKicker) return;
+            var active = guideTabs.querySelector(".gtab-active");
+            if (!active) return;
+            railKicker.textContent = active.dataset.full || "";
+            if (!railDesc) return;
+            var panel = active.getAttribute("aria-controls")
+              ? document.getElementById(active.getAttribute("aria-controls"))
+              : null;
+            var desc = panel && panel.dataset ? panel.dataset.desc : "";
+            railDesc.textContent = desc || "";
+            railDesc.hidden = !desc;
           }
 
           /* The jet-lag calculator is an ARRIVAL tool. It used to sit above every tab of
@@ -547,7 +585,8 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
                either. The percentage now fills the ACTIVE STATION itself, and a station you
                have finished with stays solid (data-visited, set in showTab). One thing filling,
                instead of three things at three offsets. */
-            var horizonNav = document.querySelector(".guide-tabs-nav");
+            // R5: the rail replaced .guide-tabs-nav; the fill it writes is unchanged.
+            var horizonNav = document.querySelector(".grail");
             function updateBar() {
               var max = document.body.scrollHeight - window.innerHeight;
               var pct = max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0;
@@ -719,6 +758,11 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
          used. lockScroll/unlockScroll are still shared with the mobile sheet below —
          passed in rather than duplicated, so the two keep coordinating one counter. */
       try { initSharePanel(_lockScroll, _unlockScroll); } catch (e) { fail("share panel", e); }
+      /* The spine rail's runtime: the progress fill, keeping the active stop inside its own
+         scroller, and republishing the measured header height into --hdr-h. It reacts to the
+         router above rather than replacing it, so this failing costs the fill and the sticky
+         offset — never the ability to change station. */
+      try { initGuideRail(document); } catch (e) { fail("guide rail", e); }
       // Guided change request. _cfg carries navSections (the guide's own tabs) so the
       // wizard can offer a real section hint instead of asking a reader to name one.
       try { initChangeRequest(_cfg, _lockScroll, _unlockScroll); } catch (e) { fail("change request", e); }

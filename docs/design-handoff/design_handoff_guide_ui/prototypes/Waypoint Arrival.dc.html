@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600;7..72,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+body{background:#c9cec2;font-family:'Source Sans 3',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;scrollbar-width:none;-ms-overflow-style:none}
+::-webkit-scrollbar{width:0;height:0;display:none}
+a{color:#80371b;text-decoration:none}
+a:hover{color:#9c4421}
+[data-field="day"]{--bg:#e3e7dc;--card:#fbfcf6;--sunken:#ced5c4;--ink:#0f141a;--muted:#3c4534;--rule:#a9b39b;--rule2:#8a9480;--accent:#9c4421;--aink:#80371b;--on-aink:#f0d2c7;--green:#396345;--on-green:#ffffff;--ochre:#7f4a07;--crit:#b3261e;--rw:1px;--photo:1}
+[data-field="night"]{--bg:#0f1317;--card:#242c34;--sunken:#1a2129;--ink:#e8ece3;--muted:#9aa392;--rule:#38414b;--rule2:#4e5865;--accent:#9c4421;--aink:#c78f78;--on-aink:#f0d2c7;--green:#6aab76;--on-green:#0f1317;--ochre:#d9923f;--crit:#ef8a83;--rw:1px;--photo:1}
+@keyframes ping{0%{transform:scale(1);opacity:.55}70%,100%{transform:scale(2.6);opacity:0}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+
+<section style="padding:36px 40px 60px;background:#c9cec2;min-height:100vh">
+
+  <div style="max-width:1660px;margin:0 auto 22px">
+    <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:5px">
+      <span style="font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.24em;text-transform:uppercase;color:#9c4421">Waypoint · the arrival</span>
+      <span style="font:600 10px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:rgba(23,29,36,.5)">cover &rarr; homepage &rarr; guide · desktop and phone, same three steps</span>
+    </div>
+    <h1 style="font:500 31px/1.05 Literata,Georgia,serif;letter-spacing:-.015em;color:#171d24;margin:0 0 13px">One plate travels the whole way in</h1>
+
+    <div style="display:flex;flex-wrap:wrap;gap:16px 26px;align-items:flex-start;padding:13px 16px;background:#f8faf3;border:1px solid #a3ac98">
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <span style="font:700 9px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#80371b">Step</span>
+        <div style="display:flex;border:1px solid #a3ac98">
+          <sc-for list="{{ stepOptions }}" as="o" hint-placeholder-count="3">
+            <button type="button" onClick="{{ o.pick }}" style="min-height:34px;padding:0 15px;border:0;border-right:1px solid #cfd5c6;background:{{ o.bg }};color:{{ o.fg }};font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.1em;text-transform:uppercase;cursor:pointer">{{ o.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <span style="font:700 9px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#80371b">Theme</span>
+        <div style="display:flex;border:1px solid #a3ac98">
+          <sc-for list="{{ fieldOptions }}" as="o" hint-placeholder-count="3">
+            <button type="button" onClick="{{ o.pick }}" style="min-height:34px;padding:0 15px;border:0;border-right:1px solid #cfd5c6;background:{{ o.bg }};color:{{ o.fg }};font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.1em;text-transform:uppercase;cursor:pointer">{{ o.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <span style="font:700 9px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#80371b">Hub face</span>
+        <div style="display:flex;border:1px solid #a3ac98">
+          <sc-for list="{{ modeOptions }}" as="o" hint-placeholder-count="2">
+            <button type="button" onClick="{{ o.pick }}" style="min-height:34px;padding:0 15px;border:0;border-right:1px solid #cfd5c6;background:{{ o.bg }};color:{{ o.fg }};font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.1em;text-transform:uppercase;cursor:pointer">{{ o.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <p style="flex:1 1 320px;margin:0;font:400 12px/1.55 'Source Sans 3',sans-serif;color:rgba(23,29,36,.62);text-wrap:pretty">{{ stepNote }}</p>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:34px;align-items:flex-start;max-width:1660px;margin:0 auto">
+
+    <!-- ══ DESKTOP ══ -->
+    <div style="flex:none;width:1180px;display:flex;flex-direction:column;gap:9px">
+      <div style="display:flex;align-items:baseline;gap:11px">
+        <span style="font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#fff;background:#171d24;padding:5px 9px">Desktop</span>
+        <span style="font:400 12px/1.4 'Source Sans 3',sans-serif;color:#4e5747">{{ dLabel }}</span>
+      </div>
+
+      <div data-field="{{ field }}" style="position:relative;width:1180px;height:812px;border:1px solid #a3ac98;background:var(--bg,#dfe3d9);color:var(--ink,#171d24);overflow:hidden;isolation:isolate">
+
+        <!-- ── header, present on hub + guide ── -->
+        <sc-if value="{{ notCover }}" hint-placeholder-val="{{ true }}">
+          <div style="position:relative;z-index:30;display:flex;align-items:center;gap:18px;padding:0 22px;height:58px;background:var(--bg,#dfe3d9);border-bottom:var(--rw,1px) solid var(--rule,#bec6b2)">
+            <span style="display:flex;align-items:center;gap:9px">
+              <span style="display:block;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:13px solid var(--accent,#9c4421)"></span>
+              <span style="font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.24em;color:var(--ink,#171d24)">WAYPOINT</span>
+            </span>
+            <sc-if value="{{ isHub }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;border:1px solid var(--rule2,#a3ac98);border-radius:999px;overflow:hidden">
+                <sc-for list="{{ modeOptions }}" as="o" hint-placeholder-count="2">
+                  <button type="button" onClick="{{ o.pick }}" style="min-height:34px;padding:0 17px;border:0;background:{{ o.hbg }};color:{{ o.hfg }};font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;cursor:pointer">{{ o.label }}</button>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ isGuide }}" hint-placeholder-val="{{ true }}">
+              <button type="button" onClick="{{ goHub }}" style="display:flex;align-items:center;gap:7px;min-height:34px;padding:0 15px;border:1px solid var(--rule2,#a3ac98);border-radius:999px;background:transparent;color:var(--ink,#171d24);font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.1em;text-transform:uppercase;cursor:pointer">&larr; the atlas</button>
+            </sc-if>
+            <span style="margin-left:auto;display:flex;align-items:center;gap:9px">
+              <span style="font:600 10px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--muted,#4e5747)">{{ hubClock }}</span>
+              <span style="min-height:32px;display:flex;align-items:center;padding:0 13px;border:1px solid var(--rule2,#a3ac98);border-radius:999px;font:600 10px/1 'Source Sans 3',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ink,#171d24)">Tools</span>
+              <span style="min-height:32px;display:flex;align-items:center;padding:0 13px;border:1px solid var(--rule2,#a3ac98);border-radius:999px;font:600 10px/1 'Source Sans 3',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ink,#171d24)">&#65291; new guide</span>
+            </span>
+          </div>
+        </sc-if>
+
+        <!-- ── 1 · COVER ── -->
+        <sc-if value="{{ isCover }}" hint-placeholder-val="{{ true }}">
+          <div style="position:absolute;inset:0;display:grid;place-items:center;background:var(--bg,#dfe3d9)">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:18px">
+              <span style="position:relative;display:block;width:26px;height:23px;border-left:13px solid transparent;border-right:13px solid transparent;border-bottom:22px solid var(--accent,#9c4421)">
+                <span style="position:absolute;left:-3px;top:13px;display:block;width:6px;height:6px;background:var(--bg,#dfe3d9)"></span>
+              </span>
+              <span style="font:700 4.4rem/1 'Source Sans 3',sans-serif;letter-spacing:.24em;color:var(--ink,#171d24);padding-left:.24em">WAYPOINT</span>
+              <span style="font:600 10px/1 'Source Sans 3',sans-serif;letter-spacing:.3em;text-transform:uppercase;color:var(--muted,#4e5747)">Verified field guides</span>
+              <button type="button" onClick="{{ goHub }}" style="min-height:46px;padding:13px 26px;border:0;border-radius:999px;background:var(--accent,#9c4421);color:var(--on-aink,#f0d2c7);font:600 13px/1 'Source Sans 3',sans-serif;letter-spacing:.06em;cursor:pointer;margin-top:6px">Enter the atlas</button>
+              <span style="display:flex;flex-direction:column;align-items:center;margin-top:14px">
+                <span style="display:block;width:1px;height:34px;background:linear-gradient(var(--rule2,#a3ac98),var(--aink,#80371b))"></span>
+                <span style="display:block;width:9px;height:9px;border-radius:50%;border:2px solid var(--accent,#9c4421)"></span>
+              </span>
+              <span style="margin-top:10px;font:400 11px/1 'Source Sans 3',sans-serif;letter-spacing:.06em;color:var(--muted,#4e5747)">opens on its own after 4200ms &mdash; any click, scroll or wheel opens it now</span>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ── 2 · HOMEPAGE · WORLD ── -->
+        <sc-if value="{{ isWorld }}" hint-placeholder-val="{{ true }}">
+          <div style="position:relative;height:753px;overflow:hidden;background:var(--sunken,#d2d7c8)">
+            <div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 71px,color-mix(in srgb,var(--rule2,#a3ac98) 60%,transparent) 71px 72px),repeating-linear-gradient(0deg,transparent 0 71px,color-mix(in srgb,var(--rule2,#a3ac98) 60%,transparent) 71px 72px);opacity:.5"></div>
+
+            <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:430px;height:430px;border-radius:50%;border:var(--rw,1px) solid var(--rule2,#a3ac98);background:color-mix(in srgb,var(--card,#f8faf3) 42%,transparent);display:grid;place-items:center;text-align:center;padding:30px">
+              <span style="font:600 11px/1.6 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--muted,#4e5747)">&lt;atlas&#8209;map&gt; canvas<br>orthographic globe · d3 + topojson<br>graticule · terminator · dashed traverses</span>
+            </div>
+
+            <sc-for list="{{ pins }}" as="p" hint-placeholder-count="4">
+              <span style="position:absolute;left:{{ p.x }};top:{{ p.y }};transform:translate(-50%,-50%)">
+                <span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:block;width:9px;height:9px;border-radius:50%;border:2px solid var(--accent,#9c4421);animation:ping 2.4s ease-out infinite"></span>
+                <button type="button" onClick="{{ p.open }}" style="position:relative;display:block;width:44px;height:44px;border:0;background:transparent;cursor:pointer">
+                  <span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:block;width:{{ p.dot }};height:{{ p.dot }};border-radius:50%;background:{{ p.fill }}"></span>
+                </button>
+                <span style="position:absolute;left:26px;top:12px;white-space:nowrap;font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:{{ p.fill }}">{{ p.cc }}</span>
+              </span>
+            </sc-for>
+
+            <div style="position:absolute;left:20px;top:18px;width:262px;background:var(--card,#f8faf3);border:var(--rw,1px) solid var(--rule,#bec6b2);padding:13px 15px 14px">
+              <span style="display:block;font:700 9px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b);margin-bottom:3px">Sheet centre</span>
+              <span style="display:block;font:600 1.5rem/1.1 'Source Sans 3',sans-serif;font-variant-numeric:tabular-nums;color:var(--aink,#80371b)">37.57&deg;N 126.98&deg;E</span>
+              <div style="height:1px;background:var(--rule,#bec6b2);margin:11px 0 9px"></div>
+              <span style="display:block;font:700 9px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b);margin-bottom:7px">Index of sheets</span>
+              <sc-for list="{{ sheets }}" as="s" hint-placeholder-count="4">
+                <button type="button" onClick="{{ s.open }}" style="display:flex;align-items:baseline;gap:9px;width:100%;min-height:36px;padding:0;border:0;border-top:1px dashed var(--rule,#bec6b2);background:transparent;cursor:pointer;text-align:left">
+                  <span style="flex:none;font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.1em;color:var(--accent,#9c4421);font-variant-numeric:tabular-nums">{{ s.num }}</span>
+                  <span style="flex:1;min-width:0;font:500 13px/1.2 Literata,Georgia,serif;color:var(--ink,#171d24);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ s.title }}</span>
+                  <span style="flex:none;font:400 10px/1 'Source Sans 3',sans-serif;color:var(--muted,#4e5747);white-space:nowrap">{{ s.short }}</span>
+                </button>
+              </sc-for>
+            </div>
+
+            <div style="position:absolute;left:20px;top:50%;transform:translateY(-50%);width:236px;background:var(--card,#f8faf3);border:var(--rw,1px) solid var(--rule,#bec6b2);padding:12px 15px 13px">
+              <span style="display:block;font:700 9px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b);margin-bottom:8px">Key to the marks</span>
+              <sc-for list="{{ keyMarks }}" as="k" hint-placeholder-count="4">
+                <span style="display:flex;align-items:center;gap:9px;padding:5px 0">
+                  <span style="flex:none;display:block;width:14px;height:{{ k.h }};border-radius:{{ k.r }};background:{{ k.bg }};border-top:{{ k.bt }}"></span>
+                  <span style="font:400 11px/1.35 'Source Sans 3',sans-serif;color:var(--muted,#4e5747)">{{ k.label }}</span>
+                </span>
+              </sc-for>
+            </div>
+
+            <div style="position:absolute;right:20px;top:50%;transform:translateY(-50%);width:250px;background:var(--card,#f8faf3);border:var(--rw,1px) solid var(--rule,#bec6b2);padding:12px 15px 13px">
+              <span style="display:block;font:700 9px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b);margin-bottom:8px">The record</span>
+              <sc-for list="{{ record }}" as="r" hint-placeholder-count="4">
+                <button type="button" onClick="{{ r.open }}" style="display:flex;align-items:baseline;gap:10px;width:100%;min-height:38px;padding:0;border:0;border-top:1px dashed var(--rule,#bec6b2);background:transparent;cursor:pointer;text-align:left">
+                  <span style="flex:none;width:60px;font:400 10px/1.3 'Source Sans 3',sans-serif;color:var(--muted,#4e5747);font-variant-numeric:tabular-nums">{{ r.when }}</span>
+                  <span style="flex:1;min-width:0;font:500 12px/1.25 Literata,Georgia,serif;color:var(--ink,#171d24)">{{ r.title }}</span>
+                  <span style="flex:none;font:700 9px/1 'Source Sans 3',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:{{ r.tone }}">{{ r.state }}</span>
+                </button>
+              </sc-for>
+            </div>
+
+            <div style="position:absolute;left:20px;bottom:18px;display:flex;gap:7px">
+              <sc-for list="{{ zoomBtns }}" as="z" hint-placeholder-count="4">
+                <span style="min-height:34px;display:flex;align-items:center;padding:0 13px;background:var(--card,#f8faf3);border:var(--rw,1px) solid var(--rule,#bec6b2);font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ink,#171d24)">{{ z.label }}</span>
+              </sc-for>
+            </div>
+
+            <div style="position:absolute;right:20px;bottom:18px;width:250px;background:var(--card,#f8faf3);border:var(--rw,1px) solid var(--rule,#bec6b2);padding:12px 15px 13px">
+              <span style="display:block;font:700 9px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b);margin-bottom:5px">The north star</span>
+              <span style="display:block;font:400 12px/1.5 Literata,Georgia,serif;color:var(--muted,#4e5747)">Every perishable fact traces to a primary source and the date it was checked.</span>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ── 2 · HOMEPAGE · TABLE ── -->
+        <sc-if value="{{ isTable }}" hint-placeholder-val="{{ true }}">
+          <div style="height:753px;overflow-y:auto;background:var(--bg,#dfe3d9)">
+            <div style="max-width:1000px;margin:0 auto;padding:20px 24px 40px">
+
+              <div style="display:flex;align-items:center;gap:11px;min-height:44px;padding:0 15px;background:var(--card,#f8faf3);border:var(--rw,1px) solid var(--rule2,#a3ac98)">
+                <span style="font:400 14px/1 'Source Sans 3',sans-serif;color:var(--muted,#4e5747)">Search every sheet &mdash; a place, a price, 119&hellip;</span>
+              </div>
+
+              <div style="display:flex;gap:8px;margin-top:11px">
+                <sc-for list="{{ sheets }}" as="s" hint-placeholder-count="4">
+                  <button type="button" onClick="{{ s.open }}" style="min-height:36px;padding:0 15px;border:1px solid var(--rule2,#a3ac98);border-radius:999px;background:transparent;color:var(--ink,#171d24);font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap">{{ s.cc }} · {{ s.title }}</button>
+                </sc-for>
+              </div>
+
+              <div style="margin-top:18px;background:var(--card,#f8faf3);border:2px solid var(--accent,#9c4421);padding:18px 20px 20px">
+                <span style="display:block;font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--accent,#9c4421);margin-bottom:6px">On this trip now</span>
+                <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+                  <span style="font:500 2.1rem/1.05 Literata,Georgia,serif;letter-spacing:-.015em;color:var(--ink,#171d24)">South Korea</span>
+                  <span style="font:600 1.5rem/1.1 'Source Sans 3',sans-serif;font-variant-numeric:tabular-nums;color:var(--aink,#80371b)">14:12 KST</span>
+                  <span style="margin-left:auto;font:400 12px/1.4 'Source Sans 3',sans-serif;color:var(--muted,#4e5747)">Day 4 of 8 · 8&ndash;15 jul 2026</span>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:13px">
+                  <sc-for list="{{ quickChips }}" as="c" hint-placeholder-count="5">
+                    <a href="{{ c.href }}" style="min-height:36px;display:flex;align-items:center;padding:0 14px;border:1px solid {{ c.ink }};border-radius:999px;color:{{ c.ink }};white-space:nowrap;font:600 12px/1 'Source Sans 3',sans-serif;letter-spacing:.06em">{{ c.label }}</a>
+                  </sc-for>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;margin-top:15px;padding-top:13px;border-top:1px solid var(--rule,#bec6b2)">
+                  <span style="font:400 12px/1.45 'Source Sans 3',sans-serif;color:var(--muted,#4e5747)">Next: KTX 08:30 &rarr; Daejeon · 21/37 stops · 4 to book</span>
+                  <button type="button" onClick="{{ goGuide }}" style="margin-left:auto;min-height:44px;padding:0 20px;border:0;border-radius:999px;background:var(--accent,#9c4421);color:var(--on-aink,#f0d2c7);font:600 13px/1 'Source Sans 3',sans-serif;letter-spacing:.05em;cursor:pointer">Open this sheet &rarr;</button>
+                </div>
+              </div>
+
+              <span style="display:block;margin:22px 0 9px;font:700 9px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b)">Every sheet</span>
+              <sc-for list="{{ sheets }}" as="s" hint-placeholder-count="4">
+                <button type="button" onClick="{{ s.open }}" style="display:flex;align-items:center;gap:16px;width:100%;min-height:64px;padding:12px 16px;border:0;border-top:1px solid var(--rule,#bec6b2);background:transparent;cursor:pointer;text-align:left">
+                  <span style="flex:none;font:600 1.5rem/1 'Source Sans 3',sans-serif;font-variant-numeric:tabular-nums;color:var(--rule2,#a3ac98)">{{ s.num }}</span>
+                  <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px">
+                    <span style="font:500 1.15rem/1.15 Literata,Georgia,serif;color:var(--ink,#171d24)">{{ s.title }}</span>
+                    <span style="font:400 12px/1.3 'Source Sans 3',sans-serif;color:var(--muted,#4e5747)">{{ s.cities }} · {{ s.dates }}</span>
+                  </span>
+                  <span style="flex:none;font:700 .82rem/1 'Source Sans 3',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:{{ s.stampInk }};background:{{ s.stampBg }};border:1px solid {{ s.stampInk }};padding:6px 10px">{{ s.status }}</span>
+                </button>
+              </sc-for>
+
+              <div style="display:flex;align-items:center;gap:12px;margin-top:22px;padding:14px 16px;background:var(--card,#f8faf3);border:var(--rw,1px) solid var(--rule,#bec6b2)">
+                <span style="font:500 1rem/1.2 Literata,Georgia,serif;color:var(--ink,#171d24)">Split, closures, reminders, route</span>
+                <span style="margin-left:auto;min-height:40px;display:flex;align-items:center;padding:0 17px;border:1px solid var(--rule2,#a3ac98);border-radius:999px;font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ink,#171d24)">Tools &rarr;</span>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ── 3 · GUIDE ARRIVAL ── -->
+        <sc-if value="{{ isGuide }}" hint-placeholder-val="{{ true }}">
+          <div style="height:753px;overflow-y:auto;background:var(--bg,#dfe3d9)">
+            <div style="display:flex;flex-wrap:wrap;gap:26px;padding:26px 30px 0">
+              <div style="flex:1 1 560px;min-height:340px;position:relative;background:var(--sunken,#d2d7c8);border:var(--rw,1px) solid var(--rule2,#a3ac98)">
+                <div style="position:absolute;inset:0;background:repeating-linear-gradient(58deg,#b9bfae 0 3px,#c6ccbc 3px 7px);opacity:var(--photo,1)"></div>
+                <span style="position:absolute;left:14px;bottom:13px;font:600 10px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#4e5747;background:#f8faf3;padding:5px 8px">cover plate · gyeongbokgung, commons</span>
+              </div>
+              <div style="flex:1 1 360px;display:flex;flex-direction:column;justify-content:flex-end;gap:11px">
+                <span style="font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--accent,#9c4421)">Verified field guide</span>
+                <span style="font:500 4.1rem/0.98 Literata,Georgia,serif;letter-spacing:-.02em;color:var(--ink,#171d24)">South Korea</span>
+                <span style="font:400 1.05rem/1.5 Literata,Georgia,serif;color:var(--muted,#4e5747);max-width:44ch">Eight days across Seoul, Daejeon and Busan &mdash; built around MSI, and checked against what was actually open.</span>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px">
+                  <sc-for list="{{ quickChips }}" as="c" hint-placeholder-count="5">
+                    <a href="{{ c.href }}" style="min-height:36px;display:flex;align-items:center;padding:0 14px;border:1px solid {{ c.ink }};border-radius:999px;color:{{ c.ink }};white-space:nowrap;font:600 12px/1 'Source Sans 3',sans-serif;letter-spacing:.06em">{{ c.label }}</a>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:14px;margin:22px 30px 0;padding:11px 0 12px;border-top:2px solid var(--accent,#9c4421)">
+              <span style="font:600 2.2rem/1 Literata,Georgia,serif;letter-spacing:-.02em;color:var(--aink,#80371b)">Seoul · Daejeon · Busan</span>
+              <span style="font:700 11px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;color:var(--aink,#80371b);white-space:nowrap">Next: KTX 08:30 &rarr; Daejeon</span>
+              <span style="font:600 10px/1 'Source Sans 3',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#4e5747);border:1px solid var(--rule,#bec6b2);padding:4px 7px;white-space:nowrap">&#10003; 30 jul</span>
+              <span style="margin-left:auto;font:400 11px/1 'Source Sans 3',sans-serif;color:var(--muted,#4e5747)">21/37 stops · 4 to book · print sheet</span>
+            </div>
+
+            <div style="margin:0 30px;padding:14px 0 16px;border-bottom:var(--rw,1px) solid var(--rule,#bec6b2)">
+              <div style="position:relative;display:flex;align-items:flex-start;justify-content:space-between;padding-top:15px">
+                <span style="position:absolute;left:0;right:0;top:5px;height:2px;background:var(--rule2,#a3ac98)"></span>
+                <sc-for list="{{ stations }}" as="st" hint-placeholder-count="13">
+                  <span style="position:relative;flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:8px">
+                    <span style="position:absolute;top:-15px;display:block;width:{{ st.d }};height:{{ st.d }};border-radius:50%;background:{{ st.bg }};border:2px solid {{ st.bd }};box-shadow:{{ st.halo }}"></span>
+                    <span style="margin-top:5px;font:{{ st.font }};color:{{ st.fg }};text-align:center;line-height:1.25;padding:0 3px">{{ st.name }}</span>
+                  </span>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="padding:18px 30px 30px">
+              <span style="display:block;font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b);margin-bottom:5px">Days · you are on day 4</span>
+              <span style="display:block;font:500 1.7rem/1.15 Literata,Georgia,serif;color:var(--ink,#171d24)">Daejeon &mdash; MSI, and the KTX down</span>
+              <span style="display:block;margin-top:9px;font:400 1rem/1.55 Literata,Georgia,serif;color:var(--muted,#4e5747);max-width:70ch">The full day, its stops, its marginalia and its checks continue in the guide file &mdash; this is the arrival frame the hub hands off to.</span>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+
+    <!-- ══ MOBILE ══ -->
+    <div style="flex:none;display:flex;flex-direction:column;gap:9px">
+      <div style="display:flex;align-items:baseline;gap:11px">
+        <span style="font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#fff;background:#171d24;padding:5px 9px">Mobile</span>
+        <span style="font:400 12px/1.4 'Source Sans 3',sans-serif;color:#4e5747">402 &times; 874</span>
+      </div>
+
+      <div style="position:relative;flex:none;width:426px;height:898px;padding:12px;background:#0a0c0e;border-radius:56px;box-shadow:0 24px 60px rgba(16,20,24,.34),0 0 0 2px #2b3138">
+        <div data-field="{{ field }}" style="position:relative;width:402px;height:874px;border-radius:44px;overflow:hidden;background:var(--bg,#dfe3d9);color:var(--ink,#171d24);isolation:isolate">
+
+          <div style="position:absolute;top:0;left:0;right:0;height:54px;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:16px 30px 0;pointer-events:none;background:var(--bg,#dfe3d9)">
+            <span style="font:700 13px/1 'Source Sans 3',sans-serif;font-variant-numeric:tabular-nums;color:var(--ink,#171d24)">14:12</span>
+            <span style="display:flex;align-items:center;gap:5px">
+              <span style="display:block;width:17px;height:10px;border:1px solid var(--ink,#171d24);border-radius:2px;opacity:.85"></span>
+              <span style="display:block;width:4px;height:10px;background:var(--ink,#171d24);opacity:.55"></span>
+            </span>
+          </div>
+          <div style="position:absolute;top:11px;left:50%;transform:translateX(-50%);width:112px;height:33px;border-radius:999px;background:#0a0c0e;z-index:61"></div>
+
+          <div style="position:absolute;inset:54px 0 0 0;overflow-y:auto;overflow-x:hidden">
+
+            <!-- 1 · COVER -->
+            <sc-if value="{{ isCover }}" hint-placeholder-val="{{ true }}">
+              <div style="height:820px;display:grid;place-items:center;padding:0 26px">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:16px">
+                  <span style="position:relative;display:block;width:26px;height:23px;border-left:13px solid transparent;border-right:13px solid transparent;border-bottom:22px solid var(--accent,#9c4421)">
+                    <span style="position:absolute;left:-3px;top:13px;display:block;width:6px;height:6px;background:var(--bg,#dfe3d9)"></span>
+                  </span>
+                  <span style="font:700 2rem/1 'Source Sans 3',sans-serif;letter-spacing:.24em;color:var(--ink,#171d24);padding-left:.24em">WAYPOINT</span>
+                  <span style="font:600 10px/1 'Source Sans 3',sans-serif;letter-spacing:.3em;text-transform:uppercase;color:var(--muted,#4e5747)">Verified field guides</span>
+                  <button type="button" onClick="{{ goHub }}" style="min-height:46px;padding:13px 26px;border:0;border-radius:999px;background:var(--accent,#9c4421);color:var(--on-aink,#f0d2c7);font:600 13px/1 'Source Sans 3',sans-serif;letter-spacing:.06em;cursor:pointer;margin-top:6px">Enter the atlas</button>
+                  <span style="display:flex;flex-direction:column;align-items:center;margin-top:12px">
+                    <span style="display:block;width:1px;height:34px;background:linear-gradient(var(--rule2,#a3ac98),var(--aink,#80371b))"></span>
+                    <span style="display:block;width:9px;height:9px;border-radius:50%;border:2px solid var(--accent,#9c4421)"></span>
+                  </span>
+                </div>
+              </div>
+            </sc-if>
+
+            <!-- 2 · HOMEPAGE -->
+            <sc-if value="{{ isHub }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;align-items:center;gap:10px;padding:9px 16px;border-bottom:var(--rw,1px) solid var(--rule,#bec6b2)">
+                <span style="display:block;width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:11px solid var(--accent,#9c4421)"></span>
+                <span style="font:700 11px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;color:var(--ink,#171d24)">WAYPOINT</span>
+                <span style="margin-left:auto;display:flex;border:1px solid var(--rule2,#a3ac98);border-radius:999px;overflow:hidden">
+                  <sc-for list="{{ modeOptions }}" as="o" hint-placeholder-count="2">
+                    <button type="button" onClick="{{ o.pick }}" style="min-height:34px;padding:0 13px;border:0;background:{{ o.hbg }};color:{{ o.hfg }};font:700 9px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;cursor:pointer">{{ o.label }}</button>
+                  </sc-for>
+                </span>
+              </div>
+
+              <sc-if value="{{ isWorld }}" hint-placeholder-val="{{ true }}">
+                <div style="position:relative;height:520px;background:var(--sunken,#d2d7c8);overflow:hidden">
+                  <div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 47px,color-mix(in srgb,var(--rule2,#a3ac98) 60%,transparent) 47px 48px),repeating-linear-gradient(0deg,transparent 0 47px,color-mix(in srgb,var(--rule2,#a3ac98) 60%,transparent) 47px 48px);opacity:.5"></div>
+                  <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:300px;height:300px;border-radius:50%;border:var(--rw,1px) solid var(--rule2,#a3ac98);background:color-mix(in srgb,var(--card,#f8faf3) 42%,transparent);display:grid;place-items:center;text-align:center;padding:22px">
+                    <span style="font:600 10px/1.6 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--muted,#4e5747)">&lt;atlas&#8209;map&gt;<br>bare pings only<br>no cards, no rails</span>
+                  </div>
+                  <sc-for list="{{ pinsM }}" as="p" hint-placeholder-count="4">
+                    <span style="position:absolute;left:{{ p.x }};top:{{ p.y }};transform:translate(-50%,-50%)">
+                      <span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:block;width:9px;height:9px;border-radius:50%;border:2px solid var(--accent,#9c4421);animation:ping 2.4s ease-out infinite"></span>
+                      <button type="button" onClick="{{ p.open }}" style="position:relative;display:block;width:44px;height:44px;border:0;background:transparent;cursor:pointer">
+                        <span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:block;width:{{ p.dot }};height:{{ p.dot }};border-radius:50%;background:{{ p.fill }}"></span>
+                      </button>
+                    </span>
+                  </sc-for>
+                  <span style="position:absolute;right:16px;bottom:16px;display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background:var(--accent,#9c4421);color:var(--on-aink,#f0d2c7);font:700 17px/1 'Source Sans 3',sans-serif">&#9776;</span>
+                </div>
+                <div style="padding:14px 16px 22px;border-top:2px solid var(--accent,#9c4421);background:var(--card,#f8faf3)">
+                  <span style="display:block;font:700 9px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--accent,#9c4421);margin-bottom:4px">Ping</span>
+                  <span style="display:block;font:500 1.5rem/1.1 Literata,Georgia,serif;color:var(--ink,#171d24)">South Korea</span>
+                  <span style="display:block;margin-top:4px;font:400 12px/1.4 'Source Sans 3',sans-serif;color:var(--muted,#4e5747)">Seoul · day 4 of 8 · 14:12 KST</span>
+                  <div style="display:flex;gap:9px;margin-top:12px">
+                    <span style="flex:none;min-height:44px;display:flex;align-items:center;padding:0 16px;border:1px solid var(--rule2,#a3ac98);border-radius:999px;font:600 11px/1 'Source Sans 3',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ink,#171d24)">Zoom</span>
+                    <button type="button" onClick="{{ goGuide }}" style="flex:1;min-height:44px;border:0;border-radius:999px;background:var(--accent,#9c4421);color:var(--on-aink,#f0d2c7);font:600 13px/1 'Source Sans 3',sans-serif;cursor:pointer">Open the sheet &rarr;</button>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ isTable }}" hint-placeholder-val="{{ true }}">
+                <div style="padding:12px 16px 30px">
+                  <div style="display:flex;align-items:center;min-height:44px;padding:0 14px;background:var(--card,#f8faf3);border:var(--rw,1px) solid var(--rule2,#a3ac98)">
+                    <span style="font:400 13px/1 'Source Sans 3',sans-serif;color:var(--muted,#4e5747);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Search every sheet &mdash; a place, a price, 119&hellip;</span>
+                  </div>
+
+                  <div style="margin-top:13px;background:var(--card,#f8faf3);border:2px solid var(--accent,#9c4421);padding:15px 16px 17px">
+                    <span style="display:block;font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--accent,#9c4421);margin-bottom:5px">On this trip now</span>
+                    <span style="display:block;font:500 1.75rem/1.05 Literata,Georgia,serif;color:var(--ink,#171d24)">South Korea</span>
+                    <span style="display:flex;align-items:baseline;gap:10px;margin-top:5px">
+                      <span style="font:600 1.5rem/1.1 'Source Sans 3',sans-serif;font-variant-numeric:tabular-nums;color:var(--aink,#80371b)">14:12 KST</span>
+                      <span style="font:400 11px/1.3 'Source Sans 3',sans-serif;color:var(--muted,#4e5747)">Day 4 of 8</span>
+                    </span>
+                    <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:12px">
+                      <sc-for list="{{ quickChips }}" as="c" hint-placeholder-count="5">
+                        <a href="{{ c.href }}" style="min-height:40px;display:flex;align-items:center;padding:0 13px;border:1px solid {{ c.ink }};border-radius:999px;color:{{ c.ink }};white-space:nowrap;font:600 12px/1 'Source Sans 3',sans-serif;letter-spacing:.05em">{{ c.label }}</a>
+                      </sc-for>
+                    </div>
+                    <button type="button" onClick="{{ goGuide }}" style="width:100%;margin-top:14px;min-height:48px;border:0;border-radius:999px;background:var(--accent,#9c4421);color:var(--on-aink,#f0d2c7);font:600 13px/1 'Source Sans 3',sans-serif;cursor:pointer">Open this sheet &rarr;</button>
+                  </div>
+
+                  <span style="display:block;margin:20px 0 4px;font:700 9px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--aink,#80371b)">Every sheet</span>
+                  <sc-for list="{{ sheets }}" as="s" hint-placeholder-count="4">
+                    <button type="button" onClick="{{ s.open }}" style="display:flex;align-items:center;gap:12px;width:100%;min-height:64px;padding:11px 0;border:0;border-top:1px solid var(--rule,#bec6b2);background:transparent;cursor:pointer;text-align:left">
+                      <span style="flex:none;font:600 1.2rem/1 'Source Sans 3',sans-serif;font-variant-numeric:tabular-nums;color:var(--rule2,#a3ac98)">{{ s.num }}</span>
+                      <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+                        <span style="font:500 1rem/1.15 Literata,Georgia,serif;color:var(--ink,#171d24)">{{ s.title }}</span>
+                        <span style="font:400 11px/1.3 'Source Sans 3',sans-serif;color:var(--muted,#4e5747);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ s.dates }}</span>
+                      </span>
+                      <span style="flex:none;font:700 9px/1 'Source Sans 3',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:{{ s.stampInk }};background:{{ s.stampBg }};border:1px solid {{ s.stampInk }};padding:5px 7px">{{ s.status }}</span>
+                    </button>
+                  </sc-for>
+
+                  <div style="display:flex;align-items:center;gap:10px;margin-top:18px;padding:13px 15px;background:var(--card,#f8faf3);border:var(--rw,1px) solid var(--rule,#bec6b2)">
+                    <span style="font:500 .95rem/1.2 Literata,Georgia,serif;color:var(--ink,#171d24)">Split, closures, reminders, route</span>
+                    <span style="margin-left:auto;font:700 11px/1 'Source Sans 3',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--aink,#80371b)">Tools &rarr;</span>
+                  </div>
+                </div>
+              </sc-if>
+            </sc-if>
+
+            <!-- 3 · GUIDE -->
+            <sc-if value="{{ isGuide }}" hint-placeholder-val="{{ true }}">
+              <div style="position:relative;height:210px;background:var(--sunken,#d2d7c8);overflow:hidden">
+                <div style="position:absolute;inset:0;background:repeating-linear-gradient(58deg,#b9bfae 0 3px,#c6ccbc 3px 7px);opacity:var(--photo,1)"></div>
+                <button type="button" onClick="{{ goHub }}" style="position:absolute;left:14px;top:12px;min-height:36px;padding:0 14px;border:1px solid var(--rule2,#a3ac98);border-radius:999px;background:var(--card,#f8faf3);color:var(--ink,#171d24);font:600 10px/1 'Source Sans 3',sans-serif;letter-spacing:.12em;text-transform:uppercase;cursor:pointer">&larr; atlas</button>
+              </div>
+              <div style="padding:14px 16px 0">
+                <span style="display:block;font:700 10px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--accent,#9c4421);margin-bottom:5px">Verified field guide</span>
+                <span style="display:block;font:500 2.5rem/0.98 Literata,Georgia,serif;letter-spacing:-.02em;color:var(--ink,#171d24)">South Korea</span>
+                <span style="display:block;margin-top:8px;font:400 .95rem/1.5 Literata,Georgia,serif;color:var(--muted,#4e5747)">Eight days across Seoul, Daejeon and Busan &mdash; checked against what was actually open.</span>
+                <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:12px">
+                  <sc-for list="{{ quickChips }}" as="c" hint-placeholder-count="5">
+                    <a href="{{ c.href }}" style="min-height:40px;display:flex;align-items:center;padding:0 13px;border:1px solid {{ c.ink }};border-radius:999px;color:{{ c.ink }};white-space:nowrap;font:600 12px/1 'Source Sans 3',sans-serif;letter-spacing:.05em">{{ c.label }}</a>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:9px;margin:16px 0 0;padding:8px 16px 9px;border-top:2px solid var(--accent,#9c4421);border-bottom:1px solid var(--rule2,#a3ac98)">
+                <span style="font:700 11px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;color:var(--aink,#80371b);white-space:nowrap">Next: KTX 08:30 &rarr; Daejeon</span>
+                <span style="margin-left:auto;font:400 11px/1 'Source Sans 3',sans-serif;color:var(--muted,#4e5747);white-space:nowrap">21/37 stops · 4 to book</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:9px;padding:9px 14px 9px 16px;background:var(--bg,#dfe3d9);border-bottom:1px solid var(--rule,#bec6b2)">
+                <span style="flex:none;display:block;width:11px;height:11px;border-radius:50%;background:var(--accent,#9c4421);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent,#9c4421) 24%,transparent)"></span>
+                <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px">
+                  <span style="font:600 15px/1.2 Literata,Georgia,serif;color:var(--ink,#171d24)">Days</span>
+                  <span style="font:600 9px/1.3 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--muted,#4e5747)">day 4 of 8 · sat 11 jul</span>
+                </span>
+                <span style="flex:none;min-width:52px;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:999px;border:1px solid var(--crit,#b3261e);color:var(--crit,#b3261e);font:700 11px/1 'Source Sans 3',sans-serif;letter-spacing:.06em">SOS</span>
+              </div>
+              <div style="padding:16px">
+                <span style="display:block;font:500 1.4rem/1.15 Literata,Georgia,serif;color:var(--ink,#171d24)">Daejeon &mdash; MSI, and the KTX down</span>
+                <span style="display:block;margin-top:8px;font:400 .95rem/1.55 Literata,Georgia,serif;color:var(--muted,#4e5747)">The full day and its checks continue in the guide file &mdash; this is the arrival frame the hub hands off to.</span>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:1660px;margin:30px auto 0;padding:16px 18px;background:#f8faf3;border:1px solid #a3ac98">
+    <span style="display:block;font:700 9px/1 'Source Sans 3',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#80371b;margin-bottom:9px">The seam</span>
+    <div style="display:flex;flex-wrap:wrap;gap:14px 30px">
+      <sc-for list="{{ seam }}" as="s" hint-placeholder-count="4">
+        <span style="flex:1 1 300px;display:flex;flex-direction:column;gap:3px">
+          <span style="font:600 12px/1.3 'Source Sans 3',sans-serif;letter-spacing:.04em;color:#171d24">{{ s.head }}</span>
+          <span style="font:400 12px/1.5 'Source Sans 3',sans-serif;color:rgba(23,29,36,.62);text-wrap:pretty">{{ s.sub }}</span>
+        </span>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1700,&quot;height&quot;:1100},&quot;field&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;day&quot;,&quot;night&quot;],&quot;default&quot;:&quot;day&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const INK = "#171d24", ACC = "#9c4421";
+
+const SHEETS = [
+  ["01", "DK", "Denmark", "Copenhagen · Aarhus", "12–22 may 2026", "Complete", "complete"],
+  ["02", "KR", "South Korea", "Seoul · Daejeon · Busan", "8–15 jul 2026", "In progress", "now"],
+  ["03", "US", "Sedona", "Sedona · Flagstaff", "3–9 oct 2026", "Upcoming", "next"],
+  ["04", "JP", "Japan", "Tokyo · Kyoto", "spring 2027", "Upcoming", "next"]
+];
+
+const PINS = [
+  ["DK", "44%", "31%", "9px", true],
+  ["KR", "70%", "40%", "11px", true],
+  ["US", "20%", "42%", "9px", true],
+  ["JP", "79%", "47%", "7px", false]
+];
+
+const PINS_M = [
+  ["DK", "45%", "33%", "8px", true],
+  ["KR", "68%", "43%", "11px", true],
+  ["US", "23%", "45%", "8px", true],
+  ["JP", "73%", "47%", "7px", false]
+];
+
+const KEY = [
+  ["oxide dot — surveyed, a sheet exists", "10px", "50%", ACC, "0"],
+  ["grey dot — filed, not yet researched", "10px", "50%", "#a3ac98", "0"],
+  ["dashed — traverse from the origin airport", "0", "0", "transparent", "2px dashed " + ACC],
+  ["shaded — night there now", "10px", "0", "rgba(15,19,23,.34)", "0"]
+];
+
+const RECORD = [
+  ["may 2026", "Denmark", "Complete", "green"],
+  ["jul 2026", "South Korea", "Day 4", "accent"],
+  ["oct 2026", "Sedona", "Next", "muted"],
+  ["2027", "Japan", "Planned", "muted"]
+];
+
+const CHIPS = [
+  ["Police 112", "tel:112", "crit"],
+  ["Fire & ambulance 119", "tel:119", "crit"],
+  ["Tourist 1330", "tel:1330", "crit"],
+  ["₩1,461 / $1", "#", "muted"],
+  ["Base · Jongno, Seoul", "#", "muted"]
+];
+
+const STATIONS = ["Plan", "Essentials", "Transit", "Days", "Sights", "Daejeon & MSI", "Food & shopping", "Pokémon GO", "Gaming & anime", "Tokyo", "Sources", "Field log", "Tools"];
+
+const SEAM = [
+  ["The plate is the through-line", "The cover photograph is mounted as a plate in the hub card, and the same plate is the guide's masthead. Arrival FLIPs it — capture the source rect, apply the inverse transform, run to identity over 850ms — so the thing you clicked is the thing you land on."],
+  ["The wordmark never re-enters", "It FLIPs from the cover's centre into its header seat over 620ms and stays there for the whole session. The header is continuous from that moment to the guide; only what sits under it changes."],
+  ["Two hub faces, one destination", "WORLD is the instrument; TABLE is the daylight surface with no entrance animation at all. Both open the same sheet, and the phone keeps the switch permanently visible because the globe is not what you reach for in a station."],
+  ["The guide arrives already in state", "Day 4, next leg, stops and outstanding bookings are on the plate line before you scroll. The hub knew the trip was live; the guide does not ask again."]
+];
+
+class Component extends DCLogic {
+  // The prop SEEDS the theme; it does not override it, or the switcher writes to
+  // state that every render then discards.
+  state = { step: "cover", mode: "world", field: this.props.field || "day" };
+
+  renderVals() {
+    const s = this.state;
+    const field = s.field;
+    const tone = { crit: "var(--crit,#b3261e)", muted: "var(--muted,#4e5747)", green: "var(--green,#396345)", accent: "var(--accent,#9c4421)" };
+    const isHub = s.step === "hub";
+
+    const stampFor = (state) => state === "complete"
+      ? { ink: "var(--green,#396345)", bg: "transparent" }
+      : state === "now"
+        ? { ink: "var(--on-aink,#f0d2c7)", bg: "var(--accent,#9c4421)" }
+        : { ink: "var(--aink,#80371b)", bg: "transparent" };
+
+    const sheets = SHEETS.map(([num, cc, title, cities, dates, status, st]) => {
+      const stamp = stampFor(st);
+      return {
+        num, cc, title, cities, dates, status,
+        short: dates.split(" ").slice(-2).join(" "),
+        stampInk: st === "now" ? "var(--accent,#9c4421)" : stamp.ink,
+        stampBg: stamp.bg,
+        open: () => this.setState({ step: "guide" })
+      };
+    });
+
+    const pin = ([cc, x, y, dot, surveyed]) => ({
+      cc, x, y, dot,
+      fill: surveyed ? "var(--accent,#9c4421)" : "var(--rule2,#a3ac98)",
+      open: () => this.setState({ step: "guide" })
+    });
+
+    return {
+      field,
+      notCover: s.step !== "cover",
+      isCover: s.step === "cover",
+      isHub,
+      isGuide: s.step === "guide",
+      isWorld: isHub && s.mode === "world",
+      isTable: isHub && s.mode === "table",
+      hubClock: "Seoul 14:12",
+      goHub: () => this.setState({ step: "hub" }),
+      goGuide: () => this.setState({ step: "guide" }),
+
+      stepOptions: [["cover", "Cover"], ["hub", "Homepage"], ["guide", "Guide"]].map(([v, label]) => ({
+        label,
+        bg: s.step === v ? INK : "transparent",
+        fg: s.step === v ? "#fff" : "rgba(23,29,36,.62)",
+        pick: () => this.setState({ step: v })
+      })),
+      fieldOptions: [["day", "Day"], ["night", "Night"]].map(([v, label]) => ({
+        label,
+        bg: s.field === v ? INK : "transparent",
+        fg: s.field === v ? "#fff" : "rgba(23,29,36,.62)",
+        pick: () => this.setState({ field: v })
+      })),
+      modeOptions: [["world", "World"], ["table", "Table"]].map(([v, label]) => ({
+        label,
+        bg: s.mode === v ? INK : "transparent",
+        fg: s.mode === v ? "#fff" : "rgba(23,29,36,.62)",
+        hbg: s.mode === v ? "var(--accent,#9c4421)" : "transparent",
+        hfg: s.mode === v ? "var(--on-aink,#f0d2c7)" : "var(--muted,#4e5747)",
+        pick: () => this.setState({ step: "hub", mode: v })
+      })),
+
+      stepNote: s.step === "cover"
+        ? "Shown once per session and behind a flag. The wordmark FLIPs into the header seat it keeps for the rest of the visit; the iris opens onto a globe already flying in beneath it."
+        : isHub
+          ? (s.mode === "world"
+            ? "The instrument. Desktop carries the overlays; the phone shows bare pings and raises a sheet, because there is no spatial budget for floating cards on 402px."
+            : "The daylight surface, and the one reached for mid-trip. No entrance animation anywhere on this path — content is legible the instant it paints.")
+          : "Arrival. The plate you clicked is the plate you land on, and the guide is already in the trip's live state.",
+
+      dLabel: s.step === "cover" ? "cover · shown once per session"
+        : isHub ? (s.mode === "world" ? "homepage · world" : "homepage · table") : "guide · arrival frame",
+
+      sheets,
+      pins: PINS.map(pin),
+      pinsM: PINS_M.map(pin),
+      keyMarks: KEY.map(([label, h, r, bg, bt]) => ({ label, h, r, bg, bt })),
+      record: RECORD.map(([when, title, state, t]) => ({
+        when, title, state, tone: tone[t],
+        open: () => this.setState({ step: "guide" })
+      })),
+      zoomBtns: [["＋"], ["−"], ["Fit world"], ["Pause spin"]].map(([label]) => ({ label })),
+      quickChips: CHIPS.map(([label, href, t]) => ({ label, href, ink: tone[t] })),
+
+      stations: STATIONS.map((name) => {
+        const on = name === "Days";
+        return {
+          name, d: on ? "13px" : "9px",
+          bg: on ? "var(--accent,#9c4421)" : "var(--bg,#dfe3d9)",
+          bd: on ? "var(--accent,#9c4421)" : "var(--rule2,#a3ac98)",
+          halo: on ? "0 0 0 4px color-mix(in srgb,var(--accent,#9c4421) 22%,transparent)" : "none",
+          font: on ? "700 11px/1.25 'Source Sans 3',sans-serif" : "400 11px/1.25 'Source Sans 3',sans-serif",
+          fg: on ? "var(--ink,#171d24)" : "var(--muted,#4e5747)"
+        };
+      }),
+
+      seam: SEAM.map(([head, sub]) => ({ head, sub }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>

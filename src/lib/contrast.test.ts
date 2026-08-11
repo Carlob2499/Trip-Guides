@@ -8,9 +8,9 @@ import { relativeLuminance, contrastRatio, readableOn } from "./contrast";
    R2 (2026-08-04): retargeted to the wider tonal spread in base.css. The old CARD2 (#f2f4eb) was
    a phantom — no token or stylesheet has defined that fill for some time, so it tested nothing;
    it is now the real page ground, which accent text genuinely lands on. */
-const CARD = "#f8faf3";
-const PAGE = "#dfe3d9";
-const SUNKEN = "#d2d7c8";
+const CARD = "#fbfcf6";
+const PAGE = "#e3e7dc";
+const SUNKEN = "#ced5c4";
 
 describe("readableOn", () => {
   it("leaves a colour alone when it already passes", () => {
@@ -113,7 +113,7 @@ describe("contrastRatio", () => {
   // above the 3.0 build gate, and an obvious disaster (near-cream) must fail it.
   // If this ever flips, the gate in content.config.ts needs re-review.
   it("passes the tightest shipping accent and fails a pale disaster on the light bg", () => {
-    expect(contrastRatio("#a6721b", "#dfe3d9")).toBeGreaterThan(3);
-    expect(contrastRatio("#f5e6a0", "#dfe3d9")).toBeLessThan(3);
+    expect(contrastRatio("#a6721b", "#e3e7dc")).toBeGreaterThan(3);
+    expect(contrastRatio("#f5e6a0", "#e3e7dc")).toBeLessThan(3);
   });
 });

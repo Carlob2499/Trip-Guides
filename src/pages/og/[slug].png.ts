@@ -44,22 +44,22 @@ export async function GET({ props }: { props: { slug: string; data: any } }) {
   // (Liberation Serif standing in for Literata display) and the small data labels are a
   // plain SANS (Liberation Sans standing in for Source Sans 3) — no webfonts in librsvg.
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <rect width="1200" height="630" fill="#dfe3d9"/>
+  <rect width="1200" height="630" fill="#e3e7dc"/>
   <rect x="0" y="0" width="8" height="630" fill="${accent}"/>
   <rect x="0" y="608" width="1200" height="22" fill="${accent}"/>
   <text x="68" y="72"
         font-family="'Liberation Sans',Arial,sans-serif"
-        font-size="13" fill="#4e5747" letter-spacing="4" font-weight="700">WAYPOINT</text>
+        font-size="13" fill="#3c4534" letter-spacing="4" font-weight="700">WAYPOINT</text>
   <rect x="68" y="90" width="48" height="2" fill="${accent}"/>
   <text x="68" y="166"
         font-family="'Liberation Sans',Arial,sans-serif"
         font-size="17" fill="${accent}" letter-spacing="3" font-weight="700">${countrySafe}</text>
   <text x="68" y="310"
         font-family="'Liberation Serif',Georgia,serif"
-        font-size="${tfs}" fill="#171d24" font-weight="700" letter-spacing="-0.5">${titleSafe}</text>
+        font-size="${tfs}" fill="#0f141a" font-weight="700" letter-spacing="-0.5">${titleSafe}</text>
   <text x="68" y="${dekY}"
         font-family="'Liberation Sans',Arial,sans-serif"
-        font-size="22" fill="#4e5747">${dekSafe}</text>
+        font-size="22" fill="#3c4534">${dekSafe}</text>
 </svg>`;
 
   // Rasterise SVG → PNG using sharp (already a dep via Astro's image optimiser).

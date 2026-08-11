@@ -11,6 +11,8 @@ import Reminders from "../components/Reminders.astro";
 import TripKit from "../components/TripKit.astro";
 import JetLag from "../components/JetLag.astro";
 import { bucket } from "../lib/buckets";
+import { buildStations } from "../features/guide-rail/index";
+import "../features/guide-rail/styles.css";
 import { emergencyFor, FALLBACK_RATES_AS_OF } from "../data/countries.mjs";
 import { buildModifyIssueUrl } from "../lib/modify-schema.mjs";
 import { currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
@@ -81,6 +83,19 @@ const REPO = "Carlob2499/Trip-Guides";
 const { guide } = Astro.props;
 const { order, byG } = bucket(guide.sections);
 
+/* R5 — the spine rail's stops, derived from THIS guide rather than from any list. Korea yields
+   13 (11 groups + Field log + Tools), Sedona 9 (8 + Tools alone, because it has no learnings
+   record and an empty Field log is a promise the guide cannot keep). Neither number appears in
+   this file or in the rail's markup; both fall out of the guide. */
+const stations = buildStations({
+  groups: order,
+  hasLearnings: !!(guide as any).learnings,
+});
+/* The group descriptor the context line reads. Creator-signed where one exists; otherwise
+   nothing — an invented descriptor would be copy about content nobody wrote. */
+const stationDesc = (s: { kind: string; full: string }) =>
+  s.kind === "group" ? ((guide as any).descriptors?.[s.full] ?? null) : null;
+
 // The jet-lag calculator is an ARRIVAL tool, and it used to sit above EVERY tab of every
 // guide (creator, 2026-07-30: "quite useless and doesn't need to be there on every screen,
 // especially on the Days tab"). It now shows on ONE group — the one whose own content
@@ -94,12 +109,11 @@ order.forEach((g: string, ci: number) => (byG[g] || []).forEach((o: any) => {
 }));
 const jlGroupIdx = jlGroup ?? 0;
 
-// Tab-bar display shortening: long compound group names crowd the tab strip
-// (Korea has 13 tabs; names run to 20 chars). Display-only — the full name
-// stays in aria-label, the sheet, the dial, and the chapter opener. Data is
-// untouched. Rule: names over 13 chars split at " & " keep the head.
-const shortLabel = (g: string) =>
-  g.length > 13 && g.includes(" & ") ? g.split(" & ")[0] : g;
+// R5 deleted shortLabel(). The tab strip it existed for is gone: a spine-rail station label
+// wraps to two lines and a pill row scrolls, so neither surface needs an abbreviation. The one
+// place a name genuinely will not fit is the thumb bar's four fixed slots, and that shortening
+// lives in mobile-nav's slotLabel(), where the "only if the stub stays readable" rule is
+// already written and tested. Two shorteners would have meant two answers for one name.
 
 // Chapter-opener photo fans: a group whose sections already carry verified
 // Commons images (sights) gets up to three of its OWN photos fanned beside
@@ -397,7 +411,7 @@ const tripSummary = buildSummary(guide);
         // computed --bg later, but "later" is after first paint: installed to the home
         // screen on a dark phone, the status bar flashed the light default first.
         const tc = document.querySelector('meta[name="theme-color"]');
-        if (tc) tc.setAttribute("content", document.documentElement.getAttribute("data-theme") === "dark" ? "#0f1317" : "#dfe3d9");
+        if (tc) tc.setAttribute("content", document.documentElement.getAttribute("data-theme") === "dark" ? "#0f1317" : "#e3e7dc");
       })();
     </script>
   </head>
@@ -494,42 +508,6 @@ const tripSummary = buildSummary(guide);
       )}
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════════════════════
-         GUIDE TAB BAR — one tab per section group + Budget Calculator + Vote tools
-         ═══════════════════════════════════════════════════════════════════ -->
-    <nav class="guide-tabs-nav" aria-label="Guide sections" data-hint-anchor>
-    <div class="guide-tabs" id="guideTabs" role="tablist">
-      {order.map((g, i) => (
-        <button class="gtab" role="tab" type="button" id={`gtab-${i}`} data-tab={i} data-full={g}
-                aria-controls={`grp-${i}`}
-                aria-label={g} aria-selected={i === 0 ? "true" : "false"}>{shortLabel(g)}</button>
-      ))}
-      {/* M4 item 3 — the TOOL tabs are layout chrome by CLAUDE.md's own definition, not content
-          groups, and Korea's 13 content tabs + these 5 made the strip scroll even on a 1400px
-          desktop. They stay in the SAME tablist (one tab set, one arrow-key ring, aria-controls
-          untouched — collapsing them into a popover would have broken the tablist's ARIA
-          structure for a purely visual win). Instead `.gtab-tool` marks them: a separator rule
-          sets them off as chrome, and on desktop their labels go visually-hidden (clipped, NOT
-          display:none — clipped text stays in the accessibility tree) so the strip fits one row
-          while every accessible name survives verbatim. Mobile keeps the labels: the strip
-          scrolls there by design and the sheet below spells them out in full anyway. */}
-      <button class="gtab gtab-tool gtab-split" role="tab" type="button" id="gtab-split" data-tab="split"
-              aria-controls="tripSplit" aria-selected="false"
-              aria-label="Budget calculator" title="Budget calculator"><Icon name="budget" class="gtab-ico" /><span class="gtab-txt">Budget</span></button>
-      <button class="gtab gtab-tool gtab-vote" role="tab" type="button" id="gtab-vote" data-tab="vote"
-              aria-controls="tripVote" aria-selected="false"
-              aria-label="Group vote" title="Group vote"><Icon name="vote" class="gtab-ico" /><span class="gtab-txt">Vote</span></button>
-      <button class="gtab gtab-tool gtab-remind" role="tab" type="button" id="gtab-remind" data-tab="remind"
-              aria-controls="tripRemind" aria-selected="false"
-              aria-label="Reminders" title="Reminders"><Icon name="remind" class="gtab-ico" /><span class="gtab-txt">Reminders</span></button>
-      <button class="gtab gtab-tool gtab-learn" role="tab" type="button" id="gtab-learn" data-tab="learn"
-              aria-controls="tripLearn" aria-selected="false" hidden
-              aria-label="Trip learnings" title="Trip learnings"><Icon name="learn" class="gtab-ico" /><span class="gtab-txt">Learnings</span></button>
-      <button class="gtab gtab-tool gtab-kit" role="tab" type="button" id="gtab-kit" data-tab="kit"
-              aria-controls="tripKit" aria-selected="false"
-              aria-label="Trip kit" title="Trip kit"><Icon name="kit" class="gtab-ico" /><span class="gtab-txt">Trip kit</span></button>
-    </div>
-    </nav>
 
     </div>{/* end .sticky-chrome */}
 
@@ -747,6 +725,51 @@ const tripSummary = buildSummary(guide);
          MAIN LAYOUT — tab-switched content panels (nav is the sticky tab bar above)
          ═══════════════════════════════════════════════════════════════════ -->
     <div class="shell">
+      {/* ═══════════════════════════════════════════════════════════════════════
+          THE SPINE RAIL — one stop per station, derived from this guide.
+          One DOM for all three models; @container in guide-rail/styles.css decides which
+          paints. Deliberately NOT a tablist: R5 stations are plain buttons carrying
+          aria-current in a nav (BEHAVIOR.md §4), because a tablist promises arrow-key
+          traversal of a set the reader can see, and thirteen stops on a scrolling phone row
+          are not that set. The arrow-key ring is kept by hand in guide-ui.js.
+          ═══════════════════════════════════════════════════════════════════ */}
+      <nav class="grail" aria-label="Guide sections" data-hint-anchor>
+        <div class="grail-track" id="guideTabs">
+          {stations.map((s) => (
+            <button class="gtab grail-stop" type="button" id={`gtab-${s.index}`}
+                    data-tab={s.index} data-full={s.full} data-kind={s.kind}
+                    aria-controls={`grp-${s.index}`}
+                    aria-current={s.index === 0 ? "true" : undefined}>
+              <span class="grail-dot" aria-hidden="true"></span>
+              <span class="grail-label">{s.full}</span>
+            </button>
+          ))}
+          {/* The R4 tool tabs, kept inside #guideTabs so every silo that reaches for
+              `.gtab[data-tab="split"]` keeps resolving through one element, and hidden from the
+              rail so the stop count stays the guide's own — 13 for Korea, not 18. Step 4
+              rehomes them into the Tools station and deletes this block. */}
+          <button class="gtab gtab-tool gtab-split" type="button" id="gtab-split" data-tab="split"
+                  aria-controls="tripSplit" aria-label="Budget calculator" title="Budget calculator" hidden><Icon name="budget" class="gtab-ico" /><span class="gtab-txt">Budget</span></button>
+          <button class="gtab gtab-tool gtab-vote" type="button" id="gtab-vote" data-tab="vote"
+                  aria-controls="tripVote" aria-label="Group vote" title="Group vote" hidden><Icon name="vote" class="gtab-ico" /><span class="gtab-txt">Vote</span></button>
+          <button class="gtab gtab-tool gtab-remind" type="button" id="gtab-remind" data-tab="remind"
+                  aria-controls="tripRemind" aria-label="Reminders" title="Reminders" hidden><Icon name="remind" class="gtab-ico" /><span class="gtab-txt">Reminders</span></button>
+          <button class="gtab gtab-tool gtab-learn" type="button" id="gtab-learn" data-tab="learn"
+                  aria-controls="tripLearn" aria-label="Trip learnings" title="Trip learnings" hidden><Icon name="learn" class="gtab-ico" /><span class="gtab-txt">Learnings</span></button>
+          <button class="gtab gtab-tool gtab-kit" type="button" id="gtab-kit" data-tab="kit"
+                  aria-controls="tripKit" aria-label="Trip kit" title="Trip kit" hidden><Icon name="kit" class="gtab-ico" /><span class="gtab-txt">Trip kit</span></button>
+        </div>
+        {/* Phone only: the ordinal position a rail with unreachable ends cannot give. */}
+        <div class="grail-prog" aria-hidden="true"><span class="grail-fill"></span></div>
+        <div class="grail-ctx">
+          <p class="grail-kicker" data-rail-kicker>{stations[0]?.full}</p>
+          {stationDesc(stations[0]) && <p class="grail-desc" data-rail-desc>{stationDesc(stations[0])}</p>}
+          {/* The resume line is written by mobile-nav's section memory when there IS one.
+              Rendered empty here and never with a fabricated "start here". */}
+          <p class="grail-resume" data-rail-resume hidden></p>
+        </div>
+      </nav>
+
       <main class="content" id="content">
         <noscript>
           <p class="note" style="padding:1.5rem 0">This guide reads fine without JavaScript; enabling it adds section tabs, saved checklists, and the jet-lag calculator.</p>
@@ -762,7 +785,7 @@ const tripSummary = buildSummary(guide);
           const sub = collapseSubPrefixes(subParts.slice(0, 4)).join(" · ") + (subParts.length > 4 ? ` · +${subParts.length - 4} more` : "");
           const isPanelGroup = ((guide as any).panelGroups ?? []).includes(g);
           return (
-            <div class="catblock" id={`grp-${ci}`} data-ci={ci} role="tabpanel" aria-labelledby={`gtab-${ci}`} hidden={ci > 0}>
+            <div class="catblock" id={`grp-${ci}`} data-ci={ci} data-desc={descriptor ?? undefined} role="region" aria-labelledby={`gtab-${ci}`} hidden={ci > 0}>
               <header class="cat-opener">
                 <span class="cat-num" aria-hidden="true">{String(ci + 1).padStart(2, "0")}</span>
                 {groupImgs[g] && (

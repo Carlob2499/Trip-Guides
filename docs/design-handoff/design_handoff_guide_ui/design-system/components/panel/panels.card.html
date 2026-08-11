@@ -1,0 +1,32 @@
+<!-- @dsCard group="Components" viewport="700x300" subtitle="Open, collapsed, full-span, and stamped" name="Panel" -->
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<style>html,body{margin:0}body{background:var(--bg);color:var(--ink);font-family:var(--fs);padding:18px 20px}*{box-sizing:border-box}</style>
+</head><body>
+<div id="root"></div>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<script type="text/babel" data-presets="react">
+const { Panel } = window.Waypoint || {};
+function Demo() {
+  if (!Panel) return <p style={{font:"400 12px/1.5 var(--fs)",color:"var(--muted)"}}>Bundle not built yet — the compiler generates _ds_bundle.js.</p>;
+  return (
+    <div className="wp-panel-grid" style={{ "--panel-min": "200px" }}>
+      <Panel kicker="FIELD NOTE" title="Getting around" onToggle={() => {}}>
+        <p className="wp-body" style={{margin:0}}>T-money covers subway, bus and most taxis.</p>
+      </Panel>
+      <Panel kicker="EMERGENCY" title="One source, two doors" stamp="✓ checked 18 jul 2026" onToggle={() => {}}>
+        <p className="wp-body" style={{margin:0}}>112 police · 119 fire &amp; ambulance · 1330 tourist.</p>
+      </Panel>
+      <Panel kicker="TOKYO" collapsed onToggle={() => {}} />
+      <Panel kicker="LEDGER" title="Where the money went" span onToggle={() => {}}>
+        <p className="wp-body" style={{margin:0}}>Full-span types are internally gridded already.</p>
+      </Panel>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo />);
+</script>
+</body></html>

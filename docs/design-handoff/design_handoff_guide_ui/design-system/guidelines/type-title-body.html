@@ -1,0 +1,16 @@
+<!-- @dsCard group="Type" viewport="700x215" subtitle="Panel titles are FIXED at 1.45rem — the 24px grading rule" name="Title & body" -->
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--fs);padding:18px 20px}
+*{box-sizing:border-box}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
+.sw{flex:1 1 90px;min-width:90px;display:flex;flex-direction:column;justify-content:flex-end;height:78px;padding:8px 9px;border:1px solid var(--rule2)}
+.sw b{font:700 10px/1.3 var(--fs);letter-spacing:.1em;text-transform:uppercase}
+.sw i{font:400 10px/1.3 var(--fs);font-style:normal;opacity:.75;font-variant-numeric:tabular-nums}
+.note{font:400 11px/1.45 var(--fs);color:var(--muted);margin:10px 0 0;max-width:62ch}
+</style></head><body>
+<div style="font:500 1.45rem/1.15 var(--fd)">Where the money went</div>
+<p style="font:400 1.02rem/1.72 var(--fd);color:var(--muted);margin:9px 0 0;max-width:52ch">Both are a one-minute walk from Haeundae Station. Exits 3 and 5 put you straight onto Gunam-ro, where lunch, T1 and the beach all line one street.</p>
+<p class="note">Headings sit at weight 400–500, which puts their WCAG large-text line at 24px rather than 18.7px. Card titles are fixed rather than fluid for exactly that reason.</p></body></html>

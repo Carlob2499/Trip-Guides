@@ -1,0 +1,33 @@
+<!-- @dsCard group="Components" viewport="700x330" subtitle="Dot, chip, stamp, reading, and the gap" name="Notation" -->
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<style>html,body{margin:0}body{background:var(--bg);color:var(--ink);font-family:var(--fs);padding:18px 20px}*{box-sizing:border-box}</style>
+</head><body>
+<div id="root"></div>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<script type="text/babel" data-presets="react">
+const W = window.Waypoint || {};
+function Demo() {
+  if (!W.Stamp) return <p style={{font:"400 12px/1.5 var(--fs)",color:"var(--muted)"}}>Bundle not built yet.</p>;
+  const { Stamp, FlagChip, ProvenanceDot, Reading, GapBlock } = W;
+  return (
+    <div style={{display:"flex",flexDirection:"column",gap:16}}>
+      <p className="wp-body" style={{margin:0}}>Airport Limousine 6002 is ₩17,000 per person<ProvenanceDot /> and runs every 15 minutes.</p>
+      <div style={{display:"flex",flexWrap:"wrap",gap:10,alignItems:"center"}}>
+        <FlagChip kind="approx" onClick={()=>{}} />
+        <FlagChip kind="unconfirmed" onClick={()=>{}} />
+        <FlagChip kind="checked" label="confirmed" />
+        <Stamp>✓ checked 18 jul 2026</Stamp>
+        <Stamp tone="ochre">⚠ ageing — 12 days left</Stamp>
+      </div>
+      <Reading>37.57°N 126.98°E</Reading>
+      <GapBlock body="Post-match dinner times could not be pinned." whatToDo="What to do instead — call Gobang, 042-863-2104, before you go in" />
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo />);
+</script>
+</body></html>

@@ -152,9 +152,9 @@ class AtlasMap extends HTMLElement {
   _readTheme() {
     this._dark = document.documentElement.getAttribute("data-theme") === "dark";
     this._c = {
-      card: cssVar(this, "--card", "#f8faf3"), sunken: cssVar(this, "--sunken", "#d2d7c8"),
-      rule: cssVar(this, "--rule", "#bec6b2"), rule2: cssVar(this, "--rule2", "#a3ac98"),
-      muted: cssVar(this, "--muted", "#4e5747"), bg: cssVar(this, "--bg", "#dfe3d9"),
+      card: cssVar(this, "--card", "#fbfcf6"), sunken: cssVar(this, "--sunken", "#ced5c4"),
+      rule: cssVar(this, "--rule", "#a9b39b"), rule2: cssVar(this, "--rule2", "#8a9480"),
+      muted: cssVar(this, "--muted", "#3c4534"), bg: cssVar(this, "--bg", "#e3e7dc"),
     };
   }
 
