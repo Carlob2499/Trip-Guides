@@ -241,6 +241,9 @@
     text-transform: uppercase; color: var(--ink);
   }
   .atlas-dock-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--rule2); flex: 0 0 auto; }
+  /* One rule per TripStatus. The class is composed as `atlas-dock-dot--${status}` in
+     index.astro, so these look unreferenced to a literal-string sweep — they are not.
+     `undated` deliberately has none and keeps the base dot colour. */
   .atlas-dock-dot--ongoing { background: var(--accent); }
   .atlas-dock-dot--upcoming { background: var(--aink); }
   .atlas-dock-dot--past { background: var(--green); }
@@ -263,14 +266,13 @@
   .atlas-dock-tel { border-color: var(--accent); color: var(--accent-ink); }
   .atlas-dock-warn { color: var(--ochre); border-color: var(--ochre); }
   .atlas-dock-actions { display: flex; gap: 8px; }
-  .atlas-dock-cta, .atlas-dock-alt {
+  .atlas-dock-cta {
     flex: 1 1 auto; min-height: 44px; display: inline-flex; align-items: center; justify-content: center;
     font-family: var(--font-data); font-size: var(--text-micro); letter-spacing: .06em;
     text-transform: uppercase; text-decoration: none; border-radius: 999px;
+    background: var(--cta); color: var(--cta-ink); border: 0;
   }
-  .atlas-dock-cta { background: var(--cta); color: var(--cta-ink); border: 0; }
-  .atlas-dock-alt { flex: 0 0 auto; padding: 0 16px; background: none; color: var(--ink); border: 1px solid var(--rule2); }
-  .atlas-dock-cta:focus-visible, .atlas-dock-alt:focus-visible, .atlas-dock-head:focus-visible {
+  .atlas-dock-cta:focus-visible, .atlas-dock-head:focus-visible {
     outline: 2px solid var(--accent-ink); outline-offset: 2px;
   }
 

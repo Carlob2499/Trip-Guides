@@ -415,10 +415,10 @@ button{appearance:none;-webkit-appearance:none}
    are NOT covered as a class — inline text links shouldn't shrink — only the named pill
    anchors below join the buttons. */
 button:not(:disabled):active,[role="button"]:active,summary:active,
-a.foot-modify-pill:active,a.hub-hero-cta:active,a.pg-done-link:active,a.ab-cta-btn:active{scale:.98}
+a.foot-modify-pill:active,a.pg-done-link:active,a.ab-cta-btn:active{scale:.98}
 @media(prefers-reduced-motion:reduce){
   button:not(:disabled):active,[role="button"]:active,summary:active,
-  a.foot-modify-pill:active,a.hub-hero-cta:active,a.pg-done-link:active,a.ab-cta-btn:active{scale:none}
+  a.foot-modify-pill:active,a.pg-done-link:active,a.ab-cta-btn:active{scale:none}
 }
 body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:var(--text-body);line-height:1.72;-webkit-font-smoothing:antialiased}
 /* Fine paper-grain noise overlay — fixed, non-interactive, behind everything. */

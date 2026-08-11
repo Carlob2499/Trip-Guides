@@ -53,6 +53,12 @@ import "../styles/overview.css";
 import "../styles/flight.css";
 import "../styles/mobile-nav.css";
 import "../styles/field-tools.css";
+/* The TOOLS STATION's own styles. This layout is their ONLY importer now: they used to ride
+   in on the standalone /tools/ page, and when R5 retired that page the stylesheet lost its
+   last import while every panel kept rendering — unstyled, and green across 225 browser
+   tests, because none of them assert appearance. Deleting a page means checking what it was
+   the last importer of. */
+import "../styles/tools.css";
 import "../styles/palette.css";
 import "../styles/print-day.css";
 import "../styles/budget-sheet.css";
@@ -943,7 +949,7 @@ const tripSummary = buildSummary(guide);
           {/* Reminders kept its panel when its tool TAB was retired. It is the group's shared
               scratchpad, not a Vote/Trip-kit-style surface R5 removed — dropping it with them
               would have deleted a live Firebase-backed feature by association. */}
-          <ToolsScreen active={toolsTrip} base={base} inGuide>
+          <ToolsScreen active={toolsTrip} base={base}>
             <Reminders storeKey={storeKey} />
           </ToolsScreen>
         </div>

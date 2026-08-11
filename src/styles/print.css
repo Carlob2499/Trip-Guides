@@ -72,7 +72,7 @@
 
   /* Print external link URLs inline */
   a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 8pt; color: #555; word-break: break-all; }
-  a.topbar-home::after, a.botHome::after, a.sheet-link::after, a.sheet-cat::after { content: none !important; }
+  a.topbar-home::after, a.sheet-link::after, a.sheet-cat::after { content: none !important; }
 
   /* Masthead */
   .masthead { padding: 0 0 .7rem; border-bottom: 1.5pt solid #111; text-align: left; }

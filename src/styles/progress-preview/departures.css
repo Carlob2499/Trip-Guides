@@ -117,6 +117,8 @@
 .dp-cell::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;
   background:color-mix(in srgb,var(--ink) 55%,transparent);pointer-events:none}
 .dp-face{display:block;width:100%;height:100%;backface-visibility:hidden;transform-origin:center}
+/* Composed as `dp-status st-${kind}` in _lib/departures.js, so a literal-string sweep
+   of the source reads these four as unused. They are not. */
 .dp-status.st-cleared .dp-cell{color:var(--dp-fg)}
 .dp-status.st-running .dp-cell{background:var(--accent);color:var(--on-accent)}
 /* STALLED is ringed, not filled: --warn is one of the tokens base.css DOES remap per

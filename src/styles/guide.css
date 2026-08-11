@@ -124,9 +124,9 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
    back on release (var(--ease-spring) overshoot on the transform channel) for a
    physical, app-like "pressed" feel. Interactive controls only — not cards or
    inputs, and suppressed for users who ask to reduce motion. */
-.gtab:active,.sc-add-btn:active,.sc-add-expense-btn:active,.scm-btn:active,.split-del:active,.jl-toggle:active,.anchor-btn:active,.topbar-btn:active{transform:scale(.94)}
+.gtab:active,.sc-add-btn:active,.sc-add-expense-btn:active,.split-del:active,.jl-toggle:active,.anchor-btn:active,.topbar-btn:active{transform:scale(.94)}
 @media(prefers-reduced-motion:reduce){
-  .gtab:active,.sc-add-btn:active,.sc-add-expense-btn:active,.scm-btn:active,.split-del:active,.jl-toggle:active,.anchor-btn:active,.topbar-btn:active{transform:none}
+  .gtab:active,.sc-add-btn:active,.sc-add-expense-btn:active,.split-del:active,.jl-toggle:active,.anchor-btn:active,.topbar-btn:active{transform:none}
 }
 
 /* === LAYOUT SHELL ============================================================ */
@@ -612,8 +612,6 @@ body{overflow-x:clip}
    points at is one tap away and this panel is for sharing. */
 .share-elsewhere{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--rule2);font-size:var(--text-small);color:var(--muted)}
 .share-elsewhere a{color:var(--accent-ink)}
-.share-dl:only-child{grid-column:1 / -1}
-.share-dl-ext{font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:.05em;color:var(--accent-ink)}
 /* Share-summary button — full-width action under the URL row */
 .share-summary-btn{width:100%;margin-bottom:.85rem;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;background:none;color:var(--muted);border:1px solid var(--rule2);border-radius:999px;padding:.5rem .6rem;cursor:pointer;transition:color .14s,border-color .14s}
 .share-summary-btn:hover{color:var(--ink);border-color:var(--ink)}

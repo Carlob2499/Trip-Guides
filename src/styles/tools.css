@@ -1,51 +1,19 @@
-/* === TRIP TOOLS SCREEN =====================================================
-   The standalone cross-trip Tools screen (design-handoff README §5). Atlas rules
-   throughout: square corners on containers, 999px on pills, no third radius; every
-   colour, size and easing resolves through base.css tokens so both themes and any
-   future token change carry for free. The Panel container itself is
-   src/features/panel/styles.css — this file styles only what sits inside and around it. */
-
-.tools-bar{display:flex;align-items:center;justify-content:space-between;max-width:1180px;margin:0 auto;padding:1.1rem 1.2rem;padding-left:max(1.2rem,var(--safe-left));padding-right:max(1.2rem,var(--safe-right))}
-.tools-wordmark{font-family:var(--font-data);font-size:var(--text-control);letter-spacing:.14em;text-transform:uppercase;color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;padding:.5rem .9rem;border:1px solid var(--rule2);border-radius:999px;background:var(--card)}
-.tools-wordmark:hover{border-color:var(--accent-ink)}
-.tools-wordmark:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
-
-/* Survey ground behind the head. It was position:fixed over the whole viewport at first,
-   which made every element on the page "partially obscured" to axe — the contrast checks
-   under it all went unresolved rather than passing. Bounded to the head's own band, the
-   way the About page's contours already were, so it decorates without covering. */
-#toolsMain{position:relative}
-.tools-contours{position:absolute;inset:0 0 auto 0;height:520px;overflow:hidden;pointer-events:none;z-index:0}
-.tools-contours svg{position:absolute;width:130%;left:-15%;top:-10%;opacity:.3}
-.tools-contours polyline{fill:none;stroke:var(--rule);stroke-width:1}
+/* === THE TOOLS STATION =====================================================
+   The last stop on every guide's rail (ToolsScreen.astro). This was a standalone
+   cross-trip screen with its own masthead, contour ground and trip picker until R5
+   retired it; the chrome those needed is gone with it, and what remains styles only
+   the panels themselves. Atlas rules throughout: square corners on containers, 999px
+   on pills, no third radius; every colour, size and easing resolves through base.css
+   tokens so both themes and any future token change carry for free. The Panel
+   container itself is src/features/panel/styles.css. */
 
 .tools{position:relative;z-index:1;max-width:1180px;margin:0 auto;
   padding:0 max(1.2rem,var(--safe-left)) calc(4rem + var(--safe-bottom)) max(1.2rem,var(--safe-right))}
-
-/* --- Head + trip picker ---------------------------------------------------- */
-.tools-head{padding:2.4rem 0 1.8rem;border-bottom:1px solid var(--rule)}
-.tools-kicker{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:.22em;text-transform:uppercase;color:var(--accent-ink)}
-.tools-title{margin-top:.7rem;font-family:var(--font-display);font-weight:420;font-size:var(--text-h1);line-height:1.15;letter-spacing:-.01em;text-wrap:balance}
-.tools-dek{margin-top:.7rem;color:var(--muted);max-width:44rem;text-wrap:pretty}
-.tools-guidelink{color:var(--accent-ink);text-underline-offset:3px}
-
-/* Pills, not bare text — CLAUDE.md's clickability rule. The current trip stays in the
-   list and is marked rather than removed; a picker that hides where you are reads as a
-   shorter list of trips than the site actually has. */
-.tools-picker{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.4rem}
-.tools-trip{font-family:var(--font-data);font-size:var(--text-control);letter-spacing:.04em;
-  padding:.45rem 1rem;border:1px solid var(--rule2);border-radius:999px;background:var(--card);
-  color:var(--ink);text-decoration:none;transition:border-color .18s ease,background .18s ease}
-.tools-trip:hover{border-color:var(--accent-ink)}
-.tools-trip:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
-.tools-trip--on{background:color-mix(in srgb,var(--accent) 14%,var(--card));border-color:var(--accent);color:var(--accent-ink);font-weight:700}
 
 /* --- The grid -------------------------------------------------------------- */
 .tools-grid{margin-top:1.8rem}
 
 /* --- Shared panel innards --------------------------------------------------- */
-.tools-note{color:var(--muted);text-wrap:pretty;margin-bottom:1rem}
-.tools-note b{color:var(--ink)}
 .tools-sub{font-family:var(--font-data);font-size:var(--text-caption);letter-spacing:.06em;text-transform:uppercase;color:var(--ink);margin:1.1rem 0 .5rem}
 .tools-sub:first-child{margin-top:0}
 .tools-dim{color:var(--muted)}
@@ -90,15 +58,7 @@
 .tools-route-sug b{color:var(--accent-ink)}
 .tools-route-ok{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}
 
-/* --- Foot ------------------------------------------------------------------- */
-.tools-foot{margin-top:2.4rem;padding-top:1.2rem;border-top:1px solid var(--rule);font-family:var(--font-data);font-size:var(--text-control);letter-spacing:.06em;text-transform:uppercase}
-.tools-foot a{display:inline-flex;align-items:center;gap:.4rem;color:var(--ink);text-decoration:none;padding:.5rem .9rem;border:1px solid var(--rule2);border-radius:999px;background:var(--card)}
-.tools-foot a:hover{border-color:var(--accent-ink)}
-.tools-foot a:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
-.tools-foot svg{transform:rotate(90deg)}
-
 @media(max-width:640px){
-  .tools-head{padding-top:1.4rem}
   .tools-rem-meta{margin-left:0}
 }
 

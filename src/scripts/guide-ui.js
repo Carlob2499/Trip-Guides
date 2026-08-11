@@ -78,18 +78,14 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           /* ── TAB BAR ─────────────────────────────────────────────────── */
           var guideTabs  = document.getElementById("guideTabs");
           var catblocks  = Array.prototype.slice.call(document.querySelectorAll(".catblock"));
-          // Non-numeric tabs (each a standalone panel, not a section group).
-          // Add a new one here + its DOM id — everything else generalizes.
-          /* R5 left NO special panels: every destination is a numbered station now, including
-             Field log and Tools. Budget and Reminders moved inside the Tools station, Vote and
-             Trip kit are retired, and Learnings became Field log. The map and the router's
-             string-vs-index branch stay because they cost nothing and a future station
-             addressed by name would need them again. */
-          var specialPanels = {};
-          // Via Object.prototype, not specialPanels.hasOwnProperty: the keys come from a URL
-          // hash and localStorage, so a tab named "hasOwnProperty" or "__proto__" would
-          // otherwise call something that isn't the check we meant.
-          function hasPanel(key) { return Object.prototype.hasOwnProperty.call(specialPanels, key); }
+          /* Every destination is a NUMBERED station now — Field log and Tools included. The
+             string-keyed "special panel" map that used to sit here (Budget, Reminders, Vote,
+             Trip kit, Learnings) is gone, and with it the whole string-vs-index branch showTab
+             carried: `hasPanel()`, the `isSpecial` short-circuit, and the sessionStorage
+             restore path that had to prove a named panel actually existed before trusting it.
+             It was kept one revision longer than it was used, on the theory that a future
+             station addressed by name would want it back. It would not: a station addressed by
+             name is a station, and stations are what the rail already builds. */
 
           var TAB_KEY = "tg-tab-" + STORE_KEY;
 
@@ -107,18 +103,13 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           }
 
           function showTab(idx) {
-            var isSpecial = typeof idx === "string" && hasPanel(idx);
-            catblocks.forEach(function (b, i) { b.hidden = isSpecial || i !== idx; });
-            Object.keys(specialPanels).forEach(function (key) {
-              var panel = specialPanels[key];
-              if (panel) panel.hidden = !(isSpecial && idx === key);
-            });
+            catblocks.forEach(function (b, i) { b.hidden = i !== idx; });
             if (guideTabs) {
               // Leaving a section counts as having been through it.
-              var leaving = guideTabs.querySelector(".gtab-active:not(.gtab-tool)");
-              if (leaving && leaving.dataset.tab !== (isSpecial ? idx : String(idx))) markSeen(leaving.dataset.tab);
+              var leaving = guideTabs.querySelector(".gtab-active");
+              if (leaving && leaving.dataset.tab !== String(idx)) markSeen(leaving.dataset.tab);
               guideTabs.querySelectorAll(".gtab").forEach(function (btn) {
-                var match = btn.dataset.tab === (isSpecial ? idx : String(idx));
+                var match = btn.dataset.tab === String(idx);
                 /* R5: aria-current, not aria-selected. The rail is a <nav> of plain buttons
                    rather than a tablist (BEHAVIOR.md §4), and aria-selected on a button with
                    no tab role is invalid ARIA that axe reports. Removed rather than set to
@@ -143,9 +134,9 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
                 guideTabs.scrollLeft = Math.min(Math.max(want, 0), max);
               }
             }
-            try { sessionStorage.setItem(TAB_KEY, isSpecial ? idx : String(idx)); } catch (_) {}
+            try { sessionStorage.setItem(TAB_KEY, String(idx)); } catch (_) {}
             syncTabIndex();
-            syncJetLag(isSpecial ? null : idx);
+            syncJetLag(idx);
             syncRailContext();
           }
 
@@ -197,7 +188,7 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             guideTabs.querySelectorAll(".gtab").forEach(function (btn) {
               btn.addEventListener("click", function () {
                 var t = this.dataset.tab;
-                showTab(hasPanel(t) ? t : parseInt(t, 10));
+                showTab(parseInt(t, 10));
                 // Post-switch scrolling is owned by scroll-memory.js (per-tab
                 // position restore) — a hard jump to page top re-showed the
                 // hero on every section change and lost the reader's place.
@@ -242,16 +233,6 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           var deepLinkedTab = hashTabIdx >= 0;
           if (deepLinkedTab) {
             showTab(hashTabIdx);
-          } else if (hasPanel(savedTab) && specialPanels[savedTab]) {
-            // R6: `hasOwnProperty` alone only proves the KEY is a known special-tab name —
-            // not that THIS guide actually rendered that panel (e.g. a Learnings tab from a
-            // prior guide visit, saved under the same per-storeKey session key, before this
-            // guide has a `learnings` block: the DOM element is null). Restoring into a
-            // panel that doesn't exist hid every catblock (isSpecial short-circuits them
-            // all) with nothing left to un-hide — a blank content area with no active tab.
-            // Requiring the element to actually exist falls through to the numeric-tab
-            // branch below instead.
-            showTab(savedTab);
           } else {
             var si = parseInt(savedTab || "0", 10);
             showTab(isNaN(si) || si >= catblocks.length ? 0 : si);
@@ -309,11 +290,7 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             sheet.querySelectorAll("a").forEach(function (a) {
               a.addEventListener("click", function () {
                 var t = this.dataset.tab;
-                if (hasPanel(t)) {
-                  showTab(t);
-                } else if (t !== undefined && t !== "") {
-                  showTab(parseInt(t, 10));
-                }
+                if (t !== undefined && t !== "") showTab(parseInt(t, 10));
                 closeSheet();
               });
             });
@@ -614,7 +591,9 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
               bar.style.setProperty("--read-prog", (pct / 100).toFixed(4));
               if (!horizonNav) return;
               horizonNav.style.setProperty("--journey-read", String(pct));
-              var active = horizonNav.querySelector(".gtab-active:not(.gtab-tool)");
+              // :not(.gtab-tool) is gone with the tool tabs it excluded — every stop on the
+              // rail is a station now, and every station's dot carries reading progress.
+              var active = horizonNav.querySelector(".gtab-active");
               if (active) active.style.setProperty("--st-fill", String(Math.round(pct)));
             }
             window.addEventListener("scroll", updateBar, { passive: true });

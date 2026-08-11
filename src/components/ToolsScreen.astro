@@ -1,18 +1,15 @@
 ---
-/* The standalone Tools screen (design-handoff README §5) — five tools behind one screen,
-   with a trip selector that switches which trip they run on.
+/* The TOOLS STATION — the last stop on every guide's rail.
 
-   WHY THE PICKER IS LINKS, NOT A CLIENT SWITCH. The README describes `ensureGuide(slug)`
-   loading a trip's data on demand and warns that whichever entry point forgets to load is
-   the one that ships. This site is statically built, so each trip gets its OWN rendered
-   Tools page and the picker is four ordinary <a>s. There is no unloaded state to guard
-   against, the screen works with JavaScript off, and every entry point — hub header, table
-   row, guide, mobile menu — lands on a page whose data is already there.
+   This was a standalone screen with a trip picker until R5 retired it (SUPERSEDES §1: "one
+   entry point, and it cannot be forgotten"). What the picker existed to solve — the README's
+   `ensureGuide(slug)` warning that whichever entry point forgets to load the trip is the one
+   that ships — is solved structurally now: the tools are a station of the guide whose data
+   they run on, so there is no slug to pass and nothing to forget.
 
    Trip Split is deliberately the guide's own calculator on the guide's own storeKey, not a
-   copy: the creator's ruling (2026-08-08) is that the split records what was ACTUALLY
-   spent, is unrelated to the budget a guide researched, and nothing may duplicate it. One
-   ledger, reachable from two places. */
+   copy: the creator's ruling (2026-08-08) is that the split records what was ACTUALLY spent,
+   is unrelated to the budget a guide researched, and nothing may duplicate it. */
 import Panel from "./Panel.astro";
 import Icon from "./Icon.astro";
 import TripSplit from "./TripSplit.astro";
@@ -21,18 +18,11 @@ import { km } from "../features/trip-tools/index";
 import type { TripTools } from "../features/trip-tools/index";
 
 interface Props {
-  /* Absent when this renders as the guide's own Tools STATION, which after R5 is the only way
-     a reader reaches Tools (SUPERSEDES §1 retired the other three entry points). Present only
-     for a cross-trip surface that wants the picker. Optional rather than a second component:
-     two implementations of four tools is exactly how the guide's ledger and the screen's
-     ledger drift into disagreeing about what anyone owes. */
-  trips?: TripTools[];
   active: TripTools;
+  /** Site base path — the .gpx/.ics download hrefs are the only thing that still needs it. */
   base: string;
-  /** In-guide: the station is already inside the page, so it draws no masthead of its own. */
-  inGuide?: boolean;
 }
-const { trips, active, base, inGuide = false } = Astro.props;
+const { active, base } = Astro.props;
 const r = active.record;
 const hol = active.holidays;
 const during = hol?.during ?? [];
@@ -46,34 +36,7 @@ const rest = r.reminders.filter((i) => !i.book);
     Korea and `#grp-8` on the US — a guide-specific ordinal no outside surface can hardcode —
     and guide-ui.js resolves any hash to its enclosing .catblock, so an id on this div is all
     the hub needs to send a reader to the right station of the right guide. */}
-<div class="tools" id={inGuide ? "tools" : undefined} data-storekey={r.storeKey}>
-  {/* In-guide, the station is already inside a page that says whose trip this is, and the rail's
-      context line above it already reads "Tools" — a second title and a link back to the guide
-      you are standing in would be the same datum rendered as two different things. */}
-  {!inGuide && (
-    <header class="tools-head">
-      <p class="tools-kicker">TRIP TOOLS</p>
-      <h1 class="tools-title">{r.title}</h1>
-      <p class="tools-dek">
-        <a class="tools-guidelink" href={active.href}>Open the guide →</a>
-      </p>
-
-      {trips && trips.length > 1 && (
-        /* The current trip stays IN the list and is marked, never removed: a picker that hides
-           where you are makes the set look like it shrank. */
-        <nav class="tools-picker" aria-label="Choose a trip">
-          {trips.map((t) => (
-            <a class:list={["tools-trip", t.record.slug === r.slug && "tools-trip--on"]}
-               href={`${base}/tools/${t.record.slug}/`}
-               aria-current={t.record.slug === r.slug ? "page" : undefined}>
-              {t.record.title}
-            </a>
-          ))}
-        </nav>
-      )}
-    </header>
-  )}
-
+<div class="tools" id="tools" data-storekey={r.storeKey}>
   {/* The same self-describing grid the guides declare — one scope per trip, so collapse
       state and panel order are remembered per trip rather than bleeding across the picker. */}
   <div class="pnl-grid tools-grid" data-panel-grid data-panel-scope={`tools:${r.slug}`}>
@@ -252,17 +215,10 @@ const rest = r.reminders.filter((i) => !i.book);
     )}
 
     {/* Panels the GUIDE owns rather than this screen — Reminders is the group's shared
-        scratchpad and is Firebase-backed per storeKey, which this screen has no business
+        scratchpad and is Firebase-backed per storeKey, which this component has no business
         knowing about. It lands inside the grid so it sits with the other tool panels rather
         than below them; a guide that passes nothing leaves the grid exactly as it was. */}
     <slot />
   </div>
 
-  {/* Screen chrome, not station chrome: inside a guide the masthead is already the way back to
-      the hub, and a second one at the foot of a tool panel reads as a different destination. */}
-  {!inGuide && (
-    <p class="tools-foot">
-      <a href={`${base}/`}><Icon name="chevron" size={12} /> All trips</a>
-    </p>
-  )}
 </div>
