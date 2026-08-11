@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1751 checks · 1751 carry a stated promise · 148 files
+1763 checks · 1763 carry a stated promise · 150 files
 
 ## Can everyone read it
 
@@ -304,6 +304,14 @@ nothing ships.
 - falls back to an honest computed count when unlabeled  <sub>src/lib/lead-split.test.ts:82</sub>
 - drops the count when it can't be computed (0)  <sub>src/lib/lead-split.test.ts:86</sub>
 
+**A day's whole-route link only exists when the guide really knows the route.**
+
+- chains every stop between the first and the last  <sub>src/lib/transit-links.route.test.ts:9</sub>
+- omits the waypoints parameter entirely for a two-stop day  <sub>src/lib/transit-links.route.test.ts:17</sub>
+- skips a stop with no coordinates rather than guessing one from its name  <sub>src/lib/transit-links.route.test.ts:24</sub>
+- returns null when fewer than two stops are locatable — a point is not a route  <sub>src/lib/transit-links.route.test.ts:31</sub>
+- rejects NaN and Infinity, which are numbers but not places  <sub>src/lib/transit-links.route.test.ts:41</sub>
+
 **A fact past its shelf life is flagged as needing a re-check.**
 
 - fresh fact well inside its shelf life  <sub>src/lib/staleness.test.ts:10</sub>
@@ -315,6 +323,16 @@ nothing ships.
 - SHELF_LIFE_DAYS has no inherited-key collisions (the UI's hasOwnProperty guard)  <sub>src/lib/staleness.test.ts:59</sub>
 - null/undefined/malformed dates return null (caller decides rendering)  <sub>src/lib/staleness.test.ts:69</sub>
 - a future verified_on yields negative age and is not stale  <sub>src/lib/staleness.test.ts:76</sub>
+
+**A guide never claims you are on a day of a trip you are not on.**
+
+- marks today `now`, the day after `next`, and the rest around it  <sub>src/lib/day-state.test.ts:12</sub>
+- ⌁ has NO `now` day before the trip starts — day 1 is first, not current  <sub>src/lib/day-state.test.ts:16</sub>
+- ⌁ has no `now` day after the trip has finished  <sub>src/lib/day-state.test.ts:26</sub>
+- marks exactly one day `now` and at most one `next`  <sub>src/lib/day-state.test.ts:32</sub>
+- gives the last day no `next` — there is no day after the trip  <sub>src/lib/day-state.test.ts:40</sub>
+- returns null for a date it cannot resolve rather than guessing a state  <sub>src/lib/day-state.test.ts:45</sub>
+- compares calendar dates, not timestamps — 23:50 and 00:10 are different days  <sub>src/lib/day-state.test.ts:51</sub>
 
 **A guide's colours come from its own cover image.**
 

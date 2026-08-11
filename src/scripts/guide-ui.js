@@ -5,7 +5,7 @@
 import { todayInTz, trapFocus, migrateStorageKey, tapHaptic } from "./util.js";
 import { attachSheetDrag } from "./sheet-drag.js";
 import { initDarkToggle } from "./theme.js";
-import { resolveTripDate, tripWindow } from "../lib/trip-dates";
+import { resolveTripDate, tripWindow, dayState } from "../lib/trip-dates";
 import { initRate, initWeather, initDaySwap, initSun } from "../features/live-data/index.js";
 import { initJetLag } from "./jetlag-ui.js";
 import { initSharePanel } from "../features/share/index.js";
@@ -13,6 +13,7 @@ import { initChangeRequest } from "../features/change-request/index.js";
 import { reportError } from "../features/firebase/index.js";
 import { initBudgetPact } from "../features/budget-pact/index.js";
 import { initGuideRail } from "../features/guide-rail/index.ts";
+import { initFolds } from "./fold.js";
 import { initPacking } from "../features/trip-kit/index.js";
 
 const _cfgEl = document.getElementById("tgConfig");
@@ -763,6 +764,39 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
          router above rather than replacing it, so this failing costs the fill and the sticky
          offset — never the ability to change station. */
       try { initGuideRail(document); } catch (e) { fail("guide rail", e); }
+      // Every fold in the product, delegated from the document — day bodies, Panels and
+      // tool screens alike, including the ones built after this runs.
+      try { initFolds(document); } catch (e) { fail("folds", e); }
+
+      /* ── DAY STATE ────────────────────────────────────────────────────
+         done / now / next / planned, resolved against the READER's clock rather than the
+         build's. The model (lib/trip-dates.ts) owns the rule that matters — there is no `now`
+         day unless today falls inside the trip — and this only paints what it returns. A day
+         whose date will not resolve keeps its chip hidden rather than showing a guess. */
+      try {
+        var dayEls = Array.prototype.slice.call(document.querySelectorAll(".day[data-date]"));
+        if (dayEls.length) {
+          var dates = dayEls.map(function (el) { return el.getAttribute("data-date"); });
+          var nowClock = new Date();
+          dayEls.forEach(function (el, i) {
+            var state = dayState(dates, i, nowClock);
+            var chip = el.querySelector("[data-day-state]");
+            if (!chip) return;
+            if (!state) { chip.hidden = true; return; }
+            chip.textContent = state;
+            chip.setAttribute("data-state", state);
+            chip.hidden = false;
+            el.setAttribute("data-state", state);
+          });
+          /* The day scrubber's chips carry the same states, from the same call — two surfaces
+             reading one answer, so they cannot disagree about which day it is. */
+          document.querySelectorAll(".dchip[data-day-jump]").forEach(function (chip) {
+            var i = parseInt(chip.getAttribute("data-day-jump"), 10);
+            var state = dayState(dates, i, nowClock);
+            if (state) chip.setAttribute("data-state", state);
+          });
+        }
+      } catch (e) { fail("day state", e); }
       // Guided change request. _cfg carries navSections (the guide's own tabs) so the
       // wizard can offer a real section hint instead of asking a reader to name one.
       try { initChangeRequest(_cfg, _lockScroll, _unlockScroll); } catch (e) { fail("change request", e); }

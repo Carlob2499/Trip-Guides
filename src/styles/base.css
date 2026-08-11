@@ -432,3 +432,9 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opa
    above story-mode specifically so this can never regress silently again. */
 .skip-link{position:fixed;left:.7rem;top:.7rem;z-index:var(--z-skip-link);padding:.55rem 1rem;background:var(--ink);color:var(--bg);border-radius:999px;font-family:var(--font-data);font-size:var(--text-caption);text-decoration:none;transform:translateY(-300%);transition:transform .15s}
 .skip-link:focus-visible{transform:none;outline:3px solid var(--accent);outline-offset:2px}
+
+/* Visually hidden, still announced. CLIPPED rather than display:none or visibility:hidden —
+   both of those remove the element from the accessibility tree, which is the opposite of what
+   this class is for. The pattern was already inline in the deleted tool-tab rule; named here so
+   the next component that needs it does not invent a seventh variant. */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}

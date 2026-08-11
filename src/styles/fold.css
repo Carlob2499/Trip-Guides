@@ -1,0 +1,69 @@
+/* === THE FOLD ================================================================================
+   COMPONENTS.md §5. One implementation for every long explanation in the product.
+
+   The open/close uses grid-template-rows 0fr -> 1fr rather than max-height. max-height needs a
+   guessed ceiling: too low silently clips the tail of a long explanation, too high makes the
+   transition start with a pause while it travels through empty space. 0fr -> 1fr animates to
+   the content's ACTUAL height with no number to guess and nothing to clip. */
+.fold-wrap{display:block}
+
+/* The control IS the lead — the whole two-line block is the target, not a chevron beside it. */
+.fold-btn{
+  display:grid;grid-template-columns:1fr auto;align-items:start;gap:.5rem;
+  width:100%;min-height:44px;padding:0;
+  background:none;border:0;border-radius:0;
+  color:inherit;font:inherit;text-align:start;cursor:pointer;
+}
+.fold-lead{
+  /* Exactly two lines, always visible. Clamped rather than truncated by character count: a
+     character count guesses at the font, the width and the reader's own text-size setting, and
+     is wrong on every device that is not the one it was tuned on. */
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  font-family:var(--font-data);font-size:var(--text-lead);line-height:1.55;color:var(--ink);
+}
+.fold-mark{
+  flex:none;color:var(--aink);font-size:var(--text-control-sm);line-height:1.8;
+  transition:transform 240ms ease;
+}
+.fold-btn[aria-expanded="true"] .fold-mark{transform:rotate(180deg)}
+/* Once open, the lead is no longer a two-line summary of what is below it — it is the first two
+   lines OF what is below it, so the clamp comes off and the paragraph reads continuously. */
+.fold-btn[aria-expanded="true"] .fold-lead{-webkit-line-clamp:none;overflow:visible}
+.fold-btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+.fold{display:grid;grid-template-rows:0fr;transition:grid-template-rows 240ms ease}
+.fold > *{overflow:hidden}
+.fold[data-open]{grid-template-rows:1fr}
+/* THE SIZE DOES NOT CHANGE ON OPEN. Stated as its own rule, at the same value as .fold-lead, so
+   that a later edit to either has to notice the other. This is the fold's whole point: the
+   reader needs the space most on the smallest phone, and an explanation that shrinks when it
+   opens is a punishment for opening it. */
+.fold-inner{
+  font-family:var(--font-data);font-size:var(--text-lead);line-height:1.55;color:var(--ink);
+  padding-top:.5rem;
+}
+.fold-inner > :first-child{margin-top:0}
+.fold-inner > :last-child{margin-bottom:0}
+
+/* DESKTOP: hover AND click. A pointer reader gets it for free; everyone else can still click,
+   and the keyboard path is the button itself. Guarded on (hover:hover) and (pointer:fine)
+   together — a touchscreen laptop reports hover but not a fine pointer, and a stylus the
+   reverse; requiring both keeps the latching :hover off every touch device. */
+@media (hover:hover) and (pointer:fine){
+  .fold-wrap:hover .fold{grid-template-rows:1fr}
+  .fold-wrap:hover .fold-mark{transform:rotate(180deg)}
+  .fold-wrap:hover .fold-lead{-webkit-line-clamp:none;overflow:visible}
+}
+
+/* Reduced motion cuts rather than softens — the fold appears open, it does not open slowly. */
+@media (prefers-reduced-motion:reduce){
+  .fold,.fold-mark{transition:none}
+}
+
+/* PRINT force-opens every fold. A folded explanation on paper is missing text, not tidy text. */
+@media print{
+  .fold{grid-template-rows:1fr!important}
+  .fold > *{overflow:visible!important}
+  .fold-lead{-webkit-line-clamp:none!important;overflow:visible!important}
+  .fold-mark{display:none}
+}

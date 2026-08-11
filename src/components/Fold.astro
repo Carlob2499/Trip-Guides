@@ -1,0 +1,38 @@
+---
+/* THE FOLD — every long explanation in the product folds the same way (R5 COMPONENTS.md §5).
+
+   Two lines are always visible; the rest opens in place. The rule that makes it worth having a
+   single component rather than six similar ones is the one that is easiest to get wrong:
+   **the type size does not change when it opens.** An explanation that shrinks on open punishes
+   the reader for opening it, and every hand-rolled disclosure in this codebase's history did
+   exactly that, because shrinking is what makes the expanded state "fit".
+
+   Desktop opens on hover AND on click — hover alone is unreachable without a pointer, and click
+   alone wastes the pointer a desktop reader already has. Touch is tap only; there is no hover
+   to speak of, and a :hover rule on touch latches until you tap elsewhere.
+
+   Print force-opens every fold (print.css). A folded explanation on paper is just missing text.
+*/
+interface Props {
+  /** The always-visible lead. Two lines, clamped — never rewritten shorter to fit. */
+  lead: string;
+  /** Stable id root for the aria-controls pairing. */
+  id: string;
+  /** Optional label for the control; defaults to naming what opens. */
+  label?: string;
+}
+const { lead, id, label = "More detail" } = Astro.props;
+const regionId = `fold-${id}`;
+---
+<div class="fold-wrap">
+  {/* The lead is inside the button, not beside it, so the whole two-line block is the target —
+      a 44px row rather than a chevron someone has to aim at. */}
+  <button class="fold-btn" type="button" aria-expanded="false" aria-controls={regionId} data-fold-btn>
+    <span class="fold-lead">{lead}</span>
+    <span class="fold-mark" aria-hidden="true">▾</span>
+    <span class="sr-only">{label}</span>
+  </button>
+  <div class="fold" id={regionId} data-fold>
+    <div class="fold-inner"><slot /></div>
+  </div>
+</div>

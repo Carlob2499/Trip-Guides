@@ -7,7 +7,9 @@ import Icon from "../Icon.astro";
 //   3. Per-day numbered stop lists from the additive `waypoints` field — the
 //      on-the-go itinerary ladder (time in data face, name, note).
 import TransitLinks from "../TransitLinks.astro";
+import Fold from "../Fold.astro";
 import { checklistText } from "../../lib/checklist";
+import { dayRouteLink } from "../../lib/transit-links";
 // R5 section anchor: the trip's shape as a journey line, derived from the day
 // entries themselves (dates + the first/last days' own titles — anchors.ts).
 // Per-day route-leg headers derive from each day's verified waypoints.
@@ -20,6 +22,14 @@ const two = (n: number) => String(n + 1).padStart(2, "0");
 // reflected on get a Plan ⇄ Actual toggle — the rest render exactly as before.
 const actualFor = (date: string) =>
   (learnings?.days ?? []).find((d: any) => d.date === date) ?? null;
+
+/* R5 SCREENS.md §3 — the day card's kicker: DAY 4 OF 8 · SAT 11 JUL · <state>.
+   "of N" is DERIVED from the day list, never written down: TESTS.md §5 exists because a
+   hand-maintained count contradicted the thing rendered beneath it. The state itself is
+   resolved client-side (guide-ui.js) against the reader's own clock, because a build-time
+   "now" is whatever time the site was deployed — this markup carries only the parts that are
+   true regardless of when it is read. */
+const dayCount = days.length;
 ---
 {timeline.length > 0 && (
   <div class="anch-fig" data-anch aria-hidden="true">
@@ -58,7 +68,18 @@ const actualFor = (date: string) =>
   <div class="planner-days">
     {days.map((d: any, di: number) => (
       <div class="day" data-day={di} data-date={d.date} id={`day-${di}`}>
-        <div class="d"><span class="day-num">{two(di)}</span>{d.date}</div>
+        {/* R5 SCREENS.md §3 — the day kicker: DAY 04 OF 08 · <date> · <state>.
+            "OF N" is DERIVED from the day list and never written down (TESTS.md §5). The state
+            chip is left EMPTY and hidden here, and filled by guide-ui.js against the reader's
+            own clock: a build-time "now" is whatever time the site was last deployed, so a
+            server-rendered "NOW" would be a claim about a moment that has already passed.
+            .day-num keeps its exact size — planner.css documents it as contrast-graded. */}
+        <div class="d">
+          <span class="day-num">{two(di)}</span>
+          <span class="day-of">of {String(dayCount).padStart(2, "0")}</span>
+          {d.date}
+          <span class="day-state" data-day-state hidden></span>
+        </div>
         <div class="b">
           <strong>{d.title}{d.constraints && d.constraints.length > 0 && <span class="cal-badge" title={d.constraints.join("; ")}>📅</span>}</strong>
           {/* R5 route-leg header — first stop → last stop, straight-line km summed only
@@ -93,7 +114,11 @@ const actualFor = (date: string) =>
               )}
             </div>
           )}
-          {d.tldr && <p class="day-tldr">{d.tldr}</p>}
+          {/* The tldr is the day's LEAD, and it renders exactly once. When there is a body to
+              fold, the lead IS the fold's always-visible two lines (below); rendering it here
+              as well would put the same sentence on screen twice as if it were two different
+              things. With no body, there is nothing to fold to and it stands on its own. */}
+          {d.tldr && !d.body && <p class="day-tldr">{d.tldr}</p>}
           {d.checklist && d.checklist.length > 0 && (
             <span class="day-kitcount" hidden aria-live="polite"></span>
           )}
@@ -116,8 +141,25 @@ const actualFor = (date: string) =>
               ))}
             </ol>
           )}
+          {(() => { const route = dayRouteLink(d.waypoints); return route && (
+            /* The WHOLE-DAY link, on top of the per-stop ones (COMPONENTS.md §12). Rendered
+               only when at least two stops carry real coordinates — dayRouteLink returns null
+               otherwise, and an absent link is the honest answer to a route the guide cannot
+               actually draw. A plain <a>: it needs no JS and survives Maps being unreachable. */
+            <p class="day-route">
+              <a class="day-route-link" href={route} target="_blank" rel="noopener">Open the whole day in Maps ↗</a>
+              <span class="day-route-note">Straight-line order as listed — not a transit time</span>
+            </p>
+          ); })()}
           {d.note && <span class="lsnote">🌿 <Fragment set:html={d.note} /></span>}
-          {d.body && <div><Fragment set:html={d.body} /></div>}
+          {/* R5 COMPONENTS.md §5 — a day's long body folds like every other long explanation:
+              two lines visible, the rest in place, at unchanged type size. A day with a tldr
+              already has its lead above, so the body's own first lines become the fold's; a day
+              with no tldr has nothing to fold TO and renders whole. */}
+          {d.body && (d.tldr
+            ? <Fold id={`day-${di}`} lead={d.tldr} label={`More about ${d.title}`}><Fragment set:html={d.body} /></Fold>
+            : <div><Fragment set:html={d.body} /></div>
+          )}
           {/* Plan B — the researched inclement-day alternate (schema: days[].items[].plan_b).
               Rendered in the card so Focus Today can clone it (single source of truth,
               same pattern as tldr/stops). Provenance is schema-required; the date renders

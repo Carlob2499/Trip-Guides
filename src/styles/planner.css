@@ -128,3 +128,31 @@ html[data-conn="offline"] .split-live-dot{background:var(--muted);animation:none
 .stop-name{font-family:var(--font-display);font-weight:640;font-size:var(--text-body);letter-spacing:-.01em;line-height:1.3}
 .stop-note{font-size:var(--text-control);color:var(--muted);line-height:1.45}
 .stop-time{flex:none;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* === R5: THE WHOLE-DAY ROUTE LINK ============================================================
+   COMPONENTS.md §12. Sits under the day's stops: the per-stop links answer "how do I get to
+   this one", this answers "how do I do today".
+   The note beside it is not decoration and may not be dropped: the order is the guide's own
+   listing order and the distances behind it are STRAIGHT-LINE. Presenting either as a transit
+   route would be the product asserting a journey time nobody measured. */
+.day-route{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem .8rem;margin:.7rem 0 .2rem}
+.day-route-link{
+  display:inline-flex;align-items:center;min-height:44px;padding:0 1rem;
+  border:var(--rw) solid var(--rule2);border-radius:999px;
+  font-family:var(--font-data);font-size:var(--text-control);font-weight:600;
+  color:var(--aink);text-decoration:none;
+}
+.day-route-link:hover{border-color:var(--accent)}
+.day-route-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.day-route-note{font-family:var(--font-data);font-size:var(--text-nano);color:var(--muted)}
+
+/* The derived "of N" beside the day numeral, and the client-resolved state chip.
+   .day-of is deliberately quieter than .day-num: the numeral is where you are, the total is
+   context for it. Notation voice, because a count is data. */
+.day-of{font-family:var(--font-data);font-size:var(--text-nano);font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-right:.35rem}
+/* done / now / next / planned — the word, never a colour alone (COMPONENTS.md §8: the word is
+   the accessible carrier). Hidden until guide-ui.js resolves it against the reader's clock. */
+.day-state{font-family:var(--font-data);font-size:var(--text-nano);font-weight:600;letter-spacing:.16em;text-transform:uppercase;margin-left:.5rem}
+.day-state[data-state="now"]{color:var(--aink)}
+.day-state[data-state="done"]{color:var(--green)}
+.day-state[data-state="next"],.day-state[data-state="planned"]{color:var(--muted)}

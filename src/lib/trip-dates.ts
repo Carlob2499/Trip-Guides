@@ -140,3 +140,51 @@ function windowFrom(start: Date | null, end: Date | null, now: Date): TripWindow
     daysUntilStart: hasDates ? Math.round((start!.getTime() - todayMid.getTime()) / 86400000) : 0,
   };
 }
+
+/** A day's position relative to the reader's own present. */
+export type DayState = "done" | "now" | "next" | "planned";
+
+/**
+ * Resolve one day of a trip against a given "now" (R5 COMPONENTS.md §4, SCREENS.md §3).
+ *
+ * The rule that matters most is the one about ABSENCE: **`now` exists only if today falls
+ * inside the trip.** A pre-trip guide has no `now` day — day 1 is selected because it is first,
+ * not because it is current — and a finished trip has none either. Inventing a present moment
+ * for a trip nobody is on is the same class of error as a seeded expense ledger: a claim about
+ * the reader's situation that nobody checked.
+ *
+ * `next` is the single day immediately after `now`, and it too exists only mid-trip: on a
+ * pre-trip guide every day reads `planned`, because calling day 1 "next" would imply a
+ * departure the guide cannot see.
+ *
+ * Returns null for a day whose date string cannot be resolved — an unknown date gets no state
+ * rather than a guessed one.
+ */
+export function dayState(
+  dayDates: Array<string | null | undefined>,
+  index: number,
+  now: Date,
+): DayState | null {
+  const dates = dayDates.map((d) => resolveTripDate(d, now));
+  const self = dates[index];
+  if (!self) return null;
+
+  const today = localISODate(now);
+  const iso = (d: Date | null) => (d ? localISODate(d) : null);
+
+  // Is today one of the trip's own days? Compared as local calendar dates, not timestamps: a
+  // reader at 23:50 and one at 00:10 the same evening are on different days, and only the
+  // calendar comparison agrees with what their phone says the date is.
+  const currentIndex = dates.findIndex((d) => iso(d) === today);
+  const inTrip = currentIndex >= 0;
+
+  if (!inTrip) {
+    // Outside the trip there is no present to be near. Every day before today is done; every
+    // day after is planned. Never `now`, never `next`.
+    return iso(self)! < today ? "done" : "planned";
+  }
+
+  if (index === currentIndex) return "now";
+  if (index === currentIndex + 1) return "next";
+  return index < currentIndex ? "done" : "planned";
+}
