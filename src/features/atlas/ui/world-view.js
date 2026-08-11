@@ -9,15 +9,29 @@ import { localClockLabel } from "../model/local-time";
 import { attachSheetDrag } from "../../../scripts/sheet-drag.js";
 import { atWidth, srcsetFor } from "../../../lib/img-width";
 
-const CARD_W = 220;
+/* 260, not 220: the surveyed card's CTA is the long one ("✓ Verified — open the sheet →")
+   and at 220 it wrapped to a second line, which is both narrower than the prototype draws the
+   card and the reason axe could not resolve that line's contrast on exactly the two surveyed
+   cards. The width is the fix; padding and margins were not the problem. */
+const CARD_W = 260;
 /* The plate is 3:2 inside a 220px card — 220x146 — and `object-fit: cover` fills the SHORT
    axis. A cover wider than 3:2 (Nyhavn is 2.21:1) asked for at 220px comes back 220x100 and
    gets scaled UP to cover 146px of height, which is how a correctly-thumbnailed image still
    lands on screen soft. Asking at twice the card width clears the height for any cover this
    product is likely to carry, and is still an order of magnitude off the 258 KB original. */
 const PLATE_W = CARD_W * 2;
-const CARD_FULL_H = 140;
-const CARD_COMPACT_H = 60;
+/* The plate's own laid-out height, from the 3:2 above — the card is 220 wide, so 147. */
+const PLATE_H = Math.round((CARD_W * 2) / 3);
+/* SEED estimates for the solver's collision boxes, replaced by a real measurement on the
+   first card that exists (measureCardH). They were plain constants — 140 and 60, written
+   when the card was text only — and when the plate was added underneath them nothing
+   updated: the solver kept seating a 280px card in a 140px box and stamping that height
+   back on the element, so the fill and rule stopped at the bottom of the photo and the
+   kicker, title, clock and CTA sat outside the card on bare globe. A number describing a
+   rendered element cannot be a literal nobody re-checks; these are a first guess now, and
+   the DOM is the authority. */
+let cardBodyH = 60;
+let cardFullH = 140;
 const DRIFT_THRESHOLD = 90;
 
 // Live-checked, not cached (D5): a phone rotated to landscape, or a resized preview window,
@@ -122,17 +136,57 @@ export function initAtlasWorld(root = document) {
   });
 
   // ── Index rail + THE RECORD (README §2) ─────────────────────────────────────────────
+  /* PLANNED and NEXT TRIP are both `upcoming`; the prototype separates them because only one
+     guide is the one you leave for next, and a rail that calls four trips "planned" says
+     nothing about which. `isNext` is computed once on the server (index.astro). */
+  const STATUS_LABEL = { past: "COMPLETE", ongoing: "IN PROGRESS", upcoming: "PLANNED", undated: "" };
+  const recordLabel = (g) => (g.isNext ? "NEXT TRIP" : STATUS_LABEL[g.status] || "");
+  /* Both rails are two-column rows in the prototype, not one run-on line: the sheet's
+     identity on the left and WHEN on the right, so the eye reads down either column alone.
+     Rendering them as one string was what flattened the whole panel to a single weight. */
+  /* The two rails answer different questions and so carry different orders. The INDEX is a
+     register of sheets — it runs 01, 02, 03, 04, because an index out of its own numbering is
+     not an index. The RECORD is a timeline and keeps the payload's relevance order (ongoing,
+     then soonest ahead, then most recent behind), which is what makes NEXT TRIP land in the
+     middle of it rather than at the top. */
+  const byOrdinal = guides
+    .slice()
+    .sort((a, b) => (a.ordinal ?? Infinity) - (b.ordinal ?? Infinity));
+  const byRelevance = guides
+    .slice()
+    .sort((a, b) => (a.rank ?? Infinity) - (b.rank ?? Infinity));
+
   const indexList = root.querySelector("[data-atlas-index-list]");
   if (indexList) {
-    indexList.innerHTML = guides
-      .map((g) => `<li><button type="button" data-fly="${g.slug}">${g.ordinal != null ? String(g.ordinal).padStart(2, "0") : "—"} · ${escapeHtml(g.name)}</button></li>`)
+    indexList.innerHTML = byOrdinal
+      .map((g) => {
+        const n = g.ordinal != null ? String(g.ordinal).padStart(2, "0") : "—";
+        const stamp = g.stamp ? escapeHtml(g.stamp) + (g.status === "past" ? " ✓" : "") : "—";
+        // Sheet 01 leads the register and takes the accent — the prototype marks the top of
+        // the index, not the trip's status; status is the RECORD rail's job on the right.
+        return `<li><button type="button" data-fly="${g.slug}"${g.ordinal === 1 ? " data-lead" : ""}>` +
+          `<span class="ix-n">${n}</span><span class="ix-name">${escapeHtml(g.name)}</span>` +
+          `<span class="ix-stamp">${stamp}</span></button></li>`;
+      })
       .join("");
+    // "INDEX OF SHEETS · 04" — the count belongs in the kicker, where the prototype puts it.
+    const kicker = indexList.parentElement?.querySelector(".atlas-ov-kicker");
+    if (kicker) kicker.textContent = `Index of sheets · ${String(guides.length).padStart(2, "0")}`;
   }
   const recordList = root.querySelector("[data-atlas-record-list]");
   if (recordList) {
-    const STATUS_LABEL = { past: "COMPLETE", ongoing: "IN PROGRESS", upcoming: "PLANNED", undated: "" };
-    recordList.innerHTML = guides
-      .map((g) => `<li><button type="button" data-fly="${g.slug}" data-open="${g.href}"><span>${escapeHtml(g.name)}</span><span class="status">${STATUS_LABEL[g.status] || ""}</span></button></li>`)
+    /* The RECORD leads with the trip's dates, in the display face, because that is what
+       distinguishes one entry from the next — the country repeats from the index above it. */
+    recordList.innerHTML = byRelevance
+      .map((g) => {
+        const label = recordLabel(g);
+        const tone = g.isNext ? "next" : g.status;
+        return `<li><button type="button" data-fly="${g.slug}" data-open="${g.href}" data-tone="${tone}">` +
+          `<span class="rec-dot"></span>` +
+          `<span class="rec-lines"><span class="rec-when">${g.dates ? escapeHtml(g.dates) : "Dates not set"}</span>` +
+          `<span class="rec-what">${escapeHtml(g.name)}${label ? ` · ${label}` : ""}</span></span>` +
+          `</button></li>`;
+      })
       .join("");
   }
   root.querySelectorAll("[data-fly]").forEach((btn) => {
@@ -353,13 +407,20 @@ export function initAtlasWorld(root = document) {
     el.style.width = `${CARD_W}px`;
     el.innerHTML = `
       <span class="atlas-pincard-tail"></span>
+      <span class="atlas-pincard-ticks" aria-hidden="true"></span>
       ${g.coverImg ? `<img class="atlas-pincard-plate" src="${escapeHtml(atWidth(g.coverImg, PLATE_W))}"${srcsetFor(g.coverImg, PLATE_W) ? ` srcset="${escapeHtml(srcsetFor(g.coverImg, PLATE_W))}"` : ""} alt="" loading="lazy" style="view-transition-name:cover-${escapeHtml(g.slug)}" />` : ""}
       <span class="atlas-pincard-body">
-        <span class="atlas-pincard-cc">${escapeHtml(g.cc || "")} · ${g.ordinal != null ? String(g.ordinal).padStart(2, "0") : "—"}</span>
+        <span class="atlas-pincard-cc">${escapeHtml(g.cc || "")}${g.anchorLabel ? ` · ${escapeHtml(g.anchorLabel)}` : ""}</span>
         <span class="atlas-pincard-title">${escapeHtml(g.name)}</span>
         ${g.tz ? `<span class="atlas-pincard-clock" data-tick data-tz="${escapeHtml(g.tz)}">${escapeHtml(localClockLabel(g.tz, new Date()) || "—")}</span>` : ""}
-        <span class="atlas-pincard-cta">Open the guide →</span>
+        ${g.isNext && g.dates ? `<span class="atlas-pincard-next">Next trip · ${escapeHtml(g.dates)}</span>` : ""}
+        <span class="atlas-pincard-cta">${g.status === "past" ? "✓ Verified — open the sheet →" : "Open the sheet →"}</span>
       </span>`;
+    /* Status drives the card's colour, not just its words: a surveyed trip's CTA goes green
+       because it is a statement of fact (this one was walked), and the next trip takes the
+       accent because it is the only card on the globe with a date still ahead of it. */
+    el.dataset.status = g.status;
+    if (g.isNext) el.dataset.next = "";
     pinsLayer.appendChild(el);
     cardEls.set(slug, el);
     return el;
@@ -453,6 +514,21 @@ export function initAtlasWorld(root = document) {
     }
   }
 
+  /* Read the card's real height off a card that exists, once the first one does. Both halves
+     come from one element: the body is what a compacted (plate-hidden) card is, and the body
+     plus the plate is what a full one is. Cheap enough to re-check while the seed is still in
+     place, and it stops as soon as it has a real number. */
+  function measureCardH() {
+    if (cardBodyH !== 60) return false;
+    const el = cardEls.values().next().value;
+    const body = el && el.querySelector(".atlas-pincard-body");
+    const h = body && body.offsetHeight;
+    if (!h) return false;
+    cardBodyH = h;
+    cardFullH = h + (el.querySelector(".atlas-pincard-plate") ? PLATE_H : 0);
+    return true;
+  }
+
   function runSolve(pos) {
     // No floating CARDS on mobile (README "Mobile": no spatial budget for them) — the chips
     // above carry the name instead, and a tap still opens the bottom sheet.
@@ -466,7 +542,7 @@ export function initAtlasWorld(root = document) {
     }
     const visibleGuides = guides.filter((g) => pos[g.slug]?.v);
     const cards = visibleGuides.map((g) => ({
-      code: g.slug, x: pos[g.slug].x, y: pos[g.slug].y, w: CARD_W, fullH: CARD_FULL_H, compactH: CARD_COMPACT_H,
+      code: g.slug, x: pos[g.slug].x, y: pos[g.slug].y, w: CARD_W, fullH: cardFullH, compactH: cardBodyH,
     }));
     const obstacles = Array.from(root.querySelectorAll("[data-ref-fadezoom]:not([data-faded])")).map((el) => {
       const hostRect = host.getBoundingClientRect();
@@ -483,7 +559,9 @@ export function initAtlasWorld(root = document) {
       const el = ensureCard(seat.code);
       if (!el) continue;
       el.style.transform = `translate3d(${seat.l}px, ${seat.t}px, 0)`;
-      el.style.height = `${seat.h}px`;
+      // No height is written back. The seat height is the solver's estimate for collision
+      // geometry; the CARD is sized by its own content, so a title that wraps to two lines
+      // grows the box instead of spilling out of it.
       const plate = el.querySelector(".atlas-pincard-plate");
       if (plate) plate.style.display = seat.compact ? "none" : "block";
       el.toggleAttribute("data-tail", seat.tail);
@@ -492,6 +570,14 @@ export function initAtlasWorld(root = document) {
     lastVisible = visibleGuides.map((g) => g.slug).sort().join(",");
     lastSolveAt = { x: pos.center[0], y: pos.center[1] };
     solveQueued = false;
+
+    /* The first pass has no card to measure, so it seats everything on the seed estimate and
+       cards overlap. Now that one exists, take the real height and solve exactly once more.
+       Waiting for the next pos event is not enough: maybeSolve() ignores a globe that has not
+       drifted, so a paused or reduced-motion globe would keep the overlapping first pass —
+       which is how axe found two cards sitting on each other's text. measureCardH() latches,
+       so this recurses once and never again. */
+    if (measureCardH()) requestAnimationFrame(() => runSolve(pos));
   }
 
   function maybeSolve(pos) {

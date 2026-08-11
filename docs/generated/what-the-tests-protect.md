@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1819 checks · 1819 carry a stated promise · 156 files
+1824 checks · 1824 carry a stated promise · 156 files
 
 ## Can everyone read it
 
@@ -761,6 +761,10 @@ nothing ships.
 - null for a non-calendar label, same contract as the inferring resolver  <sub>src/lib/trip-dates.test.ts:127</sub>
 - windows are identical whatever `now` a build runs at — only the STATUS moves  <sub>src/lib/trip-dates.test.ts:134</sub>
 - a range wrapping the year boundary rolls its END forward, not clamped  <sub>src/lib/trip-dates.test.ts:143</sub>
+- collapses the month when both ends share one  <sub>src/lib/trip-dates.test.ts:154</sub>
+- names both months when the trip crosses one  <sub>src/lib/trip-dates.test.ts:158</sub>
+- ⌁ formats from the dates, never from the kicker's own text  <sub>src/lib/trip-dates.test.ts:162</sub>
+- ⌁ a half-known window is not a range  <sub>src/lib/trip-dates.test.ts:169</sub>
 
 **Trips are numbered and ordered consistently everywhere they appear.**
 
@@ -1433,9 +1437,10 @@ nothing ships.
 
 **The clock shown for a destination is that destination's real local time.**
 
-- formats HH:MM THERE in the given tz, 24h  <sub>src/features/atlas/model/local-time.test.ts:7</sub>
-- null when tz is absent — never guessed  <sub>src/features/atlas/model/local-time.test.ts:12</sub>
-- null for an unresolvable tz string, never throws  <sub>src/features/atlas/model/local-time.test.ts:18</sub>
+- formats HH:MM and the zone in the given tz, 24h  <sub>src/features/atlas/model/local-time.test.ts:7</sub>
+- ⌁ the zone follows the reader's own DST, because it is derived and not a table  <sub>src/features/atlas/model/local-time.test.ts:12</sub>
+- null when tz is absent — never guessed  <sub>src/features/atlas/model/local-time.test.ts:20</sub>
+- null for an unresolvable tz string, never throws  <sub>src/features/atlas/model/local-time.test.ts:26</sub>
 
 **The database refuses writes the app should never make.**
 

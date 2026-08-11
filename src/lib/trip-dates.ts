@@ -188,3 +188,26 @@ export function dayState(
   if (index === currentIndex + 1) return "next";
   return index < currentIndex ? "done" : "planned";
 }
+
+/**
+ * The trip's window as one label — `Jul 8–15, 2026`, or `Oct 15–Nov 10, 2026` when it
+ * crosses a month.
+ *
+ * Formatted from the window's own `Date`s rather than sliced out of the guide's kicker.
+ * `dateLine()` looks like it would do this and does not: its contract is "whatever
+ * `cityLine` takes, this leaves", so a kicker with no city list — `Sedona, Arizona — Sep
+ * 2–8, 2026` — correctly comes back whole, and the hub's record rail printed the place name
+ * inside its date column. Two different questions, so two different functions.
+ *
+ * Null when either end is missing: a half-known window is not a range, and the surfaces that
+ * call this print nothing rather than an open-ended one.
+ */
+export function tripRangeLabel(start: Date | null, end: Date | null): string | null {
+  if (!start || !end) return null;
+  const mon = (d: Date) => d.toLocaleDateString("en-US", { month: "short" });
+  const sameMonth = start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear();
+  const head = sameMonth
+    ? `${mon(start)} ${start.getDate()}–${end.getDate()}`
+    : `${mon(start)} ${start.getDate()}–${mon(end)} ${end.getDate()}`;
+  return `${head}, ${end.getFullYear()}`;
+}

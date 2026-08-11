@@ -1,7 +1,7 @@
 // @protects-file Today, days-to-go and this-trip-is-over are correct on every day of a trip.
 
 import { describe, it, expect } from "vitest";
-import { resolveTripDate, resolveTripDateInYear, tripWindow, tripWindowInYear, localISODate } from "./trip-dates";
+import { resolveTripDate, resolveTripDateInYear, tripWindow, tripWindowInYear, localISODate, tripRangeLabel } from "./trip-dates";
 
 const iso = (d: Date | null) => (d ? `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}` : null);
 
@@ -145,5 +145,30 @@ describe("tripWindowInYear", () => {
     expect(iso(w.start)).toBe("2026-12-28");
     expect(iso(w.end)).toBe("2027-01-03");
     expect(w.lengthDays).toBe(7);
+  });
+});
+
+describe("tripRangeLabel", () => {
+  const d = (iso: string) => new Date(`${iso}T12:00:00`);
+
+  it("collapses the month when both ends share one", () => {
+    expect(tripRangeLabel(d("2026-07-08"), d("2026-07-15"))).toBe("Jul 8–15, 2026");
+  });
+
+  it("names both months when the trip crosses one", () => {
+    expect(tripRangeLabel(d("2026-10-15"), d("2026-11-10"))).toBe("Oct 15–Nov 10, 2026");
+  });
+
+  it("⌁ formats from the dates, never from the kicker's own text", () => {
+    /* ⌁ The regression: the hub reused dateLine(), whose contract is the masthead's split,
+       and a kicker with no city list ("Sedona, Arizona — Sep 2–8, 2026") comes back whole by
+       design — so the record rail printed a place name in its date column. */
+    expect(tripRangeLabel(d("2026-09-02"), d("2026-09-08"))).toBe("Sep 2–8, 2026");
+  });
+
+  it("⌁ a half-known window is not a range", () => {
+    expect(tripRangeLabel(d("2026-09-02"), null)).toBeNull();
+    expect(tripRangeLabel(null, d("2026-09-08"))).toBeNull();
+    expect(tripRangeLabel(null, null)).toBeNull();
   });
 });
