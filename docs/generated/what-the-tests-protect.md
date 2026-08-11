@@ -69,9 +69,9 @@ nothing ships.
 - reminder ticks persist per guide, including the ones behind the disclosure  <sub>tests/visual/trip-tools.spec.ts:73</sub>
 - route order says straight-line, so nobody reads it as walking time  <sub>tests/visual/trip-tools.spec.ts:86</sub>
 - no surface still links to the retired /tools/ screen  <sub>tests/visual/trip-tools.spec.ts:93</sub>
-- the hub's TRIP TOOLS row lands on the featured guide's own station  <sub>tests/visual/trip-tools.spec.ts:103</sub>
-- the phone's ☰ menu still reaches tools — the only route in at that width  <sub>tests/visual/trip-tools.spec.ts:113</sub>
-- the station's content is in the page without JavaScript  <sub>tests/visual/trip-tools.spec.ts:120</sub>
+- ⌁ the hub carries no tools door at all — at either width  <sub>tests/visual/trip-tools.spec.ts:103</sub>
+- a guide's own rail is the way in, and it opens the station  <sub>tests/visual/trip-tools.spec.ts:115</sub>
+- the station's content is in the page without JavaScript  <sub>tests/visual/trip-tools.spec.ts:123</sub>
 
 **The map and calendar files a guide hands out are valid, and open in real apps.**
 

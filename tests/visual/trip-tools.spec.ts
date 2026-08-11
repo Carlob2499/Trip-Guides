@@ -101,21 +101,24 @@ test("no surface still links to the retired /tools/ screen", async ({ page }) =>
   }
 });
 
-test("the hub's TRIP TOOLS row lands on the featured guide's own station", async ({ page }) => {
-  await page.goto("/Trip-Guides/", { waitUntil: "networkidle" });
-  await page.locator('[data-atlas-mode-btn="table"]').click();
-  await page.locator(".atlas-toolsrow").click();
-  await page.waitForURL(/\/guides\/\w+\/#tools$/);
-  // The deep link must OPEN the station, not just land on the page with it hidden.
-  await expect(page.locator(".catblock--tools")).toBeVisible();
-  expect(await panelTitles(page)).toHaveLength(PANEL_COUNT);
+test("⌁ the hub carries no tools door at all — at either width", async ({ page }) => {
+  /* ⌁ Two doors used to live here — a TRIP TOOLS row and a link in the phone's ☰ menu — each
+     aimed at whichever guide the hub featured. Both widths, because they lived at different
+     ones. The reasoning is in index.astro, beside the markup that no longer exists. */
+  for (const size of [{ width: 1280, height: 900 }, { width: 402, height: 874 }]) {
+    await page.setViewportSize(size);
+    await page.goto("/Trip-Guides/", { waitUntil: "networkidle" });
+    await expect(page.locator(".atlas-toolsrow"), `${size.width}px`).toHaveCount(0);
+    await expect(page.locator('a[href*="#tools"]'), `${size.width}px`).toHaveCount(0);
+  }
 });
 
-test("the phone's ☰ menu still reaches tools — the only route in at that width", async ({ page }) => {
-  await page.setViewportSize({ width: 402, height: 874 });
-  await page.goto("/Trip-Guides/", { waitUntil: "networkidle" });
-  const link = page.locator('[data-atlas-menusheet] a[href*="#tools"]');
-  await expect(link).toHaveCount(1);
+test("a guide's own rail is the way in, and it opens the station", async ({ page }) => {
+  // The route that replaced them: open the guide, press its tools stop.
+  await page.goto(guide("korea"), { waitUntil: "networkidle" });
+  await page.locator('.grail-stop[data-kind="tools"]').click();
+  await expect(page.locator(".catblock--tools")).toBeVisible();
+  expect(await panelTitles(page)).toHaveLength(PANEL_COUNT);
 });
 
 test("the station's content is in the page without JavaScript", async ({ browser }) => {

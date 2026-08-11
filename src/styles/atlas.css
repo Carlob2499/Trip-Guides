@@ -172,16 +172,6 @@
 .atlas-stamp--progress { background: var(--accent); border-color: var(--accent); color: var(--on-aink); }
 .atlas-stamp--upcoming { color: var(--aink); }
 
-/* ── Tools row ────────────────────────────────────────────────────────────────────────── */
-.atlas-toolsrow {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  margin-top: 22px; padding: 14px 16px; min-height: 44px;
-  background: var(--card); border: 1px solid var(--rule); text-decoration: none; color: var(--ink);
-}
-.atlas-toolsrow-label {
-  font-family: var(--font-data); font-weight: 640; font-size: var(--text-control);
-  letter-spacing: .08em; text-transform: uppercase; color: var(--aink);
-}
 
 .atlas-empty { padding: 40px 4px; color: var(--muted); text-align: center; }
 

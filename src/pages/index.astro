@@ -207,10 +207,12 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
     <a class="skip-link" href="#atlasTable">Skip to guides</a>
 
     {/* Header (item 6 built the shell — brand mark + wordmark, the cover's FLIP target; item 9
-        added the actions cluster: TOOLS — which now opens the standalone cross-trip Tools
-        screen built in Stage E, on the trip this hub is featuring — ＋ New guide, and the theme
-        toggle. The WORLD|TABLE toggle now lives here too (compact buttons, matching the design
-        screenshots) instead of the full-width bar it started as below — that bar read as
+        added the actions cluster). It carries ＋ New guide and the theme toggle. There is no
+        TOOLS button and there is not meant to be: the tools are a station of each guide's own
+        rail, so a hub-level door could only point at one trip's while reading as a door to
+        tools in general (creator, 2026-08-11: "it's per-guide").
+        The WORLD VIEW | TABLE VIEW toggle lives here too, centred at >=760px to match the
+        design screenshots, instead of the full-width bar it started as below — that bar read as
         oversized/mobile-only-styled at desktop widths; the mobile-only full-bleed treatment
         moved to a `max-width:759px` override in atlas-mobile.css instead. */}
     <header class="atlas-header">
@@ -320,7 +322,7 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
 
         {/* Mobile-only (<760px, D5): the desktop rails/pincards/motto have no spatial budget
             on a phone (README "Mobile"), so a bare-ping globe gets its own FAB menu (fly to
-            each sheet, fit world, pause spin, tools, ＋ new guide — the same actions the
+            each sheet, fit world, pause spin, ＋ new guide — the same actions the
             desktop rail already exposes, just relocated) and a bottom sheet on pin tap instead
             of the desktop pincard. Hidden by CSS above 759px; inert without JS either way
             (world.js gates its own mobile branch, so a no-JS phone visitor still gets the
@@ -372,14 +374,11 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
           <span class="atlas-menusheet-kicker">The map</span>
           <button type="button" data-atlas-menu-fit>Fit world</button>
           <button type="button" data-atlas-menu-spin>Pause</button>
-          {/* The README's warning stands — on a phone the ☰ is the only route in — but the
-              destination moved: R5 retired the standalone screen, so tools belong to a trip
-              and there is no generic /tools/ to send anyone to. The link now needs `quick`,
-              and when the hub is featuring nothing it renders NOTHING rather than a door onto
-              a deleted route. */}
-          {quick && (
-            <a href={`${base}/guides/${quick.g.id}/#tools`}>{quick.g.data.title} tools</a>
-          )}
+          {/* No tools link. The README warned that on a phone the ☰ is the only route in,
+              and that was true of a cross-trip screen; it stopped being true when R5 made
+              the tools a station of each guide's own rail. From here the honest route is
+              "fly to a sheet" above and then that guide's rail — one door, in the one place
+              the tools actually belong. */}
           <a class="atlas-menusheet-new" href={`${base}/new/`}>＋ New guide</a>
         </div>
 
@@ -569,15 +568,11 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
         </ul>
       )}
 
-      {/* README §5's "TRIP TOOLS row", re-aimed: the tools are a station of the featured
-          trip's own guide now, not a screen with a picker. The other three trips are reached
-          the way everything else about them is — by opening that guide. */}
-      {quick && (
-        <a class="atlas-toolsrow" href={`${base}/guides/${quick.g.id}/#tools`}>
-          <span class="atlas-toolsrow-label">Trip tools</span>
-          <span>{quick.g.data.title} →</span>
-        </a>
-      )}
+      {/* README §5's "TRIP TOOLS row" is gone, and its absence is the point (creator,
+          2026-08-11: "it's per-guide"). R5 made the tools a station of a guide's own rail,
+          so a row here could only ever mean ONE trip's tools — the featured one — while
+          reading like a door to tools in general. The way to a trip's tools is the way to
+          everything else about that trip: open its guide. */}
     </main>
     <footer class="atlas-foot">Waypoint — every fact checked, every route tested. <a href={`${base}/about/`}>How it's made →</a></footer>
     </div>
