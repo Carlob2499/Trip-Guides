@@ -161,3 +161,33 @@ shipped as an empty `<p class="grail-resume" hidden>` that nothing filled. A fab
 here" is the loud version of that failure; an element reserving space for a memory nobody has is
 the quiet one, and ACCEPTANCE forbids both. Client-filled honest blanks are created and REMOVED
 by whoever owns the datum — never rendered empty and left for later.
+
+**A removal must not leave stale pointers, even into guide content** (2026-08-11). R5's
+FALLBACKS §4 lists `src/content/guides/` as a scope guard for design work, and one guide file
+was edited anyway: `japan/01-plan.json` sent readers to "the Entry card in your Trip kit" — a
+feature R5 deleted — from inside the Entry card. The guard exists to stop a design pass
+rewriting content; it does not license shipping a pointer to something that no longer exists.
+The rule: when a change deletes a feature, the continuity sweep runs into guide content too,
+and the edit is recorded rather than hidden. This is the ONLY guide-content edit of the R5 arc.
+
+**A target under 44px is a control the reader misses; a mark under 44px is notation**
+(2026-08-11). ACCEPTANCE §6.4's floor applies to anything the reader is meant to AIM at — a
+button, chip, pill, tab, station or emergency number. It does NOT apply to the notation family:
+the provenance dot, the ≈/⚠ flag chips, the stale pill, a photo credit. Those are sized to the
+type they annotate, and a 44px dot beside a 13px figure dominates the fact it is meant to
+footnote. Two real controls stay under the line on purpose, with counts that may only shrink
+(`TARGET_BASELINE` in a11y.spec.ts): `.transit-link` and `.dchip`. Both are density decisions
+across all four guides, and both are open questions rather than settled ones.
+
+**A hidden surface must leave the tab order, not just the screen** (2026-08-11). The journey
+sheet slid away on `translateY(100%)` and kept all ~90 of its links focusable and in the
+accessibility tree. `display:none` fixes the tab order and kills the animation; `inert` does
+both, and is the tool for any surface that must animate out. axe cannot see this class of
+defect — every one of those links is perfectly accessible, just somewhere nobody can look.
+
+**Guide code may read a viewport number for GEOMETRY, never for layout** (2026-08-11). The R5
+contract is that the guide body switches on container width alone. Popover placement, gesture
+distance, and a `userAgent` string in an error beacon are not layout branches and are allowed —
+each named with its reason in `scripts/__tests__/no-device-checks.test.mjs`, which fails on any
+unlisted one and additionally requires the four files defining the guide body to contain none
+at all. Do not "fix" the allowed five; do not add a sixth without adding its reason.

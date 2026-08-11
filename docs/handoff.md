@@ -79,26 +79,33 @@ outranks the guard here, but it is the one line of this arc that touched guide c
 
 ## Where we left off
 
-**The R5 handoff is done and live** — steps 1-6, three commits, all four workflows green.
-1718 vitest · 202 Playwright (axe clean at both themes and both viewports, no baseline raised) ·
-build/lint/typecheck/drift clean.
+**R5 is done and ACCEPTANCE is walked** — 47 lines ticked, 3 flagged, 0 left unexamined.
+1722 vitest · 225 Playwright · build/lint/typecheck/drift clean.
 
-**Still open from the bundle's own ACCEPTANCE list** (each one honest rather than ticked):
-- `tests/copy-honesty.test.ts` and `tests/pins.test.ts` are named in TESTS.md and were not
-  written. The claims they would make are covered obliquely by existing gates; the files are not
-  there, and that is a gap not a pass.
-- ACCEPTANCE asks for zero `innerWidth` in guide code. Six remain and all six are gesture or
-  popover GEOMETRY (swipe distance, where a popup fits), never a layout-model branch — the rail
-  and the guide body switch on container width alone. Judged compliant in substance; say so
-  rather than claim zero.
-- `scrollIntoView` appears twice as a real call in guide-ui.js (jump-to-day, jump-to-card). The
-  rail's own pill centring uses `track.scrollLeft`, which is what the rule was about.
+Writing the three a11y checks that were missing found three real defects, none visible to axe:
 
-**One thing needs you:** `eslint.config.mjs` is hook-protected, so the R5 bundle could not go in
-its ignore list (you approved it). Fixed at the source instead — `prototypes/support.js` carries
-an `eslint-disable` header naming it a vendored design artefact. Swap it for the config line if
-you prefer the R4 precedent.
+- The journey sheet slid away on a transform and left ~90 links in the tab order. `inert` now.
+- 25 control classes rendered under 44px, including the rail's own stops, the topbar buttons
+  and the emergency `tel:` chips. 23 fixed in one block in `base.css`.
+- The a11y gate itself was auditing Astro's 404 page under the name "trip tools" — the route
+  R5 deleted. Removed, and every `prep()` now asserts the status code first.
 
-**Recommended next step:** write the two missing TESTS.md files, or take the `us` guide through
-a real read at 375px now that every absent state is built — it is the guide the whole fallback
-layer was designed around and nobody has read it end to end since.
+**Three things are flagged rather than ticked, and each is a real open item:**
+
+1. **`.transit-link` (189/guide) and `.dchip` stay under 44px** with counts that can only
+   shrink (`TARGET_BASELINE` in a11y.spec.ts). Raising the transit pills wraps every day card's
+   link row; raising the day chips means giving up "the whole trip in one row, active expanded"
+   (COMPONENTS §4). **Your call — this is the one open design decision R5 leaves.**
+2. **The gap block and the "no cover" plate have never rendered.** Both paths are intact; no
+   guide triggers either. A guide with an unconfirmed sight, or with its cover removed, would
+   be the demonstration.
+3. **`japan/01-plan.json` was edited** — one dead "see the Entry card in your Trip kit" pointer
+   removed, against FALLBACKS §4's scope guard. Recorded in CONTEXT as a standing rule: a
+   removal's continuity sweep runs into guide content too.
+
+**Still needs you:** `eslint.config.mjs` is hook-protected, so the R5 bundle ignore line you
+approved could not go in. `prototypes/support.js` carries an `eslint-disable` header instead.
+
+**Recommended next step:** decide (1) above — it is the last thing between R5 and a clean
+ACCEPTANCE. After that, read `us` end to end at 375px: it is the guide the whole fallback layer
+was designed around and nobody has read it through since the absent states were built.

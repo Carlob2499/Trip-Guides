@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1811 checks · 1811 carry a stated promise · 154 files
+1815 checks · 1815 carry a stated promise · 155 files
 
 ## Can everyone read it
 
@@ -2058,6 +2058,13 @@ nothing ships.
 - leaves a fact inside its shelf life alone  <sub>scripts/audit/check-staleness.test.mjs:123</sub>
 - skips an archived guide entirely, listing it in `archived` not `sections`/`stale`  <sub>scripts/audit/check-staleness.test.mjs:130</sub>
 - check-staleness.mjs's copy deep-equals src/lib/staleness.ts's  <sub>scripts/audit/check-staleness.test.mjs:139</sub>
+
+**One build serves every screen — no device decides which layout a reader gets.**
+
+- found the source tree  <sub>scripts/__tests__/no-device-checks.test.mjs:58</sub>
+- ⌁ no unlisted file branches on a device or a viewport number  <sub>scripts/__tests__/no-device-checks.test.mjs:62</sub>
+- ⌁ every allowance still points at a file that exists and still needs it  <sub>scripts/__tests__/no-device-checks.test.mjs:84</sub>
+- ⌁ the guide body itself has none at all  <sub>scripts/__tests__/no-device-checks.test.mjs:98</sub>
 
 **Patterns drawn from feedback reflect what people actually reported.**
 
