@@ -62,3 +62,17 @@ export function srcsetFor(url: string | null | undefined, w: number): string | n
   if (!one || !two || one === two) return null;
   return `${one} 1x, ${two} 2x`;
 }
+
+/**
+ * Who to credit for an image, read off the URL that serves it — `Wikimedia Commons` for a
+ * Commons FilePath URL, and null for anything else.
+ *
+ * Null rather than a hostname, deliberately. A CDN's domain is not a credit line: it says
+ * where the bytes are cached, not who made the picture or under what licence. Printing one
+ * would be a fabricated attribution, which is worse than an uncredited photo. Commons is the
+ * one case the URL genuinely settles, because only Commons FilePath URLs take this shape.
+ */
+export function imgCredit(url: string | null | undefined): string | null {
+  if (!url) return null;
+  return String(url).includes(COMMONS_FILEPATH) ? "Wikimedia Commons" : null;
+}

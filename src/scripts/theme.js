@@ -37,7 +37,14 @@ export function initDarkToggle(btnId) {
       if (bg) tc.setAttribute("content", bg);
     }
     if (!btn) return;
-    btn.innerHTML = dark ? SUN_SVG : MOON_SVG;
+    /* The word rides along with the icon everywhere, and CSS decides who shows it — the hub's
+       desktop header does (the design labels this button), every other surface keeps the icon
+       alone. Emitting it here rather than in the hub's markup is what stops the two from
+       drifting: innerHTML is rewritten on every toggle, so a label written once in HTML would
+       be wiped the first time anyone pressed it. It names the mode you are switching TO, which
+       is what the button does, and matches the aria-label below. */
+    const word = dark ? "Light" : "Dark";
+    btn.innerHTML = (dark ? SUN_SVG : MOON_SVG) + `<span class="theme-btn-label">${word}</span>`;
     btn.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
     btn.title = dark ? "Switch to light mode" : "Switch to dark mode";
   }

@@ -222,8 +222,10 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
         </span>
       </a>
       <div class="atlas-toggle" role="group" aria-label="Switch view">
-        <button type="button" class="atlas-toggle-btn" data-atlas-mode-btn="world" aria-pressed="false">World</button>
-        <button type="button" class="atlas-toggle-btn" data-atlas-mode-btn="table" aria-pressed="true">Table</button>
+        {/* "World view" on desktop, "World" on a phone — one button, and the suffix is a span
+            CSS drops under 760px rather than two labels that could disagree. */}
+        <button type="button" class="atlas-toggle-btn" data-atlas-mode-btn="world" aria-pressed="false">World<span class="atlas-toggle-word"> view</span></button>
+        <button type="button" class="atlas-toggle-btn" data-atlas-mode-btn="table" aria-pressed="true">Table<span class="atlas-toggle-word"> view</span></button>
       </div>
       <div class="atlas-header-actions">
         <a class="atlas-header-btn atlas-header-btn--cta" href={`${base}/new/`}>＋<span class="atlas-header-btn-label"> New guide</span></a>

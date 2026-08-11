@@ -7,7 +7,7 @@ import "./atlas-map.js";
 import { solvePlacement } from "../model/solver";
 import { localClockLabel } from "../model/local-time";
 import { attachSheetDrag } from "../../../scripts/sheet-drag.js";
-import { atWidth, srcsetFor } from "../../../lib/img-width";
+import { atWidth, srcsetFor, imgCredit } from "../../../lib/img-width";
 
 /* 260, not 220: the surveyed card's CTA is the long one ("✓ Verified — open the sheet →")
    and at 220 it wrapped to a second line, which is both narrower than the prototype draws the
@@ -405,9 +405,14 @@ export function initAtlasWorld(root = document) {
     el.className = "atlas-pincard";
     el.href = g.href;
     el.style.width = `${CARD_W}px`;
+    // The credit chip sits on the bottom edge of the photo, so it needs the photo's height —
+    // published from here, where the width it derives from actually lives. Hard-coding the
+    // matching number in CSS is how CARD_FULL_H went stale in the first place.
+    el.style.setProperty("--plate-h", `${PLATE_H}px`);
     el.innerHTML = `
       <span class="atlas-pincard-tail"></span>
       <span class="atlas-pincard-ticks" aria-hidden="true"></span>
+      ${g.coverImg && imgCredit(g.coverImg) ? `<span class="atlas-pincard-credit">${escapeHtml(imgCredit(g.coverImg))}</span>` : ""}
       ${g.coverImg ? `<img class="atlas-pincard-plate" src="${escapeHtml(atWidth(g.coverImg, PLATE_W))}"${srcsetFor(g.coverImg, PLATE_W) ? ` srcset="${escapeHtml(srcsetFor(g.coverImg, PLATE_W))}"` : ""} alt="" loading="lazy" style="view-transition-name:cover-${escapeHtml(g.slug)}" />` : ""}
       <span class="atlas-pincard-body">
         <span class="atlas-pincard-cc">${escapeHtml(g.cc || "")}${g.anchorLabel ? ` · ${escapeHtml(g.anchorLabel)}` : ""}</span>
@@ -564,6 +569,8 @@ export function initAtlasWorld(root = document) {
       // grows the box instead of spilling out of it.
       const plate = el.querySelector(".atlas-pincard-plate");
       if (plate) plate.style.display = seat.compact ? "none" : "block";
+      // The credit belongs to the photo, so it leaves with it when the card compacts.
+      el.toggleAttribute("data-compact", seat.compact);
       el.toggleAttribute("data-tail", seat.tail);
       el.toggleAttribute("data-ready", true);
     }

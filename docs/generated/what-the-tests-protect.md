@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1824 checks · 1824 carry a stated promise · 156 files
+1826 checks · 1826 carry a stated promise · 156 files
 
 ## Can everyone read it
 
@@ -604,6 +604,8 @@ nothing ships.
 - offers 1x and 2x for a resizable URL  <sub>src/lib/img-width.test.ts:42</sub>
 - returns null when the URL already pins a width — both entries would be the same file  <sub>src/lib/img-width.test.ts:46</sub>
 - returns null for a single-size URL — a srcset of one size is a lie about choice  <sub>src/lib/img-width.test.ts:50</sub>
+- credits Commons when the URL is a Commons FilePath URL  <sub>src/lib/img-width.test.ts:57</sub>
+- ⌁ never turns a CDN hostname into an attribution  <sub>src/lib/img-width.test.ts:62</sub>
 
 **Public holidays around a trip come from real published data for that country and year.**
 

@@ -121,7 +121,12 @@ export const EXEMPTIONS = [
     why: "The kit's blanket 'no elevation' rule is outranked by the approved prototype's own markup, which gives the FAB, the menu sheet and the ping sheet real shadows. Extended to the other overlays built in that language: bottom sheets, modals, popovers, toasts and the drag state.",
     test: (v) =>
       v.category === "ELEVATION" &&
-      /(menufab|menusheet|pingsheet|\.sheet|sos-|modal|-pop|toast|drag|resume-chip|offline-pill|pal-|sm-|lnw-|cr-|share-)/.test(blockOf(v)),
+      /(menufab|menusheet|pingsheet|\.sheet|sos-|modal|-pop|toast|drag|resume-chip|offline-pill|pal-|sm-|lnw-|cr-|share-|pincard)/.test(blockOf(v)),
+  },
+  {
+    id: "pincard-credit-sits-on-a-photograph",
+    why: "The globe pin card's image credit is the one chip in this system whose background is a PHOTOGRAPH, and neither theme controls how bright that photograph is. A themed pair would invert with the page and put dark text on a dark cover half the time; the fixed dark scrim and near-white type hold their contrast over any image, which is the same reasoning every map attribution chip uses. The design screenshots draw it this way in both the light and the dark board.",
+    test: (v) => v.category === "COLOUR" && /pincard-credit/.test(blockOf(v)),
   },
   {
     id: "unshipped-design-study",

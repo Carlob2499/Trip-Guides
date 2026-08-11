@@ -1,7 +1,7 @@
 // @protects-file Photos are requested at the size they are shown, not full size.
 
 import { describe, it, expect } from "vitest";
-import { atWidth, srcsetFor } from "./img-width";
+import { atWidth, srcsetFor, imgCredit } from "./img-width";
 
 const COMMONS = "https://commons.wikimedia.org/wiki/Special:FilePath/Nyhavn-Copenhagen.JPG";
 
@@ -50,5 +50,21 @@ describe("srcsetFor", () => {
   it("returns null for a single-size URL — a srcset of one size is a lie about choice", () => {
     expect(srcsetFor("https://cdn.example/pic.jpg", 56)).toBeNull();
     expect(srcsetFor(null, 56)).toBeNull();
+  });
+});
+
+describe("imgCredit", () => {
+  it("credits Commons when the URL is a Commons FilePath URL", () => {
+    expect(imgCredit("https://commons.wikimedia.org/wiki/Special:FilePath/Nyhavn.JPG?width=440"))
+      .toBe("Wikimedia Commons");
+  });
+
+  it("⌁ never turns a CDN hostname into an attribution", () => {
+    /* ⌁ A domain says where the bytes are cached, not who made the picture. Crediting
+       "images.example.com" would be a fabricated attribution presented as a real one. */
+    expect(imgCredit("https://images.example.com/photo-1234.jpg")).toBeNull();
+    expect(imgCredit("https://cdn.pexels.com/x/y.jpg")).toBeNull();
+    expect(imgCredit(null)).toBeNull();
+    expect(imgCredit(undefined)).toBeNull();
   });
 });

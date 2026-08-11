@@ -2,18 +2,44 @@
    §8-9). D4: the globe is progressive enhancement over the table view's server-rendered
    baseline — this screen only becomes the active face once JS has mounted <atlas-map>. */
 
-/* Compact by default — a small bordered pair of buttons living inside .atlas-header, matching
-   the design screenshots (NOT the full-width segmented bar this started as, which read as
-   oversized at desktop widths). atlas-mobile.css widens it back to a full-bleed row under
-   759px, where a permanent, prominent segmented switch is the actual mobile spec (D5). */
-.atlas-toggle { display: inline-flex; gap: 1px; border: 1px solid var(--rule2); background: var(--rule2); }
+/* DESKTOP ONLY below 760px is where this stops applying: atlas-mobile.css widens the switch
+   back to a full-bleed row under 759px, where a permanent, prominent segmented switch is the
+   actual mobile spec (D5), and the abbreviated "WORLD | TABLE" labels belong to that width.
+
+   Two separately bordered buttons rather than one hairline-divided pair, matching the design
+   screenshots: the pressed one takes the accent fill, the other stays an outline. */
+.atlas-toggle { display: inline-flex; gap: 8px; }
 .atlas-toggle-btn {
   display: inline-flex; align-items: center; justify-content: center;
-  min-height: 38px; padding: 0 16px; background: var(--card); border: none; cursor: pointer;
+  min-height: 40px; padding: 0 20px; background: none; cursor: pointer;
+  border: 1px solid var(--rule2);
   font-family: var(--font-data); font-weight: 640; font-size: var(--text-control-sm);
-  letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+  letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+  white-space: nowrap;   /* "WORLD VIEW" is one label, not two lines */
+  transition: color .14s, border-color .14s;
 }
-.atlas-toggle-btn[aria-pressed="true"] { background: var(--accent); color: var(--on-aink); }
+.atlas-toggle-btn:hover { color: var(--ink); border-color: var(--ink); }
+.atlas-toggle-btn[aria-pressed="true"] {
+  background: var(--accent); border-color: var(--accent); color: var(--on-aink);
+}
+.atlas-toggle-btn[aria-pressed="true"]:hover { color: var(--on-aink); border-color: var(--accent); }
+
+/* Centred on the VIEWPORT, not between its neighbours: the brand and the action buttons are
+   different widths, so `margin: auto` would settle it off-centre by half their difference.
+   Absolute inside the header's own positioning context puts it where the design has it, and
+   the flanks keep the flow row to themselves. */
+@media (min-width: 760px) {
+  .atlas-toggle { position: absolute; left: 50%; transform: translateX(-50%); }
+  .atlas-header-actions { margin-left: auto; }
+  /* The theme button is labelled up here, where there is room for the word. */
+  .atlas-header .theme-btn-label { display: inline; margin-left: .45rem; }
+  .atlas-header-icon { width: auto; padding: 0 14px; }
+}
+/* Everywhere else the button is its icon — guides included, which is why this default lives
+   with the button and not in the hub's own media query. */
+.theme-btn-label { display: none; }
+.atlas-toggle-word { display: none; }
+@media (min-width: 760px) { .atlas-toggle-word { display: inline; } }
 
 .atlas-globe-wrap { display: none; }
 :root[data-atlas-mode="world"] .atlas-globe-wrap { display: block; }
@@ -40,7 +66,21 @@
   position: absolute; top: 0; left: 0; width: 220px;
   background: var(--card); border: 1px solid var(--rule2);
   color: var(--ink); text-decoration: none;
-  pointer-events: auto; will-change: transform; opacity: 0; transition: opacity .2s ease;
+  /* Elevated, because it is a card lying ON the globe and not a panel printed into the page.
+     Flat, it read as part of the map. Same elevation idiom the mobile ping/menu sheets
+     already use (atlas-mobile.css) — the one place this system does spend a shadow. */
+  box-shadow: 0 10px 30px rgba(16, 20, 24, .28);
+  pointer-events: auto; will-change: transform; opacity: 0;
+  /* The card GLIDES to its new seat. The solver only re-seats on 90px of globe drift, so
+     without this the cards teleport in 90px steps while the globe turns smoothly under them —
+     the jaggedness is the sampling rate, not the frame rate, and animating the gap is what
+     hides it. Transform and opacity only, which is the one pair that never costs layout. */
+  transition: opacity .2s ease, transform .5s cubic-bezier(.22, .61, .36, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Reduced motion takes the jump over the glide: a card sliding across the globe is exactly
+     the large-area movement the preference is asking us not to make. */
+  .atlas-pincard { transition: opacity .2s ease; }
 }
 /* The sheet being read takes an accent rule and the surveyor's corner ticks — the prototype's
    way of saying "this one" without moving or resizing anything.
@@ -60,6 +100,18 @@
 }
 .atlas-pincard-ticks::before { left: 4px; border-left: 2px solid var(--accent); }
 .atlas-pincard-ticks::after { right: 4px; border-right: 2px solid var(--accent); }
+
+/* The photo's credit, on the photo. Only ever rendered when the URL itself settles who to
+   credit (imgCredit) — a card whose cover came from somewhere else carries no chip rather
+   than a guessed one. Fixed dark chip in both themes because it sits on a photograph, whose
+   brightness neither theme controls. */
+.atlas-pincard-credit {
+  position: absolute; left: 8px; top: calc(var(--plate-h, 0px) - 26px);
+  padding: 3px 7px; background: rgba(16, 20, 24, .74); color: #f4f6f1;
+  font-family: var(--font-data); font-size: var(--text-nano); letter-spacing: .06em;
+  pointer-events: none;
+}
+.atlas-pincard[data-compact] .atlas-pincard-credit { display: none; }
 .atlas-pincard[data-status="past"] .atlas-pincard-tail {
   border-right-color: var(--accent); border-bottom-color: var(--accent);
 }
