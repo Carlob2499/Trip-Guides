@@ -15,9 +15,10 @@
 
 import { canScrub, dayFromX, SCRUB_LOCK } from "../model/scrub";
 import { tapHaptic } from "../../../scripts/util.js";
+import { MOBILE_MAX } from "../../../lib/breakpoints";
 
 export function initDayScrub() {
-  if (!window.matchMedia("(max-width: 899px)").matches) return;
+  if (!window.matchMedia("(max-width: " + MOBILE_MAX + "px)").matches) return;
   var rail = document.getElementById("dayScrub");
   if (!rail) return;
   var chips = Array.prototype.slice.call(rail.querySelectorAll("[data-day-jump]"));

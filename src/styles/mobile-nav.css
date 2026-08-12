@@ -10,6 +10,9 @@
    accessibility tree instead of deleting them for non-visual readers. */
 .mn-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
 
+/* bp:MOBILE_MAX — src/lib/breakpoints.ts. This whole sheet is page CHROME (the bottom bar, the
+   sheet, the yielding topbar), which is positioned against the viewport — the one thing chrome
+   may legitimately ask about. The guide BODY inside it still switches on container width. */
 @media(max-width:899px){
   /* === BOTTOM TAB BAR =======================================================
      [ group ] [ group ] [ Groups ] [ Today ] [ Map ] — five equal slots, so the
@@ -172,7 +175,13 @@
      other to `auto`, which clipped the drag bubble to a sliver above the rail. Nothing
      overflows horizontally in fit mode anyway; that is what fit means. */
   .day-scrub.scrub-fit{overflow:visible;touch-action:pan-y;position:sticky}
-  .scrub-fit .dchip{flex:1 1 0;min-width:0;align-items:center;padding:.4rem .15rem;gap:0;transition:flex-grow .28s var(--ease-out-expo)}
+  /* NO `transition:flex-grow` here, and its absence is the fix. Animating flex-grow held every
+     chip at its base grow value, so .dchip-active's `flex-grow:2.4` below never took effect and
+     the rail rendered eight identical 6.8px numerals — no active day, no date, at any time
+     (measured: the same chip lays out at 32.5px the moment the transition is gone). The
+     expansion is now instant, which is the correct trade: a rail that says which day you are on
+     beats a rail that eases smoothly between saying nothing. */
+  .scrub-fit .dchip{flex:1 1 0;min-width:0;align-items:center;padding:.4rem .15rem;gap:0}
   .scrub-fit .dchip-num{font-size:var(--text-control-sm)}
   /* The ACTIVE chip expands and keeps its date; the rest are numerals. Dropping the date
      from every chip was what made the rail fit, but it also meant the compacted rail

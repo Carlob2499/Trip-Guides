@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1827 checks · 1827 carry a stated promise · 156 files
+1835 checks · 1835 carry a stated promise · 158 files
 
 ## Can everyone read it
 
@@ -175,6 +175,12 @@ nothing ships.
 - ⌁ 9.5 the same trip data renders at phone and desktop width  <sub>tests/visual/pins.spec.ts:78</sub>
 - ⌁ 9.6 the tools run on the guide they are in, with no slug to forget  <sub>tests/visual/pins.spec.ts:99</sub>
 - the pins delegated above still have somewhere to live  <sub>tests/visual/pins.spec.ts:120</sub>
+
+**Every checked section shows the date it was checked, and every aged-out one says so instead.**
+
+- every verified section carries exactly one verification mark  <sub>tests/visual/section-stamp.spec.ts:24</sub>
+- ⌁ past its shelf life the stamp gives way to the downgrade pill  <sub>tests/visual/section-stamp.spec.ts:50</sub>
+- the stamp is a mark, not a control  <sub>tests/visual/section-stamp.spec.ts:68</sub>
 
 **No number on a guide contradicts the thing it is counting.**
 
@@ -591,6 +597,14 @@ nothing ships.
 
 - found the stylesheets and their declarations at all  <sub>src/styles/var-defined.test.ts:69</sub>
 - reads no custom property that nothing declares  <sub>src/styles/var-defined.test.ts:75</sub>
+
+**One number decides the phone/tablet cut, so no two surfaces can disagree about it.**
+
+- found the stylesheets and their markers at all  <sub>src/styles/breakpoints.test.ts:63</sub>
+- ⌁ no marked query has drifted from the constant it names  <sub>src/styles/breakpoints.test.ts:68</sub>
+- ⌁ the marked sites are exactly the documented ones  <sub>src/styles/breakpoints.test.ts:86</sub>
+- ⌁ every @container guide query carries a marker  <sub>src/styles/breakpoints.test.ts:97</sub>
+- ⌁ no script re-hardcodes a shared breakpoint in a matchMedia query  <sub>src/styles/breakpoints.test.ts:115</sub>
 
 **Photos are requested at the size they are shown, not full size.**
 
@@ -2076,10 +2090,10 @@ nothing ships.
 
 **One build serves every screen — no device decides which layout a reader gets.**
 
-- found the source tree  <sub>scripts/__tests__/no-device-checks.test.mjs:58</sub>
-- ⌁ no unlisted file branches on a device or a viewport number  <sub>scripts/__tests__/no-device-checks.test.mjs:62</sub>
-- ⌁ every allowance still points at a file that exists and still needs it  <sub>scripts/__tests__/no-device-checks.test.mjs:84</sub>
-- ⌁ the guide body itself has none at all  <sub>scripts/__tests__/no-device-checks.test.mjs:98</sub>
+- found the source tree  <sub>scripts/__tests__/no-device-checks.test.mjs:85</sub>
+- ⌁ no unlisted file branches on a device or a viewport number  <sub>scripts/__tests__/no-device-checks.test.mjs:89</sub>
+- ⌁ every allowance still points at a file that exists and still needs it  <sub>scripts/__tests__/no-device-checks.test.mjs:111</sub>
+- ⌁ the guide body itself has none at all  <sub>scripts/__tests__/no-device-checks.test.mjs:125</sub>
 
 **Patterns drawn from feedback reflect what people actually reported.**
 

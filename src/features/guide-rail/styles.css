@@ -4,9 +4,12 @@
    container queries layer the tablet and desktop models on top. A browser without container
    queries matches neither and keeps the phone model, which is the intended degradation.
 
-     < 744px      pill row + progress line   — the line's ends are unreachable at this width, so
+   Thresholds are src/lib/breakpoints.ts's, marked at each query below; they are CONTAINER
+   widths, which run ~35px under the viewport (.shell-q's gutters).
+
+     < 720px      pill row + progress line   — the line's ends are unreachable at this width, so
                                                the ordinal position moves into a progress fill
-     744-1179px   vertical spine, left column — 13 stops do not fit a 744px horizontal line
+     720-1179px   vertical spine, left column — 13 stops do not fit a 720px horizontal line
      >= 1180px    horizontal spine
 
    A pill rail said "these are categories". A spine says "this is one journey and you are here",
@@ -95,10 +98,11 @@ body.chrome-yield .grail{transform:translateY(calc(-1 * var(--hdr-h)))}
   margin-left:auto;font-family:var(--font-data);font-size:var(--text-caption);color:var(--aink);
 }
 
-/* --- TABLET (744-1179): the vertical spine --------------------------------------------------
-   Thirteen stops do not fit a 744px horizontal line, and a tablet has vertical room to spare —
+/* --- TABLET (720-1179): the vertical spine --------------------------------------------------
+   Thirteen stops do not fit a 720px horizontal line, and a tablet has vertical room to spare —
    so the spine turns rather than shrinking its stops or scrolling out of sight. */
-@container guide (min-width: 744px){
+/* bp:TABLET_MIN — src/lib/breakpoints.ts */
+@container guide (min-width: 720px){
   .grail{
     /* Beside the reading column, not above it. .shell's grid places this in column one. */
     border-bottom:0;border-inline-end:var(--rw) solid var(--rule);
@@ -161,6 +165,7 @@ body.chrome-yield .grail{transform:translateY(calc(-1 * var(--hdr-h)))}
 }
 
 /* --- DESKTOP (>=1180): the horizontal spine -------------------------------------------------- */
+/* bp:DESKTOP_MIN — src/lib/breakpoints.ts */
 @container guide (min-width: 1180px){
   .grail{border-inline-end:0;border-bottom:var(--rw) solid var(--rule);padding-block:0}
   .grail-track{

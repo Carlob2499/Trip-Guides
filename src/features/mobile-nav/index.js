@@ -20,6 +20,7 @@ import { initResume, initSectionMemory, initResumeChip, initRailResume } from ".
 import { initSwipeTabs } from "./ui/swipe-tabs.js";
 import { initYieldChrome } from "./ui/yield-chrome.js";
 import { initDayScrub } from "./ui/day-scrub.js";
+import { MOBILE_MAX } from "../../lib/breakpoints";
 
 export {
   parseCounts, recordOpen, rankOrder, promoted, seat, slotLabel, resumeLine,
@@ -62,7 +63,7 @@ export function initMobileNav(cfg, store) {
   // After the bar, which publishes the indicator the gesture drives.
   initSwipeTabs(ctx);
   // Chrome only yields where it is in the way — the bar's own breakpoint.
-  if (bar && window.matchMedia("(max-width: 899px)").matches) initYieldChrome(ctx);
+  if (bar && window.matchMedia("(max-width: " + MOBILE_MAX + "px)").matches) initYieldChrome(ctx);
   // After day-rail has wired the chips, which the scrubber drives through their clicks.
   initDayScrub();
 }

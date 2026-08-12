@@ -4,6 +4,8 @@
    (using the nav proves the lesson landed). Content is device-appropriate:
    swipe on touch, tabs + Ctrl+K search on desktop. */
 
+import { MOBILE_MAX } from "../lib/breakpoints";
+
 (function () {
   var KEY = "tg-nav-hint-done";
   try { if (localStorage.getItem(KEY)) return; } catch (e) { return; }
@@ -17,7 +19,7 @@
   window.__onboardShown = true;
 
   var touch = window.matchMedia("(pointer: coarse)").matches ||
-              window.matchMedia("(max-width: 899px)").matches;
+              window.matchMedia("(max-width: " + MOBILE_MAX + "px)").matches;
   var strip = document.createElement("div");
   strip.className = "nav-hint";
   strip.setAttribute("role", "note");

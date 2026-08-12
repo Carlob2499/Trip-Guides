@@ -16,7 +16,13 @@ import { describe, it, expect } from "vitest";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 
-const PATTERN = /\b(navigator\.userAgent|window\.innerWidth|innerWidth|isMobile|isIOS|isAndroid)\b/;
+/* matchMedia() was missing here until 2026-08-12, so the three checks this contract cares most
+   about — day scrubber, chrome yield, swipe gesture — were invisible to the gate written for
+   them. `prefers-*` is excluded: a user PREFERENCE is not a device, and catching ~10
+   reduced-motion/color-scheme sites would double the list with entries nobody reads. The
+   lookahead sits after `matchMedia(`, so hiding the query behind a constant still trips it. */
+const PATTERN =
+  /\b(navigator\.userAgent|window\.innerWidth|innerWidth|isMobile|isIOS|isAndroid)\b|matchMedia\(\s*(?!["'`]\s*\(?\s*prefers-)/;
 
 /** Every site that may read a viewport number, and the reason it is not a layout branch. */
 const ALLOWED = {
@@ -32,8 +38,29 @@ const ALLOWED = {
   "src/features/field-tools/ui/field-tools.js":
     "The same clamp for the field-tools popover. Same reason, same shape.",
   "src/features/mobile-nav/ui/swipe-tabs.js":
-    "Gesture geometry: how far a swipe travelled as a fraction of the screen, and the commit " +
-    "threshold that follows from it. A swipe is measured in the pixels a thumb actually moved.",
+    "Two things, both allowed. Gesture geometry: how far a swipe travelled as a fraction of the " +
+    "screen, and the commit threshold that follows from it — a swipe is measured in the pixels a " +
+    "thumb actually moved. And the arming check itself (phone ceiling OR coarse pointer), which " +
+    "decides whether a GESTURE exists, never what renders: the page is identical either way, it " +
+    "just does or does not follow a finger. The ceiling is MOBILE_MAX from src/lib/breakpoints.ts.",
+  "src/features/mobile-nav/index.js":
+    "One width query deciding whether the chrome-yield behaviour starts. Yielding chrome is the " +
+    "bottom bar and the topbar — page chrome, positioned against the viewport, which is the one " +
+    "thing chrome may legitimately ask about — and it reads the same MOBILE_MAX ceiling that " +
+    "draws the bar in mobile-nav.css. The guide BODY beside it still switches on container width.",
+  "src/features/mobile-nav/ui/day-scrub.js":
+    "Arms the drag-to-scrub gesture on the day rail below the same MOBILE_MAX ceiling. Like " +
+    "swipe-tabs it adds a gesture to a rail that renders identically with or without it — the " +
+    "chips, their taps, their arrow keys and the scroll-spy are untouched by this branch.",
+  "src/scripts/onboard.js":
+    "Chooses the first-visit hint's COPY: 'Swipe ⇄ to move between sections' on a coarse pointer " +
+    "or a phone-width screen, 'Tabs up top · Ctrl+K' otherwise. Teaching a swipe to a mouse is " +
+    "worse than teaching nothing. It picks a sentence — same element, same box, same placement.",
+  "src/scripts/micro.js":
+    "matchMedia('(hover:hover) and (pointer:fine)') gating the magnetic pull on .next-cta. A " +
+    "6px pull that tracks a cursor is meaningless without a cursor, and on touch it would fire " +
+    "off a tap as an unexplained twitch. Nothing renders differently; the button simply does not " +
+    "move unless a fine pointer is inside it.",
   "src/features/firebase/sync.js":
     "navigator.userAgent in an ERROR BEACON payload, truncated to 200 chars. It is diagnostic " +
     "data about a failure the maker is trying to reproduce — it branches on nothing.",

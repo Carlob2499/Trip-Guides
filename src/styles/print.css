@@ -37,7 +37,9 @@
   body::before { display: none !important; }
 
   /* Collapse the grid layout to single column; reveal all section tabs for print */
-  .shell { display: block !important; max-width: 100% !important; padding: 0 !important; }
+  /* .shell-q owns the cap and the gutters; .shell owns the (tablet/desktop) grid. Paper needs
+     both undone, so both are named — resetting only one leaves the other's half in place. */
+  .shell-q, .shell { display: block !important; max-width: 100% !important; padding: 0 !important; }
   .content { padding: 0 !important; }
   .catblock[hidden] { display: block !important; }
 

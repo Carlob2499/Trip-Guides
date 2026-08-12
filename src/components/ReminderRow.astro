@@ -11,7 +11,7 @@ const { item } = Astro.props as { item: ReminderItem };
     <input class="tools-rem-box" type="checkbox" data-rem-id={item.id} />
     <span class="tools-rem-text">
       {item.book && <span class="tools-flag">BOOK AHEAD</span>}
-      {item.text}
+      <Fragment set:html={item.text} />
       {item.note && <span class="tools-dim"> — {item.note}</span>}
     </span>
   </label>

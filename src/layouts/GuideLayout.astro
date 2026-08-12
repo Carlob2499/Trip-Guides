@@ -793,6 +793,13 @@ const tripSummary = buildSummary(guide);
     <!-- ═══════════════════════════════════════════════════════════════════════
          MAIN LAYOUT — tab-switched content panels (nav is the sticky tab bar above)
          ═══════════════════════════════════════════════════════════════════ -->
+    {/* .shell-q exists only to BE the query container (guide.css). The container-name has to
+        live on .shell's parent, because a size query is answered by the nearest ancestor
+        container and never by the element that declares one on itself — with both on .shell,
+        `@container guide (…){.shell{…}}` matched nothing and the tablet two-column model never
+        rendered at any width. .shell-q carries the cap/gutters so the query box is the same
+        width it always was; .shell is the grid. */}
+    <div class="shell-q">
     <div class="shell">
       {/* ═══════════════════════════════════════════════════════════════════════
           THE SPINE RAIL — one stop per station, derived from this guide.
@@ -954,7 +961,8 @@ const tripSummary = buildSummary(guide);
           </ToolsScreen>
         </div>
       </main>
-    </div>
+    </div>{/* end .shell */}
+    </div>{/* end .shell-q */}
 
     <!-- M4 item 5 — COLOPHON. This was the weakest surface on an otherwise composed page:
          `{guide.footer}` plus three <br>-separated muted spans. It is also the natural home for

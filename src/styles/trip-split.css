@@ -325,7 +325,8 @@ select.split-in{cursor:pointer}
   @keyframes su-rise{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
 }
 /* On phones the bottom tab bar owns the bottom edge — sit above it, matching the offset the
-   field tools already use. */
+   field tools already use. Same ceiling as the bar itself, from one source. */
+/* bp:MOBILE_MAX — src/lib/breakpoints.ts */
 @media(max-width:899px){
   .split-undo{bottom:5.2rem}
 }

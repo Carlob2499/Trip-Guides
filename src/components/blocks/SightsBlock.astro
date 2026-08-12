@@ -1,5 +1,6 @@
 ---
 import { pinSlug } from "../../lib/map-pins";
+import { MOBILE_MAX } from "../../lib/breakpoints";
 import { formatClosedDays } from "../../lib/closed-days.mjs";
 import TransitLinks from "../TransitLinks.astro";
 import ProvenancePopover from "../ProvenancePopover.astro";
@@ -54,7 +55,7 @@ const creditOf = (img: any) =>
         <img class="cardimg" loading="lazy" decoding="async" alt={it.img.alt || it.name || ""}
           src={imgSrcAt(it.img, 800)}
           srcset={imgSrcset(it.img)}
-          sizes="(max-width:899px) 100vw, 420px"
+          sizes={`(max-width:${MOBILE_MAX}px) 100vw, 420px`}
           onload="this.closest('.sight-media').classList.add('media-ok')"
           onerror="this.closest('.sight-media').classList.add('media-fail')" />
         <span class="sight-media-grad" aria-hidden="true"></span>

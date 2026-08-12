@@ -24,9 +24,10 @@
 import { tapHaptic } from "../../../scripts/util.js";
 import { reducedMotion } from "../../../scripts/util.js";
 import { axisLocked, resolveCommit, damp, atEdge } from "../model/gesture";
+import { MOBILE_MAX } from "../../../lib/breakpoints";
 
 export function initSwipeTabs(ctx) {
-  if (!window.matchMedia("(max-width: 899px)").matches &&
+  if (!window.matchMedia("(max-width: " + MOBILE_MAX + "px)").matches &&
       !window.matchMedia("(pointer: coarse)").matches) return;
   var tabs = ctx.tabs;
   var content = document.getElementById("content");

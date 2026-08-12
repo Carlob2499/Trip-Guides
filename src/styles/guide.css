@@ -1,7 +1,7 @@
 /* === GUIDE BASE (tokens, reset, noise texture live in base.css) ============= */
 /* scroll-padding keeps hash-linked sections clear of the sticky chrome. */
 html{scroll-behavior:smooth;scroll-padding-top:var(--chrome-h)}
-.topbar,header,.shell,footer{position:relative;z-index:1}
+.topbar,header,.shell-q,.shell,footer{position:relative;z-index:1}
 /* Quiet Edition (R1): display and body are BOTH Literata — headings are simply more of
    the reading face, cut for display by the optical-size axis. */
 h1{font-family:var(--font-display);font-weight:620;letter-spacing:-.012em;line-height:1.02;text-wrap:balance}
@@ -119,6 +119,8 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
    progress bar entirely. A viewport query rather than a container one on purpose — .read-prog
    is fixed page chrome, positioned against the viewport, which is the one thing chrome may
    legitimately ask about. */
+/* bp:MOBILE_MAX+1 — src/lib/breakpoints.ts. The phone ceiling's complement: this is "above the
+   phone model", so it has to move with MOBILE_MAX or a 1px band gets both the bar and the rail. */
 @media(min-width:900px){.read-prog{display:none}}
 /* Tactile press feedback — guide action buttons compress on :active and spring
    back on release (var(--ease-spring) overshoot on the transform channel) for a
@@ -134,22 +136,34 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
    column (--read) for legibility; sights (image grid) and maps break out to fill
    the shell — see READING COLUMN below. */
 :root{--read:42rem}
-/* R5 — .shell is THE query container, and it is deliberately the shell rather than the content
-   column (TOKENS.md §7 calls it "the guide body"; here that body is a rail plus a reading
+/* R5 — the guide body is THE query container, and it is deliberately the shell rather than the
+   content column (TOKENS.md §7 calls it "the guide body"; here that body is a rail plus a reading
    column, and both have to agree on which model they are in).
-   Naming .content instead was tried and is wrong: on a 744px tablet the rail takes a 200-240px
+   Naming .content instead was tried and is wrong: on a tablet the rail takes a 200-240px
    column, so .content measures ~544px — the rail would render its tablet model while the body
    beside it rendered its phone model, at the same instant, on the same screen. One container
    above both makes that state unrepresentable.
    inline-size, never `size`: `size` contains the block axis too, and this element's height is
-   content-driven — it would collapse. */
-.shell{max-width:1400px;margin:0 auto;padding:0 1.1rem;container-type:inline-size;container-name:guide}
+   content-driven — it would collapse.
+
+   .shell-q, NOT .shell, carries the container — and that split is the whole point of this
+   element existing. An element can never match a size query against its own named container:
+   the query is answered by the nearest ANCESTOR container, so `container-name:guide` on .shell
+   plus `@container guide (…){.shell{…}}` matched nothing and the tablet two-column grid never
+   applied at any width (proven by probe: a CHILD of .shell received the query's value, .shell
+   did not). .shell-q takes the box — the cap, the centring, the gutters, the containment — and
+   .shell becomes a plain child of it, so the queries below can finally reach it. The query box's
+   inline size is unchanged by the move: .shell-q's content box is exactly what .shell's used
+   to be, so every threshold still means what it measured before. */
+.shell-q{max-width:1400px;margin:0 auto;padding:0 1.1rem;container-type:inline-size;container-name:guide}
 
 /* The rail sits BESIDE the reading column only on the tablet model; above it on the other two.
    One grid, three shapes, no repositioning in JS. */
-@container guide (min-width: 744px){
+/* bp:TABLET_MIN — src/lib/breakpoints.ts */
+@container guide (min-width: 720px){
   .shell{--gutter:18px;display:grid;grid-template-columns:minmax(200px,240px) minmax(0,1fr);gap:var(--gutter);align-items:start}
 }
+/* bp:DESKTOP_MIN — src/lib/breakpoints.ts */
 @container guide (min-width: 1180px){
   /* Horizontal spine again — the rail spans the full width above the reading column. */
   .shell{--gutter:20px;grid-template-columns:minmax(0,1fr);gap:0}
@@ -165,7 +179,10 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 /* R5 CONTAINER SCAFFOLD (design_handoff_guide_ui/TOKENS.md §7). The guide body is a QUERY
    CONTAINER, and every responsive decision inside it switches on the container's own inline
    size — never on the viewport, never on a device check, never on window.innerWidth. Three
-   models, two thresholds: <744 phone · 744-1179 tablet · >=1180 desktop.
+   models, two thresholds, both from src/lib/breakpoints.ts: <720 phone · 720-1179 tablet ·
+   >=1180 desktop. The tablet floor was 744 until 2026-08-12 and measured nothing: the query box
+   is the viewport less .shell-q's own 1.1rem gutters, so a 768px iPad reported 732.8px and took
+   the phone model — the commonest tablet on earth, under the threshold written for it.
    Why this and not media queries: one build has to serve phone, tablet and desktop with no
    user-agent branch, and a folding phone that measures 673px unfolded gets the phone model in
    portrait and the tablet model in landscape with ZERO code — it falls straight out of the
@@ -198,8 +215,32 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
    PLACEMENT in a title row — the leading gap and the no-wrap that keeps "⚠ verified …"
    on one line. */
 .stale-pill{margin-left:.55rem;white-space:nowrap}
-/* Below 900px the sticky chrome is shorter — retune --chrome-h once; scroll-padding
+/* Verification stamp (staleness-ui.js) — the pill's HEALTHY counterpart, and the per-section
+   half of CLAUDE.md's "guide-level + per-section Checked [date] stamps". Nothing rendered here
+   before: only the downgrade drew, so a verified section and an unverified one were visually
+   identical and the Verified property had no surface of its own.
+
+   Zero new design. This is SPEC-COMPONENTS §2's Stamp row — Source Sans 3, .82rem
+   (--text-control renders that exact value), .08em, 640, "1px of its own ink, square" — which
+   is the same declaration set .hl-stamp (health.css) and .atlas-stamp already make, and which
+   the design-handoff prototype's own per-section stamp writes as
+   stS("var(--green)") = {--fs, 640, .08em, color:c, border:1px solid c}. --green because that
+   prototype paints the section stamp green and this system already spends --green on exactly
+   this claim (.hl-stamp.s-proven, .atlas-stamp--complete); health.css records it as
+   contrast-tested on --card, and it clears 4.5:1 on --bg in both themes too, which is the
+   ground the non-carded blocks (days/sights/venues/divergences) put it on.
+   inline-block, not inline: inside .block-title-row flex blockifies it anyway, but under a
+   Panel's .pnl-headings it sits in normal flow, where an inline box's padding and border would
+   bleed over the line above. Placement (the leading gap, the no-wrap) matches .stale-pill's. */
+.checked-stamp{
+  display:inline-block;margin-left:.55rem;white-space:nowrap;
+  font-family:var(--font-data);font-size:var(--text-control);font-weight:640;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--green);
+  border:1px solid currentColor;border-radius:0;padding:.15rem .5rem;
+}
+/* Below the phone ceiling the sticky chrome is shorter — retune --chrome-h once; scroll-padding
    and every scroll-margin above follow automatically. */
+/* bp:MOBILE_MAX — src/lib/breakpoints.ts */
 @media(max-width:899px){html{--chrome-h:82px}}
 
 /* === READING COLUMN (wide desktop) ========================================= */
@@ -294,7 +335,7 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
    rule below (same selector, same specificity — placed before it here, the base rule would win
    on source order and silently cancel this half of the fix, which is exactly what happened on
    first pass: verified live, only the --shell half took effect). */
-@media(max-width:599px){.shell{padding:0 .8rem}.card p{line-height:1.5}}
+@media(max-width:599px){.shell-q{padding:0 .8rem}.card p{line-height:1.5}}
 .card p+p{margin-top:.85rem}
 .card ul,.card ol{padding-left:1.3rem;margin:.45rem 0}
 .card li{margin-bottom:.3rem;line-height:1.65}
@@ -378,9 +419,10 @@ ol.steps li:not(:last-child)::after{content:"";position:absolute;left:calc(.725r
 footer{border-top:1px solid var(--rule2);text-align:center;padding:1.7rem 1.1rem;color:var(--muted);font-size:var(--text-control);margin-top:1rem}
 
 /* === MOBILE: BOTTOM BAR + SLIDE-UP SECTION SHEET ============================ */
-/* Hidden on desktop — shown only below 900 px */
+/* Hidden on desktop — shown only at or below the phone ceiling */
 .botbar{display:none}
 .sheet,.sheet-backdrop{display:none}
+/* bp:MOBILE_MAX — src/lib/breakpoints.ts */
 @media(max-width:899px){
   .content{padding-bottom:5.5rem}
   /* R2 hid the tab strip entirely below 900px and made the journey sheet the sole section
@@ -696,6 +738,10 @@ details.card.is-collapsible>.block-body{padding:1.1rem 1.4rem 1.25rem}
    scrollWidth exceeded clientWidth on fifteen of them and NOTHING could scroll, so the last
    column of each was on the page and unreachable — the failure `overflow-x:auto` exists to
    prevent, hiding in the one container the selector had never been extended to. */
+/* NOT the tablet threshold, despite now sharing its number: this is a VIEWPORT query about
+   whether a wide table fits the screen, and TABLET_MIN is a CONTAINER width about which body
+   model renders. They answer different questions at different measurements and are free to move
+   apart — do not "centralize" this one into src/lib/breakpoints.ts. */
 @media(max-width:720px){
   .card table,
   .pnl table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}

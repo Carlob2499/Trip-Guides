@@ -47,13 +47,24 @@
 /* M2/CLS: [data-hint-anchor] (the tab nav) is the positioning context — nav-hint OVERLAYS
    just below the tab bar instead of inserting into flow, so it can never push page content
    down after paint. It has its own background + shadow so it reads as a floating strip, not
-   a layout row. */
-[data-hint-anchor]{position:relative}
+   a layout row.
+
+   There is no `[data-hint-anchor]{position:relative}` rule here any more, and its absence is
+   load-bearing. The only element carrying that attribute is .grail, which declares
+   `position:sticky;top:var(--hdr-h)` — and both selectors are (0,1,0), so the later file won
+   the tie and the rail was position:RELATIVE at every width, desktop included. It therefore
+   never stuck to anything: `top` on a relative box is a displacement, so the rail simply sat
+   --hdr-h lower and painted over that much of the page's first screen. Nothing is lost by
+   deleting it, because the containing block this comment asks for is what a sticky element
+   already provides — sticky is a positioned box, so .nav-hint's `position:absolute;top:100%`
+   still resolves against .grail exactly as before. Do not re-add it; give any future anchor
+   its own class instead of a rule broad enough to collide with a positioned element. */
 .nav-hint{position:absolute;top:100%;left:0;right:0;display:flex;align-items:center;gap:.7rem;max-width:var(--read);margin:.5rem auto 0;padding:.55rem .9rem;background:color-mix(in srgb,var(--accent) 10%,var(--card));border:1px dashed color-mix(in srgb,var(--accent) 45%,var(--rule));border-radius:0;box-shadow:0 6px 16px rgba(0,0,0,.12);font-size:var(--text-small);color:var(--ink);transition:opacity .35s,transform .35s}
 .nav-hint-txt{flex:1;line-height:1.5}
 .nav-hint-x{flex:none;width:30px;height:30px;background:transparent;border:1px solid var(--rule);border-radius:999px;color:var(--muted);cursor:pointer;font-size:var(--text-control-sm)}
 .nav-hint-x:hover{color:var(--ink);border-color:var(--ink)}
 .nav-hint-out{opacity:0;transform:translateY(-8px)}
+/* bp:MOBILE_MAX — src/lib/breakpoints.ts */
 @media(max-width:899px){.nav-hint{margin-left:1rem;margin-right:1rem}}
 
 /* ── Next-section CTA — the guided reading chain ─────────────────────────── */
