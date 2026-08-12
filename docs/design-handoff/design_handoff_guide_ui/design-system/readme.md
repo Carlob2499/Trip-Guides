@@ -80,11 +80,11 @@ as the moment deserves.
 
 ### Colour
 
-Cool sage and ink with exactly one chromatic voice. Daylight is `#dfe3d9` paper, `#f8faf3`
-cards, `#171d24` ink. The chart room is `#0f1317` slate, `#242c34` cards, `#e8ece3` paper.
+Cool sage and ink with exactly one chromatic voice. Daylight is `#e3e7dc` paper, `#fbfcf6`
+cards, `#0f141a` ink. The chart room is `#0f1317` slate, `#242c34` cards, `#e8ece3` paper.
 Iron oxide `#9c4421` is the accent and **does not re-map between themes** — a guide's colour
 is a fact about the guide, not about the reader's display. Only its ink re-maps
-(`#80371b` → `#c78f78`).
+(`#783319` → `#c78f78`).
 
 Status is three pigments and no more: field green (done, confirmed), caution ochre (stale,
 unconfirmed, advisory), emergency red (SOS only, never derived from a guide's accent).

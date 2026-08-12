@@ -11,13 +11,13 @@
    ──────────────────────────────────────────────────────────────────────────── */
 
 :root {
-  /* Raw palette — daylight */
-  --survey-paper: #dfe3d9;
-  --survey-paper-sunken: #d2d7c8;
-  --card-paper: #f8faf3;
-  --map-ink: #171d24;
-  --ink-muted: #4e5747;
-  --hairline: #bec6b2;
+  /* Raw palette — daylight (R5 palette lift, 2026-08-11 — matches shipped base.css) */
+  --survey-paper: #e3e7dc;
+  --survey-paper-sunken: #ced5c4;
+  --card-paper: #fbfcf6;
+  --map-ink: #0f141a;
+  --ink-muted: #3c4534;
+  --hairline: #a9b39b;
   --hairline-strong: #8a9480;
 
   /* Raw palette — the chart room */
@@ -31,7 +31,7 @@
 
   /* Identity + status */
   --surveyors-red-oxide: #9c4421;
-  --accent-ink: #80371b;
+  --accent-ink: #783319; /* recomputed by accentTokens() when the sunken bed darkened — 4.5:1 on --sunken */
   --accent-ink-dark: #c78f78;
   --on-accent: #f0d2c7;
   --field-green: #396345;
@@ -57,7 +57,7 @@
   --rule: #a9b39b;
   --rule2: #8a9480;
   --accent: #9c4421;
-  --aink: #80371b;
+  --aink: #783319;
   --on-aink: #f0d2c7;
   --green: #396345;
   --on-green: #ffffff;
