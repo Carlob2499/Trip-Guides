@@ -7,11 +7,8 @@ import { test, expect, type Page } from "@playwright/test";
 
 const KOREA = "/Trip-Guides/guides/korea/";
 
-/* Freeze the page clock before any script runs, so `Date` is the trip's own week.
-   install() is a once-per-page operation; the tests below move the clock three times in one
-   test, so every call after the first sets the time instead. Calling install() repeatedly
-   worked most of the time and lost a race under full-suite load, which is the worst way for a
-   test helper to be wrong. */
+/* Freeze the clock before any script runs. install() is once-per-page — repeat calls set the
+   time instead, because calling it twice lost a race under full-suite load. */
 const installed = new WeakSet<Page>();
 async function atDate(page: Page, iso: string) {
   if (installed.has(page)) {
@@ -78,24 +75,25 @@ test("⌁ the next leg is absent before the trip and after it", async ({ page })
 });
 
 test("the live-state column stamps the trip's state, and the stamp follows the clock", async ({ page }) => {
-  // Three states, one page, three different days. The stamp is the R5 red-ink rule's second
-  // moment, so "now" is also the only one of the three that takes the accent.
-  await atDate(page, "2026-07-09T06:00:00");
-  await page.goto(KOREA, { waitUntil: "networkidle" });
-  await expect(page.locator("#mastState")).toHaveText(/on this trip now/i);
-  await expect(page.locator("#mastState")).toHaveAttribute("data-state", "now");
-  await expect(page.locator("#mastWhen")).toHaveText(/Day \d+ of \d+/);
-
-  await atDate(page, "2026-05-01T09:00:00");
-  await page.goto(KOREA, { waitUntil: "networkidle" });
-  await expect(page.locator("#mastState")).toHaveText(/upcoming/i);
-  // ⌁ Off the trip, the day-and-clock row is two true facts that mean nothing here.
-  await expect(page.locator("#mastWhen")).toBeHidden();
-
-  await atDate(page, "2026-09-01T09:00:00");
-  await page.goto(KOREA, { waitUntil: "networkidle" });
-  await expect(page.locator("#mastState")).toHaveText(/complete/i);
-  await expect(page.locator("#mastWhen")).toBeHidden();
+  /* Three states, one page, three different days. `domcontentloaded`, not `networkidle`:
+     networkidle waits on the guide's third-party cover images, so this failed twice under
+     full-suite load and passed alone — measuring the machine. Every assertion auto-retries. */
+  for (const [when, state, dayRow] of [
+    ["2026-07-09T06:00:00", /on this trip now/i, true],
+    ["2026-05-01T09:00:00", /upcoming/i, false],
+    ["2026-09-01T09:00:00", /complete/i, false],
+  ] as const) {
+    await atDate(page, when);
+    await page.goto(KOREA, { waitUntil: "domcontentloaded" });
+    await expect(page.locator("#mastState"), when).toHaveText(state);
+    // ⌁ Off the trip, the day-and-clock row is two true facts that mean nothing here.
+    if (dayRow) {
+      await expect(page.locator("#mastState")).toHaveAttribute("data-state", "now");
+      await expect(page.locator("#mastWhen")).toHaveText(/Day \d+ of \d+/);
+    } else {
+      await expect(page.locator("#mastWhen"), when).toBeHidden();
+    }
+  }
 });
 
 test("⌁ the counted progress row agrees with the checklist it counts", async ({ page }) => {

@@ -686,9 +686,20 @@ details.card.is-collapsible>.block-body{padding:1.1rem 1.4rem 1.25rem}
 .card tbody tr:last-child td{border-bottom:none}
 .card tbody tr:hover td{background:var(--bg2)}
 /* On phones/tablets a multi-column table (e.g. raid counter charts) can exceed the
-   viewport; make it scroll horizontally instead of being clipped by overflow-x:clip.
-   Desktop keeps the normal full-width table. */
-@media(max-width:720px){.card table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}}
+   viewport; make it scroll horizontally instead of being clipped. Desktop keeps the normal
+   full-width table.
+
+   `.pnl table` joined `.card table` on 2026-08-11. The rule was written when a guide's
+   content lived in .card, and panels — which is where content lives now — were never added
+   to it. Measured on Korea's Plan station at 375px: sixteen tables inside <details>, each
+   360-418px wide in a 313px column, with `details{overflow:hidden}` cutting the rest off.
+   scrollWidth exceeded clientWidth on fifteen of them and NOTHING could scroll, so the last
+   column of each was on the page and unreachable — the failure `overflow-x:auto` exists to
+   prevent, hiding in the one container the selector had never been extended to. */
+@media(max-width:720px){
+  .card table,
+  .pnl table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+}
 details{margin:.3rem 0;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
 details summary{cursor:pointer;padding:.55rem .8rem;font-weight:600;font-size:var(--text-small);list-style:none;display:flex;align-items:center;gap:.5rem;user-select:none;background:var(--bg2)}
 details summary::-webkit-details-marker{display:none}

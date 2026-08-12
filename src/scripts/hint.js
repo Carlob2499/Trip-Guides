@@ -75,7 +75,19 @@ function closeAll(except) {
 
 document.addEventListener("click", (e) => {
   const btn = e.target.closest?.("[data-hint-btn]");
-  if (!btn) { closeAll(null); return; }
+  if (!btn) {
+    closeAll(null);
+    /* Re-fit after any other click, because the idle pass above can only measure what was
+       laid out when it ran. A station the rail has not opened yet is `hidden`, so its bubbles
+       measure 0x0, take no shift, and keep overhanging the right edge once revealed — which
+       is how the Tools station (the LAST stop on every guide, hidden at load by definition)
+       ended up with a 461px bubble on a 375px screen. Tapping one still clamped it, because
+       that path calls fit() directly; what stayed wrong was the un-revealed width, which is
+       the same measurement this file already refuses to ship a lie about. Idle-scheduled and
+       read-only, so a click that opened nothing costs nothing. */
+    idle(fitAll);
+    return;
+  }
   const hint = btn.closest("[data-hint]");
   if (!hint) return;
   // The button is often inside a larger control (a Panel header, a tab). Asking what
