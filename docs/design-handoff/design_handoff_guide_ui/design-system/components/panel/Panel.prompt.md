@@ -8,5 +8,5 @@ Use `Panel` for every card-shaped thing in Waypoint — guide sections, tool pan
 
 - `span` for internally-gridded types: sights, venues, days, budget, map, divergences, and any list over five items.
 - `collapsed` panels must sort AFTER open ones in the grid — a collapsed title bar beside a full panel is what creates dead space.
-- Collapse animates height + opacity over 340ms `power2.inOut`, and the grid re-measures on the tween's update tick, not on complete.
+- Collapse animates `grid-template-rows` + opacity via CSS transition over 350ms `cubic-bezier(.16,1,.3,1)` (no GSAP), and the grid re-sorts on transitionend.
 - Collapse state and order persist in localStorage keyed per scope (guide slug + section group), never globally.

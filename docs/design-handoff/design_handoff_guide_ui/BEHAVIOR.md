@@ -49,7 +49,7 @@ Additions to `SPEC-COMPONENTS.md` §9. Everything there stays.
 | Sheet (all four) | 360ms | `cubic-bezier(.22,1,.36,1)` | `translateY` + opacity + delayed `visibility` |
 | Sheet rows | 28ms stagger | — | opacity + `translateY(8px)` |
 | Scrim | 220ms | ease | opacity |
-| Panel collapse | 340ms | `power2.inOut` (GSAP) | height + opacity, grid re-measures on **update** |
+| Panel collapse | 350ms (`--dur-reveal`) | `cubic-bezier(.16,1,.3,1)` (`--ease-out-expo`, CSS transition — no GSAP) | `grid-template-rows` + opacity, grid re-sorts on **transitionend** |
 | Chrome yield | 280ms | `cubic-bezier(.22,1,.36,1)` | `translateY` |
 | Present-band pulse | 2.4s loop | — | `box-shadow` spread + opacity |
 | Section reveal | 700ms, once, on intersect | — | `translateY(22px)` → 0 |

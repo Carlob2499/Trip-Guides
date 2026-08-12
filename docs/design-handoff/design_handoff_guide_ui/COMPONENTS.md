@@ -32,9 +32,9 @@ areas, both `data-noprint`.
 (`guide slug + section group`). A global key is wrong: collapsing the budget Panel in Korea must
 not collapse it in Denmark.
 
-**Collapse motion.** GSAP height + opacity, **340ms `power2.inOut`**, with the grid re-measuring
-on the tween's **update** tick — not only on complete, or the row height lags a frame and the
-page visibly jolts at the end of every collapse.
+**Collapse motion.** CSS transition (no GSAP) on `grid-template-rows` + opacity, **350ms
+`cubic-bezier(.16,1,.3,1)`** (`--dur-reveal` / `--ease-out-expo`), with the grid re-sorting on
+the body's **transitionend** (falling back to a timeout if the tab is hidden mid-transition).
 
 Each section group also gets a **COLLAPSE ALL / EXPAND ALL** control in its header.
 

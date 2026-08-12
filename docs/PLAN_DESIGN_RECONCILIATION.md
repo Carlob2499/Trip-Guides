@@ -247,22 +247,47 @@ modes, build-start instructions). Nothing like it exists in the repo.
   the repo copy).
 - [ ] Verify the skill loads and triggers (one throwaway invocation in a test session).
 
-### B2. `HANDOFF.md` (P3 top-level) diff-check
+### B2. `HANDOFF.md` (P3 top-level) diff-check — RESOLVED 2026-08-12
 
 The 13 committed docs (`00-START-HERE` … `TOKENS.md`) were derived from it. Insurance check
 that nothing was lost in derivation:
 
-- [ ] Fetch P3 `HANDOFF.md`; diff each numbered section against its committed counterpart
+- [x] Fetch P3 `HANDOFF.md`; diff each numbered section against its committed counterpart
   (§2→COMPONENTS/BEHAVIOR, §7→FALLBACKS, §9→SUPERSEDES, §10→motion tables, §14→TESTS).
-- [ ] Anything present in HANDOFF.md but absent from the 13 docs: add to the right doc, same
+- [x] Anything present in HANDOFF.md but absent from the 13 docs: add to the right doc, same
   commit. Expected result is "nothing lost" — record that explicitly if so.
 
-### B3. `CLAUDE-SNIPPET.md` (P1) absorption check
+  **Nothing lost.** Fetched P3's raw top-level `HANDOFF.md` and diffed it (CRLF-normalized)
+  against the committed `docs/design-handoff/design_handoff_guide_ui/HANDOFF-R5-NARRATIVE.md`:
+  byte-identical, zero diff lines. The 13 derived docs already carry everything HANDOFF.md
+  states.
 
-- [ ] Confirm each of its hard rules has a live home (CLAUDE.md Design Fidelity §, SPEC,
+### B3. `CLAUDE-SNIPPET.md` (P1) absorption check — RESOLVED 2026-08-12
+
+- [x] Confirm each of its hard rules has a live home (CLAUDE.md Design Fidelity §, SPEC,
   check-drift, or a test). Known open verify: **"panel collapse is 340ms power2.inOut"** —
   confirm `docs/reference/motion.md` + shipped GSAP call agree; if they drifted, the shipped,
   tested value wins and the docs align to it.
+
+  **Found a real drift, now corrected.** The panel-collapse claim ("GSAP, 340ms
+  `power2.inOut`") never lived in `motion.md` — it lived in `BEHAVIOR.md`, `COMPONENTS.md`,
+  and `Panel.prompt.md` (all P3-derived). Checked against the shipped implementation
+  (`src/features/panel/ui/collapse.js` + `styles.css`): there is **no GSAP** in Panel
+  collapse — it's a pure CSS transition on `grid-template-rows` + opacity, using
+  `--dur-reveal: 350ms` and `--ease-out-expo: cubic-bezier(.16,1,.3,1)` (`src/styles/base.css`),
+  and the grid re-sorts on the body's `transitionend` (with a hidden-tab timeout fallback in
+  `ui/grid.js`) — not on a GSAP "update" tick, which doesn't exist here. Per this task's own
+  rule, the shipped/tested value wins: corrected all three docs (`BEHAVIOR.md`'s motion table,
+  `COMPONENTS.md`'s "Collapse motion" prose, `Panel.prompt.md`'s bullet) to state 350ms
+  `cubic-bezier(.16,1,.3,1)` CSS transition, re-sort-on-transitionend, no GSAP.
+
+  Every other hard rule in the snippet already has a live home: colour tokens + radius +
+  typeface + safe-area + transform/opacity-only motion are all machine-checked by
+  `check-drift.mjs`; `ANTIPATTERNS.md` covers "entrance animations on the table view," "never
+  re-tune the globe/pin-card solver," and "never port `prototype/trip-split.js` back into the
+  repo"; the Honest-property doctrine (never invent a fact, never soften a gap block) is the
+  project's own core "What Waypoint Is" rule in `CLAUDE.md`; `ACCEPTANCE.md`'s phase gates are
+  already the Ship Loop's own drift/test gates.
 
 ### B4. `shots/` triage (P3, ~45 images)
 
@@ -274,14 +299,49 @@ Working captures from the design iterations (`01-fin`, `02-final`, `night`, `sed
 - [ ] Keepers land in `docs/design-handoff/design_handoff_guide_ui/shots/` with one INDEX.md
   line each; the rest are noted as reviewed-and-skipped. Do NOT commit all 45 blindly.
 
-### B5. Prototype deep-read: `Waypoint Arrival.dc.html` + `Waypoint Sedona.dc.html`
+### B5. Prototype deep-read: `Waypoint Arrival.dc.html` + `Waypoint Sedona.dc.html` — RESOLVED 2026-08-12
 
 Both exist in the repo but neither had a dedicated build ticket in R5's order.
 
-- [ ] Arrival: diff against the shipped hub Cover (CONTEXT "Cover" entry). Log divergences
+- [x] Arrival: diff against the shipped hub Cover (CONTEXT "Cover" entry). Log divergences
   into the A-table.
-- [ ] Sedona: diff against the shipped single-city guide rendering (strict kicker split,
+
+  **No gap.** Compared the prototype's Cover frame (desktop + mobile) against
+  `src/features/atlas/ui/cover.js` + `src/styles/atlas-cover.css` + the markup in
+  `src/pages/index.astro:269-278`. Mark, wordmark, subline copy ("VERIFIED FIELD GUIDES"),
+  CTA copy ("Enter the atlas"), and scroll indicator are byte-identical to the prototype.
+  The prototype's own annotation ("The wordmark... FLIPs... over 620ms") matches the shipped
+  `.62s cubic-bezier(.22,1,.36,1)` FLIP transition in `cover.js` exactly.
+  One low-severity divergence worth a follow-up, not a ticket-blocking gap: the prototype's
+  caption claims the cover dismisses on "any click, scroll or wheel," but the shipped
+  listeners are only `click` and `wheel` (`cover.js:101-102`) — a touchscreen swipe/scroll
+  gesture (as opposed to a tap) won't dismiss it, since `wheel` doesn't fire from touch
+  scrolling. In practice this is low-impact: the whole full-viewport cover is a tap target,
+  and the 4200ms auto-open timer bounds the wait either way — but if touch-swipe-to-dismiss
+  is wanted, `cover.js` needs a `touchstart`/`touchmove` listener alongside `wheel`.
+
+- [x] Sedona: diff against the shipped single-city guide rendering (strict kicker split,
   no cities row). Log into the A-table.
+
+  **No gap — confirms the shipped behavior, doesn't match the prototype's own demo data.**
+  The real shipped `us` guide's kicker (`src/content/guides/us/_guide.json`) is
+  `"Sedona, Arizona — Sep 2–8, 2026"`, which `cityLine()` returns `null` for (this exact
+  string is a named test case in `src/lib/plate-line.test.ts`) — so `GuideLayout.astro`
+  renders no `.mast-cities` row and keeps the whole kicker in the eyebrow, exactly as the
+  plan describes. The Sedona *prototype*, however, mocks a richer multi-stop trip and shows
+  a "Sedona · Oak Creek · Phoenix" cities row (prototype line 86) styled like Korea's — that
+  never shipped; the guide's real authored content is simpler than the prototype's demo data
+  turned out to be. Categorized as prototype-only noise (illustrative placeholder superseded
+  by the real content decision), not a code gap.
+
+  The prototype's "What is absent" panel (9 honest-absence states: no cover photo, no field
+  log station, no present-moment band, no day walked, nothing ticked shows its denominator,
+  Trip Split reads $0.00 without seeding from the budget forecast, no resume line, no
+  sourced rate, gaps rendered in ochre boxes) all map to doctrine already recorded elsewhere
+  in this plan/CONTEXT.md rather than new findings — most directly, `GapBlock.astro` and the
+  no-cover plate are already confirmed shipped and unit-tested (CONTEXT.md, 2026-08-12,
+  §H3, this same reconciliation arc) even though no real guide has exercised the no-cover
+  state in production yet. No further action.
 
 ---
 
