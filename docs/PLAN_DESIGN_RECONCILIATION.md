@@ -78,9 +78,10 @@ decision — cite it) · `ASK` (a genuine fork — put it to the creator, never 
 
 | Surface | Finding | Verdict | Action |
 |---------|---------|---------|--------|
-| Guide | `.transit-link` (≤189/guide) and `.dchip` (≤12) under the 44px floor | **ASK** (open since R5) | The density call in `tests/visual/a11y.spec.ts` `TARGET_BASELINE` — creator decides; counts may only shrink |
-| Guide | Bottom-bar slots + day chips shipped as full pills; kit mobile shots ambiguous | **ASK** | SPEC rule 1 visual confirm against P3 `shots/` mobile captures |
-| Guide | Gap block (`GapBlock.astro`) and "no-cover" plate have **never rendered** | FIX (demonstrate) | Stage a demonstration: one real unconfirmed sight or a cover-less draft; screenshot both states; then revert if staged |
+| Guide | `.transit-link` (≤189/guide) and `.dchip` (≤12) under the 44px floor | **DECIDED** (2026-08-12, CONTEXT.md) | Split ruling: `.transit-link` RAISE (touch-target expansion, C2); `.scrub-fit .dchip` KEEP baselined (8-10/row is a load-bearing design constraint, not neglect) — see CONTEXT.md Decisions |
+| Guide | Bottom-bar slots shipped as full pills | **No gap** (2026-08-12) | `.botslot` (mobile-nav.css:41-47) matches `prototypes/Waypoint Guide Mobile.dc.html` property-for-property — closed |
+| Guide | Day chips (`.dchip`) shipped as filled bordered pills | **FIX** (2026-08-12, DECIDED — CONTEXT.md) | SPEC rule 1 + 3 independent P3 sources agree: no border/radius/fill, `border-bottom` underline instead, active ground `--sunken` not `--accent`. Fix table + contrast re-derivation requirement in CONTEXT.md Decisions — implement in `planner.css` |
+| Guide | Gap block (`GapBlock.astro`) and "no-cover" plate have **never rendered** | FIX (demonstrate) | **DECIDED** (2026-08-12, CONTEXT.md): demonstrate via an isolated test fixture (Playwright/vitest, mock unconfirmed-fact data) — never stage on a real/draft guide, even reverted |
 | Tools | Budget sheet prints with no preview ([#47](https://github.com/Carlob2499/Trip-Guides/issues/47)) | FIX | Preview-then-print shell; `window.print()` stays synchronous with the gesture (no await before it — the popup-blocker boundary) |
 | Hub | Globe pin click should fly-to + cover-hero popup ([#46](https://github.com/Carlob2499/Trip-Guides/issues/46)) | FIX | Per issue spec; do not re-tune the collision solver (SPEC §8 "do not simplify") |
 | Hub/Guide | [#45](https://github.com/Carlob2499/Trip-Guides/issues/45) claims flag chip/gap/prose dots "unbuilt" | Stale issue | Close with verification links: `facts.mjs:74`, `GapBlock.astro`, `provenance-dot.js` |
@@ -166,10 +167,26 @@ not novelty:
 
 - [ ] **C1. Drift-baseline paydown**: 150 real violations (`scripts/drift-baseline.json`,
   sums 153; two categories already under). Work file-by-file; after each drop, re-run
-  `npm run drift` and tighten the baseline with `--update` in the same commit so improvement
-  can't regress. Target: guide.css RADIUS(25) and ELEVATION(4) first — highest counts.
-- [ ] **C2. The 44px decision implemented** (whichever way the creator ruled in A2) and
-  `TARGET_BASELINE` shrunk or removed.
+  `npm run drift` and tighten the baseline with `--update` **in the same commit** (per-commit
+  cadence — CONTEXT.md Decisions, §H5). Target: guide.css RADIUS(25) and ELEVATION(4) first.
+- [ ] **C2a. Day-chip pill→underline fix** — DECIDED (CONTEXT.md, §H2, do this BEFORE C2b since
+  it changes the chip's horizontal footprint): in `planner.css`, `.dchip` loses `border-radius`,
+  `border`, and `background:var(--card)` (→ `border:0;border-bottom:2px solid transparent`,
+  `background:transparent`); `.dchip-active` ground moves from `var(--accent)` to `var(--sunken)`
+  with `border-bottom-color:var(--accent)` replacing the accent border. **Then** re-derive and
+  re-measure `.dchip-active .dchip-num`'s color against the new `--sunken` ground (the existing
+  3.58:1/2.56:1 comment assumed an `--accent` ground and is now stale) — update the comment with
+  the new measured ratios, don't just delete it. Verify against `mobile-nav.css`'s
+  `.scrub-fit .dchip` override — it should still only touch flex/padding, no change needed there.
+- [ ] **C2b. The 44px decision implemented** — DECIDED (CONTEXT.md, §H1): `.transit-link` gets a
+  touch-target expansion toward 44px (guide.css:324-327; room to grow since nothing else shares
+  its row — mind `.transit-links{gap:.35rem}`, tight enough that a naive hit-slop would overlap
+  adjacent pills, so size the expansion carefully and verify with real `getBoundingClientRect()`
+  measurements, not assumed math). For `.scrub-fit .dchip`: **re-measure after C2a ships** — the
+  underline shape may fit 8-10 chips at 44px where the pill couldn't (CONTEXT.md's §H2 update
+  note); if so, shrink/remove `TARGET_BASELINE.dchip`; if not, it stays baselined and the `why`
+  gets the drag/scrub-gesture rationale from CONTEXT.md instead of reading as still-open. Shrink
+  `TARGET_BASELINE.transit-link`'s max in `a11y.spec.ts` to match the new measured count either way.
 - [ ] **C3. Print**: the #47 preview shell shipped; `PRINT SHEET` force-opens every
   `[data-fold]` and hides every `[data-noprint]` (assert in a Playwright print test).
 - [ ] **C4. Sync the projects forward**: push the corrected token files back to P1
@@ -240,16 +257,24 @@ every box above is ticked; then archive it (header ritual) and close the loop in
 
 ## H. Clarifying questions (per-session ritual — Clarifying-Questions Doctrine)
 
-Open decisions a session must NOT settle alone. Put unanswered ones to the creator via
-`AskUserQuestion` at session start; record settlements in CONTEXT.md Decisions:
+Open decisions a session must NOT settle alone. Per the 2026-08-12 creator instruction ("Execute
+the plan. Judge the design forks."), items 1/3/5 were explicitly delegated to session judgment
+and are now DECIDED (recorded in CONTEXT.md Decisions — do not re-litigate). Item 2 is judged by
+a dedicated visual-confirmation pass (in progress as of 2026-08-12; check A2 for its resolved
+verdict before re-asking). Item 4 was never a real fork — B4 already states the retention
+criterion; sessions apply it, they don't re-decide it.
 
-1. **The 44px density call** (A2): raise `.transit-link` (wraps day-card link rows) and/or
-   `.dchip` (gives up whole-trip-in-one-row), or keep both baselined? — *the* open design fork.
-2. **SPEC rule-1 pills** (A2): bottom-bar slots + day chips as full pills — confirm or revise
-   against P3 shots.
-3. **Gap-block demonstration** (A2): stage it on a draft, or wait for a real research gap?
-   (Staging conflicts with "never invent a gap"; a staged-then-reverted demo may be
-   acceptable as a test fixture only — creator's call.)
-4. **`shots/` retention** (B4): which working captures earn a committed home?
-5. **Drift-baseline tightening cadence** (C1): per-commit `--update` (recommended, prevents
-   giveback) or milestone-only?
+1. ~~The 44px density call~~ — **DECIDED**, CONTEXT.md Decisions (2026-08-12): `.transit-link`
+   raises, `.scrub-fit .dchip` stays baselined. See §A2/§C2.
+2. ~~SPEC rule-1 pills~~ — **DECIDED**, CONTEXT.md Decisions (2026-08-12): bottom-bar slots
+   confirmed as-is (No gap); day chips REVISE (pill → underline, exact fix in CONTEXT.md and
+   §A2/§C2a). Note: DesignSync is not reachable from subagents — this verdict was built from the
+   repo's vendored `docs/design-handoff/design_handoff_guide_ui/` copy (prototypes, COMPONENTS.md,
+   TOKENS.md), not P3's live `shots/`, since those are DesignSync-only and unreachable to a
+   subagent. Sufficient evidence (3 independent sources) to decide without them.
+3. ~~Gap-block demonstration~~ — **DECIDED**, CONTEXT.md Decisions (2026-08-12): isolated test
+   fixture only, never a staged-then-reverted live guide edit.
+4. **`shots/` retention** (B4): not a fork — apply B4's stated criterion (keeps a state the
+   committed screenshot sets lack) mechanically during the triage pass.
+5. ~~Drift-baseline tightening cadence~~ — **DECIDED**, CONTEXT.md Decisions (2026-08-12):
+   per-commit `--update`, every commit that improves a category.

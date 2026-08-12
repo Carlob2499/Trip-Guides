@@ -177,7 +177,70 @@ the provenance dot, the ≈/⚠ flag chips, the stale pill, a photo credit. Thos
 type they annotate, and a 44px dot beside a 13px figure dominates the fact it is meant to
 footnote. Two real controls stay under the line on purpose, with counts that may only shrink
 (`TARGET_BASELINE` in a11y.spec.ts): `.transit-link` and `.dchip`. Both are density decisions
-across all four guides, and both are open questions rather than settled ones.
+across all four guides, and both were open questions until the design-reconciliation arc
+settled them (below) — do not re-litigate.
+
+**The 44px density fork splits by row-count ceiling, not by treating both controls alike**
+(2026-08-12, design-reconciliation arc, `docs/PLAN_DESIGN_RECONCILIATION.md` §H1). `.transit-link`
+(guide.css:324, `gap:.35rem`, wraps freely, 2-3 per day card) and `.scrub-fit .dchip`
+(mobile-nav.css:175, `flex:1 1 0;min-width:0`, up to 8-10 in one fixed 375px row) look like the
+same violation but are not: one has no row-count ceiling and the other's ceiling IS the design —
+the compact rail exists specifically to fit a whole trip's days in one glance. `.transit-link`:
+**raise** — implement a touch-target expansion toward 44px in C2; it is free to grow because
+nothing else shares its row. `.scrub-fit .dchip`: **keep baselined** — rejected raising it,
+because 44px-wide chips at 8-10 per row guarantee overflow past 375px and the drag/scrub gesture
+model (`src/features/mobile-nav/model/gesture.ts`) already makes inactive chips a secondary
+target during a continuous drag, not a discrete tap goal, which is a real mitigating factor axe
+cannot see. Note for implementers: `planner.css`'s separate `.dchip` (desktop day list,
+`min-height:44px` already) is a same-named, unrelated, already-compliant selector — do not
+"fix" it by mistake for the mobile-nav one.
+
+**Update (2026-08-12, same day, §H2 investigation):** the day-chip shape itself is changing
+(below) — P3's prototype achieves 8 chips at a full 44px in one 375px row using a flat
+underline treatment (`padding:0 3px`, no border/radius/fill) rather than a bordered pill, which
+removes the horizontal cost a rounded, bordered pill carries. This DOES NOT reopen the
+`.scrub-fit .dchip` ruling above — the row-count ceiling and gesture-model reasoning both still
+hold regardless of chip shape — but it means "keep baselined" should be re-measured once the
+pill→underline fix (below) ships, not assumed permanent. If the underline shape turns out to fit
+8-10 chips at 44px, shrink `TARGET_BASELINE.dchip` in the same commit; if it still doesn't,
+baselined stands and this note can be removed.
+
+**Day chips (`.dchip`) are a pill in shipped CSS; SPEC rule 1 and three independent P3 sources
+say they should not be** (2026-08-12, design-reconciliation arc, §H2). SPEC rule 1
+(`enforcement/SPEC-COMPONENTS.md:14`): "Radius is binary — `0` on anything that holds content or
+evidence, `999px` on anything you press." A day chip is evidence (which day you're on), not a
+button. `prototypes/Waypoint Guide Mobile.dc.html`, `COMPONENTS.md` §4, and `DayScrubber.jsx`
+independently agree: no border, no radius, no fill — a `border-bottom:2px solid` underline
+instead (transparent when inactive, `--accent` when active), active ground `--sunken` not
+`--accent`. Shipped `planner.css` (`.dchip`/`.dchip-active`, both `.dchip` implementations
+inherit from here) is a filled, bordered, `999px` pill — REVISE. Rejected leaving it as-is: SPEC
+rule 1 is not ambiguous here and three sources agree independently, which is stronger evidence
+than the single ambiguous kit reading this fork opened to resolve. The bottom-bar slots (a
+separate, actually-pressed control) DO stay `999px` pills — shipped `.botslot` already matches
+the prototype property-for-property; that half of the original A2 row is **No gap**, closed.
+Implementing the day-chip fix also invalidates the measured-contrast comment at
+`planner.css:14-16` (`--accent-ink` at 3.58:1/2.56:1 assumed an `--accent` ground) — whoever
+implements this must re-derive and re-measure `.dchip-active .dchip-num`'s color against the new
+`--sunken` ground, not carry the old value over. Also: `TOKENS.md` lines 124-126 claim a 14px
+radius exception for the thumb bar that contradicts both the prototype and its own line 119 —
+the prototype outranks it per CONTEXT.md's authority order; treat the exception paragraph as
+stale when C4 syncs tokens back to the projects.
+
+**A staged demonstration of a design state is a test fixture, never a live guide edit**
+(2026-08-12, design-reconciliation arc, §H3). `GapBlock.astro` and the no-cover plate have never
+rendered on any real guide, so their only proof-of-life would be staging one on a real guide and
+reverting — but "never invent a gap" (Plan §D row 8) is written to mean no *reader* ever sees an
+invented one, and a staged-then-reverted commit still ships that state to production for however
+long it's live. Rejected: staging on a draft guide. The screenshot/demonstration for A2's FIX row
+comes from an isolated test fixture (a Playwright/vitest spec rendering the component directly
+with mock unconfirmed-fact data) — real guide JSON is never touched to manufacture a demo.
+
+**Drift-baseline tightening happens every commit that improves a category, not at milestones**
+(2026-08-12, design-reconciliation arc, §H5). `scripts/drift-baseline.json` already documents
+"improvement can't regress" as its intent (Plan §C1). Rejected: milestone-only re-baselining —
+it lets a category regress back up between checkpoints and nobody notices until the milestone
+audit, silently spending the paydown work. Every commit that drops a category's count re-runs
+`npm run drift -- --update` in the same commit, so the baseline only ever moves down.
 
 **A hidden surface must leave the tab order, not just the screen** (2026-08-11). The journey
 sheet slid away on `translateY(100%)` and kept all ~90 of its links focusable and in the
