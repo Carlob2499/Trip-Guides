@@ -242,6 +242,61 @@ it lets a category regress back up between checkpoints and nobody notices until 
 audit, silently spending the paydown work. Every commit that drops a category's count re-runs
 `npm run drift -- --update` in the same commit, so the baseline only ever moves down.
 
+**Hub trip list orders current-trip-first, not alphabetical** (2026-08-12, design-reconciliation
+arc, A3 chunk 1). Shipped `dist/` renders the sheet/chip list alphabetically with the upcoming
+trip last; P1's reference and the page's own header copy ("up next first") both call for the
+current/upcoming trip first. Decided: reorder to current-trip-first. Rejected: keeping
+alphabetical and rewriting the header copy instead — no reason surfaced anywhere for alphabetical
+being the intended order, so the copy is correct and the sort is the bug.
+
+**Panel titles stay at `--text-h4` (20.8px), not SPEC's 1.45rem/23.2px**
+(2026-08-12, design-reconciliation arc, A3 chunk 3). `SPEC-COMPONENTS.md` §1 specifies
+`1.45rem/1.2` for `.pnl-title`; shipped uses the shared `--text-h4` token (20.8px), which is used
+elsewhere in the governed type scale. Decided: keep shipped. SPEC's guide-page prose has already
+proven stale twice over in this same audit (masthead coordinates and the plate-stamp number are
+both correctly-removed per earlier CONTEXT.md rulings that SPEC's prose doesn't reflect), so a
+third literal disagreement isn't strong enough evidence on its own to fork a shared token off its
+scale. Rejected: raising panel titles to a one-off 23.2px literal (introduces a size the type
+scale doesn't otherwise have) and re-deriving `--text-h4` globally (unbounded blast radius, no
+evidence the shared scale itself is wrong elsewhere it's used).
+
+**The route-order interactive picker's home is an open investigation, not settled**
+(2026-08-12, design-reconciliation arc, A3 chunk 5). P1 designed an interactive stop-picker +
+"shortest order" solver for the ROUTE ORDER tool station; shipped, that station is read-only
+analysis, and the interactive component (`features/route-opt/`, `route-opt.js:14`) is mounted on
+the itinerary (`.planner-days .day[data-day]`) instead. Rejected (for now): wiring it into the
+Tools station as the first move, even though the component already exists and the change would be
+small — moving or duplicating an existing interactive surface has real product implications
+(what happens to the itinerary mount?) beyond a mounting change, and the creator wants both
+surfaces reviewed together before choosing either direction. Not a FIX row until that review
+happens.
+
+**The tablet layout's dead `@container` self-reference is fixed alongside a full breakpoint
+centralization, not scoped narrowly** (2026-08-12, design-reconciliation arc, A3 chunk 7). Two
+compounding bugs, both real: (a) `.shell` declares `container-name:guide` on itself
+(`guide.css:146`) and then `@container guide (min-width:744px){.shell{…}}` tries to style `.shell`
+through that same query — an element can never match its own container, proven by injecting a
+probe rule where a child received the query's value and `.shell` did not — so the tablet
+two-column grid never applies at any width. (b) Separately, `.grail{position:sticky}` loses to
+`flight.css:51`'s `[data-hint-anchor]{position:relative}` at equal specificity (0,1,0), source
+order deciding the tie — the rail never sticks at ANY width, desktop included, which is why an
+earlier same-day audit chunk (guide-desktop) could only log this as an unverified ASK before the
+tablet chunk's independent probe confirmed the mechanism. (c) Even after fixing (a), the intended
+744px container threshold is high enough that a real iPad's ~732.8px container (768px viewport
+minus scrollbar) still falls under it — the single most common physical tablet size still
+wouldn't get the tablet model. Decided: fix all three together. Introduce one shared breakpoint
+source — both the tablet threshold and the mobile 899px cutoff are currently hardcoded literals
+scattered across 10 files (`guide.css`, `guide-rail/styles.css` for tablet; `guide.css`,
+`mobile-nav.css`, `flight.css`, `trip-split.css`, `SightsBlock.astro`, `mobile-nav/index.js`,
+`day-scrub.js`, `swipe-tabs.js` for mobile) — migrate all 10 to reference it, then fix the
+container self-reference and lower the tablet threshold (~720px) to land real iPads in the tablet
+model, in the same pass. Rejected: scoping just the container-query bug plus a literal threshold
+change first and centralizing later — the creator chose the larger pass explicitly, reasoning that
+the literal-scatter pattern is itself a contributor to "three disagreeing chrome regimes" (both
+the guide-desktop and tablet chunks independently found navigation-model files disagreeing about
+which body model applied at the same width) and letting it stand a second time just relocates the
+next version of the same bug.
+
 **A hidden surface must leave the tab order, not just the screen** (2026-08-11). The journey
 sheet slid away on `translateY(100%)` and kept all ~90 of its links focusable and in the
 accessibility tree. `display:none` fixes the tab order and kills the animation; `inert` does

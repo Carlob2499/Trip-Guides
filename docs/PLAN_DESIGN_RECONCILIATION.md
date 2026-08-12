@@ -86,7 +86,7 @@ decision — cite it) · `ASK` (a genuine fork — put it to the creator, never 
 | Hub | Globe pin click should fly-to + cover-hero popup ([#46](https://github.com/Carlob2499/Trip-Guides/issues/46)) | FIX | Per issue spec; do not re-tune the collision solver (SPEC §8 "do not simplify") |
 | Hub/Guide | [#45](https://github.com/Carlob2499/Trip-Guides/issues/45) claims flag chip/gap/prose dots "unbuilt" | Stale issue | Close with verification links: `facts.mjs:74`, `GapBlock.astro`, `provenance-dot.js` |
 | Guide | ThumbBar `seat()`/`slotLabel()`/`promoted()` | **No gap** | Verified shipped in `src/features/mobile-nav/model/rank.ts:57-89` — do not re-audit |
-| Guide | Tablet model (container queries 744/1180) | **No gap** | Verified shipped `src/styles/guide.css:150-153` |
+| Guide | Tablet model (container queries 744/1180) | **CORRECTED to FIX** (2026-08-12, A3 chunk 7 — supersedes this row's earlier "No gap") | The container query never matches: `.shell` names itself `container-name:guide` then `@container guide` tries to style `.shell` through that same name — an element can never query its own container. Tablet's two-column grid has never rendered at any width. Fix + breakpoint centralization: see "A3 Results" below and CONTEXT.md |
 
 **KEEP-RULING register** (cite, never "fix"): no hub tools door · `GMT+9` not `KST` · no sheet
 numbers on guide surfaces (`sheetOrdinal` lives for the hub index only) · Trip Split never
@@ -95,15 +95,140 @@ strict (single-city guides keep the whole kicker in the eyebrow).
 
 ### A3. Audit chunks (tick when the chunk's table rows are logged AND verdicts assigned)
 
-- [ ] **Hub desktop** vs P1 `screenshots/01–03, 13, 21` (cover, world, table, dark, light)
-- [ ] **Hub mobile** vs P2 `screenshots/01–04` (globe home, list scrolled, guide entry)
-- [ ] **Guide masthead + panels** vs P1 `04, 05, 14, 15, 17, 19` and P3 `shots/`
-- [ ] **Guide mobile chrome** (strip, thumb bar, sheets, journey) vs P3 `shots/` mobile set
-- [ ] **Tools** (4 stations) vs P1 `06, 07, 11, 12` — note jetlag is retired as a tool (reads in Plan)
-- [ ] **Notation family** vs P1 `16` + P3 the-gap/notation cards — dot, chip, stamp, reading, gap
-- [ ] **Tablet pass** at 744–1179 vs P3 `Waypoint Guide Tablet.dc.html` — the least-exercised model
+- [x] **Hub desktop** vs P1 `screenshots/01–03, 13, 21` (cover, world, table, dark, light)
+- [x] **Hub mobile** vs P2 `screenshots/01–04` (globe home, list scrolled, guide entry)
+- [x] **Guide masthead + panels** vs P1 `04, 05, 14, 15, 17, 19` and P3 `shots/`
+- [x] **Guide mobile chrome** (strip, thumb bar, sheets, journey) vs P3 `shots/` mobile set
+- [x] **Tools** (4 stations) vs P1 `06, 07, 11, 12` — note jetlag is retired as a tool (reads in Plan)
+- [x] **Notation family** vs P1 `16` + P3 the-gap/notation cards — dot, chip, stamp, reading, gap
+- [x] **Tablet pass** at 744–1179 vs P3 `Waypoint Guide Tablet.dc.html` — the least-exercised model
 - [ ] **All FIX rows implemented** (each through the full Ship Loop, §7)
-- [ ] **All ASK rows put to the creator** and their answers recorded in CONTEXT.md if fork-settling
+- [x] **All ASK rows put to the creator** — 4 genuine forks surfaced (trip ordering, panel-title
+  size, route-order picker, breakpoint scope); all answered and recorded in CONTEXT.md. Lower-
+  stakes ASKs from the audit (glyph shape, motion-duration deltas, wording nits) had a sane
+  default and were resolved inline per the Doctrine's own carve-out — see "A3 Results" below
+
+### A3 Results — consolidated findings (2026-08-12, all 7 chunks, run as 7 parallel `opulent:coder`
+agents against the built `dist/` — see task-notification log for full per-agent method notes:
+the Browser pane didn't composite frames in this headless run, shared across all 7 agents, so
+every finding below is DOM/computed-style/geometry evidence, not a screenshot. Two agents proved
+their findings mechanically (forced `transition:none`, injected `@container` probe rules) rather
+than resting on the unconfirmed pane — those are called out below. Ordered by severity so §7 can
+work top-down; each item is independently actionable without re-reading the original reports.
+
+#### Tier 0 — critical functional bugs (site is materially broken for a reader)
+
+| # | Bug | File(s) | Root cause | Fix |
+|---|-----|---------|------------|-----|
+| T0.1 | Mobile day-scrubber shows 8 identical clipped numerals — no active day, no date, ever | `mobile-nav.css:175` `.scrub-fit .dchip{transition:flex-grow}` | The transition pins computed `flex-grow` at its base value (`planner.css:9` `.dchip{flex:none}`); only `transition:none` releases it — proven live (6.8px → 32.5px) | Remove/scope the transition so `flex-grow` resolves. **Must land before or with C2a** — C2a's re-measurement step will produce garbage numbers against a collapsed rail |
+| T0.2 | Desktop + tablet tab rail (`.grail`) never sticks — scrolls fully off screen | `flight.css:51` `[data-hint-anchor]{position:relative}` vs `guide-rail/styles.css:22` `.grail{position:sticky}` | Equal specificity (0,1,0); `flight.css` loads later, `relative` wins the tie. The surviving `top:58px` displaces the box instead of sticking, so the rail also paints over the content's first 58px | Raise `.grail`'s sticky rule's specificity, or drop `position:relative` from `[data-hint-anchor]` — its own comment says it only needs a positioning context for `.nav-hint`, which `sticky` already provides |
+| T0.3 | Tablet two-column layout never renders at any width | `guide.css:146,150` — `.shell{container-name:guide}` then `@container guide(min-width:744px){.shell{…}}` | An element can never match its own container query — proven by injecting a probe rule where a child received the query's value and `.shell` did not | Move the grid rule onto `.shell`'s **parent**, or rename the container so `.shell` isn't both namer and target. Same pass as the breakpoint-centralization decision below (CONTEXT.md) |
+| T0.4 | 140 Korea reminder items show literal `&lt;b&gt;…&lt;/b&gt;` text instead of bold | `ReminderRow.astro:13` uses `{item.text}` | `ListBlock.astro:5` correctly uses `set:html` for the same allowlisted-`<b>` data; `ReminderRow.astro` double-escapes it | Switch `ReminderRow.astro:13` to the same `set:html` pattern |
+| T0.5 | No per-section `✓ CHECKED <date>` stamp renders anywhere — 28 of 29 verified `.block`s show no evidence of verification | `staleness-ui.js:28` only draws on the unhealthy path | The per-section stamp CLAUDE.md names as enforced is unconditional; shipped code only ever surfaces staleness, never freshness | Render the stamp on the healthy path too — needs a small design pass (glyph, placement) before implementing, not a one-line fix |
+
+#### Tier 1 — real gaps (fidelity + minor behavior), by area
+
+**Hub** — toggle `aria-pressed` on cold load doesn't match the rendered view (`index.astro:229-230`
+ships TABLE `true` while the page renders WORLD — wrong AT state pre-hydration, permanently wrong
+with JS off) · quick-card CTA is a bare text link on both desktop and mobile (`atlas.css:129-132`
+— should be a filled pill, breaks "no bare-text tap targets") · trip ordering to current-trip-first
+— **DECIDED**, implement (CONTEXT.md) · `atlas-world.css:5-7` comment claims mobile "widens the
+switch back to a full-bleed row," contradicting the shipped, correctly-ruled compact-header
+behavior — fix the comment before it misleads someone into "fixing" a non-bug · P2's own
+`02-home-list-scrolled.png` reference is byte-identical to `01` (md5 match) — the scrolled-state
+reference this chunk was chartered against never existed · `a11y.spec.ts:840`'s entire 9-device
+44px sweep only loads `/guides/korea/` — the hub has zero touch-target coverage at any width,
+extend the sweep to `/`.
+
+**Guide desktop** — panel `box-shadow` (`features/panel/styles.css:13`) — both P1 §1 and P3's
+`Panel.jsx` say none, remove · missing header→body hairline inside panels (`.panel__rule`, P1 §1 +
+P3 `Panel.jsx:58` agree), add · hardcoded non-token radii inside panels: `.anchor-btn` 3px
+(`guide.css:625`, ×12), `.copy-addr` 4px (`guide.css:630`), `.hol-clear` 7px (`guide.css:567`) — P3
+uses only 999px/50%/0, convert · grid column floor (304px vs spec 340px) and the missing >1100px
+18px-gap step — no visible difference at 1440px today, align while the file's open.
+
+**Guide mobile** — `.botbar-ind` radius `0px 0px 3px 3px`/`3px 3px 0 0` (`mobile-nav.css:84,225`)
+against the binary-radius rule, flatten to 0 · bottom-bar slot height 48px vs P3's 52-54px (not a
+44px-floor violation, worth matching while T0.1 touches this file) · contradictory code comments
+on slot count (`mobile-nav.css:15` says five, `:32` says four; three actually render) — fix
+whichever comment is wrong.
+
+**Tools** — route order missing the SUPERSEDES §5-required Maps handoff links (`OPEN IN MAPS ↗`
+per leg + one whole-day link) — `dayRouteLink()` already exists and works in the itinerary
+(`DaysBlock.astro:150`), just isn't called from the tool panel (distinct, decided-scope gap —
+**not** the held interactive-picker question below) · 5 radius violations: `.rm-new` 12px,
+`.rm-in-label`/`.rm-in-text` 8px, `.rm-privacy` `0 6px 6px 0`, `.tools-more` 6px (inherited from a
+**global** `guide.css:703 details{border-radius:6px}` hitting 17 elements site-wide — fix the
+global rule, not just `.tools-more`) · hardcoded `#d98a00` (`features/firebase/styles.css:30,49,52`,
+near-duplicate of `--warn` `#d9923f`) — replace with a token · dead jetlag CSS (`tools.css:77-81`)
+— housekeeping, remove.
+
+**Notation** — popover label rows (`.prov-popover dt`) render in Literata serif at
+11.52px/.04em/600 with no border where SPEC §2 wants Source Sans 3 `.82rem`/`.08em`/640/1px
+own-ink border — `.prov-popover` sets no `font-family` so it inherits prose serif; scope the fix to
+`dt` only (`.prov-claim` is correctly Literata already) · flag chip missing
+`text-transform:uppercase` (`FlagChip.jsx:15` has it, shipped doesn't — tracking without uppercase
+reads as a mistake per SPEC rule 4) · flag-chip pill splits a price range on Korea
+(`₩33,000 ≈ approx.–35,000 pp` — `facts.mjs:85-86` appends the pill after the value; the settled
+pill ruling never covered a token that's the first half of a range) · provenance dot
+`border-radius:50%` vs `ProvenanceDot.jsx`'s `999px` (visually identical on a square, but
+`check-drift.mjs` doesn't catch `%` radii — switch for consistency and checker coverage) ·
+stale-pill wording mismatch (popover uses SPEC wording, inline pill says
+`⚠ verified <date> — re-check` — pick one, apply everywhere) · missing `✓` glyph on the CHECKED
+stamp (SPEC + `notation.card.html:23`) · `.mast-stamp` border uses `--rule` where SPEC wants "1px
+of its own ink" (`currentColor`) · `.cal-badge` (`DaysBlock.astro:84`) `border-radius:4px` +
+`opacity:.85` over `--accent`/`--on-accent` — the opacity voids the measured contrast contract,
+fix radius and drop the opacity (or re-measure at .85 and record it if kept) · flag chip's `≈`/`⚠`
+glyph isn't `aria-hidden` (`FlagChip.jsx:17` has it, shipped doesn't — screen readers announce
+"almost equal to approx.").
+
+#### Tier 2 — gate/tooling hardening (fix the checkers, not just the CSS)
+
+- `no-device-checks.test.mjs`'s `PATTERN` (`:19`) doesn't match `matchMedia(...)` — three real
+  device-check violations (`day-scrub.js:20`, `mobile-nav/index.js:65`, `swipe-tabs.js:29-30`, all
+  branching the navigation model on a 899px viewport query) are invisible to the gate that exists
+  specifically to catch this class of bug — verbatim the regression its own header warns against.
+  Add `matchMedia` to the pattern.
+- `check-drift.mjs` doesn't catch `%`-radii (only literal px/rem) — the provenance-dot finding
+  above would've been silent otherwise. Extend the checker, or accept `50%` on a proven-square
+  element as an allowed radius synonym.
+- Extend CLAUDE.md's documented false-positive class 2 (box-shadow on FAB/menu-sheet/ping-sheet)
+  to explicitly name popovers — same overlay class, currently undocumented, so `.prov-popover`'s
+  elevation reads as an open question on every future audit pass.
+
+#### Open investigation — not yet a FIX row
+- Route-order **interactive picker** (the stop-picker + solver, distinct from the Maps-links gap
+  above) — **held**, see CONTEXT.md. Needs both surfaces (Tools station, itinerary mount) reviewed
+  together before choosing a direction.
+
+#### Backlog — content/research, not a code fix
+- `closed_days` is absent from every guide in the repo — half the Closures tool renders an honest
+  blank on every guide. Backfill is a research task (primary-source hours); route through
+  B-workstream / the guide-author skill, not this plan's A-workstream.
+- Sources tab content shape diverges across guides: US uses `<ul><li>`, Korea/Japan/Denmark use
+  `<br>`/`·`-separated prose. Only US matches the P1 reference. `<ul>` is the recommended canonical
+  shape (matches both the reference and the accessible-list pattern) — migrating the other three
+  guides' JSON is a content edit, route through the guide-author skill's continuity discipline.
+- `.gtab` (Sources tab chrome) is radius-0/no-fill where P1 shows pill tabs — this is the same
+  desktop spine-rail redesign that already superseded §4's pill-tab prose elsewhere (KEEP-RULING);
+  logged only so Sources isn't mistakenly reported as conforming to the stale P1 prose.
+- `.mast-credit` (photo credit) uses an `rgba()` literal outside the token system — minor, batch
+  with other token-literal cleanup (C1).
+
+#### Confirmed correct — do not re-touch
+Bottom-bar slots (999px pills) · SOS control · `.botslot`/`.bslot-mark` geometry · masthead plate
+frame, corner ticks, text column, chip geometry · accent identity (`--accent` never re-mapped,
+per-guide via `accent-tokens.ts`) · missing masthead coordinates (removed by ruling) · missing
+plate-stamp number (removed by ruling) · desktop spine rail replacing the old pill-tab row · panel
+radius (all 83 panels, both themes) · panel span/sort logic (`FULL_WIDTH_PANEL_TYPES`,
+`panelRank()`) · collapsed-panel title kept — **DECIDED**, CONTEXT.md · panel-title size 20.8px —
+**DECIDED**, CONTEXT.md · GapBlock absence (test-fixture-only, by ruling) · provenance-dot 44px
+exemption (notation, not a control) · Three Jobs Rule / 18% tint ceiling (enforced by a test) ·
+tablet thumb-bar-as-centred-pill · tablet station count (13, exact) · trip-split empty-state
+behavior (copy wording differs from `SUPERSEDES.md` §4's quoted text, but shipped copy is
+arguably better — amend the doc to match code, not the reverse) · Closures merged-panel layout
+(recommend ratifying against P1's two-panel reference, not reverting — low stakes, no live ASK
+needed).
 
 ---
 
@@ -259,10 +384,24 @@ every box above is ticked; then archive it (header ritual) and close the loop in
 
 Open decisions a session must NOT settle alone. Per the 2026-08-12 creator instruction ("Execute
 the plan. Judge the design forks."), items 1/3/5 were explicitly delegated to session judgment
-and are now DECIDED (recorded in CONTEXT.md Decisions — do not re-litigate). Item 2 is judged by
-a dedicated visual-confirmation pass (in progress as of 2026-08-12; check A2 for its resolved
-verdict before re-asking). Item 4 was never a real fork — B4 already states the retention
-criterion; sessions apply it, they don't re-decide it.
+and are now DECIDED (recorded in CONTEXT.md Decisions — do not re-litigate). Item 2 was judged by
+the A3 visual/DOM-confirmation pass, now **complete** (all 7 chunks — see "A3 Results" under §A
+above); its verdict is DECIDED (bottom-bar slots No-gap, day chips REVISE). Item 4 was never a
+real fork — B4 already states the retention criterion; sessions apply it, they don't re-decide it.
+
+**Round 2 — 4 new forks surfaced mid-execution by the A3 audit itself** (2026-08-12), triaged
+down from ~20+ raw ASK verdicts per the Doctrine's own "one sane default doesn't need asking"
+carve-out, put to the creator via `AskUserQuestion`, all now DECIDED and recorded in full in
+CONTEXT.md Decisions — do not re-litigate:
+6. ~~Hub trip-list ordering~~ — **DECIDED**: current-trip-first, not alphabetical.
+7. ~~Panel title size (20.8px shipped vs SPEC's 1.45rem/23.2px)~~ — **DECIDED**: keep shipped
+   20.8px; SPEC's guide-page prose has proven stale twice before.
+8. ~~Route-order interactive picker's home~~ — **DECIDED to HOLD**: review Tools station +
+   itinerary mount together before choosing a direction; logged as an open investigation in
+   "A3 Results," not a FIX row.
+9. ~~Tablet `@container` breakpoint fix scope~~ — **DECIDED**: centralize now, in the same pass —
+   one shared breakpoint source for both the ~744px tablet threshold and the 899px mobile cutoff
+   (currently hardcoded across 10 files), not a narrow scoped fix.
 
 1. ~~The 44px density call~~ — **DECIDED**, CONTEXT.md Decisions (2026-08-12): `.transit-link`
    raises, `.scrub-fit .dchip` stays baselined. See §A2/§C2.
