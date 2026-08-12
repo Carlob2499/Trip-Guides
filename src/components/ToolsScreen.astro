@@ -16,6 +16,11 @@ import TripSplit from "./TripSplit.astro";
 import ReminderRow from "./ReminderRow.astro";
 import { km } from "../features/trip-tools/index";
 import type { TripTools } from "../features/trip-tools/index";
+/* The itinerary's own Maps builder, not a second one. One place where a maps URL is
+   assembled means one place where it can be wrong (src/lib/transit-links.ts, called from
+   DaysBlock.astro for the day cards). It returns null rather than a partial route, which is
+   why every call below is rendered conditionally. */
+import { dayRouteLink } from "../lib/transit-links";
 
 interface Props {
   active: TripTools;
@@ -155,8 +160,26 @@ const rest = r.reminders.filter((i) => !i.book);
                   <b>{d.date}</b> {d.title && <span class="tools-dim">— {d.title}</span>}
                   <span class="tools-route-km">{km(d.currentKm)} as planned</span>
                 </p>
-                <ol class="tools-route-stops">
-                  {d.points.map((p) => <li>{p.name}</li>)}
+                {/* R5 turned this station from a table into a HAND-OFF (SUPERSEDES §5,
+                    COMPONENTS §12): the day is listed as its legs, and every leg carries its
+                    own Maps link, with one more for the whole day below. A leg is two
+                    consecutive LOCATED stops — route-plan.ts builds legs[i] from
+                    points[i] → points[i+1] in the guide's own order, so the coordinates for a
+                    leg are the point pair at the same index. Unlocated stops are in neither,
+                    and the line under the day says how many. */}
+                <ol class="tools-route-legs">
+                  {d.legs.map((leg, i) => {
+                    const href = dayRouteLink([d.points[i], d.points[i + 1]]);
+                    return (
+                      <li class="tools-route-leg">
+                        <span class="tools-route-leg-name">{leg.from} → {leg.to}</span>
+                        {href && (
+                          <a class="tools-route-map" href={href} target="_blank" rel="noopener">Open in maps ↗</a>
+                        )}
+                        <span class="tools-route-leg-km">{km(leg.km)}</span>
+                      </li>
+                    );
+                  })}
                 </ol>
                 {d.suggestion ? (
                   <p class="tools-route-sug">
@@ -168,6 +191,19 @@ const rest = r.reminders.filter((i) => !i.book);
                 {d.unlocatedCount > 0 && (
                   <p class="tools-dim">{d.unlocatedCount} stop{d.unlocatedCount > 1 ? "s" : ""} on this day has no coordinates yet, so it is not in the figure above.</p>
                 )}
+                {/* The whole-day link chains the guide's OWN order, never the suggestion above:
+                    nothing is reordered for you, so nothing hands off an order you did not
+                    choose. Same helper, same contract — absent if the day cannot honestly be
+                    drawn. The note beside it may not be dropped, for the reason planner.css
+                    states on the day card's copy of this link: the order is the guide's listing
+                    order and the distances behind it are straight-line, and a link presented as
+                    a transit route would assert a journey time nobody measured. */}
+                {(() => { const whole = dayRouteLink(d.points); return whole && (
+                  <p class="tools-route-all">
+                    <a class="tools-route-all-link" href={whole} target="_blank" rel="noopener">The whole day in maps ↗</a>
+                    <span class="tools-route-all-note">All {d.points.length} mapped stops in the guide's own order — straight-line, not a transit time</span>
+                  </p>
+                ); })()}
               </li>
             ))}
           </ul>

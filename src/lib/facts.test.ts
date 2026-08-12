@@ -92,6 +92,48 @@ describe("renderFactValue — ≈ is derived, never authored", () => {
     it("strips to honest plain text for the .ics/.gpx exports (tags dropped, inner text kept)", () => {
       expect(html.replace(/<[^>]*>/g, "")).toBe("60–70 min ≈ approx.");
     });
+    // The ≈ is decoration beside the word it decorates; without a name the chip announces
+    // "almost equal to approx." The design's FlagChip hides the glyph with aria-hidden, which
+    // this string can't do (prose-html.ts allows one <span> shape and it isn't this one) —
+    // aria-label reaches the same accessible name through an attribute the allowlist permits.
+    it("names itself 'approx.' so the ≈ isn't announced twice", () => {
+      expect(html).toContain('aria-label="approx."');
+    });
+  });
+});
+
+// A written range puts only its FIRST half in the registry ("{{fact:esim-low}}–35,000 for
+// 7–10 days"), so appending the pill straight after the value split the range down the middle
+// on every guide that writes prices that way: "₩26,000 ≈ approx.–35,000". The range's second
+// half travels with the value instead, and the pill sits after the whole span.
+describe("a fact token that opens a written range", () => {
+  const RANGE_FACTS = {
+    "esim-low": {
+      claim: "Korean eSIM, 7–10 days — low end", value: "₩26,000", state: "approx",
+      source_url: "https://example.com/esim", verified_on: "2026-07-01", shelf_life: "hours",
+    },
+    "coex-adult": { claim: "COEX Aquarium adult", value: "₩35,000", state: "clean" },
+  };
+
+  it("keeps the range whole and puts the pill after it, not between the halves", () => {
+    const { data } = interpolateFacts({ b: "Tickets {{fact:esim-low}}–35,000 pp." }, RANGE_FACTS);
+    expect(data.b).toMatch(/^Tickets ₩26,000–35,000 <a class="flag-chip flag-chip--approx" .*<\/a> pp\.$/);
+    expect(data.b).not.toContain("approx.–35,000");
+  });
+
+  it("reads as one honest range in the .ics/.gpx plain-text exports too", () => {
+    const { data } = interpolateFacts({ b: "{{fact:esim-low}}–35,000" }, RANGE_FACTS);
+    expect((data.b as string).replace(/<[^>]*>/g, "")).toBe("₩26,000–35,000 ≈ approx.");
+  });
+
+  it("leaves a spaced dash alone — that is prose punctuation, not a range", () => {
+    const { data } = interpolateFacts({ b: "{{fact:esim-low}} — 7 day plans." }, RANGE_FACTS);
+    expect(data.b).toMatch(/^₩26,000 <a .*<\/a> — 7 day plans\.$/);
+  });
+
+  it("leaves a clean fact's following text exactly where the author put it", () => {
+    const { data } = interpolateFacts({ b: "{{fact:coex-adult}}–40,000" }, RANGE_FACTS);
+    expect(data.b).toBe("₩35,000–40,000");
   });
 });
 

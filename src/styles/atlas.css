@@ -72,7 +72,13 @@
 }
 .atlas-chip {
   flex: 0 0 auto; display: inline-flex; align-items: center; gap: .4em;
-  min-height: 32px; padding: .3rem .8rem;
+  /* 32px → 44px. The jump rail is a row of real links and every one of them measured 32px tall
+     at all seven widths under 760px (the row is hidden above it, where world view owns the
+     screen). Vertical growth is free here in a way it is not for .scrub-fit .dchip: the row is
+     `overflow-x:auto` with `flex:0 0 auto` children, so it scrolls sideways rather than
+     compressing, and no fixed number of chips has to fit one 375px line. The row gets 12px
+     taller and scrolls exactly as it did. */
+  min-height: 44px; padding: .3rem .8rem;
   font-family: var(--font-data); font-weight: 640; font-size: var(--text-control-sm);
   letter-spacing: .08em; text-transform: uppercase;
   border: 1px solid var(--rule2); border-radius: 999px; color: var(--muted);
@@ -114,8 +120,12 @@
 }
 .atlas-quick-title { font-family: var(--font-display); font-size: var(--text-h2); margin: 4px 0 10px; }
 .atlas-quick-chips { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+/* The emergency number, and the floor it is the reason for. CONTEXT.md (2026-08-11) names an
+   "emergency number" in the list of things §6.4's 44px applies to, so this control is the least
+   exemptable one on the page: it measured 187x32 at every width under 760px and is now 44px.
+   No exemption was considered — the ruling names it. */
 .atlas-quick-tel {
-  display: inline-flex; align-items: center; gap: .35em; min-height: 32px; padding: .25rem .7rem;
+  display: inline-flex; align-items: center; gap: .35em; min-height: 44px; padding: .25rem .7rem;
   font-family: var(--font-data); font-weight: 640; font-size: var(--text-control-sm);
   letter-spacing: .04em; color: var(--ochre); border: 1px solid currentColor; border-radius: 999px;
   text-decoration: none;
@@ -125,11 +135,37 @@
   font-family: var(--font-data); font-weight: 600; font-size: var(--text-control-sm);
   letter-spacing: .04em; color: var(--muted); border: 1px solid var(--rule2); border-radius: 999px;
 }
+/* …and the chips beside it come with it, because the prototype draws them as ONE BAND.
+   03-table-view.png / 21-table-view-light.png put the emergency chip, the currency chip and the
+   hazard chip on one line at one height, and SPEC-COMPONENTS §5 lists them as one series ("
+   emergency numbers as tappable tel: chips, currency, hazards, a ticking local clock"). Raising
+   only the tel would have left a 44px pill centred against 32px neighbours in the same row — the
+   band broken by an accessibility fix, which the prototype outranks. These are <span>s, not
+   controls, so the floor does not reach them on its own; they are raised for the row, and only
+   their min-height moves (type, colour and padding are untouched).
+   Scoped to .atlas-quick-chips deliberately: .atlas-quick-meta is reused as the country-code
+   chip inside .atlas-sheet rows (index.astro), where atlas-mobile.css strips it to bare text and
+   where a 44px pill would break a DIFFERENT row — the up-next card's meta line, whose
+   .atlas-stamp sibling is not moving. */
+.atlas-quick-chips .atlas-quick-meta { min-height: 44px; }
 .atlas-quick-clock[data-tick] { color: var(--ink); font-variant-numeric: tabular-nums; }
+/* A filled pill, not a bare text line — "clickability must be obvious; no bare-text tap
+   targets" (CLAUDE.md, Design Doctrine). It is the SAME control as the globe dock's
+   `.atlas-dock-cta` and the ping sheet's `.atlas-pingsheet-open` (atlas-mobile.css) — one
+   datum, three surfaces — so it reuses their pattern exactly: the primary-button
+   --cta/--cta-ink pair (contrast-pinned in both themes by atlas-tokens.test.ts) on a 999px
+   radius, no new colour and no new radius. inline-flex so the pill hugs its label; the
+   flex-container chip row above it already forces the line break a `display:block` was
+   providing. 44px min-height clears the touch-target floor the a11y gate holds. */
 .atlas-quick-cta {
-  display: block; margin-top: 14px; font-family: var(--font-data); font-weight: 640;
-  font-size: var(--text-control); letter-spacing: .04em; color: var(--aink);
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-top: 14px; min-height: 44px; padding: 0 20px;
+  background: var(--cta); color: var(--cta-ink); border: 0; border-radius: 999px;
+  font-family: var(--font-data); font-weight: 640;
+  font-size: var(--text-control); letter-spacing: .04em; text-decoration: none;
 }
+.atlas-quick-cta:hover { opacity: .88; }
+.atlas-quick-cta:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
 .atlas-quick-advisory { color: var(--ochre); }
 
 /* ── Sheet list ───────────────────────────────────────────────────────────────────────── */

@@ -2,16 +2,24 @@
    §8-9). D4: the globe is progressive enhancement over the table view's server-rendered
    baseline — this screen only becomes the active face once JS has mounted <atlas-map>. */
 
-/* DESKTOP ONLY below 760px is where this stops applying: atlas-mobile.css widens the switch
-   back to a full-bleed row under 759px, where a permanent, prominent segmented switch is the
-   actual mobile spec (D5), and the abbreviated "WORLD | TABLE" labels belong to that width.
+/* The switch's shared base rules, at every width. Under 760px atlas-mobile.css does NOT widen
+   it back into a full-bleed row — it keeps the same two compact buttons and pushes them to the
+   right of the header's single row (`flex:0 0 auto; margin-left:auto`, 44px targets, 12px
+   padding), because the stacked full-width version cost ~130px of sticky chrome on a 375px
+   phone. Only the LABELS change at that width: `.atlas-toggle-word` below drops the " view"
+   suffix, so the buttons read "WORLD | TABLE" — one label per button, never two that could
+   disagree. The @media block further down centres the pair in the header at >=760px.
 
    Two separately bordered buttons rather than one hairline-divided pair, matching the design
    screenshots: the pressed one takes the accent fill, the other stays an outline. */
 .atlas-toggle { display: inline-flex; gap: 8px; }
 .atlas-toggle-btn {
   display: inline-flex; align-items: center; justify-content: center;
-  min-height: 40px; padding: 0 20px; background: none; cursor: pointer;
+  /* 44px, not the kit's 40px. atlas-mobile.css already made exactly this trade for the phone
+     ("a gate outranks a screenshot") and the base rule was left at 40 — so the switch cleared
+     the floor under 760px and failed it at 834px and 1024px, which is the half of the range
+     nobody had measured. One number, both models: the mobile block now only re-paddings. */
+  min-height: 44px; padding: 0 20px; background: none; cursor: pointer;
   border: 1px solid var(--rule2);
   font-family: var(--font-data); font-weight: 640; font-size: var(--text-control-sm);
   letter-spacing: .12em; text-transform: uppercase; color: var(--muted);

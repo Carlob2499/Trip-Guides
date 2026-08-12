@@ -212,8 +212,13 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
    verified_on has outlived its shelf life. Warn tone, never red (red is reserved for
    emergencies); links to the recorded source when present. Sizing/pill/border come from the
    shared .flag-chip class (provenance-dot.css, D10); this rule carries only the pill's
-   PLACEMENT in a title row — the leading gap and the no-wrap that keeps "⚠ verified …"
-   on one line. */
+   PLACEMENT — the leading gap before it.
+   The no-wrap here is SUPERSEDED and kept only as the family default for the short marks
+   beside it (.checked-stamp's line below matches it). The pill itself now prints
+   SPEC-COMPONENTS §2's reading — "⚠ N DAYS OLD — M PAST ITS <CATEGORY> SHELF LIFE"
+   (staleness.ts's stalenessReading), not the "verified <date> — re-check" this line was
+   written for — and that is a sentence, too wide for a phone's headings column on one line,
+   so provenance-dot.css's .flag-chip.stale-pill wraps it. See that rule for the measurements. */
 .stale-pill{margin-left:.55rem;white-space:nowrap}
 /* Verification stamp (staleness-ui.js) — the pill's HEALTHY counterpart, and the per-section
    half of CLAUDE.md's "guide-level + per-section Checked [date] stamps". Nothing rendered here
@@ -606,7 +611,8 @@ body{overflow-x:clip}
 .hol-local{font-weight:400;color:var(--muted)}
 .hol-flag{color:var(--muted);font-size:var(--text-caption)}
 /* Reassuring state when nothing falls during the trip. */
-.hol-clear{font-size:var(--text-small);color:var(--ink);margin:0;padding:.55rem .75rem;background:var(--bg2);border:1px solid var(--rule);border-radius:7px}
+/* 0, not 7px: SPEC-COMPONENTS.md rule 1 — this is a sourced finding in a box, not a control. */
+.hol-clear{font-size:var(--text-small);color:var(--ink);margin:0;padding:.55rem .75rem;background:var(--bg2);border:1px solid var(--rule);border-radius:0}
 /* Context list for holidays just before/after the trip. */
 .hol-near{margin:.6rem 0 0;font-size:var(--text-control)}
 .hol-near-label{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
@@ -664,12 +670,15 @@ body{overflow-x:clip}
    Always faintly visible on touch devices (no hover state). */
 .block-title-row{display:flex;align-items:baseline;gap:.45rem}
 .block-title-row .block-title{flex:1;min-width:0}
-.anchor-btn{flex:none;background:none;border:none;padding:.1rem .3rem;cursor:pointer;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);opacity:0;border-radius:3px;transition:opacity .15s,color .15s,background .15s;line-height:1;align-self:center}
+/* 999px, not 3px: SPEC-COMPONENTS.md rule 1 — radius is binary, and this is a button you press. */
+.anchor-btn{flex:none;background:none;border:none;padding:.1rem .3rem;cursor:pointer;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);opacity:0;border-radius:999px;transition:opacity .15s,color .15s,background .15s;line-height:1;align-self:center}
 .anchor-btn:focus-visible{opacity:1;outline:2px solid var(--theme-primary,var(--accent));outline-offset:2px}
 .card:hover .anchor-btn,.block:hover .anchor-btn{opacity:.45}
 .card:hover .anchor-btn:hover,.block:hover .anchor-btn:hover{opacity:1;color:var(--accent-ink)}
 @media(hover:none){.anchor-btn{opacity:.3}}
-.copy-addr{display:inline-flex;align-items:center;gap:.25em;font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:.04em;color:var(--muted);background:var(--bg);border:1px solid var(--rule);border-radius:4px;padding:.1rem .4rem;cursor:pointer;vertical-align:middle;margin-left:.35em;line-height:1.4;transition:color .15s,border-color .15s,background .15s;white-space:nowrap}
+/* 999px, not 4px: SPEC-COMPONENTS.md rule 1 — the copy-address chip is a button (guide-ui.js
+   builds it as one), and a pressed thing is a pill. */
+.copy-addr{display:inline-flex;align-items:center;gap:.25em;font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:.04em;color:var(--muted);background:var(--bg);border:1px solid var(--rule);border-radius:999px;padding:.1rem .4rem;cursor:pointer;vertical-align:middle;margin-left:.35em;line-height:1.4;transition:color .15s,border-color .15s,background .15s;white-space:nowrap}
 .copy-addr:hover{color:var(--accent-ink);border-color:var(--accent)}
 .copy-addr.copied{color:var(--green);border-color:var(--green)}
 
@@ -746,7 +755,11 @@ details.card.is-collapsible>.block-body{padding:1.1rem 1.4rem 1.25rem}
   .card table,
   .pnl table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
 }
-details{margin:.3rem 0;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+/* 0, not 6px: SPEC-COMPONENTS.md rule 1 — a <details> HOLDS content, so it takes the square
+   corner. This is the widest-reach radius rule in the file: it is a bare element selector, so
+   every <details> in the product inherits from it (the Tools sheet's `.tools-more` among them,
+   which is why fixing it here and not per-consumer is the point). */
+details{margin:.3rem 0;border:1px solid var(--rule);border-radius:0;overflow:hidden}
 details summary{cursor:pointer;padding:.55rem .8rem;font-weight:600;font-size:var(--text-small);list-style:none;display:flex;align-items:center;gap:.5rem;user-select:none;background:var(--bg2)}
 details summary::-webkit-details-marker{display:none}
 details summary::before{content:"▶";font-size:.65rem;color:var(--accent-ink);transition:transform .18s;flex:none}

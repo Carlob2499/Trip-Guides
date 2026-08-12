@@ -8,9 +8,11 @@
 
    Slot 1 is always the group you are reading, so the bar can never show a set that
    excludes where you actually are; slot 2 is the next-most-opened group on this device.
-   The tool slot shows the TOOL this device opens most, defaulting to the budget split
-   (creator, 2026-07-30: "the Trip Split calculator is by far the most useful to have
-   handy").
+   The tool slot is FIXED, not ranked: R5 folded the five tool panels into one Tools
+   station (the rail's last stop), so there is nothing left to guess — the slot points at
+   that station and keeps one label and one icon. R4 ranked five tools here and swapped
+   the slot's own icon to match; per GuideLayout's R5 note, a button whose icon changes
+   under you is a button you cannot build a habit around.
 
    Groups opens the existing sheet — the FULL navigation, always one thumb away. The Today
    jump, the map and Trip Kit live in that sheet's tool row, which is why the bar can
@@ -21,12 +23,8 @@
    way through a MutationObserver on the tab strip, which means every route in (bar, sheet,
    swipe, keyboard, deep link, session restore) updates the bar without knowing it exists. */
 
-import { promoted, seat, slotLabel, recordOpen, parseCounts, rankOrder } from "../model/rank";
+import { promoted, seat, slotLabel, recordOpen, parseCounts } from "../model/rank";
 import { tapHaptic } from "../../../scripts/util.js";
-
-/** Tool panels the slot can offer, in default preference order. */
-var TOOL_KEYS = ["split", "vote", "remind", "kit", "learn"];
-var TOOL_LABEL = { split: "Split", vote: "Vote", remind: "Alerts", kit: "Kit", learn: "Learnings" };
 
 export function initBotBar(ctx) {
   var bar = ctx.bar, tabs = ctx.tabs, order = ctx.order;
@@ -43,18 +41,20 @@ export function initBotBar(ctx) {
   if (!groupSlots.length && !toolSlot) return;
 
   var COUNT_KEY = "tg-tabuse-" + ctx.storeKey;
-  var TOOL_KEY = "tg-tooluse-" + ctx.storeKey;
   var counts = parseCounts(ctx.store.read(COUNT_KEY));
-  var toolCounts = parseCounts(ctx.store.read(TOOL_KEY));
   var seated = groupSlots.map(function () { return null; });
   var ind = bar.querySelector(".botbar-ind");
 
-  /** Tools this guide actually rendered — `learn` is hidden until a trip is reflected on. */
-  function liveTools() {
-    return TOOL_KEYS.filter(function (k) {
-      var b = tabs.querySelector('.gtab[data-tab="' + k + '"]');
-      return b && !b.hidden;
-    });
+  /* The Tools station, found by KIND rather than by index or by name.
+     Neither of the other two handles works. A hardcoded index cannot: the rail is built from
+     the guide's own groups, so Tools is stop 12 on Korea and stop 8 on Sedona. The old string
+     keys ("split"/"vote"/"remind"/"kit"/"learn") cannot either: R5 folded those five panels
+     into this one station and every `.gtab` has carried a numeric index ever since — the
+     filter that looked for them matched nothing, which hid this slot on every guide.
+     `data-kind` is the one thing the station asserts about itself that survives both. */
+  function toolStation() {
+    var b = tabs.querySelector('.gtab[data-kind="tools"]');
+    return b && !b.hidden ? b : null;
   }
 
   /** Park the underline over the live group slot (or hide it inside a tool panel). */
@@ -77,12 +77,15 @@ export function initBotBar(ctx) {
     var a = tabs.querySelector(".gtab-active");
     if (!a) return -1;
     var v = parseInt(a.getAttribute("data-tab"), 10);
-    return isNaN(v) ? -1 : v; // a tool panel is open → no content group is current
+    // Every R5 station is numbered, Field log and Tools included, so this no longer returns
+    // -1 when a non-group station is open. It does not need to: `promoted` rejects any index
+    // outside `order`, so a station past the last group seats no group slot either way.
+    return isNaN(v) ? -1 : v;
   }
+  /** The Tools station's index when it is the open one — the tool slot's own "you are here". */
   function currentTool() {
     var a = tabs.querySelector(".gtab-active");
-    var t = a && a.getAttribute("data-tab");
-    return t && TOOL_KEYS.indexOf(t) !== -1 ? t : null;
+    return a && a.getAttribute("data-kind") === "tools" ? a.getAttribute("data-tab") : null;
   }
 
   function renderGroups(cur) {
@@ -105,23 +108,21 @@ export function initBotBar(ctx) {
 
   function renderTool(cur) {
     if (!toolSlot) return;
-    var live = liveTools();
-    if (!live.length) { toolSlot.hidden = true; return; }
+    var station = toolStation();
+    if (!station) { toolSlot.hidden = true; return; }
     toolSlot.hidden = false;
-    // The open tool holds the slot while it's open, for the same reason the current group
-    // does: the bar must never point away from where the reader is.
-    var key = cur || rankOrder(toolCounts, live)[0] || live[0];
-    toolSlot.setAttribute("data-tab", key);
-    var full = tabs.querySelector('.gtab[data-tab="' + key + '"]');
-    toolSlot.setAttribute("aria-label", (full && full.getAttribute("aria-label")) || TOOL_LABEL[key] || key);
-    var txt = toolSlot.querySelector(".bslot-txt");
-    if (txt) txt.textContent = TOOL_LABEL[key] || key;
+    // Taken from the station rather than trusted from the markup, so the slot cannot drift
+    // from the rail stop it clicks even if the two are ever rendered from different sources.
+    var key = station.getAttribute("data-tab");
+    if (key != null) toolSlot.setAttribute("data-tab", key);
+    // Label and accessible name are server-rendered and FIXED under R5 — one station, one
+    // name — so there is nothing to rewrite. R4 rewrote both every render because the slot
+    // stood for whichever of five tools this device opened most.
     // A class, not `hidden`: the UA's `[hidden]{display:none}` does not apply to SVG
-    // elements inside an HTML document, so `hidden` left all five icons stacked.
-    toolSlot.querySelectorAll(".bslot-ico").forEach(function (ico) {
-      ico.classList.toggle("bsi-on", ico.classList.contains("bsi-" + key));
-    });
-    var on = key === cur;
+    // elements inside an HTML document, so mobile-nav.css hides .bslot-ico by rule and shows
+    // the .bsi-on one. The slot ships exactly one icon now, and it is always the right one.
+    toolSlot.querySelectorAll(".bslot-ico").forEach(function (ico) { ico.classList.add("bsi-on"); });
+    var on = key != null && key === cur;
     toolSlot.classList.toggle("botslot-on", on);
     if (on) toolSlot.setAttribute("aria-current", "true");
     else toolSlot.removeAttribute("aria-current");
@@ -159,17 +160,15 @@ export function initBotBar(ctx) {
   // evaluation, which the layout's fixed import order puts strictly before this module —
   // the observer does not exist yet. If that order ever changes, the default tab starts
   // out-ranking the groups the traveller actually opens.
+  //
+  // Only CONTENT groups are counted. R4 also kept a parallel `tg-tooluse-<guide>` tally to
+  // decide which of five tools this slot should offer; with one Tools station there is
+  // nothing to rank, so the tally is gone rather than left writing a number no one reads.
   var mo = new MutationObserver(function () {
     var cur = currentIdx();
     if (cur >= 0 && order[cur]) {
       counts = recordOpen(counts, order[cur]);
       ctx.store.write(COUNT_KEY, JSON.stringify(counts));
-    } else {
-      var tool = currentTool();
-      if (tool) {
-        toolCounts = recordOpen(toolCounts, tool);
-        ctx.store.write(TOOL_KEY, JSON.stringify(toolCounts));
-      }
     }
     render();
   });

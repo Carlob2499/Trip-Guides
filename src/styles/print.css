@@ -25,6 +25,12 @@
   .bactual, .budget-toggle, .share-backdrop, .share-modal,
   [id="btnShare"],
   .transit-links,
+  /* The Tools station's route hand-off, for the same reason as .transit-links above: a Maps
+     URL is a thing you tap, and the rule below prints every external href inline, so these
+     would set 34 lines of raw coordinate string on korea alone. The itinerary already prints
+     one whole-day URL per day (.day-route, deliberately kept), so the station's copy would be
+     the same URL a second time. The legs themselves — names and straight-line distance — print. */
+  .tools-route-map, .tools-route-all,
   .cold-open, .whats-next, .draft-graduate, .next-cta, .lnw-cta,
   /* The provenance dot's popover only ever opens via a JS click handler (data-open),
      which paper can't trigger — leaving the dot renders a dead "●" glyph with no way

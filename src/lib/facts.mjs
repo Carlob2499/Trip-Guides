@@ -41,6 +41,17 @@ export const FACT_TOKEN_RE = /\{\{fact:([a-z0-9][a-z0-9-]*)\}\}/g;
     tag allowlist, and a `</p>` would move the lead-first fold. Enforced by the schema too. */
 export const FACT_VALUE_FORBIDDEN_RE = /[<>]/;
 
+/** A token that opens a WRITTEN RANGE — `{{fact:phone-esim-low}}–35,000 for 7–10 days`. Only
+    the first half of the range is a registry token; the second half is literal prose. The
+    ≈ approx. pill is appended after the value, so on a range it landed BETWEEN the two halves
+    ("₩33,000 ≈ approx.–35,000") — the pill ruling (D10) was settled against single values and
+    never covered this shape. Matching the tail lets it travel with the value so the pill sits
+    after the whole span instead of splitting it.
+    Deliberately tight: the dash must TOUCH the token and be followed by a number. A spaced
+    dash is ordinary prose punctuation ("{{fact:fare}} — book ahead"), and swallowing that
+    would move the pill into the middle of a sentence, trading one bug for a worse one. */
+export const RANGE_TAIL_RE = /^[–—-] ?\d[\d.,]*/;
+
 /** Minimal HTML-attribute escaper — `claim` is free authored text (no FORBIDDEN_RE gate the
     way `value` has), so it can carry `&`/`"`/`<`/`>` and must not break out of the attribute
     it's embedded in below. Order matters: `&` first, or the later entities re-escape. */
@@ -66,13 +77,25 @@ function escapeAttr(s) {
  * case to guard against. `value`'s own FORBIDDEN_RE already guarantees no `<`/`>` reaches this
  * template unescaped; `claim` gets its own escape since it carries no such constraint.
  * The plain-text exports (.ics/.gpx) strip tags keeping inner text, so this renders there as
- * "<value> ≈ approx." — the space before the pill is load-bearing for that stripping. */
-export function renderFactValue(fact) {
-  const v = String(fact.value);
+ * "<value> ≈ approx." — the space before the pill is load-bearing for that stripping.
+ *
+ * `rangeTail` is the literal second half of a written range the caller has consumed on this
+ * token's behalf (RANGE_TAIL_RE) — it renders as part of the value so the pill lands after the
+ * whole range, never inside it.
+ *
+ * A11y: the `≈` is decoration beside the word it decorates, and a screen reader announcing
+ * "almost equal to approx." says the same thing twice. FlagChip.jsx hides it with an
+ * `aria-hidden` span around the glyph; this string cannot — prose-html.ts allows exactly one
+ * `<span>` shape (`data-addr-kr`) and widening a stored-XSS gate to hold a glyph would be a
+ * poor trade. `aria-label` on the `<a>` reaches the identical accessible name ("approx.",
+ * which is the chip's visible text less the decoration) without touching the allowlist. */
+export function renderFactValue(fact, rangeTail = "") {
+  const v = String(fact.value) + rangeTail;
   if (fact.state !== "approx") return v;
   const attrs = [
     `class="flag-chip flag-chip--approx"`,
     `href="${escapeAttr(fact.source_url)}"`,
+    `aria-label="approx."`,
     `target="_blank"`,
     `rel="noopener"`,
     `data-claim="${escapeAttr(fact.claim)}"`,
@@ -105,17 +128,31 @@ export function interpolateFacts(data, facts = {}, { keepUnresolved = true } = {
   const used = new Set();
   const missing = new Set();
 
+  // Scanned rather than String.replace()d because an approx token can CONSUME text that
+  // follows it (the second half of a written range, RANGE_TAIL_RE) — a replace callback can
+  // only rewrite what it matched, so the tail would be re-emitted after the pill.
   const walk = (node) => {
     if (typeof node === "string") {
-      return node.replace(FACT_TOKEN_RE, (whole, id) => {
+      let out = "";
+      let cursor = 0;
+      for (const m of node.matchAll(FACT_TOKEN_RE)) {
+        const [whole, id] = m;
+        out += node.slice(cursor, m.index);
+        cursor = m.index + whole.length;
         const fact = facts[id];
         if (!fact) {
           missing.add(id);
-          return keepUnresolved ? whole : "";
+          if (keepUnresolved) out += whole;
+          continue;
         }
         used.add(id);
-        return renderFactValue(fact);
-      });
+        // Only an approx fact emits a pill, so only an approx fact has a range to be split
+        // by one. A clean value leaves the text after it exactly where the author put it.
+        const tail = fact.state === "approx" ? (RANGE_TAIL_RE.exec(node.slice(cursor)) ?? [""])[0] : "";
+        cursor += tail.length;
+        out += renderFactValue(fact, tail);
+      }
+      return out + node.slice(cursor);
     }
     if (Array.isArray(node)) return node.map(walk);
     if (node && typeof node === "object") {

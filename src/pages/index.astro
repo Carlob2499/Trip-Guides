@@ -213,8 +213,9 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
         tools in general (creator, 2026-08-11: "it's per-guide").
         The WORLD VIEW | TABLE VIEW toggle lives here too, centred at >=760px to match the
         design screenshots, instead of the full-width bar it started as below — that bar read as
-        oversized/mobile-only-styled at desktop widths; the mobile-only full-bleed treatment
-        moved to a `max-width:759px` override in atlas-mobile.css instead. */}
+        oversized/mobile-only-styled at desktop widths. Under 760px it stays in this same header
+        row, compact and right-aligned (atlas-mobile.css's `max-width:759px` block), with only
+        the " view" suffix dropped; it is NOT re-widened to a full-bleed bar there either. */}
     <header class="atlas-header">
       <a class="atlas-brand" href={`${base}/`} aria-label="Waypoint — the atlas">
         <span class="atlas-brand-mark" aria-hidden="true"></span>
@@ -229,6 +230,25 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
         <button type="button" class="atlas-toggle-btn" data-atlas-mode-btn="world" aria-pressed="false">World<span class="atlas-toggle-word"> view</span></button>
         <button type="button" class="atlas-toggle-btn" data-atlas-mode-btn="table" aria-pressed="true">Table<span class="atlas-toggle-word"> view</span></button>
       </div>
+      {/* aria-pressed has to match the view that is actually on screen, and the two doors
+          disagree about which that is: with no JS nothing sets `data-atlas-mode`, so CSS
+          leaves the TABLE up (D4) — which is what the markup above ships pressed. With JS the
+          head script has ALREADY flipped the root to `world` (or the visitor's remembered
+          choice) before first paint, so that same markup announced "Table view, pressed" over
+          a rendered globe. This re-syncs the pair to the mode the head script settled on.
+
+          It lives HERE, immediately after the buttons, and not in <head> beside its partner:
+          the head script runs before these elements are parsed and could not reach them. Still
+          parser-blocking and still pre-paint, so no wrong state is ever announced or painted.
+          The module script at the foot owns every LATER change, through the same setMode(). */}
+      <script is:inline>
+        (function () {
+          const mode = document.documentElement.getAttribute("data-atlas-mode") || "table";
+          document.querySelectorAll("[data-atlas-mode-btn]").forEach(function (b) {
+            b.setAttribute("aria-pressed", String(b.dataset.atlasModeBtn === mode));
+          });
+        })();
+      </script>
       <div class="atlas-header-actions">
         <a class="atlas-header-btn atlas-header-btn--cta" href={`${base}/new/`}>＋<span class="atlas-header-btn-label"> New guide</span></a>
         <button type="button" id="btnDark" class="atlas-header-btn atlas-header-icon" aria-label="Switch to dark mode" title="Switch to dark mode">
@@ -440,8 +460,11 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
         <div class="atlas-results" data-atlas-results role="listbox" aria-label="Search results"></div>
       </div>
 
+      {/* Chips read in the same order as the list below them — `relevant`, not `rows`. A jump
+          rail whose sequence disagrees with the list it jumps into is a second ranking to keep
+          in step, which is what this page already avoids for the globe's record rail. */}
       <div class="atlas-chips" data-atlas-chips role="group" aria-label="Jump to a sheet">
-        {rows.map(({ g }) => (
+        {relevant.map(({ g }) => (
           <a class={`atlas-chip${g.id === quick?.g.id ? " atlas-chip--current" : ""}`} href={`#sheet-${g.id}`}>
             {g.data.title}
           </a>
@@ -484,17 +507,30 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
         <div class="atlas-listhead" aria-hidden="true">Your sheets — up next first</div>
       )}
 
+      {/* ORDER of the list below: `relevant`, not `rows` — current trip first, at every width
+          (CONTEXT.md 2026-08-12, "Hub trip list orders current-trip-first, not alphabetical").
+          `rows` is the content collection's own order, i.e. alphabetical by slug, which put the
+          upcoming trip LAST under a header that promises "up next first".
+
+          The rule is `relevanceOrder()` (features/atlas/model/relevance.ts) — deliberately
+          REUSED rather than re-derived here, so this list, the quick card above it and the
+          globe's record `rank` can never disagree about which trip is the current one. In full:
+          the trip whose date range contains today first (`ongoing`), then upcoming ones
+          soonest-start first, then finished ones most-recently-ended first, then undated ones
+          last; ties inside a rank keep collection order. The dates come from the guide's own day
+          sections via firstDayDateOf/lastDayDateOf — no separate meta field to keep in step.
+
+          The `.atlas-sheets-next` marker below still exists and atlas-mobile.css still gives it
+          `order:-1`; that is now a no-op agreeing with the DOM rather than the only thing
+          floating the card, and the `#sheet-<id>` anchors are unaffected — they are ids, not
+          positions. */}
       {rows.length === 0 ? (
         <p class="atlas-empty">No guides yet.</p>
       ) : (
         <ul class="atlas-sheets">
-          {rows.map(({ g, record, cc, cities, dates, dayCount }) => {
+          {relevant.map(({ g, record, cc, cities, dates, dayCount }) => {
             const stamp = STAMP[record.status];
             // The up-next sheet is the mobile list's big card (bundle §1 "Up-next card").
-            // It stays in DOM order — the `#sheet-<id>` anchors, the chip row and desktop's
-            // own ordering all read this list positionally — and CSS `order` alone floats it
-            // to the top under 760px. Reordering the markup would have moved it on desktop
-            // too, which the design never asked for.
             const isNext = quick != null && g.id === quick.g.id;
             return (
               <li class={isNext ? "atlas-sheets-next" : undefined}>

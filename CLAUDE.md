@@ -125,7 +125,8 @@ these by hand): (1) it expects token names `--fd`/`--fs`; the shipped repo's act
 `--font-data`/`--font-display`/`--font-body` — every "TYPE" hit against those is a naming
 mismatch, not a real third typeface. (2) It flags any `box-shadow` as "no elevation," but the
 approved prototype's own FAB/menu-sheet/ping-sheet markup uses real shadows — the prototype
-outranks the checker's blanket rule for those specific overlay elements. (3) Its color/token
+outranks the checker's blanket rule for those specific overlay elements, extended to popovers
+(e.g. `.prov-popover`) as the same overlay category. (3) Its color/token
 values (e.g. `--on-aink`) are a design-tool export and can be a step behind the shipped,
 contrast-tested `base.css` — **before "fixing" a token value to match the kit, grep `base.css`
 for that token's own comment** (search `ATLAS TOKEN CONTRACT`); if it documents a deliberate,

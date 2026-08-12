@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1835 checks · 1835 carry a stated promise · 158 files
+1844 checks · 1844 carry a stated promise · 158 files
 
 ## Can everyone read it
 
@@ -19,7 +19,7 @@ nothing ships.
 - what's-next banner is legible  <sub>tests/visual/a11y.spec.ts:695</sub>
 - ⌁ with every sheet closed, nothing inside one is focusable  <sub>tests/visual/a11y.spec.ts:750</sub>
 - ⌁ an open sheet traps focus, Escape closes it, and focus comes back to the opener  <sub>tests/visual/a11y.spec.ts:769</sub>
-- every visible target clears 44px  <sub>tests/visual/a11y.spec.ts:839</sub>
+- every visible target clears 44px — …, …  <sub>tests/visual/a11y.spec.ts:850</sub>
 
 **Search reaches anything in a guide, from anywhere in it.**
 
@@ -363,6 +363,10 @@ nothing ships.
 - SHELF_LIFE_DAYS has no inherited-key collisions (the UI's hasOwnProperty guard)  <sub>src/lib/staleness.test.ts:59</sub>
 - null/undefined/malformed dates return null (caller decides rendering)  <sub>src/lib/staleness.test.ts:69</sub>
 - a future verified_on yields negative age and is not stale  <sub>src/lib/staleness.test.ts:76</sub>
+- past its life: age, the overrun, and the category that judged it  <sub>src/lib/staleness.test.ts:87</sub>
+- inside the final third: the ageing heads-up, and no warn glyph to hide  <sub>src/lib/staleness.test.ts:94</sub>
+- silence is the healthy state — no reading at all with room to spare  <sub>src/lib/staleness.test.ts:101</sub>
+- the glyph is separable, so a chip can hide it from AT without re-parsing the line  <sub>src/lib/staleness.test.ts:105</sub>
 
 **A guide never claims you are on a day of a trip you are not on.**
 
@@ -524,17 +528,22 @@ nothing ships.
 - omits data-tier when the fact carries none  <sub>src/lib/facts.test.ts:85</sub>
 - HTML-escapes a claim carrying quotes or angle brackets  <sub>src/lib/facts.test.ts:88</sub>
 - strips to honest plain text for the .ics/.gpx exports (tags dropped, inner text kept)  <sub>src/lib/facts.test.ts:92</sub>
-- matches kebab ids only  <sub>src/lib/facts.test.ts:99</sub>
-- collects every referenced id across a nested structure, deduped  <sub>src/lib/facts.test.ts:104</sub>
-- rejects markup in a fact value — it would bypass the prose tag allowlist  <sub>src/lib/facts.test.ts:115</sub>
-- substitutes into deeply nested strings and leaves everything else alone  <sub>src/lib/facts.test.ts:123</sub>
-- applies the ≈ marker (value + the ≈ approx. pill) from the record's state  <sub>src/lib/facts.test.ts:139</sub>
-- reports an unknown id instead of failing silently  <sub>src/lib/facts.test.ts:144</sub>
-- does not mutate the input tree  <sub>src/lib/facts.test.ts:151</sub>
-- handles a guide with no registry at all — the dormant case  <sub>src/lib/facts.test.ts:157</sub>
-- substitutes every occurrence of a repeated fact — the one-edit-updates-everywhere property  <sub>src/lib/facts.test.ts:165</sub>
-- flags a registered fact nothing references  <sub>src/lib/facts.test.ts:174</sub>
-- is empty when everything is referenced  <sub>src/lib/facts.test.ts:177</sub>
+- names itself 'approx.' so the ≈ isn't announced twice  <sub>src/lib/facts.test.ts:99</sub>
+- keeps the range whole and puts the pill after it, not between the halves  <sub>src/lib/facts.test.ts:118</sub>
+- reads as one honest range in the .ics/.gpx plain-text exports too  <sub>src/lib/facts.test.ts:124</sub>
+- leaves a spaced dash alone — that is prose punctuation, not a range  <sub>src/lib/facts.test.ts:129</sub>
+- leaves a clean fact's following text exactly where the author put it  <sub>src/lib/facts.test.ts:134</sub>
+- matches kebab ids only  <sub>src/lib/facts.test.ts:141</sub>
+- collects every referenced id across a nested structure, deduped  <sub>src/lib/facts.test.ts:146</sub>
+- rejects markup in a fact value — it would bypass the prose tag allowlist  <sub>src/lib/facts.test.ts:157</sub>
+- substitutes into deeply nested strings and leaves everything else alone  <sub>src/lib/facts.test.ts:165</sub>
+- applies the ≈ marker (value + the ≈ approx. pill) from the record's state  <sub>src/lib/facts.test.ts:181</sub>
+- reports an unknown id instead of failing silently  <sub>src/lib/facts.test.ts:186</sub>
+- does not mutate the input tree  <sub>src/lib/facts.test.ts:193</sub>
+- handles a guide with no registry at all — the dormant case  <sub>src/lib/facts.test.ts:199</sub>
+- substitutes every occurrence of a repeated fact — the one-edit-updates-everywhere property  <sub>src/lib/facts.test.ts:207</sub>
+- flags a registered fact nothing references  <sub>src/lib/facts.test.ts:216</sub>
+- is empty when everything is referenced  <sub>src/lib/facts.test.ts:219</sub>
 
 **Every text size comes from the type scale, so nothing is arbitrarily sized.**
 

@@ -350,7 +350,11 @@ import { trapFocus, migrateStorageKey } from "../../../scripts/util.js";
           el.type = "button";
           el.className = "gstat gstat-burn";
           el.addEventListener("click", function () {
-            var t = document.querySelector('.gtab[data-tab="split"]');
+            // The Budget calculator lives on the Tools station now, and R5 numbers every
+            // `.gtab` by its rail position — that number differs per guide, so this looks the
+            // station up by kind. The old `[data-tab="split"]` matched nothing, which made the
+            // burn pill a dead control: it showed a total and went nowhere when tapped.
+            var t = document.querySelector('.gtab[data-kind="tools"]');
             if (t) t.click();
           });
           stats.appendChild(el);

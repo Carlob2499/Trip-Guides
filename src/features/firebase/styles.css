@@ -26,8 +26,12 @@
   background: var(--rule2);          /* default / offline: grey, no pulse */
   box-shadow: none;
 }
-/* Connecting: amber. Live: green, gently pulsing. Offline keeps the grey default. */
-.split-live[data-state="connecting"] .split-live-dot { background: #d98a00; }
+/* Connecting: amber. Live: green, gently pulsing. Offline keeps the grey default.
+   The amber is --warn, not a literal of its own. This file used to carry its own hex — a
+   near-duplicate of the token, identical to the eye in dark and a shade off in light, which is
+   how a second "advisory" pigment gets into a product with one. Resolved through the token,
+   both themes and any future retune carry for free. */
+.split-live[data-state="connecting"] .split-live-dot { background: var(--warn); }
 .split-live[data-state="live"] .split-live-dot {
   background: var(--green);
   box-shadow: 0 0 0 0 color-mix(in srgb, var(--green) 55%, transparent);
@@ -46,10 +50,10 @@
 .split-privacy {
   margin: -.4rem 0 1rem;
   padding: .5rem .7rem;
-  border: 1px solid color-mix(in srgb, #d98a00 40%, var(--rule));
+  border: 1px solid color-mix(in srgb, var(--warn) 40%, var(--rule));
   border-left-width: 3px;
   border-radius: 0;
-  background: color-mix(in srgb, #d98a00 7%, transparent);
+  background: color-mix(in srgb, var(--warn) 7%, transparent);
   font-size:var(--text-control);
   line-height: 1.5;
   color: var(--muted);

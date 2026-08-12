@@ -2,8 +2,9 @@
    Sections carrying structured provenance (data-verified-on, from the schema's
    additive `verified_on` field) get judged against their category's shelf life
    on the CLIENT clock (a build-time judgment would freeze "fresh" at deploy and
-   rot silently). Past shelf life → a small ⚠ pill lands in the title row:
-   "verified <date> — re-check", linking to the source when one is recorded.
+   rot silently). Past shelf life → a small ⚠ pill lands in the title row, worded
+   by staleness.ts's shared stalenessReading ("⚠ N DAYS OLD — M PAST ITS <CATEGORY>
+   SHELF LIFE") and linking to the source when one is recorded.
    WITHIN shelf life → the ✓ CHECKED <date> stamp lands in the same row, which is
    CLAUDE.md's per-section half of "guide-level + per-section Checked [date] stamps".
    Until that branch existed this module drew on the unhealthy path only, so a section
@@ -18,7 +19,7 @@
    exchange rate — good for ~7 days — on the same 90-day clock as a museum's
    address. */
 
-import { staleness, SHELF_LIFE_DAYS } from "../lib/staleness";
+import { staleness, stalenessReading, SHELF_LIFE_DAYS } from "../lib/staleness";
 
 (function () {
   var nodes = document.querySelectorAll(".block[data-verified-on]");
@@ -62,7 +63,22 @@ import { staleness, SHELF_LIFE_DAYS } from "../lib/staleness";
     // never rewired into a popover-only control — see docs/archive/PLAN_ATLAS_MIGRATION.md Stage A.7.
     var pill = document.createElement(src ? "a" : "span");
     pill.className = "stale-pill flag-chip flag-chip--stale";
-    pill.textContent = "⚠ verified " + date + " — re-check";
+    // WORDING comes from staleness.ts, shared with the popover's Status row. This pill used to
+    // say "⚠ verified <date> — re-check" while the popover on the same page said "⚠ N DAYS OLD
+    // — M PAST ITS <CATEGORY> SHELF LIFE" about the same fact. SPEC-COMPONENTS §2 specifies the
+    // second, and it is the one that answers the reader's actual question — a date alone leaves
+    // them to know the category's shelf life and do the arithmetic.
+    var reading = stalenessReading(s, cat);
+    // s.stale is already true on this branch, so a reading always exists; the guard is for the
+    // shared function's contract, not for a case that can occur here.
+    if (!reading) return;
+    // The glyph is decoration next to a sentence that already says the fact is past its life,
+    // so it is hidden from AT rather than announced as "warning sign" (FlagChip.jsx:17's own
+    // treatment). .flag-chip's `gap` supplies the space a flex container drops between them.
+    var glyph = document.createElement("span");
+    glyph.setAttribute("aria-hidden", "true");
+    glyph.textContent = reading.glyph;
+    pill.append(glyph, reading.label);
     if (src) {
       pill.href = src;
       pill.target = "_blank";

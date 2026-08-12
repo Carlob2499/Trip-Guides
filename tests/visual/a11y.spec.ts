@@ -835,9 +835,20 @@ const TARGET_BASELINE: Record<string, { max: number; why: string }> = {
   },
 };
 
+/* Two pages, not one. This sweep only ever visited a guide, so the hub — the page every
+   visitor lands on first, and the one carrying the most chips and pills per screen — had no
+   touch-target coverage at all at any of these nine widths. Kept as separate tests per page
+   rather than one test loading both, so the TARGET_BASELINE ceilings below stay PER PAGE and
+   a regression on one page can never be absorbed by headroom on the other. */
+const TARGET_PAGES = [
+  ["korea guide", "/Trip-Guides/guides/korea/"],
+  ["hub", "/Trip-Guides/"],
+] as const;
+
+for (const [pageName, path] of TARGET_PAGES) {
 for (const d of DEVICES) {
-  test(`every visible target clears 44px — ${d.label}`, async ({ page }) => {
-    await prep(page, "/Trip-Guides/guides/korea/", "light", d);
+  test(`every visible target clears 44px — ${pageName}, ${d.label}`, async ({ page }) => {
+    await prep(page, path, "light", d);
     const small = await page.evaluate(() => {
       const F = 'a[href],button:not([disabled]),input:not([disabled]),select,[role="button"]';
       return [...document.querySelectorAll(F)]
@@ -879,17 +890,18 @@ for (const d of DEVICES) {
     const unexplained = small.filter((row) => !Object.keys(TARGET_BASELINE).some((k) => row.startsWith(k)));
     expect(
       unexplained,
-      `${d.label} (${d.width}px): a control renders under 44px in its smallest dimension. ` +
-        `That is the floor a thumb needs; below it the reader misses and hits the thing beside it. ` +
-        `If it is genuinely notation rather than a control, exclude it above with a reason — ` +
-        `never widen TARGET_BASELINE to make a new one pass.`,
+      `${pageName} — ${d.label} (${d.width}px): a control renders under 44px in its smallest ` +
+        `dimension. That is the floor a thumb needs; below it the reader misses and hits the thing ` +
+        `beside it. If it is genuinely notation rather than a control, exclude it above with a ` +
+        `reason — never widen TARGET_BASELINE to make a new one pass.`,
     ).toEqual([]);
     for (const [cls, entry] of Object.entries(TARGET_BASELINE)) {
       const n = small.filter((row) => row.startsWith(cls)).length;
       expect(
         n,
-        `${d.label}: ${cls} is at ${n}, over its ceiling of ${entry.max}. ${entry.why}`,
+        `${pageName} — ${d.label}: ${cls} is at ${n}, over its ceiling of ${entry.max}. ${entry.why}`,
       ).toBeLessThanOrEqual(entry.max);
     }
   });
+}
 }

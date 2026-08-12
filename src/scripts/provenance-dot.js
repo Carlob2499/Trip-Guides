@@ -1,5 +1,5 @@
 /** Provenance dot — tap to show/hide source + verification info. */
-import { staleness, SHELF_LIFE_DAYS } from "../lib/staleness";
+import { staleness, stalenessReading, SHELF_LIFE_DAYS } from "../lib/staleness";
 
 (function () {
   let open = null;
@@ -21,16 +21,12 @@ import { staleness, SHELF_LIFE_DAYS } from "../lib/staleness";
     if (!cat || !Object.prototype.hasOwnProperty.call(SHELF_LIFE_DAYS, cat)) cat = "default";
     var s = staleness(date, cat, new Date());
     if (!s) return;
-    var life = SHELF_LIFE_DAYS[cat];
-    var text = null, warn = false;
-    if (s.stale) {
-      text = "⚠ " + s.ageDays + " DAYS OLD — " + (s.ageDays - life) + " PAST ITS " + cat.toUpperCase() + " SHELF LIFE";
-      warn = true;
-    } else if (s.remainingDays <= life / 3) {
-      // "Inside the last third" of shelf life — a heads-up, not yet a downgrade.
-      text = "AGEING — " + s.remainingDays + " DAYS OF SHELF LIFE LEFT";
-    }
-    if (!text) return; // well within shelf life — nothing extra to say, per the honest-blank rule
+    // The wording itself lives in staleness.ts (stalenessReading) — shared with the section
+    // title-row pill, which used to phrase the same judgment its own way.
+    var reading = stalenessReading(s, cat);
+    if (!reading) return; // well within shelf life — nothing extra to say, per the honest-blank rule
+    var text = reading.glyph ? reading.glyph + " " + reading.label : reading.label;
+    var warn = reading.warn;
     // <dt>/<dd>, not a bare <div> — a <dl> mixing loose dt/dd with a wrapping div violates
     // the HTML5 content model (all-loose or all-wrapped, never both).
     var dt = document.createElement("dt");

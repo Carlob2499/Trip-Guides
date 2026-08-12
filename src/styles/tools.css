@@ -17,7 +17,9 @@
 .tools-sub{font-family:var(--font-data);font-size:var(--text-caption);letter-spacing:.06em;text-transform:uppercase;color:var(--ink);margin:1.1rem 0 .5rem}
 .tools-sub:first-child{margin-top:0}
 .tools-dim{color:var(--muted)}
-.tools-src{margin-top:1rem;font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}
+/* overflow-wrap because a source line is often a bare URL with no break opportunity — at 375px
+   it hung outside the panel, where text has no resolvable background and the a11y gate says so. */
+.tools-src{margin-top:1rem;font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);overflow-wrap:anywhere}
 .tools-src a{color:var(--accent-ink)}
 /* An admitted blank is a feature (CLAUDE.md) — it reads as a deliberate statement, not
    as a panel that failed to load. */
@@ -52,8 +54,34 @@
 .tools-route-day:first-child{padding-top:0;border-top:0}
 .tools-route-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:.5rem}
 .tools-route-km{margin-left:auto;font-family:var(--font-data);font-size:var(--text-caption);font-variant-numeric:tabular-nums;color:var(--muted)}
-.tools-route-stops{margin:.5rem 0 .5rem 1.4rem;color:var(--muted)}
-.tools-route-stops li{padding:.1rem 0}
+/* Legs, not a stop list. R5 hands the route OFF rather than tabulating it (SUPERSEDES §5), so
+   each row is a leg carrying its own Maps link and its own straight-line figure. Dashed
+   hairlines between legs, one weight lighter than the solid rule that separates whole days. */
+.tools-route-legs{list-style:none;margin:.6rem 0 .2rem}
+.tools-route-leg{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem .8rem;padding:.3rem 0;border-top:1px dashed var(--rule)}
+.tools-route-leg-name{flex:1 1 12rem;min-width:0;text-wrap:pretty;overflow-wrap:anywhere}
+.tools-route-leg-km{flex:none;margin-left:auto;font-family:var(--font-data);font-size:var(--text-caption);font-variant-numeric:tabular-nums;color:var(--muted)}
+/* Pills, because they are pressed — and 44px because a thumb aims at them on a wet platform
+   (ACCEPTANCE.md: no touch target under 44px). Outlined here, filled for the whole-day link
+   below: one primary action per day, the legs are the alternatives to it. */
+.tools-route-map{
+  flex:none;display:inline-flex;align-items:center;min-height:44px;padding:0 .85rem;
+  border:1px solid var(--rule2);border-radius:999px;text-decoration:none;
+  font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;color:var(--accent-ink);
+  transition:color .14s,border-color .14s;
+}
+.tools-route-map:hover{border-color:var(--accent)}
+.tools-route-map:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.tools-route-all{display:flex;flex-wrap:wrap;align-items:center;gap:.45rem .8rem;margin-top:.9rem;padding-top:.8rem;border-top:1px solid var(--rule)}
+.tools-route-all-link{
+  display:inline-flex;align-items:center;min-height:44px;padding:0 1rem;
+  background:var(--accent);color:var(--on-accent);border-radius:999px;text-decoration:none;
+  font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;
+}
+.tools-route-all-link:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.tools-route-all-note{flex:1 1 14rem;min-width:0;font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);text-wrap:pretty}
 .tools-route-sug{padding:.7rem .9rem;background:var(--sunken);border-left:3px solid var(--accent);text-wrap:pretty}
 .tools-route-sug b{color:var(--accent-ink)}
 .tools-route-ok{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}
@@ -68,18 +96,6 @@
 .tools-more>summary{cursor:pointer;font-family:var(--font-data);font-size:var(--text-control);letter-spacing:.04em;color:var(--accent-ink);padding:.35rem 0;list-style-position:inside}
 .tools-more>summary:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 .tools-more[open]>summary{margin-bottom:.4rem}
-
-/* The jetlag calculator was written for the guide masthead, where it has a 36rem column to
-   itself. Dropped into a ~348px panel, its <select>'s long option labels ("Singapore / Hong
-   Kong / Beijing (UTC+8)") set the intrinsic minimum width and the whole tool overflowed
-   its own panel by ~66px — caught not by eye but by the a11y gate, which could no longer
-   resolve the contrast of text hanging outside its container. */
-.tools .pnl-body-in,
-.tools .jl-row,
-.tools .jl-inner{min-width:0}
-.tools .jl-wrap{max-width:100%;margin-left:0;margin-right:0}
-.tools .jl-select{width:100%;max-width:100%}
-.tools-src{overflow-wrap:anywhere}
 
 /* A count, not a paragraph. The sentence that used to sit here moved behind the panel's
    `?` (creator, 2026-08-08) — what stays is the one number a reader actually scans for. */

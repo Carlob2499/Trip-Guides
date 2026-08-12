@@ -1,7 +1,7 @@
 // @protects-file A fact past its shelf life is flagged as needing a re-check.
 
 import { describe, it, expect } from "vitest";
-import { staleness, SHELF_LIFE_DAYS } from "./staleness";
+import { staleness, stalenessReading, SHELF_LIFE_DAYS } from "./staleness";
 
 // Fixed clock — never the real one (injected-clock rule).
 const NOW = new Date(Date.UTC(2026, 6, 10)); // 2026-07-10
@@ -77,5 +77,33 @@ describe("staleness", () => {
     const s = staleness("2026-07-20", 90, NOW)!;
     expect(s.ageDays).toBe(-10);
     expect(s.stale).toBe(false);
+  });
+});
+
+// One wording for one judgment. The popover's Status row and the section title-row pill both
+// read from here; before they did, the pill said "⚠ verified <date> — re-check" beside a
+// popover saying "⚠ N DAYS OLD — M PAST ITS <CATEGORY> SHELF LIFE" about the same fact.
+describe("stalenessReading — SPEC-COMPONENTS §2's wording, declared once", () => {
+  it("past its life: age, the overrun, and the category that judged it", () => {
+    const r = stalenessReading(staleness("2026-01-01", "fx", NOW)!, "fx")!;
+    expect(r.glyph).toBe("⚠");
+    expect(r.label).toBe("190 DAYS OLD — 183 PAST ITS FX SHELF LIFE");
+    expect(r.warn).toBe(true);
+  });
+
+  it("inside the final third: the ageing heads-up, and no warn glyph to hide", () => {
+    const r = stalenessReading(staleness("2026-07-05", "fx", NOW)!, "fx")!; // 5 of 7 days gone
+    expect(r.glyph).toBe("");
+    expect(r.label).toBe("AGEING — 2 DAYS OF SHELF LIFE LEFT");
+    expect(r.warn).toBe(false);
+  });
+
+  it("silence is the healthy state — no reading at all with room to spare", () => {
+    expect(stalenessReading(staleness("2026-07-09", "transit", NOW)!, "transit")).toBeNull();
+  });
+
+  it("the glyph is separable, so a chip can hide it from AT without re-parsing the line", () => {
+    const r = stalenessReading(staleness("2026-01-01", "hours", NOW)!, "hours")!;
+    expect(r.label.startsWith("⚠")).toBe(false);
   });
 });

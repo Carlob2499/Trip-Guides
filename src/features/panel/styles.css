@@ -5,12 +5,16 @@
    so the body's real height is never read or written by script and the transition
    survives content changing size between collapses. */
 
+/* NO box-shadow, deliberately. SPEC-COMPONENTS.md §1 and P3's own Panel both draw this
+   container with its 1px rule and nothing else: in this system an edge does the separating
+   that elevation does elsewhere (the share modal's note in guide.css records the same call).
+   The only shadow the Panel ever wears is .pnl--drag's, below — a Panel in flight is the one
+   moment it IS lifted off the page. */
 .pnl {
   background: var(--card);
   border: 1px solid var(--rule);
   border-radius: 0;
   margin-bottom: 1rem;
-  box-shadow: 0 1px 3px rgba(16, 20, 24, .06);
 }
 
 /* Hostable-but-not-carded blocks (weather, holidays) keep their hide-on-empty
@@ -164,6 +168,12 @@ html:not([data-panel-reorder]) [data-panel-order-reset] { display: none; }
      to the panel instead of the panel stretching to the children. Anything genuinely wider
      than a phone (the route rail) carries its own overflow-x scroller and says so. */
   grid-template-columns: minmax(0, 1fr);
+  /* SPEC-COMPONENTS.md §1's `.panel__rule` — the hairline between the header row and the body.
+     It rides the BODY's top edge rather than the head's bottom so it leaves WITH the body on
+     collapse: a rule left under the title of a shut Panel underlines nothing. Full-bleed
+     rather than inset, because the head and the body do not share a horizontal padding
+     (.3rem vs 1.4rem) and an inset line would align to neither. */
+  border-top: 1px solid var(--rule);
   opacity: 1;
   visibility: visible;
 }
@@ -192,6 +202,13 @@ html:not([data-panel-reorder]) [data-panel-order-reset] { display: none; }
 /* Block rhythm belongs to the container, exactly as .card p+p does in guide.css —
    otherwise every consumer has to re-supply it and they will not agree. */
 .pnl-body-in > * { margin: 0; }
+/* The 12px under the hairline (SPEC-COMPONENTS.md §1 gives `.panel__rule` `margin: 10px 0 12px`;
+   the 10px above is .pnl-head's own padding-bottom). It is carried by the FIRST CHILD's margin
+   for the same reason the bottom gap is carried by the last child's: padding on .pnl-body-in is
+   the 0fr row's floor and would leave a collapsed Panel that tall, and a margin on .pnl-body-in
+   itself would count toward the track's minimum contribution. A child's margin sits inside the
+   clip, so a collapsed Panel keeps its exact height. */
+.pnl-body-in > :first-child { margin-top: .75rem; }
 .pnl-body-in > * + * { margin-top: .85rem; }
 .pnl-body-in > :last-child { margin-bottom: 1.25rem; }
 
@@ -217,6 +234,11 @@ html:not([data-panel-reorder]) [data-panel-order-reset] { display: none; }
 .pnl-body-in:has(.venue) { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
 .pnl-body-in:has(.sight) > * + *,
 .pnl-body-in:has(.venue) > * + * { margin-top: 0; }
+/* The under-hairline margin goes with them, and for a sharper reason than rhythm: in a grid
+   the margin lands on ONE item, so the first card would sit 12px below its own row-mates. The
+   card grids meet the hairline flush instead. */
+.pnl-body-in:has(.sight) > :first-child,
+.pnl-body-in:has(.venue) > :first-child { margin-top: 0; }
 /* The intro paragraph (sec.intro, VenueBlock.astro) reads above the card grid, full
    width — never squeezed into one card's column. */
 .pnl-body-in:has(.venue) > .venue-intro { grid-column: 1 / -1; }
@@ -282,9 +304,23 @@ html:not([data-panel-reorder]) [data-panel-order-reset] { display: none; }
      declared span still only ever comes from its type (`.pnl--full`). */
 .pnl-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+  /* 340px, not 304px, and px rather than rem: SPEC-COMPONENTS.md §1 states this floor in px
+     and the sibling card grids above (.sight 300px, .venue 280px) already do. `min(100%, …)`
+     keeps a narrow container on one column instead of overflowing it. */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
   gap: 1rem;
   align-items: stretch;
+}
+
+/* SPEC-COMPONENTS.md §1: the gap widens from 16px to 18px above 1100px — the one step the
+   shipped grid was missing. Written in rem (1.125rem = 18px) because gap is a rem measure
+   everywhere else in this file; the SPEC states it in px only because a design tool does.
+   A VIEWPORT query on purpose, matching guide.css's existing 1100px rule for this same grid's
+   catblock — the pair are siblings, move them together. 1100 is NOT one of the three model
+   thresholds in src/lib/breakpoints.ts (it is the wide-column step), so it takes no `bp:`
+   marker and breakpoints.test.ts is right to ignore it. */
+@media (min-width: 1100px) {
+  .pnl-grid { gap: 1.125rem; }
 }
 
 /* Vertical rhythm belongs to the grid's gap; the Panel's own single-column margin

@@ -26,10 +26,13 @@ for (const f of files) {
   lines.forEach((ln, i) => {
     const n = i + 1;
     // 1. radius is binary: 0 or 999px (99px pill shorthand tolerated)
-    const rad = ln.match(/border-radius:\s*([^;"']+)/g);
+    // `}` ends the value as surely as `;` does: minified CSS drops the last declaration's
+    // semicolon, so `…;border-radius:0}` used to capture "0}" and report a correctly-zeroed
+    // rule as drift (src/styles/guide.css's .hol-clear, .lb-img).
+    const rad = ln.match(/border-radius:\s*([^;"'}]+)/g);
     if (rad) for (const r of rad) {
       const v = r.split(':')[1].trim();
-      if (!/^(0|999px|99px|50%)( .*)?$/.test(v)) V(f, n, 'RADIUS — only 0 or 999px exist in this system', ln);
+      if (!v.split(/\s+/).every((t) => /^(0|999px|99px|50%)$/.test(t))) V(f, n, 'RADIUS — only 0 or 999px exist in this system', ln);
     }
     // 2. no hex outside the approved set, and none at all outside tokens.css
     for (const m of ln.matchAll(/#[0-9a-fA-F]{6}\b/g)) {

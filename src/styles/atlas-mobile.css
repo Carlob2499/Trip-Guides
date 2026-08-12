@@ -55,9 +55,12 @@
   .atlas-brand { flex: 0 1 auto; min-width: 0; }
   .atlas-brand-sub { display: none; }
   .atlas-toggle { flex: 0 0 auto; margin-left: auto; }
-  /* 44px, not the kit's 4px-padded segments: this repo's a11y gate holds every hit target to
-     44px and a gate outranks a screenshot. */
-  .atlas-toggle-btn { min-height: 44px; padding: 0 12px; }
+  /* Only the horizontal run narrows here — the 44px height moved to the base rule in
+     atlas-world.css once the sweep showed the desktop half of the range was still at 40px.
+     (The reasoning it carried is unchanged and now applies at every width: 44px, not the kit's
+     4px-padded segments, because this repo's a11y gate holds every hit target to 44px and a
+     gate outranks a screenshot.) */
+  .atlas-toggle-btn { padding: 0 12px; }
   .atlas-header-actions { flex: 0 0 auto; margin-left: 0; gap: 6px; }
 
   /* No spatial budget for the desktop rails, floating pincards, or motto. */
@@ -81,6 +84,17 @@
     /* The lift clear of the pin's dot. Centring is applied by world-view.js inside the
        same `transform` it rewrites each frame — see the note there. */
     margin: -12px 0 0 0; padding: 3px 8px;
+    /* A chip is a BUTTON here (world-view.js builds it as one, and tapping it does what tapping
+       its pin does), so it takes the 44px floor rather than sizing to its 12px label — it
+       measured 25px tall at every width under 760px. Nothing shares its row to squeeze it: each
+       chip is absolutely positioned at its own pin's screen point, so this is the .transit-link
+       case ("free to grow because nothing else shares its row"), not the .scrub-fit .dchip one
+       (8-10 chips competing for one fixed 375px row). The one real consequence is that placeChips'
+       overlap solver now reserves a taller box — it measures offsetHeight live each frame, so
+       the box follows this number rather than a hardcoded one, and a chip it hides for clashing
+       was already the designed behaviour at 25px. Verified after the raise: the same chips are
+       still drawn at 375px. */
+    min-height: 44px;
     /* Opaque, not translucent: this sits over a canvas whose colour changes as the globe
        turns, so a see-through ground meant the label's contrast depended on which ocean
        was behind it — unverifiable to the a11y gate and genuinely harder to read. */

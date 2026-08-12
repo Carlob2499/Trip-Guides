@@ -15,10 +15,18 @@
    may legitimately ask about. The guide BODY inside it still switches on container width. */
 @media(max-width:899px){
   /* === BOTTOM TAB BAR =======================================================
-     [ group ] [ group ] [ Groups ] [ Today ] [ Map ] — five equal slots, so the
+     [ group ] [ group ] [ Tools ] [ Groups ] — four equal slots (the five-slot
+     Stage D variant lost the creator's 2026-08-08 phone A/B and is gone), so the
      bar scales by SHRINKING EVERY SLOT TOGETHER rather than letting one flex item
      eat the others (the old Journey-primary bar was flex:1 against fixed minis,
-     which broke below ~340px). Every slot keeps a ≥44px target at every width. */
+     which broke below ~340px). Every slot keeps a ≥44px target at every width.
+
+     All four slots RENDER. Three did until 2026-08-12: botbar.js still looked for
+     `.gtab[data-tab="split"]` (and vote/remind/kit/learn), keys the R5 station rail
+     stopped emitting when it numbered every stop — so the lookup matched nothing and
+     renderTool() set `.botslot-tool[hidden]` on every guide. It now finds the station
+     by `data-kind="tools"`, which survives the per-guide index (Korea 12, Sedona 8).
+     Keep sizing this bar for FOUR. */
   .botbar{
     gap:var(--mn-gap,.3rem);
     padding:.4rem var(--mn-pad,.5rem);
@@ -44,7 +52,7 @@
   .botslot,.botbar .botmini{
     flex:1 1 0;min-width:0;
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
-    min-height:48px;padding:.3rem .15rem;
+    min-height:52px;padding:.3rem .15rem;
     background:var(--card);border:1px solid var(--rule2);border-radius:999px;
     color:var(--ink);text-decoration:none;cursor:pointer;font-family:var(--font-data);
   }
@@ -61,12 +69,16 @@
   }
   /* Active group: filled, accent-bordered, ink-weight label. A tinted fill (not a bare
      colour change) keeps "which one am I on" legible in both themes and at 320px. */
-  /* The tool slot carries an icon instead of a station dot — it is not a stop on the
-     journey, and dotting it would put it on a rail it isn't on. All five icons ship and
-     the swap is a `hidden` toggle, so changing tool costs nothing at runtime. */
+  /* The tool slot carries an icon instead of a station dot. Tools IS the rail's last stop
+     under R5, but these dots mark the two CONTENT groups the bar RANKS — dotting the fixed
+     slot would read as a third rankable group. Exactly ONE icon ships: GuideLayout renders
+     a single `.bslot-ico.bsi-split` (the Budget glyph). R4's five-icon set, one per
+     rankable tool panel, went when the five panels became one station — nothing swaps here
+     at runtime any more. */
   /* Explicit display, NOT the `hidden` attribute: the UA's `[hidden]{display:none}` does
-     not reach SVG elements inside an HTML document, so all five icons rendered stacked
-     and the bar grew to fit them. */
+     not reach SVG elements inside an HTML document, so R4's five icons rendered stacked
+     and the bar grew to fit them. The pair stays because it is what REVEALS the icon —
+     botbar.js adds .bsi-on, and the one icon that ships is invisible without it. */
   .botslot-tool .bslot-ico{display:none;color:var(--muted)}
   .botslot-tool .bslot-ico.bsi-on{display:block}
   .botslot-tool.botslot-on .bslot-ico{color:var(--accent-ink)}
@@ -84,7 +96,13 @@
      across slots rather than a decoration inside each. Hidden when a tool panel is
      open — no content group is current then, and pointing at one would be a lie. */
   .botbar-ind{
-    position:absolute;top:0;height:2.5px;border-radius:0 0 3px 3px;background:var(--accent);
+    /* Square ends, both edges. SPEC rule 1 — radius is binary in this system: 0 on
+       anything that holds content or evidence, 999px on anything you press. The
+       indicator is evidence (which group you are in), not a control, so it is 0 —
+       the 3px it used to carry on its outer corners was the only third value in
+       the file. The tablet rule below flips it to the bar's bottom edge and
+       inherits this 0 rather than re-rounding the other way. */
+    position:absolute;top:0;height:2.5px;border-radius:0;background:var(--accent);
     /* Full-bleed and SCALED to the live slot rather than resized to it. The X was already a
        transform (the finger drives it per-frame), but the width was a real `style.width` with a
        .3s `width` transition behind it — so every frame of every tab change ran layout on the
@@ -206,9 +224,9 @@
   @media(prefers-reduced-motion:reduce){.scrub-bubble{transition:opacity .14s ease}}
 
   /* ── Small phones (≤359px: iPhone SE 1st gen, Galaxy A-series compacts) ──
-     Five slots at 320px leaves ~60px each. Buy the room from the gutters, the
+     Four slots at 320px leaves ~75px each. Buy the room from the gutters, the
      tracking and the icon — never from the type step (--text-nano is already the
-     scale's floor) and never from the 48px height, which is the real touch target. */
+     scale's floor) and never from the 52px height, which is the real touch target. */
   @media(max-width:359px){
     .botbar{--mn-gap:.2rem;--mn-pad:.3rem}
     .bslot-txt,.botbar .botmini span{letter-spacing:.01em}
@@ -216,14 +234,16 @@
   }
   /* ── Large phones (≥430px: Pro Max, Ultra, most modern Androids) ──────────
      Don't let the bar sprawl: cap the row and centre it so the thumb still
-     reaches every slot from one side. */
+     reaches every slot from one side. The 52px height is the base one now, so
+     this step only caps the width — it carried a duplicate min-height:52px when
+     the base was 48. */
   @media(min-width:430px){
     .botbar{--mn-gap:.4rem;justify-content:center}
-    .botslot,.botbar .botmini{max-width:110px;min-height:52px}
+    .botslot,.botbar .botmini{max-width:110px}
   }
   /* ── Tablets (600–899px) ─────────────────────────────────────────────────
      A full-width bar on a tablet puts the outer slots out of thumb reach entirely.
-     Float it as a centred pill instead — the same five slots, one reach apart. */
+     Float it as a centred pill instead — the same four slots, one reach apart. */
   @media(min-width:600px){
     .botbar{
       left:50%;right:auto;transform:translateX(-50%);
@@ -231,7 +251,7 @@
       padding-bottom:.4rem;border:1px solid var(--rule2);border-radius:0;
       box-shadow:0 6px 24px rgba(16,20,24,.18),0 2px 6px rgba(16,20,24,.08);
     }
-    .botbar-ind{top:auto;bottom:0;border-radius:3px 3px 0 0}
+    .botbar-ind{top:auto;bottom:0}
     /* A floating pill sits ABOVE the page edge, so the last line of content needs the
        bar's own height plus that float gap to clear it. */
     .content{padding-bottom:7rem}
