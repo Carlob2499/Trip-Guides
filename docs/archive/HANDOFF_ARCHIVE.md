@@ -4,6 +4,37 @@
 > (the ~80-line budget its own header sets is now gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). Newest first, verbatim.
 
+## Snapshot (2026-08-11 — the R5 guide-UI handoff, COMPLETE: all six steps)
+
+`docs/design-handoff/design_handoff_guide_ui/` is fully implemented and live. Korea renders its
+13 stations, `us` its 9 — and `us` remains the day-zero fixture every absent state was walked
+against.
+
+**What steps 4-6 changed on top of the palette/rail/day-station half:**
+· Vote is deleted outright; the standalone `/tools/<trip>/` screen is deleted; Trip kit's content
+  moved into Plan. Tools and Field log are numbered stations, and `#tools` is the stable deep
+  link (the enclosing catblock is `#grp-12` on Korea and `#grp-8` on `us` — no outside surface
+  can hardcode that ordinal, so the anchor sits on ToolsScreen's own root).
+· The plate line lost its coordinate pair and `PLATE NN — CC` and gained the trip's cities plus
+  its next leg (`src/lib/plate-line.ts`). `sheet-order.ts` deliberately SURVIVES — the hub
+  indexes by number and that is a legitimate index; numbering the guide at the guide was not.
+· The masthead's right column carries the live trip state: stamp, day + destination clock,
+  `37 stops · 42 to book`. The counted row is build-time; the two "when is it" rows are
+  client-filled, because a build-time stamp reads UPCOMING for as long as the deploy lasts.
+
+**Four defects, all at a boundary, none visible to vitest.** Reminders rendered into the page
+still carrying the `hidden` its retired tool tab used to clear — a live Firebase feature in the
+DOM and invisible, found because axe flagged its now-dangling `aria-labelledby`. The hub's ☰
+menu and TRIP TOOLS row still pointed at the deleted route. Japan's Plan prose still sent
+readers to "the Entry card in your Trip kit", from inside the Entry card. And the rail's resume
+line shipped as an empty `<p hidden>` nothing ever filled — the quiet version of a fabricated
+"start here", now created and removed by mobile-nav's section memory.
+
+**One content edit was necessary and is flagged deliberately:** FALLBACKS §4 lists
+`src/content/guides/` as a scope guard, and `japan/01-plan.json` was edited anyway — removing a
+cross-reference to a feature R5 deleted. Continuity (a removal must not leave stale pointers)
+outranks the guard here, but it is the one line of this arc that touched guide content.
+
 ## Snapshot (2026-08-08 — Atlas migration **Stage D COMPLETE**; C+D both shipped)
 
 Two stages closed this session. **Stage C (the flip, `cd94ab5`+`93e1657`)**: `atlas.astro`

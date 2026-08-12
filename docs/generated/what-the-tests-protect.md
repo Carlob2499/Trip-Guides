@@ -185,16 +185,16 @@ nothing ships.
 
 **The masthead says where the trip goes and what is next, each exactly once.**
 
-- the cities lead the plate line, at reading scale  <sub>tests/visual/plate-line.spec.ts:21</sub>
-- ⌁ the coordinate pair and the plate number are gone from the guide  <sub>tests/visual/plate-line.spec.ts:31</sub>
-- ⌁ the eyebrow and the plate line never say the same thing  <sub>tests/visual/plate-line.spec.ts:41</sub>
-- the next leg appears mid-trip, naming a real stop from the day cards  <sub>tests/visual/plate-line.spec.ts:53</sub>
-- ⌁ the next leg is absent before the trip and after it  <sub>tests/visual/plate-line.spec.ts:67</sub>
-- the live-state column stamps the trip's state, and the stamp follows the clock  <sub>tests/visual/plate-line.spec.ts:76</sub>
-- ⌁ the counted progress row agrees with the checklist it counts  <sub>tests/visual/plate-line.spec.ts:98</sub>
-- ⌁ a guide with nothing to count renders no progress row  <sub>tests/visual/plate-line.spec.ts:111</sub>
-- ⌁ a plate line with nothing to say is shorter, never padded  <sub>tests/visual/plate-line.spec.ts:122</sub>
-- ⌁ the resume line is absent from the DOM until there IS one  <sub>tests/visual/plate-line.spec.ts:137</sub>
+- the cities lead the plate line, at reading scale  <sub>tests/visual/plate-line.spec.ts:28</sub>
+- ⌁ the coordinate pair and the plate number are gone from the guide  <sub>tests/visual/plate-line.spec.ts:38</sub>
+- ⌁ the eyebrow and the plate line never say the same thing  <sub>tests/visual/plate-line.spec.ts:47</sub>
+- the next leg appears mid-trip, naming a real stop from the day cards  <sub>tests/visual/plate-line.spec.ts:60</sub>
+- ⌁ the next leg is absent before the trip and after it  <sub>tests/visual/plate-line.spec.ts:73</sub>
+- the live-state column stamps the trip's state, and the stamp follows the clock  <sub>tests/visual/plate-line.spec.ts:82</sub>
+- ⌁ the counted progress row agrees with the checklist it counts  <sub>tests/visual/plate-line.spec.ts:102</sub>
+- ⌁ a guide with nothing to count renders no progress row  <sub>tests/visual/plate-line.spec.ts:115</sub>
+- ⌁ a plate line with nothing to say is shorter, never padded  <sub>tests/visual/plate-line.spec.ts:125</sub>
+- ⌁ the resume line is absent from the DOM until there IS one  <sub>tests/visual/plate-line.spec.ts:139</sub>
 
 ## Using a guide on the road
 

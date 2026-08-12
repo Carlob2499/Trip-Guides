@@ -191,3 +191,27 @@ distance, and a `userAgent` string in an error beacon are not layout branches an
 each named with its reason in `scripts/__tests__/no-device-checks.test.mjs`, which fails on any
 unlisted one and additionally requires the four files defining the guide body to contain none
 at all. Do not "fix" the allowed five; do not add a sixth without adding its reason.
+
+**Tools are per-guide, and the hub carries no door to them** (creator ruling, 2026-08-11). R5
+made the tools a station of each guide's own rail, and the hub's two surviving doors — a TRIP
+TOOLS row in table view, a link in the phone's ☰ menu — were both aimed at whichever guide the
+hub happened to feature. Rejected: keeping one as a convenience shortcut. A hub-level door can
+only ever point at ONE trip's tools while reading as a door to tools in general, so it promises
+the cross-trip screen R5 deleted. The design prototype draws a TOOLS button in the hub header
+and it is deliberately not built. From the hub the route is: fly to a sheet, then that guide's
+own rail.
+
+**A clock prints its zone as a derived offset, never a letter abbreviation** (2026-08-11).
+`localClockLabel` renders `21:05 GMT+9`; the design shows `KST`. Rejected: the abbreviation.
+`Intl` has no en-US abbreviation for most zones — it returns `GMT+9` for Seoul and Tokyo alike —
+so printing letters would mean shipping a hand-written table, which is invented data and wrong
+twice over: abbreviations collide across countries, and half of them move under DST. Where Intl
+does know one it is already printed (`us` is `America/Phoenix`, which shows `MST`). A test pins
+Copenhagen at `GMT+1` in January and `GMT+2` in July.
+
+**An image credit is derived from the URL or absent — never guessed** (2026-08-11). `imgCredit()`
+(`src/lib/img-width.ts`) returns "Wikimedia Commons" for a Commons FilePath URL and null for
+everything else. Rejected: crediting the host the photo is served from. A CDN hostname says where
+the bytes are cached, not who took the picture, and printing one would be a fabricated
+attribution wearing a real one's clothes. An uncredited photo carries no chip at all — the same
+honest blank the rest of the product uses when research comes up short.

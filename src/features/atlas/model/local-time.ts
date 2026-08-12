@@ -1,8 +1,9 @@
 /* The quick card's / pin card's ticking local clock (README §3, §"World view" pin cards) —
-   one pure formatter shared by both surfaces so "HH:MM THERE" never drifts between them. */
+   one pure formatter shared by both surfaces so the label never drifts between them. */
 
-/** `HH:MM THERE` in the guide's own tz, 24h, or null when the guide has no tz to read one
-    from — honest absence, never a guessed zone. */
+/** `HH:MM` plus the zone in the guide's own tz, 24h — `21:05 GMT+9`, or `15:28 MST` where
+    Intl knows a letter abbreviation. Null when the guide has no tz to read one from — honest
+    absence, never a guessed zone. */
 export function localClockLabel(tz: string | null | undefined, now: Date): string | null {
   if (!tz) return null;
   try {
