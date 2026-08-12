@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1826 checks · 1826 carry a stated promise · 156 files
+1827 checks · 1827 carry a stated promise · 156 files
 
 ## Can everyone read it
 
@@ -1914,10 +1914,11 @@ nothing ships.
 
 **A stylesheet nothing imports ships as a file nobody sees.**
 
-- found the stylesheets  <sub>scripts/__tests__/no-orphan-stylesheets.test.mjs:34</sub>
-- ⌁ every .css file is imported by at least one other file  <sub>scripts/__tests__/no-orphan-stylesheets.test.mjs:38</sub>
-- ⌁ the Tools station's own stylesheet is imported by the guide layout  <sub>scripts/__tests__/no-orphan-stylesheets.test.mjs:60</sub>
-- ⌁ every allowance still names a file that exists  <sub>scripts/__tests__/no-orphan-stylesheets.test.mjs:66</sub>
+- found the stylesheets  <sub>scripts/__tests__/no-orphan-stylesheets.test.mjs:51</sub>
+- ⌁ every .css file is imported by at least one other file  <sub>scripts/__tests__/no-orphan-stylesheets.test.mjs:55</sub>
+- ⌁ the gate can actually fail — each sheet is vouched for by its OWN path  <sub>scripts/__tests__/no-orphan-stylesheets.test.mjs:67</sub>
+- ⌁ the Tools station's own stylesheet is imported by the guide layout  <sub>scripts/__tests__/no-orphan-stylesheets.test.mjs:84</sub>
+- ⌁ every allowance still names a file that exists  <sub>scripts/__tests__/no-orphan-stylesheets.test.mjs:90</sub>
 
 **A venue that has closed down cannot stay in a guide.**
 
