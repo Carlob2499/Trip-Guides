@@ -149,6 +149,11 @@ export const EXEMPTIONS = [
       /(menufab|menusheet|pingsheet|\.sheet|sos-|modal|-pop|toast|drag|resume-chip|offline-pill|pal-|sm-|lnw-|cr-|share-|pincard|nav-hint|botbar)/.test(blockOf(v)),
   },
   {
+    id: "map-marker-sits-on-tile-imagery",
+    why: "Same reasoning as pincard-credit-sits-on-a-photograph, one category over: map.css's .map-chip (the filter row) and .map-cluster (the pin count marker) both paint OVER live map tiles — ocean blue, forest green, satellite grey, whatever OpenStreetMap/Google Maps renders underneath — not the site's own controlled page background. A 1px border alone doesn't guarantee separation against unpredictable tile colour the way it does on flat page paper; the shadow is the same 'read as a mark floating over imagery, not part of it' job the pincard credit chip already has an approved exemption for, just on the guide's own itinerary map instead of the hub's globe.",
+    test: (v) => v.category === "ELEVATION" && /(map-chip|map-cluster)/.test(blockOf(v)),
+  },
+  {
     id: "pincard-credit-sits-on-a-photograph",
     why: "The globe pin card's image credit is the one chip in this system whose background is a PHOTOGRAPH, and neither theme controls how bright that photograph is. A themed pair would invert with the page and put dark text on a dark cover half the time; the fixed dark scrim and near-white type hold their contrast over any image, which is the same reasoning every map attribution chip uses. The design screenshots draw it this way in both the light and the dark board.",
     test: (v) => v.category === "COLOUR" && /pincard-credit/.test(blockOf(v)),

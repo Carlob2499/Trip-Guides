@@ -3,7 +3,7 @@
    PUBLIC_GMAPS_KEY is set at build, gmaps-render.js upgrades the mount to an
    interactive Google map — the .wpop-* rules below style its info windows. */
 
-.itin-map{position:relative;width:100%;height:340px;border:1px solid var(--rule2);border-radius:5px;background:var(--bg2);margin:.4rem 0 .3rem;overflow:hidden;z-index:0}
+.itin-map{position:relative;width:100%;height:340px;border:1px solid var(--rule2);border-radius:0;background:var(--bg2);margin:.4rem 0 .3rem;overflow:hidden;z-index:0}
 .itin-map:fullscreen{width:100%;height:100%;border-radius:0}
 @media(max-width:599px){.itin-map{height:300px}}
 .osmmap{width:100%;height:100%;border:0;display:block}

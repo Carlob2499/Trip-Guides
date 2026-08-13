@@ -4,6 +4,33 @@
 > (the ~80-line budget its own header sets is now gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). Newest first, verbatim.
 
+## Snapshot (2026-08-13d — §C1 continues: flight.css/mobile-nav.css clean; two stale-doc
+corrections; B4 re-diagnosed with DesignSync actually reachable)
+
+Three commits, ship-loop-clean each: 1748 vitest, full 57-test `a11y.spec.ts` Playwright suite,
+build/lint/typecheck/drift green. Drift real count 104→100.
+
+**`.cat-fan-img`'s decorative shadow (the chapter-opener's fanned-photo stack) is gone — no
+stated functional reason, and this component predates the Atlas redesign (not in the
+design-system export to check against).** Radius→`0`, shadow removed; screenshot-verified in
+both themes that the existing `border:2px solid var(--card)` alone still reads clearly as
+separated, overlapping photos.
+
+**`.nav-hint` and `.botbar`'s shadows are the opposite case — kept, and formally exempted
+instead.** Each carries its OWN comment stating a real functional reason (a floating,
+out-of-flow element needs the shadow to read as lifted, not docked — `.botbar`'s is even scoped
+to exactly the `>=600px` media query its own comment calls "a centred pill"). Extended
+`overlay-shadow-is-approved` to name both rather than changing CSS against its own stated
+reasoning.
+
+**Two stale-doc corrections, found by checking the plan against actual source instead of
+trusting old checkboxes:** §B1 (the `waypoint-design` skill) and every A3 FIX row were already
+done — commits `e9ba8a5`/`c05fe26`/`7b4d92a` — just never ticked. And §B4 ("`shots/` triage")
+was marked "blocked, DesignSync unreachable" from an earlier subagent session; re-checked live
+from a main session and the tool DOES work, but this login's `list_projects` shows only two
+projects and neither has the `shots/`/`HANDOFF.md` content B4 needs — corrected the note so a
+future session doesn't retry the wrong blocker (it's project access, not tool access).
+
 ## Snapshot (2026-08-13 — design-reconciliation §C2a/§C2b shipped, §C1 opened: guide.css's
 drift fully paid down, plus two Tier-2 gate bugs found doing it)
 

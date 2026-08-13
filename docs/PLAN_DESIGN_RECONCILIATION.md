@@ -417,10 +417,25 @@ not novelty:
   centred pill"), so `overlay-shadow-is-approved` is extended to cover both by name rather than
   the CSS being changed against its own stated reasoning.
 
-  Remaining, file-by-file, same cadence: `intake.css`/`jetlag.css`/`map.css`/`painted-atlas.css`/
-  `panel-preview/` RADIUS+ELEVATION, `sights.css`/`atlas-map.js`/`firebase/styles.css`/
-  `gmaps-render.js`/`PwaHead.astro`/`GuideLayout.astro`/`util.js`/`accent-tokens.ts` COLOUR
-  (`og`/`recap` pages stay baselined like `budget-sheet.css` — same forced-literal class).
+  `intake.css`/`jetlag.css`/`map.css` are DONE too (100→91): six radii converted (a focus ring on
+  `.itk-wordmark` that was the ONLY `:focus-visible{outline;border-radius}` pairing anywhere in
+  the codebase — every other text-link focus ring is plain outline, so the radius was an
+  unexplained outlier, dropped; `.itk-blank`'s `3px 3px 0 0` → `0`, matching the day-chip
+  underline treatment; `.jl-toggle` → `999px`, matching `.card-more-sum`'s identical
+  full-width-disclosure-row precedent; `.jl-select`/`.jl-output`/`.itin-map` → `0`, form
+  control/content-callout/map-embed patterns already established). `.ng-form`'s shadow removed
+  (no stated reason, ordinary page content, border already present). `.map-chip`/`.map-cluster`'s
+  shadows are the opposite case, kept and exempted under a NEW entry
+  (`map-marker-sits-on-tile-imagery`) rather than folded into the existing overlay-shadow
+  reasoning, which doesn't fit: these aren't floating page chrome, they're markers painting OVER
+  live map tiles (unpredictable colour, not the site's own controlled page background) — the same
+  need for separation the existing `pincard-credit-sits-on-a-photograph` exemption already
+  recognizes for the hub's globe, one component category over.
+
+  Remaining, file-by-file, same cadence: `painted-atlas.css`/`panel-preview/` RADIUS+ELEVATION,
+  `sights.css`/`atlas-map.js`/`firebase/styles.css`/`gmaps-render.js`/`PwaHead.astro`/
+  `GuideLayout.astro`/`util.js`/`accent-tokens.ts` COLOUR (`og`/`recap` pages stay baselined like
+  `budget-sheet.css` — same forced-literal class).
 - [x] **C2a. Day-chip pill→underline fix** — DONE. `planner.css`'s `.dchip` lost `border-radius`,
   `border`, and `background:var(--card)` (→ `border:0;border-bottom:2px solid transparent`,
   `background:transparent`); `.dchip-active` ground moved from `var(--accent)` to `var(--sunken)`
