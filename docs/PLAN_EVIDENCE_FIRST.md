@@ -432,6 +432,21 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
 - DO NOT TOUCH: floors; question mechanism.
 - TESTS: fixture triggers all four; synthetic clean guide passes.
 - ACCEPTANCE: cases 2, 4, 7 (weak support = single non-primary source on an R3 anchor-adjacent claim), 8 detected.
+- **STATUS 2026-08-13 — LANDED, all four.** `scripts/audit/check-uncertainty.mjs`, wired as
+  verify's `uncertainty` row under E1's warn-first posture (blocks drafts, advises published).
+  Detectors are risk-independent for the same reason E1's are. Fixture: 6 findings, all four
+  cases. korea + denmark PASS. **Genuine findings on `us`** (advisory): Arizona's monsoon
+  season range is prose-only with no fact row, and its passA→passB→reconcile stages are
+  0.077 s / 0.078 s apart — so **case 8 is systemic, not japan-only**; the batched-checkpoint
+  write affects every guide the pipeline has produced.
+  Two calibration corrections worth keeping: (1) the forecast detector must match date-BEFORE-term
+  as well as term-before-date — the fixture's own "a reliable mid-Oct–early-Nov foliage peak"
+  was invisible to a term-first pattern; (2) `mid-\w+` matches "mid-morning", so the mid/early/late
+  prefix is restricted to month names or a seasonal gate starts flagging itinerary times of day.
+  Case 7 reads the ledger's OWN admission (`B-only` + "not directly fetched") rather than
+  guessing at source quality — the guide already said it; nothing was listening.
+  `check-run-integrity.mjs` keeps ownership of the git-history version of case 8; this is the
+  history-free counterpart for judging a state file alone, reusing its `MIN_GAP_SECONDS`.
 
 **F1 — Archive generated/historical artifacts** · S · mechanic
 - `korea.revision-27*.json` → `guides-intake/archive/`; grep for readers of those paths first (boundary check #1). ACCEPTANCE: builds/tests green, no reader breaks.

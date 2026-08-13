@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1997 checks · 1997 carry a stated promise · 167 files
+2018 checks · 2018 carry a stated promise · 168 files
 
 ## Can everyone read it
 
@@ -1782,6 +1782,30 @@ nothing ships.
 - case 6 — the unsurfaced R4 travel advisory  <sub>scripts/__tests__/check-risk-gates.test.mjs:145</sub>
 - case 9 — the ¥11,410 figure attributed to both a railway and an airline  <sub>scripts/__tests__/check-risk-gates.test.mjs:149</sub>
 - case 10 — all three malformed values ($19, / $1, / $80,)  <sub>scripts/__tests__/check-risk-gates.test.mjs:154</sub>
+
+**A guide cannot be published quoting forecasts, weak sources, or unresolved contradictions as if they were settled.**
+
+- flags a forecast term quoted with dates but backed by no fact row  <sub>scripts/__tests__/check-uncertainty.test.mjs:25</sub>
+- matches BOTH orders — guides write the date before the term as often as after  <sub>scripts/__tests__/check-uncertainty.test.mjs:30</sub>
+- is silent when a fact row DOES cover the term — korea's fact-backed monsoon claims  <sub>scripts/__tests__/check-uncertainty.test.mjs:39</sub>
+- does NOT treat a time of day as a seasonal date — the mid-morning false positive  <sub>scripts/__tests__/check-uncertainty.test.mjs:45</sub>
+- reports each term once, not once per section  <sub>scripts/__tests__/check-uncertainty.test.mjs:52</sub>
+- flags consecutive stages checkpointed under the floor  <sub>scripts/__tests__/check-uncertainty.test.mjs:64</sub>
+- is silent on genuine gaps — real runs are thousands of seconds apart  <sub>scripts/__tests__/check-uncertainty.test.mjs:70</sub>
+- ignores absent stages and a missing state file entirely  <sub>scripts/__tests__/check-uncertainty.test.mjs:74</sub>
+- flags a row that is B-only AND self-flagged as not directly fetched  <sub>scripts/__tests__/check-uncertainty.test.mjs:83</sub>
+- does NOT flag a B-only row that WAS fetched — B-only is normal, unverified is not  <sub>scripts/__tests__/check-uncertainty.test.mjs:90</sub>
+- is silent on an intake with no reconciliation ledger  <sub>scripts/__tests__/check-uncertainty.test.mjs:94</sub>
+- flags a contradiction with no question block recording an assumption  <sub>scripts/__tests__/check-uncertainty.test.mjs:102</sub>
+- is satisfied once the intake carries a q-block with an **Assumed:** line  <sub>scripts/__tests__/check-uncertainty.test.mjs:106</sub>
+- says nothing when C2 found no contradictions at all  <sub>scripts/__tests__/check-uncertainty.test.mjs:111</sub>
+- BLOCKS on a draft and only ADVISES on a published guide, with identical findings  <sub>scripts/__tests__/check-uncertainty.test.mjs:119</sub>
+- passes a guide with nothing to say — an empty artifact set is not a finding  <sub>scripts/__tests__/check-uncertainty.test.mjs:126</sub>
+- fails the fixture outright  <sub>scripts/__tests__/check-uncertainty.test.mjs:150</sub>
+- case 4 — koyo and foliage quoted with dates, zero fact rows covering them  <sub>scripts/__tests__/check-uncertainty.test.mjs:154</sub>
+- case 8 — passA/passB/reconcile checkpointed 71ms apart across three stages  <sub>scripts/__tests__/check-uncertainty.test.mjs:160</sub>
+- case 7 — the Sapporo birthday dinner shipped on Pass B convergence alone  <sub>scripts/__tests__/check-uncertainty.test.mjs:164</sub>
+- case 2 — the unresolved Oct 15 / Oct 22 start-date range  <sub>scripts/__tests__/check-uncertainty.test.mjs:168</sub>
 
 **A guide cannot publish with unsourced facts or broken references.**
 

@@ -37,6 +37,7 @@ import { evaluateReadiness } from "./guide-readiness.mjs";
 import { checkStaleness } from "./audit/check-staleness.mjs";
 import { checkFactsHygiene } from "./audit/check-facts-hygiene.mjs";
 import { evaluateRiskGates } from "./audit/check-risk-gates.mjs";
+import { evaluateUncertainty } from "./audit/check-uncertainty.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -94,7 +95,7 @@ const HUMAN_ROWS = [
 ];
 
 // Roll the three sources up for one guide into a verdict + structured scorecard.
-export function evaluateGuide(guide, slug, staleness, net, facts = null, unused = [], candidates = null, sources = null, destinationConfig = null) {
+export function evaluateGuide(guide, slug, staleness, net, facts = null, unused = [], candidates = null, sources = null, destinationConfig = null, uncertaintyInputs = null) {
   const draft = !!guide.draft;
   const readiness = evaluateReadiness(guide, slug); // { pass, warns, infos, coverage }
 
@@ -152,6 +153,16 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
   // which carry pre-existing debt that failing retroactively would only obstruct.
   const riskGates = evaluateRiskGates({ guide, facts, unused, hygiene, destinationConfig, enforce: draft });
 
+  // E3: does the guide SHIP the contradictions and uncertainties C2 gates at intake? Same
+  // warn-first split as riskGates. Artifacts (intake doc, state file, C2 findings) are read
+  // by verify() and passed in, like the candidates and staleness rows.
+  const uncertainty = evaluateUncertainty({
+    sections: Array.isArray(guide.sections) ? guide.sections : (guide.sections || []).flat(),
+    facts,
+    ...(uncertaintyInputs || {}),
+    enforce: draft,
+  });
+
   // Blocking gates → the exit-code verdict. Recency is intentionally NOT blocking.
   const blockers = [];
   if (!readiness.pass) blockers.push("research");
@@ -163,13 +174,14 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
   if (coverage.status === "fail") blockers.push("coverage");
   if (voice.status === "fail") blockers.push("voice");
   if (riskGates.status === "fail") blockers.push("risk-gates");
+  if (uncertainty.status === "fail") blockers.push("uncertainty");
   const pass = blockers.length === 0;
 
   // Registry visibility (informational, never a gate): a guide with no facts.json is normal,
   // and a guide with one should show at a glance how much of it is sourced data rather than prose.
   const registry = facts ? { count: Object.keys(facts).length, unused } : null;
 
-  return { slug, draft, pass, blockers, readiness, recency, content, venueStatus, candidates: candidatesRow, sources, coverage, voice, hygiene, riskGates, noVerifiedDate, registry };
+  return { slug, draft, pass, blockers, readiness, recency, content, venueStatus, candidates: candidatesRow, sources, coverage, voice, hygiene, riskGates, uncertainty, noVerifiedDate, registry };
 }
 
 export async function verify({ slug = null, network = false } = {}) {
@@ -213,8 +225,22 @@ export async function verify({ slug = null, network = false } = {}) {
   const destBySlug = {};
   for (const t of targets) destBySlug[t.slug] = await readDestinationConfig(t.slug);
 
+  // E3: the intake doc, the pipeline state file, and C2's contradiction findings. Read here
+  // (async) and threaded into the sync evaluator, like candidates and staleness.
+  const { readState, readIntake } = await import("./audit/check-uncertainty.mjs");
+  const { checkIntakeContradictions } = await import("./audit/check-intake-contradictions.mjs");
+  const uncertaintyBySlug = {};
+  for (const t of targets) {
+    const intakeMd = await readIntake(t.slug);
+    uncertaintyBySlug[t.slug] = {
+      intakeMd,
+      state: await readState(t.slug),
+      contradictions: intakeMd ? (checkIntakeContradictions(intakeMd).findings ?? []) : [],
+    };
+  }
+
   const results = targets.map(({ guide, slug: s, raw, facts, unusedFacts }) =>
-    evaluateGuide(guide, s, staleness, net, facts, unusedFacts, candidatesBySlug[s], sourceMix(raw, guide.country), destBySlug[s]));
+    evaluateGuide(guide, s, staleness, net, facts, unusedFacts, candidatesBySlug[s], sourceMix(raw, guide.country), destBySlug[s], uncertaintyBySlug[s]));
   return { results, error: null, network };
 }
 
@@ -332,6 +358,21 @@ export function report(r) {
         `${enforced ? " (draft: these BLOCK graduation)" : " (published: advisory this release, blocks once enforced)"}:`,
       );
       for (const f of r.riskGates.findings) L.push(`      ⚠ [${f.code}] ${f.msg}`);
+    }
+  }
+
+  // E3: contradiction + uncertainty. Same warn-first split, stated the same way — a reader
+  // must never have to guess whether an advisory line would have blocked a graduation.
+  if (r.uncertainty) {
+    if (r.uncertainty.status === "pass") {
+      L.push(`  P0 uncertainty· PASS — no unregistered forecasts, burst stages, or unresolved contradictions`);
+    } else {
+      const enforced = r.uncertainty.status === "fail";
+      L.push(
+        `  P0 uncertainty· ${enforced ? "FAIL" : "advisory"} — ${r.uncertainty.findings.length} finding(s)` +
+        `${enforced ? " (draft: these BLOCK graduation)" : " (published: advisory this release, blocks once enforced)"}:`,
+      );
+      for (const f of r.uncertainty.findings) L.push(`      ⚠ [${f.code}] ${f.msg}`);
     }
   }
 
