@@ -15,6 +15,11 @@
 //   · every `shipped` candidate NAME must appear somewhere in the guide's section files —
 //     a shipped row that matches nothing in the guide is either a typo or a lie, and both
 //     need a human.
+//   · D3: a table using the 3-column `| Candidate | Verdict | Shortlist |` format must mark
+//     every `shipped` row shortlisted (shipped ⊆ shortlist ⊆ considered — the funnel is
+//     broad research → shortlist → deep-verify, and "shipped" is not a side door around the
+//     shortlist stage). `researchFloors` may optionally add a `shortlist` count floor per
+//     rank; the 2-column legacy format (no third cell) isn't gated on shortlist at all.
 //
 // POSTURE for guides that predate the standard: no `## Candidates considered` section →
 // "n/a" (the coverage.json precedent — the gate only bites guides scaffolded after it).
@@ -37,6 +42,13 @@ export const DEFAULT_FLOORS = {
   3: { considered: 6, shipped: 3 },
 };
 
+/** true/false marks the shortlist cell explicitly; null means the row's table predates the
+    D3 column (2-cell `| Candidate | Verdict |` format) — shortlist isn't tracked, don't gate it. */
+function parseShortlistCell(cells) {
+  if (cells.length < 5) return null;
+  return /^y(es)?$/i.test(cells[3] ?? "");
+}
+
 /** Pure: parse the `## Candidates considered` section into per-priority row sets.
     Returns null when the section is absent (pre-standard guide). */
 export function parseCandidates(intakeMd) {
@@ -51,10 +63,10 @@ export function parseCandidates(intakeMd) {
     const rows = [];
     for (const line of block.split(/\r?\n/)) {
       const cells = line.split("|").map((c) => c.trim());
-      // A table row: | Candidate | Verdict | → ["", name, verdict, ""]
+      // A table row: | Candidate | Verdict | (Shortlist) | → ["", name, verdict, (shortlist), ""]
       if (cells.length < 4 || !cells[1]) continue;
       if (/^-+$/.test(cells[1]) || cells[1] === "Candidate") continue; // separator/header
-      rows.push({ name: cells[1], verdict: cells[2] ?? "" });
+      rows.push({ name: cells[1], verdict: cells[2] ?? "", shortlisted: parseShortlistCell(cells) });
     }
     tables.push({ rank: Number(m[1]), priority: m[2].trim() || "(unnamed)", rows });
   }
@@ -70,18 +82,27 @@ export function judgeCandidates(tables, { floors = {}, guideText = "" } = {}) {
     if (!floor) continue; // ranks beyond 3 are bonus depth, never gated
     const shipped = t.rows.filter((r) => /^shipped\b/i.test(r.verdict));
     const considered = t.rows.length;
-    summary.push({ rank: t.rank, priority: t.priority, considered, shipped: shipped.length, floor });
+    const shortlisted = t.rows.filter((r) => r.shortlisted === true).length;
+    summary.push({ rank: t.rank, priority: t.priority, considered, shipped: shipped.length, shortlisted, floor });
     if (considered < floor.considered) {
       findings.push(`priority ${t.rank} (${t.priority}): ${considered} candidate(s) considered, floor is ${floor.considered}`);
     }
     if (shipped.length < floor.shipped) {
       findings.push(`priority ${t.rank} (${t.priority}): ${shipped.length} shipped, floor is ${floor.shipped}`);
     }
+    if (floor.shortlist != null && shortlisted < floor.shortlist) {
+      findings.push(`priority ${t.rank} (${t.priority}): ${shortlisted} shortlisted, floor is ${floor.shortlist}`);
+    }
     for (const r of shipped) {
       // The cross-check that makes a padded table expensive: a shipped name must exist in
       // the guide. Case-insensitive substring — names appear inside prose and item fields.
       if (guideText && !guideText.toLowerCase().includes(r.name.toLowerCase())) {
         findings.push(`priority ${t.rank}: "${r.name}" is marked shipped but appears nowhere in the guide`);
+      }
+      // shipped ⊆ shortlist (D3): a table using the 3-column format must mark every shipped
+      // row shortlisted — shipped is the deep-verified tip of the funnel, never a side door.
+      if (r.shortlisted === false) {
+        findings.push(`priority ${t.rank}: "${r.name}" is marked shipped but not shortlisted`);
       }
     }
   }
@@ -116,7 +137,7 @@ if (isMain(import.meta.url)) {
   if (!slug || slug === "--slug") { console.error("Usage: node scripts/check-candidates.mjs --slug <slug>"); process.exit(1); }
   const r = await checkCandidates(slug);
   console.log(`[candidates] ${slug}: ${r.status}${r.reason ? ` — ${r.reason}` : ""}`);
-  for (const s of r.summary ?? []) console.log(`  P${s.rank} ${s.priority}: ${s.shipped}/${s.considered} shipped/considered (floor ${s.floor.shipped}/${s.floor.considered})`);
+  for (const s of r.summary ?? []) console.log(`  P${s.rank} ${s.priority}: ${s.shipped}/${s.shortlisted}/${s.considered} shipped/shortlisted/considered (floor ${s.floor.shipped}/${s.floor.shortlist ?? "—"}/${s.floor.considered})`);
   for (const f of r.findings ?? []) console.log(`  ✗ ${f}`);
   process.exit(r.status === "fail" ? 1 : 0);
 }

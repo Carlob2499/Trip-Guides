@@ -740,9 +740,16 @@ const guides = defineCollection({
     // candidates), so the floors are per-guide data with defaults in check-candidates.mjs.
     // Keys are priority ranks ("1", "2", "3"); values are the minimum candidates CONSIDERED
     // and SHIPPED that priority's table must show. Checked by verify's `candidates` row.
+    // `shortlist` (D3, optional) — a minimum count for the funnel's shortlist stage, on top
+    // of the shipped ⊆ shortlist structural check check-candidates.mjs always applies to the
+    // 3-column table format.
     researchFloors: z.record(
       z.string().regex(/^[1-3]$/),
-      z.object({ considered: z.number().int().positive(), shipped: z.number().int().positive() }),
+      z.object({
+        considered: z.number().int().positive(),
+        shipped: z.number().int().positive(),
+        shortlist: z.number().int().positive().optional(),
+      }),
     ).optional(),
     // R5 — per-group voice descriptors (design decision №4: "labels literal, always;
     // warmth demoted to the descriptors"). Keyed by EXACT group name (superRefine below

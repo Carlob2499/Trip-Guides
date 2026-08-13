@@ -13,6 +13,11 @@ const table = (rank, name, rows) =>
   `### Priority ${rank}: ${name}\n\n| Candidate | Verdict |\n|-----------|---------|\n` +
   rows.map(([c, v]) => `| ${c} | ${v} |`).join("\n") + "\n";
 
+// D3: the 3-column format — rows are [name, verdict, shortlist ("y"/"n"/"")].
+const table3 = (rank, name, rows) =>
+  `### Priority ${rank}: ${name}\n\n| Candidate | Verdict | Shortlist |\n|---|---|---|\n` +
+  rows.map(([c, v, s]) => `| ${c} | ${v} | ${s} |`).join("\n") + "\n";
+
 const doc = (...tables) => `# Intake\n\n## Candidates considered (fill DURING research)\n> blurb\n\n${tables.join("\n")}\n## Amendments\n- none\n`;
 
 describe("parseCandidates", () => {
@@ -25,8 +30,8 @@ describe("parseCandidates", () => {
     expect(t).toHaveLength(1);
     expect(t[0]).toMatchObject({ rank: 1, priority: "Food" });
     expect(t[0].rows).toEqual([
-      { name: "Shin Shin", verdict: "shipped" },
-      { name: "Ippudo", verdict: "rejected: chain, tourist-priced" },
+      { name: "Shin Shin", verdict: "shipped", shortlisted: null },
+      { name: "Ippudo", verdict: "rejected: chain, tourist-priced", shortlisted: null },
     ]);
   });
 
@@ -84,5 +89,58 @@ describe("judgeCandidates", () => {
       2: { considered: 10, shipped: 5 },
       3: { considered: 6, shipped: 3 },
     });
+  });
+});
+
+describe("judgeCandidates — D3 shortlist stage (shipped ⊆ shortlist ⊆ considered)", () => {
+  const rows3 = (n, shipped, shortlistExtra = 0) =>
+    Array.from({ length: n }, (_, i) => [
+      `Cand ${i}`,
+      i < shipped ? "shipped" : "rejected: no source",
+      i < shipped + shortlistExtra ? "y" : "n",
+    ]);
+  const names = (n) => Array.from({ length: n }, (_, i) => `Cand ${i}`).join(" ");
+
+  it("valid: every shipped row is also marked shortlisted → passes", () => {
+    const t = parseCandidates(doc(table3(1, "Food", rows3(16, 8))));
+    const r = judgeCandidates(t, { guideText: names(8) });
+    expect(r.status).toBe("pass");
+    expect(r.summary[0]).toMatchObject({ shipped: 8, shortlisted: 8 });
+  });
+
+  it("superset: shortlist marks MORE than shipped (extra candidates promoted, not shipped) → still passes", () => {
+    const t = parseCandidates(doc(table3(1, "Food", rows3(16, 8, 4))));
+    const r = judgeCandidates(t, { guideText: names(8) });
+    expect(r.status).toBe("pass");
+    expect(r.summary[0]).toMatchObject({ shipped: 8, shortlisted: 12 });
+  });
+
+  it("missing: a shipped row is NOT marked shortlisted → fails, naming the row (ACCEPTANCE)", () => {
+    const rows = rows3(16, 8);
+    rows[0][2] = "n"; // Cand 0 ships but was never shortlisted
+    const t = parseCandidates(doc(table3(1, "Food", rows)));
+    const r = judgeCandidates(t, { guideText: names(8) });
+    expect(r.status).toBe("fail");
+    expect(r.findings.join("\n")).toMatch(/"Cand 0" is marked shipped but not shortlisted/);
+  });
+
+  it("legacy 2-column tables (no Shortlist cell) are never gated on shortlist — backward compatible", () => {
+    const rows2 = Array.from({ length: 16 }, (_, i) => [`Cand ${i}`, i < 8 ? "shipped" : "rejected: no source"]);
+    const t = parseCandidates(doc(table(1, "Food", rows2)));
+    expect(t[0].rows.every((r) => r.shortlisted === null)).toBe(true);
+    const r = judgeCandidates(t, { guideText: names(8) });
+    expect(r.status).toBe("pass");
+  });
+
+  it("honors an optional per-rank `shortlist` floor via researchFloors, on top of considered/shipped", () => {
+    const t = parseCandidates(doc(table3(1, "Food", rows3(16, 8, 0))));
+    const passing = judgeCandidates(t, { guideText: names(8) });
+    expect(passing.status).toBe("pass");
+    const withFloor = judgeCandidates(t, {
+      floors: { 1: { considered: 16, shipped: 8, shortlist: 10 } },
+      guideText: names(8),
+    });
+    expect(withFloor.status).toBe("fail");
+    expect(withFloor.findings.join("\n")).toMatch(/8 shortlisted, floor is 10/);
   });
 });

@@ -45,6 +45,27 @@ function issuePaths(result: any) {
 // as a red new-guide Action, not a red local test. Born after the R6 phase seeds landed in
 // the scaffold; parses the real scaffold output (map/weather/holidays wired, niche section,
 // facet tags) against the real collection schema.
+describe("content.config guides schema — researchFloors (D3 shortlist floor)", () => {
+  it("accepts a researchFloors entry with the optional shortlist count", () => {
+    const result = schema.safeParse(
+      validGuide({ researchFloors: { 1: { considered: 16, shipped: 8, shortlist: 10 } } }),
+    );
+    expect(issuePaths(result)).toEqual([]);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      // The regression this pins: an object schema silently STRIPS unrecognized keys by
+      // default — without `shortlist` declared, this override would parse "successfully"
+      // while quietly losing the field before it ever reaches check-candidates.mjs.
+      expect((result.data as any).researchFloors["1"].shortlist).toBe(10);
+    }
+  });
+
+  it("still accepts a researchFloors entry with no shortlist (pre-D3 shape)", () => {
+    const result = schema.safeParse(validGuide({ researchFloors: { 2: { considered: 10, shipped: 5 } } }));
+    expect(issuePaths(result)).toEqual([]);
+  });
+});
+
 describe("content.config guides schema — scaffold contract", () => {
   it("accepts a freshly scaffolded guide, facet seeds included", async () => {
     const { buildGuideObject } = await import("../scripts/scaffold-guide.mjs");

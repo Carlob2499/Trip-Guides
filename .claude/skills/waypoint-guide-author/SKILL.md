@@ -175,16 +175,21 @@ field sets how hard Pass B leans here (off-the-beaten-path → aggressive; bucke
 stays, with the timing that makes it bearable). Judged by rubric row **#12** plus #9 (party fit)
 and the bar test.
 
-### Candidates considered — the consideration set is evidence (S2/S3, 2026-08-02)
+### Candidates considered — the consideration set is evidence (S2/S3, 2026-08-02; D3 funnel)
 Record every venue/experience you EVALUATE for a ranked priority in the intake doc's `##
-Candidates considered` tables, AS you research — verdict `shipped` or `rejected: <one-line
-reason>`. The rejections are the point: "rejected: tourist-priced chain, locals rank Shin Shin
-above it" is research evidence a survivors-only guide destroys. Verify gates on per-priority
-floors (defaults 16/8 · 10/5 · 6/3 considered/shipped; a guide that legitimately can't owe that
-sets `researchFloors` in `_guide.json` — the tabBudget precedent) and cross-checks every
-`shipped` name against the guide, so padding the table is expensive and an honest `rejected:
-couldn't verify` row is a good row. Pass B's floors are separate and quantitative: a full pass
-owes ≥8 finds, ≥3 crowd/timing, ≥2 novel/alternative.
+Candidates considered` tables, AS you research, as a 3-column row: `| Candidate | Verdict |
+Shortlist |` — verdict `shipped` or `rejected: <one-line reason>`; Shortlist `y`/`n` for whether
+it survived past first-pass discovery to deep verification. The funnel is broad discovery →
+shortlist → deep-verify → shipped, and **shipped ⊆ shortlist ⊆ considered**: every `shipped` row
+MUST also be marked shortlisted, or the gate fails naming it — shipped is never a side door
+around the shortlist stage. The rejections are the point: "rejected: tourist-priced chain,
+locals rank Shin Shin above it" is research evidence a survivors-only guide destroys. Verify
+gates on per-priority floors (defaults 16/8 · 10/5 · 6/3 considered/shipped; a guide that
+legitimately can't owe that sets `researchFloors` in `_guide.json` — the tabBudget precedent,
+optionally adding a `shortlist` count floor per rank) and cross-checks every `shipped` name
+against the guide, so padding the table is expensive and an honest `rejected: couldn't verify`
+row is a good row. Pass B's floors are separate and quantitative: a full pass owes ≥8 finds, ≥3
+crowd/timing, ≥2 novel/alternative.
 
 ## Fact discipline — applies to BOTH passes
 - Keep a **verification ledger while researching** — one row per perishable fact, captured as you

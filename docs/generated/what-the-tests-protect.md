@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1958 checks · 1958 carry a stated promise · 165 files
+1965 checks · 1965 carry a stated promise · 165 files
 
 ## Can everyone read it
 
@@ -262,77 +262,79 @@ nothing ships.
 
 **A guide cannot ship in a broken shape — the build refuses malformed or incomplete content.**
 
-- accepts a freshly scaffolded guide, facet seeds included  <sub>src/content.config.test.ts:49</sub>
-- accepts a panelGroups entry naming an all-carded, all-titled group  <sub>src/content.config.test.ts:59</sub>
-- rejects a panelGroups entry that names no real group (the typo failure mode)  <sub>src/content.config.test.ts:69</sub>
-- accepts a panel group containing own-cards types (the SECTION is the Panel, not each item)  <sub>src/content.config.test.ts:75</sub>
-- rejects a panel group containing an untitled section (the title is the Panel's id)  <sub>src/content.config.test.ts:91</sub>
-- rejects duplicate titles within a panel group (the title is the storage id)  <sub>src/content.config.test.ts:98</sub>
-- accepts weather and holidays in a panel group (hostable-but-not-carded: the Panel hides with their empty wrapper)  <sub>src/content.config.test.ts:108</sub>
-- passes at exactly the default budget (10 groups)  <sub>src/content.config.test.ts:121</sub>
-- fails past the default budget (11 groups) with an issue on tabBudget  <sub>src/content.config.test.ts:127</sub>
-- respects a raised per-guide tabBudget  <sub>src/content.config.test.ts:134</sub>
-- still fails a guide that exceeds its own raised tabBudget  <sub>src/content.config.test.ts:140</sub>
-- passes a mid-value colour legible on both grounds  <sub>src/content.config.test.ts:149</sub>
-- rejects a colour illegible against the light background  <sub>src/content.config.test.ts:156</sub>
-- rejects a colour illegible against the dark background even though it passes light  <sub>src/content.config.test.ts:165</sub>
-- rejects a theme colour not shaped like #RRGGBB  <sub>src/content.config.test.ts:174</sub>
-- rejects a ≈ figure with no verified_on under strict provenance  <sub>src/content.config.test.ts:183</sub>
-- accepts the same ≈ figure once verified_on is present  <sub>src/content.config.test.ts:194</sub>
-- does not gate ≈ figures when provenance isn't declared strict  <sub>src/content.config.test.ts:212</sub>
-- does not require verified_on for an honestly-flagged ⚠ gap under strict provenance  <sub>src/content.config.test.ts:219</sub>
-- rejects a learnings day whose date matches no itinerary day  <sub>src/content.config.test.ts:233</sub>
-- accepts a learnings day whose date matches a real itinerary day  <sub>src/content.config.test.ts:244</sub>
-- rejects a skipped stop whose declared group names no real section group  <sub>src/content.config.test.ts:254</sub>
-- accepts a skipped stop whose declared group is real  <sub>src/content.config.test.ts:268</sub>
-- rejects a roomId shorter than the RTDB write-gate minimum  <sub>src/content.config.test.ts:283</sub>
-- accepts a 16-char lowercase-alphanumeric roomId  <sub>src/content.config.test.ts:288</sub>
-- requires source_url + verified_on on an entry-requirements row  <sub>src/content.config.test.ts:293</sub>
-- accepts a fully-provenanced entry-requirements row  <sub>src/content.config.test.ts:300</sub>
-- rejects an advisory level outside 1–4  <sub>src/content.config.test.ts:316</sub>
-- accepts a guide with no region set (every pre-existing guide)  <sub>src/content.config.test.ts:332</sub>
-- accepts a single-state region alongside a real country  <sub>src/content.config.test.ts:337</sub>
-- accepts a multi-state region string  <sub>src/content.config.test.ts:342</sub>
-- still requires country even when region is set  <sub>src/content.config.test.ts:347</sub>
-- passes clean allowlisted HTML  <sub>src/content.config.test.ts:356</sub>
-- rejects a <script> tag in body  <sub>src/content.config.test.ts:363</sub>
-- rejects an onerror= handler on an <img>  <sub>src/content.config.test.ts:371</sub>
-- rejects a javascript: href  <sub>src/content.config.test.ts:378</sub>
-- allows the data-addr-kr span (field-tools tap-to-copy)  <sub>src/content.config.test.ts:385</sub>
-- rejects a span carrying any other attribute  <sub>src/content.config.test.ts:392</sub>
-- checks list items too  <sub>src/content.config.test.ts:399</sub>
-- accepts a guide with archived: true  <sub>src/content.config.test.ts:409</sub>
-- accepts a guide with archived omitted (default unset, not required)  <sub>src/content.config.test.ts:414</sub>
-- rejects a non-boolean archived value  <sub>src/content.config.test.ts:419</sub>
-- accepts the classic Commons cover unchanged (no existing guide regresses)  <sub>src/content.config.test.ts:426</sub>
-- accepts a direct royalty-free src WITH credit + license  <sub>src/content.config.test.ts:431</sub>
-- rejects a direct src without credit/license — the honesty apparatus travels with the widened horizon  <sub>src/content.config.test.ts:439</sub>
-- rejects an http (non-https) src  <sub>src/content.config.test.ts:445</sub>
-- rejects file + src together (two still sources, one slot)  <sub>src/content.config.test.ts:452</sub>
-- rejects an empty cover object (needs file, src, or video)  <sub>src/content.config.test.ts:460</sub>
-- accepts video with required credit + license (poster optional — the photo cover is the poster)  <sub>src/content.config.test.ts:465</sub>
-- rejects video missing credit or license  <sub>src/content.config.test.ts:473</sub>
-- accepts a video-only cover (poster falls back to the first sight photo downstream)  <sub>src/content.config.test.ts:480</sub>
-- accepts the classic Commons file unchanged (no existing guide regresses)  <sub>src/content.config.test.ts:494</sub>
-- accepts a direct royalty-free src WITH credit + license  <sub>src/content.config.test.ts:499</sub>
-- rejects a direct src without credit/license — attribution travels in the data or not at all  <sub>src/content.config.test.ts:507</sub>
-- rejects an http (non-https) src  <sub>src/content.config.test.ts:513</sub>
-- rejects file + src together (two sources, one slot)  <sub>src/content.config.test.ts:520</sub>
-- rejects an img object with neither file nor src  <sub>src/content.config.test.ts:528</sub>
-- rejects a non-https creditUrl  <sub>src/content.config.test.ts:533</sub>
-- accepts descriptors whose keys are real section groups  <sub>src/content.config.test.ts:542</sub>
-- rejects a descriptor key no section uses (a group rename must error, not silently orphan the line)  <sub>src/content.config.test.ts:547</sub>
-- accepts a sourced rain alternate  <sub>src/content.config.test.ts:564</sub>
-- rejects an alternate with no source — a refuge claim is perishable like any other  <sub>src/content.config.test.ts:575</sub>
-- rejects a trigger outside rain/closure  <sub>src/content.config.test.ts:582</sub>
-- plan_b body rides the prose tag allowlist (a <script> there fails like anywhere else)  <sub>src/content.config.test.ts:589</sub>
-- accepts a fact with none of risk/entity/evidence — every pre-existing row's shape  <sub>src/content.config.test.ts:613</sub>
-- accepts risk 0 through 4  <sub>src/content.config.test.ts:619</sub>
-- rejects risk outside 0-4, and rejects a non-integer risk  <sub>src/content.config.test.ts:627</sub>
-- accepts a kebab-case entity id  <sub>src/content.config.test.ts:635</sub>
-- rejects an entity id that isn't kebab-case  <sub>src/content.config.test.ts:643</sub>
-- accepts evidence up to 240 chars, rejects past it  <sub>src/content.config.test.ts:651</sub>
-- accepts all three together on one row (the eventual R3/R4 shape)  <sub>src/content.config.test.ts:659</sub>
+- accepts a researchFloors entry with the optional shortlist count  <sub>src/content.config.test.ts:49</sub>
+- still accepts a researchFloors entry with no shortlist (pre-D3 shape)  <sub>src/content.config.test.ts:63</sub>
+- accepts a freshly scaffolded guide, facet seeds included  <sub>src/content.config.test.ts:70</sub>
+- accepts a panelGroups entry naming an all-carded, all-titled group  <sub>src/content.config.test.ts:80</sub>
+- rejects a panelGroups entry that names no real group (the typo failure mode)  <sub>src/content.config.test.ts:90</sub>
+- accepts a panel group containing own-cards types (the SECTION is the Panel, not each item)  <sub>src/content.config.test.ts:96</sub>
+- rejects a panel group containing an untitled section (the title is the Panel's id)  <sub>src/content.config.test.ts:112</sub>
+- rejects duplicate titles within a panel group (the title is the storage id)  <sub>src/content.config.test.ts:119</sub>
+- accepts weather and holidays in a panel group (hostable-but-not-carded: the Panel hides with their empty wrapper)  <sub>src/content.config.test.ts:129</sub>
+- passes at exactly the default budget (10 groups)  <sub>src/content.config.test.ts:142</sub>
+- fails past the default budget (11 groups) with an issue on tabBudget  <sub>src/content.config.test.ts:148</sub>
+- respects a raised per-guide tabBudget  <sub>src/content.config.test.ts:155</sub>
+- still fails a guide that exceeds its own raised tabBudget  <sub>src/content.config.test.ts:161</sub>
+- passes a mid-value colour legible on both grounds  <sub>src/content.config.test.ts:170</sub>
+- rejects a colour illegible against the light background  <sub>src/content.config.test.ts:177</sub>
+- rejects a colour illegible against the dark background even though it passes light  <sub>src/content.config.test.ts:186</sub>
+- rejects a theme colour not shaped like #RRGGBB  <sub>src/content.config.test.ts:195</sub>
+- rejects a ≈ figure with no verified_on under strict provenance  <sub>src/content.config.test.ts:204</sub>
+- accepts the same ≈ figure once verified_on is present  <sub>src/content.config.test.ts:215</sub>
+- does not gate ≈ figures when provenance isn't declared strict  <sub>src/content.config.test.ts:233</sub>
+- does not require verified_on for an honestly-flagged ⚠ gap under strict provenance  <sub>src/content.config.test.ts:240</sub>
+- rejects a learnings day whose date matches no itinerary day  <sub>src/content.config.test.ts:254</sub>
+- accepts a learnings day whose date matches a real itinerary day  <sub>src/content.config.test.ts:265</sub>
+- rejects a skipped stop whose declared group names no real section group  <sub>src/content.config.test.ts:275</sub>
+- accepts a skipped stop whose declared group is real  <sub>src/content.config.test.ts:289</sub>
+- rejects a roomId shorter than the RTDB write-gate minimum  <sub>src/content.config.test.ts:304</sub>
+- accepts a 16-char lowercase-alphanumeric roomId  <sub>src/content.config.test.ts:309</sub>
+- requires source_url + verified_on on an entry-requirements row  <sub>src/content.config.test.ts:314</sub>
+- accepts a fully-provenanced entry-requirements row  <sub>src/content.config.test.ts:321</sub>
+- rejects an advisory level outside 1–4  <sub>src/content.config.test.ts:337</sub>
+- accepts a guide with no region set (every pre-existing guide)  <sub>src/content.config.test.ts:353</sub>
+- accepts a single-state region alongside a real country  <sub>src/content.config.test.ts:358</sub>
+- accepts a multi-state region string  <sub>src/content.config.test.ts:363</sub>
+- still requires country even when region is set  <sub>src/content.config.test.ts:368</sub>
+- passes clean allowlisted HTML  <sub>src/content.config.test.ts:377</sub>
+- rejects a <script> tag in body  <sub>src/content.config.test.ts:384</sub>
+- rejects an onerror= handler on an <img>  <sub>src/content.config.test.ts:392</sub>
+- rejects a javascript: href  <sub>src/content.config.test.ts:399</sub>
+- allows the data-addr-kr span (field-tools tap-to-copy)  <sub>src/content.config.test.ts:406</sub>
+- rejects a span carrying any other attribute  <sub>src/content.config.test.ts:413</sub>
+- checks list items too  <sub>src/content.config.test.ts:420</sub>
+- accepts a guide with archived: true  <sub>src/content.config.test.ts:430</sub>
+- accepts a guide with archived omitted (default unset, not required)  <sub>src/content.config.test.ts:435</sub>
+- rejects a non-boolean archived value  <sub>src/content.config.test.ts:440</sub>
+- accepts the classic Commons cover unchanged (no existing guide regresses)  <sub>src/content.config.test.ts:447</sub>
+- accepts a direct royalty-free src WITH credit + license  <sub>src/content.config.test.ts:452</sub>
+- rejects a direct src without credit/license — the honesty apparatus travels with the widened horizon  <sub>src/content.config.test.ts:460</sub>
+- rejects an http (non-https) src  <sub>src/content.config.test.ts:466</sub>
+- rejects file + src together (two still sources, one slot)  <sub>src/content.config.test.ts:473</sub>
+- rejects an empty cover object (needs file, src, or video)  <sub>src/content.config.test.ts:481</sub>
+- accepts video with required credit + license (poster optional — the photo cover is the poster)  <sub>src/content.config.test.ts:486</sub>
+- rejects video missing credit or license  <sub>src/content.config.test.ts:494</sub>
+- accepts a video-only cover (poster falls back to the first sight photo downstream)  <sub>src/content.config.test.ts:501</sub>
+- accepts the classic Commons file unchanged (no existing guide regresses)  <sub>src/content.config.test.ts:515</sub>
+- accepts a direct royalty-free src WITH credit + license  <sub>src/content.config.test.ts:520</sub>
+- rejects a direct src without credit/license — attribution travels in the data or not at all  <sub>src/content.config.test.ts:528</sub>
+- rejects an http (non-https) src  <sub>src/content.config.test.ts:534</sub>
+- rejects file + src together (two sources, one slot)  <sub>src/content.config.test.ts:541</sub>
+- rejects an img object with neither file nor src  <sub>src/content.config.test.ts:549</sub>
+- rejects a non-https creditUrl  <sub>src/content.config.test.ts:554</sub>
+- accepts descriptors whose keys are real section groups  <sub>src/content.config.test.ts:563</sub>
+- rejects a descriptor key no section uses (a group rename must error, not silently orphan the line)  <sub>src/content.config.test.ts:568</sub>
+- accepts a sourced rain alternate  <sub>src/content.config.test.ts:585</sub>
+- rejects an alternate with no source — a refuge claim is perishable like any other  <sub>src/content.config.test.ts:596</sub>
+- rejects a trigger outside rain/closure  <sub>src/content.config.test.ts:603</sub>
+- plan_b body rides the prose tag allowlist (a <script> there fails like anywhere else)  <sub>src/content.config.test.ts:610</sub>
+- accepts a fact with none of risk/entity/evidence — every pre-existing row's shape  <sub>src/content.config.test.ts:634</sub>
+- accepts risk 0 through 4  <sub>src/content.config.test.ts:640</sub>
+- rejects risk outside 0-4, and rejects a non-integer risk  <sub>src/content.config.test.ts:648</sub>
+- accepts a kebab-case entity id  <sub>src/content.config.test.ts:656</sub>
+- rejects an entity id that isn't kebab-case  <sub>src/content.config.test.ts:664</sub>
+- accepts evidence up to 240 chars, rejects past it  <sub>src/content.config.test.ts:672</sub>
+- accepts all three together on one row (the eventual R3/R4 shape)  <sub>src/content.config.test.ts:680</sub>
 
 ## Design system and shared rules
 
@@ -2231,16 +2233,21 @@ nothing ships.
 
 **Proposed venues are checked before they can enter a guide.**
 
-- returns null when the section is absent — a pre-standard guide is n/a, never failed  <sub>scripts/__tests__/check-candidates.test.mjs:19</sub>
-- parses per-priority tables, skipping header and separator rows  <sub>scripts/__tests__/check-candidates.test.mjs:23</sub>
-- stops at the next ## section — Amendments rows never leak in  <sub>scripts/__tests__/check-candidates.test.mjs:33</sub>
-- passes a table meeting the default floors, with every shipped name present in the guide  <sub>scripts/__tests__/check-candidates.test.mjs:44</sub>
-- fails a thin consideration set by count, naming the floor  <sub>scripts/__tests__/check-candidates.test.mjs:50</sub>
-- fails a shipped row that appears nowhere in the guide — the anti-padding cross-check  <sub>scripts/__tests__/check-candidates.test.mjs:56</sub>
-- honors per-guide researchFloors over the defaults — the tabBudget precedent  <sub>scripts/__tests__/check-candidates.test.mjs:62</sub>
-- gates only ranks 1-3; a fourth table is bonus depth  <sub>scripts/__tests__/check-candidates.test.mjs:69</sub>
-- FAILS an empty section on a post-standard guide — the thinness this exists to measure  <sub>scripts/__tests__/check-candidates.test.mjs:75</sub>
-- default floors are the documented 16/8 · 10/5 · 6/3  <sub>scripts/__tests__/check-candidates.test.mjs:81</sub>
+- returns null when the section is absent — a pre-standard guide is n/a, never failed  <sub>scripts/__tests__/check-candidates.test.mjs:24</sub>
+- parses per-priority tables, skipping header and separator rows  <sub>scripts/__tests__/check-candidates.test.mjs:28</sub>
+- stops at the next ## section — Amendments rows never leak in  <sub>scripts/__tests__/check-candidates.test.mjs:38</sub>
+- passes a table meeting the default floors, with every shipped name present in the guide  <sub>scripts/__tests__/check-candidates.test.mjs:49</sub>
+- fails a thin consideration set by count, naming the floor  <sub>scripts/__tests__/check-candidates.test.mjs:55</sub>
+- fails a shipped row that appears nowhere in the guide — the anti-padding cross-check  <sub>scripts/__tests__/check-candidates.test.mjs:61</sub>
+- honors per-guide researchFloors over the defaults — the tabBudget precedent  <sub>scripts/__tests__/check-candidates.test.mjs:67</sub>
+- gates only ranks 1-3; a fourth table is bonus depth  <sub>scripts/__tests__/check-candidates.test.mjs:74</sub>
+- FAILS an empty section on a post-standard guide — the thinness this exists to measure  <sub>scripts/__tests__/check-candidates.test.mjs:80</sub>
+- default floors are the documented 16/8 · 10/5 · 6/3  <sub>scripts/__tests__/check-candidates.test.mjs:86</sub>
+- valid: every shipped row is also marked shortlisted → passes  <sub>scripts/__tests__/check-candidates.test.mjs:104</sub>
+- superset: shortlist marks MORE than shipped (extra candidates promoted, not shipped) → still passes  <sub>scripts/__tests__/check-candidates.test.mjs:111</sub>
+- missing: a shipped row is NOT marked shortlisted → fails, naming the row (ACCEPTANCE)  <sub>scripts/__tests__/check-candidates.test.mjs:118</sub>
+- legacy 2-column tables (no Shortlist cell) are never gated on shortlist — backward compatible  <sub>scripts/__tests__/check-candidates.test.mjs:127</sub>
+- honors an optional per-rank `shortlist` floor via researchFloors, on top of considered/shipped  <sub>scripts/__tests__/check-candidates.test.mjs:135</sub>
 
 **Re-checking a fact updates its date only when it was genuinely re-checked.**
 
