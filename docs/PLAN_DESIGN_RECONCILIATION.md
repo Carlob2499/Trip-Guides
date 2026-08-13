@@ -535,14 +535,42 @@ not novelty:
   themes + 375px mobile: the preview UI follows the reader's live theme, the sheet itself
   stays fixed white paper regardless (same "paper is white whatever theme you're reading in"
   call print.css already makes for the guide itself).
-- [ ] **C4. Sync the projects forward**: REPO-SIDE DONE 2026-08-13 · **remote push still
-  PENDING** — push the corrected token files back to P1 (`waypoint_anchors/tokens.css` if
-  stale) and P3 (both levels of `tokens/colors.css`, the two color cards, `readme.md`) via
-  `DesignSync finalize_plan`+`write_files`, so the design projects stop lagging the repo.
-  Also fix the residual kit defects found 2026-08-12: `--emergency-red-dark: #ef5350` →
-  `#ef8a83`, and the kit serif stack missing the CJK fallbacks (`'Literata Variable',
-  Georgia, 'Times New Roman', AppleMyungjo, Batang, 'Noto Serif CJK KR', serif`) — fix in
-  repo first, then re-upload the touched files to the ds-project (`ef8458ac-…`) too.
+- [x] **C4. Sync the projects forward** — DONE 2026-08-13 (repo `fc49501`, remote push same
+  day from a main session where `DesignSync` was mounted). Pushed the corrected token files
+  back to P1 (`waypoint_anchors/tokens.css`) and P3 (both levels of `tokens/colors.css`, the
+  two color cards, `readme.md`) via `DesignSync finalize_plan`+`write_files`, so the design
+  projects stop lagging the repo. Also fixed the residual kit defects found 2026-08-12:
+  `--emergency-red-dark: #ef5350` → `#ef8a83`, and the kit serif stack missing the CJK
+  fallbacks (`'Literata Variable', Georgia, 'Times New Roman', AppleMyungjo, Batang, 'Noto
+  Serif CJK KR', serif`) — fixed in repo first, then re-uploaded the touched files to the
+  ds-project (`ef8458ac-…`) too.
+  - **Staleness turned out to be per-project, not uniform — verified with `get_file` before
+    writing anything, not assumed.** P1's `waypoint_anchors/tokens.css` carries no
+    `--crit`/emergency-red token at all (its own separate palette), so only its `--fd` short
+    stack needed fixing. P3's top-level `tokens/colors.css` had both defects; its nested
+    `design_handoff_guide_ui/design-system/tokens/colors.css` copy had only the color defect
+    (`--fd` there was already CJK-complete). The ds-project's `tokens/colors.css` had only the
+    color defect too. Each project got exactly the write it needed, not a blind overwrite.
+  - **One more drift found and folded in, beyond the two named defects**: `--accent-ink`/
+    `--aink` was still `#80371b` on both P3 copies (P1 has no equivalent token to compare
+    against), while the repo's shipped `base.css` and its own already-fixed nested mirror
+    carry `#783319` — the C2a accent-ink recompute (against the new `--sunken` ground) that
+    had never been synced back. Folded into the same P3 writes (`tokens/colors.css` ×2,
+    `guidelines/colors-accent.html` ×2 swatch, `readme.md` ×2 prose) since "sync forward" is
+    the explicit point of this task and leaving a second, adjacent stale value in the same
+    files the moment they were open would just create the next drift ticket. The ds-project
+    already had `#783319` everywhere — it was ahead of P3 on this one token, behind on the
+    other two; left untouched there.
+  - **`guidelines/colors-status.html`** (the other "color card") needed no write at either
+    project — its `crit #ef8a83` dark-mode note was already correct on P3 and the ds-project
+    alike; only `colors-accent.html`'s `--aink` swatch was stale.
+  - **P1's own `--aink:#80371b`** was deliberately left untouched, not overlooked — it's the
+    same stale value in a *different* design project's token freeze, and C4's brief named two
+    specific defects, not a general accent-ink resync for P1. Fixing it would be a reasonable
+    follow-up but wasn't verified against P1's own intent for that file; flagging rather than
+    guessing.
+  - The two frozen design-tool exports and two documented seams from the repo-side fix
+    (below) are unchanged by the remote push — they were never in scope for `write_files`.
   - **Both kit defects are fixed in-repo** (commit `fc49501`), across five files, all now
     matching `src/styles/base.css` — the file DESIGN.md itself calls "the one place a token
     value is ever true". Emergency red: `DESIGN.md`'s front-matter `emergency-red-dark` and
@@ -575,17 +603,14 @@ not novelty:
     longer matches its own `--fd` first entry. Same divergence already existed pre-fix
     (`"Literata"` vs base.css's `'Literata Variable'`); this change did not create it, but
     it is now load-bearing in a file that ships a font import.
-  - **The `DesignSync` half did not run: the tool is absent from this session**, which is a
-    different failure from the `list_projects` filtering quirk §B4 documents above. That
-    quirk is answered by calling `get_file`/`write_files` with an explicit projectId — but
-    there is no `get_file` to call here. An exact-name tool lookup for `DesignSync`,
-    `get_file`, `list_files`, `write_files`, `finalize_plan` returns nothing, and no MCP
-    server in the environment provides them. So P1's `waypoint_anchors/tokens.css`, P3's two
-    `tokens/colors.css` levels + color cards + `readme.md`, and the ds-project
-    (`ef8458ac-…`) copies all **still carry both stale values** and remain the one place the
-    two defects survive. Row stays unticked for that reason. Finishing it needs a session
-    with DesignSync mounted; the corrected file contents are already in the repo at the five
-    paths above and can be uploaded verbatim — no re-derivation needed.
+  - **Confirmed operational note for future sessions**: `DesignSync` was absent from the
+    subagent that did the repo-side fix (a different failure from the `list_projects`
+    filtering quirk §B4 documents — that quirk is answered by calling
+    `get_file`/`write_files` with an explicit projectId; this was the tool not being mounted
+    at all, no `get_file` to call). It *was* available from the main session, which is where
+    the remote push above ran. `docs/handoff.md` and this plan's §B4 already documented the
+    "works from a main session, not reachable from subagents" split — this confirms it again
+    rather than contradicting it.
 - [ ] **C5. Final polish walk**: all four guides + hub at 375/744/1440, day+night,
   reduced-motion, keyboard-only — nothing escapes its container, nothing focusable in a
   closed sheet, every control ≥44px or in the (shrunk) baseline with its reason.
