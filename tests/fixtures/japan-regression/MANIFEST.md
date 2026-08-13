@@ -6,9 +6,12 @@
 > evidence-first program exists to catch. A checker that disagrees with a case below is a
 > checker bug — fix it in its owning packet, never by editing the fixture.
 >
-> **The live guide is never repaired either** (creator ruling 2026-08-13, `CONTEXT.md`).
-> `src/content/guides/japan/` failing the new hygiene gates is the EXPECTED state, not a bug
-> queue. Gates that must be corpus-wide green need a japan exemption, not a japan cleanup.
+> **The live guide is a separate thing and is NOT frozen** (creator ruling 2026-08-13, refined —
+> see `CONTEXT.md`). `src/content/guides/japan/` is now `draft: true` (hidden from the site) and
+> **will be regenerated** through the rebuilt pipeline with fuller research and confirmed
+> bookings — the trip is real and upcoming. This fixture is what preserves the defects; nothing
+> asserts the live guide against it. Still forbidden: hand-patching Japan's defects to make a
+> gate pass, which would destroy the specimen without fixing the process that produced it.
 
 ## What is frozen
 
@@ -23,8 +26,10 @@
 | `intake/japan.md` | `guides-intake/japan.md` | 1a, 1b, 2, 7 |
 | `intake/japan.state.json` | `guides-intake/japan.state.json` | 8 |
 
-Line numbers below are valid in **both** the fixture copy and the source file — the copies are
-byte-identical, and a `diff -q` assertion in `japan-regression.test.mjs` keeps them that way.
+The line numbers below refer to **the fixture copies**, which were byte-identical to the live
+guide when frozen on 2026-08-13. They are pinned by a CITATIONS table in
+`scripts/__tests__/japan-regression-fixture.test.mjs`, which fails if any cited line stops
+carrying its evidence. Do not expect them to match the live guide once it is regenerated.
 
 ---
 

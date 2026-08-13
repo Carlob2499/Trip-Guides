@@ -2216,6 +2216,14 @@ nothing ships.
 - ESCALATED modify form → parseReviseIssue falls back to modify's labels  <sub>scripts/__tests__/issue-forms.test.mjs:100</sub>
 - graduate form → parseIssueBody  <sub>scripts/__tests__/issue-forms.test.mjs:116</sub>
 
+**The frozen Japan defect evidence, independent of the live guide's fate.**
+
+- the fixture list is non-empty (guards a vacuous pass)  <sub>scripts/__tests__/japan-regression-fixture.test.mjs:44</sub>
+- documents all 12 cases, one `## Case N` heading each  <sub>scripts/__tests__/japan-regression-fixture.test.mjs:71</sub>
+- case 1 is split into the 1a/1b sub-cases  <sub>scripts/__tests__/japan-regression-fixture.test.mjs:79</sub>
+- records case 1a as a NEGATIVE case — the C2 false-positive guard  <sub>scripts/__tests__/japan-regression-fixture.test.mjs:89</sub>
+- every frozen file is listed in the manifest's table  <sub>scripts/__tests__/japan-regression-fixture.test.mjs:93</sub>
+
 **The guide-building pipeline runs its stages in order and stops when one fails.**
 
 - no state → the first stage  <sub>scripts/__tests__/pipeline.test.mjs:22</sub>
@@ -2252,14 +2260,6 @@ nothing ships.
 - FAILS (catches the regression) when a touchpoint is left stale  <sub>scripts/__tests__/run-skill-evals.test.mjs:41</sub>
 - FAILS when the change landed in only one place (didn't propagate)  <sub>scripts/__tests__/run-skill-evals.test.mjs:47</sub>
 - detects a preserved draft flag and its absence  <sub>scripts/__tests__/run-skill-evals.test.mjs:54</sub>
-
-**The Japan regression fixture is byte-identical evidence and is never repaired.**
-
-- the fixture list is non-empty (guards a vacuous pass)  <sub>scripts/__tests__/japan-regression-fixture.test.mjs:28</sub>
-- documents all 12 cases, one `## Case N` heading each  <sub>scripts/__tests__/japan-regression-fixture.test.mjs:56</sub>
-- case 1 is split into the 1a/1b sub-cases  <sub>scripts/__tests__/japan-regression-fixture.test.mjs:64</sub>
-- records case 1a as a NEGATIVE case — the C2 false-positive guard  <sub>scripts/__tests__/japan-regression-fixture.test.mjs:74</sub>
-- every frozen file is listed in the manifest's table  <sub>scripts/__tests__/japan-regression-fixture.test.mjs:78</sub>
 
 **The plain-English list of what the tests protect stays complete and current.**
 

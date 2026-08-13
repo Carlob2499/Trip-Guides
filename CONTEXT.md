@@ -348,13 +348,24 @@ human label") is struck. The evidence gate is the bar; a human label is not. If 
 finds the plan's §10 prose calling for G1, **this entry supersedes it** — the plan doc is
 annotated in place, but prose is easy to miss.
 
-**The Japan guide is regression evidence, permanently — it is never repaired** (creator ruling,
-2026-08-13). `PLAN_EVIDENCE_FIRST.md` assumed Japan would get a `revise-guide` cleanup pass once
-Phase H proved the new checks detect its 12 defect classes. Rejected: the creator ruled Japan
-stays as-is *indefinitely*, not "until the checks are proven." It is the corpus's only live
-specimen of every defect the evidence-first program exists to catch — a cleaned Japan would leave
-the regression suite testing a fixture nothing real corresponds to any more. Consequence for
-future sessions: `src/content/guides/japan/` failing new hygiene gates is the EXPECTED state, not
-a bug queue. Never "fix" its `$19,` values, its six duplicate domestic-flight rows, or its
-section-path claims. Gates that must stay green corpus-wide are the ones that need a japan
-exemption — not the other way round.
+**Japan's defects are frozen in the FIXTURE; the live guide is hidden and will be regenerated**
+(creator ruling, 2026-08-13 — REFINED later the same day, supersedes the first version of this
+entry). The original ruling said Japan "is never repaired, permanently." That was recorded before
+two facts surfaced: the trip is **real and upcoming** (Oct 15–Nov 10, 2026), and the creator
+intends to **re-run it through the rebuilt pipeline** with the fuller research and confirmed
+bookings they already hold. So:
+
+- **The fixture is the permanent evidence.** `tests/fixtures/japan-regression/` holds
+  byte-identical copies of all 12 defect classes plus a MANIFEST citing file+line. That is what
+  the regression suite tests, and it is immutable regardless of what the live guide does.
+- **The live guide is `draft: true`** — off the public grid, still in the repo. It carried known
+  defects (`$19,` values, ¥11,410 attributed to both a railway and an airline, an unconfirmed
+  travel advisory) and a better version is coming; showing the defective one publicly meanwhile
+  fails the Honest pillar.
+- **The live guide MAY be regenerated** through the fixed pipeline. That is the program's point.
+  What stays forbidden is **hand-patching Japan's defects to make a gate go green** — that
+  destroys the specimen without fixing the process that produced it.
+
+Consequence: no japan gate exemption is needed (a draft guide is out of the published corpus),
+and no test asserts the fixture against the live guide any more — the fixture protects its own
+line citations instead. Japan's regeneration is the program's natural end-to-end acceptance test.

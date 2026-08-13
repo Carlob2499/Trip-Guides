@@ -36,11 +36,16 @@
    data (`airports.mjs`, `countries.mjs`, `holidays/`, `palettes/`), so destinations slot in
    beside established precedent rather than opening a new home.
 3. **Q: Does the Japan guide itself get repaired once the new checks land?**
-   **DECIDED — NO, never. Japan stays as-is indefinitely.** ⚠️ *Stronger than this document's
-   original assumption ("yes, later, after Phase H").* Japan is the corpus's only live specimen
-   of all 12 defect classes; cleaning it would leave the regression suite testing a fixture
-   nothing real corresponds to. Japan failing the new hygiene gates is the **expected** state,
-   not a bug queue. Gates needing corpus-wide green get a japan exemption, never a japan cleanup.
+   **DECIDED (revised later on 2026-08-13) — the guide is hidden (`draft: true`) and will be
+   REGENERATED through the rebuilt pipeline, not hand-repaired.** The first answer was "never
+   touched, indefinitely"; it was revised once two facts surfaced — the trip is real and
+   upcoming (Oct 15–Nov 10, 2026), and the creator holds fuller research plus confirmed bookings
+   to re-run it with. The permanent evidence is the **fixture**
+   (`tests/fixtures/japan-regression/`, packet A1), which is immutable and standalone. Still
+   forbidden: hand-patching Japan's defects to make a gate pass — that destroys the specimen
+   without fixing the process. **No japan gate exemption is needed** (a draft guide is outside
+   the published corpus), and Japan's regeneration becomes this program's natural end-to-end
+   acceptance test. See `CONTEXT.md` for the authoritative wording.
 4. **Q: Google Routes API is a billed surface — enable it?**
    **DECIDED — YES**, exactly as assumed: config-gate + lazy import like Places, default OFF,
    key via GitHub secret / local untracked `.env`. Zero billing until the creator flips it;
@@ -385,7 +390,7 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
 - CONTEXT: B1/B3 landed advisory; D2 makes research emit risk/tier. Now enforcement.
 - GOAL: verify-guide.mjs: (a) R2+ perishables must be facts.json rows (prose-inline hard-fails — upgrades check-research D2 from warn), (b) R2+ rows require `tier`; R3/R4 require `tier: primary` + `evidence`; (c) R4 rows must be SURFACED (referenced by ≥1 token in a rendered group — an omitted advisory is a blocker; regression case 6), (d) B3's hygiene flags become blockers at R2+.
 - FILES TO INSPECT/CHANGE: `scripts/verify-guide.mjs`, `scripts/audit/check-research.mjs`, tests.
-- DO NOT TOUCH: existing blocker semantics for R0/R1 (unchanged); japan live guide.
+- DO NOT TOUCH: existing blocker semantics for R0/R1 (unchanged). (The japan live guide is now `draft: true` and outside the published corpus — build gates against the FIXTURE, not the live dir.)
 - TESTS: fixture guide fails with named R-tier blockers; korea/us pass (or their true findings are enumerated in the PR).
 - ACCEPTANCE: regression cases 5, 6, 9, 10 detected as blockers on the fixture.
 
@@ -476,9 +481,9 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
 
 ## 11 · Definition of done (the whole program)
 
-1. H1 green: **12/12 regression cases detected** against the frozen fixture; Japan's live
-   guide byte-identical to its pre-program state — permanently, not just for this program
-   (creator ruling 2026-08-13: Japan is never repaired).
+1. H1 green: **12/12 regression cases detected** against the frozen fixture. The fixture — not
+   the live guide — is the evidence; Japan is `draft: true` and is regenerated through the
+   rebuilt pipeline rather than hand-repaired (creator ruling 2026-08-13, revised).
 2. `facts.json` remains the ONLY fact registry; `risk`/`entity`/`evidence`/`tier` live there;
    no parallel evidence store exists anywhere in the tree.
 3. ~~A newly researched guide cannot publish without a human `graduate-approved` label.~~

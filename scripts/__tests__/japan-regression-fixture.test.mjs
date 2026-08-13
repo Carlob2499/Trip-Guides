@@ -1,28 +1,44 @@
-/* Why byte-identical: the MANIFEST cites line numbers as evidence, and those citations die the
-   moment the copies drift. Full case documentation lives in the fixture's MANIFEST.md; proving
-   each case is DETECTED is packet H1's job, once the B/C/E checkers exist. */
-// @protects-file The Japan regression fixture is byte-identical evidence and is never repaired.
+/* The fixture is STANDALONE evidence: Japan is being re-run through the rebuilt pipeline with
+   confirmed bookings (creator, 2026-08-13), so the live guide is expected to change and is no
+   longer asserted against. What must never drift is the fixture itself — the MANIFEST cites line
+   numbers, and those citations die the moment the frozen copies move — hence the CITATIONS table
+   below. Proving each case is DETECTED is packet H1's job, once the B/C/E checkers exist. */
+// @protects-file The frozen Japan defect evidence, independent of the live guide's fate.
 
 import { describe, expect, test } from "vitest";
 import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 const FIXTURE = fileURLToPath(new URL("../../tests/fixtures/japan-regression", import.meta.url));
-const ROOT = fileURLToPath(new URL("../..", import.meta.url));
+
 
 /* Keep in sync with the MANIFEST's "What is frozen" table. */
 const FROZEN = [
-  ["guide/facts.json", "src/content/guides/japan/facts.json"],
-  ["guide/_guide.json", "src/content/guides/japan/_guide.json"],
-  ["guide/01-plan.json", "src/content/guides/japan/01-plan.json"],
-  ["guide/03-sights.json", "src/content/guides/japan/03-sights.json"],
-  ["guide/06-days.json", "src/content/guides/japan/06-days.json"],
-  ["guide/08-health-and-safety.json", "src/content/guides/japan/08-health-and-safety.json"],
-  ["intake/japan.md", "guides-intake/japan.md"],
-  ["intake/japan.state.json", "guides-intake/japan.state.json"],
+  "guide/facts.json",
+  "guide/_guide.json",
+  "guide/01-plan.json",
+  "guide/03-sights.json",
+  "guide/06-days.json",
+  "guide/08-health-and-safety.json",
+  "intake/japan.md",
+  "intake/japan.state.json",
 ];
 
-const read = (base, rel) => readFileSync(`${base}/${rel}`, "utf8");
+/* Every line number the MANIFEST cites as evidence, and the substring that must still be on it.
+   These citations ARE the fixture's value — if a line moves, the MANIFEST starts lying. */
+const CITATIONS = [
+  ["guide/facts.json", 25, '"value": "$19,"', "case 10 — malformed value"],
+  ["guide/facts.json", 73, "https://www.jreast.co.jp/e/", "case 9 — the railway attribution"],
+  ["guide/facts.json", 88, '"value": "$1,"', "case 10 — truncated FX fragment"],
+  ["guide/facts.json", 119, '"value": "$80,"', "case 10 — malformed value"],
+  ["guide/facts.json", 128, "https://www.ana.co.jp/en/us/", "case 9 — the airline attribution"],
+  ["intake/japan.md", 16, "His birthday is Sept 25", "case 1a — the companion's birthday"],
+  ["intake/japan.md", 25, "2026-10-15 – 2026-11-10", "case 2 — the flat start date"],
+  ["intake/japan.md", 28, "Anchor event", "case 3 — the anchor"],
+];
+
+const read = (rel) => readFileSync(`${FIXTURE}/${rel}`, "utf8");
+const line = (rel, n) => read(rel).split("\n")[n - 1] ?? "";
 
 describe("japan regression fixture — existence and integrity", () => {
   test("the fixture list is non-empty (guards a vacuous pass)", () => {
@@ -33,25 +49,24 @@ describe("japan regression fixture — existence and integrity", () => {
     expect(existsSync(`${FIXTURE}/${rel}`), `missing fixture file: ${rel}`).toBe(true);
   });
 
-  test.each(FROZEN.filter(([rel]) => rel.endsWith(".json")))("%s parses as JSON", (rel) => {
-    expect(() => JSON.parse(read(FIXTURE, rel))).not.toThrow();
+  test.each(FROZEN.filter((rel) => rel.endsWith(".json")))("%s parses as JSON", (rel) => {
+    expect(() => JSON.parse(read(rel))).not.toThrow();
   });
 
-  test.each(FROZEN)("%s is byte-identical to its live source (%s)", (rel, live) => {
+  test.each(CITATIONS)("%s:%d still carries the evidence for %s", (rel, n, needle, why) => {
     expect(
-      read(FIXTURE, rel),
-      `tests/fixtures/japan-regression/${rel} has drifted from ${live}.\n\n` +
-        "If you EDITED THE LIVE GUIDE: don't. Japan is regression evidence and is never " +
-        "repaired (creator ruling 2026-08-13, CONTEXT.md). Its defects are the point. Revert " +
-        "the guide edit.\n\n" +
-        "If a repo-wide migration legitimately rewrote every guide: re-copy the file, then " +
-        "re-verify every line number the MANIFEST cites for it — a migration moves them.",
-    ).toBe(read(ROOT, live));
+      line(rel, n),
+      `The MANIFEST cites ${rel}:${n} as evidence for ${why}, but that line no longer ` +
+        `contains ${JSON.stringify(needle)}.\n\n` +
+        "The fixture is FROZEN evidence — it is not edited to make a checker pass. If you " +
+        "genuinely need to re-freeze it, re-verify every line number the MANIFEST cites, " +
+        "because moving one line moves them all.",
+    ).toContain(needle);
   });
 });
 
 describe("japan regression fixture — the manifest", () => {
-  const manifest = read(FIXTURE, "MANIFEST.md");
+  const manifest = read("MANIFEST.md");
 
   test("documents all 12 cases, one `## Case N` heading each", () => {
     const headings = manifest.match(/^## Case \d+/gm) ?? [];
@@ -76,7 +91,7 @@ describe("japan regression fixture — the manifest", () => {
   });
 
   test("every frozen file is listed in the manifest's table", () => {
-    for (const [rel] of FROZEN) {
+    for (const rel of FROZEN) {
       expect(manifest, `MANIFEST.md never mentions ${rel}`).toContain(rel);
     }
   });
