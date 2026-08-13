@@ -95,7 +95,7 @@ const HUMAN_ROWS = [
 ];
 
 // Roll the three sources up for one guide into a verdict + structured scorecard.
-export function evaluateGuide(guide, slug, staleness, net, facts = null, unused = [], candidates = null, sources = null, destinationConfig = null, uncertaintyInputs = null) {
+export function evaluateGuide(guide, slug, staleness, net, facts = null, unused = [], candidates = null, sources = null, destinationConfig = null, uncertaintyInputs = null, drift = null) {
   const draft = !!guide.draft;
   const readiness = evaluateReadiness(guide, slug); // { pass, warns, infos, coverage }
 
@@ -156,6 +156,9 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
   // E3: does the guide SHIP the contradictions and uncertainties C2 gates at intake? Same
   // warn-first split as riskGates. Artifacts (intake doc, state file, C2 findings) are read
   // by verify() and passed in, like the candidates and staleness rows.
+  // E2: drift is computed by verify() (network I/O) and threaded in, like the staleness scan.
+  const driftRow = drift ?? { status: "skipped" };
+
   const uncertainty = evaluateUncertainty({
     sections: Array.isArray(guide.sections) ? guide.sections : (guide.sections || []).flat(),
     facts,
@@ -181,7 +184,7 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
   // and a guide with one should show at a glance how much of it is sourced data rather than prose.
   const registry = facts ? { count: Object.keys(facts).length, unused } : null;
 
-  return { slug, draft, pass, blockers, readiness, recency, content, venueStatus, candidates: candidatesRow, sources, coverage, voice, hygiene, riskGates, uncertainty, noVerifiedDate, registry };
+  return { slug, draft, pass, blockers, readiness, recency, content, venueStatus, candidates: candidatesRow, sources, coverage, voice, hygiene, riskGates, uncertainty, drift: driftRow, noVerifiedDate, registry };
 }
 
 export async function verify({ slug = null, network = false } = {}) {
@@ -227,6 +230,15 @@ export async function verify({ slug = null, network = false } = {}) {
 
   // E3: the intake doc, the pipeline state file, and C2's contradiction findings. Read here
   // (async) and threaded into the sync evaluator, like candidates and staleness.
+  // E2: source drift — only under --network, since it reads every cited page. Advisory for
+  // one release by instruction; the row names the R3+ rows that will block once enforced.
+  const driftBySlug = {};
+  if (network) {
+    const { checkDrift, liveFetchPage } = await import("./audit/check-drift.mjs");
+    const fetchPage = liveFetchPage();
+    for (const t of targets) driftBySlug[t.slug] = await checkDrift(t.facts, { fetchPage });
+  }
+
   const { readState, readIntake } = await import("./audit/check-uncertainty.mjs");
   const { checkIntakeContradictions } = await import("./audit/check-intake-contradictions.mjs");
   const uncertaintyBySlug = {};
@@ -240,7 +252,7 @@ export async function verify({ slug = null, network = false } = {}) {
   }
 
   const results = targets.map(({ guide, slug: s, raw, facts, unusedFacts }) =>
-    evaluateGuide(guide, s, staleness, net, facts, unusedFacts, candidatesBySlug[s], sourceMix(raw, guide.country), destBySlug[s], uncertaintyBySlug[s]));
+    evaluateGuide(guide, s, staleness, net, facts, unusedFacts, candidatesBySlug[s], sourceMix(raw, guide.country), destBySlug[s], uncertaintyBySlug[s], driftBySlug[s] ?? null));
   return { results, error: null, network };
 }
 
@@ -373,6 +385,20 @@ export function report(r) {
         `${enforced ? " (draft: these BLOCK graduation)" : " (published: advisory this release, blocks once enforced)"}:`,
       );
       for (const f of r.uncertainty.findings) L.push(`      ⚠ [${f.code}] ${f.msg}`);
+    }
+  }
+
+  // E2: source drift (network only). Advisory for one release by instruction — but the row
+  // states which findings WILL block once enforced, so the future cost is visible now.
+  if (r.drift && r.drift.status === "skipped") {
+    L.push(`  P1 drift      · skipped — run with --network to re-read every cited page`);
+  } else if (r.drift && r.drift.status !== "n/a") {
+    const d = r.drift;
+    if (d.status === "pass") {
+      L.push(`  P1 drift      · PASS — ${d.checked} source page(s) still carry their stated values`);
+    } else {
+      L.push(`  P1 drift      · advisory — ${d.findings.length} finding(s) across ${d.checked} page(s)${d.blockers?.length ? `; ${d.blockers.length} will BLOCK once enforced (R3+)` : ""}:`);
+      for (const f of d.findings) L.push(`      ⚠ [${f.code}] ${f.msg}`);
     }
   }
 

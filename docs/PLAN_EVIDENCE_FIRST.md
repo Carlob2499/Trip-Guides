@@ -424,6 +424,26 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
 - DO NOT TOUCH: citation-audit critic duties (they remain the sampled human-grade check; this is the deterministic floor).
 - TESTS: mocked page-with-value passes; page-without drifts; 200-empty-page drifts (the exact "200 ≠ verified" case).
 - ACCEPTANCE: regression case 12-class drift (a closure notice replacing a price page) is caught by the value-absence path.
+- **STATUS 2026-08-13 — LANDED.** `scripts/audit/check-drift.mjs`, wired as verify's `drift`
+  row under `--network`. Decoupled from `risk`/`evidence` for the third time (no row carries
+  either): the risk-independent path asks whether the stated VALUE still appears on the cited
+  page, which works on all 145 rows today; `evidence` is a second, more precise way to satisfy
+  the same check where a research pass supplies one. Advisory for one release as instructed,
+  and the row NAMES the R3+ findings that will block once enforced. Matching is
+  digit-signature-based with optional separators and digit-boundary anchoring, so a page may
+  render "¥11,410" as "11410" or "11 410" and still pass, while "410" never matches inside
+  "3410". Fetching is injectable (zero-network tests, repo doctrine); the live fetcher honours
+  the two-attempt rule with r.jina.ai as the SECOND attempt and never rewrites the citation.
+- **Boundary check run (doctrine #3, "smoke the real integration"): E2 found a REAL defect on
+  its first live run.** `npm run verify -- --slug us --network` → `budget-daily-costs-300`
+  ($300, "luxury resorts at $300–700+") cites a budgetyourtrip Sedona page that does **not**
+  contain 300 — while its three sibling rows from the SAME page (173, 231, 143) all verify,
+  which proves the page is readable and the miss is genuine, not a JS-rendering artifact. This
+  is the 200-≠-verified class caught in the wild, not a fixture. **Also surfaced: the same
+  three rows share the byte-identical claim `Budget & daily costs → Lodging, per night
+  (Sedona, 3★ average)` with three different values** — the D4 claim-identity defect (claims
+  are section-path echoes) reproducing on `us`, exactly as it did on japan (case 9's cluster).
+  Neither is fixed here; both are content findings for a guide-author pass.
 
 **E3 — Contradiction + uncertainty in the verify roll-up** · S · coder
 - CONTEXT: C2 gates intake at scaffold; the guide itself must also not SHIP contradictory or silently-uncertain plan-critical facts (cases 2, 4, 7, 8).

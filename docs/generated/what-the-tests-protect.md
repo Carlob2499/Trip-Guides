@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-2018 checks · 2018 carry a stated promise · 168 files
+2035 checks · 2035 carry a stated promise · 169 files
 
 ## Can everyone read it
 
@@ -1882,6 +1882,26 @@ nothing ships.
 - detects destination-ccTLD presence  <sub>scripts/__tests__/check-source-mix.test.mjs:52</sub>
 - reports ccTLD as n/a for the US — .us is unused by real US institutions  <sub>scripts/__tests__/check-source-mix.test.mjs:60</sub>
 - handles a guide with zero citations without dividing by zero  <sub>scripts/__tests__/check-source-mix.test.mjs:66</sub>
+
+**A live source URL cannot vouch for a fact its page no longer states.**
+
+- matches the same number written with different separators  <sub>scripts/__tests__/check-drift.test.mjs:15</sub>
+- does not match the digits embedded in a LARGER number  <sub>scripts/__tests__/check-drift.test.mjs:22</sub>
+- refuses to build a pattern from a single digit — it would match almost any page  <sub>scripts/__tests__/check-drift.test.mjs:29</sub>
+- strips markup, scripts and styles so a figure in the copy is what gets matched  <sub>scripts/__tests__/check-drift.test.mjs:36</sub>
+- passes on the value alone — the path that works on every existing row  <sub>scripts/__tests__/check-drift.test.mjs:44</sub>
+- prefers the evidence snippet when the research pass supplied one  <sub>scripts/__tests__/check-drift.test.mjs:48</sub>
+- fails when neither the snippet nor the value is on the page  <sub>scripts/__tests__/check-drift.test.mjs:53</sub>
+- fails on a 200 that returned an EMPTY page — the exact 200-≠-verified shape  <sub>scripts/__tests__/check-drift.test.mjs:57</sub>
+- passes a registry whose pages still carry their values  <sub>scripts/__tests__/check-drift.test.mjs:63</sub>
+- fetches each URL ONCE even when many rows cite it  <sub>scripts/__tests__/check-drift.test.mjs:70</sub>
+- reports an unreachable source WITHOUT calling it drift — liveness is checkLinks' verdict  <sub>scripts/__tests__/check-drift.test.mjs:82</sub>
+- says 'uncheckable' rather than 'drifted', and distinguishes WHY  <sub>scripts/__tests__/check-drift.test.mjs:89</sub>
+- stays ADVISORY, but names the R3+ rows that will block once enforced  <sub>scripts/__tests__/check-drift.test.mjs:104</sub>
+- is n/a with no sourced rows or no fetcher  <sub>scripts/__tests__/check-drift.test.mjs:116</sub>
+- the fixture really does carry the Zao crater price row this case is about  <sub>scripts/__tests__/check-drift.test.mjs:133</sub>
+- PASSES while the source still prices it — a live, honest page must not drift-flag  <sub>scripts/__tests__/check-drift.test.mjs:138</sub>
+- DRIFTS the moment the price page becomes a seasonal-closure notice  <sub>scripts/__tests__/check-drift.test.mjs:145</sub>
 
 **A looked-up location must match the venue's name, or it is left blank.**
 
