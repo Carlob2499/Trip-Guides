@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1849 checks · 1849 carry a stated promise · 159 files
+1852 checks · 1852 carry a stated promise · 160 files
 
 ## Can everyone read it
 
@@ -1693,6 +1693,12 @@ nothing ships.
 - resolves Seoul to Asia/Seoul (cross-check against an existing guide's known-good tz)  <sub>scripts/__tests__/lookup-tz.test.mjs:25</sub>
 - returns an error for non-finite coordinates instead of guessing  <sub>scripts/__tests__/lookup-tz.test.mjs:30</sub>
 - accepts numeric strings the same as numbers (CLI argv is always a string)  <sub>scripts/__tests__/lookup-tz.test.mjs:36</sub>
+
+**A draft guide is invisible to site search, not just the curated grid.**
+
+- drops any guide whose meta carries draft: true  <sub>scripts/build-search-index.test.mjs:15</sub>
+- keeps a guide with no draft key at all (the normal, published shape)  <sub>scripts/build-search-index.test.mjs:20</sub>
+- emits no record for a draft guide once publishedOnly has filtered it out  <sub>scripts/build-search-index.test.mjs:27</sub>
 
 **A draft only becomes a published guide once it meets every requirement.**
 

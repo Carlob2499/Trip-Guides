@@ -21,15 +21,21 @@ import { buildGuideSearchIndex } from "../src/features/atlas/index";
 const DIST_DATA = path.resolve("dist", "data");
 const OUT_FILE = path.join(DIST_DATA, "search-index.json");
 
-async function buildIndex(guides: Awaited<ReturnType<typeof readGuides>>) {
-  const records = guides.flatMap(({ guide, slug }) =>
+export function publishedOnly(guides: Awaited<ReturnType<typeof readGuides>>) {
+  // Same rule as src/pages/index.astro's curated-grid filter (`!g.data.draft`): a draft guide
+  // isn't published, so it must not be findable through site search either — otherwise hiding
+  // it from the grid is cosmetic, and a search hit is a second, unintended front door to it.
+  return guides.filter(({ guide }) => !guide.draft);
+}
+
+export async function buildIndex(guides: Awaited<ReturnType<typeof readGuides>>) {
+  return guides.flatMap(({ guide, slug }) =>
     buildGuideSearchIndex(slug, guide.title ?? slug, flatten(guide.sections)),
   );
-  return records;
 }
 
 if (isMain(import.meta.url)) {
-  const guides = await readGuides();
+  const guides = publishedOnly(await readGuides());
   const records = await buildIndex(guides);
   await mkdir(DIST_DATA, { recursive: true });
   await writeFile(OUT_FILE, JSON.stringify(records), "utf8");
