@@ -195,15 +195,16 @@ cannot see. Note for implementers: `planner.css`'s separate `.dchip` (desktop da
 `min-height:44px` already) is a same-named, unrelated, already-compliant selector — do not
 "fix" it by mistake for the mobile-nav one.
 
-**Update (2026-08-12, same day, §H2 investigation):** the day-chip shape itself is changing
-(below) — P3's prototype achieves 8 chips at a full 44px in one 375px row using a flat
-underline treatment (`padding:0 3px`, no border/radius/fill) rather than a bordered pill, which
-removes the horizontal cost a rounded, bordered pill carries. This DOES NOT reopen the
-`.scrub-fit .dchip` ruling above — the row-count ceiling and gesture-model reasoning both still
-hold regardless of chip shape — but it means "keep baselined" should be re-measured once the
-pill→underline fix (below) ships, not assumed permanent. If the underline shape turns out to fit
-8-10 chips at 44px, shrink `TARGET_BASELINE.dchip` in the same commit; if it still doesn't,
-baselined stands and this note can be removed.
+**Resolved (2026-08-13, C2a/C2b implementation):** the pill→underline shape fix shipped
+(`planner.css`'s `.dchip`) and the re-measurement this note asked for is done — real
+`getBoundingClientRect()` numbers, both target pages, all nine devices. The underline shape does
+NOT fit 8-10 chips at 44px: the shape change touches border/fill/radius only, not the
+`flex:1 1 0;min-width:0` math on `.scrub-fit .dchip` that narrows these chips, so the width miss
+is unchanged. `TARGET_BASELINE.dchip.max` shrunk 12→8 (the real observed ceiling, was a looser
+bound) but the baseline-with-reason stands; the row-count-ceiling and gesture-model rulings above
+are confirmed, not reopened. `.transit-link` (the other §H1 control) fully resolved instead: its
+width already cleared 44px everywhere, so a height-only padding increase reached the floor with
+no wrap-point change — its `TARGET_BASELINE` exception is removed, not shrunk.
 
 **Day chips (`.dchip`) are a pill in shipped CSS; SPEC rule 1 and three independent P3 sources
 say they should not be** (2026-08-12, design-reconciliation arc, §H2). SPEC rule 1

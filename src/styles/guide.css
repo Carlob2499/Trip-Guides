@@ -368,7 +368,12 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
    sight cards + day-waypoint stops. Buttons, not bare text links, per the clickability
    doctrine: this can be 2-3 links in a row and must read as tappable at a glance. */
 .transit-links{display:inline-flex;flex-wrap:wrap;gap:.35rem;margin:.3rem 0 0}
-.transit-link{display:inline-flex;align-items:center;gap:.2rem;padding:.24rem .55rem;border-radius:999px;background:var(--card);border:1px solid var(--rule);color:var(--ink);font-family:var(--font-data);font-size:var(--text-micro);font-weight:600;letter-spacing:.01em;text-decoration:none;white-space:nowrap;transition:border-color .15s,color .15s}
+/* 44px floor (CONTEXT.md's density fork — these RAISE, unlike .scrub-fit .dchip): the pill's own
+   width already clears 44px on every measured guide (min 88.2px, min-content plus icon+text), so
+   only the height was under — a padding-block increase alone reaches the floor with no width
+   growth, so `.transit-links{gap:.35rem}` and the row's wrap point are both unaffected. Measured
+   with real getBoundingClientRect(): .68rem .55rem -> 44.375px (was 30.3px at .24rem .55rem). */
+.transit-link{display:inline-flex;align-items:center;gap:.2rem;padding:.68rem .55rem;min-height:44px;border-radius:999px;background:var(--card);border:1px solid var(--rule);color:var(--ink);font-family:var(--font-data);font-size:var(--text-micro);font-weight:600;letter-spacing:.01em;text-decoration:none;white-space:nowrap;transition:border-color .15s,color .15s}
 .transit-link:hover{border-color:var(--accent);color:var(--accent-ink)}
 .transit-link:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 

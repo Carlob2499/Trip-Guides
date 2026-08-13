@@ -807,26 +807,27 @@ const DEVICES = [
   { label: 'iPad Pro 13"', width: 1024, height: 1366 },
 ] as const;
 
-/* A ceiling, not a permission. Both entries are real controls under the 44px line; both repeat
-   hundreds of times per guide, and raising either changes the density of every day card in every
-   guide — which is a design decision, not a fix, and is recorded as an open question for the
-   creator rather than decided here. The counts may only fall. */
+/* A ceiling, not a permission. The remaining entry is a real control under the 44px line, repeats
+   hundreds of times per guide, and raising it changes the density of every day card in every
+   guide — which is a design decision, not a fix. The counts may only fall.
+   `.transit-link` RESOLVED (design-reconciliation §C2b, CONTEXT.md §H1 "raise" ruling): its own
+   width already cleared 44px everywhere measured (min 88.2px); only height was short, so a
+   padding-block increase alone reached the floor with no width growth and no row-wrap change.
+   Measured 0 violations, both target pages, all nine devices — exception removed, not shrunk to
+   zero, so a future regression here is a real failure again. */
 const TARGET_BASELINE: Record<string, { max: number; why: string }> = {
-  "transit-link": {
-    max: 189,
-    why: "The route hand-off pills R5 SUPERSEDES §5 made central ('every leg carries OPEN IN " +
-      "MAPS ↗'). They sit in inline-flex rows of two to four inside a day card; at 44px each " +
-      "the rows wrap to three lines and the card doubles in height. Raising them is a density " +
-      "decision across all four guides.",
-  },
   "dchip": {
-    max: 12,
+    max: 8,
     why: "The day scrubber's inactive chips. COMPONENTS §4 asks for every day of the trip in " +
       "one row with the active day EXPANDED, and .scrub-fit gives the inactive ones flex:1 1 0 " +
       "with min-width:0 to make that fit — so the same spec that defines this control is what " +
       "pushes it under the line. They are 44px TALL and the row is the full width of the page; " +
-      "the miss costs a neighbouring day, not a wrong destination. Resolving it means choosing " +
-      "between 'the whole trip at a glance' and a 44px floor, which is the creator's call.",
+      "the miss costs a neighbouring day, not a wrong destination. Re-measured after the C2a " +
+      "pill->underline shape fix (design-reconciliation §C2a/§H2): the shape change touches " +
+      "border/fill/radius only, not the flex-basis math that narrows these, so the width miss " +
+      "is unchanged — max shrunk from 12 to the real observed ceiling (8, iPad Pro 11\" korea " +
+      "guide) but the violation itself persists. Resolving it means choosing between 'the whole " +
+      "trip at a glance' and a 44px floor, which is the creator's call.",
   },
   "anchor-btn": {
     max: 78,

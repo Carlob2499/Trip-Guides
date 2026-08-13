@@ -4,6 +4,56 @@
 > (the ~80-line budget its own header sets is now gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). Newest first, verbatim.
 
+## Snapshot (2026-08-11b — R5 cleanup and hub fidelity; six commits, every defect at a boundary)
+
+Six commits on `main`, all four CI workflows green on each. 1734 vitest · 225 Playwright ·
+build/lint/typecheck/drift clean. R5's ACCEPTANCE walk is unchanged: 47 ticked, 3 flagged.
+
+**The retired Tools screen's chrome is gone, and deleting it had orphaned a stylesheet**
+(`a2cb0d8` + `28828d8`) — dead with the tabs: ToolsScreen's `trips`/`inGuide` props, masthead and
+trip picker, `guide-ui.js`'s `specialPanels`/`hasPanel`/`isSpecial`, 20 CSS classes. **Finding:**
+removing `/tools/` removed the ONLY import of `src/styles/tools.css`, so the station shipped
+unstyled while build, lint, typecheck, 1722 unit and 225 Playwright stayed green — none assert
+appearance. `GuideLayout.astro` imports it now; `no-orphan-stylesheets.test.mjs`, which compared
+only BASENAMES (11 of the 52 sheets share one, so a single `styles.css` import covered all nine
+feature silos), is fixed and now fails on any unimported `.css`. Mutation-tested; specifiers
+resolve against the importing file.
+
+**The globe's pin cards had no box, and the world view ignored its own type scale** (`24d7411`).
+`.atlas-pincard-body`, a `<span>` in an `<a>` with no `display` rule, was inline and added nothing
+to the anchor's height; `CARD_FULL_H`/`CARD_COMPACT_H` were literals set when the card was
+text-only, never updated once the photo plate arrived. Heights are now measured off a real card,
+none written back; typography rebuilt against `docs/design-handoff/screenshots/` in both themes.
+`tripRangeLabel()` (`src/lib/trip-dates.ts`) is new: the rail first reused `dateLine()`, whose
+masthead city/date contract sent a kicker with no city list back whole, printing a place name in
+the date column.
+
+**The desktop hub now matches the screenshots** (`24d2516`) — WORLD VIEW / TABLE VIEW as two
+bordered buttons centred on the viewport, theme button labelled, mobile untouched. Cards now glide
+to their seat over 500ms (they teleported since the solver re-seats only on 90px of globe drift)
+and take the overlay elevation idiom. `imgCredit()` (`src/lib/img-width.ts`) credits Wikimedia
+Commons for a Commons FilePath URL, null otherwise. Two new `scripts/drift-real.mjs` exemptions,
+both classes with reasoning.
+
+**The hub carries no tools door at all** (`9cce036`, creator ruling) — the TRIP TOOLS row and the
+phone's ☰ link both pointed at whichever guide the hub featured. Gone, with `.atlas-toolsrow`;
+verified in compiled `dist/` that no `tools` href survives on the hub. The two tests asserting the
+doors now assert their absence at both widths.
+
+**Tables in panels were clipped and unreachable on a phone** (`7cf750a`), found walking every
+station of all four guides at 375px and 1440px. `.card table{display:block;overflow-x:auto}`
+dates from when content lived in `.card`; it lives in panels now and the selector was never
+extended, so a table rendered at natural width inside a `<details>` with `overflow:hidden` —
+Korea's Plan station had sixteen tables 360–418px wide in a 313px column, fifteen unreachable.
+`.pnl table` joins that rule in `src/styles/guide.css`. Also fixed: hint bubbles measuring 0×0
+because `hint.js`'s idle `fitAll` ran while their station was still `hidden`, and
+`tests/visual/plate-line.spec.ts`'s `networkidle` flake.
+
+*(Between this snapshot and the next-newer one above: the design-reconciliation arc landed five
+commits — `e9ba8a5`…`9398694` — closing PLAN_DESIGN_RECONCILIATION.md's §A fidelity-audit FIX
+rows and §B mining workstream, all recorded in CONTEXT.md Decisions rather than here; this file's
+Snapshot section did not get rewritten across those sessions.)*
+
 ## Snapshot (2026-08-11 — the R5 guide-UI handoff, COMPLETE: all six steps)
 
 `docs/design-handoff/design_handoff_guide_ui/` is fully implemented and live. Korea renders its

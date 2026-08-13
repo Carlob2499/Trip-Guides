@@ -19,7 +19,7 @@ nothing ships.
 - what's-next banner is legible  <sub>tests/visual/a11y.spec.ts:695</sub>
 - ⌁ with every sheet closed, nothing inside one is focusable  <sub>tests/visual/a11y.spec.ts:750</sub>
 - ⌁ an open sheet traps focus, Escape closes it, and focus comes back to the opener  <sub>tests/visual/a11y.spec.ts:769</sub>
-- every visible target clears 44px — …, …  <sub>tests/visual/a11y.spec.ts:850</sub>
+- every visible target clears 44px — …, …  <sub>tests/visual/a11y.spec.ts:851</sub>
 
 **Search reaches anything in a guide, from anywhere in it.**
 

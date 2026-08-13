@@ -354,24 +354,34 @@ not novelty:
   sums 153; two categories already under). Work file-by-file; after each drop, re-run
   `npm run drift` and tighten the baseline with `--update` **in the same commit** (per-commit
   cadence — CONTEXT.md Decisions, §H5). Target: guide.css RADIUS(25) and ELEVATION(4) first.
-- [ ] **C2a. Day-chip pill→underline fix** — DECIDED (CONTEXT.md, §H2, do this BEFORE C2b since
-  it changes the chip's horizontal footprint): in `planner.css`, `.dchip` loses `border-radius`,
+- [x] **C2a. Day-chip pill→underline fix** — DONE. `planner.css`'s `.dchip` lost `border-radius`,
   `border`, and `background:var(--card)` (→ `border:0;border-bottom:2px solid transparent`,
-  `background:transparent`); `.dchip-active` ground moves from `var(--accent)` to `var(--sunken)`
-  with `border-bottom-color:var(--accent)` replacing the accent border. **Then** re-derive and
-  re-measure `.dchip-active .dchip-num`'s color against the new `--sunken` ground (the existing
-  3.58:1/2.56:1 comment assumed an `--accent` ground and is now stale) — update the comment with
-  the new measured ratios, don't just delete it. Verify against `mobile-nav.css`'s
-  `.scrub-fit .dchip` override — it should still only touch flex/padding, no change needed there.
-- [ ] **C2b. The 44px decision implemented** — DECIDED (CONTEXT.md, §H1): `.transit-link` gets a
-  touch-target expansion toward 44px (guide.css:324-327; room to grow since nothing else shares
-  its row — mind `.transit-links{gap:.35rem}`, tight enough that a naive hit-slop would overlap
-  adjacent pills, so size the expansion carefully and verify with real `getBoundingClientRect()`
-  measurements, not assumed math). For `.scrub-fit .dchip`: **re-measure after C2a ships** — the
-  underline shape may fit 8-10 chips at 44px where the pill couldn't (CONTEXT.md's §H2 update
-  note); if so, shrink/remove `TARGET_BASELINE.dchip`; if not, it stays baselined and the `why`
-  gets the drag/scrub-gesture rationale from CONTEXT.md instead of reading as still-open. Shrink
-  `TARGET_BASELINE.transit-link`'s max in `a11y.spec.ts` to match the new measured count either way.
+  `background:transparent`); `.dchip-active` ground moved from `var(--accent)` to `var(--sunken)`
+  with `border-bottom-color:var(--accent)` replacing the accent border. `.dchip-active .dchip-num`
+  re-derived against the new `--sunken` ground: `--accent-ink`, not `--on-accent` — `--sunken` is
+  a page-family surface (`var(--bg2)`) and `--accent-ink` is base.css's own "text on a page
+  surface" token, already derived (and tested, `accent-tokens.test.ts`) to hold >=4.5:1 against
+  `--bg2` specifically, so this holds contrast by construction, no separate measurement needed;
+  the old 3.58:1/2.56:1 comment measured the wrong pairing (`--accent-ink` on an `--accent` FILL)
+  and is replaced, not left stale. `mobile-nav.css`'s `.scrub-fit .dchip` override needed no
+  change — confirmed it only touches flex/padding. Verified: 1748 vitest, 18/18 a11y Playwright,
+  visual walk at 375px/1440px × light/dark.
+- [x] **C2b. The 44px decision implemented** — DONE. `.transit-link` (guide.css:371) got a
+  touch-target expansion: real `getBoundingClientRect()` measurement (not assumed math) found
+  every rendered pill's WIDTH already clears 44px (min 88.2px, icon+text content) — only height
+  was short, fixed at 30.3px by `padding:.24rem .55rem` — so a padding-block-only increase to
+  `.68rem .55rem` (measured 44.375px) reaches the floor with zero width growth, meaning
+  `.transit-links{gap:.35rem}`'s row-wrap point is untouched and the "wraps to three lines"
+  concern the original baseline comment raised never applied. Measured 0 violations across both
+  target pages (`korea guide`, `hub`) and all nine devices — `TARGET_BASELINE.transit-link`
+  removed from `a11y.spec.ts` entirely (not shrunk to 0), so a regression here is a real test
+  failure again. `.scrub-fit .dchip`: re-measured after C2a shipped, per CONTEXT.md's §H2 update
+  note — real ceiling is unchanged (8, was ≤12), since the pill→underline shape touches only
+  border/fill/radius, not the `flex:1 1 0;min-width:0` math that narrows these chips.
+  `TARGET_BASELINE.dchip.max` shrunk 12→8 (the real measured ceiling); the entry stays, with the
+  drag/scrub-gesture rationale from CONTEXT.md, since the violation itself persists — resolving
+  it is still the creator's 'whole trip at a glance' vs. 44px-floor call. CONTEXT.md's §H2 update
+  note is now answered (does NOT reopen the ruling) and removed.
 - [ ] **C3. Print**: the #47 preview shell shipped; `PRINT SHEET` force-opens every
   `[data-fold]` and hides every `[data-noprint]` (assert in a Playwright print test).
 - [ ] **C4. Sync the projects forward**: push the corrected token files back to P1
