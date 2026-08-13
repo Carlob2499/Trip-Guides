@@ -535,14 +535,57 @@ not novelty:
   themes + 375px mobile: the preview UI follows the reader's live theme, the sheet itself
   stays fixed white paper regardless (same "paper is white whatever theme you're reading in"
   call print.css already makes for the guide itself).
-- [ ] **C4. Sync the projects forward**: push the corrected token files back to P1
-  (`waypoint_anchors/tokens.css` if stale) and P3 (both levels of `tokens/colors.css`,
-  the two color cards, `readme.md`) via `DesignSync finalize_plan`+`write_files`, so the
-  design projects stop lagging the repo. Also fix the residual kit defects found 2026-08-12:
-  `--emergency-red-dark: #ef5350` → `#ef8a83`, and the kit serif stack missing the CJK
-  fallbacks (`'Literata Variable', Georgia, 'Times New Roman', AppleMyungjo, Batang,
-  'Noto Serif CJK KR', serif`) — fix in repo first, then re-upload the touched files to the
-  ds-project (`ef8458ac-…`) too.
+- [ ] **C4. Sync the projects forward**: REPO-SIDE DONE 2026-08-13 · **remote push still
+  PENDING** — push the corrected token files back to P1 (`waypoint_anchors/tokens.css` if
+  stale) and P3 (both levels of `tokens/colors.css`, the two color cards, `readme.md`) via
+  `DesignSync finalize_plan`+`write_files`, so the design projects stop lagging the repo.
+  Also fix the residual kit defects found 2026-08-12: `--emergency-red-dark: #ef5350` →
+  `#ef8a83`, and the kit serif stack missing the CJK fallbacks (`'Literata Variable',
+  Georgia, 'Times New Roman', AppleMyungjo, Batang, 'Noto Serif CJK KR', serif`) — fix in
+  repo first, then re-upload the touched files to the ds-project (`ef8458ac-…`) too.
+  - **Both kit defects are fixed in-repo** (commit `fc49501`), across five files, all now
+    matching `src/styles/base.css` — the file DESIGN.md itself calls "the one place a token
+    value is ever true". Emergency red: `DESIGN.md`'s front-matter `emergency-red-dark` and
+    `design-system/tokens/colors.css`'s raw-palette entry, both `#ef5350` → `#ef8a83`.
+    `colors.css` was already self-contradictory — its `[data-field="night"]` block assigned
+    the correct `--crit:#ef8a83` (line 89) while the palette entry above it still declared
+    `#ef5350`, so the theme layer had been updated and the palette never was; the new value
+    carries the contrast rationale as a comment (2.16:1 → 5.81:1 on the night `--card`).
+    CJK serif: `enforcement/tokens.css`'s `--fd`, `design-system/tokens/fonts.css`'s `--fd`,
+    `TOKENS.md`'s `--fd` code block, and all four of `DESIGN.md`'s serif `typography.*
+    .fontFamily` entries (display/headline/title/body) — the last three had drifted to a
+    shorter `'Literata', Georgia, serif` than the display's, and base.css runs ONE serif
+    stack for both display and body, so all four now read identically.
+  - **Scope call — canonical token definitions only.** Two frozen design-tool exports still
+    carry the old literals and were deliberately left as historical snapshots, not edited:
+    `prototype/atlas-mobile-home/WayPoint Mobile.dc.html` (`#ef5350` in three inline styles
+    plus its `dv-note` prose, which now misstates the dark remap) and
+    `prototype/Waypoint Overdrive v2.dc.html` (`--fd:'Literata',Georgia,serif`). P3's newer
+    `prototypes/Waypoint Arrival.dc.html` already ships the correct `--crit:#ef8a83`, which
+    is what dates the other two as superseded exports rather than live sources.
+  - **Two seams the fix exposed, for a later ruling — neither is blocking.** (1)
+    `enforcement/tokens.css`'s header claims its values are "EXTRACTED VERBATIM from the
+    approved prototype", but its `--fd` now intentionally exceeds the prototype's; the
+    CLAUDE.md authority order (prototype > enforcement) does not really cover a fallback
+    chain the prototype never had an opinion about, since the Latin-only mock predates the
+    Korean-content requirement. (2) `design-system/tokens/fonts.css` `@import`s Literata
+    from the Google Fonts CDN, where the family resolves as `Literata`, while base.css uses
+    `'Literata Variable'` (self-hosted `@fontsource-variable/literata`). Matching base.css
+    exactly — the instruction for this task — means that one kit file's own `@import` no
+    longer matches its own `--fd` first entry. Same divergence already existed pre-fix
+    (`"Literata"` vs base.css's `'Literata Variable'`); this change did not create it, but
+    it is now load-bearing in a file that ships a font import.
+  - **The `DesignSync` half did not run: the tool is absent from this session**, which is a
+    different failure from the `list_projects` filtering quirk §B4 documents above. That
+    quirk is answered by calling `get_file`/`write_files` with an explicit projectId — but
+    there is no `get_file` to call here. An exact-name tool lookup for `DesignSync`,
+    `get_file`, `list_files`, `write_files`, `finalize_plan` returns nothing, and no MCP
+    server in the environment provides them. So P1's `waypoint_anchors/tokens.css`, P3's two
+    `tokens/colors.css` levels + color cards + `readme.md`, and the ds-project
+    (`ef8458ac-…`) copies all **still carry both stale values** and remain the one place the
+    two defects survive. Row stays unticked for that reason. Finishing it needs a session
+    with DesignSync mounted; the corrected file contents are already in the repo at the five
+    paths above and can be uploaded verbatim — no re-derivation needed.
 - [ ] **C5. Final polish walk**: all four guides + hub at 375/744/1440, day+night,
   reduced-motion, keyboard-only — nothing escapes its container, nothing focusable in a
   closed sheet, every control ≥44px or in the (shrunk) baseline with its reason.
