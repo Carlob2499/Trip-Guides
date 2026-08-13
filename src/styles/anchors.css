@@ -69,7 +69,7 @@
 .anch-ring .ring-txt b{display:block;font-family:var(--font-data);font-weight:700;font-size:var(--text-lead);color:var(--ink);font-variant-numeric:tabular-nums}
 .anch-ring .ring-txt b span{color:var(--muted);font-weight:600;font-size:var(--text-small)}
 .anch-ring .ring-txt i{font-family:var(--font-data);font-style:normal;font-size:var(--text-nano);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.anch-ring.ring-done .ring-fill{stroke:var(--green,#3a7d44)}
+.anch-ring.ring-done .ring-fill{stroke:var(--green)}
 
 /* The overture: pending figures hold at zero, .anch-in draws them home once. */
 .anch-pending .jl-track{transform:scaleX(0)}

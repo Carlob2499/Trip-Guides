@@ -4,6 +4,29 @@
 > (the ~80-line budget its own header sets is now gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). Newest first, verbatim.
 
+## Snapshot (2026-08-13e — §C1 continues: intake.css/jetlag.css/map.css clean; a new,
+honestly-scoped exemption for map markers over tile imagery)
+
+One commit, ship-loop-clean: 1748 vitest, full 57-test `a11y.spec.ts` Playwright suite (axe
+scans on every guide, both themes), build/lint/typecheck/drift green. Drift real count 100→91.
+
+**Six radii converted, all to precedent already established elsewhere this arc.**
+`.itk-wordmark:focus-visible`'s `border-radius:6px` was the ONLY `outline` + `border-radius`
+pairing anywhere in the codebase — every other text-link focus ring is plain outline — dropped as
+an unexplained outlier. `.itk-blank` → `0` (matches the day-chip underline treatment).
+`.jl-toggle` → `999px` (matches `.card-more-sum`'s identical full-width-disclosure-row shape).
+`.jl-select`/`.jl-output`/`.itin-map` → `0` (form-control/content-callout/map-embed patterns
+already established). `.ng-form`'s shadow removed too — no stated reason, ordinary page content,
+border already there.
+
+**`.map-chip`/`.map-cluster`'s shadows are kept, under a NEW exemption rather than stretched
+into the existing overlay one.** They aren't floating page chrome like `.nav-hint`/`.botbar` —
+they're markers painting OVER live map tiles (unpredictable colour, not the site's own
+controlled page background). That's the same separation need `pincard-credit-sits-on-a-
+photograph` already recognizes for the hub's globe, one component category over — named
+`map-marker-sits-on-tile-imagery` rather than folded into a reasoning that doesn't actually fit,
+per this arc's own standard of naming exemptions honestly rather than as a mute button.
+
 ## Snapshot (2026-08-13d — §C1 continues: flight.css/mobile-nav.css clean; two stale-doc
 corrections; B4 re-diagnosed with DesignSync actually reachable)
 

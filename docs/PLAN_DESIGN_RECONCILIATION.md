@@ -368,7 +368,8 @@ Both exist in the repo but neither had a dedicated build ticket in R5's order.
 Polish serves the shipped doctrine — open-not-crowded, quiet paper/loud marks. It is paydown,
 not novelty:
 
-- [~] **C1. Drift-baseline paydown**: IN PROGRESS. `guide.css` (the named first target) is DONE
+- [x] **C1. Drift-baseline paydown**: DONE (153→29 real; see the sub-bullet below for the full
+  file-by-file record). `guide.css` (the named first target) started it
   — RADIUS 26→0, ELEVATION 6→0, 21 hand-classified radius fixes (pill/circle → 999px per the
   system's own established convention on every other `*-chip`/`*-pill`/`*-badge`/cursor:pointer
   selector in the codebase, content container → 0) plus three real box-shadows removed
@@ -432,10 +433,43 @@ not novelty:
   need for separation the existing `pincard-credit-sits-on-a-photograph` exemption already
   recognizes for the hub's globe, one component category over.
 
-  Remaining, file-by-file, same cadence: `painted-atlas.css`/`panel-preview/` RADIUS+ELEVATION,
-  `sights.css`/`atlas-map.js`/`firebase/styles.css`/`gmaps-render.js`/`PwaHead.astro`/
-  `GuideLayout.astro`/`util.js`/`accent-tokens.ts` COLOUR (`og`/`recap` pages stay baselined like
-  `budget-sheet.css` — same forced-literal class).
+- [x] **C1 is DONE (91→29 real, all four remaining rows structurally forced-literal, not
+  fixable).** `painted-atlas.css` (19 COLOUR+ELEVATION) is a generative painter's-sky
+  illustration outside the flat chrome system by design — new exemption
+  `painted-atlas-is-generative-art-not-chrome`, its mood-palette hexes and orb glow are the art's
+  own definition, not drift. `panel-preview/` folded into the existing `unshipped-design-study`
+  exemption (its own header comment: "a deliberate copy of progress-preview's file, not an
+  import of it," same "delete this whole folder with the study" class). `sights.css`'s two real
+  bugs fixed: `.sight-media-cap`'s `color:#f8faf3` was a pre-R5 stale literal never updated when
+  the current card token moved (→ `var(--ink)`, matching the exact fix its own neighbouring
+  comment already describes for its sibling rules); `.tag--onphoto`'s photo-tuned near-white is
+  legitimate and exempted (`sights-onphoto-text-sits-on-a-confirmed-photograph`, same reasoning
+  as the hub's pincard credit). `anchors.css`'s `.ring-fill` dead fallback deleted (unreachable,
+  same class as `divergences.css`'s). `atlas-map.js`/`gmaps-render.js`/`util.js`/
+  `PwaHead.astro`/`GuideLayout.astro`/`accent-tokens.ts` are all structurally forced-literal —
+  canvas/third-party-SDK/meta-attribute contexts that can never hold `var()`, or (accent-tokens.ts)
+  the tested derivation source `--accent-ink` itself comes from — five new honestly-scoped
+  exemptions, none a blanket mute.
+
+  **Five more Tier-2 gate bugs found and fixed in the same pass** (`scripts/drift-real.mjs`):
+  (1) `box-shadow:none` matched check-drift's OWN `(?!none)` negative-lookahead rule anyway — a
+  regex-backtracking bug in the vendored checker, not editable there, exempted at the
+  classification layer. (2) `isInsideComment` didn't recognize Astro's `{/* … */}` comment
+  syntax (only bare `/*`), so a comment's own opening line was never marked — found via
+  `GuideLayout.astro`'s safe-area comment tripping the very rule it was explaining. (3)
+  `in-a-comment`'s category allowlist excluded SAFE-AREA and MOTION for no stated reason, so
+  fixing (2) alone didn't help that violation — widened. (4) `ring-shadow-is-not-elevation`'s
+  extraction regex didn't stop at `}`, so a `@keyframes` step's `box-shadow` packed onto one
+  compressed line (`0%,100%{box-shadow:…}50%{box-shadow:…}`) captured into the NEXT step as
+  garbage and failed the ring test on a value that was actually a clean ring (`planner.css`'s
+  `nowPulse`) — now stops at `}`, matching check-drift's own radius extraction. (5) that same
+  regex only recognized a unit-bearing ring spread (`Npx`), not a bare `0` (legal, unitless-zero
+  CSS) — a pulse animation's start frame (`0 0 0 0 …` growing to `0 0 0 6px …`) needs both.
+
+  Total this session: 153→29 real violations, twelve named exemptions added or generalized,
+  five checker bugs fixed, three real CSS bugs found and fixed (two contrast failures in
+  `divergences.css`, one stale-token literal in `sights.css`). §C1's file-by-file queue is empty
+  — the four remaining rows are load-bearing baseline debt, not a queue.
 - [x] **C2a. Day-chip pill→underline fix** — DONE. `planner.css`'s `.dchip` lost `border-radius`,
   `border`, and `background:var(--card)` (→ `border:0;border-bottom:2px solid transparent`,
   `background:transparent`); `.dchip-active` ground moved from `var(--accent)` to `var(--sunken)`
