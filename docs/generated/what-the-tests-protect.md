@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1844 checks · 1844 carry a stated promise · 158 files
+1849 checks · 1849 carry a stated promise · 158 files
 
 ## Can everyone read it
 
@@ -81,12 +81,17 @@ nothing ships.
 - ….ics is well-formed iCalendar  <sub>tests/visual/exports.spec.ts:83</sub>
 - at least one guide actually produced each export  <sub>tests/visual/exports.spec.ts:154</sub>
 
-**The printed budget sheet says exactly what the calculator on screen says.**
+**The printed budget sheet says exactly what the calculator on screen says,**
 
-- the PDF button stays hidden until there is spending, then appears  <sub>tests/visual/budget-sheet.spec.ts:58</sub>
-- clicking it prints a two-page sheet on <body> and then removes it  <sub>tests/visual/budget-sheet.spec.ts:72</sub>
-- the printed figures are the ones the calculator shows  <sub>tests/visual/budget-sheet.spec.ts:98</sub>
-- non-Latin names survive, and payment handles never reach the file  <sub>tests/visual/budget-sheet.spec.ts:122</sub>
+- the PDF button stays hidden until there is spending, then appears  <sub>tests/visual/budget-sheet.spec.ts:78</sub>
+- clicking it opens a visible two-page preview and does NOT print yet  <sub>tests/visual/budget-sheet.spec.ts:92</sub>
+- the preview's Print button calls window.print() once, synchronously  <sub>tests/visual/budget-sheet.spec.ts:123</sub>
+- afterprint closes the preview and cleans up  <sub>tests/visual/budget-sheet.spec.ts:129</sub>
+- Cancel closes the preview without ever printing, and returns focus to the trigger  <sub>tests/visual/budget-sheet.spec.ts:140</sub>
+- the backdrop and Escape also close the preview  <sub>tests/visual/budget-sheet.spec.ts:151</sub>
+- @media print unwraps the preview to just the sheet, hiding the rest of the page  <sub>tests/visual/budget-sheet.spec.ts:163</sub>
+- the printed figures are the ones the calculator shows  <sub>tests/visual/budget-sheet.spec.ts:190</sub>
+- non-Latin names survive, and payment handles never reach the file  <sub>tests/visual/budget-sheet.spec.ts:214</sub>
 
 **The shared trip budget never quietly changes what anyone owes.**
 

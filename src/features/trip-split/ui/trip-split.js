@@ -27,7 +27,7 @@
 
 import { settle } from "../model/settle";
 import { buildBudgetSummary } from "../model/summary";
-import { printBudgetSummary } from "./budget-sheet.js";
+import { previewBudgetSummary } from "./budget-sheet.js";
 import { formatMinor, toBaseMinor, BASE_CURRENCY, CURRENCY_EXPONENT } from "../model/money";
 import { normalizeExpense, normalizeMember, normalizePayment, rekeyForRoom } from "../model/records";
 import { planMemberRemoval, applyExpensePatch } from "../model/undo";
@@ -1043,9 +1043,10 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
   }
 
   /* ── Save summary as PDF ──────────────────────────────────────────────────
-     Everything here is synchronous: the sheet is built and window.print() is called
-     inside the click gesture, never behind an await (CLAUDE.md boundary check #2 — the
-     popup-blocker trap). */
+     Opens an on-screen preview (issue #47) rather than printing straight away — see
+     budget-sheet.js for why, and for the synchronous-gesture constraint that still
+     applies once the preview's own Print button is clicked (CLAUDE.md boundary check
+     #2 — the popup-blocker trap). */
   function currencyForSheet() {
     var live = getLastRate();
     if (live && live.rate) {
@@ -1077,7 +1078,7 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
   if (savePdfBtn) {
     savePdfBtn.addEventListener("click", function () {
       var summaryData = buildBudgetSummary(state.members, state.expenses, state.payments, dayCount());
-      printBudgetSummary(summaryData, sheetMeta());
+      previewBudgetSummary(summaryData, sheetMeta());
     });
   }
 

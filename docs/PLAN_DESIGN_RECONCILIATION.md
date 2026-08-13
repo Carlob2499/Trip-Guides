@@ -498,8 +498,29 @@ not novelty:
   drag/scrub-gesture rationale from CONTEXT.md, since the violation itself persists — resolving
   it is still the creator's 'whole trip at a glance' vs. 44px-floor call. CONTEXT.md's §H2 update
   note is now answered (does NOT reopen the ruling) and removed.
-- [ ] **C3. Print**: the #47 preview shell shipped; `PRINT SHEET` force-opens every
-  `[data-fold]` and hides every `[data-noprint]` (assert in a Playwright print test).
+- [x] **C3. Print**: DONE — issue #47's preview-then-print shell shipped
+  (`features/trip-split/ui/budget-sheet.js`). Built against the issue's own text, which is
+  the authoritative spec here (verified via `issue_read` before building) — this row's
+  `[data-fold]`/`[data-noprint]` language doesn't correspond to anything in the actual
+  ticket or in the budget sheet's markup (it has no folds/collapsed sections to force open;
+  every figure renders unconditionally). Clicking "Save summary as PDF" now opens a visible,
+  on-screen preview (`.bsp-modal`, matching `.share-modal`'s established pattern — border,
+  no shadow, `border-radius:0`) built from the SAME `.bsheet` element that later prints, not
+  a copy; only the preview's own Print button calls `window.print()`, synchronously inside
+  its own click gesture, so the popup-blocker-class constraint still holds. `.bs-*` styling
+  moved from `@media print`-only to unconditional (screen preview and paper render
+  identically — one document, not a screen variant and a print variant); `@media print`
+  now only handles what actually differs on paper (hide the preview chrome, unwrap the
+  modal back to normal flow, `@page` size). Reuses the existing shared `trapFocus` utility
+  rather than reimplementing focus-trapping a third time. The Playwright print test the row
+  asks for is `tests/visual/budget-sheet.spec.ts`'s "@media print unwraps the preview to
+  just the sheet" — `page.emulateMedia({media:'print'})` asserts the chrome hides, the modal
+  unwraps to `position:static`, the rest of the page is suppressed, and the sheet stays
+  visible. Full suite rewritten (9 tests, all passing) since the old assertions encoded the
+  pre-fix behavior (immediate print, invisible sheet) as correct. Screenshot-verified both
+  themes + 375px mobile: the preview UI follows the reader's live theme, the sheet itself
+  stays fixed white paper regardless (same "paper is white whatever theme you're reading in"
+  call print.css already makes for the guide itself).
 - [ ] **C4. Sync the projects forward**: push the corrected token files back to P1
   (`waypoint_anchors/tokens.css` if stale) and P3 (both levels of `tokens/colors.css`,
   the two color cards, `readme.md`) via `DesignSync finalize_plan`+`write_files`, so the

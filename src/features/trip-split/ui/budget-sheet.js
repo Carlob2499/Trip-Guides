@@ -13,12 +13,17 @@
    selectable vector text, a tiny file, and zero dependencies. The user's "Save as PDF"
    destination does the rest.
 
-   The sheet is appended to <body> (never inside .split-wrap, which print.css hides outright)
-   and removed as soon as printing ends. Everything is built SYNCHRONOUSLY inside the click
-   gesture: window.print() must not sit behind an await, the same trap that let a popup
-   blocker silently swallow the change-request wizard. */
+   PREVIEW THEN PRINT (issue #47): the old flow called window.print() the instant the
+   trigger was clicked — the reader never saw the document before it hit the printer. Now
+   the click opens a visible, on-screen preview (built from the SAME .bsheet element that
+   later prints, not a copy) and only the preview's own Print button calls window.print().
+   That call still has to be SYNCHRONOUS inside its own click gesture — window.print() must
+   never sit behind an await, the same popup-blocker-class trap recorded in the boundary
+   checks — which is why the preview's Print button calls it directly, not through any
+   async step. The sheet is appended to <body> (never inside .split-wrap, which print.css
+   hides outright) and removed once the preview is dismissed or printing ends. */
 
-import { esc } from "../../../scripts/util.js";
+import { esc, trapFocus } from "../../../scripts/util.js";
 import { formatMinor, BASE_CURRENCY } from "../model/money";
 
 /** All summary figures arrive as integer minor units of the base currency. */
@@ -170,47 +175,81 @@ function statementPage(s, meta) {
 }
 
 /** Build the sheet element. Exported for tests and for anything that wants to inspect the
-    markup without triggering a print dialog. */
+    markup without opening the preview. Not aria-hidden: once opened it's the visible,
+    focusable content of a real dialog, not print-only furniture nobody sees. */
 export function buildSheet(summary, meta) {
   var el = document.createElement("div");
   el.className = "bsheet";
   el.id = "budgetSheet";
-  el.setAttribute("aria-hidden", "true");
   el.innerHTML = coverPage(summary, meta) + statementPage(summary, meta);
   return el;
 }
 
-/** Render the sheet and open the browser's print / Save-as-PDF dialog, then clean up.
-    Returns false when there is nothing worth printing. */
-export function printBudgetSummary(summary, meta) {
+var BAR_HTML =
+  '<div class="bsp-backdrop" id="bspBackdrop"></div>' +
+  '<div class="bsp-modal" id="bspModal" role="dialog" aria-modal="true" aria-label="Print preview">' +
+    '<div class="bsp-bar">' +
+      '<span class="bsp-bar-label">Print preview</span>' +
+      '<div class="bsp-bar-actions">' +
+        '<button class="bsp-cancel" id="bspCancel" type="button">Cancel</button>' +
+        '<button class="bsp-print" id="bspPrint" type="button">Print</button>' +
+      '</div>' +
+    '</div>' +
+    '<div class="bsp-scroll" id="bspScroll"></div>' +
+  '</div>';
+
+/** Build the sheet and open it in an on-screen preview — the reader sees exactly what is
+    about to print before choosing to print it. Returns false when there is nothing worth
+    summarising. The Print button inside the preview calls window.print() synchronously
+    from its OWN click, so the gesture constraint holds without the trigger itself printing
+    anything. */
+export function previewBudgetSummary(summary, meta) {
   if (!summary || !summary.expenseCount) return false;
 
-  var existing = document.getElementById("budgetSheet");
-  if (existing) existing.remove();
+  var opener = document.activeElement;
+  var existingSheet = document.getElementById("budgetSheet");
+  if (existingSheet) existingSheet.remove();
+  var existingModal = document.getElementById("bspModal");
+  if (existingModal) { existingModal.remove(); var bd = document.getElementById("bspBackdrop"); if (bd) bd.remove(); }
+
+  document.body.insertAdjacentHTML("beforeend", BAR_HTML);
+  var backdrop = document.getElementById("bspBackdrop");
+  var modal = document.getElementById("bspModal");
+  var scroll = document.getElementById("bspScroll");
+  var cancelBtn = document.getElementById("bspCancel");
+  var printBtn = document.getElementById("bspPrint");
 
   var sheet = buildSheet(summary, meta);
-  document.body.appendChild(sheet);
-  document.body.setAttribute("data-print-budget", "");
+  scroll.appendChild(sheet);
+  document.body.setAttribute("data-bsheet-open", "");
 
   var cleaned = false;
+  var untrap = trapFocus(modal, function () { return !cleaned; });
   function cleanup() {
     if (cleaned) return;
     cleaned = true;
-    document.body.removeAttribute("data-print-budget");
-    var el = document.getElementById("budgetSheet");
-    if (el) el.remove();
+    document.body.removeAttribute("data-bsheet-open");
+    modal.remove();
+    backdrop.remove();
     window.removeEventListener("afterprint", cleanup);
+    document.removeEventListener("keydown", onKeydown);
+    untrap();
+    if (opener && opener.focus) opener.focus();
   }
-  window.addEventListener("afterprint", cleanup);
+  function onKeydown(e) { if (e.key === "Escape") cleanup(); }
 
-  try {
-    window.print();
-  } catch (e) {
-    cleanup();
-    return false;
-  }
-  // Safari/iOS fire afterprint unreliably; a timed sweep guarantees the sheet never outlives
-  // the dialog and reappears as a stray block on screen.
-  setTimeout(cleanup, 60000);
+  window.addEventListener("afterprint", cleanup);
+  document.addEventListener("keydown", onKeydown);
+  backdrop.addEventListener("click", cleanup);
+  cancelBtn.addEventListener("click", cleanup);
+  printBtn.addEventListener("click", function () {
+    // SYNCHRONOUS, inside this click's own gesture — no await between here and print().
+    try { window.print(); } catch (e) { /* dialog blocked/unsupported — preview stays open */ }
+    // Safari/iOS fire afterprint unreliably; a timed sweep guarantees the sheet never
+    // outlives the dialog and reappears as a stray block on screen.
+    setTimeout(cleanup, 60000);
+  });
+
+  printBtn.focus();
   return true;
 }

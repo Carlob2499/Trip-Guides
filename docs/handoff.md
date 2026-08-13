@@ -22,52 +22,48 @@
   (presentation/motion) · `docs/standards/guide-rubric.md` (quality bar) ·
   `docs/evidence/competitive-landscape.md` (market parity reference) ·
   **`docs/PLAN_DESIGN_RECONCILIATION.md`** is the live work order for design/theme work — its
-  §A/§B/§C1 are ALL DONE now. §C is at §C3/§C4/§C5 (print preview, project sync, final polish
-  walk), see below. `docs/archive/PLAN_ATLAS_MIGRATION.md` is fully ticked — history only.
+  §A/§B/§C1/§C3 are ALL DONE now. §C is at §C4/§C5 (project sync, final polish walk), see below.
+  `docs/archive/PLAN_ATLAS_MIGRATION.md` is fully ticked — history only.
 
-## Snapshot (2026-08-13f — §C1 CLOSED: 153→29 real drift violations, five more Tier-2 gate
-bugs fixed, three real CSS bugs found and fixed)
+## Snapshot (2026-08-13g — §C3 shipped: the budget sheet previews before it prints, issue #47)
 
-One large commit, ship-loop-clean: 1748 vitest, full 57-test `a11y.spec.ts` Playwright suite,
-build/lint/typecheck/drift green. This finishes the drift-baseline paydown workstream this arc
-opened several sessions ago — the four rows left in the baseline are structurally forced-literal
-(`budget-sheet.css`, `og`/`recap` PNG generators), not a queue.
+One commit, ship-loop-clean: 1748 vitest, full 57-test `a11y.spec.ts` Playwright suite, a fully
+rewritten 9-test `budget-sheet.spec.ts`, build/lint/typecheck/drift green.
 
-**`painted-atlas.css`'s 19 violations are art, not chrome — a whole-file exemption, not CSS
-changes.** It's a generative painter's-sky illustration (`PaintedAtlas.astro`, "the living cover
-every guide is born with"), governed by `docs/reference/motion.md` instead of the flat-chrome
-rules this gate otherwise enforces. `panel-preview/` folded into the existing
-`unshipped-design-study` exemption — its own comment says it's "a deliberate copy of
-progress-preview's file," same "delete this whole folder with the study" class.
+**Built against the actual GitHub issue, fetched via `issue_read` before writing any code** —
+the plan doc's own `[data-fold]`/`[data-noprint]` language for this row didn't correspond to
+anything in the ticket or in the sheet's markup (it has no folds; every figure already renders
+unconditionally), so it was ignored rather than built to.
 
-**Two real bugs, both found doing the mechanical pass, same pattern as every file this arc:**
-`sights.css`'s `.sight-media-cap{color:#f8faf3}` was a pre-R5 stale literal (the OLD `--card`
-value) never updated when the token moved — fixed to `var(--ink)`, matching the exact fix its
-own neighbouring comment already describes for its sibling rules; screenshot-verified legible in
-both themes. `anchors.css`'s `.ring-fill` had a dead, stale fallback (same class as
-`divergences.css`'s from earlier this arc) — deleted.
+**Clicking "Save summary as PDF" now opens a visible on-screen preview** (`.bsp-modal`, reusing
+`.share-modal`'s established pattern — border, no shadow, `border-radius:0` — and the shared
+`trapFocus` utility rather than a third hand-rolled focus trap) built from the SAME `.bsheet`
+element that later prints, not a copy. Only the preview's own Print button calls
+`window.print()`, synchronously inside its own click — the popup-blocker-class constraint the
+issue itself calls out still holds, it just moved from the trigger's click to the preview's.
 
-**Five more Tier-2 gate bugs fixed in `scripts/drift-real.mjs`, on top of the two from earlier
-sessions:** `box-shadow:none` was tripping check-drift's OWN `(?!none)` negative-lookahead rule
-via regex backtracking; `isInsideComment` didn't recognize Astro's `{/* … */}` syntax, only bare
-`/*`; `in-a-comment`'s category allowlist excluded SAFE-AREA/MOTION for no stated reason, so the
-previous fix alone didn't help; `ring-shadow-is-not-elevation`'s extraction didn't stop at `}`,
-so a `@keyframes` step's box-shadow captured garbage from the NEXT step; that same regex only
-accepted a unit-bearing ring spread, not the legal bare-`0` a pulse animation's start frame uses.
+**The CSS restructure this required is the more interesting part:** `.bs-*` styling used to live
+entirely inside `@media print` — meaning before this fix, there was no way to show the document
+on screen even if something HAD called `display:block` on it, because none of its actual design
+(fonts, colours, spacing) existed outside print media. Moved unconditional: screen preview and
+paper render identically now, because it's one document, not a screen variant and a print
+variant. `@media print` is now thin — only what actually differs on paper (hide the preview
+chrome, unwrap the modal back to normal flow, `@page` size).
 
-**Everything else structurally forced-literal got one clean, honestly-named exemption each**
-(not a blanket mute): JS reading a live CSS token with a defensive fallback (canvas/pre-paint
-contexts can't hold `var()`), third-party SDK config (Google Maps), `<meta>` attribute values,
-`accent-tokens.ts` (the tested derivation source `--accent-ink` itself comes from), and
-`sights.css`'s legitimate photo-tuned near-white (same reasoning as the hub's pincard credit).
+**The existing Playwright suite encoded the pre-fix behavior as correct** (immediate print,
+`display:none` sheet) and needed deliberate rewriting, not just new assertions — all 9 tests
+updated, plus the print-media test the plan doc's row asked for
+(`page.emulateMedia({media:'print'})` asserting the chrome hides and the modal unwraps to
+`position:static`). Screenshot-verified both themes + 375px mobile: the preview UI follows the
+reader's live theme; the sheet itself stays fixed white paper regardless, same call print.css
+already makes for the guide itself.
 
 ## Open items
 
-- **§C3** — the #47 print-preview shell (budget sheet prints straight to the OS dialog, no
-  preview).
 - **§C4** — sync corrected tokens back to the two Claude Design projects — must go LAST, after
   everything else lands, so the projects receive the final state.
 - **§C5** — final 375/744/1440 × day/night × keyboard-only polish walk across all four guides.
+  This is the last row in the whole design-reconciliation plan.
 - **§B4 blocked on project access**, not tool access (`DesignSync` works from a main session;
   this login's `list_projects` just doesn't show the right one) — don't retry until it does.
 - **Held, not open:** the route-order interactive picker's home (Tools station vs. itinerary
@@ -82,19 +78,20 @@ contexts can't hold `var()`), third-party SDK config (Google Maps), `<meta>` att
 
 ## Where we left off
 
-**§C1 is closed — the drift-baseline paydown workstream this arc opened is done.** The remaining
-29 real violations are all in the four already-decided forced-literal files; there is no more
-file-by-file queue for this workstream. The next open work is §C3 (print preview), a real
-user-facing feature rather than more token hygiene.
+**§A/§B/§C1/§C3 are all closed now — only §C4 (project sync) and §C5 (final polish walk) are
+left in the whole design-reconciliation plan.** §C4 explicitly goes last by its own row's design
+(it pushes the FINAL state back to the projects), so §C5 is the more useful next move even
+though it's numbered after C4 in the doc.
 
-**A pattern worth carrying into §C3/§C5:** every drift-paydown session this arc found real bugs
-(contrast failures, stale literals, gate false-positives) sitting beside the mechanical fix, not
-in a separate audit. The same discipline — read the whole thing, not just the flagged line —
-should carry into the print-preview build and the final polish walk.
+**A pattern worth carrying into §C5:** every workstream this arc found real bugs by reading the
+whole surface, not just what a mechanical pass flagged — two contrast bugs in `divergences.css`,
+a stale token in `sights.css`, an entire CSS scoping bug in `budget-sheet.css` that made an
+on-screen preview structurally impossible until restructured. The polish walk should read that
+way too: actually look at each guide, not just check boxes off a list.
 
 **Still needs you:** the same `eslint.config.mjs` hook-protection gap as before — the R5 bundle
 ignore line still can't land there; `support.js` still carries its own `eslint-disable` header.
 
-**Recommended next step:** §C3, the print-preview shell for issue #47. `main` is kept in sync
-with this branch after every ship-loop-clean commit (explicit standing instruction) — no
-separate merge step needed at session end.
+**Recommended next step:** §C5, the final polish walk. `main` is kept in sync with this branch
+after every ship-loop-clean commit (explicit standing instruction) — no separate merge step
+needed at session end.
