@@ -7,6 +7,8 @@
 
 import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { SANITY } from "../../src/features/live-data/model/rate";
+import { FALLBACK_RATES } from "../../src/data/countries.mjs";
 
 const FIXED_TIME = new Date("2026-09-01T10:00:00+09:00");
 
@@ -43,9 +45,44 @@ async function assertRealPage(res: Awaited<ReturnType<Page["goto"]>>, path: stri
 
 async function prep(page: Page, path: string, scheme: "light" | "dark", vp: Viewport) {
   await page.setViewportSize({ width: vp.width, height: vp.height });
-  await page.route("**/*", (route) =>
-    route.request().url().startsWith("http://localhost:4322") ? route.continue() : route.abort(),
-  );
+  /* Everything off-origin is aborted — except the rate endpoint, which is SERVED a canned
+     response (design-reconciliation §C5). Blanket-aborting it was a real coverage hole, not a
+     neutral choice: rate.js's failure ladder ends at applyFallback(), the one path that never
+     unhides #liveRatePill, so the stats-bar rate pill — a genuine control, field-tools.js gives
+     it role="button"/tabindex="0" and a click handler that opens the currency converter — was
+     `hidden` in every run this gate has ever made. It was measured at 36px by hand. Same
+     principle as the SOS sheet below: a surface that only exists after a condition still has to
+     pass, so the gate has to create the condition.
+     Fulfilled rather than seeded into localStorage so it stays currency-agnostic — the reply
+     echoes whatever `symbols` the guide asked for, so adding a guide in any currency to
+     TARGET_PAGES needs no table here. The date matches FIXED_TIME's own UTC day, which is what
+     rate.js compares its cache against.
+     The VALUE is derived from the product's own sanity band rather than picked, and that is not
+     fussiness — a flat 1389.2 for every currency passed korea (KRW's band is 500-3000) and was
+     rejected on japan, because model/rate.ts's inBand() correctly reads 1389 yen to the dollar
+     as bad data. The canned rate has to be plausible for the currency actually asked for, so it
+     comes from SANITY's midpoint where a hand-tuned band exists and from the guide's own seed
+     rate otherwise (a seed is in its own derived band by construction). */
+  const RATE_DAY = FIXED_TIME.toISOString().slice(0, 10);
+  const plausibleRate = (code: string) => {
+    const band = SANITY[code];
+    if (band) return (band[0] + band[1]) / 2;
+    const seed = (FALLBACK_RATES as Record<string, number>)[code];
+    return typeof seed === "number" && seed > 0 ? seed : 1;
+  };
+  await page.route("**/*", (route) => {
+    const url = route.request().url();
+    if (url.startsWith("http://localhost:4322")) return route.continue();
+    if (url.startsWith("https://api.frankfurter.dev/")) {
+      const code = new URL(url).searchParams.get("symbols") ?? "";
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ amount: 1, base: "USD", date: RATE_DAY, rates: { [code]: plausibleRate(code) } }),
+      });
+    }
+    return route.abort();
+  });
   // REDUCED MOTION IS LOAD-BEARING, not a nicety. reveal.js marks content .reveal-pending
   // (opacity:0) and only un-hides it via a 4s setTimeout safety rail — and the fixed clock below
   // means that timer NEVER fires. Without this line the whole page sits at opacity 0 while axe
@@ -805,16 +842,26 @@ const DEVICES = [
   { label: "iPad mini", width: 744, height: 1133 },
   { label: 'iPad Pro 11"', width: 834, height: 1194 },
   { label: 'iPad Pro 13"', width: 1024, height: 1366 },
+  /* A desktop width in a TOUCH-target list looks wrong until you notice what the nine above
+     cannot reach: 1024px is this list's ceiling, and the reading spine does not exist below
+     1100px, so `.spine-tick` — a real, keyboard-focusable <button>, one per section group on
+     all four guides — had never been measured by anything (design-reconciliation §C5). Any
+     control gated behind a desktop breakpoint was structurally invisible here. This entry is
+     the ≥1100px window, not a tenth device; SCREENS.md still names the nine. */
+  { label: "Desktop 1280", width: 1280, height: 800 },
 ] as const;
 
-/* A ceiling, not a permission. The remaining entry is a real control under the 44px line, repeats
-   hundreds of times per guide, and raising it changes the density of every day card in every
-   guide — which is a design decision, not a fix. The counts may only fall.
+/* A ceiling, not a permission. Every entry is a real control under the 44px line whose raise is a
+   design decision rather than a fix, and every one carries the measurement that made it a
+   decision. The counts may only fall.
    `.transit-link` RESOLVED (design-reconciliation §C2b, CONTEXT.md §H1 "raise" ruling): its own
    width already cleared 44px everywhere measured (min 88.2px); only height was short, so a
    padding-block increase alone reached the floor with no width growth and no row-wrap change.
    Measured 0 violations, both target pages, all nine devices — exception removed, not shrunk to
-   zero, so a future regression here is a real failure again. */
+   zero, so a future regression here is a real failure again.
+   Two more RAISED the same way in §C5 rather than landing here, both height-only: `.jl-toggle`
+   (34.9px, already width:100%) and the `.guide-stats` stat tiles carrying `#liveRatePill`
+   (86.7x36.0). `.spine-tick` is the one §C5 control that could not be raised — see its entry. */
 const TARGET_BASELINE: Record<string, { max: number; why: string }> = {
   "dchip": {
     max: 8,
@@ -834,15 +881,42 @@ const TARGET_BASELINE: Record<string, { max: number; why: string }> = {
     why: "The copy-link control beside every panel title — one per panel, so it scales with " +
       "the guide. It is deliberately quiet: at 44px it competes with the title it belongs to.",
   },
+  "spine-tick": {
+    max: 13,
+    why: "The desktop reading spine's ticks (field-tools.css:66, spine.js) — one per section " +
+      "group, 5x30px inactive / 7x30px active, ≥1100px only. Found by hand in " +
+      "design-reconciliation §C5 and baselined on a MEASURED constraint, not an aesthetic one: " +
+      "widening the hit area is what the 44px floor would need here (height is nearly there, " +
+      "width is 5px), and there is nowhere to put it. At the 1100px activation width the " +
+      "content column's left edge measures 17.6px while the rail occupies 14.4-21.4px — the " +
+      "gutter is NEGATIVE, the rail already floats over content. A 44px-wide hit area, visible " +
+      "or transparent, would therefore sit on top of the page and swallow clicks meant for it. " +
+      "Growing it vertically instead fails differently: the ticks pitch at 37.2px (30px + a " +
+      "7.2px gap), so 44px hit areas would OVERLAP their neighbours by 6.8px and manufacture " +
+      "wrong-destination misclicks — strictly worse than a small target. What holds the line " +
+      "meanwhile: this control only exists at ≥1100px, where the input is a pointer and not " +
+      "the thumb this floor is written for; every tick is a REDUNDANT shortcut to a .gtab tab " +
+      "button that is always present and already clears 44px (spine.js forwards the click to " +
+      "it); and it is keyboard-reachable with a focus ring plus a .spine-tip tooltip naming the " +
+      "destination. As with .dchip, the miss costs a neighbouring section, not a wrong " +
+      "destination. Ceiling is korea's 13 groups (japan 11, denmark 10, us 9); it may only fall.",
+  },
 };
 
-/* Two pages, not one. This sweep only ever visited a guide, so the hub — the page every
+/* Three pages, not one. This sweep only ever visited a guide, so the hub — the page every
    visitor lands on first, and the one carrying the most chips and pills per screen — had no
-   touch-target coverage at all at any of these nine widths. Kept as separate tests per page
+   touch-target coverage at all at any of these widths. Kept as separate tests per page
    rather than one test loading both, so the TARGET_BASELINE ceilings below stay PER PAGE and
    a regression on one page can never be absorbed by headroom on the other. */
 const TARGET_PAGES = [
   ["korea guide", "/Trip-Guides/guides/korea/"],
+  /* Japan, added in design-reconciliation §C5, is not a third sample of the same thing — it is
+     the only page here whose trip is in the FUTURE relative to FIXED_TIME. guide-ui.js:163-176
+     hides the jet-lag calculator once a trip is past, and korea's is, so `.jl-toggle` (36px,
+     every width) rendered on japan and us and was audited on neither. The general hole: a guide
+     whose CONTENT differs — an upcoming trip, a different currency, a different tab count —
+     renders controls korea simply does not have. One upcoming-trip guide closes it. */
+  ["japan guide", "/Trip-Guides/guides/japan/"],
   ["hub", "/Trip-Guides/"],
 ] as const;
 
@@ -850,6 +924,19 @@ for (const [pageName, path] of TARGET_PAGES) {
 for (const d of DEVICES) {
   test(`every visible target clears 44px — ${pageName}, ${d.label}`, async ({ page }) => {
     await prep(page, path, "light", d);
+    /* The measurement below silently skips anything rendering at 0x0, which is exactly how
+       #liveRatePill hid from this gate for its whole life. Now that prep() serves the rate,
+       assert the pill actually came up — otherwise a future change to rate.js's ladder could
+       re-hide it and this sweep would go back to reporting green on a control it never saw.
+       Guarded on presence: the hub has no pill, and a USD guide deliberately never mounts one. */
+    const pill = page.locator("#liveRatePill");
+    if (await pill.count()) {
+      await expect(
+        pill,
+        `${pageName}: #liveRatePill never un-hid, so this sweep is about to skip it. That is the ` +
+          `blind spot §C5 closed — fix the rate path, do not delete this assertion.`,
+      ).toBeVisible();
+    }
     const small = await page.evaluate(() => {
       const F = 'a[href],button:not([disabled]),input:not([disabled]),select,[role="button"]';
       return [...document.querySelectorAll(F)]
@@ -875,7 +962,18 @@ for (const d of DEVICES) {
 
              The rule this preserves: a control the reader is meant to AIM at clears 44px. A
              mark the reader is meant to READ is sized to its text. */
-          return !el.closest(".prov-dot, .flag-chip, .stale-pill, .imgcredit") && !el.matches("input");
+          /* `.mast-credit` joined this list in design-reconciliation §C5, and it is the SAME
+             entry as `.imgcredit`, not a new licence. CONTEXT.md's 2026-08-11 ruling names "a
+             photo credit" in the notation family outright, and masthead.css's own comment
+             calls .mast-credit the "same badge-on-photo pattern as sights.css's
+             .imgcredit--onphoto" — which renders as `class="imgcredit imgcredit--onphoto"` and
+             has therefore been excluded here all along. The masthead copy was never measured
+             only because this gate's env aborts off-origin images, which sets .mast-media-fail
+             and `display:none`s it; the first run that actually loaded a cover photo found it
+             at 143.6x24.2. Padding it to 44px would put a chunky lozenge on the hero AND render
+             the same datum at two different sizes on two surfaces — the exact split the
+             uniform-surfaces guardrail forbids. It is notation on both. */
+          return !el.closest(".prov-dot, .flag-chip, .stale-pill, .imgcredit, .mast-credit") && !el.matches("input");
         })
         .map((el) => {
           const r = el.getBoundingClientRect();

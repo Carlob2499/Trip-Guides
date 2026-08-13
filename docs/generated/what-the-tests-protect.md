@@ -13,13 +13,13 @@ nothing ships.
 
 **Anyone can read every screen — text stays legible and controls stay usable, in both light and dark.**
 
-- form controls are >=16px so iOS never zoom-traps  <sub>tests/visual/a11y.spec.ts:525</sub>
-- every page passes an automated accessibility scan  <sub>tests/visual/a11y.spec.ts:573</sub>
-- each guide uses its own readable accent colour, not another guide's  <sub>tests/visual/a11y.spec.ts:661</sub>
-- what's-next banner is legible  <sub>tests/visual/a11y.spec.ts:695</sub>
-- ⌁ with every sheet closed, nothing inside one is focusable  <sub>tests/visual/a11y.spec.ts:750</sub>
-- ⌁ an open sheet traps focus, Escape closes it, and focus comes back to the opener  <sub>tests/visual/a11y.spec.ts:769</sub>
-- every visible target clears 44px — …, …  <sub>tests/visual/a11y.spec.ts:851</sub>
+- form controls are >=16px so iOS never zoom-traps  <sub>tests/visual/a11y.spec.ts:562</sub>
+- every page passes an automated accessibility scan  <sub>tests/visual/a11y.spec.ts:610</sub>
+- each guide uses its own readable accent colour, not another guide's  <sub>tests/visual/a11y.spec.ts:698</sub>
+- what's-next banner is legible  <sub>tests/visual/a11y.spec.ts:732</sub>
+- ⌁ with every sheet closed, nothing inside one is focusable  <sub>tests/visual/a11y.spec.ts:787</sub>
+- ⌁ an open sheet traps focus, Escape closes it, and focus comes back to the opener  <sub>tests/visual/a11y.spec.ts:806</sub>
+- every visible target clears 44px — …, …  <sub>tests/visual/a11y.spec.ts:925</sub>
 
 **Search reaches anything in a guide, from anywhere in it.**
 

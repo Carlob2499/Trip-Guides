@@ -5,7 +5,15 @@
    src/components/JetLag.astro; the decisions are src/lib/jetlag.ts. */
 /* Collapsible panel in the masthead — shown only when country timezone is known */
 .jl-wrap{margin:1rem auto 0;width:100%;max-width:36rem}
-.jl-toggle{width:100%;display:flex;align-items:center;gap:.5rem;background:none;border:1px solid var(--rule2);border-radius:999px;padding:.52rem 1rem;cursor:pointer;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);transition:color .15s,border-color .15s}
+/* 44px floor (CONTEXT.md's "a target under 44px is a control the reader misses";
+   design-reconciliation §C5). Same shape as §C2b's .transit-link: this button is already
+   `width:100%` inside a 36rem wrapper, so width was never the miss — only height was, at
+   34.9px measured with getBoundingClientRect(). A padding-block-only increase reaches the
+   floor with no width change and no new wrap point. It was invisible to a11y.spec.ts because
+   that gate only tested korea + hub, and korea's trip is in the past relative to the gate's
+   fixed clock, which correctly hides the calculator (guide-ui.js:163-176) — japan is in the
+   gate's page list now so an upcoming-trip guide actually renders this control. */
+.jl-toggle{width:100%;display:flex;align-items:center;gap:.5rem;background:none;border:1px solid var(--rule2);border-radius:999px;padding:.8rem 1rem;min-height:44px;cursor:pointer;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);transition:color .15s,border-color .15s}
 .jl-toggle:hover{color:var(--ink);border-color:var(--ink)}
 .jl-toggle[aria-expanded="true"]{border-color:var(--rule2);color:var(--ink)}
 .jl-icon{flex:none;font-style:normal}

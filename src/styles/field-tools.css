@@ -6,7 +6,15 @@
 /* ── Tap-to-copy addresses ────────────────────────────────────────────────── */
 .addr-copy{cursor:pointer;border-bottom:1px dashed color-mix(in srgb,var(--accent) 55%,transparent);padding-bottom:1px}
 .addr-copy::after{content:" ⧉";font-size:.78em;color:var(--accent-ink)}
-.addr-copy:hover,.addr-copy:focus-visible{background:color-mix(in srgb,var(--accent) 12%,transparent);outline:none}
+/* Hover and focus-visible were ONE rule ending in `outline:none` (design-reconciliation §C5).
+   A tint is a fine hover affordance, but as the only focus treatment it left a sighted
+   keyboard user with no ring at all on a genuinely Tab-reachable control — this is
+   role="button" + tabindex="0" with a real handler in field-tools.js, and a full Tab-walk of
+   the korea guide (169 focusable elements) landed on it. Split, so the tint stays for the
+   pointer and focus gets the system's standard ring. NOT a touch-target change: these sit
+   inline inside prose, which the 44px gate excludes by design (a mark, not a target). */
+.addr-copy:hover{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+.addr-copy:focus-visible{background:color-mix(in srgb,var(--accent) 12%,transparent);outline:2px solid var(--accent);outline-offset:2px}
 
 /* ── Mini toast ───────────────────────────────────────────────────────────── */
 .ft-toast{position:fixed;left:50%;bottom:calc(5.4rem + var(--safe-bottom));transform:translate(-50%,8px);z-index:940;padding:.5rem .95rem;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:var(--text-control-sm);border-radius:999px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
@@ -15,7 +23,10 @@
 
 /* ── Stop check-off ───────────────────────────────────────────────────────── */
 .stop-num{cursor:pointer;border-radius:999px;padding:.1rem .3rem;margin:-.1rem -.3rem}
-.stop-num:hover,.stop-num:focus-visible{background:color-mix(in srgb,var(--accent) 16%,transparent);outline:none}
+/* Same split, same reason as .addr-copy above — role="checkbox" + tabindex="0" here, so the
+   keyboard user checking off stops had no focus ring either. */
+.stop-num:hover{background:color-mix(in srgb,var(--accent) 16%,transparent)}
+.stop-num:focus-visible{background:color-mix(in srgb,var(--accent) 16%,transparent);outline:2px solid var(--accent);outline-offset:2px}
 .stop-done .stop-name{text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--accent) 60%,transparent);opacity:.6}
 .stop-done .stop-note{opacity:.5}
 .stop-done .stop-num{color:var(--green)}

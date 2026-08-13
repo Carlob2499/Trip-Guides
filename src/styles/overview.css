@@ -17,9 +17,20 @@
 .guide-stats::-webkit-scrollbar{display:none}
 /* Sized down 2026-07-30 with the cut from six pills to three. At 58px tall and .95rem of
    side padding, six chunky blocks scrolled sideways on a phone and pushed the first real
-   content below the fold; three live facts at 36px sit on one line at 320px and read as a
-   meta line rather than a second navigation bar. */
-.guide-stats .gstat{display:flex;flex-direction:column;justify-content:center;gap:.1rem;min-height:36px;padding:.35rem .7rem;background:var(--card);border:1px solid var(--rule);border-radius:0;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.02em;color:var(--ink)}
+   content below the fold; three live facts sit on one line at 320px and read as a meta line
+   rather than a second navigation bar.
+   36px -> 44px (2026-08-13, design-reconciliation §C5): one tile in this row is a real
+   CONTROL, not a readout — #liveRatePill takes role="button"/tabindex="0" from field-tools.js
+   and opens the currency converter — so CONTEXT.md's floor ("a target under 44px is a control
+   the reader misses") applies to it. Measured 86.7x36.0: only the HEIGHT was short, the same
+   shape as §C2b's .transit-link, so this is a height-only raise with no width growth.
+   The floor sits on EVERY tile rather than on .gstat-rate alone, and that is the CLS point
+   above, not tidiness: the pills are JS-injected and the rate one arrives LAST (async fetch),
+   so a 44px floor on the rate tile alone would grow the row 36->44 after the countdown had
+   already painted it — a second layout shift. At 44px on all tiles the row is its final
+   height the moment the first pill lands, exactly as it is today. Three tiles at 44px is
+   still one thin line; the failure this comment records was six blocks at 58px. */
+.guide-stats .gstat{display:flex;flex-direction:column;justify-content:center;gap:.1rem;min-height:44px;padding:.35rem .7rem;background:var(--card);border:1px solid var(--rule);border-radius:0;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.02em;color:var(--ink)}
 .guide-stats .gstat-countdown,.guide-stats .gstat-active{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:700}
 .guide-stats .gstat-warning{border-color:var(--accent);color:var(--accent-ink)}
 .guide-stats .gstat-past{color:var(--muted)}

@@ -22,7 +22,14 @@
   color: var(--muted); font-style: italic;
 }
 .divergence-correction p { margin: 0; }
+/* 44px floor (design-reconciliation §C5). Found the moment the japan guide entered
+   a11y.spec.ts's TARGET_PAGES — japan carries the only divergences content in the product, so
+   this link had never been measured by anything. It is a grid item of `.divergence`, therefore
+   already blockified and full-bleed (measured 1151x21): width was never the miss, only height,
+   the same shape as §C2b's .transit-link. min-height + centring grows the row a reader taps
+   without touching the type or the link's quiet visual language. */
 .divergence-source {
+  display: flex; align-items: center; min-height: 44px;
   font-size: var(--text-caption); color: var(--accent-ink); text-decoration: none;
 }
 .divergence-source:hover { text-decoration: underline; }
