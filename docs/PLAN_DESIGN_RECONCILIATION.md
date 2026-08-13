@@ -350,10 +350,26 @@ Both exist in the repo but neither had a dedicated build ticket in R5's order.
 Polish serves the shipped doctrine — open-not-crowded, quiet paper/loud marks. It is paydown,
 not novelty:
 
-- [ ] **C1. Drift-baseline paydown**: 150 real violations (`scripts/drift-baseline.json`,
-  sums 153; two categories already under). Work file-by-file; after each drop, re-run
-  `npm run drift` and tighten the baseline with `--update` **in the same commit** (per-commit
-  cadence — CONTEXT.md Decisions, §H5). Target: guide.css RADIUS(25) and ELEVATION(4) first.
+- [~] **C1. Drift-baseline paydown**: IN PROGRESS. `guide.css` (the named first target) is DONE
+  — RADIUS 26→0, ELEVATION 6→0, 21 hand-classified radius fixes (pill/circle → 999px per the
+  system's own established convention on every other `*-chip`/`*-pill`/`*-badge`/cursor:pointer
+  selector in the codebase, content container → 0) plus three real box-shadows removed
+  (`.cat-title`'s decorative double-line, `.card`'s resting shadow, `.card:hover`'s lift —
+  edges are 1px rules, the border already carries the affordance). Found and fixed two Tier-2
+  gate bugs along the way (`scripts/drift-real.mjs`): `radius-brace-capture`'s exemption regex
+  accepted ANY trailing text after a valid first token, silently hiding a real asymmetric-radius
+  violation (`guide.css`'s `.day-planb`, `0 6px 6px 0` — now `0`); and the single-selector
+  `station-dot-ring-is-not-elevation` exemption is generalized to `ring-shadow-is-not-elevation`,
+  a structural check (zero offset AND zero blur on every comma-separated layer = geometrically a
+  ring, not a drop shadow) — found the identical unexempted pattern in `guide.css`'s `.day-today`
+  and `mobile-nav.css`'s `.bslot-mark`/`.sheet-cat.active::before`. Re-running `--update` after
+  both fixes correctly picked up stale baseline entries system-wide (categories other sessions
+  had already fixed in CSS, or that the pre-existing `overlay-shadow-is-approved`/`drag` keyword
+  already covered, but nobody had re-tightened): real count 153→109. Remaining, file-by-file,
+  same cadence: `budget-sheet.css`/`divergences.css` COLOUR(6/5), `flight.css`/`intake.css`/
+  `jetlag.css`/`map.css`/`painted-atlas.css`/`panel-preview/`/`mobile-nav.css` RADIUS+ELEVATION,
+  `sights.css`/`atlas-map.js`/`firebase/styles.css`/`gmaps-render.js`/`PwaHead.astro`/
+  `GuideLayout.astro`/`og`+`recap` pages/`util.js`/`accent-tokens.ts` COLOUR.
 - [x] **C2a. Day-chip pill→underline fix** — DONE. `planner.css`'s `.dchip` lost `border-radius`,
   `border`, and `background:var(--card)` (→ `border:0;border-bottom:2px solid transparent`,
   `background:transparent`); `.dchip-active` ground moved from `var(--accent)` to `var(--sunken)`

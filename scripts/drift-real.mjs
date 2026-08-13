@@ -65,6 +65,30 @@ function blockOf(v) {
   return v.text;
 }
 
+/** Split a CSS value on top-level commas only — a color-mix()/rgba() argument list must not be
+ * mistaken for a multi-layer box-shadow list. Depth-tracked, not regex: nested parens (var()
+ * inside color-mix()) defeat any non-recursive regex attempt at this. */
+function splitTopLevelCommas(value) {
+  const out = [];
+  let depth = 0, cur = "";
+  for (const ch of value) {
+    if (ch === "(") depth++;
+    if (ch === ")") depth--;
+    if (ch === "," && depth === 0) { out.push(cur); cur = ""; }
+    else cur += ch;
+  }
+  if (cur.trim()) out.push(cur);
+  return out;
+}
+
+/** A box-shadow with zero offset AND zero blur on every layer is geometrically a RING, not a
+ * drop shadow — there is no depth illusion to read, only a flat-spread outline drawn outside the
+ * border box. Handles multi-layer (comma-separated) values, e.g. a double halo. */
+function isRingShadow(value) {
+  const segs = splitTopLevelCommas(value.trim());
+  return segs.length > 0 && segs.every((seg) => /^0\s+0\s+0\s+[\d.]+(?:px|rem)\s+\S/.test(seg.trim()));
+}
+
 /* Each entry: why this hit is not real. Order matters only for reporting — a hit is exempt if
  * ANY rule claims it. Every one of these is written down in CLAUDE.md or in the prototype's own
  * markup; none of them is "this was noisy". */
@@ -75,12 +99,13 @@ export const EXEMPTIONS = [
     test: (v) => v.category === "MOTION" && /(^|\/)guide-rail\/styles\.css$/.test(v.file) && /grail-fill/.test(blockOf(v)),
   },
   {
-    id: "station-dot-ring-is-not-elevation",
-    why: "The kit reads every box-shadow as elevation. These three are geometry: the station dot's 2px ring in the page ground (which makes the spine line appear to pass BEHIND the dot rather than stop at it) and the active dot's halo, specified as a flat spread in COMPONENTS.md §2. No blur, no offset — a shadow with neither is a ring, and there is no other way to draw one outside an element's border box.",
-    test: (v) =>
-      v.category === "ELEVATION" &&
-      /(^|\/)guide-rail\/styles\.css$/.test(v.file) &&
-      /grail-dot/.test(blockOf(v)),
+    id: "ring-shadow-is-not-elevation",
+    why: "The kit reads every box-shadow as elevation. A box-shadow with zero offset AND zero blur on every comma-separated layer is geometry, not a drop shadow — there is no depth illusion to read, only a flat-spread ring drawn outside the border box, and box-shadow is the only way to draw one there. First named for the guide rail's station dot (the 2px ring in the page ground that makes the spine line appear to pass BEHIND the dot, and the active dot's halo — both a flat spread per COMPONENTS.md §2); generalized 2026-08-13 after finding the identical shape and identical purpose (an accent halo marking an active/current state) unexempted in `guide.css`'s `.day-today` and `mobile-nav.css`'s `.bslot-mark`/`.sheet-cat.active::before` — same reasoning, same shape, different files, so the test is now structural rather than file-scoped. A real elevation shadow (offset and/or blur, e.g. `.card`'s resting `0 1px 3px` or its hover `0 6px 24px`) still fails this and stays real.",
+    test: (v) => {
+      if (v.category !== "ELEVATION") return false;
+      const m = v.text.match(/box-shadow:\s*([^;"']+)/);
+      return !!m && isRingShadow(m[1].replace(/[}\s]+$/, ""));
+    },
   },
   {
     id: "type-token-naming",
@@ -109,11 +134,11 @@ export const EXEMPTIONS = [
   },
   {
     id: "radius-brace-capture",
-    why: "The checker's regex captures to end-of-line when the declaration ends a block, so `border-radius:0}` is read as the value `0}` and fails its own valid-value test. The value is legal.",
+    why: "The checker's regex captures to end-of-line when the declaration ends a block, so `border-radius:0}` is read as the value `0}` and fails its own valid-value test. The value is legal. Fixed 2026-08-13: the previous test's `( .*)?$` tail matched ANY trailing text after a valid first token, so a genuine asymmetric-radius violation like `border-radius:0 6px 6px 0` (starts with the legal token `0`) was silently exempted as a false positive it is not — found via `guide.css`'s `.day-planb`. Every space-separated token must now be individually valid, mirroring check-drift's own per-token check.",
     test: (v) => {
       if (v.category !== "RADIUS") return false;
       const vals = [...v.text.matchAll(/border-radius:\s*([^;"']+)/g)].map((m) => m[1].replace(/[}\s]+$/, "").trim());
-      return vals.length > 0 && vals.every((x) => /^(0|999px|99px|50%)( .*)?$/.test(x));
+      return vals.length > 0 && vals.every((x) => x.split(/\s+/).every((t) => /^(0|999px|99px|50%)$/.test(t)));
     },
   },
   {
