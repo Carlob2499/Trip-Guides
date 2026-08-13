@@ -470,9 +470,20 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
 
 **F1 — Archive generated/historical artifacts** · S · mechanic
 - `korea.revision-27*.json` → `guides-intake/archive/`; grep for readers of those paths first (boundary check #1). ACCEPTANCE: builds/tests green, no reader breaks.
+- **STATUS 2026-08-13 — DONE.** Boundary check first, as instructed: nothing globs `guides-intake/`
+  for `.json`, and `check-passb-coverage.mjs` reads `<slug>.passB.json` (i.e. `korea.passB.json`),
+  NOT the revision-prefixed file — so the discovery mechanism never had a claim on these. The two
+  real readers were prose citations in `guides-intake/korea.md`, updated with the move.
+  `docs-integrity` only validates `docs/*.md` paths, so it was never at risk either way.
 
 **F2 — Trim pipeline.md to policy** · S · scribe
 - Move W-series/shipped-✅ history to a new pipeline-history file under `docs/archive/` (F2 creates it). The PUBLISH section is **left describing auto-graduation** (G1 struck) — do not rewrite it. ACCEPTANCE: pipeline.md ≤140 lines, PUBLISH still documents auto-graduation accurately, docs-integrity test green.
+- **STATUS 2026-08-13 — DONE.** `docs/reference/pipeline.md` 255 → **139 lines**;
+  `docs/archive/pipeline-history.md` created (83 lines) holding the W-series, the P0–P4 shipped
+  table, the retired implementation narration (auto-chaining + circuit breaker, network budgeting,
+  publish mechanics) and the 2026-08-02 critic merge. PUBLISH keeps its auto-graduation description
+  AND its honest-tradeoff paragraph (rubric #6/#8/#9/#12 are human-judged and do not block) — both
+  are policy, not history. VERIFY's stage contract updated to name the rows E1/E2/E3 added.
 
 **F3 — Pointerize new-guide.yml's embedded prompt** · S · mechanic
 - Replace the 15-line interactive prompt in the issue comment with a 2-line pointer to the skill. ACCEPTANCE: comment renders, no workflow-behavior change.

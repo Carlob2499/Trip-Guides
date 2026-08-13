@@ -25,13 +25,13 @@ Not recorded — see the note above. Do not reconstruct.
 
 ### Revision #27 — 2026-07-30 · Sights perishable-fact refresh
 
-Scope: issue #27, plan `guides-intake/korea.revision-27.json`. Fork 1 answered by the owner
+Scope: issue #27, plan `guides-intake/archive/korea.revision-27.json`. Fork 1 answered by the owner
 as **option A** (stay the historical record of the completed 8–15 Jul 2026 trip; correct only
 perishable facts — dates, framing, `archived: true` and the learnings block untouched). Fork 2
 was non-blocking and took its stated default (current values with fresh `verified_on` stamps).
 Groups touched: `05-sights`, `02-essentials`, `04-itinerary`, `01-plan`, `03-getting-around`,
 `11-references`, `_guide.json`. Pass B finds are recorded in full in
-`guides-intake/korea.revision-27.passB.json`.
+`guides-intake/archive/korea.revision-27.passB.json`.
 
 | Item | Pass A (canonical) | Pass B (local/authentic) | Reconciled → guide | Note (conflict / crowd / novel) |
 |------|--------------------|--------------------------|--------------------|---------------------------------|
