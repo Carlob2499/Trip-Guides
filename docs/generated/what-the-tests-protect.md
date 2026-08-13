@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-2040 checks · 2040 carry a stated promise · 169 files
+2051 checks · 2051 carry a stated promise · 170 files
 
 ## Can everyone read it
 
@@ -2206,6 +2206,20 @@ nothing ships.
 - the Japan seed carries every field the ACCEPTANCE line names  <sub>scripts/__tests__/destination-schema.test.mjs:110</sub>
 - every URL-bearing field in every seed has a verified_on (re-checks the real files, not just the schema)  <sub>scripts/__tests__/destination-schema.test.mjs:119</sub>
 - the Japan travel advisory is honestly marked unconfirmed (matches the guide's own bot-gated note)  <sub>scripts/__tests__/destination-schema.test.mjs:135</sub>
+
+**Every defect class the first Japan guide shipped stays detectable.**
+
+- the fixture as a whole FAILS both enforcing gates — it must never read as shippable  <sub>scripts/__tests__/japan-regression.test.mjs:51</sub>
+- 1a (NEGATIVE) — two travellers' two birthdays are NOT a contradiction; C2 must stay silent  <sub>scripts/__tests__/japan-regression.test.mjs:57</sub>
+- 1b — the guide never attributes either birthday to a person (authoring, by design not a gate — MANIFEST: 'documented only')  <sub>scripts/__tests__/japan-regression.test.mjs:64</sub>
+- … — … → […]  <sub>scripts/__tests__/japan-regression.test.mjs:79</sub>
+- 9 (detail) — the misattribution finding names the actual figure, not just the row ids  <sub>scripts/__tests__/japan-regression.test.mjs:84</sub>
+- 10 (detail) — all THREE malformed values are caught, not just the first  <sub>scripts/__tests__/japan-regression.test.mjs:88</sub>
+- 8 (detail) — both burst gaps are reported (passA→passB and passB→reconcile)  <sub>scripts/__tests__/japan-regression.test.mjs:92</sub>
+- 12 — a seasonal-closure notice replacing the Zao price page drifts (the 200-≠-verified case)  <sub>scripts/__tests__/japan-regression.test.mjs:97</sub>
+- 3 — unresolved anchor venue (Wild Area, prose-only) → needs an anchor-scoped 'unresolved plan-critical unknown' detector. A naive unresolved-language scan fires on korea/us/denmark too, so it needs anchor scoping before it can ship (owner: E1(a))  <sub>scripts/__tests__/japan-regression.test.mjs:110</sub>
+- 11 — unverified leg durations → needs the Google Routes integration, which no packet has built yet (settled as YES, config-gated + default OFF, clarifying question 4; owner: a Routes packet)  <sub>scripts/__tests__/japan-regression.test.mjs:112</sub>
+- reports 10 of 12 cases detected, with the 2 gaps named  <sub>scripts/__tests__/japan-regression.test.mjs:116</sub>
 
 **Every guide has its own shared-budget room, and a swap leaves a trail.**
 

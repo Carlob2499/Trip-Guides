@@ -501,6 +501,22 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
 - FILES TO CHANGE: the test file only.
 - DO NOT TOUCH: checkers (failures here are checker bugs — fix via the owning packet, never by loosening the test).
 - TESTS: itself. ACCEPTANCE: 12/12 red-green — each case demonstrably detected; suite is part of `npm test`.
+- **STATUS 2026-08-13 — LANDED at 10/12, with the 2 gaps NAMED, not hidden.**
+  `scripts/__tests__/japan-regression.test.mjs`, table-driven against the frozen fixture, in
+  `npm test`. Detected: **1a** (negative — C2 correctly stays silent on two travellers' two
+  birthdays), **2, 4, 5, 6, 7, 8, 9, 10, 12**. Case **1b** is `documented only` by the MANIFEST's
+  own design (authoring discipline, never a gate). The two real gaps are `it.todo` with their
+  owning packet named, because H1's rule is that a missing detector is a CHECKER problem and must
+  never be papered over by loosening this file:
+  - **Case 3** (unresolved anchor venue, prose-only) — needs an ANCHOR-SCOPED "unresolved
+    plan-critical unknown" detector. Measured: a naive unresolved-language scan
+    (`unannounced|TBA|to be confirmed|…`) fires on denmark (2) and us (1) as well, so it needs
+    anchor scoping before it can ship. Owner: E1(a).
+  - **Case 11** (unverified leg durations) — needs the **Google Routes integration**, which no
+    packet ever built. Routes was settled as YES (clarifying question 4: config-gated, default
+    OFF, absent key ⇒ advisory) but never scheduled. Owner: a new Routes packet.
+  A coverage-accounting test asserts the 10/2 split numerically, so adding a detector without
+  updating the accounting fails the suite rather than silently drifting.
 
 ### Case→packet coverage map (mandate §31)
 
