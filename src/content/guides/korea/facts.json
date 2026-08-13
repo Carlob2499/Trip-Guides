@@ -358,8 +358,8 @@
     "state": "approx"
   },
   "day-by-day-6-000": {
-    "claim": "Day by day → Palaces & old Seoul — ₩6,000.",
-    "value": "₩6,000.",
+    "claim": "Day by day → Palaces & old Seoul — ₩6,000",
+    "value": "₩6,000",
     "source_url": "https://english.visitseoul.net/attractions/Gyeongbokgung/ENP000072",
     "verified_on": "2026-07-30",
     "shelf_life": "venue",
@@ -455,8 +455,8 @@
     "state": "approx"
   },
   "day-by-day-22-000-2": {
-    "claim": "Day by day → Post-MSI: Daejeon → Busan day trip → back to Seoul — ₩22,000,",
-    "value": "₩22,000,",
+    "claim": "Day by day → Post-MSI: Daejeon → Busan day trip → back to Seoul — ₩22,000",
+    "value": "₩22,000",
     "source_url": "https://www.humetro.busan.kr",
     "verified_on": "2026-07-13",
     "shelf_life": "transit",
@@ -609,15 +609,15 @@
     "state": "approx"
   },
   "where-to-eat-1-500": {
-    "claim": "Where to eat — picks near your route — ₩1,500,",
-    "value": "₩1,500,",
+    "claim": "Where to eat — picks near your route — ₩1,500",
+    "value": "₩1,500",
     "source_url": "https://map.naver.com",
     "verified_on": "2026-07-07",
     "shelf_life": "venue"
   },
   "where-to-eat-2-500": {
-    "claim": "Where to eat — picks near your route — ₩2,500,",
-    "value": "₩2,500,",
+    "claim": "Where to eat — picks near your route — ₩2,500",
+    "value": "₩2,500",
     "source_url": "https://map.naver.com",
     "verified_on": "2026-07-07",
     "shelf_life": "venue"

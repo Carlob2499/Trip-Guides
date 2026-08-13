@@ -94,17 +94,18 @@ describe("malformedValueRows", () => {
     expect(malformedValueRows(facts).map((f) => f.id)).toEqual(["a"]);
   });
 
-  it("documents the true positives already shipped in korea (4) and us (1)", () => {
-    // These predate B2's regex fix — B2 stops NEW ones, this flag surfaces the ones already
-    // in facts.json. Not a bug in the checker: a genuinely malformed value, found honestly.
-    expect(malformedValueRows(realFacts("korea")).map((f) => f.id).sort()).toEqual([
-      "day-by-day-22-000-2",
-      "day-by-day-6-000",
-      "where-to-eat-1-500",
-      "where-to-eat-2-500",
-    ]);
-    expect(malformedValueRows(realFacts("us")).map((f) => f.id)).toEqual(["budget-daily-costs-143"]);
-    expect(malformedValueRows(realFacts("denmark"))).toEqual([]);
+  it("the whole published corpus is now free of malformed values — the five B3 found are FIXED", () => {
+    // B3 flagged 5 rows that predated B2's regex fix (korea 4: day-by-day-6-000,
+    // day-by-day-22-000-2, where-to-eat-1-500, where-to-eat-2-500; us 1:
+    // budget-daily-costs-143). E1 promoted that flag toward a gate, so they were repaired
+    // rather than carried: in every case the swallowed character was load-bearing SENTENCE
+    // punctuation, so the fix MOVED it out of `value`/`claim` and back into the prose after
+    // the {{fact:}} token — never a silent delete, which would have produced
+    // "Taxi: ~10 min, ₩6,000" with no full stop and "spa, ₩22,000 22 sauna rooms".
+    // This assertion is the guard that they stay fixed.
+    for (const slug of ["korea", "us", "denmark"]) {
+      expect(malformedValueRows(realFacts(slug)), `${slug} malformed`).toEqual([]);
+    }
   });
 });
 
@@ -164,12 +165,18 @@ describe("checkFactsHygiene (roll-up)", () => {
     expect(total).toBeGreaterThanOrEqual(3);
   });
 
-  it("korea/us/denmark are 'advisory' (documented true positives), never 'clean' as of this corpus snapshot", () => {
-    // Per the packet's own acceptance clause: "clean korea/us facts produce none, OR
-    // documented true positives." These are the documented true positives — malformed values
-    // and bare echoes that predate this packet, not something the checker invented.
+  it("the published corpus now carries ONLY bare-echo findings — every acting-on-a-wrong-fact class is clear", () => {
+    // The corpus snapshot moved once E1 repaired the five malformed values. What remains is
+    // `bareEcho` alone: claims shaped like their section path ("Local essentials — ¥1,000"),
+    // defect D4. That is a NAMING smell, not a wrong fact, which is exactly why E1 left it
+    // advisory while promoting misattribution and malformed values toward a gate.
+    // us came out fully clean; korea (7) and denmark (3) keep bare-echo rows only.
     for (const slug of ["korea", "us", "denmark"]) {
-      expect(checkFactsHygiene(realFacts(slug)).status, `${slug} status`).toBe("advisory");
+      const r = checkFactsHygiene(realFacts(slug));
+      expect(r.misattribution, `${slug} misattribution`).toEqual([]);
+      expect(r.malformed, `${slug} malformed`).toEqual([]);
+      expect(r.status, `${slug} status`).toBe(r.bareEcho.length ? "advisory" : "clean");
     }
+    expect(checkFactsHygiene(realFacts("us")).status).toBe("clean");
   });
 });

@@ -2476,15 +2476,15 @@ nothing ships.
 - catches the frozen fixture's three known malformed values  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:82</sub>
 - does not flag a clean value  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:87</sub>
 - flags a trailing period as well as a trailing comma  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:92</sub>
-- documents the true positives already shipped in korea (4) and us (1)  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:97</sub>
-- catches the frozen fixture's three bare, repeated stems  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:112</sub>
-- does not flag a bare stem used for only ONE value  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:117</sub>
-- does not flag a claim WITH a leaf (a → segment) even if it repeats  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:122</sub>
-- documents the true positives already present in korea and denmark  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:132</sub>
-- reports n/a for a guide with no facts.json  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:144</sub>
-- reports clean when a facts.json has none of the three defect classes  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:148</sub>
-- the frozen Japan fixture triggers all three distinct flag classes (≥3 findings)  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:157</sub>
-- korea/us/denmark are 'advisory' (documented true positives), never 'clean' as of this corpus snapshot  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:167</sub>
+- the whole published corpus is now free of malformed values — the five B3 found are FIXED  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:97</sub>
+- catches the frozen fixture's three bare, repeated stems  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:113</sub>
+- does not flag a bare stem used for only ONE value  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:118</sub>
+- does not flag a claim WITH a leaf (a → segment) even if it repeats  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:123</sub>
+- documents the true positives already present in korea and denmark  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:133</sub>
+- reports n/a for a guide with no facts.json  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:145</sub>
+- reports clean when a facts.json has none of the three defect classes  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:149</sub>
+- the frozen Japan fixture triggers all three distinct flag classes (≥3 findings)  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:158</sub>
+- the published corpus now carries ONLY bare-echo findings — every acting-on-a-wrong-fact class is clear  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:168</sub>
 
 **Venue details are taken from the source, never filled in from memory.**
 
