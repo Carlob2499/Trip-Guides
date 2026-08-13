@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1965 checks · 1965 carry a stated promise · 165 files
+1997 checks · 1997 carry a stated promise · 167 files
 
 ## Can everyone read it
 
@@ -1759,6 +1759,30 @@ nothing ships.
 - never throws on a missing intake doc — applies nothing  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:246</sub>
 - applies nothing to a clean doc  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:251</sub>
 
+**A guide cannot be published carrying an unsurfaced advisory or a misattributed fact.**
+
+- FIRES when the destination declares an advisory and the guide has no typed advisory  <sub>scripts/__tests__/check-risk-gates.test.mjs:21</sub>
+- is silent when the guide carries a typed advisory object  <sub>scripts/__tests__/check-risk-gates.test.mjs:26</sub>
+- is silent for a destination with no advisory in its config — the domestic-trip case  <sub>scripts/__tests__/check-risk-gates.test.mjs:30</sub>
+- is silent when the destination has no config at all — denmark today  <sub>scripts/__tests__/check-risk-gates.test.mjs:36</sub>
+- fires on an R4 row that no rendered group references  <sub>scripts/__tests__/check-risk-gates.test.mjs:42</sub>
+- is silent when the R4 row IS referenced  <sub>scripts/__tests__/check-risk-gates.test.mjs:48</sub>
+- ignores unreferenced rows below R4, and rows with no risk at all  <sub>scripts/__tests__/check-risk-gates.test.mjs:52</sub>
+- requires a tier at R2+  <sub>scripts/__tests__/check-risk-gates.test.mjs:58</sub>
+- requires tier:primary AND evidence at R3+  <sub>scripts/__tests__/check-risk-gates.test.mjs:62</sub>
+- passes a fully-specified R4 row  <sub>scripts/__tests__/check-risk-gates.test.mjs:68</sub>
+- says NOTHING about rows with no risk — the whole corpus today  <sub>scripts/__tests__/check-risk-gates.test.mjs:72</sub>
+- promotes misattribution and malformed values  <sub>scripts/__tests__/check-risk-gates.test.mjs:78</sub>
+- leaves bareEcho advisory — a section-path-shaped claim is a naming smell, not a wrong fact  <sub>scripts/__tests__/check-risk-gates.test.mjs:86</sub>
+- BLOCKS on a draft — graduate-guide.yml gates on this, so it is the publication chokepoint  <sub>scripts/__tests__/check-risk-gates.test.mjs:98</sub>
+- only ADVISES on a published guide, with identical findings  <sub>scripts/__tests__/check-risk-gates.test.mjs:104</sub>
+- passes a clean guide regardless of posture  <sub>scripts/__tests__/check-risk-gates.test.mjs:110</sub>
+- passes an entirely risk-free corpus guide — no risk data must never mean no verdict  <sub>scripts/__tests__/check-risk-gates.test.mjs:114</sub>
+- fails the fixture outright  <sub>scripts/__tests__/check-risk-gates.test.mjs:141</sub>
+- case 6 — the unsurfaced R4 travel advisory  <sub>scripts/__tests__/check-risk-gates.test.mjs:145</sub>
+- case 9 — the ¥11,410 figure attributed to both a railway and an airline  <sub>scripts/__tests__/check-risk-gates.test.mjs:149</sub>
+- case 10 — all three malformed values ($19, / $1, / $80,)  <sub>scripts/__tests__/check-risk-gates.test.mjs:154</sub>
+
 **A guide cannot publish with unsourced facts or broken references.**
 
 - a clean published guide PASSes with no blockers  <sub>scripts/__tests__/verify-guide.test.mjs:28</sub>
@@ -2178,6 +2202,20 @@ nothing ships.
 - replaces the existing block in place, leaving surrounding source untouched  <sub>scripts/__tests__/refresh-fx.test.mjs:63</sub>
 - throws rather than silently appending when the block can't be found  <sub>scripts/__tests__/refresh-fx.test.mjs:79</sub>
 - returns a sorted, de-duplicated set of the codes actually in use  <sub>scripts/__tests__/refresh-fx.test.mjs:85</sub>
+
+**Fact sources are only labelled primary when the destination's own domain list proves it.**
+
+- matches the domain itself and any subdomain of it  <sub>scripts/__tests__/backfill-tier.test.mjs:12</sub>
+- does NOT match on a bare substring — the impersonation failure mode  <sub>scripts/__tests__/backfill-tier.test.mjs:18</sub>
+- is case- and trailing-dot-insensitive, and never matches on empty input  <sub>scripts/__tests__/backfill-tier.test.mjs:24</sub>
+- returns 'primary' when the host is under a declared t0Domain  <sub>scripts/__tests__/backfill-tier.test.mjs:34</sub>
+- returns null — never 'secondary' — for a host outside the list  <sub>scripts/__tests__/backfill-tier.test.mjs:38</sub>
+- returns null for an absent or unparseable source_url  <sub>scripts/__tests__/backfill-tier.test.mjs:47</sub>
+- returns null for every url when the destination declares no t0Domains  <sub>scripts/__tests__/backfill-tier.test.mjs:53</sub>
+- assigns primary only to provable rows and explains every skip  <sub>scripts/__tests__/backfill-tier.test.mjs:61</sub>
+- NEVER overwrites an existing tier — a research call outranks a hostname sweep  <sub>scripts/__tests__/backfill-tier.test.mjs:73</sub>
+- is idempotent — re-running over its own output proposes nothing  <sub>scripts/__tests__/backfill-tier.test.mjs:80</sub>
+- handles an empty/absent registry without throwing  <sub>scripts/__tests__/backfill-tier.test.mjs:87</sub>
 
 **Generated room codes are long and random enough not to be guessed.**
 

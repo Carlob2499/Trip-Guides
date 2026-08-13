@@ -393,6 +393,29 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
 - DO NOT TOUCH: existing blocker semantics for R0/R1 (unchanged). (The japan live guide is now `draft: true` and outside the published corpus — build gates against the FIXTURE, not the live dir.)
 - TESTS: fixture guide fails with named R-tier blockers; korea/us pass (or their true findings are enumerated in the PR).
 - ACCEPTANCE: regression cases 5, 6, 9, 10 detected as blockers on the fixture.
+- **STATUS 2026-08-13 — LANDED for cases 6, 9, 10; case 5 DEFERRED.** Three creator rulings
+  reshaped this packet: (1) **detection is decoupled from `risk`** — a corpus audit found ZERO
+  rows carrying `risk`/`tier`/`entity`/`evidence` (korea 83 · denmark 27 · us 10 · japan 25 ·
+  fixture 25), and the fixture is frozen evidence that can never be re-annotated, so a
+  risk-keyed gate would fire on nothing; each defect class got a risk-INDEPENDENT detector and
+  `risk` only escalates where a research pass has supplied it. (2) **Warn-first**: findings
+  BLOCK on drafts and advise on published guides — which makes `graduate-guide.yml` the
+  publication chokepoint, delivering the safety struck packet G was for. (3) **`tier` backfilled
+  mechanically** (`scripts/backfill-tier.mjs`), but PRIMARY-ONLY: `t0Domains` lists
+  destination-level authorities while verification-rules.md §3 also counts "the venue's own
+  site", so defaulting non-matches to `secondary` mislabelled genuinely-primary sources (KT's
+  own eSIM page, an aquarium's own ticket page, the Fed's H.10 release). Non-matches stay blank.
+  Backfilled 27 korea + 2 us rows; denmark has no destination config, japan is never touched.
+  **Case 5 deferred with evidence:** a CHANGE-language + date prose heuristic catches the
+  fixture's tax-free cutover but also fires 7× across published guides (korea 5 · us 1 ·
+  denmark 1) on itinerary structure and as-of rate dates. Precision needs a "no facts.json row
+  covers this date" cross-check before it can ship — shipping it now would cry wolf on every
+  published guide, the exact failure B3's calibration pass exists to prevent.
+- **Found in passing (not fixed here — published-content edits are out of this packet's
+  scope):** five REAL malformed values survive on published guides from the pre-B2 migration —
+  korea `day-by-day-6-000` (`₩6,000.`), `day-by-day-22-000-2` (`₩22,000,`), `where-to-eat-1-500`
+  (`₩1,500,`), `where-to-eat-2-500` (`₩2,500,`), and us `budget-daily-costs-143` (`$143,`).
+  They render to readers verbatim. B2 fixed the regex that produced them, never the rows.
 
 **E2 — Source drift detection** · M · coder
 - CONTEXT: 200 ≠ verified (D8). B1 added `evidence` snippets for R3/R4.

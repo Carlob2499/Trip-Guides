@@ -12,7 +12,8 @@
     "value": "$45",
     "source_url": "https://www.tsa.gov/realid",
     "verified_on": "2026-07-19",
-    "shelf_life": "default"
+    "shelf_life": "default",
+    "tier": "primary"
   },
   "budget-daily-costs-173": {
     "claim": "Budget & daily costs → Lodging, per night (Sedona, 3★ average) — $173",
@@ -66,7 +67,8 @@
     "value": "$5",
     "source_url": "https://www.fs.usda.gov/r03/coconino/passes/red-rock-coconino-passes-program",
     "verified_on": "2026-07-19",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "traveler-origin": {
     "claim": "Traveler origin — departure airport (D14/ADR 0003) — unconfirmed, EWR-or-JFK",

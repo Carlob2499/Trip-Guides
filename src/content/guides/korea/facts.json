@@ -99,7 +99,8 @@
     "value": "₩4,800",
     "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=140661",
     "verified_on": "2026-07-23",
-    "shelf_life": "transit"
+    "shelf_life": "transit",
+    "tier": "primary"
   },
   "budget-daily-costs-11-000": {
     "claim": "Budget & daily costs → Taxis (whole trip total) — ₩11,000",
@@ -107,7 +108,8 @@
     "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=140661",
     "verified_on": "2026-07-23",
     "shelf_life": "transit",
-    "state": "approx"
+    "state": "approx",
+    "tier": "primary"
   },
   "budget-daily-costs-5-500": {
     "claim": "Budget & daily costs → Taxis (whole trip total) — ₩5,500",
@@ -115,7 +117,8 @@
     "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=140661",
     "verified_on": "2026-07-23",
     "shelf_life": "transit",
-    "state": "approx"
+    "state": "approx",
+    "tier": "primary"
   },
   "budget-daily-costs-17-000": {
     "claim": "Budget & daily costs → Airport Limousine 6002 — inbound + outbound — ₩17,000",
@@ -153,7 +156,8 @@
     "value": "₩3,000",
     "source_url": "https://english.visitseoul.net/attractions/Gyeongbokgung/ENP000072",
     "verified_on": "2026-07-30",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "budget-daily-costs-2": {
     "claim": "Budget & daily costs → Gyeongbokgung palace — $2",
@@ -161,7 +165,8 @@
     "source_url": "https://english.visitseoul.net/attractions/Gyeongbokgung/ENP000072",
     "verified_on": "2026-07-30",
     "shelf_life": "venue",
-    "state": "approx"
+    "state": "approx",
+    "tier": "primary"
   },
   "budget-daily-costs-15-000": {
     "claim": "Budget & daily costs → Gyeongbokgung palace — ₩15,000",
@@ -169,28 +174,32 @@
     "source_url": "https://english.visitseoul.net/attractions/Gyeongbokgung/ENP000072",
     "verified_on": "2026-07-30",
     "shelf_life": "venue",
-    "state": "approx"
+    "state": "approx",
+    "tier": "primary"
   },
   "budget-daily-costs-3-000-2": {
     "claim": "Budget & daily costs → Changdeokgung + Huwon (Secret Garden) — ₩3,000",
     "value": "₩3,000",
     "source_url": "https://english.visitseoul.net/area/2024-cdggarden/ENPl8f5md",
     "verified_on": "2026-07-30",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "budget-daily-costs-5-000": {
     "claim": "Budget & daily costs → Changdeokgung + Huwon (Secret Garden) — ₩5,000",
     "value": "₩5,000",
     "source_url": "https://english.visitseoul.net/area/2024-cdggarden/ENPl8f5md",
     "verified_on": "2026-07-30",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "budget-daily-costs-8-000": {
     "claim": "Budget & daily costs → Changdeokgung + Huwon (Secret Garden) — ₩8,000",
     "value": "₩8,000",
     "source_url": "https://english.visitseoul.net/area/2024-cdggarden/ENPl8f5md",
     "verified_on": "2026-07-30",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "budget-daily-costs-5-50": {
     "claim": "Budget & daily costs → Changdeokgung + Huwon (Secret Garden) — $5.50",
@@ -198,7 +207,8 @@
     "source_url": "https://english.visitseoul.net/area/2024-cdggarden/ENPl8f5md",
     "verified_on": "2026-07-30",
     "shelf_life": "venue",
-    "state": "approx"
+    "state": "approx",
+    "tier": "primary"
   },
   "budget-daily-costs-29-000": {
     "claim": "Budget & daily costs → N Seoul Tower observatory — ₩29,000",
@@ -242,7 +252,8 @@
     "value": "₩15,000",
     "source_url": "https://english.visitseoul.net/area/Namsan-Cable-Car/ENP035015",
     "verified_on": "2026-07-30",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "budget-daily-costs-10": {
     "claim": "Budget & daily costs → Namsan cable car (round-trip) — $10",
@@ -250,21 +261,24 @@
     "source_url": "https://english.visitseoul.net/area/Namsan-Cable-Car/ENP035015",
     "verified_on": "2026-07-30",
     "shelf_life": "venue",
-    "state": "approx"
+    "state": "approx",
+    "tier": "primary"
   },
   "budget-daily-costs-12-000": {
     "claim": "Budget & daily costs → Namsan cable car (round-trip) — ₩12,000",
     "value": "₩12,000",
     "source_url": "https://english.visitseoul.net/area/Namsan-Cable-Car/ENP035015",
     "verified_on": "2026-07-30",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "budget-daily-costs-1-500": {
     "claim": "Budget & daily costs → Namsan cable car (round-trip) — ₩1,500",
     "value": "₩1,500",
     "source_url": "https://english.visitseoul.net/area/Namsan-Cable-Car/ENP035015",
     "verified_on": "2026-07-30",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "getting-to-from-17-000": {
     "claim": "Getting to/from Incheon Airport — options compared — ₩17,000",
@@ -349,14 +363,16 @@
     "source_url": "https://english.visitseoul.net/attractions/Gyeongbokgung/ENP000072",
     "verified_on": "2026-07-30",
     "shelf_life": "venue",
-    "state": "approx"
+    "state": "approx",
+    "tier": "primary"
   },
   "day-by-day-100-000": {
     "claim": "Day by day → Palaces & old Seoul — ₩100,000",
     "value": "₩100,000",
     "source_url": "https://english.visitseoul.net/attractions/Gyeongbokgung/ENP000072",
     "verified_on": "2026-07-30",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "day-by-day-1-400": {
     "claim": "Day by day → GO Fest Day 1 in Daejeon (all day) → MSI Lower Bracket Final — ₩1,400",
@@ -452,7 +468,8 @@
     "source_url": "https://english.visitseoul.net/area/2024-cdggarden/ENPl8f5md",
     "verified_on": "2026-07-30",
     "shelf_life": "venue",
-    "state": "approx"
+    "state": "approx",
+    "tier": "primary"
   },
   "day-by-day-40-000": {
     "claim": "Day by day → The Secret Garden, the big shopping day & a send-off dinner — ₩40,000",
@@ -460,7 +477,8 @@
     "source_url": "https://english.visitseoul.net/area/2024-cdggarden/ENPl8f5md",
     "verified_on": "2026-07-30",
     "shelf_life": "venue",
-    "state": "approx"
+    "state": "approx",
+    "tier": "primary"
   },
   "day-by-day-130-000": {
     "claim": "Day by day → The Secret Garden, the big shopping day & a send-off dinner — ₩130,000",
@@ -468,7 +486,8 @@
     "source_url": "https://english.visitseoul.net/area/2024-cdggarden/ENPl8f5md",
     "verified_on": "2026-07-30",
     "shelf_life": "venue",
-    "state": "approx"
+    "state": "approx",
+    "tier": "primary"
   },
   "day-by-day-100-000-2": {
     "claim": "Day by day → The Secret Garden, the big shopping day & a send-off dinner — ₩100,000",
@@ -476,7 +495,8 @@
     "source_url": "https://english.visitseoul.net/area/2024-cdggarden/ENPl8f5md",
     "verified_on": "2026-07-30",
     "shelf_life": "venue",
-    "state": "approx"
+    "state": "approx",
+    "tier": "primary"
   },
   "day-by-day-17-000": {
     "claim": "Day by day → Easy departure — slow Jongno morning → limousine bus home — ₩17,000",
@@ -490,14 +510,16 @@
     "value": "₩4,000",
     "source_url": "https://english.visitseoul.net/attractions/Leeum-Samsung-Museum-of-Art/ENP001232",
     "verified_on": "2026-07-23",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "solo-in-seoul-18-000": {
     "claim": "Solo in Seoul — a menu for whenever someone splits off — ₩18,000",
     "value": "₩18,000",
     "source_url": "https://english.visitseoul.net/attractions/Leeum-Samsung-Museum-of-Art/ENP001232",
     "verified_on": "2026-07-23",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "solo-in-seoul-5-000": {
     "claim": "Solo in Seoul — a menu for whenever someone splits off — ₩5,000",
@@ -505,21 +527,24 @@
     "source_url": "https://english.visitseoul.net/attractions/Leeum-Samsung-Museum-of-Art/ENP001232",
     "verified_on": "2026-07-23",
     "shelf_life": "venue",
-    "state": "approx"
+    "state": "approx",
+    "tier": "primary"
   },
   "top-sights-in-100-000": {
     "claim": "Top sights in Seoul → Bukchon Hanok Village — ₩100,000",
     "value": "₩100,000",
     "source_url": "https://english.seoul.go.kr/notice-on-restrictions-for-tourist-visits-to-bukchon-special-management-area-effective-from-november-2024/",
     "verified_on": "2026-07-30",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "visiting-tips-100-000": {
     "claim": "Visiting tips — ₩100,000",
     "value": "₩100,000",
     "source_url": "https://english.visitseoul.net/area/2024-cdggarden/ENPl8f5md",
     "verified_on": "2026-07-30",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "hongdae-after-dark-10-000": {
     "claim": "Hongdae after dark — ₩10,000",
@@ -602,14 +627,16 @@
     "value": "₩15,000",
     "source_url": "https://english.visitseoul.net/taxrefund",
     "verified_on": "2026-07-30",
-    "shelf_life": "default"
+    "shelf_life": "default",
+    "tier": "primary"
   },
   "shopping-in-seoul-15-000": {
     "claim": "Shopping in Seoul — ₩15,000",
     "value": "₩15,000",
     "source_url": "https://english.visitseoul.net",
     "verified_on": "2026-07-07",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "quick-reference-when-1-500": {
     "claim": "Quick reference — when you're unsure what to do — ₩1,500",

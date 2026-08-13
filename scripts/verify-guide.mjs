@@ -36,6 +36,7 @@ import { readGuides, isMain } from "./audit/lib.mjs";
 import { evaluateReadiness } from "./guide-readiness.mjs";
 import { checkStaleness } from "./audit/check-staleness.mjs";
 import { checkFactsHygiene } from "./audit/check-facts-hygiene.mjs";
+import { evaluateRiskGates } from "./audit/check-risk-gates.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -93,7 +94,7 @@ const HUMAN_ROWS = [
 ];
 
 // Roll the three sources up for one guide into a verdict + structured scorecard.
-export function evaluateGuide(guide, slug, staleness, net, facts = null, unused = [], candidates = null, sources = null) {
+export function evaluateGuide(guide, slug, staleness, net, facts = null, unused = [], candidates = null, sources = null, destinationConfig = null) {
   const draft = !!guide.draft;
   const readiness = evaluateReadiness(guide, slug); // { pass, warns, infos, coverage }
 
@@ -141,10 +142,15 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
   const voice = checkVoice(guide);
 
   // B3 (docs/PLAN_EVIDENCE_FIRST.md): facts.json hygiene — misattribution candidates, malformed
-  // values, bare section-path echoes. ADVISORY ONLY this packet, deliberately not in `blockers`
-  // below — E1 is the packet that promotes any of these to a gate, once risk/tier exist to
-  // scope which rows actually need to block.
+  // values, bare section-path echoes. The FULL report stays advisory and is printed in whole;
+  // E1's `riskGates` row below is what promotes the two acting-on-a-wrong-fact classes
+  // (misattribution, malformed values) to a blocker on drafts.
   const hygiene = checkFactsHygiene(facts);
+
+  // E1: risk-weighted gates. Warn-first by creator ruling — findings BLOCK on drafts (the
+  // graduation chokepoint `graduate-guide.yml` gates on) and ADVISE on published guides,
+  // which carry pre-existing debt that failing retroactively would only obstruct.
+  const riskGates = evaluateRiskGates({ guide, facts, unused, hygiene, destinationConfig, enforce: draft });
 
   // Blocking gates → the exit-code verdict. Recency is intentionally NOT blocking.
   const blockers = [];
@@ -156,13 +162,14 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
   if (sources?.status === "fail") blockers.push("sources");
   if (coverage.status === "fail") blockers.push("coverage");
   if (voice.status === "fail") blockers.push("voice");
+  if (riskGates.status === "fail") blockers.push("risk-gates");
   const pass = blockers.length === 0;
 
   // Registry visibility (informational, never a gate): a guide with no facts.json is normal,
   // and a guide with one should show at a glance how much of it is sourced data rather than prose.
   const registry = facts ? { count: Object.keys(facts).length, unused } : null;
 
-  return { slug, draft, pass, blockers, readiness, recency, content, venueStatus, candidates: candidatesRow, sources, coverage, voice, hygiene, noVerifiedDate, registry };
+  return { slug, draft, pass, blockers, readiness, recency, content, venueStatus, candidates: candidatesRow, sources, coverage, voice, hygiene, riskGates, noVerifiedDate, registry };
 }
 
 export async function verify({ slug = null, network = false } = {}) {
@@ -199,8 +206,15 @@ export async function verify({ slug = null, network = false } = {}) {
   // S5: source-mix measurement — pure text analysis over the same raw the link sweep scans.
   const { sourceMix } = await import("./audit/check-source-mix.mjs");
 
+  // E1: the destination config (D1) is what makes the advisory-surfacing check possible
+  // without a per-guide exemption list. Read per-target; a slug without one simply disables
+  // the checks that need it.
+  const { readDestinationConfig } = await import("./audit/check-risk-gates.mjs");
+  const destBySlug = {};
+  for (const t of targets) destBySlug[t.slug] = await readDestinationConfig(t.slug);
+
   const results = targets.map(({ guide, slug: s, raw, facts, unusedFacts }) =>
-    evaluateGuide(guide, s, staleness, net, facts, unusedFacts, candidatesBySlug[s], sourceMix(raw, guide.country)));
+    evaluateGuide(guide, s, staleness, net, facts, unusedFacts, candidatesBySlug[s], sourceMix(raw, guide.country), destBySlug[s]));
   return { results, error: null, network };
 }
 
@@ -302,6 +316,22 @@ export function report(r) {
     } else {
       L.push(`  P6 voice      · FAIL — ${r.voice.hits.length} process-language leak(s):`);
       for (const h of r.voice.hits) L.push(`      ⚠ "${h.match}" in §"${h.section}"`);
+    }
+  }
+
+  // E1: risk-weighted gates. The status already encodes the warn-first split (drafts fail,
+  // published guides advise), so the row prints WHICH it was and why — a reader must never
+  // have to guess whether an advisory line would have blocked a graduation.
+  if (r.riskGates) {
+    if (r.riskGates.status === "pass") {
+      L.push(`  P0 risk-gates · PASS — advisory surfaced, no misattributed or malformed facts`);
+    } else {
+      const enforced = r.riskGates.status === "fail";
+      L.push(
+        `  P0 risk-gates · ${enforced ? "FAIL" : "advisory"} — ${r.riskGates.findings.length} finding(s)` +
+        `${enforced ? " (draft: these BLOCK graduation)" : " (published: advisory this release, blocks once enforced)"}:`,
+      );
+      for (const f of r.riskGates.findings) L.push(`      ⚠ [${f.code}] ${f.msg}`);
     }
   }
 
