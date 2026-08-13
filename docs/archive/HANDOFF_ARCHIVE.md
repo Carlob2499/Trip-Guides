@@ -4,6 +4,39 @@
 > (the ~80-line budget its own header sets is now gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). Newest first, verbatim.
 
+## Snapshot (2026-08-13 — design-reconciliation §C2a/§C2b shipped, §C1 opened: guide.css's
+drift fully paid down, plus two Tier-2 gate bugs found doing it)
+
+Two commits, ship-loop-clean each: 1748 vitest, full `a11y.spec.ts` Playwright suite (57 tests,
+not just the 44px sweep — axe scans on every guide, both themes), build/lint/typecheck/drift all
+green.
+
+**§C2a/§C2b (first commit):** `.dchip` (day scrubber) is an underline now, not a filled pill
+(CONTEXT.md §H2) — ground moves `--accent`→`--sunken`, active ink re-derived to `--accent-ink`
+(the "text on a page surface" token, already proven ≥4.5:1 against `--bg2` by its own base.css
+derivation comment) rather than the old, wrong `--on-accent`-on-a-fill pairing. `.transit-link`
+clears 44px for real — a `getBoundingClientRect()` sweep found only height was short, so a
+padding-only raise reached the floor with zero width growth; its `TARGET_BASELINE` exception is
+REMOVED, not shrunk. `.scrub-fit .dchip` re-measured, confirmed unchanged by the shape fix,
+ceiling tightened 12→8.
+
+**§C1 opened (second commit): `guide.css`, the plan's own named first target, is DONE** —
+RADIUS 26→0 (21 literals converted: pill/circle/badge/button → `999px`, matching the codebase's
+own unbroken convention on every other `*-chip`/`*-pill`/`*-badge`/`cursor:pointer` selector,
+verified against each one's actual template markup, not guessed from the CSS alone; content
+container → `0`), ELEVATION 6→0 (three real box-shadows removed — `.cat-title`'s decorative
+double-line, `.card`'s resting shadow, `.card:hover`'s lift-shadow; the border already carries
+the edge). **Two Tier-2 gate bugs found and fixed along the way** (`scripts/drift-real.mjs`):
+`radius-brace-capture`'s exemption regex accepted ANY trailing text after one valid token,
+silently hiding a real violation (`.day-planb`'s `0 6px 6px 0` — now `0`); the single-selector
+`station-dot-ring-is-not-elevation` exemption is generalized to `ring-shadow-is-not-elevation`, a
+structural check (zero offset AND zero blur on every layer = a ring, not a drop shadow) — found
+the identical unexempted pattern in `guide.css`'s `.day-today` and `mobile-nav.css`'s
+`.bslot-mark`/`.sheet-cat.active::before`. Re-running `--update` after both fixes also correctly
+picked up several categories other sessions had already fixed in CSS or that the pre-existing
+`overlay-shadow-is-approved`/`drag` keyword already covered, but nobody had re-tightened for:
+real count 153→109 baseline-wide, not just guide.css's slice.
+
 ## Snapshot (2026-08-11b — R5 cleanup and hub fidelity; six commits, every defect at a boundary)
 
 Six commits on `main`, all four CI workflows green on each. 1734 vitest · 225 Playwright ·

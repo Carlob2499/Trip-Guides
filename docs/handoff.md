@@ -22,50 +22,48 @@
   (presentation/motion) · `docs/standards/guide-rubric.md` (quality bar) ·
   `docs/evidence/competitive-landscape.md` (market parity reference) ·
   **`docs/PLAN_DESIGN_RECONCILIATION.md`** is the live work order for design/theme work — its
-  §A/§B (fidelity audit, unshipped-material mining) are DONE; §C (theme polish) is IN PROGRESS,
-  now at §C1 (drift paydown, file-by-file — `guide.css` done, others queued), see below.
+  §A/§B (fidelity audit, unshipped-material mining) are DONE; §C is IN PROGRESS at §C1
+  (drift paydown, file-by-file — `guide.css` and `divergences.css` done, others queued below).
   `docs/archive/PLAN_ATLAS_MIGRATION.md` is fully ticked and archived — read for history only.
 
-## Snapshot (2026-08-13 — design-reconciliation §C2a/§C2b shipped, §C1 opened: guide.css's
-drift fully paid down, plus two Tier-2 gate bugs found doing it)
+## Snapshot (2026-08-13c — §C1 continues: divergences.css clean, and two real
+accent-contrast bugs found doing the cleanup, not caused by it)
 
-Two commits, ship-loop-clean each: 1748 vitest, full `a11y.spec.ts` Playwright suite (57 tests,
-not just the 44px sweep — axe scans on every guide, both themes), build/lint/typecheck/drift all
-green.
+One commit, ship-loop-clean: 1748 vitest, full 57-test `a11y.spec.ts` Playwright suite
+(axe scans on every guide, both themes), build/lint/typecheck/drift green. Drift real count
+109→104.
 
-**§C2a/§C2b (first commit):** `.dchip` (day scrubber) is an underline now, not a filled pill
-(CONTEXT.md §H2) — ground moves `--accent`→`--sunken`, active ink re-derived to `--accent-ink`
-(the "text on a page surface" token, already proven ≥4.5:1 against `--bg2` by its own base.css
-derivation comment) rather than the old, wrong `--on-accent`-on-a-fill pairing. `.transit-link`
-clears 44px for real — a `getBoundingClientRect()` sweep found only height was short, so a
-padding-only raise reached the floor with zero width growth; its `TARGET_BASELINE` exception is
-REMOVED, not shrunk. `.scrub-fit .dchip` re-measured, confirmed unchanged by the shape fix,
-ceiling tightened 12→8.
+**`divergences.css`'s 5 COLOUR violations were dead code, not live drift.** Its
+`var(--accent, #a6721b)`-style fallbacks can never actually resolve — the file only ever renders
+inside `GuideLayout.astro`, where base.css's tokens are always defined — and the fallback hexes
+themselves were stale pre-R2 placeholders nobody had touched since. Deleted outright rather than
+"fixed" to a new value.
 
-**§C1 opened (second commit): `guide.css`, the plan's own named first target, is DONE** —
-RADIUS 26→0 (21 literals converted: pill/circle/badge/button → `999px`, matching the codebase's
-own unbroken convention on every other `*-chip`/`*-pill`/`*-badge`/`cursor:pointer` selector,
-verified against each one's actual template markup, not guessed from the CSS alone; content
-container → `0`), ELEVATION 6→0 (three real box-shadows removed — `.cat-title`'s decorative
-double-line, `.card`'s resting shadow, `.card:hover`'s lift-shadow; the border already carries
-the edge). **Two Tier-2 gate bugs found and fixed along the way** (`scripts/drift-real.mjs`):
-`radius-brace-capture`'s exemption regex accepted ANY trailing text after one valid token,
-silently hiding a real violation (`.day-planb`'s `0 6px 6px 0` — now `0`); the single-selector
-`station-dot-ring-is-not-elevation` exemption is generalized to `ring-shadow-is-not-elevation`, a
-structural check (zero offset AND zero blur on every layer = a ring, not a drop shadow) — found
-the identical unexempted pattern in `guide.css`'s `.day-today` and `mobile-nav.css`'s
-`.bslot-mark`/`.sheet-cat.active::before`. Re-running `--update` after both fixes also correctly
-picked up several categories other sessions had already fixed in CSS or that the pre-existing
-`overlay-shadow-is-approved`/`drag` keyword already covered, but nobody had re-tightened for:
-real count 153→109 baseline-wide, not just guide.css's slice.
+**Deleting one dead fallback exposed a real bug the gate's own regex couldn't see through the
+two-argument `var()` call:** `.divergence-source{color:var(--accent, …)}` was raw `--accent` as
+text — the exact "occurrence 1" class `accent-ink-contract.test.mjs` exists to catch — invisible
+to it only because the fallback comma broke the gate's pattern match. Fixed to `--accent-ink`.
+
+**Checking the file's other accent-as-text pairing by hand (not caught by any gate) found a
+worse, second bug:** `.divergence-cat{background:var(--accent);color:var(--bg)}` measures 5.13:1
+in light mode but **2.90:1 in dark** — under even the 3:1 large-text floor — because `--bg`
+doesn't remap alongside `--accent` the way `--on-accent` is derived to. Every other
+`background:var(--accent)` pairing in the codebase (nine of them) already uses `--on-accent`;
+this was the one outlier, now fixed to match (4.52:1, the same floor `--on-accent` holds
+everywhere else).
+
+**`budget-sheet.css` stays baselined, deliberately not touched:** its literals are
+`@media print`-forced-light values that must render on white paper regardless of the reader's
+live theme, so `var()` is structurally wrong there — the same accepted-debt class as the
+`og`/`recap` PNG generators already sitting unexempted in this same baseline.
 
 ## Open items
 
 - **§C1 continues, file-by-file, same cadence** (drift → fix → `--update` same commit): next up
-  `budget-sheet.css`/`divergences.css` COLOUR, `flight.css`/`mobile-nav.css` RADIUS+ELEVATION,
-  `intake.css`/`jetlag.css`/`map.css`/`painted-atlas.css`/`panel-preview/` RADIUS+ELEVATION, then
-  the COLOUR-only files (`sights.css`, `atlas-map.js`, `firebase/styles.css`, `gmaps-render.js`,
-  `PwaHead.astro`, `GuideLayout.astro`, `og`/`recap` pages, `util.js`, `accent-tokens.ts`).
+  `flight.css`/`mobile-nav.css` RADIUS+ELEVATION, `intake.css`/`jetlag.css`/`map.css`/
+  `painted-atlas.css`/`panel-preview/` RADIUS+ELEVATION, then the COLOUR-only files (`sights.css`,
+  `atlas-map.js`, `firebase/styles.css`, `gmaps-render.js`, `PwaHead.astro`, `GuideLayout.astro`,
+  `util.js`, `accent-tokens.ts`; `og`/`recap` pages stay baselined like `budget-sheet.css`).
 - **§C3/§C4/§C5, and §B4** still open: the #47 print-preview shell, syncing corrected tokens
   back to the design projects (last, so they receive the final state), the final polish walk,
   and the `shots/` triage. `docs/PLAN_DESIGN_RECONCILIATION.md` §C/§B4 is the queue.
@@ -81,14 +79,17 @@ real count 153→109 baseline-wide, not just guide.css's slice.
 
 ## Where we left off
 
-**Both §H1/§H2 44px-density forks are implemented, not just decided** (see above), and
-`guide.css` — the plan's own first C1 target — is fully clean on RADIUS and ELEVATION, with the
-gate itself hardened in the process rather than worked around.
+**A pattern worth repeating each C1 file:** the mechanical part (converting one hardcoded value
+to its token) is cheap, but it's worth a beat to hand-check the FILE's other uses of the same
+token family while it's open — both bugs found this round (`--accent`-as-text, `--bg`-as-
+on-accent-ink) were sitting right beside the literal that brought the file into scope, invisible
+to any existing gate, and would have shipped past a purely mechanical "swap the hex for var()"
+pass.
 
 **Still needs you:** the same `eslint.config.mjs` hook-protection gap as before — the R5 bundle
 ignore line still can't land there; `support.js` still carries its own `eslint-disable` header.
 
-**Recommended next step:** keep §C1 moving — `budget-sheet.css`/`divergences.css` COLOUR (11
-literals between them) is the next-cheapest file-by-file chunk before the bigger RADIUS/ELEVATION
-files. `main` is kept in sync with this branch after every ship-loop-clean commit (explicit
-standing instruction) — no separate merge step needed at session end.
+**Recommended next step:** keep §C1 moving — `flight.css`/`mobile-nav.css` RADIUS+ELEVATION is
+the next chunk (both already touched this arc for other reasons, so context is warm). `main` is
+kept in sync with this branch after every ship-loop-clean commit (explicit standing instruction)
+— no separate merge step needed at session end.

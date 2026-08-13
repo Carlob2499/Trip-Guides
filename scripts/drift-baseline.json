@@ -1,7 +1,6 @@
 {
   "src/styles/anchors.css::COLOUR": 1,
   "src/styles/budget-sheet.css::COLOUR": 6,
-  "src/styles/divergences.css::COLOUR": 5,
   "src/styles/flight.css::RADIUS": 1,
   "src/styles/flight.css::ELEVATION": 2,
   "src/styles/guide.css::MOTION": 1,

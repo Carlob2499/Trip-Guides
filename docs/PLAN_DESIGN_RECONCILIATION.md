@@ -365,8 +365,29 @@ not novelty:
   and `mobile-nav.css`'s `.bslot-mark`/`.sheet-cat.active::before`. Re-running `--update` after
   both fixes correctly picked up stale baseline entries system-wide (categories other sessions
   had already fixed in CSS, or that the pre-existing `overlay-shadow-is-approved`/`drag` keyword
-  already covered, but nobody had re-tightened): real count 153→109. Remaining, file-by-file,
-  same cadence: `budget-sheet.css`/`divergences.css` COLOUR(6/5), `flight.css`/`intake.css`/
+  already covered, but nobody had re-tightened): real count 153→109.
+
+  `divergences.css` is DONE too (109→104): its `var(--accent, #a6721b)`-style fallbacks were
+  dead code (the file only ever renders inside `GuideLayout.astro`, where base.css's tokens are
+  always defined — the fallback branch is unreachable), and the fallback hexes themselves were
+  stale pre-R2 placeholders, so they're deleted outright rather than "fixed" to a value. Deleting
+  the dead fallback on `.divergence-source{color:var(--accent, …)}` exposed a REAL bug the
+  `accent-ink-contract` gate's regex couldn't see through the two-argument `var()` call: raw
+  `--accent` as text, the exact "occurrence 1" class that gate exists to catch (fixed to
+  `--accent-ink`). Checking the file's other accent-as-text pairing by hand
+  (`.divergence-cat{background:var(--accent);color:var(--bg)}`, not caught by any gate — its
+  denylist only matches `color:` deriving from `--accent`, not from an unrelated token used
+  as the "on-accent" ink) found a SECOND, worse bug: measured contrast is 5.13:1 in light mode
+  but 2.90:1 in dark — under even the 3:1 large-text floor — because `--bg` doesn't remap with
+  `--accent` the way `--on-accent` is derived to. Every other `background:var(--accent)` pairing
+  in the codebase (nine of them, `about.css` through `venues.css`) already uses `--on-accent`;
+  this was the one outlier. Fixed to match (4.52:1, the same measured floor `--on-accent` holds
+  everywhere else it's used). `budget-sheet.css` stays baselined, not fixed: its literals are
+  `@media print`-forced-light values (must render on white paper regardless of the reader's live
+  theme, so `var()` is structurally wrong there), the same accepted-debt class as the `og`/`recap`
+  PNG generators already sitting in this baseline unexempted.
+
+  Remaining, file-by-file, same cadence: `flight.css`/`intake.css`/
   `jetlag.css`/`map.css`/`painted-atlas.css`/`panel-preview/`/`mobile-nav.css` RADIUS+ELEVATION,
   `sights.css`/`atlas-map.js`/`firebase/styles.css`/`gmaps-render.js`/`PwaHead.astro`/
   `GuideLayout.astro`/`og`+`recap` pages/`util.js`/`accent-tokens.ts` COLOUR.
