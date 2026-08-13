@@ -4,35 +4,88 @@
 > (the ~80-line budget its own header sets is now gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). Newest first, verbatim.
 
-## Snapshot (2026-08-13 — design-reconciliation §C2a/§C2b: the day-chip underline + the
-transit-link 44px raise)
+## Snapshot (2026-08-13e — §C1 continues: intake.css/jetlag.css/map.css clean; a new,
+honestly-scoped exemption for map markers over tile imagery)
 
-One commit, ship-loop-clean: 1748 vitest, 18/18 `a11y.spec.ts` 44px-sweep Playwright tests,
-build/lint/typecheck/drift (136 real, under the 153 baseline, unchanged by this commit) all
-green. `docs/PLAN_DESIGN_RECONCILIATION.md`'s §A (fidelity audit FIX rows) and §B (mining) were
-already done before this session; §C (theme polish) had not been started — this session opened
-it at §C2a/§C2b, the two items CONTEXT.md had already decided (§H1/§H2), per the plan's own
-execution order.
+One commit, ship-loop-clean: 1748 vitest, full 57-test `a11y.spec.ts` Playwright suite (axe
+scans on every guide, both themes), build/lint/typecheck/drift green. Drift real count 100→91.
 
-**`.dchip` (the day scrubber) is an underline now, not a filled pill** (CONTEXT.md §H2's REVISE
-ruling — SPEC rule 1: evidence, not a button). `planner.css`'s `.dchip` lost border/radius/fill;
-`.dchip-active`'s ground moved from `--accent` to `--sunken` with an accent `border-bottom`.
-Re-derived (not just re-typed) the active numeral's ink: `--accent-ink` is base.css's own "text
-on a page surface" token, already proven ≥4.5:1 against `--bg2`/`--sunken` by its own R5
-derivation comment — the old 3.58:1/2.56:1 note had measured the WRONG pairing (accent-ink on an
-accent FILL) and is replaced, not left stale.
+**Six radii converted, all to precedent already established elsewhere this arc.**
+`.itk-wordmark:focus-visible`'s `border-radius:6px` was the ONLY `outline` + `border-radius`
+pairing anywhere in the codebase — every other text-link focus ring is plain outline — dropped as
+an unexplained outlier. `.itk-blank` → `0` (matches the day-chip underline treatment).
+`.jl-toggle` → `999px` (matches `.card-more-sum`'s identical full-width-disclosure-row shape).
+`.jl-select`/`.jl-output`/`.itin-map` → `0` (form-control/content-callout/map-embed patterns
+already established). `.ng-form`'s shadow removed too — no stated reason, ordinary page content,
+border already there.
 
-**`.transit-link` clears 44px now; `.dchip`'s baseline tightens, but doesn't clear.** A real
-`getBoundingClientRect()` sweep (both `TARGET_PAGES` × all nine devices, the exact harness
-`a11y.spec.ts` itself uses) found `.transit-link`'s WIDTH already cleared 44px everywhere
-(min 88.2px) — only height was short (30.3px), so a padding-block-only raise to `.68rem .55rem`
-(measured 44.375px) reached the floor with zero width growth and no row-wrap change, the thing
-the original baseline comment worried about. 0 violations, both pages, all nine devices — its
-`TARGET_BASELINE` entry is REMOVED, not shrunk, so a regression here is a real test failure
-again. `.scrub-fit .dchip` was re-measured per CONTEXT.md's own §H2 update note and does NOT
-newly clear — the pill→underline shape touches border/fill/radius, not the
-`flex:1 1 0;min-width:0` math that narrows these chips — so the density ruling (baselined,
-creator's call) stands; only the ceiling itself tightened, 12→8, to the real observed max.
+**`.map-chip`/`.map-cluster`'s shadows are kept, under a NEW exemption rather than stretched
+into the existing overlay one.** They aren't floating page chrome like `.nav-hint`/`.botbar` —
+they're markers painting OVER live map tiles (unpredictable colour, not the site's own
+controlled page background). That's the same separation need `pincard-credit-sits-on-a-
+photograph` already recognizes for the hub's globe, one component category over — named
+`map-marker-sits-on-tile-imagery` rather than folded into a reasoning that doesn't actually fit,
+per this arc's own standard of naming exemptions honestly rather than as a mute button.
+
+## Snapshot (2026-08-13d — §C1 continues: flight.css/mobile-nav.css clean; two stale-doc
+corrections; B4 re-diagnosed with DesignSync actually reachable)
+
+Three commits, ship-loop-clean each: 1748 vitest, full 57-test `a11y.spec.ts` Playwright suite,
+build/lint/typecheck/drift green. Drift real count 104→100.
+
+**`.cat-fan-img`'s decorative shadow (the chapter-opener's fanned-photo stack) is gone — no
+stated functional reason, and this component predates the Atlas redesign (not in the
+design-system export to check against).** Radius→`0`, shadow removed; screenshot-verified in
+both themes that the existing `border:2px solid var(--card)` alone still reads clearly as
+separated, overlapping photos.
+
+**`.nav-hint` and `.botbar`'s shadows are the opposite case — kept, and formally exempted
+instead.** Each carries its OWN comment stating a real functional reason (a floating,
+out-of-flow element needs the shadow to read as lifted, not docked — `.botbar`'s is even scoped
+to exactly the `>=600px` media query its own comment calls "a centred pill"). Extended
+`overlay-shadow-is-approved` to name both rather than changing CSS against its own stated
+reasoning.
+
+**Two stale-doc corrections, found by checking the plan against actual source instead of
+trusting old checkboxes:** §B1 (the `waypoint-design` skill) and every A3 FIX row were already
+done — commits `e9ba8a5`/`c05fe26`/`7b4d92a` — just never ticked. And §B4 ("`shots/` triage")
+was marked "blocked, DesignSync unreachable" from an earlier subagent session; re-checked live
+from a main session and the tool DOES work, but this login's `list_projects` shows only two
+projects and neither has the `shots/`/`HANDOFF.md` content B4 needs — corrected the note so a
+future session doesn't retry the wrong blocker (it's project access, not tool access).
+
+## Snapshot (2026-08-13 — design-reconciliation §C2a/§C2b shipped, §C1 opened: guide.css's
+drift fully paid down, plus two Tier-2 gate bugs found doing it)
+
+Two commits, ship-loop-clean each: 1748 vitest, full `a11y.spec.ts` Playwright suite (57 tests,
+not just the 44px sweep — axe scans on every guide, both themes), build/lint/typecheck/drift all
+green.
+
+**§C2a/§C2b (first commit):** `.dchip` (day scrubber) is an underline now, not a filled pill
+(CONTEXT.md §H2) — ground moves `--accent`→`--sunken`, active ink re-derived to `--accent-ink`
+(the "text on a page surface" token, already proven ≥4.5:1 against `--bg2` by its own base.css
+derivation comment) rather than the old, wrong `--on-accent`-on-a-fill pairing. `.transit-link`
+clears 44px for real — a `getBoundingClientRect()` sweep found only height was short, so a
+padding-only raise reached the floor with zero width growth; its `TARGET_BASELINE` exception is
+REMOVED, not shrunk. `.scrub-fit .dchip` re-measured, confirmed unchanged by the shape fix,
+ceiling tightened 12→8.
+
+**§C1 opened (second commit): `guide.css`, the plan's own named first target, is DONE** —
+RADIUS 26→0 (21 literals converted: pill/circle/badge/button → `999px`, matching the codebase's
+own unbroken convention on every other `*-chip`/`*-pill`/`*-badge`/`cursor:pointer` selector,
+verified against each one's actual template markup, not guessed from the CSS alone; content
+container → `0`), ELEVATION 6→0 (three real box-shadows removed — `.cat-title`'s decorative
+double-line, `.card`'s resting shadow, `.card:hover`'s lift-shadow; the border already carries
+the edge). **Two Tier-2 gate bugs found and fixed along the way** (`scripts/drift-real.mjs`):
+`radius-brace-capture`'s exemption regex accepted ANY trailing text after one valid token,
+silently hiding a real violation (`.day-planb`'s `0 6px 6px 0` — now `0`); the single-selector
+`station-dot-ring-is-not-elevation` exemption is generalized to `ring-shadow-is-not-elevation`, a
+structural check (zero offset AND zero blur on every layer = a ring, not a drop shadow) — found
+the identical unexempted pattern in `guide.css`'s `.day-today` and `mobile-nav.css`'s
+`.bslot-mark`/`.sheet-cat.active::before`. Re-running `--update` after both fixes also correctly
+picked up several categories other sessions had already fixed in CSS or that the pre-existing
+`overlay-shadow-is-approved`/`drag` keyword already covered, but nobody had re-tightened for:
+real count 153→109 baseline-wide, not just guide.css's slice.
 
 ## Snapshot (2026-08-11b — R5 cleanup and hub fidelity; six commits, every defect at a boundary)
 

@@ -5,7 +5,7 @@
    src/components/JetLag.astro; the decisions are src/lib/jetlag.ts. */
 /* Collapsible panel in the masthead — shown only when country timezone is known */
 .jl-wrap{margin:1rem auto 0;width:100%;max-width:36rem}
-.jl-toggle{width:100%;display:flex;align-items:center;gap:.5rem;background:none;border:1px solid var(--rule2);border-radius:6px;padding:.52rem 1rem;cursor:pointer;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);transition:color .15s,border-color .15s}
+.jl-toggle{width:100%;display:flex;align-items:center;gap:.5rem;background:none;border:1px solid var(--rule2);border-radius:999px;padding:.52rem 1rem;cursor:pointer;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);transition:color .15s,border-color .15s}
 .jl-toggle:hover{color:var(--ink);border-color:var(--ink)}
 .jl-toggle[aria-expanded="true"]{border-color:var(--rule2);color:var(--ink)}
 .jl-icon{flex:none;font-style:normal}
@@ -14,9 +14,9 @@
 .jl-inner{padding:.75rem .05rem .3rem}
 .jl-row{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:.55rem}
 .jl-label{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);flex:0 0 7.5rem;line-height:1.4}
-.jl-select{flex:1;min-width:0;border:1px solid var(--rule2);border-radius:4px;padding:.35rem .5rem;font:inherit;font-size:var(--text-body);background:var(--card);color:var(--ink)}
+.jl-select{flex:1;min-width:0;border:1px solid var(--rule2);border-radius:0;padding:.35rem .5rem;font:inherit;font-size:var(--text-body);background:var(--card);color:var(--ink)}
 .jl-select:focus{outline:2px solid var(--theme-primary,var(--accent));outline-offset:0;border-color:transparent}
-.jl-output{margin-top:.55rem;padding:.7rem .9rem;background:var(--bg2);border-radius:5px;border-left:3px solid var(--accent);font-size:var(--text-small)}
+.jl-output{margin-top:.55rem;padding:.7rem .9rem;background:var(--bg2);border-radius:0;border-left:3px solid var(--accent);font-size:var(--text-small)}
 .jl-result{font-weight:600;margin-bottom:.4rem;line-height:1.4}
 .jl-tips{padding-left:1.1rem;color:var(--muted);font-size:var(--text-small);line-height:1.65;margin-top:.3rem}
 .jl-tips li{margin-bottom:.2rem}

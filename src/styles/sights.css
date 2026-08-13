@@ -28,7 +28,7 @@
 
 .sight-media-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,13,16,.82) 0%,rgba(10,13,16,.30) 42%,rgba(10,13,16,0) 68%)}
 
-.sight-media-cap{position:absolute;left:0;right:0;bottom:0;margin:0;padding:.9rem 1rem .85rem;color:#f8faf3}
+.sight-media-cap{position:absolute;left:0;right:0;bottom:0;margin:0;padding:.9rem 1rem .85rem;color:var(--ink)}
 /* DEFAULT is the SAFE state, not the photo-tuned one — this used to be backwards. .cardimg is
    loading="lazy", so onload/onerror often haven't fired yet when this first paints (confirmed live:
    under a blocked/slow network the image sits in this exact default state indefinitely, never
