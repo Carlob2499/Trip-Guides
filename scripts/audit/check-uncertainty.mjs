@@ -74,6 +74,54 @@ export function forecastFactsUnregistered(sections = [], facts = null) {
   return findings;
 }
 
+/** Regulatory-change vocabulary: a RULE that changes on a date. Deliberately excludes "as of"
+    and "no longer", which calibration showed are verification-stamp language ("as of Jul 24",
+    "no longer operates") and generated every false positive in the first two attempts at this
+    detector — 7 across the published guides. What remains are verbs that can only mean a rule
+    changing, which produced zero false positives on korea, us and denmark. */
+const CHANGE_TERM =
+  "(effective|takes effect|switch(?:es|ing)? (?:from|to)|changes? on|last day|cutover|is replaced|will be replaced|ends on|begins on)";
+const CHANGE_NEAR = new RegExp(
+  `${CHANGE_TERM}[^"]{0,80}?${FORECAST_DATE}|${FORECAST_DATE}[^"]{0,80}?${CHANGE_TERM}`,
+  "i",
+);
+
+/** Regression case 5 — a mid-trip regulatory change tracked only in prose.
+ *
+ * Japan's tax-free system switches from instant-discount to refund-at-departure on Nov 1 2026,
+ * inside the trip. The guide says so in three places and carries a related ¥5,000-threshold
+ * fact row — but no row for the CUTOVER DATE itself, the plan-critical datum. Nothing expires
+ * it, nothing re-checks it, and the section is `verified_on`-stamped so the existing
+ * prose-provenance check correctly stays silent.
+ *
+ * This was deferred out of E1 (the first heuristic fired 7× on published guides) and completed
+ * once E3's proximity technique replaced section-level matching. Its live value is already
+ * proven: it finds a real Coconino National Forest closure order in the `us` guide — effective
+ * Jul 13–Sep 30 2026, covering trails that guide recommends, "unless rescinded early", with no
+ * fact row to ever notice the rescission.
+ */
+export function regulatoryChangeUnregistered(sections = [], facts = null) {
+  const factText = JSON.stringify(facts ?? {}).toLowerCase();
+  const findings = [];
+  for (const s of sections) {
+    // Day sections are itinerary structure, not rule statements (SKILL.md: clock times in a day
+    // plan are never registry facts), so they are not scanned.
+    if (s?.type === "days") continue;
+    const m = JSON.stringify(s).match(CHANGE_NEAR);
+    if (!m) continue;
+    const date = m[2] || m[3] || "";
+    // Covered when some fact row already carries that same date.
+    if (date && factText.includes(date.toLowerCase())) continue;
+    findings.push({
+      code: "regulatory-change-unregistered",
+      msg:
+        `§"${s.title || s.group || "(untitled)"}" states a rule change around ${date || "a date"} ` +
+        `("${(m[1] || m[4] || "").trim()}") with no facts.json row — a plan-critical change nothing will re-check or expire`,
+    });
+  }
+  return findings;
+}
+
 /** Regression case 8 — research stages checkpointed in a burst.
  *
  * Pass A and Pass B are architecturally required to be INDEPENDENT research acts, and
@@ -185,6 +233,7 @@ export function evaluateUncertainty({
 } = {}) {
   const findings = [
     ...forecastFactsUnregistered(sections, facts),
+    ...regulatoryChangeUnregistered(sections, facts),
     ...stageBurst(state),
     ...weaklySupportedLedgerRows(intakeMd),
     ...unresolvedContradictions(intakeMd, contradictions),

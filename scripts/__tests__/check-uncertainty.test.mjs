@@ -10,6 +10,7 @@ import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import {
   forecastFactsUnregistered,
+  regulatoryChangeUnregistered,
   stageBurst,
   weaklySupportedLedgerRows,
   unresolvedContradictions,
@@ -55,6 +56,33 @@ describe("forecastFactsUnregistered — regression case 4", () => {
       { title: "B", body: "more koyo around Nov 5." },
     ];
     expect(forecastFactsUnregistered(sections, {})).toHaveLength(1);
+  });
+});
+
+describe("regulatoryChangeUnregistered — regression case 5", () => {
+  it("flags a rule change stated with a date and backed by no fact row", () => {
+    const sections = [{ title: "Entry & documents", body: "The tax-free system switches to refund-at-departure on Nov 1." }];
+    const f = regulatoryChangeUnregistered(sections, {});
+    expect(f.map((x) => x.code)).toEqual(["regulatory-change-unregistered"]);
+  });
+
+  it("is silent once a fact row carries that date", () => {
+    const sections = [{ title: "A", body: "switches to refund-at-departure on Nov 1." }];
+    expect(regulatoryChangeUnregistered(sections, { x: { claim: "Tax-free cutover", value: "Nov 1" } })).toEqual([]);
+  });
+
+  it("does NOT fire on verification-stamp language — the false positives that deferred this", () => {
+    // "as of" and "no longer" are how this repo writes verification stamps, not rule changes.
+    // Including them produced 7 false positives across korea/us/denmark; excluding them gives 0.
+    const stamps = [
+      { title: "A", body: "Prices as of Jul 24 2026." },
+      { title: "B", body: "The 3000-won surcharge no longer applies since Mar 20." },
+    ];
+    expect(regulatoryChangeUnregistered(stamps, {})).toEqual([]);
+  });
+
+  it("skips day sections — clock times in a day plan are never registry facts", () => {
+    expect(regulatoryChangeUnregistered([{ type: "days", title: "Day by day", body: "effective Nov 1" }], {})).toEqual([]);
   });
 });
 
@@ -133,7 +161,7 @@ describe("evaluateUncertainty — the warn-first split", () => {
 // so the gate cannot drift away from the corpus it was built to catch.
 describe("E3 ACCEPTANCE — the frozen japan-regression fixture", async () => {
   const { checkIntakeContradictions } = await import("../audit/check-intake-contradictions.mjs");
-  const sections = ["03-sights.json", "06-days.json"].flatMap((f) => {
+  const sections = ["01-plan.json", "03-sights.json", "06-days.json"].flatMap((f) => {
     const j = fixture(`guide/${f}`);
     return Array.isArray(j) ? j : j.sections || [];
   });
@@ -149,6 +177,10 @@ describe("E3 ACCEPTANCE — the frozen japan-regression fixture", async () => {
 
   it("fails the fixture outright", () => {
     expect(r.status).toBe("fail");
+  });
+
+  it("case 5 — the tax-free cutover date, plan-critical and unregistered", () => {
+    expect(r.findings.some((f) => f.code === "regulatory-change-unregistered")).toBe(true);
   });
 
   it("case 4 — koyo and foliage quoted with dates, zero fact rows covering them", () => {

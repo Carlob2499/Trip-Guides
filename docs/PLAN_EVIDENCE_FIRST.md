@@ -406,11 +406,14 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
   site", so defaulting non-matches to `secondary` mislabelled genuinely-primary sources (KT's
   own eSIM page, an aquarium's own ticket page, the Fed's H.10 release). Non-matches stay blank.
   Backfilled 27 korea + 2 us rows; denmark has no destination config, japan is never touched.
-  **Case 5 deferred with evidence:** a CHANGE-language + date prose heuristic catches the
-  fixture's tax-free cutover but also fires 7× across published guides (korea 5 · us 1 ·
-  denmark 1) on itinerary structure and as-of rate dates. Precision needs a "no facts.json row
-  covers this date" cross-check before it can ship — shipping it now would cry wolf on every
-  published guide, the exact failure B3's calibration pass exists to prevent.
+  **Case 5 was deferred here and COMPLETED under E3** (`regulatoryChangeUnregistered`,
+  2026-08-13): the first heuristic fired 7× on published guides because it matched at SECTION
+  level and treated "as of" / "no longer" as change language — those are how this repo writes
+  verification stamps. E3's proximity technique plus a change-verb-only vocabulary and a "no
+  facts.json row carries this date" cross-check brought it to **zero false positives** on korea,
+  us and denmark. It finds the fixture's tax-free cutover AND a real Coconino National Forest
+  closure order in the `us` guide (effective Jul 13–Sep 30 2026, covering trails that guide
+  recommends, "unless rescinded early") that no fact row tracks.
 - **Found in passing (not fixed here — published-content edits are out of this packet's
   scope):** five REAL malformed values survive on published guides from the pre-B2 migration —
   korea `day-by-day-6-000` (`₩6,000.`), `day-by-day-22-000-2` (`₩22,000,`), `where-to-eat-1-500`
