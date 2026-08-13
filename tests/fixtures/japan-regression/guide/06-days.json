@@ -1,0 +1,324 @@
+[
+  {
+    "type": "days",
+    "group": "Days",
+    "title": "Day by day",
+    "phase": "daily",
+    "items": [
+      {
+        "date": "Thu Oct 15",
+        "title": "Depart the US",
+        "tldr": "Overnight flight to Tokyo — the trip's real start is tomorrow.",
+        "pace": "Travel day — overnight transpacific flight",
+        "energy": "slow",
+        "env": "indoor",
+        "body": "<p>⚠ Exact start date still unconfirmed between Oct 15 and Oct 22 — everything below shifts by a week if it lands on the later date. Board the transpacific flight into Tokyo (HND or NRT, whichever has the better fare/schedule); a ~13-hour crossing lands the next afternoon or evening local time.</p>",
+        "checklist": [
+          "Confirm trip start date (Oct 15 vs Oct 22) before booking flights"
+        ]
+      },
+      {
+        "date": "Fri Oct 16",
+        "title": "Arrive Tokyo — overnight near the airport",
+        "tldr": "Land in Tokyo, get an IC card and eSIM sorted, sleep near the airport rather than rushing a same-day connection.",
+        "pace": "Arrival day — clear immigration, buy IC card + activate eSIM, overnight near HND/NRT",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>Clear immigration, buy a Suica/Pasmo IC card at the airport, and activate your eSIM before leaving the arrivals hall. Rather than rushing a same-day domestic connection after a long flight, stay the night near the airport — a gentle first night that matches the trip's slow pace and de-risks a missed connection.</p>"
+      },
+      {
+        "date": "Sat Oct 17",
+        "title": "Fly to Fukuoka — settle in, first yatai evening",
+        "tldr": "Short domestic hop to Fukuoka, then straight into Tenjin's yatai stalls for the first dinner.",
+        "pace": "Half travel, half arrival — ≈2 hr flight, then settle in before an evening yatai walk",
+        "energy": "balanced",
+        "env": "mixed",
+        "body": "<p>Fly Tokyo → Fukuoka (≈2 hrs), settle into a base near Tenjin or Hakata Station, and ease into the trip with Tenjin's yatai stalls for dinner — the locals' pick over Nakasu's livelier but pricier scene (see Food &amp; shopping). Cash-heavy, {{fact:day-by-day-1-000}} notes, arrive ≈18:00–19:00 or after ≈21:00 for the calmer window.</p>",
+        "verified_on": "2026-07-29",
+        "shelf_life": "transit",
+        "source_url": "https://www.ana.co.jp/en/us/"
+      },
+      {
+        "date": "Sun Oct 18",
+        "title": "Hakata Station & Nakasu — ramen, gaming, mentaiko",
+        "tldr": "Mentaiko breakfast, gacha at Canal City, a walk through Nakasu's yatai, then motsunabe for dinner.",
+        "pace": "Full day, mostly walkable — Hakata Station area in the morning, Nakasu in the evening",
+        "energy": "balanced",
+        "env": "mixed",
+        "body": "<p>Start at <b>Kisuimaru</b> in Hakata Station (B1F, Hakata 1-Bangai) for an all-you-can-eat mentaiko breakfast — zero transit cost, right where you're staying. From there, <b>Canal City Hakata</b> is a short walk: the <b>Gashapon Department Store</b> (~2,200 capsule machines) is the gacha stop for the gaming/anime priority. In the evening, walk <b>Nakasu</b>'s riverside yatai for the atmosphere (see Sights), pick up mentaiko to bring home at <b>Fukuya's Nakasu Honten</b>, and close with dinner at <b>Maedaya</b> — the local-favorite motsunabe pick.</p>"
+      },
+      {
+        "date": "Mon Oct 19",
+        "title": "Tenjin — shopping, arcade, market lunch",
+        "tldr": "Animate, Mandarake and an arcade in Tenjin, lunch at a real working fish market.",
+        "pace": "Full day in one neighborhood — Tenjin is walkable end to end",
+        "energy": "balanced",
+        "env": "mixed",
+        "body": "<p><b>Animate Fukuoka PARCO</b> and <b>Mandarake Fukuoka</b> (Daimyo) anchor the morning, with <b>Taito Station Fukuoka Tenjin</b> for arcade time. For lunch, <b>Yanagibashi Rengo Ichiba</b> — \"Fukuoka's Kitchen,\" a genuine working market with small counters, off the standard tourist circuit (⚠ confirm it's open today — fish markets often skip Sundays, though Monday should be fine). If the history pulls you in, <b>Ippudo's original 1985 Daimyo shop</b> is nearby for a look, framed honestly as the origin story rather than the best bowl in town.</p>"
+      },
+      {
+        "date": "Tue Oct 20",
+        "title": "Dazaifu (optional) — or a second Fukuoka food day",
+        "tldr": "The standard Kyushu day trip, honestly flagged as optional for repeat visitors — or spend the day going deeper on food instead.",
+        "pace": "Half-day trip if you go (≈30 min each way) — otherwise a full open day in Fukuoka",
+        "energy": "slow",
+        "env": "outdoor",
+        "body": "<p><i>Honest call-out: Dazaifu Tenmangu is the standard answer every generic Japan guide gives for a Fukuoka day trip — a direct ≈30-min Nishitetsu train from Tenjin to Japan's principal shrine to Sugawara no Michizane, with a mochi-stall approach street. It's genuinely worth seeing once, but as repeat 2024 visitors you may well have already done it — this day is written as optional rather than assumed.</i></p><p><b>If you go:</b> back in Fukuoka by early afternoon, loop past <b>Ganso Nagahamaya</b> near the old fish-market area for the 1952-original Nagahama tonkotsu ramen.</p><p><b>If you'd rather go deeper on food instead</b> (this trip's actual #1 priority): use the day for a second, unhurried pass through Tenjin/Nakasu/Nagahama — revisit whichever ramen shop most impressed on Day 4–5, or track down one of the more locally-favored yatai from a quieter afternoon angle rather than the evening rush.</p>"
+      },
+      {
+        "date": "Wed Oct 21",
+        "title": "Flex day — pace check",
+        "tldr": "An open day: rest, revisit a favorite, or a lightly-scouted onsen day trip to Yufuin/Beppu.",
+        "pace": "Deliberately open — the slow-pace buffer this trip asked for",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>No fixed plan today, by design — the intake asked for a slow pace, and six days into a 27-day trip is a good place for one. Options: revisit a favorite from the last few days, wander Tenjin/Nakasu without an agenda, or — if energy allows — a day trip to the Yufuin/Beppu onsen towns (≈2 hrs from Hakata by train/bus). <b>⚠ Yufuin/Beppu wasn't researched to this guide's usual standard this pass</b> — treat it as an idea to look into locally, not a booked plan.</p>"
+      },
+      {
+        "date": "Thu Oct 22",
+        "title": "Last Fukuoka night — Shin Shin, pack",
+        "tldr": "Late-night ramen at the locals' favorite, then pack for Hokkaido.",
+        "pace": "Light day — pack in the afternoon, dinner/late ramen at night",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>An easy last day in Fukuoka — pack, tie up any shopping, and close with <b>Shin Shin</b> in Tenjin (open to 03:00, last order 02:30), the local top pick for a late-night bowl before an early flight tomorrow.</p>"
+      },
+      {
+        "date": "Fri Oct 23",
+        "title": "Fly to Sapporo — settle in",
+        "tldr": "Direct flight north to Hokkaido; ease into Susukino for the evening.",
+        "pace": "Travel day — ≈2h15 direct flight, then settle in",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>Direct flight Fukuoka → Sapporo (≈2h10–2h20, no Tokyo detour needed). Land at New Chitose, ≈40 min JR rapid train into Sapporo Station, settle into a base near Susukino/Odori. An easy evening stroll through <b>Tanukikoji</b>'s covered arcade — browse, don't commit to anything big yet.</p>"
+      },
+      {
+        "date": "Sat Oct 24",
+        "title": "Birthday — Sapporo city day",
+        "tldr": "Odori Park and Tanukikoji by day, a Jingisukan feast at Daruma to close out the birthday.",
+        "pace": "Full but relaxed day, ending in a celebration dinner",
+        "energy": "balanced",
+        "env": "mixed",
+        "body": "<p><i>A birthday that actually lands during the trip — make today the good day the intake asked for.</i></p><ul><li><b>Late morning:</b> Odori Park and the Sapporo TV Tower — an easy, unhurried city walk.</li><li><b>Afternoon:</b> Tanukikoji for the C-pla gacha stop and a browse through Mandarake/Animate Sapporo — pick up a birthday souvenir if something jumps out.</li><li><b>Evening — the birthday dinner:</b> <b>Jingisukan Daruma Honten</b>, Susukino — Sapporo's charcoal-grilled-lamb specialty, a shared, celebratory format that suits the occasion better than a solo ramen counter. <b>⚠ Call ahead to book for two</b> — address/hours are well-corroborated but not fetched from an official page this pass.</li></ul>",
+        "checklist": [
+          "Book Jingisukan Daruma for two ahead of time"
+        ]
+      },
+      {
+        "date": "Sun Oct 25",
+        "title": "Mt. Moiwa & Nijo Market",
+        "tldr": "A morning seafood breakfast, then a ropeway or hike up Mt. Moiwa.",
+        "pace": "Balanced day — market in the morning, Mt. Moiwa in the afternoon",
+        "energy": "balanced",
+        "env": "outdoor",
+        "body": "<p>Start at <b>Nijo Market</b> for a crab/uni breakfast, then head to <b>Mt. Moiwa</b> — ropeway + cable car to the 531m summit (open through mid-November), or one of five marked hiking trails (2.4–4.5km, ≈1–1.5 hr) if you'd rather earn the view. Low elevation keeps snow risk minimal this early.</p>",
+        "plan_b": {
+          "trigger": "closure",
+          "body": "Mt. Moiwa's ropeway suspends for wind without notice (the operator's own page warns of this). If it's down, or the trails are too slick to hike, swap the summit for the <b>Sapporo Beer Museum</b> — free entry, self-guided, inside the original 1890 brick brewery, a ≈20 min tram + walk from Nijo Market. Nijo Market's stalls stay open regardless of weather.",
+          "source_url": "https://www.sapporobeer.jp/english/brewery/s_museum/",
+          "verified_on": "2026-08-03"
+        }
+      },
+      {
+        "date": "Mon Oct 26",
+        "title": "Otaru day trip",
+        "tldr": "Canal town by train — go for the weekday morning quiet, not the weekend crush.",
+        "pace": "Day trip — ≈35 min each way by JR rapid train",
+        "energy": "balanced",
+        "env": "outdoor",
+        "body": "<p>Otaru's canal district is a genuinely popular day trip, and independent reviews agree the main stretch runs tour-bus-crowded even on weekdays — today being a Monday is deliberate, the quietest weekday option in this block. Walk the canal in the morning, then continue north past the main photo-spot stretch for a calmer, less-crowded angle. Sushi-dori has a wide price spread between tourist-priced and local-priced counters — ask around rather than walking into the first storefront.</p>",
+        "plan_b": {
+          "trigger": "rain",
+          "body": "Heavy rain trades the canal walk for the <b>Otaru Music Box Museum</b> — free entry, three floors inside an 1912 building, 2 min from the canal's north end, open daily 9:00–18:00. Sushi-dori's counters are indoors too, so lunch plans don't change.",
+          "source_url": "https://www.otaru-orgel.co.jp/",
+          "verified_on": "2026-08-03"
+        }
+      },
+      {
+        "date": "Tue Oct 27",
+        "title": "Noboribetsu day trip — Jigokudani",
+        "tldr": "An early walk through Hell Valley before the tour buses arrive.",
+        "pace": "Day trip — ≈1h15 each way by JR Limited Express, aim to arrive by 9:15",
+        "energy": "balanced",
+        "env": "outdoor",
+        "body": "<p>JR Limited Express Hokuto to Noboribetsu (≈1h15), then a short bus to <b>Jigokudani</b> (Hell Valley) — a free, 24hr geothermal valley. Leave Sapporo early enough to arrive before ≈10:00, when tour buses reliably start filling the area. Continue to <b>Oyunuma</b>'s crater lake and natural footbath for a longer loop (90 min–2 hrs total) if energy allows, then back to Sapporo by evening.</p>",
+        "plan_b": {
+          "trigger": "rain",
+          "body": "Jigokudani's boardwalk is exposed with nowhere to shelter, so a real downpour is worth skipping rather than enduring. <b>Yumoto Sagiriyu</b>, Noboribetsu's public bathhouse — five indoor baths plus a sauna, ⚠ ≈¥500 adult — is a 5-min walk from the valley entrance and open 9:00–21:00 daily. Trade the view for a soak, then the JR Limited Express back to Sapporo whenever you're ready.",
+          "source_url": "http://sagiriyu-noboribetsu.com/",
+          "verified_on": "2026-08-03"
+        }
+      },
+      {
+        "date": "Wed Oct 28",
+        "title": "Jozankei hiking day",
+        "tldr": "A real trail day at Jozankei Onsen, graded by how the legs feel.",
+        "pace": "Day trip — ≈60 min direct bus (Kappa Liner) or ≈75 min regular bus from Sapporo Station",
+        "energy": "packed",
+        "env": "outdoor",
+        "body": "<p>Jozankei's official autumn trail list has 8 graded routes. <b>Asahi-dake</b> (598m, 3.3km, ≈3 hrs round trip) is the best-documented option — officially \"moderate,\" though recent hiker reports describe rope sections and exposure, so treat the grading as optimistic if you're not confident on technical ground. If that's more than the day calls for, the easier <b>Mt. Yuhi</b> trail is the gentler alternative. Skip the harder routes (Mt. Sapporo, Mt. Muine) this late in October — they sit right at the elevation where early snow can already be an issue.</p>",
+        "constraints": [
+          "Higashione Course on Mt. Jozankei Tengu is officially closed"
+        ],
+        "plan_b": {
+          "trigger": "rain",
+          "body": "Rope sections on Asahi-dake get slick and exposed in rain — not worth the risk for the view. Jozankei is itself a hot-spring town: <b>SHIKAnoYU</b> offers day-use bathing (⚠ ≈¥1,000–1,500 depending on time of day), a straightforward swap from trail to soak with nothing to rebook.",
+          "source_url": "https://shikanoyu.co.jp/en/shikanoyu/spa/day",
+          "verified_on": "2026-08-03"
+        }
+      },
+      {
+        "date": "Thu Oct 29",
+        "title": "Flex / koyo day — Moerenuma Park",
+        "tldr": "An open day — Isamu Noguchi's land-art park, or just rest, as Sapporo's foliage builds toward peak.",
+        "pace": "Open, low-commitment day",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>Another deliberately open day. <b>Moerenuma Park</b> — an Isamu Noguchi-designed sculpture/land-art park — is a genuinely design-forward option if you want something beyond the standard circuit; otherwise, rest. Sapporo's official koyo average peak (Oct 28–Nov 5) starts right around now — no need to chase it today specifically, the next few days are built around it.</p>"
+      },
+      {
+        "date": "Fri Oct 30",
+        "title": "Flex day",
+        "tldr": "Another open day — wander, shop, or rest before the koyo-peak weekend.",
+        "pace": "Open, low-commitment day",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>Open by design. A good day to revisit anything missed — Tanukikoji, Nijo Market, a second ramen shop — or simply rest before tomorrow's foliage-peak window.</p>"
+      },
+      {
+        "date": "Sat Oct 31",
+        "title": "Sapporo/Otaru koyo-peak day — last day of the old tax-free system",
+        "tldr": "Foliage should be at or near peak today — and it's your last day to use the simple instant-discount tax-free system.",
+        "pace": "Full day — wherever the color looks best, plus a shopping window before the system changes tomorrow",
+        "energy": "balanced",
+        "env": "outdoor",
+        "body": "<p>Sapporo's official koyo average (JMC: Oct 28–Nov 5) puts today near the peak — spend it wherever the color looks best; Nakajima Park and the grounds around Hokkaido Shrine are the classic in-city spots, though this pass didn't individually verify their current status. <b>⚠ Every koyo date in this guide is a multi-year average, not a locked 2026 forecast</b> — Japan's meteorological service doesn't publish its first 2026 release until ~mid-September, so confirm closer to travel.</p><p><b>Practical note:</b> today is the last day Japan's simple instant-discount tax-free system applies (it switches to a pay-then-claim-at-departure model tomorrow) — if there's a big gaming/anime purchase on the list, today's the easier day to make it.</p>",
+        "checklist": [
+          "Make any big tax-free purchases today, before tomorrow's system change"
+        ]
+      },
+      {
+        "date": "Sun Nov 1",
+        "title": "Rest day — pack for Sendai",
+        "tldr": "An easy last Sapporo day; the new tax-free system starts today.",
+        "pace": "Light day — pack, tie up loose ends",
+        "energy": "slow",
+        "env": "indoor",
+        "body": "<p>Japan's tax-free system flips today to pay-full-price-then-claim-at-the-airport — anything bought from here on needs the passport-scan kiosk step at departure (see Plan tab). An easy day otherwise: pack, confirm tomorrow's flight, rest up for the move to Tohoku.</p>"
+      },
+      {
+        "date": "Mon Nov 2",
+        "title": "Fly to Sendai — settle in",
+        "tldr": "Direct flight to Tohoku; ease into the Wild Area base city.",
+        "pace": "Travel day — ≈1h10–1h20 direct flight, then settle in",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>Direct flight Sapporo → Sendai (≈1h10–1h20) — the Hokkaido Shinkansen still doesn't reach Sapporo, so flying is the clear right call here rather than a 6–7 hr overland routing through Tokyo. Settle into a base near Sendai Station — this is the \"Wild Area base\" for the rest of the trip. An easy first evening: <b>Ryūtei</b>, the actual restaurant where hiyashi chūka (cold ramen) was invented in 1937 — Sendai's food identity beyond gyutan.</p>"
+      },
+      {
+        "date": "Tue Nov 3",
+        "title": "Matsushima day trip",
+        "tldr": "One of Japan's Three Views, on the Culture Day holiday — expect it busier than a normal Tuesday.",
+        "pace": "Day trip — ≈40 min each way on the JR Senseki Line",
+        "energy": "balanced",
+        "env": "outdoor",
+        "body": "<p>JR Senseki Line to <b>Matsushimakaigan Station</b> (not \"Matsushima Station\") for the bay — one of Japan's official Three Scenic Views. Quick stop at Godaido for the classic shot, then out to Fukuura Island's pine-forest trails or up to Saigyo Modoshi no Matsu Park for a quieter, elevated view away from the waterfront crowd. <b>Note:</b> today is Culture Day (a national holiday), which likely means a busier bay than a normal weekday — budget extra patience at Godaido.</p>",
+        "constraints": [
+          "Nov 3 is Culture Day — a public holiday, likely busier than a normal weekday"
+        ],
+        "plan_b": {
+          "trigger": "rain",
+          "body": "Rain flattens the bay view and empties Fukuura Island's outdoor pine trails. <b>Zuiganji Temple</b> — one of Tōhoku's most important Zen temples, a 5-min walk from Matsushimakaigan Station — keeps you under cover in its historic halls and rock-cut caves, open 8:30–15:30 daily. ⚠ Admission reported anywhere from ¥700–1,000 adult depending on source — confirm at the gate.",
+          "source_url": "https://www.japan-guide.com/e/e5102.html",
+          "verified_on": "2026-08-03"
+        }
+      },
+      {
+        "date": "Wed Nov 4",
+        "title": "Naruko Gorge day trip",
+        "tldr": "Arrive at opening to beat the tour buses through the gorge's shortened trail.",
+        "pace": "Day trip — ≈90 min–2 hrs each way via the Rikuu East Line",
+        "energy": "balanced",
+        "env": "outdoor",
+        "body": "<p>The regular (non-special) JR Rikuu East Line local to Naruko-Onsen Station — the scenic \"Yukemuri\" observation train's autumn special only runs weekends/holidays, and today's a Wednesday, so this uses the ordinary service instead (same route, same views). At the gorge: arrive at opening (≈8:30) or after ≈14:00 to avoid the 11:00–15:00 tour-bus crush. <b>Honest note:</b> the full historic trail was permanently shortened after 2011 earthquake damage — expect a partial trail plus the resthouse observation bridge, not a complete historic hike.</p>",
+        "plan_b": {
+          "trigger": "rain",
+          "body": "Heavy rain (or an early-season closure of the gorge's already-shortened post-2011 trail) still leaves Naruko itself, one of Tōhoku's oldest hot-spring towns. <b>Takinoyu</b>, a public bath fed straight from the town's original thousand-year-old source, is a 5-min walk from Naruko-Onsen Station, open 7:30–21:00 daily. ⚠ Admission reported ¥150–300 depending on source — small enough not to plan around.",
+          "source_url": "https://en.japantravel.com/miyagi/taki-no-yu-hot-spring-in-naruko/15284",
+          "verified_on": "2026-08-03"
+        }
+      },
+      {
+        "date": "Thu Nov 5",
+        "title": "Zao Onsen — belated birthday, the ryokan splurge",
+        "tldr": "The deliberate belated-birthday night: Miyamaso Takamiya's private hot springs, kaiseki dinner, maybe the crater.",
+        "pace": "Travel + splurge night — ≈2 hrs to Zao Onsen, the rest of the day at the ryokan",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p><i>The trip's one deliberate splurge, and the belated celebration for the birthday that fell before the trip started.</i></p><ul><li><b>Getting there:</b> JR Senzan Line to Yamagata (≈70–90 min) then a local bus (≈35–40 min) to Zao Onsen — or a direct highway bus from Sendai Station if it's running outside peak ski season (⚠ confirm current schedule; frequency drops off-season).</li><li><b>Miyamaso Takamiya</b> — Zao Onsen's most historic ryokan (founded 1716), three private hot-spring sources, nine baths, Yamagata-cuisine kaiseki dinner + breakfast. Book direct at reserve.489ban.net. <b>⚠ Old building</b> — lots of stairs, no elevator; request a non-top-floor room with a view when booking.</li><li><b>Okama Crater, if it's still open:</b> the Zao Ropeway + hike to the crater rim typically closes for the season in early November — this visit sits right at that edge. Treat seeing it as a bonus, not a plan; the onsen itself is unaffected either way.</li></ul>",
+        "checklist": [
+          "Confirm Miyamaso Takamiya reservation and room request",
+          "Check whether Zao Ropeway/Okama access is still open before setting expectations"
+        ]
+      },
+      {
+        "date": "Fri Nov 6",
+        "title": "Back to Sendai — Wild Area, Day 1",
+        "tldr": "Return from Zao Onsen and start the Pokémon GO Wild Area weekend — expect real crowding, not just marketing-copy \"citywide.\"",
+        "pace": "Travel back in the morning, event from midday",
+        "energy": "packed",
+        "env": "outdoor",
+        "body": "<p>Senzan Line back to Sendai, then into the first day of <b>Pokémon GO Wild Area — Sendai</b> (Nov 6–8, 2026, officially confirmed by pokemongo.com; exact venue and ticket sales were still unannounced as of this guide's last check). <b>Set expectations from how the past two editions actually played out</b>, not the marketing description: Nagasaki 2025's own network provider reported crowds gathering in rapid, unpredictable bursts even in a nominally \"citywide\" format, with real Wi-Fi/cellular congestion on-site — Niantic's own support account asked attendees to spread out during the event. Plan accordingly: have an offline map as backup, don't count on live data at peak hours in the single most-hyped spot, and expect the first 1–2 hours of the day (people arriving at open) to be the worst crush.</p>",
+        "checklist": [
+          "Wild Area tickets bought the moment sales open",
+          "Offline map downloaded as a data-congestion backup"
+        ]
+      },
+      {
+        "date": "Sat Nov 7",
+        "title": "Wild Area, Day 2",
+        "tldr": "Second event day — same congestion-aware plan, route toward secondary hubs over the single most-hyped spot.",
+        "pace": "Full event day",
+        "energy": "packed",
+        "env": "outdoor",
+        "body": "<p>Second day of the event. Same playbook as Friday: arrive early, spread across secondary hubs rather than funneling into one plaza, and keep the offline map handy for when the network gets congested.</p>"
+      },
+      {
+        "date": "Sun Nov 8",
+        "title": "Wild Area, Day 3 — final day",
+        "tldr": "Last day of the event — wind down into the evening once it wraps.",
+        "pace": "Event by day, easing off by evening",
+        "energy": "packed",
+        "env": "outdoor",
+        "body": "<p>Final day of Pokémon GO Wild Area Sendai. Same crowd-aware approach through the day; once the event wraps, ease into an evening in Kokubuncho rather than planning anything else demanding.</p>"
+      },
+      {
+        "date": "Mon Nov 9",
+        "title": "Sendai wind-down — gyutan, izakaya lanes",
+        "tldr": "A local gyutan lunch, then Sendai's back-alley izakaya lanes for the last full night.",
+        "pace": "Easy day — no fixed morning plan, food-forward evening",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>An easy recovery day after three event days. Lunch at <b>Date no Gyutan Honpo, Aobajo</b> (lunch-only, 11:00–15:00, on the former Date-clan castle grounds) — the local-favorite alternative to the big station-area gyutan chains. In the evening, <b>Kokubuncho</b> and the <b>Bunka-yokocho/Iroha-yokocho</b> back-alley izakaya lanes — retro Shōwa-era 8–10-seat bars most visitors miss entirely; <b>Genji Izakaya</b> is one specific standout. Use today to send anything bulky ahead via Yamato Ta-Q-Bin to the Tokyo hotel before tomorrow's travel day.</p>",
+        "checklist": [
+          "Ship any bulky luggage/purchases ahead via Ta-Q-Bin to the Tokyo hotel"
+        ]
+      },
+      {
+        "date": "Tue Nov 10",
+        "title": "Sendai → Tokyo → home",
+        "tldr": "Shinkansen to Tokyo, then the international flight home.",
+        "pace": "Travel day — ≈90 min Shinkansen, then the international departure",
+        "energy": "slow",
+        "env": "indoor",
+        "body": "<p>Tohoku Shinkansen \"Hayabusa\" to Tokyo (≈90 min, all-reserved, {{fact:day-by-day-11-410}}). Connect to the international flight home from HND/NRT. If any purchases since Nov 1 need the new tax-free refund process, build in extra time at the departure kiosk before check-in.</p>",
+        "checklist": [
+          "Extra time at the airport for the tax-free refund kiosk if anything was bought Nov 1 onward"
+        ],
+        "verified_on": "2026-07-29",
+        "shelf_life": "transit",
+        "source_url": "https://www.jreast.co.jp/e/"
+      }
+    ]
+  }
+]

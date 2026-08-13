@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1844 checks · 1844 carry a stated promise · 158 files
+1849 checks · 1849 carry a stated promise · 159 files
 
 ## Can everyone read it
 
@@ -2252,6 +2252,14 @@ nothing ships.
 - FAILS (catches the regression) when a touchpoint is left stale  <sub>scripts/__tests__/run-skill-evals.test.mjs:41</sub>
 - FAILS when the change landed in only one place (didn't propagate)  <sub>scripts/__tests__/run-skill-evals.test.mjs:47</sub>
 - detects a preserved draft flag and its absence  <sub>scripts/__tests__/run-skill-evals.test.mjs:54</sub>
+
+**The Japan regression fixture is byte-identical evidence and is never repaired.**
+
+- the fixture list is non-empty (guards a vacuous pass)  <sub>scripts/__tests__/japan-regression-fixture.test.mjs:28</sub>
+- documents all 12 cases, one `## Case N` heading each  <sub>scripts/__tests__/japan-regression-fixture.test.mjs:56</sub>
+- case 1 is split into the 1a/1b sub-cases  <sub>scripts/__tests__/japan-regression-fixture.test.mjs:64</sub>
+- records case 1a as a NEGATIVE case — the C2 false-positive guard  <sub>scripts/__tests__/japan-regression-fixture.test.mjs:74</sub>
+- every frozen file is listed in the manifest's table  <sub>scripts/__tests__/japan-regression-fixture.test.mjs:78</sub>
 
 **The plain-English list of what the tests protect stays complete and current.**
 

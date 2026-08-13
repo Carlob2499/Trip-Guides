@@ -91,7 +91,7 @@ of truth (`intake-schema.mjs` FIELDS drives form + parser + scaffolder, contract
 | D4 | **Claims are section-path echoes** ("Budget & daily costs → …"), i.e. presentation-layer addressing, not claim identity. | Claim-ID discipline (B) |
 | D5 | **`tier` exists in the schema (content.config.ts, both factRecord and provenance) but nothing populates or enforces it.** | Populate + gate (B/E) — extend-before-add satisfied |
 | D6 | **No risk weighting anywhere** — a museum price and a government travel advisory get the same 2-search cap and the same gates. | Risk tiers R0–R4 (B/D/E) |
-| D7 | **No intake certainty states.** "Oct 15" vs "Oct 22" and the Sept 25 / Oct 24 birthday contradiction sit in `japan.md` as flat prose; nothing distinguishes fixed from assumed. | Certainty states + contradiction gate (C) |
+| D7 | **No intake certainty states.** "Oct 15" vs "Oct 22" sits in `japan.md` as flat prose; nothing distinguishes fixed from assumed. (The "Sept 25 / Oct 24 birthday contradiction" originally cited here **does not exist** — A1 verified it is two travellers' two birthdays. See the fixture MANIFEST, case 1.) | Certainty states + contradiction gate (C) |
 | D8 | **Link check = liveness only.** 200 OK passes; page content is never compared to the stated value outside the critic's ≥5-row sample. | Drift detection via evidence snippets (E) |
 | D9 | **Traceability is one-directional.** `{{fact:<id>}}` tokens resolve fact→prose at build, but nothing answers "which days/sections depend on fact X" or "which shipped claims have no fact row." | Derived usage index (B4) |
 | D10 | **Destination knowledge lives as prose** in the skill/references (and partly nowhere — koyo sources, tax-free rules, advisory URLs are re-found per run). | Destination config as data (D1) |
@@ -209,12 +209,17 @@ contract tests; the issue form and scaffolder inherit.
    The Japan case becomes representable: start date = `target: Oct 15` not a bare date.
 2. **Contradiction gate.** New `scripts/audit/check-intake-contradictions.mjs`:
    deterministic extraction of dates, party counts, and named people across ALL intake fields;
-   flags (a) two different values for the same entity ("birthday Sept 25" vs "birthday
-   Oct 24"), (b) anchor date outside the trip window, (c) party-size vs traveler-list
-   mismatch. Runs in `new-guide.yml` after parse and as a research-pass preflight. A hit
+   flags (a) two different values for the same entity, (b) anchor date outside the trip window,
+   (c) party-size vs traveler-list mismatch. Runs in `new-guide.yml` after parse and as a
+   research-pass preflight. A hit
    emits a `### q-<slug>-<n>` traveler question (existing mechanism) and stamps the intake
    doc `## Contradictions` — research proceeds only on a recorded `**Assumed:**` line.
    Never a hard workflow failure (creator ruling: surface, don't hard-stop).
+   **Binding constraint on (a), learned in A1:** "the same entity" means the same *person*, not
+   the same *noun*. A party of N travellers legitimately carries N birthdays, N passports, N
+   dietary needs. Japan is the proof — its two "birthday" dates belong to two different people
+   and the intake is correct. A checker keying on the bare word "birthday" fires on correct data.
+   Fixture case **1a is a NEGATIVE test: C2 must stay silent on `japan.md`.**
 3. **Risk seeds from intake.** The parser marks anchor-event facts R3 and
    advisory/visa/health context R4 at scaffold time, so risk exists before research starts.
 
@@ -343,13 +348,13 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
 - ACCEPTANCE: a filed issue with "Dates: Oct 15 (target)" scaffolds an intake doc carrying the state; old-format issues still parse.
 
 **C2 — Intake contradiction gate** · M · coder
-- CONTEXT: The Japan intake carries "birthday Sept 25" and "birthday Oct 24" (§1 vs §2) plus Oct 15-vs-22 — nothing flags either (regression cases 1–2).
+- CONTEXT: The Japan intake records the start date as a flat `2026-10-15` (`japan.md:25`) while stating the traveller is still choosing between Oct 15 and Oct 22 (`japan.md:10`) — nothing flags it (regression case 2). ⚠️ **The "Sept 25 vs Oct 24 birthday contradiction" this packet originally cited was verified in A1 and DOES NOT EXIST** — two travellers, two birthdays, correctly handled. It is now fixture case **1a, a NEGATIVE case: C2 must NOT fire on it.** Read the fixture MANIFEST's case 1 before writing the extractor.
 - GOAL: `scripts/audit/check-intake-contradictions.mjs` per §5.2 (date/party/person extraction, cross-field compare); wired as a step in `new-guide.yml` post-parse and a research-pass preflight; emits traveler questions + `## Contradictions` stamp; never fails the workflow.
 - FILES TO INSPECT: `guides-intake/japan.md` (fixture copy), `scripts/intake-schema.mjs`, `references/pipeline-roles.md` (question format).
 - FILES TO CHANGE: new script, `new-guide.yml` (+1 step), `research-pass.yml` (+1 preflight step), npm alias.
 - DO NOT TOUCH: question-surfacing mechanism (reuse it), intake docs themselves.
-- TESTS: fixture intake triggers both the birthday and the start-date findings; korea/us fixtures trigger none.
-- ACCEPTANCE: regression cases 1 and 2 detected deterministically, run proceeds, questions posted.
+- TESTS: fixture intake triggers the start-date finding (case 2) and **emits NO birthday finding** (case 1a — the false-positive guard); korea/us fixtures trigger none. A synthetic intake giving ONE named person two different birthdays MUST fire — that is the real contradiction shape.
+- ACCEPTANCE: regression case 2 detected deterministically and case 1a stays silent, run proceeds, questions posted.
 
 **D1 — Destination config (knowledge as data)** · M · coder + scribe
 - CONTEXT: D10/D12 — destination facts (languages, advisory URLs, GTFS feeds, seasonal sources, tax-free rules) live as prose or nowhere; every run re-finds them.
@@ -424,7 +429,8 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
 
 | # | Case | Detected by |
 |---|---|---|
-| 1 | Conflicting birthday info | C2 |
+| 1a | ~~Conflicting birthday info~~ → **NEGATIVE case** (two travellers, two birthdays — no contradiction exists) | C2 must **NOT** fire |
+| 1b | **NEW (A1):** the guide never attributes either birthday to a person — an intake distinction the guide flattened | D2 (authoring discipline; no deterministic gate — documented, not asserted) |
 | 2 | Oct 15 vs 22 unconfirmed start | C1+C2, E3(b) |
 | 3 | Unresolved Wild Area venue | E1(a) — R3 plan-critical without a primary-tier fact row |
 | 4 | Koyo forecast uncertainty | E3(c) |
