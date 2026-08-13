@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1905 checks · 1905 carry a stated promise · 163 files
+1910 checks · 1910 carry a stated promise · 163 files
 
 ## Can everyone read it
 
@@ -1763,25 +1763,29 @@ nothing ships.
 
 - has the same fields, in the same order, as the issue form  <sub>scripts/__tests__/intake-schema.test.mjs:49</sub>
 - field "…" matches the form (kind, label, options)  <sub>scripts/__tests__/intake-schema.test.mjs:54</sub>
-- maps direct fields  <sub>scripts/__tests__/intake-schema.test.mjs:87</sub>
-- splits dates into start/end  <sub>scripts/__tests__/intake-schema.test.mjs:101</sub>
-- collects priorities in rank order, dropping the null-ish choice  <sub>scripts/__tests__/intake-schema.test.mjs:106</sub>
-- treats _No response_ and null-ish dropdown defaults as unset  <sub>scripts/__tests__/intake-schema.test.mjs:110</sub>
-- validates: country required, extras allowed  <sub>scripts/__tests__/intake-schema.test.mjs:117</sub>
-- renders "…"  <sub>scripts/__tests__/intake-schema.test.mjs:132</sub>
+- maps direct fields  <sub>scripts/__tests__/intake-schema.test.mjs:100</sub>
+- splits dates into start/end  <sub>scripts/__tests__/intake-schema.test.mjs:114</sub>
+- collects priorities in rank order, dropping the null-ish choice  <sub>scripts/__tests__/intake-schema.test.mjs:119</sub>
+- treats _No response_ and null-ish dropdown defaults as unset  <sub>scripts/__tests__/intake-schema.test.mjs:123</sub>
+- validates: country required, extras allowed  <sub>scripts/__tests__/intake-schema.test.mjs:130</sub>
+- round-trips an explicitly selected certainty for dates, anchor, and budget  <sub>scripts/__tests__/intake-schema.test.mjs:144</sub>
+- every CERTAINTY_OPTIONS value round-trips through the parser unchanged  <sub>scripts/__tests__/intake-schema.test.mjs:150</sub>
+- an old-format issue with NO certainty headings still parses and defaults to "assumed"  <sub>scripts/__tests__/intake-schema.test.mjs:157</sub>
+- validates: a certainty answer must be one of CERTAINTY_OPTIONS  <sub>scripts/__tests__/intake-schema.test.mjs:165</sub>
+- renders "…"  <sub>scripts/__tests__/intake-schema.test.mjs:180</sub>
 
 **A guide request submitted from the site reaches the maker intact.**
 
 - a rendered body parses back to the same answers a human submission would  <sub>scripts/__tests__/intake-proxy.test.mjs:13</sub>
 - renders '_No response_' for empty fields (so they parse back as unset)  <sub>scripts/__tests__/intake-proxy.test.mjs:35</sub>
-- labels (auto-research) under the cap  <sub>scripts/__tests__/intake-proxy.test.mjs:45</sub>
-- accepts but withHOLDS the label at/over the cap (queued for owner approval)  <sub>scripts/__tests__/intake-proxy.test.mjs:49</sub>
-- rejects outright over the hard max  <sub>scripts/__tests__/intake-proxy.test.mjs:54</sub>
-- honors custom thresholds  <sub>scripts/__tests__/intake-proxy.test.mjs:58</sub>
-- derives the pair the Worker feeds intakeRateDecision  <sub>scripts/__tests__/intake-proxy.test.mjs:65</sub>
-- AUTO_CAP=0 queues EVERYTHING for approval rather than rejecting everything  <sub>scripts/__tests__/intake-proxy.test.mjs:68</sub>
-- falls back to the default rather than DISABLING the cap on a garbage value  <sub>scripts/__tests__/intake-proxy.test.mjs:77</sub>
-- mirrors the scaffolder's slugify  <sub>scripts/__tests__/intake-proxy.test.mjs:86</sub>
+- labels (auto-research) under the cap  <sub>scripts/__tests__/intake-proxy.test.mjs:49</sub>
+- accepts but withHOLDS the label at/over the cap (queued for owner approval)  <sub>scripts/__tests__/intake-proxy.test.mjs:53</sub>
+- rejects outright over the hard max  <sub>scripts/__tests__/intake-proxy.test.mjs:58</sub>
+- honors custom thresholds  <sub>scripts/__tests__/intake-proxy.test.mjs:62</sub>
+- derives the pair the Worker feeds intakeRateDecision  <sub>scripts/__tests__/intake-proxy.test.mjs:69</sub>
+- AUTO_CAP=0 queues EVERYTHING for approval rather than rejecting everything  <sub>scripts/__tests__/intake-proxy.test.mjs:72</sub>
+- falls back to the default rather than DISABLING the cap on a garbage value  <sub>scripts/__tests__/intake-proxy.test.mjs:81</sub>
+- mirrors the scaffolder's slugify  <sub>scripts/__tests__/intake-proxy.test.mjs:90</sub>
 
 **A guide's sources are primary ones, not a pile of aggregators.**
 
@@ -1872,27 +1876,28 @@ nothing ships.
 - omits budgetTarget when no budget answer is given  <sub>scripts/__tests__/scaffold-guide.test.mjs:144</sub>
 - seeds a valid Composer phase on every foldable-group section, and none on Plan/Days/Sources  <sub>scripts/__tests__/scaffold-guide.test.mjs:152</sub>
 - fills in the supplied answers  <sub>scripts/__tests__/scaffold-guide.test.mjs:166</sub>
-- leaves blanks honest (no invented placeholder text) when answers are missing  <sub>scripts/__tests__/scaffold-guide.test.mjs:188</sub>
-- maps each priority to its group with 1-indexed rank  <sub>scripts/__tests__/scaffold-guide.test.mjs:197</sub>
-- first priority to claim a group wins (Food before Shopping)  <sub>scripts/__tests__/scaffold-guide.test.mjs:204</sub>
-- returns empty for no priorities  <sub>scripts/__tests__/scaffold-guide.test.mjs:209</sub>
-- maps niche interest to Highlights  <sub>scripts/__tests__/scaffold-guide.test.mjs:213</sub>
-- maps every known priority label to a group  <sub>scripts/__tests__/scaffold-guide.test.mjs:217</sub>
-- applies rank to sections whose group matches a priority  <sub>scripts/__tests__/scaffold-guide.test.mjs:225</sub>
-- does not add rank to groups with no matching priority  <sub>scripts/__tests__/scaffold-guide.test.mjs:233</sub>
-- no priorities means no ranks anywhere  <sub>scripts/__tests__/scaffold-guide.test.mjs:239</sub>
-- extracts non-empty asks from answers  <sub>scripts/__tests__/scaffold-guide.test.mjs:246</sub>
-- omits empty/missing answers  <sub>scripts/__tests__/scaffold-guide.test.mjs:261</sub>
-- includes niche only when provided  <sub>scripts/__tests__/scaffold-guide.test.mjs:266</sub>
-- parses normal --flag value pairs  <sub>scripts/__tests__/scaffold-guide.test.mjs:275</sub>
-- a flag directly followed by another flag gets true, NOT the next flag's name as its value  <sub>scripts/__tests__/scaffold-guide.test.mjs:281</sub>
-- a trailing flag with nothing after it gets true, not undefined-as-a-string  <sub>scripts/__tests__/scaffold-guide.test.mjs:288</sub>
-- handles an all-flags-no-values argv without throwing  <sub>scripts/__tests__/scaffold-guide.test.mjs:294</sub>
-- extracts a bare, deliberately-capitalized code  <sub>scripts/__tests__/scaffold-guide.test.mjs:300</sub>
-- extracts a code mentioned inline, capitalized, among lowercase prose  <sub>scripts/__tests__/scaffold-guide.test.mjs:304</sub>
-- does NOT guess from a lowercase word — a false positive would be worse than no row  <sub>scripts/__tests__/scaffold-guide.test.mjs:309</sub>
-- does not guess from a bare city name with no code at all  <sub>scripts/__tests__/scaffold-guide.test.mjs:314</sub>
-- null for empty/absent input  <sub>scripts/__tests__/scaffold-guide.test.mjs:323</sub>
+- renders a supplied certainty inline for dates, anchor, and budget  <sub>scripts/__tests__/scaffold-guide.test.mjs:192</sub>
+- leaves blanks honest (no invented placeholder text) when answers are missing  <sub>scripts/__tests__/scaffold-guide.test.mjs:203</sub>
+- maps each priority to its group with 1-indexed rank  <sub>scripts/__tests__/scaffold-guide.test.mjs:212</sub>
+- first priority to claim a group wins (Food before Shopping)  <sub>scripts/__tests__/scaffold-guide.test.mjs:219</sub>
+- returns empty for no priorities  <sub>scripts/__tests__/scaffold-guide.test.mjs:224</sub>
+- maps niche interest to Highlights  <sub>scripts/__tests__/scaffold-guide.test.mjs:228</sub>
+- maps every known priority label to a group  <sub>scripts/__tests__/scaffold-guide.test.mjs:232</sub>
+- applies rank to sections whose group matches a priority  <sub>scripts/__tests__/scaffold-guide.test.mjs:240</sub>
+- does not add rank to groups with no matching priority  <sub>scripts/__tests__/scaffold-guide.test.mjs:248</sub>
+- no priorities means no ranks anywhere  <sub>scripts/__tests__/scaffold-guide.test.mjs:254</sub>
+- extracts non-empty asks from answers  <sub>scripts/__tests__/scaffold-guide.test.mjs:261</sub>
+- omits empty/missing answers  <sub>scripts/__tests__/scaffold-guide.test.mjs:276</sub>
+- includes niche only when provided  <sub>scripts/__tests__/scaffold-guide.test.mjs:281</sub>
+- parses normal --flag value pairs  <sub>scripts/__tests__/scaffold-guide.test.mjs:290</sub>
+- a flag directly followed by another flag gets true, NOT the next flag's name as its value  <sub>scripts/__tests__/scaffold-guide.test.mjs:296</sub>
+- a trailing flag with nothing after it gets true, not undefined-as-a-string  <sub>scripts/__tests__/scaffold-guide.test.mjs:303</sub>
+- handles an all-flags-no-values argv without throwing  <sub>scripts/__tests__/scaffold-guide.test.mjs:309</sub>
+- extracts a bare, deliberately-capitalized code  <sub>scripts/__tests__/scaffold-guide.test.mjs:315</sub>
+- extracts a code mentioned inline, capitalized, among lowercase prose  <sub>scripts/__tests__/scaffold-guide.test.mjs:319</sub>
+- does NOT guess from a lowercase word — a false positive would be worse than no row  <sub>scripts/__tests__/scaffold-guide.test.mjs:324</sub>
+- does not guess from a bare city name with no code at all  <sub>scripts/__tests__/scaffold-guide.test.mjs:329</sub>
+- null for empty/absent input  <sub>scripts/__tests__/scaffold-guide.test.mjs:338</sub>
 
 **A research run cannot be marked done while sources are missing.**
 

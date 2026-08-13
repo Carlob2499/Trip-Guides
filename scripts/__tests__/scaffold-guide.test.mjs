@@ -173,7 +173,7 @@ describe("buildIntakeMd", () => {
     expect(md).toContain("Who is this for / party:** Couple");
     expect(md).toContain("Number of travelers: 2");
     expect(md).toContain("2026-07-13 – 2026-07-20");
-    expect(md).toContain("Anchor event (the non-negotiable the trip is built around):** Roskilde Festival");
+    expect(md).toContain("Anchor event (assumed) — the non-negotiable the trip is built around:** Roskilde Festival");
     expect(md).toContain("1. Food");
     expect(md).toContain("2. Design");
     expect(md).toContain("3. Nature");
@@ -182,7 +182,22 @@ describe("buildIntakeMd", () => {
     expect(md).toContain("## Cover art — footage candidates");
     expect(md).toContain("no invented geography");
     expect(md).toContain("Niche interest: record shops");
-    expect(md).toContain("Per-day target (from form): $150/day");
+    expect(md).toContain("Per-day target (assumed, from form): $150/day");
+  });
+
+  // C1 (docs/PLAN_EVIDENCE_FIRST.md): dates/anchor/budget certainty renders inline. No certainty
+  // supplied defaults to "assumed" (asserted above); this pins that a REAL certainty answer
+  // renders too — the exact shape that makes the Japan case representable ("target: Oct 15",
+  // not a bare date silently read as locked).
+  it("renders a supplied certainty inline for dates, anchor, and budget", () => {
+    const md = buildIntakeMd({
+      country: "Japan", start: "2026-10-15", end: "2026-11-10", datesCertainty: "target",
+      anchor: "Wild Area — Sendai", anchorCertainty: "fixed",
+      budget: "Comfortable ($150–300/day)", budgetCertainty: "flexible",
+    });
+    expect(md).toContain("**Dates (target):** 2026-10-15 – 2026-11-10");
+    expect(md).toContain("Anchor event (fixed) — the non-negotiable the trip is built around:** Wild Area — Sendai");
+    expect(md).toContain("Per-day target (flexible, from form): Comfortable ($150–300/day)");
   });
 
   it("leaves blanks honest (no invented placeholder text) when answers are missing", () => {

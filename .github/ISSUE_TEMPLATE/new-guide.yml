@@ -34,6 +34,25 @@ body:
       placeholder: 2026-03-01 to 2026-03-08
     validations:
       required: false
+  - type: dropdown
+    id: dates-certainty
+    attributes:
+      label: Dates certainty
+      description: >-
+        How firm are these dates? fixed = booked/locked. target = the current best guess, still
+        being narrowed. flexible = could move meaningfully. unknown = genuinely undecided. none =
+        no dates yet at all. Leave as "assumed" if you're not sure which applies — research will
+        flag it rather than treat it as locked.
+      options:
+        - assumed
+        - fixed
+        - target
+        - flexible
+        - unknown
+        - none
+      default: 0
+    validations:
+      required: false
   - type: input
     id: departure-airport
     attributes:
@@ -56,6 +75,24 @@ body:
         pass verifies its date + venue against an official source FIRST. Include a source URL
         if you have one.
       placeholder: e.g. the festival, concert or match the trip is built around — with its official source URL
+    validations:
+      required: false
+  - type: dropdown
+    id: anchor-certainty
+    attributes:
+      label: Anchor event certainty
+      description: >-
+        How firm is the anchor event itself? fixed = officially confirmed (tickets bought, date
+        announced). target = expected but not yet officially confirmed. flexible / unknown as
+        above. none = no anchor event for this trip. Leave as "assumed" if unsure.
+      options:
+        - assumed
+        - fixed
+        - target
+        - flexible
+        - unknown
+        - none
+      default: 0
     validations:
       required: false
   - type: input
@@ -197,6 +234,23 @@ body:
         - "Mid-range ($75–150/day)"
         - "Comfortable ($150–300/day)"
         - "Luxury ($300+/day)"
+      default: 0
+    validations:
+      required: false
+  - type: dropdown
+    id: budget-certainty
+    attributes:
+      label: Budget certainty
+      description: >-
+        How firm is this budget target? fixed = a hard cap. target = a rough goal, could flex.
+        flexible / unknown / none as above. Leave as "assumed" if unsure.
+      options:
+        - assumed
+        - fixed
+        - target
+        - flexible
+        - unknown
+        - none
       default: 0
     validations:
       required: false

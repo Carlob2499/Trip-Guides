@@ -40,6 +40,10 @@
 *Drives: weather strip, holiday/closure checks, event lookups, seasonal warnings, pacing of day cards.*
 
 - Exact dates (start–end):
+- **Dates certainty:** fixed / target / flexible / unknown / none / assumed. *Say so explicitly
+  if the dates are still moving — a bare date silently reads as locked (this is the gap that let
+  a real trip ship with "Oct 15" recorded as fixed when the traveler was still choosing between
+  Oct 15 and Oct 22). Default to "assumed" if you're not sure which applies.*
 - Number of nights / number of cities:
 - **Departure airport** — even a guess helps (IATA code if you know it, e.g. EWR, JFK).
   *Drives the Atlas globe's route line from home to this trip (D14/ADR 0003) — recorded as
@@ -50,6 +54,8 @@
   on the trip. **Pass A verifies its date + venue against a T0 (official) source FIRST**, before
   any other research, and the itinerary is built around it. Capture what + dates + a source URL
   if known:*
+- **Anchor certainty:** fixed (officially confirmed) / target (expected, not yet confirmed) /
+  flexible / unknown / none (no anchor) / assumed.
 - Other fixed anchors (secondary non-negotiables, if any):
 - Pace preference: packed / balanced / slow
 - **Travel style: bucket-list must-sees / off-the-beaten-path / balanced.** *Drives how hard
@@ -78,6 +84,8 @@ Rank these from most to least important (drop any that don't apply):
 budget calculator emphasizes saving or comfort.*
 
 - Total budget, OR per-day target, OR "comfortable but not lavish":
+- **Budget certainty:** fixed (a hard cap) / target (a rough goal, could flex) / flexible /
+  unknown / none / assumed.
 - Accommodation style: hostel / mid-range / boutique / luxury
 - One category to SPLURGE on:
 - One category to SAVE on:

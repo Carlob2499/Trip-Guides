@@ -36,8 +36,12 @@ describe("renderIssueBody ↔ parseIssueBody round-trip", () => {
     const body = renderIssueBody({ country: "Japan" });
     expect(body).toContain("### Country\n\nJapan");
     expect(body).toContain("_No response_");
-    // An empty dropdown/text parses back to no key, not an empty-string key.
-    expect(answersFromForm(parseIssueBody(body))).toEqual({ country: "Japan" });
+    // An empty dropdown/text parses back to no key, not an empty-string key — except the three
+    // C1 certainty fields, which always default to "assumed" rather than staying undefined
+    // (docs/PLAN_EVIDENCE_FIRST.md packet C1: absent certainty is recorded, not silently missing).
+    expect(answersFromForm(parseIssueBody(body))).toEqual({
+      country: "Japan", datesCertainty: "assumed", anchorCertainty: "assumed", budgetCertainty: "assumed",
+    });
   });
 });
 

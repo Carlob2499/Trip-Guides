@@ -24,6 +24,15 @@ import { z } from "zod";
 export const NULLISH_VALUES = ["undecided", "— none —"];
 const NULLISH = new Set(NULLISH_VALUES);
 
+// C1 (docs/PLAN_EVIDENCE_FIRST.md): how firm a date-like or decision-like answer actually is.
+// "assumed" is deliberately the FIRST option (dropdown index 0 = its default) — unlike the
+// undecided/— none — nullish values above, a certainty field's default is a REAL, meaningful
+// value, not "unset": an intake with no certainty stated is treated as "assumed", not blank.
+// This is what makes the Japan case representable — "Oct 15 (target)" instead of a bare date
+// that silently reads as locked (guides-intake/japan.md's real, still-unresolved ambiguity;
+// see docs/PLAN_EVIDENCE_FIRST.md's case 2).
+export const CERTAINTY_OPTIONS = ["assumed", "fixed", "target", "flexible", "unknown", "none"];
+
 // The intake fields, in issue-form order. Each entry carries everything the three surfaces need:
 //   id          issue-form id AND the key in the raw parsed object
 //   label       the ### heading in the rendered issue body AND the issue-form label
@@ -47,6 +56,10 @@ export const FIELDS = [
     description: "Optional. Format \"YYYY-MM-DD to YYYY-MM-DD\" — drives the day-by-day cards and the weather/holiday window.",
     placeholder: "2026-03-01 to 2026-03-08" },
 
+  { id: "dates-certainty", label: "Dates certainty", kind: "dropdown", required: false, answerKey: "datesCertainty",
+    description: "How firm are these dates? fixed = booked/locked. target = the current best guess, still being narrowed. flexible = could move meaningfully. unknown = genuinely undecided. none = no dates yet at all. Leave as \"assumed\" if you're not sure which applies — research will flag it rather than treat it as locked.",
+    options: CERTAINTY_OPTIONS },
+
   { id: "departure-airport", label: "Departure airport", kind: "input", required: false, answerKey: "departureAirport",
     description: "Which airport you'll fly out of, if you have a guess — an IATA code is best (EWR, JFK), but a plain city/airport name works too. Drives the Atlas globe's route line from home to this trip (D14/ADR 0003); recorded as UNCONFIRMED until a real booking confirms it, so a guess here draws no line by itself.",
     placeholder: "e.g. EWR (Newark) — or \"probably JFK\" if you're not sure yet" },
@@ -54,6 +67,10 @@ export const FIELDS = [
   { id: "anchor", label: "Anchor event", kind: "input", required: false, answerKey: "anchor",
     description: "The one non-negotiable the trip is built around (a concert, a match, a festival, a wedding). This is the most perishable, most important fact on the trip — the research pass verifies its date + venue against an official source FIRST. Include a source URL if you have one.",
     placeholder: "e.g. Pokémon GO Wild Area — Mexico City, Nov 6–8 2026 (pokemongolive.com)" },
+
+  { id: "anchor-certainty", label: "Anchor event certainty", kind: "dropdown", required: false, answerKey: "anchorCertainty",
+    description: "How firm is the anchor event itself? fixed = officially confirmed (tickets bought, date announced). target = expected but not yet officially confirmed. flexible / unknown as above. none = no anchor event for this trip. Leave as \"assumed\" if unsure.",
+    options: CERTAINTY_OPTIONS },
 
   { id: "travelers", label: "Number of travelers", kind: "input", required: false, answerKey: "travelers",
     description: "Just the headcount. Mobility, dietary, and sensory needs go in Constraints below; anything else specific (solo/couple/family, ages) goes in Comments.",
@@ -96,6 +113,10 @@ export const FIELDS = [
   { id: "budget", label: "Budget", kind: "dropdown", required: false, answerKey: "budget",
     description: "Per-day spending target, all-in (lodging + food + activities).",
     options: ["undecided", "Shoestring (<$75/day)", "Mid-range ($75–150/day)", "Comfortable ($150–300/day)", "Luxury ($300+/day)"], nullish: "undecided" },
+
+  { id: "budget-certainty", label: "Budget certainty", kind: "dropdown", required: false, answerKey: "budgetCertainty",
+    description: "How firm is this budget target? fixed = a hard cap. target = a rough goal, could flex. flexible / unknown / none as above. Leave as \"assumed\" if unsure.",
+    options: CERTAINTY_OPTIONS },
 
   { id: "comments", label: "Comments", kind: "textarea", required: false, answerKey: "comments",
     description: "Anything the fields above don't capture — group makeup, a fixed anchor event, dealbreakers, etc. (Mobility/dietary/sensory needs belong in Constraints above, where they bind the research.)",
@@ -148,6 +169,15 @@ export function answersFromForm(raw) {
     .map((f) => raw[f.id])
     .filter(Boolean);
   if (priorities.length) a.priorities = priorities;
+
+  // C1: a certainty field left BLANK (old-format issue filed before this dropdown existed, or a
+  // hand-built CLI/test answers object) is not the same as a certainty field explicitly set to
+  // "assumed" — but both mean the same thing to research: treat this as provisional. The generic
+  // copy loop above only sets a key when the raw value is non-empty, so an absent certainty needs
+  // its own default here rather than silently staying undefined.
+  a.datesCertainty ??= "assumed";
+  a.anchorCertainty ??= "assumed";
+  a.budgetCertainty ??= "assumed";
   return a;
 }
 
@@ -159,8 +189,10 @@ export const IntakeAnswers = z.object({
   cities: z.string().optional(),
   start: z.string().optional(),
   end: z.string().optional(),
+  datesCertainty: z.enum(CERTAINTY_OPTIONS).optional(),
   departureAirport: z.string().optional(),
   anchor: z.string().optional(),
+  anchorCertainty: z.enum(CERTAINTY_OPTIONS).optional(),
   travelers: z.string().optional(),
   party: z.string().optional(),
   constraints: z.string().optional(),
@@ -170,6 +202,7 @@ export const IntakeAnswers = z.object({
   priorities: z.array(z.string()).optional(),
   niche: z.string().optional(),
   budget: z.string().optional(),
+  budgetCertainty: z.enum(CERTAINTY_OPTIONS).optional(),
   comments: z.string().optional(),
 }).loose();
 

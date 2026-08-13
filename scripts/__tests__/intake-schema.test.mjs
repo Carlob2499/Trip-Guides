@@ -11,7 +11,7 @@
 import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { FIELDS, parseIssueBody, answersFromForm, validateAnswers } from "../intake-schema.mjs";
+import { FIELDS, CERTAINTY_OPTIONS, parseIssueBody, answersFromForm, validateAnswers } from "../intake-schema.mjs";
 import { buildIntakeMd } from "../scaffold-guide.mjs";
 
 const FORM_PATH = fileURLToPath(new URL("../../.github/ISSUE_TEMPLATE/new-guide.yml", import.meta.url));
@@ -66,8 +66,10 @@ const FULL_BODY = [
   "### Country", "", "Portugal", "",
   "### City / cities", "", "Lisbon, Porto", "",
   "### Trip dates", "", "2026-07-08 to 2026-07-14", "",
+  "### Dates certainty", "", "target", "",
   "### Departure airport", "", "EWR (Newark)", "",
   "### Anchor event", "", "NOS Alive festival — Lisbon, Jul 9-11 2026", "",
+  "### Anchor event certainty", "", "fixed", "",
   "### Number of travelers", "", "3", "",
   "### Who's this for / party", "", "the Korea group (3 mid-20s, heavy walkers)", "",
   "### Traveler passport countries", "", "United States, United Kingdom", "",
@@ -78,7 +80,18 @@ const FULL_BODY = [
   "### Priority #3", "", "— none —", "",
   "### Niche interest", "", "_No response_", "",
   "### Budget", "", "Mid-range ($75–150/day)", "",
+  "### Budget certainty", "", "flexible", "",
   "### Comments", "", "one vegetarian",
+].join("\n");
+
+// The exact shape of a REAL old issue filed before C1 shipped these three dropdowns — no
+// certainty headings at all, not even blank ones. This is the compatibility case the plan's
+// own ACCEPTANCE names: "old-format issues still parse."
+const OLD_FORMAT_BODY = [
+  "### Country", "", "Portugal", "",
+  "### Trip dates", "", "2026-07-08 to 2026-07-14", "",
+  "### Anchor event", "", "NOS Alive festival — Lisbon, Jul 9-11 2026", "",
+  "### Budget", "", "Mid-range ($75–150/day)", "",
 ].join("\n");
 
 describe("parseIssueBody + answersFromForm", () => {
@@ -121,6 +134,40 @@ describe("parseIssueBody + answersFromForm", () => {
   });
 });
 
+// C1 (docs/PLAN_EVIDENCE_FIRST.md): certainty states. Round-trips each certainty value through
+// the real parser, and confirms an intake with none of the three new headings at all — a real
+// pre-C1 issue — still parses and defaults every certainty to "assumed" rather than throwing or
+// leaving the key undefined (the plan's own ACCEPTANCE: "old-format issues still parse").
+describe("certainty states (C1)", () => {
+  const answers = answersFromForm(parseIssueBody(FULL_BODY));
+
+  it("round-trips an explicitly selected certainty for dates, anchor, and budget", () => {
+    expect(answers.datesCertainty).toBe("target");
+    expect(answers.anchorCertainty).toBe("fixed");
+    expect(answers.budgetCertainty).toBe("flexible");
+  });
+
+  it("every CERTAINTY_OPTIONS value round-trips through the parser unchanged", () => {
+    for (const value of CERTAINTY_OPTIONS) {
+      const body = `### Country\n\nX\n\n### Dates certainty\n\n${value}`;
+      expect(answersFromForm(parseIssueBody(body)).datesCertainty).toBe(value);
+    }
+  });
+
+  it("an old-format issue with NO certainty headings still parses and defaults to \"assumed\"", () => {
+    const old = answersFromForm(parseIssueBody(OLD_FORMAT_BODY));
+    expect(old.country).toBe("Portugal"); // the rest of the old-format issue still parses fine
+    expect(old.datesCertainty).toBe("assumed");
+    expect(old.anchorCertainty).toBe("assumed");
+    expect(old.budgetCertainty).toBe("assumed");
+  });
+
+  it("validates: a certainty answer must be one of CERTAINTY_OPTIONS", () => {
+    expect(validateAnswers({ country: "X", datesCertainty: "target" }).ok).toBe(true);
+    expect(validateAnswers({ country: "X", datesCertainty: "definitely" }).ok).toBe(false);
+  });
+});
+
 describe("intake doc surfaces every captured field", () => {
   // Guards the third surface: a field captured by the parser but silently missing from the
   // generated intake doc would be data the human never sees.
@@ -128,7 +175,8 @@ describe("intake doc surfaces every captured field", () => {
   const md = buildIntakeMd(answers);
   for (const val of ["Portugal", "Lisbon, Porto", "2026-07-08", "EWR (Newark)", "NOS Alive", "3",
     "the Korea group", "United States, United Kingdom", "balanced", "Off-the-beaten-path",
-    "Food & dining", "Culture / history", "Mid-range ($75–150/day)", "one vegetarian"]) {
+    "Food & dining", "Culture / history", "Mid-range ($75–150/day)", "one vegetarian",
+    "Dates (target)", "Anchor event (fixed)", "Per-day target (flexible, from form)"]) {
     it(`renders "${val}"`, () => expect(md).toContain(val));
   }
 });

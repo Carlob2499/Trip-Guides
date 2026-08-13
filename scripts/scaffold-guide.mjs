@@ -226,11 +226,11 @@ export function buildIntakeMd(answers = {}) {
 - **Traveler passport countries (drives visa & entry research):** ${answers.passportCountries || ""}  *(a party can mix — each named country gets its own researched entry row, schema-required source+date; the Trip Kit shows a dropdown so each traveler picks their own)*
 
 ## 2. Trip Shape
-- Exact dates (start–end): ${[answers.start, answers.end].filter(Boolean).join(" – ")}
+- **Dates (${answers.datesCertainty || "assumed"}):** ${[answers.start, answers.end].filter(Boolean).join(" – ")}
 - Cities: ${answers.cities || ""}
 - Number of nights / cities:
 - **Departure airport (drives the Atlas globe's route line, D14/ADR 0003):** ${answers.departureAirport || ""}  *(recorded UNCONFIRMED in facts.json until a real booking confirms it — no line draws off a guess)*
-- **Anchor event (the non-negotiable the trip is built around):** ${answers.anchor || ""}  *(VERIFY this first, against a T0 source — dates + venue — before any other research)*
+- **Anchor event (${answers.anchorCertainty || "assumed"}) — the non-negotiable the trip is built around:** ${answers.anchor || ""}  *(VERIFY this first, against a T0 source — dates + venue — before any other research)*
 - Pace preference: ${answers.pace || "packed / balanced / slow"}
 
 ## 3. Priorities — RANK them
@@ -242,7 +242,7 @@ Top 3, in order:
 - **Travel style:** ${answers.travelStyle || "bucket-list must-sees / off-the-beaten-path / balanced"}  *(→ drives Pass B's aggressiveness on crowd-avoidance + novel picks)*
 
 ## 4. Budget Reality
-- Per-day target (from form): ${answers.budget || ""}
+- Per-day target (${answers.budgetCertainty || "assumed"}, from form): ${answers.budget || ""}
 - Accommodation style: hostel / mid-range / boutique / luxury
 - Splurge on: / Save on:
 
