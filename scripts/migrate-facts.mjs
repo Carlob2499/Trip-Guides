@@ -66,8 +66,10 @@ export function normalizeValue(value) {
   return value.replace(/[.,]+$/, "");
 }
 
-// Prose-ish fields that may carry a price. Mirrors the fields the voice gate scans.
-const TEXT_FIELDS = ["body", "intro", "why", "how", "crowd_tip", "note", "tip"];
+// Prose-ish fields that may carry a price. Mirrors the fields the voice gate scans. Exported
+// (B4, docs/PLAN_EVIDENCE_FIRST.md) so fact-usage.mjs scans the SAME fields when it looks for
+// raw money mentions with no {{fact:id}} token — one list, not two that can drift apart.
+export const TEXT_FIELDS = ["body", "intro", "why", "how", "crowd_tip", "note", "tip"];
 
 /** kebab id, uniquified. The VALUE is always kept and the label truncated around it — an id
     like `transit-passes-589-dkk` is greppable; `transit-passes-which-one-to-buy-7` is not. */

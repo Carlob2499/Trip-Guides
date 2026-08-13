@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1896 checks · 1896 carry a stated promise · 162 files
+1905 checks · 1905 carry a stated promise · 163 files
 
 ## Can everyone read it
 
@@ -2044,6 +2044,18 @@ nothing ships.
 - both package.json files still declare an esbuild version/range at all  <sub>scripts/__tests__/esbuild-pin.test.mjs:27</sub>
 - the pin is a same-major-line version as astro's declared minimum (0.x, not a different major)  <sub>scripts/__tests__/esbuild-pin.test.mjs:32</sub>
 - the pin's minor version is not more than one ahead of astro's declared minimum minor  <sub>scripts/__tests__/esbuild-pin.test.mjs:39</sub>
+
+**Changing a fact tells you every day/section that depends on it; a sourced**
+
+- locates a token reference inside a `days` section, capturing file/section/day  <sub>scripts/__tests__/fact-usage.test.mjs:35</sub>
+- locates a token reference inside a non-days section, capturing the item name instead of a day  <sub>scripts/__tests__/fact-usage.test.mjs:56</sub>
+- a fact referenced from TWO different files/sections gets both locations  <sub>scripts/__tests__/fact-usage.test.mjs:77</sub>
+- a fact defined but never referenced anywhere has no usage entry at all  <sub>scripts/__tests__/fact-usage.test.mjs:91</sub>
+- finds a sourced, untokenized money mention as a candidate  <sub>scripts/__tests__/fact-usage.test.mjs:103</sub>
+- does NOT flag a money mention already inside a {{fact:id}} token as a candidate  <sub>scripts/__tests__/fact-usage.test.mjs:114</sub>
+- does NOT flag a money mention in a unit with no source_url/verified_on (not migratable)  <sub>scripts/__tests__/fact-usage.test.mjs:126</sub>
+- does NOT scan a Sources list as a candidate source (mirrors migrate-facts.mjs's isReferenceUnit)  <sub>scripts/__tests__/fact-usage.test.mjs:135</sub>
+- the ¥11,410 figure is referenced from at least two different group files  <sub>scripts/__tests__/fact-usage.test.mjs:146</sub>
 
 **Code checks run over the whole repository, with nothing quietly excluded.**
 
