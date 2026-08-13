@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1941 checks · 1941 carry a stated promise · 164 files
+1958 checks · 1958 carry a stated promise · 165 files
 
 ## Can everyone read it
 
@@ -2111,6 +2111,26 @@ nothing ships.
 - keeps the sky/water hue when nothing else clears the subject threshold (open ocean — honest, not forced)  <sub>scripts/__tests__/extract-palette.test.mjs:74</sub>
 - finds a passing lightness for a saturated hue, closest to the requested l0  <sub>scripts/__tests__/extract-palette.test.mjs:83</sub>
 - the picked colour actually passes the ≥3.0:1 floor on both grounds  <sub>scripts/__tests__/extract-palette.test.mjs:90</sub>
+
+**Destination config obeys the same fact discipline as facts.json — no URL**
+
+- accepts a confirmed pointer with a verified_on date  <sub>scripts/__tests__/destination-schema.test.mjs:18</sub>
+- rejects a URL field with no verified_on — the ACCEPTANCE rule  <sub>scripts/__tests__/destination-schema.test.mjs:23</sub>
+- rejects a malformed date  <sub>scripts/__tests__/destination-schema.test.mjs:28</sub>
+- rejects a non-URL string  <sub>scripts/__tests__/destination-schema.test.mjs:33</sub>
+- defaults state to 'confirmed' when omitted  <sub>scripts/__tests__/destination-schema.test.mjs:38</sub>
+- accepts an explicit 'unconfirmed' state — a URL attempted but not fetched successfully  <sub>scripts/__tests__/destination-schema.test.mjs:43</sub>
+- accepts the minimum viable config — slug + one language, everything else defaulted/absent  <sub>scripts/__tests__/destination-schema.test.mjs:50</sub>
+- rejects a missing slug or empty languages array  <sub>scripts/__tests__/destination-schema.test.mjs:61</sub>
+- rejects a non-kebab-case slug  <sub>scripts/__tests__/destination-schema.test.mjs:66</sub>
+- rejects an unknown top-level field (.strict())  <sub>scripts/__tests__/destination-schema.test.mjs:70</sub>
+- propagates the URL-needs-verified_on rule through nested transitAuthorities/gtfsPortals/seasonalSources  <sub>scripts/__tests__/destination-schema.test.mjs:75</sub>
+- returns { ok: true, value } on success  <sub>scripts/__tests__/destination-schema.test.mjs:86</sub>
+- returns { ok: false, error } naming the field on failure  <sub>scripts/__tests__/destination-schema.test.mjs:92</sub>
+- all three seeds validate against the schema  <sub>scripts/__tests__/destination-schema.test.mjs:102</sub>
+- the Japan seed carries every field the ACCEPTANCE line names  <sub>scripts/__tests__/destination-schema.test.mjs:110</sub>
+- every URL-bearing field in every seed has a verified_on (re-checks the real files, not just the schema)  <sub>scripts/__tests__/destination-schema.test.mjs:119</sub>
+- the Japan travel advisory is honestly marked unconfirmed (matches the guide's own bot-gated note)  <sub>scripts/__tests__/destination-schema.test.mjs:135</sub>
 
 **Every guide has its own shared-budget room, and a swap leaves a trail.**
 

@@ -1,0 +1,46 @@
+{
+  "slug": "korea",
+  "languages": ["ko"],
+  "t0Domains": [
+    "go.kr",
+    "or.kr",
+    "visitkorea.or.kr",
+    "visitseoul.net",
+    "e-arrivalcard.go.kr",
+    "khs.go.kr"
+  ],
+  "travelAdvisory": {
+    "url": "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/south-korea-travel-advisory.html",
+    "label": "US State Dept — South Korea travel advisory (Level 1, Exercise Normal Precautions, as last shipped in the Korea guide)",
+    "verified_on": "2026-07-18",
+    "state": "confirmed"
+  },
+  "transitAuthorities": [
+    {
+      "name": "Incheon International Airport",
+      "url": {
+        "url": "https://www.airport.kr/ap/en/index.do",
+        "verified_on": "2026-07-07",
+        "state": "confirmed"
+      }
+    },
+    {
+      "name": "Seoul Metro",
+      "url": {
+        "url": "https://www.seoulmetro.co.kr/en/",
+        "verified_on": "2026-07-30",
+        "state": "confirmed"
+      }
+    },
+    {
+      "name": "Korail (KTX / national rail)",
+      "url": {
+        "url": "https://www.korail.com/global/eng",
+        "verified_on": "2026-06-28",
+        "state": "confirmed"
+      }
+    }
+  ],
+  "gtfsPortals": [],
+  "seasonalSources": []
+}

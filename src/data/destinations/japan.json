@@ -1,0 +1,70 @@
+{
+  "slug": "japan",
+  "languages": ["ja"],
+  "t0Domains": [
+    "go.jp",
+    "mlit.go.jp",
+    "mofa.go.jp",
+    "customs.go.jp",
+    "japan.travel",
+    "jreast.co.jp",
+    "jrkyushu.co.jp",
+    "jrhokkaido.co.jp"
+  ],
+  "travelAdvisory": {
+    "url": "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/japan-travel-advisory.html",
+    "label": "US State Dept — Japan travel advisory (same URL pattern as the Korea guide's shipped advisory.source_url)",
+    "verified_on": "2026-08-13",
+    "state": "unconfirmed"
+  },
+  "transitAuthorities": [
+    {
+      "name": "JR East",
+      "url": {
+        "url": "https://www.jreast.co.jp/e/",
+        "verified_on": "2026-07-29",
+        "state": "confirmed"
+      }
+    },
+    {
+      "name": "JR Kyushu",
+      "url": {
+        "url": "https://www.jrkyushu.co.jp/english/railpass/railpass.html",
+        "label": "JR Kyushu Rail Pass",
+        "verified_on": "2026-07-29",
+        "state": "confirmed"
+      }
+    },
+    {
+      "name": "JR Hokkaido",
+      "url": {
+        "url": "https://www.jrhokkaido.co.jp/global/english/travel/tour-train/tour-train04.html",
+        "label": "JR Hokkaido — scenic tour trains",
+        "verified_on": "2026-07-29",
+        "state": "confirmed"
+      }
+    }
+  ],
+  "gtfsPortals": [
+    {
+      "url": "https://www.odpt.org/en/",
+      "label": "Public Transportation Open Data Center (ODPT) — national aggregator; JR East publishes GTFS/GTFS-RT through open-data initiatives, not one single canonical feed URL",
+      "verified_on": "2026-08-13",
+      "state": "confirmed"
+    }
+  ],
+  "seasonalSources": [
+    {
+      "url": "https://n-kishou.com/corp/news-contents/autumn/?lang=en",
+      "label": "Japan Meteorological Corporation (JMC) — autumn foliage (koyo) forecast; first forecast publishes ~mid-September, updated through November",
+      "verified_on": "2026-08-13",
+      "state": "confirmed"
+    }
+  ],
+  "taxFreeRules": {
+    "url": "https://www.mlit.go.jp/kankocho/tax-free/page01_000001_00028.html",
+    "label": "Japan Tourism Agency — tax-free system change (instant-discount to refund-at-departure, effective Nov 1 2026)",
+    "verified_on": "2026-07-29",
+    "state": "confirmed"
+  }
+}
