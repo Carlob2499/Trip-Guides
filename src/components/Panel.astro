@@ -61,6 +61,12 @@ const Heading = level === 3 ? "h3" : "h2";
 const slug = String(id).replace(/[^A-Za-z0-9_-]+/g, "-");
 const bodyId = `pnl-body-${slug}`;
 const titleId = `pnl-title-${slug}`;
+/* A bare <section> with an accessible name gets an IMPLICIT role="region" below — a landmark.
+   The enclosing tab group is already a labelled region of its own, and a group whose only
+   content is one identically-titled Panel produces two indistinguishable "region" landmarks
+   (found: Japan's Etiquette & language tab, axe landmark-unique). The explicit role="group"
+   on the section isn't a landmark, so it can't collide with any ancestor's name — a Panel is
+   a titled content cluster, not a page-level navigation target. */
 ---
 
 <section
@@ -74,6 +80,7 @@ const titleId = `pnl-title-${slug}`;
   data-panel-full={fullWidth ? "1" : null}
   data-collapsed={collapsed ? "1" : null}
   aria-labelledby={titleId}
+  role="group"
 >
   <header class="pnl-head">
     <button class="pnl-grip" type="button" data-panel-grip aria-label={`Move ${title}. Use arrow keys to reorder.`}>
