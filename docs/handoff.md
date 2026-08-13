@@ -22,27 +22,39 @@
   (presentation/motion) · `docs/standards/guide-rubric.md` (quality bar) ·
   `docs/evidence/competitive-landscape.md` (market parity reference) ·
   **`docs/PLAN_DESIGN_RECONCILIATION.md`** is the live work order for design/theme work — its
-  §A/§B/§C1 are ALL DONE now. §C is at §C3/§C4/§C5 (print preview, project sync, final polish
-  walk), see below. `docs/archive/PLAN_ATLAS_MIGRATION.md` is fully ticked — history only.
+  §A/§B/§C1/§C3 are ALL DONE now. §C is at §C4/§C5 (project sync, final polish walk), see below.
+  `docs/archive/PLAN_ATLAS_MIGRATION.md` is fully ticked — history only.
 
-## Snapshot (2026-08-13 — two parallel arcs landed: §C1 drift paydown, and PLAN_EVIDENCE_FIRST end to end)
+## Snapshot (2026-08-13g — two arcs closed: §C3 print preview shipped, PLAN_EVIDENCE_FIRST done)
 
-Two independent workstreams closed the same day. Ship-loop-clean on both: 2006 vitest + 1 todo,
-full `a11y.spec.ts` suite, build/lint/typecheck/drift green.
+### §C3 — the budget sheet previews before it prints (issue #47)
 
-### §C1 — drift-baseline paydown CLOSED (153 → 29 real violations)
+Ship-loop-clean; rewritten 9-test `budget-sheet.spec.ts`. Built against the ACTUAL GitHub issue
+(fetched via `issue_read` first) — the plan doc's `[data-fold]`/`[data-noprint]` language for this
+row matched nothing in the ticket or the markup, so it was ignored rather than built to.
 
-Finishes the workstream this arc opened. The four rows left are structurally forced-literal, not a
-queue; `painted-atlas.css`'s 19 are art, not chrome — a whole-file exemption under
-`docs/reference/motion.md`. Two real bugs surfaced beside the mechanical pass: `sights.css`'s
-`.sight-media-cap` was a pre-R5 stale literal (the OLD `--card` value) → `var(--ink)`;
-`anchors.css`'s `.ring-fill` had a dead stale fallback → deleted. Five more Tier-2 gate bugs fixed
-in `scripts/drift-real.mjs` (regex backtracking defeating its own `(?!none)`, Astro `{/* … */}`
-comments unrecognised, a category allowlist gap, `@keyframes` extraction not stopping at `}`).
+"Save summary as PDF" now opens a visible preview (`.bsp-modal`, reusing `.share-modal`'s pattern
+and the shared `trapFocus`), built from the SAME `.bsheet` that later prints; only the preview's
+Print button calls `window.print()`, synchronously in its own click, so the popup-blocker
+constraint still holds. **The CSS restructure is the more interesting part:** `.bs-*` styling used
+to live entirely inside `@media print`, so nothing could show it on screen even at
+`display:block`. Now unconditional — screen and paper render identically because it is one
+document. The Playwright suite encoded the pre-fix behaviour as correct and needed deliberate
+rewriting, not just new assertions.
 
 ### PLAN_EVIDENCE_FIRST — complete, H1 at 12/12
 
-A1 · B1–B4 · C1–C2 · D1–D3 · E1–E3 · F1–F2 · H1, each with a STATUS block in the plan.
+A1 · B1–B4 · C1–C2 · D1–D3 · E1–E3 · F1–F2 · H1, each with a STATUS block in the plan. Two
+rulings shaped it, both CONTEXT.md Decisions: **detection is decoupled from
+`risk`/`evidence`/`tier`** (a corpus audit found ZERO rows carry any of them, so the gates as
+specified would have fired on nothing, forever), and **warn-first** — findings BLOCK on drafts,
+advise on published, making `graduate-guide.yml` the publication chokepoint.
+
+**Real defects found on live guides, not fixtures:** five malformed values were reaching readers
+(the swallowed characters were sentence punctuation, so the repair MOVED them into the prose);
+`us`'s `budget-daily-costs-300` cites a page that does not contain 300 while three siblings from
+that page verify; a real **Coconino National Forest closure order** (Jul 13–Sep 30 2026) covers
+two trails that guide recommends, with no fact row to notice a rescission.
 
 **The finding that shaped all of Phase E.** E1/E2/E3 were specified around `risk`/`evidence`/
 `tier` — and a corpus audit found **zero rows carry any of them** (korea 83, denmark 27, us 10,
@@ -67,20 +79,16 @@ vocabulary only. Case 11 ships as an ADVISORY by the MANIFEST's own instruction;
 half is gated and inert, and the blocker there is structural, not credential-shaped.
 ## Open items
 
-- **§C3** — the #47 print-preview shell (budget sheet prints straight to the OS dialog, no
-  preview).
-- **§C4** — sync corrected tokens back to the two Claude Design projects — must go LAST, after
-  everything else lands, so the projects receive the final state.
-- **§C5** — final 375/744/1440 × day/night × keyboard-only polish walk across all four guides.
+- **§C4** — sync corrected tokens back to the two Claude Design projects; goes LAST so they receive the final state.
+- **§C5** — final 375/744/1440 × day/night × keyboard-only polish walk, all four guides. Last row
+  in the design-reconciliation plan.
 - **§B4 blocked on project access**, not tool access (`DesignSync` works from a main session;
-  this login's `list_projects` just doesn't show the right one) — don't retry until it does.
-- **Held, not open:** the route-order interactive picker's home (Tools station vs. itinerary
-  mount) — needs both surfaces reviewed together, CONTEXT.md Decisions.
-- The gap block and the "no cover" plate have still never rendered on a real guide, by design
-  (CONTEXT.md §H3) — their proof-of-life is an isolated test fixture, not a staged guide edit.
+  this login's `list_projects` doesn't show the right one) — don't retry until it does.
+- **Held, not open:** the route-order picker's home (Tools station vs. itinerary mount) — needs both surfaces reviewed together.
+- The gap block and "no cover" plate have never rendered on a real guide, by design (CONTEXT.md
+  §H3) — proof-of-life is an isolated test fixture, not a staged guide edit.
 - Airports for Sedona/Japan — record them WHEN flights get booked. No fact yet; don't invent.
-- `/about/` and `/new/` are not in the SW precache shell. Cover overlay does not trap focus.
-- Cloudflare dashboard Git integration still failing 0s builds on every push.
+- `/about/` + `/new/` not in the SW precache shell; cover overlay does not trap focus; Cloudflare dashboard Git integration still failing 0s builds.
 - Korea 03: critic flagged a swapped 명동 label on the Gyeongbokgung map point → file its issue.
 - No guide uses a direct royalty-free `sights[].img.src` yet — capability live, unexercised.
 
@@ -89,31 +97,23 @@ half is gated and inert, and the blocker there is structural, not credential-sha
 **`docs/PLAN_EVIDENCE_FIRST.md` is fully executed.** Every packet has a STATUS block in the plan
 recording what shipped and, where reality contradicted the spec, what changed and why.
 
-**§C1 is closed — the drift-baseline paydown workstream this arc opened is done.** The remaining
-29 real violations are all in the four already-decided forced-literal files; there is no more
-file-by-file queue for this workstream. The next open work is §C3 (print preview), a real
-user-facing feature rather than more token hygiene.
+**§A/§B/§C1/§C3 are all closed — only §C4 (project sync) and §C5 (polish walk) remain in the
+design-reconciliation plan.** §C4 goes last by its own row's design (it pushes the FINAL state to
+the projects), so §C5 is the more useful next move despite the numbering.
 
-**A pattern worth carrying into §C3/§C5:** every drift-paydown session this arc found real bugs
-(contrast failures, stale literals, gate false-positives) sitting beside the mechanical fix, not
-in a separate audit. The same discipline — read the whole thing, not just the flagged line —
-should carry into the print-preview build and the final polish walk.
+**A pattern worth carrying into §C5:** every workstream this arc found real bugs by reading the
+whole surface, not just what a mechanical pass flagged — contrast bugs in `divergences.css`, a
+stale token in `sights.css`, a CSS scoping bug in `budget-sheet.css`.
 
-**Still needs you — four items, none of them plan packets:**
-1. **The batched-checkpoint bug** (case 8, systemic). `pipeline.mjs` checkpoints are written in
-   one burst at the end of a run, so no guide's state file can evidence that Pass A and Pass B
-   ran independently — the property the whole two-pass design rests on. Now DETECTED but not
-   FIXED; the fix belongs in how research-pass writes checkpoints.
-2. **Two `us` content findings** for a guide-author pass: the unsupported `$300` lodging figure,
-   and three rows sharing the byte-identical claim `Budget & daily costs → Lodging, per night
-   (Sedona, 3★ average)` with three different values (defect D4 reproducing on `us`).
-3. **Live Routes verification** — needs legs structured as origin→destination pairs against the
-   guide's `map` points before a key can be useful.
-4. `skill-evals.yml`'s live-agent gate could not be run locally at any point this session; the
-   D2 skill rewrite needs one real CI run to confirm it still passes.
+**Still needs you — four pipeline items, none of them plan packets:** (1) **the
+batched-checkpoint bug** — `pipeline.mjs` writes checkpoints in one burst at the end, so no
+guide's state file can evidence Pass A/B independence, the property the two-pass design rests on;
+DETECTED but not FIXED. (2) Two `us` content findings for a guide-author pass: the unsupported
+`$300` lodging figure, and three rows sharing one byte-identical claim with three different values
+(D4 reproducing on `us`). (3) Live Routes verification needs legs structured as origin→destination
+pairs against the guide's `map` points. (4) `skill-evals.yml`'s live-agent gate could not be run
+locally at any point — the D2 skill rewrite needs one real CI run to confirm it passes.
 
-**Recommended next step — two arcs, pick by appetite.** Design: **§C3**, the print-preview
-shell for issue #47, a real user-facing feature rather than more token hygiene. Pipeline: **the
-batched-checkpoint fix**, which is small and makes an architectural guarantee true rather than
-merely observable. `main` is kept in sync after every ship-loop-clean commit (standing
-instruction) — no separate merge step at session end.
+**Recommended next step — two arcs.** Design: **§C5**, the final polish walk (§C4 goes last by
+its own row's design). Pipeline: **the batched-checkpoint fix** — small, and it makes an
+architectural guarantee true rather than merely observable.

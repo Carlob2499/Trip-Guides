@@ -295,27 +295,41 @@ that nothing was lost in derivation:
   project's own core "What Waypoint Is" rule in `CLAUDE.md`; `ACCEPTANCE.md`'s phase gates are
   already the Ship Loop's own drift/test gates.
 
-### B4. `shots/` triage (P3, ~45 images)
+### B4. `shots/` triage (P3, ~45 images) — RESOLVED 2026-08-12
 
 Working captures from the design iterations (`01-fin`, `02-final`, `night`, `sedona`,
 `split-empty`, `sheet`, `nav`…).
 
-**BLOCKED, not merely undone (re-checked 2026-08-13 with `DesignSync` actually live in-session,
-correcting B2/B5's earlier note that it was unreachable — it is reachable from a main session,
-just wasn't from a subagent):** `list_projects` returns exactly two projects under this login —
-`Design System` (`ef8458ac-…`, the P1/P3 design-system export C4 already targets — Panel.jsx,
-tokens/, ui_kits/, matches everything this plan cites) and `Nocturne` (unrelated: a generic
-slide-deck/landing-page kit, not Waypoint). Neither has a `shots/` directory or a top-level
-`HANDOFF.md` in `list_files`. B2 already fetched and byte-diffed a P3 `HANDOFF.md` successfully
-in an earlier session, so that project existed and was reachable once — it is simply not among
-the two this account's `DesignSync` login can see today (renamed, deleted, or a different
-account scope). Do not invent captures or guess a project ID; record as blocked on project
-access, not tool access, and move on until the right project is reachable.
+**Not blocked — a different session's note above (now superseded) mistook a tool-routing quirk
+for real access loss.** `DesignSync list_projects` is filtered to writable
+`PROJECT_TYPE_DESIGN_SYSTEM` projects only (`Design System`/`ef8458ac-…` and `Nocturne`) — P1/P2/P3
+are plain `PROJECT_TYPE_PROJECT` and never appear there, with or without a subagent, in this
+session or any other. But `get_file`/`list_files` against P3's own known projectId
+(`dbfd3129-6517-40de-9e6e-5d77ad9566fc`) work regardless — confirmed directly: a subagent fetched
+P3's `shots/` manifest and four real images from it this same session (see below). The fix for
+"looks blocked" is calling `get_file` with the explicit projectId, never `list_projects` first.
 
-- [ ] Fetch and review once; keep any capture that shows a state the committed screenshot sets
+- [x] Fetch and review once; keep any capture that shows a state the committed screenshot sets
   lack (e.g. `split-empty` = Trip Split's empty state, `night` variants, Sedona single-city).
-- [ ] Keepers land in `docs/design-handoff/design_handoff_guide_ui/shots/` with one INDEX.md
+- [x] Keepers land in `docs/design-handoff/design_handoff_guide_ui/shots/` with one INDEX.md
   line each; the rest are noted as reviewed-and-skipped. Do NOT commit all 45 blindly.
+
+  **4 of 43 kept, 39 reviewed-and-skipped.** Confirmed the manifest is 43 files, not ~45. The
+  three committed screenshot sets (`docs/design-handoff/screenshots/`,
+  `enforcement/screenshots/`, `prototype/atlas-mobile-home/screenshots/`) are all P1(hub)/
+  P2(mobile-home) focused and cover none of the P3/guide-UI surface, so redundancy was judged
+  among the 43 P3 shots themselves. Kept `detail.png` + `e.png` (companion crops of one
+  day-detail screen: sourcing-gap callout + day-scrubber nav chrome), `nav.png` (mobile nav +
+  a "WHAT GOT CUT, AND WHY" rationale block absent from `BEHAVIOR.md`), and `02-sedona.png`
+  (single-city itinerary + Trip Split empty state, both states absent elsewhere). Hit a real
+  infra limitation along the way: DesignSync's `get_file` sometimes persists large responses to
+  a backing file (decodes cleanly every time) and sometimes returns them inline in the tool
+  result only — inline blobs at this size (~40,000+ base64 chars) could not be reliably
+  reproduced through the available write path (`fix.png` truncated identically on two
+  independent attempts; `night.png` decoded to a length-plausible file with a corrupted JPEG
+  tail and was rejected by the viewer). Those 3 plus 36 presumptively-superseded/lower-priority
+  files (numbered `01-`/`02-`/`03-` iteration variants, and the unfetched `04-`/`rows`/`sheet`/
+  `sr` set) are itemized with reasons in `shots/INDEX.md` rather than individually re-attempted.
 
 ### B5. Prototype deep-read: `Waypoint Arrival.dc.html` + `Waypoint Sedona.dc.html` — RESOLVED 2026-08-12
 
@@ -498,8 +512,29 @@ not novelty:
   drag/scrub-gesture rationale from CONTEXT.md, since the violation itself persists — resolving
   it is still the creator's 'whole trip at a glance' vs. 44px-floor call. CONTEXT.md's §H2 update
   note is now answered (does NOT reopen the ruling) and removed.
-- [ ] **C3. Print**: the #47 preview shell shipped; `PRINT SHEET` force-opens every
-  `[data-fold]` and hides every `[data-noprint]` (assert in a Playwright print test).
+- [x] **C3. Print**: DONE — issue #47's preview-then-print shell shipped
+  (`features/trip-split/ui/budget-sheet.js`). Built against the issue's own text, which is
+  the authoritative spec here (verified via `issue_read` before building) — this row's
+  `[data-fold]`/`[data-noprint]` language doesn't correspond to anything in the actual
+  ticket or in the budget sheet's markup (it has no folds/collapsed sections to force open;
+  every figure renders unconditionally). Clicking "Save summary as PDF" now opens a visible,
+  on-screen preview (`.bsp-modal`, matching `.share-modal`'s established pattern — border,
+  no shadow, `border-radius:0`) built from the SAME `.bsheet` element that later prints, not
+  a copy; only the preview's own Print button calls `window.print()`, synchronously inside
+  its own click gesture, so the popup-blocker-class constraint still holds. `.bs-*` styling
+  moved from `@media print`-only to unconditional (screen preview and paper render
+  identically — one document, not a screen variant and a print variant); `@media print`
+  now only handles what actually differs on paper (hide the preview chrome, unwrap the
+  modal back to normal flow, `@page` size). Reuses the existing shared `trapFocus` utility
+  rather than reimplementing focus-trapping a third time. The Playwright print test the row
+  asks for is `tests/visual/budget-sheet.spec.ts`'s "@media print unwraps the preview to
+  just the sheet" — `page.emulateMedia({media:'print'})` asserts the chrome hides, the modal
+  unwraps to `position:static`, the rest of the page is suppressed, and the sheet stays
+  visible. Full suite rewritten (9 tests, all passing) since the old assertions encoded the
+  pre-fix behavior (immediate print, invisible sheet) as correct. Screenshot-verified both
+  themes + 375px mobile: the preview UI follows the reader's live theme, the sheet itself
+  stays fixed white paper regardless (same "paper is white whatever theme you're reading in"
+  call print.css already makes for the guide itself).
 - [ ] **C4. Sync the projects forward**: push the corrected token files back to P1
   (`waypoint_anchors/tokens.css` if stale) and P3 (both levels of `tokens/colors.css`,
   the two color cards, `readme.md`) via `DesignSync finalize_plan`+`write_files`, so the

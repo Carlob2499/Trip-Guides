@@ -3,17 +3,30 @@
    ../../src/features/trip-split/model/summary.test.ts; what those units cannot reach is
    everything this file pins:
      · the button only appears once there is spending to summarise
-     · clicking it builds a two-page sheet appended to <body> (NOT inside .split-wrap,
-       which print.css hides outright — the sheet would print blank from there)
+     · clicking it opens an on-screen PREVIEW first (issue #47) — a two-page sheet appended
+       to <body> (NOT inside .split-wrap, which print.css hides outright), visible and
+       inspectable, with window.print() NOT yet called
+     · only the preview's own Print button calls window.print(), synchronously within its
+       own click
+     · Cancel, the backdrop, and Escape all close the preview without printing
      · the printed figures equal the ones on screen
      · payment handles stay OUT of the file, which gets forwarded
      · non-Latin names survive as text — the whole reason this prints rather than
        generating a PDF with a WinAnsi-only library
-     · the sheet is removed again, so it never paints on screen
-   window.print is stubbed: a real dialog would hang the run. */
-// @protects-file The printed budget sheet says exactly what the calculator on screen says.
+     · the preview is removed again on close or after printing
+     · @media print unwraps the preview chrome so ONLY the sheet reaches paper
+   window.print is stubbed where it's invoked: a real dialog would hang the run. */
+// @protects-file The printed budget sheet says exactly what the calculator on screen says,
+// and the reader always sees it before it prints.
 
 import { test, expect, type Page } from "@playwright/test";
+
+declare global {
+  interface Window {
+    __printCount?: number;
+    __realPrint?: typeof window.print;
+  }
+}
 
 const KOREA = "/Trip-Guides/guides/korea/";
 
@@ -44,13 +57,20 @@ async function openBudgetWithData(page: Page) {
   await page.locator('.grail-stop[data-kind="tools"]').click();
 }
 
-/** Click the button with print stubbed, and report how many times it fired. */
-async function clickPrint(page: Page) {
+/** Click the trigger and wait for the preview to open. window.print must NOT fire yet. */
+async function openPreview(page: Page) {
+  await page.getByRole("button", { name: /save summary as pdf/i }).click();
+  await expect(page.locator("#bspModal")).toBeVisible();
+  await expect(page.locator("#budgetSheet")).toBeVisible();
+}
+
+/** Stub window.print, click the preview's own Print button, report how many times it fired. */
+async function clickPrintInPreview(page: Page) {
   return page.evaluate(() => {
     let printed = 0;
     const real = window.print;
     window.print = () => { printed++; };
-    document.getElementById("sSavePdf")!.click();
+    document.getElementById("bspPrint")!.click();
     window.print = real;
     return printed;
   });
@@ -70,35 +90,107 @@ test("the PDF button stays hidden until there is spending, then appears", async 
   await expect(page.locator("#sSavePdf")).toBeVisible();
 });
 
-test("clicking it prints a two-page sheet on <body> and then removes it", async ({ page }) => {
+test("clicking it opens a visible two-page preview and does NOT print yet", async ({ page }) => {
   await openBudgetWithData(page);
-  expect(await clickPrint(page)).toBe(1);
+
+  await page.evaluate(() => {
+    window.__printCount = 0;
+    window.__realPrint = window.print;
+    window.print = () => { window.__printCount!++; };
+  });
+  await openPreview(page);
 
   const state = await page.evaluate(() => {
     const s = document.getElementById("budgetSheet")!;
     return {
-      onBody: s.parentElement === document.body,
+      onBody: s.parentElement?.id === "bspScroll",
       insideSplitWrap: !!s.closest(".split-wrap"),
       pages: s.querySelectorAll(".bs-page").length,
       screenDisplay: getComputedStyle(s).display,
-      bodyAttr: document.body.hasAttribute("data-print-budget"),
+      bodyAttr: document.body.hasAttribute("data-bsheet-open"),
+      printedSoFar: window.__printCount,
     };
   });
   expect(state.onBody).toBe(true);
   expect(state.insideSplitWrap).toBe(false);
   expect(state.pages).toBe(2);
-  expect(state.screenDisplay).toBe("none"); // never paints on screen
+  expect(state.screenDisplay).toBe("block"); // now visibly previewed, not hidden
   expect(state.bodyAttr).toBe(true);
+  expect(state.printedSoFar).toBe(0); // opening the preview must never print
 
-  // afterprint is what cleans up in a real dialog; fire it and the sheet must go.
+  await page.evaluate(() => { window.print = window.__realPrint!; });
+});
+
+test("the preview's Print button calls window.print() once, synchronously", async ({ page }) => {
+  await openBudgetWithData(page);
+  await openPreview(page);
+  expect(await clickPrintInPreview(page)).toBe(1);
+});
+
+test("afterprint closes the preview and cleans up", async ({ page }) => {
+  await openBudgetWithData(page);
+  await openPreview(page);
+  await clickPrintInPreview(page);
+
   await page.evaluate(() => window.dispatchEvent(new Event("afterprint")));
   await expect(page.locator("#budgetSheet")).toHaveCount(0);
-  expect(await page.evaluate(() => document.body.hasAttribute("data-print-budget"))).toBe(false);
+  await expect(page.locator("#bspModal")).toHaveCount(0);
+  expect(await page.evaluate(() => document.body.hasAttribute("data-bsheet-open"))).toBe(false);
+});
+
+test("Cancel closes the preview without ever printing, and returns focus to the trigger", async ({ page }) => {
+  await openBudgetWithData(page);
+  await openPreview(page);
+
+  await page.locator("#bspCancel").click();
+  await expect(page.locator("#budgetSheet")).toHaveCount(0);
+  await expect(page.locator("#bspModal")).toHaveCount(0);
+  expect(await page.evaluate(() => document.body.hasAttribute("data-bsheet-open"))).toBe(false);
+  await expect(page.locator("#sSavePdf")).toBeFocused();
+});
+
+test("the backdrop and Escape also close the preview", async ({ page }) => {
+  await openBudgetWithData(page);
+  await openPreview(page);
+  await page.locator("#bspBackdrop").click({ position: { x: 2, y: 2 } });
+  await expect(page.locator("#bspModal")).toHaveCount(0);
+
+  await openBudgetWithData(page);
+  await openPreview(page);
+  await page.keyboard.press("Escape");
+  await expect(page.locator("#bspModal")).toHaveCount(0);
+});
+
+test("@media print unwraps the preview to just the sheet, hiding the rest of the page", async ({ page }) => {
+  await openBudgetWithData(page);
+  await openPreview(page);
+  await page.emulateMedia({ media: "print" });
+
+  const state = await page.evaluate(() => {
+    const bar = document.querySelector(".bsp-bar") as HTMLElement;
+    const backdrop = document.querySelector(".bsp-backdrop") as HTMLElement;
+    const modal = document.querySelector(".bsp-modal") as HTMLElement;
+    const chrome = document.querySelector(".split-wrap") as HTMLElement | null;
+    return {
+      barHidden: getComputedStyle(bar).display === "none",
+      backdropHidden: getComputedStyle(backdrop).display === "none",
+      modalPosition: getComputedStyle(modal).position,
+      chromeHidden: chrome ? getComputedStyle(chrome).display === "none" : true,
+      sheetVisible: getComputedStyle(document.getElementById("budgetSheet")!).display !== "none",
+    };
+  });
+  expect(state.barHidden).toBe(true);
+  expect(state.backdropHidden).toBe(true);
+  expect(state.modalPosition).toBe("static"); // unwrapped back to normal document flow
+  expect(state.chromeHidden).toBe(true); // the rest of the page is suppressed
+  expect(state.sheetVisible).toBe(true);
+
+  await page.emulateMedia({ media: "screen" });
 });
 
 test("the printed figures are the ones the calculator shows", async ({ page }) => {
   await openBudgetWithData(page);
-  await clickPrint(page);
+  await openPreview(page);
 
   const { panelTotal, sheet } = await page.evaluate(() => {
     const s = document.getElementById("budgetSheet")!;
@@ -122,7 +214,7 @@ test("the printed figures are the ones the calculator shows", async ({ page }) =
 
 test("non-Latin names survive, and payment handles never reach the file", async ({ page }) => {
   await openBudgetWithData(page);
-  await clickPrint(page);
+  await openPreview(page);
 
   const text = await page.evaluate(() => document.getElementById("budgetSheet")!.textContent || "");
   expect(text).toContain("김민준");            // the case a WinAnsi PDF library would garble
