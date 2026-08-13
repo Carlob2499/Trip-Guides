@@ -470,8 +470,12 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
   Detectors are risk-independent for the same reason E1's are. Fixture: 6 findings, all four
   cases. korea + denmark PASS. **Genuine findings on `us`** (advisory): Arizona's monsoon
   season range is prose-only with no fact row, and its passA→passB→reconcile stages are
-  0.077 s / 0.078 s apart — so **case 8 is systemic, not japan-only**; the batched-checkpoint
-  write affects every guide the pipeline has produced.
+  0.077 s / 0.078 s apart — so the burst pattern is not japan-only. **It is HISTORICAL, not live**
+  (corrected the same day): `pipeline.mjs`'s `uncommittedPredecessor` guard, added 2026-08-09,
+  already refuses to checkpoint a stage whose predecessor is not committed at HEAD, and its own
+  comment cites the Japan 35 ms burst as its worked example. Both state files predate that guard.
+  `stageBurst` is therefore the DETECTIVE half of an already-prevented defect — still worth having
+  (it reads a frozen state file, which the git-history guard cannot), but there is nothing to fix.
   Two calibration corrections worth keeping: (1) the forecast detector must match date-BEFORE-term
   as well as term-before-date — the fixture's own "a reliable mid-Oct–early-Nov foliage peak"
   was invisible to a term-first pattern; (2) `mid-\w+` matches "mid-morning", so the mid/early/late

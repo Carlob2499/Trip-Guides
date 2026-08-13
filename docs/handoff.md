@@ -92,16 +92,21 @@ as live on every failed fetch. Shipped behaviour left alone; the gate fixed inst
 `PLAN_DESIGN_RECONCILIATION.md` (archived). There is no live work order; the next design change
 is governed by `docs/design-handoff/` + `enforcement/` directly.
 
-**Still needs you — four pipeline items, none of them plan packets:** (1) **the
-batched-checkpoint bug** — `pipeline.mjs` writes checkpoints in one burst at the end, so no
-guide's state file can evidence Pass A/B independence, the property the two-pass design rests on;
-DETECTED but not FIXED. (2) Two `us` content findings for a guide-author pass: the unsupported
-`$300` lodging figure, and three rows sharing one byte-identical claim with three different values
-(D4 reproducing on `us`). (3) Live Routes verification needs legs structured as origin→destination
-pairs against the guide's `map` points. (4) `skill-evals.yml`'s live-agent gate could not be run
-locally at any point — the D2 skill rewrite needs one real CI run to confirm it passes.
+**CORRECTION (2026-08-13, same session):** an earlier version of this section listed the
+batched-checkpoint bug as "DETECTED but not FIXED" and recommended fixing it next. **That was
+wrong.** `pipeline.mjs`'s `uncommittedPredecessor` guard already prevents it — a stage cannot be
+checkpointed until its predecessor is committed at HEAD (exit 4), it is unit-tested, and it
+predates this session (2026-08-09). Its own comment names the Japan 35 ms burst as the worked
+example. The japan and us state files are historical artifacts of runs that predate the guard, not
+evidence of a live defect. E3's `stageBurst` detector remains the useful DETECTIVE half — it
+catches those artifacts and would catch any future bypass — but nothing needs fixing.
 
-**Recommended next step — the batched-checkpoint fix.** Small, and it makes an architectural
-guarantee true rather than merely observable. The design side has no queued work; the two items
-it left are creator forks (the theme-aware focus-ring token, the fallback converter), both in
-Open items above — neither should be settled by a session alone.
+**Still needs you — two items, neither a plan packet:** (1) **Live Routes verification** — the
+advisory half ships and counts unattested leg durations; the live half needs legs structured as
+origin→destination pairs against the guide's `map` points before an API key buys anything.
+(2) **`us` content**: `budget-daily-costs-300` cites a page that does not contain 300, and three
+rows share one byte-identical claim with three different values (D4 reproducing on `us`). Both are
+guide-author work, not code.
+
+**Recommended next step — the `us` content pass**, since it is the only item that touches what a
+reader actually sees. Routes needs a structural decision first, not a session.

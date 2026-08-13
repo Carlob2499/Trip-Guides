@@ -16,35 +16,22 @@
     "tier": "primary"
   },
   "budget-daily-costs-173": {
-    "claim": "Budget & daily costs → Lodging, per night (Sedona, 3★ average) — $173",
+    "claim": "Sedona 3★ hotels — median nightly rate",
     "value": "$173",
     "source_url": "https://www.budgetyourtrip.com/hotels/united-states-of-america/sedona-5313667",
-    "verified_on": "2026-07-19",
+    "verified_on": "2026-08-13",
     "shelf_life": "venue",
-    "state": "approx"
-  },
-  "budget-daily-costs-143": {
-    "claim": "Budget & daily costs → Lodging, per night (Sedona, 3★ average) — $143",
-    "value": "$143",
-    "source_url": "https://www.budgetyourtrip.com/hotels/united-states-of-america/sedona-5313667",
-    "verified_on": "2026-07-19",
-    "shelf_life": "venue",
-    "state": "approx"
+    "state": "approx",
+    "evidence": "the median price is $173"
   },
   "budget-daily-costs-231": {
-    "claim": "Budget & daily costs → Lodging, per night (Sedona, 3★ average) — $231",
+    "claim": "Sedona all hotels — median nightly rate",
     "value": "$231",
     "source_url": "https://www.budgetyourtrip.com/hotels/united-states-of-america/sedona-5313667",
-    "verified_on": "2026-07-19",
+    "verified_on": "2026-08-13",
     "shelf_life": "venue",
-    "state": "approx"
-  },
-  "budget-daily-costs-300": {
-    "claim": "Budget & daily costs → Lodging, per night (Sedona, 3★ average) — $300",
-    "value": "$300",
-    "source_url": "https://www.budgetyourtrip.com/hotels/united-states-of-america/sedona-5313667",
-    "verified_on": "2026-07-19",
-    "shelf_life": "venue"
+    "state": "approx",
+    "evidence": "the median price is $231"
   },
   "budget-daily-costs-39": {
     "claim": "Budget & daily costs → Rental car, per day (compact/mid-size) — $39",
@@ -74,5 +61,23 @@
     "claim": "Traveler origin — departure airport (D14/ADR 0003) — unconfirmed, EWR-or-JFK",
     "value": "EWR",
     "state": "unconfirmed"
+  },
+  "budget-daily-costs-133": {
+    "claim": "Sedona budget hotels — average nightly rate",
+    "value": "$133",
+    "source_url": "https://www.budgetyourtrip.com/hotels/united-states-of-america/sedona-5313667",
+    "verified_on": "2026-08-13",
+    "shelf_life": "venue",
+    "state": "approx",
+    "evidence": "The average price of these budget hotels is $133"
+  },
+  "budget-daily-costs-531": {
+    "claim": "Sedona luxury hotels — average nightly rate",
+    "value": "$531",
+    "source_url": "https://www.budgetyourtrip.com/hotels/united-states-of-america/sedona-5313667",
+    "verified_on": "2026-08-13",
+    "shelf_life": "venue",
+    "state": "approx",
+    "evidence": "the average price for luxury hotels in Sedona is $531"
   }
 }
