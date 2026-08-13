@@ -127,6 +127,10 @@ export async function proposeMigration(slug, guidesDir = GUIDES_DIR) {
           if (!id) {
             id = makeFactId(label, h.value, taken);
             byValue.set(key, id);
+            // Does NOT populate risk/entity/evidence (src/content.config.ts, src/lib/facts.mjs)
+            // — deliberately. This migrator lifts exactly what was already in the prose unit;
+            // assigning risk or grouping an entity needs research judgment this pass doesn't
+            // have. That's D2's job (entity-level research protocol), not this one's.
             facts[id] = {
               claim: `${label} — ${h.value}`,
               value: h.value,

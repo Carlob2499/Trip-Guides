@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1852 checks · 1852 carry a stated promise · 160 files
+1859 checks · 1859 carry a stated promise · 160 files
 
 ## Can everyone read it
 
@@ -326,6 +326,13 @@ nothing ships.
 - rejects an alternate with no source — a refuge claim is perishable like any other  <sub>src/content.config.test.ts:575</sub>
 - rejects a trigger outside rain/closure  <sub>src/content.config.test.ts:582</sub>
 - plan_b body rides the prose tag allowlist (a <script> there fails like anywhere else)  <sub>src/content.config.test.ts:589</sub>
+- accepts a fact with none of risk/entity/evidence — every pre-existing row's shape  <sub>src/content.config.test.ts:613</sub>
+- accepts risk 0 through 4  <sub>src/content.config.test.ts:619</sub>
+- rejects risk outside 0-4, and rejects a non-integer risk  <sub>src/content.config.test.ts:627</sub>
+- accepts a kebab-case entity id  <sub>src/content.config.test.ts:635</sub>
+- rejects an entity id that isn't kebab-case  <sub>src/content.config.test.ts:643</sub>
+- accepts evidence up to 240 chars, rejects past it  <sub>src/content.config.test.ts:651</sub>
+- accepts all three together on one row (the eventual R3/R4 shape)  <sub>src/content.config.test.ts:659</sub>
 
 ## Design system and shared rules
 

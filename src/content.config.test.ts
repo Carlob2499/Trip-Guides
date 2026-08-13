@@ -594,3 +594,77 @@ describe("content.config guides schema — plan_b (inclement-day alternate)", ()
     expect(result.success).toBe(false);
   });
 });
+
+// B1 (docs/PLAN_EVIDENCE_FIRST.md) — factRecord gains risk/entity/evidence, all optional. Every
+// fact written before this packet has none of the three, so the first assertion is the load-
+// bearing one: the schema must not start demanding something that never existed.
+describe("content.config factsFile schema — risk/entity/evidence (B1)", () => {
+  function baseFact(overrides: Record<string, unknown> = {}) {
+    return {
+      claim: "Test claim — $10",
+      value: "$10",
+      source_url: "https://example.com/",
+      verified_on: "2026-08-01",
+      shelf_life: "default",
+      ...overrides,
+    };
+  }
+
+  it("accepts a fact with none of risk/entity/evidence — every pre-existing row's shape", async () => {
+    const { factsFile } = await import("./content.config");
+    const result = factsFile.safeParse({ "test-fact": baseFact() });
+    expect(result.success).toBe(true);
+  });
+
+  it("accepts risk 0 through 4", async () => {
+    const { factsFile } = await import("./content.config");
+    for (let risk = 0; risk <= 4; risk++) {
+      const result = factsFile.safeParse({ "test-fact": baseFact({ risk }) });
+      expect(result.success, `risk ${risk} should be valid`).toBe(true);
+    }
+  });
+
+  it("rejects risk outside 0-4, and rejects a non-integer risk", async () => {
+    const { factsFile } = await import("./content.config");
+    for (const risk of [-1, 5, 2.5]) {
+      const result = factsFile.safeParse({ "test-fact": baseFact({ risk }) });
+      expect(result.success, `risk ${risk} should be invalid`).toBe(false);
+    }
+  });
+
+  it("accepts a kebab-case entity id", async () => {
+    const { factsFile } = await import("./content.config");
+    const result = factsFile.safeParse({
+      "test-fact": baseFact({ entity: "domestic-flights-tokyo-fukuoka" }),
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects an entity id that isn't kebab-case", async () => {
+    const { factsFile } = await import("./content.config");
+    for (const entity of ["Domestic Flights", "domestic_flights", "UPPER-CASE"]) {
+      const result = factsFile.safeParse({ "test-fact": baseFact({ entity }) });
+      expect(result.success, `entity ${JSON.stringify(entity)} should be invalid`).toBe(false);
+    }
+  });
+
+  it("accepts evidence up to 240 chars, rejects past it", async () => {
+    const { factsFile } = await import("./content.config");
+    const ok = factsFile.safeParse({ "test-fact": baseFact({ evidence: "x".repeat(240) }) });
+    expect(ok.success).toBe(true);
+    const tooLong = factsFile.safeParse({ "test-fact": baseFact({ evidence: "x".repeat(241) }) });
+    expect(tooLong.success).toBe(false);
+  });
+
+  it("accepts all three together on one row (the eventual R3/R4 shape)", async () => {
+    const { factsFile } = await import("./content.config");
+    const result = factsFile.safeParse({
+      "wild-area-sendai": baseFact({
+        risk: 3,
+        entity: "wild-area-sendai",
+        evidence: "Nov 6-8, 2026, official announcement",
+      }),
+    });
+    expect(result.success).toBe(true);
+  });
+});

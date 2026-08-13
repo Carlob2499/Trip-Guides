@@ -94,6 +94,29 @@ requirement. Distinct from a Live rate — a different claim with a different sh
 never conflated with it in the same line of UI.
 _Avoid_: live rate
 
+**Risk tier (R0–R4)**:
+How much verification rigor a `facts.json` row earns, carried in its optional `risk` field
+(`src/content.config.ts`, packet B1 of `docs/PLAN_EVIDENCE_FIRST.md`). Replaces the flat
+"same 2-search cap for everything" the evidence-first program's D6 defect named. R0 = no
+research needed; R1 = a light check; R2 = a normal sourced fact; R3 = plan-critical (an anchor
+event, a booked venue) — a wrong R3 fact reroutes a day; R4 = mandatory-surfaced (a travel
+advisory, a visa rule) — an R4 fact that's wrong or silently dropped is a safety failure, not
+an inconvenience. Packet E1 enforces tier/evidence requirements that scale with this number;
+nothing populates `risk` yet as of B1 — that is D2's (research protocol) and the intake
+parser's (scaffold-time seeding) job.
+_Avoid_: priority, severity (different axes — risk tier is about verification rigor, not
+importance to the itinerary or how bad an error would read)
+
+**Entity (fact registry)**:
+The kebab-case id (`facts.json` row's optional `entity` field) grouping every fact row that
+describes ONE researched thing — a venue, a transit route, a booked event — so one research
+act yields all its facts instead of each prose mention re-discovering it independently. Named
+for the defect it fixes: Japan's regression fixture (`tests/fixtures/japan-regression/`,
+case 9) froze six rows for one domestic-flight leg, two different values disagreeing about
+which source they came from, because nothing grouped them as the same thing.
+_Avoid_: fact group, cluster (this repo's specific term is "entity," matching the plan's D1
+defect and D2 packet — don't drift to a synonym)
+
 **Emergency data**:
 A guide's verified emergency phone numbers, sourced from `emergencyFor()`
 (`src/data/countries.mjs`). One data source and one rendering component, exposed at two

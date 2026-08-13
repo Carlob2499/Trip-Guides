@@ -86,6 +86,25 @@ const factRecord = z.object({
   // "sourced-but-approximate" and stops a bare ≈ appearing next to an unsourced number.
   state: z.enum(["clean", "approx"]).default("clean"),
   tier: z.enum(["primary", "corroborated", "secondary"]).optional(),
+  // B1 (docs/PLAN_EVIDENCE_FIRST.md) — additive and optional; population is later packets' work
+  // (D populates risk/entity at research time, E enforces tier/evidence by risk). Every existing
+  // guide's facts.json is valid without any of the three; adding one to a row is a strict
+  // widening, never required.
+  //
+  // How much rigor this fact earned, R0 (none) through R4 (mandatory-surfaced — e.g. a travel
+  // advisory). Replaces the flat "2-search cap for everything" the plan's D6 defect names.
+  risk: z.number().int().min(0).max(4).optional(),
+  // Groups the rows that all describe ONE researched thing (a venue, a route, an event) — e.g.
+  // every "Domestic flights (Tokyo→Fukuoka→Sapporo→Sendai)" row shares one entity id instead of
+  // being re-discovered per prose mention (the plan's D1/D9 defect — see the Japan regression
+  // fixture's case 9, six rows for one flight leg with two different sources). Kebab-case, same
+  // shape as a fact id, so B3's hygiene gate can group on it directly.
+  entity: z.string().regex(/^[a-z0-9][a-z0-9-]*$/, "entity must be kebab-case").optional(),
+  // A short, quoted phrase actually on the source page — the substring a drift check (packet E2)
+  // can search for later to tell "still true" from "200 OK, page changed" apart. Reserved for
+  // R3/R4 rows (E1 will enforce that); capped short on purpose — this is a locator, not a mirror
+  // of the page.
+  evidence: z.string().max(240).optional(),
 });
 
 // D14/ADR 0001+0003 (docs/archive/PLAN_ATLAS_MIGRATION.md Stage B) — the ONE reserved id in the registry:

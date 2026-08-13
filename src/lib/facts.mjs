@@ -15,7 +15,13 @@
 // declarations — kept in sync only by a test — are the cautionary precedent.
 //
 // SHAPE (validated by the zod schema in src/content.config.ts, which stays the one schema home):
-//   { "<kebab-id>": { claim, value, source_url, verified_on, shelf_life, state?, tier? } }
+//   { "<kebab-id>": { claim, value, source_url, verified_on, shelf_life, state?, tier?,
+//                      risk?, entity?, evidence? } }
+// risk/entity/evidence (B1, docs/PLAN_EVIDENCE_FIRST.md) are additive and optional, same as
+// tier: risk is 0-4 (how much rigor the fact earned), entity groups every row researched as
+// one unit (a venue/route/event), evidence is a short quoted locator phrase for later drift
+// checks. Nothing populates them yet — that's later packets' work — so every fact written
+// today is unaffected.
 
 /** Files in a guide directory that are NOT arrays of sections. Every directory reader must
     skip these; a reader that doesn't either throws on load (the Astro loader) or silently
