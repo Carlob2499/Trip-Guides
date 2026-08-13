@@ -334,3 +334,27 @@ everything else. Rejected: crediting the host the photo is served from. A CDN ho
 the bytes are cached, not who took the picture, and printing one would be a fabricated
 attribution wearing a real one's clothes. An uncredited photo carries no chip at all — the same
 honest blank the rest of the product uses when research comes up short.
+
+**Auto-graduation stays; the 2026-07-30 ruling is REAFFIRMED, not reversed** (creator ruling,
+2026-08-13). `PLAN_EVIDENCE_FIRST.md`'s §10 mandate text called for removing autonomous
+publication (its Phase G / packet G1) so a verify PASS would land `draft: true` and wait for a
+human `graduate-approved` label. The creator was walked through G1's exact mechanics — it touches
+only who pulls the trigger, not the verify gates — and rejected it: **packet G1 is dropped from
+the program entirely.** research-pass.yml's critic step keeps calling `graduate-guide.mjs --slug`
+on verify PASS. Rejected alongside it: building a review/approval surface on the website, which
+would need auth and a repo write-back path a static Astro + Pages site does not have — that is a
+separate future feature, not pipeline scope. Definition-of-done #3 ("cannot publish without a
+human label") is struck. The evidence gate is the bar; a human label is not. If a later session
+finds the plan's §10 prose calling for G1, **this entry supersedes it** — the plan doc is
+annotated in place, but prose is easy to miss.
+
+**The Japan guide is regression evidence, permanently — it is never repaired** (creator ruling,
+2026-08-13). `PLAN_EVIDENCE_FIRST.md` assumed Japan would get a `revise-guide` cleanup pass once
+Phase H proved the new checks detect its 12 defect classes. Rejected: the creator ruled Japan
+stays as-is *indefinitely*, not "until the checks are proven." It is the corpus's only live
+specimen of every defect the evidence-first program exists to catch — a cleaned Japan would leave
+the regression suite testing a fixture nothing real corresponds to any more. Consequence for
+future sessions: `src/content/guides/japan/` failing new hygiene gates is the EXPECTED state, not
+a bug queue. Never "fix" its `$19,` values, its six duplicate domestic-flight rows, or its
+section-path claims. Gates that must stay green corpus-wide are the ones that need a japan
+exemption — not the other way round.

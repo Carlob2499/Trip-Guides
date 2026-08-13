@@ -1,9 +1,10 @@
 # PLAN — Evidence-First Pipeline (the master-architect program)
 
-> **Status: PLAN ONLY. Nothing in this document is implemented.** Produced 2026-08-12 by the
-> architect session against the creator's master-orchestrator mandate. Every task packet below
-> waits on an explicit "go" — the packets exist so lower-model lanes can execute them without
-> re-deriving this analysis.
+> **Status: IN EXECUTION since 2026-08-13.** Produced 2026-08-12 by the architect session
+> against the creator's master-orchestrator mandate; the creator gave an explicit "go" on
+> 2026-08-13 after settling all five clarifying questions (see the decisions block below —
+> **two reversed this document's assumptions, and packet G1 is struck**). Packet-by-packet
+> progress is tracked in `docs/handoff.md`, not here; this document stays the specification.
 >
 > Core principle, verbatim from the mandate: **EVIDENCE FIRST → GUIDE SECOND.** `facts.json` is
 > the canonical fact layer; prose is presentation. Extend the existing registry — never create a
@@ -11,26 +12,41 @@
 
 ---
 
-## Clarifying questions (doctrine block — recorded, non-blocking; each ships on its Assumed line)
+## Clarifying questions — ALL SETTLED (creator, interactive session 2026-08-13)
+
+> These were recorded as non-blocking assumptions on 2026-08-12. They were put to the creator
+> directly on 2026-08-13 and are now **decisions**. Two REVERSE what this document assumed —
+> read them before executing any packet. Questions 1 and 3 also carry `CONTEXT.md` entries,
+> which are authoritative if this prose ever drifts from them.
 
 1. **Q: §10 (no autonomous publication) reverses the 2026-07-30 creator ruling and the
    pipeline.md "PUBLISH auto-resolves itself" design — confirm the reversal?**
-   **Assumed:** the new mandate wins. Auto-graduation is removed (Phase G); the existing
-   human-label `graduate-guide.yml` path becomes THE publication path, and `pipeline.md` +
-   `CONTEXT.md` are updated so the old ruling doesn't silently resurface.
+   **DECIDED — NO. The reversal is rejected; the 2026-07-30 ruling stands.** ⚠️ *Opposite of
+   this document's original assumption.* Auto-graduation **stays**: research-pass.yml's critic
+   step keeps calling `graduate-guide.mjs --slug` on verify PASS. **Packet G1 is struck from the
+   program** and Phase G no longer exists. The creator was walked through G1's mechanics first
+   (it gates only the trigger, never the verify gates) and chose auto-publish knowingly. Also
+   rejected: a review/approval surface on the website — it needs auth and a repo write-back path
+   a static Astro + Pages site doesn't have; that is a separate future feature, not pipeline
+   scope. §10's "no autonomous publication" mandate text is **void**; nothing below implements it.
 2. **Q: Where does destination knowledge live?** Options: `src/data/destinations/`,
    `src/content/destinations/`, repo-root `destinations/`.
-   **Assumed (recommended):** `src/data/destinations/<slug>.json` with a zod schema in
-   `scripts/lib/` — machine-consumed config, not content-collection material, not intake state.
+   **DECIDED — `src/data/destinations/<slug>.json`**, zod schema in `scripts/lib/`. Confirmed
+   against the tree: `src/data/` already holds exactly this class of machine-consumed reference
+   data (`airports.mjs`, `countries.mjs`, `holidays/`, `palettes/`), so destinations slot in
+   beside established precedent rather than opening a new home.
 3. **Q: Does the Japan guide itself get repaired once the new checks land?**
-   **Assumed:** yes, but as a later `revise-guide` run AFTER Phase H proves the checks detect
-   the defects. The mandate forbids cleaning Japan to make checks pass; the fixture freeze
-   (Phase A) preserves the defects permanently regardless.
+   **DECIDED — NO, never. Japan stays as-is indefinitely.** ⚠️ *Stronger than this document's
+   original assumption ("yes, later, after Phase H").* Japan is the corpus's only live specimen
+   of all 12 defect classes; cleaning it would leave the regression suite testing a fixture
+   nothing real corresponds to. Japan failing the new hygiene gates is the **expected** state,
+   not a bug queue. Gates needing corpus-wide green get a japan exemption, never a japan cleanup.
 4. **Q: Google Routes API is a billed surface — enable it?**
-   **Assumed:** designed in behind the same config-gate + lazy pattern as Places, default OFF,
-   key via GitHub secret / local untracked `.env`. Zero billing until the creator flips it.
+   **DECIDED — YES**, exactly as assumed: config-gate + lazy import like Places, default OFF,
+   key via GitHub secret / local untracked `.env`. Zero billing until the creator flips it;
+   absent key ⇒ the check degrades to advisory, never a failure.
 5. **Q: Risk-tier vocabulary (R0–R4) enters `CONTEXT.md`'s glossary?**
-   **Assumed:** yes, in Phase B, so later sessions don't invent synonyms.
+   **DECIDED — YES**, in Phase B (packet B1), so later sessions don't invent synonyms.
 
 ---
 
@@ -79,7 +95,7 @@ of truth (`intake-schema.mjs` FIELDS drives form + parser + scaffolder, contract
 | D8 | **Link check = liveness only.** 200 OK passes; page content is never compared to the stated value outside the critic's ≥5-row sample. | Drift detection via evidence snippets (E) |
 | D9 | **Traceability is one-directional.** `{{fact:<id>}}` tokens resolve fact→prose at build, but nothing answers "which days/sections depend on fact X" or "which shipped claims have no fact row." | Derived usage index (B4) |
 | D10 | **Destination knowledge lives as prose** in the skill/references (and partly nowhere — koyo sources, tax-free rules, advisory URLs are re-found per run). | Destination config as data (D1) |
-| D11 | **Auto-publication.** research-pass's critic step calls `graduate-guide.mjs --slug` on verify PASS — a fully autonomous publish, with rubric rows #6/#8/#9/#12 (human rows) explicitly non-blocking. | Phase G removal |
+| D11 | ~~**Auto-publication.** research-pass's critic step calls `graduate-guide.mjs --slug` on verify PASS.~~ **NOT A DEFECT — creator ruling 2026-08-13.** Auto-publication is intended behavior; the evidence gate (build + verify) is the bar. | ~~Phase G removal~~ — **struck** |
 | D12 | **Native-language discovery is sanctioned prose, not structure** (research-efficiency.md "native-first deep sweep") — no config supplies languages/query seeds, no gate observes whether it happened. | D packets |
 
 ### Runtime-context cost (the prose problem, quantified)
@@ -156,7 +172,7 @@ prose surfaces*, not dead files.
 | Candidate flow | considered → shipped (floors) | **Funnel**: broad → shortlist → deep-verify, shortlist recorded, floors per stage |
 | Destination knowledge | Skill prose + re-research per run | `src/data/destinations/<slug>.json` (data, versioned, verified like any fact source) |
 | Traceability | fact→prose (build tokens) | Bidirectional via **derived** usage index (build-time script; no stored duplication) |
-| Publication | Auto-graduate on verify PASS | **DRAFT until a human applies `graduate-approved`** (existing rescue path promoted to the only path) |
+| Publication | Auto-graduate on verify PASS | **Unchanged — auto-graduate on verify PASS** (creator ruling 2026-08-13; `graduate-guide.yml`'s label path stays the rescue/override route it already is) |
 | External data | Places (status/hours SKUs), Commons, Wikivoyage | + Routes (config-gated, off), GTFS static feeds (per destination config), Open-Meteo (keyless), OSM as cross-check only — **no new search layer, no Brave MCP, no high-volume Nominatim** |
 
 Preserved unchanged: scaffold→passA→passB→reconcile→verified spine, checkpointing/resume,
@@ -223,7 +239,7 @@ Minimal moves; one canonical home per concept; nothing deleted that is evidence.
 
 ```
 A  Fixture freeze ────────────────┐            (no deps; do first)
-G  Publication safety ────────────┤            (no deps; do first — safety)
+                                  │
 B  Canonical fact layer  ◀────────┘
 │   B1 schema fields (risk, entity, evidence) — additive, optional
 │   B2 migrate-facts MONEY_RE fix    B3 dedup/claim-ID gate    B4 usage index
@@ -235,10 +251,12 @@ E  Verification ◀ B, D    (gates land warn-first, then enforce)
 │   E1 risk-weighted gates   E2 drift detection   E3 contradiction gate in verify roll-up
 F  Organization & prose reduction ◀ D2 (skill rewrite settles first)
 H  Regression proof ◀ everything   (12/12 detections against the frozen fixture)
+
+G  Publication safety — STRUCK ENTIRELY (creator ruling 2026-08-13; auto-publish stays)
 ```
 
-Order of execution: **A + G → B ∥ C → D → E → F → H.** (The mandate's A–H lettering is kept;
-the dependency analysis moves G to the front as permitted.)
+Order of execution: **A → B ∥ C → D → E → F → H.** (The mandate's A–H lettering is kept for
+packet-ID stability, so the letters now skip G — that gap is deliberate, not a missing phase.)
 
 ---
 
@@ -267,14 +285,19 @@ the dependency analysis moves G to the front as permitted.)
 - TESTS: a trivial vitest asserting the fixture files exist and parse.
 - ACCEPTANCE: 12/12 cases have a manifest row pointing at a fixture file + line evidence.
 
-**G1 — Remove autonomous publication** · S · coder (small but policy-critical)
-- CONTEXT: research-pass.yml's critic step calls `node scripts/graduate-guide.mjs --slug` on verify PASS (auto-publish). Mandate §10: newly researched guides stay DRAFT.
-- GOAL: PASS ⇒ land-branch merges the guide **still `draft: true`**; publication happens only via the existing `graduate-approved` label path.
-- FILES TO INSPECT: `.github/workflows/research-pass.yml` (critic step + land step), `scripts/graduate-guide.mjs`, `scripts/land-branch.sh` (announce-URL hook), `.github/workflows/new-guide.yml` (issue-comment text promising self-publication).
-- FILES TO CHANGE: research-pass.yml (drop the `--slug` auto call; adjust run-report + PR body wording; keep the verify PASS gate itself), new-guide.yml comment text, `docs/reference/pipeline.md` PUBLISH section, `CONTEXT.md` (supersede the 2026-07-30 auto-publish ruling with a dated entry).
-- DO NOT TOUCH: `graduate-guide.mjs` logic, `graduate-guide.yml` (they are now the only publish path — unchanged), the verify gates.
-- TESTS: existing suites green; grep dist/docs for stale "publishes itself" strings.
-- ACCEPTANCE: no code path removes `draft: true` without the `graduate-approved` label; docs consistent.
+**G1 — ~~Remove autonomous publication~~ · STRUCK, DO NOT IMPLEMENT**
+
+> **Creator ruling, 2026-08-13 (see the decisions block at the top of this file and
+> `CONTEXT.md`).** The mandate's §10 called for removing auto-graduation; the creator was
+> walked through this packet's exact mechanics and rejected it. Auto-publication is
+> **intended behavior** and stays. This packet is retained only so a future reader who finds
+> §10's prose knows it was considered and consciously declined — **executing it would
+> contradict a standing ruling.** Nothing downstream depends on it: the case→packet coverage
+> map routes all 12 regression cases through B/C/D/E, none through G.
+>
+> Original packet text preserved for the record: it would have dropped research-pass.yml's
+> `graduate-guide.mjs --slug` call so a verify PASS landed the guide still `draft: true`,
+> making the `graduate-approved` label the only publish path.
 
 **B1 — Extend the fact schema (risk · entity · evidence)** · M · coder
 - CONTEXT: `tier` already exists unused in `content.config.ts` (factRecord + provenance). The mandate's fact-layer needs three more optional fields; extend-before-add.
@@ -381,7 +404,7 @@ the dependency analysis moves G to the front as permitted.)
 - `korea.revision-27*.json` → `guides-intake/archive/`; grep for readers of those paths first (boundary check #1). ACCEPTANCE: builds/tests green, no reader breaks.
 
 **F2 — Trim pipeline.md to policy** · S · scribe
-- Move W-series/shipped-✅ history to a new pipeline-history file under `docs/archive/` (F2 creates it); PUBLISH section rewritten per G1. ACCEPTANCE: pipeline.md ≤140 lines, no stale auto-publish language, docs-integrity test green.
+- Move W-series/shipped-✅ history to a new pipeline-history file under `docs/archive/` (F2 creates it). The PUBLISH section is **left describing auto-graduation** (G1 struck) — do not rewrite it. ACCEPTANCE: pipeline.md ≤140 lines, PUBLISH still documents auto-graduation accurately, docs-integrity test green.
 
 **F3 — Pointerize new-guide.yml's embedded prompt** · S · mechanic
 - Replace the 15-line interactive prompt in the issue comment with a 2-line pointer to the skill. ACCEPTANCE: comment renders, no workflow-behavior change.
@@ -424,9 +447,10 @@ the dependency analysis moves G to the front as permitted.)
 - **Preserved:** the full existing suite (805+) stays green at every packet; no test deleted
   or weakened (mandate).
 - **Boundary checks** (repo doctrine — run only where a packet touches a seam):
-  C2/G1 touch workflows ⇒ force the failure path once (dispatch research-pass on a scratch
-  slug with a contradiction planted; confirm the question posts and the run proceeds; confirm
-  a PASS run lands still-draft). E2 ⇒ one live fetch against a real source URL before
+  C2 touches workflows ⇒ force the failure path once (dispatch research-pass on a scratch
+  slug with a contradiction planted; confirm the question posts and the run proceeds). The
+  "confirm a PASS run lands still-draft" check is struck with G1. E2 ⇒ one live fetch
+  against a real source URL before
   declaring the mocked logic done. D1 ⇒ grep for competing config discovery before adding
   the destinations dir.
 - **Skill:** D2 gated by `skill-evals.yml` (existing PR gate on `.claude/skills/**`).
@@ -437,8 +461,8 @@ the dependency analysis moves G to the front as permitted.)
 - All schema fields are **additive + optional** — reverting a consumer never breaks data.
 - New gates land **warn-first** (B3, E2) with a named flip-to-blocker packet, so a false
   positive never bricks the pipeline mid-arc.
-- G1 rollback = re-adding one call — but its removal is the mandate's explicit safety
-  requirement; treat re-adding as a creator-only decision.
+- G1 is struck (2026-08-13) — auto-publication stays, so there is no publication-path change
+  to roll back. Removing auto-graduation later is a creator-only decision, not a packet.
 - External APIs default OFF (config-gated); absent keys degrade checks to advisory, never
   failures. No credentials in the repo at any point.
 - The attempt circuit breaker (CAP 5) and checkpoint spine are untouched — a broken gate can
@@ -447,11 +471,13 @@ the dependency analysis moves G to the front as permitted.)
 ## 11 · Definition of done (the whole program)
 
 1. H1 green: **12/12 regression cases detected** against the frozen fixture; Japan's live
-   guide byte-identical to its pre-program state.
+   guide byte-identical to its pre-program state — permanently, not just for this program
+   (creator ruling 2026-08-13: Japan is never repaired).
 2. `facts.json` remains the ONLY fact registry; `risk`/`entity`/`evidence`/`tier` live there;
    no parallel evidence store exists anywhere in the tree.
-3. A newly researched guide **cannot publish without a human `graduate-approved` label**;
-   docs contain no surviving auto-publish language.
+3. ~~A newly researched guide cannot publish without a human `graduate-approved` label.~~
+   **STRUCK 2026-08-13** — auto-graduation on verify PASS is intended behavior and is
+   preserved unchanged. The evidence gate (build + verify) is the publication bar.
 4. Intake round-trips certainty states; a planted contradiction produces a traveler question
    and a recorded assumption, deterministically.
 5. Net prose reduction recorded and negative (F4 ledger) — skill corpus + workflow prompts
@@ -459,5 +485,5 @@ the dependency analysis moves G to the front as permitted.)
 6. Full existing test suite + new suites green; `npm run build`/`lint`/`typecheck` green;
    no credentials or keys in the repo; every external integration inert when unconfigured.
 7. The spine (checkpoints, A/B independence, single critic, land-branch, attempt budget)
-   demonstrably unchanged: `pipeline.mjs` and `land-branch.sh` diff-clean except where G1
-   names them.
+   demonstrably unchanged: `pipeline.mjs` and `land-branch.sh` **diff-clean, full stop** —
+   with G1 struck, no packet in this program has any reason to touch either file.
