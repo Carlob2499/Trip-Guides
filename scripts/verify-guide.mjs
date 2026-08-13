@@ -38,6 +38,7 @@ import { checkStaleness } from "./audit/check-staleness.mjs";
 import { checkFactsHygiene } from "./audit/check-facts-hygiene.mjs";
 import { evaluateRiskGates } from "./audit/check-risk-gates.mjs";
 import { evaluateUncertainty } from "./audit/check-uncertainty.mjs";
+import { checkRoutes } from "./audit/check-routes.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -156,6 +157,11 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
   // E3: does the guide SHIP the contradictions and uncertainties C2 gates at intake? Same
   // warn-first split as riskGates. Artifacts (intake doc, state file, C2 findings) are read
   // by verify() and passed in, like the candidates and staleness rows.
+  // Case 11: transit-leg durations with no routing authority behind them. Advisory ALWAYS —
+  // Routes is config-gated and default OFF (creator ruling), so this measures the gap and
+  // never fails a run.
+  const routes = checkRoutes(Array.isArray(guide.sections) ? guide.sections : (guide.sections || []).flat());
+
   // E2: drift is computed by verify() (network I/O) and threaded in, like the staleness scan.
   const driftRow = drift ?? { status: "skipped" };
 
@@ -163,6 +169,7 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
     sections: Array.isArray(guide.sections) ? guide.sections : (guide.sections || []).flat(),
     facts,
     ...(uncertaintyInputs || {}),
+    archived: !!guide.archived,
     enforce: draft,
   });
 
@@ -184,7 +191,7 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
   // and a guide with one should show at a glance how much of it is sourced data rather than prose.
   const registry = facts ? { count: Object.keys(facts).length, unused } : null;
 
-  return { slug, draft, pass, blockers, readiness, recency, content, venueStatus, candidates: candidatesRow, sources, coverage, voice, hygiene, riskGates, uncertainty, drift: driftRow, noVerifiedDate, registry };
+  return { slug, draft, pass, blockers, readiness, recency, content, venueStatus, candidates: candidatesRow, sources, coverage, voice, hygiene, riskGates, uncertainty, routes, drift: driftRow, noVerifiedDate, registry };
 }
 
 export async function verify({ slug = null, network = false } = {}) {
@@ -386,6 +393,12 @@ export function report(r) {
       );
       for (const f of r.uncertainty.findings) L.push(`      ⚠ [${f.code}] ${f.msg}`);
     }
+  }
+
+  // Case 11: leg durations. Advisory by design — printed, never gating.
+  if (r.routes && r.routes.status === "advisory") {
+    L.push(`  P1 routes     · advisory — ${r.routes.unverified}/${r.routes.legs} leg duration(s) unattested${r.routes.configured ? "" : " (Routes not configured — default OFF)"}`);
+    for (const f of r.routes.findings) L.push(`      ⚠ [${f.code}] ${f.msg}`);
   }
 
   // E2: source drift (network only). Advisory for one release by instruction — but the row

@@ -11,6 +11,7 @@ import { readFileSync } from "node:fs";
 import {
   forecastFactsUnregistered,
   regulatoryChangeUnregistered,
+  unannouncedUnregistered,
   stageBurst,
   weaklySupportedLedgerRows,
   unresolvedContradictions,
@@ -83,6 +84,34 @@ describe("regulatoryChangeUnregistered — regression case 5", () => {
 
   it("skips day sections — clock times in a day plan are never registry facts", () => {
     expect(regulatoryChangeUnregistered([{ type: "days", title: "Day by day", body: "effective Nov 1" }], {})).toEqual([]);
+  });
+});
+
+describe("unannouncedUnregistered — regression case 3", () => {
+  const wildArea = [{ title: "Day by day", body: "exact venue and ticket sales were still unannounced as of this guide's last check." }];
+
+  it("flags an announcement-pending detail that no fact row tracks", () => {
+    expect(unannouncedUnregistered(wildArea, {}).map((f) => f.code)).toEqual(["unannounced-untracked"]);
+  });
+
+  it("is silent once a fact row tracks the open question", () => {
+    expect(unannouncedUnregistered(wildArea, { x: { claim: "Wild Area venue", value: "unannounced" } })).toEqual([]);
+  });
+
+  it("EXEMPTS archived guides — a concluded trip's unknowns are historical, not pending", () => {
+    // This scoping is what made case 3 shippable: it drops korea and denmark (both archived)
+    // entirely, including denmark's two hits, which are exactly this historical class.
+    expect(unannouncedUnregistered(wildArea, {}, { archived: true })).toEqual([]);
+  });
+
+  it("does NOT fire on a traveller instruction or on evidence-quality prose", () => {
+    // The two false positives a wider net produced: "has to be confirmed ahead" is an
+    // instruction to the reader; "not confirmed bookings" describes how good an estimate is.
+    const benign = [
+      { title: "A", body: "individual summer access has to be confirmed ahead." },
+      { title: "B", body: "Figures below are sourced estimates (≈), not confirmed bookings." },
+    ];
+    expect(unannouncedUnregistered(benign, {})).toEqual([]);
   });
 });
 

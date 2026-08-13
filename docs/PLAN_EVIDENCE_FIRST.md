@@ -501,7 +501,13 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
 - FILES TO CHANGE: the test file only.
 - DO NOT TOUCH: checkers (failures here are checker bugs — fix via the owning packet, never by loosening the test).
 - TESTS: itself. ACCEPTANCE: 12/12 red-green — each case demonstrably detected; suite is part of `npm test`.
-- **STATUS 2026-08-13 — LANDED at 10/12, with the 2 gaps NAMED, not hidden.**
+- **STATUS 2026-08-13 — LANDED at 12/12 (mandate §31 met).** First landed at 10/12; both gaps
+  were then closed in the same session — see the two entries after this one. Case **11** is
+  asserted as an ADVISORY rather than a blocker, exactly as the fixture MANIFEST fixes it
+  (Routes is config-gated and default OFF; a check that cannot run must never fail a run), and
+  case **1b** stays `todo` because the MANIFEST classes it "documented only" — authoring
+  discipline (D2), never a gate, so there is nothing mechanical to assert. Superseded detail
+  from the 10/12 landing:
   `scripts/__tests__/japan-regression.test.mjs`, table-driven against the frozen fixture, in
   `npm test`. Detected: **1a** (negative — C2 correctly stays silent on two travellers' two
   birthdays), **2, 4, 5, 6, 7, 8, 9, 10, 12**. Case **1b** is `documented only` by the MANIFEST's
@@ -515,8 +521,25 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
   - **Case 11** (unverified leg durations) — needs the **Google Routes integration**, which no
     packet ever built. Routes was settled as YES (clarifying question 4: config-gated, default
     OFF, absent key ⇒ advisory) but never scheduled. Owner: a new Routes packet.
-  A coverage-accounting test asserts the 10/2 split numerically, so adding a detector without
-  updating the accounting fails the suite rather than silently drifting.
+  A coverage-accounting test asserts the split numerically (now 12), so removing a detector or
+  dropping a case fails the suite rather than letting claimed coverage drift.
+- **Case 3 CLOSED** (`unannouncedUnregistered`, in `check-uncertainty.mjs`). The scoping that made
+  it shippable: **archived guides are exempt**, because a concluded trip's unknowns are historical
+  — the announcement already landed and the guide is a record, not a plan (the same reason
+  `check-staleness` skips archived guides). That drops korea and denmark entirely, including
+  denmark's two hits, which are exactly that historical class. The vocabulary is also narrowed to
+  ANNOUNCEMENT-class terms only: calibration showed "to be confirmed" catches a traveller
+  INSTRUCTION ("access has to be confirmed ahead") and "not confirmed" catches a description of
+  evidence quality ("sourced estimates (≈), not confirmed bookings") — neither is an open research
+  state. Result: zero findings on korea/us/denmark, the fixture's Wild Area caught.
+- **Case 11 CLOSED** (`scripts/audit/check-routes.mjs`, verify's `routes` row). Advisory ALWAYS,
+  per the MANIFEST. The advisory half needs no key and works today: it counts leg durations
+  carrying no `source_url` (korea 12/62 · denmark 17/27 · us 3/6 · fixture 15/33 — this defect is
+  systemic, not particular). **What is NOT built, stated plainly:** live Routes verification is
+  gated and inert, and the blocker is structural rather than credential-shaped — durations live in
+  prose with no machine-readable origin→destination pair to query. Structuring legs against the
+  guide's own `map` points is the remaining work, and the check SAYS so when a key is present
+  rather than silently no-opping.
 
 ### Case→packet coverage map (mandate §31)
 

@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-2051 checks · 2051 carry a stated promise · 170 files
+2065 checks · 2065 carry a stated promise · 171 files
 
 ## Can everyone read it
 
@@ -1785,32 +1785,36 @@ nothing ships.
 
 **A guide cannot be published quoting forecasts, weak sources, or unresolved contradictions as if they were settled.**
 
-- flags a forecast term quoted with dates but backed by no fact row  <sub>scripts/__tests__/check-uncertainty.test.mjs:26</sub>
-- matches BOTH orders — guides write the date before the term as often as after  <sub>scripts/__tests__/check-uncertainty.test.mjs:31</sub>
-- is silent when a fact row DOES cover the term — korea's fact-backed monsoon claims  <sub>scripts/__tests__/check-uncertainty.test.mjs:40</sub>
-- does NOT treat a time of day as a seasonal date — the mid-morning false positive  <sub>scripts/__tests__/check-uncertainty.test.mjs:46</sub>
-- reports each term once, not once per section  <sub>scripts/__tests__/check-uncertainty.test.mjs:53</sub>
-- flags a rule change stated with a date and backed by no fact row  <sub>scripts/__tests__/check-uncertainty.test.mjs:63</sub>
-- is silent once a fact row carries that date  <sub>scripts/__tests__/check-uncertainty.test.mjs:69</sub>
-- does NOT fire on verification-stamp language — the false positives that deferred this  <sub>scripts/__tests__/check-uncertainty.test.mjs:74</sub>
-- skips day sections — clock times in a day plan are never registry facts  <sub>scripts/__tests__/check-uncertainty.test.mjs:84</sub>
-- flags consecutive stages checkpointed under the floor  <sub>scripts/__tests__/check-uncertainty.test.mjs:92</sub>
-- is silent on genuine gaps — real runs are thousands of seconds apart  <sub>scripts/__tests__/check-uncertainty.test.mjs:98</sub>
-- ignores absent stages and a missing state file entirely  <sub>scripts/__tests__/check-uncertainty.test.mjs:102</sub>
-- flags a row that is B-only AND self-flagged as not directly fetched  <sub>scripts/__tests__/check-uncertainty.test.mjs:111</sub>
-- does NOT flag a B-only row that WAS fetched — B-only is normal, unverified is not  <sub>scripts/__tests__/check-uncertainty.test.mjs:118</sub>
-- is silent on an intake with no reconciliation ledger  <sub>scripts/__tests__/check-uncertainty.test.mjs:122</sub>
-- flags a contradiction with no question block recording an assumption  <sub>scripts/__tests__/check-uncertainty.test.mjs:130</sub>
-- is satisfied once the intake carries a q-block with an **Assumed:** line  <sub>scripts/__tests__/check-uncertainty.test.mjs:134</sub>
-- says nothing when C2 found no contradictions at all  <sub>scripts/__tests__/check-uncertainty.test.mjs:139</sub>
-- BLOCKS on a draft and only ADVISES on a published guide, with identical findings  <sub>scripts/__tests__/check-uncertainty.test.mjs:147</sub>
-- passes a guide with nothing to say — an empty artifact set is not a finding  <sub>scripts/__tests__/check-uncertainty.test.mjs:154</sub>
-- fails the fixture outright  <sub>scripts/__tests__/check-uncertainty.test.mjs:178</sub>
-- case 5 — the tax-free cutover date, plan-critical and unregistered  <sub>scripts/__tests__/check-uncertainty.test.mjs:182</sub>
-- case 4 — koyo and foliage quoted with dates, zero fact rows covering them  <sub>scripts/__tests__/check-uncertainty.test.mjs:186</sub>
-- case 8 — passA/passB/reconcile checkpointed 71ms apart across three stages  <sub>scripts/__tests__/check-uncertainty.test.mjs:192</sub>
-- case 7 — the Sapporo birthday dinner shipped on Pass B convergence alone  <sub>scripts/__tests__/check-uncertainty.test.mjs:196</sub>
-- case 2 — the unresolved Oct 15 / Oct 22 start-date range  <sub>scripts/__tests__/check-uncertainty.test.mjs:200</sub>
+- flags a forecast term quoted with dates but backed by no fact row  <sub>scripts/__tests__/check-uncertainty.test.mjs:27</sub>
+- matches BOTH orders — guides write the date before the term as often as after  <sub>scripts/__tests__/check-uncertainty.test.mjs:32</sub>
+- is silent when a fact row DOES cover the term — korea's fact-backed monsoon claims  <sub>scripts/__tests__/check-uncertainty.test.mjs:41</sub>
+- does NOT treat a time of day as a seasonal date — the mid-morning false positive  <sub>scripts/__tests__/check-uncertainty.test.mjs:47</sub>
+- reports each term once, not once per section  <sub>scripts/__tests__/check-uncertainty.test.mjs:54</sub>
+- flags a rule change stated with a date and backed by no fact row  <sub>scripts/__tests__/check-uncertainty.test.mjs:64</sub>
+- is silent once a fact row carries that date  <sub>scripts/__tests__/check-uncertainty.test.mjs:70</sub>
+- does NOT fire on verification-stamp language — the false positives that deferred this  <sub>scripts/__tests__/check-uncertainty.test.mjs:75</sub>
+- skips day sections — clock times in a day plan are never registry facts  <sub>scripts/__tests__/check-uncertainty.test.mjs:85</sub>
+- flags an announcement-pending detail that no fact row tracks  <sub>scripts/__tests__/check-uncertainty.test.mjs:93</sub>
+- is silent once a fact row tracks the open question  <sub>scripts/__tests__/check-uncertainty.test.mjs:97</sub>
+- EXEMPTS archived guides — a concluded trip's unknowns are historical, not pending  <sub>scripts/__tests__/check-uncertainty.test.mjs:101</sub>
+- does NOT fire on a traveller instruction or on evidence-quality prose  <sub>scripts/__tests__/check-uncertainty.test.mjs:107</sub>
+- flags consecutive stages checkpointed under the floor  <sub>scripts/__tests__/check-uncertainty.test.mjs:121</sub>
+- is silent on genuine gaps — real runs are thousands of seconds apart  <sub>scripts/__tests__/check-uncertainty.test.mjs:127</sub>
+- ignores absent stages and a missing state file entirely  <sub>scripts/__tests__/check-uncertainty.test.mjs:131</sub>
+- flags a row that is B-only AND self-flagged as not directly fetched  <sub>scripts/__tests__/check-uncertainty.test.mjs:140</sub>
+- does NOT flag a B-only row that WAS fetched — B-only is normal, unverified is not  <sub>scripts/__tests__/check-uncertainty.test.mjs:147</sub>
+- is silent on an intake with no reconciliation ledger  <sub>scripts/__tests__/check-uncertainty.test.mjs:151</sub>
+- flags a contradiction with no question block recording an assumption  <sub>scripts/__tests__/check-uncertainty.test.mjs:159</sub>
+- is satisfied once the intake carries a q-block with an **Assumed:** line  <sub>scripts/__tests__/check-uncertainty.test.mjs:163</sub>
+- says nothing when C2 found no contradictions at all  <sub>scripts/__tests__/check-uncertainty.test.mjs:168</sub>
+- BLOCKS on a draft and only ADVISES on a published guide, with identical findings  <sub>scripts/__tests__/check-uncertainty.test.mjs:176</sub>
+- passes a guide with nothing to say — an empty artifact set is not a finding  <sub>scripts/__tests__/check-uncertainty.test.mjs:183</sub>
+- fails the fixture outright  <sub>scripts/__tests__/check-uncertainty.test.mjs:207</sub>
+- case 5 — the tax-free cutover date, plan-critical and unregistered  <sub>scripts/__tests__/check-uncertainty.test.mjs:211</sub>
+- case 4 — koyo and foliage quoted with dates, zero fact rows covering them  <sub>scripts/__tests__/check-uncertainty.test.mjs:215</sub>
+- case 8 — passA/passB/reconcile checkpointed 71ms apart across three stages  <sub>scripts/__tests__/check-uncertainty.test.mjs:221</sub>
+- case 7 — the Sapporo birthday dinner shipped on Pass B convergence alone  <sub>scripts/__tests__/check-uncertainty.test.mjs:225</sub>
+- case 2 — the unresolved Oct 15 / Oct 22 start-date range  <sub>scripts/__tests__/check-uncertainty.test.mjs:229</sub>
 
 **A guide cannot publish with unsourced facts or broken references.**
 
@@ -2209,17 +2213,18 @@ nothing ships.
 
 **Every defect class the first Japan guide shipped stays detectable.**
 
-- the fixture as a whole FAILS both enforcing gates — it must never read as shippable  <sub>scripts/__tests__/japan-regression.test.mjs:51</sub>
-- 1a (NEGATIVE) — two travellers' two birthdays are NOT a contradiction; C2 must stay silent  <sub>scripts/__tests__/japan-regression.test.mjs:57</sub>
-- 1b — the guide never attributes either birthday to a person (authoring, by design not a gate — MANIFEST: 'documented only')  <sub>scripts/__tests__/japan-regression.test.mjs:64</sub>
-- … — … → […]  <sub>scripts/__tests__/japan-regression.test.mjs:79</sub>
-- 9 (detail) — the misattribution finding names the actual figure, not just the row ids  <sub>scripts/__tests__/japan-regression.test.mjs:84</sub>
-- 10 (detail) — all THREE malformed values are caught, not just the first  <sub>scripts/__tests__/japan-regression.test.mjs:88</sub>
-- 8 (detail) — both burst gaps are reported (passA→passB and passB→reconcile)  <sub>scripts/__tests__/japan-regression.test.mjs:92</sub>
-- 12 — a seasonal-closure notice replacing the Zao price page drifts (the 200-≠-verified case)  <sub>scripts/__tests__/japan-regression.test.mjs:97</sub>
-- 3 — unresolved anchor venue (Wild Area, prose-only) → needs an anchor-scoped 'unresolved plan-critical unknown' detector. A naive unresolved-language scan fires on korea/us/denmark too, so it needs anchor scoping before it can ship (owner: E1(a))  <sub>scripts/__tests__/japan-regression.test.mjs:110</sub>
-- 11 — unverified leg durations → needs the Google Routes integration, which no packet has built yet (settled as YES, config-gated + default OFF, clarifying question 4; owner: a Routes packet)  <sub>scripts/__tests__/japan-regression.test.mjs:112</sub>
-- reports 10 of 12 cases detected, with the 2 gaps named  <sub>scripts/__tests__/japan-regression.test.mjs:116</sub>
+- the fixture as a whole FAILS both enforcing gates — it must never read as shippable  <sub>scripts/__tests__/japan-regression.test.mjs:62</sub>
+- 1a (NEGATIVE) — two travellers' two birthdays are NOT a contradiction; C2 must stay silent  <sub>scripts/__tests__/japan-regression.test.mjs:68</sub>
+- 1b — the guide never attributes either birthday to a person (authoring, by design not a gate — MANIFEST: 'documented only')  <sub>scripts/__tests__/japan-regression.test.mjs:75</sub>
+- … — … → […]  <sub>scripts/__tests__/japan-regression.test.mjs:91</sub>
+- 9 (detail) — the misattribution finding names the actual figure, not just the row ids  <sub>scripts/__tests__/japan-regression.test.mjs:96</sub>
+- 10 (detail) — all THREE malformed values are caught, not just the first  <sub>scripts/__tests__/japan-regression.test.mjs:100</sub>
+- 8 (detail) — both burst gaps are reported (passA→passB and passB→reconcile)  <sub>scripts/__tests__/japan-regression.test.mjs:104</sub>
+- 12 — a seasonal-closure notice replacing the Zao price page drifts (the 200-≠-verified case)  <sub>scripts/__tests__/japan-regression.test.mjs:109</sub>
+- 11 — leg durations asserted with no routing authority → [leg-duration-unverified], advisory  <sub>scripts/__tests__/japan-regression.test.mjs:119</sub>
+- 11 (detail) — with no key configured, the check says so and never escalates  <sub>scripts/__tests__/japan-regression.test.mjs:127</sub>
+- reports 12 of 12 cases detected — the mandate §31 bar  <sub>scripts/__tests__/japan-regression.test.mjs:135</sub>
+- case 11 is the only one whose verdict is advisory rather than a finding/blocker  <sub>scripts/__tests__/japan-regression.test.mjs:142</sub>
 
 **Every guide has its own shared-budget room, and a swap leaves a trail.**
 
@@ -2518,6 +2523,18 @@ nothing ships.
 - the recorded drift debt only ever shrinks  <sub>scripts/__tests__/drift-real.test.mjs:34</sub>
 - every exemption is a named class carrying its own justification  <sub>scripts/__tests__/drift-real.test.mjs:42</sub>
 - classifies against the real source line, not the checker's truncated echo  <sub>scripts/__tests__/drift-real.test.mjs:51</sub>
+
+**Transit durations are measured against a routing authority, or the gap is counted.**
+
+- finds a duration stated in transit context  <sub>scripts/__tests__/check-routes.test.mjs:14</sub>
+- ignores a duration with no transit context — a dwell time is not a leg  <sub>scripts/__tests__/check-routes.test.mjs:18</sub>
+- counts a unit as sourced when its SECTION carries the source_url  <sub>scripts/__tests__/check-routes.test.mjs:22</sub>
+- is false without a key and true with one — inert until configured  <sub>scripts/__tests__/check-routes.test.mjs:33</sub>
+- is ADVISORY, never fail, when legs are unattested and no key is set  <sub>scripts/__tests__/check-routes.test.mjs:40</sub>
+- counts attested vs total rather than flagging each leg individually  <sub>scripts/__tests__/check-routes.test.mjs:47</sub>
+- with a key set, says the remaining blocker is structural, not credential-shaped  <sub>scripts/__tests__/check-routes.test.mjs:53</sub>
+- is n/a for a guide that asserts no leg durations at all  <sub>scripts/__tests__/check-routes.test.mjs:62</sub>
+- never returns 'fail' under any input — the ruling this check exists under  <sub>scripts/__tests__/check-routes.test.mjs:66</sub>
 
 **Trip feedback exports carry the survey answers and nothing personal.**
 

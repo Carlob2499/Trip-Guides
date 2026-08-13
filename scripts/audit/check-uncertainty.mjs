@@ -122,6 +122,50 @@ export function regulatoryChangeUnregistered(sections = [], facts = null) {
   return findings;
 }
 
+/** Announcement-class vocabulary: a detail a THIRD PARTY has yet to publish. Deliberately
+    narrow, and the narrowness is the whole detector. Calibration showed the obvious wider net
+    ("to be confirmed", "not confirmed") catches two things that are not this defect at all:
+    a traveller INSTRUCTION ("individual access has to be confirmed ahead") and a description
+    of evidence quality ("sourced estimates (≈), not confirmed bookings"). Neither is an open
+    research state waiting on someone else's announcement. */
+const UNANNOUNCED_TERM =
+  /\b(unannounced|not yet announced|to be announced|TBA\b|not yet published|yet to be announced|awaiting announcement)/i;
+
+/** Regression case 3 — a plan-critical unknown with no structural home.
+ *
+ * Japan's Wild Area venue and ticket sales were unannounced when the guide was written, and the
+ * guide says so honestly. The defect is that no `facts.json` row tracks the open question, so
+ * when the announcement lands nothing re-checks it — an R3 plan-critical unknown that will
+ * silently stay wrong.
+ *
+ * ARCHIVED GUIDES ARE EXEMPT, and that is the scoping that makes this shippable. A concluded
+ * trip's unknowns are historical: the announcement already happened, the traveller already went,
+ * and the guide is a record rather than a plan. This is the same reason `check-staleness` skips
+ * archived guides. With it, korea and denmark drop out entirely (both archived, and denmark's two
+ * hits are exactly this historical class), `us` is clean, and the fixture's Wild Area is the only
+ * finding — which is why case 3 could ship here after being deferred out of E1 as too noisy.
+ */
+export function unannouncedUnregistered(sections = [], facts = null, { archived = false } = {}) {
+  if (archived) return [];
+  const factText = JSON.stringify(facts ?? {}).toLowerCase();
+  const findings = [];
+  for (const s of sections) {
+    const raw = JSON.stringify(s);
+    const m = raw.match(UNANNOUNCED_TERM);
+    if (!m) continue;
+    // Covered when a fact row already tracks the open question — the structural home this is
+    // asking for. A row whose own value/claim says "unannounced" IS the tracker.
+    if (UNANNOUNCED_TERM.test(factText)) continue;
+    findings.push({
+      code: "unannounced-untracked",
+      msg:
+        `§"${s.title || s.group || "(untitled)"}" states a detail is ${m[1].toLowerCase()} but no facts.json row ` +
+        `tracks the open question — when it IS announced, nothing here will notice`,
+    });
+  }
+  return findings;
+}
+
 /** Regression case 8 — research stages checkpointed in a burst.
  *
  * Pass A and Pass B are architecturally required to be INDEPENDENT research acts, and
@@ -229,11 +273,13 @@ export function evaluateUncertainty({
   intakeMd = "",
   state = null,
   contradictions = [],
+  archived = false,
   enforce = false,
 } = {}) {
   const findings = [
     ...forecastFactsUnregistered(sections, facts),
     ...regulatoryChangeUnregistered(sections, facts),
+    ...unannouncedUnregistered(sections, facts, { archived }),
     ...stageBurst(state),
     ...weaklySupportedLedgerRows(intakeMd),
     ...unresolvedContradictions(intakeMd, contradictions),
