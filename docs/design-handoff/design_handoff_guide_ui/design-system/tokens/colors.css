@@ -39,7 +39,10 @@
   --caution-ochre: #7f4a07;
   --caution-ochre-dark: #d9923f;
   --emergency-red: #b3261e;
-  --emergency-red-dark: #ef5350;
+  /* Measured, not picked: #ef8a83 on the night --card #242c34 = 5.81:1. The old #ef5350 sat at
+     2.16:1 there — under even the 3:1 large-text floor, on the one number someone dials in an
+     emergency. See the ATLAS TOKEN CONTRACT note on --crit in src/styles/base.css. */
+  --emergency-red-dark: #ef8a83;
 }
 
 /* ── Daylight (default) ─────────────────────────────────────────────────────

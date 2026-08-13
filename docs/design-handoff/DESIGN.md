@@ -19,7 +19,7 @@ colors:
   caution-ochre: "#7f4a07"
   caution-ochre-dark: "#d9923f"
   emergency-red: "#b3261e"
-  emergency-red-dark: "#ef5350"
+  emergency-red-dark: "#ef8a83"
   chart-room-slate: "#0f1317"
   chart-room-sunken: "#1a2129"
   chart-room-card: "#242c34"
@@ -45,23 +45,23 @@ cssVariables:
   "--hdr-h": "measured sticky-header height, written by JS for sticky offsets"
 typography:
   display:
-    fontFamily: "'Literata', Georgia, 'Times New Roman', serif"
+    fontFamily: "'Literata Variable', Georgia, 'Times New Roman', AppleMyungjo, Batang, 'Noto Serif CJK KR', serif"
     fontSize: "clamp(2.5rem, 6vw, 4.8rem)"
     fontWeight: 640
     lineHeight: 0.98
     letterSpacing: "-0.014em"
   headline:
-    fontFamily: "'Literata', Georgia, serif"
+    fontFamily: "'Literata Variable', Georgia, 'Times New Roman', AppleMyungjo, Batang, 'Noto Serif CJK KR', serif"
     fontSize: "clamp(1.5rem, 4vw, 2.2rem)"
     fontWeight: 400
     lineHeight: 1.15
   title:
-    fontFamily: "'Literata', Georgia, serif"
+    fontFamily: "'Literata Variable', Georgia, 'Times New Roman', AppleMyungjo, Batang, 'Noto Serif CJK KR', serif"
     fontSize: "1.45rem"
     fontWeight: 500
     lineHeight: 1.15
   body:
-    fontFamily: "'Literata', Georgia, serif"
+    fontFamily: "'Literata Variable', Georgia, 'Times New Roman', AppleMyungjo, Batang, 'Noto Serif CJK KR', serif"
     fontSize: "1.02rem"
     fontWeight: 400
     lineHeight: 1.72

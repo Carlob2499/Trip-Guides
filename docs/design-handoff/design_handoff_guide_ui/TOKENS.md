@@ -81,7 +81,7 @@ Two faces. **No third face and no monospace.**
 | Data, labels, all notation — the notation voice | **Source Sans 3** (400 600 700) | `--fs` |
 
 ```css
---fd: Literata, Georgia, "Times New Roman", serif;
+--fd: "Literata Variable", Georgia, "Times New Roman", AppleMyungjo, Batang, "Noto Serif CJK KR", serif;
 --fs: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
 ```
 
