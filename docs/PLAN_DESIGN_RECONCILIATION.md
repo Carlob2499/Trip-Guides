@@ -102,7 +102,11 @@ strict (single-city guides keep the whole kicker in the eyebrow).
 - [x] **Tools** (4 stations) vs P1 `06, 07, 11, 12` — note jetlag is retired as a tool (reads in Plan)
 - [x] **Notation family** vs P1 `16` + P3 the-gap/notation cards — dot, chip, stamp, reading, gap
 - [x] **Tablet pass** at 744–1179 vs P3 `Waypoint Guide Tablet.dc.html` — the least-exercised model
-- [ ] **All FIX rows implemented** (each through the full Ship Loop, §7)
+- [x] **All FIX rows implemented** (each through the full Ship Loop, §7) — Tier 0 (`7b4d92a`)
+  and Tier 1/2 (`c05fe26`) both landed; spot-verified 2026-08-13 against current source
+  (`.anchor-btn`/`.copy-addr` at `999px`, `.panel__rule` hairline present, world/table
+  `aria-pressed` synced to cold-load state, `.atlas-quick-cta` a filled 44px pill) — all match
+  the A3 Results table's fix descriptions.
 - [x] **All ASK rows put to the creator** — 4 genuine forks surfaced (trip ordering, panel-title
   size, route-order picker, breakpoint scope); all answered and recorded in CONTEXT.md. Lower-
   stakes ASKs from the audit (glyph shape, motion-duration deltas, wording nits) had a sane
@@ -239,13 +243,15 @@ needed).
 P3 carries a finished, well-written `waypoint-design` skill (brand rules, the five failure
 modes, build-start instructions). Nothing like it exists in the repo.
 
-- [ ] Port to `.claude/skills/waypoint-design/SKILL.md` with its `readme.md` +
+- [x] Port to `.claude/skills/waypoint-design/SKILL.md` with its `readme.md` +
   `styles.css` + `components/` + `guidelines/` references pointed at
   `docs/design-handoff/design_handoff_guide_ui/design-system/` (the repo copy — do not
-  duplicate the asset tree into the skill).
-- [ ] Its token values must reference the post-`5928f9f` corrected files (they already live in
-  the repo copy).
-- [ ] Verify the skill loads and triggers (one throwaway invocation in a test session).
+  duplicate the asset tree into the skill). DONE, `e9ba8a5`.
+- [x] Its token values must reference the post-`5928f9f` corrected files (they already live in
+  the repo copy) — satisfied structurally: the skill points at the repo copy's directory rather
+  than inlining any values of its own, so it always reads whatever that directory currently has.
+- [x] Verify the skill loads and triggers — confirmed 2026-08-13, listed and available in a live
+  session's skill roster.
 
 ### B2. `HANDOFF.md` (P3 top-level) diff-check — RESOLVED 2026-08-12
 
@@ -293,6 +299,18 @@ that nothing was lost in derivation:
 
 Working captures from the design iterations (`01-fin`, `02-final`, `night`, `sedona`,
 `split-empty`, `sheet`, `nav`…).
+
+**BLOCKED, not merely undone (re-checked 2026-08-13 with `DesignSync` actually live in-session,
+correcting B2/B5's earlier note that it was unreachable — it is reachable from a main session,
+just wasn't from a subagent):** `list_projects` returns exactly two projects under this login —
+`Design System` (`ef8458ac-…`, the P1/P3 design-system export C4 already targets — Panel.jsx,
+tokens/, ui_kits/, matches everything this plan cites) and `Nocturne` (unrelated: a generic
+slide-deck/landing-page kit, not Waypoint). Neither has a `shots/` directory or a top-level
+`HANDOFF.md` in `list_files`. B2 already fetched and byte-diffed a P3 `HANDOFF.md` successfully
+in an earlier session, so that project existed and was reachable once — it is simply not among
+the two this account's `DesignSync` login can see today (renamed, deleted, or a different
+account scope). Do not invent captures or guess a project ID; record as blocked on project
+access, not tool access, and move on until the right project is reachable.
 
 - [ ] Fetch and review once; keep any capture that shows a state the committed screenshot sets
   lack (e.g. `split-empty` = Trip Split's empty state, `night` variants, Sedona single-city).
