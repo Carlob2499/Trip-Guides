@@ -405,10 +405,22 @@ not novelty:
   theme, so `var()` is structurally wrong there), the same accepted-debt class as the `og`/`recap`
   PNG generators already sitting in this baseline unexempted.
 
-  Remaining, file-by-file, same cadence: `flight.css`/`intake.css`/
-  `jetlag.css`/`map.css`/`painted-atlas.css`/`panel-preview/`/`mobile-nav.css` RADIUS+ELEVATION,
-  `sights.css`/`atlas-map.js`/`firebase/styles.css`/`gmaps-render.js`/`PwaHead.astro`/
-  `GuideLayout.astro`/`og`+`recap` pages/`util.js`/`accent-tokens.ts` COLOUR.
+  `flight.css` and `mobile-nav.css` are DONE too (104→100): `.cat-fan-img`'s decorative shadow
+  (the chapter-opener's fanned photo stack) had no stated functional reason and no prototype/
+  screenshot backing either way (this component predates the Atlas redesign entirely — not in
+  the design-system export) — removed, radius→`0`; verified in a screenshot that the existing
+  `border:2px solid var(--card)` alone still reads clearly as separated, overlapping photos in
+  both themes with no shadow. `.nav-hint` and `.botbar`'s shadows are the OPPOSITE case — each
+  carries its own comment stating a real functional reason (a floating, out-of-flow chrome
+  element needs the shadow to read as lifted off the page, not docked to it — `.botbar`'s shadow
+  is even scoped to exactly the `>=600px` media query where its own comment says it becomes "a
+  centred pill"), so `overlay-shadow-is-approved` is extended to cover both by name rather than
+  the CSS being changed against its own stated reasoning.
+
+  Remaining, file-by-file, same cadence: `intake.css`/`jetlag.css`/`map.css`/`painted-atlas.css`/
+  `panel-preview/` RADIUS+ELEVATION, `sights.css`/`atlas-map.js`/`firebase/styles.css`/
+  `gmaps-render.js`/`PwaHead.astro`/`GuideLayout.astro`/`util.js`/`accent-tokens.ts` COLOUR
+  (`og`/`recap` pages stay baselined like `budget-sheet.css` — same forced-literal class).
 - [x] **C2a. Day-chip pill→underline fix** — DONE. `planner.css`'s `.dchip` lost `border-radius`,
   `border`, and `background:var(--card)` (→ `border:0;border-bottom:2px solid transparent`,
   `background:transparent`); `.dchip-active` ground moved from `var(--accent)` to `var(--sunken)`

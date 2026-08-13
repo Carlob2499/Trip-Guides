@@ -37,7 +37,7 @@
 /* ── Opener photo fan — a group's own verified photos, fanned like a hand of
       postcards beside the numeral (static). ────────────────────────────────── */
 .cat-fan{position:absolute;right:clamp(.5rem,4vw,3rem);top:.4rem;z-index:1;width:130px;height:88px;pointer-events:none}
-.cat-fan-img{position:absolute;width:86px;height:62px;object-fit:cover;border-radius:8px;border:2px solid var(--card);box-shadow:0 4px 14px rgba(10,14,18,.28)}
+.cat-fan-img{position:absolute;width:86px;height:62px;object-fit:cover;border-radius:0;border:2px solid var(--card)}
 .cat-fan-0{left:0;top:12px;transform:rotate(-7deg)}
 .cat-fan-1{left:26px;top:4px;transform:rotate(2deg)}
 .cat-fan-2{left:52px;top:14px;transform:rotate(9deg)}

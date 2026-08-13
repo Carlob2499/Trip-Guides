@@ -143,10 +143,10 @@ export const EXEMPTIONS = [
   },
   {
     id: "overlay-shadow-is-approved",
-    why: "The kit's blanket 'no elevation' rule is outranked by the approved prototype's own markup, which gives the FAB, the menu sheet and the ping sheet real shadows. Extended to the other overlays built in that language: bottom sheets, modals, popovers, toasts and the drag state.",
+    why: "The kit's blanket 'no elevation' rule is outranked by the approved prototype's own markup, which gives the FAB, the menu sheet and the ping sheet real shadows. Extended to the other overlays built in that language: bottom sheets, modals, popovers, toasts and the drag state. Extended again 2026-08-13 to two more, each with its OWN comment stating the same functional reason (a floating chrome element needs the shadow to read as lifted off the page, not docked to it) rather than any new judgment call here: `flight.css`'s `.nav-hint` ('It has its own background + shadow so it reads as a floating strip, not a layout row' — position:absolute, out of flow, already differentiated further by a dashed border + tinted background) and `mobile-nav.css`'s `.botbar` at the >=600px breakpoint only, where its own comment says 'Float it as a centred pill instead' — the shadow is scoped to exactly that media query, absent from the docked phone-width bar that doesn't need it.",
     test: (v) =>
       v.category === "ELEVATION" &&
-      /(menufab|menusheet|pingsheet|\.sheet|sos-|modal|-pop|toast|drag|resume-chip|offline-pill|pal-|sm-|lnw-|cr-|share-|pincard)/.test(blockOf(v)),
+      /(menufab|menusheet|pingsheet|\.sheet|sos-|modal|-pop|toast|drag|resume-chip|offline-pill|pal-|sm-|lnw-|cr-|share-|pincard|nav-hint|botbar)/.test(blockOf(v)),
   },
   {
     id: "pincard-credit-sits-on-a-photograph",

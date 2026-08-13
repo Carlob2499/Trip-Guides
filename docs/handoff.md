@@ -22,51 +22,48 @@
   (presentation/motion) · `docs/standards/guide-rubric.md` (quality bar) ·
   `docs/evidence/competitive-landscape.md` (market parity reference) ·
   **`docs/PLAN_DESIGN_RECONCILIATION.md`** is the live work order for design/theme work — its
-  §A/§B (fidelity audit, unshipped-material mining) are DONE; §C is IN PROGRESS at §C1
-  (drift paydown, file-by-file — `guide.css` and `divergences.css` done, others queued below).
-  `docs/archive/PLAN_ATLAS_MIGRATION.md` is fully ticked and archived — read for history only.
+  §A/§B (fidelity audit, unshipped-material mining) are DONE; §C is IN PROGRESS at §C1 (drift
+  paydown, file-by-file — `guide.css`/`divergences.css`/`flight.css`/`mobile-nav.css` done,
+  others queued below). `docs/archive/PLAN_ATLAS_MIGRATION.md` is fully ticked — history only.
 
-## Snapshot (2026-08-13c — §C1 continues: divergences.css clean, and two real
-accent-contrast bugs found doing the cleanup, not caused by it)
+## Snapshot (2026-08-13d — §C1 continues: flight.css/mobile-nav.css clean; two stale-doc
+corrections; B4 re-diagnosed with DesignSync actually reachable)
 
-One commit, ship-loop-clean: 1748 vitest, full 57-test `a11y.spec.ts` Playwright suite
-(axe scans on every guide, both themes), build/lint/typecheck/drift green. Drift real count
-109→104.
+Three commits, ship-loop-clean each: 1748 vitest, full 57-test `a11y.spec.ts` Playwright suite,
+build/lint/typecheck/drift green. Drift real count 104→100.
 
-**`divergences.css`'s 5 COLOUR violations were dead code, not live drift.** Its
-`var(--accent, #a6721b)`-style fallbacks can never actually resolve — the file only ever renders
-inside `GuideLayout.astro`, where base.css's tokens are always defined — and the fallback hexes
-themselves were stale pre-R2 placeholders nobody had touched since. Deleted outright rather than
-"fixed" to a new value.
+**`.cat-fan-img`'s decorative shadow (the chapter-opener's fanned-photo stack) is gone — no
+stated functional reason, and this component predates the Atlas redesign (not in the
+design-system export to check against).** Radius→`0`, shadow removed; screenshot-verified in
+both themes that the existing `border:2px solid var(--card)` alone still reads clearly as
+separated, overlapping photos.
 
-**Deleting one dead fallback exposed a real bug the gate's own regex couldn't see through the
-two-argument `var()` call:** `.divergence-source{color:var(--accent, …)}` was raw `--accent` as
-text — the exact "occurrence 1" class `accent-ink-contract.test.mjs` exists to catch — invisible
-to it only because the fallback comma broke the gate's pattern match. Fixed to `--accent-ink`.
+**`.nav-hint` and `.botbar`'s shadows are the opposite case — kept, and formally exempted
+instead.** Each carries its OWN comment stating a real functional reason (a floating,
+out-of-flow element needs the shadow to read as lifted, not docked — `.botbar`'s is even scoped
+to exactly the `>=600px` media query its own comment calls "a centred pill"). Extended
+`overlay-shadow-is-approved` to name both rather than changing CSS against its own stated
+reasoning.
 
-**Checking the file's other accent-as-text pairing by hand (not caught by any gate) found a
-worse, second bug:** `.divergence-cat{background:var(--accent);color:var(--bg)}` measures 5.13:1
-in light mode but **2.90:1 in dark** — under even the 3:1 large-text floor — because `--bg`
-doesn't remap alongside `--accent` the way `--on-accent` is derived to. Every other
-`background:var(--accent)` pairing in the codebase (nine of them) already uses `--on-accent`;
-this was the one outlier, now fixed to match (4.52:1, the same floor `--on-accent` holds
-everywhere else).
-
-**`budget-sheet.css` stays baselined, deliberately not touched:** its literals are
-`@media print`-forced-light values that must render on white paper regardless of the reader's
-live theme, so `var()` is structurally wrong there — the same accepted-debt class as the
-`og`/`recap` PNG generators already sitting unexempted in this same baseline.
+**Two stale-doc corrections, found by checking the plan against actual source instead of
+trusting old checkboxes:** §B1 (the `waypoint-design` skill) and every A3 FIX row were already
+done — commits `e9ba8a5`/`c05fe26`/`7b4d92a` — just never ticked. And §B4 ("`shots/` triage")
+was marked "blocked, DesignSync unreachable" from an earlier subagent session; re-checked live
+from a main session and the tool DOES work, but this login's `list_projects` shows only two
+projects and neither has the `shots/`/`HANDOFF.md` content B4 needs — corrected the note so a
+future session doesn't retry the wrong blocker (it's project access, not tool access).
 
 ## Open items
 
 - **§C1 continues, file-by-file, same cadence** (drift → fix → `--update` same commit): next up
-  `flight.css`/`mobile-nav.css` RADIUS+ELEVATION, `intake.css`/`jetlag.css`/`map.css`/
-  `painted-atlas.css`/`panel-preview/` RADIUS+ELEVATION, then the COLOUR-only files (`sights.css`,
-  `atlas-map.js`, `firebase/styles.css`, `gmaps-render.js`, `PwaHead.astro`, `GuideLayout.astro`,
-  `util.js`, `accent-tokens.ts`; `og`/`recap` pages stay baselined like `budget-sheet.css`).
-- **§C3/§C4/§C5, and §B4** still open: the #47 print-preview shell, syncing corrected tokens
-  back to the design projects (last, so they receive the final state), the final polish walk,
-  and the `shots/` triage. `docs/PLAN_DESIGN_RECONCILIATION.md` §C/§B4 is the queue.
+  `intake.css`/`jetlag.css`/`map.css`/`painted-atlas.css`/`panel-preview/` RADIUS+ELEVATION, then
+  the COLOUR-only files (`sights.css`, `atlas-map.js`, `firebase/styles.css`, `gmaps-render.js`,
+  `PwaHead.astro`, `GuideLayout.astro`, `util.js`, `accent-tokens.ts`; `og`/`recap` pages and
+  `budget-sheet.css` stay baselined — forced-literal print/image contexts, not fixable).
+- **§C3/§C4/§C5** still open: the #47 print-preview shell, syncing corrected tokens back to the
+  design projects (last, so they receive the final state), the final polish walk.
+- **§B4 blocked on project access** (see above) — don't retry until the right design-tool
+  project is reachable under this login.
 - **Held, not open:** the route-order interactive picker's home (Tools station vs. itinerary
   mount) — needs both surfaces reviewed together, CONTEXT.md Decisions.
 - The gap block and the "no cover" plate have still never rendered on a real guide, by design
@@ -79,17 +76,15 @@ live theme, so `var()` is structurally wrong there — the same accepted-debt cl
 
 ## Where we left off
 
-**A pattern worth repeating each C1 file:** the mechanical part (converting one hardcoded value
-to its token) is cheap, but it's worth a beat to hand-check the FILE's other uses of the same
-token family while it's open — both bugs found this round (`--accent`-as-text, `--bg`-as-
-on-accent-ink) were sitting right beside the literal that brought the file into scope, invisible
-to any existing gate, and would have shipped past a purely mechanical "swap the hex for var()"
-pass.
+**Keep hand-checking the whole file when a C1 chunk opens it, not just the flagged line** —
+every session in this arc so far has found something the mechanical pass alone would have
+missed (two contrast bugs in `divergences.css`; two stale-but-important doc checkboxes and a
+wrong blocker diagnosis this round). It's cheap and it keeps paying off.
 
 **Still needs you:** the same `eslint.config.mjs` hook-protection gap as before — the R5 bundle
 ignore line still can't land there; `support.js` still carries its own `eslint-disable` header.
 
-**Recommended next step:** keep §C1 moving — `flight.css`/`mobile-nav.css` RADIUS+ELEVATION is
-the next chunk (both already touched this arc for other reasons, so context is warm). `main` is
-kept in sync with this branch after every ship-loop-clean commit (explicit standing instruction)
-— no separate merge step needed at session end.
+**Recommended next step:** keep §C1 moving — `intake.css`/`jetlag.css`/`map.css` is the next
+chunk (three small files, similar shape to what's already landed). `main` is kept in sync with
+this branch after every ship-loop-clean commit (explicit standing instruction) — no separate
+merge step needed at session end.
