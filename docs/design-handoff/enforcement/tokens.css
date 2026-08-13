@@ -16,7 +16,7 @@
   --lamp:#e8ece3; --lmuted:#9aa392;
   --cta:#0f1317; --cta-ink:#f8faf3;
   --contour:rgba(78,87,71,.16); --contour2:rgba(78,87,71,.30);
-  --fd:'Literata',Georgia,serif;
+  --fd:'Literata Variable',Georgia,'Times New Roman',AppleMyungjo,Batang,'Noto Serif CJK KR',serif;
   --fs:'Source Sans 3',-apple-system,system-ui,sans-serif;
 }
 [data-theme="dark"]{
