@@ -294,6 +294,7 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
 - DO NOT TOUCH: anything under `src/content/guides/`, `guides-intake/` (copy out, never move).
 - TESTS: a trivial vitest asserting the fixture files exist and parse.
 - ACCEPTANCE: 12/12 cases have a manifest row pointing at a fixture file + line evidence.
+- **STATUS 2026-08-13 — DONE.** `tests/fixtures/japan-regression/` + a 12-case MANIFEST. **Case 1 had to be rewritten:** the plan's "Sept 25 / Oct 24 birthday contradiction" **does not exist** — verified as two travellers' two birthdays, so it became case 1a (a NEGATIVE test: C2 must stay silent) plus 1b (the real defect found while checking — the guide never attributes either birthday to a person). The fixture test asserts a CITATIONS table (file:line + substring), not byte-identity with the live guide, because japan will be regenerated.
 
 **G1 — ~~Remove autonomous publication~~ · STRUCK, DO NOT IMPLEMENT**
 
@@ -317,6 +318,7 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
 - DO NOT TOUCH: any guide's facts.json (population is D/E work); token syntax; RESERVED ids.
 - TESTS: schema unit tests (valid/invalid risk values, evidence length); build green on all guides.
 - ACCEPTANCE: fields parse when present, absent everywhere today, zero behavior change.
+- **STATUS 2026-08-13 — DONE.** `factRecord` gains `risk` (int 0–4), `entity` (kebab-case), `evidence` (≤240 chars), all optional and additive; R0–R4 entered `CONTEXT.md`'s glossary per question 5. Note what this did NOT do: nothing populates them, which is the fact that reshaped all of Phase E.
 
 **B2 — Fix migrate-facts value capture + dedup** · S · coder
 - CONTEXT: `MONEY_RE`'s `[\d.,]*` captures trailing punctuation ⇒ `"$19,"` class defects; dedup key `value|approx|source_url` lets 6 rows exist for one entity-claim.
@@ -325,6 +327,7 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
 - DO NOT TOUCH: existing guides' facts.json; `src/lib/facts.mjs` interpolation.
 - TESTS: unit cases reproducing `$19,` / `$80,` from the Japan fixture strings; dedup case from the 6-row domestic-flights cluster (fixture data).
 - ACCEPTANCE: fixture-derived inputs produce clean values and a single row per claim; byte-identical invariant preserved for non-fact text.
+- **STATUS 2026-08-13 — DONE.** `MONEY_DIGITS` corrected to `\d+(?:[.,]\d+)*` so a trailing separator is no longer swallowed; `normalizeValue` strips trailing punctuation; dedup keys on `label|value|approx` with a `collapsed` report printed in propose mode. Fixes NEW migrations only — the 5 rows already written were repaired separately once E1 surfaced them.
 
 **B3 — Claim-ID + duplicate-row gate** · M · coder
 - CONTEXT: claims are section-path echoes; duplicates and cross-source misattribution (D3/D4) are invisible to verify.
@@ -334,6 +337,7 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
 - DO NOT TOUCH: existing blockers list semantics (advisory only this packet).
 - TESTS: fixture facts.json triggers ≥3 distinct flags; clean korea/us facts produce none (or documented true positives).
 - ACCEPTANCE: `npm run verify -- --slug japan` (against fixture copy in a temp dir) reports the D2/D3/D4 classes.
+- **STATUS 2026-08-13 — DONE.** `scripts/audit/check-facts-hygiene.mjs`, advisory, wired into verify. **Calibration was the whole packet:** the first design (same value + same claim-stem prefix) produced **71 false positives on korea's real facts**, because generic prefixes like "Budget & daily costs" repeat across unrelated claims. Fixed by dropping the recurring group label and requiring ≥2 shared significant words in the LEAF text — zero false positives on the real corpus, and exactly the japan case-9 hit.
 
 **B4 — Fact-usage index (traceability)** · S · coder
 - CONTEXT: `{{fact:id}}` gives fact→prose; nothing gives prose→fact or day-level dependency (D9).
@@ -343,6 +347,7 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
 - DO NOT TOUCH: build pipeline; no stored index file.
 - TESTS: unit test on a synthetic guide dir; fixture assertion that Japan's ¥11,410 maps to ≥2 groups.
 - ACCEPTANCE: bidirectional queries answer in one command; zero new stored state.
+- **STATUS 2026-08-13 — DONE.** `scripts/audit/fact-usage.mjs` — `buildFactUsage(slug)` returns `{usage, candidates}`, a derived forward/inverse index with no stored state, reusing `findMoney`/`TEXT_FIELDS` and `collectTokens`/`isSectionFile` rather than re-implementing them.
 
 **C1 — Certainty states in the intake schema** · M · coder
 - CONTEXT: FIELDS array in `intake-schema.mjs` drives form/parser/scaffolder; contract-tested. Flat values can't express `target: Oct 15`.
@@ -351,6 +356,7 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
 - DO NOT TOUCH: modify/revise parsers beyond what the shared `matchField` requires; existing intake docs.
 - TESTS: contract tests round-trip each certainty; absent certainty defaults to `assumed` for dates and is recorded as such.
 - ACCEPTANCE: a filed issue with "Dates: Oct 15 (target)" scaffolds an intake doc carrying the state; old-format issues still parse.
+- **STATUS 2026-08-13 — DONE.** `CERTAINTY_OPTIONS` + three dropdowns (`dates-certainty`, `anchor-certainty`, `budget-certainty`), defaulting to `assumed`. Propagated in one pass to the issue template (same field order — it is contract-tested), the scaffolder's intake rendering, and `docs/standards/new-guide-intake.md`, so the machine and human intakes cannot drift.
 
 **C2 — Intake contradiction gate** · M · coder
 - CONTEXT: The Japan intake records the start date as a flat `2026-10-15` (`japan.md:25`) while stating the traveller is still choosing between Oct 15 and Oct 22 (`japan.md:10`) — nothing flags it (regression case 2). ⚠️ **The "Sept 25 vs Oct 24 birthday contradiction" this packet originally cited was verified in A1 and DOES NOT EXIST** — two travellers, two birthdays, correctly handled. It is now fixture case **1a, a NEGATIVE case: C2 must NOT fire on it.** Read the fixture MANIFEST's case 1 before writing the extractor.
@@ -360,6 +366,7 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
 - DO NOT TOUCH: question-surfacing mechanism (reuse it), intake docs themselves.
 - TESTS: fixture intake triggers the start-date finding (case 2) and **emits NO birthday finding** (case 1a — the false-positive guard); korea/us fixtures trigger none. A synthetic intake giving ONE named person two different birthdays MUST fire — that is the real contradiction shape.
 - ACCEPTANCE: regression case 2 detected deterministically and case 1a stays silent, run proceeds, questions posted.
+- **STATUS 2026-08-13 — DONE.** `scripts/audit/check-intake-contradictions.mjs` (32 tests), emitting question blocks in `pipeline-roles.md`'s exact format, wired into `new-guide.yml` and `research-pass.yml`. `birthdayConflicts` groups by possessive marker specifically so it does NOT fire on case 1a — the negative case A1 uncovered.
 
 **D1 — Destination config (knowledge as data)** · M · coder + scribe
 - CONTEXT: D10/D12 — destination facts (languages, advisory URLs, GTFS feeds, seasonal sources, tax-free rules) live as prose or nowhere; every run re-finds them.
@@ -369,6 +376,7 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
 - DO NOT TOUCH: skill prose in this packet (D2 does the rewrite atomically).
 - TESTS: zod validation; every URL field non-empty ⇒ has verified_on.
 - ACCEPTANCE: three seeds validate; Japan seed carries advisory URL, ja language, koyo source list, GTFS feed entries, tax-free pointer.
+- **STATUS 2026-08-13 — DONE.** `scripts/lib/destination-schema.mjs` + `src/data/destinations/{japan,korea,us}.json`, populated from real corpus citations and live-verified. Japan's `travelAdvisory` is recorded `state: "unconfirmed"` — the page 403s automated fetches, which independently confirms the guide's own bot-gated note (regression case 6). `us` deliberately has NO `travelAdvisory`: a US advisory for a US-domestic trip is meaningless, and that absence is what exempts it from E1's case-6 rule with no per-guide exemption list.
 
 **D2 — Entity-level research protocol + risk budgets (skill rewrite)** · L · coder
 - CONTEXT: The skill's research flow verifies facts one prose-mention at a time under a flat 2-search cap (D1/D6). This packet is the one large prose surgery: research is re-specified around entities, budgets scale by risk, and destination config is consumed — with a NET LINE REDUCTION across SKILL.md + references (mandate: prose reduction is first-class).
@@ -377,6 +385,7 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
 - DO NOT TOUCH: workflow prompt pointers (they keep pointing at the same anchors — keep heading names stable), gate scripts.
 - TESTS: `skill-evals.yml` suite green (it gates `.claude/skills/**` PRs); wc -l before/after recorded in the PR body — total must go DOWN.
 - ACCEPTANCE: entity protocol + risk table + config consumption present; total skill corpus line count strictly lower than before D1+D2.
+- **STATUS 2026-08-13 — DONE.** Skill rewritten for entity-batched research and risk-scaled budgets, with Pass B's discovery reading languages/domains from D1's config instead of guessing. Corpus 909 → **885 lines** (bar: strictly lower). Reduction came from real prose cuts PLUS a mechanical rewrap to a consistent width, verified word-for-word content-identical before applying; two rewrap bugs were caught and fixed in the process (mangled YAML frontmatter, a broken indented table). All workflow-referenced headings confirmed unchanged. **Not verifiable locally:** `skill-evals.yml`'s live-agent gate.
 
 **D3 — Candidate funnel: shortlist stage** · S · coder
 - CONTEXT: `check-candidates.mjs` sees considered→shipped only; the mandate wants broad→shortlist→deep-verify visible.
@@ -385,6 +394,7 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
 - DO NOT TOUCH: existing floor defaults.
 - TESTS: fixture-style tables (shortlist missing / superset / valid) unit-tested.
 - ACCEPTANCE: a shipped candidate absent from shortlist fails the gate with a named row.
+- **STATUS 2026-08-13 — DONE.** Optional third `Shortlist` column; `shipped ⊆ shortlist` enforced, naming any offending row. `researchFloors` gains an optional per-rank `shortlist` floor — **and `content.config.ts` had to be updated to accept it**, since zod strips unrecognized keys by default and the override would otherwise have been silently discarded before reaching the checker. The 2-column legacy format is never gated on shortlist.
 
 **E1 — Risk-weighted verification gates** · M · coder
 - CONTEXT: B1/B3 landed advisory; D2 makes research emit risk/tier. Now enforcement.
