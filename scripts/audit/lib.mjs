@@ -11,6 +11,10 @@ import { isSectionFile, interpolateFacts, unusedFactIds } from "../../src/lib/fa
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 export const GUIDES_DIR = path.join(ROOT, "src", "content", "guides");
+// C2 (docs/PLAN_EVIDENCE_FIRST.md): scaffold-guide.mjs keeps its own private INTAKE_DIR const
+// (unchanged, not worth touching working code for a rename) — this is the same path, exported
+// here so audit scripts that need to READ an intake doc (not write the scaffold) share one home.
+export const GUIDES_INTAKE_DIR = path.join(ROOT, "guides-intake");
 
 // "Is this module the one Node was invoked on" check, done correctly cross-platform.
 // process.argv[1] is a plain path (relative or backslash-separated on Windows) —

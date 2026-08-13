@@ -60,6 +60,17 @@ jobs:
           ISSUE_BODY: ${{ github.event.issue.body }}
         run: node scripts/issue-to-scaffold.mjs
 
+      # C2 (docs/PLAN_EVIDENCE_FIRST.md): deterministic date/party/person contradiction checks
+      # against the freshly scaffolded intake doc, stamped in BEFORE the commit below so the
+      # first commit already carries anything found — never a separate follow-up commit, never
+      # a workflow failure (the script always exits 0; a hit becomes a traveler question the
+      # "Auto-start the research pass" dispatch's own surfacing step will post later, same as
+      # any question research itself emits).
+      - name: Check intake for contradictions
+        env:
+          SLUG: ${{ steps.gen.outputs.slug }}
+        run: node scripts/audit/check-intake-contradictions.mjs --slug "${SLUG}" --write
+
       - name: Commit scaffold straight to main, comment/close the issue
         env:
           GH_TOKEN: ${{ github.token }}

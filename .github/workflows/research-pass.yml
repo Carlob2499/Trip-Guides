@@ -245,6 +245,27 @@ jobs:
           echo "[budget] $SLUG — attempt $ATTEMPTS of $CAP, proceeding."
           echo "should_run=true" >> "$GITHUB_OUTPUT"
 
+      # C2 (docs/PLAN_EVIDENCE_FIRST.md) preflight: the SAME deterministic contradiction check
+      # new-guide.yml already ran right after scaffolding — re-run here because a human may have
+      # hand-elaborated guides-intake/<slug>.md since then (this is exactly how the Japan
+      # regression fixture's case 2 — a date range narrowed in prose, never reflected in the
+      # flat start-date bullet — actually got into a real intake doc). Runs BEFORE Pass A spends
+      # any agent budget, same ordering reason as the attempt-budget circuit breaker above.
+      # Idempotent (applyContradictions never re-appends an id already in the doc), so a resumed
+      # run re-checking the same doc is a harmless no-op. Never fails the workflow.
+      - name: Preflight — check intake for contradictions
+        if: steps.budget.outputs.should_run == 'true'
+        env:
+          SLUG: ${{ inputs.slug }}
+        run: |
+          set -euo pipefail
+          node scripts/audit/check-intake-contradictions.mjs --slug "$SLUG" --write
+          if ! git diff --quiet -- "guides-intake/${SLUG}.md"; then
+            git add "guides-intake/${SLUG}.md"
+            git commit -m "chore(intake): stamp contradiction findings for ${SLUG}"
+            git push origin "HEAD:research/${SLUG}"
+          fi
+
       # Social-leads aide (skill references/research-efficiency.md, "Social & video lead
       # sourcing"): yt-dlp lets Pass B pull YouTube
       # TRANSCRIPTS (never media) as T2 leads. Best-effort BY DESIGN — transcripts are an aide,

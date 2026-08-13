@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1910 checks · 1910 carry a stated promise · 163 files
+1941 checks · 1941 carry a stated promise · 164 files
 
 ## Can everyone read it
 
@@ -1722,6 +1722,40 @@ nothing ships.
 - fails NOT_FOUND when neither shape exists  <sub>scripts/__tests__/graduate-guide.test.mjs:100</sub>
 - fails NOT_DRAFT when the guide has already graduated (no draft key)  <sub>scripts/__tests__/graduate-guide.test.mjs:105</sub>
 - prefers the flat file if both shapes somehow exist (defensive tie-break, not an expected case)  <sub>scripts/__tests__/graduate-guide.test.mjs:111</sub>
+
+**A genuine intake contradiction becomes a traveler question; a multi-traveller**
+
+- reads the pre-C1 'Exact dates (start–end):' bullet  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:33</sub>
+- reads the C1 '**Dates (<certainty>):**' bullet  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:39</sub>
+- returns nulls when no date bullet is present  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:45</sub>
+- does NOT flag two different possessive markers with different dates (the case 1a shape)  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:51</sub>
+- DOES flag the SAME marker used with two different dates  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:56</sub>
+- does not flag the same marker repeating the SAME date  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:64</sub>
+- is silent when there is no birthday mention at all  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:69</sub>
+- flags when the structured start matches ONE of two 'or'-joined dates  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:75</sub>
+- does not flag when neither side of the pair matches the structured start  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:80</sub>
+- does not flag when there is no 'or'-joined date pair  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:85</sub>
+- returns nothing when no start date was extracted  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:89</sub>
+- is silent when the anchor's dated day falls inside the window  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:95</sub>
+- flags when the anchor's dated day falls outside the window  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:100</sub>
+- does not guess when the anchor names no year  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:107</sub>
+- does not fire when there is no anchor, or no window  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:112</sub>
+- reads a leading number word ('Two 27-year-olds...')  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:119</sub>
+- reads 'single'/'solo' as 1  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:123</sub>
+- reads 'family of N'  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:127</sub>
+- reads 'couple' as 2  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:131</sub>
+- returns null when no headcount phrasing is recognized  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:135</sub>
+- flags when the named headcount disagrees with the structured travelers count  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:139</sub>
+- does not flag when they agree  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:143</sub>
+- does not flag when no headcount could be extracted from the party text  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:147</sub>
+- fires ONLY the start-date finding (case 2) and stays silent on birthdays (case 1a)  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:153</sub>
+- … produces zero findings  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:166</sub>
+- fires all four flag classes together when genuinely present  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:174</sub>
+- appends a new '## Questions for the traveler' section when none exists  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:210</sub>
+- fills the scaffold template's '(none yet)' placeholder instead of duplicating the heading  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:220</sub>
+- is idempotent — a second run on the same doc appends nothing new  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:236</sub>
+- never throws on a missing intake doc — applies nothing  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:246</sub>
+- applies nothing to a clean doc  <sub>scripts/__tests__/check-intake-contradictions.test.mjs:251</sub>
 
 **A guide cannot publish with unsourced facts or broken references.**
 
