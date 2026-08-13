@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1859 checks · 1859 carry a stated promise · 160 files
+1875 checks · 1875 carry a stated promise · 161 files
 
 ## Can everyone read it
 
@@ -1821,6 +1821,25 @@ nothing ships.
 - still rejects an anchored row whose place_id result lands somewhere else entirely  <sub>scripts/__tests__/geocode-venues.test.mjs:206</sub>
 - excludes anchored rows from the median used to judge everyone else  <sub>scripts/__tests__/geocode-venues.test.mjs:213</sub>
 - measures the Tokyo→Osaka gap that motivated the check  <sub>scripts/__tests__/geocode-venues.test.mjs:228</sub>
+
+**A migrated fact's value never carries a stray trailing separator, and the**
+
+- strips a trailing comma  <sub>scripts/__tests__/migrate-facts.test.mjs:19</sub>
+- strips a trailing period  <sub>scripts/__tests__/migrate-facts.test.mjs:22</sub>
+- strips a run of trailing separators  <sub>scripts/__tests__/migrate-facts.test.mjs:25</sub>
+- leaves a clean value untouched  <sub>scripts/__tests__/migrate-facts.test.mjs:28</sub>
+- leaves an interior decimal untouched  <sub>scripts/__tests__/migrate-facts.test.mjs:31</sub>
+- does not swallow the separator in a comma-separated list of options  <sub>scripts/__tests__/migrate-facts.test.mjs:40</sub>
+- does not swallow a full stop ending a sentence  <sub>scripts/__tests__/migrate-facts.test.mjs:45</sub>
+- does not swallow a trailing comma with nothing after it  <sub>scripts/__tests__/migrate-facts.test.mjs:50</sub>
+- still captures a full comma-grouped, decimal value intact  <sub>scripts/__tests__/migrate-facts.test.mjs:55</sub>
+- still captures plain thousands-grouping (¥11,410, unit-first JPY)  <sub>scripts/__tests__/migrate-facts.test.mjs:60</sub>
+- still captures unit-last currency codes (100 DKK)  <sub>scripts/__tests__/migrate-facts.test.mjs:65</sub>
+- never emits a raw/value ending in a bare separator, across all three MONEY_RE branches  <sub>scripts/__tests__/migrate-facts.test.mjs:70</sub>
+- collapses the SAME claim + value cited from two different source_urls into one row  <sub>scripts/__tests__/migrate-facts.test.mjs:101</sub>
+- does NOT collapse the same value under a DIFFERENT claim label — only the stem must match  <sub>scripts/__tests__/migrate-facts.test.mjs:139</sub>
+- still collapses repeats from the SAME source (the original one-fact-one-row behavior)  <sub>scripts/__tests__/migrate-facts.test.mjs:167</sub>
+- produces clean values end-to-end from fixture-shaped prose (no trailing punctuation reaches facts.json)  <sub>scripts/__tests__/migrate-facts.test.mjs:187</sub>
 
 **A new guide starts from a valid, complete skeleton every time.**
 

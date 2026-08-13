@@ -18,6 +18,12 @@
 // written "≈ 120" (marker, then a space) is SKIPPED rather than migrated: re-rendering it would
 // emit "≈120" and lose the space — a one-byte diff is still a diff.
 //
+// DEDUP (B2, docs/PLAN_EVIDENCE_FIRST.md): two units citing the identical claim text (same
+// label, same value) from two DIFFERENT source pages collapse onto ONE row — the first-seen
+// source wins, and every collapse is printed in the CLI output (below) for human review before
+// `--write` makes it permanent. See the collapsed-rows log, and MONEY_DIGITS above MONEY_RE for
+// the companion fix (a value must never carry a trailing separator with nothing after it).
+//
 // Usage:
 //   node scripts/migrate-facts.mjs --slug denmark            # propose, print a review table
 //   node scripts/migrate-facts.mjs --slug denmark --write    # apply (facts.json + tokens)
@@ -28,16 +34,37 @@ import { pathToFileURL } from "node:url";
 import { GUIDES_DIR } from "./audit/lib.mjs";
 import { isSectionFile } from "../src/lib/facts.mjs";
 
+// B2 (docs/PLAN_EVIDENCE_FIRST.md): the digit group used to be `\d[\d.,]*` — any run of digits,
+// commas, and dots. That accepts a TRAILING separator with nothing after it, which is exactly
+// how "$19, $65, or $18" (a comma-separated list in prose) yielded the fact row `"$19,"` — the
+// regex happily matched up through the list separator. Same failure mode for a value ending a
+// sentence: "…around ₩6,000." captured the full stop. The Japan regression fixture's case 10
+// froze three such rows (tests/fixtures/japan-regression/MANIFEST.md).
+//
+// Fix: every separator inside the digit group must be immediately followed by MORE digits —
+// `\d+(?:[.,]\d+)*` — so a comma or dot with nothing after it is simply left out of the match,
+// not swallowed into it. Verified against every value format actually in the corpus (comma
+// thousands-grouping "11,410", plain "19", decimals "5.50" and "2,007.90") before landing this.
+const MONEY_DIGITS = "\\d+(?:[.,]\\d+)*";
+
 // Currency amounts only. Both orders (symbol-first "$12" / "DKK 100" and unit-last "100 DKK",
 // "200 kr"), with an optional leading ≈ captured so state can be derived from it.
 const MONEY_RE = new RegExp(
   [
-    "(≈)?\\s?(?:DKK|NOK|SEK|EUR|USD|JPY|KRW|GBP)\\s?\\d[\\d.,]*",
-    "(≈)?\\s?[$€£¥₩]\\s?\\d[\\d.,]*(?:\\s?(?:USD|EUR|GBP|DKK|NOK|SEK))?",
-    "(≈)?\\s?\\d[\\d.,]*\\s?(?:DKK|NOK|SEK|EUR|USD|JPY|KRW|kr\\.?)\\b",
+    `(≈)?\\s?(?:DKK|NOK|SEK|EUR|USD|JPY|KRW|GBP)\\s?${MONEY_DIGITS}`,
+    `(≈)?\\s?[$€£¥₩]\\s?${MONEY_DIGITS}(?:\\s?(?:USD|EUR|GBP|DKK|NOK|SEK))?`,
+    `(≈)?\\s?${MONEY_DIGITS}\\s?(?:DKK|NOK|SEK|EUR|USD|JPY|KRW|kr\\.?)\\b`,
   ].join("|"),
   "g",
 );
+
+/** Defense in depth alongside the regex fix above, not a substitute for it: strips any trailing
+    run of `,`/`.` a value should never carry. The regex should never produce one any more, but
+    this keeps a malformed value from reaching facts.json even if a future MONEY_RE edit
+    reintroduces the gap — the exact way this bug shipped the first time. */
+export function normalizeValue(value) {
+  return value.replace(/[.,]+$/, "");
+}
 
 // Prose-ish fields that may carry a price. Mirrors the fields the voice gate scans.
 const TEXT_FIELDS = ["body", "intro", "why", "how", "crowd_tip", "note", "tip"];
@@ -83,6 +110,11 @@ export function findMoney(text) {
     // a byte — the registry is not worth a cosmetic regression.
     if (approx && /^\s/.test(value)) continue;
     if (!/\d/.test(value)) continue;
+    // Normalize the STORED value only — never `raw`/`tight`, which drive the positional
+    // replacement below and must stay the exact substring lifted from prose (the invariant this
+    // whole module exists to hold). MONEY_DIGITS should already stop this trailing-punctuation
+    // case from occurring; this is the safety net described above MONEY_RE, not the primary fix.
+    value = normalizeValue(value);
     out.push({ start: start + lead, end: start + lead + tight.length, raw: tight, value, approx });
   }
   return out;
@@ -102,9 +134,18 @@ export async function proposeMigration(slug, guidesDir = GUIDES_DIR) {
   const files = (await readdir(dir)).filter(isSectionFile).sort();
   const facts = {};
   const taken = new Set();
-  // value+source_url → id, so the SAME price cited from the same page becomes ONE fact
-  // referenced from every mention. That collapsing is the entire point: one edit, everywhere.
-  const byValue = new Map();
+  // B2: keyed on (label, normalized value, approx) — the CLAIM STEM plus the value, matching
+  // the fact's own `claim` string (`${label} — ${value}`) minus formatting. That's deliberately
+  // broader than the old value+source_url key: two units citing the identical claim from two
+  // DIFFERENT pages used to mint two rows with byte-identical `claim` text, which is the
+  // duplicate-row half of the plan's D9 defect (the Japan fixture's case 9 domestic-flight
+  // cluster is this shape, just spread across separate migrate-facts.mjs runs over time rather
+  // than one). The first occurrence in file order wins and keeps its source; "strongest source"
+  // isn't computable here since `tier` is never populated at migrate time (documented in B1) —
+  // first-seen is the deterministic tie-break, and every collapse is reported so a human can
+  // override it before `--write`.
+  const byClaim = new Map();
+  const collapsed = [];
   const edits = [];
   let occurrences = 0;
 
@@ -122,11 +163,11 @@ export async function proposeMigration(slug, guidesDir = GUIDES_DIR) {
         if (!hits.length) continue;
         const reps = [];
         for (const h of hits) {
-          const key = `${h.value}|${h.approx}|${unit.source_url}`;
-          let id = byValue.get(key);
+          const key = `${label}|${h.value}|${h.approx}`;
+          let id = byClaim.get(key);
           if (!id) {
             id = makeFactId(label, h.value, taken);
-            byValue.set(key, id);
+            byClaim.set(key, id);
             // Does NOT populate risk/entity/evidence (src/content.config.ts, src/lib/facts.mjs)
             // — deliberately. This migrator lifts exactly what was already in the prose unit;
             // assigning risk or grouping an entity needs research judgment this pass doesn't
@@ -139,6 +180,12 @@ export async function proposeMigration(slug, guidesDir = GUIDES_DIR) {
               shelf_life: unit.shelf_life ?? "default",
               ...(h.approx ? { state: "approx" } : {}),
             };
+          } else if (facts[id].source_url !== unit.source_url) {
+            // Same claim, same value, a SECOND source_url turned up. Kept the first; report the
+            // rest rather than silently dropping evidence a human might want to look at (a
+            // second source could mean welcome corroboration, or it could mean the JR East vs
+            // ANA misattribution shape B3's hygiene gate looks for later).
+            collapsed.push({ id, label, value: h.value, kept: facts[id].source_url, dropped: unit.source_url });
           }
           reps.push({ ...h, token: `{{fact:${id}}}` });
           occurrences++;
@@ -157,7 +204,7 @@ export async function proposeMigration(slug, guidesDir = GUIDES_DIR) {
     if (touched) edits.push({ file, json: JSON.stringify(sections, null, 2) + "\n" });
   }
 
-  return { facts, edits, occurrences, factCount: Object.keys(facts).length };
+  return { facts, edits, occurrences, factCount: Object.keys(facts).length, collapsed };
 }
 
 // ── CLI ──
@@ -177,7 +224,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     console.error("Usage: node scripts/migrate-facts.mjs --slug <slug> [--write]");
     process.exit(1);
   }
-  const { facts, edits, occurrences, factCount } = await proposeMigration(a.slug);
+  const { facts, edits, occurrences, factCount, collapsed } = await proposeMigration(a.slug);
   if (!factCount) {
     console.log(`[migrate] ${a.slug}: no migratable money facts in provenance-bearing units.`);
     process.exit(0);
@@ -188,6 +235,19 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     console.log(`  ${id}`);
     console.log(`     value ${JSON.stringify(f.value)}${f.state === "approx" ? "  (≈ derived)" : ""}${reuse}`);
     console.log(`     ${f.shelf_life} · ${f.verified_on} · ${f.source_url}`);
+  }
+  // B2: same claim + value cited from a second source_url — collapsed onto the first-seen row
+  // rather than minting a duplicate. Printed even in propose mode (before any --write) since
+  // this is exactly the review point a human should look at before the drop is permanent: a
+  // second source could be welcome corroboration, or it could be the misattribution shape B3's
+  // hygiene gate is built to catch later.
+  if (collapsed.length) {
+    console.log(`\n[migrate] ${collapsed.length} row(s) collapsed onto an existing claim (review before --write):`);
+    for (const c of collapsed) {
+      console.log(`  ${c.id}  (${c.label} — ${JSON.stringify(c.value)})`);
+      console.log(`     kept:    ${c.kept}`);
+      console.log(`     dropped: ${c.dropped}`);
+    }
   }
   if (!a.write) {
     console.log(`\n[migrate] proposal only — re-run with --write to apply.`);
