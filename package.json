@@ -13,6 +13,7 @@
     "typecheck": "astro check",
     "lint": "eslint .",
     "readiness": "node scripts/guide-readiness.mjs",
+    "check-facts-hygiene": "node scripts/audit/check-facts-hygiene.mjs",
     "verify": "node scripts/verify-guide.mjs",
     "verify-live": "node scripts/verify-live.mjs",
     "pipeline": "node scripts/pipeline.mjs",

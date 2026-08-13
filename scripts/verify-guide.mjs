@@ -35,6 +35,7 @@ import { fileURLToPath } from "node:url";
 import { readGuides, isMain } from "./audit/lib.mjs";
 import { evaluateReadiness } from "./guide-readiness.mjs";
 import { checkStaleness } from "./audit/check-staleness.mjs";
+import { checkFactsHygiene } from "./audit/check-facts-hygiene.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -139,6 +140,12 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
   // P6: voice gate — process language must not leak into traveler-facing prose.
   const voice = checkVoice(guide);
 
+  // B3 (docs/PLAN_EVIDENCE_FIRST.md): facts.json hygiene — misattribution candidates, malformed
+  // values, bare section-path echoes. ADVISORY ONLY this packet, deliberately not in `blockers`
+  // below — E1 is the packet that promotes any of these to a gate, once risk/tier exist to
+  // scope which rows actually need to block.
+  const hygiene = checkFactsHygiene(facts);
+
   // Blocking gates → the exit-code verdict. Recency is intentionally NOT blocking.
   const blockers = [];
   if (!readiness.pass) blockers.push("research");
@@ -155,7 +162,7 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
   // and a guide with one should show at a glance how much of it is sourced data rather than prose.
   const registry = facts ? { count: Object.keys(facts).length, unused } : null;
 
-  return { slug, draft, pass, blockers, readiness, recency, content, venueStatus, candidates: candidatesRow, sources, coverage, voice, noVerifiedDate, registry };
+  return { slug, draft, pass, blockers, readiness, recency, content, venueStatus, candidates: candidatesRow, sources, coverage, voice, hygiene, noVerifiedDate, registry };
 }
 
 export async function verify({ slug = null, network = false } = {}) {
@@ -298,6 +305,20 @@ export function report(r) {
     }
   }
 
+  // B3: facts.json hygiene (advisory only — see the field's own comment in evaluateGuide).
+  if (r.hygiene && r.hygiene.status !== "n/a") {
+    const h = r.hygiene;
+    const n = h.misattribution.length + h.malformed.length + h.bareEcho.length;
+    if (h.status === "clean") {
+      L.push(`  -- hygiene    · clean — no misattribution/malformed-value/bare-echo findings`);
+    } else {
+      L.push(`  -- hygiene    · ${n} advisory finding(s) in facts.json (not blocking — see docs/PLAN_EVIDENCE_FIRST.md B3)`);
+      for (const m of h.misattribution) L.push(`      ⚠ misattribution: ${m.ids.join(" <-> ")} both claim ${JSON.stringify(m.value)} from different sources`);
+      for (const m of h.malformed) L.push(`      ⚠ malformed value: ${m.id} — ${JSON.stringify(m.value)}`);
+      for (const b of h.bareEcho) L.push(`      ⚠ bare echo: "${b.stem}" covers ${b.values.length} different values — which is which?`);
+    }
+  }
+
   L.push(`  #1 schema     · not checked here — run \`npm run build\` (the content-collection gate)`);
 
   // Human checklist
@@ -340,6 +361,13 @@ export function renderMarkdown(r) {
   else if (r.coverage.status === "pass") coverageCell = "✅ PASS — every ask addressed";
   else coverageCell = `❌ FAIL — ${r.coverage.uncovered.length} ask(s) uncovered`;
   L.push(`| Coverage — intake asks addressed | P0 | ${coverageCell} |`);
+  let hygieneCell = "— n/a (no facts.json)";
+  if (r.hygiene && r.hygiene.status === "clean") hygieneCell = "✅ clean";
+  else if (r.hygiene && r.hygiene.status === "advisory") {
+    const n = r.hygiene.misattribution.length + r.hygiene.malformed.length + r.hygiene.bareEcho.length;
+    hygieneCell = `⚠ ${n} advisory finding(s) (not blocking)`;
+  }
+  L.push(`| Facts hygiene — misattribution · malformed values · bare echoes | -- | ${hygieneCell} |`);
   L.push(`| Schema | P0 | ▶ \`npm run build\` |`);
   L.push("");
   if (rd.warns.length) {
@@ -356,6 +384,15 @@ export function renderMarkdown(r) {
   if (r.coverage.status === "fail") {
     L.push(`<details><summary>⚠ ${r.coverage.uncovered.length} uncovered intake ask(s)</summary>`, "");
     for (const a of r.coverage.uncovered) L.push(`- **${a.label}**: "${a.value}" — set \`coveredBy\` in \`coverage.json\` or log a skip/amendment`);
+    L.push("", `</details>`, "");
+  }
+  if (r.hygiene && r.hygiene.status === "advisory") {
+    const h = r.hygiene;
+    const n = h.misattribution.length + h.malformed.length + h.bareEcho.length;
+    L.push(`<details><summary>⚠ ${n} facts.json hygiene finding(s) — advisory, not blocking</summary>`, "");
+    for (const m of h.misattribution) L.push(`- misattribution: \`${m.ids.join("`, `")}\` both claim ${JSON.stringify(m.value)} from different sources (${m.sources.join(" vs ")})`);
+    for (const m of h.malformed) L.push(`- malformed value: \`${m.id}\` — ${JSON.stringify(m.value)}`);
+    for (const b of h.bareEcho) L.push(`- bare echo: "${b.stem}" covers ${b.values.length} different values (\`${b.ids.join("`, `")}\`) — which is which?`);
     L.push("", `</details>`, "");
   }
   L.push(`### Human judgment — graduation checklist (the machine can't score these)`);

@@ -106,6 +106,37 @@ describe("evaluateGuide verdict", () => {
   });
 });
 
+// B3 (docs/PLAN_EVIDENCE_FIRST.md): facts.json hygiene is ADVISORY ONLY this packet — the
+// DO NOT TOUCH boundary its own task packet names ("existing blockers list semantics"). These
+// pin that a guide riddled with hygiene findings still PASSes on hygiene grounds alone; E1 is
+// the (separate, future) packet that may promote some of these to real blockers.
+describe("evaluateGuide — facts hygiene (B3, advisory only)", () => {
+  const guide = { verified: "Checked Jun 2026", sections: [{ type: "prose", group: "Overview", title: "About", body: "Lots to see here." }] };
+
+  it("a guide with no facts.json reports hygiene n/a and is unaffected", () => {
+    const r = evaluateGuide(guide, "no-facts", CLEAN_STALENESS, null, null);
+    expect(r.hygiene.status).toBe("n/a");
+    expect(r.pass).toBe(true);
+  });
+
+  it("a malformed value in facts.json is surfaced in hygiene, but never blocks the verdict", () => {
+    const facts = { a: { claim: "Sights → Museum entry — $19,", value: "$19,", source_url: "https://x.example/", verified_on: "2026-01-01", shelf_life: "venue" } };
+    const r = evaluateGuide(guide, "malformed", CLEAN_STALENESS, null, facts);
+    expect(r.hygiene.status).toBe("advisory");
+    expect(r.hygiene.malformed).toHaveLength(1);
+    expect(r.blockers).not.toContain("hygiene");
+    expect(r.blockers).toEqual([]);
+    expect(r.pass).toBe(true);
+  });
+
+  it("a facts.json with none of the three defect classes reports hygiene clean", () => {
+    const facts = { a: { claim: "Sights → Museum entry — $10", value: "$10", source_url: "https://x.example/", verified_on: "2026-01-01", shelf_life: "venue" } };
+    const r = evaluateGuide(guide, "clean-facts", CLEAN_STALENESS, null, facts);
+    expect(r.hygiene.status).toBe("clean");
+    expect(r.pass).toBe(true);
+  });
+});
+
 describe("renderMarkdown", () => {
   const base = {
     slug: "korea", draft: false, pass: true, blockers: [],

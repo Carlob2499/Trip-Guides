@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-1875 checks · 1875 carry a stated promise · 161 files
+1896 checks · 1896 carry a stated promise · 162 files
 
 ## Can everyone read it
 
@@ -1734,27 +1734,30 @@ nothing ships.
 - every link probe failing (network outage) marks content unverifiable and blocks  <sub>scripts/__tests__/verify-guide.test.mjs:82</sub>
 - a single flaky error link among otherwise-checked links stays advisory — still PASSes  <sub>scripts/__tests__/verify-guide.test.mjs:92</sub>
 - a clean network check (no dead links, no missing photos, no outage) PASSes  <sub>scripts/__tests__/verify-guide.test.mjs:100</sub>
-- renders a passing scorecard with the marker, table, and checklist  <sub>scripts/__tests__/verify-guide.test.mjs:119</sub>
-- renders NEEDS WORK with a collapsible blocking-findings list  <sub>scripts/__tests__/verify-guide.test.mjs:128</sub>
-- shows a draft's recency as n/a and stale recency as advisory  <sub>scripts/__tests__/verify-guide.test.mjs:138</sub>
-- lists dead links + missing photos when content failed  <sub>scripts/__tests__/verify-guide.test.mjs:143</sub>
-- renders unverifiable content distinctly from a clean pass  <sub>scripts/__tests__/verify-guide.test.mjs:151</sub>
-- renders a PASS header and the human checklist  <sub>scripts/__tests__/verify-guide.test.mjs:172</sub>
-- renders NEEDS WORK with each blocking finding listed  <sub>scripts/__tests__/verify-guide.test.mjs:181</sub>
-- reports content as skipped when --network wasn't run  <sub>scripts/__tests__/verify-guide.test.mjs:192</sub>
-- reports dead links and missing photos when content failed  <sub>scripts/__tests__/verify-guide.test.mjs:196</sub>
-- reports unverifiable content as a distinct do-NOT-publish state  <sub>scripts/__tests__/verify-guide.test.mjs:204</sub>
-- reports draft recency as n/a  <sub>scripts/__tests__/verify-guide.test.mjs:214</sub>
-- reports stale sections with their category/age/shelf-life  <sub>scripts/__tests__/verify-guide.test.mjs:219</sub>
-- notes a `verified` field with no parseable date  <sub>scripts/__tests__/verify-guide.test.mjs:231</sub>
-- returns an error and no results when --slug names a guide that doesn't exist  <sub>scripts/__tests__/verify-guide.test.mjs:254</sub>
-- evaluates every guide when no --slug is given  <sub>scripts/__tests__/verify-guide.test.mjs:262</sub>
-- filters to just the named guide when --slug is given  <sub>scripts/__tests__/verify-guide.test.mjs:272</sub>
-- runs the network audits and folds dead links / missing photos into content when --network is set  <sub>scripts/__tests__/verify-guide.test.mjs:280</sub>
-- folds a Commons API failure into an unverifiable, failing verdict (fail-closed on outage)  <sub>scripts/__tests__/verify-guide.test.mjs:294</sub>
-- never runs the network audits when --network is not set  <sub>scripts/__tests__/verify-guide.test.mjs:305</sub>
-- returns n/a for a slug without coverage.json (pre-P3 guide)  <sub>scripts/__tests__/verify-guide.test.mjs:315</sub>
-- pre-P3 guides without coverage.json get coverage n/a and still PASS  <sub>scripts/__tests__/verify-guide.test.mjs:323</sub>
+- a guide with no facts.json reports hygiene n/a and is unaffected  <sub>scripts/__tests__/verify-guide.test.mjs:116</sub>
+- a malformed value in facts.json is surfaced in hygiene, but never blocks the verdict  <sub>scripts/__tests__/verify-guide.test.mjs:122</sub>
+- a facts.json with none of the three defect classes reports hygiene clean  <sub>scripts/__tests__/verify-guide.test.mjs:132</sub>
+- renders a passing scorecard with the marker, table, and checklist  <sub>scripts/__tests__/verify-guide.test.mjs:150</sub>
+- renders NEEDS WORK with a collapsible blocking-findings list  <sub>scripts/__tests__/verify-guide.test.mjs:159</sub>
+- shows a draft's recency as n/a and stale recency as advisory  <sub>scripts/__tests__/verify-guide.test.mjs:169</sub>
+- lists dead links + missing photos when content failed  <sub>scripts/__tests__/verify-guide.test.mjs:174</sub>
+- renders unverifiable content distinctly from a clean pass  <sub>scripts/__tests__/verify-guide.test.mjs:182</sub>
+- renders a PASS header and the human checklist  <sub>scripts/__tests__/verify-guide.test.mjs:203</sub>
+- renders NEEDS WORK with each blocking finding listed  <sub>scripts/__tests__/verify-guide.test.mjs:212</sub>
+- reports content as skipped when --network wasn't run  <sub>scripts/__tests__/verify-guide.test.mjs:223</sub>
+- reports dead links and missing photos when content failed  <sub>scripts/__tests__/verify-guide.test.mjs:227</sub>
+- reports unverifiable content as a distinct do-NOT-publish state  <sub>scripts/__tests__/verify-guide.test.mjs:235</sub>
+- reports draft recency as n/a  <sub>scripts/__tests__/verify-guide.test.mjs:245</sub>
+- reports stale sections with their category/age/shelf-life  <sub>scripts/__tests__/verify-guide.test.mjs:250</sub>
+- notes a `verified` field with no parseable date  <sub>scripts/__tests__/verify-guide.test.mjs:262</sub>
+- returns an error and no results when --slug names a guide that doesn't exist  <sub>scripts/__tests__/verify-guide.test.mjs:285</sub>
+- evaluates every guide when no --slug is given  <sub>scripts/__tests__/verify-guide.test.mjs:293</sub>
+- filters to just the named guide when --slug is given  <sub>scripts/__tests__/verify-guide.test.mjs:303</sub>
+- runs the network audits and folds dead links / missing photos into content when --network is set  <sub>scripts/__tests__/verify-guide.test.mjs:311</sub>
+- folds a Commons API failure into an unverifiable, failing verdict (fail-closed on outage)  <sub>scripts/__tests__/verify-guide.test.mjs:325</sub>
+- never runs the network audits when --network is not set  <sub>scripts/__tests__/verify-guide.test.mjs:336</sub>
+- returns n/a for a slug without coverage.json (pre-P3 guide)  <sub>scripts/__tests__/verify-guide.test.mjs:346</sub>
+- pre-P3 guides without coverage.json get coverage n/a and still PASS  <sub>scripts/__tests__/verify-guide.test.mjs:354</sub>
 
 **A guide request cannot arrive missing the answers it needs.**
 
@@ -2345,6 +2348,27 @@ nothing ships.
 - treats everything as new when the marker is empty  <sub>scripts/__tests__/export-feedback.test.mjs:60</sub>
 - advances to the max createdAt per slug, carrying prior values forward  <sub>scripts/__tests__/export-feedback.test.mjs:67</sub>
 - averages ratings, lists skips, and keeps freeform + a count (agent-only)  <sub>scripts/__tests__/export-feedback.test.mjs:75</sub>
+
+**Two facts.json rows sharing a value from different sources, a malformed**
+
+- catches the frozen fixture's case 9: ¥11,410 attributed to two different sources  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:34</sub>
+- does not flag the same value from the SAME source (that's a normal shared fact)  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:42</sub>
+- does not flag the same value under UNRELATED claims (no shared significant words)  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:50</sub>
+- does not flag on a SINGLE shared word — the threshold is 2, on purpose  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:58</sub>
+- ignores the reserved traveler-origin row  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:66</sub>
+- produces ZERO findings across every real, shipped guide's facts.json  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:74</sub>
+- catches the frozen fixture's three known malformed values  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:82</sub>
+- does not flag a clean value  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:87</sub>
+- flags a trailing period as well as a trailing comma  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:92</sub>
+- documents the true positives already shipped in korea (4) and us (1)  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:97</sub>
+- catches the frozen fixture's three bare, repeated stems  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:112</sub>
+- does not flag a bare stem used for only ONE value  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:117</sub>
+- does not flag a claim WITH a leaf (a → segment) even if it repeats  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:122</sub>
+- documents the true positives already present in korea and denmark  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:132</sub>
+- reports n/a for a guide with no facts.json  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:144</sub>
+- reports clean when a facts.json has none of the three defect classes  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:148</sub>
+- the frozen Japan fixture triggers all three distinct flag classes (≥3 findings)  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:157</sub>
+- korea/us/denmark are 'advisory' (documented true positives), never 'clean' as of this corpus snapshot  <sub>scripts/__tests__/check-facts-hygiene.test.mjs:167</sub>
 
 **Venue details are taken from the source, never filled in from memory.**
 
