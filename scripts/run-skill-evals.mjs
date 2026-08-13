@@ -12,6 +12,7 @@ import { readFileSync, existsSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { isMain } from "./audit/lib.mjs";
+import { interpolateFacts, isSectionFile } from "../src/lib/facts.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const GUIDES = path.join(ROOT, "src", "content", "guides");
@@ -55,12 +56,48 @@ export function assertDraftPreserved(text) {
 
 /* ─────────────────────────── impure: read the produced guide ─────────────────────────── */
 
+// Guide text as a READER sees it — `{{fact:<id>}}` tokens resolved through the SAME
+// interpolation the build uses.
+//
+// WHY THIS IS NOT OPTIONAL (found by the first real run of this gate, 2026-08-13). The skill
+// requires perishable money facts to live in `facts.json` and be referenced from prose as
+// tokens. Under that model the literal figure exists exactly ONCE — in the registry row — and
+// every touchpoint carries a token instead. That single-source property is the whole point:
+// "one edit updates every mention". But these checks assert a figure appears at ≥2 touchpoints,
+// which raw file text can no longer show — so a CORRECT, doctrine-following edit scored
+// "₩14,000 near SPAREX in 0 place(s)" and failed the gate. The eval was encoding the
+// pre-registry model of correctness, where propagation meant copying a literal to N places.
+//
+// Resolving first restores what the check was always trying to measure: does the new value
+// actually reach every place the reader encounters it, however it is stored.
 function guideTexts(slug) {
   const flat = path.join(GUIDES, `${slug}.json`);
   if (existsSync(flat)) return [readFileSync(flat, "utf8")];
   const dir = path.join(GUIDES, slug);
   if (!existsSync(dir)) return [];
-  return readdirSync(dir).filter((f) => f.endsWith(".json")).map((f) => readFileSync(path.join(dir, f), "utf8"));
+
+  // facts.json is EXCLUDED: it is the source of a value, not a place the reader meets it.
+  // Counting it inflated the touchpoint tally — with tokens resolved, one registry row plus a
+  // single prose site scored 2 and passed a `minTouchpoints: 2` check that should have failed.
+  // (Caught by re-running the sabotage cases after making the reader-view change below; a stale
+  // row cannot hide either way, since prose resolves THROUGH it and would render stale.)
+  const files = readdirSync(dir).filter((f) => f.endsWith(".json") && f !== "facts.json");
+  let facts = {};
+  try {
+    facts = JSON.parse(readFileSync(path.join(dir, "facts.json"), "utf8"));
+  } catch { /* no registry — pre-migration guide, raw text is already what the reader sees */ }
+
+  return files.map((f) => {
+    const raw = readFileSync(path.join(dir, f), "utf8");
+    // Only section files carry tokens; _guide.json and facts.json are read verbatim so the
+    // registry row itself still counts as the evidence it is.
+    if (!isSectionFile(f)) return raw;
+    try {
+      return JSON.stringify(interpolateFacts(JSON.parse(raw), facts).data);
+    } catch {
+      return raw; // unparseable — fall back rather than hide the file from the check
+    }
+  });
 }
 
 // Deterministic checks per eval id — the subset a grep can verify honestly. Each returns

@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-2070 checks · 2070 carry a stated promise · 171 files
+2073 checks · 2073 carry a stated promise · 171 files
 
 ## Can everyone read it
 
@@ -2478,12 +2478,15 @@ nothing ships.
 
 **The guide-writing instructions are themselves tested against known cases.**
 
-- returns one window per keyword occurrence, scoped around it  <sub>scripts/__tests__/run-skill-evals.test.mjs:23</sub>
-- finds nothing when the keyword is absent  <sub>scripts/__tests__/run-skill-evals.test.mjs:28</sub>
-- PASSES when every SPAREX touchpoint shows the new price and none the old  <sub>scripts/__tests__/run-skill-evals.test.mjs:34</sub>
-- FAILS (catches the regression) when a touchpoint is left stale  <sub>scripts/__tests__/run-skill-evals.test.mjs:41</sub>
-- FAILS when the change landed in only one place (didn't propagate)  <sub>scripts/__tests__/run-skill-evals.test.mjs:47</sub>
-- detects a preserved draft flag and its absence  <sub>scripts/__tests__/run-skill-evals.test.mjs:54</sub>
+- returns one window per keyword occurrence, scoped around it  <sub>scripts/__tests__/run-skill-evals.test.mjs:24</sub>
+- finds nothing when the keyword is absent  <sub>scripts/__tests__/run-skill-evals.test.mjs:29</sub>
+- PASSES when every SPAREX touchpoint shows the new price and none the old  <sub>scripts/__tests__/run-skill-evals.test.mjs:35</sub>
+- FAILS (catches the regression) when a touchpoint is left stale  <sub>scripts/__tests__/run-skill-evals.test.mjs:42</sub>
+- FAILS when the change landed in only one place (didn't propagate)  <sub>scripts/__tests__/run-skill-evals.test.mjs:48</sub>
+- detects a preserved draft flag and its absence  <sub>scripts/__tests__/run-skill-evals.test.mjs:55</sub>
+- counts a tokenized touchpoint, because the reader sees the resolved value  <sub>scripts/__tests__/run-skill-evals.test.mjs:74</sub>
+- still FAILS when only one touchpoint carries the value — the ≥2 floor must keep biting  <sub>scripts/__tests__/run-skill-evals.test.mjs:84</sub>
+- still FAILS on a stale value left beside a correctly-tokenized one  <sub>scripts/__tests__/run-skill-evals.test.mjs:92</sub>
 
 **The plain-English list of what the tests protect stays complete and current.**
 
