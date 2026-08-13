@@ -128,6 +128,37 @@ Never re-implemented per surface.
 Each entry states what was decided, and the alternative that was rejected — the rejection is
 the load-bearing half. Contradicting one of these is allowed; doing it silently is not.
 
+**Evidence-gate detection is DECOUPLED from `risk`/`evidence`/`tier`** (creator ruling,
+2026-08-13). PLAN_EVIDENCE_FIRST specified E1, E2 and E3 as risk-keyed: R2+ must be a fact row,
+R3/R4 need `tier: primary` plus an `evidence` snippet, R4 must be surfaced. An audit found ZERO
+rows in the corpus carry any of those fields (korea 83 · denmark 27 · us 10 · japan 25 · fixture
+25), and the A1 fixture is frozen evidence that can never be re-annotated. Rejected: shipping the
+gates as specified, which would have produced three checkers that fire on nothing at all until
+every guide is regenerated — a gate that cannot fire is indistinguishable from no gate. Each
+defect class therefore has a RISK-INDEPENDENT detector that works on the artifacts as they exist;
+`risk` only ESCALATES where a research pass has supplied it. The risk-keyed code is written and
+tested but dormant. When D2-generated guides start carrying the fields, the gates sharpen without
+a rewrite.
+
+**Evidence gates are warn-first: they BLOCK on drafts, ADVISE on published guides**
+(creator ruling, 2026-08-13). Rejected: blocking everywhere immediately, which would have turned
+korea, denmark and us red over pre-existing debt and blocked all further work behind content
+repair; and grandfathering the debt permanently, which never collects it. The split is not
+timidity — `graduate-guide.yml` gates on a draft's verify, so blocking there means a defective
+guide can never be PUBLISHED, while published guides accumulate visible advisories that name what
+will block once enforced. This is how E1 delivers the publication safety that struck packet G was
+for, without a human approval step.
+
+**`tier` is backfilled PRIMARY-ONLY; a non-match stays blank, never `secondary`**
+(2026-08-13, corrected against real data). The mechanical backfill was approved as "official
+domain → primary, else secondary". Running it showed the else-branch is wrong:
+`verification-rules.md` §3 counts "the venue's own site" as T0, which no destination-level
+`t0Domains` list can enumerate — Korea Telecom's own eSIM page, the COEX aquarium's own ticket
+page and the US Federal Reserve's H.10 release all came back `secondary`. Since E1(b) goes on to
+gate on `tier: primary`, a wrong `secondary` would fail facts that deserve to pass. Rejected:
+completeness over correctness. The script asserts only what a declared domain proves, and a blank
+tier keeps meaning "not yet judged" — the honest blank.
+
 **Globe traverses use a per-guide Traveler origin, not a shared home-base constant**
 (2026-08-06). The design handoff's `atlas-map.js` prototype took a single global
 `home-base="lon,lat,LABEL"` — one departure point for every pin, guessed as LAX. Rejected:

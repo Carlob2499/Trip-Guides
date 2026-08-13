@@ -26,36 +26,34 @@
   §C (theme polish) is IN PROGRESS, see below. `docs/archive/PLAN_ATLAS_MIGRATION.md` is fully
   ticked and archived — read it for history, not for what's next.
 
-## Snapshot (2026-08-13 — design-reconciliation §C2a/§C2b: the day-chip underline + the
-transit-link 44px raise)
+## Snapshot (2026-08-13 — PLAN_EVIDENCE_FIRST executed end to end; 8 commits, H1 at 12/12)
 
-One commit, ship-loop-clean: 1748 vitest, 18/18 `a11y.spec.ts` 44px-sweep Playwright tests,
-build/lint/typecheck/drift (136 real, under the 153 baseline, unchanged by this commit) all
-green. `docs/PLAN_DESIGN_RECONCILIATION.md`'s §A (fidelity audit FIX rows) and §B (mining) were
-already done before this session; §C (theme polish) had not been started — this session opened
-it at §C2a/§C2b, the two items CONTEXT.md had already decided (§H1/§H2), per the plan's own
-execution order.
+`docs/PLAN_EVIDENCE_FIRST.md` is **complete**: A1 · B1–B4 · C1–C2 · D1–D3 · E1–E3 · F1–F2 · H1.
+2006 vitest + 1 todo, lint/typecheck/build green. Branch `claude/pipeline-changes-plan-752kra`.
 
-**`.dchip` (the day scrubber) is an underline now, not a filled pill** (CONTEXT.md §H2's REVISE
-ruling — SPEC rule 1: evidence, not a button). `planner.css`'s `.dchip` lost border/radius/fill;
-`.dchip-active`'s ground moved from `--accent` to `--sunken` with an accent `border-bottom`.
-Re-derived (not just re-typed) the active numeral's ink: `--accent-ink` is base.css's own "text
-on a page surface" token, already proven ≥4.5:1 against `--bg2`/`--sunken` by its own R5
-derivation comment — the old 3.58:1/2.56:1 note had measured the WRONG pairing (accent-ink on an
-accent FILL) and is replaced, not left stale.
+**The finding that shaped every gate in Phase E.** E1/E2/E3 were all specified around `risk`,
+`evidence` and `tier` — and a corpus audit found **zero rows carry any of them** (korea 83,
+denmark 27, us 10, japan 25, fixture 25). Specified literally, all three gates would have fired
+on nothing, forever, since the A1 fixture is frozen evidence that can never be re-annotated. The
+creator's ruling was to **decouple detection**: every gate now works on the artifacts as they
+actually are, and the risk-keyed logic is written, tested and dormant until D2-generated guides
+arrive. Second ruling: **warn-first** — findings BLOCK on drafts and advise on published guides,
+which makes `graduate-guide.yml` the publication chokepoint and delivers the safety struck packet
+G was for, without failing three published guides over pre-existing debt.
 
-**`.transit-link` clears 44px now; `.dchip`'s baseline tightens, but doesn't clear.** A real
-`getBoundingClientRect()` sweep (both `TARGET_PAGES` × all nine devices, the exact harness
-`a11y.spec.ts` itself uses) found `.transit-link`'s WIDTH already cleared 44px everywhere
-(min 88.2px) — only height was short (30.3px), so a padding-block-only raise to `.68rem .55rem`
-(measured 44.375px) reached the floor with zero width growth and no row-wrap change, the thing
-the original baseline comment worried about. 0 violations, both pages, all nine devices — its
-`TARGET_BASELINE` entry is REMOVED, not shrunk, so a regression here is a real test failure
-again. `.scrub-fit .dchip` was re-measured per CONTEXT.md's own §H2 update note and does NOT
-newly clear — the pill→underline shape touches border/fill/radius, not the
-`flex:1 1 0;min-width:0` math that narrows these chips — so the density ruling (baselined,
-creator's call) stands; only the ceiling itself tightened, 12→8, to the real observed max.
+**Real defects found on live guides, not fixtures.** Five malformed values were rendering to
+readers (fixed — the swallowed characters were load-bearing sentence punctuation, so the repair
+MOVED them into the prose rather than deleting them). `us`'s `budget-daily-costs-300` cites a page
+that does not contain 300, while its three siblings from that same page verify. A real **Coconino
+National Forest closure order** (effective Jul 13–Sep 30 2026) covers Devil's Bridge and West Fork
+Trail — both recommended by that guide — with no fact row to notice a rescission. And **case 8 is
+systemic**: every guide the pipeline has produced has batched checkpoints, so Pass A/B
+independence has never been evidenced by its own artifacts.
 
+**H1 reached 12/12** after first landing at 10/12. Case 3 needed scoping, not a better regex —
+archived guides are exempt (a concluded trip's unknowns are historical), plus announcement-class
+vocabulary only. Case 11 ships as an ADVISORY by the MANIFEST's own instruction; its live Routes
+half is gated and inert, and the blocker there is structural, not credential-shaped.
 ## Open items
 
 - **§C1/§C3/§C4/§C5 of the theme-polish workstream, and §B4** — drift-baseline paydown (136
@@ -75,13 +73,22 @@ creator's call) stands; only the ceiling itself tightened, 12→8, to the real o
 
 ## Where we left off
 
-**Both §H1/§H2 44px-density forks CONTEXT.md recorded on 2026-08-12 are now implemented, not
-just decided.** `.transit-link` is fully resolved; `.scrub-fit .dchip` is re-measured and
-confirmed to stay baselined, with a tighter, real ceiling instead of a stale looser one.
+**`docs/PLAN_EVIDENCE_FIRST.md` is fully executed.** Every packet has a STATUS block in the plan
+recording what shipped and, where reality contradicted the spec, what changed and why.
 
-**Still needs you:** the same `eslint.config.mjs` hook-protection gap as before — the R5 bundle
-ignore line still can't land there; `support.js` still carries its own `eslint-disable` header.
+**Still needs you — four items, none of them plan packets:**
+1. **The batched-checkpoint bug** (case 8, systemic). `pipeline.mjs` checkpoints are written in
+   one burst at the end of a run, so no guide's state file can evidence that Pass A and Pass B
+   ran independently — the property the whole two-pass design rests on. Now DETECTED but not
+   FIXED; the fix belongs in how research-pass writes checkpoints.
+2. **Two `us` content findings** for a guide-author pass: the unsupported `$300` lodging figure,
+   and three rows sharing the byte-identical claim `Budget & daily costs → Lodging, per night
+   (Sedona, 3★ average)` with three different values (defect D4 reproducing on `us`).
+3. **Live Routes verification** — needs legs structured as origin→destination pairs against the
+   guide's `map` points before a key can be useful.
+4. `skill-evals.yml`'s live-agent gate could not be run locally at any point this session; the
+   D2 skill rewrite needs one real CI run to confirm it still passes.
 
-**Recommended next step:** `docs/PLAN_DESIGN_RECONCILIATION.md` §C1 (drift-baseline paydown,
-file-by-file, tighten `--update` in the same commit each time) is next in the plan's own
-execution order — or §C3 (print preview, issue #47) if you'd rather ship a user-facing fix.
+**Recommended next step:** the checkpoint fix (1). It is small, it closes a defect that affects
+every guide, and it is the one item that makes an architectural guarantee true rather than merely
+observable.

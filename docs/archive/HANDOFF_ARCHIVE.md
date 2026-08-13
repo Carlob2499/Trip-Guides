@@ -4,6 +4,36 @@
 > (the ~80-line budget its own header sets is now gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). Newest first, verbatim.
 
+## Snapshot (2026-08-13 — design-reconciliation §C2a/§C2b: the day-chip underline + the
+transit-link 44px raise)
+
+One commit, ship-loop-clean: 1748 vitest, 18/18 `a11y.spec.ts` 44px-sweep Playwright tests,
+build/lint/typecheck/drift (136 real, under the 153 baseline, unchanged by this commit) all
+green. `docs/PLAN_DESIGN_RECONCILIATION.md`'s §A (fidelity audit FIX rows) and §B (mining) were
+already done before this session; §C (theme polish) had not been started — this session opened
+it at §C2a/§C2b, the two items CONTEXT.md had already decided (§H1/§H2), per the plan's own
+execution order.
+
+**`.dchip` (the day scrubber) is an underline now, not a filled pill** (CONTEXT.md §H2's REVISE
+ruling — SPEC rule 1: evidence, not a button). `planner.css`'s `.dchip` lost border/radius/fill;
+`.dchip-active`'s ground moved from `--accent` to `--sunken` with an accent `border-bottom`.
+Re-derived (not just re-typed) the active numeral's ink: `--accent-ink` is base.css's own "text
+on a page surface" token, already proven ≥4.5:1 against `--bg2`/`--sunken` by its own R5
+derivation comment — the old 3.58:1/2.56:1 note had measured the WRONG pairing (accent-ink on an
+accent FILL) and is replaced, not left stale.
+
+**`.transit-link` clears 44px now; `.dchip`'s baseline tightens, but doesn't clear.** A real
+`getBoundingClientRect()` sweep (both `TARGET_PAGES` × all nine devices, the exact harness
+`a11y.spec.ts` itself uses) found `.transit-link`'s WIDTH already cleared 44px everywhere
+(min 88.2px) — only height was short (30.3px), so a padding-block-only raise to `.68rem .55rem`
+(measured 44.375px) reached the floor with zero width growth and no row-wrap change, the thing
+the original baseline comment worried about. 0 violations, both pages, all nine devices — its
+`TARGET_BASELINE` entry is REMOVED, not shrunk, so a regression here is a real test failure
+again. `.scrub-fit .dchip` was re-measured per CONTEXT.md's own §H2 update note and does NOT
+newly clear — the pill→underline shape touches border/fill/radius, not the
+`flex:1 1 0;min-width:0` math that narrows these chips — so the density ruling (baselined,
+creator's call) stands; only the ceiling itself tightened, 12→8, to the real observed max.
+
 ## Snapshot (2026-08-11b — R5 cleanup and hub fidelity; six commits, every defect at a boundary)
 
 Six commits on `main`, all four CI workflows green on each. 1734 vitest · 225 Playwright ·
