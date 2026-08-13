@@ -235,7 +235,7 @@ across all four guides, and both were open questions until the design-reconcilia
 settled them (below) — do not re-litigate.
 
 **The 44px density fork splits by row-count ceiling, not by treating both controls alike**
-(2026-08-12, design-reconciliation arc, `docs/PLAN_DESIGN_RECONCILIATION.md` §H1). `.transit-link`
+(2026-08-12, design-reconciliation arc, `docs/archive/PLAN_DESIGN_RECONCILIATION.md` §H1). `.transit-link`
 (guide.css:324, `gap:.35rem`, wraps freely, 2-3 per day card) and `.scrub-fit .dchip`
 (mobile-nav.css:175, `flex:1 1 0;min-width:0`, up to 8-10 in one fixed 375px row) look like the
 same violation but are not: one has no row-count ceiling and the other's ceiling IS the design —

@@ -4,6 +4,59 @@
 > (the ~80-line budget its own header sets is now gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). Newest first, verbatim.
 
+## Snapshot (2026-08-13g — two arcs closed: §C3 print preview shipped, PLAN_EVIDENCE_FIRST done)
+
+### §C3 — the budget sheet previews before it prints (issue #47)
+
+Ship-loop-clean; rewritten 9-test `budget-sheet.spec.ts`. Built against the ACTUAL GitHub issue
+(fetched via `issue_read` first) — the plan doc's `[data-fold]`/`[data-noprint]` language for this
+row matched nothing in the ticket or the markup, so it was ignored rather than built to.
+
+"Save summary as PDF" now opens a visible preview (`.bsp-modal`, reusing `.share-modal`'s pattern
+and the shared `trapFocus`), built from the SAME `.bsheet` that later prints; only the preview's
+Print button calls `window.print()`, synchronously in its own click, so the popup-blocker
+constraint still holds. **The CSS restructure is the more interesting part:** `.bs-*` styling used
+to live entirely inside `@media print`, so nothing could show it on screen even at
+`display:block`. Now unconditional — screen and paper render identically because it is one
+document. The Playwright suite encoded the pre-fix behaviour as correct and needed deliberate
+rewriting, not just new assertions.
+
+### PLAN_EVIDENCE_FIRST — complete, H1 at 12/12
+
+A1 · B1–B4 · C1–C2 · D1–D3 · E1–E3 · F1–F2 · H1, each with a STATUS block in the plan. Two
+rulings shaped it, both CONTEXT.md Decisions: **detection is decoupled from
+`risk`/`evidence`/`tier`** (a corpus audit found ZERO rows carry any of them, so the gates as
+specified would have fired on nothing, forever), and **warn-first** — findings BLOCK on drafts,
+advise on published, making `graduate-guide.yml` the publication chokepoint.
+
+**Real defects found on live guides, not fixtures:** five malformed values were reaching readers
+(the swallowed characters were sentence punctuation, so the repair MOVED them into the prose);
+`us`'s `budget-daily-costs-300` cites a page that does not contain 300 while three siblings from
+that page verify; a real **Coconino National Forest closure order** (Jul 13–Sep 30 2026) covers
+two trails that guide recommends, with no fact row to notice a rescission.
+
+**The finding that shaped all of Phase E.** E1/E2/E3 were specified around `risk`/`evidence`/
+`tier` — and a corpus audit found **zero rows carry any of them** (korea 83, denmark 27, us 10,
+japan 25, fixture 25). Specified literally, all three would have fired on nothing, forever, since
+the A1 fixture can never be re-annotated. Creator's ruling: **decouple detection** — every gate
+works on the artifacts as they are, risk-keyed logic written but dormant until D2-generated guides
+arrive. Second: **warn-first** — findings BLOCK on drafts, advise on published, making
+`graduate-guide.yml` the publication chokepoint. Both are CONTEXT.md Decisions.
+
+**Real defects found on live guides, not fixtures.** Five malformed values were rendering to
+readers (fixed — the swallowed characters were load-bearing sentence punctuation, so the repair
+MOVED them into the prose). `us`'s `budget-daily-costs-300` cites a page that does not contain
+300 while its three siblings from that page verify. A real **Coconino National Forest closure
+order** (Jul 13–Sep 30 2026) covers Devil's Bridge and West Fork Trail — both recommended by that
+guide — with no fact row to notice a rescission. And **case 8 is systemic**: every guide the
+pipeline has produced has batched checkpoints, so Pass A/B independence has never been evidenced
+by its own artifacts.
+
+**H1 reached 12/12** after first landing at 10/12. Case 3 needed scoping, not a better regex —
+archived guides are exempt (a concluded trip's unknowns are historical), plus announcement-class
+vocabulary only. Case 11 ships as an ADVISORY by the MANIFEST's own instruction; its live Routes
+half is gated and inert, and the blocker there is structural, not credential-shaped.
+
 ## Snapshot (2026-08-13e — §C1 continues: intake.css/jetlag.css/map.css clean; a new,
 honestly-scoped exemption for map markers over tile imagery)
 

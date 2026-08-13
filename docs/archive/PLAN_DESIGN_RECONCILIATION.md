@@ -1,10 +1,10 @@
 # PLAN — Design Reconciliation (the three Claude Design projects ⇄ the shipped site)
 
-> **Status: ACTIVE.** This is the only design work order. `PLAN_ATLAS_MIGRATION.md` and the R5
-> build order are DONE and ARCHIVED — do not re-read them except to answer "how did X get its
-> shape". When every box here is ticked, move this file to `docs/archive/` and record the
-> closeout in `docs/handoff.md`. A finished plan is referenced when asked for, never re-read
-> by default.
+> **Status: DONE and ARCHIVED (2026-08-13).** Every box in §A–§C is ticked; §C5, the final
+> polish walk, closed last. Archived here per this header's own ritual, alongside
+> `PLAN_ATLAS_MIGRATION.md` and the R5 build order — **history only.** Do not re-read it except
+> to answer "how did X get its shape"; a finished plan is referenced when asked for, never read
+> by default. The closeout is recorded in `docs/handoff.md`.
 
 **Written:** 2026-08-12 · **By:** the survey session that read all three live projects.
 **Executor:** future Claude Code sessions (interactive or headless), one workstream chunk at a
@@ -611,9 +611,71 @@ not novelty:
     the remote push above ran. `docs/handoff.md` and this plan's §B4 already documented the
     "works from a main session, not reachable from subagents" split — this confirms it again
     rather than contradicting it.
-- [ ] **C5. Final polish walk**: all four guides + hub at 375/744/1440, day+night,
-  reduced-motion, keyboard-only — nothing escapes its container, nothing focusable in a
-  closed sheet, every control ≥44px or in the (shrunk) baseline with its reason.
+- [x] **C5. Final polish walk** — DONE 2026-08-13. A read-only verification agent walked all
+  four guides + the hub at 375/744/1440, day+night, reduced-motion and keyboard-only — 30
+  combinations, reporting **0 overflow escapes, 0 closed-sheet focus leaks, 0 keyboard traps**.
+  The container/sheet/trap half of this row therefore passed as written. The ≥44px half did
+  not: six real regressions surfaced by hand that `a11y.spec.ts`'s `TARGET_BASELINE` gate
+  **structurally could not see**, each for a different reason, and closing those blind spots
+  mattered more than the individual fixes — a gate with holes just misses the next one.
+  **Four touch targets.** `.jl-toggle` (jetlag.css, measured 34.9px at every width) and the
+  `.guide-stats` stat tiles carrying `#liveRatePill` (86.7x36.0) both RAISED, height-only, the
+  §C2b `.transit-link` shape exactly — width already cleared 44px on both, so padding-block
+  alone reached the floor with no width growth. The stat-tile floor went on **every** tile
+  (`min-height:36px`→`44px`, overview.css) rather than on `.gstat-rate` alone, and that is the
+  CLS invariant that file records, not tidiness: the pills are JS-injected and the rate one
+  arrives last, so floor-on-the-rate-tile-alone would have grown the row *after* the countdown
+  painted it — a second layout shift. `.mast-credit` was **not** padded: CONTEXT.md's 2026-08-11
+  ruling names "a photo credit" in the notation family outright, masthead.css calls it the same
+  badge-on-photo pattern as `.imgcredit--onphoto` (already excluded), and padding it would have
+  rendered the same datum at two sizes on two surfaces — it joined the gate's notation exclusion
+  instead, which is where `.imgcredit` already sat. `.spine-tick` **baselined** (`max: 13`,
+  korea's group count) on a measured constraint rather than an aesthetic one: at its own 1100px
+  activation width the content column's left edge measures 17.6px against the rail's 14.4–21.4px,
+  so the gutter is *negative* and any 44px-wide hit area — visible or transparent — would sit on
+  the page and swallow clicks meant for it; growing it vertically fails differently, since the
+  ticks pitch at 37.2px and 44px targets would overlap neighbours by 6.8px and manufacture
+  wrong-destination misclicks. It holds meanwhile because it is ≥1100px-only (pointer, not the
+  thumb this floor is written for) and every tick is a redundant shortcut to a `.gtab` that
+  already clears 44px.
+  **Two focus-visibility gaps.** `.addr-copy` and `.stop-num` (field-tools.css) each collapsed
+  hover and focus into one rule ending `outline:none`, leaving genuinely Tab-reachable controls
+  (`role="button"` / `role="checkbox"`, real handlers) with no ring at all. Split, so the tint
+  stays for the pointer and focus gets the system's standard `2px solid var(--accent)` — the
+  convention all seven other rings in that same file already use. Verified under a *real*
+  keyboard Tab (programmatic `.focus()` does not trigger `:focus-visible`): both now match
+  `:focus-visible` and compute a solid painted outline.
+  **Three gate blind spots closed**, which is the durable half of this row. (a) The gate aborts
+  all off-origin requests, which forced rate.js down its `applyFallback()` path — the one path
+  that never un-hides `#liveRatePill` — so that control was `hidden` in every run this gate ever
+  made; `prep()` now *serves* the rate endpoint a canned reply, and an assertion fails loudly if
+  the pill ever stops un-hiding. The canned value is derived from the product's own `SANITY`
+  band rather than picked: a flat rate passed korea and was correctly rejected on japan, because
+  `inBand()` reads 1389 yen to the dollar as bad data. (b) `TARGET_PAGES` gained **japan** — the
+  only page whose trip is in the FUTURE relative to `FIXED_TIME`, so it is the only one that
+  renders `.jl-toggle` at all (guide-ui.js:163-176 correctly hides the calculator on korea's
+  past trip). (c) `DEVICES` gained **Desktop 1280**: the list topped out at 1024px, so anything
+  behind a desktop breakpoint — `.spine-tick` at 1100px — was unmeasurable by construction.
+  That expansion immediately earned itself, surfacing a **seventh** control nothing had ever
+  audited: `.divergence-source` at 1151x21 (japan carries the product's only divergences
+  content). Raised to 44px, not baselined, per this gate's own "never widen `TARGET_BASELINE`
+  to make a new one pass".
+  **One deviation, recorded rather than taken.** The brief called `applyFallback()`'s failure to
+  un-hide `#liveRatePill` a fallback-path bug to fix. It is not: the markup comment reads
+  "injected by JS *when fetch succeeds*", and the stats bar's editorial rule (GuideLayout.astro)
+  is that only self-changing facts belong there — static ones were deliberately cut. Un-hiding
+  a hardcoded build-time seed rate there would present a stale number as a live one on every
+  guide whose fetch fails, against this product's core honesty property, so shipped behaviour
+  was left alone and the *gate* was fixed instead, which was the actual goal. Noted for the
+  creator: on that path the traveller also loses the currency converter entirely (it hangs off
+  the pill) even though `curFallbackRate` is in hand — a real gap, but a feature decision, not
+  this row's.
+  **Gates:** build ✓, lint 0 errors, typecheck 0 errors, vitest 2006 passed / 146 files,
+  `a11y.spec.ts` **69/69** (was 57 — +12 from the page and device the matrix gained, not from
+  loosened assertions), `check-drift.mjs src` unchanged at 341 COLOUR / 435 TYPE / 37 ELEVATION
+  / 18 RADIUS / 4 MOTION. Re-verified in `astro preview` at 375/1280/1440, light and dark: every
+  raised control measures ≥44px, the stats row stays one non-scrolling line at 375px, and no
+  page gained horizontal overflow.
 
 ---
 
