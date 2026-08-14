@@ -44,13 +44,15 @@
 - Airports for Sedona/Japan — record them WHEN flights get booked. No fact yet; don't invent.
 - `/about/` + `/new/` not in the SW precache shell; cover overlay does not trap focus; Cloudflare dashboard Git integration still failing 0s builds.
 - No guide uses a direct royalty-free `sights[].img.src` yet — capability live, unexercised.
-- **Remote branch `claude/pipeline-changes-plan-752kra` — merged, deletable, NOT deletable from a
-  container session.** All four routes are closed here: `git push --delete` 403s at the egress
-  proxy, the REST API 403s ("GitHub access is not enabled for this session"), the GitHub MCP
-  surface has `create_branch` but no delete, and `merge_pull_request` takes no delete-branch flag.
-  Verified fully merged (zero commits `origin/main..branch`), so nothing is lost. One click at
-  github.com/Carlob2499/Trip-Guides/branches. The other three remote branches each carry an
-  unmerged commit — leave them.
+- **ALL FOUR remote branches are now safe to delete — and none can be deleted from a container
+  session.** `pipeline-changes-plan-752kra`, `a11y-landmark-fix-v2` and `recert/japan` are merged
+  into main; `claude/design-fixes-continuation-wi920k` is **superseded, never to be merged** — it
+  carries the same a11y commit in an older/smaller form plus doc state main moved past, so merging
+  it would un-archive `PLAN_DESIGN_RECONCILIATION.md` and revert `handoff.md`. Every delete route
+  is closed here: `git push --delete` 403s at the egress proxy, the REST API 403s ("GitHub access
+  is not enabled for this session"), the GitHub MCP surface has `create_branch` but no delete, and
+  `merge_pull_request` takes no delete-branch flag. One pass at
+  github.com/Carlob2499/Trip-Guides/branches clears all four.
 
 ## Snapshot (2026-08-14 — case 11's live half is built; the "structural blocker" wasn't one)
 
