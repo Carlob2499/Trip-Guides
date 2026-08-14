@@ -43,8 +43,14 @@
   §H3) — proof-of-life is an isolated test fixture, not a staged guide edit.
 - Airports for Sedona/Japan — record them WHEN flights get booked. No fact yet; don't invent.
 - `/about/` + `/new/` not in the SW precache shell; cover overlay does not trap focus; Cloudflare dashboard Git integration still failing 0s builds.
-- Korea 03: critic flagged a swapped 명동 label on the Gyeongbokgung map point → file its issue.
 - No guide uses a direct royalty-free `sights[].img.src` yet — capability live, unexercised.
+- **Remote branch `claude/pipeline-changes-plan-752kra` — merged, deletable, NOT deletable from a
+  container session.** All four routes are closed here: `git push --delete` 403s at the egress
+  proxy, the REST API 403s ("GitHub access is not enabled for this session"), the GitHub MCP
+  surface has `create_branch` but no delete, and `merge_pull_request` takes no delete-branch flag.
+  Verified fully merged (zero commits `origin/main..branch`), so nothing is lost. One click at
+  github.com/Carlob2499/Trip-Guides/branches. The other three remote branches each carry an
+  unmerged commit — leave them.
 
 ## Snapshot (2026-08-14 — case 11's live half is built; the "structural blocker" wasn't one)
 
