@@ -57,3 +57,7 @@
   .map-chips::-webkit-scrollbar{display:none}
   .map-chip{flex:none}
 }
+
+/* Moved from guide.css (2026-08-14 split — the ~800-line rule). */
+/* === EMBEDDED MAP ============================================================ */
+.osmmap{width:100%;height:300px;border:1px solid var(--rule2);border-radius:0;display:block;margin:.4rem 0 .3rem;background:var(--bg2)}

@@ -26,9 +26,9 @@ same-audience event content shares one group. A group name is a nav label
 identity. New guides start from: Plan · Essentials · Transit · Days ·
 Sights · Food & shopping · Sources, adding at most 3 trip-specific groups.
 
-**Cite evidence, not just doctrine.** `docs/generated/telemetry-summary.md` (auto-generated
-weekly from anonymous tab-open counts, PII-free) ranks which tabs travelers
-actually opened on past guides. Consult it when deciding a new guide's groups and
+**Cite evidence, not just doctrine.** Trip post-mortems (`learnings/<slug>.md`) and
+`docs/evidence/traveler-patterns.md` record which tabs and tools travelers actually
+used on past guides. Consult them when deciding a new guide's groups and
 their order: a tab nobody opened is a merge candidate; a consistently top-ranked
 one earns prominence. Absent or thin data means no signal yet — fall back to the
 ranking rules, don't invent one.

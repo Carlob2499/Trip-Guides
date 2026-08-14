@@ -16,7 +16,7 @@ on:
       - .github/ISSUE_TEMPLATE/graduate-guide.yml
       - .github/ISSUE_TEMPLATE/modify-guide.yml
       - .github/ISSUE_TEMPLATE/revise-guide.yml
-      - .github/workflows/content-audit.yml
+      - .github/workflows/recert.yml
       - .github/workflows/graduate-guide.yml
       - .github/workflows/research-pass.yml
       - .github/workflows/modify-guide.yml

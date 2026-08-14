@@ -17,7 +17,7 @@
 //      mechanical "notice + trigger" is automated. Dedupe (no double-dispatch, no stacking on an
 //      in-flight recert) keeps it from spending agent tokens on a guide already being handled.
 //
-// A .ts script (run via `tsx`, matching aggregate-telemetry.ts's precedent) rather than
+// A .ts script (run via `tsx`) rather than
 // .mjs specifically so it can import src/lib/trip-dates.ts directly — the SAME year-
 // inference + T-minus math the on-page countdown and weather window already use, instead
 // of a second hand-kept copy of that logic (the SHELF_LIFE_DAYS split between

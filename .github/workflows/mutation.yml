@@ -13,9 +13,9 @@ name: Mutation testing
 # silently wrong answer is possible and expensive. UI and build scripts are excluded — their real
 # failures are geometry and integration, which the visual specs and the CLAUDE.md boundary checks
 # cover instead.
+# De-cronned 2026-08-14 (workflow-noise cleanup): mutation runs are a diagnostic you
+# ask for, not a weekly bill. Dispatch it after meaningful model/lib changes.
 on:
-  schedule:
-    - cron: "0 6 * * 1" # Mondays, 06:00 UTC
   workflow_dispatch:
 
 permissions:

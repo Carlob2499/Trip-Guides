@@ -16,7 +16,7 @@ name: Feedback export (LEARN loop)
 # freeform) is gitignored and never committed.
 on:
   schedule:
-    - cron: "13 8 * * 1" # Mondays 08:13 UTC — weekly, off-the-hour (see content-audit.yml)
+    - cron: "13 8 * * 1" # Mondays 08:13 UTC — weekly, off-the-hour on purpose (crowd-spreading)
   workflow_dispatch:
 
 permissions:

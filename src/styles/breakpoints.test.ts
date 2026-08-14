@@ -33,8 +33,10 @@ const CSS = sources(SRC, /\.css$/).map((f) => ({ file: rel(f), css: readFileSync
 const EXPECTED: Record<string, string[]> = {
   "features/guide-rail/styles.css": ["TABLET_MIN", "DESKTOP_MIN"],
   "styles/flight.css": ["MOBILE_MAX"],
-  "styles/guide.css": ["MOBILE_MAX+1", "TABLET_MIN", "DESKTOP_MIN", "MOBILE_MAX", "MOBILE_MAX"],
-  "styles/mobile-nav.css": ["MOBILE_MAX"],
+  // 2026-08-14 split: the mobile botbar/sheet plumbing (one MOBILE_MAX block) moved
+  // from guide.css to mobile-nav.css, its appearance-owner.
+  "styles/guide.css": ["MOBILE_MAX+1", "TABLET_MIN", "DESKTOP_MIN", "MOBILE_MAX"],
+  "styles/mobile-nav.css": ["MOBILE_MAX", "MOBILE_MAX"],
   "styles/trip-split.css": ["MOBILE_MAX"],
 };
 

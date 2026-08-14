@@ -26,7 +26,7 @@ const RISKY_FILL = /background(?:-color)?:\s*[^;}]*var\(--(accent|green|warn|cri
 
 /* src/styles/budget-sheet.css is the PRINT sheet: paper is white whatever theme the reader is
    in, so its --bs-* palette is literal on purpose and that file documents why. */
-const EXEMPT = ["budget-sheet.css", "progress-preview"];
+const EXEMPT = ["budget-sheet.css"];
 
 const FILES = [...cssFiles(join(SRC, "styles")), ...cssFiles(join(SRC, "features"))].filter(
   (f) => !EXEMPT.some((e) => f.replace(/\\/g, "/").includes(e)),

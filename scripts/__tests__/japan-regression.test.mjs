@@ -22,7 +22,7 @@ import { readFileSync } from "node:fs";
 import { checkFactsHygiene } from "../audit/check-facts-hygiene.mjs";
 import { evaluateRiskGates } from "../audit/check-risk-gates.mjs";
 import { evaluateUncertainty } from "../audit/check-uncertainty.mjs";
-import { checkDrift } from "../audit/check-drift.mjs";
+import { checkDrift } from "../audit/check-content-drift.mjs";
 import { checkRoutes } from "../audit/check-routes.mjs";
 import { checkIntakeContradictions } from "../audit/check-intake-contradictions.mjs";
 

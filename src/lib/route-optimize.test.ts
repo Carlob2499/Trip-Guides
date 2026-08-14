@@ -1,7 +1,7 @@
 // @protects-file A suggested stop order is genuinely shorter than the planned one, or is not offered.
 
 import { describe, it, expect } from "vitest";
-import { optimizeDayRoute, nearestNeighborOrder, twoOpt, routeDistance } from "./optimize";
+import { optimizeDayRoute, nearestNeighborOrder, twoOpt, routeDistance } from "./route-optimize";
 
 // A zigzag along one line of latitude: the day's stops sit east of the start at
 // 10km, 2km, and 8km — visiting them in that (recorded) order backtracks twice.

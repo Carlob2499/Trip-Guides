@@ -5,7 +5,7 @@
  * fire, and the regex-driven date/flight/lodging extraction) are unit-testable without a
  * DOM. The UI keeps only element creation, GSAP wiring, and file reading.
  *
- * A7 / TEST_COVERAGE_ANALYSIS.md §P6: wizard.js was named the top untested-risk-surface
+ * A7 (2026-07 coverage analysis §P6): wizard.js was named the top untested-risk-surface
  * candidate — none of this had a single test before this extraction.
  */
 import { COUNTRIES, ALIASES } from "../../../data/countries.mjs";

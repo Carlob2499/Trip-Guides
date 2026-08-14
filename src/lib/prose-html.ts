@@ -2,9 +2,9 @@
    Guide bodies render via `set:html` in 30+ places, so any string that reaches the
    reader as HTML must be confined to this small, safe tag set — nothing that can
    execute script or navigate to a dangerous scheme. The guide collection schema walks
-   every HTML-bearing field through findUnsafeHtml; non-schema HTML surfaces (the
-   panel-preview fixtures) import it directly so they ride the same gate rather than
-   growing a second checker that can drift (the #39 divergence lesson). */
+   every HTML-bearing field through findUnsafeHtml; any future non-schema HTML surface
+   should import it directly and ride the same gate rather than growing a second
+   checker that can drift (the #39 divergence lesson). */
 
 export const ALLOWED_TAGS = new Set(["p", "b", "i", "a", "ul", "li", "ol", "br"]);
 

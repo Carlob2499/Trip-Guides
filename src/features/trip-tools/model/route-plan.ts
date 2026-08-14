@@ -1,5 +1,5 @@
 /* Route order — the trip-wide view of the same advice the day cards already give as a chip.
-   The optimiser itself is `src/features/route-opt/model/optimize.ts` (nearest-neighbour then
+   The optimiser itself is `src/lib/route-optimize.ts` (nearest-neighbour then
    2-opt, unit-tested there); this module only asks it about every day at once and attaches
    the leg distances the Tools screen prints.
 
@@ -7,7 +7,7 @@
    a "2.1 km" leg through a river with one bridge is not a 2.1 km walk, and a tool that lets
    a reader believe otherwise is worse than one that says nothing. */
 
-import { haversineKm, routeDistance, optimizeDayRoute } from "../../route-opt/model/optimize";
+import { haversineKm, routeDistance, optimizeDayRoute } from "../../../lib/route-optimize";
 
 export interface RoutePoint { name: string; lat: number; lng: number }
 

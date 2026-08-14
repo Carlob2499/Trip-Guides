@@ -14,10 +14,10 @@ vi.mock("./client.js", () => ({
   hasFirebase: (...args: unknown[]) => hasFirebaseMock(...args),
 }));
 
-const { generateTripCode, normalizeCode, reportError, bumpCounter } = await import("./sync.js");
+const { generateTripCode, normalizeCode, reportError } = await import("./sync.js");
 
 // Top-level so it applies to EVERY test in the file, including the rate-limit block below —
-// `readyMock` is shared across reportError/bumpCounter (both call the same imported `ready`),
+// `readyMock` is shared across the reportError tests (all call the same imported `ready`),
 // so a call-count assertion in one describe must not inherit calls left over from another.
 beforeEach(() => {
   readyMock.mockReset();
@@ -65,37 +65,11 @@ describe("normalizeCode", () => {
   });
 });
 
-describe("reportError / bumpCounter — no-op-without-config posture", () => {
+describe("reportError — no-op-without-config posture", () => {
   it("reportError never calls ready() when Firebase isn't configured", () => {
     hasFirebaseMock.mockReturnValue(false);
     reportError({ guide: "g", feature: "f", message: "m" });
     expect(readyMock).not.toHaveBeenCalled();
-  });
-
-  it("bumpCounter never calls ready() when Firebase isn't configured", () => {
-    hasFirebaseMock.mockReturnValue(false);
-    bumpCounter("telemetry/x", 1);
-    expect(readyMock).not.toHaveBeenCalled();
-  });
-
-  it("bumpCounter never calls ready() when no path is given, even if configured", () => {
-    hasFirebaseMock.mockReturnValue(true);
-    bumpCounter("", 1);
-    bumpCounter(null as unknown as string, 1);
-    expect(readyMock).not.toHaveBeenCalled();
-  });
-
-  it("bumpCounter calls ready() once configured and given a path", async () => {
-    hasFirebaseMock.mockReturnValue(true);
-    readyMock.mockReturnValue(
-      Promise.resolve({
-        db: {},
-        mod: { ref: vi.fn(), set: vi.fn(() => Promise.resolve()), increment: vi.fn() },
-      }),
-    );
-    bumpCounter("telemetry/x", 1);
-    expect(readyMock).toHaveBeenCalledTimes(1);
-    await new Promise((r) => setImmediate(r)); // let the queued .then/.catch settle
   });
 });
 

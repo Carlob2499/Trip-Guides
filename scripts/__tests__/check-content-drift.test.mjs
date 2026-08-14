@@ -6,7 +6,7 @@
 // @protects-file A live source URL cannot vouch for a fact its page no longer states.
 
 import { describe, it, expect } from "vitest";
-import { digitsOf, valuePattern, pageText, pageSupports, checkDrift } from "../audit/check-drift.mjs";
+import { digitsOf, valuePattern, pageText, pageSupports, checkDrift } from "../audit/check-content-drift.mjs";
 
 const page = (body) => ({ ok: true, text: body });
 const fetcherFor = (map) => async (url) => map[url] ?? { ok: false, status: 404 };

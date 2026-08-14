@@ -9,9 +9,9 @@ name: Skill retro (IMPROVE loop)
 # Guard: because a skill edit can regress guide quality, the PR must pass skill-evals.yml (the wired
 # regression evals) before the maker reviews — the eval workflow runs automatically on any PR that
 # touches .claude/skills/**, so this PR triggers it by construction.
+# De-cronned 2026-08-14 (workflow-noise cleanup): run on demand after a research
+# pass or trip lands new evidence, not on a calendar.
 on:
-  schedule:
-    - cron: "0 9 1 * *" # 09:00 UTC on the 1st of each month
   workflow_dispatch:
 
 permissions:

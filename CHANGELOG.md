@@ -3,6 +3,11 @@
 The structural story of this project: what changed, and **why**. Not every commit — the
 shifts that changed how the thing is built. Newest first.
 
+> **Frozen as history at 2026-07-16** (owner ruling, 2026-08-14 cleanup): entries stop here.
+> The Atlas hub migration, the R5 guide redesign and the evidence-first program that followed
+> are recorded in `CONTEXT.md` (decisions) and `docs/archive/` (plans) instead — one home for
+> the ongoing story, so this file no longer pretends to be current.
+
 Waypoint is a static Astro site of *verified, personalized* travel guides, deployed to GitHub
 Pages under `/Trip-Guides`. A guide is only done when it's **Verified · Personal · Actionable
 · Honest** (see `CLAUDE.md`).

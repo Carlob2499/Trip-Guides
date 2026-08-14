@@ -1,5 +1,5 @@
 // A7: unit tests for extract-palette.mjs's colour quantization — 0% coverage before this
-// (TEST_COVERAGE_ANALYSIS.md flagged this file). dominantVibrant() is tested against small
+// (flagged by the 2026-07 coverage analysis). dominantVibrant() is tested against small
 // FIXTURE IMAGES synthesized with sharp itself (the same library the real extraction pipeline
 // uses) rather than a checked-in binary PNG — same raw-pixel-buffer shape sharp hands the real
 // code, generated on the fly so there's no binary fixture to keep in sync.

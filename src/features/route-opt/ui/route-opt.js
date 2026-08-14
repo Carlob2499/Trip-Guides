@@ -1,4 +1,4 @@
-/* Day-route optimizer — DOM half (decisions in ../model/optimize.ts). Advisory
+/* Day-route optimizer — DOM half (decisions in src/lib/route-optimize.ts). Advisory
    only, same doctrine as the weather day-swap note: it never reorders anything
    on its own. A chip appears on a qualifying day card ("Reorder could save
    ≈Nkm"); tapping it opens a sheet with the suggested order; Apply reorders
@@ -7,7 +7,7 @@
    GPX/ICS/print, which stay in the guide's authored order). Restore undoes it.
    Silent whenever a day has <3 located stops or reordering wouldn't help. */
 
-import { optimizeDayRoute } from "../model/optimize";
+import { optimizeDayRoute } from "../../../lib/route-optimize";
 import { reducedMotion, tapHaptic, trapFocus } from "../../../scripts/util.js";
 
 (function () {

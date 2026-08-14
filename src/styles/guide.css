@@ -422,56 +422,8 @@ ol.steps li::before{content:counter(step);position:absolute;left:0;top:.05rem;wi
    Pure CSS; sits behind/between the numeral squares. */
 ol.steps li:not(:last-child)::after{content:"";position:absolute;left:calc(.725rem - 1px);top:1.65rem;bottom:-.75rem;width:2px;background:repeating-linear-gradient(to bottom,var(--accent) 0 4px,transparent 4px 8px);opacity:.45}
 
-/* === EMBEDDED MAP ============================================================ */
-.osmmap{width:100%;height:300px;border:1px solid var(--rule2);border-radius:0;display:block;margin:.4rem 0 .3rem;background:var(--bg2)}
-
 /* === FOOTER ================================================================== */
 footer{border-top:1px solid var(--rule2);text-align:center;padding:1.7rem 1.1rem;color:var(--muted);font-size:var(--text-control);margin-top:1rem}
-
-/* === MOBILE: BOTTOM BAR + SLIDE-UP SECTION SHEET ============================ */
-/* Hidden on desktop — shown only at or below the phone ceiling */
-.botbar{display:none}
-.sheet,.sheet-backdrop{display:none}
-/* bp:MOBILE_MAX — src/lib/breakpoints.ts */
-@media(max-width:899px){
-  .content{padding-bottom:5.5rem}
-  /* R2 hid the tab strip entirely below 900px and made the journey sheet the sole section
-     switcher. R5 reverses that: the phone gets the PILL ROW, which is the phone's model of the
-     rail rather than the absence of one — a reader on a phone can now see where they are
-     without opening a sheet. The sticky chrome still shrinks to the topbar alone. */
-  html{--chrome-h:54px}
-  /* The bottom TAB BAR — plumbing only (position/stacking). Every dimension, every
-     slot's look and all the phone/tablet scaling live in mobile-nav.css, which is the
-     single owner of the mobile navigation's appearance. */
-  .botbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:40;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--rule2)}
-  /* Slide-up sheet backdrop */
-  .sheet-backdrop{display:block;position:fixed;inset:0;z-index:45;background:rgba(16,20,24,0);pointer-events:none;transition:background .25s}
-  .sheet-backdrop.open{background:rgba(16,20,24,.45);pointer-events:auto}
-  /* Slide-up sheet */
-  /* 16px was pre-Atlas drift the migration missed (the system has 0 and 999px, nothing else),
-     and it was also the misleading affordance: a softly rounded top edge is the universal
-     "drag me" cue, so the sheet promised a gesture the browser kept taking away. The container
-     is square because it holds content; the GRAB HANDLE below is a pill because it is the part
-     you press. Same rule, applied to the right two elements. */
-  .sheet{display:flex;flex-direction:column;position:fixed;left:0;right:0;bottom:0;z-index:46;max-height:80vh;background:var(--bg);border-radius:0;border-top:1px solid var(--rule2);box-shadow:0 -10px 34px rgba(16,20,24,.28);transform:translateY(100%);transition:transform .28s cubic-bezier(.2,.8,.2,1);padding-bottom:max(.5rem,var(--safe-bottom))}
-  /* The explicit handle the rounded corner was standing in for — same 38x4 pill the SOS sheet
-     uses, so both sheets say "drag" the same way. `flex:none` keeps it off the list's scroll. */
-  .sheet::before{content:"";flex:none;display:block;width:38px;height:4px;border-radius:999px;background:var(--rule2);margin:.5rem auto .35rem}
-  .sheet.open{transform:translateY(0)}
-  .sheet-head{flex:none;font-family:var(--font-display);font-size:var(--text-h4);padding:.3rem 1.2rem .65rem;border-bottom:1px solid var(--rule)}
-  .sheet-list{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:.3rem 0 1rem}
-  /* Sheet look & choreography live in mobile-nav.css (single owner) — R2 turned the
-     bearing numbers into journey stations there. Only the plumbing lives here. */
-  /* The count sits on the far right of the row, tabular so a column of them lines up. */
-  .sheet-cat{display:flex;align-items:center;gap:.6rem;text-decoration:none}
-  .sheet-cat-name{flex:1 1 auto;min-width:0}
-  .sheet-count{flex:0 0 auto;font-family:var(--font-data);font-size:var(--text-control-sm);
-    color:var(--muted);font-variant-numeric:tabular-nums}
-  .sheet-link{display:flex;align-items:center;min-height:44px;text-decoration:none}
-  .sheet-link.active{color:var(--accent-ink);font-weight:600}
-  .sheet-cat:active,.sheet-link:active{background:var(--bg2)}
-  body.sheet-lock{overflow:hidden}
-}
 
 /* === TYPOGRAPHY POLISH ======================================================= */
 h2,h3,h4,.block-title,.cat-title,.sight-name,.item .name,.sheet-head{font-family:var(--font-display);font-weight:640;letter-spacing:-0.015em}
@@ -480,70 +432,6 @@ iframe{max-width:100%}
 .content,.block,.card,.catblock,.day,.day .b{min-width:0}
 p,li,.check,.block-title,.sight-name,.cat-title,.lsnote,.fit,.tag,.day .d,.item .name,.sheet-link,.sheet-cat{overflow-wrap:break-word}
 body{overflow-x:clip}
-
-/* === BUDGET CALCULATOR ======================================================= */
-.budget{margin:.2rem 0}
-.budget-intro{color:var(--muted);margin-bottom:.7rem}
-.budget-grid{display:flex;flex-direction:column;border:1px solid var(--rule);border-radius:0;overflow:hidden}
-.brow{display:grid;grid-template-columns:1fr 6.4rem 5rem;gap:.5rem;align-items:center;padding:.55rem .7rem;border-top:1px solid var(--rule);min-width:0}
-.brow:first-child{border-top:0}
-.bhead{background:var(--bg2);font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
-.bcol{text-align:right}
-.blabel{display:flex;flex-direction:column;gap:.12rem;min-width:0;overflow-wrap:break-word;line-height:1.3}
-.bnote{font-style:normal;font-size:var(--text-caption);color:var(--muted);line-height:1.35}
-.best{font-variant-numeric:tabular-nums;white-space:nowrap}
-.best small{display:block;font-size:var(--text-micro);color:var(--muted)}
-.bactual{width:100%;border:1px solid var(--rule2);border-radius:0;padding:.32rem .35rem;font:inherit;font-size:var(--text-body);text-align:right;background:var(--card);color:var(--ink);-moz-appearance:textfield}
-.bactual::-webkit-outer-spin-button,.bactual::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-.bactual:focus{outline:2px solid var(--theme-primary,var(--accent));outline-offset:0;border-color:var(--theme-primary,var(--accent))}
-.btotal{background:var(--bg2);font-weight:600}
-.best-total,.bact-total{font-variant-numeric:tabular-nums;white-space:nowrap}
-/* Was eight hardcoded Material-palette hexes with a dark set behind a bare
-   prefers-color-scheme query. Two things wrong, both invisible: the light "over" pair measured
-   3.57:1 (#e65100 on #fff8e1) against the 4.5:1 this bold 13px text needs, and the dark set had
-   no [data-theme="dark"] counterpart — the same gap already documented on .topbar-sos — so a
-   visitor who toggled dark on a light OS got light-green ink on a pale mint chip inside a dark
-   panel. Both are gone by construction here: --green and --warn are the product's own
-   contrast-tested inks and re-map themselves, and the grounds are mixed from the surface the
-   chip actually sits on, so there is nothing left to keep in sync. The tint is 8%, not the
-   12% first written: 12 measured 4.28:1 for dark "within", still short. At 8 the four pairs
-   are 5.85 / 6.14 light and 4.57 / 4.85 dark. */
-.budget-verdict{margin:.6rem 0 0;padding:.45rem .7rem;border-radius:0;font-size:var(--text-small);font-weight:600;line-height:1.3}
-.budget-verdict.within{background:color-mix(in srgb,var(--green) 8%,var(--card));color:var(--green)}
-.budget-verdict.over{background:color-mix(in srgb,var(--warn) 8%,var(--card));color:var(--warn)}
-.budget-foot{margin-top:.55rem;font-size:var(--text-caption);color:var(--muted);line-height:1.4}
-@media(max-width:520px){
-  .brow{grid-template-columns:1fr 4.8rem 4.2rem;gap:.4rem;padding:.5rem .55rem}
-  .bhead{font-size:var(--text-nano)}
-  /* .bactual deliberately does NOT shrink here. It used to drop to --text-control (13.12px)
-     to fit the tighter grid, but this block only applies at <=520px — the exact widths where
-     iOS zooms the page in on focus for any control under 16px, and never zooms back out. A
-     budget field is tapped repeatedly while entering spend, so it was the worst possible
-     control to shrink. It stays --text-body; the column widths above absorb it. */
-}
-
-/* Budget: category headers, ranges, per-person toggle, group pill */
-.budget-toggle{display:flex;gap:.35rem;margin-bottom:.6rem}
-.btog-btn{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;background:none;border:1px solid var(--rule2);border-radius:999px;padding:.32rem .7rem;cursor:pointer;color:var(--muted);transition:background .14s,color .14s,border-color .14s;line-height:1.4}
-.btog-btn:hover{color:var(--ink);border-color:var(--ink)}
-.btog-active{background:var(--ink) !important;color:var(--bg) !important;border-color:var(--ink) !important}
-/* No opacity: it composited var(--muted) down to 3.18:1 (light) / 3.57:1 (dark) on the toggle's
-   real ground. The size step to .9em already reads as secondary; bare --muted clears 4.5:1 on
-   every surface it actually paints (5.08-6.13 measured), so nothing else needs to change. */
-.btog-party{font-size:.9em;color:var(--muted)}
-.bcat-head{grid-column:1/-1;background:var(--bg2);border-top:2px solid var(--rule2) !important;padding:.38rem .7rem !important}
-.bcat-label{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
-.bsubtotal{background:var(--bg2)}
-.bsub-lbl{font-size:var(--text-control);font-style:italic;color:var(--muted)}
-.bsub-est{font-size:var(--text-small);font-variant-numeric:tabular-nums;color:var(--muted)}
-.bsub-act{font-size:var(--text-small);font-variant-numeric:tabular-nums;color:var(--muted)}
-.best-val{font-variant-numeric:tabular-nums;white-space:nowrap}
-.bday-rate{display:block;font-size:var(--text-micro);color:var(--muted);margin-top:.1rem}
-.brange{display:block;font-size:var(--text-micro);color:var(--muted);margin-top:.05rem}
-.btot-range{display:block;font-size:var(--text-control-sm);font-weight:400;color:var(--muted);margin-top:.15rem}
-.bpill{display:inline-block;font-size:var(--text-nano);font-family:var(--font-data);letter-spacing:.03em;background:var(--bg2);border:1px solid var(--rule2);border-radius:999px;padding:0 .38rem;color:var(--muted);line-height:1.7;margin-left:.3rem;vertical-align:middle}
-.brate-link{color:var(--accent-ink)}
-.brate-link:hover{text-decoration:underline}
 
 /* === READING PROGRESS BAR =================================================== */
 /* 3px accent line fixed at the very top — fills as user scrolls through content */

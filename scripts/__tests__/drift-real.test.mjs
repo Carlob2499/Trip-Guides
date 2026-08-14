@@ -14,7 +14,10 @@ describe("design drift", () => {
     // The corpus has known debt; a low number here means the scan broke, not that the repo got
     // clean. This caught a real one: piped, the checker's own process.exit(1) truncated its
     // report on Linux and CI classified 465 of 788 hits while Windows saw them all.
-    expect(real.length + exempt.length).toBeGreaterThan(700);
+    // Floor lowered 700→600 on 2026-08-14: the panel/progress-preview design-study
+    // stylesheets (and their exemption class) were deleted in the cleanup, taking
+    // ~100 always-exempt hits with them. Still far above an empty-run score.
+    expect(real.length + exempt.length).toBeGreaterThan(600);
     expect(Object.keys(baseline).length).toBeGreaterThan(0);
   });
 

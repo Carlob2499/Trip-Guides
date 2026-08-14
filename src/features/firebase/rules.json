@@ -10,73 +10,147 @@
         "members": {
           "$mid": {
             ".validate": "$mid.matches(/^[A-Za-z0-9_-]{1,40}$/) && newData.hasChildren(['name'])",
-            "name": { ".validate": "newData.isString() && newData.val().length <= 60" },
-            "payment": { ".validate": "newData.isString() && newData.val().length <= 80" },
-            "order": { ".validate": "newData.isNumber()" },
-            "createdBy": { ".validate": "newData.isString() && newData.val().length <= 64" },
-            "createdAt": { ".validate": "newData.isNumber()" },
-            "$other": { ".validate": false }
+            "name": {
+              ".validate": "newData.isString() && newData.val().length <= 60"
+            },
+            "payment": {
+              ".validate": "newData.isString() && newData.val().length <= 80"
+            },
+            "order": {
+              ".validate": "newData.isNumber()"
+            },
+            "createdBy": {
+              ".validate": "newData.isString() && newData.val().length <= 64"
+            },
+            "createdAt": {
+              ".validate": "newData.isNumber()"
+            },
+            "$other": {
+              ".validate": false
+            }
           }
         },
         "expenses": {
           "$eid": {
             ".validate": "$eid.matches(/^[A-Za-z0-9_-]{1,40}$/)",
-            "paidBy": { ".validate": "newData.isString() && newData.val().length <= 64" },
-            "desc": { ".validate": "newData.isString() && newData.val().length <= 120" },
-            "order": { ".validate": "newData.isNumber()" },
-            "createdBy": { ".validate": "newData.isString() && newData.val().length <= 64" },
-            "createdAt": { ".validate": "newData.isNumber()" },
+            "paidBy": {
+              ".validate": "newData.isString() && newData.val().length <= 64"
+            },
+            "desc": {
+              ".validate": "newData.isString() && newData.val().length <= 120"
+            },
+            "order": {
+              ".validate": "newData.isNumber()"
+            },
+            "createdBy": {
+              ".validate": "newData.isString() && newData.val().length <= 64"
+            },
+            "createdAt": {
+              ".validate": "newData.isNumber()"
+            },
             "participants": {
-              "$i": { ".validate": "newData.isString() && newData.val().length <= 40" }
+              "$i": {
+                ".validate": "newData.isString() && newData.val().length <= 40"
+              }
             },
-            "category": { ".validate": "newData.isString() && newData.val().length <= 60" },
-            "amountMinor": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000000000" },
-            "baseMinor": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000000000" },
-            "currency": { ".validate": "newData.isString() && newData.val().matches(/^[A-Z]{3}$/)" },
-            "rate": { ".validate": "newData.isNumber() && newData.val() > 0" },
-            "rateDate": { ".validate": "newData.isString() && newData.val().length <= 20" },
-            "method": { ".validate": "newData.val().matches(/^(EQUAL|EXACT|PERCENTAGE|SHARES)$/)" },
+            "category": {
+              ".validate": "newData.isString() && newData.val().length <= 60"
+            },
+            "amountMinor": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000000000"
+            },
+            "baseMinor": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000000000"
+            },
+            "currency": {
+              ".validate": "newData.isString() && newData.val().matches(/^[A-Z]{3}$/)"
+            },
+            "rate": {
+              ".validate": "newData.isNumber() && newData.val() > 0"
+            },
+            "rateDate": {
+              ".validate": "newData.isString() && newData.val().length <= 20"
+            },
+            "method": {
+              ".validate": "newData.val().matches(/^(EQUAL|EXACT|PERCENTAGE|SHARES)$/)"
+            },
             "weights": {
-              "$pid": { ".validate": "$pid.matches(/^[A-Za-z0-9_-]{1,40}$/) && newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000000000" }
+              "$pid": {
+                ".validate": "$pid.matches(/^[A-Za-z0-9_-]{1,40}$/) && newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000000000"
+              }
             },
-            "amount": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000000" },
+            "amount": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000000"
+            },
             "split": {
-              "$pid": { ".validate": "$pid.matches(/^[A-Za-z0-9_-]{1,40}$/) && newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000000" }
+              "$pid": {
+                ".validate": "$pid.matches(/^[A-Za-z0-9_-]{1,40}$/) && newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000000"
+              }
             },
-            "$other": { ".validate": false }
+            "$other": {
+              ".validate": false
+            }
           }
         },
         "payments": {
           "$pid": {
             ".validate": "$pid.matches(/^[A-Za-z0-9_-]{1,40}$/) && newData.hasChildren(['from','to','baseMinor'])",
-            "from": { ".validate": "newData.isString() && newData.val().length <= 64" },
-            "to": { ".validate": "newData.isString() && newData.val().length <= 64" },
-            "baseMinor": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000000000" },
-            "on": { ".validate": "newData.isString() && newData.val().length <= 20" },
-            "note": { ".validate": "newData.isString() && newData.val().length <= 200" },
-            "order": { ".validate": "newData.isNumber()" },
-            "createdBy": { ".validate": "newData.isString() && newData.val().length <= 64" },
-            "createdAt": { ".validate": "newData.isNumber()" },
-            "$other": { ".validate": false }
+            "from": {
+              ".validate": "newData.isString() && newData.val().length <= 64"
+            },
+            "to": {
+              ".validate": "newData.isString() && newData.val().length <= 64"
+            },
+            "baseMinor": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000000000"
+            },
+            "on": {
+              ".validate": "newData.isString() && newData.val().length <= 20"
+            },
+            "note": {
+              ".validate": "newData.isString() && newData.val().length <= 200"
+            },
+            "order": {
+              ".validate": "newData.isNumber()"
+            },
+            "createdBy": {
+              ".validate": "newData.isString() && newData.val().length <= 64"
+            },
+            "createdAt": {
+              ".validate": "newData.isNumber()"
+            },
+            "$other": {
+              ".validate": false
+            }
           }
         },
         "meta": {
-          "customSplit": { ".validate": "newData.isBoolean()" },
-          "$other": { ".validate": false }
+          "customSplit": {
+            ".validate": "newData.isBoolean()"
+          },
+          "$other": {
+            ".validate": false
+          }
         },
         "feedback": {
           "$fid": {
             ".validate": "$fid.matches(/^[A-Za-z0-9_-]{1,40}$/) && newData.hasChild('createdBy')",
-            "$field": { ".validate": "!newData.isString() || newData.val().length <= 4000" }
+            "$field": {
+              ".validate": "!newData.isString() || newData.val().length <= 4000"
+            }
           }
         },
         "reminders": {
           "$rid": {
             ".validate": "$rid.matches(/^[A-Za-z0-9_-]{1,40}$/) && newData.hasChild('createdBy')",
-            "$field": { ".validate": "!newData.isString() || newData.val().length <= 2000" }
+            "$field": {
+              ".validate": "!newData.isString() || newData.val().length <= 2000"
+            }
           }
         },
-        "$other": { ".validate": false }
+        "$other": {
+          ".validate": false
+        }
       }
     },
     "errors": {
@@ -84,26 +158,24 @@
       ".write": "auth != null",
       "$eid": {
         ".validate": "$eid.matches(/^[A-Za-z0-9_-]+$/)",
-        "guide": { ".validate": "newData.isString() && newData.val().length <= 60" },
-        "feature": { ".validate": "newData.isString() && newData.val().length <= 60" },
-        "message": { ".validate": "newData.isString() && newData.val().length <= 500" },
-        "ua": { ".validate": "newData.isString() && newData.val().length <= 200" },
-        "at": { ".validate": "newData.isNumber()" },
-        "$other": { ".validate": false }
-      }
-    },
-    "telemetry": {
-      ".read": true,
-      ".write": "auth != null",
-      "$guide": {
-        ".validate": "$guide.matches(/^[a-z0-9_-]{1,60}$/)",
-        "tabs": {
-          "$name": { ".validate": "$name.matches(/^[a-z0-9_-]{1,40}$/) && newData.isNumber() && newData.val() >= 0" }
+        "guide": {
+          ".validate": "newData.isString() && newData.val().length <= 60"
         },
-        "tools": {
-          "$name": { ".validate": "$name.matches(/^[a-z0-9_-]{1,40}$/) && newData.isNumber() && newData.val() >= 0" }
+        "feature": {
+          ".validate": "newData.isString() && newData.val().length <= 60"
         },
-        "$other": { ".validate": false }
+        "message": {
+          ".validate": "newData.isString() && newData.val().length <= 500"
+        },
+        "ua": {
+          ".validate": "newData.isString() && newData.val().length <= 200"
+        },
+        "at": {
+          ".validate": "newData.isNumber()"
+        },
+        "$other": {
+          ".validate": false
+        }
       }
     }
   }

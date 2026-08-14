@@ -1,5 +1,5 @@
 /* Great-circle distance — the one scripts-side home (audit dedup, 2026-08-14).
-   src has its own typed copy in features/route-opt/model/optimize.ts; node scripts
+   src has its own typed copy in src/lib/route-optimize.ts; node scripts
    can't import TS, so this is the .mjs twin. Keep the math identical. */
 export function haversineKm(a, b) {
   const toRad = (d) => (d * Math.PI) / 180;

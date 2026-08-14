@@ -166,9 +166,8 @@ const checklistItem = z.union([
 // Prose tag allowlist (CLAUDE.md / waypoint-guide-author skill): guide bodies render via
 // `set:html` in 30+ places, so any string that reaches the reader as HTML must be
 // confined to a small, safe tag set. The allowlist itself lives in src/lib/prose-html.ts
-// (the ONE home — non-schema HTML surfaces like the panel-preview fixtures import the
-// same check, imported at the top of this file); this schema walks every HTML-bearing
-// field through it below.
+// (the ONE home, imported at the top of this file); this schema walks every
+// HTML-bearing field through it below.
 // Fields across section types that are rendered as HTML via set:html — see
 // PanelBlock/ProseBlock/ListBlock/RoutesBlock/DaysBlock/etc. Walked generically below so
 // a new HTML-bearing field just needs adding to this list, not a new check.

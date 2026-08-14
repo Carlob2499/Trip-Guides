@@ -1,17 +1,17 @@
 name: Pre-trip check
 
-# Daily (not weekly, like recert.yml/content-audit.yml) — "entering the 7-day window before
+# Daily (not weekly, like recert.yml) — "entering the 7-day window before
 # departure" is a daily-granularity event, and recert.yml's own schedule has no concept of a
 # guide's trip dates at all (it only tracks each FACT's age vs its shelf life). This closes
 # that specific gap with the cheapest safe first phase: report-only, mirroring
-# content-audit.yml's single-tracking-issue pattern (find-or-update, never duplicates) — it
+# the content-audit job's single-tracking-issue pattern (recert.yml) (find-or-update, never duplicates) — it
 # reports to a tracking issue AND (W1) auto-dispatches recert.yml for any in-window guide with
 # real stale facts — the evidence-earned phase 2. AUTO_DISPATCH=1 (below) enables it; the dispatch
 # is deduped so it never stacks on an in-flight recert, and recert.yml still opens a human-reviewed
 # freshness PR and never auto-merges, so only the mechanical trigger is automated, not the judgment.
 on:
   schedule:
-    # 41 min past the hour, daily — an off-the-hour minute on purpose (see content-audit.yml).
+    # 41 min past the hour, daily — an off-the-hour minute on purpose (crowd-spreading).
     - cron: "41 5 * * *"
   workflow_dispatch:
 

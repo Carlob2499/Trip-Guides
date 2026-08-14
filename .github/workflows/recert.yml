@@ -28,8 +28,33 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write
 
 jobs:
+  # Weekly no-LLM accuracy REPORT (merged from the retired content-audit.yml, 2026-08-14 —
+  # one Monday cron instead of two): dead links, missing Commons photos, third-party API
+  # health, stale `verified` stamps → one tracking issue, updated in place. This job only
+  # REPORTS; the recert matrix below ACTS on the staleness half by opening fix PRs
+  # (link/photo rot stays a human's swap/removal call). Schedule-only: a manual dispatch
+  # is someone chasing one guide's freshness, not the weekly report. Run locally with
+  # `node scripts/audit/run-audit.mjs --dry-run`.
+  audit:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Run content audit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          # The Places canary (scripts/audit/check-apis.mjs) verifies the venue verifier is
+          # still wired — key valid, SKU access intact, businessStatus still returned. It
+          # SKIPS cleanly when this is unset, so a fork without the secret stays green.
+          PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
+        run: node scripts/audit/run-audit.mjs
   # Build the list of guides needing recert. A manual dispatch with a slug targets just that one;
   # otherwise every currently-stale guide. Empty list → the recert job is skipped (has_stale gate).
   detect:

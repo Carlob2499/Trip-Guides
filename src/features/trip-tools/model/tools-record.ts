@@ -14,7 +14,7 @@
    calculator on this screen is the same instance on the same key as the one in the guide
    rather than a second ledger that could disagree with it. */
 
-import { buildReminders, type ReminderItem, type ChecklistSource } from "./reminders";
+import { buildReminders, type ReminderItem, type ChecklistSource } from "./booking-reminders";
 import { buildClosures, closureCount, type ClosureDay } from "./closures";
 import { buildRoutePlan, type RouteDay, type RouteDaySource } from "./route-plan";
 

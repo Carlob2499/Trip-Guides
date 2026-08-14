@@ -157,7 +157,9 @@ test.describe("Panel gates — korea/Essentials on the real guide page", () => {
         }
       }).observe(document, { attributes: true, subtree: true });
     });
-    await page.goto("/Trip-Guides/panel-preview/?scope=study-a", { waitUntil: "networkidle" });
+    // 2026-08-14: repointed from the retired panel-preview study page to a shipped
+    // guide with declared panelGroups — same silo, same staging attributes.
+    await page.goto("/Trip-Guides/guides/korea/", { waitUntil: "networkidle" });
     await expect(page.locator("html[data-panel-anim]")).toHaveCount(1);
     const stage = await page.evaluate(() => window.__stage);
     expect(stage.ready).toBeDefined();

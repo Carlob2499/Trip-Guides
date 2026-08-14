@@ -243,7 +243,7 @@ export async function verify({ slug = null, network = false } = {}) {
   // one release by instruction; the row names the R3+ rows that will block once enforced.
   const driftBySlug = {};
   if (network) {
-    const { checkDrift, liveFetchPage } = await import("./audit/check-drift.mjs");
+    const { checkDrift, liveFetchPage } = await import("./audit/check-content-drift.mjs");
     const fetchPage = liveFetchPage();
     for (const t of targets) driftBySlug[t.slug] = await checkDrift(t.facts, { fetchPage });
   }

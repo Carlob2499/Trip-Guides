@@ -15,5 +15,6 @@ file before you open it, which is the question that actually matters when you la
 
 **Naming rules.** Lowercase kebab-case, no underscores, no `SCREAMING_CASE` — that convention
 belongs to the repo root (`README`, `CLAUDE`, `CHANGELOG`, `SECURITY`), where tooling looks for
-those exact names. A `plan-` prefix would mean *not built yet*; nothing carries one right now,
-because every plan in this repo has either shipped or been archived.
+those exact names. ONE standing exception: `PLAN_EVIDENCE_FIRST.md`, the active program doc —
+it keeps the archive's `PLAN_` convention because ~35 files cite it by that name and it will
+retire INTO `archive/` under it (recorded 2026-08-14; renaming mid-program buys nothing).

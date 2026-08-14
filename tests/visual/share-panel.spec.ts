@@ -3,7 +3,7 @@
    pins the wiring the units can't reach: opening the modal actually sets the WhatsApp/email
    links' hrefs to the CORRECT encoded URL/title, the copy button carries the right URL, and
    the section-specific deep link (#grp-N) is picked up from the active tab. A7 /
-   TEST_COVERAGE_ANALYSIS.md §P6. */
+   the 2026-07 coverage analysis §P6. */
 // @protects-file Sharing a guide sends the exact page you are looking at, not the front door.
 
 import { test, expect } from "@playwright/test";

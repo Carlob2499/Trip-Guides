@@ -103,7 +103,7 @@ layer**; native = PWA-first. The P-series (P0–P4) and the W-series are **shipp
 |-------|-------------|--------|----------------|
 | **R3 · Dynamic runtime** | View Transitions, live-data tiles, offline/connection state machine | dynamic #2 + #3 | Fable designs; Sonnet implements |
 | **R4 · Per-country visual identity** | Build-time country skin (palette from the guide's own imagery), one signature motion set, motion-doctrine doc | goals 8/9 | Fable spec; Sonnet implements |
-| **R5 · Tool suite by demand** | Top-3 tools ranked by telemetry + post-mortems; cull below-median | goal 7 | Sonnet / Haiku |
+| **R5 · Tool suite by demand** | Top-3 tools ranked by trip post-mortems; cull below-median | goal 7 | Sonnet / Haiku |
 | **R6 · App-ready distribution** | PWA manifest/icons/splash hardening, install prompt, iOS meta; optional TWA | goal 10 | Haiku / Sonnet |
 
 R3/R4 are independent of the pipeline phases and can interleave if a trip deadline appears.

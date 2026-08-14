@@ -1,3 +1,4 @@
+import { haversineKm as havKm } from "./route-optimize";
 // Section-anchor derivations (R5, docs/reference/visual-redesign.md Move C) — the pure data
 // behind the figures that open Days / Transit / checklist sections. The rule that governs
 // every function here: a figure is DERIVED from the guide's own researched content, never
@@ -71,17 +72,10 @@ export function dayLegSummary(
   return { from, to, km: complete ? Math.round(km * 10) / 10 : null };
 }
 
-/** Great-circle distance (km). Standard haversine on a mean-radius sphere — plenty for
- *  a day-leg header (walking distances are approximate by nature and rendered with ≈). */
+/** Great-circle distance (km), scalar-argument form — delegates to the one src-side
+ *  haversine (route-optimize.ts) so the math has a single home. */
 export function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
-  const R = 6371;
-  const rad = Math.PI / 180;
-  const dLat = (lat2 - lat1) * rad;
-  const dLng = (lng2 - lng1) * rad;
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(dLng / 2) ** 2;
-  return 2 * R * Math.asin(Math.sqrt(a));
+  return havKm({ lat: lat1, lng: lng1 }, { lat: lat2, lng: lng2 });
 }
 
 /** The Transit journey-line: one station per route step, labelled by the step's own
