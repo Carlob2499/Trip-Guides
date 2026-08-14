@@ -20,11 +20,11 @@
     "verified_on": "2026-07-29",
     "shelf_life": "default"
   },
-  "phone-data-19": {
-    "claim": "Phone & data — $19,",
-    "value": "$19,",
-    "source_url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/",
-    "verified_on": "2026-07-29",
+  "phone-data-16-50": {
+    "claim": "Phone & data — $16.50,",
+    "value": "$16.50,",
+    "source_url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/japan-10gb-30-days/",
+    "verified_on": "2026-08-10",
     "shelf_life": "default",
     "state": "approx"
   },
@@ -76,18 +76,18 @@
     "state": "approx"
   },
   "money-currency-150": {
-    "claim": "Money & currency — ¥150",
-    "value": "¥150",
-    "source_url": "https://www.sevenbank.co.jp/intlcard/index2.html",
-    "verified_on": "2026-07-29",
+    "claim": "Money & currency — ¥158",
+    "value": "¥158",
+    "source_url": "https://www.federalreserve.gov/releases/h10/current/",
+    "verified_on": "2026-08-10",
     "shelf_life": "fx",
     "state": "approx"
   },
   "money-currency-1": {
     "claim": "Money & currency — $1,",
     "value": "$1,",
-    "source_url": "https://www.sevenbank.co.jp/intlcard/index2.html",
-    "verified_on": "2026-07-29",
+    "source_url": "https://www.federalreserve.gov/releases/h10/current/",
+    "verified_on": "2026-08-10",
     "shelf_life": "fx"
   },
   "budget-daily-costs-250": {
@@ -168,11 +168,11 @@
     "shelf_life": "transit",
     "state": "approx"
   },
-  "budget-daily-costs-19": {
-    "claim": "Budget & daily costs → eSIM / data — $19",
-    "value": "$19",
-    "source_url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/",
-    "verified_on": "2026-07-29",
+  "budget-daily-costs-16-50": {
+    "claim": "Budget & daily costs → eSIM / data — $16.50",
+    "value": "$16.50",
+    "source_url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/japan-10gb-30-days/",
+    "verified_on": "2026-08-10",
     "shelf_life": "fx",
     "state": "approx"
   },

@@ -37,10 +37,10 @@
     "group": "Plan",
     "title": "Phone & data",
     "phase": "before",
-    "body": "<p>For ~26 days of data, an <b>eSIM</b> is the cheapest, most flexible option — and matters more than it sounds for two people who might split up on a shopping or arcade afternoon, since a single shared pocket wifi puck doesn't help if you're on opposite sides of a mall. <b>Ubigi</b>'s 20GB/30-day plan runs {{fact:phone-data-19}} unlimited/30-day {{fact:phone-data-65}} — activation is clean, the plan starts the moment you validate it in-app. <b>Airalo</b>'s comparable plans run {{fact:phone-data-18}}–25 for 10–20GB. <b>⚠ \"Unlimited\" plans on every major eSIM provider (Ubigi, Airalo, Holafly) have a repeated, unresolved user complaint about throttling past a daily threshold</b> — if you're shooting a lot of photo/video and navigating heavily, budget for the higher tier or carry a data top-up option as backup rather than assuming true-unlimited speed. Buy an eSIM before you land (installs over home wifi, activates on arrival).</p>",
-    "verified_on": "2026-07-29",
+    "body": "<p>For ~26 days of data, an <b>eSIM</b> is the cheapest, most flexible option — and matters more than it sounds for two people who might split up on a shopping or arcade afternoon, since a single shared pocket wifi puck doesn't help if you're on opposite sides of a mall. <b>Ubigi</b>'s 10GB/30-day plan runs {{fact:phone-data-16-50}} unlimited/30-day {{fact:phone-data-65}} — activation is clean, the plan starts the moment you validate it in-app. <b>Airalo</b>'s comparable plans run {{fact:phone-data-18}}–25 for 10–20GB. <b>⚠ \"Unlimited\" plans on every major eSIM provider (Ubigi, Airalo, Holafly) have a repeated, unresolved user complaint about throttling past a daily threshold</b> — if you're shooting a lot of photo/video and navigating heavily, budget for the higher tier or carry a data top-up option as backup rather than assuming true-unlimited speed. Buy an eSIM before you land (installs over home wifi, activates on arrival).</p>",
+    "verified_on": "2026-08-10",
     "shelf_life": "default",
-    "source_url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/"
+    "source_url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/japan-10gb-30-days/"
   },
   {
     "type": "panel",

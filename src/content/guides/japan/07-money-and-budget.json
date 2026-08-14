@@ -5,9 +5,9 @@
     "title": "Money & currency",
     "phase": "arrival",
     "body": "<p>Japanese Yen (¥/JPY). Card acceptance keeps broadening at tourist-facing venues, but this trip's actual food priorities skew cash-heavy — yatai stalls are ~90% cash-only, and plenty of ramen counters and markets are too. Withdraw at 7-Eleven ATMs (Seven Bank), which reliably accept foreign cards 24/7. <a href='https://www.google.com/search?q=JPY+USD+exchange+rate' target='_blank' rel='noopener noreferrer'>Check the current JPY/USD rate</a> before you go — the figures below assume a rough {{fact:money-currency-150}}/{{fact:money-currency-1}} unconfirmed against a live rate.</p>",
-    "verified_on": "2026-07-29",
+    "verified_on": "2026-08-10",
     "shelf_life": "fx",
-    "source_url": "https://www.sevenbank.co.jp/intlcard/index2.html"
+    "source_url": "https://www.federalreserve.gov/releases/h10/current/"
   },
   {
     "type": "budget",
@@ -95,13 +95,13 @@
         "label": "eSIM / data",
         "basis": "trip",
         "est": 65,
-        "low": 19,
+        "low": 16.5,
         "high": 130,
         "category": "Phone & data",
-        "note": "Ubigi unlimited/30-day {{fact:phone-data-65}} (two 30-day cycles needed to cover ~26 days); the 20GB/30-day tier is {{fact:budget-daily-costs-19}} if data use is lighter than expected.",
-        "verified_on": "2026-07-29",
+        "note": "Ubigi unlimited/30-day {{fact:phone-data-65}} (two 30-day cycles needed to cover ~26 days); the 10GB/30-day tier is {{fact:budget-daily-costs-16-50}} if data use is lighter than expected.",
+        "verified_on": "2026-08-10",
         "shelf_life": "fx",
-        "source_url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/"
+        "source_url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/japan-10gb-30-days/"
       },
       {
         "label": "Luggage forwarding (Yamato Ta-Q-Bin)",
