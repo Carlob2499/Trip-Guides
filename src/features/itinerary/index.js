@@ -8,9 +8,7 @@
     story-mode — so listener attachment relative to each other is unchanged;
     the one bundle-wide invariant (guide-ui runs before all of these) is
     preserved by importing this barrel after guide-ui in GuideLayout.
-    Behavioral coverage: tests/visual/itinerary.spec.ts (must stay green
-    across this move). Purely a side-effecting UI feature — no public API to
-    export.
+    Purely a side-effecting UI feature — no public API to export.
 
     A1: story-mode.js used to be deep-imported separately by GuideLayout.astro
     (bypassing this silo's own index contract) even though it executed

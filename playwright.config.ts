@@ -1,12 +1,11 @@
-/* Playwright harness for the site's behavioral + accessibility E2E specs (tests/visual/).
-   The screenshot-diff suite that used to live here was removed — it failed on every intentional
-   visual change, which is exactly the wrong signal. What remains is real-behavior coverage: the
-   axe accessibility gate (a11y.spec.ts, CI-gated via .github/workflows/a11y.yml) plus behavioral
-   specs (sos, offline, share-panel, itinerary, route-opt, atlas-hub, field-tools) run locally with
-   `npm run test:e2e`. Deterministic by construction: fixed clock, external requests blocked (see
-   each spec). Runs against `astro preview` on :4322 — the ONLY trusted preview per CLAUDE.md
-   (preview serves the real production build; dev HMR state is not what ships). CI builds
-   first; locally run `npm run build` before `npm run test:e2e`. */
+/* Playwright harness for the accessibility gate (tests/visual/a11y.spec.ts, CI-gated via
+   .github/workflows/a11y.yml). The screenshot-diff suite that used to live here was removed
+   (it failed on every intentional visual change — the wrong signal), and the 24 local-only
+   behavioral specs were deleted in the 2026-08-14 cleanup (owner ruling: nothing ran them, so
+   they proved nothing; recoverable from git if a design overhaul ever wants them back).
+   Deterministic by construction: fixed clock, external requests blocked. Runs against
+   `astro preview` on :4322 — the ONLY trusted preview per CLAUDE.md (preview serves the real
+   production build). CI builds first; locally run `npm run build` before `npm run test:e2e`. */
 import { defineConfig, chromium } from "@playwright/test";
 import { existsSync } from "node:fs";
 

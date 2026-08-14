@@ -46,22 +46,22 @@ export function initIntakeFlow() {
   stage.className = "itk-stage";
   form.insertBefore(stage, holder);
 
-  function v(id) { var el = document.getElementById(id); return el ? el.value.trim() : ""; }
+  function val(id) { var el = document.getElementById(id); return el ? el.value.trim() : ""; }
   function values() {
     var out = {};
-    Object.keys(fields).forEach(function (id) { out[id] = v(id); });
-    ["ngStart", "ngEnd"].forEach(function (id) { out[id] = v(id); });
+    Object.keys(fields).forEach(function (id) { out[id] = val(id); });
+    ["ngStart", "ngEnd"].forEach(function (id) { out[id] = val(id); });
     return out;
   }
 
   /* ── Screen plumbing ─────────────────────────────────────────────────────────── */
   var screens = [];   // built lazily; each is {el, onEnter?}
   var cur = -1, animating = false;
-  function show(n, dir) {
-    if (animating || n === cur) return;
-    var from = cur >= 0 ? screens[cur].el : null, to = screens[n].el;
-    cur = n;
-    if (screens[n].onEnter) screens[n].onEnter();
+  function show(idx, dir) {
+    if (animating || idx === cur) return;
+    var from = cur >= 0 ? screens[cur].el : null, to = screens[idx].el;
+    cur = idx;
+    if (screens[idx].onEnter) screens[idx].onEnter();
     if (!from || reducedMotion()) {
       if (from) from.hidden = true;
       to.hidden = false;
@@ -85,8 +85,8 @@ export function initIntakeFlow() {
       focusHead(to);
     }
     var safety = setTimeout(function () { settle(null); }, 900);
-    import("gsap").then(function (m) {
-      var gsap = m.gsap || m.default;
+    import("gsap").then(function (mod) {
+      var gsap = mod.gsap || mod.default;
       gsap.to(from, { x: dir < 0 ? 46 : -46, autoAlpha: 0, duration: 0.2, ease: "power2.in", onComplete: function () {
         if (settled) return;
         from.hidden = true; gsap.set(from, { clearProps: "all" });
@@ -98,8 +98,8 @@ export function initIntakeFlow() {
     }).catch(function () { clearTimeout(safety); settle(null); });
   }
   function focusHead(el) {
-    var h = el.querySelector(".itk-ask");
-    if (h) { h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: false }); }
+    var head = el.querySelector(".itk-ask");
+    if (head) { head.setAttribute("tabindex", "-1"); head.focus({ preventScroll: false }); }
   }
   function screen(cls) {
     var el = document.createElement("div");
@@ -112,22 +112,22 @@ export function initIntakeFlow() {
     var bar = document.createElement("div");
     bar.className = "itk-nav";
     if (opts.back !== false) {
-      var b = document.createElement("button");
-      b.type = "button"; b.className = "itk-back"; b.textContent = "← Back";
-      b.addEventListener("click", function () { show(Math.max(0, cur - 1), -1); });
-      bar.appendChild(b);
+      var back = document.createElement("button");
+      back.type = "button"; back.className = "itk-back"; back.textContent = "← Back";
+      back.addEventListener("click", function () { show(Math.max(0, cur - 1), -1); });
+      bar.appendChild(back);
     }
-    var n = document.createElement("button");
-    n.type = "button"; n.className = "itk-next" + (opts.accent ? " itk-next-acc" : "");
-    n.textContent = opts.label || "Next →";
-    n.addEventListener("click", opts.go);
-    bar.appendChild(n);
+    var next = document.createElement("button");
+    next.type = "button"; next.className = "itk-next" + (opts.accent ? " itk-next-acc" : "");
+    next.textContent = opts.label || "Next →";
+    next.addEventListener("click", opts.go);
+    bar.appendChild(next);
     el.appendChild(bar);
-    return n;
+    return next;
   }
   function ask(el, big, sub) {
-    var h = document.createElement("p"); h.className = "itk-ask"; h.textContent = big; el.appendChild(h);
-    if (sub) { var s = document.createElement("p"); s.className = "itk-sub"; s.textContent = sub; el.appendChild(s); }
+    var head = document.createElement("p"); head.className = "itk-ask"; head.textContent = big; el.appendChild(head);
+    if (sub) { var subEl = document.createElement("p"); subEl.className = "itk-sub"; subEl.textContent = sub; el.appendChild(subEl); }
   }
 
   /* ── A · Drop Zone ───────────────────────────────────────────────────────────── */
@@ -158,7 +158,7 @@ export function initIntakeFlow() {
       if (isPdf) {
         reader.onload = function () {
           import("../model/pdf-text")
-            .then(function (m) { return m.extractPdfText(reader.result); })
+            .then(function (mod) { return mod.extractPdfText(reader.result); })
             .then(function (text) { parseDoc(text, file.name); })
             .catch(function () { parseDoc("", file.name); });
         };
@@ -207,33 +207,33 @@ export function initIntakeFlow() {
   var ranked = [];
   function drawBoard() {
     board.innerHTML = "";
-    RANK_CARDS.forEach(function (c) {
-      var b = document.createElement("button");
-      b.type = "button"; b.className = "itk-card";
-      var idx = ranked.indexOf(c.value);
-      if (idx > -1) { b.classList.add("itk-card-on"); b.textContent = "#" + (idx + 1) + " · " + c.label; }
-      else b.textContent = c.label;
-      b.setAttribute("aria-pressed", String(idx > -1));
-      b.addEventListener("click", function () {
-        var i = ranked.indexOf(c.value);
-        if (i > -1) ranked.splice(i, 1);
-        else if (ranked.length < 3) ranked.push(c.value);
-        var p = rankToFields(ranked);
-        document.getElementById("ngPriority1").value = p.priority1;
-        document.getElementById("ngPriority2").value = p.priority2;
-        document.getElementById("ngPriority3").value = p.priority3;
+    RANK_CARDS.forEach(function (card) {
+      var btn = document.createElement("button");
+      btn.type = "button"; btn.className = "itk-card";
+      var idx = ranked.indexOf(card.value);
+      if (idx > -1) { btn.classList.add("itk-card-on"); btn.textContent = "#" + (idx + 1) + " · " + card.label; }
+      else btn.textContent = card.label;
+      btn.setAttribute("aria-pressed", String(idx > -1));
+      btn.addEventListener("click", function () {
+        var pos = ranked.indexOf(card.value);
+        if (pos > -1) ranked.splice(pos, 1);
+        else if (ranked.length < 3) ranked.push(card.value);
+        var priorities = rankToFields(ranked);
+        document.getElementById("ngPriority1").value = priorities.priority1;
+        document.getElementById("ngPriority2").value = priorities.priority2;
+        document.getElementById("ngPriority3").value = priorities.priority3;
         drawBoard();
       });
-      board.appendChild(b);
+      board.appendChild(btn);
     });
-    Array.prototype.forEach.call(slotRow.children, function (s, i) {
+    Array.prototype.forEach.call(slotRow.children, function (slot, i) {
       if (ranked[i]) {
-        var card = RANK_CARDS.filter(function (c) { return c.value === ranked[i]; })[0];
-        s.className = "itk-slot itk-slot-on";
-        s.innerHTML = "<em>#" + (i + 1) + "</em>" + (card ? card.label : ranked[i]);
+        var card = RANK_CARDS.filter(function (entry) { return entry.value === ranked[i]; })[0];
+        slot.className = "itk-slot itk-slot-on";
+        slot.innerHTML = "<em>#" + (i + 1) + "</em>" + (card ? card.label : ranked[i]);
       } else {
-        s.className = "itk-slot";
-        s.innerHTML = "<span>Priority #" + (i + 1) + "</span>";
+        slot.className = "itk-slot";
+        slot.innerHTML = "<span>Priority #" + (i + 1) + "</span>";
       }
     });
   }
@@ -246,17 +246,17 @@ export function initIntakeFlow() {
   topicsWrap.setAttribute("role", "group");
   topicsWrap.setAttribute("aria-label", "Extra research topics");
   var picked = new Set();
-  TOPIC_CHIPS.forEach(function (t) {
-    var b = document.createElement("button");
-    b.type = "button"; b.className = "itk-chip"; b.textContent = t;
-    b.setAttribute("aria-pressed", "false");
-    b.addEventListener("click", function () {
-      var on = !picked.has(t);
-      if (on) picked.add(t); else picked.delete(t);
-      b.classList.toggle("itk-chip-on", on);
-      b.setAttribute("aria-pressed", String(on));
+  TOPIC_CHIPS.forEach(function (topic) {
+    var btn = document.createElement("button");
+    btn.type = "button"; btn.className = "itk-chip"; btn.textContent = topic;
+    btn.setAttribute("aria-pressed", "false");
+    btn.addEventListener("click", function () {
+      var on = !picked.has(topic);
+      if (on) picked.add(topic); else picked.delete(topic);
+      btn.classList.toggle("itk-chip-on", on);
+      btn.setAttribute("aria-pressed", String(on));
     });
-    topicsWrap.appendChild(b);
+    topicsWrap.appendChild(btn);
   });
   sB.appendChild(topicsWrap);
   // Pace / style / budget as pill rows bound to the real selects.
@@ -271,20 +271,20 @@ export function initIntakeFlow() {
     row.setAttribute("role", "radiogroup");
     row.setAttribute("aria-label", pair[1]);
     Array.prototype.forEach.call(sel.options, function (opt) {
-      var b = document.createElement("button");
-      b.type = "button"; b.className = "itk-chip";
-      b.textContent = opt.value === "" ? "no preference" : opt.text;
-      b.setAttribute("role", "radio");
-      b.setAttribute("aria-checked", String(sel.value === opt.value));
-      if (sel.value === opt.value) b.classList.add("itk-chip-on");
-      b.addEventListener("click", function () {
+      var btn = document.createElement("button");
+      btn.type = "button"; btn.className = "itk-chip";
+      btn.textContent = opt.value === "" ? "no preference" : opt.text;
+      btn.setAttribute("role", "radio");
+      btn.setAttribute("aria-checked", String(sel.value === opt.value));
+      if (sel.value === opt.value) btn.classList.add("itk-chip-on");
+      btn.addEventListener("click", function () {
         sel.value = opt.value;
-        Array.prototype.forEach.call(row.children, function (x) {
-          x.classList.remove("itk-chip-on"); x.setAttribute("aria-checked", "false");
+        Array.prototype.forEach.call(row.children, function (chip) {
+          chip.classList.remove("itk-chip-on"); chip.setAttribute("aria-checked", "false");
         });
-        b.classList.add("itk-chip-on"); b.setAttribute("aria-checked", "true");
+        btn.classList.add("itk-chip-on"); btn.setAttribute("aria-checked", "true");
       });
-      row.appendChild(b);
+      row.appendChild(btn);
     });
     sB.appendChild(row);
   });
@@ -294,10 +294,10 @@ export function initIntakeFlow() {
   var tailBuilt = [];
   function buildTailScreens() {
     // Tear down previous tail screens (a Back → re-Next rebuild keeps them fresh).
-    tailBuilt.forEach(function (s) {
-      Array.prototype.forEach.call(s.el.querySelectorAll(".ng-field, .ng-row"), function (f) { holder.appendChild(f); });
-      stage.removeChild(s.el);
-      screens.splice(screens.indexOf(s), 1);
+    tailBuilt.forEach(function (scr) {
+      Array.prototype.forEach.call(scr.el.querySelectorAll(".ng-field, .ng-row"), function (field) { holder.appendChild(field); });
+      stage.removeChild(scr.el);
+      screens.splice(screens.indexOf(scr), 1);
     });
     tailBuilt = [];
     var steps = nextTailSteps(values(), ranked);
@@ -307,24 +307,24 @@ export function initIntakeFlow() {
       st.ids.forEach(function (id) {
         // ngEnd lives inside ngStart's .ng-row (fields are keyed by a row's FIRST input),
         // so fields["ngEnd"] is rightly undefined — the row arrives via ngStart.
-        var f = fields[id];
-        if (f && !el.contains(f)) el.appendChild(f);
+        var field = fields[id];
+        if (field && !el.contains(field)) el.appendChild(field);
       });
       var isLast = i === steps.length - 1;
       var required = st.ids.indexOf("ngCountry") > -1;
-      var s = { el: el };
-      screens.push(s); tailBuilt.push(s);
+      var scr = { el: el };
+      screens.push(scr); tailBuilt.push(scr);
       nav(el, {
         label: isLast ? "Review →" : "Next →",
         go: function () {
-          if (required && !v("ngCountry")) {
+          if (required && !val("ngCountry")) {
             if (errEl) {
               errEl.textContent = "Country is required.";
               errEl.removeAttribute("hidden");
               el.appendChild(errEl);
             }
-            var c = document.getElementById("ngCountry");
-            if (c) c.focus();
+            var countryEl = document.getElementById("ngCountry");
+            if (countryEl) countryEl.focus();
             return;
           }
           if (errEl) errEl.setAttribute("hidden", "");
@@ -347,10 +347,10 @@ export function initIntakeFlow() {
   sD.appendChild(drawer);
   function labelFor(id, raw) {
     if (id === "ngStart") {
-      var d = [v("ngStart"), v("ngEnd")].filter(Boolean).join(" → ");
-      return d || raw;
+      var dates = [val("ngStart"), val("ngEnd")].filter(Boolean).join(" → ");
+      return dates || raw;
     }
-    return v(id) || raw;
+    return val(id) || raw;
   }
   function drawManifest() {
     mani.innerHTML = "";
@@ -359,22 +359,22 @@ export function initIntakeFlow() {
         mani.appendChild(document.createTextNode(seg.text));
         return;
       }
-      var b = document.createElement("button");
-      b.type = "button"; b.className = "itk-blank";
+      var btn = document.createElement("button");
+      btn.type = "button"; btn.className = "itk-blank";
       var shown = labelFor(seg.field, seg.ghost || "");
-      b.textContent = shown;
-      if (!v(seg.field) && !(seg.field === "ngStart" && (v("ngStart") || v("ngEnd")))) b.classList.add("itk-blank-ghost");
-      b.addEventListener("click", function () { openDrawer(seg.field); });
-      mani.appendChild(b);
+      btn.textContent = shown;
+      if (!val(seg.field) && !(seg.field === "ngStart" && (val("ngStart") || val("ngEnd")))) btn.classList.add("itk-blank-ghost");
+      btn.addEventListener("click", function () { openDrawer(seg.field); });
+      mani.appendChild(btn);
     });
   }
   function openDrawer(id) {
-    Array.prototype.forEach.call(drawer.querySelectorAll(".ng-field, .ng-row"), function (f) { holder.appendChild(f); });
-    var f = fields[id];
-    if (!f) return;
-    drawer.appendChild(f);
+    Array.prototype.forEach.call(drawer.querySelectorAll(".ng-field, .ng-row"), function (field) { holder.appendChild(field); });
+    var field = fields[id];
+    if (!field) return;
+    drawer.appendChild(field);
     drawer.hidden = false;
-    var input = f.querySelector("input,select,textarea");
+    var input = field.querySelector("input,select,textarea");
     if (input) { input.focus(); }
   }
   drawer.addEventListener("input", drawManifest);
@@ -383,7 +383,7 @@ export function initIntakeFlow() {
   send.type = "button"; send.className = "itk-send";
   send.textContent = "Send it to research →";
   send.addEventListener("click", function () {
-    if (!v("ngCountry")) {
+    if (!val("ngCountry")) {
       if (errEl) { errEl.textContent = "Country is required."; errEl.removeAttribute("hidden"); sD.appendChild(errEl); }
       openDrawer("ngCountry");
       return;
@@ -407,12 +407,12 @@ export function initIntakeFlow() {
   /* Fold parsed docs + extra topics into comments on submit (capture: runs before
      intake-submit builds the payload) — byte-identical mechanism to the old wizard. */
   form.addEventListener("submit", function () {
-    var c = document.getElementById("ngComments");
-    if (!c) return;
+    var comments = document.getElementById("ngComments");
+    if (!comments) return;
     var extra = [];
     if (picked.size) extra.push("Research focus: " + Array.from(picked).join(", "));
     if (parsedNotes.length) extra.push("Parsed from uploaded documents:\n" + parsedNotes.join("\n"));
-    if (extra.length) c.value = (c.value ? c.value + "\n\n" : "") + extra.join("\n\n");
+    if (extra.length) comments.value = (comments.value ? comments.value + "\n\n" : "") + extra.join("\n\n");
   }, true);
 
   /* ── Assemble ────────────────────────────────────────────────────────────────── */
@@ -424,9 +424,9 @@ export function initIntakeFlow() {
   function goReview() {
     buildTailScreens();
     // Keep the manifest LAST whatever the tail did — tail screens sit between board and it.
-    var d = null;
-    for (var i = 0; i < screens.length; i++) if (screens[i].el === sD) d = screens.splice(i, 1)[0];
-    if (d) screens.push(d);
+    var maniScreen = null;
+    for (var i = 0; i < screens.length; i++) if (screens[i].el === sD) maniScreen = screens.splice(i, 1)[0];
+    if (maniScreen) screens.push(maniScreen);
     show(cur + 1, 1); // first tail screen, or the manifest when nothing is blank
   }
   show(0, 1);

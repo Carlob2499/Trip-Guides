@@ -139,7 +139,7 @@ import { trapFocus, migrateStorageKey } from "../../../scripts/util.js";
   // A currency code is three letters and nothing else. It reaches innerHTML below, and it
   // arrives from guide data or a CustomEvent detail — neither of which this module owns —
   // so it is narrowed here, at the boundary, instead of being escaped at every use site.
-  var asCode = function (c) { return /^[A-Za-z]{3}$/.test(String(c || "")) ? String(c).toUpperCase() : ""; };
+  var asCode = function (raw) { return /^[A-Za-z]{3}$/.test(String(raw || "")) ? String(raw).toUpperCase() : ""; };
   var code = seeded ? asCode(seeded.code) : null;
   var pill = document.getElementById("liveRatePill");
   if (pill) {
@@ -153,14 +153,14 @@ import { trapFocus, migrateStorageKey } from "../../../scripts/util.js";
     var inp = pop.querySelector(".cur-in");
     var out = pop.querySelector(".cur-out");
     function render() {
-      var v = parseFloat(inp.value);
-      var res = convertRate(v, rate); // math + branching in the tested model
+      var amount = parseFloat(inp.value);
+      var res = convertRate(amount, rate); // math + branching in the tested model
       if (res.state === "no-rate") { out.textContent = "Live rate not loaded"; return; }
       if (res.state === "empty") { out.textContent = "Type an amount"; return; }
       // tg:rate is USD → local (1 USD = rate local), matching the pill.
       out.innerHTML =
-        "<b>$" + v.toLocaleString() + "</b> ≈ " + res.usdToLocal.toLocaleString(undefined, { maximumFractionDigits: 0 }) + " " + code +
-        "<br><b>" + v.toLocaleString() + " " + code + "</b> ≈ $" + res.localToUsd.toLocaleString(undefined, { maximumFractionDigits: 2 });
+        "<b>$" + amount.toLocaleString() + "</b> ≈ " + res.usdToLocal.toLocaleString(undefined, { maximumFractionDigits: 0 }) + " " + code +
+        "<br><b>" + amount.toLocaleString() + " " + code + "</b> ≈ $" + res.localToUsd.toLocaleString(undefined, { maximumFractionDigits: 2 });
     }
     inp.addEventListener("input", render);
     // Registered here, not above, for two reasons: `render` is block-scoped to this `if`
@@ -177,13 +177,13 @@ import { trapFocus, migrateStorageKey } from "../../../scripts/util.js";
     function togglePop() {
       pop.hidden = !pop.hidden;
       if (!pop.hidden) {
-        var r = pill.getBoundingClientRect();
-        pop.style.top = (r.bottom + window.scrollY + 8) + "px";
+        var rect = pill.getBoundingClientRect();
+        pop.style.top = (rect.bottom + window.scrollY + 8) + "px";
         // Clamp to the viewport using the popover's MEASURED width (it's visible by
         // now, so offsetWidth is real) — the old hardcoded 250px assumption clipped
         // the right edge on narrow screens whenever the popover rendered wider.
         var w = pop.offsetWidth || 250;
-        pop.style.left = Math.max(8, Math.min(innerWidth - w - 8, r.left)) + "px";
+        pop.style.left = Math.max(8, Math.min(innerWidth - w - 8, rect.left)) + "px";
         render();
         inp.focus();
       }
@@ -214,10 +214,10 @@ import { trapFocus, migrateStorageKey } from "../../../scripts/util.js";
     var focusSunEl = null;
     function updateFocusSun() {
       if (!focusSunEl || !cfgFT.mapCenter) return;
-      var t = solarTimesFor(cfgFT.mapCenter.lat, cfgFT.mapCenter.lng, new Date());
-      var left = daylightLeftLabel(new Date(), t);
+      var times = solarTimesFor(cfgFT.mapCenter.lat, cfgFT.mapCenter.lng, new Date());
+      var left = daylightLeftLabel(new Date(), times);
       if (left) {
-        focusSunEl.textContent = "☀︎ " + left + " of daylight left · sunset " + fmtClock(t.sunset, cfgFT.destTzIana);
+        focusSunEl.textContent = "☀︎ " + left + " of daylight left · sunset " + fmtClock(times.sunset, cfgFT.destTzIana);
         focusSunEl.hidden = false;
       } else {
         focusSunEl.hidden = true;
@@ -340,8 +340,8 @@ import { trapFocus, migrateStorageKey } from "../../../scripts/util.js";
     // Burn tile: total logged in the Budget calculator, tap to open it.
     function renderBurn() {
       try {
-        var s = JSON.parse(localStorage.getItem("tg-split-" + storeKey) || "null");
-        var total = burnTotal(s);
+        var splitState = JSON.parse(localStorage.getItem("tg-split-" + storeKey) || "null");
+        var total = burnTotal(splitState);
         var el = document.getElementById("burnPill");
         if (!total) { if (el) el.remove(); return; }
         if (!el) {
@@ -354,8 +354,8 @@ import { trapFocus, migrateStorageKey } from "../../../scripts/util.js";
             // `.gtab` by its rail position — that number differs per guide, so this looks the
             // station up by kind. The old `[data-tab="split"]` matched nothing, which made the
             // burn pill a dead control: it showed a total and went nowhere when tapped.
-            var t = document.querySelector('.gtab[data-kind="tools"]');
-            if (t) t.click();
+            var toolsTab = document.querySelector('.gtab[data-kind="tools"]');
+            if (toolsTab) toolsTab.click();
           });
           stats.appendChild(el);
         }
@@ -376,7 +376,7 @@ import { trapFocus, migrateStorageKey } from "../../../scripts/util.js";
       var incoming = decodeStops(params.get("stops"));
       var incomingKeys = Object.keys(incoming);
       if (incomingKeys.length) {
-        incomingKeys.forEach(function (k) { stopState[k] = 1; });
+        incomingKeys.forEach(function (key) { stopState[key] = 1; });
         try { localStorage.setItem(STOPS_KEY, JSON.stringify(stopState)); } catch (e) {}
         // Re-mark ticked stops now that state merged.
         document.querySelectorAll(".planner-days .day[data-day]").forEach(function (day) {
@@ -392,11 +392,11 @@ import { trapFocus, migrateStorageKey } from "../../../scripts/util.js";
     }
     var modal = document.getElementById("shareModal");
     if (modal && Object.keys(stopState).length + document.querySelectorAll(".stop").length > 0) {
-      var b = document.createElement("button");
-      b.type = "button";
-      b.className = "share-summary-btn";
-      b.textContent = "↗ Share trip progress (checked stops)";
-      b.addEventListener("click", function () {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "share-summary-btn";
+      btn.textContent = "↗ Share trip progress (checked stops)";
+      btn.addEventListener("click", function () {
         var url = window.location.origin + window.location.pathname +
           "?stops=" + encodeStops(stopState);
         (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(
@@ -404,7 +404,7 @@ import { trapFocus, migrateStorageKey } from "../../../scripts/util.js";
           function () { window.prompt("Copy this link:", url); }
         );
       });
-      modal.appendChild(b);
+      modal.appendChild(btn);
     }
   })();
 
@@ -417,18 +417,18 @@ import { trapFocus, migrateStorageKey } from "../../../scripts/util.js";
   var tabsEl = document.getElementById("guideTabs");
   if (bsCur && tabsEl) {
     var numTabs = tabsEl.querySelectorAll('.gtab[data-tab]');
-    var totalSections = Array.prototype.filter.call(numTabs, function (t) {
-      return /^\d+$/.test(t.getAttribute("data-tab"));
+    var totalSections = Array.prototype.filter.call(numTabs, function (tab) {
+      return /^\d+$/.test(tab.getAttribute("data-tab"));
     }).length;
     var posEl = document.createElement("span");
     posEl.className = "bs-pos mn-sr";
     bsCur.insertAdjacentElement("afterend", posEl);
     var sheetPos = document.getElementById("sheetPos");
     function syncPos() {
-      var a = tabsEl.querySelector(".gtab-active");
-      var v = a ? parseInt(a.getAttribute("data-tab"), 10) : NaN;
-      posEl.textContent = isNaN(v) ? "" : (v + 1) + "/" + totalSections;
-      if (sheetPos) sheetPos.textContent = isNaN(v) ? "" : (v + 1) + " of " + totalSections;
+      var active = tabsEl.querySelector(".gtab-active");
+      var num = active ? parseInt(active.getAttribute("data-tab"), 10) : NaN;
+      posEl.textContent = isNaN(num) ? "" : (num + 1) + "/" + totalSections;
+      if (sheetPos) sheetPos.textContent = isNaN(num) ? "" : (num + 1) + " of " + totalSections;
     }
     // Every switch route ends in a class change on the strip — a click listener missed
     // swipes, the bottom bar, keyboard arrows and deep links, so the position silently

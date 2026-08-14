@@ -49,7 +49,7 @@ let worldPromise = null;
 function loadWorld() {
   if (worldPromise) return worldPromise;
   const base = (document.body?.dataset?.base || "").replace(/\/$/, "");
-  worldPromise = fetch(`${base}/data/countries-110m.json`).then((r) => r.json());
+  worldPromise = fetch(`${base}/data/countries-110m.json`).then((res) => res.json());
   return worldPromise;
 }
 
@@ -81,11 +81,11 @@ function decimate(feature, keep) {
     out.push(ring[ring.length - 1]);
     return out.length >= 4 ? out : ring;
   };
-  const g = feature.geometry;
-  if (!g) return feature;
-  const map = (coords, depth) => (depth === 0 ? thin(coords) : coords.map((c) => map(c, depth - 1)));
-  const depth = g.type === "Polygon" ? 1 : g.type === "MultiPolygon" ? 2 : 0;
-  return { type: "Feature", id: feature.id, properties: feature.properties, geometry: { type: g.type, coordinates: map(g.coordinates, depth) } };
+  const geom = feature.geometry;
+  if (!geom) return feature;
+  const map = (coords, depth) => (depth === 0 ? thin(coords) : coords.map((sub) => map(sub, depth - 1)));
+  const depth = geom.type === "Polygon" ? 1 : geom.type === "MultiPolygon" ? 2 : 0;
+  return { type: "Feature", id: feature.id, properties: feature.properties, geometry: { type: geom.type, coordinates: map(geom.coordinates, depth) } };
 }
 
 class AtlasMap extends HTMLElement {
@@ -133,7 +133,7 @@ class AtlasMap extends HTMLElement {
         this._d3 = d3mod; this._topojson = topoMod; this._world = world;
         this._build();
       })
-      .catch((e) => console.warn("atlas-map: failed to load", e));
+      .catch((err) => console.warn("atlas-map: failed to load", err));
     this._ro = new ResizeObserver(() => { if (this._world) this._build(); });
     this._ro.observe(this);
     this._mo = new MutationObserver(() => { this._readTheme(); this._dirty = true; this._furnDirty = true; });
@@ -145,7 +145,7 @@ class AtlasMap extends HTMLElement {
   }
 
   disconnectedCallback() {
-    [this._ro, this._mo, this._io].forEach((o) => o && o.disconnect());
+    [this._ro, this._mo, this._io].forEach((obs) => obs && obs.disconnect());
     document.removeEventListener("visibilitychange", this._onVis);
     this._reducedMQ?.removeEventListener("change", this._onReducedChange);
     if (this._loop) cancelAnimationFrame(this._loop);
@@ -188,11 +188,11 @@ class AtlasMap extends HTMLElement {
     this._anchorOf = {};
     this._nameOf = {};
     this._originOf = {};
-    for (const g of this._guides) {
-      if (g.countryId != null) this._idToSlug[g.countryId] = g.slug;
-      if (g.anchor) this._anchorOf[g.slug] = g.anchor;
-      this._nameOf[g.slug] = g.name;
-      if (g.origin) this._originOf[g.slug] = g.origin;
+    for (const guide of this._guides) {
+      if (guide.countryId != null) this._idToSlug[guide.countryId] = guide.slug;
+      if (guide.anchor) this._anchorOf[guide.slug] = guide.anchor;
+      this._nameOf[guide.slug] = guide.name;
+      if (guide.origin) this._originOf[guide.slug] = guide.origin;
     }
   }
 
@@ -215,42 +215,42 @@ class AtlasMap extends HTMLElement {
     // geometry, built once per dataset: full detail + a decimated tier for motion
     if (!this._geom || this._geom.src !== this._world) {
       const feats = topojson.feature(this._world, this._world.objects.countries).features;
-      const fast = feats.map((f) => decimate(f, 3));
-      const cap = (f) => {
-        const ctr = d3.geoCentroid(f);
+      const fast = feats.map((feat) => decimate(feat, 3));
+      const cap = (feat) => {
+        const ctr = d3.geoCentroid(feat);
         let rad = 0;
         const walk = (co, depth) => {
           if (depth === 0) { const dd = d3.geoDistance(ctr, co); if (dd > rad) rad = dd; return; }
           for (const c2 of co) walk(c2, depth - 1);
         };
-        const g = f.geometry;
-        walk(g.coordinates, g.type === "Polygon" ? 2 : 3);
+        const geom = feat.geometry;
+        walk(geom.coordinates, geom.type === "Polygon" ? 2 : 3);
         return { ctr, rad };
       };
       const caps = feats.map(cap);
-      feats.forEach((f, i) => { f.__cap = caps[i]; });
-      fast.forEach((f, i) => { f.__cap = caps[i]; });
+      feats.forEach((feat, i) => { feat.__cap = caps[i]; });
+      fast.forEach((feat, i) => { feat.__cap = caps[i]; });
       this._geom = {
         src: this._world, feats,
-        full: { plain: feats.filter((f) => !this._idToSlug[+f.id]), guides: feats.filter((f) => this._idToSlug[+f.id]) },
-        fast: { plain: fast.filter((f) => !this._idToSlug[+f.id]), guides: fast.filter((f) => this._idToSlug[+f.id]) },
+        full: { plain: feats.filter((feat) => !this._idToSlug[+feat.id]), guides: feats.filter((feat) => this._idToSlug[+feat.id]) },
+        fast: { plain: fast.filter((feat) => !this._idToSlug[+feat.id]), guides: fast.filter((feat) => this._idToSlug[+feat.id]) },
       };
     } else {
       // Same world dataset, but the guide->country mapping may have changed (a new guide
       // shipped) — re-split without re-decimating.
-      this._geom.full.plain = this._geom.full.plain.concat(this._geom.full.guides).filter((f) => !this._idToSlug[+f.id]);
-      this._geom.full.guides = this._geom.feats.filter((f) => this._idToSlug[+f.id]);
+      this._geom.full.plain = this._geom.full.plain.concat(this._geom.full.guides).filter((feat) => !this._idToSlug[+feat.id]);
+      this._geom.full.guides = this._geom.feats.filter((feat) => this._idToSlug[+feat.id]);
     }
 
     // Per-guide route arcs (D19/D21): from THIS guide's own confirmed origin to its own
     // anchor — never a shared home base. A guide with no confirmed origin gets no arc.
     this._arcs = this._guides
-      .filter((g) => g.anchor && g.origin?.confirmed)
-      .map((g) => {
-        const interp = d3.geoInterpolate([g.origin.lng, g.origin.lat], g.anchor);
+      .filter((guide) => guide.anchor && guide.origin?.confirmed)
+      .map((guide) => {
+        const interp = d3.geoInterpolate([guide.origin.lng, guide.origin.lat], guide.anchor);
         const pts = [];
         for (let i = 0; i <= 40; i++) pts.push(interp(i / 40));
-        return { slug: g.slug, origin: g.origin, line: { type: "LineString", coordinates: pts } };
+        return { slug: guide.slug, origin: guide.origin, line: { type: "LineString", coordinates: pts } };
       });
     if (this._arcT == null) this._arcT = 0;
     this._nightGen = d3.geoCircle().radius(90).precision(4);
@@ -262,8 +262,8 @@ class AtlasMap extends HTMLElement {
     this._dpr = dpr;
 
     const bg = this._layer(w, h, dpr);
-    { const bx = bg.cx; let s = 17;
-      const rnd = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
+    { const bx = bg.cx; let seed = 17;
+      const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
       bx.globalAlpha = 0.45;
       [[w * 0.1, h * 0.2], [w * 0.06, h * 0.9], [w * 0.94, h * 0.14], [w * 0.9, h * 0.86]].forEach(([cx, cy]) => {
         for (let r = 1; r <= 6; r++) {
@@ -311,9 +311,9 @@ class AtlasMap extends HTMLElement {
       .attr("viewBox", "0 0 " + w + " " + h).attr("width", "100%").attr("height", "100%")
       .style("position", "absolute").style("inset", "0").style("pointer-events", "none");
     this._pins = {}; this._pinAt = {};
-    for (const g of this._guides) {
-      if (!g.anchor) continue;
-      const code = g.slug;
+    for (const guide of this._guides) {
+      if (!guide.anchor) continue;
+      const code = guide.slug;
       const el = svg.append("g").style("pointer-events", "auto").style("cursor", "pointer")
         .on("click", (ev) => {
           if (this._dragged) return;
@@ -331,7 +331,7 @@ class AtlasMap extends HTMLElement {
       // upcoming/undated). Distinct from card "plating" (all four pin cards carry a photo —
       // Stage C.5's "all four cards get plates", unlike the prototype's Korea-only plate).
       el.append("circle").attr("r", 8)
-        .style("fill", g.surveyed ? "#9c4421" : "var(--muted)").style("stroke", "var(--bg)").attr("stroke-width", 2.5);
+        .style("fill", guide.surveyed ? "#9c4421" : "var(--muted)").style("stroke", "var(--bg)").attr("stroke-width", 2.5);
       this._pins[code] = el.node();
       // A focus set before the world loaded (state restored after a Back) lands here.
       if (this._focus === code) this._pins[code].toggleAttribute("data-focus", true);
@@ -359,11 +359,11 @@ class AtlasMap extends HTMLElement {
 
     this._canvas.addEventListener("click", (ev) => {
       if (this._dragged) return;
-      const r = this._canvas.getBoundingClientRect();
-      const p = this._proj.invert([ev.clientX - r.left, ev.clientY - r.top]);
-      if (!p) return;
+      const rect = this._canvas.getBoundingClientRect();
+      const pt = this._proj.invert([ev.clientX - rect.left, ev.clientY - rect.top]);
+      if (!pt) return;
       let hit = null;
-      for (const f of this._geom.feats) { if (d3.geoContains(f, p)) { hit = f; break; } }
+      for (const feat of this._geom.feats) { if (d3.geoContains(feat, pt)) { hit = feat; break; } }
       const slug = hit ? (this._idToSlug[+hit.id] || null) : null;
       if (slug) { this._target = slug; this._furnDirty = true; }
       // A tap on open ocean or an unsurveyed country clears the focus rather than leaving a
@@ -379,10 +379,10 @@ class AtlasMap extends HTMLElement {
 
   _start() {
     let last = performance.now();
-    const frame = (t) => {
+    const frame = (now) => {
       this._loop = requestAnimationFrame(frame);
-      const dt = Math.min(48, t - last);
-      last = t;
+      const dt = Math.min(48, now - last);
+      last = now;
       if (!this._visible || document.hidden) return;
 
       let moved = false;
@@ -417,26 +417,26 @@ class AtlasMap extends HTMLElement {
   }
 
   _draw(moving) {
-    const { w, h } = this._dims, ctx = this._ctx, path = this._path, c = this._c;
+    const { w, h } = this._dims, ctx = this._ctx, path = this._path, colors = this._c;
     const lo = moving || this._degraded > 0;
     const wantPrec = lo ? 4 : 0.7;
     if (wantPrec !== this._prec) { this._proj.precision(wantPrec); this._prec = wantPrec; }
     ctx.clearRect(0, 0, w, h);
 
     ctx.beginPath(); ctx.arc(w / 2, h / 2, this._k, 0, 6.2832);
-    ctx.fillStyle = c.card; ctx.fill();
-    ctx.lineWidth = 1.2; ctx.strokeStyle = c.rule2; ctx.stroke();
+    ctx.fillStyle = colors.card; ctx.fill();
+    ctx.lineWidth = 1.2; ctx.strokeStyle = colors.rule2; ctx.stroke();
 
     if (!(lo && this._degraded > 1)) {
       ctx.beginPath(); path(lo ? this._gratCoarse : this._grat);
-      ctx.globalAlpha = 0.42; ctx.lineWidth = 0.5; ctx.strokeStyle = c.rule2; ctx.stroke();
+      ctx.globalAlpha = 0.42; ctx.lineWidth = 0.5; ctx.strokeStyle = colors.rule2; ctx.stroke();
       if (!lo) {
         ctx.beginPath(); path(this._tropics);
         ctx.globalAlpha = 0.3; ctx.setLineDash([3, 4]); ctx.stroke(); ctx.setLineDash([]);
       }
       ctx.globalAlpha = 1;
       ctx.beginPath(); path(this._indexLines);
-      ctx.lineWidth = 1.1; ctx.strokeStyle = c.rule2; ctx.stroke();
+      ctx.lineWidth = 1.1; ctx.strokeStyle = colors.rule2; ctx.stroke();
     }
 
     const tier = lo ? this._geom.fast : this._geom.full;
@@ -444,15 +444,15 @@ class AtlasMap extends HTMLElement {
     const geoDist = this._d3.geoDistance;
     const HALF = Math.PI / 2;
     const drawSet = (set) => {
-      for (const f of set) {
-        const cap = f.__cap;
+      for (const feat of set) {
+        const cap = feat.__cap;
         if (cap && geoDist(cap.ctr, centre0) - cap.rad > HALF) continue;
-        path(f);
+        path(feat);
       }
     };
     ctx.beginPath(); drawSet(tier.plain);
-    ctx.fillStyle = c.sunken; ctx.fill();
-    if (!lo) { ctx.lineWidth = 0.6; ctx.strokeStyle = c.rule2; ctx.stroke(); }
+    ctx.fillStyle = colors.sunken; ctx.fill();
+    if (!lo) { ctx.lineWidth = 0.6; ctx.strokeStyle = colors.rule2; ctx.stroke(); }
     ctx.beginPath(); drawSet(tier.guides);
     ctx.fillStyle = "rgba(156,68,33,.32)"; ctx.fill();
     ctx.lineWidth = 1; ctx.strokeStyle = "#9c4421"; ctx.stroke();
@@ -462,26 +462,26 @@ class AtlasMap extends HTMLElement {
       ctx.save();
       ctx.setLineDash([5, 5]); ctx.lineWidth = 1.3; ctx.strokeStyle = "rgba(156,68,33,.72)";
       ctx.beginPath();
-      for (const a of this._arcs) {
-        const n = a.line.coordinates.length;
-        const cut = Math.max(2, Math.round(n * this._arcT));
-        path({ type: "LineString", coordinates: a.line.coordinates.slice(0, cut) });
+      for (const arc of this._arcs) {
+        const count = arc.line.coordinates.length;
+        const cut = Math.max(2, Math.round(count * this._arcT));
+        path({ type: "LineString", coordinates: arc.line.coordinates.slice(0, cut) });
       }
       ctx.stroke();
       ctx.restore();
       // Origin markers — one per guide with a confirmed, drawn arc, at ITS OWN airport
       // point (not a single shared home base — D19/D21).
-      for (const a of this._arcs) {
-        const op = [a.origin.lng, a.origin.lat];
+      for (const arc of this._arcs) {
+        const op = [arc.origin.lng, arc.origin.lat];
         if (this._d3.geoDistance(op, centre) >= 1.5) continue;
         const hp = this._proj(op);
         ctx.beginPath(); ctx.arc(hp[0], hp[1], 4.5, 0, 6.2832);
-        ctx.fillStyle = c.bg; ctx.fill();
+        ctx.fillStyle = colors.bg; ctx.fill();
         ctx.lineWidth = 2; ctx.strokeStyle = "#9c4421"; ctx.stroke();
         if (!lo) {
           ctx.font = "600 9px 'Source Sans 3', system-ui, sans-serif";
-          ctx.fillStyle = c.muted;
-          ctx.fillText(a.origin.label || "", hp[0] + 9, hp[1] + 3);
+          ctx.fillStyle = colors.muted;
+          ctx.fillText(arc.origin.label || "", hp[0] + 9, hp[1] + 3);
         }
       }
     }
@@ -498,45 +498,45 @@ class AtlasMap extends HTMLElement {
       ctx.fillStyle = full; ctx.fill();
       if (!lo) {
         const bands = [[86, .05], [82, .05], [78, .04]];
-        for (const [r, a] of bands) {
-          ctx.beginPath(); path(this._nightGen.radius(r)());
-          ctx.fillStyle = this._dark ? "rgba(0,0,0," + a + ")" : "rgba(15,19,23," + a + ")";
+        for (const [radius, alpha] of bands) {
+          ctx.beginPath(); path(this._nightGen.radius(radius)());
+          ctx.fillStyle = this._dark ? "rgba(0,0,0," + alpha + ")" : "rgba(15,19,23," + alpha + ")";
           ctx.fill();
         }
         this._nightGen.radius(90);
       }
       ctx.beginPath(); path(this._nightGeom);
-      ctx.globalAlpha = 0.5; ctx.lineWidth = 1; ctx.strokeStyle = c.rule2; ctx.stroke(); ctx.globalAlpha = 1;
+      ctx.globalAlpha = 0.5; ctx.lineWidth = 1; ctx.strokeStyle = colors.rule2; ctx.stroke(); ctx.globalAlpha = 1;
     }
 
     // pins — SVG, only touched when they actually move
     const d3 = this._d3;
-    for (const g of this._guides) {
-      if (!g.anchor) continue;
-      const code = g.slug;
-      const p = this._proj(g.anchor);
-      const vis = d3.geoDistance(g.anchor, centre) < 1.42;
+    for (const guide of this._guides) {
+      if (!guide.anchor) continue;
+      const code = guide.slug;
+      const pt = this._proj(guide.anchor);
+      const vis = d3.geoDistance(guide.anchor, centre) < 1.42;
       const node = this._pins[code], prev = this._pinAt[code];
       if (!node) continue;
-      const x = Math.round(p[0] * 10) / 10, y = Math.round(p[1] * 10) / 10;
+      const x = Math.round(pt[0] * 10) / 10, y = Math.round(pt[1] * 10) / 10;
       if (!prev || prev.x !== x || prev.y !== y) node.setAttribute("transform", "translate(" + x + "," + y + ")");
       if (!prev || prev.v !== vis) { if (vis) node.removeAttribute("display"); else node.setAttribute("display", "none"); }
-      this._pinAt[code] = { x, y, v: vis, fx: p[0], fy: p[1] };
+      this._pinAt[code] = { x, y, v: vis, fx: pt[0], fy: pt[1] };
     }
     // limb shading
     { const cx = w / 2, cy = h / 2, k = this._k;
       if (!this._limb || this._limbK !== k || this._limbDark !== this._dark || this._limbW !== w || this._limbH !== h) {
-        const g = ctx.createRadialGradient(cx - k * 0.22, cy - k * 0.26, k * 0.1, cx, cy, k);
+        const grad = ctx.createRadialGradient(cx - k * 0.22, cy - k * 0.26, k * 0.1, cx, cy, k);
         if (this._dark) {
-          g.addColorStop(0, "rgba(255,255,255,.05)");
-          g.addColorStop(0.62, "rgba(0,0,0,0)");
-          g.addColorStop(1, "rgba(0,0,0,.34)");
+          grad.addColorStop(0, "rgba(255,255,255,.05)");
+          grad.addColorStop(0.62, "rgba(0,0,0,0)");
+          grad.addColorStop(1, "rgba(0,0,0,.34)");
         } else {
-          g.addColorStop(0, "rgba(255,255,255,.16)");
-          g.addColorStop(0.6, "rgba(0,0,0,0)");
-          g.addColorStop(1, "rgba(23,29,36,.17)");
+          grad.addColorStop(0, "rgba(255,255,255,.16)");
+          grad.addColorStop(0.6, "rgba(0,0,0,0)");
+          grad.addColorStop(1, "rgba(23,29,36,.17)");
         }
-        this._limb = g; this._limbK = k; this._limbDark = this._dark; this._limbW = w; this._limbH = h;
+        this._limb = grad; this._limbK = k; this._limbDark = this._dark; this._limbW = w; this._limbH = h;
       }
       ctx.beginPath(); ctx.arc(cx, cy, k, 0, 6.2832);
       ctx.fillStyle = this._limb; ctx.fill();
@@ -548,32 +548,32 @@ class AtlasMap extends HTMLElement {
     const { w, h } = this._dims;
     if (!this._detail || this._detailGuideCount !== this._guides.length) {
       this._detail = { w, h, center: [0, 0], zoom: 1 };
-      for (const g of this._guides) this._detail[g.slug] = { x: 0, y: 0, v: false };
+      for (const guide of this._guides) this._detail[guide.slug] = { x: 0, y: 0, v: false };
       this._detailGuideCount = this._guides.length;
     }
     const D = this._detail;
     D.w = w; D.h = h;
     D.center[0] = -this._rot[0]; D.center[1] = -this._rot[1];
     D.zoom = this._k / this._R;
-    for (const g of this._guides) {
-      const p = this._pinAt[g.slug], slot = D[g.slug];
-      if (p && slot) { slot.x = p.fx; slot.y = p.fy; slot.v = p.v; }
+    for (const guide of this._guides) {
+      const pin = this._pinAt[guide.slug], slot = D[guide.slug];
+      if (pin && slot) { slot.x = pin.fx; slot.y = pin.fy; slot.v = pin.v; }
     }
     this.dispatchEvent(new CustomEvent("atlas-pos", { bubbles: true, detail: D }));
   }
 
   _furniture() {
-    const { w, h } = this._dims, c = this._c, R = this._R;
+    const { w, h } = this._dims, colors = this._c, R = this._R;
     const centre = [-this._rot[0], -this._rot[1]];
     const d3 = this._d3;
-    const anchors = this._guides.filter((g) => g.anchor);
+    const anchors = this._guides.filter((guide) => guide.anchor);
     if (!anchors.length) return;
     let target = this._target;
     if (!target || !this._anchorOf[target]) {
       let best = Infinity;
-      for (const g of anchors) {
-        const dd = d3.geoDistance(centre, g.anchor) * 6371;
-        if (dd < best) { best = dd; target = g.slug; }
+      for (const guide of anchors) {
+        const dd = d3.geoDistance(centre, guide.anchor) * 6371;
+        if (dd < best) { best = dd; target = guide.slug; }
       }
     }
     const targetAnchor = this._anchorOf[target];
@@ -595,7 +595,7 @@ class AtlasMap extends HTMLElement {
 
     const ctx = this._furnCtx;
     ctx.clearRect(0, 0, w, h);
-    ctx.strokeStyle = c.rule2; ctx.lineWidth = 1;
+    ctx.strokeStyle = colors.rule2; ctx.lineWidth = 1;
     const P = 14, T = 16;
     [[P, P, 1, 1], [w - P, P, -1, 1], [P, h - P, 1, -1], [w - P, h - P, -1, -1]].forEach(([x, y, sx, sy]) => {
       ctx.beginPath(); ctx.moveTo(x + sx * T, y); ctx.lineTo(x, y); ctx.lineTo(x, y + sy * T); ctx.stroke();
@@ -612,7 +612,7 @@ class AtlasMap extends HTMLElement {
       ctx.stroke();
     }
     ctx.font = "700 8.5px 'Source Sans 3', system-ui, sans-serif";
-    ctx.fillStyle = c.muted; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillStyle = colors.muted; ctx.textAlign = "center"; ctx.textBaseline = "middle";
     [["N", 0], ["E", 90], ["S", 180], ["W", 270]].forEach(([lbl, a]) => {
       const t = (a - 90) * Math.PI / 180;
       ctx.fillText(lbl, rx + Math.cos(t) * (rr + 8), ry + Math.sin(t) * (rr + 8));
@@ -625,23 +625,23 @@ class AtlasMap extends HTMLElement {
     ctx.closePath(); ctx.fillStyle = "#9c4421"; ctx.fill();
     ctx.beginPath();
     ctx.moveTo(rx - nx * (rr - 7), ry - ny * (rr - 7)); ctx.lineTo(rx - nx * 5, ry - ny * 5);
-    ctx.lineWidth = 1.4; ctx.strokeStyle = c.muted; ctx.stroke();
+    ctx.lineWidth = 1.4; ctx.strokeStyle = colors.muted; ctx.stroke();
     ctx.beginPath(); ctx.arc(rx, ry, 2.4, 0, 6.2832);
-    ctx.fillStyle = c.bg; ctx.fill(); ctx.lineWidth = 1.2; ctx.strokeStyle = c.muted; ctx.stroke();
+    ctx.fillStyle = colors.bg; ctx.fill(); ctx.lineWidth = 1.2; ctx.strokeStyle = colors.muted; ctx.stroke();
     ctx.font = "640 9.5px 'Source Sans 3', system-ui, sans-serif";
     ctx.fillStyle = "#9c4421";
     ctx.fillText(String(target).toUpperCase().slice(0, 3) + "  " + String(Math.round(brg)).padStart(3, "0") + "°", rx, ry + rr + 16);
     ctx.font = "600 8.5px 'Source Sans 3', system-ui, sans-serif";
-    ctx.fillStyle = c.muted;
+    ctx.fillStyle = colors.muted;
     ctx.fillText(km.toLocaleString() + " km", rx, ry + rr + 28);
     ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
     const bx2 = 22, by2 = h - 30;
-    ctx.strokeStyle = c.muted; ctx.lineWidth = 1.4;
+    ctx.strokeStyle = colors.muted; ctx.lineWidth = 1.4;
     ctx.beginPath();
     ctx.moveTo(bx2, by2 - 4); ctx.lineTo(bx2, by2); ctx.lineTo(bx2 + px, by2); ctx.lineTo(bx2 + px, by2 - 4);
     ctx.stroke();
     ctx.font = "600 9.5px 'Source Sans 3', system-ui, sans-serif";
-    ctx.fillStyle = c.muted;
+    ctx.fillStyle = colors.muted;
     ctx.fillText(Math.round(stepKm).toLocaleString() + " km", bx2, by2 - 8);
   }
 
@@ -668,12 +668,12 @@ class AtlasMap extends HTMLElement {
     const seq = (this._flySeq = (this._flySeq || 0) + 1);
     const step = (now) => {
       if (seq !== this._flySeq) return; // superseded by another flight, or by resetView
-      const p = Math.min(1, (now - t0) / d2), e = ease(p);
-      this._rot = [startRot[0] + (endLon - startRot[0]) * e, startRot[1] + (-lat - startRot[1]) * e];
-      this._k = startK + (endK - startK) * e; this._targetK = this._k;
+      const progress = Math.min(1, (now - t0) / d2), eased = ease(progress);
+      this._rot = [startRot[0] + (endLon - startRot[0]) * eased, startRot[1] + (-lat - startRot[1]) * eased];
+      this._k = startK + (endK - startK) * eased; this._targetK = this._k;
       this._proj.rotate(this._rot).scale(this._k);
       this._dirty = true;
-      if (p < 1) requestAnimationFrame(step);
+      if (progress < 1) requestAnimationFrame(step);
       else { this._flying = false; this._hold = true; clearTimeout(this._resume); this._resume = setTimeout(() => { this._hold = false; }, 2600); }
     };
     clearTimeout(this._flyEnd);
@@ -746,12 +746,12 @@ class AtlasMap extends HTMLElement {
     const t0 = performance.now();
     const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
     const step = (now) => {
-      const p = Math.min(1, (now - t0) / dur), e = ease(p);
-      this._rot = [startRot[0] + (endRot[0] - startRot[0]) * e, startRot[1] + (endRot[1] - startRot[1]) * e];
-      this._k = startK + (endK - startK) * e; this._targetK = this._k;
+      const progress = Math.min(1, (now - t0) / dur), eased = ease(progress);
+      this._rot = [startRot[0] + (endRot[0] - startRot[0]) * eased, startRot[1] + (endRot[1] - startRot[1]) * eased];
+      this._k = startK + (endK - startK) * eased; this._targetK = this._k;
       this._proj.rotate(this._rot).scale(this._k);
       this._dirty = true;
-      if (p < 1) requestAnimationFrame(step);
+      if (progress < 1) requestAnimationFrame(step);
       else { this._flying = false; this._targetK = endK; }
     };
     clearTimeout(this._flyEnd);

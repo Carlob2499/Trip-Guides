@@ -34,11 +34,11 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
       // closures like showTab/hashKey) runs in one try; each independent leaf feature
       // after it gets its own, so a throw in one leaf can no longer kill the rest and
       // the console names the culprit instead of a single generic message.
-      function fail(name, e) {
-        console.error("[guide-ui] " + name + " failed:", e);
+      function fail(name, err) {
+        console.error("[guide-ui] " + name + " failed:", err);
         // Also beacon it so the maker can SEE production failures, not just the traveler's own
         // console. Best-effort + rate-limited inside reportError; never let it mask the original.
-        try { reportError({ guide: storeKey, feature: name, message: (e && e.message) || String(e) }); } catch (_) {}
+        try { reportError({ guide: storeKey, feature: name, message: (err && err.message) || String(err) }); } catch (_) {}
       }
 
 
@@ -103,7 +103,7 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           }
 
           function showTab(idx) {
-            catblocks.forEach(function (b, i) { b.hidden = i !== idx; });
+            catblocks.forEach(function (block, i) { block.hidden = i !== idx; });
             if (guideTabs) {
               // Leaving a section counts as having been through it.
               var leaving = guideTabs.querySelector(".gtab-active");
@@ -187,8 +187,8 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           if (guideTabs) {
             guideTabs.querySelectorAll(".gtab").forEach(function (btn) {
               btn.addEventListener("click", function () {
-                var t = this.dataset.tab;
-                showTab(parseInt(t, 10));
+                var tab = this.dataset.tab;
+                showTab(parseInt(tab, 10));
                 // Post-switch scrolling is owned by scroll-memory.js (per-tab
                 // position restore) — a hard jump to page top re-showed the
                 // hero on every section change and lost the reader's place.
@@ -272,7 +272,7 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             sheet.removeAttribute("inert");
             _lockScroll();
             sheetBtn.setAttribute("aria-expanded", "true");
-            var f = sheet.querySelector("a"); if (f) f.focus();
+            var firstLink = sheet.querySelector("a"); if (firstLink) firstLink.focus();
           }
           function closeSheet() {
             sheet.classList.remove("open"); backdrop.classList.remove("open");
@@ -287,10 +287,10 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           if (sheet && sheetBtn && backdrop) {
             sheetBtn.addEventListener("click", openSheet);
             backdrop.addEventListener("click", closeSheet);
-            sheet.querySelectorAll("a").forEach(function (a) {
-              a.addEventListener("click", function () {
-                var t = this.dataset.tab;
-                if (t !== undefined && t !== "") showTab(parseInt(t, 10));
+            sheet.querySelectorAll("a").forEach(function (link) {
+              link.addEventListener("click", function () {
+                var tab = this.dataset.tab;
+                if (tab !== undefined && tab !== "") showTab(parseInt(tab, 10));
                 closeSheet();
               });
             });
@@ -323,9 +323,9 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             var grp = dayEl.closest('[id^="grp-"]');
             var cat = grp ? parseInt(grp.id.slice(4), 10) : 0;
             showTab(cat);
-            var d = new Date();
+            var now = new Date();
             var DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"], MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-            var todayStr = DOW[d.getDay()] + " " + MON[d.getMonth()] + " " + d.getDate();
+            var todayStr = DOW[now.getDay()] + " " + MON[now.getMonth()] + " " + now.getDate();
             var hit = document.querySelector('.day[data-date="' + todayStr + '"]');
             (hit || grp || dayEl).scrollIntoView({ behavior: "smooth", block: "start" });
           });
@@ -337,14 +337,14 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           /* ── 3. SCROLL-SPY ───────────────────────────────────────────── */
           function setActive(secId, cat) {
             var cur = document.getElementById("curCat"); if (cur) cur.textContent = order[cat] || "";
-            document.querySelectorAll(".sheet-link").forEach(function (a) {
-              var on = a.getAttribute("href") === "#" + secId;
-              a.classList.toggle("active", on);
-              if (on) a.setAttribute("aria-current", "true");
-            else a.removeAttribute("aria-current");
+            document.querySelectorAll(".sheet-link").forEach(function (link) {
+              var on = link.getAttribute("href") === "#" + secId;
+              link.classList.toggle("active", on);
+              if (on) link.setAttribute("aria-current", "true");
+            else link.removeAttribute("aria-current");
             });
-            document.querySelectorAll(".sheet-cat").forEach(function (a) {
-              a.classList.toggle("active", a.dataset.cat === String(cat));
+            document.querySelectorAll(".sheet-cat").forEach(function (link) {
+              link.classList.toggle("active", link.dataset.cat === String(cat));
             });
             // One spy, many listeners: the mobile-nav silo records "where you were"
             // per group from this verdict rather than running a second spy of its own.
@@ -356,7 +356,7 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           var blocks = Array.prototype.slice.call(document.querySelectorAll(".block"));
           function spy() {
             // Only spy blocks inside the currently-visible catblock
-            var visBlocks = blocks.filter(function (b) { return b.offsetParent !== null; });
+            var visBlocks = blocks.filter(function (block) { return block.offsetParent !== null; });
             if (!visBlocks.length) return;
             // VISUAL order, not capture order: Panel-hosted blocks (Atlas Phase 2) get
             // reordered by the reader, and the early-break walk below assumes
@@ -370,7 +370,7 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
                 if (visBlocks[i].getBoundingClientRect().top <= line) { idx = i; } else { break; }
               }
             }
-            var b = visBlocks[idx]; setActive(b.id, b.dataset.cat);
+            var block = visBlocks[idx]; setActive(block.id, block.dataset.cat);
           }
           var ticking = false;
           function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(function () { spy(); ticking = false; }); } }
@@ -386,9 +386,9 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             var destToday = todayInTz(destTzIana);
             var now = new Date();
             var mo  = destToday ? destToday.m : now.getMonth() + 1;
-            var d   = destToday ? destToday.d : now.getDate();
+            var dayNum = destToday ? destToday.d : now.getDate();
             // Match day cards whose .d label contains today's month-day (e.g. "Jul 9", "Jul 14")
-            var plain  = MONTHS[mo - 1] + " " + d;
+            var plain  = MONTHS[mo - 1] + " " + dayNum;
             document.querySelectorAll(".day").forEach(function (card) {
               var dEl = card.querySelector(".d");
               if (!dEl) return;
@@ -463,23 +463,23 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
 
           /* ── 4. CHECKLISTS ───────────────────────────────────────────── */
           // hashKey is still used by the budget calculator below.
-          function hashKey(s) {
-            var h = 5381; s = String(s);
-            for (var i = 0; i < s.length; i++) { h = ((h << 5) + h + s.charCodeAt(i)) | 0; }
-            return "k" + (h >>> 0).toString(36);
+          function hashKey(str) {
+            var hash = 5381; str = String(str);
+            for (var i = 0; i < str.length; i++) { hash = ((hash << 5) + hash + str.charCodeAt(i)) | 0; }
+            return "k" + (hash >>> 0).toString(36);
           }
           // data-pkey is stamped at build time by PanelBlock/ListBlock/DaysBlock —
           // no client-side hash or dedup needed.
           var boxes = Array.prototype.slice.call(document.querySelectorAll("input[type=checkbox]"));
 
           function loadState()  { try { return JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); } catch (e) { return {}; } }
-          function saveState(s) { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); flash("✓ saved"); } catch (e) { flash("Storage full"); } }
-          function currentState() { var s = {}; boxes.forEach(function (b) { if (b.checked) s[b.dataset.pkey] = 1; }); return s; }
+          function saveState(stateObj) { try { localStorage.setItem(STORE_KEY, JSON.stringify(stateObj)); flash("✓ saved"); } catch (e) { flash("Storage full"); } }
+          function currentState() { var stateObj = {}; boxes.forEach(function (box) { if (box.checked) stateObj[box.dataset.pkey] = 1; }); return stateObj; }
 
-          function flash(t) {
-            var n = document.getElementById("savedNote"); if (!n) return;
-            n.textContent = t;
-            if (t) { clearTimeout(n._t); n._t = setTimeout(function () { n.textContent = ""; }, 2200); }
+          function flash(msg) {
+            var note = document.getElementById("savedNote"); if (!note) return;
+            note.textContent = msg;
+            if (msg) { clearTimeout(note._t); note._t = setTimeout(function () { note.textContent = ""; }, 2200); }
           }
 
           // Per-day "Day kit N/M" badge — counts only the checkboxes inside each
@@ -492,7 +492,7 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
               var cbs = kit.querySelectorAll("input[type=checkbox]");
               if (!cbs.length) return;
               var done = 0;
-              cbs.forEach(function (c) { if (c.checked) done++; });
+              cbs.forEach(function (box) { if (box.checked) done++; });
               badge.textContent = "Day kit " + done + "/" + cbs.length;
               badge.hidden = false;
               badge.classList.toggle("done", done === cbs.length);
@@ -501,10 +501,10 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
 
           // Load saved state on page open
           var saved = loadState();
-          boxes.forEach(function (b) { if (saved[b.dataset.pkey]) b.checked = true; });
+          boxes.forEach(function (box) { if (saved[box.dataset.pkey]) box.checked = true; });
           updateDayCounts();
-          boxes.forEach(function (b) {
-            b.addEventListener("change", function () {
+          boxes.forEach(function (box) {
+            box.addEventListener("change", function () {
               // A tick is a commitment ("packed", "booked") made without looking up from
               // the bag — the buzz is the confirmation. Silent no-op off Android.
               tapHaptic();
@@ -528,24 +528,24 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
               // slot). Falling back to a per-ROW-INDEX key keeps them independent — still
               // stable across reloads (row order doesn't change), just not stable across a
               // guide edit that reorders rows, same caveat any index-based key would have.
-              var k = hashKey(dataKey || ("row-" + i));
-              inp.dataset.pkey = k;
-              if (bstore[k] != null) inp.value = bstore[k];
+              var key = hashKey(dataKey || ("row-" + i));
+              inp.dataset.pkey = key;
+              if (bstore[key] != null) inp.value = bstore[key];
             });
-            function fmt(n)    { return cur + (Math.round(n * 100) / 100).toLocaleString("en-US"); }
+            function fmt(num)    { return cur + (Math.round(num * 100) / 100).toLocaleString("en-US"); }
             function recalcB() {
               var sum = 0;
               var catSums = {};
               inputs.forEach(function (inp) {
-                var v = parseFloat(inp.value);
-                if (!isNaN(v)) {
-                  sum += v;
+                var val = parseFloat(inp.value);
+                if (!isNaN(val)) {
+                  sum += val;
                   var row = inp.closest(".brow");
                   var cat = row ? (row.getAttribute("data-bcat") || "") : "";
-                  catSums[cat] = (catSums[cat] || 0) + v;
+                  catSums[cat] = (catSums[cat] || 0) + val;
                 }
               });
-              var t = bud.querySelector(".bact-total"); if (t) t.textContent = fmt(sum);
+              var totalEl = bud.querySelector(".bact-total"); if (totalEl) totalEl.textContent = fmt(sum);
               // Update per-category "Your spend" subtotal cells
               bud.querySelectorAll(".bsubtotal").forEach(function (row) {
                 var cat = row.getAttribute("data-sub-cat") || "";
@@ -554,8 +554,8 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
               });
             }
             function persistB() {
-              var o = {}; inputs.forEach(function (inp) { if (inp.value !== "") o[inp.dataset.pkey] = inp.value; });
-              try { localStorage.setItem(BKEY, JSON.stringify(o)); flash("✓ saved"); } catch (e) { flash("Storage full"); }
+              var vals = {}; inputs.forEach(function (inp) { if (inp.value !== "") vals[inp.dataset.pkey] = inp.value; });
+              try { localStorage.setItem(BKEY, JSON.stringify(vals)); flash("✓ saved"); } catch (e) { flash("Storage full"); }
             }
             inputs.forEach(function (inp) { inp.addEventListener("input", function () { recalcB(); persistB(); }); });
             recalcB();
@@ -657,8 +657,8 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             // month precedes the previous one (a trip spanning New Year's).
             var prevMoIdx = -1;
             var days = [];
-            daysForBanner.forEach(function (d) {
-              var parts = String(d.date).split(/\s+/);
+            daysForBanner.forEach(function (dayEntry) {
+              var parts = String(dayEntry.date).split(/\s+/);
               var moIdx = MONTHS.indexOf(parts[1]);
               var day   = parseInt(parts[2], 10);
               if (moIdx === -1 || isNaN(day)) return;
@@ -666,15 +666,15 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
               prevMoIdx = moIdx;
               var dt = new Date(year, moIdx, day);
               dt.setHours(0, 0, 0, 0);
-              days.push({ date: dt, title: d.title, fit: d.fit });
+              days.push({ date: dt, title: dayEntry.title, fit: dayEntry.fit });
             });
             if (!days.length) return;
 
             var today = new Date(now); today.setHours(0, 0, 0, 0); // dest-calendar day (from `now` above)
             if (today < days[0].date || today > days[days.length - 1].date) return;
 
-            var match    = days.find(function (d) { return d.date.getTime() === today.getTime(); });
-            var upcoming = !match && days.find(function (d) { return d.date.getTime() > today.getTime(); });
+            var match    = days.find(function (day) { return day.date.getTime() === today.getTime(); });
+            var upcoming = !match && days.find(function (day) { return day.date.getTime() > today.getTime(); });
             var entry    = match || upcoming;
             if (!entry) return;
 
@@ -703,7 +703,7 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             var _d = todayInTz(destTzIana);
             var when = _d ? new Date(_d.y, _d.m - 1, _d.d) : new Date();
             var leg = nextLeg(
-              story.map(function (d) { return { date: d.date, waypoints: d.stops }; }),
+              story.map(function (day) { return { date: day.date, waypoints: day.stops }; }),
               resolveTripDate,
               when,
             );
@@ -773,7 +773,7 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
               /* Which day is "now" comes from dayState itself rather than a second date
                  comparison here — one derivation, so the stamp and the day card cannot
                  disagree. It answers per-index, so the index is the one it calls "now". */
-              var dates = daysForBanner.map(function (d) { return d.date; });
+              var dates = daysForBanner.map(function (day) { return day.date; });
               var current = -1;
               for (var di = 0; di < dates.length; di++) {
                 if (dayState(dates, di, when) === "now") { current = di; break; }
@@ -785,9 +785,9 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
                   var fmt2 = new Intl.DateTimeFormat("en-GB", { timeZone: destTzIana, hour: "2-digit", minute: "2-digit", hour12: false });
                   parts.push(fmt2.format(new Date()));
                   setInterval(function () {
-                    var p = whenEl.textContent.split(" · ");
-                    p[p.length - 1] = fmt2.format(new Date());
-                    whenEl.textContent = p.join(" · ");
+                    var segs = whenEl.textContent.split(" · ");
+                    segs[segs.length - 1] = fmt2.format(new Date());
+                    whenEl.textContent = segs.join(" · ");
                   }, 60000);
                 } catch (_) { /* an invalid zone drops the clock, not the day */ }
               }
@@ -903,11 +903,11 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
         var btns  = tog.querySelectorAll(".btog-btn");
         var cur   = bud.getAttribute("data-cur") || "$";
 
-        function fmt(n) { return cur + Math.round(n).toLocaleString("en-US"); }
+        function fmt(num) { return cur + Math.round(num).toLocaleString("en-US"); }
 
         function applyMode(mode) {
-          btns.forEach(function (b) {
-            b.classList.toggle("btog-active", b.getAttribute("data-mode") === mode);
+          btns.forEach(function (btn) {
+            btn.classList.toggle("btog-active", btn.getAttribute("data-mode") === mode);
           });
 
           bud.querySelectorAll(".brow[data-key]").forEach(function (row) {
@@ -934,21 +934,21 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           bud.querySelectorAll(".bsubtotal").forEach(function (row) {
             var el = row.querySelector(".bsub-est");
             if (!el) return;
-            var t = parseFloat(row.getAttribute("data-sub-trip")   || "0");
-            var p = parseFloat(row.getAttribute("data-sub-person") || "0");
-            el.textContent = fmt(mode === "person" ? p : t);
+            var tripVal = parseFloat(row.getAttribute("data-sub-trip")   || "0");
+            var personVal = parseFloat(row.getAttribute("data-sub-person") || "0");
+            el.textContent = fmt(mode === "person" ? personVal : tripVal);
           });
 
           var totEl = bud.querySelector(".best-total");
           if (totEl) {
-            var t = parseFloat(totEl.getAttribute("data-trip-total") || "0");
-            var p = parseFloat(totEl.getAttribute("data-pp-total")   || "0");
-            totEl.textContent = fmt(mode === "person" ? p : t);
+            var tripVal = parseFloat(totEl.getAttribute("data-trip-total") || "0");
+            var personVal = parseFloat(totEl.getAttribute("data-pp-total")   || "0");
+            totEl.textContent = fmt(mode === "person" ? personVal : tripVal);
           }
         }
 
-        btns.forEach(function (b) {
-          b.addEventListener("click", function () { applyMode(b.getAttribute("data-mode") || "total"); });
+        btns.forEach(function (btn) {
+          btn.addEventListener("click", function () { applyMode(btn.getAttribute("data-mode") || "total"); });
         });
       });
 

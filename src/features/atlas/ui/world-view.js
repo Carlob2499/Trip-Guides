@@ -52,9 +52,9 @@ export function initAtlasWorld(root = document) {
   const base = (document.body.dataset.base || "").replace(/\/$/, "");
   const map = document.createElement("atlas-map");
   host.querySelector("[data-atlas-map-slot]")?.appendChild(map);
-  map.guides = guides.map((g) => ({
-    slug: g.slug, name: g.name, countryId: g.countryId, anchor: g.anchor, origin: g.origin,
-    surveyed: g.status === "past" || g.status === "ongoing",
+  map.guides = guides.map((guide) => ({
+    slug: guide.slug, name: guide.name, countryId: guide.countryId, anchor: guide.anchor, origin: guide.origin,
+    surveyed: guide.status === "past" || guide.status === "ongoing",
   }));
 
   const pinsLayer = host.querySelector("[data-atlas-pins]");
@@ -102,17 +102,17 @@ export function initAtlasWorld(root = document) {
   window.addEventListener("pagehide", () => saveHomeState(savedSlug));
 
   function restoreHomeState() {
-    let s = null;
-    try { s = JSON.parse(sessionStorage.getItem(HOME_STATE) || "null"); } catch { return; }
-    if (!s) return;
-    if (s.slug && guides.some((g) => g.slug === s.slug)) {
-      savedSlug = s.slug;
-      rowOf(s.slug)?.setAttribute("data-selected", "");
-      map.focus(s.slug);
+    let saved = null;
+    try { saved = JSON.parse(sessionStorage.getItem(HOME_STATE) || "null"); } catch { return; }
+    if (!saved) return;
+    if (saved.slug && guides.some((guide) => guide.slug === saved.slug)) {
+      savedSlug = saved.slug;
+      rowOf(saved.slug)?.setAttribute("data-selected", "");
+      map.focus(saved.slug);
     }
     // Only when the browser has NOT already restored it. Its own restoration wins — writing a
     // second offset on top produces the visible double-jump this is supposed to prevent.
-    if (s.y > 0 && window.scrollY < 4) window.scrollTo(0, s.y);
+    if (saved.y > 0 && window.scrollY < 4) window.scrollTo(0, saved.y);
   }
   window.addEventListener("pageshow", (ev) => { if (!ev.persisted) restoreHomeState(); });
 
@@ -120,11 +120,11 @@ export function initAtlasWorld(root = document) {
      the list scrolling to where the row is. Every mobile entry point (the pin, its chip, the
      canvas hit test) goes through here so none of them can drift into doing three of the four.
      `map.focus` is what holds the spin; see its own note. */
-  function pickGuide(g) {
-    map.focus(g.slug);
-    markSelected(g.slug);
-    showPingSheet(g);
-    scrollToRow(g.slug);
+  function pickGuide(guide) {
+    map.focus(guide.slug);
+    markSelected(guide.slug);
+    showPingSheet(guide);
+    scrollToRow(guide.slug);
   }
 
   /* Tapping a ROW is the ordinary way into a guide — the globe is the scenic one — so it has to
@@ -138,7 +138,7 @@ export function initAtlasWorld(root = document) {
      guide is the one you leave for next, and a rail that calls four trips "planned" says
      nothing about which. `isNext` is computed once on the server (index.astro). */
   const STATUS_LABEL = { past: "COMPLETE", ongoing: "IN PROGRESS", upcoming: "PLANNED", undated: "" };
-  const recordLabel = (g) => (g.isNext ? "NEXT TRIP" : STATUS_LABEL[g.status] || "");
+  const recordLabel = (guide) => (guide.isNext ? "NEXT TRIP" : STATUS_LABEL[guide.status] || "");
   /* Both rails are two-column rows in the prototype, not one run-on line: the sheet's
      identity on the left and WHEN on the right, so the eye reads down either column alone.
      Rendering them as one string was what flattened the whole panel to a single weight. */
@@ -157,13 +157,13 @@ export function initAtlasWorld(root = document) {
   const indexList = root.querySelector("[data-atlas-index-list]");
   if (indexList) {
     indexList.innerHTML = byOrdinal
-      .map((g) => {
-        const n = g.ordinal != null ? String(g.ordinal).padStart(2, "0") : "—";
-        const stamp = g.stamp ? escapeHtml(g.stamp) + (g.status === "past" ? " ✓" : "") : "—";
+      .map((guide) => {
+        const num = guide.ordinal != null ? String(guide.ordinal).padStart(2, "0") : "—";
+        const stamp = guide.stamp ? escapeHtml(guide.stamp) + (guide.status === "past" ? " ✓" : "") : "—";
         // Sheet 01 leads the register and takes the accent — the prototype marks the top of
         // the index, not the trip's status; status is the RECORD rail's job on the right.
-        return `<li><button type="button" data-fly="${g.slug}"${g.ordinal === 1 ? " data-lead" : ""}>` +
-          `<span class="ix-n">${n}</span><span class="ix-name">${escapeHtml(g.name)}</span>` +
+        return `<li><button type="button" data-fly="${guide.slug}"${guide.ordinal === 1 ? " data-lead" : ""}>` +
+          `<span class="ix-n">${num}</span><span class="ix-name">${escapeHtml(guide.name)}</span>` +
           `<span class="ix-stamp">${stamp}</span></button></li>`;
       })
       .join("");
@@ -176,13 +176,13 @@ export function initAtlasWorld(root = document) {
     /* The RECORD leads with the trip's dates, in the display face, because that is what
        distinguishes one entry from the next — the country repeats from the index above it. */
     recordList.innerHTML = byRelevance
-      .map((g) => {
-        const label = recordLabel(g);
-        const tone = g.isNext ? "next" : g.status;
-        return `<li><button type="button" data-fly="${g.slug}" data-open="${g.href}" data-tone="${tone}">` +
+      .map((guide) => {
+        const label = recordLabel(guide);
+        const tone = guide.isNext ? "next" : guide.status;
+        return `<li><button type="button" data-fly="${guide.slug}" data-open="${guide.href}" data-tone="${tone}">` +
           `<span class="rec-dot"></span>` +
-          `<span class="rec-lines"><span class="rec-when">${g.dates ? escapeHtml(g.dates) : "Dates not set"}</span>` +
-          `<span class="rec-what">${escapeHtml(g.name)}${label ? ` · ${label}` : ""}</span></span>` +
+          `<span class="rec-lines"><span class="rec-when">${guide.dates ? escapeHtml(guide.dates) : "Dates not set"}</span>` +
+          `<span class="rec-what">${escapeHtml(guide.name)}${label ? ` · ${label}` : ""}</span></span>` +
           `</button></li>`;
       })
       .join("");
@@ -226,7 +226,7 @@ export function initAtlasWorld(root = document) {
   const flySlot = root.querySelector("[data-atlas-menusheet-fly]");
   if (flySlot) {
     flySlot.innerHTML = guides
-      .map((g) => `<button type="button" data-fly="${g.slug}">${g.ordinal != null ? String(g.ordinal).padStart(2, "0") : "—"} · ${escapeHtml(g.name)}</button>`)
+      .map((guide) => `<button type="button" data-fly="${guide.slug}">${guide.ordinal != null ? String(guide.ordinal).padStart(2, "0") : "—"} · ${escapeHtml(guide.name)}</button>`)
       .join("");
     flySlot.querySelectorAll("[data-fly]").forEach((btn) => {
       btn.addEventListener("click", () => { map.flyTo(btn.dataset.fly, reduced ? 0 : 1100); closeMenu(); });
@@ -250,10 +250,10 @@ export function initAtlasWorld(root = document) {
     dock.hidden = false;
     let open = false;
     try { open = localStorage.getItem(DOCK_KEY) === "open"; } catch { /* private mode */ }
-    const setDock = (o) => {
-      dock.toggleAttribute("data-open", o);
-      dockToggle?.setAttribute("aria-expanded", o ? "true" : "false");
-      try { localStorage.setItem(DOCK_KEY, o ? "open" : "shut"); } catch { /* private mode */ }
+    const setDock = (isOpen) => {
+      dock.toggleAttribute("data-open", isOpen);
+      dockToggle?.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      try { localStorage.setItem(DOCK_KEY, isOpen ? "open" : "shut"); } catch { /* private mode */ }
     };
     setDock(open);
     dockToggle?.addEventListener("click", () => setDock(!dock.hasAttribute("data-open")));
@@ -295,26 +295,26 @@ export function initAtlasWorld(root = document) {
   const pingOpen = root.querySelector("[data-atlas-pingsheet-open]");
   const pingThumb = root.querySelector("[data-atlas-pingsheet-thumb]");
   const STATUS_LABEL_PING = { past: "SURVEYED", ongoing: "ON THIS TRIP NOW", upcoming: "FILED", undated: "" };
-  function showPingSheet(g) {
-    if (!pingSheet) { window.location.href = g.href; return; }
-    if (pingKicker) pingKicker.textContent = `${g.cc || ""} · ${g.ordinal != null ? String(g.ordinal).padStart(2, "0") : "—"}`;
-    if (pingTitle) pingTitle.textContent = g.name;
-    if (pingMeta) pingMeta.textContent = [STATUS_LABEL_PING[g.status], g.tz ? localClockLabel(g.tz, new Date()) : null].filter(Boolean).join(" · ");
-    if (pingOpen) pingOpen.href = g.href;
+  function showPingSheet(guide) {
+    if (!pingSheet) { window.location.href = guide.href; return; }
+    if (pingKicker) pingKicker.textContent = `${guide.cc || ""} · ${guide.ordinal != null ? String(guide.ordinal).padStart(2, "0") : "—"}`;
+    if (pingTitle) pingTitle.textContent = guide.name;
+    if (pingMeta) pingMeta.textContent = [STATUS_LABEL_PING[guide.status], guide.tz ? localClockLabel(guide.tz, new Date()) : null].filter(Boolean).join(" · ");
+    if (pingOpen) pingOpen.href = guide.href;
     /* The cover, at the size it is actually drawn. atWidth/srcsetFor are the same helpers the
        table rows use, so a Commons file is requested resized rather than pulled full-size — a
        64px thumbnail must not fetch a 258 KB original. No cover means no frame at all: an
        honest blank beats a grey placeholder pretending to be a photo. */
     if (pingThumb) {
-      const src = atWidth(g.coverImg, 64);
+      const src = atWidth(guide.coverImg, 64);
       pingThumb.hidden = !src;
       if (src) {
         pingThumb.src = src;
-        const ss = srcsetFor(g.coverImg, 64);
+        const ss = srcsetFor(guide.coverImg, 64);
         if (ss) pingThumb.srcset = ss; else pingThumb.removeAttribute("srcset");
       }
     }
-    pingSheet.dataset.slug = g.slug;
+    pingSheet.dataset.slug = guide.slug;
     pingSheet.hidden = false;
     // A pin chip is painted above the menu scrim (.atlas-pins z-index 5 vs 4), so it stays
     // tappable with the menu open and could raise this sheet on top of it. One bottom surface
@@ -352,13 +352,13 @@ export function initAtlasWorld(root = document) {
   let toastTimer = null;
   map.addEventListener("atlas-select", (ev) => {
     const { slug } = ev.detail || {};
-    const g = guides.find((x) => x.slug === slug);
-    if (g) {
-      if (isMobile()) { pickGuide(g); return; }
+    const guide = guides.find((entry) => entry.slug === slug);
+    if (guide) {
+      if (isMobile()) { pickGuide(guide); return; }
       // Desktop opens the guide directly (README "Clicking a pin"), so the selection it
       // records is the one Back will restore.
       markSelected(slug);
-      window.location.href = g.href;
+      window.location.href = guide.href;
       return;
     }
     markSelected(null);
@@ -370,7 +370,7 @@ export function initAtlasWorld(root = document) {
   });
 
   // ── atlas-pos: coordinate readout, fade-zoom law, pin-card solve scheduling ──────────
-  const byIndex = new Map(guides.map((g) => [g.slug, g]));
+  const byIndex = new Map(guides.map((guide) => [guide.slug, guide]));
   const cardEls = new Map();
   let lastVisible = "";
   let lastSolveAt = { x: 0, y: 0 };
@@ -393,15 +393,15 @@ export function initAtlasWorld(root = document) {
 
   function ensureCard(slug) {
     if (cardEls.has(slug)) return cardEls.get(slug);
-    const g = byIndex.get(slug);
-    if (!g) return null;
+    const guide = byIndex.get(slug);
+    if (!guide) return null;
     /* The plate is 220px wide and was being handed the ORIGINAL — Nyhavn is 1600x724 and 258 KB
        for a 218x145 box, measured 2026-08-10. The table rows and the ping sheet both already
        ask Commons for a thumbnail at the size they draw; this is the third surface using the
        same cover and the only one that never did. */
     const el = document.createElement("a");
     el.className = "atlas-pincard";
-    el.href = g.href;
+    el.href = guide.href;
     el.style.width = `${CARD_W}px`;
     // The credit chip sits on the bottom edge of the photo, so it needs the photo's height —
     // published from here, where the width it derives from actually lives. Hard-coding the
@@ -410,20 +410,20 @@ export function initAtlasWorld(root = document) {
     el.innerHTML = `
       <span class="atlas-pincard-tail"></span>
       <span class="atlas-pincard-ticks" aria-hidden="true"></span>
-      ${g.coverImg && imgCredit(g.coverImg) ? `<span class="atlas-pincard-credit">${escapeHtml(imgCredit(g.coverImg))}</span>` : ""}
-      ${g.coverImg ? `<img class="atlas-pincard-plate" src="${escapeHtml(atWidth(g.coverImg, PLATE_W))}"${srcsetFor(g.coverImg, PLATE_W) ? ` srcset="${escapeHtml(srcsetFor(g.coverImg, PLATE_W))}"` : ""} alt="" loading="lazy" style="view-transition-name:cover-${escapeHtml(g.slug)}" />` : ""}
+      ${guide.coverImg && imgCredit(guide.coverImg) ? `<span class="atlas-pincard-credit">${escapeHtml(imgCredit(guide.coverImg))}</span>` : ""}
+      ${guide.coverImg ? `<img class="atlas-pincard-plate" src="${escapeHtml(atWidth(guide.coverImg, PLATE_W))}"${srcsetFor(guide.coverImg, PLATE_W) ? ` srcset="${escapeHtml(srcsetFor(guide.coverImg, PLATE_W))}"` : ""} alt="" loading="lazy" style="view-transition-name:cover-${escapeHtml(guide.slug)}" />` : ""}
       <span class="atlas-pincard-body">
-        <span class="atlas-pincard-cc">${escapeHtml(g.cc || "")}${g.anchorLabel ? ` · ${escapeHtml(g.anchorLabel)}` : ""}</span>
-        <span class="atlas-pincard-title">${escapeHtml(g.name)}</span>
-        ${g.tz ? `<span class="atlas-pincard-clock" data-tick data-tz="${escapeHtml(g.tz)}">${escapeHtml(localClockLabel(g.tz, new Date()) || "—")}</span>` : ""}
-        ${g.isNext && g.dates ? `<span class="atlas-pincard-next">Next trip · ${escapeHtml(g.dates)}</span>` : ""}
-        <span class="atlas-pincard-cta">${g.status === "past" ? "✓ Verified — open the sheet →" : "Open the sheet →"}</span>
+        <span class="atlas-pincard-cc">${escapeHtml(guide.cc || "")}${guide.anchorLabel ? ` · ${escapeHtml(guide.anchorLabel)}` : ""}</span>
+        <span class="atlas-pincard-title">${escapeHtml(guide.name)}</span>
+        ${guide.tz ? `<span class="atlas-pincard-clock" data-tick data-tz="${escapeHtml(guide.tz)}">${escapeHtml(localClockLabel(guide.tz, new Date()) || "—")}</span>` : ""}
+        ${guide.isNext && guide.dates ? `<span class="atlas-pincard-next">Next trip · ${escapeHtml(guide.dates)}</span>` : ""}
+        <span class="atlas-pincard-cta">${guide.status === "past" ? "✓ Verified — open the sheet →" : "Open the sheet →"}</span>
       </span>`;
     /* Status drives the card's colour, not just its words: a surveyed trip's CTA goes green
        because it is a statement of fact (this one was walked), and the next trip takes the
        accent because it is the only card on the globe with a date still ahead of it. */
-    el.dataset.status = g.status;
-    if (g.isNext) el.dataset.next = "";
+    el.dataset.status = guide.status;
+    if (guide.isNext) el.dataset.next = "";
     pinsLayer.appendChild(el);
     cardEls.set(slug, el);
     return el;
@@ -450,24 +450,24 @@ export function initAtlasWorld(root = document) {
 
   function ensureChip(slug) {
     if (chipEls.has(slug)) return chipEls.get(slug);
-    const g = byIndex.get(slug);
-    if (!g) return null;
+    const guide = byIndex.get(slug);
+    if (!guide) return null;
     // A button, not a link: on mobile a pin raises the ping sheet first (README "Clicking a
     // pin"), so the chip must do exactly what tapping its own pin does, not jump the queue.
     const el = document.createElement("button");
     el.type = "button";
     el.className = "atlas-pinchip";
-    el.setAttribute("data-status", g.status || "undated");
-    el.innerHTML = `<span class="atlas-pinchip-dot" aria-hidden="true"></span><span class="atlas-pinchip-name">${escapeHtml(g.name)}</span>`;
+    el.setAttribute("data-status", guide.status || "undated");
+    el.innerHTML = `<span class="atlas-pinchip-dot" aria-hidden="true"></span><span class="atlas-pinchip-name">${escapeHtml(guide.name)}</span>`;
     // Every status has its own word. This used to test only for "now", so a past trip and an
     // upcoming one both announced "guide filed" while the ping sheet called the same trip
     // SURVEYED — two surfaces describing one fact differently.
-    el.setAttribute("aria-label", `${g.name} — ${CHIP_STATUS[g.status] || CHIP_STATUS.undated}. Open details.`);
+    el.setAttribute("aria-label", `${guide.name} — ${CHIP_STATUS[guide.status] || CHIP_STATUS.undated}. Open details.`);
     el.setAttribute("data-slug", slug);
     // Through the same function the pin itself uses, not straight to the sheet: the comment
     // above says the chip must do exactly what tapping its pin does, and once a pick also
     // haloes the pin, marks the row and holds the spin, "exactly" has four parts to it.
-    el.addEventListener("click", () => pickGuide(g));
+    el.addEventListener("click", () => pickGuide(guide));
     pinsLayer.appendChild(el);
     chipEls.set(slug, el);
     return el;
@@ -486,33 +486,33 @@ export function initAtlasWorld(root = document) {
     // middle of the globe keeps it. Two overlapping labels are unreadable AND make the rear
     // one's contrast unverifiable — the a11y gate caught that before any eye did.
     const wanted = [];
-    for (const g of guides) {
-      const p = pos[g.slug];
-      const el = ensureChip(g.slug);
+    for (const guide of guides) {
+      const pin = pos[guide.slug];
+      const el = ensureChip(guide.slug);
       if (!el) continue;
-      if (!p || !p.v) { el.removeAttribute("data-on"); el.style.opacity = "0"; continue; }
+      if (!pin || !pin.v) { el.removeAttribute("data-on"); el.style.opacity = "0"; continue; }
       // Fade toward the limb, so a label never floats over the globe's own edge with
       // nothing under it.
-      const d = Math.hypot(p.x - pos.w / 2, p.y - pos.h / 2) / R;
-      const o = d <= CHIP_FADE_FROM ? 1 : Math.max(0, 1 - (d - CHIP_FADE_FROM) / (1 - CHIP_FADE_FROM));
+      const dist = Math.hypot(pin.x - pos.w / 2, pin.y - pos.h / 2) / R;
+      const fade = dist <= CHIP_FADE_FROM ? 1 : Math.max(0, 1 - (dist - CHIP_FADE_FROM) / (1 - CHIP_FADE_FROM));
       // The centring lives HERE, not in the stylesheet: this line rewrites `transform`
       // every frame, so a `translate(-50%,-100%)` written in CSS would be erased on the
       // first pos event. Anchor = the pin's own point; the chip sits centred just above it.
-      el.style.transform = `translate3d(${p.x}px, ${p.y}px, 0) translate(-50%, -100%)`;
-      wanted.push({ el, x: p.x, y: p.y, o, d });
+      el.style.transform = `translate3d(${pin.x}px, ${pin.y}px, 0) translate(-50%, -100%)`;
+      wanted.push({ el, x: pin.x, y: pin.y, fade, dist });
     }
-    wanted.sort((a, b) => a.d - b.d);
+    wanted.sort((a, b) => a.dist - b.dist);
 
     const placed = [];
-    for (const c of wanted) {
+    for (const chip of wanted) {
       // offsetWidth, not getBoundingClientRect: the element carries a live transform, and
       // the layout box is what collides here, not the painted one.
-      const w = c.el.offsetWidth || 90, h = c.el.offsetHeight || 22;
-      const box = { l: c.x - w / 2, r: c.x + w / 2, t: c.y - h - CHIP_LIFT, b: c.y - CHIP_LIFT };
-      const clash = placed.some((q) => box.l < q.r && box.r > q.l && box.t < q.b && box.b > q.t);
-      const o = clash ? 0 : c.o;
-      c.el.style.opacity = String(o);
-      c.el.toggleAttribute("data-on", o > 0.06);
+      const w = chip.el.offsetWidth || 90, h = chip.el.offsetHeight || 22;
+      const box = { l: chip.x - w / 2, r: chip.x + w / 2, t: chip.y - h - CHIP_LIFT, b: chip.y - CHIP_LIFT };
+      const clash = placed.some((other) => box.l < other.r && box.r > other.l && box.t < other.b && box.b > other.t);
+      const opacity = clash ? 0 : chip.fade;
+      chip.el.style.opacity = String(opacity);
+      chip.el.toggleAttribute("data-on", opacity > 0.06);
       if (!clash) placed.push(box);
     }
   }
@@ -538,25 +538,25 @@ export function initAtlasWorld(root = document) {
     if (isMobile()) {
       for (const [, el] of cardEls) el.remove();
       cardEls.clear();
-      lastVisible = guides.filter((g) => pos[g.slug]?.v).map((g) => g.slug).sort().join(",");
+      lastVisible = guides.filter((guide) => pos[guide.slug]?.v).map((guide) => guide.slug).sort().join(",");
       lastSolveAt = { x: pos.center[0], y: pos.center[1] };
       solveQueued = false;
       return;
     }
-    const visibleGuides = guides.filter((g) => pos[g.slug]?.v);
-    const cards = visibleGuides.map((g) => ({
-      code: g.slug, x: pos[g.slug].x, y: pos[g.slug].y, w: CARD_W, fullH: cardFullH, compactH: cardBodyH,
+    const visibleGuides = guides.filter((guide) => pos[guide.slug]?.v);
+    const cards = visibleGuides.map((guide) => ({
+      code: guide.slug, x: pos[guide.slug].x, y: pos[guide.slug].y, w: CARD_W, fullH: cardFullH, compactH: cardBodyH,
     }));
     const obstacles = Array.from(root.querySelectorAll("[data-ref-fadezoom]:not([data-faded])")).map((el) => {
       const hostRect = host.getBoundingClientRect();
-      const r = el.getBoundingClientRect();
-      return { l: r.left - hostRect.left, t: r.top - hostRect.top, r: r.right - hostRect.left, b: r.bottom - hostRect.top };
+      const rect = el.getBoundingClientRect();
+      return { l: rect.left - hostRect.left, t: rect.top - hostRect.top, r: rect.right - hostRect.left, b: rect.bottom - hostRect.top };
     });
     const result = solvePlacement(cards, obstacles, { w: pos.w, h: pos.h });
 
     // Drop cards for guides no longer visible.
     for (const [slug, el] of cardEls) {
-      if (!visibleGuides.some((g) => g.slug === slug)) { el.remove(); cardEls.delete(slug); }
+      if (!visibleGuides.some((guide) => guide.slug === slug)) { el.remove(); cardEls.delete(slug); }
     }
     for (const seat of result.seats) {
       const el = ensureCard(seat.code);
@@ -572,7 +572,7 @@ export function initAtlasWorld(root = document) {
       el.toggleAttribute("data-tail", seat.tail);
       el.toggleAttribute("data-ready", true);
     }
-    lastVisible = visibleGuides.map((g) => g.slug).sort().join(",");
+    lastVisible = visibleGuides.map((guide) => guide.slug).sort().join(",");
     lastSolveAt = { x: pos.center[0], y: pos.center[1] };
     solveQueued = false;
 
@@ -586,7 +586,7 @@ export function initAtlasWorld(root = document) {
   }
 
   function maybeSolve(pos) {
-    const visibleNow = guides.filter((g) => pos[g.slug]?.v).map((g) => g.slug).sort().join(",");
+    const visibleNow = guides.filter((guide) => pos[guide.slug]?.v).map((guide) => guide.slug).sort().join(",");
     const drift = Math.hypot(pos.center[0] - lastSolveAt.x, pos.center[1] - lastSolveAt.y) * 60; // rough px-equivalent
     const setChanged = visibleNow !== lastVisible;
     if (!setChanged && drift < DRIFT_THRESHOLD) return;
