@@ -65,7 +65,7 @@ body.chrome-yield .grail{transform:translateY(calc(-1 * var(--hdr-h)))}
 .grail-stop[aria-current="true"],.grail-stop.gtab-active{
   background:var(--accent);color:var(--on-aink);border-color:var(--accent);
 }
-.grail-stop:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.grail-stop:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 /* The dot belongs to the spine models; a pill marks itself by its fill. */
 .grail-dot{display:none}
 

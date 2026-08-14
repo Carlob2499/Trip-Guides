@@ -173,7 +173,7 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 .cold-open{display:flex;align-items:center;gap:.7rem;justify-content:center;padding:.5rem 1rem;background:color-mix(in srgb,var(--accent) 10%,var(--card));border-bottom:1px solid var(--rule)}
 .cold-open-txt{font-family:var(--font-data);font-size:var(--text-caption);color:var(--ink);letter-spacing:.01em}
 .cold-open-x{flex-shrink:0;width:30px;height:30px;border-radius:999px;border:1px solid var(--rule);background:var(--card);color:var(--muted);cursor:pointer;font-size:var(--text-control-sm)}
-.cold-open-x:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.cold-open-x:focus-visible{outline:2px solid var(--accent-ink);outline-offset:1px}
 
 /* === CONTENT ================================================================= */
 /* R5 CONTAINER SCAFFOLD (design_handoff_guide_ui/TOKENS.md §7). The guide body is a QUERY
@@ -375,7 +375,7 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
    with real getBoundingClientRect(): .68rem .55rem -> 44.375px (was 30.3px at .24rem .55rem). */
 .transit-link{display:inline-flex;align-items:center;gap:.2rem;padding:.68rem .55rem;min-height:44px;border-radius:999px;background:var(--card);border:1px solid var(--rule);color:var(--ink);font-family:var(--font-data);font-size:var(--text-micro);font-weight:600;letter-spacing:.01em;text-decoration:none;white-space:nowrap;transition:border-color .15s,color .15s}
 .transit-link:hover{border-color:var(--accent);color:var(--accent-ink)}
-.transit-link:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.transit-link:focus-visible{outline:2px solid var(--accent-ink);outline-offset:1px}
 
 /* === DAY-BY-DAY ============================================================== */
 .day{display:grid;grid-template-columns:92px 1fr;gap:1rem;padding:1.1rem;border-radius:0;background:var(--bg2);margin-bottom:.5rem;border:1px solid var(--rule)}
@@ -496,7 +496,7 @@ body{overflow-x:clip}
 .best small{display:block;font-size:var(--text-micro);color:var(--muted)}
 .bactual{width:100%;border:1px solid var(--rule2);border-radius:0;padding:.32rem .35rem;font:inherit;font-size:var(--text-body);text-align:right;background:var(--card);color:var(--ink);-moz-appearance:textfield}
 .bactual::-webkit-outer-spin-button,.bactual::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-.bactual:focus{outline:2px solid var(--theme-primary,var(--accent));outline-offset:0;border-color:var(--theme-primary,var(--accent))}
+.bactual:focus{outline:2px solid var(--accent-ink);outline-offset:0;border-color:var(--accent-ink)}
 .btotal{background:var(--bg2);font-weight:600}
 .best-total,.bact-total{font-variant-numeric:tabular-nums;white-space:nowrap}
 /* Was eight hardcoded Material-palette hexes with a dark set behind a bare
@@ -677,7 +677,7 @@ body{overflow-x:clip}
 .block-title-row .block-title{flex:1;min-width:0}
 /* 999px, not 3px: SPEC-COMPONENTS.md rule 1 — radius is binary, and this is a button you press. */
 .anchor-btn{flex:none;background:none;border:none;padding:.1rem .3rem;cursor:pointer;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);opacity:0;border-radius:999px;transition:opacity .15s,color .15s,background .15s;line-height:1;align-self:center}
-.anchor-btn:focus-visible{opacity:1;outline:2px solid var(--theme-primary,var(--accent));outline-offset:2px}
+.anchor-btn:focus-visible{opacity:1;outline:2px solid var(--accent-ink);outline-offset:2px}
 .card:hover .anchor-btn,.block:hover .anchor-btn{opacity:.45}
 .card:hover .anchor-btn:hover,.block:hover .anchor-btn:hover{opacity:1;color:var(--accent-ink)}
 @media(hover:none){.anchor-btn{opacity:.3}}
@@ -732,7 +732,7 @@ details.card.is-collapsible>.block-body{padding:1.1rem 1.4rem 1.25rem}
    text link mid-masthead; now lives in the footer instead. */
 .foot-modify-pill{display:inline-flex;align-items:center;gap:.3rem;margin-top:.7rem;padding:.4rem .85rem;min-height:34px;font-family:var(--font-data);font-size:var(--text-control-sm);letter-spacing:.02em;color:var(--muted);background:var(--card);border:1px solid var(--rule2);border-radius:999px;text-decoration:none;transition:color .15s,border-color .15s}
 .foot-modify-pill:hover{color:var(--ink);border-color:var(--ink)}
-.foot-modify-pill:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.foot-modify-pill:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 
 /* === RAID COUNTER TABLES & COLLAPSIBLE DETAILS =============================== */
 /* Used in GO Fest prose sections — <details>/<summary> for collapsible boss charts */
@@ -859,4 +859,4 @@ details table{margin:.3rem 0 .4rem}
 .pnl-reset-row{margin:.6rem 0 0;text-align:right}
 .pnl-reset{font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);background:var(--card);border:1px solid var(--rule);border-radius:999px;padding:.4rem .85rem;cursor:pointer;transition:color .15s,border-color .15s}
 .pnl-reset:hover{color:var(--accent-ink);border-color:var(--rule2)}
-.pnl-reset:focus-visible{outline:2px solid var(--theme-primary,var(--accent));outline-offset:2px}
+.pnl-reset:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}

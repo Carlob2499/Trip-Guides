@@ -29,7 +29,7 @@
 /* Once open, the lead is no longer a two-line summary of what is below it — it is the first two
    lines OF what is below it, so the clamp comes off and the paragraph reads continuously. */
 .fold-btn[aria-expanded="true"] .fold-lead{-webkit-line-clamp:none;overflow:visible}
-.fold-btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.fold-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:3px}
 
 .fold{display:grid;grid-template-rows:0fr;transition:grid-template-rows 240ms ease}
 .fold > *{overflow:hidden}

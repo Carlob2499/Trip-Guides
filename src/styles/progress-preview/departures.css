@@ -162,7 +162,7 @@
   transition:background var(--dur-ui) ease,transform var(--dur-tap) var(--ease-spring)}
 .dp-cta:hover{background:var(--accent);color:var(--on-accent)}
 .dp-cta:active{transform:scale(.97)}
-.dp-cta:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.dp-cta:focus-visible{outline:3px solid var(--accent-ink);outline-offset:3px}
 
 .dp-fix{margin:1.2rem 0 0;padding-top:1rem;border-top:1px dashed var(--rule);max-width:44rem}
 .dp-fix[hidden]{display:none}
@@ -170,7 +170,7 @@
 .dp-fix form{display:flex;gap:.5rem}
 .dp-fix input{flex:1;min-width:0;padding:.6rem .8rem;border-radius:var(--r-md);border:1px solid var(--rule);
   background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
-.dp-fix input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.dp-fix input:focus-visible{outline:2px solid var(--accent-ink);outline-offset:1px}
 .dp-fix button{padding:.6rem 1.1rem;border-radius:var(--r-md);border:1px solid var(--ink);
   background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;
   font-size:var(--text-small);cursor:pointer}

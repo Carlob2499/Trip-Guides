@@ -43,7 +43,7 @@
    as labels, not as things you press (the site's own clickability doctrine). */
 .sc-add-btn,.sc-add-expense-btn{display:inline-flex;align-items:center;gap:.3rem;min-height:34px;padding:.4rem .85rem;font-family:var(--font-data);font-size:var(--text-control);font-weight:600;letter-spacing:.01em;color:var(--accent-ink);background:color-mix(in srgb,var(--accent) 8%,transparent);border:1px solid color-mix(in srgb,var(--accent) 32%,transparent);border-radius:999px;cursor:pointer;white-space:nowrap;flex:none;transition:background .16s,border-color .16s,color .16s}
 .sc-add-btn:hover,.sc-add-expense-btn:hover{background:color-mix(in srgb,var(--accent) 16%,transparent);border-color:color-mix(in srgb,var(--accent) 55%,transparent)}
-.sc-add-btn:focus-visible,.sc-add-expense-btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.sc-add-btn:focus-visible,.sc-add-expense-btn:focus-visible{outline:3px solid var(--accent-ink);outline-offset:2px}
 .sc-add-expense-btn{align-self:flex-start}
 
 /* ── member rows ───────────────────────────────────────────────────────────── */
@@ -61,7 +61,7 @@
 /* One outline, not an `outline:none` immediately overridden by an `outline` shorthand two
    declarations later. Raised from a 55% mix to solid --accent: composited on --card the mix
    measured 1.71-2.35:1 across the four guides, under WCAG 1.4.11's 3:1 for a focus indicator. */
-.split-in:focus{border-color:var(--accent);outline:3px solid var(--accent);outline-offset:0}
+.split-in:focus{border-color:var(--accent-ink);outline:3px solid var(--accent-ink);outline-offset:0}
 .split-in::placeholder{color:var(--muted);opacity:.75}
 select.split-in{cursor:pointer}
 
@@ -69,7 +69,7 @@ select.split-in{cursor:pointer}
    A real (if quiet) button: circular, hoverable, and big enough to hit. */
 .split-del{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:transparent;border:1px solid transparent;cursor:pointer;font-size:var(--text-lead);line-height:1;color:var(--muted);border-radius:999px;transition:color .14s,background .14s,border-color .14s;flex:none;padding:0}
 .split-del:hover{color:var(--accent-ink);background:color-mix(in srgb,var(--accent) 10%,transparent);border-color:color-mix(in srgb,var(--accent) 30%,transparent)}
-.split-del:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.split-del:focus-visible{outline:2px solid var(--accent-ink);outline-offset:1px}
 
 /* ── per-row disclosure ────────────────────────────────────────────────────
    Category, split rule, who shared and any weights live behind this. Collapsed by
@@ -79,7 +79,7 @@ select.split-in{cursor:pointer}
 .se-sub{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-top:.3rem}
 .se-toggle{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.03em;color:var(--muted);background:none;border:1px solid var(--rule2);border-radius:999px;padding:.18rem .6rem;min-height:28px;cursor:pointer;transition:color .14s,border-color .14s,background .14s}
 .se-toggle:hover{color:var(--ink);border-color:var(--ink)}
-.se-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.se-toggle:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 .se-meta{font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);overflow-wrap:anywhere}
 .se-more{margin-top:.5rem;padding-top:.6rem;border-top:1px dashed var(--rule)}
 .se-more-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.2rem}
@@ -91,7 +91,7 @@ select.split-in{cursor:pointer}
    makes iOS Safari zoom the page in on focus and never zoom back out (the a11y gate caught
    it at 11.52px). The amount columns below are sized to fit it. */
 .se-cur-sel{font-family:var(--font-data);font-size:var(--text-body);font-weight:700;letter-spacing:.02em;color:var(--muted);background:var(--bg2);border:1px solid var(--rule2);border-radius:0;padding:.2rem .1rem;cursor:pointer;flex:none;min-height:38px}
-.se-cur-sel:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.se-cur-sel:focus-visible{outline:2px solid var(--accent-ink);outline-offset:1px}
 
 /* ── find one expense among many ───────────────────────────────────────────
    Revealed only past a handful of expenses (trip-split.js's FILTER_FROM): below that,
@@ -102,7 +102,7 @@ select.split-in{cursor:pointer}
 .se-filter-sel{flex:1 1 7.5rem;min-width:0}
 .se-filter-clear{flex:none;min-height:40px;padding:.4rem .85rem;font-family:var(--font-data);font-size:var(--text-control);font-weight:600;color:var(--muted);background:none;border:1px solid var(--rule2);border-radius:999px;cursor:pointer;transition:color .14s,border-color .14s}
 .se-filter-clear:hover{color:var(--ink);border-color:var(--ink)}
-.se-filter-clear:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.se-filter-clear:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 /* The honesty line: a filtered list sits beside an UNfiltered total, and that has exactly
    one wrong reading. It gets the full width so it is never mistaken for a control's label. */
 .se-filter-note{flex:1 0 100%;margin:.1rem 0 0;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--accent-ink)}
@@ -208,7 +208,7 @@ select.split-in{cursor:pointer}
 /* "Mark paid" — the control that turns a perpetual suggestion into a settled record. */
 .st-done{grid-column:1/-1;justify-self:start;margin-top:.35rem;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.03em;color:var(--accent-ink);background:color-mix(in srgb,var(--accent) 8%,transparent);border:1px solid color-mix(in srgb,var(--accent) 32%,transparent);border-radius:999px;padding:.28rem .8rem;min-height:32px;cursor:pointer;transition:background .16s,border-color .16s}
 .st-done:hover{background:color-mix(in srgb,var(--accent) 16%,transparent);border-color:color-mix(in srgb,var(--accent) 55%,transparent)}
-.st-done:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.st-done:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 
 /* Settled payments — a log with an undo, because this is the one easily-mistapped action
    whose whole value is being an accurate record. */
@@ -219,7 +219,7 @@ select.split-in{cursor:pointer}
 .sp-on{grid-column:1;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted)}
 .sp-undo{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;color:var(--muted);background:none;border:1px solid var(--rule2);border-radius:999px;padding:.15rem .6rem;min-height:28px;cursor:pointer;transition:color .14s,border-color .14s}
 .sp-undo:hover{color:var(--ink);border-color:var(--ink)}
-.sp-undo:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sp-undo:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 
 /* Where it went — proportional bars, biggest first. Bars are a reading aid beside the real
    figures, never a substitute for them. */

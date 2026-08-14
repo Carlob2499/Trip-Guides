@@ -14,7 +14,7 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .itk-bar{max-width:52rem;margin:0 auto;width:100%;padding:1.1rem 1.2rem 0}
 .itk-wordmark{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);color:var(--ink);text-decoration:none;letter-spacing:-.01em}
 .itk-wordmark:hover{color:var(--accent-ink)}
-.itk-wordmark:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.itk-wordmark:focus-visible{outline:2px solid var(--accent-ink);outline-offset:3px}
 
 .intake{max-width:52rem;margin:0 auto;width:100%;padding:1.8rem 1.2rem 3rem;flex:1}
 .itk-eyebrow{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink)}
@@ -33,13 +33,13 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .ng-field input,.ng-field select,.ng-field textarea{font:inherit;font-size:var(--text-body);background:var(--bg2);color:var(--ink);border:1px solid var(--rule2);border-radius:0;padding:.55rem .75rem;width:100%;min-height:44px;transition:border-color .14s,background .14s}
 .ng-field textarea{min-height:66px}
 .ng-field input:hover,.ng-field select:hover,.ng-field textarea:hover{border-color:var(--muted)}
-.ng-field input:focus,.ng-field select:focus,.ng-field textarea:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+.ng-field input:focus,.ng-field select:focus,.ng-field textarea:focus{outline:2px solid var(--accent-ink);outline-offset:0;border-color:transparent}
 .ng-row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
 .ng-err{color:var(--accent-ink);font-size:var(--text-control);font-weight:600}
 .ng-submit{margin-top:.4rem;min-height:44px;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);background:var(--ink);color:var(--bg);border:1px solid var(--ink);border-radius:999px;padding:.6rem 1.3rem;cursor:pointer;transition:background .18s,border-color .18s,transform .18s var(--ease-spring)}
 .ng-submit:hover{background:var(--accent);border-color:var(--accent)}
 .ng-submit:active{transform:scale(.98)}
-.ng-submit:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ng-submit:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 @media(prefers-reduced-motion:reduce){.ng-submit{transition:background .18s,border-color .18s}.ng-submit:active{transform:none}}
 
 /* ── The flow ─────────────────────────────────────────────────────────────── */
@@ -53,7 +53,7 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .itk-next{background:var(--ink);border-color:var(--ink);color:var(--bg);margin-left:auto}
 .itk-next:hover,.itk-next-acc{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .itk-back:hover{border-color:var(--ink)}
-.itk-back:focus-visible,.itk-next:focus-visible,.itk-send:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.itk-back:focus-visible,.itk-next:focus-visible,.itk-send:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 
 /* A · drop zone */
 .itk-dz{display:block;padding:2rem 1rem;border:2px dashed var(--rule2);border-radius:0;text-align:center;cursor:pointer;transition:border-color .2s,background .2s}
@@ -82,7 +82,7 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .itk-mani{font-family:var(--font-display);font-size:clamp(1.15rem,3vw,1.45rem);line-height:2;max-width:58ch;margin:.4rem 0 .6rem}
 .itk-blank{display:inline;font:inherit;background:none;border:none;border-bottom:2px solid var(--accent);color:var(--accent-ink);padding:0 .1em;cursor:pointer;border-radius:0;transition:background .15s}
 .itk-blank:hover{background:color-mix(in srgb,var(--accent) 10%,transparent)}
-.itk-blank:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.itk-blank:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 .itk-blank-ghost{color:var(--muted);border-bottom-color:var(--rule2);font-style:italic}
 .itk-drawer{margin:.6rem 0 .2rem;padding:.9rem 1rem;background:var(--bg2);border:1px solid var(--rule);border-radius:0}
 .itk-send{min-height:44px;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);background:var(--accent);color:var(--on-accent);border:1px solid var(--accent);border-radius:999px;padding:.6rem 1.4rem;cursor:pointer;margin-left:auto;transition:background .18s,transform .18s var(--ease-spring)}

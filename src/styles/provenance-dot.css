@@ -18,7 +18,7 @@
   transition: color 0.15s ease, border-color 0.15s ease;
 }
 .prov-dot:hover, .prov-dot:focus-visible { color: var(--accent-ink); border-color: var(--accent); }
-.prov-dot:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.prov-dot:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
 
 /* D13/Stage A.6: square (radius 0), oxide 1px border — matches the design-handoff
    prototype's popover exactly (border:1px solid #9c4421, no border-radius declared).
@@ -106,7 +106,7 @@
 }
 .flag-chip::before { content: ""; position: absolute; inset: -6px 0; }
 .flag-chip:hover { background: color-mix(in srgb, currentColor 10%, transparent); }
-.flag-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.flag-chip:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
 /* ≈ approx.: neutral, --ink — a positive claim ("checked, found approximate"), not a warning. */
 .flag-chip--approx { color: var(--ink); }
 /* ⚠ unconfirmed/stale: --warn, the existing .stale-pill tone, carried over. */

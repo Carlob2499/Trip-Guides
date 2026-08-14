@@ -124,7 +124,7 @@
   transition:background var(--dur-ui) ease,transform var(--dur-tap) var(--ease-spring)}
 .nl-cta:hover{background:var(--accent);color:var(--on-accent)}
 .nl-cta:active{transform:scale(.97)}
-.nl-cta:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.nl-cta:focus-visible{outline:3px solid var(--accent-ink);outline-offset:3px}
 
 .nl-fix{margin:1.4rem 0 0;max-width:38rem}
 .nl-fix[hidden]{display:none}
@@ -132,7 +132,7 @@
 .nl-fix form{display:flex;gap:.5rem}
 .nl-fix input{flex:1;min-width:0;padding:.6rem .8rem;border-radius:var(--r-md);border:1px solid var(--rule);
   background:var(--card);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
-.nl-fix input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.nl-fix input:focus-visible{outline:2px solid var(--accent-ink);outline-offset:1px}
 .nl-fix button{padding:.6rem 1.1rem;border-radius:var(--r-md);border:1px solid var(--ink);
   background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;
   font-size:var(--text-small);cursor:pointer}
