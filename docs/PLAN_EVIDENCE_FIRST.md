@@ -547,13 +547,28 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
   evidence quality ("sourced estimates (≈), not confirmed bookings") — neither is an open research
   state. Result: zero findings on korea/us/denmark, the fixture's Wild Area caught.
 - **Case 11 CLOSED** (`scripts/audit/check-routes.mjs`, verify's `routes` row). Advisory ALWAYS,
-  per the MANIFEST. The advisory half needs no key and works today: it counts leg durations
-  carrying no `source_url` (korea 12/62 · denmark 17/27 · us 3/6 · fixture 15/33 — this defect is
-  systemic, not particular). **What is NOT built, stated plainly:** live Routes verification is
-  gated and inert, and the blocker is structural rather than credential-shaped — durations live in
-  prose with no machine-readable origin→destination pair to query. Structuring legs against the
-  guide's own `map` points is the remaining work, and the check SAYS so when a key is present
-  rather than silently no-opping.
+  per the MANIFEST. Three layers, cheapest first:
+  1. **Prose count** (no key, no coords) — leg durations carrying no `source_url`
+     (korea 12/62 · denmark 17/27 · us 3/6 · fixture 15/33 — systemic, not particular).
+  2. **Physical floor** (no key, needs coords) — a straight-line distance no ground transport
+     could cover in the scheduled gap. Two calibration corrections, both from running it on the
+     real corpus rather than reasoning about it: an 80 km/h ceiling flagged both real KTX legs
+     (fixed by setting the bound at 300 km/h — this layer is physics, not a realistic speed),
+     and reading a windowed stop's END time correctly then flagged the two legs where a window
+     closes at the same clock minute the next stop opens (fixed by `FLOOR_GRANULARITY_MIN`).
+     Final corpus false-positive rate: **zero**.
+  3. **Live matrix** (needs `GOOGLE_ROUTES_KEY`) — one `computeRouteMatrix` call per day, only
+     for days with ≥3 scheduled stops, exactly the budget §4 fixed. Asymmetric verdict: a gap
+     LARGER than the live duration is dwell time and proves nothing; only a gap smaller says
+     the day cannot happen. Threaded in by `verify() --network`, like E2's drift check.
+  **The structural blocker is gone.** The earlier status here said live verification was blocked
+  because durations live in prose with no origin→destination pair. That was true of the prose and
+  false of the guide: §4's own Routes row names the real substrate — "scheduled day legs" — and
+  `days[].waypoints[]` already carries `{name, lat, lng, time}`. Consecutive waypoints ARE the
+  pairs. Korea yields 27 legs across 7 qualifying days today; denmark 5, us 2, the fixture 0.
+  Verified end-to-end against the real corpus with a stubbed matrix (7 calls, 27 legs, budget
+  honoured), with the outage path forced, and with one intentionally-invalid-key request against
+  the live endpoint (boundary checks #2 and #3 — `API_KEY_INVALID`, nothing created).
 
 ### Case→packet coverage map (mandate §31)
 

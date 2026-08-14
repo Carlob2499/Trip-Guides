@@ -83,6 +83,8 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       # S1: the recert agent re-verifies venues; lookup-venue + verify --network use this.
       PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
+      # Case 11: live leg-duration verification. Default OFF — unset ⇒ free layers only.
+      GOOGLE_ROUTES_KEY: ${{ secrets.GOOGLE_ROUTES_KEY }}
     steps:
       - uses: actions/checkout@v7
         with:

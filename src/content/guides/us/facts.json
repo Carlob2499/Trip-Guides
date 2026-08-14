@@ -34,7 +34,7 @@
     "evidence": "the median price is $231"
   },
   "budget-daily-costs-39": {
-    "claim": "Budget & daily costs → Rental car, per day (compact/mid-size) — $39",
+    "claim": "PHX economy/compact rental car, low end — per-day rate",
     "value": "$39",
     "source_url": "https://www.kayak.com/Phoenix-Sky-Harbor-Intl-Airport-Car-Rentals.PHX.cap.ksp",
     "verified_on": "2026-07-19",
@@ -42,7 +42,7 @@
     "state": "approx"
   },
   "budget-daily-costs-57": {
-    "claim": "Budget & daily costs → Rental car, per day (compact/mid-size) — $57",
+    "claim": "PHX mid-size rental car — per-day rate",
     "value": "$57",
     "source_url": "https://www.kayak.com/Phoenix-Sky-Harbor-Intl-Airport-Car-Rentals.PHX.cap.ksp",
     "verified_on": "2026-07-19",
@@ -50,7 +50,7 @@
     "state": "approx"
   },
   "budget-daily-costs-5": {
-    "claim": "Budget & daily costs → Red Rock Pass (7-day) — $5",
+    "claim": "Red Rock Pass — per-DAY rate (not the 7-day pass)",
     "value": "$5",
     "source_url": "https://www.fs.usda.gov/r03/coconino/passes/red-rock-coconino-passes-program",
     "verified_on": "2026-07-19",

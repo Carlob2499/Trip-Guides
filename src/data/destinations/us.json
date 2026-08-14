@@ -8,5 +8,6 @@
   ],
   "transitAuthorities": [],
   "gtfsPortals": [],
-  "seasonalSources": []
+  "seasonalSources": [],
+  "defaultTravelMode": "DRIVE"
 }

@@ -61,6 +61,14 @@ export const destinationConfig = z
     seasonalSources: z.array(sourcePointer).default([]),
     // Absent = no destination-specific tax-free/duty-free rule research has found yet.
     taxFreeRules: sourcePointer.optional(),
+    // Case 11's live Routes layer: how a scheduled day at this destination actually moves.
+    // NOT a sourcePointer — this is a routing PARAMETER, not a claim about the world, so it
+    // carries no verified_on. It is read from the guide's own transit section (Korea rides
+    // KTX and the subway; a Sedona trip drives a rental car because that guide names driving
+    // as "the recommended default for the whole trip"), never guessed from the country.
+    // Absent ⇒ TRANSIT, which is the safe default: it is the mode a guide is most likely to
+    // schedule around, and a wrong mode only makes the advisory noisier, never a blocker.
+    defaultTravelMode: z.enum(["TRANSIT", "DRIVE", "WALK", "BICYCLE"]).optional(),
   })
   .strict();
 

@@ -46,67 +46,60 @@
 - Korea 03: critic flagged a swapped 명동 label on the Gyeongbokgung map point → file its issue.
 - No guide uses a direct royalty-free `sights[].img.src` yet — capability live, unexercised.
 
-## Snapshot (2026-08-13h — the design-reconciliation plan is DONE and ARCHIVED)
+## Snapshot (2026-08-14 — case 11's live half is built; the "structural blocker" wasn't one)
 
-**§C5 closed the last box, and the plan is archived** to `docs/archive/`. A read-only verifier
-walked all four guides + hub at 375/744/1440, day+night, reduced-motion, keyboard-only — 30
-combinations, **0 overflow escapes, 0 closed-sheet focus leaks, 0 keyboard traps.** The ≥44px
-half found six real regressions the automated gate **structurally could not see**, which is the
-part worth remembering.
+**Live Routes verification ships.** `check-routes.mjs` is now three layers, cheapest first:
+a prose count (no key), a **physical floor** over `days[].waypoints[]` (no key — a straight-line
+distance no ground transport could cover in the scheduled gap), and a **live matrix**
+(`GOOGLE_ROUTES_KEY`, one `computeRouteMatrix` per day, only days with ≥3 stops — §4's exact
+budget). Threaded into `verify() --network` like E2's drift row. Korea yields 27 legs across 7
+qualifying days; denmark 5, us 2, japan 0.
 
-**Four touch targets.** `.jl-toggle` (34.9px) and the `.guide-stats` tiles carrying
-`#liveRatePill` (86.7x36.0) RAISED height-only — the §C2b `.transit-link` shape, width already
-cleared. The stat-tile floor went on EVERY tile, not just the rate one, because the pills are
-JS-injected and the rate arrives last: flooring it alone would have grown the row after the
-countdown painted it, a second CLS shift. `.mast-credit` was NOT padded — CONTEXT.md's
-2026-08-11 ruling names "a photo credit" as notation, and `.imgcredit` (literally the same
-component) was already excluded; it joined that list. `.spine-tick` BASELINED (`max: 13`) on a
-measurement, not a preference: at its own 1100px activation width the content column starts at
-17.6px against the rail's 14.4–21.4px, so the gutter is *negative* — any 44px hit area would eat
-clicks meant for the page — and vertically, 44px targets on a 37.2px pitch would overlap
-neighbours and manufacture wrong-destination misclicks.
+**The blocker this file listed for a release did not exist.** The old status said live checking
+needed legs "structured as origin→destination pairs against the guide's `map` points" — a schema
+design decision. But PLAN_EVIDENCE_FIRST §4 had already named the substrate ("scheduled day
+legs") and `days[].waypoints[]` already carried `{name, lat, lng, time}`. **Consecutive waypoints
+ARE the pairs.** The lesson, recorded in CONTEXT.md: before declaring work blocked on structure
+that doesn't exist, grep for the structure that does. A blocker asserted from a module's own
+header comment is an assumption, not a finding.
 
-**Two focus gaps.** `.addr-copy`/`.stop-num` collapsed hover and focus into one rule ending
-`outline:none`, so Tab-reachable controls had no ring. Split; verified under a *real* Tab press
-(programmatic `.focus()` never triggers `:focus-visible` — worth knowing for the next audit).
+**Two calibration corrections, both from running it on the corpus rather than reasoning about
+it.** An 80 km/h ceiling flagged both real KTX legs (Seoul→Daejeon, Daejeon→Busan) — fixed by
+setting the bound at 300 km/h, because this layer is physics, not a realistic speed. Then reading
+a windowed stop's END time correctly (origin-end → destination-start, so "10:00–16:30"→"17:00" is
+a 30-minute window, not 420) surfaced two more: a window closing at the same clock minute the
+next stop opens. That's how humans write itineraries, so `FLOOR_GRANULARITY_MIN` absorbs it.
+**Final corpus false-positive rate: zero.** The live verdict is asymmetric for the same reason —
+a gap LARGER than the drive is dwell time and proves nothing.
 
-**The durable half — three gate blind spots.** Each regression hid for a different structural
-reason, so the gate was widened at each: the network-blocked env forced rate.js's fallback (the
-one path that never un-hides the pill) → `prep()` now serves the rate endpoint and asserts the
-pill un-hides; korea's trip is in the past so it never renders the jetlag toggle → **japan**
-joined `TARGET_PAGES` as the only upcoming-trip page; the device list topped out at 1024px so
-nothing behind a desktop breakpoint was reachable → **Desktop 1280** joined it. That last one
-paid immediately, surfacing a seventh never-audited control (`.divergence-source`, 1151x21,
-japan-only content) — raised, not baselined. The canned rate had to be derived from the product's
-own `SANITY` band, because a flat value passed korea and was correctly rejected on japan.
-`a11y.spec.ts` **57 → 69 tests**, all green; drift unchanged at 341/435/37/18/4.
+**Boundary checks run, not assumed.** The forced-outage path executed (7 `routes-unreachable`
+findings, no invented verdicts); a stubbed matrix drove the real Korea legs end-to-end (7 calls,
+27 legs, budget honoured); and one intentionally-invalid-key request hit the live endpoint —
+`API_KEY_INVALID`, nothing created. `GOOGLE_ROUTES_KEY` is wired into graduate-guide, recert and
+research-pass as an optional secret; unset keeps the free layers and never fails a run.
 
-**One deviation, recorded not taken:** the brief called `applyFallback()` not un-hiding the pill a
-bug. It isn't — the markup says "injected when fetch succeeds" and the stats bar's rule is that
-only self-changing facts belong there. Un-hiding a build-time seed rate would show a stale number
-as live on every failed fetch. Shipped behaviour left alone; the gate fixed instead.
+**`us` registry, closed.** The three remaining section-path-echo claims are renamed. One was
+wrong, not just ugly: `budget-daily-costs-5`'s claim read "Red Rock Pass (7-day) — $5" while the
+value is the per-DAY rate. It renders nowhere (`data-claim` is emitted only on `approx` rows —
+checked in `dist/`, not assumed), so this was registry hygiene, not a reader-facing bug. The
+rename also had to be redone once: "PHX rental car, per day — {low end, mid-size}" put the
+distinguishing attribute AFTER the em-dash, which is exactly what `claimStem` strips, so it
+manufactured a new bare-echo pair. Attribute before the dash. us hygiene now clean.
 
 ## Where we left off
 
-**Both big plans are now fully executed** — `PLAN_EVIDENCE_FIRST.md` and, as of today,
-`PLAN_DESIGN_RECONCILIATION.md` (archived). There is no live work order; the next design change
-is governed by `docs/design-handoff/` + `enforcement/` directly.
+**Everything in `PLAN_EVIDENCE_FIRST.md` is built, and the open-item list is empty.** All 16
+STATUS blocks closed, 12/12 regression cases covered, 2034 tests + 1 todo green, build/lint/
+typecheck clean, preview verified at :4322.
 
-**CORRECTION (2026-08-13, same session):** an earlier version of this section listed the
-batched-checkpoint bug as "DETECTED but not FIXED" and recommended fixing it next. **That was
-wrong.** `pipeline.mjs`'s `uncommittedPredecessor` guard already prevents it — a stage cannot be
-checkpointed until its predecessor is committed at HEAD (exit 4), it is unit-tested, and it
-predates this session (2026-08-09). Its own comment names the Japan 35 ms burst as the worked
-example. The japan and us state files are historical artifacts of runs that predate the guard, not
-evidence of a live defect. E3's `stageBurst` detector remains the useful DETECTIVE half — it
-catches those artifacts and would catch any future bypass — but nothing needs fixing.
+**Nothing is waiting on the creator.** The two items this section listed last session are both
+resolved: Routes needed a grep, not a structural decision, and the `us` registry work is done.
+The only residue is administrative — the merged remote branch
+`claude/pipeline-changes-plan-752kra` still exists on GitHub because this environment's proxy
+refuses git delete operations; it is one click in the branches UI.
 
-**Still needs you — two items, neither a plan packet:** (1) **Live Routes verification** — the
-advisory half ships and counts unattested leg durations; the live half needs legs structured as
-origin→destination pairs against the guide's `map` points before an API key buys anything.
-(2) **`us` content**: `budget-daily-costs-300` cites a page that does not contain 300, and three
-rows share one byte-identical claim with three different values (D4 reproducing on `us`). Both are
-guide-author work, not code.
-
-**Recommended next step — the `us` content pass**, since it is the only item that touches what a
-reader actually sees. Routes needs a structural decision first, not a session.
+**Recommended next step — regenerate the japan guide through the rebuilt pipeline.** It is the
+program's natural end-to-end acceptance test (CONTEXT.md's Japan ruling says so explicitly), it
+is the only guide with 0 coordinate-bearing waypoints so it exercises the new Routes layers from
+zero, and its trip is real and upcoming (Oct 15 – Nov 10, 2026). Everything else on the roadmap
+is R3–R6 in `docs/reference/pipeline.md` — product scope that was never part of this plan.

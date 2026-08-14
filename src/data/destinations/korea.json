@@ -42,5 +42,6 @@
     }
   ],
   "gtfsPortals": [],
-  "seasonalSources": []
+  "seasonalSources": [],
+  "defaultTravelMode": "TRANSIT"
 }

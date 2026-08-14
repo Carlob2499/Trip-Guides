@@ -96,7 +96,7 @@ const HUMAN_ROWS = [
 ];
 
 // Roll the three sources up for one guide into a verdict + structured scorecard.
-export function evaluateGuide(guide, slug, staleness, net, facts = null, unused = [], candidates = null, sources = null, destinationConfig = null, uncertaintyInputs = null, drift = null) {
+export function evaluateGuide(guide, slug, staleness, net, facts = null, unused = [], candidates = null, sources = null, destinationConfig = null, uncertaintyInputs = null, drift = null, liveRoutes = null) {
   const draft = !!guide.draft;
   const readiness = evaluateReadiness(guide, slug); // { pass, warns, infos, coverage }
 
@@ -159,8 +159,10 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
   // by verify() and passed in, like the candidates and staleness rows.
   // Case 11: transit-leg durations with no routing authority behind them. Advisory ALWAYS —
   // Routes is config-gated and default OFF (creator ruling), so this measures the gap and
-  // never fails a run.
-  const routes = checkRoutes(Array.isArray(guide.sections) ? guide.sections : (guide.sections || []).flat());
+  // never fails a run. Its free layers (prose count + physical floor over `days[].waypoints`)
+  // run here; the live Routes matrix is network I/O, so verify() computes it and threads it
+  // in as `liveRoutes` — the same split E2's drift check uses.
+  const routes = checkRoutes(Array.isArray(guide.sections) ? guide.sections : (guide.sections || []).flat(), { live: liveRoutes });
 
   // E2: drift is computed by verify() (network I/O) and threaded in, like the staleness scan.
   const driftRow = drift ?? { status: "skipped" };
@@ -246,6 +248,25 @@ export async function verify({ slug = null, network = false } = {}) {
     for (const t of targets) driftBySlug[t.slug] = await checkDrift(t.facts, { fetchPage });
   }
 
+  // Case 11, live layer: ask Routes what each scheduled day leg actually takes. Network AND
+  // key-gated — `liveRouteMatrix` returns null with no key, so an unconfigured repo does zero
+  // work here and `checkRoutes` reports the free layers alone. Travel mode comes from the
+  // destination config (a Korea day rides the KTX; a Sedona day drives), defaulting to TRANSIT.
+  const liveRoutesBySlug = {};
+  if (network) {
+    const { extractDayLegs, verifyDayLegs, liveRouteMatrix } = await import("./audit/check-routes.mjs");
+    const fetchMatrix = liveRouteMatrix();
+    if (fetchMatrix) {
+      for (const t of targets) {
+        const sections = Array.isArray(t.guide.sections) ? t.guide.sections : (t.guide.sections || []).flat();
+        liveRoutesBySlug[t.slug] = await verifyDayLegs(extractDayLegs(sections), {
+          fetchMatrix,
+          travelMode: destBySlug[t.slug]?.defaultTravelMode ?? "TRANSIT",
+        });
+      }
+    }
+  }
+
   const { readState, readIntake } = await import("./audit/check-uncertainty.mjs");
   const { checkIntakeContradictions } = await import("./audit/check-intake-contradictions.mjs");
   const uncertaintyBySlug = {};
@@ -259,7 +280,7 @@ export async function verify({ slug = null, network = false } = {}) {
   }
 
   const results = targets.map(({ guide, slug: s, raw, facts, unusedFacts }) =>
-    evaluateGuide(guide, s, staleness, net, facts, unusedFacts, candidatesBySlug[s], sourceMix(raw, guide.country), destBySlug[s], uncertaintyBySlug[s], driftBySlug[s] ?? null));
+    evaluateGuide(guide, s, staleness, net, facts, unusedFacts, candidatesBySlug[s], sourceMix(raw, guide.country), destBySlug[s], uncertaintyBySlug[s], driftBySlug[s] ?? null, liveRoutesBySlug[s] ?? null));
   return { results, error: null, network };
 }
 
@@ -395,9 +416,20 @@ export function report(r) {
     }
   }
 
-  // Case 11: leg durations. Advisory by design — printed, never gating.
-  if (r.routes && r.routes.status === "advisory") {
-    L.push(`  P1 routes     · advisory — ${r.routes.unverified}/${r.routes.legs} leg duration(s) unattested${r.routes.configured ? "" : " (Routes not configured — default OFF)"}`);
+  // Case 11: leg durations. Advisory by design — printed, never gating. The line states all
+  // three layers, so "0 findings" can never be mistaken for "everything was checked": prose
+  // legs counted, scheduled day legs measured, and how many of those a live Routes call reached.
+  if (r.routes && r.routes.status !== "n/a") {
+    const bits = [`${r.routes.unverified}/${r.routes.legs} prose leg(s) unattested`];
+    if (r.routes.dayLegs) bits.push(`${r.routes.judgeable}/${r.routes.dayLegs} scheduled leg(s) measurable`);
+    bits.push(
+      r.routes.live
+        ? `live: ${r.routes.live.verified} leg(s) via ${r.routes.live.queried} matrix call(s)`
+        : r.routes.configured
+          ? "live: key set, not run (needs --network)"
+          : "live: OFF (no GOOGLE_ROUTES_KEY)",
+    );
+    L.push(`  P1 routes     · ${r.routes.status} — ${bits.join(" · ")}`);
     for (const f of r.routes.findings) L.push(`      ⚠ [${f.code}] ${f.msg}`);
   }
 

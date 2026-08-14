@@ -4,6 +4,46 @@
 > (the ~80-line budget its own header sets is now gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). Newest first, verbatim.
 
+## Snapshot (2026-08-13h — the design-reconciliation plan is DONE and ARCHIVED)
+
+**§C5 closed the last box, and the plan is archived** to `docs/archive/`. A read-only verifier
+walked all four guides + hub at 375/744/1440, day+night, reduced-motion, keyboard-only — 30
+combinations, **0 overflow escapes, 0 closed-sheet focus leaks, 0 keyboard traps.** The ≥44px
+half found six real regressions the automated gate **structurally could not see**, which is the
+part worth remembering.
+
+**Four touch targets.** `.jl-toggle` (34.9px) and the `.guide-stats` tiles carrying
+`#liveRatePill` (86.7x36.0) RAISED height-only — the §C2b `.transit-link` shape, width already
+cleared. The stat-tile floor went on EVERY tile, not just the rate one, because the pills are
+JS-injected and the rate arrives last: flooring it alone would have grown the row after the
+countdown painted it, a second CLS shift. `.mast-credit` was NOT padded — CONTEXT.md's
+2026-08-11 ruling names "a photo credit" as notation, and `.imgcredit` (literally the same
+component) was already excluded; it joined that list. `.spine-tick` BASELINED (`max: 13`) on a
+measurement, not a preference: at its own 1100px activation width the content column starts at
+17.6px against the rail's 14.4–21.4px, so the gutter is *negative* — any 44px hit area would eat
+clicks meant for the page — and vertically, 44px targets on a 37.2px pitch would overlap
+neighbours and manufacture wrong-destination misclicks.
+
+**Two focus gaps.** `.addr-copy`/`.stop-num` collapsed hover and focus into one rule ending
+`outline:none`, so Tab-reachable controls had no ring. Split; verified under a *real* Tab press
+(programmatic `.focus()` never triggers `:focus-visible` — worth knowing for the next audit).
+
+**The durable half — three gate blind spots.** Each regression hid for a different structural
+reason, so the gate was widened at each: the network-blocked env forced rate.js's fallback (the
+one path that never un-hides the pill) → `prep()` now serves the rate endpoint and asserts the
+pill un-hides; korea's trip is in the past so it never renders the jetlag toggle → **japan**
+joined `TARGET_PAGES` as the only upcoming-trip page; the device list topped out at 1024px so
+nothing behind a desktop breakpoint was reachable → **Desktop 1280** joined it. That last one
+paid immediately, surfacing a seventh never-audited control (`.divergence-source`, 1151x21,
+japan-only content) — raised, not baselined. The canned rate had to be derived from the product's
+own `SANITY` band, because a flat value passed korea and was correctly rejected on japan.
+`a11y.spec.ts` **57 → 69 tests**, all green; drift unchanged at 341/435/37/18/4.
+
+**One deviation, recorded not taken:** the brief called `applyFallback()` not un-hiding the pill a
+bug. It isn't — the markup says "injected when fetch succeeds" and the stats bar's rule is that
+only self-changing facts belong there. Un-hiding a build-time seed rate would show a stale number
+as live on every failed fetch. Shipped behaviour left alone; the gate fixed instead.
+
 ## Snapshot (2026-08-13g — two arcs closed: §C3 print preview shipped, PLAN_EVIDENCE_FIRST done)
 
 ### §C3 — the budget sheet previews before it prints (issue #47)

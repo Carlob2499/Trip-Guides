@@ -141,6 +141,8 @@ jobs:
       # S1: verify --network runs the Places venue-status gate; the agents' own lookup-venue
       # calls use it too. Absent secret → the check reports n/a and everything else proceeds.
       PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
+      # Case 11: live leg-duration verification. Default OFF — unset ⇒ free layers only.
+      GOOGLE_ROUTES_KEY: ${{ secrets.GOOGLE_ROUTES_KEY }}
     steps:
       - uses: actions/checkout@v7
         with:

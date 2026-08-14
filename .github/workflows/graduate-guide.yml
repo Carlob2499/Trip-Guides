@@ -98,6 +98,10 @@ jobs:
           SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://carlob2499.github.io/Trip-Guides' }}
           # S1: verify --network includes the Places venue-status gate; n/a without the secret.
           PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
+          # Case 11: verify --network asks Routes what each scheduled day leg really takes.
+          # Config-gated and default OFF by creator ruling — an unset secret keeps the check
+          # on its free layers (prose count + physical floor) and never fails a run.
+          GOOGLE_ROUTES_KEY: ${{ secrets.GOOGLE_ROUTES_KEY }}
         run: |
           set -euo pipefail
           git config user.name  "waypoint-scaffold[bot]"

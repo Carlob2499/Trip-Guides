@@ -423,3 +423,24 @@ bookings they already hold. So:
 Consequence: no japan gate exemption is needed (a draft guide is out of the published corpus),
 and no test asserts the fixture against the live guide any more — the fixture protects its own
 line citations instead. Japan's regeneration is the program's natural end-to-end acceptance test.
+
+**A scheduled day's `waypoints` are the routing substrate — leg verification is not blocked on a
+new schema** (2026-08-14). Case 11's live half sat unbuilt for a release behind the belief that
+transit durations "live in prose with no machine-readable origin→destination pair to query", so
+closing it meant designing a new `legs` structure. That was wrong twice over: PLAN_EVIDENCE_FIRST
+§4 had already named the substrate ("verify inter-stop transit durations for scheduled day legs"),
+and `days[].waypoints[]` already carried `{name, lat, lng, time}` — consecutive waypoints ARE the
+pairs, in 27 Korea legs across 7 days. Rejected: adding a parallel `legs[]` array to the `routes`
+section type, which would have restated already-verified prose as a second copy of the same claim
+and created a continuity liability the moment either drifted. The general lesson is the one this
+program keeps re-teaching: **before declaring work blocked on structure that does not exist, grep
+for the structure that does.** A blocker asserted from a module's own header comment is an
+assumption, not a finding.
+
+**A schedule gap is measured origin-END to destination-START, and only an OVERRUN is a finding**
+(2026-08-14). Waypoint `time` is a display label, so a windowed stop ("10:00–16:30") has two
+times. Taking its start would inflate every travel window — 420 minutes where the traveller has
+30 — and the check could never fail. Taking its end is the real window. The verdict is then
+deliberately asymmetric: a gap LARGER than the live duration is dwell time and proves nothing,
+so only a gap smaller than the leg is reported. Rejected: comparing gap to duration
+symmetrically, which would flag every stop a traveller lingers at — i.e. all of them.

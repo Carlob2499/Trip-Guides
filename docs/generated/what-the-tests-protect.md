@@ -7,7 +7,7 @@ product makes to whoever is holding it on a trip; the lines under it are the spe
 that promise is verified. If a promise ever stops being true, one of its checks goes red and
 nothing ships.
 
-2073 checks · 2073 carry a stated promise · 171 files
+2098 checks · 2098 carry a stated promise · 171 files
 
 ## Can everyone read it
 
@@ -2534,15 +2534,40 @@ nothing ships.
 
 **Transit durations are measured against a routing authority, or the gap is counted.**
 
-- finds a duration stated in transit context  <sub>scripts/__tests__/check-routes.test.mjs:14</sub>
-- ignores a duration with no transit context — a dwell time is not a leg  <sub>scripts/__tests__/check-routes.test.mjs:18</sub>
-- counts a unit as sourced when its SECTION carries the source_url  <sub>scripts/__tests__/check-routes.test.mjs:22</sub>
-- is false without a key and true with one — inert until configured  <sub>scripts/__tests__/check-routes.test.mjs:33</sub>
-- is ADVISORY, never fail, when legs are unattested and no key is set  <sub>scripts/__tests__/check-routes.test.mjs:40</sub>
-- counts attested vs total rather than flagging each leg individually  <sub>scripts/__tests__/check-routes.test.mjs:47</sub>
-- with a key set, says the remaining blocker is structural, not credential-shaped  <sub>scripts/__tests__/check-routes.test.mjs:53</sub>
-- is n/a for a guide that asserts no leg durations at all  <sub>scripts/__tests__/check-routes.test.mjs:62</sub>
-- never returns 'fail' under any input — the ruling this check exists under  <sub>scripts/__tests__/check-routes.test.mjs:66</sub>
+- finds a duration stated in transit context  <sub>scripts/__tests__/check-routes.test.mjs:37</sub>
+- ignores a duration with no transit context — a dwell time is not a leg  <sub>scripts/__tests__/check-routes.test.mjs:41</sub>
+- counts a unit as sourced when its SECTION carries the source_url  <sub>scripts/__tests__/check-routes.test.mjs:45</sub>
+- reads a plain time and an approximated one identically — `≈` is notation, not data  <sub>scripts/__tests__/check-routes.test.mjs:56</sub>
+- reads a window as start AND end, so a windowed stop cannot inflate its own travel gap  <sub>scripts/__tests__/check-routes.test.mjs:61</sub>
+- is null for a label with no clock time — 'morning' is not a time to measure from  <sub>scripts/__tests__/check-routes.test.mjs:65</sub>
+- pairs consecutive coordinate-bearing waypoints into origin→destination legs  <sub>scripts/__tests__/check-routes.test.mjs:74</sub>
+- measures the gap from the origin's END to the destination's START  <sub>scripts/__tests__/check-routes.test.mjs:80</sub>
+- skips waypoints with no coordinates — a name alone is not an origin  <sub>scripts/__tests__/check-routes.test.mjs:87</sub>
+- reports an unmeasurable gap as null rather than assuming it is fine  <sub>scripts/__tests__/check-routes.test.mjs:92</sub>
+- ignores non-days sections entirely  <sub>scripts/__tests__/check-routes.test.mjs:97</sub>
+- flags a leg no ground transport could make in the scheduled gap  <sub>scripts/__tests__/check-routes.test.mjs:103</sub>
+- does NOT flag a real KTX leg — the floor is physics, not a realistic speed  <sub>scripts/__tests__/check-routes.test.mjs:111</sub>
+- does NOT flag the windowed-stop convention — the real corpus' only two floor hits  <sub>scripts/__tests__/check-routes.test.mjs:121</sub>
+- says nothing about a leg with no measurable gap  <sub>scripts/__tests__/check-routes.test.mjs:134</sub>
+- uses a straight-line lower bound, so its verdict can never be beaten by a real route  <sub>scripts/__tests__/check-routes.test.mjs:138</sub>
+- is false without a key and true with one — inert until configured  <sub>scripts/__tests__/check-routes.test.mjs:147</sub>
+- flags only an OVERRUN — a gap larger than the drive is dwell time, not a defect  <sub>scripts/__tests__/check-routes.test.mjs:163</sub>
+- tolerates overrun inside the granularity threshold  <sub>scripts/__tests__/check-routes.test.mjs:171</sub>
+- reads only the matrix diagonal — the cross product's off-diagonal cells are other pairs  <sub>scripts/__tests__/check-routes.test.mjs:177</sub>
+- spends one matrix call per day, and skips days under the stop budget  <sub>scripts/__tests__/check-routes.test.mjs:188</sub>
+- degrades when the Routes API is unreachable instead of inventing a verdict  <sub>scripts/__tests__/check-routes.test.mjs:197</sub>
+- is n/a with no fetcher and with no day meeting the stop budget  <sub>scripts/__tests__/check-routes.test.mjs:206</sub>
+- returns null with no key — an unconfigured repo does zero work  <sub>scripts/__tests__/check-routes.test.mjs:213</sub>
+- names endpoint, key header and field mask explicitly, and converts Google's seconds  <sub>scripts/__tests__/check-routes.test.mjs:217</sub>
+- throws on a non-2xx so verifyDayLegs reports the outage rather than a silent pass  <sub>scripts/__tests__/check-routes.test.mjs:233</sub>
+- is ADVISORY, never fail, when legs are unattested and no key is set  <sub>scripts/__tests__/check-routes.test.mjs:240</sub>
+- counts attested vs total rather than flagging each leg individually  <sub>scripts/__tests__/check-routes.test.mjs:247</sub>
+- runs the physical floor with no key at all — the free layer needs coords, not credentials  <sub>scripts/__tests__/check-routes.test.mjs:253</sub>
+- says how many scheduled legs it could NOT judge, so silence never reads as a pass  <sub>scripts/__tests__/check-routes.test.mjs:262</sub>
+- with a key but no coordinate-bearing day, names the missing substrate exactly  <sub>scripts/__tests__/check-routes.test.mjs:272</sub>
+- folds the live layer's findings into the row when verify threads one in  <sub>scripts/__tests__/check-routes.test.mjs:279</sub>
+- is n/a for a guide that asserts no leg durations at all  <sub>scripts/__tests__/check-routes.test.mjs:286</sub>
+- never returns 'fail' under any input — the ruling this check exists under  <sub>scripts/__tests__/check-routes.test.mjs:290</sub>
 
 **Trip feedback exports carry the survey answers and nothing personal.**
 

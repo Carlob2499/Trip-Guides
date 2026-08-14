@@ -66,5 +66,6 @@
     "label": "Japan Tourism Agency — tax-free system change (instant-discount to refund-at-departure, effective Nov 1 2026)",
     "verified_on": "2026-07-29",
     "state": "confirmed"
-  }
+  },
+  "defaultTravelMode": "TRANSIT"
 }
