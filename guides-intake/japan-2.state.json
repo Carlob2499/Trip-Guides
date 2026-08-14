@@ -1,0 +1,14 @@
+{
+  "slug": "japan-2",
+  "createdAt": "2026-08-14T12:50:10.810Z",
+  "updatedAt": "2026-08-14T12:50:10.810Z",
+  "stages": {
+    "scaffold": "2026-08-14T12:50:10.810Z",
+    "passA": null,
+    "passB": null,
+    "reconcile": null,
+    "verified": null
+  },
+  "attempts": 0,
+  "notes": []
+}

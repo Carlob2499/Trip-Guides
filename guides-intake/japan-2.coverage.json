@@ -1,0 +1,78 @@
+{
+  "slug": "japan-2",
+  "generatedAt": "2026-08-14T12:50:10.809Z",
+  "asks": [
+    {
+      "id": "anchor",
+      "label": "Anchor event",
+      "value": "Sendai Wild Area 2026 - Nov 6-8, 2026",
+      "coveredBy": null
+    },
+    {
+      "id": "cities",
+      "label": "Cities",
+      "value": "Fukuoka -> Hokkaido/Sapporo -> Tokyo -> Sendai -> Tokyo",
+      "coveredBy": null
+    },
+    {
+      "id": "dates",
+      "label": "Trip dates",
+      "value": "2026-10-15 – 2026-11-10",
+      "coveredBy": null
+    },
+    {
+      "id": "priority-1",
+      "label": "Priority #1",
+      "value": "Nature / outdoors",
+      "coveredBy": null
+    },
+    {
+      "id": "priority-2",
+      "label": "Priority #2",
+      "value": "Food & dining",
+      "coveredBy": null
+    },
+    {
+      "id": "priority-3",
+      "label": "Priority #3",
+      "value": "Shopping",
+      "coveredBy": null
+    },
+    {
+      "id": "pace",
+      "label": "Pace",
+      "value": "balanced",
+      "coveredBy": null
+    },
+    {
+      "id": "travel-style",
+      "label": "Travel style",
+      "value": "Off-the-beaten-path",
+      "coveredBy": null
+    },
+    {
+      "id": "budget",
+      "label": "Budget target",
+      "value": "Mid-range ($75–150/day)",
+      "coveredBy": null
+    },
+    {
+      "id": "party",
+      "label": "Party description",
+      "value": "4 people - all late 20s",
+      "coveredBy": null
+    },
+    {
+      "id": "passport-countries",
+      "label": "Passport countries",
+      "value": "All US",
+      "coveredBy": null
+    },
+    {
+      "id": "comments",
+      "label": "Comments / constraints",
+      "value": "2 people ( the other two people) are going to leave Nov 2; we dont know if us 2 (the ones going to Sendai) should stay in our own hotel from Oct 29-Nov 5 or get one with them from Oct 29-Nov2 then get another from Nov 3-5. \n\nResearch focus: Day trips",
+      "coveredBy": null
+    }
+  ]
+}
