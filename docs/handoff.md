@@ -28,14 +28,6 @@
 
 ## Open items
 
-- **Dark-mode focus-ring contrast, system-wide** — `--accent` (`#646b2e`) does NOT flip with the
-  theme (only `--accent-ink` does), so the ~15 `outline:2px solid var(--accent)` rings measure
-  ≈2.85:1 against a dark `.day` card, under WCAG 1.4.11's 3:1. `--accent-ink` would fix dark and
-  break light (≈2.70:1), so the fix is a theme-aware ring token — a design-system fork for the
-  creator, not a session call. axe has no focus-ring-contrast rule, which is why nothing caught it.
-- **The rate fallback drops the currency converter** — the converter hangs off `#liveRatePill`,
-  which `applyFallback()` deliberately never un-hides, so a traveller whose rate fetch fails loses
-  it entirely even though `curFallbackRate` is in hand. A feature decision, not a bug fix.
 - **§B4 blocked on project access**, not tool access (`DesignSync` works from a main session;
   this login's `list_projects` doesn't show the right one) — don't retry until it does.
 - **Held, not open:** the route-order picker's home (Tools station vs. itinerary mount) — needs both surfaces reviewed together.
@@ -53,6 +45,13 @@
   is not enabled for this session"), the GitHub MCP surface has `create_branch` but no delete, and
   `merge_pull_request` takes no delete-branch flag. One pass at
   github.com/Carlob2499/Trip-Guides/branches clears all four.
+
+## Parallel session, same day (merged): design-reconciliation forks closed
+
+A concurrent session fixed the two items this file used to hold open — the dark-mode
+focus-ring token (`--focus-ring`, theme-aware) and the rate-fallback now keeping the
+currency converter alive on a seed rate — and scaffolded the japan draft from issue #50.
+Their entries left Open items above; details in that snapshot (docs/archive/HANDOFF_ARCHIVE.md).
 
 ## Snapshot (2026-08-14 — the codebase-audit cleanup: audited, then cut, all gates green)
 

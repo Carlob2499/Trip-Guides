@@ -1,0 +1,20 @@
+[
+  {
+    "type": "routes",
+    "group": "Transit",
+    "title": "Key transit routes",
+    "phase": "daily",
+    "steps": []
+  },
+  {
+    "type": "map",
+    "group": "Transit",
+    "title": "Orientation map",
+    "phase": "daily",
+    "center": {
+      "lat": 35.6762,
+      "lng": 139.6503
+    },
+    "span": 0.08
+  }
+]

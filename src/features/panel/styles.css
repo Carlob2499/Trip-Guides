@@ -69,7 +69,7 @@
 }
 
 [data-panel-reorder] .pnl-grip:hover { background: var(--sunken); }
-[data-panel-reorder] .pnl-grip:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+[data-panel-reorder] .pnl-grip:focus-visible { outline: 3px solid var(--accent-ink); outline-offset: 2px; }
 
 /* The Panel in flight: still visible (the reader is steering it), but transparent to
    hit-testing so elementFromPoint sees the Panel underneath the pointer. */
@@ -132,7 +132,7 @@ html:not([data-panel-reorder]) [data-panel-order-reset] { display: none; }
 }
 
 .pnl-toggle:hover { background: var(--sunken); }
-.pnl-toggle:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.pnl-toggle:focus-visible { outline: 3px solid var(--accent-ink); outline-offset: 2px; }
 
 /* The silo's one visually-hidden class — the toggle's accessible name (the Panel's
    title; aria-expanded carries the state) and the reorder live region both wear it.

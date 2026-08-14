@@ -42,14 +42,14 @@
 .tk-phrase-note { margin: 0 0 .5rem; font-size:var(--text-control); color: var(--muted); }
 .tk-speak { display: inline-flex; align-items: center; gap: .3rem; padding: .35rem .7rem; border-radius: 999px; background: var(--card); border: 1px solid var(--rule); color: var(--ink); font-family: var(--font-data); font-size:var(--text-control-sm); font-weight: 600; cursor: pointer; }
 .tk-speak:hover { border-color: var(--accent); color: var(--accent-ink); }
-.tk-speak:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.tk-speak:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 1px; }
 
 /* Entry requirements — one row per traveler home country; a picker appears only when the
    guide has entry rows for more than one passport country (single-row guides skip it). */
 .tk-entry-picker { display: flex; flex-direction: column; gap: .25rem; margin: 0 0 .7rem; }
 .tk-entry-picker-label { font-family: var(--font-data); font-size: var(--text-micro); font-weight: 700; letter-spacing: var(--tracking-micro); text-transform: uppercase; color: var(--muted); }
 .tk-entry-select { border: 1px solid var(--rule2); border-radius: 0; padding: .4rem .5rem; font: inherit; font-size:var(--text-body); background: var(--card); color: var(--ink); }
-.tk-entry-select:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
+.tk-entry-select:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 0; border-color: transparent; }
 .tk-entry-rows { display: flex; flex-direction: column; gap: .8rem; margin-top: .3rem; }
 .tk-entry-row { border-top: 1px solid var(--rule); padding-top: .7rem; }
 .tk-entry-country { margin: 0 0 .2rem; font-family: var(--font-data); font-size: var(--text-micro); font-weight: 700; letter-spacing: var(--tracking-micro); text-transform: uppercase; color: var(--muted); }

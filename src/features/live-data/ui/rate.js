@@ -78,6 +78,15 @@ export function initRate(cfg) {
 
   function applyFallback(reason) {
     console.warn("[tg-rate] " + reason + " — using fallback " + curFallbackRate + " " + curCode);
+    // A traveller whose fetch fails still has curFallbackRate in hand — show the pill
+    // (clearly marked as a seed rate, not live) instead of leaving the converter dark.
+    var pill = document.getElementById("liveRatePill");
+    if (pill) {
+      pill.textContent = "$1 ≈ " + fmtRate(curFallbackRate) + " " + curCode;
+      pill.title = "Seed rate" + (curFallbackAsOf ? " " + curFallbackAsOf : "") +
+        " · live rate unavailable · ECB via Frankfurter.dev";
+      pill.removeAttribute("hidden");
+    }
     var foot = document.getElementById("liveRateFoot");
     if (foot) {
       // Was hardcoded "≈₩… · Jun 2026" — the won symbol and a fixed month rendered on EVERY
@@ -88,6 +97,7 @@ export function initRate(cfg) {
       foot.removeAttribute("hidden");
       revealCheckLink();
     }
+    remember({ rate: curFallbackRate, date: curFallbackAsOf, code: curCode, fallback: true });
   }
 
   // A stale-but-real cached rate beats the hardcoded build-time fallback — show it

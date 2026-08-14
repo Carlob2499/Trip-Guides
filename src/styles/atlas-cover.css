@@ -112,7 +112,7 @@
   font-family: var(--font-data); font-weight: 600; font-size: var(--text-small); letter-spacing: .04em;
   cursor: pointer;
 }
-.atlas-cover-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.atlas-cover-cta:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 3px; }
 
 .atlas-cover-scroll { display: grid; justify-items: center; gap: 0; margin-top: 2px; }
 .atlas-cover-scroll-line { width: 1px; height: 34px; background: linear-gradient(var(--rule2), var(--aink)); }

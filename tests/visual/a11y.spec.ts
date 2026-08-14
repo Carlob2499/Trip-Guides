@@ -46,13 +46,14 @@ async function assertRealPage(res: Awaited<ReturnType<Page["goto"]>>, path: stri
 async function prep(page: Page, path: string, scheme: "light" | "dark", vp: Viewport) {
   await page.setViewportSize({ width: vp.width, height: vp.height });
   /* Everything off-origin is aborted — except the rate endpoint, which is SERVED a canned
-     response (design-reconciliation §C5). Blanket-aborting it was a real coverage hole, not a
-     neutral choice: rate.js's failure ladder ends at applyFallback(), the one path that never
-     unhides #liveRatePill, so the stats-bar rate pill — a genuine control, field-tools.js gives
-     it role="button"/tabindex="0" and a click handler that opens the currency converter — was
-     `hidden` in every run this gate has ever made. It was measured at 36px by hand. Same
-     principle as the SOS sheet below: a surface that only exists after a condition still has to
-     pass, so the gate has to create the condition.
+     response (design-reconciliation §C5). Blanket-aborting it was a real coverage hole at the
+     time: rate.js's failure ladder used to end at applyFallback() never unhiding #liveRatePill
+     (fixed 2026-08-14 — the pill now shows a clearly-marked seed rate on fallback too), so the
+     stats-bar rate pill — a genuine control, field-tools.js gives it role="button"/tabindex="0"
+     and a click handler that opens the currency converter — was `hidden` in every run this gate
+     ever made. It was measured at 36px by hand. Serving the endpoint here still matters: it
+     exercises the LIVE path specifically, same principle as the SOS sheet below — a surface
+     that only exists after a condition still has to pass, so the gate has to create the condition.
      Fulfilled rather than seeded into localStorage so it stays currency-agnostic — the reply
      echoes whatever `symbols` the guide asked for, so adding a guide in any currency to
      TARGET_PAGES needs no table here. The date matches FIXED_TIME's own UTC day, which is what
