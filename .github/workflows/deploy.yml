@@ -25,10 +25,12 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm test
-      # P5: gate the deploy on typecheck too — previously only test.yml (a parallel, non-required
-      # check) ran it, so the pipeline could push straight to a main deploy regardless of
-      # typecheck's result.
+      # THE main-push gate since 2026-08-14: test.yml is PR-only now, so this job carries
+      # the full set alone — lint, then coverage (a strict superset of `npm test`: every
+      # test runs AND the pure-logic coverage floors in vitest.config.ts are enforced),
+      # then typecheck. A direct push that bypasses PR review still meets every gate here.
+      - run: npm run lint
+      - run: npm run coverage
       - run: npm run typecheck
       # Refresh public-holiday data (Nager.Date) before building. The script is
       # self-healing: on any fetch error it keeps the committed JSON, so the build

@@ -1,9 +1,11 @@
 name: Tests
 
-# Runs the Vitest suite + the Astro/TS type check + the coverage gate on every PR
-# (and on pushes to main) so a broken test, a type error, OR a coverage regression
-# in the pure-logic core blocks the merge instead of only surfacing later in the
-# Pages deploy. Deploy.yml also runs `npm test`, but only after a push to main.
+# Runs lint + the Astro/TS type check + the coverage gate on every PR, so a broken
+# test, a type error, or a coverage regression in the pure-logic core blocks the
+# merge instead of only surfacing later in the Pages deploy. PR-only since
+# 2026-08-14: deploy.yml's build job runs the identical gate set (lint + coverage +
+# typecheck) on every push to main, so the push trigger here bought a second
+# npm ci + full-suite run for an answer the deploy was already computing.
 #
 # paths-ignore may only skip paths `eslint .` does not lint (#39): docs/** left this
 # list because eslint DELIBERATELY lints docs/mockups/*.mjs, so a docs-only push could
@@ -13,9 +15,6 @@ name: Tests
 # the commit that creates a divergence; change either list only in step with the other.
 on:
   pull_request:
-    paths-ignore: [learnings/**, guides-intake/**, "**.md"]
-  push:
-    branches: [main]
     paths-ignore: [learnings/**, guides-intake/**, "**.md"]
 
 permissions:
