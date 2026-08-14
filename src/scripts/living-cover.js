@@ -14,10 +14,12 @@
 // actually playing — nobody sees a control for motion they never got. While the video is
 // live, the credit chip swaps from the photo's credit to the footage's (data-video-credit,
 // zod-required content) — one surface, always crediting what's actually on screen.
+import { reducedMotion } from "./util.js";
+
 (function () {
   var video = document.querySelector(".mast-video");
   if (!video || !video.dataset.src) return;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (reducedMotion()) return;
   var conn = navigator.connection;
   if (conn && conn.saveData) return;
 

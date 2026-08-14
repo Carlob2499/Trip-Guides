@@ -8,7 +8,7 @@
 // CI run (posts/updates the issue):
 //   node scripts/audit/run-audit.mjs
 
-import { execFileSync } from "node:child_process";
+import { gh } from "../lib/cli.mjs";
 import { checkLinks } from "./check-links.mjs";
 import { checkPhotos } from "./check-photos.mjs";
 import { checkApis } from "./check-apis.mjs";
@@ -83,10 +83,6 @@ function buildReport({ links, photos, apis, staleness }) {
   }
 
   return lines.join("\n");
-}
-
-function gh(args, opts = {}) {
-  return execFileSync("gh", args, { encoding: "utf8", ...opts });
 }
 
 async function postOrUpdateIssue(body) {

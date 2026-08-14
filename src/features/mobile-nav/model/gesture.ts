@@ -15,9 +15,9 @@
 /** Claim the gesture only once it is unambiguously horizontal. */
 export const AXIS_LOCK_PX = 24;
 /** Commit when the drag crosses this share of the viewport… */
-export const COMMIT_FRACTION = 0.3;
+const COMMIT_FRACTION = 0.3;
 /** …or when it is flicked at least this fast (px/ms), however short. */
-export const COMMIT_VELOCITY = 0.5;
+const COMMIT_VELOCITY = 0.5;
 
 /**
  * Has the drag declared itself horizontal? Deliberately strict: a diagonal reads as

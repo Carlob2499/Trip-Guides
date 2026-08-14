@@ -1,8 +1,6 @@
 import { getCollection } from "astro:content";
-// Same accent resolution as the guide page + hub + OG card (uniform across surfaces).
-import { accentForGuide } from "../../lib/palettes";
 import { tripRecapStats } from "../../features/exports/index";
-import sharp from "sharp";
+import { cardIdentity, xmlEscape, svgToPngResponse } from "../og/_card";
 
 // One recap card per guide that actually has a post-trip `learnings` block — the
 // reality layer only renders when there IS reality to show (same rule the
@@ -17,23 +15,9 @@ export async function getStaticPaths() {
 
 export async function GET({ props }: { props: { slug: string; data: any } }) {
   const { slug, data } = props;
-  const title   = data.title  || "Guide";
-  const country = data.country || "";
-  // accent stays keyed on the real country (functional); the printed label prefers
-  // `region` when set, so a single-state US guide doesn't read as a whole-country one.
-  const accent  = accentForGuide(slug, data.theme, country);
-  const regionLabel = data.region || country;
-  const stats   = tripRecapStats(data);
+  const { title, accent, titleSafe, countrySafe } = cardIdentity(slug, data);
+  const stats = tripRecapStats(data);
 
-  function xmlEscape(s: string) {
-    return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-  }
-  function truncate(s: string, n: number) {
-    return s.length > n ? s.slice(0, n - 1) + "…" : s;
-  }
-
-  const titleSafe   = xmlEscape(truncate(title, 28));
-  const countrySafe = xmlEscape(regionLabel.toUpperCase());
   const tfs = title.length > 20 ? (title.length > 28 ? 44 : 56) : 68;
 
   const stops = stats.waypointsTotal > 0
@@ -72,16 +56,12 @@ export async function GET({ props }: { props: { slug: string; data: any } }) {
         font-size="17" fill="${accent}" letter-spacing="3" font-weight="700">${countrySafe}</text>
   <text x="68" y="290"
         font-family="'Liberation Sans',Arial,sans-serif"
-        font-size="${tfs}" fill="#e8ece3" font-weight="700" letter-spacing="-1.5">${titleSafe}</text>
+        font-size="${tfs}" fill="#e8ece3" font-weight="700" letter-spacing="-1.5">${titleSafe(28)}</text>
   <text x="68" y="340"
         font-family="'Liberation Sans',Arial,sans-serif"
         font-size="22" fill="#9aa392">How it actually went</text>
   ${chipsSvg}
 </svg>`;
 
-  const pngBuffer = await sharp(Buffer.from(svg, "utf-8")).png().toBuffer();
-
-  return new Response(new Uint8Array(pngBuffer), {
-    headers: { "Content-Type": "image/png" },
-  });
+  return svgToPngResponse(svg);
 }

@@ -12,7 +12,7 @@ export const ALLOWED_TAGS = new Set(["p", "b", "i", "a", "ul", "li", "ol", "br"]
 // / guide-ui.js query it to power tap-to-copy native-script addresses. Allowed ONLY in
 // that exact single-attribute shape — no other attribute (in particular no `on\w+=`)
 // rides along on the same tag.
-export const SPAN_ADDR_RE = /^<span\s+data-addr-kr\s*=\s*(?:"[^"]*"|'[^']*')\s*>$/i;
+const SPAN_ADDR_RE = /^<span\s+data-addr-kr\s*=\s*(?:"[^"]*"|'[^']*')\s*>$/i;
 
 export function findUnsafeHtml(value: string): string | null {
   // Any tag not in the allowlist (opening or closing).

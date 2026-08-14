@@ -8,7 +8,7 @@
 import { daySwapAdvice } from "../model/day-swap";
 import { getLastWx } from "./weather.js";
 
-function esc(s) { var d = document.createElement("div"); d.textContent = s == null ? "" : String(s); return d.innerHTML; }
+import { esc } from "../../../scripts/util.js";
 
 export function initDaySwap(cfg) {
   var days = (cfg && cfg.daysForBanner) || [];

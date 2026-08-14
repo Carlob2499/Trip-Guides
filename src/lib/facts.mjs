@@ -56,7 +56,7 @@ export const FACT_VALUE_FORBIDDEN_RE = /[<>]/;
     Deliberately tight: the dash must TOUCH the token and be followed by a number. A spaced
     dash is ordinary prose punctuation ("{{fact:fare}} — book ahead"), and swallowing that
     would move the pill into the middle of a sentence, trading one bug for a worse one. */
-export const RANGE_TAIL_RE = /^[–—-] ?\d[\d.,]*/;
+const RANGE_TAIL_RE = /^[–—-] ?\d[\d.,]*/;
 
 /** Minimal HTML-attribute escaper — `claim` is free authored text (no FORBIDDEN_RE gate the
     way `value` has), so it can carry `&`/`"`/`<`/`>` and must not break out of the attribute

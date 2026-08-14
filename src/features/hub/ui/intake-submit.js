@@ -55,7 +55,7 @@ function val(id) {
 // Collect the intake by ISSUE-FORM field id — the exact keys renderIssueBody / the GitHub
 // issue template consume, so the proxy and the fallback file identical issues. UNCHANGED
 // from the modal era; this object IS the pipeline seam.
-export function collectRaw(country) {
+function collectRaw(country) {
   return {
     country,
     cities: val("ngCities"),

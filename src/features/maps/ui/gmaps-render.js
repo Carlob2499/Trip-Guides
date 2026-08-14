@@ -8,6 +8,7 @@
    site's HTTP referrers and to the Maps JavaScript API in Google Cloud Console. */
 
 import { clusterPins } from "../model/cluster";
+import { esc as escapeHtml } from "../../../scripts/util.js";
 
 /* global google */ // injected on window by the Maps JS SDK once its loader script resolves
 export function boot(cfg) {
@@ -54,9 +55,6 @@ export function boot(cfg) {
   function zoomFromSpan(span) {
     var s = span || 0.05;
     return Math.max(5, Math.min(16, Math.round(13 - Math.log2(s / 0.05))));
-  }
-  function escapeHtml(s) {
-    return String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
   var sharedInfo = null;

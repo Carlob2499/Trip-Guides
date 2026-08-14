@@ -1,8 +1,5 @@
 import { getCollection } from "astro:content";
-// Same accent resolution as the guide page + hub (uniform across surfaces):
-// explicit theme > extracted cover palette > country accent.
-import { accentForGuide } from "../../lib/palettes";
-import sharp from "sharp";
+import { cardIdentity, xmlEscape, truncate, svgToPngResponse } from "./_card";
 
 export async function getStaticPaths() {
   const guides = await getCollection("guides");
@@ -14,24 +11,8 @@ export async function getStaticPaths() {
 
 export async function GET({ props }: { props: { slug: string; data: any } }) {
   const { slug, data } = props;
-  const title   = data.title  || "Guide";
-  const country = data.country || "";
-  const dek     = data.dek    || "";
-  // accent stays keyed on the real country (functional); the printed label prefers
-  // `region` when set, so a single-state US guide doesn't read as a whole-country one.
-  const accent  = accentForGuide(slug, data.theme, country);
-  const regionLabel = data.region || country;
-
-  function xmlEscape(s: string) {
-    return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-  }
-  function truncate(s: string, n: number) {
-    return s.length > n ? s.slice(0, n - 1) + "…" : s;
-  }
-
-  const titleSafe   = xmlEscape(truncate(title, 28));
-  const countrySafe = xmlEscape(regionLabel.toUpperCase());
-  const dekSafe     = xmlEscape(truncate(dek, 76));
+  const { title, accent, titleSafe, countrySafe } = cardIdentity(slug, data);
+  const dekSafe = xmlEscape(truncate(data.dek || "", 76));
 
   // Scale display font to keep title on one line
   const tfs  = title.length > 20 ? (title.length > 28 ? 48 : 62) : 80;
@@ -56,19 +37,11 @@ export async function GET({ props }: { props: { slug: string; data: any } }) {
         font-size="17" fill="${accent}" letter-spacing="3" font-weight="700">${countrySafe}</text>
   <text x="68" y="310"
         font-family="'Liberation Serif',Georgia,serif"
-        font-size="${tfs}" fill="#0f141a" font-weight="700" letter-spacing="-0.5">${titleSafe}</text>
+        font-size="${tfs}" fill="#0f141a" font-weight="700" letter-spacing="-0.5">${titleSafe(28)}</text>
   <text x="68" y="${dekY}"
         font-family="'Liberation Sans',Arial,sans-serif"
         font-size="22" fill="#3c4534">${dekSafe}</text>
 </svg>`;
 
-  // Rasterise SVG → PNG using sharp (already a dep via Astro's image optimiser).
-  // Social platforms (Twitter, WhatsApp, Facebook) require raster images for og:image.
-  const pngBuffer = await sharp(Buffer.from(svg, "utf-8")).png().toBuffer();
-
-  // Wrap the node Buffer as a Uint8Array — a valid BodyInit (the DOM Response type doesn't
-  // accept Node's Buffer directly, though it works at runtime).
-  return new Response(new Uint8Array(pngBuffer), {
-    headers: { "Content-Type": "image/png" },
-  });
+  return svgToPngResponse(svg);
 }

@@ -1103,7 +1103,6 @@ const tripSummary = buildSummary(guide);
         tab through every one of them before reaching the page. guide-ui.js clears it on open
         and restores it on close. */}
     <div class="sheet" role="dialog" aria-label="Sections" aria-modal="true" inert>
-      <div class="sheet-grip" aria-hidden="true"></div>
       {/* The "3 of 13" position moved here from the bottom bar when that bar became a
           five-slot tab bar (no room for a second label). field-tools.js writes it. */}
       <div class="sheet-head">The journey <span class="sheet-pos" id="sheetPos"></span></div>
@@ -1185,6 +1184,7 @@ const tripSummary = buildSummary(guide);
       import "../scripts/cold-open.js";
       import "../scripts/onboard.js";
       import "../scripts/scroll-memory.js";
+      import "../scripts/tools-reminders.js";
       import "../scripts/offline-pill.js";
       import "../features/field-tools/index.js";
       import "../features/route-opt/index.js";

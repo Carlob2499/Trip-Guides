@@ -14,7 +14,7 @@ export const YIELD_AT = 80;
 /** Upward travel that counts as "bring it back" — a deliberate flick, not a rebound. */
 export const RETURN_AT = 24;
 /** Anything under this is page jitter and means nothing. */
-export const JITTER = 6;
+const JITTER = 6;
 /** Above the masthead there is nothing to gain, and the cover reads better whole. */
 export const TOP_ZONE = 140;
 

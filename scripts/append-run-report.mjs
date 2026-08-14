@@ -9,7 +9,7 @@
 //   WORKFLOW=research-pass SLUG=<slug> MODEL=<model> RUN_URL=<url> [NOTE_FILE=run-report.md] \
 //     node scripts/append-run-report.mjs
 
-import { execFileSync } from "node:child_process";
+import { gh } from "./lib/cli.mjs";
 import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -30,10 +30,6 @@ export function buildComment({ workflow, slug, model, attempts, runUrl, note, da
   ].filter(Boolean);
   const body = note && note.trim() ? ["", note.trim()] : [];
   return [head, "", ...facts, ...body].join("\n");
-}
-
-function gh(args) {
-  return execFileSync("gh", args, { encoding: "utf8" });
 }
 
 // The pipeline checkpoint records an attempt counter (scripts/pipeline.mjs). Read it if present so

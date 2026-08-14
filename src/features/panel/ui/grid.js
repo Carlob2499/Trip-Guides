@@ -241,7 +241,7 @@ export function initGrid(ctx) {
         A drag that went nowhere writes nothing — same contract as movePanel's no-op. */
     commitDomOrder: function () {
       var ids = domIds();
-      if (ids.join(" ") !== orderIds.join(" ")) {
+      if (ids.join("\u0000") !== orderIds.join("\u0000")) {
         orderIds = ids;
         persist();
       }

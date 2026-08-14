@@ -25,6 +25,7 @@
 // throws, exactly like every other lookup script here.
 
 import { isoCodeFor } from "../src/data/countries.mjs";
+import { parseArgs } from "./lib/cli.mjs";
 import { pathToFileURL } from "node:url";
 
 const ENDPOINT = "https://places.googleapis.com/v1/places:searchText";
@@ -136,14 +137,6 @@ export async function lookupVenue(query, opts = {}) {
 }
 
 // ── CLI ──
-function parseArgs(argv) {
-  const a = { _: [] };
-  for (let i = 0; i < argv.length; i++) {
-    if (argv[i].startsWith("--")) { a[argv[i].slice(2)] = argv[i + 1]; i++; }
-    else a._.push(argv[i]);
-  }
-  return a;
-}
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const a = parseArgs(process.argv.slice(2));

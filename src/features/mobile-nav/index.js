@@ -42,7 +42,7 @@ export const localStore = {
  * `cfg` = { order: string[], storeKey: string }. Returns silently on any page that
  * isn't a guide (no tab bar, no bottom bar) so importing is always safe.
  */
-export function initMobileNav(cfg, store) {
+function initMobileNav(cfg, store) {
   var order = (cfg && cfg.order) || [];
   var storeKey = (cfg && cfg.storeKey) || "guide";
   var tabs = document.getElementById("guideTabs");

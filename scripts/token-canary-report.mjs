@@ -6,20 +6,12 @@
 //
 //   OUTCOME=success|failure  RUN_URL=<actions run url>  node scripts/token-canary-report.mjs
 
-import { execFileSync } from "node:child_process";
+import { gh, findOpenIssueByTitle } from "./lib/cli.mjs";
 
 const TITLE = "🔴 CLAUDE_CODE_OAUTH_TOKEN canary FAILED — the agent pipeline is down";
 const LABEL = "token-canary";
 
-function gh(args) {
-  return execFileSync("gh", args, { encoding: "utf8" });
-}
-
-function findOpenIssue() {
-  const out = gh(["issue", "list", "--search", `"${TITLE}" in:title`, "--state", "open", "--json", "number,title"]);
-  const found = JSON.parse(out).find((i) => i.title === TITLE);
-  return found ? found.number : null;
-}
+const findOpenIssue = () => findOpenIssueByTitle(TITLE);
 
 function today() {
   return new Date().toISOString().slice(0, 10);

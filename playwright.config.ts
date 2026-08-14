@@ -2,7 +2,7 @@
    The screenshot-diff suite that used to live here was removed — it failed on every intentional
    visual change, which is exactly the wrong signal. What remains is real-behavior coverage: the
    axe accessibility gate (a11y.spec.ts, CI-gated via .github/workflows/a11y.yml) plus behavioral
-   specs (sos, offline, share-panel, itinerary, route-opt, overture, field-tools) run locally with
+   specs (sos, offline, share-panel, itinerary, route-opt, atlas-hub, field-tools) run locally with
    `npm run test:e2e`. Deterministic by construction: fixed clock, external requests blocked (see
    each spec). Runs against `astro preview` on :4322 — the ONLY trusted preview per CLAUDE.md
    (preview serves the real production build; dev HMR state is not what ships). CI builds

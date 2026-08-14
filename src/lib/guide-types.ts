@@ -31,9 +31,3 @@ export type SectionOf<T extends SectionType> = Extract<Section, { type: T }>;
 export type DayItem = SectionOf<"days">["items"][number];
 export type SightItem = SectionOf<"sights">["items"][number];
 
-/** Runtime narrowing helper for walkers that receive a heterogeneous section list.
- *  Cheap, but it's what lets `.filter(isSection("days"))` produce a correctly-typed array
- *  instead of needing a cast at every call site. */
-export function isSection<T extends SectionType>(type: T) {
-  return (s: Section): s is SectionOf<T> => s.type === type;
-}

@@ -8,7 +8,7 @@
    trigger is missing it simply never opens — the normal scrollable itinerary is
    always there underneath. Reuses the tested gesture model (resolveSwipe). */
 
-import { reducedMotion, tapHaptic } from "../../../scripts/util.js";
+import { reducedMotion, tapHaptic, esc } from "../../../scripts/util.js";
 import { resolveSwipe } from "../model/gesture";
 
 (function () {
@@ -21,7 +21,6 @@ import { resolveSwipe } from "../model/gesture";
 
   var N = days.length;
   var reduce = reducedMotion();
-  function esc(s) { var d = document.createElement("div"); d.textContent = s == null ? "" : String(s); return d.innerHTML; }
 
   var overlay = null, panel = null, rail = null, liveEl = null, cur = 0, lastFocus = null;
 

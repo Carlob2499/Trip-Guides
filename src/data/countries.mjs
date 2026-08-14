@@ -84,7 +84,7 @@ export const EMERGENCY = {
 // not a perishable one. Keys must match COUNTRIES rows exactly. Used ONLY as a
 // labeled fallback below — a traveler in Norway must never get silence, but the
 // fallback never pretends to be a fully-researched emergency sheet.
-export const EU112_COUNTRIES = new Set([
+const EU112_COUNTRIES = new Set([
   "Austria", "Belgium", "Croatia", "Czechia", "Denmark", "Finland", "France",
   "Germany", "Greece", "Hungary", "Iceland", "Ireland", "Italy", "Netherlands",
   "Norway", "Poland", "Portugal", "Spain", "Sweden", "Switzerland",

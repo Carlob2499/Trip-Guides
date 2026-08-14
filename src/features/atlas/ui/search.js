@@ -10,9 +10,7 @@ const MIN_CHARS = 2;
 const CAP = 40;
 const DEBOUNCE_MS = 150;
 
-function escapeHtml(s) {
-  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
+import { esc as escapeHtml } from "../../../scripts/util.js";
 
 export function initAtlasSearch(root) {
   const input = root.querySelector("[data-atlas-search]");

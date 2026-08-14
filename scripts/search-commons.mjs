@@ -13,6 +13,7 @@
 // CLI:         node scripts/search-commons.mjs "Fushimi Inari Taisha" --limit 6
 
 import { pathToFileURL } from "node:url";
+import { parseArgs } from "./lib/cli.mjs";
 
 const API = "https://commons.wikimedia.org/w/api.php";
 const UA = "waypoint-generator/1.0 (+https://github.com/Carlob2499/Trip-Guides)";
@@ -61,14 +62,6 @@ export async function searchCommons(query, limit = 6) {
 }
 
 // ── CLI ──
-function parseArgs(argv) {
-  const a = { _: [] };
-  for (let i = 0; i < argv.length; i++) {
-    if (argv[i].startsWith("--")) { a[argv[i].slice(2)] = argv[i + 1]; i++; }
-    else a._.push(argv[i]);
-  }
-  return a;
-}
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const a = parseArgs(process.argv.slice(2));

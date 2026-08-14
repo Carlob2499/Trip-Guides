@@ -7,6 +7,7 @@ import "./atlas-map.js";
 import { solvePlacement } from "../model/solver";
 import { localClockLabel } from "../model/local-time";
 import { attachSheetDrag } from "../../../scripts/sheet-drag.js";
+import { esc as escapeHtml, reducedMotion } from "../../../scripts/util.js";
 import { atWidth, srcsetFor, imgCredit } from "../../../lib/img-width";
 
 /* 260, not 220: the surveyed card's CTA is the long one ("✓ Verified — open the sheet →")
@@ -38,9 +39,6 @@ const DRIFT_THRESHOLD = 90;
 // must not get stuck on whichever branch was true at page load.
 const isMobile = () => matchMedia("(max-width: 759px)").matches;
 
-function escapeHtml(s) {
-  return String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
 
 export function initAtlasWorld(root = document) {
   const host = root.querySelector("[data-atlas-globe]");
@@ -62,7 +60,7 @@ export function initAtlasWorld(root = document) {
   const pinsLayer = host.querySelector("[data-atlas-pins]");
   const toast = root.querySelector("[data-atlas-toast]");
   const coordEl = root.querySelector("[data-atlas-coord]");
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduced = reducedMotion();
 
   /* ── Selection, and coming back to it ────────────────────────────────────────────────
      The atlas-mobile-home bundle asks for two things the hub had no notion of: picking a pin

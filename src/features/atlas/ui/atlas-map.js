@@ -29,7 +29,20 @@ const cssVar = (el, prop, fallback) => getComputedStyle(el).getPropertyValue(pro
 
 let d3Promise = null;
 let topoPromise = null;
-const loadD3 = () => (d3Promise ||= import("d3"));
+/* Submodule imports, not the full `d3` bundle — the globe uses 11 APIs from three
+   packages, and the monolith shipped ~200 KB of unused modules in this lazy chunk
+   (audit, 2026-08-14). `range` is the only d3-array call, inlined below. */
+const loadD3 = () => (d3Promise ||= Promise.all([
+  import("d3-geo"), import("d3-selection"), import("d3-drag"),
+]).then(([geo, selection, drag]) => ({
+  ...geo, ...selection, ...drag,
+  // d3-array's exact semantics: stop is EXCLUSIVE.
+  range: (start, stop, step) => {
+    const out = [];
+    for (let v = start; step > 0 ? v < stop : v > stop; v += step) out.push(v);
+    return out;
+  },
+})));
 const loadTopo = () => (topoPromise ||= import("topojson-client"));
 
 let worldPromise = null;
@@ -749,4 +762,3 @@ class AtlasMap extends HTMLElement {
 }
 if (!customElements.get("atlas-map")) customElements.define("atlas-map", AtlasMap);
 
-export { AtlasMap };
