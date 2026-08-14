@@ -67,6 +67,20 @@
         "place_id": "ChIJu43ESZSRQTURr0huMxMFZDI"
       },
       {
+        "name": "長浜屋台 がぶがぶ。, Nagahama yatai district",
+        "area": "Nagahama",
+        "book": "walk-in",
+        "why": "Residents largely skip the pricier, tourist-oriented Tenjin/Nakasu yatai (no walls/AC, no reservations, tourist-priced menus) for the Nagahama district's stalls — noticeably cheaper (≈¥500–700/bowl) and locally frequented. The row nearly died out but a \"Nagahama Yatai Revival Project\" reopened several stalls; this one is confirmed still operating.",
+        "crowd_tip": "The most local of the trip's three yatai options (Tenjin, Nakasu, here) — go if the Tenjin/Nakasu evening leaves you wanting the quieter, cheaper version.",
+        "price": "≈¥500–700/bowl, cash-only",
+        "map": { "lat": 33.5930502, "lng": 130.3871955 },
+        "verified_on": "2026-08-14",
+        "shelf_life": "venue",
+        "source_url": "https://yokatoko-fukuoka.jp/column/nagahama-ramen/",
+        "place_id": "ChIJZXEwWTGTQTUR6AnXPVJpxXE",
+        "tier": "corroborated"
+      },
+      {
         "name": "Maedaya",
         "book": "walk-in",
         "why": "The local-favorite motsunabe (offal hot pot) pick — recurs independently across a Q&A thread, a 2026 locals' ranking, and a resident magazine mention, stronger convergence than any single other option found."
@@ -133,7 +147,7 @@
     "phase": "daily",
     "rank": 3,
     "theme": "Shopping",
-    "intro": "<p>This trip explicitly skips Tokyo/Akihabara and Osaka/Den Den Town, so here's the regional answer instead — set expectations as \"solid regional branch,\" not Tokyo/Osaka flagship depth on any one hot category (Pokémon cards, current-season figures).</p>",
+    "intro": "<p>This trip explicitly skips Tokyo/Akihabara and Osaka/Den Den Town, so here's the regional answer instead — set expectations as \"solid regional branch,\" not Tokyo/Osaka flagship depth on any one hot category (Pokémon cards, current-season figures). <b>Honest gap, checked rather than assumed:</b> \"Teenage Dream Records,\" a commonly-cited Daimyo record-shop pick, has permanently closed — confirmed via Google Places. Border Line Records nearby is confirmed still open but redundant with TICRO MARKET (below) as the primary record-shop pick, so it's a second-visit footnote rather than a separate stop.</p>",
     "verified_on": "2026-07-29",
     "shelf_life": "venue",
     "source_url": "https://www.animate.co.jp/en/shop/fukuokatenjin/",
@@ -167,6 +181,18 @@
         "why": "Opened 2020, ~2,200 capsule-toy machines — Fukuoka's dedicated gacha landmark.",
         "map": { "lat": 33.5884979, "lng": 130.4107175 },
         "place_id": "ChIJLwf1dxKRQTURAI0T-yCAH3A"
+      },
+      {
+        "name": "TICRO MARKET (チクロマーケット)",
+        "area": "Daimyo",
+        "book": "walk-in",
+        "why": "A specialist record shop (rock/jazz/electronica/world) tucked in the Daimyo/Imaizumi vintage-shopping backstreets — the pick over the now-closed \"Teenage Dream Records\" and the redundant Border Line Records.",
+        "map": { "lat": 33.587139, "lng": 130.3958532 },
+        "verified_on": "2026-08-14",
+        "shelf_life": "venue",
+        "source_url": "https://local-t.com/blogs/fukuoka/vinyl",
+        "place_id": "ChIJhUWz1IWRQTURPU4ZXuzyXzs",
+        "tier": "corroborated"
       },
       {
         "name": "Culture Arts",
@@ -235,6 +261,18 @@
         "source_url": "https://www.gltjp.com/en/directory/item/13955/",
         "verified_on": "2026-08-03",
         "shelf_life": "venue"
+      },
+      {
+        "name": "gop no Anagura (gopのアナグラ)",
+        "area": "Yamanote, Nishi-ku",
+        "book": "walk-in",
+        "why": "Off the main Susukino/Ōdōri soup-curry circuit — spice-forward, minimal-dairy stock, with other soup-curry shop owners cited as regulars here. The shop's own description: \"うちの味はマニアック\" (our flavor is for the die-hards). The novel alternative if GARAKU's line is too long or the goal is the locals' bowl, not the famous one.",
+        "map": { "lat": 43.0685092, "lng": 141.2951363 },
+        "verified_on": "2026-08-14",
+        "shelf_life": "venue",
+        "source_url": "https://gop-soupcurry.com/",
+        "place_id": "ChIJ6xVmQTMoC18RFBW2hRMIBf4",
+        "tier": "corroborated"
       },
       {
         "name": "Ganso Sapporo Ramen Yokocho",
@@ -328,6 +366,19 @@
         "crowd_tip": "⚠ Confirm it's still open and check current hours locally.",
         "map": { "lat": 38.2674817, "lng": 140.876861 },
         "place_id": "ChIJz1STJCYoil8Re1n8XYd-3Ys"
+      },
+      {
+        "name": "Tanyaki Ichiryu Honten (たん焼 一隆 本店)",
+        "area": "Kokubuncho",
+        "book": "walk-in",
+        "why": "Run by a direct disciple of Sano Keishiro, gyutan-yaki's originator — named repeatedly across local sources as the residents' pick over the station-front chain row.",
+        "crowd_tip": "Limited daily quantity — a line forms before opening. Confirmed still operating.",
+        "map": { "lat": 38.261260199999995, "lng": 140.8687617 },
+        "verified_on": "2026-08-14",
+        "shelf_life": "venue",
+        "source_url": "https://www.tanyaki-ichiryu.com/",
+        "place_id": "ChIJ4WH-6jsoil8Rk4dWuoEYwxQ",
+        "tier": "corroborated"
       },
       {
         "name": "Date no Gyutan Honpo, Aobajo",

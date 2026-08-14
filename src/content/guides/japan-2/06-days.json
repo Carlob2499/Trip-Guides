@@ -121,7 +121,7 @@
         "pace": "Day trip — ≈35 min each way by JR rapid train",
         "energy": "balanced",
         "env": "outdoor",
-        "body": "<p>Otaru's canal district is a genuinely popular day trip, and independent reviews agree the main stretch runs tour-bus-crowded even on weekdays — today being a Monday is deliberate, the quietest weekday option in this block. Walk the canal in the morning, then continue north past the main photo-spot stretch for a calmer angle. Sushi-dori has a wide price spread between tourist-priced and local-priced counters — ask around rather than walking into the first storefront.</p>",
+        "body": "<p>Otaru's canal district is a genuinely popular day trip, and independent reviews agree the main stretch runs tour-bus-crowded even on weekdays — today being a Monday is deliberate, the quietest weekday option in this block. Walk the canal in the morning, then cross Ryūgū Bridge to the North Canal — the original, quieter warehouse-lined stretch most visitors never reach. Sushi-dori has a wide price spread between tourist-priced and local-priced counters — ask around rather than walking into the first storefront.</p>",
         "plan_b": {
           "trigger": "rain",
           "body": "Heavy rain trades the canal walk for the <b>Otaru Music Box Museum</b> — free entry, three floors inside an 1912 building, 2 min from the canal's north end, open daily 9:00–18:00. Sushi-dori's counters are indoors too, so lunch plans don't change.",
@@ -151,7 +151,7 @@
         "pace": "Day trip — ≈60 min direct bus (Kappa Liner) or ≈75 min regular bus from Sapporo Station",
         "energy": "packed",
         "env": "outdoor",
-        "body": "<p>Jozankei's official autumn trail list has 8 graded routes. <b>Asahi-dake</b> (598m, 3.3km, ≈3 hrs round trip) is the best-documented option — officially \"moderate,\" though recent hiker reports describe rope sections and exposure, so treat the grading as optimistic if not everyone in the group is confident on technical ground. If that's more than the day calls for, the easier <b>Mt. Yuhi</b> trail is the gentler alternative — the group can split here and reconverge at the onsen. Skip the harder routes (Mt. Sapporo, Mt. Muine) this late in October — they sit right at the elevation where early snow can already be an issue.</p>",
+        "body": "<p>Jozankei's official autumn trail list has 8 graded routes. <b>Asahi-dake</b> (598m, 3.3km, ≈3 hrs round trip) is the best-documented option — officially \"moderate,\" though recent hiker reports describe rope sections and exposure, so treat the grading as optimistic if not everyone in the group is confident on technical ground. If that's more than the day calls for, the easier <b>Mt. Yuhi</b> trail is the gentler alternative — the group can split here and reconverge at the onsen. Skip the harder routes (Mt. Sapporo, Mt. Muine) this late in October — they sit right at the elevation where early snow can already be an issue. Either way, a short detour to <b>Akaiwa no Ma</b> (a small red-rock river gorge the local tourism association itself calls 'quite difficult to find') is a genuine alternative to the onsen-town core for anyone who wants one more quiet stop before the soak.</p>",
         "constraints": ["Higashione Course on Mt. Jozankei Tengu is officially closed"],
         "plan_b": {
           "trigger": "rain",
@@ -214,7 +214,7 @@
         "pace": "Day trip — ≈40 min each way on the JR Senseki Line",
         "energy": "balanced",
         "env": "outdoor",
-        "body": "<p>JR Senseki Line to <b>Matsushimakaigan Station</b> (not \"Matsushima Station\") for the bay — one of Japan's official Three Scenic Views. Quick stop at Godaido for the classic shot, then out to Fukuura Island's pine-forest trails or up to Saigyo Modoshi no Matsu Park for a quieter, elevated view away from the waterfront crowd. <b>Note:</b> today is Culture Day (a national holiday), which likely means a busier bay than a normal weekday.</p>",
+        "body": "<p>JR Senseki Line to <b>Matsushimakaigan Station</b> (not \"Matsushima Station\") for the bay — one of Japan's official Three Scenic Views. Quick stop at Godaido for the classic shot, then out to Fukuura Island's pine-forest trails or up to Saigyo Modoshi no Matsu Park for a quieter, elevated view away from the waterfront crowd. <b>Note:</b> today is Culture Day (a national holiday), which likely means a busier bay than a normal weekday — if the pier crowd is heavier than expected, <b>Tetarazu Kaihin Park</b> (≈10 min by car/taxi) is the same bay without the holiday crush, with a produce/soft-serve stand in the parking area.</p>",
         "constraints": ["Nov 3 is Culture Day — a public holiday, likely busier than a normal weekday"],
         "plan_b": {
           "trigger": "rain",
@@ -230,7 +230,7 @@
         "pace": "Day trip — ≈90 min–2 hrs each way via the Rikuu East Line",
         "energy": "balanced",
         "env": "outdoor",
-        "body": "<p>The regular (non-special) JR Rikuu East Line local to Naruko-Onsen Station — the scenic \"Yukemuri\" observation train's autumn special only runs weekends/holidays, and today's a Wednesday, so this uses the ordinary service instead (same route, same views). At the gorge: arrive at opening (≈8:30) or after ≈14:00 to avoid the 11:00–15:00 tour-bus crush. The full historic trail was permanently shortened after 2011 earthquake damage — expect a partial trail plus the resthouse observation bridge, not a complete historic hike.</p>",
+        "body": "<p>The regular (non-special) JR Rikuu East Line local to Naruko-Onsen Station — the scenic \"Yukemuri\" observation train's autumn special only runs weekends/holidays, and today's a Wednesday, so this uses the ordinary service instead (same route, same views). At the gorge: arrive at opening (≈8:30) or after ≈14:00 to avoid the 11:00–15:00 tour-bus crush. The full historic trail was permanently shortened after 2011 earthquake damage — expect a partial trail plus the resthouse observation bridge, not a complete historic hike. Once past the bridge deck's photo queue, the Ofukazawa Promenade — the same gorge stream, walked by almost no one — is worth the extra loop.</p>",
         "plan_b": {
           "trigger": "rain",
           "body": "Heavy rain (or an early-season closure of the gorge's already-shortened post-2011 trail) still leaves Naruko itself, one of Tōhoku's oldest hot-spring towns. <b>Takinoyu</b>, a public bath fed straight from the town's original thousand-year-old source, is a 5-min walk from Naruko-Onsen Station, open 7:30–21:00 daily. ⚠ Admission reported ¥150–300 depending on source.",

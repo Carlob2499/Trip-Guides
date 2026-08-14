@@ -105,14 +105,27 @@ locations (Naruko Gorge, Matsushima, Sapporo) — one candidate ("time lapse of 
 Mount Fuji") is explicitly the WRONG mountain. Empty table stands; the Painted Atlas /
 Naruko-kyo photo cover is the honest default.
 
-## Research reconciliation (fill during the dual-pass — see the guide-author skill)
+## Research reconciliation
+> Filled during the dual-pass — see the guide-author skill.
 > Pass A = canonical/verified (official, anchors, logistics). Pass B = local/authentic/crowd-aware
 > (resident + blog knowledge, off-peak timing, novel alternatives). Record what each pass found and
 > how conflicts resolved — this is the corroboration trail behind the guide.
 
 | Item | Pass A (canonical) | Pass B (local/authentic) | Reconciled → guide | Note (conflict / crowd / novel) |
 |------|--------------------|--------------------------|--------------------|---------------------------------|
-|      |                    |                          |                    |                                 |
+| Naruko Gorge — Ofukazawa Promenade | Already had a crowd/timing note (arrive at opening / after 14:00) | Found the same crowd problem independently, plus the specific fix: the Ofukazawa Promenade loop past the bridge deck | **AGREE + enhanced** — Sights `Naruko Gorge` body now names the Promenade, links nap-camp.com; Day Nov 4 (Naruko Gorge day trip) mentions it | Corroboration: both passes independently flagged the bridge-deck crush; B supplied the specific escape route |
+| Yamadera (Risshakuji) | Already had "go at opening" timing note | Corroborated with the specific detail: gates open 8:00, temple is the year's most crowded in koyo season | **AGREE + enhanced** — Sights `Yamadera` body now cites the 8:00 gate time + bushikaku.net | Corroboration, not new information — B sharpened an A finding |
+| Mt. Moiwa Ropeway | Had only a general "night views" claim, no crowd timing | Found the specific crowd peak: 8–9pm sunset window, ropeway line up to ≈1hr | **B-only** — Sights `Mt. Moiwa` body gained a new paragraph with the 8–9pm crowd-peak note + workaround, cited skyticket.jp | New info from B; A had the venue but not this crowd reality |
+| Otaru Canal — North Canal (北運河) | Already had a generic "walk north past the main stretch" note, uncited to a specific landmark | Named the specific route (cross Ryūgū Bridge) and the specific district (North Canal, Meiji-era stone warehouses) | **AGREE + enhanced** — Sights `Otaru Canal` body + Day Oct 26 (Otaru day trip) both now name Ryūgū Bridge / North Canal, cited tabirai.net | Corroboration: A already routed around the crowd; B supplied the actionable landmark name |
+| Akaiwa no Ma (赤岩の澗), Jozankei | Not found — Jozankei had no dedicated sight entry, only the hiking-day trail list | Found this small red-rock gorge, a genuine off-the-beaten-path detour near the Route 230/Nakayama Pass turn | **B-only** — new Sights item added (place_id `ChIJMWT_N4LTCl8RPR65wO83_Qw`, verified via lookup-venue.mjs); mentioned in Day Oct 28 (Jozankei hiking day) | Novel find — fills a real gap, since Jozankei previously had no sights-tab entry despite being a full day-trip day |
+| Tetarazu Kaihin Park (手樽海浜公園), Matsushima | Not found — only Matsushima Bay/Godaido/Fukuura Island were researched | Found this quiet shoreline park ≈10 min from the pier crowds, used by residents rather than tour groups | **B-only** — new Sights item added (place_id `ChIJzSulqsObiV8Rnrtn6ehJ2NI`); mentioned in Day Nov 3 (Matsushima day trip) as the Culture Day holiday alternative | Novel/alternative find — especially relevant since Nov 3 lands on a national holiday (Culture Day), when the main pier is likely busier |
+| Nagahama yatai district, Fukuoka (incl. 長浜屋台 がぶがぶ。) | Had Tenjin vs. Nakasu yatai comparison only | Found a third, more local option: Nagahama's cheaper (≈¥500–700/bowl), locally-frequented stalls | **B-only** — new venue item added to the Fukuoka yatai section (place_id `ChIJZXEwWTGTQTUR6AnXPVJpxXE`) | Novel — deepens the yatai repository beyond the Tenjin/Nakasu binary already in the guide |
+| Tanyaki Ichiryu Honten (たん焼 一隆 本店), Sendai | Had Date no Gyutan Honpo as the "local alternative to chains" gyutan pick | Found a second, stronger local pick — run by a direct disciple of gyutan-yaki's originator | **B-only** — new venue item added to the Sendai gyutan section (place_id `ChIJ4WH-6jsoil8Rk4dWuoEYwxQ`) | Novel — Sendai food repository now carries two local-alternative gyutan picks, not one |
+| gop no Anagura (gopのアナグラ), Sapporo | Had GARAKU (essential) + Suage+ (shorter-line fallback) for soup curry | Found a third pick, off the main circuit entirely, favored by other soup-curry shop owners | **B-only** — new venue item added to the Sapporo soup curry section (place_id `ChIJ6xVmQTMoC18RFBW2hRMIBf4`) | Novel — a genuine "locals' bowl, not the famous one" pick |
+| TICRO MARKET (チクロマーケット), Fukuoka | Not researched — no record-shop pick existed in the guide | Found this specialist record shop, and separately confirmed "Teenage Dream Records" (a commonly-cited pick) is CLOSED_PERMANENTLY, with Border Line Records redundant | **B-only** — new venue item added to Fukuoka shopping (place_id `ChIJhUWz1IWRQTURPU4ZXuzyXzs`); shopping section intro now states the Teenage Dream Records closure + Border Line Records redundancy explicitly | Novel find + an honest-gap correction (a commonly-cited pick doesn't exist anymore) |
+| Hakata-ben phrase set | Not researched — the phrase card covers standard Japanese only | Cross-checked across 2 independent guides: yoka/bari/-to? question form | **B-only** — woven into the Etiquette & language panel body as a "for flavor, not function" paragraph, cited yokatoko-fukuoka.jp | Durable linguistic fact, not perishable — kept out of the situational phrase card (which is functional/safety phrases) per the "woven, not a new tab" rule |
+| Sendai/Miyagi-ben phrase set | Not researched | Cross-checked across 2 independent guides: nda/ndanda, obandesu | **B-only** — woven into the same Etiquette & language paragraph, cited loco.kufu.jp | Same treatment as Hakata-ben |
+| Hokkaido-ben phrase set | Not researched | Cross-checked across 2 independent guides: namara, shitakke | **B-only** — woven into the same Etiquette & language paragraph, cited kojin.blog | Same treatment as Hakata-ben |
 
 ## Discovery leads (Pass B — native-first)
 > OPTIONAL accelerant, filled by an interactive deep-research sweep BEFORE the pipeline runs
@@ -189,10 +202,10 @@ earlier pass's "not yet open" as still true 2+ weeks later — confirmed still a
 | Lake Toya | rejected: would duplicate the volcanic-valley slot Noboribetsu/Jigokudani already fills, at the cost of a day this itinerary doesn't have | n |
 | Sapporo Snow Festival grounds | rejected: wrong season — the festival runs February | n |
 | Zao Snow Monsters (juhyo) | rejected: a winter-only phenomenon (Dec–Feb); this trip's Nov 5 Zao visit is for the crater/onsen, not the frost trees | n |
-| Ofukazawa Promenade (大深沢遊歩道), Naruko Gorge | shipped (Pass B) | y |
-| North Canal / Ryūgū Bridge (北運河・竜宮橋), Otaru | shipped (Pass B) | y |
+| Ofukazawa Promenade | shipped (Pass B) | y |
+| North Canal | shipped (Pass B) | y |
 | Akaiwa no Ma (赤岩の澗), Jozankei | shipped (Pass B) | y |
-| Tetarazu Kaihin Park (手樽海浜公園), Matsushima | shipped (Pass B) | y |
+| Tetarazu Kaihin Park | shipped (Pass B) | y |
 
 ### Priority 2: Food & dining
 
@@ -225,9 +238,9 @@ earlier pass's "not yet open" as still true 2+ weeks later — confirmed still a
 | "Mentai Park" (Kanefuku) | rejected: doesn't exist anywhere in Fukuoka Prefecture — checked directly against Kanefuku's own site; a commonly repeated false claim | y |
 | Dai-ichi Takimotokan (Noboribetsu resort dining) | rejected: "big tour-group" feel flagged in local reviews; the trip's one onsen-ryokan splurge (Zao) covers that experience instead | y |
 | Sapporo Beer Garden | rejected: the larger, more tour-scaled jingisukan alternative to Daruma — noted as a fallback, not a pick | n |
-| Nagahama yatai district (incl. 長浜屋台 がぶがぶ。), Fukuoka | shipped (Pass B) | y |
-| Tanyaki Ichiryu Honten (たん焼 一隆 本店), Sendai | shipped (Pass B) | y |
-| gop no Anagura (gopのアナグラ), Sapporo | shipped (Pass B) | y |
+| Nagahama yatai district | shipped (Pass B) | y |
+| Tanyaki Ichiryu Honten | shipped (Pass B) | y |
+| gop no Anagura | shipped (Pass B) | y |
 
 ### Priority 3: Shopping
 
@@ -249,7 +262,7 @@ earlier pass's "not yet open" as still true 2+ weeks later — confirmed still a
 | Osaka Den Den Town | rejected: not on this trip's Fukuoka→Sapporo→Sendai route | n |
 | Tokyo Akihabara deep-dive | rejected: Tokyo is a connection point only on this trip, no dedicated shopping day there | n |
 | Mandarake Sendai | rejected: doesn't exist — confirmed against Mandarake's own store list (Tokyo×4, Utsunomiya, Nagoya, Osaka, Kyoto, Fukuoka, Kokura, Sapporo — nothing in Tohoku) | y |
-| TICRO MARKET (チクロマーケット), Daimyo, Fukuoka | shipped (Pass B) | y |
+| TICRO MARKET | shipped (Pass B) | y |
 | Teenage Dream Records, Fukuoka | rejected: confirmed CLOSED_PERMANENTLY via `lookup-venue.mjs`/Google Places, 2026-08-14 — a commonly-cited pick that no longer exists | y |
 | Border Line Records, Daimyo, Fukuoka | rejected: confirmed operating, but redundant with TICRO MARKET as the primary record-shop pick — kept as a second-visit footnote, not a separate entry | y |
 | Toyohira Shrine Antique Market (豊平神社骨董市), Sapporo | rejected: Sapporo's only regular antique market, but Nov 2026 falls on its one off-cycle date (3rd Sunday, Nov 15) — outside this trip's window (2026-10-15–11-10) entirely | y |

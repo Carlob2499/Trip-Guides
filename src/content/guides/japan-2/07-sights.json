@@ -18,15 +18,27 @@
         "source_url": "https://www.japan.travel/en/spot/2127/"
       },
       {
+        "name": "Tetarazu Kaihin Park (手樽海浜公園)",
+        "kicker": "The bay locals actually use — 10 min by car from the pier crowds",
+        "body": "<p>A quiet 485m shoreline park ≈10 min by car from central Matsushima, on the same bay but away from the pier crowds — used by residents (kids on bikes, skateboarders) rather than tour groups, with a produce/soft-serve trailer stand (\"Kaze no Marché\") in the parking area. A good pairing with the Godaido/Fukuura Island stop for anyone who wants Matsushima Bay without the crush at the main pier.</p>",
+        "map": { "lat": 38.379028399999996, "lng": 141.0936351 },
+        "verified_on": "2026-08-14",
+        "shelf_life": "venue",
+        "source_url": "https://www.matsushima-kanko.com/miru/detail.php?id=177",
+        "place_id": "ChIJzSulqsObiV8Rnrtn6ehJ2NI",
+        "tier": "corroborated"
+      },
+      {
         "name": "Naruko Gorge (Naruko Kyokoku)",
-        "kicker": "Free, seasonal — arrive at opening to beat the tour buses",
-        "body": "<p>A 2.6km volcanic gorge in the Naruko Onsen district, known for oddly-carved rock cliffs and a foliage peak averaging {{fact:koyo-naruko-avg}} ({{fact:koyo-sapporo-avg}}-class forecast — a multi-year average, not a locked 2026 date). The full historic walking trail was permanently shortened after damage in the 2011 Tōhoku earthquake — expect a partial trail plus the resthouse observation bridge, not a full historic hike. Tour buses fill the parking by ~9:00 on peak-color weekends and the crush peaks 11:00–15:00; arrive at opening (≈8:30) or after ≈14:00. Reach it via the JR Rikuu East Line to Naruko-Onsen Station, then a short seasonal bus.</p>",
+        "kicker": "Free, seasonal — arrive at opening to beat the tour buses, or walk the promenade almost everyone skips",
+        "body": "<p>A 2.6km volcanic gorge in the Naruko Onsen district, known for oddly-carved rock cliffs and a foliage peak averaging {{fact:koyo-naruko-avg}} ({{fact:koyo-sapporo-avg}}-class forecast — a multi-year average, not a locked 2026 date). The full historic walking trail was permanently shortened after damage in the 2011 Tōhoku earthquake — expect a partial trail plus the resthouse observation bridge, not a full historic hike. Tour buses fill the parking by ~9:00 on peak-color weekends and the crush peaks 11:00–15:00; arrive at opening (≈8:30) or after ≈14:00.</p><p><b>The photo-op crowd stops at the bridge.</b> The main Ofukazawa Bridge viewing deck is where the queue forms — but the adjacent <a href='https://www.nap-camp.com/mag/16557' target='_blank' rel='noopener noreferrer'><b>Ofukazawa Promenade</b></a> (大深沢遊歩道, a paved ≈2.2km loop from the Narukokyo Resthouse, open 9:00–16:00) follows the same gorge stream and is walked by almost no one; most visitors only look from the bridge deck and turn back. Reach the gorge via the JR Rikuu East Line to Naruko-Onsen Station, then a short seasonal bus.</p>",
         "img": { "file": "Miyagi Naruko-kyo in autumn xl.jpg", "alt": "Naruko Gorge cliffs in autumn color" },
         "map": { "lat": 38.7346, "lng": 140.6567 },
         "verified_on": "2026-08-14",
         "shelf_life": "venue",
         "source_url": "https://www.visitmiyagi.com/contents/naruko-gorge-autumn-colors/",
-        "place_id": "ChIJyck1-0c5iV8RdPFUniMCrfE"
+        "place_id": "ChIJyck1-0c5iV8RdPFUniMCrfE",
+        "tier": "corroborated"
       },
       {
         "name": "Zao Okama Crater",
@@ -54,7 +66,7 @@
       {
         "name": "Otaru Canal",
         "kicker": "Genuinely tour-bus-heavy at the main spot — go on a weekday morning",
-        "body": "<p>A restored 1920s canal district of gas-lamp-lined warehouses and glassware shops — a very standard day-trip recommendation, and independent reviews across multiple platforms agree the main canal stretch runs genuinely crowded with tour groups even on weekdays. The fix: go on a weekday morning, and walk north past the main photo-spot stretch, reported \"almost empty and more relaxing\" by comparison. Sushi-dori (the sushi restaurant street) has a wide price spread between tourist-priced counters and ones aimed at regulars — ask locally rather than walking into the first storefront. ≈35 min by JR rapid train from Sapporo Station.</p>",
+        "body": "<p>A restored 1920s canal district of gas-lamp-lined warehouses and glassware shops — a very standard day-trip recommendation, and independent reviews across multiple platforms agree the main canal stretch runs genuinely crowded with tour groups even on weekdays. The fix: go on a weekday morning, and cross <a href='https://www.tabirai.net/sightseeing/tatsujin/0000089.aspx' target='_blank' rel='noopener noreferrer'><b>Ryūgū Bridge</b></a> (竜宮橋) past the main photo-spot stretch to the <b>North Canal</b> (北運河) — the original 40m-wide segment lined with Meiji-era stone warehouses (the former NYK Otaru branch, the former Shibusawa warehouse), which domestic tourists rarely walk as far as, so it stays quiet while carrying the same historic warehouse-row scenery. Sushi-dori (the sushi restaurant street) has a wide price spread between tourist-priced counters and ones aimed at regulars — ask locally rather than walking into the first storefront. ≈35 min by JR rapid train from Sapporo Station.</p>",
         "img": { "file": "Otaru Canal03bs3.jpg", "alt": "Otaru Canal lined with historic warehouses" },
         "map": { "lat": 43.2020231, "lng": 141.0006005 },
         "verified_on": "2026-07-29",
@@ -66,13 +78,24 @@
       {
         "name": "Mt. Moiwa",
         "kicker": "Ropeway or a 1–1.5 hr hike, right in Sapporo",
-        "body": "<p>A 531m peak inside Sapporo city limits — ropeway + cable car to the summit (open through mid-November) or one of five marked hiking trails (2.4–4.5km, ≈1–1.5 hr), the Jizousawa route being the most popular. Low elevation keeps snow risk minimal into November, though the operator's own page warns the ropeway can suspend for wind without notice. Billed as one of Japan's \"New Three Great Night Views\" — a widely repeated claim, not independently verified against the original listing, but the view itself is real and easy: a short bus + ropeway combo from central Sapporo.</p>",
+        "body": "<p>A 531m peak inside Sapporo city limits — ropeway + cable car to the summit (open through mid-November) or one of five marked hiking trails (2.4–4.5km, ≈1–1.5 hr), the Jizousawa route being the most popular. Low elevation keeps snow risk minimal into November, though the operator's own page warns the ropeway can suspend for wind without notice. Billed as one of Japan's \"New Three Great Night Views\" — a widely repeated claim, not independently verified against the original listing, but the view itself is real and easy: a short bus + ropeway combo from central Sapporo.</p><p><b>If going for the night view:</b> <a href='https://skyticket.jp/guide/465065/' target='_blank' rel='noopener noreferrer'>the 8–9pm sunset/night-view window is the crowd peak</a> — on clear evenings the ropeway line alone can run up to ≈1hr each way. Going on an overcast or light-rain evening, or well outside 8–9pm, skips the wait entirely.</p>",
         "img": { "file": "Cable Car (Ropeway) to Mount Moiwayama - Sapporo - Hokkaido - Japan (47977611532).jpg", "alt": "Ropeway cable car ascending Mt. Moiwa above Sapporo" },
         "map": { "lat": 43.0223946, "lng": 141.3223386 },
         "verified_on": "2026-07-29",
         "shelf_life": "venue",
         "source_url": "https://mt-moiwa.jp/",
         "place_id": "ChIJ6WyfEO7VCl8RITH5sM3AG8M"
+      },
+      {
+        "name": "Akaiwa no Ma (赤岩の澗), Jozankei",
+        "kicker": "The Jozankei Tourism Association's own words: \"quite difficult to find\"",
+        "body": "<p>A small iron-oxide red-rock gorge on the Toyohira River, reached via a short detour off Route 230 toward Nakayama Pass (turn off after the \"Yu no Hana\" sign — ≈2 min drive + 3 min walk) or via the Futami–Jozan promenade from Futami Park. A genuine alternative to the crowded onsen-town core and the Toyohira Dam viewpoint, especially for foliage viewing — worth the detour on the Jozankei hiking day if the group splits between the harder and easier trail.</p>",
+        "map": { "lat": 42.9604754, "lng": 141.1526676 },
+        "verified_on": "2026-08-14",
+        "shelf_life": "venue",
+        "source_url": "https://sasaru.media/article/weather/20231011_005/",
+        "place_id": "ChIJMWT_N4LTCl8RPR65wO83_Qw",
+        "tier": "corroborated"
       },
       {
         "name": "Dazaifu Tenmangu",
@@ -105,12 +128,13 @@
       {
         "name": "Yamadera (Risshaku-ji)",
         "kicker": "1,015 stone steps up a sacred cliff — technically Yamagata, but the standard Sendai day trip",
-        "body": "<p>A temple complex founded in 860 CE, its halls built directly into a rock-face mountainside — the 1,015-step climb through cedar forest takes ≈30–60 min depending on pace, with the summit hall's panoramic gorge view the payoff. It's just across the prefecture line in Yamagata, reached directly from Sendai via the JR Senzan Line (≈1 hr). Autumn foliage (Oct–Nov) is its most popular window and tour buses from Sendai arrive by mid-morning — go at opening to get the steps and the summit view without the crowd. Budget at least 2 hrs total.</p>",
+        "body": "<p>A temple complex founded in 860 CE, its halls built directly into a rock-face mountainside — the 1,015-step climb through cedar forest takes ≈30–60 min depending on pace, with the summit hall's panoramic gorge view the payoff. It's just across the prefecture line in Yamagata, reached directly from Sendai via the JR Senzan Line (≈1 hr). Gates open at 8:00 — <a href='https://www.bushikaku.net/article/4848/' target='_blank' rel='noopener noreferrer'>arriving right at opening, not mid-morning</a>, means climbing the steps in near-empty quiet during koyo season (late Oct–early Nov, this trip's window), when the temple is described as the year's most crowded; by mid-morning the steps and summit views fill in. Budget at least 2 hrs total.</p>",
         "map": { "lat": 38.3131193, "lng": 140.4346099 },
         "place_id": "ChIJeUV2g-_Oi18RwK-4JcNEe44",
         "source_url": "https://www.japan.travel/en/spot/1796/",
         "verified_on": "2026-08-03",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "tier": "corroborated"
       },
       {
         "name": "Akiu Great Falls (Akiu Otaki)",
