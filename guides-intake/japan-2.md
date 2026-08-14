@@ -189,6 +189,10 @@ earlier pass's "not yet open" as still true 2+ weeks later — confirmed still a
 | Lake Toya | rejected: would duplicate the volcanic-valley slot Noboribetsu/Jigokudani already fills, at the cost of a day this itinerary doesn't have | n |
 | Sapporo Snow Festival grounds | rejected: wrong season — the festival runs February | n |
 | Zao Snow Monsters (juhyo) | rejected: a winter-only phenomenon (Dec–Feb); this trip's Nov 5 Zao visit is for the crater/onsen, not the frost trees | n |
+| Ofukazawa Promenade (大深沢遊歩道), Naruko Gorge | shipped (Pass B) | y |
+| North Canal / Ryūgū Bridge (北運河・竜宮橋), Otaru | shipped (Pass B) | y |
+| Akaiwa no Ma (赤岩の澗), Jozankei | shipped (Pass B) | y |
+| Tetarazu Kaihin Park (手樽海浜公園), Matsushima | shipped (Pass B) | y |
 
 ### Priority 2: Food & dining
 
@@ -221,6 +225,9 @@ earlier pass's "not yet open" as still true 2+ weeks later — confirmed still a
 | "Mentai Park" (Kanefuku) | rejected: doesn't exist anywhere in Fukuoka Prefecture — checked directly against Kanefuku's own site; a commonly repeated false claim | y |
 | Dai-ichi Takimotokan (Noboribetsu resort dining) | rejected: "big tour-group" feel flagged in local reviews; the trip's one onsen-ryokan splurge (Zao) covers that experience instead | y |
 | Sapporo Beer Garden | rejected: the larger, more tour-scaled jingisukan alternative to Daruma — noted as a fallback, not a pick | n |
+| Nagahama yatai district (incl. 長浜屋台 がぶがぶ。), Fukuoka | shipped (Pass B) | y |
+| Tanyaki Ichiryu Honten (たん焼 一隆 本店), Sendai | shipped (Pass B) | y |
+| gop no Anagura (gopのアナグラ), Sapporo | shipped (Pass B) | y |
 
 ### Priority 3: Shopping
 
@@ -242,6 +249,10 @@ earlier pass's "not yet open" as still true 2+ weeks later — confirmed still a
 | Osaka Den Den Town | rejected: not on this trip's Fukuoka→Sapporo→Sendai route | n |
 | Tokyo Akihabara deep-dive | rejected: Tokyo is a connection point only on this trip, no dedicated shopping day there | n |
 | Mandarake Sendai | rejected: doesn't exist — confirmed against Mandarake's own store list (Tokyo×4, Utsunomiya, Nagoya, Osaka, Kyoto, Fukuoka, Kokura, Sapporo — nothing in Tohoku) | y |
+| TICRO MARKET (チクロマーケット), Daimyo, Fukuoka | shipped (Pass B) | y |
+| Teenage Dream Records, Fukuoka | rejected: confirmed CLOSED_PERMANENTLY via `lookup-venue.mjs`/Google Places, 2026-08-14 — a commonly-cited pick that no longer exists | y |
+| Border Line Records, Daimyo, Fukuoka | rejected: confirmed operating, but redundant with TICRO MARKET as the primary record-shop pick — kept as a second-visit footnote, not a separate entry | y |
+| Toyohira Shrine Antique Market (豊平神社骨董市), Sapporo | rejected: Sapporo's only regular antique market, but Nov 2026 falls on its one off-cycle date (3rd Sunday, Nov 15) — outside this trip's window (2026-10-15–11-10) entirely | y |
 
 ## Questions for the traveler (research emits; traveler answers on the progress page)
 > Traveler-framed only — no pipeline vocabulary. Each question carries an assumption the guide
