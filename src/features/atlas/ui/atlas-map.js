@@ -88,7 +88,12 @@ function decimate(feature, keep) {
   return { type: "Feature", id: feature.id, properties: feature.properties, geometry: { type: geom.type, coordinates: map(geom.coordinates, depth) } };
 }
 
-class AtlasMap extends HTMLElement {
+/* SSR-safe base: this module is now reachable through the atlas barrel from build-time
+   code (index.astro frontmatter imports the model half). Node has no HTMLElement; the
+   element is only ever CONSTRUCTED in a browser, so a stub base class is never used. */
+const BaseElement = typeof HTMLElement === "undefined" ? class {} : HTMLElement;
+
+class AtlasMap extends BaseElement {
   connectedCallback() {
     if (this._init) return; this._init = true;
     this.style.display = "block";
@@ -760,5 +765,5 @@ class AtlasMap extends HTMLElement {
     return true;
   }
 }
-if (!customElements.get("atlas-map")) customElements.define("atlas-map", AtlasMap);
+if (typeof customElements !== "undefined" && !customElements.get("atlas-map")) customElements.define("atlas-map", AtlasMap);
 

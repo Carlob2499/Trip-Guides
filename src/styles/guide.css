@@ -613,7 +613,6 @@ details.card.is-collapsible>.block-body{padding:1.1rem 1.4rem 1.25rem}
 
 /* === OFFLINE NOTE ============================================================ */
 .offline-note{display:inline-block;margin-top:.4rem;font-size:var(--text-caption);color:var(--muted)} /* no opacity — see .hol-credit */
-.foot-telemetry{display:inline-block;margin-top:.3rem;font-size:var(--text-control-sm);color:var(--muted)}
 
 /* U11: a real, obviously-tappable pill (banned bare-text tap targets) — was an underlined
    text link mid-masthead; now lives in the footer instead. */

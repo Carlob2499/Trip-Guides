@@ -39,7 +39,7 @@ describe("optimizeDayRoute", () => {
   });
 
   it("excludes waypoints with no coordinates from consideration entirely", () => {
-    const withGaps = [ZIGZAG[0], { name: "no coords" } as any, ZIGZAG[1], ZIGZAG[2], ZIGZAG[3]];
+    const withGaps = [ZIGZAG[0], { name: "no coords" } as unknown as (typeof ZIGZAG)[number], ZIGZAG[1], ZIGZAG[2], ZIGZAG[3]];
     const result = optimizeDayRoute(withGaps);
     expect(result).not.toBeNull();
     // Original indices in the 5-item array: 0, 2, 3, 4 are located; index 1 is skipped.

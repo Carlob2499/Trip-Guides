@@ -444,3 +444,23 @@ times. Taking its start would inflate every travel window — 420 minutes where 
 deliberately asymmetric: a gap LARGER than the live duration is dwell time and proves nothing,
 so only a gap smaller than the leg is reported. Rejected: comparing gap to duration
 symmetrically, which would flag every stop a traveller lingers at — i.e. all of them.
+
+**The cleanup rulings — what got cut and what "keep" means** (2026-08-14, codebase-audit
+session; each was an explicit creator answer, so a later session must not silently re-add them).
+Cut, do not resurrect without a new ruling: the telemetry feature end-to-end (counting was
+statistically worthless for this audience, and its weekly commit path had been silently broken —
+the deleted disclosure line in the guide footer goes back ONLY if counting ever returns); the
+test-index meta-gate (test descriptions + generated catalog taxed every test change and
+hard-coded suite-size floors); the 24 local-only Playwright specs (nothing ran them — a11y.spec
+is the one gate; git history holds the rest if a redesign wants them); the panel/progress-preview
+study trees; model-smoke.yml; the mutation and skill-retro CRONS (both workflows stay,
+dispatch-only). CHANGELOG is frozen at 2026-07-16 and lives in docs/archive/ — the structural
+story's ongoing home is THIS file plus the archive plans, not a second ledger. Kept by ruling:
+the /new intake wizard and its worker ("the HUMAN way to interact with the website") — its
+Turnstile protection is wired in code and waits only on the creator's keys; docs/archive and
+HANDOFF_ARCHIVE (git history was squash-rooted 2026-08-08, so the archive IS the pre-August
+record); deploy.yml's `npm test` (test.yml is a non-required check, so deploy's run is the real
+gate — the audit's "duplicate" finding was withdrawn on evidence). Also settled: PLAN_EVIDENCE_
+FIRST.md keeps its SCREAMING_CASE name as docs/README's one recorded exception, and the
+route-optimizer's pure math lives in src/lib/route-optimize.ts — a silo whose index must stay a
+side-effect import cannot also be a build-time export door.
