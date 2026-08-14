@@ -91,19 +91,19 @@ manufactured a new bare-echo pair. Attribute before the dash. us hygiene now cle
 
 ## Snapshot (2026-08-14 — dark-mode focus-ring contrast fixed)
 
-**Fixed, not deferred.** The prior entry's "`--accent-ink` would break light (≈2.70:1)" was
-wrong — `accentTokens()` derives it to clear ≥4.5:1 on every light AND dark surface by
-construction, so no fork existed. 53 `:focus`/`:focus-visible` rules painting identity `--accent`
-(19 `src/styles/` files, 6 feature silos, `progress-preview`) now paint `--accent-ink` instead —
-the same fix already applied to accent link text. Verified in preview: Korea's dark ring
-2.48:1 → 5.23:1; light unchanged. `.pin-flash`/`[data-selected]` left alone (not focus rings).
-Ship loop green: build/lint/typecheck, vitest 2009/2009, `a11y.spec.ts` 69/69, drift unchanged.
+**Fixed, not deferred.** The prior entry's "`--accent-ink` would break light (≈2.70:1)" was wrong
+— `accentTokens()` derives it to clear ≥4.5:1 on every light AND dark surface by construction, so
+no fork existed. 53 `:focus`/`:focus-visible` rules painting identity `--accent` (19 `src/styles/`
+files, 6 feature silos, `progress-preview`) now paint `--accent-ink` instead, same fix already
+applied to accent link text. Verified in preview: Korea's dark ring 2.48:1 → 5.23:1, light
+unchanged; `.pin-flash`/`[data-selected]` left alone. Ship loop green: build/lint/typecheck,
+vitest 2009/2009, `a11y.spec.ts` 69/69, drift unchanged.
 
 ## Where we left off
 
 **Everything in `PLAN_EVIDENCE_FIRST.md` is built, and the open-item list is empty.** All 16
-STATUS blocks closed, 12/12 regression cases covered, 2034 tests + 1 todo green, build/lint/
-typecheck clean, preview verified at :4322.
+STATUS blocks closed, 12/12 regression cases covered, build/lint/typecheck clean, preview
+verified at :4322.
 
 **Nothing is waiting on the creator.** The two items this section listed last session are both
 resolved: Routes needed a grep, not a structural decision, and the `us` registry work is done.
@@ -115,6 +115,6 @@ refuses git delete operations; it is one click in the branches UI.
 program's natural end-to-end acceptance test (CONTEXT.md's Japan ruling says so explicitly), it
 is the only guide with 0 coordinate-bearing waypoints so it exercises the new Routes layers from
 zero, and its trip is real and upcoming (Oct 15 – Nov 10, 2026). Everything else on the roadmap
-is R3–R6 in `docs/reference/pipeline.md` — product scope that was never part of this plan. The
-design side has no queued work; one item is left, a creator fork (the fallback converter dropping
-entirely on a failed rate fetch) — see Open items above. It should not be settled by a session alone.
+is R3–R6 in `docs/reference/pipeline.md` — product scope never part of this plan. The design side
+has no queued work; one item is left, a creator fork (fallback converter dropping entirely on a
+failed rate fetch) — see Open items above. Not to be settled by a session alone.
