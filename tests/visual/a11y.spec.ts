@@ -273,6 +273,35 @@ const FRAME_TESTED_WHY =
   "inject its test script into. Structurally permanent, not a code gap; frame-title-unique (a " +
   "DIFFERENT, genuinely fixable rule) was fixed separately and is not in this allowlist.";
 
+const PILL_ROW_CLIPPED_WHY =
+  "R5 gave the PHONE a rail. The spine's phone model is a horizontally scrolling pill row " +
+  "(guide-rail/styles.css, .grail-track{overflow-x:auto} — a real, load-bearing rule, the same " +
+  "category as JLINE_CLIPPED_WHY and DAY_SWIPE_CLIPPED_WHY above), so on a 390px screen only the " +
+  "first few stops are in view and the rest sit past the scroller's right edge. axe declines a " +
+  "partially-clipped element's contrast because it cannot sample a midpoint that falls outside " +
+  "the visible box — a geometry artifact, not a colour judgement. Identified NODE BY NODE on an " +
+  "instrumented local run rather than absorbed as jitter: exactly #gtab-4 through #gtab-12's " +
+  ".grail-label (Sights, Daejeon & MSI, Gaming & anime, Food & shopping, Pokemon GO, Tokyo, " +
+  "Sources, Field log, Tools) — the nine of korea's thirteen stops that do not fit 390px. Stops " +
+  "0-3 are fully visible and axe measures them normally. The count is therefore a function of the " +
+  "guide's own station count, which is why it is korea (13 stops) that needs the entry. " +
+  "The real colour pair is provably safe independent of what axe could measure: an inactive pill " +
+  "is .grail-stop{color:var(--ink)} on the rail's .grail{background:var(--bg)}, and the active " +
+  "one is var(--on-aink) on var(--accent) — both pinned by src/styles/atlas-tokens.test.ts, the " +
+  "first at 15.60:1 in the R5 lifted Day palette. Desktop reports zero nodes of this key: the " +
+  "spine lays all thirteen stops out at once, so nothing is clipped.";
+/* Japan and US were never in the full-scan list until this pass (see the guide-page loop below) —
+   their own elmPartiallyObscured/elmPartiallyObscuring counts are the SAME three already-proven
+   mechanisms above (PILL_ROW_CLIPPED_WHY's phone rail, DAY_SCRUB_STICKY_RANGE_WHY's forced-open
+   multi-panel sticky reach, JLINE_CLIPPED_WHY's panned journey-line), compounding at each guide's
+   own stop/day count rather than korea's or denmark's. Node-by-node confirmed on both: japan's
+   desktop max is .jl-stop/.jl-label pill-row clipping + .dchip-num/.dchip-date day-scrub range +
+   .jl-word/.jl-date journey-line clipping together; us shows the identical three classes at its
+   own, smaller stop/day count. No new kind of node on either guide — same mechanisms, new counts. */
+const GUIDE_TIMELINE_CLIPPED_WHY =
+  `Three already-documented, guide-page-only clipping mechanisms compounding at this guide's own ` +
+  `stop/day count: (1) ${PILL_ROW_CLIPPED_WHY} (2) ${DAY_SCRUB_STICKY_RANGE_WHY} (3) ${JLINE_CLIPPED_WHY}`;
+
 /* A color-contrast incomplete COUNT is a function of text reflow, not of correctness. axe flags one
    node per text node whose ancestor carries a sizeable pseudo-element, so re-wrapping the same prose
    across a different number of lines changes the tally without changing a single colour. Measured on
@@ -487,6 +516,41 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     // (desktop reports 0). See DAY_SWIPE_CLIPPED_WHY.
     "color-contrast/default": { max: 1, why: DAY_SWIPE_CLIPPED_WHY },
   },
+  /* Japan and US join the full-scan list this pass (see the guide-page loop below) — first real
+     axe run either has ever had. Every key below is an already-proven mechanism from korea/denmark
+     above, at japan's/us's own node counts; no new kind of node on either guide. Counts verified
+     via the real test harness (temporary instrumented run), not estimated from a diff. */
+  "japan guide": {
+    "color-contrast/bgOverlap": {
+      max: 32,
+      why: bgOverlapWhy(
+        "sight-card captions/credit under a still-loading OR explicitly-failed photo (sights.css's " +
+          ".media-ok/.media-fail split) and the masthead's broken-cover-photo fallback (masthead.css)",
+      ),
+    },
+    "color-contrast/pseudoContent": { max: 17, why: PSEUDO_CONTENT_WHY },
+    "color-contrast/shortTextContent": { max: 4, why: SHORT_TEXT_CONTENT_WHY },
+    "color-contrast/nonBmp": { max: 58, why: NON_BMP_WHY },
+    // Desktop-only: japan's journey line runs long enough that even the 1280px scan clips a stop
+    // at the .anch-scroll edge (the same mechanism denmark only shows at mobile).
+    "color-contrast/elmPartiallyObscuring": { max: 1, why: JLINE_CLIPPED_WHY },
+    // 27 desktop = japan's own stop/day count driving all three GUIDE_TIMELINE_CLIPPED_WHY
+    // mechanisms at once (pill-row + day-scrub + journey-line clipping) — see that constant.
+    "color-contrast/elmPartiallyObscured": { max: 27, why: GUIDE_TIMELINE_CLIPPED_WHY },
+    "frame-tested/default": { max: 1, why: FRAME_TESTED_WHY },
+  },
+  "us guide": {
+    "color-contrast/nonBmp": { max: 37, why: NON_BMP_WHY },
+    "color-contrast/pseudoContent": { max: 9, why: PSEUDO_CONTENT_WHY },
+    "color-contrast/bgOverlap": {
+      max: 9,
+      why: bgOverlapWhy(
+        "sight-card captions/credit under a still-loading OR explicitly-failed photo (sights.css's " +
+          ".media-ok/.media-fail split) and the masthead's broken-cover-photo fallback (masthead.css)",
+      ),
+    },
+    "frame-tested/default": { max: 1, why: FRAME_TESTED_WHY },
+  },
 };
 
 /* Narrow viewports reflow the same prose across more lines, and a colour-contrast incomplete
@@ -494,23 +558,6 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
    These are raises over the desktop numbers above, seeded from measurement rather than guessed,
    and only where mobile genuinely renders more. Where mobile renders FEWER, the desktop max
    stands as a (looser but safe) ceiling rather than being tracked twice. */
-const PILL_ROW_CLIPPED_WHY =
-  "R5 gave the PHONE a rail. The spine's phone model is a horizontally scrolling pill row " +
-  "(guide-rail/styles.css, .grail-track{overflow-x:auto} — a real, load-bearing rule, the same " +
-  "category as JLINE_CLIPPED_WHY and DAY_SWIPE_CLIPPED_WHY above), so on a 390px screen only the " +
-  "first few stops are in view and the rest sit past the scroller's right edge. axe declines a " +
-  "partially-clipped element's contrast because it cannot sample a midpoint that falls outside " +
-  "the visible box — a geometry artifact, not a colour judgement. Identified NODE BY NODE on an " +
-  "instrumented local run rather than absorbed as jitter: exactly #gtab-4 through #gtab-12's " +
-  ".grail-label (Sights, Daejeon & MSI, Gaming & anime, Food & shopping, Pokemon GO, Tokyo, " +
-  "Sources, Field log, Tools) — the nine of korea's thirteen stops that do not fit 390px. Stops " +
-  "0-3 are fully visible and axe measures them normally. The count is therefore a function of the " +
-  "guide's own station count, which is why it is korea (13 stops) that needs the entry. " +
-  "The real colour pair is provably safe independent of what axe could measure: an inactive pill " +
-  "is .grail-stop{color:var(--ink)} on the rail's .grail{background:var(--bg)}, and the active " +
-  "one is var(--on-aink) on var(--accent) — both pinned by src/styles/atlas-tokens.test.ts, the " +
-  "first at 15.60:1 in the R5 lifted Day palette. Desktop reports zero nodes of this key: the " +
-  "spine lays all thirteen stops out at once, so nothing is clipped.";
 
 const MOBILE_DELTA: Record<string, Record<string, Baseline>> = {
   hub: {
@@ -546,6 +593,20 @@ const MOBILE_DELTA: Record<string, Record<string, Baseline>> = {
     // Stage A.1's day-scrub sticky fix (see DAY_SCRUB_STICKY_RANGE_WHY) — mobile-only, measured
     // 16 on both colour schemes; desktop's shorter forced-open page stays within the base max: 4.
     "color-contrast/elmPartiallyObscured": { max: 16, why: DAY_SCRUB_STICKY_RANGE_WHY },
+  },
+  "japan guide": {
+    // Measured 57 at 375px against 27 at 1280px — the same three GUIDE_TIMELINE_CLIPPED_WHY
+    // mechanisms (pill row + day-scrub + journey-line) render more of themselves in the
+    // single-column mobile layout, at japan's own stop/day count.
+    "color-contrast/elmPartiallyObscured": { max: 57, why: GUIDE_TIMELINE_CLIPPED_WHY },
+  },
+  "us guide": {
+    // Measured 7 at 375px against 0 at 1280px — the same combined mechanism as japan above, at
+    // us's own smaller stop/day count.
+    "color-contrast/elmPartiallyObscured": { max: 7, why: GUIDE_TIMELINE_CLIPPED_WHY },
+    // Mobile-only: us's journey line clips one stop at the .anch-scroll edge (.jl-word), the same
+    // mechanism japan's own elmPartiallyObscuring entry above documents at desktop scale.
+    "color-contrast/elmPartiallyObscuring": { max: 1, why: JLINE_CLIPPED_WHY },
   },
 };
 
@@ -584,15 +645,22 @@ for (const [name, path] of [
   });
 }
 
-// Every page shape the site builds: the hub, and BOTH guides. Korea and Denmark
+// Every page shape the site builds: the hub, and ALL FOUR guides. Korea and Denmark
 // differ in ways axe can see — Denmark has no learnings block (so no reality
 // layer), Korea carries four extra content groups and a habitats/raids grid — so
-// covering one guide leaves the other's markup ungated. Both colour schemes: the
-// accent-token dark-mode remap has its own failure modes light mode can't surface.
+// covering one guide leaves the other's markup ungated. Japan and US joined this pass
+// (design-reconciliation §C5): the full-scan list had silently only ever covered two of
+// the four guides, and extending it immediately found a real, previously-shipping
+// landmark-unique bug on Japan's Etiquette & language tab (Panel.astro's implicit
+// role="region" colliding with its own tab-group ancestor) — fixed at the shared
+// component, see Panel.astro. Both colour schemes: the accent-token dark-mode remap has
+// its own failure modes light mode can't surface.
 for (const [name, path] of [
   ["hub", "/Trip-Guides/"],
   ["korea guide", "/Trip-Guides/guides/korea/"],
   ["denmark guide", "/Trip-Guides/guides/denmark/"],
+  ["japan guide", "/Trip-Guides/guides/japan/"],
+  ["us guide", "/Trip-Guides/guides/us/"],
   ["new intake", "/Trip-Guides/new/"], // R4: the composed intake — gated from birth
   /* ⌁ `["trip tools", "/Trip-Guides/tools/korea/"]` was here and is REMOVED, not relocated.
      R5 deleted that route and this entry kept pointing at it — so for four combos the gate
