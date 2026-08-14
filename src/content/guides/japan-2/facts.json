@@ -60,14 +60,15 @@
     "state": "approx",
     "entity": "zao-okama-crater"
   },
-  "zao-okama-ropeway-3000": {
-    "claim": "Zao Ropeway — round trip to Jizo Sancho (crater hike trailhead)",
-    "value": "≈¥3,000",
-    "source_url": "https://www.zao-machi.com/",
-    "verified_on": "2026-07-29",
+  "zao-okama-ropeway-4400": {
+    "claim": "Zao Ropeway — adult round trip to Jizo Sancho (crater hike trailhead)",
+    "value": "¥4,400",
+    "source_url": "https://zaoropeway.co.jp/summer/en.php",
+    "verified_on": "2026-08-14",
     "shelf_life": "venue",
-    "state": "approx",
-    "entity": "zao-okama-crater"
+    "tier": "primary",
+    "entity": "zao-okama-crater",
+    "evidence": "round trip to Jizo Sancho Station — adult ¥4,400, child ¥2,200"
   },
   "koyo-sapporo-avg": {
     "claim": "Sapporo — average koyo (autumn foliage) peak window",
@@ -193,10 +194,5 @@
     "shelf_life": "venue",
     "state": "approx",
     "entity": "zao-ryokan"
-  },
-  "traveler-origin": {
-    "claim": "Traveler origin — departure airport",
-    "value": "JFK",
-    "state": "unconfirmed"
   }
 }

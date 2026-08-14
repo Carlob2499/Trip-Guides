@@ -37,10 +37,18 @@
     "group": "Plan",
     "title": "Phone & data",
     "phase": "before",
-    "body": "<p>For ~26 days of data, an <b>eSIM</b> is cheapest and most flexible — and matters more here than usual, since the group splits (2 fly home Nov 2) and a shared pocket-wifi puck stops working the moment you're not together. <b>Ubigi</b>'s 10GB/30-day plan runs {{fact:ubigi-10gb-30day-1650}}, unlimited/30-day {{fact:ubigi-unlimited-30day-65}} — activation is clean, the plan starts the moment you validate it in-app. <b>⚠ \"Unlimited\" plans on every major eSIM provider (Ubigi, Airalo, Holafly) have a repeated, unresolved complaint about throttling past a daily threshold</b> — budget for the higher tier if you're shooting a lot of photo/video. Buy before you land (installs over home wifi, activates on arrival).</p>",
+    "body": "<p>For ~27 days of data, an <b>eSIM</b> is cheapest and most flexible — and matters more here than usual, since the group splits (2 fly home Nov 2) and a shared pocket-wifi puck stops working the moment you're not together. <b>Ubigi</b>'s 10GB/30-day plan runs {{fact:ubigi-10gb-30day-1650}}, unlimited/30-day {{fact:ubigi-unlimited-30day-65}} — activation is clean, the plan starts the moment you validate it in-app.</p><p>The 10GB price comes from its own plan page; the unlimited one is ⚠ carried from an earlier check and couldn't be re-read, since Ubigi shows that tier only inside its store — treat it as a ballpark and confirm at checkout.<b>⚠ \"Unlimited\" plans on every major eSIM provider (Ubigi, Airalo, Holafly) have a repeated, unresolved complaint about throttling past a daily threshold</b> — budget for the higher tier if you're shooting a lot of photo/video. Buy before you land (installs over home wifi, activates on arrival).</p>",
     "verified_on": "2026-08-10",
     "shelf_life": "default",
     "source_url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/japan-10gb-30-days/"
+  },
+  {
+    "type": "panel",
+    "group": "Plan",
+    "title": "Health & pharmacy",
+    "fold": false,
+    "phase": "before",
+    "body": "<p><b>Emergency numbers:</b> Police <b>110</b>, Fire/Ambulance <b>119</b> — both work nationwide, English support is limited but dispatchers can usually connect a translator. Save these before you land.</p><p><b>Pharmacies</b> (Matsumoto Kiyoshi, Sugi, Tsuruha) are everywhere in Tenjin, Susukino, and around Sendai Station, but English-speaking pharmacists are the exception outside Tokyo — bring any prescriptions in their original labeled packaging, and a doctor's note if you carry anything that could read as a controlled substance (some common US allergy/ADHD medications are restricted in Japan).</p><p><b>Hokkaido and Tohoku in late Oct/Nov run cold</b> — Sapporo's average first snow lands late October, and mountain trail areas (Jozankei's harder routes, Zao) can see snow before that. Pack real layers and waterproof footwear for the hiking days.</p><p><b>Earthquakes:</b> Japan is seismically active nationwide, and Tohoku specifically was the epicenter region of the 2011 Great East Japan Earthquake — the 2 continuing to Sendai will visit stops (Naruko Gorge's shortened trail, coastal Matsushima) that still carry visible aftereffects. If a quake hits: drop, cover, hold on; away from the coast there's no tsunami risk, but Matsushima is a coastal stop — know the nearest high ground if you're there when one happens.</p><p><b>US State Dept travel advisory:</b> could not be confirmed — the page is bot-gated against automated fetches and needs a live browser check. Check travel.state.gov directly before you go — it's on the booking checklist above.</p>"
   },
   {
     "type": "panel",
@@ -58,6 +66,7 @@
       "eSIM (Ubigi/Airalo) for each traveler — buy before departure, install over home wifi",
       "JR Kyushu rail pass (Northern, 5-day) and/or JR East–South Hokkaido Rail Pass, if the point-to-point fare comparison favors them",
       "Pokémon GO Wild Area Sendai tickets — sales not yet open as of this check; watch pokemongo.com and buy immediately once they open, past events have sold out",
+      "Check whether Wild Area day 1 (Nov 6) is timed-entry BEFORE locking the Zao Onsen ryokan for Nov 5 — that checkout lands you back in Sendai around midday",
       "Travel insurance",
       "US State Dept travel advisory — bot-gated against automated fetches this pass; needs a live browser check before travel",
       "Any timed museum/attraction tickets that come up once dates are locked"

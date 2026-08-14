@@ -1,7 +1,7 @@
 [
   {
     "type": "venues",
-    "group": "Food & shopping",
+    "group": "Food & dining",
     "title": "Fukuoka — ramen",
     "phase": "daily",
     "rank": 2,
@@ -43,7 +43,7 @@
   },
   {
     "type": "venues",
-    "group": "Food & shopping",
+    "group": "Food & dining",
     "title": "Fukuoka — yatai, motsunabe & mentaiko",
     "phase": "daily",
     "rank": 2,
@@ -63,7 +63,10 @@
         "why": "Officially licensed and location-assigned by Fukuoka City. Tenjin is where residents actually eat — cheaper (≈¥100–200 less per ramen bowl) and more Hakata-ben than tourist chatter — while Nakasu is the livelier, more tourist-facing riverside scene, worth seeing for the atmosphere even if Tenjin is the better meal.",
         "crowd_tip": "Best windows are right at opening or ≈21:00 once the first dinner rush clears. Bring {{fact:local-essentials-1000}} notes — stalls often can't break a {{fact:local-essentials-10000}} bill.",
         "price": "~90% cash-only",
-        "map": { "lat": 33.5906696, "lng": 130.4079063 },
+        "map": {
+          "lat": 33.5906696,
+          "lng": 130.4079063
+        },
         "place_id": "ChIJu43ESZSRQTURr0huMxMFZDI"
       },
       {
@@ -73,7 +76,10 @@
         "why": "Residents largely skip the pricier, tourist-oriented Tenjin/Nakasu yatai (no walls/AC, no reservations, tourist-priced menus) for the Nagahama district's stalls — noticeably cheaper (≈¥500–700/bowl) and locally frequented. The row nearly died out but a \"Nagahama Yatai Revival Project\" reopened several stalls; this one is confirmed still operating.",
         "crowd_tip": "The most local of the trip's three yatai options (Tenjin, Nakasu, here) — go if the Tenjin/Nakasu evening leaves you wanting the quieter, cheaper version.",
         "price": "≈¥500–700/bowl, cash-only",
-        "map": { "lat": 33.5930502, "lng": 130.3871955 },
+        "map": {
+          "lat": 33.5930502,
+          "lng": 130.3871955
+        },
         "verified_on": "2026-08-14",
         "shelf_life": "venue",
         "source_url": "https://yokatoko-fukuoka.jp/column/nagahama-ramen/",
@@ -105,7 +111,10 @@
         "book": "walk-in",
         "why": "Fukuya is the brand that invented commercial mentaiko, and this location stocks a honten-exclusive tin not sold elsewhere.",
         "price": "≈¥3,672 for the honten-exclusive tin",
-        "map": { "lat": 33.5920508, "lng": 130.4080741 },
+        "map": {
+          "lat": 33.5920508,
+          "lng": 130.4080741
+        },
         "place_id": "ChIJFZ4i_JSRQTURZXWTUqkSsrE"
       },
       {
@@ -120,7 +129,7 @@
   },
   {
     "type": "venues",
-    "group": "Food & shopping",
+    "group": "Food & dining",
     "title": "Fukuoka — Yanagibashi Market",
     "phase": "daily",
     "rank": 2,
@@ -132,94 +141,32 @@
     "items": [
       {
         "name": "Yanagibashi Rengo Ichiba",
+        "area": "Haruyoshi, Chuo-ku",
+        "address": "1-6-1 Haruyoshi, Chuo-ku",
+        "hours": "≈8:00–17:00, though each stall keeps its own",
+        "closed": "Sundays and national holidays",
         "book": "walk-in",
+        "how": "≈10 min walk from Watanabe-dori or Yakuin subway station, between Tenjin and Hakata.",
         "why": "Nicknamed \"Fukuoka's Kitchen\" — a genuine working public fish/produce market with small sit-down counters, off the standard Hakata/Tenjin/Nakasu circuit. Fukuoka Now, the city's resident/expat magazine, has independently featured it across multiple years as one of the city's most distinctive spots to see actual daily commerce rather than a tourist market.",
-        "crowd_tip": "⚠ Check current hours before going — traditional fish markets often skip Sundays.",
-        "map": { "lat": 33.5829794, "lng": 130.4084273 },
-        "place_id": "ChIJcRcfs5mRQTUR5D_YhnCAeBQ"
-      }
-    ]
-  },
-  {
-    "type": "venues",
-    "group": "Food & shopping",
-    "title": "Fukuoka — shopping & gaming",
-    "phase": "daily",
-    "rank": 3,
-    "theme": "Shopping",
-    "intro": "<p>This trip explicitly skips Tokyo/Akihabara and Osaka/Den Den Town, so here's the regional answer instead — set expectations as \"solid regional branch,\" not Tokyo/Osaka flagship depth on any one hot category (Pokémon cards, current-season figures). <b>Honest gap, checked rather than assumed:</b> \"Teenage Dream Records,\" a commonly-cited Daimyo record-shop pick, has permanently closed — confirmed via Google Places. Border Line Records nearby is confirmed still open but redundant with TICRO MARKET (below) as the primary record-shop pick, so it's a second-visit footnote rather than a separate stop.</p>",
-    "verified_on": "2026-07-29",
-    "shelf_life": "venue",
-    "source_url": "https://www.animate.co.jp/en/shop/fukuokatenjin/",
-    "items": [
-      {
-        "name": "Animate Fukuoka PARCO",
-        "area": "Tenjin",
-        "address": "8F, Fukuoka PARCO Main Bldg, 2-11-1 Tenjin",
-        "phone": "092-732-8070",
-        "hours": "10:00–20:30",
-        "book": "walk-in",
-        "why": "A real, non-token branch of the national anime-goods chain.",
-        "map": { "lat": 33.5909156, "lng": 130.3987274 },
-        "place_id": "ChIJtTHWz4iRQTURJjWhyDSwJXk"
-      },
-      {
-        "name": "Mandarake Fukuoka",
-        "area": "Daimyo",
-        "address": "Grand Bldg, 2-9-5 Daimyo",
-        "phone": "092-716-7774",
-        "hours": "12:00–20:00 daily",
-        "book": "walk-in",
-        "why": "Two floors of games/toys/cards/vintage on 1F and cosplay/dolls/doujinshi on 2F, duty-free over ¥5,000.",
-        "map": { "lat": 33.5901747, "lng": 130.3937289 },
-        "place_id": "ChIJAQBAJoaRQTURO3HsHm6qY3A"
-      },
-      {
-        "name": "Gashapon Department Store",
-        "how": "Inside Canal City Hakata.",
-        "book": "walk-in",
-        "why": "Opened 2020, ~2,200 capsule-toy machines — Fukuoka's dedicated gacha landmark.",
-        "map": { "lat": 33.5884979, "lng": 130.4107175 },
-        "place_id": "ChIJLwf1dxKRQTURAI0T-yCAH3A"
-      },
-      {
-        "name": "TICRO MARKET (チクロマーケット)",
-        "area": "Daimyo",
-        "book": "walk-in",
-        "why": "A specialist record shop (rock/jazz/electronica/world) tucked in the Daimyo/Imaizumi vintage-shopping backstreets — the pick over the now-closed \"Teenage Dream Records\" and the redundant Border Line Records.",
-        "map": { "lat": 33.587139, "lng": 130.3958532 },
+        "crowd_tip": "It closes Sundays and national holidays, so it only works on a weekday or Saturday — the Oct 19 (Monday) lunch slot in Days is deliberate. Stalls thin out well before the 17:00 close; go for an early lunch, not a late one.",
+        "map": {
+          "lat": 33.5829794,
+          "lng": 130.4084273
+        },
+        "place_id": "ChIJcRcfs5mRQTUR5D_YhnCAeBQ",
+        "closed_days": [
+          "sun"
+        ],
+        "source_url": "https://www.crossroadfukuoka.jp/spot/12640",
         "verified_on": "2026-08-14",
         "shelf_life": "venue",
-        "source_url": "https://local-t.com/blogs/fukuoka/vinyl",
-        "place_id": "ChIJhUWz1IWRQTURPU4ZXuzyXzs",
         "tier": "corroborated"
-      },
-      {
-        "name": "Culture Arts",
-        "area": "Tenjin",
-        "how": "3rd floor of an apartment building near Tenjin.",
-        "book": "walk-in",
-        "why": "An independent retro-game shop that comes up repeatedly as the locals'/enthusiasts' non-chain alternative.",
-        "map": { "lat": 33.5932722, "lng": 130.395327 },
-        "place_id": "ChIJHxo0s-6RQTURj6GMgQXB7xc"
-      },
-      {
-        "name": "Taito Station Fukuoka Tenjin",
-        "area": "Tenjin",
-        "address": "Southern Cross Bldg, 2-6-35 Tenjin",
-        "phone": "092-737-5500",
-        "hours": "10:00–24:00 year-round",
-        "book": "walk-in",
-        "why": "Anchors a reported cluster with nearby GiGO and Round1 locations.",
-        "crowd_tip": "The cluster is unconfirmed beyond blog mentions — worth a look on the ground.",
-        "map": { "lat": 33.589634, "lng": 130.397274 },
-        "place_id": "ChIJr9Yab4-RQTURvRScd6Tb5oA"
       }
     ]
   },
   {
     "type": "venues",
-    "group": "Food & shopping",
+    "group": "Food & dining",
     "title": "Sapporo — jingisukan, miso ramen & Nijo Market",
     "phase": "daily",
     "rank": 2,
@@ -231,21 +178,30 @@
         "book": "call",
         "why": "Sapporo's signature charcoal-grilled lamb, a shared, drinking-friendly grill format. Founded 1954, its own sauce recipe, named as \"the place\" for jingisukan across multiple independent write-ups. Sapporo Beer Garden is the larger, more tour-group-scaled alternative if Daruma is full.",
         "crowd_tip": "⚠ Address/hours not independently confirmed against an official page — call ahead to book for a party of 4 and confirm current hours.",
-        "map": { "lat": 43.0538364, "lng": 141.3524624 },
+        "map": {
+          "lat": 43.0538364,
+          "lng": 141.3524624
+        },
         "place_id": "ChIJbQQV34UpC18RgzQI7TQon1g"
       },
       {
         "name": "Menya Saimi",
         "book": "walk-in",
         "why": "Sapporo is the birthplace of miso ramen; this shop stands out for genuine local following (its recipe became a retail instant-ramen product) rather than just tourist-guide visibility — a single-source lead, worth a walk-by rather than a locked plan.",
-        "map": { "lat": 43.0352658, "lng": 141.3819435 },
+        "map": {
+          "lat": 43.0352658,
+          "lng": 141.3819435
+        },
         "place_id": "ChIJ8QvxwkgqC18RzLwtQHUynbc"
       },
       {
         "name": "Nijo Market",
         "book": "walk-in",
         "why": "Sapporo's classic seafood market, good for a morning uni/crab breakfast; no strong \"locals go elsewhere instead\" alternative surfaced, so treat it as the standard, reasonably reliable pick.",
-        "map": { "lat": 43.058299, "lng": 141.358446 },
+        "map": {
+          "lat": 43.058299,
+          "lng": 141.358446
+        },
         "place_id": "ChIJCb2qW4IpC18R93EsGNFraJI"
       },
       {
@@ -256,7 +212,10 @@
         "book": "walk-in",
         "why": "Sapporo's most internationally known soup curry — a dashi-based broth built from ~30 ingredients and 21 spices, with a spice-level scale from 1 up to 40. Independent write-ups converge on this as the essential bowl.",
         "crowd_tip": "⚠ No reservations — a ticket-number system kicks in when busy, and lines are reported long at both lunch and dinner. Suage+ (founded 2007, fried-chicken-forward) draws similar local loyalty with reportedly shorter lines — a real fallback.",
-        "map": { "lat": 43.058399699999995, "lng": 141.3588997 },
+        "map": {
+          "lat": 43.058399699999995,
+          "lng": 141.3588997
+        },
         "place_id": "ChIJQ21rhoMpC18RmzhfndITzug",
         "source_url": "https://www.gltjp.com/en/directory/item/13955/",
         "verified_on": "2026-08-03",
@@ -267,7 +226,10 @@
         "area": "Yamanote, Nishi-ku",
         "book": "walk-in",
         "why": "Off the main Susukino/Ōdōri soup-curry circuit — spice-forward, minimal-dairy stock, with other soup-curry shop owners cited as regulars here. The shop's own description: \"うちの味はマニアック\" (our flavor is for the die-hards). The novel alternative if GARAKU's line is too long or the goal is the locals' bowl, not the famous one.",
-        "map": { "lat": 43.0685092, "lng": 141.2951363 },
+        "map": {
+          "lat": 43.0685092,
+          "lng": 141.2951363
+        },
         "verified_on": "2026-08-14",
         "shelf_life": "venue",
         "source_url": "https://gop-soupcurry.com/",
@@ -282,7 +244,10 @@
         "book": "walk-in",
         "why": "A 42m alley of ~17 independent miso-ramen counters, tracing back to a 1951 ramen row demolished in 1969 for Olympic-era road expansion and revived at this location in 1971. A browse-many-shops pick that complements Menya Saimi rather than replacing it.",
         "crowd_tip": "Crowded with visitors through the day; locals mostly show up late at night after drinking in Susukino.",
-        "map": { "lat": 43.0547934, "lng": 141.35429159999998 },
+        "map": {
+          "lat": 43.0547934,
+          "lng": 141.35429159999998
+        },
         "place_id": "ChIJSyzMXY8pC18R-ecCwIykpC8",
         "source_url": "https://www.sapporo.travel/en/gourmet/shop/ganso-ramen-yokocho/",
         "verified_on": "2026-08-03",
@@ -296,7 +261,10 @@
         "price": "Seafood-bowl set meals vary by shop, roughly ¥2,000–4,000",
         "why": "A working, wholesale-adjacent market of ~60–80 stalls and eateries sourcing straight from the morning auctions next door — a larger-scale alternative to Nijo Market for a seafood breakfast, at the cost of being further from Susukino.",
         "crowd_tip": "Less tourist-branded than Nijo Market day-to-day, but still a known guidebook name — a genuine second option, not an undiscovered secret.",
-        "map": { "lat": 43.073412399999995, "lng": 141.3221065 },
+        "map": {
+          "lat": 43.073412399999995,
+          "lng": 141.3221065
+        },
         "place_id": "ChIJ0SAA6q0pC18Ril72znQb3eE",
         "source_url": "https://www.sapporo.travel/en/spot/facility/sapporo_central_wholesale_market/",
         "verified_on": "2026-08-03",
@@ -306,53 +274,7 @@
   },
   {
     "type": "venues",
-    "group": "Food & shopping",
-    "title": "Sapporo — shopping & gaming",
-    "phase": "daily",
-    "rank": 3,
-    "theme": "Shopping",
-    "intro": "<p>Tanukikoji itself is worth a browse beyond C-pla — the city's own tourism board confirms game centers and anime-goods shops scattered through the arcade, a district to wander rather than one pinned address.</p>",
-    "verified_on": "2026-07-29",
-    "shelf_life": "venue",
-    "source_url": "https://www.animate.co.jp/en/shop/sapporo/",
-    "items": [
-      {
-        "name": "Animate Sapporo",
-        "area": "Susukino",
-        "address": "2F Marudai Bldg, 1-5 Minami 2-jo Nishi, Chuo-ku",
-        "phone": "011-219-1223",
-        "hours": "11:00–20:00",
-        "book": "walk-in",
-        "why": "Sits near Susukino.",
-        "map": { "lat": 43.0587057, "lng": 141.3560096 },
-        "place_id": "ChIJSyBo4oIpC18RLfwQ_-HnIOk"
-      },
-      {
-        "name": "Mandarake Sapporo",
-        "area": "Susukino",
-        "address": "NORBESA Bldg 2F, Minamisanjo Nishi 5-1-1",
-        "phone": "011-207-7773",
-        "hours": "12:00–20:00 daily",
-        "book": "walk-in",
-        "why": "Comics/toys/CDs/games/cosplay/dolls, duty-free over ¥5,000.",
-        "crowd_tip": "Honest caveat: specific trending categories (current Pokémon cards, hot anime figures) run shallower than a flagship store; go for breadth, not depth on any one franchise.",
-        "map": { "lat": 43.0559428, "lng": 141.3511392 },
-        "place_id": "ChIJo7vfsYUpC18RRXbj5JKgDxI"
-      },
-      {
-        "name": "C-pla",
-        "how": "Inside the Tanukikoji covered shopping arcade.",
-        "hours": "Open to 22:00",
-        "book": "walk-in",
-        "why": "Opened Oct 2023, one of Hokkaido's largest capsule-toy shops — Sapporo's gacha landmark.",
-        "map": { "lat": 43.0571701, "lng": 141.3557218 },
-        "place_id": "ChIJ4S9mvyYpC18ROzWHh23rzuE"
-      }
-    ]
-  },
-  {
-    "type": "venues",
-    "group": "Food & shopping",
+    "group": "Food & dining",
     "title": "Sendai — gyutan, hiyashi chūka & the back-alley izakaya lanes",
     "phase": "daily",
     "rank": 2,
@@ -364,7 +286,10 @@
         "book": "walk-in",
         "why": "The actual restaurant where hiyashi chūka (cold ramen) was invented in 1937, adapting the Shanghainese dish liangbanmian — a distinctive fact for Sendai's food identity, usually reduced to gyutan alone.",
         "crowd_tip": "⚠ Confirm it's still open and check current hours locally.",
-        "map": { "lat": 38.2674817, "lng": 140.876861 },
+        "map": {
+          "lat": 38.2674817,
+          "lng": 140.876861
+        },
         "place_id": "ChIJz1STJCYoil8Re1n8XYd-3Ys"
       },
       {
@@ -373,7 +298,10 @@
         "book": "walk-in",
         "why": "Run by a direct disciple of Sano Keishiro, gyutan-yaki's originator — named repeatedly across local sources as the residents' pick over the station-front chain row.",
         "crowd_tip": "Limited daily quantity — a line forms before opening. Confirmed still operating.",
-        "map": { "lat": 38.261260199999995, "lng": 140.8687617 },
+        "map": {
+          "lat": 38.261260199999995,
+          "lng": 140.8687617
+        },
         "verified_on": "2026-08-14",
         "shelf_life": "venue",
         "source_url": "https://www.tanyaki-ichiryu.com/",
@@ -387,14 +315,20 @@
         "book": "walk-in",
         "why": "On the former Date-clan castle grounds — a distinct gyutan (grilled beef tongue) pick from the big station-area chains most visitors default to.",
         "price": "Set meals from ¥2,330",
-        "map": { "lat": 38.252218299999996, "lng": 140.8562437 },
+        "map": {
+          "lat": 38.252218299999996,
+          "lng": 140.8562437
+        },
         "place_id": "ChIJeRXL1EIoil8R7mPEpbXmLXc"
       },
       {
         "name": "Kokubuncho, Bunka-yokocho & Iroha-yokocho",
         "book": "walk-in",
         "why": "Sendai's drinking district and its retro Shōwa-era back-alley izakaya lanes — tiny 8–10-seat bars in former storage-warehouse buildings, repeatedly named across independent sources as the city's nightlife core most visitors miss entirely.",
-        "map": { "lat": 38.258959, "lng": 140.8725576 },
+        "map": {
+          "lat": 38.258959,
+          "lng": 140.8725576
+        },
         "place_id": "ChIJB5rnyT0oil8RwyBRF6T7xZ0"
       },
       {
@@ -402,7 +336,10 @@
         "area": "Bunka-yokocho",
         "book": "walk-in",
         "why": "A 200-year-old former warehouse building with genuine local following — one specific standout inside Bunka-yokocho.",
-        "map": { "lat": 38.2593046, "lng": 140.8733374 },
+        "map": {
+          "lat": 38.2593046,
+          "lng": 140.8733374
+        },
         "place_id": "ChIJwaMrsD0oil8RWNWxZ7hs3sk"
       },
       {
@@ -414,7 +351,10 @@
         "price": "Priced per piece",
         "why": "The originator of sasakamaboko itself — the bamboo-leaf-shaped fish cake takes its name from the Date family's \"sasa ni suzume\" crest, and this is the founding shop. A no-reservation stall lets you hand-grill your own piece on-site.",
         "crowd_tip": "A good stop woven into a Kokubuncho evening or a daytime walk near Aoba Castle.",
-        "map": { "lat": 38.2609529, "lng": 140.8750043 },
+        "map": {
+          "lat": 38.2609529,
+          "lng": 140.8750043
+        },
         "place_id": "ChIJUbl72jwoil8RMPSKrXMTD5g",
         "source_url": "https://www.sentabi.jp/en/tours/930",
         "verified_on": "2026-08-03",
@@ -427,7 +367,10 @@
         "book": "walk-in",
         "why": "Zunda (sweet edamame paste) is Sendai's other defining flavor beyond gyutan — this is the specialty shop for it. Right inside the station, so it slots into an arrival or departure day with zero extra transit.",
         "crowd_tip": "Can queue at peak travel times — a between-train stop rather than a sit-down destination.",
-        "map": { "lat": 38.2604316, "lng": 140.8818661 },
+        "map": {
+          "lat": 38.2604316,
+          "lng": 140.8818661
+        },
         "place_id": "ChIJIQAgjxgoil8RJlLtqWr8r-8",
         "source_url": "https://en.hoshinoresorts.com/guide/area/hokkaidotohoku/miyagi/sendai/akiu_zunda/",
         "verified_on": "2026-08-03",
@@ -441,73 +384,15 @@
         "price": "≈¥2,500 all-you-can-eat",
         "why": "Miyagi's oyster season runs autumn through winter, and this hut lets you grill/steam your own at the table — a genuine seasonal pairing with the Matsushima Bay sight. 45-min time limit; +¥500 adds fried rice and miso soup.",
         "crowd_tip": "⚠ Hours are reported as subject to change — confirm same-day if possible.",
-        "map": { "lat": 38.3714516, "lng": 141.0655607 },
+        "map": {
+          "lat": 38.3714516,
+          "lng": 141.0655607
+        },
         "place_id": "ChIJvXt_OZ-biV8Rw1x9nLk4KQ4",
         "source_url": "https://discoversendai.travel/places/matsushima-tourism-association-oyster-shack/",
         "verified_on": "2026-08-03",
         "shelf_life": "venue"
       }
     ]
-  },
-  {
-    "type": "venues",
-    "group": "Food & shopping",
-    "title": "Sendai — shopping & gaming",
-    "phase": "daily",
-    "rank": 3,
-    "theme": "Shopping",
-    "intro": "<p>For the 2 of you continuing past Nov 2. <b>Honest gap, confirmed rather than assumed:</b> Mandarake has no branch anywhere in Sendai or Tohoku — checked directly against Mandarake's own store list, which runs Tokyo (×4), Utsunomiya, Nagoya, Osaka, Kyoto, Fukuoka, Kokura, and Sapporo, with nothing in between.</p>",
-    "verified_on": "2026-07-29",
-    "shelf_life": "venue",
-    "source_url": "https://www.animate.co.jp/en/shop/sendai/",
-    "items": [
-      {
-        "name": "Animate Sendai",
-        "address": "Sendaiekimae EBeanS 7F, 4-1-1 Chuo, Aoba-ku",
-        "phone": "022-264-0437",
-        "hours": "Store 10:00–20:00; attached Animate Cafe Gratte",
-        "how": "3 min from Sendai Station West Exit.",
-        "book": "walk-in",
-        "why": "The chain-store anchor.",
-        "crowd_tip": "One lead describes it as \"actually small considering it's the city's only shop\" and notes weekend crowding.",
-        "map": { "lat": 38.2586228, "lng": 140.8796841 },
-        "place_id": "ChIJS2Uado8vdkARRJoWg79Zrjc"
-      },
-      {
-        "name": "e-Beans",
-        "book": "walk-in",
-        "why": "The same multi-floor building housing Animate — described by one enthusiast source as \"Sendai's version of Nakano Broadway,\" with bookstores and dedicated anime-goods specialty shops beyond just the Animate tenant.",
-        "map": { "lat": 38.2585564, "lng": 140.8797295 },
-        "place_id": "ChIJ9cpiYjsoil8Rh4g-9pYqmcM"
-      },
-      {
-        "name": "Seagull, Yamato-cho branch",
-        "area": "Yamato-cho",
-        "book": "walk-in",
-        "why": "A Tohoku-regional used-game chain that gets a reasonable notice (\"pretty good selection of retro games, systems, accessories\") for used games specifically.",
-        "crowd_tip": "Stock varies day to day.",
-        "map": { "lat": 38.24917, "lng": 140.912956 },
-        "place_id": "ChIJsxizofgnil8RdYY9k-x1s_M"
-      },
-      {
-        "name": "Kikuya",
-        "book": "walk-in",
-        "why": "A manga bookstore with DVD/CD/merch and manga-artist memorabilia — a further option beyond Animate.",
-        "map": { "lat": 38.258633, "lng": 140.87973 },
-        "place_id": "ChIJq2g8ihcoil8Ry52PQcINqeE"
-      }
-    ]
-  },
-  {
-    "type": "prose",
-    "group": "Food & shopping",
-    "title": "Shipping it all home",
-    "phase": "leaving",
-    "rank": 3,
-    "theme": "Shopping",
-    "body": "<p>Boxed figures, sealed games, and trading cards all qualify for the {{fact:tax-free-threshold-5000}}/store/day tax-free threshold (see the Plan tab for the {{fact:tax-free-cutover-nov-1}} system change that lands mid-trip). For anything too bulky or fragile to carry city-to-city, <b>Yamato Ta-Q-Bin</b> (see Transit) can forward a box straight to your next hotel instead of hauling it through more flights. For larger hauls that won't fit in luggage at all, Mandarake ships internationally directly from any of its branches — worth asking about at checkout.</p>",
-    "verified_on": "2026-08-14",
-    "shelf_life": "default",
-    "source_url": "https://www.mlit.go.jp/kankocho/tax-free/page01_000001_00028.html"
   }
 ]

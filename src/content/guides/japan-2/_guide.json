@@ -9,10 +9,20 @@
     "alt": "Naruko Gorge in full autumn color — red, orange, and yellow foliage lining the canyon walls",
     "focal": "50% 40%"
   },
-  "draft": true,
-  "verified": "⚠ Draft — Pass A (canonical/verified backbone) and Pass B (local/authentic, corroborated to primary sources) reconciled into one guide; the self-correction verify loop is the remaining stage. Confirmed against primary sources so far: Pokémon GO Wild Area Sendai (Nov 6–8, 2026 — pokemongo.com; venue + ticket sales still unannounced), US visa-free entry (90 days — mofa.go.jp), Japan's Nov 1, 2026 tax-free system cutover (mlit.go.jp), the Zao Ropeway's actual Apr 1–Dec 10 operating season (zaoropeway.co.jp — corrects an unsourced \"typically closes in November\" assumption from an earlier pass on this same trip), JR Kyushu/JR East–South Hokkaido rail-pass pricing, every restaurant/shop/trail address in Food & shopping and Sights, and Pass B's crowd/timing and novel-alternative finds (Ofukazawa Promenade, Otaru's North Canal, Mt. Moiwa's night-view crowd window, Yamadera's opening time, Tetarazu Kaihin Park, Akaiwa no Ma, the Nagahama yatai district, Tanyaki Ichiryu Honten, gop no Anagura, TICRO MARKET). ⚠ Re-check before travel: Wild Area Sendai's exact venue and ticket sale date (unannounced); the JMC's first 2026 koyo forecast (publishes ~mid-Sept 2026 — every foliage date here is a multi-year average); the US State Dept advisory level (its page is bot-gated against automated fetches — needs a live browser check, not yet done); the Zao/Sendai accommodation split for the 2 travelers continuing past Nov 2 (open traveler question); your actual departure airport (unconfirmed — no globe route drawn until set).",
+  "verified": "Checked 2026-08-14 — a canonical/verified backbone and an independent local/authentic pass reconciled into one guide, then read end to end by a fresh reviewer who corrected ten findings and re-audited a sample of citations against the pages they cite. Confirmed against primary sources: Pokémon GO Wild Area Sendai (Nov 6–8, 2026 — pokemongo.com; venue + ticket sales still unannounced), US visa-free entry (90 days — mofa.go.jp), Japan's Nov 1, 2026 tax-free system cutover (mlit.go.jp), the Zao Ropeway's actual Apr 1–Dec 10 operating season and its ¥4,400 adult round-trip fare (zaoropeway.co.jp — correcting, respectively, an unsourced \"typically closes in November\" assumption and a ≈¥3,000 fare credited to a page that carries no fare, both carried over from an earlier pass on this same trip), JR Kyushu/JR East–South Hokkaido rail-pass pricing, every restaurant/shop/trail address in the Food & dining, Shopping, Nature and Sights tabs, and the local pass's crowd/timing and novel-alternative finds (Ofukazawa Promenade, Otaru's North Canal, Mt. Moiwa's night-view crowd window, Yamadera's opening time, Tetarazu Kaihin Park, Akaiwa no Ma, the Nagahama yatai district, Tanyaki Ichiryu Honten, gop no Anagura, TICRO MARKET). ⚠ Re-check before travel: Wild Area Sendai's exact venue and ticket sale date (unannounced); the JMC's first 2026 koyo forecast (publishes ~mid-Sept 2026 — every foliage date here is a multi-year average); the US State Dept advisory level (its page is bot-gated against automated fetches — needs a live browser check, not yet done); the Zao/Sendai accommodation split for the 2 travelers continuing past Nov 2 (open traveler question); your actual departure airport (unconfirmed — no globe route drawn until set).",
   "provenance": "strict",
-  "panelGroups": ["Plan", "Transit", "Money & budget", "Health & safety", "Etiquette & language", "Sources", "Food & shopping", "Sights", "Days"],
+  "panelGroups": [
+    "Plan",
+    "Nature / outdoors",
+    "Sights",
+    "Transit",
+    "Days",
+    "Food & dining",
+    "Shopping",
+    "Money & budget",
+    "Etiquette & language",
+    "Sources"
+  ],
   "entry": [
     {
       "homeCountry": "United States",
@@ -26,16 +36,79 @@
   "phrases": {
     "lang": "ja-JP",
     "items": [
-      { "situation": "Getting attention / excuse me", "native": "すみません", "romanization": "Sumimasen", "source_url": "https://www.japanesepod101.com/blog/2019/11/21/japanese-travel-phrases/", "verified_on": "2026-08-14" },
-      { "situation": "I need help", "native": "助けてください", "romanization": "Tasukete kudasai", "note": "General distress — point-and-say if English fails entirely.", "source_url": "https://www.foodallergy.org/resources/travel-tips-japan", "verified_on": "2026-08-14" },
-      { "situation": "I need a doctor", "native": "医者を呼んでください", "romanization": "Isha o yonde kudasai", "source_url": "https://www.accessible-japan.com/accessible-japan-essential-japanese-phrases-for-hospital-visits-and-medical-assistance-for-disabled-travelers/", "verified_on": "2026-08-14" },
-      { "situation": "Call an ambulance (119)", "native": "救急車をお願いします", "romanization": "Kyūkyūsha o onegai shimasu", "source_url": "https://www.foodallergy.org/resources/travel-tips-japan", "verified_on": "2026-08-14" },
-      { "situation": "I have a food allergy", "native": "食物アレルギーがあります", "romanization": "Tabemono arerugī ga arimasu", "note": "Follow with the specific allergen if known — e.g. peanut is piinattsu (ピーナッツ).", "source_url": "https://japanhandbook.com/food-allergies-in-japan-labels-and-safe-phrases/", "verified_on": "2026-08-14" },
-      { "situation": "Do you have an English menu?", "native": "英語のメニューはありますか？", "romanization": "Eigo no menyū wa arimasu ka?", "source_url": "https://www.ponz.co.jp/en/blog/essential-japanese-phrases-travelers", "verified_on": "2026-08-14" },
-      { "situation": "Where is the station?", "native": "駅はどこですか？", "romanization": "Eki wa doko desu ka?", "source_url": "https://www.ponz.co.jp/en/blog/essential-japanese-phrases-travelers", "verified_on": "2026-08-14" },
-      { "situation": "Where is the bathroom?", "native": "トイレはどこですか？", "romanization": "Toire wa doko desu ka?", "source_url": "https://www.ponz.co.jp/en/blog/essential-japanese-phrases-travelers", "verified_on": "2026-08-14" },
-      { "situation": "Taxi: take me to ___, please", "native": "（行き先）までお願いします", "romanization": "~ made onegai shimasu", "note": "Fill the blank with a place name, or show a written address/map pin.", "source_url": "https://livejapan.com/en/article-a0000913/", "verified_on": "2026-08-14" },
-      { "situation": "Turn right / left / straight, please (taxi)", "native": "右／左／まっすぐお願いします", "romanization": "Migi / Hidari / Massugu onegai shimasu", "source_url": "https://livejapan.com/en/article-a0000913/", "verified_on": "2026-08-14" }
+      {
+        "situation": "Getting attention / excuse me",
+        "native": "すみません",
+        "romanization": "Sumimasen",
+        "source_url": "https://www.japanesepod101.com/blog/2019/11/21/japanese-travel-phrases/",
+        "verified_on": "2026-08-14"
+      },
+      {
+        "situation": "I need help",
+        "native": "助けてください",
+        "romanization": "Tasukete kudasai",
+        "note": "General distress — point-and-say if English fails entirely.",
+        "source_url": "https://www.foodallergy.org/resources/travel-tips-japan",
+        "verified_on": "2026-08-14"
+      },
+      {
+        "situation": "I need a doctor",
+        "native": "医者を呼んでください",
+        "romanization": "Isha o yonde kudasai",
+        "source_url": "https://www.accessible-japan.com/accessible-japan-essential-japanese-phrases-for-hospital-visits-and-medical-assistance-for-disabled-travelers/",
+        "verified_on": "2026-08-14"
+      },
+      {
+        "situation": "Call an ambulance (119)",
+        "native": "救急車をお願いします",
+        "romanization": "Kyūkyūsha o onegai shimasu",
+        "source_url": "https://www.foodallergy.org/resources/travel-tips-japan",
+        "verified_on": "2026-08-14"
+      },
+      {
+        "situation": "I have a food allergy",
+        "native": "食物アレルギーがあります",
+        "romanization": "Tabemono arerugī ga arimasu",
+        "note": "Follow with the specific allergen if known — e.g. peanut is piinattsu (ピーナッツ).",
+        "source_url": "https://japanhandbook.com/food-allergies-in-japan-labels-and-safe-phrases/",
+        "verified_on": "2026-08-14"
+      },
+      {
+        "situation": "Do you have an English menu?",
+        "native": "英語のメニューはありますか？",
+        "romanization": "Eigo no menyū wa arimasu ka?",
+        "source_url": "https://www.ponz.co.jp/en/blog/essential-japanese-phrases-travelers",
+        "verified_on": "2026-08-14"
+      },
+      {
+        "situation": "Where is the station?",
+        "native": "駅はどこですか？",
+        "romanization": "Eki wa doko desu ka?",
+        "source_url": "https://www.ponz.co.jp/en/blog/essential-japanese-phrases-travelers",
+        "verified_on": "2026-08-14"
+      },
+      {
+        "situation": "Where is the bathroom?",
+        "native": "トイレはどこですか？",
+        "romanization": "Toire wa doko desu ka?",
+        "source_url": "https://www.ponz.co.jp/en/blog/essential-japanese-phrases-travelers",
+        "verified_on": "2026-08-14"
+      },
+      {
+        "situation": "Taxi: take me to ___, please",
+        "native": "（行き先）までお願いします",
+        "romanization": "~ made onegai shimasu",
+        "note": "Fill the blank with a place name, or show a written address/map pin.",
+        "source_url": "https://livejapan.com/en/article-a0000913/",
+        "verified_on": "2026-08-14"
+      },
+      {
+        "situation": "Turn right / left / straight, please (taxi)",
+        "native": "右／左／まっすぐお願いします",
+        "romanization": "Migi / Hidari / Massugu onegai shimasu",
+        "source_url": "https://livejapan.com/en/article-a0000913/",
+        "verified_on": "2026-08-14"
+      }
     ]
   },
   "roomId": "0nrlkaeuogl14te6",

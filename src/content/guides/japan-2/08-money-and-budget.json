@@ -14,9 +14,9 @@
     "group": "Money & budget",
     "title": "Budget & daily costs — the shared leg (4 travelers, Oct 15–Nov 2)",
     "phase": "before",
-    "intro": "Rough <b>per-person USD</b> estimates for the 18 days all 4 of you travel together (Tokyo→Fukuoka→Sapporo). Mid-range target ($75–150/day) — lodging assumes twin-share rooms under the stated $100/night-per-room cap, so per person runs about half that. All figures are ≈ estimates, not fixed quotes — confirm as you book. The Sendai leg for the 2 continuing has its own budget section below.",
+    "intro": "Rough <b>per-person USD</b> estimates for the 19 days all 4 of you travel together (Tokyo→Fukuoka→Sapporo, Oct 15 through the Nov 2 split). Mid-range target ($75–150/day) — lodging assumes twin-share rooms under the stated $100/night-per-room cap, so per person runs about half that. All figures are ≈ estimates, not fixed quotes — confirm as you book. The Sendai leg for the 2 continuing has its own budget section below; between them the two sections cover all 27 days.",
     "currency": "$",
-    "days": 18,
+    "days": 19,
     "party": 4,
     "items": [
       {
@@ -80,7 +80,7 @@
         "note": "Ropeway fares (Mt. Moiwa), gacha/gaming spending, and similar — many days (Jigokudani, Otaru, yatai-hopping) cost nothing to just walk through."
       },
       {
-        "label": "eSIM / data (per person, ~18 days)",
+        "label": "eSIM / data (per person, ~19 days)",
         "basis": "trip",
         "est": 33,
         "low": 16.5,
@@ -126,9 +126,9 @@
   {
     "type": "budget",
     "group": "Money & budget",
-    "title": "Budget & daily costs — Sendai leg (the 2 of you continuing, Nov 2–10)",
+    "title": "Budget & daily costs — Sendai leg (the 2 of you continuing, Nov 3–10)",
     "phase": "before",
-    "intro": "Per-person USD for the 8 days after the group splits. The 2 flying home Nov 2 (Sapporo→Tokyo→int'l) aren't covered here — their return flight cost is left unestimated until the departure airport is confirmed (see the traveler question). All ≈ estimates.",
+    "intro": "Per-person USD for the 8 days after the group splits — Nov 2 itself sits in the shared-leg section above, since all 4 of you are still in Sapporo that morning. The 2 flying home Nov 2 (Sapporo→Tokyo→int'l) aren't covered here — their return flight cost is left unestimated until the departure airport is confirmed (see the traveler question). All ≈ estimates.",
     "currency": "$",
     "days": 8,
     "party": 2,
@@ -195,6 +195,18 @@
         "verified_on": "2026-07-29",
         "shelf_life": "transit",
         "source_url": "https://www.jreast.co.jp/e/"
+      },
+      {
+        "label": "Sights & activities, per day",
+        "basis": "day",
+        "est": 8,
+        "low": 2,
+        "high": 20,
+        "category": "Activities",
+        "note": "Thinner than it looks day to day, then front-loaded onto Nov 5: the Zao Ropeway alone is {{fact:zao-okama-ropeway-4400}} adult round trip. The rest are small admissions — Zuihoden ¥570, the Aoba Castle Museum ⚠ ≈¥700–770, Fukuura Island's bridge fee — and the rain plan_b bathhouses (Takinoyu ⚠ ≈¥150–300, Zuiganji ⚠ ≈¥700–1,000) land in the same bracket. Matsushima Bay, Naruko Gorge and the Aoba Castle honmaru grounds are all free to walk.",
+        "verified_on": "2026-08-14",
+        "shelf_life": "venue",
+        "source_url": "https://zaoropeway.co.jp/summer/en.php"
       },
       {
         "label": "Pokémon GO Wild Area Sendai — ticket",

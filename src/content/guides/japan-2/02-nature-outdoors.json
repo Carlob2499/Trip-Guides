@@ -1,7 +1,7 @@
 [
   {
     "type": "sights",
-    "group": "Sights",
+    "group": "Nature / outdoors",
     "title": "Top sights",
     "phase": "daily",
     "rank": 1,
@@ -11,8 +11,14 @@
         "name": "Matsushima Bay",
         "kicker": "One of Japan's official \"Three Views\" — Nihon Sankei",
         "body": "<p>A bay of ~260 pine-covered islets, officially designated one of Japan's Three Scenic Views since the Edo period alongside Amanohashidate and Miyajima. <b>Godaido</b> (the small vermilion hall on its own islet, right by the station) is the classic 10–15 min photo stop and gets crowded fast in peak season. For a quieter angle, walk out to <b>Fukuura Island</b> via its 252m red bridge (small entry fee) for pine-forest trails away from the waterfront crush, or up to <b>Saigyo Modoshi no Matsu Park</b> for an elevated panoramic view of the whole bay. Boat cruises run year-round. Get off the JR Senseki Line at <b>Matsushimakaigan Station</b>, not \"Matsushima Station\" — the latter is well away from the bay.</p>",
-        "img": { "file": "Matsushima (Matsushima Bay) with steamboats.jpg", "alt": "Boats on Matsushima Bay among pine-covered islets" },
-        "map": { "lat": 38.3675, "lng": 141.0525 },
+        "img": {
+          "file": "Matsushima (Matsushima Bay) with steamboats.jpg",
+          "alt": "Boats on Matsushima Bay among pine-covered islets"
+        },
+        "map": {
+          "lat": 38.3675,
+          "lng": 141.0525
+        },
         "verified_on": "2026-07-29",
         "shelf_life": "venue",
         "source_url": "https://www.japan.travel/en/spot/2127/"
@@ -21,7 +27,10 @@
         "name": "Tetarazu Kaihin Park (手樽海浜公園)",
         "kicker": "The bay locals actually use — 10 min by car from the pier crowds",
         "body": "<p>A quiet 485m shoreline park ≈10 min by car from central Matsushima, on the same bay but away from the pier crowds — used by residents (kids on bikes, skateboarders) rather than tour groups, with a produce/soft-serve trailer stand (\"Kaze no Marché\") in the parking area. A good pairing with the Godaido/Fukuura Island stop for anyone who wants Matsushima Bay without the crush at the main pier.</p>",
-        "map": { "lat": 38.379028399999996, "lng": 141.0936351 },
+        "map": {
+          "lat": 38.379028399999996,
+          "lng": 141.0936351
+        },
         "verified_on": "2026-08-14",
         "shelf_life": "venue",
         "source_url": "https://www.matsushima-kanko.com/miru/detail.php?id=177",
@@ -32,8 +41,14 @@
         "name": "Naruko Gorge (Naruko Kyokoku)",
         "kicker": "Free, seasonal — arrive at opening to beat the tour buses, or walk the promenade almost everyone skips",
         "body": "<p>A 2.6km volcanic gorge in the Naruko Onsen district, known for oddly-carved rock cliffs and a foliage peak averaging {{fact:koyo-naruko-avg}} ({{fact:koyo-sapporo-avg}}-class forecast — a multi-year average, not a locked 2026 date). The full historic walking trail was permanently shortened after damage in the 2011 Tōhoku earthquake — expect a partial trail plus the resthouse observation bridge, not a full historic hike. Tour buses fill the parking by ~9:00 on peak-color weekends and the crush peaks 11:00–15:00; arrive at opening (≈8:30) or after ≈14:00.</p><p><b>The photo-op crowd stops at the bridge.</b> The main Ofukazawa Bridge viewing deck is where the queue forms — but the adjacent <a href='https://www.nap-camp.com/mag/16557' target='_blank' rel='noopener noreferrer'><b>Ofukazawa Promenade</b></a> (大深沢遊歩道, a paved ≈2.2km loop from the Narukokyo Resthouse, open 9:00–16:00) follows the same gorge stream and is walked by almost no one; most visitors only look from the bridge deck and turn back. Reach the gorge via the JR Rikuu East Line to Naruko-Onsen Station, then a short seasonal bus.</p>",
-        "img": { "file": "Miyagi Naruko-kyo in autumn xl.jpg", "alt": "Naruko Gorge cliffs in autumn color" },
-        "map": { "lat": 38.7346, "lng": 140.6567 },
+        "img": {
+          "file": "Miyagi Naruko-kyo in autumn xl.jpg",
+          "alt": "Naruko Gorge cliffs in autumn color"
+        },
+        "map": {
+          "lat": 38.7346,
+          "lng": 140.6567
+        },
         "verified_on": "2026-08-14",
         "shelf_life": "venue",
         "source_url": "https://www.visitmiyagi.com/contents/naruko-gorge-autumn-colors/",
@@ -43,9 +58,15 @@
       {
         "name": "Zao Okama Crater",
         "kicker": "\"Five Color Lake\" — weather-dependent, but the ropeway itself runs through this trip's window",
-        "body": "<p>A volcanic crater lake whose color shifts with the light — striking when clear, reported obscured by fog roughly half the time, so build in slack rather than a tight window. Reached from Zao Onsen by the <b>Zao Ropeway</b> (two stages to Jizo Sancho Station, ≈20 min, {{fact:zao-okama-ropeway-3000}} round trip) followed by a hike to the rim (45 min–2 hrs across sources — budget the longer one).</p><p>The ropeway's own operator confirms its summer/autumn season runs {{fact:zao-ropeway-season-apr-dec}} — the Nov 5 visit sits comfortably inside that window, not at its edge as an earlier assumption on this trip had it. Only the separate Echo Line toll road ({{fact:zao-echo-line-closed-nov-apr}}) closes for winter, and this itinerary doesn't use it (no rental car). The onsen town and ryokan are unaffected either way; weather on the day is still the real variable.</p>",
-        "img": { "file": "Fall colors at Okama crater lake, Mt. Zao, Tohoku region, Japan,.jpg", "alt": "Okama crater lake ringed by autumn color on Mt. Zao" },
-        "map": { "lat": 38.1461, "lng": 140.4419 },
+        "body": "<p>A volcanic crater lake whose color shifts with the light — striking when clear, reported obscured by fog roughly half the time, so build in slack rather than a tight window. Reached from Zao Onsen by the <b>Zao Ropeway</b> (two stages to Jizo Sancho Station, ≈20 min, {{fact:zao-okama-ropeway-4400}} adult round trip) followed by a hike to the rim (45 min–2 hrs across sources — budget the longer one).</p><p>The ropeway's own operator confirms its summer/autumn season runs {{fact:zao-ropeway-season-apr-dec}} — the Nov 5 visit sits comfortably inside that window, not at its edge as an earlier assumption on this trip had it. Only the separate Echo Line toll road ({{fact:zao-echo-line-closed-nov-apr}}) closes for winter, and this itinerary doesn't use it (no rental car). The onsen town and ryokan are unaffected either way; weather on the day is still the real variable.</p>",
+        "img": {
+          "file": "Fall colors at Okama crater lake, Mt. Zao, Tohoku region, Japan,.jpg",
+          "alt": "Okama crater lake ringed by autumn color on Mt. Zao"
+        },
+        "map": {
+          "lat": 38.1461,
+          "lng": 140.4419
+        },
         "verified_on": "2026-08-14",
         "shelf_life": "venue",
         "source_url": "https://zaoropeway.co.jp/summer/en.php",
@@ -56,8 +77,14 @@
         "name": "Jigokudani (Hell Valley), Noboribetsu",
         "kicker": "Free, 24hr, walkable — go before 10am",
         "body": "<p>An active geothermal valley — steaming vents, sulfur-yellow rock, the source of Noboribetsu Onsen's baths — free to walk and open around the clock. The main loop is ≈20 min; continuing to <b>Oyunuma</b> (a crater lake) and its natural hot-spring footbath makes it a 90 min–2 hr outing. Tour buses reliably arrive by mid-morning — an early visit (before ≈10:00) gets the valley to yourselves. Reached from Sapporo by JR Limited Express Hokuto (≈1h15) to Noboribetsu Station, then a short local bus.</p>",
-        "img": { "file": "Jigokudani (Hell Valley), Noboribetsu Onsen, Hokkaido, April 2023 10.jpg", "alt": "Steaming volcanic valley at Jigokudani, Noboribetsu" },
-        "map": { "lat": 42.4963864, "lng": 141.1452929 },
+        "img": {
+          "file": "Jigokudani (Hell Valley), Noboribetsu Onsen, Hokkaido, April 2023 10.jpg",
+          "alt": "Steaming volcanic valley at Jigokudani, Noboribetsu"
+        },
+        "map": {
+          "lat": 42.4963864,
+          "lng": 141.1452929
+        },
         "verified_on": "2026-07-29",
         "shelf_life": "venue",
         "source_url": "https://www.japan.travel/en/spot/1908/",
@@ -66,9 +93,15 @@
       {
         "name": "Otaru Canal",
         "kicker": "Genuinely tour-bus-heavy at the main spot — go on a weekday morning",
-        "body": "<p>A restored 1920s canal district of gas-lamp-lined warehouses and glassware shops — a very standard day-trip recommendation, and independent reviews across multiple platforms agree the main canal stretch runs genuinely crowded with tour groups even on weekdays. The fix: go on a weekday morning, and cross <a href='https://www.tabirai.net/sightseeing/tatsujin/0000089.aspx' target='_blank' rel='noopener noreferrer'><b>Ryūgū Bridge</b></a> (竜宮橋) past the main photo-spot stretch to the <b>North Canal</b> (北運河) — the original 40m-wide segment lined with Meiji-era stone warehouses (the former NYK Otaru branch, the former Shibusawa warehouse), which domestic tourists rarely walk as far as, so it stays quiet while carrying the same historic warehouse-row scenery. Sushi-dori (the sushi restaurant street) has a wide price spread between tourist-priced counters and ones aimed at regulars — ask locally rather than walking into the first storefront. ≈35 min by JR rapid train from Sapporo Station.</p>",
-        "img": { "file": "Otaru Canal03bs3.jpg", "alt": "Otaru Canal lined with historic warehouses" },
-        "map": { "lat": 43.2020231, "lng": 141.0006005 },
+        "body": "<p>A restored 1920s canal district of gas-lamp-lined warehouses and glassware shops — a very standard day-trip recommendation, and independent reviews across multiple platforms agree the main canal stretch runs genuinely crowded with tour groups even on weekdays. The fix: go on a weekday morning, and cross <a href='https://www.tabirai.net/sightseeing/tatsujin/0000089.aspx' target='_blank' rel='noopener noreferrer'><b>Ryūgū Bridge</b></a> (竜宮橋) past the main photo-spot stretch to the <b>North Canal</b> (北運河) — the original 40m-wide segment lined with Meiji-era stone warehouses (the former NYK Otaru branch, the former Shibusawa warehouse), which domestic tourists rarely walk as far as, so it stays quiet while carrying the same historic warehouse-row scenery.</p><p>Sushi-dori (the sushi restaurant street) has a wide price spread between tourist-priced counters and ones aimed at regulars — ask locally rather than walking into the first storefront. ≈35 min by JR rapid train from Sapporo Station.</p>",
+        "img": {
+          "file": "Otaru Canal03bs3.jpg",
+          "alt": "Otaru Canal lined with historic warehouses"
+        },
+        "map": {
+          "lat": 43.2020231,
+          "lng": 141.0006005
+        },
         "verified_on": "2026-07-29",
         "shelf_life": "venue",
         "source_url": "https://otaru.gr.jp/",
@@ -79,8 +112,14 @@
         "name": "Mt. Moiwa",
         "kicker": "Ropeway or a 1–1.5 hr hike, right in Sapporo",
         "body": "<p>A 531m peak inside Sapporo city limits — ropeway + cable car to the summit (open through mid-November) or one of five marked hiking trails (2.4–4.5km, ≈1–1.5 hr), the Jizousawa route being the most popular. Low elevation keeps snow risk minimal into November, though the operator's own page warns the ropeway can suspend for wind without notice. Billed as one of Japan's \"New Three Great Night Views\" — a widely repeated claim, not independently verified against the original listing, but the view itself is real and easy: a short bus + ropeway combo from central Sapporo.</p><p><b>If going for the night view:</b> <a href='https://skyticket.jp/guide/465065/' target='_blank' rel='noopener noreferrer'>the 8–9pm sunset/night-view window is the crowd peak</a> — on clear evenings the ropeway line alone can run up to ≈1hr each way. Going on an overcast or light-rain evening, or well outside 8–9pm, skips the wait entirely.</p>",
-        "img": { "file": "Cable Car (Ropeway) to Mount Moiwayama - Sapporo - Hokkaido - Japan (47977611532).jpg", "alt": "Ropeway cable car ascending Mt. Moiwa above Sapporo" },
-        "map": { "lat": 43.0223946, "lng": 141.3223386 },
+        "img": {
+          "file": "Cable Car (Ropeway) to Mount Moiwayama - Sapporo - Hokkaido - Japan (47977611532).jpg",
+          "alt": "Ropeway cable car ascending Mt. Moiwa above Sapporo"
+        },
+        "map": {
+          "lat": 43.0223946,
+          "lng": 141.3223386
+        },
         "verified_on": "2026-07-29",
         "shelf_life": "venue",
         "source_url": "https://mt-moiwa.jp/",
@@ -90,7 +129,10 @@
         "name": "Akaiwa no Ma (赤岩の澗), Jozankei",
         "kicker": "The Jozankei Tourism Association's own words: \"quite difficult to find\"",
         "body": "<p>A small iron-oxide red-rock gorge on the Toyohira River, reached via a short detour off Route 230 toward Nakayama Pass (turn off after the \"Yu no Hana\" sign — ≈2 min drive + 3 min walk) or via the Futami–Jozan promenade from Futami Park. A genuine alternative to the crowded onsen-town core and the Toyohira Dam viewpoint, especially for foliage viewing — worth the detour on the Jozankei hiking day if the group splits between the harder and easier trail.</p>",
-        "map": { "lat": 42.9604754, "lng": 141.1526676 },
+        "map": {
+          "lat": 42.9604754,
+          "lng": 141.1526676
+        },
         "verified_on": "2026-08-14",
         "shelf_life": "venue",
         "source_url": "https://sasaru.media/article/weather/20231011_005/",
@@ -101,15 +143,24 @@
         "name": "Dazaifu Tenmangu",
         "kicker": "Japan's head shrine to the god of scholarship — the default pick, marked optional here",
         "body": "<p>Japan's principal shrine dedicated to Sugawara no Michizane, deified as the god of scholarship — a genuinely major Shinto site, with a famous approach street of grilled-mochi (umegae mochi) stalls. A direct ≈30-min Nishitetsu train from Tenjin makes it an easy half-day. <b>Marked optional, not assumed:</b> this is the default answer any generic Japan itinerary gives for a Fukuoka day trip, and this trip's stated off-the-beaten-path style points toward the Day 6 food-focused alternative instead — go if the pull is there, skip it without guilt if not.</p>",
-        "img": { "file": "Dazaifu Tenmangu-40.jpg", "alt": "Dazaifu Tenmangu shrine grounds" },
-        "map": { "lat": 33.5194494, "lng": 130.5344619 },
+        "img": {
+          "file": "Dazaifu Tenmangu-40.jpg",
+          "alt": "Dazaifu Tenmangu shrine grounds"
+        },
+        "map": {
+          "lat": 33.5194494,
+          "lng": 130.5344619
+        },
         "place_id": "ChIJzfvrKp-bQTURl65fp6vRJLg"
       },
       {
         "name": "Moerenuma Park",
         "kicker": "Isamu Noguchi's last work — a genuine detour, not a city-center add-on",
         "body": "<p>A reclaimed landfill turned into a single sculpture-scale artwork by Isamu Noguchi, who completed the master plan in November 1988 (he died the following month) — the park itself wasn't finished until 2005. Play equipment doubles as sculpture across the 189-hectare grounds, anchored by the glass pyramid <b>Hidamari</b> (info center/gallery) and the stepped <b>Play Mountain</b>. Genuinely out of the center — ≈40 min via tram + bus, or a direct bus from Sapporo Station — so it rewards a half-day rather than a stopover; autumn foliage across the open grounds is the reason to make the trip in this window rather than winter.</p>",
-        "map": { "lat": 43.1231335, "lng": 141.42665359999998 },
+        "map": {
+          "lat": 43.1231335,
+          "lng": 141.42665359999998
+        },
         "place_id": "ChIJo24_lq8vC18RcfiqGApcx1s",
         "source_url": "https://www.sapporo.travel/en/spot/facility/moerenuma_park/",
         "verified_on": "2026-08-03",
@@ -119,7 +170,10 @@
         "name": "Hokkaido Shrine (Hokkaido Jingu)",
         "kicker": "A genuinely quiet shrine ground minutes from the city center",
         "body": "<p>Founded by imperial decree in 1869 as Hokkaido's guardian shrine, set within Maruyama Park's ≈18 hectares of old-growth forest — despite sitting a 10-minute walk from a subway station, the grounds stay notably quiet. Ginkgo and maple color peaks around mid-October, so a visit through late October still catches the tail of it. Pair with a walk through Maruyama Park itself (primeval forest trails, the zoo). Reached via the Tozai Line to Maruyama-koen Station, then ≈10 min on foot.</p>",
-        "map": { "lat": 43.054333, "lng": 141.3077928 },
+        "map": {
+          "lat": 43.054333,
+          "lng": 141.3077928
+        },
         "place_id": "ChIJk6jwxNwpC18RCNdmWzXijew",
         "source_url": "https://visit.sapporo.travel/discover/art-culture/hokkaido-shrine/",
         "verified_on": "2026-08-03",
@@ -129,7 +183,10 @@
         "name": "Yamadera (Risshaku-ji)",
         "kicker": "1,015 stone steps up a sacred cliff — technically Yamagata, but the standard Sendai day trip",
         "body": "<p>A temple complex founded in 860 CE, its halls built directly into a rock-face mountainside — the 1,015-step climb through cedar forest takes ≈30–60 min depending on pace, with the summit hall's panoramic gorge view the payoff. It's just across the prefecture line in Yamagata, reached directly from Sendai via the JR Senzan Line (≈1 hr). Gates open at 8:00 — <a href='https://www.bushikaku.net/article/4848/' target='_blank' rel='noopener noreferrer'>arriving right at opening, not mid-morning</a>, means climbing the steps in near-empty quiet during koyo season (late Oct–early Nov, this trip's window), when the temple is described as the year's most crowded; by mid-morning the steps and summit views fill in. Budget at least 2 hrs total.</p>",
-        "map": { "lat": 38.3131193, "lng": 140.4346099 },
+        "map": {
+          "lat": 38.3131193,
+          "lng": 140.4346099
+        },
         "place_id": "ChIJeUV2g-_Oi18RwK-4JcNEe44",
         "source_url": "https://www.japan.travel/en/spot/1796/",
         "verified_on": "2026-08-03",
@@ -140,7 +197,10 @@
         "name": "Akiu Great Falls (Akiu Otaki)",
         "kicker": "A Top-100 Japan waterfall, ≈40 min from central Sendai",
         "body": "<p>A 55m waterfall ranked among Japan's Top 100 and designated a National Place of Scenic Beauty, with an easy 5–10 min walk from the parking area to the Takimidai observation deck. Surrounding maples typically peak late October–early November, lining up well with this trip's dates. <b>⚠ Access note:</b> the public bus from Sendai Station's west-exit bus pool runs weekends and holidays only — a weekday visit needs a taxi or rental car instead. Parking fills on autumn weekends.</p>",
-        "map": { "lat": 38.2752025, "lng": 140.6034944 },
+        "map": {
+          "lat": 38.2752025,
+          "lng": 140.6034944
+        },
         "place_id": "ChIJebYZOFItil8RpAXgQehB3wI",
         "source_url": "https://www.tohokukanko.jp/en/attractions/detail_1005046.html",
         "verified_on": "2026-08-03",
@@ -151,8 +211,14 @@
         "kicker": "Atmospheric, cash-only, and worth a walk-through even beyond dinner",
         "theme": "Food & dining",
         "body": "<p>Fukuoka's riverside concentration of city-licensed street-food stalls — the more tourist-facing of the city's two main yatai districts (Tenjin's is the locals' pick for eating, per Food &amp; shopping), but the Nakasu riverside atmosphere at night is worth seeing regardless of where you sit down to eat. Shared bench seating, no reservations, ≈90% cash-only. Best atmosphere is right at open (≈18:00–19:00) or after the dinner rush clears (≈21:00).</p>",
-        "img": { "file": "Nakasu Yatai Stalls (19979437930).jpg", "alt": "Yatai food stalls lit up at night along the river in Nakasu" },
-        "map": { "lat": 33.5906696, "lng": 130.4079063 },
+        "img": {
+          "file": "Nakasu Yatai Stalls (19979437930).jpg",
+          "alt": "Yatai food stalls lit up at night along the river in Nakasu"
+        },
+        "map": {
+          "lat": 33.5906696,
+          "lng": 130.4079063
+        },
         "verified_on": "2026-07-29",
         "shelf_life": "venue",
         "source_url": "https://www.japan.travel/en/spot/273/",
@@ -161,10 +227,15 @@
       {
         "name": "Odori Park & Sapporo TV Tower",
         "kicker": "Sapporo's central green spine",
-        "theme": "Shopping",
         "body": "<p>A 1.5km park running through the center of Sapporo, anchored by the Sapporo TV Tower at its east end — the city's obvious gathering space and a good low-key base for a relaxed day. Steps from Tanukikoji's covered shopping arcade and the Susukino entertainment district.</p>",
-        "img": { "file": "Odori park at Sapporo TV tower.jpg", "alt": "Odori Park with the Sapporo TV Tower" },
-        "map": { "lat": 43.0599018, "lng": 141.3475101 },
+        "img": {
+          "file": "Odori park at Sapporo TV tower.jpg",
+          "alt": "Odori Park with the Sapporo TV Tower"
+        },
+        "map": {
+          "lat": 43.0599018,
+          "lng": 141.3475101
+        },
         "place_id": "ChIJjWSHX50pC18RMSAiw3gaBOI"
       },
       {
@@ -172,15 +243,24 @@
         "kicker": "Shopping/entertainment complex — also home to the Gashapon Department Store",
         "theme": "Shopping",
         "body": "<p>A large canal-through-the-middle shopping and entertainment complex in Hakata, with a dancing fountain show and dozens of shops — the specific draw for this trip is the <b>Gashapon Department Store</b> inside it (~2,200 capsule-toy machines, opened 2020), the concentrated gacha stop called out in Food &amp; shopping's shopping section.</p>",
-        "img": { "file": "Dancing fountains, Canal City, Fukuoka, Japan.jpg", "alt": "Dancing fountains inside Canal City Hakata" },
-        "map": { "lat": 33.5896715, "lng": 130.411141 },
+        "img": {
+          "file": "Dancing fountains, Canal City, Fukuoka, Japan.jpg",
+          "alt": "Dancing fountains inside Canal City Hakata"
+        },
+        "map": {
+          "lat": 33.5896715,
+          "lng": 130.411141
+        },
         "place_id": "ChIJYcOBiZWRQTUR0Rl0ehe67eA"
       },
       {
         "name": "Sapporo Beer Museum",
         "kicker": "Free, self-guided, and usually skipped in favor of the attached beer garden",
         "body": "<p>Japan's only beer museum, housed in the actual red-brick brewery building that operated here 1876–1965 — designated a Hokkaido Heritage site in 2004. The self-guided exhibition floor is free (open 11:00–18:00, last entry 17:30, closed Mondays) and covers Sapporo Breweries' Meiji-era founding. Most visitors only come for the attached Sapporo Beer Garden's jingisukan lunch and skip the museum itself, which keeps the exhibition floor genuinely uncrowded even at midday. A short walk from Higashi-Sapporo Station on the Tozai Line, or the museum's own shuttle bus from Sapporo Station.</p>",
-        "map": { "lat": 43.0714671, "lng": 141.3689124 },
+        "map": {
+          "lat": 43.0714671,
+          "lng": 141.3689124
+        },
         "place_id": "ChIJ0fYsL4QpC18Ry-fF7_rGYBM",
         "source_url": "https://www.sapporobeer.jp/english/brewery/s_museum/",
         "verified_on": "2026-08-03",
@@ -190,7 +270,10 @@
         "name": "Former Hokkaido Government Office Building (Akarenga)",
         "kicker": "Free, central, and a 10-minute add-on to any Sapporo Station walk",
         "body": "<p>Sapporo's affectionately nicknamed \"Akarenga\" (Red Brick) — an 1888 neo-baroque brick building modeled on the Massachusetts State House, built as Hokkaido's government headquarters and now a free public history exhibit (open 8:45–18:00 daily). Two floors cover Hokkaido's pioneering era, and the former Governor's office, with its ornate arabesque ceiling, is open to walk through. 8 min on foot from Sapporo Station's west exit, with none of the queue either that or Odori Park draws.</p>",
-        "map": { "lat": 43.0643035, "lng": 141.346868 },
+        "map": {
+          "lat": 43.0643035,
+          "lng": 141.346868
+        },
         "place_id": "ChIJrQd1AJ8pC18Rt53mDW5dIbs",
         "source_url": "https://www.akarenga-h.jp/en/access/",
         "verified_on": "2026-08-03",
@@ -200,7 +283,10 @@
         "name": "Zuihoden (Date Masamune Mausoleum)",
         "kicker": "Momoyama-style ornate rebuild — the original burned in a 1945 air raid",
         "body": "<p>The mausoleum of Date Masamune, Sendai's founding feudal lord, in the elaborately carved Momoyama architectural style. <b>⚠ Honest structural note:</b> the original 1637 structure was destroyed in a 1945 air raid; the current building is a 1979 reconstruction based on the original's surviving records and fittings, not the historic original itself. Set in a quiet cedar grove a short walk from the Otamaya-bashi bridge. ¥570 adult admission; open 9:00–16:50 (Feb–Nov), last entry 20 min before close. Reached via the Sendai Loople sightseeing bus or a ≈20-min walk from Sendai Station.</p>",
-        "map": { "lat": 38.2504479, "lng": 140.8667079 },
+        "map": {
+          "lat": 38.2504479,
+          "lng": 140.8667079
+        },
         "place_id": "ChIJ8y-8UGkoil8ROchbu7NB2iw",
         "source_url": "https://www.zuihoden.com/en/info/",
         "verified_on": "2026-08-03",
@@ -210,55 +296,14 @@
         "name": "Aoba Castle Ruins (Sendai Castle)",
         "kicker": "Free ruins + skyline view; the museum and Loople bus stop are extras",
         "body": "<p>The hilltop ruins of Date Masamune's castle, in service as the Sendai domain's seat of government for ≈270 years until the Meiji Restoration — the honmaru (main keep) site is free to walk and gives a genuine panoramic view over central Sendai (the Pacific is visible on a clear day). The mounted Masamune statue (1964, 9m with base) beside it is the photo spot, lit sunset–23:00. The on-site Aoba Castle Museum is a separate ⚠ ≈¥700–770 ticket if you want more than the view — sources disagree on the exact price, confirm on arrival. Reached by the Loople Sendai sightseeing bus (¥260/ride, ¥630 day pass), which stops directly at the ruins.</p>",
-        "map": { "lat": 38.2530776, "lng": 140.8567093 },
+        "map": {
+          "lat": 38.2530776,
+          "lng": 140.8567093
+        },
         "place_id": "ChIJcbTzagApil8RZYOPDwpQvTI",
         "source_url": "https://visitmiyagi.com/contents/aoba-castle-honmaru-museum/",
         "verified_on": "2026-08-03",
         "shelf_life": "venue"
-      }
-    ]
-  },
-  {
-    "type": "divergences",
-    "group": "Sights",
-    "title": "What generic guides get wrong",
-    "rank": 1,
-    "intro": "Every item below is something a first-visit-focused guide would recommend by default — costly on time, money, or authenticity for an off-the-beaten-path trip. Researched, and a better option built into the itinerary. Want the generic version anyway? Each entry explains how.",
-    "items": [
-      {
-        "claim": "\"Ippudo is the essential Fukuoka ramen stop.\"",
-        "correction": "Ippudo is a global chain that started in Fukuoka — the Daimyo flagship is genuinely historic (est. 1985), but locals independently rank Shin Shin and Ganso Nagahamaya above it for a more authentic, less tourist-priced bowl. This guide uses Shin Shin as the primary pick. <b>If you still want it:</b> Ippudo Daimyo Honten (the original, not a franchise) is a 5-min walk from Tenjin Station.",
-        "category": "tourist-trap",
-        "verified_on": "2026-07-29",
-        "source_url": "https://www.shinshin.co.jp/"
-      },
-      {
-        "claim": "\"Otaru Canal is a relaxed, scenic day trip from Sapporo.\"",
-        "correction": "The main canal stretch runs genuinely crowded with tour-bus groups even on weekdays — independent reviews across multiple platforms converge on this. This guide schedules Otaru on a Monday morning specifically to mitigate it, and routes you north past the main photo-spot stretch, reported almost empty by comparison. Sushi-dori has a wide price spread between tourist counters and locals' picks — ask at your accommodation before choosing one.",
-        "category": "overcrowded",
-        "verified_on": "2026-07-29",
-        "source_url": "https://otaru.gr.jp/"
-      },
-      {
-        "claim": "\"Stay at Dai-ichi Takimotokan for the full Noboribetsu onsen experience.\"",
-        "correction": "Takimotokan is a large resort hotel whose \"big tour-group\" feel was flagged in local reviews. This guide drops it as an overnight entirely — one ryokan splurge night (Zao Onsen's Miyamaso Takamiya, a 1716-era inn with private springs) keeps the experience singular instead of splitting the budget across two competing hotel-style onsen nights.",
-        "category": "overcrowded",
-        "verified_on": "2026-07-29",
-        "source_url": "https://takimotokan.co.jp/"
-      },
-      {
-        "claim": "\"Naruko Gorge is an easy afternoon side trip.\"",
-        "correction": "On peak-color weekends, tour buses fill the parking by 9:00 and the crush peaks 11:00–15:00 — an afternoon arrival lands you in the worst of it. This guide routes you there at opening (≈8:30) for better light and fewer people. Also note: the full historic walking trail was permanently shortened after 2011 earthquake damage. <b>If afternoons are all you have:</b> arriving after 14:00 as the buses leave is the second-best window.",
-        "category": "missing-context",
-        "verified_on": "2026-08-14",
-        "source_url": "https://www.visitmiyagi.com/contents/naruko-gorge-autumn-colors/"
-      },
-      {
-        "claim": "\"The Zao Ropeway/Okama Crater is basically closed by early November.\"",
-        "correction": "Checked directly against the ropeway operator's own page: the summer/autumn season runs Apr 1–Dec 10, so a Nov 5 visit is comfortably inside it. Only the separate Echo Line toll road (unused on this itinerary) closes for winter starting early November. Weather on the day, not the calendar, is the real variable for whether the crater is visible.",
-        "category": "outdated",
-        "verified_on": "2026-08-14",
-        "source_url": "https://zaoropeway.co.jp/summer/en.php"
       }
     ]
   }

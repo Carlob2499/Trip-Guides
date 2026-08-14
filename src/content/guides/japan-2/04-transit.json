@@ -34,13 +34,40 @@
     "group": "Transit",
     "title": "Fukuoka orientation",
     "phase": "daily",
-    "center": { "lat": 33.5900413, "lng": 130.4056216 },
+    "center": {
+      "lat": 33.5900413,
+      "lng": 130.4056216
+    },
     "span": 0.07,
     "points": [
-      { "name": "Hakata Station", "lat": 33.5900413, "lng": 130.4199026, "place_id": "W72653571", "local_script_name": "博多駅" },
-      { "name": "Tenjin", "lat": 33.5903225, "lng": 130.3998391, "place_id": "N3555317380", "local_script_name": "天神" },
-      { "name": "Nakasu", "lat": 33.5934757, "lng": 130.4056216, "place_id": "R19383249", "local_script_name": "中洲" },
-      { "name": "Canal City Hakata", "lat": 33.5896715, "lng": 130.411141, "place_id": "W751001483", "local_script_name": "キャナルシティ博多" }
+      {
+        "name": "Hakata Station",
+        "lat": 33.5900413,
+        "lng": 130.4199026,
+        "place_id": "W72653571",
+        "local_script_name": "博多駅"
+      },
+      {
+        "name": "Tenjin",
+        "lat": 33.5903225,
+        "lng": 130.3998391,
+        "place_id": "N3555317380",
+        "local_script_name": "天神"
+      },
+      {
+        "name": "Nakasu",
+        "lat": 33.5934757,
+        "lng": 130.4056216,
+        "place_id": "R19383249",
+        "local_script_name": "中洲"
+      },
+      {
+        "name": "Canal City Hakata",
+        "lat": 33.5896715,
+        "lng": 130.411141,
+        "place_id": "W751001483",
+        "local_script_name": "キャナルシティ博多"
+      }
     ]
   },
   {
@@ -48,13 +75,40 @@
     "group": "Transit",
     "title": "Sapporo orientation",
     "phase": "daily",
-    "center": { "lat": 43.061936, "lng": 141.3506993 },
+    "center": {
+      "lat": 43.061936,
+      "lng": 141.3506993
+    },
     "span": 0.05,
     "points": [
-      { "name": "Sapporo Station", "lat": 43.0686555, "lng": 141.350787, "place_id": "W115507509", "local_script_name": "札幌駅" },
-      { "name": "Susukino", "lat": 43.0553655, "lng": 141.3534063, "place_id": "N353677501", "local_script_name": "すすきの" },
-      { "name": "Tanukikoji Shopping Street", "lat": 43.0569761, "lng": 141.3505831, "place_id": "R15508277", "local_script_name": "狸小路商店街" },
-      { "name": "Odori Park", "lat": 43.0599018, "lng": 141.3475101, "place_id": "W64733385", "local_script_name": "大通公園" }
+      {
+        "name": "Sapporo Station",
+        "lat": 43.0686555,
+        "lng": 141.350787,
+        "place_id": "W115507509",
+        "local_script_name": "札幌駅"
+      },
+      {
+        "name": "Susukino",
+        "lat": 43.0553655,
+        "lng": 141.3534063,
+        "place_id": "N353677501",
+        "local_script_name": "すすきの"
+      },
+      {
+        "name": "Tanukikoji Shopping Street",
+        "lat": 43.0569761,
+        "lng": 141.3505831,
+        "place_id": "R15508277",
+        "local_script_name": "狸小路商店街"
+      },
+      {
+        "name": "Odori Park",
+        "lat": 43.0599018,
+        "lng": 141.3475101,
+        "place_id": "W64733385",
+        "local_script_name": "大通公園"
+      }
     ]
   },
   {
@@ -62,11 +116,26 @@
     "group": "Transit",
     "title": "Sendai orientation (for the 2 continuing)",
     "phase": "daily",
-    "center": { "lat": 38.2603, "lng": 140.8735 },
+    "center": {
+      "lat": 38.2603,
+      "lng": 140.8735
+    },
     "span": 0.04,
     "points": [
-      { "name": "Sendai Station", "lat": 38.2597526, "lng": 140.8800249, "place_id": "N264415884", "local_script_name": "仙台駅" },
-      { "name": "Kokubuncho", "lat": 38.2612535, "lng": 140.869596, "place_id": "N8392490417", "local_script_name": "国分町" }
+      {
+        "name": "Sendai Station",
+        "lat": 38.2597526,
+        "lng": 140.8800249,
+        "place_id": "N264415884",
+        "local_script_name": "仙台駅"
+      },
+      {
+        "name": "Kokubuncho",
+        "lat": 38.2612535,
+        "lng": 140.869596,
+        "place_id": "N8392490417",
+        "local_script_name": "国分町"
+      }
     ]
   }
 ]

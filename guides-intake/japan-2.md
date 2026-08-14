@@ -283,8 +283,10 @@ earlier pass's "not yet open" as still true 2+ weeks later — confirmed still a
 
 ### q-japan-2-2
 - **Q:** What's your home departure airport? It draws the route line on your guide's globe view.
-- **Assumed:** Left unconfirmed — no route drawn until you tell us (`facts.json`
-  `traveler-origin`, `state: "unconfirmed"`).
+- **Assumed:** Left unconfirmed — no route drawn until you tell us. `facts.json` carries NO
+  `traveler-origin` row at all, which is the honest state for "we don't know yet"
+  (`src/content.config.ts`: "a guide with no row … draws no traverse"). A row was briefly
+  seeded with `JFK`; the critic removed it — see Critic finding C4.
 - **Context:** Booking checklist; Atlas hub globe route.
 - **Status:** open
 
@@ -296,6 +298,228 @@ earlier pass's "not yet open" as still true 2+ weeks later — confirmed still a
   until Dec 2026, after this trip).
 - **Context:** Days Nov 2; Transit; Budget.
 - **Status:** open
+
+## Critic findings
+
+Fresh-context pass, 2026-08-14. Ten findings, all resolved in the guide (C1–C8 from reading the
+product; C9–C10 surfaced during graduation and the ship loop). Scans 1 (intake fit)
+and 4 (authenticity) came up clean on their own: the anchor is T0-verified with dates, the top-2
+priorities carry real weight, and the Pass-B novel picks (Akaiwa no Ma, Tetarazu Kaihin Park, the
+Nagahama yatai row, Tanyaki Ichiryu, gop no Anagura, TICRO MARKET) are genuinely off the
+TripAdvisor list. What follows is what did not hold.
+
+### C1 — The Zao Ropeway fare is 47% under the operator's own published price
+**Where:** `facts.json` → `zao-okama-ropeway-3000`; echoed in `07-sights.json` → "Zao Okama
+Crater". **Rubric row 3** (provenance on perishables) + **row 11** (recency).
+The guide shipped `≈¥3,000` round trip to Jizo Sancho, credited to `zao-machi.com`. Fetched that
+page during the citation audit: **it carries no ropeway fare of any kind**. Fetched the operator's
+own page — already cited two sentences later in the same paragraph for the season dates — and it
+states `¥4,400` adult / `¥2,200` child. This is the single largest paid item on the Sendai leg and
+it was understated by ¥1,400 per person against a source that never said it.
+**Replacement (shipped):** row renamed `zao-okama-ropeway-4400`, value `¥4,400`, `tier: primary`,
+`source_url: https://zaoropeway.co.jp/summer/en.php`, `verified_on: 2026-08-14`, `evidence`
+snippet added so drift can check it next run. `state: "approx"` dropped — this is an exact
+published fare, not a sourced estimate. Prose updated to "adult round trip", since the child fare
+differs.
+
+### C2 — The Sendai leg had no sights-and-activities budget line at all
+**Where:** `02-money-and-budget.json` → "Budget & daily costs — Sendai leg". **Rubric row 9**
+(party fit — the budget has to match the party) + **row 4** (completeness).
+The shared leg budgets $15/day for "Sights & activities". The Sendai section — the 8 days
+carrying the Zao Ropeway, Zuihoden, the Aoba Castle Museum, Fukuura Island's bridge fee and four
+plan_b bathhouses — had no such line. The 2 continuing travelers were reading a per-day total that
+silently omitted an entire category, on a trip filtered against a stated mid-range target.
+**Replacement (shipped):** a `Sights & activities, per day` line, est $8 (low 2 / high 20), noting
+that the cost is front-loaded onto Nov 5 by the ropeway and that Matsushima Bay, Naruko Gorge and
+the Aoba honmaru grounds are free. Built from figures already verified in this guide; no new
+research needed beyond C1's corrected fare.
+
+### C3 — The budget's day counts don't add up to the itinerary
+**Where:** `02-money-and-budget.json`, both sections. **Rubric row 5** (itinerary integrity) +
+**row 9**.
+`days: 18` + `days: 8` = 26 against 27 day cards, and both section titles disagreed with their own
+counts — "Oct 15–Nov 2" is 19 days, "Nov 2–10" is 9. One day of the trip was unbudgeted, and every
+per-day figure was computed off a wrong denominator against the intake's $75–150/day target.
+**Replacement (shipped):** shared leg = Oct 15–Nov 2, `days: 19`; Sendai leg retitled Nov 3–10,
+`days: 8`, with an explicit line saying Nov 2 sits in the shared section because all 4 are still
+in Sapporo that morning. 19 + 8 = 27. Ripples fixed: the eSIM line label and the Plan tab's
+"~26 days of data".
+
+### C4 — The guide recorded a departure airport nobody supplied
+**Where:** `facts.json` → `traveler-origin`. **Rubric row 2** (no fabrication) + **row 10**
+(honest gaps).
+Intake §2's departure-airport field is blank, q-japan-2-2's `**Assumed:**` says "left
+unconfirmed — no route drawn", and `_guide.json` repeats "no globe route drawn until set". The row
+nonetheless carried `value: "JFK"`. `state: "unconfirmed"` suppresses the route ARC but not the
+point: `originFor()` (`src/features/atlas/model/guide-record.ts:145`) resolves any parseable code
+through the gazetteer, and the interface comment is explicit that for an unconfirmed row "the
+point still resolves". So the Atlas globe would have pinned these travelers to New York on the
+strength of nothing.
+**Replacement (shipped):** the row is deleted. `originFor` returns null with no row, which is the
+documented honest state ("a guide with no row … draws no traverse", `src/content.config.ts:113`).
+q-japan-2-2's assumption line updated to match. Schema forbids a blank value, so removal — not a
+placeholder — is the only honest option.
+
+### C5 — A ⚠ hedge standing in for research that takes one fetch
+**Where:** `08-food-and-shopping.json` → "Yanagibashi Rengo Ichiba"; echoed in `06-days.json` →
+Mon Oct 19. **Rubric row 7** (the 4-question venue rule — "when it fits" went unanswered) +
+**row 10**.
+This is the rank-2 priority's lunch stop on a scheduled day, and it shipped with no address, no
+hours, no source, no date, and a `crowd_tip` reading "⚠ Check current hours before going —
+traditional fish markets often skip Sundays." The day card echoed it: "⚠ confirm it's open today."
+`⚠` is for what can't be sourced, not for what wasn't looked up — the market's hours are published.
+**Replacement (shipped):** `≈8:00–17:00, though each stall keeps its own`, closed **Sundays and
+national holidays**, address `1-6-1 Haruyoshi, Chuo-ku`, cited to Fukuoka Prefecture's own tourism
+portal (`crossroadfukuoka.jp/spot/12640`, "定休日：日曜日、祝日"), corroborated against Google
+Places (Mon–Sat 9:00–17:00, Sun closed), `verified_on: 2026-08-14`, plus a `closed_days` field so
+the closure is machine-visible. Both hedges replaced with the fact, and the day card now says WHY
+lunch sits on Monday. Checked: Oct 19, 2026 is a Monday and not a national holiday (Sports Day
+falls Oct 12 that year), so the slot holds.
+
+### C6 — One day in the guide had nothing on it, inside the peak window for priority #1
+**Where:** `06-days.json` → Fri Oct 30. **Lens: pacing arc** + **rubric row 8** (priority depth).
+Open days are a feature and this trip has four; the other three all name something concrete
+(Oct 21 the Yufuin/Beppu idea, Oct 29 Moerenuma, Nov 1 the split logistics). Oct 30 said "revisit
+anything missed" and stopped — and it sits inside the stated Sapporo koyo window
+(`{{fact:koyo-sapporo-avg}}`) for a party whose #1 ranked priority is nature. Meanwhile two
+verified sights in this guide's own repository were never scheduled on any day.
+**Replacement (shipped):** a reorder, no new facts. Oct 30 now anchors on **Maruyama Park &
+Hokkaido Shrine** — 18 hectares of old-growth forest, 10 min from Maruyama-koen Station, quiet,
+and a real walk or a bench depending on the legs — while keeping the "or just rest" framing and
+`energy: slow`. It also gains the `plan_b` it lacked: the **Akarenga**, free and indoors, 8 min
+from Sapporo Station. **Ripple caught and fixed:** Oct 31 previously offered "the grounds around
+Hokkaido Shrine" as its koyo spot, which would now be a silent repeat — it points at Nakajima Park
+and names yesterday's walk explicitly.
+
+### C7 — The ryokan night sits against day 1 of the trip's one non-negotiable, unremarked
+**Where:** `06-days.json` → Thu Nov 5 / Fri Nov 6; `01-plan.json` booking checklist.
+**Lens: common sense.**
+Nov 5 is Zao Onsen; Nov 6 is Wild Area day 1 "from midday" after a ≈2 hr return. The guide states
+both and connects neither — the traveler is never told that the splurge night costs them the
+morning of the one event this entire trip is built around. On the facts as they stand the trade is
+defensible (the same card warns the first 1–2 hours are the worst crush, and there are two more
+full days), but ticket structure is explicitly unannounced (`{{fact:wild-area-sendai-tickets-tbd}}`),
+and a timed-entry day 1 would turn a defensible trade into a missed anchor.
+**Replacement (shipped):** no reorder — the alternatives all cost more than they save (Naruko's
+own koyo peak is ≈Nov 5, and a Zao→Sendai→Naruko day would run ≈6 hrs of transit). Instead the
+Nov 6 card states the trade in plain words and names the lever: if day 1 turns out to be
+time-boxed, move the Zao night to Nov 9. The Nov 5 card and the Plan tab's booking checklist both
+now put the ticket-structure check BEFORE locking the ryokan date, since the ryokan is the harder
+booking to move.
+
+### C8 — Odori Park filed under `theme: "Shopping"` (minor)
+**Where:** `07-sights.json` → "Odori Park & Sapporo TV Tower".
+**Scope stated honestly:** this is currently inert — `compose-guide.mjs` reads `theme` at the
+SECTION level (`s.theme ?? s.group`), not on items, and `GuideLayout.astro` doesn't render it. So
+nothing is visibly wrong today. It is still a 1.5km city park tagged as shopping, one compose
+change away from mattering.
+**Replacement (shipped):** the item-level `theme` override is removed, so it inherits the
+section's "Nature / outdoors". (The two genuinely cross-theme items in that section — Nakasu yatai
+as Food & dining, Canal City as Shopping — are correct and left alone.)
+
+### C9 — Compose sent the emergency/health panel to the bottom of the Days tab
+**Where:** `03-health-and-safety.json` → "Health & pharmacy" (now in `01-plan.json`).
+**Lens: common sense** + CLAUDE.md's "Surfacing beats sourcing" doctrine.
+Found while running the graduation step, not by reading the guide — `compose-guide.mjs` reported
+11 groups against a budget of 10 and folded Health & safety, the only foldable group, into
+**Days**. Fold destination is keyed off the unit's own `phase` (`PHASE_HOST` in
+`scripts/compose-guide.mjs:50`), and this panel was tagged `phase: "daily"`, so emergency numbers,
+the controlled-substance/prescription warning (a real risk for a US party — some common US
+allergy and ADHD medications are restricted in Japan), the cold-weather packing note and the
+earthquake/tsunami guidance would have landed *after* 27 day cards.
+**Replacement (shipped):** not a tabBudget raise — the panel was simply mis-phased. Four of its
+five items are pack-and-prepare actions ("save these before you land", bring prescriptions in
+original packaging, pack real layers, check the advisory before you go), so `phase: "before"` is
+the honest tag and it routes the panel to **Plan**, where it now sits between "Phone & data" and
+the Booking checklist — next to Entry & documents, which is where a reader looks for what to
+carry. Tab budget stays at 10; "merge before adding" is respected rather than bought out.
+**Note for the tooling:** compose renames groups but does not update `_guide.json`'s
+`panelGroups`, so the build failed after its own write ("panelGroups names 'Health & safety' but
+no section carries that group"). Fixed by hand; flagged in the run report.
+
+### C10 — The Sources tab was three run-on paragraphs of 180 words
+**Where:** `09-sources.json` (now `10-sources.json`). **Lens: tone.**
+Caught by `scripts/__tests__/prose-shape.test.mjs` on the full test run. The tab shipped as three
+undifferentiated walls — an "Also checked directly:" list running 184 words of `·`-separated
+links, a 177-word secondary-leads paragraph, and the correction narrative fused onto the end of
+it. A reader looking for the one source behind one claim had no landmarks. Two more offences sat
+in the day cards (Oct 28 Jozankei at 147 words, Otaru Canal at 134).
+**Replacement (shipped):** all five split at their natural seams, with the Sources tab now
+carrying labelled paragraphs — official/primary, rain plans and crowd-timing, Pass B's novel
+picks, secondary leads, and "What changed on review." **Baseline deliberately NOT raised:**
+`prose-shape-baseline.json` had no japan-2 rows at all (it is a new guide), so growing it would
+have shipped known-bad shape under cover of "pre-existing." japan-2 now records **zero** offences
+and the baseline file is untouched.
+
+#### Continuity sweep — critic execution
+- greps run: `zao-okama-ropeway-3000` · `¥3,000` / `3,000` · `traveler-origin` · `JFK` ·
+  `18 day` / `8 days` / `26 day` / `27-day` / `"days":` · `Yanagibashi` · `Hokkaido Shrine` /
+  `Maruyama` / `Akarenga` / `Former Hokkaido` · `theme` (schema + compose + GuideLayout call
+  sites) · `originFor` call sites. Also re-ran the day-label/day-of-week check across all 27 day
+  cards (`Thu Oct 15` … `Tue Nov 10` — zero mismatches) and re-counted day cards against both
+  budget denominators.
+- ripples found & fixed:
+  1. `{{fact:zao-okama-ropeway-3000}}` reference in `07-sights.json` → renamed token, and prose
+     changed to "adult round trip" now that the child fare is a separate published figure.
+  2. eSIM budget line label "~18 days" → "~19 days" (C3).
+  3. Plan tab "For ~26 days of data" → "~27 days" (C3).
+  4. Oct 31's "the grounds around Hokkaido Shrine" would have silently repeated Oct 30's new
+     anchor → rewritten to Nakajima Park, naming yesterday's walk (C6).
+  5. Sendai-leg budget intro had to say WHERE Nov 2 is counted, or retitling it Nov 3–10 just
+     moves the missing day rather than fixing it (C3).
+  6. `09-sources.json` gained the two newly-cited pages (`akarenga-h.jp` as the Oct 30 plan_b,
+     `crossroadfukuoka.jp` for Yanagibashi) and its closing paragraph now records the fare
+     correction alongside the season correction it already described.
+  7. `_guide.json`'s `verified` string described only the Zao season correction → now also
+     records the fare correction, so the guide's own provenance blurb doesn't understate what
+     changed.
+  8. `guides-intake/japan-2.md` q-japan-2-2's `**Assumed:**` line asserted a `traveler-origin`
+     row that no longer exists → rewritten (C4).
+  9. `closed_days: ["Sun"]` failed the content-collection schema (lowercase enum) — caught by
+     `npm run build`, fixed to `["sun"]`.
+  10. `compose --write` renamed every group file (`03-health-and-safety.json` →
+      folded; `06-days.json` → `05-days.json`; `07-sights.json` → `02-nature-outdoors.json` +
+      `03-sights.json`; `08-food-and-shopping.json` → `06-food-and-dining.json` +
+      `07-shopping.json`) but left `_guide.json`'s `panelGroups` naming the OLD groups → build
+      failed; rewritten to the composed group list (C9).
+  11. Splitting paragraphs for C10 was done AFTER compose, so the splits live in the composed
+      filenames — re-ran compose (idempotent, "already composed — no changes") and rebuilt to
+      confirm nothing re-shuffled underneath the edits.
+- ship loop: `npm run build` clean · `npm run lint` clean · `npm run typecheck` 0 errors/0
+  warnings · `npm test` **146 files / 2034 passed**, 0 failed · `dist/guides/japan-2/index.html`
+  grepped for every stale string (`¥3,000`, `JFK`, `~26 days of data`, `18 days all 4`, "confirm
+  it's open today") — the only surviving `¥3,000` is inside the `verified` blurb that documents
+  the correction, which is intended; every replacement string confirmed present in the compiled
+  output.
+- deferred to human: none. Two pre-existing advisories are left standing deliberately, both
+  already honest in the guide: `e-Beans` and `Seagull, Yamato-cho branch` return no Places match
+  under their English names (both are real Sendai venues with correct coords; the flag is a
+  name-matching artifact, not a closure — `verify --network` reports 0 closed), and the US State
+  Dept advisory remains bot-gated, already tracked on the booking checklist and stated as unknown
+  in Health & safety.
+
+## Citation audit
+
+Sampled 7 perishable facts, weighted to the anchor event, the regulatory change landing mid-trip,
+and prices. Each fact's own `source_url` was fetched and read against the value it is supporting.
+
+| Claim | Value | Source fetched | Verdict |
+|-------|-------|----------------|---------|
+| Wild Area Sendai — dates (anchor) | Nov 6–8, 2026 | y — pokemongo.com | **supports** — "citywide GO Wild Area events in Sendai, Japan, and Mexico City, Mexico, from November 6 to November 8, 2026" |
+| Wild Area Sendai — ticket status | Not yet on sale; boundaries unannounced | y — pokemongo.com | **supports** — "Tickets … will be available next Season"; no boundary/venue detail published |
+| Tax-free system cutover | Nov 1, 2026 | y — mlit.go.jp | **supports** — "for purchases made on or after November 1, 2026, the system will shift to the Refund Method" |
+| Tax-free minimum, per store per day | ¥5,000 | y — mlit.go.jp | **supports** — "Purchases totaling 5,000 yen or more (tax excluded) per store per day are eligible" |
+| Zao Ropeway operating season | Apr 1 – Dec 10 | y — zaoropeway.co.jp | **supports** — "Summer（1 Apr. – 10 Dec.）" |
+| Zao Ropeway round trip, Jizo Sancho | ≈¥3,000 → **¥4,400** | y — zao-machi.com (cited source) + zaoropeway.co.jp (operator) | **drifted → fixed** — the cited page carries no ropeway fare at all; the operator states ¥4,400 adult / ¥2,200 child. Corrected, re-sourced and re-dated on the spot — see finding C1 |
+| Ubigi eSIM, Japan unlimited/30-day | ≈$65 | y (×2 URLs) — cellulardata.ubigi.com | **unreachable → flagged** — pulled as a 7th sample after verify's recency row flagged it 17d old against a 7d `fx` shelf. Both the rates page and the plans page render prices only inside the client-side store, so the value cannot be re-read. `verified_on` deliberately NOT advanced (re-dating a fact you couldn't confirm is silencing a flag), so recert keeps chasing it; the Plan tab now says out loud that this tier's price is carried from an earlier check and should be confirmed at checkout. The 10GB figure, which has its own plan page, re-reads fine and is 4 days old. |
+
+Note on `verify --network`'s drift row: it flags 17 facts, but its check is a literal string match
+against the fetched page, so it fires on every value that is formatted differently from the source
+("Nov 6–8, 2026" vs "November 6 to November 8, 2026"), computed from a source (USD conversions of
+yen fares), or sourced to a booking portal that renders prices client-side (ana.co.jp). Of the four
+it marks as R3-blocking, three were fetched by hand above and **support**. The one real drift in
+the whole set was `zao-okama-ropeway-3000`, which its own numeric check DID catch — the audit's
+value was confirming it rather than dismissing it as formatting noise.
 
 ## Amendments (append-only — record every research-forced re-plan)
 > When research changes the plan (an anchor moved, a neighborhood beats the intended one, a day
