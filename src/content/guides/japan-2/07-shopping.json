@@ -1,0 +1,225 @@
+[
+  {
+    "type": "venues",
+    "group": "Shopping",
+    "title": "Fukuoka — shopping & gaming",
+    "phase": "daily",
+    "rank": 3,
+    "theme": "Shopping",
+    "intro": "<p>This trip explicitly skips Tokyo/Akihabara and Osaka/Den Den Town, so here's the regional answer instead — set expectations as \"solid regional branch,\" not Tokyo/Osaka flagship depth on any one hot category (Pokémon cards, current-season figures). <b>Honest gap, checked rather than assumed:</b> \"Teenage Dream Records,\" a commonly-cited Daimyo record-shop pick, has permanently closed — confirmed via Google Places. Border Line Records nearby is confirmed still open but redundant with TICRO MARKET (below) as the primary record-shop pick, so it's a second-visit footnote rather than a separate stop.</p>",
+    "verified_on": "2026-07-29",
+    "shelf_life": "venue",
+    "source_url": "https://www.animate.co.jp/en/shop/fukuokatenjin/",
+    "items": [
+      {
+        "name": "Animate Fukuoka PARCO",
+        "area": "Tenjin",
+        "address": "8F, Fukuoka PARCO Main Bldg, 2-11-1 Tenjin",
+        "phone": "092-732-8070",
+        "hours": "10:00–20:30",
+        "book": "walk-in",
+        "why": "A real, non-token branch of the national anime-goods chain.",
+        "map": {
+          "lat": 33.5909156,
+          "lng": 130.3987274
+        },
+        "place_id": "ChIJtTHWz4iRQTURJjWhyDSwJXk"
+      },
+      {
+        "name": "Mandarake Fukuoka",
+        "area": "Daimyo",
+        "address": "Grand Bldg, 2-9-5 Daimyo",
+        "phone": "092-716-7774",
+        "hours": "12:00–20:00 daily",
+        "book": "walk-in",
+        "why": "Two floors of games/toys/cards/vintage on 1F and cosplay/dolls/doujinshi on 2F, duty-free over ¥5,000.",
+        "map": {
+          "lat": 33.5901747,
+          "lng": 130.3937289
+        },
+        "place_id": "ChIJAQBAJoaRQTURO3HsHm6qY3A"
+      },
+      {
+        "name": "Gashapon Department Store",
+        "how": "Inside Canal City Hakata.",
+        "book": "walk-in",
+        "why": "Opened 2020, ~2,200 capsule-toy machines — Fukuoka's dedicated gacha landmark.",
+        "map": {
+          "lat": 33.5884979,
+          "lng": 130.4107175
+        },
+        "place_id": "ChIJLwf1dxKRQTURAI0T-yCAH3A"
+      },
+      {
+        "name": "TICRO MARKET (チクロマーケット)",
+        "area": "Daimyo",
+        "book": "walk-in",
+        "why": "A specialist record shop (rock/jazz/electronica/world) tucked in the Daimyo/Imaizumi vintage-shopping backstreets — the pick over the now-closed \"Teenage Dream Records\" and the redundant Border Line Records.",
+        "map": {
+          "lat": 33.587139,
+          "lng": 130.3958532
+        },
+        "verified_on": "2026-08-14",
+        "shelf_life": "venue",
+        "source_url": "https://local-t.com/blogs/fukuoka/vinyl",
+        "place_id": "ChIJhUWz1IWRQTURPU4ZXuzyXzs",
+        "tier": "corroborated"
+      },
+      {
+        "name": "Culture Arts",
+        "area": "Tenjin",
+        "how": "3rd floor of an apartment building near Tenjin.",
+        "book": "walk-in",
+        "why": "An independent retro-game shop that comes up repeatedly as the locals'/enthusiasts' non-chain alternative.",
+        "map": {
+          "lat": 33.5932722,
+          "lng": 130.395327
+        },
+        "place_id": "ChIJHxo0s-6RQTURj6GMgQXB7xc"
+      },
+      {
+        "name": "Taito Station Fukuoka Tenjin",
+        "area": "Tenjin",
+        "address": "Southern Cross Bldg, 2-6-35 Tenjin",
+        "phone": "092-737-5500",
+        "hours": "10:00–24:00 year-round",
+        "book": "walk-in",
+        "why": "Anchors a reported cluster with nearby GiGO and Round1 locations.",
+        "crowd_tip": "The cluster is unconfirmed beyond blog mentions — worth a look on the ground.",
+        "map": {
+          "lat": 33.589634,
+          "lng": 130.397274
+        },
+        "place_id": "ChIJr9Yab4-RQTURvRScd6Tb5oA"
+      }
+    ]
+  },
+  {
+    "type": "venues",
+    "group": "Shopping",
+    "title": "Sapporo — shopping & gaming",
+    "phase": "daily",
+    "rank": 3,
+    "theme": "Shopping",
+    "intro": "<p>Tanukikoji itself is worth a browse beyond C-pla — the city's own tourism board confirms game centers and anime-goods shops scattered through the arcade, a district to wander rather than one pinned address.</p>",
+    "verified_on": "2026-07-29",
+    "shelf_life": "venue",
+    "source_url": "https://www.animate.co.jp/en/shop/sapporo/",
+    "items": [
+      {
+        "name": "Animate Sapporo",
+        "area": "Susukino",
+        "address": "2F Marudai Bldg, 1-5 Minami 2-jo Nishi, Chuo-ku",
+        "phone": "011-219-1223",
+        "hours": "11:00–20:00",
+        "book": "walk-in",
+        "why": "Sits near Susukino.",
+        "map": {
+          "lat": 43.0587057,
+          "lng": 141.3560096
+        },
+        "place_id": "ChIJSyBo4oIpC18RLfwQ_-HnIOk"
+      },
+      {
+        "name": "Mandarake Sapporo",
+        "area": "Susukino",
+        "address": "NORBESA Bldg 2F, Minamisanjo Nishi 5-1-1",
+        "phone": "011-207-7773",
+        "hours": "12:00–20:00 daily",
+        "book": "walk-in",
+        "why": "Comics/toys/CDs/games/cosplay/dolls, duty-free over ¥5,000.",
+        "crowd_tip": "Honest caveat: specific trending categories (current Pokémon cards, hot anime figures) run shallower than a flagship store; go for breadth, not depth on any one franchise.",
+        "map": {
+          "lat": 43.0559428,
+          "lng": 141.3511392
+        },
+        "place_id": "ChIJo7vfsYUpC18RRXbj5JKgDxI"
+      },
+      {
+        "name": "C-pla",
+        "how": "Inside the Tanukikoji covered shopping arcade.",
+        "hours": "Open to 22:00",
+        "book": "walk-in",
+        "why": "Opened Oct 2023, one of Hokkaido's largest capsule-toy shops — Sapporo's gacha landmark.",
+        "map": {
+          "lat": 43.0571701,
+          "lng": 141.3557218
+        },
+        "place_id": "ChIJ4S9mvyYpC18ROzWHh23rzuE"
+      }
+    ]
+  },
+  {
+    "type": "venues",
+    "group": "Shopping",
+    "title": "Sendai — shopping & gaming",
+    "phase": "daily",
+    "rank": 3,
+    "theme": "Shopping",
+    "intro": "<p>For the 2 of you continuing past Nov 2. <b>Honest gap, confirmed rather than assumed:</b> Mandarake has no branch anywhere in Sendai or Tohoku — checked directly against Mandarake's own store list, which runs Tokyo (×4), Utsunomiya, Nagoya, Osaka, Kyoto, Fukuoka, Kokura, and Sapporo, with nothing in between.</p>",
+    "verified_on": "2026-07-29",
+    "shelf_life": "venue",
+    "source_url": "https://www.animate.co.jp/en/shop/sendai/",
+    "items": [
+      {
+        "name": "Animate Sendai",
+        "address": "Sendaiekimae EBeanS 7F, 4-1-1 Chuo, Aoba-ku",
+        "phone": "022-264-0437",
+        "hours": "Store 10:00–20:00; attached Animate Cafe Gratte",
+        "how": "3 min from Sendai Station West Exit.",
+        "book": "walk-in",
+        "why": "The chain-store anchor.",
+        "crowd_tip": "One lead describes it as \"actually small considering it's the city's only shop\" and notes weekend crowding.",
+        "map": {
+          "lat": 38.2586228,
+          "lng": 140.8796841
+        },
+        "place_id": "ChIJS2Uado8vdkARRJoWg79Zrjc"
+      },
+      {
+        "name": "e-Beans",
+        "book": "walk-in",
+        "why": "The same multi-floor building housing Animate — described by one enthusiast source as \"Sendai's version of Nakano Broadway,\" with bookstores and dedicated anime-goods specialty shops beyond just the Animate tenant.",
+        "map": {
+          "lat": 38.2585564,
+          "lng": 140.8797295
+        },
+        "place_id": "ChIJ9cpiYjsoil8Rh4g-9pYqmcM"
+      },
+      {
+        "name": "Seagull, Yamato-cho branch",
+        "area": "Yamato-cho",
+        "book": "walk-in",
+        "why": "A Tohoku-regional used-game chain that gets a reasonable notice (\"pretty good selection of retro games, systems, accessories\") for used games specifically.",
+        "crowd_tip": "Stock varies day to day.",
+        "map": {
+          "lat": 38.24917,
+          "lng": 140.912956
+        },
+        "place_id": "ChIJsxizofgnil8RdYY9k-x1s_M"
+      },
+      {
+        "name": "Kikuya",
+        "book": "walk-in",
+        "why": "A manga bookstore with DVD/CD/merch and manga-artist memorabilia — a further option beyond Animate.",
+        "map": {
+          "lat": 38.258633,
+          "lng": 140.87973
+        },
+        "place_id": "ChIJq2g8ihcoil8Ry52PQcINqeE"
+      }
+    ]
+  },
+  {
+    "type": "prose",
+    "group": "Shopping",
+    "title": "Shipping it all home",
+    "phase": "leaving",
+    "rank": 3,
+    "theme": "Shopping",
+    "body": "<p>Boxed figures, sealed games, and trading cards all qualify for the {{fact:tax-free-threshold-5000}}/store/day tax-free threshold (see the Plan tab for the {{fact:tax-free-cutover-nov-1}} system change that lands mid-trip). For anything too bulky or fragile to carry city-to-city, <b>Yamato Ta-Q-Bin</b> (see Transit) can forward a box straight to your next hotel instead of hauling it through more flights. For larger hauls that won't fit in luggage at all, Mandarake ships internationally directly from any of its branches — worth asking about at checkout.</p>",
+    "verified_on": "2026-08-14",
+    "shelf_life": "default",
+    "source_url": "https://www.mlit.go.jp/kankocho/tax-free/page01_000001_00028.html"
+  }
+]

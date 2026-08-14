@@ -1,14 +1,20 @@
 {
   "slug": "japan-2",
   "createdAt": "2026-08-14T12:50:10.810Z",
-  "updatedAt": "2026-08-14T12:50:10.810Z",
+  "updatedAt": "2026-08-14T14:09:01.082Z",
   "stages": {
     "scaffold": "2026-08-14T12:50:10.810Z",
-    "passA": null,
-    "passB": null,
-    "reconcile": null,
-    "verified": null
+    "passA": "2026-08-14T13:21:54.257Z",
+    "passB": "2026-08-14T13:31:00.628Z",
+    "reconcile": "2026-08-14T13:42:15.302Z",
+    "verified": "2026-08-14T14:09:01.082Z"
   },
-  "attempts": 0,
-  "notes": []
+  "attempts": 1,
+  "notes": [
+    {
+      "stage": "passA",
+      "note": "Pass A: anchor event (Wild Area Sendai) + entry/visa verified fresh; backbone (transit, money, health, etiquette, sights, food/shopping, 27-day itinerary) adapted from the sibling japan guide's already-sourced facts (party grew 2->4, splits 2+2 on Nov 2; dropped birthday framing and the gaming/anime tab per this intake's priorities); fixed 3 known defect classes (Zao Ropeway closure date, flights/Shinkansen misattribution, malformed values); phrase card + footage scout duties done; candidates tables exceed floors; verify PASS, build/lint/typecheck/tests all clean.",
+      "at": "2026-08-14T13:21:54.257Z"
+    }
+  ]
 }

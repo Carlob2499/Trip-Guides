@@ -1,0 +1,46 @@
+[
+  {
+    "type": "divergences",
+    "group": "Sights",
+    "title": "What generic guides get wrong",
+    "rank": 1,
+    "intro": "Every item below is something a first-visit-focused guide would recommend by default — costly on time, money, or authenticity for an off-the-beaten-path trip. Researched, and a better option built into the itinerary. Want the generic version anyway? Each entry explains how.",
+    "items": [
+      {
+        "claim": "\"Ippudo is the essential Fukuoka ramen stop.\"",
+        "correction": "Ippudo is a global chain that started in Fukuoka — the Daimyo flagship is genuinely historic (est. 1985), but locals independently rank Shin Shin and Ganso Nagahamaya above it for a more authentic, less tourist-priced bowl. This guide uses Shin Shin as the primary pick. <b>If you still want it:</b> Ippudo Daimyo Honten (the original, not a franchise) is a 5-min walk from Tenjin Station.",
+        "category": "tourist-trap",
+        "verified_on": "2026-07-29",
+        "source_url": "https://www.shinshin.co.jp/"
+      },
+      {
+        "claim": "\"Otaru Canal is a relaxed, scenic day trip from Sapporo.\"",
+        "correction": "The main canal stretch runs genuinely crowded with tour-bus groups even on weekdays — independent reviews across multiple platforms converge on this. This guide schedules Otaru on a Monday morning specifically to mitigate it, and routes you north past the main photo-spot stretch, reported almost empty by comparison. Sushi-dori has a wide price spread between tourist counters and locals' picks — ask at your accommodation before choosing one.",
+        "category": "overcrowded",
+        "verified_on": "2026-07-29",
+        "source_url": "https://otaru.gr.jp/"
+      },
+      {
+        "claim": "\"Stay at Dai-ichi Takimotokan for the full Noboribetsu onsen experience.\"",
+        "correction": "Takimotokan is a large resort hotel whose \"big tour-group\" feel was flagged in local reviews. This guide drops it as an overnight entirely — one ryokan splurge night (Zao Onsen's Miyamaso Takamiya, a 1716-era inn with private springs) keeps the experience singular instead of splitting the budget across two competing hotel-style onsen nights.",
+        "category": "overcrowded",
+        "verified_on": "2026-07-29",
+        "source_url": "https://takimotokan.co.jp/"
+      },
+      {
+        "claim": "\"Naruko Gorge is an easy afternoon side trip.\"",
+        "correction": "On peak-color weekends, tour buses fill the parking by 9:00 and the crush peaks 11:00–15:00 — an afternoon arrival lands you in the worst of it. This guide routes you there at opening (≈8:30) for better light and fewer people. Also note: the full historic walking trail was permanently shortened after 2011 earthquake damage. <b>If afternoons are all you have:</b> arriving after 14:00 as the buses leave is the second-best window.",
+        "category": "missing-context",
+        "verified_on": "2026-08-14",
+        "source_url": "https://www.visitmiyagi.com/contents/naruko-gorge-autumn-colors/"
+      },
+      {
+        "claim": "\"The Zao Ropeway/Okama Crater is basically closed by early November.\"",
+        "correction": "Checked directly against the ropeway operator's own page: the summer/autumn season runs Apr 1–Dec 10, so a Nov 5 visit is comfortably inside it. Only the separate Echo Line toll road (unused on this itinerary) closes for winter starting early November. Weather on the day, not the calendar, is the real variable for whether the crater is visible.",
+        "category": "outdated",
+        "verified_on": "2026-08-14",
+        "source_url": "https://zaoropeway.co.jp/summer/en.php"
+      }
+    ]
+  }
+]
