@@ -48,10 +48,45 @@ Top 3, in order:
 ---
 
 ## Spec Summary (fill after intake, before research)
-- Section types to include / exclude (and why):
-- The 2–3 priorities driving depth:
-- Hard filters applied to every entry:
-- Verification focus (most perishable / most important to get right):
+- **Section types to include / exclude (and why):** Plan · Money & budget · Health & safety ·
+  Etiquette & language · Transit · Days · Sights · Food & shopping · Sources (9 groups, under
+  the default tabBudget of 10). No standalone "Gaming & anime" group this pass — unlike the
+  sibling `japan` guide (same trip, party of 2, since regenerated), this party's ranked
+  priorities don't name gaming/anime, so shopping picks (incl. Mandarake/Animate/gacha) live
+  as venue sections inside Food & shopping instead of earning their own tab.
+- **The 2–3 priorities driving depth:** 1) Nature/outdoors (Sights, rank 1 — Hokkaido hiking,
+  Naruko Gorge, Matsushima, Zao) 2) Food & dining (rank 2) 3) Shopping (rank 3).
+  Off-the-beaten-path travel style → Pass B should lean hard on crowd-avoidance + novel picks.
+- **Hard filters applied to every entry:** lodging <$100/night except the one ryokan splurge
+  night; every venue answers where/how/when/book; nature picks note weather-dependency and a
+  plan_b where the day sits in a closable/weather-risk slot.
+- **Verification focus:** the anchor event (Pokémon GO Wild Area Sendai, Nov 6–8, 2026) against
+  pokemongo.com; US entry/visa against mofa.go.jp; the Nov 1, 2026 tax-free system cutover
+  (mlit.go.jp) since it lands mid-trip; JR Kyushu/Hokkaido rail-pass pricing; seasonal closure
+  risk on the Zao Ropeway (Nov 5 visit) and Mt. Moiwa ropeway.
+
+## Note on this guide's relationship to `japan` (read before researching)
+`src/content/guides/japan/` is the SAME real trip (identical dates, cities, anchor event),
+authored for an earlier party of 2 with two in-trip birthdays. That guide is now `draft: true`
+and frozen as a regression fixture (`tests/fixtures/japan-regression/MANIFEST.md`) — it carries
+12 documented defect classes (birthday-attribution ambiguity, a flat date hiding a stated range,
+prose-only forecast/regulatory facts, an unstructured R4 advisory, a ¥11,410 figure attributed to
+both a railway and an airline, malformed values like `"$19,"`, an unsourced "typically closes"
+seasonal claim). This pass reuses that guide's already-primary-sourced facts as a research lead
+(dates carried forward where still within shelf life, re-verified fresh where flagged below) —
+**never its defects, and never its party-of-2 framing (no birthday content; this party is 4,
+splitting 2+2 on Nov 2).** Fixes applied this pass: Zao Ropeway's actual closure schedule (Apr
+1–Dec 10 per zaoropeway.co.jp — the old guide's "typically early November" was an unsourced
+guess); the flights-vs-Shinkansen fare misattribution; koyo/tax-free-cutover dates moved into
+`facts.json` rows instead of bare prose.
+
+## Party-of-4 fork (Nov 2) — read before the Days section
+The intake states 2 of the 4 travelers fly home Nov 2 (from Sapporo, via Tokyo — no direct
+int'l service from New Chitose in this window); the other 2 continue Sapporo→Sendai the same
+day to reach the Nov 6–8 anchor event, per the original Fukuoka→Sapporo→Sendai routing. Days
+Nov 3–10 are written for **the 2 continuing** and say so explicitly ("the 2 of you"), not "the
+4 of you" — the continuity rule Party A's Korea trip established (a day can fork without
+breaking budget math or headcount phrasing).
 
 ## Cover art — footage candidates (research fills the shortlist; the CREATOR signs)
 > The research pass's footage scout records 0–2 licensed, hot-linkable clips here — stable-URL
@@ -63,6 +98,12 @@ Top 3, in order:
 | Clip URL | License | Claims to show | Matches cover geography? | Frame-verified by |
 |----------|---------|----------------|--------------------------|-------------------|
 |          |         |                |                          |                   |
+
+**Footage scout run (Pass A, 2026-08-14, 2 searches):** checked Mixkit's Japan/train/mountain/
+forest/autumn categories. Nothing found is geographically verifiable as this trip's actual
+locations (Naruko Gorge, Matsushima, Sapporo) — one candidate ("time lapse of a street and
+Mount Fuji") is explicitly the WRONG mountain. Empty table stands; the Painted Atlas /
+Naruko-kyo photo cover is the honest default.
 
 ## Research reconciliation (fill during the dual-pass — see the guide-author skill)
 > Pass A = canonical/verified (official, anchors, logistics). Pass B = local/authentic/crowd-aware
@@ -85,6 +126,33 @@ Top 3, in order:
 |------|-------------------|----------------------------------|--------|
 |      |                   |                                  |        |
 
+## Verification ledger — Pass A (2026-08-14)
+> Full rows live in `facts.json` (id · claim · value · source · date · shelf_life · state) —
+> this table is the human-readable trail for what got a FRESH check this pass vs. what carried
+> forward already-primary-sourced from the earlier pass on this same trip.
+
+| Claim | Value | Source (tier + URL) | Checked | Flag |
+|-------|-------|---------------------|---------|------|
+| Wild Area Sendai — dates | Nov 6–8, 2026 | T0 — pokemongo.com | 2026-08-14 | clean |
+| Wild Area Sendai — tickets | Not yet on sale | T0 — pokemongo.com | 2026-08-14 | clean (open R3 item, tracked in facts.json) |
+| US entry — visa-free | 90 days | T0 — mofa.go.jp (read via mirror; direct fetch 403s) | 2026-08-14 | clean |
+| Zao Ropeway operating season | Apr 1 – Dec 10 | T0 — zaoropeway.co.jp | 2026-08-14 | clean — **corrects** an earlier pass's unsourced "typically closes early November" |
+| Zao Echo Line (toll road) closure | Early Nov–late Apr | T2 — visityamagata.jp (no single T0 operator page found for the toll road specifically) | 2026-08-14 | ≈ |
+| JPY/USD reference rate | ≈¥158/$1 (Fed H.10: ¥157.54, Aug 7 2026) | T0 — federalreserve.gov/releases/h10 | 2026-08-14 | ≈ |
+| Fukuoka→Sapporo flight fare range | ≈$90–170 | T2 aggregator search (Google Flights/Skyscanner/Travelocity snippets) — leads only, cited to the mainline carrier's own booking page | 2026-08-14 | ≈ |
+| Sapporo koyo peak window | late Oct–early Nov | T2 — watabi.org 2026 foliage guide, itself citing "official 2026 forecast isn't out until September" | 2026-08-14 | ≈ |
+| Naruko Gorge koyo peak | ≈Nov 5 | T2 — watabi.org 2026 foliage guide | 2026-08-14 | ≈ |
+| Tax-free system cutover | Nov 1, 2026 | T0 — mlit.go.jp (carried forward, verified 2026-07-29 on the earlier pass, still within shelf life) | 2026-07-29 | clean |
+| JR Kyushu / JR East–South Hokkaido pass pricing | ¥17,000 / ¥40,000 | T0 — jrkyushu.co.jp / jrhokkaido.co.jp (carried forward, 2026-07-29) | 2026-07-29 | clean |
+| ~40 venue/sight facts (addresses, hours, why-picks) | — | T0/T1 official pages + convergent local sources, carried forward from the earlier pass on this same trip (dates preserved) | 2026-07-29 / 2026-08-03 | clean/⚠ per item — see group files |
+| US State Dept travel advisory | Not confirmed | Page is Cloudflare-gated against automated fetch/WebFetch (403); no browser tool available this pass | 2026-08-14 | **open — needs a live browser check, tracked in Booking checklist** |
+| Phrase card (10 situational phrases) | — | T2 cross-checked across ≥2 independent bilingual sources per phrase | 2026-08-14 | clean (durable linguistic facts, not perishable) |
+
+**Adversarial checks run:** searched "Zao ropeway closure November" specifically to try to confirm
+the earlier pass's assumption — found the opposite (the operator's own Apr 1–Dec 10 season) and
+corrected it. Searched Wild Area Sendai ticket/venue status fresh rather than trusting the
+earlier pass's "not yet open" as still true 2+ weeks later — confirmed still accurate.
+
 ## Candidates considered (fill DURING research — one table per ranked priority)
 > Standard S2/S3 (2026-08-02): real research quality is how many options you REJECTED and
 > why — a thin pass and a deep pass are indistinguishable if only survivors are recorded.
@@ -95,33 +163,131 @@ Top 3, in order:
 > `shipped` name must actually appear in the guide. An honest `rejected: couldn't
 > verify` row is a good row — it proves the option was seen.
 
-### Priority 1: (name it)
+### Priority 1: Nature / outdoors
 
-| Candidate | Verdict |
-|-----------|---------|
-|           |         |
+| Candidate | Verdict | Shortlist |
+|-----------|---------|-----------|
+| Matsushima Bay | shipped | y |
+| Naruko Gorge | shipped | y |
+| Zao Okama Crater | shipped | y |
+| Jigokudani | shipped | y |
+| Otaru Canal | shipped | y |
+| Mt. Moiwa | shipped | y |
+| Moerenuma Park | shipped | y |
+| Akiu Great Falls | shipped | y |
+| Yamadera | shipped | y |
+| Jozankei | shipped | y |
+| Hokkaido Shrine | shipped | y |
+| Furano-Biei Norokko scenic train | rejected: ends its 28-year run Sept 28, 2026 — over before the trip starts | y |
+| "Resort Minori" observation train (Tohoku) | rejected: retired 2020 | y |
+| "Yukemuri" autumn-special observation train | rejected: 2025's special ran weekends/holidays only — this trip's free Tohoku days (Nov 2–5) are all weekdays; the regular Rikuu East Line local covers the same route | y |
+| Mt. Sapporo / Mt. Muine hiking routes | rejected: sit at the elevation where early-Nov snow is already a live risk | y |
+| Dazaifu Tenmangu | rejected: the default generic-guide pick for a Fukuoka day trip; shipped as an explicitly optional day instead of a plan requirement | y |
+| Furano lavender fields | rejected: wrong season — lavender peaks Jun–Aug, this trip is Oct–Nov | n |
+| Shiretoko National Park | rejected: too far from the Fukuoka→Sapporo→Sendai routing to fit without adding a day | n |
+| Daisetsuzan National Park | rejected: same — too far north of Sapporo for this trip's window | n |
+| Lake Toya | rejected: would duplicate the volcanic-valley slot Noboribetsu/Jigokudani already fills, at the cost of a day this itinerary doesn't have | n |
+| Sapporo Snow Festival grounds | rejected: wrong season — the festival runs February | n |
+| Zao Snow Monsters (juhyo) | rejected: a winter-only phenomenon (Dec–Feb); this trip's Nov 5 Zao visit is for the crater/onsen, not the frost trees | n |
 
-### Priority 2: (name it)
+### Priority 2: Food & dining
 
-| Candidate | Verdict |
-|-----------|---------|
-|           |         |
+| Candidate | Verdict | Shortlist |
+|-----------|---------|-----------|
+| Shin Shin | shipped | y |
+| Ganso Nagahamaya | shipped | y |
+| Yatai — Tenjin & Nakasu | shipped | y |
+| Maedaya | shipped | y |
+| Ganso Motsunabe Rakutenchi | shipped | y |
+| Fukuya's Nakasu Honten | shipped | y |
+| Kisuimaru | shipped | y |
+| Yanagibashi Rengo Ichiba | shipped | y |
+| Jingisukan Daruma Honten | shipped | y |
+| Menya Saimi | shipped | y |
+| Nijo Market | shipped | y |
+| Soup Curry GARAKU | shipped | y |
+| Ganso Sapporo Ramen Yokocho | shipped | y |
+| Sapporo Central Wholesale Market Outer Market | shipped | y |
+| Ryūtei | shipped | y |
+| Date no Gyutan Honpo | shipped | y |
+| Kokubuncho | shipped | y |
+| Genji Izakaya | shipped | y |
+| Abe Kamaboko-ten | shipped | y |
+| Zunda Saryo | shipped | y |
+| Oyster Hut Matsu | shipped | y |
+| Suage+ | shipped | y |
+| Ichiran | rejected: a local ranked top-10 blog explicitly excludes it as "overpriced"; mostly a tourist queue | y |
+| Ippudo, Daimyo flagship | rejected: genuinely historic (1985 original) but locals rank Shin Shin/Nagahamaya above it for an authentic, less tourist-priced bowl — kept as an optional aside for the curious, not the primary pick | y |
+| "Mentai Park" (Kanefuku) | rejected: doesn't exist anywhere in Fukuoka Prefecture — checked directly against Kanefuku's own site; a commonly repeated false claim | y |
+| Dai-ichi Takimotokan (Noboribetsu resort dining) | rejected: "big tour-group" feel flagged in local reviews; the trip's one onsen-ryokan splurge (Zao) covers that experience instead | y |
+| Sapporo Beer Garden | rejected: the larger, more tour-scaled jingisukan alternative to Daruma — noted as a fallback, not a pick | n |
 
-### Priority 3: (name it)
+### Priority 3: Shopping
 
-| Candidate | Verdict |
-|-----------|---------|
-|           |         |
+| Candidate | Verdict | Shortlist |
+|-----------|---------|-----------|
+| Canal City Hakata | shipped | y |
+| Animate Fukuoka PARCO | shipped | y |
+| Mandarake Fukuoka | shipped | y |
+| Culture Arts | shipped | y |
+| Taito Station Fukuoka Tenjin | shipped | y |
+| Tanukikoji Shopping Street | shipped | y |
+| C-pla | shipped | y |
+| Animate Sapporo | shipped | y |
+| Mandarake Sapporo | shipped | y |
+| Animate Sendai | shipped | y |
+| e-Beans | shipped | y |
+| Seagull, Yamato-cho | shipped | y |
+| Kikuya | shipped | y |
+| Osaka Den Den Town | rejected: not on this trip's Fukuoka→Sapporo→Sendai route | n |
+| Tokyo Akihabara deep-dive | rejected: Tokyo is a connection point only on this trip, no dedicated shopping day there | n |
+| Mandarake Sendai | rejected: doesn't exist — confirmed against Mandarake's own store list (Tokyo×4, Utsunomiya, Nagoya, Osaka, Kyoto, Fukuoka, Kokura, Sapporo — nothing in Tohoku) | y |
 
 ## Questions for the traveler (research emits; traveler answers on the progress page)
 > Traveler-framed only — no pipeline vocabulary. Each question carries an assumption the guide
 > builds on until the traveler answers. See src/features/intake-questions/ for the model.
 
-(none yet)
+### q-japan-2-1
+- **Q:** For the 2 of you continuing to Sendai — do you want your own room starting Oct 29
+  (while you're still with the other pair), or would you rather share through Nov 2 and only
+  book your own place once you're on your own?
+- **Assumed:** Share accommodation with the full group of 4 through Nov 2 (the last day
+  together), then book separately as a pair from Nov 3 onward — cheaper, and nothing about the
+  Oct 29–Nov 2 stretch (still in Sapporo) requires splitting off early.
+- **Context:** Trip Shape §2 / Booking checklist / Days Oct 29–Nov 5.
+- **Status:** open
+
+### q-japan-2-2
+- **Q:** What's your home departure airport? It draws the route line on your guide's globe view.
+- **Assumed:** Left unconfirmed — no route drawn until you tell us (`facts.json`
+  `traveler-origin`, `state: "unconfirmed"`).
+- **Context:** Booking checklist; Atlas hub globe route.
+- **Status:** open
+
+### q-japan-2-3
+- **Q:** The pair heading home Nov 2 — are you flying straight out of New Chitose (Sapporo), or
+  routing through Tokyo like the continuing pair's Sendai connection does?
+- **Assumed:** Via Tokyo (HND/NRT) — no scheduled nonstop North America service from New
+  Chitose in this window (Sapporo's first ones, United/SFO and Air Canada/YVR, don't start
+  until Dec 2026, after this trip).
+- **Context:** Days Nov 2; Transit; Budget.
+- **Status:** open
 
 ## Amendments (append-only — record every research-forced re-plan)
 > When research changes the plan (an anchor moved, a neighborhood beats the intended one, a day
 > collapsed), log it here with the reason. The intake above stays the ORIGINAL intent; this is the
 > diff. (Korea/Denmark were "corrected three times by running it" — that history now has a home.)
 
-- (none yet)
+- 2026-08-14 (Pass A): Zao Ropeway's actual operating window is **Apr 1 – Dec 10** per its own
+  operator page (zaoropeway.co.jp) — the sibling `japan` guide's "typically closes for the
+  season in early November" was an unsourced assumption (frozen as Case 12 in the regression
+  fixture). The Nov 5 crater visit is comfortably inside the ropeway's season; only the
+  separate Echo Line toll road (unused by this itinerary — no rental car) closes Nov–Apr.
+- 2026-08-14 (Pass A): dropped all birthday-celebration framing carried over from the `japan`
+  guide (a party-of-2 trip with two in-trip birthdays neither the traveler nor this intake
+  mentions for this party of 4). The Oct 24 Sapporo day and the Zao Onsen night are now framed
+  as an ordinary city day and the trip's one deliberate ryokan splurge, respectively — no
+  invented personal occasion.
+- 2026-08-14 (Pass A): no "Gaming & anime" tab — shopping (this party's rank-3 priority) folds
+  Mandarake/Animate/gacha picks into Food & shopping instead, since gaming/anime isn't named as
+  its own priority in this intake (unlike the sibling guide's party).

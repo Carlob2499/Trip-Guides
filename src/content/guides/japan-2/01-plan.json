@@ -3,43 +3,71 @@
     "type": "panel",
     "group": "Plan",
     "title": "When you land",
-    "body": ""
+    "fold": false,
+    "phase": "arrival",
+    "body": "<p>International arrival is Tokyo (Haneda or Narita, whichever has the better transpacific fare) — no direct US flight reaches Fukuoka, so a Tokyo connection is unavoidable. A ~13-hour flight lands mid-afternoon to evening; plan to <b>overnight near the Tokyo airport rather than rushing a same-day domestic connection.</b></p><p>Buy an IC card (Suica/Pasmo) at the airport the moment you land — the 2023 chip-shortage sales suspension fully resolved by March 2025. Get an eSIM active before leaving the arrivals hall. The next morning, fly Tokyo → Fukuoka to start the trip.</p>",
+    "verified_on": "2026-07-29",
+    "shelf_life": "default",
+    "source_url": "https://www.jreast.co.jp/e/pdf/press_20230802_suica.pdf"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Local essentials",
-    "body": ""
+    "moreLabel": "Tipping, power & voltage",
+    "phase": "arrival",
+    "body": "<p><b>Cash matters more than in most countries you've traveled.</b> Yatai stalls run roughly 90% cash-only, and plenty of small ramen counters and markets are cash-only too. <b>7-Eleven ATMs (Seven Bank)</b> are the reliable fallback — Visa, Mastercard, Amex, JCB, Discover and UnionPay, 24/7, ~28,000 machines nationwide, for a per-withdrawal fee on top of your home bank's. Carry {{fact:local-essentials-1000}} notes — stalls often can't break a {{fact:local-essentials-10000}} bill.</p><p><b>Tipping doesn't happen</b> anywhere in Japan — restaurants, taxis, hotels, guides.</p><p><b>Power:</b> 100V, Type A plugs (US shape, lower voltage) — most modern chargers auto-handle 100–240V, but check the brick before assuming.</p>",
+    "verified_on": "2026-07-29",
+    "shelf_life": "default",
+    "source_url": "https://www.sevenbank.co.jp/intlcard/index2.html"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Entry & documents",
-    "body": ""
+    "moreLabel": "Tax-free shopping — the Nov 1 system change",
+    "phase": "before",
+    "body": "<p>US passport holders enter visa-free for tourism, up to 90 days. <b>Visit Japan Web</b> (pre-filed immigration/customs QR) is optional, not required — paper landing cards still work planeside.</p><p><b>Tax-free shopping straddles a system change mid-trip.</b> Purchases through Oct 31, 2026 use the current instant-discount system: passport at checkout, tax-free price applied on the spot, {{fact:tax-free-threshold-5000}} (pre-tax) minimum per store per day, items stay sealed until departure. From {{fact:tax-free-cutover-nov-1}}, Japan switches to refund-at-departure: pay the full tax-inclusive price at checkout, then scan your passport at an airport departure kiosk before check-in. <b>Practical read for the shopping days:</b> do bigger purchases in Fukuoka and Hokkaido by Oct 31; anything bought in Sendai in November needs full sticker price at checkout and extra kiosk time at the Tokyo departure airport.</p>",
+    "verified_on": "2026-08-14",
+    "shelf_life": "default",
+    "source_url": "https://www.mlit.go.jp/kankocho/tax-free/page01_000001_00028.html"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Phone & data",
-    "body": ""
+    "phase": "before",
+    "body": "<p>For ~26 days of data, an <b>eSIM</b> is cheapest and most flexible — and matters more here than usual, since the group splits (2 fly home Nov 2) and a shared pocket-wifi puck stops working the moment you're not together. <b>Ubigi</b>'s 10GB/30-day plan runs {{fact:ubigi-10gb-30day-1650}}, unlimited/30-day {{fact:ubigi-unlimited-30day-65}} — activation is clean, the plan starts the moment you validate it in-app. <b>⚠ \"Unlimited\" plans on every major eSIM provider (Ubigi, Airalo, Holafly) have a repeated, unresolved complaint about throttling past a daily threshold</b> — budget for the higher tier if you're shooting a lot of photo/video. Buy before you land (installs over home wifi, activates on arrival).</p>",
+    "verified_on": "2026-08-10",
+    "shelf_life": "default",
+    "source_url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/japan-10gb-30-days/"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Booking checklist",
-    "body": "",
+    "phase": "before",
+    "body": "<p>Domestic flights (Tokyo→Fukuoka, Fukuoka→Sapporo) anchor the shared part of the trip; the Sapporo→Sendai leg and the return-home flight are only for the 2 continuing past Nov 2 — see the traveler questions in the intake doc for the still-open accommodation and routing decisions. The Zao Onsen ryokan is worth locking in as soon as dates are firm — it's a small, historic property, not a chain with endless rooms.</p>",
     "checklist": [
-      "Flights",
-      "Accommodation",
-      "Airport transfer",
+      "Transpacific flights — into Tokyo (HND/NRT), and home for the 2 leaving Nov 2",
+      "Domestic flights: Tokyo → Fukuoka, Fukuoka → Sapporo, then Sapporo → Sendai (2 continuing only)",
+      "Confirm each traveler's departure airport (unconfirmed — no globe route drawn yet)",
+      "Confirm the Oct 29–Nov 2 vs. Nov 3–5 accommodation split for the 2 continuing (open question)",
+      "Miyamaso Takamiya ryokan, Zao Onsen — book directly (reserve.489ban.net) once dates are firm",
+      "Accommodation — Fukuoka (Tenjin/Hakata), Sapporo (Susukino/Odori), Sendai (near the station) — all under $100/night except the ryokan night",
+      "eSIM (Ubigi/Airalo) for each traveler — buy before departure, install over home wifi",
+      "JR Kyushu rail pass (Northern, 5-day) and/or JR East–South Hokkaido Rail Pass, if the point-to-point fare comparison favors them",
+      "Pokémon GO Wild Area Sendai tickets — sales not yet open as of this check; watch pokemongo.com and buy immediately once they open, past events have sold out",
       "Travel insurance",
-      "Any timed tickets"
+      "US State Dept travel advisory — bot-gated against automated fetches this pass; needs a live browser check before travel",
+      "Any timed museum/attraction tickets that come up once dates are locked"
     ]
   },
   {
     "type": "weather",
     "group": "Plan",
-    "title": "Weather for your dates"
+    "title": "Weather for your dates",
+    "note": "Reads live from the Fukuoka map below — the trip's first stop. Sapporo runs noticeably colder and Sendai in between; check each region's own forecast closer to travel rather than reading this as one trip-wide number."
   },
   {
     "type": "holidays",

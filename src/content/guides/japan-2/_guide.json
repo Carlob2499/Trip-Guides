@@ -1,11 +1,43 @@
 {
-  "kicker": "Field guide",
-  "title": "Fukuoka -> Hokkaido/Sapporo -> Tokyo -> Sendai -> Tokyo & Japan",
-  "dek": "",
+  "kicker": "Fukuoka · Sapporo · Sendai — Oct 15–Nov 10, 2026",
+  "title": "Japan",
+  "dek": "Three and a half weeks chasing koyo from Kyushu to Hokkaido to Tohoku, four friends' way — Fukuoka's food scene and a real Hokkaido hiking stretch for everyone, then a Sendai finish for the two of you staying on for the Pokémon GO Wild Area weekend.",
   "country": "Japan",
+  "tz": "Asia/Tokyo",
+  "cover": {
+    "file": "Miyagi Naruko-kyo in autumn xl.jpg",
+    "alt": "Naruko Gorge in full autumn color — red, orange, and yellow foliage lining the canyon walls",
+    "focal": "50% 40%"
+  },
   "draft": true,
-  "verified": "⚠ Draft scaffold — nothing here is researched or verified yet. This is a starting skeleton; every price, hour, address and fact must be added and checked against a primary source before use (see the intake spec + CLAUDE.md).",
+  "verified": "⚠ Draft — Pass A (canonical/verified backbone) only; Pass B (local/authentic) and reconciliation are separate stages still to run. Confirmed against primary sources so far: Pokémon GO Wild Area Sendai (Nov 6–8, 2026 — pokemongo.com; venue + ticket sales still unannounced), US visa-free entry (90 days — mofa.go.jp), Japan's Nov 1, 2026 tax-free system cutover (mlit.go.jp), the Zao Ropeway's actual Apr 1–Dec 10 operating season (zaoropeway.co.jp — corrects an unsourced \"typically closes in November\" assumption from an earlier pass on this same trip), JR Kyushu/JR East–South Hokkaido rail-pass pricing, and every restaurant/shop/trail address in Food & shopping and Sights. ⚠ Re-check before travel: Wild Area Sendai's exact venue and ticket sale date (unannounced); the JMC's first 2026 koyo forecast (publishes ~mid-Sept 2026 — every foliage date here is a multi-year average); the US State Dept advisory level (its page is bot-gated against automated fetches — needs a live browser check, not yet done); the Zao/Sendai accommodation split for the 2 travelers continuing past Nov 2 (open traveler question); your actual departure airport (unconfirmed — no globe route drawn until set).",
   "provenance": "strict",
+  "panelGroups": ["Plan", "Transit", "Money & budget", "Health & safety", "Etiquette & language", "Sources", "Food & shopping", "Sights", "Days"],
+  "entry": [
+    {
+      "homeCountry": "United States",
+      "visa": "Visa-free for tourism, stays up to 90 days. Japan's planned digital pre-arrival system (\"JESTA\") isn't targeted to launch until FY2028, so nothing new applies for this trip; the optional Visit Japan Web pre-registration remains optional, not mandatory.",
+      "passportValidity": "Japan's own rule only requires validity through your date of departure; the conventional 6-months-remaining buffer is still what most airlines check at boarding, so plan to that stricter standard.",
+      "note": "Assumes a US passport for all 4 travelers, per intake — on another passport, check your own country's requirement. mofa.go.jp blocks direct automated fetches (bot-protection); read via a mirror this pass — worth a quick manual re-check before booking.",
+      "source_url": "https://www.mofa.go.jp/j_info/visit/visa/short/novisa.html",
+      "verified_on": "2026-08-14"
+    }
+  ],
+  "phrases": {
+    "lang": "ja-JP",
+    "items": [
+      { "situation": "Getting attention / excuse me", "native": "すみません", "romanization": "Sumimasen", "source_url": "https://www.japanesepod101.com/blog/2019/11/21/japanese-travel-phrases/", "verified_on": "2026-08-14" },
+      { "situation": "I need help", "native": "助けてください", "romanization": "Tasukete kudasai", "note": "General distress — point-and-say if English fails entirely.", "source_url": "https://www.foodallergy.org/resources/travel-tips-japan", "verified_on": "2026-08-14" },
+      { "situation": "I need a doctor", "native": "医者を呼んでください", "romanization": "Isha o yonde kudasai", "source_url": "https://www.accessible-japan.com/accessible-japan-essential-japanese-phrases-for-hospital-visits-and-medical-assistance-for-disabled-travelers/", "verified_on": "2026-08-14" },
+      { "situation": "Call an ambulance (119)", "native": "救急車をお願いします", "romanization": "Kyūkyūsha o onegai shimasu", "source_url": "https://www.foodallergy.org/resources/travel-tips-japan", "verified_on": "2026-08-14" },
+      { "situation": "I have a food allergy", "native": "食物アレルギーがあります", "romanization": "Tabemono arerugī ga arimasu", "note": "Follow with the specific allergen if known — e.g. peanut is piinattsu (ピーナッツ).", "source_url": "https://japanhandbook.com/food-allergies-in-japan-labels-and-safe-phrases/", "verified_on": "2026-08-14" },
+      { "situation": "Do you have an English menu?", "native": "英語のメニューはありますか？", "romanization": "Eigo no menyū wa arimasu ka?", "source_url": "https://www.ponz.co.jp/en/blog/essential-japanese-phrases-travelers", "verified_on": "2026-08-14" },
+      { "situation": "Where is the station?", "native": "駅はどこですか？", "romanization": "Eki wa doko desu ka?", "source_url": "https://www.ponz.co.jp/en/blog/essential-japanese-phrases-travelers", "verified_on": "2026-08-14" },
+      { "situation": "Where is the bathroom?", "native": "トイレはどこですか？", "romanization": "Toire wa doko desu ka?", "source_url": "https://www.ponz.co.jp/en/blog/essential-japanese-phrases-travelers", "verified_on": "2026-08-14" },
+      { "situation": "Taxi: take me to ___, please", "native": "（行き先）までお願いします", "romanization": "~ made onegai shimasu", "note": "Fill the blank with a place name, or show a written address/map pin.", "source_url": "https://livejapan.com/en/article-a0000913/", "verified_on": "2026-08-14" },
+      { "situation": "Turn right / left / straight, please (taxi)", "native": "右／左／まっすぐお願いします", "romanization": "Migi / Hidari / Massugu onegai shimasu", "source_url": "https://livejapan.com/en/article-a0000913/", "verified_on": "2026-08-14" }
+    ]
+  },
   "roomId": "0nrlkaeuogl14te6",
-  "footer": ""
+  "footer": "Location photos via Wikimedia Commons — tap any credit for its source, author and license."
 }
