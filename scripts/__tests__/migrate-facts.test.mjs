@@ -204,3 +204,112 @@ describe("proposeMigration — claim-stem dedup across sources (B2, case 9)", ()
     expect(Object.values(facts).map((f) => f.value).sort()).toEqual(["$18", "$19", "$65"]);
   });
 });
+
+describe("proposeMigration — merges into an existing facts.json instead of clobbering it", () => {
+  let dir;
+
+  beforeEach(async () => {
+    dir = await mkdtemp(path.join(tmpdir(), "migrate-facts-fixture-"));
+  });
+
+  afterEach(async () => {
+    await rm(dir, { recursive: true, force: true });
+  });
+
+  async function guideDir(slug, files) {
+    const guide = path.join(dir, slug);
+    await mkdir(guide, { recursive: true });
+    for (const [name, sections] of Object.entries(files)) {
+      await writeFile(path.join(guide, name), JSON.stringify(sections));
+    }
+    return guide;
+  }
+
+  it("preserves every pre-existing row when the guide already has a facts.json", async () => {
+    // Regression for a real incident (2026-08-15): proposeMigration started `facts` as a blank
+    // object, so `--write` on a guide that already had a populated registry replaced it wholesale
+    // with just the newly-discovered rows — korea/facts.json went from 83 rows to 2 on a live run.
+    // The bug was caught immediately by the build (unresolved {{fact:}} tokens) and hand-reverted;
+    // this test is the guard that it can't happen silently again.
+    const existing = {
+      "already-registered-5-000": {
+        claim: "Some other section — ₩5,000",
+        value: "₩5,000",
+        source_url: "https://example.com/already-sourced",
+        verified_on: "2026-01-01",
+        shelf_life: "default",
+        tier: "primary",
+      },
+    };
+    await guideDir("test-slug", {
+      "01-a.json": [
+        {
+          group: "New section",
+          title: "New section",
+          source_url: "https://example.com/new",
+          verified_on: "2026-07-29",
+          body: "Entry costs $40.",
+        },
+      ],
+    });
+    await writeFile(path.join(dir, "test-slug", "facts.json"), JSON.stringify(existing, null, 2));
+
+    const { facts, factCount, newIds } = await proposeMigration("test-slug", dir);
+
+    // The pre-existing row survives untouched.
+    expect(facts["already-registered-5-000"]).toEqual(existing["already-registered-5-000"]);
+    // factCount/newIds report only what THIS run discovered, not the merged total.
+    expect(factCount).toBe(1);
+    expect(newIds.size).toBe(1);
+    expect(Object.keys(facts)).toHaveLength(2);
+  });
+
+  it("never mints a new id that collides with one already in facts.json", async () => {
+    const existing = {
+      "new-section-40": {
+        claim: "New section — $40 (unrelated pre-existing row)",
+        value: "$40",
+        source_url: "https://example.com/pre-existing",
+        verified_on: "2026-01-01",
+        shelf_life: "default",
+      },
+    };
+    await guideDir("test-slug", {
+      "01-a.json": [
+        {
+          group: "New section",
+          title: "New section",
+          source_url: "https://example.com/new",
+          verified_on: "2026-07-29",
+          body: "Entry costs $40.",
+        },
+      ],
+    });
+    await writeFile(path.join(dir, "test-slug", "facts.json"), JSON.stringify(existing, null, 2));
+
+    const { facts, newIds } = await proposeMigration("test-slug", dir);
+
+    expect(Object.keys(facts)).toHaveLength(2);
+    const [mintedId] = [...newIds];
+    expect(mintedId).not.toBe("new-section-40");
+    expect(facts["new-section-40"]).toEqual(existing["new-section-40"]);
+  });
+
+  it("works normally (empty base) when the guide has no facts.json yet", async () => {
+    await guideDir("test-slug", {
+      "01-a.json": [
+        {
+          group: "New section",
+          title: "New section",
+          source_url: "https://example.com/new",
+          verified_on: "2026-07-29",
+          body: "Entry costs $40.",
+        },
+      ],
+    });
+
+    const { facts, factCount } = await proposeMigration("test-slug", dir);
+    expect(factCount).toBe(1);
+    expect(Object.keys(facts)).toHaveLength(1);
+  });
+});

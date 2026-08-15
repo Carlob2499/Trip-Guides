@@ -134,8 +134,16 @@ export function applyReplacements(text, reps) {
 export async function proposeMigration(slug, guidesDir = GUIDES_DIR) {
   const dir = path.join(guidesDir, slug);
   const files = (await readdir(dir)).filter(isSectionFile).sort();
-  const facts = {};
-  const taken = new Set();
+  // The registry already on disk is the base we merge INTO, never a blank slate — otherwise
+  // --write silently deletes every fact a prior pass (or hand edit) already registered. Newly
+  // migrated ids must also avoid colliding with an id that already exists.
+  let facts = {};
+  try {
+    facts = JSON.parse(await readFile(path.join(dir, "facts.json"), "utf8"));
+  } catch (err) {
+    if (err.code !== "ENOENT") throw err;
+  }
+  const taken = new Set(Object.keys(facts));
   // B2: keyed on (label, normalized value, approx) — the CLAIM STEM plus the value, matching
   // the fact's own `claim` string (`${label} — ${value}`) minus formatting. That's deliberately
   // broader than the old value+source_url key: two units citing the identical claim from two
@@ -147,6 +155,7 @@ export async function proposeMigration(slug, guidesDir = GUIDES_DIR) {
   // first-seen is the deterministic tie-break, and every collapse is reported so a human can
   // override it before `--write`.
   const byClaim = new Map();
+  const newIds = new Set();
   const collapsed = [];
   const edits = [];
   let occurrences = 0;
@@ -170,6 +179,7 @@ export async function proposeMigration(slug, guidesDir = GUIDES_DIR) {
           if (!id) {
             id = makeFactId(label, h.value, taken);
             byClaim.set(key, id);
+            newIds.add(id);
             // Does NOT populate risk/entity/evidence (src/content.config.ts, src/lib/facts.mjs)
             // — deliberately. This migrator lifts exactly what was already in the prose unit;
             // assigning risk or grouping an entity needs research judgment this pass doesn't
@@ -206,7 +216,7 @@ export async function proposeMigration(slug, guidesDir = GUIDES_DIR) {
     if (touched) edits.push({ file, json: JSON.stringify(sections, null, 2) + "\n" });
   }
 
-  return { facts, edits, occurrences, factCount: Object.keys(facts).length, collapsed };
+  return { facts, edits, occurrences, factCount: newIds.size, collapsed, newIds };
 }
 
 // ── CLI ──
@@ -226,13 +236,14 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     console.error("Usage: node scripts/migrate-facts.mjs --slug <slug> [--write]");
     process.exit(1);
   }
-  const { facts, edits, occurrences, factCount, collapsed } = await proposeMigration(a.slug);
+  const { facts, edits, occurrences, factCount, collapsed, newIds } = await proposeMigration(a.slug);
   if (!factCount) {
     console.log(`[migrate] ${a.slug}: no migratable money facts in provenance-bearing units.`);
     process.exit(0);
   }
   console.log(`[migrate] ${a.slug}: ${factCount} fact(s) covering ${occurrences} occurrence(s) across ${edits.length} file(s)\n`);
-  for (const [id, f] of Object.entries(facts)) {
+  for (const id of newIds) {
+    const f = facts[id];
     const reuse = occurrences > factCount ? "" : "";
     console.log(`  ${id}`);
     console.log(`     value ${JSON.stringify(f.value)}${f.state === "approx" ? "  (≈ derived)" : ""}${reuse}`);
