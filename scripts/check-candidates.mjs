@@ -7,7 +7,7 @@
 // (same philosophy as the reconciliation ledger: evidence, not vibes), and the floors make
 // thinness a measurable verdict instead of a human impression.
 //
-// WHAT IT CHECKS, per ranked-priority table in `guides-intake/<slug>.md`'s
+// WHAT IT CHECKS, per ranked-priority table in `guides-intake/<slug>/ledger.md`'s
 // `## Candidates considered` section:
 //   · rows counted: total considered, and rows whose verdict starts with "shipped"
 //   · floors: defaults below, overridable per guide via `researchFloors` in _guide.json
@@ -51,8 +51,8 @@ function parseShortlistCell(cells) {
 
 /** Pure: parse the `## Candidates considered` section into per-priority row sets.
     Returns null when the section is absent (pre-standard guide). */
-export function parseCandidates(intakeMd) {
-  const section = intakeMd.split(/^## Candidates considered.*$/m)[1];
+export function parseCandidates(ledgerMd) {
+  const section = ledgerMd.split(/^## Candidates considered.*$/m)[1];
   if (section === undefined) return null;
   const body = section.split(/^## /m)[0];
   const tables = [];
@@ -110,16 +110,16 @@ export function judgeCandidates(tables, { floors = {}, guideText = "" } = {}) {
   return { status: findings.length ? "fail" : "pass", findings, summary };
 }
 
-/** Full check for one slug: reads the intake doc + guide files. n/a when pre-standard. */
+/** Full check for one slug: reads the research ledger + guide files. n/a when pre-standard. */
 export async function checkCandidates(slug, { rootDir = ROOT, researchFloors = null } = {}) {
-  let intake;
+  let ledger;
   try {
-    intake = await readFile(path.join(rootDir, "guides-intake", `${slug}.md`), "utf8");
+    ledger = await readFile(path.join(rootDir, "guides-intake", slug, "ledger.md"), "utf8");
   } catch {
-    return { status: "n/a", reason: "no intake doc" };
+    return { status: "n/a", reason: "no research ledger" };
   }
-  const tables = parseCandidates(intake);
-  if (tables === null) return { status: "n/a", reason: "pre-standard intake (no ## Candidates considered section)" };
+  const tables = parseCandidates(ledger);
+  if (tables === null) return { status: "n/a", reason: "pre-standard ledger (no ## Candidates considered section)" };
 
   const dir = path.join(rootDir, "src", "content", "guides", slug);
   let guideText = "";

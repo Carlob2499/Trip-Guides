@@ -10,6 +10,7 @@
    model/wizard.ts (parser). Motion: lazy GSAP, reduced-motion honored. */
 
 import { reducedMotion } from "../../../scripts/util.js";
+import { WAYPOINT_BACKEND } from "../../../lib/backend-config.js";
 import { parseBookingDocument, formatParsedNote } from "../model/wizard";
 import { RANK_CARDS, TOPIC_CHIPS, rankToFields, nextTailSteps, manifestSegments } from "../model/intake";
 import { initIntakeSubmit } from "./intake-submit.js";
@@ -417,7 +418,12 @@ export function initIntakeFlow() {
   });
   var sendNote = document.createElement("p");
   sendNote.className = "itk-sub itk-send-note";
-  sendNote.textContent = "Filing opens the research request (a GitHub issue under the hood) and takes you to the live progress page.";
+  // Two paths, two honest sentences (batch 3). With the backend configured the traveler never
+  // touches GitHub, so naming it here was describing plumbing they'd never see; unconfigured,
+  // the next tap really does open a GitHub issue and hiding that would be the dishonest half.
+  sendNote.textContent = WAYPOINT_BACKEND.url
+    ? "Sending starts the research and takes you to the live progress page."
+    : "Sending opens a prefilled request for you to submit, then takes you to the live progress page.";
   var backBar = document.createElement("div");
   backBar.className = "itk-nav";
   var backD = document.createElement("button");

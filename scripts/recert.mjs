@@ -6,10 +6,11 @@
 // scheduled run covers ALL currently-stale guides, not one.
 //
 // It never edits anything and never hits a network (check-staleness reads local files) — it produces
-// the punch list; the agent (recert.yml, on Max) re-verifies each fact against a primary source,
-// updates + re-dates it, or downgrades it to ⚠, then the verify gate must PASS before merge.
+// the punch list. Acting on it is the CHANGE lifecycle's job: `--dispatch` starts one change.yml run
+// per stale guide (source `staleness`), which re-verifies each fact against a primary source,
+// updates + re-dates it or downgrades it to ⚠, and always lands as a PR for a human.
 //
-// Recert is POST-graduation maintenance and is deliberately separate from the GENERATE checkpoint
+// Recert is maintenance on a PUBLISHED guide and is deliberately separate from the GENERATE checkpoint
 // spine (scripts/pipeline.mjs): a published guide's freshness is recorded by the facts' own
 // verified_on dates + the guide stamp, not by pipeline stages. Drafts are the research pass's job,
 // not recert's — check-staleness skips them, so recert only ever touches published guides.
@@ -65,6 +66,29 @@ if (isMain(import.meta.url)) {
   const slug = argv.includes("--slug") ? argv[argv.indexOf("--slug") + 1] : null;
   const asJson = argv.includes("--json");
   const { slugs, byGuide } = await recertList();
+
+  if (argv.includes("--dispatch")) {
+    // The ACTING half now lives in the change lifecycle: one change.yml run per stale guide,
+    // source `staleness`, which always lands as a PR for a human. A single dispatch failing must
+    // not stop the others — comprehensiveness is the point of the sweep.
+    const { gh } = await import("./lib/cli.mjs");
+    const { isValidSlug } = await import("./lib/slug.mjs");
+    const only = (process.env.INPUT_SLUG || "").trim();
+    if (only && !isValidSlug(only)) { console.error(`[recert] "${only}" isn't a valid slug`); process.exit(1); }
+    const targets = only ? [only] : slugs;
+    if (!targets.length) { console.log("[recert] all guides current — nothing to dispatch."); process.exit(0); }
+    let failed = 0;
+    for (const s of targets) {
+      try {
+        gh(["workflow", "run", "change.yml", "-f", `slug=${s}`, "-f", "source=staleness", "-f", "land=pr"]);
+        console.log(`[recert] dispatched a staleness change run for ${s}`);
+      } catch (err) {
+        failed++;
+        console.error(`[recert] could not dispatch ${s}: ${err.message}`);
+      }
+    }
+    process.exit(failed === targets.length ? 1 : 0);
+  }
 
   if (asJson) {
     console.log(JSON.stringify({ slugs, byGuide }, null, 2));

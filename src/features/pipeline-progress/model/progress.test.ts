@@ -1,7 +1,7 @@
 // @protects-file The research progress page reports the real state of a run, including when it fails.
 
 import { describe, it, expect } from "vitest";
-import { deriveProgress, formatElapsed, predictSlug, STAGE_ORDER, STUCK_THRESHOLD_MS } from "./progress";
+import { deriveProgress, formatElapsed, normalizeSlug, predictSlug, STAGE_ORDER, STUCK_THRESHOLD_MS } from "./progress";
 import { FRESH_SCAFFOLD, MID_RESEARCH, VERIFIED } from "../mocks/seeds";
 
 describe("deriveProgress", () => {
@@ -107,5 +107,50 @@ describe("predictSlug", () => {
 
   it("falls back to \"guide\" for empty input", () => {
     expect(predictSlug("")).toBe("guide");
+  });
+});
+
+describe("normalizeSlug (the ONE gate on both slug entrances)", () => {
+  // A slug reaches this page two ways — ?slug= in the URL, and the manual-correction input the
+  // page offers when the guess never resolves. Both then build the same fetch paths and the same
+  // "view the guide" href, so both need the same check; only one of them used to have it.
+
+  it("accepts the shape scaffold-guide.mjs actually emits", () => {
+    for (const ok of ["south-korea", "korea", "guide-2", "a", "trinidad-tobago", "ile-de-france"]) {
+      expect(normalizeSlug(ok)).toBe(ok);
+    }
+  });
+
+  it("normalizes what a human types into an input — surrounding space, capitals", () => {
+    expect(normalizeSlug("  South-Korea  ")).toBe("south-korea");
+    expect(normalizeSlug("KOREA")).toBe("korea");
+    expect(normalizeSlug("korea\n")).toBe("korea");
+  });
+
+  it("rejects path traversal rather than building a URL out of it", () => {
+    for (const bad of ["../../x", "../korea", "korea/../../etc", "/korea", "korea/"]) {
+      expect(normalizeSlug(bad)).toBe("");
+    }
+  });
+
+  it("rejects anything that would leave the path — schemes, protocol-relative hosts, queries", () => {
+    for (const bad of ["javascript:alert(1)", "//evil.test/x", "https://evil.test", "korea?x=1", "korea#f"]) {
+      expect(normalizeSlug(bad)).toBe("");
+    }
+  });
+
+  it("rejects the near-misses a real typo produces", () => {
+    // Inner space, underscore, doubled or edge hyphens, an un-stripped accent: all shapes
+    // scaffold-guide.mjs never produces, so a fetch for them can only 404.
+    for (const bad of ["Korea Trip", "a_b", "korea--2", "-korea", "korea-", "koreá"]) {
+      expect(normalizeSlug(bad)).toBe("");
+    }
+  });
+
+  it("treats absent input as no slug, never as the string \"null\"", () => {
+    expect(normalizeSlug(null)).toBe("");
+    expect(normalizeSlug(undefined)).toBe("");
+    expect(normalizeSlug("")).toBe("");
+    expect(normalizeSlug("   ")).toBe("");
   });
 });

@@ -1,4 +1,4 @@
-// D1 (docs/PLAN_EVIDENCE_FIRST.md) — destination knowledge AS DATA. Before this, a destination's
+// D1 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST) — destination knowledge AS DATA. Before this, a destination's
 // languages, official advisory URL, transit operators/GTFS sources, seasonal forecast sources,
 // and tax-free rule pointer lived as prose scattered across the skill (or, per the plan's D10
 // defect, nowhere at all) — every research pass re-found them from scratch. This is the one

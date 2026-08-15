@@ -1,4 +1,4 @@
-// E1 (docs/PLAN_EVIDENCE_FIRST.md) — risk-weighted verification gates.
+// E1 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST) — risk-weighted verification gates.
 //
 // WHY THIS IS NOT KEYED ON `risk` ALONE (creator ruling 2026-08-13, "decouple detection").
 // E1 was specified as "R2+ must be a fact row, R3/R4 need tier+evidence, R4 must be
@@ -12,7 +12,7 @@
 //
 // WARN-FIRST POSTURE (creator ruling, matching the plan's own Phase E header). Findings
 // BLOCK on drafts and advise on published guides. That split is deliberate, not timidity:
-// a draft's verify is what `graduate-guide.yml` gates on, so blocking there stops a
+// a draft's verify is the evidence gate publication runs, so blocking there stops a
 // defective guide from ever being published, while the three already-published guides
 // carry pre-existing debt that turning red retroactively would only obstruct. Publication
 // is the chokepoint — which is how E1 delivers the safety that struck packet G was for.
@@ -121,7 +121,7 @@ export function hygieneFindings(hygiene) {
 
 /**
  * Roll-up. `enforce` decides blocker-vs-advisory and is the warn-first switch: verify passes
- * `guide.draft === true`, so drafts (the graduation chokepoint) block and published guides
+ * `guide.draft === true`, so drafts (the publish chokepoint) block and published guides
  * advise. Returns "n/a" only when there was genuinely nothing to check.
  */
 export function evaluateRiskGates({ guide, facts = null, unused = [], hygiene = null, destinationConfig = null, enforce = false } = {}) {

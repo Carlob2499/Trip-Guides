@@ -1,4 +1,4 @@
-// Case 11 (docs/PLAN_EVIDENCE_FIRST.md, fixture MANIFEST) — transit leg durations asserted
+// Case 11 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST, fixture MANIFEST) — transit leg durations asserted
 // without a routing authority behind them.
 //
 // THE DEFECT. Guides state inter-stop durations as honest estimates — "JR Senzan Line to

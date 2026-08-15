@@ -1,52 +1,25 @@
 name: Research pass
 
-# Autonomous research pass: FOUR Claude Code agents research one guide via the dual-pass
-# procedure (Agent 1: Pass A canonical/verified → Agent 2: Pass B local/authentic/crowd-aware,
-# STRUCTURALLY BLIND to Pass A → Agent 3: reconcile + verify loop → Agent 4: fresh-context
-# critic + auto-graduate). Each agent is a separate invocation — Pass B cannot read Pass A's
-# guide output, and the critic cannot see the research process, only the finished product +
-# intake spec. This enforces independence at the infrastructure level (P2/F3: Japan proved
-# prompt-only independence is not a guarantee; P3/R8: the critic catches what researchers
-# can't see from inside the process).
-# MODEL MAP: Pass B is always Sonnet; the `model` input governs A + reconcile; `critic_model`
-# (default Opus — judgment work per research-efficiency.md) governs the critic.
+# The RESEARCH lifecycle: four Claude Code agents build one guide — Pass A (canonical/verified) →
+# Pass B (local/authentic/crowd-aware, structurally blind to Pass A) → Reconcile + verify → a
+# fresh-context critic. Each is a separate action invocation, so independence is enforced by the
+# infrastructure rather than asked for in a prompt.
 #
-# CRITIC MERGE (2026-08-02): the experimental Fable vibe critic, its Opus fallback, and its
-# Opus executor were folded into the single critic agent, which now runs the vibe lens as its
-# fifth scan (pipeline-roles.md, "The fresh-context critic"). Three extra agent sessions and
-# two extra verify loops per run bought no findings the merged critic can't reach, and
-# splitting "judge" from "fix" meant the judge never had to live with its own suggestion.
+# This file is ORCHESTRATION ONLY. Every prompt lives in prompts/ (composed by
+# `pipeline prompt`, which fails loudly on an unresolved placeholder) and every decision lives in
+# scripts/pipeline.mjs. If you are about to add a `run: |` block with logic in it, it belongs in
+# one of those two places instead.
 #
-# SINGLE SOURCE OF TRUTH (2026-07-30): agent prompts here are POINTERS — each carries only its
-# stage's I/O contract (paths, checkpoints, forbidden reads, stop conditions) and instructs the
-# agent to read .claude/skills/waypoint-guide-author/ (SKILL.md + references/, incl.
-# pipeline-roles.md for the critic protocol / question emitter). Editing the skill edits the
-# pipeline; never restate skill doctrine in a prompt. The "Critic artifact gate" step
-# hard-fails any run whose critic ended without `## Critic findings` + `## Citation audit`
-# (+ the continuity-sweep record whenever the critic edited the guide).
+# Resumable: the agents commit + checkpoint after EACH stage, and this job resumes the
+# research/<slug> branch, so a run cut off by the wall-clock or a usage window picks up at the
+# next un-done stage. `pipeline gate integrity` audits whether that actually happened — a run
+# that produced nothing durable, or recorded several stages in one burst, fails.
 #
-# Auto-graduation: the verify PASS is the evidence gate (see scripts/graduate-guide.mjs --slug);
-# a guide that passes goes live on the next Pages deploy with ZERO further action. Only a guide
-# that DIDN'T reach verify PASS lands as a draft PR for human triage. Trigger via workflow_dispatch.
+# Publishing is automatic: a guide that clears every stage AND passes the networked verify has
+# its draft flag removed by the landing step and goes live on the next Pages deploy. Anything
+# less lands as a draft PR for a human. There is no separate approval event.
 #
-# RESUMABLE (pipeline P2): a full dual pass is long and can be cut off by the Action wall-clock or
-# your Max usage window. The agent commits + checkpoints (guides-intake/<slug>.state.json) after
-# EACH stage, and this job resumes the research/<slug> branch — so a re-run picks up at the next
-# un-done stage (`npm run pipeline -- --slug <slug> --status`) instead of restarting.
-#
-# ENFORCED, not merely asked (P1 — the first real run proved a prompt mandate is not a guarantee):
-#   · pipeline.mjs's --checkpoint REFUSES a stage whose predecessor is not committed at HEAD, so
-#     batching stages fails at the moment it is attempted, not in a post-mortem.
-#   · the "Run-integrity gate" step below audits what this run actually did — no durable output at
-#     all (VOID), or stages recorded in one burst — and fails the workflow either way.
-#
-# Runs on your Claude MAX subscription (not a pay-per-use API key), so a headless run costs ~$0
-# marginal against your plan. Prerequisites:
-#   - CLAUDE_CODE_OAUTH_TOKEN secret set in repo Settings → Secrets → Actions.
-#     Generate it once locally with `claude setup-token` (Pro/Max only) and paste the value.
-#   - The guide's scaffold exists at src/content/guides/<slug>/ (_guide.json + NN-*.json)
-#
-# Usage: Actions → Research pass → Run workflow → enter slug (and optionally section)
+# Runs on the Claude MAX subscription (CLAUDE_CODE_OAUTH_TOKEN secret, from `claude setup-token`).
 on:
   workflow_dispatch:
     inputs:
@@ -60,20 +33,13 @@ on:
         type: string
         default: ""
       model:
-        description: "Model for the research agent. Sonnet is the default (research is Sonnet work — see references/research-efficiency.md); pick Opus only for a genuinely contested reconcile."
+        description: "Model for Pass A + reconcile. Research is Sonnet work; Opus only for a genuinely contested reconcile."
         required: false
         type: choice
         options:
           - claude-sonnet-5
           - claude-opus-5
         default: claude-sonnet-5
-      # Boundary check #4 (CLAUDE.md): explicit over ambient. Effort used to be
-      # whatever the runner defaulted to — an unnamed knob that silently changes
-      # search depth when the environment changes. Default is HIGH for every agent
-      # (creator's ruling, 2026-07-30: high, not xhigh — the QA trial showed xhigh's
-      # extra depth wasn't buying verification quality, just tokens); xhigh stays a
-      # dispatchable option for a deliberately exhaustive one-off. low/medium make
-      # the model scope work DOWN to the literal ask — wrong for a full pass.
       effort:
         description: "Reasoning effort. high is the default for every agent; xhigh only for a deliberately exhaustive one-off pass."
         required: false
@@ -84,11 +50,8 @@ on:
           - medium
           - max
         default: high
-      # Judgment work is Opus work (research-efficiency.md model economy; HANDOFF operating
-      # rules) — so the rubric critic gets its own knob instead of riding the research
-      # model. Research stays Sonnet-cheap while the final gate thinks harder.
       critic_model:
-        description: "Model for the fresh-context critic (Agent 4). Opus is the doctrine default for judgment work; Sonnet for a cheap re-run; Fable to experiment."
+        description: "Model for the fresh-context critic. Opus is the doctrine default for judgment work."
         required: false
         type: choice
         options:
@@ -96,19 +59,11 @@ on:
           - claude-sonnet-5
           - claude-fable-5
         default: claude-opus-5
-      # The originating intake issue, when this run was auto-dispatched by new-guide.yml.
-      # Used ONLY to surface `## Questions for the traveler` back to the person who filed the
-      # intake (see the "Surface traveler questions" steps). Never a gate: a run without it
-      # simply skips those steps. Blank on a manual dispatch is normal.
       issue:
-        description: "Intake issue number to post traveler questions to (optional; set automatically by new-guide.yml)."
+        description: "Intake issue number to post traveler questions to (set automatically by new-guide.yml)."
         required: false
         type: string
         default: ""
-      # P1/F2: set ONLY by this workflow's own auto-retry dispatch after a VOID run (an agent
-      # session that produced no durable output at all). It exists to make the retry strictly
-      # once — a second void run with this already true files the stuck issue instead of
-      # re-dispatching forever. Humans should never set it.
       void_retry:
         description: "Internal — set by the auto-retry after a void run. Leave false."
         required: false
@@ -119,9 +74,9 @@ permissions:
   contents: write
   pull-requests: write
   issues: write
+  actions: write # the void auto-retry re-dispatches this workflow
 
-# M0/B3: rapid re-dispatches (or two dispatches for the same slug) would otherwise race the
-# same research/<slug> branch — each bump-commit-push cycle able to collide with the other's.
+# Two dispatches for the same slug would otherwise race the same research/<slug> branch.
 concurrency:
   group: research-${{ inputs.slug }}
   cancel-in-progress: false
@@ -129,20 +84,23 @@ concurrency:
 jobs:
   research:
     runs-on: ubuntu-latest
-    # A4: job-level so it's in scope for every step INCLUDING the agent action below (whose
-    # own bash tool calls inherit the job's environment) — was hardcoded identically here,
-    # in graduate-guide.yml, new-guide.yml, astro.config.mjs, and verify-live.mjs.
-    # M0/B3: GH_TOKEN here too — land-branch.sh and the prompt's own `gh issue`/`gh pr` calls
-    # run inside the agent's Bash tool, which inherits this job's environment; unset, `gh`
-    # inside the agent has no credential and every gh call in the prompt would fail unproven.
+    # Job-level so the agent action's own Bash tool (which inherits this environment) has the
+    # same credentials the steps do.
     env:
       SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://carlob2499.github.io/Trip-Guides' }}
       GH_TOKEN: ${{ github.token }}
-      # S1: verify --network runs the Places venue-status gate; the agents' own lookup-venue
-      # calls use it too. Absent secret → the check reports n/a and everything else proceeds.
       PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
-      # Case 11: live leg-duration verification. Default OFF — unset ⇒ free layers only.
       GOOGLE_ROUTES_KEY: ${{ secrets.GOOGLE_ROUTES_KEY }}
+      # Every workflow input the `run:` blocks below need, bound ONCE as environment DATA. A
+      # `${{ }}` expression written into a `run:` body is text spliced into the shell script
+      # before bash parses it, so a value carrying a quote or `$(…)` would be code — and `slug`
+      # and `section` come from a dispatch anyone with write access (or the Worker) can shape.
+      # Read them as "$SLUG" / "$SECTION"; never re-inline them.
+      SLUG: ${{ inputs.slug }}
+      SECTION: ${{ inputs.section }}
+      ISSUE: ${{ inputs.issue }}
+      MODEL: ${{ inputs.model || 'claude-sonnet-5' }}
+      EFFORT: ${{ inputs.effort || 'high' }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -161,155 +119,61 @@ jobs:
           git config user.name  "waypoint-research[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      # S3: inputs.slug becomes a branch name, a path segment, and a bash/agent-prompt
-      # string in every step below — validate it here, first, via env: (never
-      # interpolated straight into a shell string) so an invalid slug never reaches any
-      # of those sinks.
-      - name: Validate slug input
-        env:
-          SLUG: ${{ inputs.slug }}
-        run: |
-          node --input-type=module -e "
-            import { isValidSlug } from './scripts/lib/slug.mjs';
-            if (!isValidSlug(process.env.SLUG)) { console.error('Invalid slug:', process.env.SLUG); process.exit(1); }
-          "
-
-      # Resume the research branch if a prior (cut-off) run created it, so the agent starts with the
-      # committed partial progress + checkpoint state in the working tree; otherwise start it fresh.
-      # P1: this MUST happen before any state-file mutation below — bumping the attempt count on
-      # `main` first, then checking out this branch, made `git checkout` abort on the modified
-      # state file (every resumed run went red before the agent even started).
+      # Validates the slug (it becomes a branch name, a path segment and a prompt value below)
+      # and resumes the branch if a prior cut-off run created it. Must run before any state
+      # mutation: bumping the attempt count on main first made `git checkout` abort on the
+      # modified state file.
       - name: Resume or start the research branch
-        env:
-          SLUG: ${{ inputs.slug }}
-        run: |
-          BR="research/${SLUG}"
-          if git ls-remote --exit-code --heads origin "$BR" >/dev/null 2>&1; then
-            git fetch origin "$BR" && git checkout "$BR"
-            echo "Resumed $BR"
-          else
-            git checkout -b "$BR"
-            echo "Started $BR"
-          fi
+        id: branch
+        run: node scripts/pipeline.mjs branch --slug "$SLUG" --prefix research
 
-      # Circuit breaker (docs/reference/pipeline.md P2 spine): a headless run that keeps getting cut off
-      # before reaching `verified` should eventually stop and ask a human instead of silently
-      # resuming forever. Runs BEFORE the agent so a stuck guide never spends agent tokens.
-      # P2: attempts are read/bumped and COMMITTED on THIS branch (research/<slug>), not on
-      # main — previously the bump only ever landed on main via a later merge that a failing
-      # guide never reaches, so main's copy of the state file stayed at attempts: 0 forever and
-      # the circuit breaker could never trip. Committing here, on the branch, right after the
-      # bump, is what makes the cap real.
+      # Circuit breaker: a headless run that keeps getting cut off eventually stops and asks a
+      # human. Runs BEFORE the agents so a stuck guide never spends agent tokens, and commits the
+      # bumped count on this branch so the breaker's memory survives a run that dies early.
       - name: Attempt budget
         id: budget
         env:
-          GH_TOKEN: ${{ github.token }}
-          SLUG: ${{ inputs.slug }}
-        run: |
-          set -euo pipefail
-          NEXT=$(node scripts/pipeline.mjs --slug "$SLUG" --status --json | jq -r '.nextStage')
-          if [ "$NEXT" = "null" ]; then
-            echo "[budget] $SLUG already reached verified — nothing to do."
-            echo "should_run=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
+          BRANCH: ${{ steps.branch.outputs.name }}
+        run: node scripts/pipeline.mjs gate budget --slug "$SLUG" --branch "$BRANCH"
 
-          ATTEMPTS=$(node scripts/pipeline.mjs --slug "$SLUG" --bump-attempt --json | jq -r '.attempts')
-
-          # Persist the bumped attempt count on THIS branch now, so it survives even if this run
-          # is cut off before the agent commits anything else — the circuit breaker's memory
-          # must not depend on the agent ever reaching a commit step.
-          if ! git diff --quiet -- "guides-intake/${SLUG}.state.json"; then
-            git add "guides-intake/${SLUG}.state.json"
-            git commit -m "chore(pipeline): attempt ${ATTEMPTS}"
-            git push origin "HEAD:research/${SLUG}"
-          fi
-
-          # M0/B9: trips the run AFTER the cap-th attempt (attempts > CAP), so the message names
-          # the actual triggering count, not CAP itself — "cap: 5" read as "stops after 5" when
-          # it stops after 6.
-          CAP=5
-          if [ "$ATTEMPTS" -gt "$CAP" ]; then
-            echo "[budget] $SLUG has been attempted $ATTEMPTS times without reaching verified (exceeds cap of $CAP) — flagging instead of continuing."
-            TITLE="Research stuck: $SLUG"
-            STATUS_TEXT=$(node scripts/pipeline.mjs --slug "$SLUG" --status)
-            BODY=$(printf 'Automated research has run **%s** times for `%s` without reaching `verified`.\n\nCurrent status:\n```\n%s\n```\n\nThis destination may be genuinely hard to source (bot-blocked, sparse coverage) or stuck on one fact. Check `guides-intake/%s.md` and the `research/%s` branch, then either finish it by hand or re-run this workflow to keep trying — the attempt count only resets if `guides-intake/%s.state.json` is edited directly (git-tracked, so that is a deliberate act, not automatic).' "$ATTEMPTS" "$SLUG" "$STATUS_TEXT" "$SLUG" "$SLUG" "$SLUG")
-            EXISTING=$(gh issue list --search "\"$TITLE\" in:title" --state open --json number -q '.[0].number' 2>/dev/null || true)
-            if [ -n "$EXISTING" ]; then
-              gh issue comment "$EXISTING" --body "$BODY"
-            else
-              gh issue create --title "$TITLE" --body "$BODY" --label "stuck"
-            fi
-            echo "should_run=false" >> "$GITHUB_OUTPUT"
-            exit 1
-          fi
-
-          echo "[budget] $SLUG — attempt $ATTEMPTS of $CAP, proceeding."
-          echo "should_run=true" >> "$GITHUB_OUTPUT"
-
-      # C2 (docs/PLAN_EVIDENCE_FIRST.md) preflight: the SAME deterministic contradiction check
-      # new-guide.yml already ran right after scaffolding — re-run here because a human may have
-      # hand-elaborated guides-intake/<slug>.md since then (this is exactly how the Japan
-      # regression fixture's case 2 — a date range narrowed in prose, never reflected in the
-      # flat start-date bullet — actually got into a real intake doc). Runs BEFORE Pass A spends
-      # any agent budget, same ordering reason as the attempt-budget circuit breaker above.
-      # Idempotent (applyContradictions never re-appends an id already in the doc), so a resumed
-      # run re-checking the same doc is a harmless no-op. Never fails the workflow.
       - name: Preflight — check intake for contradictions
         if: steps.budget.outputs.should_run == 'true'
         env:
-          SLUG: ${{ inputs.slug }}
-        run: |
-          set -euo pipefail
-          node scripts/audit/check-intake-contradictions.mjs --slug "$SLUG" --write
-          if ! git diff --quiet -- "guides-intake/${SLUG}.md"; then
-            git add "guides-intake/${SLUG}.md"
-            git commit -m "chore(intake): stamp contradiction findings for ${SLUG}"
-            git push origin "HEAD:research/${SLUG}"
-          fi
+          BRANCH: ${{ steps.branch.outputs.name }}
+        run: node scripts/pipeline.mjs gate preflight --slug "$SLUG" --branch "$BRANCH"
 
-      # Social-leads aide (skill references/research-efficiency.md, "Social & video lead
-      # sourcing"): yt-dlp lets Pass B pull YouTube
-      # TRANSCRIPTS (never media) as T2 leads. Best-effort BY DESIGN — transcripts are an aide,
-      # not a dependency: if this install fails, or YouTube blocks the runner's IP at pull time,
-      # the pass runs identically without them (the skill's bot-blocked doctrine). That is why
-      # continue-on-error is correct here and nothing downstream checks this step's outcome.
-      - name: Install yt-dlp (transcript lead sourcing — best-effort)
+      # Transcript lead sourcing for Pass B. Best-effort BY DESIGN — transcripts are an aide, not
+      # a dependency, so nothing downstream checks this step's outcome.
+      - name: Install yt-dlp (best-effort)
         if: steps.budget.outputs.should_run == 'true'
         continue-on-error: true
         run: python3 -m pip install --upgrade yt-dlp
 
-      # P1 (F1/F2): the "before" half of the run-integrity gate. Captured AFTER the attempt-budget
-      # step's own commit, so the agent's own output is the only thing that can move these numbers.
       - name: Pre-agent snapshot
         id: pre
         if: steps.budget.outputs.should_run == 'true'
-        env:
-          SLUG: ${{ inputs.slug }}
         run: node scripts/check-run-integrity.mjs --slug "$SLUG" --snapshot
-
-      # P2 (F3/R5/R6/R16): the dual-pass research is now THREE separate agent invocations so
-      # Pass B is structurally blind to Pass A's findings — not merely asked to ignore them.
-      # Route steps between agents check the pipeline status and skip agents whose stage is
-      # already cleared (resume-safe). Pass B always runs Sonnet (cheap, parallel-capable later).
-      #
-      # Shared env/auth for all agent steps — factored into the YAML anchors below.
 
       - name: Route to next stage
         id: route
         if: steps.budget.outputs.should_run == 'true'
-        env:
-          SLUG: ${{ inputs.slug }}
-        run: |
-          NEXT=$(node scripts/pipeline.mjs --slug "$SLUG" --status --json | jq -r '.nextStage')
-          echo "next=$NEXT" >> "$GITHUB_OUTPUT"
-          echo "[route] next stage: $NEXT"
+        run: node scripts/pipeline.mjs route --slug "$SLUG"
 
-      # ── AGENT 1: Pass A (scaffold + passA + Living Atlas duties) ──────────────
-      - name: Run research agent — Pass A
+      # ── AGENT 1: Pass A ──────────────────────────────────────────────────────
+      - name: Compose Pass A prompt
+        id: p1
         if: >-
           steps.budget.outputs.should_run == 'true' &&
           (steps.route.outputs.next == 'scaffold' || steps.route.outputs.next == 'passA')
+        env:
+          WP_SLUG: ${{ inputs.slug }}
+          WP_SECTION: ${{ inputs.section || 'full pass — all sections' }}
+        run: node scripts/pipeline.mjs prompt prompts/research-passA.md > /dev/null
+
+      # Each agent step keys off its own compose step's conclusion: a skipped compose means the
+      # stage is already cleared, so the agent is skipped too. One condition, not two copies.
+      - name: Run research agent — Pass A
+        if: steps.p1.conclusion == 'success'
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
@@ -320,165 +184,61 @@ jobs:
             --model ${{ inputs.model || 'claude-sonnet-5' }}
             --effort ${{ inputs.effort || 'high' }}
             --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
-          prompt: |
-            Guide slug: ${{ inputs.slug }}
-            Section focus: ${{ inputs.section || 'full pass — all sections' }}
+          prompt: ${{ steps.p1.outputs.text }}
 
-            YOU ARE THE PASS A AGENT — the skill's "Pass A — canonical & verified". This is ONE
-            of the pipeline's agent steps (A → B → Reconcile → critics); you handle scaffold +
-            passA ONLY. A SEPARATE agent handles Pass B (it cannot see your work), and a third
-            reconciles both into the final guide.
-
-            THE LAW — the skill is the single source of truth; this prompt carries only your
-            stage contract. Read and follow EXACTLY:
-              .claude/skills/waypoint-guide-author/SKILL.md — the spine: Pass A (anchor event
-                against a T0 source FIRST, then the backbone; ledger as you go; lookup-tz.mjs in
-                the SAME step as coords, tz set explicitly on EVERY guide), fact discipline, the
-                Living Atlas duties, the deterministic lookup scripts.
-              references/verification-rules.md — source tiers, ≈/⚠ legal states, ship/flag/omit.
-              references/research-efficiency.md — the BINDING search budget, fetch discipline,
-                and the reserved duty budgets (phrases card ≥3, footage scout ≥2 — the run
-                report states what each duty actually used).
-              references/block-types.md — section types, tab budget, guide-level typed features,
-                voice standard, facets, cover rules.
-              references/image-sourcing.md — BINDING for any photo you set on a sight or the
-                cover: Commons `file` via search-commons.mjs (preferred, existence provable) vs
-                a royalty-free `src` (credit + license REQUIRED, build fails without them),
-                forbidden sources, the R18 honesty rule, the pre-ship checklist.
-              references/pipeline-roles.md — "Traveler questions": the emitter you use when
-                research hits a real fork (then proceed on the assumption; never block).
-            The CLAUDE.md accuracy standard (auto-loaded) is also binding.
-
-            STAGE CONTRACT:
-            - Target: the DIRECTORY src/content/guides/${{ inputs.slug }}/ — _guide.json + one
-              NN-<group>.json per tab group. NEVER create a flat
-              src/content/guides/${{ inputs.slug }}.json (it silently shadows the directory).
-            ${{ inputs.section != '' && format('- Scope this pass to the "{0}" section only; leave all other sections as-is.', inputs.section) || '' }}
-            - RESUMABLE: start with `npm run pipeline -- --slug ${{ inputs.slug }} --status`;
-              do ONLY the un-done stages up to and including passA. Never redo a cleared stage.
-            - The Living Atlas duties (SKILL.md's four — facets, descriptors, cover, footage
-              scout; mechanics in block-types.md) are part of your passA commit — no separate
-              checkpoint.
-            - CANDIDATES TABLE (standard S2/S3 — SKILL.md "Fact discipline"): record every
-              venue/experience you EVALUATE for the ranked priorities in the intake doc's
-              `## Candidates considered` tables as you research — shipped or
-              `rejected: <one-line reason>`. Verify gates on the counts and cross-checks
-              shipped names against the guide, so a survivors-only table fails the run.
-            - When done, checkpoint and commit:
-                npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint passA
-                && git add -A && git commit -m "research(${{ inputs.slug }}): Pass A" && git push
-            - STOP after passA — Pass B and reconcile belong to separate agents. If you run low
-              on wall-clock or usage, stop at a clean committed checkpoint rather than leaving a
-              half-done uncommitted stage.
-            - Never touch any guide other than src/content/guides/${{ inputs.slug }}/ and its
-              guides-intake/${{ inputs.slug }}.md + .state.json.
-
-      # ── Route after Pass A ───────────────────────────────────────────────────
       - name: Route after Pass A
         id: route2
         if: steps.budget.outputs.should_run == 'true'
-        env:
-          SLUG: ${{ inputs.slug }}
-        run: |
-          NEXT=$(node scripts/pipeline.mjs --slug "$SLUG" --status --json | jq -r '.nextStage')
-          echo "next=$NEXT" >> "$GITHUB_OUTPUT"
-          echo "[route] after Pass A, next stage: $NEXT"
+        run: node scripts/pipeline.mjs route --slug "$SLUG"
 
-      # ── AGENT 2: Pass B (independent, A-blind, always Sonnet) ────────────────
-      # P2/F3/R6: Pass B is a SEPARATE agent invocation that receives ONLY the intake spec
-      # and the scaffold's original section list — never the guide content Pass A wrote.
-      # This makes independence structural, not prompt-only (Japan proved prompt-only fails).
-      # Findings go to guides-intake/<slug>.passB.json; the reconcile agent reads both sources.
-      - name: Run research agent — Pass B (independent)
+      # ── AGENT 2: Pass B (independent, A-blind, always Sonnet) ─────────────────
+      # A SEPARATE invocation that receives only the intake spec — never the guide content Pass A
+      # wrote. Independence is structural here, not prompt-only.
+      - name: Compose Pass B prompt
+        id: p2
         if: >-
           steps.budget.outputs.should_run == 'true' &&
           (steps.route.outputs.next == 'passB' || steps.route2.outputs.next == 'passB')
+        env:
+          WP_SLUG: ${{ inputs.slug }}
+        run: node scripts/pipeline.mjs prompt prompts/research-passB.md > /dev/null
+
+      - name: Run research agent — Pass B (independent)
+        if: steps.p2.conclusion == 'success'
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           allowed_bots: "github-actions[bot]"
           show_full_output: true
-          # P2: Pass B always runs Sonnet (cheap, parallel-capable later) regardless of
-          # the model input — the model input governs Pass A and Reconcile only.
+          # Pass B is always Sonnet regardless of the model input — that input governs Pass A and
+          # reconcile only.
           claude_args: |
             --model claude-sonnet-5
             --effort ${{ inputs.effort || 'high' }}
             --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
-          prompt: |
-            Guide slug: ${{ inputs.slug }}
+          prompt: ${{ steps.p2.outputs.text }}
 
-            YOU ARE THE PASS B AGENT — the skill's "Pass B — local, authentic, crowd-aware".
-            You are STRUCTURALLY INDEPENDENT of Pass A: you must NOT read, open, or reference
-            ANY file under src/content/guides/${{ inputs.slug }}/. Your findings go to a
-            separate file that the reconcile agent (a third agent) merges with Pass A's guide.
-
-            THE LAW — the skill is the single source of truth; this prompt carries only your
-            stage contract. Read and follow EXACTLY:
-              .claude/skills/waypoint-guide-author/SKILL.md — Pass B: the resident/blog/forum/
-                reddit angle, the different questions you ask (off-peak reality, tourist-trap
-                alternatives, the non-obvious neighborhood, authentic local dining), and the
-                rule that every find is a T2 LEAD verified against a primary source (T0/T1)
-                before recording — no primary source, stays out.
-              references/verification-rules.md — the tier ladder your leads must climb.
-              references/research-efficiency.md — the BINDING search budget + reserved duty
-                budget (resident phrases/slang ≥2 searches), and "Social & video lead
-                sourcing": yt-dlp is installed best-effort on this runner (transcripts only,
-                ~4 max, a failed install or pull is bot-blocked — mark and move on, never
-                retry-loop); TikTok/IG via web-indexed roundups ONLY; viral = a crowd warning,
-                never a citation; "locals" phrasing needs ≥2 independent sources.
-            The CLAUDE.md accuracy standard (auto-loaded) is also binding.
-
-            STAGE CONTRACT:
-            - Read ONLY: guides-intake/${{ inputs.slug }}.md (the intake spec — priorities,
-              dates, anchor) + the skill files above. Never the guide directory, never Pass A's
-              work.
-            - DISCOVERY DOSSIER: if the intake doc carries a non-empty
-              `## Discovery leads (Pass B — native-first)` table, those rows are your starting
-              map — T2 leads from an interactive native-language sweep. Verify each to T0 like
-              any other lead, set its Status cell to `verified` or `rejected: <reason>`, and
-              carry rejected rows into `## Candidates considered` too. An empty/absent table
-              means nothing: proceed on your native aides exactly as the skill describes.
-            - Write findings to guides-intake/${{ inputs.slug }}.passB.json as a JSON array:
-              [
-                {
-                  "item": "Sight / restaurant / tip name",
-                  "category": "crowd | alternative | timing | novel | food | transit | language",
-                  "finding": "What you found (the traveler-facing insight)",
-                  "source_url": "https://...",
-                  "verified_on": "YYYY-MM-DD",
-                  "replaces": "optional — name of the obvious/generic pick this replaces, if any"
-                }
-              ]
-              Each entry MUST have a source_url and verified_on. Omit entries you could not verify.
-            - Also append the candidates you evaluated (shipped AND rejected, with one-line
-              reasons) to the intake doc's `## Candidates considered` tables — your resident-
-              angle rejections ("tourist trap, locals go to X") are exactly the rows that make
-              the consideration set worth recording.
-            - Checkpoint and commit:
-                npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint passB
-                && git add -A && git commit -m "research(${{ inputs.slug }}): Pass B" && git push
-            - STOP there. Do NOT edit the guide, reconcile, or verify — a separate agent handles
-              that. If you run low on wall-clock, commit what you have.
-
-      # ── Route after Pass B ───────────────────────────────────────────────────
       - name: Route after Pass B
         id: route3
         if: steps.budget.outputs.should_run == 'true'
-        env:
-          SLUG: ${{ inputs.slug }}
-        run: |
-          NEXT=$(node scripts/pipeline.mjs --slug "$SLUG" --status --json | jq -r '.nextStage')
-          echo "next=$NEXT" >> "$GITHUB_OUTPUT"
-          echo "[route] after Pass B, next stage: $NEXT"
+        run: node scripts/pipeline.mjs route --slug "$SLUG"
 
-      # ── AGENT 3: Reconcile + Verify (stops before graduation) ────────────────
-      - name: Run research agent — Reconcile & verify
+      # ── AGENT 3: Reconcile + verify ──────────────────────────────────────────
+      - name: Compose reconcile prompt
+        id: p3
         if: >-
           steps.budget.outputs.should_run == 'true' &&
           (steps.route.outputs.next == 'reconcile' || steps.route.outputs.next == 'verified' ||
            steps.route2.outputs.next == 'reconcile' || steps.route2.outputs.next == 'verified' ||
            steps.route3.outputs.next == 'reconcile' || steps.route3.outputs.next == 'verified')
+        env:
+          WP_SLUG: ${{ inputs.slug }}
+          WP_SECTION: ${{ inputs.section || 'full pass — all sections' }}
+        run: node scripts/pipeline.mjs prompt prompts/research-reconcile.md > /dev/null
+
+      - name: Run research agent — Reconcile & verify
+        if: steps.p3.conclusion == 'success'
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
@@ -489,112 +249,35 @@ jobs:
             --model ${{ inputs.model || 'claude-sonnet-5' }}
             --effort ${{ inputs.effort || 'high' }}
             --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
-          prompt: |
-            Guide slug: ${{ inputs.slug }}
-            Section focus: ${{ inputs.section || 'full pass — all sections' }}
+          prompt: ${{ steps.p3.outputs.text }}
 
-            YOU ARE THE RECONCILE & VERIFY AGENT — the skill's "Reconcile → ONE guide, with a
-            ledger" plus the self-correction loop. You merge two independent research passes
-            into one guide, then drive it through verification. You do NOT graduate.
-
-            THE LAW — the skill is the single source of truth; this prompt carries only your
-            stage contract. Read and follow EXACTLY:
-              .claude/skills/waypoint-guide-author/SKILL.md — Reconcile (AGREE / A-only /
-                B-only / CONFLICT + the `## Research reconciliation` ledger + `## Amendments`),
-                authenticity woven into existing bodies (crowd + best-time notes, no new tabs),
-                fact discipline, and done-gate step 1 (the self-correction loop).
-              references/verification-rules.md, references/research-efficiency.md,
-                references/block-types.md — binding as everywhere.
-              references/image-sourcing.md — BINDING for the Living Atlas cover duty and any
-                sight photo: Commons `file` vs royalty-free `src` (credit + license REQUIRED),
-                forbidden sources, the R18 honesty rule.
-              references/pipeline-roles.md — "Traveler questions" for any real fork
-                reconciliation reveals (proceed on the assumption; never block).
-            The CLAUDE.md accuracy standard (auto-loaded) is also binding.
-
-            STAGE CONTRACT:
-            - Target: the DIRECTORY src/content/guides/${{ inputs.slug }}/ — never a flat
-              src/content/guides/${{ inputs.slug }}.json.
-            - RESUMABLE: `npm run pipeline -- --slug ${{ inputs.slug }} --status` first; do ONLY
-              the un-done stages (reconcile and/or verified). Never redo a cleared stage.
-            - TWO SOURCES TO RECONCILE: Pass A's guide (already in the guide directory, with its
-              verification ledger) and Pass B's findings
-              (guides-intake/${{ inputs.slug }}.passB.json — independent, each entry
-              primary-source verified).
-            - After reconciling, checkpoint and commit:
-                npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint reconcile
-                && git add -A && git commit -m "research(${{ inputs.slug }}): reconcile" && git push
-            - SELF-CORRECTION LOOP (the `verified` stage) — the skill's done-gate step 1,
-              iterate, never one-shot: offline rounds first (`npm run verify -- --slug
-              ${{ inputs.slug }}` + `npm run build`; fix each blocking ⚠ by re-researching that
-              fact against a T0 source — never silence a flag you cannot source; up to 4
-              rounds), THEN the FINAL NETWORK GATE, the only gate that checks links + Commons
-              photos: `npm run verify -- --slug ${{ inputs.slug }} --network`.
-              · content FAIL → fix each finding (dead link → re-source the fact from a live
-                primary; missing photo → correct via search-commons.mjs or omit) and re-run the
-                SAME networked verify — never fall back to the offline command from here on.
-              · UNVERIFIABLE (a checker outage — NOT the same as "checked, found nothing") →
-                wait 60s, retry ONCE; still UNVERIFIABLE → do NOT proceed: commit as-is, write
-                the outage into the scorecard, and let landing take the draft-PR path.
-            - STOP once the networked verify PASSes — commit and push, then hand off:
-                git add -A && git commit -m "research(${{ inputs.slug }}): verify PASS — awaiting critic" && git push
-              Separate critic agents run next in fresh contexts and own graduation.
-            - If the 4-round cap ends still NEEDS WORK: commit and push whatever fix attempts
-              you made (check `git status --short` first; skip if nothing), so the remote
-              reflects your actual last state:
-                git add -A && git commit -m "research(${{ inputs.slug }}): NEEDS WORK after 4 rounds" && git push
-            - Never touch any guide other than src/content/guides/${{ inputs.slug }}/ and its
-              guides-intake/${{ inputs.slug }}.md + .state.json.
-
-      # ── Route after Reconcile & Verify ─────────────────────────────────────
-      - name: Route after Reconcile
+      - name: Route after reconcile
         id: route4
         if: steps.budget.outputs.should_run == 'true'
-        env:
-          SLUG: ${{ inputs.slug }}
+        run: node scripts/pipeline.mjs route --slug "$SLUG" --verify
+
+      # HARD GATE: Pass A and B are independent, but ONE agent merges them and no later critic can
+      # see what the merge silently dropped — they judge the product, not what is missing from it.
+      # Every passB.json entry must carry a written verdict in the ledger. Fails BEFORE the critic
+      # spends tokens; the quantitative floors bite only on a full pass.
+      - name: Pass B coverage gate
+        if: steps.budget.outputs.should_run == 'true' && steps.route4.outputs.verified == 'true'
         run: |
-          NEXT=$(node scripts/pipeline.mjs --slug "$SLUG" --status --json | jq -r '.nextStage')
-          # The critic runs when the guide passes mechanical verification. We check the exit
-          # code of verify (0 = PASS) rather than parsing JSON, which is more robust.
-          set +e
-          node scripts/verify-guide.mjs --slug "$SLUG" > /dev/null 2>&1
-          VERIFY_EXIT=$?
-          set -e
-          VERIFIED=false; [ "$VERIFY_EXIT" -eq 0 ] && VERIFIED=true
-          echo "next=$NEXT" >> "$GITHUB_OUTPUT"
-          echo "verified=$VERIFIED" >> "$GITHUB_OUTPUT"
-          echo "[route] after Reconcile, next=$NEXT, verified=$VERIFIED"
+          # The floors flag is decided in bash from "$SECTION", not appended as expression text.
+          FLOORS=()
+          if [ -z "$SECTION" ]; then FLOORS=(--floors); fi
+          node scripts/pipeline.mjs gate coverage --slug "$SLUG" "${FLOORS[@]}"
 
-      # HARD GATE (reconcile blind spot, creator's ruling 2026-07-30): Pass A and B are
-      # independent, but ONE agent merges them and no later critic can see what the merge
-      # silently dropped — they judge the product, not what's missing from it. Deterministic,
-      # agent-free: every passB.json entry must have a written verdict in the intake doc's
-      # `## Research reconciliation` (AGREE / B-only / CONFLICT / explicit rejection).
-      # Fails BEFORE the critics spend tokens — a barrier by design.
-      - name: Pass B coverage gate — every B-find gets a reconciliation verdict
-        if: >-
-          steps.budget.outputs.should_run == 'true' &&
-          steps.route4.outputs.verified == 'true'
+      # ── AGENT 4: fresh-context critic ────────────────────────────────────────
+      - name: Compose critic prompt
+        id: p4
+        if: steps.budget.outputs.should_run == 'true' && steps.route4.outputs.verified == 'true'
         env:
-          SLUG: ${{ inputs.slug }}
-          # S4: quantitative floors bite only on a FULL pass — a section-scoped re-run
-          # legitimately produces few B finds, and gating it would punish precision.
-          FLOORS_FLAG: ${{ inputs.section == '' && '--floors' || '' }}
-        run: node scripts/check-passb-coverage.mjs --slug "$SLUG" $FLOORS_FLAG
+          WP_SLUG: ${{ inputs.slug }}
+        run: node scripts/pipeline.mjs prompt prompts/research-critic.md > /dev/null
 
-      # ── AGENT 4: Fresh-context Critic + Graduate ─────────────────────────────
-      # P3/R8/R9: a SEPARATE agent invocation with fresh context — it sees ONLY the intake
-      # spec and the finished guide, not the research process or intermediate findings. This
-      # is the bar test: "Could a generic AI have written this from training data alone,
-      # without research and without knowing this traveler?" Runs on `critic_model`
-      # (default Opus — judgment is Opus work), independent of the research model.
-      # It carries EVERY judgment lens — the four rubric scans plus the vibe lens (pacing,
-      # geography, meals, tone, common sense) as its fifth — then implements its own findings
-      # under full verification discipline (pipeline-roles.md is the single source for both).
-      - name: Run research agent — Critic & graduate
-        if: >-
-          steps.budget.outputs.should_run == 'true' &&
-          steps.route4.outputs.verified == 'true'
+      - name: Run research agent — Critic
+        if: steps.p4.conclusion == 'success'
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
@@ -605,294 +288,78 @@ jobs:
             --model ${{ inputs.critic_model || 'claude-opus-5' }}
             --effort ${{ inputs.effort || 'high' }}
             --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
-          prompt: |
-            Guide slug: ${{ inputs.slug }}
+          prompt: ${{ steps.p4.outputs.text }}
 
-            YOU ARE THE CRITIC AGENT — the fresh-context quality gate, run AFTER all mechanical
-            verification. You have NO knowledge of how the research was done; you see only the
-            finished product and the original spec, and you own graduation. You are the ONLY
-            judgment agent in this pipeline: nothing downstream reviews your work, so scan
-            with that in mind.
+      # An alarm, not a barrier — it necessarily runs after the critic, since the critic is what
+      # writes the artifacts. A missing record means a human looks at the run.
+      - name: Critic artifact gate
+        if: steps.budget.outputs.should_run == 'true' && steps.route4.outputs.verified == 'true'
+        run: node scripts/pipeline.mjs gate artifacts --slug "$SLUG" --stage critic
 
-            THE LAW — the skill is the single source of truth; this prompt carries only your
-            stage contract. Read and execute EXACTLY:
-              .claude/skills/waypoint-guide-author/references/pipeline-roles.md — "The
-                fresh-context critic": your inputs (and the files you are FORBIDDEN to read),
-                the FIVE scans (intake fit · generic-probability · party fit · authenticity ·
-                the VIBE LENS — pacing arc, geography, meals & energy, tone, common sense),
-                the `## Critic findings` format (researched replacements REQUIRED — "consider
-                adding" is never sufficient; exact clean-pass sentinel), the EXECUTION
-                discipline for implementing your own findings, the `#### Continuity sweep —
-                critic execution` record you MUST leave whenever you edit the guide, and the
-                CITATION AUDIT (`## Citation audit` table). The workflow hard-gates on those
-                artifacts after you finish.
-              .claude/skills/waypoint-guide-author/SKILL.md + references/verification-rules.md
-                + references/block-types.md — the standards you enforce and edit under.
-              docs/standards/guide-rubric.md — the rows you score against.
-            The CLAUDE.md accuracy standard (auto-loaded) is also binding.
-
-            STAGE CONTRACT — after findings are recorded AND resolved in the guide (edit the
-            group files, extend the ledger, re-run `npm run verify -- --slug ${{ inputs.slug }}`
-            + `npm run build` until clean, ≤3 rounds), the continuity sweep is recorded if you
-            edited anything, and the `## Citation audit` is written:
-
-            GRADUATION:
-              a. Extract the identity palette:
-                 npm run extract-palette -- --slug ${{ inputs.slug }}
-                 (writes src/data/palettes/${{ inputs.slug }}.json — commit it; skips harmlessly
-                 if no photo)
-              b. Compose tabs while the guide is STILL a draft:
-                 node scripts/compose-guide.mjs --slug ${{ inputs.slug }} --write
-                 A compose ERROR is a real finding: fix the cause (usually a ⚠-flagged unit
-                 stranded in a thin group — source it or move it deliberately, or raise tabBudget
-                 in _guide.json with a one-line justification), then re-run verify + compose.
-              c. Auto-graduate:
-                 node scripts/graduate-guide.mjs --slug ${{ inputs.slug }}
-                 && npm run pipeline -- --slug ${{ inputs.slug }} --checkpoint verified
-                 && git add -A && git commit -m "research(${{ inputs.slug }}): critic clear — auto-graduated" && git push
-
-            LANDING THE BRANCH — however the above ended, hand landing to the shared script:
-
-              set +e
-              npm run verify -- --slug ${{ inputs.slug }} --markdown --network > /tmp/scorecard.md
-              VERIFY_EXIT=$?
-              set -e
-              NEXT=$(node scripts/pipeline.mjs --slug ${{ inputs.slug }} --status --json | jq -r '.nextStage')
-              PASSED=false; [ "$NEXT" = "null" ] && [ "$VERIFY_EXIT" -eq 0 ] && PASSED=true
-              bash scripts/land-branch.sh "research/${{ inputs.slug }}" main \
-                "Research pass: ${{ inputs.slug }}${{ inputs.section != '' && format(' ({0})', inputs.section) || '' }}" \
-                /tmp/scorecard.md "$PASSED" \
-                "$SITE_BASE_URL/guides/${{ inputs.slug }}/"
-
-            It prints exactly one line — read it, don't guess what happened:
-            - **`merged:<n>`** — the guide landed on `main` ALREADY graduated. It goes live on
-              the next Pages deploy. land-branch.sh auto-files a "🚀 Auto-published" heads-up
-              issue; the deploy workflow's `verify-live` job confirms it's reachable.
-            - **`draft:<n>`** — verify didn't reach PASS or auto-merge hit a conflict. PR #<n>
-              is where a human triages it.
-
-            Never touch any guide other than
-            src/content/guides/${{ inputs.slug }}/ and its
-            guides-intake/${{ inputs.slug }}.md + .state.json + src/data/palettes/${{ inputs.slug }}.json.
-
-            FINALLY, write a short run report to `run-report.md` (repo root, gitignored — do NOT
-            commit it): a `## Run report` heading then 3-5 bullets — outcome (published / draft /
-            stuck), critic findings count and what was caught, the citation-audit result, and any
-            place the skill or its references were unclear. This feeds the monthly skill-retro;
-            be concrete.
-
-      # HARD GATE (creator's ruling, 2026-07-30; extended 2026-08-02 for the merged critic):
-      # the critic's required artifacts are not advisory. A critic run that ended without
-      # recording `## Critic findings` AND the `## Citation audit` table did not do its job,
-      # even if everything else looks green — fail the run loudly so it can never read as a
-      # clean pass. Since the merged critic now IMPLEMENTS its own findings (the retired vibe
-      # executor's job), the continuity-sweep record is required too — but only when it had
-      # findings to implement: a clean pass edits nothing and owes no sweep. This runs after
-      # landing by necessity (the critic itself writes the artifacts), so it is an alarm, not
-      # a barrier: a missing artifact means a human looks at the run, not that a good guide
-      # is blocked.
-      - name: Critic artifact gate — findings + citation audit + sweep are REQUIRED
-        if: >-
-          steps.budget.outputs.should_run == 'true' &&
-          steps.route4.outputs.verified == 'true'
+      # THE EVIDENCE GATE AND THE LANDING, in code: runs the networked verify itself, writes the
+      # scorecard as the PR body, removes the draft flag when the guide passed every stage, and
+      # opens or merges the PR. --announce makes land-branch.sh file the vetoable "auto-published"
+      # notice, so a self-publish is still something a human can catch and roll back.
+      - name: Land the branch
+        if: steps.budget.outputs.should_run == 'true'
         env:
-          SLUG: ${{ inputs.slug }}
+          BRANCH: ${{ steps.branch.outputs.name }}
         run: |
-          F="guides-intake/${SLUG}.md"
-          MISSING=""
-          grep -q "^## Critic findings" "$F" || MISSING="$MISSING '## Critic findings'"
-          grep -q "^## Citation audit" "$F" || MISSING="$MISSING '## Citation audit'"
-          # Findings present and NOT the clean-pass sentinel ⇒ the critic edited the guide
-          # ⇒ it owes a continuity sweep record (same detection the vibe route step used).
-          HAS_FINDINGS=false
-          if grep -q "^## Critic findings" "$F" && \
-             ! grep -A2 "^## Critic findings" "$F" | grep -qi "^None"; then HAS_FINDINGS=true; fi
-          if [ "$HAS_FINDINGS" = "true" ] && \
-             ! grep -q "^#### Continuity sweep — critic execution" "$F"; then
-            MISSING="$MISSING '#### Continuity sweep — critic execution'"
-          fi
-          if [ -n "$MISSING" ]; then
-            echo "::error::Critic run ended without required artifact(s):$MISSING in $F — pipeline-roles.md's critic protocol / the skill's done-gate citation audit was not completed."
-            exit 1
-          fi
-          echo "[gate] critic artifacts present (findings + citation audit; sweep required: $HAS_FINDINGS)"
+          TITLE="Research pass: $SLUG"
+          if [ -n "$SECTION" ]; then TITLE="$TITLE ($SECTION)"; fi
+          node scripts/pipeline.mjs land --slug "$SLUG" \
+            --branch "$BRANCH" --gate --require-verified \
+            --title "$TITLE" \
+            --announce "${SITE_BASE_URL}/guides/${SLUG}/"
 
-      # P1 — RUN INTEGRITY (QA findings F1/F2). Two things the old workflow could not see:
-      #   · a VOID run — the agent burned a full session, exited `success`, and left NOTHING
-      #     durable behind (no commit, no checkpoint). This happened on attempt 1 of the very
-      #     first real run and cost $11+ with no way to tell after the fact.
-      #   · a run that CLAIMED staged progress it never made. Japan's commit labelled "Pass A"
-      #     already contained passA, passB and reconcile — the two commits after it introduced no
-      #     stage state at all, so `git log` narrated a resumable run that never existed.
-      # --report-only keeps this step green so the remediation steps below still run; the final
-      # "Enforce run integrity" step is what actually fails the workflow.
       - name: Run-integrity gate
         id: integrity
         if: steps.budget.outputs.should_run == 'true'
         env:
-          SLUG: ${{ inputs.slug }}
+          PRE_HEAD: ${{ steps.pre.outputs.head }}
+          PRE_STAGES: ${{ steps.pre.outputs.stages }}
         run: |
-          node scripts/check-run-integrity.mjs --slug "$SLUG" \
-            --pre-head "${{ steps.pre.outputs.head }}" \
-            --pre-stages "${{ steps.pre.outputs.stages }}" \
-            --report-only
+          node scripts/pipeline.mjs gate integrity --slug "$SLUG" \
+            --pre-head "$PRE_HEAD" --pre-stages "$PRE_STAGES"
 
-      # F2 remediation: a void run gets exactly ONE automatic retry. Re-dispatching the workflow
-      # (rather than duplicating the agent step) keeps the 200-line research prompt in ONE place —
-      # two copies would drift — and reuses the existing attempt budget, so the circuit breaker
-      # still caps the total. `void_retry: true` is what makes it once-only.
+      # A void run gets exactly ONE automatic retry. Re-dispatching (rather than repeating the
+      # agent steps) reuses the attempt budget, so the circuit breaker still caps the total.
       - name: Auto-retry once after a void run
         if: steps.integrity.outputs.void == 'true' && format('{0}', inputs.void_retry) != 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          SLUG: ${{ inputs.slug }}
         run: |
-          echo "[run-integrity] VOID run — re-dispatching once with void_retry=true." >> "$GITHUB_STEP_SUMMARY"
-          gh workflow run research-pass.yml \
-            -f slug="$SLUG" \
-            -f section="${{ inputs.section }}" \
-            -f model="${{ inputs.model || 'claude-sonnet-5' }}" \
-            -f effort="${{ inputs.effort || 'high' }}" \
-            -f issue="${{ inputs.issue }}" \
-            -f void_retry=true
+          gh workflow run research-pass.yml -f slug="$SLUG" -f section="$SECTION" \
+            -f model="$MODEL" -f effort="$EFFORT" \
+            -f issue="$ISSUE" -f void_retry=true
 
-      # A second void in a row is not a flake — the run is stuck in a way retrying cannot fix.
       - name: File a stuck issue after a second void run
         if: steps.integrity.outputs.void == 'true' && format('{0}', inputs.void_retry) == 'true'
         env:
-          GH_TOKEN: ${{ github.token }}
-          SLUG: ${{ inputs.slug }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
-          set -euo pipefail
-          TITLE="Research stuck: $SLUG"
-          BODY=$(printf 'Two consecutive research runs for `%s` produced **no durable output** — no commit, no checkpoint advance — while reporting success. The auto-retry has been spent.\n\nThis is QA finding F2: a green agent step is not evidence of work. Check the run log (`show_full_output` is on) before dispatching again.\n\nLatest run: %s\n' "$SLUG" "$RUN_URL")
-          EXISTING=$(gh issue list --search "\"$TITLE\" in:title" --state open --json number -q '.[0].number' 2>/dev/null || true)
-          if [ -n "$EXISTING" ]; then gh issue comment "$EXISTING" --body "$BODY";
-          else gh issue create --title "$TITLE" --body "$BODY" --label "stuck"; fi
+          node scripts/pipeline.mjs gate stuck --slug "$SLUG" \
+            --run-url "$RUN_URL"
 
-      # W3: deposit a run report on the pipeline ledger issue regardless of how the agent finished,
-      # so the skill-retro proposer has evidence to reason over. `|| true` — the ledger never fails
-      # the run.
-      # R6 — the Composer rides every research pass: research emits tagged units,
-      # deterministic code assembles the tabs (scripts/compose-guide.mjs; rules + tests
-      # there). The auto-APPLY lives inside the agent's step (d), after the networked
-      # verify PASS and BEFORE graduation — the one moment the guide is both complete and
-      # still a draft. This step deliberately never writes: on the PASS path the guide has
-      # already graduated + merged (a --write here would land on a spent branch and read
-      # the guide as live anyway), and on a cut-off run the draft is half-researched — a
-      # --write would fold empty scaffolding into Plan/Days and mangle the shape the
-      # resume expects. So: exit 0 = composed (the normal PASS outcome, since step (d)
-      # just ran); exit 2 = a standing proposal, surfaced in the job summary for the
-      # creator (--write --creator-signed) or for the next resumed pass to absorb; any
-      # other nonzero (the ⚠-relocation guard, unit loss) fails this run loudly.
-      - name: Compose check — verify composed, surface proposals, guard errors
+      - name: Compose check
         if: steps.budget.outputs.should_run == 'true'
-        env:
-          SLUG: ${{ inputs.slug }}
-        run: |
-          set +e
-          OUT=$(node scripts/compose-guide.mjs --slug "$SLUG" --check 2>&1)
-          CODE=$?
-          set -e
-          echo "$OUT"
-          { echo "### Composer"; echo '```'; echo "$OUT"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
-          if [ "$CODE" -eq 2 ]; then
-            echo "Standing proposal — composition applies inside the next research pass (drafts) or via --write --creator-signed (live)." >> "$GITHUB_STEP_SUMMARY"
-          elif [ "$CODE" -ne 0 ]; then
-            exit "$CODE"
-          fi
+        run: node scripts/pipeline.mjs gate compose --slug "$SLUG"
 
-      # The actual verdict. Runs after remediation so a void run still gets its retry dispatched
-      # and a stuck issue filed before the workflow goes red — but it DOES go red: a run that
-      # produced nothing, or that faked its staging, is a failed run no matter what merged.
+      # Runs after remediation so a void run still gets its retry and its stuck issue before the
+      # workflow goes red — but it does go red.
       - name: Enforce run integrity
         if: always() && steps.budget.outputs.should_run == 'true'
+        env:
+          VOID: ${{ steps.integrity.outputs.void }}
+          VIOLATIONS: ${{ steps.integrity.outputs.violations }}
+          KINDS: ${{ steps.integrity.outputs.kinds }}
         run: |
-          VOID="${{ steps.integrity.outputs.void }}"
-          VIOLATIONS="${{ steps.integrity.outputs.violations }}"
-          if [ "$VOID" = "true" ]; then
-            echo "::error::Void run — the agent produced no durable output (QA finding F2). Remediation dispatched above."
-            exit 1
-          fi
-          if [ -n "$VIOLATIONS" ] && [ "$VIOLATIONS" != "0" ]; then
-            echo "::error::Checkpoint discipline violated — $VIOLATIONS finding(s), kinds: ${{ steps.integrity.outputs.kinds }}. The stages this run cleared are not resumable (QA finding F1)."
-            exit 1
-          fi
-          echo "[run-integrity] clean."
+          node scripts/pipeline.mjs gate enforce --slug "$SLUG" \
+            --void "$VOID" \
+            --violations "$VIOLATIONS" \
+            --kinds "$KINDS"
 
-      # TRAVELER QUESTIONS (2026-08-02) — surface, never gate.
-      # The agents emit genuine forks (dates, lodging style, splurge-vs-save) into the intake
-      # doc under `## Questions for the traveler` and PROCEED on a stated assumption, because
-      # research must never block on a human. Until now those questions died in a file nobody
-      # reads — which is exactly how the Japan run shipped two silently-assumed forks (QA
-      # F4/F6/F7). This posts every OPEN question as a comment on the originating intake issue
-      # so the traveler sees what was assumed on their behalf.
-      # NOT A GATE (creator's ruling): no label swap, no pause, no failed step, no wait. The
-      # guide ships on the assumption; a correction arrives later as a modify/revise issue.
-      # always() so a cut-off or failed run still surfaces what it managed to ask; skipped
-      # silently on a manual dispatch (no issue number). Deduped by question id against the
-      # issue's existing comments, so a resumed run never re-asks the same fork.
+      # Surface, never gate: the traveler sees what was assumed on their behalf. always() so a
+      # cut-off run still asks what it managed to; skipped silently on a manual dispatch.
       - name: Surface traveler questions on the intake issue
         if: always() && inputs.issue != ''
         continue-on-error: true
-        env:
-          GH_TOKEN: ${{ github.token }}
-          SLUG: ${{ inputs.slug }}
-          ISSUE_NUM: ${{ inputs.issue }}
-        run: |
-          set -euo pipefail
-          F="guides-intake/${SLUG}.md"
-          if [ ! -f "$F" ]; then echo "[questions] no intake doc yet — nothing to surface."; exit 0; fi
-          gh issue view "$ISSUE_NUM" --json comments -q '[.comments[].body] | join("\n")' > /tmp/asked.txt 2>/dev/null || : > /tmp/asked.txt
-          BODY=$(node --input-type=module -e "
-            import { readFileSync } from 'node:fs';
-            const md = readFileSync('guides-intake/' + process.env.SLUG + '.md', 'utf8');
-            const asked = readFileSync('/tmp/asked.txt', 'utf8');
-            const after = md.split(/^## Questions for the traveler/m)[1];
-            if (!after) process.exit(0);
-            const blocks = after.split(/^## /m)[0].split(/^### /m).slice(1);
-            const open = [];
-            for (const b of blocks) {
-              const id = b.split(/\r?\n/)[0].trim();
-              if (!id || asked.includes(id)) continue;
-              if (!/Status:..\s*open/i.test(b)) continue;
-              const field = (label) => {
-                const marker = '**' + label + ':**';
-                const line = b.split(/\r?\n/).find((l) => l.includes(marker));
-                return line ? line.slice(line.indexOf(marker) + marker.length).trim() : '';
-              };
-              open.push({ id, q: field('Q'), assumed: field('Assumed'), context: field('Context') });
-            }
-            if (!open.length) process.exit(0);
-            const lines = [
-              open.length === 1
-                ? '**One decision came up while building your guide.**'
-                : '**' + open.length + ' decisions came up while building your guide.**',
-              '',
-              'Research never waits on an answer, so each was built on the assumption below — your guide is complete either way. If an assumption is wrong, use the **✎ Request a change** button on the guide (or reply here) and it gets fixed without rebuilding anything.',
-              '',
-            ];
-            open.forEach((o, i) => {
-              lines.push((i + 1) + '. **' + (o.q || o.id) + '**');
-              if (o.assumed) lines.push('   - Built on: ' + o.assumed);
-              if (o.context) lines.push('   - Affects: ' + o.context);
-              lines.push('   - <sub>' + o.id + '</sub>');
-            });
-            process.stdout.write(lines.join('\n'));
-          ")
-          if [ -z "$BODY" ]; then echo "[questions] none open, or all already asked."; exit 0; fi
-          gh issue comment "$ISSUE_NUM" --body "$BODY"
-          echo "[questions] surfaced on #${ISSUE_NUM}"
-
-      - name: Append run report to the ledger
-        if: always()
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
-          WORKFLOW: research-pass
-          SLUG: ${{ inputs.slug }}
-          MODEL: ${{ inputs.model || 'claude-sonnet-5' }}
-          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          NOTE_FILE: run-report.md
-        run: node scripts/append-run-report.mjs || true
+        run: node scripts/pipeline.mjs questions --slug "$SLUG" --issue "$ISSUE"

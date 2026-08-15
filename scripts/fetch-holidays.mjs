@@ -17,13 +17,12 @@ import { fileURLToPath } from "node:url";
 // Country → ISO 3166-1 alpha-2, shared with the site (single source of truth).
 // countries.mjs is plain ESM precisely so this Node script can import it too.
 import { COUNTRY_CODES } from "../src/data/countries.mjs";
-// Shared guide reader — understands BOTH content shapes (flat <slug>.json and
-// split <slug>/_guide.json + NN-*.json). A local readdir(GUIDES_DIR)-then-filter
-// used to live here instead; it silently stopped seeing Denmark/Korea the moment
-// they split into directories (readdir returns the bare dir name, which never
-// ends in ".json"), so their holiday data went stale with zero error, zero
-// warning — reusing readGuides() closes that gap for good instead of patching it
-// locally a second time.
+// Shared guide reader — assembles each guide directory (<slug>/_guide.json +
+// NN-*.json). A local readdir(GUIDES_DIR)-then-filter used to live here instead;
+// it silently stopped seeing Denmark/Korea the moment they became directories
+// (readdir returns the bare dir name, which never ends in ".json"), so their
+// holiday data went stale with zero error, zero warning — reusing readGuides()
+// closes that gap for good instead of patching it locally a second time.
 import { readGuides, flatten } from "./audit/lib.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");

@@ -60,6 +60,53 @@
 .pg-q-assumed-label{font-weight:600;color:var(--ink)}
 .pg-q-context{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);margin:0}
 
+/* A blocking fork has STOPPED the run — it gets the ochre (the "needs a human" pigment), a left
+   edge so it reads as a different kind of card at a glance, and nothing louder than that. */
+.pg-q-card.is-blocking{border-left:3px solid var(--ochre)}
+.pg-q-badge{font-family:var(--font-data);font-size:var(--text-caption);letter-spacing:.06em;text-transform:uppercase;color:var(--ochre);margin:0 0 .35rem}
+
+/* Answer controls (owner only) */
+.pg-q-answer{margin-top:.6rem}
+.pg-q-input{width:100%;padding:.55rem .75rem;border-radius:0;border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
+.pg-q-options{display:flex;flex-wrap:wrap;gap:.4rem}
+.pg-q-opt{padding:.45rem .95rem;border-radius:999px;border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-display);font-weight:560;font-size:var(--text-small);cursor:pointer;transition:background .18s,color .18s}
+.pg-q-opt:hover{border-color:var(--ink)}
+.pg-q-opt[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.pg-q-send{margin-top:.4rem;padding:.6rem 1.3rem;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);cursor:pointer}
+.pg-q-send:hover:not(:disabled){background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.pg-q-send:disabled{opacity:.45;cursor:default}
+.pg-q-send[hidden]{display:none}
+.pg-q-status{font-size:var(--text-small);color:var(--muted);margin:.5rem 0 0;line-height:1.4}
+
+/* Revision proposals (owner only) */
+.pg-proposals{margin-top:1.4rem}
+.pg-proposals[hidden]{display:none}
+.pg-p-head{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);margin:0 0 .3rem}
+.pg-p-intro{font-size:var(--text-small);color:var(--muted);line-height:1.45;margin:0 0 .8rem}
+.pg-p-card{background:var(--bg2);border:1px solid var(--rule);border-radius:0;padding:.9rem 1rem;margin-bottom:.6rem}
+.pg-p-title{font-family:var(--font-display);font-weight:560;font-size:var(--text-body);margin:0 0 .4rem;line-height:1.4}
+.pg-p-reason{font-size:var(--text-small);color:var(--muted);margin:0 0 .6rem;line-height:1.4}
+.pg-p-approve{padding:.5rem 1.1rem;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);cursor:pointer}
+.pg-p-approve:hover:not(:disabled){background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.pg-p-approve:disabled{opacity:.45;cursor:default}
+.pg-p-status{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);margin:.5rem 0 0}
+.pg-p-status:empty{display:none}
+
+/* The owner-key affordance — deliberately the quietest thing on the page: it is maintenance
+   furniture, not part of the reader's journey. */
+.pg-key{margin-top:1.6rem;padding-top:1.1rem;border-top:1px dashed var(--rule)}
+.pg-key[hidden]{display:none}
+.pg-key-toggle{padding:0;border:0;background:none;color:var(--muted);font-family:var(--font-data);font-size:var(--text-control);text-decoration:underline;cursor:pointer}
+.pg-key-toggle:hover{color:var(--accent-ink)}
+.pg-key-form{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin-top:.7rem}
+.pg-key-form[hidden]{display:none}
+.pg-key-label{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}
+.pg-key-form input{flex:1;min-width:12rem;padding:.55rem .75rem;border-radius:0;border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
+.pg-key-form button{padding:.5rem 1.1rem;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);cursor:pointer}
+.pg-key-form button:hover{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.pg-key-form button[hidden]{display:none}
+.pg-key-status{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);margin:.6rem 0 0;line-height:1.45}
+
 .pg-waiting[hidden]{display:none}
 .pg-home-link{display:inline-block;margin-top:1.6rem;font-family:var(--font-data);font-size:var(--text-control);color:var(--muted);text-decoration:none}
 .pg-home-link:hover{color:var(--accent-ink)}

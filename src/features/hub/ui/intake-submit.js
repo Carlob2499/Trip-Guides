@@ -2,13 +2,19 @@
    (R4, 2026-08-05: the intake moved from the hub's 440px modal to the /new page; the
    modal shell — open/close/backdrop/focus-trap — died with the modal, the submit
    machinery did not change by one key). Two paths, exactly as before:
-     · ZERO-CLICK — intake proxy configured (intake-proxy-config.js): POST the intake to
-       the Worker, which files the issue; then this tab goes to the progress tracker.
-     · FALLBACK — proxy off or failed: prefilled GitHub issue. `afterAwait` is still
+     · ZERO-CLICK — backend configured (src/lib/backend-config.js): POST the intake to
+       the Worker, which files the record; then this tab goes to the progress tracker.
+       The traveler never sees GitHub on this path.
+     · FALLBACK — backend off or failed: prefilled GitHub issue. `afterAwait` is still
        load-bearing (post-await window.open dies silently to popup blockers — Boundary
-       Checks #2 caught that in W-series; navigate THIS tab instead). */
+       Checks #2 caught that in W-series; navigate THIS tab instead).
 
-import { INTAKE_PROXY } from "../intake-proxy-config.js";
+   Batch 3 moved the config out of this silo to src/lib/backend-config.js (three features
+   share it now) and put the bytes-on-the-wire in src/lib/worker-client.js. The two paths,
+   the field ids and the fallback semantics are unchanged. */
+
+import { WAYPOINT_BACKEND } from "../../../lib/backend-config.js";
+import { postToWorker } from "../../../lib/worker-client.js";
 
 // Best-effort slug guess, mirroring scaffold-guide.mjs's slugify (a collision gets "-2"
 // server-side; the bot's issue comment carries the authoritative link either way).
@@ -86,21 +92,14 @@ export function initIntakeSubmit(form, errEl) {
     const raw = collectRaw(country);
 
     let proxyTried = false;
-    if (INTAKE_PROXY.url) {
+    if (WAYPOINT_BACKEND.url) {
       proxyTried = true;
-      try {
-        const res = await fetch(INTAKE_PROXY.url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(raw),
-        });
-        if (res.ok) {
-          const data = await res.json();
-          toProgress(country, data.slug);
-          return;
-        }
-      } catch (_) {
-        // network/proxy error — fall through to the GitHub path so the user still succeeds.
+      // Never throws (worker-client resolves a result either way), so a backend that is down
+      // still falls through to the GitHub path and the traveler still succeeds.
+      const res = await postToWorker("intake", raw);
+      if (res.ok) {
+        toProgress(country, res.data.slug);
+        return;
       }
     }
     fallbackToGitHub(raw, country, proxyTried);

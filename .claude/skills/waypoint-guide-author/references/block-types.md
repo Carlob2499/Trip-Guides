@@ -36,8 +36,8 @@ ranking rules, don't invent one.
 **Budget `est` values power plan-vs-logged.** The Budget calculator compares
 its logged spend against the guide's own `budget` section (USD sections
 only; `est × dayCount` for `basis:"day"` items). Generated drafts emit
-`est: 0` (line hidden) — filling real researched estimates during
-graduation turns the comparison on automatically.
+`est: 0` (line hidden) — filling real researched estimates during a
+research pass turns the comparison on automatically.
 
 **Day `tldr` (required on researched guides).** Every day item carries a
 one-sentence `tldr` — the glanceable summary rendered huge in Focus Today
@@ -344,7 +344,7 @@ NO renderer:
 
 Weight is never written — it is derived from item counts + prose length, so it cannot
 drift from the content. Composition auto-applies to a draft exactly ONCE per pass — after
-the networked verify PASS, before graduation (the done gate's `compose-guide.mjs --write`
+the networked verify PASS, before it publishes (the done gate's `compose-guide.mjs --write`
 moment); LIVE guides only ever receive a printed proposal for the creator to sign
 (`--write --creator-signed`). Tag facets during research; never retro-tag a live guide
 just to force a recomposition without the creator asking.

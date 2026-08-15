@@ -1,10 +1,11 @@
 # New Guide Intake — [Destination]
 
 > Complete this with the traveler BEFORE any research begins. The filled-in
-> answers become the spec the guide is built against. Save this file in the
-> repo alongside the finished guide so future updates know the original
-> priorities. See the project CLAUDE.md "Order of Operations" for how this
-> fits the build.
+> answers become the spec the guide is built against. It is saved as
+> `guides-intake/<slug>/intake.md` and **frozen once research starts** — it is the
+> ORIGINAL INTENT, and research records its own state next door in `ledger.md`
+> (see "Where research state goes" at the bottom). See the project CLAUDE.md
+> "Order of Operations" for how this fits the build.
 >
 > *This is the human-canonical template. The **machine** intake — the quick-capture issue form,
 > the scaffolder, and answer validation — all derive from one source of truth,
@@ -125,42 +126,26 @@ of the same destination. Often the most important section for fit.*
 
 ---
 
-## Spec Summary (fill after intake, before research)
-*Translate the answers above into a build plan.*
+## Where research state goes — NOT here
 
-- **Section types this guide will include:**
-- **Section types deliberately excluded (and why):**
-- **The 2–3 priorities driving depth:**
-- **Hard filters applied to every entry:**
-- **Verification focus** (what's most perishable / most important to get
-  right for this traveler):
+This template ends at section 7. Everything the research pass produces — the spec summary,
+the Pass A / Pass B reconciliation table, candidates considered, cover-art footage
+candidates, traveler questions, amendments, verification ledger, critic findings — lives in
+`ledger.md` beside the intake, in the guide's run-state directory:
 
----
+```
+guides-intake/<slug>/
+  intake.md      ← this template, filled in, then FROZEN
+  ledger.md      ← all research state, scaffolded automatically
+  state.json     ← the pipeline checkpoint (scaffold → passA → passB → reconcile → verified)
+  coverage.json  ← the intake-asks coverage matrix verify gates on
+  passB.json     ← Pass B's raw findings (written by the Pass B agent)
+```
 
-## Research reconciliation (fill DURING the dual-pass — the corroboration trail)
-*The guide-author skill's Research workflow runs TWO independent passes and reconciles them into
-one guide. This is where that reconciliation is recorded — the evidence that the itinerary was
-generated more than once and cross-checked, not written once and only error-corrected.*
+The split exists so the traveler's original intent stays readable as itself: when research
+forces the plan to change, that goes in the ledger's `## Amendments` section, never by
+rewriting the intake.
 
-> **Pass A — canonical & verified:** primary/official sources → the anchor, the must-dos, logistics,
-> transit, the verification ledger.
-> **Pass B — local, authentic, crowd-aware:** researched *independently from this intake* (not by
-> editing A) → resident/blog/forum angle: off-peak timing, crowd reality, novel alternatives to the
-> tourist-trap version. **B's finds are T2 leads — each is verified against a primary source before
-> it enters the guide.**
-
-| Item | Pass A (canonical) | Pass B (local/authentic) | Reconciled → guide | Note (agree / conflict / crowd / novel) |
-|------|--------------------|--------------------------|--------------------|------------------------------------------|
-|      |                    |                          |                    |                                          |
-
-*Reconciliation rules: **AGREE** → high confidence. **A-only** → is it a trap B routed around? add a
-crowd + best-time note, or swap to the authentic version. **B-only** → arrives already T0-verified
-(that is Pass B's own contract, above); carry its citation across rather than re-fetching it.
-**CONFLICT** (hours, "best" pick) → resolve to the truth, record which source won and why.*
-
-## Amendments (append-only — every research-forced re-plan)
-*The intake above stays the ORIGINAL intent. When research forces the plan to change — an anchor
-moved, a neighborhood beats the intended one, a day collapsed — log the diff here with the reason.
-(Korea and Denmark were "corrected three times by running it"; this is where that history lives.)*
-
-- (none yet)
+**The ledger's skeleton is owned by code**, not by this doc — `buildLedgerMd()` in
+`scripts/scaffold-guide.mjs` emits it, and `writeScaffold()` writes both files at once, so
+the two can't drift. Don't copy those headings here.

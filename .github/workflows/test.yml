@@ -37,10 +37,10 @@ jobs:
           cache: npm
       - run: npm ci
       # Gates the class astro check and Vitest structurally cannot see: unused bindings,
-      # unreachable code, accidental globals. Its first pass found a live ReferenceError in
-      # graduate-guide.mjs that 832 green tests could not — the CLI called an isValidSlug the
-      # module only re-exported and never imported. Wired in only once it was at zero, so a
-      # red run always means a new regression.
+      # unreachable code, accidental globals. Its first pass found a live ReferenceError in a
+      # script's CLI that 832 green tests could not — it called an isValidSlug the module only
+      # re-exported and never imported. Wired in only once it was at zero, so a red run always
+      # means a new regression.
       - run: npm run lint
       - run: npm run typecheck
       # A5: `npm test` + `npm run coverage` both ran the full vitest suite (coverage is a

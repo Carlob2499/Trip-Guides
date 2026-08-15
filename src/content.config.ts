@@ -86,7 +86,7 @@ const factRecord = z.object({
   // "sourced-but-approximate" and stops a bare ≈ appearing next to an unsourced number.
   state: z.enum(["clean", "approx"]).default("clean"),
   tier: z.enum(["primary", "corroborated", "secondary"]).optional(),
-  // B1 (docs/PLAN_EVIDENCE_FIRST.md) — additive and optional; population is later packets' work
+  // B1 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST) — additive and optional; population is later packets' work
   // (D populates risk/entity at research time, E enforces tier/evidence by risk). Every existing
   // guide's facts.json is valid without any of the three; adding one to a row is a strict
   // widening, never required.
@@ -454,17 +454,12 @@ const section = z.discriminatedUnion("type", [
     })) }),
 ]);
 
-// Guide loader — accepts BOTH content shapes (convergence Phase 4):
-//   · <slug>.json                — a single-file guide (legacy; scaffolds/drafts
-//                                  still author this way)
-//   · <slug>/ directory          — the siloed shape: _guide.json (all top-level
-//                                  fields except sections) + NN-<group>.json
-//                                  files, each an ARRAY of that tab group's
-//                                  sections; filename sort (the NN prefix)
-//                                  reproduces the original section order.
-// Split a monolith with `node scripts/split-guide.mjs <slug>`. The assembled
-// data validates against the exact same schema as a single-file guide, and the
-// built HTML is byte-identical either way (that is the migration gate).
+// Guide loader — ONE content shape, drafts included: every guide is the directory
+// `<slug>/` — _guide.json (all top-level fields except sections) + NN-<group>.json
+// files, each an ARRAY of that tab group's sections; filename sort (the NN prefix)
+// reproduces the original section order. A stray flat `<slug>.json` is not a guide
+// and is ignored here; `scripts/__tests__/guide-shape-uniform.test.mjs` is the gate
+// that fails the catalog loudly if one ever appears.
 const guideLoader = {
   name: "waypoint-guides",
   load: async ({ store, parseData, generateDigest }: any) => {
@@ -475,10 +470,7 @@ const guideLoader = {
     const entries = await readdir(DIR, { withFileTypes: true });
     for (const e of entries) {
       let id: string, raw: Record<string, unknown>;
-      if (e.isFile() && e.name.endsWith(".json")) {
-        id = e.name.replace(/\.json$/, "");
-        raw = JSON.parse(await readFile(path.join(DIR, e.name), "utf8"));
-      } else if (e.isDirectory()) {
+      if (e.isDirectory()) {
         const files = (await readdir(path.join(DIR, e.name))).filter((f) => f.endsWith(".json"));
         if (!files.includes("_guide.json")) continue; // not a guide dir
         id = e.name;
@@ -531,8 +523,7 @@ const guideLoader = {
 };
 
 const guides = defineCollection({
-  // Every guide in src/content/guides/ becomes one page — single-file or
-  // directory shape alike (see guideLoader above).
+  // Every guide directory in src/content/guides/ becomes one page (see guideLoader above).
   loader: guideLoader,
   schema: z.object({
     kicker: z.string().optional(),

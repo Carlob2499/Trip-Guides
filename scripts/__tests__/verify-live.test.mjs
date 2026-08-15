@@ -27,35 +27,35 @@ describe("discoverPublishedSlugs (pure, real temp dir)", () => {
     await rm(dir, { recursive: true, force: true });
   });
 
-  const flat = (slug, obj) => writeFile(path.join(dir, `${slug}.json`), JSON.stringify(obj));
   const dirGuide = async (slug, obj) => {
     await mkdir(path.join(dir, slug), { recursive: true });
     await writeFile(path.join(dir, slug, "_guide.json"), JSON.stringify(obj));
   };
 
-  it("includes flat and directory guides with no draft flag", async () => {
-    await flat("us", { title: "Sedona" });
+  it("includes every guide with no draft flag", async () => {
+    await dirGuide("us", { title: "Sedona" });
     await dirGuide("korea", { title: "Korea" });
     expect(discoverPublishedSlugs(dir)).toEqual(["korea", "us"]);
   });
 
-  it("excludes guides marked draft:true, in either shape", async () => {
-    await flat("live", { title: "Live" });
-    await flat("hidden", { title: "Hidden", draft: true });
-    await dirGuide("draftdir", { title: "Draft dir", draft: true });
+  it("excludes guides marked draft:true", async () => {
+    await dirGuide("live", { title: "Live" });
+    await dirGuide("hidden", { title: "Hidden", draft: true });
     expect(discoverPublishedSlugs(dir)).toEqual(["live"]);
   });
 
   it("treats draft:false and a missing draft key as published", async () => {
-    await flat("a", { draft: false });
-    await flat("b", {});
+    await dirGuide("a", { draft: false });
+    await dirGuide("b", {});
     expect(discoverPublishedSlugs(dir)).toEqual(["a", "b"]);
   });
 
-  it("skips a directory with no _guide.json and malformed JSON without throwing", async () => {
+  it("ignores a directory with no _guide.json, a loose <slug>.json, and malformed JSON", async () => {
     await mkdir(path.join(dir, "empty"), { recursive: true });
-    await writeFile(path.join(dir, "broken.json"), "{ not json");
-    await flat("ok", { title: "OK" });
+    await writeFile(path.join(dir, "stray.json"), JSON.stringify({ title: "Stray" }));
+    await dirGuide("broken", null);
+    await writeFile(path.join(dir, "broken", "_guide.json"), "{ not json");
+    await dirGuide("ok", { title: "OK" });
     expect(discoverPublishedSlugs(dir)).toEqual(["ok"]);
   });
 
@@ -145,7 +145,8 @@ describe("checkLive (shell, injected fetch — no network, no real clock)", () =
   let dir;
   beforeEach(async () => {
     dir = await mkdtemp(path.join(tmpdir(), "vl-shell-"));
-    await writeFile(path.join(dir, "korea.json"), JSON.stringify({ title: "Korea" }));
+    await mkdir(path.join(dir, "korea"), { recursive: true });
+    await writeFile(path.join(dir, "korea", "_guide.json"), JSON.stringify({ title: "Korea" }));
   });
   afterEach(async () => {
     await rm(dir, { recursive: true, force: true });
@@ -188,7 +189,7 @@ describe("checkLive (shell, injected fetch — no network, no real clock)", () =
   });
 
   it("is a no-op (ok) when there are no published guides", async () => {
-    await rm(path.join(dir, "korea.json"));
+    await rm(path.join(dir, "korea"), { recursive: true });
     const r = await checkLive({ base: "https://x", guidesDir: dir, fetchImpl: makeFetch([]), sleep: noSleep });
     expect(r).toMatchObject({ ok: true, expected: [] });
   });

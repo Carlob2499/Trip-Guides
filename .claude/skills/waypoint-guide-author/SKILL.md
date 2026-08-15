@@ -21,11 +21,10 @@ Mandatory"**) plus the code-layer guardrails; don't re-Read it, it points *here*
 guide-content detail.
 
 **The headless pipeline runs THIS file.** `research-pass.yml`'s four agents (Pass A · Pass B ·
-Reconcile · Critic) read this skill and execute their stage from it — the workflow carries only
-each stage's I/O contract (paths, checkpoints, forbidden dirs), never a restatement. The
-stage-role law (the critic's five scans incl. the vibe lens, its execution discipline, the
-traveler-question emitter) lives in **`references/pipeline-roles.md`**. Editing these files edits
-the pipeline directly.
+Reconcile · Critic) read this skill and execute their stage from it. Each stage's I/O contract
+(paths, checkpoints, forbidden reads, STOP conditions) lives in its own prompt file under
+`prompts/` — that is the ONE home for stage contracts, and this skill is the one home for what
+"good" means. Editing either edits the pipeline directly.
 
 ## Read first
 1. **`references/verification-rules.md`** — the binding fact decision layer
@@ -36,17 +35,21 @@ the pipeline directly.
    the **Research-skill discovery layer** (interactive only). Follow it instead of rediscovering
    it.
 3. The **target guide** — `src/content/guides/<slug>/`; read only the group file the fact lives
-   in, per CLAUDE.md's Operational Habits. Also read its **intake** `guides-intake/<slug>.md` if
-   it exists (ranked priorities decide which sections get depth); else infer general scope and
-   say so. `docs/standards/new-guide-intake.md` explains intake → spec.
+   in, per CLAUDE.md's Operational Habits. Also read its **run-state directory**
+   `guides-intake/<slug>/` if it exists — `intake.md` is the traveler's frozen intent (ranked
+   priorities decide which sections get depth) and `ledger.md` is everything research has
+   produced so far (reconciliation, candidates, questions, amendments); else infer general scope
+   and say so. `docs/standards/new-guide-intake.md` explains intake → spec.
 4. **`references/block-types.md`** — section types, tab budget, typed features
    (phrases/entry/advisory), voice standard, facets, covers. **`references/image-sourcing.md`** —
    binding photo layer (Commons vs royalty-free `src`, attribution, forbidden sources, R18
    honesty, pre-ship checklist).
 5. **The `denmark/` and `korea/` guide dirs** — the gold standard to match or beat.
 6. **`docs/evidence/pipeline-patterns.md`** — what critics keep catching, distilled; read the
-   OPEN rows first so a known miss-class is avoided upstream (process evidence only — never
-   learnings or traveler patterns).
+   OPEN rows first so a known miss-class is avoided upstream, and **append this pass's own
+   distilled rows before landing** (including the honest-blank row on a clean run) — that file's
+   own Rules section governs the format and the ≥2-recurrence promotion trigger. Process evidence
+   only — never learnings or traveler patterns.
 7. **`docs/evidence/traveler-patterns.md`** — how these travelers *actually* travel, plus
    `learnings/<slug>.md` for any prior trip with the same travelers. **Consult during intake and
    research** so a new guide starts personalized, and **establish WHICH PARTY the guide is for
@@ -72,11 +75,13 @@ the pipeline directly.
   fix what's in scope, stop-and-ask when it forks the plan. **Record the sweep** (greps run ·
   ripples found & fixed · "none" stated explicitly) — every headless edit surface hard-gates on
   this record, and it belongs in an interactive completion report the same way. This mode is what
-  `modify-guide.yml` runs headlessly for a scoped "Request a change" issue (any guide page's **✎
-  Request a change** button) — same discipline, triggered by the owner's `modify-approved` label
-  and landed via `scripts/land-branch.sh` instead of a hand-merged PR.
-- **Recert a published guide** — the self-freshening / maintenance mode (the scheduled
-  `recert.yml`, or manual). Get the punch list with `npm run recert -- --slug <slug>` — every
+  a **change run** (`change.yml`) does headlessly for a "Request a change" issue — any guide page's
+  **✎ Request a change** button, which posts to the site's Worker — same discipline, landed by
+  `pipeline land` instead of a hand-merged PR. The requester's own words ride the DATA channel
+  (`change.txt`), never the prompt.
+- **Recert a published guide** — the self-freshening / maintenance mode. `recert.yml` only
+  DETECTS staleness and dispatches a change run per stale guide; the editing below is that run's
+  work, or yours by hand. Get the punch list with `npm run recert -- --slug <slug>` — every
   fact past its shelf life + the `source_url` to re-check it against. Re-verify EACH against a
   primary source: if changed, update it and re-date `verified_on` to today; if you can't confirm
   it, downgrade to `⚠` or omit — never leave a stale value presenting as verified, never invent a
@@ -137,7 +142,8 @@ way — the bar never moves.
 
 ### Reconcile → ONE guide, with a ledger
 Merge the two passes item by item into the single guide, and record the merge in the **`##
-Research reconciliation`** table of the intake doc (`guides-intake/<slug>.md`):
+Research reconciliation`** table of the research ledger (`guides-intake/<slug>/ledger.md` — never
+`intake.md`, which is frozen intent):
 - **AGREE** (both passes land on it) → high confidence; include.
 - **A-only** → is it a trap Pass B routed around? Add a crowd + best-time note, or swap to the
   authentic version B found.
@@ -155,10 +161,11 @@ a B lead is disproved; a silently dropped find fails the run. Name each B item i
 `passB.json` spells it (the matcher forgives phrasing, not absence).
 
 The ledger proves the itinerary was corroborated, not single-sourced. A re-plan forced by
-reconciliation also gets appended to the intake's **`## Amendments`** section.
+reconciliation also gets appended to the ledger's **`## Amendments`** section — that section
+exists precisely so a research-forced change of plan never has to rewrite the frozen intake.
 
 ### Checkpoint each stage — the run is resumable
-The pipeline tracks progress in `guides-intake/<slug>.state.json` (stages: scaffold → passA →
+The pipeline tracks progress in `guides-intake/<slug>/state.json` (stages: scaffold → passA →
 passB → reconcile → verified) so a long run that gets interrupted resumes instead of restarting.
 **Start by running `npm run pipeline -- --slug <slug> --status`** — it shows which stages are
 already cleared and the exact next action; do only the un-done ones. After you FINISH a stage,
@@ -191,6 +198,26 @@ against the guide, so padding the table is expensive and an honest `rejected: co
 row is a good row. Pass B's floors are separate and quantitative: a full pass owes ≥8 finds, ≥3
 crowd/timing, ≥2 novel/alternative.
 
+### Traveler questions — research never blocks on a fork
+When research or reconciliation hits a REAL fork — a decision only the traveler can make (dates,
+lodging style, splurge-vs-save) — emit a question card to the research ledger
+(`guides-intake/<slug>/ledger.md`) under `## Questions for the traveler`, in exactly this shape
+(the progress page parses it, and `scripts/pipeline.mjs questions` reads it):
+
+```
+### q-<slug>-<n>
+- **Q:** <traveler-framed question — NO pipeline vocabulary>
+- **Assumed:** <what you'll build if they don't answer>
+- **Context:** <which section/day this affects>
+- **Status:** open
+```
+
+Then PROCEED on the assumption — research never waits for an answer, and the traveler answers on
+the guide's progress page whenever they get to it. **`**Assumed:**` is load-bearing**: it is what
+actually ships, and what the traveler is asked to confirm or correct. Emit questions only for
+genuine forks, never for facts you can research yourself. (Interactive sessions ask the creator
+directly via `AskUserQuestion` instead — same bar for what counts as a fork.)
+
 ## Fact discipline — applies to BOTH passes
 - Keep a **verification ledger while researching** — one row per perishable fact, captured as you
   go, not reconstructed after:
@@ -217,7 +244,7 @@ crowd/timing, ≥2 novel/alternative.
   plan are itinerary structure, not registry facts — leave them in prose. An existing guide is
   migrated with `node scripts/migrate-facts.mjs --slug <slug>` (propose) then `--write`; it lifts
   values VERBATIM and the built site must stay byte-identical.
-- **Three more fields, optional, D2 (`docs/PLAN_EVIDENCE_FIRST.md`).** `entity` — every row from
+- **Three more fields, optional, D2 (`docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST`).** `entity` — every row from
   the SAME research batch (a venue/route/event) shares one kebab id; what a batched entity visit
   produces, not something added after the fact. `risk` (0–4) — sets the search budget
   (`research-efficiency.md`'s table); populate it as you research, from the destination's own
@@ -289,13 +316,13 @@ art"):
 4. **Footage scout** — candidates ONLY in the intake doc's table; never set `cover.video`.
 
 Composition auto-applies exactly once, in the done gate — after the networked verify PASS, while
-the guide is still a draft (`compose-guide.mjs --write`); after graduation it is proposal-only,
-forever.
+the guide is still a draft (`compose-guide.mjs --write`); once it is published it is
+proposal-only, forever.
 
 ## Done gate — all of it, before calling anything finished
 
 **The bar is `docs/standards/guide-rubric.md`** — the 13-dimension standard every guide is judged
-against (P0 blocks graduation; P0+P1 = Korea-tier). `readiness` + `build` auto-enforce the P0
+against (P0 blocks publishing; P0+P1 = Korea-tier). `readiness` + `build` auto-enforce the P0
 mechanical half; the P1 rows (venue completeness, priority depth, party fit, honest gaps) are
 your judgment via the §8 self-check below. A `readiness` PASS means "no detectable errors,"
 **not** "good."
@@ -314,13 +341,38 @@ Then these guide-content gates, on top of it:
    primary (T0) source* — never silence a flag you can't source; downgrade to `⚠` or omit.
    **Re-run verify until it PASSes** (or every remaining item is a deliberately-explained `⚠`
    gap). Recency is advisory; the `citations` line is context, not a target. `npm run build` is
-   the separate schema gate — both must be clean. Run `--network` before graduating.
+   the separate schema gate — both must be clean. Run `--network` before the guide can publish.
 2. **The bar test — recorded, never silent.** Read the whole merged guide against the bar: "would
    this appear in ANY generic AI guide, unresearched, without knowing this traveler?" (rubric
    rows #6/#9/#12). Replace what fails it or justify it explicitly; a replacement re-enters the
    SAME ledger + continuity sweep. Log the outcome always, even "none" — see
    `verification-rules.md` §8 item 1. In CI this judgment belongs to the critic agent;
    interactively it is yours.
+
+   **The vibe lens — how the finished trip FEELS.** The rubric scores facts; this scans flow, and
+   it is the half a passing verify cannot see. Read the guide the way a well-travelled friend
+   would:
+   - **PACING ARC** — does the trip breathe? A packed jet-lagged arrival day? Three museum days in
+     a row? A "slow" day listing six stops?
+   - **GEOGRAPHY** — does any day zigzag across the city when reordering stops would halve the
+     transit?
+   - **MEALS & ENERGY** — are food picks where the day actually puts the traveler at mealtimes? A
+     late night followed by a dawn start?
+   - **TONE** — does any copy read like a brochure or a model? Flat, useful, human.
+   - **INCLEMENT COVER** — does every day inside a known weather window (jangma, monsoon, rainy
+     season) or anchored on a closable venue carry a researched `plan_b`, or an explicit "no good
+     alternate" note in the ledger? A rain-window day with neither is a finding: the traveler will
+     stand in the rain with a guide that has no answer. Never resolve this by INVENTING an
+     alternate — an unverifiable one gets the honest note instead.
+   - **COMMON SENSE** — whatever a friend would catch: thin buffers, a "backup" worse than
+     nothing, a plan that ignores the party's stated pace.
+
+   Judge boldly — a reorder or a swap you can justify is worth proposing even when nothing is
+   factually wrong. **Judgment never lowers the bar:** a reorder or swap keeps every fact's
+   provenance intact, and anything NEW it introduces (a venue, a time, a claim) is verified
+   against a primary (T0) source before it ships, or it doesn't ship. A finding you judge WRONG on
+   second look gets a one-line rebuttal written beneath it instead of an edit — **disagreement is
+   allowed; silence is not.**
 3. **Citation audit — the fidelity spot-check (REQUIRED artifact).** Sample **≥5 verified
    perishable facts** (or all of them if fewer), weighted toward prices, hours, and the anchor
    event. Fetch each fact's own `source_url` and confirm the page still supports the stated
@@ -328,7 +380,7 @@ Then these guide-content gates, on top of it:
    sampled fact: claim · value · source fetched (y/n) · verdict (`supports` / `drifted → fixed` /
    `unreachable → flagged`). A drifted value is corrected and re-dated on the spot; an
    unreachable source downgrades the fact per ship/flag/omit. **A pass that ends without this
-   table is not done** — the pipeline greps for it before graduation, and "sampled 5, all
+   table is not done** — the pipeline greps for it before publishing, and "sampled 5, all
    support" is the normal, short outcome. This catches the failure `verify` structurally can't: a
    live link whose page no longer says what the guide says.
 4. When verify PASSes AND the bar test + citation audit are recorded: `npm run extract-palette --
@@ -338,8 +390,8 @@ Then these guide-content gates, on top of it:
    run pipeline -- --slug <slug> --checkpoint verified`.
 5. The **`verification-rules.md` §8 self-check**, line by line.
 6. **`verified` stamp** — `Checked [date] for [trip] · re-check before travel: [most perishable
-   items]`; keep it `⚠`-prefixed on drafts and keep `draft: true` — graduating a guide is a human
-   decision, never yours.
+   items]`; keep it `⚠`-prefixed on drafts and keep `draft: true` — you never flip that flag. The
+   landing step does, after the evidence gate, and only when the gate is green.
 7. **Recert pass** — any fact you touched that sits past its shelf life (`src/lib/staleness.ts`
    categories) is re-sourced from a primary source and re-dated, or visibly downgraded to `⚠` —
    never silently left presenting as verified.

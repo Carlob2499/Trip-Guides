@@ -183,6 +183,6 @@ describe("formatReport", () => {
 
 describe("stateRelPath", () => {
   it("points at the committed intake state file", () => {
-    expect(stateRelPath("japan")).toBe("guides-intake/japan.state.json");
+    expect(stateRelPath("japan")).toBe("guides-intake/japan/state.json");
   });
 });

@@ -1,4 +1,4 @@
-// E2 (docs/PLAN_EVIDENCE_FIRST.md) — source drift detection. The answer to defect D8:
+// E2 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST) — source drift detection. The answer to defect D8:
 // "link check = liveness only". A 200 OK proves a server answered, not that the page still
 // says what the guide says it says.
 //

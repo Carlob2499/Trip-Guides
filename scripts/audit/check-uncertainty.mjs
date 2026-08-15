@@ -1,4 +1,4 @@
-// E3 (docs/PLAN_EVIDENCE_FIRST.md) — contradiction + uncertainty in the verify roll-up.
+// E3 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST) — contradiction + uncertainty in the verify roll-up.
 //
 // WHY, AND HOW IT DIFFERS FROM C2. C2 gates the INTAKE at scaffold time: it asks whether the
 // traveler's own answers contradict each other. E3 asks the next question — whether the
@@ -13,7 +13,7 @@
 // and each was calibrated against the real corpus BEFORE being trusted — the B3 lesson,
 // where a first design produced 71 false positives on korea's live facts.
 //
-// WARN-FIRST, as E1: findings block on drafts (the graduation chokepoint) and advise on
+// WARN-FIRST, as E1: findings block on drafts (the publish chokepoint) and advise on
 // published guides. `evaluateUncertainty` takes `enforce` and never decides that itself.
 
 import { readFile } from "node:fs/promises";
@@ -205,9 +205,9 @@ export function stageBurst(state, { minGapSeconds = MIN_GAP_SECONDS } = {}) {
  * source and no Pass A counterpart shipped anyway, with a recorded intent to re-check that
  * nothing tracks. Detection reads the ledger's own admission rather than guessing at
  * source quality — the guide told us; nothing was listening. */
-export function weaklySupportedLedgerRows(intakeMd = "") {
+export function weaklySupportedLedgerRows(ledgerMd = "") {
   const findings = [];
-  const section = String(intakeMd).split(/^## Research reconciliation.*$/m)[1];
+  const section = String(ledgerMd).split(/^## Research reconciliation.*$/m)[1];
   if (section === undefined) return findings;
   for (const line of section.split(/^## /m)[0].split(/\r?\n/)) {
     if (!line.trim().startsWith("|")) continue;
@@ -222,21 +222,21 @@ export function weaklySupportedLedgerRows(intakeMd = "") {
   return findings;
 }
 
-/** Regression case 2 — C2 found a contradiction that the intake never resolved.
+/** Regression case 2 — C2 found a contradiction that the ledger never resolved.
  *
- * C2 emits a structured question block per contradiction; `references/pipeline-roles.md`
+ * C2 emits a structured question block per contradiction; SKILL.md's "Traveler questions"
  * makes `**Assumed:**` the load-bearing part, because it is what actually gets built. A
  * contradiction with no question block recording an assumption means the guide picked a
  * side silently — the exact thing the Clarifying-Questions doctrine forbids. */
-export function unresolvedContradictions(intakeMd = "", contradictions = []) {
+export function unresolvedContradictions(ledgerMd = "", contradictions = []) {
   const questionIds = new Set(
-    [...String(intakeMd).matchAll(/^###\s+(q-[a-z0-9-]+)\s*$/gim)].map((m) => m[1].toLowerCase()),
+    [...String(ledgerMd).matchAll(/^###\s+(q-[a-z0-9-]+)\s*$/gim)].map((m) => m[1].toLowerCase()),
   );
-  const hasAnyAssumption = /^\s*-\s*\*\*Assumed:\*\*/im.test(String(intakeMd));
+  const hasAnyAssumption = /^\s*-\s*\*\*Assumed:\*\*/im.test(String(ledgerMd));
   const findings = [];
   for (const c of contradictions) {
-    // Resolved when the intake carries question blocks with assumptions at all — C2's own
-    // ids are generated per run, so requiring an exact id match would fail every intake that
+    // Resolved when the ledger carries question blocks with assumptions at all — C2's own
+    // ids are generated per run, so requiring an exact id match would fail every ledger that
     // was answered and then re-run. Presence of the resolution structure is the signal.
     if (questionIds.size && hasAnyAssumption) continue;
     findings.push({
@@ -250,16 +250,25 @@ export function unresolvedContradictions(intakeMd = "", contradictions = []) {
 /** Read a guide's pipeline state file, or null. */
 export async function readState(slug, { intakeDir = GUIDES_INTAKE_DIR } = {}) {
   try {
-    return JSON.parse(await readFile(path.join(intakeDir, `${slug}.state.json`), "utf8"));
+    return JSON.parse(await readFile(path.join(intakeDir, slug, "state.json"), "utf8"));
   } catch {
     return null;
   }
 }
 
-/** Read a guide's intake doc, or "" when it has none. */
+/** Read a guide's traveler-intent doc, or "" when it has none. */
 export async function readIntake(slug, { intakeDir = GUIDES_INTAKE_DIR } = {}) {
   try {
-    return await readFile(path.join(intakeDir, `${slug}.md`), "utf8");
+    return await readFile(path.join(intakeDir, slug, "intake.md"), "utf8");
+  } catch {
+    return "";
+  }
+}
+
+/** Read a guide's research ledger, or "" when it has none. */
+export async function readLedger(slug, { intakeDir = GUIDES_INTAKE_DIR } = {}) {
+  try {
+    return await readFile(path.join(intakeDir, slug, "ledger.md"), "utf8");
   } catch {
     return "";
   }
@@ -270,7 +279,7 @@ export async function readIntake(slug, { intakeDir = GUIDES_INTAKE_DIR } = {}) {
 export function evaluateUncertainty({
   sections = [],
   facts = null,
-  intakeMd = "",
+  ledgerMd = "",
   state = null,
   contradictions = [],
   archived = false,
@@ -281,8 +290,8 @@ export function evaluateUncertainty({
     ...regulatoryChangeUnregistered(sections, facts),
     ...unannouncedUnregistered(sections, facts, { archived }),
     ...stageBurst(state),
-    ...weaklySupportedLedgerRows(intakeMd),
-    ...unresolvedContradictions(intakeMd, contradictions),
+    ...weaklySupportedLedgerRows(ledgerMd),
+    ...unresolvedContradictions(ledgerMd, contradictions),
   ];
   if (!findings.length) return { status: "pass", findings: [], enforce };
   return { status: enforce ? "fail" : "advisory", findings, enforce };

@@ -1,4 +1,4 @@
-// Tests for the E1 `tier` backfill (docs/PLAN_EVIDENCE_FIRST.md, defect D5 — a schema field
+// Tests for the E1 `tier` backfill (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST, defect D5 — a schema field
 // nothing ever populated). The behaviors worth pinning are all about what the script REFUSES
 // to assert: a hostname can prove "primary", and it cannot prove anything else, so every
 // non-match must stay blank rather than becoming a false `secondary`.

@@ -2,7 +2,7 @@
 //
 // Every internal gate (build, tests, schema, perf budget) can go green while the
 // change never reaches the page a traveler actually loads: work stuck on an
-// unmerged branch, a guide graduated in the repo but not yet redeployed, a route
+// unmerged branch, a guide published in the repo but not yet redeployed, a route
 // that 404s in production. Those gates answer "is the code correct"; this script
 // answers the only question that matters to a reader — "is it live right now."
 //
@@ -37,24 +37,17 @@ export const PROBLEM = {
 };
 
 /** A guide is "published" (should be live) when its meta JSON has no `draft: true`.
- *  Handles both guide shapes (CLAUDE.md Operational Habits): a directory guide keeps
- *  every top-level field in `<slug>/_guide.json`; a flat guide is `<slug>.json`. `draft`
- *  only ever lives in the meta file, so that single file decides it either way. */
+ *  Every guide is a directory (CLAUDE.md Operational Habits), keeping every top-level
+ *  field in `<slug>/_guide.json` — and `draft` only ever lives in that meta file, so
+ *  that single file decides it. */
 export function discoverPublishedSlugs(guidesDir = GUIDES_DIR) {
   if (!existsSync(guidesDir)) return [];
   const slugs = [];
   for (const entry of readdirSync(guidesDir)) {
     const full = path.join(guidesDir, entry);
-    let metaPath, slug;
-    if (statSync(full).isDirectory()) {
-      metaPath = path.join(full, "_guide.json");
-      slug = entry;
-    } else if (entry.endsWith(".json")) {
-      metaPath = full;
-      slug = entry.slice(0, -".json".length);
-    } else {
-      continue;
-    }
+    if (!statSync(full).isDirectory()) continue;
+    const slug = entry;
+    const metaPath = path.join(full, "_guide.json");
     if (!existsSync(metaPath)) continue;
     let meta;
     try {

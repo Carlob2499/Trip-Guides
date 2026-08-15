@@ -1,38 +1,28 @@
 name: New guide scaffold
 
 # Fires when the "new-guide" label lands on an issue. The New-guide issue form
-# (.github/ISSUE_TEMPLATE/new-guide.yml) auto-applies that label, so submitting the
-# form is enough. The "new-guide" label is created automatically by
-# .github/workflows/ensure-labels.yml — no manual setup needed.
+# (.github/ISSUE_TEMPLATE/new-guide.yml) auto-applies that label, so submitting the form is
+# enough; ensure-labels.yml creates the label itself.
 #
-# Commits the scaffold straight to main (no branch/PR) — main has no protection
-# rules requiring review, and the draft:true + noindex-in-prod quarantine (see
-# content.config.ts / GuideLayout.astro) already keep unverified guides fenced off
-# from the curated grid, so a branch+PR review gate here was pure ceremony.
+# The scaffold commits straight to main — no branch, no PR. A scaffold is `draft: true`, and the
+# draft quarantine (content.config.ts / GuideLayout.astro) already keeps unverified guides off the
+# hub grid and out of search, so a review gate here was ceremony.
 on:
   issues:
     types: [labeled]
 
 # Least privilege: commit to main, comment/close the issue, dispatch research-pass.yml.
-# No pull-requests permission needed — there's no PR in THIS flow.
 permissions:
   contents: write
   issues: write
   actions: write
 
-# A6: without this, the same "new-guide" label landing twice in quick succession (a
-# double-click, a relabel-after-edit) fires two concurrent scaffold jobs for the same
-# issue — both parse the same issue body and each commits its own scaffold straight to
-# main, producing a duplicate "slug-2" guide. One concurrency group per issue serializes
-# them; the second run queues (does not cancel — a scaffold commit is not idempotent to
-# interrupt mid-commit).
-#
-# B7: a single GLOBAL group (not per-issue) — country isn't known until issue-to-scaffold.mjs
-# parses the body INSIDE the job, so two DIFFERENT issues for the same country can't be told
-# apart by a pre-job concurrency key. Two different issues used to run concurrently, both
-# compute the same uniqueSlug from independent checkouts, and the second `git pull --rebase`
-# hit an add/add conflict on identical paths. Serializing every scaffold run (fast, infrequent)
-# trades a little parallelism for correctness.
+# A single GLOBAL group, not per-issue: the country isn't known until issue-to-scaffold.mjs parses
+# the body INSIDE the job, so two different issues for the same country can't be told apart by a
+# pre-job key — and when they ran concurrently both computed the same uniqueSlug from independent
+# checkouts and the second `git pull --rebase` hit an add/add conflict. Scaffolds are fast and
+# infrequent; serializing them trades a little parallelism for correctness. Queue, never cancel —
+# a scaffold commit is not idempotent to interrupt.
 concurrency:
   group: new-guide-scaffold
   cancel-in-progress: false
@@ -41,6 +31,9 @@ jobs:
   scaffold:
     if: github.event.label.name == 'new-guide'
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://carlob2499.github.io/Trip-Guides' }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -48,10 +41,7 @@ jobs:
           node-version: 22
           cache: npm
 
-      # issue-to-scaffold.mjs → scaffold-guide.mjs → intake-schema.mjs imports `zod` — every
-      # other workflow in this repo installs dependencies before running a Node script; this
-      # one didn't, so the very first real issue filed through it failed at import time with
-      # ERR_MODULE_NOT_FOUND before ever reaching a line of this repo's own code.
+      # issue-to-scaffold.mjs → scaffold-guide.mjs → intake-schema.mjs imports zod.
       - run: npm ci
 
       - name: Parse issue and generate scaffold
@@ -60,57 +50,42 @@ jobs:
           ISSUE_BODY: ${{ github.event.issue.body }}
         run: node scripts/issue-to-scaffold.mjs
 
-      # C2 (docs/PLAN_EVIDENCE_FIRST.md): deterministic date/party/person contradiction checks
-      # against the freshly scaffolded intake doc, stamped in BEFORE the commit below so the
-      # first commit already carries anything found — never a separate follow-up commit, never
-      # a workflow failure (the script always exits 0; a hit becomes a traveler question the
-      # "Auto-start the research pass" dispatch's own surfacing step will post later, same as
-      # any question research itself emits).
+      # Deterministic date/party/person contradiction checks against the fresh intake doc, stamped
+      # in BEFORE the commit so the first commit already carries anything found. Always exits 0 —
+      # a hit becomes a traveler question the research pass surfaces later, not a failed scaffold.
       - name: Check intake for contradictions
         env:
           SLUG: ${{ steps.gen.outputs.slug }}
         run: node scripts/audit/check-intake-contradictions.mjs --slug "${SLUG}" --write
 
-      - name: Commit scaffold straight to main, comment/close the issue
-        env:
-          GH_TOKEN: ${{ github.token }}
-          SLUG: ${{ steps.gen.outputs.slug }}
-          COUNTRY: ${{ steps.gen.outputs.country }}
-          ISSUE_NUM: ${{ github.event.issue.number }}
-          # A4: was hardcoded identically here, in graduate-guide.yml, research-pass.yml,
-          # astro.config.mjs, and verify-live.mjs (6 copies).
-          SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://carlob2499.github.io/Trip-Guides' }}
+      - name: Configure git identity
         run: |
-          set -euo pipefail
           git config user.name  "waypoint-scaffold[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add src/content/guides guides-intake
-          git commit -m "Scaffold new guide: ${COUNTRY} (from #${ISSUE_NUM})"
-          # Rebase onto whatever landed on main since checkout, in case another
-          # scaffold or push happened while this job ran, then push.
-          git pull --rebase origin main
-          git push origin HEAD:main
-          GUIDE_URL="${SITE_BASE_URL}/guides/${SLUG}/"
-          PROGRESS_URL="${SITE_BASE_URL}/progress/?slug=${SLUG}"
-          gh issue comment "${ISSUE_NUM}" --body "Scaffolded ✅ — committed straight to \`main\`: [\`src/content/guides/${SLUG}/\`](https://github.com/${GITHUB_REPOSITORY}/tree/main/src/content/guides/${SLUG}) (\`_guide.json\` + per-tab \`NN-*.json\`). It's a **draft** (\`draft: true\`) — reachable directly at ${GUIDE_URL} (not listed on the hub grid while it's a draft) — and the research pass fills the facts from here per the intake spec: [\`guides-intake/${SLUG}.md\`](https://github.com/${GITHUB_REPOSITORY}/blob/main/guides-intake/${SLUG}.md).
 
-          **Watch it happen:** ${PROGRESS_URL} — a live timer + step checklist (scaffold → Pass A → Pass B → reconcile → verify → published). Nothing to do here; that page updates itself.
+      # Commit + rebase + push, then reply to the filer and close the issue. The reply text lives
+      # in scripts/pipeline/scaffold.mjs, where it can be tested and grepped.
+      #
+      # `country` is whatever the filer typed into a PUBLIC issue form (or sent through the
+      # Worker's anonymous intake), so it reaches this step as an environment variable and is read
+      # as "$COUNTRY". Written as `${{ }}` inside the script it would be text spliced into the
+      # command line before bash parsed it — i.e. a destination name is code.
+      - name: Land the scaffold on main
+        env:
+          SLUG: ${{ steps.gen.outputs.slug }}
+          COUNTRY: ${{ steps.gen.outputs.country }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          node scripts/pipeline.mjs scaffold --slug "$SLUG" \
+            --country "$COUNTRY" --issue "$ISSUE"
 
-          **The research pass is starting automatically** (TWO-pass generate → reconcile, Sonnet by default — see \`references/research-efficiency.md\`). If it reaches a full verify PASS, it **graduates and publishes itself** — \`draft: true\` comes off in the same run, it merges to \`main\`, and it's live on the next Pages deploy. No approval step, no label, nothing further from you. If it can't reach PASS (or the run gets cut off), it leaves a draft PR for a human to fix instead, and re-running the same workflow resumes from the last checkpoint.
-
-          *Didn't start, or want to re-run/target one section?* Actions → Research pass → Run workflow → slug \`${SLUG}\` (optionally a \`section\`). Or interactively, on **Sonnet**:
-          \`\`\`
-          Run the research pass on ${SLUG} with the waypoint-guide-author skill (read its SKILL.md Research workflow first). Start with 'npm run pipeline -- --slug ${SLUG} --status' to see which stages remain (it's resumable — do only the un-done ones). Read guides-intake/${SLUG}.md and pick the traveler PARTY from docs/evidence/traveler-patterns.md. Research in TWO independent passes: (A) canonical/verified — verify the ANCHOR event's date + venue against a T0 source FIRST, then must-dos / entry / transit / hours / prices from primary sources; (B) local/authentic/crowd-aware — off-peak timing + crowd reality for each marquee sight, novel local alternatives where the obvious pick is a tourist trap, verifying every Pass-B lead against a primary source before it enters the guide. Reconcile A + B into ONE guide and record it in the '## Research reconciliation' ledger of guides-intake/${SLUG}.md (log any research-forced re-plan in '## Amendments'). Checkpoint each stage as you finish it: 'npm run pipeline -- --slug ${SLUG} --checkpoint <passA|passB|reconcile>'. Then loop 'npm run verify -- --slug ${SLUG}' (rolled-up gate: research + recency + scorecard) + 'npm run build' → fix each finding against a T0 source → re-run until PASS, then graduate it — 'node scripts/graduate-guide.mjs --slug ${SLUG}' — then '--checkpoint verified'.
-          \`\`\`"
-          gh issue close "${ISSUE_NUM}"
-
-      # `issue` threads this intake issue through to the research pass so it can surface any
-      # `## Questions for the traveler` (genuine forks it had to assume its way past) back to
-      # the person who filed the intake. Purely a notification channel — research never waits
-      # on an answer, and a pass dispatched without it just skips that step.
+      # `issue` threads the intake issue through so the research pass can surface any questions it
+      # had to assume its way past back to the person who filed it. A notification channel only —
+      # research never waits on an answer, and a pass dispatched without it skips that step.
       - name: Auto-start the research pass
         env:
-          GH_TOKEN: ${{ github.token }}
           SLUG: ${{ steps.gen.outputs.slug }}
-          ISSUE_NUM: ${{ github.event.issue.number }}
-        run: gh workflow run research-pass.yml -f slug="${SLUG}" -f issue="${ISSUE_NUM}"
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          gh workflow run research-pass.yml -f slug="$SLUG" \
+            -f issue="$ISSUE"

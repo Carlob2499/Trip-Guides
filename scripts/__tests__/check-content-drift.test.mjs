@@ -1,4 +1,4 @@
-// Tests for E2 (docs/PLAN_EVIDENCE_FIRST.md) — source drift. The point of the packet is the
+// Tests for E2 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST) — source drift. The point of the packet is the
 // "200 ≠ verified" class: checkLinks proves a server answered, this proves the page still
 // carries the claim. All fetches are mocked — repo doctrine is zero-network tests, which is
 // why checkDrift takes an injectable fetchPage rather than calling fetch itself.

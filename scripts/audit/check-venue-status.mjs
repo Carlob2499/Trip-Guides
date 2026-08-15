@@ -18,7 +18,7 @@
 //     canary — a fork without the secret must not go red.
 //
 // Throttled politely; ~10-40 calls per guide, and verify --network runs are rare
-// (graduation, recert, audits), so the monthly headroom is never the constraint.
+// (publishing, recert, audits), so the monthly headroom is never the constraint.
 
 import { lookupVenue } from "../lookup-venue.mjs";
 import { flatten } from "./lib.mjs";

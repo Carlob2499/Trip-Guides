@@ -31,27 +31,27 @@ describe("the rail is built from the guide", () => {
   it("ends … Sources, Tools when it does not — Field log is ABSENT, not empty", () => {
     /* ⌁ regression. An empty Field log station is a promise the guide cannot keep: it invites a
        reader to a post-mortem that was never written. Absence is asserted as absence. */
-    const stations = buildStations(realGuide("us"));
+    const stations = buildStations(realGuide("japan"));
     expect(names(stations).slice(-2)).toEqual(["Sources", "Tools"]);
     expect(names(stations)).not.toContain("Field log");
     expect(stations.some((s) => s.kind === "fieldlog")).toBe(false);
   });
 
-  it.each(["korea", "us", "denmark", "japan"])("puts Tools last for %s", (slug) => {
+  it.each(["korea", "denmark", "japan"])("puts Tools last for %s", (slug) => {
     const stations = buildStations(realGuide(slug));
     expect(stations.at(-1)?.kind).toBe("tools");
     expect(stations.filter((s) => s.kind === "tools")).toHaveLength(1);
   });
 
-  it("derives the count from the guide — Korea 13, Sedona 9", () => {
-    // The two numbers the whole redesign is calibrated against. They are ASSERTED here and
-    // written nowhere in the source: 11 groups + Field log + Tools, and 8 groups + Tools.
+  it("derives the count from the guide — Korea 13, Japan 11", () => {
+    // The two numbers are ASSERTED here and written nowhere in the source: 11 groups + Field
+    // log + Tools, and 10 groups + Tools alone (Japan carries no learnings record yet).
     expect(buildStations(realGuide("korea"))).toHaveLength(13);
-    expect(buildStations(realGuide("us"))).toHaveLength(9);
+    expect(buildStations(realGuide("japan"))).toHaveLength(11);
   });
 
   it("numbers stations contiguously from zero, whatever the guide", () => {
-    for (const slug of ["korea", "us", "denmark", "japan"]) {
+    for (const slug of ["korea", "denmark", "japan"]) {
       const stations = buildStations(realGuide(slug));
       expect(stations.map((s) => s.index)).toEqual(stations.map((_, i) => i));
     }
@@ -59,7 +59,7 @@ describe("the rail is built from the guide", () => {
 
   it("gives every station a unique key", () => {
     // Two stations sharing a key would share a panel — one of them becomes unreachable.
-    for (const slug of ["korea", "us", "denmark", "japan"]) {
+    for (const slug of ["korea", "denmark", "japan"]) {
       const keys = buildStations(realGuide(slug)).map((s) => s.key);
       expect(new Set(keys).size).toBe(keys.length);
     }
@@ -120,7 +120,7 @@ describe("the progress line's geometry", () => {
   });
 
   it("produces a valid geometry for every station of every real guide", () => {
-    for (const slug of ["korea", "us", "denmark", "japan"]) {
+    for (const slug of ["korea", "denmark", "japan"]) {
       const stations = buildStations(realGuide(slug));
       for (const s of stations) {
         const g = progressGeometry(s.index, stations.length);

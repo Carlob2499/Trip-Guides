@@ -1,7 +1,7 @@
 /**
  * Pure progress-derivation logic for the New Guide pipeline tracker. Mirrors
  * scripts/pipeline.mjs's STAGE_ORDER/state shape exactly (that file is the durable,
- * git-tracked source of truth — guides-intake/<slug>.state.json) plus one client-only
+ * git-tracked source of truth — guides-intake/<slug>/state.json) plus one client-only
  * stage, `published`, which pipeline.mjs never tracks: it's derived by the caller
  * probing whether the live guide page actually resolves (see index.ts's gateway).
  *
@@ -23,7 +23,7 @@ export const STAGE_LABEL: Record<Stage, string> = {
   published: "Published — live on the site",
 };
 
-/** Mirrors scripts/pipeline.mjs's on-disk guides-intake/<slug>.state.json shape exactly. */
+/** Mirrors scripts/pipeline.mjs's on-disk guides-intake/<slug>/state.json shape exactly. */
 export interface PipelineState {
   slug: string;
   createdAt: string;
@@ -107,6 +107,26 @@ export function formatElapsed(ms: number): string {
   if (h > 0) return `${h}h ${String(m).padStart(2, "0")}m`;
   if (m > 0) return `${m}m ${String(s).padStart(2, "0")}s`;
   return `${s}s`;
+}
+
+/** The one shape a guide slug may have on this page, mirroring scripts/lib/slug.mjs's
+ *  isValidSlug() (lowercase alphanumerics in single-hyphen-separated runs). */
+const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+/**
+ * Trim/lowercase a slug from an untrusted place — the `?slug=` query parameter OR the page's own
+ * "paste the real slug" correction box — and return "" when it isn't one.
+ *
+ * Both entrances need this, which is why it is here rather than inline in the UI: the value ends
+ * up in an href, in a raw.githubusercontent.com URL and in the body of a Worker POST, and the
+ * typed one is no more trustworthy than the linked one — anyone who can get a visitor to click a
+ * link can get them to paste a string. Returning "" (rather than throwing) is what lets the
+ * caller fall back to the correction prompt, which is the honest answer either way: this page
+ * never claims progress for a guide it cannot address.
+ */
+export function normalizeSlug(raw: string | null | undefined): string {
+  const slug = String(raw ?? "").trim().toLowerCase();
+  return SLUG_RE.test(slug) ? slug : "";
 }
 
 /** Client-side best-effort slug prediction — mirrors scaffold-guide.mjs's slugify() exactly (NFKD

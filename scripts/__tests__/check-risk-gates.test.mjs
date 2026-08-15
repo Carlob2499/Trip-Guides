@@ -1,6 +1,6 @@
-// Tests for E1's risk-weighted gates (docs/PLAN_EVIDENCE_FIRST.md). Two things carry the
+// Tests for E1's risk-weighted gates (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST). Two things carry the
 // packet and both are pinned here: the warn-first split (drafts BLOCK because that is what
-// graduate-guide.yml gates on; published guides only advise), and the fact that every
+// the publication evidence gate runs; published guides only advise), and the fact that every
 // detector works WITHOUT any `risk` data — because no row in the corpus has any, and the
 // regression fixture is frozen evidence that can never be re-annotated.
 
@@ -95,7 +95,7 @@ describe("evaluateRiskGates — the warn-first split", () => {
     hygiene: { malformed: [{ id: "x", value: "$19," }] },
   };
 
-  it("BLOCKS on a draft — graduate-guide.yml gates on this, so it is the publication chokepoint", () => {
+  it("BLOCKS on a draft — the publication evidence gate runs this, so it is the chokepoint", () => {
     const r = evaluateRiskGates({ ...defective, enforce: true });
     expect(r.status).toBe("fail");
     expect(r.findings).toHaveLength(2);

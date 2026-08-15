@@ -23,8 +23,8 @@
 | `guide/03-sights.json` | `src/content/guides/japan/03-sights.json` | 4, 12 |
 | `guide/06-days.json` | `src/content/guides/japan/06-days.json` | 1b, 3, 4, 5, 7, 11, 12 |
 | `guide/08-health-and-safety.json` | `src/content/guides/japan/08-health-and-safety.json` | 6 |
-| `intake/japan.md` | `guides-intake/japan.md` | 1a, 1b, 2, 7 |
-| `intake/japan.state.json` | `guides-intake/japan.state.json` | 8 |
+| `intake/japan.md` | `guides-intake/japan/intake.md` + `ledger.md` (one flat file when frozen) | 1a, 1b, 2, 7 |
+| `intake/japan.state.json` | `guides-intake/japan/state.json` | 8 |
 
 The line numbers below refer to **the fixture copies**, which were byte-identical to the live
 guide when frozen on 2026-08-13. They are pinned by a CITATIONS table in

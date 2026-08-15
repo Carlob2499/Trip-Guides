@@ -202,13 +202,13 @@ describe("assertWritable — the proposal-only gate for live guides", () => {
 });
 
 describe("--check NEVER writes (the boundary check, run against the real CLI)", () => {
-  it("checking the guide with a standing proposal (us) leaves every byte on disk untouched", async () => {
+  it("checking a real, live guide (korea) leaves every byte on disk untouched", async () => {
     const { execFile } = await import("node:child_process");
     const { promisify } = await import("node:util");
     const { readFile, readdir } = await import("node:fs/promises");
     const path = await import("node:path");
     const { GUIDES_DIR } = await import("../audit/lib.mjs");
-    const dir = path.join(GUIDES_DIR, "us");
+    const dir = path.join(GUIDES_DIR, "korea");
     const snapshot = async () => {
       const files = (await readdir(dir)).sort();
       const out = {};
@@ -216,8 +216,8 @@ describe("--check NEVER writes (the boundary check, run against the real CLI)", 
       return out;
     };
     const before = await snapshot();
-    // exit 2 = "a proposal exists" — the expected outcome for us; anything ≠ 0/2 is a real error
-    const code = await promisify(execFile)("node", ["scripts/compose-guide.mjs", "--slug", "us", "--check"])
+    // exit 0 = already composed, exit 2 = a proposal exists; anything else is a real error
+    const code = await promisify(execFile)("node", ["scripts/compose-guide.mjs", "--slug", "korea", "--check"])
       .then(() => 0, (e) => e.code);
     expect([0, 2]).toContain(code);
     expect(await snapshot()).toEqual(before);

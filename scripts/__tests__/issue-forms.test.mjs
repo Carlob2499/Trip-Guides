@@ -4,17 +4,16 @@
 // and the label lives in a YAML template the parser never reads. Rename a label and the parser
 // silently stops finding the field; the workflow then reports "no Guide slug field" on a
 // perfectly well-formed issue. new-guide has had this guard since P1 (intake-schema.test.mjs)
-// and modify got one with the change-request wizard; revise and graduate had NONE until now,
-// despite revise carrying six hand-typed literals across two different templates.
+// and modify got one with the change-request wizard; revise had NONE until now, despite
+// carrying six hand-typed literals across two different templates.
 
 // @protects-file The forms used to file work match what the automation expects to read.
 
 import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { MODIFY_FIELDS, REVISE_FIELDS, GRADUATE_FIELDS, SLUG_FIELD, labelFor } from "../../src/lib/issue-forms.mjs";
-import { parseReviseIssue } from "../parse-revise-issue.mjs";
-import { parseIssueBody } from "../graduate-guide.mjs";
+import { MODIFY_FIELDS, REVISE_FIELDS, SLUG_FIELD, labelFor } from "../../src/lib/issue-forms.mjs";
+import { parseChangeIssue } from "../pipeline/issue.mjs";
 
 const form = (name) => readFileSync(fileURLToPath(new URL(`../../.github/ISSUE_TEMPLATE/${name}`, import.meta.url)), "utf8");
 
@@ -39,7 +38,6 @@ function extractFormFields(yaml) {
 const CASES = [
   ["modify-guide.yml", MODIFY_FIELDS],
   ["revise-guide.yml", REVISE_FIELDS],
-  ["graduate-guide.yml", GRADUATE_FIELDS],
 ];
 
 describe.each(CASES)("CONTRACT — %s matches its field set", (file, fields) => {
@@ -59,7 +57,7 @@ describe.each(CASES)("CONTRACT — %s matches its field set", (file, fields) => 
   });
 });
 
-describe("one slug vocabulary across all three forms", () => {
+describe("one slug vocabulary across both forms", () => {
   it("every form opens with the identical slug field object", () => {
     for (const [, fields] of CASES) expect(fields[0]).toBe(SLUG_FIELD);
   });
@@ -82,14 +80,14 @@ const render = (fields, values) =>
   fields.map((f) => `### ${f.label}\n\n${values[f.id] ?? "_No response_"}`).join("\n\n");
 
 describe("round-trip — a rendered issue body parses back", () => {
-  it("revise form → parseReviseIssue", () => {
+  it("revise form → parseChangeIssue", () => {
     const body = render(REVISE_FIELDS, {
       slug: "korea",
       "what-changed": "The trip moved to October; the whole itinerary needs re-cutting.",
       sections: "Days, Sights",
       deadline: "2026-09-01",
     });
-    expect(parseReviseIssue(body)).toEqual({
+    expect(parseChangeIssue(body)).toEqual({
       slug: "korea",
       change: "The trip moved to October; the whole itinerary needs re-cutting.",
       sections: ["Days", "Sights"],
@@ -97,24 +95,19 @@ describe("round-trip — a rendered issue body parses back", () => {
     });
   });
 
-  it("ESCALATED modify form → parseReviseIssue falls back to modify's labels", () => {
-    // The single-intake-surface ruling: an issue filed on the modify form can be escalated
-    // to a revision by the owner. That fallback is why both field sets live in one module.
+  it("modify form → the SAME parser falls back to modify's labels", () => {
+    // The single-intake-surface ruling: one lifecycle reads both templates, so a request
+    // filed on either form parses identically. That is why both field sets live in one module.
     const body = render(MODIFY_FIELDS, {
       slug: "denmark",
       change: "Prices are a year out of date across the whole guide.",
       section: "Essentials",
     });
-    expect(parseReviseIssue(body)).toEqual({
+    expect(parseChangeIssue(body)).toEqual({
       slug: "denmark",
       change: "Prices are a year out of date across the whole guide.",
       sections: ["Essentials"],
       deadline: "",
     });
-  });
-
-  it("graduate form → parseIssueBody", () => {
-    const body = render(GRADUATE_FIELDS, { slug: "japan", why: "Verify passes and I've read it end to end." });
-    expect(parseIssueBody(body)).toEqual({ rawSlug: "japan" });
   });
 });

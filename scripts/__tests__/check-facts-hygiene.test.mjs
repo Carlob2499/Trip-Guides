@@ -1,9 +1,9 @@
-// Tests for scripts/audit/check-facts-hygiene.mjs (B3, docs/PLAN_EVIDENCE_FIRST.md): three
+// Tests for scripts/audit/check-facts-hygiene.mjs (B3, docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST): three
 // structural, deterministic flags over a facts.json registry — misattribution candidates,
 // malformed (trailing-punctuation) values, and bare section-path echoes. ADVISORY only; this
 // checker never fails a build or a `npm run verify` run on its own.
 //
-// Every threshold here was calibrated against the REAL corpus (korea/us/denmark's actual
+// Every threshold here was calibrated against the REAL corpus (korea/denmark's actual
 // facts.json), not just the Japan regression fixture — see check-facts-hygiene.mjs's own
 // comments for the false positives each design choice rules out.
 
@@ -72,7 +72,7 @@ describe("misattributionCandidates", () => {
   });
 
   it("produces ZERO findings across every real, shipped guide's facts.json", () => {
-    for (const slug of ["korea", "us", "denmark"]) {
+    for (const slug of ["korea", "denmark"]) {
       expect(misattributionCandidates(realFacts(slug)), `${slug} should have no misattribution candidates`).toEqual([]);
     }
   });
@@ -103,7 +103,7 @@ describe("malformedValueRows", () => {
     // the {{fact:}} token — never a silent delete, which would have produced
     // "Taxi: ~10 min, ₩6,000" with no full stop and "spa, ₩22,000 22 sauna rooms".
     // This assertion is the guard that they stay fixed.
-    for (const slug of ["korea", "us", "denmark"]) {
+    for (const slug of ["korea", "denmark"]) {
       expect(malformedValueRows(realFacts(slug)), `${slug} malformed`).toEqual([]);
     }
   });
@@ -136,7 +136,7 @@ describe("bareEchoRows", () => {
     // apart. Fixed 2026-08-15 by giving every claim a disambiguating leaf phrase. This
     // assertion is the guard that they stay fixed; a new bare-echo group here means a new
     // claim was written without a leaf, not that the checker regressed.
-    for (const slug of ["korea", "us", "denmark"]) {
+    for (const slug of ["korea", "denmark"]) {
       expect(bareEchoRows(realFacts(slug)), `${slug} bare echo`).toEqual([]);
     }
   });
@@ -171,13 +171,12 @@ describe("checkFactsHygiene (roll-up)", () => {
     // `bareEcho` alone: claims shaped like their section path ("Local essentials — ¥1,000"),
     // defect D4. That is a NAMING smell, not a wrong fact, which is exactly why E1 left it
     // advisory while promoting misattribution and malformed values toward a gate.
-    // us came out fully clean; korea (7) and denmark (3) keep bare-echo rows only.
-    for (const slug of ["korea", "us", "denmark"]) {
+    // korea (7) and denmark (3) keep bare-echo rows only.
+    for (const slug of ["korea", "denmark"]) {
       const r = checkFactsHygiene(realFacts(slug));
       expect(r.misattribution, `${slug} misattribution`).toEqual([]);
       expect(r.malformed, `${slug} malformed`).toEqual([]);
       expect(r.status, `${slug} status`).toBe(r.bareEcho.length ? "advisory" : "clean");
     }
-    expect(checkFactsHygiene(realFacts("us")).status).toBe("clean");
   });
 });

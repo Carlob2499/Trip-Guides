@@ -1,22 +1,24 @@
 name: Recert (self-freshening)
 
-# The maintenance department (pipeline REFRESH stage, "dynamic" sense #1). On a schedule it sweeps
-# EVERY published guide for facts past their shelf life and, for each stale guide, runs a Claude
-# agent that re-verifies those facts against primary sources and opens a "freshness PR" — so a
-# published guide never silently rots (the MangoPlate class of failure). Never auto-merges; a human
-# reviews + merges each freshness PR (and may simply close it for a concluded trip).
+# DETECTION ONLY. This workflow finds what has gone stale and hands each guide to change.yml; it
+# no longer runs an agent of its own. The recert agent, its prompt and its landing logic were the
+# change lifecycle wearing a third costume — same edit, same continuity sweep, same verify loop —
+# so they moved there and this kept the half nothing else does: noticing.
 #
-# COMPREHENSIVE BY DESIGN: the detect job lists ALL currently-stale guides (via `npm run recert
-# --json`, which builds on check-staleness's sweep of every non-draft guide), and the recert job is
-# a MATRIX over that list — one isolated freshness PR per guide, all in one scheduled run. Drafts are
-# the research pass's job, not recert's (check-staleness skips them).
+# (Name kept: "recert" is what the repo, the docs and the skill call this. The file is the
+# detector now, but the concept is unchanged.)
 #
-# Runs on the Claude MAX subscription (CLAUDE_CODE_OAUTH_TOKEN), same as research-pass.yml → ~$0
-# marginal. Relationship to content-audit.yml: that workflow REPORTS staleness (+ link/photo rot) to
-# a tracking issue; this one ACTS on the staleness half by opening fix PRs. No overlap in effect.
+# Two jobs:
+#   audit    the weekly no-LLM accuracy report — dead links, missing photos, third-party API
+#            health, stale stamps → one tracking issue, updated in place. Reports only.
+#   detect   every guide with a fact past its shelf life → one change.yml run each, source
+#            `staleness`. Those runs ALWAYS open a PR for a human, never auto-merge: nobody asked
+#            for them (the rule is enforced in scripts/pipeline/plan.mjs, not here).
+#
+# Drafts are the research pass's job, not this one — check-staleness skips them.
 on:
   schedule:
-    - cron: "0 6 * * 1" # Mondays 06:00 UTC — weekly; fx facts (7-day shelf life) are caught within the week
+    - cron: "0 6 * * 1" # Mondays 06:00 UTC — fx facts (7-day shelf life) are caught within the week
   workflow_dispatch:
     inputs:
       slug:
@@ -26,18 +28,11 @@ on:
         default: ""
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
   issues: write
+  actions: write # dispatches change.yml per stale guide
 
 jobs:
-  # Weekly no-LLM accuracy REPORT (merged from the retired content-audit.yml, 2026-08-14 —
-  # one Monday cron instead of two): dead links, missing Commons photos, third-party API
-  # health, stale `verified` stamps → one tracking issue, updated in place. This job only
-  # REPORTS; the recert matrix below ACTS on the staleness half by opening fix PRs
-  # (link/photo rot stays a human's swap/removal call). Schedule-only: a manual dispatch
-  # is someone chasing one guide's freshness, not the weekly report. Run locally with
-  # `node scripts/audit/run-audit.mjs --dry-run`.
   audit:
     if: github.event_name == 'schedule'
     runs-on: ubuntu-latest
@@ -50,18 +45,15 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-          # The Places canary (scripts/audit/check-apis.mjs) verifies the venue verifier is
-          # still wired — key valid, SKU access intact, businessStatus still returned. It
-          # SKIPS cleanly when this is unset, so a fork without the secret stays green.
+          # The Places canary verifies the venue verifier is still wired — key valid, SKU access
+          # intact. It skips cleanly when unset, so a fork without the secret stays green.
           PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
         run: node scripts/audit/run-audit.mjs
-  # Build the list of guides needing recert. A manual dispatch with a slug targets just that one;
-  # otherwise every currently-stale guide. Empty list → the recert job is skipped (has_stale gate).
+
   detect:
     runs-on: ubuntu-latest
-    outputs:
-      slugs: ${{ steps.list.outputs.slugs }}
-      has_stale: ${{ steps.list.outputs.has_stale }}
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -69,159 +61,10 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - id: list
+
+      # One change run per stale guide, so each lands its own reviewable PR — a single sweeping
+      # PR across several guides would be unreviewable and unrevertable per-guide.
+      - name: Dispatch a change run per stale guide
         env:
           INPUT_SLUG: ${{ inputs.slug }}
-        run: |
-          set -euo pipefail
-          if [ -n "$INPUT_SLUG" ]; then
-            node --input-type=module -e "
-              import { isValidSlug } from './scripts/lib/slug.mjs';
-              if (!isValidSlug(process.env.INPUT_SLUG)) { console.error('Invalid slug:', process.env.INPUT_SLUG); process.exit(1); }
-            "
-            SLUGS=$(jq -cn --arg s "$INPUT_SLUG" '[$s]')
-          else
-            SLUGS=$(node scripts/recert.mjs --json | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>process.stdout.write(JSON.stringify(JSON.parse(d).slugs)))")
-          fi
-          echo "slugs=$SLUGS" >> "$GITHUB_OUTPUT"
-          if [ "$SLUGS" = "[]" ]; then
-            echo "has_stale=false" >> "$GITHUB_OUTPUT"
-            echo "No guides need recert — all facts within shelf life."
-          else
-            echo "has_stale=true" >> "$GITHUB_OUTPUT"
-            echo "Stale guides to recert: $SLUGS"
-          fi
-
-  # One isolated freshness PR per stale guide. fail-fast off so one guide's failure doesn't cancel
-  # the others — comprehensiveness means every stale guide gets its own attempt.
-  recert:
-    needs: detect
-    if: needs.detect.outputs.has_stale == 'true'
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        slug: ${{ fromJson(needs.detect.outputs.slugs) }}
-    # M0/B3: job-level so the agent action's own Bash tool (which inherits the job's
-    # environment) has a gh credential — the prompt below calls `gh pr view`/`gh pr create`.
-    env:
-      GH_TOKEN: ${{ github.token }}
-      # S1: the recert agent re-verifies venues; lookup-venue + verify --network use this.
-      PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
-      # Case 11: live leg-duration verification. Default OFF — unset ⇒ free layers only.
-      GOOGLE_ROUTES_KEY: ${{ secrets.GOOGLE_ROUTES_KEY }}
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      # Defense in depth: the detect job already validated a manual-dispatch slug, but the
-      # matrix also carries recert.mjs's own list — validate again here, first, before the
-      # slug is interpolated into a branch name below.
-      - name: Validate slug input
-        env:
-          SLUG: ${{ matrix.slug }}
-        run: |
-          node --input-type=module -e "
-            import { isValidSlug } from './scripts/lib/slug.mjs';
-            if (!isValidSlug(process.env.SLUG)) { console.error('Invalid slug:', process.env.SLUG); process.exit(1); }
-          "
-
-      - name: Configure git identity
-        run: |
-          git config user.name  "waypoint-recert[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-      # Resume the freshness branch if a prior run created it (so an existing open PR is updated in
-      # place rather than duplicated); otherwise start it fresh from the current published guide.
-      - name: Resume or start the freshness branch
-        run: |
-          BR="recert/${{ matrix.slug }}"
-          if git ls-remote --exit-code --heads origin "$BR" >/dev/null 2>&1; then
-            git fetch origin "$BR" && git checkout "$BR"
-            echo "Resumed $BR"
-          else
-            git checkout -b "$BR"
-            echo "Started $BR"
-          fi
-
-      - name: Run recert agent
-        uses: anthropics/claude-code-action@v1
-        with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          # v1.0 action: `allowed_tools`/`model` are deprecated top-level inputs — both now go
-          # through claude_args (--allowedTools / --model). Recert is mechanical re-verification
-          # — Sonnet work by definition (research-efficiency.md).
-          claude_args: |
-            --model claude-sonnet-5
-            --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
-          prompt: |
-            RECERT — re-verify the STALE facts of an already-published guide. This is maintenance, not
-            new research: touch only the facts flagged below, keep everything else as-is, and keep the
-            guide published (do NOT set draft: true).
-
-            Guide slug: ${{ matrix.slug }}
-
-            Use the waypoint-guide-author skill: read .claude/skills/waypoint-guide-author/SKILL.md and
-            references/verification-rules.md + references/research-efficiency.md and follow them
-            exactly — especially the done gate's "Recert pass" step, the "Editing a Guide — Continuity
-            Is Mandatory" rule, and the search budgets (start from each fact's own source_url; ~2
-            rounds then downgrade to ⚠; a first 404 can be a live page). CLAUDE.md's accuracy
-            standard (auto-loaded) is binding.
-
-            1. Get the punch list: `npm run recert -- --slug ${{ matrix.slug }}`. It lists each fact
-               past its shelf life and the source_url to re-check it against.
-            2. For EACH flagged fact: re-verify against a PRIMARY (T0) source (start from the
-               source_url). If the value changed, update it AND re-date `verified_on` to today. If you
-               cannot confirm it from a primary source, downgrade it to ⚠ or omit it — never leave a
-               stale value presenting as verified, and never invent a fresh-looking figure.
-            3. CONTINUITY SWEEP (mandatory): a changed fact ripples. Grep the whole guide for every
-               touchpoint of each fact you changed (and the stale phrasings the change creates) and
-               fix them, per CLAUDE.md. Update the guide-level `verified` stamp date too.
-            4. SELF-CORRECTION LOOP: run `npm run verify -- --slug ${{ matrix.slug }}` + `npm run build`;
-               fix each blocking finding against a primary source; repeat until verify PASSes and build
-               is clean. (The recency row should clear once the dates are refreshed.)
-            5. Commit to the `recert/${{ matrix.slug }}` branch, push, and open OR update a PR
-               (idempotent — the branch may already have one):
-                 gh pr view --json number >/dev/null 2>&1 || gh pr create \
-                   --title "Recert: ${{ matrix.slug }}" \
-                   --body "<summary below>"
-               PR body: which facts were re-verified and whether each CHANGED / was CONFIRMED-unchanged
-               / was DOWNGRADED to ⚠, the FINAL scorecard (paste the output of
-               `npm run verify -- --slug ${{ matrix.slug }} --markdown` verbatim), and the updated
-               ledger. If this guide is a concluded trip and a fact can't sensibly be refreshed, say
-               so — the human may choose to close this PR rather than merge.
-
-            NEVER auto-merge. NEVER set draft: true. Touch only ${{ matrix.slug }} — either
-            src/content/guides/${{ matrix.slug }}.json (flat) or
-            src/content/guides/${{ matrix.slug }}/ (split guide: _guide.json + its NN-*.json section
-            files — `ls` the directory to find which files actually hold the flagged facts) — and its
-            guides-intake/${{ matrix.slug }}.md. Do not touch any other guide.
-
-            FINALLY, write a short run report to `run-report.md` (repo root, gitignored — do NOT
-            commit it): a `## Run report` heading then 3-5 bullets — what you re-verified and whether
-            each changed / was confirmed / was downgraded, roughly how many searches, and any place
-            the skill slowed you down. This feeds the monthly skill-retro; be concrete.
-
-      # W3: deposit a run report on the pipeline ledger issue (one per matrix guide), so the
-      # skill-retro proposer has evidence. `|| true` — the ledger never fails the run.
-      - name: Append run report to the ledger
-        if: always()
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
-          WORKFLOW: recert
-          SLUG: ${{ matrix.slug }}
-          MODEL: claude-sonnet-5
-          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          NOTE_FILE: run-report.md
-        run: node scripts/append-run-report.mjs || true
+        run: node scripts/recert.mjs --dispatch

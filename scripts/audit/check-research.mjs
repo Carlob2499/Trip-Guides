@@ -1,7 +1,7 @@
 // Research/draft quality gate — checks the MECHANICALLY checkable half of a guide's
 // readiness (judgment stays with the human/agent). Meant to run against an AI-generated
 // or scaffolded draft to surface the punch-list a human must still resolve before it can
-// graduate. Advisory: it reports findings, never edits. Mirrors the other scripts/audit/*
+// publish. Advisory: it reports findings, never edits. Mirrors the other scripts/audit/*
 // modules (exports a check fn; joinable in run-audit.mjs).
 //
 // Usage:  node scripts/audit/check-research.mjs --slug kyoto-japan   (single guide, verbose)
@@ -11,7 +11,7 @@ import { readGuides, flatten, isMain, parseVerifiedDate } from "./lib.mjs";
 
 const PLACEHOLDER = "__VERIFICATION_REQUIRED__";
 // A body with almost no real content is a "filled" section that isn't actually filled.
-// NOT a sanitizer (see the same note in guide-readiness.mjs) — one pass over <[^>]+> is
+// NOT a sanitizer (see the same note in verify-guide.mjs) — one pass over <[^>]+> is
 // trivially defeated. It exists to ask "is there any real prose here", a build-time length
 // question about our own content. Its output is counted, never rendered.
 const strip = (html) => String(html || "").replace(/<[^>]+>/g, "").trim();

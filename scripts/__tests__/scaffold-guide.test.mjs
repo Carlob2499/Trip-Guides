@@ -1,13 +1,16 @@
 // Tests for the pure transform functions in scripts/scaffold-guide.mjs: slug derivation,
-// day-label generation from a date range, and the canonical guide/intake-doc backbones a
-// new "Guide-to-be" is scaffolded from. writeScaffold()/the CLI do real disk I/O and are
-// exercised end-to-end by the new-guide.yml workflow, so they're intentionally out of
-// scope here — this covers the logic a bug would corrupt silently.
+// day-label generation from a date range, and the canonical guide/intake/ledger backbones a
+// new "Guide-to-be" is scaffolded from — plus one hermetic writeScaffold run that pins the
+// emitted run-state LAYOUT (tmp dirs, no repo writes). The CLI itself is exercised end-to-end
+// by the new-guide.yml workflow.
 
 // @protects-file A new guide starts from a valid, complete skeleton every time.
 
-import { describe, it, expect } from "vitest";
-import { slugify, dayLabelsFromRange, buildGuideObject, buildIntakeMd, parseArgs, deriveRanks, PRIORITY_GROUP_MAP, buildCoverageMatrix, extractIataCode } from "../scaffold-guide.mjs";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { mkdtemp, rm, readFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import path from "node:path";
+import { slugify, dayLabelsFromRange, buildGuideObject, buildIntakeMd, buildLedgerMd, writeScaffold, parseArgs, deriveRanks, PRIORITY_GROUP_MAP, buildCoverageMatrix, extractIataCode } from "../scaffold-guide.mjs";
 // The never-fold groups come from the Composer that owns the rule, not a local copy — a
 // re-declared literal here would keep passing after compose-guide.mjs changed its mind.
 import { NEVER_FOLD } from "../compose-guide.mjs";
@@ -177,15 +180,24 @@ describe("buildIntakeMd", () => {
     expect(md).toContain("1. Food");
     expect(md).toContain("2. Design");
     expect(md).toContain("3. Nature");
-    // The footage scout's ledger (R4): the section must exist in every intake doc so the
-    // research pass has a home to record candidates into — and the creator-sign rule rides it.
-    expect(md).toContain("## Cover art — footage candidates");
-    expect(md).toContain("no invented geography");
     expect(md).toContain("Niche interest: record shops");
     expect(md).toContain("Per-day target (assumed, from form): $150/day");
   });
 
-  // C1 (docs/PLAN_EVIDENCE_FIRST.md): dates/anchor/budget certainty renders inline. No certainty
+  // The split's whole point: intake.md is frozen traveler intent, so nothing research produces
+  // may be scaffolded into it. Every heading below now belongs to ledger.md.
+  it("carries NO research-state sections — those are the ledger's", () => {
+    const md = buildIntakeMd({ country: "Denmark" });
+    for (const heading of [
+      "## Spec Summary", "## Cover art", "## Research reconciliation", "## Discovery leads",
+      "## Candidates considered", "## Questions for the traveler", "## Amendments",
+    ]) {
+      expect(md, `${heading} must not appear in intake.md`).not.toContain(heading);
+    }
+    expect(md.trimEnd().endsWith("- Anything that makes this trip unlike a default version of the same destination:")).toBe(true);
+  });
+
+  // C1 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST): dates/anchor/budget certainty renders inline. No certainty
   // supplied defaults to "assumed" (asserted above); this pins that a REAL certainty answer
   // renders too — the exact shape that makes the Japan case representable ("target: Oct 15",
   // not a bare date silently read as locked).
@@ -205,6 +217,73 @@ describe("buildIntakeMd", () => {
     expect(md).toContain("# New Guide Intake — [Destination]");
     expect(md).toContain("Who is this for / party:**   *(→ pick");
     expect(md).toContain("1. \n2. \n3. ");
+  });
+});
+
+describe("buildLedgerMd", () => {
+  it("scaffolds every research-state section a pass appends into", () => {
+    const md = buildLedgerMd({ country: "Denmark" });
+    expect(md).toContain("# Research ledger — Denmark");
+    expect(md).toContain("## Spec Summary");
+    expect(md).toContain("## Research reconciliation");
+    expect(md).toContain("## Candidates considered");
+    expect(md).toContain("### Priority 1:");
+    expect(md).toContain("## Questions for the traveler");
+    expect(md).toContain("## Amendments");
+  });
+
+  // The footage scout's ledger (R4): the section must exist in every scaffolded ledger so the
+  // research pass has a home to record candidates into — and the creator-sign rule rides it.
+  it("carries the footage-candidates table and its creator-sign rule", () => {
+    const md = buildLedgerMd({ country: "Denmark" });
+    expect(md).toContain("## Cover art — footage candidates");
+    expect(md).toContain("no invented geography");
+  });
+
+  it("starts the traveler-questions section on the placeholder the C2 gate fills", () => {
+    // applyContradictions() replaces this exact string rather than appending a second heading.
+    expect(buildLedgerMd({})).toContain("(none yet)");
+  });
+
+  it("names no destination rather than inventing one", () => {
+    expect(buildLedgerMd({})).toContain("# Research ledger — [Destination]");
+  });
+});
+
+describe("writeScaffold — the emitted run-state layout", () => {
+  let guidesDir, intakeDir;
+
+  beforeEach(async () => {
+    guidesDir = await mkdtemp(path.join(tmpdir(), "scaffold-guides-"));
+    intakeDir = await mkdtemp(path.join(tmpdir(), "scaffold-intake-"));
+  });
+
+  afterEach(async () => {
+    await rm(guidesDir, { recursive: true, force: true });
+    await rm(intakeDir, { recursive: true, force: true });
+  });
+
+  it("puts intake.md, ledger.md, state.json and coverage.json in guides-intake/<slug>/", async () => {
+    const res = await writeScaffold({ country: "Denmark", start: "2026-07-13", end: "2026-07-15" }, { guidesDir, intakeDir });
+    expect(res.slug).toBe("denmark");
+    expect(path.relative(intakeDir, res.intakeDir)).toBe("denmark");
+    const runDir = path.join(intakeDir, "denmark");
+    for (const [file, marker] of [
+      ["intake.md", "# New Guide Intake — Denmark"],
+      ["ledger.md", "# Research ledger — Denmark"],
+    ]) {
+      expect(await readFile(path.join(runDir, file), "utf8")).toContain(marker);
+    }
+    const state = JSON.parse(await readFile(path.join(runDir, "state.json"), "utf8"));
+    expect(state.slug).toBe("denmark");
+    expect(state.stages.scaffold).toBeTruthy();
+    expect(JSON.parse(await readFile(path.join(runDir, "coverage.json"), "utf8")).slug).toBe("denmark");
+  });
+
+  it("writes nothing loose beside the run directory", async () => {
+    await writeScaffold({ country: "Denmark" }, { guidesDir, intakeDir });
+    const { readdir } = await import("node:fs/promises");
+    expect(await readdir(intakeDir)).toEqual(["denmark"]);
   });
 });
 

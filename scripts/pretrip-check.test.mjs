@@ -1,61 +1,54 @@
 // @protects-file Everything flagged verify-before-you-go is re-checked before departure.
 
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
-import { mkdtemp, writeFile, rm } from "node:fs/promises";
+import { mkdtemp, mkdir, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { findGuidesInWindow, buildReport } from "./pretrip-check.ts";
 
 const NOW = new Date(2026, 6, 23); // Thu Jul 23 2026 (local) — matches this session's date
 
+// Every guide is a DIRECTORY — `_guide.json` meta plus one section-array file per group.
+const writeGuide = async (dir, slug, { sections, ...meta }) => {
+  const gd = path.join(dir, slug);
+  await mkdir(gd, { recursive: true });
+  await writeFile(path.join(gd, "_guide.json"), JSON.stringify(meta));
+  await writeFile(path.join(gd, "01-plan.json"), JSON.stringify(sections));
+};
+
 let dir;
 
 beforeAll(async () => {
   dir = await mkdtemp(path.join(tmpdir(), "pretrip-fixture-"));
 
-  await writeFile(
-    path.join(dir, "soon-trip.json"),
-    JSON.stringify({
-      title: "Soon Trip",
-      country: "Testland",
-      sections: [{ type: "days", group: "Plan", items: [{ date: "Mon Jul 27", title: "Day 1" }, { date: "Thu Jul 30", title: "Day 4" }] }],
-    }),
-  );
-  await writeFile(
-    path.join(dir, "far-trip.json"),
-    JSON.stringify({
-      title: "Far Trip",
-      country: "Testland",
-      sections: [{ type: "days", group: "Plan", items: [{ date: "Wed Sep 2", title: "Day 1" }] }],
-    }),
-  );
-  await writeFile(
-    path.join(dir, "past-trip.json"),
-    JSON.stringify({
-      title: "Past Trip",
-      country: "Testland",
-      sections: [{ type: "days", group: "Plan", items: [{ date: "Mon Jan 5", title: "Day 1" }] }],
-    }),
-  );
-  await writeFile(
-    path.join(dir, "draft-trip.json"),
-    JSON.stringify({
-      title: "Draft Trip",
-      draft: true,
-      country: "Testland",
-      sections: [{ type: "days", group: "Plan", items: [{ date: "Sun Jul 26", title: "Day 1" }] }],
-    }),
-  );
-  await writeFile(
-    path.join(dir, "archived-soon.json"),
-    JSON.stringify({
-      title: "Archived Soon",
-      archived: true,
-      country: "Testland",
-      sections: [{ type: "days", group: "Plan", items: [{ date: "Mon Jul 27", title: "Day 1" }] }],
-    }),
-  );
-  await writeFile(path.join(dir, "no-days.json"), JSON.stringify({ title: "No Days", country: "Testland", sections: [] }));
+  await writeGuide(dir, "soon-trip", {
+    title: "Soon Trip",
+    country: "Testland",
+    sections: [{ type: "days", group: "Plan", items: [{ date: "Mon Jul 27", title: "Day 1" }, { date: "Thu Jul 30", title: "Day 4" }] }],
+  });
+  await writeGuide(dir, "far-trip", {
+    title: "Far Trip",
+    country: "Testland",
+    sections: [{ type: "days", group: "Plan", items: [{ date: "Wed Sep 2", title: "Day 1" }] }],
+  });
+  await writeGuide(dir, "past-trip", {
+    title: "Past Trip",
+    country: "Testland",
+    sections: [{ type: "days", group: "Plan", items: [{ date: "Mon Jan 5", title: "Day 1" }] }],
+  });
+  await writeGuide(dir, "draft-trip", {
+    title: "Draft Trip",
+    draft: true,
+    country: "Testland",
+    sections: [{ type: "days", group: "Plan", items: [{ date: "Sun Jul 26", title: "Day 1" }] }],
+  });
+  await writeGuide(dir, "archived-soon", {
+    title: "Archived Soon",
+    archived: true,
+    country: "Testland",
+    sections: [{ type: "days", group: "Plan", items: [{ date: "Mon Jul 27", title: "Day 1" }] }],
+  });
+  await writeGuide(dir, "no-days", { title: "No Days", country: "Testland", sections: [] });
 });
 
 afterAll(async () => {
@@ -97,10 +90,10 @@ describe("findGuidesInWindow", () => {
 
   it("includes a trip starting exactly today (0 days out)", async () => {
     const todayDir = await mkdtemp(path.join(tmpdir(), "pretrip-today-"));
-    await writeFile(
-      path.join(todayDir, "today-trip.json"),
-      JSON.stringify({ title: "Today", country: "T", sections: [{ type: "days", group: "Plan", items: [{ date: "Thu Jul 23", title: "Day 1" }] }] }),
-    );
+    await writeGuide(todayDir, "today-trip", {
+      title: "Today", country: "T",
+      sections: [{ type: "days", group: "Plan", items: [{ date: "Thu Jul 23", title: "Day 1" }] }],
+    });
     const result = await findGuidesInWindow(NOW, todayDir);
     expect(result.map((g) => g.slug)).toEqual(["today-trip"]);
     expect(result[0].daysUntilStart).toBe(0);

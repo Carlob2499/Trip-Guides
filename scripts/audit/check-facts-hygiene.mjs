@@ -1,4 +1,4 @@
-// B3 (docs/PLAN_EVIDENCE_FIRST.md) — facts.json hygiene: three deterministic, structural flags
+// B3 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST) — facts.json hygiene: three deterministic, structural flags
 // over a guide's fact registry. ADVISORY ONLY in this packet (warn-first, per the plan's own
 // rollout doctrine — E1 is the packet that flips any of these to a blocker). Nothing here
 // touches verify-guide.mjs's existing `blockers` list.

@@ -1,139 +1,250 @@
-# The Waypoint Pipeline — end-state architecture & program
+# The Waypoint Pipeline — the two lifecycles
 
 The north star for what this repo *is*: **a factory-with-a-maintenance-department for refined,
 researched, creator-tailored travel guides — where creating a guide and keeping it fresh are both
 nearly toil-free, and human effort is spent only where judgment genuinely lives.**
 
-This doc is **policy**: the target, the stage contracts, the program. How each piece arrived lives
-in `docs/archive/INDEX.md → pipeline-history`, a record and never a work order. Read alongside
-`docs/standards/guide-rubric.md` (the bar) and the `waypoint-guide-author` skill (the discipline).
+There are exactly **two lifecycles**. *Research* builds a guide that does not exist yet. *Change*
+edits one that does, whatever prompted the edit. Everything else — the front door, the gates, the
+circuit breakers — exists to serve one of those two.
+
+This doc is **policy**: the contracts, the invariants, the operations. How the architecture was
+reached lives in `docs/archive/INDEX.md → pipeline-history` and `→ PLAN_EVIDENCE_FIRST`, records
+and never work orders. Read alongside `docs/standards/guide-rubric.md` (the bar) and the
+`waypoint-guide-author` skill (the content discipline).
 
 ---
 
-## The lifecycle (the spine)
+## Two lifecycles, and nothing else
 
-A guide is not a document; it is an object with a lifecycle. On the happy path every arrow is
-automatic, PUBLISH included: an end-user files one intake and the next thing they see is a live
-guide, no approval step in between.
+|  | **Research** | **Change** |
+|---|---|---|
+| Builds | a guide that does not exist yet | a guide that already exists |
+| Workflow | `research-pass.yml` | `change.yml` |
+| Agents | 4 (Pass A · Pass B · reconcile · critic) | 2 (change · critic) |
+| Stages | `scaffold → passA → passB → reconcile → verified` | none — one run, start to finish |
+| Resumable | **yes**, per stage, from a committed checkpoint | **no** — a dead run re-runs from scratch |
+| Attempt cap | 5 (`state.json` `attempts`) | 3 (`state.json` `change.attempts`) |
+| Branch | `research/<slug>` | `change/<slug>-<issue-or-run>` |
+| Lands as | auto-merge + publish on a passing gate, else draft PR | same, except sources nobody asked for |
+
+The asymmetry in resumability is deliberate. A research pass is five to ten agent-hours of
+irreplaceable work, so its progress is checkpointed and committed stage by stage. A change run is
+one scoped edit whose plan is recomputed from its trigger in seconds — persisting a plan-status
+state machine to resume it would cost more than re-running it, and a stale persisted plan is a
+whole class of bug that now cannot exist.
+
+## The research lifecycle — build a guide, publish it if the evidence holds
 
 ```
-   ┌─────────┐   ┌──────────┐   ┌─────────┐   ┌─────────┐   ┌────────┐   ┌─────────┐
-   │ INTAKE  │──▶│ GENERATE │──▶│ VERIFY  │──▶│ PUBLISH │──▶│ LEARN  │──▶│ REFRESH │─┐
-   └─────────┘   └──────────┘   └─────────┘   └─────────┘   └────────┘   └─────────┘ │
-   REFRESH feeds back into VERIFY ─────────────────────────────────────────────────┘
+  intake (site wizard → Worker → issue)          ← the only human step
+        └─ new-guide.yml → scaffold, committed straight to main (draft: true)
+             └─ research-pass.yml, branch research/<slug>
+                  agent 1  Pass A   canonical & verified   (Sonnet)
+                  agent 2  Pass B   local, authentic, crowd-aware (Sonnet, A-blind)
+                  agent 3  Reconcile A+B → one guide + ledger, then the verify loop
+                  agent 4  Critic   fresh context, 5 scans, citation audit (Opus)
+                  └─ pipeline land --gate → verify PASS ⇒ draft flag off + merged, live
+                                          → anything less ⇒ draft PR for a human
 ```
 
-**PUBLISH auto-resolves the moment VERIFY PASSes** — no diamond, no label, no human, per the
-explicit "input information and see a new guide without other input" goal. It becomes a human
-decision only on the failure path: a run that can't reach PASS lands as a draft PR, which a human
-fixes or force-graduates via `graduate-guide.yml`. **retire/soft-delete** stays the one always-human
-diamond — nothing here ever decides to un-publish a guide.
+**Each agent is a separate action invocation, so independence is infrastructure, not a request.**
+Pass B receives the intake spec and never the guide Pass A wrote; the critic starts cold and reads
+the product, not the transcript.
 
-## The stages, and what each one owes
+**Every stage checkpoints and commits before the next one starts.** The agent runs
+`npm run pipeline -- --slug <slug> --checkpoint <stage>` and commits; a run cut off by the
+wall-clock or a usage window resumes at the next un-done stage. The CLI **refuses** a checkpoint
+whose predecessor is not committed at HEAD — batching stages into one commit at the end is not
+resumable, so it is mechanically impossible rather than asked for.
 
-1. **INTAKE — one typed front door.** `scripts/intake-schema.mjs` (FIELDS + zod) is the source of
-   truth; the issue form, scaffold CLI and guide-author skill all derive from it and cannot drift —
-   a contract test fails CI if they do. Captures party, anchor, ranked priorities, travel style and
-   per-field **certainty** (fixed / target / flexible / unknown / none / assumed).
+**Deterministic gates sit between the agents**, so a failure costs a step and not a full run:
+`gate preflight` (intake contradictions, surfaced as traveler questions, never a hard stop) ·
+`gate coverage` (every `passB.json` finding carries a written verdict in the ledger — the reconcile
+blind spot no later critic can see) · `gate artifacts` (the critic's findings + citation audit +
+sweep record exist) · `gate compose` · `gate integrity` (void and burst detection).
 
-2. **GENERATE — dual-pass, resumable, auto-chained.** Pass A canonical/verified and Pass B
-   local/authentic/crowd-aware are researched independently, then reconciled into one guide with a
-   ledger. A git-tracked checkpoint (`guides-intake/<slug>.state.json`, via `scripts/pipeline.mjs`)
-   records `scaffold → passA → passB → reconcile → verified`, so an interrupted run resumes at the
-   next un-done stage (`npm run pipeline -- --slug <slug> --status`). `new-guide.yml` dispatches the
-   research pass itself — filing the issue is the only manual step to start a guide.
+## The change lifecycle — every edit to a guide that already exists
 
-3. **VERIFY — one rolled-up gate + scorecard.** `npm run verify` rolls readiness, staleness,
-   links/photos, candidate floors, source mix, facts hygiene, risk gates, uncertainty and — under
-   `--network` — source drift into ONE verdict plus a rubric-shaped scorecard: AUTO rows the machine
-   passes/fails, HUMAN rows a reviewer checks. Schema stays the `npm run build` gate. `--network` is
-   required before graduating; both auto-publish paths pass it.
+One workflow absorbs what used to be three (scoped edits, major revisions, and recert's execution
+half): the same edit, the same continuity sweep, the same verify loop, differing only in weight —
+and **weight is carried by the plan, not by a workflow choice or an approval label.**
 
-4. **PUBLISH — graduate on evidence, automatically.** `npm run verify --markdown` renders the
-   scorecard, and that verdict is the *entire* publish decision: on a full PASS the same job
-   graduates the guide and lands it on `main`, live on the next Pages deploy. **No issue, no label,
-   no human.** `graduate-guide.yml` remains the manual override for what that can't reach — a draft
-   finished by hand, a legacy guide, or one a human fixed after a failed run.
+| Source | Trigger | Lands |
+|---|---|---|
+| `request` | a change-request issue (the guide's ✎ button, via the Worker) | auto-merge on a passing gate |
+| `answers` | the traveler answered a question the guide assumed past | auto-merge |
+| `date-lock` | dates went from assumed to confirmed; the calendar is re-cut | auto-merge |
+| `staleness` | `recert.yml`'s weekly sweep found facts past shelf life | **always a PR** |
+| `feedback` | a feedback-derived proposal the creator approved | **always a PR** |
 
-   **The honest tradeoff, stated plainly:** rubric rows #6/#8/#9/#12 (anchor coverage, priority
-   depth, party fit, authenticity) are HUMAN-judged and the machine cannot pass/fail them. They are
-   printed in every scorecard but do NOT block publication — a guide passing every automated gate
-   goes live even if nobody glanced at them. A deliberate choice, traded against the explicit "no
-   other input" requirement; the mitigation is that traveler-patterns and the Learnings loop still
-   catch a bad party-fit call after the fact, and `modify-guide.yml` fixes it without a re-run.
+**A change nobody asked for never auto-merges, however green it is.** That rule lives in
+`scripts/pipeline/plan.mjs` (`ALWAYS_PR`) where the workflow cannot override it.
 
-5. **EDIT — a scoped fix, not a full research pass.** `modify-guide.yml` handles "this one fact is
-   wrong" without re-running Pass A/B: the **✎ Request a change** button files the issue, the owner
-   applies `modify-approved`, and an agent in the skill's "Edit an existing guide" mode verifies the
-   fact, runs the continuity sweep, and lands via `land-branch.sh`. An edit never changes
-   draft/published status, and filing alone does nothing — approval runs it.
+**The plan is built by code, not by a planner agent.** `pipeline plan` reads the trigger, resolves
+any section hints against the guide's real group files, and refuses a plan that names a group which
+does not exist or touches more than `MAX_GROUPS` (5) — past that it is a re-research and says so.
+The requester's own words never enter a prompt: they are written to `change.txt`, the DATA channel
+the prompt names by filename.
 
-5b. **REVISE — between EDIT and a full re-research.** `revise-guide.yml` (spec:
-   `docs/reference/revise-guide.md`) handles changes needing real re-research with whole-guide
-   continuity. The owner triages weight at approval (`modify-approved` = scoped edit,
-   `revision-approved` = this). Four routed agents — plan, re-research the named groups, sweep
-   continuity against the emitted old→new token list, critique the diff fresh-context — then land
-   via `land-branch.sh`. A plan carrying blocking forks pauses the run (`needs-decision`) until the
-   owner answers: the Clarifying-Questions Doctrine, enforced in CI.
+Then one working agent (Sonnet — a scoped edit carries no dual-pass reconcile judgment) and one
+fresh-context critic on the diff (Opus, Sonnet fallback). Two hard gates follow: the **continuity
+artifact gate** (a written sweep record — greps run · ripples fixed · "none" stated — because a
+change that landed without one is exactly the silent-skip the continuity doctrine exists to
+prevent) and the same evidence gate every other run faces.
 
-6. **LEARN — the loop closes on the next intake.** Trip feedback → `learnings/<slug>.md` +
-   `docs/evidence/traveler-patterns.md`, so each guide starts more personalized than the last. When
-   divergence signals trip (`feedback-signals.mjs` — avg overall ≤ 3, pacing ≤ 2, or ≥ 3 skips),
-   the synthesis auto-files an INERT `revision-request` issue (aggregates only, zero verbatim
-   freeform); the owner's `revision-approved` is the only execution gate.
+**The fork gate is the Clarifying-Questions Doctrine, headless.** An agent that hits a decision only
+the creator can make writes `change-forks.json` and stops; `gate forks` comments the questions on
+the issue, applies `needs-decision`, and halts the run before anything lands. A fork with no issue
+to ask on is a hard failure — a run waiting on nobody is worse than a red build.
 
-7. **REFRESH — the maintenance department.** `recert.yml` runs weekly and on demand: a detect job
-   lists every stale guide (`npm run recert --json`), then a matrix runs one agent per guide — each
-   re-verifies only the flagged facts against primary sources, re-dates or downgrades them, runs the
-   continuity sweep and the verify gate, and opens an isolated **freshness PR** (`recert/<slug>`).
-   Never auto-merges. This is the missing half of "dynamic": a *published* guide never silently rots
-   (the MangoPlate class). Freshness is recorded by `verified_on` dates, not pipeline stages.
+### The two loops that feed it
 
-**The three senses of "dynamic", all in scope:** (1) self-freshening content — REFRESH above;
-(2) dynamic runtime — View Transitions, live-data tiles, offline state machine; (3) dynamic
-per-view — Focus Today, what's-open-now, the weather day-swap advisory.
+**REFRESH** — `recert.yml` runs weekly, detection-only. One job publishes the no-LLM accuracy audit
+(dead links, missing photos, API health, stale stamps) into a single tracking issue; the other lists
+every guide with a fact past its shelf life and dispatches one `staleness` change run per guide, so
+each lands its own reviewable PR. A *published* guide never silently rots.
 
-## The program — what remains
+**LEARN** — trip feedback → `learnings/<slug>.md` + `docs/evidence/traveler-patterns.md`, so each
+guide starts more personalized than the last. When divergence signals trip
+(`scripts/feedback-signals.mjs`), the synthesis pass auto-files an **inert** proposal issue
+(aggregates only, zero verbatim freeform); it runs nothing until the creator approves it, which
+dispatches a `feedback` change run.
 
-Platform stance is settled: **GitHub Pages + Firebase free tier + GitHub Actions as the compute
-layer**; native = PWA-first. The P-series (P0–P4) and the W-series are **shipped** — see
-`docs/archive/INDEX.md → pipeline-history`. What remains:
+## The verify gate — one command, one verdict
 
-| Phase | Deliverable | Serves | Model / effort |
-|-------|-------------|--------|----------------|
-| **R3 · Dynamic runtime** | View Transitions, live-data tiles, offline/connection state machine | dynamic #2 + #3 | Fable designs; Sonnet implements |
-| **R4 · Per-country visual identity** | Build-time country skin (palette from the guide's own imagery), one signature motion set, motion-doctrine doc | goals 8/9 | Fable spec; Sonnet implements |
-| **R5 · Tool suite by demand** | Top-3 tools ranked by trip post-mortems; cull below-median | goal 7 | Sonnet / Haiku |
-| **R6 · App-ready distribution** | PWA manifest/icons/splash hardening, install prompt, iOS meta; optional TWA | goal 10 | Haiku / Sonnet |
+`npm run verify -- --slug <slug>` rolls readiness, staleness, links and photos, candidate floors,
+source mix, facts hygiene, risk gates, uncertainty, route legs and — under `--network` — source
+drift into ONE verdict plus a rubric-shaped scorecard: AUTO rows the machine passes or fails, HUMAN
+rows a reviewer checks. Schema stays `npm run build`'s job.
 
-R3/R4 are independent of the pipeline phases and can interleave if a trip deadline appears.
-**Per-session rule:** open with the phase's measurables, close with the Ship Loop.
+**Findings BLOCK on drafts and ADVISE on published guides** (creator ruling, `CONTEXT.md`). Because
+publication is gated on a draft's verify, blocking there means a defective guide can never go live,
+while published guides accumulate visible advisories naming what will block once enforced.
 
-### Model economy — the backbone runs on Claude Pro
+**The honest tradeoff, stated plainly:** rubric rows #6/#8/#9/#12 (anchor coverage, priority depth,
+party fit, authenticity) are HUMAN-judged and the machine cannot score them. They print in every
+scorecard but do NOT block publication — a guide passing every automated gate goes live even if
+nobody glanced at them. That is the price of "file an intake, get a guide"; the mitigations are the
+Learnings loop after the fact and a change run that fixes it without a re-research.
+
+## Publish-on-verify — there is no graduation step
+
+**Publishing is the landing step, not an event of its own.** `pipeline land --gate` runs the
+networked verify itself, writes the scorecard as the PR body, deletes the `draft` key from
+`<slug>/_guide.json`, and merges — live on the next Pages deploy. No issue, no label, no human. A
+run that fails the gate lands a draft PR instead.
+
+The graduate workflow, its issue form, its approval label and `graduate-guide.mjs` are gone: a human
+step that always said yes to the same evidence this code checks was ceremony. What is NOT gone —
+the evidence gate itself (`npm run build` + `npm run verify --network`, and `publishGuide()` refuses
+to flip anything without a passing verdict); the **veto** (`land-branch.sh` files a "🚀
+Auto-published" issue with a one-line rollback); and the manual override,
+`node scripts/pipeline.mjs publish --slug <slug>`, which runs the same gate before the same flip.
+
+**retire / soft-delete stays the one always-human decision.** Nothing here ever decides to
+un-publish a guide.
+
+## The front door — the site, not GitHub
+
+**GitHub is the record, not the interface.** The creator's surfaces all reach the pipeline through
+the Cloudflare Worker (`worker/`, its own README carries setup): the New-Guide wizard files the
+intake issue silently and returns a progress-page URL; a guide's ✎ change request files a
+change-request issue; the progress page's owner controls answer traveler questions, resolve blocking
+forks, and approve feedback proposals by dispatching `change.yml` directly.
+
+**Two gates protect that, in different places.** The Worker's three owner endpoints require an
+`X-Owner-Key` header (unset key ⇒ 503, fail CLOSED) — that header is what replaced the deleted
+approval labels. And because the issue *templates* are public and auto-apply the request label,
+`change.yml`'s resolve job additionally requires the issue's AUTHOR to be the owner or a
+collaborator. Without that, filing the identical issue by hand would bypass the key entirely. An
+outsider's request still files, still reads; it just spends no agent until a human dispatches it.
+
+Stuck-run alerts still file GitHub issues — those are owner alerts, not a UX.
+
+## Run state — one directory per guide
+
+```
+guides-intake/<slug>/
+  intake.md      the traveler's intent, FROZEN after scaffold. No research state, ever.
+  ledger.md      ALL research state: spec summary, reconciliation, amendments, candidates,
+                 verification ledger, traveler questions, critic findings, citation audit, sweeps
+  state.json     { slug, createdAt, updatedAt, stages{…}, attempts, notes[], change{attempts} }
+  passB.json     Pass B's raw findings — data handed between stages
+  coverage.json  the intake-asks coverage matrix verify gates on
+```
+
+**The intent/ledger split is the point.** When research forces the plan to change, that goes in the
+ledger's `## Amendments` — never by rewriting what the traveler asked for. `state.json` is ONE
+schema for both lifecycles: the stage map plus a `change` block, written read-modify-write-whole so
+either lifecycle can add its own keys without the other's writers knowing.
+
+These files are **generated** — machine-written, git-tracked because git is the durable store.
+Hand-edit them only deliberately; the attempt counter resets no other way.
+
+## Prompts — the stage contracts
+
+**Every prompt lives in `prompts/` as a versioned file, never inline in workflow YAML.** A workflow
+runs `node scripts/pipeline.mjs prompt prompts/<name>.md`, which substitutes `{{placeholder}}` from
+`WP_*` environment variables, **fails loudly on any unresolved placeholder**, and hands the text to
+the agent step. `prompts/README.md` governs what belongs in one; `scripts/__tests__/prompt-contract.test.mjs`
+gates the seam so a rename cannot silently ship a prompt containing a literal `{{slug}}`.
+
+The division of ownership is strict: **prompts own the stage's I/O contract** (paths, checkpoints,
+forbidden reads, STOP conditions), **the `waypoint-guide-author` skill owns what "good" means**, and
+anything the schema, `npm run verify` or `scripts/pipeline.mjs` already enforces belongs in none of
+them. Untrusted text never enters a prompt — it rides the DATA channel as a named file.
+
+## Circuit breakers — what stops a runaway
+
+- **Attempt caps** (research 5, change 3), bumped *before* the agents run and committed on the run's
+  own branch, so the breaker's memory survives a run that dies early. Past the cap: a `stuck` issue,
+  and no agent spend.
+- **Void detection** — an agent step can burn a session, exit success, and leave nothing behind.
+  `gate integrity` compares HEAD and stage count before and after. Research gets exactly ONE
+  automatic re-dispatch (which spends an attempt, so the cap still bounds it); a second void files
+  the stuck issue. A change run has no auto-retry — it enforces directly.
+- **Burst detection** — several stages recorded in one commit is a run that is not resumable, and it
+  goes red.
+- **Concurrency groups** — `research-<slug>` and `guide-<slug>` queue rather than interleave; the
+  scaffold job serializes globally because the slug isn't known until the body is parsed.
+
+## The workflow set
+
+Workflows are **thin**: trigger → setup → agent step(s) → one `pipeline` command. If you are about
+to add a `run: |` block with logic in it, it belongs in `scripts/pipeline/` or `prompts/` instead.
+
+| Workflow | Does | Logic lives in |
+|---|---|---|
+| `new-guide.yml` | scaffold on the `new-guide` label, then dispatch research | `pipeline scaffold` |
+| `research-pass.yml` | the four research agents, resumable | `pipeline route/gate/land` |
+| `change.yml` | every change run, all five sources | `pipeline plan/gate/land/report` |
+| `recert.yml` | weekly audit + staleness detection → dispatches change runs | `scripts/recert.mjs` |
+| `feedback-export.yml` | export survey feedback → synthesis PR + inert proposal | `scripts/feedback-signals.mjs` |
+| `pretrip-check.yml` | T-7 departure window: stale facts on a trip about to happen | `scripts/pretrip-check.ts` |
+| `deploy` · `deploy-worker` · `test` · `a11y` · `ensure-labels` · `mutation` (manual) | the substrate | — |
+
+## Model economy — the backbone runs on a Claude subscription
 
 Designed on heavy models; *operated* on light ones.
 
 | Work | Model | Why |
 |---|---|---|
-| Research passes (A + B), recert | **Sonnet** (workflow default, pinned via `claude_args`) | Verification is procedure-driven — the skill + gates carry the judgment |
-| Contested reconcile / anchor calls | light **Opus** (explicit dispatch choice) | Rare, bounded judgment moments |
-| The fresh-context critic (one per run) | **Opus** (`critic_model` default) | The only judgment agent left, and the last gate before a guide auto-publishes |
-| Mechanical sweeps, formatting | Haiku / stay in Sonnet | — |
-| Pipeline/skill/design changes | Fable/Opus, **separate sessions** | Design is one-time; operation is forever |
-
-Guides are not numbered milestones — each is the backbone exercising. What makes Pro sufficient:
-**plan-mode first**, **checkpoint-often**, and the skill's `references/research-efficiency.md`
-budgets — scripts before web, direct-to-primary, batch by entity, scaled by risk, ship/flag/omit.
+| Research passes A + B, reconcile | **Sonnet** (workflow default) | Verification is procedure-driven — the skill and the gates carry the judgment |
+| Contested reconcile / anchor calls | **Opus** (explicit dispatch input) | Rare, bounded judgment moments |
+| The research critic (one per run) | **Opus** (`critic_model` default) | The last gate before a guide publishes itself |
+| The change agent | **Sonnet** | A scoped edit against a code-built plan |
+| The change critic | **Opus**, Sonnet fallback | Fresh eyes on the diff |
 
 ## What "done" means for the pipeline (exit criteria)
 
-- Filing a trip reaches a corroborated, verify-PASSing guide **merged, published and live** with
-  **zero human action** on the happy path. (A run that can't reach PASS lands as a draft PR — the
-  toil floor, not the common case.)
-- The end-user sees **tangible progress while it runs**, from the same git-tracked checkpoint state
-  the pipeline already writes, so nothing is maintained twice.
-- A **published** guide cannot silently rot: recert opens a freshness PR before facts mislead, and
-  a wrong fact is one issue + one label away from a scoped fix with no full re-run.
-- No stage depends on remembering a separate script: one intake, one generate, one verify, one
-  auto-graduate, one recert, one modify — each a named command and a workflow, inherited by every
-  guide because the machinery lives at the pipeline/skill level.
+- Filing an intake on the site reaches a corroborated, verify-PASSing guide **merged, published and
+  live** with **zero further human action** — and without the creator ever seeing GitHub. A run that
+  can't reach PASS lands as a draft PR: the toil floor, not the common case.
+- The traveler sees **tangible progress while it runs**, read from the same git-tracked state the
+  pipeline already writes, so nothing is maintained twice.
+- A **published** guide cannot silently rot: recert opens a freshness PR before facts mislead, and a
+  wrong fact is one ✎ request away from a scoped, verified fix with no re-research.
+- No stage depends on remembering a separate script: one intake, one research pass, one change
+  lifecycle, one verify, one publish — each a named `pipeline` subcommand and a thin workflow,
+  inherited by every guide because the machinery lives at the pipeline level, never per guide.

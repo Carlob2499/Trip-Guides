@@ -15,10 +15,10 @@ quality stays Korea-tier while tokens and searches stay Pro-sized.
 | Formatting, ledger cleanup, mechanical sweeps | Haiku (or stay in Sonnet) |
 | Pipeline/skill/workflow design | Fable/Opus — separate sessions, not research |
 
-**Checkpoint often** (`npm run pipeline -- --slug X --checkpoint <stage>` + commit) — Pro
-sessions run shorter than Max ones, so a session should end at any checkpoint and resume without
-re-research. Plan-mode first on any multi-section pass: plan cheap, execute the plan, don't
-wander.
+**Checkpoint often** — Pro sessions run shorter than Max ones, so a session should end at a
+committed checkpoint and resume without re-research. Each stage's own prompt in `prompts/` carries
+the exact checkpoint command; this file governs how much you spend before reaching one. Plan-mode
+first on any multi-section pass: plan cheap, execute the plan, don't wander.
 
 ## Search budget (per ENTITY — a venue, route, or event; D2, 2026-08-13)
 
@@ -150,8 +150,8 @@ verified against a T0 primary source before entering the guide, same as the rest
 ### YouTube — transcripts via yt-dlp (never media)
 
 The one platform with a clean keyless path: `yt-dlp` pulls a video's subtitles/transcript without
-downloading any media. CI installs it best-effort (research-pass.yml); locally, check `yt-dlp
---version` first — if absent, skip to the indirect route below.
+downloading any media. Check `yt-dlp --version` before relying on it — if absent, skip to the
+indirect route below.
 
 1. **Find candidates by web search**, not by browsing: `"<city> travel vlog"`, `"<city> what
    locals eat"`, `"living in <city>"`. Prefer recent uploads (≤18 months — perishable facts age)

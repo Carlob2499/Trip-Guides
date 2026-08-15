@@ -1,0 +1,329 @@
+name: Change a guide
+
+# The CHANGE lifecycle: every edit to an already-built guide, whatever prompted it. It replaces
+# modify-guide.yml (scoped edit requests), revise-guide.yml (major revisions) and recert.yml's
+# execution half — three workflows, four agent chains and two plan state machines that all did the
+# same thing at different weights.
+#
+# One working agent + one fresh-context critic. The plan is built by CODE (`pipeline plan`) from
+# whatever triggered the run and validated against the guide's real group files, so there is no
+# planner agent and no persisted plan file: a change run that dies is re-run from scratch, capped
+# at three attempts.
+#
+# SOURCES
+#   request    a change-request issue (or a manual dispatch naming one). Own requests are
+#              pre-approved — the request label IS the trigger, there is no approval label.
+#   staleness  recert.yml's weekly sweep found facts past their shelf life.
+#   answers    the traveler answered a question the guide was built on an assumption for.
+#   date-lock  the trip dates went from assumed to confirmed; the calendar is re-cut.
+#   feedback   a feedback-derived proposal. Like staleness: nobody asked for it.
+#
+# LANDING: request / answers / date-lock land like any other run — auto-merge on a passing
+# evidence gate. staleness and feedback ALWAYS open a PR for a human, however green they are,
+# because nobody asked for them. That rule lives in scripts/pipeline/plan.mjs and this workflow
+# cannot override it.
+#
+# FORK GATE (Clarifying-Questions Doctrine): an agent that hits a decision only the creator can
+# make writes change-forks.json and stops. `pipeline gate forks` comments the questions on the
+# issue, applies needs-decision, and halts the run before anything lands.
+#
+# WHO CAN START ONE. The approval labels are gone because the creator's own requests are
+# pre-approved — the request label IS the trigger. But the issue TEMPLATES auto-apply that label
+# for whoever submits them, and a template is public, so "the label is the trigger" on its own
+# would let any GitHub account start an agent run on this repo with this repo's token. The
+# resolve job therefore requires the issue's AUTHOR to be the owner or a collaborator. That is
+# not a second approval step: nobody clicks anything, and an owner-filed request still runs on
+# submit. It is the same boundary the Worker draws with its owner key — without it here, that
+# key is bypassed by filing the identical issue by hand. An outsider's request still lands as an
+# issue and is still readable; it just does not spend an agent until a human dispatches it.
+on:
+  issues:
+    types: [labeled]
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "Guide slug (e.g. japan)."
+        required: true
+        type: string
+      source:
+        description: "What prompted this change."
+        required: true
+        type: choice
+        options:
+          - request
+          - staleness
+          - answers
+          - date-lock
+          - feedback
+        default: answers
+      issue:
+        description: "Issue number, when source is request or feedback."
+        required: false
+        type: string
+        default: ""
+      plan_json:
+        description: 'Structured input for the run, when the caller has it. Today only source `answers` uses it: {"source":"answers","slug":"…","answers":[{"id":"Q1","answer":"…"}]}, sent by the site''s answer flow through the Worker. The answer TEXT is data — pipeline plan writes it to change.txt and it never reaches a prompt string.'
+        required: false
+        type: string
+        default: ""
+      land:
+        description: "auto merges on a passing evidence gate; pr always leaves a PR. staleness and feedback are always pr."
+        required: false
+        type: choice
+        options:
+          - auto
+          - pr
+        default: auto
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  # Concurrency-group keys cannot read same-job step outputs, so a tiny first job resolves the
+  # slug for the guide-<slug> group below: two changes to the same guide must queue, never
+  # interleave.
+  resolve:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      ((github.event.label.name == 'modify-request' || github.event.label.name == 'revision-request') &&
+       contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association))
+    runs-on: ubuntu-latest
+    outputs:
+      slug: ${{ steps.get.outputs.slug }}
+      issue: ${{ steps.get.outputs.issue }}
+      source: ${{ steps.get.outputs.source }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      # The resolver uses the real issue-form parser (which reads the template's own field
+      # labels), not a hand-copied regex that drifts the day the template is reworded.
+      - run: npm ci
+      # EVERY `${{ }}` value this run block needs arrives as an environment variable, and the
+      # script reads "$VAR". An expression written into the `run:` body is TEXT SPLICED INTO A
+      # SHELL SCRIPT before bash ever sees it, so an issue title or a dispatch input containing a
+      # quote or a `$(…)` is code — and both are things a stranger can supply. Env vars are data.
+      # (Same rule for `steps.*.outputs.*`: those values started life as one of the above.)
+      - name: Resolve slug, issue and source
+        id: get
+        env:
+          # The change lifecycle reads the LIVE issue via `gh issue view` (see the plan step) — this
+          # job only needs the token to do it.
+          GH_TOKEN: ${{ github.token }}
+          IN_SLUG: ${{ inputs.slug }}
+          IN_ISSUE: ${{ inputs.issue || github.event.issue.number }}
+          IN_SOURCE: ${{ inputs.source }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          node scripts/pipeline.mjs resolve-change \
+            --slug "$IN_SLUG" \
+            --issue "$IN_ISSUE" \
+            --source "$IN_SOURCE" \
+            --event "$EVENT_NAME"
+
+  change:
+    needs: resolve
+    concurrency:
+      group: guide-${{ needs.resolve.outputs.slug }}
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://carlob2499.github.io/Trip-Guides' }}
+      PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
+      GOOGLE_ROUTES_KEY: ${{ secrets.GOOGLE_ROUTES_KEY }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure git identity
+        run: |
+          git config user.name  "waypoint-change[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      # Separate branch namespace from research/<slug>, so the two lifecycles never collide on a
+      # guide being worked on at the same time.
+      - name: Start or resume the change branch
+        id: branch
+        env:
+          SLUG: ${{ needs.resolve.outputs.slug }}
+          SUFFIX: ${{ needs.resolve.outputs.issue || github.run_id }}
+        run: |
+          node scripts/pipeline.mjs branch --slug "$SLUG" \
+            --prefix change --suffix "$SUFFIX"
+
+      - name: Attempt budget
+        id: budget
+        env:
+          SLUG: ${{ needs.resolve.outputs.slug }}
+          BRANCH: ${{ steps.branch.outputs.name }}
+        run: |
+          node scripts/pipeline.mjs gate budget --slug "$SLUG" \
+            --lifecycle change --branch "$BRANCH"
+
+      # Builds and validates the plan. The requester's own words are written to change.txt here —
+      # they are DATA the agent reads, never text interpolated into a prompt.
+      #
+      # ONE ISSUE-BODY SOURCE, and it is the LIVE issue (`gh issue view`, inside pipeline plan).
+      # This step used to hand it `ISSUE_BODY: github.event.issue.body` — the payload snapshot
+      # from the moment the label landed — while a workflow_dispatch run (source feedback, or a
+      # manual request) had no payload and fell back to the live read. Two sources for one fact:
+      # an edit between labelling and running gave the resolver and the planner different bodies,
+      # and only one trigger shape ever exercised the fallback. The live read works for both, is
+      # what a human sees when they open the issue, and keeps the fallback path from being dead
+      # code (Boundary Check #2). The source flags are chosen HERE, in bash, from a variable —
+      # never spliced into the command line as expression text.
+      - name: Build the change plan
+        id: plan
+        if: steps.budget.outputs.should_run == 'true'
+        env:
+          PLAN_JSON: ${{ inputs.plan_json }}
+          SLUG: ${{ needs.resolve.outputs.slug }}
+          SOURCE: ${{ needs.resolve.outputs.source }}
+          ISSUE: ${{ needs.resolve.outputs.issue }}
+          LAND: ${{ inputs.land || 'auto' }}
+        run: |
+          case "$SOURCE" in
+            request|feedback) SRC=(--from-issue "$ISSUE") ;;
+            staleness)        SRC=(--from-staleness) ;;
+            answers)          SRC=(--from-answers) ;;
+            date-lock)        SRC=(--date-lock) ;;
+            *) echo "::error::unknown change source '$SOURCE'"; exit 1 ;;
+          esac
+          node scripts/pipeline.mjs plan \
+            --slug "$SLUG" \
+            --source "$SOURCE" \
+            --land "$LAND" \
+            "${SRC[@]}"
+
+      # The "before" half of the void check: an agent step can burn a full session, exit success,
+      # and leave nothing behind. For a change run there are no stages, so HEAD is the evidence.
+      - name: Pre-agent snapshot
+        id: pre
+        if: steps.plan.conclusion == 'success'
+        env:
+          SLUG: ${{ needs.resolve.outputs.slug }}
+        run: node scripts/check-run-integrity.mjs --slug "$SLUG" --snapshot
+
+      - name: Compose change prompt
+        id: pc
+        if: steps.plan.conclusion == 'success'
+        env:
+          WP_SLUG: ${{ needs.resolve.outputs.slug }}
+        run: node scripts/pipeline.mjs prompt prompts/change.md > /dev/null
+
+      - name: Run change agent
+        if: steps.pc.conclusion == 'success'
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          allowed_bots: "github-actions[bot]"
+          show_full_output: true
+          # A scoped edit is Sonnet work — there is no dual-pass reconcile judgment here.
+          claude_args: |
+            --model claude-sonnet-5
+            --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
+          prompt: ${{ steps.pc.outputs.text }}
+
+      # Blocking forks stop the run here, before the critic and before landing.
+      - name: Fork gate
+        id: forks
+        if: steps.plan.conclusion == 'success'
+        env:
+          SLUG: ${{ needs.resolve.outputs.slug }}
+          ISSUE: ${{ needs.resolve.outputs.issue }}
+        run: |
+          node scripts/pipeline.mjs gate forks --slug "$SLUG" \
+            --issue "$ISSUE"
+
+      - name: Compose critic prompt
+        id: pcc
+        if: steps.forks.outputs.blocked == 'false'
+        env:
+          WP_SLUG: ${{ needs.resolve.outputs.slug }}
+        run: node scripts/pipeline.mjs prompt prompts/change-critic.md > /dev/null
+
+      - name: Run change critic
+        if: steps.pcc.conclusion == 'success'
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          allowed_bots: "github-actions[bot]"
+          show_full_output: true
+          claude_args: |
+            --model claude-opus-5
+            --fallback-model claude-sonnet-5
+            --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
+          prompt: ${{ steps.pcc.outputs.text }}
+
+      # HARD GATE: a change that landed without a written sweep record is the silent-skip failure
+      # the continuity doctrine exists to prevent. "No ripples" is a valid entry; no record is not.
+      - name: Continuity artifact gate
+        if: steps.forks.outputs.blocked == 'false'
+        env:
+          SLUG: ${{ needs.resolve.outputs.slug }}
+        run: |
+          node scripts/pipeline.mjs gate artifacts --slug "$SLUG" \
+            --stage change --file /tmp/change-summary.md
+
+      # The PR title is assembled in bash from variables rather than by expression concatenation,
+      # for the same reason as everything above: it is a shell argument, not a template.
+      - name: Land the branch
+        id: land
+        if: steps.forks.outputs.blocked == 'false'
+        env:
+          SLUG: ${{ needs.resolve.outputs.slug }}
+          SOURCE: ${{ needs.resolve.outputs.source }}
+          ISSUE: ${{ needs.resolve.outputs.issue }}
+          BRANCH: ${{ steps.branch.outputs.name }}
+          LAND: ${{ steps.plan.outputs.land }}
+        run: |
+          TITLE="change($SLUG): $SOURCE"
+          if [ -n "$ISSUE" ]; then TITLE="$TITLE #$ISSUE"; fi
+          node scripts/pipeline.mjs land --slug "$SLUG" \
+            --branch "$BRANCH" --gate \
+            --land "$LAND" \
+            --prepend /tmp/change-summary.md \
+            --body-file /tmp/pr-body.md \
+            --title "$TITLE"
+
+      # Report back on the originating issue. A merged change closes it; a draft PR leaves it open
+      # until a human finishes the edit.
+      - name: Report back on the issue
+        if: needs.resolve.outputs.issue != '' && steps.land.conclusion == 'success'
+        env:
+          ISSUE: ${{ needs.resolve.outputs.issue }}
+          OUTCOME: ${{ steps.land.outputs.outcome }}
+          PR: ${{ steps.land.outputs.pr }}
+        run: |
+          node scripts/pipeline.mjs report --issue "$ISSUE" \
+            --outcome "$OUTCOME" --pr "$PR" \
+            --summary /tmp/change-summary.md
+
+      # A change run has no stages to batch, so this is purely the void check: an agent chain that
+      # burned the session and left nothing durable. No auto-retry here — a change run re-runs from
+      # scratch, and the attempt cap is what stops it repeating forever — so it enforces directly.
+      - name: Run-integrity gate
+        if: always() && steps.budget.outputs.should_run == 'true' && steps.forks.outputs.blocked == 'false'
+        env:
+          SLUG: ${{ needs.resolve.outputs.slug }}
+          PRE_HEAD: ${{ steps.pre.outputs.head }}
+          PRE_STAGES: ${{ steps.pre.outputs.stages }}
+        run: |
+          node scripts/pipeline.mjs gate integrity --slug "$SLUG" --enforce \
+            --pre-head "$PRE_HEAD" --pre-stages "$PRE_STAGES"

@@ -1,4 +1,4 @@
-// B4 (docs/PLAN_EVIDENCE_FIRST.md) — fact-usage index: bidirectional traceability over a
+// B4 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST) — fact-usage index: bidirectional traceability over a
 // guide's perishable-fact registry, derived at query time and never stored.
 //
 // `{{fact:id}}` interpolation (src/lib/facts.mjs) answers fact→prose at build — substitute the

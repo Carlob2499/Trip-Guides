@@ -5,7 +5,7 @@
 // @protects-file The guide-building pipeline runs its stages in order and stops when one fails.
 
 import { describe, it, expect, afterAll } from "vitest";
-import { existsSync, rmSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import path from "node:path";
 import {
@@ -16,7 +16,8 @@ import {
 const ROOT = path.resolve(import.meta.dirname, "../..");
 
 const SLUG = "zz-pipeline-test"; // sorts last, never a real guide
-afterAll(() => { if (existsSync(statePath(SLUG))) rmSync(statePath(SLUG)); });
+const RUN_DIR = path.join(ROOT, "guides-intake", SLUG);
+afterAll(() => { rmSync(RUN_DIR, { recursive: true, force: true }); });
 
 describe("nextStage (pure)", () => {
   it("no state → the first stage", () => {
@@ -43,9 +44,15 @@ describe("statusLines (pure)", () => {
     expect(out).toMatch(/IN PROGRESS/);
     expect(out).toMatch(/NEXT \(passA\)/);
   });
-  it("all cleared → ready for graduation", () => {
+  it("all cleared → complete, and names the ONE manual publish path", () => {
+    // There is no human publication step to wait for any more: a run that clears every stage
+    // publishes itself on landing. What the status still owes a reader is the single override
+    // command — and the fact that it runs the same evidence gate, not a bare flag flip.
     const all = Object.fromEntries(STAGE_ORDER.map((s) => [s, "2026-01-01T00:00:00Z"]));
-    expect(statusLines(SLUG, { updatedAt: "2026-01-01T00:00:00Z", stages: all }).join("\n")).toMatch(/READY for human graduation/);
+    const out = statusLines(SLUG, { updatedAt: "2026-01-01T00:00:00Z", stages: all }).join("\n");
+    expect(out).toMatch(/COMPLETE/);
+    expect(out).toMatch(/pipeline\.mjs publish --slug/);
+    expect(out).toMatch(/networked verify/);
   });
 });
 
@@ -114,9 +121,15 @@ describe("bumpAttempt (circuit breaker)", () => {
   });
 });
 
+describe("statePath (the per-guide run-state directory)", () => {
+  it("resolves to guides-intake/<slug>/state.json, not a sibling file", () => {
+    expect(path.relative(ROOT, statePath(SLUG)).split(path.sep)).toEqual(["guides-intake", SLUG, "state.json"]);
+  });
+});
+
 describe("CLI slug guard (S4 — path traversal)", () => {
   it("--slug ../../x exits non-zero and writes nothing outside guides-intake", () => {
-    const traversalTarget = path.resolve(ROOT, "..", "..", "x.state.json");
+    const traversalTarget = path.resolve(ROOT, "..", "x", "state.json");
     expect(() => {
       execFileSync("node", [path.join(ROOT, "scripts/pipeline.mjs"), "--slug", "../../x", "--status"], {
         cwd: ROOT,
@@ -124,6 +137,47 @@ describe("CLI slug guard (S4 — path traversal)", () => {
       });
     }).toThrow();
     expect(existsSync(traversalTarget)).toBe(false);
+  });
+});
+
+describe("resolve-change CLI (the change lifecycle's front door)", () => {
+  const OUT_DIR = path.join(ROOT, "guides-intake", `${SLUG}-out`);
+  const outFile = path.join(OUT_DIR, "github_output");
+
+  const run = (args) => {
+    mkdirSync(OUT_DIR, { recursive: true });
+    writeFileSync(outFile, "");
+    execFileSync("node", [path.join(ROOT, "scripts/pipeline.mjs"), "resolve-change", ...args], {
+      cwd: ROOT,
+      stdio: "pipe",
+      env: { ...process.env, GITHUB_OUTPUT: outFile },
+    });
+    return readFileSync(outFile, "utf8");
+  };
+  afterAll(() => { rmSync(OUT_DIR, { recursive: true, force: true }); });
+
+  it("emits slug, issue and source for a dispatch", () => {
+    const out = run(["--slug", "korea", "--issue", "42", "--source", "request", "--event", "workflow_dispatch"]);
+    expect(out).toContain("slug=korea\n");
+    expect(out).toContain("issue=42\n");
+    expect(out).toContain("source=request\n");
+  });
+
+  it("accepts a run with no issue at all (staleness, date-lock)", () => {
+    expect(run(["--slug", "korea", "--source", "staleness", "--event", "workflow_dispatch"])).toContain("issue=\n");
+  });
+
+  it("REFUSES an issue that isn't a number, before anything is emitted", () => {
+    // The value becomes a step output, a branch suffix, a `gh issue` argument and a PR title.
+    for (const bad of ["12; rm -rf /", "12\nslug=other", "abc", "-1", "1.5", "$(id)"]) {
+      expect(() => run(["--slug", "korea", "--issue", bad, "--event", "workflow_dispatch"])).toThrow();
+      expect(readFileSync(outFile, "utf8")).toBe("");
+    }
+  });
+
+  it("REFUSES a slug the pipeline could not address", () => {
+    expect(() => run(["--slug", "../../x", "--event", "workflow_dispatch"])).toThrow();
+    expect(readFileSync(outFile, "utf8")).toBe("");
   });
 });
 

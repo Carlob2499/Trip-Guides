@@ -149,9 +149,6 @@ const thumbUrlFor = (photo) =>
 
 async function readGuide(entryName) {
   const p = path.join(GUIDES_DIR, entryName);
-  if (entryName.endsWith(".json")) {
-    return { slug: entryName.replace(/\.json$/, ""), guide: JSON.parse(await readFile(p, "utf8")) };
-  }
   const files = (await readdir(p)).filter((f) => f.endsWith(".json"));
   if (!files.includes("_guide.json")) return null;
   const meta = JSON.parse(await readFile(path.join(p, "_guide.json"), "utf8"));
@@ -194,7 +191,7 @@ if (isMain(import.meta.url)) {
   const argv = process.argv.slice(2);
   const only = argv.includes("--slug") ? argv[argv.indexOf("--slug") + 1] : null;
   const entries = (await readdir(GUIDES_DIR, { withFileTypes: true }))
-    .filter((e) => (e.isFile() && e.name.endsWith(".json")) || e.isDirectory())
+    .filter((e) => e.isDirectory())
     .map((e) => e.name);
   for (const name of entries) {
     const g = await readGuide(name);

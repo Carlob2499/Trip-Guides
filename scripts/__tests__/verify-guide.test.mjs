@@ -20,9 +20,73 @@ vi.mock("../audit/check-staleness.mjs", () => ({ checkStaleness: (...args) => ch
 vi.mock("../audit/check-links.mjs", () => ({ checkLinks: (...args) => checkLinksMock(...args) }));
 vi.mock("../audit/check-photos.mjs", () => ({ checkPhotos: (...args) => checkPhotosMock(...args) }));
 
-const { evaluateGuide, renderMarkdown, report, verify, checkCoverage } = await import("../verify-guide.mjs");
+const { evaluateGuide, renderMarkdown, report, verify, checkCoverage, sourceCoverage, evaluateReadiness } = await import("../verify-guide.mjs");
 
 const CLEAN_STALENESS = { stale: [], sections: [], noDate: [], drafts: [] };
+
+// sourceCoverage / evaluateReadiness — folded in from the former scripts/guide-readiness.mjs
+// (2026-08-15). No dedicated test file existed for that module; these pin the behavior verify-guide
+// now owns directly.
+describe("sourceCoverage (folded in from guide-readiness.mjs)", () => {
+  it("counts a contentful fact section with source_url as sourced", () => {
+    const guide = { sections: [{ type: "prose", group: "Overview", title: "About", body: "A real paragraph.", source_url: "https://x.example" }] };
+    const c = sourceCoverage(guide);
+    expect(c).toEqual({ total: 1, sourced: 1, pct: 1 });
+  });
+
+  it("counts a contentful fact section with an inline <a href> citation as sourced", () => {
+    // Single-quoted href, matching this repo's own guide-content convention — JSON.stringify
+    // escapes double quotes to `\"`, which the isSourced regex does not match through.
+    const guide = { sections: [{ type: "prose", group: "Overview", title: "About", body: "See <a href='https://x.example'>the source</a>." }] };
+    const c = sourceCoverage(guide);
+    expect(c.sourced).toBe(1);
+  });
+
+  it("counts a contentful fact section with neither as unsourced", () => {
+    const guide = { sections: [{ type: "prose", group: "Overview", title: "About", body: "A real paragraph with no citation." }] };
+    const c = sourceCoverage(guide);
+    expect(c).toEqual({ total: 1, sourced: 0, pct: 0 });
+  });
+
+  it("excludes an empty scaffold section (no body/items/steps/checklist)", () => {
+    const guide = { sections: [{ type: "prose", group: "Overview", title: "About", body: "" }] };
+    expect(sourceCoverage(guide)).toEqual({ total: 0, sourced: 0, pct: 1 });
+  });
+
+  it("excludes sections in a References group by design", () => {
+    const guide = { sections: [{ type: "list", group: "References", title: "Sources", items: ["one", "two"] }] };
+    expect(sourceCoverage(guide)).toEqual({ total: 0, sourced: 0, pct: 1 });
+  });
+
+  it("excludes non-fact section types (e.g. map, sights)", () => {
+    const guide = { sections: [{ type: "map", group: "Overview", points: [{ name: "x" }] }] };
+    expect(sourceCoverage(guide)).toEqual({ total: 0, sourced: 0, pct: 1 });
+  });
+
+  it("returns pct 1 when there are zero fact sections (vacuously full)", () => {
+    const guide = { sections: [] };
+    expect(sourceCoverage(guide).pct).toBe(1);
+  });
+});
+
+describe("evaluateReadiness (folded in from guide-readiness.mjs)", () => {
+  it("passes when check-research reports no blocking (warn) findings", () => {
+    const guide = { verified: "Checked Jun 2026", sections: [{ type: "prose", group: "Overview", title: "About", body: "A lovely city with much to see." }] };
+    const r = evaluateReadiness(guide, "clean");
+    expect(r.pass).toBe(true);
+    expect(r.warns).toEqual([]);
+    expect(r.slug).toBe("clean");
+    expect(r.coverage).toBeTruthy();
+  });
+
+  it("fails when check-research reports a blocking (warn) finding, but still reports infos separately", () => {
+    const guide = { sections: [{ type: "panel", group: "Plan", title: "When you land", body: "" }] };
+    const r = evaluateReadiness(guide, "empty");
+    expect(r.pass).toBe(false);
+    expect(r.warns.length).toBeGreaterThan(0);
+    expect(r.warns.every((f) => f.severity === "warn")).toBe(true);
+  });
+});
 
 describe("evaluateGuide verdict", () => {
   it("a clean published guide PASSes with no blockers", () => {
@@ -106,7 +170,7 @@ describe("evaluateGuide verdict", () => {
   });
 });
 
-// B3 (docs/PLAN_EVIDENCE_FIRST.md): facts.json hygiene is ADVISORY ONLY this packet — the
+// B3 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST): facts.json hygiene is ADVISORY ONLY this packet — the
 // DO NOT TOUCH boundary its own task packet names ("existing blockers list semantics"). These
 // pin that a guide riddled with hygiene findings still PASSes on hygiene grounds alone; E1 is
 // the (separate, future) packet that may promote some of these to real blockers.

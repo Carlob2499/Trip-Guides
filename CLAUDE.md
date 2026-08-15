@@ -27,8 +27,10 @@ Never start by writing content. Fixed order: **(1)** intake (`docs/standards/new
 — priorities ranked, dates set) → **(2)** spec section types from the ranking →
 **(3)** research (primary sources; depth on the top 2–3 priorities) → **(4)** write
 with each perishable fact's source + date attached → **(5)** run the bar test above →
-**(6)** save the intake doc beside the guide. The `waypoint-guide-author` skill carries
-the operational detail and drives this flow.
+**(6)** save the run state in `guides-intake/<slug>/` — `intake.md` is the traveler's intent,
+frozen once the guide is scaffolded; `ledger.md` is everything research learned, appended as it
+goes; never write one where the other belongs. The `waypoint-guide-author` skill carries the
+operational detail and drives this flow.
 
 ---
 
@@ -209,7 +211,7 @@ rule's "when a change forks the plan, stop and ask" to ALL work:
   `AskUserQuestion` (plus any newly-warranted questions) and waits for explicit go
   BEFORE building. Mid-session, a newly-discovered fork gets the same treatment.
 - **Headless surfaces never block on a chat prompt** — they use their built mechanisms:
-  revise-guide's fork gate pauses the run and asks via issue comment; new-guide posts
+  a change run's fork gate pauses and asks via issue comment; new-guide posts
   traveler questions as non-blocking issue comments with the `**Assumed:**` line stating
   what shipped. A headless run that hits an unmediated fork stops and records it; it does
   not guess.
@@ -281,8 +283,11 @@ a genuinely new workflow needs it.
   `scripts/__tests__/docs-integrity.test.mjs`.
 - **Every guide is a directory — no exceptions, drafts included** (`src/content/guides/<slug>/`
   — `_guide.json` meta + `NN-<group>.json` per tab group + `facts.json`). One shape, gated by
-  `scripts/__tests__/guide-shape-uniform.test.mjs`. Import an outside single-file guide with
-  `npm run split-guide -- <slug>`, then delete the flat file.
+  `scripts/__tests__/guide-shape-uniform.test.mjs`. The flat `<slug>.json` shape is gone and
+  nothing reads it; `writeGuideDir` (`scripts/lib/guide-shape.mjs`) is the one writer of the
+  layout, used by the scaffolder and the Composer alike. Its run state is the sibling directory
+  `guides-intake/<slug>/` (`intake.md` · `ledger.md` · `state.json`) — machine-written, tracked
+  in git because git is the durable store, and the resume point every pipeline run reads.
 - **A perishable fact may NOT be in the group file — check `facts.json` first.**
   `facts.json` is the perishable-fact registry: one row per price/fare/dated figure (claim ·
   value · `source_url` · `verified_on` · `shelf_life` · `state`), referenced from prose as
@@ -306,7 +311,9 @@ a genuinely new workflow needs it.
 ### Issue tracker
 
 Issues and specs live as GitHub issues on `Carlob2499/Trip-Guides`, via the `gh` CLI.
-See `docs/reference/issue-tracker.md`.
+See `docs/reference/issue-tracker.md`. `gh` is the maintainer's tool, not the product's: the
+creator's own surfaces file issues and start runs through the site's Worker front door
+(`worker/README.md`), so GitHub never appears in the UX.
 
 ### Domain docs
 

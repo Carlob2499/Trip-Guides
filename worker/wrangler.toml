@@ -1,15 +1,20 @@
-# Cloudflare Worker config for the zero-click intake proxy (W5). Deployed by
-# .github/workflows/deploy-worker.yml (cloudflare/wrangler-action), never by hand.
+# Cloudflare Worker config for the site's backend (W5 intake proxy, widened in batch 3 to the
+# change/answer/approve endpoints). Deployed by .github/workflows/deploy-worker.yml
+# (cloudflare/wrangler-action), never by hand.
 name = "waypoint-intake"
 main = "index.mjs"
 compatibility_date = "2024-11-01"
 
-# Non-secret config. The one secret (GH_TOKEN) is set separately with
-# `npx wrangler secret put GH_TOKEN` — never committed.
+# Non-secret config. The two secrets (GH_TOKEN, OWNER_KEY) are set separately with
+# `npx wrangler secret put <NAME>` — never committed.
 [vars]
 REPO = "Carlob2499/Trip-Guides"
 ALLOWED_ORIGIN = "https://carlob2499.github.io"
 AUTO_CAP = "3"
+# Explicit over ambient (CLAUDE.md Boundary Check #4): name the ref and the workflow file the
+# owner endpoints dispatch, rather than letting the API resolve a default that can change.
+DISPATCH_REF = "main"
+CHANGE_WORKFLOW = "change.yml"
 
 # Optional per-IP weekly rate limiting. The Worker runs fine without it (the counter is simply
 # skipped); to enable, create the namespace once and uncomment with its id:

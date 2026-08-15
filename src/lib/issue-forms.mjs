@@ -4,14 +4,14 @@
 // (`### Guide slug\n\n<value>`), and the label lives in a YAML template the parser never
 // reads. Rename the label and the parser silently stops finding the field — the workflow
 // then reports "no Guide slug field" on a perfectly well-formed issue. `modify-schema.mjs`
-// was created to close exactly that for the modify form; revise and graduate still had
-// hand-typed literals and, unlike new-guide and modify, no contract test at all.
+// was created to close exactly that for the modify form; revise still had hand-typed
+// literals and, unlike new-guide and modify, no contract test at all.
 //
 // `issue-forms.test.mjs` asserts each array against its checked-in template.
 //
-// NOTE ON `Guide slug`: all three forms use the same label, deliberately — one vocabulary
-// for the owner. It is written once here (SLUG_FIELD) and spread into each set, so the three
-// can't drift apart by a stray capital letter.
+// NOTE ON `Guide slug`: both forms use the same label, deliberately — one vocabulary for the
+// owner. It is written once here (SLUG_FIELD) and spread into each set, so the two can't drift
+// apart by a stray capital letter.
 
 /** Every form opens with the same slug input. */
 export const SLUG_FIELD = { id: "slug", label: "Guide slug", kind: "input", required: true };
@@ -32,12 +32,6 @@ export const REVISE_FIELDS = [
   { id: "what-changed", label: "What changed and why this needs re-research", kind: "textarea", required: true },
   { id: "sections", label: "Sections", kind: "input", required: false },
   { id: "deadline", label: "Deadline", kind: "input", required: false },
-];
-
-/** `.github/ISSUE_TEMPLATE/graduate-guide.yml` — nominate a draft for publication. */
-export const GRADUATE_FIELDS = [
-  SLUG_FIELD,
-  { id: "why", label: "Why is this ready?", kind: "textarea", required: false },
 ];
 
 /** Look a label up by field id. Throws rather than returning undefined: a typo'd id would

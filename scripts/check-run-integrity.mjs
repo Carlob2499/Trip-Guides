@@ -42,7 +42,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 export const MIN_GAP_SECONDS = 120;
 
 export function stateRelPath(slug) {
-  return `guides-intake/${slug}.state.json`;
+  return `guides-intake/${slug}/state.json`;
 }
 
 export function countCleared(state) {

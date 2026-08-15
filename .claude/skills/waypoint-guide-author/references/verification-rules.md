@@ -136,8 +136,8 @@ perishable items before travel. Match the pattern in the korea / denmark guides 
 doubles as the reader's pre-trip re-verification checklist.
 
 **On drafts** the stamp stays `⚠`-prefixed (it renders as the masthead warning pill) with the
-date + re-check list riding along. Dropping the `⚠` / `draft` is the human graduation call, never
-yours.
+date + re-check list riding along. Dropping the `⚠` / `draft` is the landing step's call after
+the evidence gate passes, never yours.
 
 **Per-section stamps** — sections whose facts age fastest (restaurant hours, event rosters)
 should carry their own verified date where practical, since the guide-level date will drift past

@@ -1,9 +1,9 @@
 // guide-template.jsonc — the fill-in model for a NEW country guide.
 //
 // This file is intentionally NOT in src/content/guides/, so it is never published.
-// To make a real guide: copy the shape below into src/content/guides/<country>.json
-// (or split into a src/content/guides/<country>/ directory — _guide.json meta +
-// NN-<group>.json section-array files, once it graduates — see `npm run split-guide`),
+// To make a real guide: lay the shape below out as a src/content/guides/<country>/
+// directory — _guide.json (every top-level field except sections) + one NN-<group>.json
+// section-array file per tab group + facts.json — which is the ONE shape the loader reads,
 // remove the comments (real .json files can't have them), fill every field with
 // VERIFIED facts, and delete any section you genuinely don't need. Research every
 // price/time/fact and every photo filename before publishing (see CLAUDE.md).

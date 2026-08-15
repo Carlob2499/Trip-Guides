@@ -160,5 +160,12 @@ export async function runExport({ dryRun = false } = {}) {
 
 if (isMain(import.meta.url)) {
   const dryRun = process.argv.includes("--dry-run");
-  await runExport({ dryRun });
+  const working = await runExport({ dryRun });
+  // The count gates the whole synthesis half of feedback-export.yml. It used to be re-derived
+  // there by a `node -e` one-liner re-reading the file this script just wrote; the number is
+  // already in hand here.
+  if (process.env.GITHUB_OUTPUT) {
+    const { appendFileSync } = await import("node:fs");
+    appendFileSync(process.env.GITHUB_OUTPUT, `count=${working.newSubmissionCount || 0}\n`);
+  }
 }

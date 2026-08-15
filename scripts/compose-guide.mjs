@@ -35,12 +35,12 @@
 //            sign-off). Live guides are NEVER auto-recomposed.
 //   --write  applies the composition — refused unless the guide is a draft
 //            (`draft: true`) or the creator explicitly passes --creator-signed.
-//            Writing reuses split-guide.mjs, so the directory shape and NN-<group>.json
+//            Writing reuses lib/guide-shape.mjs, so the directory shape and NN-<group>.json
 //            naming decisions stay in exactly one place.
 import path from "node:path";
-import { readFile, writeFile, readdir, rm } from "node:fs/promises";
+import { readFile, readdir, rm } from "node:fs/promises";
 import { GUIDES_DIR, isMain } from "./audit/lib.mjs";
-import { splitGuide } from "./split-guide.mjs";
+import { writeGuideDir } from "./lib/guide-shape.mjs";
 import { isSectionFile } from "../src/lib/facts.mjs";
 
 /* ── the rule constants (one home, exported for the tests) ─────────────────── */
@@ -172,7 +172,7 @@ export function composeSections(sections, { tabBudget = 10 } = {}) {
     if (order[k] !== firstAppearance[k]) { moves.push(`reorder: ${order.join(" · ")}`); break; }
   }
 
-  // Emit: group-contiguous (split-guide's invariant), original order within each group,
+  // Emit: group-contiguous (writeGuideDir's invariant), original order within each group,
   // folded units appended to their host after its own units. Facet fields stay on the
   // unit — they are the unit's identity for the NEXT composition.
   const out = [];
@@ -227,11 +227,13 @@ export async function applyComposition(slug, meta, sections, guidesDir = GUIDES_
   for (const f of (await readdir(dir)).filter(isSectionFile)) {
     await rm(path.join(dir, f));
   }
-  const flatSeed = path.join(guidesDir, `${slug}.json`);
-  await writeFile(flatSeed, JSON.stringify({ ...meta, sections }, null, 2) + "\n");
-  const res = await splitGuide(slug, { guidesDir });
-  if (!res.ok) throw new Error(`split failed after compose: ${res.message}`);
-  return res;
+  try {
+    return await writeGuideDir(slug, { ...meta, sections }, { guidesDir });
+  } catch (err) {
+    // Group-contiguity is the Composer's own invariant, so a throw here is a compose bug, not a
+    // caller error — say which side failed instead of surfacing a bare shape complaint.
+    throw new Error(`writing the composed guide failed: ${err.message}`, { cause: err });
+  }
 }
 
 /* ── CLI ───────────────────────────────────────────────────────────────────── */

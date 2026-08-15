@@ -1,4 +1,4 @@
-// Tests for scripts/lib/destination-schema.mjs (D1, docs/PLAN_EVIDENCE_FIRST.md): the
+// Tests for scripts/lib/destination-schema.mjs (D1, docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST): the
 // destination-knowledge schema and its three seed files.
 
 // @protects-file Destination config obeys the same fact discipline as facts.json — no URL
@@ -100,7 +100,7 @@ describe("validateDestinationConfig", () => {
 // language, koyo source list, GTFS feed entries, tax-free pointer."
 describe("the three seed files (ACCEPTANCE)", () => {
   it("all three seeds validate against the schema", async () => {
-    for (const slug of ["japan", "korea", "us"]) {
+    for (const slug of ["japan", "korea"]) {
       const data = await seed(slug);
       const r = validateDestinationConfig(data);
       expect(r.ok, `${slug}: ${r.error}`).toBe(true);
@@ -117,7 +117,7 @@ describe("the three seed files (ACCEPTANCE)", () => {
   });
 
   it("every URL-bearing field in every seed has a verified_on (re-checks the real files, not just the schema)", async () => {
-    for (const slug of ["japan", "korea", "us"]) {
+    for (const slug of ["japan", "korea"]) {
       const data = await seed(slug);
       const pointers = [
         data.travelAdvisory,

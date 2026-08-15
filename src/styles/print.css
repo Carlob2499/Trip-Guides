@@ -12,9 +12,9 @@
 */
 @media print {
   /* Hide every interactive or navigation element. U7: .cold-open/.whats-next/
-     .draft-graduate/.next-cta/.lnw-cta were missing — maker/tool CTAs (dismiss this
-     framing strip, jump to today, graduate this draft, log your trip feedback) have no
-     purpose on paper and printed as clutter/dead links. */
+     .draft-progress/.next-cta/.lnw-cta were missing — maker/tool CTAs (dismiss this
+     framing strip, jump to today, track this draft's progress, log your trip feedback) have
+     no purpose on paper and printed as clutter/dead links. */
   .topbar, nav.topbar, .sticky-chrome,
   .botbar, .sheet, .sheet-backdrop,
   .split-wrap,
@@ -31,7 +31,7 @@
      one whole-day URL per day (.day-route, deliberately kept), so the station's copy would be
      the same URL a second time. The legs themselves — names and straight-line distance — print. */
   .tools-route-map, .tools-route-all,
-  .cold-open, .whats-next, .draft-graduate, .next-cta, .lnw-cta,
+  .cold-open, .whats-next, .draft-progress, .next-cta, .lnw-cta,
   /* The provenance dot's popover only ever opens via a JS click handler (data-open),
      which paper can't trigger — leaving the dot renders a dead "●" glyph with no way
      to reach the CHECKED date/source it names. */

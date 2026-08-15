@@ -224,15 +224,7 @@ describe("readGuides (filesystem, isolated temp dir)", () => {
     await rm(guidesDir, { recursive: true, force: true });
   });
 
-  it("reads a flat-file guide", async () => {
-    await writeFile(path.join(guidesDir, "korea.json"), JSON.stringify({ title: "Korea", sections: [] }));
-    const guides = await readGuides(guidesDir);
-    expect(guides).toEqual([
-      { file: "korea.json", slug: "korea", raw: JSON.stringify({ title: "Korea", sections: [] }), guide: { title: "Korea", sections: [] } },
-    ]);
-  });
-
-  it("reads a directory-shaped (split) guide, assembling sections in filename-sort order", async () => {
+  it("reads a guide directory, assembling sections in filename-sort order", async () => {
     const dir = path.join(guidesDir, "denmark");
     await mkdir(dir, { recursive: true });
     await writeFile(path.join(dir, "_guide.json"), JSON.stringify({ title: "Denmark" }));
@@ -261,26 +253,21 @@ describe("readGuides (filesystem, isolated temp dir)", () => {
     expect(await readGuides(guidesDir)).toEqual([]);
   });
 
-  it("skips a malformed guide file (invalid JSON) rather than throwing", async () => {
-    await writeFile(path.join(guidesDir, "broken.json"), "{ not valid json");
-    await writeFile(path.join(guidesDir, "ok.json"), JSON.stringify({ title: "OK" }));
+  it("skips a malformed guide (invalid JSON) rather than throwing", async () => {
+    const broken = path.join(guidesDir, "broken");
+    await mkdir(broken, { recursive: true });
+    await writeFile(path.join(broken, "_guide.json"), "{ not valid json");
+    const ok = path.join(guidesDir, "ok");
+    await mkdir(ok, { recursive: true });
+    await writeFile(path.join(ok, "_guide.json"), JSON.stringify({ title: "OK" }));
     const guides = await readGuides(guidesDir);
     expect(guides).toHaveLength(1);
     expect(guides[0].slug).toBe("ok");
   });
 
-  it("ignores non-JSON files at the top level", async () => {
+  it("ignores loose files at the top level — a guide is a directory, never a flat <slug>.json", async () => {
     await writeFile(path.join(guidesDir, "README.md"), "# not a guide");
+    await writeFile(path.join(guidesDir, "stray.json"), JSON.stringify({ title: "Stray", sections: [] }));
     expect(await readGuides(guidesDir)).toEqual([]);
-  });
-
-  it("E8·2: when a slug has both shapes, the flat file wins (shared tie-break, same as resolveGuidePath)", async () => {
-    await writeFile(path.join(guidesDir, "dupe.json"), JSON.stringify({ title: "Flat wins" }));
-    const dir = path.join(guidesDir, "dupe");
-    await mkdir(dir, { recursive: true });
-    await writeFile(path.join(dir, "_guide.json"), JSON.stringify({ title: "Directory loses" }));
-    const guides = await readGuides(guidesDir);
-    expect(guides).toHaveLength(1);
-    expect(guides[0].guide.title).toBe("Flat wins");
   });
 });

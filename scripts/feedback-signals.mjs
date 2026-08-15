@@ -14,6 +14,8 @@
 // so the plan doc's "any group 100% skipped" candidate signal is NOT implementable today —
 // noted rather than silently approximated.
 
+import { isMain } from "./audit/lib.mjs";
+
 export const THRESHOLDS = {
   overallMax: 3, // avg overall ≤ this trips the signal
   pacingMax: 2, // avg pacing ≤ this trips the signal
@@ -41,4 +43,18 @@ export function divergenceSignals(summaries, thresholds = THRESHOLDS) {
     if (signals.length) out.push({ slug: s.slug, signals, counts: { submissions: s.count, skips } });
   }
   return out;
+}
+
+// CLI: read the export step's working file, write revision-signals.json, print the count.
+// Lifted out of feedback-export.yml, where it was a ten-line `node --input-type=module -e`
+// heredoc that no linter or test could see.
+if (isMain(import.meta.url)) {
+  const { readFileSync, writeFileSync, appendFileSync } = await import("node:fs");
+  const working = JSON.parse(readFileSync("feedback-export.working.json", "utf8"));
+  const signals = divergenceSignals(working.summaries || []);
+  const pretty = JSON.stringify(signals, null, 2);
+  writeFileSync("revision-signals.json", pretty + "\n");
+  console.log(pretty);
+  if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, `count=${signals.length}\n`);
+  if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, `### Divergence signals\n\n\`\`\`json\n${pretty}\n\`\`\`\n`);
 }

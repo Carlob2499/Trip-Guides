@@ -24,13 +24,13 @@ import { z } from "zod";
 export const NULLISH_VALUES = ["undecided", "— none —"];
 const NULLISH = new Set(NULLISH_VALUES);
 
-// C1 (docs/PLAN_EVIDENCE_FIRST.md): how firm a date-like or decision-like answer actually is.
+// C1 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST): how firm a date-like or decision-like answer actually is.
 // "assumed" is deliberately the FIRST option (dropdown index 0 = its default) — unlike the
 // undecided/— none — nullish values above, a certainty field's default is a REAL, meaningful
 // value, not "unset": an intake with no certainty stated is treated as "assumed", not blank.
 // This is what makes the Japan case representable — "Oct 15 (target)" instead of a bare date
-// that silently reads as locked (guides-intake/japan.md's real, still-unresolved ambiguity;
-// see docs/PLAN_EVIDENCE_FIRST.md's case 2).
+// that silently reads as locked (guides-intake/japan/intake.md's real, still-unresolved ambiguity;
+// case 2 in docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST).
 export const CERTAINTY_OPTIONS = ["assumed", "fixed", "target", "flexible", "unknown", "none"];
 
 // The intake fields, in issue-form order. Each entry carries everything the three surfaces need:
@@ -125,8 +125,8 @@ export const FIELDS = [
 
 // Issue Forms render each answered field as "### <Label>\n\n<value>"; an empty input renders the
 // literal "_No response_". Pull a field's value out of the body by its label.
-// A4: exported so graduate-guide.mjs (and anything importing `field` from there, e.g.
-// parse-modify-issue.mjs) shares this ONE regex instead of keeping its own byte-identical copy.
+// A4: exported so every issue-body parser in the pipeline shares this ONE regex instead of
+// keeping its own byte-identical copy.
 export function matchField(body, label) {
   const esc = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const m = String(body || "").match(new RegExp("###\\s+" + esc + "\\s*\\n+([\\s\\S]*?)(?=\\n###\\s|$)"));

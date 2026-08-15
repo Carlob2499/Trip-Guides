@@ -95,6 +95,13 @@
 .cr-btn[hidden] { display: none; }
 
 .cr-foot { font-size: var(--text-micro); color: var(--muted); margin-top: .8rem; line-height: 1.45; }
+.cr-foot[hidden], .cr-nav[hidden], .cr-sent[hidden] { display: none; }
+
+/* The worker path's confirmation — it replaces the whole wizard, so it carries the weight of a
+   result rather than a caption. tabindex=-1 + focus() on reveal, since the panes it replaced
+   held the focus. */
+.cr-sent { font-family: var(--font-display); font-weight: 560; font-size: var(--text-lead); color: var(--ink); margin: .4rem 0 0; line-height: 1.4; }
+.cr-sent:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 
 @media (prefers-reduced-motion: reduce) {
   .cr-chip, .cr-btn, .cr-close { transition: none; }

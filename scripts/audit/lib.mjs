@@ -11,7 +11,7 @@ import { isSectionFile, interpolateFacts, unusedFactIds } from "../../src/lib/fa
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 export const GUIDES_DIR = path.join(ROOT, "src", "content", "guides");
-// C2 (docs/PLAN_EVIDENCE_FIRST.md): scaffold-guide.mjs keeps its own private INTAKE_DIR const
+// C2 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST): scaffold-guide.mjs keeps its own private INTAKE_DIR const
 // (unchanged, not worth touching working code for a rename) — this is the same path, exported
 // here so audit scripts that need to READ an intake doc (not write the scaffold) share one home.
 export const GUIDES_INTAKE_DIR = path.join(ROOT, "guides-intake");
@@ -28,31 +28,20 @@ export function isMain(moduleUrl) {
 export const MONTHS = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
 const MONTH_RE = new RegExp(`\\b(${Object.keys(MONTHS).join("|")})[a-z]*\\.?\\s+(\\d{4})\\b`);
 
-// Read every guide as { file, slug, raw (text), guide (parsed) }. Understands
-// BOTH content shapes (mirrors the guideLoader in src/content.config.ts):
-//   · <slug>.json — single-file guide
-//   · <slug>/     — directory guide: _guide.json meta + NN-*.json section
-//                   arrays, assembled in filename-sort order. `raw` is the
-//                   concatenation of every file's text so href/source_url
-//                   regex extraction keeps seeing everything.
+// Read every guide as { file, slug, raw (text), guide (parsed) }. One shape only
+// (mirrors the guideLoader in src/content.config.ts): <slug>/ — _guide.json meta +
+// NN-*.json section arrays, assembled in filename-sort order. `raw` is the
+// concatenation of every file's text so href/source_url regex extraction keeps
+// seeing everything.
 export async function readGuides(guidesDir = GUIDES_DIR) {
   const entries = await readdir(guidesDir, { withFileTypes: true });
   const out = [];
   for (const e of entries) {
     try {
-      if (e.isFile() && e.name.endsWith(".json")) {
-        const slug = e.name.replace(/\.json$/, "");
-        // E8·2: same shared tie-break as graduate-guide.mjs — if a slug somehow has BOTH a
-        // flat file and a directory, the flat file wins and this entry is skipped (the
-        // directory-shaped entry for the same slug handles it instead, also via the resolver).
-        const located = resolveGuidePath(slug, guidesDir);
-        if (!located || located.isDirectory) continue;
-        const raw = await readFile(located.metaPath, "utf8");
-        out.push({ file: e.name, slug, raw, guide: JSON.parse(raw) });
-      } else if (e.isDirectory()) {
+      if (e.isDirectory()) {
         const slug = e.name;
         const located = resolveGuidePath(slug, guidesDir);
-        if (!located || !located.isDirectory) continue; // no _guide.json, or a same-slug flat file wins
+        if (!located) continue; // a directory with no _guide.json is not a guide
         const dir = path.join(guidesDir, slug);
         const files = (await readdir(dir)).filter((f) => f.endsWith(".json"));
         const metaRaw = await readFile(located.metaPath, "utf8");

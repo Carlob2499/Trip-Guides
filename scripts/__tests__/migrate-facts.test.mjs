@@ -2,7 +2,7 @@
 // proposeMigration() against an isolated temp guide directory (real disk I/O — this script's
 // whole job is reading/rewriting guide section files, so a fake filesystem tests nothing real).
 //
-// B2 (docs/PLAN_EVIDENCE_FIRST.md): fixes MONEY_RE's trailing-punctuation capture (Japan
+// B2 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST): fixes MONEY_RE's trailing-punctuation capture (Japan
 // regression fixture case 10 — "$19,", "$1,", "$80,") and adds claim-stem dedup across
 // source_urls (case 9 — one entity re-discovered with a different source each time).
 

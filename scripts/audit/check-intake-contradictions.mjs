@@ -1,4 +1,4 @@
-// C2 (docs/PLAN_EVIDENCE_FIRST.md) — intake contradiction gate. Deterministic extraction of
+// C2 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST) — intake contradiction gate. Deterministic extraction of
 // dates, party counts, and named people across an intake doc's FULL TEXT (not just the
 // structured scaffold bullets), because the contradictions this exists to catch live in the
 // free-text elaboration a traveler or researcher adds AFTER scaffolding — exactly like the
@@ -8,8 +8,8 @@
 // Runs at TWO points (creator ruling, §5.2): right after new-guide.yml scaffolds the intake
 // doc, and again as a research-pass preflight — the second run is what catches contradictions a
 // human adds while hand-elaborating the doc, which the first run couldn't have seen yet.
-// NEVER A HARD FAILURE either time: a hit emits a traveler question (the existing mechanism,
-// references/pipeline-roles.md) and stamps `## Contradictions`; research proceeds on the
+// NEVER A HARD FAILURE either time: a hit emits a traveler question (the existing mechanism —
+// SKILL.md's "Traveler questions") and stamps `## Contradictions`; research proceeds on the
 // recorded `**Assumed:**` line, same as any other traveler question.
 //
 // THE BINDING CONSTRAINT (learned the hard way, in A1): "the same entity" means the same
@@ -218,32 +218,39 @@ export function checkIntakeContradictions(text) {
   return { status: findings.length ? "advisory" : "clean", findings };
 }
 
-/** The file-mutating half: read a guide's intake doc, run the detectors, and append anything
-    NEW (idempotent — an id already present in the doc is never re-appended, so a repeated run,
-    e.g. the research-pass preflight re-running what new-guide.yml already stamped, is a no-op)
-    as a `### q-<slug>-<id>` block under `## Questions for the traveler` (the existing mechanism,
-    references/pipeline-roles.md — reused untouched) plus a line under `## Contradictions`
-    (created if absent). Returns the finding count actually appended (0 on a clean or already-
-    stamped doc). NEVER throws on a missing intake doc — callers proceed regardless. */
+/** The file-mutating half: read a guide's intake doc (traveler intent), run the detectors, and
+    append anything NEW to the guide's LEDGER (idempotent — an id already present in the ledger is
+    never re-appended, so a repeated run, e.g. the research-pass preflight re-running what
+    new-guide.yml already stamped, is a no-op) as a `### q-<slug>-<id>` block under
+    `## Questions for the traveler` (the existing mechanism, SKILL.md's "Traveler questions" —
+    reused untouched) plus a line under `## Contradictions` (created if absent).
+
+    Read intake, write ledger: intake.md is frozen intent, so a finding ABOUT it is recorded
+    beside it, never inside it. Returns the finding count actually appended (0 on a clean or
+    already-stamped doc). NEVER throws on a missing intake doc — callers proceed regardless. */
 export async function applyContradictions(slug, guidesIntakeDir = GUIDES_INTAKE_DIR) {
-  const file = path.join(guidesIntakeDir, `${slug}.md`);
+  const intakeFile = path.join(guidesIntakeDir, slug, "intake.md");
+  const ledgerFile = path.join(guidesIntakeDir, slug, "ledger.md");
   let text;
   try {
-    text = await readFile(file, "utf8");
+    text = await readFile(intakeFile, "utf8");
   } catch {
     return { applied: 0, findings: [] };
   }
+  // A ledger that doesn't exist yet is created by the append below, not an error: a guide
+  // scaffolded before ledger.md existed still gets its questions recorded.
+  const ledger = await readFile(ledgerFile, "utf8").catch(() => "");
 
   const { findings } = checkIntakeContradictions(text);
   const qId = (f) => `q-${slug}-${f.id}`;
-  const fresh = findings.filter((f) => !text.includes(qId(f)));
+  const fresh = findings.filter((f) => !ledger.includes(qId(f)));
   if (!fresh.length) return { applied: 0, findings };
 
   const questionBlocks = fresh
     .map((f) => `### ${qId(f)}\n- **Q:** ${f.q}\n- **Assumed:** ${f.assumed}\n- **Context:** ${f.context}\n- **Status:** open\n`)
     .join("\n");
 
-  let out = text;
+  let out = ledger;
   if (out.includes("## Questions for the traveler")) {
     out = out.replace(
       /^## Questions for the traveler.*$\n(?:> .*\n)*\n?(?:\(none yet\)\n)?/m,
@@ -260,7 +267,8 @@ export async function applyContradictions(slug, guidesIntakeDir = GUIDES_INTAKE_
     out += `\n## Contradictions\n> Deterministic findings from \`npm run check-intake-contradictions\` — never a hard-stop; research proceeds on each finding's Assumed line above.\n\n${contradictionLines}\n`;
   }
 
-  await import("node:fs/promises").then(({ writeFile }) => writeFile(file, out));
+  await import("node:fs/promises").then(({ mkdir, writeFile }) =>
+    mkdir(path.dirname(ledgerFile), { recursive: true }).then(() => writeFile(ledgerFile, out)));
   return { applied: fresh.length, findings };
 }
 
@@ -273,7 +281,7 @@ if (isMain(import.meta.url)) {
     console.error("Usage: node scripts/audit/check-intake-contradictions.mjs --slug <slug> [--write]");
     process.exit(1);
   }
-  const file = path.join(GUIDES_INTAKE_DIR, `${slug}.md`);
+  const file = path.join(GUIDES_INTAKE_DIR, slug, "intake.md");
   const text = await readFile(file, "utf8").catch(() => null);
   if (text == null) {
     console.log(`[contradictions] ${slug}: no intake doc at ${file}`);
@@ -288,7 +296,7 @@ if (isMain(import.meta.url)) {
   }
   if (write) {
     const { applied } = await applyContradictions(slug);
-    console.log(`[contradictions] ${slug}: appended ${applied} new question(s) to ${file}`);
+    console.log(`[contradictions] ${slug}: appended ${applied} new question(s) to ${path.join(GUIDES_INTAKE_DIR, slug, "ledger.md")}`);
   }
   // Never a hard failure (creator ruling) — always exits 0.
 }

@@ -40,23 +40,29 @@ beforeAll(async () => {
       },
     ],
   };
-  await writeFile(path.join(dir, "fixture-guide.json"), JSON.stringify(guide), "utf8");
+  // Every guide is a DIRECTORY — `_guide.json` meta plus one section-array file per group.
+  const { mkdir } = await import("node:fs/promises");
+  const writeGuide = async (slug, { sections, ...meta }) => {
+    const gd = path.join(dir, slug);
+    await mkdir(gd, { recursive: true });
+    await writeFile(path.join(gd, "_guide.json"), JSON.stringify(meta), "utf8");
+    await writeFile(path.join(gd, "01-sections.json"), JSON.stringify(sections), "utf8");
+  };
+  await writeGuide("fixture-guide", guide);
 
   // D4: an archived guide's facts are stale by definition (the trip concluded) and must be
   // skipped entirely, not flagged forever with no path to "current".
-  const archivedGuide = {
+  await writeGuide("archived-guide", {
     title: "Concluded Trip",
     country: "Testland",
     archived: true,
     sections: [{ type: "prose", group: "Overview", title: "Old fact", body: "x", verified_on: oldDate }],
-  };
-  await writeFile(path.join(dir, "archived-guide.json"), JSON.stringify(archivedGuide), "utf8");
+  });
 
-  // A DIRECTORY guide carrying a perishable-fact registry. Interpolation inlines a fact's
-  // VALUE into the prose but leaves its verified_on behind, so unless checkStaleness reads
-  // facts.json directly, moving a price out of prose and into the registry would silently
-  // remove it from the recert punch list while it kept aging.
-  const { mkdir } = await import("node:fs/promises");
+  // A guide carrying a perishable-fact registry. Interpolation inlines a fact's VALUE into the
+  // prose but leaves its verified_on behind, so unless checkStaleness reads facts.json directly,
+  // moving a price out of prose and into the registry would silently remove it from the recert
+  // punch list while it kept aging.
   const gdir = path.join(dir, "registry-guide");
   await mkdir(gdir, { recursive: true });
   await writeFile(path.join(gdir, "_guide.json"), JSON.stringify({ title: "Registry Guide", country: "Testland" }), "utf8");

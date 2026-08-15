@@ -161,13 +161,13 @@ ever freelances information architecture.
   agent tags, nothing more.
 - **`scripts/compose-guide.mjs`** — pure, unit-tested, beside `scaffold-guide.mjs`. Rules,
   in order: **Spine** (Plan · Essentials · Transit · Days · Sources always exist — but may
-  fold when near-empty, e.g. Sedona's Transit folds into Plan/Days for a one-car trip);
+  fold when near-empty, e.g. Transit folds into Plan/Days on a one-car road trip);
   **Anchor** (a top-2 intake priority with sufficient weight earns its own tab — Korea's
   MSI + GO Fest); **Merge** (a theme below threshold folds into its host — no one-paragraph
   tabs); **Reader-order** (tabs sort by when the traveler needs them, never alphabet);
   **Budget** (`tabBudget` binds; merging may never hide a ⚠ — that fails the build instead).
 - **Pipeline integration:** composition runs INSIDE the research agent's done gate —
-  post-verify-PASS, pre-graduation, the one moment a guide is both complete and a draft. The
+  post-verify-PASS, pre-publish, the one moment a guide is both complete and a draft. The
   post-agent step and CI are `--check` only and surface proposals in the job summary. Scaffold
   does NOT compose: a fresh scaffold's spine placeholders are near-empty by definition and would
   fold before research filled them. **Drafts recompose freely; LIVE guides get proposals only** —

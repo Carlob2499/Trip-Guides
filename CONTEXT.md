@@ -84,7 +84,7 @@ _Avoid_: placeholder, empty state
 **Live rate**:
 A currency conversion fetched at render time via `src/features/live-data/model/rate.ts`
 (Frankfurter API + fallback table), labeled as today's/live rate. Used in Trip Split's
-totals and a guide's own Budget panel, for all four guides.
+totals and a guide's own Budget panel, on every guide.
 _Avoid_: sourced rate, verified rate
 
 **Sourced rate**:
@@ -96,7 +96,7 @@ _Avoid_: live rate
 
 **Risk tier (R0–R4)**:
 How much verification rigor a `facts.json` row earns, carried in its optional `risk` field
-(`src/content.config.ts`, packet B1 of `docs/PLAN_EVIDENCE_FIRST.md`). Replaces the flat
+(`src/content.config.ts`, packet B1 — `docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST`). Replaces the flat
 "same 2-search cap for everything" the evidence-first program's D6 defect named. R0 = no
 research needed; R1 = a light check; R2 = a normal sourced fact; R3 = plan-critical (an anchor
 event, a booked venue) — a wrong R3 fact reroutes a day; R4 = mandatory-surfaced (a travel
@@ -123,6 +123,50 @@ A guide's verified emergency phone numbers, sourced from `emergencyFor()`
 entry points — the guide's own SOS sheet, and the atlas hub's Table-view quick card.
 Never re-implemented per surface.
 
+**Research pass**:
+The lifecycle that BUILDS a guide that does not exist yet — `research-pass.yml`, four agents,
+five stages (`scaffold → passA → passB → reconcile → verified`) checkpointed in
+`guides-intake/<slug>/state.json`, on branch `research/<slug>`. Resumable by design: a
+re-dispatch continues at the first unfinished stage instead of restarting.
+_Avoid_: generation run (nothing is generated — the pass researches)
+
+**Change run**:
+The lifecycle that EDITS a guide that already exists — `change.yml`, one editor agent plus a
+critic on the diff, on branch `change/<slug>-<issue-or-run-id>`. ONE workflow for every reason a guide changes
+(a request, traveler answers, a date lock, staleness, trip feedback); the weight of the edit is
+carried by the plan `scripts/pipeline/plan.mjs` builds, never by picking a different workflow.
+Unstaged and not resumable — a failed change run is re-dispatched from the top.
+_Avoid_: revision, modify run, recert run (all name workflows that no longer exist; recert.yml
+survives as detection only and dispatches a change run)
+
+**Intake**:
+One traveler's stated intent for one guide — `guides-intake/<slug>/intake.md`, written at
+scaffold from the intake form and FROZEN afterwards. What was asked for. Never the place to
+record what research later found.
+_Avoid_: brief, spec
+
+**Ledger**:
+Everything a pipeline run learned about one guide — `guides-intake/<slug>/ledger.md`: the Pass A
+/ Pass B reconciliation table, amendments, candidates, traveler questions, critic findings and
+sweep records, appended across runs. Tracked in git because git is the durable store. Intake is
+intent, ledger is findings; a run that writes one where the other belongs corrupts both.
+_Avoid_: run report (`append-run-report.mjs` is deleted — the ledger absorbed it), notes
+
+**Publish**:
+Removing a guide's `draft` key so it enters the hub grid and the search index — the automatic
+consequence of a passing evidence gate inside `pipeline land --gate`, not an event anyone
+triggers separately. `node scripts/pipeline.mjs publish --slug <slug>` runs the same gate by
+hand; `land-branch.sh` files a "🚀 Auto-published" issue so the flip is visible and reversible.
+_Avoid_: graduate, graduation (the retired `graduate-guide.yml` mechanism — the ruling behind it
+survives, its vocabulary does not)
+
+**Front door**:
+The Cloudflare Worker (`worker/`) the product's own surfaces talk to, so GitHub never appears in
+the creator's UX: it files intake and change issues and dispatches change runs. Public endpoints
+are rate-limited; `/change`, `/answer` and `/approve` require the `X-Owner-Key` header and 503
+when `OWNER_KEY` is unset.
+_Avoid_: intake proxy (it stopped being intake-only when the owner endpoints landed)
+
 ## Decisions
 
 Each entry states what was decided, and the alternative that was rejected — the rejection is
@@ -144,7 +188,7 @@ a rewrite.
 (creator ruling, 2026-08-13). Rejected: blocking everywhere immediately, which would have turned
 korea, denmark and us red over pre-existing debt and blocked all further work behind content
 repair; and grandfathering the debt permanently, which never collects it. The split is not
-timidity — `graduate-guide.yml` gates on a draft's verify, so blocking there means a defective
+timidity — the publish path gates on a draft's verify (`pipeline land --gate`), so blocking there means a defective
 guide can never be PUBLISHED, while published guides accumulate visible advisories that name what
 will block once enforced. This is how E1 delivers the publication safety that struck packet G was
 for, without a human approval step.
@@ -398,7 +442,9 @@ publication (its Phase G / packet G1) so a verify PASS would land `draft: true` 
 human `graduate-approved` label. The creator was walked through G1's exact mechanics — it touches
 only who pulls the trigger, not the verify gates — and rejected it: **packet G1 is dropped from
 the program entirely.** research-pass.yml's critic step keeps calling `graduate-guide.mjs --slug`
-on verify PASS. Rejected alongside it: building a review/approval surface on the website, which
+on verify PASS. (**Mechanism update 2026-08-15:** `graduate-guide.mjs` and its workflow are
+deleted; the same flip now happens inside `pipeline land --gate` — see "Publishing is what a
+passing verify DOES" below. The ruling is untouched; only the trigger's address moved.) Rejected alongside it: building a review/approval surface on the website, which
 would need auth and a repo write-back path a static Astro + Pages site does not have — that is a
 separate future feature, not pipeline scope. Definition-of-done #3 ("cannot publish without a
 human label") is struck. The evidence gate is the bar; a human label is not. If a later session
@@ -488,3 +534,73 @@ dates with dates, anchor with anchor, budget on the ranked board where budget li
 the flow's pill row, never as a raw dropdown, and never counted when deciding whether that step
 still needs asking ("assumed" is a real answer, not a blank). `intake-contract.test.ts` names all
 four so the drop cannot recur silently.
+
+**Two lifecycles, and nothing else** (creator-approved architecture refactor, 2026-08-15). A guide
+is either being BUILT (research pass) or being EDITED (change run); there is no third thing.
+`modify-guide.yml`, `revise-guide.yml` and recert's execution half are deleted and `change.yml`
+carries all of it, with the weight of an edit decided by the plan `scripts/pipeline/plan.mjs`
+builds (≤5 groups, past which it is a re-research) rather than by which workflow was picked.
+Rejected: a workflow per reason-for-editing, which is what existed — three pipelines that were the
+same run at different weights, each copy drifting from the others. Consequence: recert.yml is a
+DETECTOR that dispatches change runs, and feedback-export files inert proposals a human dispatches.
+
+**The pipeline's business logic lives in `scripts/pipeline/`; a workflow is wiring** (2026-08-15).
+Every gate, plan, route, prompt and publish decision moved out of `run: |` heredocs into tested
+modules behind one CLI (`node scripts/pipeline.mjs <subcommand>`), leaving research-pass.yml at 334
+lines, change.yml at 271 and recert.yml at 70 — trigger, setup, agent step(s), one subcommand.
+Rejected: keeping the logic in YAML, where no linter reads it, no suite can execute it, and each
+workflow owns a copy. The two seams this creates are themselves gated: `prompt-contract.test.mjs`
+holds `prompts/` ↔ workflows together, `pipeline-orchestration.test.mjs` pins what the modules
+decide.
+
+**One run-state directory per guide, and intent is never findings** (2026-08-15).
+`guides-intake/<slug>/` replaces the flat sibling files (`<slug>.md`, `<slug>.state.json`,
+`<slug>.passB.json`, `<slug>.coverage.json`): `intake.md` is the traveler's intent, frozen at
+scaffold; `ledger.md` is everything the runs learned, appended; `state.json`, `coverage.json` and
+`passB.json` are machine-written. Rejected: the single growing intake file, where a research
+finding written next to the traveler's own words silently becomes something the traveler said.
+Git stays the store — no database, so the PR diff IS the audit trail.
+
+**Publishing is what a passing verify DOES** (2026-08-15). `pipeline land --gate` runs
+`npm run build` + `npm run verify --network`, and on a pass deletes the guide's `draft` key in the
+same step that merges; `graduate-guide.yml`, its issue template, `graduate-guide.mjs` and the
+graduation vocabulary are deleted. This is a MECHANISM change only — the 2026-08-13 auto-graduation
+ruling stands, and so do the veto (`land-branch.sh`'s "🚀 Auto-published" issue with a one-line
+rollback), the manual override (`pipeline publish --slug`), and the human-only retire path.
+Rejected: keeping graduation as a separate workflow that re-runs the same gate — a second copy of
+one verdict is a place for the two to disagree, and nothing between them can arbitrate.
+
+**The front door is the Worker; GitHub stays invisible** (2026-08-15). The product's own surfaces
+file issues and start runs through `worker/`: public `/` and `/intake` are rate-limited, while
+`/change`, `/answer` and `/approve` require the `X-Owner-Key` header and 503 when `OWNER_KEY` is
+unset (fail CLOSED). Because the issue templates are public, `change.yml`'s resolve job ALSO
+requires `author_association` ∈ OWNER/MEMBER/COLLABORATOR — the label a stranger can apply must not
+be able to start an agent run. Rejected: trusting the label alone (the owner key is bypassed by
+filing the identical issue by hand), and sending the creator to GitHub to do it themselves.
+
+**Resumability is research-only** (2026-08-15). A research pass checkpoints five stages in
+`state.json` and gets 5 attempts; a change run has no stages, gets 3, and re-runs from the top
+(`CAPS` in `scripts/pipeline/gate.mjs`). Rejected: giving change runs the same checkpoint spine —
+a change is one editor agent plus a critic, minutes rather than hours, so the state machine would
+cost a second thing that can disagree with the branch and buy back nothing.
+
+**The meta-workflows are deleted** (2026-08-15). Gone: `skill-evals.yml` (a live-agent regression
+gate on `.claude/skills/**` PRs) with its `evals.json` corpus, `skill-retro.yml` (the monthly
+skill-improvement proposer, whose input ledger `append-run-report.mjs` maintained no longer
+exists — run history is `guides-intake/<slug>/ledger.md` now), and `token-canary.yml` (the weekly
+call that alarmed on `CLAUDE_CODE_OAUTH_TOKEN` expiry). Each gated the harness rather than the
+product. **This supersedes the 2026-08-14 "kept by ruling" line for skill-retro**; mutation.yml
+survives, dispatch-only, as the one meta-gate left. Rejected: leaving them wired but dispatch-only
+— the Turnstile mistake in another costume, since an unrun workflow reads as a live gate to the
+next audit. Two consequences to know: a skill edit is now reviewed by a human with no eval behind
+it, and an expired agent token surfaces as the first failed pipeline run instead of a weekly alarm.
+
+**`us` and `japan-2` are deleted from the corpus** (creator ruling, 2026-08-15). `us` was the
+published Sedona guide; `japan-2` was a second guide for the SAME Oct 15–Nov 10, 2026 Japan trip as
+`japan`. Rejected: keeping either as corpus — two live guides for one trip make every index lie
+about how many trips exist, and japan's regeneration through the rebuilt pipeline has no room for a
+rival draft of itself. Deleting a guide takes all FOUR of its homes: `src/content/guides/<slug>/`,
+`guides-intake/<slug>/`, `src/data/destinations/<slug>.json` and `src/data/palettes/<slug>.json`.
+Nothing is lost that the evidence needed: Japan's defects live in the frozen fixture
+(`tests/fixtures/japan-regression/`, 2026-08-13 ruling), and the critic findings from both runs are
+already distilled in `docs/evidence/pipeline-patterns.md`.

@@ -1,4 +1,4 @@
-// Tests for E3 (docs/PLAN_EVIDENCE_FIRST.md) — does the GUIDE ship the contradictions and
+// Tests for E3 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST) — does the GUIDE ship the contradictions and
 // uncertainties C2 gates at intake? Every case here is one the japan guide DISCLOSES honestly
 // in prose and still fails, because prose an author remembered to write is not a field
 // anything can re-check or expire. The calibration facts are pinned too: each detector was
@@ -194,13 +194,15 @@ describe("E3 ACCEPTANCE — the frozen japan-regression fixture", async () => {
     const j = fixture(`guide/${f}`);
     return Array.isArray(j) ? j : j.sections || [];
   });
-  const intakeMd = fixtureText("intake/japan.md");
+  // The frozen fixture predates the intake/ledger split: one flat doc that is BOTH the
+  // traveler's stated intent and the reconciliation ledger, so it feeds both inputs here.
+  const fixtureDoc = fixtureText("intake/japan.md");
   const r = evaluateUncertainty({
     sections,
     facts: fixture("guide/facts.json"),
-    intakeMd,
+    ledgerMd: fixtureDoc,
     state: fixture("intake/japan.state.json"),
-    contradictions: checkIntakeContradictions(intakeMd).findings ?? [],
+    contradictions: checkIntakeContradictions(fixtureDoc).findings ?? [],
     enforce: true,
   });
 

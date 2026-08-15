@@ -1,11 +1,16 @@
 name: Ensure repo labels
 
-# Guarantees the labels the automation depends on actually exist. GitHub issue
-# templates can only APPLY labels that already exist — they never create them — so
-# without this the New-guide form would silently fail to trigger its workflow.
+# Guarantees the labels the automation depends on actually exist. GitHub issue templates can only
+# APPLY labels that already exist — they never create them — so without this the New-guide form
+# would silently fail to trigger its workflow.
 #
-# Runs on setup (the first push that adds this file matches the path filter) and can
-# be re-run any time from the Actions tab. Idempotent via `gh label create --force`.
+# There are no *-approved labels. Every request here is the creator's own, filed through the
+# creator's own template: a second label saying "yes, really" was a gate that always opened. The
+# request label IS the trigger. What survives is the one gate that isn't ceremony — needs-decision,
+# which a run applies to itself when it hits a fork only the creator can settle.
+#
+# Runs on setup (the first push adding this file matches the path filter) and on demand from the
+# Actions tab. Idempotent via `gh label create --force`.
 on:
   workflow_dispatch:
   push:
@@ -13,16 +18,13 @@ on:
     paths:
       - .github/workflows/ensure-labels.yml
       - .github/ISSUE_TEMPLATE/new-guide.yml
-      - .github/ISSUE_TEMPLATE/graduate-guide.yml
       - .github/ISSUE_TEMPLATE/modify-guide.yml
       - .github/ISSUE_TEMPLATE/revise-guide.yml
-      - .github/workflows/recert.yml
-      - .github/workflows/graduate-guide.yml
       - .github/workflows/research-pass.yml
-      - .github/workflows/modify-guide.yml
-      - .github/workflows/revise-guide.yml
+      - .github/workflows/change.yml
+      - .github/workflows/recert.yml
+      - .github/workflows/feedback-export.yml
       - .github/workflows/deploy.yml
-      - .github/workflows/token-canary.yml
       - .github/workflows/pretrip-check.yml
 
 # Label management lives under the issues API — that's all this needs.
@@ -47,41 +49,25 @@ jobs:
             --color FBCA04 \
             --description "Automated weekly content-audit tracking issue" \
             --force
-          gh label create graduate-request \
-            --color 0E8A16 \
-            --description "Nominates a draft guide as ready to leave Guides-to-be — anyone can open one" \
-            --force
-          gh label create graduate-approved \
-            --color 5319E7 \
-            --description "Owner-only: applying this label actually flips draft:false. Requires write access." \
-            --force
           gh label create modify-request \
             --color 0E8A16 \
-            --description "Requests a scoped content edit on a guide — anyone can open one" \
-            --force
-          gh label create modify-approved \
-            --color 5319E7 \
-            --description "Owner-only: applying this label actually runs the edit pass. Requires write access." \
+            --description "Runs a scoped content edit on a guide (change.yml, source: request)" \
             --force
           gh label create revision-request \
             --color 0E8A16 \
-            --description "Requests a MAJOR revision (re-research, not a scoped edit) on a guide — anyone can open one" \
-            --force
-          gh label create revision-approved \
-            --color 5319E7 \
-            --description "Owner-only: runs the heavy revise pipeline (plan, re-research, sweep, critic). Needs write access." \
+            --description "Runs a MAJOR revision — broader than a scoped edit (change.yml, source: request)" \
             --force
           gh label create revision-auto-filed \
             --color C5DEF5 \
-            --description "Auto-filed by the feedback-synthesis pass — inert until revision-approved" \
+            --description "Proposed by the feedback-synthesis pass — inert until the owner adds revision-request" \
             --force
           gh label create needs-decision \
             --color D93F0B \
-            --description "A revise run hit a fork only the owner can decide — answer, then re-apply revision-approved" \
+            --description "A run paused on a fork only the owner can settle — answer in the thread, then re-run" \
             --force
           gh label create stuck \
             --color D93F0B \
-            --description "An automated research pass hit its attempt cap without reaching verified" \
+            --description "An automated run hit its attempt cap without reaching a clean finish" \
             --force
           gh label create deploy-verification \
             --color B60205 \
@@ -90,14 +76,6 @@ jobs:
           gh label create auto-published \
             --color 5319E7 \
             --description "A guide auto-published (verified) with no human approval — a vetoable heads-up" \
-            --force
-          gh label create token-canary \
-            --color B60205 \
-            --description "The weekly OAuth-token canary failed — the agent pipeline is down until the token is rotated" \
-            --force
-          gh label create run-ledger \
-            --color C5DEF5 \
-            --description "The pipeline run ledger — research/recert runs append a comment for the skill-retro proposer" \
             --force
           gh label create pretrip-check \
             --color FBCA04 \

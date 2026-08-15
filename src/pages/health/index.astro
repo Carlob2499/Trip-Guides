@@ -42,18 +42,18 @@ const lifecycle: Flow[] = [
     verdict: "The centerpiece — and the least proven. It has only ever been triggered a couple of times, and hasn't completed a real end-to-end run. Run it once for real and watch it before trusting it.",
   },
   {
-    file: "modify-guide.yml",
-    name: "modify-guide",
-    desc: "Takes a single scoped fact-fix request (a price, an hour, a venue) and edits just that, with the same verification discipline.",
+    file: "change.yml",
+    name: "change",
+    desc: "Every edit to a guide that already exists, whatever prompted it — a scoped fact-fix request, the weekly staleness sweep, a traveler answering a question the guide assumed, or confirmed dates. One agent, one fresh-context critic, the same verification discipline in each case.",
     state: "unproven",
-    verdict: "Built and unit-tested in isolation, but has never actually made an edit on request. Exercise it on a small real change before relying on it.",
+    verdict: "Built and unit-tested in isolation, but has never made an edit on request. It replaced three separate workflows (modify-guide, revise-guide, recert's execution half) that were the same run at different weights, so it is newer than its parts. Exercise it on a small real change before relying on it.",
   },
   {
     file: "recert.yml",
     name: "recert",
-    desc: "Re-checks aging facts on a schedule so a guide doesn't quietly rot as prices and hours drift.",
+    desc: "Finds facts that have aged past their own shelf life, on a schedule, so a guide doesn't quietly rot as prices and hours drift — then hands each stale guide to the change workflow.",
     state: "unproven",
-    verdict: "Has never run. The safety-against-staleness promise is only a promise until it fires at least once.",
+    verdict: "Has never run. The safety-against-staleness promise is only a promise until it fires at least once. It detects only: the fixing is change.yml's job, and those runs always open a PR for a human because nobody asked for them.",
   },
   {
     file: "pretrip-check.yml",
@@ -61,13 +61,6 @@ const lifecycle: Flow[] = [
     desc: "Daily check for guides entering their 7-day-before-departure window, so freshness is checked when it matters most — not just on recert's weekly clock, which has no idea when anyone is actually about to travel.",
     state: "unproven",
     verdict: "Just added, report-only by design (it names commands for a human to run — it never invokes an agent or opens a PR itself). Like recert, it needs a real guide to actually enter its window before it's proven, not just built.",
-  },
-  {
-    file: "graduate-guide.yml",
-    name: "graduate-guide",
-    desc: "Publishes a draft guide once a human explicitly signs off — the manual override / rescue path now that research-pass auto-publishes.",
-    state: "support",
-    verdict: "A deliberate manual backstop, not something meant to run often. Fine that it's rarely used.",
   },
   {
     file: "new-guide.yml",

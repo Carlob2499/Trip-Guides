@@ -1,18 +1,20 @@
 name: Deploy intake worker
 
-# Deploys the zero-click intake proxy (worker/) to Cloudflare (W5). Runs when the Worker or the pure
-# logic it bundles changes. INERT until configured: if the CLOUDFLARE_API_TOKEN secret isn't set,
-# every step is skipped and the job passes green — so this can sit in the repo doing nothing until
-# the owner opts in (create a free Cloudflare account → add the API token secret). The site on
-# GitHub Pages is untouched either way.
+# Deploys the site's backend Worker (worker/) to Cloudflare (W5). INERT until configured: if the
+# CLOUDFLARE_API_TOKEN secret isn't set, every step is skipped and the job passes green — so this
+# can sit in the repo doing nothing until the owner opts in (create a free Cloudflare account → add
+# the API token secret). The site on GitHub Pages is untouched either way.
+#
+# NO `paths:` FILTER, deliberately. The bundle is not worker/ — esbuild follows the Worker's
+# imports out into the repo and pulls in scripts/intake-proxy.mjs, scripts/intake-schema.mjs,
+# scripts/worker-api.mjs, scripts/lib/slug.mjs and src/lib/modify-schema.mjs. A filter has to list
+# every one of those, and it silently stops listing them the moment an import is added — which is
+# how a security fix to the deployed auth gate gets written, merged, and never deployed, with a
+# green pipeline the whole way. Every push to main redeploys; a no-op deploy costs seconds and
+# nothing else, and "the fix is live" stops depending on a list somebody has to remember.
 on:
   push:
     branches: [main]
-    paths:
-      - worker/**
-      - scripts/intake-proxy.mjs
-      - scripts/intake-schema.mjs
-      - .github/workflows/deploy-worker.yml
   workflow_dispatch:
 
 permissions:
@@ -44,7 +46,9 @@ jobs:
         run: npm ci
       # wrangler-action installs + runs wrangler; workingDirectory points it at worker/wrangler.toml.
       # The Worker's `import "../scripts/intake-proxy.mjs"` bundles fine — esbuild follows it out of
-      # worker/ into the repo (that's why npm ci above installs zod for the bundle).
+      # worker/ into the repo (that's why npm ci above installs zod for the bundle), along with
+      # scripts/worker-api.mjs, scripts/lib/slug.mjs and src/lib/modify-schema.mjs. That reach is
+      # exactly why this workflow has no `paths:` filter — see the header.
       - if: steps.cfg.outputs.go == 'true'
         uses: cloudflare/wrangler-action@v4
         with:

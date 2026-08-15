@@ -1,14 +1,26 @@
 /* Change-request wizard — DOM wiring. All decisions live in ../model/change-request.ts.
    Progressive enhancement: the footer pill is a REAL link to the prefilled GitHub issue and
-   keeps working with JS off. This intercepts the click and offers the guided version instead. */
+   keeps working with JS off. This intercepts the click and offers the guided version instead.
+
+   Batch 3 added the worker path: with the backend configured and an owner key stored, the final
+   step POSTs the request and confirms in place instead of navigating to GitHub. Every piece of
+   GitHub-facing copy is therefore mode-dependent (MODE_COPY) — the markup carries the GitHub
+   wording as its no-JS default and this file swaps it when the worker path is live. */
 
 import {
   sectionOptions,
   validateStep,
   remainingChars,
   buildRequestUrl,
+  buildRequestPayload,
+  submitMode,
+  MODE_COPY,
+  SENT_COPY,
   CHANGE_MAX,
 } from "../model/change-request";
+import { createChangeGateway } from "../gateway.js";
+import { WAYPOINT_BACKEND } from "../../../lib/backend-config.js";
+import { readOwnerKey } from "../../../scripts/owner-key.js";
 
 export function initChangeRequest(cfg, lockScroll, unlockScroll) {
   var trigger = document.getElementById("btnChangeRequest");
@@ -33,16 +45,28 @@ export function initChangeRequest(cfg, lockScroll, unlockScroll) {
   var elTextarea = modal.querySelector("[data-cr-change]");
   var elCount = modal.querySelector("[data-cr-count]");
   var elErr = modal.querySelector("[data-cr-err]");
+  // The step-2 error slot lives inside the step-2 pane, which is HIDDEN on the review step —
+  // a send failure written there would be invisible. The review pane carries its own.
+  var elSendErr = modal.querySelector("[data-cr-send-err]");
   var elReview = modal.querySelector("[data-cr-review]");
+  var elReviewNote = modal.querySelector("[data-cr-review-note]");
+  var elFoot = modal.querySelector("[data-cr-foot]");
+  var elSent = modal.querySelector("[data-cr-sent]");
   var btnBack = modal.querySelector("[data-cr-back]");
   var btnNext = modal.querySelector("[data-cr-next]");
   var btnClose = modal.querySelector("[data-cr-close]");
+  var elNav = modal.querySelector(".cr-nav");
   var panes = modal.querySelectorAll("[data-cr-pane]");
 
   var STEPS = 3;
   var step = 0;
   var state = { section: "", change: "" };
   var options = sectionOptions(cfg && cfg.navSections);
+  // Resolved per OPEN, not once at boot: the owner can paste their key from the progress page
+  // in another tab and come back to this one without a reload.
+  var mode = "github";
+  var copy = MODE_COPY.github;
+  var sending = false;
 
   if (elTextarea) elTextarea.setAttribute("maxlength", String(CHANGE_MAX));
 
@@ -103,14 +127,37 @@ export function initChangeRequest(cfg, lockScroll, unlockScroll) {
     }
     if (elStepOf) elStepOf.textContent = "Step " + (step + 1) + " of " + STEPS;
     if (btnBack) btnBack.hidden = step === 0;
-    if (btnNext) btnNext.textContent = step === STEPS - 1 ? "Continue on GitHub →" : "Next";
+    if (btnNext) btnNext.textContent = step === STEPS - 1 ? copy.next : "Next";
     if (elErr) elErr.textContent = "";
+    if (elSendErr) elSendErr.textContent = "";
     if (step === 2) renderReview();
+  }
+
+  /** The one confirmation the worker path gets: the wizard's own panes go away and the modal
+      says what actually happened. Nothing here mentions where the request went — the whole
+      point of the configured path is that the reporter never learns. */
+  function renderSent() {
+    for (var i = 0; i < panes.length; i++) panes[i].setAttribute("hidden", "");
+    if (elStepOf) elStepOf.textContent = "";
+    if (elNav) elNav.hidden = true;
+    if (elFoot) elFoot.hidden = true;
+    if (elSent) {
+      elSent.textContent = SENT_COPY;
+      elSent.hidden = false;
+      elSent.focus();
+    }
   }
 
   function open(e) {
     if (e) e.preventDefault();
     step = 0;
+    sending = false;
+    mode = submitMode({ backendUrl: WAYPOINT_BACKEND.url, hasOwnerKey: !!readOwnerKey() });
+    copy = MODE_COPY[mode];
+    if (elReviewNote) elReviewNote.textContent = copy.review;
+    if (elFoot) { elFoot.textContent = copy.foot; elFoot.hidden = false; }
+    if (elSent) elSent.hidden = true;
+    if (elNav) elNav.hidden = false;
     // null = nothing chosen yet, which is distinct from "" = the explicit "I'm not sure".
     // Without that distinction the escape hatch renders pre-selected before the reader picks.
     state = { section: null, change: "" };
@@ -137,9 +184,27 @@ export function initChangeRequest(cfg, lockScroll, unlockScroll) {
   }
 
   function next() {
+    if (sending) return;
     var v = validateStep(step, state);
     if (!v.ok) { if (elErr) elErr.textContent = v.error; return; }
     if (step < STEPS - 1) { step += 1; render(); return; }
+
+    if (mode === "worker") {
+      // Async is SAFE here only because nothing after the await opens a window or navigates —
+      // the result is rendered into this same modal. The GitHub branch below must stay
+      // synchronous for exactly the opposite reason (see its comment).
+      sending = true;
+      if (btnNext) { btnNext.disabled = true; btnNext.textContent = "Sending…"; }
+      var gateway = createChangeGateway({ ownerKey: readOwnerKey() });
+      gateway.submitChange(buildRequestPayload(slug, state)).then(function (res) {
+        sending = false;
+        if (btnNext) { btnNext.disabled = false; btnNext.textContent = copy.next; }
+        if (res.ok) { renderSent(); return; }
+        if (elSendErr) elSendErr.textContent = res.message;
+      });
+      return;
+    }
+
     // FINAL step. The URL is built and navigation happens SYNCHRONOUSLY inside this click —
     // no await anywhere on this path. An `await` here would put window.open outside the user
     // gesture and popup blockers would eat it silently (CLAUDE.md boundary check #2, the bug

@@ -18,7 +18,7 @@
 // written "≈ 120" (marker, then a space) is SKIPPED rather than migrated: re-rendering it would
 // emit "≈120" and lose the space — a one-byte diff is still a diff.
 //
-// DEDUP (B2, docs/PLAN_EVIDENCE_FIRST.md): two units citing the identical claim text (same
+// DEDUP (B2, docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST): two units citing the identical claim text (same
 // label, same value) from two DIFFERENT source pages collapse onto ONE row — the first-seen
 // source wins, and every collapse is printed in the CLI output (below) for human review before
 // `--write` makes it permanent. See the collapsed-rows log, and MONEY_DIGITS above MONEY_RE for
@@ -34,7 +34,7 @@ import { pathToFileURL } from "node:url";
 import { GUIDES_DIR } from "./audit/lib.mjs";
 import { isSectionFile } from "../src/lib/facts.mjs";
 
-// B2 (docs/PLAN_EVIDENCE_FIRST.md): the digit group used to be `\d[\d.,]*` — any run of digits,
+// B2 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST): the digit group used to be `\d[\d.,]*` — any run of digits,
 // commas, and dots. That accepts a TRAILING separator with nothing after it, which is exactly
 // how "$19, $65, or $18" (a comma-separated list in prose) yielded the fact row `"$19,"` — the
 // regex happily matched up through the list separator. Same failure mode for a value ending a
@@ -67,7 +67,7 @@ export function normalizeValue(value) {
 }
 
 // Prose-ish fields that may carry a price. Mirrors the fields the voice gate scans. Exported
-// (B4, docs/PLAN_EVIDENCE_FIRST.md) so fact-usage.mjs scans the SAME fields when it looks for
+// (B4, docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST) so fact-usage.mjs scans the SAME fields when it looks for
 // raw money mentions with no {{fact:id}} token — one list, not two that can drift apart.
 export const TEXT_FIELDS = ["body", "intro", "why", "how", "crowd_tip", "note", "tip"];
 

@@ -148,8 +148,8 @@ a.mast-chip:hover{background:color-mix(in srgb,currentColor 10%,transparent)}
 /* The accent rule centers over the meta band (which is centered below). */
 .mast-hero .masthead-rule{margin:1.4rem auto 0;width:3.2rem}
 /* Below-hero meta band is centered (see overview.css). Only the collapsible
-   jet-lag panel + draft-graduate note stay left within the contained width. */
-.mast-hero .jl-wrap,.mast-hero .draft-graduate{max-width:52rem;margin-left:auto;margin-right:auto;padding-left:clamp(1rem,3vw,1.5rem);padding-right:clamp(1rem,3vw,1.5rem)}
+   jet-lag panel + draft-progress note stay left within the contained width. */
+.mast-hero .jl-wrap,.mast-hero .draft-progress{max-width:52rem;margin-left:auto;margin-right:auto;padding-left:clamp(1rem,3vw,1.5rem);padding-right:clamp(1rem,3vw,1.5rem)}
 
 /* ── Orchestrated page-load motion ──────────────────────────────────────── */
 /* Motion ownership: the photo transform belongs to hero-parallax.js; the text

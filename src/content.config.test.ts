@@ -616,7 +616,7 @@ describe("content.config guides schema — plan_b (inclement-day alternate)", ()
   });
 });
 
-// B1 (docs/PLAN_EVIDENCE_FIRST.md) — factRecord gains risk/entity/evidence, all optional. Every
+// B1 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST) — factRecord gains risk/entity/evidence, all optional. Every
 // fact written before this packet has none of the three, so the first assertion is the load-
 // bearing one: the schema must not start demanding something that never existed.
 describe("content.config factsFile schema — risk/entity/evidence (B1)", () => {

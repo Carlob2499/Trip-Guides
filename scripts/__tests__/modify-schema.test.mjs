@@ -2,7 +2,7 @@
 // new-guide: assert the checked-in issue form matches MODIFY_FIELDS exactly.
 //
 // The drift this closes is not hypothetical. modify's three fields used to be duplicated
-// between .github/ISSUE_TEMPLATE/modify-guide.yml and scripts/parse-modify-issue.mjs, joined
+// between .github/ISSUE_TEMPLATE/modify-guide.yml and its parser, joined
 // by nothing but two matching string literals — rename a label in the form and the parser
 // stops finding the field, silently, with the workflow reporting "no Guide slug field" on a
 // perfectly well-formed issue. Three surfaces derive from the array now (form, parser,
@@ -21,7 +21,7 @@ import {
   sanitizeSection,
   CHANGE_MAX,
 } from "../../src/lib/modify-schema.mjs";
-import { parseModifyIssue } from "../parse-modify-issue.mjs";
+import { parseChangeIssue } from "../pipeline/issue.mjs";
 
 const FORM_PATH = fileURLToPath(new URL("../../.github/ISSUE_TEMPLATE/modify-guide.yml", import.meta.url));
 const form = readFileSync(FORM_PATH, "utf8");
@@ -79,10 +79,11 @@ describe("buildModifyIssueUrl", () => {
     const body = MODIFY_FIELDS
       .map((f) => `### ${f.label}\n\n${url.searchParams.get(f.id) ?? "_No response_"}`)
       .join("\n\n");
-    expect(parseModifyIssue(body)).toEqual({
+    expect(parseChangeIssue(body)).toEqual({
       slug: "korea",
       change: "Gyeongbokgung admission is now 3,000 won.",
-      section: "Sights",
+      sections: ["Sights"],
+      deadline: "",
     });
   });
 

@@ -2,13 +2,14 @@
 //
 // The per-guide mechanical checks used to be scattered across `readiness`, `check-staleness`, and
 // the audit suite, each run separately. This rolls them into ONE verdict + a rubric-shaped
-// scorecard (docs/standards/guide-rubric.md), so a draft graduates against evidence instead of a patchwork
-// of hand-run scripts. It is the gate the later pipeline stages (recert, graduate-on-evidence)
-// reuse — see docs/reference/pipeline.md, VERIFY stage.
+// scorecard (docs/standards/guide-rubric.md), so a draft is judged against evidence instead of a
+// patchwork of hand-run scripts. It is the gate the later pipeline stages (recert,
+// publish-on-verify) reuse — see docs/reference/pipeline.md, VERIFY stage.
 //
 // What it rolls up:
-//   • RESEARCH quality   → guide-readiness (wraps check-research): fabrication, provenance
-//                          hygiene, completeness, itinerary integrity                    [P0]
+//   • RESEARCH quality   → readiness (wraps check-research, folded in from the former
+//                          guide-readiness.mjs): fabrication, provenance hygiene,
+//                          completeness, itinerary integrity                            [P0]
 //   • RECENCY            → check-staleness: per-section facts past their shelf life + the
 //                          guide-level stamp age (non-draft guides only)                 [P1/#11]
 //   • CONTENT (--network)→ the audit suite: dead links, missing Commons photos           [P0/#2]
@@ -16,7 +17,7 @@
 // What it does NOT judge (stated, never silently skipped):
 //   • Schema shape → `npm run build` is the content-collection gate. The scorecard says so; run it.
 //   • Depth / party fit / authenticity / anchor (rubric #6,#8,#9,#12) → HUMAN judgment. The
-//     scorecard lists them as a graduation checklist; the machine cannot pass/fail them.
+//     scorecard lists them as a human checklist; the machine cannot pass/fail them.
 //
 // Verdict (exit 0/1): PASS iff every AUTO gate that BLOCKS is green. Blocking = readiness (P0
 // mechanical) and, under --network, dead links / missing photos (concrete breakage). Recency is
@@ -32,8 +33,8 @@
 import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { readGuides, isMain } from "./audit/lib.mjs";
-import { evaluateReadiness } from "./guide-readiness.mjs";
+import { readGuides, flatten, isMain } from "./audit/lib.mjs";
+import { checkResearchGuide } from "./audit/check-research.mjs";
 import { checkStaleness } from "./audit/check-staleness.mjs";
 import { checkFactsHygiene } from "./audit/check-facts-hygiene.mjs";
 import { evaluateRiskGates } from "./audit/check-risk-gates.mjs";
@@ -42,10 +43,64 @@ import { checkRoutes } from "./audit/check-routes.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
+// Guide readiness — the mechanical research checks + a source-coverage metric, folded in from
+// the former scripts/guide-readiness.mjs (2026-08-15). Feeds the P0 research row below.
+//
+// Prose-like sections carry perishable facts AND support provenance (source_url/verified_on) —
+// they're the ones the skill's strict mode gates. The coverage proxy is measured over these.
+const FACT_TYPES = new Set(["panel", "prose", "list", "routes", "venues", "divergences"]);
+// NOT a sanitizer, and must never be used as one — a single pass over <[^>]+> is trivially
+// defeated ("<<b>>" leaves a stray ">"). Its only job is to approximate VISIBLE TEXT LENGTH for
+// the coverage metric below. Nothing it returns is ever rendered or written to a page.
+const stripHtml = (html) => String(html || "").replace(/<[^>]+>/g, "").trim();
+
+// A fact section is "sourced" if it carries a structured source_url OR an inline <a href>
+// citation anywhere in its content (the skill treats both as live citations).
+function isSourced(section) {
+  if (section.source_url) return true;
+  return /href=['"]https?:\/\//i.test(JSON.stringify(section));
+}
+
+// Only count fact sections that actually have content — an empty scaffold section isn't a
+// missing citation, it's an unfilled section (check-research already flags those).
+function isContentfulFactSection(s) {
+  if (!FACT_TYPES.has(s.type)) return false;
+  if (String(s.group || "").toLowerCase() === "references") return false; // sources live here by design
+  const hasBody = stripHtml(s.body).length >= 3;
+  const hasItems = Array.isArray(s.items) && s.items.length > 0;
+  const hasSteps = Array.isArray(s.steps) && s.steps.length > 0;
+  const hasChecklist = Array.isArray(s.checklist) && s.checklist.length > 0;
+  return hasBody || hasItems || hasSteps || hasChecklist;
+}
+
+// Citation context (NOT a gate): of the contentful fact sections, how many carry a citation.
+// Reported for context only — calibration against the published guides (korea/denmark) showed
+// them at ~43–47%, because much fact-prose is DURABLE narrative (etiquette, "what to eat") that
+// legitimately needs no per-section source. Gating on a % here would just train the loop to
+// fake-cite durable prose. The real gate is zero check-research `warn` findings.
+export function sourceCoverage(guide) {
+  const fact = flatten(guide.sections).filter(isContentfulFactSection);
+  const sourced = fact.filter(isSourced);
+  return { total: fact.length, sourced: sourced.length, pct: fact.length ? sourced.length / fact.length : 1 };
+}
+
+// Runs the mechanical research checks (check-research) + the source-coverage metric against one
+// guide. It does NOT check the JSON schema — that's `npm run build` (the content-collection
+// gate). It auto-enforces the P0 MECHANICAL rows of docs/standards/guide-rubric.md (fabrication,
+// provenance, completeness, itinerary integrity); the P1 depth/personalization rows are the
+// human's §8 judgment — a PASS means "no detectable errors," not "good".
+export function evaluateReadiness(guide, slug) {
+  const { findings } = checkResearchGuide(guide, slug);
+  const warns = findings.filter((f) => f.severity === "warn");
+  const infos = findings.filter((f) => f.severity !== "warn");
+  const pass = warns.length === 0;
+  return { slug, pass, warns, infos, coverage: sourceCoverage(guide) };
+}
+
 // P3/R15: coverage gate — every intake ask must map to guide content or a logged skip/amendment.
 // Pre-P3 guides without coverage.json pass trivially (the gate only bites guides scaffolded after P3).
 export function checkCoverage(slug) {
-  const p = path.join(ROOT, "guides-intake", `${slug}.coverage.json`);
+  const p = path.join(ROOT, "guides-intake", slug, "coverage.json");
   if (!existsSync(p)) return { status: "n/a", uncovered: [] };
   let cov;
   try { cov = JSON.parse(readFileSync(p, "utf8")); } catch { return { status: "n/a", uncovered: [] }; }
@@ -86,7 +141,7 @@ export function checkVoice(guide) {
   return { status: hits.length ? "fail" : "pass", hits };
 }
 
-// The rubric rows the machine can only defer to a human. Kept here as the graduation checklist the
+// The rubric rows the machine can only defer to a human. Kept here as the human checklist the
 // scorecard prints — mirrors docs/standards/guide-rubric.md so the two stay legible together.
 const HUMAN_ROWS = [
   ["#6", "Anchor verified against a T0 source (dates + venue), trip built around it — anchor trips"],
@@ -143,15 +198,15 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
   // P6: voice gate — process language must not leak into traveler-facing prose.
   const voice = checkVoice(guide);
 
-  // B3 (docs/PLAN_EVIDENCE_FIRST.md): facts.json hygiene — misattribution candidates, malformed
+  // B3 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST): facts.json hygiene — misattribution candidates, malformed
   // values, bare section-path echoes. The FULL report stays advisory and is printed in whole;
   // E1's `riskGates` row below is what promotes the two acting-on-a-wrong-fact classes
   // (misattribution, malformed values) to a blocker on drafts.
   const hygiene = checkFactsHygiene(facts);
 
   // E1: risk-weighted gates. Warn-first by creator ruling — findings BLOCK on drafts (the
-  // graduation chokepoint `graduate-guide.yml` gates on) and ADVISE on published guides,
-  // which carry pre-existing debt that failing retroactively would only obstruct.
+  // chokepoint the publish gate reads: a draft cannot go live over a failing verdict) and ADVISE
+  // on published guides, which carry pre-existing debt that failing retroactively would obstruct.
   const riskGates = evaluateRiskGates({ guide, facts, unused, hygiene, destinationConfig, enforce: draft });
 
   // E3: does the guide SHIP the contradictions and uncertainties C2 gates at intake? Same
@@ -267,13 +322,16 @@ export async function verify({ slug = null, network = false } = {}) {
     }
   }
 
-  const { readState, readIntake } = await import("./audit/check-uncertainty.mjs");
+  const { readState, readIntake, readLedger } = await import("./audit/check-uncertainty.mjs");
   const { checkIntakeContradictions } = await import("./audit/check-intake-contradictions.mjs");
   const uncertaintyBySlug = {};
   for (const t of targets) {
+    // Two documents, two jobs: contradictions are detected in the traveler's own intent
+    // (intake.md), while the reconciliation rows and question blocks they resolve into are
+    // research state (ledger.md).
     const intakeMd = await readIntake(t.slug);
     uncertaintyBySlug[t.slug] = {
-      intakeMd,
+      ledgerMd: await readLedger(t.slug),
       state: await readState(t.slug),
       contradictions: intakeMd ? (checkIntakeContradictions(intakeMd).findings ?? []) : [],
     };
@@ -387,7 +445,7 @@ export function report(r) {
 
   // E1: risk-weighted gates. The status already encodes the warn-first split (drafts fail,
   // published guides advise), so the row prints WHICH it was and why — a reader must never
-  // have to guess whether an advisory line would have blocked a graduation.
+  // have to guess whether an advisory line would have blocked publication.
   if (r.riskGates) {
     if (r.riskGates.status === "pass") {
       L.push(`  P0 risk-gates · PASS — advisory surfaced, no misattributed or malformed facts`);
@@ -395,14 +453,14 @@ export function report(r) {
       const enforced = r.riskGates.status === "fail";
       L.push(
         `  P0 risk-gates · ${enforced ? "FAIL" : "advisory"} — ${r.riskGates.findings.length} finding(s)` +
-        `${enforced ? " (draft: these BLOCK graduation)" : " (published: advisory this release, blocks once enforced)"}:`,
+        `${enforced ? " (draft: these BLOCK publishing)" : " (published: advisory this release, blocks once enforced)"}:`,
       );
       for (const f of r.riskGates.findings) L.push(`      ⚠ [${f.code}] ${f.msg}`);
     }
   }
 
   // E3: contradiction + uncertainty. Same warn-first split, stated the same way — a reader
-  // must never have to guess whether an advisory line would have blocked a graduation.
+  // must never have to guess whether an advisory line would have blocked publication.
   if (r.uncertainty) {
     if (r.uncertainty.status === "pass") {
       L.push(`  P0 uncertainty· PASS — no unregistered forecasts, burst stages, or unresolved contradictions`);
@@ -410,7 +468,7 @@ export function report(r) {
       const enforced = r.uncertainty.status === "fail";
       L.push(
         `  P0 uncertainty· ${enforced ? "FAIL" : "advisory"} — ${r.uncertainty.findings.length} finding(s)` +
-        `${enforced ? " (draft: these BLOCK graduation)" : " (published: advisory this release, blocks once enforced)"}:`,
+        `${enforced ? " (draft: these BLOCK publishing)" : " (published: advisory this release, blocks once enforced)"}:`,
       );
       for (const f of r.uncertainty.findings) L.push(`      ⚠ [${f.code}] ${f.msg}`);
     }
@@ -454,7 +512,7 @@ export function report(r) {
     if (h.status === "clean") {
       L.push(`  -- hygiene    · clean — no misattribution/malformed-value/bare-echo findings`);
     } else {
-      L.push(`  -- hygiene    · ${n} advisory finding(s) in facts.json (not blocking — see docs/PLAN_EVIDENCE_FIRST.md B3)`);
+      L.push(`  -- hygiene    · ${n} advisory finding(s) in facts.json (not blocking — see scripts/audit/check-facts-hygiene.mjs)`);
       for (const m of h.misattribution) L.push(`      ⚠ misattribution: ${m.ids.join(" <-> ")} both claim ${JSON.stringify(m.value)} from different sources`);
       for (const m of h.malformed) L.push(`      ⚠ malformed value: ${m.id} — ${JSON.stringify(m.value)}`);
       for (const b of h.bareEcho) L.push(`      ⚠ bare echo: "${b.stem}" covers ${b.values.length} different values — which is which?`);
@@ -464,17 +522,17 @@ export function report(r) {
   L.push(`  #1 schema     · not checked here — run \`npm run build\` (the content-collection gate)`);
 
   // Human checklist
-  L.push(`  ── Human judgment (graduation checklist — the machine can't score these) ──`);
+  L.push(`  ── Human judgment (publish checklist — the machine can't score these) ──`);
   for (const [num, desc] of HUMAN_ROWS) L.push(`  [ ] ${num.padEnd(3)} ${desc}`);
 
   L.push(r.pass
-    ? `  → verdict: PASS (blocking gates green). Graduation still needs the human checklist + \`npm run build\`.`
+    ? `  → verdict: PASS (blocking gates green). Publishing still needs the human checklist + \`npm run build\`.`
     : `  → verdict: NEEDS WORK — fix the blocking gate(s): ${r.blockers.join(", ")}. Re-research each against a primary source, then re-run.`);
   return L.join("\n");
 }
 
-// GitHub-flavored-markdown scorecard for a single guide — the artifact posted on the research/recert
-// PR and on the graduation issue, so a guide is judged against visible evidence (pipeline P4). The
+// GitHub-flavored-markdown scorecard for a single guide — the artifact `pipeline.mjs land` writes
+// as the research/recert PR body, so a guide is judged against visible evidence (pipeline P4). The
 // leading HTML-comment marker lets a poster find-or-update it in place instead of duplicating.
 export function renderMarkdown(r) {
   const L = [];
@@ -537,10 +595,10 @@ export function renderMarkdown(r) {
     for (const b of h.bareEcho) L.push(`- bare echo: "${b.stem}" covers ${b.values.length} different values (\`${b.ids.join("`, `")}\`) — which is which?`);
     L.push("", `</details>`, "");
   }
-  L.push(`### Human judgment — graduation checklist (the machine can't score these)`);
+  L.push(`### Human judgment — publish checklist (the machine can't score these)`);
   for (const [num, desc] of HUMAN_ROWS) L.push(`- [ ] **${num}** ${desc}`);
   L.push("");
-  L.push(`> Verdict PASS = blocking gates green. Graduation still needs the checklist above + \`npm run build\` (schema).`);
+  L.push(`> Verdict PASS = blocking gates green. Publishing still needs the checklist above + \`npm run build\` (schema).`);
   return L.join("\n");
 }
 

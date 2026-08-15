@@ -1,4 +1,4 @@
-// E1 (docs/PLAN_EVIDENCE_FIRST.md) — backfill the `tier` field on existing facts.json rows.
+// E1 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST) — backfill the `tier` field on existing facts.json rows.
 //
 // WHY. `tier` has been in `src/content.config.ts` since P7/R11 (both factRecord and
 // provenance) and NOTHING has ever populated it — defect D5 in the plan's audit: a schema

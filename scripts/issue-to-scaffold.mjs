@@ -8,9 +8,9 @@
 // transforms) lives in intake-schema.mjs, so this file can never drift from the issue form or the
 // scaffolder: it just wires them together.
 
-import { appendFileSync } from "node:fs";
 import { writeScaffold } from "./scaffold-guide.mjs";
 import { parseIssueBody, answersFromForm, validateAnswers } from "./intake-schema.mjs";
+import { emitOutput } from "./lib/cli.mjs";
 
 const body = process.env.ISSUE_BODY || "";
 const answers = answersFromForm(parseIssueBody(body));
@@ -20,6 +20,8 @@ if (!v.ok) { console.error(`[issue-to-scaffold] invalid intake: ${v.error} — a
 
 const res = await writeScaffold(answers);
 console.log(`[issue-to-scaffold] wrote scaffold for ${answers.country} (slug: ${res.slug})`);
-if (process.env.GITHUB_OUTPUT) {
-  appendFileSync(process.env.GITHUB_OUTPUT, `slug=${res.slug}\ncountry=${answers.country}\n`);
-}
+// Through the shared writer: `country` is whatever a stranger typed into the public issue form,
+// and $GITHUB_OUTPUT is line-delimited — a newline in it would be a second output line the runner
+// accepts as this step's own (e.g. its own `slug=`). Refused, not trimmed.
+emitOutput("slug", res.slug);
+emitOutput("country", answers.country);

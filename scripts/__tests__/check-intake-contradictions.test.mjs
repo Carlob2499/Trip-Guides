@@ -1,4 +1,4 @@
-// Tests for scripts/audit/check-intake-contradictions.mjs (C2, docs/PLAN_EVIDENCE_FIRST.md):
+// Tests for scripts/audit/check-intake-contradictions.mjs (C2, docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST):
 // deterministic date/party/person contradiction extraction over an intake doc's full text.
 //
 // THE FALSE-POSITIVE GUARD IS THE POINT of this file, not an afterthought — A1 found that the
@@ -10,7 +10,7 @@
 // intake's normal per-person variation never does.
 
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { readFile, mkdtemp, writeFile, rm } from "node:fs/promises";
+import { readFile, mkdtemp, mkdir, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -25,7 +25,7 @@ const FIXTURE_INTAKE = fileURLToPath(
 );
 
 async function realIntake(slug) {
-  const p = fileURLToPath(new URL(`../../guides-intake/${slug}.md`, import.meta.url));
+  const p = fileURLToPath(new URL(`../../guides-intake/${slug}/intake.md`, import.meta.url));
   return readFile(p, "utf8");
 }
 
@@ -162,7 +162,7 @@ describe("checkIntakeContradictions — the frozen Japan fixture", () => {
 });
 
 describe("checkIntakeContradictions — every real, shipped intake doc is clean", () => {
-  for (const slug of ["korea", "us"]) {
+  for (const slug of ["korea"]) {
     it(`${slug} produces zero findings`, async () => {
       const text = await realIntake(slug);
       expect(checkIntakeContradictions(text)).toEqual({ status: "clean", findings: [] });
@@ -186,6 +186,8 @@ describe("checkIntakeContradictions — synthetic multi-flag coverage", () => {
   });
 });
 
+// Read intake.md, write ledger.md — the split's load-bearing half here. intake.md is frozen
+// traveler intent, so a finding ABOUT it is recorded beside it, never appended into it.
 describe("applyContradictions — file mutation", () => {
   let dir;
 
@@ -197,50 +199,70 @@ describe("applyContradictions — file mutation", () => {
     await rm(dir, { recursive: true, force: true });
   });
 
-  const DOC = (extra) => `# New Guide Intake — Testland
+  const DOC = `# New Guide Intake — Testland
 
 ## 2. Trip Shape
 - **Dates (target):** 2026-10-15 – 2026-11-10
 - Number of travelers: 2
 
 the traveler is still narrowing (Oct 15 or Oct 22, both ending around Nov 10)
-${extra ?? ""}
 `;
 
-  it("appends a new '## Questions for the traveler' section when none exists", async () => {
-    await writeFile(path.join(dir, "t.md"), DOC());
+  /** Seed a run-state dir: intake.md always, ledger.md only when given. */
+  async function seed(slug, intake, ledger) {
+    await mkdir(path.join(dir, slug), { recursive: true });
+    await writeFile(path.join(dir, slug, "intake.md"), intake);
+    if (ledger != null) await writeFile(path.join(dir, slug, "ledger.md"), ledger);
+  }
+  const ledgerOf = (slug) => readFile(path.join(dir, slug, "ledger.md"), "utf8");
+
+  it("appends a new '## Questions for the traveler' section to the ledger when none exists", async () => {
+    await seed("t", DOC, "# Research ledger — Testland\n");
     const r = await applyContradictions("t", dir);
     expect(r.applied).toBe(1);
-    const out = await readFile(path.join(dir, "t.md"), "utf8");
+    const out = await ledgerOf("t");
     expect(out).toContain("### q-t-dates-range");
     expect(out).toContain("- **Status:** open");
     expect(out).toContain("## Contradictions");
   });
 
+  it("never writes into intake.md — frozen intent stays byte-identical", async () => {
+    await seed("t", DOC, "# Research ledger — Testland\n");
+    await applyContradictions("t", dir);
+    expect(await readFile(path.join(dir, "t", "intake.md"), "utf8")).toBe(DOC);
+  });
+
+  it("creates the ledger when the guide has none yet", async () => {
+    await seed("t", DOC); // no ledger.md
+    const r = await applyContradictions("t", dir);
+    expect(r.applied).toBe(1);
+    expect(await ledgerOf("t")).toContain("### q-t-dates-range");
+  });
+
   it("fills the scaffold template's '(none yet)' placeholder instead of duplicating the heading", async () => {
-    const templated = DOC() + `
+    const templated = `# Research ledger — Testland
+
 ## Questions for the traveler (research emits; traveler answers on the progress page)
 > Traveler-framed only — no pipeline vocabulary.
 
 (none yet)
 `;
-    await writeFile(path.join(dir, "t.md"), templated);
+    await seed("t", DOC, templated);
     await applyContradictions("t", dir);
-    const out = await readFile(path.join(dir, "t.md"), "utf8");
+    const out = await ledgerOf("t");
     expect(out).toContain("### q-t-dates-range");
     expect(out).not.toContain("(none yet)");
     // Exactly one Questions heading — the template's own, not a second appended copy.
     expect(out.match(/## Questions for the traveler/g)).toHaveLength(1);
   });
 
-  it("is idempotent — a second run on the same doc appends nothing new", async () => {
-    await writeFile(path.join(dir, "t.md"), DOC());
+  it("is idempotent — a second run on the same guide appends nothing new", async () => {
+    await seed("t", DOC, "# Research ledger — Testland\n");
     const r1 = await applyContradictions("t", dir);
     const r2 = await applyContradictions("t", dir);
     expect(r1.applied).toBe(1);
     expect(r2.applied).toBe(0);
-    const out = await readFile(path.join(dir, "t.md"), "utf8");
-    expect(out.match(/### q-t-dates-range/g)).toHaveLength(1); // not duplicated
+    expect((await ledgerOf("t")).match(/### q-t-dates-range/g)).toHaveLength(1); // not duplicated
   });
 
   it("never throws on a missing intake doc — applies nothing", async () => {
@@ -249,7 +271,7 @@ ${extra ?? ""}
   });
 
   it("applies nothing to a clean doc", async () => {
-    await writeFile(path.join(dir, "clean.md"), "# New Guide Intake — Testland\n\nNothing contradictory here.\n");
+    await seed("clean", "# New Guide Intake — Testland\n\nNothing contradictory here.\n", "# Research ledger\n");
     const r = await applyContradictions("clean", dir);
     expect(r.applied).toBe(0);
   });

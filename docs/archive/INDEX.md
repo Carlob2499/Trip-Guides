@@ -12,6 +12,50 @@ to look for here. Two files in this folder are **not** indexed, because they sti
 
 ---
 
+### PLAN_EVIDENCE_FIRST.md — evidence first, guide second
+
+Written 2026-08-12 against the creator's master-orchestrator mandate, executed 2026-08-13, retired
+2026-08-15. Its principle holds and is now just how the repo works: `facts.json` is the canonical
+fact layer and prose is presentation — no parallel evidence store was ever created. Shipped: the
+frozen Japan regression fixture (A1) and the 12/12 detection harness that closes the program (H1);
+`risk`/`entity`/`evidence` on the fact schema (B1); the migrate-facts value fix and dedup (B2); the
+facts-hygiene, risk-gate, uncertainty, drift and routes checkers wired into `npm run verify`
+(B3/E1/E2/E3); intake certainty states and the contradiction gate (C1/C2); destination knowledge as
+data (D1); entity-batched, risk-scaled research in the skill (D2); the candidate shortlist stage
+(D3). Packet G1 (remove autonomous publication) was **struck by the creator** — see `CONTEXT.md`.
+`git show c507b91:docs/PLAN_EVIDENCE_FIRST.md`
+
+**Parked items** — everything not carried into the current architecture:
+
+- **F4, the prose-reduction ledger, was never recorded** and its 2026-08-12 baseline no longer
+  exists: the 2026-08-15 refactor moved every workflow prompt into `prompts/` and rewrote
+  `pipeline.md`, so a before/after `wc -l` against that baseline would measure two different repos.
+  Definition-of-done #5 retires with it. Nothing depends on the number.
+- **The risk-keyed half of E1/E2/E3 is still dormant** — no fact row in the corpus carries
+  `risk`/`tier`/`entity`/`evidence`, so each defect class ships a risk-INDEPENDENT detector and
+  `risk` only escalates where a research pass supplies it. That is a recorded state, not a task:
+  `CONTEXT.md`, "Evidence-gate detection is DECOUPLED from `risk`/`evidence`/`tier`".
+- **Japan's three malformed fact values survive** (`$16.50,` · `$1,` · `$80,` in
+  `src/content/guides/japan/facts.json`). B2 fixed the regex that produced them, never the rows,
+  and hand-patching Japan is forbidden — the guide is `draft: true` and will be regenerated. The
+  five equivalents on published guides are gone: korea's four were repaired, `us` was deleted.
+- **Definition-of-done #7 ("`pipeline.mjs` and `land-branch.sh` diff-clean") is superseded**, not
+  broken. It bound *this* program's packets; the 2026-08-15 architecture refactor rewrote the spine
+  under its own creator approval.
+
+### revise-guide.md — the MAJOR-revision pipeline (V1–V6)
+
+Drafted 2026-07-30 as a plan, kept in `docs/reference/` as the shipped pipeline's spec, retired
+2026-08-15 when the change lifecycle absorbed it. It synthesized two independent designs into one
+arc and shipped all six phases: the label substrate, the issue template + parser + plan validator,
+a four-agent chain (plan → scoped re-research → ripple sweep → fresh-context critic on the diff)
+with model fallback, and the feedback-driven auto-file. What survived the merge into `change.yml`
+is in `docs/reference/pipeline.md`: the ≤5-group cap that separates a change from a re-research,
+the DATA channel for a requester's own words, the `guide-<slug>` concurrency group, the fork gate,
+the critic-on-the-diff, and "nobody asked for it, so a human signs it off". What did not: the
+approval labels, the planner agent, and the persisted revision plan with its status machine.
+`git show c507b91:docs/reference/revise-guide.md`
+
 ### PLAN_DESIGN_RECONCILIATION.md — the three Claude Design projects vs. the shipped site
 
 Written 2026-08-12, closed 2026-08-13. A fidelity audit (§A) of hub, guide, tools, notation and

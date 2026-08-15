@@ -1,4 +1,4 @@
-// Tests for scripts/audit/fact-usage.mjs (B4, docs/PLAN_EVIDENCE_FIRST.md): the derived,
+// Tests for scripts/audit/fact-usage.mjs (B4, docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST): the derived,
 // never-stored bidirectional index — fact-id -> every location that references it, and the
 // inverse list of sourced money mentions with no {{fact:id}} token at all.
 

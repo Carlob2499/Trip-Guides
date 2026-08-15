@@ -1,4 +1,4 @@
-// H1 (docs/PLAN_EVIDENCE_FIRST.md) — THE PROOF.
+// H1 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST) — THE PROOF.
 //
 // Mandate §31: the rebuilt pipeline must DETECT all 12 defect classes the Japan guide shipped,
 // and Japan itself is never cleaned. `tests/fixtures/japan-regression/` froze those defects as
@@ -32,7 +32,8 @@ const text = (p) => readFileSync(at(p), "utf8");
 
 const facts = json("guide/facts.json");
 const guide = json("guide/_guide.json");
-const intakeMd = text("intake/japan.md");
+// Frozen pre-split evidence: one flat doc serving as both intent and reconciliation ledger.
+const fixtureDoc = text("intake/japan.md");
 const state = json("intake/japan.state.json");
 const destinationConfig = JSON.parse(
   readFileSync(new URL("../../src/data/destinations/japan.json", import.meta.url), "utf8"),
@@ -44,11 +45,11 @@ const sections = ["01-plan.json", "03-sights.json", "06-days.json", "08-health-a
   return Array.isArray(j) ? j : j.sections || [];
 });
 
-const contradictions = checkIntakeContradictions(intakeMd).findings ?? [];
+const contradictions = checkIntakeContradictions(fixtureDoc).findings ?? [];
 const hygiene = checkFactsHygiene(facts);
 const riskGates = evaluateRiskGates({ guide, facts, hygiene, destinationConfig, enforce: true });
 const uncertainty = evaluateUncertainty({
-  sections, facts, intakeMd, state, contradictions,
+  sections, facts, ledgerMd: fixtureDoc, state, contradictions,
   archived: !!guide.archived,
   enforce: true,
 });

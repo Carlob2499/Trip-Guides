@@ -134,7 +134,7 @@ describe("parseIssueBody + answersFromForm", () => {
   });
 });
 
-// C1 (docs/PLAN_EVIDENCE_FIRST.md): certainty states. Round-trips each certainty value through
+// C1 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST): certainty states. Round-trips each certainty value through
 // the real parser, and confirms an intake with none of the three new headings at all — a real
 // pre-C1 issue — still parses and defaults every certainty to "assumed" rather than throwing or
 // leaving the key undefined (the plan's own ACCEPTANCE: "old-format issues still parse").

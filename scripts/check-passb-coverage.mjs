@@ -3,7 +3,7 @@
 // Pass A and Pass B are independent by construction, but ONE agent merges them — and nothing
 // downstream can see what the merge silently dropped: the critics judge the product, not what's
 // missing from it. This check is deterministic and agent-free: every entry in
-// guides-intake/<slug>.passB.json must be accounted for in the intake doc's
+// guides-intake/<slug>/passB.json must be accounted for in the research ledger's
 // `## Research reconciliation` section (as AGREE / B-only / CONFLICT — or an explicit
 // rejection row). A B-find that vanished without a written verdict fails the run.
 //
@@ -54,20 +54,20 @@ export function isCovered(itemName, normalizedLedger) {
  * - passB null/[] → skip (nothing to cover).
  * - reconciliation section absent while passB has entries → every entry is missing.
  */
-export function checkCoverage(passB, intakeText) {
+export function checkCoverage(passB, ledgerText) {
   if (!Array.isArray(passB) || passB.length === 0) {
     return { status: "skip", missing: [], reason: "no Pass B entries to cover" };
   }
-  const m = RECONCILIATION_HEADING.exec(intakeText ?? "");
+  const m = RECONCILIATION_HEADING.exec(ledgerText ?? "");
   if (!m) {
     return {
       status: "fail",
       missing: passB.map((e) => e.item),
-      reason: "intake doc has no `## Research reconciliation` section",
+      reason: "research ledger has no `## Research reconciliation` section",
     };
   }
   // Section text = from the heading to the next `## ` heading (or EOF).
-  const rest = intakeText.slice(m.index + m[0].length);
+  const rest = ledgerText.slice(m.index + m[0].length);
   const next = rest.search(/^##\s/m);
   const ledger = normalize(next === -1 ? rest : rest.slice(0, next));
   const missing = passB.filter((e) => !isCovered(e.item ?? "", ledger)).map((e) => e.item);
@@ -109,8 +109,8 @@ if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith
     process.exit(1);
   }
   const enforceFloors = process.argv.includes("--floors");
-  const passBPath = `guides-intake/${slug}.passB.json`;
-  const intakePath = `guides-intake/${slug}.md`;
+  const passBPath = `guides-intake/${slug}/passB.json`;
+  const ledgerPath = `guides-intake/${slug}/ledger.md`;
   if (!existsSync(passBPath)) {
     console.log(`[passb-coverage] ${passBPath} absent — nothing to check (single-pass or pre-B run).`);
     process.exit(0);
@@ -122,8 +122,8 @@ if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith
     console.error(`[passb-coverage] ${passBPath} is not valid JSON: ${e.message}`);
     process.exit(1);
   }
-  const intake = existsSync(intakePath) ? readFileSync(intakePath, "utf8") : "";
-  const result = checkCoverage(passB, intake);
+  const ledger = existsSync(ledgerPath) ? readFileSync(ledgerPath, "utf8") : "";
+  const result = checkCoverage(passB, ledger);
   if (result.status === "fail") {
     console.error(`[passb-coverage] FAIL — ${result.reason}:`);
     for (const item of result.missing) console.error(`  · ${item}`);

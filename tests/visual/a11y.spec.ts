@@ -661,7 +661,6 @@ for (const [name, path] of [
   ["korea guide", "/Trip-Guides/guides/korea/"],
   ["denmark guide", "/Trip-Guides/guides/denmark/"],
   ["japan guide", "/Trip-Guides/guides/japan/"],
-  ["us guide", "/Trip-Guides/guides/us/"],
   ["new intake", "/Trip-Guides/new/"], // R4: the composed intake — gated from birth
   /* ⌁ `["trip tools", "/Trip-Guides/tools/korea/"]` was here and is REMOVED, not relocated.
      R5 deleted that route and this entry kept pointing at it — so for four combos the gate
@@ -796,7 +795,7 @@ for (const scheme of ["light", "dark"] as const) {
 
    Scanned per guide because --accent and --accent-ink are extracted PER GUIDE, and the bug it
    replaces was one that only denmark's lighter accent exposed. */
-for (const guide of ["denmark", "korea", "japan", "us"] as const) {
+for (const guide of ["denmark", "korea", "japan"] as const) {
   for (const scheme of ["light", "dark"] as const) {
     test(`what's-next banner is legible — ${guide} (${scheme})`, async ({ page }) => {
       await page.emulateMedia({ colorScheme: scheme, reducedMotion: "reduce" });
