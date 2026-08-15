@@ -459,11 +459,32 @@ is the one gate; git history holds the rest if a redesign wants them); the panel
 study trees; model-smoke.yml; the mutation and skill-retro CRONS (both workflows stay,
 dispatch-only). CHANGELOG is frozen at 2026-07-16 and lives in docs/archive/ — the structural
 story's ongoing home is THIS file plus the archive plans, not a second ledger. Kept by ruling:
-the /new intake wizard and its worker ("the HUMAN way to interact with the website") — its
-Turnstile protection is wired in code and waits only on the creator's keys; docs/archive and
+the /new intake wizard and its worker ("the HUMAN way to interact with the website" — its bot
+challenge was later dropped, see the 2026-08-15 entry below); docs/archive and
 HANDOFF_ARCHIVE (git history was squash-rooted 2026-08-08, so the archive IS the pre-August
 record); deploy.yml's `npm test` (test.yml is a non-required check, so deploy's run is the real
 gate — the audit's "duplicate" finding was withdrawn on evidence). Also settled: PLAN_EVIDENCE_
 FIRST.md keeps its SCREAMING_CASE name as docs/README's one recorded exception, and the
 route-optimizer's pure math lives in src/lib/route-optimize.ts — a silo whose index must stay a
 side-effect import cannot also be a build-time export door.
+
+**The public intake endpoint ships with no bot check** (creator ruling, 2026-08-15). Turnstile was
+wired end to end — client widget, config key, Worker verify branch — and waiting only on the
+creator's keys; the ruling is that it is not wanted, so all three were deleted. Rejected: leaving
+the code in place behind an unset secret, which is dead code that reads as a live guard to every
+later audit (the 2026-08-14 audit and HANDOFF both carried it as a pending creator task). What
+protects the endpoint is what already did the work: the shared zod schema + FIELDS mapping (a
+malformed body is a 400 that files nothing), the per-IP weekly cap with its owner-approval tier,
+and the fixed `ALLOWED_ORIGIN`. `/health` now reports one guard, not two. Re-adding a challenge is
+a new decision, not a restoration.
+
+**The /new page asks the whole intake schema — no field collected into nothing** (2026-08-15).
+The composed intake shipped without `departure-airport` or the three certainty dropdowns, so every
+hub-filed guide reached research with its dates/anchor/budget certainty silently defaulted to
+"assumed" and no departure airport — which is the fact the Atlas globe draws its route line from,
+so hub-filed guides drew none. Rejected: a separate certainty step (a quiz about answers the
+traveler hasn't given yet). Each certainty is a RIDER on the step of the field it qualifies —
+dates with dates, anchor with anchor, budget on the ranked board where budget lives — rendered as
+the flow's pill row, never as a raw dropdown, and never counted when deciding whether that step
+still needs asking ("assumed" is a real answer, not a blank). `intake-contract.test.ts` names all
+four so the drop cannot recur silently.

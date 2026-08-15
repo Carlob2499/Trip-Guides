@@ -45,6 +45,19 @@ describe("nextTailSteps", () => {
     const steps = nextTailSteps({ ngCountry: "   " }, []);
     expect(steps.some((s) => s.ids.includes("ngCountry"))).toBe(true);
   });
+  it("a certainty rides beside its field and never fires a step by itself", () => {
+    // A rider can't be blank the way the tail means it ("assumed" is a real answer), so it never
+    // re-opens a question the drop zone already settled — whether or not a value is in hand.
+    const dates = { ngStart: "2026-10-12", ngEnd: "2026-10-30" };
+    expect(nextTailSteps({ ...dates, ngDatesCertainty: "assumed" }, []).some((s) => s.ids.includes("ngDatesCertainty"))).toBe(false);
+    expect(nextTailSteps(dates, []).some((s) => s.ids.includes("ngDatesCertainty"))).toBe(false);
+    // ...and it never answers FOR the field it qualifies: that question still gets asked.
+    expect(nextTailSteps({ ngDatesCertainty: "fixed" }, []).some((s) => s.ids.includes("ngStart"))).toBe(true);
+  });
+  it("asks the departure airport when blank, skips it once known", () => {
+    expect(nextTailSteps({}, []).some((s) => s.ids.includes("ngDepartureAirport"))).toBe(true);
+    expect(nextTailSteps({ ngDepartureAirport: "EWR" }, []).some((s) => s.ids.includes("ngDepartureAirport"))).toBe(false);
+  });
 });
 
 describe("manifestSegments", () => {
@@ -59,10 +72,14 @@ describe("manifestSegments", () => {
   it("includes optional sentences only when their values exist", () => {
     const none = manifestSegments({});
     expect(none.some((s) => s.field === "ngConstraints")).toBe(false);
-    const some = manifestSegments({ ngConstraints: "no stairs", ngAnchor: "GO Fest", ngPriority2: "Shopping" });
+    expect(none.some((s) => s.field === "ngDepartureAirport")).toBe(false);
+    const some = manifestSegments({
+      ngConstraints: "no stairs", ngAnchor: "GO Fest", ngPriority2: "Shopping", ngDepartureAirport: "EWR",
+    });
     expect(some.some((s) => s.field === "ngConstraints")).toBe(true);
     expect(some.some((s) => s.field === "ngAnchor")).toBe(true);
     expect(some.some((s) => s.field === "ngPriority2")).toBe(true);
+    expect(some.some((s) => s.field === "ngDepartureAirport")).toBe(true);
   });
   it("drops empty text separators", () => {
     for (const s of manifestSegments({})) {

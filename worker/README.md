@@ -8,9 +8,9 @@ before (opens a prefilled GitHub issue), so the repo is safe to leave as-is.
 ## How it fits
 
 ```
-wizard (POST intake JSON) ──▶ Worker ──(Turnstile ✓ · validate · rate-limit)──▶ files new-guide issue
-                                                                                        │
-                            existing pipeline (scaffold → research → publish) ◀─────────┘
+wizard (POST intake JSON) ──▶ Worker ──(validate · rate-limit)──▶ files new-guide issue
+                                                                          │
+              existing pipeline (scaffold → research → publish) ◀─────────┘
 ```
 
 The Worker files the **same** issue body the GitHub form would (rendered from the one intake schema,
@@ -31,11 +31,13 @@ Then trigger a deploy (push any change under `worker/`, or Actions → **Deploy 
 Copy the deployed URL (e.g. `https://waypoint-intake.<you>.workers.dev`) into
 `src/features/hub/intake-proxy-config.js` → `url`, and push. Zero-click is now live.
 
-### Recommended: bot protection (Turnstile) + rate limiting
+### Recommended: rate limiting
 
-- **Turnstile** (blocks scripted spam): create a Turnstile widget in the Cloudflare dashboard →
-  put the **site key** in `intake-proxy-config.js` → `turnstileSiteKey`, and the **secret key** on
-  the Worker: `npx wrangler secret put TURNSTILE_SECRET`. Until set, submissions aren't bot-checked.
+There is **no bot challenge**, by decision (`CONTEXT.md` 2026-08-15, "The public intake endpoint
+ships with no bot check"). The endpoint's protection is the shared zod schema (a malformed body is
+a 400 that files nothing), the fixed `ALLOWED_ORIGIN`, and the cap below. Adding a challenge is a
+new decision, not a restoration.
+
 - **Per-IP weekly cap** (KV): `npx wrangler kv namespace create RATE`, then uncomment the
   `[[kv_namespaces]]` block in `wrangler.toml` with the returned id and redeploy. Under `AUTO_CAP`
   (default 3) per IP per week the issue is auto-labeled (auto-research); over it, the issue is filed

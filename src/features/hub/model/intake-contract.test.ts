@@ -85,8 +85,18 @@ describe("intake field ids ↔ intake-schema FIELDS", () => {
   });
 
   it("every key intake-submit.js emits is a FIELDS id", () => {
-    // One-way on purpose: the schema carries fields /new does not ask (departure-airport, the
-    // three certainties). An unknown key is the bug; an unasked field is a scope decision.
+    // One-way on purpose: an unknown key is the bug (it files as nothing); whether /new ASKS a
+    // given schema field is a scope decision, made per field. As of 2026-08-15 it asks them all.
     for (const key of EMITTED_KEYS) expect(FIELD_IDS).toContain(key);
+  });
+
+  it("collects the four fields /new used to drop on the floor", () => {
+    // Until 2026-08-15 the page asked none of these, so every hub-filed guide reached research
+    // with all three certainties silently defaulted to "assumed" and no departure airport — and
+    // the Atlas globe, which draws its route line from that airport, had nothing to draw. Named
+    // one by one because a field collected into nothing is exactly this file's failure mode.
+    for (const key of ["dates-certainty", "departure-airport", "anchor-certainty", "budget-certainty"]) {
+      expect(EMITTED_KEYS).toContain(key);
+    }
   });
 });

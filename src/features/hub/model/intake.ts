@@ -66,10 +66,20 @@ export interface TailStep {
   sub?: string;
 }
 
+/* A certainty field (dates / anchor / budget) rides in the step of the field it QUALIFIES —
+   asking "how firm is that?" on its own screen would be a quiz about an answer the traveler
+   hasn't given yet. It is a RIDER: it never decides whether a step fires. It cannot be blank in
+   the sense the tail means — its select defaults to the schema's real "assumed" value
+   (intake-schema.mjs's CERTAINTY_OPTIONS comment: an unstated certainty means "assumed", not
+   "unset") — so counting it as empty would re-ask a question the drop zone already answered.
+   Budget's certainty is the exception to the placement, not the rule: budget itself lives on the
+   ranked board, so its row is built there rather than in the tail. */
+export const CERTAINTY_IDS: string[] = ["ngDatesCertainty", "ngAnchorCertainty", "ngBudgetCertainty"];
 export const TAIL_STEPS: TailStep[] = [
   { ids: ["ngCountry", "ngCities"], ask: "Where are we going?", sub: "Country is the one thing research can't start without." },
-  { ids: ["ngStart", "ngEnd"], ask: "When, roughly?", sub: "Even a loose window shapes what gets checked." },
-  { ids: ["ngAnchor"], ask: "Is the trip built around something?", sub: "A festival, a match, a season — or nothing, that's fine." },
+  { ids: ["ngStart", "ngEnd", "ngDatesCertainty"], ask: "When, roughly?", sub: "Even a loose window shapes what gets checked — and how firm it is decides whether research treats it as booked." },
+  { ids: ["ngDepartureAirport"], ask: "Where are you flying out of?", sub: "A code is best (EWR, JFK); a city name works. It's the home end of the route line on your map." },
+  { ids: ["ngAnchor", "ngAnchorCertainty"], ask: "Is the trip built around something?", sub: "A festival, a match, a season — or nothing, that's fine." },
   { ids: ["ngTravelers", "ngParty"], ask: "Who's going?", sub: "Numbers and shape — the guide is tailored to the people on it." },
   { ids: ["ngPassports"], ask: "Whose passports?", sub: "Drives the visa & entry research." },
   { ids: ["ngConstraints"], ask: "Anything the guide must honor?", sub: "Mobility, dietary, sensory — hard rules, not preferences." },
@@ -78,7 +88,8 @@ export const TAIL_STEPS: TailStep[] = [
 ];
 
 /** Which tail steps still need asking, given current field values (id → value) and the
- *  ranked priorities. A step fires when ANY of its fields is empty; the niche step
+ *  ranked priorities. A step fires when ANY of its fields is empty — except the certainty
+ *  riders, which are never counted (see CERTAINTY_IDS above); the niche step
  *  fires only when a ranked priority IS the niche enum (killing the old form's
  *  remember-the-dropdown memory bridge); the two always-optional closers (constraints,
  *  comments) still show when empty — an explicit blank is a decision, so they render
@@ -87,7 +98,7 @@ export function nextTailSteps(
   values: Record<string, string>,
   ranked: string[],
 ): TailStep[] {
-  const empty = (id: string) => !(values[id] ?? "").trim();
+  const empty = (id: string) => !CERTAINTY_IDS.includes(id) && !(values[id] ?? "").trim();
   return TAIL_STEPS.filter((step) => {
     if (step.ids.includes("ngNiche") && !ranked.includes(NICHE_VALUE)) return false;
     return step.ids.some(empty);
@@ -136,6 +147,7 @@ export function manifestSegments(v: Record<string, string>): ManifestSegment[] {
   if (get("ngPriority3")) segs.push({ text: ", then " }, { field: "ngPriority3", ghost: "" });
   if (get("ngNiche")) segs.push({ text: " — specifically " }, { field: "ngNiche", ghost: "" });
   segs.push({ text: ", on a " }, { field: "ngBudget", ghost: "budget TBD" }, { text: " footing." });
+  if (get("ngDepartureAirport")) segs.push({ text: " Flying out of " }, { field: "ngDepartureAirport", ghost: "" }, { text: "." });
   if (get("ngConstraints")) segs.push({ text: " The guide must honor: " }, { field: "ngConstraints", ghost: "" }, { text: "." });
   if (get("ngPassports")) segs.push({ text: " Passports: " }, { field: "ngPassports", ghost: "" }, { text: "." });
   // Drop empty-text segments so the UI never renders stray separators.

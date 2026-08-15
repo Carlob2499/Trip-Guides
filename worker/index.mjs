@@ -4,16 +4,21 @@
 // this repo only). The site stays on GitHub Pages untouched — this is added beside it, deployed
 // from the repo by .github/workflows/deploy-worker.yml, and removable without trace.
 //
-// Flow: wizard POSTs the intake JSON (+ a Turnstile token) → verify Turnstile → validate with the
-// SAME zod + mapping the scaffolder uses → per-IP rate limit → file the issue via the GitHub API,
-// WITH the `new-guide` label under the cap (auto-research) or WITHOUT it over the cap (queued for
-// the owner). Returns { slug, issueUrl } so the wizard redirects to /progress/.
+// Flow: wizard POSTs the intake JSON → validate with the SAME zod + mapping the scaffolder uses →
+// per-IP rate limit → file the issue via the GitHub API, WITH the `new-guide` label under the cap
+// (auto-research) or WITHOUT it over the cap (queued for the owner). Returns { slug, issueUrl } so
+// the wizard redirects to /progress/.
+//
+// There is deliberately NO bot challenge (CONTEXT.md 2026-08-15, "The public intake endpoint ships
+// with no bot check"). What stands between the open internet and a filed issue: the shared zod
+// schema (a malformed body is a 400 and files nothing), the per-IP weekly cap with its owner-
+// approval tier, and the fixed ALLOWED_ORIGIN. Adding a challenge is a new decision, not a
+// restoration — read that entry first.
 //
 // All the judgment lives in the tested pure core (scripts/intake-proxy.mjs). This file is I/O only.
 //
 // Env (wrangler.toml vars + `wrangler secret put`):
 //   GH_TOKEN         (secret)  fine-grained PAT, Issues:write on this repo only
-//   TURNSTILE_SECRET (secret)  Cloudflare Turnstile secret key (optional; if unset, verify skipped)
 //   REPO             (var)     "owner/repo"
 //   ALLOWED_ORIGIN   (var)     the site origin allowed to POST here (CORS)
 //   AUTO_CAP         (var)     auto-research submissions per IP per week before owner-approval gating
@@ -41,35 +46,17 @@ function json(data, status, headers) {
   });
 }
 
-// The two protections below are fully implemented and BOTH fail OPEN when unconfigured —
-// `verifyTurnstile` returns true with no secret, and the rate counter reads 0 with no KV
-// binding, so `intakeRateDecision` always accepts. That is the correct default (a half-
-// deployed Worker must not lock out the owner's own intake), but until 2026-08-02 it was
-// also SILENT: a deployed Worker reported nothing about being wide open, and there is no
-// request whose response differs. Log it on every unprotected request instead — a protection
-// you cannot observe is an assumption, not a feature.
+// The rate limit fails OPEN when unconfigured — the counter reads 0 with no KV binding, so
+// `intakeRateDecision` always accepts. That is the correct default (a half-deployed Worker
+// must not lock out the owner's own intake), but until 2026-08-02 it was also SILENT: a
+// deployed Worker reported nothing about being wide open, and there is no request whose
+// response differs. Log it on every unprotected request instead — a protection you cannot
+// observe is an assumption, not a feature.
 function warnUnprotected(env) {
   const off = [];
-  if (!env.TURNSTILE_SECRET) off.push("TURNSTILE_SECRET unset (no bot check)");
   if (!env.RATE) off.push("RATE KV unbound (per-IP limit never counts)");
   if (off.length) console.warn(`[intake] UNPROTECTED public endpoint — ${off.join(" · ")}`);
   return off;
-}
-
-async function verifyTurnstile(secret, token, ip) {
-  if (!secret) return true; // not configured — the owner hasn't enabled bot protection yet
-  const form = new URLSearchParams({ secret, response: token || "" });
-  if (ip) form.set("remoteip", ip);
-  try {
-    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
-      method: "POST",
-      body: form,
-    });
-    const data = await res.json();
-    return !!data.success;
-  } catch {
-    return false;
-  }
 }
 
 export default {
@@ -84,7 +71,6 @@ export default {
       return json({
         ok: true,
         repo: env.REPO ?? null,
-        turnstile: env.TURNSTILE_SECRET ? "configured" : "OFF",
         rateLimit: env.RATE ? "configured" : "OFF",
       }, 200, cors);
     }
@@ -98,14 +84,7 @@ export default {
     } catch {
       return json({ error: "invalid JSON" }, 400, cors);
     }
-    const turnstileToken = raw.turnstileToken;
-    delete raw.turnstileToken;
-
     const ip = request.headers.get("CF-Connecting-IP") || "";
-
-    if (!(await verifyTurnstile(env.TURNSTILE_SECRET, turnstileToken, ip))) {
-      return json({ error: "bot check failed — reload and try again, or file on GitHub instead" }, 403, cors);
-    }
 
     // Validate with the exact same mapping + schema the scaffolder consumes (no drift).
     const answers = answersFromForm(raw);

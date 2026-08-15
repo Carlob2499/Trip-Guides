@@ -85,9 +85,39 @@ const contours = [
             <input type="date" id="ngEnd" />
           </label>
         </div>
+        {/* Certainty option VALUES are intake-schema.mjs's CERTAINTY_OPTIONS, exactly; the
+            option text is plain English for the traveler (the flow renders these as pills and
+            shows that text). "assumed" is first because it is the schema's real default — an
+            unstated certainty means "assumed", never "unset". */}
+        <label class="ng-field">
+          <span>How firm are these dates?</span>
+          <select id="ngDatesCertainty">
+            <option value="assumed">not sure</option>
+            <option value="fixed">booked</option>
+            <option value="target">best guess</option>
+            <option value="flexible">could move</option>
+            <option value="unknown">undecided</option>
+            <option value="none">no dates yet</option>
+          </select>
+        </label>
+        <label class="ng-field">
+          <span>Departure airport</span>
+          <input type="text" id="ngDepartureAirport" placeholder="e.g. EWR (Newark) — or the city you'll fly out of" autocomplete="off" />
+        </label>
         <label class="ng-field">
           <span>Anchor event</span>
           <input type="text" id="ngAnchor" placeholder="e.g. the festival, concert or match the trip is built around" autocomplete="off" />
+        </label>
+        <label class="ng-field">
+          <span>How firm is the anchor?</span>
+          <select id="ngAnchorCertainty">
+            <option value="assumed">not sure</option>
+            <option value="fixed">confirmed</option>
+            <option value="target">expected</option>
+            <option value="flexible">could move</option>
+            <option value="unknown">undecided</option>
+            <option value="none">no anchor</option>
+          </select>
         </label>
         <label class="ng-field">
           <span>Number of travelers</span>
@@ -150,6 +180,17 @@ const contours = [
             <option value="Mid-range ($75–150/day)">Mid-range ($75–150/day)</option>
             <option value="Comfortable ($150–300/day)">Comfortable ($150–300/day)</option>
             <option value="Luxury ($300+/day)">Luxury ($300+/day)</option>
+          </select>
+        </label>
+        <label class="ng-field">
+          <span>How firm is that budget?</span>
+          <select id="ngBudgetCertainty">
+            <option value="assumed">not sure</option>
+            <option value="fixed">hard cap</option>
+            <option value="target">rough goal</option>
+            <option value="flexible">could flex</option>
+            <option value="unknown">undecided</option>
+            <option value="none">no budget set</option>
           </select>
         </label>
         <label class="ng-field">

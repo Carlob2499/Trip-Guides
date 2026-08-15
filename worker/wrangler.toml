@@ -4,8 +4,8 @@ name = "waypoint-intake"
 main = "index.mjs"
 compatibility_date = "2024-11-01"
 
-# Non-secret config. Secrets (GH_TOKEN, TURNSTILE_SECRET) are set separately with
-# `npx wrangler secret put <NAME>` — never committed.
+# Non-secret config. The one secret (GH_TOKEN) is set separately with
+# `npx wrangler secret put GH_TOKEN` — never committed.
 [vars]
 REPO = "Carlob2499/Trip-Guides"
 ALLOWED_ORIGIN = "https://carlob2499.github.io"

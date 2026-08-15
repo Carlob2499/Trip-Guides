@@ -92,7 +92,7 @@ SUPERSEDES.md deleted, all code comments repointed); visual-redesign.md split sp
 (history → `docs/archive/visual-redesign-history.md`); new `intake-contract.test.ts` binds the
 hub's intake vocabulary to `intake-schema.mjs` (replaces hardcoded copies in intake.test.ts).
 Surfaced, not fixed: `/new` never collects departure-airport or the three certainty fields —
-scope decision for the creator.
+scope decision for the creator. (Decided and fixed 2026-08-15: it now collects all four.)
 
 **All gates green after the cleanup:** build · lint · typecheck 0 · 2009 tests / 144 files ·
 77 a11y checks vs the preview build · dist grep clean. Deferred with rationale: test-walker
@@ -100,11 +100,9 @@ scope decision for the creator.
 mass CSS-home unification and jetlag re-siloing (churn without reader value); revise-guide +
 modify-guide merge (agent pipelines; merge blind and you can't test the seam — needs a live run).
 
-**Waiting on the creator, 2 items:** (1) Turnstile keys — code is fully wired both ends; create
-the widget in the Cloudflare dashboard, put the site key in `hub/intake-proxy-config.js`, run
-`npx wrangler secret put TURNSTILE_SECRET`. Until then the live intake endpoint has no bot check.
-(2) RTDB rules: telemetry node removed from `rules.json` — paste into the Firebase console to
-revoke the now-unused write path.
+**Waiting on the creator, 1 item:** RTDB rules — telemetry node removed from `rules.json`; paste
+into the Firebase console to revoke the now-unused write path. (The former item 1, the intake
+endpoint's bot check, is closed: dropped by ruling 2026-08-15, see CONTEXT.md.)
 
 **Recommended next step — the guide-deepening list from the audit** (uses existing tooling, zero
 new code): korea geocode backfill (24/87 items missing coords), japan's 3 malformed fact values +

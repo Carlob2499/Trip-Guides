@@ -129,6 +129,48 @@ export function initIntakeFlow() {
     var head = document.createElement("p"); head.className = "itk-ask"; head.textContent = big; el.appendChild(head);
     if (sub) { var subEl = document.createElement("p"); subEl.className = "itk-sub"; subEl.textContent = sub; el.appendChild(subEl); }
   }
+  /* A <select> rendered as the flow's one control idiom: a row of pills bound to the real
+     select, which stays in the holder (a raw dropdown appears only in the no-JS flat form).
+     Board and tail share this — the certainty rows are the same mechanism pace/style/budget
+     have always used, so a pill row is built fresh on every rebuild and reads its checked
+     state back off the select. */
+  function pillRow(parent, id, head) {
+    var sel = document.getElementById(id);
+    if (!sel) return;
+    var headEl = document.createElement("p");
+    headEl.className = "itk-minihead"; headEl.textContent = head;
+    parent.appendChild(headEl);
+    var row = document.createElement("div");
+    row.className = "itk-topics";
+    row.setAttribute("role", "radiogroup");
+    row.setAttribute("aria-label", head);
+    Array.prototype.forEach.call(sel.options, function (opt) {
+      var btn = document.createElement("button");
+      btn.type = "button"; btn.className = "itk-chip";
+      btn.textContent = opt.value === "" ? "no preference" : opt.text;
+      btn.setAttribute("role", "radio");
+      btn.setAttribute("aria-checked", String(sel.value === opt.value));
+      if (sel.value === opt.value) btn.classList.add("itk-chip-on");
+      btn.addEventListener("click", function () {
+        sel.value = opt.value;
+        Array.prototype.forEach.call(row.children, function (chip) {
+          chip.classList.remove("itk-chip-on"); chip.setAttribute("aria-checked", "false");
+        });
+        btn.classList.add("itk-chip-on"); btn.setAttribute("aria-checked", "true");
+      });
+      row.appendChild(btn);
+    });
+    parent.appendChild(row);
+  }
+  /* Ids the tail renders as a pill row instead of appending their .ng-field — the certainty
+     selects, which ride beside the field they qualify (model/intake.ts's TAIL_STEPS note).
+     ngBudgetCertainty is here for its heading only; budget lives on the board, so its row is
+     built there. */
+  var PILL_HEADS = {
+    ngDatesCertainty: "How firm are these dates?",
+    ngAnchorCertainty: "How firm is the anchor?",
+    ngBudgetCertainty: "How firm is that budget?",
+  };
 
   /* ── A · Drop Zone ───────────────────────────────────────────────────────────── */
   var parsedNotes = [];
@@ -259,35 +301,14 @@ export function initIntakeFlow() {
     topicsWrap.appendChild(btn);
   });
   sB.appendChild(topicsWrap);
-  // Pace / style / budget as pill rows bound to the real selects.
-  [["ngPace", "How do we move?"], ["ngTravelStyle", "Leaning where?"], ["ngBudget", "On what footing?"]].forEach(function (pair) {
-    var sel = document.getElementById(pair[0]);
-    if (!sel) return;
-    var head = document.createElement("p");
-    head.className = "itk-minihead"; head.textContent = pair[1];
-    sB.appendChild(head);
-    var row = document.createElement("div");
-    row.className = "itk-topics";
-    row.setAttribute("role", "radiogroup");
-    row.setAttribute("aria-label", pair[1]);
-    Array.prototype.forEach.call(sel.options, function (opt) {
-      var btn = document.createElement("button");
-      btn.type = "button"; btn.className = "itk-chip";
-      btn.textContent = opt.value === "" ? "no preference" : opt.text;
-      btn.setAttribute("role", "radio");
-      btn.setAttribute("aria-checked", String(sel.value === opt.value));
-      if (sel.value === opt.value) btn.classList.add("itk-chip-on");
-      btn.addEventListener("click", function () {
-        sel.value = opt.value;
-        Array.prototype.forEach.call(row.children, function (chip) {
-          chip.classList.remove("itk-chip-on"); chip.setAttribute("aria-checked", "false");
-        });
-        btn.classList.add("itk-chip-on"); btn.setAttribute("aria-checked", "true");
-      });
-      row.appendChild(btn);
-    });
-    sB.appendChild(row);
-  });
+  // Pace / style / budget as pill rows bound to the real selects — budget's certainty right
+  // after budget, the field it qualifies.
+  [
+    ["ngPace", "How do we move?"],
+    ["ngTravelStyle", "Leaning where?"],
+    ["ngBudget", "On what footing?"],
+    ["ngBudgetCertainty", PILL_HEADS.ngBudgetCertainty],
+  ].forEach(function (pair) { pillRow(sB, pair[0], pair[1]); });
   nav(sB, { go: function () { goReview(); } });
 
   /* ── C · Interview tail (built at entry — asks only what's still blank) ─────── */
@@ -305,6 +326,9 @@ export function initIntakeFlow() {
       var el = screen("itk-c");
       ask(el, st.ask, st.sub);
       st.ids.forEach(function (id) {
+        // A certainty select renders as pills beside the field it qualifies; its .ng-field
+        // stays in the holder, exactly as the board's pace/style/budget selects do.
+        if (PILL_HEADS[id]) { pillRow(el, id, PILL_HEADS[id]); return; }
         // ngEnd lives inside ngStart's .ng-row (fields are keyed by a row's FIRST input),
         // so fields["ngEnd"] is rightly undefined — the row arrives via ngStart.
         var field = fields[id];
