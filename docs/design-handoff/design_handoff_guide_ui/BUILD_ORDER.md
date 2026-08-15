@@ -74,7 +74,8 @@ Files: `src/components/blocks/`, the rail's station list.
 - Build every row of `FALLBACKS.md` §1 against a day-zero fixture.
 - Run all three gates and fix what they find — **fix the design, never weaken the gate**.
 - Axe both themes. `TESTS.md` §6.6 is the pairing most likely to fail.
-- Amend `docs/design-handoff/DESIGN.md` with every row of `SUPERSEDES.md`.
+- Amend `docs/design-handoff/DESIGN.md` with every R5 override (done 2026-08-14: all seven are
+  folded into its body and `SUPERSEDES.md` is deleted).
 - Walk `ACCEPTANCE.md` and demonstrate each line.
 
 ---

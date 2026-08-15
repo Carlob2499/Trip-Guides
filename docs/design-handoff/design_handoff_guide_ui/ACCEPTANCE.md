@@ -17,7 +17,8 @@ mechanical, the command is given.
 
 ## Superseded content actually removed
 
-- [x] `docs/design-handoff/DESIGN.md` amended with every row of `SUPERSEDES.md`, **in this PR**
+- [x] `docs/design-handoff/DESIGN.md` amended with every R5 override, **in this PR** (folded into
+      its body 2026-08-14; `SUPERSEDES.md` deleted, so one document states the current ruling)
 - [x] No `[data-field="glare"]` in any shipped CSS
 - [x] No `SHEET NN`, `PLATE NN — CC` or `GUIDE NN` on any guide surface (the hub keeps its index)
 - [x] No coordinate pair on the plate line

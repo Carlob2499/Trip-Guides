@@ -115,7 +115,10 @@ and `docs/design-handoff/` (README, prototype HTML, `screenshots/`) — **read b
 building or reviewing any hub/guide visual work**, not just the plan doc's prose summary.
 
 **Authority order:** the prototype/screenshots > `enforcement/SPEC-COMPONENTS.md` >
-`enforcement/ANTIPATTERNS.md` > your judgment. Run `node docs/design-handoff/enforcement/
+`enforcement/ANTIPATTERNS.md` > your judgment — with `docs/design-handoff/DESIGN.md` as the
+single **written** design authority (R5's overrides were folded into its body on 2026-08-14 and
+the guide-UI bundle's `SUPERSEDES.md` deleted, so no bundle overrides it any more; token *values*
+still answer to `src/styles/base.css`). Run `node docs/design-handoff/enforcement/
 check-drift.mjs <path>` before calling visual work done — it mechanically catches
 border-radius drift (only `0` or `999px` exist in this system), stray hex literals outside
 `tokens.css`, unwrapped `env(safe-area-*)`, and non-transform/opacity animation.

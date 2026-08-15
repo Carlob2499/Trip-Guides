@@ -40,10 +40,10 @@ principle: **say what is true, including "we do not know", and never fabricate.*
 
 ## 3. Contradictions
 
-- **A doc in this bundle vs. a doc in `docs/`** — this bundle wins; amend the repo doc in the
-  same PR.
+- **A doc in this bundle vs. `docs/design-handoff/DESIGN.md`** — DESIGN.md wins: R5's overrides
+  were folded into its body on 2026-08-14 and it is the single written design authority.
 - **A doc in this bundle vs. a prototype** — the doc wins.
-- **Two docs in this bundle** — `SUPERSEDES.md` > `TOKENS.md`/`COMPONENTS.md` > prose.
+- **Two docs in this bundle** — `TOKENS.md`/`COMPONENTS.md` > prose.
 - **A gate fails on a value this bundle specifies** — the gate wins, and you raise it. Do not
   weaken a gate to make a design pass. `type-scale.test.ts` in particular will likely fail first,
   because the prototypes use inline `font` shorthand it has never seen; the fix is to add the

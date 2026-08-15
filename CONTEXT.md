@@ -190,8 +190,9 @@ design-only with zero guide-data edits. From Phase 2 onward a Panel section rend
 a Panel, so the two nest rather than compete. Qualify in writing whenever the surrounding
 text could mean either.
 
-**Guide numbering is dead on guide surfaces; the hub index is not** (2026-08-11, R5
-SUPERSEDES §3). `SHEET 02` / `PLATE 02 — KR` / `GUIDE 02` are gone from every guide surface —
+**Guide numbering is dead on guide surfaces; the hub index is not** (2026-08-11, R5 §3 — now
+`docs/design-handoff/DESIGN.md` → "The plate"). `SHEET 02` / `PLATE 02 — KR` / `GUIDE 02` are
+gone from every guide surface —
 they carried nothing a traveller uses. `src/lib/sheet-order.ts` and `sheetOrdinal` **stay
 alive and are not dead code**: the atlas hub indexes trips by number and an index is the one
 legitimate use of one. If a future session finds sheet-order.ts with no guide-side caller, that

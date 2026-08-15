@@ -54,7 +54,7 @@
 .tools-route-day:first-child{padding-top:0;border-top:0}
 .tools-route-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:.5rem}
 .tools-route-km{margin-left:auto;font-family:var(--font-data);font-size:var(--text-caption);font-variant-numeric:tabular-nums;color:var(--muted)}
-/* Legs, not a stop list. R5 hands the route OFF rather than tabulating it (SUPERSEDES §5), so
+/* Legs, not a stop list. R5 hands the route OFF rather than tabulating it (DESIGN.md R5 §5), so
    each row is a leg carrying its own Maps link and its own straight-line figure. Dashed
    hairlines between legs, one weight lighter than the solid rule that separates whole days. */
 .tools-route-legs{list-style:none;margin:.6rem 0 .2rem}

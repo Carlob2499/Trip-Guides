@@ -36,7 +36,7 @@ describe("Trip Split ships empty", () => {
 });
 
 describe("Trip Split never seeds itself from the guide", () => {
-  /* ⌁ The deliberate reversal (SUPERSEDES.md §4). R4 seeded the ledger from the guide's budget
+  /* ⌁ The deliberate reversal (DESIGN.md R5 §4). R4 seeded the ledger from the guide's budget
      block, which produces a settle-up demanding real transfers for money nobody spent — an
      estimate is not a debt. Asserted as the ABSENCE of a code path, because a behaviour test
      passes happily on a seeding function nobody happens to call yet. */

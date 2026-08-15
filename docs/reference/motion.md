@@ -243,7 +243,8 @@ by reading the code (Boundary Check #2):
 
 ## Living covers — the R4 rules (shipped 2026-07-28)
 
-The cover stack, from birth upward (VISUAL_REDESIGN.md Move A½; creator-delegated №7):
+The cover stack, from birth upward (`docs/reference/visual-redesign.md` Move A½;
+creator-delegated №7):
 
 1. **The Painted Atlas is the universal default.** Every guide — current, scaffold, future —
    is born with a living cover: ridgelines seeded from its own slug (`src/lib/terrain.ts`,

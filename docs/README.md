@@ -11,7 +11,7 @@ file before you open it, which is the question that actually matters when you la
 | `evidence/` | What we learned, accumulated over time: traveller patterns, pipeline patterns, the competitive landscape. | Append, don't rewrite. These are records, and the two `*-patterns` files must never mix — one asserts lived experience, the other is process evidence from before anyone travelled. |
 | `generated/` | Written by scripts: what the tests protect, where they're blind, telemetry roll-ups. | **No.** Hand-edits are overwritten on the next run, and CI fails if these go stale. |
 | `archive/` | Finished plans and superseded snapshots. | No. History, kept honest — it may cite paths that no longer resolve, which is why the integrity gate skips it. |
-| `design-handoff/` | Design-tool exports: the Atlas system (`DESIGN.md` R4), machine-checkable gates in `enforcement/`, prototype bundles. | Only `DESIGN.md` and this bundle's own README. The rest is vendored output. |
+| `design-handoff/` | Design-tool exports: the Atlas system (`DESIGN.md` — R4 with the R5 guide-UI revision folded in, the single written design authority), machine-checkable gates in `enforcement/`, prototype bundles. | Only `DESIGN.md` and this bundle's own README. The rest is vendored output. |
 
 **Naming rules.** Lowercase kebab-case, no underscores, no `SCREAMING_CASE` — that convention
 belongs to the repo root (`README`, `CLAUDE`, `SECURITY`), where tooling looks for

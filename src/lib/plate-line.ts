@@ -1,6 +1,6 @@
-/* The plate line's two derived rows — cities, and the next leg (R5 SUPERSEDES.md §3).
+/* The plate line's two derived rows — cities, and the next leg (DESIGN.md R5 §3).
 
-   R4 put a decimal coordinate pair here at display scale. SUPERSEDES §3 retires it in one
+   R4 put a decimal coordinate pair here at display scale. DESIGN.md R5 §3 retires it in one
    sentence: "a decimal coordinate pair is not information a traveller standing in Seoul uses."
    The same row retires guide numbering on this surface — `sheetOrdinal` and sheet-order.ts stay
    alive for the atlas hub, which indexes by number legitimately. What replaces both is the two

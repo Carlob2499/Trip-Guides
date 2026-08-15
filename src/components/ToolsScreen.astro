@@ -1,7 +1,7 @@
 ---
 /* The TOOLS STATION — the last stop on every guide's rail.
 
-   This was a standalone screen with a trip picker until R5 retired it (SUPERSEDES §1: "one
+   This was a standalone screen with a trip picker until R5 retired it (DESIGN.md R5 §1: "one
    entry point, and it cannot be forgotten"). What the picker existed to solve — the README's
    `ensureGuide(slug)` warning that whichever entry point forgets to load the trip is the one
    that ships — is solved structurally now: the tools are a station of the guide whose data
@@ -52,7 +52,7 @@ const rest = r.reminders.filter((i) => !i.book);
     </Panel>
 
     {/* ── 2. JETLAG ─────────────────────────────────────────────────────── */}
-    {/* Jetlag was the fifth tool and is not one any more (SUPERSEDES.md §5): its single useful
+    {/* Jetlag was the fifth tool and is not one any more (DESIGN.md R5 §5): its single useful
         output is the body-clock reading at 11pm local on arrival night — a fact about the
         FLIGHT, read once before departure, not an instrument you return to mid-trip. It renders
         in the guide's Plan group instead (JetLag.astro, mounted by GuideLayout). src/lib/jetlag.ts
@@ -160,7 +160,7 @@ const rest = r.reminders.filter((i) => !i.book);
                   <b>{d.date}</b> {d.title && <span class="tools-dim">— {d.title}</span>}
                   <span class="tools-route-km">{km(d.currentKm)} as planned</span>
                 </p>
-                {/* R5 turned this station from a table into a HAND-OFF (SUPERSEDES §5,
+                {/* R5 turned this station from a table into a HAND-OFF (DESIGN.md R5 §5,
                     COMPONENTS §12): the day is listed as its legs, and every leg carries its
                     own Maps link, with one more for the whole day below. A leg is two
                     consecutive LOCATED stops — route-plan.ts builds legs[i] from

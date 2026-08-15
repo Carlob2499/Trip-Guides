@@ -1,5 +1,5 @@
 /* === THE PAINTED ATLAS ======================================================
-   The living cover every guide is born with (VISUAL_REDESIGN.md Move A½ №4;
+   The living cover every guide is born with (docs/reference/visual-redesign.md Move A½ №4;
    component: src/components/PaintedAtlas.astro). Terrain seeded from the guide's
    slug, painted from the guide's own --accent (set on the guide <html> and on
    each hub card alike), under a sky keyed to the destination's local clock.

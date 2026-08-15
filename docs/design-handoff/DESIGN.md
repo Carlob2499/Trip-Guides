@@ -1,17 +1,17 @@
 ---
 name: Waypoint
 description: Verified, personalized travel guides that show their work — a field instrument, not a brochure.
-revision: R5 — the guide-UI revision, 2026-08-11 (see the R5 section at the foot of this file; R4 front-matter values below are superseded where it says so)
+revision: "R4 + R5 — the guide-UI revision (2026-08-11) is folded into the body below and marked there; revision history at the foot. Every value here is the shipped one, read from src/styles/base.css, which is the one place a token value is ever true."
 colors:
-  survey-paper: "#dfe3d9"
-  survey-paper-sunken: "#d2d7c8"
-  card-paper: "#f8faf3"
-  map-ink: "#171d24"
-  ink-muted: "#4e5747"
-  hairline: "#bec6b2"
-  hairline-strong: "#a3ac98"
+  survey-paper: "#e3e7dc"
+  survey-paper-sunken: "#ced5c4"
+  card-paper: "#fbfcf6"
+  map-ink: "#0f141a"
+  ink-muted: "#3c4534"
+  hairline: "#a9b39b"
+  hairline-strong: "#8a9480"
   surveyors-red-oxide: "#9c4421"
-  accent-ink: "#80371b"
+  accent-ink: "#783319"
   accent-ink-dark: "#c78f78"
   on-accent: "#f0d2c7"
   field-green: "#396345"
@@ -27,6 +27,8 @@ colors:
   lamplit-muted: "#9aa392"
   hairline-dark: "#38414b"
   hairline-strong-dark: "#4e5865"
+  cta: "#0f1317"
+  cta-ink: "#f8faf3"
 cssVariables:
   "--bg": "page ground — survey paper / chart-room slate"
   "--card": "card, panel, and sheet ground"
@@ -39,8 +41,8 @@ cssVariables:
   "--on-aink": "text on an accent fill (never re-maps)"
   "--green": "confirmed, complete, on-plan"
   "--ochre": "stale, unconfirmed, advisory"
-  "--cta": "primary button ground"
-  "--cta-ink": "primary button text"
+  "--cta": "primary button ground — the one pair that INVERTS by theme (creator, 2026-08-06): slate in daylight, lamplit paper in the chart room, because a fixed slate button vanishes into the chart-room ground"
+  "--cta-ink": "primary button text — inverts with --cta"
   "--safe-top / --safe-bottom / --safe-left / --safe-right": "display-cutout insets, sourced from env() at :root"
   "--hdr-h": "measured sticky-header height, written by JS for sticky offsets"
 typography:
@@ -135,8 +137,8 @@ components:
     rounded: "{rounded.pill}"
     padding: "2px 9px"
   cta-primary:
-    backgroundColor: "{colors.chart-room-slate}"
-    textColor: "{colors.card-paper}"
+    backgroundColor: "{colors.cta}"
+    textColor: "{colors.cta-ink}"
     rounded: "{rounded.pill}"
     padding: "13px 26px"
     minHeight: "46px"
@@ -195,9 +197,14 @@ line), it may take pigment and scale.
 
 **The Red Ink Rule.** Maximum is iron-oxide notation at display scale on bare paper. It is
 spent in exactly four places: the plate line of a masthead, a **gap** (research came up short
-and the guide says so), a **stale or unconfirmed warning**, and the SOS affordance. One
-red-ink moment per viewport. The rule exists because a system with no defined maximum takes
-its maximum from the category default.
+and the guide says so), a **stale or unconfirmed warning**, and the SOS affordance — plus **one
+second moment, the present**: the live band on the day being read may take reading-scale accent
+alongside one of the four. Nothing else qualifies — not the current-day chip, not a "you are
+here" dot, not a countdown on a future day — and where a screen has to choose, the present wins.
+One red-ink moment per viewport, two where the present is one of them. The rule governs
+reading-scale accent only; it does not govern the 10px panel kicker, which is notation and
+appears on every panel. The rule exists because a system with no defined maximum takes its
+maximum from the category default. (R5, 2026-08-11: added the present; R4 allowed the four only.)
 
 **The Two Doors Rule.** Every destination in the product is reachable from both an immersive
 door and a plain one — globe pin *and* table row, atlas menu *and* header control. The
@@ -214,19 +221,33 @@ data and is deliberately the same value in both themes.
 ### Primary
 
 - **Surveyor's Red-Oxide** (`#9c4421`): the house accent and the shape every per-country
-  accent takes. Fills the active tab, plate lines, corner ticks, focus rings, panel kickers,
-  and large display marks. Deliberately **not** contrast-gated, because it is never small text.
-- **Accent Ink** (`--aink`, `#80371b` light / `#c78f78` dark): the accent doing the *text* job,
-  derived to clear 4.5:1 on every surface the site paints, flat or accent-tinted.
+  accent takes. Fills the reader's current station on the rail, plate lines, corner ticks, focus
+  rings, panel kickers, and large display marks. Deliberately **not** contrast-gated, because it
+  is never small text.
+- **Accent Ink** (`--aink`, `#783319` light / `#c78f78` dark): the accent doing the *text* job,
+  derived to clear 4.5:1 on every surface the site paints, flat or accent-tinted. The light value
+  is **derived, never picked** — it darkened from R4's `#80371b` as a consequence of the day
+  palette's lift below, because the sunken bed it has to stand on got darker.
 - **On-Accent** (`--on-aink`, `#f0d2c7`): text sitting *on* an accent fill. One correct answer
   per accent, identical in both themes, because its ground never re-maps.
 
 ### Neutral — daylight / chart room
 
 `--bg` page, `--card` panels, `--sunken` wells and plate beds, `--ink` primary text,
-`--muted` secondary, `--rule` / `--rule2` the two hairline weights. In the chart room these
-resolve to slate `#0f1317`, card `#242c34`, sunken `#1a2129`, lamplit paper `#e8ece3`, muted
-`#9aa392`, rules `#38414b` / `#4e5865`.
+`--muted` secondary, `--rule` / `--rule2` the two hairline weights. In daylight these resolve to
+paper `#e3e7dc`, card `#fbfcf6`, sunken `#ced5c4`, ink `#0f141a`, muted `#3c4534`, rules
+`#a9b39b` / `#8a9480`. In the chart room, to slate `#0f1317`, card `#242c34`, sunken `#1a2129`,
+lamplit paper `#e8ece3`, muted `#9aa392`, rules `#38414b` / `#4e5865`.
+
+(R5, 2026-08-11: the day palette was **lifted** — lighter paper, darker ink, darker rules,
+replacing R4's `#dfe3d9` / `#f8faf3` / `#d2d7c8` / `#171d24` / `#4e5747` / `#bec6b2` / `#a3ac98`.
+The palette people actually read on is the one that has to hold up in direct sun, and R4's was
+tuned on a monitor. Seven values moved together; none was a taste change; the accent did not
+move at all.)
+
+**There is no third palette.** A "Glare" theme was built during review and **deleted, not
+hidden** — a third contrast surface is one more thing to police and one nobody remembers to
+switch into. `src/styles/atlas-tokens.test.ts` asserts its absence so it cannot creep back.
 
 ### Tertiary — status
 
@@ -320,10 +341,21 @@ Three behaviours make it gap-free:
 3. **Wide types claim the full row.** Sights, venues, day rails, ledgers, charts, and long
    reference lists span `1 / -1` — they are internally gridded already.
 
-**Breakpoints** are narrow on purpose: **760px** is the mobile/desktop split for behaviour
-(pin cards, rails, and the segmented switch), **900px** for the guide shell, **620px** for the
-compass position. Sticky offsets are never literals — the header measures itself into
-`--hdr-h` and the rails stick to that.
+**The guide body asks its container, not the viewport** (R5, 2026-08-11: replaced R4's
+760 / 900 / 620 viewport ladder for everything below the masthead). Three models, two
+thresholds, declared once in `src/lib/breakpoints.ts` and mirrored into each stylesheet under a
+`bp:` marker that a test parses: phone under **720px** of container width, tablet to **1180px**,
+desktop above it. One build serves all three with no device check and no user-agent sniffing, and
+a folding phone changes model between portrait and landscape with zero code. (The tablet floor
+was R5's stated 744 until 2026-08-12; the query box is the viewport less the shell's own gutters,
+so a 768px iPad measured 732.8px and took the phone model — the commonest tablet on earth, under
+the threshold written for it.)
+
+**Viewport media queries survive for page chrome only** — the sticky header, the phone's progress
+bar, print — at **899px** (`MOBILE_MAX`), because chrome is positioned against the viewport, which
+is the one thing it may legitimately ask about. Hub furniture keeps its own viewport splits:
+**760px** for pin cards and the segmented switch, **620px** for the compass position. Sticky
+offsets are never literals — the header measures itself into `--hdr-h` and the rail sticks to that.
 
 **Display cutouts** are first-class: `viewport-fit=cover`, the four `--safe-*` variables
 declared once at `:root` from `env()`, and every fixed or sticky edge padded with
@@ -398,11 +430,46 @@ per scope. A panel is square, `--card` ground, 1px `--rule`, and stretches to it
 
 ### The plate — photography and the masthead
 
-A guide's cover photograph is mounted as a numbered survey plate: square, sunken bed, hairline
-frame, oxide corner ticks, and a **plate line** beneath it on bare paper carrying the plate
-number, coordinates at Reading scale, and a boxed `CHECKED [date]` stamp. Type never sits on
-the photograph. The plate is also the shared element that morphs from hub card to guide
+A guide's cover photograph is mounted as a survey plate: square, sunken bed, hairline frame,
+oxide corner ticks, and a **plate line** beneath it on bare paper carrying the trip's **cities**
+at Reading scale, its **next leg**, and a boxed `CHECKED [date]` stamp. The masthead's right
+column carries the **live trip state** — an `ON THIS TRIP NOW` / `UPCOMING` / `COMPLETE` stamp,
+the day and the destination's local time, and what there is left to get through. Three states and
+no fourth for "we are not sure": a guide with no dated window shows no stamp, and the day and
+clock appear only while the trip is running. Type never sits on the photograph. The plate is also the shared element that morphs from hub card to guide
 masthead; under reduced motion the morph is a cut.
+
+(R5, 2026-08-11: replaced the two loudest items on that line. A decimal coordinate pair at
+display scale is not information a traveller standing in Seoul uses, and guide numbering —
+`SHEET 02`, `PLATE 02 — CC`, `GUIDE 02` — carried nothing a reader acts on, so **no guide surface
+is numbered**. `sheetOrdinal` and `src/lib/sheet-order.ts` stay alive on purpose: the hub indexes
+trips by number, and an index is the one legitimate use of one. **Coordinates survive on the
+globe** — the hub's sheet-centre readout, compass rose and scale bar are untouched, because there
+they *are* the map. The right column was empty at desktop width, and the trip's state was the
+most useful thing to put in it.)
+
+### The rail — every group is a station
+
+Navigation below the masthead is one journey line, not a row of categories (R5, 2026-08-11:
+replaced R4's rail of scrollable tab pills). Every section group is a **station** on one
+continuous 2px line, the reader's own position a filled oxide dot with a halo, and a **context
+line** beneath carrying the active group's descriptor and the resume line. Stations are
+equal-width, because a rail is a scale and unequal stops read as unequal importance. A pill rail
+said "these are categories"; a spine says "this is one journey and you are here" — and eleven-plus
+groups overflowed the pill rail besides.
+
+One DOM, three models, switched entirely by container query: a swipeable **pill row with a 2px
+progress line** on the phone (the line's ends are unreachable at that width, so the ordinal
+position moves into the fill), a **vertical spine** in the left column on the tablet, and a
+**horizontal spine** above the reading column on the desktop. **Tools is the last station** and
+the only way in — the standalone `/tools/<trip>/` screen and its trip picker are deleted, because
+the entry point that forgets to load the trip is the one that ships, and one route cannot be
+forgotten. **Field log is its own station**, after Sources: rendering a retrospective at the foot
+of the body puts post-trip content in front of a reader who is mid-trip. It is drawn only when the
+guide has a record — an empty Field log station is a promise the guide cannot keep.
+
+The resume line is **absent** when nothing is remembered. A fabricated "start here" would be the
+product telling a reader it knows something about them that it does not.
 
 ### The globe — world view
 
@@ -427,6 +494,14 @@ Where research came up short, the guide says so loudly: `NOT CONFIRMED` at Readi
 ochre on bare paper, a datum rule, then a Stamp-scale line stating what was checked, when, and
 what to do instead. This is also the error-recovery register.
 
+### The fold — long explanations
+
+**Every long explanation folds the same way**: two lines always visible, the rest opening in
+place — hover *and* click on a fine pointer, tap on touch — at **unchanged type size**. The
+reader needs the space, especially on a small phone, and an explanation that shrinks when it
+opens is a punishment for opening it. (R5, 2026-08-11: one fold for all prose, replacing the
+lead/more-detail fold panels invented for themselves.)
+
 ### Table view — the transit surface
 
 Search across every guide's sections, sticky sheet chips, and a quick card for the trip you
@@ -435,15 +510,31 @@ time ticking. No entrance animations here — content is legible the instant it 
 
 ### Tools
 
-Trip split, jetlag, closures, reminders, and route order, all built from panels and all seeded
-from the guide's own record — split reads the budget rows and party size; closures read the
-sights section; route reads the mapped points. Reachable from the hub header, the guide header,
-the table view, and the mobile map menu, with a trip selector in the tool rail.
+**Four** — trip split, closures, reminders, and route order — all built from panels and all
+living on the rail's last station, seeded from the guide's own record: closures read the sights
+section; route reads the mapped points. Route order **hands off** rather than tabulating: every
+leg carries a maps link built from the guide's own coordinates, plus one whole-day multi-stop
+link, because a route you cannot walk is a table.
+
+**Trip Split never seeds.** It ships empty — `$0.00`, nobody in deficit, no transfers, the
+where-it-went bars hidden rather than drawn at zero — and says so. No row in it ever carries
+`✓ FROM THE GUIDE`, because nothing in that tool is vouched for by the guide.
+
+(R5, 2026-08-11: R4 had five tools behind four entry points. **Jet-lag** moved into the **Plan**
+group — its one useful output is the body-clock reading at 11pm local on arrival night, a fact
+about the flight read once before departure, not an instrument you return to mid-trip;
+`src/lib/jetlag.ts` and `src/lib/tz-offset.ts` are untouched and keep their tests, only the
+placement changed. And Trip Split's seeding was a deliberate reversal: **an estimate is not a
+debt.** Seeding "meals per day, $32" produces a settle-up demanding transfers for money nobody
+spent. The forecast is real and belongs in the guide's own Budget panel, labelled a forecast,
+where it already lives.)
 
 ### Named Rules
 
 **The Seeded From The Record Rule.** A tool never asks for data the guide already has. If it
 cannot find the record, it says so and offers to load it — it does not silently start empty.
+The rule covers *facts* the guide verified, not *forecasts* it estimated: Trip Split is the one
+tool that starts empty on purpose, and it says that too (R5, 2026-08-11 — see Tools above).
 
 **The One Unit Rule.** New surfaces are assembled from panels, not from bespoke cards. If a
 layout needs something a panel cannot do, extend the panel.
@@ -477,7 +568,8 @@ idle time, not in the event handler.
 - **Do** build new surfaces from panels, and let the grid stretch and dense-pack them.
 - **Do** mount every photograph as a plate: square, hairline-framed, corner-ticked, captioned.
 - **Do** render verification marks at Stamp scale by default, Reading scale in mastheads and gaps.
-- **Do** spend the one red-ink moment per viewport on a plate line, a gap, a stale warning, or SOS.
+- **Do** spend the one red-ink moment per viewport on a plate line, a gap, a stale warning, or
+  SOS — and the only second one on the present.
 - **Do** reach for a CSS variable, never a hex literal — the themes swap underneath you.
 - **Do** state an absence in ochre when a figure cannot be sourced.
 - **Do** give every immersive entry point a plain-surface twin.
@@ -492,6 +584,9 @@ idle time, not in the event handler.
 - **Don't** hardcode a sticky offset; measure it.
 - **Don't** render a tappable flag below Control size, or a gap quieter than Reading-scale ochre.
 - **Don't** put corner ticks on anything that isn't evidence.
+- **Don't** seed a ledger from a forecast — an estimate is not a debt.
+- **Don't** shrink prose when a fold opens, and don't number a guide surface or put a coordinate
+  pair on one.
 - **Don't** animate `left`/`top`, or run a layout solver inside a scroll or pointer handler.
 - **Don't** soften motion for reduced-motion users — disable it.
 - **Don't** introduce a second sans, a monospace, or a display face.
@@ -538,69 +633,19 @@ What this revision codifies that the previous document did not.
 
 ---
 
-## R5 — the guide-UI revision (2026-08-11)
+## Revision history
 
-`docs/design-handoff/design_handoff_guide_ui/SUPERSEDES.md` is the authority for everything in
-this section; what follows records each of its rows here so this file is not read as current
-where R5 has overtaken it. The front-matter above still carries R4's colour values — those are
-superseded by row 2 below, and the shipped values live in `src/styles/base.css`, which is the
-one place a token value is ever true.
+- **R5 — the guide-UI revision (2026-08-11).** Seven rulings, every one folded into the body
+  above and marked there: the spine rail (with Tools and Field log as stations), the lifted day
+  palette and the deleted `glare` theme, the cities-and-next-leg plate line with its live-state
+  column, Trip Split never seeding, four tools instead of five, one fold for all long prose, and
+  the present as the Red Ink Rule's one additional moment. It arrived as the guide-UI bundle's
+  `SUPERSEDES.md`, whose seven numbered sections are still cited from code comments — §1
+  navigation · §2 palette · §3 masthead · §4 trip split · §5 tools · §6 prose · §7 red ink. That
+  file was deleted on 2026-08-14 once this one carried its content, so **this document is the
+  single written design authority** and no bundle overrides it.
+- **R4 (this document's body).** The Change Ledger above records what it changed from R3.
 
-### 1. Navigation
-
-| R4 | R5 |
-| --- | --- |
-| Tab rail of scrollable pills, active pill filled oxide | **Spine rail** — every group is a station on one 2px line, the current station a filled oxide dot with a halo, a context line beneath carrying the active group's descriptor and the resume line |
-| One rail at every viewport | Spine on **tablet and desktop**; a swipeable **pill row with a 2px progress line** on the **phone** |
-| Tools reachable from four entry points | **One** — Tools is the **last station on the rail**. The standalone `/tools/<trip>/` screen is deleted |
-| Field log inline at the bottom of the guide body | Field log is **its own station**, after Sources |
-| Breakpoints 760 / 900 / 620 | **Container queries at 744 and 1180** for the guide body; viewport media queries for page chrome only |
-
-### 2. Palette
-
-Day lightened and its ink darkened: `--bg #e3e7dc` · `--card #fbfcf6` · `--sunken #ced5c4` ·
-`--ink #0f141a` · `--muted #3c4534` · `--rule #a9b39b` · `--rule2 #8a9480`. The palette people
-read on is the one that has to hold up in direct sun. Everything else is unchanged, including
-the oxide accent, which does not re-map between themes.
-
-**There is no third palette.** A "Glare" theme was built during review and **deleted, not
-hidden** — a third contrast surface is one more thing to police and one nobody switches into.
-
-### 3. The masthead and the plate line
-
-| R4 | R5 |
-| --- | --- |
-| Plate line leads with **coordinates** at display scale, plus a `PLATE NN — CC` stamp | Plate line leads with the trip's **cities** at reading scale, then its **next leg** |
-| Guide numbering on every guide surface | **None.** `sheetOrdinal` and `src/lib/sheet-order.ts` stay — the hub indexes by number, and an index is a legitimate use of one |
-| The right column ends after the chips | It carries the **live trip state**: the status stamp, the day and local time, and what there is to get through |
-
-**Coordinates survive on the globe**, where they *are* the map. They are not on the guide page.
-
-### 4. Trip Split
-
-**It never seeds.** R4 filled the ledger from the guide's `budget` section and stamped those
-rows `✓ FROM THE GUIDE`. An estimate is not a debt: seeding "meals per day, $32" produces a
-settle-up demanding transfers for money nobody spent. It now ships empty and says so. The
-forecast is real and belongs in the guide's own Budget panel, labelled a forecast.
-
-### 5. Tools
-
-Four, not five — the **jet-lag** panel moved into the **Plan** group, where a fact about the
-flight is read before departure rather than after landing. `src/lib/jetlag.ts` and
-`src/lib/tz-offset.ts` are untouched and keep their tests; only the placement changed. Route
-order **hands off**: every leg carries a maps link built from the guide's own coordinates, plus
-one whole-day multi-stop link.
-
-### 6. Prose
-
-**Every long explanation folds the same way** — two lines always visible, the rest opening in
-place, hover *and* click on a fine pointer, tap on touch — **at unchanged type size**. An
-explanation that shrinks when it opens is a punishment for opening it.
-
-### 7. The Red Ink Rule — extended, not replaced
-
-R4 spent one red-ink moment per viewport in four places: a plate line, a gap, a stale warning,
-SOS. R5 allows **one second moment: the present** — the live band on the day being read may take
-reading-scale accent alongside one of the four. Nothing else qualifies, and where a screen has
-to choose, the present wins. The rule governs reading-scale accent only; it does not govern the
-10px panel kicker, which is notation.
+Token values are the one exception to that authority: `src/styles/base.css` is the place a token
+value is true, and its `ATLAS TOKEN CONTRACT` comments carry the contrast measurement behind each
+one. The front-matter here mirrors those values; it never overrides them.

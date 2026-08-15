@@ -24,7 +24,7 @@ guide JSON is untouched, and no `"type"` value in any guide file is edited.
 | # | File | Why |
 | --- | --- | --- |
 | 1 | `00-START-HERE.md` (this file) | precedence rules, glossary, the shape of the job |
-| 2 | `SUPERSEDES.md` | **what is now wrong in the repo.** Read before you trust any repo doc |
+| 2 | `docs/design-handoff/DESIGN.md` | the design system. R5's overrides were folded into its body on 2026-08-14 and `SUPERSEDES.md` was deleted |
 | 3 | `README.md` | the master specification — screens, components, behaviour |
 | 4 | `TOKENS.md` | every colour, size, weight, radius, duration. Exact values |
 | 5 | `COMPONENTS.md` | per-component measurements. Nothing here is approximate |
@@ -40,14 +40,15 @@ guide JSON is untouched, and no `"type"` value in any guide file is edited.
 
 Apply strictly, highest first:
 
-1. **`SUPERSEDES.md`** — it names things that are now wrong. It wins over everything.
+1. **`docs/design-handoff/DESIGN.md`** — the single written design authority. It carries R5's
+   overrides in its own body (folded in 2026-08-14, when `SUPERSEDES.md` was deleted), so where it
+   and this bundle disagree, it wins.
 2. **`TOKENS.md` / `COMPONENTS.md`** — exact values. They win over prose.
 3. **`README.md`** and the other files in this bundle.
 4. **The prototypes in `prototypes/`** — tie-breaks only. If a doc says 16px and the prototype
    renders 17px, the doc is right and the prototype drifted.
-5. **`docs/design-handoff/DESIGN.md` (R4) in the repo** — everything it says that this bundle
-   does not contradict still holds. It is a large, good document; do not discard it.
-6. **`docs/design-handoff/README.md` and `SPEC-COMPONENTS.md` (R4)** — same.
+5. **`docs/design-handoff/README.md` and `SPEC-COMPONENTS.md`** — everything they say that
+   `DESIGN.md` does not contradict still holds.
 7. Anything else in `docs/`. Much of it is historical planning. Treat with suspicion.
 
 **Your own memory of what Waypoint looks like ranks below all of the above.** If you are about
@@ -68,7 +69,8 @@ in this bundle or in the repo, stop and go read.
   model tests behind them and were learned from real bugs.
 - **Do not invent content.** No placeholder copy, no example expenses, no sample ledger rows, no
   fabricated "start here" resume line, no invented coordinates.
-- **Do not seed Trip Split from the guide's budget block.** See `SUPERSEDES.md` §4.
+- **Do not seed Trip Split from the guide's budget block.** See `DESIGN.md` → Components → Tools
+  (R5 §4).
 
 ## 5. What "done" means
 

@@ -738,7 +738,7 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
 
         } catch (e) { fail("local time", e); }
         try {
-          /* ── 9b. THE MASTHEAD'S LIVE-STATE COLUMN (R5 SUPERSEDES §3) ──
+          /* ── 9b. THE MASTHEAD'S LIVE-STATE COLUMN (DESIGN.md R5 §3) ──
              The stamp and the day/clock row. Both are answers to "when is it", so both are
              filled here rather than baked into the page: a build-time stamp would say
              UPCOMING for as long as the deploy lasted. The third row (stops · to book) is

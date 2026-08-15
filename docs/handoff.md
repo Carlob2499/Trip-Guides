@@ -86,6 +86,12 @@ found only remnants — deleted the 4 orphaned progress-study files in `docs/moc
 shipped pipeline-progress feature's throwaway prototype) + their `.gitignore` block, and the
 empty `voting`/`telemetry` silo skeletons. Everything else audited KEEP with evidence (see
 commit). `backfill-tier.mjs` stays until E1 tiering finishes, per the list below.
+Follow-up round: DESIGN.md is now the ONE design authority (R5 overrides folded into the body,
+SUPERSEDES.md deleted, all code comments repointed); visual-redesign.md split spec/history
+(history → `docs/archive/visual-redesign-history.md`); new `intake-contract.test.ts` binds the
+hub's intake vocabulary to `intake-schema.mjs` (replaces hardcoded copies in intake.test.ts).
+Surfaced, not fixed: `/new` never collects departure-airport or the three certainty fields —
+scope decision for the creator.
 
 **All gates green after the cleanup:** build · lint · typecheck 0 · 2009 tests / 144 files ·
 77 a11y checks vs the preview build · dist grep clean. Deferred with rationale: test-walker

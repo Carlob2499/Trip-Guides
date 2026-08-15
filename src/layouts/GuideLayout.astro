@@ -243,7 +243,7 @@ const coverVideo = cover?.video ?? null;
 // For weather widget — pull lat/lng from first map section
 const mapSec    = _flat.find((s: any) => s.type === "map" && s.center?.lat);
 const mapCenter = mapSec ? { lat: mapSec.center.lat as number, lng: mapSec.center.lng as number } : null;
-/* R5 SUPERSEDES §3 replaced BOTH of the plate line's own rows.
+/* DESIGN.md R5 §3 replaced BOTH of the plate line's own rows.
 
    The coordinate readout is gone: a decimal pair at display scale is not information a
    traveller standing in Seoul uses. Coordinates survive where they ARE the map — the atlas
@@ -654,7 +654,7 @@ const tripSummary = buildSummary(guide);
           )}
         </div>
 
-        {/* THE LIVE-STATE COLUMN (R5 SUPERSEDES §3). R4's masthead ended after the chips and
+        {/* THE LIVE-STATE COLUMN (DESIGN.md R5 §3). R4's masthead ended after the chips and
             left this space empty at desktop width; the state of the trip is the most useful
             thing to put in it.
 

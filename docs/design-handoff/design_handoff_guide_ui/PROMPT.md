@@ -9,8 +9,8 @@ in `design_handoff_guide_ui/` at the repo root.
 
 **Read `design_handoff_guide_ui/00-START-HERE.md` first, completely, before writing any code.**
 It gives the reading order, the precedence rules, and the glossary. Then read
-`SUPERSEDES.md` — the repo contains an earlier design revision (R4) and parts of it are now
-wrong; that file names exactly which parts, and those amendments ship in the same PR.
+`docs/design-handoff/DESIGN.md` — the single written design authority, carrying R5's overrides in
+its own body (folded in 2026-08-14, when this bundle's `SUPERSEDES.md` was deleted).
 
 Ground rules, all non-negotiable:
 

@@ -112,7 +112,7 @@ grid, safe areas, container-query breakpoints.
 | --- | --- |
 | `00-START-HERE.md` | reading order, precedence, glossary, what not to do |
 | `PROMPT.md` | the message to paste into Claude Code |
-| `SUPERSEDES.md` | **what is now wrong in the repo.** Read before trusting any repo doc |
+| ~~`SUPERSEDES.md`~~ | deleted 2026-08-14 — its seven rows live in `docs/design-handoff/DESIGN.md`'s body, which is the single design authority |
 | `README.md` | this file — the master specification |
 | `TOKENS.md` | every exact value |
 | `COMPONENTS.md` | per-component measurements |

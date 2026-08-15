@@ -2,29 +2,13 @@
 
 import { describe, it, expect } from "vitest";
 import {
-  RANK_CARDS, NICHE_VALUE, TOPIC_CHIPS,
-  rankToFields, nextTailSteps, manifestSegments, TAIL_STEPS,
+  NICHE_VALUE,
+  rankToFields, nextTailSteps, manifestSegments,
 } from "./intake";
 
-/* The pipeline contract: every rank-card value must be an EXACT option string from the
-   new-guide issue template (the same enum the old 3×7 dropdowns carried). If someone
-   "friendlifies" a value instead of a label, the issue form silently drops it. */
-const ISSUE_PRIORITY_ENUM = [
-  "Food & dining", "Culture / history", "Nature / outdoors", "Nightlife",
-  "Shopping", "Wellness / relaxation", "Niche interest (specify below)",
-];
-
-describe("RANK_CARDS", () => {
-  it("every card value is an exact issue-template enum string", () => {
-    for (const c of RANK_CARDS) expect(ISSUE_PRIORITY_ENUM).toContain(c.value);
-  });
-  it("covers the full enum — no priority silently unreachable from the board", () => {
-    expect(RANK_CARDS.map((c) => c.value).sort()).toEqual([...ISSUE_PRIORITY_ENUM].sort());
-  });
-  it("topic chips never collide with enum values (they are the also-research tier)", () => {
-    for (const t of TOPIC_CHIPS) expect(ISSUE_PRIORITY_ENUM).not.toContain(t);
-  });
-});
+// The rank-card/issue-enum and TAIL_STEPS/field-id contracts once duplicated here as hardcoded
+// lists now live in intake-contract.test.ts, asserted against the real intake-schema.mjs and
+// intake-submit.js sources instead of a copy that could drift unnoticed.
 
 describe("rankToFields", () => {
   it("maps tap order to priority order and pads with empty", () => {
@@ -60,15 +44,6 @@ describe("nextTailSteps", () => {
   it("whitespace-only counts as empty", () => {
     const steps = nextTailSteps({ ngCountry: "   " }, []);
     expect(steps.some((s) => s.ids.includes("ngCountry"))).toBe(true);
-  });
-});
-
-describe("TAIL_STEPS", () => {
-  it("every id is a real flat-form field id (the seam: intake-submit collects by these)", () => {
-    const KNOWN = ["ngCountry", "ngCities", "ngStart", "ngEnd", "ngAnchor", "ngTravelers",
-      "ngParty", "ngConstraints", "ngPassports", "ngPace", "ngTravelStyle",
-      "ngPriority1", "ngPriority2", "ngPriority3", "ngNiche", "ngBudget", "ngComments"];
-    for (const s of TAIL_STEPS) for (const id of s.ids) expect(KNOWN).toContain(id);
   });
 });
 

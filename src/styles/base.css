@@ -21,7 +21,7 @@
      the old values fell to 4.19:1 and 4.38:1, under the 4.5 floor they hold on every other
      surface. --accent is untouched — one variable at a time. */
   /* R5 (2026-08-11) — THE DAY PALETTE, LIFTED. design_handoff_guide_ui/TOKENS.md §1 and
-     SUPERSEDES.md §2. Seven values move together and none is a taste change: lighter paper,
+     DESIGN.md R5 §2. Seven values move together and none is a taste change: lighter paper,
      darker ink, darker rules, because the palette people actually read on is the one that has
      to hold up in direct sun, and R2's spread was tuned on a monitor. bg #dfe3d9 -> #e3e7dc,
      card #f8faf3 -> #fbfcf6, bg2 (--sunken) #d2d7c8 -> #ced5c4, ink #171d24 -> #0f141a, muted
