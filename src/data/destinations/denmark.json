@@ -1,0 +1,39 @@
+{
+  "slug": "denmark",
+  "languages": ["da", "sv", "no"],
+  "t0Domains": [
+    "visitcopenhagen.com",
+    "publictransport.dk",
+    "rejseplanen.dk",
+    "visitoslo.com",
+    "malmocity.se",
+    "visitskane.com"
+  ],
+  "travelAdvisory": {
+    "url": "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/denmark-travel-advisory.html",
+    "label": "US State Dept — Denmark travel advisory (Level 2, as shipped in the guide's own advisory block)",
+    "verified_on": "2026-07-18",
+    "state": "confirmed"
+  },
+  "transitAuthorities": [
+    {
+      "name": "DOT / Din Offentlige Transport (Copenhagen)",
+      "url": {
+        "url": "https://www.publictransport.dk/tickets/citypass",
+        "verified_on": "2026-07-23",
+        "state": "confirmed"
+      }
+    },
+    {
+      "name": "Rejseplanen (national journey planner)",
+      "url": {
+        "url": "https://www.rejseplanen.dk",
+        "verified_on": "2026-06-08",
+        "state": "confirmed"
+      }
+    }
+  ],
+  "gtfsPortals": [],
+  "seasonalSources": [],
+  "defaultTravelMode": "TRANSIT"
+}

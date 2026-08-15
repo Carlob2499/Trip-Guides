@@ -46,49 +46,56 @@
     "value": "100 DKK",
     "source_url": "https://www.publictransport.dk/tickets/citypass",
     "verified_on": "2026-07-23",
-    "shelf_life": "transit"
+    "shelf_life": "transit",
+    "tier": "primary"
   },
   "transit-passes-which-180-dkk": {
     "claim": "Transit passes — which one to buy and when — 180 DKK",
     "value": "180 DKK",
     "source_url": "https://www.publictransport.dk/tickets/citypass",
     "verified_on": "2026-07-23",
-    "shelf_life": "transit"
+    "shelf_life": "transit",
+    "tier": "primary"
   },
   "transit-passes-which-280-dkk": {
     "claim": "Transit passes — which one to buy and when — 280 DKK",
     "value": "280 DKK",
     "source_url": "https://www.publictransport.dk/tickets/citypass",
     "verified_on": "2026-07-23",
-    "shelf_life": "transit"
+    "shelf_life": "transit",
+    "tier": "primary"
   },
   "transit-passes-which-340-dkk": {
     "claim": "Transit passes — which one to buy and when — 340 DKK",
     "value": "340 DKK",
     "source_url": "https://www.publictransport.dk/tickets/citypass",
     "verified_on": "2026-07-23",
-    "shelf_life": "transit"
+    "shelf_life": "transit",
+    "tier": "primary"
   },
   "transit-passes-which-589-dkk": {
     "claim": "Transit passes — which one to buy and when — 589 DKK",
     "value": "589 DKK",
     "source_url": "https://www.publictransport.dk/tickets/citypass",
     "verified_on": "2026-07-23",
-    "shelf_life": "transit"
+    "shelf_life": "transit",
+    "tier": "primary"
   },
   "transit-passes-which-859-dkk": {
     "claim": "Transit passes — which one to buy and when — 859 DKK",
     "value": "859 DKK",
     "source_url": "https://www.publictransport.dk/tickets/citypass",
     "verified_on": "2026-07-23",
-    "shelf_life": "transit"
+    "shelf_life": "transit",
+    "tier": "primary"
   },
   "transit-passes-which-1-039-dkk": {
     "claim": "Transit passes — which one to buy and when — 1,039 DKK",
     "value": "1,039 DKK",
     "source_url": "https://www.publictransport.dk/tickets/citypass",
     "verified_on": "2026-07-23",
-    "shelf_life": "transit"
+    "shelf_life": "transit",
+    "tier": "primary"
   },
   "transit-passes-which-26-dkk": {
     "claim": "Transit passes — which one to buy and when — 26 DKK",
@@ -96,63 +103,72 @@
     "source_url": "https://www.publictransport.dk/tickets/citypass",
     "verified_on": "2026-07-23",
     "shelf_life": "transit",
-    "state": "approx"
+    "state": "approx",
+    "tier": "primary"
   },
   "transit-passes-which-40-dkk": {
     "claim": "Transit passes — which one to buy and when — 40 DKK",
     "value": "40 DKK",
     "source_url": "https://www.publictransport.dk/tickets/citypass",
     "verified_on": "2026-07-23",
-    "shelf_life": "transit"
+    "shelf_life": "transit",
+    "tier": "primary"
   },
   "what-to-eat-160-dkk": {
     "claim": "What to eat in Copenhagen — a first-timer's guide — 160 DKK",
     "value": "160 DKK",
     "source_url": "https://www.visitcopenhagen.com",
     "verified_on": "2026-06-08",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "what-to-eat-45-dkk": {
     "claim": "What to eat in Copenhagen — a first-timer's guide — 45 DKK",
     "value": "45 DKK",
     "source_url": "https://www.visitcopenhagen.com",
     "verified_on": "2026-06-08",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "what-to-eat-40-dkk": {
     "claim": "What to eat in Copenhagen — a first-timer's guide — 40 DKK",
     "value": "40 DKK",
     "source_url": "https://www.visitcopenhagen.com",
     "verified_on": "2026-06-08",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "what-to-eat-50-dkk": {
     "claim": "What to eat in Copenhagen — a first-timer's guide — 50 DKK",
     "value": "50 DKK",
     "source_url": "https://www.visitcopenhagen.com",
     "verified_on": "2026-06-08",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "what-to-eat-100-dkk": {
     "claim": "What to eat in Copenhagen — a first-timer's guide — 100 DKK",
     "value": "100 DKK",
     "source_url": "https://www.visitcopenhagen.com",
     "verified_on": "2026-06-08",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "what-to-eat-5-000-dkk": {
     "claim": "What to eat in Copenhagen — a first-timer's guide — 5,000 DKK",
     "value": "5,000 DKK",
     "source_url": "https://www.visitcopenhagen.com",
     "verified_on": "2026-06-08",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "shopping-in-copenhagen-300-dkk": {
     "claim": "Shopping in Copenhagen — where to go and what to look for — 300 DKK",
     "value": "300 DKK",
     "source_url": "https://www.visitcopenhagen.com",
     "verified_on": "2026-06-08",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "a-day-across-120-sek": {
     "claim": "A day across the bridge — Malmö, Sweden (Wed Jun 10) → Malmöhus Castle — 120 SEK",
@@ -160,14 +176,16 @@
     "source_url": "https://malmocity.se/en/museum/",
     "verified_on": "2026-06-10",
     "shelf_life": "venue",
-    "state": "approx"
+    "state": "approx",
+    "tier": "primary"
   },
   "a-day-across-11-usd": {
     "claim": "A day across the bridge — Malmö, Sweden (Wed Jun 10) → Malmöhus Castle — $11 USD",
     "value": "$11 USD",
     "source_url": "https://malmocity.se/en/museum/",
     "verified_on": "2026-06-10",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "overnight-to-oslo-150-nok": {
     "claim": "Overnight to Oslo — Jun 14–16 → Free afternoon after the tour — ~13:00 to 15:20 — 150 NOK",
@@ -175,14 +193,16 @@
     "source_url": "https://www.visitoslo.com",
     "verified_on": "2026-06-15",
     "shelf_life": "venue",
-    "state": "approx"
+    "state": "approx",
+    "tier": "primary"
   },
   "overnight-to-oslo-16-usd": {
     "claim": "Overnight to Oslo — Jun 14–16 → Free afternoon after the tour — ~13:00 to 15:20 — $16 USD",
     "value": "$16 USD",
     "source_url": "https://www.visitoslo.com",
     "verified_on": "2026-06-15",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "traveler-origin": {
     "claim": "Traveler origin — departure airport (D14/ADR 0003)",
