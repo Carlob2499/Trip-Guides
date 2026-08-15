@@ -5,7 +5,8 @@
     "source_url": "https://www.uber.com/global/en/r/routes/phx-to-sedona-az/",
     "verified_on": "2026-07-19",
     "shelf_life": "transit",
-    "state": "approx"
+    "state": "approx",
+    "tier": "primary"
   },
   "entry-documents-45": {
     "claim": "Entry & documents — $45",

@@ -4,7 +4,8 @@
     "value": "$12",
     "source_url": "https://www.verizon.com/support/travelpass-faqs/",
     "verified_on": "2026-07-23",
-    "shelf_life": "default"
+    "shelf_life": "default",
+    "tier": "primary"
   },
   "currency-how-to-100-dkk": {
     "claim": "Currency & how to pay — 100 DKK",
@@ -32,14 +33,16 @@
     "value": "200 kr",
     "source_url": "https://pokemongo.com/en/gofest/copenhagen/tickets",
     "verified_on": "2026-06-08",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "what-this-trip-640-kr": {
     "claim": "What this trip costs — a realistic budget → GO Fest Premier Access (optional add-on) — 640 kr",
     "value": "640 kr",
     "source_url": "https://pokemongo.com/en/gofest/copenhagen/tickets",
     "verified_on": "2026-06-08",
-    "shelf_life": "venue"
+    "shelf_life": "venue",
+    "tier": "primary"
   },
   "transit-passes-which-100-dkk": {
     "claim": "Transit passes — which one to buy and when — 100 DKK",
