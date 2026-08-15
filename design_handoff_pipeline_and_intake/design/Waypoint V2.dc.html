@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script>
+// A skipped view transition rejects an uncaught promise at navigation time; benign — silence just that one.
+window.addEventListener("unhandledrejection", function (e) {
+  var r = String((e.reason && e.reason.message) || e.reason || "");
+  if (r.indexOf("Transition was skipped") !== -1) e.preventDefault();
+});
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,300..800;1,7..72,400&amp;family=Source+Sans+3:wght@400..700&amp;display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#e3e7dc}
+a{color:#235a74}a:hover{color:#0f141a}
+
+@media (prefers-reduced-motion: no-preference){
+  @view-transition{navigation:auto}
+  ::view-transition-old(root){animation-duration:200ms}
+  ::view-transition-new(root){animation-duration:350ms;animation-timing-function:cubic-bezier(.16,1,.3,1)}
+}
+@keyframes omArrive{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes omArriveSoft{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion: no-preference){
+  [data-arrive]{animation:omArrive .5s cubic-bezier(.16,1,.3,1) backwards}
+  [data-arrive="1"]{animation-delay:.02s}
+  [data-arrive="2"]{animation-delay:.09s}
+  [data-arrive="3"]{animation-delay:.16s}
+  [data-arrive="4"]{animation-delay:.23s}
+}
+@keyframes wpPulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes wpBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.35)}}
+@keyframes wpSlideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes wpRing{0%{r:5px;opacity:.8}100%{r:15px;opacity:0}}
+@keyframes wpMarch{to{stroke-dashoffset:-18px}}
+@keyframes wpHalo{0%,100%{opacity:.28}50%{opacity:.08}}
+@keyframes ikUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes ikPulse{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes ikDrift{from{transform:translateY(0) scale(1)}to{transform:translateY(-1.5px) scale(1.05)}}
+@keyframes ikPin{0%{r:1.6px;opacity:.9}70%{r:6px;opacity:0}100%{r:6px;opacity:0}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+<div ref="{{ rootRef }}" data-screen-label="Waypoint V2" style="--bg:#e3e7dc;--bg2:#ced5c4;--ink:#0f141a;--card:#fbfcf6;--rule:#a9b39b;--rule2:#8a9480;--muted:#3c4534;--accent:#2e6f8e;--accent-ink:#235a74;--on-accent:#d8ecf5;--green:#396345;--on-green:#ffffff;--warn:#7f4a07;--font-display:'Literata',Georgia,serif;--font-data:'Source Sans 3',-apple-system,system-ui,sans-serif;min-height:100svh;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font-family:var(--font-display);font-size:clamp(15px, 0.55vw + 13.4px, 18.5px);line-height:1.5;position:relative">
+  <div aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E&quot;)"></div>
+  <div aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none">
+    <svg preserveAspectRatio="none" viewBox="0 0 1000 700" style="position:absolute;inset:0;width:100%;height:100%">
+      <sc-for list="{{ contours }}" as="c" hint-placeholder-count="0">
+        <polyline points="{{ c }}" fill="none" stroke="color-mix(in srgb,var(--muted) 26%,transparent)" stroke-width="1.2"></polyline>
+      </sc-for>
+    </svg>
+  </div>
+
+  <div style="position:relative;z-index:6;flex:none;display:flex;align-items:center;gap:10px;padding:7px 14px;background:var(--ink);color:var(--bg)">
+    <span style="font-family:var(--font-data);font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.75">Preview</span>
+    <span style="display:flex;border:1px solid color-mix(in srgb,var(--bg) 40%,transparent)">
+      <button onClick="{{ setDesktop }}" style="min-height:34px;padding:0 14px;border:none;background:{{ dBg }};color:{{ dColor }};font-family:var(--font-data);font-weight:640;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Desktop</button>
+      <button onClick="{{ pickMobile }}" style="min-height:34px;padding:0 14px;border:none;border-left:1px solid color-mix(in srgb,var(--bg) 40%,transparent);background:{{ mBg }};color:{{ mColor }};font-family:var(--font-data);font-weight:640;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Mobile · 390</button>
+    </span>
+    <span style="flex:1"></span>
+    <span style="font-family:var(--font-data);font-size:.7rem;opacity:.75">{{ previewNote }}</span>
+  </div>
+
+  <div ref="{{ frameRef }}" style="position:relative;z-index:1;flex:1;width:100%;max-width:{{ frameMax }};margin:0 auto;border-left:{{ frameEdge }};border-right:{{ frameEdge }};display:flex;flex-direction:column;min-width:0;background:transparent;font-size:{{ baseFont }}">
+  <header data-arrive="1" style="position:relative;z-index:2;flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:{{ headPad }};border-bottom:1px solid var(--rule2);background:var(--card)">
+    <a href="#" style="text-decoration:none;color:var(--ink);display:flex;align-items:center;min-height:44px;gap:10px">
+      <span style="position:relative;width:20px;height:18px;flex:none">
+        <span style="position:absolute;inset:0;width:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:17px solid var(--accent)"></span>
+        <span style="position:absolute;left:7.5px;top:10px;width:5px;height:5px;border-radius:50%;background:var(--card)"></span>
+      </span>
+      <span style="display:grid">
+        <span style="font-family:var(--font-data);font-weight:700;font-size:.88rem;letter-spacing:.24em">WAYPOINT</span>
+        <span style="font-family:var(--font-data);font-weight:600;font-size:.6rem;letter-spacing:.2em;color:var(--muted);white-space:nowrap">{{ subMark }}</span>
+      </span>
+    </a>
+    <nav style="display:flex;align-items:center;gap:2px;margin:{{ navMargin }};order:{{ navOrder }};width:{{ navWidth }};flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch" aria-label="Main">
+      <a href="#" style="flex:none;padding:7px 11px;font-family:var(--font-data);font-weight:640;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none" style-hover="color:var(--ink)">Guides</a>
+      <button onClick="{{ goNew }}" style="flex:none;min-height:40px;padding:7px 11px;border:none;background:none;font-family:var(--font-data);font-weight:640;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:{{ nColor }};border-bottom:{{ nUnder }};cursor:pointer">New guide</button>
+      <button onClick="{{ goChange }}" style="flex:none;min-height:40px;padding:7px 11px;border:none;background:none;font-family:var(--font-data);font-weight:640;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:{{ cColor }};border-bottom:{{ cUnder }};cursor:pointer">Change a guide</button>
+      <button onClick="{{ goProgress }}" style="flex:none;min-height:40px;display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:none;background:none;font-family:var(--font-data);font-weight:640;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:{{ pColor }};border-bottom:{{ pUnder }};cursor:pointer">Progress
+        <sc-if value="{{ showNavBadge }}" hint-placeholder-val="{{ false }}">
+          <span style="display:inline-flex;align-items:center;gap:5px;padding:.15em .5em;color:{{ navBadgeColor }};font-size:.62rem;font-weight:640;letter-spacing:.08em;border:1px solid currentColor">
+            <span style="width:5px;height:5px;border-radius:999px;background:{{ navBadgeColor }};animation:{{ dotAnim }}"></span>{{ navBadge }}
+          </span>
+        </sc-if>
+      </button>
+    </nav>
+    <span style="flex:1"></span>
+    <sc-if value="{{ onProgress }}" hint-placeholder-val="{{ true }}">
+      <span style="display:inline-flex;align-items:center;gap:8px;padding:.3em .7em;border:1px solid currentColor;background:{{ statusBg }};color:{{ statusColor }};font-family:var(--font-data);font-size:.78rem;font-weight:640;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap">
+        <span style="width:8px;height:8px;border-radius:999px;background:{{ statusColor }};animation:{{ dotAnim }}"></span>{{ statusText }}
+      </span>
+      <span style="display:inline-flex;align-items:baseline;gap:7px;font-family:var(--font-data)">
+        <span style="font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">Elapsed</span>
+        <span style="font-size:1.15rem;font-weight:700;font-variant-numeric:tabular-nums">{{ elapsed }}</span>
+      </span>
+    </sc-if>
+    <button onClick="{{ toggleTheme }}" aria-label="{{ themeAria }}" title="{{ themeAria }}" style="flex:none;width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:0;border:1px solid var(--rule2);background:none;color:var(--muted);cursor:pointer" style-hover="color:var(--ink);border-color:var(--ink)">
+      <sc-if value="{{ isLightTheme }}" hint-placeholder-val="{{ true }}">
+        <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <path d="M15.4 12.6A6.2 6.2 0 0 1 7.4 4.6a6.4 6.4 0 1 0 8 8Z"></path>
+        </svg>
+      </sc-if>
+      <sc-if value="{{ isDarkTheme }}" hint-placeholder-val="{{ false }}">
+        <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <circle cx="10" cy="10" r="3.6"></circle>
+          <path d="M10 1.6v2.2M10 16.2v2.2M1.6 10h2.2M16.2 10h2.2M4.1 4.1l1.6 1.6M14.3 14.3l1.6 1.6M15.9 4.1l-1.6 1.6M5.7 14.3l-1.6 1.6"></path>
+        </svg>
+      </sc-if>
+    </button>
+  </header>
+
+    <sc-if value="{{ onProgress }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;flex-direction:column;flex:1;min-height:{{ progMinH }};min-width:0">
+  <sc-if value="{{ showDemo }}" hint-placeholder-val="{{ true }}">
+  <nav aria-label="Run scrubber" style="position:relative;z-index:2;flex:none;padding:{{ railPad }};border-bottom:1px dashed var(--rule);background:transparent">
+    <div style="position:relative;height:10px;background:var(--bg2);border:1px solid var(--rule);overflow:hidden">
+      <span style="position:absolute;inset:0;background:{{ scrubFillColor }};transform-origin:left;transform:scaleX({{ scrubFill }});transition:transform .4s cubic-bezier(.16,1,.3,1)"></span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:2px;margin-top:4px">
+      <sc-for list="{{ stageJumps }}" as="sg" hint-placeholder-count="6">
+        <button onClick="{{ sg.go }}" style="min-height:36px;display:flex;flex-direction:column;align-items:stretch;gap:4px;padding:0;border:none;background:none;cursor:pointer;text-align:left;min-width:0">
+          <span style="height:3px;background:{{ sg.tick }};transition:background .3s"></span>
+          <span style="font-family:var(--font-data);font-size:.66rem;font-weight:{{ sg.weight }};letter-spacing:.03em;color:{{ sg.color }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ sg.label }}</span>
+        </button>
+      </sc-for>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-top:8px;padding-top:7px;border-top:1px dotted var(--rule)">
+      <label for="demo-state" style="flex:none;font-family:var(--font-data);font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">Demo state</label>
+      <span style="flex:1;min-width:0"></span>
+      <select id="demo-state" value="{{ demoValue }}" onChange="{{ demoPick }}" style="flex:none;min-height:34px;max-width:11rem;padding:0 8px;border:1px solid var(--rule2);background:var(--card);color:var(--ink);font-family:var(--font-data);font-size:.8rem;font-weight:600;cursor:pointer">
+        <sc-for list="{{ demoOptions }}" as="op" hint-placeholder-count="5">
+          <option value="{{ op }}">{{ op }}</option>
+        </sc-for>
+      </select>
+    </div>
+  </nav>
+  </sc-if>
+
+  <sc-if value="{{ notifyPromptOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:relative;z-index:2;flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:10px {{ cardPadX }};border-bottom:1px solid var(--rule);background:color-mix(in srgb,var(--accent) 7%,var(--card))">
+    <p style="margin:0;flex:1 1 {{ doneHeadBasis }};min-width:0;font-family:var(--font-data);font-size:.85rem;line-height:1.45;color:var(--ink);text-wrap:pretty">Research takes 1–2 hours. Get notified when it needs an answer, and when it’s done?</p>
+    <button onClick="{{ notifyYes }}" style="flex:none;min-height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--font-data);font-weight:640;font-size:.78rem;letter-spacing:.04em;white-space:nowrap;cursor:pointer" style-hover="background:var(--accent);border-color:var(--accent)">Notify me</button>
+    <button onClick="{{ notifyNo }}" style="flex:none;min-height:40px;padding:0 12px;border:none;background:none;color:var(--muted);font-family:var(--font-data);font-weight:640;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer" style-hover="color:var(--ink)">No thanks</button>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+  <main style="position:relative;z-index:1;flex:1;display:flex;align-items:center;justify-content:center;padding:24px 20px">
+    <div style="max-width:44rem;text-align:center">
+      <svg viewBox="0 0 320 120" style="display:block;width:100%;max-width:320px;margin:0 auto 18px" aria-hidden="true">
+        <path d="M14,96 Q160,10 306,72" fill="none" stroke="var(--rule2)" stroke-width="1.4" stroke-dasharray="3 6" stroke-linecap="round"></path>
+        <circle cx="14" cy="96" r="3.4" fill="var(--rule2)"></circle>
+        <circle cx="306" cy="72" r="3.4" fill="var(--rule2)"></circle>
+        <g transform="translate(160,26) rotate(118)" opacity="0.35">
+          <path d="M0,-7 L1.6,-1.6 L7,1.2 L7,3 L1.4,1.8 L1.1,5.4 L3,7 L3,8.4 L0,7.6 L-3,8.4 L-3,7 L-1.1,5.4 L-1.4,1.8 L-7,3 L-7,1.2 L-1.6,-1.6 Z" fill="var(--rule2)"></path>
+        </g>
+      </svg>
+      <p style="margin:0;font-family:var(--font-data);font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)">Flight Deck</p>
+      <h1 style="margin:6px 0 8px;font-family:var(--font-display);font-weight:640;font-size:1.7rem;letter-spacing:-.012em">Nothing running.</h1>
+      <p style="margin:0 0 20px;color:var(--muted);font-size:1.02rem">No research run is active. Start a guide and this page tracks it end to end — you can close the tab and come back.</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <a href="Intake and Change.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 20px;border-radius:999px;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-weight:640;font-size:.82rem;letter-spacing:.04em;text-decoration:none">＋ Start a new guide</a>
+        <a href="#" style="display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:1px solid var(--rule2);color:var(--muted);font-family:var(--font-data);font-weight:640;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none">Browse guides</a>
+        <button onClick="{{ loadDemoRun }}" style="min-height:44px;padding:0 14px;border:1px solid var(--rule2);background:none;color:var(--muted);font-family:var(--font-data);font-weight:640;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer">Watch a demo run</button>
+      </div>
+      <p style="margin:22px 0 0;font-family:var(--font-data);font-size:.78rem;color:var(--muted)">Last completed: <a href="#">Reykjavík</a> · 2 days ago · 1h 52m · $12.40</p>
+    </div>
+  </main>
+  </sc-if>
+  <sc-if value="{{ hasRun }}" hint-placeholder-val="{{ true }}">
+  <main style="position:relative;z-index:1;flex:1;min-height:0;display:grid;grid-template-columns:{{ mainCols }};gap:{{ mainGap }};padding:{{ mainPad }}">
+
+    <section aria-label="Route map and phases" style="min-height:0;display:flex;flex-direction:column;gap:{{ mainGap }}">
+      <article data-arrive="2" style="flex:none;background:var(--card);border:1px solid var(--rule);border-radius:0;padding:12px {{ cardPadX }} 8px;position:{{ routePos }};top:0;z-index:4;box-shadow:{{ routeShadow }}">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:4px">
+          <h2 style="margin:0;font-family:var(--font-data);font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">Research run — progress</h2>
+          <span style="font-family:var(--font-data);font-size:.72rem;color:var(--muted);white-space:nowrap">Reykjavík guide · SFO → KEF</span>
+          <span style="flex:1"></span>
+          <span style="font-family:var(--font-data);font-size:1.3rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--accent-ink)">{{ pctLabel }}</span>
+        </div>
+        <p style="margin:0 0 6px;font-family:var(--font-data);font-size:.85rem;color:var(--muted)">{{ progressSentence }}</p>
+
+        <sc-if value="{{ isStalled }}" hint-placeholder-val="{{ false }}">
+          <div style="margin:6px 0 4px;padding:9px 12px;background:color-mix(in srgb,var(--warn) 12%,var(--card));border:1px solid var(--warn);color:var(--warn);font-size:.85rem;line-height:1.45;animation:wpSlideUp .35s cubic-bezier(.16,1,.3,1)">
+            <strong>Stalled.</strong> No checkpoint has cleared in 20 minutes. Nothing on this page animates while a run is dead — nudge the agent below, or restart from the last checkpoint.
+          </div>
+        </sc-if>
+        <svg viewBox="150 20 600 260" style="display:block;width:100%;height:auto;max-height:{{ mapMaxH }};margin:0 auto" role="img" aria-label="Route progress: {{ pctLabel }} complete">
+          <rect x="150" y="20" width="600" height="260" fill="color-mix(in srgb,var(--accent) 6%,transparent)"></rect>
+          <path d="M190,20 V280 M270,20 V280 M350,20 V280 M430,20 V280 M510,20 V280 M590,20 V280 M670,20 V280 M150,60 H750 M150,120 H750 M150,180 H750 M150,240 H750" stroke="color-mix(in srgb,var(--rule) 38%,transparent)" stroke-width="0.6" fill="none"></path>
+          <g>
+            <sc-for list="{{ mapPaths }}" as="mp" hint-placeholder-count="0">
+              <path d="{{ mp }}" fill="var(--bg2)" stroke="var(--rule)" stroke-width="0.5" opacity="0.55"></path>
+            </sc-for>
+          </g>
+          <path d="M230.5,209.5 Q420,30 629.6,104.1" fill="none" stroke="var(--rule2)" stroke-width="1.8" stroke-dasharray="3 6" stroke-linecap="round" style="animation:{{ marchAnim }}"></path>
+          <path ref="{{ glowRef }}" d="M230.5,209.5 Q420,30 629.6,104.1" fill="none" stroke="var(--accent)" stroke-width="11" stroke-linecap="round" opacity="0.22"></path>
+          <path ref="{{ progRef }}" d="M230.5,209.5 Q420,30 629.6,104.1" fill="none" stroke="var(--accent)" stroke-width="3.6" stroke-linecap="round"></path>
+          <sc-for list="{{ stations }}" as="st" hint-placeholder-count="6">
+            <g>
+              <circle cx="{{ st.x }}" cy="{{ st.y }}" r="5" fill="none" stroke="var(--accent)" stroke-width="1.4" style="animation:{{ st.ringAnim }}" opacity="0"></circle>
+              <circle cx="{{ st.x }}" cy="{{ st.y }}" r="5.6" fill="{{ st.fill }}" stroke="{{ st.stroke }}" stroke-width="1.8" style="transition:fill .4s,stroke .4s"></circle>
+              <text x="{{ st.x }}" y="{{ st.ly }}" text-anchor="middle" fill="{{ st.tcolor }}" style="font-family:var(--font-data);font-size:10.5px;font-weight:{{ st.tweight }};letter-spacing:.04em">{{ st.label }}</text>
+            </g>
+          </sc-for>
+          <circle cx="230.5" cy="209.5" r="3.4" fill="var(--ink)"></circle>
+          <text x="160" y="228" text-anchor="start" fill="var(--muted)" style="font-family:var(--font-data);font-size:10.5px;letter-spacing:.06em">SFO · REQUEST FILED</text>
+          <circle cx="629.6" cy="104.1" r="3.4" fill="var(--ink)"></circle>
+          <text x="629.6" y="124" text-anchor="middle" fill="var(--muted)" style="font-family:var(--font-data);font-size:10.5px;letter-spacing:.06em">KEF · GUIDE PUBLISHED</text>
+          <g ref="{{ planeRef }}">
+            <circle cx="0" cy="0" r="17" fill="var(--accent)" style="animation:{{ planeHaloAnim }}" opacity="0.22"></circle>
+            <g transform="scale(1.75)">
+              <path d="M0,-7 L1.6,-1.6 L7,1.2 L7,3 L1.4,1.8 L1.1,5.4 L3,7 L3,8.4 L0,7.6 L-3,8.4 L-3,7 L-1.1,5.4 L-1.4,1.8 L-7,3 L-7,1.2 L-1.6,-1.6 Z" fill="var(--accent)" stroke="var(--card)" stroke-width="0.9"></path>
+            </g>
+          </g>
+        </svg>
+        <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:8px 0 6px;animation:wpSlideUp .45s cubic-bezier(.16,1,.3,1)">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin-bottom:10px">
+              <p style="margin:0;flex:1 1 {{ doneHeadBasis }};min-width:0;font-family:var(--font-display);font-weight:640;font-size:1.15rem;text-wrap:pretty">The Reykjavík guide is live.</p>
+              <a href="#" style="flex:none;display:inline-block;padding:11px 22px;border-radius:999px;background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;font-size:.88rem;text-decoration:none">Open the Iceland guide →</a>
+            </div>
+            <div style="border:1px dashed var(--rule);padding:10px 14px;background:var(--bg2)">
+              <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:6px">
+                <span style="font-family:var(--font-data);font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink)">How the run went</span>
+                <span style="flex:1;border-bottom:1px dotted var(--rule2)"></span>
+                <span style="font-family:var(--font-data);font-size:.7rem;color:var(--muted)">Reykjavík · 10 sections</span>
+              </div>
+              <div style="display:{{ statsDisplay }};grid-template-columns:{{ statCols }};flex-wrap:wrap;justify-content:space-between;gap:8px 14px;margin-bottom:8px">
+                <sc-for list="{{ manifestStats }}" as="ms" hint-placeholder-count="4">
+                  <div style="text-align:{{ ms.align }}">
+                    <div style="font-family:var(--font-data);font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">{{ ms.label }}</div>
+                    <div style="font-family:var(--font-data);font-size:1.05rem;font-weight:700;font-variant-numeric:tabular-nums">{{ ms.value }}</div>
+                  </div>
+                </sc-for>
+              </div>
+              <sc-for list="{{ modelRows }}" as="mr" hint-placeholder-count="3">
+                <div style="display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:baseline;column-gap:12px;font-family:var(--font-data);font-size:.78rem;padding:4px 0;border-top:1px dotted color-mix(in srgb,var(--rule) 55%,transparent)">
+                  <span style="min-width:0">
+                    <span style="font-weight:600;color:var(--ink)">{{ mr.model }}</span>
+                    <span style="display:block;color:var(--muted);font-size:.72rem">{{ mr.role }}</span>
+                  </span>
+                  <span style="font-variant-numeric:tabular-nums;color:var(--muted);text-align:right;min-width:5.5em">{{ mr.tokens }}</span>
+                  <span style="font-variant-numeric:tabular-nums;font-weight:700;color:{{ mr.costColor }};text-align:right;min-width:4.5em">{{ mr.cost }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+      </article>
+
+      <article data-arrive="2" aria-live="polite" style="flex:none;background:var(--card);border:1px solid var(--rule);border-left:3px solid var(--accent);padding:11px {{ cardPadX }} 12px">
+        <div style="display:flex;align-items:baseline;gap:9px;margin-bottom:5px">
+          <h2 style="margin:0;font-family:var(--font-data);font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">{{ nugHead }}</h2>
+          <span style="flex:1;min-width:0"></span>
+          <sc-if value="{{ hasNugget }}" hint-placeholder-val="{{ true }}">
+            <span style="font-family:var(--font-data);font-size:.7rem;color:var(--muted);font-variant-numeric:tabular-nums">{{ nugPos }}</span>
+            <button onClick="{{ nugPrev }}" aria-label="Previous find" style="min-width:30px;min-height:30px;border:1px solid var(--rule);background:none;color:{{ nugPrevColor }};font-family:var(--font-data);font-size:.8rem;cursor:pointer">‹</button>
+            <button onClick="{{ nugNext }}" aria-label="Next find" style="min-width:30px;min-height:30px;border:1px solid var(--rule);background:none;color:{{ nugNextColor }};font-family:var(--font-data);font-size:.8rem;cursor:pointer">›</button>
+          </sc-if>
+        </div>
+        <sc-if value="{{ hasNugget }}" hint-placeholder-val="{{ true }}">
+          <div style="animation:wpSlideUp .35s cubic-bezier(.16,1,.3,1)">
+            <span style="display:inline-flex;padding:.2em .6em;margin-bottom:5px;border:1px solid currentColor;color:var(--accent-ink);font-family:var(--font-data);font-weight:700;font-size:.63rem;letter-spacing:.08em;text-transform:uppercase">{{ nugKind }}</span>
+            <p style="margin:0;font-family:var(--font-display);font-size:.95rem;line-height:1.45;text-wrap:pretty">{{ nugText }}</p>
+            <p style="margin:4px 0 0;font-family:var(--font-data);font-size:.7rem;color:var(--muted)">{{ nugSrc }}</p>
+          </div>
+        </sc-if>
+        <sc-if value="{{ noNugget }}" hint-placeholder-val="{{ false }}">
+          <p style="margin:0;color:var(--muted);font-style:italic;font-size:.92rem">{{ nugEmpty }}</p>
+        </sc-if>
+      </article>
+
+      <article data-arrive="3" style="flex:1;min-height:{{ phasesMinH }};display:flex;flex-direction:column;overflow:{{ phasesOverflow }};min-width:0;background:var(--card);border:1px solid var(--rule);border-radius:0;padding:12px {{ cardPadX }}">
+        <h2 style="margin:0 0 8px;font-family:var(--font-data);font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">What’s happening</h2>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <sc-for list="{{ phases }}" as="ph" hint-placeholder-count="3">
+            <div style="display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:center;opacity:{{ ph.opacity }}">
+              <span style="padding:2px 10px;font-family:var(--font-data);font-size:.75rem;font-weight:700;letter-spacing:.14em;color:var(--accent-ink);background:{{ ph.chipBg }};border:1px solid {{ ph.chipBorder }};border-radius:999px">{{ ph.num }}</span>
+              <span style="font-family:var(--font-display);font-weight:{{ ph.weight }};font-size:.95rem">{{ ph.label }}</span>
+              <span style="font-family:var(--font-data);font-size:.78rem;font-weight:600;color:{{ ph.statusColor }}">{{ ph.status }}</span>
+              <span></span>
+              <span style="grid-column:2 / 4;height:6px;border-radius:999px;background:var(--bg2);overflow:hidden;display:block">
+                <span style="display:block;height:100%;width:100%;border-radius:999px;background:{{ ph.barColor }};transform-origin:left;transform:scaleX({{ ph.fill }});transition:transform .5s cubic-bezier(.16,1,.3,1)"></span>
+              </span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:auto;padding-top:10px;border-top:1px dashed var(--rule);display:grid;grid-template-columns:{{ counterCols }};gap:10px">
+          <sc-for list="{{ counters }}" as="c" hint-placeholder-count="3">
+            <div>
+              <div style="font-family:var(--font-data);font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">{{ c.label }}</div>
+              <div style="font-family:var(--font-data);font-size:1.25rem;font-weight:700;font-variant-numeric:tabular-nums">{{ c.value }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </article>
+    </section>
+
+    <section aria-label="Live evaluation streams" style="min-height:0;display:flex;flex-direction:column;gap:{{ mainGap }}">
+      <article data-arrive="3" style="flex:none;background:var(--card);border:1px solid var(--rule);border-radius:0;padding:14px {{ cardPadX }} 12px">
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:8px">
+          <h2 style="margin:0;font-family:var(--font-data);font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">Sources we’re reading</h2>
+          <span style="flex:1"></span>
+          <span style="font-family:var(--font-data);font-size:.72rem;color:var(--muted);font-variant-numeric:tabular-nums">{{ sourceMeta }}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:9px;padding:8px 11px;background:var(--bg2);border:1px solid var(--rule);margin-bottom:8px">
+          <span ref="{{ fetchDotRef }}" style="flex:none;width:7px;height:7px;border-radius:999px;background:{{ liveDotColor }};animation:{{ liveDotAnim }}"></span>
+          <span style="flex:1;min-width:0;font-family:var(--font-data);font-size:.85rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ currentUrl }}</span>
+          <span style="flex:none;font-family:var(--font-data);font-size:.75rem;font-weight:700;font-variant-numeric:tabular-nums;color:{{ currentCodeColor }}">{{ currentCode }}</span>
+        </div>
+        <ul ref="{{ urlListRef }}" aria-live="polite" aria-label="Recent fetches" style="list-style:none;margin:0;padding:0;height:{{ fetchListH }};overflow-y:auto;display:flex;flex-direction:column">
+          <sc-for list="{{ urlRows }}" as="u" hint-placeholder-count="6">
+            <li style="display:flex;align-items:baseline;gap:9px;padding:3px 2px;border-bottom:1px solid color-mix(in srgb,var(--rule) 40%,transparent);font-family:var(--font-data);font-size:.78rem">
+              <span style="flex:none;color:var(--muted);font-variant-numeric:tabular-nums">{{ u.time }}</span>
+              <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink)">{{ u.url }}</span>
+              <span style="flex:none;font-weight:700;font-variant-numeric:tabular-nums;color:{{ u.codeColor }}">{{ u.code }}</span>
+            </li>
+          </sc-for>
+        </ul>
+      </article>
+
+      <article data-arrive="4" style="flex:1;min-height:{{ logMinH }};display:flex;flex-direction:column;background:var(--card);border:1px solid var(--rule);border-radius:0;padding:14px {{ cardPadX }} 10px">
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:8px">
+          <h2 style="margin:0;font-family:var(--font-data);font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">Decisions made</h2>
+          <span style="flex:1"></span>
+          <span style="font-family:var(--font-data);font-size:.72rem;color:var(--muted)">{{ judgeCount }} so far</span>
+        </div>
+        <div ref="{{ logRef }}" aria-live="polite" aria-label="Agent reasoning log" style="flex:1;min-height:0;min-width:0;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;gap:6px;padding-right:4px">
+          <sc-for list="{{ logRows }}" as="lg" hint-placeholder-count="5">
+            <div style="background:{{ lg.bg }};border:{{ lg.border }};padding:{{ lg.pad }};animation:wpSlideUp .35s cubic-bezier(.16,1,.3,1) backwards">
+              <div style="display:flex;gap:8px;align-items:baseline">
+                <span style="flex:none;font-family:var(--font-data);font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:{{ lg.tagColor }}">{{ lg.tag }}</span>
+                <span style="flex:none;font-family:var(--font-data);font-size:.7rem;color:var(--muted);font-variant-numeric:tabular-nums">{{ lg.time }}</span>
+              </div>
+              <p style="margin:2px 0 0;font-family:{{ lg.font }};font-size:{{ lg.size }};line-height:1.45;color:var(--ink);overflow-wrap:anywhere;text-wrap:pretty">{{ lg.text }}</p>
+            </div>
+          </sc-for>
+        </div>
+      </article>
+    </section>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ notDone }}" hint-placeholder-val="{{ true }}">
+  <section aria-label="Add a note to this run" style="position:{{ notePos }};bottom:0;z-index:5;flex:none;border-top:{{ ijBorderW }} solid {{ ijBorder }};background:{{ ijBg }};padding:{{ notePad }};box-shadow:{{ ijShadow }};transition:background .35s,border-color .35s,box-shadow .35s">
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-bottom:8px">
+      <h2 style="margin:0;flex:none;font-family:var(--font-display);font-size:1rem;font-weight:640;color:var(--ink)">{{ noteHead }}</h2>
+      <span style="flex:none;display:inline-flex;align-items:center;gap:6px;font-family:var(--font-data);font-size:.72rem;font-weight:700;letter-spacing:.04em;color:{{ ijPillColor }};white-space:nowrap">
+        <span style="width:7px;height:7px;border-radius:999px;background:{{ ijPillColor }};animation:{{ ijPillAnim }}"></span>{{ ijState }}
+      </span>
+      <span style="flex:1;min-width:0"></span>
+      <button onClick="{{ toggleNotify }}" style="flex:none;min-height:32px;padding:0;border:none;background:none;color:{{ notifyColor }};font-family:var(--font-data);font-weight:640;font-size:.72rem;text-decoration:underline;text-underline-offset:3px;cursor:pointer;white-space:nowrap" style-hover="color:var(--ink)">{{ notifyLabel }}</button>
+    </div>
+    <sc-if value="{{ hasQuestion }}" hint-placeholder-val="{{ false }}">
+      <div style="background:color-mix(in srgb,var(--warn) 8%,var(--card));border:1.5px solid var(--warn);padding:12px 15px;margin-bottom:9px;animation:wpSlideUp .4s cubic-bezier(.16,1,.3,1)">
+        <p style="margin:0 0 4px;font-family:var(--font-display);font-weight:560;font-size:.95rem;line-height:1.4">{{ qText }}</p>
+        <p style="margin:0 0 8px;font-size:.85rem;color:var(--muted)"><strong style="color:var(--ink)">If you don't answer:</strong> {{ qAssume }}</p>
+        <button onClick="{{ acceptAssumption }}" style="min-height:32px;padding:3px 14px;border-radius:999px;border:1px solid var(--rule);background:transparent;color:var(--muted);font-family:var(--font-data);font-size:.78rem;cursor:pointer" style-hover="color:var(--accent-ink);border-color:var(--rule2)">Accept the assumption →</button>
+      </div>
+    </sc-if>
+    <form onSubmit="{{ submitInterjection }}" style="display:flex;flex-direction:{{ formDir }};gap:8px">
+      <input ref="{{ inputRef }}" placeholder="{{ ijPlaceholder }}" aria-label="Interjection input" style="flex:1;padding:11px 14px;border-radius:0;border:1.5px solid {{ ijInputBorder }};background:var(--card);color:var(--ink);font-family:var(--font-data);font-size:.92rem;outline-color:var(--accent-ink);transition:border-color .35s"></input>
+      <button type="submit" style="min-height:44px;padding:0 22px;border-radius:999px;border:1px solid {{ ijBtnBg }};background:{{ ijBtnBg }};color:{{ ijBtnColor }};font-family:var(--font-display);font-weight:640;font-size:.88rem;cursor:pointer;transition:background .35s,border-color .35s" style-hover="background:var(--accent);border-color:var(--accent)">{{ ijBtn }}</button>
+    </form>
+  </section>
+  </sc-if>
+
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ notProgress }}" hint-placeholder-val="{{ false }}">
+    <main data-arrive="2" style="position:relative;z-index:1;flex:1;min-width:0;width:100%;max-width:min(88rem,100%);margin:0 auto;padding:{{ ikMainPad }}">
+      <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;overflow:hidden">
+        <svg viewBox="0 0 640 420" style="position:absolute;top:-30px;right:-60px;width:min(56rem,90%);opacity:.55;animation:ikDrift 26s ease-in-out infinite alternate">
+          <path d="M40,360 Q320,40 600,180" fill="none" stroke="color-mix(in srgb,var(--rule2) 55%,transparent)" stroke-width="1.6" stroke-dasharray="4 9" stroke-linecap="round"></path>
+          <circle cx="40" cy="360" r="4" fill="none" stroke="color-mix(in srgb,var(--rule2) 60%,transparent)" stroke-width="1.4"></circle>
+          <circle cx="332" cy="196" r="4" fill="none" stroke="color-mix(in srgb,var(--rule2) 60%,transparent)" stroke-width="1.4"></circle>
+          <circle cx="600" cy="180" r="4" fill="none" stroke="color-mix(in srgb,var(--rule2) 60%,transparent)" stroke-width="1.4"></circle>
+          <g transform="translate(430,140) rotate(64) scale(2.1)" opacity="0.5">
+            <path d="M0,-7 L1.6,-1.6 L7,1.2 L7,3 L1.4,1.8 L1.1,5.4 L3,7 L3,8.4 L0,7.6 L-3,8.4 L-3,7 L-1.1,5.4 L-1.4,1.8 L-7,3 L-7,1.2 L-1.6,-1.6 Z" fill="color-mix(in srgb,var(--rule2) 70%,transparent)"></path>
+          </g>
+          <g transform="translate(560,300)" opacity="0.45">
+            <path d="M0,-26 L15,0 L-15,0 Z" fill="none" stroke="color-mix(in srgb,var(--rule2) 65%,transparent)" stroke-width="1.6" stroke-linejoin="round"></path>
+            <circle cx="0" cy="-8" r="3" fill="color-mix(in srgb,var(--rule2) 65%,transparent)"></circle>
+          </g>
+        </svg>
+      </div>
+    <sc-if value="{{ onNew }}" hint-placeholder-val="{{ true }}">
+    <section aria-label="New guide intake" style="position:relative">
+      <p style="margin:0;font-family:var(--font-data);font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-ink)">New guide</p>
+      <h1 style="margin:{{ h1Margin }};font-family:var(--font-display);font-weight:640;font-size:{{ h1Size }};letter-spacing:-.012em;line-height:1.12">Before we start</h1>
+      <p style="margin:{{ dekMargin }};color:var(--muted);font-size:{{ dekSize }};max-width:58ch;text-wrap:pretty">Work down the list at your own pace. Every answer shapes what we go looking for — and anything you skip, we’ll tell you what we assumed instead.</p>
+
+      <div style="position:sticky;top:0;z-index:3;background:var(--bg);padding:8px 0 10px;margin-bottom:10px;border-bottom:1px solid var(--rule)">
+        <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:6px">
+          <span style="font-family:var(--font-data);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);min-width:0">{{ clearedLabel }}</span>
+          <span style="flex:1;min-width:0"></span>
+          <span style="font-family:var(--font-data);font-size:.75rem;color:var(--muted);flex:none">{{ estimateLabel }}</span>
+        </div>
+        <div style="height:6px;background:var(--bg2);overflow:hidden">
+          <div style="height:100%;width:100%;background:{{ meterColor }};transform-origin:left;transform:scaleX({{ meterFill }});transition:transform .45s cubic-bezier(.16,1,.3,1)"></div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:{{ cardCols }};gap:10px;align-items:start">
+        <sc-for list="{{ groups }}" as="g" hint-placeholder-count="6">
+          <article data-arrive="{{ g.arrive }}" style="background:var(--card);border:1px solid {{ g.border }};grid-column:{{ g.span }};min-width:0;transition:border-color .25s,box-shadow .25s" style-hover="box-shadow:0 2px 0 0 var(--rule2)">
+            <button onClick="{{ g.toggle }}" aria-expanded="{{ g.expandedStr }}" style="width:100%;display:flex;align-items:center;gap:12px;padding:13px 16px;border:none;background:none;color:var(--ink);text-align:left;cursor:pointer;min-height:56px;flex-wrap:wrap">
+              <span style="flex:none;width:22px;height:22px;border:1.5px solid {{ g.iconBorder }};background:{{ g.iconBg }};color:{{ g.iconColor }};display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-data);font-size:.8rem;font-weight:700">{{ g.icon }}</span>
+              <span style="flex:1;min-width:0">
+                <span style="display:block;font-family:var(--font-display);font-weight:{{ g.weight }};font-size:1.02rem">{{ g.title }}</span>
+                <span style="display:block;font-family:var(--font-data);font-size:.78rem;color:var(--muted)">{{ g.summary }}</span>
+              </span>
+              <span style="flex:none;display:inline-flex;white-space:nowrap;padding:.2em .6em;border:1px solid currentColor;color:{{ g.stampColor }};font-family:var(--font-data);font-weight:640;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase">{{ g.stamp }}</span>
+              <span style="flex:none;color:var(--muted);font-family:var(--font-data);font-size:.8rem">{{ g.chev }}</span>
+            </button>
+            <sc-if value="{{ g.expanded }}" hint-placeholder-val="{{ false }}">
+              <div style="border-top:1px solid var(--rule);padding:14px {{ groupPadX }} 16px;display:flex;flex-direction:column;gap:{{ bodyGap }};animation:ikUp .25s cubic-bezier(.16,1,.3,1)">
+                <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="3">
+                  <div style="display:grid;grid-template-columns:{{ fieldCols }};gap:{{ fieldGap }};align-items:start;min-width:0">
+                    <label style="display:flex;flex-direction:column;gap:5px;min-width:0">
+                      <span style="display:flex;align-items:baseline;gap:8px">
+                        <span style="font-family:var(--font-data);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">{{ it.label }}</span>
+                        <span style="font-family:var(--font-data);font-size:.68rem;color:{{ it.stateColor }};font-weight:640">{{ it.state }}</span>
+                      </span>
+                      <sc-if value="{{ it.hasOptions }}" hint-placeholder-val="{{ false }}">
+                        <span style="display:flex;flex-wrap:wrap;gap:7px">
+                          <sc-for list="{{ it.options }}" as="op" hint-placeholder-count="3">
+                            <button onClick="{{ op.pick }}" style="min-height:40px;padding:5px 14px;border-radius:999px;border:1px solid {{ op.border }};background:{{ op.bg }};color:{{ op.color }};font-family:var(--font-display);font-weight:600;font-size:.85rem;cursor:pointer" style-hover="border-color:var(--accent)">{{ op.label }}</button>
+                          </sc-for>
+                        </span>
+                      </sc-if>
+                      <sc-if value="{{ it.hasInput }}" hint-placeholder-val="{{ true }}">
+                        <input value="{{ it.value }}" onInput="{{ it.type }}" placeholder="{{ it.placeholder }}" aria-label="{{ it.label }}" style="min-height:44px;padding:10px 12px;border:1px solid {{ it.inputBorder }};background:var(--bg2);color:var(--ink);font-family:var(--font-data);font-size:.95rem;width:100%"></input>
+                      </sc-if>
+                      <sc-if value="{{ it.hasExample }}" hint-placeholder-val="{{ false }}">
+                        <span style="font-family:var(--font-data);font-size:.72rem;color:var(--muted);font-style:italic">{{ it.example }}</span>
+                      </sc-if>
+                    </label>
+                    <p style="margin:0;font-family:var(--font-data);font-size:.72rem;line-height:1.5;color:var(--muted);border-left:2px solid var(--rule);padding-left:10px">{{ it.drives }}</p>
+                  </div>
+                </sc-for>
+
+                <sc-if value="{{ g.isPriorities }}" hint-placeholder-val="{{ false }}">
+                  <div style="border-top:1px dashed var(--rule);padding-top:12px">
+                    <sc-if value="{{ matchOpen }}" hint-placeholder-val="{{ true }}">
+                      <p style="margin:0 0 4px;font-size:1rem">On this trip, which matters more?</p>
+                      <p style="margin:0 0 10px;font-family:var(--font-data);font-size:.72rem;color:var(--muted)">{{ matchProgress }}</p>
+                      <div style="display:grid;grid-template-columns:{{ matchCols }};gap:12px;align-items:center;justify-items:stretch">
+                        <button onClick="{{ pickA }}" style="min-height:60px;padding:12px;border:1.5px solid var(--rule2);background:var(--card);color:var(--ink);font-family:var(--font-display);font-weight:600;font-size:.98rem;cursor:pointer;transition:border-color .18s,background .18s,transform .18s cubic-bezier(.34,1.56,.64,1)" style-hover="border-color:var(--accent);background:color-mix(in srgb,var(--accent) 7%,transparent);transform:translateY(-2px)">{{ matchA }}</button>
+                        <span style="font-family:var(--font-data);font-size:.7rem;font-weight:700;letter-spacing:.1em;color:var(--muted)">VS</span>
+                        <button onClick="{{ pickB }}" style="min-height:60px;padding:12px;border:1.5px solid var(--rule2);background:var(--card);color:var(--ink);font-family:var(--font-display);font-weight:600;font-size:.98rem;cursor:pointer;transition:border-color .18s,background .18s,transform .18s cubic-bezier(.34,1.56,.64,1)" style-hover="border-color:var(--accent);background:color-mix(in srgb,var(--accent) 7%,transparent);transform:translateY(-2px)">{{ matchB }}</button>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ matchDone }}" hint-placeholder-val="{{ false }}">
+                      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;animation:ikUp .3s cubic-bezier(.16,1,.3,1)">
+                        <span style="font-family:var(--font-data);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Ranked</span>
+                        <sc-for list="{{ ranked }}" as="r" hint-placeholder-count="3">
+                          <span style="display:inline-flex;align-items:center;gap:7px;padding:.35em .8em;border:1px solid {{ r.border }};background:{{ r.bg }};color:{{ r.color }};font-family:var(--font-data);font-weight:640;font-size:.8rem">
+                            <span style="font-variant-numeric:tabular-nums;opacity:.65">{{ r.rank }}</span>{{ r.label }}
+                          </span>
+                        </sc-for>
+                        <button onClick="{{ redoMatch }}" style="min-height:36px;padding:0 12px;border:1px solid var(--rule2);background:none;color:var(--muted);font-family:var(--font-data);font-weight:640;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Redo</button>
+                      </div>
+                    </sc-if>
+                  </div>
+                </sc-if>
+
+                <div style="display:flex;gap:10px;align-items:center;border-top:1px dashed var(--rule);padding-top:11px">
+                  <button onClick="{{ g.skip }}" style="min-height:38px;padding:0 13px;border:1px solid var(--rule2);background:none;color:var(--muted);font-family:var(--font-data);font-weight:640;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer" style-hover="color:var(--warn);border-color:var(--warn)">Skip this for now</button>
+                  <span style="flex:1"></span>
+                  <button onClick="{{ g.next }}" style="min-height:40px;padding:0 18px;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--font-data);font-weight:640;font-size:.78rem;letter-spacing:.04em;cursor:pointer" style-hover="background:var(--accent);border-color:var(--accent)">{{ g.nextLabel }}</button>
+                </div>
+              </div>
+            </sc-if>
+          </article>
+        </sc-for>
+      </div>
+
+      <div style="margin-top:16px;background:var(--card);border:1px solid var(--rule);padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <span style="font-family:var(--font-data);font-size:.8rem;color:{{ readyColor }};font-weight:600">{{ readyNote }}</span>
+        <span style="flex:1"></span>
+        <button onClick="{{ dispatchRun }}" style="min-height:46px;padding:0 22px;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--font-data);font-weight:640;font-size:.82rem;letter-spacing:.04em;cursor:pointer" style-hover="background:var(--accent);border-color:var(--accent)">Start the research run</button>
+      </div>
+
+      <sc-if value="{{ forksOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:16px;background:var(--card);border:1.5px solid var(--warn);padding:16px 18px;animation:ikUp .32s cubic-bezier(.16,1,.3,1)">
+          <span style="display:inline-flex;padding:.25em .7em;border:1px solid currentColor;color:var(--warn);font-family:var(--font-data);font-weight:640;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase">Two quick questions</span>
+          <p style="margin:10px 0 4px;color:var(--muted);font-size:.95rem;max-width:62ch">Your answers here change what we look for. We won’t guess on your behalf — pick one, or go with our suggestion.</p>
+          <sc-for list="{{ forks }}" as="fk" hint-placeholder-count="2">
+            <div style="border-top:1px dashed var(--rule);padding:12px 0 10px">
+              <p style="margin:0 0 8px;font-weight:560">{{ fk.q }}</p>
+              <div style="display:flex;flex-wrap:wrap;gap:7px;align-items:center">
+                <sc-for list="{{ fk.options }}" as="fo" hint-placeholder-count="2">
+                  <button onClick="{{ fo.pick }}" style="min-height:40px;padding:5px 14px;border-radius:999px;border:1px solid {{ fo.border }};background:{{ fo.bg }};color:{{ fo.color }};font-family:var(--font-display);font-weight:600;font-size:.85rem;cursor:pointer">{{ fo.label }}</button>
+                </sc-for>
+                <span style="font-family:var(--font-data);font-size:.72rem;color:var(--muted)">{{ fk.rec }}</span>
+              </div>
+            </div>
+          </sc-for>
+          <sc-if value="{{ forksCleared }}" hint-placeholder-val="{{ false }}">
+            <a href="Pipeline Dashboard.dc.html" style="display:inline-flex;align-items:center;min-height:46px;margin-top:8px;padding:0 22px;border-radius:999px;background:var(--green);color:#fff;font-family:var(--font-data);font-weight:640;font-size:.82rem;letter-spacing:.04em;text-decoration:none;animation:ikUp .3s cubic-bezier(.16,1,.3,1)">All set — see it running →</a>
+          </sc-if>
+        </div>
+      </sc-if>
+    </section>
+    </sc-if>
+
+    <sc-if value="{{ onChange }}" hint-placeholder-val="{{ false }}">
+    <section aria-label="Request a change" style="position:relative">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px">
+        <p style="margin:0;font-family:var(--font-data);font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-ink)">Change a guide</p>
+        <span style="flex:1;min-width:0"></span>
+        <div style="display:flex;flex:none;width:{{ segWidth }};border:1px solid var(--rule2)">
+          <button onClick="{{ viewTraveler }}" style="flex:1;min-height:40px;padding:0 14px;border:none;background:{{ travBg }};color:{{ travColor }};font-family:var(--font-data);font-weight:640;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap">Request a change</button>
+          <button onClick="{{ viewOwner }}" style="flex:1;min-height:40px;padding:0 14px;border:none;border-left:1px solid var(--rule2);background:{{ ownBg }};color:{{ ownColor }};font-family:var(--font-data);font-weight:640;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap">Pending requests</button>
+        </div>
+      </div>
+      <h1 style="margin:{{ h1Margin }};font-family:var(--font-display);font-weight:640;font-size:{{ h1Size }};letter-spacing:-.012em;line-height:1.12">{{ changeHead }}</h1>
+      <p style="margin:{{ dekMargin }};color:var(--muted);font-size:{{ dekSize }};max-width:58ch;text-wrap:pretty">{{ changeDek }}</p>
+
+      <sc-if value="{{ isTraveler }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+        <sc-for list="{{ guideCards }}" as="gc" hint-placeholder-count="3">
+          <button onClick="{{ gc.pick }}" style="flex:1;min-width:{{ guideCardMin }};display:flex;align-items:stretch;padding:0;border:1.5px solid {{ gc.border }};background:var(--card);cursor:pointer;text-align:left;overflow:hidden;transition:border-color .2s,transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="border-color:var(--accent);transform:translateY(-2px)">
+            <span style="flex:none;width:64px;position:relative;background:{{ gc.sky }};overflow:hidden">
+              <svg viewBox="0 0 64 70" style="position:absolute;inset:0;width:100%;height:100%">
+                <g style="animation:{{ gc.driftAnim }}">
+                  <sc-for list="{{ gc.landPaths }}" as="lp" hint-placeholder-count="0">
+                    <path d="{{ lp.d }}" fill="{{ lp.fill }}" stroke="{{ lp.stroke }}" stroke-width="0.5" stroke-linejoin="round"></path>
+                  </sc-for>
+                </g>
+                <sc-for list="{{ gc.pins }}" as="pn" hint-placeholder-count="0">
+                  <g>
+                    <circle cx="{{ pn.x }}" cy="{{ pn.y }}" r="2" fill="none" stroke="{{ pn.fill }}" stroke-width="0.9" style="animation:{{ pn.anim }}"></circle>
+                    <circle cx="{{ pn.x }}" cy="{{ pn.y }}" r="1.4" fill="{{ pn.fill }}"></circle>
+                  </g>
+                </sc-for>
+              </svg>
+            </span>
+            <span style="flex:1;min-width:0;padding:11px 12px">
+              <span style="display:block;font-family:var(--font-display);font-weight:600;font-size:.95rem">{{ gc.title }}</span>
+              <span style="display:block;font-family:var(--font-data);font-size:.72rem;color:var(--muted)">{{ gc.meta }}</span>
+            </span>
+            <span style="flex:none;align-self:center;margin-right:10px;white-space:nowrap;padding:.2em .5em;border:1px solid currentColor;font-family:var(--font-data);font-size:.62rem;font-weight:640;letter-spacing:.08em;text-transform:uppercase;color:{{ gc.stampColor }}">{{ gc.stamp }}</span>
+          </button>
+        </sc-for>
+      </div>
+      <div style="display:grid;grid-template-columns:{{ panelCols }};gap:14px;align-items:{{ panelAlign }};min-width:0">
+        <article style="background:var(--card);border:1px solid var(--rule);padding:16px 18px;display:flex;flex-direction:column">
+          <label style="display:block;font-family:var(--font-data);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">What needs changing?</label>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin:0 0 9px">
+            <sc-for list="{{ samples }}" as="sm" hint-placeholder-count="4">
+              <button onClick="{{ sm.use }}" style="min-height:34px;padding:0 11px;border-radius:999px;border:1px solid var(--rule);background:none;color:var(--muted);font-family:var(--font-data);font-size:.72rem;cursor:pointer" style-hover="border-color:var(--accent);color:var(--accent-ink)">{{ sm.label }}</button>
+            </sc-for>
+          </div>
+          <textarea ref="{{ changeRef }}" onInput="{{ onChangeType }}" placeholder="e.g. Our dates moved to Oct 22–30, and my father is joining — he can't do stairs." style="width:100%;flex:1;min-height:{{ taMinH }};padding:12px 13px;border:1px solid var(--rule2);background:var(--bg2);color:var(--ink);font-family:var(--font-data);font-size:.95rem;line-height:1.55;resize:vertical"></textarea>
+        </article>
+
+        <article style="background:var(--card);border:1px solid var(--rule);padding:16px 18px;display:flex;flex-direction:column" aria-live="polite">
+          <div style="display:flex;align-items:baseline;gap:9px;margin-bottom:5px">
+            <h2 style="margin:0;font-family:var(--font-data);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">What we’d update</h2>
+            <span style="flex:1"></span>
+            <sc-if value="{{ someAffected }}" hint-placeholder-val="{{ false }}">
+              <span style="display:inline-flex;white-space:nowrap;padding:.2em .6em;border:1px solid currentColor;color:{{ weightColor }};font-family:var(--font-data);font-weight:640;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase">{{ weightLabel }}</span>
+            </sc-if>
+          </div>
+          <p style="margin:0 0 11px;font-family:var(--font-data);font-size:.75rem;color:var(--muted)">{{ diffNote }}</p>
+          <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px">
+            <sc-for list="{{ affected }}" as="af" hint-placeholder-count="0">
+              <li style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:{{ af.bg }};border-left:3px solid {{ af.accent }};animation:ikUp .26s cubic-bezier(.16,1,.3,1)">
+                <span style="flex:none;font-family:var(--font-data);font-size:.63rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:{{ af.accent }}">{{ af.kind }}</span>
+                <span style="flex:1;min-width:0;font-family:var(--font-data);font-size:.82rem">{{ af.file }}</span>
+                <button onClick="{{ af.drop }}" aria-label="Remove" style="flex:none;width:26px;height:26px;border:1px solid var(--rule);background:none;color:var(--muted);font-size:.7rem;cursor:pointer">✕</button>
+              </li>
+            </sc-for>
+          </ul>
+          <sc-if value="{{ noneAffected }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:8px">
+              <p style="margin:0;color:var(--muted);font-size:.92rem;line-height:1.5;text-wrap:pretty">As you write, this fills in with the parts of your guide that change — so <em>“our dates moved”</em> would light up:</p>
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
+                <span style="padding:.25em .7em;border:1px dashed var(--rule2);color:var(--muted);font-family:var(--font-data);font-size:.78rem">Plan</span>
+                <span style="padding:.25em .7em;border:1px dashed var(--rule2);color:var(--muted);font-family:var(--font-data);font-size:.78rem">Days</span>
+                <span style="padding:.25em .7em;border:1px dashed var(--rule2);color:var(--muted);font-family:var(--font-data);font-size:.78rem">Weather</span>
+              </div>
+              <p style="margin:0;color:var(--muted);font-family:var(--font-data);font-size:.75rem">You can strike anything off the list before it's sent. Nothing runs until you send it.</p>
+            </div>
+          </sc-if>
+          <sc-if value="{{ someAffected }}" hint-placeholder-val="{{ false }}">
+            <div style="border-top:1px dashed var(--rule);margin-top:auto;padding-top:12px">
+              <p style="margin:0 0 10px;font-family:var(--font-data);font-size:.75rem;color:var(--muted)">{{ costNote }}</p>
+              <button onClick="{{ fileRequest }}" style="width:100%;min-height:46px;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--font-data);font-weight:640;font-size:.82rem;letter-spacing:.04em;cursor:pointer" style-hover="background:var(--accent);border-color:var(--accent)">{{ fileLabel }}</button>
+            </div>
+          </sc-if>
+        </article>
+      </div>
+
+      <article style="margin-top:14px;background:var(--card);border:1px solid var(--rule);padding:15px 18px 17px">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:3px">
+          <h2 style="margin:0;font-family:var(--font-data);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Your guide’s 10 sections — what we’d touch</h2>
+          <span style="flex:1;min-width:0"></span>
+          <span style="font-family:var(--font-data);font-size:.72rem;color:var(--muted)">{{ mapNote }}</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px 18px;margin:0 0 12px">
+          <span style="display:inline-flex;align-items:baseline;gap:7px;font-family:var(--font-data);font-size:.78rem;color:var(--muted)"><strong style="color:var(--ink);font-weight:700;font-size:.66rem;letter-spacing:.06em;text-transform:uppercase">Redone</strong>rewritten from fresh sources</span>
+          <span style="display:inline-flex;align-items:baseline;gap:7px;font-family:var(--font-data);font-size:.78rem;color:var(--muted)"><strong style="color:var(--ink);font-weight:700;font-size:.66rem;letter-spacing:.06em;text-transform:uppercase">Checked</strong>re-read so nothing contradicts</span>
+          <span style="display:inline-flex;align-items:baseline;gap:7px;font-family:var(--font-data);font-size:.78rem;color:var(--muted)"><strong style="color:var(--ink);font-weight:700;font-size:.66rem;letter-spacing:.06em;text-transform:uppercase">Untouched</strong>stays as you last read it</span>
+        </div>
+        <div style="display:grid;grid-template-columns:{{ tabCols }};gap:7px">
+          <sc-for list="{{ sectionMap }}" as="sec" hint-placeholder-count="10">
+            <div style="position:relative;display:flex;align-items:baseline;gap:7px;padding:7px 10px 8px;background:{{ sec.bg }};border:1px solid {{ sec.border }};overflow:hidden;transition:background .3s,border-color .3s;min-width:0">
+              <span style="flex:none;font-family:var(--font-data);font-size:.62rem;font-weight:700;letter-spacing:.1em;color:{{ sec.numColor }};font-variant-numeric:tabular-nums">{{ sec.num }}</span>
+              <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--font-display);font-weight:{{ sec.weight }};font-size:.88rem;color:var(--ink)">{{ sec.label }}</span>
+              <span style="flex:none;font-family:var(--font-data);font-size:.63rem;font-weight:640;letter-spacing:.06em;text-transform:uppercase;color:{{ sec.tagColor }}">{{ sec.tag }}</span>
+              <span style="position:absolute;left:0;bottom:0;height:2px;width:100%;background:{{ sec.barColor }};transform-origin:left;transform:scaleX({{ sec.bar }});transition:transform .45s cubic-bezier(.16,1,.3,1)"></span>
+            </div>
+          </sc-for>
+        </div>
+      </article>
+      </sc-if>
+
+      <sc-if value="{{ isOwner }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px">
+        <span style="font-family:var(--font-data);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">{{ queueCount }} still to decide</span>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <sc-for list="{{ catLegend }}" as="cl" hint-placeholder-count="5">
+            <span style="display:inline-flex;align-items:center;height:26px;padding:0 10px;background:{{ cl.bg }};color:{{ cl.color }};font-family:var(--font-data);font-weight:640;font-size:.68rem;white-space:nowrap">{{ cl.label }}</span>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:{{ queueCols }};gap:12px;align-items:stretch">
+        <sc-for list="{{ queue }}" as="q" hint-placeholder-count="4">
+          <article data-arrive="{{ q.arrive }}" style="display:flex;background:var(--card);border:1px solid {{ q.cardBorder }};min-width:0;transition:border-color .3s,transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:translateY(-2px)">
+            <span style="flex:none;width:5px;background:{{ q.stripe }}"></span>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;padding:13px 15px 14px">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:7px">
+                <span style="display:inline-flex;padding:.25em .7em;background:{{ q.catBg }};color:{{ q.catColor }};font-family:var(--font-data);font-weight:700;font-size:.66rem;letter-spacing:.04em">{{ q.cat }}</span>
+                <span style="flex:1;min-width:0"></span>
+                <span style="display:inline-flex;padding:.2em .6em;border:1px solid currentColor;color:{{ q.stampColor }};font-family:var(--font-data);font-weight:640;font-size:.63rem;letter-spacing:.06em">{{ q.stamp }}</span>
+              </div>
+              <h3 style="margin:0 0 2px;font-family:var(--font-display);font-weight:600;font-size:1.05rem;line-height:1.3">{{ q.title }}</h3>
+              <p style="margin:0 0 8px;font-family:var(--font-data);font-size:.72rem;color:var(--muted)">{{ q.who }}</p>
+              <p style="margin:0 0 12px;font-size:.92rem;line-height:1.5;color:var(--ink);text-wrap:pretty">{{ q.body }}</p>
+              <div style="margin-top:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-top:1px dashed var(--rule);padding-top:11px">
+                <span style="font-family:var(--font-data);font-size:.7rem;color:var(--muted)">{{ q.suggestion }}</span>
+                <span style="flex:1;min-width:0"></span>
+                <button onClick="{{ q.light }}" style="min-height:40px;padding:0 14px;border-radius:999px;border:1px solid {{ q.lightBorder }};background:{{ q.lightBg }};color:{{ q.lightColor }};font-family:var(--font-data);font-weight:640;font-size:.75rem;cursor:pointer" style-hover="border-color:var(--green)">Quick fix</button>
+                <button onClick="{{ q.heavy }}" style="min-height:40px;padding:0 14px;border-radius:999px;border:1px solid {{ q.heavyBorder }};background:{{ q.heavyBg }};color:{{ q.heavyColor }};font-family:var(--font-data);font-weight:640;font-size:.75rem;cursor:pointer" style-hover="border-color:var(--ink)">Full re-check</button>
+              </div>
+            </div>
+          </article>
+        </sc-for>
+      </div>
+      <div style="margin-top:12px;background:var(--card);border:1px solid var(--rule);padding:13px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <span style="font-family:var(--font-data);font-size:.8rem;color:{{ dispatchColor }};font-weight:600">{{ dispatchNote }}</span>
+        <span style="flex:1;min-width:0"></span>
+        <a href="Pipeline Dashboard.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 20px;border-radius:999px;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-weight:640;font-size:.8rem;letter-spacing:.04em;text-decoration:none">See what's running →</a>
+      </div>
+      </sc-if>
+    </section>
+    </sc-if>
+    </main>
+    </sc-if>
+
+    <footer style="position:relative;z-index:2;flex:none;padding:{{ footPad }};border-top:1px solid var(--rule);background:var(--bg);font-family:var(--font-data);font-size:.72rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 14px">
+      <span>Waypoint — your trip guides, researched properly</span>
+      <span style="flex:1"></span>
+      <span>Demo screens — nothing was actually researched</span>
+    </footer>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;demoControls&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Demo&quot;},&quot;loopSeconds&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:120,&quot;min&quot;:30,&quot;max&quot;:300,&quot;step&quot;:10,&quot;unit&quot;:&quot;s&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Demo&quot;},&quot;scriptedPause&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Demo&quot;}}">
+const P0 = [230.5, 209.5], PC = [420, 30], P1 = [629.6, 104.1];
+function bez(t) {
+  const a = (1 - t) * (1 - t), b = 2 * t * (1 - t), c = t * t;
+  return [a * P0[0] + b * PC[0] + c * P1[0], a * P0[1] + b * PC[1] + c * P1[1]];
+}
+function bezAngle(t) {
+  const dx = 2 * (1 - t) * (PC[0] - P0[0]) + 2 * t * (P1[0] - PC[0]);
+  const dy = 2 * (1 - t) * (PC[1] - P0[1]) + 2 * t * (P1[1] - PC[1]);
+  return Math.atan2(dy, dx) * 180 / Math.PI + 90;
+}
+const STAGES = [
+  { key: "scaffold", t: .15, label: "Scaffold", from: 0, to: 8 },
+  { key: "passA", t: .32, label: "Pass A", from: 8, to: 38 },
+  { key: "passB", t: .5, label: "Pass B", from: 38, to: 66 },
+  { key: "reconcile", t: .66, label: "Reconcile", from: 66, to: 82 },
+  { key: "verified", t: .83, label: "Verify", from: 82, to: 95 },
+  { key: "published", t: 1, label: "Published", from: 95, to: 100 },
+];
+const PAUSE_P = 52;
+const fmtTok = n => n >= 1e6 ? (n / 1e6).toFixed(1) + "M" : n >= 1e3 ? Math.round(n / 1e3) + "k" : String(n);
+// Deterministic token model: total ≈ 6.9M at 100%, weighted heavier through Pass B's deep-dives.
+const tokAt = pct => Math.round(69000 * pct * (1 + 0.35 * Math.sin(pct / 100 * Math.PI)));
+const MODELS = [
+  { model: "Opus", role: "the navigator — judgments & reconcile", share: .22, perM: 22.5 },
+  { model: "Sonnet", role: "the pilot — extraction & drafting", share: .33, perM: 5.4 },
+  { model: "Haiku", role: "the scout — page triage at speed", share: .45, perM: 0.9 },
+];
+const fmtT = p => { const m = Math.floor(p * 1.1 * 60 / 60), s = Math.floor((p * 1.1 * 60) % 60); const h = Math.floor(m / 60); return h > 0 ? h + "h " + String(m % 60).padStart(2, "0") + "m" : m + "m " + String(s).padStart(2, "0") + "s"; };
+const U = (p, url, code) => ({ p, kind: "url", url, code });
+const L = (p, text) => ({ p, kind: "log", tag: "pipeline", text });
+const J = (p, text, tag) => ({ p, kind: "judge", tag: tag || "reasoner", text });
+const EVENTS = [
+  L(1, "scaffold committed — iceland/ draft, 10 tabs, weather + currency wired"),
+  U(2, "https://visiticeland.com/plan-your-trip", 200),
+  L(4, "Pass A start — canonical & verified sourcing"),
+  U(6, "https://safetravel.is/conditions", 200),
+  U(9, "https://www.icelandair.com/flights/sfo-kef", 200),
+  J(11, "Kept Icelandair SFO→KEF direct (seasonal, May–Oct) — matches brief's 'no red-eye connections'. Delta via MSP held as winter fallback.", "flights"),
+  U(13, "https://www.kefairport.is/arrivals/flybus", 200),
+  U(15, "https://www.re.is/tour/flybus", 304),
+  U(17, "https://www.road.is/travel-info/road-conditions", 200),
+  U(19, "https://en.vedur.is/weather/forecasts", 200),
+  J(21, "Kept Flybus over rental for arrival day — brief says no car for city days; 45min, runs after every landing.", "flights"),
+  U(23, "https://www.thingvellir.is/en/plan-your-visit", 200),
+  U(25, "https://www.bluelagoon.com/plan-your-visit", 200),
+  J(27, "Kept Blue Lagoon pre-book warning — July slots sell out ~5 days ahead; 3 sources agree.", "reasoner"),
+  U(29, "https://guidetoiceland.is/best-of-iceland", 200),
+  U(31, "https://www.vatnajokulsthjodgardur.is/en", 200),
+  L(33, "Pass A checkpoint — 41 canonical facts extracted, 38 verified, 3 flagged for reconcile"),
+  U(35, "https://www.jokulsarlon.is/boat-tours", 200),
+  L(38, "Pass A cleared ✓ — starting Pass B: local, authentic, crowd-aware"),
+  U(40, "https://grapevine.is/best-of-reykjavik-2026", 200),
+  U(42, "https://www.fosshotel.is/hotels/fosshotel-reykjavik", 200),
+  J(44, "Excluded Hotel Borg — family rooms cap at 3 guests; brief requires 2+2 with crib. Flagged as couples-only alternative.", "hotels"),
+  U(46, "https://www.centerhotels.com/en/hotel-plaza-reykjavik", 200),
+  U(48, "https://www.kexhostel.is/rooms", 200),
+  J(50, "Excluded 2019 Grapevine listicle — venue at Hverfisgata 12 closed (ja.is registry check). Source de-weighted for staleness.", "reasoner"),
+  U(51, "https://www.hotelranga.is/rooms-suites", 200),
+  L(54, "Researcher directive applied — hotel deep-dive re-anchored"),
+  U(56, "https://www.baejarinsbeztu.is", 200),
+  U(58, "https://www.dillrestaurant.is/menus", 200),
+  J(60, "Kept Bæjarins Beztu — open past midnight, cash-free, 4-source local consensus. Dill needs booking 3+ weeks out; marked splurge-optional.", "dining"),
+  U(62, "https://www.matarkjallarinn.is/en", 304),
+  U(63, "https://www.tripadvisor.com/Restaurants-Reykjavik", 429),
+  L(64, "429 from tripadvisor.com — backing off 40s, source deprioritized"),
+  U(65, "https://ja.is/veitingastadir/reykjavik", 200),
+  L(66, "Pass B cleared ✓ — reconciling A + B into one guide"),
+  J(69, "Reconcile: Þingvellir timing conflict — Pass A says 2h, local blogs say half-day with Silfra. Split: 2h drive-through day 2, Silfra optional add-on.", "reconcile"),
+  U(72, "https://www.straeto.is/en/timetables", 200),
+  J(75, "Reconcile: 3 flagged facts resolved — opening hours updated from official registries, 1 price corrected (ISK 1,290 → 1,590).", "reconcile"),
+  L(78, "Draft assembled — 10 tabs, 47 sights, 12 eats, 6 day plans"),
+  L(82, "Reconcile cleared ✓ — running verify + build"),
+  L(85, "verify: schema PASS · contrast gate PASS · closed-days check PASS"),
+  U(88, "https://commons.wikimedia.org/wiki/Category:Reykjavik", 200),
+  L(90, "cover photo licensed ✓ — palette extracted, accent gated 4.6:1"),
+  L(95, "Verify cleared ✓ — publishing to the live site"),
+  L(98, "build green — deploy in flight"),
+  L(100, "Published ✓ — guides/iceland/ resolves. Guide compiled."),
+];
+// Golden nuggets: things only THIS trip's dates and season surface. Found progressively.
+const NUGGETS = [
+  { p: 9, kind: "Season", text: "Late October gives you about 8h 40m of daylight, and it drops by 6 minutes a day while you're there. Sunrise is around 09:00, sunset around 17:40 — worth pinning the outdoor days to the middle.", src: "almanak.hi.is" },
+  { p: 17, kind: "Timing", text: "Iceland never changes its clocks, but Europe does — on 25 October, mid-trip. Anything you've booked by London or Paris time shifts by an hour halfway through the week.", src: "government.is" },
+  { p: 26, kind: "Access", text: "Highland F-roads shut for winter in the second half of October, so Landmannalaugar is out. The south coast road and the Golden Circle stay open year-round.", src: "road.is" },
+  { p: 34, kind: "Season", text: "Your dates sit in the best northern-lights window of the year — fully dark by 18:30, and the forecast at en.vedur.is updates every evening at 17:00.", src: "en.vedur.is" },
+  { p: 44, kind: "Heads-up", text: "Studded tyres are only legal from 1 November, so a late-October rental may still be on all-seasons. Ask before you book the south-coast day.", src: "samgongustofa.is" },
+  { p: 56, kind: "Don't expect", text: "The puffins have already left — they're gone by mid-August. Anyone promising you puffins in October is selling you a photo.", src: "fuglavernd.is" },
+  { p: 68, kind: "Local", text: "The Blue Lagoon's October slots are far easier than July's, but the 08:00 opening is still the quiet hour by a wide margin.", src: "bluelagoon.com" },
+  { p: 79, kind: "Worth knowing", text: "Reykjavík's swimming pools are the real local ritual, not the Blue Lagoon — Vesturbæjarlaug opens at 06:30 and costs about a tenth as much.", src: "reykjavik.is" },
+  { p: 92, kind: "Fun fact", text: "The Icelandic phone book is alphabetised by first name, because surnames are patronymics rather than family names. Ja.is works the same way.", src: "ja.is" },
+];
+const QUESTION = {
+  text: "Pass B found two viable bases: Reykjavík (nightlife, walkable, day-trip radius) vs Selfoss (Golden Circle proximity, ~30% cheaper). Which should anchor the hotel deep-dive?",
+  assume: "Reykjavík — matches the brief's 'first visit, no car for city days'.",
+};
+const PRIOS = ["Food & dining", "Culture & history", "Nature & outdoors", "Nightlife", "Shopping", "Relaxation"];
+const PAIRS = [[0, 1], [2, 3], [0, 2], [1, 5], [0, 4]];
+const GROUPS = [
+  { key: "trip", title: "Trip", summary: "Where and when", items: [
+    { k: "dest", label: "Where are you going?", ph: "Iceland — Reykjavík, south coast", drives: "Tells us where to look, and which official sources to trust." },
+    { k: "dates", label: "When?", ph: "Oct 22 – Oct 30, 2026", drives: "We check the weather, holidays and what’s closed on your actual dates." },
+    { k: "certainty", label: "Are those dates locked in?", opts: ["Fixed", "Target", "Flexible", "Unknown"], drives: "If your dates might still move, say so — we won’t build everything around them." },
+    { k: "origin", label: "Flying from", ph: "SFO", drives: "Lets us plan your first and last day around the actual flight." },
+  ]},
+  { key: "travelers", title: "Who’s going", summary: "Who’s coming", items: [
+    { k: "party", label: "Who’s going?", opts: ["Solo", "Couple", "Friends", "Family", "Mixed group"], drives: "Changes how fast we pace the days and how far we send you." },
+    { k: "ages", label: "Ages, and anything to work around", ph: "2 adults, 1 child (4), 1 grandparent — no stairs", ex: "the more specific, the better we can plan", drives: "If you tell us, we check step-free access at every single place — not just assume it." },
+    { k: "passports", label: "Passports you’ll travel on", ph: "US, Ireland", ex: "one each is fine if they differ", drives: "We look up the visa and entry rules for each passport, separately." },
+  ]},
+  { key: "priorities", title: "Priorities", summary: "What matters most to you", items: [] },
+  { key: "budget", title: "Budget", summary: "What you’re spending", items: [
+    { k: "budget", label: "Roughly what are you spending?", ph: "comfortable but not lavish", ex: "e.g. $250/day, or a total", drives: "Sets the price range we shop in, for both beds and dinners." },
+    { k: "stay", label: "Where do you like to stay?", opts: ["Hostel", "Mid-range", "Boutique", "Luxury"], drives: "Narrows the search before we start looking." },
+    { k: "splurge", label: "Worth splurging on / happy to save on", ph: "splurge: one dinner · save: transit", ex: "one of each", drives: "Tells us where to go deep, and where to keep it simple." },
+  ]},
+  { key: "constraints", title: "Constraints", summary: "Your dealbreakers", items: [
+    { k: "diet", label: "Anything you can’t eat", ph: "one severe shellfish allergy", ex: "allergies, halal, kosher, vegan…", drives: "We confirm this with every restaurant. If we can’t confirm it, it doesn’t make the guide." },
+    { k: "avoid", label: "Things to avoid", ph: "crowds, tourist traps, long hikes", ex: "anything you'd rather not see", drives: "Nothing that breaks these will be recommended." },
+    { k: "safety", label: "Anything about feeling safe", ph: "solo female travel", ex: "optional", drives: "Shapes which neighbourhoods and evenings we suggest." },
+  ]},
+  { key: "voice", title: "Tone", summary: "How it should read", items: [
+    { k: "reader", label: "Who’s reading this guide?", opts: ["Just me", "The group", "My parents", "A guest"], drives: "Decides how much we explain versus assume you know." },
+    { k: "tone", label: "How should it read?", opts: ["Practical & terse", "Warm & narrative", "Detailed & exhaustive"], drives: "How the whole guide reads." },
+  ]},
+];
+const SAMPLES = [
+  { label: "Dates moved", text: "Our dates moved to Oct 22–30. Everything built around the old week needs a look." },
+  { label: "New traveler with access needs", text: "My father is joining and can't manage stairs — hotels and day routes need to work for him." },
+  { label: "A venue closed", text: "The place you recommended on Laugavegur has closed permanently. Need a replacement." },
+  { label: "Budget cut", text: "Budget dropped by about a third. Keep the anchor dinner, trim everywhere else." },
+];
+const CATS = {
+  dates: { label: "When?", color: "var(--accent)", ink: "var(--accent-ink)" },
+  access: { label: "Access needs", color: "#7a4fa3", ink: "#6a3f93" },
+  closed: { label: "Something closed", color: "var(--crit,#b3261e)", ink: "var(--crit,#b3261e)" },
+  money: { label: "Budget", color: "var(--green)", ink: "var(--green)" },
+  taste: { label: "Preferences", color: "var(--warn)", ink: "var(--warn)" },
+};
+const RULES = [
+  { re: /date|week|month|oct|nov|when|moved|shift/i, tabs: ["Plan", "Days", "Weather"], kind: "rewrite", cat: "dates" },
+  { re: /stairs|wheelchair|access|mobility|walk|elderly|father|mother|grandparent|child|baby/i, tabs: ["Where to stay", "Days", "Sights"], kind: "rewrite", cat: "access" },
+  { re: /closed|shut|gone|replace|no longer/i, tabs: ["Food"], kind: "rewrite", cat: "closed" },
+  { re: /budget|cheap|expensive|cost|money|afford|trim/i, tabs: ["Budget", "Where to stay"], kind: "check", cat: "money" },
+  { re: /hotel|stay|room|accommodation/i, tabs: ["Where to stay"], kind: "rewrite", cat: "access" },
+  { re: /food|eat|restaurant|dinner|dining/i, tabs: ["Food"], kind: "rewrite", cat: "taste" },
+  { re: /flight|airport|fly|transit|bus|train|car/i, tabs: ["Getting around"], kind: "check", cat: "dates" },
+];
+const QUEUE = [
+  { num: "1", title: "Iceland — our dates moved", who: "Asked by the traveller · 2 hours ago", body: "“We're now going Oct 22–30 instead of the 15th.” Six days of the plan were built around the old week.", cat: "dates", size: "big", stamp: "Waiting on you" },
+  { num: "2", title: "Korea — the Busan day isn't working", who: "Raised automatically from trip feedback · yesterday", body: "Eight people rated the pacing 2 out of 5, and everyone skipped the Busan day entirely. Nothing happens until you decide.", cat: "taste", size: "big", stamp: "Waiting on you" },
+  { num: "3", title: "Denmark — a restaurant has closed", who: "Asked by the traveller · 3 days ago", body: "“The place on Værnedamsvej is gone.” One replacement, checked against its own opening hours.", cat: "closed", size: "small", stamp: "Waiting on you" },
+  { num: "4", title: "Iceland — grandad is joining us", who: "Asked by the traveller · 4 days ago", body: "“He can't do stairs.” Hotels and the walking days both need to work for him.", cat: "access", size: "big", stamp: "Waiting on you" },
+];
+const GUIDE_TABS = ["Plan", "Getting around", "Where to stay", "Sights", "Days", "Food", "Weather", "Budget", "Etiquette", "Emergencies"];
+const GUIDES = [
+  { slug: "iceland", title: "Iceland", meta: "Reykjavík + south coast · Oct 2026", stamp: "upcoming", accent: "#2e6f8e", sky: "#cfe0e8", countries: ["Iceland"], pins: [[-21.94, 64.15], [-19.06, 63.42]] },
+  { slug: "korea", title: "Korea", meta: "Seoul, Busan · Apr 2026", stamp: "complete", accent: "#4a7a52", sky: "#dbe4d4", countries: ["South Korea"], pins: [[126.98, 37.57], [129.08, 35.18]] },
+  { slug: "denmark", title: "Denmark", meta: "Copenhagen · Jun 2025", stamp: "complete", accent: "#a1662f", sky: "#ecdfcd", countries: ["Denmark"], pins: [[12.57, 55.68]] },
+];
+class Component extends DCLogic {
+  state = {
+    empty: false, pct: 0, paused: false, stalled: false, awaiting: false, processing: false, resumedFlash: false,
+    done: false, dark: false, logs: [], urls: [], firedCount: 0, judged: 0,
+    kept: 0, excluded: 0, pages: 0, reqMin: 0, answeredText: null, mapPaths: [], mobile: false,
+    tab: "progress", dark: false, open: "trip", vals: {}, skipped: {},
+    matchIdx: 0, scores: {}, dispatched: false, forkPicks: {},
+    view: "traveler", changeText: "", dropped: {}, filed: false, labels: {}, guide: "iceland", geo: {}, mobile: false,
+    preview: "desktop", notifyAsked: false, notifyOn: false, nugIdx: null, w: 1280,
+  };
+
+  
+  componentDidMount() {
+    this.reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Container-driven, not viewport-driven: the same component is correct embedded or full-page.
+    // One width in state; every layout value is derived from it, so any resolution lands somewhere sensible.
+    this.setMobile = w => { const m = w <= 760, r = Math.round(w); if (m !== this.state.mobile || r !== this.state.w) this.setState({ mobile: m, w: r }); };
+    if (this.rootEl && window.ResizeObserver) {
+      this.ro = new ResizeObserver(es => this.setMobile(es[0].contentRect.width));
+      this.ro.observe(this.frameEl || this.rootEl);
+    }
+    this.setMobile(((this.frameEl || this.rootEl || {}).clientWidth) || window.innerWidth);
+    try { if (localStorage.getItem("wp-theme") === "dark") this.applyTheme(true); } catch (e) {}
+    this.shown = 0;
+    this.tick = setInterval(() => this.step(), 200);
+    this.raf = requestAnimationFrame(() => this.frame());
+    this.loadMap();
+    this.loadGeo();
+    if (location.hash === "#change") this.setState({ tab: "change" });
+    if (location.hash === "#progress") this.setState({ tab: "progress" });
+    this.placePlane(0);
+  }
+  // Asked once when a run starts; two events only — needs an answer, and finished.
+  setNotify(on) {
+    this.setState({ notifyAsked: true, notifyOn: on });
+    try { if (on && window.Notification && Notification.permission === "default") Notification.requestPermission(); } catch (e) {}
+  }
+  push(title, body) {
+    try { if (window.Notification && Notification.permission === "granted") new Notification(title, { body }); } catch (e) {}
+  }
+  componentDidUpdate(pp, ps) {
+    const s = this.state;
+    const flag = s.empty ? null : s.awaiting ? "Waiting on you" : s.done ? "Guide ready" : null;
+    document.title = flag ? "● " + flag + " — Waypoint" : "Waypoint";
+    if (!s.notifyOn) return;
+    if (s.awaiting && !ps.awaiting) this.push("Waypoint — Reykjavík guide", "The run paused and needs one answer from you.");
+    if (s.done && !ps.done) this.push("Waypoint — Reykjavík guide", "Finished. Your guide is ready to read.");
+  }
+  componentWillUnmount() { clearInterval(this.tick); cancelAnimationFrame(this.raf); if (this.ro) this.ro.disconnect(); }
+  async loadMap() {
+    try {
+      const topo = await (await fetch("public/data/countries-110m.json")).json();
+      const { scale: sc, translate: tr } = topo.transform;
+      const arcs = topo.arcs.map(arc => {
+        let x = 0, y = 0;
+        return arc.map(([dx, dy]) => { x += dx; y += dy; return [(x * sc[0] + tr[0]), (y * sc[1] + tr[1])]; });
+      });
+      const px = lon => (lon + 180) * 4, py = lat => (90 - lat) * 4;
+      const ring = idxs => {
+        let pts = [];
+        idxs.forEach(i => {
+          let a = i >= 0 ? arcs[i] : arcs[~i].slice().reverse();
+          if (pts.length) a = a.slice(1);
+          pts = pts.concat(a);
+        });
+        return pts;
+      };
+      const paths = [];
+      const geoms = topo.objects.countries.geometries;
+      geoms.forEach(g => {
+        const polys = g.type === "Polygon" ? [g.arcs] : g.type === "MultiPolygon" ? g.arcs : [];
+        polys.forEach(poly => {
+          const pts = ring(poly[0]);
+          let minx = 1e9, maxx = -1e9, miny = 1e9, maxy = -1e9;
+          const proj = pts.map(([lon, lat]) => { const x = px(lon), y = py(lat); if (x < minx) minx = x; if (x > maxx) maxx = x; if (y < miny) miny = y; if (y > maxy) maxy = y; return [x, y]; });
+          if (maxx < 130 || minx > 770 || maxy < 0 || miny > 300) return;
+          if (maxx - minx > 900) return; // antimeridian wrap artifacts
+          paths.push("M" + proj.map(p => p[0].toFixed(1) + "," + p[1].toFixed(1)).join("L") + "Z");
+        });
+      });
+      this.setState({ mapPaths: paths });
+    } catch (e) { console.warn("map backdrop unavailable", e); }
+  }
+  loopSec() { return this.props.loopSeconds ?? 120; }
+  step() {
+    const s = this.state;
+    if (s.done || s.paused || s.stalled || s.empty) return;
+    let pct = Math.min(100, s.pct + 100 / (this.loopSec() * 5));
+    const pauseOn = (this.props.scriptedPause ?? true) && s.pct < PAUSE_P && pct >= PAUSE_P && !s.answeredText;
+    if (pauseOn) pct = PAUSE_P;
+    this.applyPct(pct, { keepLogs: true });
+    if (pauseOn) this.setState({ paused: true, awaiting: true });
+  }
+  applyPct(pct, opts = {}) {
+    const s = this.state;
+    let logs = opts.keepLogs ? s.logs.slice() : [];
+    let urls = opts.keepLogs ? s.urls.slice() : [];
+    let judged = opts.keepLogs ? s.judged : 0, kept = opts.keepLogs ? s.kept : 0, excluded = opts.keepLogs ? s.excluded : 0, pages = opts.keepLogs ? s.pages : 0;
+    const fromCount = opts.keepLogs ? s.firedCount : 0;
+    let fired = 0;
+    EVENTS.forEach((ev, i) => {
+      if (ev.p > pct) return;
+      fired++;
+      if (fired <= fromCount) return;
+      const time = fmtT(ev.p);
+      if (ev.kind === "url") {
+        pages += 2 + (i % 4);
+        urls.push({ time, url: ev.url, code: ev.code, codeColor: ev.code === 200 ? "var(--green)" : ev.code === 304 ? "var(--muted)" : "var(--warn)" });
+        if (urls.length > 24) urls = urls.slice(-24);
+      } else {
+        if (ev.kind === "judge") { judged++; /Excluded/.test(ev.text) ? excluded++ : kept++; }
+        logs.push({
+          time, tag: ev.tag, text: ev.text,
+          bg: ev.kind === "judge" ? "var(--bg2)" : "transparent",
+          border: ev.kind === "judge" ? "1px solid var(--rule)" : "none",
+          pad: ev.kind === "judge" ? "8px 11px" : "1px 2px",
+          font: ev.kind === "judge" ? "var(--font-display)" : "var(--font-data)",
+          size: ev.kind === "judge" ? ".88rem" : ".8rem",
+          tagColor: ev.kind === "judge" ? "var(--accent-ink)" : "var(--muted)",
+        });
+        if (logs.length > 40) logs = logs.slice(-40);
+      }
+    });
+    const done = pct >= 100;
+    this.setState({
+      pct, logs, urls, firedCount: fired, judged, kept, excluded, pages,
+      done, paused: done ? false : this.state.paused,
+    }, () => {
+      if (this.logEl) this.logEl.scrollTop = this.logEl.scrollHeight;
+      if (this.urlEl) this.urlEl.scrollTop = this.urlEl.scrollHeight;
+      if (this.reduced) this.placePlane(pct / 100);
+    });
+  }
+  frame() {
+    this.raf = requestAnimationFrame(() => this.frame());
+    if (this.reduced) return;
+    const target = this.state.pct / 100;
+    const moving = !this.state.paused && !this.state.done;
+    this.shown += (target - this.shown) * 0.06;
+    let t = this.shown;
+    if (moving) t += Math.sin(Date.now() / 900) * 0.0012; // alive drift, licensed by live work
+    this.placePlane(Math.max(0, Math.min(1, t)));
+  }
+  placePlane(t) {
+    const [x, y] = bez(t), a = bezAngle(t);
+    if (this.planeEl) this.planeEl.setAttribute("transform", `translate(${x.toFixed(1)},${y.toFixed(1)}) rotate(${a.toFixed(1)})`);
+    if (this.progEl) {
+      if (!this.progLen) this.progLen = this.progEl.getTotalLength();
+      this.progEl.style.strokeDasharray = this.progLen;
+      this.progEl.style.strokeDashoffset = this.progLen * (1 - t);
+      if (this.glowEl) { this.glowEl.style.strokeDasharray = this.progLen; this.glowEl.style.strokeDashoffset = this.progLen * (1 - t); }
+    }
+  }
+  jump(p, stall) {
+    const awaiting = !stall && p === PAUSE_P && (this.props.scriptedPause ?? true);
+    this.setState({ empty: false, paused: awaiting, awaiting, stalled: !!stall, processing: false, resumedFlash: false, answeredText: p > PAUSE_P ? (this.state.answeredText || "(assumption accepted)") : null, done: false }, () => this.applyPct(p, { keepLogs: false }));
+  }
+  resume(text) {
+    this.setState({ awaiting: false, processing: true });
+    setTimeout(() => {
+      const s = this.state;
+      const logs = s.logs.concat([{
+        time: fmtT(s.pct), tag: "researcher", text: "Directive received — " + text + " Hotel deep-dive re-anchored; filters updated mid-run.",
+        bg: "color-mix(in srgb, var(--green) 10%, var(--card))", border: "1px solid var(--green)", pad: "8px 11px",
+        font: "var(--font-display)", size: ".88rem", tagColor: "var(--green)",
+      }]);
+      this.setState({ processing: false, resumedFlash: true, paused: false, answeredText: text, logs }, () => { if (this.logEl) this.logEl.scrollTop = this.logEl.scrollHeight; });
+      setTimeout(() => this.setState({ resumedFlash: false }), 3000);
+    }, 1800);
+  }
+  progVals() {
+    const s = this.state;
+    const running = !s.paused && !s.done && !s.stalled;
+    const curStage = STAGES.find(st => s.pct < st.to) || STAGES[5];
+    const statusText = s.done ? "Complete" : s.stalled ? "Stalled — no checkpoint in 20m" : s.awaiting ? "Paused — awaiting you" : s.processing ? "Applying your input" : "Running · " + curStage.label;
+    const statusColor = s.done ? "var(--green)" : (s.awaiting || s.processing || s.stalled) ? "var(--warn)" : "var(--accent-ink)";
+    const ijState = s.done ? "Finished" : s.awaiting ? "Paused for you" : s.processing ? "Applying" : s.resumedFlash ? "Resumed" : s.stalled ? "Stuck" : "Working";
+    const ijColor = s.awaiting ? "var(--warn)" : s.processing ? "var(--warn)" : s.resumedFlash ? "var(--green)" : "var(--muted)";
+    const lastUrl = s.urls[s.urls.length - 1];
+    const doneStages = STAGES.filter(st => s.pct >= st.to).length;
+    const mob = this.mob(), w = s.w || 1280, narrow = w <= 1000;
+    return {
+      isMobile: mob, notMobile: !mob,
+      baseFont: mob ? "16px" : "clamp(15px, 0.55vw + 13.4px, 18.5px)",
+      mainCols: mob || narrow ? "minmax(0,1fr)" : "minmax(0,1.08fr) minmax(0,1fr)",
+      mainPad: mob ? "12px 14px 18px" : "clamp(12px,1.2vw,26px) clamp(14px,1.6vw,34px)",
+      mainGap: mob ? "12px" : "clamp(12px,1vw,22px)",
+      headPad: mob ? "10px 14px 8px" : "clamp(10px,1vw,18px) clamp(14px,1.6vw,34px) clamp(8px,.8vw,15px)",
+      navOrder: mob ? "5" : "0", navWidth: mob ? "100%" : "auto", navMargin: mob ? "0" : "0 0 0 8px",
+      statusOrder: mob ? "4" : "3", statusWidth: mob ? "100%" : "auto",
+      statusJustify: mob ? "space-between" : "flex-end",
+      themeOrder: mob ? "3" : "4",
+      railPad: mob ? "6px 14px" : "clamp(6px,.7vw,12px) clamp(14px,1.6vw,34px)",
+      mapMaxH: mob ? "clamp(180px,52vw,300px)" : "clamp(200px,34vh,460px)",
+      cardPadX: mob ? "13px" : "clamp(14px,1.1vw,26px)",
+      logMinH: mob ? "clamp(240px,46vh,420px)" : "0",
+      phasesMinH: mob ? "auto" : "clamp(190px,22vh,340px)",
+      phasesOverflow: mob ? "visible" : "hidden auto",
+      fetchListH: mob ? "clamp(96px,15vh,150px)" : "clamp(110px,14vh,210px)",
+      statCols: mob ? "repeat(2,minmax(0,1fr))" : "repeat(4,minmax(0,1fr))",
+      counterCols: mob ? "repeat(3,minmax(0,1fr))" : "repeat(3,1fr)",
+      railLabel: mob ? "none" : "inline",
+      fieldGap: mob ? "3px 0" : "6px 14px",
+      bodyGap: mob ? "11px" : "14px",
+      spacerFlex: mob ? "0" : "1",
+      panelAlign: mob ? "start" : "stretch",
+      taMinH: mob ? "clamp(96px,22vh,150px)" : "clamp(120px,17vh,220px)",
+      routePos: mob ? "sticky" : "relative",
+      routeShadow: mob ? "0 6px 18px color-mix(in srgb,var(--ink) 10%,transparent)" : "none",
+      h1Size: mob ? "clamp(1.4rem,6.5vw,1.9rem)" : "clamp(1.75rem,2.6vw,2.6rem)",
+      h1Margin: mob ? "0 0 4px" : "0 0 6px",
+      dekSize: mob ? "1rem" : "1.1rem",
+      dekMargin: mob ? "0 0 14px" : "0 0 20px",
+      themeIcon: s.dark ? "sun" : "moon",
+      isDarkTheme: s.dark, isLightTheme: !s.dark,
+      themeAria: s.dark ? "Switch to light theme" : "Switch to dark theme",
+      notePos: mob ? "sticky" : "relative",
+      notePad: mob ? "10px 14px 12px" : "clamp(10px,1vw,18px) clamp(14px,1.6vw,34px) clamp(12px,1.1vw,20px)",
+      formDir: mob ? "column" : "row",
+      footPad: mob ? "8px 14px 14px" : "clamp(8px,.7vw,15px) clamp(14px,1.6vw,34px)",
+      rootRef: el => { this.rootEl = el; }, planeRef: el => { this.planeEl = el; }, progRef: el => { this.progEl = el; },
+      glowRef: el => { this.glowEl = el; },
+      marchAnim: running ? "wpMarch 1.6s linear infinite" : "none",
+      planeHaloAnim: running ? "wpHalo 1.8s ease-in-out infinite" : "none",
+      logRef: el => { this.logEl = el; }, urlListRef: el => { this.urlEl = el; }, inputRef: el => { this.inputEl = el; },
+      dotRef: () => {}, fetchDotRef: () => {},
+      showDemo: this.props.demoControls ?? true,
+      contours: (this.contourLines || (this.contourLines = Array.from({ length: 9 }, (_, i) => {
+        const base = 70 + i * 72, amp = 26 + (i % 3) * 13, ph = i * 1.1;
+        return Array.from({ length: 41 }, (_, k) => {
+          const x = k * 25;
+          return x + "," + (base + Math.sin(k / 5.5 + ph) * amp + Math.sin(k / 2.3 + ph) * (amp / 4)).toFixed(1);
+        }).join(" ");
+      }))),
+      progressSentence: s.done
+        ? "Finished in " + fmtT(100) + " — every stage cleared, every fact verified."
+        : s.stalled ? "Nothing has moved since the last checkpoint."
+        : (s.awaiting ? "Paused mid-stage — the run waits until you answer below." :
+          "Stage " + (STAGES.indexOf(curStage) + 1) + " of 6 · " + ({scaffold:"building the draft structure",passA:"checking canonical sources",passB:"gathering local knowledge",reconcile:"resolving contradictions",verified:"verifying and building",published:"publishing"})[curStage.key] + " · about " + fmtT(Math.max(0, 100 - s.pct)).replace(/ 0?(\d+)s$/, "") + " remaining"),
+      elapsed: fmtT(s.pct), pctLabel: Math.round(s.pct) + "%",
+      themeLabel: s.dark ? "Light" : "Dark",
+      toggleTheme: () => this.applyTheme(!s.dark),
+      statusText, statusColor,
+      statusBg: `color-mix(in srgb, ${statusColor} 10%, var(--card))`,
+      statusBorder: `color-mix(in srgb, ${statusColor} 45%, transparent)`,
+      dotAnim: running ? "wpPulse 1.6s ease-in-out infinite" : "none",
+      isDone: s.done, notDone: !s.done && !s.empty, isStalled: s.stalled,
+      isEmpty: s.empty, hasRun: !s.empty,
+      loadDemoRun: () => this.jump(0),
+      navBadge: s.empty ? "IDLE" : s.done ? "DONE" : s.stalled ? "STALLED" : s.awaiting ? "PAUSED" : "1 RUNNING",
+      navBadgeColor: s.empty ? "var(--muted)" : s.done ? "var(--green)" : (s.stalled || s.awaiting) ? "var(--warn)" : "var(--accent-ink)",
+      navBadgeBg: `color-mix(in srgb, ${s.empty ? "var(--muted)" : s.done ? "var(--green)" : (s.stalled || s.awaiting) ? "var(--warn)" : "var(--accent)"} 14%, transparent)`,
+      mapPaths: s.mapPaths,
+      stations: STAGES.map(st => {
+        const [x, y] = bez(st.t);
+        const cleared = s.pct >= st.to, current = !cleared && s.pct >= st.from;
+        return {
+          x: x.toFixed(1), y: y.toFixed(1), ly: (st.t === .32 || st.t === .66 ? y + 18 : y - 11).toFixed(1),
+          label: st.label,
+          fill: cleared ? "var(--green)" : current ? "var(--accent)" : "var(--card)",
+          stroke: cleared ? "var(--green)" : current ? "var(--accent)" : "var(--rule2)",
+          tcolor: cleared || current ? "var(--ink)" : "var(--muted)", tweight: current ? "700" : "500",
+          ringAnim: current && running ? "wpRing 1.8s ease-out infinite" : "none",
+        };
+      }),
+      phases: [
+        { key: "passA", num: "A", label: "Pass A — official sources", from: 8, to: 38 },
+        { key: "passB", num: "B", label: "Pass B — local knowledge", from: 38, to: 66 },
+        { key: "rec", num: "C", label: "Critic — cross-checking both", from: 66, to: 82 },
+      ].map(ph => {
+        const fill = Math.max(0, Math.min(1, (s.pct - ph.from) / (ph.to - ph.from)));
+        const doneP = fill >= 1, cur = fill > 0 && !doneP;
+        return {
+          num: ph.num, label: ph.label, fill: fill.toFixed(3),
+          opacity: fill === 0 ? ".55" : "1", weight: cur ? "640" : "480",
+          chipBg: cur || doneP ? "color-mix(in srgb,var(--accent) 8%,transparent)" : "transparent",
+          chipBorder: cur || doneP ? "color-mix(in srgb,var(--accent) 40%,transparent)" : "var(--rule)",
+          status: doneP ? "✓ cleared" : cur ? Math.round(fill * 100) + "%" : "queued",
+          statusColor: doneP ? "var(--green)" : cur ? "var(--accent-ink)" : "var(--muted)",
+          barColor: doneP ? "var(--green)" : "var(--accent)",
+        };
+      }),
+      counters: [
+        { label: "Pages visited", value: String(s.pages) },
+        { label: "Facts verified", value: String(Math.round(41 * s.pct / 100)) },
+        { label: "Kept · excluded", value: s.kept + " · " + s.excluded },
+      ],
+      manifestStats: [
+        { label: "Route distance", value: "4,192 mi" },
+        { label: "Elapsed", value: fmtT(100) },
+        { label: "Pages visited", value: String(s.pages) },
+        { label: "Decisions", value: String(s.judged) + " · 1 hold" },
+      ].map((m, i, a) => ({ ...m, align: mob ? (i % 2 ? "right" : "left") : i === 0 ? "left" : i === a.length - 1 ? "right" : "center" })),
+      statsDisplay: mob ? "grid" : "flex",
+      // Traveller-facing summary — how it was researched, not what it ran on.
+      modelRows: [
+        { model: "Official sources first", role: "weather, roads, opening hours, entry rules", tokens: "", cost: "17 sites", costColor: "var(--ink)" },
+        { model: "Then local knowledge", role: "local press, registries, resident blogs", tokens: "", cost: "24 sites", costColor: "var(--ink)" },
+        { model: "Everything cross-checked", role: "a fact needs two independent sources to stay in", tokens: "", cost: "41 facts", costColor: "var(--ink)" },
+        { model: "Cost to research", role: "", tokens: "", cost: "$" + MODELS.reduce((a, m) => a + tokAt(s.pct) * m.share / 1e6 * m.perM, 0).toFixed(2), costColor: "var(--accent-ink)" },
+      ],
+      currentUrl: s.done ? "guides/iceland/ — published" : lastUrl ? "Evaluating: " + lastUrl.url.replace(/^https:\/\//, "") : "starting the browser pool…",
+      currentCode: s.done ? "LIVE" : lastUrl ? "[" + lastUrl.code + "]" : "",
+      currentCodeColor: s.done ? "var(--green)" : lastUrl ? lastUrl.codeColor : "var(--muted)",
+      liveDotColor: running ? "var(--green)" : "var(--warn)",
+      liveDotAnim: running ? "wpBreathe 1.4s ease-in-out infinite" : "none",
+      urlRows: s.urls, logRows: s.logs, judgeCount: s.judged,
+      sourceMeta: (() => {
+        const sites = new Set(s.urls.map(u => (u.url.split("/")[2] || "").replace(/^www\./, ""))).size;
+        const skipped = s.urls.filter(u => u.code >= 400).length;
+        if (s.empty || !s.urls.length) return "nothing read yet";
+        return s.pages + " pages · " + sites + " sites" + (skipped ? " · " + skipped + " refused us" : "");
+      })(),
+      ijState, ijBorder: s.awaiting ? "var(--warn)" : s.resumedFlash ? "var(--green)" : "var(--rule)",
+      ijBorderW: s.awaiting || s.resumedFlash ? "3px" : "1px",
+      ijShadow: s.awaiting ? "0 -14px 36px color-mix(in srgb, var(--warn) 22%, transparent)" : s.resumedFlash ? "0 -14px 36px color-mix(in srgb, var(--green) 18%, transparent)" : "none",
+      ijInputBorder: s.awaiting ? "var(--warn)" : "var(--rule)",
+      ijBtnBg: s.awaiting ? "var(--warn)" : "var(--ink)",
+      ijBtnColor: s.awaiting ? "#ffffff" : "var(--bg)",
+      ijBg: s.awaiting ? "color-mix(in srgb, var(--warn) 7%, var(--card))" : s.resumedFlash ? "color-mix(in srgb, var(--green) 7%, var(--card))" : "var(--card)",
+      ijPillColor: ijColor, ijPillBorder: ijColor, ijPillBg: `color-mix(in srgb, ${ijColor} 10%, transparent)`,
+      ijPillAnim: s.awaiting ? "wpPulse 1.1s ease-in-out infinite" : "none",
+      ijHint: s.done ? "This run is finished — notes go to the revise-guide flow." : s.stalled ? "A note here files a nudge against the stuck run. It will not pretend to fix it." : "Add a parameter, tighten a filter, or ask a question. It applies mid-run.",
+      ...(() => {
+        const found = s.empty ? [] : NUGGETS.filter(n => s.pct >= n.p);
+        const i = Math.max(0, Math.min(found.length - 1, s.nugIdx === null ? found.length - 1 : s.nugIdx));
+        const n = found[i];
+        return {
+          hasNugget: !!n, noNugget: !n,
+          nugKind: n ? n.kind : "", nugText: n ? n.text : "", nugSrc: n ? n.src : "",
+          nugPos: found.length ? (i + 1) + " / " + found.length : "",
+          nugEmpty: s.done ? "Nothing notable turned up." : "The first finds usually land during Pass A.",
+          nugHead: s.done ? found.length + " things worth knowing" : "Worth knowing",
+          nugFresh: s.nugIdx === null && found.length > 0,
+          nugPrev: () => this.setState({ nugIdx: Math.max(0, i - 1) }),
+          nugNext: () => this.setState({ nugIdx: i + 1 >= found.length ? null : i + 1 }),
+          nugPrevColor: i > 0 ? "var(--ink)" : "var(--rule2)",
+          nugNextColor: i < found.length - 1 ? "var(--ink)" : "var(--rule2)",
+        };
+      })(),
+      notifyPromptOpen: !s.empty && !s.notifyAsked && !s.done && s.pct < 14,
+      notifyYes: () => this.setNotify(true), notifyNo: () => this.setNotify(false),
+      toggleNotify: () => this.setNotify(!s.notifyOn),
+      notifyLabel: s.notifyOn ? "Notifications on" : "Notify me",
+      notifyColor: s.notifyOn ? "var(--green)" : "var(--muted)",
+      noteHead: s.done ? "Research finished" : s.awaiting ? "One answer needed" : s.stalled ? "Research is stuck" : s.processing ? "Adding your note" : "Add to the research",
+      hasQuestion: s.awaiting, qText: QUESTION.text, qAssume: QUESTION.assume,
+      acceptAssumption: () => this.resume(QUESTION.assume),
+      ijPlaceholder: s.awaiting ? "Answer here — e.g. “Reykjavík, but keep one Selfoss option”" : "Add a must-see, tighten a filter, ask why…",
+      ijBtn: s.processing ? "Applying…" : s.awaiting ? "Answer & resume" : s.stalled ? "File the nudge" : "Send to agent",
+      submitInterjection: e => {
+        e.preventDefault();
+        let v = (this.inputEl && this.inputEl.value || "").trim();
+        if (s.stalled && !v) v = "resume from the last cleared checkpoint";
+        if (!v || s.processing) return;
+        this.inputEl.value = "";
+        if (s.awaiting) this.resume("“" + v + "”");
+        else if (s.stalled) {
+          const logs = this.state.logs.concat([{ time: fmtT(this.state.pct), tag: "researcher", text: "Nudge filed: “" + v + "” — research-pass re-dispatched from the last cleared checkpoint.", bg: "color-mix(in srgb, var(--green) 10%, var(--card))", border: "1px solid var(--green)", pad: "8px 11px", font: "var(--font-display)", size: ".88rem", tagColor: "var(--green)" }]);
+          this.setState({ stalled: false, resumedFlash: true, logs }, () => { if (this.logEl) this.logEl.scrollTop = this.logEl.scrollHeight; });
+          setTimeout(() => this.setState({ resumedFlash: false }), 3000);
+        }
+        else {
+          const logs = this.state.logs.concat([{ time: fmtT(this.state.pct), tag: "researcher", text: "Note routed to reasoner: “" + v + "”", bg: "transparent", border: "none", pad: "1px 2px", font: "var(--font-data)", size: ".8rem", tagColor: "var(--green)" }]);
+          this.setState({ logs }, () => { if (this.logEl) this.logEl.scrollTop = this.logEl.scrollHeight; });
+        }
+      },
+      // The scrubber IS the demo control: the run's own progress rail, tappable by stage.
+      scrubFill: (s.empty ? 0 : s.pct / 100).toFixed(3),
+      scrubFillColor: s.done ? "var(--green)" : (s.stalled || s.awaiting) ? "var(--warn)" : "var(--accent)",
+      scrubHint: s.empty ? "No run — tap a stage to start one" : s.stalled ? "Stalled at " + Math.round(s.pct) + "%" : s.awaiting ? "Waiting on you at " + Math.round(s.pct) + "%" : Math.round(s.pct) + "% · " + curStage.label,
+      stageJumps: STAGES.map((st, i) => {
+        const cleared = !s.empty && s.pct >= st.to, cur = !s.empty && !cleared && s.pct >= st.from;
+        return {
+          label: st.label, go: () => this.jump(Math.min(100, st.from + (st.to - st.from) * 0.6)),
+          tick: cleared ? "var(--green)" : cur ? "var(--accent)" : "var(--rule2)",
+          color: cur ? "var(--ink)" : cleared ? "var(--accent-ink)" : "var(--muted)",
+          weight: cur ? "700" : "600",
+        };
+      }),
+      stateJumps: [
+        { label: "Restart", act: () => this.jump(0), on: !s.empty && s.pct < 2 },
+        { label: "Waiting", act: () => this.jump(PAUSE_P), on: s.awaiting },
+        { label: "Stalled", act: () => this.jump(61, true), on: s.stalled },
+        { label: "Done", act: () => this.jump(100), on: s.done },
+        { label: "No run", act: () => this.setState({ empty: true, done: false, stalled: false, awaiting: false, paused: false }), on: s.empty },
+      ].map(j => ({ label: j.label, go: j.act })),
+      demoValue: s.empty ? "No run" : s.done ? "Done" : s.stalled ? "Stalled" : s.awaiting ? "Waiting" : "Running",
+      demoPick: e => {
+        const v = e.target.value;
+        if (v === "No run") this.setState({ empty: true, done: false, stalled: false, awaiting: false, paused: false });
+        else if (v === "Waiting") this.jump(PAUSE_P);
+        else if (v === "Stalled") this.jump(61, true);
+        else if (v === "Done") this.jump(100);
+        else this.jump(0);
+      },
+      demoOptions: ["Running", "Waiting", "Stalled", "Done", "No run"],
+      doneHeadBasis: mob ? "100%" : "auto",
+    };
+  }
+  applyTheme(dark) {
+    const T = dark
+      ? { "--bg": "#0f1317", "--bg2": "#1a2129", "--ink": "#e8ece3", "--card": "#242c34", "--rule": "#38414b", "--rule2": "#4e5865", "--muted": "#9aa392", "--green": "#6aab76", "--on-green": "#0f1317", "--warn": "#d9923f", "--accent-ink": "#8fc1d9" }
+      : { "--bg": "#e3e7dc", "--bg2": "#ced5c4", "--ink": "#0f141a", "--card": "#fbfcf6", "--rule": "#a9b39b", "--rule2": "#8a9480", "--muted": "#3c4534", "--green": "#396345", "--on-green": "#ffffff", "--warn": "#7f4a07", "--accent-ink": "#235a74" };
+    if (this.rootEl) Object.entries(T).forEach(([k, v]) => this.rootEl.style.setProperty(k, v));
+    document.body.style.background = T["--bg"];
+    try { localStorage.setItem("wp-theme", dark ? "dark" : "light"); } catch (e) {}
+    this.setState({ dark });
+  }
+
+  
+  
+  async loadGeo() {
+    try {
+      const topo = await (await fetch("public/data/countries-110m.json")).json();
+      const { scale: sc, translate: tr } = topo.transform;
+      const arcs = topo.arcs.map(arc => { let x = 0, y = 0; return arc.map(([dx, dy]) => { x += dx; y += dy; return [x * sc[0] + tr[0], y * sc[1] + tr[1]]; }); });
+      const ring = idxs => { let p = []; idxs.forEach(i => { let a = i >= 0 ? arcs[i] : arcs[~i].slice().reverse(); if (p.length) a = a.slice(1); p = p.concat(a); }); return p; };
+      const byName = {};
+      topo.objects.countries.geometries.forEach(g => {
+        const polys = g.type === "Polygon" ? [g.arcs] : g.type === "MultiPolygon" ? g.arcs : [];
+        byName[g.properties.name] = polys.map(poly => ring(poly[0]));
+      });
+      // Per-guide: fit its own country to the 64x70 card box (equirectangular, cos-lat corrected).
+      const geo = {};
+      GUIDES.forEach(gd => {
+        const rings = gd.countries.flatMap(n => byName[n] || []);
+        if (!rings.length) return;
+        let minx = 1e9, maxx = -1e9, miny = 1e9, maxy = -1e9;
+        const all = rings.map(r => r.filter(p => Math.abs(p[0]) < 180));
+        all.forEach(r => r.forEach(([lo, la]) => { if (lo < minx) minx = lo; if (lo > maxx) maxx = lo; if (la < miny) miny = la; if (la > maxy) maxy = la; }));
+        const midLat = (miny + maxy) / 2, k = Math.cos(midLat * Math.PI / 180);
+        const w = (maxx - minx) * k, h = maxy - miny;
+        const s = Math.min(56 / w, 56 / h), ox = 32 - (w * s) / 2, oy = 35 + (h * s) / 2;
+        const X = lo => ox + (lo - minx) * k * s, Y = la => oy - (la - miny) * s;
+        geo[gd.slug] = {
+          paths: all.filter(r => r.length > 2).map(r => "M" + r.map(([lo, la]) => X(lo).toFixed(1) + "," + Y(la).toFixed(1)).join("L") + "Z"),
+          pins: (gd.pins || []).map(([lo, la]) => ({ x: X(lo).toFixed(1), y: Y(la).toFixed(1) })),
+        };
+      });
+      this.setState({ geo });
+    } catch (e) { console.warn("geography unavailable", e); }
+  }
+  
+  setVal(k, v) { this.setState(s => ({ vals: { ...s.vals, [k]: v } })); }
+  groupState(g) {
+    if (this.state.skipped[g.key]) return "skipped";
+    if (g.key === "priorities") return this.state.matchIdx >= PAIRS.length ? "done" : this.state.matchIdx > 0 ? "part" : "todo";
+    const done = g.items.filter(i => (this.state.vals[i.k] || "").trim()).length;
+    return done === 0 ? "todo" : done === g.items.length ? "done" : "part";
+  }
+  
+  affectedList() {
+    const t = this.state.changeText;
+    if (t.trim().length < 8) return [];
+    const seen = {}, out = [];
+    RULES.forEach(r => { if (r.re.test(t)) r.tabs.forEach(f => { if (!seen[f] && !this.state.dropped[f]) { seen[f] = 1; out.push({ file: f, kind: r.kind, cat: r.cat }); } }); });
+    return out;
+  }
+  matchedCats() {
+    const t = this.state.changeText;
+    if (t.trim().length < 8) return [];
+    const seen = {};
+    return RULES.filter(r => r.re.test(t)).map(r => r.cat).filter(c => !seen[c] && (seen[c] = 1));
+  }
+  ikVals() {
+    const s = this.state, onNew = s.tab === "new";
+    const aff = this.affectedList();
+    const heavy = aff.filter(a => a.kind === "re-research").length;
+    const cleared = GROUPS.filter(g => this.groupState(g) === "done").length;
+    const skippedN = Object.keys(s.skipped).length;
+    const meter = (cleared + skippedN * 0.4) / GROUPS.length;
+    const pair = PAIRS[s.matchIdx] || PAIRS[0];
+    const rankedIdx = Object.keys(s.scores).map(Number).sort((a, b) => s.scores[b] - s.scores[a]).slice(0, 3);
+    const tabBtn = active => ({ color: active ? "var(--ink)" : "var(--muted)", underline: active ? "2px solid var(--accent)" : "2px solid transparent" });
+    const nb = tabBtn(onNew), cb = tabBtn(!onNew);
+    const forkList = [
+      { id: "base", q: "Where should you be based? Reykjavík is walkable with everything in day-trip range; Selfoss is closer to the Golden Circle and about a third cheaper.", options: ["Reykjavík", "Selfoss", "Split the trip"], rec: "We’d suggest Reykjavík — you said no car for the city days." },
+      { id: "season", q: "Late October is in-between season. Would you rather chase the northern lights, or stick to places guaranteed to be open?", options: ["Northern lights", "Guaranteed open", "Balance"], rec: "We’d suggest a balance — your booked dinner works either way." },
+    ];
+    const mob = this.mob(), w = s.w || 1280;
+    return {
+      isMobile: mob, notMobile: !mob,
+      headPad: mob ? "10px 14px 8px" : "clamp(10px,1vw,18px) clamp(14px,1.6vw,34px) clamp(8px,.8vw,15px)",
+      navOrder: mob ? "5" : "0", navWidth: mob ? "100%" : "auto", navMargin: mob ? "0" : "0 0 0 8px",
+      statusOrder: mob ? "4" : "3", statusWidth: mob ? "100%" : "auto",
+      statusJustify: mob ? "space-between" : "flex-end", themeOrder: mob ? "3" : "4",
+      ikMainPad: mob ? "16px 14px 40px" : "clamp(18px,1.6vw,34px) clamp(20px,2.2vw,46px) clamp(32px,3vw,64px)",
+      ikFootPad: mob ? "18px 14px 32px" : "clamp(18px,1.6vw,34px) clamp(20px,2.2vw,46px) clamp(28px,2.6vw,52px)",
+      cardCols: mob ? "minmax(0,1fr)" : "repeat(auto-fit,minmax(min(26rem,100%),1fr))",
+      fieldCols: mob ? "minmax(0,1fr)" : "minmax(0,1.35fr) minmax(0,1fr)",
+      matchCols: mob ? "minmax(0,1fr)" : "1fr auto 1fr",
+      guideCardMin: mob ? "100%" : "clamp(13rem,20vw,19rem)",
+      groupPadX: mob ? "13px" : "clamp(14px,1.1vw,24px)",
+      queueCols: mob ? "minmax(0,1fr)" : "repeat(auto-fit,minmax(min(25rem,100%),1fr))",
+      panelCols: mob ? "minmax(0,1fr)" : "repeat(auto-fit,minmax(min(20rem,100%),1fr))",
+      tabCols: mob ? "minmax(0,1fr)" : "repeat(auto-fill,minmax(min(15rem,100%),1fr))",
+      segWidth: mob ? "100%" : "auto",
+      rootRef: el => { this.rootEl = el; },
+      changeRef: el => { this.changeEl = el; },
+      contours: (this.cl || (this.cl = Array.from({ length: 9 }, (_, i) => {
+        const base = 70 + i * 72, amp = 26 + (i % 3) * 13, ph = i * 1.1;
+        return Array.from({ length: 41 }, (_, k) => (k * 25) + "," + (base + Math.sin(k / 5.5 + ph) * amp + Math.sin(k / 2.3 + ph) * (amp / 4)).toFixed(1)).join(" ");
+      }))),
+      subMark: onNew ? "NEW GUIDE" : "REQUEST A CHANGE",
+      onNew, onChange: !onNew,
+      goNew: () => this.setState({ tab: "new" }), goChange: () => this.setState({ tab: "change" }),
+      newColor: nb.color, newUnderline: nb.underline, chgColor: cb.color, chgUnderline: cb.underline,
+      themeLabel: s.dark ? "Light" : "Dark", toggleTheme: () => this.applyTheme(!s.dark),
+
+      clearedLabel: cleared + " of " + GROUPS.length + " done" + (skippedN ? " · " + skippedN + " skipped" : ""),
+      estimateLabel: cleared < 2 ? "time estimate appears as you go" : "est. " + (cleared >= 5 ? "1h 40m · ~$11.80" : cleared >= 3 ? "1–2h · ~$12" : "1–3h · $9–18"),
+      meterFill: Math.min(1, meter).toFixed(3),
+      meterColor: skippedN && cleared + skippedN >= GROUPS.length ? "var(--warn)" : "var(--accent)",
+
+      groups: GROUPS.map(g => {
+        const st = this.groupState(g), expanded = s.open === g.key;
+        const idx = GROUPS.indexOf(g);
+        return {
+          key: g.key, title: g.title, isPriorities: g.key === "priorities",
+          summary: st === "skipped" ? "Skipped — we’ll assume sensible defaults" : g.summary,
+          expanded, expandedStr: expanded ? "true" : "false", chev: expanded ? "▲" : "▼",
+          span: expanded ? "1 / -1" : "auto", arrive: String(Math.min(4, idx + 1)),
+          weight: expanded ? "640" : "560",
+          border: expanded ? "var(--rule2)" : "var(--rule)",
+          icon: st === "done" ? "✓" : st === "skipped" ? "!" : String(idx + 1),
+          iconBg: st === "done" ? "var(--green)" : st === "skipped" ? "var(--warn)" : "transparent",
+          iconBorder: st === "done" ? "var(--green)" : st === "skipped" ? "var(--warn)" : "var(--rule2)",
+          iconColor: st === "done" || st === "skipped" ? "#fff" : "var(--muted)",
+          stamp: st === "done" ? "done" : st === "skipped" ? "assumed" : st === "part" ? "part done" : "not started",
+          stampColor: st === "done" ? "var(--green)" : st === "skipped" ? "var(--warn)" : st === "part" ? "var(--accent-ink)" : "var(--muted)",
+          toggle: () => this.setState({ open: expanded ? null : g.key }),
+          skip: () => this.setState(p => ({ skipped: { ...p.skipped, [g.key]: true }, open: (GROUPS[idx + 1] || {}).key || null })),
+          next: () => this.setState({ open: (GROUPS[idx + 1] || {}).key || null }),
+          nextLabel: idx === GROUPS.length - 1 ? "Done" : "Next: " + GROUPS[idx + 1].title,
+          items: g.items.map(it => {
+            const val = s.vals[it.k] || "";
+            return {
+              label: it.label, drives: it.drives, example: it.ex || "", hasExample: !!it.ex,
+              value: val, placeholder: it.ph || "",
+              state: val ? "answered" : s.skipped[g.key] ? "assumed" : "",
+              stateColor: val ? "var(--green)" : "var(--warn)",
+              inputBorder: val ? "var(--green)" : "var(--rule2)",
+              hasOptions: !!it.opts, hasInput: !it.opts,
+              type: e => this.setVal(it.k, e.target.value),
+              options: (it.opts || []).map(o => ({
+                label: o, pick: () => this.setVal(it.k, o),
+                bg: val === o ? "var(--accent)" : "var(--card)",
+                color: val === o ? "var(--on-accent)" : "var(--ink)",
+                border: val === o ? "var(--accent)" : "var(--rule)",
+              })),
+            };
+          }),
+        };
+      }),
+
+      matchOpen: s.matchIdx < PAIRS.length, matchDone: s.matchIdx >= PAIRS.length,
+      matchProgress: "Question " + Math.min(s.matchIdx + 1, PAIRS.length) + " of " + PAIRS.length,
+      matchA: PRIOS[pair[0]], matchB: PRIOS[pair[1]],
+      pickA: () => this.setState(p => ({ scores: { ...p.scores, [pair[0]]: (p.scores[pair[0]] || 0) + 1 }, matchIdx: p.matchIdx + 1 })),
+      pickB: () => this.setState(p => ({ scores: { ...p.scores, [pair[1]]: (p.scores[pair[1]] || 0) + 1 }, matchIdx: p.matchIdx + 1 })),
+      redoMatch: () => this.setState({ matchIdx: 0, scores: {} }),
+      ranked: rankedIdx.map((pi, n) => ({
+        rank: (n + 1) + ".", label: PRIOS[pi],
+        bg: n === 0 ? "var(--accent)" : "transparent",
+        color: n === 0 ? "var(--on-accent)" : "var(--ink)",
+        border: n === 0 ? "var(--accent)" : "var(--rule2)",
+      })),
+
+      readyNote: s.dispatched ? "Off it goes — you’ll see it on the Progress page in a moment."
+        : cleared + skippedN < GROUPS.length ? "You can start whenever you like — we’ll fill gaps with assumptions and show you each one."
+        : skippedN ? skippedN + " skipped — we’ll assume sensible defaults there."
+        : "All answered. Nothing left to guess.",
+      readyColor: s.dispatched ? "var(--green)" : skippedN ? "var(--warn)" : "var(--muted)",
+      dispatchRun: () => this.setState({ dispatched: true }),
+      forksOpen: s.dispatched,
+      forksCleared: Object.keys(s.forkPicks).length >= 2,
+      forks: forkList.map(f => ({
+        q: f.q, rec: f.rec,
+        options: f.options.map(o => ({
+          label: o, pick: () => this.setState(p => ({ forkPicks: { ...p.forkPicks, [f.id]: o } })),
+          bg: s.forkPicks[f.id] === o ? "var(--accent)" : "var(--card)",
+          color: s.forkPicks[f.id] === o ? "var(--on-accent)" : "var(--ink)",
+          border: s.forkPicks[f.id] === o ? "var(--accent)" : "var(--rule)",
+        })),
+      })),
+
+      guideCards: GUIDES.map((g, i) => {
+        const on = s.guide === g.slug;
+        return {
+          title: g.title, meta: g.meta, stamp: g.stamp,
+          stampColor: g.stamp === "complete" ? "var(--green)" : "var(--accent-ink)",
+          border: on ? "var(--accent)" : "var(--rule)",
+          driftAnim: on ? "ikDrift 24s ease-in-out infinite alternate" : "none",
+          sky: g.sky, pick: () => this.setState({ guide: g.slug }),
+          landPaths: ((s.geo[g.slug] || {}).paths || []).map(d => ({
+            d, fill: `color-mix(in srgb, ${g.accent} ${on ? 62 : 34}%, transparent)`,
+            stroke: g.accent, anim: on ? "ikDrift 22s ease-in-out infinite alternate" : "none",
+          })),
+          pins: on ? ((s.geo[g.slug] || {}).pins || []).map((p, k) => ({
+            x: p.x, y: p.y, fill: g.accent, anim: `ikPin 2.6s ease-out ${k * 0.9}s infinite`,
+          })) : [],
+        };
+      }),
+      sectionMap: GUIDE_TABS.map((label, i) => {
+        const hit = aff.find(a => a.file === label);
+        const kind = hit ? hit.kind : null;
+        const c = hit ? CATS[hit.cat] : null;
+        return {
+          num: String(i + 1).padStart(2, "0"), label,
+          tag: kind === "rewrite" ? "Redone" : kind === "check" ? "Checked" : "Untouched",
+          bg: kind === "rewrite" ? `color-mix(in srgb,${c.color} 12%,transparent)` : kind ? "var(--bg2)" : "transparent",
+          border: kind === "rewrite" ? c.color : kind ? "var(--rule2)" : "var(--rule)",
+          numColor: kind ? c.ink : "var(--muted)",
+          tagColor: kind === "rewrite" ? c.ink : "var(--muted)",
+          weight: kind ? "640" : "480",
+          bar: kind ? "1" : "0", barColor: kind === "rewrite" ? c.color : "var(--rule2)",
+        };
+      }),
+      mapNote: aff.length === 0 ? "" : aff.length + " of 10 sections would change",
+      matchedCats: this.matchedCats().map(k => ({ label: CATS[k].label, color: CATS[k].ink, bg: `color-mix(in srgb,${CATS[k].color} 12%,transparent)` })),
+      isTraveler: s.view === "traveler", isOwner: s.view === "owner",
+      viewTraveler: () => this.setState({ view: "traveler" }), viewOwner: () => this.setState({ view: "owner" }),
+      travBg: s.view === "traveler" ? "var(--ink)" : "transparent", travColor: s.view === "traveler" ? "var(--bg)" : "var(--muted)",
+      ownBg: s.view === "owner" ? "var(--ink)" : "transparent", ownColor: s.view === "owner" ? "var(--bg)" : "var(--muted)",
+      changeHead: s.view === "traveler" ? "Tell us what changed" : "Requests waiting on you",
+      changeDek: s.view === "traveler"
+        ? "Describe the change in plain words. You'll see what it affects before anything is sent."
+        : "Each request needs one decision: quick fix, or full re-check. Nothing starts until you choose.",
+      samples: SAMPLES.map(sm => ({ label: sm.label, use: () => { if (this.changeEl) this.changeEl.value = sm.text; this.setState({ changeText: sm.text, dropped: {}, filed: false }); } })),
+      onChangeType: e => this.setState({ changeText: e.target.value, filed: false }),
+      affected: aff.map(a => {
+        const c = CATS[a.cat];
+        return {
+          file: a.file, kind: a.kind === "rewrite" ? "Redone" : "Checked",
+          accent: a.kind === "rewrite" ? c.color : "var(--muted)",
+          bg: a.kind === "rewrite" ? `color-mix(in srgb,${c.color} 9%,transparent)` : "var(--bg2)",
+          drop: () => this.setState(p => ({ dropped: { ...p.dropped, [a.file]: true } })),
+        };
+      }),
+      noneAffected: aff.length === 0, someAffected: aff.length > 0,
+      weightLabel: aff.length === 0 ? "—" : heavy >= 2 ? "Bigger job" : "Quick fix",
+      weightColor: heavy >= 2 ? "var(--warn)" : "var(--green)",
+      diffNote: aff.length === 0 ? ""
+        : heavy >= 2 ? "Several parts get properly redone and re-checked against their sources."
+        : "One part gets updated, and we re-read the rest to make sure nothing contradicts it.",
+      costNote: heavy >= 2 ? "Usually takes under an hour. You'll get a note when it's done." : "Usually done in about 10 minutes.",
+      fileLabel: s.filed ? "Sent — we'll take it from here" : "Send this request",
+      fileRequest: () => this.setState({ filed: true }),
+
+      queue: QUEUE.map((q, qi) => {
+        const lab = s.labels[q.num], c = CATS[q.cat];
+        return {
+          arrive: String(Math.min(4, qi + 1)), num: q.num, title: q.title, who: q.who, body: q.body,
+          cat: c.label, catColor: c.ink, catBg: `color-mix(in srgb,${c.color} 13%,transparent)`, stripe: c.color,
+          cardBorder: lab ? "var(--green)" : "var(--rule)",
+          suggestion: q.size === "big" ? "Suggested: full re-check" : "Suggested: quick fix",
+          stamp: lab === "light" ? "Quick fix — started" : lab === "heavy" ? "Full re-check — started" : q.stamp,
+          stampColor: lab ? "var(--green)" : "var(--warn)",
+          light: () => this.setState(p => ({ labels: { ...p.labels, [q.num]: "light" } })),
+          heavy: () => this.setState(p => ({ labels: { ...p.labels, [q.num]: "heavy" } })),
+          lightBg: lab === "light" ? "var(--green)" : "transparent", lightColor: lab === "light" ? "#fff" : "var(--muted)", lightBorder: lab === "light" ? "var(--green)" : "var(--rule2)",
+          heavyBg: lab === "heavy" ? "var(--ink)" : "transparent", heavyColor: lab === "heavy" ? "var(--bg)" : "var(--muted)", heavyBorder: lab === "heavy" ? "var(--ink)" : "var(--rule2)",
+        };
+      }),
+      queueCount: QUEUE.length - Object.keys(s.labels).length,
+      dispatchNote: Object.keys(s.labels).length
+        ? Object.keys(s.labels).length + " under way — follow them on the Progress page."
+        : "Nothing has started yet.",
+      dispatchColor: Object.keys(s.labels).length ? "var(--green)" : "var(--muted)",
+      catLegend: Object.keys(CATS).map(k => ({ label: CATS[k].label, color: CATS[k].ink, bg: `color-mix(in srgb,${CATS[k].color} 13%,transparent)` })),
+    };
+  }
+
+  mob() { return this.state.preview === "mobile" ? true : this.state.mobile; }
+  renderVals() {
+    const s = this.state, mob = this.mob(), tab = s.tab || "progress";
+    const t = on => ({ color: on ? "var(--ink)" : "var(--muted)", under: on ? "2px solid var(--accent)" : "2px solid transparent" });
+    const tp = t(tab === "progress"), tn = t(tab === "new"), tc = t(tab === "change");
+    const shell = {
+      frameRef: el => { this.frameEl = el; },
+      onProgress: tab === "progress", notProgress: tab !== "progress",
+      showNavBadge: tab !== "progress", // on Progress the status pill already says it, with the stage
+
+      onNew: tab === "new", onChange: tab === "change",
+      goProgress: () => this.setState({ tab: "progress" }),
+      goNew: () => this.setState({ tab: "new" }), goChange: () => this.setState({ tab: "change" }),
+      pColor: tp.color, pUnder: tp.under, nColor: tn.color, nUnder: tn.under, cColor: tc.color, cUnder: tc.under,
+      subMark: tab === "progress" ? "PROGRESS" : tab === "new" ? "NEW GUIDE" : "REQUEST A CHANGE",
+      isMobile: mob, notMobile: !mob,
+      setDesktop: () => this.setState({ preview: "desktop" }), pickMobile: () => this.setState({ preview: "mobile" }),
+      dBg: s.preview === "desktop" ? "var(--bg)" : "transparent", dColor: s.preview === "desktop" ? "var(--ink)" : "color-mix(in srgb,var(--bg) 70%,transparent)",
+      mBg: s.preview === "mobile" ? "var(--bg)" : "transparent", mColor: s.preview === "mobile" ? "var(--ink)" : "color-mix(in srgb,var(--bg) 70%,transparent)",
+      previewNote: s.preview === "mobile" ? "390px frame — the same component, container-driven" : "Full width. Switch to Mobile to check the phone layout.",
+      frameMax: s.preview === "mobile" ? "390px" : "100%",
+      frameEdge: s.preview === "mobile" ? "1px solid var(--rule2)" : "none",
+      progMinH: mob ? "auto" : "clamp(620px,86vh,1200px)",
+    };
+    return { ...this.progVals(), ...this.ikVals(), ...shell };
+  }
+}
+</script>
+</body>
+</html>
