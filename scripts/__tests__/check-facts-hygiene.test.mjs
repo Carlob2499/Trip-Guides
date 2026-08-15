@@ -130,14 +130,15 @@ describe("bareEchoRows", () => {
     expect(bareEchoRows(facts)).toEqual([]);
   });
 
-  it("documents the true positives already present in korea and denmark", () => {
-    // Real, structural section-path echoes in the shipped corpus — e.g. Korea's "Money &
-    // currency" alone covers five different FX benchmarks with nothing to tell them apart.
-    const koreaStems = bareEchoRows(realFacts("korea")).map((b) => b.stem);
-    expect(koreaStems).toContain("Money & currency");
-    expect(koreaStems).toContain("Phone & data");
-    expect(bareEchoRows(realFacts("us"))).toEqual([]);
-    expect(bareEchoRows(realFacts("denmark")).map((b) => b.stem)).toContain("Currency & how to pay");
+  it("stays clean across the shipped corpus (guard against new bare-echo groups)", () => {
+    // korea and denmark used to carry real structural section-path echoes — e.g. Korea's
+    // "Money & currency" covering five different FX benchmarks with nothing to tell them
+    // apart. Fixed 2026-08-15 by giving every claim a disambiguating leaf phrase. This
+    // assertion is the guard that they stay fixed; a new bare-echo group here means a new
+    // claim was written without a leaf, not that the checker regressed.
+    for (const slug of ["korea", "us", "denmark"]) {
+      expect(bareEchoRows(realFacts(slug)), `${slug} bare echo`).toEqual([]);
+    }
   });
 });
 
