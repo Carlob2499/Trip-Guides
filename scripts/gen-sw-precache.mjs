@@ -18,7 +18,7 @@ const BEGIN = "/* CORE:BEGIN";
 const END = "/* CORE:END */";
 
 // Static shell entries beyond the guide pages (mirror public/ assets).
-// D18 (docs/archive/PLAN_ATLAS_MIGRATION.md Stage B.5): the vendored world TopoJSON the Atlas globe fetches
+// D18 (docs/archive/INDEX.md → PLAN_ATLAS_MIGRATION Stage B.5): the vendored world TopoJSON the Atlas globe fetches
 // client-side — precached so it works offline too, same as everything else in this list.
 const SHELL = ["/", "/manifest.webmanifest", "/icons/icon-192.png", "/icons/favicon.svg", "/data/countries-110m.json"];
 

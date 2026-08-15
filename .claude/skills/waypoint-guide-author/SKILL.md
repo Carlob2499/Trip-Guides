@@ -225,7 +225,7 @@ crowd/timing, ≥2 novel/alternative.
   required once `risk` is R3+ (a wrong plan-critical/safety fact needs a snippet a later drift
   check can search for, not just a URL that might still 200).
 - **`traveler-origin` is the ONE reserved id in the registry** (D14/ADR 0001+0003,
-  docs/archive/PLAN_ATLAS_MIGRATION.md Stage B) — a different shape from every other row: `value`
+  docs/archive/INDEX.md → PLAN_ATLAS_MIGRATION Stage B) — a different shape from every other row: `value`
   is a 3-letter IATA code, `state` is `confirmed` | `unconfirmed` (not `clean`/`approx` — "do we
   know this yet", not a sourced-approximate figure), and `source_url`/`verified_on` are optional
   UNLESS `state` is `confirmed` (a personal booking has no public URL — use `source` free text

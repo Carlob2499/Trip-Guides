@@ -1,4 +1,4 @@
-/* Phrase-card "Speak" button (docs/archive/FEATURES.md #6) — the free browser TTS (Web Speech
+/* Phrase-card "Speak" button (docs/archive/INDEX.md → FEATURES #6) — the free browser TTS (Web Speech
    API), no service, no cost. Feature-detected: on a browser without speechSynthesis the
    buttons simply do nothing when clicked rather than throwing (the phrase text itself,
    already big native-script type on screen, remains fully useful without audio — the

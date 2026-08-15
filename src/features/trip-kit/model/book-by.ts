@@ -1,4 +1,4 @@
-// Prep timeline / "book by" deadlines (docs/archive/PLAN_TRAVELER_FEATURES.md F1) — turns the
+// Prep timeline / "book by" deadlines (docs/archive/INDEX.md → PLAN_TRAVELER_FEATURES F1) — turns the
 // scattered dated checklist items across a guide's panel + day-kit checklists into one
 // T-minus timeline. Reads ONLY items that were upgraded to carry a `due` date
 // (content.config.ts's `checklistItem` union); a guide with no dated items returns an

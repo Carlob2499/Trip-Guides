@@ -194,8 +194,9 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
    Viewport media queries stay for PAGE CHROME only (the sticky header, print). Chrome is
    positioned against the viewport, so it is the one thing that legitimately asks about it. */
 .content{min-width:0;padding:1.2rem 0 3rem}
-/* FALLBACKS.md §2 — where container queries are unsupported, no @container rule matches and
-   every model-specific declaration simply never applies, so the base (phone) styles stand.
+/* Retired R5 FALLBACKS §2 (git path in design_handoff_guide_ui/README.md) — where container
+   queries are unsupported, no @container rule matches and every model-specific declaration
+   simply never applies, so the base (phone) styles stand.
    That is the intended degradation: the phone model is the narrowest and loses nothing
    structural. Nothing here needs a @supports guard; the absence of a match IS the fallback. */
 .catblock{scroll-margin-top:var(--chrome-h)}
@@ -364,7 +365,7 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 .cardimg{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:.1rem 0 .2rem;background:var(--bg2)}
 .imgcredit{display:block;font-size:var(--text-control-sm);color:var(--muted);margin:0 0 .85rem;text-align:right;font-family:var(--font-data)}
 .imgcredit a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--rule2)}
-/* "Get me there" transit deep-links (docs/archive/FEATURES.md #1) — a small pill-button row on
+/* "Get me there" transit deep-links (docs/archive/INDEX.md → FEATURES #1) — a small pill-button row on
    sight cards + day-waypoint stops. Buttons, not bare text links, per the clickability
    doctrine: this can be 2-3 links in a row and must read as tappable at a glance. */
 .transit-links{display:inline-flex;flex-wrap:wrap;gap:.35rem;margin:.3rem 0 0}

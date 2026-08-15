@@ -1,4 +1,4 @@
-/* Entry-requirements country picker (docs/archive/FEATURES.md #7) — when a guide's entry[] carries
+/* Entry-requirements country picker (docs/archive/INDEX.md → FEATURES #7) — when a guide's entry[] carries
    more than one passport-country row, only one traveler's row is relevant at a time. The
    dropdown swaps which row is visible; a single-row guide never shows a dropdown at all
    (TripKit.astro only renders one when entry.length > 1). */

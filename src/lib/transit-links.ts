@@ -1,4 +1,4 @@
-// "Get me there" transit deep-links (docs/archive/FEATURES.md #1) — one-tap open-in links for a
+// "Get me there" transit deep-links (docs/archive/INDEX.md → FEATURES #1) — one-tap open-in links for a
 // verified coordinate, built from each provider's OWN current developer documentation
 // (verified 2026-07-18; re-check if either provider's scheme changes):
 //   Google — https://developers.google.com/maps/documentation/urls/get-started

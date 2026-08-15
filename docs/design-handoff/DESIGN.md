@@ -95,10 +95,10 @@ typography:
     fontWeight: 640
     letterSpacing: "0.16em"
 rounded:
+  # Binary, per the shipped system: 0 on anything holding content or evidence, 999px on anything
+  # you press. R3's 6/10/16px ladder was retired in R4 (see "Containers went square" below);
+  # base.css DELETED --r-sm/--r-md/--r-lg in Atlas Stage G and check-drift.mjs fails a third value.
   none: "0px"
-  sm: "6px"
-  md: "10px"
-  lg: "16px"
   pill: "999px"
 motion:
   ease-enter: "cubic-bezier(.22,1,.36,1)"
@@ -145,7 +145,9 @@ components:
   tab-pill:
     typography: "{typography.control}"
     rounded: "{rounded.pill}"
-    padding: "10px 16px"
+    # Corrected to the shipped `.grail-stop` (src/features/guide-rail/styles.css): minHeight does
+    # the vertical sizing, so the pill carries horizontal padding only. COMPONENTS.md §3 agrees.
+    padding: "0 14px"
     minHeight: "40px"
   tab-pill-active:
     backgroundColor: "{colors.surveyors-red-oxide}"

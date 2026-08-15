@@ -121,9 +121,8 @@ clocks, money, distances, counts, coordinates.
 There is no 4px, 8px or 12px anywhere in this product. A rounded card is the single fastest way
 to make this design stop looking like itself.
 
-The one exception, already in the system: the phone's thumb-bar slots use `14px` because they
-are a pressed *area* rather than a pill, and a 999px radius on a 52px-tall full-width slot reads
-as a lozenge. Do not extend this exception anywhere else.
+There are no exceptions. (The kit drafted a `14px` thumb-bar-slot exception; it never shipped —
+`mobile-nav.css` uses only `0`/`999px`/`50%`, and `check-drift.mjs` enforces the binary rule.)
 
 ## 4. Border weight
 

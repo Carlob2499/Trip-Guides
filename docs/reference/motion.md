@@ -108,7 +108,7 @@ scroll-driven reveals (`reveal.js` fallback) · V3c story-mode itinerary (the on
 deck — the less-scroll/retention payoff) · V3d lead-first density polish · V4 per-country
 palette identity (above). **Dropped (V2): palette duotone graphic cards** — read as "graphic
 poster"; hub cards stay photo-forward. The hub Overture/Atlas work continues in
-`docs/archive/PLAN_VISUAL_OVERHAUL.md`.
+`docs/archive/INDEX.md → PLAN_VISUAL_OVERHAUL`.
 
 Information-delivery half of the brief (retention, not just motion): one idea per view
 (story mode), a consistent editorial measure with mono-face data on the right rail, and
@@ -136,7 +136,7 @@ all (`.11`/`.07` alpha on the masthead; ~10–16% tints on the hub). Raised once
 no-photo fallback) and of the hub's pre-auto-glide contour layer, and reviewed by the creator.
 **Kept as-is — no step-back.** The strokes render clearly and legibly in all four masthead
 states without competing with title legibility; the U9 values hold. This closes the last open
-item in `docs/archive/PLAN_FIELD_REPORT_FIXES.md` (E8 item 5).
+item in `docs/archive/INDEX.md → PLAN_FIELD_REPORT_FIXES` (E8 item 5).
 
 ## V6 — QA and the honest pass (2026-07-23)
 
@@ -183,7 +183,7 @@ genuine "did this cost anything" pass has to report:
   degrades to a flat, fully-readable single-scroll document with an explicit "This guide reads
   fine without JavaScript" note — by design, unaffected by this arc.
 
-This closes `docs/archive/PLAN_VISUAL_OVERHAUL.md`. The doctrine above (signature, inventory, rules,
+This closes `docs/archive/INDEX.md → PLAN_VISUAL_OVERHAUL`. The doctrine above (signature, inventory, rules,
 identity engine) reflects what's actually shipped as of this pass.
 
 ## The motion language — "the overture, then the heartbeat" (decided 2026-07-28)
@@ -305,7 +305,7 @@ content, schema-guarded so a group rename errors instead of silently orphaning i
 (Voice standard revised 2026-07-28: rare + informational-only, block-types.md — the
 original "warmth in the descriptors" framing is superseded.)
 
-## Mobile navigation — the gestures (shipped 2026-07-30, `docs/archive/PLAN_MOBILE_NAV.md`)
+## Mobile navigation — the gestures (shipped 2026-07-30, `docs/archive/INDEX.md → PLAN_MOBILE_NAV`)
 
 Below 900px the top chip strip is hidden, so the bottom bar IS the guide's navigation.
 Everything here is gesture motion, which follows a different rule from the entrance motion

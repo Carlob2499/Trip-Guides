@@ -6,8 +6,9 @@
    alive for the atlas hub, which indexes by number legitimately. What replaces both is the two
    things a traveller does use: which cities this trip touches, and what the next move is.
 
-   Neither is a new content field. FALLBACKS §4 forbids adding one, and it is the right
-   constraint here — a guide that had to be edited to gain a plate line would mean every
+   Neither is a new content field. The retired R5 FALLBACKS §4 (git path in
+   design_handoff_guide_ui/README.md) forbids adding one, and it is the right constraint
+   here — a guide that had to be edited to gain a plate line would mean every
    existing guide shipped with an empty one. Both rows are read out of data the guides already
    carry, and a guide carrying neither renders neither. */
 

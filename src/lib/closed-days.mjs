@@ -1,4 +1,4 @@
-/* closed_days (D11 — CLAUDE.md + docs/archive/PLAN_ATLAS_MIGRATION.md Stage A.3): the visitable schema's
+/* closed_days (D11 — CLAUDE.md + docs/archive/INDEX.md → PLAN_ATLAS_MIGRATION Stage A.3): the visitable schema's
    structured weekday-closure field. Plain .mjs (not .ts), same reason facts.mjs/issue-forms.mjs
    are: this needs importing from BOTH an Astro/TS surface (SightsBlock.astro's Closed row) and
    a plain-`node` build script (scripts/check-closed-days.mjs's itinerary cross-check) with one

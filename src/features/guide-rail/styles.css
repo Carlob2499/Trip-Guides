@@ -153,7 +153,7 @@ body.chrome-yield .grail{transform:translateY(calc(-1 * var(--hdr-h)))}
   .grail-stop[aria-current="true"] .grail-dot,.grail-stop.gtab-active .grail-dot{
     /* The halo. The flat rgba is declared FIRST as the fallback and color-mix second: a browser
        that cannot parse color-mix drops that declaration and keeps the rgba, and one that can
-       overrides it (FALLBACKS.md §2). Order is the whole mechanism — reversed, the fallback
+       overrides it (retired R5 FALLBACKS §2). Order is the whole mechanism — reversed, the fallback
        would win everywhere. */
     box-shadow:0 0 0 2px var(--bg),0 0 0 6px rgba(156,68,33,.22);
     box-shadow:0 0 0 2px var(--bg),0 0 0 6px color-mix(in srgb,var(--accent) 22%,transparent);

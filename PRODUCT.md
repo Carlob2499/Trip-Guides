@@ -133,7 +133,7 @@ the shipped Atlas build) is its single authority, with the mechanical gates besi
   primary-source count, rendered on the hub and About (`src/lib/guide-stats.ts`).
 - **Real post-trip feedback** from at least one completed trip, feeding
   `docs/evidence/traveler-patterns.md` and a guide-level learnings block.
-- **Market research** behind the shipped feature set, with sources, in `docs/archive/FEATURES.md`;
+- **Market research** behind the shipped feature set, with sources, in `docs/archive/INDEX.md → FEATURES`;
   category comparison in `docs/evidence/competitive-landscape.md`.
 - **Quality bar and process** are written down: `docs/standards/guide-rubric.md`, `docs/reference/pipeline.md`,
   `docs/reference/motion.md`, `docs/reference/architecture.md`.

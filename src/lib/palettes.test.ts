@@ -32,7 +32,7 @@ describe("accentForGuide precedence", () => {
   });
 });
 
-describe("paletteAccentsForGuide (V1 — Atlas card tinting, docs/archive/PLAN_VISUAL_OVERHAUL.md)", () => {
+describe("paletteAccentsForGuide (V1 — Atlas card tinting, docs/archive/INDEX.md → PLAN_VISUAL_OVERHAUL)", () => {
   it("gives all three stops from the extracted palette when one exists", () => {
     const extracted = paletteFor("korea")!;
     const accents = paletteAccentsForGuide("korea", undefined, "South Korea");

@@ -218,8 +218,10 @@ the quiet one, and ACCEPTANCE forbids both. Client-filled honest blanks are crea
 by whoever owns the datum — never rendered empty and left for later.
 
 **A removal must not leave stale pointers, even into guide content** (2026-08-11). R5's
-FALLBACKS §4 lists `src/content/guides/` as a scope guard for design work, and one guide file
-was edited anyway: `japan/01-plan.json` sent readers to "the Entry card in your Trip kit" — a
+FALLBACKS §4 (retired with the bundle's process docs — git path in
+`docs/design-handoff/design_handoff_guide_ui/README.md`) lists `src/content/guides/` as a scope
+guard for design work, and one guide file was edited anyway: `japan/01-plan.json` sent readers
+to "the Entry card in your Trip kit" — a
 feature R5 deleted — from inside the Entry card. The guard exists to stop a design pass
 rewriting content; it does not license shipping a pointer to something that no longer exists.
 The rule: when a change deletes a feature, the continuity sweep runs into guide content too,
@@ -236,7 +238,7 @@ across all four guides, and both were open questions until the design-reconcilia
 settled them (below) — do not re-litigate.
 
 **The 44px density fork splits by row-count ceiling, not by treating both controls alike**
-(2026-08-12, design-reconciliation arc, `docs/archive/PLAN_DESIGN_RECONCILIATION.md` §H1). `.transit-link`
+(2026-08-12, design-reconciliation arc, `docs/archive/INDEX.md → PLAN_DESIGN_RECONCILIATION` §H1). `.transit-link`
 (guide.css:324, `gap:.35rem`, wraps freely, 2-3 per day card) and `.scrub-fit .dchip`
 (mobile-nav.css:175, `flex:1 1 0;min-width:0`, up to 8-10 in one fixed 375px row) look like the
 same violation but are not: one has no row-count ceiling and the other's ceiling IS the design —

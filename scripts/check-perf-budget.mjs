@@ -25,7 +25,7 @@ const BUDGET = {
 
 // On-demand chunks a visitor pulls ONLY via explicit interaction, so they aren't part of the
 // baseline page weight the `js` budget protects (pdf.js on a booking upload, d3/topojson-client
-// behind the Atlas globe's dynamic import() — docs/archive/PLAN_ATLAS_MIGRATION.md Stage C.2/D19). Derived
+// behind the Atlas globe's dynamic import() — docs/archive/INDEX.md → PLAN_ATLAS_MIGRATION Stage C.2/D19). Derived
 // STRUCTURALLY (same "read dist/, don't memorize names" principle as gen-sw-precache.mjs) —
 // a chunk is on-demand precisely when it never appears in ANY page's first-paint closure, i.e.
 // Rollup only emitted it because something reached it via a dynamic import(). That replaces a

@@ -305,7 +305,8 @@ const toolsTrip = {
   }),
   href: `${base}/guides/${guideSlug}/`,
   // A holiday reading only when the guide DECLARED a holidays section — never a guessed one.
-  // FALLBACKS.md §1: with no record for a country-year the tool says so rather than guessing.
+  // Retired R5 FALLBACKS §1 (git path in design_handoff_guide_ui/README.md): with no record for
+  // a country-year the tool says so rather than guessing.
   holidays: _holSec ? buildHolidayInfo(_toolsHolRows, firstDayDate, lastDayDate, _toolsYear) : null,
   cc: _toolsCC,
   // Computed with the SAME collectors the .gpx/.ics endpoints use, so a download is never

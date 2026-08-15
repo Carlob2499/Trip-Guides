@@ -5,7 +5,7 @@ researched, creator-tailored travel guides — where creating a guide and keepin
 nearly toil-free, and human effort is spent only where judgment genuinely lives.**
 
 This doc is **policy**: the target, the stage contracts, the program. How each piece arrived lives
-in `docs/archive/pipeline-history.md`, a record and never a work order. Read alongside
+in `docs/archive/INDEX.md → pipeline-history`, a record and never a work order. Read alongside
 `docs/standards/guide-rubric.md` (the bar) and the `waypoint-guide-author` skill (the discipline).
 
 ---
@@ -97,7 +97,7 @@ per-view — Focus Today, what's-open-now, the weather day-swap advisory.
 
 Platform stance is settled: **GitHub Pages + Firebase free tier + GitHub Actions as the compute
 layer**; native = PWA-first. The P-series (P0–P4) and the W-series are **shipped** — see
-`docs/archive/pipeline-history.md`. What remains:
+`docs/archive/INDEX.md → pipeline-history`. What remains:
 
 | Phase | Deliverable | Serves | Model / effort |
 |-------|-------------|--------|----------------|

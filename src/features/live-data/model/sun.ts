@@ -1,4 +1,4 @@
-/* Sunrise / sunset / golden hour — pure math, no API, no dep (docs/archive/FEATURES.md #8).
+/* Sunrise / sunset / golden hour — pure math, no API, no dep (docs/archive/INDEX.md → FEATURES #8).
    Algorithm: the standard NOAA/Meeus-style approximation — solar declination +
    equation of time (both closed-form, from Wikipedia's "Position of the Sun" and
    "Equation of time" articles, sourced from Jean Meeus's Astronomical Algorithms)

@@ -254,8 +254,9 @@
   --text-panel-kicker:.625rem;
   --tracking-panel-kicker:.22em;
   /* R5 (2026-08-11) — the sentence-case functional-label step, 11px. Added DELIBERATELY rather
-     than exempting the rail from type-scale.test.ts, which is what FALLBACKS.md §3 asks for
-     when a design needs a size the scale does not carry.
+     than exempting the rail from type-scale.test.ts, which is what the R5 bundle's retired
+     FALLBACKS §3 asked for when a design needs a size the scale does not carry (that file's git
+     path is in design_handoff_guide_ui/README.md).
      Why a new step and not --text-micro (.75rem/12px): micro is the UPPERCASE TRACKED label
      role, and uppercase reads smaller than sentence case at equal size — that is exactly why R3
      raised micro to 12px. A sentence-case label carries more x-height per pixel, so it holds

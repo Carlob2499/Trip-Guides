@@ -1,4 +1,4 @@
-/* Weather-aware packing strip (docs/archive/PLAN_TRAVELER_FEATURES.md F4) — pure derivation from
+/* Weather-aware packing strip (docs/archive/INDEX.md → PLAN_TRAVELER_FEATURES F4) — pure derivation from
    data the repo already fetches for the weather strip: no new API, no UV index (none
    exists anywhere in this codebase or in Open-Meteo's `daily` response we already use —
    see model/weather.ts's `Daily`), so "sun protection" is approximated from daylight

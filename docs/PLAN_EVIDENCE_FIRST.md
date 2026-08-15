@@ -157,7 +157,7 @@ prose surfaces*, not dead files.
 
 ### UNCLEAR — resolved (inventories complete)
 - Scripts: none unreferenced; no dead npm aliases. Docs: `docs/archive/` already holds the
-  historical plans (incl. `PLAN_FACTORY_V2.md`, a prior pipeline plan — superseded by THIS
+  historical plans (incl. PLAN_FACTORY_V2, a prior pipeline plan — superseded by THIS
   document; F2 adds a supersession note there). `docs/design-handoff/**` zero-inbound files
   are shipped-design records under the design-fidelity doctrine — out of scope, untouched.
 
@@ -496,7 +496,7 @@ packet-ID stability, so the letters now skip G — that gap is deliberate, not a
 **F2 — Trim pipeline.md to policy** · S · scribe
 - Move W-series/shipped-✅ history to a new pipeline-history file under `docs/archive/` (F2 creates it). The PUBLISH section is **left describing auto-graduation** (G1 struck) — do not rewrite it. ACCEPTANCE: pipeline.md ≤140 lines, PUBLISH still documents auto-graduation accurately, docs-integrity test green.
 - **STATUS 2026-08-13 — DONE.** `docs/reference/pipeline.md` 255 → **139 lines**;
-  `docs/archive/pipeline-history.md` created (83 lines) holding the W-series, the P0–P4 shipped
+  pipeline-history created (83 lines; indexed in `docs/archive/INDEX.md`) holding the W-series, the P0–P4 shipped
   table, the retired implementation narration (auto-chaining + circuit breaker, network budgeting,
   publish mechanics) and the 2026-08-02 critic merge. PUBLISH keeps its auto-graduation description
   AND its honest-tradeoff paragraph (rubric #6/#8/#9/#12 are human-judged and do not block) — both

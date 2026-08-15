@@ -244,7 +244,7 @@ const MAST_DEK_OBSCURING_WHY =
   "composited worst case the same pixel-sampled way: 5.91:1 (denmark, daytime sky, both schemes) " +
   "against the 4.5:1 required at 17.92px/400; korea measures >=14:1.";
 const DAY_SCRUB_STICKY_RANGE_WHY =
-  "docs/archive/PLAN_ATLAS_MIGRATION.md Stage A.1 fixed .day-scrub's position:sticky (planner.css), dead " +
+  "docs/archive/INDEX.md → PLAN_ATLAS_MIGRATION Stage A.1 fixed .day-scrub's position:sticky (planner.css), dead " +
   "before because .pnl-body-in{overflow:hidden} (unconditional) neutralised it — the same " +
   "ancestor DAY_SWIPE_CLIPPED_WHY already documents as changing axe's clipping geometry when " +
   "its overflow value changes. Fixed, .pnl-body-in only stays overflow:hidden while a Panel is " +

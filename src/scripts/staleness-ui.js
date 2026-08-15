@@ -60,7 +60,7 @@ import { staleness, stalenessReading, SHELF_LIFE_DAYS } from "../lib/staleness";
     // D10 (Stage A.7): the flag-chip visual language — control-size pill, 1px current-ink
     // border, tappable — same class .prov-dot's popover-openers share. Behavior unchanged: a
     // real <a> to the source when one exists (one tap to what the reader actually wants),
-    // never rewired into a popover-only control — see docs/archive/PLAN_ATLAS_MIGRATION.md Stage A.7.
+    // never rewired into a popover-only control — see docs/archive/INDEX.md → PLAN_ATLAS_MIGRATION Stage A.7.
     var pill = document.createElement(src ? "a" : "span");
     pill.className = "stale-pill flag-chip flag-chip--stale";
     // WORDING comes from staleness.ts, shared with the popover's Status row. This pill used to

@@ -1,4 +1,4 @@
-/* Per-guide atlas record (docs/archive/PLAN_ATLAS_MIGRATION.md Stage B.4) — ONE pure, build-time
+/* Per-guide atlas record (docs/archive/INDEX.md → PLAN_ATLAS_MIGRATION Stage B.4) — ONE pure, build-time
    derivation. "Content is king" (CLAUDE.md binding principle 1): every field comes from the
    guide's own already-published content — its sections, its facts.json, its `country` — never
    a parallel hand-filled registry. This record is meant to be the ONLY thing the Atlas hub

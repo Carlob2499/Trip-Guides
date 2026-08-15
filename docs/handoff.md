@@ -23,8 +23,8 @@
   `docs/evidence/competitive-landscape.md` (market parity reference) ·
   `docs/design-handoff/` + its `enforcement/` (the design system's own authority — read BOTH
   before any hub/guide visual work). **There is no live design work order:**
-  `docs/archive/PLAN_DESIGN_RECONCILIATION.md` is fully ticked and archived alongside
-  `PLAN_ATLAS_MIGRATION.md` — history only, referenced when asked, never re-read by default.
+  PLAN_DESIGN_RECONCILIATION and PLAN_ATLAS_MIGRATION are both fully ticked, and their bodies now
+  live only in git — `docs/archive/INDEX.md` says how each ended and prints the `git show` line.
 
 ## Open items
 
@@ -40,7 +40,8 @@
   session.** `pipeline-changes-plan-752kra`, `a11y-landmark-fix-v2` and `recert/japan` are merged
   into main; `claude/design-fixes-continuation-wi920k` is **superseded, never to be merged** — it
   carries the same a11y commit in an older/smaller form plus doc state main moved past, so merging
-  it would un-archive `PLAN_DESIGN_RECONCILIATION.md` and revert `handoff.md`. Every delete route
+  it would restore PLAN_DESIGN_RECONCILIATION (now indexed, not stored) and revert `handoff.md`.
+  Every delete route
   is closed here: `git push --delete` 403s at the egress proxy, the REST API 403s ("GitHub access
   is not enabled for this session"), the GitHub MCP surface has `create_branch` but no delete, and
   `merge_pull_request` takes no delete-branch flag. One pass at

@@ -6,7 +6,7 @@
    verified numbers get no button at all — never guessed) as tel: links in
    huge type. Works offline (numbers are baked into the page).
 
-   Also surfaces the guide's official travel-advisory (docs/archive/FEATURES.md #9), when
+   Also surfaces the guide's official travel-advisory (docs/archive/INDEX.md → FEATURES #9), when
    elevated (level >= 2) — the button itself renders even with no emergency numbers
    researched yet, as long as an elevated advisory exists to show.
 
@@ -20,7 +20,7 @@ import { attachSheetDrag } from "../../../scripts/sheet-drag.js";
   var cfgEl = document.getElementById("tgConfig");
   var cfg = cfgEl ? JSON.parse(cfgEl.textContent || "{}") : {};
   var em = cfg.emergency;
-  // Advisory pill (docs/archive/FEATURES.md #9) — honest-blank: a normal-precautions guide
+  // Advisory pill (docs/archive/INDEX.md → FEATURES #9) — honest-blank: a normal-precautions guide
   // (level 1, or the field absent/never researched) shows nothing here at all.
   var adv = cfg.advisory && cfg.advisory.level >= 2 ? cfg.advisory : null;
   if ((!em || !em.lines || !em.lines.length) && !adv) return;

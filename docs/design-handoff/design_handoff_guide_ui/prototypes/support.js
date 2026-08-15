@@ -1,6 +1,7 @@
 /* eslint-disable -- VENDORED DESIGN ARTEFACT, NOT PRODUCTION CODE.
    This file is the runtime the R5 handoff's prototypes are rendered in, exported verbatim by
-   the design tool. 00-START-HERE.md §4 states the prototypes "are not production code"; the
+   the design tool. The retired 00-START-HERE §4 stated the prototypes "are not production code"
+   (this folder's README.md keeps that rule and the deleted file's git path); the
    repo's own precedent is eslint.config.mjs already ignoring docs/design-handoff/prototype/**
    for the R4 prototype. Linting it produces 88 problems nobody can act on without editing an
    artefact we do not own and must not diverge from — and a lint run whose output is all noise

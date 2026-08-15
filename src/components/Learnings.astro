@@ -13,7 +13,7 @@ const { storeKey, learnings = null, slug, title = "" } = Astro.props;
 // Which parts of the guide didn't survive contact, by declared group. Empty unless the
 // post-mortem tagged its skipped stops — no data, no heading (the honest-blank rule).
 const skipTally = tallySkipsByGroup(learnings?.days);
-// The recap card (docs/archive/FEATURES.md #10) exists ONLY for guides with a post-trip
+// The recap card (docs/archive/INDEX.md → FEATURES #10) exists ONLY for guides with a post-trip
 // `learnings.days` entry — src/pages/recap/[slug].png.ts's own getStaticPaths
 // filters the same way, so this link never 404s.
 const hasRecap = (learnings?.days ?? []).length > 0;

@@ -1,6 +1,7 @@
-// Real, counted-not-invented numbers for the Overture hero's stats beat (docs/
-// PLAN_VISUAL_OVERHAUL.md, session V2). CLAUDE.md's honesty rule applies to marketing copy as
-// much as guide content: a hero that claims "121 verified facts" had better mean exactly that,
+// Real, counted-not-invented numbers for the Overture hero's stats beat
+// (docs/archive/INDEX.md → PLAN_VISUAL_OVERHAUL, session V2). CLAUDE.md's honesty rule applies
+// to marketing copy as much as guide content: a hero that claims "121 verified facts" had
+// better mean exactly that,
 // recomputed from the guides themselves on every build — never a hand-typed number that goes
 // stale the next time a guide is added or edited.
 //

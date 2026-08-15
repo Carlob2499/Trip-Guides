@@ -40,7 +40,7 @@
 > - **Move A · Living covers** → `src/scripts/living-cover.js`, `cover.video` in the schema
 >   (`src/content.config.ts`). Research never sets `cover.video`; the creator frame-verifies
 >   and signs each clip.
-> - **Move B · Navigation splits by device** → delivered by `docs/archive/PLAN_MOBILE_NAV.md`
+> - **Move B · Navigation splits by device** → delivered by `docs/archive/INDEX.md → PLAN_MOBILE_NAV`
 >   (`src/features/mobile-nav/`), plus the masthead pill row cut 6 → 3.
 > - **Move C · One cartographic world** → `src/components/PaintedAtlas.astro`,
 >   `src/styles/painted-atlas.css` (the honest default cover when no photo is earned).

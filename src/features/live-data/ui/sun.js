@@ -1,4 +1,4 @@
-/* Sun & daylight strip — pure math, no fetch (docs/archive/FEATURES.md #8). All decisions
+/* Sun & daylight strip — pure math, no fetch (docs/archive/INDEX.md → FEATURES #8). All decisions
    live in ../model/sun.ts. Mounts into the `.day-sun` placeholder each day card
    already renders (same pattern as `.day-kitcount`), keyed off the guide's map-section
    coordinates (same `mapCenter` weather.js already reads — no new schema). */

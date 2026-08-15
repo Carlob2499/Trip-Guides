@@ -119,7 +119,7 @@
 .sos-num{flex:none;min-width:4.2rem;font-family:var(--font-display);font-weight:640;font-size:1.7rem;letter-spacing:-.012em;color:var(--crit)}
 .sos-label{font-size:var(--text-small);line-height:1.4;color:var(--ink)}
 .sos-note{margin:.7rem 0 0;font-size:var(--text-caption);color:var(--muted)}
-/* Official travel-advisory notice (docs/archive/FEATURES.md #9) — only present when elevated;
+/* Official travel-advisory notice (docs/archive/INDEX.md → FEATURES #9) — only present when elevated;
    sits above the emergency numbers since "know the current advisory" outranks
    "have the number ready" the moment a traveler opens this sheet. */
 .sos-advisory{display:flex;flex-direction:column;gap:.15rem;padding:.7rem .8rem;margin-bottom:.4rem;border:1px solid var(--warn);border-radius:0;text-decoration:none;background:color-mix(in srgb,var(--warn) 8%,transparent)}

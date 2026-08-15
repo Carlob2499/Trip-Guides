@@ -1,5 +1,5 @@
 /* The Atlas feature's public surface (sealed-silo contract, ARCHITECTURE.md) — the only door
-   another module may import through. Stage B (docs/archive/PLAN_ATLAS_MIGRATION.md) ships model/ only;
+   another module may import through. Stage B (docs/archive/INDEX.md → PLAN_ATLAS_MIGRATION) ships model/ only;
    Stage C adds ui/ (the globe element, table view, overlays) behind this same door. */
 export {
   deriveGuideRecord,
