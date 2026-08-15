@@ -8,21 +8,21 @@
     "tier": "primary"
   },
   "currency-how-to-100-dkk": {
-    "claim": "Currency & how to pay — 100 DKK",
+    "claim": "Currency & how to pay → 100 DKK ≈ $15.25 USD",
     "value": "100 DKK",
     "source_url": "https://wise.com/us/currency-converter/dkk-to-usd-rate",
     "verified_on": "2026-07-23",
     "shelf_life": "fx"
   },
   "currency-how-to-100-sek": {
-    "claim": "Currency & how to pay — 100 SEK",
+    "claim": "Currency & how to pay → 100 SEK (Sweden day trip) ≈ $10.30 USD",
     "value": "100 SEK",
     "source_url": "https://wise.com/us/currency-converter/dkk-to-usd-rate",
     "verified_on": "2026-07-23",
     "shelf_life": "fx"
   },
   "currency-how-to-100-nok": {
-    "claim": "Currency & how to pay — 100 NOK",
+    "claim": "Currency & how to pay → 100 NOK (Norway day trip) ≈ $10.40 USD",
     "value": "100 NOK",
     "source_url": "https://wise.com/us/currency-converter/dkk-to-usd-rate",
     "verified_on": "2026-07-23",
@@ -45,7 +45,7 @@
     "tier": "primary"
   },
   "transit-passes-which-100-dkk": {
-    "claim": "Transit passes — which one to buy and when — 100 DKK",
+    "claim": "Transit passes → Copenhagen Card 24h — 100 DKK",
     "value": "100 DKK",
     "source_url": "https://www.publictransport.dk/tickets/citypass",
     "verified_on": "2026-07-23",
@@ -53,7 +53,7 @@
     "tier": "primary"
   },
   "transit-passes-which-180-dkk": {
-    "claim": "Transit passes — which one to buy and when — 180 DKK",
+    "claim": "Transit passes → Copenhagen Card 48h, high end of disputed range — 180 DKK",
     "value": "180 DKK",
     "source_url": "https://www.publictransport.dk/tickets/citypass",
     "verified_on": "2026-07-23",
@@ -61,7 +61,7 @@
     "tier": "primary"
   },
   "transit-passes-which-280-dkk": {
-    "claim": "Transit passes — which one to buy and when — 280 DKK",
+    "claim": "Transit passes → Copenhagen Card 96h — 280 DKK",
     "value": "280 DKK",
     "source_url": "https://www.publictransport.dk/tickets/citypass",
     "verified_on": "2026-07-23",
@@ -69,7 +69,7 @@
     "tier": "primary"
   },
   "transit-passes-which-340-dkk": {
-    "claim": "Transit passes — which one to buy and when — 340 DKK",
+    "claim": "Transit passes → Copenhagen Card 120h — 340 DKK",
     "value": "340 DKK",
     "source_url": "https://www.publictransport.dk/tickets/citypass",
     "verified_on": "2026-07-23",
@@ -77,7 +77,7 @@
     "tier": "primary"
   },
   "transit-passes-which-589-dkk": {
-    "claim": "Transit passes — which one to buy and when — 589 DKK",
+    "claim": "Transit passes → City Pass 24h, original research figure — 589 DKK",
     "value": "589 DKK",
     "source_url": "https://www.publictransport.dk/tickets/citypass",
     "verified_on": "2026-07-23",
@@ -85,7 +85,7 @@
     "tier": "primary"
   },
   "transit-passes-which-859-dkk": {
-    "claim": "Transit passes — which one to buy and when — 859 DKK",
+    "claim": "Transit passes → City Pass 48h, original research figure — 859 DKK",
     "value": "859 DKK",
     "source_url": "https://www.publictransport.dk/tickets/citypass",
     "verified_on": "2026-07-23",
@@ -93,7 +93,7 @@
     "tier": "primary"
   },
   "transit-passes-which-1-039-dkk": {
-    "claim": "Transit passes — which one to buy and when — 1,039 DKK",
+    "claim": "Transit passes → City Pass 72h, original research figure — 1,039 DKK",
     "value": "1,039 DKK",
     "source_url": "https://www.publictransport.dk/tickets/citypass",
     "verified_on": "2026-07-23",
@@ -101,7 +101,7 @@
     "tier": "primary"
   },
   "transit-passes-which-26-dkk": {
-    "claim": "Transit passes — which one to buy and when — 26 DKK",
+    "claim": "Transit passes → single 2-zone city ticket — 26 DKK",
     "value": "26 DKK",
     "source_url": "https://www.publictransport.dk/tickets/citypass",
     "verified_on": "2026-07-23",
@@ -110,7 +110,7 @@
     "tier": "primary"
   },
   "transit-passes-which-40-dkk": {
-    "claim": "Transit passes — which one to buy and when — 40 DKK",
+    "claim": "Transit passes → single 3-zone airport ticket, high end — 40 DKK",
     "value": "40 DKK",
     "source_url": "https://www.publictransport.dk/tickets/citypass",
     "verified_on": "2026-07-23",
@@ -118,7 +118,7 @@
     "tier": "primary"
   },
   "what-to-eat-160-dkk": {
-    "claim": "What to eat in Copenhagen — a first-timer's guide — 160 DKK",
+    "claim": "What to eat in Copenhagen → smørrebrød at a proper restaurant, high end — 160 DKK",
     "value": "160 DKK",
     "source_url": "https://www.visitcopenhagen.com",
     "verified_on": "2026-06-08",
@@ -126,7 +126,7 @@
     "tier": "primary"
   },
   "what-to-eat-45-dkk": {
-    "claim": "What to eat in Copenhagen — a first-timer's guide — 45 DKK",
+    "claim": "What to eat in Copenhagen → wienerbrød at a decent bakery, high end — 45 DKK",
     "value": "45 DKK",
     "source_url": "https://www.visitcopenhagen.com",
     "verified_on": "2026-06-08",
@@ -134,7 +134,7 @@
     "tier": "primary"
   },
   "what-to-eat-40-dkk": {
-    "claim": "What to eat in Copenhagen — a first-timer's guide — 40 DKK",
+    "claim": "What to eat in Copenhagen → kanelsnegl/kardemommesnurrer, high end — 40 DKK",
     "value": "40 DKK",
     "source_url": "https://www.visitcopenhagen.com",
     "verified_on": "2026-06-08",
@@ -142,7 +142,7 @@
     "tier": "primary"
   },
   "what-to-eat-50-dkk": {
-    "claim": "What to eat in Copenhagen — a first-timer's guide — 50 DKK",
+    "claim": "What to eat in Copenhagen → pølse from a pølsevogn cart, high end — 50 DKK",
     "value": "50 DKK",
     "source_url": "https://www.visitcopenhagen.com",
     "verified_on": "2026-06-08",
@@ -150,7 +150,7 @@
     "tier": "primary"
   },
   "what-to-eat-100-dkk": {
-    "claim": "What to eat in Copenhagen — a first-timer's guide — 100 DKK",
+    "claim": "What to eat in Copenhagen → Folkehuset Absalon communal dinner, high end — 100 DKK",
     "value": "100 DKK",
     "source_url": "https://www.visitcopenhagen.com",
     "verified_on": "2026-06-08",
@@ -158,7 +158,7 @@
     "tier": "primary"
   },
   "what-to-eat-5-000-dkk": {
-    "claim": "What to eat in Copenhagen — a first-timer's guide — 5,000 DKK",
+    "claim": "What to eat in Copenhagen → Alchemist tasting menu, high end of 3,000–5,000 — 5,000 DKK",
     "value": "5,000 DKK",
     "source_url": "https://www.visitcopenhagen.com",
     "verified_on": "2026-06-08",

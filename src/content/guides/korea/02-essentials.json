@@ -84,7 +84,7 @@
         "low": 6,
         "high": 26,
         "category": "Transport",
-        "note": "Limousine Bus 6002: {{fact:budget-daily-costs-17-000}} each way per person (confirmed current) → {{fact:budget-daily-costs-34-000}} round trip ≈ $25. Cheaper alternative: AREX All-Stop {{fact:budget-daily-costs-4-050}} each way ({{fact:budget-daily-costs-6}} round trip) — faster clock, but you carry bags through the subway.",
+        "note": "Limousine Bus 6002: {{fact:getting-to-from-17-000}} each way per person (confirmed current) → {{fact:budget-daily-costs-34-000}} round trip ≈ $25. Cheaper alternative: AREX All-Stop {{fact:budget-daily-costs-4-050}} each way ({{fact:budget-daily-costs-6}} round trip) — faster clock, but you carry bags through the subway.",
         "verified_on": "2026-07-23",
         "shelf_life": "transit",
         "source_url": "https://mileasia.com/korea/incheon-airport-limousine-bus/"
