@@ -299,6 +299,17 @@ export default {
     }
 
     if (request.method !== "POST") return json({ error: "POST only" }, 405, cors);
+
+    // Enforce ALLOWED_ORIGIN server-side, not just in the CORS response header. A live smoke
+    // test (2026-08-15) filed a real intake issue from `Origin: https://evil.example`: CORS is
+    // enforced by the BROWSER on the response, so it never stopped a direct POST from curl or a
+    // script. The header alone is not an access control. Browsers always send Origin on a
+    // cross-origin POST, so the site's own fetches are unaffected; a missing Origin means a
+    // non-browser caller and is refused for the same reason.
+    if (env.ALLOWED_ORIGIN && request.headers.get("Origin") !== env.ALLOWED_ORIGIN) {
+      return json({ error: "origin not allowed" }, 403, cors);
+    }
+
     warnUnprotected(env);
 
     let raw;

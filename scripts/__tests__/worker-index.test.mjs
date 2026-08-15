@@ -30,10 +30,12 @@ function fakeKV(initial = {}) {
   };
 }
 
+const ALLOWED_ORIGIN = "https://example.test";
+
 const baseEnv = (over = {}) => ({
   REPO: "owner/repo",
   GH_TOKEN: "gh-token",
-  ALLOWED_ORIGIN: "https://example.test",
+  ALLOWED_ORIGIN,
   ...over,
 });
 
@@ -51,10 +53,17 @@ const INTAKE = {
   notes: "",
 };
 
+/** A POST as the SITE makes it — from the allowed origin, which the Worker now checks
+ *  server-side. Pass `Origin` in `headers` to model a caller that isn't the site. */
 const post = (path, body, headers = {}) =>
   new Request(`https://worker.test${path}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", "CF-Connecting-IP": IP, ...headers },
+    headers: {
+      "Content-Type": "application/json",
+      "CF-Connecting-IP": IP,
+      Origin: ALLOWED_ORIGIN,
+      ...headers,
+    },
     body: JSON.stringify(body),
   });
 
@@ -80,6 +89,47 @@ beforeEach(() => {
 afterEach(() => {
   vi.unstubAllGlobals();
   vi.restoreAllMocks();
+});
+
+// A live smoke test on 2026-08-15 POSTed to the deployed Worker with `Origin: https://evil.
+// example` and it filed a real intake issue: CORS is enforced by the BROWSER on the RESPONSE,
+// so the Access-Control-Allow-Origin header never stopped a direct POST. The origin check has
+// to happen server-side, before any handler runs.
+describe("ALLOWED_ORIGIN is enforced on the request, not just echoed in CORS headers", () => {
+  it("refuses a POST from a foreign origin without calling GitHub", async () => {
+    const calls = stubGithub();
+    const res = await worker.fetch(post("/intake", INTAKE, { Origin: "https://evil.example" }), baseEnv());
+    expect(res.status).toBe(403);
+    expect(calls).toHaveLength(0);
+  });
+
+  it("refuses a POST with no Origin header at all (a non-browser caller)", async () => {
+    const calls = stubGithub();
+    const req = new Request("https://worker.test/intake", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "CF-Connecting-IP": IP },
+      body: JSON.stringify(INTAKE),
+    });
+    const res = await worker.fetch(req, baseEnv());
+    expect(res.status).toBe(403);
+    expect(calls).toHaveLength(0);
+  });
+
+  it("guards the owner routes too, before the key is even compared", async () => {
+    const calls = stubGithub();
+    const res = await worker.fetch(
+      post("/change", { slug: "japan", change: "x" }, { Origin: "https://evil.example", "X-Owner-Key": "k" }),
+      baseEnv({ OWNER_KEY: "k" }),
+    );
+    expect(res.status).toBe(403);
+    expect(calls).toHaveLength(0);
+  });
+
+  it("still allows the site's own origin through", async () => {
+    stubGithub();
+    const res = await worker.fetch(post("/intake", INTAKE), baseEnv());
+    expect(res.status).toBe(200);
+  });
 });
 
 describe("/intake with the rate-limit KV unbound — fails SAFE, not open", () => {
