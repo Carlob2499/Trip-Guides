@@ -16,9 +16,9 @@ AUTO_CAP = "3"
 DISPATCH_REF = "main"
 CHANGE_WORKFLOW = "change.yml"
 
-# Optional per-IP weekly rate limiting. The Worker runs fine without it (the counter is simply
-# skipped); to enable, create the namespace once and uncomment with its id:
-#   npx wrangler kv namespace create RATE
-# [[kv_namespaces]]
-# binding = "RATE"
-# id = "REPLACE_WITH_YOUR_KV_ID"
+# Per-IP weekly rate limiting. Created 2026-08-15 with `npx wrangler kv namespace create RATE`.
+# Without this binding the Worker still runs, but an intake is UNMEASURED and so fails safe:
+# the issue is filed without the auto-run label and research never starts on its own.
+[[kv_namespaces]]
+binding = "RATE"
+id = "0377d2a631634212a7afd188c1e6c0de"
