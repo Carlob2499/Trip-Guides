@@ -83,6 +83,11 @@ describe("formatElapsed", () => {
     expect(formatElapsed(3 * 60_000 + 5_000)).toBe("3m 05s");
   });
 
+  it("rolls into days past 24 hours, so a stalled run does not read as '412h 06m'", () => {
+    expect(formatElapsed(24 * 3600_000)).toBe("1d 0h");
+    expect(formatElapsed(412 * 3600_000 + 6 * 60_000)).toBe("17d 4h");
+  });
+
   it("renders hours + padded minutes at/over an hour", () => {
     expect(formatElapsed(60 * 60_000 + 4 * 60_000)).toBe("1h 04m");
   });
