@@ -155,12 +155,28 @@ const PRIORITY_FIELDS = FIELDS.filter((f: { special?: string }) => f.special ===
               </span>
             </summary>
             <div class="itk-sec-body" data-body>
-              {sec.fields.filter((f) => !f.derived).map((f) => (
+              {sec.fields.filter((f) => !f.derived).map((f) => {
+                /* One question over TWO controls (only `dates`) means the question labels the
+                   GROUP, not the first input. As a `<label for={f.dom[0]}>` it gave #ngStart a
+                   second label beside its own "First day" sub-label — axe
+                   form-field-multiple-labels, and a screen reader reading "When? First day".
+                   Group-labelling instead, server-rendered so the no-JS form keeps it. A
+                   `<fieldset>` would be the other spelling, but `<legend>` has to be the
+                   fieldset's first child: the question would move inside `.ng-field-split`,
+                   away from its example line, and the row's flex layout would inherit the UA
+                   fieldset box. Single-control rows keep the plain `<label for>` — the
+                   stronger association, and correct there. */
+                const split = f.dom.length > 1;
+                return (
                 <div class="itk-row" data-field={f.id}>
                   <div class="itk-ctl">
-                    <label class="itk-q" for={f.dom[0]}>{f.question}</label>
+                    {split
+                      ? <p class="itk-q" id={`${f.dom[0]}Q`}>{f.question}</p>
+                      : <label class="itk-q" for={f.dom[0]}>{f.question}</label>}
                     {f.example && <p class="itk-eg" id={`${f.dom[0]}Eg`}>{f.example}</p>}
-                    <div class={`ng-field${f.dom.length > 1 ? " ng-field-split" : ""}`}>
+                    <div class={`ng-field${split ? " ng-field-split" : ""}`}
+                      role={split ? "group" : undefined}
+                      aria-labelledby={split ? `${f.dom[0]}Q` : undefined}>
                       {f.dom.map((id, di) => {
                         const c = CONTROLS[id];
                         return (
@@ -185,7 +201,8 @@ const PRIORITY_FIELDS = FIELDS.filter((f: { special?: string }) => f.special ===
                   </div>
                   <p class="itk-note" id={`${f.dom[0]}Note`}>{f.changes}</p>
                 </div>
-              ))}
+                );
+              })}
               {sec.matchups && (
                 <div class="itk-row" data-fallback="priorities">
                   <div class="itk-ctl">
