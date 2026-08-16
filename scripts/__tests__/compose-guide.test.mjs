@@ -54,7 +54,7 @@ describe("composeSections — determinism & identity", () => {
 
   it("CATALOG: every real guide composes without error and without losing a single unit", async () => {
     const guides = await readGuides();
-    expect(guides.length).toBeGreaterThanOrEqual(3);
+    expect(guides.length).toBeGreaterThanOrEqual(2); // korea, denmark today — never fewer
     for (const g of guides) {
       const r = composeSections(g.guide.sections, { tabBudget: g.guide.tabBudget ?? 10 });
       expect(r.error, `${g.slug}: ${r.error}`).toBeUndefined();

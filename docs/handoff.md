@@ -66,9 +66,9 @@ aren't a single place. Refuse-rather-than-guess working as designed.
 
 **Bare-echo / undated-budget items were already clean.** Korea/denmark's facts hygiene
 (bare-echo, malformed, misattribution) and untokenized-money checks both ran clean — an earlier
-2026-08-15 session had already closed them. Only japan still carries findings (3 malformed + 1
-misattribution + 3 bare-echo stems), and japan is frozen regression evidence, never hand-patched
-(see Decisions) — its regeneration through the rebuilt pipeline is the only path left to it.
+2026-08-15 session had already closed them. Japan's findings (3 malformed + 1 misattribution + 3
+bare-echo stems) left with the guide — it was deleted later the same day for a fresh redo (see
+Decisions). The defects survive as frozen fixture evidence, which is where they always belonged.
 
 **E1 tiering backfill done; `backfill-tier.mjs` deleted.** Re-run on korea/denmark: 0 rows left
 to assign — everything's already `tier: primary` or correctly left blank as a research call the
@@ -81,9 +81,12 @@ errors, all in `design_handoff_pipeline_and_intake/support.js` — the design bu
 deleted by the plan's own Commit E, not real source) · typecheck 0 · 2229 tests / 149 files ·
 dist grep clean · verified in `astro preview`.
 
-**Still open, not part of the UI plan below:** regenerate japan through the rebuilt pipeline (a
-full research-pass run). The RTDB rules paste (creator, Firebase console) is done — closed
-2026-08-15, nothing left waiting on the creator.
+**Nothing open outside the UI plan below.** The japan regeneration that stood here is CLOSED, not
+done: the creator deleted the guide instead (`src/content/guides/japan/`, `guides-intake/japan/`,
+its palette — see Decisions in CONTEXT.md). It will be redone later as a fresh guide with much
+more research, not an in-place regen of the old intake; not scheduled or scoped yet. The fixture
+and `src/data/destinations/japan.json` were kept. The RTDB rules paste (creator, Firebase console)
+is done — closed 2026-08-15, nothing left waiting on the creator.
 
 **Recommended next step — execute `PLAN_PIPELINE_SURFACES.md`.** Not started (0/5 commits). Full
 execution contract at repo root: five shippable commits (progress dashboard → intake checklist →

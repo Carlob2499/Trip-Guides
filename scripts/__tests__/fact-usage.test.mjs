@@ -10,7 +10,6 @@ import { mkdtemp, mkdir, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { buildFactUsage } from "../audit/fact-usage.mjs";
-import { GUIDES_DIR } from "../audit/lib.mjs";
 
 describe("buildFactUsage — synthetic guide dir", () => {
   let dir;
@@ -142,20 +141,11 @@ describe("buildFactUsage — synthetic guide dir", () => {
   });
 });
 
-describe("buildFactUsage — real Japan guide (ACCEPTANCE: ¥11,410 spans >= 2 groups)", () => {
-  it("the ¥11,410 figure is referenced from at least two different group files", async () => {
-    // Japan is never hand-repaired (CONTEXT.md) — this exercises the real, still-defective
-    // guide directly rather than the frozen fixture, which only carries a subset of Japan's
-    // group files (tests/fixtures/japan-regression/MANIFEST.md) and doesn't include
-    // 07-money-and-budget.json, where one of the two ¥11,410 rows is actually referenced.
-    const { usage } = await buildFactUsage("japan", GUIDES_DIR);
-    const filesReferencingValue = new Set();
-    for (const locations of Object.values(usage)) {
-      for (const loc of locations) filesReferencingValue.add(loc.file);
-    }
-    // Both fact rows sharing the ¥11,410 value (day-by-day-11-410, budget-daily-costs-11-410 —
-    // the frozen fixture's case 9) must each resolve to a usage location, in different files.
-    expect(usage["day-by-day-11-410"]?.[0]?.file).toBe("06-days.json");
-    expect(usage["budget-daily-costs-11-410"]?.[0]?.file).toBe("07-money-and-budget.json");
-  });
-});
+/* ⌁ A "real Japan guide" ACCEPTANCE block stood here: two fact rows sharing the ¥11,410 value
+   (day-by-day-11-410, budget-daily-costs-11-410) each resolving to a different group file. It
+   read the LIVE japan guide on purpose, because the frozen fixture carries only a subset of
+   japan's group files and not 07-money-and-budget.json. That guide was deleted for a fresh
+   redo, so the block has no subject; the defect itself stays frozen as case 9 of
+   tests/fixtures/japan-regression/ (see scripts/__tests__/japan-regression.test.mjs). The
+   BEHAVIOUR it exercised — one fact referenced from two files yielding both locations — is
+   covered synthetically above and loses nothing here. */

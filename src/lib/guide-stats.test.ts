@@ -64,7 +64,7 @@ describe("computeGuideStats (pure)", () => {
       }
     }
     const stats = computeGuideStats(guidesData);
-    expect(stats.guideCount).toBeGreaterThanOrEqual(3); // korea, denmark, us today — never fewer
+    expect(stats.guideCount).toBeGreaterThanOrEqual(2); // korea, denmark today — never fewer
     expect(stats.verifiedFactCount).toBeGreaterThan(0);
     expect(stats.sourceCount).toBeGreaterThan(0);
   });

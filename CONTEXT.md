@@ -451,27 +451,42 @@ human label") is struck. The evidence gate is the bar; a human label is not. If 
 finds the plan's §10 prose calling for G1, **this entry supersedes it** — the plan doc is
 annotated in place, but prose is easy to miss.
 
-**Japan's defects are frozen in the FIXTURE; the live guide is hidden and will be regenerated**
-(creator ruling, 2026-08-13 — REFINED later the same day, supersedes the first version of this
-entry). The original ruling said Japan "is never repaired, permanently." That was recorded before
-two facts surfaced: the trip is **real and upcoming** (Oct 15–Nov 10, 2026), and the creator
-intends to **re-run it through the rebuilt pipeline** with the fuller research and confirmed
-bookings they already hold. So:
+**Japan's defects are frozen in the FIXTURE; the live guide was DELETED for a fresh redo**
+(creator ruling, 2026-08-13 — REFINED later the same day, then settled 2026-08-15 by the deletion
+described below; each version supersedes the one before it). The original ruling said Japan "is
+never repaired, permanently." That was recorded before two facts surfaced: the trip is **real and
+upcoming** (Oct 15–Nov 10, 2026), and the creator intends to redo it with the fuller research and
+confirmed bookings they already hold. So:
 
 - **The fixture is the permanent evidence.** `tests/fixtures/japan-regression/` holds
   byte-identical copies of all 12 defect classes plus a MANIFEST citing file+line. That is what
-  the regression suite tests, and it is immutable regardless of what the live guide does.
-- **The live guide is `draft: true`** — off the public grid, still in the repo. It carried known
-  defects (`$19,` values, ¥11,410 attributed to both a railway and an airline, an unconfirmed
-  travel advisory) and a better version is coming; showing the defective one publicly meanwhile
-  fails the Honest pillar.
-- **The live guide MAY be regenerated** through the fixed pipeline. That is the program's point.
-  What stays forbidden is **hand-patching Japan's defects to make a gate go green** — that
-  destroys the specimen without fixing the process that produced it.
+  the regression suite tests, and it is immutable regardless of what any live guide does. It was
+  built deliberately independent of the live guide, which is why the deletion below cost it
+  nothing: `japan-regression*.test.mjs` pass unmodified with no japan guide in the repo at all.
+- **The live guide is GONE, not hidden** (2026-08-15). It had been `draft: true` — off the public
+  grid, still in the repo — because it carried known defects (`$19,` values, ¥11,410 attributed to
+  both a railway and an airline, an unconfirmed travel advisory). The earlier plan was to
+  regenerate it in place through the rebuilt pipeline. The creator instead deleted
+  `src/content/guides/japan/`, `guides-intake/japan/` and `src/data/palettes/japan.json`: the redo
+  will be a **fresh guide built from much more information**, not a re-run of the old intake, and
+  keeping the old intake and ledger would only anchor the new brief to the weaker one. Not
+  scheduled or scoped as of this ruling.
+- **Kept on purpose, both verified independent of the deleted guide**: the fixture above, and
+  `src/data/destinations/japan.json` (country-level reusable research — t0 domains, advisory URL —
+  which the redo needs again). Deleting a guide never means deleting the country.
+- **Hand-patching stays forbidden**: repairing defects to make a gate go green destroys the
+  specimen without fixing the process that produced it. Moot for Japan now — there is no live
+  guide to patch — and the rule survives for whichever guide is next.
 
-Consequence: no japan gate exemption is needed (a draft guide is out of the published corpus),
-and no test asserts the fixture against the live guide any more — the fixture protects its own
-line citations instead. Japan's regeneration is the program's natural end-to-end acceptance test.
+Consequence: no japan gate exemption is needed, and no test asserts the fixture against a live
+guide — the fixture protects its own line citations instead. The tests that DID read the live
+japan guide were re-pointed at the remaining guides in the deletion commit (the rail counts in
+`stations.test.ts`, the never-fewer guide-count floors in `guide-stats.test.ts` and
+`compose-guide.test.mjs`); `fact-usage.test.mjs`'s japan ACCEPTANCE block was dropped because its
+behaviour is already covered synthetically. Note the side effect: **every shipped guide now
+carries a `learnings` record**, so the rail's no-learnings branch is exercised by deriving that
+input rather than by any real guide. The fresh redo, once scoped, is still the program's natural
+end-to-end acceptance test.
 
 **A scheduled day's `waypoints` are the routing substrate — leg verification is not blocked on a
 new schema** (2026-08-14). Case 11's live half sat unbuilt for a release behind the belief that

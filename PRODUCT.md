@@ -126,9 +126,10 @@ the shipped Atlas build) is its single authority, with the mechanical gates besi
 
 ## Evidence on Hand
 
-- **Four real, researched guides** in `src/content/guides/` (denmark, japan, korea, us), each
-  with primary-source citations and verification dates. Korea and Denmark additionally carry
-  verified phrase cards and entry rows; Korea carries a real post-trip learnings block.
+- **Two real, researched guides** in `src/content/guides/` (denmark, korea), each with
+  primary-source citations and verification dates. Both carry verified phrase cards and entry
+  rows; Korea carries a real post-trip learnings block. (`us`, `japan-2` and `japan` were
+  deleted 2026-08-15 — japan to be redone as a fresh guide; see `CONTEXT.md`.)
 - **Counted proof, generated at build:** guide count, verified-fact count, and distinct
   primary-source count, rendered on the hub and About (`src/lib/guide-stats.ts`).
 - **Real post-trip feedback** from at least one completed trip, feeding
