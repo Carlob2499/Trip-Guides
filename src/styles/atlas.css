@@ -207,6 +207,15 @@
 .atlas-stamp--complete { color: var(--green); }
 .atlas-stamp--progress { background: var(--accent); border-color: var(--accent); color: var(--on-aink); }
 .atlas-stamp--upcoming { color: var(--aink); }
+/* A FOURTH stamp, and a different question from the other three. Those are SPEC-COMPONENTS.md
+   §6's trip-status series — where the TRIP stands against today. This one says the GUIDE is not
+   finished being researched (features/atlas/model/building.ts), which is true of trips that have
+   not been planned, taken or dated. It borrows nothing from the series' pigments precisely so it
+   cannot be read as a fourth trip status: muted ink, plain outline, quiet on purpose — an
+   unfinished thing announcing itself is not news, and the row already links to the run.
+   No pulse, no dot: §6's "never a coloured dot without the word; the word is the accessible
+   carrier", and a pulse would claim a liveness a static page cannot verify. */
+.atlas-stamp--building { color: var(--muted); }
 
 
 .atlas-empty { padding: 40px 4px; color: var(--muted); text-align: center; }
