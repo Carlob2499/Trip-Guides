@@ -1,8 +1,11 @@
 // @protects-file The research progress page reports the real state of a run, including when it fails.
 
 import { describe, it, expect } from "vitest";
-import { deriveProgress, formatElapsed, normalizeSlug, predictSlug, STAGE_ORDER, STUCK_THRESHOLD_MS } from "./progress";
-import { FRESH_SCAFFOLD, MID_RESEARCH, VERIFIED } from "../mocks/seeds";
+import {
+  deriveProgress, formatElapsed, normalizeSlug, predictSlug, STAGE_ORDER, STUCK_THRESHOLD_MS,
+  derivePageState, deriveStatusPill, deriveProgressLine, derivePhases, deriveNotePanel, PHASE_STATUS_LABEL,
+} from "./progress";
+import { FRESH_SCAFFOLD, MID_RESEARCH, STALLED, VERIFIED } from "../mocks/seeds";
 
 describe("deriveProgress", () => {
   it("returns an all-not-done view with zero elapsed when no state exists yet", () => {
@@ -157,5 +160,134 @@ describe("normalizeSlug (the ONE gate on both slug entrances)", () => {
     expect(normalizeSlug(undefined)).toBe("");
     expect(normalizeSlug("")).toBe("");
     expect(normalizeSlug("   ")).toBe("");
+  });
+});
+
+/* ── The cockpit's derived views ─────────────────────────────────────────────────────────── */
+
+const NOW_MID = new Date("2026-07-19T10:40:00Z");
+const midView = () => deriveProgress(MID_RESEARCH, { now: NOW_MID, published: false });
+const emptyView = () => deriveProgress(null, { now: NOW_MID, published: false });
+const stalledView = () => deriveProgress(STALLED, { now: new Date("2026-07-19T11:00:00Z"), published: false });
+const doneView = () => deriveProgress(VERIFIED, { now: new Date("2026-07-19T11:30:00Z"), published: true });
+
+describe("derivePageState", () => {
+  it("is empty until a real state has actually been read", () => {
+    // deriveProgress(null, …) is a valid view, so the view alone can't tell these apart.
+    expect(derivePageState({ view: emptyView(), hasRun: false, openQuestions: 0 })).toBe("empty");
+    expect(derivePageState({ view: emptyView(), hasRun: true, openQuestions: 0 })).toBe("running");
+  });
+
+  it("ranks done over everything, and an open question over the stall it caused", () => {
+    expect(derivePageState({ view: doneView(), hasRun: true, openQuestions: 3 })).toBe("done");
+    expect(derivePageState({ view: stalledView(), hasRun: true, openQuestions: 1 })).toBe("awaiting");
+    expect(derivePageState({ view: stalledView(), hasRun: true, openQuestions: 0 })).toBe("stalled");
+    expect(derivePageState({ view: midView(), hasRun: true, openQuestions: 0 })).toBe("running");
+  });
+});
+
+describe("deriveStatusPill", () => {
+  it("names the live stage while running and never invents one when there isn't one", () => {
+    expect(deriveStatusPill("running", midView())).toEqual({ text: "Researching · Reconcile", tone: "accent" });
+    expect(deriveStatusPill("running", doneView())).toEqual({ text: "Researching", tone: "accent" });
+  });
+
+  it("carries a warning tone for both states that need a human", () => {
+    expect(deriveStatusPill("awaiting", midView())).toEqual({ text: "Waiting on you", tone: "warn" });
+    expect(deriveStatusPill("stalled", stalledView())).toEqual({ text: "Stalled", tone: "warn" });
+  });
+
+  it("is muted before a run and green after one", () => {
+    expect(deriveStatusPill("empty", emptyView())).toEqual({ text: "No run yet", tone: "muted" });
+    expect(deriveStatusPill("done", doneView())).toEqual({ text: "Complete", tone: "green" });
+  });
+});
+
+describe("deriveProgressLine", () => {
+  it("says which stage of how many, in traveller language", () => {
+    expect(deriveProgressLine("running", midView()))
+      .toBe("Stage 4 of 6 — resolving where the two passes disagree.");
+  });
+
+  it("never estimates a time remaining", () => {
+    // Stage durations are wildly uneven, so elapsed÷percent would be a confident wrong number —
+    // exactly the plausible-but-invented claim the accuracy rules forbid.
+    const all = (["empty", "running", "awaiting", "stalled", "done"] as const)
+      .map((p) => deriveProgressLine(p, midView()));
+    all.forEach((line) => {
+      expect(line).not.toMatch(/remaining|left|eta|estimat/i);
+    });
+  });
+
+  it("reports real clocks for the stalled and finished cases", () => {
+    expect(deriveProgressLine("stalled", stalledView()))
+      .toBe("No checkpoint for 38m 00s — stage 3 of 6 never finished.");
+    expect(deriveProgressLine("done", doneView())).toBe("All 6 stages cleared in 1h 30m.");
+  });
+
+  it("degrades to a stageless sentence rather than reading past the end of the list", () => {
+    expect(deriveProgressLine("running", doneView())).toBe("Stage 7 of 6.");
+    expect(deriveProgressLine("awaiting", doneView())).toBe("Paused — the run needs an answer before it goes on.");
+    expect(deriveProgressLine("empty", emptyView())).toBe("No research run is attached to this page yet.");
+  });
+});
+
+describe("derivePhases", () => {
+  it("fills only what has actually cleared, and marks the one under way in words", () => {
+    const phases = derivePhases("running", midView());
+    expect(phases.map((p) => p.key)).toEqual(["passA", "passB", "critic"]);
+    expect(phases[0]).toMatchObject({ fill: 1, status: "cleared" });
+    expect(phases[1]).toMatchObject({ fill: 1, status: "cleared" });
+    // reconcile is current, verified is not — a half-full bar, not an interpolated one.
+    expect(phases[2]).toMatchObject({ fill: 0, status: "active" });
+    expect(PHASE_STATUS_LABEL[phases[2].status]).toBe("under way");
+  });
+
+  it("is all-queued before anything runs and all-cleared at the end", () => {
+    expect(derivePhases("empty", emptyView()).every((p) => p.fill === 0)).toBe(true);
+    // Nothing is "under way" on a page with no run — scaffold being currentIndex 0 is an
+    // artefact of rendering a view of nothing, not a claim that scaffolding started.
+    expect(derivePhases("empty", emptyView()).every((p) => p.status === "queued")).toBe(true);
+    // The same view under a real run DOES mark the phase holding the current stage.
+    expect(derivePhases("running", emptyView())[0].status).toBe("active");
+    expect(derivePhases("done", doneView()).every((p) => p.fill === 1 && p.status === "cleared")).toBe(true);
+  });
+
+  it("gives a partly-cleared phase a fractional fill", () => {
+    const v = deriveProgress(VERIFIED, { now: new Date("2026-07-19T11:30:00Z"), published: false });
+    // reconcile + verified both cleared, published pending — the critic phase is whole.
+    expect(derivePhases("running", v)[2]).toMatchObject({ fill: 1, status: "cleared" });
+    const mid = derivePhases("running", midView());
+    expect(mid.every((p) => p.fill >= 0 && p.fill <= 1)).toBe(true);
+  });
+});
+
+describe("deriveNotePanel", () => {
+  it("offers a control ONLY where a real endpoint exists", () => {
+    // POST /answer exists and resumes the run; mid-run notes have no endpoint anywhere.
+    expect(deriveNotePanel("awaiting", "awaiting")).toMatchObject({ acceptsInput: true, placeholder: null });
+    for (const page of ["running", "stalled", "done", "empty"] as const) {
+      const panel = deriveNotePanel(page, "monitoring");
+      expect(panel.acceptsInput).toBe(false);
+      expect(typeof panel.placeholder).toBe("string");
+      expect(panel.placeholder).not.toBe("");
+    }
+  });
+
+  it("says out loud that mid-run notes do not exist yet", () => {
+    expect(deriveNotePanel("running", "monitoring").placeholder)
+      .toBe("Mid-run notes are on the way — for now the run pauses and asks whenever it needs you.");
+  });
+
+  it("lets the send/resume states override the page state", () => {
+    expect(deriveNotePanel("running", "processing")).toMatchObject({ heading: "Sending your answer…", acceptsInput: true });
+    expect(deriveNotePanel("awaiting", "resumed")).toMatchObject({ tone: "green", acceptsInput: false });
+  });
+
+  it("carries a warning tone exactly where a person is blocking or the run is stuck", () => {
+    expect(deriveNotePanel("awaiting", "awaiting").tone).toBe("warn");
+    expect(deriveNotePanel("stalled", "monitoring").tone).toBe("warn");
+    expect(deriveNotePanel("running", "monitoring").tone).toBe("muted");
+    expect(deriveNotePanel("done", "monitoring").tone).toBe("green");
   });
 });

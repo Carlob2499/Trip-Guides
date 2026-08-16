@@ -1,112 +1,264 @@
-/* === NEW-GUIDE PROGRESS TRACKER ===============================================
-   The "tangible viewing progress" surface: a live elapsed timer + step checklist
-   over scripts/pipeline.mjs's own checkpoint state. See src/features/pipeline-
-   progress/ for the logic; this is presentation only. */
+/* === NEW-GUIDE PROGRESS COCKPIT ===============================================
+   The run's own surface: a route map with one station per pipeline stage, three phase
+   bars, the live panels the run will report into, and the note panel that is the one
+   place a person puts something INTO a run. See src/features/pipeline-progress/ for
+   every claim this file paints; this is presentation only.
 
-.pg-wrap{max-width:34rem;margin:0 auto;padding:2.4rem 1.2rem 4rem}
-.pg-kicker{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin:0 0 .3rem}
-.pg-head{font-family:var(--font-display);font-weight:640;font-size:var(--text-h3);letter-spacing:-.012em;margin:0 0 .5rem}
+   Two Atlas rules govern everything below. Radius is binary — 0 or 999px, nothing
+   between. And motion is transform/opacity, with two deliberate exceptions the
+   approved prototype specifies for the route itself (the flown-route dash offset and
+   the marching un-flown dash), both paint-only on a single small path.
+
+   Responsive is CONTAINER-driven, never window.innerWidth: .pg is the container, and
+   every breakpoint below is a @container query on it. */
+
+/* ── Page ground ───────────────────────────────────────────────────────────── */
+body{min-height:100vh;display:flex;flex-direction:column}
+.pg-contours{position:fixed;inset:0;z-index:0;pointer-events:none}
+.pg-contours svg{position:absolute;inset:0;width:100%;height:100%}
+.pg-contours polyline{fill:none;stroke:color-mix(in srgb,var(--muted) 14%,transparent);stroke-width:1.1}
+.pg-bar,.pg,.pg-foot{position:relative;z-index:1}
+
+.pg-bar{max-width:74rem;margin:0 auto;width:100%;padding:1.1rem 1.2rem 0;display:flex;align-items:center;justify-content:space-between;gap:.8rem}
+.pg-wordmark{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.pg-wordmark:hover{color:var(--accent-ink)}
+.pg-wordmark:focus-visible{outline:2px solid var(--accent-ink);outline-offset:3px}
+.pg-bar-right{display:flex;align-items:center;gap:.6rem}
+
+/* Every status pigment on this page resolves through one custom property, so a state
+   change is one attribute rather than four class swaps. */
+[data-tone="muted"]{--pg-tone:var(--muted)}
+[data-tone="accent"]{--pg-tone:var(--accent-ink)}
+[data-tone="warn"]{--pg-tone:var(--ochre)}
+[data-tone="green"]{--pg-tone:var(--green)}
+[data-tone="crit"]{--pg-tone:var(--crit)}
+
+.pg-pill{display:inline-flex;align-items:center;gap:.4rem;padding:.32rem .8rem;border-radius:999px;border:1px solid var(--pg-tone,var(--rule));background:color-mix(in srgb,var(--pg-tone,var(--rule)) 12%,var(--card));color:var(--pg-tone,var(--muted));font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.02em;white-space:nowrap}
+
+.pg-theme-btn{display:inline-flex;align-items:center;justify-content:center;min-width:38px;min-height:38px;padding:0 .6rem;border-radius:999px;border:1px solid var(--rule);background:var(--card);color:var(--ink);cursor:pointer;transition:background var(--dur-tap) ease,border-color var(--dur-tap) ease}
+.pg-theme-btn:hover{border-color:var(--ink)}
+.pg-theme-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.tb-ico{width:17px;height:17px;flex:none;display:block}
+.theme-btn-label{display:none}
+
+.pg-foot{border-top:1px solid var(--rule2);text-align:center;padding:1.6rem 1.2rem calc(1.6rem + var(--safe-bottom));color:var(--muted);font-size:var(--text-control);font-family:var(--font-data);letter-spacing:.04em}
+.pg-foot a{color:var(--accent-ink);text-decoration:underline;text-underline-offset:3px}
+
+/* ── Shell ─────────────────────────────────────────────────────────────────── */
+.pg{max-width:74rem;margin:0 auto;width:100%;padding:1.6rem 1.2rem 2.4rem;flex:1;container-type:inline-size;container-name:pg}
+
+.pg-hero{margin-bottom:1.5rem}
+.pg-eyebrow{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink);margin:0}
+.pg-title{font-family:var(--font-display);font-weight:640;font-size:var(--text-h2);letter-spacing:-.012em;line-height:1.1;margin:.35rem 0 .5rem}
 .pg-slug{font-family:var(--font-data);color:var(--accent-ink)}
-.pg-intro{color:var(--muted);font-size:var(--text-small);line-height:1.5;margin:0 0 1.6rem}
+.pg-line{color:var(--muted);font-size:var(--text-lead);line-height:1.55;max-width:58ch;margin:0}
+.pg-elapsed{display:flex;align-items:baseline;gap:.5rem;margin:.7rem 0 0}
+/* No run, no clock. The timer counts from page load until a real createdAt corrects it, which is
+   right once a run exists and a fabricated duration before one does. */
+.pg[data-state="empty"] .pg-elapsed{display:none}
+.pg-title-empty{display:none}
+.pg[data-state="empty"] .pg-title-empty{display:inline}
+.pg[data-state="empty"] .pg-title-run{display:none}
+.pg-empty-actions{display:none;flex-wrap:wrap;gap:.7rem;margin:1rem 0 0}
+.pg[data-state="empty"] .pg-empty-actions{display:flex}
+.pg-elapsed-label{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
+.pg-elapsed-val{font-family:var(--font-data);font-size:var(--text-h4);font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
 
-/* Atlas re-expression (Stage F, feature 12): square on the card, the stuck notice, the
-   correction inputs and the question cards; 999px on the step icons and the progress bar. */
-.pg-card{background:var(--card);border:1px solid var(--rule);border-radius:0;padding:1.4rem 1.3rem}
+.pg-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:1.1rem;align-items:start}
+.pg-col{display:flex;flex-direction:column;gap:1.1rem;min-width:0}
 
-.pg-timer-row{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:.9rem}
-.pg-timer-label{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
-.pg-timer{font-family:var(--font-data);font-size:var(--text-h4);font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.pg-card{background:var(--card);border:1px solid var(--rule);border-radius:0;padding:1.1rem 1.2rem;min-width:0}
+.pg-card[hidden]{display:none}
+.pg-card-head{display:flex;align-items:center;gap:.5rem;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin:0 0 .8rem}
+.pg-card-intro{font-size:var(--text-small);color:var(--muted);line-height:1.45;margin:0 0 .8rem}
 
-.pg-bar-track{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;margin-bottom:.3rem}
-/* The fill animated `width` on a polling update — a layout path, and this system moves with
-   transform and opacity only. Same bar, driven by --pg-progress (0..1, written by
-   pipeline-progress/ui/progress.js). */
-.pg-bar-fill{height:100%;width:100%;transform-origin:left;transform:scaleX(var(--pg-progress,0));border-radius:999px;background:var(--accent);transition:transform .5s var(--ease-out-expo,ease)}
-.pg-percent{text-align:right;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);margin:0 0 1.1rem}
+/* The map's text equivalent — read by screen readers, never shown. */
+.pg-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 
-.pg-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.55rem}
-.pg-step{display:flex;align-items:center;gap:.7rem;font-family:var(--font-display);font-size:var(--text-small);color:var(--muted)}
-.pg-step-icon{display:inline-flex;align-items:center;justify-content:center;width:1.4rem;height:1.4rem;border-radius:999px;border:1.5px solid var(--rule2);font-size:var(--text-control);flex:none}
-.pg-step.is-done{color:var(--ink)}
-.pg-step.is-done .pg-step-icon{background:var(--green);border-color:var(--green);color:var(--on-green)}
-.pg-step.is-current{color:var(--ink);font-weight:640}
-.pg-step.is-current .pg-step-icon{border-color:var(--accent);color:var(--accent-ink)}
+/* ── The route map ─────────────────────────────────────────────────────────── */
+.pg-route-card{--pg-label:12}
+.pg-route{display:block;width:100%;height:auto;max-height:320px;overflow:visible}
+.pg-ocean{fill:color-mix(in srgb,var(--accent) 6%,transparent)}
+.pg-graticule{fill:none;stroke:color-mix(in srgb,var(--rule) 38%,transparent);stroke-width:.8}
+.pg-land{fill:color-mix(in srgb,var(--rule) 26%,transparent);stroke:color-mix(in srgb,var(--rule2) 50%,transparent);stroke-width:.5}
+.pg-endpoints circle{fill:var(--accent)}
 
-.pg-stuck{margin-top:1.1rem;padding:.8rem .9rem;border-radius:0;background:color-mix(in srgb, var(--warn) 12%, var(--card));border:1px solid var(--warn);color:var(--warn);font-size:var(--text-small);line-height:1.45}
-.pg-stuck[hidden]{display:none}
+.pg-route-glow{fill:none;stroke:color-mix(in srgb,var(--accent) 16%,transparent);stroke-width:7;stroke-linecap:round}
+.pg-route-todo{fill:none;stroke:var(--rule2);stroke-width:1.4;stroke-dasharray:5 6}
+.pg-route-flown{fill:none;stroke:var(--accent);stroke-width:2.6;stroke-linecap:round}
+/* The ants march ONLY while a run is live, on the same data-live gate as the station ring below:
+   a route crawling forever over a page with no run — or a finished one — is the page claiming
+   work is happening. Paint-only, and one of exactly two exceptions to transform/opacity motion
+   on this page: the approved prototype draws the route this way and the checker's rule is about
+   layout properties, which stroke-dashoffset is not. */
+.pg-route[data-live="1"] .pg-route-todo{animation:pg-march 1.6s linear infinite}
+@keyframes pg-march{to{stroke-dashoffset:-11}}
 
-.pg-done{margin-top:1.4rem;text-align:center}
-.pg-done[hidden]{display:none}
-.pg-done-head{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);margin:0 0 .8rem}
-.pg-done-link{display:inline-block;padding:.75rem 1.5rem;border-radius:999px;background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);text-decoration:none;transition:background .18s}
-.pg-done-link:hover{background:var(--accent)}
+.pg-station-dot{fill:var(--card);stroke:var(--rule2);stroke-width:1.4}
+.pg-station-ring{fill:none;stroke:var(--accent);stroke-width:1.2;opacity:0;transform-box:fill-box;transform-origin:center}
+.pg-station-label{fill:var(--muted);font-family:var(--font-data);font-size:calc(var(--pg-label) * 1px);font-weight:600;letter-spacing:.02em}
+.pg-station[data-state="done"] .pg-station-dot{fill:var(--green);stroke:var(--green)}
+.pg-station[data-state="done"] .pg-station-label{fill:var(--ink)}
+.pg-station[data-state="current"] .pg-station-dot{fill:var(--accent);stroke:var(--accent)}
+.pg-station[data-state="current"] .pg-station-label{fill:var(--accent-ink);font-weight:700}
+/* The ring pulses ONLY while a run is actually live — motion.md: a pulse over a dead run is
+   the page lying, so ui/progress.js sets data-live on the SVG and clears it the moment the
+   run finishes, stalls or was never there. */
+.pg-route[data-live="1"] .pg-station[data-state="current"] .pg-station-ring{animation:pg-ping 1.8s ease-out infinite}
+@keyframes pg-ping{0%{opacity:.75;transform:scale(1)}70%{opacity:0;transform:scale(2.6)}100%{opacity:0;transform:scale(2.6)}}
 
-.pg-correction{margin-top:1.3rem;padding-top:1.1rem;border-top:1px dashed var(--rule)}
-.pg-correction[hidden]{display:none}
-.pg-correction-note{font-size:var(--text-control);color:var(--muted);margin:0 0 .6rem;line-height:1.45}
-.pg-correction-form{display:flex;gap:.5rem}
-.pg-correction-form input{flex:1;padding:.6rem .8rem;border-radius:0;border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
-.pg-correction-form button{padding:.6rem 1.1rem;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);cursor:pointer}
-.pg-correction-form button:hover{background:var(--accent);border-color:var(--accent)}
+.pg-plane{fill:var(--accent);stroke:var(--card);stroke-width:.8}
+/* Ghosted, not hidden, with no run: the plane parked at the departure point is a true frame. */
+.pg[data-state="empty"] .pg-plane{opacity:.35}
 
-/* Question cards (P4) */
-.pg-questions{margin-top:1.4rem}
-.pg-questions[hidden]{display:none}
-.pg-q-head{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);margin:0 0 .3rem}
-.pg-q-intro{font-size:var(--text-small);color:var(--muted);line-height:1.45;margin:0 0 .8rem}
-.pg-q-card{background:var(--bg2);border:1px solid var(--rule);border-radius:0;padding:.9rem 1rem;margin-bottom:.6rem}
-.pg-q-text{font-family:var(--font-display);font-weight:560;font-size:var(--text-body);margin:0 0 .4rem;line-height:1.4}
-.pg-q-assumed{font-size:var(--text-small);color:var(--muted);margin:0 0 .25rem;line-height:1.4}
-.pg-q-assumed-label{font-weight:600;color:var(--ink)}
-.pg-q-context{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);margin:0}
+/* ── Phases ────────────────────────────────────────────────────────────────── */
+.pg-phases{display:flex;flex-direction:column;gap:.9rem}
+.pg-phase{min-width:0}
+.pg-phase-top{display:flex;align-items:baseline;justify-content:space-between;gap:.6rem;margin-bottom:.35rem}
+.pg-phase-label{font-family:var(--font-display);font-weight:640;font-size:var(--text-small);color:var(--ink)}
+.pg-phase-status{font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--pg-tone,var(--muted));letter-spacing:.02em}
+.pg-phase-track{height:6px;border-radius:999px;background:var(--sunken);overflow:hidden}
+/* scaleX from a custom property, never width — a poll tick costs a composite, not a layout. */
+.pg-phase-fill{height:100%;width:100%;transform-origin:left;transform:scaleX(var(--pg-fill,0));border-radius:999px;background:var(--pg-tone,var(--accent));transition:transform var(--dur-reveal) var(--ease-out-expo)}
+.pg-phase-blurb{font-size:var(--text-caption);color:var(--muted);line-height:1.4;margin:.35rem 0 0}
 
-/* A blocking fork has STOPPED the run — it gets the ochre (the "needs a human" pigment), a left
-   edge so it reads as a different kind of card at a glance, and nothing louder than that. */
-.pg-q-card.is-blocking{border-left:3px solid var(--ochre)}
-.pg-q-badge{font-family:var(--font-data);font-size:var(--text-caption);letter-spacing:.06em;text-transform:uppercase;color:var(--ochre);margin:0 0 .35rem}
+/* ── Live logs ─────────────────────────────────────────────────────────────── */
+.pg-dot{width:7px;height:7px;border-radius:999px;background:var(--green);flex:none;animation:pg-breathe 2.2s ease-in-out infinite}
+.pg-dot[hidden]{display:none}
+@keyframes pg-breathe{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
 
-/* Answer controls (owner only) */
-.pg-q-answer{margin-top:.6rem}
-.pg-q-input{width:100%;padding:.55rem .75rem;border-radius:0;border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
-.pg-q-options{display:flex;flex-wrap:wrap;gap:.4rem}
-.pg-q-opt{padding:.45rem .95rem;border-radius:999px;border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-display);font-weight:560;font-size:var(--text-small);cursor:pointer;transition:background .18s,color .18s}
-.pg-q-opt:hover{border-color:var(--ink)}
-.pg-q-opt[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
-.pg-q-send{margin-top:.4rem;padding:.6rem 1.3rem;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);cursor:pointer}
-.pg-q-send:hover:not(:disabled){background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
-.pg-q-send:disabled{opacity:.45;cursor:default}
-.pg-q-send[hidden]{display:none}
-.pg-q-status{font-size:var(--text-small);color:var(--muted);margin:.5rem 0 0;line-height:1.4}
+.pg-log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.4rem;min-width:0}
+.pg-log:empty{display:none}
+.pg-log--fetch{max-height:132px;overflow-y:auto;font-family:var(--font-data);font-size:var(--text-caption)}
+.pg-log-row{display:flex;align-items:baseline;gap:.6rem;min-width:0}
+.pg-log-host{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}
+.pg-log-status{font-variant-numeric:tabular-nums;font-weight:700;color:var(--pg-tone,var(--muted));flex:none}
+.pg-log-row--judge{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.55rem;align-items:baseline}
+.pg-log-kind{font-family:var(--font-data);font-size:var(--text-nano);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--pg-tone,var(--muted))}
+.pg-log-text{font-size:var(--text-caption);color:var(--ink);line-height:1.45;overflow-wrap:anywhere}
+.pg-log-empty{font-size:var(--text-caption);color:var(--muted);line-height:1.5;margin:0;max-width:52ch}
+.pg-log-empty[hidden]{display:none}
 
-/* Revision proposals (owner only) */
-.pg-proposals{margin-top:1.4rem}
-.pg-proposals[hidden]{display:none}
-.pg-p-head{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);margin:0 0 .3rem}
-.pg-p-intro{font-size:var(--text-small);color:var(--muted);line-height:1.45;margin:0 0 .8rem}
-.pg-p-card{background:var(--bg2);border:1px solid var(--rule);border-radius:0;padding:.9rem 1rem;margin-bottom:.6rem}
+/* ── Worth knowing ─────────────────────────────────────────────────────────── */
+.pg-nuggets{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.8rem}
+.pg-nuggets:empty{display:none}
+.pg-nug{border-left:2px solid var(--accent);padding-left:.7rem;min-width:0}
+.pg-nug-text{font-size:var(--text-small);color:var(--ink);line-height:1.5;margin:0;overflow-wrap:anywhere}
+.pg-nug-src{font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin:.3rem 0 0}
+
+.pg-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem;margin:1rem 0 0;padding-top:.9rem;border-top:1px solid var(--rule)}
+.pg-stat dt{font-family:var(--font-data);font-size:var(--text-nano);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
+.pg-stat dd{font-family:var(--font-data);font-size:var(--text-h4);font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;margin:.1rem 0 0}
+.pg-stats-note{font-size:var(--text-nano);color:var(--muted);margin:.6rem 0 0;line-height:1.4}
+.pg-stats-note[hidden]{display:none}
+
+/* ── Buttons ───────────────────────────────────────────────────────────────── */
+.pg-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.6rem 1.2rem;border-radius:999px;border:1px solid var(--ink);background:var(--card);color:var(--ink);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);text-decoration:none;cursor:pointer;transition:background var(--dur-tap) ease,color var(--dur-tap) ease,border-color var(--dur-tap) ease}
+.pg-btn:hover:not(:disabled){background:var(--ink);color:var(--bg)}
+.pg-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.pg-btn:disabled{opacity:.45;cursor:default}
+.pg-btn[hidden]{display:none}
+.pg-btn--go{background:var(--cta);color:var(--cta-ink);border-color:var(--cta)}
+.pg-btn--go:hover:not(:disabled){background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+
+.pg-notify-copy{font-size:var(--text-small);color:var(--muted);line-height:1.5;margin:0 0 .9rem}
+.pg-notify-status{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);margin:.6rem 0 0;line-height:1.4}
+.pg-notify-status:empty{display:none}
+
+.pg-done-copy{font-size:var(--text-small);color:var(--muted);line-height:1.5;margin:0 0 .9rem}
+
+/* ── Revision proposals (owner only) ───────────────────────────────────────── */
+.pg-p-card{background:var(--sunken);border:1px solid var(--rule);border-radius:0;padding:.9rem 1rem;margin-bottom:.6rem}
 .pg-p-title{font-family:var(--font-display);font-weight:560;font-size:var(--text-body);margin:0 0 .4rem;line-height:1.4}
 .pg-p-reason{font-size:var(--text-small);color:var(--muted);margin:0 0 .6rem;line-height:1.4}
-.pg-p-approve{padding:.5rem 1.1rem;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);cursor:pointer}
+.pg-p-approve{min-height:44px;padding:.5rem 1.1rem;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);cursor:pointer}
 .pg-p-approve:hover:not(:disabled){background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .pg-p-approve:disabled{opacity:.45;cursor:default}
 .pg-p-status{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);margin:.5rem 0 0}
 .pg-p-status:empty{display:none}
 
-/* The owner-key affordance — deliberately the quietest thing on the page: it is maintenance
-   furniture, not part of the reader's journey. */
-.pg-key{margin-top:1.6rem;padding-top:1.1rem;border-top:1px dashed var(--rule)}
+/* ── Correction ────────────────────────────────────────────────────────────── */
+.pg-correction-form{display:flex;gap:.5rem;flex-wrap:wrap}
+.pg-correction-form input{flex:1;min-width:10rem;min-height:44px;padding:.6rem .8rem;border-radius:0;border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
+.pg-correction-form code{font-family:var(--font-data);background:var(--sunken);padding:0 .25rem}
+
+/* ── The owner-key affordance — the quietest thing here: maintenance furniture. ── */
+.pg-key{padding-top:.4rem}
 .pg-key[hidden]{display:none}
 .pg-key-toggle{padding:0;border:0;background:none;color:var(--muted);font-family:var(--font-data);font-size:var(--text-control);text-decoration:underline;cursor:pointer}
 .pg-key-toggle:hover{color:var(--accent-ink)}
 .pg-key-form{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin-top:.7rem}
 .pg-key-form[hidden]{display:none}
 .pg-key-label{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}
-.pg-key-form input{flex:1;min-width:12rem;padding:.55rem .75rem;border-radius:0;border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
-.pg-key-form button{padding:.5rem 1.1rem;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);cursor:pointer}
+.pg-key-form input{flex:1;min-width:12rem;min-height:44px;padding:.55rem .75rem;border-radius:0;border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
+.pg-key-form button{min-height:44px;padding:.5rem 1.1rem;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);cursor:pointer}
 .pg-key-form button:hover{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .pg-key-form button[hidden]{display:none}
 .pg-key-status{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);margin:.6rem 0 0;line-height:1.45}
 
-.pg-waiting[hidden]{display:none}
-.pg-home-link{display:inline-block;margin-top:1.6rem;font-family:var(--font-data);font-size:var(--text-control);color:var(--muted);text-decoration:none}
-.pg-home-link:hover{color:var(--accent-ink)}
+/* ── The note panel ────────────────────────────────────────────────────────── */
+.pg-note{margin-top:1.1rem;background:color-mix(in srgb,var(--pg-tone,var(--rule)) 5%,var(--card));border:1px solid var(--pg-tone,var(--rule));border-radius:0;padding:1.1rem 1.2rem}
+.pg-note-head{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);color:var(--pg-tone,var(--ink));margin:0 0 .5rem}
+.pg-note-placeholder{font-size:var(--text-small);color:var(--muted);line-height:1.5;margin:0;max-width:64ch}
+.pg-note-placeholder[hidden]{display:none}
+.pg-note-issue{display:inline-block;margin-top:.7rem;font-family:var(--font-data);font-size:var(--text-control);color:var(--accent-ink);text-decoration:underline;text-underline-offset:3px}
+.pg-note-issue[hidden]{display:none}
+.pg-note-live[hidden]{display:none}
+.pg-note-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.8rem;margin-top:.6rem}
+/* The one border weight change on the page: an answer that has STOPPED a run gets a heavier
+   edge than a panel that is merely watching. */
+.pg-note[data-tone="warn"]{border-width:2px}
+
+/* ── Question cards ────────────────────────────────────────────────────────── */
+.pg-q-card{background:var(--card);border:1px solid var(--rule);border-radius:0;padding:.9rem 1rem;margin-bottom:.6rem}
+.pg-q-card.is-blocking{border-left:3px solid var(--ochre)}
+.pg-q-badge{font-family:var(--font-data);font-size:var(--text-caption);letter-spacing:.06em;text-transform:uppercase;color:var(--ochre);margin:0 0 .35rem}
+.pg-q-text{font-family:var(--font-display);font-weight:560;font-size:var(--text-body);margin:0 0 .4rem;line-height:1.4}
+.pg-q-assumed{font-size:var(--text-small);color:var(--muted);margin:0 0 .25rem;line-height:1.4}
+.pg-q-assumed-label{font-weight:600;color:var(--ink)}
+.pg-q-context{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);margin:0}
+.pg-q-answer{margin-top:.6rem}
+.pg-q-input{width:100%;min-height:44px;padding:.55rem .75rem;border-radius:0;border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
+.pg-q-options{display:flex;flex-wrap:wrap;gap:.4rem}
+.pg-q-opt{min-height:44px;padding:.45rem .95rem;border-radius:999px;border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-display);font-weight:560;font-size:var(--text-small);cursor:pointer;transition:background var(--dur-tap) ease,color var(--dur-tap) ease,border-color var(--dur-tap) ease}
+.pg-q-opt:hover{border-color:var(--ink)}
+.pg-q-opt[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+/* "Accept the assumption" is an escape from the question, not the recommended path — it reads
+   as a link-weight control beside the filled primary. */
+.pg-q-accept{min-height:44px;padding:0 .2rem;border:0;background:none;color:var(--muted);font-family:var(--font-data);font-size:var(--text-control);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.pg-q-accept:hover{color:var(--accent-ink)}
+.pg-q-status{font-size:var(--text-small);color:var(--muted);margin:0;line-height:1.4}
+
+/* ── Container breakpoints ─────────────────────────────────────────────────── */
+/* Below 760px the map's labels would render under 7px once the 600-unit viewBox is squeezed
+   into a phone's card, so the label size steps up in user units to land back at ~11px. */
+@container pg (max-width: 760px){
+  .pg-route-card{--pg-label:19}
+  .pg-route{max-height:230px}
+  .pg-title{font-size:var(--text-h3)}
+  .pg-line{font-size:var(--text-body)}
+  .pg-correction-form input{flex:1 1 100%}
+  /* The note panel is the only thing on this page a person can act on, so on a phone it stays
+     reachable instead of living below four cards of telemetry. Sticky, not fixed: it gives its
+     space back at the end of the document. The shadow is the overlay treatment the approved
+     prototype specifies for exactly this class of element (CLAUDE.md's known
+     check-drift false positive #2) — a floating panel needs a real edge against moving content. */
+  .pg-note{position:sticky;bottom:0;margin-left:-1.2rem;margin-right:-1.2rem;padding-bottom:calc(1.1rem + var(--safe-bottom));box-shadow:0 -10px 28px color-mix(in srgb,var(--ink) 14%,transparent)}
+  .pg-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@container pg (min-width: 1000px){
+  .pg-grid{grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);gap:1.3rem}
+  .pg-route{max-height:360px}
+}
+
+/* ── Reduced motion — it cuts, it does not soften ──────────────────────────── */
+@media (prefers-reduced-motion: reduce){
+  .pg-route-todo,.pg-station-ring,.pg-dot{animation:none}
+  .pg-phase-fill,.pg-btn,.pg-q-opt,.pg-theme-btn{transition:none}
+  .pg-dot{opacity:1;transform:none}
+}
+
+@media print{
+  .pg-contours,.pg-bar,.pg-foot,.pg-key,.pg-notify{display:none!important}
+  .pg-note{position:static;box-shadow:none}
+}

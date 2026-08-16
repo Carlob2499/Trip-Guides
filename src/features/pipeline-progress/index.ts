@@ -19,9 +19,26 @@ export {
   normalizeSlug,
   STAGE_ORDER,
   STAGE_LABEL,
+  STAGE_SHORT,
   STUCK_THRESHOLD_MS,
+  derivePageState,
+  deriveStatusPill,
+  deriveProgressLine,
+  derivePhases,
+  deriveNotePanel,
+  PHASE_STATUS_LABEL,
 } from "./model/progress";
-export type { PipelineState, ProgressView, StageView, Stage, PipelineStage } from "./model/progress";
+export type {
+  PipelineState, ProgressView, StageView, Stage, PipelineStage,
+  PageState, Tone, StatusPill, PhaseView, PhaseStatus, NoteState, NotePanelView,
+} from "./model/progress";
+export {
+  parseRunEvents, pushBounded, fetchTone, fetchHost,
+  EMPTY_RUN_EVENTS, FETCH_BUFFER, DECISION_BUFFER,
+} from "./model/run-events";
+export type {
+  RunEvents, FetchEvent, DecisionEvent, Nugget, RunCounters, FetchTone,
+} from "./model/run-events";
 export { toProposals, proposalMatchesSlug, REVISION_LABEL } from "./model/proposals";
 export type { RevisionProposal, RawIssue } from "./model/proposals";
 export { createGithubGateway, createWorkerGateway } from "./gateway";

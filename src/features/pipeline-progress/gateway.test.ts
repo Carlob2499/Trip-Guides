@@ -3,7 +3,8 @@
 
 import { describe, it, expect, vi } from "vitest";
 import { createGithubGateway, createWorkerGateway } from "./gateway";
-import { PROPOSAL_ISSUES } from "./mocks/seeds";
+import { PROPOSAL_ISSUES, RUN_EVENTS } from "./mocks/seeds";
+import { EMPTY_RUN_EVENTS } from "./model/run-events";
 import { OWNER_KEY_HEADER } from "../../lib/worker-client.js";
 import { WAYPOINT_BACKEND } from "../../lib/backend-config.js";
 
@@ -161,5 +162,35 @@ describe("createWorkerGateway", () => {
       ok: false,
       message: "Couldn't reach the server. Try again in a moment.",
     });
+  });
+});
+
+describe("createGithubGateway().fetchRunEvents", () => {
+  it("reads the run's own branch and shapes what it finds", async () => {
+    const { impl, calls } = stubFetch({ "events.json": RUN_EVENTS });
+    const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
+
+    const out = await gw.fetchRunEvents("testland");
+
+    expect(calls).toHaveLength(1);
+    expect(calls[0].url).toContain("/research/testland/guides-intake/testland/events.json");
+    expect(out.available).toBe(true);
+    expect(out.counters).toEqual({ pages: 148, facts: 62, kept: 51, dropped: 11 });
+  });
+
+  it("returns an honestly-empty result on the 404 that is today's every-single-case", async () => {
+    // Nothing in the pipeline writes events.json yet. One request, no fallback to `main`:
+    // telemetry is a property of a run, and a run lives on its branch.
+    const { impl, calls } = stubFetch({});
+    const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
+
+    await expect(gw.fetchRunEvents("testland")).resolves.toEqual(EMPTY_RUN_EVENTS);
+    expect(calls).toHaveLength(1);
+  });
+
+  it("returns an honestly-empty result rather than throwing on a file it cannot read", async () => {
+    const { impl } = stubFetch({ "events.json": "{ truncated" });
+    const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
+    await expect(gw.fetchRunEvents("testland")).resolves.toEqual(EMPTY_RUN_EVENTS);
   });
 });
