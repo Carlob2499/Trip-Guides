@@ -1,10 +1,24 @@
 ---
-// New Guide pipeline progress tracker — the "tangible viewing progress" surface (see
-// src/features/pipeline-progress/). A single static page: the slug/country comes from the
-// URL query string client-side (?slug=... or ?country=...), never from getStaticPaths, since
-// the whole point is tracking a guide that didn't exist at build time.
+// New Guide pipeline progress tracker — the run's cockpit (see src/features/pipeline-progress/).
+// A single static page: the slug/country comes from the URL query string client-side
+// (?slug=... or ?country=...), never from getStaticPaths, since the whole point is tracking a
+// guide that didn't exist at build time.
+//
+// The route map's SKELETON is server-rendered — ocean, graticule, land, the curve, six stations —
+// so the page has its cartography before a single byte of JS runs and never reflows into it.
+// Only the plane, the flown-route dash and the station states are client-side, because only
+// those are claims about a run. The land is projected at BUILD time (src/lib/route-geometry.ts)
+// rather than fetched: it saves the client a 107KB download of countries-110m.json and the parse
+// that follows it, for ~34KB of inline path data that gzips hard.
+import { readFileSync } from "node:fs";
 import PwaHead from "../../components/PwaHead.astro";
 import { jsonEmbed } from "../../lib/json-embed";
+import { generateContourLayer } from "../../lib/contours";
+import {
+  ROUTE_VIEWBOX, OCEAN_RECT, ROUTE_PATH_D, graticulePath, projectLand, routeStations,
+  type Topology,
+} from "../../lib/route-geometry";
+import { STAGE_ORDER, STAGE_SHORT } from "../../features/pipeline-progress/index";
 // Quiet Edition (R1): ONE serif — Literata with its optical-size axis (standard = wght+opsz,
 // so browsers cut display vs text automatically) — and ONE quiet humanist sans for data/labels.
 import "@fontsource-variable/literata/standard.css";
@@ -14,111 +28,277 @@ import "../../styles/base.css";
 import "../../styles/progress.css";
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const REPO = "Carlob2499/Trip-Guides";
+
+// Read rather than `import`: a 107KB JSON import makes TypeScript infer a literal type for every
+// one of 595 arcs, which costs more in `npm run typecheck` than the file is worth.
+const topo = JSON.parse(
+  readFileSync(new URL("../../../public/data/countries-110m.json", import.meta.url), "utf8"),
+) as Topology;
+// One <path>, not 79. Countries never overlap, and a hole sits inside exactly its own polygon,
+// so evenodd over the union fills precisely the land — at a 78-node saving.
+const landPath = projectLand(topo).join("");
+const graticule = graticulePath();
+const stations = routeStations().map((s, i) => ({ ...s, key: STAGE_ORDER[i], label: STAGE_SHORT[STAGE_ORDER[i]] }));
+
+// The survey ground, same cartography as the intake page. Own seeds — own terrain.
+const contours = [
+  generateContourLayer({ seed: 31, rings: 9, cx: 180, cy: 640 }),
+  generateContourLayer({ seed: 58, rings: 7, cx: 880, cy: 200 }),
+];
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Building your guide — Waypoint</title>
     <meta name="description" content="Live progress for a guide currently being researched." />
     <meta name="robots" content="noindex,nofollow" />
     <PwaHead />
+    <!-- Dark-mode init — runs before paint to avoid flash (same key and attribute as every
+         other surface: src/scripts/theme.js owns the after-load toggle). -->
+    <script is:inline>
+      (function () {
+        const s = localStorage.getItem("tg-theme");
+        const preferDark = window.matchMedia && window.matchMedia("(prefers-color-scheme:dark)").matches;
+        if (s === "dark" || (s === null && preferDark)) {
+          document.documentElement.setAttribute("data-theme", "dark");
+        } else if (s === "light") {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      })();
+    </script>
   </head>
-  <body>
-    <div class="pg-wrap" id="pgRoot">
-      <p class="pg-kicker">New guide</p>
-      <h1 class="pg-head">Building <span class="pg-slug" id="pgSlug">your guide</span></h1>
-      <p class="pg-intro">
-        A research agent is verifying every fact against primary sources — dates, prices, hours,
-        transit, the works — before this guide ever appears. This page updates itself; you don't
-        need to do anything else.
-      </p>
+  <body data-base={base}>
+    <a class="skip-link" href="#pgMain">Skip to the run</a>
 
-      <div class="pg-card">
-        <div class="pg-waiting" id="pgWaiting" hidden>
-          <div class="pg-timer-row">
-            <span class="pg-timer-label">Elapsed</span>
-            <span class="pg-timer" id="pgTimer">0s</span>
-          </div>
-          <div class="pg-bar-track"><div class="pg-bar-fill" id="pgBarFill"></div></div>
-          <p class="pg-percent" id="pgPercent">0%</p>
-          <ol class="pg-steps" id="pgSteps"></ol>
-          <p class="pg-stuck" id="pgStuckNote" hidden>
-            This is taking longer than usual. It hasn't failed — some destinations are just
-            harder to source — but if nothing changes for a while, leave this page open or come
-            back later; the address stays the same.
-          </p>
-        </div>
-
-        <div class="pg-questions" id="pgQuestions" hidden>
-          <h2 class="pg-q-head">Questions for you</h2>
-          <p class="pg-q-intro">
-            The research reached a fork in the plan. Your answer shapes the guide. Where an
-            assumption is listed, that's what gets built if you leave it alone; a question marked
-            <b>Waiting on you</b> has stopped the run until you choose.
-          </p>
-          <div class="pg-q-list" id="pgQList"></div>
-          <button type="button" class="pg-q-send" id="pgQSend" hidden disabled>Send answers</button>
-          <p class="pg-q-status" id="pgQStatus" role="status" aria-live="polite"></p>
-        </div>
-
-        <div class="pg-proposals" id="pgProposals" hidden>
-          <h2 class="pg-p-head">Revisions worth making</h2>
-          <p class="pg-p-intro">
-            Trip feedback suggests these are out of date or wrong. Approving one starts a
-            research pass on that part of the guide — nothing changes until you do.
-          </p>
-          <div class="pg-p-list" id="pgPList"></div>
-        </div>
-
-        <div class="pg-done" id="pgDone" hidden>
-          <p class="pg-done-head">Your guide is ready.</p>
-          <a class="pg-done-link" id="pgDoneLink" href="#">View the guide →</a>
-        </div>
-
-        <div class="pg-correction" id="pgCorrection" hidden>
-          <p class="pg-correction-note">
-            Can't find it yet — the exact web address depends on the destination name, and this
-            page's first guess may not match. If you know it, paste the slug here (the part of the
-            guide's URL after <code>/guides/</code>):
-          </p>
-          <form class="pg-correction-form" id="pgSlugForm">
-            <input type="text" id="pgSlugInput" placeholder="e.g. south-korea" autocomplete="off" />
-            <button type="submit">Track</button>
-          </form>
-        </div>
-      </div>
-
-      {/* The maker's own controls. Hidden until the backend is configured (initProgress unhides
-          it), and it only ever WRITES the key — the stored value is never rendered back. */}
-      <div class="pg-key" id="pgKeyPanel" hidden>
-        <button type="button" class="pg-key-toggle" id="pgKeyToggle" aria-expanded="false" aria-controls="pgKeyForm">
-          Maker controls
-        </button>
-        <form class="pg-key-form" id="pgKeyForm" hidden>
-          <label class="pg-key-label" for="pgKeyInput">Owner key</label>
-          <input
-            type="password"
-            id="pgKeyInput"
-            autocomplete="off"
-            spellcheck="false"
-            placeholder="Paste your key"
-          />
-          <button type="submit">Save</button>
-          <button type="button" id="pgKeyClear" hidden>Forget</button>
-        </form>
-        <p class="pg-key-status" id="pgKeyStatus" role="status" aria-live="polite"></p>
-      </div>
-
-      <a class="pg-home-link" href={`${base}/`}>← Back to all guides</a>
+    <div class="pg-contours" aria-hidden="true">
+      {contours.map((layer, i) => (
+        <svg data-pg-contour={i} viewBox={`0 0 ${layer.viewBox} ${layer.viewBox}`} preserveAspectRatio="xMidYMid slice">
+          {layer.rings.map((points) => <polyline points={points} />)}
+        </svg>
+      ))}
     </div>
 
-    <script type="application/json" is:inline id="pgConfig" set:html={jsonEmbed({ base })}></script>
+    <header class="pg-bar">
+      <a class="pg-wordmark" href={`${base}/`}>← Waypoint</a>
+      <div class="pg-bar-right">
+        <span class="pg-pill" id="pgStatusPill" data-tone="muted" role="status" aria-live="polite">No run yet</span>
+        <button type="button" class="pg-theme-btn" id="pgDark" aria-label="Switch to dark mode"></button>
+      </div>
+    </header>
+
+    <main class="pg" id="pgMain" data-state="empty">
+      <div id="pgRoot">
+        <header class="pg-hero">
+          <p class="pg-eyebrow">New guide</p>
+          {/* Both headlines ship in the markup and the page state picks one in CSS. The
+              server-rendered default is the empty one, which is the honest first paint: a
+              bookmarked link has told us nothing yet, and "Building …" would claim otherwise. */}
+          <h1 class="pg-title">
+            <span class="pg-title-empty">Nothing running.</span>
+            <span class="pg-title-run">Building <span class="pg-slug" id="pgSlug">your guide</span></span>
+          </h1>
+          <p class="pg-line" id="pgLine">No research run is attached to this page yet.</p>
+          <p class="pg-elapsed">
+            <span class="pg-elapsed-label">Elapsed</span>
+            <span class="pg-elapsed-val" id="pgTimer">0s</span>
+          </p>
+          {/* The empty state's way out, per the bundle README. No last-completed line: nothing
+              in the repo resolves "the last completed run", and the plan's own instruction is to
+              omit the line rather than substitute a published guide for a finished run. */}
+          <p class="pg-empty-actions">
+            <a class="pg-btn pg-btn--go" href={`${base}/new/`}>＋ Start a new guide</a>
+            <a class="pg-btn" href={`${base}/`}>Browse guides</a>
+          </p>
+        </header>
+
+        <div class="pg-grid">
+          <div class="pg-col">
+            {/* ── The route ───────────────────────────────────────────────────────────── */}
+            <section class="pg-card pg-route-card" aria-labelledby="pgRouteHead">
+              <h2 class="pg-card-head" id="pgRouteHead">The route</h2>
+              <svg
+                class="pg-route"
+                id="pgRoute"
+                viewBox={ROUTE_VIEWBOX}
+                preserveAspectRatio="xMidYMid meet"
+                role="img"
+                aria-labelledby="pgRouteAlt"
+              >
+                <title id="pgRouteAlt">Six research stages plotted along a flight path. No run attached, so none of them has started.</title>
+                <rect
+                  class="pg-ocean"
+                  x={OCEAN_RECT.x} y={OCEAN_RECT.y}
+                  width={OCEAN_RECT.width} height={OCEAN_RECT.height}
+                />
+                <path class="pg-graticule" d={graticule} />
+                <path class="pg-land" d={landPath} fill-rule="evenodd" />
+                <path class="pg-route-glow" id="pgRouteGlow" d={ROUTE_PATH_D} />
+                <path class="pg-route-todo" d={ROUTE_PATH_D} />
+                <path class="pg-route-flown" id="pgRouteFlown" d={ROUTE_PATH_D} />
+                <g class="pg-endpoints">
+                  <circle cx={stations[0].x} cy={stations[0].y} r="3.4" />
+                  <circle cx={stations[5].x} cy={stations[5].y} r="3.4" />
+                </g>
+                <g class="pg-stations" id="pgStations">
+                  {stations.map((s) => (
+                    <g class="pg-station" data-stage={s.key}>
+                      <circle class="pg-station-ring" cx={s.x} cy={s.y} r="5" />
+                      <circle class="pg-station-dot" cx={s.x} cy={s.y} r="4" />
+                      <text class="pg-station-label" x={s.labelX} y={s.labelY} text-anchor="middle">{s.label}</text>
+                    </g>
+                  ))}
+                </g>
+                {/* Ghosted rather than hidden when nothing is running (README's empty state):
+                    parked at the departure point at 35% it reads as "not left yet", which is
+                    what is true — and it is the same frame the first checkpoint departs from. */}
+                <g class="pg-plane" id="pgPlane" aria-hidden="true">
+                  <path d="M0,-7 L4.4,4.6 L0,2.4 L-4.4,4.6 Z" />
+                </g>
+              </svg>
+
+              {/* The map's text equivalent. Visually hidden because the design gives the stage
+                  detail to the map, not to a second checklist — but a map is not a text, and a
+                  screen reader must still be able to read the same six facts. */}
+              <ol class="pg-sr" id="pgSteps"></ol>
+            </section>
+
+            {/* ── Phases ──────────────────────────────────────────────────────────────── */}
+            <section class="pg-card" aria-labelledby="pgPhasesHead">
+              <h2 class="pg-card-head" id="pgPhasesHead">Phases</h2>
+              <div class="pg-phases" id="pgPhases"></div>
+            </section>
+
+            {/* ── What it is reading ──────────────────────────────────────────────────── */}
+            <section class="pg-card" aria-labelledby="pgFetchHead">
+              <h2 class="pg-card-head" id="pgFetchHead">
+                What it is reading
+                <span class="pg-dot" id="pgFetchDot" hidden aria-hidden="true"></span>
+              </h2>
+              <ul class="pg-log pg-log--fetch" id="pgFetchList" aria-live="polite" aria-busy="false"></ul>
+              <p class="pg-log-empty" id="pgFetchEmpty">
+                This run doesn't report the pages it opens yet. When it does, each request lands
+                here with the status the server gave it.
+              </p>
+            </section>
+
+            {/* ── Calls it is making ──────────────────────────────────────────────────── */}
+            <section class="pg-card" aria-labelledby="pgJudgeHead">
+              <h2 class="pg-card-head" id="pgJudgeHead">Calls it is making</h2>
+              <ul class="pg-log pg-log--judge" id="pgJudgeList" aria-live="polite"></ul>
+              <p class="pg-log-empty" id="pgJudgeEmpty">
+                Nothing reported yet. What the research keeps, what it throws out and why will
+                appear here as it decides — not summarised afterwards.
+              </p>
+            </section>
+          </div>
+
+          <div class="pg-col pg-col--side">
+            {/* ── Worth knowing ───────────────────────────────────────────────────────── */}
+            <section class="pg-card" aria-labelledby="pgNugHead">
+              <h2 class="pg-card-head" id="pgNugHead">Worth knowing</h2>
+              <ul class="pg-nuggets" id="pgNugList" aria-live="polite"></ul>
+              <p class="pg-log-empty" id="pgNugEmpty">
+                Nothing yet. When the research turns up something you'd want to know before you
+                arrive, it lands here with the source it came from.
+              </p>
+              <dl class="pg-stats" id="pgStats">
+                <div class="pg-stat"><dt>Pages read</dt><dd id="pgStatPages">—</dd></div>
+                <div class="pg-stat"><dt>Facts checked</dt><dd id="pgStatFacts">—</dd></div>
+                <div class="pg-stat"><dt>Kept</dt><dd id="pgStatKept">—</dd></div>
+                <div class="pg-stat"><dt>Dropped</dt><dd id="pgStatDropped">—</dd></div>
+              </dl>
+              <p class="pg-stats-note" id="pgStatsNote">Counts arrive with the rest of the run's reporting.</p>
+            </section>
+
+            {/* ── Tell me when it's done ──────────────────────────────────────────────── */}
+            <section class="pg-card pg-notify" id="pgNotify" aria-labelledby="pgNotifyHead">
+              <h2 class="pg-card-head" id="pgNotifyHead">No need to watch</h2>
+              <p class="pg-notify-copy">
+                Research takes 1–2 hours. Close the tab if you like — the address stays the same,
+                and this page picks up exactly where the run is whenever you come back.
+              </p>
+              <button type="button" class="pg-btn" id="pgNotifyBtn">Notify me when it's done</button>
+              <p class="pg-notify-status" id="pgNotifyStatus" role="status" aria-live="polite"></p>
+            </section>
+
+            {/* ── The finished guide ──────────────────────────────────────────────────── */}
+            <section class="pg-card pg-done" id="pgDone" hidden aria-labelledby="pgDoneHead">
+              <h2 class="pg-card-head" id="pgDoneHead">Your guide is ready</h2>
+              <p class="pg-done-copy" id="pgDoneCopy">Every stage cleared and every perishable fact carries a source and a date.</p>
+              <a class="pg-btn pg-btn--go" id="pgDoneLink" href="#">Open the guide →</a>
+            </section>
+
+            {/* Revision proposals used to sit here. They moved to /progress/triage/, the owner's
+                queue, where they are one of two card kinds and share its category striping — this
+                page is about ONE run, and a repo-wide list of things worth revising was never
+                about the run being watched. */}
+
+            {/* ── Can't find the run ──────────────────────────────────────────────────── */}
+            <section class="pg-card pg-correction" id="pgCorrection" hidden aria-labelledby="pgCorrHead">
+              <h2 class="pg-card-head" id="pgCorrHead">Can't find it yet</h2>
+              <p class="pg-card-intro">
+                The exact web address depends on the destination name, and this page's first guess
+                may not match. If you know it, paste the slug here (the part of the guide's URL
+                after <code>/guides/</code>):
+              </p>
+              <form class="pg-correction-form" id="pgSlugForm">
+                <input type="text" id="pgSlugInput" placeholder="e.g. south-korea" autocomplete="off" aria-label="Guide slug" />
+                <button type="submit" class="pg-btn">Track</button>
+              </form>
+            </section>
+
+            {/* The maker's own controls. Hidden until the backend is configured (initProgress
+                unhides it), and it only ever WRITES the key — the stored value is never rendered
+                back. */}
+            <div class="pg-key" id="pgKeyPanel" hidden>
+              <button type="button" class="pg-key-toggle" id="pgKeyToggle" aria-expanded="false" aria-controls="pgKeyForm">
+                Maker controls
+              </button>
+              <form class="pg-key-form" id="pgKeyForm" hidden>
+                <label class="pg-key-label" for="pgKeyInput">Owner key</label>
+                <input type="password" id="pgKeyInput" autocomplete="off" spellcheck="false" placeholder="Paste your key" />
+                <button type="submit">Save</button>
+                <button type="button" id="pgKeyClear" hidden>Forget</button>
+              </form>
+              <p class="pg-key-status" id="pgKeyStatus" role="status" aria-live="polite"></p>
+            </div>
+          </div>
+        </div>
+
+        {/* ── The note panel: the one place a person puts something INTO a run ─────────── */}
+        <section class="pg-note" id="pgNote" data-tone="muted" aria-labelledby="pgNoteHead">
+          <h2 class="pg-note-head" id="pgNoteHead">Nothing to add to yet</h2>
+          <p class="pg-note-placeholder" id="pgNotePlaceholder">
+            Start a run and this is where it asks you whatever it needs.
+          </p>
+          <a class="pg-note-issue" id="pgNoteIssue" href={`https://github.com/${REPO}/issues`} hidden>
+            Open the run's issue →
+          </a>
+          <div class="pg-note-live" id="pgNoteLive" hidden>
+            <div class="pg-q-list" id="pgQList"></div>
+            <div class="pg-note-actions">
+              <button type="button" class="pg-btn pg-btn--go" id="pgQSend" hidden disabled>Answer &amp; resume</button>
+              <p class="pg-q-status" id="pgQStatus" role="status" aria-live="polite"></p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="pg-foot">
+      <a href={`${base}/`}>← Back to all guides</a>
+    </footer>
+
+    <script type="application/json" is:inline id="pgConfig" set:html={jsonEmbed({ base, repo: REPO })}></script>
 
     <script>
       import { initProgress } from "../../features/pipeline-progress/index.js";
+      import { initDarkToggle } from "../../scripts/theme.js";
+      initDarkToggle("pgDark");
       initProgress();
     </script>
   </body>

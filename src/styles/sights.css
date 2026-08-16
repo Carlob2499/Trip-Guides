@@ -24,19 +24,30 @@
 .sight-media.media-fail{animation:none;background:var(--bg2)}
 .sight-media.media-fail .cardimg{display:none}
 .sight-media.media-fail::after{content:"Photo loads online";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-data);font-size:var(--text-control-sm);letter-spacing:.04em;color:var(--muted)}
-.sight-media.media-fail .sight-media-grad,.sight-media.media-fail .imgcredit{display:none}
+.sight-media.media-fail .imgcredit{display:none}
 
 .sight-media-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,13,16,.82) 0%,rgba(10,13,16,.30) 42%,rgba(10,13,16,0) 68%)}
+/* The scrim exists to make near-white text legible over PHOTO pixels, so it paints only once a
+   photo is actually there. Gated on .media-ok rather than suppressed on .media-fail (which is what
+   this was, and which left the DEFAULT/still-loading state painting a dark scrim over the light
+   skeleton while the caption below was set to dark var(--ink) — 1.75:1 on .sight-name--onphoto,
+   2.47:1 on .tag--onphoto, light mode, measured 2026-08-16). :not(.media-ok) covers .media-fail
+   too, so that arm is gone from the rule above; .media-fail still hides .imgcredit on its own. */
+.sight-media:not(.media-ok) .sight-media-grad{display:none}
 
 .sight-media-cap{position:absolute;left:0;right:0;bottom:0;margin:0;padding:.9rem 1rem .85rem;color:var(--ink)}
 /* DEFAULT is the SAFE state, not the photo-tuned one — this used to be backwards. .cardimg is
    loading="lazy", so onload/onerror often haven't fired yet when this first paints (confirmed live:
    under a blocked/slow network the image sits in this exact default state indefinitely, never
-   reaching .media-fail, since a lazy image that never starts loading never errors either). The
-   default background here is the loading-skeleton gradient above (--bg2-toned), and near-white text
-   on that measured 1.11:1/1.32:1 — the same failure .media-fail already fixed, reached by a path
-   that fix didn't cover. var(--ink) is safe against both the skeleton AND the .media-fail flat
-   --bg2, so it can be the one default instead of two special-cased overrides. */
+   reaching .media-fail, since a lazy image that never starts loading never errors either).
+   ⌁ The earlier version of this comment claimed var(--ink) "is safe against both the skeleton AND
+   the .media-fail flat --bg2, so it can be the one default". Both halves were true and the
+   conclusion still did not hold: .sight-media-grad painted its dark scrim OVER the light skeleton
+   in that same default state, so the real background was neither of the two backgrounds reasoned
+   about, and dark ink landed on a dark scrim (1.75:1 / 2.47:1, light mode). Fixed at the scrim
+   (see .sight-media:not(.media-ok) above), not here — with the scrim gone from every state that
+   has no photo, the default background really is the skeleton, and this pair really is
+   --ink-on-(--bg2|--card-mix): the same token pair .media-fail already relies on. */
 .tag--onphoto{color:var(--ink);opacity:.95;margin-bottom:.15rem}
 .sight-name--onphoto{color:var(--ink);margin:0;font-size:var(--text-h4);line-height:1.12}
 /* Photo-tuned near-white + shadow is now OPT-IN, gated on .media-ok (new onload handler in

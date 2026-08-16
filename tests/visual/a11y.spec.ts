@@ -60,8 +60,10 @@ async function prep(page: Page, path: string, scheme: "light" | "dark", vp: View
      rate.js compares its cache against.
      The VALUE is derived from the product's own sanity band rather than picked, and that is not
      fussiness — a flat 1389.2 for every currency passed korea (KRW's band is 500-3000) and was
-     rejected on japan, because model/rate.ts's inBand() correctly reads 1389 yen to the dollar
-     as bad data. The canned rate has to be plausible for the currency actually asked for, so it
+     rejected on the japan guide (since deleted, 2026-08-15), because model/rate.ts's inBand()
+     correctly reads 1389 yen to the dollar as bad data. The reasoning outlives that guide: any
+     future non-KRW guide re-creates the same trap.
+     The canned rate has to be plausible for the currency actually asked for, so it
      comes from SANITY's midpoint where a hand-tuned band exists and from the guide's own seed
      rate otherwise (a seed is in its own derived band by construction). */
   const RATE_DAY = FIXED_TIME.toISOString().slice(0, 10);
@@ -222,7 +224,8 @@ const DAY_SWIPE_CLIPPED_WHY =
   "judgement at all; axe throws 'Element midpoint exceeds the grid bounds' inside its own " +
   "color-contrast#evaluate before it ever samples a pixel, hence messageKey 'default' rather than " +
   "elmPartiallyObscured. Confirmed identical in both themes (rules out a colour cause) and at " +
-  "exactly day-1 on all four guides regardless of content (rules out a content cause) — a scan-time " +
+  "exactly day-1 on all four guides the suite then covered — korea and denmark plus the since-" +
+  "deleted japan and us — regardless of content (rules out a content cause) — a scan-time " +
   "geometry artifact of the Panel migration's nesting (Atlas Phase 2 added a .pnl-body-in{overflow:" +
   "hidden} ancestor the deck did not have before), not a rendering bug. The text itself uses " +
   ".d{color:var(--accent-ink)} on .day{background:var(--bg2)} — accent-tokens.ts derives --accent-" +
@@ -243,6 +246,47 @@ const MAST_DEK_OBSCURING_WHY =
   "case — the same stacking-order reimplementation family as bgOverlap above. Measured the real " +
   "composited worst case the same pixel-sampled way: 5.91:1 (denmark, daytime sky, both schemes) " +
   "against the 4.5:1 required at 17.92px/400; korea measures >=14:1.";
+/* ⌁ This entry REPLACES a `color-contrast/bgGradient` baseline of 1, and the swap is the whole
+   story — it is the fourth instance of the family this file's header describes, and the first
+   where the gate's own ceiling is what surfaced a shipped bug.
+
+   axe 4.13.0 (bumped in c507b91) relabelled these same nodes from `bgOverlap` to `bgGradient`,
+   1:1, no node added or removed. bgOverlap's ceiling was 65/47 and absorbed them silently;
+   bgGradient's was 1, so they finally showed. Measuring them then found a REAL defect:
+   `.sight-media-grad` — the dark scrim that makes near-white text legible over photo pixels —
+   was suppressed only under `.media-fail`, so in the DEFAULT still-loading state it painted over
+   the LIGHT loading skeleton while the caption below was dark `var(--ink)`. Light mode measured
+   1.75:1 on .sight-name--onphoto and 2.47:1 on .tag--onphoto. Not harness-only: .cardimg is
+   loading="lazy", and a lazy image that never starts loading never errors either, so a blocked or
+   slow network parks a card in that state indefinitely (sights.css records this).
+
+   Fixed at the scrim (`.sight-media:not(.media-ok) .sight-media-grad{display:none}`) — it paints
+   only when there is a photo to make legible. With it gone from the chain axe walks one layer
+   further and reaches `.cardimg` itself, so the key moves to imgNode: axe declines to rate text
+   with an image node behind it. It still cannot resolve; the difference is that the number behind
+   it now passes.
+
+   Counts: 3 nodes per photo card (.tag--onphoto, .sight-name--onphoto, .imgcredit--onphoto) ×
+   14 korea / 10 denmark cards = 42 / 30, identical on all four scheme × viewport combos.
+
+   Measured 2026-08-16 in the default/loading state both guides render here, animations settled,
+   element opacity composited, against the skeleton's own resolved stops — all need 4.5:1:
+     .sight-name--onphoto  20.8px/640  12.28:1 light · 12.86:1 dark
+     .tag--onphoto         12px/400    11.19:1 light · 12.86:1 dark  (opacity .95 accounted)
+     .imgcredit--onphoto   9.6px/400   18.52:1 both  (its own rgba(10,13,16,.68) pill, not the
+                                                     skeleton — unaffected by the scrim either way)
+   Identical on denmark, which is the tell that this is sights.css and not per-guide content. */
+const SIGHT_ONPHOTO_IMGNODE_WHY =
+  "The sight photo cards' on-media text (.tag--onphoto / .sight-name--onphoto / .imgcredit--" +
+  "onphoto, 3 per card) sits over .sight-media, whose child .cardimg is an image node — axe " +
+  "declines to rate text with an image behind it and reports fgColor/bgColor null, ratio 0. It " +
+  "is declining to compute, not disagreeing with a value. Measured the real composited contrast " +
+  "instead, in the still-loading state these render in here (images aborted), both schemes, " +
+  "opacity composited: .sight-name--onphoto 12.28:1 light / 12.86:1 dark at 20.8px/640; " +
+  ".tag--onphoto 11.19:1 / 12.86:1 at 12px/400; .imgcredit--onphoto 18.52:1 on its own pill at " +
+  "9.6px/400 — all against 4.5:1. The dark scrim that used to break this pair now paints only " +
+  "under .media-ok (sights.css), so no state composites dark ink onto it. See the block comment " +
+  "above for the bug this baseline replaced.";
 const DAY_SCRUB_STICKY_RANGE_WHY =
   "docs/archive/INDEX.md → PLAN_ATLAS_MIGRATION Stage A.1 fixed .day-scrub's position:sticky (planner.css), dead " +
   "before because .pnl-body-in{overflow:hidden} (unconditional) neutralised it — the same " +
@@ -291,17 +335,16 @@ const PILL_ROW_CLIPPED_WHY =
   "one is var(--on-aink) on var(--accent) — both pinned by src/styles/atlas-tokens.test.ts, the " +
   "first at 15.60:1 in the R5 lifted Day palette. Desktop reports zero nodes of this key: the " +
   "spine lays all thirteen stops out at once, so nothing is clipped.";
-/* Japan and US were never in the full-scan list until this pass (see the guide-page loop below) —
-   their own elmPartiallyObscured/elmPartiallyObscuring counts are the SAME three already-proven
-   mechanisms above (PILL_ROW_CLIPPED_WHY's phone rail, DAY_SCRUB_STICKY_RANGE_WHY's forced-open
-   multi-panel sticky reach, JLINE_CLIPPED_WHY's panned journey-line), compounding at each guide's
-   own stop/day count rather than korea's or denmark's. Node-by-node confirmed on both: japan's
-   desktop max is .jl-stop/.jl-label pill-row clipping + .dchip-num/.dchip-date day-scrub range +
-   .jl-word/.jl-date journey-line clipping together; us shows the identical three classes at its
-   own, smaller stop/day count. No new kind of node on either guide — same mechanisms, new counts. */
-const GUIDE_TIMELINE_CLIPPED_WHY =
-  `Three already-documented, guide-page-only clipping mechanisms compounding at this guide's own ` +
-  `stop/day count: (1) ${PILL_ROW_CLIPPED_WHY} (2) ${DAY_SCRUB_STICKY_RANGE_WHY} (3) ${JLINE_CLIPPED_WHY}`;
+/* ⌁ A composite GUIDE_TIMELINE_CLIPPED_WHY used to live here, concatenating the three constants
+   above (PILL_ROW_CLIPPED_WHY's phone rail, DAY_SCRUB_STICKY_RANGE_WHY's forced-open multi-panel
+   sticky reach, JLINE_CLIPPED_WHY's panned journey-line). It existed only for the japan and us
+   guides, whose elmPartiallyObscured/elmPartiallyObscuring counts hit all three at once; both
+   guides were deleted (us in 6ca5568, japan in 33beeff on 2026-08-15) and it went with their
+   baselines. The finding it recorded is reusable and worth keeping: those three are ONE
+   already-proven family, and a guide that trips all three reports a count that is a function of
+   its own stop/day count, not a new kind of node. A guide added to the full-scan list below with
+   a long journey line will need that composite entry back — rebuild it from the three constants
+   rather than baselining its counts as something new. */
 
 /* A color-contrast incomplete COUNT is a function of text reflow, not of correctness. axe flags one
    node per text node whose ancestor carries a sizeable pseudo-element, so re-wrapping the same prose
@@ -445,6 +488,9 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     // renders the same masthead so the same max covers it).
     "color-contrast/bgGradient": { max: 1, why: MAST_BG_GRADIENT_WHY },
     "color-contrast/elmPartiallyObscuring": { max: 1, why: MAST_DEK_OBSCURING_WHY },
+    // 42 = 3 on-media nodes × korea's 14 photo cards. See SIGHT_ONPHOTO_IMGNODE_WHY and the
+    // block comment above it for the scrim bug this replaced.
+    "color-contrast/imgNode": { max: 42, why: SIGHT_ONPHOTO_IMGNODE_WHY },
     // Atlas Phase 2 (own-cards-panels): day-1's date label in the phone swipe-deck, mobile only
     // (desktop reports 0). See DAY_SWIPE_CLIPPED_WHY.
     "color-contrast/default": { max: 1, why: DAY_SWIPE_CLIPPED_WHY },
@@ -509,6 +555,10 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     // (Painted Atlas daytime sky: h1 4.64:1 vs 3:1 needed; .dek 5.91:1 vs 4.5:1 needed).
     "color-contrast/bgGradient": { max: 1, why: MAST_BG_GRADIENT_WHY },
     "color-contrast/elmPartiallyObscuring": { max: 1, why: MAST_DEK_OBSCURING_WHY },
+    // 30 = the same 3 on-media nodes as korea at DENMARK's 10 photo cards. The measured ratios in
+    // SIGHT_ONPHOTO_IMGNODE_WHY are identical on both guides — the tell that this is sights.css,
+    // not per-guide content.
+    "color-contrast/imgNode": { max: 30, why: SIGHT_ONPHOTO_IMGNODE_WHY },
     // 4 = the timeline stops clipped at the .anch-scroll edge, mobile only (counted: 2 .jl-date +
     // .jl-word/.jl-date of the Tue stop at 375px; desktop renders 0 of this key).
     "color-contrast/elmPartiallyObscured": { max: 4, why: JLINE_CLIPPED_WHY },
@@ -517,41 +567,16 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     // (desktop reports 0). See DAY_SWIPE_CLIPPED_WHY.
     "color-contrast/default": { max: 1, why: DAY_SWIPE_CLIPPED_WHY },
   },
-  /* Japan and US join the full-scan list this pass (see the guide-page loop below) — first real
-     axe run either has ever had. Every key below is an already-proven mechanism from korea/denmark
-     above, at japan's/us's own node counts; no new kind of node on either guide. Counts verified
-     via the real test harness (temporary instrumented run), not estimated from a diff. */
-  "japan guide": {
-    "color-contrast/bgOverlap": {
-      max: 32,
-      why: bgOverlapWhy(
-        "sight-card captions/credit under a still-loading OR explicitly-failed photo (sights.css's " +
-          ".media-ok/.media-fail split) and the masthead's broken-cover-photo fallback (masthead.css)",
-      ),
-    },
-    "color-contrast/pseudoContent": { max: 17, why: PSEUDO_CONTENT_WHY },
-    "color-contrast/shortTextContent": { max: 4, why: SHORT_TEXT_CONTENT_WHY },
-    "color-contrast/nonBmp": { max: 58, why: NON_BMP_WHY },
-    // Desktop-only: japan's journey line runs long enough that even the 1280px scan clips a stop
-    // at the .anch-scroll edge (the same mechanism denmark only shows at mobile).
-    "color-contrast/elmPartiallyObscuring": { max: 1, why: JLINE_CLIPPED_WHY },
-    // 27 desktop = japan's own stop/day count driving all three GUIDE_TIMELINE_CLIPPED_WHY
-    // mechanisms at once (pill-row + day-scrub + journey-line clipping) — see that constant.
-    "color-contrast/elmPartiallyObscured": { max: 27, why: GUIDE_TIMELINE_CLIPPED_WHY },
-    "frame-tested/default": { max: 1, why: FRAME_TESTED_WHY },
-  },
-  "us guide": {
-    "color-contrast/nonBmp": { max: 37, why: NON_BMP_WHY },
-    "color-contrast/pseudoContent": { max: 9, why: PSEUDO_CONTENT_WHY },
-    "color-contrast/bgOverlap": {
-      max: 9,
-      why: bgOverlapWhy(
-        "sight-card captions/credit under a still-loading OR explicitly-failed photo (sights.css's " +
-          ".media-ok/.media-fail split) and the masthead's broken-cover-photo fallback (masthead.css)",
-      ),
-    },
-    "frame-tested/default": { max: 1, why: FRAME_TESTED_WHY },
-  },
+  /* ⌁ "japan guide" and "us guide" entries stood here and are REMOVED WITH THEIR GUIDES, not
+     relocated (us in 6ca5568, japan in 33beeff on 2026-08-15 — japan is being rebuilt from
+     scratch). Their maxes were real, instrumented measurements, but of content that no longer
+     exists: a rebuilt japan is different content and would have to be re-measured anyway, so
+     keeping the numbers would only invite someone to trust a stale ceiling. What is worth
+     carrying forward is that every key they held was an already-proven mechanism from the
+     korea/denmark entries above at that guide's own node counts — adding a guide back means
+     re-measuring counts, not discovering new kinds of node. Note also what their removal COSTS:
+     they were the only pages here exercising a guide whose trip is in the FUTURE relative to
+     FIXED_TIME (see TARGET_PAGES near the foot of this file for what that gated). */
 };
 
 /* Narrow viewports reflow the same prose across more lines, and a colour-contrast incomplete
@@ -595,20 +620,11 @@ const MOBILE_DELTA: Record<string, Record<string, Baseline>> = {
     // 16 on both colour schemes; desktop's shorter forced-open page stays within the base max: 4.
     "color-contrast/elmPartiallyObscured": { max: 16, why: DAY_SCRUB_STICKY_RANGE_WHY },
   },
-  "japan guide": {
-    // Measured 57 at 375px against 27 at 1280px — the same three GUIDE_TIMELINE_CLIPPED_WHY
-    // mechanisms (pill row + day-scrub + journey-line) render more of themselves in the
-    // single-column mobile layout, at japan's own stop/day count.
-    "color-contrast/elmPartiallyObscured": { max: 57, why: GUIDE_TIMELINE_CLIPPED_WHY },
-  },
-  "us guide": {
-    // Measured 7 at 375px against 0 at 1280px — the same combined mechanism as japan above, at
-    // us's own smaller stop/day count.
-    "color-contrast/elmPartiallyObscured": { max: 7, why: GUIDE_TIMELINE_CLIPPED_WHY },
-    // Mobile-only: us's journey line clips one stop at the .anch-scroll edge (.jl-word), the same
-    // mechanism japan's own elmPartiallyObscuring entry above documents at desktop scale.
-    "color-contrast/elmPartiallyObscuring": { max: 1, why: JLINE_CLIPPED_WHY },
-  },
+  /* ⌁ The "japan guide" / "us guide" deltas that stood here went with their INCOMPLETE_BASELINE
+     entries above when the guides were deleted. The pattern they established still holds and is
+     why korea and denmark carry deltas at all: the timeline/rail clipping keys grow sharply from
+     desktop to mobile (japan measured 27 -> 57) because a single-column layout renders more of
+     the same mechanism, so a guide-page delta is expected, not a smell. */
 };
 
 /* iOS Safari zooms the page in when a text-entry control under 16px takes focus, and does not
@@ -646,21 +662,23 @@ for (const [name, path] of [
   });
 }
 
-// Every page shape the site builds: the hub, and ALL FOUR guides. Korea and Denmark
-// differ in ways axe can see — Denmark has no learnings block (so no reality
+// Every page shape the site builds: the hub, and EVERY guide the repo ships. Korea and
+// Denmark differ in ways axe can see — Denmark has no learnings block (so no reality
 // layer), Korea carries four extra content groups and a habitats/raids grid — so
-// covering one guide leaves the other's markup ungated. Japan and US joined this pass
-// (design-reconciliation §C5): the full-scan list had silently only ever covered two of
-// the four guides, and extending it immediately found a real, previously-shipping
-// landmark-unique bug on Japan's Etiquette & language tab (Panel.astro's implicit
-// role="region" colliding with its own tab-group ancestor) — fixed at the shared
-// component, see Panel.astro. Both colour schemes: the accent-token dark-mode remap has
-// its own failure modes light mode can't surface.
+// covering one guide leaves the other's markup ungated. The standing rule is EVERY guide,
+// not a representative sample, and it was earned: design-reconciliation §C5 found the list
+// had silently only ever covered two of the four guides then shipping, and extending it to
+// Japan and US immediately surfaced a real, previously-shipping landmark-unique bug on
+// Japan's Etiquette & language tab (Panel.astro's implicit role="region" colliding with its
+// own tab-group ancestor) — fixed at the shared component, see Panel.astro. Those two guides
+// have since been deleted (us in 6ca5568, japan in 33beeff on 2026-08-15) and their entries
+// went with them, so the list is two guides again by content, not by policy: ADD A GUIDE
+// HERE THE DAY IT SHIPS. Both colour schemes: the accent-token dark-mode remap has its own
+// failure modes light mode can't surface.
 for (const [name, path] of [
   ["hub", "/Trip-Guides/"],
   ["korea guide", "/Trip-Guides/guides/korea/"],
   ["denmark guide", "/Trip-Guides/guides/denmark/"],
-  ["japan guide", "/Trip-Guides/guides/japan/"],
   ["new intake", "/Trip-Guides/new/"], // R4: the composed intake — gated from birth
   /* ⌁ `["trip tools", "/Trip-Guides/tools/korea/"]` was here and is REMOVED, not relocated.
      R5 deleted that route and this entry kept pointing at it — so for four combos the gate
@@ -794,8 +812,10 @@ for (const scheme of ["light", "dark"] as const) {
    there, in near-white on near-white, and nobody could have seen it to report it.
 
    Scanned per guide because --accent and --accent-ink are extracted PER GUIDE, and the bug it
-   replaces was one that only denmark's lighter accent exposed. */
-for (const guide of ["denmark", "korea", "japan"] as const) {
+   replaces was one that only denmark's lighter accent exposed — so this list is EVERY guide the
+   repo ships, not a sample. (japan was here until its guide was deleted, 2026-08-15; add the
+   next guide the day it ships.) */
+for (const guide of ["denmark", "korea"] as const) {
   for (const scheme of ["light", "dark"] as const) {
     test(`what's-next banner is legible — ${guide} (${scheme})`, async ({ page }) => {
       await page.emulateMedia({ colorScheme: scheme, reducedMotion: "reduce" });
@@ -913,7 +933,7 @@ const DEVICES = [
   /* A desktop width in a TOUCH-target list looks wrong until you notice what the nine above
      cannot reach: 1024px is this list's ceiling, and the reading spine does not exist below
      1100px, so `.spine-tick` — a real, keyboard-focusable <button>, one per section group on
-     all four guides — had never been measured by anything (design-reconciliation §C5). Any
+     every guide — had never been measured by anything (design-reconciliation §C5). Any
      control gated behind a desktop breakpoint was structurally invisible here. This entry is
      the ≥1100px window, not a tenth device; SCREENS.md still names the nine. */
   { label: "Desktop 1280", width: 1280, height: 800 },
@@ -967,24 +987,29 @@ const TARGET_BASELINE: Record<string, { max: number; why: string }> = {
       "button that is always present and already clears 44px (spine.js forwards the click to " +
       "it); and it is keyboard-reachable with a focus ring plus a .spine-tip tooltip naming the " +
       "destination. As with .dchip, the miss costs a neighbouring section, not a wrong " +
-      "destination. Ceiling is korea's 13 groups (japan 11, denmark 10, us 9); it may only fall.",
+      "destination. Ceiling is korea's 13 groups — the most of any guide that ships (denmark " +
+      "has 10); it may only fall. The two guides that also fed this number are gone (japan 11, " +
+      "us 9, deleted 2026-08-15 and in 6ca5568), and neither was the ceiling, so it stands.",
   },
 };
 
-/* Three pages, not one. This sweep only ever visited a guide, so the hub — the page every
+/* More than one page. This sweep only ever visited a guide, so the hub — the page every
    visitor lands on first, and the one carrying the most chips and pills per screen — had no
    touch-target coverage at all at any of these widths. Kept as separate tests per page
    rather than one test loading both, so the TARGET_BASELINE ceilings below stay PER PAGE and
    a regression on one page can never be absorbed by headroom on the other. */
 const TARGET_PAGES = [
   ["korea guide", "/Trip-Guides/guides/korea/"],
-  /* Japan, added in design-reconciliation §C5, is not a third sample of the same thing — it is
-     the only page here whose trip is in the FUTURE relative to FIXED_TIME. guide-ui.js:163-176
-     hides the jet-lag calculator once a trip is past, and korea's is, so `.jl-toggle` (36px,
-     every width) rendered on japan and us and was audited on neither. The general hole: a guide
-     whose CONTENT differs — an upcoming trip, a different currency, a different tab count —
-     renders controls korea simply does not have. One upcoming-trip guide closes it. */
-  ["japan guide", "/Trip-Guides/guides/japan/"],
+  /* ⌁ A KNOWN, CURRENTLY-OPEN HOLE, stated rather than quietly closed. `["japan guide",
+     "/Trip-Guides/guides/japan/"]` sat here from design-reconciliation §C5 and was not a third
+     sample of the same thing: it was the only page in this sweep whose trip was in the FUTURE
+     relative to FIXED_TIME. guide-ui.js:165-178 hides the jet-lag calculator once a trip has
+     ended, and BOTH remaining guides' trips are past it (korea Jul 2026, denmark Jun 2026), so
+     with japan deleted (2026-08-15) `.jl-toggle` — a real control that came up short here and
+     had to be raised in §C5 — is once again measured by nothing at all. The general hole is the
+     same one §C5 named: a guide whose CONTENT differs (an upcoming trip, a different currency, a
+     different tab count) renders controls korea simply does not have. One upcoming-trip guide
+     in this list closes it again; add the rebuilt japan here when it ships. */
   ["hub", "/Trip-Guides/"],
 ] as const;
 

@@ -1,7 +1,9 @@
-/* === /new — the composed intake (R4, 2026-08-05) =============================
-   Page chrome + the flat form (moved here from hub.css when the intake left the
-   hub's modal) + the flow vocabulary (.itk-*): drop zone, ranked board, interview
-   tail, manifest confirm. Everything reads from base.css tokens. */
+/* === /new — the preflight checklist (2026-08-15) =============================
+   Page chrome + the real controls (moved here from hub.css when the intake left the
+   hub's modal) + the checklist vocabulary (.itk-*): completeness meter, six collapsible
+   sections with status marks and stamps, two-column field rows, head-to-head priority
+   matchups, the pre-dispatch fork gate. Everything reads from base.css tokens.
+   The composed flow's stage/board/manifest vocabulary died with ui/intake-flow.js. */
 
 /* ── Page chrome ──────────────────────────────────────────────────────────── */
 body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-width:100%}
@@ -24,76 +26,174 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .itk-foot a{color:var(--accent-ink);text-decoration:underline;text-underline-offset:3px}
 .itk-foot a:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 
-/* ── The flat form (no-JS base markup; fields re-parent into the flow) ────── */
-.ng-form{display:flex;flex-direction:column;gap:.95rem;background:var(--card);border:1px solid var(--rule);border-radius:0;padding:1.5rem 1.6rem 1.7rem}
+/* ── The form ─────────────────────────────────────────────────────────────────
+   The query box every checklist breakpoint below reads. Container, not viewport: the
+   form is the thing whose width decides whether a note fits beside its control, and it
+   is nested inside a max-width sheet that the viewport number cannot see. */
+.ng-form{container-type:inline-size;container-name:itk;display:flex;flex-direction:column;gap:1rem;background:var(--card);border:1px solid var(--rule);border-radius:0;padding:0 0 1.4rem}
 .ng-field{display:flex;flex-direction:column;gap:.35rem;border:none;padding:0;min-width:0}
-.ng-field>span{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
-.ng-field em{font-style:normal;color:var(--rule2)}
+.ng-field-split{flex-direction:row;gap:.6rem}
+.itk-in{display:flex;flex-direction:column;gap:.2rem;flex:1;min-width:0}
+.itk-sub-lab{font-family:var(--font-data);font-size:var(--text-label);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
 /* 44px control height (16px+ font already iOS-zoom-safe); textarea grows from the same base. */
 .ng-field input,.ng-field select,.ng-field textarea{font:inherit;font-size:var(--text-body);background:var(--bg2);color:var(--ink);border:1px solid var(--rule2);border-radius:0;padding:.55rem .75rem;width:100%;min-height:44px;transition:border-color .14s,background .14s}
 .ng-field textarea{min-height:66px}
 .ng-field input:hover,.ng-field select:hover,.ng-field textarea:hover{border-color:var(--muted)}
 .ng-field input:focus,.ng-field select:focus,.ng-field textarea:focus{outline:2px solid var(--accent-ink);outline-offset:0;border-color:transparent}
-.ng-row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
-.ng-err{color:var(--accent-ink);font-size:var(--text-control);font-weight:600}
-.ng-submit{margin-top:.4rem;min-height:44px;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);background:var(--ink);color:var(--bg);border:1px solid var(--ink);border-radius:999px;padding:.6rem 1.3rem;cursor:pointer;transition:background .18s,border-color .18s,transform .18s var(--ease-spring)}
+.ng-err{color:var(--accent-ink);font-size:var(--text-control);font-weight:600;margin:0 1.4rem}
+.ng-submit{margin:0 1.4rem;min-height:44px;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);background:var(--ink);color:var(--bg);border:1px solid var(--ink);border-radius:999px;padding:.6rem 1.3rem;cursor:pointer;transition:background .18s,border-color .18s}
 .ng-submit:hover{background:var(--accent);border-color:var(--accent)}
-.ng-submit:active{transform:scale(.98)}
 .ng-submit:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
-@media(prefers-reduced-motion:reduce){.ng-submit{transition:background .18s,border-color .18s}.ng-submit:active{transform:none}}
 
-/* ── The flow ─────────────────────────────────────────────────────────────── */
-.itk-stage{position:relative;min-height:18rem}
-.itk-screen{display:block}
-.itk-ask{font-family:var(--font-display);font-weight:640;font-size:clamp(1.3rem,3.4vw,1.7rem);letter-spacing:-.012em;line-height:1.2;margin:0 0 .3rem;outline:none}
-.itk-sub{color:var(--muted);font-size:var(--text-small);line-height:1.55;margin:0 0 1rem;max-width:58ch}
+/* ── The completeness meter ───────────────────────────────────────────────────
+   Sticky, because the one thing a checklist owes you is knowing where you are without
+   scrolling to find out. The fill is scaleX from a custom property — never width, which
+   lays out every frame (docs/reference/motion.md). */
+.itk-meter{position:sticky;top:0;z-index:2;background:var(--card);border-bottom:1px solid var(--rule);padding:.7rem 1.4rem .6rem}
+.itk-meter-track{height:6px;background:var(--bg2);border:1px solid var(--rule);overflow:hidden}
+.itk-meter-fill{display:block;height:100%;background:var(--green);transform:scaleX(var(--itk-fill,0));transform-origin:left center;transition:transform var(--dur-reveal) var(--ease-out-expo)}
+.itk-meter-row{display:flex;flex-wrap:wrap;gap:.3rem .9rem;align-items:baseline;margin-top:.45rem}
+.itk-meter-cleared{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--ink)}
+/* NOT a time or a cost. The prototype's "est. 1h 40m · ~$11.80" is unknowable before the
+   research runs; what IS knowable is how much of the intake is still blank. */
+.itk-meter-blanks{font-family:var(--font-data);font-size:var(--text-micro);color:var(--muted);margin-left:auto}
 
-.itk-nav{display:flex;align-items:center;gap:.8rem;margin-top:1.2rem}
-.itk-back,.itk-next{padding:.55rem 1.1rem;min-height:44px;border-radius:999px;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);cursor:pointer;border:1px solid var(--rule);background:var(--card);color:var(--ink);transition:background .18s,color .18s,border-color .18s}
-.itk-next{background:var(--ink);border-color:var(--ink);color:var(--bg);margin-left:auto}
-.itk-next:hover,.itk-next-acc{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
-.itk-back:hover{border-color:var(--ink)}
-.itk-back:focus-visible,.itk-next:focus-visible,.itk-send:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+/* ── Sections ─────────────────────────────────────────────────────────────────
+   <details>, so the checklist collapses with scripts off too. No height animation: the
+   body cuts in and out, which is the one behaviour reduced motion and a 60fps budget
+   agree on. */
+.itk-sec{border-bottom:1px solid var(--rule);margin:0}
+.itk-sec:last-of-type{border-bottom:none}
+.itk-sec-head{display:flex;align-items:center;gap:.7rem;padding:.85rem 1.4rem;min-height:44px;cursor:pointer;list-style:none;transition:background .14s}
+.itk-sec-head::-webkit-details-marker{display:none}
+.itk-sec-head:hover{background:var(--bg2)}
+.itk-sec-head:focus-visible{outline:2px solid var(--accent-ink);outline-offset:-2px}
+.itk-sec-titles{display:flex;flex-direction:column;gap:.1rem;min-width:0;flex:1}
+.itk-sec-title{font-family:var(--font-display);font-weight:640;font-size:var(--text-h4);letter-spacing:-.01em;line-height:1.2}
+.itk-sec-blurb{font-size:var(--text-small);color:var(--muted);line-height:1.45}
+.itk-sec-skipped .itk-sec-title,.itk-sec-skipped .itk-sec-blurb{color:var(--muted)}
 
-/* A · drop zone */
-.itk-dz{display:block;padding:2rem 1rem;border:2px dashed var(--rule2);border-radius:0;text-align:center;cursor:pointer;transition:border-color .2s,background .2s}
+/* The 22px status square: number while there is something to do, ✓ once the section is
+   answered, ! once it is deliberately skipped. */
+.itk-mark{flex:none;width:22px;height:22px;display:flex;align-items:center;justify-content:center;border-radius:0;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;line-height:1;transition:background .16s,border-color .16s,color .16s}
+.itk-mark-todo{border:1px solid var(--rule2);background:transparent;color:var(--muted)}
+.itk-mark-done{border:1px solid var(--green);background:var(--green);color:var(--on-green)}
+/* Outlined, not filled: --warn has no --on-warn partner, and in dark mode it is a light
+   ochre where white text measures ~2.3:1 — the exact bug --on-green exists to prevent.
+   SPEC-COMPONENTS §6 uses outlines for two of its three stamps anyway. */
+.itk-mark-assumed{border:2px solid var(--warn);background:transparent;color:var(--warn)}
+
+/* The stamp — the WORD is the accessible carrier; the colour only repeats it (§6). */
+.itk-stamp{flex:none;border-radius:0;padding:.25rem .5rem;font-family:var(--font-data);font-size:var(--text-panel-kicker);font-weight:700;letter-spacing:var(--tracking-panel-kicker);text-transform:uppercase;white-space:nowrap}
+.itk-stamp-done{border:1px solid var(--green);color:var(--green)}
+.itk-stamp-part{border:1px solid var(--rule2);color:var(--muted)}
+.itk-stamp-todo{border:1px solid var(--rule);color:var(--muted)}
+.itk-stamp-assumed{border:1px solid var(--warn);color:var(--warn)}
+
+.itk-sec-body{padding:.2rem 1.4rem 1.2rem;display:flex;flex-direction:column;gap:1.1rem}
+.itk-sec-foot{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;padding-top:.2rem}
+.itk-skip,.itk-next-sec,.itk-reset{min-height:44px;border-radius:999px;padding:.55rem 1.1rem;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);cursor:pointer;border:1px solid var(--rule2);background:var(--card);color:var(--ink);transition:background .16s,border-color .16s,color .16s}
+.itk-skip{border-color:var(--warn);color:var(--warn)}
+.itk-skip:hover{background:color-mix(in srgb,var(--warn) 10%,transparent)}
+.itk-next-sec{margin-left:auto;background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.itk-next-sec:hover{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.itk-reset:hover,.itk-next-sec:hover{border-color:var(--accent)}
+.itk-skip:focus-visible,.itk-next-sec:focus-visible,.itk-reset:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+
+/* ── Field rows ───────────────────────────────────────────────────────────────
+   Control + question + example on the left; what the answer CHANGES on the right, behind
+   a 2px rule. Traveller language on both sides — the schema's own descriptions are written
+   for the pipeline and say so. */
+.itk-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,15rem);gap:1.2rem;align-items:start}
+.itk-ctl{min-width:0;display:flex;flex-direction:column;gap:.3rem}
+.itk-q{font-family:var(--font-display);font-weight:640;font-size:var(--text-body);line-height:1.35;margin:0}
+.itk-eg{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);margin:0 0 .15rem;line-height:1.45}
+.itk-note{border-left:2px solid var(--rule);padding-left:.8rem;margin:.1rem 0 0;font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);line-height:1.5}
+
+/* ── A · drop zone ────────────────────────────────────────────────────────── */
+.itk-dz{display:block;padding:1.6rem 1rem;border:2px dashed var(--rule2);border-radius:0;text-align:center;cursor:pointer;transition:border-color .2s,background .2s}
 .itk-dz:hover,.itk-dz-hot{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 6%,transparent)}
 .itk-dz-big{display:block;font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);letter-spacing:-.01em}
 .itk-dz-sub{display:block;margin-top:.3rem;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted)}
-.itk-found{margin:.9rem 0 0;padding:0;font-family:var(--font-data);font-size:var(--text-control);color:var(--muted)}
+.itk-found{margin:0;padding:0;font-family:var(--font-data);font-size:var(--text-control);color:var(--muted)}
 .itk-found li{list-style:none;margin:.25rem 0}
 .itk-found li::before{content:"✓ ";color:var(--accent-ink);font-weight:700}
 
-/* B · ranked board */
-.itk-slots{display:flex;gap:.6rem;margin:.4rem 0 .8rem;flex-wrap:wrap}
-.itk-slot{flex:1;min-width:8.5rem;border:2px dashed var(--rule2);border-radius:0;min-height:50px;display:flex;align-items:center;justify-content:center;gap:.35em;font-family:var(--font-data);font-size:var(--text-control);color:var(--muted);transition:border-color .2s,background .2s}
-.itk-slot-on{border-style:solid;border-color:var(--accent);color:var(--ink);background:color-mix(in srgb,var(--accent) 8%,transparent);font-weight:700}
-.itk-slot em{font-style:normal;color:var(--accent-ink)}
-.itk-board,.itk-topics{display:flex;flex-wrap:wrap;gap:.45rem;margin:.2rem 0 .6rem}
-.itk-card,.itk-chip{padding:.5rem .95rem;min-height:44px;border-radius:999px;border:1px solid var(--rule);background:var(--card);color:var(--ink);font-family:var(--font-display);font-weight:600;font-size:var(--text-control);cursor:pointer;transition:background .15s,border-color .15s,color .15s,transform .15s}
-.itk-card:hover,.itk-chip:hover{border-color:var(--accent);transform:translateY(-1px)}
-.itk-card-on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
-.itk-chip{min-height:38px;padding:.4rem .8rem}
-.itk-chip-on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+/* ── B · head-to-head priorities ──────────────────────────────────────────── */
+.itk-vs{display:grid;grid-template-columns:1fr auto 1fr;gap:.6rem;align-items:stretch;margin:.3rem 0 .2rem}
+.itk-vs-btn{min-height:60px;border-radius:0;border:1px solid var(--rule2);background:var(--card);color:var(--ink);font-family:var(--font-display);font-weight:640;font-size:var(--text-control);padding:.7rem .9rem;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.itk-vs-btn:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,transparent)}
+.itk-vs-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.itk-vs-mid{align-self:center;font-family:var(--font-data);font-size:var(--text-panel-kicker);font-weight:700;letter-spacing:var(--tracking-panel-kicker);text-transform:uppercase;color:var(--muted)}
+.itk-vs-count{margin:.1rem 0 0;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
+.itk-podium{list-style:none;margin:.5rem 0 .2rem;padding:0;display:flex;flex-wrap:wrap;gap:.45rem}
+.itk-podium-item{display:flex;align-items:center;gap:.4rem;border:1px solid var(--rule2);border-radius:0;padding:.35rem .7rem;min-height:38px;font-family:var(--font-display);font-weight:600;font-size:var(--text-control)}
+.itk-podium-first{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.itk-podium-n{font-family:var(--font-data);font-size:var(--text-label);letter-spacing:var(--tracking-micro);opacity:.8}
+.itk-podium-lab{min-width:0}
 .itk-minihead{margin:.9rem 0 .1rem;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
-@media(prefers-reduced-motion:reduce){.itk-card,.itk-chip{transition:background .15s,border-color .15s,color .15s}.itk-card:hover,.itk-chip:hover{transform:none}}
+.itk-topics{display:flex;flex-wrap:wrap;gap:.45rem}
+.itk-chip{min-height:44px;padding:.5rem .9rem;border-radius:999px;border:1px solid var(--rule);background:var(--card);color:var(--ink);font-family:var(--font-display);font-weight:600;font-size:var(--text-control);cursor:pointer;display:inline-flex;align-items:center;gap:.4rem;transition:background .15s,border-color .15s,color .15s}
+.itk-chip:hover{border-color:var(--accent)}
+.itk-chip-on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.itk-chip:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 
-/* D · manifest */
-.itk-mani{font-family:var(--font-display);font-size:clamp(1.15rem,3vw,1.45rem);line-height:2;max-width:58ch;margin:.4rem 0 .6rem}
-.itk-blank{display:inline;font:inherit;background:none;border:none;border-bottom:2px solid var(--accent);color:var(--accent-ink);padding:0 .1em;cursor:pointer;border-radius:0;transition:background .15s}
-.itk-blank:hover{background:color-mix(in srgb,var(--accent) 10%,transparent)}
-.itk-blank:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
-.itk-blank-ghost{color:var(--muted);border-bottom-color:var(--rule2);font-style:italic}
-.itk-drawer{margin:.6rem 0 .2rem;padding:.9rem 1rem;background:var(--bg2);border:1px solid var(--rule);border-radius:0}
-.itk-send{min-height:44px;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);background:var(--accent);color:var(--on-accent);border:1px solid var(--accent);border-radius:999px;padding:.6rem 1.4rem;cursor:pointer;margin-left:auto;transition:background .18s,transform .18s var(--ease-spring)}
-.itk-send:hover{background:var(--ink);border-color:var(--ink)}
-.itk-send:active{transform:scale(.98)}
-.itk-send-note{margin-top:.7rem}
-@media(prefers-reduced-motion:reduce){.itk-send{transition:background .18s}.itk-send:active{transform:none}}
+/* ── C · the fork gate ────────────────────────────────────────────────────────
+   The last thing before dispatch, and the only warn-coloured panel on the page: two
+   questions the answers themselves raised, each writing a real field. */
+.itk-gate{margin:0 1.4rem;border:2px solid var(--warn);border-radius:0;padding:1rem 1.1rem;display:flex;flex-direction:column;gap:.9rem}
+.itk-gate-head{margin:0;font-family:var(--font-display);font-weight:640;font-size:var(--text-h4);letter-spacing:-.01em;color:var(--warn)}
+.itk-gate-body{display:flex;flex-direction:column;gap:1rem}
+.itk-fork{display:flex;flex-direction:column;gap:.4rem}
+.itk-fork-q{margin:0;font-family:var(--font-display);font-weight:600;font-size:var(--text-body);line-height:1.35}
+.itk-fork-why{margin:0;font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);line-height:1.5;max-width:62ch}
+.itk-fork-opts{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.25rem}
+.itk-rec{font-family:var(--font-data);font-size:var(--text-panel-kicker);font-weight:700;letter-spacing:var(--tracking-panel-kicker);text-transform:uppercase;color:var(--accent-ink);white-space:nowrap}
+.itk-chip-on .itk-rec{color:inherit}
 
-/* Print: the intake is an interactive surface — print the flat truth, not the flow. */
+/* ── Dispatch ─────────────────────────────────────────────────────────────── */
+.itk-dispatch{margin:0 1.4rem;display:flex;flex-direction:column;gap:.4rem;align-items:flex-start}
+.itk-go{min-height:44px;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);background:var(--green);color:var(--on-green);border:1px solid var(--green);border-radius:999px;padding:.65rem 1.4rem;cursor:pointer;transition:background .18s,border-color .18s}
+.itk-go:hover{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.itk-go:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.itk-go-note{margin:0;font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);line-height:1.5;max-width:62ch}
+.itk-go-where{margin:0;font-family:var(--font-data);font-size:var(--text-label);letter-spacing:.03em;color:var(--muted)}
+
+/* ── Narrow container: one column ─────────────────────────────────────────────
+   A component threshold, not a shared device breakpoint (src/lib/breakpoints.ts's three
+   numbers are viewport and guide-body cuts, and neither is this). The form's query box is
+   ~794px inside the 52rem sheet on desktop and ~337px on a 375px phone, so 620px separates
+   them with room to spare — and it is roughly where a 15rem note column stops being a
+   sliver beside its control. */
+@container itk (max-width: 620px){
+  .itk-meter{padding:.6rem 1rem .5rem}
+  .itk-sec-head{padding:.8rem 1rem;flex-wrap:wrap}
+  .itk-sec-body{padding:.2rem 1rem 1.1rem}
+  .ng-err,.ng-submit,.itk-gate,.itk-dispatch{margin-left:1rem;margin-right:1rem}
+  /* Field rows stack — and the note keeps its left rule, which is what marks it as the
+     answer's consequence rather than another paragraph of the question. */
+  .itk-row{grid-template-columns:minmax(0,1fr);gap:.6rem}
+  .ng-field-split{flex-direction:column}
+  /* A / VS / B stacked, each tap target comfortably past the 44px floor. */
+  .itk-vs{grid-template-columns:minmax(0,1fr);gap:.4rem}
+  .itk-vs-btn{min-height:60px}
+  .itk-vs-mid{justify-self:center}
+  .itk-meter-blanks{margin-left:0}
+}
+
+/* Reduced motion CUTS — it does not soften (SPEC-COMPONENTS §9). Everything on this page
+   that moves is either a transition on a state change or the meter's scaleX; all of it
+   lands instantly here, and press/hover states survive because they are state, not motion. */
+@media(prefers-reduced-motion:reduce){
+  .itk-meter-fill{transition:none}
+  .ng-field input,.ng-field select,.ng-field textarea,.ng-submit,.itk-sec-head,.itk-mark,
+  .itk-skip,.itk-next-sec,.itk-reset,.itk-dz,.itk-vs-btn,.itk-chip,.itk-go{transition:none}
+}
+
+/* Print: the checklist is an interactive surface — print the flat truth, not the chrome. */
 @media print{
-  .itk-contours,.itk-bar,.itk-foot{display:none!important}
+  .itk-contours,.itk-bar,.itk-foot,.itk-meter,.itk-sec-foot,.itk-dz{display:none!important}
   html,body{background:#fff!important;color:#111!important}
   body::before{display:none!important}
+  .itk-sec-body{display:block!important}
 }

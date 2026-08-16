@@ -4,13 +4,17 @@
 // creator's GO). Two doors (D4): the table view is server-rendered so the page works with
 // zero JS and stays indexable; the globe (world view) and the cover are progressive
 // enhancement that mount on top once their modules load.
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { getCollection } from "astro:content";
 import PwaHead from "../components/PwaHead.astro";
 import Icon from "../components/Icon.astro";
 import { generateContourLayer } from "../lib/contours";
 import {
   deriveGuideRecord, relevanceOrder, quickCardKicker, firstDayDateOf, lastDayDateOf,
+  deriveBuildingGuides,
 } from "../features/atlas/index";
+import type { RunStateLike } from "../features/atlas/index";
 import { sheetOrder, ordinalFor } from "../lib/sheet-order";
 import { tripRangeLabel } from "../lib/trip-dates";
 // A 56px plate does not need a 258 KB original — Commons serves a 14.5 KB thumbnail for
@@ -45,6 +49,50 @@ const contourLayers = [
 
 const allGuides = await getCollection("guides");
 const curated = allGuides.filter((g) => !g.data.draft);
+
+/* The hub's one door to a guide that is still being researched. Before this, a `draft: true`
+   guide rendered NOWHERE on the site and /progress/ had no entrance but the post-intake
+   redirect — so someone who closed that tab had no way back to their own run.
+
+   Placement follows design-handoff/README.md's entry-point table verbatim: "The Atlas table
+   row itself … make that row link to `/progress/?slug=<slug>` instead of the guide. Progress
+   is a *state of a guide*, not a fourth destination. Costs zero header space."
+
+   Which drafts qualify is features/atlas/model/building.ts's rule (draft AND its run has not
+   cleared `verified`) — see its header for why a finished-but-withheld draft (japan was the
+   motivating, now-deleted, example) must not appear here. The run state is read off the LOCAL
+   filesystem at build time: it is the same
+   git-tracked guides-intake/<slug>/state.json scripts/pipeline.mjs checkpoints into, already
+   in the repo, so there is no fetch and no GitHub call.
+
+   The path is resolved from `process.cwd()`, the way content.config.ts's own guide loader
+   resolves src/content/guides — NOT from `import.meta.url`. That was the first attempt and it
+   silently read nothing: in a BUILT page `import.meta.url` is the output chunk under dist/,
+   not this source file, so `../../guides-intake/…` resolved to dist/guides-intake/… and every
+   read ENOENT'd into the catch below. It failed the honest way (no rows, no error) which is
+   exactly why it needed a fixture build to catch rather than a reading. */
+async function readRunState(slug: string): Promise<unknown> {
+  try {
+    // `g.id` is a directory name this repo's own content loader enumerated, not user input.
+    const file = path.join(process.cwd(), "guides-intake", slug, "state.json");
+    return JSON.parse(await readFile(file, "utf8"));
+  } catch {
+    // Missing, unreadable or malformed. deriveBuildingGuides reads null as "no run this page
+    // can vouch for" and shows nothing — never as "probably building".
+    return null;
+  }
+}
+const building = deriveBuildingGuides(
+  await Promise.all(
+    allGuides.filter((g) => g.data.draft).map(async (g) => ({
+      slug: g.id,
+      title: g.data.title,
+      country: g.data.country,
+      draft: true,
+      state: (await readRunState(g.id)) as RunStateLike | null,
+    })),
+  ),
+);
 
 const sheetInputs = curated.map((g) => ({
   slug: g.id,
@@ -524,10 +572,46 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
           `order:-1`; that is now a no-op agreeing with the DOM rather than the only thing
           floating the card, and the `#sheet-<id>` anchors are unaffected — they are ids, not
           positions. */}
-      {rows.length === 0 ? (
+      {rows.length === 0 && building.length === 0 ? (
         <p class="atlas-empty">No guides yet.</p>
       ) : (
         <ul class="atlas-sheets">
+          {/* A guide still being RESEARCHED, one row per run (features/atlas/model/building.ts).
+              It is a row and not a new surface because design-handoff/README.md's entry-point
+              table puts progress on "the Atlas table row itself", linking to /progress/ instead
+              of the guide — zero new header items, zero new components.
+
+              It gets its OWN stamp word. `.atlas-stamp--progress` is taken: SPEC-COMPONENTS.md
+              §6 spends it on "IN PROGRESS", meaning the TRIP is happening right now, and both
+              stamps can appear in this same list at the same time. One word for two claims
+              would draw a guide nobody has travelled as a trip already underway.
+
+              What the row does NOT carry is any figure off the run — no stage, no elapsed
+              clock, no percentage. Those move minute by minute and this page is static, so a
+              server-rendered one would already be stale when it was read; same reason the
+              weather slot below ships empty. The live truth is one tap away, which is the
+              whole point of the link.
+
+              No `data-sheet-slug` and no `#sheet-` id, both deliberate: the first wires a row
+              into the globe's selection (world-view.js) and the second into the jump chips,
+              and this guide has neither a verified pin nor a sheet to jump to yet. */}
+          {building.map((b) => (
+            <li class="atlas-sheets-building">
+              <a class="atlas-sheet atlas-sheet--building" href={`${base}/progress/?slug=${b.slug}`}
+                 aria-label={`${b.title} — still being built. Follow its research run.`}>
+                {/* Empty on purpose — the same unfilled plate a guide with no cover gets. An
+                    honest blank reads as a slot nothing has landed in yet; a grey placeholder
+                    reads as a photo that failed. */}
+                <span class="atlas-sheet-plate"></span>
+                <span class="atlas-sheet-body">
+                  <span class="atlas-sheet-title">{b.title}</span>
+                  {b.country && <span class="atlas-sheet-cities">{b.country}</span>}
+                </span>
+                <span class="atlas-stamp atlas-stamp--building">BUILDING</span>
+                <span class="atlas-sheet-num">—</span>
+              </a>
+            </li>
+          ))}
           {relevant.map(({ g, record, cc, cities, dates, dayCount }) => {
             const stamp = STAMP[record.status];
             // The up-next sheet is the mobile list's big card (bundle §1 "Up-next card").

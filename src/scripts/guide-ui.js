@@ -10,7 +10,7 @@ import { nextLeg } from "../lib/plate-line";
 import { initRate, initWeather, initDaySwap, initSun } from "../features/live-data/index.js";
 import { initJetLag } from "./jetlag-ui.js";
 import { initSharePanel } from "../features/share/index.js";
-import { initChangeRequest } from "../features/change-request/index.js";
+import { initChangeLink } from "../features/change-request/index.js";
 import { reportError } from "../features/firebase/index.js";
 import { initBudgetPact } from "../features/budget-pact/index.js";
 import { initGuideRail } from "../features/guide-rail/index.ts";
@@ -882,9 +882,10 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           });
         }
       } catch (e) { fail("day state", e); }
-      // Guided change request. _cfg carries navSections (the guide's own tabs) so the
-      // wizard can offer a real section hint instead of asking a reader to name one.
-      try { initChangeRequest(_cfg, _lockScroll, _unlockScroll); } catch (e) { fail("change request", e); }
+      // The footer's "Request a change" pill already carries the slug; this keeps `&tab=`
+      // current off the same scroll-spy verdict the mobile nav listens to, so /change/ opens
+      // on the tab the reader was actually looking at.
+      try { initChangeLink(_cfg); } catch (e) { fail("change request", e); }
 
       /* ── PLATE-LINE PRINT CONTROL ─────────────────────────────────────── */
       // The masthead plate line's "Print sheet" button. All the actual work — hiding

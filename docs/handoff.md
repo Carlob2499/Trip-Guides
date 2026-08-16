@@ -22,9 +22,11 @@
   (presentation/motion) · `docs/standards/guide-rubric.md` (quality bar) ·
   `docs/evidence/competitive-landscape.md` (market parity reference) ·
   `docs/design-handoff/` + its `enforcement/` (the design system's own authority — read BOTH
-  before any hub/guide visual work). **There is no live design work order:**
-  PLAN_DESIGN_RECONCILIATION and PLAN_ATLAS_MIGRATION are both fully ticked, and their bodies now
-  live only in git — `docs/archive/INDEX.md` says how each ended and prints the `git show` line.
+  before any hub/guide visual work). PLAN_DESIGN_RECONCILIATION and PLAN_ATLAS_MIGRATION are both
+  fully ticked and archived (`docs/archive/INDEX.md` → `git show` line).
+- **No live design work order.** PLAN_PIPELINE_SURFACES joined the other three in
+  `docs/archive/INDEX.md` on 2026-08-16 — its bundle deleted, its durable half folded into
+  `docs/reference/pipeline.md` and `motion.md`.
 
 ## Open items
 
@@ -33,9 +35,14 @@
 - **Held, not open:** the route-order picker's home (Tools station vs. itinerary mount) — needs both surfaces reviewed together.
 - The gap block and "no cover" plate have never rendered on a real guide, by design (CONTEXT.md
   §H3) — proof-of-life is an isolated test fixture, not a staged guide edit.
-- Airports for Sedona/Japan — record them WHEN flights get booked. No fact yet; don't invent.
 - `/about/` + `/new/` not in the SW precache shell; cover overlay does not trap focus; Cloudflare dashboard Git integration still failing 0s builds.
 - No guide uses a direct royalty-free `sights[].img.src` yet — capability live, unexercised.
+- **Two GitHub issue templates still promise a dead label.** `.github/ISSUE_TEMPLATE/
+  modify-guide.yml` and `revise-guide.yml` tell the filer that nothing runs "until the owner
+  applies `modify-approved` / `revision-approved`" — those labels stopped doing anything when the
+  owner key replaced them, yet still exist on the remote (`gh label list`) because only
+  `ensure-labels.yml` was updated. Live copy instructing a real person to do a no-op; found during
+  the Commit E sweep, left alone as out of that commit's scope.
 - **ALL FOUR remote branches are now safe to delete — and none can be deleted from a container
   session.** `pipeline-changes-plan-752kra`, `a11y-landmark-fix-v2` and `recert/japan` are merged
   into main; `claude/design-fixes-continuation-wi920k` is **superseded, never to be merged** — it
@@ -47,64 +54,43 @@
   `merge_pull_request` takes no delete-branch flag. One pass at
   github.com/Carlob2499/Trip-Guides/branches clears all four.
 
-## Parallel session, same day (merged): design-reconciliation forks closed
+## Snapshot (2026-08-16 — PLAN_PIPELINE_SURFACES executed end to end; the bundle is retired)
 
-A concurrent session fixed the two items this file used to hold open — the dark-mode
-focus-ring token (`--focus-ring`, theme-aware) and the rate-fallback now keeping the
-currency converter alive on a seed rate — and scaffolded the japan draft from issue #50.
-Their entries left Open items above; details in that snapshot (docs/archive/HANDOFF_ARCHIVE.md).
+**Five commits on `design/pipeline-surfaces`, each through the full ship loop.** The progress
+cockpit with its frame-by-frame route map (`0d6aae0`), the intake preflight checklist (`f9b333a`),
+the change-request requester view (`544cc95`), the owner triage queue at `/progress/triage/`
+(`63a63ff`), and this retirement. The plan's one deferred fork closed on the way (`e119f2a` — the
+hub now stamps a guide that is BUILDING, deliberately not the `ongoing` "trip happening now"
+class).
 
-## Snapshot (2026-08-14 — the codebase-audit cleanup: audited, then cut, all gates green)
+**Three things the design asked for were NOT built, on purpose, and each is recorded as a
+Decision in CONTEXT.md.** Triage's Quick fix / Full re-check go through the owner-keyed Worker
+rather than the deleted `*-approved` labels; the feedback-proposals panel moved off `/progress/`
+into triage; and the live-event panels (sources · decisions · nuggets · counters) ship with the
+full layout and honestly empty boxes, because nothing in the pipeline emits per-event data yet.
+Emission is issue **#56** — the gateway, types, mocks and tests are already there for it to drop
+into. The bundle's "Watch a demo run" button was never built for the same reason.
 
-**Six-lens adversarial audit → three executed passes** (branch `claude/codebase-audit-cleanup-cahyfq`,
-report artifact shared with the creator). Verdict: near-zero dead code, but process weight, helper
-duplication, and four shipped defects. **Defects fixed:** tools-reminders.js was never imported
-(Tools ticks didn't persist — now wired); double `.sheet-grip` drag-handle removed; grid.js's two
-literal NUL bytes (grep saw the file as binary) escaped; the guide footer's telemetry disclosure
-outlived the feature (caught by the dist grep, removed).
-
-**Cuts, all creator-approved:** panel/progress-preview design-study trees; 5 unreferenced archive
-docs; the test-index meta-gate (test + generator + 248KB catalog); the ENTIRE telemetry chain
-(silo, bumpCounter, RTDB rules node, weekly workflow — whose docs/telemetry commit path was broken
-and never fired); the 24 local-only Playwright specs (a11y.spec.ts remains the CI gate);
-model-smoke.yml; CHANGELOG (frozen, moved to docs/archive/). Workflow diet: content-audit merged
-into recert.yml as its Monday report job; mutation + skill-retro de-cronned to dispatch-only.
-17 workflows remain, 4 crons.
-
-**Structure:** silo contract's 3 violations sealed (hub index.ts; atlas exports initAtlasWorld —
-atlas-map.js got an SSR-safe HTMLElement base for the barrel; route-optimizer math → 
-`src/lib/route-optimize.ts`); guide.css split under its ~800 rule (botbar/sheet → mobile-nav.css,
-map/budget blocks rehomed); index.astro's inline hub script → `src/scripts/atlas-hub.js`;
-`check-drift.mjs`→`check-content-drift.mjs` and trip-tools `reminders.ts`→`booking-reminders.ts`
-(name collisions); single-letter-variable rename sweep over the 6 worst files (274→185 repo-wide).
-Dedup: esc/reducedMotion → scripts/util.js; scripts gained lib/cli.mjs + lib/geo.mjs; og/recap
-share pages/og/_card.ts. d3 → 3 submodules (~200KB less shipped); geo-tz → devDependencies.
+**Retirement, per the bundle's own instructions.** `design_handoff_pipeline_and_intake/` (39
+files) and `PLAN_PIPELINE_SURFACES.md` are DELETED, not moved — an inline-styled prototype drifts
+from the implementation within a release. What survives: one section in
+`docs/reference/pipeline.md` (note-panel colours · the stalled-run rule · the route map's
+frame-by-frame requirement), eight rows in `docs/reference/motion.md`'s inventory, and a closure
+entry in `docs/archive/INDEX.md` carrying the `git show` paths to both. Four code comments that
+cited the plan by filename now cite the archive heading instead.
 
 ## Where we left off
 
-**Second-pass audit (2026-08-14, after the big cleanup):** re-mapped scripts/workflows/docs;
-found only remnants — deleted the 4 orphaned progress-study files in `docs/mockups/` (the
-shipped pipeline-progress feature's throwaway prototype) + their `.gitignore` block, and the
-empty `voting`/`telemetry` silo skeletons. Everything else audited KEEP with evidence (see
-commit). `backfill-tier.mjs` stays until E1 tiering finishes, per the list below.
-Follow-up round: DESIGN.md is now the ONE design authority (R5 overrides folded into the body,
-SUPERSEDES.md deleted, all code comments repointed); visual-redesign.md split spec/history
-(history → `docs/archive/visual-redesign-history.md`); new `intake-contract.test.ts` binds the
-hub's intake vocabulary to `intake-schema.mjs` (replaces hardcoded copies in intake.test.ts).
-Surfaced, not fixed: `/new` never collects departure-airport or the three certainty fields —
-scope decision for the creator. (Decided and fixed 2026-08-15: it now collects all four.)
+**This commit is LOCAL and unpushed — deliberately.** The creator verifies it, pushes, and opens
+the single PR for the whole branch (title: `feat: pipeline surfaces — progress cockpit, intake
+checklist, change + triage`). Everything before it is already pushed.
 
-**All gates green after the cleanup:** build · lint · typecheck 0 · 2009 tests / 144 files ·
-77 a11y checks vs the preview build · dist grep clean. Deferred with rationale: test-walker
-`walk()` dedup (8 divergent skip-lists — consolidating risks silently changing gate corpora);
-mass CSS-home unification and jetlag re-siloing (churn without reader value); revise-guide +
-modify-guide merge (agent pipelines; merge blind and you can't test the seam — needs a live run).
+**All gates green, and lint is now genuinely clean.** Build 9 pages · lint 0 (the 176 errors this
+file used to carry were all in the deleted bundle's `support.js`, so they left with it) ·
+typecheck 0 errors / 19 hints · 2400 tests + 1 todo across 155 files · coverage gate passes ·
+`/progress/`, `/progress/triage/`, `/change/` and `/new/` re-checked in `astro preview` after the
+deletion · dist grep clean of every prototype string.
 
-**Waiting on the creator, 1 item:** RTDB rules — telemetry node removed from `rules.json`; paste
-into the Firebase console to revoke the now-unused write path. (The former item 1, the intake
-endpoint's bot check, is closed: dropped by ruling 2026-08-15, see CONTEXT.md.)
-
-**Recommended next step — the guide-deepening list from the audit** (uses existing tooling, zero
-new code): korea geocode backfill (24/87 items missing coords), japan's 3 malformed fact values +
-1 misattribution, the 17 bare-echo ambiguities, korea's 11 undated budget figures, finish E1
-tiering (then delete backfill-tier.mjs), then regenerate japan through the rebuilt pipeline.
+**Next after the PR merges:** nothing is queued. Issue #56 (pipeline run events) is the natural
+follow-on and is fully specced; the two stale issue templates in Open items are a smaller,
+unrelated fix.

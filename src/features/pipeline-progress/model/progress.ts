@@ -47,6 +47,8 @@ export interface ProgressView {
   currentIndex: number;
   percent: number;
   elapsedMs: number;
+  /** Since the last checkpoint the pipeline wrote. 0 when no state has been read at all. */
+  sinceUpdateMs: number;
   attempts: number;
   /** True once every stage (including `published`) is done. */
   isDone: boolean;
@@ -75,7 +77,10 @@ export function deriveProgress(
   const { now, published } = opts;
 
   if (!state) {
-    return { stages: emptyStages(), currentIndex: 0, percent: 0, elapsedMs: 0, attempts: 0, isDone: false, isStuck: false };
+    return {
+      stages: emptyStages(), currentIndex: 0, percent: 0, elapsedMs: 0, sinceUpdateMs: 0,
+      attempts: 0, isDone: false, isStuck: false,
+    };
   }
 
   const stages: StageView[] = STAGE_ORDER.map((key) => {
@@ -91,10 +96,13 @@ export function deriveProgress(
   const percent = Math.round((doneCount / stages.length) * 100);
   const elapsedMs = Math.max(0, now.getTime() - new Date(state.createdAt).getTime());
 
-  const sinceUpdateMs = now.getTime() - new Date(state.updatedAt).getTime();
+  const sinceUpdateMs = Math.max(0, now.getTime() - new Date(state.updatedAt).getTime());
   const isStuck = !isDone && sinceUpdateMs > STUCK_THRESHOLD_MS;
 
-  return { stages, currentIndex, percent, elapsedMs, attempts: state.attempts || 0, isDone, isStuck };
+  return {
+    stages, currentIndex, percent, elapsedMs, sinceUpdateMs,
+    attempts: state.attempts || 0, isDone, isStuck,
+  };
 }
 
 /** "5s" / "3m 12s" / "1h 04m" — no dependency on src/features/live-data's clock helpers (this
@@ -146,4 +154,212 @@ export function predictSlug(country: string): string {
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-+|-+$/g, "") || "guide"
   );
+}
+
+/* ══ The cockpit's derived views ═══════════════════════════════════════════════════════════
+   Everything below turns the one ProgressView above into the things the route-map dashboard
+   actually paints: a station label, a status pill, a sentence, three phase bars, and the note
+   panel's state. They are here rather than in ui/progress.js because each one is a claim about
+   a run — and a claim that is wrong is this page lying, which is the failure mode the whole
+   surface is built to avoid. Pure, so a test can hold each claim to the state that produced it. */
+
+/** Station labels on the route map — short enough for 10.5px type under a 5px dot. */
+export const STAGE_SHORT: Record<Stage, string> = {
+  scaffold: "Scaffold",
+  passA: "Pass A",
+  passB: "Pass B",
+  reconcile: "Reconcile",
+  verified: "Verify",
+  published: "Published",
+};
+
+/** What the run is doing during each stage, in a traveller's words rather than a pipeline's.
+ *  These describe the PROCESS, which is fixed and documented (docs/reference/pipeline.md) —
+ *  they never assert anything about this particular run's findings. */
+const STAGE_ACTIVITY: Record<Stage, string> = {
+  scaffold: "setting up the guide's structure",
+  passA: "checking official and canonical sources",
+  passB: "gathering local, on-the-ground knowledge",
+  reconcile: "resolving where the two passes disagree",
+  verified: "re-checking every perishable fact",
+  published: "putting the finished guide live",
+};
+
+/** The five shapes the whole page takes. Everything else on it is derived from this one word. */
+export type PageState = "empty" | "running" | "awaiting" | "stalled" | "done";
+
+/** The pigment a piece of status carries — mapped to tokens in progress.css, never to a hex. */
+export type Tone = "muted" | "accent" | "warn" | "green";
+
+export interface PageStateInput {
+  view: ProgressView;
+  /** True only once a real state.json has actually been read. `deriveProgress(null, …)` is a
+   *  valid view, so the view alone cannot tell "not started" from "nothing found". */
+  hasRun: boolean;
+  /** How many questions the run has emitted and nobody has answered. */
+  openQuestions: number;
+}
+
+/**
+ * Which of the five states the page is in. Order matters and is deliberate: a finished run is
+ * finished whatever else is outstanding, and an open question OUTRANKS the stall it caused —
+ * "answer this" is the same fact as "nothing has moved", stated in the form the reader can act on.
+ */
+export function derivePageState({ view, hasRun, openQuestions }: PageStateInput): PageState {
+  if (!hasRun) return "empty";
+  if (view.isDone) return "done";
+  if (openQuestions > 0) return "awaiting";
+  if (view.isStuck) return "stalled";
+  return "running";
+}
+
+export interface StatusPill {
+  text: string;
+  tone: Tone;
+}
+
+/** The pill beside the page title. */
+export function deriveStatusPill(page: PageState, view: ProgressView): StatusPill {
+  switch (page) {
+    case "done":
+      return { text: "Complete", tone: "green" };
+    case "awaiting":
+      return { text: "Waiting on you", tone: "warn" };
+    case "stalled":
+      return { text: "Stalled", tone: "warn" };
+    case "running": {
+      const stage = view.stages[view.currentIndex];
+      return { text: stage ? "Researching · " + STAGE_SHORT[stage.key] : "Researching", tone: "accent" };
+    }
+    default:
+      return { text: "No run yet", tone: "muted" };
+  }
+}
+
+/**
+ * One sentence under the title saying what is true right now.
+ *
+ * Note what is NOT here: an estimated time remaining. Elapsed time over stage count would
+ * extrapolate a figure the pipeline never produced — stage durations are wildly uneven — and a
+ * confident wrong "about 20 minutes left" is precisely the plausible-but-invented claim this
+ * project's accuracy rules forbid. The stage and the clock are both real; the guess is not.
+ */
+export function deriveProgressLine(page: PageState, view: ProgressView): string {
+  const total = view.stages.length;
+  const stage = view.stages[view.currentIndex];
+  switch (page) {
+    case "done":
+      return `All ${total} stages cleared in ${formatElapsed(view.elapsedMs)}.`;
+    case "awaiting":
+      return stage
+        ? `Paused at stage ${view.currentIndex + 1} of ${total} — the run needs an answer before it goes on.`
+        : "Paused — the run needs an answer before it goes on.";
+    case "stalled":
+      return `No checkpoint for ${formatElapsed(view.sinceUpdateMs)} — stage ${view.currentIndex + 1} of ${total} never finished.`;
+    case "running":
+      return stage
+        ? `Stage ${view.currentIndex + 1} of ${total} — ${STAGE_ACTIVITY[stage.key]}.`
+        : `Stage ${view.currentIndex + 1} of ${total}.`;
+    default:
+      return "No research run is attached to this page yet.";
+  }
+}
+
+/* ── Phases ─────────────────────────────────────────────────────────────────────────────── */
+
+export type PhaseStatus = "cleared" | "active" | "queued";
+
+export interface PhaseView {
+  key: string;
+  label: string;
+  blurb: string;
+  /** 0..1, driving a scaleX() fill. */
+  fill: number;
+  status: PhaseStatus;
+}
+
+/** The three groups the research actually runs in. `published` is deliberately absent: it is the
+ *  arrival, not a research phase, and it already has its own station on the route map. */
+const PHASES: { key: string; label: string; blurb: string; stages: Stage[] }[] = [
+  { key: "passA", label: "Pass A", blurb: "Official and canonical sources", stages: ["scaffold", "passA"] },
+  { key: "passB", label: "Pass B", blurb: "Local, on-the-ground knowledge", stages: ["passB"] },
+  { key: "critic", label: "Critic", blurb: "Cross-checking both, then verifying", stages: ["reconcile", "verified"] },
+];
+
+/**
+ * Fill per phase = the share of ITS stages that have cleared. Nothing interpolates within a
+ * stage, because the pipeline checkpoints only at stage boundaries — a bar that crept forward
+ * between checkpoints would be animating an estimate, and the one under way says so in words
+ * instead ("under way") rather than in a fill nobody measured.
+ *
+ * `page` is taken for one reason: with no run attached, a view of nothing still reports a
+ * currentIndex of 0, and marking the phase containing it "under way" would tell the reader
+ * research is happening when nobody has asked for any. Empty means every phase is queued.
+ */
+export function derivePhases(page: PageState, view: ProgressView): PhaseView[] {
+  const done = new Set(view.stages.filter((s) => s.done).map((s) => s.key));
+  const current = page === "empty" ? undefined : view.stages[view.currentIndex]?.key;
+  return PHASES.map((p) => {
+    const cleared = p.stages.filter((s) => done.has(s)).length;
+    const fill = cleared / p.stages.length;
+    const status: PhaseStatus =
+      fill === 1 ? "cleared" : current && p.stages.includes(current) ? "active" : "queued";
+    return { key: p.key, label: p.label, blurb: p.blurb, fill, status };
+  });
+}
+
+export const PHASE_STATUS_LABEL: Record<PhaseStatus, string> = {
+  cleared: "cleared",
+  active: "under way",
+  queued: "queued",
+};
+
+/* ── The note panel ─────────────────────────────────────────────────────────────────────── */
+
+/**
+ * The panel that sits at the bottom of the cockpit. Four states, one of which is the only place
+ * on this page a person can put something INTO a run.
+ *
+ * Only `awaiting` has a real endpoint behind it (the Worker's POST /answer, which already
+ * exists and already resumes the run). Mid-run notes have no endpoint anywhere in the stack, so
+ * the other states ship the same visual machine with one line of copy where the control would
+ * be — a textarea that posts nowhere is a worse lie than an admitted gap.
+ */
+export type NoteState = "monitoring" | "awaiting" | "processing" | "resumed";
+
+export interface NotePanelView {
+  heading: string;
+  tone: Tone;
+  /** True only where a real endpoint exists behind the control. */
+  acceptsInput: boolean;
+  /** Shown INSTEAD of the control when there is no endpoint. Null when there is one. */
+  placeholder: string | null;
+}
+
+const MONITORING_COPY =
+  "Mid-run notes are on the way — for now the run pauses and asks whenever it needs you.";
+const STALLED_COPY =
+  "Nothing has checked in for a while. The run's own issue carries the last thing it recorded.";
+const DONE_COPY = "This run has finished — there is nothing left for it to absorb.";
+const EMPTY_COPY = "Start a run and this is where it asks you whatever it needs.";
+
+export function deriveNotePanel(page: PageState, note: NoteState): NotePanelView {
+  if (note === "processing") {
+    return { heading: "Sending your answer…", tone: "warn", acceptsInput: true, placeholder: null };
+  }
+  if (note === "resumed") {
+    return { heading: "Answer sent — the run picks up from here", tone: "green", acceptsInput: false, placeholder: null };
+  }
+  switch (page) {
+    case "awaiting":
+      return { heading: "One answer needed", tone: "warn", acceptsInput: true, placeholder: null };
+    case "stalled":
+      return { heading: "The run is stuck", tone: "warn", acceptsInput: false, placeholder: STALLED_COPY };
+    case "done":
+      return { heading: "Research finished", tone: "green", acceptsInput: false, placeholder: DONE_COPY };
+    case "empty":
+      return { heading: "Nothing to add to yet", tone: "muted", acceptsInput: false, placeholder: EMPTY_COPY };
+    default:
+      return { heading: "Add to the research", tone: "muted", acceptsInput: false, placeholder: MONITORING_COPY };
+  }
 }

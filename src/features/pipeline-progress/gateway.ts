@@ -12,6 +12,8 @@
 import type { PipelineState } from "./model/progress";
 import { toProposals, REVISION_LABEL } from "./model/proposals";
 import type { RevisionProposal } from "./model/proposals";
+import { parseRunEvents } from "./model/run-events";
+import type { RunEvents } from "./model/run-events";
 // Static since batch 3. It used to be a lazy `await import()` inside fetchQuestions so the parser
 // stayed out of the initial chunk until questions actually existed — but the page now renders
 // answer controls, so ui/progress.js imports the same module eagerly and the split bought
@@ -33,6 +35,15 @@ export interface ProgressGateway {
   fetchQuestions(slug: string): Promise<IntakeQuestion[]>;
   /** Open feedback-driven revision proposals for this guide. Owner-facing. */
   fetchProposals(slug: string): Promise<RevisionProposal[]>;
+  /**
+   * Live telemetry for the run — what it fetched, decided and learned (model/run-events.ts).
+   *
+   * NOTHING EMITS THIS YET, so today it always resolves to EMPTY_RUN_EVENTS and the cockpit's
+   * sourcing / judgments / "worth knowing" panels render their honest-empty copy. The method
+   * exists now, in the shape the emitter will write, so that turning telemetry on is a pipeline
+   * change and not a UI one — and so nobody is tempted to fake a feed in the meantime.
+   */
+  fetchRunEvents(slug: string): Promise<RunEvents>;
 }
 
 export interface GithubGatewayOptions {
@@ -125,6 +136,13 @@ export function createGithubGateway(opts: GithubGatewayOptions): ProgressGateway
         `?labels=${encodeURIComponent(REVISION_LABEL)}&state=open&per_page=${PROPOSAL_PAGE}`;
       const issues = await getJson(url);
       return Array.isArray(issues) ? toProposals(issues, slug) : [];
+    },
+    async fetchRunEvents(slug) {
+      // Research-branch only: telemetry is a property of a RUN, and the branch is where a run
+      // lives. `main` never carries it, so there is no fallback read to spend a request on.
+      // A 404 (today, every time) becomes EMPTY_RUN_EVENTS via parseRunEvents(null) — the UI
+      // stops asking after a few of those rather than polling a file forever (see ui/progress.js).
+      return parseRunEvents(await getJson(raw(`research/${slug}`, `guides-intake/${slug}/events.json`)));
     },
   };
 }

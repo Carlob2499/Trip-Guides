@@ -1,5 +1,6 @@
 import type { PipelineState } from "../model/progress";
 import type { RawIssue } from "../model/proposals";
+import type { RunEvents } from "../model/run-events";
 
 const T0 = "2026-07-19T10:00:00.000Z";
 
@@ -40,6 +41,44 @@ export const VERIFIED: PipelineState = {
   },
   attempts: 1,
   notes: [],
+};
+
+/** A run that stopped mid-research: passA cleared, then nothing for over an hour. Feeds the
+ *  stalled-state tests without any test having to hand-build a state object. */
+export const STALLED: PipelineState = {
+  slug: "testland",
+  createdAt: T0,
+  updatedAt: "2026-07-19T10:22:00.000Z",
+  stages: { scaffold: T0, passA: "2026-07-19T10:20:00.000Z", passB: null, reconcile: null, verified: null },
+  attempts: 2,
+  notes: [],
+};
+
+/* Live run telemetry in the shape guides-intake/<slug>/events.json WILL have. Nothing writes
+   that file yet (see model/run-events.ts) — this seed exists so the parser and the panels are
+   tested against a real shape rather than against an empty object, NOT so the UI can show it.
+   The page never renders a seed: an invented feed over a real run is the page lying. */
+export const RUN_EVENTS: RunEvents = {
+  available: true,
+  fetches: [
+    { at: "2026-07-19T10:21:03.000Z", url: "https://www.visitdenmark.com/denmark/plan-your-trip", status: 200 },
+    { at: "2026-07-19T10:21:06.000Z", url: "https://www.dsb.dk/en/tickets/", status: 304 },
+    { at: "2026-07-19T10:21:11.000Z", url: "https://example.museum/opening-hours", status: 404 },
+    { at: "2026-07-19T10:21:14.000Z", url: "https://api.example.org/prices", status: 503 },
+  ],
+  decisions: [
+    { at: "2026-07-19T10:21:04.000Z", kind: "check", text: "Opening hours cross-checked against the operator's own page." },
+    { at: "2026-07-19T10:21:09.000Z", kind: "reject", text: "Dropped a blog's ticket price — no primary source behind it." },
+    { at: "2026-07-19T10:21:12.000Z", kind: "decision", text: "Kept the ferry, flagged ⚠ until the winter timetable publishes." },
+  ],
+  nuggets: [
+    {
+      at: "2026-07-19T10:21:15.000Z",
+      text: "The harbour bus counts as normal city transit, so a day pass already covers it.",
+      source: "Operator fare page",
+    },
+  ],
+  counters: { pages: 148, facts: 62, kept: 51, dropped: 11 },
 };
 
 /* Revision proposals, in the shape api.github.com actually returns them (a body rendered by the

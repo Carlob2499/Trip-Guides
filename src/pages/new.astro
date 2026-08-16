@@ -1,6 +1,11 @@
 ---
 import PwaHead from "../components/PwaHead.astro";
 import { generateContourLayer } from "../lib/contours";
+import { SECTIONS } from "../features/hub/model/checklist";
+// Build-time only (Astro frontmatter runs in Node): the intake single source of truth supplies
+// the priority dropdowns' exact option strings and the derived fields' labels, so the no-JS
+// fallback cannot drift from the schema. Nothing here reaches the client bundle.
+import { FIELDS } from "../../scripts/intake-schema.mjs";
 // Same self-hosted fonts + token base as the hub — one theme, every surface.
 import "@fontsource-variable/literata/standard.css";
 import "@fontsource-variable/literata/standard-italic.css";
@@ -17,6 +22,78 @@ const contours = [
   generateContourLayer({ seed: 47, rings: 9, cx: 220, cy: 700 }),
   generateContourLayer({ seed: 73, rings: 7, cx: 830, cy: 260 }),
 ];
+
+/* The controls, keyed by the DOM id intake-submit.js collects — the pipeline seam, unchanged.
+   Option VALUES are intake-schema.mjs's, exactly; the option TEXT is plain English for the
+   traveler (the checklist renders that text on its pills). "assumed" is first on every
+   certainty select because it is the schema's real default: an unstated certainty means
+   "assumed", never "unset". */
+const CERTAINTY = (firm: string, none: string) => [
+  { v: "assumed", t: "not sure" },
+  { v: "fixed", t: firm },
+  { v: "target", t: "best guess" },
+  { v: "flexible", t: "could move" },
+  { v: "unknown", t: "undecided" },
+  { v: "none", t: none },
+];
+
+type Control = {
+  kind?: "textarea" | "select";
+  type?: "text" | "date" | "number";
+  sub?: string;
+  placeholder?: string;
+  required?: boolean;
+  min?: string;
+  options?: { v: string; t: string }[];
+};
+
+const CONTROLS: Record<string, Control> = {
+  ngCountry: { required: true, placeholder: "Brazil" },
+  ngCities: { placeholder: "Rio de Janeiro, São Paulo" },
+  ngStart: { type: "date", sub: "First day" },
+  ngEnd: { type: "date", sub: "Last day" },
+  ngDatesCertainty: { kind: "select", options: CERTAINTY("booked", "no dates yet") },
+  ngDepartureAirport: { placeholder: "EWR (Newark)" },
+  ngAnchor: { placeholder: "Pokémon GO Wild Area, Nov 6–8" },
+  ngAnchorCertainty: { kind: "select", options: CERTAINTY("confirmed", "no anchor") },
+  ngTravelers: { type: "number", min: "1", placeholder: "3" },
+  ngParty: { placeholder: "the Korea group (3 mid-20s, heavy walkers)" },
+  ngPassports: { placeholder: "United States, United Kingdom" },
+  ngNiche: { placeholder: "live music" },
+  ngConstraints: { kind: "textarea", placeholder: "no stairs — elevator or ground floor only" },
+  ngPace: {
+    kind: "select",
+    options: [
+      { v: "", t: "undecided" }, { v: "packed", t: "packed" },
+      { v: "balanced", t: "balanced" }, { v: "slow", t: "slow" },
+    ],
+  },
+  ngTravelStyle: {
+    kind: "select",
+    options: [
+      { v: "", t: "undecided" },
+      { v: "Bucket-list must-sees", t: "Bucket-list must-sees" },
+      { v: "Off-the-beaten-path", t: "Off-the-beaten-path" },
+      { v: "Balanced", t: "Balanced" },
+    ],
+  },
+  ngBudget: {
+    kind: "select",
+    options: [
+      { v: "", t: "undecided" },
+      { v: "Shoestring (<$75/day)", t: "Shoestring (under $75/day)" },
+      { v: "Mid-range ($75–150/day)", t: "Mid-range ($75–150/day)" },
+      { v: "Comfortable ($150–300/day)", t: "Comfortable ($150–300/day)" },
+      { v: "Luxury ($300+/day)", t: "Luxury ($300+/day)" },
+    ],
+  },
+  ngBudgetCertainty: { kind: "select", options: CERTAINTY("hard cap", "no budget set") },
+  ngComments: { kind: "textarea", placeholder: "traveling with my parents, celebrating an anniversary" },
+};
+
+// The three priority selects — the no-JS control for what the checklist asks as matchups.
+// Labels and options straight off FIELDS so the fallback speaks the pipeline's vocabulary.
+const PRIORITY_FIELDS = FIELDS.filter((f: { special?: string }) => f.special === "priority");
 ---
 <!doctype html>
 <html lang="en">
@@ -24,7 +101,7 @@ const contours = [
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>New guide — Waypoint</title>
-    <meta name="description" content="Ask Waypoint for a new verified travel guide: drop your bookings, rank what the trip is for, answer only what's still blank." />
+    <meta name="description" content="Ask Waypoint for a new verified travel guide: six short sections, skip anything you haven't decided, and see what each answer changes." />
     <PwaHead />
     <!-- Dark-mode init — runs before paint to avoid flash (same as the hub). -->
     <script is:inline>
@@ -54,159 +131,110 @@ const contours = [
 
     <main class="intake" id="intakeMain">
       <header class="itk-hero">
-        <p class="itk-eyebrow">New guide</p>
+        <p class="itk-eyebrow">New guide · preflight</p>
         <h1>Tell us the trip. Research does the rest.</h1>
         <p class="itk-dek">
-          A few details scaffold a verified guide — structure, checklists, live weather /
-          holiday / currency data wired in. Drop your bookings and most of this fills itself.
+          Six short sections. Every question says what your answer changes — and skipping one is a
+          real answer: the guide states the gap instead of inventing a value for it.
         </p>
       </header>
 
-      {/* The flat form IS the no-JS base markup (same progressive-enhancement contract the
-          old wizard had): with scripts off you get every field in one column and honest
-          labels; intake-flow.js re-parents these same elements into the composed flow.
-          Field ids are the pipeline seam — see ui/intake-submit.js. */}
+      {/* The sections ARE the no-JS base markup: with scripts off every field renders in an
+          open section with its real label, and the plain submit button below still files the
+          intake. ui/intake-checklist.js adds the meter, the status marks, the matchups and the
+          fork gate on top of these same controls — the ids are the pipeline seam, see
+          ui/intake-submit.js, and the six-section grouping is model/checklist.ts. */}
       <form id="ngForm" class="ng-form" data-repo={REPO}>
-        <label class="ng-field">
-          <span>Country <em>(required)</em></span>
-          <input type="text" id="ngCountry" required placeholder="e.g. Brazil" autocomplete="off" />
-        </label>
-        <label class="ng-field">
-          <span>City / cities</span>
-          <input type="text" id="ngCities" placeholder="e.g. Rio de Janeiro, São Paulo" autocomplete="off" />
-        </label>
-        <div class="ng-row">
-          <label class="ng-field">
-            <span>Start date</span>
-            <input type="date" id="ngStart" />
-          </label>
-          <label class="ng-field">
-            <span>End date</span>
-            <input type="date" id="ngEnd" />
-          </label>
-        </div>
-        {/* Certainty option VALUES are intake-schema.mjs's CERTAINTY_OPTIONS, exactly; the
-            option text is plain English for the traveler (the flow renders these as pills and
-            shows that text). "assumed" is first because it is the schema's real default — an
-            unstated certainty means "assumed", never "unset". */}
-        <label class="ng-field">
-          <span>How firm are these dates?</span>
-          <select id="ngDatesCertainty">
-            <option value="assumed">not sure</option>
-            <option value="fixed">booked</option>
-            <option value="target">best guess</option>
-            <option value="flexible">could move</option>
-            <option value="unknown">undecided</option>
-            <option value="none">no dates yet</option>
-          </select>
-        </label>
-        <label class="ng-field">
-          <span>Departure airport</span>
-          <input type="text" id="ngDepartureAirport" placeholder="e.g. EWR (Newark) — or the city you'll fly out of" autocomplete="off" />
-        </label>
-        <label class="ng-field">
-          <span>Anchor event</span>
-          <input type="text" id="ngAnchor" placeholder="e.g. the festival, concert or match the trip is built around" autocomplete="off" />
-        </label>
-        <label class="ng-field">
-          <span>How firm is the anchor?</span>
-          <select id="ngAnchorCertainty">
-            <option value="assumed">not sure</option>
-            <option value="fixed">confirmed</option>
-            <option value="target">expected</option>
-            <option value="flexible">could move</option>
-            <option value="unknown">undecided</option>
-            <option value="none">no anchor</option>
-          </select>
-        </label>
-        <label class="ng-field">
-          <span>Number of travelers</span>
-          <input type="number" id="ngTravelers" min="1" placeholder="e.g. 3" />
-        </label>
-        <label class="ng-field">
-          <span>Who's this for / party</span>
-          <input type="text" id="ngParty" placeholder="e.g. the Korea group (3 mid-20s, heavy walkers) / family of 5 with grandparents" autocomplete="off" />
-        </label>
-        <label class="ng-field">
-          <span>Constraints</span>
-          <textarea id="ngConstraints" rows="2" placeholder="mobility / dietary / sensory needs the guide must honor — e.g. no stairs, peanut allergy, max ~3 km walking per day"></textarea>
-        </label>
-        <label class="ng-field">
-          <span>Traveler passport countries</span>
-          <input type="text" id="ngPassports" placeholder="e.g. United States, United Kingdom — drives the visa & entry research" autocomplete="off" />
-        </label>
-        <label class="ng-field">
-          <span>Pace</span>
-          <select id="ngPace">
-            <option value="">undecided</option>
-            <option value="packed">packed</option>
-            <option value="balanced">balanced</option>
-            <option value="slow">slow</option>
-          </select>
-        </label>
-        <label class="ng-field">
-          <span>Travel style</span>
-          <select id="ngTravelStyle">
-            <option value="">undecided</option>
-            <option value="Bucket-list must-sees">Bucket-list must-sees</option>
-            <option value="Off-the-beaten-path">Off-the-beaten-path</option>
-            <option value="Balanced">Balanced</option>
-          </select>
-        </label>
-        {[1, 2, 3].map((n) => (
-          <label class="ng-field">
-            <span>Priority #{n}{n === 1 && <em> (most important)</em>}</span>
-            <select id={`ngPriority${n}`}>
-              <option value="">— none —</option>
-              <option value="Food & dining">Food & dining</option>
-              <option value="Culture / history">Culture / history</option>
-              <option value="Nature / outdoors">Nature / outdoors</option>
-              <option value="Nightlife">Nightlife</option>
-              <option value="Shopping">Shopping</option>
-              <option value="Wellness / relaxation">Wellness / relaxation</option>
-              <option value="Niche interest (specify below)">Niche interest (specify below)</option>
-            </select>
-          </label>
+        {SECTIONS.map((sec, si) => (
+          <details class="itk-sec" data-sec={sec.id} open>
+            <summary class="itk-sec-head">
+              <span class="itk-mark itk-mark-todo" data-mark aria-hidden="true">{si + 1}</span>
+              <span class="itk-sec-titles">
+                <span class="itk-sec-title">{sec.title}</span>
+                <span class="itk-sec-blurb">{sec.blurb}</span>
+              </span>
+            </summary>
+            <div class="itk-sec-body" data-body>
+              {sec.fields.filter((f) => !f.derived).map((f) => {
+                /* One question over TWO controls (only `dates`) means the question labels the
+                   GROUP, not the first input. As a `<label for={f.dom[0]}>` it gave #ngStart a
+                   second label beside its own "First day" sub-label — axe
+                   form-field-multiple-labels, and a screen reader reading "When? First day".
+                   Group-labelling instead, server-rendered so the no-JS form keeps it. A
+                   `<fieldset>` would be the other spelling, but `<legend>` has to be the
+                   fieldset's first child: the question would move inside `.ng-field-split`,
+                   away from its example line, and the row's flex layout would inherit the UA
+                   fieldset box. Single-control rows keep the plain `<label for>` — the
+                   stronger association, and correct there. */
+                const split = f.dom.length > 1;
+                return (
+                <div class="itk-row" data-field={f.id}>
+                  <div class="itk-ctl">
+                    {split
+                      ? <p class="itk-q" id={`${f.dom[0]}Q`}>{f.question}</p>
+                      : <label class="itk-q" for={f.dom[0]}>{f.question}</label>}
+                    {f.example && <p class="itk-eg" id={`${f.dom[0]}Eg`}>{f.example}</p>}
+                    <div class={`ng-field${split ? " ng-field-split" : ""}`}
+                      role={split ? "group" : undefined}
+                      aria-labelledby={split ? `${f.dom[0]}Q` : undefined}>
+                      {f.dom.map((id, di) => {
+                        const c = CONTROLS[id];
+                        return (
+                          <span class="itk-in">
+                            {c.sub && <label class="itk-sub-lab" for={id}>{c.sub}</label>}
+                            {c.kind === "select" ? (
+                              <select id={id} aria-describedby={di === 0 ? `${f.dom[0]}Note` : undefined}>
+                                {c.options?.map((o) => <option value={o.v}>{o.t}</option>)}
+                              </select>
+                            ) : c.kind === "textarea" ? (
+                              <textarea id={id} rows="2" placeholder={c.placeholder}
+                                aria-describedby={`${f.example ? `${f.dom[0]}Eg ` : ""}${f.dom[0]}Note`}></textarea>
+                            ) : (
+                              <input type={c.type ?? "text"} id={id} required={c.required} min={c.min}
+                                placeholder={c.placeholder} autocomplete="off"
+                                aria-describedby={di === 0 ? `${f.example ? `${f.dom[0]}Eg ` : ""}${f.dom[0]}Note` : undefined} />
+                            )}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  <p class="itk-note" id={`${f.dom[0]}Note`}>{f.changes}</p>
+                </div>
+                );
+              })}
+              {sec.matchups && (
+                <div class="itk-row" data-fallback="priorities">
+                  <div class="itk-ctl">
+                    <p class="itk-q">What is this trip for?</p>
+                    <p class="itk-eg">Rank up to three. The checklist asks this as five either-ors instead.</p>
+                    {PRIORITY_FIELDS.map((pf: { id: string; label: string; options?: string[] }) => (
+                      <div class="ng-field">
+                        <span class="itk-in">
+                          <label class="itk-sub-lab" for={`ng${pf.id.charAt(0).toUpperCase()}${pf.id.slice(1)}`}>{pf.label}</label>
+                          <select id={`ng${pf.id.charAt(0).toUpperCase()}${pf.id.slice(1)}`}>
+                            {pf.options?.map((o) => <option value={o === "— none —" ? "" : o}>{o}</option>)}
+                          </select>
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <p class="itk-note">Where the research spends its time — your top pick gets the deepest dig.</p>
+                </div>
+              )}
+            </div>
+          </details>
         ))}
-        <label class="ng-field">
-          <span>Niche interest</span>
-          <input type="text" id="ngNiche" placeholder="only if a Priority above is Niche — e.g. live music" autocomplete="off" />
-        </label>
-        <label class="ng-field">
-          <span>Budget</span>
-          <select id="ngBudget">
-            <option value="">undecided</option>
-            <option value="Shoestring (<$75/day)">Shoestring (&lt;$75/day)</option>
-            <option value="Mid-range ($75–150/day)">Mid-range ($75–150/day)</option>
-            <option value="Comfortable ($150–300/day)">Comfortable ($150–300/day)</option>
-            <option value="Luxury ($300+/day)">Luxury ($300+/day)</option>
-          </select>
-        </label>
-        <label class="ng-field">
-          <span>How firm is that budget?</span>
-          <select id="ngBudgetCertainty">
-            <option value="assumed">not sure</option>
-            <option value="fixed">hard cap</option>
-            <option value="target">rough goal</option>
-            <option value="flexible">could flex</option>
-            <option value="unknown">undecided</option>
-            <option value="none">no budget set</option>
-          </select>
-        </label>
-        <label class="ng-field">
-          <span>Comments</span>
-          <textarea id="ngComments" rows="2" placeholder="group makeup, dietary needs, a fixed anchor event, dealbreakers, etc."></textarea>
-        </label>
         <p class="ng-err" id="ngErr" hidden></p>
-        <button type="submit" class="ng-submit">Send it to research →</button>
+        <button type="submit" class="ng-submit" data-plain-submit>Send it to research →</button>
       </form>
     </main>
 
     <footer class="itk-foot">Waypoint — every fact checked, every route tested. <a href={`${base}/`}>Back to the guides →</a></footer>
 
     <script>
-      import { initIntakeFlow } from "../features/hub/index";
-      initIntakeFlow();
+      import { initIntakeChecklist } from "../features/hub/index";
+      initIntakeChecklist();
     </script>
   </body>
 </html>

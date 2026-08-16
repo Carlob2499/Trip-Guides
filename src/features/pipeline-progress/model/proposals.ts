@@ -14,8 +14,12 @@
 
 import { REVISE_FIELDS, labelFor } from "../../../lib/issue-forms.mjs";
 
-/** The label the pipeline files these under; change.yml also auto-runs on it. */
-export const REVISION_LABEL = "revision-request";
+/** The label the pipeline files these under. Inert on its own — change.yml runs on
+ *  `revision-request` instead, which the owner adds by hand once they approve (see
+ *  ensure-labels.yml, feedback-export.yml, prompts/feedback-synthesis.md). Reading proposals
+ *  by `revision-request` would find only issues already running, never the ones waiting on a
+ *  decision — this is that fix (2026-08-16). */
+export const REVISION_LABEL = "revision-auto-filed";
 
 export interface RevisionProposal {
   /** Issue number — what POST /approve hands change.yml to read the plan from. */

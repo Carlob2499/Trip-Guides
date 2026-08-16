@@ -150,8 +150,9 @@ un-publish a guide.
 **GitHub is the record, not the interface.** The creator's surfaces all reach the pipeline through
 the Cloudflare Worker (`worker/`, its own README carries setup): the New-Guide wizard files the
 intake issue silently and returns a progress-page URL; a guide's ✎ change request files a
-change-request issue; the progress page's owner controls answer traveler questions, resolve blocking
-forks, and approve feedback proposals by dispatching `change.yml` directly.
+change-request issue; the progress page's owner controls answer traveler questions and resolve
+blocking forks; and `/progress/triage/`, the owner's queue, starts a change on a waiting request or
+approves a feedback proposal by dispatching `change.yml` directly.
 
 **Two gates protect that, in different places.** The Worker's three owner endpoints require an
 `X-Owner-Key` header (unset key ⇒ 503, fail CLOSED) — that header is what replaced the deleted
@@ -161,6 +162,47 @@ collaborator. Without that, filing the identical issue by hand would bypass the 
 outsider's request still files, still reads; it just spends no agent until a human dispatches it.
 
 Stuck-run alerts still file GitHub issues — those are owner alerts, not a UX.
+
+## The progress surface — what a run is allowed to say about itself
+
+`/progress/` reports a live research run to the person waiting on it, so its rules are honesty
+rules before they are layout rules. Three of them cannot be read back off the code and are
+recorded here; everything else lives in `src/features/pipeline-progress/`. (They came from the
+design bundle that built the page, retired with its plan — `docs/archive/INDEX.md →
+PLAN_PIPELINE_SURFACES`.)
+
+**The note panel speaks in three colours, and only one of them takes input.** It is the only
+place on the page a person can put something INTO a run, so its colour is a promise about what
+happens next:
+
+| Tone | States | What it promises |
+|---|---|---|
+| `--muted` | `monitoring`, empty page | Nothing is being asked of you — the run is reading, or there is no run |
+| `--warn` | `awaiting`, `processing`, stalled page | The run is waiting on a person, or the answer you gave is in flight |
+| `--green` | `resumed`, done page | Your answer landed and the run picked up, or the research is finished |
+
+Only `awaiting` (and its in-flight `processing`) has a real endpoint behind the control — the
+Worker's POST `/answer`, which already resumes the run. A mid-run note has no endpoint anywhere
+in the stack, so `monitoring` and the stalled panel render one line of copy where the control
+would sit. **A textarea that posts nowhere is a worse lie than an admitted gap.** When the
+emitter exists, the control replaces the copy and nothing else about the panel changes.
+
+**A stalled run holds its frame — every animation on the page stops.** No plane drift, no
+marching route dashes, no breathing dot; the page says "Stalled" in words and stops moving,
+because a pulse over a dead run is the page inventing activity (`docs/reference/motion.md`, the
+work-in-progress amendment). One ordering rule sits above it: an unanswered question OUTRANKS the
+stall it caused, since "answer this" is the same fact as "nothing has moved", stated in the form
+the reader can act on.
+
+**The route map is written frame by frame, never by a transition.** `offset-distance` animates
+via neither CSS transitions nor the Web Animations API in any engine, so the plane and the flown
+line are a rAF loop writing `transform` and `stroke-dashoffset` from ONE `t` — always together,
+so the nose can never point along a stretch the line has not reached. Three consequences are not
+optional: every state change also writes its exact frame **synchronously** (rAF never fires in a
+hidden tab, and this is a page people deliberately leave and come back to), the route is
+re-measured on `visibilitychange`, and the plane sits at the last station the pipeline actually
+CLEARED. Interpolating toward the next one would animate a guess — the run reports at stage
+boundaries and nowhere else.
 
 ## Run state — one directory per guide
 

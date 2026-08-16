@@ -48,6 +48,14 @@ Anything new that wants to be flashy must strengthen this signature, not compete
 | Overture auto-glide + recede (hub intro → guide grid) | JS-owned: eased auto-scroll + scroll-linked scale/fade/parallax/route-draw, all cancelable | `overture.js` + `hub-motion.css` |
 | Atlas card hover glow + tinted border | per-guide `--accent` via `color-mix` (border + `:hover`/`:focus` box-shadow halo) | `hub-motion.css` |
 | Atlas card scroll reveal | existing native `view()` (reveal.js fallback) — unchanged | `scroll-motion.css` / `reveal.js` |
+| Progress route: plane + flown line | rAF frame-by-frame `transform` + `stroke-dashoffset` from one `t`; damped lerp toward the last CLEARED station, sine drift only while live, synchronous frame on every state change | `pipeline-progress/ui/progress.js` + `route-geometry.ts` |
+| Progress route: todo-dash march, current-station ping | CSS keyframes `pg-march` / `pg-ping`, both gated on `.pg-route[data-live="1"]` | `progress.css` |
+| Progress live-run dot | CSS keyframes `pg-breathe` — the "this run is alive" tell, and it stops when the run does | `progress.css` |
+| Progress phase fills | `scaleX(var(--pg-fill))` transition — never width (rule 7) | `progress.css` |
+| Intake completeness meter | `scaleX(var(--itk-fill))` transition — never width (rule 7) | `intake.css` |
+| Change-request selected card: silhouette drift + city-pin pings | CSS keyframes `cpDrift` (24s) / `cpPing` (2.6s, staggered), scoped to the selected card inside `prefers-reduced-motion: no-preference` | `change-request/styles.css` |
+| Change-request section map underline | `scaleX(var(--cp-bar))`, 450ms draw off the duration scale (the prototype's own figure) | `change-request/styles.css` |
+| Triage card arrival + hover lift | CSS keyframes `cpTriIn` once with `backwards` (stagger capped at four cards by the script), plus a `translateY(-2px)` hover transition | `change-request/styles.css` + `ui/triage-page.js` |
 
 ## The rules (non-negotiable)
 

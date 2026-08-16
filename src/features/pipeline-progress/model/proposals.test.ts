@@ -5,8 +5,11 @@ import { toProposals, proposalMatchesSlug, REVISION_LABEL } from "./proposals";
 import { PROPOSAL_ISSUES } from "../mocks/seeds";
 
 describe("REVISION_LABEL", () => {
-  it("is the label change.yml auto-runs on — the two must name the same thing", () => {
-    expect(REVISION_LABEL).toBe("revision-request");
+  it("is the label feedback-export.yml auto-files inert proposals under, not the one change.yml runs on", () => {
+    // change.yml triggers on "revision-request" (the owner adds it by hand to approve) — reading
+    // proposals under that label would only ever find issues already running, never ones waiting
+    // on a decision. See ensure-labels.yml / feedback-export.yml / prompts/feedback-synthesis.md.
+    expect(REVISION_LABEL).toBe("revision-auto-filed");
   });
 });
 

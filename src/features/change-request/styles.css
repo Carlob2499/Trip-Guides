@@ -1,108 +1,458 @@
-/* Change-request wizard. Deliberately reuses the share modal's shell metrics (guide.css
-   .share-backdrop/.share-modal) so a guide page has ONE modal language rather than two;
-   only the wizard-specific chrome lives here. Tokens only — dark mode is token remapping,
-   so nothing here may hardcode a colour.
+/* Change-request page (/change/) — the `.cp-*` vocabulary.
+   Replaces the `.cr-*` modal wizard's, which was deleted with the modal: the guide's footer pill
+   now deep-links here instead of opening a 420px dialog, and a dialog that can never open is not
+   a fallback, it is dead CSS.
 
-   Atlas re-expression (Stage F, feature 11): square on the modal, the textarea and the review
-   block; 999px on the close button; the drop shadow deleted, since the wizard sits on its own
-   backdrop the way the share panel does. */
+   Tokens only — dark mode is token remapping, so nothing here may hardcode a colour. The one
+   exception is per-card: each guide's own accent arrives as an inline style computed at build
+   time by src/lib/accent-tokens.ts (the same derivation the hub card and the guide page use), so
+   a card's oxide is the guide's own, not a second opinion about it.
 
-.cr-backdrop { position: fixed; inset: 0; z-index: 900; background: rgba(0, 0, 0, .45); display: none; }
-.cr-backdrop.open { display: block; }
+   Atlas: radius is 0 or 999px and nothing between. Square on plates, wells, the textarea and the
+   weight stamp; 999px on chips, pills and buttons. Uppercase + --font-data is DATA (tags, stamps,
+   counts); sentence case + --font-display is prose. */
 
-.cr-modal {
-  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 910;
-  width: min(420px, calc(100vw - 2rem)); max-height: calc(100dvh - 1.5rem); overflow-y: auto;
-  background: var(--card); border: 1px solid var(--rule2); border-radius: 0;
-  padding: 1.4rem 1.6rem;
+/* ── Page chrome — deliberately the same metrics as progress.css's, so /new/, /progress/ and
+      /change/ are visibly one site rather than three. ───────────────────────────────────────── */
+
+.cp-contours { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.cp-contours svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.cp-contours polyline { fill: none; stroke: color-mix(in srgb, var(--muted) 14%, transparent); stroke-width: 1.1; }
+
+.cp-bar, .cp, .cp-foot { position: relative; z-index: 1; }
+
+.cp-bar {
+  max-width: 74rem; margin: 0 auto; width: 100%; padding: 1.1rem 1.2rem 0;
+  display: flex; align-items: center; justify-content: space-between; gap: .8rem;
+}
+.cp-wordmark {
+  font-family: var(--font-display); font-weight: 640; font-size: var(--text-lead);
+  color: var(--ink); text-decoration: none; letter-spacing: -.01em;
+}
+.cp-wordmark:hover { color: var(--accent-ink); }
+.cp-wordmark:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 3px; }
+.cp-theme-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 38px; min-height: 38px; padding: 0 .6rem; border-radius: 999px;
+  border: 1px solid var(--rule); background: var(--card); color: var(--ink); cursor: pointer;
+  transition: background var(--dur-tap) ease, border-color var(--dur-tap) ease;
+}
+.cp-theme-btn:hover { border-color: var(--ink); }
+.cp-theme-btn:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+
+.cp {
+  max-width: 74rem; margin: 0 auto; width: 100%;
+  padding: 1.6rem 1.2rem 2.4rem; flex: 1;
+  container-type: inline-size; container-name: cp;
 }
 
-.cr-head {
-  font-family: var(--font-display); font-size: var(--text-body); font-weight: 600;
-  margin-bottom: .35rem; display: flex; align-items: center; justify-content: space-between; gap: .5rem;
+.cp-foot {
+  border-top: 1px solid var(--rule2); text-align: center;
+  padding: 1.6rem 1.2rem calc(1.6rem + var(--safe-bottom));
+  color: var(--muted); font-size: var(--text-control); font-family: var(--font-data); letter-spacing: .04em;
 }
-.cr-close {
-  background: none; border: none; cursor: pointer; font-size: var(--text-lead); color: var(--muted);
-  padding: .1rem .3rem; line-height: 1; border-radius: 999px; transition: color .14s;
-}
-.cr-close:hover { color: var(--ink); }
-.cr-close:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+.cp-foot a { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; }
 
-.cr-step-of {
+/* ── Segmented control ───────────────────────────────────────────────────────────────────────
+   Two full-width halves. The second is the OWNER's queue and stays hidden until a key is stored
+   in this browser — a pending-requests tab is not traveller navigation, and offering one to a
+   reader who cannot open it is a door painted on a wall. With one half it is still a legible
+   header plate, not a broken control. */
+
+.cp-seg {
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+  border: 1px solid var(--rule2); border-radius: 999px; overflow: hidden;
+  background: var(--card); margin-bottom: 1.6rem;
+}
+.cp-seg-btn {
+  display: flex; align-items: center; justify-content: center; gap: .4rem;
+  min-height: 44px; padding: .5rem 1rem; text-decoration: none;
+  font-family: var(--font-data); font-size: var(--text-control-sm); letter-spacing: .04em;
+  text-transform: uppercase; color: var(--muted); background: none; border: none; cursor: pointer;
+  transition: background var(--dur-tap) ease, color var(--dur-tap) ease;
+}
+.cp-seg-btn:hover { color: var(--ink); background: var(--bg2); }
+.cp-seg-btn:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: -2px; }
+.cp-seg-btn[aria-current="page"] { background: var(--ink); color: var(--bg); }
+.cp-seg-btn[hidden] { display: none; }
+
+/* ── Hero ────────────────────────────────────────────────────────────────────────────────── */
+
+.cp-hero { max-width: 46rem; margin-bottom: 1.8rem; }
+.cp-eyebrow {
   font-family: var(--font-data); font-size: var(--text-micro); letter-spacing: var(--tracking-micro);
-  text-transform: uppercase; color: var(--muted); margin-bottom: .9rem;
+  text-transform: uppercase; color: var(--muted); margin: 0 0 .4rem;
 }
-.cr-intro { font-size: var(--text-body); color: var(--muted); margin-bottom: .9rem; line-height: 1.45; }
-
-/* Tab picker — chips, because "clickability must be obvious" (CLAUDE.md design doctrine). */
-.cr-options { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .5rem; }
-.cr-chip {
-  font-family: var(--font-data); font-size: var(--text-control-sm); letter-spacing: .02em;
-  min-height: 36px; padding: .4rem .8rem; border-radius: 999px;
-  background: var(--card); color: var(--ink); border: 1px solid var(--rule2);
-  cursor: pointer; transition: background .14s, border-color .14s, color .14s;
+.cp-title {
+  font-family: var(--font-display); font-weight: 640; font-size: var(--text-h1);
+  letter-spacing: -.015em; line-height: 1.12; margin: 0 0 .5rem; color: var(--ink);
 }
-.cr-chip:hover { border-color: var(--ink); }
-.cr-chip:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
-.cr-chip[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.cp-dek { font-size: var(--text-body); color: var(--muted); line-height: 1.5; margin: 0; }
 
-.cr-hint { font-size: var(--text-micro); color: var(--muted); min-height: 1.2em; margin-bottom: .9rem; }
+/* ── Guide picker ────────────────────────────────────────────────────────────────────────────
+   Each card is a real button carrying a real country. The outline is projected at BUILD time
+   (src/lib/route-geometry.ts) so the shapes are there before any JS runs and a reader with
+   scripts off still sees which guides exist. */
 
-.cr-label {
-  display: block; font-family: var(--font-data); font-size: var(--text-micro);
-  letter-spacing: var(--tracking-micro); text-transform: uppercase; color: var(--muted); margin-bottom: .35rem;
+.cp-picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: .8rem; margin-bottom: 1.8rem; }
+.cp-card {
+  display: flex; align-items: center; gap: .9rem; text-align: left;
+  padding: .8rem .9rem; cursor: pointer;
+  background: var(--card); color: var(--ink);
+  border: 1px solid var(--rule2); border-radius: 0;
+  transition: border-color var(--dur-ui) ease, background var(--dur-ui) ease;
 }
-/* 16px floor is enforced by tests/visual/a11y.spec.ts — anything smaller makes iOS zoom on focus. */
-.cr-textarea {
-  width: 100%; box-sizing: border-box; min-height: 116px; resize: vertical;
-  font: inherit; font-size: var(--text-body); color: var(--ink);
-  background: var(--bg2); border: 1px solid var(--rule2); border-radius: 0; padding: .55rem .65rem;
+.cp-card:hover { border-color: var(--ink); }
+.cp-card:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+.cp-card[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--card));
 }
-.cr-textarea:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 1px; }
 
-.cr-count { font-family: var(--font-data); font-size: var(--text-micro); color: var(--muted); text-align: right; margin-top: .25rem; }
-/* Running-low and validation-error both wore --accent-ink, which is the guide's identity
-   colour doing emphasis — the one thing SPEC-COMPONENTS says oxide never means. --warn is the
-   product's attention pigment and is already what the over-budget states use. */
-.cr-count.cr-count-low { color: var(--warn); }
+.cp-card-map { flex: none; width: 64px; height: 70px; display: block; overflow: visible; }
+.cp-outline {
+  fill: color-mix(in srgb, var(--accent) 18%, transparent);
+  stroke: color-mix(in srgb, var(--accent) 55%, transparent); stroke-width: 1;
+  transition: fill var(--dur-ui) ease, stroke var(--dur-ui) ease;
+}
+/* The design's own number: a selected country is filled 62%, which is the point at which the
+   silhouette reads as the guide's colour rather than as a tint of the card. */
+.cp-card[aria-pressed="true"] .cp-outline {
+  fill: color-mix(in srgb, var(--accent) 62%, transparent);
+  stroke: var(--accent);
+}
 
-.cr-err { font-size: var(--text-micro); color: var(--warn); min-height: 1.2em; margin-top: .35rem; }
+.cp-pin { fill: var(--accent); opacity: 0; transition: opacity var(--dur-ui) ease; }
+.cp-card[aria-pressed="true"] .cp-pin { opacity: 1; }
+.cp-ping { fill: none; stroke: var(--accent); stroke-width: 1; opacity: 0; transform-box: fill-box; transform-origin: center; }
 
-.cr-review { background: var(--bg2); border: 1px solid var(--rule2); border-radius: 0; padding: .7rem .8rem; margin-bottom: .9rem; }
-.cr-review dt {
+.cp-card-txt { min-width: 0; }
+.cp-card-name {
+  display: block; font-family: var(--font-display); font-weight: 600; font-size: var(--text-body);
+  line-height: 1.25; overflow-wrap: anywhere;
+}
+.cp-card-sub {
+  display: block; margin-top: .2rem;
   font-family: var(--font-data); font-size: var(--text-micro); letter-spacing: var(--tracking-micro);
   text-transform: uppercase; color: var(--muted);
 }
-.cr-review dd { margin: .15rem 0 .6rem; font-size: var(--text-body); color: var(--ink); overflow-wrap: anywhere; }
-.cr-review dd:last-child { margin-bottom: 0; }
 
-.cr-nav { display: flex; gap: .5rem; align-items: center; justify-content: space-between; margin-top: 1rem; }
-.cr-btn {
-  font-family: var(--font-data); font-size: var(--text-control-sm); letter-spacing: .02em;
-  min-height: 40px; padding: .45rem 1rem; border-radius: 999px; cursor: pointer;
-  background: var(--card); color: var(--ink); border: 1px solid var(--rule2);
-  transition: background .14s, border-color .14s, color .14s;
+/* ── Compose + advisory ──────────────────────────────────────────────────────────────────── */
+
+.cp-compose { display: grid; grid-template-columns: 1.25fr 1fr; gap: 1.4rem; align-items: start; }
+
+.cp-label {
+  display: block; font-family: var(--font-data); font-size: var(--text-micro);
+  letter-spacing: var(--tracking-micro); text-transform: uppercase; color: var(--muted); margin-bottom: .35rem;
 }
-.cr-btn:hover { border-color: var(--ink); }
-.cr-btn:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
-.cr-btn-primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-/* The hover state used --accent-ink ON an --accent fill. Both are the guide's own oxide, so the
-   wizard's submit button lost its own label the moment a pointer touched it — measured on the
-   real pages, 1.45:1 (korea/japan light) to 2.30:1 (japan dark), every guide, both themes.
-   --accent-ink is ink for a PAGE ground; --on-accent is the one for a fill, and lands at
-   4.52-4.63:1 across the four guides. */
-.cr-btn-primary:hover { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
-.cr-btn[hidden] { display: none; }
 
-.cr-foot { font-size: var(--text-micro); color: var(--muted); margin-top: .8rem; line-height: 1.45; }
-.cr-foot[hidden], .cr-nav[hidden], .cr-sent[hidden] { display: none; }
+/* Starters sit ABOVE the box on purpose: they are the prompt, not a correction of what was
+   typed. A chip under the textarea reads as "you did that wrong". */
+.cp-starters { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .7rem; }
+.cp-starter {
+  font-family: var(--font-data); font-size: var(--text-control-sm); letter-spacing: .02em;
+  min-height: 36px; padding: .4rem .8rem; border-radius: 999px;
+  background: var(--card); color: var(--ink); border: 1px solid var(--rule2); cursor: pointer;
+  transition: background var(--dur-tap) ease, border-color var(--dur-tap) ease, color var(--dur-tap) ease;
+}
+.cp-starter:hover { border-color: var(--ink); }
+.cp-starter:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
 
-/* The worker path's confirmation — it replaces the whole wizard, so it carries the weight of a
-   result rather than a caption. tabindex=-1 + focus() on reveal, since the panes it replaced
-   held the focus. */
-.cr-sent { font-family: var(--font-display); font-weight: 560; font-size: var(--text-lead); color: var(--ink); margin: .4rem 0 0; line-height: 1.4; }
-.cr-sent:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+/* 16px floor is enforced by tests/visual/a11y.spec.ts — anything smaller makes iOS zoom on focus. */
+.cp-textarea {
+  width: 100%; box-sizing: border-box; min-height: 160px; resize: vertical;
+  font: inherit; font-size: var(--text-body); color: var(--ink);
+  background: var(--bg2); border: 1px solid var(--rule2); border-radius: 0; padding: .6rem .7rem;
+}
+.cp-textarea:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 1px; }
+
+.cp-count { font-family: var(--font-data); font-size: var(--text-micro); color: var(--muted); text-align: right; margin: .25rem 0 0; }
+/* --warn is the product's attention pigment; --accent-ink here would be the guide's identity
+   colour doing emphasis, which SPEC-COMPONENTS says oxide never means. */
+.cp-count-low { color: var(--warn); }
+.cp-err { font-size: var(--text-micro); color: var(--warn); min-height: 1.2em; margin: .35rem 0 0; }
+
+.cp-panel { background: var(--bg2); border: 1px solid var(--rule2); border-radius: 0; padding: 1rem 1.1rem; }
+.cp-panel-head {
+  font-family: var(--font-data); font-size: var(--text-micro); letter-spacing: var(--tracking-micro);
+  text-transform: uppercase; color: var(--muted); margin: 0 0 .6rem;
+}
+
+/* Category chips. dates and access deliberately SHARE the accent and are told apart by their
+   words (design README decision 1 ruled out the prototype's purple). --cp-tone is set per chip
+   from the model's CATEGORY_TONE. */
+.cp-cats { display: flex; flex-wrap: wrap; gap: .35rem; margin-bottom: .7rem; }
+.cp-cat {
+  font-family: var(--font-data); font-size: var(--text-micro); letter-spacing: var(--tracking-micro);
+  text-transform: uppercase; padding: .25rem .6rem; border-radius: 999px;
+  color: var(--ink); border: 1px solid color-mix(in srgb, var(--cp-tone, var(--muted)) 55%, transparent);
+  background: color-mix(in srgb, var(--cp-tone, var(--muted)) 12%, transparent);
+}
+.cp-cat[data-tone="accent"] { --cp-tone: var(--accent); }
+.cp-cat[data-tone="crit"] { --cp-tone: var(--crit); }
+.cp-cat[data-tone="green"] { --cp-tone: var(--green); }
+.cp-cat[data-tone="warn"] { --cp-tone: var(--warn); }
+
+/* The affected tabs, each with its own remove control — the requester gets the last word on
+   scope, because they know things a keyword map cannot. */
+.cp-affected { display: flex; flex-wrap: wrap; gap: .35rem; margin: 0 0 .7rem; padding: 0; list-style: none; }
+.cp-aff {
+  display: inline-flex; align-items: center; gap: .3rem;
+  font-family: var(--font-data); font-size: var(--text-control-sm); letter-spacing: .02em;
+  padding: .25rem .3rem .25rem .65rem; border-radius: 999px;
+  background: var(--card); color: var(--ink); border: 1px solid var(--rule2);
+}
+.cp-aff-kind { color: var(--muted); font-size: var(--text-micro); letter-spacing: var(--tracking-micro); text-transform: uppercase; }
+.cp-aff-x {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 24px; min-height: 24px; border-radius: 999px; cursor: pointer;
+  background: none; border: none; color: var(--muted); font-size: var(--text-body); line-height: 1;
+  transition: color var(--dur-tap) ease, background var(--dur-tap) ease;
+}
+.cp-aff-x:hover { color: var(--ink); background: var(--bg2); }
+.cp-aff-x:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 1px; }
+
+/* The empty state is a GHOST of the real thing — same shape, no claims. */
+.cp-ghost { margin: 0 0 .7rem; font-size: var(--text-micro); color: var(--muted); line-height: 1.5; }
+.cp-ghost-row { display: flex; flex-wrap: wrap; gap: .35rem; margin-bottom: .5rem; }
+.cp-ghost-chip {
+  font-family: var(--font-data); font-size: var(--text-control-sm); letter-spacing: .02em;
+  padding: .25rem .65rem; border-radius: 999px;
+  color: color-mix(in srgb, var(--muted) 70%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--rule2) 90%, transparent);
+}
+
+/* Status stamps are square (Atlas) — a stamp is pressed onto a document, not a pill. */
+.cp-weight-row { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; margin-bottom: .5rem; }
+.cp-weight {
+  font-family: var(--font-data); font-size: var(--text-micro); letter-spacing: var(--tracking-micro);
+  text-transform: uppercase; padding: .25rem .55rem; border-radius: 0; white-space: nowrap;
+  color: var(--ink); border: 1px solid var(--rule2); background: var(--card);
+}
+.cp-weight[data-weight="Bigger job"] { border-color: var(--warn); color: var(--warn); }
+.cp-note { font-size: var(--text-micro); color: var(--muted); line-height: 1.5; margin: 0 0 .9rem; }
+
+.cp-send {
+  width: 100%; min-height: 44px; padding: .5rem 1rem; border-radius: 999px; cursor: pointer;
+  font-family: var(--font-data); font-size: var(--text-control-sm); letter-spacing: .04em;
+  background: var(--ink); color: var(--bg); border: 1px solid var(--ink);
+  transition: background var(--dur-tap) ease, border-color var(--dur-tap) ease, color var(--dur-tap) ease;
+}
+/* --on-accent, not --accent-ink: the ground here is an accent FILL, and accent-ink is derived
+   for a page ground. The old wizard's button lost its own label at 1.45:1 that way. */
+.cp-send:hover { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.cp-send:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+.cp-send[disabled] { opacity: .55; cursor: not-allowed; }
+.cp-send[disabled]:hover { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+
+.cp-sent {
+  font-family: var(--font-display); font-weight: 560; font-size: var(--text-lead);
+  color: var(--ink); line-height: 1.4; margin: 0;
+}
+.cp-sent:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.cp-sent a { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; }
+.cp-foot-note { font-size: var(--text-micro); color: var(--muted); line-height: 1.5; margin: .8rem 0 0; }
+
+/* ── The section map ─────────────────────────────────────────────────────────────────────────
+   Every tab in the guide, tagged. The UNTOUCHED ones are the point: the map's job is to show how
+   much of the guide a request leaves exactly as it is. */
+
+.cp-map { margin-top: 1.8rem; }
+.cp-map-head {
+  font-family: var(--font-display); font-weight: 600; font-size: var(--text-body);
+  color: var(--ink); margin: 0 0 .7rem;
+}
+.cp-secs { display: grid; grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr)); gap: .5rem; margin: 0 0 .7rem; padding: 0; list-style: none; }
+.cp-sec { background: var(--card); border: 1px solid var(--rule2); border-radius: 0; padding: .5rem .6rem .4rem; }
+.cp-sec-name { display: block; font-size: var(--text-control-sm); color: var(--ink); line-height: 1.3; overflow-wrap: anywhere; }
+.cp-sec-tag {
+  display: block; margin-top: .25rem;
+  font-family: var(--font-data); font-size: var(--text-micro); letter-spacing: var(--tracking-micro);
+  text-transform: uppercase; color: var(--muted);
+}
+.cp-sec[data-tag="Redone"] .cp-sec-tag { color: var(--accent-ink); }
+.cp-sec[data-tag="Checked"] .cp-sec-tag { color: var(--ink); }
+/* The bar DRAWS: scaleX from a 0..1 custom property, never an animated width. --cp-draw is off
+   the duration scale on purpose — 450ms is the approved prototype's own figure for this stroke,
+   longer than --dur-reveal because the reader is meant to watch it travel. */
+.cp-sec-bar { --cp-draw: 450ms; height: 2px; margin-top: .4rem; background: var(--rule2); overflow: hidden; }
+.cp-sec-bar::after {
+  content: ""; display: block; height: 100%; background: var(--accent);
+  transform: scaleX(var(--cp-bar, 0)); transform-origin: left center;
+  transition: transform var(--cp-draw) var(--ease-out-expo);
+}
+.cp-legend { font-size: var(--text-micro); color: var(--muted); line-height: 1.5; margin: 0; }
+
+.cp-noscript { margin-top: 1.4rem; font-size: var(--text-body); color: var(--muted); line-height: 1.5; }
+.cp-noscript a { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── The owner's triage queue (/progress/triage/) ─────────────────────────────────────────────
+   Same page chrome as /change/ — it is the second half of the same segmented control, so it had
+   better be the same page. What is new is the QUEUE: a card grid whose column floor is the
+   design's own `minmax(min(25rem,100%),1fr)`, and a 5px category stripe down each card's leading
+   edge. The stripe is the fastest read on the page: a queue is scanned before it is read.
+
+   One tone token per card, set on the article as --cp-tone, so the stripe and the chip cannot
+   disagree about what colour a category is — .cp-cat already resolves var(--cp-tone) and simply
+   inherits it here instead of declaring its own. */
+
+.cp-tri-gate { max-width: 40rem; font-size: var(--text-body); color: var(--muted); line-height: 1.55; margin: 0; }
+
+.cp-tri-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-bottom: .9rem; }
+.cp-tri-count {
+  font-family: var(--font-data); font-size: var(--text-micro); font-weight: 700;
+  letter-spacing: var(--tracking-micro); text-transform: uppercase; color: var(--muted);
+}
+.cp-tri-legend { display: flex; flex-wrap: wrap; gap: .35rem; margin: 0 0 0 auto; padding: 0; list-style: none; }
+
+.cp-tri-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(25rem, 100%), 1fr));
+  gap: .8rem; align-items: stretch;
+}
+
+.cp-tri {
+  display: flex; min-width: 0; border-radius: 0;
+  background: var(--card); border: 1px solid var(--rule2);
+  transition: border-color var(--dur-ui) ease, transform var(--dur-tap) var(--ease-spring);
+}
+.cp-tri:hover { transform: translateY(-2px); }
+/* The design's one state change on this card: a started decision turns the whole edge green. */
+.cp-tri[data-started="true"] { border-color: var(--green); }
+.cp-tri[data-started="true"]:hover { transform: none; }
+
+.cp-tri-stripe { flex: none; width: 5px; background: var(--cp-tone, var(--rule2)); }
+.cp-tri[data-tone="accent"] { --cp-tone: var(--accent); }
+.cp-tri[data-tone="crit"] { --cp-tone: var(--crit); }
+.cp-tri[data-tone="green"] { --cp-tone: var(--green); }
+.cp-tri[data-tone="warn"] { --cp-tone: var(--warn); }
+
+.cp-tri-body { flex: 1; min-width: 0; display: flex; flex-direction: column; padding: .8rem .95rem .9rem; }
+
+.cp-tri-top { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; margin-bottom: .45rem; }
+/* A stamp is pressed onto a document: square, and it borrows its own text colour for its rule.
+   Amber while it waits on a person, green once it doesn't. */
+.cp-tri-stamp {
+  margin-left: auto; border-radius: 0; padding: .2rem .55rem; white-space: nowrap;
+  font-family: var(--font-data); font-size: var(--text-micro); font-weight: 640;
+  letter-spacing: var(--tracking-micro); text-transform: uppercase;
+  color: var(--warn); border: 1px solid currentColor;
+}
+.cp-tri[data-started="true"] .cp-tri-stamp { color: var(--green); }
+
+.cp-tri-title {
+  font-family: var(--font-display); font-weight: 600; font-size: var(--text-lead);
+  line-height: 1.3; margin: 0 0 .15rem; color: var(--ink); overflow-wrap: anywhere;
+}
+.cp-tri-who {
+  font-family: var(--font-data); font-size: var(--text-micro); color: var(--muted);
+  margin: 0 0 .5rem; letter-spacing: .02em;
+}
+/* The requester's words. Reading scale, prose face, and `pre-wrap` so the paragraphs they typed
+   survive as paragraphs — a verbatim quote reflowed into one block is no longer verbatim. */
+.cp-tri-words {
+  font-size: var(--text-body); line-height: 1.5; color: var(--ink);
+  margin: 0 0 .8rem; white-space: pre-wrap; overflow-wrap: anywhere; text-wrap: pretty;
+}
+
+.cp-tri-foot {
+  margin-top: auto; display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
+  border-top: 1px dashed var(--rule); padding-top: .7rem;
+}
+.cp-tri-suggest {
+  font-family: var(--font-data); font-size: var(--text-micro); color: var(--muted);
+  line-height: 1.45; flex: 1; min-width: 8rem;
+}
+.cp-tri-btn {
+  min-height: 44px; padding: .5rem 1rem; border-radius: 999px; cursor: pointer;
+  font-family: var(--font-data); font-size: var(--text-control-sm); font-weight: 640; letter-spacing: .04em;
+  background: none; color: var(--muted); border: 1px solid var(--rule2);
+  transition: background var(--dur-tap) ease, border-color var(--dur-tap) ease, color var(--dur-tap) ease;
+}
+.cp-tri-btn:hover { color: var(--ink); border-color: var(--ink); }
+.cp-tri-btn[data-choice="quick"]:hover { color: var(--green); border-color: var(--green); }
+.cp-tri-btn:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+.cp-tri-btn[disabled] { opacity: .55; cursor: not-allowed; }
+
+.cp-tri-status {
+  font-family: var(--font-data); font-size: var(--text-micro); color: var(--muted);
+  line-height: 1.45; margin: .55rem 0 0;
+}
+.cp-tri-status:empty { display: none; }
+.cp-tri[data-started="true"] .cp-tri-status { color: var(--green); }
+
+.cp-tri-empty { font-size: var(--text-body); color: var(--muted); line-height: 1.55; margin: 0; }
+
+/* The dispatch bar keeps the design's slot and loses its "See what's running →" button: a change
+   run works on `change/<slug>` and the progress page reads `research/<slug>` then `main`, so the
+   button would have promised a view of something that surface cannot see. */
+.cp-tri-dispatch {
+  margin-top: .8rem; background: var(--card); border: 1px solid var(--rule2); border-radius: 0;
+  padding: .75rem .95rem; display: flex; align-items: center; gap: .7rem; flex-wrap: wrap;
+  font-family: var(--font-data); font-size: var(--text-control-sm); color: var(--muted);
+}
+.cp-tri-dispatch[data-live="true"] { color: var(--green); border-color: var(--green); }
+
+[hidden] { display: none !important; }
+
+/* ── Motion ──────────────────────────────────────────────────────────────────────────────────
+   Both loops below are AMBIENT and scoped to the SELECTED card only — one card, on a page whose
+   whole subject is that card. They are gated inside prefers-reduced-motion: no-preference (the
+   precedent is painted-atlas.css's terrain drift), and they are transform/opacity only, so
+   neither costs a layout. Nothing else on this page moves on its own. */
+
+@media (prefers-reduced-motion: no-preference) {
+  .cp-card[aria-pressed="true"] .cp-outline { animation: cpDrift 24s ease-in-out infinite alternate; }
+  .cp-card[aria-pressed="true"] .cp-ping { animation: cpPing 2.6s var(--ease-out-expo) infinite; }
+  /* Queue cards ARRIVE — they are fetched, so there is a real moment when they were not there and
+     then were. Once, forwards, transform+opacity only, and the stagger is capped at four cards by
+     the script: past that it reads as lag rather than sequence. */
+  /* `backwards`, never `both`: a forwards fill would leave the animation owning `transform` after
+     it ended, and the hover lift below would silently stop working. One owner per property
+     (docs/reference/motion.md) — the arrival owns it while it runs, the transition owns it after. */
+  .cp-tri { animation: cpTriIn var(--dur-reveal) var(--ease-out-expo) var(--cp-tri-delay, 0ms) backwards; }
+}
+
+@keyframes cpTriIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cpDrift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-1.5px, 1.5px, 0); }
+}
+@keyframes cpPing {
+  0% { transform: scale(.35); opacity: .5; }
+  70%, 100% { transform: scale(2.4); opacity: 0; }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .cr-chip, .cr-btn, .cr-close { transition: none; }
+  .cp-card, .cp-starter, .cp-send, .cp-seg-btn, .cp-theme-btn, .cp-aff-x, .cp-outline, .cp-pin,
+  .cp-sec-bar::after, .cp-tri, .cp-tri-btn { transition: none; animation: none; }
+  /* It CUTS. The lift is motion, not state — press/focus states stay, this goes. */
+  .cp-tri:hover { transform: none; }
+}
+
+/* ── Mobile ──────────────────────────────────────────────────────────────────────────────────
+   A container query on .cp, not a viewport one: the page's own width is what decides, the same
+   way progress.css does it. */
+
+@container cp (max-width: 760px) {
+  .cp-picker { grid-template-columns: 1fr; }
+  /* The 64px outline block stays — it is what makes a card a place rather than a row. */
+  .cp-compose { grid-template-columns: 1fr; gap: 1rem; }
+  .cp-secs { grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr)); }
+  /* One triage card per row, 5px stripe unchanged (design README, mobile section). The 25rem
+     column floor would already force one column at these widths; declaring it makes the intent
+     survive a future change to that floor. */
+  .cp-tri-grid { grid-template-columns: 1fr; }
+  /* The legend stops pretending it can sit beside the count on a 375px line. */
+  .cp-tri-legend { margin-left: 0; }
+  /* Buttons before the suggestion would push the thumb targets off the bottom of a tall card;
+     keeping them last and letting the suggestion take the full line keeps both reachable. */
+  .cp-tri-suggest { flex: 1 1 100%; min-width: 0; }
+}
+
+@media print {
+  .cp-contours, .cp-bar, .cp-foot, .cp-seg, .cp-send, .cp-tri-btn { display: none !important; }
 }

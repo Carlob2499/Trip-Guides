@@ -80,7 +80,12 @@
         "book": "walk-in",
         "how": "Jonggak Station Exit 1.",
         "why": "The LCK's home venue — free-to-browse exhibition floor, Riot merch store, and PC café.",
-        "crowd_tip": "LCK Summer split resumes after MSI — check the schedule for a live match while you're there."
+        "crowd_tip": "LCK Summer split resumes after MSI — check the schedule for a live match while you're there.",
+        "map": {
+          "lat": 37.571224,
+          "lng": 126.98151670000001
+        },
+        "place_id": "ChIJny4XAzCjfDURddP-mnc3F5I"
       }
     ]
   }

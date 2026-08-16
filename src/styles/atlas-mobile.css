@@ -417,6 +417,12 @@
      index.astro note). `order` works because .atlas-sheets is already a flex column. */
   .atlas-sheets-next { order: -1; }
   .atlas-sheets-new { order: 1; }
+  /* Ahead of the up-next card, which is the one thing on this list that outranks "your next
+     trip": a run in flight is the only row here that changes while you look at it, and it is
+     the row you came back to the tab for. -2 rather than DOM order alone because the up-next
+     card is already floated with `order`, and a list where the DOM sequence and the painted
+     sequence disagree by viewport is a bug waiting to be reported as one. */
+  .atlas-sheets-building { order: -2; }
 
   /* The big card is the same six children as every other row, re-flowed: the cover and the
      title each take a full line, and the stamp/country/weather/number stay on ONE line
