@@ -6,8 +6,10 @@
 //   · priority values — the issue form only accepts its own dropdown option strings, so a
 //     "friendlified" card value files as blank and the traveler's #1 priority reaches research
 //     as nothing at all.
-//   · field ids — intake.ts names DOM ids (ngCountry…); intake-submit.js reads those ids and emits
-//     issue-form keys. Rename either end alone and the answer is collected into nothing.
+//   · field ids — checklist.ts names DOM ids (ngCountry…); intake-submit.js reads those ids and
+//     emits issue-form keys. Rename either end alone and the answer is collected into nothing.
+//   · section coverage — the six sections are a PRESENTATION grouping over FIELDS, so a schema
+//     field placed in no section is a question /new silently stops asking.
 // Asserted against FIELDS and against intake-submit.js's own source, never against a local list.
 
 // @protects-file Every answer the guide-request screen asks for reaches the person building it.
@@ -16,7 +18,8 @@ import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { FIELDS, NULLISH_VALUES } from "../../../../scripts/intake-schema.mjs";
-import { RANK_CARDS, NICHE_VALUE, TOPIC_CHIPS, TAIL_STEPS, rankToFields, manifestSegments } from "./intake";
+import { RANK_CARDS, NICHE_VALUE, TOPIC_CHIPS, rankToFields } from "./intake";
+import { SECTIONS } from "./checklist";
 
 const FIELD_IDS = FIELDS.map((f) => f.id);
 const PRIORITY_FIELDS = FIELDS.filter((f) => f.special === "priority");
@@ -72,16 +75,18 @@ describe("intake field ids ↔ intake-schema FIELDS", () => {
     for (const key of keys) expect(FIELD_IDS).toContain(key);
   });
 
-  it("every DOM id intake.ts names is one intake-submit.js collects", () => {
-    // A Proxy answering every id makes manifestSegments take all its optional branches, so this
-    // sees every field the paragraph can bind — a hardcoded filled record would drift again.
-    const filled = new Proxy({} as Record<string, string>, { get: () => "x" });
-    const named = new Set([
-      ...TAIL_STEPS.flatMap((s) => s.ids),
-      ...manifestSegments(filled).map((s) => s.field).filter(Boolean),
-    ]);
+  it("every DOM id the checklist names is one intake-submit.js collects", () => {
+    const named = new Set(SECTIONS.flatMap((s) => s.fields.flatMap((f) => f.dom)));
     expect(named.size).toBeGreaterThan(10);
     for (const id of named) expect(COLLECTED_IDS).toContain(id);
+  });
+
+  it("every schema field sits in exactly one checklist section", () => {
+    // The failure this closes is silent in both directions: a field added to the schema but
+    // placed in no section is a question /new stops asking, and a section naming an id the
+    // schema dropped is a row bound to nothing.
+    const placed = SECTIONS.flatMap((s) => s.fields.map((f) => f.id));
+    expect([...placed].sort()).toEqual([...FIELD_IDS].sort());
   });
 
   it("every key intake-submit.js emits is a FIELDS id", () => {
