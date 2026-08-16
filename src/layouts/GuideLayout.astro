@@ -11,12 +11,10 @@ import { bucket } from "../lib/buckets";
 import { buildStations } from "../features/guide-rail/index";
 import "../features/guide-rail/styles.css";
 import { emergencyFor, FALLBACK_RATES_AS_OF } from "../data/countries.mjs";
-import { buildModifyIssueUrl } from "../lib/modify-schema.mjs";
 import { currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
 import { paletteFor, accentForGuide } from "../lib/palettes";
 import { accentTokens, accentStyle } from "../lib/accent-tokens";
 import PaintedAtlas from "../components/PaintedAtlas.astro";
-import ChangeRequest from "../components/ChangeRequest.astro";
 import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
 import ToolsScreen from "../components/ToolsScreen.astro";
 import { deriveToolsRecord } from "../features/trip-tools/index";
@@ -80,10 +78,9 @@ import { derivePins } from "../lib/map-pins";
 // no files exist yet — the holiday block then simply hides.
 const holidayData = import.meta.glob("../data/holidays/*.json", { eager: true, import: "default" }) as Record<string, any[]>;
 
-// Same repo identifier index.astro's New-guide modal already uses for its
-// prefilled-issue link — kept as a local constant there too (no shared
-// site-config module exists yet for a single string this small).
-const REPO = "Carlob2499/Trip-Guides";
+// The repo identifier this layout used to hold is gone with the change-request modal: the
+// footer pill now links to /change/, and that page owns the prefilled-issue URL for every
+// guide. Nothing else on a guide page addresses GitHub.
 
 const { guide } = Astro.props;
 const { order, byG } = bucket(guide.sections);
@@ -502,11 +499,6 @@ const tripSummary = buildSummary(guide);
         <button id="btnDark" class="topbar-btn" aria-label="Switch to dark mode" title="Switch to dark mode"><Icon name="moon" class="tb-ico" /></button>
       </div>
     </nav>
-
-    <!-- Guided "Request a change" wizard — hidden until the footer pill is clicked. Both it
-         and the share modal are reparented to <body> on init (the .sticky-chrome
-         backdrop-filter containing-block trap). -->
-    <ChangeRequest repo={REPO} slug={ogSlug} />
 
     <!-- Share modal — hidden until btnShare is clicked; skipped by Web Share API on mobile -->
     <div class="share-backdrop" id="shareBackdrop" aria-hidden="true"></div>
@@ -1005,17 +997,16 @@ const tripSummary = buildSummary(guide);
              site's ✎ wizard (owner key → backend Worker) files one that runs on its own. Batch 3
              is what moved that decision off GitHub: the approval LABEL is gone, and the owner
              key the Worker checks is the approval. -->
-        <!-- A REAL link, on purpose: with JS off (or before hydration) this still reaches a
-             prefilled issue. The change-request feature intercepts the click and offers the
-             guided 3-step version instead — progressive enhancement, not a JS-only button.
-             When the backend is configured AND an owner key is stored, that wizard submits
-             through the Worker and this href is never followed. -->
+        <!-- A REAL link with the slug already in it, so it works before hydration and with JS
+             off. The 3-step modal this used to open is gone: the request surface is a page now
+             (src/pages/change.astro), which is the only place the guide picker, the live "what
+             we'd update" advisory and the whole-guide section map fit. features/change-request's
+             initChangeLink adds `&tab=` as the reader scrolls, so arriving there pre-fills the
+             tab they were actually looking at — a refinement of this href, never a replacement. -->
         <a
           class="foot-modify-pill"
           id="btnChangeRequest"
-          aria-expanded="false"
-          href={buildModifyIssueUrl(REPO, { slug: ogSlug })}
-          target="_blank" rel="noopener"
+          href={`${base}/change/?slug=${encodeURIComponent(ogSlug)}`}
         ><Icon name="edit" size={14} /> Request a change</a>
       </div>
     </footer>

@@ -183,11 +183,19 @@ export function graticulePath(): string {
   return parts.join(" ");
 }
 
+/** One country in the topology. `id` is the ISO 3166-1 NUMERIC code as a string ("208" Denmark,
+ *  "410" South Korea) — Natural Earth's own key, and the one src/data/countries.mjs resolves to. */
+export interface Geometry {
+  type: string;
+  id?: string | number;
+  arcs?: unknown;
+}
+
 /** The slice of public/data/countries-110m.json this module actually reads. */
 export interface Topology {
   transform: { scale: [number, number]; translate: [number, number] };
   arcs: [number, number][][];
-  objects: Record<string, { geometries: { type: string; arcs?: unknown }[] }>;
+  objects: Record<string, { geometries: Geometry[] }>;
 }
 
 export interface ProjectOptions {
@@ -204,8 +212,16 @@ export interface ProjectOptions {
 const DEFAULT_WINDOW = { minX: 130, maxX: 770, minY: 0, maxY: 300 };
 const DEFAULT_MAX_SPAN = 900;
 
+/** How a decoded lon/lat pair becomes a drawing coordinate. */
+type Projection = (lon: number, lat: number) => Point;
+
+/** The route map's own projection: 4px/° equirectangular over the whole globe. */
+const ROUTE_PROJECTION: Projection = (lon, lat) => [lonToX(lon), latToY(lat)];
+/** Identity: keep degrees, for callers that fit their own box (see fitCountryCard). */
+const LON_LAT: Projection = (lon, lat) => [lon, lat];
+
 /** TopoJSON stores arcs as quantised deltas; decode to absolute lon/lat, then project. */
-function decodeArcs(topo: Topology): Point[][] {
+function decodeArcs(topo: Topology, project: Projection = ROUTE_PROJECTION): Point[][] {
   const [sx, sy] = topo.transform.scale;
   const [tx, ty] = topo.transform.translate;
   return topo.arcs.map((arc) => {
@@ -214,7 +230,7 @@ function decodeArcs(topo: Topology): Point[][] {
     return arc.map(([dx, dy]) => {
       x += dx;
       y += dy;
-      return [lonToX(x * sx + tx), latToY(y * sy + ty)] as Point;
+      return project(x * sx + tx, y * sy + ty);
     });
   });
 }
@@ -274,4 +290,131 @@ export function projectLand(topo: Topology, opts: ProjectOptions = {}): string[]
     }
   }
   return out;
+}
+
+/* ── Country cards ──────────────────────────────────────────────────────────────────────── */
+
+/**
+ * The change-request picker draws each guide as a small country silhouette, and those cards do
+ * NOT use the projection above. At 4px/° Denmark is 14 units wide and South Korea 12 — a smudge,
+ * not a country. Each card instead gets its own fit: bounding box, cos-latitude correction,
+ * scale-to-longest-edge, centre. Same arithmetic as the approved prototype's loadGeo().
+ *
+ * The cos-latitude term is the part that stops the silhouette lying. A degree of longitude at
+ * 56°N is 56% the length of a degree of latitude, so drawing the two 1:1 gives a Denmark half
+ * again too wide — recognisably wrong to anyone who knows the shape, which is everyone the card
+ * is for. Multiplying longitude by cos(mid-latitude) is the cheapest correction that gets the
+ * proportions right at country scale.
+ */
+export const CARD_BOX = { width: 64, height: 70 } as const;
+/** The longest edge of the fitted outline, leaving air on the narrow axis. */
+export const CARD_FIT = 56;
+/** Radius of a map pin drawn on the card, in the same units. */
+export const PIN_RADIUS = 3;
+
+const CARD_CX = CARD_BOX.width / 2;
+const CARD_CY = CARD_BOX.height / 2;
+/** Below this, a span is a rounding artefact rather than an extent, and dividing by it would
+ *  hand the caller Infinity. */
+const MIN_DEGREE_SPAN = 1e-6;
+/** A country spanning more longitude than this has wrapped the antimeridian (Russia, Fiji): its
+ *  bounding box covers most of the planet and no honest fit exists. The caller gets null. */
+const MAX_CARD_LON_SPAN = 180;
+
+export interface CountryCard {
+  /** One `d` string — every ring as a subpath — for a single `<path fill-rule="evenodd">` in a
+   *  `0 0 64 70` viewBox. One path, so holes cut instead of filling. */
+  d: string;
+  /** Real coordinates → the same box, so a pin lands where the place actually is rather than
+   *  where a designer guessed. */
+  project: Projection;
+}
+
+/**
+ * Every ring of one country, in raw lon/lat degrees.
+ *
+ * `id` is the ISO 3166-1 numeric code — Natural Earth's key, which src/data/countries.mjs
+ * resolves a country name to. Matching on `properties.name` instead would tie the picker to
+ * Natural Earth's spelling of "South Korea", which is not the guide's spelling of it.
+ */
+export function countryRings(topo: Topology, id: string | number, object = "countries"): Point[][] {
+  const collection = topo?.objects?.[object];
+  if (!collection || id === null || id === undefined || id === "") return [];
+  const wanted = String(id);
+
+  const arcs = decodeArcs(topo, LON_LAT);
+  const out: Point[][] = [];
+  for (const geometry of collection.geometries) {
+    if (String(geometry.id ?? "") !== wanted) continue;
+    for (const polygon of ringsOf(geometry)) {
+      for (const ring of polygon) {
+        // Points exactly on the antimeridian are Natural Earth's seam, not coastline.
+        const points = stitchRing(ring, arcs).filter(([lon]) => Math.abs(lon) < 180);
+        if (points.length > 2) out.push(points);
+      }
+    }
+  }
+  return out;
+}
+
+/** Fit lon/lat rings into the card box. Null when there is nothing honest to draw. */
+export function fitCountryCard(rings: Point[][]): CountryCard | null {
+  const points = rings.flat();
+  if (points.length < 3) return null;
+
+  let minLon = Infinity;
+  let maxLon = -Infinity;
+  let minLat = Infinity;
+  let maxLat = -Infinity;
+  for (const [lon, lat] of points) {
+    if (!Number.isFinite(lon) || !Number.isFinite(lat)) return null;
+    if (lon < minLon) minLon = lon;
+    if (lon > maxLon) maxLon = lon;
+    if (lat < minLat) minLat = lat;
+    if (lat > maxLat) maxLat = lat;
+  }
+  if (maxLon - minLon > MAX_CARD_LON_SPAN) return null;
+
+  // Never negative for a real latitude; the clamp is against malformed data, not against maths.
+  const k = Math.max(0, Math.cos((((minLat + maxLat) / 2) * Math.PI) / 180));
+  const width = (maxLon - minLon) * k;
+  const height = maxLat - minLat;
+  const byWidth = width > MIN_DEGREE_SPAN ? CARD_FIT / width : Infinity;
+  const byHeight = height > MIN_DEGREE_SPAN ? CARD_FIT / height : Infinity;
+  const scale = Math.min(byWidth, byHeight);
+  if (!Number.isFinite(scale) || scale <= 0) return null; // a single point has no shape
+
+  const ox = CARD_CX - (width * scale) / 2;
+  const oy = CARD_CY + (height * scale) / 2;
+  const project: Projection = (lon, lat) => [ox + (lon - minLon) * k * scale, oy - (lat - minLat) * scale];
+
+  const d = rings
+    .map((ring) => {
+      const pts = ring.map((p) => {
+        const [x, y] = project(p[0], p[1]);
+        return `${x.toFixed(2)},${y.toFixed(2)}`;
+      });
+      return "M" + pts.join("L") + "Z";
+    })
+    .join("");
+
+  return { d, project };
+}
+
+/** The card for one country, or null if the topology has no drawable geometry under that id. */
+export function countryCard(topo: Topology, id: string | number, object = "countries"): CountryCard | null {
+  return fitCountryCard(countryRings(topo, id, object));
+}
+
+/**
+ * Whether a projected point can be drawn as a pin without being clipped by the card edge.
+ *
+ * This is a real filter, not a formality: the Korea guide's map centres include Tokyo, which sits
+ * 10° east of anything on a card fitted to South Korea. Drawing it would either smear the pin
+ * across the card border or silently rescale the country to fit a city in another one. Dropping
+ * it is the honest option — the card shows Korea, and Tokyo is not in Korea.
+ */
+export function insideCard(point: Point, pad = PIN_RADIUS): boolean {
+  const [x, y] = point;
+  return x >= pad && x <= CARD_BOX.width - pad && y >= pad && y <= CARD_BOX.height - pad;
 }

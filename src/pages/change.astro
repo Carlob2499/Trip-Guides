@@ -1,0 +1,314 @@
+---
+// Request a change — the requester's view (see src/features/change-request/).
+//
+// It is a PAGE, not the modal it replaces, because the approved design asks for three things a
+// 420px dialog cannot hold: a picker across every published guide, a live "what we'd update"
+// advisory, and a map of the whole guide showing how much a request leaves alone. The guide
+// page's footer pill deep-links here with ?slug= and ?tab= already filled in.
+//
+// Everything a reader needs to SEE is server-rendered: the country silhouettes, every tab of
+// every guide, and a real prefilled-issue link per guide for the no-JS path. The client script
+// only adds the parts that are claims about what someone just typed.
+import { getCollection } from "astro:content";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import PwaHead from "../components/PwaHead.astro";
+import { jsonEmbed } from "../lib/json-embed";
+import { generateContourLayer } from "../lib/contours";
+import { bucket } from "../lib/buckets";
+import { accentForGuide, paletteFor } from "../lib/palettes";
+import { accentTokens, accentStyle } from "../lib/accent-tokens";
+import { isoNumericFor } from "../data/countries.mjs";
+import { buildModifyIssueUrl } from "../lib/modify-schema.mjs";
+import type { Section, SectionOf } from "../lib/guide-types";
+import { TOUCH_LEGEND, advisoryEmptyLine } from "../features/change-request/index.js";
+import {
+  countryCard, insideCard, CARD_BOX, PIN_RADIUS, type Topology,
+} from "../lib/route-geometry";
+// Quiet Edition (R1): one serif for prose, one humanist sans for data — same as every surface.
+import "@fontsource-variable/literata/standard.css";
+import "@fontsource-variable/literata/standard-italic.css";
+import "@fontsource-variable/source-sans-3";
+import "../styles/base.css";
+import "../features/change-request/styles.css";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const REPO = "Carlob2499/Trip-Guides";
+
+// `readFileSync` rather than `import`, for the reason /progress/ documents: a 107KB JSON import
+// makes TypeScript infer a literal type for every one of 595 arcs and costs more in typecheck
+// than the file is worth.
+//
+// Resolved from process.cwd(), NOT from `new URL(..., import.meta.url)`. In a compiled Astro page
+// import.meta.url is the BUILT chunk — dist/.prerender/chunks/change_HASH.mjs — so a relative
+// path there is relative to dist/, not to this file. (/progress/'s copy of this read only works
+// because it sits one directory deeper and its ../../../ happens to climb back out of dist/.
+// Depth is not a contract.) cwd is the project root under `astro build` and `astro dev` alike.
+const topo = JSON.parse(
+  readFileSync(join(process.cwd(), "public", "data", "countries-110m.json"), "utf8"),
+) as Topology;
+
+// Published guides only. A draft is still being researched — the surface for that is /progress/,
+// and asking for a change to a guide nobody has finished writing is a request into thin air.
+const published = (await getCollection("guides")).filter((g) => !g.data.draft);
+
+/** Every distinct map centre in the guide, as real [lon, lat]. The Korea guide files two Daejeon
+    centres ~200m apart, which would render as one smudged pin, so they round-and-dedupe to one. */
+function centresOf(sections: readonly Section[]): [number, number][] {
+  const seen = new Set<string>();
+  const out: [number, number][] = [];
+  for (const s of sections) {
+    if (s.type !== "map") continue;
+    const { lat, lng } = (s as SectionOf<"map">).center ?? {};
+    if (typeof lat !== "number" || typeof lng !== "number") continue;
+    const key = lat.toFixed(2) + "," + lng.toFixed(2);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push([lng, lat]);
+  }
+  return out;
+}
+
+const cards = published.map((entry) => {
+  const g = entry.data;
+  const slug = entry.id;
+  const { order, byG } = bucket(g.sections);
+  const accent = accentForGuide(slug, g.theme, g.country);
+  const extracted = g.theme?.primary ? null : paletteFor(slug);
+
+  // The country's own silhouette, fitted to the card box at BUILD time. A country the topology
+  // has no drawable geometry for renders as a card with no outline rather than a wrong one.
+  const iso = isoNumericFor(g.country);
+  const card = iso ? countryCard(topo, iso) : null;
+  // Pins outside the fitted box are dropped, not squeezed in: the Korea guide's centres include
+  // Tokyo, and a card fitted to South Korea has nowhere honest to put it.
+  const pins = card
+    ? centresOf(g.sections)
+        .map(([lon, lat]) => card.project(lon, lat))
+        .filter((p) => insideCard(p))
+        .map(([x, y]) => ({ x: Number(x.toFixed(2)), y: Number(y.toFixed(2)) }))
+    : [];
+
+  return {
+    slug,
+    title: g.title,
+    country: g.country,
+    groups: order,
+    navSections: order.map((grp) => ({
+      group: grp,
+      titles: (byG[grp] || []).map((o) => o.s.title).filter(Boolean),
+    })),
+    outline: card?.d ?? null,
+    pins,
+    style: accentStyle(accentTokens(accent, extracted?.accent)),
+    issueUrl: buildModifyIssueUrl(REPO, { slug }),
+  };
+});
+
+// The survey ground, same cartography as /new/ and /progress/. Own seeds — own terrain.
+const contours = [
+  generateContourLayer({ seed: 19, rings: 9, cx: 260, cy: 620 }),
+  generateContourLayer({ seed: 64, rings: 7, cx: 840, cy: 240 }),
+];
+
+const first = cards[0] ?? null;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Request a change — Waypoint</title>
+    <meta name="description" content="Tell us what's wrong or out of date in a Waypoint guide, and see which parts of it a fix would touch." />
+    <meta name="robots" content="noindex,nofollow" />
+    <PwaHead />
+    <!-- Dark-mode init — runs before paint to avoid flash (same key and attribute as every
+         other surface: src/scripts/theme.js owns the after-load toggle). -->
+    <script is:inline>
+      (function () {
+        const s = localStorage.getItem("tg-theme");
+        const preferDark = window.matchMedia && window.matchMedia("(prefers-color-scheme:dark)").matches;
+        if (s === "dark" || (s === null && preferDark)) {
+          document.documentElement.setAttribute("data-theme", "dark");
+        } else if (s === "light") {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      })();
+    </script>
+  </head>
+  <body data-base={base}>
+    <a class="skip-link" href="#cpMain">Skip to the form</a>
+
+    <div class="cp-contours" aria-hidden="true">
+      {contours.map((layer, i) => (
+        <svg data-cp-contour={i} viewBox={`0 0 ${layer.viewBox} ${layer.viewBox}`} preserveAspectRatio="xMidYMid slice">
+          {layer.rings.map((points) => <polyline points={points} />)}
+        </svg>
+      ))}
+    </div>
+
+    <header class="cp-bar">
+      <a class="cp-wordmark" href={`${base}/`}>← Waypoint</a>
+      <button type="button" class="cp-theme-btn" id="cpDark" aria-label="Switch to dark mode"></button>
+    </header>
+
+    <main class="cp" id="cpMain">
+      <div id="cpRoot">
+        {/* Two halves, and the second is the OWNER's. It stays hidden until a key is stored in
+            this browser — "Pending requests", never "Requests to me", because the queue is a
+            property of the requests, not of who is reading. */}
+        <nav class="cp-seg" aria-label="Change requests">
+          <a class="cp-seg-btn" href={`${base}/change/`} aria-current="page">Request a change</a>
+          <a class="cp-seg-btn" href={`${base}/progress/triage/`} data-cp-triage hidden>Pending requests</a>
+        </nav>
+
+        <header class="cp-hero">
+          <p class="cp-eyebrow">Change request</p>
+          <h1 class="cp-title">Something wrong? Tell us in a sentence.</h1>
+          <p class="cp-dek">
+            A price that moved, a place that closed, a day that doesn't work for you. Say it plainly —
+            we'll show you which parts of the guide it would touch before you send anything.
+          </p>
+        </header>
+
+        {cards.length > 0 ? (
+          <>
+            <h2 class="cp-label" id="cpPickerLabel">Which guide?</h2>
+            <div class="cp-picker" role="group" aria-labelledby="cpPickerLabel">
+              {cards.map((c, i) => (
+                <button
+                  type="button"
+                  class="cp-card"
+                  data-cp-card={c.slug}
+                  aria-pressed={i === 0 ? "true" : "false"}
+                  style={c.style}
+                >
+                  <svg class="cp-card-map" viewBox={`0 0 ${CARD_BOX.width} ${CARD_BOX.height}`} aria-hidden="true">
+                    {c.outline && <path class="cp-outline" d={c.outline} fill-rule="evenodd" />}
+                    {c.pins.map((p, pi) => (
+                      <>
+                        <circle
+                          class="cp-ping" cx={p.x} cy={p.y} r={PIN_RADIUS}
+                          style={`animation-delay:${(pi * 0.45).toFixed(2)}s`}
+                        />
+                        <circle class="cp-pin" cx={p.x} cy={p.y} r={PIN_RADIUS - 1} />
+                      </>
+                    ))}
+                  </svg>
+                  <span class="cp-card-txt">
+                    <span class="cp-card-name">{c.title}</span>
+                    <span class="cp-card-sub">{c.country} · {c.groups.length} tabs</span>
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            <div class="cp-compose">
+              <div>
+                <label class="cp-label" for="cpChange">What should change?</label>
+                {/* Seeded from the guide's own tabs by the client script — a generic example
+                    teaches nothing about THIS guide, a real tab name does. */}
+                <div class="cp-starters" data-cp-starters></div>
+                <p class="cp-note" data-cp-from hidden>
+                  From the <b data-cp-from-name></b> tab.
+                  <button type="button" class="cp-aff-x" data-cp-from-clear aria-label="Not that tab">×</button>
+                </p>
+                <textarea
+                  class="cp-textarea" id="cpChange" data-cp-change rows="7"
+                  placeholder="The 09:40 ferry doesn't run on Sundays any more — the timetable on the operator's site now starts at 11:15."
+                  aria-describedby="cpCount"
+                ></textarea>
+                <p class="cp-count" id="cpCount" data-cp-count></p>
+                <p class="cp-err" data-cp-err role="alert"></p>
+              </div>
+
+              {/* Advisory, and it must read like one. The panel is polite-live so a screen
+                  reader hears the verdict settle rather than every keystroke. */}
+              <aside class="cp-panel" aria-live="polite">
+                <h2 class="cp-panel-head">What we'd update</h2>
+                <div class="cp-cats" data-cp-cats hidden></div>
+                <ul class="cp-affected" data-cp-affected hidden></ul>
+                <div class="cp-ghost" data-cp-ghost>
+                  <div class="cp-ghost-row" aria-hidden="true">
+                    <span class="cp-ghost-chip">a tab</span>
+                    <span class="cp-ghost-chip">another tab</span>
+                  </div>
+                  {/* Same function the script calls on every keystroke, so the pre-JS render and
+                      the first re-render cannot say different things about an empty box. */}
+                  <p data-cp-ghost-line>{advisoryEmptyLine("")}</p>
+                </div>
+                <p class="cp-weight-row">
+                  <span class="cp-weight" data-cp-weight data-weight="—">—</span>
+                </p>
+                <p class="cp-note" data-cp-note></p>
+                <button type="button" class="cp-send" data-cp-send>Send this request</button>
+                <p class="cp-sent" data-cp-sent tabindex="-1" hidden></p>
+                <p class="cp-foot-note" data-cp-footnote></p>
+              </aside>
+            </div>
+
+            <section class="cp-map">
+              <h2 class="cp-map-head" data-cp-map-head>
+                Your guide's {first ? first.groups.length : 0} sections — what we'd touch
+              </h2>
+              <ul class="cp-secs" data-cp-secs>
+                {first?.groups.map((g: string) => (
+                  <li class="cp-sec" data-tag="Untouched">
+                    <span class="cp-sec-name">{g}</span>
+                    <span class="cp-sec-tag">Untouched</span>
+                    <span class="cp-sec-bar" aria-hidden="true"></span>
+                  </li>
+                ))}
+              </ul>
+              <p class="cp-legend">{TOUCH_LEGEND}</p>
+            </section>
+
+            {/* The no-JS path, and it is a real one: the same prefilled issue the guide's footer
+                pill used to open, now offered for every published guide rather than only the one
+                the reader happened to be standing on. */}
+            <noscript>
+              <div class="cp-noscript">
+                <p>Scripts are off, so the guided version isn't available. These file the same request by hand:</p>
+                <ul>
+                  {cards.map((c) => (
+                    <li><a href={c.issueUrl} target="_blank" rel="noopener">Request a change to {c.title} →</a></li>
+                  ))}
+                </ul>
+              </div>
+            </noscript>
+          </>
+        ) : (
+          <p class="cp-dek">There are no published guides to change yet.</p>
+        )}
+      </div>
+    </main>
+
+    <footer class="cp-foot">
+      Waypoint — every fact checked, every route tested. <a href={`${base}/`}>Back to the guides →</a>
+    </footer>
+
+    <script
+      type="application/json"
+      is:inline
+      id="cpConfig"
+      set:html={jsonEmbed({
+        base,
+        repo: REPO,
+        guides: cards.map((c) => ({
+          slug: c.slug,
+          title: c.title,
+          groups: c.groups,
+          navSections: c.navSections,
+        })),
+      })}
+    ></script>
+
+    <script>
+      import { initChangePage } from "../features/change-request/index.js";
+      import { initDarkToggle } from "../scripts/theme.js";
+      initChangePage();
+      initDarkToggle("cpDark");
+    </script>
+  </body>
+</html>

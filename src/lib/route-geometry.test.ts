@@ -10,12 +10,16 @@ import {
   STATION_T, routeStations,
   clamp01, dampToward, planeDrift, PLANE_DAMPING,
   lonToX, latToY, graticulePath, projectLand, type Topology,
+  CARD_BOX, CARD_FIT, PIN_RADIUS, countryRings, fitCountryCard, countryCard, insideCard,
 } from "./route-geometry";
 import { STAGE_ORDER } from "../features/pipeline-progress/model/progress";
 
 /* A hand-built topology in the same shape TopoJSON emits: identity-ish transform so the delta
    decode is readable, and one arc per shape. scale 1/translate 0 means arc values ARE lon/lat. */
-function topo(geometries: { type: string; arcs?: unknown }[], arcs: number[][][]): Topology {
+function topo(
+  geometries: { type: string; id?: string | number; arcs?: unknown }[],
+  arcs: number[][][],
+): Topology {
   return {
     transform: { scale: [1, 1], translate: [0, 0] },
     arcs: arcs as [number, number][][],
@@ -242,6 +246,113 @@ describe("the equirectangular projection", () => {
   });
 });
 
+describe("country cards", () => {
+  /** A 10°×5° box at 60°N, tagged with an ISO-numeric id, as one country in a topology. */
+  const oneCountry = (id: string | number, lon = -30, lat = 60, w = 10, h = 5) =>
+    topo([{ type: "Polygon", id, arcs: [[0]] }], [boxArc(lon, lat, w, h)]);
+
+  it("selects by ISO-numeric id and returns raw degrees, not route-map units", () => {
+    const rings = countryRings(oneCountry("208"), "208");
+    expect(rings).toHaveLength(1);
+    // Degrees: the first point is the box corner itself. Through lonToX it would be 600.
+    expect(rings[0][0]).toEqual([-30, 60]);
+    expect(countryRings(oneCountry("208"), 208)).toHaveLength(1); // number id resolves the same
+  });
+
+  it("returns nothing for an id, object or topology that isn't there", () => {
+    expect(countryRings(oneCountry("208"), "410")).toEqual([]);
+    expect(countryRings(oneCountry("208"), "208", "nope")).toEqual([]);
+    expect(countryRings(oneCountry("208"), "")).toEqual([]);
+    expect(countryRings(oneCountry("208"), null as unknown as string)).toEqual([]);
+  });
+
+  it("fits the outline inside the card box, touching the long edge", () => {
+    // The box spans 60–65°N, so the correction uses the MID-latitude, 62.5°: 10° of longitude
+    // there measures 10·cos(62.5°) ≈ 4.62 against 5° of latitude. Height governs, the outline is
+    // 56 tall, and the width follows from the correction rather than from the raw 10°.
+    const card = countryCard(oneCountry("208"), "208")!;
+    const n = numbersIn(card.d);
+    const xs = n.filter((_, i) => i % 2 === 0);
+    const ys = n.filter((_, i) => i % 2 === 1);
+    const expectedWidth = 10 * Math.cos((62.5 * Math.PI) / 180) * (CARD_FIT / 5);
+    expect(Math.max(...ys) - Math.min(...ys)).toBeCloseTo(CARD_FIT, 1);
+    expect(Math.max(...xs) - Math.min(...xs)).toBeCloseTo(expectedWidth, 1);
+    expect(expectedWidth).toBeLessThan(CARD_FIT); // the correction really does narrow it
+    expect(Math.min(...xs)).toBeGreaterThanOrEqual(0);
+    expect(Math.max(...xs)).toBeLessThanOrEqual(CARD_BOX.width);
+    expect(Math.min(...ys)).toBeGreaterThanOrEqual(0);
+    expect(Math.max(...ys)).toBeLessThanOrEqual(CARD_BOX.height);
+  });
+
+  it("centres the outline in the box", () => {
+    const n = numbersIn(countryCard(oneCountry("208"), "208")!.d);
+    const xs = n.filter((_, i) => i % 2 === 0);
+    const ys = n.filter((_, i) => i % 2 === 1);
+    expect((Math.min(...xs) + Math.max(...xs)) / 2).toBeCloseTo(CARD_BOX.width / 2, 1);
+    expect((Math.min(...ys) + Math.max(...ys)) / 2).toBeCloseTo(CARD_BOX.height / 2, 1);
+  });
+
+  it("corrects for latitude — the same box drawn near the equator is WIDER", () => {
+    const arctic = numbersIn(countryCard(oneCountry("208", -30, 60), "208")!.d);
+    const tropic = numbersIn(countryCard(oneCountry("208", -30, 0), "208")!.d);
+    const spanX = (n: number[]) => {
+      const xs = n.filter((_, i) => i % 2 === 0);
+      return Math.max(...xs) - Math.min(...xs);
+    };
+    expect(spanX(tropic)).toBeGreaterThan(spanX(arctic));
+  });
+
+  it("puts north at the top", () => {
+    const card = countryCard(oneCountry("208"), "208")!;
+    expect(card.project(-30, 65)[1]).toBeLessThan(card.project(-30, 60)[1]);
+    expect(card.project(-20, 60)[0]).toBeGreaterThan(card.project(-30, 60)[0]);
+  });
+
+  it("projects a real coordinate into the same box the outline was drawn in", () => {
+    const card = countryCard(oneCountry("208"), "208")!;
+    // The box's own centre must land on the card's centre.
+    const [cx, cy] = card.project(-25, 62.5);
+    expect(cx).toBeCloseTo(CARD_BOX.width / 2, 1);
+    expect(cy).toBeCloseTo(CARD_BOX.height / 2, 1);
+  });
+
+  it("refuses a shape it cannot honestly fit rather than drawing a smear", () => {
+    expect(fitCountryCard([])).toBeNull();
+    expect(fitCountryCard([[[0, 0], [1, 1]]])).toBeNull(); // fewer than 3 points
+    // A single point repeated has no extent in either axis.
+    expect(fitCountryCard([[[5, 5], [5, 5], [5, 5]]])).toBeNull();
+    // Antimeridian wrap: the bounding box would cover most of the planet.
+    expect(fitCountryCard([[[-179, 10], [179, 10], [179, 12], [-179, 12]]])).toBeNull();
+    expect(fitCountryCard([[[0, 0], [Number.NaN, 1], [2, 2]]])).toBeNull();
+  });
+
+  it("still draws a shape that is degenerate in only one axis", () => {
+    // A due-north/south line has zero width but real height; latitude governs and it renders.
+    const card = fitCountryCard([[[5, 0], [5, 4], [5, 8]]]);
+    expect(card).not.toBeNull();
+    expect(numbersIn(card!.d).every(Number.isFinite)).toBe(true);
+  });
+
+  it("keeps every ring as a subpath of ONE path, so holes cut instead of filling", () => {
+    const donut = topo([{ type: "Polygon", id: "1", arcs: [[0], [1]] }], [
+      boxArc(0, 0, 10, 10),
+      boxArc(3, 3, 4, 4),
+    ]);
+    const d = countryCard(donut, "1")!.d;
+    expect(d.match(/M/g)).toHaveLength(2);
+    expect(d.match(/Z/g)).toHaveLength(2);
+  });
+
+  it("keeps a pin inside the card, and drops one that is somewhere else entirely", () => {
+    expect(insideCard([32, 35])).toBe(true);
+    expect(insideCard([0, 35])).toBe(false); // clipped by the left edge
+    expect(insideCard([PIN_RADIUS, PIN_RADIUS])).toBe(true);
+    expect(insideCard([CARD_BOX.width - PIN_RADIUS, CARD_BOX.height - PIN_RADIUS])).toBe(true);
+    expect(insideCard([128, 35])).toBe(false);
+    expect(insideCard([32, -4])).toBe(false);
+  });
+});
+
 describe("against the real countries-110m.json", () => {
   const real = JSON.parse(
     readFileSync(new URL("../../public/data/countries-110m.json", import.meta.url), "utf8"),
@@ -258,6 +369,42 @@ describe("against the real countries-110m.json", () => {
       expect(d.endsWith("Z")).toBe(true);
       expect(numbersIn(d).every(Number.isFinite)).toBe(true);
     });
+  });
+
+  it("fits the two published guides' countries into their cards, pins included", () => {
+    // Denmark 208 / South Korea 410 — the ISO-numeric ids src/data/countries.mjs resolves to.
+    // These are the exact cards the change-request picker renders, so a projection drift here
+    // shows up as an unrecognisable country under a real guide's name.
+    const cases: [string, [number, number]][] = [
+      ["208", [12.568, 55.676]], // Copenhagen — the Denmark guide's map centre
+      ["410", [126.98, 37.5707]], // Seoul — the Korea guide's first map centre
+    ];
+    for (const [id, [lon, lat]] of cases) {
+      const card = countryCard(real, id);
+      expect(card, `no card for ${id}`).not.toBeNull();
+      const n = numbersIn(card!.d);
+      expect(n.length).toBeGreaterThan(20);
+      expect(n.every(Number.isFinite)).toBe(true);
+      const xs = n.filter((_, i) => i % 2 === 0);
+      const ys = n.filter((_, i) => i % 2 === 1);
+      expect(Math.min(...xs)).toBeGreaterThanOrEqual(0);
+      expect(Math.max(...xs)).toBeLessThanOrEqual(CARD_BOX.width);
+      expect(Math.min(...ys)).toBeGreaterThanOrEqual(0);
+      expect(Math.max(...ys)).toBeLessThanOrEqual(CARD_BOX.height);
+      // The longest axis fills the fit box: a country that renders at 12 units is the bug.
+      const longest = Math.max(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys));
+      expect(longest).toBeCloseTo(CARD_FIT, 1);
+      expect(insideCard(card!.project(lon, lat)), `capital off the ${id} card`).toBe(true);
+    }
+  });
+
+  it("drops a map centre that is in another country — Tokyo is not on the Korea card", () => {
+    const korea = countryCard(real, "410")!;
+    expect(insideCard(korea.project(139.6917, 35.6895))).toBe(false);
+  });
+
+  it("has no card for an id the topology doesn't carry", () => {
+    expect(countryCard(real, "000")).toBeNull();
   });
 
   it("draws land under the arrival station (Iceland, at 22.6°W 64.0°N)", () => {
