@@ -12,11 +12,12 @@
    their honest-empty form until real telemetry exists (model/run-events.ts), and there is no
    demo feed anywhere in this file to make them look busy in the meantime.
 
-   Three owner-gated controls sit alongside the read-only view — answering intake questions,
-   choosing on a blocking fork, and approving a feedback-driven revision proposal. Each posts to
-   the site's backend Worker with the key stored in this browser, and NONE of them render until
-   one is stored (the key replaced the deleted approval labels, so without it the Worker 401s and
-   the control would be a button that can only fail).
+   Two owner-gated controls sit alongside the read-only view — answering intake questions and
+   choosing on a blocking fork. Both post to the site's backend Worker with the key stored in this
+   browser, and NEITHER renders until one is stored (the key replaced the deleted approval labels,
+   so without it the Worker 401s and the control would be a button that can only fail). Approving
+   a feedback-driven revision proposal was the third; it moved to /progress/triage/, the owner's
+   queue, which is where every waiting decision now lives.
 
    The slug in the URL is a CLIENT-SIDE GUESS (predictSlug mirrors scaffold-guide.mjs's
    slugify()) — a same-name collision appends "-2" server-side, which this can't predict. If the
@@ -93,8 +94,6 @@ export function initProgress() {
     qList: byId("pgQList"),
     qSend: byId("pgQSend"),
     qStatus: byId("pgQStatus"),
-    proposals: byId("pgProposals"),
-    pList: byId("pgPList"),
     keyPanel: byId("pgKeyPanel"),
     keyToggle: byId("pgKeyToggle"),
     keyForm: byId("pgKeyForm"),
@@ -511,48 +510,6 @@ export function initProgress() {
     });
   }
 
-  /* ── Revision proposals (owner only) ──────────────────────────────────────────────────── */
-
-  function renderProposals(list) {
-    if (!els.pList || !els.proposals) return;
-    if (!owner || !list.length) { els.proposals.hidden = true; return; }
-    els.proposals.hidden = false;
-    els.pList.textContent = "";
-    list.forEach(function (p) {
-      var card = el("div", "pg-p-card");
-      card.appendChild(el("p", "pg-p-title", p.title));
-      if (p.reason) card.appendChild(el("p", "pg-p-reason", p.reason));
-      var status = el("p", "pg-p-status");
-      var btn = el("button", "pg-p-approve", "Approve this revision");
-      btn.type = "button";
-      btn.addEventListener("click", function () {
-        btn.disabled = true;
-        status.textContent = "Starting…";
-        createWorkerGateway({ ownerKey: readOwnerKey() }).approveRevision({ slug: slug, issue: p.issue })
-          .then(function (res) {
-            if (res.ok) {
-              btn.remove();
-              status.textContent = "Approved — the revision is running.";
-              loadProposals();
-            } else {
-              btn.disabled = false;
-              status.textContent = res.message;
-            }
-          });
-      });
-      card.appendChild(btn);
-      card.appendChild(status);
-      els.pList.appendChild(card);
-    });
-  }
-
-  // Deliberately not on the poll loop — api.github.com allows 60 unauthenticated requests per
-  // hour per IP and the state poll already spends 240 (see gateway.fetchProposals).
-  function loadProposals() {
-    if (!owner || !slug) { renderProposals([]); return; }
-    gateway.fetchProposals(slug).then(renderProposals);
-  }
-
   /* ── "Tell me when it's done" ─────────────────────────────────────────────────────────── */
 
   const BASE_TITLE = document.title;
@@ -628,8 +585,8 @@ export function initProgress() {
     if (els.keyPanel) els.keyPanel.hidden = !WAYPOINT_BACKEND.url;
     if (els.keyStatus) {
       els.keyStatus.textContent = owner
-        ? "Key stored in this browser — answer and approve controls are on."
-        : "No key stored. Progress still updates; answering and approving need a key.";
+        ? "Key stored in this browser — the answer controls are on, here and in the triage queue."
+        : "No key stored. Progress still updates; answering a question needs a key.";
     }
     if (els.keyClear) els.keyClear.hidden = !owner;
   }
@@ -660,7 +617,6 @@ export function initProgress() {
         syncOwner();
         renderedQuestionKey = "";
         poll();
-        loadProposals();
       });
     }
     if (els.keyClear) {
@@ -669,7 +625,6 @@ export function initProgress() {
         answers.clear();
         syncOwner();
         renderedQuestionKey = "";
-        renderProposals([]);
         poll();
       });
     }
@@ -759,7 +714,6 @@ export function initProgress() {
     // No pre-poll render: the server-rendered markup already says "No run yet" honestly, and
     // rendering "empty" here would make the first real state look like a transition INTO it.
     poll();
-    loadProposals();
     pollTimer = setInterval(poll, POLL_MS);
     tickTimer = setInterval(renderTick, TICK_MS);
   }

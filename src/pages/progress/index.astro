@@ -232,15 +232,10 @@ const contours = [
               <a class="pg-btn pg-btn--go" id="pgDoneLink" href="#">Open the guide →</a>
             </section>
 
-            {/* ── Revision proposals (owner only; moves to /progress/triage/ later) ───── */}
-            <section class="pg-card pg-proposals" id="pgProposals" hidden aria-labelledby="pgPHead">
-              <h2 class="pg-card-head" id="pgPHead">Revisions worth making</h2>
-              <p class="pg-card-intro">
-                Trip feedback suggests these are out of date or wrong. Approving one starts a
-                research pass on that part of the guide — nothing changes until you do.
-              </p>
-              <div class="pg-p-list" id="pgPList"></div>
-            </section>
+            {/* Revision proposals used to sit here. They moved to /progress/triage/, the owner's
+                queue, where they are one of two card kinds and share its category striping — this
+                page is about ONE run, and a repo-wide list of things worth revising was never
+                about the run being watched. */}
 
             {/* ── Can't find the run ──────────────────────────────────────────────────── */}
             <section class="pg-card pg-correction" id="pgCorrection" hidden aria-labelledby="pgCorrHead">

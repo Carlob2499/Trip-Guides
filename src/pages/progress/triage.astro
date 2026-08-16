@@ -1,0 +1,165 @@
+---
+// The owner's triage queue — every change waiting on one decision, in one place.
+//
+// OWNER-ONLY, and not in traveller navigation. Its single entry point is the /change/ page's
+// segmented control, whose "Pending requests" half is itself unhidden only when an owner key is
+// stored in this browser. (The design handoff says "reachable from the hub TOOLS menu only"; the
+// hub has no TOOLS menu and deliberately never will — src/pages/index.astro records that creator
+// ruling twice. The /change/ segment is the entry point the design's own screenshot shows, and it
+// already shipped, so it is the one this page mirrors.)
+//
+// It lives under /progress/ because it is a pipeline surface, and it wears the /change/ page's
+// `.cp-*` chrome because it is the second half of that page's segmented control. Two different
+// shells behind one control would read as two different sites.
+//
+// Everything that can be true without the network is server-rendered: the chrome, the segmented
+// control, the hero, the category legend, and the dispatch bar's idle line. The queue itself needs
+// a key and two reads, so it is the script's job — and until it answers, the page says nothing
+// about what is waiting.
+import { getCollection } from "astro:content";
+import PwaHead from "../../components/PwaHead.astro";
+import { jsonEmbed } from "../../lib/json-embed";
+import { generateContourLayer } from "../../lib/contours";
+import { bucket } from "../../lib/buckets";
+import { CATEGORY_LABEL, CATEGORY_TONE, DISPATCH_IDLE } from "../../features/change-request/index.js";
+// Quiet Edition (R1): one serif for prose, one humanist sans for data — same as every surface.
+import "@fontsource-variable/literata/standard.css";
+import "@fontsource-variable/literata/standard-italic.css";
+import "@fontsource-variable/source-sans-3";
+import "../../styles/base.css";
+import "../../features/change-request/styles.css";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const REPO_OWNER = "Carlob2499";
+const REPO_NAME = "Trip-Guides";
+
+// No country topology read here: this page draws no map. (If one is ever added, resolve the JSON
+// from process.cwd() and NOT from `new URL(..., import.meta.url)` — in a compiled Astro page
+// import.meta.url is the BUILT chunk, so a relative path there is relative to dist/. The note in
+// src/pages/change.astro carries the full reasoning.)
+
+// Published guides only, exactly as /change/ does: a draft is still being researched, and there is
+// no "change" to triage on a guide nobody has finished writing. The tab groups ride along because
+// the queue's weight suggestion is derived against the guide's OWN tabs, never a hardcoded list.
+const published = (await getCollection("guides")).filter((g) => !g.data.draft);
+const guides = published.map((entry) => ({
+  slug: entry.id,
+  title: entry.data.title,
+  groups: bucket(entry.data.sections).order,
+}));
+
+// The five topics, straight from the model — a legend that drifted from the chips it explains
+// would be worse than no legend.
+const legend = (Object.keys(CATEGORY_LABEL) as (keyof typeof CATEGORY_LABEL)[]).map((k) => ({
+  label: CATEGORY_LABEL[k],
+  tone: CATEGORY_TONE[k],
+}));
+
+// The survey ground, same cartography as /new/, /progress/ and /change/. Own seeds — own terrain.
+const contours = [
+  generateContourLayer({ seed: 37, rings: 9, cx: 300, cy: 580 }),
+  generateContourLayer({ seed: 82, rings: 7, cx: 800, cy: 200 }),
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Pending requests — Waypoint</title>
+    <meta name="description" content="The maker's queue: every change request and feedback proposal waiting on one decision." />
+    <meta name="robots" content="noindex,nofollow" />
+    <PwaHead />
+    <!-- Dark-mode init — runs before paint to avoid flash (same key and attribute as every
+         other surface: src/scripts/theme.js owns the after-load toggle). -->
+    <script is:inline>
+      (function () {
+        const s = localStorage.getItem("tg-theme");
+        const preferDark = window.matchMedia && window.matchMedia("(prefers-color-scheme:dark)").matches;
+        if (s === "dark" || (s === null && preferDark)) {
+          document.documentElement.setAttribute("data-theme", "dark");
+        } else if (s === "light") {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      })();
+    </script>
+  </head>
+  <body data-base={base}>
+    <a class="skip-link" href="#cpTriageRoot">Skip to the queue</a>
+
+    <div class="cp-contours" aria-hidden="true">
+      {contours.map((layer, i) => (
+        <svg data-cp-contour={i} viewBox={`0 0 ${layer.viewBox} ${layer.viewBox}`} preserveAspectRatio="xMidYMid slice">
+          {layer.rings.map((points) => <polyline points={points} />)}
+        </svg>
+      ))}
+    </div>
+
+    <header class="cp-bar">
+      <a class="cp-wordmark" href={`${base}/`}>← Waypoint</a>
+      <button type="button" class="cp-theme-btn" id="cpDark" aria-label="Switch to dark mode"></button>
+    </header>
+
+    <main class="cp" id="cpTriageRoot">
+      {/* Both halves render here. Hiding the tab the reader is standing on would be a control
+          arguing with the page it is on — /change/ hides it because a traveller has no business
+          being offered it, and a traveller cannot be here. */}
+      <nav class="cp-seg" aria-label="Change requests">
+        <a class="cp-seg-btn" href={`${base}/change/`}>Request a change</a>
+        <a class="cp-seg-btn" href={`${base}/progress/triage/`} aria-current="page">Pending requests</a>
+      </nav>
+
+      <header class="cp-hero">
+        <p class="cp-eyebrow">Change a guide</p>
+        <h1 class="cp-title">Requests waiting on you</h1>
+        <p class="cp-dek">
+          Each request needs one decision: quick fix, or full re-check. Nothing starts until you choose.
+        </p>
+      </header>
+
+      {/* What a browser with no key sees, and the only thing it sees. Filled by the script so the
+          gate copy has one home (model/triage.ts) rather than two. */}
+      <p class="cp-tri-gate" data-cp-tri-gate hidden></p>
+
+      <div data-cp-tri-queue hidden>
+        <div class="cp-tri-meta">
+          <span class="cp-tri-count" data-cp-tri-count></span>
+          <ul class="cp-tri-legend">
+            {legend.map((c) => <li class="cp-cat" data-tone={c.tone}>{c.label}</li>)}
+          </ul>
+        </div>
+
+        <div class="cp-tri-grid" data-cp-tri-list></div>
+        <p class="cp-tri-empty" data-cp-tri-empty hidden></p>
+
+        <p class="cp-tri-dispatch" data-cp-tri-dispatch data-live="false">{DISPATCH_IDLE}</p>
+      </div>
+
+      <noscript>
+        <p class="cp-noscript">
+          The queue is read from the tracker in this browser, so it needs scripts on. Nothing here
+          works without them, and nothing here is worth faking without them.
+        </p>
+      </noscript>
+    </main>
+
+    <footer class="cp-foot">
+      Waypoint — every fact checked, every route tested. <a href={`${base}/`}>Back to the guides →</a>
+    </footer>
+
+    <script
+      type="application/json"
+      is:inline
+      id="cpTriageConfig"
+      set:html={jsonEmbed({ base, owner: REPO_OWNER, repo: REPO_NAME, guides })}
+    ></script>
+
+    <script>
+      import { initTriagePage } from "../../features/change-request/index.js";
+      import { initDarkToggle } from "../../scripts/theme.js";
+      initTriagePage();
+      initDarkToggle("cpDark");
+    </script>
+  </body>
+</html>

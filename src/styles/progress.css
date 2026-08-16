@@ -167,15 +167,9 @@ body{min-height:100vh;display:flex;flex-direction:column}
 
 .pg-done-copy{font-size:var(--text-small);color:var(--muted);line-height:1.5;margin:0 0 .9rem}
 
-/* ── Revision proposals (owner only) ───────────────────────────────────────── */
-.pg-p-card{background:var(--sunken);border:1px solid var(--rule);border-radius:0;padding:.9rem 1rem;margin-bottom:.6rem}
-.pg-p-title{font-family:var(--font-display);font-weight:560;font-size:var(--text-body);margin:0 0 .4rem;line-height:1.4}
-.pg-p-reason{font-size:var(--text-small);color:var(--muted);margin:0 0 .6rem;line-height:1.4}
-.pg-p-approve{min-height:44px;padding:.5rem 1.1rem;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);cursor:pointer}
-.pg-p-approve:hover:not(:disabled){background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
-.pg-p-approve:disabled{opacity:.45;cursor:default}
-.pg-p-status{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);margin:.5rem 0 0}
-.pg-p-status:empty{display:none}
+/* The .pg-p-* revision-proposal rules were deleted with the panel they styled: proposals moved to
+   /progress/triage/ and render there as the design's category-striped queue cards, which are the
+   change-request feature's .cp-tri-* vocabulary, not this one's. */
 
 /* ── Correction ────────────────────────────────────────────────────────────── */
 .pg-correction-form{display:flex;gap:.5rem;flex-wrap:wrap}

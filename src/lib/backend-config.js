@@ -1,8 +1,9 @@
 /* The ONE config for the site's backend Worker (worker/). Empty `url` = OFF: every surface that
    would talk to it falls back to its pre-Worker behavior — the New-Guide wizard opens a prefilled
-   GitHub issue, the ✎ change request opens a prefilled GitHub issue, the progress page hides the
-   answer/approve controls. Nothing breaks, no network call. Same config-gate pattern as
-   src/features/firebase/firebase-config.js: committed so the build is inert until configured.
+   GitHub issue, the ✎ change request opens a prefilled GitHub issue, the progress page hides its
+   answer controls and the owner's triage queue stays shut. Nothing breaks, no network call. Same
+   config-gate pattern as src/features/firebase/firebase-config.js: committed so the build is
+   inert until configured.
      · url — the deployed Worker URL, e.g. "https://waypoint-intake.<you>.workers.dev"
 
    WHY src/lib/ and not a feature folder (batch 3): three silos now need this value —

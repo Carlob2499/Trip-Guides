@@ -150,8 +150,9 @@ un-publish a guide.
 **GitHub is the record, not the interface.** The creator's surfaces all reach the pipeline through
 the Cloudflare Worker (`worker/`, its own README carries setup): the New-Guide wizard files the
 intake issue silently and returns a progress-page URL; a guide's ✎ change request files a
-change-request issue; the progress page's owner controls answer traveler questions, resolve blocking
-forks, and approve feedback proposals by dispatching `change.yml` directly.
+change-request issue; the progress page's owner controls answer traveler questions and resolve
+blocking forks; and `/progress/triage/`, the owner's queue, starts a change on a waiting request or
+approves a feedback proposal by dispatching `change.yml` directly.
 
 **Two gates protect that, in different places.** The Worker's three owner endpoints require an
 `X-Owner-Key` header (unset key ⇒ 503, fail CLOSED) — that header is what replaced the deleted

@@ -21,8 +21,8 @@
        down for — an unreadable store simply reads as "no key", i.e. the public experience.
 
    Cross-cutting client behavior, so it sits flat in src/scripts/ (CLAUDE.md) rather than inside
-   one feature: both the guide page's ✎ flow and the progress page's answer/approve controls need
-   it, and neither owns it. */
+   one feature: the guide page's ✎ flow, the progress page's answer controls and the owner's
+   triage queue all need it, and none of them owns it. */
 
 const STORAGE_KEY = "wp-owner-key";
 /** A key short enough to be a typo is more likely a mis-paste than a secret. Rejecting it at the
