@@ -35,7 +35,7 @@ describe("createGithubGateway().fetchProposals", () => {
 
     expect(calls).toHaveLength(1);
     expect(calls[0].url).toContain("https://api.github.com/repos/o/r/issues");
-    expect(calls[0].url).toContain("labels=revision-request");
+    expect(calls[0].url).toContain("labels=revision-auto-filed");
     expect(calls[0].url).toContain("state=open");
     expect(out.map((p) => p.issue)).toEqual([44, 41]);
   });
