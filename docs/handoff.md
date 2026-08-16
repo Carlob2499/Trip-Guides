@@ -35,7 +35,6 @@
 - **Held, not open:** the route-order picker's home (Tools station vs. itinerary mount) — needs both surfaces reviewed together.
 - The gap block and "no cover" plate have never rendered on a real guide, by design (CONTEXT.md
   §H3) — proof-of-life is an isolated test fixture, not a staged guide edit.
-- Airports for Sedona/Japan — record them WHEN flights get booked. No fact yet; don't invent.
 - `/about/` + `/new/` not in the SW precache shell; cover overlay does not trap focus; Cloudflare dashboard Git integration still failing 0s builds.
 - No guide uses a direct royalty-free `sights[].img.src` yet — capability live, unexercised.
 - **ALL FOUR remote branches are now safe to delete — and none can be deleted from a container
