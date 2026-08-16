@@ -22,9 +22,11 @@
   (presentation/motion) · `docs/standards/guide-rubric.md` (quality bar) ·
   `docs/evidence/competitive-landscape.md` (market parity reference) ·
   `docs/design-handoff/` + its `enforcement/` (the design system's own authority — read BOTH
-  before any hub/guide visual work). **There is no live design work order:**
-  PLAN_DESIGN_RECONCILIATION and PLAN_ATLAS_MIGRATION are both fully ticked, and their bodies now
-  live only in git — `docs/archive/INDEX.md` says how each ended and prints the `git show` line.
+  before any hub/guide visual work). PLAN_DESIGN_RECONCILIATION and PLAN_ATLAS_MIGRATION are both
+  fully ticked and archived (`docs/archive/INDEX.md` → `git show` line).
+- **There IS a live design work order:** `PLAN_PIPELINE_SURFACES.md` (repo root, this branch),
+  execution contract for the Progress cockpit / intake checklist / change-request / triage UI —
+  see Where we left off.
 
 ## Open items
 
@@ -74,12 +76,17 @@ script was never built to make.
 
 ## Where we left off
 
-**Still open from the guide-deepening list:** regenerate japan through the rebuilt pipeline —
-a full research-pass run, not attempted this pass.
+**Working tree clean, nothing uncommitted.** All gates green: build · lint (pre-existing 176
+errors, all in `design_handoff_pipeline_and_intake/support.js` — the design bundle itself,
+deleted by the plan's own Commit E, not real source) · typecheck 0 · 2229 tests / 149 files ·
+dist grep clean · verified in `astro preview`.
 
-**All gates green:** build · lint (pre-existing 176 errors, all in `design_handoff_pipeline_and_
-intake/support.js`, unrelated to this branch's content work) · typecheck 0 · 2229 tests / 149
-files · dist grep clean · verified in `astro preview`.
+**Still open, not part of the UI plan below:** regenerate japan through the rebuilt pipeline (a
+full research-pass run). Waiting on the creator: paste the RTDB rules into the Firebase console
+to revoke the dead telemetry write path.
 
-**Waiting on the creator, 1 item:** RTDB rules — telemetry node removed from `rules.json`; paste
-into the Firebase console to revoke the now-unused write path.
+**Recommended next step — execute `PLAN_PIPELINE_SURFACES.md`.** Not started (0/5 commits). Full
+execution contract at repo root: five shippable commits (progress dashboard → intake checklist →
+change-request view → triage queue → bundle retirement), each through the full ship loop +
+`check-drift.mjs` + screenshots. All 4 creator forks are pre-answered in the plan (do not re-ask);
+read the plan's own "Read before writing a line of code" list first.
