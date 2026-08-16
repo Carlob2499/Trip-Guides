@@ -39,7 +39,8 @@ import { readOwnerKey } from "../../../scripts/owner-key.js";
 /* The neighbour silo, through its PUBLIC surface — never into its ui/ or model/. That is the
    sealed-silo rule's one permitted door, and the proposal read and the /approve write behind it are
    already real, already wired and already tested; a second copy of either here would be a second
-   thing to keep true (PLAN_PIPELINE_SURFACES Reconciliation 2: reused as-is).
+   thing to keep true (docs/archive/INDEX.md → PLAN_PIPELINE_SURFACES, Reconciliation 2: reused
+   as-is).
 
    LAZY on purpose. Importing that index at module scope pulls the whole progress-page module in
    with it (~24KB), and because this file is exported from the same feature index as initChangePage,

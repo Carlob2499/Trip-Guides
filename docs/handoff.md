@@ -24,9 +24,9 @@
   `docs/design-handoff/` + its `enforcement/` (the design system's own authority — read BOTH
   before any hub/guide visual work). PLAN_DESIGN_RECONCILIATION and PLAN_ATLAS_MIGRATION are both
   fully ticked and archived (`docs/archive/INDEX.md` → `git show` line).
-- **There IS a live design work order:** `PLAN_PIPELINE_SURFACES.md` (repo root, this branch),
-  execution contract for the Progress cockpit / intake checklist / change-request / triage UI —
-  see Where we left off.
+- **No live design work order.** PLAN_PIPELINE_SURFACES joined the other three in
+  `docs/archive/INDEX.md` on 2026-08-16 — its bundle deleted, its durable half folded into
+  `docs/reference/pipeline.md` and `motion.md`.
 
 ## Open items
 
@@ -37,6 +37,12 @@
   §H3) — proof-of-life is an isolated test fixture, not a staged guide edit.
 - `/about/` + `/new/` not in the SW precache shell; cover overlay does not trap focus; Cloudflare dashboard Git integration still failing 0s builds.
 - No guide uses a direct royalty-free `sights[].img.src` yet — capability live, unexercised.
+- **Two GitHub issue templates still promise a dead label.** `.github/ISSUE_TEMPLATE/
+  modify-guide.yml` and `revise-guide.yml` tell the filer that nothing runs "until the owner
+  applies `modify-approved` / `revision-approved`" — those labels stopped doing anything when the
+  owner key replaced them, yet still exist on the remote (`gh label list`) because only
+  `ensure-labels.yml` was updated. Live copy instructing a real person to do a no-op; found during
+  the Commit E sweep, left alone as out of that commit's scope.
 - **ALL FOUR remote branches are now safe to delete — and none can be deleted from a container
   session.** `pipeline-changes-plan-752kra`, `a11y-landmark-fix-v2` and `recert/japan` are merged
   into main; `claude/design-fixes-continuation-wi920k` is **superseded, never to be merged** — it
@@ -48,47 +54,43 @@
   `merge_pull_request` takes no delete-branch flag. One pass at
   github.com/Carlob2499/Trip-Guides/branches clears all four.
 
-## Parallel session, same day (merged): design-reconciliation forks closed
+## Snapshot (2026-08-16 — PLAN_PIPELINE_SURFACES executed end to end; the bundle is retired)
 
-A concurrent session fixed the two items this file used to hold open — the dark-mode
-focus-ring token (`--focus-ring`, theme-aware) and the rate-fallback now keeping the
-currency converter alive on a seed rate — and scaffolded the japan draft from issue #50.
-Their entries left Open items above; details in that snapshot (docs/archive/HANDOFF_ARCHIVE.md).
+**Five commits on `design/pipeline-surfaces`, each through the full ship loop.** The progress
+cockpit with its frame-by-frame route map (`0d6aae0`), the intake preflight checklist (`f9b333a`),
+the change-request requester view (`544cc95`), the owner triage queue at `/progress/triage/`
+(`63a63ff`), and this retirement. The plan's one deferred fork closed on the way (`e119f2a` — the
+hub now stamps a guide that is BUILDING, deliberately not the `ongoing` "trip happening now"
+class).
 
-## Snapshot (2026-08-15 — guide-deepening list, items 1/3/4/5 closed)
+**Three things the design asked for were NOT built, on purpose, and each is recorded as a
+Decision in CONTEXT.md.** Triage's Quick fix / Full re-check go through the owner-keyed Worker
+rather than the deleted `*-approved` labels; the feedback-proposals panel moved off `/progress/`
+into triage; and the live-event panels (sources · decisions · nuggets · counters) ship with the
+full layout and honestly empty boxes, because nothing in the pipeline emits per-event data yet.
+Emission is issue **#56** — the gateway, types, mocks and tests are already there for it to drop
+into. The bundle's "Watch a demo run" button was never built for the same reason.
 
-**Korea geocode backfill.** `PLACES_API_KEY` lives in `.env` but nothing sources it into the
-process env — `set -a; source .env; set +a` before invoking `geocode-venues.mjs`. 1 of 25
-unresolved venues (LoL Park) matched confidently and was written; the other 24 stay blank on
-purpose — name mismatches Places itself disagrees with, or category entries ("Konbini") that
-aren't a single place. Refuse-rather-than-guess working as designed.
-
-**Bare-echo / undated-budget items were already clean.** Korea/denmark's facts hygiene
-(bare-echo, malformed, misattribution) and untokenized-money checks both ran clean — an earlier
-2026-08-15 session had already closed them. Japan's findings (3 malformed + 1 misattribution + 3
-bare-echo stems) left with the guide — it was deleted later the same day for a fresh redo (see
-Decisions). The defects survive as frozen fixture evidence, which is where they always belonged.
-
-**E1 tiering backfill done; `backfill-tier.mjs` deleted.** Re-run on korea/denmark: 0 rows left
-to assign — everything's already `tier: primary` or correctly left blank as a research call the
-script was never built to make.
+**Retirement, per the bundle's own instructions.** `design_handoff_pipeline_and_intake/` (39
+files) and `PLAN_PIPELINE_SURFACES.md` are DELETED, not moved — an inline-styled prototype drifts
+from the implementation within a release. What survives: one section in
+`docs/reference/pipeline.md` (note-panel colours · the stalled-run rule · the route map's
+frame-by-frame requirement), eight rows in `docs/reference/motion.md`'s inventory, and a closure
+entry in `docs/archive/INDEX.md` carrying the `git show` paths to both. Four code comments that
+cited the plan by filename now cite the archive heading instead.
 
 ## Where we left off
 
-**Working tree clean, nothing uncommitted.** All gates green: build · lint (pre-existing 176
-errors, all in `design_handoff_pipeline_and_intake/support.js` — the design bundle itself,
-deleted by the plan's own Commit E, not real source) · typecheck 0 · 2229 tests / 149 files ·
-dist grep clean · verified in `astro preview`.
+**This commit is LOCAL and unpushed — deliberately.** The creator verifies it, pushes, and opens
+the single PR for the whole branch (title: `feat: pipeline surfaces — progress cockpit, intake
+checklist, change + triage`). Everything before it is already pushed.
 
-**Nothing open outside the UI plan below.** The japan regeneration that stood here is CLOSED, not
-done: the creator deleted the guide instead (`src/content/guides/japan/`, `guides-intake/japan/`,
-its palette — see Decisions in CONTEXT.md). It will be redone later as a fresh guide with much
-more research, not an in-place regen of the old intake; not scheduled or scoped yet. The fixture
-and `src/data/destinations/japan.json` were kept. The RTDB rules paste (creator, Firebase console)
-is done — closed 2026-08-15, nothing left waiting on the creator.
+**All gates green, and lint is now genuinely clean.** Build 9 pages · lint 0 (the 176 errors this
+file used to carry were all in the deleted bundle's `support.js`, so they left with it) ·
+typecheck 0 errors / 19 hints · 2400 tests + 1 todo across 155 files · coverage gate passes ·
+`/progress/`, `/progress/triage/`, `/change/` and `/new/` re-checked in `astro preview` after the
+deletion · dist grep clean of every prototype string.
 
-**Recommended next step — execute `PLAN_PIPELINE_SURFACES.md`.** Not started (0/5 commits). Full
-execution contract at repo root: five shippable commits (progress dashboard → intake checklist →
-change-request view → triage queue → bundle retirement), each through the full ship loop +
-`check-drift.mjs` + screenshots. All 4 creator forks are pre-answered in the plan (do not re-ask);
-read the plan's own "Read before writing a line of code" list first.
+**Next after the PR merges:** nothing is queued. Issue #56 (pipeline run events) is the natural
+follow-on and is fully specced; the two stale issue templates in Open items are a smaller,
+unrelated fix.

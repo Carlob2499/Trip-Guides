@@ -1,4 +1,5 @@
-/* Waypoint /new — the PREFLIGHT CHECKLIST (2026-08-15, PLAN_PIPELINE_SURFACES commit B).
+/* Waypoint /new — the PREFLIGHT CHECKLIST (2026-08-15; docs/archive/INDEX.md →
+   PLAN_PIPELINE_SURFACES, commit B).
 
    Six collapsible sections over the intake schema, a completeness meter that reports what is
    actually answered, head-to-head matchups where three priority dropdowns used to be, and a

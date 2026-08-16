@@ -9,7 +9,7 @@
      are exactly the ones waiting on a decision. Starting it POSTs /change, which files the same
      request under the owner's authorship — and that is where the weight rides, as a line of TEXT
      in the request body. The weight is a SUGGESTION: `pipeline plan` decides the real scope, so
-     the button may not name it (PLAN_PIPELINE_SURFACES Reconciliation 1).
+     the button may not name it (docs/archive/INDEX.md → PLAN_PIPELINE_SURFACES, Reconciliation 1).
 
    · `proposal` — a feedback-derived revision proposal (../../pipeline-progress's model/proposals).
      Nobody asked; the divergence signals tripped. Starting it POSTs /approve, whose payload is

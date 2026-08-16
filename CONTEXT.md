@@ -619,3 +619,32 @@ rival draft of itself. Deleting a guide takes all FOUR of its homes: `src/conten
 Nothing is lost that the evidence needed: Japan's defects live in the frozen fixture
 (`tests/fixtures/japan-regression/`, 2026-08-13 ruling), and the critic findings from both runs are
 already distilled in `docs/evidence/pipeline-patterns.md`.
+
+**Triage buttons start a change through the Worker front door, not through a label** (creator
+decision, 2026-08-15). The retired design bundle mapped Quick fix → `modify-approved` and Full
+re-check → `revision-approved`; both labels were deleted the same morning by the two-lifecycles
+refactor. Quick fix and Full re-check now POST the owner-keyed `/change` (or `/approve` for a
+feedback proposal) and carry the owner's suggested weight as a line of TEXT in the request body —
+`pipeline plan` still decides the real scope, so the button is a suggestion and never names the
+outcome. Rejected: re-creating the labels so the design could ship as drawn, which would have
+restored the exact bypass the owner key was introduced to close (anyone can apply a label to a
+public issue). Consequence: the dead label strings must never be RENDERED anywhere; naming them in
+a comment as history is fine and deliberate.
+
+**Feedback proposals live in triage, not on `/progress/`** (creator decision, 2026-08-15). The
+proposals panel moved off the traveller-facing progress page into `/progress/triage/`, the
+owner-key-gated queue reachable from the hub TOOLS menu only. `fetchProposals` + `toProposals` are
+reused through the pipeline-progress silo's public index — not copied. Rejected: leaving proposals
+on `/progress/`, which put an owner decision on a page whose reader is the person waiting for a
+guide, and made the same panel answer to two audiences. Consequence: `/progress/` has no owner
+queue at all, and the triage cards state plainly that nothing happens until the owner decides.
+
+**The live-event panels ship empty until the pipeline emits** (creator decision, 2026-08-15). The
+cockpit's "Sources we're reading", "Decisions made", "Worth knowing" and the Pages-visited /
+Facts-verified counters have a typed, mocked, tested gateway and a full layout — and today that
+gateway always resolves to empty, because nothing in the pipeline writes per-event data. Each panel
+carries one line saying so. Rejected: replaying a scripted demo run (the bundle's "Watch a demo run"
+button, which does not ship) and inferring counts from the artifacts, both of which put invented
+activity on the one surface whose entire job is reporting what is actually happening. The
+"Cost to research" row is omitted for the same reason — no data, so no row. Emission is a drop-in:
+`docs/reference/pipeline.md` + issue #56 carry the contract.

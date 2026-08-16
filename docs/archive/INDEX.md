@@ -43,6 +43,22 @@ data (D1); entity-batched, risk-scaled research in the skill (D2); the candidate
   broken. It bound *this* program's packets; the 2026-08-15 architecture refactor rewrote the spine
   under its own creator approval.
 
+### PLAN_PIPELINE_SURFACES.md — the pipeline's three surfaces get designed
+
+Written 2026-08-15 as the execution contract for the `design_handoff_pipeline_and_intake/` bundle,
+executed and retired 2026-08-16 on branch `design/pipeline-surfaces`. Landed in five commits: the
+progress cockpit with its route map (`0d6aae0`), the intake preflight checklist (`f9b333a`), the
+change-request requester view (`544cc95`), the owner triage queue at `/progress/triage/`
+(`63a63ff`), and this retirement. Its deferred hub fork closed separately in `e119f2a`. Five
+Reconciliations corrected the bundle where the same morning's architecture refactor had made it
+stale — the ones still worth knowing are recorded as Decisions in `CONTEXT.md`. What survives in the
+working tree: the note-panel/stalled/route-map rules in `docs/reference/pipeline.md`, eight rows in
+`docs/reference/motion.md`'s inventory, and the code itself. The bundle was **deleted, not moved** —
+an inline-styled prototype drifts from the implementation within a release, and a stale reference is
+worse than none. `git show 8961b91:PLAN_PIPELINE_SURFACES.md` ·
+`git show 8961b91:design_handoff_pipeline_and_intake/README.md` (the spec, its verifier checklist
+and its 30 captioned frames' index).
+
 ### revise-guide.md — the MAJOR-revision pipeline (V1–V6)
 
 Drafted 2026-07-30 as a plan, kept in `docs/reference/` as the shipped pipeline's spec, retired

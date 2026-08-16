@@ -3,9 +3,10 @@
  *
  * The cockpit's centrepiece is a great-circle-looking flight path across the North Atlantic with
  * one station per pipeline stage and a plane that eases along it as stages clear. Every number
- * here is fixed by the approved design (design_handoff_pipeline_and_intake/design/Waypoint
- * V2.dc.html) — the curve's three control points, the six station parameters, the 600×260
- * viewBox, and the 4px-per-degree equirectangular projection that turns
+ * here is fixed by the approved design (the retired handoff bundle's `design/Waypoint V2.dc.html`
+ * — docs/archive/INDEX.md → PLAN_PIPELINE_SURFACES carries the git path to it, and these numbers
+ * are now the record, not a copy of one) — the curve's three control points, the six station
+ * parameters, the 600×260 viewBox, and the 4px-per-degree equirectangular projection that turns
  * public/data/countries-110m.json into the land behind it.
  *
  * Why this is a lib module rather than inline in the UI: projection arithmetic drifts silently.
