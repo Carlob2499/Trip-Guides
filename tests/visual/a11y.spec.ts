@@ -246,6 +246,47 @@ const MAST_DEK_OBSCURING_WHY =
   "case — the same stacking-order reimplementation family as bgOverlap above. Measured the real " +
   "composited worst case the same pixel-sampled way: 5.91:1 (denmark, daytime sky, both schemes) " +
   "against the 4.5:1 required at 17.92px/400; korea measures >=14:1.";
+/* ⌁ This entry REPLACES a `color-contrast/bgGradient` baseline of 1, and the swap is the whole
+   story — it is the fourth instance of the family this file's header describes, and the first
+   where the gate's own ceiling is what surfaced a shipped bug.
+
+   axe 4.13.0 (bumped in c507b91) relabelled these same nodes from `bgOverlap` to `bgGradient`,
+   1:1, no node added or removed. bgOverlap's ceiling was 65/47 and absorbed them silently;
+   bgGradient's was 1, so they finally showed. Measuring them then found a REAL defect:
+   `.sight-media-grad` — the dark scrim that makes near-white text legible over photo pixels —
+   was suppressed only under `.media-fail`, so in the DEFAULT still-loading state it painted over
+   the LIGHT loading skeleton while the caption below was dark `var(--ink)`. Light mode measured
+   1.75:1 on .sight-name--onphoto and 2.47:1 on .tag--onphoto. Not harness-only: .cardimg is
+   loading="lazy", and a lazy image that never starts loading never errors either, so a blocked or
+   slow network parks a card in that state indefinitely (sights.css records this).
+
+   Fixed at the scrim (`.sight-media:not(.media-ok) .sight-media-grad{display:none}`) — it paints
+   only when there is a photo to make legible. With it gone from the chain axe walks one layer
+   further and reaches `.cardimg` itself, so the key moves to imgNode: axe declines to rate text
+   with an image node behind it. It still cannot resolve; the difference is that the number behind
+   it now passes.
+
+   Counts: 3 nodes per photo card (.tag--onphoto, .sight-name--onphoto, .imgcredit--onphoto) ×
+   14 korea / 10 denmark cards = 42 / 30, identical on all four scheme × viewport combos.
+
+   Measured 2026-08-16 in the default/loading state both guides render here, animations settled,
+   element opacity composited, against the skeleton's own resolved stops — all need 4.5:1:
+     .sight-name--onphoto  20.8px/640  12.28:1 light · 12.86:1 dark
+     .tag--onphoto         12px/400    11.19:1 light · 12.86:1 dark  (opacity .95 accounted)
+     .imgcredit--onphoto   9.6px/400   18.52:1 both  (its own rgba(10,13,16,.68) pill, not the
+                                                     skeleton — unaffected by the scrim either way)
+   Identical on denmark, which is the tell that this is sights.css and not per-guide content. */
+const SIGHT_ONPHOTO_IMGNODE_WHY =
+  "The sight photo cards' on-media text (.tag--onphoto / .sight-name--onphoto / .imgcredit--" +
+  "onphoto, 3 per card) sits over .sight-media, whose child .cardimg is an image node — axe " +
+  "declines to rate text with an image behind it and reports fgColor/bgColor null, ratio 0. It " +
+  "is declining to compute, not disagreeing with a value. Measured the real composited contrast " +
+  "instead, in the still-loading state these render in here (images aborted), both schemes, " +
+  "opacity composited: .sight-name--onphoto 12.28:1 light / 12.86:1 dark at 20.8px/640; " +
+  ".tag--onphoto 11.19:1 / 12.86:1 at 12px/400; .imgcredit--onphoto 18.52:1 on its own pill at " +
+  "9.6px/400 — all against 4.5:1. The dark scrim that used to break this pair now paints only " +
+  "under .media-ok (sights.css), so no state composites dark ink onto it. See the block comment " +
+  "above for the bug this baseline replaced.";
 const DAY_SCRUB_STICKY_RANGE_WHY =
   "docs/archive/INDEX.md → PLAN_ATLAS_MIGRATION Stage A.1 fixed .day-scrub's position:sticky (planner.css), dead " +
   "before because .pnl-body-in{overflow:hidden} (unconditional) neutralised it — the same " +
@@ -447,6 +488,9 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     // renders the same masthead so the same max covers it).
     "color-contrast/bgGradient": { max: 1, why: MAST_BG_GRADIENT_WHY },
     "color-contrast/elmPartiallyObscuring": { max: 1, why: MAST_DEK_OBSCURING_WHY },
+    // 42 = 3 on-media nodes × korea's 14 photo cards. See SIGHT_ONPHOTO_IMGNODE_WHY and the
+    // block comment above it for the scrim bug this replaced.
+    "color-contrast/imgNode": { max: 42, why: SIGHT_ONPHOTO_IMGNODE_WHY },
     // Atlas Phase 2 (own-cards-panels): day-1's date label in the phone swipe-deck, mobile only
     // (desktop reports 0). See DAY_SWIPE_CLIPPED_WHY.
     "color-contrast/default": { max: 1, why: DAY_SWIPE_CLIPPED_WHY },
@@ -511,6 +555,10 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     // (Painted Atlas daytime sky: h1 4.64:1 vs 3:1 needed; .dek 5.91:1 vs 4.5:1 needed).
     "color-contrast/bgGradient": { max: 1, why: MAST_BG_GRADIENT_WHY },
     "color-contrast/elmPartiallyObscuring": { max: 1, why: MAST_DEK_OBSCURING_WHY },
+    // 30 = the same 3 on-media nodes as korea at DENMARK's 10 photo cards. The measured ratios in
+    // SIGHT_ONPHOTO_IMGNODE_WHY are identical on both guides — the tell that this is sights.css,
+    // not per-guide content.
+    "color-contrast/imgNode": { max: 30, why: SIGHT_ONPHOTO_IMGNODE_WHY },
     // 4 = the timeline stops clipped at the .anch-scroll edge, mobile only (counted: 2 .jl-date +
     // .jl-word/.jl-date of the Tue stop at 375px; desktop renders 0 of this key).
     "color-contrast/elmPartiallyObscured": { max: 4, why: JLINE_CLIPPED_WHY },
