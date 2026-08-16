@@ -59,8 +59,9 @@ const curated = allGuides.filter((g) => !g.data.draft);
    is a *state of a guide*, not a fourth destination. Costs zero header space."
 
    Which drafts qualify is features/atlas/model/building.ts's rule (draft AND its run has not
-   cleared `verified`) — see its header for why japan, a finished-but-withheld draft, must not
-   appear here. The run state is read off the LOCAL filesystem at build time: it is the same
+   cleared `verified`) — see its header for why a finished-but-withheld draft (japan was the
+   motivating, now-deleted, example) must not appear here. The run state is read off the LOCAL
+   filesystem at build time: it is the same
    git-tracked guides-intake/<slug>/state.json scripts/pipeline.mjs checkpoints into, already
    in the repo, so there is no fetch and no GitHub call.
 

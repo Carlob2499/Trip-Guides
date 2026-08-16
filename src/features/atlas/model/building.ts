@@ -12,11 +12,13 @@
      1. the guide's `_guide.json` still carries `draft: true`, and
      2. its own run state (guides-intake/<slug>/state.json) has NOT cleared `verified`.
 
-   Condition 2 is load-bearing, not belt-and-braces. `japan` is `draft: true` today, but its
-   run reached `verified` in July 2026 and the guide was then hidden deliberately, pending a
-   full regeneration through the rebuilt pipeline (CONTEXT.md, "Japan's defects are frozen in
-   the FIXTURE"; commit 4513f97). A draft whose run has finished is not a guide being built —
-   it is a guide being withheld — and the hub has nothing honest to say about it. */
+   Condition 2 is load-bearing, not belt-and-braces. `japan` was the motivating case: its run
+   reached `verified` in July 2026 while it stayed `draft: true`, hidden deliberately pending a
+   full regeneration (CONTEXT.md, "Japan's defects are frozen in the FIXTURE"; commit 4513f97).
+   A draft whose run has finished is not a guide being built — it is a guide being withheld —
+   and the hub has nothing honest to say about it. (Japan itself was deleted outright for a
+   fresh redo shortly after, 2026-08-15 — see CONTEXT.md — but the rule the case motivated
+   still matters for whatever guide is next held back this way.) */
 
 import type { PipelineStage } from "../../pipeline-progress/index";
 
