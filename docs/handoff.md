@@ -82,8 +82,8 @@ deleted by the plan's own Commit E, not real source) · typecheck 0 · 2229 test
 dist grep clean · verified in `astro preview`.
 
 **Still open, not part of the UI plan below:** regenerate japan through the rebuilt pipeline (a
-full research-pass run). Waiting on the creator: paste the RTDB rules into the Firebase console
-to revoke the dead telemetry write path.
+full research-pass run). The RTDB rules paste (creator, Firebase console) is done — closed
+2026-08-15, nothing left waiting on the creator.
 
 **Recommended next step — execute `PLAN_PIPELINE_SURFACES.md`.** Not started (0/5 commits). Full
 execution contract at repo root: five shippable commits (progress dashboard → intake checklist →
