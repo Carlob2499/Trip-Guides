@@ -54,57 +54,32 @@ focus-ring token (`--focus-ring`, theme-aware) and the rate-fallback now keeping
 currency converter alive on a seed rate — and scaffolded the japan draft from issue #50.
 Their entries left Open items above; details in that snapshot (docs/archive/HANDOFF_ARCHIVE.md).
 
-## Snapshot (2026-08-14 — the codebase-audit cleanup: audited, then cut, all gates green)
+## Snapshot (2026-08-15 — guide-deepening list, items 1/3/4/5 closed)
 
-**Six-lens adversarial audit → three executed passes** (branch `claude/codebase-audit-cleanup-cahyfq`,
-report artifact shared with the creator). Verdict: near-zero dead code, but process weight, helper
-duplication, and four shipped defects. **Defects fixed:** tools-reminders.js was never imported
-(Tools ticks didn't persist — now wired); double `.sheet-grip` drag-handle removed; grid.js's two
-literal NUL bytes (grep saw the file as binary) escaped; the guide footer's telemetry disclosure
-outlived the feature (caught by the dist grep, removed).
+**Korea geocode backfill.** `PLACES_API_KEY` lives in `.env` but nothing sources it into the
+process env — `set -a; source .env; set +a` before invoking `geocode-venues.mjs`. 1 of 25
+unresolved venues (LoL Park) matched confidently and was written; the other 24 stay blank on
+purpose — name mismatches Places itself disagrees with, or category entries ("Konbini") that
+aren't a single place. Refuse-rather-than-guess working as designed.
 
-**Cuts, all creator-approved:** panel/progress-preview design-study trees; 5 unreferenced archive
-docs; the test-index meta-gate (test + generator + 248KB catalog); the ENTIRE telemetry chain
-(silo, bumpCounter, RTDB rules node, weekly workflow — whose docs/telemetry commit path was broken
-and never fired); the 24 local-only Playwright specs (a11y.spec.ts remains the CI gate);
-model-smoke.yml; CHANGELOG (frozen, moved to docs/archive/). Workflow diet: content-audit merged
-into recert.yml as its Monday report job; mutation + skill-retro de-cronned to dispatch-only.
-17 workflows remain, 4 crons.
+**Bare-echo / undated-budget items were already clean.** Korea/denmark's facts hygiene
+(bare-echo, malformed, misattribution) and untokenized-money checks both ran clean — an earlier
+2026-08-15 session had already closed them. Only japan still carries findings (3 malformed + 1
+misattribution + 3 bare-echo stems), and japan is frozen regression evidence, never hand-patched
+(see Decisions) — its regeneration through the rebuilt pipeline is the only path left to it.
 
-**Structure:** silo contract's 3 violations sealed (hub index.ts; atlas exports initAtlasWorld —
-atlas-map.js got an SSR-safe HTMLElement base for the barrel; route-optimizer math → 
-`src/lib/route-optimize.ts`); guide.css split under its ~800 rule (botbar/sheet → mobile-nav.css,
-map/budget blocks rehomed); index.astro's inline hub script → `src/scripts/atlas-hub.js`;
-`check-drift.mjs`→`check-content-drift.mjs` and trip-tools `reminders.ts`→`booking-reminders.ts`
-(name collisions); single-letter-variable rename sweep over the 6 worst files (274→185 repo-wide).
-Dedup: esc/reducedMotion → scripts/util.js; scripts gained lib/cli.mjs + lib/geo.mjs; og/recap
-share pages/og/_card.ts. d3 → 3 submodules (~200KB less shipped); geo-tz → devDependencies.
+**E1 tiering backfill done; `backfill-tier.mjs` deleted.** Re-run on korea/denmark: 0 rows left
+to assign — everything's already `tier: primary` or correctly left blank as a research call the
+script was never built to make.
 
 ## Where we left off
 
-**Second-pass audit (2026-08-14, after the big cleanup):** re-mapped scripts/workflows/docs;
-found only remnants — deleted the 4 orphaned progress-study files in `docs/mockups/` (the
-shipped pipeline-progress feature's throwaway prototype) + their `.gitignore` block, and the
-empty `voting`/`telemetry` silo skeletons. Everything else audited KEEP with evidence (see
-commit). `backfill-tier.mjs` stays until E1 tiering finishes, per the list below.
-Follow-up round: DESIGN.md is now the ONE design authority (R5 overrides folded into the body,
-SUPERSEDES.md deleted, all code comments repointed); visual-redesign.md split spec/history
-(history → `docs/archive/visual-redesign-history.md`); new `intake-contract.test.ts` binds the
-hub's intake vocabulary to `intake-schema.mjs` (replaces hardcoded copies in intake.test.ts).
-Surfaced, not fixed: `/new` never collects departure-airport or the three certainty fields —
-scope decision for the creator. (Decided and fixed 2026-08-15: it now collects all four.)
+**Still open from the guide-deepening list:** regenerate japan through the rebuilt pipeline —
+a full research-pass run, not attempted this pass.
 
-**All gates green after the cleanup:** build · lint · typecheck 0 · 2009 tests / 144 files ·
-77 a11y checks vs the preview build · dist grep clean. Deferred with rationale: test-walker
-`walk()` dedup (8 divergent skip-lists — consolidating risks silently changing gate corpora);
-mass CSS-home unification and jetlag re-siloing (churn without reader value); revise-guide +
-modify-guide merge (agent pipelines; merge blind and you can't test the seam — needs a live run).
+**All gates green:** build · lint (pre-existing 176 errors, all in `design_handoff_pipeline_and_
+intake/support.js`, unrelated to this branch's content work) · typecheck 0 · 2229 tests / 149
+files · dist grep clean · verified in `astro preview`.
 
 **Waiting on the creator, 1 item:** RTDB rules — telemetry node removed from `rules.json`; paste
-into the Firebase console to revoke the now-unused write path. (The former item 1, the intake
-endpoint's bot check, is closed: dropped by ruling 2026-08-15, see CONTEXT.md.)
-
-**Recommended next step — the guide-deepening list from the audit** (uses existing tooling, zero
-new code): korea geocode backfill (24/87 items missing coords), japan's 3 malformed fact values +
-1 misattribution, the 17 bare-echo ambiguities, korea's 11 undated budget figures, finish E1
-tiering (then delete backfill-tier.mjs), then regenerate japan through the rebuilt pipeline.
+into the Firebase console to revoke the now-unused write path.

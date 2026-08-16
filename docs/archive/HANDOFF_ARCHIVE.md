@@ -9,6 +9,32 @@
 > (the ~80-line budget its own header sets is gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). The session-end ritual still appends here.
 
+## Snapshot (2026-08-14 — the codebase-audit cleanup: audited, then cut, all gates green)
+
+**Six-lens adversarial audit → three executed passes** (branch `claude/codebase-audit-cleanup-cahyfq`,
+report artifact shared with the creator). Verdict: near-zero dead code, but process weight, helper
+duplication, and four shipped defects. **Defects fixed:** tools-reminders.js was never imported
+(Tools ticks didn't persist — now wired); double `.sheet-grip` drag-handle removed; grid.js's two
+literal NUL bytes (grep saw the file as binary) escaped; the guide footer's telemetry disclosure
+outlived the feature (caught by the dist grep, removed).
+
+**Cuts, all creator-approved:** panel/progress-preview design-study trees; 5 unreferenced archive
+docs; the test-index meta-gate (test + generator + 248KB catalog); the ENTIRE telemetry chain
+(silo, bumpCounter, RTDB rules node, weekly workflow — whose docs/telemetry commit path was broken
+and never fired); the 24 local-only Playwright specs (a11y.spec.ts remains the CI gate);
+model-smoke.yml; CHANGELOG (frozen, moved to docs/archive/). Workflow diet: content-audit merged
+into recert.yml as its Monday report job; mutation + skill-retro de-cronned to dispatch-only.
+17 workflows remain, 4 crons.
+
+**Structure:** silo contract's 3 violations sealed (hub index.ts; atlas exports initAtlasWorld —
+atlas-map.js got an SSR-safe HTMLElement base for the barrel; route-optimizer math →
+`src/lib/route-optimize.ts`); guide.css split under its ~800 rule (botbar/sheet → mobile-nav.css,
+map/budget blocks rehomed); index.astro's inline hub script → `src/scripts/atlas-hub.js`;
+`check-drift.mjs`→`check-content-drift.mjs` and trip-tools `reminders.ts`→`booking-reminders.ts`
+(name collisions); single-letter-variable rename sweep over the 6 worst files (274→185 repo-wide).
+Dedup: esc/reducedMotion → scripts/util.js; scripts gained lib/cli.mjs + lib/geo.mjs; og/recap
+share pages/og/_card.ts. d3 → 3 submodules (~200KB less shipped); geo-tz → devDependencies.
+
 ## Snapshot (2026-08-14 — dark-mode focus-ring contrast fixed)
 
 **Fixed, not deferred.** The prior entry's "`--accent-ink` would break light (≈2.70:1)" was wrong
@@ -59,32 +85,8 @@ rename also had to be redone once: "PHX rental car, per day — {low end, mid-si
 distinguishing attribute AFTER the em-dash, which is exactly what `claimStem` strips, so it
 manufactured a new bare-echo pair. Attribute before the dash. us hygiene now clean.
 
-# Archived snapshot (moved 2026-08-14, merge of the parallel design-fork session)
-
-## Snapshot (2026-08-14 — both design-reconciliation forks are closed)
-
-**Fork #2 (currency converter on rate-fallback) fixed.** `applyFallback()` in
-`src/features/live-data/ui/rate.js` used to leave `#liveRatePill` hidden even with
-`curFallbackRate` in hand, so a failed fetch silently dropped the converter. It now shows the
-pill with the seed rate, marked "≈" and titled "Seed rate · live rate unavailable" — honest, not
-live, but present. Verified by forcing the real failure path (pointed `fetch` at a dead host,
-rebuilt, confirmed in preview: pill un-hides, popover converts off the seed rate; reverted).
-Updated `a11y.spec.ts`'s stale comment describing the old never-unhides behavior. Fork #1
-(dark-mode focus-ring contrast) was fixed earlier this session — see archive for both writeups.
-Ship loop green: build/lint/typecheck, vitest 2034/2034, `a11y.spec.ts` 77/77, drift unchanged
-at 29 real · 742 exempt.
-
-## Where we left off
-
-**Both forks this file was tracking are shipped. Nothing design-related is waiting on the
-creator.** The rate-fallback behavior was the last open product decision from the design
-reconciliation; it's now a straightforward honesty-preserving fix, not a fork.
-
-**Recommended next step — regenerate the japan guide through the rebuilt pipeline.** It is the
-program's natural end-to-end acceptance test (CONTEXT.md's Japan ruling says so explicitly), it
-is the only guide with 0 coordinate-bearing waypoints so it exercises the new Routes layers from
-zero, and its trip is real and upcoming (Oct 15 – Nov 10, 2026). Everything else on the roadmap
-is R3–R6 in `docs/reference/pipeline.md` — product scope never part of this plan. The only other
-residue is administrative: the merged remote branch `claude/pipeline-changes-plan-752kra` still
-exists on GitHub because this environment's proxy refuses git delete operations — one click in
-the branches UI, see Open items above.
+> **Truncated further 2026-08-15**: the "both design-reconciliation forks are closed" snapshot
+> (moved here 2026-08-14) rolled off the 3-snapshot cap. `git show <commit-before-this-one>:
+> docs/archive/HANDOFF_ARCHIVE.md` has it verbatim if needed — it recorded the rate-fallback
+> currency-converter fix and the dark-mode focus-ring fix, both long since shipped and unrelated
+> to any open item above.
