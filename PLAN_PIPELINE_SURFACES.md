@@ -248,6 +248,14 @@ Per the README's own retirement section, on the commit that lands last:
    facts-verified) into `guides-intake/<slug>/` and wire the Progress gateway to them; add
    Worker `/note` for mid-run directives and un-placeholder the note panel's monitoring +
    stalled inputs." File it as a GitHub issue via `gh`.
+7. **Deferred fork from Commit A (creator ruling 2026-08-15):** the plan's Commit A "Entry
+   points" bullet (line 155-156) assumed the hub already renders `.atlas-stamp--progress` and
+   has a "build strip" — neither exists (`ongoing` in `STAMP`/`trip-dates.ts` means the trip is
+   happening, not that the guide is building; greps for `strip`/`buildStrip`/`atlas-build` found
+   nothing). Commit A shipped with zero hub changes as a result — the only working entry point
+   is the existing post-intake redirect. Decide here whether the hub gets a real in-progress
+   indicator, and if so design it before coding it; file as its own GitHub issue if deferred
+   past this plan's closure.
 
 ---
 
