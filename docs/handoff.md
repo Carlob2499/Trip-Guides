@@ -54,43 +54,39 @@
   `merge_pull_request` takes no delete-branch flag. One pass at
   github.com/Carlob2499/Trip-Guides/branches clears all four.
 
-## Snapshot (2026-08-16 — PLAN_PIPELINE_SURFACES executed end to end; the bundle is retired)
+## Snapshot (2026-08-17 — Pipeline V2 backend implemented end to end, M0–M8 on `codex/pipeline-v2`)
 
-**Five commits on `design/pipeline-surfaces`, each through the full ship loop.** The progress
-cockpit with its frame-by-frame route map (`0d6aae0`), the intake preflight checklist (`f9b333a`),
-the change-request requester view (`544cc95`), the owner triage queue at `/progress/triage/`
-(`63a63ff`), and this retirement. The plan's one deferred fork closed on the way (`e119f2a` — the
-hub now stamps a guide that is BUILDING, deliberately not the `ongoing` "trip happening now"
-class).
+**Eight milestones, one commit each, all pushed.** `docs/pipeline v2/IMPLEMENTATION_STATE.md`
+is the durable per-milestone record (baseline → publication-safety fixes → fail-closed V2
+contracts → adaptive doctrine → job-per-stage V2 workflow with mechanical Pass-B isolation →
+research rules → lifecycle correctness → honest progress adapters). Authority chain honored:
+DECISIONS.md → FABLE_IMPLEMENTATION_PROMPT.md → repo behavior.
 
-**Three things the design asked for were NOT built, on purpose, and each is recorded as a
-Decision in CONTEXT.md.** Triage's Quick fix / Full re-check go through the owner-keyed Worker
-rather than the deleted `*-approved` labels; the feedback-proposals panel moved off `/progress/`
-into triage; and the live-event panels (sources · decisions · nuggets · counters) ship with the
-full layout and honestly empty boxes, because nothing in the pipeline emits per-event data yet.
-Emission is issue **#56** — the gateway, types, mocks and tests are already there for it to drop
-into. The bundle's "Watch a demo run" button was never built for the same reason.
+**What V1 gained immediately (shared code):** landing now runs the REAL evidence gate (build +
+networked verify — it ran verify alone and asserted the pass); compose/integrity/artifacts run
+BEFORE landing and downgrade it to a draft PR; the contradiction preflight commits the ledger
+it writes (was intake.md — findings were lost with the runner); change attempts are run-scoped
+(3 successful runs no longer trip the breaker for the 4th); research+change share one
+`guide-<slug>` concurrency group; mid-run answers route onto the active research branch's
+ledger; pretrip watches `change/<slug>-*` (the dead `recert/<slug>` check detected nothing);
+recert partial-dispatch failures exit red.
 
-**Retirement, per the bundle's own instructions.** `design_handoff_pipeline_and_intake/` (39
-files) and `PLAN_PIPELINE_SURFACES.md` are DELETED, not moved — an inline-styled prototype drifts
-from the implementation within a release. What survives: one section in
-`docs/reference/pipeline.md` (note-panel colours · the stalled-run rule · the route map's
-frame-by-frame requirement), eight rows in `docs/reference/motion.md`'s inventory, and a closure
-entry in `docs/archive/INDEX.md` carrying the `git show` paths to both. Four code comments that
-cited the plan by filename now cite the archive heading instead.
+**What V2 adds beside V1 (manual, draft-only):** `research-pass-v2.yml` (job-per-stage; Pass B
+runs in a baseline checkout that mechanically excludes Pass A; the critic gets depth-1 history
+and a working tree stripped of evidence/run-state; the workflow — never the agent — validates,
+commits and checkpoints every stage; one bounded void auto-retry; landing is ALWAYS a draft
+PR). Contracts under `scripts/pipeline/v2/` fail closed (`wp-run/2.0` · `wp-evidence/2.0` ·
+`wp-coverage/2.0` · telemetry with honest nulls). Quota floors are GONE repo-wide — the earned
+saturation stop replaced them (DECISIONS "Research breadth").
 
 ## Where we left off
 
-**This commit is LOCAL and unpushed — deliberately.** The creator verifies it, pushes, and opens
-the single PR for the whole branch (title: `feat: pipeline surfaces — progress cockpit, intake
-checklist, change + triage`). Everything before it is already pushed.
+**Branch `codex/pipeline-v2`, all gates green, everything pushed.** Build 9 pages · lint 0 ·
+typecheck 0 errors/19 hints · 165 test files, 2566 + 1 todo · offline verify PASS on both
+published guides with legacy `n/a` rows intact · preview checked at 375px + desktop + dark ·
+dist grep clean (old "live on the site" label gone; V2 adapters compiled in).
 
-**All gates green, and lint is now genuinely clean.** Build 9 pages · lint 0 (the 176 errors this
-file used to carry were all in the deleted bundle's `support.js`, so they left with it) ·
-typecheck 0 errors / 19 hints · 2400 tests + 1 todo across 155 files · coverage gate passes ·
-`/progress/`, `/progress/triage/`, `/change/` and `/new/` re-checked in `astro preview` after the
-deletion · dist grep clean of every prototype string.
-
-**Next after the PR merges:** nothing is queued. Issue #56 (pipeline run events) is the natural
-follow-on and is fully specced; the two stale issue templates in Open items are a smaller,
-unrelated fix.
+**Codex reviews next — do NOT merge to main, switch dispatch, publish, or delete V1.** The
+final-handoff section of IMPLEMENTATION_STATE.md carries the manual canary command, required
+secrets, and every unverified external boundary (Actions dispatch paths, gh/worker calls, the
+claude-code-action jobs — none exercised from here).

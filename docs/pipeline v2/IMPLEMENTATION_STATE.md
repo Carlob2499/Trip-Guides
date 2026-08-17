@@ -6,12 +6,11 @@
 
 ## Position
 
-- **Last completed milestone:** M7 — Honest progress compatibility and telemetry
-- **Current milestone:** M8 — Full verification and handoff
-- **Exact next action:** Full Ship Loop (build/lint/typecheck/test), offline verify vs published
-  guides (record legacy n/a), preview checks at 375px + desktop incl. dark + reduced-motion on
-  progress/hub, grep dist/ for stale stage labels, write the manual V2 canary command + secrets
-  list, finalize this file + handoff, session-close HANDOFF update, /code-review.
+- **Last completed milestone:** M8 — Full verification and handoff (IMPLEMENTATION COMPLETE)
+- **Current milestone:** none — awaiting Codex review (see "Final handoff to Codex" below)
+- **Exact next action (Codex):** review the branch diff, run independent checks, then decide
+  whether a manual V2 canary is allowed (command below). Do not merge to main, switch dispatch,
+  publish, or delete V1.
 
 **Mid-session external event (08:09):** `docs/pipeline v2/IMPLEMENTATION_PLAN.md` (Carlo's
 delivery-cadence plan) appeared untracked while M4 was underway — authored outside this session,
@@ -277,8 +276,65 @@ prompts/README.md V1-vs-V2 section.
 
 - M0 baseline: full suite + build + lint + typecheck (results above).
 
-## Known failures / unverified external boundaries
+## M8 — done (full verification)
 
-- None yet. External boundaries not exercised in M0: GitHub Actions dispatch, `gh` CLI paths,
-  Cloudflare Worker endpoints, Claude action invocations (all deferred to their milestones; final
-  handoff will name what stayed unproven).
+- Fresh Ship Loop on the branch tip: `npm run build` (9 pages) ✓ · `npm run lint` (0/0) ✓ ·
+  `npm run typecheck` (0 errors, 19 pre-existing hints) ✓ · `npm test` 165 files / 2566 ✓ + 1 todo.
+- `npm run verify` (offline, both published guides): **PASS**, legacy behavior recorded as-is —
+  korea/denmark report `candidates · n/a — pre-standard ledger` and `coverage · n/a — pre-P3
+  guide`; no historical evidence rewritten. Advisory rows (routes, uncertainty) unchanged.
+- `astro preview` :4322 (production build): `/progress/?slug=…` at 375px and desktop, dark
+  scheme — page renders honest empty state, new "Published — merged to the site" label, no
+  horizontal scroll, dark tokens paint (body rgb(15,19,23)); hub renders with no BUILDING rows
+  (no drafts exist — honest). Reduced-motion: NO code on the motion path changed this arc
+  (M7 touched derivations, not the rAF loop); existing behavior stands, not re-verified
+  visually because the Browser pane could not composite screenshots in this session
+  (structural checks via computed styles/read_page used instead).
+- `dist/` grep: old "Published — live on the site" string GONE; `merged to the site`,
+  `blockingForks`, `run.v2.json` present in the compiled progress chunk; no `researchFloors`,
+  no `recert/<slug>` branch strings.
+- `.claude/launch.json` added (preview server config for the harness browser — dev tooling).
+
+## Final handoff to Codex
+
+**Completed milestones / pushed commits** (branch `codex/pipeline-v2`, forked from `9f1599b`):
+M0 `8ca2f7d` · M1 `896cbce` · M2 `54087fd` · M3 `a292d79` · M4 `59001c5` · M5 `785b4e9` ·
+M6 `3351644` · M7 `71e8671` · M8 (this commit). Each milestone section above lists exact files,
+reasons, preserved-vs-changed contracts, and the tests that pin them.
+
+**Manual V2 canary (when Codex allows it):**
+```
+gh workflow run research-pass-v2.yml -f slug=<slug> \
+  -f model=claude-sonnet-5 -f effort=high -f critic_model=claude-opus-5
+```
+Prerequisites: the slug must already be scaffolded on main (file a /new intake or run
+`node scripts/scaffold-guide.mjs` first — V2 refuses to scaffold); repo secrets
+`CLAUDE_CODE_OAUTH_TOKEN` (required), `PLACES_API_KEY` (venue checks; optional but wanted),
+`GOOGLE_ROUTES_KEY` (optional). The run lands a DRAFT PR only. Boundary checks to run on the
+first canary (Boundary Checks doctrine): (1) confirm the passB job's baseline checkout really
+lacks Pass-A files on the runner (the verify-passb-workspace step prints it); (2) force one
+failure path — cancel an agent step and confirm fail-stage records `agent-failure` and the
+branch resumes at the same stage on re-dispatch; (3) confirm `pipeline land --gate` on the
+runner produces the build+verify scorecard as the PR body.
+
+**Unverified external boundaries (none exercised from this session — no Actions run, no gh
+write, no Worker call was made):**
+- All GitHub Actions YAML paths: job chaining/`needs` conditions in research-pass-v2.yml, the
+  three-checkout passB job, depth-1 critic push, `gh workflow run` re-dispatch, concurrency
+  queueing across the renamed `guide-<slug>` groups.
+- The claude-code-action agent steps (V2 prompts have never driven a live agent).
+- change.yml's new answers-route path against a LIVE research branch (unit-tested pure logic
+  only), and the run-key budget behavior across real dispatches.
+- Worker endpoints (unchanged in code this arc — but the answers flow's end-to-end behavior
+  with routing is new).
+- recert/pretrip: the new `change/<slug>-*` in-flight lookup against the real remote.
+- `isLive` search-index probe against the real deployed Pages site.
+
+**Schema/versioning:** `wp-run/2.0` · `wp-evidence/2.0` · `wp-coverage/2.0` · `wp-telemetry/2.0`;
+same-major-any-minor accepted, loose parse preserves unknown fields, different major refused
+naming migration; malformed mandatory artifacts throw `ContractError` (fail closed). V1
+compatibility: `readAnyRunState` adapter (view-only), V1 state.json/passB.json/ledger untouched,
+no historical guide data rewritten.
+
+**Non-goals honored:** no UI redesign, no GPT, no new APIs/DBs/queues, no cutover, no V1
+deletion, no live publication, no live V2 run.

@@ -9,6 +9,31 @@
 > (the ~80-line budget its own header sets is gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). The session-end ritual still appends here.
 
+## Snapshot (2026-08-16 — PLAN_PIPELINE_SURFACES executed end to end; the bundle is retired)
+
+**Five commits on `design/pipeline-surfaces`, each through the full ship loop.** The progress
+cockpit with its frame-by-frame route map (`0d6aae0`), the intake preflight checklist (`f9b333a`),
+the change-request requester view (`544cc95`), the owner triage queue at `/progress/triage/`
+(`63a63ff`), and this retirement. The plan's one deferred fork closed on the way (`e119f2a` — the
+hub now stamps a guide that is BUILDING, deliberately not the `ongoing` "trip happening now"
+class).
+
+**Three things the design asked for were NOT built, on purpose, and each is recorded as a
+Decision in CONTEXT.md.** Triage's Quick fix / Full re-check go through the owner-keyed Worker
+rather than the deleted `*-approved` labels; the feedback-proposals panel moved off `/progress/`
+into triage; and the live-event panels (sources · decisions · nuggets · counters) ship with the
+full layout and honestly empty boxes, because nothing in the pipeline emits per-event data yet.
+Emission is issue **#56** — the gateway, types, mocks and tests are already there for it to drop
+into. The bundle's "Watch a demo run" button was never built for the same reason.
+
+**Retirement, per the bundle's own instructions.** `design_handoff_pipeline_and_intake/` (39
+files) and `PLAN_PIPELINE_SURFACES.md` are DELETED, not moved — an inline-styled prototype drifts
+from the implementation within a release. What survives: one section in
+`docs/reference/pipeline.md` (note-panel colours · the stalled-run rule · the route map's
+frame-by-frame requirement), eight rows in `docs/reference/motion.md`'s inventory, and a closure
+entry in `docs/archive/INDEX.md` carrying the `git show` paths to both. Four code comments that
+cited the plan by filename now cite the archive heading instead.
+
 ## Snapshot (2026-08-15 — guide-deepening list, items 1/3/4/5 closed)
 
 **Korea geocode backfill.** `PLACES_API_KEY` lives in `.env` but nothing sources it into the
@@ -52,20 +77,3 @@ map/budget blocks rehomed); index.astro's inline hub script → `src/scripts/atl
 (name collisions); single-letter-variable rename sweep over the 6 worst files (274→185 repo-wide).
 Dedup: esc/reducedMotion → scripts/util.js; scripts gained lib/cli.mjs + lib/geo.mjs; og/recap
 share pages/og/_card.ts. d3 → 3 submodules (~200KB less shipped); geo-tz → devDependencies.
-
-## Snapshot (2026-08-14 — dark-mode focus-ring contrast fixed)
-
-**Fixed, not deferred.** The prior entry's "`--accent-ink` would break light (≈2.70:1)" was wrong
-— `accentTokens()` derives it to clear ≥4.5:1 on every light AND dark surface by construction, so
-no fork existed. 53 `:focus`/`:focus-visible` rules painting identity `--accent` (19 `src/styles/`
-files, 6 feature silos, `progress-preview`) now paint `--accent-ink` instead, same fix already
-applied to accent link text. Verified in preview: Korea's dark ring 2.48:1 → 5.23:1, light
-unchanged; `.pin-flash`/`[data-selected]` left alone. Ship loop green: build/lint/typecheck,
-vitest 2009/2009, `a11y.spec.ts` 69/69, drift unchanged.
-
-> **Rolled off since**, in order, each one commit further back than the last: the
-> "both design-reconciliation forks are closed" snapshot (2026-08-15 — the rate-fallback
-> currency-converter fix and the dark-mode focus-ring fix), and "case 11's live half is built"
-> (2026-08-16 — live Routes verification, the blocker that wasn't, and the `us` registry
-> close-out). Both are shipped work with nothing open against them;
-> `git log -- docs/archive/HANDOFF_ARCHIVE.md` walks back to either verbatim.
