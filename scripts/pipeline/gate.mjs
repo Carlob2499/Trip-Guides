@@ -227,9 +227,17 @@ function gateIntegrity({ slug, preHead, preStages, enforce }) {
 // any agent budget is spent: a human may have hand-elaborated the intake since, and a date range
 // narrowed in prose but never reflected in the flat bullet is exactly how a contradiction gets in.
 // Idempotent, and never fails the run — a finding becomes a traveler question, not a red build.
+// Pure: the file the preflight's --write actually mutates, so the commit below and the writer
+// (applyContradictions → guides-intake/<slug>/ledger.md) cannot disagree again. It used to
+// commit intake.md — the one file the check NEVER writes (intake is frozen intent; findings are
+// recorded beside it) — so every preflight finding was silently left uncommitted.
+export function preflightCommitPath(slug) {
+  return `guides-intake/${slug}/ledger.md`;
+}
+
 function gatePreflight({ slug, branch }) {
   runNode([path.join(ROOT, "scripts", "audit", "check-intake-contradictions.mjs"), "--slug", slug, "--write"]);
-  const rel = `guides-intake/${slug}/intake.md`;
+  const rel = preflightCommitPath(slug);
   if (branch && git(["status", "--porcelain", "--", rel]).trim()) {
     git(["add", rel]);
     git(["commit", "-m", `chore(intake): stamp contradiction findings for ${slug}`]);
@@ -241,15 +249,24 @@ function gatePreflight({ slug, branch }) {
 // The verdict, run AFTER remediation so a void run still gets its retry dispatched and its stuck
 // issue filed before the workflow goes red — but it does go red: a run that produced nothing, or
 // that faked its staging, is a failed run no matter what merged.
-function gateEnforce({ isVoid, violations, kinds }) {
+function gateEnforce({ isVoid, violations, kinds, compose }) {
+  let failed = false;
   if (String(isVoid) === "true") {
     console.error("::error::Void run — the agent produced no durable output. Remediation dispatched above.");
-    return 1;
+    failed = true;
   }
   if (violations && String(violations) !== "0") {
     console.error(`::error::Checkpoint discipline violated — ${violations} finding(s), kinds: ${kinds || "?"}. The stages this run cleared are not resumable.`);
-    return 1;
+    failed = true;
   }
+  // The compose check now runs BEFORE landing (continue-on-error, so a failure downgrades the
+  // landing to a draft PR instead of skipping it) — this is where that deferred failure turns
+  // the run red, after remediation and the draft-PR landing have both had their chance.
+  if (compose === "failure") {
+    console.error("::error::Compose check failed — the run landed as a draft at most; the composition error needs a human.");
+    failed = true;
+  }
+  if (failed) return 1;
   console.log("[run-integrity] clean.");
   return 0;
 }

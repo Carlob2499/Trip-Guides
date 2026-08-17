@@ -6,10 +6,11 @@
 
 ## Position
 
-- **Last completed milestone:** M0 — Baseline and resume spine
-- **Current milestone:** M1 — Repair current publication safety
-- **Exact next action:** Implement the three M1 fixes (see "M1 worklist" below), then add
-  order/failure tests, run targeted suites, commit and push.
+- **Last completed milestone:** M1 — Repair current publication safety
+- **Current milestone:** M2 — Versioned V2 contracts
+- **Exact next action:** Design and implement `scripts/pipeline/v2/` runtime-validated contracts
+  (run state, evidence/candidates, coverage, reconciliation dispositions, telemetry) + fail-closed
+  validation + V1 readers + contract tests (valid/missing/malformed/legacy/forward-compatible).
 
 ## Branch
 
@@ -48,6 +49,28 @@ All four gates green on `main` @ 9f1599b before any V2 work:
    `gatePreflight` (`scripts/pipeline/gate.mjs`) stages/commits `guides-intake/<slug>/intake.md`
    only — the written findings are never committed. Fix: commit the ledger file (keep intake in the
    pathspec only if it can legitimately change — it cannot; intake is frozen).
+
+## M1 — done (all three fixes + tests)
+
+1. `landingGate()` added to `scripts/pipeline/publish.mjs`: build → networked markdown verify,
+   short-circuit, captured output as scorecard. `pipeline land --gate` now calls it (the bare
+   verify-only `execSync` is gone), so `publishGuide(slug, {gatePassed: true})` is an earned claim.
+2. `research-pass.yml`: Run-integrity gate (report-only) + void remediation + Compose check
+   (now `continue-on-error`) moved BEFORE "Land the branch"; the landing step computes
+   `LAND=auto|pr` from `VOID`/`VIOLATIONS`/`COMPOSE_OUTCOME` so any failed gate downgrades the
+   landing to a draft PR (human-triage surface preserved, auto-merge blocked). "Enforce run
+   integrity" stays last and now also reds the run on `--compose failure` (gateEnforce learned
+   `compose`). `change.yml`: Run-integrity gate (`--enforce`, always()) moved BEFORE landing —
+   a void change run can no longer open or merge anything.
+3. `gatePreflight` commits `preflightCommitPath(slug)` = `guides-intake/<slug>/ledger.md` — the
+   file `applyContradictions` actually writes (was intake.md, which is frozen and never written,
+   so findings were lost with the runner). new-guide.yml's scaffold path was already correct
+   (`landScaffold` adds all of guides-intake/).
+- Tests: `scripts/__tests__/pipeline-v2-safety.test.mjs` (13) — landingGate order/short-circuit/
+  scorecard/slug-refusal + CLI-seam wiring, preflight write-vs-commit contract (fixture-driven),
+  workflow step-order and downgrade-guard text checks for both workflows, enforce wiring.
+- Checks: targeted 6 suites (153 ✓) · full `npm test` 156 files / 2413 ✓ · eslint clean on
+  changed files.
 
 ## Decisions made within engineering discretion
 

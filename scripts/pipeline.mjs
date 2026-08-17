@@ -257,6 +257,7 @@ async function runSubcommand(cmd, rest, get) {
         isVoid: get("--void"),
         violations: get("--violations"),
         kinds: get("--kinds"),
+        compose: get("--compose"),
         runUrl: get("--run-url"),
         enforce: has("--enforce"),
       });
@@ -326,27 +327,25 @@ async function runSubcommand(cmd, rest, get) {
 
     case "land": {
       if (!needSlug()) return 1;
-      const { publishGuide, commitAll, landBranch, PUBLISH_ERRORS } = await import("./pipeline/publish.mjs");
-      const { execSync } = await import("node:child_process");
+      const { publishGuide, commitAll, landBranch, landingGate, PUBLISH_ERRORS } = await import("./pipeline/publish.mjs");
       const { writeFileSync, readFileSync, existsSync: exists } = await import("node:fs");
       const bodyFile = get("--body-file") || "/tmp/scorecard.md";
       let passed = get("--passed") === "true";
 
       // THE evidence, produced by code. The agent's own verify runs are how it fixes things; this
-      // one is what the verdict is based on, so a run cannot report a pass it did not earn.
+      // one is what the verdict is based on, so a run cannot report a pass it did not earn. It is
+      // the REAL evidence gate — build first (the schema gate), then the networked verify — the
+      // same steps evidenceGate() defines, so `gatePassed: true` below is a claim that was earned.
       if (has("--gate")) {
-        let out;
-        let code = 0;
-        try { out = execSync(`npm run verify -- --slug ${slug} --markdown --network`, { cwd: ROOT, encoding: "utf8" }); }
-        catch (err) { out = `${err?.stdout || ""}${err?.stderr || ""}`; code = typeof err?.status === "number" ? err.status : 1; }
+        const gate = landingGate(slug);
         const prepend = get("--prepend");
         const summary = prepend && exists(prepend) ? readFileSync(prepend, "utf8").trimEnd() + "\n\n" : "";
-        writeFileSync(bodyFile, summary + out);
+        writeFileSync(bodyFile, summary + gate.scorecard);
         const state = await readState(slug);
         // Research also requires every stage cleared: a green verify on a half-researched guide
         // is a green verify on a half-researched guide.
-        passed = code === 0 && (!has("--require-verified") || (state && !nextStage(state)));
-        console.log(`[land] evidence gate — verify exit ${code}, stages ${state && !nextStage(state) ? "complete" : "incomplete"} → passed=${passed}`);
+        passed = gate.passed && (!has("--require-verified") || (state && !nextStage(state)));
+        console.log(`[land] evidence gate — ${gate.steps.map((s) => `\`${s.cmd}\` exit ${s.code}`).join(", ")}, stages ${state && !nextStage(state) ? "complete" : "incomplete"} → passed=${passed}`);
       }
 
       const auto = (get("--land") || "auto") === "auto";

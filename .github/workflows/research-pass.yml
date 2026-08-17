@@ -296,22 +296,10 @@ jobs:
         if: steps.budget.outputs.should_run == 'true' && steps.route4.outputs.verified == 'true'
         run: node scripts/pipeline.mjs gate artifacts --slug "$SLUG" --stage critic
 
-      # THE EVIDENCE GATE AND THE LANDING, in code: runs the networked verify itself, writes the
-      # scorecard as the PR body, removes the draft flag when the guide passed every stage, and
-      # opens or merges the PR. --announce makes land-branch.sh file the vetoable "auto-published"
-      # notice, so a self-publish is still something a human can catch and roll back.
-      - name: Land the branch
-        if: steps.budget.outputs.should_run == 'true'
-        env:
-          BRANCH: ${{ steps.branch.outputs.name }}
-        run: |
-          TITLE="Research pass: $SLUG"
-          if [ -n "$SECTION" ]; then TITLE="$TITLE ($SECTION)"; fi
-          node scripts/pipeline.mjs land --slug "$SLUG" \
-            --branch "$BRANCH" --gate --require-verified \
-            --title "$TITLE" \
-            --announce "${SITE_BASE_URL}/guides/${SLUG}/"
-
+      # Integrity, remediation and compose all run BEFORE landing, so their verdicts can gate the
+      # merge. Report-only here keeps the step green so remediation (the void auto-retry, the
+      # stuck issue) still runs; the landing step reads these outputs to decide auto vs draft, and
+      # the final enforce step is what turns the run red.
       - name: Run-integrity gate
         id: integrity
         if: steps.budget.outputs.should_run == 'true'
@@ -339,23 +327,57 @@ jobs:
           node scripts/pipeline.mjs gate stuck --slug "$SLUG" \
             --run-url "$RUN_URL"
 
+      # continue-on-error so a compose failure DOWNGRADES the landing to a draft PR rather than
+      # skipping the landing entirely (a draft PR is the human-triage surface — losing it would
+      # hide the failure, not surface it). The enforce step below still turns the run red.
       - name: Compose check
+        id: compose
         if: steps.budget.outputs.should_run == 'true'
+        continue-on-error: true
         run: node scripts/pipeline.mjs gate compose --slug "$SLUG"
 
-      # Runs after remediation so a void run still gets its retry and its stuck issue before the
-      # workflow goes red — but it does go red.
+      # THE EVIDENCE GATE AND THE LANDING, in code: runs the REAL evidence gate itself (build +
+      # networked verify), writes the scorecard as the PR body, removes the draft flag when the
+      # guide passed every stage AND every pre-landing gate, and opens or merges the PR.
+      # A void run, a checkpoint-discipline violation or a compose failure forces --land pr: the
+      # work still surfaces as a draft PR, but nothing auto-merges past a failed gate.
+      # --announce makes land-branch.sh file the vetoable "auto-published" notice, so a
+      # self-publish is still something a human can catch and roll back.
+      - name: Land the branch
+        if: steps.budget.outputs.should_run == 'true'
+        env:
+          BRANCH: ${{ steps.branch.outputs.name }}
+          VOID: ${{ steps.integrity.outputs.void }}
+          VIOLATIONS: ${{ steps.integrity.outputs.violations }}
+          COMPOSE_OUTCOME: ${{ steps.compose.outcome }}
+        run: |
+          TITLE="Research pass: $SLUG"
+          if [ -n "$SECTION" ]; then TITLE="$TITLE ($SECTION)"; fi
+          LAND=auto
+          if [ "$VOID" = "true" ] || [ "${VIOLATIONS:-0}" != "0" ] || [ "$COMPOSE_OUTCOME" = "failure" ]; then
+            LAND=pr
+          fi
+          node scripts/pipeline.mjs land --slug "$SLUG" \
+            --branch "$BRANCH" --gate --require-verified \
+            --land "$LAND" \
+            --title "$TITLE" \
+            --announce "${SITE_BASE_URL}/guides/${SLUG}/"
+
+      # Runs after remediation and landing so a void run still gets its retry, its stuck issue
+      # and its draft PR before the workflow goes red — but it does go red.
       - name: Enforce run integrity
         if: always() && steps.budget.outputs.should_run == 'true'
         env:
           VOID: ${{ steps.integrity.outputs.void }}
           VIOLATIONS: ${{ steps.integrity.outputs.violations }}
           KINDS: ${{ steps.integrity.outputs.kinds }}
+          COMPOSE_OUTCOME: ${{ steps.compose.outcome }}
         run: |
           node scripts/pipeline.mjs gate enforce --slug "$SLUG" \
             --void "$VOID" \
             --violations "$VIOLATIONS" \
-            --kinds "$KINDS"
+            --kinds "$KINDS" \
+            --compose "$COMPOSE_OUTCOME"
 
       # Surface, never gate: the traveler sees what was assumed on their behalf. always() so a
       # cut-off run still asks what it managed to; skipped silently on a manual dispatch.

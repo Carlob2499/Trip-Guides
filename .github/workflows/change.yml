@@ -281,6 +281,21 @@ jobs:
           node scripts/pipeline.mjs gate artifacts --slug "$SLUG" \
             --stage change --file /tmp/change-summary.md
 
+      # A change run has no stages to batch, so this is purely the void check: an agent chain that
+      # burned the session and left nothing durable. No auto-retry here — a change run re-runs from
+      # scratch, and the attempt cap is what stops it repeating forever — so it enforces directly,
+      # and it runs BEFORE landing so a void run can never open or merge anything. always() so the
+      # audit still reports when the agent chain itself failed.
+      - name: Run-integrity gate
+        if: always() && steps.budget.outputs.should_run == 'true' && steps.forks.outputs.blocked == 'false'
+        env:
+          SLUG: ${{ needs.resolve.outputs.slug }}
+          PRE_HEAD: ${{ steps.pre.outputs.head }}
+          PRE_STAGES: ${{ steps.pre.outputs.stages }}
+        run: |
+          node scripts/pipeline.mjs gate integrity --slug "$SLUG" --enforce \
+            --pre-head "$PRE_HEAD" --pre-stages "$PRE_STAGES"
+
       # The PR title is assembled in bash from variables rather than by expression concatenation,
       # for the same reason as everything above: it is a shell argument, not a template.
       - name: Land the branch
@@ -315,15 +330,3 @@ jobs:
             --outcome "$OUTCOME" --pr "$PR" \
             --summary /tmp/change-summary.md
 
-      # A change run has no stages to batch, so this is purely the void check: an agent chain that
-      # burned the session and left nothing durable. No auto-retry here — a change run re-runs from
-      # scratch, and the attempt cap is what stops it repeating forever — so it enforces directly.
-      - name: Run-integrity gate
-        if: always() && steps.budget.outputs.should_run == 'true' && steps.forks.outputs.blocked == 'false'
-        env:
-          SLUG: ${{ needs.resolve.outputs.slug }}
-          PRE_HEAD: ${{ steps.pre.outputs.head }}
-          PRE_STAGES: ${{ steps.pre.outputs.stages }}
-        run: |
-          node scripts/pipeline.mjs gate integrity --slug "$SLUG" --enforce \
-            --pre-head "$PRE_HEAD" --pre-stages "$PRE_STAGES"
