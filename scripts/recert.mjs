@@ -87,7 +87,14 @@ if (isMain(import.meta.url)) {
         console.error(`[recert] could not dispatch ${s}: ${err.message}`);
       }
     }
-    process.exit(failed === targets.length ? 1 : 0);
+    // A PARTIAL failure is a failure (M6): the sweep's whole point is comprehensiveness, and a
+    // green run that silently skipped guides is a sweep that lied. Every successful dispatch
+    // above still went out — nothing is rolled back — but the run reports the gap.
+    if (failed) {
+      console.error(`[recert] ${failed} of ${targets.length} dispatch(es) FAILED — the sweep is incomplete; re-run for the failed slug(s).`);
+      process.exit(1);
+    }
+    process.exit(0);
   }
 
   if (asJson) {

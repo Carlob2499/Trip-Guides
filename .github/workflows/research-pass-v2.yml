@@ -72,10 +72,11 @@ permissions:
   issues: write
   actions: write # the bounded auto-retry re-dispatches this workflow
 
-# SAME group as the V1 research workflow, deliberately: a V1 and a V2 research run on one slug
-# would race the same guide, so they queue behind each other instead.
+# SAME guide-<slug> group as V1 research AND the change lifecycle, deliberately: any two runs
+# on one slug — V1 research, V2 research, or a change — queue behind each other instead of
+# interleaving (M6's exclusion boundary).
 concurrency:
-  group: research-${{ inputs.slug }}
+  group: guide-${{ inputs.slug }}
   cancel-in-progress: false
 
 env:

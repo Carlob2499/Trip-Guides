@@ -248,6 +248,7 @@ async function runSubcommand(cmd, rest, get) {
         lifecycle: get("--lifecycle") || "research",
         branch: get("--branch"),
         cap: get("--cap") ? Number(get("--cap")) : undefined,
+        runKey: get("--run-key"),
         stage: get("--stage"),
         file: get("--file"),
         floors: has("--floors"),
@@ -267,6 +268,78 @@ async function runSubcommand(cmd, rest, get) {
       if (!needSlug()) return 1;
       const { surfaceQuestions } = await import("./pipeline/questions.mjs");
       return surfaceQuestions({ slug, issue: get("--issue"), json: has("--json") });
+    }
+
+    // M6: where does a traveler answer belong? While research is ACTIVE it belongs to that
+    // run's ledger on the research branch; only a published/complete guide gets a change run.
+    // Reads the committed state on the CURRENT checkout (main) — an active research run's
+    // stages are incomplete there by construction.
+    case "answers-route": {
+      if (!needSlug()) return 1;
+      const { routeAnswers } = await import("./pipeline/questions.mjs");
+      const { execFileSync } = await import("node:child_process");
+      const { existsSync: exists, readFileSync } = await import("node:fs");
+
+      let hasAnswers;
+      try {
+        const { parseAnswersJson } = await import("./pipeline/plan.mjs");
+        hasAnswers = !!parseAnswersJson(process.env.PLAN_JSON)?.length;
+      } catch { hasAnswers = false; }
+
+      const metaPath = path.join(ROOT, "src", "content", "guides", slug, "_guide.json");
+      let published;
+      try { published = exists(metaPath) && !JSON.parse(readFileSync(metaPath, "utf8")).draft; } catch { published = false; }
+
+      const { readAnyRunState } = await import("./pipeline/v2/run-state.mjs");
+      const { version, state } = await readAnyRunState(slug);
+      const researchActive = version > 0 && state.lifecycle === "research" && !!state.resume?.nextStage;
+
+      let researchBranch = null;
+      if (researchActive && !published) {
+        for (const b of version === 2 ? [`research-v2/${slug}`, `research/${slug}`] : [`research/${slug}`, `research-v2/${slug}`]) {
+          try {
+            execFileSync("git", ["ls-remote", "--exit-code", "--heads", "origin", b], { cwd: ROOT, stdio: "pipe" });
+            researchBranch = b;
+            break;
+          } catch { /* branch absent — try the next namespace */ }
+        }
+      }
+
+      const d = routeAnswers({ hasAnswers, researchActive, researchBranch, published });
+      emit("target", d.target);
+      emit("research_branch", d.branch || "");
+      console.log(`[answers-route] ${slug} → ${d.target}${d.branch ? ` (${d.branch})` : ""} — ${d.reason}`);
+      return 0;
+    }
+
+    // M6: record dispatched answers on the active research run's ledger (the caller has the
+    // research branch checked out). Deterministic, zero-agent: the run's own resume reads the
+    // answered cards. A missing card id reds the step — an answer that lands nowhere is lost.
+    case "answers-apply": {
+      if (!needSlug()) return 1;
+      const { applyAnswersToLedger } = await import("./pipeline/questions.mjs");
+      const { parseAnswersJson } = await import("./pipeline/plan.mjs");
+      let answers;
+      try { answers = parseAnswersJson(process.env.PLAN_JSON); }
+      catch (err) { console.error(`[answers-apply] ${err.message}`); return 1; }
+      if (!answers?.length) { console.error("[answers-apply] PLAN_JSON carries no answers — nothing to record."); return 1; }
+
+      const result = await applyAnswersToLedger(slug, answers);
+      const rel = `guides-intake/${slug}/ledger.md`;
+      const branch = get("--branch");
+      const { execFileSync } = await import("node:child_process");
+      const dirty = execFileSync("git", ["status", "--porcelain", "--", rel], { cwd: ROOT, encoding: "utf8" }).trim();
+      if (dirty) {
+        execFileSync("git", ["add", rel], { cwd: ROOT });
+        execFileSync("git", ["commit", "-m", `research(${slug}): traveler answered ${result.applied.filter((a) => !a.already).map((a) => a.id).join(", ")}`], { cwd: ROOT });
+        if (branch) execFileSync("git", ["push", "origin", `HEAD:${branch}`], { cwd: ROOT });
+      }
+      console.log(`[answers-apply] ${slug} — ${result.applied.length} answer(s) recorded${result.applied.some((a) => a.already) ? " (some were already answered)" : ""}.`);
+      if (result.missing.length) {
+        console.error(`[answers-apply] no question card found for: ${result.missing.join(", ")} — those answers were NOT recorded; a human should check the ids.`);
+        return 1;
+      }
+      return 0;
     }
 
     case "plan": {
@@ -456,7 +529,7 @@ async function runSubcommand(cmd, rest, get) {
     }
 
     default:
-      console.error(`[pipeline] unknown subcommand "${cmd}" — one of: prompt, branch, route, gate, questions, plan, land, scaffold, publish`);
+      console.error(`[pipeline] unknown subcommand "${cmd}" — one of: prompt, branch, route, gate, questions, answers-route, answers-apply, plan, land, scaffold, publish`);
       return 1;
   }
 }

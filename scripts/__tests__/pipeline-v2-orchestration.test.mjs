@@ -302,10 +302,12 @@ describe("research-pass-v2.yml — wiring", () => {
     expect(newGuide).not.toContain("research-pass-v2.yml");
   });
 
-  it("shares V1's research concurrency group so a slug cannot run V1 and V2 research at once", () => {
-    expect(text).toContain("group: research-${{ inputs.slug }}");
+  it("V1 research, V2 research AND change share ONE guide-<slug> concurrency group (M6 exclusion)", () => {
+    expect(text).toContain("group: guide-${{ inputs.slug }}");
     const v1 = readFileSync(path.join(ROOT, ".github", "workflows", "research-pass.yml"), "utf8");
-    expect(v1).toContain("group: research-${{ inputs.slug }}");
+    expect(v1).toContain("group: guide-${{ inputs.slug }}");
+    const change = readFileSync(path.join(ROOT, ".github", "workflows", "change.yml"), "utf8");
+    expect(change).toContain("group: guide-${{ needs.resolve.outputs.slug }}");
   });
 
   it("the passB job's agent world is the BASELINE checkout at depth 1, verified clean", () => {

@@ -6,12 +6,12 @@
 
 ## Position
 
-- **Last completed milestone:** M5 — V2 verification and research rules
-- **Current milestone:** M6 — Connected lifecycle correctness
-- **Exact next action:** Per-run attempt scoping; same-slug research/change concurrency
-  exclusion; answer routing to an ACTIVE research run (vs change run for published guides);
-  pretrip/recert in-flight detection + partial-dispatch failure reporting. Read worker/index.mjs,
-  scripts/worker-api.mjs, recert.mjs, pretrip-check.ts first.
+- **Last completed milestone:** M6 — Connected lifecycle correctness
+- **Current milestone:** M7 — Honest progress compatibility and telemetry
+- **Exact next action:** Read `src/features/pipeline-progress/` (gateway, model) +
+  `src/features/atlas/model/building.ts`; add V1/V2 run-state adapters; blocking-vs-non-blocking
+  question distinction; real running/failed/heartbeat state (drop the 20-minute stage-boundary
+  guess); late-telemetry polling; honest empties; merged/published vs deployed-live distinction.
 
 **Mid-session external event (08:09):** `docs/pipeline v2/IMPLEMENTATION_PLAN.md` (Carlo's
 delivery-cadence plan) appeared untracked while M4 was underway — authored outside this session,
@@ -201,6 +201,36 @@ prompts/README.md V1-vs-V2 section.
   make the quality bar contradict the gates). `content.config.ts` researchFloors field
   deleted (no guide ever declared it) + its tests; scaffold ledger blurb updated.
 - Japan regression suites + full suite green throughout (160 files / 2526 + new).
+
+## M6 — done (connected lifecycle correctness)
+
+- **Run-scoped attempts:** `bumpChangeAttempt` takes `runKey` (the change branch suffix —
+  issue number or dispatch run id). Same key ⇒ counts up (retries of stuck work still cap at
+  3); new key ⇒ resets to 1 (three successful runs no longer consume the guide's lifetime
+  allowance — the 4th request used to trip the breaker). `gate budget --run-key` wired;
+  change.yml passes `issue || run_id`. Legacy no-key callers keep monotonic V1 semantics.
+  V2 research attempts were already per-run by construction (run.v2.json).
+- **Same-slug exclusion:** research-pass.yml + research-pass-v2.yml concurrency groups renamed
+  `research-<slug>` → `guide-<slug>`, matching change.yml's — any two runs on one guide now
+  queue (research⇄change can no longer land concurrently). docs/reference/pipeline.md updated.
+- **Answer routing:** new `pipeline answers-route` (reads committed state via readAnyRunState +
+  the draft flag; emits target=research|change + the research branch found on origin) and
+  `pipeline answers-apply` (deterministic: `applyAnswers` marks ledger cards `- **A:** …` /
+  `Status: answered` — the exact shape `plan.mjs answeredQuestions()` reads back — idempotent,
+  missing ids red the step, commit+push on the research branch). change.yml routes BEFORE
+  branch/budget, so a research-routed answer spends no change machinery and pushes no stray
+  change branch; published guides keep the change-run path untouched.
+- **Pretrip in-flight detection:** `hasRecertInFlight` watched `recert/<slug>` — a namespace
+  that stopped existing when recert's acting half moved to change.yml — so it detected NOTHING.
+  Now watches `change/<slug>-*` (pure helpers `inFlightBranchPattern`/`hasInFlightFromRefs`,
+  exported + tested); a failed lookup never blocks a dispatch.
+- **Recert partial-dispatch reporting:** `--dispatch` used to exit 0 unless EVERY dispatch
+  failed; a partial failure now exits 1 naming the count (dispatches that succeeded still went
+  out; the run just stops lying about completeness).
+- Tests: `pipeline-v2-lifecycle.test.mjs` (17) — run-key scoping, routing decisions,
+  applyAnswers (incl. the answeredQuestions round-trip contract, idempotence, missing ids,
+  multi-line flattening), pretrip namespace, recert exit, change.yml wiring. Orchestration test
+  updated for the group rename. Full suite 162 files / 2543 ✓ · lint ✓ · typecheck ✓.
 
 ## Decisions made within engineering discretion
 

@@ -63,16 +63,27 @@ export function attemptsOf(state, lifecycle) {
   return state?.attempts || 0;
 }
 
-export async function bumpChangeAttempt(slug, { now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {
+// Attempt counters are scoped to a RUN, not the guide's lifetime (M6, Pipeline V2). The run
+// key is the change branch's suffix (issue number, or the dispatch run id): retries of the
+// SAME work share a key and count toward the cap, while a NEW request starts at attempt 1 —
+// three successful change runs must never consume a guide's allowance for the fourth.
+export async function bumpChangeAttempt(slug, { now = new Date().toISOString(), intakeDir = INTAKE_DIR, runKey = null } = {}) {
   const state = (await readState(slug, { intakeDir })) || { slug, createdAt: now, updatedAt: now, stages: {}, attempts: 0, notes: [] };
-  state.change = { ...(state.change || {}), attempts: (state.change?.attempts || 0) + 1, updatedAt: now };
+  const prev = state.change || {};
+  const sameRun = runKey == null || prev.runKey === runKey;
+  state.change = {
+    ...prev,
+    attempts: sameRun ? (prev.attempts || 0) + 1 : 1,
+    runKey: runKey ?? prev.runKey ?? null,
+    updatedAt: now,
+  };
   state.updatedAt = now;
   await mkdir(path.join(intakeDir, slug), { recursive: true });
   await writeFile(statePath(slug, intakeDir), JSON.stringify(state, null, 2) + "\n");
   return state;
 }
 
-async function gateBudget({ slug, lifecycle = "research", branch, cap = CAPS[lifecycle] || 5 }) {
+async function gateBudget({ slug, lifecycle = "research", branch, cap = CAPS[lifecycle] || 5, runKey = null }) {
   const before = await readState(slug);
   if (lifecycle === "research" && before && !nextStage(before)) {
     console.log(`[budget] ${slug} already reached verified — nothing to do.`);
@@ -80,7 +91,7 @@ async function gateBudget({ slug, lifecycle = "research", branch, cap = CAPS[lif
     return 0;
   }
 
-  const state = lifecycle === "change" ? await bumpChangeAttempt(slug) : await bumpAttempt(slug);
+  const state = lifecycle === "change" ? await bumpChangeAttempt(slug, { runKey }) : await bumpAttempt(slug);
   const attempts = attemptsOf(state, lifecycle);
   emitOutput("attempts", String(attempts));
   emitOutput("next", nextStage(state) || "");

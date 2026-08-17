@@ -76,9 +76,11 @@ permissions:
   issues: write
   actions: write # the void auto-retry re-dispatches this workflow
 
-# Two dispatches for the same slug would otherwise race the same research/<slug> branch.
+# ONE guide-<slug> group across research (V1 + V2) AND change: two dispatches for the same slug
+# would race the same branch, and a research run and a change run interleaving on one guide
+# could land conflicting edits (M6 — they share an exclusion boundary now).
 concurrency:
-  group: research-${{ inputs.slug }}
+  group: guide-${{ inputs.slug }}
   cancel-in-progress: false
 
 jobs:

@@ -95,8 +95,8 @@ export function staleItemCount(entry: RecertByGuide[string] | undefined): number
 }
 
 // Pure decision: auto-dispatch a recert for this in-window guide? Yes ONLY when it has stale facts
-// AND no recert is already in flight (open recert/<slug> PR or branch — passed in by the caller,
-// which does the actual gh/git lookup). Everything else is a no, with a human-readable reason.
+// AND no staleness change run is already in flight (open change/<slug>-* PR or branch — passed in
+// by the caller, which does the actual gh/git lookup). Everything else is a no, with a reason.
 export function shouldDispatch(
   g: GuideInWindow,
   staleCount: number,
@@ -138,21 +138,32 @@ function gh(args: string[]): string {
   return execFileSync("gh", args, { encoding: "utf8" });
 }
 
-// Is a recert already covering this guide? True if an open freshness PR exists, or if the
-// remote recert/<slug> branch exists (a run mid-flight that hasn't opened its PR yet). Either way,
-// dispatching a second one would just spend agent tokens on work already in progress.
+// The branch namespace an in-flight recert actually lives in (M6 fix). Recert's acting half is
+// the CHANGE lifecycle — recert.yml dispatches change.yml, whose branches are
+// `change/<slug>-<issue-or-run>`. The old `recert/<slug>` namespace this used to check no
+// longer exists, so the in-flight detection detected NOTHING and every daily run could stack a
+// second dispatch on a guide already being handled.
+export function inFlightBranchPattern(slug: string): string {
+  return `change/${slug}-*`;
+}
+
+/** Pure: does an ls-remote listing show any in-flight change branch? (Branches are deleted on
+    merge, so an existing branch IS the in-flight signal; an open PR implies its branch.) */
+export function hasInFlightFromRefs(lsRemoteOutput: string): boolean {
+  return lsRemoteOutput.trim().length > 0;
+}
+
+// Is a staleness change run already covering this guide? Checked against the CHANGE branch
+// namespace; dispatching a second one would just spend agent tokens on work already in progress.
 function hasRecertInFlight(slug: string): boolean {
   try {
-    const prs = gh(["pr", "list", "--head", `recert/${slug}`, "--state", "open", "--json", "number"]);
-    if ((JSON.parse(prs) as unknown[]).length > 0) return true;
+    const refs = execFileSync(
+      "git", ["ls-remote", "--heads", "origin", inFlightBranchPattern(slug)],
+      { encoding: "utf8" },
+    );
+    return hasInFlightFromRefs(refs);
   } catch {
-    // gh unavailable / no PRs — fall through to the branch check.
-  }
-  try {
-    execFileSync("git", ["ls-remote", "--exit-code", "--heads", "origin", `recert/${slug}`], { stdio: "ignore" });
-    return true; // exit 0 → the branch exists
-  } catch {
-    return false; // non-zero → no such branch
+    return false; // lookup unavailable — do not block the dispatch on a failed check
   }
 }
 
