@@ -27,14 +27,16 @@ export {
   derivePhases,
   deriveNotePanel,
   PHASE_STATUS_LABEL,
+  adaptV2Snapshot,
+  EMPTY_SNAPSHOT,
 } from "./model/progress";
 export type {
-  PipelineState, ProgressView, StageView, Stage, PipelineStage,
+  PipelineState, ProgressView, StageView, Stage, PipelineStage, RunSnapshot,
   PageState, Tone, StatusPill, PhaseView, PhaseStatus, NoteState, NotePanelView,
 } from "./model/progress";
 export {
-  parseRunEvents, pushBounded, fetchTone, fetchHost,
-  EMPTY_RUN_EVENTS, FETCH_BUFFER, DECISION_BUFFER,
+  parseRunEvents, pushBounded, fetchTone, fetchHost, probeEventsThisTick,
+  EMPTY_RUN_EVENTS, FETCH_BUFFER, DECISION_BUFFER, EVENT_PROBES, EVENT_RECHECK_EVERY,
 } from "./model/run-events";
 export type {
   RunEvents, FetchEvent, DecisionEvent, Nugget, RunCounters, FetchTone,

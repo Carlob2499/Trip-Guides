@@ -9,7 +9,8 @@
  *  · WorkerGateway — WRITES. Answers and approvals go to the site's backend Worker, authenticated
  *    with the owner key. Injectable `fetchImpl` on both so tests run zero-network.
  */
-import type { PipelineState } from "./model/progress";
+import type { PipelineState, RunSnapshot } from "./model/progress";
+import { adaptV2Snapshot, EMPTY_SNAPSHOT } from "./model/progress";
 import { toProposals, REVISION_LABEL } from "./model/proposals";
 import type { RevisionProposal } from "./model/proposals";
 import { parseRunEvents } from "./model/run-events";
@@ -28,9 +29,24 @@ export interface ProgressGateway {
    *  a wrong slug guess looks identical to "not scaffolded yet" from here; callers decide how
    *  long to wait before treating a persistent null as "check back later"). */
   fetchState(slug: string): Promise<PipelineState | null>;
+  /**
+   * The generation-aware read (M7): the V2 run record (research-v2/<slug> branch, run.v2.json)
+   * when one exists — with its REAL run status, failure classification and deployed-live fact —
+   * else the V1 state through the same shape with those facts honestly null. A V2 file that
+   * exists but cannot be read comes back `malformed: true`, never as "no run".
+   */
+  fetchRun(slug: string): Promise<RunSnapshot>;
   /** True once the guide's own committed JSON on `main` has no `draft: true` — the moment
-   *  research-pass.yml's publish-on-verify step (scripts/pipeline/publish.mjs) has landed. */
+   *  research-pass.yml's publish-on-verify step (scripts/pipeline/publish.mjs) has landed.
+   *  This is the MERGE fact. It says nothing about the deploy — that is isLive(). */
   isPublished(slug: string): Promise<boolean>;
+  /**
+   * The DEPLOY fact: is the published guide actually in the live site's own search index
+   * (dist/data/search-index.json — regenerated per deploy, drafts excluded by build)?
+   * Resolves true / false / null — null when no site base is configured or the index is
+   * unreachable, and an unknown must render as unknown, never as "live".
+   */
+  isLive(slug: string): Promise<boolean | null>;
   /** Intake questions AND blocking forks from the research branch's ledger, or empty if none. */
   fetchQuestions(slug: string): Promise<IntakeQuestion[]>;
   /** Open feedback-driven revision proposals for this guide. Owner-facing. */
@@ -51,6 +67,9 @@ export interface GithubGatewayOptions {
   repo: string;
   /** Defaults to "main" — the branch a merged, published guide lives on. */
   baseBranch?: string;
+  /** The live site's own base path/origin (e.g. "/Trip-Guides/"). Enables isLive(); absent,
+   *  isLive() honestly resolves null rather than probing a URL nobody configured. */
+  siteBase?: string;
   /** Injectable for tests; defaults to the platform fetch. */
   fetchImpl?: typeof fetch;
 }
@@ -65,7 +84,7 @@ const FETCH_TIMEOUT_MS = 8000;
 const PROPOSAL_PAGE = 20;
 
 export function createGithubGateway(opts: GithubGatewayOptions): ProgressGateway {
-  const { owner, repo, baseBranch = "main", fetchImpl } = opts;
+  const { owner, repo, baseBranch = "main", siteBase, fetchImpl } = opts;
   const doFetch: typeof fetch = fetchImpl || ((...args) => fetch(...args));
 
   async function getText(url: string): Promise<string | null> {
@@ -108,6 +127,20 @@ export function createGithubGateway(opts: GithubGatewayOptions): ProgressGateway
       const onMain = await getJson(raw(baseBranch, `guides-intake/${slug}/state.json`));
       return (onMain as PipelineState) ?? null;
     },
+    async fetchRun(slug) {
+      // V2 first: run.v2.json on the V2 research branch (each stage job commits it there). The
+      // raw text is fetched separately from its parse so "file exists but is not a run" reads
+      // as MALFORMED — the fail-closed rule — while "no file" falls through to V1 honestly.
+      const v2Text = await getText(raw(`research-v2/${slug}`, `guides-intake/${slug}/run.v2.json`));
+      if (v2Text != null) {
+        let parsed: unknown;
+        try { parsed = JSON.parse(v2Text); } catch { parsed = null; }
+        return adaptV2Snapshot(parsed);
+      }
+      const state = await this.fetchState(slug);
+      if (!state) return EMPTY_SNAPSHOT;
+      return { ...EMPTY_SNAPSHOT, version: 1, state };
+    },
     async isPublished(slug) {
       // Every guide is a DIRECTORY (CLAUDE.md; gated by guide-shape-uniform.test.mjs), so the
       // meta file is `<slug>/_guide.json`. This read used to point at the flat `<slug>.json`,
@@ -118,6 +151,15 @@ export function createGithubGateway(opts: GithubGatewayOptions): ProgressGateway
       // Publishing DELETES the key rather than setting it false (publish.mjs), so "no draft
       // key" and "draft: false" must both read as published — which `!draft` gives for free.
       return !(guide as { draft?: boolean }).draft;
+    },
+    async isLive(slug) {
+      if (!siteBase) return null; // unconfigured is unknown, and unknown must never read "live"
+      const url = `${siteBase.replace(/\/$/, "")}/data/search-index.json?t=${Date.now()}`;
+      const index = await getJson(url);
+      if (!Array.isArray(index)) return null; // unreachable/unparseable — still unknown
+      // The index is rebuilt from PUBLISHED guides on every deploy, so the slug appearing in
+      // the deployed copy is the deploy actually carrying the published guide.
+      return index.some((r) => (r as { slug?: string })?.slug === slug);
     },
     async fetchQuestions(slug) {
       // Questions and forks are research state, so they live in the ledger — intake.md is
@@ -139,10 +181,13 @@ export function createGithubGateway(opts: GithubGatewayOptions): ProgressGateway
     },
     async fetchRunEvents(slug) {
       // Research-branch only: telemetry is a property of a RUN, and the branch is where a run
-      // lives. `main` never carries it, so there is no fallback read to spend a request on.
-      // A 404 (today, every time) becomes EMPTY_RUN_EVENTS via parseRunEvents(null) — the UI
-      // stops asking after a few of those rather than polling a file forever (see ui/progress.js).
-      return parseRunEvents(await getJson(raw(`research/${slug}`, `guides-intake/${slug}/events.json`)));
+      // lives (`main` never carries it). Both generations' branches are tried — a V2 run's
+      // events would live on research-v2/<slug>. A 404 becomes EMPTY_RUN_EVENTS via
+      // parseRunEvents(null); the UI keeps LOOKING while the run is active (probeEventsThisTick
+      // in model/run-events.ts), just less often, so telemetry that starts late still surfaces.
+      const v1 = await getJson(raw(`research/${slug}`, `guides-intake/${slug}/events.json`));
+      if (v1) return parseRunEvents(v1);
+      return parseRunEvents(await getJson(raw(`research-v2/${slug}`, `guides-intake/${slug}/events.json`)));
     },
   };
 }

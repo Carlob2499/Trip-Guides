@@ -91,3 +91,24 @@ describe("deriveBuildingGuides", () => {
     expect(deriveBuildingGuides([{ slug: "korea", title: "South Korea", state: null }])).toEqual([]);
   });
 });
+
+/* ── M7: the V2 run record is the newer word on "finished" ────────────────────────────────── */
+
+describe("isGuideBuilding with a V2 run record (M7)", () => {
+  const v1Incomplete = { stages: { scaffold: "2026-08-17T10:00:00Z", verified: null } };
+
+  it("an unfinished V2 run reads as building, whatever V1's file says", () => {
+    expect(isGuideBuilding({ draft: true, state: null, runV2: { status: "running", stages: { critic: { status: "queued" } } } })).toBe(true);
+  });
+
+  it("a COMPLETE V2 run on a still-draft guide is a guide being WITHHELD — not building", () => {
+    // The V2 form of the Japan case: research finished, draft kept deliberately.
+    expect(isGuideBuilding({ draft: true, state: v1Incomplete, runV2: { status: "complete" } })).toBe(false);
+    expect(isGuideBuilding({ draft: true, state: v1Incomplete, runV2: { status: "running", stages: { critic: { status: "complete" } } } })).toBe(false);
+  });
+
+  it("no V2 record keeps the V1 rule exactly", () => {
+    expect(isGuideBuilding({ draft: true, state: v1Incomplete, runV2: null })).toBe(true);
+    expect(isGuideBuilding({ draft: true, state: v1Incomplete })).toBe(true);
+  });
+});

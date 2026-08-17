@@ -30,6 +30,13 @@ export interface RunStateLike {
   stages?: Partial<Record<PipelineStage, string | null>> | null;
 }
 
+/** The slice of a V2 run record (guides-intake/<slug>/run.v2.json) this rule reads. Same loose
+    posture as RunStateLike: `JSON.parse`d off disk, every level optional. */
+export interface RunStateV2Like {
+  status?: string | null;
+  stages?: Partial<Record<string, { status?: string | null } | null>> | null;
+}
+
 export interface BuildingGuideInput {
   slug: string;
   title: string;
@@ -38,6 +45,8 @@ export interface BuildingGuideInput {
   draft?: boolean;
   /** Parsed run state, or null when the file is missing, unreadable or unparseable. */
   state?: RunStateLike | null;
+  /** Parsed V2 run record, when one exists on main (a landed V2 run). Null otherwise. */
+  runV2?: RunStateV2Like | null;
 }
 
 export interface BuildingGuide {
@@ -49,14 +58,24 @@ export interface BuildingGuide {
   country: string | null;
 }
 
-/** True only for a draft guide whose run state exists and has not yet cleared `verified`.
+/** True only for a draft guide whose run state exists and has not yet finished its research.
  *
  *  No run state on disk — never scaffolded, deleted, or unreadable — reads as FALSE, not as
  *  "probably building". The page can only vouch for a run it can actually see, and refusing
  *  rather than guessing is the same call `scripts/geocode-venues.mjs` makes when a result
- *  doesn't match the name it asked about. */
-export function isGuideBuilding(guide: Pick<BuildingGuideInput, "draft" | "state">): boolean {
+ *  doesn't match the name it asked about.
+ *
+ *  V2 (M7): a landed V2 run record on main is the newer, truer word on the same question — a
+ *  run whose own status is `complete` (or whose critic stage completed) is finished research,
+ *  so a still-draft guide with one is a guide being WITHHELD, not built (the same Japan case
+ *  the V1 `verified` condition exists for). */
+export function isGuideBuilding(guide: Pick<BuildingGuideInput, "draft" | "state" | "runV2">): boolean {
   if (guide.draft !== true) return false;
+  if (guide.runV2) {
+    if (guide.runV2.status === "complete") return false;
+    if (guide.runV2.stages?.critic?.status === "complete") return false;
+    return true; // a V2 run exists and has not finished — building, whatever V1's file says
+  }
   if (!guide.state) return false;
   return !guide.state.stages?.verified;
 }

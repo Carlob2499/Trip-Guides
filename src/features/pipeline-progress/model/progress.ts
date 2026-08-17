@@ -20,7 +20,9 @@ export const STAGE_LABEL: Record<Stage, string> = {
   passB: "Pass B — local, authentic, crowd-aware",
   reconcile: "Reconcile A + B → one guide",
   verified: "Verify PASS + build clean",
-  published: "Published — live on the site",
+  // "merged", deliberately not "live": publication is the merge to main; the Pages deploy is a
+  // separate later fact (ProgressView.deployedLive) and this page must not conflate the two.
+  published: "Published — merged to the site",
 };
 
 /** Mirrors scripts/pipeline.mjs's on-disk guides-intake/<slug>/state.json shape exactly. */
@@ -31,6 +33,77 @@ export interface PipelineState {
   stages: Record<PipelineStage, string | null>;
   attempts: number;
   notes: { stage: string; note: string; at: string }[];
+}
+
+/* ── V2 run-state adapter ──────────────────────────────────────────────────────────────────
+   Pipeline V2 records a run in guides-intake/<slug>/run.v2.json (scripts/pipeline/v2/) with
+   per-stage status, a run-level status, failure classification, and publication vs
+   deployed-live as DISTINCT facts. This adapts that richer record into the view this page
+   already paints — plus the facts V1 never had, which is what makes the page stop guessing. */
+
+/** What one poll learned about the run, whichever pipeline generation produced it. */
+export interface RunSnapshot {
+  /** 0 = no run found · 1 = V1 state.json · 2 = V2 run.v2.json. */
+  version: 0 | 1 | 2;
+  state: PipelineState | null;
+  /** V2 only — the run's own recorded status. Null for V1 (it never records one). */
+  runStatus: "pending" | "running" | "paused" | "complete" | "failed" | "stuck" | null;
+  /** V2 only — the recorded failure classification, when the run failed. */
+  failureClass: string | null;
+  /** V2 only — the run's own deployed-live fact (null = not yet known, which is honest). */
+  deployedLive: boolean | null;
+  /** True when a V2 file EXISTS but cannot be read as a run — never silently "no run". */
+  malformed: boolean;
+}
+
+export const EMPTY_SNAPSHOT: RunSnapshot = {
+  version: 0, state: null, runStatus: null, failureClass: null, deployedLive: null, malformed: false,
+};
+
+/** V2 stage keys → this page's stations. The critic IS the verify station: it runs the verify
+    loop and is the last research stage before landing. */
+const V2_STAGE_TO_STATION: Record<string, PipelineStage> = {
+  scaffold: "scaffold", passA: "passA", passB: "passB", reconcile: "reconcile", critic: "verified",
+};
+
+/**
+ * Adapt a raw run.v2.json document. A document that is not a compatible V2 run state comes back
+ * `malformed: true` — the caller must surface that, never treat it as "no run" (the fail-closed
+ * rule the V2 contracts carry, applied at the reading edge too).
+ */
+export function adaptV2Snapshot(raw: unknown): RunSnapshot {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+    return { ...EMPTY_SNAPSHOT, version: 2, malformed: true };
+  }
+  const r = raw as Record<string, unknown>;
+  if (!/^wp-run\/2\./.test(String(r.schemaVersion ?? "")) || !r.stages || typeof r.stages !== "object") {
+    return { ...EMPTY_SNAPSHOT, version: 2, malformed: true };
+  }
+  const v2Stages = r.stages as Record<string, { status?: string; endedAt?: string | null } | undefined>;
+  const stages = {} as Record<PipelineStage, string | null>;
+  for (const key of PIPELINE_STAGE_ORDER) stages[key] = null;
+  for (const [v2Key, station] of Object.entries(V2_STAGE_TO_STATION)) {
+    const st = v2Stages[v2Key];
+    if (st?.status === "complete") stages[station] = st.endedAt ?? "";
+  }
+  const publication = (r.publication ?? {}) as { deployedLive?: boolean | null };
+  const status = String(r.status ?? "");
+  const failure = r.failure as { class?: string } | null | undefined;
+  return {
+    version: 2,
+    state: {
+      slug: String(r.slug ?? ""),
+      createdAt: String(r.createdAt ?? ""),
+      updatedAt: String(r.updatedAt ?? ""),
+      stages,
+      attempts: Number((r.attempts as { total?: number } | undefined)?.total ?? 0) || 0,
+      notes: [],
+    },
+    runStatus: (["pending", "running", "paused", "complete", "failed", "stuck"] as const).find((s) => s === status) ?? null,
+    failureClass: failure?.class ?? null,
+    deployedLive: typeof publication.deployedLive === "boolean" ? publication.deployedLive : null,
+    malformed: false,
+  };
 }
 
 export interface StageView {
@@ -52,13 +125,21 @@ export interface ProgressView {
   attempts: number;
   /** True once every stage (including `published`) is done. */
   isDone: boolean;
-  /** No forward movement in a long time and not yet done — surfaced honestly, never hidden. */
+  /** No forward movement (V1's clock heuristic) or a RECORDED failure/stuck status (V2's real
+   *  state) and not yet done — surfaced honestly, never hidden. */
   isStuck: boolean;
+  /** True only when the run RECORDED a failure (V2). V1 has no failure record — false there. */
+  runFailed: boolean;
+  /** The Pages deploy actually carrying the published guide: true / false / null = unknown.
+   *  Distinct from the `published` stage (the merge) on purpose — a merge is not "live". */
+  deployedLive: boolean | null;
 }
 
-/** No checkpoint update in this long, with the guide still not fully done, reads as "stuck"
- *  rather than "still working" — matches research-pass.yml's own circuit-breaker judgment call,
- *  just surfaced to the person waiting instead of only to a GitHub issue. */
+/** V1 ONLY: no checkpoint update in this long, with the guide still not fully done, reads as
+ *  "stuck" rather than "still working". A guess by construction — V1 records nothing between
+ *  stage boundaries, and a long healthy stage looks identical to a dead run from here. V2 runs
+ *  never use this clock: their run.v2.json records running/failed/stuck for real, so a
+ *  40-minute healthy Pass A stays "running" instead of false-positiving "Stalled". */
 export const STUCK_THRESHOLD_MS = 20 * 60 * 1000;
 
 function emptyStages(): StageView[] {
@@ -72,14 +153,21 @@ function emptyStages(): StageView[] {
  */
 export function deriveProgress(
   state: PipelineState | null,
-  opts: { now: Date; published: boolean },
+  opts: {
+    now: Date;
+    published: boolean;
+    /** V2's recorded run status; null/absent for V1 runs (they record none). */
+    runStatus?: RunSnapshot["runStatus"];
+    /** The deploy truth, when a caller has one (V2 record, or the site's own index probe). */
+    deployedLive?: boolean | null;
+  },
 ): ProgressView {
-  const { now, published } = opts;
+  const { now, published, runStatus = null, deployedLive = null } = opts;
 
   if (!state) {
     return {
       stages: emptyStages(), currentIndex: 0, percent: 0, elapsedMs: 0, sinceUpdateMs: 0,
-      attempts: 0, isDone: false, isStuck: false,
+      attempts: 0, isDone: false, isStuck: false, runFailed: false, deployedLive: null,
     };
   }
 
@@ -97,11 +185,15 @@ export function deriveProgress(
   const elapsedMs = Math.max(0, now.getTime() - new Date(state.createdAt).getTime());
 
   const sinceUpdateMs = Math.max(0, now.getTime() - new Date(state.updatedAt).getTime());
-  const isStuck = !isDone && sinceUpdateMs > STUCK_THRESHOLD_MS;
+  const runFailed = runStatus === "failed" || runStatus === "stuck";
+  // V2 runs report their REAL status, so the clock guess is not used at all: a long healthy
+  // stage is "running" until the run itself records otherwise. V1 keeps the heuristic — it
+  // records nothing between checkpoints, and a guess labeled as such beats silence.
+  const isStuck = !isDone && (runStatus ? runFailed : sinceUpdateMs > STUCK_THRESHOLD_MS);
 
   return {
     stages, currentIndex, percent, elapsedMs, sinceUpdateMs,
-    attempts: state.attempts || 0, isDone, isStuck,
+    attempts: state.attempts || 0, isDone, isStuck, runFailed, deployedLive,
   };
 }
 
@@ -193,22 +285,29 @@ export type Tone = "muted" | "accent" | "warn" | "green";
 
 export interface PageStateInput {
   view: ProgressView;
-  /** True only once a real state.json has actually been read. `deriveProgress(null, …)` is a
+  /** True only once a real state file has actually been read. `deriveProgress(null, …)` is a
    *  valid view, so the view alone cannot tell "not started" from "nothing found". */
   hasRun: boolean;
-  /** How many questions the run has emitted and nobody has answered. */
+  /** BLOCKING forks — decisions the run is STOPPED on. Only these put the page in "awaiting":
+   *  research proceeds past ordinary questions on its recorded assumption, so an open question
+   *  alone must never claim the run is paused (that claim was this page lying about V1 runs). */
+  blockingForks: number;
+  /** Non-blocking open questions — surfaced as cards, never as a paused page. */
   openQuestions: number;
+  /** A V2 state file exists but is unreadable — surfaced as stalled, never as "no run". */
+  malformed?: boolean;
 }
 
 /**
  * Which of the five states the page is in. Order matters and is deliberate: a finished run is
- * finished whatever else is outstanding, and an open question OUTRANKS the stall it caused —
+ * finished whatever else is outstanding, and a blocking fork OUTRANKS the stall it caused —
  * "answer this" is the same fact as "nothing has moved", stated in the form the reader can act on.
  */
-export function derivePageState({ view, hasRun, openQuestions }: PageStateInput): PageState {
+export function derivePageState({ view, hasRun, blockingForks, malformed = false }: PageStateInput): PageState {
+  if (malformed) return "stalled"; // the state exists and cannot be read — a human problem, not an empty page
   if (!hasRun) return "empty";
   if (view.isDone) return "done";
-  if (openQuestions > 0) return "awaiting";
+  if (blockingForks > 0) return "awaiting";
   if (view.isStuck) return "stalled";
   return "running";
 }
@@ -226,7 +325,8 @@ export function deriveStatusPill(page: PageState, view: ProgressView): StatusPil
     case "awaiting":
       return { text: "Waiting on you", tone: "warn" };
     case "stalled":
-      return { text: "Stalled", tone: "warn" };
+      // A recorded failure (V2) is a stronger, truer claim than the V1 clock's "stalled".
+      return { text: view.runFailed ? "Failed" : "Stalled", tone: "warn" };
     case "running": {
       const stage = view.stages[view.currentIndex];
       return { text: stage ? "Researching · " + STAGE_SHORT[stage.key] : "Researching", tone: "accent" };
@@ -248,14 +348,22 @@ export function deriveProgressLine(page: PageState, view: ProgressView): string 
   const total = view.stages.length;
   const stage = view.stages[view.currentIndex];
   switch (page) {
-    case "done":
-      return `All ${total} stages cleared in ${formatElapsed(view.elapsedMs)}.`;
+    case "done": {
+      // Merged and live are different facts, said differently: true = the deploy carrying the
+      // guide is confirmed; false/null = merged, deploy not yet confirmed — never claimed.
+      const tail = view.deployedLive === true
+        ? "Live on the site."
+        : "Merged — the site deploy that carries it hasn't been confirmed yet.";
+      return `All ${total} stages cleared in ${formatElapsed(view.elapsedMs)}. ${tail}`;
+    }
     case "awaiting":
       return stage
         ? `Paused at stage ${view.currentIndex + 1} of ${total} — the run needs an answer before it goes on.`
         : "Paused — the run needs an answer before it goes on.";
     case "stalled":
-      return `No checkpoint for ${formatElapsed(view.sinceUpdateMs)} — stage ${view.currentIndex + 1} of ${total} never finished.`;
+      return view.runFailed
+        ? `The run recorded a failure at stage ${view.currentIndex + 1} of ${total} — it will not continue without a human.`
+        : `No checkpoint for ${formatElapsed(view.sinceUpdateMs)} — stage ${view.currentIndex + 1} of ${total} never finished.`;
     case "running":
       return stage
         ? `Stage ${view.currentIndex + 1} of ${total} — ${STAGE_ACTIVITY[stage.key]}.`
@@ -343,7 +451,11 @@ const STALLED_COPY =
 const DONE_COPY = "This run has finished — there is nothing left for it to absorb.";
 const EMPTY_COPY = "Start a run and this is where it asks you whatever it needs.";
 
-export function deriveNotePanel(page: PageState, note: NoteState): NotePanelView {
+export function deriveNotePanel(
+  page: PageState,
+  note: NoteState,
+  { openQuestions = 0 }: { openQuestions?: number } = {},
+): NotePanelView {
   if (note === "processing") {
     return { heading: "Sending your answer…", tone: "warn", acceptsInput: true, placeholder: null };
   }
@@ -360,6 +472,13 @@ export function deriveNotePanel(page: PageState, note: NoteState): NotePanelView
     case "empty":
       return { heading: "Nothing to add to yet", tone: "muted", acceptsInput: false, placeholder: EMPTY_COPY };
     default:
+      // Non-blocking questions while the run keeps working: a REAL endpoint exists (POST
+      // /answer routes mid-run answers onto the research branch's ledger), so the control is
+      // honest input, not a textarea that posts nowhere. With no questions open the panel
+      // stays the admitted gap it always was.
+      if (openQuestions > 0) {
+        return { heading: "Questions to answer whenever — research continues either way", tone: "accent", acceptsInput: true, placeholder: null };
+      }
       return { heading: "Add to the research", tone: "muted", acceptsInput: false, placeholder: MONITORING_COPY };
   }
 }

@@ -6,12 +6,12 @@
 
 ## Position
 
-- **Last completed milestone:** M6 — Connected lifecycle correctness
-- **Current milestone:** M7 — Honest progress compatibility and telemetry
-- **Exact next action:** Read `src/features/pipeline-progress/` (gateway, model) +
-  `src/features/atlas/model/building.ts`; add V1/V2 run-state adapters; blocking-vs-non-blocking
-  question distinction; real running/failed/heartbeat state (drop the 20-minute stage-boundary
-  guess); late-telemetry polling; honest empties; merged/published vs deployed-live distinction.
+- **Last completed milestone:** M7 — Honest progress compatibility and telemetry
+- **Current milestone:** M8 — Full verification and handoff
+- **Exact next action:** Full Ship Loop (build/lint/typecheck/test), offline verify vs published
+  guides (record legacy n/a), preview checks at 375px + desktop incl. dark + reduced-motion on
+  progress/hub, grep dist/ for stale stage labels, write the manual V2 canary command + secrets
+  list, finalize this file + handoff, session-close HANDOFF update, /code-review.
 
 **Mid-session external event (08:09):** `docs/pipeline v2/IMPLEMENTATION_PLAN.md` (Carlo's
 delivery-cadence plan) appeared untracked while M4 was underway — authored outside this session,
@@ -231,6 +231,38 @@ prompts/README.md V1-vs-V2 section.
   applyAnswers (incl. the answeredQuestions round-trip contract, idempotence, missing ids,
   multi-line flattening), pretrip namespace, recert exit, change.yml wiring. Orchestration test
   updated for the group rename. Full suite 162 files / 2543 ✓ · lint ✓ · typecheck ✓.
+
+## M7 — done (honest progress compatibility)
+
+- **V2 adapter:** `adaptV2Snapshot` (model/progress.ts) maps run.v2.json → the page's station
+  view (critic → the verify station), carrying the REAL facts V1 never had: runStatus,
+  failureClass, publication.deployedLive. Fail-closed at the reading edge: a V2 file that
+  exists but isn't a run comes back `malformed: true` → page state "stalled", never "no run".
+  `gateway.fetchRun` reads research-v2/<slug> run.v2.json first, falls back to the V1 chain
+  through one `RunSnapshot` shape (V1's runStatus honestly null).
+- **Blocking vs non-blocking:** `derivePageState` takes `blockingForks` separately — only a
+  fork pauses the page. An open question no longer produces the false "Paused / Waiting on
+  you" claim (V1 research proceeds on its assumption); `deriveNotePanel` now offers the REAL
+  answer control while running with open questions (the endpoint exists — M6 routes mid-run
+  answers onto the research branch).
+- **Real running/failed state:** with a V2 runStatus present the 20-minute clock guess is not
+  used at all — a 3-hour healthy Pass A stays "running"; a recorded failure/stuck is stalled
+  immediately with pill "Failed" and a failure line. V1 keeps its labeled clock heuristic
+  (nothing better exists there; documented in STUCK_THRESHOLD_MS's comment).
+- **Merged ≠ live:** STAGE_LABEL.published now says "merged"; the done line says "Live on the
+  site." ONLY when deployedLive === true, else "Merged — the site deploy that carries it
+  hasn't been confirmed yet." Deploy truth: the V2 record's own fact, else `gateway.isLive`
+  (the deployed site's own search-index.json — rebuilt per deploy, drafts excluded; null =
+  unknown, and unknown never renders "live").
+- **Late telemetry:** `probeEventsThisTick` (pure, tested) — every tick for the first 3
+  misses, then every 4th tick WHILE the run is active, always once seen, never after done.
+  fetchRunEvents tries both generations' branches. Events panels stay honest-empty (V2's
+  run-state telemetry is not force-mapped into the V1 events shape — deferred to the UI pass).
+- **Atlas BUILDING:** building.ts prefers a landed V2 run record — a complete V2 run on a
+  still-draft guide reads as WITHHELD, not building (the Japan case, V2 form). index.astro
+  reads run.v2.json beside state.json.
+- Tests: progress/gateway/run-events/building suites extended (feature suites 933 ✓ total);
+  full `npm test` 164 files / 2566 ✓ · build ✓ · lint ✓ · typecheck ✓.
 
 ## Decisions made within engineering discretion
 

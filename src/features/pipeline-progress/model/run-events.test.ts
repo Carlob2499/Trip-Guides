@@ -98,3 +98,29 @@ describe("fetchHost", () => {
     expect(fetchHost("")).toBe("");
   });
 });
+
+/* ── M7: late telemetry keeps being looked for ────────────────────────────────────────────── */
+
+import { probeEventsThisTick, EVENT_PROBES, EVENT_RECHECK_EVERY } from "./run-events";
+
+describe("probeEventsThisTick (M7)", () => {
+  it("probes every tick until the first misses are spent", () => {
+    for (let m = 0; m < EVENT_PROBES; m++) {
+      expect(probeEventsThisTick({ pollIndex: m + 1, misses: m, active: true, seen: false })).toBe(true);
+    }
+  });
+
+  it("keeps LOOKING while the run is active — every Nth tick, not never", () => {
+    expect(probeEventsThisTick({ pollIndex: EVENT_RECHECK_EVERY, misses: 10, active: true, seen: false })).toBe(true);
+    expect(probeEventsThisTick({ pollIndex: EVENT_RECHECK_EVERY + 1, misses: 10, active: true, seen: false })).toBe(false);
+    expect(probeEventsThisTick({ pollIndex: EVENT_RECHECK_EVERY * 5, misses: 99, active: true, seen: false })).toBe(true);
+  });
+
+  it("always probes once telemetry has been seen — it is live data now", () => {
+    expect(probeEventsThisTick({ pollIndex: 7, misses: 50, active: true, seen: true })).toBe(true);
+  });
+
+  it("never probes a finished run — nothing new can appear", () => {
+    expect(probeEventsThisTick({ pollIndex: EVENT_RECHECK_EVERY, misses: 0, active: false, seen: false })).toBe(false);
+  });
+});
