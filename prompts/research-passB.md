@@ -2,16 +2,21 @@
 
 Guide slug: {{slug}}
 
-You are stage 2 of four independent agent sessions. You are STRUCTURALLY INDEPENDENT of Pass A:
-do not read, open or reference ANY file under `src/content/guides/{{slug}}/`. Your findings go to
-their own file; a third agent merges them with Pass A's guide.
+You are stage 2 of four independent agent sessions, and your value depends on independence from
+Pass A. Your checkout may physically contain Pass A's committed work, so the wall is THIS
+contract and it is absolute: do not read, open or reference ANY file under
+`src/content/guides/{{slug}}/`. Your findings go to their own file; a third agent merges them
+with Pass A's guide. (The V2 pipeline prepares a workspace that excludes Pass A's outputs
+mechanically; this V1 pass relies on you honoring the boundary.)
 
 ## Read first
 
 - `.claude/skills/waypoint-guide-author/SKILL.md` — Pass B: the resident/blog/forum angle, the
-  different questions you ask, and the rule that every find is a T2 LEAD verified against a
-  primary source before it is recorded.
-- `references/verification-rules.md` — the tier ladder your leads must climb.
+  different questions you ask, and the claim-dependent verification bar (objective facts climb
+  to a primary source; experiential findings corroborate via ≥2 recent independent firsthand
+  sources).
+- `references/verification-rules.md` — the tier ladder for objective claims and the
+  corroboration bar for experiential ones (§3).
 - `references/research-efficiency.md` — the binding search budget, the reserved duty budget
   (resident phrases/slang ≥2 searches), and "Social & video lead sourcing": yt-dlp is installed
   best-effort on this runner (transcripts only, ~4 max; a failed install or pull is bot-blocked —

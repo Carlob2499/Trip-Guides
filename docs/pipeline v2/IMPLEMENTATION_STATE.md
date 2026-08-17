@@ -6,12 +6,13 @@
 
 ## Position
 
-- **Last completed milestone:** M2 — Versioned V2 contracts
-- **Current milestone:** M3 — Guide Author and prompt contracts
-- **Exact next action:** Update SKILL.md + references for the locked decisions (adaptive
-  saturation replaces fixed floors; objective-vs-experiential evidence; adaptive native-language;
-  source independence; reservation depth; transport robustness; category freshness), align
-  `.agents` skill copy via parity test, update the four research prompts to the V2 artifacts.
+- **Last completed milestone:** M3 — Guide Author and prompt contracts
+- **Current milestone:** M4 — V2 orchestration and isolation
+- **Exact next action:** Create `prompts/research-{passA,passB,reconcile,critic}-v2.md` (the V2
+  stage contracts), `.github/workflows/research-pass-v2.yml` (manual dispatch), V2 CLI subcommands
+  in `scripts/pipeline-v2.mjs` (init/stage-start/stage-complete/stage-fail/route), mechanical
+  Pass-B input preparation + deterministic exclusion test, bounded resume/retry. Update
+  prompts/README.md with the V1/V2 variant rule once the files exist.
 
 ## Branch
 
@@ -101,6 +102,39 @@ New: `scripts/pipeline/v2/{contracts,run-state,evidence,coverage,telemetry}.mjs`
 - **Telemetry:** all-null empty state, stage facts from workflow boundaries, counts derived only
   from what the evidence artifact proves, tokens/cost never inferred, merge never lets a late
   unknown erase a known value.
+
+## M3 — done (doctrine + parity; V2 prompt files deferred into M4 deliberately)
+
+- `verification-rules.md` §3: objective-vs-experiential evidence classes (official/primary for
+  objective; ≥2 recent independent firsthand for experiential; "official URL on a subjective
+  claim = fabricated citation") + source independence as FAMILIES (copied/SEO families count
+  once; unknowable independence stated, not assumed).
+- `research-efficiency.md`: the S2/S3 fixed candidate floors (16/10/6) replaced by the adaptive
+  stopping rule (duplicates/weaker trend + unresolved-evidence answer, recorded in the V2
+  saturation record).
+- NEW `references/research-depth.md`: decision-impact scaling — disagreement investigation,
+  reservation depth by importance + labeled `unconfirmed-lead` booking leads, Worth the
+  Effort/Detour retention, transport robustness by risk (door-to-door reality, group/luggage,
+  last practical return, fallback), contingencies fail-differently rule, category freshness +
+  recheck dates + recurring-event year safety, research memory ("memory proposes, current
+  research verifies").
+- `SKILL.md`: Read-first gains research-depth.md (items renumbered); candidates section floors
+  → adaptive saturation (Pass B owes coverage, not a find-count; funnel invariant kept);
+  Pass B section gains the claim-dependent bar + adaptive native-language with light audit
+  trail; "Independence is structural" reworded honestly (V1 = enforced contract, V2 =
+  mechanically prepared input).
+- `.agents` mirror REGENERATED from canonical (CLAUDE.md→AGENTS.md transform + verbatim
+  references) — parity now gated by `scripts/__tests__/pipeline-v2-skill-parity.test.mjs` (14
+  tests, whitespace-normalized doctrine assertions).
+- V1 prompts: `research-passB.md` overclaim removed ("STRUCTURALLY INDEPENDENT" → honest
+  contract wording + V2 contrast) and its verification bullet updated to the claim-dependent
+  bar. Other V1 prompts carried no floors/misleading claims.
+- **Deferred to M4 by design:** the four `-v2` prompt files land WITH `research-pass-v2.yml`,
+  because `prompt-contract.test.mjs` fails any prompt no workflow composes — the V2 prompts and
+  their workflow are one commit. (Updating the V1 prompts to V2 artifacts in place was rejected:
+  it would convert every `/new` dispatch into an unproven hybrid, violating "V2 stays
+  manual/draft-only"; recorded as the M3/M4 boundary decision.)
+- Checks: parity suite 14 ✓ · full `npm test` 158 files / 2468 ✓.
 
 ## Decisions made within engineering discretion
 

@@ -31,26 +31,33 @@ Reconcile · Critic) read this skill and execute their stage from it. Each stage
    (perishable-vs-durable, source tiers, ship/flag/omit, stopping conditions, the §8 self-check).
    Read before writing any fact.
 2. **`references/research-efficiency.md`** — the binding model economy, entity-batched and
-   risk-scaled search budgets, plus **social/video lead rules** (yt-dlp, TikTok/IG indirect) and
-   the **Research-skill discovery layer** (interactive only). Follow it instead of rediscovering
-   it.
-3. The **target guide** — `src/content/guides/<slug>/`; read only the group file the fact lives
+   risk-scaled search budgets, the **adaptive discovery stopping rule** (no fixed candidate
+   quotas — stop when new searches mostly duplicate/weaken the set AND unresolved evidence is
+   unlikely to change the recommendation), plus **social/video lead rules** (yt-dlp, TikTok/IG
+   indirect) and the **Research-skill discovery layer** (interactive only). Follow it instead of
+   rediscovering it.
+3. **`references/research-depth.md`** — the binding decision-impact scaling layer: disagreement
+   investigation, reservation depth by importance (with labeled unconfirmed booking leads),
+   Worth-the-Effort/Worth-the-Detour retention, transport robustness by risk, contingency
+   depth, category freshness + recurring-event year safety, and research memory ("memory
+   proposes, current research verifies").
+4. The **target guide** — `src/content/guides/<slug>/`; read only the group file the fact lives
    in, per AGENTS.md's Operational Habits. Also read its **run-state directory**
    `guides-intake/<slug>/` if it exists — `intake.md` is the traveler's frozen intent (ranked
    priorities decide which sections get depth) and `ledger.md` is everything research has
    produced so far (reconciliation, candidates, questions, amendments); else infer general scope
    and say so. `docs/standards/new-guide-intake.md` explains intake → spec.
-4. **`references/block-types.md`** — section types, tab budget, typed features
+5. **`references/block-types.md`** — section types, tab budget, typed features
    (phrases/entry/advisory), voice standard, facets, covers. **`references/image-sourcing.md`** —
    binding photo layer (Commons vs royalty-free `src`, attribution, forbidden sources, R18
    honesty, pre-ship checklist).
-5. **The `denmark/` and `korea/` guide dirs** — the gold standard to match or beat.
-6. **`docs/evidence/pipeline-patterns.md`** — what critics keep catching, distilled; read the
+6. **The `denmark/` and `korea/` guide dirs** — the gold standard to match or beat.
+7. **`docs/evidence/pipeline-patterns.md`** — what critics keep catching, distilled; read the
    OPEN rows first so a known miss-class is avoided upstream, and **append this pass's own
    distilled rows before landing** (including the honest-blank row on a clean run) — that file's
    own Rules section governs the format and the ≥2-recurrence promotion trigger. Process evidence
    only — never learnings or traveler patterns.
-7. **`docs/evidence/traveler-patterns.md`** — how these travelers *actually* travel, plus
+8. **`docs/evidence/traveler-patterns.md`** — how these travelers *actually* travel, plus
    `learnings/<slug>.md` for any prior trip with the same travelers. **Consult during intake and
    research** so a new guide starts personalized, and **establish WHICH PARTY the guide is for
    FIRST** — use only that party's section plus Cross-party (the file's header explains why;
@@ -61,7 +68,7 @@ Reconcile · Critic) read this skill and execute their stage from it. Each stage
 
 ## Modes
 - **New guide** — intake first (establish the **party** and the **anchor event** before anything
-  — see Read-first #7), then scaffold (`node scripts/scaffold-guide.mjs --country "..." --dates
+  — see Read-first #8), then scaffold (`node scripts/scaffold-guide.mjs --country "..." --dates
   "YYYY-MM-DD to YYYY-MM-DD"`, or the "New guide" issue form, which scaffolds automatically) —
   pre-wires the map/weather/holidays live sections and an empty backbone, every fact still
   unverified. Then research via the **two-pass procedure** below (Pass A canonical → Pass B
@@ -106,9 +113,12 @@ error-corrected. The second pass *corroborates* the first; a single pass can be 
 still thin or biased, which readiness can't detect. Both obey the same fact discipline below;
 they differ only in **what they go looking for**.
 
-**Independence is structural, not stylistic.** In CI, Pass B runs as a separate agent that never
-reads Pass A's output; interactively, honor the same wall — spawn Pass B as an isolated subagent
-where the harness allows, or research it from the intake alone and merge only at reconcile.
+**Independence is enforced, not requested.** In CI, Pass B is a separate agent invocation that
+is forbidden to read Pass A's output — and the V2 pipeline (`research-pass-v2.yml`) goes
+further: Pass B's prepared input mechanically EXCLUDES Pass A's guide and research artifacts,
+so the wall is infrastructure, not a prompt promise. Interactively, honor the same wall — spawn
+Pass B as an isolated subagent where the harness allows, or research it from the intake alone
+and merge only at reconcile.
 
 ### Pass A — canonical & verified
 Primary/official sources first. The **anchor event — verify its date + venue against a T0 source
@@ -123,12 +133,22 @@ the second angle that makes reconciliation mean anything. Come at the destinatio
 resident / blog / forum / reddit side and ask *different* questions: When is each marquee sight
 actually empty — the off-peak hour, the side entrance, the day the tour buses skip? Where is the
 obvious pick a tourist trap, and what do locals do instead? What's the non-obvious neighborhood,
-the authentic version of the experience the guidebooks flatten? **Pass B's finds are T2 leads —
-each must be verified against a primary source before it enters the guide**; authenticity changes
-*what* you research, never the bar it clears. Video/social sourcing is part of this pass's
-toolkit — YouTube transcripts via `yt-dlp` (never media) and web-indexed TikTok/IG roundups:
-`research-efficiency.md` "Social & video lead sourcing" (leads-only, same T0 bar, viral = crowd
-warning, failures never block).
+the authentic version of the experience the guidebooks flatten? **Pass B's finds are T2 leads,
+and the bar they clear depends on the CLAIM (`verification-rules.md` §3): every objective fact
+in them (hours, prices, booking rules) must climb to a primary source before it enters the
+guide; experiential findings (crowd timing, atmosphere, transfer reality, neighborhood feel)
+are verified by corroboration instead — ≥2 recent, independent, firsthand sources, never an
+official URL pasted onto a subjective claim it does not support.** Authenticity changes *what*
+you research, never the bar it clears. **Native-language research is adaptive** — lean on it
+hardest where English results are generic, tourist-heavy, thin, or contradictory (Japan/Korea
+usually qualify); search the way locals describe the problem, never word-for-word translations
+of English queries; strong local-language evidence is valid even with little English coverage.
+Keep the light audit trail — what kinds of native searches, why, and what useful new
+information they produced (V2: `passB.nativeLanguage` in `evidence.v2.json`) — never every
+query or result. Video/social sourcing is part of this pass's toolkit — YouTube transcripts via
+`yt-dlp` (never media) and web-indexed TikTok/IG roundups: `research-efficiency.md` "Social &
+video lead sourcing" (leads-only, objective claims still climb to T0, viral = crowd warning,
+failures never block).
 
 ### Discovery before either pass — interactive sessions only
 Pass A may open with ONE Standard-mode call to the global `Research` skill (backbone landscape).
@@ -190,13 +210,16 @@ it survived past first-pass discovery to deep verification. The funnel is broad 
 shortlist → deep-verify → shipped, and **shipped ⊆ shortlist ⊆ considered**: every `shipped` row
 MUST also be marked shortlisted, or the gate fails naming it — shipped is never a side door
 around the shortlist stage. The rejections are the point: "rejected: tourist-priced chain,
-locals rank Shin Shin above it" is research evidence a survivors-only guide destroys. Verify
-gates on per-priority floors (defaults 16/8 · 10/5 · 6/3 considered/shipped; a guide that
-legitimately can't owe that sets `researchFloors` in `_guide.json` — the tabBudget precedent,
-optionally adding a `shortlist` count floor per rank) and cross-checks every `shipped` name
-against the guide, so padding the table is expensive and an honest `rejected: couldn't verify`
-row is a good row. Pass B's floors are separate and quantitative: a full pass owes ≥8 finds, ≥3
-crowd/timing, ≥2 novel/alternative.
+locals rank Shin Shin above it" is research evidence a survivors-only guide destroys. **Breadth
+is adaptive, not a quota** (V2 — DECISIONS.md "Research breadth" supersedes the old 16/10/6
+per-priority floors): research scales to the destination, and discovery stops only when new
+searches mostly produce duplicates or clearly weaker options AND unresolved evidence is
+unlikely to change the recommendation — a stop the run RECORDS (V2: the `saturation` record in
+`evidence.v2.json`, with the trend and the unresolved-evidence answer). Verify still
+cross-checks every `shipped` name against the guide and the funnel invariant, so padding the
+table is expensive and an honest `rejected: couldn't verify` row is a good row. Pass B owes
+coverage, not a find-count: every find still gets a written reconcile verdict, but no fixed
+minimum exists — a small town's honest six finds beat a padded eight.
 
 ### Traveler questions — research never blocks on a fork
 When research or reconciliation hits a REAL fork — a decision only the traveler can make (dates,

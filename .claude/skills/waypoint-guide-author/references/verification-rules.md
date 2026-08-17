@@ -45,6 +45,27 @@ always, whatever the search felt like.
 
 ## 3. What counts as a source (quality hierarchy)
 
+**Classify the CLAIM before picking the ladder (V2 rule, DECISIONS.md "Objective facts vs
+traveler experience"). These are different evidence types with different bars:**
+
+- **Objective facts** — opening hours, prices, reservation rules, event dates, train schedules,
+  entry rules. These normally require an official/primary (T0) source. The tier ladder below is
+  their law.
+- **Experiential evidence** — crowds, queue reality, atmosphere, transfer difficulty,
+  neighborhood feel, quality decline. A venue's own site cannot testify to these; **an official
+  URL pasted onto a subjective claim it does not support is a fabricated citation**, not
+  verification. The bar here is **multiple (≥2) recent, independent, firsthand sources** —
+  specificity, recency, independence, and exact branch/location when relevant. One creator's
+  opinion gets neutral phrasing, never a "locals say" endorsement.
+
+**Source independence is a fact about FAMILIES, not domains.** Ten copied articles are one
+opinion wearing ten mastheads: syndicated content, SEO/affiliate templates rewriting the same
+press kit, and listicles citing each other form one source *family* and count ONCE. When you
+lean on multiple sources for an experiential claim, they must be independent — different
+authors, different platforms, no shared boilerplate. SEO and affiliate pages may help discovery
+but carry little weight in final judgment. When independence isn't knowable, say so — don't
+assume it.
+
 Use the highest tier available; drop a tier only when the one above doesn't exist for that fact.
 Cite up the ladder, never down.
 
