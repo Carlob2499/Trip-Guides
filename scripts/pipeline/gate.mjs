@@ -188,11 +188,12 @@ function captureNode(args) {
   catch (err) { return { code: typeof err?.status === "number" ? err.status : 1, out: `${err?.stdout || ""}${err?.stderr || ""}` }; }
 }
 
-// Quantitative floors bite only on a FULL pass — a section-scoped re-run legitimately produces
-// few B finds, and gating it would punish precision.
+// The substance check bites only on a FULL pass — a section-scoped re-run legitimately
+// produces few B finds, and gating it would punish precision. (Quantitative floors are gone —
+// V2's adaptive saturation record replaced them; what a full pass still owes is EXISTING.)
 function gateCoverage({ slug, floors }) {
   const args = [path.join(ROOT, "scripts", "check-passb-coverage.mjs"), "--slug", slug];
-  if (floors) args.push("--floors");
+  if (floors) args.push("--full-pass");
   return runNode(args);
 }
 

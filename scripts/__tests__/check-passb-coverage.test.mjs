@@ -73,46 +73,35 @@ describe("checkCoverage", () => {
   });
 });
 
-// ── S4: quantitative floors ──────────────────────────────────────────────────
-import { checkFloors, PASSB_FLOORS } from "../check-passb-coverage.mjs";
+// ── S4, adaptive form (CHANGE, Pipeline V2 2026-08-17) ───────────────────────
+// The fixed ≥8/≥3/≥2 quotas are deliberately gone — DECISIONS.md "Research breadth": breadth
+// is adaptive, and the V2 saturation record (scripts/pipeline/v2/evidence.mjs, its own suite)
+// is the replacement protection against a lazy stop. What a FULL pass still owes here is
+// EXISTENCE: zero entries is not an adaptive stop, it is a pass that never happened.
+import { checkSubstance } from "../check-passb-coverage.mjs";
 
-describe("checkFloors (S4) — Pass B must be quantitatively real, not just reconciled", () => {
+describe("checkSubstance — a full Pass B must exist; its shape is informational", () => {
   const entry = (category, i) => ({ item: `Find ${category} ${i}`, category, finding: "x", source_url: "https://e.org", verified_on: "2026-08-02" });
-  const fullPass = [
-    ...Array.from({ length: 3 }, (_, i) => entry("crowd", i)),
-    ...Array.from({ length: 2 }, (_, i) => entry("novel", i)),
-    ...Array.from({ length: 3 }, (_, i) => entry("food", i)),
-  ];
 
-  it("passes a pass meeting every floor", () => {
-    const r = checkFloors(fullPass);
+  it("PRESERVE (strengthened): zero entries on a full pass FAILS", () => {
+    const r = checkSubstance([]);
+    expect(r.status).toBe("fail");
+    expect(r.findings.join("\n")).toMatch(/ZERO Pass B entries/);
+    expect(checkSubstance(null).status).toBe("fail");
+  });
+
+  it("CHANGE: a thin-but-real pass PASSES — a small town's honest six finds beat a padded eight", () => {
+    const r = checkSubstance(Array.from({ length: 3 }, (_, i) => entry("food", i)));
     expect(r.status).toBe("pass");
-    expect(r.counts).toEqual({ total: 8, crowd: 3, novel: 2 });
   });
 
-  it("fails a thin pass on total count", () => {
-    const r = checkFloors(fullPass.slice(0, 5));
-    expect(r.status).toBe("fail");
-    expect(r.findings.join("\n")).toMatch(/entries total — floor is 8/);
-  });
-
-  it("fails when the crowd/timing angle is missing — even with plenty of entries", () => {
-    const r = checkFloors(Array.from({ length: 10 }, (_, i) => entry("food", i)));
-    expect(r.status).toBe("fail");
-    expect(r.findings.join("\n")).toMatch(/crowd\/timing/);
-    expect(r.findings.join("\n")).toMatch(/novel\/alternative/);
-  });
-
-  it("counts `timing` toward crowd and `alternative` toward novel", () => {
-    const r = checkFloors([
+  it("category counts stay computed for the human row (timing→crowd, alternative→novel)", () => {
+    const r = checkSubstance([
       ...Array.from({ length: 3 }, (_, i) => entry("timing", i)),
       ...Array.from({ length: 2 }, (_, i) => entry("alternative", i)),
       ...Array.from({ length: 3 }, (_, i) => entry("language", i)),
     ]);
     expect(r.status).toBe("pass");
-  });
-
-  it("documented floors: 8 total, 3 crowd/timing, 2 novel/alternative", () => {
-    expect(PASSB_FLOORS).toEqual({ MIN_TOTAL: 8, MIN_CROWD: 3, MIN_NOVEL: 2 });
+    expect(r.counts).toEqual({ total: 8, crowd: 3, novel: 2 });
   });
 });

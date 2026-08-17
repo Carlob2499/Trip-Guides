@@ -37,6 +37,7 @@ import {
   bumpRunAttempt, recordAutoRetry, recordTelemetry, V2_RESEARCH_STAGES,
 } from "./pipeline/v2/run-state.mjs";
 import { readEvidence, requireEvidence, evidenceProblems } from "./pipeline/v2/evidence.mjs";
+import { researchRuleProblems } from "./pipeline/v2/research-rules.mjs";
 import { requireCoverage, coverageProblems } from "./pipeline/v2/coverage.mjs";
 import {
   preparePassBWorkspace, collectPassB, prepareCriticInput, restoreCriticInput, verifyPassBWorkspace,
@@ -94,6 +95,7 @@ export async function validateStageOutput(slug, stage, { intakeDir = INTAKE_DIR,
       const doc = await readEvidence(slug, { intakeDir });
       if (!doc) { problems.push(`reconcile owes the merged evidence artifact: guides-intake/${slug}/evidence.v2.json`); break; }
       problems.push(...evidenceProblems(doc, { fullPass: !scoped }));
+      problems.push(...researchRuleProblems(doc));
       try {
         const coverage = await requireCoverage(slug, { intakeDir });
         problems.push(...coverageProblems(coverage));
@@ -298,6 +300,7 @@ async function run(cmd, get, has) {
         const coverage = await requireCoverage(slug);
         const problems = [
           ...evidenceProblems(evidence, { fullPass: !has("--scoped") }),
+          ...researchRuleProblems(evidence),
           ...coverageProblems(coverage),
         ];
         if (problems.length) {

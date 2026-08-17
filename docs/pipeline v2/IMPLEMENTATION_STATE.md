@@ -6,14 +6,12 @@
 
 ## Position
 
-- **Last completed milestone:** M4 — V2 orchestration and isolation
-- **Current milestone:** M5 — V2 verification and research rules
-- **Exact next action:** Replace quota checks (`check-candidates.mjs` floors,
-  `check-passb-coverage.mjs --floors`) with adaptive saturation/decision-stability validation
-  for V2-artifact guides (legacy behavior preserved for V1 guides); add the M5 research-rule
-  validators (objective-vs-experiential sourcing, recurring-event year safety, reservation depth
-  by importance, high-risk transport robustness, category freshness) layered on
-  `pipeline-v2 validate`; preserve Japan regression classes.
+- **Last completed milestone:** M5 — V2 verification and research rules
+- **Current milestone:** M6 — Connected lifecycle correctness
+- **Exact next action:** Per-run attempt scoping; same-slug research/change concurrency
+  exclusion; answer routing to an ACTIVE research run (vs change run for published guides);
+  pretrip/recert in-flight detection + partial-dispatch failure reporting. Read worker/index.mjs,
+  scripts/worker-api.mjs, recert.mjs, pretrip-check.ts first.
 
 **Mid-session external event (08:09):** `docs/pipeline v2/IMPLEMENTATION_PLAN.md` (Carlo's
 delivery-cadence plan) appeared untracked while M4 was underway — authored outside this session,
@@ -178,6 +176,31 @@ prompts/README.md V1-vs-V2 section.
   execution prompt, plus the prompt contract.
 - Checks: orchestration 24 ✓ · prompt-contract green with the four new prompts wired · full
   `npm test` 159 files / 2512 ✓ · eslint clean.
+
+## M5 — done (quota checks → adaptive; research rules enforced)
+
+- `check-candidates.mjs`: DEFAULT_FLOORS + `researchFloors` plumbing DELETED (CHANGE —
+  DECISIONS "Research breadth"); PRESERVED: n/a posture, empty-table/section failure (now also
+  per-priority empty tables), shipped-name cross-check, shipped⊆shortlist funnel, legacy
+  2-column tolerance. Replacement protection: the V2 saturation gate (earned-stop rule,
+  M2-tested). `verify-guide.mjs` no longer threads researchFloors.
+- `check-passb-coverage.mjs`: `checkFloors`/`PASSB_FLOORS` (≥8/≥3/≥2) → `checkSubstance`
+  (CHANGE): a FULL pass must exist and be non-empty; category counts print, never gate.
+  STRENGTHENED: an absent passB.json on a full pass now FAILS (it previously exited 0).
+  Flag renamed `--floors` → `--full-pass` at the script; `gate coverage` translates.
+- NEW `scripts/pipeline/v2/research-rules.mjs` (+ 21-test suite), wired into
+  `pipeline-v2 validate` and reconcile stage validation: objective↔source-kind law
+  (official/operator/reference), experiential-official = fabricated citation, ≥2
+  distinct-family firsthand corroboration on shipped candidates, recurring-event year safety
+  (claim year > publish year fails), experiential freshness (24-month window; unknown dates
+  never judged), reservation depth by importance (casual owes nothing; important owes a
+  booking answer; anchor owes when + fallback; confirmed leads owe current evidence),
+  R3+ transport robustness (fallback + missed-connection + buffer/next/last-return).
+- Doctrine sync: `docs/standards/guide-rubric.md` rows 8 + 12 updated (SCOPE ADDITION,
+  justified: M3/M5 mandate removing floors the rubric verbatim asserts; leaving them would
+  make the quality bar contradict the gates). `content.config.ts` researchFloors field
+  deleted (no guide ever declared it) + its tests; scaffold ledger blurb updated.
+- Japan regression suites + full suite green throughout (160 files / 2526 + new).
 
 ## Decisions made within engineering discretion
 

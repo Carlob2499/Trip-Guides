@@ -188,7 +188,7 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
   // venue that no longer exists is concrete breakage, same class as a dead link.
   const venueStatus = net?.venuesBySlug?.[slug] ?? { status: "skipped" };
 
-  // S2/S3: the candidates table + coverage floors. Async (file reads), so verify() computes
+  // S2/S3: the candidates table (structural checks; breadth is adaptive since V2). Async, so verify() computes
   // it and passes the result in — the same shape as the staleness scan.
   const candidatesRow = candidates ?? { status: "n/a", reason: "not computed" };
 
@@ -276,10 +276,11 @@ export async function verify({ slug = null, network = false } = {}) {
   }
 
   // S2/S3: candidates tables are read per-target (async), then threaded into the sync evaluator.
+  // Breadth floors are gone (V2 adaptive saturation replaced them); the structural checks remain.
   const { checkCandidates } = await import("./check-candidates.mjs");
   const candidatesBySlug = {};
   for (const t of targets) {
-    candidatesBySlug[t.slug] = await checkCandidates(t.slug, { researchFloors: t.guide.researchFloors ?? null });
+    candidatesBySlug[t.slug] = await checkCandidates(t.slug);
   }
 
   // S5: source-mix measurement — pure text analysis over the same raw the link sweep scans.
@@ -389,7 +390,7 @@ export function report(r) {
     for (const f of v.flagged) L.push(`      ⚠ ${f.name} (${f.section}) — ${f.why}`);
   }
 
-  // S2/S3: candidates table + floors. Optional-chained for pre-standard result objects.
+  // S2/S3: candidates table (structural, floor-free since V2). Optional-chained for pre-standard result objects.
   if (r.candidates?.status === "n/a") {
     L.push(`  P1 candidates · n/a — ${r.candidates.reason}`);
   } else if (r.candidates && r.candidates.status !== "skipped") {

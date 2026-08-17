@@ -78,26 +78,24 @@ export function checkCoverage(passB, ledgerText) {
   };
 }
 
-// ── S4: quantitative floors (creator-approved 2026-08-02) ─────────────────────
-// Coverage above proves no B-find was silently DROPPED; it says nothing about how much B
-// FOUND. A lazy Pass B with 3 entries passed the same gate as one with 30, so the resident
-// angle — the whole reason B exists — could quietly thin out. Floors, enforced only with
-// --floors (the research-pass gate on a FULL pass; section-scoped re-runs are exempt and
-// nothing retro-fails an existing guide):
-//   · ≥ MIN_TOTAL entries overall
-//   · ≥ MIN_CROWD in {crowd, timing} — the off-peak/queue reality every marquee sight needs
-//   · ≥ MIN_NOVEL in {novel, alternative} — the non-obvious picks that beat the generic list
-export const PASSB_FLOORS = { MIN_TOTAL: 8, MIN_CROWD: 3, MIN_NOVEL: 2 };
-
-/** Pure. Returns { status: "pass"|"fail", counts, findings[] }. */
-export function checkFloors(passB, floors = PASSB_FLOORS) {
+// ── S4, adaptive form (V2, 2026-08-17 — the fixed ≥8/≥3/≥2 quotas are deliberately gone) ──
+// Coverage above proves no B-find was silently DROPPED; this proves a FULL pass produced a
+// real resident angle at all. Breadth beyond that is adaptive (DECISIONS.md "Research
+// breadth"): a small town's honest six finds beat a padded eight, and the V2 saturation
+// record — not a category quota — is what justifies stopping. Enforced only with --full-pass
+// (section-scoped re-runs are exempt and nothing retro-fails an existing guide):
+//   · a full pass with ZERO Pass-B entries is not an adaptive stop, it is a pass that never
+//     happened — fail;
+//   · the category counts stay computed and PRINTED so thinness is visible to a human, but
+//     they no longer gate.
+export function checkSubstance(passB) {
   const entries = Array.isArray(passB) ? passB : [];
   const cat = (c) => entries.filter((e) => c.includes(String(e.category ?? "").toLowerCase())).length;
   const counts = { total: entries.length, crowd: cat(["crowd", "timing"]), novel: cat(["novel", "alternative"]) };
   const findings = [];
-  if (counts.total < floors.MIN_TOTAL) findings.push(`${counts.total} entries total — floor is ${floors.MIN_TOTAL}; the resident angle is thin`);
-  if (counts.crowd < floors.MIN_CROWD) findings.push(`${counts.crowd} crowd/timing find(s) — floor is ${floors.MIN_CROWD}; marquee sights need off-peak reality`);
-  if (counts.novel < floors.MIN_NOVEL) findings.push(`${counts.novel} novel/alternative find(s) — floor is ${floors.MIN_NOVEL}; nothing here beats the generic list`);
+  if (counts.total === 0) {
+    findings.push("a full pass produced ZERO Pass B entries — the resident angle never happened; an adaptive stop still records what it found");
+  }
   return { status: findings.length ? "fail" : "pass", counts, findings };
 }
 
@@ -105,13 +103,19 @@ export function checkFloors(passB, floors = PASSB_FLOORS) {
 if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith("check-passb-coverage.mjs")) {
   const slug = process.argv[process.argv.indexOf("--slug") + 1];
   if (!slug || slug.startsWith("--")) {
-    console.error("usage: node scripts/check-passb-coverage.mjs --slug <slug> [--floors]");
+    console.error("usage: node scripts/check-passb-coverage.mjs --slug <slug> [--full-pass]");
     process.exit(1);
   }
-  const enforceFloors = process.argv.includes("--floors");
+  const fullPass = process.argv.includes("--full-pass");
   const passBPath = `guides-intake/${slug}/passB.json`;
   const ledgerPath = `guides-intake/${slug}/ledger.md`;
   if (!existsSync(passBPath)) {
+    if (fullPass) {
+      // Previously an absent passB.json passed even a full-pass gate — a Pass B that wrote
+      // nothing at all was invisible. A full pass owes the artifact's existence.
+      console.error(`[passb-substance] FAIL — ${passBPath} absent on a FULL pass: Pass B never produced its artifact.`);
+      process.exit(1);
+    }
     console.log(`[passb-coverage] ${passBPath} absent — nothing to check (single-pass or pre-B run).`);
     process.exit(0);
   }
@@ -135,14 +139,13 @@ if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith
   }
   console.log(`[passb-coverage] ${result.status.toUpperCase()} — ${result.reason} (${passB.length} entries).`);
 
-  if (enforceFloors) {
-    const f = checkFloors(passB);
+  if (fullPass) {
+    const f = checkSubstance(passB);
     if (f.status === "fail") {
-      console.error(`[passb-floors] FAIL — Pass B is under its floors (S4):`);
+      console.error(`[passb-substance] FAIL — a full pass owes a real resident angle:`);
       for (const x of f.findings) console.error(`  · ${x}`);
-      console.error("A full pass owes a real resident angle; re-run Pass B with the skill's Pass B charter, or justify the gap to a human.");
       process.exit(1);
     }
-    console.log(`[passb-floors] PASS — ${f.counts.total} entries (${f.counts.crowd} crowd/timing, ${f.counts.novel} novel/alternative).`);
+    console.log(`[passb-substance] PASS — ${f.counts.total} entries (${f.counts.crowd} crowd/timing, ${f.counts.novel} novel/alternative — informational, not gated).`);
   }
 }
