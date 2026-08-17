@@ -1,0 +1,553 @@
+name: Research pass (V2)
+
+# PIPELINE V2 — the manual, draft-only research pipeline being proven beside V1.
+# (docs/pipeline v2/DECISIONS.md is the authority; docs/pipeline v2/IMPLEMENTATION_STATE.md the
+# build record.) Differences from research-pass.yml that are the POINT of this workflow:
+#
+#   · ONE JOB PER STAGE. The workflow — never the agent — validates each stage's owed artifact,
+#     commits it, and checkpoints run.v2.json (begin-stage before the agent, finish-stage after).
+#     A stage that produced nothing durable is a recorded VOID failure with one bounded
+#     auto-retry; any other agent failure is recorded honestly as `agent-failure` and the branch
+#     stays manually resumable (usage-limit failures are not reliably identifiable from here, so
+#     they are never guessed at).
+#   · MECHANICAL PASS-B ISOLATION. The passB job checks out the run's recorded BASELINE commit
+#     (fetch-depth 1): Pass A's outputs are absent from its world, not merely forbidden. The
+#     collect step then checks out the run branch separately, validates passB.v2.json
+#     (fail-closed schema + origin/reconciliation rules) and transfers it.
+#   · MECHANICAL CRITIC BLINDNESS. The critic job checks out with fetch-depth 1 (no prior
+#     history) and prepare-critic deletes the evidence/run-state artifacts from its working tree
+#     before the agent runs; restore-critic puts the tracked ones back afterwards.
+#   · NO PUBLICATION. Landing always opens a DRAFT PR (--land pr) with the real evidence-gate
+#     scorecard as its body. V2 does not remove `draft`, does not auto-merge, and V1 dispatch
+#     (new-guide.yml → research-pass.yml) is untouched.
+#
+# Resumable: run.v2.json records per-stage status and the resume point; each stage job is
+# skipped when routing says it is already complete, so a re-dispatch continues, never restarts.
+on:
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "Guide slug (must already be scaffolded — V2 researches an existing scaffold)."
+        required: true
+        type: string
+      section:
+        description: "Section focus for a scoped pass. Leave blank for a full pass."
+        required: false
+        type: string
+        default: ""
+      model:
+        description: "Model for Pass A + reconcile (Pass B is always Sonnet)."
+        required: false
+        type: choice
+        options:
+          - claude-sonnet-5
+          - claude-opus-5
+        default: claude-sonnet-5
+      effort:
+        description: "Reasoning effort for every agent."
+        required: false
+        type: choice
+        options:
+          - high
+          - xhigh
+          - medium
+        default: high
+      critic_model:
+        description: "Model for the fresh-context critic."
+        required: false
+        type: choice
+        options:
+          - claude-opus-5
+          - claude-sonnet-5
+        default: claude-opus-5
+      void_retry:
+        description: "Internal — set by the bounded auto-retry. Leave false."
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: write # the bounded auto-retry re-dispatches this workflow
+
+# SAME group as the V1 research workflow, deliberately: a V1 and a V2 research run on one slug
+# would race the same guide, so they queue behind each other instead.
+concurrency:
+  group: research-${{ inputs.slug }}
+  cancel-in-progress: false
+
+env:
+  SLUG: ${{ inputs.slug }}
+
+jobs:
+  # ── setup: branch, init/resume, budget, route ──────────────────────────────
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      branch: ${{ steps.branch.outputs.name }}
+      should_run: ${{ steps.budget.outputs.should_run }}
+      next: ${{ steps.route.outputs.next }}
+      baseline: ${{ steps.route.outputs.baseline }}
+      run_id: ${{ steps.route.outputs.run_id }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SLUG: ${{ inputs.slug }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Configure git identity
+        run: |
+          git config user.name  "waypoint-research-v2[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Resume or start the V2 research branch
+        id: branch
+        run: node scripts/pipeline.mjs branch --slug "$SLUG" --prefix research-v2
+
+      - name: Init or resume the V2 run
+        env:
+          BRANCH: ${{ steps.branch.outputs.name }}
+        run: node scripts/pipeline-v2.mjs init --slug "$SLUG" --branch "$BRANCH"
+
+      - name: Attempt budget (bounded)
+        id: budget
+        env:
+          BRANCH: ${{ steps.branch.outputs.name }}
+        run: node scripts/pipeline-v2.mjs budget --slug "$SLUG" --branch "$BRANCH"
+
+      - name: File the stuck issue past the cap
+        if: steps.budget.outputs.should_run == 'false'
+        run: node scripts/pipeline.mjs gate stuck --slug "$SLUG"
+
+      - name: Preflight — check intake for contradictions
+        if: steps.budget.outputs.should_run == 'true'
+        env:
+          BRANCH: ${{ steps.branch.outputs.name }}
+        run: node scripts/pipeline.mjs gate preflight --slug "$SLUG" --branch "$BRANCH"
+
+      - name: Route to next stage
+        id: route
+        if: steps.budget.outputs.should_run == 'true'
+        run: node scripts/pipeline-v2.mjs route --slug "$SLUG"
+
+  # ── Pass A ─────────────────────────────────────────────────────────────────
+  passA:
+    needs: setup
+    if: needs.setup.outputs.should_run == 'true' && needs.setup.outputs.next == 'passA'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SLUG: ${{ inputs.slug }}
+      BRANCH: ${{ needs.setup.outputs.branch }}
+      PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.setup.outputs.branch }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Configure git identity
+        run: |
+          git config user.name  "waypoint-research-v2[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Checkpoint stage start
+        run: |
+          node scripts/pipeline-v2.mjs begin-stage --slug "$SLUG" --stage passA \
+            --model "${{ inputs.model || 'claude-sonnet-5' }}" \
+            --effort "${{ inputs.effort || 'high' }}" \
+            --branch "$BRANCH"
+
+      - name: Compose Pass A prompt
+        id: prompt
+        env:
+          WP_SLUG: ${{ inputs.slug }}
+          WP_SECTION: ${{ inputs.section || 'full pass — all sections' }}
+        run: node scripts/pipeline.mjs prompt prompts/research-passA-v2.md > /dev/null
+
+      - name: Run research agent — Pass A
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          allowed_bots: "github-actions[bot]"
+          show_full_output: true
+          claude_args: |
+            --model ${{ inputs.model || 'claude-sonnet-5' }}
+            --effort ${{ inputs.effort || 'high' }}
+            --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
+          prompt: ${{ steps.prompt.outputs.text }}
+
+      # Validate the owed artifact, commit the work, checkpoint completion — or record the
+      # failure (void → one bounded auto-retry below).
+      - name: Validate, commit, checkpoint
+        id: finish
+        run: |
+          SCOPED=()
+          if [ -n "${{ inputs.section }}" ]; then SCOPED=(--scoped); fi
+          node scripts/pipeline-v2.mjs finish-stage --slug "$SLUG" --stage passA \
+            --branch "$BRANCH" "${SCOPED[@]}"
+
+      - name: Record agent failure honestly
+        if: failure() && steps.finish.conclusion != 'failure'
+        run: |
+          node scripts/pipeline-v2.mjs fail-stage --slug "$SLUG" --stage passA \
+            --class agent-failure --detail "agent step failed; branch is manually resumable" \
+            --branch "$BRANCH"
+
+      - name: Bounded auto-retry after a void stage
+        if: failure() && steps.finish.outputs.void == 'true' && format('{0}', inputs.void_retry) != 'true'
+        id: retry
+        run: node scripts/pipeline-v2.mjs auto-retry --slug "$SLUG" --branch "$BRANCH"
+
+      - name: Re-dispatch once
+        if: failure() && steps.retry.outputs.allowed == 'true'
+        run: |
+          gh workflow run research-pass-v2.yml -f slug="$SLUG" \
+            -f section="${{ inputs.section }}" -f model="${{ inputs.model }}" \
+            -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
+            -f void_retry=true
+
+  # ── Pass B — mechanically isolated ─────────────────────────────────────────
+  passB:
+    needs: [setup, passA]
+    # Runs when routing says passB is next, whether passA ran this dispatch or a previous one.
+    if: >-
+      always() && needs.setup.outputs.should_run == 'true' &&
+      (needs.passA.result == 'success' || (needs.passA.result == 'skipped' && needs.setup.outputs.next == 'passB'))
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SLUG: ${{ inputs.slug }}
+      BRANCH: ${{ needs.setup.outputs.branch }}
+      PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
+    steps:
+      # Control-plane world, used ONLY to checkpoint stage start; deleted before the agent.
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.setup.outputs.branch }}
+          fetch-depth: 0
+          path: .control
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - name: Checkpoint stage start (control-plane checkout)
+        working-directory: .control
+        run: |
+          npm ci
+          git config user.name  "waypoint-research-v2[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          node scripts/pipeline-v2.mjs begin-stage --slug "$SLUG" --stage passB \
+            --model claude-sonnet-5 --effort "${{ inputs.effort || 'high' }}" \
+            --branch "$BRANCH"
+      - name: Remove the control-plane world before the agent
+        run: rm -rf .control
+
+      # THE ISOLATION: the agent's entire world is the baseline commit — Pass A's outputs are
+      # not in the tree and (fetch-depth 1) not in history either.
+      - name: Checkout the clean baseline workspace
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.setup.outputs.baseline }}
+          fetch-depth: 1
+      - run: npm ci
+      - name: Verify the prepared workspace excludes Pass-A outputs
+        run: node scripts/pipeline-v2.mjs verify-passb-workspace --slug "$SLUG" --dest .
+
+      - name: Install yt-dlp (best-effort)
+        continue-on-error: true
+        run: python3 -m pip install --upgrade yt-dlp
+
+      - name: Compose Pass B prompt
+        id: prompt
+        env:
+          WP_SLUG: ${{ inputs.slug }}
+        run: node scripts/pipeline.mjs prompt prompts/research-passB-v2.md > /dev/null
+
+      - name: Run research agent — Pass B (isolated)
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          allowed_bots: "github-actions[bot]"
+          show_full_output: true
+          claude_args: |
+            --model claude-sonnet-5
+            --effort ${{ inputs.effort || 'high' }}
+            --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
+          prompt: ${{ steps.prompt.outputs.text }}
+
+      # The workflow — not Pass B — validates and transfers the artifact, then commits. The
+      # control-plane checkout happens AFTER the agent (always(), so failure recording has a
+      # world to write to even when the agent step failed).
+      - name: Checkout the run branch for collection
+        if: always()
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.setup.outputs.branch }}
+          fetch-depth: 0
+          path: collect
+
+      - name: Transfer the Pass B artifact
+        id: transfer
+        working-directory: collect
+        run: |
+          npm ci
+          git config user.name  "waypoint-research-v2[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          node scripts/pipeline-v2.mjs collect-passb --slug "$SLUG" --from "$GITHUB_WORKSPACE"
+          node scripts/pipeline-v2.mjs finish-stage --slug "$SLUG" --stage passB --branch "$BRANCH"
+
+      - name: Record agent failure honestly
+        if: failure() && steps.transfer.conclusion != 'failure'
+        working-directory: collect
+        run: |
+          npm ci
+          git config user.name  "waypoint-research-v2[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          node scripts/pipeline-v2.mjs fail-stage --slug "$SLUG" --stage passB \
+            --class agent-failure --detail "agent step failed; branch is manually resumable" \
+            --branch "$BRANCH"
+
+      - name: Bounded auto-retry after a void stage
+        if: failure() && steps.transfer.outputs.void == 'true' && format('{0}', inputs.void_retry) != 'true'
+        id: retry
+        working-directory: collect
+        run: node scripts/pipeline-v2.mjs auto-retry --slug "$SLUG" --branch "$BRANCH"
+
+      - name: Re-dispatch once
+        if: failure() && steps.retry.outputs.allowed == 'true'
+        run: |
+          gh workflow run research-pass-v2.yml -f slug="$SLUG" \
+            -f section="${{ inputs.section }}" -f model="${{ inputs.model }}" \
+            -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
+            -f void_retry=true
+
+  # ── Reconcile ──────────────────────────────────────────────────────────────
+  reconcile:
+    needs: [setup, passB]
+    if: >-
+      always() && needs.setup.outputs.should_run == 'true' &&
+      (needs.passB.result == 'success' || (needs.passB.result == 'skipped' && needs.setup.outputs.next == 'reconcile'))
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SLUG: ${{ inputs.slug }}
+      BRANCH: ${{ needs.setup.outputs.branch }}
+      PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.setup.outputs.branch }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Configure git identity
+        run: |
+          git config user.name  "waypoint-research-v2[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Checkpoint stage start
+        run: |
+          node scripts/pipeline-v2.mjs begin-stage --slug "$SLUG" --stage reconcile \
+            --model "${{ inputs.model || 'claude-sonnet-5' }}" \
+            --effort "${{ inputs.effort || 'high' }}" --branch "$BRANCH"
+
+      - name: Compose reconcile prompt
+        id: prompt
+        env:
+          WP_SLUG: ${{ inputs.slug }}
+          WP_SECTION: ${{ inputs.section || 'full pass — all sections' }}
+        run: node scripts/pipeline.mjs prompt prompts/research-reconcile-v2.md > /dev/null
+
+      - name: Run research agent — Reconcile
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          allowed_bots: "github-actions[bot]"
+          show_full_output: true
+          claude_args: |
+            --model ${{ inputs.model || 'claude-sonnet-5' }}
+            --effort ${{ inputs.effort || 'high' }}
+            --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
+          prompt: ${{ steps.prompt.outputs.text }}
+
+      - name: Validate, commit, checkpoint
+        id: finish
+        run: |
+          SCOPED=()
+          if [ -n "${{ inputs.section }}" ]; then SCOPED=(--scoped); fi
+          node scripts/pipeline-v2.mjs finish-stage --slug "$SLUG" --stage reconcile \
+            --branch "$BRANCH" "${SCOPED[@]}"
+
+      - name: Record agent failure honestly
+        if: failure() && steps.finish.conclusion != 'failure'
+        run: |
+          node scripts/pipeline-v2.mjs fail-stage --slug "$SLUG" --stage reconcile \
+            --class agent-failure --detail "agent step failed; branch is manually resumable" \
+            --branch "$BRANCH"
+
+      - name: Bounded auto-retry after a void stage
+        if: failure() && steps.finish.outputs.void == 'true' && format('{0}', inputs.void_retry) != 'true'
+        id: retry
+        run: node scripts/pipeline-v2.mjs auto-retry --slug "$SLUG" --branch "$BRANCH"
+
+      - name: Re-dispatch once
+        if: failure() && steps.retry.outputs.allowed == 'true'
+        run: |
+          gh workflow run research-pass-v2.yml -f slug="$SLUG" \
+            -f section="${{ inputs.section }}" -f model="${{ inputs.model }}" \
+            -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
+            -f void_retry=true
+
+  # ── Critic — mechanically blind ────────────────────────────────────────────
+  critic:
+    needs: [setup, reconcile]
+    if: >-
+      always() && needs.setup.outputs.should_run == 'true' &&
+      (needs.reconcile.result == 'success' || (needs.reconcile.result == 'skipped' && needs.setup.outputs.next == 'critic'))
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SLUG: ${{ inputs.slug }}
+      BRANCH: ${{ needs.setup.outputs.branch }}
+      PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
+    steps:
+      # fetch-depth 1: prior git history is mechanically absent from the critic's world.
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.setup.outputs.branch }}
+          fetch-depth: 1
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Configure git identity
+        run: |
+          git config user.name  "waypoint-research-v2[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Checkpoint stage start
+        run: |
+          node scripts/pipeline-v2.mjs begin-stage --slug "$SLUG" --stage critic \
+            --model "${{ inputs.critic_model || 'claude-opus-5' }}" \
+            --effort "${{ inputs.effort || 'high' }}" --branch "$BRANCH"
+
+      - name: Prepare the critic's blind input
+        run: node scripts/pipeline-v2.mjs prepare-critic --slug "$SLUG"
+
+      - name: Compose critic prompt
+        id: prompt
+        env:
+          WP_SLUG: ${{ inputs.slug }}
+        run: node scripts/pipeline.mjs prompt prompts/research-critic-v2.md > /dev/null
+
+      - name: Run research agent — Critic
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          allowed_bots: "github-actions[bot]"
+          show_full_output: true
+          claude_args: |
+            --model ${{ inputs.critic_model || 'claude-opus-5' }}
+            --effort ${{ inputs.effort || 'high' }}
+            --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
+          prompt: ${{ steps.prompt.outputs.text }}
+
+      - name: Restore the control plane's files
+        run: node scripts/pipeline-v2.mjs restore-critic --slug "$SLUG"
+
+      # Deterministic tail the V1 critic used to run itself: palette + composition are code.
+      - name: Extract palette + compose
+        run: |
+          npm run extract-palette -- --slug "$SLUG"
+          node scripts/compose-guide.mjs --slug "$SLUG" --write
+
+      - name: Validate, commit, checkpoint
+        id: finish
+        run: |
+          node scripts/pipeline-v2.mjs finish-stage --slug "$SLUG" --stage critic \
+            --branch "$BRANCH"
+
+      - name: Record agent failure honestly
+        if: failure() && steps.finish.conclusion != 'failure'
+        run: |
+          node scripts/pipeline-v2.mjs restore-critic --slug "$SLUG" || true
+          node scripts/pipeline-v2.mjs fail-stage --slug "$SLUG" --stage critic \
+            --class agent-failure --detail "agent step failed; branch is manually resumable" \
+            --branch "$BRANCH"
+
+      - name: Bounded auto-retry after a void stage
+        if: failure() && steps.finish.outputs.void == 'true' && format('{0}', inputs.void_retry) != 'true'
+        id: retry
+        run: node scripts/pipeline-v2.mjs auto-retry --slug "$SLUG" --branch "$BRANCH"
+
+      - name: Re-dispatch once
+        if: failure() && steps.retry.outputs.allowed == 'true'
+        run: |
+          gh workflow run research-pass-v2.yml -f slug="$SLUG" \
+            -f section="${{ inputs.section }}" -f model="${{ inputs.model }}" \
+            -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
+            -f void_retry=true
+
+  # ── Land — always a draft PR while V2 is being proven ──────────────────────
+  land:
+    needs: [setup, critic]
+    if: >-
+      always() && needs.setup.outputs.should_run == 'true' &&
+      (needs.critic.result == 'success' || (needs.critic.result == 'skipped' && needs.setup.outputs.next == ''))
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SLUG: ${{ inputs.slug }}
+      BRANCH: ${{ needs.setup.outputs.branch }}
+      SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://carlob2499.github.io/Trip-Guides' }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.setup.outputs.branch }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Configure git identity
+        run: |
+          git config user.name  "waypoint-research-v2[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      # Fail-closed artifact validation BEFORE landing: evidence, dispositions, saturation,
+      # coverage. A malformed or missing artifact blocks here.
+      - name: Validate V2 artifacts
+        run: |
+          SCOPED=()
+          if [ -n "${{ inputs.section }}" ]; then SCOPED=(--scoped); fi
+          node scripts/pipeline-v2.mjs validate --slug "$SLUG" "${SCOPED[@]}"
+
+      # The REAL evidence gate (build + networked verify) runs inside `land --gate`; the
+      # scorecard becomes the PR body. --land pr: a V2 run NEVER auto-merges or publishes.
+      - name: Land as a draft PR
+        run: |
+          node scripts/pipeline.mjs land --slug "$SLUG" \
+            --branch "$BRANCH" --gate --land pr \
+            --title "Research pass (V2): $SLUG"

@@ -6,13 +6,19 @@
 
 ## Position
 
-- **Last completed milestone:** M3 — Guide Author and prompt contracts
-- **Current milestone:** M4 — V2 orchestration and isolation
-- **Exact next action:** Create `prompts/research-{passA,passB,reconcile,critic}-v2.md` (the V2
-  stage contracts), `.github/workflows/research-pass-v2.yml` (manual dispatch), V2 CLI subcommands
-  in `scripts/pipeline-v2.mjs` (init/stage-start/stage-complete/stage-fail/route), mechanical
-  Pass-B input preparation + deterministic exclusion test, bounded resume/retry. Update
-  prompts/README.md with the V1/V2 variant rule once the files exist.
+- **Last completed milestone:** M4 — V2 orchestration and isolation
+- **Current milestone:** M5 — V2 verification and research rules
+- **Exact next action:** Replace quota checks (`check-candidates.mjs` floors,
+  `check-passb-coverage.mjs --floors`) with adaptive saturation/decision-stability validation
+  for V2-artifact guides (legacy behavior preserved for V1 guides); add the M5 research-rule
+  validators (objective-vs-experiential sourcing, recurring-event year safety, reservation depth
+  by importance, high-risk transport robustness, category freshness) layered on
+  `pipeline-v2 validate`; preserve Japan regression classes.
+
+**Mid-session external event (08:09):** `docs/pipeline v2/IMPLEMENTATION_PLAN.md` (Carlo's
+delivery-cadence plan) appeared untracked while M4 was underway — authored outside this session,
+read in full, no conflicts with the executed plan (it confirms build-beside-V1, manual proving,
+UI deferred). Committed with M4 to preserve it durably; not modified.
 
 ## Branch
 
@@ -135,6 +141,43 @@ New: `scripts/pipeline/v2/{contracts,run-state,evidence,coverage,telemetry}.mjs`
   it would convert every `/new` dispatch into an unproven hybrid, violating "V2 stays
   manual/draft-only"; recorded as the M3/M4 boundary decision.)
 - Checks: parity suite 14 ✓ · full `npm test` 158 files / 2468 ✓.
+
+## M4 — done (orchestration + mechanical isolation)
+
+New: `scripts/pipeline/v2/workspace.mjs`, `scripts/pipeline-v2.mjs` (CLI: init · route · budget
+· begin-stage · finish-stage · fail-stage · auto-retry · prepare-passb ·
+verify-passb-workspace · collect-passb · prepare-critic · restore-critic · validate),
+`prompts/research-{passA,passB,reconcile,critic}-v2.md`, `.github/workflows/
+research-pass-v2.yml`, `scripts/__tests__/pipeline-v2-orchestration.test.mjs` (24 tests),
+prompts/README.md V1-vs-V2 section.
+
+- **Job-per-stage workflow**, manual dispatch only, draft-only landing (`--land pr`, no
+  announce, `pipeline-v2 validate` fail-closed before `land --gate`). Same concurrency group as
+  V1 research (`research-<slug>`) so V1/V2 runs on one slug queue. V1 dispatch untouched
+  (new-guide.yml still starts research-pass.yml — pinned by test).
+- **Durability contract:** begin-stage checkpoints START (committed+pushed) before each agent;
+  finish-stage VALIDATES the stage's owed artifact (`validateStageOutput`: scaffold files,
+  passA-origin evidence, passB artifact, dispositions+coverage at reconcile, critic ledger
+  artifacts), commits the work (the workflow commits, never the agent), checkpoints completion,
+  and records stage telemetry (duration/model/effort + evidence-derived counts). A stage with
+  problems and no diff = VOID (`void=true` output, failure class void-run) → ONE bounded
+  auto-retry re-dispatch; any other agent failure = honest `agent-failure`, branch manually
+  resumable (usage-limit never guessed from logs).
+- **Pass-B isolation:** the passB job's agent world is a checkout of the run's recorded
+  BASELINE commit at fetch-depth 1 (Pass-A outputs absent from tree AND history); the
+  control-plane checkout used for begin-stage is `rm -rf`'d before the agent; collection is a
+  separate post-agent checkout where `collect-passb` schema-validates the artifact, refuses
+  foreign-origin records and premature reconciliation, and transfers it. Local/test mechanism
+  (`preparePassBWorkspace` worktree) proves the same exclusion against a real git repo,
+  fail-closed via `verifyPassBWorkspace` (also run in CI on the prepared checkout).
+- **Critic blindness:** fetch-depth 1 (no prior history) + `prepare-critic` deletes
+  evidence/run-state/coverage artifacts (V2 AND V1 forms) from the working tree pre-agent;
+  `restore-critic` restores tracked ones after; palette+compose moved from the critic prompt to
+  deterministic workflow steps. Known limit (documented): a Bash-equipped agent could dig
+  current-commit blobs out of git plumbing — boundary enforced "where practical" per the
+  execution prompt, plus the prompt contract.
+- Checks: orchestration 24 ✓ · prompt-contract green with the four new prompts wired · full
+  `npm test` 159 files / 2512 ✓ · eslint clean.
 
 ## Decisions made within engineering discretion
 
