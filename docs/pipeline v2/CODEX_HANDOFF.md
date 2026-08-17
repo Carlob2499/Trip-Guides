@@ -1,10 +1,10 @@
 # Codex Handoff — Pipeline V2
 
-Read this file after `docs/pipeline-v2/DECISIONS.md`.
+Read this file after `docs/pipeline v2/DECISIONS.md`.
 
-Do not implement Pipeline V2 yet.
+The repo-wide audit requested below is complete. This file now records the verified dependency contract; do not repeat the audit.
 
-Your first job is to inspect the existing repo and make a safe implementation plan for Claude/Fable.
+Implement Pipeline V2 only through the bounded Codex-authored execution prompt in this directory.
 
 The creator decisions in DECISIONS.md are authoritative.
 
